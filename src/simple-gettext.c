@@ -41,7 +41,7 @@
 #include <windows.h>
 #include "types.h"
 #include "util.h"
-
+#include "w32reg.h"
 
 /* The magic number of the GNU message catalog format.	*/
 #define MAGIC	      0x950412de
@@ -278,117 +278,16 @@ get_string( struct loaded_domain *domain, u32 idx )
 {
     char *p = domain->data + SWAPIT(domain->must_swap,
 				    domain->trans_tab[idx].offset);
-    if( !domain->mapped[idx] ) {
-	byte *pp;
 
-	domain->mapped[idx] = 1;
-	/* we assume Latin1 -> CP 850 for now */
-	for( pp=p; *pp; pp++ ) {
-	    if( (*pp & 0x80) ) {
-		switch( *pp ) {
-		  /* ISO-8859-1 to IBM-CP-850 */
-		  case 0xa0: *pp = '\xff' ; break;  /* nobreakspace */
-		  case 0xa1: *pp = '\xad' ; break;  /* exclamdown */
-		  case 0xa2: *pp = '\xbd' ; break;  /* cent */
-		  case 0xa3: *pp = '\x9c' ; break;  /* sterling */
-		  case 0xa4: *pp = '\xcf' ; break;  /* currency */
-		  case 0xa5: *pp = '\xbe' ; break;  /* yen */
-		  case 0xa6: *pp = '\xdd' ; break;  /* brokenbar */
-		  case 0xa7: *pp = '\xf5' ; break;  /* section */
-		  case 0xa8: *pp = '\xf9' ; break;  /* diaeresis */
-		  case 0xa9: *pp = '\xb8' ; break;  /* copyright */
-		  case 0xaa: *pp = '\xa6' ; break;  /* ordfeminine */
-		  case 0xab: *pp = '\xae' ; break;  /* guillemotleft */
-		  case 0xac: *pp = '\xaa' ; break;  /* notsign */
-		  case 0xad: *pp = '\xf0' ; break;  /* hyphen */
-		  case 0xae: *pp = '\xa9' ; break;  /* registered */
-		  case 0xaf: *pp = '\xee' ; break;  /* macron */
-		  case 0xb0: *pp = '\xf8' ; break;  /* degree */
-		  case 0xb1: *pp = '\xf1' ; break;  /* plusminus */
-		  case 0xb2: *pp = '\xfd' ; break;  /* twosuperior */
-		  case 0xb3: *pp = '\xfc' ; break;  /* threesuperior */
-		  case 0xb4: *pp = '\xef' ; break;  /* acute */
-		  case 0xb5: *pp = '\xe6' ; break;  /* mu */
-		  case 0xb6: *pp = '\xf4' ; break;  /* paragraph */
-		  case 0xb7: *pp = '\xfa' ; break;  /* periodcentered */
-		  case 0xb8: *pp = '\xf7' ; break;  /* cedilla */
-		  case 0xb9: *pp = '\xfb' ; break;  /* onesuperior */
-		  case 0xba: *pp = '\xa7' ; break;  /* masculine */
-		  case 0xbb: *pp = '\xaf' ; break;  /* guillemotright */
-		  case 0xbc: *pp = '\xac' ; break;  /* onequarter */
-		  case 0xbd: *pp = '\xab' ; break;  /* onehalf */
-		  case 0xbe: *pp = '\xf3' ; break;  /* threequarters */
-		  case 0xbf: *pp = '\xa8' ; break;  /* questiondown */
-		  case 0xc0: *pp = '\xb7' ; break;  /* Agrave */
-		  case 0xc1: *pp = '\xb5' ; break;  /* Aacute */
-		  case 0xc2: *pp = '\xb6' ; break;  /* Acircumflex */
-		  case 0xc3: *pp = '\xc7' ; break;  /* Atilde */
-		  case 0xc4: *pp = '\x8e' ; break;  /* Adiaeresis */
-		  case 0xc5: *pp = '\x8f' ; break;  /* Aring */
-		  case 0xc6: *pp = '\x92' ; break;  /* AE */
-		  case 0xc7: *pp = '\x80' ; break;  /* Ccedilla */
-		  case 0xc8: *pp = '\xd4' ; break;  /* Egrave */
-		  case 0xc9: *pp = '\x90' ; break;  /* Eacute */
-		  case 0xca: *pp = '\xd2' ; break;  /* Ecircumflex */
-		  case 0xcb: *pp = '\xd3' ; break;  /* Ediaeresis */
-		  case 0xcc: *pp = '\xde' ; break;  /* Igrave */
-		  case 0xcd: *pp = '\xd6' ; break;  /* Iacute */
-		  case 0xce: *pp = '\xd7' ; break;  /* Icircumflex */
-		  case 0xcf: *pp = '\xd8' ; break;  /* Idiaeresis */
-		  case 0xd0: *pp = '\xd1' ; break;  /* Eth */
-		  case 0xd1: *pp = '\xa5' ; break;  /* Ntilde */
-		  case 0xd2: *pp = '\xe3' ; break;  /* Ograve */
-		  case 0xd3: *pp = '\xe0' ; break;  /* Oacute */
-		  case 0xd4: *pp = '\xe2' ; break;  /* Ocircumflex */
-		  case 0xd5: *pp = '\xe5' ; break;  /* Otilde */
-		  case 0xd6: *pp = '\x99' ; break;  /* Odiaeresis */
-		  case 0xd7: *pp = '\x9e' ; break;  /* multiply */
-		  case 0xd8: *pp = '\x9d' ; break;  /* Ooblique */
-		  case 0xd9: *pp = '\xeb' ; break;  /* Ugrave */
-		  case 0xda: *pp = '\xe9' ; break;  /* Uacute */
-		  case 0xdb: *pp = '\xea' ; break;  /* Ucircumflex */
-		  case 0xdc: *pp = '\x9a' ; break;  /* Udiaeresis */
-		  case 0xdd: *pp = '\xed' ; break;  /* Yacute */
-		  case 0xde: *pp = '\xe8' ; break;  /* Thorn */
-		  case 0xdf: *pp = '\xe1' ; break;  /* ssharp */
-		  case 0xe0: *pp = '\x85' ; break;  /* agrave */
-		  case 0xe1: *pp = '\xa0' ; break;  /* aacute */
-		  case 0xe2: *pp = '\x83' ; break;  /* acircumflex */
-		  case 0xe3: *pp = '\xc6' ; break;  /* atilde */
-		  case 0xe4: *pp = '\x84' ; break;  /* adiaeresis */
-		  case 0xe5: *pp = '\x86' ; break;  /* aring */
-		  case 0xe6: *pp = '\x91' ; break;  /* ae */
-		  case 0xe7: *pp = '\x87' ; break;  /* ccedilla */
-		  case 0xe8: *pp = '\x8a' ; break;  /* egrave */
-		  case 0xe9: *pp = '\x82' ; break;  /* eacute */
-		  case 0xea: *pp = '\x88' ; break;  /* ecircumflex */
-		  case 0xeb: *pp = '\x89' ; break;  /* ediaeresis */
-		  case 0xec: *pp = '\x8d' ; break;  /* igrave */
-		  case 0xed: *pp = '\xa1' ; break;  /* iacute */
-		  case 0xee: *pp = '\x8c' ; break;  /* icircumflex */
-		  case 0xef: *pp = '\x8b' ; break;  /* idiaeresis */
-		  case 0xf0: *pp = '\xd0' ; break;  /* eth */
-		  case 0xf1: *pp = '\xa4' ; break;  /* ntilde */
-		  case 0xf2: *pp = '\x95' ; break;  /* ograve */
-		  case 0xf3: *pp = '\xa2' ; break;  /* oacute */
-		  case 0xf4: *pp = '\x93' ; break;  /* ocircumflex */
-		  case 0xf5: *pp = '\xe4' ; break;  /* otilde */
-		  case 0xf6: *pp = '\x94' ; break;  /* odiaeresis */
-		  case 0xf7: *pp = '\xf6' ; break;  /* division */
-		  case 0xf8: *pp = '\x9b' ; break;  /* oslash */
-		  case 0xf9: *pp = '\x97' ; break;  /* ugrave */
-		  case 0xfa: *pp = '\xa3' ; break;  /* uacute */
-		  case 0xfb: *pp = '\x96' ; break;  /* ucircumflex */
-		  case 0xfc: *pp = '\x81' ; break;  /* udiaeresis */
-		  case 0xfd: *pp = '\xec' ; break;  /* yacute */
-		  case 0xfe: *pp = '\xe7' ; break;  /* thorn */
-		  case 0xff: *pp = '\x98' ; break;  /* ydiaeresis */
-		  default  :  break;
-		}
-	    }
-	}
+	/* status of domain->mapped[idx] is ignored.
+	 * not sure about the consequences.
+	 * perhaps mapped can entirely be removed?
+	 */
 
-    }
+	/* we assume, strings are already correctly
+	 * encoded.
+	 */
+
     return (const char*)p;
 }
 
