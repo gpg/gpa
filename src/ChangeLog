@@ -1,7 +1,9 @@
 2001-01-15  Bernhard Herzog  <bh@intevation.de>
 
 	* keyring.c: Add and update comments
-	
+	(keyring_editor_can_sign): New function. Sensitivity callback for
+	the sign key button.
+
 	* keyring.c (keyring_editor_generate_key):
 	(keyring_editor_generate_key_advanced): Renamed
 	keyring_editor_generate_key to
