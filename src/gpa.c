@@ -88,7 +88,6 @@ static ARGPARSE_OPTS opts[] = {
 
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain = NULL;
-GtkWidget *global_popupMenu = NULL;
 gboolean global_noTips = FALSE;
 GpapaAction global_lastCallbackResult;
 gchar *global_keyserver = NULL;
@@ -605,31 +604,3 @@ gpa_recipientWindow_close (gpointer param)
   paramClose[1] = NULL;
   gpa_window_destroy (paramClose);
 }				/* gpa_recipientWindow_close */
-
-
-void
-gpa_popupMenu_init (void)
-{
-  /* var */
-  GtkItemFactory *itemFactory;
-  GtkItemFactoryEntry menuItem[] = {
-    {_("/Show detail"), NULL, file_showDetail, 0, NULL},
-    {_("/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/Sign"), NULL, file_sign, 0, NULL},
-    {_("/Encrypt"), NULL, file_encrypt, 0, NULL},
-    {_("/E_ncrypt as"), NULL, file_encryptAs, 0, NULL},
-    {_("/Protect by Password"), NULL, file_protect, 0, NULL},
-    {_("/P_rotect as"), NULL, file_protectAs, 0, NULL},
-    {_("/Decrypt"), NULL, file_decrypt, 0, NULL},
-    {_("/Decrypt _as"), NULL, file_decryptAs, 0, NULL},
-    {_("/sep2"), NULL, NULL, 0, "<Separator>"},
-    {_("/Close"), NULL, file_close, 0, NULL}
-  };
-  gint menuItems = sizeof (menuItem) / sizeof (menuItem[0]);
-  /* commands */
-  itemFactory = gtk_item_factory_new (GTK_TYPE_MENU, "<main>", NULL);
-  gtk_item_factory_create_items (itemFactory, menuItems, menuItem, NULL);
-  global_popupMenu = gtk_item_factory_get_widget (itemFactory, "<main>");
-} /* gpa_popupMenu_init */
-
-
