@@ -36,7 +36,7 @@ gpa_widget_set_centered (GtkWidget * widget, GtkWidget * parent)
   gdk_window_get_size (parent->window, &w0, &h0);
   x = x0 + (w0 - w) / 2;
   y = y0 + (h0 - h) / 2;
-  gdk_window_move_resize (widget->window, x, y, 0, 0);
+  gdk_window_move_resize (widget->window, x, y, w, h);
 }				/* gpa_widget_set_centered */
 
 void
