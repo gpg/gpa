@@ -95,8 +95,8 @@ echo "Running aclocal..."
 aclocal
 echo "Running autoheader..."
 autoheader
-echo "Running automake --gnu ..."
-automake --gnu;
+echo "Running automake --add-missing --gnu ..."
+automake --add-missing --gnu;
 echo "Running autoconf..."
 autoconf
 
