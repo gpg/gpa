@@ -1,5 +1,18 @@
 2001-02-09  Bernhard Herzog  <bh@intevation.de>
 
+	* optionsmenu.h: Remove the prototypes of functions that are long
+	gone or that are now static
+
+	* optionsmenu.c (options_recipients_fillDefault):
+	(options_recipients_set):
+	(options_recipients):
+	(options_key):
+	(options_key_set):
+	(options_key_select):
+	(options_keyserver):
+	(options_keyserver_set): Make them static. They're only used in
+	this file.
+
 	* keyring.c (toolbar_edit_key): Update the details notebook too
 	when the key has been changed
 
