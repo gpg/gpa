@@ -341,28 +341,23 @@ static gchar * build_genkey_parms (GPAKeyGenParameters *params)
     {
       g_free (expire);
     }
-  
+
   return string;
 }
 
-/* Generate a key with the given parameters. It prepares the parameters
- * required by Gpgme and returns whatever gpgme_op_genkey returns.
+/* Begin generation of a key with the given parameters. It prepares the
+ * parameters required by Gpgme and returns whatever gpgme_op_genkey_start 
+ * returns.
  */
-gpg_error_t gpa_generate_key (GPAKeyGenParameters *params, gpgme_key_t *key)
+gpg_error_t gpa_generate_key_start (gpgme_ctx_t ctx, 
+				    GPAKeyGenParameters *params)
 {
   gchar *parm_string;
   gpg_error_t err;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   parm_string = build_genkey_parms (params);
-  err = gpgme_op_genkey (ctx, parm_string, NULL, NULL);
+  err = gpgme_op_genkey_start (ctx, parm_string, NULL, NULL);
   g_free (parm_string);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-    {
-      GpgmeGenKeyResult result = gpgme_op_genkey_result (ctx);
-      gpgme_get_key (ctx, result->fpr, key, FALSE);
-    }
-  gpgme_release (ctx);
 
   return err;
 }

@@ -98,8 +98,5 @@ gboolean gpa_options_get_backup_generated (GpaOptions *options);
 void gpa_options_set_detailed_view (GpaOptions *options, gboolean value);
 gboolean gpa_options_get_detailed_view (GpaOptions *options);
 
-/* Destroy the GpaOptions object */
-void gpa_options_destroy (GpaOptions *options);
-
 #endif /*OPTIONS_H*/
 

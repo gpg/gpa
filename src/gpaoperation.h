@@ -61,9 +61,4 @@ GType gpa_operation_get_type (void) G_GNUC_CONST;
 gboolean
 gpa_operation_busy (GpaOperation *op);
 
-/* Destroy the operation and related resources.
- */
-void
-gpa_operation_destroy (GpaOperation *op);
-
 #endif

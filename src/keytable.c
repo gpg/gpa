@@ -86,6 +86,7 @@ gpa_keytable_init (GpaKeyTable *keytable)
   keytable->context = gpa_context_new ();
   keytable->keys = NULL;
   keytable->secret = FALSE;
+  keytable->new_key = FALSE;
   keytable->tmp_list = NULL;
   g_signal_connect (G_OBJECT (keytable->context), "next_key",
 		    G_CALLBACK (next_key_cb), keytable);
@@ -98,18 +99,18 @@ gpa_keytable_finalize (GObject *object)
 {
   GpaKeyTable *keytable = GPA_KEYTABLE (object);
 
-  gpa_context_destroy (keytable->context);
+  g_object_unref (keytable->context);
   g_list_foreach (keytable->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (keytable->keys);
 }
 
 /* Internal functions */
 
-static void reload_cache (GpaKeyTable *keytable)
+static void reload_cache (GpaKeyTable *keytable, const char *fpr)
 {
   gpg_error_t err;
   
-  err = gpgme_op_keylist_start (keytable->context->ctx, NULL,
+  err = gpgme_op_keylist_start (keytable->context->ctx, fpr,
 				keytable->secret);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
@@ -134,16 +135,24 @@ static void done_cb (GpaContext *context, gpg_error_t err,
   /* Reverse the list to have the keys come up in the same order they
    * were listed */
   keytable->tmp_list = g_list_reverse (keytable->tmp_list);
-  /* Replace the list
-   */
-  if (keytable->keys)
+  if (keytable->new_key)
     {
-      g_list_foreach (keytable->keys, (GFunc) gpgme_key_unref, 
-		      NULL);
-      g_list_free (keytable->keys); 
+      /* Append the new key(s) 
+       */
+      keytable->keys = g_list_concat (keytable->keys, keytable->tmp_list);
     }
-  keytable->keys = keytable->tmp_list;
-  
+  else
+    {
+      /* Replace the list
+       */
+      if (keytable->keys)
+	{
+	  g_list_foreach (keytable->keys, (GFunc) gpgme_key_unref, 
+			  NULL);
+	  g_list_free (keytable->keys); 
+	}
+      keytable->keys = keytable->tmp_list;
+    }
   if (keytable->end)
     {
       keytable->end (keytable->data);
@@ -251,7 +260,7 @@ void gpa_keytable_list_keys (GpaKeyTable *keytable,
     }
   else 
     {
-      reload_cache (keytable);
+      reload_cache (keytable, NULL);
     }
 }
 
@@ -270,7 +279,28 @@ void gpa_keytable_force_reload (GpaKeyTable *keytable,
   keytable->end = end;
   keytable->data = data;
   /* List keys */
-  reload_cache (keytable);
+  reload_cache (keytable, NULL);
+}
+
+/* Load the key with the given fingerprint from GnuPG, replacing it in the
+ * keytable if needed.
+ */
+void gpa_keytable_load_new (GpaKeyTable *keytable,
+			    const char *fpr,
+			    GpaKeyTableNextFunc next,
+			    GpaKeyTableEndFunc end,
+			    gpointer data)
+{
+  g_return_if_fail (keytable != NULL);
+  g_return_if_fail (GPA_IS_KEYTABLE (keytable));
+
+  /* Set up callbacks */
+  keytable->next = next;
+  keytable->end = end;
+  keytable->data = data;
+  /* List keys */
+  keytable->new_key = TRUE;
+  reload_cache (keytable, fpr);
 }
 
 /* Return the key with a given fingerprint from the keytable, NULL if
@@ -299,19 +329,9 @@ const gpgme_key_t gpa_keytable_lookup_key (GpaKeyTable *keytable,
        * any real problems.
        */
       keytable->end = (GpaKeyTableEndFunc) gtk_main_quit;
-      reload_cache (keytable);
+      reload_cache (keytable, NULL);
       gtk_main ();
       keytable->end = NULL;
       return gpa_keytable_lookup_key (keytable, fpr);
     }
-}
-
-/* Free the keytable.
- */
-void gpa_keytable_destroy (GpaKeyTable *keytable)
-{
-  g_return_if_fail (keytable != NULL);
-  g_return_if_fail (GPA_IS_KEYTABLE (keytable));
-
-  g_object_run_dispose (G_OBJECT (keytable));
 }

@@ -376,13 +376,6 @@ gpa_options_get_backup_generated (GpaOptions *options)
   return options->backup_generated;
 }
 
-/* Destroy the GpaOptions object */
-void
-gpa_options_destroy (GpaOptions *options)
-{
-  g_object_run_dispose (G_OBJECT (options));
-}
-
 static void
 gpa_options_save_settings (GpaOptions *options)
 {

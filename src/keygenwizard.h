@@ -22,6 +22,13 @@
 #define KEYGENWIZARD_H
 
 #include <gtk/gtk.h>
-gboolean gpa_keygen_wizard_run (GtkWidget * parent);
+
+typedef gboolean (*GpaKeyGenWizardGenerateCb) (GPAKeyGenParameters *params,
+					       gboolean do_backup,
+					       gpointer data);
+
+GtkWidget *gpa_keygen_wizard_new (GtkWidget * parent, 
+				  GpaKeyGenWizardGenerateCb generate_action,
+				  gpointer data);
 
 #endif /* KEYGENWIZARD_H */

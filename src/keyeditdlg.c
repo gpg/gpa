@@ -318,7 +318,7 @@ gpa_key_edit_change_expiry(GtkWidget * widget, GpaKeyEditDialog *dialog)
 		    G_CALLBACK (gpa_key_edit_dialog_changed_wot_cb),
 		    dialog);
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (gpa_operation_destroy), dialog); 
+		    G_CALLBACK (g_object_unref), dialog); 
 }
 
 /* signal handler for the change passphrase button. */
@@ -334,7 +334,7 @@ gpa_key_edit_change_passphrase (GtkWidget *widget, GpaKeyEditDialog *dialog)
 		    G_CALLBACK (gpa_key_edit_dialog_changed_wot_cb),
 		    dialog);
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (gpa_operation_destroy), dialog);
+		    G_CALLBACK (g_object_unref), dialog);
 }
 
 /* API */

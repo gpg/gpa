@@ -70,6 +70,9 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpaimportfileop.h gpaimportfileop.c \
 	      gpaimportclipop.h gpaimportclipop.c \
 	      gpaimportserverop.h gpaimportserverop.c \
+	      gpagenkeyop.h gpagenkeyop.c \
+	      gpagenkeyadvop.h gpagenkeyadvop.c \
+	      gpagenkeysimpleop.h gpagenkeysimpleop.c \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
 	      options.c gpa.rc

@@ -44,6 +44,8 @@ struct _GpaKeyList {
   GList *keys;
   /* Dialog for warning about a trustdb rebuilding */
   GtkWidget *dialog;
+  /* ID of the timeout that displays the dialog */
+  guint timeout_id;
 };
 
 struct _GpaKeyListClass {
@@ -89,5 +91,10 @@ GList *gpa_keylist_get_selected_keys (GpaKeyList * keylist);
 /* Begin a reload of the keyring.
  */
 void gpa_keylist_start_reload (GpaKeyList * keylist);
+
+/* Let the keylist know that a new key with the given fingerprint is
+ * available.
+ */
+void gpa_keylist_new_key (GpaKeyList * keylist, const char *fpr);
 
 #endif /* GPA_KEYLIST_H */

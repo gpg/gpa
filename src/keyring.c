@@ -63,6 +63,9 @@
 
 #include "gpabackupop.h"
 
+#include "gpagenkeyadvop.h"
+#include "gpagenkeysimpleop.h"
+
 /*
  *      The public keyring editor
  */
@@ -287,13 +290,21 @@ gpa_keyring_editor_key_modified (GpaKeyEditDialog *dialog, gpgme_key_t key,
 }
 
 static void
+gpa_keyring_editor_new_key_cb (gpointer data, const gchar *fpr)
+{
+  GPAKeyringEditor *editor = data;
+  
+  gpa_keylist_new_key (GPA_KEYLIST (editor->keylist), fpr);
+}
+
+static void
 register_key_operation (GPAKeyringEditor * editor, GpaKeyOperation *op)
 {
   g_signal_connect_swapped (G_OBJECT (op), "changed_wot",
 			    G_CALLBACK (gpa_keyring_editor_changed_wot_cb),
 			    editor);
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (gpa_operation_destroy), editor); 
+		    G_CALLBACK (g_object_unref), editor); 
 }
 
 static void
@@ -303,14 +314,24 @@ register_import_operation (GPAKeyringEditor * editor, GpaImportOperation *op)
 			    G_CALLBACK (gpa_keyring_editor_changed_wot_cb),
 			    editor);
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (gpa_operation_destroy), editor); 
+		    G_CALLBACK (g_object_unref), editor); 
+}
+
+static void
+register_generate_operation (GPAKeyringEditor * editor, GpaGenKeyOperation *op)
+{
+  g_signal_connect_swapped (G_OBJECT (op), "generated_key",
+			    G_CALLBACK (gpa_keyring_editor_new_key_cb),
+			    editor);
+  g_signal_connect (G_OBJECT (op), "completed",
+		    G_CALLBACK (g_object_unref), editor); 
 }
 
 static void
 register_operation (GPAKeyringEditor * editor, GpaOperation *op)
 {
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (gpa_operation_destroy), editor); 
+		    G_CALLBACK (g_object_unref), editor); 
 }
 
 
@@ -513,32 +534,11 @@ static void
 keyring_editor_generate_key_advanced (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  GPAKeyGenParameters * params;
-  gpg_error_t err;
-  gpgme_key_t key;
 
-  params = gpa_key_gen_run_dialog(editor->window);
-  if (params)
-    {
-      err = gpa_generate_key (params, &key);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-        {
-          gpa_gpgme_error (err);
-        }
-      gpgme_key_unref (key);
-      gpa_key_gen_free_parameters (params);
-
-      /* finally, update the default key if there is none because now
-       * there is at least one secret key, update the key list and the
-       * sensitive widgets because some may depend on whether secret
-       * keys are available
-       */
-      gpa_keylist_start_reload (editor->keylist);
-      gpa_options_update_default_key (gpa_options_get_instance ());
-      update_selection_sensitive_widgets (editor);
-    }
-} /* keyring_editor_generate_key_advanced */
-
+  GpaGenKeyAdvancedOperation *op = gpa_gen_key_advanced_operation_new
+    (editor->window);
+  register_generate_operation (editor, GPA_GEN_KEY_OPERATION (op));
+}
 
 /* Call the key generation wizard and update the key list if necessary */
 static void
@@ -546,18 +546,10 @@ keyring_editor_generate_key_simple (gpointer param)
 {
   GPAKeyringEditor * editor = param;
 
-  if (gpa_keygen_wizard_run (editor->window))
-    {
-      /* update the default key if there is none because now
-       * there is at least one secret key, update the key list and the
-       * sensitive widgets because some may depend on whether secret
-       * keys are available
-       */
-      gpa_keylist_start_reload (editor->keylist);
-      gpa_options_update_default_key (gpa_options_get_instance ());
-      update_selection_sensitive_widgets (editor);
-    }
-} /* keyring_editor_generate_key_simple */
+  GpaGenKeySimpleOperation *op = gpa_gen_key_simple_operation_new
+    (editor->window);
+  register_generate_operation (editor, GPA_GEN_KEY_OPERATION (op));
+}
 
 
 /* Depending on the simple_ui flag call either

@@ -24,6 +24,10 @@
 #include "keytable.h"
 #include "icons.h"
 
+/* Internal */
+static void add_trustdb_dialog (GpaKeyList * keylist);
+static void remove_trustdb_dialog (GpaKeyList * keylist);
+
 /* Callbacks */
 static void gpa_keylist_next (gpgme_key_t key, gpointer data);
 static void gpa_keylist_end (gpointer data);
@@ -131,6 +135,7 @@ gpa_keylist_init (GpaKeyList *list)
   list->secret = FALSE;
   list->keys = NULL;
   list->dialog = NULL;
+  list->timeout_id = 0;
   list->window = NULL;
   /* Init the model */
   store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
@@ -152,6 +157,7 @@ gpa_keylist_init (GpaKeyList *list)
   gpa_keylist_set_brief (list);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
   /* Load the keyring */
+  add_trustdb_dialog (list);
   gpa_keytable_list_keys (gpa_keytable_get_public_instance(),
 			  gpa_keylist_next, gpa_keylist_end, list);
 }
@@ -378,6 +384,45 @@ void gpa_keylist_start_reload (GpaKeyList * keylist)
   g_list_foreach (keylist->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (keylist->keys);
   keylist->keys = NULL;
+  add_trustdb_dialog (keylist);
+
+  gpa_keytable_force_reload (gpa_keytable_get_public_instance (),
+			     gpa_keylist_next, gpa_keylist_end, keylist);
+}
+
+/* Let the keylist know that a new key with the given fingerprint is
+ * available.
+ */
+void gpa_keylist_new_key (GpaKeyList * keylist, const char *fpr)
+{
+  add_trustdb_dialog (keylist);
+  gpa_keytable_load_new (gpa_keytable_get_secret_instance (), fpr,
+			 NULL, (GpaKeyTableEndFunc) gtk_main_quit, NULL);
+  /* Hack. Turn the asynchronous listing into a synchronous one */
+  gtk_main ();
+  remove_trustdb_dialog (keylist);
+  /* The trustdb seems not to be updated for a --list-secret, so we
+   * cdisplay the dialog both times, just in case */
+  add_trustdb_dialog (keylist);
+  gpa_keytable_load_new (gpa_keytable_get_public_instance (), fpr,
+			 gpa_keylist_next, gpa_keylist_end, keylist);
+}
+
+/* Internal functions */
+
+static gboolean
+display_dialog (GpaKeyList * keylist)
+{
+  gtk_widget_show_all (keylist->dialog);
+
+  keylist->timeout_id = 0;
+
+  return FALSE;
+}
+
+static void
+add_trustdb_dialog (GpaKeyList * keylist)
+{
   /* Display this warning until the first key is received.
    * It may be shown at times when it's not needed. But it shouldn't appear
    * for long those times.
@@ -389,12 +434,26 @@ void gpa_keylist_start_reload (GpaKeyList * keylist)
 					    _("GnuPG is rebuilding the trust "
 					      "database.\nThis might take a "
 					      "few seconds."));
-  gtk_widget_show_all (keylist->dialog);
-  gpa_keytable_force_reload (gpa_keytable_get_public_instance (),
-			     gpa_keylist_next, gpa_keylist_end, keylist);
+  /* Wait a second before displaying the dialog. This avoids most 
+   * "false alarms". */
+  keylist->timeout_id = g_timeout_add (1000, (GSourceFunc) display_dialog, 
+				       keylist);
 }
 
-/* Internal functions */
+static void
+remove_trustdb_dialog (GpaKeyList * keylist)
+{
+  if (keylist->timeout_id)
+    {
+      g_source_remove (keylist->timeout_id);
+      keylist->timeout_id = 0;
+    }
+  if (keylist->dialog)
+    {
+      gtk_widget_destroy (keylist->dialog);
+      keylist->dialog = NULL;
+    }
+}
 
 static GdkPixbuf*
 get_key_pixbuf (gpgme_key_t key)
@@ -432,11 +491,7 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
   gchar *userid, *expiry;
 
   /* Remove the dialog if it is being displayed */
-  if (list->dialog) 
-    {
-      gtk_widget_destroy (list->dialog);
-      list->dialog = NULL;
-    }
+  remove_trustdb_dialog (list);
   
   list->keys = g_list_append (list->keys, key);
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (list)));
@@ -474,6 +529,9 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
 
 static void gpa_keylist_end (gpointer data)
 {
+  GpaKeyList *list = data;
+  
+  remove_trustdb_dialog (list);
 }
 
 static void gpa_keylist_clear_columns (GpaKeyList *keylist)

@@ -34,7 +34,8 @@ static gboolean gpa_backup_operation_idle_cb (gpointer data);
 enum
 {
   PROP_0,
-  PROP_KEY
+  PROP_KEY,
+  PROP_FINGERPRINT,
 };
 
 static void
@@ -50,6 +51,9 @@ gpa_backup_operation_get_property (GObject     *object,
     case PROP_KEY:
       g_value_set_pointer (value, op->key);
       break;
+    case PROP_FINGERPRINT:
+      g_value_set_string (value, op->fpr);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -63,12 +67,29 @@ gpa_backup_operation_set_property (GObject     *object,
 				   GParamSpec  *pspec)
 {
   GpaBackupOperation *op = GPA_BACKUP_OPERATION (object);
+  gchar *fpr;
+  gpgme_key_t key;
 
   switch (prop_id)
     {
     case PROP_KEY:
-      op->key = (gpgme_key_t) g_value_get_pointer (value);
-      gpgme_key_ref (op->key);
+      key = (gpgme_key_t) g_value_get_pointer (value);
+      if (key)
+	{
+	  op->key = key;
+	  gpgme_key_ref (op->key);
+	  op->fpr = g_strdup (op->key->subkeys->fpr);
+	  op->key_id = g_strdup (gpa_gpgme_key_get_short_keyid (op->key, 0));
+	}
+      break;
+    case PROP_FINGERPRINT:
+      fpr = (gchar*) g_value_get_pointer (value);
+      if (fpr)
+	{
+	  op->key = NULL;
+	  op->fpr = g_strdup (fpr);
+	  op->key_id = g_strdup (fpr + strlen (fpr) - 8);
+	}
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -81,7 +102,12 @@ gpa_backup_operation_finalize (GObject *object)
 {
   GpaBackupOperation *op = GPA_BACKUP_OPERATION (object);
 
-  gpgme_key_unref (op->key);
+  if (op->key)
+    {
+      gpgme_key_unref (op->key);
+    }
+  g_free (op->fpr);
+  g_free (op->key_id);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -90,6 +116,8 @@ static void
 gpa_backup_operation_init (GpaBackupOperation *op)
 {
   op->key = NULL;
+  op->fpr = NULL;
+  op->key_id = NULL;
 }
 
 static GObject*
@@ -130,6 +158,12 @@ gpa_backup_operation_class_init (GpaBackupOperationClass *klass)
 				   g_param_spec_pointer 
 				   ("key", "Key",
 				    "Key",
+				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_FINGERPRINT,
+				   g_param_spec_pointer 
+				   ("fpr", "fpr",
+				    "Fingerprint",
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
 
@@ -187,7 +221,7 @@ gpa_backup_operation_do_backup (GpaBackupOperation *op, gchar *filename)
     }
   if (!cancelled)
     {
-      if (gpa_backup_key (op->key->subkeys->fpr, filename))
+      if (gpa_backup_key (op->fpr, filename))
         {
           gchar *message;
 	      message = g_strdup_printf (_("A copy of your secret key has "
@@ -228,7 +262,7 @@ export_browse (gpointer param)
 } /* export_browse */
 
 static gchar*
-gpa_backup_operation_dialog_run (GtkWidget *parent, gpgme_key_t key)
+gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id)
 {
   GtkAccelGroup *accel_group;
 
@@ -266,8 +300,7 @@ gpa_backup_operation_dialog_run (GtkWidget *parent, gpgme_key_t key)
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
 
   /* Show the ID */
-  id_text = g_strdup_printf (_("Generating backup of key: %s"),
-			     gpa_gpgme_key_get_short_keyid (key, 0));
+  id_text = g_strdup_printf (_("Generating backup of key: %s"), key_id);
   id_label = gtk_label_new (id_text);
   gtk_table_attach (GTK_TABLE (table), id_label, 0, 3, 0, 1, GTK_FILL, 0, 0, 0);
   g_free (id_text);
@@ -312,7 +345,7 @@ gpa_backup_operation_idle_cb (gpointer data)
   gchar *file;
 
   if ((file = gpa_backup_operation_dialog_run (GPA_OPERATION (op)->window,
-					       op->key)))
+					       op->key_id)))
     {
       gpa_backup_operation_do_backup (op, file);
     }
@@ -334,5 +367,18 @@ gpa_backup_operation_new (GtkWidget *window, gpgme_key_t key)
 		     "key", key,
 		     NULL);
 
+  return op;
+}
+
+GpaBackupOperation* 
+gpa_backup_operation_new_from_fpr (GtkWidget *window, const gchar *fpr)
+{
+  GpaBackupOperation *op;
+  
+  op = g_object_new (GPA_BACKUP_OPERATION_TYPE,
+		     "window", window,
+		     "fpr", fpr,
+		     NULL);
+  
   return op;
 }

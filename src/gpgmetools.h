@@ -104,11 +104,12 @@ int gpa_open_input (const char *filename, gpgme_data_t *data, GtkWidget *parent)
  */
 void dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard);
 
-/* Generate a key with the given parameters. It prepares the parameters
- * required by Gpgme and returns whatever gpgme_op_genkey returns, along with
- * the key generated in key.
+/* Begin generation of a key with the given parameters. It prepares the
+ * parameters required by Gpgme and returns whatever gpgme_op_genkey_start 
+ * returns.
  */
-gpg_error_t gpa_generate_key (GPAKeyGenParameters *params, gpgme_key_t *key);
+gpg_error_t gpa_generate_key_start (gpgme_ctx_t ctx, 
+				    GPAKeyGenParameters *params);
 
 /* Backup a key. It exports both the public and secret keys to a file.
  * Returns TRUE on success and FALSE on error. It displays errors to the

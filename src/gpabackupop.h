@@ -42,6 +42,7 @@ struct _GpaBackupOperation {
   GpaOperation parent;
 
   gpgme_key_t key;
+  gchar *fpr, *key_id;
 };
 
 struct _GpaBackupOperationClass {
@@ -53,5 +54,8 @@ GType gpa_backup_operation_get_type (void) G_GNUC_CONST;
 /* API */					   
 GpaBackupOperation* 
 gpa_backup_operation_new (GtkWidget *window, gpgme_key_t key);
+
+GpaBackupOperation* 
+gpa_backup_operation_new_from_fpr (GtkWidget *window, const gchar *fpr);
 
 #endif

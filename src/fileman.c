@@ -216,7 +216,7 @@ register_operation (GpaFileManager *fileman, GpaFileOperation *op)
   g_signal_connect (G_OBJECT (op), "created_file",
 		    G_CALLBACK (file_created_cb), fileman);
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (gpa_operation_destroy), NULL);
+		    G_CALLBACK (g_object_unref), NULL);
 }
 
 /*

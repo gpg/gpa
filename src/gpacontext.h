@@ -77,9 +77,5 @@ GpaContext *gpa_context_new (void);
  */
 gboolean gpa_context_busy (GpaContext *context);
 
-/* Destroy the context.
- */
-void gpa_context_destroy (GpaContext *context);
-
 #endif
 

@@ -30,6 +30,7 @@
 #include "gpawizard.h"
 #include "qdchkpwd.h"
 #include "gpgmetools.h"
+#include "keygenwizard.h"
 
 /*
  * The key generation wizard
@@ -75,7 +76,9 @@ typedef struct {
   GtkAccelGroup * accel_group;
   GdkPixmap * genkey_pixmap;
   GdkPixmap * backup_pixmap;
-  gboolean successful;
+
+  GpaKeyGenWizardGenerateCb generate;
+  gpointer generate_data;
 } GPAKeyGenWizard;
 
 
@@ -433,8 +436,6 @@ gpa_keygen_wizard_generate_action (gpointer data)
 {
   GPAKeyGenWizard *keygen_wizard = data;
   GPAKeyGenParameters params;
-  gpg_error_t err;
-  gpgme_key_t key;
   gboolean do_backup;
   GtkWidget *radio;
 
@@ -464,25 +465,13 @@ gpa_keygen_wizard_generate_action (gpointer data)
   while (gtk_events_pending())
     gtk_main_iteration();
 
-  err = gpa_generate_key (&params, &key);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-    {
-      gpa_gpgme_error (err);
-    }
-  if (do_backup)
-    {
-      /* Disabled until key generation becomes a GpaOperation */
-#if 0
-      key_backup_dialog_run (keygen_wizard->window, key);
-#endif      
-    }
-  gpgme_key_unref (key);
+  keygen_wizard->generate (&params, do_backup, keygen_wizard->generate_data);
+
   g_free (params.userID);
   g_free (params.email);
   g_free (params.comment);
 
-  keygen_wizard->successful = TRUE;
-  return TRUE;
+  return FALSE;
 }
 
 
@@ -497,11 +486,10 @@ gpa_keygen_wizard_close (GtkWidget * widget, gpointer param)
 }
 
 
-/* handler for the destroy signal. Quit the recursive main loop */
+/* handler for the destroy signal. */
 static void
 gpa_keygen_wizard_destroy (GtkWidget *widget, gpointer param)
 {
-  gtk_main_quit ();
 }
 
 
@@ -535,9 +523,9 @@ page_switched (GtkWidget * page, gpointer data)
   gtk_pixmap_set (GTK_PIXMAP (keygen_wizard->pixmap_widget), pixmap, NULL);
 }
 
-
-gboolean
-gpa_keygen_wizard_run (GtkWidget * parent)
+GtkWidget *gpa_keygen_wizard_new (GtkWidget * parent, 
+				  GpaKeyGenWizardGenerateCb generate_action,
+				  gpointer data)
 {
   GtkWidget * window;
   GtkWidget * wizard;
@@ -549,13 +537,15 @@ gpa_keygen_wizard_run (GtkWidget * parent)
 
 
   keygen_wizard = g_malloc (sizeof (*keygen_wizard));
-  keygen_wizard->successful = FALSE;
   keygen_wizard->genkey_pixmap = gpa_create_icon_pixmap (parent,
 							 "wizard_genkey",
 							 NULL);
   keygen_wizard->backup_pixmap = gpa_create_icon_pixmap (parent,
 							 "wizard_backup",
 							 NULL);
+
+  keygen_wizard->generate = generate_action;
+  keygen_wizard->generate_data = data;
 
   accel_group = gtk_accel_group_new ();
   keygen_wizard->accel_group = accel_group;
@@ -627,9 +617,7 @@ gpa_keygen_wizard_run (GtkWidget * parent)
    * some day */
   gpa_wizard_update_buttons (wizard);
 
-  gtk_main ();
-
-  return keygen_wizard->successful;
+  return window;
 }
   
 

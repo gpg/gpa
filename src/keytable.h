@@ -52,6 +52,7 @@ struct _GpaKeyTable {
   GpaContext *context;
 
   gboolean secret;
+  gboolean new_key;
   GpaKeyTableNextFunc next;
   GpaKeyTableEndFunc end;
   gpointer data;
@@ -93,14 +94,19 @@ void gpa_keytable_force_reload (GpaKeyTable *keytable,
 				GpaKeyTableEndFunc end,
 				gpointer data);
 
+/* Load the key with the given fingerprint from GnuPG, replacing it in the
+ * keytable if needed.
+ */
+void gpa_keytable_load_new (GpaKeyTable *keytable,
+			    const char *fpr,
+			    GpaKeyTableNextFunc next,
+			    GpaKeyTableEndFunc end,
+			    gpointer data);
+
 /* Return the key with a given fingerprint from the keytable, NULL if
  * there is none. No reference is provided.
  */
 const gpgme_key_t gpa_keytable_lookup_key (GpaKeyTable *keytable,
 					   const char *fpr);
-
-/* Free the keytable.
- */
-void gpa_keytable_destroy (GpaKeyTable *keytable);
 
 #endif /* KEYTABLE_H */

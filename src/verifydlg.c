@@ -82,7 +82,7 @@ gpa_file_verify_dialog_finalize (GObject *object)
 {  
   GpaFileVerifyDialog *dialog = GPA_FILE_VERIFY_DIALOG (object);
 
-  gpa_context_destroy (dialog->ctx);
+  g_object_unref (dialog->ctx);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -229,17 +229,6 @@ gpa_context_busy (GpaContext *context)
   return context->busy;
 }
 
-/* Destroy the GpaContext object.
- */
-void
-gpa_context_destroy (GpaContext *context)
-{
-  g_return_if_fail (context != NULL);
-  g_return_if_fail (GPA_IS_CONTEXT (context));
-
-  g_object_run_dispose (G_OBJECT (context));
-}
-
 /* 
  * The GPGME I/O callbacks 
  */

@@ -1,3 +1,86 @@
+2003-10-12  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (gpa_keyring_editor_new_key_cb)
+	(register_generate_operation): New.
+	(keyring_editor_generate_key_advanced)
+	(keyring_editor_generate_key_simple): Use operation objects.
+
+	* keylist.c (gpa_keylist_init):
+	(gpa_keylist_start_reload): Display the trustdb dialog.
+	(gpa_keylist_new_key): New.
+	(display_dialog, remove_trustdb_dialog): New.
+	(add_trustdb_dialog): New. Set a timeout before displaying the
+	"rebuilding trustdb" dialog.
+	(gpa_keylist_next): Remove the dialog here.
+	(gpa_keylist_end): Likewise. Make sure the dialog is always removed.
+
+	* keylist.h (gpa_keylist_new_key): New.
+
+	* keytable.c (gpa_keytable_init): Add new_key field.
+	(reload_cache): Receive a pattern, too.
+	(done_cb): Act differently when in "new key" mode.
+	(gpa_keytable_list_keys, gpa_keytable_force_reload)
+	(gpa_keytable_lookup_key): Change call to reload_cache.
+	(gpa_keytable_load_new): New.
+
+	* keytable.h: New function.
+
+	* keygenwizard.c (gpa_keygen_wizard_generate_action): Don't
+	generate the key here, just invoke a callback to let the operation
+	know it's time to generate it.
+	(gpa_keygen_wizard_destroy): Remove call to gtk_main_quit.
+	(gpa_keygen_wizard_new): Receive the callback. Don't go into a
+	nested main loop.
+
+	* keygenwizard.h (gpa_keygen_wizard_run): Rename to:
+	(gpa_keygen_wizard_new): Change prototype to receive a callback
+
+	* gpgmetools.c, gpgmetools.h (gpa_generate_key_start): Replace
+	gpa_generate_key with this.
+
+	* gpabackupop.c (gpa_backup_operation_get_property)
+	(gpa_backup_operation_set_property)
+	(gpa_backup_operation_class_init): Add fingerprint property. When
+	receiving a key, use just it's fingerprint.
+	(gpa_backup_operation_finalize, gpa_backup_operation_init): Account for
+	fingerprint and key id fields.
+	(gpa_backup_operation_do_backup): Use the stored fingerprint instead
+	of the key.
+	(gpa_backup_operation_dialog_run)
+	(gpa_backup_operation_idle_cb): Same thing with the key id.
+	(gpa_backup_operation_new_from_fpr): New.
+
+	* gpabackupop.h (gpa_backup_operation_new_from_fpr): New constructor
+	to backup a key by fingerprint.
+
+	* gpagenkeyop.h, gpagenkeyop.c, gpagenkeyadvop.h, gpagenkeyadvop.c,
+	gpagenkeysimpleop.h, gpagenkeysimpleop.c: New. The key generation
+	operations.
+
+	* Makefile.am (gpa_SOURCES): Add gpagenkeyop.h, gpagenkeyop.c,
+	gpagenkeyadvop.h, gpagenkeyadvop.c, gpagenkeysimpleop.h and
+	gpagenkeysimpleop.c.
+
+	* keytable.h (gpa_keytable_destroy): Removed.
+
+	* options.h, options.c (gpa_options_destroy): Removed.
+
+	* gpaoperation.c (gpa_operation_finalize): Replace gpa_context_destroy
+	with g_object_unref.
+	* verifydlg.c (gpa_file_verify_dialog_finalize): Likewise.
+
+	* gpacontext.h, gpacontext.c (gpa_context_destroy): Removed.
+
+	* gpaoperation.h, gpaoperation.c (gpa_operation_destroy): Removed.
+
+	* keyring.c (register_key_operation, register_import_operation)
+	(register_operation): Replace gpa_operation_destroy with
+	g_object_unref.
+	* fileman.c (register_operation): Likewise.
+	* keyeditdlg.c (gpa_key_edit_change_expiry)
+	(gpa_key_edit_change_passphrase): Likewise.
+
+
 2003-10-03  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (keyring_editor_key_listed): New.

@@ -84,7 +84,7 @@ gpa_operation_finalize (GObject *object)
 {
   GpaOperation *op = GPA_OPERATION (object);
   
-  gpa_context_destroy (op->context);
+  g_object_unref (op->context);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -186,15 +186,4 @@ gpa_operation_busy (GpaOperation *op)
   g_return_val_if_fail (GPA_IS_OPERATION (op), FALSE);
 
   return gpa_context_busy (op->context);
-}
-
-/* Destroy the operation and related resources.
- */
-void
-gpa_operation_destroy (GpaOperation *op)
-{
-  g_return_if_fail (op != NULL);
-  g_return_if_fail (GPA_IS_OPERATION (op));
-
-  g_object_run_dispose (G_OBJECT (op));
 }
