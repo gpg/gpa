@@ -1,0 +1,102 @@
+/* gpgmeparsers.c - The GNU Privacy Assistant
+ *      Copyright (C) 2002, Miguel Coca.
+ *
+ * This file is part of GPA
+ *
+ * GPA is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GPA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ */
+
+#include <gpgme.h>
+#include "gpa.h"
+#include "gpgmeparsers.h"
+
+/* Retrieve and parse the result of gpgme_get_engine_info () */
+
+struct parse_engine_info_s
+{
+  GQueue *tag_stack;
+  gboolean in_openpgp;
+  GpaEngineInfo *engine;
+};
+
+void parse_engine_info_start (GMarkupParseContext *context,
+			      const gchar         *element_name,
+			      const gchar        **attribute_names,
+			      const gchar        **attribute_values,
+			      gpointer             user_data,
+			      GError             **error)
+{
+  struct parse_engine_info_s *data = user_data;
+  g_queue_push_head (data->tag_stack, (gpointer) element_name);
+}
+
+void parse_engine_info_end (GMarkupParseContext *context,
+			    const gchar         *element_name,
+			    gpointer             user_data,
+			    GError             **error)
+{
+  struct parse_engine_info_s *data = user_data;
+  g_queue_pop_head (data->tag_stack);
+}
+
+void parse_engine_info_text (GMarkupParseContext *context,
+			     const gchar         *text,
+			     gsize                text_len,  
+			     gpointer             user_data,
+			     GError             **error)
+{
+  struct parse_engine_info_s *data = user_data;
+  if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), "protocol"))
+    {
+      if (g_str_equal (text, "OpenPGP"))
+	{
+	  data->in_openpgp = TRUE;
+	}
+      else
+	{
+	  data->in_openpgp = FALSE;
+	}
+    }
+  else if (data->in_openpgp)
+    {
+      if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), "path"))
+	{
+	  data->engine->path = g_strdup (text);
+	}
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), 
+			    "version"))
+	{
+	  data->engine->version = g_strdup (text);
+	}
+    }
+}
+
+void gpa_parse_engine_info (GpaEngineInfo *info)
+{
+  GMarkupParser parser = 
+    {
+      parse_engine_info_start,
+      parse_engine_info_end,
+      parse_engine_info_text,
+      NULL, NULL
+    };
+  struct parse_engine_info_s data = {g_queue_new(), FALSE, info};
+  const gchar *engine_info = gpgme_get_engine_info ();
+  GMarkupParseContext* context = g_markup_parse_context_new (&parser, 0,
+							     &data, NULL);
+  g_markup_parse_context_parse (context, engine_info, strlen (engine_info),
+				NULL);
+  g_markup_parse_context_free (context);
+}

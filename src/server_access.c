@@ -32,6 +32,7 @@
 
 #include "gtktools.h"
 #include "server_access.h"
+#include "gpgmeparsers.h"
 
 /* WARNING: Keep this up to date with gnupg's include/keyserver.h */
 #define KEYSERVER_OK               0 /* not an error */
@@ -52,8 +53,29 @@
 
 /* Internal API */
 
+/* Find out the plugin protocol version */
+static int 
+protocol_version (void)
+{
+  GpaEngineInfo info;
+  gpa_parse_engine_info (&info);
+  /* GnuPG 1.0.7 and 1.2.x use version 0 */
+  if (info.version[0] == '1' && 
+      (info.version[2] == '0' || info.version[2] == '2'))
+    {
+      return 0;
+    }
+  else
+    {
+      /* Assume all others use version 1 */
+      return 1;
+    }
+  g_free (info.version);
+  g_free (info.path);
+}
+
 /* Code adapted from GnuPG (file g10/keyserver.c) */
-gboolean 
+static gboolean 
 parse_keyserver_uri (char *uri, char **scheme, char **host,
 		     char **port, char **opaque)
 {
@@ -239,6 +261,7 @@ invoke_helper (const gchar *scheme, gchar *command_filename,
   GError *error = NULL;
   int exit_status;
   int output_fd;
+  gchar *error_message;
   
   /* Open the output file */
   output_fd = g_file_open_tmp (OUTPUT_TEMP_NAME, output_filename, NULL);
@@ -249,8 +272,8 @@ invoke_helper (const gchar *scheme, gchar *command_filename,
   helper_argv[2] = *output_filename;
   helper_argv[3] = command_filename;
   g_spawn_sync (NULL, helper_argv, NULL, 
-		G_SPAWN_STDOUT_TO_DEV_NULL|G_SPAWN_STDERR_TO_DEV_NULL, 
-		NULL, NULL, NULL, NULL, &exit_status, &error);
+		G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, 
+		NULL, &error_message, &exit_status, &error);
   if (error)
     {
       /* An error ocurred in the fork/exec: we assume that there is no plugin.
@@ -263,25 +286,38 @@ invoke_helper (const gchar *scheme, gchar *command_filename,
       /* Error during connection. Try to parse the output and report the 
        * error.
        */
-      gint error_code = parse_helper_output (*output_filename);
-      /* Not really errors */
-      if (error_code == KEYSERVER_OK ||
-	  error_code == KEYSERVER_KEY_NOT_FOUND ||
-	  error_code == KEYSERVER_KEY_EXISTS)
+      if (protocol_version () == 0)
 	{
-	  exit_status = KEYSERVER_OK;
-	}
-      else
-	{
+	  /* With Version 0 plugins, we just can't know the error, so we
+	   * show the error output from the plugin to the user. */
 	  gchar *message = g_strdup_printf (_("An error ocurred while "
 					      "contacting the server:\n\n%s"), 
-					    error_string (error_code));
+					    error_message);
 	  gpa_window_error (message, parent);
+	}
+      else if (protocol_version () == 1)
+	{
+	  gint error_code = parse_helper_output (*output_filename);
+	  /* Not really errors */
+	  if (error_code == KEYSERVER_OK ||
+	      error_code == KEYSERVER_KEY_NOT_FOUND ||
+	      error_code == KEYSERVER_KEY_EXISTS)
+	    {
+	      exit_status = KEYSERVER_OK;
+	    }
+	  else
+	    {
+	      gchar *message = g_strdup_printf (_("An error ocurred while "
+					      "contacting the server:\n\n%s"), 
+						error_string (error_code));
+	      gpa_window_error (message, parent);
+	    }
 	}
     }
   close (output_fd);
   g_free (helper);
   g_free (helper_path);
+  g_free (error_message);
 
   return exit_status;
 }

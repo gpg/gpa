@@ -24,6 +24,7 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpgmetools.h"
+#include "gpgmeparsers.h"
 
 /* Report an unexpected error in GPGME and quit the application */
 void _gpa_gpgme_error (GpgmeError err, const char *file, int line)
@@ -274,79 +275,6 @@ GpgmeError gpa_generate_key (GPAKeyGenParameters *params)
   return err;
 }
 
-struct parse_engine_info_s
-{
-  GQueue *tag_stack;
-  gboolean in_openpgp;
-  gchar *path;
-};
-
-void parse_engine_info_start (GMarkupParseContext *context,
-			      const gchar         *element_name,
-			      const gchar        **attribute_names,
-			      const gchar        **attribute_values,
-			      gpointer             user_data,
-			      GError             **error)
-{
-  struct parse_engine_info_s *data = user_data;
-  g_queue_push_head (data->tag_stack, (gpointer) element_name);
-}
-
-void parse_engine_info_end (GMarkupParseContext *context,
-			    const gchar         *element_name,
-			    gpointer             user_data,
-			    GError             **error)
-{
-  struct parse_engine_info_s *data = user_data;
-  g_queue_pop_head (data->tag_stack);
-}
-
-void parse_engine_info_text (GMarkupParseContext *context,
-			     const gchar         *text,
-			     gsize                text_len,  
-			     gpointer             user_data,
-			     GError             **error)
-{
-  struct parse_engine_info_s *data = user_data;
-  if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), "protocol"))
-    {
-      if (g_str_equal (text, "OpenPGP"))
-	{
-	  data->in_openpgp = TRUE;
-	}
-      else
-	{
-	  data->in_openpgp = FALSE;
-	}
-    }
-  else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), "path") 
-	   && data->in_openpgp)
-    {
-      data->path = g_strdup (text);
-    }
-}
-
-/* Find the path to the gpg executable from the gpgme engine information. */
-static gchar *
-find_gpg_executable (void)
-{
-  GMarkupParser parser = 
-    {
-      parse_engine_info_start,
-      parse_engine_info_end,
-      parse_engine_info_text,
-      NULL, NULL
-    };
-  struct parse_engine_info_s data = {g_queue_new(), FALSE, NULL};
-  const gchar *engine_info = gpgme_get_engine_info ();
-  GMarkupParseContext* context = g_markup_parse_context_new (&parser, 0,
-							     &data, NULL);
-  g_markup_parse_context_parse (context, engine_info, strlen (engine_info),
-				NULL);
-  g_markup_parse_context_free (context);
-  return data.path;
-}
-
 /* Backup a key. It exports both the public and secret keys to a file.
  * Returns TRUE on success and FALSE on error. It displays errors to the
  * user.
@@ -357,20 +285,24 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
   gchar *err;
   FILE *file;
   gint ret_code;
-  gchar *gpg = find_gpg_executable();
+  GpaEngineInfo info;
   gchar *header_argv[] = 
     {
-      gpg, "--batch", "--no-tty", "--fingerprint", fpr, NULL
+      NULL, "--batch", "--no-tty", "--fingerprint", fpr, NULL
     };
   gchar *pub_argv[] = 
     {
-      gpg, "--batch", "--no-tty", "--armor", "--export", fpr, NULL
+      NULL, "--batch", "--no-tty", "--armor", "--export", fpr, NULL
     };
   gchar *sec_argv[] = 
     {
-      gpg, "--batch", "--no-tty", "--armor", "--export-secret-key", fpr, NULL
+      NULL, "--batch", "--no-tty", "--armor", "--export-secret-key", fpr, NULL
     };
 
+  gpa_parse_engine_info (&info);
+  header_argv[0] = info.path;
+  pub_argv[0] = info.path;
+  sec_argv[0] = info.path;
   /* Open the file */
   file = fopen (filename, "w");
   if (!file)
@@ -414,6 +346,8 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
   fputs (sec_key, file);
   g_free (err);
   g_free (sec_key);
+  g_free (info.path);
+  g_free (info.version);
 
   fclose (file);
   return TRUE;

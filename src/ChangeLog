@@ -1,3 +1,18 @@
+2002-10-25  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* server_access.c (protocol_version): New function.
+	(invoke_helper): Added support for error reporting under both
+	GnuPG 1.2 and 1.3.
+
+	* gpgmetools.c (parse_engine_info_start, parse_engine_info_end) 
+	(parse_engine_info_text, find_gpg_executable): Remove from here.
+	Mostly moved (and expanded) to gpgmeparsers.c.
+	(gpa_backup_key): Use gpa_parse_engine_info.
+
+	* gpgmeparsers.c, gpgmeparsers.h: New files.
+
+	* Makefile.am (gpa_SOURCES): Add gpgmeparsers.{c,h}.
+
 2002-10-20  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keyring.c (keyring_editor_mapped): Use GtkMessageDialog's for the
