@@ -1,5 +1,9 @@
 2001-02-09  Bernhard Herzog  <bh@intevation.de>
 
+	* optionsmenu.c (options_key):
+	(options_key_destroy): Make the default key dialog properly modal
+	with a recursive main loop and a handler for the destroy signal
+
 	* filesigndlg.c (file_sign_ok): Pass the selected secret key to
 	the passphrase dialog
 
