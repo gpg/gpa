@@ -37,6 +37,7 @@
 #include "keyexportdlg.h"
 #include "keygendlg.h"
 #include "keygenwizard.h"
+#include "keylist.h"
 #include "keyring.h"
 
 /*
@@ -51,7 +52,7 @@ struct _GPAKeyringEditor {
   GtkWidget *window;
 
   /* The central list of keys */
-  GtkCList  *clist_keys;
+  GtkWidget  *clist_keys;
 
   /* The "Show Ownertrust" toggle button */
   GtkWidget *toggle_show;
@@ -153,7 +154,7 @@ keyring_editor_has_selection (gpointer param)
 {
   GPAKeyringEditor * editor = param;
 
-  return (editor->clist_keys->selection != NULL);
+  return gpa_keylist_has_selection (editor->clist_keys);
 } /* keyring_editor_has_selection */
 
 
@@ -165,7 +166,7 @@ keyring_editor_has_single_selection (gpointer param)
 {
   GPAKeyringEditor * editor = param;
 
-  return (g_list_length (editor->clist_keys->selection) == 1);
+  return gpa_keylist_has_single_selection (editor->clist_keys);
 }
 
 
@@ -178,43 +179,7 @@ keyring_editor_has_single_selection (gpointer param)
 static void
 keyring_editor_fill_keylist (GPAKeyringEditor * editor)
 {
-  gint contentsCountKeys;
-  gchar *contents[5];
-  GpapaKeytrust trust;
-  GpapaPublicKey *key;
-  GDate *expiryDate;
-  int show_trust;
-  int row;
-
-  show_trust = FALSE;
-  /*= gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (editor->toggle_show));*/
-  gtk_clist_clear (editor->clist_keys);
-  contentsCountKeys = gpapa_get_public_key_count(gpa_callback, editor->window);
-  while (contentsCountKeys > 0)
-    {
-      contentsCountKeys--;
-      key = gpapa_get_public_key_by_index (contentsCountKeys, gpa_callback,
-					   editor->window);
-      contents[0] = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback,
-					editor->window);
-      trust = gpapa_public_key_get_keytrust (key, gpa_callback,
-					     editor->window);
-      contents[1] = gpa_keytrust_string (trust);
-      if (show_trust)
-	contents[2] = gpa_ownertrust_string (gpapa_public_key_get_ownertrust
-					     (key, gpa_callback,
-					      editor->window));
-      else
-	contents[2] = "";
-      expiryDate = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
-					      editor->window);
-      contents[3] = gpa_expiry_date_string (expiryDate);
-      contents[4] = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
-					      editor->window);
-      row = gtk_clist_append (editor->clist_keys, contents);
-      gtk_clist_set_row_data_full (editor->clist_keys, row,
-				   xstrdup (contents[4]), free);
-    } /* while */
+  gpa_keylist_update_list (editor->clist_keys);
 } /* keyring_editor_fill_keylist */
 
 
@@ -228,9 +193,10 @@ keyring_editor_edit_trust (gpointer param)
   gint row;
   gchar * key_id;
   gboolean result;
+  GList * selection;
 
   /* find out which key is selected */
-  if (!editor->clist_keys->selection)
+  if (!gpa_keylist_has_selection (editor->clist_keys))
     {
       /* this shouldn't happen because the button should be grayed out
        * in this case
@@ -239,8 +205,9 @@ keyring_editor_edit_trust (gpointer param)
       return;
     }
 
-  row = GPOINTER_TO_INT (editor->clist_keys->selection->data);
-  key_id = gtk_clist_get_row_data (editor->clist_keys, row);
+  selection = gpa_keylist_selection (editor->clist_keys);
+  row = GPOINTER_TO_INT (selection->data);
+  key_id = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
   key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
 
   /* Let the user select a new one */
@@ -256,7 +223,7 @@ keyring_editor_edit_trust (gpointer param)
 
 
 
-
+#if 0
 /* toggle the visibility of the ownertrust values */
 static void
 keyring_editor_toggle_show_trust (gpointer param)
@@ -298,6 +265,7 @@ keyring_editor_toggle_show_trust (gpointer param)
 	}
     }
 } /* keyring_editor_toggle_show_trust */
+#endif
 
 /* delete the selected keys */
 static void
@@ -313,11 +281,11 @@ keyring_editor_delete (gpointer param)
   gchar * reply;
   const gchar * buttons[] = {_("Ok"), _("Cancel"), NULL};
 
-  selection = editor->clist_keys->selection;
+  selection = gpa_keylist_selection (editor->clist_keys);
   while (selection)
     {
-      row = GPOINTER_TO_INT (editor->clist_keys->selection->data);
-      key_id = gtk_clist_get_row_data (editor->clist_keys, row);
+      row = GPOINTER_TO_INT (selection->data);
+      key_id = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
       public_key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
 					       editor->window);
       secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback,
@@ -404,7 +372,7 @@ keyring_editor_sign (gpointer param)
   GpapaSignType sign_type = GPAPA_KEY_SIGN_NORMAL;
   GList * selection;
 
-  if (!editor->clist_keys->selection)
+  if (!gpa_keylist_has_selection (editor->clist_keys))
     {
       /* this shouldn't happen because the button should be grayed out
        * in this case
@@ -423,11 +391,11 @@ keyring_editor_sign (gpointer param)
       return;
     }
 
-  selection = editor->clist_keys->selection;
+  selection = gpa_keylist_selection (editor->clist_keys);
   while (selection)
     {
-      row = GPOINTER_TO_INT (editor->clist_keys->selection->data);
-      key_id = gtk_clist_get_row_data (editor->clist_keys, row);
+      row = GPOINTER_TO_INT (selection->data);
+      key_id = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
 				   
       key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
       if (gpa_key_sign_run_dialog (editor->window, key, &sign_type,
@@ -450,6 +418,7 @@ keyring_editor_receive (gpointer param)
   key_receive_run_dialog (editor->window);
 }
 
+
 /* export the selected keys to a file */
 static void
 keyring_editor_export (gpointer param)
@@ -457,9 +426,8 @@ keyring_editor_export (gpointer param)
   GPAKeyringEditor * editor = param;
   gchar * filename;
   gboolean armored;
-    
 
-  if (!editor->clist_keys->selection)
+  if (!gpa_keylist_has_selection (editor->clist_keys))
     {
       /* this shouldn't happen because the button should be grayed out
        * in this case
@@ -614,16 +582,7 @@ keyring_editor_generate_key (gpointer param)
 static gchar *
 keyring_editor_current_key_id (GPAKeyringEditor *editor)
 {
-  int row;
-  gchar * key_id = NULL;
-
-  if (editor->clist_keys->selection)
-    {
-      row = GPOINTER_TO_INT (editor->clist_keys->selection->data);
-      key_id = gtk_clist_get_row_data (editor->clist_keys, row);
-    }
-
-  return key_id;
+  return gpa_keylist_current_key_id (editor->clist_keys);
 }
 
 
@@ -631,19 +590,7 @@ keyring_editor_current_key_id (GPAKeyringEditor *editor)
 static GpapaPublicKey *
 keyring_editor_current_key (GPAKeyringEditor *editor)
 {
-  int row;
-  gchar * key_id;
-  GpapaPublicKey * key = NULL;
-
-  if (editor->clist_keys->selection)
-    {
-      row = GPOINTER_TO_INT (editor->clist_keys->selection->data);
-      key_id = gtk_clist_get_row_data (editor->clist_keys, row);
-      
-      key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
-    }
-
-  return key;
+  return gpa_keylist_current_key (editor->clist_keys);
 }
 
 
@@ -961,11 +908,12 @@ keyring_editor_new (void)
   GtkWidget *hbox;
   GtkWidget *icon;
 
-  gchar *titlesKeys[] = {
+  /*  gchar *titlesKeys[] = {
     _("Key owner"), _("Key trust"), _("Ownertrust"), _("Expiry date"),
     _("Key ID")
-  };
-  gint i;
+  };*/
+  GPAKeyListColumn keylist_columns[] = {GPA_KEYLIST_NAME, GPA_KEYLIST_ID,
+					GPA_KEYLIST_EXPIRYDATE};
 
   editor = xmalloc(sizeof(GPAKeyringEditor));
   editor->selection_sensitive_widgets = NULL;
@@ -1005,20 +953,12 @@ keyring_editor_new (void)
   vboxKeys = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
-  clistKeys = gtk_clist_new_with_titles (5, titlesKeys);
-  editor->clist_keys = GTK_CLIST (clistKeys);
-  gtk_clist_set_selection_mode (GTK_CLIST (clistKeys),
-				GTK_SELECTION_EXTENDED);
-  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 0, 185);
-  for (i = 1; i < 4; i++)
-    {
-      gtk_clist_set_column_width (GTK_CLIST (clistKeys), i, 100);
-      gtk_clist_set_column_justification (GTK_CLIST (clistKeys), i,
-					  GTK_JUSTIFY_CENTER);
-    }				/* for */
-  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 4, 120);
-  for (i = 0; i < 5; i++)
-    gtk_clist_column_title_passive (GTK_CLIST (clistKeys), i);
+  
+  clistKeys =  gpa_keylist_new ((sizeof keylist_columns)
+				/ (sizeof keylist_columns[0]),
+				keylist_columns, 10,
+				windowPublic);
+  editor->clist_keys = clistKeys;
   /*
   gpa_connect_by_accelerator (GTK_LABEL (labelRingname), clistKeys,
 			      accelGroup, _("_Public key Ring"));*/
@@ -1060,7 +1000,7 @@ keyring_editor_new (void)
 		      0);
   gtk_container_add (GTK_CONTAINER (windowPublic), vboxPublic);
 
-  keyring_editor_fill_keylist (editor);
+  /*keyring_editor_fill_keylist (editor);*/
   update_selection_sensitive_widgets (editor);
 
   return windowPublic;
