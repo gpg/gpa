@@ -1,3 +1,10 @@
+2003-10-13  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (SUBDIRS): Add m4.
+	(ACLOCAL_AMFLAGS): New variable.
+	(EXTRA_DIST): Add config.rpath.
+	* configure.ac (AC_CONFIG_FILES): Add m4/Makefile.
+
 2003-10-12  Miguel Coca  <mcoca@gnu.org>
 	
 	* configure.ac: Update version number to 0.7.0-cvs. Update gpgme

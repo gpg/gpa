@@ -14,7 +14,6 @@ AC_PREREQ(2.52)
 #
 AC_INIT(gpa, 0.7.0-cvs, [bug-gpa@gnupg.org])
 
-ALL_LINGUAS="de fr zh_TW.Big5 pt_BR ja nl es sv"
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_SRCDIR(src/gpa.c)
 AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
@@ -135,6 +134,8 @@ dnl
 dnl Checks for libraries
 dnl
 
+AM_GNU_GETTEXT_VERSION(0.12.1)
+
 if test "$try_gettext" = yes; then
 AM_GNU_GETTEXT
 else
@@ -230,7 +231,7 @@ DATADIRNAME=$DATADIRNAME
 GPG=$GPG
 ]])
 
-AC_CONFIG_FILES([
+AC_CONFIG_FILES([ m4/Makefile 
 Makefile
 intl/Makefile
 po/Makefile.in

@@ -1,6 +1,6 @@
 
-SUBDIRS = intl src po pixmaps
-EXTRA_DIST = TODO README-alpha to-utf8 autogen.sh gpa.spec gpa-logo-48x48.png
+SUBDIRS = m4  intl src po pixmaps
+EXTRA_DIST = config.rpath  TODO README-alpha to-utf8 autogen.sh gpa.spec gpa-logo-48x48.png
 DISTCLEANFILES = gpadefs.h 
 
 
@@ -8,3 +8,5 @@ DISTCLEANFILES = gpadefs.h
 dist-hook:
 	@set -e; echo "$(VERSION)" > $(distdir)/VERSION
 
+
+ACLOCAL_AMFLAGS = -I m4

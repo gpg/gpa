@@ -108,11 +108,11 @@ fi
 
 
 if (gettext --version </dev/null 2>/dev/null | awk 'NR==1 { split($4,A,"."); \
-    X=10000*A[1]+100*A[2]+A[3]; echo X; if( X >= 1035 ) exit 1; exit 0}')
+    X=10000*A[1]+100*A[2]+A[3]; echo X; if( X >= 1201 ) exit 1; exit 0}')
     then
     echo "**Error**: You must have "\`gettext\'" installed to compile $PGM."
-    echo '           (version 0.10.35 or newer is required; get'
-    echo '            ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz'
+    echo '           (version 0.12.1 or newer is required; get'
+    echo '            ftp://alpha.gnu.org/gnu/gettext-0.12.1.tar.gz'
     echo '            or install the latest Debian package)'
     DIE="yes"
 fi
@@ -138,9 +138,10 @@ if test "$DIE" = "yes"; then
     exit 1
 fi
 
-
+echo "Running autopoint"
+autopoint
 echo "Running aclocal..."
-aclocal
+aclocal -I m4
 echo "Running autoheader..."
 autoheader
 echo "Running automake --add-missing --gnu ..."

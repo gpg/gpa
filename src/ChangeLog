@@ -1,3 +1,7 @@
+2003-10-13  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c: Delete stale include.
+
 2003-10-12  Miguel Coca  <mcoca@gnu.org>
 
 	* gpasubkeylist.c (gpa_subkey_list_new, gpa_subkey_list_set_key): Add

@@ -37,7 +37,6 @@
 #include "keygenwizard.h"
 #include "keyeditdlg.h"
 #include "keydeletedlg.h"
-#include "keyimpseldlg.h"
 #include "keylist.h"
 #include "siglist.h"
 #include "keyring.h"

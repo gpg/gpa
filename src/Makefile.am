@@ -10,7 +10,7 @@ EXTRA_DIST = $(tip_files) $(logo)
 bin_PROGRAMS = gpa
 
 INCLUDES = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
-LDADD = @INTLLIBS@
+LDADD = @LIBINTL@
 
 gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
