@@ -1,5 +1,20 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* tipwindow.c: 
+	* help.h:
+	* help.c: Removed because the tip windows are not used anymore.
+	tipwindow.c wasn't actually used anyway
+	
+	* Makefile.am (gpa_SOURCES): Removed help.c and help.h
+
+	* gpa.c (main): Don't init the tipwindow.
+
+	* optionsmenu.c (options_homedir):
+	(options_load):
+	(options_save): Remove the gpa_window_tip_show calls.
+
+	* gtktools.c (gpa_window_destroy): Remove the window tip handling
+
 	* filemenu.c (file_open):
 	(gpa_fileOpenSelect_init): 
 	(file_open_ok): 

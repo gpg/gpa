@@ -522,8 +522,6 @@ main (int argc, char **argv)
   /* initialize the default key to a useful default */
   gpa_update_default_key ();
 
-  gpa_window_tip_init ();
-
   gpa_homeDirSelect_init (_("Set home directory"));
   gpa_loadOptionsSelect_init (_("Load options file"));
   gpa_saveOptionsSelect_init (_("Save options file"));

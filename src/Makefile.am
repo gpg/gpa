@@ -15,7 +15,7 @@ gpa_SOURCES = gpa.c gpa.h \
 	      filemenu.c filemenu.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
 	      gtktools.c gtktools.h  \
-	      help.c help.h helpmenu.c helpmenu.h	  \
+	      helpmenu.c helpmenu.h	  \
 	      optionsmenu.c optionsmenu.h \
 	      icons.c icons.h icons.xpm \
 	      gpawidgets.c gpawidgets.h \
