@@ -88,6 +88,7 @@ struct _GPAKeyringEditor {
 
   /* The signatures list in the notebook */
   GtkWidget *signatures_list;
+  GtkWidget *signatures_uids;
 
   /* Labels in the status bar */
   GtkWidget *status_key_user;
@@ -371,7 +372,7 @@ keyring_editor_sign (gpointer param)
                 }
               else if (err == GPGME_No_Recipients)
                 {
-                  /* Couldn't sign because the key was already signed */
+                  /* Couldn't sign because there is no default key */
                   gpa_window_error (_("You haven't selected a default key "
                                       "to sign with!"), editor->window);
                 }
@@ -944,6 +945,17 @@ add_details_row (GtkWidget * table, gint row, gchar *text,
   return widget;
 }
 
+/* Callback for the popdown menu on the signatures page */
+static void
+signatures_uid_selected (GtkOptionMenu *optionmenu, gpointer user_data)
+{
+  GPAKeyringEditor *editor = user_data;
+  gchar * fpr = keyring_editor_current_key_id (editor);
+
+  gpa_siglist_set_signatures (editor->signatures_list, fpr, 
+                              gtk_option_menu_get_history 
+                              (GTK_OPTION_MENU (editor->signatures_uids))-1);
+}
 
 /* Create and return the Details/Signatures notebook
  */
@@ -957,6 +969,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   GtkWidget * scrolled;
   GtkWidget * viewport;
   GtkWidget * siglist;
+  GtkWidget * options;
   gint table_row;
 
   notebook = gtk_notebook_new ();
@@ -1006,12 +1019,20 @@ keyring_details_notebook (GPAKeyringEditor *editor)
                             gtk_label_new (_("Details")));
 
   /* Signatures Page */
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_vbox_new (FALSE, 5);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+
+  options = gtk_option_menu_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), options, FALSE, FALSE, 0);
+  gtk_widget_set_sensitive (options, FALSE);
+  editor->signatures_uids = options;
+  g_signal_connect (G_OBJECT (options), "changed",
+                    G_CALLBACK (signatures_uid_selected), editor);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
 
-  siglist = gpa_siglist_new (editor->window);
+  siglist = gpa_siglist_new ();
   editor->signatures_list = siglist;
   gtk_container_add (GTK_CONTAINER (scrolled), siglist);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
@@ -1113,23 +1134,29 @@ keyring_details_page_fill_num_keys (GPAKeyringEditor * editor, gint num_key)
 /* Fill the signatures page of the details notebook with the signatures
  * of the public key key */
 static void
-keyring_signatures_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
+keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gchar *fpr)
 {
-#if 0
-  GList * signatures;
-  gchar * key_id = NULL;
+  GtkWidget *menu;
+  GtkWidget *label;
+  gchar *uid;
+  int i;
+  GpgmeKey key = gpa_keytable_lookup (keytable, fpr);
 
-  /* in the simplified UI we don't want to list the self signatures */
-  if (gpa_options_get_simplified_ui (gpa_options))
+  /* Create the menu for the popdown UID list */
+  menu = gtk_menu_new ();
+  label = gtk_menu_item_new_with_label (_("Display all signatures on the key"));
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
+  for (i = 0; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
     {
-      key_id = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
-                                         editor->window);
+      label = gtk_menu_item_new_with_label (uid);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
+      g_free (uid);
     }
-
-  signatures = gpapa_public_key_get_signatures (key, gpa_callback,
-                                                editor->window);
-  gpa_siglist_set_signatures (editor->signatures_list, signatures, key_id);
-#endif
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (editor->signatures_uids), menu);
+  gtk_widget_show_all (menu);
+  gtk_widget_set_sensitive (editor->signatures_uids, TRUE);
+  /* Add the signatures */
+  gpa_siglist_set_signatures (editor->signatures_list, fpr, -1);
 } /* keyring_signatures_page_fill_key */
 
 
@@ -1137,7 +1164,9 @@ keyring_signatures_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
 static void
 keyring_signatures_page_empty (GPAKeyringEditor * editor)
 {
-  gpa_siglist_set_signatures (editor->signatures_list, NULL, NULL);
+  gtk_widget_set_sensitive (editor->signatures_uids, FALSE);
+  gtk_option_menu_remove_menu (GTK_OPTION_MENU (editor->signatures_uids));
+  gpa_siglist_set_signatures (editor->signatures_list, NULL, 0);
 } /* keyring_signatures_page_empty */
 
 
@@ -1158,7 +1187,7 @@ idle_update_details (gpointer param)
 
       key = gpa_keytable_lookup (keytable, key_id);
       keyring_details_page_fill_key (editor, key);
-      keyring_signatures_page_fill_key (editor, key);
+      keyring_signatures_page_fill_key (editor, key_id);
     }
   else
     {
@@ -1453,7 +1482,7 @@ keyring_editor_new (void)
                         _("GNU Privacy Assistant - Keyring Editor"));
   gtk_object_set_data_full (GTK_OBJECT (window), "user_data", editor,
                             keyring_editor_destroy);
-  gtk_window_set_default_size (GTK_WINDOW (window), 580, 460);
+  gtk_window_set_default_size (GTK_WINDOW (window), 600, 600);
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   gtk_signal_connect_object (GTK_OBJECT (window), "map",
@@ -1503,9 +1532,6 @@ keyring_editor_new (void)
                                 keylist_columns_brief, 10, window);
   editor->clist_keys = keylist;
   gtk_container_add (GTK_CONTAINER (scrolled), keylist);
-  /*
-  gpa_connect_by_accelerator (GTK_LABEL (label), keylist,
-                              accel_group, _("_Public key Ring"));*/
 
   gtk_signal_connect (GTK_OBJECT (keylist), "select-row",
                       GTK_SIGNAL_FUNC (keyring_editor_selection_changed),
@@ -1516,13 +1542,10 @@ keyring_editor_new (void)
   gtk_signal_connect (GTK_OBJECT (keylist), "end-selection",
                       GTK_SIGNAL_FUNC (keyring_editor_end_selection),
                       (gpointer) editor);
-  /*  gtk_signal_connect (GTK_OBJECT (keylist), "button-press-event",
-                      GTK_SIGNAL_FUNC (keyring_openPublic_evalMouse),
-                      (gpointer) editor);*/
 
   notebook = keyring_details_notebook (editor);
   gtk_paned_pack2 (GTK_PANED (paned), notebook, TRUE, TRUE);
-  gtk_paned_set_position (GTK_PANED (paned), 190);
+  gtk_paned_set_position (GTK_PANED (paned), 250);
 
   statusbar = keyring_statusbar_new (editor);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);

@@ -27,90 +27,208 @@
 #include "siglist.h"
 
 /*
- *  Implement a CList showing signatures
+ *  Implement a List showing signatures
  */
 
+typedef enum
+{
+  SIG_KEYID_COLUMN,
+  SIG_STATUS_COLUMN,
+  SIG_USERID_COLUMN,
+  SIG_N_COLUMNS
+} SignatureListColumn;
 
-typedef struct {
-  /* The main window to use for the gpa_callback */
-  GtkWidget * window;
-} GPASigList;
-
-
-/* Create and return a new signature CList. The window is the toplevel
- * window to be passed to the gpa_callback */
+/* Create the list of signatures */
 GtkWidget *
-gpa_siglist_new (GtkWidget *window)
+gpa_siglist_new (void)
 {
-  GtkWidget *clist;
-  gchar *titles[3] = {
-    _("Key ID"), _("Validity"), _("Signature")
-  };
-  gint i;
-  GPASigList * siglist = g_malloc (sizeof (*siglist));
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  GtkListStore *store;
+  GtkWidget *list;
 
-  siglist->window = window;
+  store = gtk_list_store_new (SIG_N_COLUMNS, G_TYPE_STRING,
+			      G_TYPE_STRING, G_TYPE_STRING);
+  list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+  gtk_widget_set_size_request (list, 400, 100);
 
-  clist = gtk_clist_new_with_titles (3, titles);
-  for (i = 0; i < 3; i++)
-    gtk_clist_column_title_passive (GTK_CLIST (clist), i);
-  gtk_object_set_data_full (GTK_OBJECT (clist), "gpa_siglist", siglist, free);
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
+						     "text", SIG_KEYID_COLUMN,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
-  return clist;
-} /* gpa_siglist_new */
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Status"), renderer,
+						     "markup", 
+						     SIG_STATUS_COLUMN, NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
+						     "text", SIG_USERID_COLUMN,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
-/* Update the list of signatures to show the GList signatures. If key_id
- * is given, signatures for that key won't be listed (useful to filter
- * out the self signatures of a key */
+  return list;
+}
+
+typedef struct
+{
+  const gchar *keyid, *status;
+  gchar *userid;
+} KeySignature;
+
+static void
+signature_free (KeySignature *sig)
+{
+  g_free (sig->userid);
+  g_free (sig);
+}
+
+static void
+add_signature (gchar *keyid, KeySignature *sig, GtkListStore *store)
+{
+  GtkTreeIter iter;
+  
+  /* Append it to the list */
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+                      SIG_KEYID_COLUMN, sig->keyid, 
+                      SIG_STATUS_COLUMN, sig->status,
+                      SIG_USERID_COLUMN, sig->userid, -1);
+}
+
+static void
+gpa_siglist_set_all (GtkWidget * list, const char *fpr)
+{
+  GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
+                                        (GTK_TREE_VIEW (list)));
+  GpgmeKey key;
+  GpgmeError err;
+  int i, uid;
+  int old_mode = gpgme_get_keylist_mode (ctx);
+  const gchar *keyid;
+  /* Create the hash table */
+  GHashTable *hash = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+                                            (GDestroyNotify) signature_free);
+
+  /* Get the key */
+  gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
+  err = gpgme_get_key (ctx, fpr, &key, FALSE, FALSE);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  gpgme_set_keylist_mode (ctx, old_mode); 
+
+  /* Clear the model */
+  gtk_list_store_clear (store);
+
+  /* Iterate over UID's and signatures and add unique values to the hash */
+  for (uid = 0; gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, 0,
+                                           uid); uid++)
+    {
+      for (i = 0; (keyid = 
+                   gpgme_key_sig_get_string_attr (key, uid, GPGME_ATTR_KEYID, 
+                                                  NULL, i)) != NULL; i++)
+        {
+          /* Here we assume (wrongly) that long KeyID are unique. But there
+           * is basically no other way to do this, and in this context it
+           * doens't matter that much (at most, one signature will be missing
+           * from the "all" list).*/
+          if (!g_hash_table_lookup (hash, keyid))
+            {
+              /* Add the signature to the list */
+              /* FIXME: This saves the first signature on the key in each UID,
+               * if they have different attributes, this may cause trouble */
+              KeySignature *sig;
+              sig = g_malloc (sizeof (KeySignature));
+              sig->keyid = gpa_gpgme_key_sig_get_short_keyid (key, uid, i);
+              sig->userid = gpa_gpgme_key_sig_get_userid (key, uid, i);
+              sig->status = gpa_gpgme_key_sig_get_sig_status (key, uid, i);
+              g_hash_table_insert (hash, (gchar*) keyid, sig);
+            }
+        }
+    }
+  /* Now, add each signature to the list */
+  g_hash_table_foreach (hash, (GHFunc)add_signature, store);
+  
+  /* Delete the hash table */
+  g_hash_table_destroy (hash);
+  
+  /* We don't need the key anymore */
+  gpgme_key_unref (key); 
+}
+
+static void
+gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
+{
+  GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
+                                        (GTK_TREE_VIEW (list)));
+  GpgmeKey key;
+  GpgmeError err;
+  int i;
+  int old_mode = gpgme_get_keylist_mode (ctx);
+
+  /* Get the key */
+  gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
+  err = gpgme_get_key (ctx, fpr, &key, FALSE, FALSE);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  gpgme_set_keylist_mode (ctx, old_mode); 
+
+  /* Clear the model */
+  gtk_list_store_clear (store);
+  /* Add the signatures to the model */
+  for (i = 0; gpgme_key_sig_get_string_attr (key, 0, GPGME_ATTR_KEYID, 
+                                             NULL, i); i++)
+    {
+      GtkTreeIter iter;
+      const gchar *keyid, *status;
+      gchar *userid;
+
+      /* The Key ID */
+      keyid = gpa_gpgme_key_sig_get_short_keyid (key, idx, i);
+      /* The user ID */
+      userid = gpa_gpgme_key_sig_get_userid (key, idx, i);
+      /* The signature status */
+      status = gpa_gpgme_key_sig_get_sig_status (key, idx, i);
+      /* Append it to the list */
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter,
+                          SIG_KEYID_COLUMN, keyid, 
+                          SIG_STATUS_COLUMN, status,
+                          SIG_USERID_COLUMN, userid, -1);
+      /* Clean up */
+      g_free (userid);
+    }
+  
+  /* We don't need the key anymore */
+  gpgme_key_unref (key);
+}
+
+/* Update the list of signatures */
 void
-gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
-			    gchar * key_id)
+gpa_siglist_set_signatures (GtkWidget * list, gchar *fpr, int idx)
 {
-#if 0
-  GPASigList * siglist = gtk_object_get_data (GTK_OBJECT (clist),
-					      "gpa_siglist");
-  GpapaSignature *sig;
-  GpapaSigValidity validity;
-  gchar *contents[3];
-  gint i, width;
-
-  gtk_clist_freeze (GTK_CLIST (clist));
-  gtk_clist_clear (GTK_CLIST (clist));
-  while (signatures)
+  GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
+                                        (GTK_TREE_VIEW (list)));
+  if (fpr)
     {
-      sig = (GpapaSignature *)(signatures->data);
-      signatures = g_list_next (signatures);
-
-      contents[0] = gpapa_signature_get_identifier (sig, gpa_callback,
-						    siglist->window);
-
-      /* if key_id is given and the same as the id of the signature
-       * ignore the signature */
-      if (key_id && strcmp (contents[0], key_id) == 0)
-	continue;
-
-      validity = gpapa_signature_get_validity (sig, gpa_callback,
-					       siglist->window);
-      contents[1] = gpa_sig_validity_string (validity);
-      
-      contents[2] = gpapa_signature_get_name (sig, gpa_callback,
-					      siglist->window);
-
-      if (!contents[2])
-	contents[2] = _("[Unknown user ID]");
-	  
-      gtk_clist_append (GTK_CLIST (clist), contents);
+      if (idx == -1)
+        {
+          gpa_siglist_set_all (list, fpr);
+        }
+      else
+        {
+          gpa_siglist_set_userid (list, fpr, idx);
+        }
     }
-
-  gtk_container_check_resize (GTK_CONTAINER (clist));
-  for (i = 0; i < 3; i++)
+  else
     {
-      width = gtk_clist_optimal_column_width (GTK_CLIST (clist), i);
-      gtk_clist_set_column_width (GTK_CLIST (clist), i, width);
+      gtk_list_store_clear (store);
     }
-
-  gtk_clist_thaw (GTK_CLIST (clist));
-#endif
-} /* gpa_siglist_set_signatures */
-
+}

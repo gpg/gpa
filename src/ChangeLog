@@ -1,3 +1,24 @@
+2002-12-07  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (signatures_uid_selected): New.
+	(keyring_details_notebook): Add the User ID popdown menu.
+	(keyring_signatures_page_fill_key): Rewrite to use the new siglist.
+	(keyring_signatures_page_empty): Clear the UID menu too.
+	(idle_update_details): Use new prototype of signatures_page_fill_key.
+	(keyring_editor_new): Increase default window size, leave more space
+	for the details notebook.
+	
+	* siglist.h, siglist.c (gpa_siglist_new)
+	(gpa_siglist_set_signatures): Completely new signature list, for key
+	signatures only.
+
+	* gpgmetools.c (string_to_utf8): New.
+	(gpa_gpgme_key_get_userid): Use string_to_utf8.
+	
+	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_sig_get_userid)
+	(gpa_gpgme_key_sig_get_short_keyid) 
+	(gpa_gpgme_key_sig_get_sig_status): New.
+
 2002-12-04  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpawidgets.c (gpa_key_list_new): Set the columns to autoresize.

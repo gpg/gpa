@@ -23,9 +23,9 @@
 
 #include <gtk/gtk.h>
 
-GtkWidget * gpa_siglist_new (GtkWidget *window);
-void gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
-				 gchar * key_id);
-
+GtkWidget * gpa_siglist_new (void);
+/* Display the signatures on user ID idx. With idx == -1, display all
+ * signatures. */
+void gpa_siglist_set_signatures (GtkWidget * list, gchar *fpr, int idx);
 
 #endif /* SIGLIST_H */

@@ -148,4 +148,23 @@ gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx);
  */
 const gchar *gpa_gpgme_key_get_short_keyid (GpgmeKey key, int idx);
 
+/* Convenience function to access key signature attibutes, much like the
+ * previous ones */
+
+/* Return the user ID, making sure it is properly UTF-8 encoded.
+ * Allocates a new string, which must be freed with g_free().
+ */
+gchar *gpa_gpgme_key_sig_get_userid (GpgmeKey key, int uid_idx, int idx);
+
+/* Return the short key ID of the indicated key. The returned string is valid
+ * as long as the key is valid.
+ */
+const gchar *gpa_gpgme_key_sig_get_short_keyid (GpgmeKey key, int uid_idx,
+                                                int idx);
+
+/* Return a string with the status of the key signature.
+ */
+const gchar *gpa_gpgme_key_sig_get_sig_status (GpgmeKey key, int uid_idx,
+                                               int idx);
+
 #endif

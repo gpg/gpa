@@ -603,30 +603,38 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
 /* Return the user ID, making sure it is properly UTF-8 encoded.
  * Allocates a new string, which must be freed with g_free ().
  */
-gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
+
+static gchar *
+string_to_utf8 (const gchar *string)
 {
-  const char * uid;
   const gchar *s;
 
-  uid = gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, idx);
-  if (!uid)
+  if (!string)
     {
       return NULL;
     }
   /* Make sure the encoding is UTF-8.
    * Test structure suggested by Werner Koch */
-  for (s = uid; *s && !(*s & 0x80); s++)
+  for (s = string; *s && !(*s & 0x80); s++)
     ;
-  if (*s && !strchr (uid, 0xc3))
+  if (*s && !strchr (string, 0xc3))
     {
       /* The string is Latin-1 */
-      return  g_convert (uid, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+      return  g_convert (string, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
     }
   else
     {
       /* The string is already in UTF-8 */
-      return g_strdup (uid);
+      return g_strdup (string);
     }
+}
+
+gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
+{
+  const char * uid;
+
+  uid = gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, idx);
+  return string_to_utf8 (uid);
 }
 
 /* Return the key fingerprint, properly formatted according to the algorithm.
@@ -699,4 +707,76 @@ const gchar *gpa_gpgme_key_get_short_keyid (GpgmeKey key, int idx)
     {
       return keyid+8;
     }
+}
+
+/* Convenience function to access key signature attibutes, much like the
+ * previous ones */
+
+/* Return the user ID, making sure it is properly UTF-8 encoded.
+ * Allocates a new string, which must be freed with g_free().
+ */
+gchar *gpa_gpgme_key_sig_get_userid (GpgmeKey key, int uid_idx, int idx)
+{
+  const char * uid;
+
+  uid = gpgme_key_sig_get_string_attr (key, uid_idx, GPGME_ATTR_USERID, 
+                                       NULL, idx);
+  if (!uid || !*uid)
+    {
+      /* Duplicate it to make sure it can be g_free'd */
+      return g_strdup (_("[Unknown user ID]"));
+    }
+  else
+    {
+      return string_to_utf8 (uid);
+    }
+}
+
+/* Return the short key ID of the indicated key. The returned string is valid
+ * as long as the key is valid.
+ */
+const gchar *gpa_gpgme_key_sig_get_short_keyid (GpgmeKey key, int uid_idx,
+                                                int idx)
+{
+  const char *keyid;
+  keyid = gpgme_key_sig_get_string_attr (key, uid_idx, GPGME_ATTR_KEYID,
+                                         NULL, idx);
+  if (!keyid)
+    {
+      return NULL;
+    }
+  else
+    {
+      return keyid+8;
+    }
+}
+
+/* Return a string with the status of the key signature.
+ */
+const gchar *gpa_gpgme_key_sig_get_sig_status (GpgmeKey key, int uid_idx,
+                                               int idx)
+{
+  const gchar *status;
+  switch (gpgme_key_sig_get_ulong_attr (key, uid_idx, GPGME_ATTR_SIG_STATUS, 
+                                        NULL, idx))
+    {
+    case GPGME_SIG_STAT_GOOD:
+      status = _("Valid");
+      break;
+    case GPGME_SIG_STAT_BAD:
+      status = _("Bad");
+    default:
+      status = _("Unknown");
+    }
+  if (gpgme_key_sig_get_ulong_attr (key, uid_idx, GPGME_ATTR_KEY_EXPIRED, 
+                                        NULL, idx))
+    {
+      status = _("Expired");
+    }
+  else if (gpgme_key_sig_get_ulong_attr (key, uid_idx, GPGME_ATTR_KEY_REVOKED, 
+                                         NULL, idx))
+    {
+      status = _("Revoked");
+    }
+  return status;
 }
