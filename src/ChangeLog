@@ -1,3 +1,13 @@
+2001-01-30  Bernhard Herzog  <bh@intevation.de>
+
+	* keyeditdlg.h: 
+	* keyeditdlg.c: New files implementing the key edit dialog (still
+	incomplete, though)
+
+	* Makefile.am (gpa_SOURCES): Add the edit dialog files
+
+	* keyring.c (toolbar_edit_key): Run the key edit dialog
+
 2001-01-26  Bernhard Herzog  <bh@intevation.de>
 
 	* keyring.c (keyring_editor_new): Initialize the status bar
