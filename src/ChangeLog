@@ -1,5 +1,10 @@
 2001-02-07  Bernhard Herzog  <bh@intevation.de>
 
+	* gpawidgets.h (gpa_signature_list_new):
+	* gpawidgets.c (add_sigs_to_clist):
+	(gpa_signature_list_new): Removed. Superseded by the siglist in
+	siglist.c
+
 	* fileman.c (show_file_detail): Use the siglist to display the
 	list of signatures
 
