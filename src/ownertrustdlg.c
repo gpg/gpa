@@ -1,5 +1,5 @@
 /* keyring.c  -	 The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -41,14 +41,26 @@ gpa_tableKey_new (GpapaKey * key, GtkWidget * window);
  */
 
 struct _GPAOwnertrustDialog {
-    GpapaOwnertrust trust;
-    gboolean result;
-    GtkWidget *combo;
-    GtkWidget *window;
+
+  /* true after OK, false after Cancel or deleting the window (via
+   * window manager) */
+  gboolean result;
+
+  /* The selected owner trust level if result is true. Undefined
+   * otherwise */
+  GpapaOwnertrust trust;
+
+  /* The ownertrust combo box */
+  GtkWidget *combo;
+
+  /* The top-level dialog window */
+  GtkWidget *window;
 };
 typedef struct _GPAOwnertrustDialog GPAOwnertrustDialog;
 
 
+/* signal handler for the OK button. Determine the selected trust level,
+ * set result to true and quit the recursive main loop */
 static void
 ownertrust_ok (gpointer param)
 {
@@ -64,28 +76,32 @@ ownertrust_ok (gpointer param)
     {
       gpa_window_error (_("Invalid ownertrust level."), dialog->window);
       return;
-    }				/* if */
+    } /* if */
   dialog->trust = trust;
-  gtk_main_quit ();
+  gtk_widget_destroy (dialog->window);
 } /* ownertrust_ok */
 
+
+/* Signal handler for the cancel button */
 static void
 ownertrust_cancel (gpointer param)
 {
   GPAOwnertrustDialog * dialog = param;
 
   dialog->result = FALSE;
-  gtk_main_quit ();
+  gtk_widget_destroy (dialog->window);
 } /* ownertrust_cancel */
 
-static gboolean
-ownertrust_delete_event (GtkWidget *widget, GdkEvent *event, gpointer param)
+
+/* Handler for the destroy signal. Quit the recursive main loop */
+static void
+ownertrust_destroy (GtkWidget *widget, gpointer param)
 {
-  ownertrust_cancel (param);
-  return TRUE;
-} /* ownertrust_delete_event */
+  gtk_main_quit ();
+} /* ownertrust_destroy */
 
 
+/* Run the owner trust dialog modally. */
 gboolean
 gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent, gchar* tip,
 			   GpapaOwnertrust * trust)
@@ -109,9 +125,9 @@ gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent, gchar* tip,
 
   windowTrust = dialog.window = gtk_window_new (GTK_WINDOW_DIALOG);
   gtk_window_set_title (GTK_WINDOW (windowTrust), _("Change key ownertrust"));
-  gtk_signal_connect_object (GTK_OBJECT (windowTrust), "delete_event",
-			     GTK_SIGNAL_FUNC (ownertrust_delete_event),
-			     (gpointer) &dialog);
+  gtk_signal_connect (GTK_OBJECT (windowTrust), "destroy",
+		      GTK_SIGNAL_FUNC (ownertrust_destroy),
+		      (gpointer) &dialog);
 
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowTrust), accelGroup);
@@ -161,15 +177,13 @@ gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent, gchar* tip,
   gtk_container_add (GTK_CONTAINER (hButtonBoxTrust), buttonAccept);
   gtk_box_pack_start (GTK_BOX (vboxTrust), hButtonBoxTrust, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowTrust), vboxTrust);
-  gpa_widget_show (windowTrust, parent, _("keyring_openPublic_editTrust.tip"));
+  gpa_window_show_centered (windowTrust, parent);
+  gtk_window_set_modal (GTK_WINDOW (windowTrust), TRUE);
 
-  gtk_grab_add (windowTrust);
   gtk_main ();
-  gtk_grab_remove (windowTrust);
-  gtk_widget_destroy (windowTrust);
 
   if (dialog.result)
     *trust = dialog.trust;
 
   return dialog.result;
-}				/* gpa_ownertrust_run_dialog */
+} /* gpa_ownertrust_run_dialog */
