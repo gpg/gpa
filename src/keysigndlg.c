@@ -1,5 +1,5 @@
 /* keysigndlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -49,7 +49,15 @@ key_sign_cancel (gpointer param)
 
   dialog->result = FALSE;
   gtk_main_quit ();
-} /* ownertrust_cancel */
+} /* key_sign_cancel */
+
+static gboolean
+key_sign_delete (GtkWidget *widget, GdkEvent *event, gpointer param)
+{
+  key_sign_cancel (param);
+  return FALSE;
+}
+
 
 static void
 key_sign_ok (gpointer param)
@@ -72,7 +80,7 @@ key_sign_ok (gpointer param)
       dialog->passphrase = gpa_passphrase_run_dialog (dialog->window);
     }
   gtk_main_quit ();
-} /* ownertrust_ok */
+} /* key_sign_ok */
 
 
 
@@ -107,8 +115,11 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaSignType * sign_type,
     } /* if */
 
   windowSign = gtk_window_new (GTK_WINDOW_DIALOG);
-  gtk_window_set_title (GTK_WINDOW (windowSign), _("Sign Keys"));
   dialog.window = windowSign;
+  gtk_window_set_title (GTK_WINDOW (windowSign), _("Sign Keys"));
+  gtk_signal_connect (GTK_OBJECT (windowSign), "delete_event",
+		      GTK_SIGNAL_FUNC (key_sign_delete),
+		      (gpointer)&dialog);
 
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowSign), accelGroup);
