@@ -1,3 +1,14 @@
+2001-01-17  Bernhard Herzog  <bh@intevation.de>
+
+	* keysigndlg.h: 
+	* keysigndlg.c (gpa_key_sign_run_dialog): Add the key to be signed
+	to the parameter list and display its user id and fingerprint.
+
+	* keyring.c (keyring_editor_generate_key_advanced): Do some error
+	checking after generating the key pair.
+	(keyring_editor_sign): Run the keysing dialog for each selected
+	key separately
+
 2001-01-16  Bernhard Herzog  <bh@intevation.de>
 
 	* filemenu.c (file_sign_dialog): 
