@@ -1,3 +1,27 @@
+2002-11-08  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_import): Check for errors getting keys
+	from the server.
+
+	* server_access.c (server_get_key): Make sure a proper value is
+	returned for "data" everytime.
+	(helper_path): New function.
+	(check_errors): New function.
+	(server_get_key, server_send_keys): Removed dialog from here...
+	(invoke_helper): and added it here. Send some functionality into
+	other functions.
+	(protocol_version): Use the -V option of the plugins to find out the
+	version of a given plugin.
+	(do_spawn): New function. Run the helper asyncronously, and redraw the
+	dialog until it completes.
+	(close_dialog): New function.
+
+	* server_access.c, server_access.h (server_send_keys)
+	(server_get_key): Return a boolean indicating success.
+
+	* keyimportdlg.c (key_import_results_dialog_run): Added special
+	message if no keys were found in the import.
+
 2002-11-06  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* verifydlg.c (verify_file): Check for GPGME_SIG_STAT_NONE too.

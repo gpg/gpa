@@ -26,6 +26,8 @@
 /* For unlink() */
 #ifdef G_OS_UNIX
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #else
 #include <io.h>
 #endif
@@ -52,27 +54,6 @@
 #define OUTPUT_TEMP_NAME "gpa-out-XXXXXX"
 
 /* Internal API */
-
-/* Find out the plugin protocol version */
-static int 
-protocol_version (void)
-{
-  GpaEngineInfo info;
-  gpa_parse_engine_info (&info);
-  /* GnuPG 1.0.7 and 1.2.x use version 0 */
-  if (info.version[0] == '1' && 
-      (info.version[2] == '0' || info.version[2] == '2'))
-    {
-      return 0;
-    }
-  else
-    {
-      /* Assume all others use version 1 */
-      return 1;
-    }
-  g_free (info.version);
-  g_free (info.path);
-}
 
 /* Code adapted from GnuPG (file g10/keyserver.c) */
 static gboolean 
@@ -154,6 +135,46 @@ parse_keyserver_uri (char *uri, char **scheme, char **host,
   return TRUE;
 }
 
+/* Return the path to the helper for a certain scheme */
+static gchar *
+helper_path (const gchar *scheme)
+{
+  gchar *helper;
+  gchar *path;
+ 
+  helper = g_strdup_printf ("gpgkeys_%s", scheme);
+  path = g_build_filename (GPA_KEYSERVER_HELPERS_DIR, helper, NULL);
+  g_free (helper);
+  
+  return path;
+}
+
+/* Find out the plugin protocol version */
+static int 
+protocol_version (const gchar *scheme)
+{
+  gchar *helper[] = {helper_path (scheme), "-V", NULL};
+  gchar *output = NULL;
+  gint version;
+  
+  g_spawn_sync (NULL, helper, NULL, G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, 
+		NULL, &output, NULL, NULL);
+  if (output && output[0])
+    {
+      /* The version is a number, and it's value is it's ascii code minus
+       * the ascii code of 0 */
+      version = output[0] - '0';
+    }
+  else
+    {
+      version = 0;
+    }
+  g_free (output);
+  g_free (helper[0]);
+  return version;
+}
+
+/* Return the first error code found */
 static gint
 parse_helper_output (const gchar *filename)
 {
@@ -176,6 +197,7 @@ parse_helper_output (const gchar *filename)
   return error;
 }
 
+/* Return an error string for the code */
 static const gchar *
 error_string (gint error_code)
 {
@@ -252,96 +274,164 @@ wait_dialog (const gchar *server, GtkWidget *parent)
   return dialog;
 }
 
-static int
-invoke_helper (const gchar *scheme, gchar *command_filename, 
-	       gchar **output_filename, GtkWidget *parent)
+/* Report any errors to the user. Returns TRUE if there were errors and false
+ * otherwise */
+static gboolean
+check_errors (int exit_status, gchar *error_message, gchar *output_filename,
+              int version, GtkWidget *parent)
 {
-  gchar *helper, *helper_path;
+  /* Error during connection. Try to parse the output and report the 
+   * error.
+   */
+  if (version == 0)
+    {
+      /* With Version 0 plugins, we just can't know the error, so we
+       * show the error output from the plugin to the user if the process
+       * ended with error */
+      if (exit_status)
+        {
+          gchar *message = g_strdup_printf (_("An error ocurred while "
+                                              "contacting the server:\n\n%s"), 
+                                            error_message);
+          gpa_window_error (message, parent);
+          return TRUE;
+        }
+    }
+  /* If version != 0, at least try to use version 1 error codes */
+  else
+    {
+      gint error_code = parse_helper_output (output_filename);
+      /* Not really errors */
+      if (error_code == KEYSERVER_OK ||
+          error_code == KEYSERVER_KEY_NOT_FOUND ||
+          error_code == KEYSERVER_KEY_EXISTS)
+        {
+          return FALSE;
+        }
+      else
+        {
+          gchar *message = g_strdup_printf (_("An error ocurred while "
+                                              "contacting the server:\n\n%s"), 
+                                            error_string (error_code));
+          gpa_window_error (message, parent);
+          return TRUE;
+        }
+    }
+}
+
+/* This is a hack: when a SIGCHLD is received, close the dialog. We need a
+ * global variable to pass the dialog to the signal handler. */
+GtkWidget *waiting_dlg;
+static void
+close_dialog (int sig)
+{
+  gtk_dialog_response (GTK_DIALOG (waiting_dlg), GTK_RESPONSE_CLOSE);
+}
+
+/* Run the helper, and update the dialog if possible */
+static void
+do_spawn (const gchar *scheme, const gchar *command_filename,
+          const gchar *output_filename, gchar **error_output,
+          gint *exit_status, GError **error, GtkWidget *dialog)
+{
   gchar *helper_argv[] = {NULL, "-o", NULL, NULL, NULL};
+#ifdef G_OS_UNIX
+  pid_t pid;
+  gint standard_error, length;
+  GIOChannel *channel;
+#endif
+
+  /* Build the command line */
+  helper_argv[0] = helper_path (scheme);
+  helper_argv[2] = (gchar*) output_filename;
+  helper_argv[3] = (gchar*) command_filename;
+  /* Invoke the keyserver helper */
+#ifdef G_OS_UNIX
+  /* On Unix, run the helper asyncronously, so that we can update the dialog */
+  g_spawn_async_with_pipes (NULL, helper_argv, NULL, 
+                            G_SPAWN_STDOUT_TO_DEV_NULL|
+                            G_SPAWN_DO_NOT_REAP_CHILD, 
+                            NULL, NULL, &pid, NULL, NULL, &standard_error,
+                            error);
+  /* FIXME: Could we do this properly, without a global variable? */
+  /* We run the dialog until we get a SIGCHLD, meaning the helper has
+   * finnished, then we wait for it. */
+  waiting_dlg = dialog;
+  signal (SIGCHLD, close_dialog);
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  signal (SIGCHLD, SIG_DFL);
+  wait (exit_status);
+  /* Read stderr, since we need any error message */
+  channel = g_io_channel_unix_new (standard_error);
+  g_io_channel_read_to_end (channel, error_output, &length, NULL);
+  g_io_channel_unref (channel);
+  g_io_channel_shutdown (channel, TRUE, NULL);
+#else
+  /* On Windows, use syncronous spawn */
+  g_spawn_sync (NULL, helper_argv, NULL, 
+		G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, 
+		NULL, error_output, exit_status, error);
+#endif
+  /* Free the helper's filename */
+  g_free (helper_argv[0]);
+}
+
+static int
+invoke_helper (const gchar *server, const gchar *scheme,
+               gchar *command_filename, gchar **output_filename,
+               GtkWidget *parent)
+{
   GError *error = NULL;
   int exit_status;
   int output_fd;
-  gchar *error_message;
-  
+  gchar *error_output;
+  GtkWidget *dialog;
+
+  /* Display a pretty dialog */
+  dialog = wait_dialog (server, parent);  
   /* Open the output file */
   output_fd = g_file_open_tmp (OUTPUT_TEMP_NAME, output_filename, NULL);
-  /* Invoke the keyserver helper */
-  helper = g_strdup_printf ("gpgkeys_%s", scheme);
-  helper_path = g_build_filename (GPA_KEYSERVER_HELPERS_DIR, helper, NULL);
-  helper_argv[0] = helper_path;
-  helper_argv[2] = *output_filename;
-  helper_argv[3] = command_filename;
-  g_spawn_sync (NULL, helper_argv, NULL, 
-		G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, 
-		NULL, &error_message, &exit_status, &error);
+  /* Run the helper */
+  do_spawn (scheme, command_filename, *output_filename, &error_output,
+            &exit_status, &error, dialog);
+  /* Error checking */
   if (error)
     {
       /* An error ocurred in the fork/exec: we assume that there is no plugin.
        */
       gpa_window_error (_("There is no plugin available for the keyserver\n"
-			  "protocol you specified."), parent);
+			  "protocol you specified."), dialog);
     }
-  else if (exit_status)
+  else
     {
-      /* Error during connection. Try to parse the output and report the 
-       * error.
-       */
-      if (protocol_version () == 0)
-	{
-	  /* With Version 0 plugins, we just can't know the error, so we
-	   * show the error output from the plugin to the user. */
-	  gchar *message = g_strdup_printf (_("An error ocurred while "
-					      "contacting the server:\n\n%s"), 
-					    error_message);
-	  gpa_window_error (message, parent);
-	}
-      else if (protocol_version () == 1)
-	{
-	  gint error_code = parse_helper_output (*output_filename);
-	  /* Not really errors */
-	  if (error_code == KEYSERVER_OK ||
-	      error_code == KEYSERVER_KEY_NOT_FOUND ||
-	      error_code == KEYSERVER_KEY_EXISTS)
-	    {
-	      exit_status = KEYSERVER_OK;
-	    }
-	  else
-	    {
-	      gchar *message = g_strdup_printf (_("An error ocurred while "
-					      "contacting the server:\n\n%s"), 
-						error_string (error_code));
-	      gpa_window_error (message, parent);
-	    }
-	}
+      check_errors (exit_status, error_output, *output_filename,
+                    protocol_version (scheme), dialog);
     }
   close (output_fd);
-  g_free (helper);
-  g_free (helper_path);
-  g_free (error_message);
+  g_free (error_output);
+  /* Destroy the dialog */
+  gtk_widget_destroy (dialog);
 
   return exit_status;
 }
 
 /* Public functions */
 
-void server_send_keys (const gchar *server, const gchar *keyid,
+gboolean server_send_keys (const gchar *server, const gchar *keyid,
 		       GpgmeData data, GtkWidget *parent)
 {
   gchar *keyserver = g_strdup (server);
   gchar *command_filename, *output_filename;
   int command_fd;
   FILE *command;
-  GtkWidget *dialog;
   gchar *scheme, *host, *port, *opaque;
   int exit_status;
 
-  /* Display a pretty dialog */
-  dialog = wait_dialog (server, parent);
   /* Parse the URI */
   if (!parse_keyserver_uri (keyserver, &scheme, &host, &port, &opaque))
     {
-      gpa_window_error (_("The keyserver you specified is not valid"), dialog);
-      return;
+      gpa_window_error (_("The keyserver you specified is not valid"), parent);
+      return FALSE;
     }
   /* Create a temp command file */
   command_fd = g_file_open_tmp (COMMAND_TEMP_NAME, &command_filename, NULL);
@@ -353,37 +443,40 @@ void server_send_keys (const gchar *server, const gchar *keyid,
   dump_data_to_file (data, command);
   fprintf (command, "\nKEY %s END\n", keyid);
   fclose (command);
-  exit_status = invoke_helper (scheme, command_filename, &output_filename,
-			       parent);
-  /* Destroy the dialog */
-  gtk_widget_destroy (dialog);
+  exit_status = invoke_helper (server, scheme, command_filename, 
+                               &output_filename, parent);
   g_free (keyserver);
   /* Delete temp files */
   unlink (command_filename);
   g_free (command_filename);
   unlink (output_filename);
   g_free (output_filename);
+
+  return (exit_status == 0);
 }
 
-void server_get_key (const gchar *server, const gchar *keyid,
-		     GpgmeData *data, GtkWidget *parent)
+gboolean server_get_key (const gchar *server, const gchar *keyid,
+                         GpgmeData *data, GtkWidget *parent)
 {
   gchar *keyserver = g_strdup (server);
   gchar *command_filename, *output_filename;
   int command_fd;
   FILE *command;
-  GtkWidget *dialog;
   gchar *scheme, *host, *port, *opaque;
   int exit_status;
   GpgmeError err;
 
-  /* Display a pretty dialog */
-  dialog = wait_dialog (server, parent);
   /* Parse the URI */
   if (!parse_keyserver_uri (keyserver, &scheme, &host, &port, &opaque))
     {
-      gpa_window_error (_("The keyserver you specified is not valid"), dialog);
-      return;
+      /* Create an empty GpgmeData, so that we always return a valid one */
+      err = gpgme_data_new (data);
+      if (err != GPGME_No_Error)
+        {
+          gpa_gpgme_error (err);
+        }
+      gpa_window_error (_("The keyserver you specified is not valid"), parent);
+      return FALSE;
     }
   /* Create a temp command file */
   command_fd = g_file_open_tmp (COMMAND_TEMP_NAME, &command_filename, NULL);
@@ -393,8 +486,8 @@ void server_get_key (const gchar *server, const gchar *keyid,
   /* Write the keys to the file */
   fprintf (command, "0x%s\n", keyid);
   fclose (command);
-  exit_status = invoke_helper (scheme, command_filename, &output_filename,
-			       parent);
+  exit_status = invoke_helper (server, scheme, command_filename,
+                               &output_filename, parent);
   /* Read the output */
   /* No error checking: the import will take care of that. */
   err = gpa_gpgme_data_new_from_file (data, output_filename, parent);
@@ -402,12 +495,12 @@ void server_get_key (const gchar *server, const gchar *keyid,
     {
       gpa_gpgme_error (err);
     }
-  /* Destroy the dialog */
-  gtk_widget_destroy (dialog);
   g_free (keyserver);
   /* Delete temp files */
   unlink (command_filename);
   g_free (command_filename);
   unlink (output_filename);
   g_free (output_filename);
+
+  return (exit_status == 0);
 }

@@ -31,10 +31,10 @@
 /* Send the keys in NULL terminated array KEYS to the keyserver SERVER.
  * The PARENT window is used as parent for any dialog the function displays.
  */
-void server_send_keys (const gchar *server, const gchar *keyid,
+gboolean server_send_keys (const gchar *server, const gchar *keyid,
 		       GpgmeData data, GtkWidget *parent);
 
-void server_get_key (const gchar *server, const gchar *keyid,
-		     GpgmeData *data, GtkWidget *parent);
+gboolean server_get_key (const gchar *server, const gchar *keyid,
+                         GpgmeData *data, GtkWidget *parent);
 
 #endif

@@ -247,20 +247,30 @@ void key_import_results_dialog_run (GtkWidget *parent, GpaImportInfo *info)
 {
   GtkWidget *dialog;
 
-  dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-				   GTK_DIALOG_MODAL,
-				   GTK_MESSAGE_INFO,
-				   GTK_BUTTONS_CLOSE,
-				   _("%i public keys read\n"
-				     "%i public keys imported\n"
-				     "%i public keys unchanged\n"
-				     "%i secret keys read\n"
-				     "%i secret keys imported\n"
-				     "%i secret keys unchanged"),
-				   info->count, info->imported,
-				   info->unchanged, info->sec_read,
-				   info->sec_imported, info->sec_dups);
-				   
+  if (info->count == 0)
+    {
+      dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+                                       GTK_DIALOG_MODAL,
+                                       GTK_MESSAGE_WARNING,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("No keys were found."));
+    }
+  else
+    {
+      dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+                                       GTK_DIALOG_MODAL,
+                                       GTK_MESSAGE_INFO,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("%i public keys read\n"
+                                         "%i public keys imported\n"
+                                         "%i public keys unchanged\n"
+                                         "%i secret keys read\n"
+                                         "%i secret keys imported\n"
+                                         "%i secret keys unchanged"),
+                                       info->count, info->imported,
+                                       info->unchanged, info->sec_read,
+                                       info->sec_imported, info->sec_dups);
+    }			   
 
   /* Run the dialog */
   gtk_widget_show_all (dialog);

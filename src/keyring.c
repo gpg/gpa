@@ -417,7 +417,12 @@ keyring_editor_import (gpointer param)
         }
       else if (server)
         {
-	  server_get_key (server, key_id, &data, editor->window);
+          if (!server_get_key (server, key_id, &data, editor->window))
+            {
+              free (filename);
+              free (server);
+              return;
+            }
         }
       else
         {
