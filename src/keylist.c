@@ -340,7 +340,7 @@ void gpa_keylist_start_reload (GpaKeyList * keylist)
 					    _("GnuPG is rebuilding the trust "
 					      "database.\nThis might take a "
 					      "few seconds."));
-  gtk_widget_show_all (keylist->dia log);
+  gtk_widget_show_all (keylist->dialog);
   gpa_keytable_force_reload (gpa_keytable_get_public_instance (),
 			     gpa_keylist_next, gpa_keylist_end, keylist);
 }

@@ -1,3 +1,20 @@
+2003-07-28  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (gpa_SOURCES): Add gpakeysignop.{c,h}
+
+	* gpakeysignop.h, gpakeysignop.c: New. The key signing operation.
+	
+	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_sign_parms_new) 
+	(gpa_gpgme_edit_sign_parms_release): New.
+	(gpa_gpgme_edit_sign): Renamed to:
+	(gpa_gpgme_edit_sign_start): Use the event loop. Now receives a
+	GpaContext so that it can attach itself to the "done" signal and do
+	clean up after the signing completes.
+
+	* keyring.c (keyring_editor_sign): Use the GpaKeySignOperation.
+
+	* keylist.c (gpa_keylist_start_reload): Fix typo.
+
 2003-07-25  Miguel Coca  <mcoca@gnu.org>
 
 	* gpakeydeleteop.c, gpakeydeleteop.h, gpakeyop.c, gpakeyop.h: New.

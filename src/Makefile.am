@@ -58,5 +58,6 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpafileverifyop.h gpafileverifyop.c \
 	      gpakeyop.h gpakeyop.c \
 	      gpakeydeleteop.h gpakeydeleteop.c \
+	      gpakeysignop.h gpakeysignop.c \
 	      gpakeyselector.h gpakeyselector.c \
 	      options.c gpa.rc

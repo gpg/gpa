@@ -24,6 +24,7 @@
 #define GPGMEEDIT_H
 
 #include "gpa.h"
+#include "gpacontext.h"
 #include <glib.h>
 #include <gpgme.h>
 
@@ -37,9 +38,9 @@ gpg_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key,
 
 /* Sign this key with the given private key. If local is true, make a local
  * signature. */
-gpg_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
-				 gpgme_key_t secret_key,
-				 gboolean local);
+gpg_error_t gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
+				       gpgme_key_t secret_key,
+				       gboolean local);
 
 /* Change the key's passphrase.
  */

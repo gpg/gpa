@@ -60,6 +60,10 @@ struct edit_parms_s
   EditAction action;
   /* The transit function */
   EditTransit transit;
+  /* The output data object */
+  gpgme_data_t out;
+  /* Signal attachment id */
+  gulong signal_id;
   /* Data to be passed to the previous functions */
   void *opaque;
 };
@@ -697,7 +701,7 @@ gpg_error_t gpa_gpgme_edit_trust (gpgme_ctx_t ctx, gpgme_key_t key,
   const gchar *trust_strings[] = {"1", "1", "2", "3", "4", "5"};
   struct edit_parms_s parms = {TRUST_START, gpg_error (GPG_ERR_NO_ERROR), 
 			       edit_trust_fnc_action, edit_trust_fnc_transit,
-			       (char*) trust_strings[ownertrust]};
+			       NULL, 0, (char*) trust_strings[ownertrust]};
   gpg_error_t err;
   gpgme_data_t out = NULL;
 
@@ -717,7 +721,7 @@ gpg_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, GDate *date
   gchar buf[12];
   struct edit_parms_s parms = {EXPIRE_START, gpg_error (GPG_ERR_NO_ERROR), 
 			       edit_expire_fnc_action, edit_expire_fnc_transit,
-			       buf};
+			       NULL, 0, buf};
   gpg_error_t err;
   gpgme_data_t out = NULL;
 
@@ -740,15 +744,53 @@ gpg_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, GDate *date
   return err;
 }
 
-/* Sign this key with the given private key */
-gpg_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
-				   gpgme_key_t secret_key, gboolean local)
+/* Release the edit parameters needed for signing. The prototype is that of
+ * a GpaContext's "done" signal handler.
+ */
+static void
+gpa_gpgme_edit_sign_parms_release (GpaContext *ctx, gpg_error_t err,
+				   struct edit_parms_s* parms)
 {
-  
-  struct sign_parms_s sign_parms = {"0", local};
-  struct edit_parms_s parms = {SIGN_START, gpg_error (GPG_ERR_NO_ERROR),
-			       edit_sign_fnc_action, edit_sign_fnc_transit,
-			       &sign_parms};
+  gpgme_data_release (parms->out);
+  if (parms->signal_id != 0)
+    {
+      g_signal_handler_disconnect (ctx, parms->signal_id);
+    }
+  g_free (parms->opaque);
+  g_free (parms);
+}
+
+/* Generate the edit parameters needed for signing 
+ */
+static struct edit_parms_s*
+gpa_gpgme_edit_sign_parms_new (GpaContext *ctx, char *check_level,
+			       gboolean local, gpgme_data_t out)
+{
+  struct sign_parms_s *sign_parms = g_malloc (sizeof (struct sign_parms_s));
+  struct edit_parms_s *edit_parms = g_malloc (sizeof (struct edit_parms_s));
+
+  edit_parms->state = SIGN_START;
+  edit_parms->err = gpg_error (GPG_ERR_NO_ERROR);
+  edit_parms->action = edit_sign_fnc_action;
+  edit_parms->transit = edit_sign_fnc_transit;
+  edit_parms->signal_id = 0;
+  edit_parms->out = out;
+  edit_parms->opaque = sign_parms;
+  sign_parms->check_level = check_level;
+  sign_parms->local = local;
+
+  g_signal_connect (G_OBJECT (ctx), "done", 
+		    G_CALLBACK (gpa_gpgme_edit_sign_parms_release),
+		    edit_parms);
+
+  return edit_parms;
+}
+
+/* Sign this key with the given private key */
+gpg_error_t gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
+				       gpgme_key_t secret_key, gboolean local)
+{
+  struct edit_parms_s *parms = NULL;
   gpg_error_t err = gpg_error (GPG_ERR_NO_ERROR);
   gpgme_data_t out;
 
@@ -757,15 +799,15 @@ gpg_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
     {
       return err;
     }  
-  gpgme_signers_clear (ctx);
-  err = gpgme_signers_add (ctx, secret_key);
+  gpgme_signers_clear (ctx->ctx);
+  err = gpgme_signers_add (ctx->ctx, secret_key);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       return err;
     }
-  err = gpgme_op_edit (ctx, key, edit_fnc, &parms, out);
-  gpgme_data_release (out);
-  
+  parms = gpa_gpgme_edit_sign_parms_new (ctx, "0", local, out);
+  err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
+
   return err;
 }
 
@@ -774,8 +816,8 @@ gpg_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
 
 /* Special passphrase callback for use within the passwd command */
 gpg_error_t passwd_passphrase_cb (void *hook, const char *uid_hint,
-				    const char *passphrase_info, 
-				    int prev_was_bad, int fd)
+				  const char *passphrase_info, 
+				  int prev_was_bad, int fd)
 {
   int *i = hook;
 
@@ -802,7 +844,7 @@ gpg_error_t gpa_gpgme_edit_passwd (gpgme_ctx_t ctx, gpgme_key_t key)
 {
   struct edit_parms_s parms = {PASSWD_START, gpg_error (GPG_ERR_NO_ERROR),
 			       edit_passwd_fnc_action, edit_passwd_fnc_transit,
-			       (gchar *) ""};
+			       NULL, 0, (gchar *) ""};
   gpg_error_t err;
   gpgme_data_t out;
   int i = 0;

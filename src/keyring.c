@@ -50,6 +50,7 @@
 #include "options.h"
 
 #include "gpakeydeleteop.h"
+#include "gpakeysignop.h"
 
 /*
  *      The public keyring editor
@@ -325,12 +326,6 @@ static void
 keyring_editor_sign (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  gpgme_key_t key, signer_key;
-  gpg_error_t err;
-  gboolean sign_locally = FALSE;
-  GList *selection;
-  gint signed_count = 0;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   if (!gpa_keylist_has_selection (editor->keylist))
     {
@@ -340,77 +335,13 @@ keyring_editor_sign (gpointer param)
       gpa_window_error (_("No keys selected for signing."), editor->window);
       return;
     }
-
-  signer_key = gpa_options_get_default_key (gpa_options_get_instance ());
-  if (!signer_key)
+  else
     {
-      /* this shouldn't happen because the button should be grayed out
-       * in this case
-       */
-      gpa_window_error (_("No private key for signing."), editor->window);
-      return;
+      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
+      GpaKeySignOperation *op = gpa_key_sign_operation_new (editor->window,
+							    selection);
+      register_operation (editor, op);
     }
-
-  for (selection = gpa_keylist_get_selected_keys (editor->keylist); 
-       selection; selection = g_list_next (selection))
-    {
-      key = selection->data;
-      if (gpa_key_sign_run_dialog (editor->window, key, &sign_locally))
-        {
-          err = gpa_gpgme_edit_sign (ctx, key, signer_key, sign_locally);
-          if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
-            {
-              signed_count++;
-            }
-          else if (gpg_err_code (err) == GPG_ERR_BAD_PASSPHRASE)
-            {
-              gpa_window_error (_("Wrong passphrase!"),
-                                editor->window);
-            }
-          else if (gpg_err_code (err) == GPG_ERR_UNUSABLE_PUBKEY)
-            {
-              /* Couldn't sign because the key was expired */
-              gpa_window_error (_("This key has expired! "
-                                  "Unable to sign."), editor->window);
-            }
-          else if (gpg_err_code (err) == GPG_ERR_CONFLICT)
-            {
-              /* Couldn't sign because the key was already signed */
-              gpa_window_error (_("This key has already been signed with "
-                                  "your own!"), editor->window);
-            }
-          else if (gpg_err_code (err) == GPG_ERR_NO_SECKEY)
-            {
-              /* Couldn't sign because there is no default key */
-              gpa_window_error (_("You haven't selected a default key "
-                                  "to sign with!"), editor->window);
-            }
-          else if (gpg_err_code (err) == GPG_ERR_CANCELED)
-            {
-              /* Do nothing, the user should know if he cancelled the
-               * operation */
-            }
-          else
-            {
-              gpa_gpgme_error (err);
-            }
-        }
-      selection = g_list_next (selection);
-    }
-  g_list_free (selection);
-  /* Update the signatures details page and the widgets because some
-   * depend on what signatures a key has
-   */
-  if (signed_count > 0)
-    {
-      /* Reload the list of keys: a new signature may change the 
-       * trust values on several keys.*/
-      gpa_keylist_start_reload (editor->keylist);
-      keyring_update_details_notebook (editor);
-      update_selection_sensitive_widgets (editor);
-    }
-
-  gpgme_release (ctx);
 }
 
 /* Invoke the "edit key" dialog */
