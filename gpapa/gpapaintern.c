@@ -45,6 +45,65 @@ dummy_line_callback (gchar *a, void *opaque, GpgStatusCode status)
 {
 }
 
+/* Counter for STATUS_NODATA messages.
+ */
+static int nodata_counter = 0;
+
+/* Used by various line_callback functions: report a GPG error status.
+ * STATUS_NODATA is reported only once per gpapa_call_gnupg().
+ */
+void
+gpapa_report_error_status (GpgStatusCode status,
+                           GpapaCallbackFunc callback, gpointer calldata)
+{
+  char *errstr;
+  switch (status)
+    {
+      case STATUS_ABORT:
+        errstr = "gpg execution aborted";
+        break;
+      case STATUS_BADARMOR:
+        errstr = "invalid file: bad armor";
+        break;
+      case STATUS_BADMDC:
+        errstr = "invalid file: bad MDC";
+        break;
+      case STATUS_BAD_PASSPHRASE:
+        errstr = "bad passphrase";
+        break;
+      case STATUS_DECRYPTION_FAILED:
+        errstr = "decryption failed";
+        break;
+      case STATUS_DELETE_PROBLEM:
+        errstr = "delete problem";
+        break;
+      case STATUS_ERRMDC:
+        errstr = "error in MDC";
+        break;
+      case STATUS_ERRSIG:
+        errstr = "error in signature";
+        break;
+      case STATUS_FILE_ERROR:
+        errstr = "file error";
+        break;
+      case STATUS_MISSING_PASSPHRASE:
+        errstr = "missing passphrase";
+        break;
+      case STATUS_NODATA:
+        if (nodata_counter == 0)
+          errstr = "no valid OpenPGP data found";
+        else
+          errstr = NULL;
+        nodata_counter++;
+        break;
+      default:
+        errstr = NULL;
+        break;
+    }
+  if (errstr)
+    callback (GPAPA_ACTION_ERROR, errstr, calldata);
+}
+
 /* A structure to pass our parameters through GPGME.
  */
 typedef struct gpapa_data_s
@@ -129,12 +188,17 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait,
   GpgObject gpg;
   char **arg;
   int return_code = 0;
- 
+
   /* This data we want to have available in our callbacks to
    * _gpgme_gpg_spawn.
    */
   gpapa_data_t gpapa_data;
 
+  /* Reset the counter of STATUS_NODATA reports.
+   * !!! This is not thread-safe.
+   */
+  nodata_counter = 0;
+ 
   /* Avoid various `if's.
    */
   if (! line_callback)

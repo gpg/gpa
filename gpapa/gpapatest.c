@@ -230,7 +230,6 @@ test_secring (void)
 	strcpy (buffer, "never");
       printf ("Expires: %s\n", buffer);
       printf ("\n");
-      gpapa_release_secret_key (S, callback, calldata);
     }
   S = gpapa_get_secret_key_by_ID ("D80C6F3A193AB8CA", callback, calldata);
   if (S != NULL)
@@ -238,7 +237,6 @@ test_secring (void)
       gchar *PassPhrase;
       printf ("Secret key D80C6F3A193AB8CA: %s\n",
 	      gpapa_key_get_name (GPAPA_KEY (S), callback, calldata));
-      gpapa_release_secret_key (S, callback, calldata);
       printf ("\n");
       PassPhrase = getpass ("Please enter passphrase: ");
       printf ("Signing file `test.txt' ... ");
@@ -280,7 +278,6 @@ test_pubring (void)
 	strcpy (buffer, "never");
       printf ("Expires: %s\n", buffer);
       printf ("\n");
-      gpapa_release_public_key (P, callback, calldata);
     }
   P = gpapa_get_public_key_by_ID ("983465DB21439422", callback, calldata);
   gpapa_public_key_delete (P, callback, calldata);
@@ -313,7 +310,6 @@ test_pubring (void)
 	  g = g_list_next (g);
 	}
 /*	gpapa_public_key_send_to_server (P, "blackhole.pca.dfn.de", callback, calldata); */
-      gpapa_release_public_key (P, callback, calldata);
     }
   else
     printf ("Public key 983465DB21439422 not available\n");
@@ -414,7 +410,6 @@ test_export_public (char *keyID)
   GpapaPublicKey *P = gpapa_get_public_key_by_ID (keyID, callback, calldata);
   gpapa_public_key_export (P, "exported.asc", GPAPA_ARMOR, callback,
 			   calldata);
-  gpapa_release_public_key (P, callback, calldata);
   gpapa_export_ownertrust ("exptrust.asc", GPAPA_ARMOR, callback, calldata);
   gpapa_import_ownertrust ("exptrust.asc", callback, calldata);
   gpapa_import_keys ("peter.elg-dsa.public-key.asc", callback, calldata);
@@ -428,7 +423,6 @@ test_export_secret (char *keyID)
   gpapa_secret_key_export (P, "exportedsec.asc", GPAPA_ARMOR, callback,
 			   calldata);
   gpapa_secret_key_delete (P, callback, calldata);
-  gpapa_release_secret_key (P, callback, calldata);
 }
 
 void

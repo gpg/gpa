@@ -26,16 +26,16 @@
 #include "gpapa.h"
 
 void
-gpapa_secret_key_set_passphrase (GpapaSecretKey *key, gchar *passphrase,
+gpapa_secret_key_set_passphrase (GpapaSecretKey *key, char *passphrase,
 				 GpapaCallbackFunc callback,
 				 gpointer calldata)
 {
   if (key)
     printf ("Setting passphrase of secret key 0x%s.\n", key->key->KeyID);
-} /* gpapa_secret_key_set_passphrase */
+}
 
 void
-gpapa_secret_key_export (GpapaSecretKey *key, gchar *targetFileID,
+gpapa_secret_key_export (GpapaSecretKey *key, char *targetFileID,
 			 GpapaArmor Armor, GpapaCallbackFunc callback,
 			 gpointer calldata)
 {
@@ -45,13 +45,13 @@ gpapa_secret_key_export (GpapaSecretKey *key, gchar *targetFileID,
     callback (GPAPA_ACTION_ERROR, "target file not specified", calldata);
   if (key && targetFileID)
     {
-      gchar *full_keyID;
+      char *full_keyID;
       char *gpgargv[7];
       int i = 0;
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
       gpgargv[i++] = "-o";
       gpgargv[i++] = targetFileID;
-      gpgargv[i++] = "--yes";	/* overwrite the file */
+      gpgargv[i++] = "--yes";  /* overwrite the file */
       if (Armor == GPAPA_ARMOR)
 	gpgargv[i++] = "--armor";
       gpgargv[i++] = "--export-secret-key";
@@ -62,10 +62,8 @@ gpapa_secret_key_export (GpapaSecretKey *key, gchar *targetFileID,
 	 NULL, NULL, callback, calldata);
       free (full_keyID);
     }
-} /* gpapa_secret_key_export */
+}
 
-/* Due to gpg's security features, this currently does not work.
- */
 void
 gpapa_secret_key_delete (GpapaSecretKey *key, GpapaCallbackFunc callback,
 			 gpointer calldata)
@@ -74,30 +72,26 @@ gpapa_secret_key_delete (GpapaSecretKey *key, GpapaCallbackFunc callback,
     callback (GPAPA_ACTION_ERROR, "no valid secret key specified", calldata);
   else
     {
-      gchar *full_keyID;
+      char *full_keyID;
       char *gpgargv[4];
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
       gpgargv[0] = "--yes";
       gpgargv[1] = "--delete-secret-key";
       gpgargv[2] = full_keyID;
       gpgargv[3] = NULL;
-      gpapa_call_gnupg
-	(gpgargv, TRUE, "YES\n", NULL,
-	 NULL, NULL, callback, calldata);
+      gpapa_call_gnupg (gpgargv, TRUE, "YES\n", NULL,
+	                NULL, NULL, callback, calldata);
       gpgargv[0] = "--yes";
       gpgargv[1] = "--delete-key";
       gpgargv[2] = full_keyID;
       gpgargv[3] = NULL;
-      gpapa_call_gnupg
-	(gpgargv, TRUE, "YES\n", NULL,
-	 NULL, NULL, callback, calldata);
+      gpapa_call_gnupg (gpgargv, TRUE, "YES\n", NULL,
+	                NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_secret_keyring (callback, calldata);
     }
-} /* gpapa_secret_key_delete */
+}
 
-/* Due to gpg's security features, this currently does not work.
- */
 void
 gpapa_secret_key_create_revocation (GpapaSecretKey *key,
 				    GpapaCallbackFunc callback,
@@ -105,18 +99,22 @@ gpapa_secret_key_create_revocation (GpapaSecretKey *key,
 {
   if (key)
     {
-      gchar *gpgargv[3];
-      gchar *commands;
-      gchar *commands_sprintf_str;
-      commands_sprintf_str = "yes \n1 \n\n";
-      commands = (char *) (xmalloc (strlen (commands_sprintf_str)));
-      sprintf (commands, commands_sprintf_str);
-/* printf("\n-->%s<--\n",commands);  */
+      char *gpgargv[3];
+      char *commands = "yes \n1 \n\n";
       gpgargv[0] = "--gen-revoke";
       gpgargv[1] = key->key->KeyID;
       gpgargv[2] = NULL; 
       gpapa_call_gnupg (gpgargv, TRUE, commands, NULL,
                         NULL, NULL, callback, calldata); 
-      free(commands);
     }
-} /* gpapa_secret_key_create_revocation */
+}
+
+void
+gpapa_secret_key_release (GpapaSecretKey *key)
+{
+  if (key != NULL)
+    {
+      gpapa_key_release (key->key);
+      free (key);
+    }
+}

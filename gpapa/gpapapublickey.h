@@ -29,7 +29,7 @@ typedef struct
 {
   GpapaKey *key;
   GList *uids, *sigs;
-  gchar *fingerprint;
+  char *fingerprint;
 }
 GpapaPublicKey;
 
@@ -65,47 +65,49 @@ GpapaKeytrust;
 #define GPAPA_KEYTRUST_FIRST GPAPA_KEYTRUST_UNKNOWN
 #define GPAPA_KEYTRUST_LAST GPAPA_KEYTRUST_FULLY
 
-extern gchar *gpapa_public_key_get_fingerprint (GpapaPublicKey * key,
-						GpapaCallbackFunc callback,
-						gpointer calldata);
+extern char *gpapa_public_key_get_fingerprint (GpapaPublicKey *key,
+                                               GpapaCallbackFunc callback,
+                                               gpointer calldata);
 
-extern GpapaKeytrust gpapa_public_key_get_keytrust (GpapaPublicKey * key,
-						    GpapaCallbackFunc
-						    callback,
-						    gpointer calldata);
+extern GpapaKeytrust gpapa_public_key_get_keytrust (GpapaPublicKey *key,
+                                                    GpapaCallbackFunc
+                                                    callback,
+                                                    gpointer calldata);
 
-extern GpapaOwnertrust gpapa_public_key_get_ownertrust (GpapaPublicKey * key,
-							GpapaCallbackFunc
-							callback,
-							gpointer calldata);
+extern GpapaOwnertrust gpapa_public_key_get_ownertrust (GpapaPublicKey *key,
+                                                        GpapaCallbackFunc
+                                                        callback,
+                                                        gpointer calldata);
 
-extern void gpapa_public_key_set_ownertrust (GpapaPublicKey * key,
-					     GpapaOwnertrust trust,
-					     GpapaCallbackFunc callback,
-					     gpointer calldata);
+extern void gpapa_public_key_set_ownertrust (GpapaPublicKey *key,
+                                             GpapaOwnertrust trust,
+                                             GpapaCallbackFunc callback,
+                                             gpointer calldata);
 
-extern GList *gpapa_public_key_get_signatures (GpapaPublicKey * key,
-					       GpapaCallbackFunc callback,
-					       gpointer calldata);
+extern GList *gpapa_public_key_get_signatures (GpapaPublicKey *key,
+                                               GpapaCallbackFunc callback,
+                                               gpointer calldata);
 
-extern void gpapa_public_key_export (GpapaPublicKey * key,
-				     gchar * targetFileID, GpapaArmor Armor,
-				     GpapaCallbackFunc callback,
-				     gpointer calldata);
+extern void gpapa_public_key_export (GpapaPublicKey *key,
+                                     char *targetFileID, GpapaArmor Armor,
+                                     GpapaCallbackFunc callback,
+                                     gpointer calldata);
 
-extern void gpapa_public_key_delete (GpapaPublicKey * key,
-				     GpapaCallbackFunc callback,
-				     gpointer calldata);
+extern void gpapa_public_key_delete (GpapaPublicKey *key,
+                                     GpapaCallbackFunc callback,
+                                     gpointer calldata);
 
-extern void gpapa_public_key_send_to_server (GpapaPublicKey * key,
-					     gchar * ServerName,
-					     GpapaCallbackFunc callback,
-					     gpointer calldata);
+extern void gpapa_public_key_send_to_server (GpapaPublicKey *key,
+                                             char *ServerName,
+                                             GpapaCallbackFunc callback,
+                                             gpointer calldata);
 
-extern void gpapa_public_key_sign (GpapaPublicKey * key, gchar * keyID,
-				   gchar * PassPhrase,
-				   GpapaKeySignType SignType,
-				   GpapaCallbackFunc callback,
-				   gpointer calldata);
+extern void gpapa_public_key_sign (GpapaPublicKey *key, char *keyID,
+                                   char *PassPhrase,
+                                   GpapaKeySignType SignType,
+                                   GpapaCallbackFunc callback,
+                                   gpointer calldata);
+
+extern void gpapa_public_key_release (GpapaPublicKey *key);
 
 #endif /* __GPAPAPUBLICKEY_H__ */

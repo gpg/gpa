@@ -56,4 +56,6 @@ extern void gpapa_secret_key_create_revocation (GpapaSecretKey * key,
 						GpapaCallbackFunc callback,
 						gpointer calldata);
 
+extern void gpapa_secret_key_release (GpapaSecretKey *key);
+
 #endif /* __GPAPASECRETKEY_H__ */

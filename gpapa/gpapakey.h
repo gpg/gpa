@@ -24,42 +24,41 @@
 #include <glib.h>
 #include "gpapatypedefs.h"
 
-#define GPAPA_KEY(obj) ( ( obj ) -> key )
+#define GPAPA_KEY(obj) ((obj)->key)
 
 typedef struct
 {
-  gchar KeyTrust, OwnerTrust;	/* OwnerTrust might get a different type in future versions. */
+  char KeyTrust, OwnerTrust;  /* OwnerTrust might get a different type in future versions. */
   gint bits, algorithm;
   GList *uids, *subs;
-  gchar *KeyID, *LocalID, *UserID;
+  char *KeyID, *LocalID, *UserID;
   GDate *CreationDate, *ExpirationDate;
 }
 GpapaKey;
 
-extern GpapaKey *gpapa_key_new (gchar * keyID, GpapaCallbackFunc callback,
+extern GpapaKey *gpapa_key_new (char *keyID, GpapaCallbackFunc callback,
 				gpointer calldata);
 
-extern gchar *gpapa_key_get_identifier (GpapaKey * key,
-					GpapaCallbackFunc callback,
-					gpointer calldata);
+extern char *gpapa_key_get_identifier (GpapaKey *key,
+                                       GpapaCallbackFunc callback,
+                                       gpointer calldata);
 
-extern gchar *gpapa_key_get_name (GpapaKey * key, GpapaCallbackFunc callback,
-				  gpointer calldata);
+extern char *gpapa_key_get_name (GpapaKey *key, GpapaCallbackFunc callback,
+				 gpointer calldata);
 
-extern GDate *gpapa_key_get_expiry_date (GpapaKey * key,
+extern GDate *gpapa_key_get_expiry_date (GpapaKey *key,
 					 GpapaCallbackFunc callback,
 					 gpointer calldata);
 
-extern void gpapa_key_set_expiry_date (GpapaKey * key, GDate * date,
-				       gchar * password,
+extern void gpapa_key_set_expiry_date (GpapaKey *key, GDate *date,
+				       char *password,
 				       GpapaCallbackFunc callback,
 				       gpointer calldata);
 
-extern void gpapa_key_set_expiry_time (GpapaKey * key, gint number,
-				       gchar unit, GpapaCallbackFunc callback,
+extern void gpapa_key_set_expiry_time (GpapaKey *key, gint number,
+				       char unit, GpapaCallbackFunc callback,
 				       gpointer calldata);
 
-extern void gpapa_key_release (GpapaKey * key, GpapaCallbackFunc callback,
-			       gpointer calldata);
+extern void gpapa_key_release (GpapaKey *key);
 
 #endif /* __GPAPAKEY_H__ */

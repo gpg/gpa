@@ -1,3 +1,49 @@
+Tue 13 Feb 2001 29:45 Peter Gerwinski <peter@gerwinski.de>
+
+        * all files: s/gchar/char/g, GCSsified.
+
+        * gpapa.c (release_public_keyring, release_secret_keyring,
+          compare_public_keys, compare_secret_keys,
+          gpapa_extract_fingerprint): new functions.
+          (extract_key): recognize (even false) quoted colons.
+          (linecallback_refresh_pub, linecallback_id_pub,
+          linecallback_refresh_sec, linecallback_id_sec):
+          report status errors.
+          since GPG has `--with-fingerprint' now, get the fingerprints here.
+          (gpapa_refresh_public_keyring): pass `--with-fingerprint';
+          sort the public key ring alphabetically.
+          (gpapa_get_public_key_count): refresh only if absolutely necessary.
+          (gpapa_get_public_key_by_ID, gpapa_get_public_key_by_userID,
+          gpapa_get_secret_key_by_ID, gpapa_get_secret_key_by_userID):
+          return the key from the key list.
+          (gpapa_release_public_key, gpapa_release_secret_key): removed; these
+          are now (again) methods of the public/secret key objects.
+          (gpapa_refresh_secret_keyring): sort the secret key ring
+          alphabetically.
+          (gpapa_load_options, gpapa_save_options): removed.
+          (gpapa_fini): release keyrings.
+
+        * gpapafile.c (linecallback_check_gpg_status): new function.
+          (linecallback_get_status, linecallback_get_signatures,
+          gpapa_file_sign, gpapa_file_encrypt, gpapa_file_encrypt_and_sign, 
+          gpapa_file_protect, gpapa_file_decrypt): report status errors.
+          (gpapa_file_get_status): check explicitly whether the file exists
+          and is a regular file.
+
+        * gpapaintern.c (gpapa_report_error_status): new function.
+          (gpapa_call_gnupg): reset the counter of STATUS_NODATA reports.
+
+        * gpapakey.c (gpapa_key_set_expiry_date): use g_strdup_printf().
+        
+        * gpapapublickey.c (linecallback_fingerprint,
+          gpapa_public_key_set_ownertrust): use extract_fingerprint().
+          (linecallback_fingerprint): report status errors.
+          (gpapa_public_key_release): new (old) function.
+
+        * gpapasecretkey.c (gpapa_secret_key_create_revocation): no need to
+          {s|g_strdup}_printf().
+          (gpapa_secret_key_release): new function.
+
 2001-02-13  Bernhard Herzog  <bh@intevation.de>
 
 	* Makefile.am (libgpapa_a_SOURCES): Add sema.h

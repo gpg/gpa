@@ -20,18 +20,157 @@
 
 #include "gpapa.h"
 
-gchar *global_keyServer;
+char *global_keyServer;
 
 static char *gpg_program;
 
-
+
 /* Key management.
  */
 
+/* The public and secret key ring. We only allow for one of each.
+ */
 static GList *PubRing = NULL, *SecRing = NULL;
 
+/* Release a public key ring G. This is the only place where
+ * gpapa_public_key_release() is called.
+ */
+static void
+release_public_keyring (GList *g)
+{
+  while (g)
+    {
+      gpapa_public_key_release (g->data);
+      g = g_list_next (g);
+    }
+  g_list_free (g);
+}
+
+/* Release a secret key ring G. This is the only place where
+ * gpapa_secret_key_release() is called.
+ */
+static void
+release_secret_keyring (GList *g)
+{
+  while (g)
+    {
+      gpapa_secret_key_release (g->data);
+      g = g_list_next (g);
+    }
+  g_list_free (g);
+}
+
+/* Sort public keys alphabetically.
+ */
+static int
+compare_public_keys (gconstpointer a, gconstpointer b)
+{
+  const GpapaPublicKey *k1 = a, *k2 = b;
+  if (k1->key && k2->key && k1->key->UserID && k2->key->UserID)
+    return (strcasecmp (k1->key->UserID, k2->key->UserID));
+  else
+    return (0);
+}
+
+/* Sort secret keys alphabetically.
+ */
+static int
+compare_secret_keys (gconstpointer a, gconstpointer b)
+{
+  const GpapaPublicKey *k1 = a, *k2 = b;
+  if (k1->key && k2->key && k1->key->UserID && k2->key->UserID)
+    return (strcasecmp (k1->key->UserID, k2->key->UserID));
+  else
+    return (0);
+}
+
+/* Extract a key fingerprint out of the string BUFFER and return
+ * a newly allocated buffer with the fingerprint according to
+ * the algorithm ALGORITHM.
+ */
+char *
+gpapa_extract_fingerprint (char *line, int algorithm,
+                           GpapaCallbackFunc callback, gpointer calldata)
+{
+  char *field[GPAPA_MAX_GPG_KEY_FIELDS];
+  char *p = line;
+  gint i = 0;
+  gint fields;
+
+  while (*p)
+    {
+      field[i] = p;
+      while (*p && *p != ':')
+        p++;
+      if (*p == ':')
+        {
+          *p = 0;
+          p++;
+        }
+      i++;
+      if (i >= GPAPA_MAX_GPG_KEY_FIELDS)
+        callback (GPAPA_ACTION_ERROR,
+                  "too many fields in GPG colon output", calldata);
+    }
+  fields = i;
+  if (fields != 10)
+    {
+      callback (GPAPA_ACTION_ERROR,
+                "invalid number of fields in GPG colon output", calldata);
+      return (NULL);
+    }
+  else
+    {
+      if (algorithm == 1)  /* RSA */
+        {
+          char *fpraw = field[9];
+          char *fp = xmalloc (strlen (fpraw) + 16 + 1);
+          char *r = fpraw, *q = fp;
+          gint c = 0;
+          while (*r)
+            {
+              *q++ = *r++;
+              c++;
+              if (c < 32)
+                {
+                  if (c % 2 == 0)
+                    *q++ = ' ';
+                  if (c % 16 == 0)
+                    *q++ = ' ';
+                }
+            }
+          *q = 0;
+          return fp;
+        }
+      else
+        {
+          char *fpraw = field[9];
+          char *fp = xmalloc (strlen (fpraw) + 10 + 1);
+          char *r = fpraw, *q = fp;
+          gint c = 0;
+          while (*r)
+            {
+              *q++ = *r++;
+              c++;
+              if (c < 40)
+                {
+                  if (c % 4 == 0)
+                    *q++ = ' ';
+                  if (c % 20 == 0)
+                    *q++ = ' ';
+                }
+            }
+          *q = 0;
+          return fp;
+        }
+    }
+}
+
+/* Extract a string BUFFER like "2001-05-31" to a GDate structure;
+ * return NULL on error.
+ */
 GDate *
-extract_date (gchar * buffer)
+gpapa_extract_date (char *buffer)
 {
   char *p, *year, *month, *day;
   if (buffer == NULL)
@@ -58,13 +197,16 @@ extract_date (gchar * buffer)
     return (g_date_new_dmy (atoi (day), atoi (month), atoi (year)));
   else
     return (NULL);
-} /* extract_date */
+}
 
+/* Extract a line LINE of gpg's colon output to a GpapaKey;
+ * return NULL on error.
+ */
 static GpapaKey *
-extract_key (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
+extract_key (char *line, GpapaCallbackFunc callback, gpointer calldata)
 {
-  gchar *field[GPAPA_MAX_GPG_KEY_FIELDS];
-  gchar *p = line;
+  char *field[GPAPA_MAX_GPG_KEY_FIELDS];
+  char *p = line;
   gint i = 0;
   gint fields;
 
@@ -86,109 +228,147 @@ extract_key (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
   fields = i;
   if (fields != 10)
     {
-      fprintf (stderr, "colon line=%s'\n", line);
       callback (GPAPA_ACTION_ERROR,
                 "invalid number of fields in GPG colon output", calldata);
       return (NULL);
     }
   else
     {
+      char *quoted;
       GpapaKey *key = gpapa_key_new (field[7], callback, calldata);
       key->KeyTrust = field[1][0];
       key->bits = atoi (field[2]);
       key->algorithm = atoi (field[3]);
       key->KeyID = xstrdup (field[4]);
-      key->CreationDate = extract_date (field[5]);
-      key->ExpirationDate = extract_date (field[6]);
+      key->CreationDate = gpapa_extract_date (field[5]);
+      key->ExpirationDate = gpapa_extract_date (field[6]);
       key->OwnerTrust = field[8][0];
       key->UserID = xstrdup (field[9]);
+
+      /* Special case (really?): a quoted colon.
+       * Un-quote it manually.
+       */
+      while ((quoted = strstr (key->UserID, "\\x3a")) != NULL)
+        {
+          quoted[0] = ':';
+          quoted++;
+          while (quoted[3])
+            {
+              quoted[0] = quoted[3];
+              quoted++;
+            }
+          quoted[0] = 0;
+        }
       return (key);
     }
-} /* extract_key */
+}
 
 static void
-linecallback_refresh_pub (gchar * line, gpointer data, GpgStatusCode status)
+linecallback_refresh_pub (char *line, gpointer data, GpgStatusCode status)
 {
-  if (status == NO_STATUS && line && !strncmp (line, "pub:", 4) )
+  static GpapaPublicKey *key = NULL;
+  PublicKeyData *d = data;
+  gpapa_report_error_status (status, d->callback, d->calldata);
+  if (status == NO_STATUS && line)
     {
-      PublicKeyData *d = data;
-      GpapaPublicKey *key =
-        (GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
-      memset (key, 0, sizeof (GpapaPublicKey));
-      key->key = extract_key (line, d->callback, d->calldata);
-      PubRing = g_list_append (PubRing, key);
+      if (strncmp (line, "pub:", 4) == 0)
+        {
+#ifdef DEBUG
+          fprintf (stderr, "extracting key: %s\n", line);
+#endif
+          key = (GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
+          memset (key, 0, sizeof (GpapaPublicKey));
+          key->key = extract_key (line, d->callback, d->calldata);
+          PubRing = g_list_append (PubRing, key);
+        }
+      else if (strncmp (line, "fpr:", 4) == 0 && key && key->key)
+        {
+#ifdef DEBUG
+          fprintf (stderr, "extracting fingerprint: %s\n", line);
+#endif
+          key->fingerprint = gpapa_extract_fingerprint (line, key->key->algorithm,
+                                                        d->callback, d->calldata);
+        }
     }
-} /* linecallback_refresh_pub */
+}
 
 void
 gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
 {
   PublicKeyData data = { NULL, callback, calldata };
-  char *gpgargv[3];
-  if ( PubRing )
+  char *gpgargv[4];
+  if (PubRing)
     {
-      g_list_free (PubRing);
+      release_public_keyring (PubRing);
       PubRing = NULL;
     }
   gpgargv[0] = "--list-keys";
   gpgargv[1] = "--with-colons";
-  gpgargv[2] = NULL;
+  gpgargv[2] = "--with-fingerprint";
+  gpgargv[3] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
 		    linecallback_refresh_pub, &data, callback, calldata);
-} /* gpapa_refresh_public_keyring */
+  PubRing = g_list_sort (PubRing, compare_public_keys);
+}
 
 gint
 gpapa_get_public_key_count (GpapaCallbackFunc callback, gpointer calldata)
 {
-  gpapa_refresh_public_keyring (callback, calldata);
+  if (! PubRing)
+    gpapa_refresh_public_keyring (callback, calldata);
   return (g_list_length (PubRing));
-} /* gpapa_get_public_key_count */
+}
 
 GpapaPublicKey *
 gpapa_get_public_key_by_index (gint idx, GpapaCallbackFunc callback,
 			       gpointer calldata)
 {
-  if (PubRing == NULL)
+  if (! PubRing)
     gpapa_refresh_public_keyring (callback, calldata);
   return (g_list_nth_data (PubRing, idx));
-} /* gpapa_get_public_key_by_index */
+}
+
+GpapaPublicKey *
+gpapa_get_public_key_by_ID (char *keyID, GpapaCallbackFunc callback,
+			    gpointer calldata)
+{
+  GList *g;
+  GpapaPublicKey *p = NULL;
+  if (! PubRing)
+    gpapa_refresh_public_keyring (callback, calldata);
+  g = PubRing;
+  while (g && g->data
+           && (p = (GpapaPublicKey *) g->data) != NULL
+           && p->key
+           && p->key->KeyID
+           && strcmp (p->key->KeyID, keyID) != 0)
+    g = g_list_next (g);
+  if (g && p)
+    return p;
+  else
+    return NULL;
+}
 
 static void
-linecallback_id_pub (gchar * line, gpointer data, GpgStatusCode status)
+linecallback_id_pub (char *line, gpointer data, GpgStatusCode status)
 {
+  PublicKeyData *d = data;
+  gpapa_report_error_status (status, d->callback, d->calldata);
   if (status == NO_STATUS && line && strncmp (line, "pub:", 4) == 0)
     {
-      PublicKeyData *d = data;
       d->key = (GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
       memset (d->key, 0, sizeof (GpapaPublicKey));
       d->key->key = extract_key (line, d->callback, d->calldata);
     }
-} /* linecallback_id_pub */
+}
 
 GpapaPublicKey *
-gpapa_get_public_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
+gpapa_get_public_key_by_userID (char *userID, GpapaCallbackFunc callback,
 			    gpointer calldata)
 {
   PublicKeyData data = { NULL, callback, calldata };
   char *gpgargv[4];
-  char *id = xstrcat2 ("0x", keyID);
-  gpgargv[0] = "--list-keys";
-  gpgargv[1] = "--with-colons";
-  gpgargv[2] = id;
-  gpgargv[3] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
-		    linecallback_id_pub, &data, callback, calldata);
-  free (id);
-  return (data.key);
-} /* gpapa_get_public_key_by_ID */
-
-GpapaPublicKey *
-gpapa_get_public_key_by_userID (gchar * userID, GpapaCallbackFunc callback,
-			    gpointer calldata)
-{
-  PublicKeyData data = { NULL, callback, calldata };
-  char *gpgargv[4];
-  char *uid = (char *) xmalloc (strlen (userID));
+  char *uid = xstrdup (userID);
   uid = strcpy (uid, userID);
   gpgargv[0] = "--list-keys";
   gpgargv[1] = "--with-colons";
@@ -197,11 +377,23 @@ gpapa_get_public_key_by_userID (gchar * userID, GpapaCallbackFunc callback,
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
 		    linecallback_id_pub, &data, callback, calldata);
   free (uid);
-  return (data.key);
+  if (data.key)
+    {
+      GpapaPublicKey *result;
+      if (data.key->key)
+        result = gpapa_get_public_key_by_ID (data.key->key->KeyID,
+                                             callback, calldata);
+      else
+        result = NULL;
+      gpapa_public_key_release (data.key);
+      return result;
+    }
+  else
+    return NULL;
 }
 
 GpapaPublicKey *
-gpapa_receive_public_key_from_server (gchar * keyID, gchar * ServerName,
+gpapa_receive_public_key_from_server (char *keyID, char *ServerName,
 				      GpapaCallbackFunc callback,
 				      gpointer calldata)
 {
@@ -220,33 +412,22 @@ gpapa_receive_public_key_from_server (gchar * keyID, gchar * ServerName,
       gpapa_refresh_public_keyring (callback, calldata);
     }
   return (gpapa_get_public_key_by_ID (keyID, callback, calldata));
-} /* gpapa_receive_public_key_from_server */
-
-/* This is intentionally a global function, not a method of
- * GpapaPublicKey.
- */
-void
-gpapa_release_public_key (GpapaPublicKey * key, GpapaCallbackFunc callback,
-			  gpointer calldata)
-{
-  /* Do nothing.
-   * Public keys will be released with the PubRing.
-   */
-} /* gpapa_release_public_key */
+}
 
 static void
-linecallback_refresh_sec (gchar * line, gpointer data, GpgStatusCode status)
+linecallback_refresh_sec (char *line, gpointer data, GpgStatusCode status)
 {
+  SecretKeyData *d = data;
+  gpapa_report_error_status (status, d->callback, d->calldata);
   if (status == NO_STATUS && line && strncmp (line, "sec", 3) == 0)
     {
-      SecretKeyData *d = data;
       GpapaSecretKey *key =
 	(GpapaSecretKey *) xmalloc (sizeof (GpapaSecretKey));
       memset (key, 0, sizeof (GpapaSecretKey));
       key->key = extract_key (line, d->callback, d->calldata);
       SecRing = g_list_append (SecRing, key);
     }
-} /* linecallback_refresh_sec */
+}
 
 void
 gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
@@ -263,14 +444,16 @@ gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpgargv[2] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
 		    linecallback_refresh_sec, &data, callback, calldata);
-} /* gpapa_refresh_secret_keyring */
+  SecRing = g_list_sort (SecRing, compare_secret_keys);
+}
 
 gint
 gpapa_get_secret_key_count (GpapaCallbackFunc callback, gpointer calldata)
 {
-  gpapa_refresh_secret_keyring (callback, calldata);
+  if (! SecRing)
+    gpapa_refresh_secret_keyring (callback, calldata);
   return (g_list_length (SecRing));
-} /* gpapa_get_secret_key_count */
+}
 
 GpapaSecretKey *
 gpapa_get_secret_key_by_index (gint idx, GpapaCallbackFunc callback,
@@ -279,44 +462,49 @@ gpapa_get_secret_key_by_index (gint idx, GpapaCallbackFunc callback,
   if (SecRing == NULL)
     gpapa_refresh_secret_keyring (callback, calldata);
   return (g_list_nth_data (SecRing, idx));
-} /* gpapa_get_secret_key_by_index */
+}
 
-static void
-linecallback_id_sec (gchar * line, gpointer data, GpgStatusCode status)
+GpapaSecretKey *
+gpapa_get_secret_key_by_ID (char *keyID, GpapaCallbackFunc callback,
+			    gpointer calldata)
 {
+  GList *g;
+  GpapaSecretKey *s = NULL;
+  if (! SecRing)
+    gpapa_refresh_secret_keyring (callback, calldata);
+  g = SecRing;
+  while (g && g->data
+           && (s = (GpapaSecretKey *) g->data) != NULL
+           && s->key
+           && s->key->KeyID
+           && strcmp (s->key->KeyID, keyID) != 0)
+    g = g_list_next (g);
+  if (g && s)
+    return s;
+  else
+    return NULL;
+}
+ 
+static void
+linecallback_id_sec (char *line, gpointer data, GpgStatusCode status)
+{
+  SecretKeyData *d = data;
+  gpapa_report_error_status (status, d->callback, d->calldata);
   if (status == NO_STATUS && line && strncmp (line, "sec", 3) == 0)
     {
-      SecretKeyData *d = data;
       d->key = (GpapaSecretKey *) xmalloc (sizeof (GpapaSecretKey));
       memset (d->key, 0, sizeof (GpapaSecretKey));
       d->key->key = extract_key (line, d->callback, d->calldata);
     }
-} /* linecallback_id_sec */
+}
 
 GpapaSecretKey *
-gpapa_get_secret_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
+gpapa_get_secret_key_by_userID (char *userID, GpapaCallbackFunc callback,
 			    gpointer calldata)
 {
   SecretKeyData data = { NULL, callback, calldata };
   char *gpgargv[4];
-  char *id = xstrcat2 ("0x", keyID);
-  gpgargv[0] = "--list-secret-keys";
-  gpgargv[1] = "--with-colons";
-  gpgargv[2] = id;
-  gpgargv[3] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
-		    linecallback_id_sec, &data, callback, calldata);
-  free (id);
-  return (data.key);
-} /* gpapa_get_secret_key_by_ID */
- 
-GpapaSecretKey *
-gpapa_get_secret_key_by_userID (gchar * userID, GpapaCallbackFunc callback,
-			    gpointer calldata)
-{
-  SecretKeyData data = { NULL, callback, calldata };
-  char *gpgargv[4];
-  char *uid = (char *) xmalloc (strlen (userID));
+  char *uid = xstrdup (userID);
   uid = strcpy (uid, userID);
   gpgargv[0] = "--list-secret-keys";
   gpgargv[1] = "--with-colons";
@@ -324,24 +512,27 @@ gpapa_get_secret_key_by_userID (gchar * userID, GpapaCallbackFunc callback,
   gpgargv[3] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
 		    linecallback_id_sec, &data, callback, calldata);
-  free(uid);
-  return (data.key);
+  free (uid);
+  if (data.key)
+    {
+      GpapaSecretKey *result;
+      if (data.key->key)
+        result = gpapa_get_secret_key_by_ID (data.key->key->KeyID,
+                                             callback, calldata);
+      else
+        result = NULL;
+      gpapa_secret_key_release (data.key);
+      return result;
+    }
+  else
+    return NULL;
 }
 
 void
-gpapa_release_secret_key (GpapaSecretKey * key, GpapaCallbackFunc callback,
-			  gpointer calldata)
-{
-  /* Do nothing.
-   * Secret keys will be released with the SecRing.
-   */
-} /* gpapa_release_secret_key */
-
-void
 gpapa_create_key_pair (GpapaPublicKey **publicKey,
-		       GpapaSecretKey **secretKey, gchar *passphrase,
-		       GpapaAlgo anAlgo, gint aKeysize, gchar *aUserID,
-		       gchar *anEmail, gchar *aComment,
+		       GpapaSecretKey **secretKey, char *passphrase,
+		       GpapaAlgo anAlgo, gint aKeysize, char *aUserID,
+		       char *anEmail, char *aComment,
 		       GpapaCallbackFunc callback, gpointer calldata)
 {
   if (aKeysize && aUserID && anEmail && aComment)
@@ -362,7 +553,7 @@ gpapa_create_key_pair (GpapaPublicKey **publicKey,
 	    Algo = "DSA";
 	  else if (anAlgo == GPAPA_ALGO_ELG_BOTH) 
 	    Algo = "ELG";
-	  else if (anAlgo == GPAPA_ALGO_ELG) 
+	  else /* anAlgo == GPAPA_ALGO_ELG */
 	    Algo = "ELG-E";
 	  commands_sprintf_str = "Key-Type: %s\n"
 	                         "Key-Length: %d\n"
@@ -405,23 +596,23 @@ gpapa_create_key_pair (GpapaPublicKey **publicKey,
       gpapa_call_gnupg (gpgargv, TRUE, commands, passphrase, 
 			NULL, NULL, callback, calldata);
       free (commands);
-      *publicKey = gpapa_get_public_key_by_userID 
-	             (aUserID, callback, calldata);
-      *secretKey = gpapa_get_secret_key_by_userID 
-	             (aUserID, callback, calldata);
+      gpapa_refresh_public_keyring (callback, calldata);
+      gpapa_refresh_secret_keyring (callback, calldata);
+      *publicKey = gpapa_get_public_key_by_userID (aUserID, callback, calldata);
+      *secretKey = gpapa_get_secret_key_by_userID (aUserID, callback, calldata);
     }
-} /* gpapa_create_key_pair */
+}
 
 static void
-linecallback_export_ownertrust (gchar * line, gpointer data, GpgStatusCode status)
+linecallback_export_ownertrust (gchar *line, gpointer data, GpgStatusCode status)
 {
   FILE *stream = data;
   if (status == NO_STATUS && stream && line)
     fprintf (stream, "%s\n", line);
-} /* linecallback_export_ownertrust */
+}
 
 void
-gpapa_export_ownertrust (gchar * targetFileID, GpapaArmor Armor,
+gpapa_export_ownertrust (gchar *targetFileID, GpapaArmor Armor,
 			 GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!targetFileID)
@@ -446,10 +637,10 @@ gpapa_export_ownertrust (gchar * targetFileID, GpapaArmor Armor,
 	  fclose (stream);
 	}
     }
-} /* gpapa_export_ownertrust */
+}
 
 void
-gpapa_import_ownertrust (gchar * sourceFileID,
+gpapa_import_ownertrust (gchar *sourceFileID,
 			 GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!sourceFileID)
@@ -463,7 +654,7 @@ gpapa_import_ownertrust (gchar * sourceFileID,
       gpapa_call_gnupg 	(gpgargv, TRUE, NULL, NULL,
                          NULL, NULL, callback, calldata);
     }
-} /* gpapa_import_ownertrust */
+}
 
 void
 gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
@@ -476,7 +667,7 @@ gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
 }
 
 void
-gpapa_import_keys (gchar * sourceFileID,
+gpapa_import_keys (gchar *sourceFileID,
 		   GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!sourceFileID)
@@ -491,35 +682,9 @@ gpapa_import_keys (gchar * sourceFileID,
 	(gpgargv, TRUE, NULL, NULL,
 	 NULL, NULL, callback, calldata);
     }
-} /* gpapa_import_keys */
+}
 
-
-/* Options.
- */
-
-void
-gpapa_load_options (gchar * optionsFileID,
-		    gchar ** keyServer, GList ** defaultRecipients,
-		    gchar ** defaultKey, gchar ** homeDirectory,
-		    GpapaCallbackFunc callback, gpointer calldata)
-{
-  g_print ("Load options from file ");  /*!!! */
-  g_print (optionsFileID);	/*!!! */
-  g_print ("\n");               /*!!! */
-} /* gpapa_load_options */
-
-void
-gpapa_save_options (gchar * optionsFileID,
-		    gchar * keyServer, GList * defaultRecipients,
-		    gchar * defaultKey, gchar * homeDirectory,
-		    GpapaCallbackFunc callback, gpointer calldata)
-{
-  g_print ("Save options to file ");    /*!!! */
-  g_print (optionsFileID);	/*!!! */
-  g_print ("\n");               /*!!! */
-} /* gpapa_save_options */
-
-
+
 /* Miscellaneous.
  */
 
@@ -534,24 +699,24 @@ gpapa_init (const char *gpg)
 {
   free (gpg_program);
   gpg_program = xstrdup (gpg ? gpg : "/usr/bin/gpg");
-} /* gpapa_init */
+}
 
 void
 gpapa_fini (void)
 {
   if (PubRing != NULL)
     {
-      g_list_free (PubRing);
+      release_public_keyring (PubRing);
       PubRing = NULL;
     }
   if (SecRing != NULL)
     {
-      g_list_free (SecRing);
+      release_secret_keyring (SecRing);
       SecRing = NULL;
     }
   free (gpg_program);
   gpg_program = NULL;
-} /* gpapa_fini */
+}
 
 void
 gpapa_idle (void)
@@ -562,4 +727,4 @@ gpapa_idle (void)
    *
    * Right now, just do nothing.
    */
-} /* gpapa_idle */
+}
