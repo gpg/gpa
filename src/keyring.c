@@ -49,6 +49,7 @@
 #include "gpgmetools.h"
 #include "gpgmeedit.h"
 #include "keytable.h"
+#include "server_access.h"
 
 /*
  *      The public keyring editor
@@ -421,7 +422,7 @@ keyring_editor_import (gpointer param)
         }
       else if (server)
         {
-          /* Somehow fill a GpgmeData with the keys from the server */
+	  server_get_key (server, key_id, &data, editor->window);
         }
       else
         {
@@ -466,6 +467,7 @@ keyring_editor_export (gpointer param)
   GPAKeyringEditor *editor = param;
   gchar *filename, *server;
   gboolean armored;
+  gchar *fpr = NULL;
 
   if (!gpa_keylist_has_selection (editor->clist_keys))
     {
@@ -484,8 +486,7 @@ keyring_editor_export (gpointer param)
       GList *selection = gpa_keylist_selection (editor->clist_keys);
       FILE *file = NULL;
 
-      /* First: check any preconditions to the export (file/server accessible,
-       * etc) */
+      /* First: check any preconditions to the export */
       if (filename)
         {
           file = fopen (filename, "w");
@@ -500,14 +501,6 @@ keyring_editor_export (gpointer param)
               return;
             }
         }
-      else if (server)
-        {
-          /* Server */
-        }
-      else
-        {
-          /* Clipboard: No checks needed */
-        }
 
       /* Create the data buffer */
       err = gpgme_data_new (&data);
@@ -521,9 +514,9 @@ keyring_editor_export (gpointer param)
       while (selection)
         {
           gint row = GPOINTER_TO_INT (selection->data);
-          gchar *key_id = gtk_clist_get_row_data
+          fpr = gtk_clist_get_row_data
             (GTK_CLIST (editor->clist_keys), row);
-          err = gpgme_recipients_add_name (rset, key_id);
+          err = gpgme_recipients_add_name (rset, fpr);
           if (err != GPGME_No_Error)
             gpa_gpgme_error (err);
           selection = g_list_next (selection);
@@ -548,6 +541,9 @@ keyring_editor_export (gpointer param)
         {
           /* Export the selected key to the user specified server.
            */
+	  GpgmeKey *key = gpa_keytable_lookup (keytable, fpr);
+	  server_send_keys (server, gpa_gpgme_key_get_short_keyid (key, 0),
+			    data, editor->window);
         }
       else
         {

@@ -122,4 +122,9 @@ gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx);
  */
 gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx);
 
+/* Return the short key ID of the indicated key. The returned string is valid
+ * as long as the key is valid.
+ */
+gchar *gpa_gpgme_key_get_short_keyid (GpgmeKey key, int idx);
+
 #endif

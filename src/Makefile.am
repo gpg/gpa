@@ -51,5 +51,6 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      keytable.c keytable.h \
 	      gpgmetools.h gpgmetools.c \
 	      gpgmeedit.h gpgmeedit.c \
+	      server_access.h server_access.c \
 	      gpapa.h dummy_gpapa.c \
 	      gpa.rc

@@ -605,3 +605,20 @@ gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx)
       return fp;
     }
 }
+
+/* Return the short key ID of the indicated key. The returned string is valid
+ * as long as the key is valid.
+ */
+gchar *gpa_gpgme_key_get_short_keyid (GpgmeKey key, int idx)
+{
+  const char *keyid;
+  keyid = gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, NULL, idx);
+  if (!keyid)
+    {
+      return NULL;
+    }
+  else
+    {
+      return keyid+8;
+    }
+}

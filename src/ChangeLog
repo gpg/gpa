@@ -1,3 +1,16 @@
+2002-09-24  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_get_short_keyid): New
+	function.
+
+	* keyring.c (keyring_editor_import, keyring_editor_export): Add
+	keyserver support.
+
+	* server_access.c, server_access.h: New files with the implementation
+	of all calls to the keyserver helpers. 
+
+	* Makefile.am (gpa_SOURCES): Added server_access.{c,h}.
+
 2002-09-17  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keytable.c (keytable_fill): Make the progress bar move faster.
