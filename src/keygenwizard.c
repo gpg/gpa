@@ -26,6 +26,7 @@
 #include "gtktools.h"
 #include "gpawidgets.h"
 #include "gpawizard.h"
+#include "qdchkpwd.h"
 
 
 /*
@@ -357,7 +358,8 @@ gpa_keygen_wizard_password_validate (gpointer data)
 			  keygen_wizard->window);
       result = FALSE;
     }
-  else if (strlen (gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 10)
+  else if (strlen (gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 10
+           || qdchkpwd (gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 0.6)
     {
       const gchar * buttons[] = {_("_Enter new passphrase"), _("Take this one _anyway"),
                                  NULL};
@@ -629,7 +631,7 @@ gpa_keygen_generate_key(gchar * name, gchar * email, gchar * comment,
 static gboolean
 gpa_keygen_wizard_generate_action (gpointer data)
 {
-  GPAKeyGenWizard * keygen_wizard = data;
+  GPAKeyGenWizard *keygen_wizard = data;
   gchar *name;
   gchar *email;
   gchar *comment;
@@ -669,7 +671,7 @@ gpa_keygen_wizard_generate_action (gpointer data)
 			       GPAPA_ARMOR, gpa_callback,
 			       keygen_wizard->window);
     }
-  
+
   free (name);
   free (email);
   free (comment);

@@ -22,8 +22,10 @@
 #define __GPAPAPUBLICKEY_H__
 
 #include <glib.h>
+#include <config.h>
 #include "gpapatypedefs.h"
 #include "gpapakey.h"
+#include "gpapaintern.h"
 
 typedef struct
 {
@@ -89,6 +91,11 @@ extern void gpapa_public_key_set_ownertrust (GpapaPublicKey *key,
                                              GpapaCallbackFunc callback,
                                              gpointer calldata);
 
+extern void linecallback_to_clipboard (gchar *line, gpointer data,
+                                       GpgStatusCode status);
+
+extern int set_w32_clip_text (const gchar *data, gint size);
+
 extern GList *gpapa_public_key_get_signatures (GpapaPublicKey *key,
                                                GpapaCallbackFunc callback,
                                                gpointer calldata);
@@ -97,6 +104,10 @@ extern void gpapa_public_key_export (GpapaPublicKey *key,
                                      const gchar *targetFileID, GpapaArmor Armor,
                                      GpapaCallbackFunc callback,
                                      gpointer calldata);
+
+extern void gpapa_public_key_export_to_clipboard (GpapaPublicKey *key,
+                                                  GpapaCallbackFunc callback,
+                                                  gpointer calldata);
 
 extern void gpapa_public_key_delete (GpapaPublicKey *key,
                                      GpapaCallbackFunc callback,

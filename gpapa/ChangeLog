@@ -1,3 +1,60 @@
+2002-02-10  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+	
+	* Makefile.am (libgpapa_a_SOURCES): Added  keyserver.c and
+	keyserver.h to the list.
+
+	* gpapaintern.h, gpapaintern.c (gpapa_call_gnupg): Added new
+	"data" argument, to be used as input if not NULL. Tell GnuPG we
+	are going to use utf8 strings (added --utf8-strings argument).
+
+	* gpapa.c (gpapa_receive_public_key_from_server): Added support
+	for connecting directly to key servers instead of using "gpg
+	--recv-keys" (via the keyserver.h functions). Only active on
+	windows at the moment.
+	Changed to call gpapa_get_public_key_by_userID() instead of 
+	gpapa_get_public_key_by_ID().
+	(gpapa_import_keys_from_clipboard)
+	(get_w32_clip_text): New functions for importing a key directly
+	from the MS-Windows clipboard. Disabled for other OS's.
+
+	* gpapafile.c (gpapa_file_sign)
+	(gpapa_file_encrypt)
+	(gpapa_file_encrypt_and_sign)
+	(gpapa_file_protect)
+	(gpapa_file_decrypt)
+	gpapapublickey.c (gpapa_public_key_export)
+	gpapasecretkey.c (gpapa_secret_key_export): Changed to quote every
+	filename with double quotes before passing it to gpg. (NOTE (by
+	Miguel Coca): This BREAKS all these functions on non-Windows
+	systems, since the quotes are passed to gpg along with the
+	filename).
+	
+	* gpapa.c, rungpg.c: Fixes to the debug messages.
+
+	* gpapapublickey.c: Added windows include.
+
+	* gpapapublickey.c, gpapapublickey.h (linecallback_to_clipboard)
+	(set_w32_clip_text) 
+	(gpapa_public_key_export_to_clipboard): New functions for
+	exporting a key to the MS-Windows clipboard.
+
+	* gpapasecretkey.c, gpapasecretkey.h
+	(gpapa_secret_key_export_to_clipboard): New functions for 
+	exporting a key to the MS-Windows clipboard.
+
+	* gpgme.h: Added DEBUG define.
+
+	* rungpg.c (_gpgme_gpg_set_colon_line_handler): Changed the way lines
+	are handled.
+	
+	* gpapa.c, gpapafile.c, gpapakey.c, gpapapublickey.c,
+	gpapasecretkey.c, gpapatest.c: Changed all calls of
+	gpapa_call_gnupg to new prototype.
+
+	* w32-clipboard.c, keyserver.c, keyserver.h: New files. They are
+	slightly modified versions of the equivalent files in the WinPT
+	program, after adapting them to the GNU coding style.
+	
 2002-02-05  Benedikt Wildenhain <benedikt.wildenhain@g-n-u.de>
 
 	* gpapa.c (extract_key): Changed to read only the short form of the 

@@ -1,3 +1,89 @@
+2002-02-10  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* Makefile.am (LDADD): Added -lm and -lz to the hardcoded libraries.
+	(gpa_SOURCES): Added qdchkpwd.c and qdchkpwd.h to the list.
+
+	* qdchkpwd.c, qdchkpwd.h: New files. They contain a "Quick and
+	Dirty CHecK for PassWorDs", based on the zlib library.
+
+	* gpa.h: Some code cleaning.
+
+	* gpa.c, icons.c, keyserver.c, keyring.c: Fixed debug output.
+
+	* keyeditdlg.c, keyexportdlg.c, keyserver.c, keygenwizard.c,
+	keyring.c, gpawizard.h: Reformatted to completely comply with the 
+	GNU Coding Standards.
+	
+	* fileman.c, filemenu.c, gpawidgets.c: Use the GTK+ 2.0 API for
+	finding out the right width for GtkEntry's.
+
+	* keyserver.h, keyserver.c (keyserver_get_current): Added new
+	argument that requests that the returned value never be NULL.
+
+	* keyexportdlg.c, keyimportdlg.c, keysmenu.c, optionsmenu.c: Use
+	new keyserver_get_current().
+	
+	* gpa.h, gpa.c (gpa_backup_generated)
+	(gpa_set_backup_generated)
+	(gpa_remember_backup_generated): New functions for implementing
+	new option "backup_generated".
+
+	* gpa.c (cmd_and_opt_values)
+	(opts)
+	(main): Added oBackupGenerated option. It signals whether the
+	user should be warned to generate a backup of his private key.
+
+	* gpafilesel.c (gpa_file_selection_init): Changed "Open" button to
+        read "Ok".
+	(gpa_file_selection_dir_button)
+	(gpa_file_selection_populate): Removed some debug output, other
+	fixes.
+
+	* gpawizard.c (gpa_wizard_update_buttons): Disable all buttons
+	when in the "wait" page. So, we explicitly enable the "Close"
+	button when we reach the last page.
+
+	* helpmenu.c (about_dialog_timer): Fixed wrong call to
+	gdk_draw_string.
+	(help_about): Added G-N-U GmbH copyright notice and other
+	documentation. Changed the way the text widths are calculated.
+	(gpa_help_menu_add_to_factory): Renamed help menu to "Info".
+
+	* keyexportdlg.c (export_ok): Cleaned up code a bit, reordered if
+	conditions (in preparation for adding export to clipboard).
+	
+	* keyexportdlg.c, keyexportdlg.h (secret_key_export_dialog_run)
+	(key_backup_dialog_run): New dialogues. First exports secret keys,
+	and the second makes a backup of the user's keys.
+
+	* keygenwizard.c (gpa_keygen_wizard_password_validate): Added
+	check of the strength of the passphrase, using the new qdchkpwd.
+
+	* keyimportdlg.c (import_ok): Cleaned up code a bit, reordered if
+	conditions (in preparation for adding import to clipboard).
+
+	* keyring.c (keyring_editor_sign)
+	(keyring_editor_import)
+	(keyring_editor_export)
+	(keyring_editor_export_secret)
+	(keyring_editor_backup): Added prototypes.
+	(keyring_editor_import): Added support for import from the
+	clipboard.
+	(keyring_editor_export): Export to clipboard.
+	(keyring_editor_export_secret)
+	(isdir)
+	(keyring_editor_backup): New functions.
+	(keyring_editor_mapped): Reordered "if" conditions for speed.
+	Enabled key backups.
+	(keyring_editor_menubar_new): Changed the various menu items to
+	use the keyring_editor_* functions instead of the toolbar ones.
+	Added some code, but disabled it (doesn't work).
+	(export_secret_key): Removed function.
+
+	* keysmenu.c (gpa_tableKey_new)
+	(gpa_frameExpire_new): Changed the way GtkEntries widths are
+	calculated.
+	
 2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* Makefile.am (gpa_SOURCES): Included gpafilesel.c and gpafilesel.h 

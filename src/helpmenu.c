@@ -137,7 +137,8 @@ about_dialog_timer (gpointer data)
 		       gtk_style_get_font (scroll_area->style),
 		       scroll_area->style->black_gc,
 		       scroll_area->allocation.width - scroll_offset,
-		       gtk_style_get_font (scroll_area->style),
+		       scroll_area->allocation.height
+		        - gtk_style_get_font (scroll_area->style)->descent,
 		       scroll_text[cur_scroll_text]);
       gdk_draw_pixmap (scroll_area->window,
 		       scroll_area->style->black_gc,
@@ -149,8 +150,7 @@ about_dialog_timer (gpointer data)
       if (!scroll_state
 	  && scroll_offset > ((scroll_area->allocation.width
 			       + scroll_text_widths[cur_scroll_text])/2))
-	{
-	  scroll_state = 1;
+	{ scroll_state = 1;
 	  scroll_offset = (scroll_area->allocation.width
 			   + scroll_text_widths[cur_scroll_text])/2;
 	}
@@ -211,7 +211,11 @@ help_about (void)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
-      label = gtk_label_new (_("brought to you by"));
+      label = gtk_label_new ("Copyright (C) 2000-2002 G-N-U GmbH");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+      gtk_widget_show (label);
+
+      label = gtk_label_new (_("Brought to you by:"));
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
@@ -227,12 +231,14 @@ help_about (void)
 
       scroll_text_widths = xcalloc (DIM(scroll_text),
 				    sizeof *scroll_text_widths);
+
+      gtk_widget_ensure_style (GTK_WIDGET (frame));
       max_width = 0;
       for (i = 0; i < DIM(scroll_text); i++)
 	{
-	  scroll_text_widths[i] = PANGO_SCALE
-            * gdk_string_width (gtk_style_get_font (frame->style),
-                                scroll_text[i]);
+	  scroll_text_widths[i] =
+            gdk_string_width (gtk_style_get_font (frame->style),
+                              scroll_text[i]);
 	  if (scroll_text_widths[i] > max_width)
 	    max_width = scroll_text_widths[i];
 	}
@@ -246,7 +252,19 @@ help_about (void)
       gtk_container_add (GTK_CONTAINER (frame), scroll_area);
       gtk_widget_show (scroll_area);
 
-      label = gtk_label_new (_("See http://www.gnupg.org for news"));
+      label = gtk_label_new (_("GPA is free software under the"));
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+      gtk_widget_show (label);
+
+      label = gtk_label_new (_("GNU General Public License."));
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+      gtk_widget_show (label);
+
+      label = gtk_label_new (_("For news see:"));
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+      gtk_widget_show (label);
+
+      label = gtk_label_new (_("http://www.gnupg.org"));
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
@@ -450,12 +468,12 @@ void
 gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget * window)
 {
   GtkItemFactoryEntry menu[] = {
-    {_("/_Help"), NULL, NULL, 0, "<Branch>"},
-    {_("/Help/_About"), NULL, help_about, 0, NULL},
-    {_("/Help/_License"), NULL, help_license, 0, NULL},
-    {_("/Help/_Warranty"), NULL, help_warranty, 0, NULL},
+    {_("/_Info"), NULL, NULL, 0, "<Branch>"},
+    {_("/Info/_About"), NULL, help_about, 0, NULL},
+    {_("/Info/_License"), NULL, help_license, 0, NULL},
+    {_("/Info/_Warranty"), NULL, help_warranty, 0, NULL},
 #if 0  /* Help is not available yet. :-( */
-    {_("/Help/_Help"), "F1", help_help, 0, NULL}
+    {_("/Info/_Help"), "F1", help_help, 0, NULL}
 #endif
   };
 

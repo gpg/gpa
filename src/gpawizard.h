@@ -25,8 +25,8 @@
 
 typedef gboolean (*GPAWizardAction)(gpointer user_data);
 
-GtkWidget * gpa_wizard_new (GtkAccelGroup * accel_group,
-			    GtkSignalFunc close_func, gpointer close_data);
+GtkWidget *gpa_wizard_new (GtkAccelGroup * accel_group,
+	                   GtkSignalFunc close_func, gpointer close_data);
 void gpa_wizard_append_page (GtkWidget * widget, GtkWidget * page_widget,
 			     gchar * back_label, gchar * next_label,
 			     GPAWizardAction action, gpointer user_data);

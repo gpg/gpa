@@ -103,7 +103,7 @@ import_ok (gpointer param)
       dialog->key_id = (gchar *) gtk_entry_get_text (GTK_ENTRY (dialog->entry_key_id));
       dialog->key_id = xstrdup_or_null (dialog->key_id);
     }
-  else
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_filename)))
     {
       dialog->filename = (gchar *) gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
       dialog->filename = xstrdup_or_null (dialog->filename);
@@ -240,9 +240,9 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_combo_set_value_in_list (GTK_COMBO (combo), FALSE, FALSE);
 
   gtk_combo_set_popdown_strings (GTK_COMBO (combo),
-                                 keyserver_get_as_glist () );
+                                 keyserver_get_as_glist ());
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
-		      keyserver_get_current () );
+		      keyserver_get_current (TRUE));
 
   gpa_connect_by_accelerator (GTK_LABEL (label), entry, accel_group,
 			      _("_Key Server:"));
@@ -285,5 +285,5 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
     }
 
   return dialog.result;
-} /* key_import_run_dialog */
+}
 

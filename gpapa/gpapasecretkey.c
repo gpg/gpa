@@ -46,20 +46,53 @@ gpapa_secret_key_export (GpapaSecretKey *key, char *targetFileID,
   if (key && targetFileID)
     {
       gchar *full_keyID;
+      gchar *quoted_filename = NULL;
       const gchar *gpgargv[7];
       int i = 0;
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      quoted_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
       gpgargv[i++] = "-o";
-      gpgargv[i++] = targetFileID;
+      gpgargv[i++] = quoted_filename;
       gpgargv[i++] = "--yes";  /* overwrite the file */
       if (Armor == GPAPA_ARMOR)
 	gpgargv[i++] = "--armor";
       gpgargv[i++] = "--export-secret-key";
       gpgargv[i++] = full_keyID;
       gpgargv[i] = NULL;
-      gpapa_call_gnupg
-	(gpgargv, TRUE, NULL, NULL,
-	 NULL, NULL, callback, calldata);
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
+	                NULL, NULL, callback, calldata);
+      free (quoted_filename);
+      free (full_keyID);
+    }
+}
+
+void
+gpapa_secret_key_export_to_clipboard (GpapaSecretKey *key,
+                                      GpapaCallbackFunc callback,
+                                      gpointer calldata)
+{
+  if (!key)
+    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+  if (key)
+    {
+      gchar *full_keyID;
+      gchar *clipboard_data = NULL;
+      const gchar *gpgargv[4];
+      int i = 0;
+      full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      gpgargv[i++] = "--armor";
+      gpgargv[i++] = "--export-secret-key";
+      gpgargv[i++] = full_keyID;
+      gpgargv[i] = NULL;
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
+                        linecallback_to_clipboard, &clipboard_data,
+                        callback, calldata);
+#ifdef _WIN32
+      set_w32_clip_text (clipboard_data, strlen (clipboard_data));
+#else
+      fprintf (stderr, "*** Clipboard ***\n%s\n*** End Clipboard ***\n",
+                       clipboard_data);
+#endif
       free (full_keyID);
     }
 }
@@ -79,13 +112,13 @@ gpapa_secret_key_delete (GpapaSecretKey *key, GpapaCallbackFunc callback,
       gpgargv[1] = "--delete-secret-key";
       gpgargv[2] = full_keyID;
       gpgargv[3] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, "YES\n", NULL,
+      gpapa_call_gnupg (gpgargv, TRUE, "YES\n", NULL, NULL,
 	                NULL, NULL, callback, calldata);
       gpgargv[0] = "--yes";
       gpgargv[1] = "--delete-key";
       gpgargv[2] = full_keyID;
       gpgargv[3] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, "YES\n", NULL,
+      gpapa_call_gnupg (gpgargv, TRUE, "YES\n", NULL, NULL,
 	                NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_public_keyring (callback, calldata);
@@ -105,7 +138,7 @@ gpapa_secret_key_create_revocation (GpapaSecretKey *key,
       gpgargv[0] = "--gen-revoke";
       gpgargv[1] = key->key->KeyID;
       gpgargv[2] = NULL; 
-      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL,
+      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL, NULL,
                         NULL, NULL, callback, calldata); 
     }
 }

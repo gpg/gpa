@@ -110,11 +110,11 @@ static void toolbar_remove_key (GtkWidget *widget, gpointer param);
 static void toolbar_sign_key (GtkWidget *widget, gpointer param);
 static void toolbar_export_key (GtkWidget *widget, gpointer param);
 static void toolbar_import_keys (GtkWidget *widget, gpointer param);
-static void export_secret_key (GtkWidget *widget, gpointer param);
-
-/*
- *
- */
+static void keyring_editor_sign (gpointer param);
+static void keyring_editor_import (gpointer param);
+static void keyring_editor_export (gpointer param);
+static void keyring_editor_export_secret (gpointer param);
+static void keyring_editor_backup (gpointer param);
 
 /*
  * A simple sensitivity callback mechanism
@@ -142,16 +142,17 @@ static void export_secret_key (GtkWidget *widget, gpointer param);
 typedef gboolean (*SensitivityFunc)(gpointer);
 
 
-/* Add widget to the list of sensitive widgets of editor */
+/* Add widget to the list of sensitive widgets of editor
+ */
 static void
-add_selection_sensitive_widget (GPAKeyringEditor * editor,
-				GtkWidget * widget,
+add_selection_sensitive_widget (GPAKeyringEditor *editor,
+				GtkWidget *widget,
 				SensitivityFunc callback)
 {
   gtk_object_set_data (GTK_OBJECT (widget), "gpa_sensitivity", callback);
   editor->selection_sensitive_widgets \
     = g_list_append(editor->selection_sensitive_widgets, widget);
-} /* add_selection_sensitive_widget */
+}
 
 
 /* Update the sensitivity of the widget data and pass param through to
@@ -164,7 +165,7 @@ update_selection_sensitive_widget (gpointer data, gpointer param)
 
   func = gtk_object_get_data (GTK_OBJECT (data), "gpa_sensitivity");
   gtk_widget_set_sensitive (GTK_WIDGET (data), func (param));
-} /* update_selection_sensitive_widget */
+}
 
 
 /* Call update_selection_sensitive_widget for all widgets in the list of
@@ -176,7 +177,7 @@ update_selection_sensitive_widgets (GPAKeyringEditor * editor)
   g_list_foreach (editor->selection_sensitive_widgets,
 		  update_selection_sensitive_widget,
 		  (gpointer) editor);
-} /* update_selection_sensitive_widgets */
+}
 
 
 /* Return TRUE if the key list widget of the keyring editor has at least
@@ -188,7 +189,7 @@ keyring_editor_has_selection (gpointer param)
   GPAKeyringEditor * editor = param;
 
   return gpa_keylist_has_selection (editor->clist_keys);
-} /* keyring_editor_has_selection */
+}
 
 
 /* Return TRUE if the key list widget of the keyring editor has exactly
@@ -315,14 +316,14 @@ keyring_editor_can_sign (gpointer param)
 static void
 keyring_editor_sign (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  gchar * private_key_id;
-  gchar * passphrase;
+  GPAKeyringEditor *editor = param;
+  gchar *private_key_id;
+  gchar *passphrase;
   gint row;
-  gchar * key_id;
+  gchar *key_id;
   GpapaPublicKey *key;
   GpapaSignType sign_type = GPAPA_KEY_SIGN_NORMAL;
-  GList * selection;
+  GList *selection;
 
   if (!gpa_keylist_has_selection (editor->clist_keys))
     {
@@ -364,55 +365,61 @@ keyring_editor_sign (gpointer param)
     }
 
   /* Update the signatures details page and the widgets because some
-   * depend on what signatures a key has*/
+   * depend on what signatures a key has
+   */
   keyring_update_details_notebook (editor);
   update_selection_sensitive_widgets (editor);
-} /* keyring_editor_sign */
+}
 
 
 /* retrieve a key from the server */
 static void
 keyring_editor_import (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  gchar * filename, *server, * key_id;
+  GPAKeyringEditor *editor = param;
+  gchar *filename, *server, *key_id;
 
   if (key_import_dialog_run (editor->window, &filename, &server, &key_id))
     {
       if (filename)
 	{
-	  /* Import keys from the user specified file. */
+	  /* Import keys from the user specified file.
+           */
 	  gpapa_import_keys (filename, gpa_callback, editor->window);
 	}
       else if (server)
 	{
-	  /* Fetch the key given by key_id from the server */
+	  /* Fetch the key given by key_id from the server
+           */
 	  gpapa_receive_public_key_from_server (key_id, server, gpa_callback,
 						editor->window);
-	  /* FIXME: add proper error handling */
+	  /* FIXME: add proper error handling
+           */
 	}
       else
 	{
-	  /* Should never happen because the dialog should ensure that
-	   * either filename or server is not NULL */
-	  printf ("neither filename nor server supplied\n");
+	  /* Import keys from the clipboard.
+           */
+	  gpapa_import_keys_from_clipboard (gpa_callback, editor->window);
 	}
       free (filename);
       free (server);
 
-      /* update the widgets */
+      /* update the widgets
+       */
       keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
-    } /* if */
+    }
 }
 
 
-/* export the selected keys to a file */
+/* export the selected keys to a file
+ */
 static void
 keyring_editor_export (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  gchar * filename, *server;
+  GPAKeyringEditor *editor = param;
+  gchar *filename, *server;
   gboolean armored;
 
   if (!gpa_keylist_has_selection (editor->clist_keys))
@@ -422,26 +429,28 @@ keyring_editor_export (gpointer param)
        */
       gpa_window_error (_("No keys selected to export."), editor->window);
       return;
-    } /* if */
+    }
 
   if (key_export_dialog_run (editor->window, &filename, &server, &armored))
     {
       if (filename)
 	{
-	  /* Export the selected key to the user specified file. FIXME:
-	   * We should really export all selected keys, but gpapa
-	   * currently can't export multiple keys to one file */
-	  GpapaPublicKey * key = gpa_keylist_current_key (editor->clist_keys);
+	  /* Export the selected key to the user specified file.
+           * FIXME: We should really export all selected keys, but
+           * GPAPA currently cannot export multiple keys to one file.
+           */
+	  GpapaPublicKey *key = gpa_keylist_current_key (editor->clist_keys);
 	  gpapa_public_key_export (key, filename, armored,
 				   gpa_callback, editor->window);
 	}
       else if (server)
 	{
-	  /* Export the selected key to the user specified server. */
-	  GList * selection = gpa_keylist_selection (editor->clist_keys);
-	  gchar * key_id;
+	  /* Export the selected key to the user specified server.
+           */
+	  GList *selection = gpa_keylist_selection (editor->clist_keys);
+	  gchar *key_id;
 	  gint row;
-	  GpapaPublicKey * key;
+	  GpapaPublicKey *key;
 
 	  while (selection)
 	    {
@@ -458,15 +467,143 @@ keyring_editor_export (gpointer param)
 	}
       else
 	{
-	  /* Should never happen because the dialog should ensure that
-	   * either filename or server is not NULL */
-	  printf ("neither filename nor server supplied\n");
+	  /* Clipboard.
+           */
+	  GpapaPublicKey *key = gpa_keylist_current_key (editor->clist_keys);
+	  gpapa_public_key_export_to_clipboard (key,
+				                gpa_callback, editor->window);
 	}
       free (filename);
       free (server);
-    } /* if */
-} /* keyring_editor_export */
+    }
+}
 
+
+static void
+keyring_editor_export_secret (gpointer param)
+{
+  GPAKeyringEditor *editor = param;
+  gchar *filename;
+  gboolean armored;
+
+  if (!gpa_keylist_has_selection (editor->clist_keys))
+    {
+      /* this shouldn't happen because the button should be grayed out
+       * in this case
+       */
+      gpa_window_error (_("No keys selected to export."), editor->window);
+      return;
+    }
+
+  if (secret_key_export_dialog_run (editor->window, &filename, &armored))
+    {
+      GpapaPublicKey *public_key
+        = gpa_keylist_current_key (editor->clist_keys);
+      GpapaSecretKey *key
+        = gpapa_get_secret_key_by_ID (gpapa_key_get_identifier (public_key->key,
+                                                                gpa_callback,
+                                                                editor->window),
+                                      gpa_callback, editor->window);
+      if (filename)
+	{
+	  /* Export the selected key to the user specified file.
+	   */
+	  gpapa_secret_key_export (key, filename, armored,
+				   gpa_callback, editor->window);
+	}
+      else
+	{
+	  /* Export the selected key to the clipboard.
+	   */
+	  gpapa_secret_key_export_to_clipboard (key,
+				                gpa_callback, editor->window);
+	}
+      free (filename);
+    }
+}
+
+/* Return TRUE if filename is a directory */
+static gboolean
+isdir (const gchar * filename)
+{
+  struct stat statbuf;
+
+  return (stat (filename, &statbuf) == 0
+	  && S_ISDIR (statbuf.st_mode));
+}
+
+/* backup the default keys */
+static void
+keyring_editor_backup (gpointer param)
+{
+  GPAKeyringEditor *editor = param;
+  gchar *key_id, *dir_name;
+  GpapaSecretKey *secret_key;
+  GpapaPublicKey *public_key;
+
+  key_id = gpa_default_key ();
+  if (!key_id)
+    {
+      /* this shouldn't happen because the menu item should be grayed out
+       * in this case
+       */
+      gpa_window_error (_("No private key to backup."), editor->window);
+      return;
+    }
+
+  secret_key = gpapa_get_secret_key_by_ID (key_id,
+                                           gpa_callback, editor->window);
+  public_key = gpapa_get_public_key_by_ID (key_id,
+                                           gpa_callback, editor->window);
+
+  if (key_backup_dialog_run (editor->window, &dir_name, key_id))
+    {
+      if (isdir (dir_name))
+	{
+	  /* FIXME: we should also test for permissions */
+	  gchar *pubkey_filename = g_strconcat (dir_name, "/pub_key.asc", NULL);
+	  gchar *seckey_filename = g_strconcat (dir_name, "/sec_key.asc", NULL);
+          struct stat statbuf;
+	  gboolean *cancelled = FALSE;
+
+	  if (stat (pubkey_filename, &statbuf) == 0)
+	    {
+              const gchar *buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
+	      gchar *message = g_strdup_printf (_("The file %s already exists.\n"
+		   			          "Do you want to overwrite it?"),
+					        pubkey_filename);
+	      gboolean reply = gpa_message_box_run (editor->window, _("File exists"),
+					            message, buttons);
+	      if (!reply || strcmp (reply, _("_Overwrite")) != 0)
+		cancelled = TRUE;
+	      g_free (message);
+	    }
+	  if (stat (seckey_filename, &statbuf) == 0)
+	    {
+              const gchar *buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
+	      gchar *message = g_strdup_printf (_("The file %s already exists.\n"
+		   			          "Do you want to overwrite it?"),
+					        seckey_filename);
+	      gboolean reply = gpa_message_box_run (editor->window, _("File exists"),
+					            message, buttons);
+	      if (!reply || strcmp (reply, _("_Overwrite")) != 0)
+		cancelled = TRUE;
+	      g_free (message);
+
+	      gpa_remember_backup_generated ();
+	    }
+	  if (!cancelled)
+	    {
+              gpapa_public_key_export (public_key, pubkey_filename, GPAPA_ARMOR,
+			               gpa_callback, editor->window);
+              gpapa_secret_key_export (secret_key, seckey_filename, GPAPA_ARMOR,
+			               gpa_callback, editor->window);
+	    }
+	  g_free (pubkey_filename);
+	  g_free (seckey_filename);
+        }
+    }
+}
 
 /* Run the advanced key generation dialog and if the user clicked OK,
  * generate a new key pair and updat the key list
@@ -529,7 +666,8 @@ keyring_editor_generate_key_advanced (gpointer param)
 					    editor->window);
       if (params->send_to_server)
 	{
-	  printf ("send key to server\n");
+	  fprintf (stderr, "send key to server\n");
+          fflush (stderr);
 /* @@@@@ warning: key is not send to the server after generation */
 	  /*
 	    gpapa_public_key_send_to_server (publicKey, global_keyserver,
@@ -632,7 +770,7 @@ keyring_editor_end_selection (GtkWidget * clistKeys, gpointer param)
 
 
 
-/* Signal handler for he map signal. If the simplified_ui flag is set
+/* Signal handler for the map signal. If the simplified_ui flag is set
  * and there's no private key in the key ring, ask the user whether he
  * wants to generate a key. If so, call keyring_editor_generate_key()
  * which runs the appropriate dialog.
@@ -648,8 +786,8 @@ keyring_editor_mapped (gpointer param)
 
   if (gpa_simplified_ui ())
     {
-      if (gpapa_get_secret_key_count (gpa_callback, editor->window) == 0
-	  && !asked_about_key_generation)
+      if (!asked_about_key_generation
+	  && gpapa_get_secret_key_count (gpa_callback, editor->window) == 0)
 	{
 	  const gchar * buttons[] = {_("_Generate key now"), _("Do it _later"),
 				     NULL};
@@ -663,8 +801,9 @@ keyring_editor_mapped (gpointer param)
 	    keyring_editor_generate_key (param);
 	  asked_about_key_generation = TRUE;
 	}
-      else if (gpapa_get_secret_key_count (gpa_callback, editor->window) != 0
-               && !asked_about_key_backup)
+      else if (!asked_about_key_backup
+	       && !gpa_backup_generated ()
+	       && gpapa_get_secret_key_count (gpa_callback, editor->window) != 0)
         {
 	  const gchar * buttons[] = {_("_Backup key now"), _("Do it _later"),
 				     NULL};
@@ -676,7 +815,7 @@ keyring_editor_mapped (gpointer param)
 					  " (recommended) or do it later?"),
 					buttons);
 	  if (result && strcmp(result, _("_Backup key now")) == 0)
-	    /* keyring_editor_backup_key (param) */;
+	    keyring_editor_backup (param);
 	  asked_about_key_backup = TRUE;
         }
     }
@@ -711,6 +850,7 @@ keyring_editor_menubar_new (GtkWidget * window,
 {
   GtkAccelGroup *accel_group;
   GtkItemFactory *factory;
+  GtkWidget *item;
   GtkItemFactoryEntry file_menu[] = {
     {_("/_File"), NULL, NULL, 0, "<Branch>"},
     {_("/File/_Close"), "<control>W", keyring_editor_close, 0, NULL},
@@ -721,11 +861,11 @@ keyring_editor_menubar_new (GtkWidget * window,
     {_("/Keys/_Generate Key..."), NULL, keyring_editor_generate_key, 0, NULL},
     /*{_("/Keys/Generate _Revocation Certificate"), NULL,
 					 keys_generateRevocation, 0, NULL},*/
-    {_("/Keys/_Sign Keys..."), NULL, toolbar_sign_key, 0, NULL},
-    {_("/Keys/_Import Keys..."), NULL, toolbar_import_keys, 0, NULL},
-    {_("/Keys/_Export Keys..."), NULL, toolbar_export_key, 0, NULL},
-    {_("/Keys/Export _Private Keys..."), NULL, export_secret_key, 0, NULL},
-    {_("/Keys/_Backup..."), NULL, export_secret_key, 0, NULL},
+    {_("/Keys/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
+    {_("/Keys/_Import Keys..."), NULL, keyring_editor_import, 0, NULL},
+    {_("/Keys/_Export Keys..."), NULL, keyring_editor_export, 0, NULL},
+    {_("/Keys/Export _Private Keys..."), NULL, keyring_editor_export_secret, 0, NULL},
+    {_("/Keys/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
     /*{_("/Keys/Import _Ownertrust..."), NULL, keys_importOwnertrust, 0, NULL},*/
     /*{_("/Keys/_Update Trust Database"), NULL, keys_updateTrust, 0, NULL},*/
   };
@@ -749,6 +889,18 @@ keyring_editor_menubar_new (GtkWidget * window,
 				 win_menu, editor);
   gpa_help_menu_add_to_factory (factory, window);
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+
+#if 0  /* @@@ :-( */
+  item = gtk_item_factory_get_widget (factory, _("/Keys/_Sign Keys..."));
+  printf ("%x\n", item);
+  add_selection_sensitive_widget (editor, item,
+                                  keyring_editor_can_sign);
+  item = gtk_item_factory_get_widget (factory, _("/Keys/_Export Keys..."));
+  printf ("%x\n", item);
+  add_selection_sensitive_widget (editor, item,
+                                  keyring_editor_has_selection);
+#endif
+
   return gtk_item_factory_get_widget (factory, "<main>");
 }
 
@@ -1110,12 +1262,6 @@ static void
 toolbar_import_keys (GtkWidget *widget, gpointer param)
 {
   keyring_editor_import (param);
-}
-
-static void
-export_secret_key (GtkWidget *widget, gpointer param)
-{
-  /* keyring_editor_export (param); */
 }
 
 static GtkWidget *

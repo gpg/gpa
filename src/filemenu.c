@@ -638,11 +638,11 @@ file_encrypt_detail (gpointer param)
     gpapa_public_key_get_fingerprint (key, gpa_callback, windowEncrypt);
   gtk_entry_set_text (GTK_ENTRY (entryFingerprint), contentsFingerprint);
   gtk_editable_set_editable (GTK_EDITABLE (entryFingerprint), FALSE);
+  gtk_widget_ensure_style (entryFingerprint);
   gtk_widget_set_usize (entryFingerprint,
-    PANGO_SCALE * (gdk_string_width (gtk_style_get_font (entryFingerprint->style),
-                                     contentsFingerprint)
-                   + gdk_string_width (gtk_style_get_font (entryFingerprint->style),
-                                       "  "))
+    gdk_string_width (gtk_style_get_font (entryFingerprint->style),
+                      contentsFingerprint)
+    + gdk_string_width (gtk_style_get_font (entryFingerprint->style), "  ")
     + entryFingerprint->style->xthickness, 0);
   gtk_box_pack_start (GTK_BOX (vboxFingerprint), entryFingerprint, TRUE, TRUE,
 		      0);

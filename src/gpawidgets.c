@@ -314,8 +314,7 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   entryAfter = gtk_entry_new ();
   frame->entryAfter = entryAfter;
   gtk_widget_set_usize (entryAfter,
-    PANGO_SCALE * gdk_string_width (gtk_style_get_font (entryAfter->style), " 00000 "),
-    0);
+    gdk_string_width (gtk_style_get_font (entryAfter->style), " 00000 "), 0);
   gtk_box_pack_start (GTK_BOX (hboxAfter), entryAfter, FALSE, FALSE, 0);
 
   comboAfter = gtk_combo_new ();

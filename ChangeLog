@@ -12,6 +12,10 @@
 
 	* configure.ac (ALL_LINGUAS): Add pt_BR.
 
+2002-02-10  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gtkrc.gpa: Changed default font.
+	
 2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* THANKS: Updated.

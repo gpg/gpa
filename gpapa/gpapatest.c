@@ -208,7 +208,7 @@ test_version (void)
   const gchar *gpgargv[2];
   gpgargv[0] = "--version";
   gpgargv[1] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, linecallback, "pruzzel",
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL, linecallback, "pruzzel",
 		    callback, NULL);
 }
 
@@ -446,7 +446,7 @@ test_edithelp (void)
   gpgargv[0] = "--edit-key";
   gpgargv[1] = "test";
   gpgargv[2] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, "help\nquit\n", NULL,
+  gpapa_call_gnupg (gpgargv, TRUE, "help\nquit\n", NULL, NULL,
 		    linecallback, "pruzzel", callback, NULL);
 }
 
@@ -471,7 +471,7 @@ test_genkey (void)
                     /* "%secring foo.sec\n" */
                     "%commit\n"
                     /* "%echo done\n" */,
-                    NULL, linecallback, "pruzzel", callback, NULL);
+                    NULL, NULL, linecallback, "pruzzel", callback, NULL);
 /*
   gpapa_create_key_pair (GpapaPublicKey ** publicKey,
                          GpapaSecretKey ** secretKey, gchar * passphrase,

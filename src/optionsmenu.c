@@ -101,7 +101,7 @@ options_keyserver (gpointer param)
   gtk_combo_set_popdown_strings (GTK_COMBO (comboServer), 
                                  keyserver_get_as_glist () );
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboServer)->entry),
-		      keyserver_get_current ());
+		      keyserver_get_current (TRUE));
   gtk_box_pack_start (GTK_BOX (hboxServer), comboServer, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxServer), hboxServer, TRUE, TRUE, 0);
   hButtonBoxServer = gtk_hbutton_box_new ();

@@ -16,6 +16,7 @@ libgpapa_a_SOURCES = gpapa.c gpapa.h \
 		     gpapapublickey.c gpapapublickey.h \
 		     gpapasecretkey.c gpapasecretkey.h \
 		     gpapasignature.c gpapasignature.h \
+                     keyserver.c  keyserver.h \
 		     rungpg.c  rungpg.h \
 		     gpgme.c  gpgme.h \
 		     wait.c  wait.h \

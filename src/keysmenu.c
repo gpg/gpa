@@ -154,11 +154,11 @@ gpa_tableKey_new (GpapaKey * key, GtkWidget * window)
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryKeyname = gtk_entry_new ();
   contentsKeyname = gpapa_key_get_name (key, gpa_callback, window);
+  gtk_widget_ensure_style (entryKeyname);
   gtk_widget_set_usize (entryKeyname,
-    PANGO_SCALE * (gdk_string_width (gtk_style_get_font (entryKeyname->style),
-                                     contentsKeyname)
-                   + gdk_string_width (gtk_style_get_font (entryKeyname->style),
-                                       "  "))
+    gdk_string_width (gtk_style_get_font (entryKeyname->style),
+                      contentsKeyname)
+    + gdk_string_width (gtk_style_get_font (entryKeyname->style), "  ")
     + entryKeyname->style->xthickness, 0);
   gtk_entry_set_text (GTK_ENTRY (entryKeyname), contentsKeyname);
   gtk_editable_set_editable (GTK_EDITABLE (entryKeyname), FALSE);
@@ -288,8 +288,7 @@ gpa_frameExpire_new (GtkAccelGroup * accelGroup, GDate ** expiryDate,
   gtk_box_pack_start (GTK_BOX (hboxAfter), radioAfter, FALSE, FALSE, 0);
   entryAfter = gtk_entry_new ();
   gtk_widget_set_usize (entryAfter,
-    PANGO_SCALE * gdk_string_width (gtk_style_get_font (entryAfter->style),
-                                    " 00000 "), 0);
+    gdk_string_width (gtk_style_get_font (entryAfter->style), " 00000 "), 0);
   gtk_box_pack_start (GTK_BOX (hboxAfter), entryAfter, FALSE, FALSE, 0);
   comboAfter = gtk_combo_new ();
   gtk_combo_set_value_in_list (GTK_COMBO (comboAfter), TRUE, FALSE);
@@ -518,7 +517,7 @@ keys_openPublic_send_key (gpointer data, gpointer userData)
   windowPublic = (GtkWidget *) userData;
   key = gpapa_get_public_key_by_ID (keyID, gpa_callback, windowPublic);
   gpapa_public_key_send_to_server (key, 
-                                   keyserver_get_current (),
+                                   keyserver_get_current (FALSE),
                                    gpa_callback,
 				   windowPublic);
 }

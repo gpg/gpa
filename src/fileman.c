@@ -315,12 +315,12 @@ show_file_detail (gpointer param)
   gtk_editable_set_editable (GTK_EDITABLE (entryFilename), FALSE);
   contentsFilename = gpapa_file_get_name (file, gpa_callback, fileman->window);
   gtk_entry_set_text (GTK_ENTRY (entryFilename), contentsFilename);
+  gtk_widget_ensure_style (entryFilename);
   gtk_widget_set_usize (entryFilename,
-    PANGO_SCALE * (gdk_string_width (gtk_style_get_font (entryFilename->style),
-                                     contentsFilename)
-                   + gdk_string_width (gtk_style_get_font (entryFilename->style),
-                                       "  "))
-                   + entryFilename->style->xthickness, 0);
+    gdk_string_width (gtk_style_get_font (entryFilename->style),
+                      contentsFilename)
+    + gdk_string_width (gtk_style_get_font (entryFilename->style), "  ")
+    + entryFilename->style->xthickness, 0);
   gtk_table_attach (GTK_TABLE (tableTop), entryFilename, 1, 2, 0, 1, GTK_FILL,
 		    GTK_FILL, 0, 0);
 

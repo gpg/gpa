@@ -23,9 +23,11 @@
 
 #include <gtk/gtk.h>
 
-gboolean key_export_dialog_run (GtkWidget * parent, gchar ** filename,
-				gchar ** server, gboolean *armored);
-
-
+extern gboolean key_export_dialog_run (GtkWidget *parent, gchar **filename,
+                                       gchar **server, gboolean *armored);
+extern gboolean secret_key_export_dialog_run (GtkWidget *parent, gchar **filename,
+                                              gboolean *armored);
+extern gboolean key_backup_dialog_run (GtkWidget *parent, gchar **filename,
+                                       gchar *key_id);
 
 #endif /* KEYEXPORTDLG_H */

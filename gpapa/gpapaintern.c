@@ -181,7 +181,8 @@ command_handler (void *opaque, GpgStatusCode code, const char *key)
  */
 void
 gpapa_call_gnupg (const gchar **user_args, gboolean do_wait,
-                  const gchar *commands, const gchar *passphrase,
+                  const gchar *commands, const gchar *data,
+		  const gchar *passphrase,
                   GpapaLineCallbackFunc line_callback, gpointer line_calldata,
                   GpapaCallbackFunc callback, gpointer calldata)
 {
@@ -217,9 +218,11 @@ gpapa_call_gnupg (const gchar **user_args, gboolean do_wait,
 
   _gpgme_gpg_add_arg (gpg, "--no-options");
   _gpgme_gpg_add_arg (gpg, "--always-trust");
+  _gpgme_gpg_add_arg (gpg, "--utf8-strings");
 
   _gpgme_gpg_set_status_handler (gpg, status_handler, &gpapa_data);
   _gpgme_gpg_set_colon_line_handler (gpg, line_handler, &gpapa_data);
+
 #ifdef USE_COMMAND_HANDLER
   if (commands || passphrase)
     {
@@ -247,6 +250,19 @@ gpapa_call_gnupg (const gchar **user_args, gboolean do_wait,
     }
   else
     _gpgme_gpg_add_arg (gpg, "--batch");
+  if (data && return_code == 0)
+    {
+      GpgmeData tmp;
+      return_code = gpgme_data_new_from_mem (&tmp, data, strlen (data), 0);
+      if (return_code == 0)
+        {
+          _gpgme_data_set_mode (tmp, GPGME_DATA_MODE_OUT);
+          return_code = _gpgme_gpg_add_data (gpg, tmp, 0);
+        }
+#ifdef DEBUG
+      fprintf (stderr, "installing data:\n%s\nreturn_code = %d\n", data, return_code);
+#endif
+    }
   if (passphrase && return_code == 0)
     {
       GpgmeData tmp;

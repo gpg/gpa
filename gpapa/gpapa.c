@@ -20,6 +20,22 @@
 
 #include "gpapa.h"
 
+#if defined(__MINGW32__) || defined(HAVE_DOSISH_SYSTEM)
+/* Defining __USE_HKP__ means to connect directly to keyservers
+ * instead of running `gpg --recv-keys'.
+ */
+#define __USE_HKP__
+#endif
+
+#ifdef __USE_HKP__
+#include <keyserver.h>
+#define KEY_BUFLEN 65536
+#endif
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 char *global_keyServer;
 
 static char *gpg_program;
@@ -276,6 +292,7 @@ linecallback_refresh_pub (char *line, gpointer data, GpgStatusCode status)
         {
 #ifdef DEBUG
           fprintf (stderr, "extracting key: %s\n", line);
+          fflush (stderr);
 #endif
           key = (GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
           memset (key, 0, sizeof (GpapaPublicKey));
@@ -286,6 +303,7 @@ linecallback_refresh_pub (char *line, gpointer data, GpgStatusCode status)
         {
 #ifdef DEBUG
           fprintf (stderr, "extracting fingerprint: %s\n", line);
+          fflush (stderr);
 #endif
           key->fingerprint = gpapa_extract_fingerprint (line, key->key->algorithm,
                                                         d->callback, d->calldata);
@@ -312,7 +330,7 @@ gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpgargv[1] = "--with-colons";
   gpgargv[2] = "--with-fingerprint";
   gpgargv[3] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 		    linecallback_refresh_pub, &data, callback, calldata);
   PubRing = g_list_sort (PubRing, compare_public_keys);
   gpapa_refresh_secret_keyring (callback, calldata);
@@ -381,7 +399,7 @@ gpapa_get_public_key_by_userID (const gchar *userID, GpapaCallbackFunc callback,
   gpgargv[1] = "--with-colons";
   gpgargv[2] = uid;
   gpgargv[3] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 		    linecallback_id_pub, &data, callback, calldata);
   free (uid);
   if (data.key)
@@ -400,12 +418,23 @@ gpapa_get_public_key_by_userID (const gchar *userID, GpapaCallbackFunc callback,
 }
 
 GpapaPublicKey *
-gpapa_receive_public_key_from_server (const gchar *keyID, const gchar *ServerName,
+gpapa_receive_public_key_from_server (const gchar *keyID,
+                                      const gchar *ServerName,
 				      GpapaCallbackFunc callback,
 				      gpointer calldata)
 {
   if (keyID && ServerName)
     {
+#ifdef __USE_HKP__
+      const gchar *gpgargv[2];
+      gchar *key_buffer = g_malloc (KEY_BUFLEN);
+      kserver_recvkey (ServerName, keyID, key_buffer, KEY_BUFLEN);
+      gpgargv[0] = "--import";
+      gpgargv[1] = NULL;
+      gpapa_call_gnupg (gpgargv, TRUE, key_buffer, NULL, NULL,
+			NULL, NULL, callback, calldata);
+      g_free (key_buffer);
+#else /* not __USE_HKP__ */
       const gchar *gpgargv[5];
       char *id = xstrcat2 ("0x", keyID);
       gpgargv[0] = "--keyserver";
@@ -413,12 +442,13 @@ gpapa_receive_public_key_from_server (const gchar *keyID, const gchar *ServerNam
       gpgargv[2] = "--recv-keys";
       gpgargv[3] = id;
       gpgargv[4] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 			NULL, NULL, callback, calldata);
       free (id);
+#endif /* not __USE_HKP */
       gpapa_refresh_public_keyring (callback, calldata);
     }
-  return (gpapa_get_public_key_by_ID (keyID, callback, calldata));
+  return (gpapa_get_public_key_by_userID (keyID, callback, calldata));
 }
 
 static void
@@ -460,7 +490,7 @@ gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpgargv[0] = "--list-secret-keys";
   gpgargv[1] = "--with-colons";
   gpgargv[2] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 		    linecallback_refresh_sec, &data, callback, calldata);
   SecRing = g_list_sort (SecRing, compare_secret_keys);
 }
@@ -528,7 +558,7 @@ gpapa_get_secret_key_by_userID (const gchar *userID, GpapaCallbackFunc callback,
   gpgargv[1] = "--with-colons";
   gpgargv[2] = uid;
   gpgargv[3] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 		    linecallback_id_sec, &data, callback, calldata);
   free (uid);
   if (data.key)
@@ -611,7 +641,7 @@ gpapa_create_key_pair (GpapaPublicKey **publicKey,
       gpgargv[0] = "--gen-key";
       gpgargv[1] = "--batch";  /* not automatically added due to commands */
       gpgargv[2] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, commands, passphrase, 
+      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL, passphrase, 
 			NULL, NULL, callback, calldata);
       free (commands);
       gpapa_refresh_public_keyring (callback, calldata);
@@ -648,7 +678,7 @@ gpapa_export_ownertrust (const gchar *targetFileID, GpapaArmor Armor,
 	    gpgargv[i++] = "--armor";
 	  gpgargv[i++] = "--export-ownertrust";
 	  gpgargv[i] = NULL;
-	  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+	  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 	                    linecallback_export_ownertrust, stream, callback, calldata);
 	  fclose (stream);
 	}
@@ -667,7 +697,7 @@ gpapa_import_ownertrust (const gchar *sourceFileID,
       gpgargv[0] = "--import-ownertrust";
       gpgargv[1] = (char *) sourceFileID;
       gpgargv[2] = NULL;
-      gpapa_call_gnupg 	(gpgargv, TRUE, NULL, NULL,
+      gpapa_call_gnupg 	(gpgargv, TRUE, NULL, NULL, NULL,
                          NULL, NULL, callback, calldata);
     }
 }
@@ -678,7 +708,7 @@ gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
   const gchar *gpgargv[2];
   gpgargv[0] = "--update-trustdb";
   gpgargv[1] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
                     NULL, NULL, callback, calldata);
   gpapa_refresh_public_keyring (callback, calldata);
 }
@@ -696,10 +726,73 @@ gpapa_import_keys (const gchar *sourceFileID,
       gpgargv[1] = "--import";
       gpgargv[2] = (char *) sourceFileID;
       gpgargv[3] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 	                NULL, NULL, callback, calldata);
       gpapa_refresh_public_keyring (callback, calldata);
     }
+}
+
+#ifdef _WIN32
+
+static gchar*
+get_w32_clip_text (gint *r_size)
+{
+  gint rc, size;
+  gchar *private_clip = NULL;
+  gchar *clip = NULL;
+  HANDLE cb;
+
+  rc = OpenClipboard(NULL);
+  if (!rc)
+    return NULL;
+  cb = GetClipboardData(CF_TEXT);
+  if (!cb)
+    goto leave;
+
+  private_clip = GlobalLock(cb);
+  if (!private_clip)
+    goto leave;
+  size = strlen(private_clip);
+
+  clip = xmalloc(size + 1);
+  if (!clip)
+    {
+      GlobalUnlock(cb);
+      goto leave;
+    }	
+  memcpy(clip, private_clip, size);
+  clip[size] = '\0';
+  *r_size = size;
+  GlobalUnlock(cb);
+
+leave:
+  CloseClipboard();
+  return clip;
+} /* get_w32_clip_text */
+
+#endif
+
+void
+gpapa_import_keys_from_clipboard (GpapaCallbackFunc callback, gpointer calldata)
+{
+#ifdef _WIN32
+  const gchar *gpgargv[3];
+  gchar *clipboard_data;
+  gint clipboard_size;
+  clipboard_data = get_w32_clip_text (&clipboard_size);
+  if (clipboard_data)
+    {
+      gpgargv[0] = "--allow-secret-key-import";
+      gpgargv[1] = "--import";
+      gpgargv[2] = NULL;
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, clipboard_data, NULL,
+                        NULL, NULL, callback, calldata);
+      gpapa_refresh_public_keyring (callback, calldata);
+    }
+#else
+  fprintf (stderr, "*** Import keys from Clipboard ***\n");
+  fflush (stderr);
+#endif
 }
 
 

@@ -834,7 +834,7 @@ gpa_file_selection_init (GpaFileSelection *filesel)
   filesel->ok_button = gtk_dialog_add_button (dialog,
                                               GTK_STOCK_OK,
                                               GTK_RESPONSE_OK);
-  gtk_button_correct_label (GTK_BUTTON (filesel->ok_button), _("_Open"));
+  gtk_button_correct_label (GTK_BUTTON (filesel->ok_button), _("_OK"));
   
   gtk_widget_grab_default (filesel->ok_button);
 
@@ -1982,7 +1982,6 @@ gpa_file_selection_dir_button (GtkWidget      *widget,
   gtk_ctree_get_node_info (GTK_CTREE (fs->dir_list), node, &temp,
                            NULL, NULL, NULL, NULL, NULL, NULL, NULL);
   plain_filename = g_strdup (temp);
-  fprintf (stderr, "dir_button: plain_filename = %s\n", plain_filename);
   filename = g_strconcat (plain_filename, G_DIR_SEPARATOR_S, NULL);
   node = GTK_CTREE_ROW (node)->parent;
   while (node)
@@ -2003,12 +2002,11 @@ gpa_file_selection_dir_button (GtkWidget      *widget,
       g_free (temp_filename);
     }
 #endif
-  fprintf (stderr, "dir_button: filename = %s\n", filename);
 
   if (filename)
     {
       gpa_file_selection_populate (fs, filename, FALSE);
-      gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), plain_filename);
+      gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), "");
       g_free (filename);
     }
   if (plain_filename)
@@ -2030,7 +2028,6 @@ gpa_file_selection_populate (GpaFileSelection *fs,
   gint possible_count = 0;
   gint selection_index = -1;
   
-  fprintf (stderr, "populate: %s\n", rel_path);
   g_return_if_fail (GPA_IS_FILE_SELECTION (fs));
   
   cmpl_state = (CompletionState*) fs->cmpl_state;
@@ -2096,8 +2093,8 @@ gpa_file_selection_populate (GpaFileSelection *fs,
           else
             {
 	      if (fs->selection_entry)
-		      gtk_entry_set_text (GTK_ENTRY (fs->selection_entry),
-					  cmpl_updated_text (cmpl_state));
+                gtk_entry_set_text (GTK_ENTRY (fs->selection_entry),
+                                    cmpl_updated_text (cmpl_state));
             }
         }
       else

@@ -94,7 +94,7 @@ gpapa_key_set_expiry_date (GpapaKey *key, GDate *date, const gchar *passphrase,
       gpgargv[0] = "--edit-key";
       gpgargv[1] = key->KeyID;
       gpgargv[2] = NULL; 
-      gpapa_call_gnupg (gpgargv, TRUE, commands, passphrase,
+      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL, passphrase,
                         NULL, NULL, callback, calldata); 
       if (key->ExpirationDate)
         g_date_free (key->ExpirationDate);

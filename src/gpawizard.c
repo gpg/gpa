@@ -28,23 +28,26 @@
 #include "gtktools.h"
 #include "gpawizard.h"
 
-typedef struct {
-  GtkWidget * notebook;
-  GtkWidget * prev_button;
-  GtkWidget * next_button;
-  GtkWidget * close_button;
-  GtkAccelGroup * accel_group;
+typedef struct
+{
+  GtkWidget *notebook;
+  GtkWidget *prev_button;
+  GtkWidget *next_button;
+  GtkWidget *close_button;
+  GtkAccelGroup *accel_group;
   GPAWizardPageSwitchedFunc page_switched;
   gpointer page_switched_data;
-} GPAWizard;
+}
+GPAWizard;
 
-typedef struct {
-  gchar * prev_label;
-  gchar * next_label;
+typedef struct
+{
+  gchar *prev_label;
+  gchar *next_label;
   GPAWizardAction action;
   gpointer user_data;
-} GPAWizardPage;
-
+}
+GPAWizardPage;
 
 /* Return the page data associated with the current page of the wizard */
 static GPAWizardPage *
@@ -89,6 +92,7 @@ gpa_wizard_update_buttons (GtkWidget * widget)
     {
       gtk_widget_set_sensitive (wizard->prev_button, TRUE);
     }
+
   /* if we're at the last page, assume that whatever the wizard was
    * supposed to do has been achieved. Therefore make both prev and next
    * button insensitive and change the label of the cancel button to
@@ -103,8 +107,19 @@ gpa_wizard_update_buttons (GtkWidget * widget)
     {
       gtk_widget_set_sensitive (wizard->prev_button, FALSE);
       gtk_widget_set_sensitive (wizard->next_button, FALSE);
+      gtk_widget_set_sensitive (wizard->close_button, TRUE);
       gpa_button_set_text (wizard->close_button, _("_Close"),
 			   wizard->accel_group);
+    }
+
+  /* @@@@@@@ KLUDGE: If we are on the "wait" page, disable all buttons.
+   */
+  else if (!gtk_notebook_get_nth_page (GTK_NOTEBOOK (wizard->notebook),
+				       page_number + 2))
+    {
+      gtk_widget_set_sensitive (wizard->prev_button, FALSE);
+      gtk_widget_set_sensitive (wizard->next_button, FALSE);
+      gtk_widget_set_sensitive (wizard->close_button, FALSE);
     }
 }
 

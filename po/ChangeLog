@@ -8,6 +8,10 @@
 
 	* pt_BR.po: New. Contributed by Renato Martini.
 
+2002-02-10  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* de.po: Updated.
+	
 2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* POTFILES.in: Added src/gpafilesel.c to the list.

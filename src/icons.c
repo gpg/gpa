@@ -80,6 +80,7 @@ pixmap_for_icon ( GtkWidget *window, const char *name, GdkBitmap **r_mask )
     if ( !xpm )
       {
         fprintf (stderr, "Icon `%s' not found\n", name );
+	fflush (stderr);
         return NULL;
       }
     

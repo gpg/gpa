@@ -100,9 +100,10 @@ read_list (const char *confname)
   ServerName list = NULL;
   
   fp = fopen (fname, "r");
-  if ( !fp )       
+  if (!fp)       
     {
       fprintf (stderr, "can't open `%s': %s\n", fname, strerror (errno) );
+      fflush (stderr);
       free (fname);
       return -1;
     }
@@ -131,14 +132,16 @@ read_list (const char *confname)
       add_server (&list, line);
     }
 
-    if ( err )
-	fprintf (stderr, "%s:%d: %s\n", fname, lnr, err );
-    else if( ferror(fp) ) {
-	fprintf (stderr, "%s:%d: read error: %s\n",
-                 fname, lnr, strerror (errno) );
+    if (err)
+      fprintf (stderr, "%s:%d: %s\n", fname, lnr, err);
+    else if (ferror (fp))
+      {
+        fprintf (stderr, "%s:%d: read error: %s\n",
+                 fname, lnr, strerror (errno));
         err = "";
-    }
-    fclose(fp);
+      }
+    fflush (stderr);
+    fclose (fp);
     free (fname);
     if (err)
       {
@@ -148,7 +151,7 @@ read_list (const char *confname)
     
     /* fine: switch to new list */
     {
-      const char *current = keyserver_get_current ();
+      const char *current = keyserver_get_current (FALSE);
       release_server_list (serverlist);
       serverlist = list;
       keyserver_set_current (current);
@@ -196,7 +199,7 @@ keyserver_set_current (const char *name)
 }
 
 const char *
-keyserver_get_current (void)
+keyserver_get_current (gboolean non_null)
 {
   ServerName x;
 
@@ -205,7 +208,10 @@ keyserver_get_current (void)
       if (x->selected)
         return x->name;
     }
-  return NULL;
+  if (non_null)
+    return "";
+  else
+    return NULL;
 }
 
 

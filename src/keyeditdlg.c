@@ -29,45 +29,47 @@
 #include "expirydlg.h"
 #include "keyeditdlg.h"
 
-typedef struct {
-  GtkWidget * window;
-  GtkWidget * expiry;
-  GtkWidget * ownertrust;
-  gchar * key_id;
+typedef struct
+{
+  GtkWidget *window;
+  GtkWidget *expiry;
+  GtkWidget *ownertrust;
+  gchar *key_id;
   gboolean key_has_changed;
-} GPAKeyEditDialog;
+}
+GPAKeyEditDialog;
 
 
 /* internal API */
 static void key_edit_close (GtkWidget *widget, gpointer param);
 static void key_edit_destroy (GtkWidget *widget, gpointer param);
 
-static GtkWidget * add_details_row (GtkWidget * table, gint row, gchar *label,
-				    gchar * text, gboolean selectable);
+static GtkWidget *add_details_row (GtkWidget *table, gint row, gchar *label,
+				   gchar *text, gboolean selectable);
 
-static void key_edit_change_expiry (GtkWidget * widget, gpointer param);
-static void key_edit_change_trust (GtkWidget * widget, gpointer param);
+static void key_edit_change_expiry (GtkWidget *widget, gpointer param);
+static void key_edit_change_trust (GtkWidget *widget, gpointer param);
 
 
 /* run the key edit dialog as a modal dialog */
 gboolean
 gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
 {
-  GtkWidget * window;
-  GtkWidget * vbox;
-  GtkWidget * frame;
-  GtkWidget * hbox;
-  GtkWidget * label;
-  GtkWidget * button;
-  GtkWidget * table;
-  GtkWidget * bbox;
-  GtkAccelGroup * accel_group;
+  GtkWidget *window;
+  GtkWidget *vbox;
+  GtkWidget *frame;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *button;
+  GtkWidget *table;
+  GtkWidget *bbox;
+  GtkAccelGroup *accel_group;
 
-  GpapaPublicKey * public_key;
-  GpapaSecretKey * secret_key;
+  GpapaPublicKey *public_key;
+  GpapaSecretKey *secret_key;
   GpapaOwnertrust trust;
-  GDate * expiry_date;
-  gchar * date_string;
+  GDate *expiry_date;
+  gchar *date_string;
 
   GPAKeyEditDialog dialog;
 

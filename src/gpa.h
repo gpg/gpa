@@ -48,10 +48,14 @@ extern void gpa_removeRecipients (gpointer param);
 extern void gpa_addRecipients (gpointer param);
 extern void gpa_recipientWindow_close (gpointer param);
 
-gboolean gpa_simplified_ui (void);
-void gpa_set_simplified_ui (gboolean value);
+extern gboolean gpa_simplified_ui (void);
+extern void gpa_set_simplified_ui (gboolean value);
 
-gchar * gpa_default_key (void);
+extern gboolean gpa_backup_generated (void);
+extern void gpa_set_backup_generated (gboolean value);
+extern void gpa_remember_backup_generated (void);
+
+gchar *gpa_default_key (void);
 void gpa_set_default_key (gchar * key);
 void gpa_update_default_key (void);
 

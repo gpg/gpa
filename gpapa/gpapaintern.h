@@ -38,7 +38,8 @@ extern void gpapa_report_error_status (GpgStatusCode status,
                                        gpointer calldata);
 
 extern void gpapa_call_gnupg (const gchar **argv, gboolean do_wait,
-			      const gchar *commands, const gchar *reserved,
+			      const gchar *commands, const gchar *data,
+			      const gchar *passphrase,
 			      GpapaLineCallbackFunc linecallback,
 			      void *linedata, GpapaCallbackFunc callback,
 			      gpointer calldata);

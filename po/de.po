@@ -249,8 +249,8 @@ msgid "decrypt file"
 msgstr "Datei entschlüsseln"
 
 #: src/fileman.c:658 src/keyring.c:1162
-msgid "Help"
-msgstr "Hilfe"
+msgid "Info"
+msgstr "Info"
 
 #: src/fileman.c:659 src/keyring.c:1163
 msgid "Understanding the GNU Privacy Assistant"
@@ -258,7 +258,7 @@ msgstr "Wie funktioniert der GNU Privacy Assistant?"
 
 #: src/fileman.c:660 src/keyring.c:1164
 msgid "help"
-msgstr "Hilfe"
+msgstr "Info"
 
 #: src/fileman.c:681
 msgid "GNU Privacy Assistant - File Manager"
@@ -718,14 +718,21 @@ msgid "About GPA"
 msgstr "Über den GPA"
 
 #: src/helpmenu.c:212
-msgid "brought to you by"
-msgstr "wurde Ihnen überreicht von"
+msgid "Brought to you by:"
+msgstr "Ermöglicht durch die Arbeit von:"
+
+msgid "GPA is free software under the"
+msgstr "GPA ist freie Software unter der"
+
+msgid "GNU General Public License."
+msgstr "GNU General Public License."
 
 #: src/helpmenu.c:246
-msgid "See http://www.gnupg.org for news"
-msgstr ""
-"Neuigkeiten finden Sie\n"
-"auf http://www.gnupg.org"
+msgid "For news see:"
+msgstr "Aktuelle Informationen finden Sie unter:"
+
+msgid "http://www.gnupg.org"
+msgstr "http://www.gnupp.de"
 
 #: src/helpmenu.c:323 src/helpmenu.c:392
 msgid "GNU general public license"
@@ -740,24 +747,24 @@ msgid "Show Help Text\n"
 msgstr "Hilfe anzeigen\n"
 
 #: src/helpmenu.c:450
-msgid "/_Help"
-msgstr "/_Hilfe"
+msgid "/_Info"
+msgstr "/_Info"
 
 #: src/helpmenu.c:451
-msgid "/Help/_About"
-msgstr "/Hilfe/_Über"
+msgid "/Info/_About"
+msgstr "/Info/_Über GPA"
 
 #: src/helpmenu.c:452
-msgid "/Help/_License"
-msgstr "/Hilfe/_Lizenz"
+msgid "/Info/_License"
+msgstr "/Info/_Lizenz"
 
 #: src/helpmenu.c:453
-msgid "/Help/_Warranty"
-msgstr "/Hilfe/_Gewährleistung"
+msgid "/Info/_Warranty"
+msgstr "/Info/_Gewährleistung"
 
 #: src/helpmenu.c:454
-msgid "/Help/_Help"
-msgstr "/Hilfe/_Hilfe"
+msgid "/Info/_Help"
+msgstr "/Info/_Hilfe"
 
 #: src/keydeletedlg.c:95
 msgid "Remove Key"
@@ -825,7 +832,7 @@ msgstr "E_xportieren in Datei: "
 
 #: src/keyexportdlg.c:201 src/keygenwizard.c:474 src/keyimportdlg.c:196
 msgid "B_rowse..."
-msgstr "D_urchsuchen..."
+msgstr "_Durchsuchen..."
 
 #: src/keyexportdlg.c:209
 msgid "_Key server:"
@@ -834,6 +841,15 @@ msgstr "An _Key-Server senden: "
 #: src/keyexportdlg.c:227
 msgid "To _clipboard"
 msgstr "Zur _Zwischenablage exportieren"
+
+msgid "Backup keys"
+msgstr "Sicherheitskopie erstellen"
+
+msgid "Generating backup of key: %s"
+msgstr "Sicherheitskopie von Schlüssel %s erstellen"
+
+msgid "_Backup to directory:"
+msgstr "_Verzeichnis für Sicherheitskopie:"
 
 #: src/keygendlg.c:148 src/keygenwizard.c:750
 msgid "Generate key"
@@ -1092,11 +1108,11 @@ msgstr "Schlüssel importieren"
 
 #: src/keyimportdlg.c:182
 msgid "I_mport from file:"
-msgstr "I_mportieren aus Datei:"
+msgstr "_Importieren aus Datei:"
 
 #: src/keyimportdlg.c:205
 msgid "Receive from _server:"
-msgstr "Schlüssel vom _Key-Server empfangen:"
+msgstr "Schlüssel vom Key-Server _empfangen:"
 
 #: src/keyimportdlg.c:252
 msgid "Import from _clipboard:"
@@ -1104,7 +1120,7 @@ msgstr "Aus _Zwischenablage importieren"
 
 #: src/keyimportdlg.c:225
 msgid "Key _ID:"
-msgstr "Schlüssel _ID:"
+msgstr "_Suchbegriff:"
 
 #: src/keyimportdlg.c:244
 msgid "_Key Server:"
@@ -1175,16 +1191,16 @@ msgstr "/_Schlüssel"
 
 #: src/keyring.c:696
 msgid "/Keys/_Generate Key..."
-msgstr "/Schlüssel/Schlüssel _erzeugen..."
+msgstr "/Schlüssel/_Erzeugen..."
 
 msgid "/Keys/_Sign Keys..."
-msgstr "/Schlüssel/Schlüssel _signieren..."
+msgstr "/Schlüssel/_Signieren..."
 
 msgid "/Keys/_Import Keys..."
-msgstr "/Schlüssel/Schlüssel _importieren..."
+msgstr "/Schlüssel/_Importieren..."
 
 msgid "/Keys/_Export Keys..."
-msgstr "/Schlüssel/Schlüssel _exportieren..."
+msgstr "/Schlüssel/E_xportieren..."
 
 msgid "/Keys/Export _Private Keys..."
 msgstr "/Schlüssel/_Private Schlüssel exportieren..."

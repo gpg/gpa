@@ -25,6 +25,10 @@
 #include <glib.h>
 #include "gpapa.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 static void
 linecallback_fingerprint (gchar *line, gpointer data, GpgStatusCode status)
 {
@@ -53,7 +57,7 @@ gpapa_public_key_get_fingerprint (GpapaPublicKey *key,
           gpgargv[1] = "--with-colons";
           gpgargv[2] = key_id;
           gpgargv[3] = NULL;
-          gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+          gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
                             linecallback_fingerprint, &data,
                             callback, calldata);
           free (key_id);
@@ -153,7 +157,7 @@ gpapa_public_key_set_ownertrust (GpapaPublicKey *key, GpapaOwnertrust trust,
       gpgargv[0] = "--edit-key";
       gpgargv[1] = key->key->KeyID;
       gpgargv[2] = NULL; 
-      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL,
+      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL, NULL,
                         NULL, NULL, callback, calldata); 
       g_free (commands);
       key->key->OwnerTrust = trust_char;
@@ -240,7 +244,7 @@ gpapa_public_key_get_signatures (GpapaPublicKey *key,
           gpgargv[1] = "--with-colons";
           gpgargv[2] = key_id;
           gpgargv[3] = NULL;
-          gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+          gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
                             linecallback_get_signatures, &data,
                             callback, calldata);
           free (key_id);
@@ -261,20 +265,107 @@ gpapa_public_key_export (GpapaPublicKey *key, const gchar *targetFileID,
   if (key && targetFileID)
     {
       gchar *full_keyID;
+      gchar *quoted_filename = NULL;
       const gchar *gpgargv[7];
       int i = 0;
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      quoted_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
       gpgargv[i++] = "-o";
-      gpgargv[i++] = targetFileID;
+      gpgargv[i++] = quoted_filename;
       gpgargv[i++] = "--yes";  /* overwrite the file */
       if (Armor == GPAPA_ARMOR)
         gpgargv[i++] = "--armor";
       gpgargv[i++] = "--export";
       gpgargv[i++] = full_keyID;
       gpgargv[i] = NULL;
-      gpapa_call_gnupg
-        (gpgargv, TRUE, NULL, NULL,
-         NULL, NULL, callback, calldata);
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
+                        NULL, NULL, callback, calldata);
+      free (quoted_filename);
+      free (full_keyID);
+    }
+}
+
+void
+linecallback_to_clipboard (gchar *line, gpointer data, GpgStatusCode status)
+{
+#ifdef HAVE_DOSISH_SYSTEM
+#define NEWLINE "\r\n"
+#else
+#define NEWLINE "\n"
+#endif
+  if (status == NO_STATUS)  /* `line' may be NULL */
+    {
+      gchar **pd = data;
+      gchar *d0 = *pd;
+      if (d0)
+        {
+          *pd = g_strconcat (d0, NEWLINE, line, NULL);
+          g_free (d0);
+        }
+      else
+        *pd = xstrdup (line);
+    }
+}
+
+#ifdef _WIN32
+
+int
+set_w32_clip_text (const gchar *data, gint size)
+{
+  int rc;
+  HANDLE cb;
+  char *private_data;
+
+  rc = OpenClipboard( NULL );
+  if (!rc)
+    return 1;
+  EmptyClipboard();
+  cb = GlobalAlloc(GHND, size+1);
+  if (!cb)
+    goto leave;
+
+  private_data = GlobalLock(cb);
+  if (!private_data)
+    goto leave;
+  memcpy(private_data, data, size);
+  private_data[size] = '\0';
+  SetClipboardData(CF_TEXT, cb);
+  GlobalUnlock(cb);
+
+leave:
+  CloseClipboard();
+  return 0;
+} /* set_w32_clip_text */
+
+#endif /* _WIN32 */
+
+void
+gpapa_public_key_export_to_clipboard (GpapaPublicKey *key,
+                                      GpapaCallbackFunc callback,
+                                      gpointer calldata)
+{
+  if (!key)
+    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+  if (key)
+    {
+      gchar *full_keyID;
+      gchar *clipboard_data = NULL;
+      const gchar *gpgargv[4];
+      int i = 0;
+      full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      gpgargv[i++] = "--armor";
+      gpgargv[i++] = "--export";
+      gpgargv[i++] = full_keyID;
+      gpgargv[i] = NULL;
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
+                        linecallback_to_clipboard, &clipboard_data,
+                        callback, calldata);
+#ifdef _WIN32
+      set_w32_clip_text (clipboard_data, strlen (clipboard_data));
+#else
+      fprintf (stderr, "*** Clipboard ***\n%s\n*** End Clipboard ***\n",
+                       clipboard_data);
+#endif
       free (full_keyID);
     }
 }
@@ -295,7 +386,7 @@ gpapa_public_key_delete (GpapaPublicKey *key, GpapaCallbackFunc callback,
       gpgargv[1] = "--delete-key";
       gpgargv[2] = full_keyID;
       gpgargv[3] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL,
+      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL, NULL,
                         NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_public_keyring (callback, calldata);
@@ -324,9 +415,8 @@ gpapa_public_key_send_to_server (GpapaPublicKey *key,
       gpgargv[2] = "--send-keys";
       gpgargv[3] = full_keyID;
       gpgargv[4] = NULL;
-      gpapa_call_gnupg
-        (gpgargv, TRUE, NULL, NULL,
-         NULL, NULL, callback, calldata);
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
+                        NULL, NULL, callback, calldata);
       free (full_keyID);
       free (name);
     }
@@ -358,7 +448,7 @@ gpapa_public_key_sign (GpapaPublicKey *key, char *keyID,
         gpgargv[3] = "--lsign-key";
       gpgargv[4] = full_keyID;
       gpgargv[5] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, commands, PassPhrase,
+      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL, PassPhrase,
                         NULL, NULL, callback, calldata);
       free (full_keyID);
 

@@ -71,6 +71,7 @@ enum cmd_and_opt_values {
   oHomedir,
   oGPGBinary,
   oAdvancedUI,
+  oBackupGenerated,
 
   oKeyserver,
 
@@ -89,12 +90,14 @@ static ARGPARSE_OPTS opts[] = {
     { oDebugAll, "debug-all" ,0, N_("enable full debugging")},
     { oGPGBinary, "gpg-program", 2 , "@" },
     { oAdvancedUI, "advanced-ui", 0,N_("use a advanced user interface")},
+    { oBackupGenerated, "backup-generated", 0,N_("omit \"no backup yet\" warning at startup")},
 
     { oKeyserver, "keyserver", 2, "@" },
     {0}
 };
 
 
+static char *gpa_configname = NULL;
 GPAOptions gpa_options;
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain = NULL;
@@ -162,6 +165,35 @@ void
 gpa_set_simplified_ui (gboolean value)
 {
   simplified_ui = value;
+}
+
+static gboolean backup_generated = FALSE;
+
+gboolean
+gpa_backup_generated (void)
+{
+  return backup_generated;
+}
+
+void
+gpa_set_backup_generated (gboolean value)
+{
+  backup_generated = value;
+}
+
+void
+gpa_remember_backup_generated (void)
+{
+  if (gpa_configname && !gpa_backup_generated ())
+    {
+      FILE *config = fopen (gpa_configname, "a");
+      if (config)
+        {
+	  fprintf (config, "backup-generated\n");
+	  fclose (config);
+        }
+    }
+  gpa_set_backup_generated (TRUE);
 }
 
 /*
@@ -359,11 +391,11 @@ main (int argc, char **argv)
   ARGPARSE_ARGS pargs;
   int orig_argc;
   char **orig_argv;
-  FILE *configfp = NULL;
   char *configname = NULL;
+  FILE *configfp = NULL;
   unsigned configlineno;
   int parse_debug = 0;
-  int default_config =1;
+  int default_config = 1;
   int greeting = 0;
   int nogreeting = 0;
   const char *gpg_program = GPG_PROGRAM;
@@ -454,6 +486,8 @@ main (int argc, char **argv)
   pargs.argv = &argv;
   pargs.flags=  1;  /* do not remove the args */
 
+  gpa_configname = xstrdup (configname);
+
  next_pass:
   if (configname)
     {
@@ -506,6 +540,7 @@ main (int argc, char **argv)
 	case oHomedir: gpa_options.homedir = pargs.r.ret_str; break;
 	case oGPGBinary: gpg_program = pargs.r.ret_str;  break;
 	case oAdvancedUI: gpa_set_simplified_ui (FALSE); break;
+	case oBackupGenerated: gpa_set_backup_generated (TRUE); break;
         case oKeyserver: keyserver = pargs.r.ret_str; break;
 
 	default : pargs.err = configfp? 1:2; break;
@@ -528,12 +563,13 @@ main (int argc, char **argv)
 
   if (greeting)
     {
-      fprintf(stderr, "%s %s; %s\n",
-	      strusage (11), strusage (13), strusage (14));
-      fprintf(stderr, "%s\n", strusage (15));
+      fprintf (stderr, "%s %s; %s\n",
+	       strusage (11), strusage (13), strusage (14));
+      fprintf (stderr, "%s\n", strusage (15));
+      fflush (stderr);
     }
 #ifdef IS_DEVELOPMENT_VERSION
-  log_info("NOTE: this is a development version!\n");
+  log_info ("NOTE: this is a development version!\n");
 #endif
 
   /* read the list of available keyservers */

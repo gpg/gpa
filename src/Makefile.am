@@ -11,7 +11,7 @@ EXTRA_DIST = $(tip_files) $(gtkrc)  $(logo)
 bin_PROGRAMS = gpa
 
 INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/gpapa	-I$(top_srcdir)/intl
-LDADD = -L ../gpapa -lgpapa -L ../jnlib -ljnlib @INTLLIBS@
+LDADD = -L ../gpapa -lgpapa -L ../jnlib -ljnlib @INTLLIBS@ -lm -lz
 
 gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      keysmenu.c keysmenu.h	    \
@@ -34,6 +34,7 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      keyexportdlg.c keyexportdlg.h \
 	      keygendlg.c keygendlg.h \
 	      keygenwizard.c keygenwizard.h \
+              qdchkpwd.c qdchkpwd.h \
 	      keyeditdlg.c keyeditdlg.h \
 	      expirydlg.c expirydlg.h \
 	      keydeletedlg.c keydeletedlg.h \

@@ -485,7 +485,14 @@ _gpgme_gpg_set_colon_line_handler ( GpgObject gpg,
     gpg->colon.eof = 0;
     gpg->colon.fnc = fnc;
     gpg->colon.fnc_value = fnc_value;
+#ifdef GPAPA
+    /* This is not really a "colon line handler", but just a "line
+     * handler". We do the colon stuff ourselves.
+     */
+    gpg->colon.simple = 1;
+#else
     gpg->colon.simple = 0;
+#endif
     return 0;
 }
 
@@ -589,13 +596,17 @@ build_argv ( GpgObject gpg )
     for ( a=gpg->arglist; a; a = a->next ) {
         argc++;
         if (a->data) {
-            /*fprintf (stderr, "build_argv: data\n" );*/
+#ifdef DEBUG
+            fprintf (stderr, "build_argv: data\n" );
+#endif
             datac++;
             if ( a->dup_to == -1 && !a->print_fd )
                 need_special = 1;
         }
         else {
-            /*   fprintf (stderr, "build_argv: arg=`%s'\n", a->arg );*/
+#ifdef DEBUG
+           fprintf (stderr, "build_argv: arg=`%s'\n", a->arg );
+#endif
         }
     }
     if ( need_special )
@@ -1098,7 +1109,9 @@ read_status ( GpgObject gpg )
             if ( *p == '\n' ) {
                 /* (we require that the last line is terminated by a LF) */
                 *p = 0;
-                /* fprintf (stderr, "read_status: `%s'\n", buffer); */
+#ifdef DEBUG                
+                fprintf (stderr, "read_status: `%s'\n", buffer);
+#endif
                 if (!strncmp (buffer, "[GNUPG:] ", 9 )
                     && buffer[9] >= 'A' && buffer[9] <= 'Z' ) {
                     struct status_table_s t, *r;

@@ -4,14 +4,14 @@
 
 style "big-label"
 {
-  font = "-adobe-helvetica-bold-r-normal--*-240-*-*-*-*-*-*"
+  font_name = "Arial 16"
 }
 widget "*big-label*" style "big-label"
 
 
 style "gpa-default"
 {
-  font_name = "Sans bold 16"  # <-- Hier die gewünschte Schriftart eintragen!
-               ############
+  font_name = "Arial 12"  # <-- Hier die gewünschte Schriftart eintragen!
+              ##########
 }
 class "*" style "gpa-default"
