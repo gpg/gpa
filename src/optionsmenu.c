@@ -197,7 +197,7 @@ options_recipients (gpointer param)
   GpaWindowKeeper *keeper;
   gint contentsKeyCount;
   GtkAccelGroup *accelGroup;
-  gchar *titlesAnyClist[] = { N_("Key owner"), N_("Key ID") };
+  gchar *titlesAnyClist[] = { _("Key owner"), _("Key ID") };
   gint i;
   GList **recipientsSelected = NULL;
   gchar *contentsAnyClist[2];
@@ -432,7 +432,7 @@ options_key (gpointer param)
 {
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
-  gchar *titlesKeys[] = { N_("User identity / role"), N_("Key ID") };
+  gchar *titlesKeys[] = { _("User identity / role"), _("Key ID") };
   gint contentsKeyCount;
   gchar **keyID;
   GpapaSecretKey *key;
