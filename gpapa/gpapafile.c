@@ -143,6 +143,9 @@ status_check (gchar *buffer, GpgStatusCode code, GpgStatusCode status, gchar **d
   if (status == code)
     {
       char *p = buffer;
+      /* Parse the buffer.
+       * First string: key ID
+       */
       while (*p == ' ')
 	p++;
       data[0] = p;
@@ -162,10 +165,6 @@ status_check (gchar *buffer, GpgStatusCode code, GpgStatusCode status, gchar **d
 	}
       else
 	data[1] = NULL;
-
-      /* Clear the buffer to avoid further processing.
-       */
-      *buffer = 0;
       result = TRUE;
     }
   return (result);
@@ -233,8 +232,8 @@ gpapa_file_get_signatures (GpapaFile * file, GpapaCallbackFunc callback,
 } /* gpapa_file_get_signatures */
 
 void
-gpapa_file_sign (GpapaFile * file, gchar * targetFileID, gchar * keyID,
-		 gchar * PassPhrase, GpapaSignType SignType, GpapaArmor Armor,
+gpapa_file_sign (GpapaFile *file, gchar *targetFileID, gchar *keyID,
+		 gchar *PassPhrase, GpapaSignType SignType, GpapaArmor Armor,
 		 GpapaCallbackFunc callback, gpointer calldata)
 {
   if (file == NULL)

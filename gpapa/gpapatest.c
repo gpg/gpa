@@ -1,5 +1,5 @@
-/* gpapatest.c	-  The GNU Privacy Assistant Pipe Access  -  test program
- *	  Copyright (C) 2000 G-N-U GmbH.
+/* gpapatest.c - The GNU Privacy Assistant Pipe Access - test program
+ * Copyright (C) 2000 G-N-U GmbH.
  *
  * This file is part of GPAPA
  *
@@ -188,13 +188,13 @@ void
 callback (GpapaAction action, gpointer actiondata, gpointer localcalldata)
 {
   fprintf (stderr, "%s: %s\n", (char *) localcalldata, (char *) actiondata);
-} /* callback */
+}
 
 void
-linecallback (gchar * line, gpointer data, gboolean status)
+linecallback (gchar *line, void *data, GpgStatusCode status)
 {
   printf ("---> %s <---%s\n", line, (gchar *) data);
-} /* linecallback */
+}
 
 void
 test_version (void)
@@ -488,7 +488,7 @@ int
 main (int argc, char **argv)
 {
   const char *what = argc > 1 ? argv[1] : "version";
-  calldata = argc > 2 ? argv[2] : "foo";
+  calldata = argc > 2 ? argv[2] : argv[0];
  
   gpapa_init (GPG_PROGRAM);
 
@@ -519,4 +519,4 @@ main (int argc, char **argv)
 				 "6C7EE1B8621CC013"), "7D0908A0EE9A8BFB");
 
   return (0);
-} /* main */
+}

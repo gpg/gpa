@@ -347,7 +347,7 @@ gpapa_create_key_pair (GpapaPublicKey ** publicKey,
   if (aKeysize && aUserID && anEmail && aComment)
     {
       gchar *gpgargv[2];
-      gchar *commands;
+      gchar *commands = NULL;
       gchar *commands_sprintf_str;
       gchar *Algo, *Sub_Algo;
       if (anAlgo == GPAPA_ALGO_DSA ||  anAlgo == GPAPA_ALGO_ELG_BOTH || 

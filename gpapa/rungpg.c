@@ -464,18 +464,25 @@ build_argv ( GpgObject gpg )
     }
 
     argc++; /* for argv[0] */
-    for ( a=gpg->arglist; a; a = a->next ) {
+    for ( a=gpg->arglist; a; a = a->next )
+      {
         argc++;
-        if (a->data) {
-            /*fprintf (stderr, "build_argv: data\n" );*/
+        if (a->data)
+          {
+#ifdef DEBUG
+            fprintf (stderr, "build_argv: data\n");
+#endif
             datac++;
-            if ( a->dup_to == -1 && !a->print_fd )
-                need_special = 1;
-        }
-        else {
-            /*   fprintf (stderr, "build_argv: arg=`%s'\n", a->arg );*/
-        }
-    }
+            if (a->dup_to == -1 && !a->print_fd)
+              need_special = 1;
+          }
+        else
+          {
+#ifdef DEBUG
+            fprintf (stderr, "build_argv: arg=`%s'\n", a->arg);
+#endif
+          }
+      }
     if ( need_special )
         argc++;
     if (use_agent)

@@ -37,7 +37,6 @@ gpapa_line_begins_with (gchar *line, gchar *keyword)
     return (FALSE);
 }	
 
-
 /* A dummy line_callback function to avoid "if (line_callback)"
  * in various places.
  */
@@ -63,6 +62,10 @@ static void
 line_handler (GpgmeCtx opaque, char *line)
 {
   gpapa_data_t *g = (gpapa_data_t *) opaque;
+#ifdef DEBUG
+  fprintf (stderr, "line handler called with line = \"%s\"\n",
+           line);
+#endif
   if (line && line[strlen (line) - 1] == '\r')
     line[strlen (line) - 1] = 0;
   g->line_callback (line, g->line_calldata, NO_STATUS);
@@ -74,8 +77,14 @@ static void
 status_handler (GpgmeCtx opaque, GpgStatusCode code, char *args)
 {
   gpapa_data_t *g = (gpapa_data_t *) opaque;
+#ifdef DEBUG
+  fprintf (stderr, "status handler called with code = %d, args = \"%s\"\n",
+           code, args);
+#endif
   g->line_callback (args, g->line_calldata, code);
 }
+
+#ifdef USE_COMMAND_HANDLER
 
 /* Command handler to be passed to _gpgme_gpg_spawn().
  */
@@ -83,8 +92,22 @@ static const char *
 command_handler (void *opaque, GpgStatusCode code, const char *key)
 {
   gpapa_data_t *g = (gpapa_data_t *) opaque;
-  return NULL;
+#ifdef DEBUG
+  fprintf (stderr, "command handler called with code = %d, key = \"%s\"\n",
+           code, key);
+#endif
+  if (g != NULL
+      && code == STATUS_GET_HIDDEN
+      && strcmp (key, "passphrase.enter") == 0)
+    {
+      fprintf (stderr, "passphrase = %s\n", g->passphrase);
+      return g->passphrase;
+    }
+  else
+    return NULL;
 }
+
+#endif /* USE_COMMAND_HANDLER */
 
 /* Call the `gpg' program, passing some standard args plus USER_ARGS
  * which must be a NULL-terminated array of argument strings.
@@ -105,7 +128,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait,
 {
   GpgObject gpg;
   char **arg;
-  int return_code;
+  int return_code = 0;
  
   /* This data we want to have available in our callbacks to
    * _gpgme_gpg_spawn.
@@ -130,26 +153,71 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait,
 
   _gpgme_gpg_add_arg (gpg, "--no-options");
   _gpgme_gpg_add_arg (gpg, "--batch");
-  for (arg = user_args; *arg; arg++)
-    _gpgme_gpg_add_arg (gpg, *arg);
 
   _gpgme_gpg_set_status_handler (gpg, status_handler, &gpapa_data);
   _gpgme_gpg_set_colon_line_handler (gpg, line_handler, &gpapa_data);
-  if (commands)
-    _gpgme_gpg_set_command_handler (gpg, command_handler, &gpapa_data);
-
-  return_code = _gpgme_gpg_spawn (gpg, &gpapa_data);
-  if (return_code == 0)
+#ifdef USE_COMMAND_HANDLER
+  if (commands || passphrase)
     {
-      gpgme_wait ((GpgmeCtx) &gpapa_data, 1);
-      
-      /* FIXME: Currently we cannot know the exit status of the
-       * GnuPG execution.
-       */
-      callback (GPAPA_ACTION_FINISHED, "GnuPG execution terminated", calldata);
+      return_code = _gpgme_gpg_set_command_handler (gpg, command_handler, &gpapa_data);
+#ifdef DEBUG
+      fprintf (stderr, "installing command handler: return_code = %d\n", return_code);
+#endif
     }
+#else /* not USE_COMMAND_HANDLER */
+  if (commands)
+    {
+      GpgmeData tmp;
+      return_code = gpgme_data_new_from_mem (&tmp, commands,
+                                             strlen (commands), 0);
+      if (return_code == 0)
+        {
+          _gpgme_data_set_mode (tmp, GPGME_DATA_MODE_OUT);
+          _gpgme_gpg_add_arg (gpg, "--command-fd");
+          return_code = _gpgme_gpg_add_data (gpg, tmp, -2);
+        }
+    }
+  if (passphrase && return_code == 0)
+    {
+      GpgmeData tmp;
+      return_code = gpgme_data_new_from_mem (&tmp, passphrase,
+                                             strlen (passphrase), 0);
+      if (return_code == 0)
+        {
+          _gpgme_data_set_mode (tmp, GPGME_DATA_MODE_OUT);
+          _gpgme_gpg_add_arg (gpg, "--passphrase-fd");
+          return_code = _gpgme_gpg_add_data (gpg, tmp, -2);
+        }
+#ifdef DEBUG
+      fprintf (stderr, "installing passphrase data: return_code = %d\n", return_code);
+#endif
+    }
+#endif /* not USE_COMMAND_HANDLER */
+
+  if (return_code != 0)
+    callback (GPAPA_ACTION_ERROR,
+              "GnuPG execution failed: internal error while setting command handler",
+              calldata);
   else
-    callback (GPAPA_ACTION_ERROR, "GnuPG execution failed", calldata);
+    {
+      for (arg = user_args; *arg; arg++)
+        _gpgme_gpg_add_arg (gpg, *arg);
+
+      return_code = _gpgme_gpg_spawn (gpg, &gpapa_data);
+      if (return_code != 0)
+        callback (GPAPA_ACTION_ERROR,
+                  "GnuPG execution failed: could not spawn external program",
+                  calldata);
+      else
+        {
+          gpgme_wait ((GpgmeCtx) &gpapa_data, 1);
+          
+          /* FIXME: Currently we cannot know the exit status of the
+           * GnuPG execution.
+           */
+          callback (GPAPA_ACTION_FINISHED, "GnuPG execution terminated", calldata);
+        }
+    }
 
   _gpgme_gpg_release (gpg);
 }

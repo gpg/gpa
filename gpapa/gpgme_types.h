@@ -25,9 +25,14 @@
 
 #ifdef GPAPA
   extern const char *gpapa_private_get_gpg_program (void);
+# ifdef GPG_PATH
+#  undef GPG_PATH
+# endif
 # define GPG_PATH gpapa_private_get_gpg_program ()
 #else /* not GPAPA */
-# define GPG_PATH "/usr/local/bin/gpg"
+# ifndef GPG_PATH
+#  define GPG_PATH "/usr/local/bin/gpg"
+# endif
 #endif /* not GPAPA */
 
 #include "gpgme.h"  /* external objects and prototypes */

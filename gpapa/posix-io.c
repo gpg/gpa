@@ -35,7 +35,7 @@
 
 #include "io.h"
 
-#define DEBUG_SELECT_ENABLED 0
+#define DEBUG_SELECT_ENABLED 1
 
 #if DEBUG_SELECT_ENABLED
 # define DEBUG_SELECT(a) fprintf a
@@ -118,6 +118,15 @@ _gpgme_io_spawn ( const char *path, char **argv,
         /* fixme: This is not really MT safe */
     }
 
+#ifdef DEBUG
+    {
+      char **arg;
+      fprintf (stderr, "executing:");
+      for (arg = argv; *arg; arg++)
+        fprintf (stderr, " %s", *arg);
+      fprintf (stderr, "\n");
+    }
+#endif
     
     pid = fork ();
     if (pid == -1) 

@@ -1,3 +1,27 @@
+Sat 27 Jan 2001 27:42 Peter Gerwinski <peter@gerwinski.de>
+
+        * gpapaintern.c (line_handler, status_handler): added debug output.
+          (command_handler): trying to use this for passing a passphrase.
+          (gpapa_call_gnupg): explicitly use `--command-fd' and
+          `--passphrase-fd' instead of relying on the GPGME callbacks.
+
+        * gpapatest.c (linecallback): fixed parameters to use GPGME
+          status codes.
+          (main): report `argv[0]' instead of "foo" in callback messages.
+
+        * posix-io.c (_gpgme_io_spawn): more debugging messages.
+
+        * rungpg.c (build_argv): more debugging messages.
+
+Fri 26 Jan 2001 18:46 Peter Gerwinski <peter@gerwinski.de>
+
+        * gpapa.c (gpapa_create_key_pair): initialize `commands'.
+
+        * gpapafile.c (status_check): do not clear the buffer.
+          The strings will be needed.
+
+        * gpgme_types.h: #define GPG_PATH only if not already defined.
+
 Tue 23 Jan 2001 11:12 Peter Gerwinski <peter@gerwinski.de>
 
         * w32-io.c (_gpgme_io_spawn): use `nul' instead of `/dev/nul'.
