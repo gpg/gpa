@@ -890,6 +890,7 @@ toolbar_sign_key (GtkWidget *widget, gpointer param)
 static void
 toolbar_export_key (GtkWidget *widget, gpointer param)
 {
+  keyring_editor_export (param);
 }
 
 static void
