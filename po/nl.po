@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
-"POT-Creation-Date: 2003-01-24 15:41+0100\n"
+"POT-Creation-Date: 2003-01-27 20:16+0100\n"
 "PO-Revision-Date: 2003-01-21 11:54+0100\n"
 "Last-Translator: Michael Anckaert <xantor@linux.be>\n"
 "Language-Team: DUTCH <nl@li.org>\n"

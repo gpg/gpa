@@ -1444,7 +1444,8 @@ msgid "_Unknown"
 msgstr "_Okänd"
 
 #: src/ownertrustdlg.c:134
-msgid "You don't know how much to trust this user to verify other people's keys.\n"
+msgid ""
+"You don't know how much to trust this user to verify other people's keys.\n"
 msgstr ""
 "Du vet inte hur mycket du litar på denne persons förtroende för andra "
 "nycklar.\n"
@@ -1635,4 +1636,3 @@ msgstr "Signaturer:"
 #: src/verifydlg.c:344
 msgid "Verify files"
 msgstr "Verifiera filer"
-

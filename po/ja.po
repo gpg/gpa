@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
-"POT-Creation-Date: 2003-01-24 15:41+0100\n"
+"POT-Creation-Date: 2003-01-27 20:16+0100\n"
 "PO-Revision-Date: 2003-01-21 22:30+0900\n"
 "Last-Translator: TAKAHASHI Tamotsu <tamo@momonga-linux.org>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
