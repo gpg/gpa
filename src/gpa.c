@@ -88,7 +88,6 @@ static ARGPARSE_OPTS opts[] = {
 GPAOptions gpa_options;
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain = NULL;
-gboolean global_noTips = FALSE;
 GpapaAction global_lastCallbackResult;
 gchar *global_keyserver = NULL;
 GList *global_defaultRecipients = NULL;

@@ -67,7 +67,6 @@ extern GPAOptions gpa_options;
 
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
-extern gboolean global_noTips;
 extern GpapaAction global_lastCallbackResult;
 extern gchar *global_keyserver;
 extern GList *global_defaultRecipients;
