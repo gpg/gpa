@@ -1,3 +1,7 @@
+2003-02-07  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (EXTRA_DIST): Add logo.
+
 2003-01-30  Miguel Coca  <mcoca@gnu.org>
 
 	* configure.ac: Require gpgme 0.4.1. Remove compatibility hack.

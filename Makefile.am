@@ -1,6 +1,6 @@
 
 SUBDIRS = intl src po pixmaps
-EXTRA_DIST = TODO README-alpha to-utf8 autogen.sh gpa.spec
+EXTRA_DIST = TODO README-alpha to-utf8 autogen.sh gpa.spec gpa-logo-48x48.png
 DISTCLEANFILES = gpadefs.h 
 
 
