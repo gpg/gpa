@@ -1,5 +1,14 @@
 2001-01-11  Bernhard Herzog  <bh@intevation.de>
 
+	* passphrasedlg.c 
+	Add some comments
+	(gpa_passphrase_run_dialog): The handler for the
+	delete-event expected to be connected with gtk_signal_connect not
+	with gtk_signal_connect_object.
+	Use the new gpa_window_show_centered function
+	(passphrase_delete_event): Return FALSE to indicate that the
+	window is to be closed.
+
 	* gtktools.c (gpa_window_show_centered): Make it actually work.
 
 2001-01-10  Bernhard Herzog  <bh@intevation.de>
