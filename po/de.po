@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.3.1a\n"
-"POT-Creation-Date: 2001-06-05 09:41+0200\n"
+"POT-Creation-Date: 2002-01-14 11:33+0100\n"
 "PO-Revision-Date: 2001-02-15 15:22+01:00\n"
 "Last-Translator: Thomas Koester <tkoester@intevation.de>\n"
 "Language-Team: GERMAN <de@li.org>\n"
@@ -113,11 +113,11 @@ msgid "_Signatures"
 msgstr "_Signaturen"
 
 #: src/fileman.c:368 src/filemenu.c:660 src/gpawizard.c:106 src/helpmenu.c:358
-#: src/keyeditdlg.c:157 src/keysmenu.c:1116
+#: src/helpmenu.c:428 src/keyeditdlg.c:157 src/keysmenu.c:1116
 msgid "_Close"
 msgstr "S_chließen"
 
-#: src/fileman.c:521 src/keyring.c:689
+#: src/fileman.c:521 src/keyring.c:690
 msgid "/_File"
 msgstr "/_Datei"
 
@@ -156,23 +156,23 @@ msgstr "/Datei/_Entschlüsseln"
 msgid "/File/sep2"
 msgstr "/Datei/sep2"
 
-#: src/fileman.c:536 src/keyring.c:690
+#: src/fileman.c:536 src/keyring.c:691
 msgid "/File/_Close"
 msgstr "/Datei/S_chließen"
 
-#: src/fileman.c:537 src/keyring.c:691
+#: src/fileman.c:537 src/keyring.c:692
 msgid "/File/_Quit"
 msgstr "/Datei/_Beenden"
 
-#: src/fileman.c:540 src/keyring.c:703
+#: src/fileman.c:540 src/keyring.c:704
 msgid "/_Windows"
 msgstr "/_Fenster"
 
-#: src/fileman.c:541 src/keyring.c:704
+#: src/fileman.c:541 src/keyring.c:705
 msgid "/Windows/_Filemanager"
 msgstr "/Fenster/_Dateimanager"
 
-#: src/fileman.c:542 src/keyring.c:705
+#: src/fileman.c:542 src/keyring.c:706
 msgid "/Windows/_Keyring Editor"
 msgstr "/Fenster/_Schlüsselverwaltung"
 
@@ -212,7 +212,7 @@ msgstr "Datei öffnen"
 msgid "open file"
 msgstr "Datei öffnen"
 
-#: src/fileman.c:641 src/keyring.c:1104
+#: src/fileman.c:641 src/keyring.c:1114
 msgid "Sign"
 msgstr "Signieren"
 
@@ -248,15 +248,15 @@ msgstr "Gewählte Datei entschlüsseln"
 msgid "decrypt file"
 msgstr "Datei entschlüsseln"
 
-#: src/fileman.c:658 src/keyring.c:1152
+#: src/fileman.c:658 src/keyring.c:1162
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/fileman.c:659 src/keyring.c:1153
+#: src/fileman.c:659 src/keyring.c:1163
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "Wie funktioniert der GNU Privacy Assistant?"
 
-#: src/fileman.c:660 src/keyring.c:1154
+#: src/fileman.c:660 src/keyring.c:1164
 msgid "help"
 msgstr "Hilfe"
 
@@ -264,32 +264,33 @@ msgstr "Hilfe"
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - Dateimanager"
 
-#: src/filemenu.c:40 src/gpapastrings.c:32 src/gpapastrings.c:45
-#: src/gpapastrings.c:157 src/gpapastrings.c:174
+#: src/filemenu.c:40 src/gpapastrings.c:32 src/gpapastrings.c:44
+#: src/gpapastrings.c:65 src/gpapastrings.c:187 src/gpapastrings.c:193
+#: src/gpapastrings.c:210
 msgid "unknown"
 msgstr "unbekannt"
 
-#: src/filemenu.c:41 src/gpapastrings.c:158
+#: src/filemenu.c:41 src/gpapastrings.c:194
 msgid "clear"
 msgstr "Klartext"
 
-#: src/filemenu.c:42 src/gpapastrings.c:159
+#: src/filemenu.c:42 src/gpapastrings.c:195
 msgid "encrypted"
 msgstr "verschlüsselt"
 
-#: src/filemenu.c:43 src/gpapastrings.c:160
+#: src/filemenu.c:43 src/gpapastrings.c:196
 msgid "protected"
 msgstr "geschützt"
 
-#: src/filemenu.c:44 src/gpapastrings.c:161
+#: src/filemenu.c:44 src/gpapastrings.c:197
 msgid "signed"
 msgstr "signiert"
 
-#: src/filemenu.c:45 src/gpapastrings.c:162
+#: src/filemenu.c:45 src/gpapastrings.c:198
 msgid "clearsigned"
 msgstr "Klartextsignatur"
 
-#: src/filemenu.c:46 src/gpapastrings.c:163
+#: src/filemenu.c:46 src/gpapastrings.c:199
 msgid "detach-signed"
 msgstr "angehängte Signatur"
 
@@ -515,7 +516,11 @@ msgid "use a advanced user interface"
 msgstr ""
 
 #: src/gpa.c:118
-msgid "Please report bugs to <gpa-bugs@gnu.org>.\n"
+msgid "Please report bugs to <"
+msgstr ""
+
+#: src/gpa.c:118
+msgid ">.\n"
 msgstr ""
 
 #: src/gpa.c:122
@@ -528,97 +533,124 @@ msgid ""
 "Graphical frontend to GnuPG\n"
 msgstr ""
 
-#: src/gpa.c:451
+#: src/gpa.c:462
 #, c-format
 msgid "NOTE: no default option file `%s'\n"
 msgstr "HINWEIS: Keine Standard-Konfigurationsdatei `%s'\n"
 
-#: src/gpa.c:455
+#: src/gpa.c:466
 #, c-format
 msgid "option file `%s': %s\n"
 msgstr "Konfigurationsdatei `%s': %s\n"
 
-#: src/gpa.c:463
+#: src/gpa.c:474
 #, c-format
 msgid "reading options from `%s'\n"
 msgstr "Lese Konfiguration aus `%s'\n"
 
-#: src/gpa.c:584 src/siglist.c:100
+#: src/gpa.c:595 src/siglist.c:100
 msgid "[Unknown user ID]"
 msgstr "[Unbekannte Benutzer ID]"
 
-#: src/gpa.c:664
+#: src/gpa.c:675
 msgid "No keys selected to remove from recipients list"
 msgstr "Keine Schlüssel aus Empfängerliste ausgewählt"
 
-#: src/gpa.c:743
+#: src/gpa.c:754
 msgid "No keys selected to add to recipients list."
 msgstr "Keine Schlüssel ausgewählt"
 
-#: src/gpapastrings.c:33 src/gpapastrings.c:46
+#: src/gpapastrings.c:33 src/gpapastrings.c:37 src/gpapastrings.c:38
+#: src/gpapastrings.c:39 src/gpapastrings.c:40 src/gpapastrings.c:45
+#: src/gpapastrings.c:66
 msgid "don't trust"
 msgstr "kein Vertrauen"
 
-#: src/gpapastrings.c:34 src/gpapastrings.c:47
+#: src/gpapastrings.c:34 src/gpapastrings.c:46 src/gpapastrings.c:67
 msgid "trust marginally"
 msgstr "teilweises Vertrauen"
 
-#: src/gpapastrings.c:35 src/gpapastrings.c:48
+#: src/gpapastrings.c:35 src/gpapastrings.c:36 src/gpapastrings.c:47
+#: src/gpapastrings.c:68
 msgid "trust fully"
 msgstr "volles Vertrauen"
 
-#: src/gpapastrings.c:85 src/keysmenu.c:37
+#: src/gpapastrings.c:48
+#, fuzzy
+msgid "trust ultimately"
+msgstr "volles Vertrauen"
+
+#: src/gpapastrings.c:49
+msgid "revoked"
+msgstr ""
+
+#: src/gpapastrings.c:50
+#, fuzzy
+msgid "expired"
+msgstr "_verfällt am"
+
+#: src/gpapastrings.c:51
+#, fuzzy
+msgid "invalid"
+msgstr "gültig"
+
+#: src/gpapastrings.c:52
+#, fuzzy
+msgid "disabled"
+msgstr "detailliert"
+
+#: src/gpapastrings.c:105 src/keysmenu.c:37
 msgid "days"
 msgstr "Tage"
 
-#: src/gpapastrings.c:86 src/keysmenu.c:38
+#: src/gpapastrings.c:106 src/keysmenu.c:38
 msgid "weeks"
 msgstr "Wochen"
 
-#: src/gpapastrings.c:87 src/keysmenu.c:39
+#: src/gpapastrings.c:107 src/keysmenu.c:39
 msgid "months"
 msgstr "Monate"
 
-#: src/gpapastrings.c:88 src/keysmenu.c:40
+#: src/gpapastrings.c:108 src/keysmenu.c:40
 msgid "years"
 msgstr "Jahre"
 
-#: src/gpapastrings.c:115
+#: src/gpapastrings.c:135
 msgid "DSA and ElGamal"
 msgstr "DSA und ELGamal"
 
-#: src/gpapastrings.c:116
+#: src/gpapastrings.c:136
 msgid "DSA (sign only)"
 msgstr "DSA (nur signieren)"
 
-#: src/gpapastrings.c:117
+#: src/gpapastrings.c:137
 msgid "ElGamal (sign and encrypt)"
 msgstr "ELGamal (signieren und verschlüsseln)"
 
-#: src/gpapastrings.c:118
+#: src/gpapastrings.c:138
 msgid "ElGamal (encrypt only)"
 msgstr "ELGamal (nur verschlüsseln)"
 
-#: src/gpapastrings.c:151
+#: src/gpapastrings.c:171
 msgid "never expires"
 msgstr "kein Verfallsdatum"
 
-#: src/gpapastrings.c:175
+#: src/gpapastrings.c:211
 msgid "!INVALID!"
 msgstr "!UNGÜLTIG!"
 
-#: src/gpapastrings.c:176
+#: src/gpapastrings.c:212
 msgid "valid"
 msgstr "gültig"
 
 #. User Name
-#: src/gpawidgets.c:53 src/keyeditdlg.c:99 src/keyring.c:788
+#: src/gpawidgets.c:53 src/keyeditdlg.c:99 src/keyring.c:789
 #: src/keysmenu.c:149
 msgid "User Name:"
 msgstr "Benutzer ID:"
 
 #. User Name
-#: src/gpawidgets.c:63 src/keyeditdlg.c:102 src/keyring.c:790
+#: src/gpawidgets.c:63 src/keyeditdlg.c:102 src/keyring.c:791
 #: src/keysmenu.c:139
 msgid "Key ID:"
 msgstr "Schlüssel ID:"
@@ -696,39 +728,35 @@ msgstr ""
 "Neuigkeiten finden Sie\n"
 "auf http://www.gnupg.org"
 
-#: src/helpmenu.c:323
+#: src/helpmenu.c:323 src/helpmenu.c:392
 msgid "GNU general public license"
 msgstr "GNU general public license"
 
-#: src/helpmenu.c:343
+#: src/helpmenu.c:343 src/helpmenu.c:413
 msgid "_GNU general public license"
 msgstr "_GNU general public license"
 
-#: src/helpmenu.c:372
-msgid "Show Warranty Information\n"
-msgstr "Gewährleistung\n"
-
-#: src/helpmenu.c:378
+#: src/helpmenu.c:442
 msgid "Show Help Text\n"
 msgstr "Hilfe anzeigen\n"
 
-#: src/helpmenu.c:386
+#: src/helpmenu.c:450
 msgid "/_Help"
 msgstr "/_Hilfe"
 
-#: src/helpmenu.c:387
+#: src/helpmenu.c:451
 msgid "/Help/_About"
 msgstr "/Hilfe/_Über"
 
-#: src/helpmenu.c:388
+#: src/helpmenu.c:452
 msgid "/Help/_License"
 msgstr "/Hilfe/_Lizenz"
 
-#: src/helpmenu.c:389
+#: src/helpmenu.c:453
 msgid "/Help/_Warranty"
 msgstr "/Hilfe/_Gewährleistung"
 
-#: src/helpmenu.c:390
+#: src/helpmenu.c:454
 msgid "/Help/_Help"
 msgstr "/Hilfe/_Hilfe"
 
@@ -959,7 +987,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "_Sicherheitskopie anlegen"
 
-#: src/keygenwizard.c:391 src/keyring.c:644
+#: src/keygenwizard.c:391 src/keyring.c:645
 msgid "Do it _later"
 msgstr "_Später erledigen"
 
@@ -1065,33 +1093,33 @@ msgstr "Schlüsselvertrauen"
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:325
+#: src/keyring.c:326
 msgid "No keys selected for signing."
 msgstr "Keine Schlüssel ausgewählt."
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:335
+#: src/keyring.c:336
 msgid "No private key for signing."
 msgstr "Kein geheimer Schlüssel zum signieren."
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:416 src/keysmenu.c:436
+#: src/keyring.c:417 src/keysmenu.c:436
 msgid "No keys selected to export."
 msgstr "Keine Schlüssel zum Exportieren ausgewählt."
 
-#: src/keyring.c:644 src/keyring.c:652
+#: src/keyring.c:645 src/keyring.c:653
 msgid "_Generate key now"
 msgstr "Jetzt Schlüssel _erzeugen"
 
-#: src/keyring.c:647
+#: src/keyring.c:648
 msgid "No key defined"
 msgstr "Kein Schlüssel"
 
-#: src/keyring.c:648
+#: src/keyring.c:649
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1099,152 +1127,152 @@ msgstr ""
 "Sie haben noch keinen geheimen Schlüssel. Wollen Sie jetzt einen erzeugen "
 "(empfohlen), oder dies später erledigen."
 
-#: src/keyring.c:694
+#: src/keyring.c:695
 msgid "/_Keys"
 msgstr "/_Schlüssel"
 
-#: src/keyring.c:695
+#: src/keyring.c:696
 msgid "/Keys/_Generate Key..."
 msgstr "/Schlüssel/Schlüssel _erzeugen..."
 
-#: src/keyring.c:792 src/keysigndlg.c:156
+#: src/keyring.c:793 src/keysigndlg.c:156
 msgid "Fingerprint:"
 msgstr "Fingerabdruck:"
 
-#: src/keyring.c:794
+#: src/keyring.c:795
 msgid "Expires at:"
 msgstr "ungültig ab:"
+
+#: src/keyring.c:797
+msgid "Owner Trust:"
+msgstr "Benutzervertrauen:"
+
+#: src/keyring.c:799
+msgid "Key Trust:"
+msgstr "Schlüsselvertrauen:"
+
+#: src/keyring.c:801
+msgid "Key Type:"
+msgstr "Art:"
 
 #: src/keyring.c:803
 msgid "Created at:"
 msgstr "erzeugt am:"
 
-#: src/keyring.c:796
-msgid "Owner Trust:"
-msgstr "Benutzervertrauen:"
-
-#: src/keyring.c:798
-msgid "Key Trust:"
-msgstr "Schlüsselvertrauen:"
-
-#: src/keyring.c:800
-msgid "Key Type:"
-msgstr "Art:"
-
-#: src/keyring.c:803
+#: src/keyring.c:806
 msgid "Details"
 msgstr "Details"
 
-#: src/keyring.c:819
+#: src/keyring.c:822
 msgid "Signatures"
 msgstr "Signaturen"
 
-#: src/keyring.c:866
+#: src/keyring.c:870
 msgid "The key has both a private and a public part"
 msgstr "Dieser Schlüssel hat einen öffentlichen und einen geheimen Teil"
 
-#: src/keyring.c:871
+#: src/keyring.c:875
 msgid "The key has only a public part"
 msgstr "Dieser Schlüssel hat nur einen öffentlichen Teil"
 
-#: src/keyring.c:887
+#: src/keyring.c:897
 msgid "No keys selected"
 msgstr "Keine Schlüssel ausgewählt"
 
-#: src/keyring.c:891
+#: src/keyring.c:901
 #, c-format
 msgid "%d keys selected"
 msgstr "%d Schlüssel ausgewählt"
 
-#: src/keyring.c:1087
+#: src/keyring.c:1097
 msgid "Edit"
 msgstr "Ändern"
 
-#: src/keyring.c:1088
+#: src/keyring.c:1098
 msgid "Edit the selected key"
 msgstr "Gewählten Schlüssel bearbeiten"
 
-#: src/keyring.c:1088
+#: src/keyring.c:1098
 msgid "edit key"
 msgstr "Schlüssel bearbeiten"
 
-#: src/keyring.c:1095
+#: src/keyring.c:1105
 msgid "Remove"
 msgstr "Löschen"
 
-#: src/keyring.c:1096
+#: src/keyring.c:1106
 msgid "Remove the selected key"
 msgstr "Gewählten Schlüssel entfernen"
 
-#: src/keyring.c:1097
+#: src/keyring.c:1107
 msgid "remove key"
 msgstr "Schlüssel entfernen"
 
-#: src/keyring.c:1105
+#: src/keyring.c:1115
 msgid "Sign the selected key"
 msgstr "Gewählten Schlüssel signieren"
 
-#: src/keyring.c:1105
+#: src/keyring.c:1115
 msgid "sign key"
 msgstr "Schlüssel signieren"
 
-#: src/keyring.c:1112
+#: src/keyring.c:1122
 msgid "Import"
 msgstr "Import"
 
-#: src/keyring.c:1113
+#: src/keyring.c:1123
 msgid "Import Keys"
 msgstr "Schlüssel importieren"
 
-#: src/keyring.c:1113
+#: src/keyring.c:1123
 msgid "import keys"
 msgstr "Schlüssel importieren"
 
-#: src/keyring.c:1118
+#: src/keyring.c:1128
 msgid "Export"
 msgstr "Export"
 
-#: src/keyring.c:1119
+#: src/keyring.c:1129
 msgid "Export Keys"
 msgstr "Schlüssel exportieren"
 
-#: src/keyring.c:1119
+#: src/keyring.c:1129
 msgid "export keys"
 msgstr "Schlüssel exportieren"
 
-#: src/keyring.c:1132
+#: src/keyring.c:1142
 msgid "Brief"
 msgstr "Liste"
 
-#: src/keyring.c:1132
+#: src/keyring.c:1142
 msgid "Show Brief Keylist"
 msgstr "Schlüssel in Listenansicht anzeigen"
 
-#: src/keyring.c:1133
+#: src/keyring.c:1143
 msgid "brief"
 msgstr "Liste"
 
-#: src/keyring.c:1144
+#: src/keyring.c:1154
 msgid "Detailed"
 msgstr "Detailliert"
 
-#: src/keyring.c:1144
+#: src/keyring.c:1154
 msgid "Show Key Details"
 msgstr "Schlüssel in Detailansicht anzeigen"
 
-#: src/keyring.c:1145
+#: src/keyring.c:1155
 msgid "detailed"
 msgstr "detailliert"
 
-#: src/keyring.c:1169
+#: src/keyring.c:1179
 msgid "Selected Default Key:"
 msgstr "Standard-Schlüssel:"
 
-#: src/keyring.c:1246
+#: src/keyring.c:1257
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - Schlüsselverwaltung"
 
-#: src/keyring.c:1275
+#: src/keyring.c:1286
 msgid "Keyring Editor"
 msgstr "Schlüsselverwaltung"
 
@@ -1491,3 +1519,6 @@ msgstr "Mantra eingeben"
 #: src/passphrasedlg.c:126
 msgid "Please enter the password for the following key:"
 msgstr "Bitte geben Sie das Mantra für den folgenden Schlüssel ein:"
+
+#~ msgid "Show Warranty Information\n"
+#~ msgstr "Gewährleistung\n"
