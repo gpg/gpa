@@ -1,5 +1,20 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* filemenu.c (file_open):
+	(gpa_fileOpenSelect_init): 
+	(file_open_ok): 
+	(file_showDetail): 
+	(file_close): 
+	(file_sign): 
+	(get_file_selection_count): 
+	(file_encrypt):
+	(file_decrypt_decrypt_exec):
+	(file_decrypt_decrypt):
+	(file_decrypt): Remove because they're not used anymore
+
+	* filemenu.h: Removed the prototypes of the functions removed from
+	filemenu.c
+
 	* gtktools.h (gpa_widget_set_centered):
 	* gtktools.c (gpa_widget_set_centered): Removed. Use
 	gpa_window_show_centered instead
