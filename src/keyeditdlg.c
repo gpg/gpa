@@ -236,11 +236,9 @@ key_edit_change_trust(GtkWidget * widget, gpointer param)
         {
           gtk_label_set_text (GTK_LABEL (dialog->ownertrust),
                               gpa_trust_string (ownertrust));
+          /* Reload all keys */
+          gpa_keytable_reload (keytable);
           dialog->key_has_changed = TRUE;
-        }
-      else if (err == GPGME_No_Passphrase)
-        {
-          dialog->key_has_changed = FALSE;
         }
       else
         {
@@ -286,6 +284,12 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
           dialog->key_has_changed = TRUE;
         }
       else if (err == GPGME_No_Passphrase)
+        {
+          if (new_date)
+            g_date_free (new_date);
+          dialog->key_has_changed = FALSE;
+        }
+      else if (err == GPGME_Canceled)
         {
           if (new_date)
             g_date_free (new_date);

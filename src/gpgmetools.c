@@ -291,6 +291,8 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
                                             NULL, GTK_DIALOG_MODAL,
                                             GTK_STOCK_OK,
                                             GTK_RESPONSE_OK,
+                                            GTK_STOCK_CANCEL,
+                                            GTK_RESPONSE_CANCEL,
                                             NULL);
       vbox = GTK_DIALOG (dialog)->vbox;
       action_area = GTK_DIALOG (dialog)->action_area;
@@ -308,8 +310,15 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
       gtk_widget_show_all (dialog);
       response = gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_hide (dialog);
-
-      return gtk_entry_get_text (GTK_ENTRY (entry));
+      if (response == GTK_RESPONSE_OK)
+        {
+          return gtk_entry_get_text (GTK_ENTRY (entry));
+        }
+      else
+        {
+          gpgme_cancel (ctx);
+          return "";
+        }
     }
   else
     {
@@ -427,10 +436,94 @@ edit_expiry_fnc (void *opaque, GpgmeStatusCode status, const char *args,
   return GPGME_No_Error;
 }
 
+/* Change the key ownertrust */
+
+struct ownertrust_parms_s
+{
+  int state;
+  const char *trust;
+};
+
+static GpgmeError
+edit_ownertrust_fnc (void *opaque, GpgmeStatusCode status, const char *args,
+                 const char **result)
+{
+  struct ownertrust_parms_s *parms = opaque;
+
+  /* Ignore these status lines */
+  if (status == GPGME_STATUS_EOF ||
+      status == GPGME_STATUS_GOT_IT ||
+      status == GPGME_STATUS_NEED_PASSPHRASE ||
+      status == GPGME_STATUS_GOOD_PASSPHRASE)
+    {
+      return GPGME_No_Error;
+    }
+
+  switch (parms->state)
+    {
+      /* State 0: start the operation */
+    case 0:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          *result = "trust";
+          parms->state = 1;
+        }
+      else
+        {
+          return GPGME_General_Error;
+        }
+      break;
+      /* State 1: send the new ownertrust value */
+    case 1:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "edit_ownertrust.value"))
+        {
+          *result = parms->trust;
+          parms->state = 2;
+        }
+      else
+        {
+          return GPGME_General_Error;
+        }
+      break;
+      /* State 2: end the edit operation */
+    case 2:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          *result = "quit";
+          parms->state = 3;
+        }
+      else
+        {
+          return GPGME_General_Error;
+        }
+      break;
+    default:
+      /* Can't happen */
+      return GPGME_General_Error;
+      break;
+    }
+  return GPGME_No_Error;
+}
+
 /* Change the ownertrust of a key */
 GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust)
 {
-  return GPGME_No_Error;
+  const gchar *trust_strings[] = {"1", "1", "2", "3", "4", "5"};
+  struct expiry_parms_s parms = {0, trust_strings[ownertrust]};
+  GpgmeError err;
+  GpgmeData out = NULL;
+
+  err = gpgme_data_new (&out);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  err = gpgme_op_edit (ctx, key, edit_ownertrust_fnc, &parms, out);
+  gpgme_data_release (out);
+  return err;
 }
 
 /* Change the expiry date of a key */
