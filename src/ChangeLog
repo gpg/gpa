@@ -1,5 +1,8 @@
 2002-10-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* helpmenu.c (gpa_help_menu_add_to_factory, help_warranty): Remove
+	the "warranty" item, as it just an exact copy of "license".
+
 	* encryptdlg.c (gpa_file_encrypt_dialog_run, file_encrypt_ok): 
 	Enable encrypt+sign.
 	(toggle_sign_cb): New function.
