@@ -81,7 +81,7 @@ verify_file (const gchar *filename, GtkWidget *parent)
   GpgmeError err;
   GpgmeData sig, signed_text, plain_text;
   gchar *signed_file = NULL;
-  GpgmeSigStat status;
+  const gchar *fpr;
 
   if (is_detached_sig (filename, &signed_file))
     {
@@ -128,7 +128,7 @@ verify_file (const gchar *filename, GtkWidget *parent)
     }
 
   /* Verify */
-  err = gpgme_op_verify (ctx, sig, signed_text, plain_text, &status);
+  err = gpgme_op_verify (ctx, sig, signed_text, plain_text);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);
@@ -149,7 +149,8 @@ verify_file (const gchar *filename, GtkWidget *parent)
     }
 
   /* Check for unsigned files */
-  if (status == GPGME_SIG_STAT_NOSIG || status == GPGME_SIG_STAT_NONE)
+  fpr = gpgme_get_sig_status (ctx, 0, NULL, NULL);
+  if (!fpr || !*fpr)
     {
       return FALSE;
     }

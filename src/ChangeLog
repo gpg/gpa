@@ -1,5 +1,7 @@
 2002-12-29  Miguel Coca  <mcoca@gnu.org>
 
+	* verifydlg.c (verify_file): Update for GPGME 0.4.1.
+
 	* keyring.c (keyring_editor_delete): Update the default key, in case
 	it's been deleted.
 
