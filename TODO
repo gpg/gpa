@@ -1,3 +1,8 @@
+2001-02-27 <jan@intevation.de>
+	First of all: check which of the following items are already
+	fixed or meanwhile obsolete!
+
+Earlier than 2001-02-27:
 
  - All dummy functions are marked by a comment containing !!!.
 
