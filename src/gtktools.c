@@ -126,6 +126,56 @@ gpa_button_new (GtkAccelGroup * accelGroup, gchar * labelText)
   return (button);
 }				/* gpa_button_new */
 
+/* Create a new hbox with an image and a label packed into it
+ * and return the box. Then treat the accelerators. */
+GtkWidget *gpa_xpm_label_box( GtkWidget *parent,
+						 gchar     **xpm,
+						 gchar     *label_text,
+						 GtkWidget * button,
+						 GtkAccelGroup * accelGroup)
+{
+   guint accelKey;
+   GtkWidget *box1;
+   GtkWidget *label;
+   GtkWidget *pixmapwid;
+   GdkPixmap *pixmap;
+   GdkBitmap *mask;
+   GtkStyle *style;
+
+   /* Create box for xpm and label */
+   box1 = gtk_hbox_new (FALSE, 0);
+   gtk_container_set_border_width (GTK_CONTAINER (box1), 2);
+
+   /* Get the style of the button to get the
+	* background color. */
+   style = gtk_widget_get_style(parent);
+
+   /* Now on to the xpm stuff */
+   pixmap = gdk_pixmap_create_from_xpm_d (parent->window, &mask,
+						&style->bg[GTK_STATE_NORMAL],
+						(gchar **)xpm);
+   pixmapwid = gtk_pixmap_new (pixmap, mask);
+
+   /* Create a label for the button */
+   label = gtk_label_new (label_text);
+
+   /* accelerators for gpa */
+  accelKey = gtk_label_parse_uline (GTK_LABEL(label), label_text);
+  gtk_widget_add_accelerator (button, "clicked", accelGroup, accelKey,
+			      GDK_MOD1_MASK, 0);
+
+   /* Pack the pixmap and label into the box */
+   gtk_box_pack_start (GTK_BOX (box1),
+			   pixmapwid, FALSE, FALSE, 3);
+
+   gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 3);
+
+   gtk_widget_show(pixmapwid);
+   gtk_widget_show(label);
+
+   return(box1);
+}
+
 GtkWidget *
 gpa_buttonCancel_new (GtkAccelGroup * accelGroup, gchar * labelText,
 		      gpointer * param)

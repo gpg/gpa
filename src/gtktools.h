@@ -26,6 +26,11 @@ extern GtkWidget *gpa_widget_hjustified_new (GtkWidget * widget,
 					     GtkJustification jtype);
 extern GtkWidget *gpa_button_new (GtkAccelGroup * accelGroup,
 				  gchar * labelText);
+extern GtkWidget *gpa_xpm_label_box( GtkWidget *parent,
+					gchar     **xpm,
+					gchar     *label_text,
+					GtkWidget * button,
+					GtkAccelGroup * accelGroup);
 extern GtkWidget *gpa_buttonCancel_new (GtkAccelGroup * accelGroup,
 					gchar * labelText, gpointer * param);
 extern GtkWidget *gpa_check_button_new (GtkAccelGroup * accelGroup,
