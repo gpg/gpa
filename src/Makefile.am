@@ -32,6 +32,7 @@ gpa_SOURCES = gpa.c gpa.h \
 	      keygenwizard.c keygenwizard.h \
 	      keyeditdlg.c keyeditdlg.h \
 	      expirydlg.c expirydlg.h \
+	      keydeletedlg.c keydeletedlg.h \
 	      keylist.c keylist.h \
 	      siglist.c siglist.h \
 	      gpawizard.c gpawizard.h \
