@@ -1,74 +1,66 @@
 # Japanese translation for GPA.
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Yasunari Imado <master@it-translation.net>, 2002.
-# TAKAHASHI Tamotsu <arms405@jade.dti.ne.jp>, 2002.
+# TAKAHASHI Tamotsu <tamo@momonga-linux.org>, 2002.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.0-cvs\n"
-"POT-Creation-Date: 2002-11-22 18:04+0100\n"
-"PO-Revision-Date: 2002-08-18 09:12+0900\n"
-"Last-Translator: TAKAHASHI Tamotsu <arms405@jade.dti.ne.jp>\n"
+"POT-Creation-Date: 2002-12-17 00:14+0900\n"
+"PO-Revision-Date: 2002-12-16 23:00+0900\n"
+"Last-Translator: TAKAHASHI Tamotsu <tamo@momonga-linux.org>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=EUC-JP\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/encryptdlg.c:80 src/verifydlg.c:183
-#, fuzzy
 msgid "Unknown Key"
-msgstr "未確認"
+msgstr "未確認の鍵"
 
 #: src/encryptdlg.c:96
-#, fuzzy
 msgid "You are going to encrypt a file using the following key:"
-msgstr "以下の鍵に署名しますか?"
+msgstr "次の鍵を使ってファイルを暗号化しようとしています:"
 
 #: src/encryptdlg.c:102
 msgid "However, it is not certain that the key belongs to that person."
-msgstr ""
+msgstr "とはいえ、その鍵がその人に属しているかどうかは確実ではありません。"
 
 #: src/encryptdlg.c:108
-#, fuzzy
 msgid "Do you <b>really</b> want to use this key?"
-msgstr "本当にこの鍵を削除しますか?"
+msgstr "<b>本当に</b>この鍵を使いたいのですか?"
 
 #: src/encryptdlg.c:129 src/encryptdlg.c:168 src/verifydlg.c:188
-#, fuzzy
 msgid "Revoked Key"
-msgstr "鍵を削除"
+msgstr "破棄済みの鍵"
 
 #: src/encryptdlg.c:144
 msgid "The following key has been revoked by it's owner:"
-msgstr ""
+msgstr "以下の鍵は所有者によって破棄されています:"
 
 #: src/encryptdlg.c:149 src/encryptdlg.c:192
-#, fuzzy
 msgid "And can not be used for encryption."
-msgstr "暗号化するファイルが選択されていません。"
+msgstr "よって、暗号化に使うことはできません。"
 
 #: src/encryptdlg.c:183
 #, c-format
 msgid "The following key expired on %s:"
-msgstr ""
+msgstr "次の鍵の有効期限は %s です:"
 
 #. Can't happen
 #: src/encryptdlg.c:221
-#, fuzzy
 msgid "The key you selected is not available for encryption"
-msgstr "暗号化するファイルが選択されていません。"
+msgstr "選択した鍵は暗号化には利用できません。"
 
 #. Can't happen
 #: src/encryptdlg.c:280
-#, fuzzy
 msgid "You didn't select any key for signing"
-msgstr "署名する鍵が選択されていません"
+msgstr "署名する鍵を選択しませんでした"
 
 #. Can't happen
 #: src/encryptdlg.c:289 src/filesigndlg.c:84
-#, fuzzy
 msgid "The key you selected is not available for signing"
-msgstr "署名する鍵が選択されていません"
+msgstr "選択した鍵は署名には利用できません"
 
 #: src/encryptdlg.c:465
 msgid ""
@@ -104,190 +96,194 @@ msgstr "署名選択 (_A)"
 msgid "A_rmor"
 msgstr "アーマの形成 (_R)"
 
-#: src/expirydlg.c:60 src/gpafilesel.c:924 src/gtktools.c:512
-#: src/keylist.c:309
-msgid "_OK"
-msgstr "_OK"
-
 #. FIXME: This error message should be more informative
-#: src/expirydlg.c:62
-msgid "Invalid Date"
-msgstr "無効な日付"
-
-#: src/expirydlg.c:63 src/gpawidgets.c:473
+#: src/expirydlg.c:61 src/gpawidgets.c:483
 msgid "Please provide a correct date."
 msgstr "正しい日付を入力してください"
 
-#: src/expirydlg.c:102 src/keyexportdlg.c:145
-msgid "Export Key"
-msgstr "鍵をエクスポート"
+#: src/expirydlg.c:101
+msgid "Change expiry data"
+msgstr "有効期限情報を変更"
 
-#: src/expirydlg.c:120
+#: src/expirydlg.c:119
 msgid "_never expire"
 msgstr "無期限有効 (_N)"
 
-#: src/expirydlg.c:129
+#: src/expirydlg.c:128
 msgid "_expire on"
 msgstr "有効期限の指定 (_E)"
 
-#: src/fileman.c:135
+#: src/fileman.c:132
 msgid "Open File"
 msgstr "ファイルを開く"
 
-#: src/fileman.c:145
+#: src/fileman.c:142
 msgid "The file is already open."
 msgstr "ファイルは開かれています"
 
-#: src/fileman.c:297 src/filesigndlg.c:129 src/keyeditdlg.c:157
-#: src/keyring.c:357
+#: src/fileman.c:294 src/filesigndlg.c:129 src/keyeditdlg.c:157
+#: src/keyring.c:405
 msgid "Wrong passphrase!"
 msgstr "パスフレーズが違います！"
 
-#: src/fileman.c:306
+#: src/fileman.c:303
 #, c-format
 msgid "The file \"%s\" contained no valid encrypted data."
-msgstr ""
+msgstr "ファイル \"%s\" には有効な暗号化データが含まれていません。"
 
-#: src/fileman.c:357 src/keyring.c:859
+#: src/fileman.c:361 src/keyring.c:980
 msgid "/_File"
 msgstr "/ファイル (_F)"
 
-#: src/fileman.c:358
+#: src/fileman.c:362
 msgid "/File/_Open"
 msgstr "/ファイル (F)/開く (_O)"
 
-#: src/fileman.c:359
+#: src/fileman.c:363
 msgid "/File/sep1"
 msgstr "/ファイル (F)/sep1"
 
-#: src/fileman.c:360
+#: src/fileman.c:364
 msgid "/File/_Sign"
 msgstr "/ファイル (F)/署名する (_S)"
 
-#: src/fileman.c:361
-msgid "/File/C_heck"
-msgstr "/ファイル (F)/チェック (_H)"
+#: src/fileman.c:365
+msgid "/File/_Verify"
+msgstr "/ファイル (F)/検証 (_V)"
 
-#: src/fileman.c:362
+#: src/fileman.c:366
 msgid "/File/_Encrypt"
 msgstr "/ファイル (F)/暗号化 (_E)"
 
-#. {_("/File/E_ncrypt as"), NULL, (GtkItemFactoryCallback) file_encryptAs, 0, NULL},
-#. {_("/File/_Protect by Password"), NULL, (GtkItemFactoryCallback) file_protect, 0, NULL},
-#. {_("/File/P_rotect as"), NULL, (GtkItemFactoryCallback) file_protectAs, 0, NULL},
-#.
 #: src/fileman.c:367
 msgid "/File/_Decrypt"
 msgstr "/ファイル (F)/復号化 (_D)"
 
-#.
-#. {_("/File/Decrypt _as"), NULL, (GtkItemFactoryCallback) file_decryptAs, 0, NULL},
-#.
-#: src/fileman.c:371
+#: src/fileman.c:368
 msgid "/File/sep2"
 msgstr "/ファイル (F)/sep2"
 
-#: src/fileman.c:372 src/keyring.c:860
+#: src/fileman.c:369 src/keyring.c:981
 msgid "/File/_Close"
 msgstr "/ファイル (F)/閉じる (_C)"
 
-#: src/fileman.c:373 src/keyring.c:861
+#: src/fileman.c:370 src/keyring.c:983
 msgid "/File/_Quit"
 msgstr "/ファイル (F)/終了 (_Q)"
 
-#: src/fileman.c:376 src/keyring.c:875
+#: src/fileman.c:373 src/keyring.c:986
+msgid "/_Edit"
+msgstr "/編集 (_E)"
+
+#: src/fileman.c:374 src/keyring.c:992
+msgid "/Edit/Select _All"
+msgstr "/編集 (_E)/すべて選択 (_A)"
+
+#: src/fileman.c:375 src/keyring.c:993
+msgid "/Edit/sep2"
+msgstr "/編集 (E)/sep2"
+
+#: src/fileman.c:376 src/keyring.c:994
+msgid "/Edit/Pr_eferences..."
+msgstr "/編集 (E)/設定 (_E)"
+
+#: src/fileman.c:380 src/keyring.c:1013
 msgid "/_Windows"
 msgstr "/ウィンドウ (_W)"
 
-#: src/fileman.c:377 src/keyring.c:876
+#: src/fileman.c:381 src/keyring.c:1014
 msgid "/Windows/_Filemanager"
 msgstr "/ウィンドウ (W)/ファイルマネージャ (_F)"
 
-#: src/fileman.c:378 src/keyring.c:877
+#: src/fileman.c:382 src/keyring.c:1015
 msgid "/Windows/_Keyring Editor"
 msgstr "/ウィンドウ (W)/鍵束エディタ (_K)"
 
-#: src/fileman.c:400
+#: src/fileman.c:406
 msgid "File"
 msgstr "ファイル"
 
-#: src/fileman.c:408
+#: src/fileman.c:414
 msgid "Files in work"
 msgstr "作業中のファイル"
 
-#: src/fileman.c:474
-msgid "Open"
-msgstr "開く"
-
-#: src/fileman.c:475
+#: src/fileman.c:486
 msgid "Open a file"
 msgstr "ファイルを開く"
 
-#: src/fileman.c:475
+#: src/fileman.c:486
 msgid "open file"
 msgstr "ファイル開く"
 
-#: src/fileman.c:479 src/keyring.c:1290
+#: src/fileman.c:491 src/keyring.c:1527
 msgid "Sign"
 msgstr "署名する"
 
-#: src/fileman.c:480
+#: src/fileman.c:492
 msgid "Sign the selected file"
 msgstr "選択ファイルに署名する"
 
-#: src/fileman.c:480
+#: src/fileman.c:492
 msgid "sign file"
 msgstr "ファイルに署名"
 
-#: src/fileman.c:484
+#: src/fileman.c:496
 msgid "Verify"
 msgstr "検証"
 
-#: src/fileman.c:485
+#: src/fileman.c:497
 msgid "Check signatures of selected file"
 msgstr "選択ファイルの署名をチェック"
 
-#: src/fileman.c:485
+#: src/fileman.c:497
 msgid "verify file"
 msgstr "ファイル検証"
 
-#: src/fileman.c:489
+#: src/fileman.c:501
 msgid "Encrypt"
 msgstr "暗号化"
 
-#: src/fileman.c:490
+#: src/fileman.c:502
 msgid "Encrypt the selected file"
 msgstr "選択ファイルを暗号化する"
 
-#: src/fileman.c:490
+#: src/fileman.c:502
 msgid "encrypt file"
 msgstr "ファイル暗号化"
 
-#: src/fileman.c:495
-msgid " Decrypt "
-msgstr " 復号化 "
+#: src/fileman.c:507
+msgid "Decrypt"
+msgstr "復号化"
 
-#: src/fileman.c:496
+#: src/fileman.c:508
 msgid "Decrypt the selected file"
 msgstr "選択ファイルを復号化する"
 
-#: src/fileman.c:496
+#: src/fileman.c:508
 msgid "decrypt file"
 msgstr "ファイル復号化"
 
-#: src/fileman.c:503 src/keyring.c:1345
+#: src/fileman.c:520 src/keyring.c:1580
+msgid "Open the Preferences dialog"
+msgstr "設定ダイアログを開く"
+
+#: src/fileman.c:521 src/keyring.c:1581
+msgid "preferences"
+msgstr "設定"
+
+#: src/fileman.c:529 src/keyring.c:1596
 msgid "Help"
 msgstr "ヘルプ"
 
-#: src/fileman.c:504 src/keyring.c:1346
+#: src/fileman.c:530 src/keyring.c:1597
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "GNU Privacy Assistant について理解する"
 
-#: src/fileman.c:505 src/keyring.c:1347
+#: src/fileman.c:531 src/keyring.c:1598
 msgid "help"
 msgstr "ヘルプ"
 
-#: src/fileman.c:527
+#: src/fileman.c:553
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - ファイルマネージャ"
 
@@ -336,59 +332,31 @@ msgstr "圧縮ありで署名する (_G)"
 msgid "sign, do_n't compress"
 msgstr "圧縮なしで署名する (_N)"
 
-#: src/filesigndlg.c:291 src/keyexportdlg.c:208
+#: src/filesigndlg.c:291 src/keyexportdlg.c:202
 msgid "a_rmor"
 msgstr "アーマ形成 (_R)"
 
-#: src/gpa.c:78
-msgid ""
-"@Options:\n"
-" "
-msgstr ""
-"オプションは以下のとおり:\n"
-" "
+#: src/gpa.c:237
+msgid "display this help and exit"
+msgstr "このヘルプを表示して終了"
 
-#: src/gpa.c:80
-msgid "verbose"
-msgstr "冗長"
+#: src/gpa.c:238
+msgid "output version information and exit"
+msgstr "バージョン情報を出力して終了"
 
-#: src/gpa.c:81
-msgid "be somewhat more quiet"
-msgstr "少し出力を減らす"
+#: src/gpa.c:239
+msgid "open keyring editor (default)"
+msgstr "鍵束エディタを開く (デフォルト)"
 
-#: src/gpa.c:82
+#: src/gpa.c:240
+msgid "open filemanager"
+msgstr "ファイルマネージャを開く"
+
+#: src/gpa.c:241
 msgid "read options from file"
 msgstr "ファイルからオプション読込"
 
-#: src/gpa.c:83
-msgid "set debugging flags"
-msgstr "デバッグのフラグをセット"
-
-#: src/gpa.c:84
-msgid "enable full debugging"
-msgstr "フルデバッグを有効にする"
-
-#: src/gpa.c:86
-msgid "set the user interface to advanced mode"
-msgstr "操作体系を上級者モードに設定"
-
-#: src/gpa.c:87
-msgid "omit \"no backup yet\" warning at startup"
-msgstr "起動時の「バックアップがない」という警告を省略"
-
-#: src/gpa.c:160
-msgid "Please report bugs to <"
-msgstr "バグは <"
-
-#: src/gpa.c:160
-msgid ">.\n"
-msgstr "> に報告してください。\n"
-
-#: src/gpa.c:164
-msgid "Usage: gpa [options] (-h for help)"
-msgstr "用法: gpa [オプション] (-h でヘルプ)"
-
-#: src/gpa.c:167
+#: src/gpa.c:265
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -396,20 +364,17 @@ msgstr ""
 "構文: gpa [オプション]\n"
 "GnuPG のグラフィカルなフロントエンド\n"
 
-#: src/gpa.c:581
-#, c-format
-msgid "NOTE: no default option file `%s'\n"
-msgstr "注意: デフォルトのオプションファイル `%s' がありません\n"
+#: src/gpa.c:267
+msgid "Options"
+msgstr "オプション"
 
-#: src/gpa.c:585
-#, c-format
-msgid "option file `%s': %s\n"
-msgstr "オプションファイル `%s': %s\n"
+#: src/gpa.c:273
+msgid "Please report bugs to <"
+msgstr "バグは <"
 
-#: src/gpa.c:593
-#, c-format
-msgid "reading options from `%s'\n"
-msgstr "オプションを `%s' から読込\n"
+#: src/gpa.c:273
+msgid ">.\n"
+msgstr "> に報告してください。\n"
 
 #: src/gpafilesel.c:641
 msgid "Filename"
@@ -433,16 +398,19 @@ msgid "Directories"
 msgstr "ディレクトリ"
 
 #. The files ctree
-#: src/gpafilesel.c:884 src/keyring.c:1338
+#: src/gpafilesel.c:884 src/keyring.c:1589
 msgid "Files"
 msgstr "ファイル"
 
 #: src/gpafilesel.c:918 src/gpafilesel.c:1650 src/gpafilesel.c:1796
-#: src/gpafilesel.c:1969 src/gpawizard.c:249 src/gtktools.c:509
-#: src/keygendlg.c:264 src/keyimpseldlg.c:157 src/keyreceivedlg.c:124
-#: src/optionsmenu.c:123 src/optionsmenu.c:273
+#: src/gpafilesel.c:1969 src/gpawizard.c:249 src/keygendlg.c:264
+#: src/keyimpseldlg.c:157
 msgid "_Cancel"
 msgstr "キャンセル (_C)"
+
+#: src/gpafilesel.c:924
+msgid "_OK"
+msgstr "_OK"
 
 #. The OK button
 #: src/gpafilesel.c:929
@@ -667,8 +635,8 @@ msgid "unknown"
 msgstr "未確認"
 
 #. User Name
-#: src/gpawidgets.c:68 src/gpgmetools.c:524 src/gpgmetools.c:531
-#: src/keyring.c:977 src/keysigndlg.c:97
+#: src/gpawidgets.c:68 src/gpgmetools.c:508 src/gpgmetools.c:515
+#: src/keyring.c:1178 src/keysigndlg.c:97
 msgid "User Name:"
 msgstr "ユーザ名:"
 
@@ -677,41 +645,43 @@ msgid "User Names:"
 msgstr "ユーザ名:"
 
 #. Key ID
-#: src/gpawidgets.c:74 src/gpgmetools.c:525 src/gpgmetools.c:532
-#: src/keyring.c:979
+#: src/gpawidgets.c:74 src/gpgmetools.c:509 src/gpgmetools.c:516
+#: src/keyring.c:1180
 msgid "Key ID:"
 msgstr "鍵 ID:"
 
-#: src/gpawidgets.c:95 src/keylist.c:195 src/siglist.c:47 src/verifydlg.c:290
+#: src/gpawidgets.c:95 src/keylist.c:195 src/siglist.c:82 src/siglist.c:102
+#: src/verifydlg.c:290
 msgid "Key ID"
 msgstr "鍵 ID"
 
-#: src/gpawidgets.c:95
-msgid "User Identity/Role"
-msgstr "ユーザーの身元/身分"
+#: src/gpawidgets.c:95 src/keylist.c:194 src/siglist.c:88 src/siglist.c:114
+#: src/verifydlg.c:302
+msgid "User Name"
+msgstr "ユーザ名"
 
-#: src/gpawidgets.c:301
+#: src/gpawidgets.c:311
 msgid "01.01.2000"
 msgstr "01.01.2000"
 
-#: src/gpawidgets.c:328
+#: src/gpawidgets.c:338
 msgid "Expiration"
 msgstr "期限"
 
-#: src/gpawidgets.c:335
+#: src/gpawidgets.c:345
 msgid "_indefinitely valid"
 msgstr "無期限有効 (_I)"
 
-#: src/gpawidgets.c:344
+#: src/gpawidgets.c:354
 msgid "expire _after"
 msgstr "有効期限 (_A)"
 
-#: src/gpawidgets.c:366
+#: src/gpawidgets.c:376
 msgid "expire a_t"
 msgstr "期限日 (_T)"
 
 #. this should never happen
-#: src/gpawidgets.c:434 src/keygendlg.c:305
+#: src/gpawidgets.c:444 src/keygendlg.c:305
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -719,7 +689,7 @@ msgstr ""
 "！致命的エラー！\n"
 "有効期限の入力方式が不正です"
 
-#: src/gpawizard.c:111 src/helpmenu.c:378
+#: src/gpawizard.c:111 src/helpmenu.c:380
 msgid "_Close"
 msgstr "閉じる (_C)"
 
@@ -741,8 +711,14 @@ msgid ""
 "\n"
 "The application will be terminated"
 msgstr ""
+"GPGME ライブラリの致命的エラー\n"
+"(ファイル %s の %i 行目から実行された):\n"
+"\n"
+"\t%s\n"
+"\n"
+"このアプリケーションは終了します"
 
-#: src/gpgmetools.c:84 src/keyexportdlg.c:244
+#: src/gpgmetools.c:84 src/keyexportdlg.c:238
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -752,7 +728,7 @@ msgstr ""
 "上書きしますか?"
 
 #. Get the keys and write them into the file
-#: src/gpgmetools.c:336
+#: src/gpgmetools.c:320
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -760,81 +736,96 @@ msgid ""
 "************************************************************************\n"
 "\n"
 msgstr ""
+"**********************************************************************\n"
+"* 警告: このファイルは秘密鍵のバックアップです。安全な場所に保管して *\n"
+"* ください。                                                         *\n"
+"**********************************************************************\n"
+"\n"
 
-#: src/gpgmetools.c:341
+#: src/gpgmetools.c:325
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
 msgstr ""
+"このファイルにバックアップされている鍵は:\n"
+"\n"
 
-#: src/gpgmetools.c:401
+#: src/gpgmetools.c:385
 msgid "DSA and ElGamal (default)"
-msgstr ""
+msgstr "DSA と ElGamel (デフォルト)"
 
-#: src/gpgmetools.c:402
+#: src/gpgmetools.c:386
 msgid "DSA (sign only)"
-msgstr ""
+msgstr "DSA (署名のみ)"
 
-#: src/gpgmetools.c:403
+#: src/gpgmetools.c:387
 msgid "RSA (sign only)"
-msgstr ""
+msgstr "RSA (署名のみ)"
 
-#: src/gpgmetools.c:434 src/gpgmetools.c:482
-#, fuzzy
+#: src/gpgmetools.c:418 src/gpgmetools.c:466 src/gpgmetools.c:753
 msgid "Unknown"
 msgstr "未確認"
 
-#: src/gpgmetools.c:437
+#: src/gpgmetools.c:421
 msgid "Never"
-msgstr ""
+msgstr "不信"
 
-#: src/gpgmetools.c:440
+#: src/gpgmetools.c:424
 msgid "Marginal"
-msgstr ""
+msgstr "一部"
 
-#: src/gpgmetools.c:443
+#: src/gpgmetools.c:427
 msgid "Full"
-msgstr ""
+msgstr "完全"
 
-#: src/gpgmetools.c:446
+#: src/gpgmetools.c:430
 msgid "Ultimate"
-msgstr ""
+msgstr "究極"
 
-#: src/gpgmetools.c:465
-#, fuzzy
+#: src/gpgmetools.c:449 src/gpgmetools.c:764
 msgid "Revoked"
-msgstr "削除"
+msgstr "破棄済み"
 
-#: src/gpgmetools.c:469
-#, fuzzy
+#: src/gpgmetools.c:453 src/gpgmetools.c:758
 msgid "Expired"
-msgstr "有効期限:"
+msgstr "期限切れ"
 
-#: src/gpgmetools.c:474
-#, fuzzy
+#: src/gpgmetools.c:458
 msgid "Disabled"
-msgstr "詳細"
+msgstr "無効"
 
-#: src/gpgmetools.c:478
+#: src/gpgmetools.c:462
 msgid "Incomplete"
-msgstr ""
+msgstr "不完全"
 
-#: src/gpgmetools.c:487
+#: src/gpgmetools.c:471
 msgid "Fully Valid"
-msgstr ""
+msgstr "完全に有効"
 
-#: src/gpgmetools.c:522
+#: src/gpgmetools.c:506
 msgid "Please enter the passphrase for the following key:"
 msgstr "以下の鍵のパスワードを入力して下さい:"
 
-#: src/gpgmetools.c:530
-#, fuzzy
+#: src/gpgmetools.c:514
 msgid "Wrong passphrase, please try again:"
-msgstr "パスフレーズが違います！"
+msgstr "パスフレーズが違います。もう一度お願いします:"
 
-#: src/gpgmetools.c:552
+#: src/gpgmetools.c:536
 msgid "Enter Passphrase"
 msgstr "パスフレーズを入力"
+
+#. Duplicate it to make sure it can be g_free'd
+#: src/gpgmetools.c:711 src/verifydlg.c:230
+msgid "[Unknown user ID]"
+msgstr "[未確認ユーザ ID]"
+
+#: src/gpgmetools.c:748 src/verifydlg.c:173
+msgid "Valid"
+msgstr "有効"
+
+#: src/gpgmetools.c:751 src/verifydlg.c:178
+msgid "Bad"
+msgstr "不正"
 
 #: src/gtktools.c:312
 msgid "GPA Error"
@@ -844,69 +835,57 @@ msgstr "GPA エラー"
 msgid "GPA Message"
 msgstr "GPA メッセージ"
 
-#: src/gtktools.c:479
-msgid "Insert passphrase"
-msgstr "パスワードを入力"
-
-#: src/gtktools.c:499 src/keygendlg.c:222
-msgid "_Passphrase: "
-msgstr "パスフレーズ (_P): "
-
 #: src/helpmenu.c:183
 msgid "About GPA"
 msgstr "GPA について"
 
-#: src/helpmenu.c:218
+#: src/helpmenu.c:220
 msgid "Brought to you by:"
 msgstr "提供者:"
 
-#: src/helpmenu.c:254
+#: src/helpmenu.c:256
 msgid "GPA is free software under the"
 msgstr "GPA is free software under the"
 
-#: src/helpmenu.c:258
+#: src/helpmenu.c:260
 msgid "GNU General Public License."
 msgstr "GNU General Public License."
 
-#: src/helpmenu.c:262
+#: src/helpmenu.c:264
 msgid "For news see:"
 msgstr "最新情報はこちら:"
 
-#: src/helpmenu.c:266
+#: src/helpmenu.c:268
 msgid "http://www.gnupg.org"
 msgstr "http://www.gnupg.org"
 
-#: src/helpmenu.c:343
+#: src/helpmenu.c:345
 msgid "GNU general public license"
 msgstr "GNU 一般公有使用許諾書 (GPL)"
 
-#: src/helpmenu.c:363
+#: src/helpmenu.c:365
 msgid "_GNU general public license"
 msgstr "_GNU 一般公有使用許諾書 (GPL)"
 
-#: src/helpmenu.c:392
+#: src/helpmenu.c:394
 msgid "Show Help Text\n"
 msgstr "ヘルプを見る\n"
 
-#: src/helpmenu.c:400
-#, fuzzy
-msgid "/_Help"
-msgstr "ヘルプ"
-
-#: src/helpmenu.c:401
-#, fuzzy
-msgid "/Help/_About"
-msgstr "/情報 (I)/_About"
-
 #: src/helpmenu.c:402
-#, fuzzy
-msgid "/Help/_License"
-msgstr "/情報 (I)/ライセンス (_L)"
+msgid "/_Help"
+msgstr "/ヘルプ (_H)"
 
 #: src/helpmenu.c:404
-#, fuzzy
-msgid "/Help/_Help"
-msgstr "/情報 (I)/ヘルプ (_H)"
+msgid "/Help/_Contents"
+msgstr "/ヘルプ (H)/内容 (_C)"
+
+#: src/helpmenu.c:407
+msgid "/Help/_License"
+msgstr "/ヘルプ (H)/ライセンス (_L)"
+
+#: src/helpmenu.c:408
+msgid "/Help/_About"
+msgstr "/ヘルプ (H)/GPA について (_A)"
 
 #: src/keydeletedlg.c:39
 msgid "Removing Secret Key"
@@ -970,11 +949,15 @@ msgstr "有効期限を変更 (_E)"
 msgid "Export public keys to file"
 msgstr "公開鍵をファイルへエクスポート"
 
+#: src/keyexportdlg.c:145
+msgid "Export Key"
+msgstr "鍵をエクスポート"
+
 #: src/keyexportdlg.c:169
 msgid "E_xport to file:"
 msgstr "エクスポート先ファイル (_X):"
 
-#: src/keyexportdlg.c:179 src/keyexportdlg.c:347 src/keyimportdlg.c:174
+#: src/keyexportdlg.c:179 src/keyexportdlg.c:341 src/keyimportdlg.c:171
 msgid "B_rowse..."
 msgstr "ブラウズ... (_R)"
 
@@ -982,11 +965,7 @@ msgstr "ブラウズ... (_R)"
 msgid "_Key server:"
 msgstr "鍵サーバー (_K):"
 
-#: src/keyexportdlg.c:202
-msgid "To _clipboard"
-msgstr "クリップボードへコピー (_C)"
-
-#: src/keyexportdlg.c:260
+#: src/keyexportdlg.c:254
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -1003,17 +982,17 @@ msgstr ""
 "に作成されました。これは重要な情報ですから、慎重に保管して\n"
 "ください (例えばフロッピーに入れて安全な場所に隠しておく)。"
 
-#: src/keyexportdlg.c:301
+#: src/keyexportdlg.c:295
 msgid "Backup Keys"
 msgstr "鍵をバックアップ"
 
-#: src/keyexportdlg.c:327
+#: src/keyexportdlg.c:321
 #, c-format
 msgid "Generating backup of key: %s"
 msgstr "鍵のバックアップを作成する: %s"
 
 #. File name entry
-#: src/keyexportdlg.c:334
+#: src/keyexportdlg.c:328
 msgid "_Backup to file:"
 msgstr "バックアップ先ファイル (_B):"
 
@@ -1025,7 +1004,7 @@ msgstr ""
 "\"パスワード\" と \"再入力\" には\n"
 "同じパスワードを入力しなくてはなりません"
 
-#: src/keygendlg.c:122 src/keygenwizard.c:557
+#: src/keygendlg.c:122 src/keygenwizard.c:566
 msgid "Generate key"
 msgstr "鍵を生成"
 
@@ -1060,6 +1039,10 @@ msgstr "_E メール: "
 #: src/keygendlg.c:210
 msgid "_Comment: "
 msgstr "コメント (_C): "
+
+#: src/keygendlg.c:222
+msgid "_Passphrase: "
+msgstr "パスフレーズ (_P): "
 
 #: src/keygendlg.c:234
 msgid "_Repeat passphrase: "
@@ -1098,7 +1081,6 @@ msgid "Please insert your name"
 msgstr "氏名を記入してください"
 
 #: src/keygenwizard.c:180
-#, fuzzy
 msgid ""
 "Please insert your email address.\n"
 "\n"
@@ -1108,11 +1090,10 @@ msgid ""
 msgstr ""
 "E メールアドレスをひとつ記入して下さい。\n"
 "\n"
-"他の人が鍵を簡単に見分けられるよう、E メールアドレスを新しい鍵の一部にしま"
-"す。E メールアドレスを複数持っているのなら、残りは後で追加できます"
+"他の人が鍵を簡単に識別できるように、E メールアドレスを新しい鍵の一部にしま"
+"す。E メールアドレスを複数持っているのなら、残りは後で追加できます。"
 
 #: src/keygenwizard.c:187
-#, fuzzy
 msgid "Your Email Address:"
 msgstr "E メールアドレス:"
 
@@ -1122,17 +1103,16 @@ msgid "Please insert your email address"
 msgstr "E メールアドレスを記入して下さい"
 
 #: src/keygenwizard.c:219
-#, fuzzy
 msgid ""
 "If you want you can supply a comment that further identifies the key to "
 "other users. The comment is especially useful if you generate several keys "
 "for the same email address. The comment is completely optional. Leave it "
 "empty if you don't have a use for it."
 msgstr ""
-"お望みなら、他のユーザのために鍵をさらに特徴づけるコメントを提供することがで"
-"きます。同じ E メールアドレスに鍵を複数生成する場合は特にコメントが役に立ちま"
-"す。コメントは付けても付けなくてもまったく構いません。不要なら空にしておいて"
-"ください."
+"お望みなら、鍵をさらに特徴づけるコメントを他のユーザのために提供することがで"
+"きます。同じ E メールアドレスに鍵を複数生成する場合は、特にコメントが役に立ち"
+"ます。コメントは付けても付けなくてもまったく構いません。不要なら空にしておい"
+"てください。"
 
 #: src/keygenwizard.c:225
 msgid "Comment:"
@@ -1166,19 +1146,7 @@ msgstr ""
 "パスワードが入力されませんでした。\n"
 "秘密鍵を守るために必要です。"
 
-#: src/keygenwizard.c:334 src/keygenwizard.c:342
-msgid "_Enter new passphrase"
-msgstr "新しいパスフレーズを入力 (_E)"
-
-#: src/keygenwizard.c:334
-msgid "Take this one _anyway"
-msgstr "とにかくこれにする (_A)"
-
-#: src/keygenwizard.c:337
-msgid "Weak passphrase"
-msgstr "脆弱なパスフレーズ"
-
-#: src/keygenwizard.c:338
+#: src/keygenwizard.c:340
 msgid ""
 "Warning: You have entered a passphrase\n"
 "that is obviously not secure.\n"
@@ -1190,7 +1158,15 @@ msgstr ""
 "\n"
 "新しいパスフレーズを入力してください。"
 
-#: src/keygenwizard.c:361
+#: src/keygenwizard.c:345
+msgid "_Enter new passphrase"
+msgstr "新しいパスフレーズを入力 (_E)"
+
+#: src/keygenwizard.c:346
+msgid "Take this one _anyway"
+msgstr "とにかくこれにする (_A)"
+
+#: src/keygenwizard.c:370
 msgid ""
 "It is recommended that you create a backup copy of your new key, once it has "
 "been generated.\n"
@@ -1200,15 +1176,15 @@ msgstr ""
 "新しい鍵が出来上がったら、バックアップコピーを作成することをお勧めします。\n"
 "バックアップコピーを作りますか？"
 
-#: src/keygenwizard.c:370
+#: src/keygenwizard.c:379
 msgid "Create _backup copy"
 msgstr "バックアップの作成 (_B)"
 
-#: src/keygenwizard.c:377 src/keyring.c:789 src/keyring.c:816
+#: src/keygenwizard.c:386 src/keyring.c:852 src/keyring.c:879
 msgid "Do it _later"
 msgstr "後で (_L)"
 
-#: src/keygenwizard.c:405
+#: src/keygenwizard.c:414
 msgid ""
 "Your key is being generated.\n"
 "\n"
@@ -1218,7 +1194,7 @@ msgstr ""
 "\n"
 "高速なコンピュータでもしばらくかかります。我慢して下さい。"
 
-#: src/keygenwizard.c:414
+#: src/keygenwizard.c:423
 msgid ""
 "Congratulations!\n"
 "\n"
@@ -1228,44 +1204,39 @@ msgstr ""
 "おめでとうございます！\n"
 "鍵の作成に成功しました。この鍵は無期限に有効で、長さは 1024 ビットです。"
 
-#: src/keygenwizard.c:608 src/keygenwizard.c:612
+#: src/keygenwizard.c:617 src/keygenwizard.c:621
 msgid "F_inish"
 msgstr "完了 (_I)"
 
-#: src/keyimportdlg.c:78
+#: src/keyimportdlg.c:75
 msgid "Import public keys from file"
 msgstr "ファイルから公開鍵をインポートする"
 
-#: src/keyimportdlg.c:137
+#: src/keyimportdlg.c:134
 msgid "Import Key"
 msgstr "鍵をインポート"
 
-#: src/keyimportdlg.c:161
+#: src/keyimportdlg.c:158
 msgid "I_mport from file:"
 msgstr "インポート元ファイル (_M):"
 
-#: src/keyimportdlg.c:183
+#: src/keyimportdlg.c:180
 msgid "Receive from _server:"
 msgstr "受信元サーバ (_S): "
 
-#: src/keyimportdlg.c:202
+#: src/keyimportdlg.c:199
 msgid "Key _ID:"
 msgstr "鍵 _ID"
 
-#: src/keyimportdlg.c:221
+#: src/keyimportdlg.c:218
 msgid "_Key Server:"
 msgstr "鍵サーバ (_K):"
 
-#: src/keyimportdlg.c:226
-msgid "Import from _clipboard:"
-msgstr "クリップボードからインポート (_C):"
-
-#: src/keyimportdlg.c:258
-#, fuzzy
+#: src/keyimportdlg.c:247
 msgid "No keys were found."
-msgstr "鍵が定義されていません"
+msgstr "鍵が見付かりませんでした。"
 
-#: src/keyimportdlg.c:266
+#: src/keyimportdlg.c:255
 #, c-format
 msgid ""
 "%i public keys read\n"
@@ -1275,8 +1246,14 @@ msgid ""
 "%i secret keys imported\n"
 "%i secret keys unchanged"
 msgstr ""
+"%i 個の公開鍵を読み込みました\n"
+"%i 個の公開鍵をインポートしました\n"
+"%i 個の公開鍵は無変更です\n"
+"%i 個の秘密鍵を読み込みました\n"
+"%i 個の秘密鍵をインポートしました\n"
+"%i 個の秘密鍵は無変更です"
 
-#: src/keyimpseldlg.c:63 src/keyring.c:1083
+#: src/keyimpseldlg.c:63 src/keyring.c:1305
 msgid "No keys selected"
 msgstr "鍵が選択されていません"
 
@@ -1292,25 +1269,16 @@ msgstr "インポートする鍵を選択"
 msgid "_Import"
 msgstr "インポート (_I)"
 
-#: src/keylist.c:194 src/verifydlg.c:302
-msgid "User Name"
-msgstr "ユーザ名"
-
 #: src/keylist.c:197
-#, fuzzy
 msgid "Key Validity"
-msgstr "有効期限"
+msgstr "鍵の有効性"
 
 #. Create the "Owner Trust" frame
 #: src/keylist.c:198 src/ownertrustdlg.c:121
 msgid "Owner Trust"
 msgstr "所有者の信用度"
 
-#: src/keylist.c:311
-msgid "Missing public key"
-msgstr "公開鍵がありません"
-
-#: src/keylist.c:312
+#: src/keylist.c:308
 msgid ""
 "You have a secret key without the\n"
 "corresponding public key in your\n"
@@ -1323,72 +1291,61 @@ msgstr ""
 "自分でさえ公開鍵をインポートする\n"
 "必要があります。"
 
-#: src/keyreceivedlg.c:50
-msgid ""
-"An error occured while receiving\n"
-"the requested key from the keyserver."
-msgstr ""
-
-#: src/keyreceivedlg.c:89
-#, fuzzy
-msgid "Receive key from server"
-msgstr "受信元サーバ (_S): "
-
-#: src/keyreceivedlg.c:111
-#, fuzzy
-msgid "_Key ID: "
-msgstr "鍵 ID:"
-
-#: src/keyreceivedlg.c:118
-#, fuzzy
-msgid "_Receive"
-msgstr "宛先 (_R)"
-
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:325
+#: src/keyring.c:375
 msgid "No keys selected for signing."
 msgstr "署名する鍵が選択されていません"
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:335
+#: src/keyring.c:385
 msgid "No private key for signing."
 msgstr "署名に使う公開鍵がありません"
 
 #. Couldn't sign because the key was expired
-#: src/keyring.c:363
+#: src/keyring.c:411
 msgid "This key has expired! Unable to sign."
 msgstr "この鍵は期限が切れています！ 署名できません。"
+
+#. Couldn't sign because the key was already signed
+#: src/keyring.c:417
+msgid "This key has already been signed with your own!"
+msgstr "この鍵は既に自分自身の鍵で署名してあります！"
+
+#. Couldn't sign because there is no default key
+#: src/keyring.c:423
+msgid "You haven't selected a default key to sign with!"
+msgstr "署名するデフォルトの鍵を選択していません！"
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:536
+#: src/keyring.c:638
 msgid "No keys selected to export."
 msgstr "エクスポートする鍵が選択されていません。"
 
 #. this shouldn't happen because the menu item should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:633
+#: src/keyring.c:705
 msgid "No private key to backup."
 msgstr "バックアップする秘密鍵がありません。"
 
-#: src/keyring.c:784
+#: src/keyring.c:847
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
 msgstr ""
 "まだ秘密鍵がありません。今すぐ作成しますか (←推奨)、それとも後にしますか?"
 
-#: src/keyring.c:788
+#: src/keyring.c:851
 msgid "_Generate key now"
 msgstr "今すぐ鍵を作成する (_G)"
 
-#: src/keyring.c:810
+#: src/keyring.c:873
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1396,196 +1353,245 @@ msgstr ""
 "まだ秘密鍵のバックアップがありません。今すぐ鍵をバックアップしますか (←推"
 "奨)、それとも後にしますか？"
 
-#: src/keyring.c:815
+#: src/keyring.c:878
 msgid "_Backup key now"
 msgstr "今すぐ鍵をバックアップする (_B)"
 
-#: src/keyring.c:864
+#: src/keyring.c:987
+msgid "/Edit/_Copy"
+msgstr "/編集 (_E)/コピー (_C)"
+
+#: src/keyring.c:989
+msgid "/Edit/_Paste"
+msgstr "/編集 (_E)/貼り付け (_P)"
+
+#: src/keyring.c:991
+msgid "/Edit/sep1"
+msgstr "/編集 (E)/sep1"
+
+#: src/keyring.c:998
 msgid "/_Keys"
 msgstr "/鍵 (_K)"
 
-#: src/keyring.c:865
-msgid "/Keys/_Generate Key..."
-msgstr "/鍵 (K)/鍵を作成... (_G)"
+#: src/keyring.c:999
+msgid "/Keys/_New Key..."
+msgstr "/鍵 (K)/鍵を作成... (_N)"
 
-#: src/keyring.c:866
+#: src/keyring.c:1001
 msgid "/Keys/_Delete Keys..."
 msgstr "/鍵 (K)/鍵を削除... (_D)"
 
-#: src/keyring.c:867
-#, fuzzy
-msgid "/Keys/_Edit Key..."
-msgstr "/鍵 (K)/鍵をエクスポート... (_E)"
+#: src/keyring.c:1003
+msgid "/Keys/sep1"
+msgstr "/鍵 (K)/sep1"
 
-#: src/keyring.c:868
-#, fuzzy
-msgid "/Keys/Change _Owner Trust..."
-msgstr "鍵の所有者信用度を変更"
-
-#: src/keyring.c:869 src/keyring.c:896
+#: src/keyring.c:1004
 msgid "/Keys/_Sign Keys..."
 msgstr "/鍵 (K)/鍵に署名... (_S)"
 
-#: src/keyring.c:870
+#: src/keyring.c:1005
+msgid "/Keys/Set _Owner Trust..."
+msgstr "/鍵 (K)/所有者の信用度を指定... (_O)"
+
+#: src/keyring.c:1006
+msgid "/Keys/_Edit Private Key..."
+msgstr "/鍵 (K)/秘密鍵を編集... (_E)"
+
+#: src/keyring.c:1007
+msgid "/Keys/sep2"
+msgstr "/鍵 (K)/sep2"
+
+#: src/keyring.c:1008
 msgid "/Keys/_Import Keys..."
 msgstr "/鍵 (K)/鍵をインポート... (_I)"
 
-#: src/keyring.c:871
-#, fuzzy
+#: src/keyring.c:1009
 msgid "/Keys/E_xport Keys..."
-msgstr "/鍵 (K)/鍵をエクスポート... (_E)"
+msgstr "/鍵 (K)/鍵をエクスポート... (_X)"
 
-#: src/keyring.c:872
+#: src/keyring.c:1010
 msgid "/Keys/_Backup..."
 msgstr "/鍵 (K)/バックアップ... (_B)"
 
-#: src/keyring.c:900
-msgid "/Keys/_Export Keys..."
-msgstr "/鍵 (K)/鍵をエクスポート... (_E)"
+#: src/keyring.c:1040
+msgid "/Keys/Export Keys..."
+msgstr "/鍵 (K)/鍵をエクスポート..."
 
-#: src/keyring.c:981 src/keysigndlg.c:102
+#: src/keyring.c:1047
+msgid "/Keys/Delete Keys..."
+msgstr "/鍵 (K)/鍵を削除..."
+
+#: src/keyring.c:1054
+msgid "/Edit/Copy"
+msgstr "/編集 (_E)/コピー"
+
+#: src/keyring.c:1062
+msgid "/Keys/Set Owner Trust..."
+msgstr "/鍵 (_K)/所有者の信用度を指定..."
+
+#: src/keyring.c:1070
+msgid "/Keys/Sign Keys..."
+msgstr "/鍵 (K)/鍵に署名..."
+
+#: src/keyring.c:1078
+msgid "/Keys/Edit Private Key..."
+msgstr "/鍵 (K)/秘密鍵を編集..."
+
+#: src/keyring.c:1085
+msgid "/Keys/Backup..."
+msgstr "/鍵 (K)/バックアップ..."
+
+#: src/keyring.c:1182 src/keysigndlg.c:102
 msgid "Fingerprint:"
 msgstr "指紋:"
 
-#: src/keyring.c:983
+#: src/keyring.c:1184
 msgid "Expires at:"
 msgstr "有効期限:"
 
-#: src/keyring.c:985
+#: src/keyring.c:1186
 msgid "Owner Trust:"
 msgstr "所有者の信用度:"
 
-#: src/keyring.c:987
-#, fuzzy
+#: src/keyring.c:1188
 msgid "Key Validity:"
-msgstr "有効期限"
+msgstr "鍵の有効性:"
 
-#: src/keyring.c:989
+#: src/keyring.c:1190
 msgid "Key Type:"
 msgstr "鍵タイプ:"
 
-#: src/keyring.c:991
+#: src/keyring.c:1192
 msgid "Created at:"
 msgstr "作成日:"
 
-#: src/keyring.c:994
+#: src/keyring.c:1195
 msgid "Details"
 msgstr "詳細"
 
-#: src/keyring.c:1010
+#: src/keyring.c:1203
+msgid "Show signatures on user name:"
+msgstr "ユーザ名に対する署名を表示"
+
+#: src/keyring.c:1223
 msgid "Signatures"
 msgstr "署名"
 
-#: src/keyring.c:1058
+#: src/keyring.c:1243
 msgid "The key has both a private and a public part"
 msgstr "この鍵は秘密鍵と公開鍵がある"
 
-#: src/keyring.c:1063
+#: src/keyring.c:1248
 msgid "The key has only a public part"
 msgstr "この鍵は公開鍵しかない"
 
-#: src/keyring.c:1087
+#: src/keyring.c:1276
+#, c-format
+msgid "%s %li bits"
+msgstr "%s %li ビット"
+
+#: src/keyring.c:1309
 #, c-format
 msgid "%d keys selected"
 msgstr "%d 個の鍵が選択されています"
 
-#: src/keyring.c:1273
+#: src/keyring.c:1336
+msgid "All signatures"
+msgstr "すべての署名"
+
+#: src/keyring.c:1509
 msgid "Edit"
 msgstr "編集"
 
-#: src/keyring.c:1274
-msgid "Edit the selected key"
-msgstr "選択された鍵を編集"
+#: src/keyring.c:1510
+msgid "Edit the selected private key"
+msgstr "選択された秘密鍵を編集"
 
-#: src/keyring.c:1274
+#: src/keyring.c:1511
 msgid "edit key"
 msgstr "鍵を編集"
 
-#: src/keyring.c:1281
-msgid "Remove"
-msgstr "削除"
-
-#: src/keyring.c:1282
+#: src/keyring.c:1519
 msgid "Remove the selected key"
 msgstr "選択された鍵を削除"
 
-#: src/keyring.c:1283
+#: src/keyring.c:1520
 msgid "remove key"
 msgstr "鍵を削除"
 
-#: src/keyring.c:1291
+#: src/keyring.c:1528
 msgid "Sign the selected key"
 msgstr "選択された鍵に署名する"
 
-#: src/keyring.c:1291
+#: src/keyring.c:1528
 msgid "sign key"
 msgstr "鍵に署名"
 
-#: src/keyring.c:1298
+#: src/keyring.c:1535
 msgid "Import"
 msgstr "インポート"
 
-#: src/keyring.c:1299
+#: src/keyring.c:1536
 msgid "Import Keys"
 msgstr "鍵をインポート"
 
-#: src/keyring.c:1299
+#: src/keyring.c:1536
 msgid "import keys"
 msgstr "鍵インポート"
 
-#: src/keyring.c:1304
+#: src/keyring.c:1541
 msgid "Export"
 msgstr "エクスポート"
 
-#: src/keyring.c:1305
+#: src/keyring.c:1542
 msgid "Export Keys"
 msgstr "鍵をエクスポート"
 
-#: src/keyring.c:1305
+#: src/keyring.c:1542
 msgid "export keys"
 msgstr "鍵エクスポート"
 
-#: src/keyring.c:1318
+#: src/keyring.c:1555
 msgid "Brief"
 msgstr "要約"
 
-#: src/keyring.c:1318
+#: src/keyring.c:1555
 msgid "Show Brief Keylist"
 msgstr "要約版の鍵リストを表示"
 
-#: src/keyring.c:1319
+#: src/keyring.c:1556
 msgid "brief"
 msgstr "要約"
 
-#: src/keyring.c:1330
+#: src/keyring.c:1567
 msgid "Detailed"
 msgstr "詳細"
 
-#: src/keyring.c:1330
+#: src/keyring.c:1567
 msgid "Show Key Details"
 msgstr "鍵の詳細を表示"
 
-#: src/keyring.c:1331
+#: src/keyring.c:1568
 msgid "detailed"
 msgstr "詳細"
 
-#: src/keyring.c:1339
+#: src/keyring.c:1590
 msgid "Open the File Manager"
 msgstr "ファイルマネージャを開く"
 
-#: src/keyring.c:1340
+#: src/keyring.c:1591
 msgid "file manager"
 msgstr "ファイルマネージャ"
 
-#: src/keyring.c:1363
+#: src/keyring.c:1614
 msgid "Selected Default Key:"
 msgstr "選択されたデフォルトの鍵:"
 
-#: src/keyring.c:1441
+#: src/keyring.c:1692
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - 鍵束エディタ"
 
-#: src/keyring.c:1472
+#: src/keyring.c:1723
 msgid "Keyring Editor"
 msgstr "鍵束エディタ"
 
@@ -1617,64 +1623,15 @@ msgstr "ローカルでだけ署名 (_L)"
 
 #: src/keytable.c:45
 msgid "GPA: Loading keyring"
-msgstr ""
+msgstr "GPA: 鍵束を受信中"
 
 #: src/keytable.c:48
-#, fuzzy
 msgid "Loading secret keys"
-msgstr "秘密鍵を削除"
+msgstr "秘密鍵を取り込み中"
 
 #: src/keytable.c:48
-#, fuzzy
 msgid "Loading public keys"
-msgstr "公開鍵がありません"
-
-#: src/optionsmenu.c:81
-msgid "Set key server"
-msgstr "鍵サーバを設定"
-
-#: src/optionsmenu.c:96
-msgid "_Key server: "
-msgstr "鍵サーバ (_K): "
-
-#: src/optionsmenu.c:114 src/optionsmenu.c:275
-msgid "_Set"
-msgstr "設定 (_S)"
-
-#: src/optionsmenu.c:190
-msgid "Fingerprint"
-msgstr "指紋"
-
-#: src/optionsmenu.c:190
-msgid "User identity / role"
-msgstr "ユーザーの身元/身分"
-
-#: src/optionsmenu.c:210
-msgid ""
-"No secret keys available to\n"
-"select a default key from."
-msgstr "デフォルト鍵に選べる秘密鍵がありません"
-
-#: src/optionsmenu.c:218
-msgid "Set default key"
-msgstr "デフォルトの鍵を設定"
-
-#: src/optionsmenu.c:261
-msgid "Default _key:"
-msgstr "デフォルトの鍵 (_K):"
-
-#: src/optionsmenu.c:297
-msgid "/_Options"
-msgstr "/オプション (_O)"
-
-#: src/optionsmenu.c:298
-msgid "/Options/_Keyserver"
-msgstr "/オプション (O)/鍵サーバー (_K)"
-
-#. {_("/Options/Default _Recipients"), NULL, (GtkItemFactoryCallback)options_recipients, 0, NULL},
-#: src/optionsmenu.c:300
-msgid "/Options/_Default Key"
-msgstr "/オプション (O)/デフォルトの鍵 (_D)"
+msgstr "公開鍵を取り込み中"
 
 #. Create the dialog
 #: src/ownertrustdlg.c:105
@@ -1682,28 +1639,30 @@ msgid "Change key ownertrust"
 msgstr "鍵の所有者信用度を変更"
 
 #: src/ownertrustdlg.c:129
-#, fuzzy
 msgid "_Unknown"
-msgstr "未確認"
+msgstr "未確認 (_U)"
 
 #: src/ownertrustdlg.c:134
 msgid ""
 "You don't know how much to trust this user to verify other people's keys.\n"
 msgstr ""
+"他の人たちの鍵を検証する際にこのユーザをどれだけ信用するかは決まっていないと"
+"いうことです。\n"
 
 #: src/ownertrustdlg.c:144
 msgid "_Never"
-msgstr ""
+msgstr "不信 (_N)"
 
 #: src/ownertrustdlg.c:149
 msgid ""
 "You don't trust this user at all to verify the validity of other people's "
 "keys at all.\n"
 msgstr ""
+"他の人たちの鍵を検証する際には、このユーザを一切信用しないということです。\n"
 
 #: src/ownertrustdlg.c:159
 msgid "_Marginal"
-msgstr ""
+msgstr "一部 (_M)"
 
 #: src/ownertrustdlg.c:164
 msgid ""
@@ -1713,10 +1672,14 @@ msgid ""
 "by this user valid if it is also signed by at least other two marginally "
 "trusted users with valid keys\n"
 msgstr ""
+"このユーザの言うことだけに基づいて他の人たちの鍵を有効だとみなすほどには、こ"
+"のユーザの検証能力を信用しないということです。\n"
+"とはいえ、このユーザの鍵が有効であれば、このユーザと他の 2 人以上の「一部」的"
+"な信用度の人の有効な鍵によって署名された鍵を有効とみなします。\n"
 
 #: src/ownertrustdlg.c:181
 msgid "_Full"
-msgstr ""
+msgstr "完全 (_F)"
 
 #: src/ownertrustdlg.c:186
 msgid ""
@@ -1724,10 +1687,13 @@ msgid ""
 "so much, that you'll consider valid any key signed by him/her, provided this "
 "user's key is valid.\n"
 msgstr ""
+"他の人たちの鍵の有効性を検証するこのユーザの能力を信用して、この人が署名した"
+"鍵をすべて有効とみなすということです。ただし、このユーザの鍵が有効であれば、"
+"です。\n"
 
 #: src/ownertrustdlg.c:199
 msgid "U_ltimate"
-msgstr ""
+msgstr "究極 (_L)"
 
 #: src/ownertrustdlg.c:204
 msgid ""
@@ -1735,57 +1701,58 @@ msgid ""
 "consider any key signed by him/her fully valid.\n"
 "\n"
 "(Warning: This is intended to be used for keys you own. Don't use it with "
-"other people's keys unless you really know what you are doing.\n"
+"other people's keys unless you really know what you are doing)\n"
 msgstr ""
+"この鍵を有効とみなし、かつ、このユーザが署名した鍵をすべて完全に有効とみなす"
+"ほど、この人を信用するということです。\n"
+"\n"
+"(警告: これは自分の鍵に使うよう意図されたものです。自分が何をしているか本当に"
+"分かっているのでなければ、他の人たちに対してこの信用度を使わないでくださ"
+"い。)\n"
 
 #: src/server_access.c:207
-#, fuzzy
 msgid "No error"
-msgstr "ソケットエラー"
+msgstr "エラーなし"
 
 #: src/server_access.c:210
-#, fuzzy
 msgid "Internal error"
-msgstr "一般エラー"
+msgstr "内部エラー"
 
 #: src/server_access.c:213
-#, fuzzy
 msgid "Operation not supported"
-msgstr "指定されたアルゴリズムはサポートされていません"
+msgstr "操作がサポートされていません"
 
 #: src/server_access.c:216
 msgid "Version mismatch"
-msgstr ""
+msgstr "バージョンが合っていません"
 
 #: src/server_access.c:219
 msgid "Internal keyserver error"
-msgstr ""
+msgstr "鍵サーバ関連の内部エラー"
 
 #: src/server_access.c:222
 msgid "Out of memory"
-msgstr ""
+msgstr "メモリ不足"
 
 #: src/server_access.c:225
 msgid "Key not found"
-msgstr ""
+msgstr "鍵が見付かりません"
 
 #: src/server_access.c:228
 msgid "Key already exists on server"
-msgstr ""
+msgstr "サーバに既に鍵が存在します"
 
 #: src/server_access.c:231
 msgid "Key incomplete"
-msgstr ""
+msgstr "鍵が不完全です"
 
 #: src/server_access.c:234
-#, fuzzy
 msgid "Could not contact keyserver"
-msgstr "鍵サーバーへ送信 (_S)"
+msgstr "鍵サーバーと連絡がとれません"
 
 #: src/server_access.c:237
-#, fuzzy
 msgid "Unknown Error"
-msgstr "[未確認ユーザ ID]"
+msgstr "未確認エラー"
 
 #: src/server_access.c:270
 #, c-format
@@ -1793,14 +1760,19 @@ msgid ""
 "Connecting to server \"%s\".\n"
 "Please wait."
 msgstr ""
+"サーバ \"%s\" に接続中です。\n"
+"お待ちください。"
 
 #: src/server_access.c:293 src/server_access.c:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
 "\n"
 "%s"
-msgstr "鍵サーバ接続中のエラー"
+msgstr ""
+"サーバとの連絡中にエラーが発生しました:\n"
+"\n"
+"%s"
 
 #. An error ocurred in the fork/exec: we assume that there is no plugin.
 #.
@@ -1809,59 +1781,251 @@ msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
 msgstr ""
+"指定されたプロトコルの鍵サーバに\n"
+"使えるプラグインはありません。"
 
-#: src/server_access.c:447 src/server_access.c:492
-#, fuzzy
+#: src/server_access.c:448 src/server_access.c:493
 msgid "The keyserver you specified is not valid"
-msgstr "鍵サーバが指定されていません"
+msgstr "指定された鍵サーバは無効です"
 
-#: src/siglist.c:47
-msgid "Validity"
-msgstr "有効期限"
+#. Build UI
+#: src/settingsdlg.c:41
+msgid "Default _key:"
+msgstr "デフォルトの鍵 (_K):"
 
-#: src/siglist.c:47
-msgid "Signature"
-msgstr "署名"
+#. Build UI
+#: src/settingsdlg.c:77
+msgid "Default key_server: "
+msgstr "デフォルトの鍵サーバ (_S):"
 
-#. Dup the static string, so that we are always safe free'ing it
-#: src/siglist.c:101 src/verifydlg.c:230
-msgid "[Unknown user ID]"
-msgstr "[未確認ユーザ ID]"
+#. Build UI
+#: src/settingsdlg.c:120
+msgid "Use _advanced mode:"
+msgstr "上級者モードを使う (_A):"
 
-#: src/verifydlg.c:173
-#, fuzzy
-msgid "Valid"
-msgstr "署名有効"
+#: src/settingsdlg.c:126
+msgid "_Yes"
+msgstr "はい (_Y)"
 
-#: src/verifydlg.c:178
-msgid "Bad"
-msgstr ""
+#: src/settingsdlg.c:129
+msgid "_No"
+msgstr "いいえ (_N)"
+
+#: src/settingsdlg.c:153
+msgid "Settings"
+msgstr "設定"
+
+#: src/siglist.c:108 src/verifydlg.c:296
+msgid "Status"
+msgstr "ステータス"
 
 #: src/verifydlg.c:193
-#, fuzzy
 msgid "Expired Key"
-msgstr "鍵をエクスポート"
+msgstr "期限切れの鍵"
 
 #. If we arrived here we know the key is available, the signature is
 #. * not bad, but it's not completely valid. So, the signature is good
 #. * but the key is not valid.
 #: src/verifydlg.c:201
 msgid "Key NOT valid"
-msgstr ""
-
-#: src/verifydlg.c:296
-msgid "Status"
-msgstr "ステータス"
+msgstr "鍵は有効では「ありません」"
 
 #: src/verifydlg.c:322
-#, fuzzy
 msgid "Signatures:"
-msgstr "署名"
+msgstr "署名:"
 
 #: src/verifydlg.c:338
-#, fuzzy
 msgid "Verify files"
 msgstr "ファイル検証"
+
+#~ msgid "Invalid Date"
+#~ msgstr "無効な日付"
+
+#~ msgid "/File/C_heck"
+#~ msgstr "/ファイル (F)/チェック (_H)"
+
+#~ msgid "Open"
+#~ msgstr "開く"
+
+#~ msgid " Decrypt "
+#~ msgstr " 復号化 "
+
+#~ msgid ""
+#~ "@Options:\n"
+#~ " "
+#~ msgstr ""
+#~ "オプションは以下のとおり:\n"
+#~ " "
+
+#~ msgid "verbose"
+#~ msgstr "冗長"
+
+#~ msgid "be somewhat more quiet"
+#~ msgstr "少し出力を減らす"
+
+#~ msgid "set debugging flags"
+#~ msgstr "デバッグのフラグをセット"
+
+#~ msgid "enable full debugging"
+#~ msgstr "フルデバッグを有効にする"
+
+#~ msgid "set the user interface to advanced mode"
+#~ msgstr "操作体系を上級者モードに設定"
+
+#~ msgid "omit \"no backup yet\" warning at startup"
+#~ msgstr "起動時の「バックアップがない」という警告を省略"
+
+#~ msgid "Usage: gpa [options] (-h for help)"
+#~ msgstr "用法: gpa [オプション] (-h でヘルプ)"
+
+#~ msgid "NOTE: no default option file `%s'\n"
+#~ msgstr "注意: デフォルトのオプションファイル `%s' がありません\n"
+
+#~ msgid "option file `%s': %s\n"
+#~ msgstr "オプションファイル `%s': %s\n"
+
+#~ msgid "reading options from `%s'\n"
+#~ msgstr "オプションを `%s' から読込\n"
+
+#~ msgid "don't trust"
+#~ msgstr "信用しない"
+
+#~ msgid "trust marginally"
+#~ msgstr "信用度低"
+
+#~ msgid "trust fully"
+#~ msgstr "信用度高"
+
+#~ msgid "undefined"
+#~ msgstr "未定義"
+
+#~ msgid "trust ultimately"
+#~ msgstr "完璧に信用"
+
+#~ msgid "User Identity/Role"
+#~ msgstr "ユーザーの身元/身分"
+
+#~ msgid "Insert passphrase"
+#~ msgstr "パスワードを入力"
+
+#~ msgid "/_Info"
+#~ msgstr "/情報 (_I)"
+
+#~ msgid "/Info/_Help"
+#~ msgstr "/情報 (I)/ヘルプ (_H)"
+
+#~ msgid "Change _trust"
+#~ msgstr "信用度の変更 (_T)"
+
+#~ msgid "To _clipboard"
+#~ msgstr "クリップボードへコピー (_C)"
+
+#~ msgid "Weak passphrase"
+#~ msgstr "脆弱なパスフレーズ"
+
+#~ msgid "Backup Directory"
+#~ msgstr "バックアップ ディレクトリ"
+
+#~ msgid ""
+#~ "Please enter a directory where your backup keys should be saved.\n"
+#~ "\n"
+#~ "GPA will create two files in that directory: pub_key.asc and sec_key.asc"
+#~ msgstr ""
+#~ "鍵のバックアップを保存するディレクトリを入力して下さい。\n"
+#~ "\n"
+#~ "GPA はそのディレクトリにふたつのファイルを作成します: pub_key.asc と "
+#~ "sec_key.asc です"
+
+#~ msgid "Directory:"
+#~ msgstr "ディレクトリ:"
+
+#~ msgid "_Overwrite"
+#~ msgstr "上書き (_O)"
+
+#~ msgid ""
+#~ "Directory %s does not exist.\n"
+#~ "Do you want to create it now?"
+#~ msgstr ""
+#~ "ディレクトリ %s は存在しません。\n"
+#~ "今ここで作成しますか?"
+
+#~ msgid "Directory does not exist"
+#~ msgstr "ディレクトリが存在しません"
+
+#~ msgid "Error creating directory"
+#~ msgstr "ディレクトリ作成エラー"
+
+#~ msgid "File exists"
+#~ msgstr "ファイルが存在します"
+
+#~ msgid "Please enter a valid directory"
+#~ msgstr "正しいディレクトリを入力して下さい"
+
+#~ msgid "Import from _clipboard:"
+#~ msgstr "クリップボードからインポート (_C):"
+
+#~ msgid "Key Trust"
+#~ msgstr "鍵の信用度"
+
+#~ msgid "Missing public key"
+#~ msgstr "公開鍵がありません"
+
+#~ msgid ""
+#~ "An error occured while receiving\n"
+#~ "the requested key from the keyserver."
+#~ msgstr ""
+#~ "要求された鍵を鍵サーバから\n"
+#~ "受信している間にエラーが発生しました。"
+
+#~ msgid "Receive key from server"
+#~ msgstr "鍵をサーバから受信"
+
+#~ msgid "_Key ID: "
+#~ msgstr "鍵 ID (_K): "
+
+#~ msgid "_Receive"
+#~ msgstr "受信 (_R)"
+
+#~ msgid "Key Trust:"
+#~ msgstr "鍵の信用度:"
+
+#~ msgid "Set key server"
+#~ msgstr "鍵サーバを設定"
+
+#~ msgid "_Key server: "
+#~ msgstr "鍵サーバ (_K): "
+
+#~ msgid "_Set"
+#~ msgstr "設定 (_S)"
+
+#~ msgid "Fingerprint"
+#~ msgstr "指紋"
+
+#~ msgid "User identity / role"
+#~ msgstr "ユーザーの身元/身分"
+
+#~ msgid ""
+#~ "No secret keys available to\n"
+#~ "select a default key from."
+#~ msgstr "デフォルト鍵に選べる秘密鍵がありません"
+
+#~ msgid "Set default key"
+#~ msgstr "デフォルトの鍵を設定"
+
+#~ msgid "/Options/_Keyserver"
+#~ msgstr "/オプション (O)/鍵サーバー (_K)"
+
+#~ msgid "/Options/_Default Key"
+#~ msgstr "/オプション (O)/デフォルトの鍵 (_D)"
+
+#~ msgid "_Ownertrust level: "
+#~ msgstr "所有者の信用度 (_O):"
+
+#~ msgid "Signature"
+#~ msgstr "署名"
+
+#~ msgid "Untrusted Key"
+#~ msgstr "信用していない鍵"
 
 #~ msgid ""
 #~ "The keyserver returned an error message:\n"
@@ -1971,6 +2135,9 @@ msgstr "ファイル検証"
 
 #~ msgid "No valid public key specified"
 #~ msgstr "適切な公開鍵が指定されていません"
+
+#~ msgid "Keyserver not specified"
+#~ msgstr "鍵サーバが指定されていません"
 
 #~ msgid "No valid secret key specified"
 #~ msgstr "適切な秘密鍵が指定されていません"
@@ -2104,88 +2271,20 @@ msgstr "ファイル検証"
 #~ msgid "Save decrypted file as"
 #~ msgstr "復号化したファイルの保存先"
 
-#~ msgid "_Decrypt"
-#~ msgstr "復号化 (_D)"
-
 #~ msgid "No keys selected to remove from recipients list"
 #~ msgstr "宛先リストから削除する鍵を選択していません"
 
 #~ msgid "No keys selected to add to recipients list."
 #~ msgstr "宛先リストに加える鍵を選択していません"
 
-#~ msgid "don't trust"
-#~ msgstr "信用しない"
-
-#~ msgid "trust marginally"
-#~ msgstr "信用度低"
-
-#~ msgid "trust fully"
-#~ msgstr "信用度高"
-
-#~ msgid "undefined"
-#~ msgstr "未定義"
-
-#~ msgid "trust ultimately"
-#~ msgstr "完璧に信用"
-
 #~ msgid "!INVALID!"
 #~ msgstr "！署名無効！"
-
-#~ msgid "/_Info"
-#~ msgstr "/情報 (_I)"
 
 #~ msgid "/Info/_Warranty"
 #~ msgstr "/情報 (I)/保証 (_W)"
 
-#~ msgid "Change _trust"
-#~ msgstr "信用度の変更 (_T)"
-
-#~ msgid "Backup Directory"
-#~ msgstr "バックアップ ディレクトリ"
-
-#~ msgid ""
-#~ "Please enter a directory where your backup keys should be saved.\n"
-#~ "\n"
-#~ "GPA will create two files in that directory: pub_key.asc and sec_key.asc"
-#~ msgstr ""
-#~ "鍵のバックアップを保存するディレクトリを入力して下さい。\n"
-#~ "\n"
-#~ "GPA はそのディレクトリにふたつのファイルを作成します: pub_key.asc と "
-#~ "sec_key.asc です"
-
-#~ msgid "Directory:"
-#~ msgstr "ディレクトリ:"
-
-#~ msgid "_Overwrite"
-#~ msgstr "上書き (_O)"
-
-#~ msgid ""
-#~ "Directory %s does not exist.\n"
-#~ "Do you want to create it now?"
-#~ msgstr ""
-#~ "ディレクトリ %s は存在しません。\n"
-#~ "今ここで作成しますか?"
-
-#~ msgid "Directory does not exist"
-#~ msgstr "ディレクトリが存在しません"
-
-#~ msgid "Error creating directory"
-#~ msgstr "ディレクトリ作成エラー"
-
-#~ msgid "File exists"
-#~ msgstr "ファイルが存在します"
-
-#~ msgid "Please enter a valid directory"
-#~ msgstr "正しいディレクトリを入力して下さい"
-
-#~ msgid "Key Trust"
-#~ msgstr "鍵の信用度"
-
 #~ msgid "No key backup"
 #~ msgstr "バックアップなし"
-
-#~ msgid "Key Trust:"
-#~ msgstr "鍵の信用度:"
 
 #~ msgid ""
 #~ "No public keys available to denote\n"
@@ -2202,6 +2301,3 @@ msgstr "ファイル検証"
 
 #~ msgid "_Add to recipients"
 #~ msgstr "宛先に追加 (_A)"
-
-#~ msgid "_Ownertrust level: "
-#~ msgstr "所有者の信用度 (_O):"

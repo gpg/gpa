@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.4.1\n"
-"POT-Creation-Date: 2002-11-22 18:04+0100\n"
+"POT-Creation-Date: 2002-12-15 16:43+0100\n"
 "PO-Revision-Date: 2001-05-27 03:48+0800\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -104,195 +104,202 @@ msgstr "簽署為 (_a)"
 msgid "A_rmor"
 msgstr "純文字 (_r)"
 
-#: src/expirydlg.c:60 src/gpafilesel.c:924 src/gtktools.c:512
-#: src/keylist.c:309
-msgid "_OK"
-msgstr "確定 (_O)"
-
 #. FIXME: This error message should be more informative
-#: src/expirydlg.c:62
-msgid "Invalid Date"
-msgstr "日期不合法"
-
-#: src/expirydlg.c:63 src/gpawidgets.c:473
+#: src/expirydlg.c:61 src/gpawidgets.c:483
 #, fuzzy
 msgid "Please provide a correct date."
 msgstr "請提供正確日期"
 
-#: src/expirydlg.c:102 src/keyexportdlg.c:145
+#: src/expirydlg.c:101
 #, fuzzy
-msgid "Export Key"
-msgstr "輸出密鑰"
+msgid "Change expiry data"
+msgstr "更改有效日期"
 
-#: src/expirydlg.c:120
+#: src/expirydlg.c:119
 msgid "_never expire"
 msgstr "永遠生效 (_n)"
 
-#: src/expirydlg.c:129
+#: src/expirydlg.c:128
 msgid "_expire on"
 msgstr "失效期為 (_e)"
 
-#: src/fileman.c:135
+#: src/fileman.c:132
 msgid "Open File"
 msgstr "開啟檔案"
 
-#: src/fileman.c:145
+#: src/fileman.c:142
 msgid "The file is already open."
 msgstr "這個檔案已經開啟."
 
-#: src/fileman.c:297 src/filesigndlg.c:129 src/keyeditdlg.c:157
-#: src/keyring.c:357
+#: src/fileman.c:294 src/filesigndlg.c:129 src/keyeditdlg.c:157
+#: src/keyring.c:405
 msgid "Wrong passphrase!"
 msgstr ""
 
-#: src/fileman.c:306
+#: src/fileman.c:303
 #, c-format
 msgid "The file \"%s\" contained no valid encrypted data."
 msgstr ""
 
-#: src/fileman.c:357 src/keyring.c:859
+#: src/fileman.c:361 src/keyring.c:980
 msgid "/_File"
 msgstr "/檔案 (_F)"
 
-#: src/fileman.c:358
+#: src/fileman.c:362
 msgid "/File/_Open"
 msgstr "/檔案/開啟 (_O)"
 
-#: src/fileman.c:359
+#: src/fileman.c:363
 msgid "/File/sep1"
 msgstr "/檔案/sep1"
 
-#: src/fileman.c:360
+#: src/fileman.c:364
 msgid "/File/_Sign"
 msgstr "/檔案/簽署 (_S)"
 
-#: src/fileman.c:361
+#: src/fileman.c:365
 #, fuzzy
-msgid "/File/C_heck"
-msgstr "/檔案/開啟 (_O)"
+msgid "/File/_Verify"
+msgstr "/檔案/解密 (_D)"
 
-#: src/fileman.c:362
+#: src/fileman.c:366
 msgid "/File/_Encrypt"
 msgstr "/檔案/加密 (_E)"
 
-#. {_("/File/E_ncrypt as"), NULL, (GtkItemFactoryCallback) file_encryptAs, 0, NULL},
-#. {_("/File/_Protect by Password"), NULL, (GtkItemFactoryCallback) file_protect, 0, NULL},
-#. {_("/File/P_rotect as"), NULL, (GtkItemFactoryCallback) file_protectAs, 0, NULL},
-#.
 #: src/fileman.c:367
 msgid "/File/_Decrypt"
 msgstr "/檔案/解密 (_D)"
 
-#.
-#. {_("/File/Decrypt _as"), NULL, (GtkItemFactoryCallback) file_decryptAs, 0, NULL},
-#.
-#: src/fileman.c:371
+#: src/fileman.c:368
 msgid "/File/sep2"
 msgstr "/檔案/sep2"
 
-#: src/fileman.c:372 src/keyring.c:860
+#: src/fileman.c:369 src/keyring.c:981
 msgid "/File/_Close"
 msgstr "/檔案/關閉 (_C)"
 
-#: src/fileman.c:373 src/keyring.c:861
+#: src/fileman.c:370 src/keyring.c:983
 msgid "/File/_Quit"
 msgstr "/檔案/離開 (_Q)"
 
-#: src/fileman.c:376 src/keyring.c:875
+#: src/fileman.c:373 src/keyring.c:986
+#, fuzzy
+msgid "/_Edit"
+msgstr "修改"
+
+#: src/fileman.c:374 src/keyring.c:992
+msgid "/Edit/Select _All"
+msgstr ""
+
+#: src/fileman.c:375 src/keyring.c:993
+#, fuzzy
+msgid "/Edit/sep2"
+msgstr "/檔案/sep2"
+
+#: src/fileman.c:376 src/keyring.c:994
+msgid "/Edit/Pr_eferences..."
+msgstr ""
+
+#: src/fileman.c:380 src/keyring.c:1013
 msgid "/_Windows"
 msgstr "/視窗 (_W)"
 
-#: src/fileman.c:377 src/keyring.c:876
+#: src/fileman.c:381 src/keyring.c:1014
 msgid "/Windows/_Filemanager"
 msgstr "/視窗/檔案管理 (_F)"
 
-#: src/fileman.c:378 src/keyring.c:877
+#: src/fileman.c:382 src/keyring.c:1015
 msgid "/Windows/_Keyring Editor"
 msgstr "/視窗/鑰圈編輯器 (_K)"
 
-#: src/fileman.c:400
+#: src/fileman.c:406
 msgid "File"
 msgstr "檔案"
 
-#: src/fileman.c:408
+#: src/fileman.c:414
 msgid "Files in work"
 msgstr "檔案執行中"
 
-#: src/fileman.c:474
-msgid "Open"
-msgstr "開啟"
-
-#: src/fileman.c:475
+#: src/fileman.c:486
 msgid "Open a file"
 msgstr "開啟檔案"
 
-#: src/fileman.c:475
+#: src/fileman.c:486
 msgid "open file"
 msgstr "開啟檔案"
 
-#: src/fileman.c:479 src/keyring.c:1290
+#: src/fileman.c:491 src/keyring.c:1527
 msgid "Sign"
 msgstr "簽署"
 
-#: src/fileman.c:480
+#: src/fileman.c:492
 msgid "Sign the selected file"
 msgstr "簽署已選擇檔案"
 
-#: src/fileman.c:480
+#: src/fileman.c:492
 msgid "sign file"
 msgstr "檔案簽署"
 
-#: src/fileman.c:484
+#: src/fileman.c:496
 msgid "Verify"
 msgstr ""
 
-#: src/fileman.c:485
+#: src/fileman.c:497
 #, fuzzy
 msgid "Check signatures of selected file"
 msgstr "簽署已選擇檔案"
 
-#: src/fileman.c:485
+#: src/fileman.c:497
 #, fuzzy
 msgid "verify file"
 msgstr "解密檔案"
 
-#: src/fileman.c:489
+#: src/fileman.c:501
 msgid "Encrypt"
 msgstr "加密"
 
-#: src/fileman.c:490
+#: src/fileman.c:502
 msgid "Encrypt the selected file"
 msgstr "加密已選擇檔案"
 
-#: src/fileman.c:490
+#: src/fileman.c:502
 msgid "encrypt file"
 msgstr "加密檔案"
 
-#: src/fileman.c:495
-msgid " Decrypt "
-msgstr "解密"
+#: src/fileman.c:507
+#, fuzzy
+msgid "Decrypt"
+msgstr "解密 (_D)"
 
-#: src/fileman.c:496
+#: src/fileman.c:508
 msgid "Decrypt the selected file"
 msgstr "解密已選擇檔案"
 
-#: src/fileman.c:496
+#: src/fileman.c:508
 msgid "decrypt file"
 msgstr "解密檔案"
 
-#: src/fileman.c:503 src/keyring.c:1345
+#: src/fileman.c:520 src/keyring.c:1580
+msgid "Open the Preferences dialog"
+msgstr ""
+
+#: src/fileman.c:521 src/keyring.c:1581
+msgid "preferences"
+msgstr ""
+
+#: src/fileman.c:529 src/keyring.c:1596
 msgid "Help"
 msgstr "求助"
 
-#: src/fileman.c:504 src/keyring.c:1346
+#: src/fileman.c:530 src/keyring.c:1597
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "了解GNU Privacy Assistant"
 
-#: src/fileman.c:505 src/keyring.c:1347
+#: src/fileman.c:531 src/keyring.c:1598
 msgid "help"
 msgstr "求助"
 
-#: src/fileman.c:527
+#: src/fileman.c:553
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - 檔案管理"
 
@@ -341,61 +348,33 @@ msgstr "簽署及壓縮 (_g)"
 msgid "sign, do_n't compress"
 msgstr "簽署但不壓縮 (_n)"
 
-#: src/filesigndlg.c:291 src/keyexportdlg.c:208
+#: src/filesigndlg.c:291 src/keyexportdlg.c:202
 msgid "a_rmor"
 msgstr "純文字 (_r)"
 
-#: src/gpa.c:78
-msgid ""
-"@Options:\n"
-" "
+#: src/gpa.c:237
+msgid "display this help and exit"
 msgstr ""
-"@選項:\n"
-" "
 
-#: src/gpa.c:80
-msgid "verbose"
-msgstr "詳細"
+#: src/gpa.c:238
+msgid "output version information and exit"
+msgstr ""
 
-#: src/gpa.c:81
-msgid "be somewhat more quiet"
-msgstr "最少顯示"
+#: src/gpa.c:239
+#, fuzzy
+msgid "open keyring editor (default)"
+msgstr "私鑰圈編輯器"
 
-#: src/gpa.c:82
+#: src/gpa.c:240
+#, fuzzy
+msgid "open filemanager"
+msgstr "/視窗/檔案管理 (_F)"
+
+#: src/gpa.c:241
 msgid "read options from file"
 msgstr "由檔案中讀取選項"
 
-#: src/gpa.c:83
-msgid "set debugging flags"
-msgstr "設定除蟲模式"
-
-#: src/gpa.c:84
-msgid "enable full debugging"
-msgstr "開動全除蟲模式"
-
-#: src/gpa.c:86
-msgid "set the user interface to advanced mode"
-msgstr ""
-
-#: src/gpa.c:87
-msgid "omit \"no backup yet\" warning at startup"
-msgstr ""
-
-#: src/gpa.c:160
-#, fuzzy
-msgid "Please report bugs to <"
-msgstr "回報臭蟲至 <gpa-bugs@gnu.org>.\n"
-
-#: src/gpa.c:160
-msgid ">.\n"
-msgstr ""
-
-#: src/gpa.c:164
-#, fuzzy
-msgid "Usage: gpa [options] (-h for help)"
-msgstr "使用方法: gpa [選項] (_-h 是求助)"
-
-#: src/gpa.c:167
+#: src/gpa.c:265
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -403,20 +382,19 @@ msgstr ""
 "語法: gpa [選項]\n"
 "GnuPG的圖像介面\n"
 
-#: src/gpa.c:581
-#, c-format
-msgid "NOTE: no default option file `%s'\n"
-msgstr "註: 沒有預設選項檔 `%s'\n"
+#: src/gpa.c:267
+#, fuzzy
+msgid "Options"
+msgstr "/選項 (_O)"
 
-#: src/gpa.c:585
-#, c-format
-msgid "option file `%s': %s\n"
-msgstr "選項檔案 `%s' : %s \n"
+#: src/gpa.c:273
+#, fuzzy
+msgid "Please report bugs to <"
+msgstr "回報臭蟲至 <gpa-bugs@gnu.org>.\n"
 
-#: src/gpa.c:593
-#, c-format
-msgid "reading options from `%s'\n"
-msgstr "由`%s'讀取選項\n"
+#: src/gpa.c:273
+msgid ">.\n"
+msgstr ""
 
 #: src/gpafilesel.c:641
 #, fuzzy
@@ -444,17 +422,20 @@ msgid "Directories"
 msgstr "目錄:"
 
 #. The files ctree
-#: src/gpafilesel.c:884 src/keyring.c:1338
+#: src/gpafilesel.c:884 src/keyring.c:1589
 #, fuzzy
 msgid "Files"
 msgstr "檔案"
 
 #: src/gpafilesel.c:918 src/gpafilesel.c:1650 src/gpafilesel.c:1796
-#: src/gpafilesel.c:1969 src/gpawizard.c:249 src/gtktools.c:509
-#: src/keygendlg.c:264 src/keyimpseldlg.c:157 src/keyreceivedlg.c:124
-#: src/optionsmenu.c:123 src/optionsmenu.c:273
+#: src/gpafilesel.c:1969 src/gpawizard.c:249 src/keygendlg.c:264
+#: src/keyimpseldlg.c:157
 msgid "_Cancel"
 msgstr "取消 (_C)"
+
+#: src/gpafilesel.c:924
+msgid "_OK"
+msgstr "確定 (_O)"
 
 #. The OK button
 #: src/gpafilesel.c:929
@@ -682,8 +663,8 @@ msgid "unknown"
 msgstr "不知名"
 
 #. User Name
-#: src/gpawidgets.c:68 src/gpgmetools.c:524 src/gpgmetools.c:531
-#: src/keyring.c:977 src/keysigndlg.c:97
+#: src/gpawidgets.c:68 src/gpgmetools.c:508 src/gpgmetools.c:515
+#: src/keyring.c:1178 src/keysigndlg.c:97
 msgid "User Name:"
 msgstr "用者名稱 :"
 
@@ -693,41 +674,43 @@ msgid "User Names:"
 msgstr "用者名稱 :"
 
 #. Key ID
-#: src/gpawidgets.c:74 src/gpgmetools.c:525 src/gpgmetools.c:532
-#: src/keyring.c:979
+#: src/gpawidgets.c:74 src/gpgmetools.c:509 src/gpgmetools.c:516
+#: src/keyring.c:1180
 msgid "Key ID:"
 msgstr "密鑰 ID:"
 
-#: src/gpawidgets.c:95 src/keylist.c:195 src/siglist.c:47 src/verifydlg.c:290
+#: src/gpawidgets.c:95 src/keylist.c:195 src/siglist.c:82 src/siglist.c:102
+#: src/verifydlg.c:290
 msgid "Key ID"
 msgstr "密鑰ID"
 
-#: src/gpawidgets.c:95
-msgid "User Identity/Role"
-msgstr "用者識辨/角色"
+#: src/gpawidgets.c:95 src/keylist.c:194 src/siglist.c:88 src/siglist.c:114
+#: src/verifydlg.c:302
+msgid "User Name"
+msgstr "用者名稱"
 
-#: src/gpawidgets.c:301
+#: src/gpawidgets.c:311
 msgid "01.01.2000"
 msgstr ""
 
-#: src/gpawidgets.c:328
+#: src/gpawidgets.c:338
 msgid "Expiration"
 msgstr "有效期"
 
-#: src/gpawidgets.c:335
+#: src/gpawidgets.c:345
 msgid "_indefinitely valid"
 msgstr "不正確的合法 (_i)"
 
-#: src/gpawidgets.c:344
+#: src/gpawidgets.c:354
 msgid "expire _after"
 msgstr "失效自 (_a)"
 
-#: src/gpawidgets.c:366
+#: src/gpawidgets.c:376
 msgid "expire a_t"
 msgstr "失效在 (_t)"
 
 #. this should never happen
-#: src/gpawidgets.c:434 src/keygendlg.c:305
+#: src/gpawidgets.c:444 src/keygendlg.c:305
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -735,7 +718,7 @@ msgstr ""
 "!執行錯誤!\n"
 "有效期不法的插入模式."
 
-#: src/gpawizard.c:111 src/helpmenu.c:378
+#: src/gpawizard.c:111 src/helpmenu.c:380
 msgid "_Close"
 msgstr "關閉 (_C)"
 
@@ -758,7 +741,7 @@ msgid ""
 "The application will be terminated"
 msgstr ""
 
-#: src/gpgmetools.c:84 src/keyexportdlg.c:244
+#: src/gpgmetools.c:84 src/keyexportdlg.c:238
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -768,7 +751,7 @@ msgstr ""
 "要進行覆寫嗎?"
 
 #. Get the keys and write them into the file
-#: src/gpgmetools.c:336
+#: src/gpgmetools.c:320
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -777,84 +760,98 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/gpgmetools.c:341
+#: src/gpgmetools.c:325
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
 msgstr ""
 
-#: src/gpgmetools.c:401
+#: src/gpgmetools.c:385
 #, fuzzy
 msgid "DSA and ElGamal (default)"
 msgstr "DSA 及 EIGamal"
 
-#: src/gpgmetools.c:402
+#: src/gpgmetools.c:386
 #, fuzzy
 msgid "DSA (sign only)"
 msgstr "只簽署的DSA (_s)"
 
-#: src/gpgmetools.c:403
+#: src/gpgmetools.c:387
 #, fuzzy
 msgid "RSA (sign only)"
 msgstr "只簽署的DSA (_s)"
 
-#: src/gpgmetools.c:434 src/gpgmetools.c:482
+#: src/gpgmetools.c:418 src/gpgmetools.c:466 src/gpgmetools.c:753
 #, fuzzy
 msgid "Unknown"
 msgstr "不知名"
 
-#: src/gpgmetools.c:437
+#: src/gpgmetools.c:421
 msgid "Never"
 msgstr ""
 
-#: src/gpgmetools.c:440
+#: src/gpgmetools.c:424
 msgid "Marginal"
 msgstr ""
 
-#: src/gpgmetools.c:443
+#: src/gpgmetools.c:427
 msgid "Full"
 msgstr ""
 
-#: src/gpgmetools.c:446
+#: src/gpgmetools.c:430
 msgid "Ultimate"
 msgstr ""
 
-#: src/gpgmetools.c:465
+#: src/gpgmetools.c:449 src/gpgmetools.c:764
 #, fuzzy
 msgid "Revoked"
 msgstr "移除"
 
-#: src/gpgmetools.c:469
+#: src/gpgmetools.c:453 src/gpgmetools.c:758
 #, fuzzy
 msgid "Expired"
 msgstr "失效期為 (_e)"
 
-#: src/gpgmetools.c:474
+#: src/gpgmetools.c:458
 #, fuzzy
 msgid "Disabled"
 msgstr "詳情"
 
-#: src/gpgmetools.c:478
+#: src/gpgmetools.c:462
 msgid "Incomplete"
 msgstr ""
 
-#: src/gpgmetools.c:487
+#: src/gpgmetools.c:471
 msgid "Fully Valid"
 msgstr ""
 
-#: src/gpgmetools.c:522
+#: src/gpgmetools.c:506
 #, fuzzy
 msgid "Please enter the passphrase for the following key:"
 msgstr "輸入以下密鑰的密碼:"
 
-#: src/gpgmetools.c:530
+#: src/gpgmetools.c:514
 msgid "Wrong passphrase, please try again:"
 msgstr ""
 
-#: src/gpgmetools.c:552
+#: src/gpgmetools.c:536
 #, fuzzy
 msgid "Enter Passphrase"
 msgstr "輸入密鑰"
+
+#. Duplicate it to make sure it can be g_free'd
+#: src/gpgmetools.c:711 src/verifydlg.c:230
+msgid "[Unknown user ID]"
+msgstr "[不名用者ID]"
+
+#: src/gpgmetools.c:748 src/verifydlg.c:173
+#, fuzzy
+msgid "Valid"
+msgstr "正確"
+
+#: src/gpgmetools.c:751 src/verifydlg.c:178
+msgid "Bad"
+msgstr ""
 
 #: src/gtktools.c:312
 msgid "GPA Error"
@@ -864,70 +861,61 @@ msgstr "GPA 錯誤"
 msgid "GPA Message"
 msgstr "GPA 訊息"
 
-#: src/gtktools.c:479
-#, fuzzy
-msgid "Insert passphrase"
-msgstr "輸入密碼"
-
-#: src/gtktools.c:499 src/keygendlg.c:222
-#, fuzzy
-msgid "_Passphrase: "
-msgstr "密碼 (_P):"
-
 #: src/helpmenu.c:183
 msgid "About GPA"
 msgstr "關於GPA"
 
-#: src/helpmenu.c:218
+#: src/helpmenu.c:220
 #, fuzzy
 msgid "Brought to you by:"
 msgstr "帶領您是由"
 
-#: src/helpmenu.c:254
+#: src/helpmenu.c:256
 msgid "GPA is free software under the"
 msgstr ""
 
-#: src/helpmenu.c:258
+#: src/helpmenu.c:260
 #, fuzzy
 msgid "GNU General Public License."
 msgstr "GNU 公眾許可証"
 
-#: src/helpmenu.c:262
+#: src/helpmenu.c:264
 msgid "For news see:"
 msgstr ""
 
-#: src/helpmenu.c:266
+#: src/helpmenu.c:268
 #, fuzzy
 msgid "http://www.gnupg.org"
 msgstr "有關新聞請到 http://www.gnupg.org"
 
-#: src/helpmenu.c:343
+#: src/helpmenu.c:345
 msgid "GNU general public license"
 msgstr "GNU 公眾許可証"
 
-#: src/helpmenu.c:363
+#: src/helpmenu.c:365
 msgid "_GNU general public license"
 msgstr "GNU 公眾許可証 (_G)"
 
-#: src/helpmenu.c:392
+#: src/helpmenu.c:394
 msgid "Show Help Text\n"
 msgstr "顯示求助文字\n"
 
-#: src/helpmenu.c:400
+#: src/helpmenu.c:402
 msgid "/_Help"
 msgstr "/求助 (_H)"
 
-#: src/helpmenu.c:401
-msgid "/Help/_About"
-msgstr "/求助/關於 (_A)"
+#: src/helpmenu.c:404
+#, fuzzy
+msgid "/Help/_Contents"
+msgstr "/求助/許可証 (_L)"
 
-#: src/helpmenu.c:402
+#: src/helpmenu.c:407
 msgid "/Help/_License"
 msgstr "/求助/許可証 (_L)"
 
-#: src/helpmenu.c:404
-msgid "/Help/_Help"
-msgstr "/求助/求助 (_H)"
+#: src/helpmenu.c:408
+msgid "/Help/_About"
+msgstr "/求助/關於 (_A)"
 
 #: src/keydeletedlg.c:39
 #, fuzzy
@@ -985,11 +973,16 @@ msgstr "改變有效日期"
 msgid "Export public keys to file"
 msgstr "輸出公鑰為檔案"
 
+#: src/keyexportdlg.c:145
+#, fuzzy
+msgid "Export Key"
+msgstr "輸出密鑰"
+
 #: src/keyexportdlg.c:169
 msgid "E_xport to file:"
 msgstr "輸出至檔案 (_x):"
 
-#: src/keyexportdlg.c:179 src/keyexportdlg.c:347 src/keyimportdlg.c:174
+#: src/keyexportdlg.c:179 src/keyexportdlg.c:341 src/keyimportdlg.c:171
 msgid "B_rowse..."
 msgstr "瀏覽 (_r)"
 
@@ -997,11 +990,7 @@ msgstr "瀏覽 (_r)"
 msgid "_Key server:"
 msgstr "公鑰伺服器 (_K):"
 
-#: src/keyexportdlg.c:202
-msgid "To _clipboard"
-msgstr ""
-
-#: src/keyexportdlg.c:260
+#: src/keyexportdlg.c:254
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -1012,18 +1001,18 @@ msgid ""
 "(for example, in a floppy disk kept in a safe place)."
 msgstr ""
 
-#: src/keyexportdlg.c:301
+#: src/keyexportdlg.c:295
 #, fuzzy
 msgid "Backup Keys"
 msgstr "備份目錄"
 
-#: src/keyexportdlg.c:327
+#: src/keyexportdlg.c:321
 #, c-format
 msgid "Generating backup of key: %s"
 msgstr ""
 
 #. File name entry
-#: src/keyexportdlg.c:334
+#: src/keyexportdlg.c:328
 #, fuzzy
 msgid "_Backup to file:"
 msgstr "輸出至檔案 (_x):"
@@ -1037,7 +1026,7 @@ msgstr ""
 "在\"密碼\"及\"重複密碼\"中\n"
 "您需要輸入相同密碼."
 
-#: src/keygendlg.c:122 src/keygenwizard.c:557
+#: src/keygendlg.c:122 src/keygenwizard.c:566
 msgid "Generate key"
 msgstr "建立新鑰"
 
@@ -1075,6 +1064,11 @@ msgstr "電郵 (_M):"
 #, fuzzy
 msgid "_Comment: "
 msgstr "備註 (_o):"
+
+#: src/keygendlg.c:222
+#, fuzzy
+msgid "_Passphrase: "
+msgstr "密碼 (_P):"
 
 #: src/keygendlg.c:234
 #, fuzzy
@@ -1181,19 +1175,7 @@ msgid ""
 "It is needed to protect your private key."
 msgstr ""
 
-#: src/keygenwizard.c:334 src/keygenwizard.c:342
-msgid "_Enter new passphrase"
-msgstr ""
-
-#: src/keygenwizard.c:334
-msgid "Take this one _anyway"
-msgstr ""
-
-#: src/keygenwizard.c:337
-msgid "Weak passphrase"
-msgstr ""
-
-#: src/keygenwizard.c:338
+#: src/keygenwizard.c:340
 msgid ""
 "Warning: You have entered a passphrase\n"
 "that is obviously not secure.\n"
@@ -1201,7 +1183,15 @@ msgid ""
 "Please enter a new passphrase."
 msgstr ""
 
-#: src/keygenwizard.c:361
+#: src/keygenwizard.c:345
+msgid "_Enter new passphrase"
+msgstr ""
+
+#: src/keygenwizard.c:346
+msgid "Take this one _anyway"
+msgstr ""
+
+#: src/keygenwizard.c:370
 msgid ""
 "It is recommended that you create a backup copy of your new key, once it has "
 "been generated.\n"
@@ -1212,15 +1202,15 @@ msgstr ""
 "\n"
 "您是否想製作一個備份?"
 
-#: src/keygenwizard.c:370
+#: src/keygenwizard.c:379
 msgid "Create _backup copy"
 msgstr "建立備份 (_b)"
 
-#: src/keygenwizard.c:377 src/keyring.c:789 src/keyring.c:816
+#: src/keygenwizard.c:386 src/keyring.c:852 src/keyring.c:879
 msgid "Do it _later"
 msgstr "往後才進行 (_l)"
 
-#: src/keygenwizard.c:405
+#: src/keygenwizard.c:414
 #, fuzzy
 msgid ""
 "Your key is being generated.\n"
@@ -1231,7 +1221,7 @@ msgstr ""
 "\n"
 "在更快的電腦上也可能要等侯一段時間. 請等侯\n"
 
-#: src/keygenwizard.c:414
+#: src/keygenwizard.c:423
 msgid ""
 "Congratulations!\n"
 "\n"
@@ -1242,45 +1232,40 @@ msgstr ""
 "\n"
 "新的鑰已經建立. 這鑰已被認正及其重長1024 bits."
 
-#: src/keygenwizard.c:608 src/keygenwizard.c:612
+#: src/keygenwizard.c:617 src/keygenwizard.c:621
 msgid "F_inish"
 msgstr "完成 (_F)"
 
-#: src/keyimportdlg.c:78
+#: src/keyimportdlg.c:75
 msgid "Import public keys from file"
 msgstr "由檔案中匯入公鑰"
 
-#: src/keyimportdlg.c:137
+#: src/keyimportdlg.c:134
 msgid "Import Key"
 msgstr "匯入密鑰"
 
-#: src/keyimportdlg.c:161
+#: src/keyimportdlg.c:158
 msgid "I_mport from file:"
 msgstr "由檔案中匯入(_m):"
 
-#: src/keyimportdlg.c:183
+#: src/keyimportdlg.c:180
 msgid "Receive from _server:"
 msgstr "由伺服器中取得(_s):"
 
-#: src/keyimportdlg.c:202
+#: src/keyimportdlg.c:199
 msgid "Key _ID:"
 msgstr "Key _ID:"
 
-#: src/keyimportdlg.c:221
+#: src/keyimportdlg.c:218
 msgid "_Key Server:"
 msgstr "公鑰伺服器(_K):"
 
-#: src/keyimportdlg.c:226
-#, fuzzy
-msgid "Import from _clipboard:"
-msgstr "由檔案中匯入(_m):"
-
-#: src/keyimportdlg.c:258
+#: src/keyimportdlg.c:247
 #, fuzzy
 msgid "No keys were found."
 msgstr "沒有選擇寄出的密鑰."
 
-#: src/keyimportdlg.c:266
+#: src/keyimportdlg.c:255
 #, c-format
 msgid ""
 "%i public keys read\n"
@@ -1291,7 +1276,7 @@ msgid ""
 "%i secret keys unchanged"
 msgstr ""
 
-#: src/keyimpseldlg.c:63 src/keyring.c:1083
+#: src/keyimpseldlg.c:63 src/keyring.c:1305
 msgid "No keys selected"
 msgstr "沒有選擇密鑰"
 
@@ -1309,10 +1294,6 @@ msgstr "私鑰編輯器"
 msgid "_Import"
 msgstr "匯入"
 
-#: src/keylist.c:194 src/verifydlg.c:302
-msgid "User Name"
-msgstr "用者名稱"
-
 #: src/keylist.c:197
 #, fuzzy
 msgid "Key Validity"
@@ -1323,12 +1304,7 @@ msgstr "認正"
 msgid "Owner Trust"
 msgstr "相信擁有者"
 
-#: src/keylist.c:311
-#, fuzzy
-msgid "Missing public key"
-msgstr "公鑰 (_P)"
-
-#: src/keylist.c:312
+#: src/keylist.c:308
 msgid ""
 "You have a secret key without the\n"
 "corresponding public key in your\n"
@@ -1337,280 +1313,331 @@ msgid ""
 "key, too."
 msgstr ""
 
-#: src/keyreceivedlg.c:50
-#, fuzzy
-msgid ""
-"An error occured while receiving\n"
-"the requested key from the keyserver."
-msgstr ""
-"在輸出密鑰時\n"
-"有錯誤發生."
-
-#: src/keyreceivedlg.c:89
-#, fuzzy
-msgid "Receive key from server"
-msgstr "由伺服器中取得(_s):"
-
-#: src/keyreceivedlg.c:111
-#, fuzzy
-msgid "_Key ID: "
-msgstr "密鑰 ID:"
-
-#: src/keyreceivedlg.c:118
-#, fuzzy
-msgid "_Receive"
-msgstr "收件未(_R)"
-
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:325
+#: src/keyring.c:375
 msgid "No keys selected for signing."
 msgstr "沒有選擇作簽署的密鑰."
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:335
+#: src/keyring.c:385
 msgid "No private key for signing."
 msgstr "沒有選擇作簽署的私鑰."
 
 #. Couldn't sign because the key was expired
-#: src/keyring.c:363
+#: src/keyring.c:411
 msgid "This key has expired! Unable to sign."
 msgstr ""
+
+#. Couldn't sign because the key was already signed
+#: src/keyring.c:417
+msgid "This key has already been signed with your own!"
+msgstr ""
+
+#. Couldn't sign because there is no default key
+#: src/keyring.c:423
+#, fuzzy
+msgid "You haven't selected a default key to sign with!"
+msgstr "沒有選擇簽署的檔案"
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:536
+#: src/keyring.c:638
 msgid "No keys selected to export."
 msgstr "沒有選擇作輸出的密鑰."
 
 #. this shouldn't happen because the menu item should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:633
+#: src/keyring.c:705
 #, fuzzy
 msgid "No private key to backup."
 msgstr "沒有選擇作簽署的私鑰."
 
-#: src/keyring.c:784
+#: src/keyring.c:847
 #, fuzzy
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
 msgstr "您並沒有私鑰, 建議您現在建立或是往後才建立?"
 
-#: src/keyring.c:788
+#: src/keyring.c:851
 msgid "_Generate key now"
 msgstr "現在建立鑰 (_G)"
 
-#: src/keyring.c:810
+#: src/keyring.c:873
 #, fuzzy
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
 msgstr "您並沒有私鑰, 建議您現在建立或是往後才建立?"
 
-#: src/keyring.c:815
+#: src/keyring.c:878
 #, fuzzy
 msgid "_Backup key now"
 msgstr "現在建立鑰 (_G)"
 
-#: src/keyring.c:864
+#: src/keyring.c:987
+msgid "/Edit/_Copy"
+msgstr ""
+
+#: src/keyring.c:989
+msgid "/Edit/_Paste"
+msgstr ""
+
+#: src/keyring.c:991
+#, fuzzy
+msgid "/Edit/sep1"
+msgstr "/檔案/sep1"
+
+#: src/keyring.c:998
 msgid "/_Keys"
 msgstr "/密鑰 (_K)"
 
-#: src/keyring.c:865
-msgid "/Keys/_Generate Key..."
+#: src/keyring.c:999
+#, fuzzy
+msgid "/Keys/_New Key..."
 msgstr "/密鑰/建立新鑰... (_G)"
 
-#: src/keyring.c:866
+#: src/keyring.c:1001
 #, fuzzy
 msgid "/Keys/_Delete Keys..."
 msgstr "/密鑰/建立新鑰... (_G)"
 
-#: src/keyring.c:867
+#: src/keyring.c:1003
 #, fuzzy
-msgid "/Keys/_Edit Key..."
-msgstr "/密鑰/建立新鑰... (_G)"
+msgid "/Keys/sep1"
+msgstr "/檔案/sep1"
 
-#: src/keyring.c:868
-#, fuzzy
-msgid "/Keys/Change _Owner Trust..."
-msgstr "改變信任度"
-
-#: src/keyring.c:869 src/keyring.c:896
+#: src/keyring.c:1004
 #, fuzzy
 msgid "/Keys/_Sign Keys..."
 msgstr "/密鑰/建立新鑰... (_G)"
 
-#: src/keyring.c:870
+#: src/keyring.c:1005
+#, fuzzy
+msgid "/Keys/Set _Owner Trust..."
+msgstr "改變信任度"
+
+#: src/keyring.c:1006
+#, fuzzy
+msgid "/Keys/_Edit Private Key..."
+msgstr "/密鑰/建立新鑰... (_G)"
+
+#: src/keyring.c:1007
+#, fuzzy
+msgid "/Keys/sep2"
+msgstr "/檔案/sep2"
+
+#: src/keyring.c:1008
 #, fuzzy
 msgid "/Keys/_Import Keys..."
 msgstr "/密鑰/建立新鑰... (_G)"
 
-#: src/keyring.c:871
+#: src/keyring.c:1009
 #, fuzzy
 msgid "/Keys/E_xport Keys..."
 msgstr "/密鑰/建立新鑰... (_G)"
 
-#: src/keyring.c:872
+#: src/keyring.c:1010
 msgid "/Keys/_Backup..."
 msgstr ""
 
-#: src/keyring.c:900
+#: src/keyring.c:1040
 #, fuzzy
-msgid "/Keys/_Export Keys..."
+msgid "/Keys/Export Keys..."
 msgstr "/密鑰/建立新鑰... (_G)"
 
-#: src/keyring.c:981 src/keysigndlg.c:102
+#: src/keyring.c:1047
+#, fuzzy
+msgid "/Keys/Delete Keys..."
+msgstr "/密鑰/建立新鑰... (_G)"
+
+#: src/keyring.c:1054
+msgid "/Edit/Copy"
+msgstr ""
+
+#: src/keyring.c:1062
+#, fuzzy
+msgid "/Keys/Set Owner Trust..."
+msgstr "改變信任度"
+
+#: src/keyring.c:1070
+#, fuzzy
+msgid "/Keys/Sign Keys..."
+msgstr "/密鑰/建立新鑰... (_G)"
+
+#: src/keyring.c:1078
+#, fuzzy
+msgid "/Keys/Edit Private Key..."
+msgstr "/密鑰/建立新鑰... (_G)"
+
+#: src/keyring.c:1085
+msgid "/Keys/Backup..."
+msgstr ""
+
+#: src/keyring.c:1182 src/keysigndlg.c:102
 msgid "Fingerprint:"
 msgstr "指紋:"
 
-#: src/keyring.c:983
+#: src/keyring.c:1184
 msgid "Expires at:"
 msgstr "有效期至:"
 
-#: src/keyring.c:985
+#: src/keyring.c:1186
 msgid "Owner Trust:"
 msgstr "擁有者信任:"
 
-#: src/keyring.c:987
+#: src/keyring.c:1188
 #, fuzzy
 msgid "Key Validity:"
 msgstr "認正"
 
-#: src/keyring.c:989
+#: src/keyring.c:1190
 msgid "Key Type:"
 msgstr "密鑰種類:"
 
-#: src/keyring.c:991
+#: src/keyring.c:1192
 #, fuzzy
 msgid "Created at:"
 msgstr "建立廢除認正"
 
-#: src/keyring.c:994
+#: src/keyring.c:1195
 msgid "Details"
 msgstr "詳情"
 
-#: src/keyring.c:1010
+#: src/keyring.c:1203
+#, fuzzy
+msgid "Show signatures on user name:"
+msgstr "簽署已選擇檔案"
+
+#: src/keyring.c:1223
 msgid "Signatures"
 msgstr "簽署"
 
-#: src/keyring.c:1058
+#: src/keyring.c:1243
 msgid "The key has both a private and a public part"
 msgstr "這是有私人及公共部份的完鑰"
 
-#: src/keyring.c:1063
+#: src/keyring.c:1248
 msgid "The key has only a public part"
 msgstr "這密鑰只有公共部份"
 
-#: src/keyring.c:1087
+#: src/keyring.c:1276
+#, c-format
+msgid "%s %li bits"
+msgstr ""
+
+#: src/keyring.c:1309
 #, c-format
 msgid "%d keys selected"
 msgstr "%d 密鑰被選擇"
 
-#: src/keyring.c:1273
+#: src/keyring.c:1336
+#, fuzzy
+msgid "All signatures"
+msgstr "簽署"
+
+#: src/keyring.c:1509
 msgid "Edit"
 msgstr "修改"
 
-#: src/keyring.c:1274
-msgid "Edit the selected key"
+#: src/keyring.c:1510
+#, fuzzy
+msgid "Edit the selected private key"
 msgstr "修改已選擇的密鑰"
 
-#: src/keyring.c:1274
+#: src/keyring.c:1511
 msgid "edit key"
 msgstr "修改密鑰"
 
-#: src/keyring.c:1281
-msgid "Remove"
-msgstr "移除"
-
-#: src/keyring.c:1282
+#: src/keyring.c:1519
 msgid "Remove the selected key"
 msgstr "移除已選擇的密鑰"
 
-#: src/keyring.c:1283
+#: src/keyring.c:1520
 msgid "remove key"
 msgstr "移除密鑰"
 
-#: src/keyring.c:1291
+#: src/keyring.c:1528
 msgid "Sign the selected key"
 msgstr "簽署已選擇的密鑰"
 
-#: src/keyring.c:1291
+#: src/keyring.c:1528
 msgid "sign key"
 msgstr "簽署密鑰"
 
-#: src/keyring.c:1298
+#: src/keyring.c:1535
 msgid "Import"
 msgstr "匯入"
 
-#: src/keyring.c:1299
+#: src/keyring.c:1536
 msgid "Import Keys"
 msgstr "匯入密鑰"
 
-#: src/keyring.c:1299
+#: src/keyring.c:1536
 msgid "import keys"
 msgstr "匯入密鑰"
 
-#: src/keyring.c:1304
+#: src/keyring.c:1541
 msgid "Export"
 msgstr "輸出"
 
-#: src/keyring.c:1305
+#: src/keyring.c:1542
 msgid "Export Keys"
 msgstr "輸出密鑰"
 
-#: src/keyring.c:1305
+#: src/keyring.c:1542
 msgid "export keys"
 msgstr "輸出密鑰"
 
-#: src/keyring.c:1318
+#: src/keyring.c:1555
 msgid "Brief"
 msgstr "摘要"
 
-#: src/keyring.c:1318
+#: src/keyring.c:1555
 msgid "Show Brief Keylist"
 msgstr "顯示密鑰清單摘要"
 
-#: src/keyring.c:1319
+#: src/keyring.c:1556
 msgid "brief"
 msgstr "摘要"
 
-#: src/keyring.c:1330
+#: src/keyring.c:1567
 msgid "Detailed"
 msgstr "詳情"
 
-#: src/keyring.c:1330
+#: src/keyring.c:1567
 msgid "Show Key Details"
 msgstr "顯示密鑰詳情"
 
-#: src/keyring.c:1331
+#: src/keyring.c:1568
 msgid "detailed"
 msgstr "詳情"
 
-#: src/keyring.c:1339
+#: src/keyring.c:1590
 #, fuzzy
 msgid "Open the File Manager"
 msgstr "開啟檔案"
 
-#: src/keyring.c:1340
+#: src/keyring.c:1591
 #, fuzzy
 msgid "file manager"
 msgstr "/視窗/檔案管理 (_F)"
 
-#: src/keyring.c:1363
+#: src/keyring.c:1614
 msgid "Selected Default Key:"
 msgstr "選擇預設密鑰:"
 
-#: src/keyring.c:1441
+#: src/keyring.c:1692
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - 鑰圈編輯器"
 
-#: src/keyring.c:1472
+#: src/keyring.c:1723
 msgid "Keyring Editor"
 msgstr "鑰圈編輯器"
 
@@ -1653,56 +1680,6 @@ msgstr "私鑰 (_S)"
 #, fuzzy
 msgid "Loading public keys"
 msgstr "公鑰 (_P)"
-
-#: src/optionsmenu.c:81
-msgid "Set key server"
-msgstr "設定公鑰伺服器"
-
-#: src/optionsmenu.c:96
-msgid "_Key server: "
-msgstr "公鑰伺服器 (_K):"
-
-#: src/optionsmenu.c:114 src/optionsmenu.c:275
-msgid "_Set"
-msgstr "設定 (_S)"
-
-#: src/optionsmenu.c:190
-#, fuzzy
-msgid "Fingerprint"
-msgstr "指紋:"
-
-#: src/optionsmenu.c:190
-msgid "User identity / role"
-msgstr "用者認正/角色"
-
-#: src/optionsmenu.c:210
-msgid ""
-"No secret keys available to\n"
-"select a default key from."
-msgstr ""
-"選擇私密鑰中\n"
-"沒有可用的私鑰."
-
-#: src/optionsmenu.c:218
-msgid "Set default key"
-msgstr "設為預設密鑰"
-
-#: src/optionsmenu.c:261
-msgid "Default _key:"
-msgstr "預設密鑰 (_K):"
-
-#: src/optionsmenu.c:297
-msgid "/_Options"
-msgstr "/選項 (_O)"
-
-#: src/optionsmenu.c:298
-msgid "/Options/_Keyserver"
-msgstr "/選項/公鑰伺服器 (_K)"
-
-#. {_("/Options/Default _Recipients"), NULL, (GtkItemFactoryCallback)options_recipients, 0, NULL},
-#: src/optionsmenu.c:300
-msgid "/Options/_Default Key"
-msgstr "/選項/預設密鑰 (_D)"
 
 #. Create the dialog
 #: src/ownertrustdlg.c:105
@@ -1763,7 +1740,7 @@ msgid ""
 "consider any key signed by him/her fully valid.\n"
 "\n"
 "(Warning: This is intended to be used for keys you own. Don't use it with "
-"other people's keys unless you really know what you are doing.\n"
+"other people's keys unless you really know what you are doing)\n"
 msgstr ""
 
 #: src/server_access.c:207
@@ -1838,31 +1815,42 @@ msgid ""
 "protocol you specified."
 msgstr ""
 
-#: src/server_access.c:447 src/server_access.c:492
+#: src/server_access.c:448 src/server_access.c:493
 msgid "The keyserver you specified is not valid"
 msgstr ""
 
-#: src/siglist.c:47
-msgid "Validity"
-msgstr "認正"
+#. Build UI
+#: src/settingsdlg.c:41
+msgid "Default _key:"
+msgstr "預設密鑰 (_K):"
 
-#: src/siglist.c:47
-msgid "Signature"
-msgstr "簽署"
-
-#. Dup the static string, so that we are always safe free'ing it
-#: src/siglist.c:101 src/verifydlg.c:230
-msgid "[Unknown user ID]"
-msgstr "[不名用者ID]"
-
-#: src/verifydlg.c:173
+#. Build UI
+#: src/settingsdlg.c:77
 #, fuzzy
-msgid "Valid"
-msgstr "正確"
+msgid "Default key_server: "
+msgstr "預設密鑰 (_K):"
 
-#: src/verifydlg.c:178
-msgid "Bad"
+#. Build UI
+#: src/settingsdlg.c:120
+msgid "Use _advanced mode:"
 msgstr ""
+
+#: src/settingsdlg.c:126
+#, fuzzy
+msgid "_Yes"
+msgstr "/密鑰 (_K)"
+
+#: src/settingsdlg.c:129
+msgid "_No"
+msgstr ""
+
+#: src/settingsdlg.c:153
+msgid "Settings"
+msgstr ""
+
+#: src/siglist.c:108 src/verifydlg.c:296
+msgid "Status"
+msgstr "狀態"
 
 #: src/verifydlg.c:193
 #, fuzzy
@@ -1876,10 +1864,6 @@ msgstr "輸出密鑰"
 msgid "Key NOT valid"
 msgstr ""
 
-#: src/verifydlg.c:296
-msgid "Status"
-msgstr "狀態"
-
 #: src/verifydlg.c:322
 #, fuzzy
 msgid "Signatures:"
@@ -1890,11 +1874,135 @@ msgstr "簽署"
 msgid "Verify files"
 msgstr "解密檔案"
 
+#~ msgid "User Identity/Role"
+#~ msgstr "用者識辨/角色"
+
+#~ msgid " Decrypt "
+#~ msgstr "解密"
+
+#~ msgid "Invalid Date"
+#~ msgstr "日期不合法"
+
+#, fuzzy
+#~ msgid "/File/C_heck"
+#~ msgstr "/檔案/開啟 (_O)"
+
+#~ msgid "Open"
+#~ msgstr "開啟"
+
+#~ msgid ""
+#~ "@Options:\n"
+#~ " "
+#~ msgstr ""
+#~ "@選項:\n"
+#~ " "
+
+#~ msgid "verbose"
+#~ msgstr "詳細"
+
+#~ msgid "be somewhat more quiet"
+#~ msgstr "最少顯示"
+
+#~ msgid "set debugging flags"
+#~ msgstr "設定除蟲模式"
+
+#~ msgid "enable full debugging"
+#~ msgstr "開動全除蟲模式"
+
+#, fuzzy
+#~ msgid "Usage: gpa [options] (-h for help)"
+#~ msgstr "使用方法: gpa [選項] (_-h 是求助)"
+
+#~ msgid "NOTE: no default option file `%s'\n"
+#~ msgstr "註: 沒有預設選項檔 `%s'\n"
+
+#~ msgid "option file `%s': %s\n"
+#~ msgstr "選項檔案 `%s' : %s \n"
+
+#~ msgid "reading options from `%s'\n"
+#~ msgstr "由`%s'讀取選項\n"
+
+#, fuzzy
+#~ msgid "Insert passphrase"
+#~ msgstr "輸入密碼"
+
+#~ msgid "/Help/_Help"
+#~ msgstr "/求助/求助 (_H)"
+
+#, fuzzy
+#~ msgid "Import from _clipboard:"
+#~ msgstr "由檔案中匯入(_m):"
+
+#, fuzzy
+#~ msgid "Missing public key"
+#~ msgstr "公鑰 (_P)"
+
+#, fuzzy
+#~ msgid ""
+#~ "An error occured while receiving\n"
+#~ "the requested key from the keyserver."
+#~ msgstr ""
+#~ "在輸出密鑰時\n"
+#~ "有錯誤發生."
+
+#, fuzzy
+#~ msgid "Receive key from server"
+#~ msgstr "由伺服器中取得(_s):"
+
+#, fuzzy
+#~ msgid "_Key ID: "
+#~ msgstr "密鑰 ID:"
+
+#, fuzzy
+#~ msgid "_Receive"
+#~ msgstr "收件未(_R)"
+
+#~ msgid "/Keys/_Generate Key..."
+#~ msgstr "/密鑰/建立新鑰... (_G)"
+
+#~ msgid "Remove"
+#~ msgstr "移除"
+
+#~ msgid "Set key server"
+#~ msgstr "設定公鑰伺服器"
+
+#~ msgid "_Key server: "
+#~ msgstr "公鑰伺服器 (_K):"
+
+#~ msgid "_Set"
+#~ msgstr "設定 (_S)"
+
+#, fuzzy
+#~ msgid "Fingerprint"
+#~ msgstr "指紋:"
+
+#~ msgid "User identity / role"
+#~ msgstr "用者認正/角色"
+
+#~ msgid ""
+#~ "No secret keys available to\n"
+#~ "select a default key from."
+#~ msgstr ""
+#~ "選擇私密鑰中\n"
+#~ "沒有可用的私鑰."
+
+#~ msgid "Set default key"
+#~ msgstr "設為預設密鑰"
+
+#~ msgid "/Options/_Keyserver"
+#~ msgstr "/選項/公鑰伺服器 (_K)"
+
+#~ msgid "/Options/_Default Key"
+#~ msgstr "/選項/預設密鑰 (_D)"
+
+#~ msgid "Validity"
+#~ msgstr "認正"
+
+#~ msgid "Signature"
+#~ msgstr "簽署"
+
 #~ msgid "No recipients chosen to encrypt for."
 #~ msgstr "沒有選擇加密的收件者"
-
-#~ msgid "Change Expiry Date"
-#~ msgstr "更改有效日期"
 
 #~ msgid "No file selected for detail view"
 #~ msgstr "沒有檔案被選擇為詳細檢視"
@@ -2013,9 +2121,6 @@ msgstr "解密檔案"
 
 #~ msgid "Save decrypted file as"
 #~ msgstr "儲存已解密檔案為"
-
-#~ msgid "_Decrypt"
-#~ msgstr "解密 (_D)"
 
 #~ msgid "use a advanced user interface"
 #~ msgstr "使用進階用者介面"
@@ -2138,9 +2243,6 @@ msgstr "解密檔案"
 
 #~ msgid "_Save and exit"
 #~ msgstr "儲存及離開 (_S)"
-
-#~ msgid "Secret key ring editor"
-#~ msgstr "私鑰圈編輯器"
 
 #~ msgid "_Secret key ring"
 #~ msgstr "私鑰圈 (_S)"
