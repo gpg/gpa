@@ -35,12 +35,12 @@
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
-#include "optionsmenu.h"
 #include "helpmenu.h"
 #include "keyring.h"
 #include "fileman.h"
 #include "keyserver.h"
 #include "keytable.h"
+#include "settingsdlg.h"
 
 #ifdef __MINGW32__
 #include "w32reg.h"
@@ -116,12 +116,12 @@ i18n_init (void)
 
 
 /*
- *  Manage the two main windows
+ *  Manage the two main windows and the settings dialog.
  */
 
 static GtkWidget *keyringeditor = NULL;
 static GtkWidget *filemanager = NULL;
-
+static GtkWidget *settings_dialog = NULL;
 
 static void
 quit_if_no_window (void)
@@ -170,6 +170,16 @@ gpa_open_filemanager (void)
   gdk_window_raise (filemanager->window);
 }
 
+void
+gpa_open_settings_dialog (void)
+{
+  if (!settings_dialog)
+    {
+      settings_dialog = gpa_settings_dialog_new ();
+    }
+  gtk_widget_show_all (settings_dialog);
+  gdk_window_raise (settings_dialog->window);
+}
 
 GtkWidget *
 gpa_get_keyring_editor (void)
@@ -184,6 +194,11 @@ gpa_get_filenamager (void)
   return filemanager;
 }
 
+GtkWidget *
+gpa_get_settings_dialog (void)
+{
+  return settings_dialog;
+}
 
 static void
 dummy_log_func (const gchar *log_domain, GLogLevelFlags log_level,

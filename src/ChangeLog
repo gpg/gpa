@@ -1,3 +1,21 @@
+2002-12-04  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpawidgets.c (gpa_key_list_new): Set the columns to autoresize.
+
+	* gpa.c, gpa.h (gpa_open_settings_dialog)
+	(gpa_get_settings_dialog): New.
+
+	* fileman.c (fileman_menu_new): Remove "Options" menu. Add "settings"
+	to the "Window" menu.
+	* keyring.c (keyring_editor_menubar_new): Likewise.
+
+	* settingsdlg.c, settingsdlg.h: New.
+
+	* optionsmenu.c, optionsmenuc.h: Removed.
+
+	* Makefile.am (gpa_SOURCES): Remove optionsmenu.{c,h}, add
+	settingsdlg.{c,h}.
+
 2002-12-03  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_sign): Add const to

@@ -28,7 +28,6 @@
 #include <errno.h>
 #include "gtktools.h"
 #include "icons.h"
-#include "optionsmenu.h"
 #include "helpmenu.h"
 #include "gpapastrings.h"
 #include "gpawidgets.h"
@@ -888,6 +887,7 @@ keyring_editor_menubar_new (GtkWidget * window,
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
     {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
     {_("/Windows/_Keyring Editor"), NULL, gpa_open_keyring_editor, 0, NULL},
+    {_("/Windows/_Settings"), NULL, gpa_open_settings_dialog, 0, NULL},
   };
 
   accel_group = gtk_accel_group_new ();
@@ -898,7 +898,6 @@ keyring_editor_menubar_new (GtkWidget * window,
   gtk_item_factory_create_items (factory,
                                  sizeof (keys_menu) / sizeof (keys_menu[0]),
                                  keys_menu, editor);
-  gpa_options_menu_add_to_factory (factory, window);
   gtk_item_factory_create_items (factory,
                                  sizeof (win_menu) / sizeof (win_menu[0]),
                                  win_menu, editor);

@@ -1,5 +1,5 @@
-/* optionsmenu.h  -  The GNU Privacy Assistant
- *      Copyright (C) 2000, 2001 G-N-U GmbH.
+/* settingsdlg.c - The GNU Privacy Assistant
+ *	Copyright (C) 2002, Miguel Coca
  *
  * This file is part of GPA
  *
@@ -18,5 +18,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-void gpa_options_menu_add_to_factory (GtkItemFactory *factory,
-				      GtkWidget *window);
+#ifndef SETTINGSDLG_H
+#define SETTINGSDLG_H
+
+GtkWidget * gpa_settings_dialog_new (void);
+
+#endif

@@ -100,6 +100,8 @@ gpa_key_list_new (void)
   gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_SINGLE);
   gtk_clist_column_title_passive (GTK_CLIST (clist), 0);
   gtk_clist_column_title_passive (GTK_CLIST (clist), 1);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (clist), 0, TRUE);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (clist), 0, TRUE);
 
   return clist;
 }

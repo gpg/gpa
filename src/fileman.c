@@ -41,7 +41,6 @@
 #include "gtktools.h"
 #include "gpawidgets.h"
 #include "siglist.h"
-#include "optionsmenu.h"
 #include "helpmenu.h"
 #include "icons.h"
 #include "fileman.h"
@@ -374,6 +373,7 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
     {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
     {_("/Windows/_Keyring Editor"), NULL, gpa_open_keyring_editor, 0, NULL},
+    {_("/Windows/_Settings"), NULL, gpa_open_settings_dialog, 0, NULL},
   };
   GtkAccelGroup *accel_group;
 
@@ -382,7 +382,6 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
   gtk_item_factory_create_items (factory,
 				 sizeof (file_menu) / sizeof (file_menu[0]),
 				 file_menu, fileman);
-  gpa_options_menu_add_to_factory (factory, window);
   gtk_item_factory_create_items (factory,
 				 sizeof(windows_menu) /sizeof(windows_menu[0]),
 				 windows_menu, fileman);

@@ -63,8 +63,10 @@ void gpa_update_default_key (void);
 
 void gpa_open_keyring_editor (void);
 void gpa_open_filemanager (void);
+void gpa_open_settings_dialog (void);
 GtkWidget * gpa_get_keyring_editor (void);
 GtkWidget * gpa_get_filenamager (void);
+GtkWidget * gpa_get_settings_dialog (void);
 
 typedef void (*GPADefaultKeyChanged) (gpointer user_data);
 

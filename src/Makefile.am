@@ -16,7 +16,6 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
 	      gtktools.c gtktools.h  \
 	      helpmenu.c helpmenu.h	  \
-	      optionsmenu.c optionsmenu.h \
 	      icons.c icons.h icons.xpm \
 	      gpawidgets.c gpawidgets.h \
               gpafilesel.c gpafilesel.h \
@@ -50,4 +49,5 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpgmeedit.h gpgmeedit.c \
 	      gpgmeparsers.h gpgmeparsers.c \
 	      server_access.h server_access.c \
+	      settingsdlg.h settingsdlg.c \
 	      gtkhacks.h options.c gpa.rc
