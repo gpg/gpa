@@ -1,5 +1,7 @@
 2001-01-19  Bernhard Herzog  <bh@intevation.de>
 
+	* gtkrc: New file with GTK style defaults
+
 	* keyring.c (keyring_editor_selection_changed):
 	(keyring_editor_end_selection):
 	(keyring_editor_fill_keylist):
