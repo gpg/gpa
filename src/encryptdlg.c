@@ -34,6 +34,7 @@ struct _GPAFileEncryptDialog {
   GtkWidget *clist_keys;
   GtkWidget *check_sign;
   GtkWidget *check_armor;
+  GtkWidget *clist_who;
   GList *files;
   GList *encrypted_files;
 };
@@ -305,8 +306,8 @@ file_encrypt_ok (GPAFileEncryptDialog *dialog)
   
   recipients = gpa_key_list_selected_ids (dialog->clist_keys);
   armor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_armor));
-  sign = FALSE;
-  signers = NULL;
+  sign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_sign));
+  signers = gpa_key_list_selected_ids (dialog->clist_who);
   
   do_encrypt (dialog, recipients, sign, signers, armor);
 }
@@ -337,6 +338,14 @@ unselect_row_cb (GtkCList *clist, gint row, gint column,
     }
 }
 
+static void
+toggle_sign_cb (GtkToggleButton *togglebutton, gpointer user_data)
+{
+  GPAFileEncryptDialog *dialog = user_data;
+  gtk_widget_set_sensitive (dialog->clist_who,
+                            gtk_toggle_button_get_active (togglebutton));
+}
+
 GList *
 gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
 {
@@ -348,6 +357,9 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
   GtkWidget *clistKeys;
   GtkWidget *checkerSign;
   GtkWidget *checkerArmor;
+  GtkWidget *labelWho;
+  GtkWidget *scrollerWho;
+  GtkWidget *clistWho;
   GtkResponseType response;
 
   GPAFileEncryptDialog dialog;
@@ -410,6 +422,23 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
   checkerSign = gpa_check_button_new (accelGroup, _("_Sign"));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), checkerSign, FALSE, FALSE, 0);
   dialog.check_sign = checkerSign;
+  gtk_signal_connect (GTK_OBJECT (checkerSign), "toggled",
+		      GTK_SIGNAL_FUNC (toggle_sign_cb), &dialog);
+
+  labelWho = gtk_label_new (NULL);
+  gtk_misc_set_alignment (GTK_MISC (labelWho), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vboxEncrypt), labelWho, FALSE, TRUE, 0);
+
+  scrollerWho = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_usize (scrollerWho, 260, 75);
+  gtk_box_pack_start (GTK_BOX (vboxEncrypt), scrollerWho, TRUE, TRUE, 0);
+
+  clistWho = gpa_secret_key_list_new ();
+  dialog.clist_who = clistWho;
+  gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
+  gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
+			      _("Sign _as "));
+  gtk_widget_set_sensitive (clistWho, FALSE);
 
   checkerArmor = gpa_check_button_new (accelGroup, _("A_rmor"));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), checkerArmor, FALSE, FALSE, 0);

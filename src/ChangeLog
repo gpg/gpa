@@ -1,5 +1,9 @@
 2002-10-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* encryptdlg.c (gpa_file_encrypt_dialog_run, file_encrypt_ok): 
+	Enable encrypt+sign.
+	(toggle_sign_cb): New function.
+
 	* gpgmeparsers.c (gpa_parse_import_info): Free the operation
 	information.
 
