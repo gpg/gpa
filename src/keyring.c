@@ -73,7 +73,8 @@ typedef struct _GPAKeyringEditor GPAKeyringEditor;
 
 static gboolean keyring_editor_has_selection (gpointer param);
 static gboolean keyring_editor_has_single_selection (gpointer param);
-static GpapaPublicKey  *keyring_editor_current_key (GPAKeyringEditor * editor);
+static GpapaPublicKey *keyring_editor_current_key (GPAKeyringEditor * editor);
+static gchar *keyring_editor_current_key_id (GPAKeyringEditor * editor);
 
 static void keyring_update_details_page (GPAKeyringEditor * editor);
 
@@ -331,7 +332,42 @@ keyring_editor_delete (gpointer param)
 static gboolean
 keyring_editor_can_sign (gpointer param)
 {
-  return (keyring_editor_has_selection (param) && gpa_default_key ());
+  GPAKeyringEditor * editor = param;
+  GpapaPublicKey * key;
+  gchar * key_id;
+  gchar * default_key_id = gpa_default_key ();
+  GList * signatures;
+  gboolean result = FALSE;
+
+  if (keyring_editor_has_selection (param) && default_key_id)
+    {
+      /* the most important requirements have been met, now find out
+       * whether the selected key was already signed with the default
+       * key */
+      key_id = keyring_editor_current_key_id (editor);
+      key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
+
+      if (key && strcmp (key_id, default_key_id) != 0)
+	{
+	  result = TRUE;
+	  signatures = gpapa_public_key_get_signatures (key, gpa_callback,
+							editor->window);
+	  while (signatures)
+	    {
+	      GpapaSignature *sig = signatures->data;
+	      gchar * sig_id = gpapa_signature_get_identifier (sig,
+							       gpa_callback,
+							       editor->window);
+	      if (strcmp (sig_id, default_key_id) == 0)
+		{
+		  result = FALSE;
+		  break;
+		}
+	      signatures = g_list_next (signatures);
+	    }
+	}
+    }
+  return result;
 } /* keyring_editor_can_sign */
 
 
@@ -538,6 +574,7 @@ keyring_editor_generate_key_simple (gpointer param)
     }
 } /* keyring_editor_generate_key_simple */
 
+
 /* Depending on the simple_ui flag call either
  * keyring_editor_generate_key_advanced or
  * keyring_editor_generate_key_simple
@@ -550,6 +587,24 @@ keyring_editor_generate_key (gpointer param)
   else
     keyring_editor_generate_key_advanced (param);
 } /* keyring_editor_generate_key */
+
+
+
+/* Return the id of the currently selected key. NULL if no key is selected */
+static gchar *
+keyring_editor_current_key_id (GPAKeyringEditor *editor)
+{
+  int row;
+  gchar * key_id = NULL;
+
+  if (editor->clist_keys->selection)
+    {
+      row = GPOINTER_TO_INT (editor->clist_keys->selection->data);
+      key_id = gtk_clist_get_row_data (editor->clist_keys, row);
+    }
+
+  return key_id;
+}
 
 
 /* Return the currently selected key. NULL if no key is selected */
@@ -723,6 +778,7 @@ add_details_row (GtkWidget * table, gint row, gchar *text)
 
   return label;
 }
+
 
 /* Create and return the Details/Signatures notebook
  */
