@@ -357,7 +357,12 @@ gpg_error_t gpa_generate_key_start (gpgme_ctx_t ctx,
 
   parm_string = build_genkey_parms (params);
   err = gpgme_op_genkey_start (ctx, parm_string, NULL, NULL);
+  /* FIXME: This is disabled to work around a bug in GPGME 0.4.3 and lower.
+   * The bug is fixed for 0.4.4, so it should be enabled just after the
+   * GPA 0.7.0 release. */
+#if 0
   g_free (parm_string);
+#endif
 
   return err;
 }
