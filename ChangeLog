@@ -1,3 +1,8 @@
+2002-11-29  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* configure.ac: Remove jnlib/ and assorted tests.
+	* Makefile.am (SUBDIRS): Likewise.
+
 2002-11-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* THANKS, AUTHORS: Updated.

@@ -1,5 +1,5 @@
 
-SUBDIRS = intl jnlib src po
+SUBDIRS = intl src po
 EXTRA_DIST = TODO README-alpha to-utf8 autogen.sh gpa.spec
 DISTCLEANFILES = gpadefs.h 
 

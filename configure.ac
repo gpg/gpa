@@ -140,13 +140,6 @@ AM_PATH_GPGME(0.4.0,
             AC_MSG_ERROR(Cannot find an up to date GPGME))
 
 dnl
-dnl Checks for header files
-dnl
-dnl These are needed by libjnlib
-AC_CHECK_FUNCS(memicmp stpcpy strlwr strtoul memmove stricmp)
-
-
-dnl
 dnl Checks for typedefs and structures
 dnl
 
@@ -155,18 +148,6 @@ GNUPG_CHECK_TYPEDEF(ushort, HAVE_USHORT_TYPEDEF)
 GNUPG_CHECK_TYPEDEF(ulong, HAVE_ULONG_TYPEDEF)
 GNUPG_CHECK_TYPEDEF(u16, HAVE_U16_TYPEDEF)
 GNUPG_CHECK_TYPEDEF(u32, HAVE_U32_TYPEDEF)
-# We should not use them in this software;
-# However jnlib/types.h needs them - so we take the easy way.
-AC_CHECK_SIZEOF(unsigned short, 2)
-AC_CHECK_SIZEOF(unsigned int, 4)
-AC_CHECK_SIZEOF(unsigned long, 4)
-if test "$ac_cv_sizeof_unsigned_short" = "0" \
-   || test "$ac_cv_sizeof_unsigned_int" = "0" \
-   || test "$ac_cv_sizeof_unsigned_long" = "0"; then
-    AC_MSG_WARN([Hmmm, something is wrong with the sizes - using defaults]);
-fi
-
-
 
 if test "$GCC" = yes; then
     if test "$USE_MAINTAINER_MODE" = "yes"; then
@@ -213,7 +194,6 @@ AC_CONFIG_FILES([
 Makefile
 intl/Makefile
 po/Makefile.in
-jnlib/Makefile
 src/Makefile
 ])
 
