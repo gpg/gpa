@@ -55,6 +55,6 @@ GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent);
 
 void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      const gchar *filename,
-				      GpgmeCtx ctx);
+				      gpgme_ctx_t ctx);
 
 #endif

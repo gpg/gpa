@@ -94,7 +94,7 @@ expire_date_toggled_cb (GtkToggleButton *togglebutton, gpointer user_data)
  * *new_date == NULL means never expire
  */
 gboolean
-gpa_expiry_dialog_run (GtkWidget * parent, GpgmeKey key, GDate ** new_date)
+gpa_expiry_dialog_run (GtkWidget * parent, gpgme_key_t key, GDate ** new_date)
 {
   GtkWidget * window;
   GtkWidget * vbox;

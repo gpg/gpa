@@ -28,19 +28,19 @@
 #include <gpgme.h>
 
 /* Change the ownertrust of a key */
-GpgmeError gpa_gpgme_edit_trust (GpgmeCtx ctx, GpgmeKey key,
-				 GpgmeValidity ownertrust);
+gpgme_error_t gpa_gpgme_edit_trust (gpgme_ctx_t ctx, gpgme_key_t key,
+				 gpgme_validity_t ownertrust);
 
 /* Change the expiry date of a key */
-GpgmeError gpa_gpgme_edit_expire (GpgmeCtx ctx, GpgmeKey key, GDate *date);
+gpgme_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, GDate *date);
 
 /* Sign this key with the given private key. If local is true, make a local
  * signature. */
-GpgmeError gpa_gpgme_edit_sign (GpgmeCtx ctx, GpgmeKey key,
+gpgme_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
 				const gchar *private_key_fpr, gboolean local);
 
 /* Change the key's passphrase.
  */
-GpgmeError gpa_gpgme_edit_passwd (GpgmeCtx ctx, GpgmeKey key);
+gpgme_error_t gpa_gpgme_edit_passwd (gpgme_ctx_t ctx, gpgme_key_t key);
 
 #endif

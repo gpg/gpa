@@ -34,7 +34,7 @@ struct _GPAKeyList;
 /* A column definition. Consists of a title and a function that returns
  * the values for that column given a public key */
 
-typedef void (*ColumnValueFunc)(GpgmeKey key,
+typedef void (*ColumnValueFunc)(gpgme_key_t key,
 				struct _GPAKeyList * keylist,
 				gchar ** label,
 				gboolean * free_label,
@@ -86,7 +86,7 @@ struct keylist_fill_data
 static void keylist_free (gpointer param);
 static void keylist_fill_list (GPAKeyList * keylist);
 static void keylist_fill_column_titles (GPAKeyList * keylist);
-static void keylist_fill_row (const gchar * fpr, GpgmeKey key,
+static void keylist_fill_row (const gchar * fpr, gpgme_key_t key,
                               struct keylist_fill_data *data);
 
 /*
@@ -94,7 +94,7 @@ static void keylist_fill_row (const gchar * fpr, GpgmeKey key,
  */
 
 static void
-get_name_value (GpgmeKey key, GPAKeyList * keylist,
+get_name_value (gpgme_key_t key, GPAKeyList * keylist,
 		gchar ** label, gboolean * free_label, GdkPixmap ** pixmap,
 		GdkBitmap ** mask)
 {
@@ -105,7 +105,7 @@ get_name_value (GpgmeKey key, GPAKeyList * keylist,
 }
 
 static void
-get_trust_value (GpgmeKey key, GPAKeyList * keylist,
+get_trust_value (gpgme_key_t key, GPAKeyList * keylist,
 		 gchar ** label, gboolean * free_label, GdkPixmap ** pixmap,
 		 GdkBitmap ** mask)
 {
@@ -116,7 +116,7 @@ get_trust_value (GpgmeKey key, GPAKeyList * keylist,
 }
   
 static void
-get_ownertrust_value (GpgmeKey key, GPAKeyList * keylist,
+get_ownertrust_value (gpgme_key_t key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
@@ -127,7 +127,7 @@ get_ownertrust_value (GpgmeKey key, GPAKeyList * keylist,
 }
 
 static void
-get_expirydate_value (GpgmeKey key, GPAKeyList * keylist,
+get_expirydate_value (gpgme_key_t key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
@@ -139,7 +139,7 @@ get_expirydate_value (GpgmeKey key, GPAKeyList * keylist,
 }
 
 static void
-get_identifier_value (GpgmeKey key, GPAKeyList * keylist,
+get_identifier_value (gpgme_key_t key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
@@ -150,7 +150,7 @@ get_identifier_value (GpgmeKey key, GPAKeyList * keylist,
 }
 
 static void
-get_key_type_pixmap_value (GpgmeKey key, GPAKeyList *keylist,
+get_key_type_pixmap_value (gpgme_key_t key, GPAKeyList *keylist,
 			   gchar **label, gboolean *free_label,
 			   GdkPixmap **pixmap, GdkBitmap **mask)
 {
@@ -265,9 +265,9 @@ keylist_fill_list (GPAKeyList *keylist)
   const gchar *fpr;
   GHashTable *sel_hash = g_hash_table_new (g_str_hash, g_str_equal);
   struct keylist_fill_data fill_data = { keylist, sel_hash };
-  GpgmeError err;
-  GpgmeKey key;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_error_t err;
+  gpgme_key_t key;
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   /* Remember the current selection. Use the
    * hash table itself as the value just because its a non-NULL pointer
@@ -324,7 +324,7 @@ keylist_fill_list (GPAKeyList *keylist)
  * key. This is a callback called for each key in the keyring.
  */
 static void
-keylist_fill_row (const gchar *fpr, GpgmeKey key,
+keylist_fill_row (const gchar *fpr, gpgme_key_t key,
                   struct keylist_fill_data *data)
 {
   gint row, col;
@@ -499,12 +499,12 @@ gpa_keylist_current_key_id (GtkWidget * clist)
 
 
 /* Return the currently selected key. NULL if no key is selected */
-GpgmeKey
+gpgme_key_t
 gpa_keylist_current_key (GtkWidget * clist)
 {
   int row;
   gchar * fpr;
-  GpgmeKey key = NULL;
+  gpgme_key_t key = NULL;
 
   if (GTK_CLIST (clist)->selection)
     {

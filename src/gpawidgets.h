@@ -23,7 +23,7 @@
 
 #include <gtk/gtk.h>
 
-extern GtkWidget *gpa_key_info_new (GpgmeKey key);
+extern GtkWidget *gpa_key_info_new (gpgme_key_t key);
 
 extern GtkWidget *gpa_expiry_frame_new (GtkAccelGroup *accelGroup,
 				        GDate *expiryDate);

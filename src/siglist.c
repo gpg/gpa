@@ -150,10 +150,10 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
 {
   GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
                                         (GTK_TREE_VIEW (list)));
-  GpgmeKey key;
-  GpgmeError err;
+  gpgme_key_t key;
+  gpgme_error_t err;
   int i, uid;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
   int old_mode = gpgme_get_keylist_mode (ctx);
   const gchar *keyid;
 
@@ -216,7 +216,7 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
 }
 
 static GHashTable*
-revoked_signatures (GpgmeKey key, int uid)
+revoked_signatures (gpgme_key_t key, int uid)
 {
   int i;
   const gchar *keyid;
@@ -241,10 +241,10 @@ gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
 {
   GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
                                         (GTK_TREE_VIEW (list)));
-  GpgmeKey key;
-  GpgmeError err;
+  gpgme_key_t key;
+  gpgme_error_t err;
   int i;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
   int old_mode = gpgme_get_keylist_mode (ctx);
   GHashTable *revoked;
 

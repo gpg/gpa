@@ -76,7 +76,7 @@ is_passphrase_correct (GtkWidget *parent, const gchar *passwd,
   return result;
 }
 
-GpgmeError gpa_change_passphrase_dialog_run (void *opaque, 
+gpgme_error_t gpa_change_passphrase_dialog_run (void *opaque, 
 					     const char *desc, 
 					     void **r_hd,
 					     const char **result)

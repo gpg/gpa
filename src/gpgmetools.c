@@ -35,7 +35,7 @@
 #endif
 
 /* Report an unexpected error in GPGME and quit the application */
-void _gpa_gpgme_error (GpgmeError err, const char *file, int line)
+void _gpa_gpgme_error (gpgme_error_t err, const char *file, int line)
 {
   gchar *message = g_strdup_printf (_("Fatal Error in GPGME library\n"
                                       "(invoked from file %s, line %i):\n\n"
@@ -47,7 +47,7 @@ void _gpa_gpgme_error (GpgmeError err, const char *file, int line)
   exit (EXIT_FAILURE);
 }
 
-void gpa_gpgme_warning (GpgmeError err)
+void gpa_gpgme_warning (gpgme_error_t err)
 {
   gchar *message = g_strdup_printf (_("The GPGME library returned an unexpected\n"
 				      "error. The error was:\n\n"
@@ -59,11 +59,11 @@ void gpa_gpgme_warning (GpgmeError err)
   g_free (message);
 }
 
-/* Initialize a GpgmeCtx for use with GPA */
-GpgmeCtx gpa_gpgme_new (void)
+/* Initialize a gpgme_ctx_t for use with GPA */
+gpgme_ctx_t gpa_gpgme_new (void)
 {
-  GpgmeCtx ctx;
-  GpgmeError err;
+  gpgme_ctx_t ctx;
+  gpgme_error_t err;
   
   err = gpgme_new (&ctx);
   if (err != GPGME_No_Error)
@@ -75,15 +75,15 @@ GpgmeCtx gpa_gpgme_new (void)
   return ctx;
 }
 
-/* Write the contents of the GpgmeData object to the file. Receives a
+/* Write the contents of the gpgme_data_t object to the file. Receives a
  * filehandle instead of the filename, so that the caller can make sure the
  * file is accesible before putting anything into data.
  */
-void dump_data_to_file (GpgmeData data, FILE *file)
+void dump_data_to_file (gpgme_data_t data, FILE *file)
 {
   char buffer[128];
   int nread;
-  GpgmeError err;
+  gpgme_error_t err;
 
   err = gpgme_data_rewind (data);
   if (err != GPGME_No_Error)
@@ -149,13 +149,13 @@ FILE *gpa_fopen (const char *filename, GtkWidget *parent)
 }
 
 int
-gpa_open_output (const char *filename, GpgmeData *data, GtkWidget *parent)
+gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
 {
   int target = -1;
   
   if (check_overwriting (filename, parent))
     {
-      GpgmeError err;
+      gpgme_error_t err;
 
       target = creat (filename, 0666);
       if (target == -1)
@@ -177,9 +177,9 @@ gpa_open_output (const char *filename, GpgmeData *data, GtkWidget *parent)
 }
 
 int
-gpa_open_input (const char *filename, GpgmeData *data, GtkWidget *parent)
+gpa_open_input (const char *filename, gpgme_data_t *data, GtkWidget *parent)
 {
-  GpgmeError err;
+  gpgme_error_t err;
   int target = -1;
 
   target = open (filename, O_RDONLY);
@@ -202,11 +202,11 @@ gpa_open_input (const char *filename, GpgmeData *data, GtkWidget *parent)
 
 /* Do a gpgme_data_new_from_file and report any GPGME_File_Error to the user.
  */
-GpgmeError gpa_gpgme_data_new_from_file (GpgmeData *data,
+gpgme_error_t gpa_gpgme_data_new_from_file (gpgme_data_t *data,
 					 const char *filename,
 					 GtkWidget *parent)
 {
-  GpgmeError err;
+  gpgme_error_t err;
   err = gpgme_data_new_from_file (data, filename, 1);
   if (err == GPGME_File_Error)
     {
@@ -218,13 +218,13 @@ GpgmeError gpa_gpgme_data_new_from_file (GpgmeData *data,
   return err;
 }
 
-/* Write the contents of the GpgmeData into the clipboard
+/* Write the contents of the gpgme_data_t into the clipboard
  */
-void dump_data_to_clipboard (GpgmeData data, GtkClipboard *clipboard)
+void dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard)
 {
   char buffer[128];
   int nread;
-  GpgmeError err;
+  gpgme_error_t err;
   gchar *text = NULL;
   gint len = 0;
 
@@ -347,11 +347,11 @@ static gchar * build_genkey_parms (GPAKeyGenParameters *params)
 /* Generate a key with the given parameters. It prepares the parameters
  * required by Gpgme and returns whatever gpgme_op_genkey returns.
  */
-GpgmeError gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
+gpgme_error_t gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
 {
   gchar *parm_string;
-  GpgmeError err;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_error_t err;
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   parm_string = build_genkey_parms (params);
   err = gpgme_op_genkey (ctx, parm_string, NULL, NULL);
@@ -522,9 +522,9 @@ gpa_algorithm_from_string (const gchar * string)
 }
 
 /* Ownertrust strings */
-const gchar *gpa_key_ownertrust_string (GpgmeKey key)
+const gchar *gpa_key_ownertrust_string (gpgme_key_t key)
 {
-  GpgmeValidity trust;
+  gpgme_validity_t trust;
   trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
   switch (trust) 
     {
@@ -549,9 +549,9 @@ const gchar *gpa_key_ownertrust_string (GpgmeKey key)
 }
 
 /* Key validity strings */
-const gchar *gpa_key_validity_string (GpgmeKey key)
+const gchar *gpa_key_validity_string (gpgme_key_t key)
 {
-  GpgmeValidity valid;
+  gpgme_validity_t valid;
   valid = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
   switch (valid) 
     {
@@ -638,7 +638,7 @@ static GtkWidget *passphrase_question_label (const gchar *desc)
 }
 
 /* This is the function called by GPGME when it wants a passphrase */
-GpgmeError gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd,
+gpgme_error_t gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd,
 			      const char **result)
 {
   GtkWidget * dialog;
@@ -739,7 +739,7 @@ string_to_utf8 (const gchar *string)
     }
 }
 
-gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
+gchar *gpa_gpgme_key_get_userid (gpgme_key_t key, int idx)
 {
   const char * uid;
   gchar *uid_utf8;
@@ -760,7 +760,7 @@ gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
  * Allocates a new string, which must be freed with g_free ().
  * This is based on code from GPAPA's extract_fingerprint.
  */
-gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx)
+gchar *gpa_gpgme_key_get_fingerprint (gpgme_key_t key, int idx)
 {
   const char *fpraw = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR,
 						 NULL, idx);
@@ -812,7 +812,7 @@ gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx)
 /* Return the short key ID of the indicated key. The returned string is valid
  * as long as the key is valid.
  */
-const gchar *gpa_gpgme_key_get_short_keyid (GpgmeKey key, int idx)
+const gchar *gpa_gpgme_key_get_short_keyid (gpgme_key_t key, int idx)
 {
   const char *keyid;
   keyid = gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, NULL, idx);
@@ -832,7 +832,7 @@ const gchar *gpa_gpgme_key_get_short_keyid (GpgmeKey key, int idx)
 /* Return the user ID, making sure it is properly UTF-8 encoded.
  * Allocates a new string, which must be freed with g_free().
  */
-gchar *gpa_gpgme_key_sig_get_userid (GpgmeKey key, int uid_idx, int idx)
+gchar *gpa_gpgme_key_sig_get_userid (gpgme_key_t key, int uid_idx, int idx)
 {
   const char * uid;
 
@@ -852,7 +852,7 @@ gchar *gpa_gpgme_key_sig_get_userid (GpgmeKey key, int uid_idx, int idx)
 /* Return the short key ID of the indicated key. The returned string is valid
  * as long as the key is valid.
  */
-const gchar *gpa_gpgme_key_sig_get_short_keyid (GpgmeKey key, int uid_idx,
+const gchar *gpa_gpgme_key_sig_get_short_keyid (gpgme_key_t key, int uid_idx,
                                                 int idx)
 {
   const char *keyid;
@@ -870,7 +870,7 @@ const gchar *gpa_gpgme_key_sig_get_short_keyid (GpgmeKey key, int uid_idx,
 
 /* Return a string with the status of the key signature.
  */
-const gchar *gpa_gpgme_key_sig_get_sig_status (GpgmeKey key, int uid_idx,
+const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_t key, int uid_idx,
                                                int idx, GHashTable *revoked)
 {
   const gchar *status;

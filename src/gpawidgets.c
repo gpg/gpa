@@ -39,7 +39,7 @@
  */ 
 
 GtkWidget *
-gpa_key_info_new (GpgmeKey key)
+gpa_key_info_new (gpgme_key_t key)
 {
   GtkWidget * table;
   GtkWidget * label;

@@ -177,8 +177,8 @@ gpa_file_verify_dialog_get_type (void)
 typedef struct
 {
   gchar *fpr;
-  GpgmeKey key;
-  GpgmeValidity validity;
+  gpgme_key_t key;
+  gpgme_validity_t validity;
   unsigned long summary;
   time_t created;
   time_t expire;
@@ -278,7 +278,7 @@ add_signature_to_model (GtkListStore *store, SignatureData *data)
 
 /* Fill the list of signatures with the data from the verification */
 static void
-fill_sig_model (GtkListStore *store, GpgmeCtx ctx)
+fill_sig_model (GtkListStore *store, gpgme_ctx_t ctx)
 {
   SignatureData *data;
   const gchar *fpr;
@@ -304,7 +304,7 @@ fill_sig_model (GtkListStore *store, GpgmeCtx ctx)
 
 /* Create the list of signatures */
 static GtkWidget *
-signature_list (GpgmeCtx ctx)
+signature_list (gpgme_ctx_t ctx)
 {
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
@@ -341,7 +341,7 @@ signature_list (GpgmeCtx ctx)
 }
 
 static GtkWidget *
-verify_file_page (GpgmeCtx ctx)
+verify_file_page (gpgme_ctx_t ctx)
 {
   GtkWidget *vbox;
   GtkWidget *list;
@@ -375,7 +375,7 @@ GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent)
 
 void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      const gchar *filename,
-				      GpgmeCtx ctx)
+				      gpgme_ctx_t ctx)
 {
   GtkWidget *page;
   

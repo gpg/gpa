@@ -24,9 +24,9 @@
 /* Callbacks */
 
 void gpa_key_selector_start  (GpaContext *context, gpointer data);
-void gpa_key_selector_next_key (GpaContext *context, GpgmeKey key,
+void gpa_key_selector_next_key (GpaContext *context, gpgme_key_t key,
 				gpointer data);
-void gpa_key_selector_done (GpaContext *context, GpgmeError err, 
+void gpa_key_selector_done (GpaContext *context, gpgme_error_t err, 
 			    gpointer data);
 
 /* GObject */
@@ -150,7 +150,7 @@ GtkWidget *gpa_key_selector_new (gboolean secret)
   return sel;
 }
 
-/* Return a list of selected GpgmeKey's. The caller must free the list.
+/* Return a list of selected gpgme_key_t's. The caller must free the list.
  */
 GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
 {
@@ -163,7 +163,7 @@ GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
 
   for (cur = list; cur; cur = g_list_next (list))
     {
-      GpgmeKey key;
+      gpgme_key_t key;
       GtkTreeIter iter;
       GtkTreePath *path = cur->data;
       GValue value = {0,};
@@ -200,7 +200,7 @@ void gpa_key_selector_start  (GpaContext *context, gpointer data)
   gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
 }
 
-void gpa_key_selector_next_key (GpaContext *context, GpgmeKey key,
+void gpa_key_selector_next_key (GpaContext *context, gpgme_key_t key,
 				gpointer data)
 {
   GpaKeySelector *selector = data;
@@ -234,7 +234,7 @@ void gpa_key_selector_next_key (GpaContext *context, GpgmeKey key,
   g_free (userid);
 }
 
-void gpa_key_selector_done (GpaContext *context, GpgmeError err, 
+void gpa_key_selector_done (GpaContext *context, gpgme_error_t err, 
 			    gpointer data)
 {
   GpaKeySelector *selector = data;

@@ -43,7 +43,7 @@ struct _GpaKeySelector {
   GpaContext *context;
   /* Whether we are listing secret or public keys */
   gboolean secret;
-  /* All GpgmeKeys we hold. We keep them here to free them.
+  /* All gpgme_key_ts we hold. We keep them here to free them.
    * Ideally this should be done by the list itself, but that would
    * involve mucking around with GValues */
   GList *keys;
@@ -60,7 +60,7 @@ GType gpa_key_selector_get_type (void) G_GNUC_CONST;
 
 GtkWidget *gpa_key_selector_new (gboolean secret);
 
-/* Return a list of selected GpgmeKey's. The caller must free the list, but
+/* Return a list of selected gpgme_key_t's. The caller must free the list, but
  * not dereference the keys, as they belong to the selector.
  */
 GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector);

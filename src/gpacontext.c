@@ -33,21 +33,21 @@ static void gpa_context_finalize (GObject *object);
 /* Default signal handlers */
 
 static void gpa_context_start (GpaContext *context);
-static void gpa_context_done (GpaContext *context, GpgmeError err);
-static void gpa_context_next_key (GpaContext *context, GpgmeKey key);
+static void gpa_context_done (GpaContext *context, gpgme_error_t err);
+static void gpa_context_next_key (GpaContext *context, gpgme_key_t key);
 static void gpa_context_next_trust_item (GpaContext *context,
-                                         GpgmeTrustItem item);
+                                         gpgme_trust_item_t item);
 
 /* The GPGME I/O callbacks */
 
-static GpgmeError gpa_context_register_cb (void *data, int fd, int dir,
-                                           GpgmeIOCb fnc, void *fnc_data, 
+static gpgme_error_t gpa_context_register_cb (void *data, int fd, int dir,
+                                           gpgme_io_cb_t fnc, void *fnc_data, 
                                            void **tag);
 static void gpa_context_remove_cb (void *tag);
-static void gpa_context_event_cb (void *data, GpgmeEventIO type,
+static void gpa_context_event_cb (void *data, gpgme_event_io_t type,
                                   void *type_data);
 
-static GpgmeError
+static gpgme_error_t
 gpa_context_passphrase_cb (void *opaque, const char *desc, void **r_hd,
 			   const char **result);
 
@@ -148,7 +148,7 @@ gpa_context_class_init (GpaContextClass *klass)
 static void
 gpa_context_init (GpaContext *context)
 {
-  GpgmeError err;
+  gpgme_error_t err;
 
   context->busy = FALSE;
 
@@ -164,7 +164,7 @@ gpa_context_init (GpaContext *context)
   gpgme_set_passphrase_cb (context->ctx, gpa_context_passphrase_cb,
 			   context);
   /* Fill the CB structure */
-  context->io_cbs = g_malloc (sizeof (struct GpgmeIOCbs));
+  context->io_cbs = g_malloc (sizeof (struct gpgme_io_cbs));
   context->io_cbs->add = gpa_context_register_cb;
   context->io_cbs->add_priv = context;
   context->io_cbs->remove = gpa_context_remove_cb;
@@ -236,7 +236,7 @@ struct gpa_io_cb_data
 {
   int fd;
   int dir;
-  GpgmeIOCb fnc;
+  gpgme_io_cb_t fnc;
   void *fnc_data;
   gint watch;
   GpaContext *context;
@@ -322,8 +322,8 @@ unregister_all_callbacks (GpaContext *context)
 
 /* Register a callback.
  */
-static GpgmeError
-gpa_context_register_cb (void *data, int fd, int dir, GpgmeIOCb fnc,
+static gpgme_error_t
+gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
                          void *fnc_data, void **tag)
 {
   GpaContext *context = data;
@@ -369,10 +369,10 @@ gpa_context_remove_cb (void *tag)
  * handlers do the real job.
  */
 static void
-gpa_context_event_cb (void *data, GpgmeEventIO type, void *type_data)
+gpa_context_event_cb (void *data, gpgme_event_io_t type, void *type_data)
 {
   GpaContext *context = data;
-  GpgmeError *err;
+  gpgme_error_t *err;
   
   switch (type)
     {
@@ -407,30 +407,30 @@ gpa_context_start (GpaContext *context)
 }
 
 static void
-gpa_context_done (GpaContext *context, GpgmeError err)
+gpa_context_done (GpaContext *context, gpgme_error_t err)
 {
   context->busy = FALSE;
 }
 
 static void
-gpa_context_next_key (GpaContext *context, GpgmeKey key)
+gpa_context_next_key (GpaContext *context, gpgme_key_t key)
 {
   /* Do nothing yet */
 }
 
 static void
-gpa_context_next_trust_item (GpaContext *context, GpgmeTrustItem item)
+gpa_context_next_trust_item (GpaContext *context, gpgme_trust_item_t item)
 {
   /* Do nothing yet */
 }
 
 /* The passphrase callback */
-static GpgmeError
+static gpgme_error_t
 gpa_context_passphrase_cb (void *opaque, const char *desc, void **r_hd,
 			   const char **result)
 {
   GpaContext *context = opaque;
-  GpgmeError err;
+  gpgme_error_t err;
 
   unregister_all_callbacks (context);
   err = gpa_passphrase_cb (NULL, desc, r_hd, result);

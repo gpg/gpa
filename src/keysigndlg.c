@@ -42,7 +42,7 @@
  * and if the user clicks OK, set *sign_locally to false.
  */
 gboolean
-gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
+gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
                          gboolean * sign_locally)
 {
   GtkAccelGroup *accelGroup;

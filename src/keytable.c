@@ -30,10 +30,10 @@ struct _GPAKeyTable
 
 /* Auxiliary functions */
 
-static void do_keylisting (GpgmeCtx ctx, GHashTable *hash, gboolean secret)
+static void do_keylisting (gpgme_ctx_t ctx, GHashTable *hash, gboolean secret)
 {
-  GpgmeError err;
-  GpgmeKey key;
+  gpgme_error_t err;
+  gpgme_key_t key;
   gchar *fpr;
   GtkWidget *window, *table, *label, *progress;
   gchar *text;
@@ -84,8 +84,8 @@ static void do_keylisting (GpgmeCtx ctx, GHashTable *hash, gboolean secret)
 
 static void keytable_fill (GHashTable *hash, gboolean secret)
 {
-  GpgmeError err;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_error_t err;
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   err = gpgme_op_keylist_start( ctx, NULL, secret );
   if( err != GPGME_No_Error )
@@ -96,8 +96,8 @@ static void keytable_fill (GHashTable *hash, gboolean secret)
 
 static void load_keys (GHashTable *hash, const gchar **keys, gboolean secret)
 {
-  GpgmeError err;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_error_t err;
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   err = gpgme_op_keylist_ext_start (ctx, keys, secret, 0);
   if( err != GPGME_No_Error )
@@ -106,7 +106,7 @@ static void load_keys (GHashTable *hash, const gchar **keys, gboolean secret)
   gpgme_release (ctx);
 }
 
-static gboolean true (const gchar *fpr, GpgmeKey key, gpointer data)
+static gboolean true (const gchar *fpr, gpgme_key_t key, gpointer data)
 {
   return TRUE;
 }
@@ -119,10 +119,10 @@ static void keytable_empty (GPAKeyTable * table)
 
 static void load_key (GHashTable *hash, const gchar *fpr, gboolean secret)
 {
-  GpgmeError err;
-  GpgmeKey key;
+  gpgme_error_t err;
+  gpgme_key_t key;
   gchar *key_fpr;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   /* List the key with a specific fingerprint */
   err = gpgme_op_keylist_start( ctx, fpr, secret );
@@ -197,14 +197,14 @@ void gpa_keytable_load_keys (GPAKeyTable * table, const gchar **keys)
   load_keys (table->secret_hash, keys, TRUE);
 }
 
-GpgmeKey gpa_keytable_lookup (GPAKeyTable * table, const gchar * fpr)
+gpgme_key_t gpa_keytable_lookup (GPAKeyTable * table, const gchar * fpr)
 {
-  return (GpgmeKey) g_hash_table_lookup (table->public_hash, fpr);
+  return (gpgme_key_t) g_hash_table_lookup (table->public_hash, fpr);
 }
 
-GpgmeKey gpa_keytable_secret_lookup (GPAKeyTable * table, const gchar * fpr)
+gpgme_key_t gpa_keytable_secret_lookup (GPAKeyTable * table, const gchar * fpr)
 {
-  return (GpgmeKey) g_hash_table_lookup (table->secret_hash, fpr);
+  return (gpgme_key_t) g_hash_table_lookup (table->secret_hash, fpr);
 }
 
 void gpa_keytable_foreach (GPAKeyTable * table, GPATableFunc func,

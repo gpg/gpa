@@ -75,7 +75,7 @@ confirm_delete_secret (GtkWidget * parent)
  * deleting secret keys.
  */
 gboolean
-gpa_delete_dialog_run (GtkWidget * parent, GpgmeKey key,
+gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key,
 		       gboolean has_secret_key)
 {
   GtkWidget * window;

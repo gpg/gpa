@@ -269,9 +269,9 @@ gboolean gpa_file_sign_dialog_get_armor (GpaFileSignDialog *dialog)
   return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_armor));
 }
 
-GpgmeSigMode gpa_file_sign_dialog_get_sign_type (GpaFileSignDialog *dialog)
+gpgme_sig_mode_t gpa_file_sign_dialog_get_sign_type (GpaFileSignDialog *dialog)
 {
-  GpgmeSigMode sign_type = GPGME_SIG_MODE_NORMAL;
+  gpgme_sig_mode_t sign_type = GPGME_SIG_MODE_NORMAL;
   
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_comp)))
     sign_type = GPGME_SIG_MODE_NORMAL;

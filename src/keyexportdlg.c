@@ -284,7 +284,7 @@ key_backup_dialog_run (GtkWidget *parent, const gchar *fpr)
   GtkWidget *entry;
   GtkWidget *button;
   GPAKeyExportDialog dialog;
-  GpgmeKey key;
+  gpgme_key_t key;
 
   gchar *id_text, *default_file;
 

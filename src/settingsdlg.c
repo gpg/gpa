@@ -33,7 +33,7 @@ key_selected_cb (GtkTreeSelection *treeselection, gpointer user_data)
   selected = gpa_key_selector_get_selected_keys (sel);
   gpa_options_set_default_key (gpa_options_get_instance (),
 			       gpgme_key_get_string_attr 
-			       ((GpgmeKey*)selected->data, GPGME_ATTR_FPR,
+			       ((gpgme_key_t*)selected->data, GPGME_ATTR_FPR,
 				NULL, 0 ));
   g_list_free (selected);
 }

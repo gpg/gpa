@@ -36,10 +36,10 @@
 /* Internal functions */
 static gboolean gpa_file_decrypt_operation_idle_cb (gpointer data);
 static void gpa_file_decrypt_operation_done_cb (GpaContext *context, 
-						GpgmeError err,
+						gpgme_error_t err,
 						GpaFileDecryptOperation *op);
 static void gpa_file_decrypt_operation_done_error_cb (GpaContext *context,
-						      GpgmeError err,
+						      gpgme_error_t err,
 						      GpaFileDecryptOperation *op);
 
 /* GObject */
@@ -175,7 +175,7 @@ static gboolean
 gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 				  const gchar *cipher_filename)
 {
-  GpgmeError err;
+  gpgme_error_t err;
   
   op->plain_filename = destination_filename (cipher_filename);
   /* Open the files */
@@ -222,7 +222,7 @@ gpa_file_decrypt_operation_next (GpaFileDecryptOperation *op)
 
 static void
 gpa_file_decrypt_operation_done_cb (GpaContext *context, 
-				    GpgmeError err,
+				    gpgme_error_t err,
 				    GpaFileDecryptOperation *op)
 {
   /* Do clean up on the operation */
@@ -265,7 +265,7 @@ gpa_file_decrypt_operation_idle_cb (gpointer data)
 }
 
 static void
-gpa_file_decrypt_operation_done_error_cb (GpaContext *context, GpgmeError err,
+gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpgme_error_t err,
 					  GpaFileDecryptOperation *op)
 {
   gchar *message;

@@ -37,10 +37,10 @@
 /* Internal functions */
 static gboolean gpa_file_verify_operation_idle_cb (gpointer data);
 static void gpa_file_verify_operation_done_error_cb (GpaContext *context,
-						     GpgmeError err,
+						     gpgme_error_t err,
 						     GpaFileVerifyOperation *op);
 static void gpa_file_verify_operation_done_cb (GpaContext *context, 
-						GpgmeError err,
+						gpgme_error_t err,
 						GpaFileVerifyOperation *op);
 static void gpa_file_verify_operation_response_cb (GtkDialog *dialog,
 						   gint response,
@@ -188,7 +188,7 @@ static gboolean
 gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 				 const gchar *sig_filename)
 {
-  GpgmeError err;
+  gpgme_error_t err;
   gchar *signed_file;
 
   if (is_detached_sig (sig_filename, &signed_file))
@@ -260,7 +260,7 @@ gpa_file_verify_operation_next (GpaFileVerifyOperation *op)
 
 static void
 gpa_file_verify_operation_done_cb (GpaContext *context, 
-				    GpgmeError err,
+				    gpgme_error_t err,
 				    GpaFileVerifyOperation *op)
 {
   /* Do clean up on the operation */
@@ -314,7 +314,7 @@ gpa_file_verify_operation_response_cb (GtkDialog *dialog,
 }
 
 static void
-gpa_file_verify_operation_done_error_cb (GpaContext *context, GpgmeError err,
+gpa_file_verify_operation_done_error_cb (GpaContext *context, gpgme_error_t err,
 					 GpaFileVerifyOperation *op)
 {
   gchar *message;

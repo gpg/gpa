@@ -62,6 +62,6 @@ GList *gpa_file_sign_dialog_signers (GpaFileSignDialog *dialog);
 
 gboolean gpa_file_sign_dialog_get_armor (GpaFileSignDialog *dialog);
 
-GpgmeSigMode gpa_file_sign_dialog_get_sign_type (GpaFileSignDialog *dialog);
+gpgme_sig_mode_t gpa_file_sign_dialog_get_sign_type (GpaFileSignDialog *dialog);
 
 #endif /* FILESIGNDLG_H */

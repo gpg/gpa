@@ -30,7 +30,7 @@
 
 typedef struct _GPAKeyTable GPAKeyTable;
 
-typedef void (*GPATableFunc) (const gchar * fpr, GpgmeKey key, gpointer data);
+typedef void (*GPATableFunc) (const gchar * fpr, gpgme_key_t key, gpointer data);
 
 /* Creates a new keytable */
 GPAKeyTable *gpa_keytable_new (void);
@@ -46,8 +46,8 @@ void gpa_keytable_load_keys (GPAKeyTable * table, const gchar ** keys);
 
 /* Return the key with a given fingerprint. It does not provide a reference 
  * for the user */
-GpgmeKey gpa_keytable_lookup (GPAKeyTable * table, const gchar * fpr);
-GpgmeKey gpa_keytable_secret_lookup (GPAKeyTable * table, const gchar * fpr);
+gpgme_key_t gpa_keytable_lookup (GPAKeyTable * table, const gchar * fpr);
+gpgme_key_t gpa_keytable_secret_lookup (GPAKeyTable * table, const gchar * fpr);
 
 /* Call the function "func" for each key and value in the table */
 void gpa_keytable_foreach (GPAKeyTable * table, GPATableFunc func,

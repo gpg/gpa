@@ -434,7 +434,7 @@ gpa_keygen_wizard_generate_action (gpointer data)
 {
   GPAKeyGenWizard *keygen_wizard = data;
   GPAKeyGenParameters params;
-  GpgmeError err;
+  gpgme_error_t err;
   gchar *fpr;
   gboolean do_backup;
   GtkWidget *radio;

@@ -38,10 +38,10 @@
 
 /* Internal functions */
 static void gpa_file_encrypt_operation_done_error_cb (GpaContext *context, 
-						      GpgmeError err,
+						      gpgme_error_t err,
 						      GpaFileEncryptOperation *op);
 static void gpa_file_encrypt_operation_done_cb (GpaContext *context, 
-						GpgmeError err,
+						gpgme_error_t err,
 						GpaFileEncryptOperation *op);
 static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
 						    gint response,
@@ -183,7 +183,7 @@ static gboolean
 gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
 				  const gchar *plain_filename)
 {
-  GpgmeError err;
+  gpgme_error_t err;
   
   op->cipher_filename = destination_filename 
     (plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx));
@@ -240,7 +240,7 @@ gpa_file_encrypt_operation_next (GpaFileEncryptOperation *op)
 
 static void
 gpa_file_encrypt_operation_done_cb (GpaContext *context, 
-				    GpgmeError err,
+				    gpgme_error_t err,
 				    GpaFileEncryptOperation *op)
 {
   /* Do clean up on the operation */
@@ -276,7 +276,7 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
  */
 
 static GtkResponseType
-ignore_key_trust (GpgmeKey key, GtkWidget *parent)
+ignore_key_trust (gpgme_key_t key, GtkWidget *parent)
 {
   GtkWidget *dialog;
   GtkWidget *key_info;
@@ -326,7 +326,7 @@ ignore_key_trust (GpgmeKey key, GtkWidget *parent)
 }
 
 static void
-revoked_key (GpgmeKey key, GtkWidget *parent)
+revoked_key (gpgme_key_t key, GtkWidget *parent)
 {
   GtkWidget *dialog;
   GtkWidget *key_info;
@@ -365,7 +365,7 @@ revoked_key (GpgmeKey key, GtkWidget *parent)
 }
 
 static void
-expired_key (GpgmeKey key, GtkWidget *parent)
+expired_key (gpgme_key_t key, GtkWidget *parent)
 {
   GtkWidget *dialog;
   GtkWidget *key_info;
@@ -412,7 +412,7 @@ static gboolean
 set_recipients (GpaFileEncryptOperation *op, GList *recipients)
 {
   GList *cur;
-  GpgmeError err;
+  gpgme_error_t err;
 
   err = gpgme_recipients_new (&op->rset);
   if (err != GPGME_No_Error)
@@ -422,8 +422,8 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
   for (cur = recipients; cur; cur = g_list_next (cur))
     {
       /* Check that all recipients are valid */
-      GpgmeKey key = cur->data;
-      GpgmeValidity valid;
+      gpgme_key_t key = cur->data;
+      gpgme_validity_t valid;
       const char *fpr=gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
 
       valid = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
@@ -478,7 +478,7 @@ static gboolean
 set_signers (GpaFileEncryptOperation *op, GList *signers)
 {
   GList *cur;
-  GpgmeError err;
+  gpgme_error_t err;
 
   gpgme_signers_clear (GPA_OPERATION (op)->context->ctx);
   if (!signers)
@@ -490,7 +490,7 @@ set_signers (GpaFileEncryptOperation *op, GList *signers)
     }
   for (cur = signers; cur; cur = g_list_next (cur))
     {
-      GpgmeKey key = cur->data;
+      gpgme_key_t key = cur->data;
       err = gpgme_signers_add (GPA_OPERATION (op)->context->ctx, key);
       if (err != GPGME_No_Error)
 	{
@@ -556,7 +556,7 @@ static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
 }
 
 static void
-gpa_file_encrypt_operation_done_error_cb (GpaContext *context, GpgmeError err,
+gpa_file_encrypt_operation_done_error_cb (GpaContext *context, gpgme_error_t err,
 					  GpaFileEncryptOperation *op)
 {
   /* Capture fatal errors and quit the application */

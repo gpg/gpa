@@ -38,10 +38,10 @@
 
 /* Internal functions */
 static void gpa_file_sign_operation_done_error_cb (GpaContext *context, 
-						   GpgmeError err,
+						   gpgme_error_t err,
 						   GpaFileSignOperation *op);
 static void gpa_file_sign_operation_done_cb (GpaContext *context, 
-						GpgmeError err,
+						gpgme_error_t err,
 						GpaFileSignOperation *op);
 static void gpa_file_sign_operation_response_cb (GtkDialog *dialog,
 						    gint response,
@@ -159,7 +159,7 @@ gpa_file_sign_operation_new (GtkWidget *window, GList *files)
 
 static gchar*
 destination_filename (const gchar *filename, gboolean armor, 
-		      GpgmeSigMode sign_type)
+		      gpgme_sig_mode_t sign_type)
 {
   const gchar *extension;
   gchar *signature_filename;
@@ -185,7 +185,7 @@ static gboolean
 gpa_file_sign_operation_start (GpaFileSignOperation *op,
 			       const gchar *plain_filename)
 {
-  GpgmeError err;
+  gpgme_error_t err;
   
   op->sig_filename = destination_filename 
     (plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx),
@@ -234,7 +234,7 @@ gpa_file_sign_operation_next (GpaFileSignOperation *op)
 
 static void
 gpa_file_sign_operation_done_cb (GpaContext *context, 
-				    GpgmeError err,
+				    gpgme_error_t err,
 				    GpaFileSignOperation *op)
 {
   /* Do clean up on the operation */
@@ -272,7 +272,7 @@ static gboolean
 set_signers (GpaFileSignOperation *op, GList *signers)
 {
   GList *cur;
-  GpgmeError err;
+  gpgme_error_t err;
 
   gpgme_signers_clear (GPA_OPERATION (op)->context->ctx);
   if (!signers)
@@ -284,7 +284,7 @@ set_signers (GpaFileSignOperation *op, GList *signers)
     }
   for (cur = signers; cur; cur = g_list_next (cur))
     {
-      GpgmeKey key = cur->data;
+      gpgme_key_t key = cur->data;
       err = gpgme_signers_add (GPA_OPERATION (op)->context->ctx, key);
       if (err != GPGME_No_Error)
 	{
@@ -340,7 +340,7 @@ static void gpa_file_sign_operation_response_cb (GtkDialog *dialog,
 }
 
 static void
-gpa_file_sign_operation_done_error_cb (GpaContext *context, GpgmeError err,
+gpa_file_sign_operation_done_error_cb (GpaContext *context, gpgme_error_t err,
 				       GpaFileSignOperation *op)
 {
   /* Capture fatal errors and quit the application */

@@ -32,9 +32,9 @@
  * The PARENT window is used as parent for any dialog the function displays.
  */
 gboolean server_send_keys (const gchar *server, const gchar *keyid,
-		       GpgmeData data, GtkWidget *parent);
+		       gpgme_data_t data, GtkWidget *parent);
 
 gboolean server_get_key (const gchar *server, const gchar *keyid,
-                         GpgmeData *data, GtkWidget *parent);
+                         gpgme_data_t *data, GtkWidget *parent);
 
 #endif

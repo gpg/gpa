@@ -1,3 +1,29 @@
+2003-05-22  Miguel Coca  <mcoca@gnu.org>
+
+	* encryptdlg.c, encryptdlg.h, expirydlg.c, expirydlg.h, fileman.c, 
+ 	fileman.h, filesigndlg.c, filesigndlg.h, gpa.c, gpa.h, 
+ 	gpa_license.c, gpa_license.h, gpacontext.c, gpacontext.h, 
+ 	gpafiledecryptop.c, gpafiledecryptop.h, gpafileencryptop.c, 
+ 	gpafileencryptop.h, gpafileop.c, gpafileop.h, gpafilesignop.c, 
+ 	gpafilesignop.h, gpafileverifyop.c, gpafileverifyop.h, 
+ 	gpakeyselector.c, gpakeyselector.h, gpaoperation.c, 
+ 	gpaoperation.h, gpapastrings.c, gpapastrings.h, gpaprogressdlg.c, 
+ 	gpaprogressdlg.h, gpawidgets.c, gpawidgets.h, gpawindowkeeper.c, 
+ 	gpawindowkeeper.h, gpawizard.c, gpawizard.h, gpgmeedit.c, 
+ 	gpgmeedit.h, gpgmetools.c, gpgmetools.h, gtktools.c, gtktools.h, 
+ 	helpmenu.c, helpmenu.h, hidewnd.c, hidewnd.h, i18n.h, icons.c, 
+ 	icons.h, keydeletedlg.c, keydeletedlg.h, keyeditdlg.c, 
+ 	keyeditdlg.h, keyexportdlg.c, keyexportdlg.h, keygendlg.c, 
+ 	keygendlg.h, keygenwizard.c, keygenwizard.h, keyimportdlg.c, 
+ 	keyimportdlg.h, keyimpseldlg.c, keyimpseldlg.h, keylist.c, 
+ 	keylist.h, keyring.c, keyring.h, keyserver.c, keyserver.h, 
+ 	keysigndlg.c, keysigndlg.h, keytable.c, keytable.h, options.c, 
+ 	options.h, ownertrustdlg.c, ownertrustdlg.h, passwddlg.c, 
+ 	passwddlg.h, qdchkpwd.c, qdchkpwd.h, server_access.c, 
+ 	server_access.h, settingsdlg.c, settingsdlg.h, siglist.c, 
+ 	siglist.h, simple-gettext.c, verifydlg.c, verifydlg.h, w32reg.c, 
+ 	w32reg.h: Do a global search and replace for new Gpgme type names.
+
 2003-05-20  Miguel Coca  <mcoca@gnu.org>
 
 	* gpawidgets.c (gpa_key_info_new): Fix memory leak.

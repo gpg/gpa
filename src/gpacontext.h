@@ -41,8 +41,8 @@ struct _GpaContext {
 
   /* public: */
 
-  /* The real GpgmeCtx */
-  GpgmeCtx ctx;
+  /* The real gpgme_ctx_t */
+  gpgme_ctx_t ctx;
   /* Whether there is an operation currently in course */
   gboolean busy;
 
@@ -51,7 +51,7 @@ struct _GpaContext {
   /* Queued I/O callbacks */
   GList *cbs;
   /* The IO callback structure */
-  struct GpgmeIOCbs *io_cbs;
+  struct gpgme_io_cbs *io_cbs;
 };
 
 struct _GpaContextClass {
@@ -59,9 +59,9 @@ struct _GpaContextClass {
 
   /* Signal handlers */
   void (*start) (GpaContext *context);
-  void (*done) (GpaContext *context, GpgmeError err);
-  void (*next_key) (GpaContext *context, GpgmeKey key);
-  void (*next_trust_item) (GpaContext *context, GpgmeTrustItem item);
+  void (*done) (GpaContext *context, gpgme_error_t err);
+  void (*next_key) (GpaContext *context, gpgme_key_t key);
+  void (*next_trust_item) (GpaContext *context, gpgme_trust_item_t item);
 };
 
 GType gpa_context_get_type (void) G_GNUC_CONST;

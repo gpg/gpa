@@ -59,7 +59,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   GtkWidget *table;
   GtkAccelGroup *accel_group;
 
-  GpgmeKey key;
+  gpgme_key_t key;
   gchar *date_string;
 
   GPAKeyEditDialog dialog;
@@ -128,11 +128,11 @@ static void
 key_edit_change_expiry(GtkWidget * widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
-  GpgmeKey key;
-  GpgmeError err;
+  gpgme_key_t key;
+  gpgme_error_t err;
   GDate * new_date;
   struct tm tm;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   key = gpa_keytable_lookup (keytable, dialog->fpr);
 
@@ -185,9 +185,9 @@ static void
 key_edit_change_passphrase (GtkWidget *widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
-  GpgmeKey key;
-  GpgmeError err;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_key_t key;
+  gpgme_error_t err;
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   err = gpgme_get_key (ctx, dialog->fpr, &key, FALSE);
   if (err != GPGME_No_Error)

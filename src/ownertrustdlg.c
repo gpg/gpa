@@ -33,7 +33,7 @@
  */
 
 static void
-init_radio_buttons (GpgmeValidity trust, GtkWidget *unknown_radio, 
+init_radio_buttons (gpgme_validity_t trust, GtkWidget *unknown_radio, 
                     GtkWidget *never_radio, GtkWidget *marginal_radio, 
                     GtkWidget *full_radio, GtkWidget *ultimate_radio)
 {  
@@ -58,7 +58,7 @@ init_radio_buttons (GpgmeValidity trust, GtkWidget *unknown_radio,
     }
 }
 
-static GpgmeValidity
+static gpgme_validity_t
 get_selected_validity (GtkWidget *unknown_radio, GtkWidget *never_radio,
                        GtkWidget *marginal_radio, GtkWidget *full_radio,
                        GtkWidget *ultimate_radio)
@@ -86,7 +86,7 @@ get_selected_validity (GtkWidget *unknown_radio, GtkWidget *never_radio,
 }
 
 /* Run the owner trust dialog modally. */
-gboolean gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent)
+gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent)
 {
   GtkWidget *dialog;
   GtkWidget *key_info;
@@ -96,7 +96,7 @@ gboolean gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent)
     *ultimate_radio;
   GtkWidget *label;
   GtkResponseType response;
-  GpgmeValidity trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST,
+  gpgme_validity_t trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST,
                                                   NULL, 0);
   gboolean result;
 
@@ -222,11 +222,11 @@ gboolean gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent)
   /* Set the ownertrust */
   if (response == GTK_RESPONSE_OK) 
     {
-      GpgmeError err;
-      GpgmeValidity new_trust = get_selected_validity 
+      gpgme_error_t err;
+      gpgme_validity_t new_trust = get_selected_validity 
               (unknown_radio, never_radio, marginal_radio, full_radio,
                ultimate_radio);
-      GpgmeCtx ctx = gpa_gpgme_new ();
+      gpgme_ctx_t ctx = gpa_gpgme_new ();
 
       /* If the user didn't change the trust, don't edit the key */
       if (trust == new_trust ||

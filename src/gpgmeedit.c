@@ -35,12 +35,12 @@
  */
 
 /* Prototype of the action function. Returns the error if there is one */
-typedef GpgmeError (*EditAction) (int state, void *opaque,
+typedef gpgme_error_t (*EditAction) (int state, void *opaque,
 				  const char **result);
 /* Prototype of the transit function. Returns the next state. If and error
  * is found changes *err. If there is no error it should NOT touch it */
-typedef int (*EditTransit) (int current_state, GpgmeStatusCode status, 
-			    const char *args, void *opaque, GpgmeError *err);
+typedef int (*EditTransit) (int current_state, gpgme_status_code_t status, 
+			    const char *args, void *opaque, gpgme_error_t *err);
 
 /* Data to be passed to the edit callback. Must be filled by the caller of
  * gpgme_op_edit()  */
@@ -53,7 +53,7 @@ struct edit_parms_s
    * callback does not abort the edit operation, so we must remember any
    * error. In other words, errors from action() or transit() are sticky.
    */
-  GpgmeError err;
+  gpgme_error_t err;
   /* The action function */
   EditAction action;
   /* The transit function */
@@ -63,8 +63,8 @@ struct edit_parms_s
 };
 
 /* The edit callback proper */
-static GpgmeError
-edit_fnc (void *opaque, GpgmeStatusCode status, const char *args,
+static gpgme_error_t
+edit_fnc (void *opaque, gpgme_status_code_t status, const char *args,
 	  const char **result)
 {
   struct edit_parms_s *parms = opaque;
@@ -88,7 +88,7 @@ edit_fnc (void *opaque, GpgmeStatusCode status, const char *args,
 				 &parms->err);
   if (parms->err == GPGME_No_Error)
     {
-      GpgmeError err;
+      gpgme_error_t err;
       /* Choose the action based on the state */
       err = parms->action (parms->state, parms->opaque, result);
       if (err != GPGME_No_Error)
@@ -112,7 +112,7 @@ typedef enum
   EXPIRE_ERROR
 } ExpireState;
 
-static GpgmeError
+static gpgme_error_t
 edit_expire_fnc_action (int state, void *opaque, const char **result)
 {
   const gchar *date = opaque;
@@ -146,8 +146,8 @@ edit_expire_fnc_action (int state, void *opaque, const char **result)
 }
 
 static int
-edit_expire_fnc_transit (int current_state, GpgmeStatusCode status, 
-			 const char *args, void *opaque, GpgmeError *err)
+edit_expire_fnc_transit (int current_state, gpgme_status_code_t status, 
+			 const char *args, void *opaque, gpgme_error_t *err)
 {
   int next_state;
  
@@ -234,7 +234,7 @@ typedef enum
   TRUST_ERROR
 } TrustState;
 
-static GpgmeError
+static gpgme_error_t
 edit_trust_fnc_action (int state, void *opaque, const char **result)
 {
   const gchar *trust = opaque;
@@ -272,8 +272,8 @@ edit_trust_fnc_action (int state, void *opaque, const char **result)
 }
 
 static int
-edit_trust_fnc_transit (int current_state, GpgmeStatusCode status, 
-			const char *args, void *opaque, GpgmeError *err)
+edit_trust_fnc_transit (int current_state, gpgme_status_code_t status, 
+			const char *args, void *opaque, gpgme_error_t *err)
 {
   int next_state;
 
@@ -386,7 +386,7 @@ struct sign_parms_s
   gboolean local;
 };
 
-static GpgmeError
+static gpgme_error_t
 edit_sign_fnc_action (int state, void *opaque, const char **result)
 {
   struct sign_parms_s *parms = opaque;
@@ -432,8 +432,8 @@ edit_sign_fnc_action (int state, void *opaque, const char **result)
 }
 
 static int
-edit_sign_fnc_transit (int current_state, GpgmeStatusCode status, 
-		       const char *args, void *opaque, GpgmeError *err)
+edit_sign_fnc_transit (int current_state, gpgme_status_code_t status, 
+		       const char *args, void *opaque, gpgme_error_t *err)
 {
   int next_state;
 
@@ -591,7 +591,7 @@ typedef enum
   PASSWD_ERROR
 } PasswdState;
 
-static GpgmeError
+static gpgme_error_t
 edit_passwd_fnc_action (int state, void *opaque, const char **result)
 {
   switch (state)
@@ -619,8 +619,8 @@ edit_passwd_fnc_action (int state, void *opaque, const char **result)
 }
 
 static int
-edit_passwd_fnc_transit (int current_state, GpgmeStatusCode status, 
-			 const char *args, void *opaque, GpgmeError *err)
+edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status, 
+			 const char *args, void *opaque, gpgme_error_t *err)
 {
   int next_state;
  
@@ -682,15 +682,15 @@ edit_passwd_fnc_transit (int current_state, GpgmeStatusCode status,
 }
 
 /* Change the ownertrust of a key */
-GpgmeError gpa_gpgme_edit_trust (GpgmeCtx ctx, GpgmeKey key,
-				 GpgmeValidity ownertrust)
+gpgme_error_t gpa_gpgme_edit_trust (gpgme_ctx_t ctx, gpgme_key_t key,
+				 gpgme_validity_t ownertrust)
 {
   const gchar *trust_strings[] = {"1", "1", "2", "3", "4", "5"};
   struct edit_parms_s parms = {TRUST_START, GPGME_No_Error, 
 			       edit_trust_fnc_action, edit_trust_fnc_transit,
 			       (char*) trust_strings[ownertrust]};
-  GpgmeError err;
-  GpgmeData out = NULL;
+  gpgme_error_t err;
+  gpgme_data_t out = NULL;
 
   err = gpgme_data_new (&out);
   if (err != GPGME_No_Error)
@@ -703,14 +703,14 @@ GpgmeError gpa_gpgme_edit_trust (GpgmeCtx ctx, GpgmeKey key,
 }
 
 /* Change the expire date of a key */
-GpgmeError gpa_gpgme_edit_expire (GpgmeCtx ctx, GpgmeKey key, GDate *date)
+gpgme_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, GDate *date)
 {
   gchar buf[12];
   struct edit_parms_s parms = {EXPIRE_START, GPGME_No_Error, 
 			       edit_expire_fnc_action, edit_expire_fnc_transit,
 			       buf};
-  GpgmeError err;
-  GpgmeData out = NULL;
+  gpgme_error_t err;
+  gpgme_data_t out = NULL;
 
   err = gpgme_data_new (&out);
   if (err != GPGME_No_Error)
@@ -732,16 +732,16 @@ GpgmeError gpa_gpgme_edit_expire (GpgmeCtx ctx, GpgmeKey key, GDate *date)
 }
 
 /* Sign this key with the given private key */
-GpgmeError gpa_gpgme_edit_sign (GpgmeCtx ctx, GpgmeKey key,
+gpgme_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
 				const gchar *private_key_fpr, gboolean local)
 {
   struct sign_parms_s sign_parms = {"0", local};
   struct edit_parms_s parms = {SIGN_START, GPGME_No_Error,
 			       edit_sign_fnc_action, edit_sign_fnc_transit,
 			       &sign_parms};
-  GpgmeKey secret_key = gpa_keytable_secret_lookup (keytable, private_key_fpr);
-  GpgmeError err = GPGME_No_Error;
-  GpgmeData out;
+  gpgme_key_t secret_key = gpa_keytable_secret_lookup (keytable, private_key_fpr);
+  gpgme_error_t err = GPGME_No_Error;
+  gpgme_data_t out;
 
   /* This return code is a bit weird, but we must use one :-) */
   if (!secret_key)
@@ -770,7 +770,7 @@ GpgmeError gpa_gpgme_edit_sign (GpgmeCtx ctx, GpgmeKey key,
  */
 
 /* Special passphrase callback for use within the passwd command */
-GpgmeError passwd_passphrase_cb (void *opaque, const char *desc, void **r_hd,
+gpgme_error_t passwd_passphrase_cb (void *opaque, const char *desc, void **r_hd,
 				 const char **result)
 {
   int *i = opaque;
@@ -792,13 +792,13 @@ GpgmeError passwd_passphrase_cb (void *opaque, const char *desc, void **r_hd,
 }
 
 
-GpgmeError gpa_gpgme_edit_passwd (GpgmeCtx ctx, GpgmeKey key)
+gpgme_error_t gpa_gpgme_edit_passwd (gpgme_ctx_t ctx, gpgme_key_t key)
 {
   struct edit_parms_s parms = {PASSWD_START, GPGME_No_Error,
 			       edit_passwd_fnc_action, edit_passwd_fnc_transit,
 			       (gchar *) ""};
-  GpgmeError err;
-  GpgmeData out;
+  gpgme_error_t err;
+  gpgme_data_t out;
   int i = 0;
 
   err = gpgme_data_new (&out);

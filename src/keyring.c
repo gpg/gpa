@@ -243,11 +243,11 @@ keyring_editor_delete (gpointer param)
   GPAKeyringEditor * editor = param;
   gint row;
   gchar * fpr;
-  GpgmeKey key;
+  gpgme_key_t key;
   GList * selection;
   gboolean has_secret;
-  GpgmeError err;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_error_t err;
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   selection = gpa_keylist_selection (editor->clist_keys);
   gtk_clist_freeze (GTK_CLIST(editor->clist_keys));
@@ -285,11 +285,11 @@ static gboolean
 key_has_been_signed (const gchar *fpr, const gchar *signer)
 {
   gint uid, idx;
-  GpgmeError err;
-  GpgmeKey key, signer_key;
+  gpgme_error_t err;
+  gpgme_key_t key, signer_key;
   gboolean uid_signed, key_signed;
   const char *signer_id;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
   int old_mode = gpgme_get_keylist_mode (ctx);
 
   /* Get the signing key ID */
@@ -372,12 +372,12 @@ keyring_editor_sign (gpointer param)
   const gchar *private_key_fpr;
   gint row;
   gchar *key_fpr;
-  GpgmeKey key;
-  GpgmeError err;
+  gpgme_key_t key;
+  gpgme_error_t err;
   gboolean sign_locally = FALSE;
   GList *selection;
   gint signed_count = 0;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   if (!gpa_keylist_has_selection (editor->clist_keys))
     {
@@ -490,7 +490,7 @@ keyring_editor_trust (gpointer param)
 
   if (fpr)
     {
-      GpgmeKey key = gpa_keytable_lookup (keytable, fpr);
+      gpgme_key_t key = gpa_keytable_lookup (keytable, fpr);
       if (gpa_ownertrust_run_dialog (key, editor->window))
         {
           gpa_keytable_reload (keytable);
@@ -503,10 +503,10 @@ keyring_editor_trust (gpointer param)
 
 
 static gboolean
-keyring_editor_import_get_source (GPAKeyringEditor *editor, GpgmeData *data)
+keyring_editor_import_get_source (GPAKeyringEditor *editor, gpgme_data_t *data)
 {
   gchar *filename, *server, *key_id;
-  GpgmeError err;
+  gpgme_error_t err;
 
   if (key_import_dialog_run (editor->window, &filename, &server, &key_id))
     {
@@ -544,10 +544,10 @@ keyring_editor_import_get_source (GPAKeyringEditor *editor, GpgmeData *data)
 }
 
 static void
-keyring_editor_import_do_import (GPAKeyringEditor *editor, GpgmeData data)
+keyring_editor_import_do_import (GPAKeyringEditor *editor, gpgme_data_t data)
 {
-  GpgmeError err;
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_error_t err;
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   /* Import the key */
   err = gpgme_op_import (ctx, data);
@@ -591,7 +591,7 @@ static void
 keyring_editor_import (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  GpgmeData data;
+  gpgme_data_t data;
 
   if (keyring_editor_import_get_source (editor, &data))
     {
@@ -601,13 +601,13 @@ keyring_editor_import (gpointer param)
 }
 
 static void
-keyring_editor_export_do_export (GPAKeyringEditor *editor, GpgmeData *data,
+keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
                                  gboolean armored)
 {
-  GpgmeError err;
-  GpgmeRecipients rset;
+  gpgme_error_t err;
+  gpgme_recipients_t rset;
   GList *selection = gpa_keylist_selection (editor->clist_keys);
-  GpgmeCtx ctx = gpa_gpgme_new ();
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   /* Create the data buffer */
   err = gpgme_data_new (data);
@@ -629,7 +629,7 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, GpgmeData *data,
             gpa_gpgme_error (err);
           selection = g_list_next (selection);
     }
-  /* Export to the GpgmeData */
+  /* Export to the gpgme_data_t */
   err = gpgme_op_export (ctx, rset, *data);
   if (err != GPGME_No_Error)
     gpa_gpgme_error (err);
@@ -656,7 +656,7 @@ keyring_editor_export (gpointer param)
 
   if (key_export_dialog_run (editor->window, &filename, &server, &armored))
     {
-      GpgmeData data;
+      gpgme_data_t data;
       FILE *file = NULL;
 
       /* First: check any preconditions to the export */
@@ -684,7 +684,7 @@ keyring_editor_export (gpointer param)
           /* Export the selected keys to the user specified file. */
           if (file)
             {
-              /* Dump the GpgmeData to the file */
+              /* Dump the gpgme_data_t to the file */
               dump_data_to_file (data, file);
               fclose (file);
             }
@@ -693,7 +693,7 @@ keyring_editor_export (gpointer param)
         {
           /* Export the selected key to the user specified server.
            */
-	  GpgmeKey key = gpa_keytable_lookup 
+	  gpgme_key_t key = gpa_keytable_lookup 
             (keytable, gpa_keylist_current_key_id (editor->clist_keys));
 	  server_send_keys (server, gpa_gpgme_key_get_short_keyid (key, 0),
 			    data, editor->window);
@@ -732,7 +732,7 @@ keyring_editor_generate_key_advanced (gpointer param)
 {
   GPAKeyringEditor * editor = param;
   GPAKeyGenParameters * params;
-  GpgmeError err;
+  gpgme_error_t err;
   gchar *fpr;
 
   params = gpa_key_gen_run_dialog(editor->window);
@@ -941,8 +941,8 @@ static void
 keyring_editor_paste (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  GpgmeData data;
-  GpgmeError err;
+  gpgme_data_t data;
+  gpgme_error_t err;
   gchar *text = gtk_clipboard_wait_for_text (gtk_clipboard_get
                                              (GDK_SELECTION_CLIPBOARD));
 
@@ -976,7 +976,7 @@ static void
 keyring_editor_copy (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  GpgmeData data;
+  gpgme_data_t data;
 
   /* Export to a data buffer */
   keyring_editor_export_do_export (editor, &data, TRUE);
@@ -1310,7 +1310,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 /* Fill the details page of the details notebook with the properties of
  * the publix key key */
 static void
-keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
+keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
 {
   gchar * text;
   gchar * uid;
@@ -1409,7 +1409,7 @@ keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gchar *fpr)
   GtkWidget *label;
   gchar *uid;
   int i;
-  GpgmeKey key = gpa_keytable_lookup (keytable, fpr);
+  gpgme_key_t key = gpa_keytable_lookup (keytable, fpr);
 
   /* Create the menu for the popdown UID list */
   menu = gtk_menu_new ();
@@ -1452,7 +1452,7 @@ idle_update_details (gpointer param)
   if (num_selected == 1)
     {
       gchar * key_id = keyring_editor_current_key_id (editor);
-      GpgmeKey key;
+      gpgme_key_t key;
 
       key = gpa_keytable_lookup (keytable, key_id);
       keyring_details_page_fill_key (editor, key);
@@ -1727,7 +1727,7 @@ static void
 keyring_update_status_bar (GPAKeyringEditor * editor)
 {
   const gchar * fpr = gpa_options_get_default_key (gpa_options_get_instance ());
-  GpgmeKey key;
+  gpgme_key_t key;
   gchar *string;
 
   if (fpr

@@ -490,7 +490,7 @@ invoke_helper (const gchar *server, const gchar *scheme,
 /* Public functions */
 
 gboolean server_send_keys (const gchar *server, const gchar *keyid,
-		       GpgmeData data, GtkWidget *parent)
+		       gpgme_data_t data, GtkWidget *parent)
 {
   gchar *keyserver = g_strdup (server);
   gchar *command_filename, *output_filename;
@@ -528,7 +528,7 @@ gboolean server_send_keys (const gchar *server, const gchar *keyid,
 }
 
 gboolean server_get_key (const gchar *server, const gchar *keyid,
-                         GpgmeData *data, GtkWidget *parent)
+                         gpgme_data_t *data, GtkWidget *parent)
 {
   gchar *keyserver = g_strdup (server);
   gchar *command_filename, *output_filename;
@@ -536,12 +536,12 @@ gboolean server_get_key (const gchar *server, const gchar *keyid,
   FILE *command;
   gchar *scheme, *host, *port, *opaque;
   int success;
-  GpgmeError err;
+  gpgme_error_t err;
 
   /* Parse the URI */
   if (!parse_keyserver_uri (keyserver, &scheme, &host, &port, &opaque))
     {
-      /* Create an empty GpgmeData, so that we always return a valid one */
+      /* Create an empty gpgme_data_t, so that we always return a valid one */
       err = gpgme_data_new (data);
       if (err != GPGME_No_Error)
         {

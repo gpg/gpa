@@ -40,7 +40,7 @@ struct _GpaFileVerifyOperation {
   GpaFileOperation parent;
 
   int sig_fd, signed_text_fd;
-  GpgmeData sig, signed_text, plain;
+  gpgme_data_t sig, signed_text, plain;
   GtkWidget *dialog;
 };
 

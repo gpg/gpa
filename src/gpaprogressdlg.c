@@ -25,7 +25,7 @@ static void
 gpa_progress_dialog_start_cb (GpaContext *context,
 			      GpaProgressDialog *dialog);
 static void
-gpa_progress_dialog_done_cb (GpaContext *context, GpgmeError err,
+gpa_progress_dialog_done_cb (GpaContext *context, gpgme_error_t err,
 			     GpaProgressDialog *dialog);
 
 /* Properties */
@@ -214,7 +214,7 @@ gpa_progress_dialog_start_cb (GpaContext *context,
 }
 
 static void
-gpa_progress_dialog_done_cb (GpaContext *context, GpgmeError err,
+gpa_progress_dialog_done_cb (GpaContext *context, gpgme_error_t err,
 			     GpaProgressDialog *dialog)
 {
   gtk_idle_remove (dialog->timer);

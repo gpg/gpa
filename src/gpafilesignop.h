@@ -39,10 +39,10 @@ typedef struct _GpaFileSignOperationClass GpaFileSignOperationClass;
 struct _GpaFileSignOperation {
   GpaFileOperation parent;
 
-  GpgmeSigMode sign_type;
+  gpgme_sig_mode_t sign_type;
   GtkWidget *sign_dialog;
   int sig_fd, plain_fd;
-  GpgmeData sig, plain;
+  gpgme_data_t sig, plain;
   gchar *sig_filename;
 };
 

@@ -23,7 +23,7 @@
 
 #include <gtk/gtk.h>
 
-gboolean gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
+gboolean gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
 				  gboolean * sign_locally);
 
 
