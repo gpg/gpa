@@ -35,6 +35,7 @@ typedef enum
   SUBKEY_CAN_SIGN,
   SUBKEY_CAN_CERTIFY,
   SUBKEY_CAN_ENCRYPT,
+  SUBKEY_CAN_AUTHENTICATE,
   SUBKEY_STATUS,
   SUBKEY_N_COLUMNS
 } SubkeyListColumn;
@@ -54,6 +55,7 @@ GtkWidget * gpa_subkey_list_new (void)
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
+			      G_TYPE_BOOLEAN,
 			      G_TYPE_BOOLEAN,
 			      G_TYPE_BOOLEAN,
 			      G_TYPE_BOOLEAN,
@@ -116,6 +118,13 @@ GtkWidget * gpa_subkey_list_new (void)
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
+  renderer = gtk_cell_renderer_toggle_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Can authenticate"),
+						     renderer,
+						     "active", SUBKEY_CAN_AUTHENTICATE,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
+
   return list;
 }
 
@@ -175,6 +184,7 @@ void gpa_subkey_list_set_key (GtkWidget * list, gpgme_key_t key)
 			      SUBKEY_CAN_SIGN, subkey->can_sign,
 			      SUBKEY_CAN_CERTIFY, subkey->can_certify,
 			      SUBKEY_CAN_ENCRYPT, subkey->can_encrypt,
+			      SUBKEY_CAN_AUTHENTICATE, subkey->can_authenticate,
 			      SUBKEY_STATUS, subkey_status (subkey),
 			      -1);
 	  g_free (size);

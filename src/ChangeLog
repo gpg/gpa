@@ -1,5 +1,10 @@
 2003-10-12  Miguel Coca  <mcoca@gnu.org>
 
+	* gpasubkeylist.c (gpa_subkey_list_new, gpa_subkey_list_set_key): Add
+	a "can authenticate" flag.
+
+2003-10-12  Miguel Coca  <mcoca@gnu.org>
+
 	* keyring.c (gpa_keyring_editor_new_key_cb)
 	(register_generate_operation): New.
 	(keyring_editor_generate_key_advanced)
