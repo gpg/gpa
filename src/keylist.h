@@ -37,6 +37,7 @@ GtkWidget * gpa_keylist_new (gint ncolumns, GPAKeyListColumn * columnsm,
 GList * gpa_keylist_selection (GtkWidget * keylist);
 gboolean gpa_keylist_has_selection (GtkWidget * keylist);
 gboolean gpa_keylist_has_single_selection (GtkWidget * keylist);
+gint gpa_keylist_selection_length (GtkWidget * keylist);
 
 GpapaPublicKey *gpa_keylist_current_key (GtkWidget * keylist);
 gchar *gpa_keylist_current_key_id (GtkWidget * keylist);

@@ -426,3 +426,10 @@ gpa_keylist_selection (GtkWidget * keylist)
 {
   return GTK_CLIST (keylist)->selection;
 }
+
+/* return the number of selected keys */
+gint
+gpa_keylist_selection_length (GtkWidget * keylist)
+{
+  return g_list_length (GTK_CLIST (keylist)->selection);
+}
