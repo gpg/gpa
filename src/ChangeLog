@@ -1,3 +1,27 @@
+2003-07-30  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (key_has_been_signed): Remove deprecated gpgme calls.
+	(keyring_editor_can_sign): Fix check for selected keys.
+	(keyring_editor_add_subkeys_page) 
+	(keyring_editor_remove_subkeys_page): New. Add and remove the subkey
+	tab to the details notebook.
+	(keyring_details_notebook): Add capabilities and the subkeys page.
+	(keyring_details_page_fill_key): Set the capabilities text. Replace
+	deprecated gpgme calls.
+	(keyring_subkeys_page_fill_key, keyring_subkeys_page_empty): New.
+	(idle_update_details): Call them.
+	(keyring_ui_mode_changed): New. Manage the subkeys tab according to
+	the ui mode.
+	(keyring_editor_new): Use it.
+
+	* Makefile.am (gpa_SOURCES): Add gpasubkeylist.{c,h}.
+
+	* gpasubkeylist.h, gpasubkeylist.c: New. A list of the subkeys of a
+	key.
+
+	* gpgmetools.h, gpgmetools.c (gpa_get_key_capabilities_text): New.
+	Returns a user readable description of the capabilities of a key.
+
 2003-07-29  Miguel Coca  <mcoca@gnu.org>
 
 	* Makefile.am (gpa_SOURCES): Add gpakeytrustop.{c,h}.

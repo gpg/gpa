@@ -173,4 +173,8 @@ const gchar *gpa_gpgme_key_sig_get_short_keyid (gpgme_key_t key, int uid_idx,
 const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_t key, int uid_idx,
                                                int idx, GHashTable *revoked);
 
+/* Return a string listing the capabilities of a key.
+ */
+const gchar *gpa_get_key_capabilities_text (gpgme_key_t key);
+
 #endif

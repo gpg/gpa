@@ -880,3 +880,66 @@ const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_t key, int uid_idx,
     }
   return status;
 }
+
+
+/* Return a string listing the capabilities of a key.
+ */
+const gchar *gpa_get_key_capabilities_text (gpgme_key_t key)
+{
+  if (key->can_certify)
+    {
+      if (key->can_sign)
+	{
+	  if (key->can_encrypt)
+	    {
+	      return _("The key can be used for certification, signing "
+		       "and encryption.");
+	    }
+	  else
+	    {
+	      return _("The key can be used for certification and "
+		       "signing, but not for encryption.");
+	    }
+	}
+      else
+	{
+	  if (key->can_encrypt)
+	    {
+	      return _("The key can be used for certification and "
+		       "encryption.");
+	    }
+	  else
+	    {
+	      return _("The key can be used only for certification.");
+	    }
+	}
+    }
+  else
+    {
+      if (key->can_sign)
+	{
+	  if (key->can_encrypt)
+	    {
+	      return _("The key can be used only for signing and "
+		       "encryption, but not for certification.");
+	    }
+	  else
+	    {
+	      return _("The key can be used only for signing.");
+	    }
+	}
+      else
+	{
+	  if (key->can_encrypt)
+	    {
+	      return _("The key can be used only for encryption.");
+
+	    }
+	  else
+	    {
+	      /* Can't happen, even for subkeys */
+	      return _("This key is useless.");
+	    }
+	}
+    }
+}

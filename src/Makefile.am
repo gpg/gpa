@@ -35,6 +35,7 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      keydeletedlg.c keydeletedlg.h \
 	      keylist.c keylist.h \
 	      siglist.c siglist.h \
+	      gpasubkeylist.c gpasubkeylist.h \
 	      gpawizard.c gpawizard.h \
 	      gpapastrings.c gpapastrings.h\
 	      gpa_license.c gpa_license.h \

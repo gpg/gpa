@@ -1,6 +1,13 @@
 Noteworthy changes in version 0.6.2 (unreleased)
 ------------------------------------------------
 
+ * The keyring editor now displays all the subkeys of the currently selected
+ key. This is only visible if GPA is in advanced mode (available from the
+ preferences dialog).
+
+ * The capabilities of a key (certify, sign, encrypt) are not visible from
+ the keyring editor.
+
  * The keyring editor can now sort keys by any column. By default, they are
  listed in the order they appear in the keyring.
 
