@@ -238,6 +238,10 @@ key_edit_change_trust(GtkWidget * widget, gpointer param)
                               gpa_trust_string (ownertrust));
           dialog->key_has_changed = TRUE;
         }
+      else if (err == GPGME_No_Passphrase)
+        {
+          dialog->key_has_changed = FALSE;
+        }
       else
         {
           gpa_gpgme_error (err);
@@ -264,13 +268,28 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
       err = gpa_gpgme_edit_expiry (key, new_date);
       if (err == GPGME_No_Error)
         {
-          g_date_to_struct_tm (new_date, &tm);
-          date_string = gpa_expiry_date_string (mktime(&tm));
+          if (new_date)
+            {
+              g_date_to_struct_tm (new_date, &tm);
+              date_string = gpa_expiry_date_string (mktime(&tm));
+            }
+          else
+            {
+              date_string = gpa_expiry_date_string (0);
+            }
           gtk_label_set_text (GTK_LABEL (dialog->expiry), date_string);
           g_free (date_string);
           if (new_date)
             g_date_free (new_date);
+          /* Reload the key */
+          gpa_keytable_load_key (keytable, dialog->fpr);
           dialog->key_has_changed = TRUE;
+        }
+      else if (err == GPGME_No_Passphrase)
+        {
+          if (new_date)
+            g_date_free (new_date);
+          dialog->key_has_changed = FALSE;
         }
       else
         {

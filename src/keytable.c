@@ -59,6 +59,35 @@ static void keytable_empty (GPAKeyTable * table)
   g_hash_table_foreach_remove (table->secret_hash, (GHRFunc) true, NULL);
 }
 
+static void load_key (GHashTable *hash, const gchar *fpr, gboolean secret)
+{
+  GpgmeError err;
+  GpgmeKey key;
+  gchar *key_fpr;
+
+  /* List the key with a specific fingerprint */
+  err = gpgme_op_keylist_start( ctx, fpr, secret );
+  if( err != GPGME_No_Error )
+    {
+      gpa_gpgme_error (err);
+    }
+  while( (err = gpgme_op_keylist_next( ctx, &key )) != GPGME_EOF )
+    {
+      if( err != GPGME_No_Error )
+        gpa_gpgme_error (err);
+      key_fpr = g_strdup (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, 
+                                                     NULL, 0 ));
+      if (g_str_equal (fpr, key_fpr))
+        {
+          g_hash_table_insert (hash, key_fpr, key);
+        }
+      else
+        {
+          g_free (key_fpr);
+        }
+    }
+}
+
 /* Public functions for the table */
 
 GPAKeyTable *gpa_keytable_new (void)
@@ -83,6 +112,15 @@ void gpa_keytable_reload (GPAKeyTable * table)
   keytable_empty (table);
   keytable_fill (table->public_hash, FALSE);
   keytable_fill (table->secret_hash, TRUE);
+}
+
+void gpa_keytable_load_key (GPAKeyTable * table, const gchar * fpr)
+{
+  /* Delete the old key */
+  gpa_keytable_remove (table, fpr);
+  /* Load the key */
+  load_key (table->public_hash, fpr, FALSE);
+  load_key (table->secret_hash, fpr, TRUE);
 }
 
 GpgmeKey gpa_keytable_lookup (GPAKeyTable * table, const gchar * fpr)

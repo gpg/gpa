@@ -1,3 +1,19 @@
+2002-08-19  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_import): Fix to behave properly when gpgme
+	returns EOF error code. Clean up code.
+
+	* keytable.c (gpa_keytable_load_key): New function.
+
+	* gpgmetools.c (edit_expiry_fnc, gpa_gpgme_edit_expiry):
+	Implemented changing the expiry date of a key.
+	(gpa_passphrase_cb):  Remove the cancel button, since it does nothing.
+	Make the question understandable.
+	(passphrase_question_label): New function.
+
+	* keyeditdlg.c (key_edit_change_expiry)
+	(key_edit_change_trust): Don't terminate on a bad passphrase.
+
 2002-08-18  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* expirydlg.c (GPAExpiryDialog, gpa_expiry_dialog_run): Port to gpgme.

@@ -366,27 +366,17 @@ keyring_editor_import (gpointer param)
 {
   GPAKeyringEditor *editor = param;
   gchar *filename, *server, *key_id;
+  GpgmeData data;
+  GpgmeError err;
 
   if (key_import_dialog_run (editor->window, &filename, &server, &key_id))
     {
       if (filename)
         {
-          /* Import keys from the user specified file.
+          /* Read keys from the user specified file.
            */
-          GpgmeData data;
-          GpgmeError err;
           err = gpgme_data_new_from_file (&data, filename, 1);
-          if (err == GPGME_No_Error)
-            {
-              err = gpgme_op_import (ctx, data);
-              /* FIXME: Check for non fatal errors */
-              if (err != GPGME_No_Error)
-                {
-                  gpa_gpgme_error (err);
-                }
-              gpgme_data_release (data);
-            }
-          else if (err == GPGME_File_Error)
+          if (err == GPGME_File_Error)
             {
               gchar message[256];
               g_snprintf (message, sizeof(message), "%s: %s",
@@ -394,61 +384,34 @@ keyring_editor_import (gpointer param)
               gpa_window_error (message, editor->window);
               return;
             }
-          else
+          else if (err != GPGME_No_Error)
             {
               gpa_gpgme_error (err);
             }
         }
       else if (server)
         {
-#ifndef __USE_HKP__
-           gpapa_receive_public_key_from_server (key_id, server, gpa_callback,
-                                                 editor->window);
-#else /* __USE_HKP__ */
-          /* Fetch the key given by key_id from the server.
-           * If there is more than one, display a chooser.
-           */
-          GList *list, *list_item;
-          list = gpapa_search_public_keys_on_server (key_id, server,
-                                                     gpa_callback,
-                                                     editor->window);
-          if (g_list_length (list) == 1)
-            {
-              /* Only one key found. Import it.
-               */
-              gpapa_receive_public_key_from_server (key_id, server, gpa_callback,
-                                                    editor->window);
-            }
-          else
-            {
-              /* Let the user choose the key(s) to import.
-               * This also handles the case when no key was found.
-               */
-              gpa_key_import_selection_dialog_run (editor->window,
-                                                   list, server);
-            }
-
-          /* Dispose the list.
-           */
-          list_item = list;
-          while (list_item)
-            {
-              gpapa_key_release (list_item->data);
-              list_item = g_list_next (list_item);
-            }
-          g_list_free (list);
-#endif /* __USE_HKP__ */
+          /* Somehow fill a GpgmeData with the keys from the server */
         }
       else
         {
-          /* Import keys from the clipboard.
-           */
-          gpapa_import_keys_from_clipboard (gpa_callback, editor->window);
+          /* Somehow fill a GpgmeData from the clipboard */
         }
       free (filename);
       free (server);
+      /* Import the key */
+      err = gpgme_op_import (ctx, data);
+      if (err != GPGME_No_Error &&
+          err != GPGME_EOF)
+        {
+          gpa_gpgme_error (err);
+        }
+      gpgme_data_release (data);
       /* Reload the list of keys to get the imported keys */
-      gpa_keytable_reload (keytable);
+      if (err != GPGME_EOF)
+        {
+          gpa_keytable_reload (keytable);
+        }
       /* update the widgets
        */
       keyring_editor_fill_keylist (editor);

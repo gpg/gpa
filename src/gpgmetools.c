@@ -227,6 +227,55 @@ gpa_algorithm_from_string (const gchar * string)
   return result;
 }
 
+static GtkWidget *passphrase_question_label (const gchar *desc)
+{
+  GtkWidget *label;
+  gchar *input;
+  gchar *text;
+  gchar *keyid, *userid, *action;
+  gint i;
+  input = g_strdup (desc);
+  /* The first line tells us whether this is the first time we ask for a
+   * passphrase or not. */
+  action = input;
+  for (i = 0; input[i] != '\n'; i++)
+    {
+    }
+  input[i++] = '\0';
+  /* The first word in the second line is the key ID */
+  keyid = input+i;
+  for (i = 0; input[i] != ' '; i++)
+    {
+    }
+  input[i++] = '\0';
+  /* The rest of the line is the user ID */
+  userid = input+i;
+  for (i = 0; input[i] != '\n'; i++)
+    {
+    }
+  input[i++] = '\0';
+  /* Build the label widget */
+  if (g_str_equal (action, "ENTER"))
+    {
+      text = g_strdup_printf ("%s\n%s %s\n%s %s",
+                              _("Please enter the passphrase for"
+                                " the following key:"),
+                              _("User Name:"), userid,
+                              _("Key ID:"), keyid);
+    }
+  else
+    {
+      text = g_strdup_printf ("%s\n%s %s\n%s %s",
+                              _("Wrong passphrase, please try again:"),
+                              _("User Name:"), userid,
+                              _("Key ID:"), keyid);
+    }
+  label = gtk_label_new (text);
+  g_free (input);
+  g_free (text);
+  return label;
+}
+
 /* This is the function called by GPGME when it wants a passphrase */
 const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
 {
@@ -242,8 +291,6 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
                                             NULL, GTK_DIALOG_MODAL,
                                             GTK_STOCK_OK,
                                             GTK_RESPONSE_OK,
-                                            GTK_STOCK_CANCEL,
-                                            GTK_RESPONSE_CANCEL,
                                             NULL);
       vbox = GTK_DIALOG (dialog)->vbox;
       action_area = GTK_DIALOG (dialog)->action_area;
@@ -251,7 +298,7 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
       gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
       /* Set the contents of the dialog */
       gtk_box_pack_start_defaults (GTK_BOX (vbox),
-                                   gtk_label_new (desc));
+                                   passphrase_question_label (desc));
       entry = gtk_entry_new ();
       gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
       gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
@@ -261,14 +308,8 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
       gtk_widget_show_all (dialog);
       response = gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_hide (dialog);
-      if (response == GTK_RESPONSE_OK)
-        {
-          return gtk_entry_get_text (GTK_ENTRY (entry));
-        }
-      else
-        {
-          return NULL;
-        }
+
+      return gtk_entry_get_text (GTK_ENTRY (entry));
     }
   else
     {
@@ -285,6 +326,107 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
  * interface.
  */
 
+/* These are the edit callbacks. Each of them can be modelled as a sequential
+ * machine: it has a state, an input (the status and it's args) and an output
+ * (the result argument). In each state, we check the input and then issue a
+ * command and/or change state for the next invocation. */
+
+/* Change expiry time */
+
+struct expiry_parms_s
+{
+  int state;
+  const char *date;
+};
+
+static GpgmeError
+edit_expiry_fnc (void *opaque, GpgmeStatusCode status, const char *args,
+                 const char **result)
+{
+  struct expiry_parms_s *parms = opaque;
+
+  /* Ignore these status lines */
+  if (status == GPGME_STATUS_EOF ||
+      status == GPGME_STATUS_GOT_IT ||
+      status == GPGME_STATUS_NEED_PASSPHRASE ||
+      status == GPGME_STATUS_GOOD_PASSPHRASE)
+    {
+      return GPGME_No_Error;
+    }
+
+  switch (parms->state)
+    {
+      /* State 0: start the operation */
+    case 0:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          *result = "expire";
+          parms->state = 1;
+        }
+      else
+        {
+          return GPGME_General_Error;
+        }
+      break;
+      /* State 1: send the new expiration date */
+    case 1:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keygen.valid"))
+        {
+          *result = parms->date;
+          parms->state = 2;
+        }
+      else
+        {
+          return GPGME_General_Error;
+        }
+      break;
+      /* State 2: gpg tells us the user ID we are about to edit */
+    case 2:
+      if (status == GPGME_STATUS_USERID_HINT)
+        {
+          parms->state = 3;
+        }
+      else
+        {
+          return GPGME_General_Error;
+        }
+      break;
+      /* State 3: end the edit operation */
+    case 3:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          *result = "quit";
+          parms->state = 4;
+        }
+      else
+        {
+          return GPGME_General_Error;
+        }
+      break;
+      /* State 4: Save */
+    case 4:
+      if (status == GPGME_STATUS_GET_BOOL &&
+          g_str_equal (args, "keyedit.save.okay"))
+        {
+          *result = "Y";
+          parms->state = 5;
+        }
+      else
+        {
+          return GPGME_General_Error;
+        }
+      break;
+    default:
+      /* Can't happen */
+      return GPGME_General_Error;
+      break;
+    }
+  return GPGME_No_Error;
+}
+
 /* Change the ownertrust of a key */
 GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust)
 {
@@ -294,6 +436,27 @@ GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust)
 /* Change the expiry date of a key */
 GpgmeError gpa_gpgme_edit_expiry (GpgmeKey key, GDate *date)
 {
-  return GPGME_No_Error;
+  gchar buf[12];
+  struct expiry_parms_s parms = {0, buf};
+  GpgmeError err;
+  GpgmeData out = NULL;
+
+  err = gpgme_data_new (&out);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  /* The new expiration date */
+  if (date)
+    {
+      g_date_strftime (buf, sizeof(buf), "%F", date);
+    }
+  else
+    {
+      strncpy (buf, "0", sizeof (buf));
+    }
+  err = gpgme_op_edit (ctx, key, edit_expiry_fnc, &parms, out);
+  gpgme_data_release (out);
+  return err;
 }
 

@@ -38,6 +38,9 @@ GPAKeyTable *gpa_keytable_new (void);
 /* Reloads the table from gpg */
 void gpa_keytable_reload (GPAKeyTable * table);
 
+/* Load a single key from gpg */
+void gpa_keytable_load_key (GPAKeyTable * table, const gchar * fpr);
+
 /* Return the key with a given fingerprint. It does not provide a reference 
  * for the user */
 GpgmeKey gpa_keytable_lookup (GPAKeyTable * table, const gchar * fpr);
