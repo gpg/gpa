@@ -1,5 +1,7 @@
 2001-02-08  Bernhard Herzog  <bh@intevation.de>
 
+	* gpawidgets.c (gpa_key_info_new): Tweak the spacing a bit
+
 	* passphrasedlg.c (gpa_passphrase_run_dialog): Add a label asking
 	for he passphrase
 

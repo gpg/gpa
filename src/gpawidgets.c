@@ -47,7 +47,7 @@ gpa_key_info_new (GpapaKey * key, GtkWidget * window)
 
   table = gtk_table_new (2, 2, FALSE);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 5);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 0);
 
   /* User Name */
   label = gtk_label_new (_("User Name:"));
