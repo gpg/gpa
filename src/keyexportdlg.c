@@ -1,5 +1,5 @@
 /* keyexportdlg.c  -	 The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -85,7 +85,6 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   GtkWidget *hboxFilename;
   GtkWidget *labelFilename;
   GtkWidget *entryFilename;
-  GtkWidget *spaceBrowse;
   GtkWidget *buttonBrowse;
   GtkWidget *checkerArmor;
   GtkWidget *hButtonBoxExport;
@@ -116,13 +115,11 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
 			     (gpointer) &dialog);
   gpa_connect_by_accelerator (GTK_LABEL (labelFilename), entryFilename,
 			      accelGroup, _("Export to _file:"));
-  spaceBrowse = gpa_space_new ();
-  gtk_box_pack_start (GTK_BOX (hboxFilename), spaceBrowse, FALSE, FALSE, 5);
   buttonBrowse = gpa_button_new (accelGroup, _("_Browse..."));
   gtk_signal_connect_object (GTK_OBJECT (buttonBrowse), "clicked",
 			     GTK_SIGNAL_FUNC (export_browse),
 			     (gpointer) &dialog);
-  gtk_box_pack_start (GTK_BOX (hboxFilename), buttonBrowse, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hboxFilename), buttonBrowse, FALSE, FALSE, 5);
   gtk_box_pack_start (GTK_BOX (vboxExport), hboxFilename, TRUE, TRUE, 0);
   dialog.entry_filename = entryFilename;
 
