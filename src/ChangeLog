@@ -1,5 +1,13 @@
 2001-02-15  Bernhard Herzog  <bh@intevation.de>
 
+	* icons.xpm:
+	* icons.c (xpms): Add the new logo
+
+	* helpmenu.c (about_dialog_logo_expose, about_dialog_load_logo)
+	removed. The logo is now an xpm just lkike the icons.
+	(help_about): Use a pixmap widget instead of the drawing area to
+	display the logo
+
 	* keygenwizard.c (page_switched): Remove a debug printf
 	(gpa_keygen_wizard_backup_page): Change the wording a little
 

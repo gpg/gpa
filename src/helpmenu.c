@@ -29,6 +29,7 @@
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
+#include "icons.h"
 
 
 static char *scroll_text[] =
@@ -48,10 +49,6 @@ static int *scroll_text_widths;
 static GtkWidget *about_dialog = NULL;
 static GtkWidget *scroll_area = NULL;
 static GdkPixmap *scroll_pixmap = NULL;
-static GtkWidget *logo_area = NULL;
-static GdkPixmap *logo_pixmap = NULL;
-static int logo_width = 0;
-static int logo_height = 0;
 static int cur_scroll_text = 0;
 static int cur_scroll_index = 0;
 static int timer = 0;
@@ -158,102 +155,7 @@ about_dialog_timer (gpointer data)
 }
 
 
-static int
-about_dialog_logo_expose (GtkWidget *widget, GdkEventExpose *event)
-{
-  /* If we draw beyond the boundaries of the pixmap, then X
-     will generate an expose area for those areas, starting
-     an infinite cycle. We now set allow_grow = FALSE, so
-     the drawing area can never be bigger than the preview.
-     Otherwise, it would be necessary to intersect event->area
-     with the pixmap boundary rectangle. */
 
-  gdk_draw_pixmap (widget->window,
-		   widget->style->black_gc,
-		   logo_pixmap,
-		   event->area.x, event->area.y,
-		   event->area.x, event->area.y,
-		   event->area.width, event->area.height);
-  
-  return FALSE;
-}
-
-static int
-about_dialog_load_logo (GtkWidget *window)
-{
-  GtkWidget *preview;
-  GdkGC *gc;
-  char buf[1024];
-  unsigned char *pixelrow;
-  FILE *fp;
-  int count;
-  int i;
-
-  {
-    char *fname;
-    const char *datadir = GPA_DATADIR;
-
-    fname = xmalloc (strlen(datadir) + 20);
-    strcpy (stpcpy (fname, datadir), "/gpa_logo.ppm");
-    fp = fopen (fname, "rb");
-    free (fname);
-  }
-
-  if (!fp)
-    return -1;
-
-  fgets (buf, DIM(buf), fp);
-  if (strcmp (buf, "P6\n"))
-    {
-      fclose (fp);
-      return -1;
-    }
-
-  fgets (buf, DIM(buf), fp);
-  fgets (buf, DIM(buf), fp);
-  sscanf (buf, "%d %d", &logo_width, &logo_height);
-
-  fgets (buf, DIM(buf), fp);
-  if (strcmp (buf, "255\n"))
-    {
-      fclose (fp);
-      return -1;
-    }
-
-  preview = gtk_preview_new (GTK_PREVIEW_COLOR);
-  gtk_preview_size (GTK_PREVIEW (preview), logo_width, logo_height);
-  pixelrow = g_new (guchar, logo_width * 3);
-
-  for (i = 0; i < logo_height; i++)
-    {
-      count = fread (pixelrow, 1, logo_width * 3, fp);
-      if (count != (logo_width * 3))
-	{
-	  gtk_widget_destroy (preview);
-	  g_free (pixelrow);
-	  fclose (fp);
-	  return -1;
-	}
-      gtk_preview_draw_row (GTK_PREVIEW (preview), pixelrow, 0,
-			    i, logo_width);
-    }
-
-  gtk_widget_realize (window);
-  logo_pixmap = gdk_pixmap_new (window->window, logo_width, logo_height,
-				gtk_preview_get_visual ()->depth);
-  gc = gdk_gc_new (logo_pixmap);
-  gtk_preview_put (GTK_PREVIEW (preview),
-		   logo_pixmap, gc,
-		   0, 0, 0, 0, logo_width, logo_height);
-  gdk_gc_destroy (gc);
-
-  gtk_widget_unref (preview);
-  g_free (pixelrow);
-
-  fclose (fp);
-
-  return 0;
-}
 
 /****************
  * Scroll and logo stuff taken from GIMP 1.0
@@ -268,6 +170,7 @@ help_about (void)
       GtkWidget *frame;
       GtkWidget *label;
       GtkWidget *alignment;
+      GtkWidget *pixmap;
       int max_width;
       int i;
 
@@ -283,12 +186,6 @@ help_about (void)
 			  GTK_SIGNAL_FUNC(about_dialog_button), NULL);
       gtk_widget_set_events (about_dialog, GDK_BUTTON_PRESS_MASK);
 
-      if (!logo_pixmap && about_dialog_load_logo (about_dialog))
-	{
-	  /* problem reading the logo image */
-	  logo_width = logo_height = 0;
-	}
-
       vbox = gtk_vbox_new (FALSE, 1);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
       gtk_container_add (GTK_CONTAINER(GTK_DIALOG(about_dialog)->vbox), vbox);
@@ -300,22 +197,10 @@ help_about (void)
       gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
       gtk_widget_show (frame);
 
-      if (logo_width)
-	{
-	  logo_area = gtk_drawing_area_new ();
-	  gtk_signal_connect (GTK_OBJECT (logo_area), "expose_event",
-			      (GtkSignalFunc) about_dialog_logo_expose, NULL);
-	  gtk_drawing_area_size (GTK_DRAWING_AREA (logo_area),
-				 logo_width, logo_height);
-	  gtk_widget_set_events (logo_area, GDK_EXPOSURE_MASK);
-	  gtk_container_add (GTK_CONTAINER (frame), logo_area);
-	  gtk_widget_show (logo_area);
-
-	  gtk_widget_realize (logo_area);
-	  gdk_window_set_background (logo_area->window,
-				     &logo_area->style->black);
-	}
-
+      gtk_widget_realize (about_dialog);
+      pixmap = gpa_create_icon_widget (about_dialog, "gpa_logo");
+      gtk_container_add (GTK_CONTAINER (frame), pixmap);
+      gtk_widget_show (pixmap);
 
       label = gtk_label_new ("GNU Privacy Assistant v" VERSION);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);

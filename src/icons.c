@@ -56,6 +56,7 @@ struct {
   {"delete",	delete_xpm},
   {"wizard_genkey", wizard_genkey_xpm},
   {"wizard_backup", wizard_backup_xpm},
+  {"gpa_logo",	gpa_logo_xpm},
   { NULL, NULL }
 };
 
