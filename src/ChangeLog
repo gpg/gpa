@@ -3,6 +3,10 @@
 	* optionsmenu.c (options_key):
 	(options_key_destroy): Make the default key dialog properly modal
 	with a recursive main loop and a handler for the destroy signal
+	(options_recipients):
+	(options_recipients_destroy): Make the default recipients dialog
+	properly modal with a recursive main loop and a handler for the
+	destroy signal
 
 	* filesigndlg.c (file_sign_ok): Pass the selected secret key to
 	the passphrase dialog
