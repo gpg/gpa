@@ -1,5 +1,11 @@
 2001-02-05  Bernhard Herzog  <bh@intevation.de>
 
+	* siglist.c (GPASigList):
+	(gpa_siglist_new):
+	(gpa_siglist_set_signatures): Don't try to be too clever about
+	when to set the columns to their optimal widths. Do it whenever
+	the list is changed and get rid of the widths_set flag.
+
 	* keyring.c (keyring_editor_export): Actually call the appropriate
 	gpap functions and handle sending keys to key servers as well.
 
