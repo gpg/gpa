@@ -1,3 +1,13 @@
+2000-05-11 16:59:24  Werner Koch  (wk@habibti.openit.de)
+
+	* configure.in: Add a few function checks. Fixed some hardcoded
+	paths for the W32 version of Gtk+ - needs a better solution.
+
+	GPA shows up on a Windows NT box and didn't crash.  This is a good
+	reason to increase the version number.
+
+	Version 0.2.0
+
 2000-05-03 20:09:17  Werner Koch  (wk@habibti.openit.de)
 
 	Version 0.1.0

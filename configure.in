@@ -11,7 +11,7 @@ AM_CONFIG_HEADER(config.h)
 dnl
 dnl The version number goes here
 dnl
-AM_INIT_AUTOMAKE(gpa,0.1.1)
+AM_INIT_AUTOMAKE(gpa,0.2.0)
 
 dnl
 dnl Setup some stuff depending on host/target.
@@ -47,8 +47,9 @@ dnl
 
 dnl Where is the GTK+ toolkit
 if test "$cross_compiling" = yes ; then
-  CFLAGS="$CFLAGS -I/negev/misc-src/gtkw32/include/gdk/win32 -I/negev/misc-src/gtkw32/include"
-  LIBS="$LIBS -L/negev/misc-src/gtkw32/lib -lgtk -lgdk -lglib"
+  CFLAGS="$CFLAGS -I/home/wk/work/gtk+w32/include/gtk+/gdk/win32 \
+ -I/home/wk/work/gtk+w32/include -I/home/wk/work/gtk+w32/include/gtk+"
+  LIBS="$LIBS     -L/home/wk/work/gtk+w32/lib -lgtk -lgdk -lglib"
 else
   AM_PATH_GTK(1.2.1,
             [LIBS="$LIBS $GTK_LIBS"
@@ -60,6 +61,7 @@ fi
 dnl
 dnl Checks for header files
 dnl
+AC_CHECK_FUNCS(stpcpy strlwr stricmp memicmp)
 
 
 dnl

@@ -73,11 +73,16 @@ xstrdup( const char *string )
 char *
 xstrcat2( const char *a, const char *b )
 {
+    size_t n1;
     char *p;
+
     if( !b )
 	return xstrdup( a );
-    p = xmalloc( strlen(a) + strlen(b) + 1 );
-    strcpy(stpcpy(p,a),b);
+
+    n1 = strlen(a);
+    p = xmalloc( n1 + strlen(b) + 1 );
+    memcpy(p, a, n1 );
+    strcpy(p+n1, b );
     return p;
 }
 

@@ -1,3 +1,8 @@
+2000-05-11 18:04:43  Werner Koch  (wk@habibti.openit.de)
+
+	* xmalloc.c (xstrcat2):  Replaced stpcpy to quickly address W32
+	problems.
+
 2000-05-02 19:43:38  Werner Koch  (wk@habibti.openit.de)
 
 	* xmalloc.c (xstrcat2): New.

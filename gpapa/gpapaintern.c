@@ -28,7 +28,9 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#include <sys/wait.h>
+#ifndef __MINGW32__
+  #include <sys/wait.h>
+#endif
 #include <fcntl.h>
 
 gboolean gpapa_line_begins_with ( gchar *line, gchar *keyword )
@@ -66,6 +68,13 @@ void gpapa_call_gnupg (
   GpapaLineCallbackFunc linecallback, gpointer linedata,
   GpapaCallbackFunc callback, gpointer calldata
 ) {
+#ifdef __MINGW32__
+  /* Hmm, let's see how we can tackle this for the W32 API:
+   *
+   */
+  callback ( GPAPA_ACTION_ERROR, "gpg calling not yet done for W32", calldata );
+
+#else /* Here is the code for something we call an operating system */
   int pid;
   int outputfd [ 2 ], statusfd [ 2 ], passfd [ 2 ], inputfd [ 2 ], devnull;
   char **argv;
@@ -133,15 +142,15 @@ void gpapa_call_gnupg (
       if ( pipe ( inputfd ) == -1 )
 	{
 	  callback ( GPAPA_ACTION_ERROR, "could not open input pipe", calldata );
-          close ( outputfd [ 0 ] );
-          close ( outputfd [ 1 ] );
-          close ( statusfd [ 0 ] );
-          close ( statusfd [ 1 ] );
-          if ( passphrase )
-            {
-              close ( passfd [ 0 ] );
-              close ( passfd [ 1 ] );
-            }
+	  close ( outputfd [ 0 ] );
+	  close ( outputfd [ 1 ] );
+	  close ( statusfd [ 0 ] );
+	  close ( statusfd [ 1 ] );
+	  if ( passphrase )
+	    {
+	      close ( passfd [ 0 ] );
+	      close ( passfd [ 1 ] );
+	    }
 	  return;
 	}
       write ( inputfd [ 1 ], commands, strlen ( commands ) );
@@ -188,12 +197,12 @@ void gpapa_call_gnupg (
       dup2 ( outputfd [ 1 ], 1 );
       close ( outputfd [ 1 ] );
       if ( commands )
-        {
+	{
 	  dup2 ( inputfd [ 0 ], 0 );
 	  close ( inputfd [ 0 ] );
-        }
+	}
       else
-        dup2 ( devnull, 0 );
+	dup2 ( devnull, 0 );
 #ifndef DEBUG
       dup2 ( devnull, 2 );
 #endif
@@ -277,7 +286,7 @@ void gpapa_call_gnupg (
 	       */
 	      if ( FD_ISSET ( statusfd [ 0 ], &readfds ) )
 		{
-                  char *bufptr = buffer;
+		  char *bufptr = buffer;
 		  p = read ( statusfd [ 0 ], buffer, bufsize );
 		  buffer [ MIN ( bufsize - 1, p ) ] = 0;
 		  if ( p )
@@ -285,36 +294,36 @@ void gpapa_call_gnupg (
 #ifdef DEBUG
 		      fprintf ( stderr, "status data: %s\n", buffer );
 #endif
-                      while ( *bufptr )
-                        {
-                          char *qq = bufptr;
-                          char nlsave;
-                          while ( *qq && *qq != '\n' )
-                            qq++;
-                          nlsave = *qq;
-                          *qq = 0;
-                          linecallback ( bufptr, linedata, TRUE );
-                          status_check ( bufptr, callback, calldata, "NODATA",
-                                         "no data found" );
-                          status_check ( bufptr, callback, calldata, "BADARMOR",
-                                         "ASCII armor is corrupted" );
-                          if ( status_check ( bufptr, callback, calldata, "MISSING_PASSPHRASE",
-                                              "missing passphrase" ) )
-                            missing_passphrase = TRUE;
-                          if ( ! missing_passphrase )
-                            status_check ( bufptr, callback, calldata, "BAD_PASSPHRASE",
-                                           "bad passphrase" );
-                          status_check ( bufptr, callback, calldata, "DECRYPTION_FAILED",
-                                         "decryption failed" );
-                          status_check ( bufptr, callback, calldata, "NO_PUBKEY",
-                                         "public key not available" );
-                          status_check ( bufptr, callback, calldata, "NO_SECKEY",
-                                         "secret key not available" );
-                          *qq = nlsave;
-                          if ( *qq )
-                            qq++;
-                          bufptr = qq;
-                        }
+		      while ( *bufptr )
+			{
+			  char *qq = bufptr;
+			  char nlsave;
+			  while ( *qq && *qq != '\n' )
+			    qq++;
+			  nlsave = *qq;
+			  *qq = 0;
+			  linecallback ( bufptr, linedata, TRUE );
+			  status_check ( bufptr, callback, calldata, "NODATA",
+					 "no data found" );
+			  status_check ( bufptr, callback, calldata, "BADARMOR",
+					 "ASCII armor is corrupted" );
+			  if ( status_check ( bufptr, callback, calldata, "MISSING_PASSPHRASE",
+					      "missing passphrase" ) )
+			    missing_passphrase = TRUE;
+			  if ( ! missing_passphrase )
+			    status_check ( bufptr, callback, calldata, "BAD_PASSPHRASE",
+					   "bad passphrase" );
+			  status_check ( bufptr, callback, calldata, "DECRYPTION_FAILED",
+					 "decryption failed" );
+			  status_check ( bufptr, callback, calldata, "NO_PUBKEY",
+					 "public key not available" );
+			  status_check ( bufptr, callback, calldata, "NO_SECKEY",
+					 "secret key not available" );
+			  *qq = nlsave;
+			  if ( *qq )
+			    qq++;
+			  bufptr = qq;
+			}
 		    }
 		}
 
@@ -342,22 +351,22 @@ void gpapa_call_gnupg (
 	      pendingsize = 0;
 	    }
 	  if ( WIFEXITED ( status ) && WEXITSTATUS ( status ) != 0 )
-            {
-              char msg [ 80 ];
-              sprintf ( msg, "GnuPG execution terminated with error code %d",
-                             WEXITSTATUS ( status ) );
+	    {
+	      char msg [ 80 ];
+	      sprintf ( msg, "GnuPG execution terminated with error code %d",
+			     WEXITSTATUS ( status ) );
 	      callback ( GPAPA_ACTION_ABORTED, msg, calldata );
-            }
+	    }
 	  else if ( WIFSIGNALED ( status ) && WTERMSIG ( status ) != 0 )
-            {
-              char msg [ 80 ];
-              sprintf ( msg, "GnuPG execution terminated by uncaught signal %d",
-                             WTERMSIG ( status ) );
+	    {
+	      char msg [ 80 ];
+	      sprintf ( msg, "GnuPG execution terminated by uncaught signal %d",
+			     WTERMSIG ( status ) );
 	      callback ( GPAPA_ACTION_ABORTED, msg, calldata );
-            }
-          else
-            callback ( GPAPA_ACTION_FINISHED,
-                       "GnuPG execution terminated normally", calldata );
+	    }
+	  else
+	    callback ( GPAPA_ACTION_FINISHED,
+		       "GnuPG execution terminated normally", calldata );
 	  free ( buffer );
 	}
       else
@@ -383,4 +392,6 @@ void gpapa_call_gnupg (
       close ( devnull );
     }
   free ( argv );
+#endif /* real operating system */
 } /* gpapa_call_gnupg */
+
