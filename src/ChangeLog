@@ -1,5 +1,17 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_update_status_bar): Make the parameter
+	explicitly a GPAKeyringEditor pointer because it's not directly
+	used as a signal handler anymore
+	(keyring_default_key_changed): New signal handler for the
+	gpa_default_key_changed signal that updates the statusbar and the
+	selection sensitive widgets because some of them depend on the
+	default key
+	(keyring_editor_new): Use keyring_default_key_changed as the
+	handler for gpa_default_key_changed
+	(keyring_editor_sign): Update the selection sensitive widgets too
+	because some depend on what signatures a key has.
+
 	* keysmenu.h: Remove the prototypes of the functions deleted from
 	keysmenu.c
 
