@@ -1,5 +1,9 @@
 2003-05-04  Miguel Coca  <mcoca@gnu.org>
 
+	* gpgmetools.c, server_access.c: Remove gpgmeparsers.h include.
+
+2003-05-04  Miguel Coca  <mcoca@gnu.org>
+
 	* gpgmeparsers.c, gpgmeparsers.h: Delete.
 
 	* Makefile.am (gpa_SOURCES): Remove gpgmeparsers.{c,h}

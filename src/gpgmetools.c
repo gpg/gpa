@@ -24,7 +24,6 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpgmetools.h"
-#include "gpgmeparsers.h"
 
 #ifdef G_OS_UNIX
 #include <unistd.h>

@@ -35,7 +35,6 @@
 
 #include "gtktools.h"
 #include "server_access.h"
-#include "gpgmeparsers.h"
 
 /* WARNING: Keep this up to date with gnupg's include/keyserver.h */
 #define KEYSERVER_OK               0 /* not an error */
