@@ -1,5 +1,5 @@
 /* gpa.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -590,72 +590,6 @@ gpa_recipientWindow_close (gpointer param)
   gpa_window_destroy (paramClose);
 }				/* gpa_recipientWindow_close */
 
-gint
-delete_event (GtkWidget * widget, GdkEvent * event, gpointer data)
-{
-  file_quit ();
-  return (FALSE);
-}				/* delete_event */
-
-GtkWidget *
-gpa_menubar_new (GtkWidget * window)
-{
-  GtkItemFactory *itemFactory;
-  GtkItemFactoryEntry menuItem[] = {
-    {_("/_File"), NULL, NULL, 0, "<Branch>"},
-    {_("/File/_Open"), "<control>O", file_open, 0, NULL},
-    {_("/File/S_how Detail"), "<control>H", file_showDetail, 0, NULL},
-    {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Sign"), NULL, file_sign, 0, NULL},
-    {_("/File/_Encrypt"), NULL, file_encrypt, 0, NULL},
-    {_("/File/E_ncrypt as"), NULL, file_encryptAs, 0, NULL},
-    {_("/File/_Protect by Password"), NULL, file_protect, 0, NULL},
-    {_("/File/P_rotect as"), NULL, file_protectAs, 0, NULL},
-    {_("/File/_Decrypt"), NULL, file_decrypt, 0, NULL},
-    {_("/File/Decrypt _as"), NULL, file_decryptAs, 0, NULL},
-    {_("/File/sep2"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Close"), NULL, file_close, 0, NULL},
-    {_("/File/_Quit"), "<control>Q", file_quit, 0, NULL},
-
-    {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
-    {_("/Keys/Open _public Keyring"), "<control>K", keys_openPublic, 0, NULL},
-    {_("/Keys/Open _secret Keyring"), NULL, keys_openSecret, 0, NULL},
-    {_("/Keys/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/Keys/_Generate Key"), NULL, keys_generateKey, 0, NULL},
-
-    {_("/Keys/Generate _Revocation Certificate"), NULL,
-					 keys_generateRevocation, 0, NULL},
-    {_("/Keys/_Import Keys"), NULL, keys_import, 0, NULL},
-    {_("/Keys/Import _Ownertrust"), NULL, keys_importOwnertrust, 0, NULL},
-    {_("/Keys/_Update Trust Database"), NULL, keys_updateTrust, 0, NULL},
-
-    {_("/_Options"), NULL, NULL, 0, "<Branch>"},
-    {_("/Options/_Keyserver"), NULL, options_keyserver, 0, NULL},
-    {_("/Options/Default _Recipients"), NULL, options_recipients, 0, NULL},
-    {_("/Options/_Default Key"), NULL, options_key, 0, NULL},
-    {_("/Options/_Home Directory"), NULL, options_homedir, 0, NULL},
-    {_("/Options/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/Options/Online _tips"), NULL, options_tips, 0, NULL},
-    {_("/Options/_Load Options File"), NULL, options_load, 0, NULL},
-    {_("/Options/_Save Options File"), NULL, options_save, 0, NULL},
-
-    {_("/_Help"), NULL, NULL, 0, "<Branch>"},
-    {_("/Help/_About"), NULL, help_about, 0, NULL},
-    {_("/Help/_License"), NULL, help_license, 0, NULL},
-    {_("/Help/_Warranty"), NULL, help_warranty, 0, NULL},
-    {_("/Help/_Help"), "F1", help_help, 0, NULL}
-  };
-  gint menuItems = sizeof (menuItem) / sizeof (menuItem[0]);
-  GtkAccelGroup *accelGroup;
-  GtkWidget *menubar;
-
-  accelGroup = gtk_accel_group_new ();
-  itemFactory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accelGroup);
-  gtk_item_factory_create_items (itemFactory, menuItems, menuItem, NULL);
-  gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
-  menubar = gtk_item_factory_get_widget (itemFactory, "<main>");
-  return menubar;
-}
 
 void
 gpa_popupMenu_init (void)
@@ -681,51 +615,5 @@ gpa_popupMenu_init (void)
   gtk_item_factory_create_items (itemFactory, menuItems, menuItem, NULL);
   global_popupMenu = gtk_item_factory_get_widget (itemFactory, "<main>");
 } /* gpa_popupMenu_init */
-
-
-gboolean
-evalKeyClistFile (GtkWidget * clistFile, GdkEventKey * event,
-		  gpointer userData)
-{
-  switch (event->keyval)
-    {
-    case GDK_Delete:
-      file_close ();
-      break;
-    case GDK_Insert:
-      file_open ();
-      break;
-    }
-  return (TRUE);
-} /* evalKeyClistFile */
-
-gboolean
-evalMouseClistFile (GtkWidget * clistFile, GdkEventButton * event,
-		    gpointer userData)
-{
-  /* var */
-  gint x, y;
-  gint row, column;
-  /* commands */
-  if (event->button == 3)
-    {
-      x = event->x;
-      y = event->y;
-      if (gtk_clist_get_selection_info
-	  (GTK_CLIST (clistFile), x, y, &row, &column))
-	{
-	  if (!(event->state & GDK_SHIFT_MASK ||
-		event->state & GDK_CONTROL_MASK))
-	    gtk_clist_unselect_all (GTK_CLIST (clistFile));
-	  gtk_clist_select_row (GTK_CLIST (clistFile), row, column);
-	  gtk_menu_popup (GTK_MENU (global_popupMenu), NULL, NULL, NULL, NULL,
-			  3, 0);
-	}			/* if */
-    }				/* if */
-  else if (event->type == GDK_2BUTTON_PRESS)
-    file_showDetail ();
-  return (TRUE);
-}				/* evalMouseClistFile */
-
 
 
