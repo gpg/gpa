@@ -1,0 +1,1499 @@
+# GPA French NLS File.
+# Copyright (C) 2001 Free Software Foundation, Inc.
+# pplf <pplf@geocities.com>, 2001.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2001-02-27 13:59+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <pplf@geocities.com>\n"
+"Language-Team: FRENCH <fr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: src/encryptdlg.c:78 src/filemenu.c:848
+msgid "No recipients chosen to encrypt for."
+msgstr "Aucun destinataire choisi pour lequel chiffrer"
+
+#: src/encryptdlg.c:142 src/filemenu.c:1006
+msgid ""
+"No public keys available.\n"
+"Currently, there is nobody who could read a\n"
+"file encrypted by you."
+msgstr ""
+"Pas de clefs publiques disponibles.\n"
+"Actuellement, il n'y a personne qui puisse lire un\n"
+"fichier chiffré par vous."
+
+#: src/encryptdlg.c:150 src/filemenu.c:1014
+msgid "No secret keys available to encrypt."
+msgstr "Pas de clefs secrètes disponibles pour chiffrer"
+
+#: src/encryptdlg.c:159 src/filemenu.c:1027
+msgid "Encrypt files"
+msgstr "Chiffrer fichiers"
+
+#: src/encryptdlg.c:184
+msgid "_Public Keys"
+msgstr "_Clefs publiques"
+
+#: src/encryptdlg.c:187
+msgid "_Sign"
+msgstr "_Signer"
+
+#: src/encryptdlg.c:191
+msgid "A_rmor"
+msgstr "A-rmure"
+
+#: src/encryptdlg.c:203 src/expirydlg.c:220 src/filemenu.c:449
+#: src/filemenu.c:1216 src/filemenu.c:1478 src/filemenu.c:1645
+#: src/filesigndlg.c:250 src/gpawizard.c:234 src/gtktools.c:511
+#: src/keydeletedlg.c:145 src/keyexportdlg.c:242 src/keygendlg.c:283
+#: src/keygenwizard.c:502 src/keyimportdlg.c:258 src/keysigndlg.c:192
+#: src/keysmenu.c:478 src/keysmenu.c:966 src/keysmenu.c:1280
+#: src/optionsmenu.c:123 src/optionsmenu.c:361 src/optionsmenu.c:534
+#: src/ownertrustdlg.c:171 src/passphrasedlg.c:152
+msgid "_Cancel"
+msgstr "_Annuler"
+
+#: src/encryptdlg.c:208 src/expirydlg.c:77 src/expirydlg.c:215
+#: src/gtktools.c:321 src/gtktools.c:360 src/gtktools.c:514
+#: src/keydeletedlg.c:140 src/keyexportdlg.c:246 src/keyimportdlg.c:262
+#: src/keysigndlg.c:196 src/passphrasedlg.c:156
+msgid "_OK"
+msgstr "_OK"
+
+#. FIXME: This error message should be more informative
+#: src/expirydlg.c:79
+msgid "Invalid Date"
+msgstr "Date invalide"
+
+#: src/expirydlg.c:80 src/gpawidgets.c:437
+msgid "Please provide a correct date"
+msgstr "Veuillez indiquer une date correcte"
+
+#: src/expirydlg.c:168
+msgid "Change Expiry Date"
+msgstr "Change la date d'expiration"
+
+#: src/expirydlg.c:177
+msgid "_never expire"
+msgstr "_n'expire jamais"
+
+#: src/expirydlg.c:186
+msgid "_expire on"
+msgstr "_expire le"
+
+#: src/fileman.c:193 src/filemenu.c:127
+msgid "The file is already open."
+msgstr "Le fichier est déjà ouvert"
+
+#: src/fileman.c:239
+msgid "Open File"
+msgstr "Ouvrir fichier"
+
+#: src/fileman.c:291
+msgid "No file selected for detail view"
+msgstr "Aucun fichier sélectionné pour une vue détaillée"
+
+#: src/fileman.c:299
+msgid "Detailed file view"
+msgstr "Vue détaillée du fichier"
+
+#: src/fileman.c:310
+msgid "Filename: "
+msgstr "Nome de fichier: "
+
+#: src/fileman.c:327
+msgid "Status:"
+msgstr "Etat:"
+
+#: src/fileman.c:361 src/filemenu.c:617
+msgid "_Signatures"
+msgstr "_Signatures"
+
+#: src/fileman.c:368 src/filemenu.c:660 src/gpawizard.c:106 src/helpmenu.c:355
+#: src/keyeditdlg.c:157 src/keysmenu.c:1114
+msgid "_Close"
+msgstr "_Fermer"
+
+#: src/fileman.c:521 src/keyring.c:688
+msgid "/_File"
+msgstr "/_Fichier"
+
+#: src/fileman.c:522
+msgid "/File/_Open"
+msgstr "/Fichier/_Ouvrir"
+
+#: src/fileman.c:523
+msgid "/File/S_how Detail"
+msgstr "/Fichiers/M_ontrer Détails"
+
+#: src/fileman.c:524
+msgid "/File/sep1"
+msgstr "/Fichier/sep1"
+
+#: src/fileman.c:525
+msgid "/File/_Sign"
+msgstr "/Fichier/_Signer"
+
+#: src/fileman.c:526
+msgid "/File/_Encrypt"
+msgstr "/Fichier/_Chiffrer"
+
+#. {_("/File/E_ncrypt as"), NULL, file_encryptAs, 0, NULL},
+#. {_("/File/_Protect by Password"), NULL, file_protect, 0, NULL},
+#. {_("/File/P_rotect as"), NULL, file_protectAs, 0, NULL},
+#.
+#: src/fileman.c:531
+msgid "/File/_Decrypt"
+msgstr "/Fichier/_Déchiffrer"
+
+#.
+#. {_("/File/Decrypt _as"), NULL, file_decryptAs, 0, NULL},
+#.
+#: src/fileman.c:535
+msgid "/File/sep2"
+msgstr "/Fichier/sep2"
+
+#: src/fileman.c:536 src/keyring.c:689
+msgid "/File/_Close"
+msgstr "/Fichier/_Fermer"
+
+#: src/fileman.c:537 src/keyring.c:690
+msgid "/File/_Quit"
+msgstr "/Fichier/_Quitter"
+
+#: src/fileman.c:540 src/keyring.c:702
+msgid "/_Windows"
+msgstr "/_Fenêtres"
+
+#: src/fileman.c:541 src/keyring.c:703
+msgid "/Windows/_Filemanager"
+msgstr "/Fenêtre/_Gestionnaire de fichier"
+
+#: src/fileman.c:542 src/keyring.c:704
+msgid "/Windows/_Keyring Editor"
+msgstr "/Fenêtres/_Editeur de trousseau"
+
+#: src/fileman.c:564
+msgid "File"
+msgstr "Fichier"
+
+#: src/fileman.c:564
+msgid "Status"
+msgstr "Etat"
+
+#: src/fileman.c:564
+msgid "Sigs total"
+msgstr "Total des signatures"
+
+#: src/fileman.c:564
+msgid "Valid Sigs"
+msgstr "Valeur des signatures"
+
+#: src/fileman.c:564
+msgid "Invalid Sigs"
+msgstr "Signatures invalides"
+
+#: src/fileman.c:572
+msgid "Files in work"
+msgstr "Fichier utilisé"
+
+#: src/fileman.c:636
+msgid "Open"
+msgstr "Ouvrir"
+
+#: src/fileman.c:637
+msgid "Open a file"
+msgstr "Ouvrir un fichier"
+
+#: src/fileman.c:637
+msgid "open file"
+msgstr "ouvrir fichier"
+
+#: src/fileman.c:641 src/keyring.c:1103
+msgid "Sign"
+msgstr "Signer"
+
+#: src/fileman.c:642
+msgid "Sign the selected file"
+msgstr "Signer le fichier sélectionner"
+
+#: src/fileman.c:642
+msgid "sign file"
+msgstr "signer fichier"
+
+#: src/fileman.c:646
+msgid "Encrypt"
+msgstr "Chiffrer"
+
+#: src/fileman.c:647
+msgid "Encrypt the selected file"
+msgstr "Chiffrer le fichier sélectionné"
+
+#: src/fileman.c:647
+msgid "encrypt file"
+msgstr "chiffrer fichier"
+
+#: src/fileman.c:652
+msgid " Decrypt "
+msgstr "Déchiffrer"
+
+#: src/fileman.c:653
+msgid "Decrypt the selected file"
+msgstr "Déchiffrer le fichier sélectionné"
+
+#: src/fileman.c:653
+msgid "decrypt file"
+msgstr "déchiffrer fichier"
+
+#: src/fileman.c:658 src/keyring.c:1151
+msgid "Help"
+msgstr "Aide"
+
+#: src/fileman.c:659 src/keyring.c:1152
+msgid "Understanding the GNU Privacy Assistant"
+msgstr "Comprendre GNU Privacy Assistant"
+
+#: src/fileman.c:660 src/keyring.c:1153
+msgid "help"
+msgstr "aide"
+
+#: src/fileman.c:681
+msgid "GNU Privacy Assistant - File Manager"
+msgstr "GNU Privacy Assistant - Gestionnaire de fichier"
+
+#: src/filemenu.c:40 src/gpapastrings.c:32 src/gpapastrings.c:45
+#: src/gpapastrings.c:157 src/gpapastrings.c:174
+msgid "unknown"
+msgstr "inconnu"
+
+#: src/filemenu.c:41 src/gpapastrings.c:158
+msgid "clear"
+msgstr "annuler"
+
+#: src/filemenu.c:42 src/gpapastrings.c:159
+msgid "encrypted"
+msgstr "chifffré"
+
+#: src/filemenu.c:43 src/gpapastrings.c:160
+msgid "protected"
+msgstr "protégé"
+
+#: src/filemenu.c:44 src/gpapastrings.c:161
+msgid "signed"
+msgstr "signé"
+
+#: src/filemenu.c:45 src/gpapastrings.c:162
+msgid "clearsigned"
+msgstr "signé en clair"
+
+#: src/filemenu.c:46 src/gpapastrings.c:163
+msgid "detach-signed"
+msgstr "signé par fichier détaché"
+
+#: src/filemenu.c:188
+msgid "No files selected for signing"
+msgstr "Pas de fichier sélectionné pour la signature"
+
+#: src/filemenu.c:282 src/filesigndlg.c:105
+msgid ""
+"!FATAL ERROR!\n"
+"Invalid sign mode"
+msgstr ""
+"!ERREUR FATALE!\n"
+"Mode de signature invalide"
+
+#: src/filemenu.c:353 src/filesigndlg.c:180
+msgid ""
+"No secret keys available for signing.\n"
+"Import a secret key first!"
+msgstr ""
+"Pas de clefs secrètes disponibles pour la signature.\n"
+"Importez d'abord une clef secrète!"
+
+#: src/filemenu.c:360
+msgid "Sign files"
+msgstr "Fichier signés"
+
+#: src/filemenu.c:365
+msgid "Signing mode"
+msgstr "Mode de signature"
+
+#: src/filemenu.c:369 src/filesigndlg.c:206
+msgid "si_gn and compress"
+msgstr "si_gner et compresser"
+
+#: src/filemenu.c:373 src/filesigndlg.c:211
+msgid "sign, do_n't compress"
+msgstr "signer, ne pas compresser"
+
+#: src/filemenu.c:378 src/filesigndlg.c:217
+msgid "sign in separate _file"
+msgstr "signer dans un fichier séparé"
+
+#: src/filemenu.c:385 src/filemenu.c:1208 src/filemenu.c:1456
+#: src/filesigndlg.c:221 src/keyexportdlg.c:226 src/keysmenu.c:466
+msgid "a_rmor"
+msgstr "a_rmure"
+
+#: src/filemenu.c:436 src/filesigndlg.c:242
+msgid "Sign _as "
+msgstr "Signer _comme"
+
+#: src/filemenu.c:550 src/siglist.c:48
+msgid "Signature"
+msgstr "Signature"
+
+#: src/filemenu.c:550 src/siglist.c:48
+msgid "Validity"
+msgstr "Validité"
+
+#: src/filemenu.c:550 src/filemenu.c:950 src/gpawidgets.c:86
+#: src/gpawidgets.c:125 src/keylist.c:201 src/keysmenu.c:1001
+#: src/keysmenu.c:1196 src/optionsmenu.c:200 src/optionsmenu.c:435
+#: src/siglist.c:48
+msgid "Key ID"
+msgstr "ID de clef"
+
+#: src/filemenu.c:578
+msgid "No key selected for detail view."
+msgstr "Aucune clef sélectionnée pour une vue détaillée"
+
+#: src/filemenu.c:587
+msgid "Show public key detail"
+msgstr "Montrer le détail de la clef publique"
+
+#: src/filemenu.c:631
+msgid "Fingerprint: "
+msgstr "Empreinte"
+
+#: src/filemenu.c:950 src/optionsmenu.c:200
+msgid "Key owner"
+msgstr "Propriétaire de la clef"
+
+#: src/filemenu.c:1020
+msgid "No files selected for encryption."
+msgstr "Aucun fichier sélectionné pour le chiffrement"
+
+#: src/filemenu.c:1037
+msgid "Add _default recipients:"
+msgstr "Ajouter les destinataires par _défaut:"
+
+#: src/filemenu.c:1084
+msgid "Rec_ipients"
+msgstr "Des_tinataires"
+
+#: src/filemenu.c:1126 src/optionsmenu.c:303
+msgid "_Public keys"
+msgstr "_Clefs publiques"
+
+#: src/filemenu.c:1152
+msgid "Remo_ve keys from recipients"
+msgstr "Retir_er des clefs dans les destinatires"
+
+#: src/filemenu.c:1161
+msgid "Add _keys to recipients"
+msgstr "Ajouter des _clefs dans les destinataires"
+
+#: src/filemenu.c:1171
+msgid "S_how detail"
+msgstr "M_ontrer détails"
+
+#: src/filemenu.c:1188
+msgid "Save encrypted file _as: "
+msgstr "Enregistrer le fichier chiffré _comme"
+
+#: src/filemenu.c:1192 src/filemenu.c:1415 src/filemenu.c:1626
+#: src/keysmenu.c:456
+msgid "   _Browse   "
+msgstr "   _Percourir   "
+
+#: src/filemenu.c:1195
+msgid "Save encrypted file as"
+msgstr "Enregistrer le fichier chiffré comme"
+
+#: src/filemenu.c:1206
+msgid "_sign"
+msgstr "_signer"
+
+#: src/filemenu.c:1228
+msgid "_Encrypt"
+msgstr "_Chiffrer"
+
+#: src/filemenu.c:1309 src/keysmenu.c:803
+msgid ""
+"In \"Password\" and \"Repeat Password\",\n"
+"you must enter the same password."
+msgstr ""
+"Dans \"Mot de passe\" et \"Répéter le mot de passe\",\n"
+"vous devez entrer le même mot de passe."
+
+#: src/filemenu.c:1382
+msgid "No files selected to protect."
+msgstr "Aucun fichier sélectionné pour être protégé"
+
+#: src/filemenu.c:1390
+msgid "Protect files by Password"
+msgstr "Fichier protégé par mot de passe"
+
+#: src/filemenu.c:1409
+msgid "Save protected _file as: "
+msgstr "Enregistrer le _fichier protégé comme"
+
+#: src/filemenu.c:1418
+msgid "Save protected file as"
+msgstr "Enregistrer le fichier protégé comme"
+
+#: src/filemenu.c:1435
+msgid "P_assword: "
+msgstr "M_ot de passe"
+
+#: src/filemenu.c:1444
+msgid "Repeat Pa_ssword: "
+msgstr "Répéter le mo_t de passe: "
+
+#: src/filemenu.c:1480
+msgid "_Protect"
+msgstr "_Protéger"
+
+#: src/filemenu.c:1597
+msgid "No files selected to decrypt."
+msgstr "Aucun fichier sélectionné pour déchiffrement."
+
+#: src/filemenu.c:1622
+msgid "Save file _as: "
+msgstr "Enregistrer le fichier _comme"
+
+#: src/filemenu.c:1629
+msgid "Save decrypted file as"
+msgstr "Enregitrer le fichier déchiffré comme"
+
+#: src/filemenu.c:1647
+msgid "_Decrypt"
+msgstr "_Déchiffrer"
+
+#: src/filesigndlg.c:121
+msgid "No key selected!"
+msgstr "Aucune clef sélectionnée!"
+
+#: src/filesigndlg.c:187
+msgid "Sign Files"
+msgstr "Signer fichiers"
+
+#: src/filesigndlg.c:198
+msgid "Signing Mode"
+msgstr "Mode de signature"
+
+#: src/gpa.c:79
+msgid ""
+"@Options:\n"
+" "
+msgstr ""
+"@Préférences:\n"
+" "
+
+#: src/gpa.c:81
+msgid "verbose"
+msgstr ""
+
+#: src/gpa.c:82
+msgid "be somewhat more quiet"
+msgstr ""
+
+#: src/gpa.c:83
+msgid "read options from file"
+msgstr "lire les préférences depuis le fichier"
+
+#: src/gpa.c:84
+msgid "set debugging flags"
+msgstr ""
+
+#: src/gpa.c:85
+msgid "enable full debugging"
+msgstr ""
+
+#: src/gpa.c:87
+msgid "use a advanced user interface"
+msgstr "utiliser une interface pour utilisateur avancé"
+
+#: src/gpa.c:114
+msgid "Please report bugs to <gpa-bugs@gnu.org>.\n"
+msgstr "Veuillez rapporter les bugs à <gpa-bugs@gnu.org>.\n"
+
+#: src/gpa.c:118
+msgid "Usage: gpa [options] (-h for help)"
+msgstr "Usage: gpa [options] (h pour l'aide)"
+
+#: src/gpa.c:121
+msgid ""
+"Syntax: gpa [options]\n"
+"Graphical frontend to GnuPG\n"
+msgstr ""
+"Syntaxe: gpa [options]\n"
+"Interface graphique pour GnuPG\n"
+
+#: src/gpa.c:446
+#, c-format
+msgid "NOTE: no default option file `%s'\n"
+msgstr "NOTE: pas de fichier d'option par défaut`%s'\n"
+
+#: src/gpa.c:450
+#, c-format
+msgid "option file `%s': %s\n"
+msgstr "fichier d'option `%s': %s\n"
+
+#: src/gpa.c:458
+#, c-format
+msgid "reading options from `%s'\n"
+msgstr "lecture des préférences depuis `%s'\n"
+
+#: src/gpa.c:583 src/siglist.c:100
+msgid "[Unknown user ID]"
+msgstr "[ID d'utilisateur inconnue]"
+
+#: src/gpa.c:663
+msgid "No keys selected to remove from recipients list"
+msgstr "Aucune clef sélectionnée pour retirer de la liste des destinataires"
+
+#: src/gpa.c:742
+msgid "No keys selected to add to recipients list."
+msgstr "Aucune clef sélectionnée pour ajouter à la liste des clefs"
+
+#: src/gpapastrings.c:33 src/gpapastrings.c:46
+msgid "don't trust"
+msgstr "ne fais pas confiance"
+
+#: src/gpapastrings.c:34 src/gpapastrings.c:47
+msgid "trust marginally"
+msgstr "fais confiance de manière marginale"
+
+#: src/gpapastrings.c:35 src/gpapastrings.c:48
+msgid "trust fully"
+msgstr "fais entièrement confiance"
+
+#: src/gpapastrings.c:85 src/keysmenu.c:35
+msgid "days"
+msgstr "jours"
+
+#: src/gpapastrings.c:86 src/keysmenu.c:36
+msgid "weeks"
+msgstr "semaines"
+
+#: src/gpapastrings.c:87 src/keysmenu.c:37
+msgid "months"
+msgstr "mois"
+
+#: src/gpapastrings.c:88 src/keysmenu.c:38
+msgid "years"
+msgstr "années"
+
+#: src/gpapastrings.c:115
+msgid "DSA and ElGamal"
+msgstr "DSA et ElGamal"
+
+#: src/gpapastrings.c:116
+msgid "DSA (sign only)"
+msgstr "DSA (signature seulement)"
+
+#: src/gpapastrings.c:117
+msgid "ElGamal (sign and encrypt)"
+msgstr "ElGamal (signature et chiffrement)"
+
+#: src/gpapastrings.c:118
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (chiffrement seulement)"
+
+#: src/gpapastrings.c:151
+msgid "never expires"
+msgstr "n'expire jamais"
+
+#: src/gpapastrings.c:175
+msgid "!INVALID!"
+msgstr "!INVALIDE!"
+
+#: src/gpapastrings.c:176
+msgid "valid"
+msgstr "valide"
+
+#. User Name
+#: src/gpawidgets.c:53 src/keyeditdlg.c:99 src/keyring.c:787
+#: src/keysmenu.c:148
+msgid "User Name:"
+msgstr "Nom d'utilisateur:"
+
+#. User Name
+#: src/gpawidgets.c:63 src/keyeditdlg.c:102 src/keyring.c:789
+#: src/keysmenu.c:138
+msgid "Key ID:"
+msgstr "ID de clef:"
+
+#: src/gpawidgets.c:86 src/gpawidgets.c:125
+msgid "User Identity/Role"
+msgstr "Identité de l'utilisateur"
+
+#: src/gpawidgets.c:266 src/keysmenu.c:251
+msgid "01.01.2000"
+msgstr "01.01.2000"
+
+#. commands
+#: src/gpawidgets.c:293 src/keysmenu.c:277
+msgid "Expiration"
+msgstr "Expiration"
+
+#: src/gpawidgets.c:300 src/keysmenu.c:280
+msgid "_indefinitely valid"
+msgstr "_valide de manière indéfinie"
+
+#: src/gpawidgets.c:309 src/keysmenu.c:285
+msgid "expire _after"
+msgstr "expire _après"
+
+#: src/gpawidgets.c:332 src/keysmenu.c:302
+msgid "expire a_t"
+msgstr "expire l_e"
+
+#. this should never happen
+#: src/gpawidgets.c:398 src/keygendlg.c:331 src/keysmenu.c:830
+msgid ""
+"!FATAL ERROR!\n"
+"Invalid insert mode for expiry date."
+msgstr ""
+"!ERREUR FATALE!\n"
+"Mode d'insertion invalide pour la date d'expiration."
+
+#: src/gpawizard.c:222 src/gpawizard.c:262
+msgid "_Prev"
+msgstr "_Précédent"
+
+#: src/gpawizard.c:228 src/gpawizard.c:264
+msgid "_Next"
+msgstr "_Suivant"
+
+#: src/gtktools.c:313
+msgid "GPA Error"
+msgstr "Erreur de GPA"
+
+#: src/gtktools.c:352
+msgid "GPA Message"
+msgstr "Message de GPA"
+
+#: src/gtktools.c:481
+msgid "Insert password"
+msgstr "Insérer mot de passe"
+
+#: src/gtktools.c:501 src/keygendlg.c:248 src/keysmenu.c:912
+#: src/passphrasedlg.c:145
+msgid "_Password: "
+msgstr "_Mot de passe"
+
+#: src/helpmenu.c:178
+msgid "About GPA"
+msgstr "A propos de GPA"
+
+#: src/helpmenu.c:209
+msgid "brought to you by"
+msgstr "vous est fournir par"
+
+#: src/helpmenu.c:243
+msgid "See http://www.gnupg.org for news"
+msgstr "Voir http://www.gnupg.org pour des nouvelles"
+
+#: src/helpmenu.c:320
+msgid "GNU general public license"
+msgstr "GNU general public license"
+
+#: src/helpmenu.c:340
+msgid "_GNU general public license"
+msgstr "_GNU general public license"
+
+#: src/helpmenu.c:369
+msgid "Show Warranty Information\n"
+msgstr "Montrer les informations sur la garantie\n"
+
+#: src/helpmenu.c:375
+msgid "Show Help Text\n"
+msgstr "Montrer le texte d'aide\n"
+
+#: src/helpmenu.c:383
+msgid "/_Help"
+msgstr "/_Aide"
+
+#: src/helpmenu.c:384
+msgid "/Help/_About"
+msgstr "/Aide/_A propos"
+
+#: src/helpmenu.c:385
+msgid "/Help/_License"
+msgstr "/Aide/_Licence"
+
+#: src/helpmenu.c:386
+msgid "/Help/_Warranty"
+msgstr "/Aide/_Garantie"
+
+#: src/helpmenu.c:387
+msgid "/Help/_Help"
+msgstr "Aide/_Aide"
+
+#: src/keydeletedlg.c:95
+msgid "Remove Key"
+msgstr "Retirer clef"
+
+#: src/keydeletedlg.c:104
+msgid "You have selected the following key for removal:"
+msgstr "Vous avez sélectionné pour effacement la clef suivante:"
+
+#: src/keydeletedlg.c:114
+msgid ""
+"This key has a secret key. Deleting this key cannot be undone, unless you "
+"have a backup copy."
+msgstr ""
+"Cette clef a une clef secrète. Si vous effacez cette clef vous ne pourrez "
+"pas revenir en arrière, à moins que vous ayez fait une copie de sauvegarde."
+
+#: src/keydeletedlg.c:123
+msgid ""
+"This key is a public key. Deleting this key cannot be undone easily, "
+"although you may be able to get a new copy  from the owner or from a key "
+"server."
+msgstr ""
+"Cette clef est une clef publique. Si vous effacez cette clef vous ne pourrez "
+"pas revenir en arrière, cependant vous pourrez en obtenir une nouvelle copie "
+"par son propriétaire ou sur un serveur de clefs."
+
+#: src/keydeletedlg.c:132
+msgid "Are you sure you want to delete this key?"
+msgstr "Etes-vous sûr que vous voulez effacer cette clef?"
+
+#: src/keyeditdlg.c:84
+msgid "Edit Key"
+msgstr "Editer la clef"
+
+#. change expiry date
+#: src/keyeditdlg.c:109 src/keylist.c:202
+msgid "Expiry Date"
+msgstr "Date d'expiration"
+
+#: src/keyeditdlg.c:125
+msgid "Change _expiration"
+msgstr "Changer _expiration"
+
+#. Owner Trust
+#: src/keyeditdlg.c:133 src/keylist.c:204
+msgid "Owner Trust"
+msgstr "Confiance dans le propriétaire"
+
+#: src/keyeditdlg.c:146
+msgid "Change _trust"
+msgstr "Changer _la confiance"
+
+#: src/keyexportdlg.c:76 src/keysmenu.c:459
+msgid "Export public keys to file"
+msgstr "Exporter des clefs publiques dans un fichier"
+
+#: src/keyexportdlg.c:170 src/keysmenu.c:441
+msgid "Export keys"
+msgstr "Exporter des clefs"
+
+#: src/keyexportdlg.c:188
+msgid "E_xport to file:"
+msgstr "E_xporter dans le fichier:"
+
+#: src/keyexportdlg.c:199 src/keygenwizard.c:474 src/keyimportdlg.c:197
+msgid "B_rowse..."
+msgstr "P_arcourir..."
+
+#: src/keyexportdlg.c:207
+msgid "_Key server:"
+msgstr "_Serveur de clef"
+
+#: src/keygendlg.c:83
+msgid ""
+"In \"Password\" and \"Repeat Password\"\n"
+"you must enter the same password."
+msgstr ""
+"In \"Mot de passe\" and \"Répéter mot de passe\"\n"
+"vous devez entrer le même mot de passe."
+
+#: src/keygendlg.c:148 src/keygenwizard.c:750
+msgid "Generate key"
+msgstr "Générer clef"
+
+#: src/keygendlg.c:177
+msgid "_Encryption algorithm: "
+msgstr "_Algorithme de chiffrement:"
+
+#: src/keygendlg.c:189
+msgid "_Key size (bits): "
+msgstr "_Taille de clef (bits)"
+
+#: src/keygendlg.c:190
+msgid "768"
+msgstr "768"
+
+#: src/keygendlg.c:191
+msgid "1024"
+msgstr "1024"
+
+#: src/keygendlg.c:192
+msgid "2048"
+msgstr "2048"
+
+#: src/keygendlg.c:216
+msgid "_User ID: "
+msgstr "_ID d'utilisateur"
+
+#: src/keygendlg.c:226
+msgid "E-_Mail: "
+msgstr "E-_Mail:"
+
+#: src/keygendlg.c:236
+msgid "C_omment: "
+msgstr "C_omment:"
+
+#: src/keygendlg.c:260 src/keysmenu.c:922
+msgid "_Repeat password: "
+msgstr "_Répéter le mot de passe:"
+
+#: src/keygendlg.c:269
+msgid "generate re_vocation certificate"
+msgstr "génère un certificat de révocation"
+
+#: src/keygendlg.c:272
+msgid "_send to key server"
+msgstr "_envoyer au serveur de clefs"
+
+#: src/keygendlg.c:288
+msgid "_Generate key"
+msgstr "_Générer clef"
+
+#: src/keygenwizard.c:178
+msgid ""
+"Please insert your full name.\n"
+"\n"
+"Your name will be part of the new key to make it easier for others to "
+"identify keys."
+msgstr ""
+"Veuillez indiquer votre nom complet.\n"
+"\n"
+"Votre nom fera partie de notre nouvelle clef pour permettre aux autres "
+"d'identifier plus facilement les clefs."
+
+#: src/keygenwizard.c:183
+msgid "Your Name:"
+msgstr "Votre nom:"
+
+#. The string is empty or consists entirely of whitespace
+#: src/keygenwizard.c:196
+msgid "Please insert your name"
+msgstr "Veuillez indiquer votre nom"
+
+#: src/keygenwizard.c:209
+msgid ""
+"Please insert your email address.\n"
+"\n"
+" Your email adress will be part of the new key to make it easier for others "
+"to identify keys. If you have several email adresses, you can add further "
+"email adresses later."
+msgstr ""
+"Veuillez indiquer votre adresse e-mail.\n"
+"\n"
+"Votre adresse e-mail fera partie de notre nouvelle clef pour permettre aux "
+"autres d'identifier plus facilement les clefs. Si vous avez plusieurs "
+"adresses e-mail, vous pourrez d'autres adresses e-mail plus tard."
+
+#: src/keygenwizard.c:216
+msgid "Your Email Adress:"
+msgstr "Votre adresse e-mail:"
+
+#. The string is empty or consists entirely of whitespace
+#: src/keygenwizard.c:231
+msgid "Please insert your email address"
+msgstr "Veuillez indiquer votre adresse e-mail"
+
+#: src/keygenwizard.c:248
+msgid ""
+"If you want you can supply a comment that further identifies the key to "
+"other users. The comment is especially useful if you generate several keys "
+"for the same email adress. The comment is completely optional. Leave it "
+"empty if you don't have a use for it."
+msgstr ""
+"Si vous voulez, vous pouvez ajouter un commentaire qui identifie la clef "
+"pour les autres utilisateurs. Le commentaire est particulièrement utile si "
+"vous générez plusieurs clefs pour la même adresse e-mail. Le commentaire est "
+"complètement optionnel. Laissez-le vide si vous n'en avez pas l'utilité."
+
+#: src/keygenwizard.c:254
+msgid "Comment:"
+msgstr "Commentaire:"
+
+#: src/keygenwizard.c:280
+msgid "Please choose a passphrase for the new key."
+msgstr "Veuillez choisir une phrase de passe pour cette nouvelle clef."
+
+#: src/keygenwizard.c:289
+msgid "Password:"
+msgstr "Mot de passe:"
+
+#: src/keygenwizard.c:302
+msgid "Repeat Password:"
+msgstr "Répétez le mot de passe:"
+
+#: src/keygenwizard.c:348
+msgid ""
+"Please insert the same password in \"Password\" and \"Repeat Password\"."
+msgstr ""
+"Veuillez indiquer le même mot de passe dans \"Mot de passe\" et \"Répéter "
+"mot de passe\"."
+
+#: src/keygenwizard.c:355
+msgid "Please insert a password\n"
+msgstr "Veuillez indiquer un mot de passe\n"
+
+#: src/keygenwizard.c:375
+msgid ""
+"It is recommended that you create a backup copy of your new key, once it has "
+"been generated.\n"
+"\n"
+"Do you want to create a backup copy?"
+msgstr ""
+"Il est recommandé de créer une copie de sauvegarde de votre nouvelle clef, "
+"une fois qu'elle a été générée.\n"
+"\n"
+"Voulez-vous créer une copie de sauvegarde?"
+
+#: src/keygenwizard.c:384
+msgid "Create _backup copy"
+msgstr "Créer une _copie de sauvegarde"
+
+#: src/keygenwizard.c:391 src/keyring.c:643
+msgid "Do it _later"
+msgstr "Le faire plus _tard"
+
+#: src/keygenwizard.c:429
+msgid "Backup Directory"
+msgstr "Répertoire de sauvegarde"
+
+#: src/keygenwizard.c:453
+msgid ""
+"Please enter a directory where your backup keys should be saved.\n"
+"\n"
+"GPA will create two files in that directory: pub_key.asc and sec_key.asc"
+msgstr ""
+"Veuillez entrer un répertoire où sauver votre clef de sauvegarde.\n"
+"\n"
+"GPA créera deux fichiers dans ce répertoire:: pub_key.asc et sec_key.asc"
+
+#: src/keygenwizard.c:465
+msgid "Directory:"
+msgstr "Répertoire"
+
+#: src/keygenwizard.c:502 src/keygenwizard.c:521 src/keygenwizard.c:533
+msgid "_Overwrite"
+msgstr "_Ecraser"
+
+#: src/keygenwizard.c:516 src/keygenwizard.c:528
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Le fichier %s existe déjà.\n"
+"Voulez-vous l'écraser?"
+
+#: src/keygenwizard.c:519 src/keygenwizard.c:531
+msgid "File exists"
+msgstr "Le fichier existe"
+
+#: src/keygenwizard.c:540
+msgid "Please enter a valid directory"
+msgstr "Veuillez entrer un répertoire valide"
+
+#: src/keygenwizard.c:577
+msgid ""
+"Your key is being generated\n"
+"\n"
+"Even on fast computers this may take a while. Please be patient\n"
+msgstr ""
+"Votre clef est en train d'être générée\n"
+"\n"
+"Même sur des oridnateurs rapides, cela peut prendre un moment. Merci de "
+"patienter\n"
+
+#: src/keygenwizard.c:586
+msgid ""
+"Congratulations!\n"
+"\n"
+"You have successfully generated a key. The key is indefinitely valid and has "
+"a length of 1024 bits."
+msgstr ""
+"Félicitations!\n"
+"\n"
+"Vous avez généré avec succès une clef. La clef a une validité indéfinie et a "
+"une longueur de 1024 bits."
+
+#: src/keygenwizard.c:798 src/keygenwizard.c:805 src/keygenwizard.c:809
+msgid "F_inish"
+msgstr "T_erminé"
+
+#: src/keyimportdlg.c:76
+msgid "Import public keys from file"
+msgstr "Importer des clefs public depuis un fichier"
+
+#: src/keyimportdlg.c:164
+msgid "Import Key"
+msgstr "Importer clef"
+
+#: src/keyimportdlg.c:183
+msgid "I_mport from file:"
+msgstr "I_mporter depuis le fichier:"
+
+#: src/keyimportdlg.c:206
+msgid "Receive from _server:"
+msgstr "Recevoir clef depuis le _serveur:"
+
+#: src/keyimportdlg.c:226
+msgid "Key _ID:"
+msgstr "ID de clef:"
+
+#: src/keyimportdlg.c:249
+msgid "_Key Server:"
+msgstr "_Serveur de clef:"
+
+#: src/keylist.c:200
+msgid "User Name"
+msgstr "Nom d'utilisateur"
+
+#: src/keylist.c:203
+msgid "Key Trust"
+msgstr "Confiance de la clef"
+
+#. this shouldn't happen because the button should be grayed out
+#. * in this case
+#.
+#: src/keyring.c:325
+msgid "No keys selected for signing."
+msgstr "Aucune clef sélectionnée pour signer."
+
+#. this shouldn't happen because the button should be grayed out
+#. * in this case
+#.
+#: src/keyring.c:335
+msgid "No private key for signing."
+msgstr "Aucune clef privée pour signer."
+
+#. this shouldn't happen because the button should be grayed out
+#. * in this case
+#.
+#: src/keyring.c:416 src/keysmenu.c:435
+msgid "No keys selected to export."
+msgstr "Aucune clef sélectionnée pour exporter."
+
+#: src/keyring.c:643 src/keyring.c:651
+msgid "_Generate key now"
+msgstr "_Générer la clef maintenant"
+
+#: src/keyring.c:646
+msgid "No key defined"
+msgstr "Aucune clef définie"
+
+#: src/keyring.c:647
+msgid ""
+"You do not have a private key yet. Do you want to generate one now "
+"(recommended) or do it later?"
+msgstr ""
+"Vous n'avez pas encore de clef privée. Voulez-vous en générer une maintenant "
+"(recommendé) ou le faire plus tard?"
+
+#: src/keyring.c:693
+msgid "/_Keys"
+msgstr "/_Clefs"
+
+#: src/keyring.c:694
+msgid "/Keys/_Generate Key..."
+msgstr "/Clefs/_Générer Clef..."
+
+#: src/keyring.c:791 src/keysigndlg.c:156
+msgid "Fingerprint:"
+msgstr "Empreinte:"
+
+#: src/keyring.c:793
+msgid "Expires at:"
+msgstr "Expire le:"
+
+#: src/keyring.c:795
+msgid "Owner Trust:"
+msgstr "Confiance dans le propriétaire:"
+
+#: src/keyring.c:797
+msgid "Key Trust:"
+msgstr "Confiance dans la clef:"
+
+#: src/keyring.c:799
+msgid "Key Type:"
+msgstr "Type de clef:"
+
+#: src/keyring.c:802
+msgid "Details"
+msgstr "Détails"
+
+#: src/keyring.c:818
+msgid "Signatures"
+msgstr "Signatures"
+
+#: src/keyring.c:865
+msgid "The key has both a private and a public part"
+msgstr "La clef a à la fois une partie privée et publique"
+
+#: src/keyring.c:870
+msgid "The key has only a public part"
+msgstr "La clef a seulement une partie publique"
+
+#: src/keyring.c:886
+msgid "No keys selected"
+msgstr "Pas de clef sélectionnée"
+
+#: src/keyring.c:890
+#, c-format
+msgid "%d keys selected"
+msgstr "%d clefs sélectionnées"
+
+#: src/keyring.c:1086
+msgid "Edit"
+msgstr "Editer"
+
+#: src/keyring.c:1087
+msgid "Edit the selected key"
+msgstr "Editer la clef sélectionnée"
+
+#: src/keyring.c:1087
+msgid "edit key"
+msgstr "éditer clef"
+
+#: src/keyring.c:1094
+msgid "Remove"
+msgstr "Retirer"
+
+#: src/keyring.c:1095
+msgid "Remove the selected key"
+msgstr "Retirer la clef sélectioner"
+
+#: src/keyring.c:1096
+msgid "remove key"
+msgstr "retirer clef"
+
+#: src/keyring.c:1104
+msgid "Sign the selected key"
+msgstr "Signer la clef sélectionnée"
+
+#: src/keyring.c:1104
+msgid "sign key"
+msgstr "signer clef"
+
+#: src/keyring.c:1111
+msgid "Import"
+msgstr "Importer"
+
+#: src/keyring.c:1112
+msgid "Import Keys"
+msgstr "Importer clefs"
+
+#: src/keyring.c:1112
+msgid "import keys"
+msgstr "importer clefs"
+
+#: src/keyring.c:1117
+msgid "Export"
+msgstr "Exporter"
+
+#: src/keyring.c:1118
+msgid "Export Keys"
+msgstr "Exporter clefs"
+
+#: src/keyring.c:1118
+msgid "export keys"
+msgstr "exporter clefs"
+
+#: src/keyring.c:1131
+msgid "Brief"
+msgstr "Résumé"
+
+#: src/keyring.c:1131
+msgid "Show Brief Keylist"
+msgstr "Montrer résumé de la liste de clefs"
+
+#: src/keyring.c:1132
+msgid "brief"
+msgstr "résumé"
+
+#: src/keyring.c:1143
+msgid "Detailed"
+msgstr "Détaillé"
+
+#: src/keyring.c:1143
+msgid "Show Key Details"
+msgstr "Montrer détails de la clef"
+
+#: src/keyring.c:1144
+msgid "detailed"
+msgstr "détaillé"
+
+#: src/keyring.c:1168
+msgid "Selected Default Key:"
+msgstr "Clef par défaut sélectionnée:"
+
+#: src/keyring.c:1245
+msgid "GNU Privacy Assistant - Keyring Editor"
+msgstr "GNU Privacy Assistant - Editeur de trousseau de clefs"
+
+#: src/keyring.c:1274
+msgid "Keyring Editor"
+msgstr "Editeur de trousseau de clefs"
+
+#: src/keysigndlg.c:127
+msgid "Sign Key"
+msgstr "Signer clef"
+
+#: src/keysigndlg.c:138
+msgid "Do you want to sign the following key?"
+msgstr "Voulez-vous signer les clefs suivantes?"
+
+#: src/keysigndlg.c:147
+msgid "User ID:"
+msgstr "ID d'utilisateur:"
+
+#: src/keysigndlg.c:165
+msgid ""
+"Check the name and fingerprint carefully to be sure that it really is the "
+"key you want to sign."
+msgstr ""
+"Vérifiez le nom et l'empreinte méticuleusement pour être sûr que c'est "
+"réellement la clef que vous voulez signer."
+
+#: src/keysigndlg.c:171
+msgid "The key will be signed with your default private key."
+msgstr "La clef sera signée avec votre clef privée par défaut"
+
+#: src/keysigndlg.c:178
+msgid "Sign only _locally"
+msgstr "Signer seulement en _local"
+
+#: src/keysmenu.c:210 src/keysmenu.c:215
+msgid "1"
+msgstr ""
+
+#: src/keysmenu.c:397 src/keysmenu.c:697
+msgid "Keys exported."
+msgstr "Clefs exportées"
+
+#: src/keysmenu.c:453
+msgid "Export to _file: "
+msgstr "Exporter dans le _fichier: "
+
+#: src/keysmenu.c:480
+msgid "E_xport"
+msgstr "E-xportation"
+
+#: src/keysmenu.c:536
+msgid "No keys selected for sending."
+msgstr "Pas de clefs sélectionnées pour l'envoi."
+
+#: src/keysmenu.c:540
+msgid "Keys sent to server."
+msgstr "Clefs envoyées au serveur."
+
+#: src/keysmenu.c:587
+msgid "Export ownertrust to file"
+msgstr "Exporter la confiance du propriétaire vers un fichier."
+
+#: src/keysmenu.c:680 src/keysmenu.c:689
+msgid ""
+"An error occurred while\n"
+"exporting secret keys."
+msgstr ""
+"Une erreur est survenue lors\n"
+"de l'exportation des clefs secrètes."
+
+#: src/keysmenu.c:725
+msgid "No keys selected to delete."
+msgstr "Pas de clef sélectionnée pour être effacée."
+
+#: src/keysmenu.c:730
+msgid "!FATAL ERROR: Invalid key selection info!\n"
+msgstr "!ERREUR FATALE: Information de sélection de la clef invalide!\n"
+
+#: src/keysmenu.c:765
+msgid "Revocation certificate created."
+msgstr "Certificat de révication créé."
+
+#: src/keysmenu.c:883
+msgid "No key selected for editing."
+msgstr "Pas de clef sélectionnée pour être éditée."
+
+#: src/keysmenu.c:895
+msgid "Secret key editor"
+msgstr "Editeur de clef secrète"
+
+#: src/keysmenu.c:943
+msgid "Create Re_vocation"
+msgstr "Créer ré_vocation"
+
+#: src/keysmenu.c:952
+msgid "E_xport key"
+msgstr "E_xporter clef"
+
+#: src/keysmenu.c:972
+msgid "_Save and exit"
+msgstr "_Sauver et quitter"
+
+#: src/keysmenu.c:1001 src/keysmenu.c:1196 src/optionsmenu.c:435
+msgid "User identity / role"
+msgstr "Identité de l'utilisateur"
+
+#: src/keysmenu.c:1031
+msgid "Secret key ring editor"
+msgstr "Editeur de trousseau de clefs secrètes"
+
+#: src/keysmenu.c:1077
+msgid "_Secret key ring"
+msgstr "_Trousseau de clefs secrètes"
+
+#: src/keysmenu.c:1086
+msgid "E_xport keys"
+msgstr "E_porter clefs"
+
+#: src/keysmenu.c:1097
+msgid "_Delete keys"
+msgstr "_Effacer clefs"
+
+#: src/keysmenu.c:1109
+msgid "_Edit key"
+msgstr "_Editer clefs"
+
+#: src/keysmenu.c:1146 src/keysmenu.c:1220
+msgid "No secret keys available yet."
+msgstr "Pas encore de clef secrète disponible."
+
+#: src/keysmenu.c:1179
+msgid "No keys selected to create revocation certificate for."
+msgstr ""
+"Pas de clef sélectionnée pour créer un certificat de révocation de cette clef"
+
+#: src/keysmenu.c:1225
+msgid "Generate revocation certificate"
+msgstr "Générer certificat de révocation"
+
+#: src/keysmenu.c:1271
+msgid "_Secret keys"
+msgstr "_Clefs secrètes"
+
+#: src/keysmenu.c:1291
+msgid "_Generate"
+msgstr "_Générer"
+
+#: src/keysmenu.c:1331
+msgid "Import keys"
+msgstr "Importer clefs"
+
+#: src/keysmenu.c:1374
+msgid "Import ownertrust"
+msgstr "Importer confiance"
+
+#: src/keysmenu.c:1397
+msgid "Trust database updated."
+msgstr "Base de données de confiance mise à jour."
+
+#: src/optionsmenu.c:85
+msgid "Set key server"
+msgstr "Indiquer serveur de clefs"
+
+#: src/optionsmenu.c:100
+msgid "_Key server: "
+msgstr "_Serveur de clefs: "
+
+#: src/optionsmenu.c:125 src/optionsmenu.c:373 src/optionsmenu.c:536
+msgid "_Set"
+msgstr "_Indiquer"
+
+#: src/optionsmenu.c:238
+msgid ""
+"No public keys available to denote\n"
+"as default recipients."
+msgstr ""
+"Pas de clefs publiques disponibles pour indiquer comme destinataires par "
+"défaut."
+
+#: src/optionsmenu.c:247
+msgid "Set default recipients"
+msgstr "Indiquer des destinataires par défaut"
+
+#: src/optionsmenu.c:282
+msgid "_Recipients"
+msgstr "_Destinataires"
+
+#: src/optionsmenu.c:340
+msgid "_Remove from recipients"
+msgstr "_Retirer des destinataires"
+
+#: src/optionsmenu.c:350
+msgid "_Add to recipients"
+msgstr "_Ajouter aux destinataires"
+
+#: src/optionsmenu.c:460
+msgid ""
+"No secret keys available to\n"
+"select a default key from."
+msgstr ""
+"Pas de clef secrète disponible pour\n"
+"sélectinner une clef secrète par défaut."
+
+#: src/optionsmenu.c:468
+msgid "Set default key"
+msgstr "Indiquer clef secrète par défaut."
+
+#: src/optionsmenu.c:522
+msgid "Default _key:"
+msgstr "Clef par _défaut:"
+
+#: src/optionsmenu.c:558
+msgid "/_Options"
+msgstr "/_Préférences"
+
+#: src/optionsmenu.c:559
+msgid "/Options/_Keyserver"
+msgstr "/Préférences/_Serveur de clefs"
+
+#: src/optionsmenu.c:560
+msgid "/Options/Default _Recipients"
+msgstr "Préférences/Destinataires _par défaut"
+
+#: src/optionsmenu.c:561
+msgid "/Options/_Default Key"
+msgstr "/Préférences/_Clef par défaut"
+
+#: src/ownertrustdlg.c:77
+msgid "Invalid ownertrust level."
+msgstr "Niveau de confiance invalide"
+
+#: src/ownertrustdlg.c:128
+msgid "Change key ownertrust"
+msgstr "Changer la confiance dans la clef"
+
+#: src/ownertrustdlg.c:159
+msgid "_Ownertrust level: "
+msgstr "_Niveau de confiance: "
+
+#: src/ownertrustdlg.c:174
+msgid "_Accept"
+msgstr "_Accepter"
+
+#: src/passphrasedlg.c:111
+msgid "Enter Password"
+msgstr "Entrer mot de passe"
+
+#: src/passphrasedlg.c:126
+msgid "Please enter the password for the following key:"
+msgstr "Veuillez entrer le mot de passe pour la clef suivante:"
