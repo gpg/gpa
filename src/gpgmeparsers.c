@@ -241,4 +241,5 @@ void gpa_parse_import_info (GpaImportInfo *info)
   g_markup_parse_context_parse (context, import_info, strlen (import_info),
 				NULL);
   g_markup_parse_context_free (context);
+  free (import_info);
 }

@@ -1,5 +1,8 @@
 2002-10-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* gpgmeparsers.c (gpa_parse_import_info): Free the operation
+	information.
+
 	* keyimportdlg.h, keyimportdlg.c (key_import_results_dialog_run): 
 	New function.
 
