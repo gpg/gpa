@@ -146,15 +146,11 @@ add_signature (gchar *keyid, KeySignature *sig, GtkListStore *store)
 }
 
 static void
-gpa_siglist_set_all (GtkWidget * list, const char *fpr)
+gpa_siglist_set_all (GtkWidget * list, const gpgme_key_t key)
 {
   GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
                                         (GTK_TREE_VIEW (list)));
-  gpgme_key_t key;
-  gpgme_error_t err;
   int i, uid;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-  int old_mode = gpgme_get_keylist_mode (ctx);
   const gchar *keyid;
 
   /* Create the hash table */
@@ -164,15 +160,6 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
   /* Set the appropiate columns */
   gpa_siglist_clear_columns (list);
   gpa_siglist_all_add_columns (list);
-
-  /* Get the key */
-  gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
-  err = gpgme_get_key (ctx, fpr, &key, FALSE);
-  if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
-  gpgme_set_keylist_mode (ctx, old_mode); 
 
   /* Clear the model */
   gtk_list_store_clear (store);
@@ -208,11 +195,6 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
   
   /* Delete the hash table */
   g_hash_table_destroy (hash);
-  
-  /* We don't need the key anymore */
-  gpgme_key_unref (key); 
-
-  gpgme_release (ctx);
 }
 
 static GHashTable*
@@ -237,29 +219,16 @@ revoked_signatures (gpgme_key_t key, int uid)
 }
 
 static void
-gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
+gpa_siglist_set_userid (GtkWidget * list, const gpgme_key_t key, int idx)
 {
   GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
                                         (GTK_TREE_VIEW (list)));
-  gpgme_key_t key;
-  gpgme_error_t err;
   int i;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-  int old_mode = gpgme_get_keylist_mode (ctx);
   GHashTable *revoked;
 
   /* Set the appropiate columns */
   gpa_siglist_clear_columns (list);
   gpa_siglist_uid_add_columns (list);
-
-  /* Get the key */
-  gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
-  err = gpgme_get_key (ctx, fpr, &key, FALSE);
-  if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
-  gpgme_set_keylist_mode (ctx, old_mode); 
 
   /* Get the list of revoked signatures */
   revoked = revoked_signatures (key, idx);
@@ -294,28 +263,23 @@ gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
           g_free (userid);
         }
     }
-  
-  /* We don't need the key anymore */
-  gpgme_key_unref (key);
-
-  gpgme_release (ctx);
 }
 
 /* Update the list of signatures */
 void
-gpa_siglist_set_signatures (GtkWidget * list, gchar *fpr, int idx)
+gpa_siglist_set_signatures (GtkWidget * list, gpgme_key_t key, int idx)
 {
   GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
                                         (GTK_TREE_VIEW (list)));
-  if (fpr)
+  if (key)
     {
       if (idx == -1)
         {
-          gpa_siglist_set_all (list, fpr);
+          gpa_siglist_set_all (list, key);
         }
       else
         {
-          gpa_siglist_set_userid (list, fpr, idx);
+          gpa_siglist_set_userid (list, key, idx);
         }
     }
   else

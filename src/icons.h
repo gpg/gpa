@@ -22,10 +22,9 @@
 #define ICONS_H
 
 
-GtkWidget *gpa_create_icon_widget ( GtkWidget *window, const char *name );
-GdkPixmap *gpa_create_icon_pixmap ( GtkWidget *window, const char *name,
-                                    GdkBitmap **mask );
-
-
+GtkWidget *gpa_create_icon_widget (GtkWidget *window, const char *name );
+GdkPixmap *gpa_create_icon_pixmap (GtkWidget *window, const char *name,
+                                   GdkBitmap **mask );
+GdkPixbuf *gpa_create_icon_pixbuf (const char *name);
      
 #endif /*ICONS_H*/

@@ -1,3 +1,7 @@
+2003-06-21  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Disable deprecated GTK widgets.
+
 2003-03-25  Miguel Coca  <mcoca@gnu.org>
 
 	* AUTHORS, NEWS: Updated.

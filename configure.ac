@@ -155,7 +155,7 @@ AC_CHECK_FUNC(getopt_long,
 dnl Where is the GTK+ toolkit
 AM_PATH_GTK_2_0(2.0.0,
             [LIBS="$LIBS $GTK_LIBS"
-            CFLAGS="$CFLAGS $GTK_CFLAGS -DGTK_ENABLE_BROKEN"],
+            CFLAGS="$CFLAGS $GTK_CFLAGS"],
             AC_MSG_ERROR(Cannot find GTK+ 2.0))
 
 AM_PATH_GPGME(0.4.1,

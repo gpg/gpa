@@ -18,35 +18,72 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef KEYLIST_H
-#define KEYLIST_H
+#ifndef GPA_KEYLIST_H
+#define GPA_KEYLIST_H
 
-typedef enum
-{
-  GPA_KEYLIST_NAME,
-  GPA_KEYLIST_ID,
-  GPA_KEYLIST_EXPIRYDATE,
-  GPA_KEYLIST_KEYTRUST,
-  GPA_KEYLIST_OWNERTRUST,
-  GPA_KEYLIST_KEY_TYPE_PIXMAP
-}
-GPAKeyListColumn;
+#include <gtk/gtk.h>
 
-GtkWidget * gpa_keylist_new (gint ncolumns, GPAKeyListColumn * columnsm,
-			     gint maxcolumns, GtkWidget * window);
+/* GObject stuff */
+#define GPA_KEYLIST_TYPE	  (gpa_keylist_get_type ())
+#define GPA_KEYLIST(obj)	  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GPA_KEYLIST_TYPE, GpaKeyList))
+#define GPA_KEYLIST_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GPA_KEYLIST_TYPE, GpaKeyListClass))
+#define GPA_IS_KEYLIST(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_KEYLIST_TYPE))
+#define GPA_IS_KEYLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_KEYLIST_TYPE))
+#define GPA_KEYLIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GPA_KEYLIST_TYPE, GpaKeyListClass))
 
-GList * gpa_keylist_selection (GtkWidget * keylist);
-gboolean gpa_keylist_has_selection (GtkWidget * keylist);
-gboolean gpa_keylist_has_single_selection (GtkWidget * keylist);
-gint gpa_keylist_selection_length (GtkWidget * keylist);
+typedef struct _GpaKeyList GpaKeyList;
+typedef struct _GpaKeyListClass GpaKeyListClass;
 
-gpgme_key_t gpa_keylist_current_key (GtkWidget * keylist);
-gchar *gpa_keylist_current_key_id (GtkWidget * keylist);
+struct _GpaKeyList {
+  GtkTreeView parent;
 
-void gpa_keylist_set_column_defs (GtkWidget * keylist,
-				  gint ncolumns, GPAKeyListColumn *columns);
+  gboolean secret;
+  /* Keys loaded into the model */
+  GList *keys;
+};
 
-void gpa_keylist_update_list (GtkWidget * keylist);
+struct _GpaKeyListClass {
+  GtkTreeViewClass parent_class;
 
+  /* Signal handlers */
+  void (*context_menu) (GpaKeyList *keylist);
+};
 
-#endif /* KEYLIST_H */
+GType gpa_keylist_get_type (void) G_GNUC_CONST;
+
+/* API */
+
+/* Create a new key list widget.
+ */
+GtkWidget *gpa_keylist_new (GtkWidget * window);
+
+/* Set the key list in "brief" mode.
+ */
+void gpa_keylist_set_brief (GpaKeyList * keylist);
+
+/* Set the key list in "detailed" mode
+ */
+void gpa_keylist_set_detailed (GpaKeyList * keylist);
+
+/* Return true if any key is selected in the list.
+ */
+gboolean gpa_keylist_has_selection (GpaKeyList * keylist);
+
+/* Return true if one, and only one, key is selected in the list.
+ */
+gboolean gpa_keylist_has_single_selection (GpaKeyList * keylist);
+
+/* Return true if one, and only one, secret key is selected in the list.
+ */
+gboolean gpa_keylist_has_single_secret_selection (GpaKeyList * keylist);
+
+/* Return a GList of selected keys. The caller must not dereference the keys
+ * as they belong to the caller.
+ */
+GList *gpa_keylist_get_selected_keys (GpaKeyList * keylist);
+
+/* Begin a reload of the keyring.
+ */
+void gpa_keylist_start_reload (GpaKeyList * keylist);
+
+#endif /* GPA_KEYLIST_H */

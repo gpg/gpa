@@ -1,3 +1,76 @@
+2003-06-21  Miguel Coca  <mcoca@gnu.org>
+
+	* siglist.h, siglist.c (gpa_siglist_set_all)
+	(gpa_siglist_set_userid, gpa_siglist_set_signatures): Use 
+	gpgme_key_t instead of fingerprints.
+
+	* options.h, options.c (gpa_options_init, gpa_options_finalize) 
+	(gpa_options_set_default_key, gpa_options_get_default_key) 
+	(determine_default_key, gpa_options_update_default_key)
+	(gpa_options_save_settings): The default key is now a
+	gpgme_key_t.
+
+	* keytable.h, keytable.h: Redo using a GpaContext to work
+	inside the Gtk main loop.
+
+	* keyring.c (struct _GPAKeyringEditor): Rename clist_keys to
+	keylist (since it's no longer a GtkCList). Add current_key field.
+	(keyring_editor_fill_keylist): Remove obsolete.
+	(key_has_been_signed):  Use new keylist interface. Work with
+	keys instead of fingerprints.
+	(keyring_editor_can_sign):
+	(keyring_editor_has_private_selected):
+	(keyring_editor_delete):
+	(keyring_editor_sign, keyring_editor_edit, keyring_editor_trust) 
+	(keyring_editor_import_do_import) 
+	(keyring_editor_export_do_export, keyring_editor_export) 
+	(keyring_editor_generate_key_advanced) 
+	(keyring_editor_generate_key_advanced) 
+	(idle_update_details)
+	(keyring_set_brief_listing, keyring_set_detailed_listing) 
+	(keyring_update_status_bar)
+	(display_popup_menu, keyring_editor_new): 
+	(keyring_editor_generate_key_simple): Likewise.
+	(keyring_editor_current_key): Rename from _current_key_id.
+	(keyring_editor_selection_changed): Set the current key with
+	all it's sigs here.
+	(keyring_editor_select_all): Use a TreeView instead of a CList.
+	(signatures_uid_selected): Use new siglist interface.
+	(keyring_editor_mapped): Change secret key tests.
+	(keyring_details_page_fill_key): Likewise.
+	(is_selected_row): Removed.
+
+	* keylist.h, keylist.c: Rewrite as a GtkTreeView. Change the
+	interface to a more sensible one.
+
+	* keyexportdlg.h, keyexportdlg.c (key_backup_dialog_run): Receive
+	the key to backup, not it's fingerprint
+
+	* keyeditdlg.h, keyeditdlg.c (gpa_key_edit_dialog_run): Receive
+	a key, not it's fingerprint.
+	(gpa_key_edit_dialog_run): Use new keytable
+
+	* keydeletedlg.h, keydeletedlg.c (gpa_delete_dialog_run): Figure
+	out whether the key is secret here, remove has_secret argument.
+
+	* icons.h, icons.c (gpa_create_icon_pixbuf): New.
+
+	* helpmenu.c (help_license): Replace deprecated GtkText with
+	GtkTextView.
+
+	* gpgmetools.c (gpa_generate_key): Don't save the key into the
+	keytable. With the new keytable, it should just be reloaded.
+
+	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_sign): Receive the
+	signer as a gpgmekey, too. Use new keytable.
+
+	* gpa.h: Remove keytable variable.
+	(gpa_default_key, gpa_set_default_key)
+	(gpa_update_default_key): Remove obsolete.
+
+	* gpa.c: Remove keytable global varible.
+	(main): Don't initialize it.
+
 2003-06-07  Miguel Coca  <mcoca@gnu.org>
 
 	* gpgmetools.c (gpa_backup_key): Make backups 600. Patch by 

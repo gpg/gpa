@@ -53,8 +53,6 @@
 /* Global variables */
 gchar *gpa_exec_dir;
 gchar *gnupg_homedir;
-/* The global table of keys */
-GPAKeyTable *keytable;
 
 /* Search for a configuration file.
  * It uses a different search order for Windows and Unix.
@@ -393,9 +391,6 @@ main (int argc, char **argv)
       gpa_options_set_default_keyserver (gpa_options_get_instance (),
 					 keyservers->data);
     }
-
-  /* Load the list of keys */
-  keytable = gpa_keytable_new ();
 
 #ifndef G_OS_WIN32
   /* Internationalisation with gtk+-2.0 wants UTF8 instead of the

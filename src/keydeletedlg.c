@@ -25,6 +25,7 @@
 #include "gtktools.h"
 #include "gpawidgets.h"
 #include "keydeletedlg.h"
+#include "keytable.h"
 
 /* Emit a last warning that a secret key is going to be deleted, and ask for
  * confirmation.
@@ -75,13 +76,16 @@ confirm_delete_secret (GtkWidget * parent)
  * deleting secret keys.
  */
 gboolean
-gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key,
-		       gboolean has_secret_key)
+gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
 {
   GtkWidget * window;
   GtkWidget * vbox;
   GtkWidget * label;
   GtkWidget * info;
+
+  gboolean has_secret_key = (gpa_keytable_lookup_key 
+			     (gpa_keytable_get_secret_instance(), 
+			      key->subkeys[0].fpr) != NULL);
 
   window = gtk_dialog_new_with_buttons (_("Remove Key"), GTK_WINDOW(parent),
                                         GTK_DIALOG_MODAL,

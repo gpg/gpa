@@ -19,50 +19,88 @@
  */
 
 /*
- * Hash table of all the keys in the keyring.
+ * Table of all the keys in the keyring. Singleton object.
+ * Acts as a key cache for key listing.
  */
 
 #ifndef KEYTABLE_H
 #define KEYTABLE_H
 
 #include <glib.h>
+#include <glib-object.h>
+#include <gtk/gtk.h>
 #include <gpgme.h>
+#include "gpacontext.h"
 
-typedef struct _GPAKeyTable GPAKeyTable;
+/* GObject stuff */
+#define GPA_KEYTABLE_TYPE	  (gpa_keytable_get_type ())
+#define GPA_KEYTABLE(obj)	  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GPA_KEYTABLE_TYPE, GpaKeyTable))
+#define GPA_KEYTABLE_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GPA_KEYTABLE_TYPE, GpaKeyTableClass))
+#define GPA_IS_KEYTABLE(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_KEYTABLE_TYPE))
+#define GPA_IS_KEYTABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_KEYTABLE_TYPE))
+#define GPA_KEYTABLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GPA_KEYTABLE_TYPE, GpaKeyTableClass))
 
-typedef void (*GPATableFunc) (const gchar * fpr, gpgme_key_t key, gpointer data);
+typedef struct _GpaKeyTable GpaKeyTable;
+typedef struct _GpaKeyTableClass GpaKeyTableClass;
 
-/* Creates a new keytable */
-GPAKeyTable *gpa_keytable_new (void);
+typedef void (*GpaKeyTableNextFunc) (gpgme_key_t key, gpointer data);
+typedef void (*GpaKeyTableEndFunc) (gpointer data);
 
-/* Reloads the table from gpg */
-void gpa_keytable_reload (GPAKeyTable * table);
+struct _GpaKeyTable {
+  GObject parent;
 
-/* Load a single key from gpg */
-void gpa_keytable_load_key (GPAKeyTable * table, const gchar * fpr);
+  GpaContext *context;
 
-/* Load several keys from gpg */
-void gpa_keytable_load_keys (GPAKeyTable * table, const gchar ** keys);
+  gboolean secret;
+  GpaKeyTableNextFunc next;
+  GpaKeyTableEndFunc end;
+  gpointer data;
 
-/* Return the key with a given fingerprint. It does not provide a reference 
- * for the user */
-gpgme_key_t gpa_keytable_lookup (GPAKeyTable * table, const gchar * fpr);
-gpgme_key_t gpa_keytable_secret_lookup (GPAKeyTable * table, const gchar * fpr);
+  GList *keys, *tmp_list;
+};
 
-/* Call the function "func" for each key and value in the table */
-void gpa_keytable_foreach (GPAKeyTable * table, GPATableFunc func,
-			   gpointer data);
-void gpa_keytable_secret_foreach (GPAKeyTable * table, GPATableFunc func,
-                                  gpointer data);
+struct _GpaKeyTableClass {
+  GObjectClass parent_class;
+};
 
-/* How many keys are there in the keyring? */
-gint gpa_keytable_size (GPAKeyTable * table);
-gint gpa_keytable_secret_size (GPAKeyTable * table);
+GType gpa_keytable_get_type (void) G_GNUC_CONST;
 
-/* Remove a key from the hash table */
-void gpa_keytable_remove (GPAKeyTable * table, const gchar * fpr);
+/* Retrieve the single keytable instance (one for public keys, one for secret
+ * ones).
+ */
+GpaKeyTable *gpa_keytable_get_public_instance ();
+GpaKeyTable *gpa_keytable_get_secret_instance ();
 
-/* Delete the hash table and all it's elements */
-void gpa_keytable_destroy (GPAKeyTable * table);
+/* List all keys, return cached copies if they are available.
+ *
+ * The "next" function is called for every key, providing a new
+ * reference for that key that should be freed.
+ *
+ * The "end" function is called when the listing is complete.
+ *
+ * This function MAY not do anything until the application goes back into
+ * the GLib main loop.
+ */
+void gpa_keytable_list_keys (GpaKeyTable *keytable,
+			     GpaKeyTableNextFunc next,
+			     GpaKeyTableEndFunc end,
+			     gpointer data);
+
+/* Same as list_keys, but forces the internal cache to be rebuilt.
+ */
+void gpa_keytable_force_reload (GpaKeyTable *keytable,
+				GpaKeyTableNextFunc next,
+				GpaKeyTableEndFunc end,
+				gpointer data);
+
+/* Return the key with a given fingerprint from the keytable, NULL if
+ * there is none. No reference is provided.
+ */
+const gpgme_key_t gpa_keytable_lookup_key (GpaKeyTable *keytable,
+					   const char *fpr);
+
+/* Free the keytable.
+ */
+void gpa_keytable_destroy (GpaKeyTable *keytable);
 
 #endif /* KEYTABLE_H */

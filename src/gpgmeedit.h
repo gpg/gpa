@@ -29,15 +29,17 @@
 
 /* Change the ownertrust of a key */
 gpgme_error_t gpa_gpgme_edit_trust (gpgme_ctx_t ctx, gpgme_key_t key,
-				 gpgme_validity_t ownertrust);
+				    gpgme_validity_t ownertrust);
 
 /* Change the expiry date of a key */
-gpgme_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, GDate *date);
+gpgme_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, 
+				     GDate *date);
 
 /* Sign this key with the given private key. If local is true, make a local
  * signature. */
 gpgme_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
-				const gchar *private_key_fpr, gboolean local);
+				   gpgme_key_t secret_key,
+				   gboolean local);
 
 /* Change the key's passphrase.
  */

@@ -23,6 +23,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gpgme.h>
 
 /* GObject stuff */
 #define GPA_OPTIONS_TYPE	  (gpa_options_get_type ())
@@ -43,7 +44,8 @@ struct _GpaOptions {
   gboolean simplified_ui;
   gboolean backup_generated;
 
-  gchar *default_key;
+  gpgme_key_t default_key;
+  gchar *default_key_fpr;
   gchar *default_keyserver;
 
   gboolean detailed_view;
@@ -78,8 +80,8 @@ void gpa_options_set_simplified_ui (GpaOptions *options, gboolean value);
 gboolean gpa_options_get_simplified_ui (GpaOptions *options);
 
 /* Choose the default key */
-void gpa_options_set_default_key (GpaOptions *options, const gchar *fpr);
-const gchar *gpa_options_get_default_key (GpaOptions *options);
+void gpa_options_set_default_key (GpaOptions *options, gpgme_key_t key);
+const gpgme_key_t gpa_options_get_default_key (GpaOptions *options);
 /* Try to find a reasonable value for the default key if there wasn't one */
 void gpa_options_update_default_key (GpaOptions *options);
 

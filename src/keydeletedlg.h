@@ -22,7 +22,6 @@
 #define KEYDELETEDLG_H
 
 #include <gtk/gtk.h>
-gboolean gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key,
-				gboolean has_secret_key);
+gboolean gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key);
 
 #endif /* KEYDELETEDLG_H */

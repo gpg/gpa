@@ -147,6 +147,7 @@ gpa_options_init (GpaOptions *options)
   options->simplified_ui = TRUE;
   options->backup_generated = FALSE;
   options->default_key = NULL;
+  options->default_key_fpr = NULL;
   options->default_keyserver = NULL;
   options->detailed_view = FALSE;
 }
@@ -157,7 +158,8 @@ gpa_options_finalize (GObject *object)
   GpaOptions *options = GPA_OPTIONS (object);
   
   g_free (options->options_file);
-  g_free (options->default_key);
+  gpgme_key_unref (options->default_key);
+  g_free (options->default_key_fpr);
   g_free (options->default_keyserver);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -225,17 +227,18 @@ gpa_options_get_simplified_ui (GpaOptions *options)
 
 /* Choose the default key */
 void
-gpa_options_set_default_key (GpaOptions *options, const gchar *fpr)
+gpa_options_set_default_key (GpaOptions *options, gpgme_key_t key)
 {
   if (options->default_key)
     {
-      g_free (options->default_key);
+      gpgme_key_unref (options->default_key);
     }
-  options->default_key = g_strdup (fpr);
+  options->default_key = key;
+  options->default_key_fpr = g_strdup (key->subkeys[0].fpr);
   g_signal_emit (options, signals[CHANGED_DEFAULT_KEY], 0);
 }
 
-const gchar *
+const gpgme_key_t
 gpa_options_get_default_key (GpaOptions *options)
 {
   return options->default_key;
@@ -245,7 +248,7 @@ gpa_options_get_default_key (GpaOptions *options)
  * approximation. Currently this means the first secret key in the keyring.
  * If there's no secret key at all, return NULL
  */
-static gchar *
+static gpgme_key_t
 determine_default_key (void)
 {
   gpgme_key_t key;
@@ -258,22 +261,18 @@ determine_default_key (void)
   err = gpgme_op_keylist_next (ctx, &key);
   if( err == GPGME_No_Error )
     {
-      /* Copy the ID and release the key, since it's no longer needed */
-      fpr = g_strdup (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, 
-                                                 NULL, 0 ));
-      gpgme_key_release (key);
       err = gpgme_op_keylist_end (ctx);
       if( err != GPGME_No_Error )
-        gpa_gpgme_error (err); 
+        gpa_gpgme_warning (err); 
     }
   else if( err == GPGME_EOF )
     /* No secret keys found */
     fpr = NULL;
   else
-    gpa_gpgme_error (err);
+    gpa_gpgme_warning (err);
 
   gpgme_release (ctx);
-  return fpr;
+  return key;
 }
 
 void
@@ -283,11 +282,11 @@ gpa_options_update_default_key (GpaOptions *options)
   gpgme_key_t key = NULL;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
 
-  if (!options->default_key)
+  if (!options->default_key_fpr)
     {
       update = TRUE;
     }
-  else if (gpgme_get_key (ctx, options->default_key, &key, TRUE) == 
+  else if (gpgme_get_key (ctx, options->default_key_fpr, &key, TRUE) == 
            GPGME_EOF)
     {
       gpa_window_error (_("The private key you selected as default is no "
@@ -296,16 +295,24 @@ gpa_options_update_default_key (GpaOptions *options)
                           "key automatically."), NULL);
       update = TRUE;
     }
+  else
+    {
+      /* Use the listed key if there is no previous one (at initialization).
+       */
+      if (!options->default_key)
+	{
+	  options->default_key = key;
+	}
+      else
+	{
+	  gpgme_key_unref (key);
+	}
+    }
 
   if (update)
     {
-      gchar *fpr = determine_default_key ();
-      gpa_options_set_default_key (options, fpr);
-      g_free (fpr);
-    }
-
-  if (key)
-    {
+      key = determine_default_key ();
+      gpa_options_set_default_key (options, key);
       gpgme_key_unref (key);
     }
 
@@ -381,7 +388,8 @@ gpa_options_save_settings (GpaOptions *options)
     {
       if (options->default_key)
         {
-          fprintf (options_file, "default-key %s\n", options->default_key);
+          fprintf (options_file, "default-key %s\n",
+		   options->default_key->subkeys[0].fpr);
         }
       if (options->default_keyserver)
         {
@@ -491,7 +499,7 @@ gpa_options_read_settings (GpaOptions *options)
                 }
               break;
             case PARSE_OPTIONS_STATE_HAVE_KEY:
-              options->default_key = g_strdup (next_word);
+              options->default_key_fpr = g_strdup (next_word);
               state = PARSE_OPTIONS_STATE_START;
               break;
             case PARSE_OPTIONS_STATE_HAVE_KEYSERVER:

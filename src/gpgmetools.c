@@ -361,12 +361,6 @@ gpgme_error_t gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
       GpgmeGenKeyResult result = gpgme_op_genkey_result (ctx);
       *fpr = g_strdup (result->fpr);
     }
-  /* Load the key into the keytable. Needed if we are to make a backup right
-   * now. */
-  if (fpr)
-    {
-      gpa_keytable_load_key (keytable, *fpr);
-    }
   gpgme_release (ctx);
 
   return err;

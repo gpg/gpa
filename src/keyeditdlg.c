@@ -30,13 +30,14 @@
 #include "expirydlg.h"
 #include "keyeditdlg.h"
 #include "gpawidgets.h"
+#include "keytable.h"
 
 typedef struct
 {
   GtkWidget *window;
   GtkWidget *expiry;
   GtkWidget *ownertrust;
-  gchar *fpr;
+  gpgme_key_t key;
   gboolean key_has_changed;
 }
 GPAKeyEditDialog;
@@ -48,7 +49,7 @@ static void key_edit_change_passphrase (GtkWidget *widget, gpointer param);
 
 /* run the key edit dialog as a modal dialog */
 gboolean
-gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
+gpa_key_edit_dialog_run (GtkWidget * parent, gpgme_key_t key)
 {
   GtkWidget *window;
   GtkWidget *vbox;
@@ -59,15 +60,12 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   GtkWidget *table;
   GtkAccelGroup *accel_group;
 
-  gpgme_key_t key;
   gchar *date_string;
 
   GPAKeyEditDialog dialog;
 
-  dialog.fpr = fpr;
+  dialog.key = key;
   dialog.key_has_changed = FALSE;
-
-  key = gpa_keytable_lookup (keytable, fpr);
 
   accel_group = gtk_accel_group_new ();
 
@@ -111,8 +109,9 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
 
   button = gpa_button_new (accel_group, _("Change _expiration"));
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-  gtk_widget_set_sensitive (button, gpa_keytable_secret_lookup 
-                            (keytable, fpr) != NULL);
+  gtk_widget_set_sensitive (button,(gpa_keytable_lookup_key 
+			     (gpa_keytable_get_secret_instance(), 
+			      key->subkeys[0].fpr) != NULL));
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc)key_edit_change_expiry, &dialog);
 
@@ -128,18 +127,15 @@ static void
 key_edit_change_expiry(GtkWidget * widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
-  gpgme_key_t key;
   gpgme_error_t err;
   GDate * new_date;
   struct tm tm;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
 
-  key = gpa_keytable_lookup (keytable, dialog->fpr);
-
-  if (gpa_expiry_dialog_run (dialog->window, key, &new_date))
+  if (gpa_expiry_dialog_run (dialog->window, dialog->key, &new_date))
     {
       gchar * date_string;
-      err = gpa_gpgme_edit_expire (ctx, key, new_date);
+      err = gpa_gpgme_edit_expire (ctx, dialog->key, new_date);
       if (err == GPGME_No_Error)
         {
           if (new_date)
@@ -155,11 +151,9 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
           g_free (date_string);
           if (new_date)
             g_date_free (new_date);
-          /* Reload the key */
-          gpa_keytable_load_key (keytable, dialog->fpr);
           dialog->key_has_changed = TRUE;
         }
-      else if (err == GPGME_No_Passphrase)
+      else if (err == GPGME_Bad_Passphrase)
         {
 	  gpa_window_error (_("Wrong passphrase!"), dialog->window);
           if (new_date)
@@ -189,13 +183,8 @@ key_edit_change_passphrase (GtkWidget *widget, gpointer param)
   gpgme_error_t err;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
 
-  err = gpgme_get_key (ctx, dialog->fpr, &key, FALSE);
-  if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
   err = gpa_gpgme_edit_passwd (ctx, key);
-  if (err == GPGME_No_Passphrase)
+  if (err == GPGME_Bad_Passphrase)
     {
       gpa_window_error (_("Wrong passphrase!"), dialog->window);
     }

@@ -742,13 +742,13 @@ gpgme_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, GDate *da
 
 /* Sign this key with the given private key */
 gpgme_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
-				const gchar *private_key_fpr, gboolean local)
+				   gpgme_key_t secret_key, gboolean local)
 {
+  
   struct sign_parms_s sign_parms = {"0", local};
   struct edit_parms_s parms = {SIGN_START, GPGME_No_Error,
 			       edit_sign_fnc_action, edit_sign_fnc_transit,
 			       &sign_parms};
-  gpgme_key_t secret_key = gpa_keytable_secret_lookup (keytable, private_key_fpr);
   gpgme_error_t err = GPGME_No_Error;
   gpgme_data_t out;
 

@@ -61,7 +61,7 @@ struct _GPAKeyringEditor {
   GtkWidget *window;
 
   /* The central list of keys */
-  GtkWidget *clist_keys;
+  GpaKeyList *keylist;
 
   /* The "Show Ownertrust" toggle button */
   GtkWidget *toggle_show;
@@ -96,6 +96,9 @@ struct _GPAKeyringEditor {
 
   /* List of sensitive widgets. See below */
   GList * selection_sensitive_widgets;
+
+  /* The currently selected key */
+  gpgme_key_t current_key;
 };
 typedef struct _GPAKeyringEditor GPAKeyringEditor;
 
@@ -106,7 +109,7 @@ typedef struct _GPAKeyringEditor GPAKeyringEditor;
 
 static gboolean keyring_editor_has_selection (gpointer param);
 static gboolean keyring_editor_has_single_selection (gpointer param);
-static gchar *keyring_editor_current_key_id (GPAKeyringEditor * editor);
+static gpgme_key_t keyring_editor_current_key (GPAKeyringEditor * editor);
 
 static void keyring_update_details_notebook (GPAKeyringEditor *editor);
 
@@ -194,7 +197,7 @@ keyring_editor_has_selection (gpointer param)
 {
   GPAKeyringEditor * editor = param;
 
-  return gpa_keylist_has_selection (editor->clist_keys);
+  return gpa_keylist_has_selection (editor->keylist);
 }
 
 
@@ -206,7 +209,7 @@ keyring_editor_has_single_selection (gpointer param)
 {
   GPAKeyringEditor * editor = param;
 
-  return gpa_keylist_has_single_selection (editor->clist_keys);
+  return gpa_keylist_has_single_selection (editor->keylist);
 }
 
 /* Return TRUE if the key list widget of the keyring editor has exactly
@@ -217,101 +220,53 @@ static gboolean
 keyring_editor_has_private_selected (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  const gchar *fpr = gpa_keylist_current_key_id (editor->clist_keys);
 
-  return gpa_keylist_has_single_selection (editor->clist_keys) &&
-          gpa_keytable_secret_lookup (keytable, fpr);
+  return gpa_keylist_has_single_secret_selection 
+    (GPA_KEYLIST(editor->keylist));
 }
-
-
-/* Fill the GtkCList with the keys */
-/* XXX This function is also used to update the list after it may have
- * been changed (e.g. by deleting keys), but for that the current
- * implementation is broken because the selection information is lost.
- */
-static void
-keyring_editor_fill_keylist (GPAKeyringEditor * editor)
-{
-  gpa_keylist_update_list (editor->clist_keys);
-} /* keyring_editor_fill_keylist */
-
 
 /* delete the selected keys */
 static void
 keyring_editor_delete (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  gint row;
-  gchar * fpr;
-  gpgme_key_t key;
-  GList * selection;
-  gboolean has_secret;
   gpgme_error_t err;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
+  GList *selection;
 
-  selection = gpa_keylist_selection (editor->clist_keys);
-  gtk_clist_freeze (GTK_CLIST(editor->clist_keys));
-  while (selection)
+  for (selection = gpa_keylist_get_selected_keys (editor->keylist); 
+       selection; selection = g_list_next (selection))
     {
-      row = GPOINTER_TO_INT (selection->data);
-      fpr = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
-      key = gpa_keytable_lookup (keytable, fpr);
-      has_secret = gpa_keytable_secret_lookup (keytable, fpr) != NULL;
-      if (!gpa_delete_dialog_run (editor->window, key, has_secret))
+      gpgme_key_t key = (gpgme_key_t) selection->data;
+
+      if (!gpa_delete_dialog_run (editor->window, key))
         break;
       err = gpgme_op_delete (ctx, key, 1);
-      selection = g_list_next (selection);
-      if (err == GPGME_No_Error)
-        {
-          gpa_keytable_remove (keytable, fpr);
-          gtk_clist_remove (GTK_CLIST(editor->clist_keys), row);
-        }
-      else
+      if (err != GPGME_No_Error)
         {
           gpa_gpgme_error (err);
         }
     }
   gpgme_release (ctx);
+  /* Reload the whole keyring: deleting keys might change the whole WoT */
+  gpa_keylist_start_reload (editor->keylist);
   /* Update the default key, as it could just have been deleted */
   gpa_options_update_default_key (gpa_options_get_instance ());
-  gtk_clist_thaw (GTK_CLIST(editor->clist_keys));
-} /* keyring_editor_delete */
+}
 
 
 /* Return true, if the public key key has been signed by the key with
  * the id key_id, otherwise return FALSE. The window parameter is needed
  * for error reporting */
 static gboolean
-key_has_been_signed (const gchar *fpr, const gchar *signer)
+key_has_been_signed (const gpgme_key_t key, 
+		     const gpgme_key_t signer_key)
 {
   gint uid, idx;
-  gpgme_error_t err;
-  gpgme_key_t key, signer_key;
   gboolean uid_signed, key_signed;
   const char *signer_id;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-  int old_mode = gpgme_get_keylist_mode (ctx);
 
-  /* Get the signing key ID */
-  err = gpgme_get_key (ctx, signer, &signer_key, FALSE);
-  if (err == GPGME_EOF)
-    {
-      /* Can't happen */
-      return FALSE;
-    }
-  else if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
   signer_id = gpgme_key_get_string_attr (signer_key, GPGME_ATTR_KEYID, 0, 0);
-  /* Get the key */
-  gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
-  err = gpgme_get_key (ctx, fpr, &key, FALSE);
-  if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
-  gpgme_set_keylist_mode (ctx, old_mode); 
   /* We consider the key signed if all user ID's have been signed */
   key_signed = TRUE;
   for (uid = 0;
@@ -332,10 +287,6 @@ key_has_been_signed (const gchar *fpr, const gchar *signer)
         }
       key_signed = key_signed && uid_signed;
     }
-  /* Forget the keys */
-  gpgme_key_unref (key);
-  gpgme_key_unref (signer_key);
-  gpgme_release (ctx);
   
   return key_signed;
 }
@@ -347,8 +298,7 @@ static gboolean
 keyring_editor_can_sign (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  gchar * fpr;
-  const gchar * default_key = gpa_options_get_default_key
+  const gpgme_key_t default_key = gpa_options_get_default_key
     (gpa_options_get_instance ());
   gboolean result = FALSE;
 
@@ -357,8 +307,8 @@ keyring_editor_can_sign (gpointer param)
       /* the most important requirements have been met, now find out
        * whether the selected key was already signed with the default
        * key */
-      fpr = keyring_editor_current_key_id (editor);
-      result = !key_has_been_signed (fpr, default_key);
+      gpgme_key_t key = keyring_editor_current_key (editor);
+      result = !key_has_been_signed (key, default_key);
     }
   return result;
 } /* keyring_editor_can_sign */
@@ -369,17 +319,14 @@ static void
 keyring_editor_sign (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  const gchar *private_key_fpr;
-  gint row;
-  gchar *key_fpr;
-  gpgme_key_t key;
+  gpgme_key_t key, signer_key;
   gpgme_error_t err;
   gboolean sign_locally = FALSE;
   GList *selection;
   gint signed_count = 0;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
 
-  if (!gpa_keylist_has_selection (editor->clist_keys))
+  if (!gpa_keylist_has_selection (editor->keylist))
     {
       /* this shouldn't happen because the button should be grayed out
        * in this case
@@ -388,8 +335,8 @@ keyring_editor_sign (gpointer param)
       return;
     }
 
-  private_key_fpr = gpa_options_get_default_key (gpa_options_get_instance ());
-  if (!private_key_fpr)
+  signer_key = gpa_options_get_default_key (gpa_options_get_instance ());
+  if (!signer_key)
     {
       /* this shouldn't happen because the button should be grayed out
        * in this case
@@ -398,16 +345,13 @@ keyring_editor_sign (gpointer param)
       return;
     }
 
-  selection = gpa_keylist_selection (editor->clist_keys);
-  while (selection)
+  for (selection = gpa_keylist_get_selected_keys (editor->keylist); 
+       selection; selection = g_list_next (selection))
     {
-      row = GPOINTER_TO_INT (selection->data);
-      key_fpr = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
-                                   
-      key = gpa_keytable_lookup (keytable, key_fpr);
+      key = selection->data;
       if (gpa_key_sign_run_dialog (editor->window, key, &sign_locally))
         {
-          err = gpa_gpgme_edit_sign (ctx, key, private_key_fpr, sign_locally);
+          err = gpa_gpgme_edit_sign (ctx, key, signer_key, sign_locally);
           if (err == GPGME_No_Error)
             {
               signed_count++;
@@ -447,7 +391,7 @@ keyring_editor_sign (gpointer param)
         }
       selection = g_list_next (selection);
     }
-
+  g_list_free (selection);
   /* Update the signatures details page and the widgets because some
    * depend on what signatures a key has
    */
@@ -455,8 +399,7 @@ keyring_editor_sign (gpointer param)
     {
       /* Reload the list of keys: a new signature may change the 
        * trust values on several keys.*/
-      gpa_keytable_reload (keytable);
-      keyring_editor_fill_keylist (editor);
+      gpa_keylist_start_reload (editor->keylist);
       keyring_update_details_notebook (editor);
       update_selection_sensitive_widgets (editor);
     }
@@ -468,14 +411,16 @@ keyring_editor_sign (gpointer param)
 static void
 keyring_editor_edit (gpointer param)
 {
-  GPAKeyringEditor * editor = param;  
-  gchar * fpr = keyring_editor_current_key_id (editor);
+  GPAKeyringEditor * editor = param;
+  gpgme_key_t key = keyring_editor_current_key (editor);
 
-  if (fpr)
+  if (key)
     {
-      if (gpa_key_edit_dialog_run (editor->window, fpr))
+      /* Should be called when just one key is selected.
+       */
+      if (gpa_key_edit_dialog_run (editor->window, key))
         {
-          keyring_editor_fill_keylist (editor);
+	  gpa_keylist_start_reload (editor->keylist);
           update_selection_sensitive_widgets (editor);
           keyring_update_details_notebook (editor);
         }
@@ -485,16 +430,14 @@ keyring_editor_edit (gpointer param)
 static void
 keyring_editor_trust (gpointer param)
 {
-  GPAKeyringEditor * editor = param;  
-  gchar * fpr = keyring_editor_current_key_id (editor);
+  GPAKeyringEditor * editor = param;
+  gpgme_key_t key = keyring_editor_current_key (editor);
 
-  if (fpr)
+  if (key)
     {
-      gpgme_key_t key = gpa_keytable_lookup (keytable, fpr);
       if (gpa_ownertrust_run_dialog (key, editor->window))
         {
-          gpa_keytable_reload (keytable);
-          keyring_editor_fill_keylist (editor);
+	  gpa_keylist_start_reload (editor->keylist);
           update_selection_sensitive_widgets (editor);
           keyring_update_details_notebook (editor);
         }
@@ -560,29 +503,18 @@ keyring_editor_import_do_import (GPAKeyringEditor *editor, gpgme_data_t data)
   if (err != GPGME_No_Data)
     {
       gpgme_import_result_t info;
-      gpgme_import_status_t cur;
-      gchar **keyids;
-      gint i;
       
       info = gpgme_op_import_result (ctx);
       /* If keys were imported, load them */
       if (info->imports)
         {
-          keyids = g_malloc (info->imported * sizeof (gchar*));
-          for (cur = info->imports, i = 0; cur; cur = cur->next, i++)
-            {
-              keyids[i] = cur->fpr;
-            }
-          keyids[i] = NULL;
-          gpa_keytable_load_keys (keytable, (const gchar**) keyids);
-          g_strfreev (keyids);
+	  gpa_keylist_start_reload (editor->keylist);
         }
       key_import_results_dialog_run (editor->window, info);
     }
   gpgme_release (ctx);
   /* update the widgets
    */
-  keyring_editor_fill_keylist (editor);
   update_selection_sensitive_widgets (editor);
 }
 
@@ -605,7 +537,7 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
                                  gboolean armored)
 {
   gpgme_error_t err;
-  GList *selection = gpa_keylist_selection (editor->clist_keys);
+  GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
   gpgme_ctx_t ctx = gpa_gpgme_new ();
   const gchar **patterns = NULL;
   int i;
@@ -619,11 +551,8 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
   patterns = g_malloc0 (sizeof(gchar*)*(g_list_length(selection)+1));
   for (i = 0; selection; i++, selection = g_list_next (selection))
     {
-      const gchar *fpr;
-      gint row = GPOINTER_TO_INT (selection->data);
-      fpr = gtk_clist_get_row_data
-        (GTK_CLIST (editor->clist_keys), row);
-      patterns[i] = fpr;
+      gpgme_key_t key = (gpgme_key_t) selection->data;
+      patterns[i] = key->subkeys[0].fpr;
     }
   /* Export to the gpgme_data_t */
   err = gpgme_op_export_ext (ctx, patterns, 0, *data);
@@ -643,7 +572,7 @@ keyring_editor_export (gpointer param)
   gchar *filename, *server;
   gboolean armored;
 
-  if (!gpa_keylist_has_selection (editor->clist_keys))
+  if (!gpa_keylist_has_selection (editor->keylist))
     {
       /* this shouldn't happen because the button should be grayed out
        * in this case
@@ -691,8 +620,7 @@ keyring_editor_export (gpointer param)
         {
           /* Export the selected key to the user specified server.
            */
-	  gpgme_key_t key = gpa_keytable_lookup 
-            (keytable, gpa_keylist_current_key_id (editor->clist_keys));
+	  gpgme_key_t key = keyring_editor_current_key (editor);
 	  server_send_keys (server, gpa_gpgme_key_get_short_keyid (key, 0),
 			    data, editor->window);
         }
@@ -707,19 +635,9 @@ static void
 keyring_editor_backup (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  const gchar *fpr;
+  gpgme_key_t key = keyring_editor_current_key (editor);
 
-  fpr = gpa_keylist_current_key_id (editor->clist_keys);
-  if (!fpr)
-    {
-      /* this shouldn't happen because the menu item should be grayed out
-       * in this case
-       */
-      gpa_window_error (_("No private key to backup."), editor->window);
-      return;
-    }
-
-  key_backup_dialog_run (editor->window, fpr);
+  key_backup_dialog_run (editor->window, key);
 }
 
 /* Run the advanced key generation dialog and if the user clicked OK,
@@ -749,9 +667,8 @@ keyring_editor_generate_key_advanced (gpointer param)
        * sensitive widgets because some may depend on whether secret
        * keys are available
        */
-      gpa_keytable_reload (keytable);
+      gpa_keylist_start_reload (editor->keylist);
       gpa_options_update_default_key (gpa_options_get_instance ());
-      keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
     }
 } /* keyring_editor_generate_key_advanced */
@@ -770,9 +687,8 @@ keyring_editor_generate_key_simple (gpointer param)
        * sensitive widgets because some may depend on whether secret
        * keys are available
        */
-      gpa_keytable_reload (keytable);
+      gpa_keylist_start_reload (editor->keylist);
       gpa_options_update_default_key (gpa_options_get_instance ());
-      keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
     }
 } /* keyring_editor_generate_key_simple */
@@ -793,11 +709,11 @@ keyring_editor_generate_key (gpointer param)
 
 
 
-/* Return the id of the currently selected key. NULL if no key is selected */
-static gchar *
-keyring_editor_current_key_id (GPAKeyringEditor *editor)
+/* Return the the currently selected key. NULL if no key is selected */
+static gpgme_key_t
+keyring_editor_current_key (GPAKeyringEditor *editor)
 {
-  return gpa_keylist_current_key_id (editor->clist_keys);
+  return editor->current_key;
 }
 
 /* Update everything that has to be updated when the selection in the
@@ -810,26 +726,42 @@ keyring_selection_update_widgets (GPAKeyringEditor * editor)
   keyring_update_details_notebook (editor);
 }  
 
-/* Signal handler for select-row and unselect-row. Call
- * update_selection_sensitive_widgets */
+/* Signal handler for selection changes.
+ */
 static void
-keyring_editor_selection_changed (GtkWidget * clistKeys, gint row,
-                                  gint column, GdkEventButton * event,
-                                  gpointer param)
+keyring_editor_selection_changed (GtkTreeSelection *treeselection, 
+				  gpointer param)
 {
-  keyring_selection_update_widgets (param);
-} /* keyring_editor_selection_changed */
-
-
-/* Signal handler for end-selection. Call
- * update_selection_sensitive_widgets */
-static void
-keyring_editor_end_selection (GtkWidget * clistKeys, gpointer param)
-{
-  keyring_selection_update_widgets (param);
-} /* keyring_editor_end_selection */
-
-
+  GPAKeyringEditor *editor = param;
+  keyring_selection_update_widgets (editor);
+  /* Update the current key */
+  if (editor->current_key)
+    {
+      /* Remove the previous one */
+      gpgme_key_unref (editor->current_key);
+      editor->current_key = NULL;
+    }
+  /* Load the new one */
+  if (gpa_keylist_has_single_selection (editor->keylist)) 
+    {
+      gpgme_error_t err;
+      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
+      gpgme_key_t key = (gpgme_key_t) selection->data;
+      gpgme_ctx_t ctx = gpa_gpgme_new ();
+      int old_mode = gpgme_get_keylist_mode (ctx);
+      /* With all the signatures */
+      gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
+      err = gpgme_get_key (ctx, key->subkeys[0].fpr, &key, FALSE);
+      if (err != GPGME_No_Error)
+	{
+	  gpa_gpgme_warning (err);
+	}
+      gpgme_set_keylist_mode (ctx, old_mode);
+      g_list_free (selection);
+      editor->current_key = key;
+      gpgme_release (ctx);
+    }
+}
 
 /* Signal handler for the map signal. If the simplified_ui flag is set
  * and there's no private key in the key ring, ask the user whether he
@@ -847,8 +779,11 @@ keyring_editor_mapped (gpointer param)
 
   if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
+      /* We assume that the only reason a user might not have a default key
+       * is because he has no private keys.
+       */
       if (!asked_about_key_generation
-          && gpa_keytable_secret_size (keytable) == 0)
+          && !gpa_options_get_default_key (gpa_options_get_instance()))
         {
 	  GtkWidget *dialog;
 	  GtkResponseType response;
@@ -875,7 +810,7 @@ keyring_editor_mapped (gpointer param)
       else if (!asked_about_key_backup
                && !gpa_options_get_backup_generated 
 	       (gpa_options_get_instance ())
-               && gpa_keytable_secret_size (keytable) != 0)
+               && !gpa_options_get_default_key (gpa_options_get_instance()))
         {
 	  GtkWidget *dialog;
 	  GtkResponseType response;
@@ -930,8 +865,10 @@ static void
 keyring_editor_select_all (gpointer param)
 {
   GPAKeyringEditor * editor = param;
+  GtkTreeSelection *selection = 
+    gtk_tree_view_get_selection (GTK_TREE_VIEW (editor->keylist));
 
-  gtk_clist_select_all (GTK_CLIST (editor->clist_keys));
+  gtk_tree_selection_select_all (selection);
 }
 
 /* Paste the clipboard into the keyring */
@@ -1201,9 +1138,9 @@ static void
 signatures_uid_selected (GtkOptionMenu *optionmenu, gpointer user_data)
 {
   GPAKeyringEditor *editor = user_data;
-  gchar * fpr = keyring_editor_current_key_id (editor);
+  gpgme_key_t key = keyring_editor_current_key (editor);
 
-  gpa_siglist_set_signatures (editor->signatures_list, fpr, 
+  gpa_siglist_set_signatures (editor->signatures_list, key, 
                               gtk_option_menu_get_history 
                               (GTK_OPTION_MENU (editor->signatures_uids))-1);
 }
@@ -1314,8 +1251,8 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
   gchar * uid;
   gint i;
 
-  if (gpa_keytable_secret_lookup (keytable, gpgme_key_get_string_attr 
-                                  (key, GPGME_ATTR_FPR, NULL, 0)))
+  if (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
+			       key->subkeys[0].fpr) != NULL)
     {
       gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
                           _("The key has both a private and a public part"));
@@ -1401,13 +1338,12 @@ keyring_details_page_fill_num_keys (GPAKeyringEditor * editor, gint num_key)
 /* Fill the signatures page of the details notebook with the signatures
  * of the public key key */
 static void
-keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gchar *fpr)
+keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
 {
   GtkWidget *menu;
   GtkWidget *label;
   gchar *uid;
   int i;
-  gpgme_key_t key = gpa_keytable_lookup (keytable, fpr);
 
   /* Create the menu for the popdown UID list */
   menu = gtk_menu_new ();
@@ -1423,7 +1359,7 @@ keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gchar *fpr)
   gtk_widget_show_all (menu);
   gtk_widget_set_sensitive (editor->signatures_uids, TRUE);
   /* Add the signatures */
-  gpa_siglist_set_signatures (editor->signatures_list, fpr, -1);
+  gpa_siglist_set_signatures (editor->signatures_list, key, -1);
 } /* keyring_signatures_page_fill_key */
 
 
@@ -1445,21 +1381,19 @@ static int
 idle_update_details (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  gint num_selected = gpa_keylist_selection_length (editor->clist_keys);
 
-  if (num_selected == 1)
+  if (gpa_keylist_has_single_selection (editor->keylist))
     {
-      gchar * key_id = keyring_editor_current_key_id (editor);
-      gpgme_key_t key;
-
-      key = gpa_keytable_lookup (keytable, key_id);
+      gpgme_key_t key = keyring_editor_current_key (editor);
       keyring_details_page_fill_key (editor, key);
-      keyring_signatures_page_fill_key (editor, key_id);
+      keyring_signatures_page_fill_key (editor, key);
     }
   else
     {
-      keyring_details_page_fill_num_keys (editor, num_selected);
+      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
+      keyring_details_page_fill_num_keys (editor, g_list_length (selection));
       keyring_signatures_page_empty (editor);
+      g_list_free (selection);
     }
 
   /* Set the idle id to NULL to indicate that the idle handler has been
@@ -1471,7 +1405,6 @@ idle_update_details (gpointer param)
   return 0;
 }
 
-
 /* Add an idle handler to update the details notebook, but only when
  * none has been set yet */
 static void
@@ -1482,21 +1415,6 @@ keyring_update_details_notebook (GPAKeyringEditor * editor)
       editor->details_idle_id = gtk_idle_add (idle_update_details, editor);
     }
 }
-                                          
-
-
-/* definitions for the brief and detailed key list. The names are at the
- * end so that they automatically take up all the surplus horizontal
- * space allocated to he list because they usually need the most
- * horizontal space.
- */
-static GPAKeyListColumn keylist_columns_brief[] =
-{GPA_KEYLIST_KEY_TYPE_PIXMAP, GPA_KEYLIST_ID, GPA_KEYLIST_NAME};
-
-static GPAKeyListColumn keylist_columns_detailed[] =
-{GPA_KEYLIST_KEY_TYPE_PIXMAP, GPA_KEYLIST_ID, GPA_KEYLIST_EXPIRYDATE,
- GPA_KEYLIST_OWNERTRUST, GPA_KEYLIST_KEYTRUST, GPA_KEYLIST_NAME};
-
 
 /* Change the keylist to brief listing */
 static void
@@ -1506,14 +1424,10 @@ keyring_set_brief_listing (GtkWidget *widget, gpointer param)
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
     {
-      gpa_keylist_set_column_defs (editor->clist_keys, 
-                                   (sizeof keylist_columns_brief)
-                                   / (sizeof keylist_columns_brief[0]),
-                                   keylist_columns_brief);
+      gpa_keylist_set_brief (editor->keylist);
       gpa_options_set_detailed_view (gpa_options_get_instance (), FALSE);
-      gpa_keylist_update_list (editor->clist_keys);
     }
-} /* keyring_set_brief_listing */
+}
 
 
 /* Change the keylist to detailed listing */
@@ -1524,14 +1438,10 @@ keyring_set_detailed_listing (GtkWidget *widget, gpointer param)
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
     {
-      gpa_keylist_set_column_defs (editor->clist_keys, 
-                                   (sizeof keylist_columns_detailed)
-                                   / (sizeof keylist_columns_detailed[0]),
-                                   keylist_columns_detailed);
+      gpa_keylist_set_detailed (editor->keylist);
       gpa_options_set_detailed_view (gpa_options_get_instance (), TRUE);
-      gpa_keylist_update_list (editor->clist_keys);
     }
-} /* keyring_set_detailed_listing */
+}
 
 
 static void
@@ -1724,12 +1634,10 @@ keyring_statusbar_new (GPAKeyringEditor *editor)
 static void
 keyring_update_status_bar (GPAKeyringEditor * editor)
 {
-  const gchar * fpr = gpa_options_get_default_key (gpa_options_get_instance ());
-  gpgme_key_t key;
+  gpgme_key_t key = gpa_options_get_default_key (gpa_options_get_instance ());
   gchar *string;
 
-  if (fpr
-      && (key = gpa_keytable_lookup (keytable, fpr)))
+  if (key)
     {
       string =  gpa_gpgme_key_get_userid (key, 0);
       gtk_label_set_text (GTK_LABEL (editor->status_key_user), string);
@@ -1744,22 +1652,8 @@ keyring_update_status_bar (GPAKeyringEditor * editor)
     }     
 }
 
-static gboolean
-is_selected_row (GtkWidget *clist, gint row)
-{
-  GList *selection = gpa_keylist_selection (clist);
-  for (;selection; selection = g_list_next (selection))
-    {
-      if (GPOINTER_TO_INT (selection->data) == row)
-        {
-          return TRUE;
-        }
-    }
-  return FALSE;
-}
-
 static gint
-display_popup_menu (GtkWidget *widget, GdkEvent *event, GtkWidget *clist)
+display_popup_menu (GtkWidget *widget, GdkEvent *event, GpaKeyList *list)
 {
   GtkMenu *menu;
   GdkEventButton *event_button;
@@ -1778,17 +1672,27 @@ display_popup_menu (GtkWidget *widget, GdkEvent *event, GtkWidget *clist)
       event_button = (GdkEventButton *) event;
       if (event_button->button == 3)
 	{
-          gint row, column;
+	  GtkTreeSelection *selection = 
+	    gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
+	  GtkTreePath *path;
+	  GtkTreeIter iter;
           /* Make sure the clicked key is selected */
-          gtk_clist_get_selection_info (GTK_CLIST (clist), event_button->x,
-                                        event_button->y, &row, &column);
-          if (!is_selected_row (clist, row))
-            {
-              gtk_clist_unselect_all (GTK_CLIST (clist));
-              gtk_clist_select_row (GTK_CLIST (clist), row, column);
-            }
-	  gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
-			  event_button->button, event_button->time);
+	  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (list), 
+					     event_button->x,
+					     event_button->y, 
+					     &path, NULL,
+					     NULL, NULL))
+	    {
+	      gtk_tree_model_get_iter (gtk_tree_view_get_model 
+				       (GTK_TREE_VIEW(list)), &iter, path);
+	      if (!gtk_tree_selection_iter_is_selected (selection, &iter))
+		{	      
+		  gtk_tree_selection_unselect_all (selection);
+		  gtk_tree_selection_select_path (selection, path);
+		}
+	      gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
+			      event_button->button, event_button->time);
+	    }
 	  return TRUE;
 	}
     }
@@ -1883,32 +1787,23 @@ keyring_editor_new (void)
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
 
-
+  keylist = gpa_keylist_new (window);
+  editor->keylist = GPA_KEYLIST (keylist);
   if (gpa_options_get_detailed_view (gpa_options_get_instance()))
     {
-      keylist = gpa_keylist_new ((sizeof keylist_columns_detailed)
-                                   / (sizeof keylist_columns_detailed[0]),
-                                   keylist_columns_detailed, 10, window);
+      gpa_keylist_set_detailed (editor->keylist);
     }
   else
     {
-      keylist =  gpa_keylist_new ((sizeof keylist_columns_brief)
-                                    / (sizeof keylist_columns_brief[0]),
-                                    keylist_columns_brief, 10, window);
+      gpa_keylist_set_brief (editor->keylist);
     }
 
-  editor->clist_keys = keylist;
   gtk_container_add (GTK_CONTAINER (scrolled), keylist);
 
-  gtk_signal_connect (GTK_OBJECT (keylist), "select-row",
-                      GTK_SIGNAL_FUNC (keyring_editor_selection_changed),
-                      (gpointer) editor);
-  gtk_signal_connect (GTK_OBJECT (keylist), "unselect-row",
-                      GTK_SIGNAL_FUNC (keyring_editor_selection_changed),
-                      (gpointer) editor);
-  gtk_signal_connect (GTK_OBJECT (keylist), "end-selection",
-                      GTK_SIGNAL_FUNC (keyring_editor_end_selection),
-                      (gpointer) editor);
+  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
+			      (GTK_TREE_VIEW (keylist))),
+		    "changed", G_CALLBACK (keyring_editor_selection_changed),
+		    (gpointer) editor);
 
   g_signal_connect_swapped (GTK_OBJECT (keylist), "button_press_event",
                             G_CALLBACK (display_popup_menu),
@@ -1928,6 +1823,8 @@ keyring_editor_new (void)
   keyring_update_status_bar (editor);
   update_selection_sensitive_widgets (editor);
   keyring_update_details_notebook (editor);
+
+  editor->current_key = NULL;
 
   return window;
 } /* keyring_editor_new */

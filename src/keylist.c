@@ -1,5 +1,5 @@
-/* keylist.c  -	 The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
+/* gpakeyselector.c  -  The GNU Privacy Assistant
+ *      Copyright (C) 2003 Miguel Coca.
  *
  * This file is part of GPA
  *
@@ -10,7 +10,7 @@
  *
  * GPA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -18,516 +18,359 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <gtk/gtk.h>
-#include <stdlib.h>
-#include <config.h>
-#include <gpgme.h>
-#include "icons.h"
 #include "gpa.h"
-#include "gpapastrings.h"
-#include "gtktools.h"
 #include "keylist.h"
+#include "gpapastrings.h"
+#include "keytable.h"
 
+/* Callbacks */
+static void gpa_keylist_next (gpgme_key_t key, gpointer data);
+static void gpa_keylist_end (gpointer data);
+static void gpa_keylist_clear_columns (GpaKeyList *keylist);
 
-struct _GPAKeyList;
+/* GObject */
 
-/* A column definition. Consists of a title and a function that returns
- * the values for that column given a public key */
+static GObjectClass *parent_class = NULL;
 
-typedef void (*ColumnValueFunc)(gpgme_key_t key,
-				struct _GPAKeyList * keylist,
-				gchar ** label,
-				gboolean * free_label,
-				GdkPixmap ** pixmap,
-				GdkBitmap ** mask);
+static void
+gpa_keylist_finalize (GObject *object)
+{  
+  GpaKeyList *list = GPA_KEYLIST (object);
 
-typedef struct {
-  /* column title. May be NULL to indicate no title. Empty strings won't
-   * work properly because they're passed through _(). */
-  gchar * title;
+  /* Dereference all keys in the list */
+  g_list_foreach (list->keys, (GFunc) gpgme_key_unref, NULL);
+  g_list_free (list->keys);
 
-  /* function to return the value */
-  ColumnValueFunc value_func;
-} ColumnDef;
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
 
-
-struct _GPAKeyList {
-  /* the number and definitins of the currently visible columns */
-  gint ncolumns;
-  ColumnDef ** column_defs;
-
-  /* flag whether the column_defs have changed since the last update */
-  gboolean column_defs_changed;
-
-  /* maximum number of columns */
-  gint max_columns;
+static void
+gpa_keylist_class_init (GpaKeyListClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
-  /* The CList widget */
-  GtkWidget * clist;
+  parent_class = g_type_class_peek_parent (klass);
 
-  /* the main window to use as the the gpa_callback parameter */
-  GtkWidget * window;
-
-};
-typedef struct _GPAKeyList GPAKeyList;
-
-
-/* internal API */
-
-/* Auxiliary struct required because we need to keep two state elements when
- * adding keys to the list: the list itself and the hash table of previously
- * selected keys. */
-struct keylist_fill_data 
-{
-  GPAKeyList *keylist;
-  GHashTable *selected_keys;
-};
-
-static void keylist_free (gpointer param);
-static void keylist_fill_list (GPAKeyList * keylist);
-static void keylist_fill_column_titles (GPAKeyList * keylist);
-static void keylist_fill_row (const gchar * fpr, gpgme_key_t key,
-                              struct keylist_fill_data *data);
-
-/*
- * ColumnDef functions
- */
-
-static void
-get_name_value (gpgme_key_t key, GPAKeyList * keylist,
-		gchar ** label, gboolean * free_label, GdkPixmap ** pixmap,
-		GdkBitmap ** mask)
-{
-  *label = gpa_gpgme_key_get_userid (key, 0);
-  *free_label = TRUE;
-  *pixmap = NULL;
-  *mask = NULL;
+  object_class->finalize = gpa_keylist_finalize;
 }
 
-static void
-get_trust_value (gpgme_key_t key, GPAKeyList * keylist,
-		 gchar ** label, gboolean * free_label, GdkPixmap ** pixmap,
-		 GdkBitmap ** mask)
+typedef enum
 {
-  *label = (gchar*) gpa_key_validity_string (key);
-  *free_label = FALSE;
-  *pixmap = NULL;
-  *mask = NULL;
+  GPA_KEYLIST_COLUMN_IMAGE,
+  GPA_KEYLIST_COLUMN_KEYID,
+  GPA_KEYLIST_COLUMN_EXPIRY,
+  GPA_KEYLIST_COLUMN_OWNERTRUST,
+  GPA_KEYLIST_COLUMN_VALIDITY,
+  GPA_KEYLIST_COLUMN_USERID,
+  GPA_KEYLIST_COLUMN_KEY,
+  GPA_KEYLIST_N_COLUMNS
+} GpaKeyListColumn;
+
+static void
+gpa_keylist_init (GpaKeyList *list)
+{
+  GtkListStore *store;
+  GtkTreeSelection *selection = 
+    gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
+
+  list->secret = FALSE;
+  list->keys = NULL;
+  /* Init the model */
+  store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
+			      GDK_TYPE_PIXBUF,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING,
+			      G_TYPE_POINTER);
+
+  /* The view */
+  gtk_tree_view_set_model (GTK_TREE_VIEW (list), GTK_TREE_MODEL (store));
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
+  gpa_keylist_set_brief (list);
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+  /* Load the keyring */
+  gpa_keytable_list_keys (gpa_keytable_get_public_instance(),
+			  gpa_keylist_next, gpa_keylist_end, list);
 }
+
+GType
+gpa_keylist_get_type (void)
+{
+  static GType keylist_type = 0;
   
-static void
-get_ownertrust_value (gpgme_key_t key, GPAKeyList * keylist,
-		      gchar ** label, gboolean * free_label,
-		      GdkPixmap ** pixmap, GdkBitmap ** mask)
-{
-  *label = (gchar*) gpa_key_ownertrust_string (key);
-  *free_label = FALSE;
-  *pixmap = NULL;
-  *mask = NULL;
-}
-
-static void
-get_expirydate_value (gpgme_key_t key, GPAKeyList * keylist,
-		      gchar ** label, gboolean * free_label,
-		      GdkPixmap ** pixmap, GdkBitmap ** mask)
-{
-  *label = gpa_expiry_date_string 
-          (gpgme_key_get_ulong_attr( key, GPGME_ATTR_EXPIRE, NULL, 0 ));
-  *free_label = TRUE;
-  *pixmap = NULL;
-  *mask = NULL;
-}
-
-static void
-get_identifier_value (gpgme_key_t key, GPAKeyList * keylist,
-		      gchar ** label, gboolean * free_label,
-		      GdkPixmap ** pixmap, GdkBitmap ** mask)
-{
-  *label = g_strdup (gpa_gpgme_key_get_short_keyid (key, 0));
-  *free_label = TRUE;
-  *pixmap = NULL;
-  *mask = NULL;
-}
-
-static void
-get_key_type_pixmap_value (gpgme_key_t key, GPAKeyList *keylist,
-			   gchar **label, gboolean *free_label,
-			   GdkPixmap **pixmap, GdkBitmap **mask)
-{
-  static gboolean pixmaps_created = FALSE;
-  static GdkPixmap *secret_pixmap = NULL;
-  static GdkBitmap *secret_mask = NULL;
-  static GdkPixmap *public_pixmap = NULL;
-  static GdkBitmap *public_mask = NULL;
-
-  if (!pixmaps_created)
+  if (!keylist_type)
     {
-      secret_pixmap = gpa_create_icon_pixmap (keylist->window,
-					      "blue_yellow_key",
-					      &secret_mask);
-      public_pixmap = gpa_create_icon_pixmap (keylist->window,
-					      "blue_key",
-					      &public_mask);
-      pixmaps_created = TRUE;
+      static const GTypeInfo keylist_info =
+      {
+        sizeof (GpaKeyListClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gpa_keylist_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GpaKeyList),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gpa_keylist_init,
+      };
+      
+      keylist_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
+						  "GpaKeyList",
+						  &keylist_info, 0);
     }
+  
+  return keylist_type;
+}
 
-  *label = NULL;
-  *free_label = FALSE;
-  if (gpa_keytable_secret_lookup 
-      (keytable, gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0)))
+/* API */
+
+GtkWidget *gpa_keylist_new (GtkWidget * window)
+{
+  GtkWidget *list = (GtkWidget*) g_object_new (GPA_KEYLIST_TYPE, NULL);
+
+  return list;
+}
+
+void gpa_keylist_set_brief (GpaKeyList * keylist)
+{
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+
+  gpa_keylist_clear_columns (keylist);
+
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  column = gtk_tree_view_column_new_with_attributes ("", renderer,
+						     "pixbuf",
+						     GPA_KEYLIST_COLUMN_IMAGE,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
+						     "text",
+						     GPA_KEYLIST_COLUMN_KEYID,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
+						     "text",
+						     GPA_KEYLIST_COLUMN_USERID,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);  
+}
+
+void gpa_keylist_set_detailed (GpaKeyList * keylist)
+{
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+
+  gpa_keylist_clear_columns (keylist);
+
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  column = gtk_tree_view_column_new_with_attributes ("", renderer,
+						     "pixbuf",
+						     GPA_KEYLIST_COLUMN_IMAGE,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
+						     "text",
+						     GPA_KEYLIST_COLUMN_KEYID,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Expiry Date"), 
+						     renderer,
+						     "text",
+						     GPA_KEYLIST_COLUMN_EXPIRY,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Owner Trust"), 
+						     renderer,
+						     "text",
+						     GPA_KEYLIST_COLUMN_OWNERTRUST,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Key Validity"),
+						     renderer,
+						     "text",
+						     GPA_KEYLIST_COLUMN_VALIDITY,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
+						     "text",
+						     GPA_KEYLIST_COLUMN_USERID,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);  
+}
+
+gboolean gpa_keylist_has_selection (GpaKeyList * keylist)
+{
+  GtkTreeSelection *selection = 
+    gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
+  return gtk_tree_selection_count_selected_rows (selection) > 0;
+}
+
+gboolean gpa_keylist_has_single_selection (GpaKeyList * keylist)
+{
+  GtkTreeSelection *selection = 
+    gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
+  return gtk_tree_selection_count_selected_rows (selection) == 1;
+}
+
+gboolean gpa_keylist_has_single_secret_selection (GpaKeyList * keylist)
+{
+  GtkTreeSelection *selection = 
+    gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
+  if (gtk_tree_selection_count_selected_rows (selection) == 1)
     {
-      *pixmap = secret_pixmap;
-      *mask = secret_mask;
+      GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
+      GList *list = gtk_tree_selection_get_selected_rows (selection, &model);
+      gpgme_key_t key;
+      GtkTreeIter iter;
+      GtkTreePath *path = list->data;
+      GValue value = {0,};
+
+      gtk_tree_model_get_iter (model, &iter, path);
+      gtk_tree_model_get_value (model, &iter, GPA_KEYLIST_COLUMN_KEY,
+				&value);
+      key = g_value_get_pointer (&value);
+      g_value_unset(&value);      
+
+      g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+      g_list_free (list);
+      return (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
+				       key->subkeys[0].fpr) != NULL);
     }
   else
     {
-      *pixmap = public_pixmap;
-      *mask = public_mask;
+      return FALSE;
     }
 }
 
-/* The order of items in column_defs must match the one in the
- * GPAKeyListColumn enum because the enum values are used as indices
- * into column_defs.
- */
-static ColumnDef column_defs[] = {
-  {N_("User Name"), get_name_value},
-  {N_("Key ID"), get_identifier_value},
-  {N_("Expiry Date"), get_expirydate_value},
-  {N_("Key Validity"), get_trust_value},
-  {N_("Owner Trust"), get_ownertrust_value},
-  {NULL, get_key_type_pixmap_value},
-};
-
-
-/* Create and return a new keylist widget */
-GtkWidget *
-gpa_keylist_new (gint ncolumns, GPAKeyListColumn *columns, gint max_columns,
-		 GtkWidget *window)
+GList *gpa_keylist_get_selected_keys (GpaKeyList * keylist)
 {
-  GtkWidget *clist;
-  GPAKeyList *keylist;
-  int i;
+  GtkTreeSelection *selection = 
+    gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
+  GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
+  GList *list = gtk_tree_selection_get_selected_rows (selection, &model);
+  GList *keys = NULL;
+  GList *cur;
 
-  keylist = g_malloc (sizeof (*keylist));
-
-  keylist->window = window;
-
-  keylist->column_defs_changed = TRUE;
-  keylist->max_columns = max_columns;
-  keylist->ncolumns = ncolumns;
-  keylist->column_defs = g_malloc (ncolumns * sizeof (*keylist->column_defs));
-  for (i = 0; i < ncolumns; i++)
+  for (cur = list; cur; cur = g_list_next (cur))
     {
-      keylist->column_defs[i] = &(column_defs[columns[i]]);
+      gpgme_key_t key;
+      GtkTreeIter iter;
+      GtkTreePath *path = cur->data;
+      GValue value = {0,};
+
+      gtk_tree_model_get_iter (model, &iter, path);
+      gtk_tree_model_get_value (model, &iter, GPA_KEYLIST_COLUMN_KEY,
+				&value);
+      key = g_value_get_pointer (&value);
+      g_value_unset(&value);      
+
+      keys = g_list_append (keys, key);
     }
 
-  clist = gtk_clist_new (max_columns);
-  keylist->clist = clist;
-  gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_EXTENDED);
-  gtk_clist_column_titles_show (GTK_CLIST (clist));
-
-  gtk_object_set_data_full (GTK_OBJECT (clist), "gpa_keylist",
-			    keylist, keylist_free);
-  gtk_clist_set_sort_column( GTK_CLIST (clist), ncolumns-1 );
-  gtk_clist_set_sort_type(GTK_CLIST (clist), GTK_SORT_ASCENDING);
-
-  gpa_keylist_update_list (keylist->clist);
-
-  return clist;
-}
-
-
-/* Free the GPAKeyList struct and its contents */
-static void
-keylist_free (gpointer param)
-{
-  GPAKeyList * keylist = param;
-
-  g_free (keylist->column_defs);
-  g_free (keylist);
-}
-
-/* Free the key of a g_hash_table. Usable as a GHFunc. */
-static void
-free_hash_key (gpointer key, gpointer value, gpointer data)
-{
-  g_free (key);
-}
-
-
-/* fill the list with the keys. This is also used to update the list
- * when the key list in the keytable may have changed.
- */
-static void
-keylist_fill_list (GPAKeyList *keylist)
-{
-  const gchar *fpr;
-  GHashTable *sel_hash = g_hash_table_new (g_str_hash, g_str_equal);
-  struct keylist_fill_data fill_data = { keylist, sel_hash };
-  gpgme_error_t err;
-  gpgme_key_t key;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-
-  /* Remember the current selection. Use the
-   * hash table itself as the value just because its a non-NULL pointer
-   * and we're interested in finding out whether a given fpr is used
-   * as a key in the hash later */
-  GList *selection = GTK_CLIST (keylist->clist)->selection;
-  while (selection)
-    {
-      fpr = gtk_clist_get_row_data (GTK_CLIST (keylist->clist),
-                                       GPOINTER_TO_INT (selection->data));
-      if (fpr)
-        {
-          g_hash_table_insert (sel_hash, g_strdup (fpr), sel_hash);
-          selection = g_list_next (selection);
-        }
-    }
+  g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+  g_list_free (list);
   
-  /* Clear the list and fill it again from our key table's key list */
-  gtk_clist_freeze (GTK_CLIST (keylist->clist));
-  gtk_clist_clear (GTK_CLIST (keylist->clist));
-  gpa_keytable_foreach (keytable, (GPATableFunc) keylist_fill_row, &fill_data);
-  /* Make sure the list is sorted before unfreezing it */
-  gtk_clist_sort (GTK_CLIST (keylist->clist));
-  gtk_clist_thaw (GTK_CLIST (keylist->clist));
+  return keys;
+}
 
-  /* Iterate over the secret keyring and verify that every key has a
-   * corresponding public key. */
-  /* FIXME: Do this with a gpa_keytable_secret_foreach() */
-  err = gpgme_op_keylist_start (ctx, NULL, 1);
-  if( err != GPGME_No_Error )
-    gpa_gpgme_error (err);
-  while( (err = gpgme_op_keylist_next( ctx, &key )) != GPGME_EOF )
-    {
-      if( err != GPGME_No_Error )
-        gpa_gpgme_error (err);
-      fpr = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
-      if( !gpa_keytable_lookup (keytable, fpr) )
-        {
-          gpa_window_error (_("You have a secret key without the\n"
-                              "corresponding public key in your\n"
-                              "key ring. In order to use this key\n"
-                              "you will need to import the public\n"
-                              "key, too."), keylist->window);
-        }
-      gpgme_key_release (key);
-    }
-  gpgme_release (ctx);
-  g_hash_table_foreach (sel_hash, free_hash_key, NULL);
-  g_hash_table_destroy (sel_hash);
-} /* keylist_fill_list */
-
-
-/* Fill the clist row row with the labels and/or pixmaps of the given
- * key. This is a callback called for each key in the keyring.
- */
-static void
-keylist_fill_row (const gchar *fpr, gpgme_key_t key,
-                  struct keylist_fill_data *data)
+void gpa_keylist_start_reload (GpaKeyList * keylist)
 {
-  gint row, col;
-  gboolean free_label;
-  gchar * label;
-  GdkPixmap * pixmap;
-  GdkBitmap * mask;
-  gchar **labels = g_malloc (data->keylist->max_columns * sizeof (gchar*));
-  /* Fill a dummy list of labels. */
-  /* FIXME: There must be a cleaner way to do this */
-  for (col = 0; col < data->keylist->max_columns; col++)
-    labels[col] = "";
-  /* Get a new empty row */
-  row = gtk_clist_append (GTK_CLIST (data->keylist->clist), labels);
-  /* Set the right value for each column */
-  for (col = 0; col < data->keylist->ncolumns; col++)
+  g_list_foreach (keylist->keys, (GFunc) gpgme_key_unref, NULL);
+  g_list_free (keylist->keys);
+  keylist->keys = NULL;
+  gpa_keytable_force_reload (gpa_keytable_get_public_instance (),
+			     gpa_keylist_next, gpa_keylist_end, keylist);
+}
+
+/* Internal functions */
+
+static GdkPixbuf*
+get_key_pixbuf (gpgme_key_t key)
+{
+  static gboolean pixmaps_created = FALSE;
+  static GdkPixbuf *secret_pixbuf = NULL;
+  static GdkPixbuf *public_pixbuf = NULL;
+
+  if (!pixmaps_created)
     {
-      data->keylist->column_defs[col]->value_func(key, data->keylist, 
-                                                  &label, &free_label, 
-                                                  &pixmap, &mask);
-      if (pixmap)
-        {
-          gtk_clist_set_pixmap (GTK_CLIST (data->keylist->clist), row, col,
-                                pixmap, mask);
-        }
-      else if (label)
-        {
-          gtk_clist_set_text (GTK_CLIST (data->keylist->clist), 
-                              row, col, label);
-        }
-      if (free_label)
-        g_free (label);
+      secret_pixbuf = gpa_create_icon_pixbuf ("blue_yellow_key");
+      public_pixbuf = gpa_create_icon_pixbuf ("blue_key");
+      pixmaps_created = TRUE;
     }
+
+  if (gpa_keytable_lookup_key 
+      (gpa_keytable_get_secret_instance(), 
+       key->subkeys[0].fpr) != NULL)
+    {
+      return secret_pixbuf;
+    }
+  else
+    {
+      return public_pixbuf;
+    }
+}
+
+
+static void gpa_keylist_next (gpgme_key_t key, gpointer data)
+{
+  GpaKeyList *list = data;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  const gchar *keyid, *ownertrust, *validity;
+  gchar *userid, *expiry;
   
-  /* The labels are no longer needed */
-  g_free (labels);
-  /* Each row remembers the associated fingerprint */
-  gtk_clist_set_row_data_full (GTK_CLIST (data->keylist->clist), row,
-                               g_strdup (fpr), free);
-
-  if (g_hash_table_lookup (data->selected_keys, fpr))
-    {
-      /* The key had been selected previously, so select it again */
-      gtk_clist_select_row (GTK_CLIST (data->keylist->clist), row, 0);
-    }
+  list->keys = g_list_append (list->keys, key);
+  store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (list)));
+  /* Get the column values */
+  keyid = gpa_gpgme_key_get_short_keyid (key, 0);
+  expiry = gpa_expiry_date_string (gpgme_key_get_ulong_attr 
+				   (key, GPGME_ATTR_EXPIRE, NULL, 0 ));
+  ownertrust = gpa_key_ownertrust_string (key);
+  validity = gpa_key_validity_string (key);
+  userid = gpa_gpgme_key_get_userid (key, 0);
+  /* Append the key to the list */
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      GPA_KEYLIST_COLUMN_IMAGE, get_key_pixbuf (key),
+		      GPA_KEYLIST_COLUMN_KEYID, keyid, 
+		      GPA_KEYLIST_COLUMN_EXPIRY, expiry,
+		      GPA_KEYLIST_COLUMN_OWNERTRUST, ownertrust,
+		      GPA_KEYLIST_COLUMN_VALIDITY, validity,
+		      GPA_KEYLIST_COLUMN_USERID, userid,
+		      GPA_KEYLIST_COLUMN_KEY, key, -1);
+  /* Clean up */
+  g_free (userid);
+  g_free (expiry);
 }
 
-
-/* Set the titles of the visible columns and make the rest invisible */
-static void
-keylist_fill_column_titles (GPAKeyList *keylist)
+static void gpa_keylist_end (gpointer data)
 {
-  gint i;
-
-  for (i = 0; i < keylist->ncolumns; i++)
-    {
-      gchar *title = keylist->column_defs[i]->title;
-      if (title)
-	title = _(title);
-      else
-	title = "";
-      gtk_clist_set_column_title (GTK_CLIST (keylist->clist), i, title);
-      gtk_clist_set_column_visibility (GTK_CLIST (keylist->clist), i, TRUE);
-      /*      gtk_clist_column_title_passive (GTK_CLIST (keylist->clist), i);*/
-    }
-  for (i = keylist->ncolumns; i < keylist->max_columns; i++)
-    {
-      gtk_clist_set_column_title (GTK_CLIST (keylist->clist), i, "");
-      gtk_clist_set_column_visibility (GTK_CLIST (keylist->clist), i, FALSE);
-    }
-} /* keylist_fill_column_titles */
-
-
-/* Change the column definitions. */
-void
-gpa_keylist_set_column_defs (GtkWidget * clist, gint ncolumns,
-			     GPAKeyListColumn *columns)
-{
-  GPAKeyList * keylist = gtk_object_get_data (GTK_OBJECT (clist),
-					      "gpa_keylist");
-  gint i;
-
-  g_free (keylist->column_defs);
-
-  keylist->ncolumns = ncolumns;
-  keylist->column_defs = g_malloc (ncolumns * sizeof (*keylist->column_defs));
-  for (i = 0; i < ncolumns; i++)
-    {
-      keylist->column_defs[i] = &(column_defs[columns[i]]);
-    }
-  gtk_clist_set_sort_column( GTK_CLIST (clist), ncolumns-1 );
-  gtk_clist_set_sort_type(GTK_CLIST (clist), GTK_SORT_ASCENDING);
-
-  keylist->column_defs_changed = TRUE;
 }
 
-
-/* Update the list to reflect the current state of the keytable and apply
- * changes made to the column definitions.
- */
-void
-gpa_keylist_update_list (GtkWidget * clist)
+static void gpa_keylist_clear_columns (GpaKeyList *keylist)
 {
-  gint i;
-  gint width;
-  gboolean update_widths;
-  GPAKeyList * keylist = gtk_object_get_data (GTK_OBJECT (clist),
-					      "gpa_keylist");
+  GList *columns, *i;
 
-  update_widths = keylist->column_defs_changed || GTK_CLIST (clist)->rows == 0;
-
-  if (keylist->column_defs_changed)
+  columns = gtk_tree_view_get_columns (GTK_TREE_VIEW (keylist));
+  for (i = columns; i; i = g_list_next (i))
     {
-      keylist_fill_column_titles (keylist);
+      gtk_tree_view_remove_column (GTK_TREE_VIEW (keylist),
+                                   (GtkTreeViewColumn*) i->data);
     }
-
-  keylist_fill_list (keylist);
-
-  /* set the width of all columns to the optimal width, but only when
-   * the column defintions changed or the list was empty before so as
-   * not to annoy the user by changing user defined widths every time
-   * the list is updated */
-  if (update_widths)
-    {
-      /* First, make sure that the size changes in the title buttons are
-       * correctly accounted for */
-      gtk_container_check_resize (GTK_CONTAINER (keylist->clist));
-
-      for (i = 0; i < keylist->ncolumns; i++)
-	{
-	  width = gtk_clist_optimal_column_width (GTK_CLIST (keylist->clist),
-						  i);
-	  gtk_clist_set_column_width (GTK_CLIST (keylist->clist), i, width);
-	}
-    }
-
-  keylist->column_defs_changed = FALSE;
-}
-
-
-/* Return TRUE if the list widget has at least one selected item.
- */
-gboolean
-gpa_keylist_has_selection (GtkWidget * clist)
-{
-  return (GTK_CLIST (clist)->selection != NULL);
-}
-
-/* Return TRUE if the list widget has exactly one selected item. */
-gboolean
-gpa_keylist_has_single_selection (GtkWidget * clist)
-{
-  return (g_list_length (GTK_CLIST (clist)->selection) == 1);
-}
-
-/* Return the id of the currently selected key. NULL if no key is
- * selected */
-gchar *
-gpa_keylist_current_key_id (GtkWidget * clist)
-{
-  int row;
-  gchar * key_id = NULL;
-
-  if (GTK_CLIST (clist)->selection)
-    {
-      row = GPOINTER_TO_INT (GTK_CLIST (clist)->selection->data);
-      key_id = gtk_clist_get_row_data (GTK_CLIST (clist), row);
-    }
-
-  return key_id;
-}
-
-
-/* Return the currently selected key. NULL if no key is selected */
-gpgme_key_t
-gpa_keylist_current_key (GtkWidget * clist)
-{
-  int row;
-  gchar * fpr;
-  gpgme_key_t key = NULL;
-
-  if (GTK_CLIST (clist)->selection)
-    {
-      row = GPOINTER_TO_INT (GTK_CLIST (clist)->selection->data);
-      fpr = gtk_clist_get_row_data (GTK_CLIST (clist), row);
-
-      key = gpa_keytable_lookup (keytable, fpr);
-    }
-
-  return key;
-}
-
-
-/* Return the current selection of the CList */
-GList *
-gpa_keylist_selection (GtkWidget * keylist)
-{
-  return GTK_CLIST (keylist)->selection;
-}
-
-/* return the number of selected keys */
-gint
-gpa_keylist_selection_length (GtkWidget * keylist)
-{
-  return g_list_length (GTK_CLIST (keylist)->selection);
 }

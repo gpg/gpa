@@ -26,6 +26,6 @@
 GtkWidget * gpa_siglist_new (void);
 /* Display the signatures on user ID idx. With idx == -1, display all
  * signatures. */
-void gpa_siglist_set_signatures (GtkWidget * list, gchar *fpr, int idx);
+void gpa_siglist_set_signatures (GtkWidget * list, gpgme_key_t key, int idx);
 
 #endif /* SIGLIST_H */

@@ -18,226 +18,300 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <glib.h>
+#include <gtk/gtk.h>
 #include "gpa.h"
+#include "gpgmetools.h"
 #include "keytable.h"
 #include "gtktools.h"
 
-struct _GPAKeyTable
+/* Internal */
+static void done_cb (GpaContext *context, gpgme_error_t err,
+		     GpaKeyTable *keytable);
+static void next_key_cb (GpaContext *context, gpgme_key_t key,
+			 GpaKeyTable *keytable);
+
+/* GObject type functions */
+
+static void gpa_keytable_init (GpaKeyTable *keytable);
+static void gpa_keytable_class_init (GpaKeyTableClass *klass);
+static void gpa_keytable_finalize (GObject *object);
+
+static GObjectClass *parent_class = NULL;
+
+GType
+gpa_keytable_get_type (void)
 {
-  GHashTable *public_hash;
-  GHashTable *secret_hash;
-};
-
-/* Auxiliary functions */
-
-static void do_keylisting (gpgme_ctx_t ctx, GHashTable *hash, gboolean secret)
-{
-  gpgme_error_t err;
-  gpgme_key_t key;
-  gchar *fpr;
-  GtkWidget *window, *table, *label, *progress;
-  gchar *text;
-  gint i = 0;
-
-  /* Create the progress dialog */
-  window = gtk_dialog_new ();
-  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-  gtk_window_set_title (GTK_WINDOW (window), _("GPA: Loading keyring"));
-  table = gtk_table_new (2, 2, FALSE);
-  label = gtk_label_new (secret ? 
-			 _("Loading secret keys") : _("Loading public keys"));
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
-  label = gtk_label_new ("0");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
-  progress = gtk_progress_bar_new ();
-  gtk_table_attach_defaults (GTK_TABLE (table), progress, 0, 2, 1, 2);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), table);
-  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  gtk_widget_show_all (window);
-  /* Load the keys */
-  while( (err = gpgme_op_keylist_next( ctx, &key )) != GPGME_EOF )
-    {
-      const char *s;
-
-      if( err != GPGME_No_Error )
-        gpa_gpgme_error (err);
-      s = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0 );
-      g_assert (s);
-      fpr = g_strdup (s);
-      g_hash_table_insert (hash, fpr, key);
-      if ( !(++i % 10) )
-        {
-          text = g_strdup_printf ("%i", i);
-          /* Change the progress bar */
-          gtk_label_set_text (GTK_LABEL (label), text);
-          g_free (text);
-          gtk_progress_bar_pulse (GTK_PROGRESS_BAR (progress));
-          /* Redraw */
-          while (gtk_events_pending ())
-            {
-              gtk_main_iteration ();
-            }
-        }
-    }
-  gtk_widget_destroy (window);
-}
-
-static void keytable_fill (GHashTable *hash, gboolean secret)
-{
-  gpgme_error_t err;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-
-  err = gpgme_op_keylist_start( ctx, NULL, secret );
-  if( err != GPGME_No_Error )
-    gpa_gpgme_error (err);
-  do_keylisting (ctx, hash, secret);
-  gpgme_release (ctx);
-}
-
-static void load_keys (GHashTable *hash, const gchar **keys, gboolean secret)
-{
-  gpgme_error_t err;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-
-  err = gpgme_op_keylist_ext_start (ctx, keys, secret, 0);
-  if( err != GPGME_No_Error )
-        gpa_gpgme_error (err);
-  do_keylisting (ctx, hash, secret);
-  gpgme_release (ctx);
-}
-
-static gboolean true (const gchar *fpr, gpgme_key_t key, gpointer data)
-{
-  return TRUE;
-}
-
-static void keytable_empty (GPAKeyTable * table)
-{
-  g_hash_table_foreach_remove (table->public_hash, (GHRFunc) true, NULL);
-  g_hash_table_foreach_remove (table->secret_hash, (GHRFunc) true, NULL);
-}
-
-static void load_key (GHashTable *hash, const gchar *fpr, gboolean secret)
-{
-  gpgme_error_t err;
-  gpgme_key_t key;
-  gchar *key_fpr;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-
-  /* List the key with a specific fingerprint */
-  err = gpgme_op_keylist_start( ctx, fpr, secret );
-  if( err != GPGME_No_Error )
-    {
-      gpa_gpgme_error (err);
-    }
-  while( (err = gpgme_op_keylist_next( ctx, &key )) != GPGME_EOF )
-    {
-      if( err != GPGME_No_Error )
-        gpa_gpgme_error (err);
-      key_fpr = g_strdup (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, 
-                                                     NULL, 0 ));
-      if (g_str_equal (fpr, key_fpr))
-        {
-          g_hash_table_insert (hash, key_fpr, key);
-        }
-      else
-        {
-          g_free (key_fpr);
-        }
-    }
-  gpgme_release (ctx);
-}
-
-/* Public functions for the table */
-
-GPAKeyTable *gpa_keytable_new (void)
-{
-  GPAKeyTable *table;
-  table = g_malloc (sizeof(GPAKeyTable));
-  table->public_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                              (GDestroyNotify) g_free,
-                                              (GDestroyNotify) 
-                                              gpgme_key_release);
-  table->secret_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                              (GDestroyNotify) g_free,
-                                              (GDestroyNotify)
-                                              gpgme_key_release);
-  keytable_fill (table->public_hash, FALSE);
-  keytable_fill (table->secret_hash, TRUE);
-  return table;
-}
-
-void gpa_keytable_reload (GPAKeyTable * table)
-{
-  keytable_empty (table);
-  keytable_fill (table->public_hash, FALSE);
-  keytable_fill (table->secret_hash, TRUE);
-}
-
-void gpa_keytable_load_key (GPAKeyTable * table, const gchar * fpr)
-{
-  /* Delete the old key */
-  gpa_keytable_remove (table, fpr);
-  /* Load the key */
-  load_key (table->public_hash, fpr, FALSE);
-  load_key (table->secret_hash, fpr, TRUE);
-}
-
-void gpa_keytable_load_keys (GPAKeyTable * table, const gchar **keys)
-{
-  gint i;
+  static GType keytable_type = 0;
   
-  /* Delete the old keys */
-  for (i = 0; keys[i]; i++)
+  if (!keytable_type)
     {
-      gpa_keytable_remove (table, keys[i]);
+      static const GTypeInfo keytable_info =
+      {
+        sizeof (GpaKeyTableClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gpa_keytable_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GpaKeyTable),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gpa_keytable_init,
+      };
+      
+      keytable_type = g_type_register_static (G_TYPE_OBJECT,
+					      "GpaTable",
+					      &keytable_info, 0);
     }
-  /* Load the keys */
-  load_keys (table->public_hash, keys, FALSE);
-  load_keys (table->secret_hash, keys, TRUE);
+  
+  return keytable_type;
 }
 
-gpgme_key_t gpa_keytable_lookup (GPAKeyTable * table, const gchar * fpr)
+static void
+gpa_keytable_class_init (GpaKeyTableClass *klass)
 {
-  return (gpgme_key_t) g_hash_table_lookup (table->public_hash, fpr);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gpa_keytable_finalize;
 }
 
-gpgme_key_t gpa_keytable_secret_lookup (GPAKeyTable * table, const gchar * fpr)
+static void
+gpa_keytable_init (GpaKeyTable *keytable)
 {
-  return (gpgme_key_t) g_hash_table_lookup (table->secret_hash, fpr);
+  keytable->next = NULL;
+  keytable->end = NULL;
+  keytable->data = NULL;
+  keytable->context = gpa_context_new ();
+  keytable->keys = NULL;
+  keytable->secret = FALSE;
+  keytable->tmp_list = NULL;
+  g_signal_connect (G_OBJECT (keytable->context), "next_key",
+		    G_CALLBACK (next_key_cb), keytable);
+  g_signal_connect (G_OBJECT (keytable->context), "done",
+		    G_CALLBACK (done_cb), keytable);
 }
 
-void gpa_keytable_foreach (GPAKeyTable * table, GPATableFunc func,
-			   gpointer data)
+static void
+gpa_keytable_finalize (GObject *object)
 {
-  g_hash_table_foreach (table->public_hash, (GHFunc) func, data );
+  GpaKeyTable *keytable = GPA_KEYTABLE (object);
+
+  gpa_context_destroy (keytable->context);
+  g_list_foreach (keytable->keys, (GFunc) gpgme_key_unref, NULL);
+  g_list_free (keytable->keys);
 }
 
-void gpa_keytable_secret_foreach (GPAKeyTable * table, GPATableFunc func,
-                                  gpointer data)
+/* Internal functions */
+
+static void reload_cache (GpaKeyTable *keytable)
 {
-  g_hash_table_foreach (table->secret_hash, (GHFunc) func, data );
+  gpgme_error_t err;
+  
+  err = gpgme_op_keylist_start (keytable->context->ctx, NULL,
+				keytable->secret);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_warning (err);
+      if (keytable->end)
+	{
+	  keytable->end (keytable->data);
+	}
+      return;
+    }
+  keytable->tmp_list = NULL;
 }
 
-gint gpa_keytable_size (GPAKeyTable * table)
+static void done_cb (GpaContext *context, gpgme_error_t err,
+		     GpaKeyTable *keytable)
 {
-  return g_hash_table_size (table->public_hash);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_warning (err);
+      return;
+    }
+  /* Reverse the list to have the keys come up in the same order they
+   * were listed */
+  keytable->tmp_list = g_list_reverse (keytable->tmp_list);
+  /* Replace the list
+   */
+  if (keytable->keys)
+    {
+      g_list_foreach (keytable->keys, (GFunc) gpgme_key_unref, 
+		      NULL);
+      g_list_free (keytable->keys); 
+    }
+  keytable->keys = keytable->tmp_list;
+  
+  if (keytable->end)
+    {
+      keytable->end (keytable->data);
+    }
 }
 
-gint gpa_keytable_secret_size (GPAKeyTable * table)
+static void next_key_cb (GpaContext *context, gpgme_key_t key,
+			 GpaKeyTable *keytable)
 {
-  return g_hash_table_size (table->secret_hash);
+  keytable->tmp_list = g_list_prepend (keytable->tmp_list, key);
+  gpgme_key_ref (key);
+  if (keytable->next)
+    {
+      keytable->next (key, keytable->data);
+    }
 }
 
-void gpa_keytable_remove (GPAKeyTable * table, const gchar * fpr)
+static void list_cache (GpaKeyTable *keytable)
 {
-  g_hash_table_remove (table->secret_hash, fpr);
-  g_hash_table_remove (table->public_hash, fpr);
+  GList *list = keytable->keys;
+  
+  for (; list; list = g_list_next (list))
+    {
+      gpgme_key_t key = (gpgme_key_t) list->data;
+      gpgme_key_ref (key);
+      if (keytable->next)
+	{
+	  keytable->next (key, keytable->data);
+	}
+    }
+
+  if (keytable->end)
+    {
+      keytable->end (keytable->data);
+    }
 }
 
-void gpa_keytable_destroy (GPAKeyTable * table)
+/* API */
+
+static GpaKeyTable *public_instance = NULL;
+static GpaKeyTable *secret_instance = NULL;
+
+/* Create a new keytable. Internal, called from get_instance.
+ */
+static GpaKeyTable *
+gpa_keytable_new (gboolean secret)
 {
-  g_hash_table_destroy (table->public_hash);
-  g_hash_table_destroy (table->secret_hash);
-  g_free (table);
+  GpaKeyTable *keytable;
+  
+  keytable = g_object_new (GPA_KEYTABLE_TYPE, NULL);
+  keytable->secret = secret;
+
+  return keytable;
+}
+
+/* Retrieve the public keytable instance.
+ */
+GpaKeyTable *gpa_keytable_get_public_instance ()
+{
+  if (!public_instance)
+    {
+      public_instance = gpa_keytable_new (FALSE);
+    }
+  return public_instance;
+}
+
+/* Retrieve the secret keytable instance.
+ */
+GpaKeyTable *gpa_keytable_get_secret_instance ()
+{
+  if (!secret_instance)
+    {
+      secret_instance = gpa_keytable_new (TRUE);
+    }
+  return secret_instance;
+}
+
+/* List all keys, return cached copies if they are available.
+ *
+ * The "next" function is called for every key, providing a new
+ * reference for that key that should be freed.
+ *
+ * The "end" function is called when the listing is complete.
+ *
+ * This function MAY not do anything until the application goes back into
+ * the GLib main loop.
+ */
+void gpa_keytable_list_keys (GpaKeyTable *keytable,
+			     GpaKeyTableNextFunc next,
+			     GpaKeyTableEndFunc end,
+			     gpointer data)
+{
+  g_return_if_fail (keytable != NULL);
+  g_return_if_fail (GPA_IS_KEYTABLE (keytable));
+
+  /* Set up callbacks */
+  keytable->next = next;
+  keytable->end = end;
+  keytable->data = data;
+  /* List keys */
+  if (keytable->keys)
+    {
+      /* There is a cached list */
+      list_cache (keytable);
+    }
+  else 
+    {
+      reload_cache (keytable);
+    }
+}
+
+/* Same as list_keys, but forces the internal cache to be rebuilt.
+ */
+void gpa_keytable_force_reload (GpaKeyTable *keytable,
+				GpaKeyTableNextFunc next,
+				GpaKeyTableEndFunc end,
+				gpointer data)
+{
+  g_return_if_fail (keytable != NULL);
+  g_return_if_fail (GPA_IS_KEYTABLE (keytable));
+
+  /* Set up callbacks */
+  keytable->next = next;
+  keytable->end = end;
+  keytable->data = data;
+  /* List keys */
+  reload_cache (keytable);
+}
+
+/* Return the key with a given fingerprint from the keytable, NULL if
+ * there is none. No reference is provided.
+ */
+const gpgme_key_t gpa_keytable_lookup_key (GpaKeyTable *keytable,
+					   const char *fpr)
+{
+  if (keytable->keys)
+    {
+      GList *cur;
+      for (cur = keytable->keys; cur; cur = g_list_next (cur))
+	{
+	  gpgme_key_t key = (gpgme_key_t) cur->data;
+	  if (g_str_equal (fpr, key->subkeys[0].fpr))
+	    {
+	      return key;
+	    }
+	}
+      return NULL;
+    }
+  else
+    {
+      /* There is no list yet. We really, really, need to one, so we list it.
+       * FIXME: This is a hack and a basic problem. Hopefully it won't cause
+       * any real problems.
+       */
+      keytable->end = gtk_main_quit;
+      reload_cache (keytable);
+      gtk_main ();
+      keytable->end = NULL;
+      return gpa_keytable_lookup_key (keytable, fpr);
+    }
+}
+
+/* Free the keytable.
+ */
+void gpa_keytable_destroy (GpaKeyTable *keytable)
+{
+  g_return_if_fail (keytable != NULL);
+  g_return_if_fail (GPA_IS_KEYTABLE (keytable));
+
+  g_object_run_dispose (G_OBJECT (keytable));
 }

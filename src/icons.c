@@ -125,3 +125,26 @@ gpa_create_icon_pixmap ( GtkWidget *window, const char *name, GdkBitmap **mask )
 {
   return pixmap_for_icon ( window, name, mask );
 }
+
+GdkPixbuf *
+gpa_create_icon_pixbuf (const char *name)
+{
+  char **xpm = NULL;
+  int i; 
+  
+  for ( i=0; xpms[i].name ; i++ )
+    if ( !strcmp ( xpms[i].name, name ) )
+      {
+	xpm = xpms[i].xpm;
+	break;
+      }
+  
+  if ( !xpm )
+    {
+      fprintf (stderr, "Icon `%s' not found\n", name );
+	fflush (stderr);
+        return NULL;
+    }
+
+  return gdk_pixbuf_new_from_xpm_data ((const char**) xpm);
+}

@@ -333,9 +333,9 @@ help_license (gpointer param)
   GtkWidget *labelGPL;
   GtkWidget *hboxGPL;
   GtkWidget *textGPL;
-  GtkWidget *vscrollbarGPL;
   GtkWidget *hButtonBoxLicense;
   GtkWidget *buttonClose;
+  GtkWidget *licenseScrolled;
 
   keeper = gpa_windowKeeper_new ();
   windowLicense = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -355,16 +355,21 @@ help_license (gpointer param)
   labelJfdGPL = gpa_widget_hjustified_new (labelGPL, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxGPL), labelJfdGPL, FALSE, FALSE, 0);
   hboxGPL = gtk_hbox_new (FALSE, 0);
-  textGPL = gtk_text_new (NULL, NULL);
-  gtk_text_set_editable (GTK_TEXT (textGPL), FALSE);
-  gtk_text_insert (GTK_TEXT (textGPL), NULL, &textGPL->style->black, NULL,
-		   gpa_license_text, -1);
+  textGPL = gtk_text_view_new ();
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (textGPL), FALSE);
+  gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (textGPL)),
+			    gpa_license_text, -1);
   gtk_widget_set_usize (textGPL, 500, 300);
+  licenseScrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (licenseScrolled),
+				  GTK_POLICY_AUTOMATIC,
+				  GTK_POLICY_AUTOMATIC);
+  gtk_container_add (GTK_CONTAINER (licenseScrolled), textGPL);
+  gtk_adjustment_set_value (gtk_scrolled_window_get_vadjustment
+			    (GTK_SCROLLED_WINDOW (licenseScrolled)), 0.0);
   gpa_connect_by_accelerator (GTK_LABEL (labelGPL), textGPL, accelGroup,
 			      _("_GNU general public license"));
-  gtk_box_pack_start (GTK_BOX (hboxGPL), textGPL, TRUE, TRUE, 0);
-  vscrollbarGPL = gtk_vscrollbar_new (GTK_TEXT (textGPL)->vadj);
-  gtk_box_pack_start (GTK_BOX (hboxGPL), vscrollbarGPL, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hboxGPL), licenseScrolled, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxGPL), hboxGPL, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxLicense), vboxGPL, TRUE, TRUE, 0);
   hButtonBoxLicense = gtk_hbutton_box_new ();

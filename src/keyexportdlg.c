@@ -272,7 +272,7 @@ do_backup (const gchar *fpr, gchar *filename, GtkWidget *parent)
  * user clicked OK, otherwise return FALSE.
  */
 gboolean
-key_backup_dialog_run (GtkWidget *parent, const gchar *fpr)
+key_backup_dialog_run (GtkWidget *parent, gpgme_key_t key)
 {
   GtkAccelGroup *accel_group;
 
@@ -284,9 +284,9 @@ key_backup_dialog_run (GtkWidget *parent, const gchar *fpr)
   GtkWidget *entry;
   GtkWidget *button;
   GPAKeyExportDialog dialog;
-  gpgme_key_t key;
 
   gchar *id_text, *default_file;
+  const char *fpr = key->subkeys[0].fpr;
 
   dialog.filename = NULL;
   dialog.server = NULL;
@@ -319,7 +319,6 @@ key_backup_dialog_run (GtkWidget *parent, const gchar *fpr)
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
 
   /* Show the ID */
-  key = gpa_keytable_lookup (keytable, fpr);
   id_text = g_strdup_printf (_("Generating backup of key: %s"),
 			     gpa_gpgme_key_get_short_keyid (key, 0));
   id_label = gtk_label_new (id_text);
