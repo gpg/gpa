@@ -306,7 +306,7 @@ main (int argc, char **argv)
   char *configname = NULL, *keyservers_configname = NULL;
   GpaCommandLineArgs args = {FALSE, FALSE, NULL};
   int i;
-  GError *err;
+  GError *err = NULL;
 
 #ifdef __MINGW32__
   hide_gpa_console_window();

@@ -1,5 +1,9 @@
 2003-11-25  Miguel Coca  <mcoca@gnu.org>
 
+	* gpa.c (main): Fix previous change.
+
+2003-11-25  Miguel Coca  <mcoca@gnu.org>
+
 	* gpa.c (main): Add a default icon for the application windows.
 
 2003-11-24  Ling Li  <ling@caltech.edu>
