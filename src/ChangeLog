@@ -1,3 +1,7 @@
+2003-02-10  Miguel Coca  <mcoca@gnu.org>
+
+	* options.c (read_next_word): Fix unsafe use of char with getc.
+
 2003-02-07  Miguel Coca  <mcoca@gnu.org>
 
 	* fileman.c (get_selected_files): List files in the order they appear

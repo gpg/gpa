@@ -347,7 +347,7 @@ static gboolean
 read_next_word (FILE *file, char *buffer, int size)
 {
   int i = 0;
-  char c;
+  int c;
 
   buffer[0] = '\0';
   /* Skip leading whitespace */
