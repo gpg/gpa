@@ -1,3 +1,7 @@
+2001-06-03  gettextize  <bug-gnu-utils@gnu.org>
+
+	* Makefile.in.in: Upgrade to gettext-0.10.38.
+
 2001-05-28  Werner Koch  <wk@gnupg.org>
 
 	* fr.po: Fixed the header entry.

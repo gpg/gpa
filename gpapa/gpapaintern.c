@@ -216,6 +216,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait,
   _gpgme_gpg_new (&gpg);
 
   _gpgme_gpg_add_arg (gpg, "--no-options");
+  _gpgme_gpg_add_arg (gpg, "--always-trust");
 
   _gpgme_gpg_set_status_handler (gpg, status_handler, &gpapa_data);
   _gpgme_gpg_set_colon_line_handler (gpg, line_handler, &gpapa_data);

@@ -1,11 +1,23 @@
 2001-05-30  Werner Koch  <wk@gnupg.org>
-
+ 
 	* gpapapublickey.c, gpapapublickey.h
 	(gpapa_public_key_send_to_server): Made ServerName arg a const.
+	
+Sat 19 May 2001 22:36:08 Peter Gerwinski <peter@gerwinski.de>
+
+        * gpapafile.c (linecallback_get_status): Do not report errors here. We
+          do not actually want to decrypt something, only check whether it is
+          encrypted. Also record ":encrypted data packet:" (just for fun).
+          (gpapa_file_get_status): Be more flexible about what `gpg' is
+          expected to report for encrypted/signed/whatever files.
+
+        * gpapafile.h (GPAPA_FILE_STATUS_ENCRYPTED): new constant.
+
+        * gpapaintern.c (gpapa_call_gnupg): add "--always-trust" option.
 
 2001-03-28  Werner Koch  <wk@gnupg.org>
 
-	* gpapa.c (gpapa_extract_fingerprint): No warning when tehre are
+	* gpapa.c (gpapa_extract_fingerprint): No warning when there are
 	more fields in gpg's output.  Just check for the minimum required
 	number of fields. 
 	Note: the parsing code does not seem to be correct.

@@ -62,8 +62,9 @@ static void
 linecallback_get_status (char *line, gpointer data, GpgStatusCode status)
 {
   FileData *d = data;
-  if (status != STATUS_NODATA)  /* This hack means: neither encrypted nor signed. */
-    gpapa_report_error_status (status, d->callback, d->calldata);
+  /* No error reporting!
+   * We are checking if something works; errors are natural.
+   */
   if (line && data)
     {
       if (status == STATUS_NODATA)
@@ -72,6 +73,8 @@ linecallback_get_status (char *line, gpointer data, GpgStatusCode status)
         {
           if (gpapa_line_begins_with (line, ":literal data packet:"))
             d->file->status_flags |= GPAPA_FILE_STATUS_LITERAL;
+          if (gpapa_line_begins_with (line, ":encrypted data packet:"))
+            d->file->status_flags |= GPAPA_FILE_STATUS_ENCRYPTED;
           if (gpapa_line_begins_with (line, ":pubkey enc packet:"))
             d->file->status_flags |= GPAPA_FILE_STATUS_PUBKEY;
           if (gpapa_line_begins_with (line, ":symkey enc packet:"))
@@ -123,26 +126,24 @@ gpapa_file_get_status (GpapaFile *file, GpapaCallbackFunc callback,
       file->status_flags = 0;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
                         linecallback_get_status, &data, callback, calldata);
-      switch (file->status_flags)
+      if (file->status_flags == GPAPA_FILE_STATUS_NODATA)
+        return (GPAPA_FILE_CLEAR);
+      else if (file->status_flags & GPAPA_FILE_STATUS_PUBKEY)
+        return (GPAPA_FILE_ENCRYPTED);
+      else if (file->status_flags & GPAPA_FILE_STATUS_SYMKEY)
+        return (GPAPA_FILE_PROTECTED);
+      else if ((file->status_flags & GPAPA_FILE_STATUS_SIGNATURE)
+               && (file->status_flags & GPAPA_FILE_STATUS_LITERAL))
         {
-          case GPAPA_FILE_STATUS_NODATA:
-            return (GPAPA_FILE_CLEAR);
-          case GPAPA_FILE_STATUS_PUBKEY:
-            return (GPAPA_FILE_ENCRYPTED);
-          case GPAPA_FILE_STATUS_SYMKEY:
-            return (GPAPA_FILE_PROTECTED);
-          case GPAPA_FILE_STATUS_SIGNATURE
-               | GPAPA_FILE_STATUS_COMPRESSED
-               | GPAPA_FILE_STATUS_LITERAL:
+          if (file->status_flags & GPAPA_FILE_STATUS_COMPRESSED)
             return (GPAPA_FILE_SIGNED);
-          case GPAPA_FILE_STATUS_SIGNATURE
-               | GPAPA_FILE_STATUS_LITERAL:
+          else
             return (GPAPA_FILE_CLEARSIGNED);
-          case GPAPA_FILE_STATUS_SIGNATURE:
-            return (GPAPA_FILE_DETACHED_SIGNATURE);
-          default:
-            return (GPAPA_FILE_UNKNOWN);
         }
+      else if (file->status_flags & GPAPA_FILE_STATUS_SIGNATURE)
+        return (GPAPA_FILE_DETACHED_SIGNATURE);
+      else
+        return (GPAPA_FILE_UNKNOWN);
     }
 }
 
