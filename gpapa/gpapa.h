@@ -98,6 +98,21 @@ extern void gpapa_export_ownertrust (
   GpapaCallbackFunc callback, gpointer calldata
 );
 
+extern void gpapa_import_ownertrust (
+  gchar *sourceFileID,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_update_trust_database (
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_import_keys (
+  gchar *sourceFileID,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+;
+
 /* Miscellaneous.
  */
 

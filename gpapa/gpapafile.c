@@ -242,7 +242,9 @@ void gpapa_file_sign (
   GpapaCallbackFunc callback, gpointer calldata
 ) {
   if ( file == NULL )
-    callback ( GPAPA_ACTION_ERROR, "trying to sign NULL file", calldata );
+    callback ( GPAPA_ACTION_ERROR, "missing file name", calldata );
+  else if ( keyID == NULL )
+    callback ( GPAPA_ACTION_ERROR, "missing private key ID for signing", calldata );
   else
     {
       gchar *full_keyID;
@@ -264,21 +266,16 @@ void gpapa_file_sign (
 	    return;
 	}
       gpgargv [ i++ ] = "-u";
-      if ( keyID == NULL )
-	{
-	  callback ( GPAPA_ACTION_ERROR, "missing key ID for signing", calldata );
-	  return;
-	}
       full_keyID = xstrcat2 ( "0x", keyID );
       gpgargv [ i++ ] = full_keyID;
       if ( Armor == GPAPA_ARMOR )
 	gpgargv [ i++ ] = "--armor";
       if ( targetFileID != NULL )
 	{
-	  gpgargv [ i++ ] = "-o";
-	  gpgargv [ i++ ] = targetFileID;
-	  gpgargv [ i++ ] = "--yes";  /* overwrite the file */
+          gpgargv [ i++ ] = "-o";
+          gpgargv [ i++ ] = targetFileID;
 	}
+      gpgargv [ i++ ] = "--yes";  /* overwrite the file */
       gpgargv [ i++ ] = file -> identifier;
       gpgargv [ i ] = NULL;
       gpapa_call_gnupg
@@ -290,6 +287,163 @@ void gpapa_file_sign (
       free ( full_keyID );
     }
 } /* gpapa_file_sign */
+
+void gpapa_file_encrypt (
+  GpapaFile *file, gchar *targetFileID, GList *rcptKeyIDs, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( file == NULL )
+    callback ( GPAPA_ACTION_ERROR, "missing file name", calldata );
+  else if ( rcptKeyIDs == NULL )
+    callback ( GPAPA_ACTION_ERROR, "missing public key ID(s) for encrypting", calldata );
+  else
+    {
+      GList *R;
+      int i = 0, l = g_list_length ( rcptKeyIDs );
+      char **gpgargv = xmalloc ( ( 7 + 2 * l ) * sizeof ( char * ) );
+      R = rcptKeyIDs;
+      while ( R )
+        {
+          gpgargv [ i++ ] = "-r";
+          gpgargv [ i++ ] = xstrcat2 ( "0x", (char *) R -> data );
+          R = g_list_next ( R );
+        }
+      gpgargv [ i++ ] = "--encrypt";
+      if ( Armor == GPAPA_ARMOR )
+	gpgargv [ i++ ] = "--armor";
+      if ( targetFileID != NULL )
+	{
+          gpgargv [ i++ ] = "-o";
+          gpgargv [ i++ ] = targetFileID;
+	}
+      gpgargv [ i++ ] = "--yes";  /* overwrite the file */
+      gpgargv [ i++ ] = file -> identifier;
+      gpgargv [ i ] = NULL;
+      gpapa_call_gnupg
+	(
+	  gpgargv, TRUE, NULL, NULL,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
+      for ( i = 1; i < 2 * l; i += 2 )
+        free ( gpgargv [ i ] );
+      free ( gpgargv );
+    }
+} /* gpapa_file_encrypt */
+
+void gpapa_file_encrypt_and_sign (
+  GpapaFile *file, gchar *targetFileID, GList *rcptKeyIDs,
+  gchar *keyID, gchar *PassPhrase, GpapaSignType SignType, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( file == NULL )
+    callback ( GPAPA_ACTION_ERROR, "missing file name", calldata );
+  else if ( rcptKeyIDs == NULL )
+    callback ( GPAPA_ACTION_ERROR, "missing public key ID(s) for encrypting", calldata );
+  else
+    {
+      GList *R;
+      int i = 0, l = g_list_length ( rcptKeyIDs );
+      char *full_keyID;
+      char **gpgargv = xmalloc ( ( 10 + 2 * l ) * sizeof ( char * ) );
+      R = rcptKeyIDs;
+      while ( R )
+        {
+          gpgargv [ i++ ] = "-r";
+          gpgargv [ i++ ] = xstrcat2 ( "0x", (char *) R -> data );
+          R = g_list_next ( R );
+        }
+      gpgargv [ i++ ] = "-u";
+      full_keyID = xstrcat2 ( "0x", keyID );
+      gpgargv [ i++ ] = full_keyID;
+      if ( Armor == GPAPA_ARMOR )
+	gpgargv [ i++ ] = "--armor";
+      gpgargv [ i++ ] = "--encrypt";
+      gpgargv [ i++ ] = "--sign";
+      if ( Armor == GPAPA_ARMOR )
+	gpgargv [ i++ ] = "--armor";
+      if ( targetFileID != NULL )
+	{
+          gpgargv [ i++ ] = "-o";
+          gpgargv [ i++ ] = targetFileID;
+	}
+      gpgargv [ i++ ] = "--yes";  /* overwrite the file */
+      gpgargv [ i++ ] = file -> identifier;
+      gpgargv [ i ] = NULL;
+      gpapa_call_gnupg
+	(
+	  gpgargv, TRUE, NULL, PassPhrase,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
+      for ( i = 1; i < 2 * l; i += 2 )
+        free ( gpgargv [ i ] );
+      free ( gpgargv );
+      free ( full_keyID );
+    }
+} /* gpapa_file_encrypt_and_sign */
+
+void gpapa_file_protect (
+  GpapaFile *file, gchar *targetFileID, gchar *PassPhrase, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( file == NULL )
+    callback ( GPAPA_ACTION_ERROR, "missing file name", calldata );
+  else if ( PassPhrase == NULL )
+    callback ( GPAPA_ACTION_ERROR, "missing passphrase for symmetric encrypting", calldata );
+  else
+    {
+      char *gpgargv [ 7 ];
+      int i = 0;
+      gpgargv [ i++ ] = "--symmetric";
+      if ( Armor == GPAPA_ARMOR )
+	gpgargv [ i++ ] = "--armor";
+      if ( targetFileID != NULL )
+	{
+          gpgargv [ i++ ] = "-o";
+          gpgargv [ i++ ] = targetFileID;
+	}
+      gpgargv [ i++ ] = "--yes";  /* overwrite the file */
+      gpgargv [ i++ ] = file -> identifier;
+      gpgargv [ i ] = NULL;
+      gpapa_call_gnupg
+	(
+	  gpgargv, TRUE, NULL, PassPhrase,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
+    }
+} /* gpapa_file_protect */
+
+void gpapa_file_decrypt (
+  GpapaFile *file, gchar *targetFileID, gchar *PassPhrase,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( file == NULL )
+    callback ( GPAPA_ACTION_ERROR, "missing file name", calldata );
+  else if ( PassPhrase == NULL )
+    callback ( GPAPA_ACTION_ERROR, "missing passphrase for symmetric encrypting", calldata );
+  else
+    {
+      char *gpgargv [ 6 ];
+      int i = 0;
+      gpgargv [ i++ ] = "--decrypt";
+      if ( targetFileID != NULL )
+	{
+          gpgargv [ i++ ] = "-o";
+          gpgargv [ i++ ] = targetFileID;
+	}
+      gpgargv [ i++ ] = "--yes";  /* overwrite the file */
+      gpgargv [ i++ ] = file -> identifier;
+      gpgargv [ i ] = NULL;
+      gpapa_call_gnupg
+	(
+	  gpgargv, TRUE, NULL, PassPhrase,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
+    }
+} /* gpapa_file_protect */
 
 void gpapa_file_release (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata

@@ -89,6 +89,27 @@ extern void gpapa_file_sign (
   GpapaCallbackFunc callback, gpointer calldata
 );
 
+extern void gpapa_file_encrypt (
+  GpapaFile *file, gchar *targetFileID, GList *rcptKeyID, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_file_encrypt_and_sign (
+  GpapaFile *file, gchar *targetFileID, GList *rcptKeyIDs,
+  gchar *keyID, gchar *PassPhrase, GpapaSignType SignType, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_file_protect (
+  GpapaFile *file, gchar *targetFileID, gchar *PassPhrase, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_file_decrypt (
+  GpapaFile *file, gchar *targetFileID, gchar *PassPhrase,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
 extern void gpapa_file_release (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 );

@@ -247,6 +247,9 @@ void test_export_public ( char *keyID )
   gpapa_public_key_export ( P, "exported.asc", GPAPA_ARMOR, callback, calldata ); 
   gpapa_release_public_key ( P, callback, calldata );
   gpapa_export_ownertrust ( "exptrust.asc", GPAPA_ARMOR, callback, calldata ); 
+  gpapa_import_ownertrust ( "exptrust.asc", callback, calldata ); 
+  gpapa_import_keys ( "peter.elg-dsa.public-key.asc", callback, calldata ); 
+  gpapa_update_trust_database ( callback, calldata ); 
 }
 
 void test_export_secret ( char *keyID )
@@ -254,7 +257,7 @@ void test_export_secret ( char *keyID )
   GpapaSecretKey *P = gpapa_get_secret_key_by_ID ( keyID, callback, calldata );
   gpapa_secret_key_export ( P, "exportedsec.asc", GPAPA_ARMOR, callback, calldata ); 
   gpapa_secret_key_delete ( P, callback, calldata ); 
-  gpapa_release_public_key ( P, callback, calldata );
+  gpapa_release_secret_key ( P, callback, calldata );
 }
 
 void test_edithelp ( void )
@@ -265,6 +268,29 @@ void test_edithelp ( void )
   gpgargv [ 2 ] = NULL;
   gpapa_call_gnupg ( gpgargv, TRUE, "help\nquit\n", NULL,
                      linecallback, "pruzzel", callback, NULL );
+}
+
+void test_encrypt ( GList *rcptKeyIDs, char *keyID )
+{
+  GpapaFile *F = gpapa_file_new ( "test.txt", callback, calldata );
+  char *PassPhrase;
+  gpapa_file_encrypt ( F, NULL, rcptKeyIDs, GPAPA_ARMOR,
+                       callback, calldata );
+  PassPhrase = getpass ( "Please enter passphrase for signing: " );
+  gpapa_file_encrypt_and_sign ( F, NULL, rcptKeyIDs,
+                                keyID, PassPhrase, GPAPA_SIGN_NORMAL, GPAPA_ARMOR,
+                                callback, calldata );
+  PassPhrase = getpass ( "Please enter passphrase for protecting: " );
+  printf ( "Encrypting ..." );
+  gpapa_file_protect ( F, NULL, PassPhrase, GPAPA_ARMOR,
+                       callback, calldata );
+  printf ( " done.\nDecrypting ..." );
+  gpapa_file_release ( F, callback, calldata );
+  F = gpapa_file_new ( "test.txt.asc", callback, calldata );
+  gpapa_file_decrypt ( F, NULL, PassPhrase,
+                       callback, calldata );
+  printf ( " done.\n" );
+  gpapa_file_release ( F, callback, calldata );
 }
 
 int main ( int argc, char **argv )
@@ -278,10 +304,11 @@ int main ( int argc, char **argv )
   test_status ( );
   test_export_public ( "4875B1DC979B6F2A" );
   test_export_public ( "6C7EE1B8621CC013" );
-*/
   test_export_secret ( "7D0908A0EE9A8BFB" );
-/*
   test_edithelp ( );
 */
+  test_encrypt ( g_list_append ( g_list_append ( NULL, "983465DB21439422" ),
+                                 "6C7EE1B8621CC013" ),
+                 "7D0908A0EE9A8BFB");
   return ( 0 );
 } /* main */

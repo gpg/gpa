@@ -362,6 +362,65 @@ void gpapa_export_ownertrust (
     }
 } /* gpapa_export_ownertrust */
 
+void gpapa_import_ownertrust (
+  gchar *sourceFileID,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( ! sourceFileID )
+    callback ( GPAPA_ACTION_ERROR, "source file not specified", calldata );
+  else
+    {
+      char *gpgargv [ 3 ];
+      int i = 0;
+      gpgargv [ 0 ] = "--import-ownertrust";
+      gpgargv [ 1 ] = sourceFileID;
+      gpgargv [ 2 ] = NULL;
+      gpapa_call_gnupg
+        (
+          gpgargv, TRUE, NULL, NULL,
+          gpapa_linecallback_dummy, NULL,
+          callback, calldata
+        );
+    }
+} /* gpapa_import_ownertrust */
+
+extern void gpapa_update_trust_database (
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  char *gpgargv [ 2 ];
+  int i = 0;
+  gpgargv [ 0 ] = "--update-trustdb";
+  gpgargv [ 1 ] = NULL;
+  gpapa_call_gnupg
+    (
+      gpgargv, TRUE, NULL, NULL,
+      gpapa_linecallback_dummy, NULL,
+      callback, calldata
+    );
+} /* gpapa_update_trust_database */
+
+void gpapa_import_keys (
+  gchar *sourceFileID,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( ! sourceFileID )
+    callback ( GPAPA_ACTION_ERROR, "source file not specified", calldata );
+  else
+    {
+      char *gpgargv [ 3 ];
+      int i = 0;
+      gpgargv [ 0 ] = "--import";
+      gpgargv [ 1 ] = sourceFileID;
+      gpgargv [ 2 ] = NULL;
+      gpapa_call_gnupg
+        (
+          gpgargv, TRUE, NULL, NULL,
+          gpapa_linecallback_dummy, NULL,
+          callback, calldata
+        );
+    }
+} /* gpapa_import_keys */
+
 /* Miscellaneous.
  */
 

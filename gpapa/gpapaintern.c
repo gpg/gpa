@@ -194,7 +194,9 @@ void gpapa_call_gnupg (
         }
       else
         dup2 ( devnull, 0 );
+#ifndef DEBUG
       dup2 ( devnull, 2 );
+#endif
       close ( devnull );
       execv ( argv [ 0 ], argv );
 
@@ -339,9 +341,23 @@ void gpapa_call_gnupg (
 	      pendingbuffer = NULL;
 	      pendingsize = 0;
 	    }
-	  if ( ! WIFEXITED ( status ) )
-	    callback ( GPAPA_ACTION_ERROR, "GnuPG execution terminated abnormally",
-		       calldata );
+	  if ( WIFEXITED ( status ) && WEXITSTATUS ( status ) != 0 )
+            {
+              char msg [ 80 ];
+              sprintf ( msg, "GnuPG execution terminated with error code %d",
+                             WEXITSTATUS ( status ) );
+	      callback ( GPAPA_ACTION_ABORTED, msg, calldata );
+            }
+	  else if ( WIFSIGNALED ( status ) && WTERMSIG ( status ) != 0 )
+            {
+              char msg [ 80 ];
+              sprintf ( msg, "GnuPG execution terminated by uncaught signal %d",
+                             WTERMSIG ( status ) );
+	      callback ( GPAPA_ACTION_ABORTED, msg, calldata );
+            }
+          else
+            callback ( GPAPA_ACTION_FINISHED,
+                       "GnuPG execution terminated normally", calldata );
 	  free ( buffer );
 	}
       else
