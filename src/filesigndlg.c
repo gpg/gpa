@@ -47,42 +47,42 @@ static void
 file_sign_do_sign (GPAFileSignDialog *dialog, gchar *key_id, gchar *passphrase,
 		   GpapaSignType sign_type, GpapaArmor armor)
 {
-  GpapaFile *file;
   GList *cur;
-  gchar *filename;
-  gchar extension[5];
 
   dialog->signed_files = NULL;
 
   cur = dialog->files;
   while (cur)
     {
-      file = cur->data;
+      GpapaFile *file;
+      const gchar *extension;
+      gchar *filename, *target_filename;
+
       global_lastCallbackResult = GPAPA_ACTION_NONE;
-      gpapa_file_sign (file, NULL, key_id, passphrase, sign_type, armor,
-		       gpa_callback, dialog->window);
-      switch (armor)
-	{
-	case GPAPA_NO_ARMOR:
-	  if (sign_type == GPAPA_SIGN_DETACH)
-	    strcpy (extension, ".sig");
-	  else
-	    strcpy (extension, ".gpg");
-	  break;
-	case GPAPA_ARMOR:
-	  strcpy (extension, ".asc");
-	  break;
-	} /* switch */
-      if (global_lastCallbackResult == GPAPA_ACTION_ERROR)
-	break;
-      
+
+      file = cur->data;
       filename = gpapa_file_get_identifier (file, gpa_callback,
 					     dialog->window);
-      dialog->signed_files = g_list_append (dialog->signed_files,
-					    xstrcat2 (filename, extension));
+      if (armor == GPAPA_NO_ARMOR)
+        {
+	  if (sign_type == GPAPA_SIGN_DETACH)
+	    extension = ".sig";
+	  else
+	    extension = ".gpg";
+        }
+      else
+        extension = ".asc";
+      target_filename = xstrcat2 (filename, extension);
+
+      gpapa_file_sign (file, target_filename, key_id, passphrase, sign_type, armor,
+		       gpa_callback, dialog->window);
+
+      if (global_lastCallbackResult == GPAPA_ACTION_ERROR)
+	break;
+      dialog->signed_files = g_list_append (dialog->signed_files, target_filename);
       cur = g_list_next (cur);
-    } /* for */
-} /* file_sign_do_sign */
+    }
+}
 
 static void
 file_sign_ok (gpointer param)
@@ -106,10 +106,21 @@ file_sign_ok (gpointer param)
       return;
     } /* else */
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->check_armor)))
-    armor = GPAPA_ARMOR;
+  if (gpa_simplified_ui ())
+    {
+      if (sign_type == GPAPA_SIGN_DETACH)
+        armor = GPAPA_NO_ARMOR;
+      else
+	armor = GPAPA_ARMOR;
+    }
   else
-    armor = GPAPA_NO_ARMOR;
+    {
+      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->check_armor)))
+        armor = GPAPA_ARMOR;
+      else
+        armor = GPAPA_NO_ARMOR;
+    }
+
   if (dialog->clist_who->selection)
     {
       gint row =  GPOINTER_TO_INT (dialog->clist_who->selection->data);
@@ -203,14 +214,27 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
   gtk_container_set_border_width (GTK_CONTAINER (vboxMode), 5);
   gtk_container_add (GTK_CONTAINER (frameMode), vboxMode);
 
-  radio_sign_comp = gpa_radio_button_new (accelGroup, _("si_gn and compress"));
-  gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_comp, FALSE, FALSE, 0);
-  dialog.radio_comp = radio_sign_comp;
-  radio_sign =
-    gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
-				      accelGroup, _("sign, do_n't compress"));
-  gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
-  dialog.radio_sign = radio_sign;
+  if (gpa_simplified_ui ())
+    {
+      radio_sign_comp = NULL;
+      dialog.radio_comp = radio_sign_comp;
+      radio_sign =
+	gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
+					  accelGroup, _("_copy and add signature"));
+      gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
+      dialog.radio_sign = radio_sign;
+    }
+  else
+    {
+      radio_sign_comp = gpa_radio_button_new (accelGroup, _("si_gn and compress"));
+      gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_comp, FALSE, FALSE, 0);
+      dialog.radio_comp = radio_sign_comp;
+      radio_sign =
+	gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
+					  accelGroup, _("sign, do_n't compress"));
+      gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
+      dialog.radio_sign = radio_sign;
+    }
   radio_sign_sep =
     gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
 				      accelGroup,
@@ -218,11 +242,16 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
   dialog.radio_sep = radio_sign_sep;
 
-  checkerArmor = gpa_check_button_new (accelGroup, _("a_rmor"));
-  gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);
-  gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
+  if (gpa_simplified_ui ())
+    checkerArmor = NULL;
+  else
+    {
+      checkerArmor = gpa_check_button_new (accelGroup, _("a_rmor"));
+      gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);
+      gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
+    }
   dialog.check_armor = checkerArmor;
-
+    
   vboxWho = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxWho), 5);
   gtk_box_pack_start (GTK_BOX (vboxSign), vboxWho, TRUE, TRUE, 0);

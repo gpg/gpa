@@ -12,6 +12,11 @@
 
 	* configure.ac (ALL_LINGUAS): Add pt_BR.
 
+2002-02-20  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gtkrc.gpa: Splitted into two new files: gtkrc-1.2.gpa and
+	gtkrc-1.3.12+.gpa.
+	
 2002-02-19  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* to-utf8: Changed to use short options to iconv.

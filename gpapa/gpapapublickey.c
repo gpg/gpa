@@ -1,5 +1,5 @@
 /* gpapapublickey.c - The GNU Privacy Assistant Pipe Access - public key object
- * Copyright (C) 2000, 2001 G-N-U GmbH, http://www.g-n-u.de
+ * Copyright (C) 2000-2002 G-N-U GmbH, http://www.g-n-u.de
  *
  * This file is part of GPAPA.
  *
@@ -471,7 +471,7 @@ gpapa_public_key_sign (GpapaPublicKey *key, char *keyID,
       gchar *full_keyID;
       gchar *commands = "YES\nYES\n";
       const gchar *gpgargv[6];
-      full_keyID = g_strconcat ("\"", key->key->UserID, "\"");
+      full_keyID = g_strconcat ("\"", key->key->UserID, "\"", NULL);
       gpgargv[0] = "--yes";
       gpgargv[1] = "--local-user";
       gpgargv[2] = keyID;

@@ -1,3 +1,24 @@
+2002-02-21  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* filemenu.c, filesigndlg.c: Reformatted to completely comply with
+	the GNU Coding Standards.
+	
+	* filemenu.c (file_sign_sign_exec): Choose the filename for the
+	dettached signature here, and not in gpapa.
+
+	* filesigndlg.c (file_sign_do_sign): Choose the filename for the
+	dettached signature here, and not in gpapa.
+	(file_sign_ok): If on simplified mode, assume the user wants armor
+	on non dettached signature, and doesn't want it on dettached ones.
+	(gpa_file_sign_dialog_run): Remove the armor option for simplified
+	mode. Don't offer to compress the signed file when in simplified
+	mode.
+
+2002-02-20  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* helpmenu.c (help_warranty): Account for the different length of
+	the license in german.
+
 2002-02-19  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* Makefile.am (LDADD): Added two win32 specific libraries.
@@ -56,7 +77,7 @@
 	
 2002-02-14  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
-	* fileman.c Reformatted to completely comply with the GNU
+	* fileman.c: Reformatted to completely comply with the GNU
 	Coding Standards.
 	(add_file): Display filenames in UTF8.
 

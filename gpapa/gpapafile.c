@@ -276,7 +276,7 @@ gpapa_file_sign (GpapaFile *file, const gchar *targetFileID, const gchar *keyID,
       FileData data = { file, callback, calldata };
       gchar *full_keyID;
       gchar *quoted_source_filename = NULL, *quoted_target_filename = NULL;
-      const gchar *gpgargv[9];
+      const gchar *gpgargv[10];
       int i = 0;
       switch (SignType)
         {
@@ -305,6 +305,7 @@ gpapa_file_sign (GpapaFile *file, const gchar *targetFileID, const gchar *keyID,
           gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
+      gpgargv[i++] = "--no-tty";
       quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
       gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
@@ -321,8 +322,7 @@ gpapa_file_sign (GpapaFile *file, const gchar *targetFileID, const gchar *keyID,
 void
 gpapa_file_encrypt (GpapaFile *file, const gchar *targetFileID,
                     GList *rcptKeyIDs, GpapaArmor Armor,
-                    GpapaCallbackFunc callback, gpointer calldata)
-{
+                    GpapaCallbackFunc callback, gpointer calldata) {
   if (file == NULL)
     callback (GPAPA_ACTION_ERROR, "missing file name", calldata);
   else if (rcptKeyIDs == NULL)
@@ -386,7 +386,7 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, const gchar *targetFileID,
       int i = 0, l = g_list_length (rcptKeyIDs);
       char *full_keyID;
       gchar *quoted_source_filename = NULL, *quoted_target_filename = NULL;
-      char **gpgargv = xmalloc ((10 + 2 * l) * sizeof (char *));
+      char **gpgargv = xmalloc ((11 + 2 * l) * sizeof (char *));
       R = rcptKeyIDs;
       while (R)
         {
@@ -410,6 +410,7 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, const gchar *targetFileID,
           gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
+      gpgargv[i++] = "--no-tty";
       quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
       gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;

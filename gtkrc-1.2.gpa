@@ -1,0 +1,15 @@
+#################
+# GTKRC for GPA #
+#################
+
+style "gpa-default"
+{
+  font = "-*-arial-medium-r-normal--16-*-*-*-*-*-iso8859-1"
+}
+class "*" style "gpa-default"
+
+style "big-label"
+{
+  font = "-*-arial-medium-r-normal--20-*-*-*-*-*-iso8859-1"
+}
+widget "*big-label*" style "big-label"

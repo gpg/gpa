@@ -428,7 +428,7 @@ help_warranty (gpointer param)
   gtk_text_set_editable (GTK_TEXT (textGPL), FALSE);
   gtk_text_insert (GTK_TEXT (textGPL), NULL, &textGPL->style->black, NULL,
 		   gpa_license_text, -1);
-  gtk_editable_set_position(GTK_EDITABLE (textGPL), 15105);
+  gtk_editable_set_position(GTK_EDITABLE (textGPL), 21800 /* English: 15105 */);
   gtk_widget_set_usize (textGPL, 500, 300);
   gpa_connect_by_accelerator (GTK_LABEL (labelGPL), textGPL, accelGroup,
 			      _("_GNU general public license"));

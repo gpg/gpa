@@ -96,8 +96,8 @@ file_open_countSigs (gpointer data, gpointer userData)
       break;
     default:
       break;
-    }				/* switch */
-}				/* file_open_countSigs */
+    }
+}
 
 void
 file_add (gchar * anIdentifier)
@@ -128,9 +128,9 @@ file_add (gchar * anIdentifier)
 	  gpa_window_error (_("The file is already open."),
 			    global_windowMain);
 	  return;
-	}			/* if */
+	}
       indexFile = g_list_next (indexFile);
-    }				/* while */
+    }
   filesOpened = g_list_append (filesOpened, aFile);
   fileEntry[1] =
     getStringForFileStatus (gpapa_file_get_status
@@ -146,14 +146,14 @@ file_add (gchar * anIdentifier)
     {
       sprintf (buffer, "%d", countSigs[1]);
       fileEntry[4] = xstrdup (buffer);
-    }				/* if */
+    }
   else
     fileEntry[4] = "";
   fileList = gpa_get_global_clist_file ();
   gtk_clist_append (GTK_CLIST (fileList), fileEntry);
   gtk_widget_grab_focus (fileList);
   gtk_widget_hide (fileOpenSelect);
-}				/* file_add */
+}
 
 
 void
@@ -172,7 +172,7 @@ file_sign_sign_exec (gpointer param)
   GList *indexFile;
   GpapaFile *file;
   gchar *identifierNew;
-  gchar appendixNew[5];
+  const gchar *appendixNew = NULL;
   GtkWidget *clistFiles;
   gpointer paramDone[2];
 /* commands */
@@ -198,32 +198,29 @@ file_sign_sign_exec (gpointer param)
     {
       global_lastCallbackResult = GPAPA_ACTION_NONE;
       file = (GpapaFile *) indexFile->data;
-      gpapa_file_sign (file, NULL, keyID,
-		       gtk_entry_get_text (GTK_ENTRY (entryPasswd)),
-		       *signType, *armor, gpa_callback, keeperSign->window);
-      switch (*armor)
+      if (*armor == GPAPA_NO_ARMOR)
 	{
-	case GPAPA_NO_ARMOR:
 	  if (*signType == GPAPA_SIGN_DETACH)
-	    strcpy (appendixNew, ".sig");
+	    appendixNew = ".sig";
 	  else
-	    strcpy (appendixNew, ".gpg");
-	  break;
-	case GPAPA_ARMOR:
-	  strcpy (appendixNew, ".asc");
-	  break;
-	}			/* switch */
-      if (global_lastCallbackResult == GPAPA_ACTION_ERROR)
-	break;
+	    appendixNew = ".gpg";
+	}
+      else
+	appendixNew = ".asc";
       identifierNew =
 	xstrcat2 (gpapa_file_get_identifier
 		  (file, gpa_callback, keeperPassphrase->window),
 		  appendixNew);
+      gpapa_file_sign (file, identifierNew, keyID,
+		       gtk_entry_get_text (GTK_ENTRY (entryPasswd)),
+		       *signType, *armor, gpa_callback, keeperSign->window);
+      if (global_lastCallbackResult == GPAPA_ACTION_ERROR)
+	break;
       file_add (identifierNew);
       free (identifierNew);
       indexFile = g_list_next (indexFile);
       i++;
-    }				/* while */
+    }
   clistFiles = gpa_get_global_clist_file ();
   gtk_clist_unselect_all (GTK_CLIST (clistFiles));
   countFiles = g_list_length (filesOpened);
@@ -231,7 +228,7 @@ file_sign_sign_exec (gpointer param)
     {
       gtk_clist_select_row (GTK_CLIST (clistFiles), afterLastFile, 0);
       afterLastFile++;
-    }				/* while */
+    }
   free (signType);
   free (armor);
   paramDone[0] = keeperPassphrase;
@@ -239,7 +236,7 @@ file_sign_sign_exec (gpointer param)
   gpa_window_destroy (paramDone);
   paramDone[0] = keeperSign;
   gpa_window_destroy (paramDone);
-}				/* file_sign_sign_exec */
+}
 
 void
 file_sign_sign (gpointer param)
