@@ -38,6 +38,7 @@
 #include "keygendlg.h"
 #include "keygenwizard.h"
 #include "keyeditdlg.h"
+#include "keydeletedlg.h"
 #include "keylist.h"
 #include "siglist.h"
 #include "keyring.h"
@@ -255,9 +256,6 @@ keyring_editor_delete (gpointer param)
   GpapaPublicKey *public_key;
   GpapaSecretKey *secret_key;
   GList * selection;
-  gchar message[500];
-  gchar * reply;
-  const gchar * buttons[] = {_("Ok"), _("Cancel"), NULL};
 
   selection = gpa_keylist_selection (editor->clist_keys);
   while (selection)
@@ -269,16 +267,8 @@ keyring_editor_delete (gpointer param)
       secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback,
 					       editor->window);
 
-      /* XXX we should probably display more information about the key
-       * (fingerprint?). We also shouldn't use a fixed size array. */
-      sprintf (message, _("Are you sure that you want to delete the"
-			  " following key?\n"
-			  "%.300s\n"),
-	       gpapa_key_get_name (GPAPA_KEY (public_key), gpa_callback,
-				   editor->window));
-      reply = gpa_message_box_run (editor->window, _("Delete Key"),
-				   message, buttons);
-      if (!reply || strcmp (reply, _("Cancel")) == 0)
+      if (!gpa_delete_dialog_run (editor->window, public_key,
+				  secret_key != NULL))
 	break;
 
       if (secret_key)
