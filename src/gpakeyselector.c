@@ -136,9 +136,15 @@ GtkWidget *gpa_key_selector_new (gboolean secret)
   gtk_widget_set_sensitive (GTK_WIDGET (sel), FALSE);
   if (secret)
     {
-      gpa_keytable_list_keys (gpa_keytable_get_secret_instance (),
-			      gpa_key_selector_next_key, 
-			      gpa_key_selector_done, sel);
+      /* FIXME: This is a hack to get around GtkTreeView's behaviour when
+       * switching to single selection mode: we need to enter the main
+       * loop before listing the keys, or the first one is always
+       * selected. Since few people have more than a few secret keys, it
+       * shouldn't matter much.
+       */
+      gpa_keytable_force_reload (gpa_keytable_get_secret_instance (),
+				 gpa_key_selector_next_key, 
+				 gpa_key_selector_done, sel);
     }
   else
     {

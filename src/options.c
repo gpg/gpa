@@ -233,6 +233,7 @@ gpa_options_set_default_key (GpaOptions *options, gpgme_key_t key)
     {
       gpgme_key_unref (options->default_key);
     }
+  gpgme_key_ref (key);
   options->default_key = key;
   options->default_key_fpr = g_strdup (key->subkeys[0].fpr);
   g_signal_emit (options, signals[CHANGED_DEFAULT_KEY], 0);
