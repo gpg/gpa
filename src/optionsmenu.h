@@ -18,16 +18,5 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-extern void options_keyserver (void);
-extern void options_recipients (void);
-extern void options_key (void);
-extern void options_homedir (void);
-extern void options_load (void);
-extern void options_save (void);
-
-extern void gpa_homeDirSelect_init (gchar * title);
-extern void gpa_loadOptionsSelect_init (gchar * title);
-extern void gpa_saveOptionsSelect_init (gchar * title);
-
 void gpa_options_menu_add_to_factory (GtkItemFactory *factory,
 				      GtkWidget *window);
