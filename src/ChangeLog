@@ -1,5 +1,9 @@
 2001-02-13  Bernhard Herzog  <bh@intevation.de>
 
+	* siglist.c (gpa_siglist_set_signatures): Call
+	gtk_container_check_resize to make sure that the sizes of the
+	title buttons are also taken into account.
+
 	* keyexportdlg.c (key_export_dialog_run): Use function from
 	gtktools.c to create the radio buttons, so that the accelerators
 	are handled correctly.

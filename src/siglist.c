@@ -102,6 +102,7 @@ gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
       gtk_clist_append (GTK_CLIST (clist), contents);
     }
 
+  gtk_container_check_resize (GTK_CONTAINER (clist));
   for (i = 0; i < 3; i++)
     {
       width = gtk_clist_optimal_column_width (GTK_CLIST (clist), i);
