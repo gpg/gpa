@@ -232,10 +232,14 @@ gpa_options_set_default_key (GpaOptions *options, gpgme_key_t key)
   if (options->default_key)
     {
       gpgme_key_unref (options->default_key);
+      options->default_key = NULL;
     }
-  gpgme_key_ref (key);
-  options->default_key = key;
-  options->default_key_fpr = g_strdup (key->subkeys->fpr);
+  if (key)
+    {
+      gpgme_key_ref (key);
+      options->default_key = key;
+      options->default_key_fpr = g_strdup (key->subkeys->fpr);
+    }
   g_signal_emit (options, signals[CHANGED_DEFAULT_KEY], 0);
 }
 
@@ -323,7 +327,10 @@ gpa_options_update_default_key (GpaOptions *options)
     {
       key = determine_default_key ();
       gpa_options_set_default_key (options, key);
-      gpgme_key_unref (key);
+      if (key)
+	{
+	  gpgme_key_unref (key);
+	}
     }
 
   gpgme_release (ctx);

@@ -1,3 +1,9 @@
+2003-10-22  Miguel Coca  <mcoca@gnu.org>
+
+	* options.c (gpa_options_update_default_key)
+	(gpa_options_set_default_key): Catch a NULL key. Fixes crash at
+	startup for new users.
+
 2003-10-18  Miguel Coca  <mcoca@gnu.org>
 
 	* gpgmetools.c (gpa_generate_key_start): Introduce memory leak to
