@@ -1,6 +1,41 @@
 2001-01-26  Bernhard Herzog  <bh@intevation.de>
 
-	* keyring.c (keyring_editor_new): Remove the close button. 
+
+	* gpa.c (gpa_update_default_key): If the default key is not set
+	yet, set it to (an approximation of) gpg's default key.
+	(gpa_determine_default_key): Make it static. It's better to use
+	gpa_update_default_key now.
+	* gpa.h: Update the prototypes accordingly.
+
+	* gpa.c (main): 
+	* keyring.c (keyring_editor_generate_key_simple): 
+	(keyring_editor_generate_key_advanced): 
+	Use gpa_update_default_key instead of gpa_determine_default_key
+
+	* keyring.c (keyring_editor_mapped): Fix a typo
+	(keyring_statusbar_new): new function to create a status bar
+	showing the default key
+	(GPAKeyringEditor): Add the labels of the status bar.
+	(keyring_update_status_bar): New function to update the status bar
+	whenever the default key changes.
+	(keyring_editor_new): Add the status bar.
+
+	* gpa.h: Add the prototypes for gpa_get_keyring_editor and
+	gpa_get_filenamager
+
+	* gpa.c (gpa_default_key_changed_marshal):
+	(gpa_create_default_key_signal):
+	(gpa_emit_default_key_changed): New functions to implement a user
+	signal "gpa_default_key_changed" for GtkWindows that is emit on
+	all toplevel windows whenever the default key changes.
+	(main): Initialize the user signal 
+	(gpa_set_default_key): Emit the new signal when the key changes.
+	(gpa_get_keyring_editor): New function to return the keyring
+	editor window
+	(gpa_get_filenamager): New function to return the filemanager
+	editor window
+
+	* keyring.c (keyring_editor_new): Remove the close button.
 
 2001-01-25  Bernhard Herzog  <bh@intevation.de>
 
