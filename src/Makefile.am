@@ -26,7 +26,7 @@ gpa_SOURCES = gpa.c gpa.h \
 	      ownertrustdlg.c ownertrustdlg.h \
 	      keysigndlg.c keysigndlg.h \
 	      passphrasedlg.c passphrasedlg.h \
-	      keyreceivedlg.c keyreceivedlg.h \
+	      keyimportdlg.c keyimportdlg.h \
 	      keyexportdlg.c keyexportdlg.h \
 	      keygendlg.c keygendlg.h \
 	      keygenwizard.c keygenwizard.h \
