@@ -96,6 +96,10 @@ gchar * gpa_determine_default_key (void);
 
 void gpa_open_keyring_editor (void);
 void gpa_open_filemanager (void);
+GtkWidget * gpa_get_keyring_editor (void);
+GtkWidget * gpa_get_filenamager (void);
+
+typedef void (*GPADefaultKeyChanged) (gpointer user_data);
 
 
 #endif /*GPA_H */
