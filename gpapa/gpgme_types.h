@@ -21,11 +21,20 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#define GPG_PATH "/usr/local/bin/gpg"
+#define GPAPA  /* should be in local Makefile */
+
+#ifdef GPAPA
+  extern const char *gpapa_private_get_gpg_program (void);
+# define GPG_PATH gpapa_private_get_gpg_program ()
+#else /* not GPAPA */
+# define GPG_PATH "/usr/local/bin/gpg"
+#endif /* not GPAPA */
 
 #include "gpgme.h"  /* external objects and prototypes */
 
-/* typedef unsigned char byte; */
+#ifndef GPAPA
+typedef unsigned char byte;
+#endif /* not GPAPA */
 
 
 typedef enum {

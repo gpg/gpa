@@ -1,3 +1,18 @@
+Tue 23 Jan 2001 11:12 Peter Gerwinski <peter@gerwinski.de>
+
+        * w32-io.c (_gpgme_io_spawn): use `nul' instead of `/dev/nul'.
+
+Mon 22 Jan 2001 29:24 Peter Gerwinski <peter@gerwinski.de>
+
+        * gpapapublickey.c (linecallback_get_signatures): do not
+          treat the self-signature specially.
+
+        * gpapatest.c (main): initialize with GPG_PROGRAM from
+          `../gpgdefs.h' rather than with a constant path.
+
+        * gpgme_types.h (GPG_PATH): redefined to use GPAPA's path to
+          the gpg program as specified in gpapa_init().
+
 2001-01-18  Werner Koch  <wk@gnupg.org>
 
 	* gpapaintern.c, util.c (stpcpy): Removed.

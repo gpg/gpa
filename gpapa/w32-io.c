@@ -261,7 +261,7 @@ _gpgme_io_spawn ( const char *path, char **argv,
         memset (&sa, 0, sizeof sa );
         sa.nLength = sizeof sa;
         sa.bInheritHandle = TRUE;
-        hnul = CreateFile ( "/dev/nul",
+        hnul = CreateFile ( "nul",
                             GENERIC_READ|GENERIC_WRITE,
                             FILE_SHARE_READ|FILE_SHARE_WRITE,
                             &sa,
@@ -269,7 +269,7 @@ _gpgme_io_spawn ( const char *path, char **argv,
                             FILE_ATTRIBUTE_NORMAL,
                             NULL );
         if ( hnul == INVALID_HANDLE_VALUE ) {
-            fprintf (stderr,"can't open `/dev/nul': ec=%d\n",
+            fprintf (stderr,"can't open `nul': ec=%d\n",
                      (int)GetLastError () );
             xfree (arg_string);
             return -1;
@@ -288,7 +288,7 @@ _gpgme_io_spawn ( const char *path, char **argv,
         }
     }
 
-    DEBUG_SELECT ((stderr,"** CreateProcess ...\n"));
+    DEBUG_SELECT ((stderr,"** CreateProcess: %s\n", GPG_PATH));
     DEBUG_SELECT ((stderr,"** args=`%s'\n", arg_string));
     cr_flags |= CREATE_SUSPENDED; 
     if ( !CreateProcessA (GPG_PATH,
@@ -308,7 +308,7 @@ _gpgme_io_spawn ( const char *path, char **argv,
         return -1;
     }
 
-    /* close the /dev/nul handle if used */
+    /* close the nul handle if used */
     if (hnul != INVALID_HANDLE_VALUE ) {
         if ( !CloseHandle ( hnul ) )
             fprintf (stderr, "** CloseHandle(hnul) failed: ec=%d\n", 
@@ -566,12 +566,12 @@ _gpgme_io_select ( struct io_select_fd_s *fds, size_t nfds )
 
             if ( !PeekNamedPipe (fd_to_handle (fds[i].fd),
                                  NULL, 0, NULL, &navail, NULL) ) {
-                fprintf (stderr, "** select: PeekFile failed: ec=%d\n",
-                         (int)GetLastError ());
+                fprintf (stderr, "** select: PeekFile failed: fd=%d ec=%d\n",
+                         fds[i].fd, (int)GetLastError ());
             }
             else if ( navail ) {
-                /*fprintf (stderr, "** fd %d has %d bytes to read\n",
-                  fds[i].fd, navail );*/
+                fprintf (stderr, "** fd %d has %d bytes to read\n",
+                  fds[i].fd, navail );
                 fds[i].signaled = 1;
                 count++;
             }

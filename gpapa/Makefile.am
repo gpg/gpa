@@ -32,10 +32,3 @@ libgpapa_a_SOURCES = gpapa.c gpapa.h \
 
 gpapatest_SOURCES = gpapatest.c
 gpapatest_LDADD =  -L . -lgpapa -L ../jnlib -ljnlib
-
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 /* gpapapublickey.c  -	The GNU Privacy Assistant Pipe Access
- *	  Copyright (C) 2000 G-N-U GmbH.
+ * Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPAPA
  *
@@ -267,16 +267,6 @@ linecallback_get_signatures (gchar * line, gpointer data, GpgStatusCode status)
     {
       PublicKeyData *d = data;
       GpapaSignature *sig = extract_sig (line, d->callback, d->calldata);
-      if (strcmp (d->key->key->KeyID, sig->KeyID) == 0)
-	{
-	  /* Self-signature.  Only report it if it is not valid.
-	   */
-	  if (sig->validity == GPAPA_SIG_VALID)
-	    {
-	      gpapa_signature_release (sig, d->callback, d->calldata);
-	      sig = NULL;
-	    }
-	}
       if (sig)
 	d->key->sigs = g_list_append (d->key->sigs, sig);
     }

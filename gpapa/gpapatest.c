@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <glib.h>
 #include "gpapa.h"
+#include "gpadefs.h"
 
 #ifdef __MINGW32__
 #include <windows.h>
@@ -489,7 +490,7 @@ main (int argc, char **argv)
   const char *what = argc > 1 ? argv[1] : "version";
   calldata = argc > 2 ? argv[2] : "foo";
  
-  gpapa_init ( "/usr/local/bin/gpg" );
+  gpapa_init (GPG_PROGRAM);
 
   if (!strcmp (what, "version"))
     test_version ();

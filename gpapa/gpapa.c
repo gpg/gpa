@@ -528,7 +528,7 @@ gpapa_save_options (gchar * optionsFileID,
  */
 
 const char *
-gpapa_private_get_gpg_program ()
+gpapa_private_get_gpg_program (void)
 {
   return gpg_program;
 }

@@ -1,7 +1,7 @@
-/* gpapafile.c	-  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+/* gpapafile.c	-  The GNU Privacy Assistant Pipe Access  -  file object
+ * Copyright (C) 2000, 2001 G-N-U GmbH
  *
- * This file is part of GPAPA
+ * This file is part of GPAPA.
  *
  * GPAPA is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
