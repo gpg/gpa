@@ -1,5 +1,8 @@
 2002-12-07  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* siglist.c (gpa_siglist_new): Sort the list by user ID. We should
+	find a way to make Unknown come last always.
+
 	* keyring.c (keyring_details_notebook): Add label to the menu. 
 	(keyring_details_page_fill_num_keys): Change the text for "all
 	signatures."

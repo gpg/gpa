@@ -70,6 +70,9 @@ gpa_siglist_new (void)
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+                                        SIG_USERID_COLUMN, GTK_SORT_ASCENDING);
+
   return list;
 }
 
