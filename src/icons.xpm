@@ -2299,3 +2299,88 @@ static char * gpa_trust_unknown_xpm[] = {
 " iopl ",
 " qrst ",
 "  uvw "};
+/* XPM */
+static char *gpa_blue_key_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"22 11 4 1",
+"  c Gray0",
+". c #72706f",
+"X c #c2ebff",
+"o c None",
+/* pixels */
+"oooooooooooooooo ooooo",
+"ooooooooooooo   X  ooo",
+"ooooooooooooo XXXXX  o",
+"oo            XXXX X o",
+"o XXXXXXXXXXXXXXX . X ",
+"o XXXXXXXXXXXXXXX . X ",
+"o. X     X   XXXXX XX ",
+"oo   ...  ..  XXXXXX .",
+"oo........oo. XXXXXX o",
+"ooooooooooooo. XXX  .o",
+"oooooooooooooo.   ...o"
+};
+/* XPM */
+static char *gpa_yellow_key_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"22 11 4 1",
+"  c Gray0",
+". c #72706f",
+"X c #f6da24",
+"o c None",
+/* pixels */
+"oooooooooooooooo ooooo",
+"ooooooooooooooo X oooo",
+"ooooooooooooo  XXX  oo",
+"oo            XXXXXX o",
+"o XXXXXXXXXXXXXXXX XX ",
+" XXXXXXXXXXXXXXXX . X ",
+". X X   X   XXXXXX X .",
+"o. . . . ...  XXXXX ..",
+"oo...o.o..oo. XXXXX .o",
+"ooooooooooooo. XXX ..o",
+"oooooooooooooo.   ...o"
+};
+/* XPM */
+static char *gpa_help_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"33 34 3 1",
+"  c #72706f",
+". c #ea5265",
+"X c None",
+/* pixels */
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXX......XX",
+"XXXXXXXX....... XXXXXXXXX...... X",
+"XXXX............... XXXXX......  ",
+"XXXX................ XXX.......  ",
+"XXX.................. XX.......  ",
+"XX....................XX.......  ",
+"XX........ XXX........ X.......  ",
+"X........ XXXXX....... X.......  ",
+"....... XXXXXXX....... X.......  ",
+"X...... XXXXXXX....... XX......  ",
+"XXX    XXXXXXXX....... XX......  ",
+"XXXXXXXXXXXXXX....... XXX......  ",
+"XXXXXXXXXXXXX........ XXX......  ",
+"XXXXXXXXXXXX........ XXXXX.....  ",
+"XXXXXXXXXXX......... XXXXX.....  ",
+"XXXXXXXXXX......... XXXXXX..... X",
+"XXXXXXXXX......... XXXXXXX..... X",
+"XXXXXXXXX........ XXXXXXXX..... X",
+"XXXXXXXXX....... XXXXXXXXX..... X",
+"XXXXXXXX...... XXXXXXXXXXX....  X",
+"XXXXXXXX...... XXXXXXXXXXX....  X",
+"XXXXXXXX..... XXXXXXXXXXXX.... XX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"XXXXXXXX..... XXXXXXXXXXX.....  X",
+"XXXXXXXX...... XXXXXXXXXX......  ",
+"XXXXXXXX...... XXXXXXXXXX....... ",
+"XXXXXXX....... XXXXXXXXX........ ",
+"XXXXXXXX...... XXXXXXXXXX......  ",
+"XXXXXXXX..... XXXXXXXXXXX.....  X",
+"XXXXXXXXXXX  XXXXXXXXXXXXXXX   XX"
+};

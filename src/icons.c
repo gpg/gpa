@@ -1,5 +1,5 @@
 /* icons.c  - GPA icons
- * Copyright (C) 2000 OpenIT GmbH
+ * Copyright (C) 2000, 2001 OpenIT GmbH
   *
  * This file is part of GPA
  *
@@ -32,18 +32,21 @@ struct {
   const char *name;
   char **xpm;
 } xpms[] = {
-  { "openfile", openfile_xpm  },
-  { "help",     help_xpm  },
-  { "encrypt",          encrypt_xpm  },
-  { "decrypt",          decrypt_xpm  },
-  { "sign",          sign_xpm  },
-  { "gpa_sign_small",          gpa_sign_small_xpm  },
-  { "keyring",          keyring_xpm  },
-  { "trash",          trash_xpm  },
-  { "gpa_trust_fully",          gpa_trust_fully_xpm },
-  { "gpa_trust_marginally",        gpa_trust_marginally_xpm },
-  { "gpa_dont_trust",        gpa_dont_trust_xpm },
-  { "gpa_trust_unknown",        gpa_trust_unknown_xpm },
+  {"openfile",	openfile_xpm  },
+  {"help",	help_xpm  },
+  {"encrypt",	encrypt_xpm  },
+  {"decrypt",	decrypt_xpm  },
+  {"sign",	sign_xpm  },
+  {"gpa_sign_small", gpa_sign_small_xpm  },
+  {"keyring",	keyring_xpm  },
+  {"trash",	trash_xpm  },
+  {"gpa_trust_fully",		gpa_trust_fully_xpm },
+  {"gpa_trust_marginally",	gpa_trust_marginally_xpm },
+  {"gpa_dont_trust",		gpa_dont_trust_xpm },
+  {"gpa_trust_unknown",	gpa_trust_unknown_xpm },
+  {"gpa_help",		gpa_help_xpm},
+  {"gpa_blue_key",	gpa_blue_key_xpm},
+  {"gpa_yellow_key",	gpa_yellow_key_xpm},
   { NULL, NULL }
 };
 
