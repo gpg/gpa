@@ -108,6 +108,7 @@ i18n_init (void)
 #else
 #ifdef ENABLE_NLS
   gtk_set_locale ();
+  bind_textdomain_codeset (PACKAGE, "UTF-8");
   bindtextdomain (PACKAGE, GPA_LOCALEDIR);
   textdomain (PACKAGE);
 #endif

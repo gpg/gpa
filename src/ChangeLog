@@ -1,3 +1,7 @@
+2002-12-17  Miguel Coca  <mcoca@gnu.org>
+
+	* gpa.c (i18n_init): Output is always UTF-8.
+
 2002-12-16  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (keyring_editor_new): Remove specific font name.
