@@ -1,5 +1,7 @@
 2001-02-27	Jan-Oliver Wagner <jan@intevation.de>
 
+	* VERSION: new revision 0.4.0
+	* TODO: added hint
 	* configure.in: added french as available language
 
 2001-01-25	Jan-Oliver Wagner <jan@intevation.de>
