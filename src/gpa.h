@@ -67,7 +67,6 @@ struct {
 
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
-extern GList *global_tempWindows;
 extern gboolean global_noTips;
 extern GpapaAction global_lastCallbackResult;
 extern gchar *global_keyserver;
