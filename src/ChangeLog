@@ -1,5 +1,8 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_new): Mark the big label for
+	translation
+
 	* keylist.c (gpa_keylist_update_list): Call
 	gtk_container_check_resize to make sure that the size changes in
 	the title buttons are correctly accounted for
