@@ -1115,6 +1115,10 @@ msgstr "Fingerabdruck:"
 msgid "Expires at:"
 msgstr "ungültig ab:"
 
+#: src/keyring.c:803
+msgid "Created at:"
+msgstr "erzeugt am:"
+
 #: src/keyring.c:796
 msgid "Owner Trust:"
 msgstr "Benutzervertrauen:"
@@ -1125,7 +1129,7 @@ msgstr "Schlüsselvertrauen:"
 
 #: src/keyring.c:800
 msgid "Key Type:"
-msgstr "Art: "
+msgstr "Art:"
 
 #: src/keyring.c:803
 msgid "Details"
