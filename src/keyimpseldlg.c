@@ -46,8 +46,11 @@ key_import_selection_do_import (GPAKeyImportSelectionDialog *dialog)
       gint row = GPOINTER_TO_INT (dialog->clist_which->selection->data);
       gchar *key_id = gtk_clist_get_row_data (dialog->clist_which, row);
       gchar *full_key_id = g_strconcat ("0x", key_id, NULL);
+#if 0
+      /* FIXME: Reimplement this when gpgme supports searches */
       gpapa_receive_public_key_from_server (full_key_id, dialog->keyserver,
 		                            gpa_callback, dialog->window);
+#endif
       g_free (full_key_id);
     }
 }

@@ -29,7 +29,6 @@
 #include <errno.h>
 #include "gtktools.h"
 #include "icons.h"
-#include "filemenu.h"
 #include "optionsmenu.h"
 #include "helpmenu.h"
 #include "gpapastrings.h"
@@ -815,7 +814,7 @@ keyring_editor_menubar_new (GtkWidget * window,
   GtkItemFactoryEntry file_menu[] = {
     {_("/_File"), NULL, NULL, 0, "<Branch>"},
     {_("/File/_Close"), "<control>W", keyring_editor_close, 0, NULL},
-    {_("/File/_Quit"), "<control>Q", file_quit, 0, NULL},
+    {_("/File/_Quit"), "<control>Q", gtk_main_quit, 0, NULL},
   };
   GtkItemFactoryEntry keys_menu[] = {
     {_("/_Keys"), NULL, NULL, 0, "<Branch>"},

@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "gpa.h"
+#include "gpawidgets.h"
 #include "gtktools.h"
 #include "gpapastrings.h"
 
@@ -68,7 +69,7 @@ gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent,
   vboxTrust = GTK_DIALOG (windowTrust)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vboxTrust), 5);
 
-  tableKey = gpa_tableKey_new (key, windowTrust);
+  tableKey = gpa_key_info_new (key, windowTrust);
   gtk_container_set_border_width (GTK_CONTAINER (tableKey), 5);
   gtk_box_pack_start (GTK_BOX (vboxTrust), tableKey, FALSE, FALSE, 0);
 

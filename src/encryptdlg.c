@@ -29,8 +29,6 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
-#include "filemenu.h"
-#include "keysmenu.h"
 
 struct _GPAFileEncryptDialog {
   GtkWidget *window;

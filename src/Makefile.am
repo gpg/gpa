@@ -14,8 +14,6 @@ INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/intl
 LDADD = -L ../jnlib -ljnlib @INTLLIBS@
 
 gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
-	      keysmenu.c keysmenu.h	    \
-	      filemenu.c filemenu.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
 	      gtktools.c gtktools.h  \
 	      helpmenu.c helpmenu.h	  \
@@ -52,5 +50,4 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpgmetools.h gpgmetools.c \
 	      gpgmeedit.h gpgmeedit.c \
 	      server_access.h server_access.c \
-	      gpapa.h dummy_gpapa.c \
 	      gpa.rc

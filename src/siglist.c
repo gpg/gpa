@@ -68,6 +68,7 @@ void
 gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
 			    gchar * key_id)
 {
+#if 0
   GPASigList * siglist = gtk_object_get_data (GTK_OBJECT (clist),
 					      "gpa_siglist");
   GpapaSignature *sig;
@@ -111,5 +112,6 @@ gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
     }
 
   gtk_clist_thaw (GTK_CLIST (clist));
+#endif
 } /* gpa_siglist_set_signatures */
 

@@ -1,5 +1,32 @@
 2002-10-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* siglist.c (gpa_siglist_set_signatures): Disable until port to gpgme.
+
+	* keyimpseldlg.c (key_import_selection_do_import): Disable imports
+	from here until there is a way to search keys again.
+
+	* Makefile.am (gpa_SOURCES): Removed filemenu.{c,h}, keysmenu.{c,h},
+	gpapa.h and dummy_gpapa.c.
+
+	* optionsmenu.c (add_key): Fix warning.
+
+	* gpa.c, gpa.h (gpa_callback, gpa_get_global_clist_file, sigs_append) 
+	(compareInts, gpa_selectRecipient, gpa_unselectRecipient) 
+	(gpa_removeRecipients, gpa_addRecipient, gpa_addRecipients) 
+	(freeRowData, gpa_recipientWindow_close): Removed obsolete.
+	* optionsmenu.c (options_recipients_fillDefault) 
+	(options_recipients_set, options_recipients_destroy) 
+	(options_recipients): Ditto.
+	* filemenu.c, filemenu.h, keysmenu.c, keysmenu.h, gpapa.h,
+	dummy_gpapa.c: Likewise for the whole files.
+
+	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Use a gpa_key_info
+	instead of a gpa_tableKey.	
+
+	* fileman.c (fileman_menu_new): Use gtk_main_quit() directly for
+	the quit menu entry.
+	* keyring.c (keyring_editor_menubar_new): Likewise.
+	
 	* keyring.c (keyring_editor_export): Use gpa_fopen.
 
 	* fileman.c (decrypt_files): Implemented using Gpgme.

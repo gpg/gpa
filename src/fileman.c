@@ -44,7 +44,6 @@
 #include "gtktools.h"
 #include "gpawidgets.h"
 #include "siglist.h"
-#include "filemenu.h"
 #include "optionsmenu.h"
 #include "helpmenu.h"
 #include "icons.h"
@@ -362,7 +361,7 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
     */
     {_("/File/sep2"), NULL, NULL, 0, "<Separator>"},
     {_("/File/_Close"), NULL, close_window, 0, NULL},
-    {_("/File/_Quit"), "<control>Q", file_quit, 0, NULL},
+    {_("/File/_Quit"), "<control>Q", gtk_main_quit, 0, NULL},
   };
   GtkItemFactoryEntry windows_menu[] = {
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
