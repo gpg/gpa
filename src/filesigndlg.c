@@ -145,11 +145,7 @@ gpa_file_sign_dialog_constructor (GType type,
 
   radio_sign =
     gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
-				      accelGroup, 
-				      gpa_options_get_simplified_ui 
-				      (gpa_options_get_instance ()) ?
-				      _("_cleartext signature") :
-				      _("sign, do_n't compress"));
+				      accelGroup, _("_cleartext signature"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
   dialog->radio_sign = radio_sign;
 
