@@ -1,5 +1,14 @@
 2001-02-15  Bernhard Herzog  <bh@intevation.de>
 
+	* keygenwizard.c (gpa_keygen_wizard_backup_dir_browse): Check for
+	a cancelled dialog.
+
+	* encryptdlg.c (file_encrypt_ok, file_encrypt_cancel): Instead of
+	quitting the main loop, destroy the dialog window.
+	(file_sign_destroy, gpa_file_encrypt_dialog_run):Add a destroy
+	event handler and quit the recursive main loop there.Make the
+	dialog properly modal.
+
 	* filesigndlg.c (file_sign_ok, file_sign_cancel): Instead of
 	quitting the main loop, destroy the dialog window.
 	(file_sign_destroy, gpa_file_sign_dialog_run): Add a destroy event

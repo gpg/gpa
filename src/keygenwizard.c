@@ -427,11 +427,13 @@ gpa_keygen_wizard_backup_dir_browse (GtkWidget * button, gpointer param)
 
   filename = gpa_get_load_file_name (gtk_widget_get_toplevel (button),
 				     _("Backup Directory"), NULL);
-  dirname = file_dirname (filename);
-  gtk_entry_set_text (GTK_ENTRY (entry), dirname);
-
-  free (filename);
-  free (dirname);
+  if (filename)
+    {
+      dirname = file_dirname (filename);
+      gtk_entry_set_text (GTK_ENTRY (entry), dirname);
+      free (filename);
+      free (dirname);
+    }
 }
   
   

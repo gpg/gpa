@@ -103,14 +103,22 @@ file_encrypt_ok (gpointer param)
       cur = g_list_next (cur);
     }
   g_list_free (recipients);
-  gtk_main_quit ();
+  gtk_widget_destroy (dialog->window);
 } /* file_encrypt_ok */
 
 static void
 file_encrypt_cancel (gpointer param)
 {
+  GPAFileEncryptDialog *dialog = param;
+  gtk_widget_destroy (dialog->window);
+}
+
+static void
+file_encrypt_destroy (GtkWidget * widget, gpointer param)
+{
   gtk_main_quit ();
 }
+
 
 GList *
 gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
@@ -150,6 +158,8 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
   window = gtk_window_new (GTK_WINDOW_DIALOG);
   gtk_window_set_title (GTK_WINDOW (window), _("Encrypt files"));
   dialog.window = window;
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (file_encrypt_destroy), NULL);
 
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
@@ -201,12 +211,10 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxEncrypt), buttonEncrypt);
 
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   gpa_window_show_centered (window, parent);
 
-  gtk_grab_add (window);
   gtk_main ();
-  gtk_grab_remove (window);
-  gtk_widget_destroy (window);
 
   return dialog.encrypted_files;
 } /* file_encrypt_dialog */
