@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
-"POT-Creation-Date: 2002-12-15 16:43+0100\n"
+"POT-Creation-Date: 2002-12-17 15:04+0100\n"
 "PO-Revision-Date: 2002-12-15 22:13+0100\n"
 "Last-Translator: Michael Anckaert <xantor@linux.be>\n"
 "Language-Team: DUTCH <nl@li.org>\n"
@@ -214,7 +214,7 @@ msgstr "Bestand openen"
 msgid "open file"
 msgstr "open bestand"
 
-#: src/fileman.c:491 src/keyring.c:1527
+#: src/fileman.c:491 src/keyring.c:1534
 msgid "Sign"
 msgstr "Ondertekenen"
 
@@ -262,23 +262,23 @@ msgstr "Ontsleutel het geselecteerde bestand"
 msgid "decrypt file"
 msgstr "ontsleutel bestand"
 
-#: src/fileman.c:520 src/keyring.c:1580
+#: src/fileman.c:520 src/keyring.c:1587
 msgid "Open the Preferences dialog"
 msgstr "Open de voorkeuren dialoog"
 
-#: src/fileman.c:521 src/keyring.c:1581
+#: src/fileman.c:521 src/keyring.c:1588
 msgid "preferences"
 msgstr "voorkeuren"
 
-#: src/fileman.c:529 src/keyring.c:1596
+#: src/fileman.c:529 src/keyring.c:1603
 msgid "Help"
 msgstr "Help"
 
-#: src/fileman.c:530 src/keyring.c:1597
+#: src/fileman.c:530 src/keyring.c:1604
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "De GNU Privacy Assistent verstaan"
 
-#: src/fileman.c:531 src/keyring.c:1598
+#: src/fileman.c:531 src/keyring.c:1605
 msgid "help"
 msgstr "help"
 
@@ -335,27 +335,27 @@ msgstr "ondertekenen, _niet comprimeren"
 msgid "a_rmor"
 msgstr "a_rmor"
 
-#: src/gpa.c:237
+#: src/gpa.c:238
 msgid "display this help and exit"
 msgstr "toon help en sluit"
 
-#: src/gpa.c:238
+#: src/gpa.c:239
 msgid "output version information and exit"
 msgstr "toon versie informatie en sluit"
 
-#: src/gpa.c:239
+#: src/gpa.c:240
 msgid "open keyring editor (default)"
 msgstr "open keyring editor (standaard)"
 
-#: src/gpa.c:240
+#: src/gpa.c:241
 msgid "open filemanager"
 msgstr "open bestandsbeheerder"
 
-#: src/gpa.c:241
+#: src/gpa.c:242
 msgid "read options from file"
 msgstr "lees opties van bestand"
 
-#: src/gpa.c:265
+#: src/gpa.c:266
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -363,15 +363,15 @@ msgstr ""
 "Syntax: gpa [opties]\n"
 "Grafische frontend voor GnuPG\n"
 
-#: src/gpa.c:267
+#: src/gpa.c:268
 msgid "Options"
 msgstr "/_Opties"
 
-#: src/gpa.c:273
+#: src/gpa.c:274
 msgid "Please report bugs to <"
 msgstr "Rapporteer fouten aub naar <"
 
-#: src/gpa.c:273
+#: src/gpa.c:274
 msgid ">.\n"
 msgstr ">.\n"
 
@@ -399,7 +399,7 @@ msgid "Directories"
 msgstr "Mappen"
 
 #. The files ctree
-#: src/gpafilesel.c:884 src/keyring.c:1589
+#: src/gpafilesel.c:884 src/keyring.c:1596
 msgid "Files"
 msgstr "Bestanden"
 
@@ -645,7 +645,7 @@ msgstr "onbekent"
 
 #. User Name
 #: src/gpawidgets.c:68 src/gpgmetools.c:508 src/gpgmetools.c:515
-#: src/keyring.c:1178 src/keysigndlg.c:97
+#: src/keyring.c:1185 src/keysigndlg.c:97
 msgid "User Name:"
 msgstr "Gebruiker naam:"
 
@@ -655,7 +655,7 @@ msgstr "Gebruiker namen:"
 
 #. Key ID
 #: src/gpawidgets.c:74 src/gpgmetools.c:509 src/gpgmetools.c:516
-#: src/keyring.c:1180
+#: src/keyring.c:1187
 msgid "Key ID:"
 msgstr "Sleutel ID:"
 
@@ -1268,7 +1268,7 @@ msgstr ""
 "%i geheime sleutels geïmporteerd\n"
 "%i geheime sleutels onveranderd"
 
-#: src/keyimpseldlg.c:63 src/keyring.c:1305
+#: src/keyimpseldlg.c:63 src/keyring.c:1312
 msgid "No keys selected"
 msgstr "Geen sleutels geselecteerd"
 
@@ -1429,185 +1429,185 @@ msgstr "/Sleutels/E_xporteer Sleutels...."
 msgid "/Keys/_Backup..."
 msgstr "/Sleutels/_Backup...."
 
-#: src/keyring.c:1040
+#: src/keyring.c:1041
 msgid "/Keys/Export Keys..."
 msgstr "/Sleutels/_Exporteer Sleutels..."
 
-#: src/keyring.c:1047
+#: src/keyring.c:1049
 msgid "/Keys/Delete Keys..."
 msgstr "/Sleutels/_Verwijder sleutels...."
 
-#: src/keyring.c:1054
+#: src/keyring.c:1057
 msgid "/Edit/Copy"
 msgstr "/Bewerk/Kopieer"
 
-#: src/keyring.c:1062
+#: src/keyring.c:1066
 msgid "/Keys/Set Owner Trust..."
 msgstr "/Sleutels/Verander _Eigenaars Vertrouwen...."
 
-#: src/keyring.c:1070
+#: src/keyring.c:1075
 msgid "/Keys/Sign Keys..."
 msgstr "/Sleutels/_Onderteken Sleutels..."
 
-#: src/keyring.c:1078
+#: src/keyring.c:1084
 msgid "/Keys/Edit Private Key..."
 msgstr "/Sleutels/_Bewerk Sleutel..."
 
-#: src/keyring.c:1085
+#: src/keyring.c:1092
 msgid "/Keys/Backup..."
 msgstr "/Sleutels/_Backup...."
 
-#: src/keyring.c:1182 src/keysigndlg.c:102
+#: src/keyring.c:1189 src/keysigndlg.c:102
 msgid "Fingerprint:"
 msgstr "Vingerafdruk:"
 
-#: src/keyring.c:1184
+#: src/keyring.c:1191
 msgid "Expires at:"
 msgstr "Vervalt op:"
 
-#: src/keyring.c:1186
+#: src/keyring.c:1193
 msgid "Owner Trust:"
 msgstr "Eigenaars Vertrouwen:"
 
-#: src/keyring.c:1188
+#: src/keyring.c:1195
 msgid "Key Validity:"
 msgstr "Sleutel geldigheid:"
 
-#: src/keyring.c:1190
+#: src/keyring.c:1197
 msgid "Key Type:"
 msgstr "Sleutel Type:"
 
-#: src/keyring.c:1192
+#: src/keyring.c:1199
 msgid "Created at:"
 msgstr "Gemaakt op:"
 
-#: src/keyring.c:1195
+#: src/keyring.c:1202
 msgid "Details"
 msgstr "Details"
 
-#: src/keyring.c:1203
+#: src/keyring.c:1210
 msgid "Show signatures on user name:"
 msgstr "Controleer ondertekeningen van het geselecteerde bestand"
 
-#: src/keyring.c:1223
+#: src/keyring.c:1230
 msgid "Signatures"
 msgstr "Ondertekeningen"
 
-#: src/keyring.c:1243
+#: src/keyring.c:1250
 msgid "The key has both a private and a public part"
 msgstr "De sleutel heeft een geheim en publiek deel"
 
-#: src/keyring.c:1248
+#: src/keyring.c:1255
 msgid "The key has only a public part"
 msgstr "De sleutel heeft enkel een publiek deel"
 
-#: src/keyring.c:1276
+#: src/keyring.c:1283
 #, c-format
 msgid "%s %li bits"
 msgstr "%s %li bits"
 
-#: src/keyring.c:1309
+#: src/keyring.c:1316
 #, c-format
 msgid "%d keys selected"
 msgstr "%d sleutels geselecteerd"
 
-#: src/keyring.c:1336
+#: src/keyring.c:1343
 msgid "All signatures"
 msgstr "Ondertekeningen"
 
-#: src/keyring.c:1509
+#: src/keyring.c:1516
 msgid "Edit"
 msgstr "Bewerk"
 
-#: src/keyring.c:1510
+#: src/keyring.c:1517
 msgid "Edit the selected private key"
 msgstr "Bewerk de geselecteerde sleutel"
 
-#: src/keyring.c:1511
+#: src/keyring.c:1518
 msgid "edit key"
 msgstr "bewerk sleutel"
 
-#: src/keyring.c:1519
+#: src/keyring.c:1526
 msgid "Remove the selected key"
 msgstr "Verwijder de geselecteerde sleutel"
 
-#: src/keyring.c:1520
+#: src/keyring.c:1527
 msgid "remove key"
 msgstr "verwijder sleutel"
 
-#: src/keyring.c:1528
+#: src/keyring.c:1535
 msgid "Sign the selected key"
 msgstr "Onderteken de geselecteerde sleutel"
 
-#: src/keyring.c:1528
+#: src/keyring.c:1535
 msgid "sign key"
 msgstr "onderteken sleutel"
 
-#: src/keyring.c:1535
+#: src/keyring.c:1542
 msgid "Import"
 msgstr "Importeer"
 
-#: src/keyring.c:1536
+#: src/keyring.c:1543
 msgid "Import Keys"
 msgstr "Importeer sleutels"
 
-#: src/keyring.c:1536
+#: src/keyring.c:1543
 msgid "import keys"
 msgstr "importeer sleutels"
 
-#: src/keyring.c:1541
+#: src/keyring.c:1548
 msgid "Export"
 msgstr "Exporteer"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1549
 msgid "Export Keys"
 msgstr "Exporteer Sleutels"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1549
 msgid "export keys"
 msgstr "exporteer sleutels"
 
-#: src/keyring.c:1555
+#: src/keyring.c:1562
 msgid "Brief"
 msgstr "Beperkt"
 
-#: src/keyring.c:1555
+#: src/keyring.c:1562
 msgid "Show Brief Keylist"
 msgstr "Toon beperkte sleutellijst"
 
-#: src/keyring.c:1556
+#: src/keyring.c:1563
 msgid "brief"
 msgstr "beperkt"
 
-#: src/keyring.c:1567
+#: src/keyring.c:1574
 msgid "Detailed"
 msgstr "Details"
 
-#: src/keyring.c:1567
+#: src/keyring.c:1574
 msgid "Show Key Details"
 msgstr "Toon Sleutel Details"
 
-#: src/keyring.c:1568
+#: src/keyring.c:1575
 msgid "detailed"
 msgstr "gedetailleerd"
 
-#: src/keyring.c:1590
+#: src/keyring.c:1597
 msgid "Open the File Manager"
 msgstr "Open de bestandsbeheerder"
 
-#: src/keyring.c:1591
+#: src/keyring.c:1598
 msgid "file manager"
 msgstr "bestandsbeheerder"
 
-#: src/keyring.c:1614
+#: src/keyring.c:1621
 msgid "Selected Default Key:"
 msgstr "Selecteer Standaard Sleutel:"
 
-#: src/keyring.c:1692
+#: src/keyring.c:1699
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistent - Keyring Editor"
 
-#: src/keyring.c:1723
+#: src/keyring.c:1730
 msgid "Keyring Editor"
 msgstr "Keyring Editor"
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.4.1\n"
-"POT-Creation-Date: 2002-12-15 16:43+0100\n"
+"POT-Creation-Date: 2002-12-17 15:04+0100\n"
 "PO-Revision-Date: 2002-12-17 20:51+0800\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -214,7 +214,7 @@ msgstr "開啟檔案"
 msgid "open file"
 msgstr "開啟檔案"
 
-#: src/fileman.c:491 src/keyring.c:1527
+#: src/fileman.c:491 src/keyring.c:1534
 msgid "Sign"
 msgstr "簽署"
 
@@ -262,23 +262,23 @@ msgstr "解密已選擇檔案"
 msgid "decrypt file"
 msgstr "解密檔案"
 
-#: src/fileman.c:520 src/keyring.c:1580
+#: src/fileman.c:520 src/keyring.c:1587
 msgid "Open the Preferences dialog"
 msgstr "開啟設定視窗"
 
-#: src/fileman.c:521 src/keyring.c:1581
+#: src/fileman.c:521 src/keyring.c:1588
 msgid "preferences"
 msgstr "設定"
 
-#: src/fileman.c:529 src/keyring.c:1596
+#: src/fileman.c:529 src/keyring.c:1603
 msgid "Help"
 msgstr "求助"
 
-#: src/fileman.c:530 src/keyring.c:1597
+#: src/fileman.c:530 src/keyring.c:1604
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "了解GNU Privacy Assistant"
 
-#: src/fileman.c:531 src/keyring.c:1598
+#: src/fileman.c:531 src/keyring.c:1605
 msgid "help"
 msgstr "求助"
 
@@ -335,27 +335,27 @@ msgstr "簽署但不壓縮 (&n)"
 msgid "a_rmor"
 msgstr "純文字 (&r)"
 
-#: src/gpa.c:237
+#: src/gpa.c:238
 msgid "display this help and exit"
 msgstr "顯示求助訊息及離開"
 
-#: src/gpa.c:238
+#: src/gpa.c:239
 msgid "output version information and exit"
 msgstr "顯示版本資料及離開"
 
-#: src/gpa.c:239
+#: src/gpa.c:240
 msgid "open keyring editor (default)"
 msgstr "開啟鑰圈編輯器 (預設)"
 
-#: src/gpa.c:240
+#: src/gpa.c:241
 msgid "open filemanager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:241
+#: src/gpa.c:242
 msgid "read options from file"
 msgstr "由檔案中讀取選項"
 
-#: src/gpa.c:265
+#: src/gpa.c:266
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -363,15 +363,15 @@ msgstr ""
 "語法: gpa [選項]\n"
 "GnuPG的圖像介面\n"
 
-#: src/gpa.c:267
+#: src/gpa.c:268
 msgid "Options"
 msgstr "選項"
 
-#: src/gpa.c:273
+#: src/gpa.c:274
 msgid "Please report bugs to <"
 msgstr "回報臭蟲至 <"
 
-#: src/gpa.c:273
+#: src/gpa.c:274
 msgid ">.\n"
 msgstr ">.\n"
 
@@ -397,7 +397,7 @@ msgid "Directories"
 msgstr "目錄"
 
 #. The files ctree
-#: src/gpafilesel.c:884 src/keyring.c:1589
+#: src/gpafilesel.c:884 src/keyring.c:1596
 msgid "Files"
 msgstr "檔案"
 
@@ -434,8 +434,7 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"檔案 \"%s\" 在機器 (%s) 並不能在這個"
-"程式中使用.\n"
+"檔案 \"%s\" 在機器 (%s) 並不能在這個程式中使用.\n"
 "您確要選擇這個檔案 ?"
 
 #: src/gpafilesel.c:1252
@@ -468,8 +467,7 @@ msgstr "關閉"
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"目錄 \"%s\" 中存有不能用作名稱的符號"
+msgstr "目錄 \"%s\" 中存有不能用作名稱的符號"
 
 #: src/gpafilesel.c:1569
 #, c-format
@@ -516,10 +514,12 @@ msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "檔案 \"%s\" 名稱中有不正確的符號, 不能用作檔案名稱"
 
 #: src/gpafilesel.c:1713
+#, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
-msgstr "刪除檔案錯誤 `%s' : %s \n"
+msgstr ""
+"刪除檔案錯誤 `%s' : %s \n"
 "%s"
 
 #: src/gpafilesel.c:1715 src/gpafilesel.c:1880
@@ -527,6 +527,7 @@ msgid "It probably contains symbols not allowed in filenames."
 msgstr "檔案名稱中有不正確的符號"
 
 #: src/gpafilesel.c:1724
+#, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "刪除檔案錯誤 `%s' : %s"
 
@@ -559,10 +560,12 @@ msgstr ""
 "%s"
 
 #: src/gpafilesel.c:1878
+#, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
-msgstr "重新名命檔案時發生錯誤 `%s' : %s \n"
+msgstr ""
+"重新名命檔案時發生錯誤 `%s' : %s \n"
 "%s"
 
 #: src/gpafilesel.c:1888
@@ -593,9 +596,7 @@ msgstr "選擇 : "
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
 "variable G_BROKEN_FILENAMES."
-msgstr ""
-"檔案名稱 %s 不能轉為 UTF-8, 請試其他的環境變數 "
-"G_BROKEN_FILENAMES."
+msgstr "檔案名稱 %s 不能轉為 UTF-8, 請試其他的環境變數 G_BROKEN_FILENAMES."
 
 #: src/gpafilesel.c:3897
 msgid "Name too long"
@@ -631,7 +632,7 @@ msgstr "不知名"
 
 #. User Name
 #: src/gpawidgets.c:68 src/gpgmetools.c:508 src/gpgmetools.c:515
-#: src/keyring.c:1178 src/keysigndlg.c:97
+#: src/keyring.c:1185 src/keysigndlg.c:97
 msgid "User Name:"
 msgstr "用者名稱 :"
 
@@ -641,7 +642,7 @@ msgstr "用者名稱 :"
 
 #. Key ID
 #: src/gpawidgets.c:74 src/gpgmetools.c:509 src/gpgmetools.c:516
-#: src/keyring.c:1180
+#: src/keyring.c:1187
 msgid "Key ID:"
 msgstr "密鑰 ID:"
 
@@ -1245,7 +1246,7 @@ msgstr ""
 "%i 私鑰已匯入\n"
 "%i 私鑰已匯入"
 
-#: src/keyimpseldlg.c:63 src/keyring.c:1305
+#: src/keyimpseldlg.c:63 src/keyring.c:1312
 msgid "No keys selected"
 msgstr "沒有選擇密鑰"
 
@@ -1402,185 +1403,185 @@ msgstr "/鑰對/匯出鑰對... (&X)"
 msgid "/Keys/_Backup..."
 msgstr "/鑰對/備份... (&B)"
 
-#: src/keyring.c:1040
+#: src/keyring.c:1041
 msgid "/Keys/Export Keys..."
 msgstr "/鑰對/匯出鑰對..."
 
-#: src/keyring.c:1047
+#: src/keyring.c:1049
 msgid "/Keys/Delete Keys..."
 msgstr "/鑰對/建立新鑰... (&G)"
 
-#: src/keyring.c:1054
+#: src/keyring.c:1057
 msgid "/Edit/Copy"
 msgstr "/編輯/複製"
 
-#: src/keyring.c:1062
+#: src/keyring.c:1066
 msgid "/Keys/Set Owner Trust..."
 msgstr "/鑰對/改變信任度..."
 
-#: src/keyring.c:1070
+#: src/keyring.c:1075
 msgid "/Keys/Sign Keys..."
 msgstr "/鑰對/簽署公鑰..."
 
-#: src/keyring.c:1078
+#: src/keyring.c:1084
 msgid "/Keys/Edit Private Key..."
 msgstr "/鑰對/修改密鑰..."
 
-#: src/keyring.c:1085
+#: src/keyring.c:1092
 msgid "/Keys/Backup..."
 msgstr "/鑰對/備份..."
 
-#: src/keyring.c:1182 src/keysigndlg.c:102
+#: src/keyring.c:1189 src/keysigndlg.c:102
 msgid "Fingerprint:"
 msgstr "指紋:"
 
-#: src/keyring.c:1184
+#: src/keyring.c:1191
 msgid "Expires at:"
 msgstr "有效期至:"
 
-#: src/keyring.c:1186
+#: src/keyring.c:1193
 msgid "Owner Trust:"
 msgstr "擁有者信任:"
 
-#: src/keyring.c:1188
+#: src/keyring.c:1195
 msgid "Key Validity:"
 msgstr "認正公鑰:"
 
-#: src/keyring.c:1190
+#: src/keyring.c:1197
 msgid "Key Type:"
 msgstr "密鑰種類:"
 
-#: src/keyring.c:1192
+#: src/keyring.c:1199
 msgid "Created at:"
 msgstr "建立在 :"
 
-#: src/keyring.c:1195
+#: src/keyring.c:1202
 msgid "Details"
 msgstr "詳情"
 
-#: src/keyring.c:1203
+#: src/keyring.c:1210
 msgid "Show signatures on user name:"
 msgstr "在用者名稱顯示簽署:"
 
-#: src/keyring.c:1223
+#: src/keyring.c:1230
 msgid "Signatures"
 msgstr "簽署"
 
-#: src/keyring.c:1243
+#: src/keyring.c:1250
 msgid "The key has both a private and a public part"
 msgstr "這是有私人及公共部份的完鑰"
 
-#: src/keyring.c:1248
+#: src/keyring.c:1255
 msgid "The key has only a public part"
 msgstr "這密鑰只有公共部份"
 
-#: src/keyring.c:1276
+#: src/keyring.c:1283
 #, c-format
 msgid "%s %li bits"
 msgstr "%s %li 位"
 
-#: src/keyring.c:1309
+#: src/keyring.c:1316
 #, c-format
 msgid "%d keys selected"
 msgstr "%d 密鑰被選擇"
 
-#: src/keyring.c:1336
+#: src/keyring.c:1343
 msgid "All signatures"
 msgstr "所有簽署"
 
-#: src/keyring.c:1509
+#: src/keyring.c:1516
 msgid "Edit"
 msgstr "修改"
 
-#: src/keyring.c:1510
+#: src/keyring.c:1517
 msgid "Edit the selected private key"
 msgstr "修改已選擇的密鑰"
 
-#: src/keyring.c:1511
+#: src/keyring.c:1518
 msgid "edit key"
 msgstr "修改密鑰"
 
-#: src/keyring.c:1519
+#: src/keyring.c:1526
 msgid "Remove the selected key"
 msgstr "移除已選擇的密鑰"
 
-#: src/keyring.c:1520
+#: src/keyring.c:1527
 msgid "remove key"
 msgstr "移除密鑰"
 
-#: src/keyring.c:1528
+#: src/keyring.c:1535
 msgid "Sign the selected key"
 msgstr "簽署已選擇的密鑰"
 
-#: src/keyring.c:1528
+#: src/keyring.c:1535
 msgid "sign key"
 msgstr "簽署密鑰"
 
-#: src/keyring.c:1535
+#: src/keyring.c:1542
 msgid "Import"
 msgstr "匯入"
 
-#: src/keyring.c:1536
+#: src/keyring.c:1543
 msgid "Import Keys"
 msgstr "匯入密鑰"
 
-#: src/keyring.c:1536
+#: src/keyring.c:1543
 msgid "import keys"
 msgstr "匯入密鑰"
 
-#: src/keyring.c:1541
+#: src/keyring.c:1548
 msgid "Export"
 msgstr "輸出"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1549
 msgid "Export Keys"
 msgstr "輸出密鑰"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1549
 msgid "export keys"
 msgstr "輸出密鑰"
 
-#: src/keyring.c:1555
+#: src/keyring.c:1562
 msgid "Brief"
 msgstr "摘要"
 
-#: src/keyring.c:1555
+#: src/keyring.c:1562
 msgid "Show Brief Keylist"
 msgstr "顯示密鑰清單摘要"
 
-#: src/keyring.c:1556
+#: src/keyring.c:1563
 msgid "brief"
 msgstr "摘要"
 
-#: src/keyring.c:1567
+#: src/keyring.c:1574
 msgid "Detailed"
 msgstr "詳情"
 
-#: src/keyring.c:1567
+#: src/keyring.c:1574
 msgid "Show Key Details"
 msgstr "顯示密鑰詳情"
 
-#: src/keyring.c:1568
+#: src/keyring.c:1575
 msgid "detailed"
 msgstr "詳情"
 
-#: src/keyring.c:1590
+#: src/keyring.c:1597
 msgid "Open the File Manager"
 msgstr "開啟檔案管理員"
 
-#: src/keyring.c:1591
+#: src/keyring.c:1598
 msgid "file manager"
 msgstr "檔案管理員"
 
-#: src/keyring.c:1614
+#: src/keyring.c:1621
 msgid "Selected Default Key:"
 msgstr "選擇預設密鑰:"
 
-#: src/keyring.c:1692
+#: src/keyring.c:1699
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - 鑰圈編輯器"
 
-#: src/keyring.c:1723
+#: src/keyring.c:1730
 msgid "Keyring Editor"
 msgstr "鑰圈編輯器"
 
@@ -1634,8 +1635,7 @@ msgstr "不知名 (&U)"
 #: src/ownertrustdlg.c:134
 msgid ""
 "You don't know how much to trust this user to verify other people's keys.\n"
-msgstr ""
-"不知道信任這公鑰的信任程度.\n"
+msgstr "不知道信任這公鑰的信任程度.\n"
 
 #: src/ownertrustdlg.c:144
 msgid "_Never"
@@ -1645,8 +1645,7 @@ msgstr "永不信任 (&N)"
 msgid ""
 "You don't trust this user at all to verify the validity of other people's "
 "keys at all.\n"
-msgstr ""
-"完全不信任所有這個用者的資料\n"
+msgstr "完全不信任所有這個用者的資料\n"
 
 #: src/ownertrustdlg.c:159
 msgid "_Marginal"
@@ -1661,8 +1660,8 @@ msgid ""
 "trusted users with valid keys\n"
 msgstr ""
 "您不信任這個用者有能力驗證其他人的公鑰.\n"
-"但是這個用者的公鑰是合法的, 如果這個用者的公"
-"鑰被兩人以前所簽署, 您會信任這個公鑰\n"
+"但是這個用者的公鑰是合法的, 如果這個用者的公鑰被兩人以前所簽署, 您會信任這個"
+"公鑰\n"
 
 #: src/ownertrustdlg.c:181
 msgid "_Full"
@@ -1674,9 +1673,8 @@ msgid ""
 "so much, that you'll consider valid any key signed by him/her, provided this "
 "user's key is valid.\n"
 msgstr ""
-"您信任這個用者有能力驗證其他人的公鑰."
-"並且您會認為所有由這個公鑰所簽署的文件"
-"都會是合法及正確的.\n"
+"您信任這個用者有能力驗證其他人的公鑰.並且您會認為所有由這個公鑰所簽署的文件都"
+"會是合法及正確的.\n"
 
 #: src/ownertrustdlg.c:199
 msgid "U_ltimate"
@@ -1690,11 +1688,9 @@ msgid ""
 "(Warning: This is intended to be used for keys you own. Don't use it with "
 "other people's keys unless you really know what you are doing)\n"
 msgstr ""
-"您全完信任這個用者的能力及其公鑰, 並信任"
-"一切由這個用者簽署的所有文件.\n"
+"您全完信任這個用者的能力及其公鑰, 並信任一切由這個用者簽署的所有文件.\n"
 "\n"
-"(警告: 除非必要, 請不要與其他公鑰同時使用這"
-"個用者的公鑰)\n"
+"(警告: 除非必要, 請不要與其他公鑰同時使用這個用者的公鑰)\n"
 
 #: src/server_access.c:207
 msgid "No error"
@@ -1750,6 +1746,7 @@ msgstr ""
 "請等候..."
 
 #: src/server_access.c:293 src/server_access.c:313
+#, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
 "\n"

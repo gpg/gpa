@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.0-cvs\n"
-"POT-Creation-Date: 2002-12-17 00:14+0900\n"
+"POT-Creation-Date: 2002-12-17 15:04+0100\n"
 "PO-Revision-Date: 2002-12-16 23:00+0900\n"
 "Last-Translator: TAKAHASHI Tamotsu <tamo@momonga-linux.org>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
@@ -215,7 +215,7 @@ msgstr "ファイルを開く"
 msgid "open file"
 msgstr "ファイル開く"
 
-#: src/fileman.c:491 src/keyring.c:1527
+#: src/fileman.c:491 src/keyring.c:1534
 msgid "Sign"
 msgstr "署名する"
 
@@ -263,23 +263,23 @@ msgstr "選択ファイルを復号化する"
 msgid "decrypt file"
 msgstr "ファイル復号化"
 
-#: src/fileman.c:520 src/keyring.c:1580
+#: src/fileman.c:520 src/keyring.c:1587
 msgid "Open the Preferences dialog"
 msgstr "設定ダイアログを開く"
 
-#: src/fileman.c:521 src/keyring.c:1581
+#: src/fileman.c:521 src/keyring.c:1588
 msgid "preferences"
 msgstr "設定"
 
-#: src/fileman.c:529 src/keyring.c:1596
+#: src/fileman.c:529 src/keyring.c:1603
 msgid "Help"
 msgstr "ヘルプ"
 
-#: src/fileman.c:530 src/keyring.c:1597
+#: src/fileman.c:530 src/keyring.c:1604
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "GNU Privacy Assistant について理解する"
 
-#: src/fileman.c:531 src/keyring.c:1598
+#: src/fileman.c:531 src/keyring.c:1605
 msgid "help"
 msgstr "ヘルプ"
 
@@ -336,27 +336,27 @@ msgstr "圧縮なしで署名する (_N)"
 msgid "a_rmor"
 msgstr "アーマ形成 (_R)"
 
-#: src/gpa.c:237
+#: src/gpa.c:238
 msgid "display this help and exit"
 msgstr "このヘルプを表示して終了"
 
-#: src/gpa.c:238
+#: src/gpa.c:239
 msgid "output version information and exit"
 msgstr "バージョン情報を出力して終了"
 
-#: src/gpa.c:239
+#: src/gpa.c:240
 msgid "open keyring editor (default)"
 msgstr "鍵束エディタを開く (デフォルト)"
 
-#: src/gpa.c:240
+#: src/gpa.c:241
 msgid "open filemanager"
 msgstr "ファイルマネージャを開く"
 
-#: src/gpa.c:241
+#: src/gpa.c:242
 msgid "read options from file"
 msgstr "ファイルからオプション読込"
 
-#: src/gpa.c:265
+#: src/gpa.c:266
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -364,15 +364,15 @@ msgstr ""
 "構文: gpa [オプション]\n"
 "GnuPG のグラフィカルなフロントエンド\n"
 
-#: src/gpa.c:267
+#: src/gpa.c:268
 msgid "Options"
 msgstr "オプション"
 
-#: src/gpa.c:273
+#: src/gpa.c:274
 msgid "Please report bugs to <"
 msgstr "バグは <"
 
-#: src/gpa.c:273
+#: src/gpa.c:274
 msgid ">.\n"
 msgstr "> に報告してください。\n"
 
@@ -398,7 +398,7 @@ msgid "Directories"
 msgstr "ディレクトリ"
 
 #. The files ctree
-#: src/gpafilesel.c:884 src/keyring.c:1589
+#: src/gpafilesel.c:884 src/keyring.c:1596
 msgid "Files"
 msgstr "ファイル"
 
@@ -636,7 +636,7 @@ msgstr "未確認"
 
 #. User Name
 #: src/gpawidgets.c:68 src/gpgmetools.c:508 src/gpgmetools.c:515
-#: src/keyring.c:1178 src/keysigndlg.c:97
+#: src/keyring.c:1185 src/keysigndlg.c:97
 msgid "User Name:"
 msgstr "ユーザ名:"
 
@@ -646,7 +646,7 @@ msgstr "ユーザ名:"
 
 #. Key ID
 #: src/gpawidgets.c:74 src/gpgmetools.c:509 src/gpgmetools.c:516
-#: src/keyring.c:1180
+#: src/keyring.c:1187
 msgid "Key ID:"
 msgstr "鍵 ID:"
 
@@ -1253,7 +1253,7 @@ msgstr ""
 "%i 個の秘密鍵をインポートしました\n"
 "%i 個の秘密鍵は無変更です"
 
-#: src/keyimpseldlg.c:63 src/keyring.c:1305
+#: src/keyimpseldlg.c:63 src/keyring.c:1312
 msgid "No keys selected"
 msgstr "鍵が選択されていません"
 
@@ -1413,185 +1413,185 @@ msgstr "/鍵 (K)/鍵をエクスポート... (_X)"
 msgid "/Keys/_Backup..."
 msgstr "/鍵 (K)/バックアップ... (_B)"
 
-#: src/keyring.c:1040
+#: src/keyring.c:1041
 msgid "/Keys/Export Keys..."
 msgstr "/鍵 (K)/鍵をエクスポート..."
 
-#: src/keyring.c:1047
+#: src/keyring.c:1049
 msgid "/Keys/Delete Keys..."
 msgstr "/鍵 (K)/鍵を削除..."
 
-#: src/keyring.c:1054
+#: src/keyring.c:1057
 msgid "/Edit/Copy"
 msgstr "/編集 (_E)/コピー"
 
-#: src/keyring.c:1062
+#: src/keyring.c:1066
 msgid "/Keys/Set Owner Trust..."
 msgstr "/鍵 (_K)/所有者の信用度を指定..."
 
-#: src/keyring.c:1070
+#: src/keyring.c:1075
 msgid "/Keys/Sign Keys..."
 msgstr "/鍵 (K)/鍵に署名..."
 
-#: src/keyring.c:1078
+#: src/keyring.c:1084
 msgid "/Keys/Edit Private Key..."
 msgstr "/鍵 (K)/秘密鍵を編集..."
 
-#: src/keyring.c:1085
+#: src/keyring.c:1092
 msgid "/Keys/Backup..."
 msgstr "/鍵 (K)/バックアップ..."
 
-#: src/keyring.c:1182 src/keysigndlg.c:102
+#: src/keyring.c:1189 src/keysigndlg.c:102
 msgid "Fingerprint:"
 msgstr "指紋:"
 
-#: src/keyring.c:1184
+#: src/keyring.c:1191
 msgid "Expires at:"
 msgstr "有効期限:"
 
-#: src/keyring.c:1186
+#: src/keyring.c:1193
 msgid "Owner Trust:"
 msgstr "所有者の信用度:"
 
-#: src/keyring.c:1188
+#: src/keyring.c:1195
 msgid "Key Validity:"
 msgstr "鍵の有効性:"
 
-#: src/keyring.c:1190
+#: src/keyring.c:1197
 msgid "Key Type:"
 msgstr "鍵タイプ:"
 
-#: src/keyring.c:1192
+#: src/keyring.c:1199
 msgid "Created at:"
 msgstr "作成日:"
 
-#: src/keyring.c:1195
+#: src/keyring.c:1202
 msgid "Details"
 msgstr "詳細"
 
-#: src/keyring.c:1203
+#: src/keyring.c:1210
 msgid "Show signatures on user name:"
 msgstr "ユーザ名に対する署名を表示"
 
-#: src/keyring.c:1223
+#: src/keyring.c:1230
 msgid "Signatures"
 msgstr "署名"
 
-#: src/keyring.c:1243
+#: src/keyring.c:1250
 msgid "The key has both a private and a public part"
 msgstr "この鍵は秘密鍵と公開鍵がある"
 
-#: src/keyring.c:1248
+#: src/keyring.c:1255
 msgid "The key has only a public part"
 msgstr "この鍵は公開鍵しかない"
 
-#: src/keyring.c:1276
+#: src/keyring.c:1283
 #, c-format
 msgid "%s %li bits"
 msgstr "%s %li ビット"
 
-#: src/keyring.c:1309
+#: src/keyring.c:1316
 #, c-format
 msgid "%d keys selected"
 msgstr "%d 個の鍵が選択されています"
 
-#: src/keyring.c:1336
+#: src/keyring.c:1343
 msgid "All signatures"
 msgstr "すべての署名"
 
-#: src/keyring.c:1509
+#: src/keyring.c:1516
 msgid "Edit"
 msgstr "編集"
 
-#: src/keyring.c:1510
+#: src/keyring.c:1517
 msgid "Edit the selected private key"
 msgstr "選択された秘密鍵を編集"
 
-#: src/keyring.c:1511
+#: src/keyring.c:1518
 msgid "edit key"
 msgstr "鍵を編集"
 
-#: src/keyring.c:1519
+#: src/keyring.c:1526
 msgid "Remove the selected key"
 msgstr "選択された鍵を削除"
 
-#: src/keyring.c:1520
+#: src/keyring.c:1527
 msgid "remove key"
 msgstr "鍵を削除"
 
-#: src/keyring.c:1528
+#: src/keyring.c:1535
 msgid "Sign the selected key"
 msgstr "選択された鍵に署名する"
 
-#: src/keyring.c:1528
+#: src/keyring.c:1535
 msgid "sign key"
 msgstr "鍵に署名"
 
-#: src/keyring.c:1535
+#: src/keyring.c:1542
 msgid "Import"
 msgstr "インポート"
 
-#: src/keyring.c:1536
+#: src/keyring.c:1543
 msgid "Import Keys"
 msgstr "鍵をインポート"
 
-#: src/keyring.c:1536
+#: src/keyring.c:1543
 msgid "import keys"
 msgstr "鍵インポート"
 
-#: src/keyring.c:1541
+#: src/keyring.c:1548
 msgid "Export"
 msgstr "エクスポート"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1549
 msgid "Export Keys"
 msgstr "鍵をエクスポート"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1549
 msgid "export keys"
 msgstr "鍵エクスポート"
 
-#: src/keyring.c:1555
+#: src/keyring.c:1562
 msgid "Brief"
 msgstr "要約"
 
-#: src/keyring.c:1555
+#: src/keyring.c:1562
 msgid "Show Brief Keylist"
 msgstr "要約版の鍵リストを表示"
 
-#: src/keyring.c:1556
+#: src/keyring.c:1563
 msgid "brief"
 msgstr "要約"
 
-#: src/keyring.c:1567
+#: src/keyring.c:1574
 msgid "Detailed"
 msgstr "詳細"
 
-#: src/keyring.c:1567
+#: src/keyring.c:1574
 msgid "Show Key Details"
 msgstr "鍵の詳細を表示"
 
-#: src/keyring.c:1568
+#: src/keyring.c:1575
 msgid "detailed"
 msgstr "詳細"
 
-#: src/keyring.c:1590
+#: src/keyring.c:1597
 msgid "Open the File Manager"
 msgstr "ファイルマネージャを開く"
 
-#: src/keyring.c:1591
+#: src/keyring.c:1598
 msgid "file manager"
 msgstr "ファイルマネージャ"
 
-#: src/keyring.c:1614
+#: src/keyring.c:1621
 msgid "Selected Default Key:"
 msgstr "選択されたデフォルトの鍵:"
 
-#: src/keyring.c:1692
+#: src/keyring.c:1699
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - 鍵束エディタ"
 
-#: src/keyring.c:1723
+#: src/keyring.c:1730
 msgid "Keyring Editor"
 msgstr "鍵束エディタ"
 
