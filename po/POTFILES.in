@@ -24,7 +24,6 @@ src/keygenwizard.c
 src/keyimportdlg.c
 src/keyimpseldlg.c
 src/keylist.c
-src/keyreceivedlg.c
 src/keyring.c
 src/keyserver.c
 src/keysigndlg.c

@@ -14,7 +14,7 @@ AC_PREREQ(2.52)
 #
 AC_INIT(gpa, 0.6.0-cvs, [bug-gpa@gnupg.org])
 
-ALL_LINGUAS="de fr zh_TW.Big5 pt_BR ja"
+ALL_LINGUAS="de fr zh_TW.Big5 pt_BR ja nl"
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_SRCDIR(src/gpa.c)
 AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)

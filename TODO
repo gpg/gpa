@@ -2,20 +2,6 @@
 
 In no particular order:
 
-* Completely remove jnlib/ At the moment the only thing from jnlib still
-  used is the command line argument parser.  
-
-* Check command line arguments: which are obsolete, which are useful.
-
-* Listing key signatures.
-
-* Implement a unified options object, along with signals, which would allow to:
-** Change from advanced-ui to simple-ui at runtime.
-** Change the default key status line when the default key changes.
-** Separate option file parsing from command line parsing.
-** Set all options (default key, keyserver, UI, and maybe others) from a
-   single dialog.
-
 * Rework the Key Generation Wizard to make it simpler and use stock buttons.
   This can probably be done using gtk_dialog_run ().
 
@@ -28,9 +14,15 @@ In no particular order:
    file" radio button automatically, or disable the file entry unless it's
    checked.
 
-* Check the GPAFileSelection. Should it be kept?
+* Context menus.
+
+* Check the GPAFileSelection. Should it be kept? It's around 20% of the GPA
+  code for something GTK already does.
 
 * Add more options to the "Edit key" dialog.
+** Change passphrase.
+** Manage UID's.
+** Manage subkeys.
 
 * Check which options should be available from the toolbar. Draw new icons if
   needed.
@@ -48,3 +40,6 @@ In no particular order:
 
 * Support a "File Status" (encrypted, signed, etc..) column in the
   filemanager, if GPGME allows it.
+
+* Use the fd/stream gpgme data objects in the filemanager, to support large
+  files.

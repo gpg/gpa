@@ -1,3 +1,11 @@
+2002-12-07  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* nl.po: New. Contributed by Michael Anckaert.
+
+2002-12-02  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* POTFILES.in: Remove keyreceivedlg.c
+
 2002-11-22  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* POTFILES.in: Update to reflect the removal of GPAPA and the
