@@ -1,5 +1,11 @@
 2001-02-09  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (toolbar_edit_key): Update the details notebook too
+	when the key has been changed
+
+	* keyeditdlg.c (key_edit_change_expiry): Set the key_has_changed
+	flag if the date has been changed
+
 	* keyring.c (keyring_details_notebook): Add a missing : in the key
 	type label
 
