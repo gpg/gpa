@@ -26,6 +26,7 @@
 #include "gtktools.h"
 #include "siglist.h"
 #include "ownertrustdlg.h"
+#include "expirydlg.h"
 #include "keyeditdlg.h"
 
 typedef struct {
@@ -44,7 +45,8 @@ static void key_edit_destroy (GtkWidget *widget, gpointer param);
 static GtkWidget * add_details_row (GtkWidget * table, gint row, gchar *label,
 				    gchar * text, gboolean selectable);
 
-static void key_edit_change_trust(GtkWidget * widget, gpointer param);
+static void key_edit_change_expiry (GtkWidget * widget, gpointer param);
+static void key_edit_change_trust (GtkWidget * widget, gpointer param);
 
 
 /* run the key edit dialog as a modal dialog */
@@ -77,7 +79,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
 
   public_key = gpapa_get_public_key_by_ID (key_id, gpa_callback, parent);
   secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback, parent);
-  
+
   window = gtk_window_new (GTK_WINDOW_DIALOG);
   dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), _("Edit Key"));
@@ -122,6 +124,8 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   button = gtk_button_new_with_label (_("Change"));
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   gtk_widget_set_sensitive (button, secret_key != NULL);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc)key_edit_change_expiry, &dialog);
 
 
   /* Owner Trust */
@@ -267,3 +271,31 @@ key_edit_change_trust(GtkWidget * widget, gpointer param)
     }
 }
   
+
+/* signal handler for the expiry date change button. */
+static void
+key_edit_change_expiry(GtkWidget * widget, gpointer param)
+{
+  GPAKeyEditDialog * dialog = param;
+  GpapaPublicKey * key;
+  GDate * expiry_date, *new_date;
+
+  key = gpapa_get_public_key_by_ID (dialog->key_id, gpa_callback,
+				    dialog->window);
+
+  expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
+					   dialog->window);
+
+  if (gpa_expiry_dialog_run (dialog->window, expiry_date, &new_date))
+    {
+      gchar * date_string;
+
+      gpapa_key_set_expiry_date (GPAPA_KEY (key), new_date, gpa_callback,
+				 dialog->window);
+      date_string = gpa_expiry_date_string (new_date);
+      gtk_label_set_text (GTK_LABEL (dialog->expiry), date_string);
+      free (date_string);
+      if (new_date)
+	g_date_free (new_date);
+    }
+}
