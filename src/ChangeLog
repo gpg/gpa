@@ -1,3 +1,20 @@
+2001-02-08  Bernhard Herzog  <bh@intevation.de>
+
+	* keygenwizard.c (GPAKeyGenWizard): Add fields for the wizard
+	widget and the wait-page.
+	(gpa_keygen_wizard_password_action): Switch to the wait-page.
+	(gpa_keygen_wizard_wait_page): New function to create the
+	wait-page.
+	(gpa_keygen_wizard_run): Put the waitpage into the wizard. Also,
+	store the wizard wizard widget in the struct.
+
+	* gpawizard.h (gpa_wizard_next_page_no_action):
+	* gpawizard.c (gpa_wizard_next_page_no_action): New public
+	function to switch the wizard to the next page without running the
+	action callback associated with the page. This is used by the
+	action callback that is invoked by the finish button to display a
+	"wait" message.
+
 2001-02-07  Thomas Koester  <tkoester@intevation.de>
 
 	* gpapastrings.c (gpa_expiry_date_string): Use %x instead of
