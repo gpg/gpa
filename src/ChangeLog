@@ -1,5 +1,36 @@
 2002-08-16  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* keysmenu.c, keysmenu.h (keys_openSecret)
+	(keys_generateRevocation)
+	(keys_import)
+	(keys_importOwnertrust)
+	(keys_updateTrust)
+	(keys_openPublic_export_export_exec)
+	(keys_openPublic_export_export)
+	(keys_export_dialog)
+	(keys_openPublic_send_key)
+	(keys_openPublic_send)
+	(keys_openPublic_exportTrust_export)
+	(keys_openSecret_export_export)
+	(keys_openSecret_delete)
+	(keys_openSecret_revocation)
+	(keys_openSecret_editKey_close)
+	(keys_openSecret_editKey)
+	(keys_openSecret_evalMouse)
+	(keys_openSecret)
+	(keys_generateRevocation_generate_exec)
+	(keys_generateRevocation_generate)
+	(keys_generateRevocation)
+	(keys_import_ok)
+	(keys_import)
+	(keys_importOwnertrust_ok)
+	(keys_importOwnertrust)
+	(keys_updateTrust)
+	(gpa_frameExpire_dont)
+	(gpa_frameExpire_after)
+	(gpa_frameExpire_at)
+	(gpa_frameExpire_new): Removed obsolete functions.
+
 	* passphrasedlg.c (gpa_passphrase_run_dialog): In dialogs, set the
 	button ordering to [OK] [Cancel] in all cases.
 	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Likewise. 

@@ -23,9 +23,3 @@ extern void keys_selectKey (GtkWidget * clistKeys, gint row, gint column,
 extern void keys_unselectKey (GtkWidget * clistKeys, gint row, gint column,
 			      GdkEventButton * event, gpointer param);
 extern GtkWidget *gpa_tableKey_new (GpapaKey * key, GtkWidget * window);
-
-extern void keys_openSecret (void);
-extern void keys_generateRevocation (void);
-extern void keys_import (void);
-extern void keys_importOwnertrust (void);
-extern void keys_updateTrust (void);
