@@ -303,7 +303,6 @@ keylist_fill_list (GPAKeyList *keylist)
       if( err != GPGME_No_Error )
         gpa_gpgme_error (err);
       fpr = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
-      gpgme_key_release (key);
       if( !gpa_keytable_lookup (keytable, fpr) )
         {
           const gchar * buttons[] = {_("_OK"),
@@ -316,6 +315,7 @@ keylist_fill_list (GPAKeyList *keylist)
                                  "key, too."),
                                buttons);
         }
+      gpgme_key_release (key);
     }
   g_hash_table_foreach (sel_hash, free_hash_key, NULL);
   g_hash_table_destroy (sel_hash);

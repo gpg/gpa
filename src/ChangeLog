@@ -1,3 +1,8 @@
+2002-11-22  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keylist.c (keylist_fill_list): Don't release the key until we are
+	done with it.
+
 2002-11-20  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.c (gpa_generate_key): Load the generated key into the
