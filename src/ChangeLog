@@ -1,5 +1,8 @@
 2002-09-11  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* gpgmeedit.c (edit_sign_fnc_action, edit_sign_fnc_transit) 
+	(edit_sign_fnc): Use an enum for the state names. Minor fixes.
+
 	* gpgmetools.c, gpgmetools.h, gpgmeedit.c, gpgmeedit.h: Moved the
 	wrappers around gpgme_op_edit and related functions to the new
 	files gpgmeedit.{c,h}
