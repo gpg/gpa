@@ -1,5 +1,14 @@
 2001-02-01  Bernhard Herzog  <bh@intevation.de>
 
+	* expirydlg.h: 
+	* expirydlg.c: New files implementing the dialog to change the
+	expiry date
+
+	* keyeditdlg.c (key_edit_change_expiry): New function. Handler for
+	the change button of the expiry date
+	(gpa_key_edit_dialog_run): Add the signal handler for the expiry
+	date change
+	
 	* keyring.c (keyring_editor_generate_key_advanced): 
 	* keygenwizard.c (gpa_keygen_wizard_password_action): Remove some
 	debug printfs
