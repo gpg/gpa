@@ -604,49 +604,6 @@ options_homedir (void)
 } /* options_homedir */
 
 void
-options_tips (gpointer param)
-{
-/* var */
-  GpaWindowKeeper *keeper;
-  GtkAccelGroup *accelGroup;
-  gpointer *paramClose;
-  GtkWidget *parent = param;
-/* objects */
-  GtkWidget *windowTips;
-  GtkWidget *hButtonBoxTips;
-  GtkWidget *toggleTips;
-  GtkWidget *buttonClose;
-/* commands */
-  keeper = gpa_windowKeeper_new ();
-  windowTips = gtk_window_new (GTK_WINDOW_DIALOG);
-  gpa_windowKeeper_set_window (keeper, windowTips);
-  gtk_window_set_title (GTK_WINDOW (windowTips), _("Show GPA Tips"));
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (windowTips), accelGroup);
-  hButtonBoxTips = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxTips),
-			     GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxTips), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxTips), 10);
-  toggleTips = gpa_toggle_button_new (accelGroup, _("_Show GPA tips"));
-  if (global_noTips == FALSE)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggleTips), TRUE);
-  else
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggleTips), FALSE);
-  gtk_signal_connect (GTK_OBJECT (toggleTips), "clicked",
-		      GTK_SIGNAL_FUNC (gpa_switch_tips), NULL);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxTips), toggleTips);
-  paramClose = (gpointer *) xmalloc (2 * sizeof (gpointer));
-  gpa_windowKeeper_add_param (keeper, paramClose);
-  paramClose[0] = keeper;
-  paramClose[1] = NULL;
-  buttonClose = gpa_buttonCancel_new (accelGroup, _("_Close"), paramClose);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxTips), buttonClose);
-  gtk_container_add (GTK_CONTAINER (windowTips), hButtonBoxTips);
-  gpa_window_show_centered (windowTips, parent);
-} /* options_tips */
-
-void
 options_load (void)
 {
   gtk_widget_show (loadOptionsSelect);
@@ -669,7 +626,6 @@ gpa_options_menu_add_to_factory (GtkItemFactory *factory, GtkWidget *window)
     {_("/Options/_Default Key"), NULL, options_key, 0, NULL},
     {_("/Options/_Home Directory"), NULL, options_homedir, 0, NULL},
     {_("/Options/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/Options/Online _tips"), NULL, options_tips, 0, NULL},
     {_("/Options/_Load Options File"), NULL, options_load, 0, NULL},
     {_("/Options/_Save Options File"), NULL, options_save, 0, NULL},
   };

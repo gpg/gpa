@@ -1,5 +1,5 @@
 /* optionsmenu.h  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 G-N-U GmbH.
+ *      Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -22,7 +22,6 @@ extern void options_keyserver (void);
 extern void options_recipients (void);
 extern void options_key (void);
 extern void options_homedir (void);
-extern void options_tips (void);
 extern void options_load (void);
 extern void options_save (void);
 

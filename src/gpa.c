@@ -559,16 +559,6 @@ gpa_get_global_clist_file (void)
   return (global_clistFile);
 }				/* gpa_get_global_clist_file */
 
-void
-gpa_switch_tips (void)
-{
-  if (global_noTips == TRUE)
-    global_noTips = FALSE;
-  else
-    global_noTips = TRUE;
-}				/* gpa_switch_tips */
-
-
 
 void
 sigs_append (gpointer data, gpointer userData)

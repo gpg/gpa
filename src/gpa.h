@@ -77,7 +77,6 @@ extern gchar *global_defaultKey;
 extern GtkWidget *gpa_get_global_clist_file (void);
 extern void gpa_callback (GpapaAction action, gpointer actiondata,
 			  gpointer calldata);
-extern void gpa_switch_tips (void);
 extern void sigs_append (gpointer data, gpointer userData);
 extern void gpa_selectRecipient (GtkWidget * clist, gint row, gint column,
 				 GdkEventButton * event, gpointer userData);
