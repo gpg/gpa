@@ -91,10 +91,6 @@ GpgmeError gpa_gpgme_data_new_from_file (GpgmeData *data,
 					 const char *filename,
 					 GtkWidget *parent);
 
-/* Read the contents of the clipboard into the GpgmeData object.
- */
-void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard);
-
 /* Write the contents of the GpgmeData into the clipboard
  */
 void dump_data_to_clipboard (GpgmeData data, GtkClipboard *clipboard);

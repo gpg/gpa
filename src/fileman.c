@@ -340,6 +340,13 @@ close_window (gpointer param)
   gtk_widget_destroy (fileman->window);
 }
 
+static void
+fileman_select_all (gpointer param)
+{
+  GPAFileManager *fileman = param;
+  
+  gtk_clist_select_all (GTK_CLIST(fileman->clist_files));
+}
 
 /*
  *	Construct the file manager window
@@ -352,24 +359,22 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
   GtkItemFactory *factory;
   GtkItemFactoryEntry file_menu[] = {
     {_("/_File"), NULL, NULL, 0, "<Branch>"},
-    {_("/File/_Open"), "<control>O", (GtkItemFactoryCallback)open_file, 0, NULL},
+    {_("/File/_Open"), NULL, open_file, 0, "<StockItem>", GTK_STOCK_OPEN},
     {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Sign"), NULL, (GtkItemFactoryCallback) sign_files, 0, NULL},
-    {_("/File/C_heck"), "<control>P", (GtkItemFactoryCallback) verify_files, 0, NULL},
-    {_("/File/_Encrypt"), NULL, (GtkItemFactoryCallback) encrypt_files, 0, NULL},
-    /*    {_("/File/E_ncrypt as"), NULL, (GtkItemFactoryCallback) file_encryptAs, 0, NULL},
-    {_("/File/_Protect by Password"), NULL, (GtkItemFactoryCallback) file_protect, 0, NULL},
-    {_("/File/P_rotect as"), NULL, (GtkItemFactoryCallback) file_protectAs, 0, NULL},
-    */
-    {_("/File/_Decrypt"), NULL, (GtkItemFactoryCallback) decrypt_files, 0, NULL},
-    /*
-    {_("/File/Decrypt _as"), NULL, (GtkItemFactoryCallback) file_decryptAs, 0, NULL},
-    */
+    {_("/File/_Sign"), NULL, sign_files, 0, NULL},
+    {_("/File/_Verify"), "<control>P", verify_files, 0, NULL},
+    {_("/File/_Encrypt"), NULL, encrypt_files, 0, NULL},
+    {_("/File/_Decrypt"), NULL, decrypt_files, 0, NULL},
     {_("/File/sep2"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/Se_ttings"), NULL, gpa_open_settings_dialog, 0, NULL},
-    {_("/File/sep3"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Close"), NULL, (GtkItemFactoryCallback) close_window, 0, NULL},
-    {_("/File/_Quit"), "<control>Q", gtk_main_quit, 0, NULL},
+    {_("/File/_Close"), NULL, close_window, 0, "<StockItem>", GTK_STOCK_CLOSE},
+    {_("/File/_Quit"), NULL, gtk_main_quit, 0, "<StockItem>", GTK_STOCK_QUIT},
+  };
+  GtkItemFactoryEntry edit_menu[] = {
+    {_("/_Edit"), NULL, NULL, 0, "<Branch>"},
+    {_("/Edit/Select _All"), "<control>A", fileman_select_all, 0, NULL},
+    {_("/Edit/sep2"), NULL, NULL, 0, "<Separator>"},
+    {_("/Edit/Pr_eferences..."), NULL, gpa_open_settings_dialog, 0,
+     "<StockItem>", GTK_STOCK_PREFERENCES},
   };
   GtkItemFactoryEntry windows_menu[] = {
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
@@ -383,6 +388,9 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
   gtk_item_factory_create_items (factory,
 				 sizeof (file_menu) / sizeof (file_menu[0]),
 				 file_menu, fileman);
+  gtk_item_factory_create_items (factory,
+				 sizeof (edit_menu) / sizeof (edit_menu[0]),
+				 edit_menu, fileman);
   gtk_item_factory_create_items (factory,
 				 sizeof(windows_menu) /sizeof(windows_menu[0]),
 				 windows_menu, fileman);

@@ -123,22 +123,6 @@ GpgmeError gpa_gpgme_data_new_from_file (GpgmeData *data,
   return err;
 }
 
-/* Read the contents of the clipboard into the GpgmeData object.
- */
-void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard)
-{
-  gchar *text = gtk_clipboard_wait_for_text (clipboard);
-  if (text)
-    {
-      if (gpgme_data_write (data, text, strlen (text)) == -1)
-        {
-          gpa_window_error (strerror (errno), NULL);
-          exit (EXIT_FAILURE);
-        }
-    }
-  g_free (text);
-}
-
 /* Write the contents of the GpgmeData into the clipboard
  */
 void dump_data_to_clipboard (GpgmeData data, GtkClipboard *clipboard)

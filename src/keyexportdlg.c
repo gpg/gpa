@@ -151,14 +151,14 @@ key_export_dialog_run (GtkWidget *parent, gchar **filename,
                                         GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);
-  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   dialog.window = window;
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   vbox = GTK_DIALOG (window)->vbox;
 
-  table = gtk_table_new (4, 2, FALSE);
+  table = gtk_table_new (2, 2, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (table), 5);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
   gtk_table_set_row_spacing (GTK_TABLE (table), 1, 2);
@@ -197,12 +197,6 @@ key_export_dialog_run (GtkWidget *parent, gchar **filename,
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
 		      gpa_options_get_default_keyserver (gpa_options));
 
-  /* Clipboard radio button */
-  radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio),
-					    accel_group, _("To _clipboard"));
-  dialog.radio_clipboard = radio;
-  gtk_table_attach (GTK_TABLE (table), radio, 0, 3, 2, 3, GTK_FILL, 0, 0, 0);
-
   if (!gpa_options_get_simplified_ui (gpa_options))
     {
       check = gpa_check_button_new (accel_group, _("a_rmor"));
@@ -232,7 +226,7 @@ key_export_dialog_run (GtkWidget *parent, gchar **filename,
 }
 
 static void
-do_backup (gchar *fpr, gchar *filename, GtkWidget *parent)
+do_backup (const gchar *fpr, gchar *filename, GtkWidget *parent)
 {
   gboolean cancelled = FALSE;
   
@@ -276,7 +270,7 @@ do_backup (gchar *fpr, gchar *filename, GtkWidget *parent)
  * user clicked OK, otherwise return FALSE.
  */
 gboolean
-key_backup_dialog_run (GtkWidget *parent, gchar *fpr)
+key_backup_dialog_run (GtkWidget *parent, const gchar *fpr)
 {
   GtkAccelGroup *accel_group;
 

@@ -398,11 +398,12 @@ gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget * window)
 {
   GtkItemFactoryEntry menu[] = {
     {_("/_Help"), NULL, NULL, 0, "<Branch>"},
-    {_("/Help/_About"), NULL, (GtkItemFactoryCallback)help_about, 0, NULL},
-    {_("/Help/_License"), NULL, (GtkItemFactoryCallback)help_license, 0, NULL},
 #if 0  /* Help is not available yet. :-( */
-    {_("/Help/_Help"), "F1", (GtkItemFactoryCallback)help_help, 0, NULL}
+    {_("/Help/_Contents"), NULL, (GtkItemFactoryCallback)help_help, 0,
+     "<StockItem>", GTK_STOCK_HELP}
 #endif
+    {_("/Help/_License"), NULL, (GtkItemFactoryCallback)help_license, 0, NULL},
+    {_("/Help/_About"), NULL, (GtkItemFactoryCallback)help_about, 0, NULL}
   };
 
   gtk_item_factory_create_items (factory, sizeof (menu) / sizeof (menu[0]),

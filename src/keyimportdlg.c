@@ -43,9 +43,6 @@ struct _GPAKeyImportDialog {
   /* The server combo box */
   GtkWidget * combo_server;
 
-  /* The clipboard radio button */
-  GtkWidget * radio_clipboard;
-
   /* The key id entry widget */
   GtkWidget * entry_key_id;
 
@@ -147,9 +144,9 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   vbox = GTK_DIALOG (window)->vbox;
-  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
-  table = gtk_table_new (5, 2, FALSE);
+  table = gtk_table_new (4, 2, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (table), 5);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
   gtk_table_set_row_spacing (GTK_TABLE (table), 1, 10);
@@ -219,14 +216,6 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
 
   gpa_connect_by_accelerator (GTK_LABEL (label), entry, accel_group,
 			      _("_Key Server:"));
-
-  /* Clipboard */
-  radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON(radio),
-					    accel_group,
-					    _("Import from _clipboard:"));
-  dialog.radio_clipboard = radio;
-  gtk_table_attach (GTK_TABLE (table), radio, 0, 2, 4, 5,
-                    GTK_FILL, 0, 0, 0);
 
   gtk_widget_show_all (window);
   if (gtk_dialog_run (GTK_DIALOG (window)) == GTK_RESPONSE_OK)

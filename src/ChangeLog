@@ -1,5 +1,33 @@
 2002-12-11  Miguel Coca  <mcoca@gnu.org>
 
+	* fileman.c (fileman_menu_new): Add the edit menu and stock icons.
+	Rename "Check" as "Verify" to match the toolbar button.
+	(fileman_select_all): New.
+
+	* helpmenu.c (gpa_help_menu_add_to_factory): Change order of buttons
+	to a more standard one.
+
+	* keyring.c (keyring_editor_import_get_source) 
+	(keyring_editor_import_do_import, keyring_editor_import): Split import
+	into these functions.
+	(keyring_editor_export_do_export): New.
+	(keyring_editor_export): Use the above.
+	(keyring_editor_menubar_new): Add an edit menu. Move preferences
+	there. Use stock icons where possible.
+	(keyring_editor_select_all, keyring_editor_paste) 
+	(keyring_editor_copy): New. The edit menu actions.
+
+	* keyexportdlg.c, keyexportdlg.h (key_backup_dialog_run, do_backup): 
+	Add const to prototype. Fixes warning.
+	
+	* keyexportdlg.c (key_export_dialog_run): Remove clipboard option.
+	Available from edit menu.
+
+	* keyimportdlg.c (key_import_dialog_run): Remove clipboard option,
+	as it is now available from the edit menu.
+
+	* gpgmetools.h, gpgmetools.c (fill_data_from_clipboard): Removed.
+
 	* keyring.c (keyring_editor_backup): Backup the selected key, not
 	the default one.
 	(keyring_editor_menubar_new): Enable "backup" only if a private key
