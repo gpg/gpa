@@ -1,4 +1,4 @@
-/* filemenu.h  -  The GNU Privacy Assistant
+/* gpawindowkeeper.h  -  The GNU Privacy Assistant
  *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -19,25 +19,19 @@
  */
 
 #include <config.h>
+#include <glib.h>
+#include <gtk/gtk.h>
 
-extern GList *filesOpened;
-extern GList *filesSelected;
+typedef struct {
+  GtkWidget *window;
+  GList *listParam;
+} GpaWindowKeeper;
 
-extern void file_open ( void );
-extern void file_showDetail ( void );
-extern void file_sign ( void );
-extern void file_encrypt ( void );
-extern void file_encryptAs ( void );
-extern void file_protect ( void );
-extern void file_protectAs ( void );
-extern void file_decrypt ( void );
-extern void file_decryptAs ( void );
-extern void file_close ( void );
-extern void file_quit ( void );
-
-extern void file_browse ( gpointer param );
-extern void file_sign_dialog (
-  GtkSignalFunc funcSign, GtkWidget *parent, gchar *tip,
-  gboolean withRadio, gboolean withCheckerArmor, gpointer userData
+extern GpaWindowKeeper *gpa_windowKeeper_new ( void );
+extern void gpa_windowKeeper_set_window (
+  GpaWindowKeeper *keeper, GtkWidget *window
 );
-extern void gpa_fileOpenSelect_init ( char *title );
+extern void gpa_windowKeeper_add_param (
+  GpaWindowKeeper *keeper, gpointer param
+);
+extern void gpa_windowKeeper_release ( GpaWindowKeeper *keeper );

@@ -21,6 +21,7 @@
 #ifndef GPA_H
 #define GPA_H
 
+#include <glib.h>
 #include <gtk/gtk.h>
 #include <gpapa.h>
 #include "xmalloc.h"
@@ -31,11 +32,17 @@
 #define _(a)	(a)
 #define N_(a)	(a)
 
+extern gchar *namesKeyserver [ 1 ]; /*!!!*/
+
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
+extern GList *global_tempWindows;
 extern gboolean global_noTips;
 extern GpapaAction global_lastCallbackResult;
 extern gchar *global_keyserver;
+extern GList *global_defaultRecipients;
+extern gchar *global_homeDirectory;
+extern gchar *global_defaultKey;
 
 extern GtkWidget *gpa_get_global_clist_file ( void );
 extern void gpa_callback (

@@ -19,10 +19,19 @@
  */
 
 #include <config.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
 #include "gpapa.h"
+
+void gpapa_secret_key_set_passphrase (
+  GpapaSecretKey *key, gchar *passphrase,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( key )
+    printf ( "Setting passphrase of secret key 0x%s.\n", key -> key -> KeyID );
+} /* gpapa_secret_key_set_passphrase */
 
 void gpapa_secret_key_export (
   GpapaSecretKey *key, gchar *targetFileID, GpapaArmor Armor,
@@ -87,4 +96,7 @@ void gpapa_secret_key_delete (
 void gpapa_secret_key_create_revocation (
   GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
 ) {
+g_print ( "Create revocation certificate for key 0x" ); /*!!!*/
+g_print ( gpapa_key_get_identifier ( GPAPA_KEY ( key ), callback, calldata ) ); /*!!!*/
+g_print ( "\n" ); /*!!!*/
 } /* gpapa_secret_key_create_revocation */

@@ -21,9 +21,8 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
+#include "gpawindowkeeper.h"
 #include "gtktools.h"
-
-#include <stdio.h> /*!!!*/
 
 void help_version ( void ) {
 g_print ( _( "Show Version Information\n" ) ); /*!!!*/
@@ -31,8 +30,9 @@ g_print ( _( "Show Version Information\n" ) ); /*!!!*/
 
 void help_license ( void ) {
 /* var */
+  GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
-  static gpointer paramClose [ 2 ];
+  gpointer *paramClose;
 /* objects */
   GtkWidget *windowLicense;
     GtkWidget *vboxLicense;
@@ -45,7 +45,9 @@ void help_license ( void ) {
       GtkWidget *hButtonBoxLicense;
         GtkWidget *buttonClose;
 /* commands */
+  keeper = gpa_windowKeeper_new ();
   windowLicense = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gpa_windowKeeper_set_window ( keeper, windowLicense );
   gtk_window_set_title (
     GTK_WINDOW ( windowLicense ), _( "GNU general public license" ) 
   );
@@ -81,7 +83,9 @@ void help_license ( void ) {
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxLicense ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxLicense ), 5 );
-  paramClose [ 0 ] = windowLicense;
+  paramClose = (gpointer*) xmalloc ( 2 * sizeof ( gpointer ) );
+  gpa_windowKeeper_add_param ( keeper, paramClose );
+  paramClose [ 0 ] = keeper;
   paramClose [ 1 ] = NULL;
   buttonClose = gpa_buttonCancel_new (
     accelGroup, _( "_Close" ), paramClose

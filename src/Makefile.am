@@ -7,6 +7,7 @@ LDADD = -L ../gpapa -lgpapa -L ../jnlib -ljnlib
 
 gpa_SOURCES = gpa.c gpa.h \
 	      filemenu.c filemenu.h \
+              gpawindowkeeper.c gpawindowkeeper.h \
 	      gtktools.c gtktools.h  \
 	      helpmenu.c helpmenu.h	   \
 	      keysmenu.c keysmenu.h	    \

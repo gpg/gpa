@@ -1,11 +1,11 @@
 2000-05-16 17:38:06  Werner Koch  (wk@habibti.openit.de)
 
-	* gpapaintern.c (gpapa_call_gnupg) [MINGW32]: Some stuff works now.
+  * gpapaintern.c (gpapa_call_gnupg) [MINGW32]: Some stuff works now.
 
 2000-05-11 16:54:10  Werner Koch  (wk@habibti.openit.de)
 
-	* gpapaintern.c (gpapa_call_gnupg) [MINGW32]: Dummy code for W32.
-	Excluded one header for W32.
+  * gpapaintern.c (gpapa_call_gnupg) [MINGW32]: Dummy code for W32.
+    Excluded one header for W32.
 
 10 May 2000 26:56 Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
@@ -74,3 +74,9 @@ Tue 18 Apr 2000 Markus Gerwinski <markus.gerwinski@sercon.de>
 Wed 5 Apr 2000 Markus Gerwinski <markus.gerwinski@sercon.de>
 
   Wrote down requirements.
+
+Tu 16 May 2000 Markus Gerwinski <markus.gerwinski@sercon.de>
+
+  - Did a lot of major changes in the header of gpapa_create_key_pair.
+  - Detached methods set_expiry_date and set_expiry_time from class
+    GpapaSecretKey and attached them to GpapaKey.

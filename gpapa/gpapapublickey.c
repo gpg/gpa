@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
@@ -159,6 +160,15 @@ GpapaOwnertrust gpapa_public_key_get_ownertrust (
 	default:  return ( GPAPA_OWNERTRUST_UNKNOWN );
       }
 } /* gpapa_public_key_get_ownertrust */
+
+extern void gpapa_public_key_set_ownertrust (
+  GpapaPublicKey *key, GpapaOwnertrust trust,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( key )
+    printf ( "Setting ownertrust of key 0x%s to level %d\n",
+             key -> key -> KeyID, trust );
+} /* gpapa_public_key_set_ownertrust */
 
 static GpapaSignature *extract_sig (
   gchar *line,
@@ -313,12 +323,6 @@ void gpapa_public_key_delete (
     }
 } /* gpapa_public_key_delete */;
 
-void gpapa_public_key_sign (
-  GpapaPublicKey *key, gchar *targetFileID, GpapaArmor Armor,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-} /* gpapa_public_key_sign */
-
 void gpapa_public_key_send_to_server (
   GpapaPublicKey *key, gchar *ServerName, 
   GpapaCallbackFunc callback, gpointer calldata
@@ -346,3 +350,14 @@ void gpapa_public_key_send_to_server (
       free ( full_keyID );
     }
 } /* gpapa_public_key_send_to_server */
+
+void gpapa_public_key_sign (
+  GpapaPublicKey *key, gchar *keyID, gchar *PassPhrase,
+  GpapaKeySignType SignType,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( key && keyID && PassPhrase )
+    printf ( "%s public key 0x%s\nwith secret key 0x%s\nwith some passphrase.\n",
+             SignType == GPAPA_KEY_SIGN_LOCALLY ? "Locally signing" : "signing",
+             key -> key -> KeyID, keyID );
+} /* gpapa_public_key_sign */

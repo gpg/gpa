@@ -69,6 +69,11 @@ extern GpapaOwnertrust gpapa_public_key_get_ownertrust (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
 );
 
+extern void gpapa_public_key_set_ownertrust (
+  GpapaPublicKey *key, GpapaOwnertrust trust,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
 extern GList *gpapa_public_key_get_signatures (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
 );
@@ -84,6 +89,12 @@ extern void gpapa_public_key_delete (
 
 extern void gpapa_public_key_send_to_server (
   GpapaPublicKey *key, gchar *ServerName, GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_public_key_sign (
+  GpapaPublicKey *key, gchar *keyID, gchar *PassPhrase,
+  GpapaKeySignType SignType,
+  GpapaCallbackFunc callback, gpointer calldata
 );
 
 #endif /* __GPAPAPUBLICKEY_H__ */

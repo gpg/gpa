@@ -60,6 +60,23 @@ GDate *gpapa_key_get_expiry_date (
     return ( key -> ExpirationDate );
 } /* gpapa_key_get_expiry_date */
 
+void gpapa_key_set_expiry_date (
+  GpapaKey *key, GDate *date,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( key )
+    printf ( "Setting expiry date of key 0x%s.\n", key -> KeyID );
+} /* gpapa_key_set_expiry_date */
+
+void gpapa_key_set_expiry_time (
+  GpapaKey *key, gint number, gchar unit,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( key )
+    printf ( "Setting expiry time of key 0x%s to %d %c.\n",
+             key -> KeyID, number, unit );
+} /* gpapa_key_set_expiry_time */
+
 void gpapa_key_release (
   GpapaKey *key, GpapaCallbackFunc callback, gpointer calldata
 ) {

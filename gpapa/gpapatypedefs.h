@@ -50,6 +50,14 @@ typedef enum {
 #define GPAPA_SIGN_LAST GPAPA_SIGN_DETACH
 
 typedef enum {
+  GPAPA_KEY_SIGN_NORMAL,
+  GPAPA_KEY_SIGN_LOCALLY,
+} GpapaKeySignType;
+
+#define GPAPA_KEY_SIGN_FIRST GPAPA_KEY_SIGN_NORMAL
+#define GPAPA_KEY_SIGN_LAST GPAPA_KEY_SIGN_LOCALLY
+
+typedef enum {
   GPAPA_SIG_UNKNOWN,
   GPAPA_SIG_INVALID,
   GPAPA_SIG_VALID
@@ -57,6 +65,16 @@ typedef enum {
 
 #define GPAPA_SIG_FIRST GPAPA_SIG_UNKNOWN
 #define GPAPA_SIG_LAST GPAPA_SIG_VALID
+
+typedef enum {
+  GPAPA_ALGO_BOTH,
+  GPAPA_ALGO_DSA,
+  GPAPA_ALGO_ELG_BOTH,
+  GPAPA_ALGO_ELG
+} GpapaAlgo;
+
+#define GPAPA_ALGO_FIRST GPAPA_ALGO_BOTH
+#define GPAPA_ALGO_LAST GPAPA_ALGO_ELG
 
 typedef void (*GpapaCallbackFunc) (
   GpapaAction action, gpointer actiondata, gpointer calldata

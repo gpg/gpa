@@ -97,9 +97,10 @@ static GpapaKey *extract_key (
   fields = i;
   if ( fields != 10 )
     {
-	#ifdef __MINGW32__
-	  fprintf (stderr,"colon line=`%s'\n", line );
-	#endif
+     #ifdef __MINGW32__
+        fprintf (stderr,"colon line=%s'\n", line );
+     #endif
+    
       callback ( GPAPA_ACTION_ERROR,
 		 "invalid number of fields in GPG colon output",
 		 calldata );
@@ -212,9 +213,9 @@ GpapaPublicKey *gpapa_receive_public_key_from_server (
       gpgargv [ 3 ] = id;
       gpgargv [ 4 ] = NULL;
       gpapa_call_gnupg (
-	gpgargv, TRUE, NULL, NULL,
-	gpapa_linecallback_dummy, NULL,
-	callback, calldata
+        gpgargv, TRUE, NULL, NULL,
+        gpapa_linecallback_dummy, NULL,
+        callback, calldata
       );
       free ( id );
       gpapa_refresh_public_keyring ( callback, calldata );
@@ -321,10 +322,12 @@ void gpapa_release_secret_key (
 } /* gpapa_release_secret_key */
 
 void gpapa_create_key_pair (
-  GpapaAlgo anAlgo, gint aKeysize, long anExpiryDate,
+  GpapaPublicKey **publicKey, GpapaSecretKey **secretKey,
+  gchar *passphrase, GpapaAlgo anAlgo, gint aKeysize,
   gchar *aUserID, gchar *anEmail, gchar *aComment,
   GpapaCallbackFunc callback, gpointer calldata
 ) {
+g_print ( "Generate a new key pair.\n" );
 } /* gpapa_create_key_pair */
 
 static void linecallback_export_ownertrust (
@@ -345,23 +348,23 @@ void gpapa_export_ownertrust (
     {
       FILE *stream = fopen ( targetFileID, "w" );
       if ( ! stream )
-	callback ( GPAPA_ACTION_ERROR, "could not open target file for writing", calldata );
+        callback ( GPAPA_ACTION_ERROR, "could not open target file for writing", calldata );
       else
-	{
-	  char *gpgargv [ 3 ];
-	  int i = 0;
-	  if ( Armor == GPAPA_ARMOR )
+        {
+          char *gpgargv [ 3 ];
+          int i = 0;
+          if ( Armor == GPAPA_ARMOR )
 	    gpgargv [ i++ ] = "--armor";
-	  gpgargv [ i++ ] = "--export-ownertrust";
-	  gpgargv [ i ] = NULL;
-	  gpapa_call_gnupg
+          gpgargv [ i++ ] = "--export-ownertrust";
+          gpgargv [ i ] = NULL;
+          gpapa_call_gnupg
 	    (
 	      gpgargv, TRUE, NULL, NULL,
 	      linecallback_export_ownertrust, stream,
 	      callback, calldata
 	    );
-	  fclose ( stream );
-	}
+          fclose ( stream );
+        }
     }
 } /* gpapa_export_ownertrust */
 
@@ -374,24 +377,22 @@ void gpapa_import_ownertrust (
   else
     {
       char *gpgargv [ 3 ];
-      int i = 0;
       gpgargv [ 0 ] = "--import-ownertrust";
       gpgargv [ 1 ] = sourceFileID;
       gpgargv [ 2 ] = NULL;
       gpapa_call_gnupg
-	(
-	  gpgargv, TRUE, NULL, NULL,
-	  gpapa_linecallback_dummy, NULL,
-	  callback, calldata
-	);
+        (
+          gpgargv, TRUE, NULL, NULL,
+          gpapa_linecallback_dummy, NULL,
+          callback, calldata
+        );
     }
 } /* gpapa_import_ownertrust */
 
-extern void gpapa_update_trust_database (
+void gpapa_update_trust_database (
   GpapaCallbackFunc callback, gpointer calldata
 ) {
   char *gpgargv [ 2 ];
-  int i = 0;
   gpgargv [ 0 ] = "--update-trustdb";
   gpgargv [ 1 ] = NULL;
   gpapa_call_gnupg
@@ -411,18 +412,42 @@ void gpapa_import_keys (
   else
     {
       char *gpgargv [ 3 ];
-      int i = 0;
       gpgargv [ 0 ] = "--import";
       gpgargv [ 1 ] = sourceFileID;
       gpgargv [ 2 ] = NULL;
       gpapa_call_gnupg
-	(
-	  gpgargv, TRUE, NULL, NULL,
-	  gpapa_linecallback_dummy, NULL,
-	  callback, calldata
-	);
+        (
+          gpgargv, TRUE, NULL, NULL,
+          gpapa_linecallback_dummy, NULL,
+          callback, calldata
+        );
     }
 } /* gpapa_import_keys */
+
+/* Options.
+ */
+
+void gpapa_load_options (
+  gchar *optionsFileID,
+  gchar **keyServer, GList **defaultRecipients, gchar **defaultKey,
+  gchar **homeDirectory,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+g_print ( "Load options from file " ); /*!!!*/
+g_print ( optionsFileID ); /*!!!*/
+g_print ( "\n" ); /*!!!*/
+} /* gpapa_load_options */
+
+void gpapa_save_options (
+  gchar *optionsFileID,
+  gchar *keyServer, GList *defaultRecipients, gchar *defaultKey,
+  gchar *homeDirectory,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+g_print ( "Save options to file " ); /*!!!*/
+g_print ( optionsFileID ); /*!!!*/
+g_print ( "\n" ); /*!!!*/
+} /* gpapa_save_options */
 
 /* Miscellaneous.
  */

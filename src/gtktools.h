@@ -51,11 +51,6 @@ extern void gpa_widget_set_centered ( GtkWidget *widget, GtkWidget *parent );
 extern void gpa_widget_show (
   GtkWidget *widget, GtkWidget *parent, gchar *tip
 );
-extern GtkWidget **gpa_window_progress (
-  gchar *message, GtkWidget *messenger
-);
-void gpa_window_progress_set ( GtkWidget **progress, gfloat percentage );
-void gpa_window_progress_destroy ( GtkWidget **progress );
 extern void gpa_window_error ( gchar *message, GtkWidget *messenger );
 extern void gpa_window_message ( gchar *message, GtkWidget *messenger );
 extern void gpa_window_passphrase (

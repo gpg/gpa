@@ -20,27 +20,33 @@
 
 #include <config.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 #include <gpapa.h>
 #include "gpa.h"
+#include "gpawindowkeeper.h"
 #include "gtktools.h"
 #include "filemenu.h"
 #include "keysmenu.h"
 #include "optionsmenu.h"
 #include "helpmenu.h"
 
-#include <stdio.h> /*!!!*/
+gchar *namesKeyserver [ 1 ] = {
+  N_( "blackhole.pca.dfn.de" )
+}; /*!!!*/
 
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain;
 GtkWidget *global_popupMenu;
 GtkWidget *global_windowTip;
+GList *global_tempWindows;
 GtkWidget *global_textTip;
 gboolean global_noTips = FALSE;
 GpapaAction global_lastCallbackResult;
-/*!!!
 gchar *global_keyserver;
-!!!*/ gchar *global_keyserver = N_( "blackhole.pca.dfn.de" ); /*!!!*/
+GList *global_defaultRecipients = NULL;
+gchar *global_homeDirectory;
+gchar *global_defaultKey;
 
 gchar *writtenSigValidity [ 3 ] = {
   N_( "unknown" ),
@@ -205,10 +211,6 @@ gint compareInts ( gconstpointer a, gconstpointer b ) {
     return 0;
 } /* compareInts */
 
-void printRow ( gpointer data, gpointer userData ) { /*!!!*/
-printf ( "%d ", *(gint*) data ); /*!!!*/
-} /*!!!*/
-
 void gpa_selectRecipient (
   GtkWidget *clist, gint row, gint column, GdkEventButton *event,
   gpointer userData
@@ -223,9 +225,6 @@ void gpa_selectRecipient (
   *recipientsSelected = g_list_insert_sorted (
     *recipientsSelected, rowData, compareInts
   );
-g_print ( ":: " ); /*!!!*/
-g_list_foreach ( *recipientsSelected, printRow, NULL ); /*!!!*/
-g_print ( "\n" ); /*!!!*/
 } /* gpa_selectRecipient */
 
 void gpa_unselectRecipient (
@@ -250,9 +249,6 @@ void gpa_unselectRecipient (
 	} /* if */
       indexRecipient = indexNext;
     } /* while */
-g_print ( ":: " ); /*!!!*/
-g_list_foreach ( *recipientsSelected, printRow, NULL ); /*!!!*/
-g_print ( "\n" ); /*!!!*/
 } /* gpa_unselectRecipient */
 
 void gpa_removeRecipients ( gpointer param ) {
@@ -347,17 +343,19 @@ void gpa_recipientWindow_close ( gpointer param ) {
   gpointer *localParam;
   GList **recipientsSelected;
   GList **keysSelected;
-  GtkWidget *windowEncrypt;
-  static gpointer paramClose [ 2 ];
+  GpaWindowKeeper *keeperEncrypt;
+  gpointer *paramClose;
 /* commands */
   localParam = (gpointer*) param;
-  recipientsSelected = (GList**) localParam [ 0 ];
-  keysSelected =       (GList**) localParam [ 1 ];
-  windowEncrypt =   (GtkWidget*) localParam [ 2 ];
+  recipientsSelected =     (GList**) localParam [ 0 ];
+  keysSelected =           (GList**) localParam [ 1 ];
+  keeperEncrypt = (GpaWindowKeeper*) localParam [ 2 ];
   g_list_foreach ( *recipientsSelected, freeRowData, NULL );
   g_list_free ( *recipientsSelected );
   g_list_free ( *keysSelected );
-  paramClose [ 0 ] = windowEncrypt;
+  paramClose = (gpointer*) xmalloc ( 2 * sizeof ( gpointer ) );
+  gpa_windowKeeper_add_param ( keeperEncrypt, paramClose );
+  paramClose [ 0 ] = keeperEncrypt;
   paramClose [ 1 ] = NULL;
   gpa_window_destroy ( paramClose );
 } /* gpa_recipientWindow_close */
@@ -544,7 +542,10 @@ GtkWidget *gpa_windowFile_new ( void ) {
       );
     } /* for */
   for ( i = 0; i <= 4; i++ )
-    gtk_clist_set_column_auto_resize ( GTK_CLIST ( clistFile ), i, FALSE );
+    {
+      gtk_clist_set_column_auto_resize ( GTK_CLIST ( clistFile ), i, FALSE );
+      gtk_clist_column_title_passive ( GTK_CLIST ( clistFile ), i );
+    } /* for */
   gtk_clist_set_selection_mode (
     GTK_CLIST ( clistFile ), GTK_SELECTION_EXTENDED
   );
@@ -597,6 +598,8 @@ GtkWidget *gpa_windowMain_new ( char *title ) {
   gpa_homeDirSelect_init ( _( "Set home directory" ) );
   gpa_loadOptionsSelect_init ( _( "Load options file" ) );
   gpa_saveOptionsSelect_init ( _( "Save options file" ) );
+  global_keyserver = namesKeyserver [ 0 ];
+  global_defaultKey = NULL;
   return ( window );
 } /* gpa_windowMain_new */
 

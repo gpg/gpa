@@ -88,7 +88,8 @@ extern void gpapa_release_secret_key (
 );
 
 extern void gpapa_create_key_pair (
-  GpapaAlgo anAlgo, gint aKeysize, long anExpiryDate,
+  GpapaPublicKey **publicKey, GpapaSecretKey **secretKey,
+  gchar *passphrase, GpapaAlgo anAlgo, gint aKeysize,
   gchar *aUserID, gchar *anEmail, gchar *aComment,
   GpapaCallbackFunc callback, gpointer calldata
 );
@@ -112,6 +113,23 @@ extern void gpapa_import_keys (
   GpapaCallbackFunc callback, gpointer calldata
 );
 ;
+
+/* Options.
+ */
+
+extern void gpapa_load_options (
+  gchar *optionsFileID,
+  gchar **keyServer, GList **defaultRecipients, gchar **defaultKey,
+  gchar **homeDirectory,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_save_options (
+  gchar *optionsFileID,
+  gchar *keyServer, GList *defaultRecipients, gchar *defaultKey,
+  gchar *homeDirectory,
+  GpapaCallbackFunc callback, gpointer calldata
+);
 
 /* Miscellaneous.
  */

@@ -22,8 +22,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
-
-/*!!!*/ #include <stdio.h> /*!!!*/
+#include "gpawindowkeeper.h"
 
 void gpa_widget_set_centered ( GtkWidget *widget, GtkWidget *parent ) {
 /* var */
@@ -46,15 +45,18 @@ void gpa_widget_show ( GtkWidget *widget, GtkWidget *parent, gchar *tip ) {
 void gpa_window_destroy ( gpointer param ) {
 /* var */
   gpointer *localParam;
-  GtkWidget *window;
+  GpaWindowKeeper *keeper;
   gchar *tip;
 /* commands */
   localParam = (gpointer*) param;
-  window = (GtkWidget*) localParam [ 0 ];
-  tip =        (gchar*) localParam [ 1 ];
-  gtk_widget_destroy ( window );
+  keeper = (GpaWindowKeeper*) localParam [ 0 ];
+  tip =              (gchar*) localParam [ 1 ];
+  gpa_windowKeeper_release ( keeper );
   if ( tip )
-    gpa_windowTip_show ( tip );
+    {
+      if ( strcmp ( tip, "" ) != 0 )
+        gpa_windowTip_show ( tip );
+    } /* if */
   else
     gtk_widget_hide ( global_windowTip );
 } /* gpa_window_destroy */
@@ -206,50 +208,9 @@ void gpa_connect_by_accelerator (
   );
 } /* gpa_connect_by_accelerator */
 
-GtkWidget **gpa_window_progress ( gchar *message, GtkWidget *messenger ) {
-/* var */
-  static GtkWidget *result [ 2 ];
-/* objects */
-  GtkWidget *windowProgress;
-    GtkWidget *vboxProgress;
-      GtkWidget *labelJfdProgress;
-        GtkWidget *labelProgress;
-      GtkWidget *progress;
-/* commands */
-  windowProgress = gtk_window_new ( GTK_WINDOW_DIALOG );
-  gtk_window_set_title (
-    GTK_WINDOW ( windowProgress ), _( "GPA action status" )
-  );
-  vboxProgress = gtk_vbox_new ( FALSE, 0 );
-  gtk_container_set_border_width ( GTK_CONTAINER ( vboxProgress ), 10 );
-  labelProgress = gtk_label_new ( message );
-  labelJfdProgress = gpa_widget_hjustified_new (
-    labelProgress, GTK_JUSTIFY_LEFT
-  );
-  gtk_box_pack_start (
-    GTK_BOX ( vboxProgress ), labelJfdProgress, FALSE, FALSE, 0
-  );
-  progress = gtk_progress_bar_new ();
-  gtk_box_pack_start ( GTK_BOX ( vboxProgress ), progress, TRUE, TRUE, 0 );
-  gtk_container_add ( GTK_CONTAINER ( windowProgress ), vboxProgress );
-  gtk_widget_show_all ( windowProgress );
-  gpa_widget_set_centered ( windowProgress, messenger );
-  gtk_widget_show_now ( windowProgress );
-  result [ 0 ] = progress;
-  result [ 1 ] = windowProgress;
-  return ( result );
-} /* gpa_window_progress */
-
-void gpa_window_progress_set ( GtkWidget **progress, gfloat percentage ) {
-  gtk_progress_bar_update ( GTK_PROGRESS_BAR ( progress [ 0 ] ), percentage );
-} /* gpa_window_progress_set */
-
-void gpa_window_progress_destroy ( GtkWidget **progress ) {
-  gtk_widget_destroy ( progress [ 1 ] );
-} /* gpa_window_progress_destroy */
-
 void gpa_window_error ( gchar *message, GtkWidget *messenger ) {
 /* var */
+  GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
 /* objects */
   GtkWidget *windowError;
@@ -257,7 +218,9 @@ void gpa_window_error ( gchar *message, GtkWidget *messenger ) {
       GtkWidget *labelMessage;
       GtkWidget *buttonClose;
 /* commands */
+  keeper = gpa_windowKeeper_new ();
   windowError = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gpa_windowKeeper_set_window ( keeper, windowError );
   gtk_window_set_title ( GTK_WINDOW ( windowError ), "GPA Error" );
   gtk_window_set_modal ( GTK_WINDOW ( windowError ), TRUE );
   accelGroup = gtk_accel_group_new ();
@@ -283,6 +246,7 @@ void gpa_window_error ( gchar *message, GtkWidget *messenger ) {
 
 void gpa_window_message ( gchar *message, GtkWidget *messenger ) {
 /* var */
+  GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
 /* objects */
   GtkWidget *windowMessage;
@@ -290,7 +254,9 @@ void gpa_window_message ( gchar *message, GtkWidget *messenger ) {
       GtkWidget *labelMessage;
       GtkWidget *buttonClose;
 /* commands */
+  keeper = gpa_windowKeeper_new ();
   windowMessage = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gpa_windowKeeper_set_window ( keeper, windowMessage );
   gtk_window_set_title ( GTK_WINDOW ( windowMessage ), "GPA Message" );
   gtk_window_set_modal ( GTK_WINDOW ( windowMessage ), TRUE );
   accelGroup = gtk_accel_group_new ();
@@ -318,9 +284,10 @@ void gpa_window_passphrase (
   GtkWidget *messenger, GtkSignalFunc func, gchar *tip, gpointer data
 ) {
 /* var */
+  GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
-  static gpointer param [ 3 ];
-  static gpointer paramClose [ 2 ];
+  gpointer *param;
+  gpointer *paramClose;
 /* objects */
   GtkWidget *windowPassphrase;
     GtkWidget *vboxPassphrase;
@@ -331,7 +298,10 @@ void gpa_window_passphrase (
         GtkWidget *buttonCancel;
         GtkWidget *buttonOK;
 /* commands */
+  keeper = gpa_windowKeeper_new ();
   windowPassphrase = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gpa_windowKeeper_set_window ( keeper, windowPassphrase );
+  gpa_windowKeeper_add_param ( keeper, data );
   gtk_window_set_title (
     GTK_WINDOW ( windowPassphrase ), _( "Insert password" )
   );
@@ -345,9 +315,11 @@ void gpa_window_passphrase (
   gtk_box_pack_start ( GTK_BOX ( hboxPasswd ), labelPasswd, FALSE, FALSE, 0 );
   entryPasswd = gtk_entry_new ();
   gtk_entry_set_visibility ( GTK_ENTRY ( entryPasswd ), FALSE );
+  param = (gpointer*) xmalloc ( 3 * sizeof ( gpointer ) );
+  gpa_windowKeeper_add_param ( keeper, param );
   param [ 0 ] = data;
   param [ 1 ] = entryPasswd;
-  param [ 2 ] = windowPassphrase;
+  param [ 2 ] = keeper;
   gtk_signal_connect_object (
     GTK_OBJECT ( entryPasswd ), "activate",
     GTK_SIGNAL_FUNC ( func ), (gpointer) param
@@ -364,7 +336,9 @@ void gpa_window_passphrase (
     GTK_BUTTON_BOX ( hButtonBoxPassphrase ), GTK_BUTTONBOX_END
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxPassphrase ), 10 );
-  paramClose [ 0 ] = windowPassphrase;
+  paramClose = (gpointer*) xmalloc ( 2 * sizeof ( gpointer ) );
+  gpa_windowKeeper_add_param ( keeper, paramClose );
+  paramClose [ 0 ] = keeper;
   paramClose [ 1 ] = tip;
   buttonCancel = gpa_buttonCancel_new (
     accelGroup, _( "_Cancel" ), paramClose
