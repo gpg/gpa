@@ -77,6 +77,14 @@ void _gpa_gpgme_error (GpgmeError err, const char *file, int line);
  */
 void dump_data_to_file (GpgmeData data, FILE *file);
 
+/* Read the contents of the clipboard into the GpgmeData object.
+ */
+void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard);
+
+/* Write the contents of the GpgmeData into the clipboard
+ */
+void dump_data_to_clipboard (GpgmeData data, GtkClipboard *clipboard);
+
 /* Generate a key with the given parameters. It prepares the parameters
  * required by Gpgme and returns whatever gpgme_op_genkey returns.
  */

@@ -424,19 +424,28 @@ keyring_editor_import (gpointer param)
         }
       else
         {
-          /* Somehow fill a GpgmeData from the clipboard */
+          /* Fill the data from the selection clipboard.
+           */
+          err = gpgme_data_new (&data);
+          if (err != GPGME_No_Error)
+            {
+              gpa_gpgme_error (err);
+            }
+          fill_data_from_clipboard (data, gtk_clipboard_get
+                                    (GDK_SELECTION_CLIPBOARD));
         }
       free (filename);
       free (server);
       /* Import the key */
       err = gpgme_op_import (ctx, data);
-      if (err != GPGME_No_Error)
+      if (err != GPGME_No_Error &&
+          err != GPGME_No_Data)
         {
           gpa_gpgme_error (err);
         }
       gpgme_data_release (data);
       /* Reload the list of keys to get the imported keys */
-      if (err != GPGME_EOF)
+      if (err != GPGME_No_Data)
         {
           gpa_keytable_reload (keytable);
         }
@@ -496,7 +505,7 @@ keyring_editor_export (gpointer param)
         }
       else
         {
-          /* Clipboard */
+          /* Clipboard: No checks needed */
         }
 
       /* Create the data buffer */
@@ -541,8 +550,10 @@ keyring_editor_export (gpointer param)
         }
       else
         {
-          /* Clipboard.
+          /* Write the data to the clipboard.
            */
+          dump_data_to_clipboard (data, gtk_clipboard_get
+                                  (GDK_SELECTION_CLIPBOARD));
         }
       g_free (filename);
       g_free (server);

@@ -52,9 +52,6 @@ struct _GPAKeyImportDialog {
   /*
    * Result values:
    */
-
-  /* True if the user clicked OK, FALSE otherwise */
-  gboolean result;
   
   /* filename */
   gchar * filename;
@@ -87,16 +84,13 @@ import_browse (gpointer param)
       g_free (utf8_filename);
       g_free (filename);
     }
-} /* import_browse */
+}
 
 
-/* Handler for the OK button. Extract the user input from the widgets
- * and destroy the main window */
-void
-import_ok (gpointer param)
+/* Extract the user input from the widgets and destroy the main window */
+static void
+import_ok (GPAKeyImportDialog * dialog)
 {
-  GPAKeyImportDialog * dialog = param;
-
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_server)))
     {
       GtkWidget * entry = GTK_COMBO (dialog->combo_server)->entry;
@@ -110,28 +104,6 @@ import_ok (gpointer param)
       dialog->filename = (gchar *) gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
       dialog->filename = g_filename_from_utf8 (dialog->filename, -1, NULL, NULL, NULL);
     }
-
-  dialog->result = TRUE;
-  gtk_widget_destroy (dialog->window);
-} /* import_ok */
-
-
-/* Handler for the Cancel button. Destroy the main window */
-static void
-import_cancel (gpointer param)
-{
-  GPAKeyImportDialog * dialog = param;
-
-  gtk_widget_destroy (dialog->window);
-}
-
-
-/* signal handler for the destroy signal. Quit the recursive main loop
- */
-static void
-import_destroy (GtkWidget *widget, gpointer param)
-{
-  gtk_main_quit ();
 }
 
 
@@ -152,29 +124,29 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   GtkWidget *radio;
   GtkWidget *entry;
   GtkWidget *button;
-  GtkWidget *bbox;
   GtkWidget *combo;
   GtkWidget *label;
 
   GPAKeyImportDialog dialog;
 
-  dialog.result = FALSE;
   dialog.filename = NULL;
   dialog.server = NULL;
   dialog.key_id = NULL;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_dialog_new_with_buttons (_("Import Key"),
+                                        parent, GTK_DIALOG_MODAL,
+                                        GTK_STOCK_OK,
+                                        GTK_RESPONSE_OK,
+                                        GTK_STOCK_CANCEL,
+                                        GTK_RESPONSE_CANCEL,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);
   dialog.window = window;
-  gtk_window_set_title (GTK_WINDOW (window), _("Import Key"));
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-  gtk_signal_connect_object (GTK_OBJECT (window), "destroy",
-			     GTK_SIGNAL_FUNC (import_destroy),
-			     (gpointer) &dialog);
 
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+  vbox = GTK_DIALOG (window)->vbox;
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
 
   table = gtk_table_new (5, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
@@ -196,8 +168,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   entry = gtk_entry_new ();
   dialog.entry_filename = entry;
   gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-  gtk_signal_connect_object (GTK_OBJECT (entry), "activate",
-			     GTK_SIGNAL_FUNC (import_ok), (gpointer) &dialog);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 
   button = gpa_button_new (accel_group, _("B_rowse..."));
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, TRUE, 0);
@@ -225,8 +196,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   dialog.entry_key_id = entry;
   gtk_table_attach (GTK_TABLE (server_table), entry, 1, 2, 0, 1,
 		    GTK_FILL | GTK_EXPAND, 0, 0, 0);
-  gtk_signal_connect_object (GTK_OBJECT (entry), "activate",
-			     GTK_SIGNAL_FUNC (import_ok), (gpointer) &dialog);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   gpa_connect_by_accelerator (GTK_LABEL (label), entry, accel_group,
 			      _("Key _ID:"));
 
@@ -257,35 +227,20 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_table_attach (GTK_TABLE (table), radio, 0, 2, 4, 5,
                     GTK_FILL, 0, 0, 0);
 
-  /* The button box */
-  bbox = gtk_hbutton_box_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
-
-  button = gpa_button_new (accel_group, _("_OK"));
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC (import_ok), (gpointer) &dialog);
-  gtk_container_add (GTK_CONTAINER (bbox), button);
-
-  button = gpa_button_cancel_new (accel_group, _("_Cancel"),
-                                  (GtkSignalFunc) import_cancel,
-				  &dialog);
-  gtk_container_add (GTK_CONTAINER (bbox), button);
-
-  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-  gpa_window_show_centered (window, parent);
-
-  gtk_main ();
-
-  if (dialog.result)
+  gtk_widget_show_all (window);
+  if (gtk_dialog_run (GTK_DIALOG (window)) == GTK_RESPONSE_OK)
     {
+      import_ok (&dialog);
       *filename = dialog.filename;
       *server = dialog.server;
       *key_id = dialog.key_id;
+      gtk_widget_destroy (window);
+      return TRUE;
     }
-
-  return dialog.result;
+  else
+    {
+      gtk_widget_destroy (window);
+      return FALSE;
+    }
 }
 

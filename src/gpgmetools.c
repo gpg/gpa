@@ -60,6 +60,49 @@ void dump_data_to_file (GpgmeData data, FILE *file)
   return;
 }
 
+/* Read the contents of the clipboard into the GpgmeData object.
+ */
+void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard)
+{
+  GpgmeError err;
+  gchar *text = gtk_clipboard_wait_for_text (clipboard);
+  if (text)
+    {
+      err = gpgme_data_write (data, text, strlen (text));
+      if (err != GPGME_No_Error)
+        {
+          gpa_gpgme_error (err);
+        }
+    }
+  g_free (text);
+}
+
+/* Write the contents of the GpgmeData into the clipboard
+ */
+void dump_data_to_clipboard (GpgmeData data, GtkClipboard *clipboard)
+{
+  char buffer[128];
+  int nread;
+  GpgmeError err;
+  gchar *text = NULL;
+  gint len = 0;
+
+  err = gpgme_data_rewind (data);
+  if (err != GPGME_No_Error)
+    gpa_gpgme_error (err);
+  while ( !(err = gpgme_data_read (data, buffer, sizeof(buffer), &nread)) ) 
+    {
+      text = g_realloc (text, len+nread);
+      strncpy (text+len, buffer, nread);
+      len += nread;
+    }
+  if (err != GPGME_EOF)
+    gpa_gpgme_error (err);
+  gtk_clipboard_set_text (clipboard, text, len);
+  g_free (text);
+  return;
+}
+
 /* Assemble the parameter string for gpgme_op_genkey for GnuPG. We don't need
  * worry about the user ID being UTF-8 as long as we are using GTK+2, because
  * all user input is UTF-8 in it.
@@ -251,7 +294,7 @@ static GtkWidget *passphrase_question_label (const gchar *desc)
   /* Build the label widget */
   if (g_str_equal (action, "ENTER"))
     {
-      text = g_strdup_printf ("%s\n%s %s\n%s %s",
+      text = g_strdup_printf ("%s\n\n%s %s\n%s %s",
                               _("Please enter the passphrase for"
                                 " the following key:"),
                               _("User Name:"), userid,
@@ -259,7 +302,7 @@ static GtkWidget *passphrase_question_label (const gchar *desc)
     }
   else
     {
-      text = g_strdup_printf ("%s\n%s %s\n%s %s",
+      text = g_strdup_printf ("%s\n\n%s %s\n%s %s",
                               _("Wrong passphrase, please try again:"),
                               _("User Name:"), userid,
                               _("Key ID:"), keyid);
@@ -274,9 +317,10 @@ static GtkWidget *passphrase_question_label (const gchar *desc)
 const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
 {
   GtkWidget * dialog;
+  GtkWidget * hbox;
   GtkWidget * vbox;
   GtkWidget * entry;
-  GtkWidget * action_area;
+  GtkWidget * pixmap;
   GtkResponseType response;
 
   if (desc)
@@ -288,8 +332,14 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
                                             GTK_STOCK_CANCEL,
                                             GTK_RESPONSE_CANCEL,
                                             NULL);
-      vbox = GTK_DIALOG (dialog)->vbox;
-      action_area = GTK_DIALOG (dialog)->action_area;
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, 
+                          TRUE, FALSE, 10);
+      pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION,
+                                         GTK_ICON_SIZE_DIALOG);
+      gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
+      vbox = gtk_vbox_new (TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, FALSE, 10);
       /* The default button is OK */
       gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
       /* Set the contents of the dialog */
@@ -298,7 +348,7 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
       entry = gtk_entry_new ();
       gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
       gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-      gtk_box_pack_start_defaults (GTK_BOX (vbox), entry);
+      gtk_box_pack_start (GTK_BOX (vbox), entry, TRUE, FALSE, 10);
       gtk_widget_grab_focus (entry);
       /* Run the dialog */
       gtk_widget_show_all (dialog);

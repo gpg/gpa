@@ -304,8 +304,9 @@ void
 gpa_window_error (const gchar *message, GtkWidget *messenger)
 {
   GtkWidget *windowError;
-  GtkWidget *vboxError;
+  GtkWidget *hboxError;
   GtkWidget *labelMessage;
+  GtkWidget *pixmap;
 
   windowError = gtk_dialog_new_with_buttons (_("GPA Error"),
                                              (messenger ? 
@@ -316,10 +317,15 @@ gpa_window_error (const gchar *message, GtkWidget *messenger)
                                              NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (windowError),
                                    GTK_RESPONSE_CLOSE);
-  vboxError = GTK_DIALOG (windowError)->vbox;
-  gtk_container_set_border_width (GTK_CONTAINER (vboxError), 10);
+  hboxError = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (windowError)->vbox),
+                               hboxError);
+  gtk_container_set_border_width (GTK_CONTAINER (hboxError), 10);
+  pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
+                                     GTK_ICON_SIZE_DIALOG);
+  gtk_box_pack_start (GTK_BOX (hboxError), pixmap, TRUE, FALSE, 10);
   labelMessage = gtk_label_new (message);
-  gtk_box_pack_start (GTK_BOX (vboxError), labelMessage, TRUE, FALSE, 10);
+  gtk_box_pack_start (GTK_BOX (hboxError), labelMessage, TRUE, FALSE, 10);
 
   gtk_widget_show_all (windowError);
   gtk_dialog_run (GTK_DIALOG (windowError));
