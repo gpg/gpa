@@ -23,8 +23,6 @@
 
 #include <gtk/gtk.h>
 
-GtkWidget * gpa_signature_list_new (GtkWidget *window, GList *signatures);
-
 GtkWidget * gpa_secret_key_list_new (GtkWidget *window);
 GtkWidget * gpa_public_key_list_new (GtkWidget *window);
 gint gpa_key_list_selection_length (GtkWidget *clist);

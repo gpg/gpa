@@ -34,62 +34,6 @@
 #include "gtktools.h"
 
 /*
- *	A CList showing a list of signatures
- */
-
-static void
-add_sigs_to_clist (GtkWidget *window, GtkWidget *clist, GList *signatures)
-{
-  GpapaSignature *sig;
-  GpapaSigValidity validity;
-  gchar *contents[3];
-
-  while (signatures)
-    {
-      sig = (GpapaSignature *)(signatures->data);
-      contents[0] = gpapa_signature_get_name (sig, gpa_callback, window);
-      if (!contents[0])
-	contents[0] = _("[Unknown user ID]");
-
-      validity = gpapa_signature_get_validity (sig, gpa_callback, window);
-      contents[1] = gpa_sig_validity_string (validity);
-
-      contents[2] = gpapa_signature_get_identifier (sig, gpa_callback, window);
-
-      gtk_clist_append (GTK_CLIST (clist), contents);
-
-      signatures = g_list_next (signatures);
-    }
-}
-
-
-GtkWidget *
-gpa_signature_list_new (GtkWidget *window, GList *signatures)
-{
-  GtkWidget *clist;
-  gchar *titles[3] = {
-    _("Signature"), _("Validity"), _("Key ID")
-  };
-  gint i;
-
-  clist = gtk_clist_new_with_titles (3, titles);
-  gtk_clist_set_column_width (GTK_CLIST (clist), 0, 180);
-  gtk_clist_set_column_justification (GTK_CLIST (clist), 0, GTK_JUSTIFY_LEFT);
-  gtk_clist_set_column_width (GTK_CLIST (clist), 1, 80);
-  gtk_clist_set_column_justification (GTK_CLIST (clist), 1,
-				      GTK_JUSTIFY_CENTER);
-  gtk_clist_set_column_width (GTK_CLIST (clist), 2, 120);
-  gtk_clist_set_column_justification (GTK_CLIST (clist), 2, GTK_JUSTIFY_LEFT);
-  for (i = 0; i < 3; i++)
-    gtk_clist_column_title_passive (GTK_CLIST (clist), i);
-
-  add_sigs_to_clist (window, clist, signatures);
-
-  return clist;
-}
-
-
-/*
  *	A CList for choosing from secret keys
  */
 
