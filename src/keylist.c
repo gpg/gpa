@@ -29,9 +29,54 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data);
 static void gpa_keylist_end (gpointer data);
 static void gpa_keylist_clear_columns (GpaKeyList *keylist);
 
+/* Properties */
+enum
+{
+  PROP_0,
+  PROP_WINDOW,
+};
+
 /* GObject */
 
 static GObjectClass *parent_class = NULL;
+
+static void
+gpa_keylist_get_property (GObject     *object,
+			  guint        prop_id,
+			  GValue      *value,
+			  GParamSpec  *pspec)
+{
+  GpaKeyList *list = GPA_KEYLIST (object);
+
+  switch (prop_id)
+    {
+    case PROP_WINDOW:
+      g_value_set_object (value, list->window);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gpa_keylist_set_property (GObject     *object,
+			  guint        prop_id,
+			  const GValue      *value,
+			  GParamSpec  *pspec)
+{
+  GpaKeyList *list = GPA_KEYLIST (object);
+
+  switch (prop_id)
+    {
+    case PROP_WINDOW:
+      list->window = (GtkWidget*) g_value_get_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
 
 static void
 gpa_keylist_finalize (GObject *object)
@@ -53,6 +98,8 @@ gpa_keylist_class_init (GpaKeyListClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gpa_keylist_finalize;
+  object_class->set_property = gpa_keylist_set_property;
+  object_class->get_property = gpa_keylist_get_property;
 }
 
 typedef enum
@@ -84,6 +131,7 @@ gpa_keylist_init (GpaKeyList *list)
   list->secret = FALSE;
   list->keys = NULL;
   list->dialog = NULL;
+  list->window = NULL;
   /* Init the model */
   store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
 			      GDK_TYPE_PIXBUF,
@@ -334,7 +382,8 @@ void gpa_keylist_start_reload (GpaKeyList * keylist)
    * It may be shown at times when it's not needed. But it shouldn't appear
    * for long those times.
    */
-  keylist->dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, 
+  keylist->dialog = gtk_message_dialog_new (GTK_WINDOW (keylist->window),
+					    GTK_DIALOG_MODAL, 
 					    GTK_MESSAGE_INFO, 
 					    GTK_BUTTONS_NONE,
 					    _("GnuPG is rebuilding the trust "

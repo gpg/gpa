@@ -556,7 +556,7 @@ static void
 gpa_file_encrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 					  GpaFileEncryptOperation *op)
 {
-  switch (err)
+  switch (gpg_err_code (err))
     {
     case GPG_ERR_NO_ERROR:
     case GPG_ERR_CANCELED:

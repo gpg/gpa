@@ -25,8 +25,6 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      keyring.c keyring.h \
 	      ownertrustdlg.c ownertrustdlg.h \
 	      keysigndlg.c keysigndlg.h \
-	      keyimportdlg.c keyimportdlg.h \
-	      keyexportdlg.c keyexportdlg.h \
 	      keygendlg.c keygendlg.h \
 	      keygenwizard.c keygenwizard.h \
               qdchkpwd.c qdchkpwd.h \
@@ -51,6 +49,7 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      passwddlg.h passwddlg.c \
 	      gpacontext.h gpacontext.c \
 	      gpaprogressdlg.h gpaprogressdlg.c \
+	      gparecvkeydlg.h gparecvkeydlg.c \
 	      gpaoperation.h gpaoperation.c \
 	      gpafileop.h gpafileop.c \
 	      gpafiledecryptop.h gpafiledecryptop.c \
@@ -61,5 +60,14 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpakeydeleteop.h gpakeydeleteop.c \
 	      gpakeysignop.h gpakeysignop.c \
 	      gpakeytrustop.h gpakeytrustop.c \
+	      gpaexportop.h gpaexportop.c \
+	      gpaexportfileop.h gpaexportfileop.c \
+	      gpaexportclipop.h gpaexportclipop.c \
+	      gpaexportserverop.h gpaexportserverop.c \
+	      gpaimportop.h gpaimportop.c \
+	      gpaimportfileop.h gpaimportfileop.c \
+	      gpaimportclipop.h gpaimportclipop.c \
+	      gpaimportserverop.h gpaimportserverop.c \
+	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
 	      options.c gpa.rc

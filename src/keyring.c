@@ -33,8 +33,6 @@
 #include "gpawidgets.h"
 #include "ownertrustdlg.h"
 #include "keysigndlg.h"
-#include "keyimportdlg.h"
-#include "keyexportdlg.h"
 #include "keygendlg.h"
 #include "keygenwizard.h"
 #include "keyeditdlg.h"
@@ -54,6 +52,16 @@
 #include "gpakeydeleteop.h"
 #include "gpakeysignop.h"
 #include "gpakeytrustop.h"
+
+#include "gpaexportfileop.h"
+#include "gpaexportclipop.h"
+#include "gpaexportserverop.h"
+
+#include "gpaimportfileop.h"
+#include "gpaimportclipop.h"
+#include "gpaimportserverop.h"
+
+#include "gpabackupop.h"
 
 /*
  *      The public keyring editor
@@ -145,6 +153,8 @@ static void keyring_editor_edit (gpointer param);
 static void keyring_editor_trust (gpointer param);
 static void keyring_editor_import (gpointer param);
 static void keyring_editor_export (gpointer param);
+static void keyring_editor_retrieve (gpointer param);
+static void keyring_editor_send (gpointer param);
 static void keyring_editor_backup (gpointer param);
 
 /*
@@ -259,11 +269,28 @@ gpa_keyring_editor_changed_wot_cb (gpointer data)
 }
 
 static void
-register_operation (GPAKeyringEditor * editor, GpaKeyOperation *op)
+register_key_operation (GPAKeyringEditor * editor, GpaKeyOperation *op)
 {
   g_signal_connect_swapped (G_OBJECT (op), "changed_wot",
 			    G_CALLBACK (gpa_keyring_editor_changed_wot_cb),
 			    editor);
+  g_signal_connect (G_OBJECT (op), "completed",
+		    G_CALLBACK (gpa_operation_destroy), editor); 
+}
+
+static void
+register_import_operation (GPAKeyringEditor * editor, GpaImportOperation *op)
+{
+  g_signal_connect_swapped (G_OBJECT (op), "imported_keys",
+			    G_CALLBACK (gpa_keyring_editor_changed_wot_cb),
+			    editor);
+  g_signal_connect (G_OBJECT (op), "completed",
+		    G_CALLBACK (gpa_operation_destroy), editor); 
+}
+
+static void
+register_operation (GPAKeyringEditor * editor, GpaOperation *op)
+{
   g_signal_connect (G_OBJECT (op), "completed",
 		    G_CALLBACK (gpa_operation_destroy), editor); 
 }
@@ -276,7 +303,7 @@ keyring_editor_delete (GPAKeyringEditor * editor)
   GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
   GpaKeyDeleteOperation *op = gpa_key_delete_operation_new (editor->window,
 							    selection);
-  register_operation (editor, GPA_KEY_OPERATION (op));
+  register_key_operation (editor, GPA_KEY_OPERATION (op));
 }
 
 
@@ -359,7 +386,7 @@ keyring_editor_sign (gpointer param)
       GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
       GpaKeySignOperation *op = gpa_key_sign_operation_new (editor->window,
 							    selection);
-      register_operation (editor, GPA_KEY_OPERATION (op));
+      register_key_operation (editor, GPA_KEY_OPERATION (op));
     }
 }
 
@@ -394,128 +421,18 @@ keyring_editor_trust (gpointer param)
       GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
       GpaKeyTrustOperation *op = gpa_key_trust_operation_new (editor->window, 
 							      selection);
-      register_operation (editor, GPA_KEY_OPERATION (op));
+      register_key_operation (editor, GPA_KEY_OPERATION (op));
     }
 }
 
-
-static gboolean
-keyring_editor_import_get_source (GPAKeyringEditor *editor, gpgme_data_t *data)
-{
-  gchar *filename, *server, *key_id;
-  gpg_error_t err;
-
-  if (key_import_dialog_run (editor->window, &filename, &server, &key_id))
-    {
-      if (filename)
-        {
-          /* Read keys from the user specified file.
-           */
-          err = gpa_gpgme_data_new_from_file (data, filename, editor->window);
-	  /* Check if a file error ocurred */
-          if (gpgme_err_code_to_errno (gpg_err_code (err)))
-            {
-              return FALSE;
-            }
-          else if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-            {
-              gpa_gpgme_error (err);
-            }
-        }
-      else if (server)
-        {
-          if (!server_get_key (server, key_id, data, editor->window))
-            {
-              g_free (filename);
-              g_free (server);
-              return FALSE;
-            }
-        }
-      g_free (filename);
-      g_free (server);
-      return TRUE;
-    }
-  else
-    {
-      return FALSE; 
-    }
-}
-
-static void
-keyring_editor_import_do_import (GPAKeyringEditor *editor, gpgme_data_t data)
-{
-  gpg_error_t err;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-
-  /* Import the key */
-  err = gpgme_op_import (ctx, data);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR &&
-      gpg_err_code (err) != GPG_ERR_NO_DATA)
-    {
-      gpa_gpgme_error (err);
-    }
-  /* Load the keys we just imported */
-  if (gpg_err_code (err) != GPG_ERR_NO_DATA)
-    {
-      gpgme_import_result_t info;
-      
-      info = gpgme_op_import_result (ctx);
-      /* If keys were imported, load them */
-      if (info->imports)
-        {
-	  gpa_keylist_start_reload (editor->keylist);
-        }
-      key_import_results_dialog_run (editor->window, info);
-    }
-  gpgme_release (ctx);
-  /* update the widgets
-   */
-  update_selection_sensitive_widgets (editor);
-}
-
-/* retrieve a key from the server */
 static void
 keyring_editor_import (gpointer param)
 {
-  GPAKeyringEditor *editor = param;
-  gpgme_data_t data;
-
-  if (keyring_editor_import_get_source (editor, &data))
-    {
-      keyring_editor_import_do_import (editor, data);
-      gpgme_data_release (data);
-    }
-}
-
-static void
-keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
-                                 gboolean armored)
-{
-  gpg_error_t err;
-  GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-  const gchar **patterns = NULL;
-  int i;
-
-  /* Create the data buffer */
-  err = gpgme_data_new (data);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-    gpa_gpgme_error (err);
-  gpgme_set_armor (ctx, armored);
-  /* Create the set of keys to export */
-  patterns = g_malloc0 (sizeof(gchar*)*(g_list_length(selection)+1));
-  for (i = 0; selection; i++, selection = g_list_next (selection))
-    {
-      gpgme_key_t key = (gpgme_key_t) selection->data;
-      patterns[i] = key->subkeys->fpr;
-    }
-  /* Export to the gpgme_data_t */
-  err = gpgme_op_export_ext (ctx, patterns, 0, *data);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-    gpa_gpgme_error (err);
-  /* Clean up */
-  gpgme_release (ctx);
-  g_free (patterns);
+  GPAKeyringEditor * editor = param;
+  
+  GpaImportFileOperation *op = gpa_import_file_operation_new 
+    (editor->window);
+  register_import_operation (editor, GPA_IMPORT_OPERATION (op));
 }
 
 /* export the selected keys to a file
@@ -523,65 +440,40 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
 static void
 keyring_editor_export (gpointer param)
 {
-  GPAKeyringEditor *editor = param;
-  gchar *filename, *server;
-  gboolean armored;
+  GPAKeyringEditor * editor = param;
+  gpgme_key_t key = keyring_editor_current_key (editor);
 
-  if (!gpa_keylist_has_selection (editor->keylist))
+  if (key)
     {
-      /* this shouldn't happen because the button should be grayed out
-       * in this case
-       */
-      gpa_window_error (_("No keys selected to export."), editor->window);
-      return;
+      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
+      GpaExportFileOperation *op = gpa_export_file_operation_new 
+	(editor->window, selection);
+      register_operation (editor, GPA_OPERATION (op));
     }
+}
 
-  if (key_export_dialog_run (editor->window, &filename, &server, &armored))
+static void
+keyring_editor_retrieve (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+  
+  GpaImportServerOperation *op = gpa_import_server_operation_new 
+    (editor->window);
+  register_import_operation (editor, GPA_IMPORT_OPERATION (op));
+}
+
+static void
+keyring_editor_send (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+  gpgme_key_t key = keyring_editor_current_key (editor);
+
+  if (key)
     {
-      gpgme_data_t data;
-      FILE *file = NULL;
-
-      /* First: check any preconditions to the export */
-      if (filename)
-        {
-          file = gpa_fopen (filename, editor->window);
-          if (!file)
-            {
-              gchar *message = g_strdup_printf ("%s: %s", filename, 
-						strerror(errno));
-              gpa_window_error (message, editor->window);
-	      g_free (message);
-              g_free (filename);
-              g_free (server);
-              return;
-            }
-        }
-
-      /* Export to a data buffer */
-      keyring_editor_export_do_export (editor, &data, armored);
-      
-      /* Write the data somewhere */
-      if (filename)
-        {
-          /* Export the selected keys to the user specified file. */
-          if (file)
-            {
-              /* Dump the gpgme_data_t to the file */
-              dump_data_to_file (data, file);
-              fclose (file);
-            }
-        }
-      else if (server)
-        {
-          /* Export the selected key to the user specified server.
-           */
-	  gpgme_key_t key = keyring_editor_current_key (editor);
-	  server_send_keys (server, gpa_gpgme_key_get_short_keyid (key, 0),
-			    data, editor->window);
-        }
-      g_free (filename);
-      g_free (server);
-      gpgme_data_release (data);
+      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
+      GpaExportServerOperation *op = gpa_export_server_operation_new 
+	(editor->window, selection);
+      register_operation (editor, GPA_OPERATION (op));
     }
 }
 
@@ -589,10 +481,15 @@ keyring_editor_export (gpointer param)
 static void
 keyring_editor_backup (gpointer param)
 {
-  GPAKeyringEditor *editor = param;
+  GPAKeyringEditor * editor = param;
   gpgme_key_t key = keyring_editor_current_key (editor);
 
-  key_backup_dialog_run (editor->window, key);
+  if (key)
+    {
+      GpaBackupOperation *op = gpa_backup_operation_new 
+	(editor->window, key);
+      register_operation (editor, GPA_OPERATION (op));
+    }
 }
 
 /* Run the advanced key generation dialog and if the user clicked OK,
@@ -786,8 +683,10 @@ keyring_editor_mapped (gpointer param)
 	  gtk_widget_destroy (dialog);
           if (response == GTK_RESPONSE_OK)
 	    {
-              key_backup_dialog_run (editor->window,
-                                     gpa_options_get_default_key (gpa_options_get_instance ()));
+	      GpaBackupOperation *op = gpa_backup_operation_new 
+		(editor->window, gpa_options_get_default_key 
+		 (gpa_options_get_instance ()));
+	      register_operation (editor, GPA_OPERATION (op));
 	    }
           asked_about_key_backup = TRUE;
         }
@@ -831,34 +730,10 @@ static void
 keyring_editor_paste (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  gpgme_data_t data;
-  gpg_error_t err;
-  gchar *text = gtk_clipboard_wait_for_text (gtk_clipboard_get
-                                             (GDK_SELECTION_CLIPBOARD));
-
-  if (text)
-    {
-      /* Fill the data from the selection clipboard.
-       */
-      err = gpgme_data_new_from_mem (&data, text, strlen (text), FALSE);
-    }
-  else
-    {
-      /* If the keyboard was empty, create an empty data
-       */
-      err = gpgme_data_new (&data);
-    }
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-    {
-      gpa_gpgme_error (err);
-    }
-  /* Import */
-  keyring_editor_import_do_import (editor, data);
-  gpgme_data_release (data);
-  if (text)
-    {
-      g_free (text);
-    }
+  
+  GpaImportClipboardOperation *op = gpa_import_clipboard_operation_new 
+    (editor->window);
+  register_import_operation (editor, GPA_IMPORT_OPERATION (op));
 }
 
 /* Copy the keys into the clipboard */
@@ -866,14 +741,15 @@ static void
 keyring_editor_copy (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  gpgme_data_t data;
+  gpgme_key_t key = keyring_editor_current_key (editor);
 
-  /* Export to a data buffer */
-  keyring_editor_export_do_export (editor, &data, TRUE);
-  /* Write the data to the clipboard.
-   */
-  dump_data_to_clipboard (data, gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
-  gpgme_data_release (data);
+  if (key)
+    {
+      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
+      GpaExportClipboardOperation *op = gpa_export_clipboard_operation_new 
+	(editor->window, selection);
+      register_operation (editor, GPA_OPERATION (op));
+    }
 }
 
 /* Create and return the menu bar for the key ring editor */
@@ -916,6 +792,11 @@ keyring_editor_menubar_new (GtkWidget * window,
     {_("/Keys/E_xport Keys..."), NULL, keyring_editor_export, 0, NULL},
     {_("/Keys/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
   };
+  GtkItemFactoryEntry keyserver_menu[] = {
+    {_("/_Server"), NULL, NULL, 0, "<Branch>"},
+    {_("/Server/_Retrieve Keys..."), NULL, keyring_editor_retrieve, 0, NULL},
+    {_("/Server/_Send Keys..."), NULL, keyring_editor_send, 0, NULL},      
+  };
   GtkItemFactoryEntry win_menu[] = {
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
     {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
@@ -934,6 +815,10 @@ keyring_editor_menubar_new (GtkWidget * window,
   gtk_item_factory_create_items (factory,
                                  sizeof (keys_menu) / sizeof (keys_menu[0]),
                                  keys_menu, editor);
+  gtk_item_factory_create_items (factory,
+                                 sizeof (keyserver_menu) / 
+				 sizeof (keyserver_menu[0]),
+                                 keyserver_menu, editor);
   gtk_item_factory_create_items (factory,
                                  sizeof (win_menu) / sizeof (win_menu[0]),
                                  win_menu, editor);
@@ -964,6 +849,14 @@ keyring_editor_menubar_new (GtkWidget * window,
       add_selection_sensitive_widget (editor, item,
                                       keyring_editor_has_selection);
     }
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Server/Send Keys..."));
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_selection);
+    }
+
   /* Only if there is only ONE key selected */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Set Owner Trust..."));
@@ -1018,6 +911,7 @@ keyring_editor_popup_menu_new (GtkWidget * window,
     {_("/_Edit Private Key..."), NULL, keyring_editor_edit, 0, NULL},
     {"/sep2", NULL, NULL, 0, "<Separator>"},
     {_("/E_xport Keys..."), NULL, keyring_editor_export, 0, NULL},
+    {_("/Se_nd Keys to Server..."), NULL, keyring_editor_send, 0, NULL},
     {_("/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
   };
   GtkWidget *item;

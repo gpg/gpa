@@ -38,6 +38,8 @@ struct _GpaKeyList {
   GtkTreeView parent;
 
   gboolean secret;
+  /* Parent window for dialogs */
+  GtkWidget *window;
   /* Keys loaded into the model */
   GList *keys;
   /* Dialog for warning about a trustdb rebuilding */

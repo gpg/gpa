@@ -1,3 +1,53 @@
+2003-09-18  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (register_key_operation, register_import_operation)
+	(register_operation): Handle different types of operations differently.
+	(keyring_editor_import_do_import)
+	(keyring_editor_import_get_source)
+	(keyring_editor_export_do_export): Removed.
+	(keyring_editor_import, keyring_editor_export): Changed to use
+	operations.
+	(keyring_editor_retrieve, keyring_editor_send): New functions.
+	Import/Export with servers.
+	(keyring_editor_backup): Use a GpaOperation.
+	(keyring_editor_mapped): Backup using a GpaOperation.
+	(keyring_editor_paste, keyring_editor_copy): Use GpaOperation's.
+	(keyring_editor_menubar_new): Add a "Server" menu for send/receive
+	operations.
+	(keyring_editor_popup_menu_new): Add "Send keys" menu item.
+
+	* keylist.c (gpa_keylist_get_property, gpa_keylist_set_property)
+	(gpa_keylist_class_init, gpa_keylist_init)
+	(gpa_keylist_start_reload): Add property handling and parent window
+	property.
+
+	* keylist.h: Add parent window to structure.
+
+	* keygenwizard.c (gpa_keygen_wizard_generate_action): Disable backup
+	generation until key generation is redone as an operation.
+
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb): Fix
+	broken error check.
+	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): 
+	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): Likewise.
+
+	* keyexportdlg.c, keyexportdlg.h, keyimportdlg.c,
+	keyimportdlg.h: Remove files. All their functionality has been moved
+	to the GpaOperation objects.
+
+	* gpaexportop.h, gpaexportop.c, gpaexportfileop.h, gpaexportfileop.c,
+	gpaexportclipop.h, gpaexportclipop.c, gpaexportserverop.h,
+	gpaexportserverop.c, gpaimportop.h, gpaimportop.c, gpaimportfileop.h,
+	gpaimportfileop.c, gpaimportclipop.h, gpaimportclipop.c,
+	gpaimportserverop.h, gpaimportserverop.c, gpabackupop.h,
+	gpabackupop.c: New files. Separate GpaOperation subclasses for
+	each way to import/export/backup a file.
+
+	* gparecvkeydlg.h, gparecvkeydlg.c: New. Simple "Receive key"
+	dialog. Asks for the key ID to be retrieved.
+	
+	* Makefile.am (gpa_SOURCES): Add new files, remove old.
+
 2003-08-20  Miguel Coca  <mcoca@gnu.org>
 
 	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_sig_get_userid) 

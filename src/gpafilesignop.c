@@ -343,7 +343,7 @@ static void
 gpa_file_sign_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 				       GpaFileSignOperation *op)
 {
-  switch (err)
+  switch (gpg_err_code (err))
     {
     case GPG_ERR_NO_ERROR:
     case GPG_ERR_CANCELED:

@@ -327,7 +327,7 @@ gpa_file_verify_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 {
   gchar *message;
 
-  switch (err)
+  switch (gpg_err_code (err))
     {
     case GPG_ERR_NO_ERROR:
     case GPG_ERR_CANCELED:

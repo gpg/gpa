@@ -30,7 +30,6 @@
 #include "gpawizard.h"
 #include "qdchkpwd.h"
 #include "gpgmetools.h"
-#include "keyexportdlg.h"
 
 /*
  * The key generation wizard
@@ -472,7 +471,10 @@ gpa_keygen_wizard_generate_action (gpointer data)
     }
   if (do_backup)
     {
+      /* Disabled until key generation becomes a GpaOperation */
+#if 0
       key_backup_dialog_run (keygen_wizard->window, key);
+#endif      
     }
   gpgme_key_unref (key);
   g_free (params.userID);

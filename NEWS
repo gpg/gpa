@@ -5,7 +5,7 @@ Noteworthy changes in version 0.6.2 (unreleased)
  key. This is only visible if GPA is in advanced mode (available from the
  preferences dialog).
 
- * The capabilities of a key (certify, sign, encrypt) are not visible from
+ * The capabilities of a key (certify, sign, encrypt) are now visible from
  the keyring editor.
 
  * The keyring editor can now sort keys by any column. By default, they are
@@ -26,6 +26,9 @@ Noteworthy changes in version 0.6.2 (unreleased)
  when GPA is started. 
 
  * Removed all deprecated widgets. GPA is now pure GTK+ 2.2.
+
+ * Imports and exports from files and servers have been separated into
+ different dialogs.
 
 Noteworthy changes in version 0.6.1 (2003-01-29)
 ------------------------------------------------
