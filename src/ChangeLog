@@ -1,5 +1,13 @@
 2001-01-30  Bernhard Herzog  <bh@intevation.de>
 
+	* keyeditdlg.c (gpa_key_edit_dialog_run):
+	(key_edit_destroy): Add a destroy event handler and quit the
+	recursive main loop there.
+	(key_edit_close): Destroy the dialog window. Quitting the mainloop
+	is now handled in the destroy callback.
+	(key_edit_delete_event): Removed because the default handler does
+	exactly what we need now.
+
 	* keyeditdlg.h: 
 	* keyeditdlg.c: New files implementing the key edit dialog (still
 	incomplete, though)
