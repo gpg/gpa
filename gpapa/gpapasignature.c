@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
-#include "gpapasignature.h"
+#include "gpapa.h"
 
 GpapaSignature *gpapa_signature_new (
   gchar *keyID, GpapaCallbackFunc callback, gpointer calldata
@@ -42,10 +42,22 @@ gchar *gpapa_signature_get_identifier (
     return ( signature -> KeyID );
 } /* gpapa_signature_get_identifier */
 
-gboolean gpapa_signature_is_valid (
+gchar *gpapa_signature_get_name (
   GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
 ) {
-return ( FALSE ); /*!!!*/
+  if ( signature == NULL )
+    return ( NULL );
+  else
+    return ( signature -> UserID );
+} /* gpapa_signature_get_name */
+
+GpapaSigValidity gpapa_signature_get_validity (
+  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( signature == NULL )
+    return ( GPAPA_SIG_UNKNOWN );
+  else
+    return ( signature -> validity );
 } /* gpapa_signature_is_valid */
 
 void gpapa_signature_release (

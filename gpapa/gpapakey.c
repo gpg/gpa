@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
-#include "gpapakey.h"
+#include "gpapa.h"
 
 GpapaKey *gpapa_key_new (
   gchar *keyID, GpapaCallbackFunc callback, gpointer calldata

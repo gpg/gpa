@@ -21,6 +21,7 @@
 #include <config.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <glib.h>
 #include "gpapafile.h"
 
@@ -31,6 +32,7 @@ GpapaFile *gpapa_file_new (
   GpapaFile *fileNew;
 /* commands */
   fileNew = (GpapaFile*) xmalloc ( sizeof ( GpapaFile ) );
+  memset ( fileNew, 0, sizeof ( GpapaFile ) );
   fileNew -> identifier = (gchar*) xstrdup ( fileID );
 fileNew -> name = (gchar*) xstrdup ( fileID );	/*!!!*/
   return ( fileNew );
@@ -60,10 +62,95 @@ GpapaFileStatus gpapa_file_get_status (
 return ( GPAPA_FILE_CLEAR ); /*!!!*/
 } /* gpapa_file_get_status */
 
+static gboolean status_check (
+  gchar *buffer, gchar *keyword,
+  gchar **data
+) {
+  gchar *checkval = xstrcat2 ( "[GNUPG:] ", keyword );
+  gboolean result = FALSE;
+  if ( strncmp ( buffer, checkval, strlen ( checkval ) ) == 0 )
+    {
+      gchar *p = buffer + strlen ( checkval );
+      while ( *p == ' ' )
+        p++;
+      data [ 0 ] = p;
+      while ( *p && *p != ' ' )
+        p++;
+      if ( *p )
+        {
+          *p = 0;
+          p++;
+          while ( *p == ' ' )
+            p++;
+          data [ 1 ] = p;
+          while ( *p && *p != '\n' )
+            p++;
+          if ( *p == '\n' )
+            p = 0;
+        }
+      else
+        data [ 1 ] = NULL;
+
+      /* Clear the buffer to avoid further processing.
+       */
+      *buffer = 0;
+      result = TRUE;
+    }
+  free ( checkval );
+  return ( result );
+} /* status_check */
+
+static void linecallback_get_signatures (
+  gchar *line, gpointer data, gboolean status
+) {
+  FileData *d = data;
+  if ( status && line )
+    {
+      char *sigdata [ 2 ] = { NULL, NULL };
+      if ( status_check ( line, "NODATA", sigdata ) )
+        {
+          /* Just let `status_check' clear the buffer to avoid
+           * gpapa_call_gnupg() to trigger error messages.
+           */
+        }
+      else if ( status_check ( line, "GOODSIG", sigdata ) )
+        {
+          GpapaSignature *sig = gpapa_signature_new ( sigdata [ 0 ], d -> callback, d -> calldata );
+          sig -> validity = GPAPA_SIG_VALID;
+          sig -> UserID = xstrdup ( sigdata [ 1 ] );
+          d -> file -> sigs = g_list_append ( d -> file -> sigs, sig );
+        }
+      else if ( status_check ( line, "ERRSIG", sigdata ) )
+        {
+          GpapaSignature *sig = gpapa_signature_new ( sigdata [ 0 ], d -> callback, d -> calldata );
+          sig -> validity = GPAPA_SIG_UNKNOWN;
+          d -> file -> sigs = g_list_append ( d -> file -> sigs, sig );
+        }
+    }
+} /* linecallback_get_signatures */
+
 GList *gpapa_file_get_signatures (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 ) {
-return ( NULL ); /*!!!*/
+  if ( file == NULL )
+    return ( NULL );
+  else
+    {
+      if ( file -> sigs == NULL && file -> identifier != NULL )
+	{
+	  FileData data = { file, callback, calldata };
+	  char *gpgargv [ 3 ];
+	  gpgargv [ 0 ] = "--verify";
+	  gpgargv [ 1 ] = file -> identifier;
+	  gpgargv [ 2 ] = NULL;
+	  gpapa_call_gnupg (
+	    gpgargv, TRUE, FALSE,
+	    linecallback_get_signatures, &data,
+	    callback, calldata
+	  );
+	}
+      return ( file -> sigs );
+    }
 } /* gpapa_file_get_signatures */
 
 void gpapa_file_release (
@@ -74,7 +161,7 @@ void gpapa_file_release (
   free ( file );
 } /* gpapa_file_release */
 
-static void linecallback_dummy ( char *line, gpointer data ) {
+static void linecallback_dummy ( char *line, gpointer data, gboolean status ) {
   /* empty */
 } /* linecallback_dummy */
 

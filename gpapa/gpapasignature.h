@@ -39,7 +39,11 @@ extern gchar *gpapa_signature_get_identifier (
   GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
 );
 
-extern gboolean gpapa_signature_is_valid (
+extern gchar *gpapa_signature_get_name (
+  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern GpapaSigValidity gpapa_signature_get_validity (
   GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
 );
 

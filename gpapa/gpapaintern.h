@@ -25,7 +25,7 @@
 #include "gpapa.h"
 
 typedef void (*GpapaLineCallbackFunc) (
-  gchar *line, gpointer data
+  gchar *line, gpointer data, gboolean status
 );
 
 extern void gpapa_call_gnupg (

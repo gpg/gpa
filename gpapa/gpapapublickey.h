@@ -31,6 +31,12 @@ typedef struct {
   gchar *fingerprint;
 } GpapaPublicKey;
 
+typedef struct {
+  GpapaPublicKey *key;
+  GpapaCallbackFunc callback;
+  gpointer calldata;
+} PublicKeyData;
+
 typedef enum {
   GPAPA_OWNERTRUST_UNKNOWN,
   GPAPA_OWNERTRUST_DISTRUST,
@@ -63,7 +69,7 @@ extern GpapaOwnertrust gpapa_public_key_get_ownertrust (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
 );
 
-extern GList *gpapa_public_key_get_sigs (
+extern GList *gpapa_public_key_get_signatures (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
 );
 

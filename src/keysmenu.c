@@ -493,7 +493,7 @@ void keys_openPublic_editKey ( gpointer param ) {
   GpapaPublicKey *key;
   GtkAccelGroup *accelGroup;
   gchar *titlesSignatures [] = {
-    N_( "Signature" ), N_( "valid" ), N_( "Key ID" )
+    N_( "Signature" ), N_( "Validity" ), N_( "Key ID" )
   };
   GList *signatures = NULL;
   gpointer paramAppend [ 2 ];
@@ -605,7 +605,7 @@ void keys_openPublic_editKey ( gpointer param ) {
   gtk_clist_set_column_justification (
     GTK_CLIST ( clistSignatures ), 2, GTK_JUSTIFY_LEFT
   );
-  signatures = gpapa_public_key_get_sigs (
+  signatures = gpapa_public_key_get_signatures (
     key, gpa_callback, windowPublic
   );
   paramAppend [ 0 ] = clistSignatures;

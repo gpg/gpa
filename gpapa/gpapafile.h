@@ -27,6 +27,7 @@
 typedef struct {
   gchar *identifier;
   gchar *name;
+  GList *sigs;
 } GpapaFile;
 
 typedef enum {
@@ -34,6 +35,12 @@ typedef enum {
   GPAPA_FILE_ENCRYPTED,
   GPAPA_FILE_PROTECTED
 } GpapaFileStatus;
+
+typedef struct {
+  GpapaFile *file;
+  GpapaCallbackFunc callback;
+  gpointer calldata;
+} FileData;
 
 #define GPAPA_FILE_FIRST GPAPA_FILE_CLEAR
 #define GPAPA_FILE_LAST GPAPA_FILE_PROTECTED

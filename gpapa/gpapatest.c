@@ -28,13 +28,13 @@
 char *calldata;
 
 void callback (
-  GpapaAction action, gpointer actiondata, gpointer calldata
+  GpapaAction action, gpointer actiondata, gpointer localcalldata
 ) {
-  fprintf ( stderr, "%s: %s\n", (char *) calldata, (char *) actiondata );
+  fprintf ( stderr, "%s: %s\n", (char *) localcalldata, (char *) actiondata );
 } /* callback */
 
 void linecallback (
-  gchar *line, gpointer data
+  gchar *line, gpointer data, gboolean status
 ) {
   printf ( "---> %s <---%s\n", line, (gchar *) data );
 } /* linecallback */
@@ -52,6 +52,7 @@ int main ( int argc, char **argv )
   int i, seccount, pubcount;
   GpapaSecretKey *S;
   GpapaPublicKey *P;
+  GpapaFile *F;
   calldata = argv [ 0 ];
   seccount = gpapa_get_secret_key_count ( callback, calldata );
   printf ( "Secret keys: %d\n", seccount );
@@ -75,7 +76,6 @@ int main ( int argc, char **argv )
   S = gpapa_get_secret_key_by_ID ( "983465DB21439422", callback, calldata);
   if ( S != NULL )
     {
-      GpapaFile *F;
       gchar *PassPhrase;
       printf ( "Secret key 983465DB21439422: %s\n",
 	       gpapa_key_get_name ( GPAPA_KEY ( S ), callback, calldata ) );
@@ -116,14 +116,14 @@ int main ( int argc, char **argv )
       printf ( "\n" );
       gpapa_release_public_key ( P, callback, calldata );
     }
-  P = gpapa_get_public_key_by_ID ( "983465DB21439422", callback, calldata );
+  P = gpapa_get_public_key_by_ID ( "6C7EE1B8621CC013", callback, calldata );
   if ( P != NULL )
     {
       GList *g;
-      printf ( "Public key 983465DB21439422: %s\n",
+      printf ( "Public key 6C7EE1B8621CC013 %s\n",
 	       gpapa_key_get_name ( GPAPA_KEY ( P ), callback, calldata ) );
       printf ( "Signatures:\n" );
-      g = gpapa_public_key_get_sigs ( P, callback, calldata );
+      g = gpapa_public_key_get_signatures ( P, callback, calldata );
       while ( g )
 	{
 	  GpapaSignature *sig = g -> data;
@@ -138,13 +138,41 @@ int main ( int argc, char **argv )
 	    validity = "BROKEN";
 	  printf ( "0x%s %s (%s)\n",
 		   gpapa_signature_get_identifier ( sig, callback, calldata ),
-		   sig -> UserID,
+		   gpapa_signature_get_name ( sig, callback, calldata ),
 		   validity );
 	  g = g_list_next ( g );
 	}
       gpapa_release_public_key ( P, callback, calldata );
     }
   else
-    printf ( "Public key 983465DB21439422: not available\n" );
+    printf ( "Public key 6C7EE1B8621CC013 not available\n" );
+  F = gpapa_file_new ( "test.txt.gpg", callback, calldata );
+  if ( P != NULL )
+    {
+      GList *g;
+      printf ( "File test.txt.gpg:\nSignatures:\n" );
+      g = gpapa_file_get_signatures ( F, callback, calldata );
+      while ( g )
+	{
+	  GpapaSignature *sig = g -> data;
+	  char *validity;
+	  if ( sig -> validity == GPAPA_SIG_UNKNOWN )
+	    validity = "unknown";
+	  else if ( sig -> validity == GPAPA_SIG_VALID )
+	    validity = "valid";
+	  else if ( sig -> validity == GPAPA_SIG_INVALID )
+	    validity = "invalid";
+	  else
+	    validity = "BROKEN";
+	  printf ( "0x%s %s (%s)\n",
+		   gpapa_signature_get_identifier ( sig, callback, calldata ),
+		   gpapa_signature_get_name ( sig, callback, calldata ),
+		   validity );
+	  g = g_list_next ( g );
+	}
+      gpapa_release_public_key ( P, callback, calldata );
+    }
+  else
+    printf ( "File test.txt.gpg: not available\n" );
   return ( 0 );
 } /* main */

@@ -28,6 +28,12 @@ typedef struct {
   GpapaKey *key;
 } GpapaSecretKey;
 
+typedef struct {
+  GpapaSecretKey *key;
+  GpapaCallbackFunc callback;
+  gpointer calldata;
+} SecretKeyData;
+
 typedef enum {
   GPAPA_ALGO_BOTH,
   GPAPA_ALGO_DSA,

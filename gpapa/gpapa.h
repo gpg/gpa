@@ -36,18 +36,6 @@
 
 #define GPAPA_MAX_GPG_KEY_FIELDS 20
 
-typedef struct {
-  GpapaPublicKey *key;
-  GpapaCallbackFunc callback;
-  gpointer calldata;
-} PublicKeyData;
-
-typedef struct {
-  GpapaSecretKey *key;
-  GpapaCallbackFunc callback;
-  gpointer calldata;
-} SecretKeyData;
-
 extern gchar *global_keyServer;
 
 /* Key management.

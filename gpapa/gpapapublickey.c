@@ -25,7 +25,7 @@
 #include "gpapa.h"
 
 static void linecallback_fingerprint (
-  gchar *line, gpointer data
+  gchar *line, gpointer data, gboolean status
 ) {
   PublicKeyData *d = data;
   if ( line && strncmp ( line, "fpr", 3 ) == 0 )
@@ -60,42 +60,42 @@ static void linecallback_fingerprint (
 	{
 	  gchar *fpraw = field [ 9 ];
 	  gchar *fp = xmalloc ( strlen ( fpraw ) + 16 + 1 );
-	  gchar *r = fpraw, *p = fp;
+	  gchar *r = fpraw, *q = fp;
 	  gint c = 0;
 	  while ( *r )
 	    {
-	      *p++ = *r++;
+	      *q++ = *r++;
 	      c++;
 	      if ( c < 32 )
 		{
 		  if ( c % 2 == 0 )
-		    *p++ = ' ';
+		    *q++ = ' ';
 		  if ( c % 16 == 0 )
-		    *p++ = ' ';
+		    *q++ = ' ';
 		}
 	    }
-	  *p = 0;
+	  *q = 0;
 	  d -> key -> fingerprint = fp;
 	}
       else
 	{
 	  gchar *fpraw = field [ 9 ];
 	  gchar *fp = xmalloc ( strlen ( fpraw ) + 10 + 1 );
-	  gchar *r = fpraw, *p = fp;
+	  gchar *r = fpraw, *q = fp;
 	  gint c = 0;
 	  while ( *r )
 	    {
-	      *p++ = *r++;
+	      *q++ = *r++;
 	      c++;
 	      if ( c < 40 )
 		{
 		  if ( c % 4 == 0 )
-		    *p++ = ' ';
+		    *q++ = ' ';
 		  if ( c % 20 == 0 )
-		    *p++ = ' ';
+		    *q++ = ' ';
 		}
 	    }
-	  *p = 0;
+	  *q = 0;
 	  d -> key -> fingerprint = fp;
 	}
     }
@@ -203,13 +203,13 @@ static GpapaSignature *extract_sig (
       else
 	sig -> validity = GPAPA_SIG_UNKNOWN;
       sig -> CreationDate = extract_date ( field [ 5 ] );
-      sig -> UserID = xstrdup ( field [ 9 ] );
+      sig -> UserID = field [ 9 ] [ 0 ] ? xstrdup ( field [ 9 ] ) : NULL;
       return ( sig );
     }
 } /* extract_sig */
 
-static void linecallback_get_sigs (
-  gchar *line, gpointer data
+static void linecallback_get_signatures (
+  gchar *line, gpointer data, gboolean status
 ) {
   PublicKeyData *d = data;
   if ( line && strncmp ( line, "sig", 3 ) == 0 )
@@ -217,9 +217,9 @@ static void linecallback_get_sigs (
       GpapaSignature *sig = extract_sig ( line, d -> callback, d -> calldata );
       d -> key -> sigs = g_list_append ( d -> key -> sigs, sig );
     }
-} /* linecallback_get_sigs */
+} /* linecallback_get_signatures */
 
-GList *gpapa_public_key_get_sigs (
+GList *gpapa_public_key_get_signatures (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
 ) {
   if ( key == NULL )
@@ -237,14 +237,14 @@ GList *gpapa_public_key_get_sigs (
 	  gpgargv [ 3 ] = NULL;
 	  gpapa_call_gnupg (
 	    gpgargv, TRUE, FALSE,
-	    linecallback_get_sigs, &data,
+	    linecallback_get_signatures, &data,
 	    callback, calldata
 	  );
 	  free ( key_id );
 	}
       return ( key -> sigs );
     }
-} /* gpapa_public_key_get_sigs */
+} /* gpapa_public_key_get_signatures */
 
 void gpapa_public_key_send_to_server (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata

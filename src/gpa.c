@@ -37,6 +37,16 @@ GtkWidget *global_windowTip;
 GtkWidget *global_textTip;
 gboolean global_noTips = FALSE;
 
+gchar *writtenSigValidity [ 3 ] = {
+  N_( "unknown" ),
+  N_( "!INVALID!" ),
+  N_( "valid" )
+};
+
+gchar *getStringForSigValidity ( GpapaSigValidity sigValidity ) {
+  return writtenSigValidity [ sigValidity ];
+} /* getStringForSigValidity */
+
 void gpa_callback (
   GpapaAction action, gpointer actiondata, gpointer calldata
 ) {
@@ -161,12 +171,18 @@ void sigs_append ( gpointer data, gpointer userData ) {
   localParam = (gpointer*) userData;
   clistSignatures = (GtkWidget*) localParam [ 0 ];
   windowPublic =    (GtkWidget*) localParam [ 1 ];
-contentsSignatures [ 0 ] = _( "Owner's name" ); /*!!!*/
-contentsSignatures [ 1 ] = _( "unknown" ); /*!!!*/
-  gtk_clist_append ( GTK_CLIST ( clistSignatures ), contentsSignatures );
+  contentsSignatures [ 0 ] = gpapa_signature_get_name (
+    signature, gpa_callback, windowPublic
+  );
+  if ( ! contentsSignatures [ 0 ] )
+    contentsSignatures [ 0 ] = _( "[Unknown user ID]" );
+  contentsSignatures [ 1 ] = getStringForSigValidity (
+    gpapa_signature_get_validity ( signature, gpa_callback, windowPublic )
+  );
   contentsSignatures [ 2 ] = gpapa_signature_get_identifier (
     signature, gpa_callback, windowPublic
   );
+  gtk_clist_append ( GTK_CLIST ( clistSignatures ), contentsSignatures );
 } /* sigs_append */
 
 gint compareInts ( gconstpointer a, gconstpointer b ) {
@@ -352,7 +368,9 @@ GtkWidget *gpa_menubar_new ( GtkWidget *window ) {
     { _( "/File/sep1" ), NULL, NULL, 0, "<Separator>" },
     { _( "/File/_Sign" ), NULL, file_sign, 0, NULL },
     { _( "/File/_Encrypt" ), NULL, file_encrypt, 0, NULL },
+    { _( "/File/E_ncrypt as" ), NULL, file_encryptAs, 0, NULL },
     { _( "/File/_Protect by Password" ), NULL, file_protect, 0, NULL },
+    { _( "/File/P_rotect as" ), NULL, file_protectAs, 0, NULL },
     { _( "/File/_Decrypt" ), NULL, file_decrypt, 0, NULL },
     { _( "/File/Decrypt _as" ), NULL, file_decryptAs, 0, NULL },
     { _( "/File/_Verify" ), NULL, file_verify, 0, NULL },
@@ -425,7 +443,7 @@ void setFileSelected (
 GtkWidget *gpa_windowFile_new ( void ) {
 /* var */
   char *clistFileTitle [ 5 ] = {
-    N_( "File" ), N_( "Encrypted" ), N_( "Sigs total" ), N_( "Valid Sigs" ),
+    N_( "File" ), N_( "Status" ), N_( "Sigs total" ), N_( "Valid Sigs" ),
     N_( "Invalid Sigs" )
   };
   int i;

@@ -118,7 +118,7 @@ static GpapaKey *extract_key (
 } /* extract_key */
 
 static void linecallback_refresh_pub (
-  gchar *line, gpointer data
+  gchar *line, gpointer data, gboolean status
 ) {
   PublicKeyData *d = data;
   if ( line && strncmp ( line, "pub", 3 ) == 0 )
@@ -166,7 +166,7 @@ GpapaPublicKey *gpapa_get_public_key_by_index (
 } /* gpapa_get_public_key_by_index */
 
 static void linecallback_id_pub (
-  gchar *line, gpointer data
+  gchar *line, gpointer data, gboolean status
 ) {
   PublicKeyData *d = data;
   if ( line && strncmp ( line, "pub", 3 ) == 0 )
@@ -208,7 +208,7 @@ void gpapa_release_public_key (
 } /* gpapa_release_public_key */
 
 static void linecallback_refresh_sec (
-  gchar *line, gpointer data
+  gchar *line, gpointer data, gboolean status
 ) {
   SecretKeyData *d = data;
   if ( line && strncmp ( line, "sec", 3 ) == 0 )
@@ -256,7 +256,7 @@ GpapaSecretKey *gpapa_get_secret_key_by_index (
 } /* gpapa_get_secret_key_by_index */
 
 static void linecallback_id_sec (
-  gchar *line, gpointer data
+  gchar *line, gpointer data, gboolean status
 ) {
   SecretKeyData *d = data;
   if ( line && strncmp ( line, "sec", 3 ) == 0 )

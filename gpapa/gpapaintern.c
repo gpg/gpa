@@ -202,7 +202,7 @@ void gpapa_call_gnupg (
 			  pendingbuffer = (char *) xrealloc ( pendingbuffer, newpendingsize );
 			  memcpy ( pendingbuffer + pendingsize, buffer, q );
 			  pendingbuffer [ newpendingsize - 1 ] = 0;
-			  linecallback ( pendingbuffer, linedata );
+			  linecallback ( pendingbuffer, linedata, FALSE );
 			  free ( pendingbuffer );
 			  pendingbuffer = NULL;
 			  pendingsize = 0;
@@ -210,7 +210,7 @@ void gpapa_call_gnupg (
 		      else
 			{
 			  buffer [ q ] = 0;
-			  linecallback ( buffer, linedata );
+			  linecallback ( buffer, linedata, FALSE );
 			}
 		      memmove ( buffer, buffer + q + 1, p - q - 1 );
 		      p -= q + 1;
@@ -229,6 +229,7 @@ void gpapa_call_gnupg (
 	       */
 	      if ( FD_ISSET ( statusfd [ 0 ], &readfds ) )
 		{
+                  char *bufptr = buffer;
 		  p = read ( statusfd [ 0 ], buffer, bufsize );
 		  buffer [ MIN ( bufsize - 1, p ) ] = 0;
 		  if ( p )
@@ -236,24 +237,38 @@ void gpapa_call_gnupg (
 #ifdef DEBUG
 		      fprintf ( stderr, "status data: %s\n", buffer );
 #endif
-		      status_check ( buffer, callback, calldata, "NODATA",
-				     "no data found" );
-		      status_check ( buffer, callback, calldata, "BADARMOR",
-				     "ASCII armor is corrupted" );
-		      if ( status_check ( buffer, callback, calldata, "MISSING_PASSPHRASE",
-					  "missing passphrase" ) )
-			missing_passphrase = TRUE;
-		      if ( ! missing_passphrase )
-			status_check ( buffer, callback, calldata, "BAD_PASSPHRASE",
-				       "bad passphrase" );
-		      status_check ( buffer, callback, calldata, "DECRYPTION_FAILED",
-				     "symmetrical decryption failed" );
-		      status_check ( buffer, callback, calldata, "DECRYPTION_FAILED",
-				     "symmetrical decryption failed" );
-		      status_check ( buffer, callback, calldata, "NO_PUBKEY",
-				     "public key not available" );
-		      status_check ( buffer, callback, calldata, "NO_SECKEY",
-				     "secret key not available" );
+                      while ( *bufptr )
+                        {
+                          char *qq = bufptr;
+                          char nlsave;
+                          while ( *qq && *qq != '\n' )
+                            qq++;
+                          nlsave = *qq;
+                          *qq = 0;
+                          linecallback ( bufptr, linedata, TRUE );
+                          status_check ( bufptr, callback, calldata, "NODATA",
+                                         "no data found" );
+                          status_check ( bufptr, callback, calldata, "BADARMOR",
+                                         "ASCII armor is corrupted" );
+                          if ( status_check ( bufptr, callback, calldata, "MISSING_PASSPHRASE",
+                                              "missing passphrase" ) )
+                            missing_passphrase = TRUE;
+                          if ( ! missing_passphrase )
+                            status_check ( bufptr, callback, calldata, "BAD_PASSPHRASE",
+                                           "bad passphrase" );
+                          status_check ( bufptr, callback, calldata, "DECRYPTION_FAILED",
+                                         "symmetrical decryption failed" );
+                          status_check ( bufptr, callback, calldata, "DECRYPTION_FAILED",
+                                         "symmetrical decryption failed" );
+                          status_check ( bufptr, callback, calldata, "NO_PUBKEY",
+                                         "public key not available" );
+                          status_check ( bufptr, callback, calldata, "NO_SECKEY",
+                                         "secret key not available" );
+                          *qq = nlsave;
+                          if ( *qq )
+                            qq++;
+                          bufptr = qq;
+                        }
 		    }
 		}
 
@@ -275,7 +290,7 @@ void gpapa_call_gnupg (
 	      int newpendingsize = pendingsize + 1;
 	      pendingbuffer = (char *) xrealloc ( pendingbuffer, newpendingsize );
 	      pendingbuffer [ newpendingsize - 1 ] = 0;
-	      linecallback ( pendingbuffer, linedata );
+	      linecallback ( pendingbuffer, linedata, FALSE );
 	      free ( pendingbuffer );
 	      pendingbuffer = NULL;
 	      pendingsize = 0;
