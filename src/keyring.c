@@ -202,50 +202,6 @@ keyring_editor_fill_keylist (GPAKeyringEditor * editor)
 } /* keyring_editor_fill_keylist */
 
 
-#if 0
-/* toggle the visibility of the ownertrust values */
-static void
-keyring_editor_toggle_show_trust (gpointer param)
-{
-  GPAKeyringEditor * editor = param;
-  gint i;
-  GpapaPublicKey *key;
-  gchar *contents;
-  GdkPixmap *icon;
-  GdkBitmap *mask;
-  GpapaOwnertrust trust;
-  int show_trust;
-  gchar * key_id;
-
-  show_trust \
-    = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (editor->toggle_show));
-
-  for (i = 0; i < editor->clist_keys->rows; i++)
-    {
-      if (show_trust)
-	{
-	  key_id = gtk_clist_get_row_data (editor->clist_keys, i);
-	  key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
-					    editor->window);
-
-	  trust = gpapa_public_key_get_ownertrust (key, gpa_callback,
-						   editor->window);
-	  contents = gpa_ownertrust_string (trust);
-	  icon = gpa_create_icon_pixmap (editor->window,
-					 gpa_ownertrust_icon_name (trust),
-					 &mask);
-	  if (icon)
-	    gtk_clist_set_pixtext (editor->clist_keys, i, 2, contents, 8,
-				   icon, mask);
-	}
-      else
-	{
-	  gtk_clist_set_text (editor->clist_keys, i, 2, "");
-	}
-    }
-} /* keyring_editor_toggle_show_trust */
-#endif
-
 /* delete the selected keys */
 static void
 keyring_editor_delete (gpointer param)
