@@ -1,3 +1,8 @@
+2003-10-29  Miguel Coca  <mcoca@gnu.org>
+
+	* qdchkpwd.c (qdchkpwd): Fix crash with long passphrases. Reported by
+	Graeme Hewson <graeme.hewson@oracle.com>.
+
 2003-10-27  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (keyring_editor_refresh, toolbar_refresh): New.

@@ -52,9 +52,10 @@ qdchkpwd (const char *pwd)
   l = strlen (pwd);
   for (i = 0; i < l; i++)
     {
-      if (hit_num[i] == 0)
+      int c = pwd[i];
+      if (hit_num[c] == 0)
         hit_card++;
-      hit_num[i]++;
+      hit_num[c]++;
     }
   S = 0.0;
   M = (double) l / (double) hit_card;
