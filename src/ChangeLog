@@ -1,3 +1,27 @@
+2001-01-23  Bernhard Herzog  <bh@intevation.de>
+
+	* Makefile.am (gpa_SOURCES): Add the keylist files.
+
+	* keylist.h: 
+	* keylist.c: New files implementing the key list of the key ring
+	editor.
+
+	* keyring.c (keyring_editor_new):
+	(keyring_editor_edit_trust):
+	(keyring_editor_delete):
+	(keyring_editor_sign):
+	(keyring_editor_export): replace the CList of the keys with the
+	keylist of keylist.c and modify all functions that use it to use
+	the appropriate functions of keylist.c
+
+	(keyring_editor_has_selection):
+	(keyring_editor_has_single_selection):
+	(keyring_editor_fill_keylist): 
+	(keyring_editor_current_key_id): 
+	(keyring_editor_current_key): 
+	These function are now just frontends for the corresponding
+	functions in keylist.c
+
 2001-01-23	Jan-Oliver Wagner	<jan@intevation.de>
 
 	* w32reg: new module copied from gnupg
