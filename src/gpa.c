@@ -19,7 +19,6 @@
  */
 
 #include <config.h>
-#include <stdio.h> /*!!!*/
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gpapa.h>
@@ -30,6 +29,7 @@
 #include "optionsmenu.h"
 #include "helpmenu.h"
 
+#include <stdio.h> /*!!!*/
 
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain;
@@ -148,7 +148,7 @@ void gpa_windowTip_init ( void ) {
 } /* gpa_windowTip_init */
 
 void gpa_windowTip_show ( gchar *text ) {
-  if ( global_noTips == FALSE )
+  if ( ! global_noTips )
     {
       gtk_editable_delete_text ( GTK_EDITABLE ( global_textTip ), 0, -1 );
       gtk_text_insert (
@@ -314,7 +314,7 @@ void gpa_addRecipients ( gpointer param ) {
 /* commands */
   localParam = (gpointer*) param;
   keysSelected =       (GList**) localParam [ 0 ];
-  clistKeys =	    (GtkWidget*) localParam [ 1 ];
+  clistKeys =       (GtkWidget*) localParam [ 1 ];
   clistRecipients = (GtkWidget*) localParam [ 2 ];
   windowEncrypt =   (GtkWidget*) localParam [ 3 ];
   if ( ! *keysSelected )
@@ -342,6 +342,7 @@ void gpa_recipientWindow_close ( gpointer param ) {
   GList **recipientsSelected;
   GList **keysSelected;
   GtkWidget *windowEncrypt;
+  static gpointer paramClose [ 2 ];
 /* commands */
   localParam = (gpointer*) param;
   recipientsSelected = (GList**) localParam [ 0 ];
@@ -350,7 +351,9 @@ void gpa_recipientWindow_close ( gpointer param ) {
   g_list_foreach ( *recipientsSelected, freeRowData, NULL );
   g_list_free ( *recipientsSelected );
   g_list_free ( *keysSelected );
-  gpa_window_destroy ( windowEncrypt );
+  paramClose [ 0 ] = windowEncrypt;
+  paramClose [ 1 ] = NULL;
+  gpa_window_destroy ( paramClose );
 } /* gpa_recipientWindow_close */
 
 gint delete_event ( GtkWidget *widget, GdkEvent *event, gpointer data ) {

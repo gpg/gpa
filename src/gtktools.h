@@ -20,7 +20,7 @@
 
 #include <gtk/gtk.h>
 
-extern void gpa_window_destroy ( GtkWidget *window );
+extern void gpa_window_destroy ( gpointer param );
 extern GtkWidget *gpa_space_new ( void );
 extern GtkWidget *gpa_widget_hjustified_new (
   GtkWidget *widget, GtkJustification jtype
@@ -29,7 +29,7 @@ extern GtkWidget *gpa_button_new (
   GtkAccelGroup *accelGroup, gchar *labelText
 );
 extern GtkWidget *gpa_buttonCancel_new (
-  GtkWidget *window, GtkAccelGroup *accelGroup, gchar *labelText
+  GtkAccelGroup *accelGroup, gchar *labelText, gpointer *param
 );
 extern GtkWidget *gpa_check_button_new (
   GtkAccelGroup *accelGroup, gchar *labelText
@@ -48,9 +48,12 @@ extern void gpa_connect_by_accelerator (
   GtkAccelGroup *accelGroup, gchar *labelText
 );
 extern void gpa_widget_set_centered ( GtkWidget *widget, GtkWidget *parent );
+extern void gpa_widget_show (
+  GtkWidget *widget, GtkWidget *parent, gchar *tip
+);
 extern void gpa_window_error (
   gchar *message, GtkWidget *messenger
 );
 extern void gpa_window_passphrase (
-  GtkWidget *messenger, GtkSignalFunc func, gpointer data
+  GtkWidget *messenger, GtkSignalFunc func, gchar *tip, gpointer data
 );

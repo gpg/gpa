@@ -96,20 +96,20 @@ void file_open_ok ( void ) {
   while ( indexFile )
     {
       if (
-	! strcmp (
-	  fileEntry [ 0 ],
-	  gpapa_file_get_identifier (
-	    (GpapaFile*) indexFile -> data, gpa_callback, global_windowMain
-	  )
-	)
+        ! strcmp (
+          fileEntry [ 0 ],
+          gpapa_file_get_identifier (
+            (GpapaFile*) indexFile -> data, gpa_callback, global_windowMain
+          )
+        )
       )
-	{
-	  gtk_widget_hide ( fileOpenSelect );
-	  gpa_window_error (
-	    _( "The file is already open." ), global_windowMain
-	  );
-	  return;
-	} /* if */
+        {
+          gtk_widget_hide ( fileOpenSelect );
+          gpa_window_error (
+            _( "The file is already open." ), global_windowMain
+          );
+          return;
+        } /* if */
       indexFile = g_list_next ( indexFile );
     } /* while */
   filesOpened = g_list_append ( filesOpened, aFile );
@@ -161,7 +161,7 @@ void file_open ( void ) {
     GTK_WINDOW ( fileOpenSelect ), GTK_WIN_POS_CENTER
   );
   gtk_widget_show ( fileOpenSelect );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "file_open.tip" ) ); /*!!!*/
 } /* file_open */
 
 void file_checkSignatures ( void ) {
@@ -178,24 +178,25 @@ void file_showDetail ( void ) {
   GList *signatures;
   gpointer paramAppend [ 2 ];
   gchar *contentsFilename;
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowDetail;
     GtkWidget *vboxDetail;
       GtkWidget *tableTop;
-	GtkWidget *labelJfdFilename;
+        GtkWidget *labelJfdFilename;
 	  GtkWidget *labelFilename;
 	GtkWidget *entryFilename;
 	GtkWidget *labelJfdEncrypted;
-	  GtkWidget *labelEncrypted;
-	GtkWidget *entryJfdEncrypted;
-	  GtkWidget *entryEncrypted;
+          GtkWidget *labelEncrypted;
+        GtkWidget *entryJfdEncrypted;
+          GtkWidget *entryEncrypted;
       GtkWidget *vboxSignatures;
 	GtkWidget *labelJfdSignatures;
 	  GtkWidget *labelSignatures;
 	GtkWidget *scrollerSignatures;
 	  GtkWidget *clistSignatures;
       GtkWidget *hButtonBoxDetail;
-	GtkWidget *buttonCheck;
+        GtkWidget *buttonCheck;
 	GtkWidget *buttonClose;
 /* commands */
   if ( ! filesSelected )
@@ -317,17 +318,19 @@ void file_showDetail ( void ) {
     GTK_SIGNAL_FUNC ( file_checkSignatures ), NULL
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxDetail ), buttonCheck );
+  paramClose [ 0 ] = windowDetail;
+  paramClose [ 1 ] = NULL;
   buttonClose = gpa_buttonCancel_new (
-    windowDetail, accelGroup, _( "_Close" )
+    accelGroup, _( "_Close" ), paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxDetail ), buttonClose );
   gtk_box_pack_start (
     GTK_BOX ( vboxDetail ), hButtonBoxDetail, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowDetail ), vboxDetail );
-  gpa_widget_set_centered ( windowDetail, global_windowMain );
-  gtk_widget_show_all ( windowDetail );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowDetail, global_windowMain, _( "file_showDetail.tip" )
+  );
 } /* file_showDetail */
 
 void file_sign_sign_exec ( gpointer param ) {
@@ -342,10 +345,11 @@ void file_sign_sign_exec ( gpointer param ) {
   GtkWidget *windowPassphrase;
   GList *indexFile;
   GpapaFile *file;
+  gpointer paramDone [ 2 ];
 /* commands */
   localParam = (gpointer*) param;
   data = (gpointer*) localParam [ 0 ];
-  entryPasswd = localParam [ 1 ];
+  entryPasswd =      localParam [ 1 ];
   windowPassphrase = localParam [ 2 ];
   signType = *(GpapaSignType*) data [ 0 ];
   armor = *(GpapaArmor*) data [ 1 ];
@@ -367,8 +371,11 @@ void file_sign_sign_exec ( gpointer param ) {
       );
       indexFile = g_list_next ( indexFile );
     } /* while */
-  gpa_window_destroy ( windowPassphrase );
-  gpa_window_destroy ( windowSign );
+  paramDone [ 0 ] = windowPassphrase;
+  paramDone [ 1 ] = NULL;
+  gpa_window_destroy ( paramDone );
+  paramDone [ 0 ] = windowSign;
+  gpa_window_destroy ( paramDone );
 } /* file_sign_sign_exec */
 
 void file_sign_sign ( gpointer param ) {
@@ -420,7 +427,9 @@ void file_sign_sign ( gpointer param ) {
   newParam [ 1 ] = &armor;
   newParam [ 2 ] = keyID;
   newParam [ 3 ] = windowSign;
-  gpa_window_passphrase ( windowSign, file_sign_sign_exec, newParam );
+  gpa_window_passphrase (
+    windowSign, file_sign_sign_exec, _( "file_sign.tip" ), newParam
+  );
 } /* file_sign_sign */
 
 void file_sign_as (
@@ -438,6 +447,7 @@ void file_sign ( void ) {
   gchar *contentsWho [ 2 ];
   static gint as = 0;
   static gpointer param [ 7 ];
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowSign;
     GtkWidget *vboxSign;
@@ -546,8 +556,10 @@ void file_sign ( void ) {
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxSign ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxSign ), 5 );
+  paramClose [ 0 ] = windowSign;
+  paramClose [ 1 ] = NULL;
   buttonCancel = gpa_buttonCancel_new (
-    windowSign, accelGroup, _( "_Cancel" )
+    accelGroup, _( "_Cancel" ), paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxSign ), buttonCancel );
   buttonSign = gpa_button_new ( accelGroup, "_Sign" );
@@ -565,9 +577,7 @@ void file_sign ( void ) {
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxSign ), buttonSign );
   gtk_box_pack_start ( GTK_BOX ( vboxSign ), hButtonBoxSign, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowSign ), vboxSign );
-  gpa_widget_set_centered ( windowSign, global_windowMain );
-  gtk_widget_show_all ( windowSign );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show ( windowSign, global_windowMain, _( "file_sign.tip" ) );
 } /* file_sign */
 
 void file_browse_ok ( GtkWidget *param [] ) {
@@ -626,6 +636,7 @@ void file_encrypt_detail ( gpointer param ) {
   gpointer *localParam;
   GList **keysSelected;
   GtkWidget *windowEncrypt;
+  gchar *tip;
   GpapaPublicKey *key;
   GList *signatures;
   GtkAccelGroup *accelGroup;
@@ -634,6 +645,7 @@ void file_encrypt_detail ( gpointer param ) {
   };
   static gpointer paramSigs [ 2 ];
   gchar *contentsFingerprint;
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowSigs;
     GtkWidget *vboxSigs;
@@ -644,7 +656,7 @@ void file_encrypt_detail ( gpointer param ) {
 	GtkWidget *scrollerSignatures;
 	  GtkWidget *clistSignatures;
       GtkWidget *vboxFingerprint;
-	GtkWidget *labelJfdFingerprint;
+        GtkWidget *labelJfdFingerprint;
 	  GtkWidget *labelFingerprint;
 	GtkWidget *entryFingerprint;
       GtkWidget *hButtonBoxSigs;
@@ -654,10 +666,11 @@ void file_encrypt_detail ( gpointer param ) {
   localParam = (gpointer*) param;
   keysSelected =     (GList**) localParam [ 0 ];
   windowEncrypt = (GtkWidget*) localParam [ 1 ];
+  tip =               (gchar*) localParam [ 2 ];
   if ( ! *keysSelected )
     {
       gpa_window_error (
-	_( "No key selected for detail view." ), windowEncrypt
+        _( "No key selected for detail view." ), windowEncrypt
       );
       return;
     } /* if */
@@ -755,13 +768,17 @@ void file_encrypt_detail ( gpointer param ) {
     GTK_SIGNAL_FUNC ( file_checkSignatures ), NULL
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxSigs ), buttonCheck );
-  buttonClose = gpa_buttonCancel_new ( windowSigs, accelGroup, _( "_Close" ) );
+  paramClose [ 0 ] = windowSigs;
+  paramClose [ 1 ] = tip;
+  buttonClose = gpa_buttonCancel_new (
+    accelGroup, _( "_Close" ), paramClose
+  );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxSigs ), buttonClose );
   gtk_box_pack_start ( GTK_BOX ( vboxSigs ), hButtonBoxSigs, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowSigs ), vboxSigs );
-  gpa_widget_set_centered ( windowSigs, global_windowMain );
-  gtk_widget_show_all ( windowSigs );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowSigs, global_windowMain, _( "file_encrypt_detail.tip" )
+  );
 } /* file_encrypt_detail */
 
 void file_encrypt_encrypt ( gpointer param ) {
@@ -769,7 +786,7 @@ g_print ( _( "Encrypt a file\n" ) ); /*!!!*/
   gpa_recipientWindow_close ( param );
 } /* file_encrypt_encrypt */
 
-void file_encrypt_dialog ( gboolean withSaveAs ) {
+void file_encrypt_dialog ( gboolean withSaveAs, gchar *tip ) {
 /* var */
   gint publicKeyCount;
   gint secretKeyCount;
@@ -786,7 +803,7 @@ void file_encrypt_dialog ( gboolean withSaveAs ) {
   static gpointer paramEncryptAs [ 2 ];
   static gpointer paramKeys [ 3 ];
   static gpointer paramAdd [ 4 ];
-  static gpointer paramDetail [ 2 ];
+  static gpointer paramDetail [ 3 ];
   static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowEncrypt;
@@ -846,7 +863,7 @@ void file_encrypt_dialog ( gboolean withSaveAs ) {
   if ( ! secretKeyCount )
     {
       gpa_window_error (
-	_( "No secret keys available to encrypt." ), global_windowMain
+        _( "No secret keys available to encrypt." ), global_windowMain
       );
       return;
     } /* if */
@@ -1067,6 +1084,7 @@ gtk_clist_append ( GTK_CLIST ( clistDefault ), text ); /*!!!*/
   buttonDetail = gpa_button_new ( accelGroup, _( "S_how detail" ) );
   paramDetail [ 0 ] = &keysSelected;
   paramDetail [ 1 ] = windowEncrypt;
+  paramDetail [ 2 ] = tip;
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonDetail ), "clicked",
     GTK_SIGNAL_FUNC ( file_encrypt_detail ), (gpointer) paramDetail
@@ -1083,30 +1101,30 @@ gtk_clist_append ( GTK_CLIST ( clistDefault ), text ); /*!!!*/
       hboxSaveAs = gtk_hbox_new ( FALSE, 0 );
       labelSaveAs = gtk_label_new ( _( "" ) );
       gtk_box_pack_start (
-	GTK_BOX ( hboxSaveAs ), labelSaveAs, FALSE, FALSE, 0
+        GTK_BOX ( hboxSaveAs ), labelSaveAs, FALSE, FALSE, 0
       );
       entrySaveAs = gtk_entry_new ();
       gpa_connect_by_accelerator (
-	GTK_LABEL ( labelSaveAs ), entrySaveAs,
-	accelGroup, _( "Save encrypted file _as: " )
+        GTK_LABEL ( labelSaveAs ), entrySaveAs,
+        accelGroup, _( "Save encrypted file _as: " )
       );
       gtk_box_pack_start (
-	GTK_BOX ( hboxSaveAs ), entrySaveAs, TRUE, TRUE, 0
+        GTK_BOX ( hboxSaveAs ), entrySaveAs, TRUE, TRUE, 0
       );
       spaceSaveAs = gpa_space_new ();
       gtk_box_pack_start (
-	GTK_BOX ( hboxSaveAs ), spaceSaveAs, FALSE, FALSE, 5
+        GTK_BOX ( hboxSaveAs ), spaceSaveAs, FALSE, FALSE, 5
       );
       buttonBrowse = gpa_button_new ( accelGroup, _( "   _Browse   " ) );
       gtk_signal_connect_object (
-	GTK_OBJECT ( buttonBrowse ), "clicked",
-	GTK_SIGNAL_FUNC ( file_browse ), (gpointer) entrySaveAs
+        GTK_OBJECT ( buttonBrowse ), "clicked",
+        GTK_SIGNAL_FUNC ( file_browse ), (gpointer) entrySaveAs
       );
       gtk_box_pack_start (
-	GTK_BOX ( hboxSaveAs ), buttonBrowse, FALSE, FALSE, 0
+        GTK_BOX ( hboxSaveAs ), buttonBrowse, FALSE, FALSE, 0
       );
       gtk_box_pack_start (
-	GTK_BOX ( vboxMisc ), hboxSaveAs, FALSE, FALSE, 0
+        GTK_BOX ( vboxMisc ), hboxSaveAs, FALSE, FALSE, 0
       );
     } /* if */
   checkerSign = gpa_check_button_new ( accelGroup, _( "_sign" ) );
@@ -1142,28 +1160,32 @@ gtk_clist_append ( GTK_CLIST ( clistDefault ), text ); /*!!!*/
     GTK_BOX ( vboxEncrypt ), hButtonBoxEncrypt, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowEncrypt ), vboxEncrypt );
-  gpa_widget_set_centered ( windowEncrypt, global_windowMain );
-  gtk_widget_show_all ( windowEncrypt );
+  gpa_widget_show ( windowEncrypt, global_windowMain, tip );
   gtk_clist_select_row ( GTK_CLIST ( clistEncryptAs ), 0, 0 );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* file_encrypt_dialog */
 
 void file_encrypt ( void ) {
-  file_encrypt_dialog ( FALSE );
+  file_encrypt_dialog ( FALSE, _( "file_encrypt.tip" ) );
 } /* file_encrypt */
 
 void file_encryptAs ( void ) {
-  file_encrypt_dialog ( TRUE );
+  file_encrypt_dialog ( TRUE, _( "file_encryptAs.tip" ) );
 } /* file_encryptAs */
 
 void file_protect_protect ( GtkWidget *windowProtect ) {
+/* var */
+  gpointer paramDone [ 2 ];
+/* commands */
 g_print ( _( "Protect a file by Password\n" ) ); /*!!!*/
-  gpa_window_destroy ( windowProtect );
+  paramDone [ 0 ] = windowProtect;
+  paramDone [ 1 ] = NULL;
+  gpa_window_destroy ( paramDone );
 } /* file_protect_protect */
 
-void file_protect_dialog ( gboolean withSaveAs ) {
+void file_protect_dialog ( gboolean withSaveAs, gchar *tip ) {
 /* var */
   GtkAccelGroup *accelGroup;
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowProtect;
     GtkWidget *vboxProtect;
@@ -1175,8 +1197,8 @@ void file_protect_dialog ( gboolean withSaveAs ) {
 	  GtkWidget *labelRepeat;
 	GtkWidget *entryRepeat;
 	GtkWidget *labelJfdSaveAs;
-	  GtkWidget *labelSaveAs;
-	GtkWidget *entrySaveAs;
+          GtkWidget *labelSaveAs;
+        GtkWidget *entrySaveAs;
 	GtkWidget *spaceBrowse;
 	GtkWidget *buttonBrowse;
       GtkWidget *checkerArmor;
@@ -1234,34 +1256,34 @@ void file_protect_dialog ( gboolean withSaveAs ) {
     {
       labelSaveAs = gtk_label_new ( _( "" ) );
       labelJfdSaveAs = gpa_widget_hjustified_new (
-	labelSaveAs, GTK_JUSTIFY_RIGHT
+        labelSaveAs, GTK_JUSTIFY_RIGHT
       );
       gtk_table_attach (
-	GTK_TABLE ( tablePasswd ), labelJfdSaveAs, 0, 1, 2, 3,
-	GTK_FILL, GTK_SHRINK, 0, 10
+        GTK_TABLE ( tablePasswd ), labelJfdSaveAs, 0, 1, 2, 3,
+        GTK_FILL, GTK_SHRINK, 0, 10
       );
       entrySaveAs = gtk_entry_new ();
       gpa_connect_by_accelerator (
-	GTK_LABEL ( labelSaveAs ), entrySaveAs,
-	accelGroup, _( "Save protected _file as: " )
+        GTK_LABEL ( labelSaveAs ), entrySaveAs,
+        accelGroup, _( "Save protected _file as: " )
       );
       gtk_table_attach (
-	GTK_TABLE ( tablePasswd ), entrySaveAs, 1, 2, 2, 3,
-	GTK_FILL, GTK_SHRINK, 0, 0
+        GTK_TABLE ( tablePasswd ), entrySaveAs, 1, 2, 2, 3,
+        GTK_FILL, GTK_SHRINK, 0, 0
       );
       spaceBrowse = gpa_space_new ();
       gtk_table_attach (
-	GTK_TABLE ( tablePasswd ), spaceBrowse, 2, 3, 2, 3,
-	GTK_FILL, GTK_SHRINK, 5, 0
+        GTK_TABLE ( tablePasswd ), spaceBrowse, 2, 3, 2, 3,
+        GTK_FILL, GTK_SHRINK, 5, 0
       );
       buttonBrowse = gpa_button_new ( accelGroup, _( "   _Browse   " ) );
       gtk_signal_connect_object (
-	GTK_OBJECT ( buttonBrowse ), "clicked",
-	GTK_SIGNAL_FUNC ( file_browse ), (gpointer) entrySaveAs
+        GTK_OBJECT ( buttonBrowse ), "clicked",
+        GTK_SIGNAL_FUNC ( file_browse ), (gpointer) entrySaveAs
       );
       gtk_table_attach (
-	GTK_TABLE ( tablePasswd ), buttonBrowse, 3, 4, 2, 3,
-	GTK_FILL, GTK_SHRINK, 0, 0
+        GTK_TABLE ( tablePasswd ), buttonBrowse, 3, 4, 2, 3,
+        GTK_FILL, GTK_SHRINK, 0, 0
       );
     } /* if */
   gtk_box_pack_start (
@@ -1278,8 +1300,10 @@ void file_protect_dialog ( gboolean withSaveAs ) {
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxProtect ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxProtect ), 5 );
+  paramClose [ 0 ] = windowProtect;
+  paramClose [ 1 ] = NULL;
   buttonCancel = gpa_buttonCancel_new (
-    windowProtect, accelGroup, _( "_Cancel" )
+    accelGroup, _( "_Cancel" ), paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxProtect ), buttonCancel );
   buttonProtect = gpa_button_new ( accelGroup, _( "_Protect" ) );
@@ -1292,17 +1316,15 @@ void file_protect_dialog ( gboolean withSaveAs ) {
     GTK_BOX ( vboxProtect ), hButtonBoxProtect, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowProtect ), vboxProtect );
-  gtk_widget_show_all ( windowProtect );
-  gpa_widget_set_centered ( windowProtect, global_windowMain );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show ( windowProtect, global_windowMain, tip );
 } /* file_protect_dialog */
 
 void file_protect ( void ) {
-  file_protect_dialog ( FALSE );
+  file_protect_dialog ( FALSE, _( "file_protect.tip" ) );
 } /* file_protect */
 
 void file_protectAs ( void ) {
-  file_protect_dialog ( TRUE );
+  file_protect_dialog ( TRUE, _( "file_protectAs.tip" ) );
 } /* file_protectAs */
 
 void file_decrypt ( void ) {
@@ -1312,18 +1334,22 @@ g_print ( _( "Decrypt a file\n" ) ); /*!!!*/
 void file_decryptAs_decrypt ( GtkWidget *param [] ) {
 /* var */
   gchar *filename;
+  gpointer paramDone [ 2 ];
 char message [ 100 ]; /*!!!*/
 /* commands */
   filename = gtk_entry_get_text ( GTK_ENTRY ( param [ 0 ] ) );
 sprintf ( message, "Decrypt file and save as %s\n", filename ); /*!!!*/
 g_print ( message ); /*!!!*/
-  gpa_window_destroy ( param [ 1 ] );
+  paramDone [ 0 ] = param [ 1 ];
+  paramDone [ 1 ] = NULL;
+  gpa_window_destroy ( paramDone );
 } /* file_decryptAs_decrypt */
 
 void file_decryptAs ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
   static GtkWidget *param [ 2 ];
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowDecrypt;
     GtkWidget *vboxDecrypt;
@@ -1367,8 +1393,10 @@ void file_decryptAs ( void ) {
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxDecrypt ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxDecrypt ), 5 );
+  paramClose [ 0 ] = windowDecrypt;
+  paramClose [ 1 ] = NULL;
   buttonCancel = gpa_buttonCancel_new (
-    windowDecrypt, accelGroup, _( "_Cancel" )
+    accelGroup, _( "_Cancel" ), paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxDecrypt ), buttonCancel );
   buttonDecrypt = gpa_button_new ( accelGroup, _( "_Decrypt" ) );
@@ -1383,9 +1411,9 @@ void file_decryptAs ( void ) {
     GTK_BOX ( vboxDecrypt ), hButtonBoxDecrypt, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowDecrypt ), vboxDecrypt );
-  gpa_widget_set_centered ( windowDecrypt, global_windowMain );
-  gtk_widget_show_all ( windowDecrypt );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowDecrypt, global_windowMain, _( "file_decryptAs.tip" )
+  );
 } /* file_decryptAs */
 
 void file_verify ( void ) {

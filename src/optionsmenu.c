@@ -1,5 +1,5 @@
 /* optionsmenu.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 Free Software Foundation, Inc.
+ *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -49,6 +49,14 @@ void gpa_homeDirSelect_init ( gchar *title ) {
     GTK_OBJECT ( GTK_FILE_SELECTION ( homeDirSelect ) -> cancel_button ),
     "clicked", GTK_SIGNAL_FUNC ( gtk_widget_hide ), (gpointer) homeDirSelect
   );
+  gtk_signal_connect (
+    GTK_OBJECT ( homeDirSelect ), "delete_event",
+    GTK_SIGNAL_FUNC ( gtk_widget_hide ), NULL
+  );
+  gtk_signal_connect_object (
+    GTK_OBJECT( homeDirSelect ), "hide",
+    GTK_SIGNAL_FUNC ( gtk_widget_hide ), (gpointer) global_windowTip
+  );
 } /* gpa_homeDirSelect_init */
 
 void gpa_loadOptionsSelect_ok ( void ) {
@@ -68,6 +76,14 @@ void gpa_loadOptionsSelect_init ( gchar *title ) {
     GTK_OBJECT ( GTK_FILE_SELECTION ( loadOptionsSelect ) -> cancel_button ),
     "clicked", GTK_SIGNAL_FUNC ( gtk_widget_hide ),
     (gpointer) loadOptionsSelect
+  );
+  gtk_signal_connect (
+    GTK_OBJECT ( loadOptionsSelect ), "delete_event",
+    GTK_SIGNAL_FUNC ( gtk_widget_hide ), NULL
+  );
+  gtk_signal_connect_object (
+    GTK_OBJECT( loadOptionsSelect ), "hide",
+    GTK_SIGNAL_FUNC ( gtk_widget_hide ), (gpointer) global_windowTip
   );
 } /* gpa_loadOptionsSelect_init */
 
@@ -89,25 +105,39 @@ void gpa_saveOptionsSelect_init ( gchar *title ) {
     "clicked", GTK_SIGNAL_FUNC ( gtk_widget_hide ),
     (gpointer) saveOptionsSelect
   );
+  gtk_signal_connect (
+    GTK_OBJECT ( saveOptionsSelect ), "delete_event",
+    GTK_SIGNAL_FUNC ( gtk_widget_hide ), NULL
+  );
+  gtk_signal_connect_object (
+    GTK_OBJECT( saveOptionsSelect ), "hide",
+    GTK_SIGNAL_FUNC ( gtk_widget_hide ), (gpointer) global_windowTip
+  );
 } /* gpa_saveOptionsSelect_init */
 
 void options_keyserver_set ( GtkWidget *windowServer ) {
+/* var */
+  gpointer paramDone [ 2 ];
+/* commands */
 g_print ( _( "Set key server\n" ) ); /*!!!*/
-  gpa_window_destroy ( windowServer );
+  paramDone [ 0 ] = windowServer;
+  paramDone [ 1 ] = NULL;
+  gpa_window_destroy ( paramDone );
 } /* options_keyserver_set */
 
 void options_keyserver ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowServer;
     GtkWidget *vboxServer;
       GtkWidget *hboxServer;
-	GtkWidget *labelServer;
-	GtkWidget *comboServer;
+        GtkWidget *labelServer;
+        GtkWidget *comboServer;
       GtkWidget *hButtonBoxServer;
-	GtkWidget *buttonCancel;
-	GtkWidget *buttonSet;
+        GtkWidget *buttonCancel;
+        GtkWidget *buttonSet;
 /* commands */
   windowServer = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title ( GTK_WINDOW ( windowServer ), _( "Set key server" ) );
@@ -133,7 +163,11 @@ void options_keyserver ( void ) {
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxServer ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxServer ), 5 );
-  buttonCancel = gpa_buttonCancel_new ( windowServer, accelGroup, "_Cancel" );
+  paramClose [ 0 ] = windowServer;
+  paramClose [ 1 ] = NULL;
+  buttonCancel = gpa_buttonCancel_new (
+    accelGroup, "_Cancel", paramClose
+  );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxServer ), buttonCancel );
   buttonSet = gpa_button_new ( accelGroup, "_Set" );
   gtk_signal_connect_object (
@@ -145,9 +179,9 @@ void options_keyserver ( void ) {
     GTK_BOX ( vboxServer ), hButtonBoxServer, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowServer ), vboxServer );
-  gpa_widget_set_centered ( windowServer, global_windowMain );
-  gtk_widget_show_all ( windowServer );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowServer, global_windowMain, _( "options_keyserver.tip" )
+  );
 } /* options_keyserver */
 
 void options_recipients ( void ) {
@@ -168,20 +202,20 @@ void options_recipients ( void ) {
   GtkWidget *windowRecipients;
     GtkWidget *vboxRecipients;
       GtkWidget *hboxRecipients;
-	GtkWidget *vboxDefault;
-	  GtkWidget *labelJfdDefault;
-	    GtkWidget *labelDefault;
-	  GtkWidget *scrollerDefault;
-	    GtkWidget *clistDefault;
-	GtkWidget *vboxKeys;
-	  GtkWidget *labelJfdKeys;
-	    GtkWidget *labelKeys;
-	  GtkWidget *scrollerKeys;
-	    GtkWidget *clistKeys;
+        GtkWidget *vboxDefault;
+          GtkWidget *labelJfdDefault;
+            GtkWidget *labelDefault;
+          GtkWidget *scrollerDefault;
+            GtkWidget *clistDefault;
+        GtkWidget *vboxKeys;
+          GtkWidget *labelJfdKeys;
+            GtkWidget *labelKeys;
+          GtkWidget *scrollerKeys;
+            GtkWidget *clistKeys;
       GtkWidget *hButtonBoxRecipients;
-	GtkWidget *buttonDelete;
-	GtkWidget *buttonAdd;
-	GtkWidget *buttonClose;
+        GtkWidget *buttonDelete;
+        GtkWidget *buttonAdd;
+        GtkWidget *buttonClose;
 /* commands */
   contentsKeyCount = gpapa_get_public_key_count (
     gpa_callback, global_windowMain
@@ -189,8 +223,8 @@ void options_recipients ( void ) {
   if ( ! contentsKeyCount )
     {
       gpa_window_error (
-	_( "No public keys available to denote\nas default recipients." ),
-	global_windowMain
+        _( "No public keys available to denote\nas default recipients." ),
+        global_windowMain
       );
       return;
     } /* if */
@@ -271,13 +305,13 @@ void options_recipients ( void ) {
     {
       contentsKeyCount--;
       key = gpapa_get_public_key_by_index (
-	contentsKeyCount, gpa_callback, global_windowMain
+        contentsKeyCount, gpa_callback, global_windowMain
       );
       contentsAnyClist [ 0 ] = gpapa_key_get_name (
-	GPAPA_KEY ( key ), gpa_callback, global_windowMain
+        GPAPA_KEY ( key ), gpa_callback, global_windowMain
       );
       contentsAnyClist [ 1 ] = gpapa_key_get_identifier (
-	GPAPA_KEY ( key ), gpa_callback, global_windowMain
+        GPAPA_KEY ( key ), gpa_callback, global_windowMain
       );
       gtk_clist_prepend ( GTK_CLIST ( clistKeys ), contentsAnyClist );
     } /* while */
@@ -330,9 +364,9 @@ void options_recipients ( void ) {
     GTK_BOX ( vboxRecipients ), hButtonBoxRecipients, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowRecipients ), vboxRecipients );
-  gpa_widget_set_centered ( windowRecipients, global_windowMain );
-  gtk_widget_show_all ( windowRecipients );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowRecipients, global_windowMain, _( "options_recipients.tip" )
+  );
 } /* options_recipients */
 
 void options_key_select (
@@ -357,6 +391,7 @@ void options_key_set ( gpointer param ) {
   gpointer *localParam;
   GpapaSecretKey **key;
   GtkWidget *windowKey;
+  gpointer paramDone [ 2 ];
 /* commands */
   localParam = (gpointer*) param;
   key = (GpapaSecretKey**) localParam [ 0 ];
@@ -366,8 +401,10 @@ g_print ( gpapa_key_get_name ( GPAPA_KEY ( *key ), gpa_callback, windowKey ) ); 
 g_print ( " (" ); /*!!!*/
 g_print ( gpapa_key_get_identifier ( GPAPA_KEY ( *key ), gpa_callback, windowKey ) ); /*!!!*/
 g_print ( ")\n" ); /*!!!*/
-  gpa_window_destroy ( windowKey );
-} /*!!!*/
+  paramDone [ 0 ] = windowKey;
+  paramDone [ 1 ] = NULL;
+  gpa_window_destroy ( paramDone );
+} /* options_key_set */
 
 void options_key ( void ) {
 /* var */
@@ -378,17 +415,18 @@ void options_key ( void ) {
   static gpointer paramKey [ 2 ];
   gchar *contentsKeys [ 2 ];
   static gpointer paramSet [ 2 ];
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowKey;
     GtkWidget *vboxKey;
       GtkWidget *vboxKeys;
-	GtkWidget *labelJfdKeys;
-	  GtkWidget *labelKeys;
-	GtkWidget *scrollerKeys;
-	  GtkWidget *clistKeys;
+        GtkWidget *labelJfdKeys;
+          GtkWidget *labelKeys;
+        GtkWidget *scrollerKeys;
+          GtkWidget *clistKeys;
       GtkWidget *hButtonBoxKey;
-	GtkWidget *buttonCancel;
-	GtkWidget *buttonSet;
+        GtkWidget *buttonCancel;
+        GtkWidget *buttonSet;
 /* commands */
   contentsKeyCount = gpapa_get_secret_key_count (
     gpa_callback, global_windowMain
@@ -396,8 +434,8 @@ void options_key ( void ) {
   if ( ! contentsKeyCount )
     {
       gpa_window_error (
-	_( "No secret keys available to\nselect a default key from." ),
-	global_windowMain
+        _( "No secret keys available to\nselect a default key from." ),
+        global_windowMain
       );
       return;
     } /* if */
@@ -430,13 +468,13 @@ void options_key ( void ) {
     {
       contentsKeyCount--;
       key = gpapa_get_secret_key_by_index (
-	contentsKeyCount, gpa_callback, global_windowMain
+        contentsKeyCount, gpa_callback, global_windowMain
       );
       contentsKeys [ 0 ] = gpapa_key_get_name (
-	GPAPA_KEY ( key ), gpa_callback, global_windowMain
+        GPAPA_KEY ( key ), gpa_callback, global_windowMain
       );
       contentsKeys [ 1 ] = gpapa_key_get_identifier (
-	GPAPA_KEY ( key ), gpa_callback, global_windowMain
+        GPAPA_KEY ( key ), gpa_callback, global_windowMain
       );
       gtk_clist_prepend ( GTK_CLIST ( clistKeys ), contentsKeys );
     } /* while */
@@ -452,8 +490,10 @@ void options_key ( void ) {
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxKey ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxKey ), 5 );
+  paramClose [ 0 ] = windowKey;
+  paramClose [ 1 ] = NULL;
   buttonCancel = gpa_buttonCancel_new (
-    windowKey, accelGroup, _( "_Cancel" )
+    accelGroup, _( "_Cancel" ), paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxKey ), buttonCancel );
   buttonSet = gpa_button_new ( accelGroup, _( "_Set" ) );
@@ -466,19 +506,18 @@ void options_key ( void ) {
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxKey ), buttonSet );
   gtk_box_pack_start ( GTK_BOX ( vboxKey ), hButtonBoxKey, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowKey ), vboxKey );
-  gpa_widget_set_centered ( windowKey, global_windowMain );
-  gtk_widget_show_all ( windowKey );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show ( windowKey, global_windowMain, _( "options_key.tip" ) );
 } /* options_key */
 
 void options_homedir ( void ) {
   gtk_widget_show ( homeDirSelect );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "options_homedir.tip" ) ); /*!!!*/
 } /* options_homedir */
 
 void options_tips ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowTips;
     GtkWidget *hButtonBoxTips;
@@ -505,22 +544,22 @@ void options_tips ( void ) {
     GTK_SIGNAL_FUNC ( gpa_switch_tips ), NULL
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxTips ), toggleTips );
+  paramClose [ 0 ] = windowTips;
+  paramClose [ 1 ] = NULL;
   buttonClose = gpa_buttonCancel_new (
-    windowTips, accelGroup, _( "_Close" )
+    accelGroup, _( "_Close" ), paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxTips ), buttonClose );
   gtk_container_add ( GTK_CONTAINER ( windowTips ), hButtonBoxTips );
-  gpa_widget_set_centered ( windowTips, global_windowMain );
-  gtk_widget_show_all ( windowTips );
-  gpa_windowTip_show ( _( "Dummy text" ) );
+  gpa_widget_show ( windowTips, global_windowMain, _( "options_tips.tip" ) );
 } /* options_tips */
 
 void options_load ( void ) {
   gtk_widget_show ( loadOptionsSelect );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "options_load.tip" ) ); /*!!!*/
 } /* options_load */
 
 void options_save ( void ) {
   gtk_widget_show ( saveOptionsSelect );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "options_save.tip" ) ); /*!!!*/
 } /* options_save */

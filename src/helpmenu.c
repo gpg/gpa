@@ -1,5 +1,5 @@
 /* helpmenu.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 Free Software Foundation, Inc.
+ *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -32,21 +32,22 @@ g_print ( _( "Show Version Information\n" ) ); /*!!!*/
 void help_license ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowLicense;
     GtkWidget *vboxLicense;
       GtkWidget *vboxGPL;
-	GtkWidget *labelJfdGPL;
-	  GtkWidget *labelGPL;
-	GtkWidget *hboxGPL;
-	  GtkWidget *textGPL;
-	  GtkWidget *vscrollbarGPL;
+        GtkWidget *labelJfdGPL;
+          GtkWidget *labelGPL;
+        GtkWidget *hboxGPL;
+          GtkWidget *textGPL;
+          GtkWidget *vscrollbarGPL;
       GtkWidget *hButtonBoxLicense;
-	GtkWidget *buttonClose;
+        GtkWidget *buttonClose;
 /* commands */
   windowLicense = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title (
-    GTK_WINDOW ( windowLicense ), _( "GNU general public license" )
+    GTK_WINDOW ( windowLicense ), _( "GNU general public license" ) 
   );
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group ( GTK_WINDOW ( windowLicense ), accelGroup );
@@ -80,16 +81,18 @@ void help_license ( void ) {
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxLicense ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxLicense ), 5 );
+  paramClose [ 0 ] = windowLicense;
+  paramClose [ 1 ] = NULL;
   buttonClose = gpa_buttonCancel_new (
-    windowLicense, accelGroup, _( "_Close" )
+    accelGroup, _( "_Close" ), paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxLicense ), buttonClose );
   gtk_box_pack_start (
     GTK_BOX ( vboxLicense ), hButtonBoxLicense, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowLicense ), vboxLicense );
-  gpa_widget_set_centered ( windowLicense, global_windowMain );
   gtk_widget_show_all ( windowLicense );
+  gpa_widget_set_centered ( windowLicense, global_windowMain );
 } // help_license
 
 void help_warranty ( void ) {

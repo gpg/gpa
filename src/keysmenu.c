@@ -123,12 +123,15 @@ void keys_ringEditor_close ( gpointer param ) {
   gpointer *localParam;
   GList **keysSelected;
   GtkWidget *window;
+  gpointer paramDone [ 2 ];
 /* commands */
   localParam = (gpointer*) param;
   keysSelected = (GList**) localParam [ 0 ];
   window =    (GtkWidget*) localParam [ 1 ];
   g_list_free ( *keysSelected );
-  gpa_window_destroy ( window );
+  paramDone [ 0 ] = window;
+  paramDone [ 1 ] = NULL;
+  gpa_window_destroy ( paramDone );
 } /* keys_ringEditor_close */
 
 GtkWidget *gpa_tableKey_new ( GpapaKey *key, GtkWidget *window ) {
@@ -362,14 +365,14 @@ void keys_revocation ( void ) {
 g_print ( _( "Create revocation certificate\n" ) ); /*!!!*/
 } /* keys_revocation */
 
-void keys_openPublic_editTrust_accept ( GtkWidget *windowTrust ) {
+void keys_openPublic_editTrust_accept ( gpointer param ) {
 g_print ( _( "Accept new ownertrust level\n" ) ); /*!!!*/
-  gpa_window_destroy ( windowTrust );
+  gpa_window_destroy ( param );
 } /* keys_openPublic_editTrust_accept */
 
-void keys_openPublic_editTrust_export ( GtkWidget *windowTrust ) {
+void keys_openPublic_editTrust_export ( gpointer param ) {
 g_print ( _( "Accept and export new ownertrust level\n" ) ); /*!!!*/
-  gpa_window_destroy ( windowTrust );
+  gpa_window_destroy ( param );
 } /* keys_openPublic_editTrust_export */
 
 void keys_openPublic_editTrust ( gpointer param ) {
@@ -377,10 +380,12 @@ void keys_openPublic_editTrust ( gpointer param ) {
   gpointer *localParam;
   GList **keysSelected;
   GtkWidget *parent;
+  gchar *tip;
   GtkAccelGroup *accelGroup;
   GList *valueLevel = NULL;
   GpapaPublicKey *key;
   GpapaOwnertrust ownertrust;
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowTrust;
     GtkWidget *vboxTrust;
@@ -396,6 +401,7 @@ void keys_openPublic_editTrust ( gpointer param ) {
   localParam = (gpointer*) param;
   keysSelected = (GList**) localParam [ 0 ];
   parent =    (GtkWidget*) localParam [ 1 ];
+  tip =           (gchar*) localParam [ 2 ];
   if ( ! *keysSelected )
     {
       gpa_window_error ( _( "No key selected for editing." ), parent );
@@ -405,6 +411,7 @@ void keys_openPublic_editTrust ( gpointer param ) {
     (gchar*) g_list_last ( *keysSelected ) -> data, gpa_callback, parent
   );
   windowTrust = gtk_window_new ( GTK_WINDOW_DIALOG );
+printf ( "new trust editor %d(@%d) from %d(@%d)\n", windowTrust, &windowTrust, parent, &parent ); /*!!!*/
   gtk_window_set_title (
     GTK_WINDOW ( windowTrust ), _( "Change key ownertrust" )
   );
@@ -450,31 +457,33 @@ void keys_openPublic_editTrust ( gpointer param ) {
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxTrust ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxTrust ), 5 );
+  paramClose [ 0 ] = windowTrust;
+  paramClose [ 1 ] = tip;
   buttonCancel = gpa_buttonCancel_new (
-    windowTrust, accelGroup, _( "_Cancel" )
+    accelGroup, _( "_Cancel" ), paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxTrust ), buttonCancel );
   buttonAccept = gpa_button_new ( accelGroup, _( "_Accept" ) );
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonAccept ), "clicked",
     GTK_SIGNAL_FUNC ( keys_openPublic_editTrust_accept ),
-    (gpointer) windowTrust
+    (gpointer) paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxTrust ), buttonAccept );
   buttonExport = gpa_button_new ( accelGroup, _( "Accept and e_xport" ) );
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonExport ), "clicked",
     GTK_SIGNAL_FUNC ( keys_openPublic_editTrust_export ),
-    (gpointer) windowTrust
+    (gpointer) paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxTrust ), buttonExport );
   gtk_box_pack_start (
     GTK_BOX ( vboxTrust ), hButtonBoxTrust, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowTrust ), vboxTrust );
-  gpa_widget_set_centered ( windowTrust, parent );
-  gtk_widget_show_all ( windowTrust );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowTrust, parent, _( "keys_openPublic_editTrust.tip" )
+  );
 } /* keys_openPublic_editTrust */
 
 void keys_openPublic_sign ( void ) {
@@ -496,7 +505,9 @@ void keys_openPublic_editKey ( gpointer param ) {
     N_( "Signature" ), N_( "Validity" ), N_( "Key ID" )
   };
   GList *signatures = NULL;
-  gpointer paramAppend [ 2 ];
+  static gpointer paramAppend [ 2 ];
+  static gpointer paramTrust [ 3 ];
+  static gpointer paramClose [ 2 ];
   gchar *contentsFingerprint;
 /* objects */
   GtkWidget *windowKey;
@@ -539,6 +550,7 @@ void keys_openPublic_editKey ( gpointer param ) {
     (gchar*) g_list_last ( *keysSelected ) -> data, gpa_callback, windowPublic
   );
   windowKey = gtk_window_new ( GTK_WINDOW_DIALOG );
+printf ( "new windowKey: %d(@%d)\n", windowKey, &windowKey ); /*!!!*/
   gtk_window_set_title ( GTK_WINDOW ( windowKey ), _( "Public key editor" ) );
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group ( GTK_WINDOW ( windowKey ), accelGroup );
@@ -689,9 +701,12 @@ void keys_openPublic_editKey ( gpointer param ) {
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxEdit ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxEdit ), 5 );
   buttonEditTrust = gpa_button_new ( accelGroup, _( "Edit _Ownertrust" ) );
+  paramTrust [ 0 ] = keysSelected;
+  paramTrust [ 1 ] = windowKey;
+  paramTrust [ 2 ] = _( "keys_openPublic_editKey.tip" );
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditTrust ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), param
+    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), (gpointer) paramTrust
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonEditTrust );
   buttonExportKey = gpa_button_new ( accelGroup, _( "E_xport key" ) );
@@ -700,13 +715,17 @@ void keys_openPublic_editKey ( gpointer param ) {
     GTK_SIGNAL_FUNC ( keys_export ), NULL
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonExportKey );
-  buttonClose = gpa_buttonCancel_new ( windowKey, accelGroup, _( "_Close" ) );
+  paramClose [ 0 ] = windowKey;
+  paramClose [ 1 ] = _( "keys_openPublic.tip" );
+  buttonClose = gpa_buttonCancel_new (
+    accelGroup, _( "_Close" ), paramClose
+  );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonClose );
   gtk_box_pack_start ( GTK_BOX ( vboxEdit ), hButtonBoxEdit, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowKey ), vboxEdit );
-  gpa_widget_set_centered ( windowKey, windowPublic );
-  gtk_widget_show_all ( windowKey );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowKey, windowPublic, _( "keys_openPublic_editKey.tip" )
+  );
 } /* keys_openPublic_editKey */
 
 void keys_openPublic_send ( void ) {
@@ -814,6 +833,7 @@ void keys_openPublic ( void ) {
   static gint columnKeyID = 4;
   static gpointer paramKeys [ 3 ];
   static gpointer paramEdit [ 2 ];
+  static gpointer paramTrust [ 3 ];
   static gpointer paramShow [ 3 ];
   static gpointer paramClose [ 2 ];
 /* objects */
@@ -980,9 +1000,12 @@ void keys_openPublic ( void ) {
   );
   keys_openPublic_fillClistKeys ( paramShow );
   buttonEditTrust = gpa_button_new ( accelGroup, _( "Edit _ownertrust" ) );
+  paramTrust [ 0 ] = &keysSelected;
+  paramTrust [ 1 ] = windowPublic;
+  paramTrust [ 2 ] = _( "keys_openPublic.tip" );
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditTrust ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), (gpointer) paramEdit
+    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), (gpointer) paramTrust
   );
   gtk_table_attach (
     GTK_TABLE ( tableTrust ), buttonEditTrust, 0, 1, 1, 2,
@@ -1024,9 +1047,9 @@ void keys_openPublic ( void ) {
     GTK_BOX ( vboxPublic ), hButtonBoxPublic, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowPublic ), vboxPublic );
-  gpa_widget_set_centered ( windowPublic, global_windowMain );
-  gtk_widget_show_all ( windowPublic );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowPublic, global_windowMain, _( "keys_openPublic.tip" )
+  );
   if ( ! gpapa_get_public_key_count )
     gpa_window_error ( _( "No public keys available yet." ), windowPublic );
 } /* keys_openPublic */
@@ -1039,6 +1062,7 @@ void keys_openSecret_editKey ( gpointer param ) {
   GpapaSecretKey *key;
   static GDate *expiryDate;
   GtkAccelGroup *accelGroup;
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowEdit;
     GtkWidget *vboxEdit;
@@ -1141,15 +1165,19 @@ void keys_openSecret_editKey ( gpointer param ) {
     GTK_SIGNAL_FUNC ( keys_export ), NULL
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonExport );
-  buttonClose = gpa_buttonCancel_new ( windowEdit, accelGroup, _( "_Close" ) );
+  paramClose [ 0 ] = windowEdit;
+  paramClose [ 1 ] = _( "keys_openSecret.tip" );
+  buttonClose = gpa_buttonCancel_new (
+    accelGroup, _( "_Close" ), paramClose
+  );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonClose );
   gtk_box_pack_start (
     GTK_BOX ( vboxEdit ), hButtonBoxEdit, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowEdit ), vboxEdit );
-  gpa_widget_set_centered ( windowEdit, windowSecret );
-  gtk_widget_show_all ( windowEdit );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowEdit, windowSecret, _( "keys_openSecret_editKey.tip" )
+  );
 } /* keys_openSecret_editKey */
 
 void keys_openSecret ( void ) {
@@ -1259,9 +1287,9 @@ void keys_openSecret ( void ) {
     GTK_BOX ( vboxSecret ), hButtonBoxSecret, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowSecret ), vboxSecret );
-  gpa_widget_set_centered ( windowSecret, global_windowMain );
-  gtk_widget_show_all ( windowSecret );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowSecret, global_windowMain, _( "keys_openSecret.tip" )
+  );
   contentsCountKeys = gpapa_get_secret_key_count (
     gpa_callback, windowSecret
   );
@@ -1284,8 +1312,13 @@ void keys_openSecret ( void ) {
 } /* keys_openSecret */
 
 void keys_generateKey_generate ( GtkWidget *windowGenerate ) {
+/* var */
+  gpointer paramDone [ 2 ];
+/* commands */
 g_print ( _( "Generate a new key\n" ) ); /*!!!*/
-  gpa_window_destroy ( windowGenerate );
+  paramDone [ 0 ] = windowGenerate;
+  paramDone [ 1 ] = NULL;
+  gpa_window_destroy ( paramDone );
 } /* keys_generateKey_generate */
 
 void keys_generateKey ( void ) {
@@ -1294,6 +1327,7 @@ void keys_generateKey ( void ) {
   GList *contentsAlgorithm = NULL;
   GList *contentsKeysize = NULL;
   static GDate *expiryDate = NULL;
+  static gpointer paramClose [ 2 ];
 /* objects */
   GtkWidget *windowGenerate;
     GtkWidget *vboxGenerate;
@@ -1513,8 +1547,10 @@ void keys_generateKey ( void ) {
   );
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxGenerate ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxGenerate ), 5 );
+  paramClose [ 0 ] = windowGenerate;
+  paramClose [ 1 ] = NULL;
   buttonCancel = gpa_buttonCancel_new (
-    windowGenerate, accelGroup, _( "_Cancel" )
+    accelGroup, _( "_Cancel" ), paramClose
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxGenerate ), buttonCancel );
   buttonGenerate = gpa_button_new ( accelGroup, _( "_Generate key" ) );
@@ -1527,9 +1563,9 @@ void keys_generateKey ( void ) {
     GTK_BOX ( vboxGenerate ), hButtonBoxGenerate, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowGenerate ), vboxGenerate );
-  gpa_widget_set_centered ( windowGenerate, global_windowMain );
-  gtk_widget_show_all ( windowGenerate );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gpa_widget_show (
+    windowGenerate, global_windowMain, _( "keys_generateKey.tip" )
+  );
 } /* keys_generateKey */
 
 void keys_generateRevocation_generate ( gpointer param ) {
@@ -1648,55 +1684,73 @@ void keys_generateRevocation ( void ) {
     GTK_BOX ( vboxRevoc ), hButtonBoxRevoc, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowRevoc ), vboxRevoc );
-  gpa_widget_set_centered ( windowRevoc, global_windowMain );
-  gtk_widget_show_all ( windowRevoc );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /* !!!*/
+  gpa_widget_show (
+    windowRevoc, global_windowMain, _( "keys_generateRevocation.tip" )
+  );
 } /* keys_generateRevocation */
 
 void keys_import_ok ( GtkWidget *windowImport ) {
+/* var */
+  gpointer paramDone [ 2 ];
+/* commands */
 char message [ 100 ];
 sprintf ( message, _( "Import keys from '%s'\n" ), gtk_file_selection_get_filename ( GTK_FILE_SELECTION ( windowImport ) ) ); /*!!!*/
 g_print ( message ); /*!!!*/
-  gpa_window_destroy ( windowImport );
+  paramDone [ 0 ] = windowImport;
+  paramDone [ 1 ] = NULL;
+  gpa_window_destroy ( paramDone );
 } /* keys_import_ok */
 
 void keys_import ( void ) {
 /* objects */
   GtkWidget *windowImport;
+  static gpointer paramClose [ 2 ];
 /* commands */
   windowImport = gtk_file_selection_new ( "Import keys" );
   gtk_signal_connect_object (
     GTK_OBJECT ( GTK_FILE_SELECTION ( windowImport ) -> ok_button ), "clicked",
     GTK_SIGNAL_FUNC ( keys_import_ok ), (gpointer) windowImport
   );
+  paramClose [ 0 ] = windowImport;
+  paramClose [ 1 ] = NULL;
   gtk_signal_connect_object (
     GTK_OBJECT ( GTK_FILE_SELECTION ( windowImport ) -> cancel_button ),
-    "clicked", GTK_SIGNAL_FUNC ( gtk_widget_destroy ), (gpointer) windowImport
+    "clicked", GTK_SIGNAL_FUNC ( gpa_window_destroy ), (gpointer) paramClose
   );
-  gtk_widget_show ( windowImport );
+  gpa_widget_show ( windowImport, global_windowMain, _( "keys_import.tip" ) );
 } /* keys_import */
 
 void keys_importOwnertrust_ok ( GtkWidget *windowImport ) {
+/* var */
+  gpointer paramDone [ 2 ];
+/* commands */
 char message [ 100 ];
 sprintf ( message, _( "Import ownertrust from '%s'\n" ), gtk_file_selection_get_filename ( GTK_FILE_SELECTION ( windowImport ) ) ); /*!!!*/
 g_print ( message ); /*!!!*/
-  gpa_window_destroy ( windowImport );
+  paramDone [ 0 ] = windowImport;
+  paramDone [ 1 ] = NULL;
+  gpa_window_destroy ( paramDone );
 } /*!!!*/
 
 void keys_importOwnertrust ( void ) {
 /* objects */
   GtkWidget *windowImport;
+  static gpointer paramClose [ 2 ];
 /* commands */
   windowImport = gtk_file_selection_new ( "Import ownertrust" );
   gtk_signal_connect_object (
     GTK_OBJECT ( GTK_FILE_SELECTION ( windowImport ) -> ok_button ), "clicked",
     GTK_SIGNAL_FUNC ( keys_importOwnertrust_ok ), (gpointer) windowImport
   );
+  paramClose [ 0 ] = windowImport;
+  paramClose [ 1 ] = NULL;
   gtk_signal_connect_object (
     GTK_OBJECT ( GTK_FILE_SELECTION ( windowImport ) -> cancel_button ),
-    "clicked", GTK_SIGNAL_FUNC ( gtk_widget_destroy ), (gpointer) windowImport
+    "clicked", GTK_SIGNAL_FUNC ( gpa_window_destroy ), (gpointer) paramClose
   );
-  gtk_widget_show ( windowImport );
+  gpa_widget_show (
+    windowImport, global_windowMain, _( "keys_importOwnertrust.tip" )
+  );
 } /* keys_importOwnertrust */
 
 void keys_updateTrust ( void ) {
