@@ -1,5 +1,11 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* gpa.c (gpa_open_keyring_editor):
+	(gpa_open_filemanager): Only do a show_all once, when the window
+	is created for the first time. With recent changes not all
+	children of the keyring editor window are shown all the time and a
+	show_all will make them all visible again.
+
 	* fileman.c (gpa_fileman_new): 
 	* keyring.c (keyring_editor_new): Realize the window before
 	creating the toolbar so that we can create pixmaps without
