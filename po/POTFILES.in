@@ -5,6 +5,7 @@ src/fileman.c
 src/filemenu.c
 src/filesigndlg.c
 src/gpa.c
+src/gpafilesel.c
 src/gpapastrings.c
 src/gpawidgets.c
 src/gpawizard.c
