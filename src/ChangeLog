@@ -1,5 +1,9 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* optionsmenu.c (gpa_homeDirSelect_init):
+	(gpa_loadOptionsSelect_init):
+	(gpa_saveOptionsSelect_init): Remove commented out window tip code
+
 	* encryptdlg.c: 
 	* fileman.c: 
 	* filemenu.c: 
