@@ -297,6 +297,11 @@ gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
 {
   PublicKeyData data = { NULL, callback, calldata };
   char *gpgargv[4];
+  if (SecRing)
+    {
+      release_secret_keyring (SecRing);
+      SecRing = NULL;
+    }
   if (PubRing)
     {
       release_public_keyring (PubRing);
@@ -309,6 +314,7 @@ gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
 		    linecallback_refresh_pub, &data, callback, calldata);
   PubRing = g_list_sort (PubRing, compare_public_keys);
+  gpapa_refresh_secret_keyring (callback, calldata);
 }
 
 gint
@@ -608,7 +614,6 @@ gpapa_create_key_pair (GpapaPublicKey **publicKey,
 			NULL, NULL, callback, calldata);
       free (commands);
       gpapa_refresh_public_keyring (callback, calldata);
-      gpapa_refresh_secret_keyring (callback, calldata);
       *publicKey = gpapa_get_public_key_by_userID (aUserID, callback, calldata);
       *secretKey = gpapa_get_secret_key_by_userID (aUserID, callback, calldata);
     }
@@ -642,9 +647,8 @@ gpapa_export_ownertrust (gchar *targetFileID, GpapaArmor Armor,
 	    gpgargv[i++] = "--armor";
 	  gpgargv[i++] = "--export-ownertrust";
 	  gpgargv[i] = NULL;
-	  gpapa_call_gnupg
-	    (gpgargv, TRUE, NULL, NULL,
-	     linecallback_export_ownertrust, stream, callback, calldata);
+	  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+	                    linecallback_export_ownertrust, stream, callback, calldata);
 	  fclose (stream);
 	}
     }
@@ -675,6 +679,7 @@ gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
   gpgargv[1] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
                     NULL, NULL, callback, calldata);
+  gpapa_refresh_public_keyring (callback, calldata);
 }
 
 void
@@ -689,9 +694,9 @@ gpapa_import_keys (gchar *sourceFileID,
       gpgargv[0] = "--import";
       gpgargv[1] = sourceFileID;
       gpgargv[2] = NULL;
-      gpapa_call_gnupg
-	(gpgargv, TRUE, NULL, NULL,
-	 NULL, NULL, callback, calldata);
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+	                NULL, NULL, callback, calldata);
+      gpapa_refresh_public_keyring (callback, calldata);
     }
 }
 

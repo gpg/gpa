@@ -1,4 +1,14 @@
-Wed 13 Feb 2001 26:14 Peter Gerwinski <peter@gerwinski.de>
+Thu 15 Feb 2001 18:51 Peter Gerwinski <peter@gerwinski.de>
+
+        * gpapa.c (gpapa_refresh_public_keyring): refresh the secret
+          keyring, too, because the secret key objects also refer to
+          the GpapaKey subobjects in the public keyring.
+          (gpapa_create_key_pair): no more need to refresh the secret
+          keyring explicitly.
+          (gpapa_update_trust_database, gpapa_import_keys): refresh
+          the public keyring afterwards.
+
+Wed 14 Feb 2001 26:14 Peter Gerwinski <peter@gerwinski.de>
 
         * gpapa.c (linecallback_refresh_sec): merge the GpapaKey subobjects
           of public and secret keys.
@@ -18,7 +28,7 @@ Wed 13 Feb 2001 26:14 Peter Gerwinski <peter@gerwinski.de>
           (gpapa_secret_key_release): do _not_ gpapa_key_release (key->key)
           because key->key is owned by the public key object now.
 
-Wed 13 Feb 2001 23:24 Peter Gerwinski <peter@gerwinski.de>
+Wed 14 Feb 2001 23:24 Peter Gerwinski <peter@gerwinski.de>
 
         * gpapapublickey.c (gpapa_public_key_delete): pass "YES" as a command.
           (I wonder how this could ever have worked without this ...)-:
