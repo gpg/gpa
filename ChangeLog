@@ -1,3 +1,12 @@
+2003-10-12  Miguel Coca  <mcoca@gnu.org>
+	
+	* configure.ac: Update version number to 0.7.0-cvs. Update gpgme
+	version check to 0.4.3.
+
+	* TODO: Remove obsolete items
+
+	* NEWS: Clean up items, add missing.
+
 2003-06-21  Miguel Coca  <mcoca@gnu.org>
 
 	* configure.ac: Disable deprecated GTK widgets.

@@ -25,18 +25,5 @@ In no particular order:
 
 * Documentation!
 
-* When/If the gpgme key cache becomes solid enough, we should drop the
-  keytable stuff and use gpgme directly.
-
-* All operations (import/export/decrypt/backup, etc) should be carried out
-  inside the *_dialog_run functions, to avoid passing too much control info
-  back and forth.
-
 * Support a "File Status" (encrypted, signed, etc..) column in the
   filemanager, if GPGME allows it.
-
-* Use the fd/stream gpgme data objects in the filemanager, to support large
-  files.
-
-* Use the GPGME event loop inteface to avoid blocking on long operations.
-  This is important mostly for the file manager.

@@ -1,5 +1,9 @@
-Noteworthy changes in version 0.6.2 (unreleased)
+Noteworthy changes in version 0.7.0 (unreleased)
 ------------------------------------------------
+
+ * Long file operations no longer block GPA, so several operations can be
+ run at the same time. This also means GPA does not freeze while an operation
+ runs, leading to a more responsive interface.
 
  * The keyring editor now displays all the subkeys of the currently selected
  key. This is only visible if GPA is in advanced mode (available from the
@@ -9,16 +13,20 @@ Noteworthy changes in version 0.6.2 (unreleased)
  the keyring editor.
 
  * The keyring editor can now sort keys by any column. By default, they are
- listed in the order they appear in the keyring.
+ listed in the order they were imported into the keyring (i.e. the same order
+ as "gpg --list-keys").
 
  * The key list is now displayed while it is being filled, allowing for
  faster startup times.
 
+ * A warning dialog is now displayed when an operation slows down due to
+ gpg rebuilding the trust database.
+
+ * Imports and exports from files and servers have been separated into
+ different dialogs and menu options.
+
  * Invoking GPA with file names as arguments will open those files in the
  file manager.
-
- * Long file operations no longer block GPA, so several operations can be
- run at the same time.
 
  * Cosmetical and minor fixes to the file manager window.
 
@@ -26,9 +34,6 @@ Noteworthy changes in version 0.6.2 (unreleased)
  when GPA is started. 
 
  * Removed all deprecated widgets. GPA is now pure GTK+ 2.2.
-
- * Imports and exports from files and servers have been separated into
- different dialogs.
 
 Noteworthy changes in version 0.6.1 (2003-01-29)
 ------------------------------------------------

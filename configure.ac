@@ -12,7 +12,7 @@ AC_PREREQ(2.52)
 # specific feature can already be done under the assumption that the
 # CVS vesiuon is the most recent one in a branch.
 #
-AC_INIT(gpa, 0.6.2-cvs, [bug-gpa@gnupg.org])
+AC_INIT(gpa, 0.7.0-cvs, [bug-gpa@gnupg.org])
 
 ALL_LINGUAS="de fr zh_TW.Big5 pt_BR ja nl es sv"
 AM_CONFIG_HEADER(config.h)
@@ -158,7 +158,7 @@ AM_PATH_GTK_2_0(2.0.0,
             CFLAGS="$CFLAGS $GTK_CFLAGS"],
             AC_MSG_ERROR(Cannot find GTK+ 2.0))
 
-AM_PATH_GPGME(0.4.1,
+AM_PATH_GPGME(0.4.3,
             [LIBS="$LIBS $GPGME_LIBS"
             CFLAGS="$CFLAGS $GPGME_CFLAGS"],
             AC_MSG_ERROR(Cannot find an up to date GPGME))
