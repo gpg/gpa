@@ -33,7 +33,7 @@
 #include "gpapastrings.h"
 #include "ownertrustdlg.h"
 #include "keysigndlg.h"
-#include "keyreceivedlg.h"
+#include "keyimportdlg.h"
 #include "keyexportdlg.h"
 #include "keygendlg.h"
 #include "keygenwizard.h"
@@ -387,11 +387,34 @@ keyring_editor_sign (gpointer param)
 
 /* retrieve a key from the server */
 static void
-keyring_editor_receive (gpointer param)
+keyring_editor_import (gpointer param)
 {
   GPAKeyringEditor * editor = param;
+  gchar * filename, *server, * key_id;
 
-  key_receive_run_dialog (editor->window);
+  if (key_import_dialog_run (editor->window, &filename, &server, &key_id))
+    {
+      if (filename)
+	{
+	  /* Import keys from the user specified file. */
+	  gpapa_import_keys (filename, gpa_callback, editor->window);
+	}
+      else if (server)
+	{
+	  /* Fetch the key given by key_id from the server */
+	  gpapa_receive_public_key_from_server (key_id, server, gpa_callback,
+						editor->window);
+	  /* FIXME: add proper error handling */
+	}
+      else
+	{
+	  /* Should never happen because the dialog should ensure that
+	   * either filename or server is not NULL */
+	  printf ("neither filename nor server supplied\n");
+	}
+      free (filename);
+      free (server);
+    } /* if */
 }
 
 
@@ -425,8 +448,7 @@ keyring_editor_export (gpointer param)
 	}
       else if (server)
 	{
-	  /* Export the selected key to the user specified server.
-	   * FIXME: We should really export all selected keys */
+	  /* Export the selected key to the user specified server. */
 	  GList * selection = gpa_keylist_selection (editor->clist_keys);
 	  gchar * key_id;
 	  gint row;
@@ -933,6 +955,7 @@ toolbar_export_key (GtkWidget *widget, gpointer param)
 static void
 toolbar_import_keys (GtkWidget *widget, gpointer param)
 {
+  keyring_editor_import (param);
 }
 
 static GtkWidget *
