@@ -92,7 +92,7 @@ void gpa_set_simplified_ui (gboolean value);
 
 gchar * gpa_default_key (void);
 void gpa_set_default_key (gchar * key);
-gchar * gpa_determine_default_key (void);
+void gpa_update_default_key (void);
 
 void gpa_open_keyring_editor (void);
 void gpa_open_filemanager (void);
