@@ -1,3 +1,7 @@
+2003-01-29  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac (ALL_LINGUAS): Fix Swedish. It's sv, not se.
+
 2003-01-28  Miguel Coca  <mcoca@gnu.org>
 
 	* configure.ac: Fix getopt_long check.

@@ -1,3 +1,8 @@
+2003-01-29  Miguel Coca  <mcoca@gnu.org>
+
+	* se.po, sv.po: Swedish is sv, not se! Move se.po to sv.po. Update
+	for 0.6.1.
+
 2003-01-24  Miguel Coca  <mcoca@gnu.org>
 
 	* se.po: New, contributed by Mick Ohrberg.
