@@ -1,5 +1,11 @@
 2001-02-01  Bernhard Herzog  <bh@intevation.de>
 
+	* keyeditdlg.c (key_edit_change_trust): 
+	* ownertrustdlg.h (gpa_ownertrust_run_dialog): 
+	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Remove the tip
+	parameter of gpa_ownertrust_run_dialog which was intended for the
+	now removed tip window. Update callers.
+
 	* keyring.c (keyring_editor_can_sign): Don't check explicitly
 	whether the selected key is the default key because the list of
 	signatures contains the self signature now.

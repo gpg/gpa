@@ -104,7 +104,7 @@ ownertrust_destroy (GtkWidget *widget, gpointer param)
 
 /* Run the owner trust dialog modally. */
 gboolean
-gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent, gchar* tip,
+gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
 			   GpapaOwnertrust * trust)
 {
   GtkAccelGroup *accelGroup;

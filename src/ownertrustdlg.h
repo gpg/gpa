@@ -1,5 +1,5 @@
 /* keyring.c  -	 The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -25,7 +25,7 @@
 #include <gpapa.h>
 
 gboolean
-gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent, gchar* tip,
+gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
 			   GpapaOwnertrust * trust);
 
 

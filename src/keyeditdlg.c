@@ -250,7 +250,6 @@ key_edit_change_trust(GtkWidget * widget, gpointer param)
   key = gpapa_get_public_key_by_ID (dialog->key_id, gpa_callback,
 				    dialog->window);
   result = gpa_ownertrust_run_dialog (key, dialog->window,
-				      "keyring_editor_public_edit_trust.tip",
 				      &ownertrust);
 
   if (result)
