@@ -1,5 +1,30 @@
 2001-02-06  Bernhard Herzog  <bh@intevation.de>
 
+	* gpa.h (global_defaultKey): Removed. Its definition was deleted
+	some time ago.
+	
+	* gpa.h (global_homeDirectory): 
+	* gpa.c (global_homeDirectory): Removed as it's no longer used.
+
+	* gpa.c (main): Don't init the home dir and load/save options dialogs.
+
+	* optionsmenu.c (homeDirSelect):
+	(loadOptionsSelect):
+	(saveOptionsSelect):
+	(gpa_homeDirSelect_ok):
+	(gpa_homeDirSelect_init):
+	(gpa_loadOptionsSelect_ok):
+	(gpa_loadOptionsSelect_init):
+	(gpa_saveOptionsSelect_ok):
+	(gpa_saveOptionsSelect_init):
+	(options_homedir):
+	(options_load):
+	(options_save): Removed. Loading and saving options wasn't
+	actually implemented in gpapa anyway and the home directory was
+	only used by the load/save options functions. 
+	(gpa_options_menu_add_to_factory): Remove the menu entries for the
+	home directory and loading/saving options.
+
 	* fileman.c (decrypt_files): Update cur to the next list element
 	at the end of the while loop.
 
