@@ -37,57 +37,57 @@ struct _GPAKeySignDialog {
   gchar * passphrase;
   GtkWidget * window;
   GtkWidget * check_local;
-  GtkCList * clist_keys;
 };
 typedef struct _GPAKeySignDialog GPAKeySignDialog;
 
 
+/* Signal handle for the cancel button. Set result to FALSE and destroy
+ * the dialog window */
 static void
 key_sign_cancel (gpointer param)
 {
   GPAKeySignDialog * dialog = param;
 
   dialog->result = FALSE;
-  gtk_main_quit ();
+  gtk_widget_destroy (dialog->window);
 } /* key_sign_cancel */
 
 
-static gboolean
-key_sign_delete (GtkWidget *widget, GdkEvent *event, gpointer param)
-{
-  key_sign_cancel (param);
-  return FALSE;
-}
-
-
+/* Signal handler for the OK button. Read the user's input and ask for
+ * the password, then destroy the dialog window */
 static void
 key_sign_ok (gpointer param)
 {
   GPAKeySignDialog * dialog = param;
-  gint row;
   GtkWidget * check;
 
   dialog->result = TRUE;
-  if (dialog->clist_keys->selection)
-    {
-      row = GPOINTER_TO_INT (dialog->clist_keys->selection->data);
 
-      check = dialog->check_local;
-      if (check && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)))
-	dialog->sign_type = GPAPA_KEY_SIGN_LOCALLY;
-      else
-	dialog->sign_type = GPAPA_KEY_SIGN_NORMAL;
-      
-      dialog->passphrase = gpa_passphrase_run_dialog (dialog->window);
-    }
-  gtk_main_quit ();
+  check = dialog->check_local;
+  if (check && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)))
+    dialog->sign_type = GPAPA_KEY_SIGN_LOCALLY;
+  else
+    dialog->sign_type = GPAPA_KEY_SIGN_NORMAL;
+
+  dialog->passphrase = gpa_passphrase_run_dialog (dialog->window);
+
+  gtk_widget_destroy (dialog->window);
 } /* key_sign_ok */
 
 
-/* Run the key sign dialog as a modal dialog and return when the user *
- * *ends the dialog. If the user clicks OK, return TRUE and set
- * *sign_type according to the "sign locally" check box and *passphrase
- * *to the passphrase. The passphrase must be freed.
+/* Handle for the dialog window's destroy signal. Quit the recursive
+ * main loop */
+static void
+key_sign_destroy (GtkWidget *widget, gpointer param)
+{
+  gtk_main_quit ();
+}
+
+
+/* Run the key sign dialog as a modal dialog and return when the user
+ * ends the dialog. If the user clicks OK, return TRUE and set sign_type
+ * according to the "sign locally" check box and *passphrase to the
+ * passphrase. The passphrase must be freed.
  *
  * If the user clicked Cancel, return FALSE and do not modify *sign_type
  * or *passphrase.
@@ -119,9 +119,8 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
   window = gtk_window_new (GTK_WINDOW_DIALOG);
   dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), _("Sign Key"));
-  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (key_sign_delete),
-		      (gpointer)&dialog);
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (key_sign_destroy), (gpointer)&dialog);
 
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
@@ -193,13 +192,11 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
 			     GTK_SIGNAL_FUNC (key_sign_ok),
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonSign);
-  gpa_window_show_centered (window, parent);
-  /* set tip to "key_sign.tip" */
 
-  gtk_grab_add (window);
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
+  gpa_window_show_centered (window, parent);
+
   gtk_main ();
-  gtk_grab_remove (window);
-  gtk_widget_destroy (window);
 
   if (dialog.result && dialog.passphrase)
     {
