@@ -1,5 +1,7 @@
 2001-01-26  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_new): Initialize the status bar
+	properly
 
 	* gpa.c (gpa_update_default_key): If the default key is not set
 	yet, set it to (an approximation of) gpg's default key.
