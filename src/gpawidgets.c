@@ -29,8 +29,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
-#include <gpapa.h>
-
 #include "gpapastrings.h"
 #include "gtktools.h"
 
@@ -80,43 +78,16 @@ gpa_key_info_new (GpgmeKey key, GtkWidget * window)
  *	A set of CLists for choosing from a list of keys.
  */
 
-/* Build the list, getting the keys from a callback. Return where the default
- * key is in default_key_index. */
+/* Build the list */
 static GtkWidget *
-gpa_key_list_new (GtkWidget *window, int num_keys, 
-                  GpapaKey* (*get_key_by_index) (gint idx, 
-                                                 GpapaCallbackFunc callback,
-                                                 gpointer calldata,
-                                                 void *data),
-                  gint *default_key_index, void *get_key_data)
+gpa_key_list_new (void)
 {
   GtkWidget *clist;
-  GpapaKey *key;
   gchar *titles[2] = {_("Key ID"), _("User Identity/Role")};
-  gchar *contents[2];
-  gint row;
 
   clist = gtk_clist_new_with_titles (2, titles);
-
-  /* FIXME: widths shouldn't be hard-coded: */
-  gtk_clist_set_column_width (GTK_CLIST (clist), 0, 120);
-  gtk_clist_set_column_width (GTK_CLIST (clist), 1, 200);
-  while (num_keys)
-    {
-      num_keys--;
-      key = get_key_by_index (num_keys, gpa_callback, window, get_key_data);
-      contents[0] = gpapa_key_get_identifier (key, gpa_callback,
-					      window);
-      contents[1] = gpapa_key_get_name (key, gpa_callback, window);
-      row = gtk_clist_prepend (GTK_CLIST (clist), contents);
-      gtk_clist_set_row_data_full (GTK_CLIST (clist), row,
-				   contents[0]? xstrdup (contents[0]):NULL,
-                                   free);
-      if (gpa_default_key () && strcmp (gpa_default_key (), contents[0]) == 0)
-	{
-	  *default_key_index = num_keys;
-	}
-    }
+  gtk_clist_set_sort_column (GTK_CLIST (clist), 1);
+  gtk_clist_set_auto_sort (GTK_CLIST (clist), TRUE);
   gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_SINGLE);
   gtk_clist_column_title_passive (GTK_CLIST (clist), 0);
   gtk_clist_column_title_passive (GTK_CLIST (clist), 1);
@@ -124,57 +95,63 @@ gpa_key_list_new (GtkWidget *window, int num_keys,
   return clist;
 }
 
-/* Auxiliary callback functions for getting either secret keys, public keys,
- * or keys from a GList */
-
-static GpapaKey *get_secret_key (gint idx, GpapaCallbackFunc callback,
-                                gpointer calldata, void *data)
+struct add_key_data_s
 {
-  return GPAPA_KEY (gpapa_get_secret_key_by_index (idx, gpa_callback, 
-                                                   calldata));
-}
+  GtkWidget *clist;
+  gint default_key_row;
+}; 
 
-static GpapaKey *get_public_key (gint idx, GpapaCallbackFunc callback,
-                                gpointer calldata, void *data)
+static void
+gpa_key_list_add_key  (const gchar * fpr, GpgmeKey key, gpointer data)
 {
-  return GPAPA_KEY (gpapa_get_public_key_by_index (idx, gpa_callback, 
-                                                   calldata));
-}
-
-static GpapaKey *get_clist_key (gint idx, GpapaCallbackFunc callback,
-                                gpointer calldata, GList *list)
-{
-       return (GpapaKey *) g_list_nth_data (list, idx);
+  struct add_key_data_s *add_data = data;
+  gchar *contents[2];
+  gint row;
+  
+  contents[0] = g_strdup (gpa_gpgme_key_get_short_keyid (key, 0));
+  contents[1] = gpa_gpgme_key_get_userid (key, 0);
+  row = gtk_clist_prepend (GTK_CLIST (add_data->clist), contents);
+  gtk_clist_set_row_data_full (GTK_CLIST (add_data->clist), row,
+			       fpr ? g_strdup (fpr) : NULL, g_free);
+  if (gpa_default_key () && g_str_equal (gpa_default_key (), fpr))
+    {
+      add_data->default_key_row = row;
+    }
+  g_free (contents[0]);
+  g_free (contents[1]);
 }
 
 /* A list of all the secret keys, with the default key selected by default */
 
 GtkWidget *
-gpa_secret_key_list_new (GtkWidget *window)
+gpa_secret_key_list_new (void)
 {
-  GtkWidget *clist;
-  gint default_key_index = 0;
-  clist = gpa_key_list_new (window, 
-                            gpapa_get_secret_key_count (gpa_callback, window),
-                            get_secret_key, &default_key_index, NULL);
+  struct add_key_data_s data;
+  
+  data.clist = gpa_key_list_new ();
+  data.default_key_row = 0;
+  gtk_clist_freeze (GTK_CLIST (data.clist));
+  gpa_keytable_secret_foreach (keytable, gpa_key_list_add_key, &data);
+  gtk_clist_thaw (GTK_CLIST (data.clist));
+  gtk_clist_select_row (GTK_CLIST (data.clist), data.default_key_row, 0);
 
-  gtk_clist_select_row (GTK_CLIST (clist), default_key_index, 0);
-
-  return clist;
+  return data.clist;
 }
 
 /* A list of all the public keys */
 
 GtkWidget *
-gpa_public_key_list_new (GtkWidget *window)
+gpa_public_key_list_new (void)
 {
-  GtkWidget *clist;
-  gint default_key_index = 0;
-  clist = gpa_key_list_new (window, 
-                            gpapa_get_public_key_count (gpa_callback, window),
-                            get_public_key, &default_key_index, NULL);
+  struct add_key_data_s data;
+  
+  data.clist = gpa_key_list_new ();
+  data.default_key_row = 0;
+  gtk_clist_freeze (GTK_CLIST (data.clist));
+  gpa_keytable_foreach (keytable, gpa_key_list_add_key, &data);
+  gtk_clist_thaw (GTK_CLIST (data.clist));
 
-  return clist;
+  return data.clist;
 }
 
 /* A list of all the keys in a GList */
@@ -182,14 +159,18 @@ gpa_public_key_list_new (GtkWidget *window)
 GtkWidget *
 gpa_key_list_new_from_glist (GtkWidget *window, GList *list)
 {
-  GtkWidget *clist;
+  GtkWidget *clist = NULL;
+  /* FIXME: Reimplement when it's needed (disabled until we know how to list
+   * keys from a remote server) */
+#if 0
   gint default_key_index = 0;
+
   clist = gpa_key_list_new (window, 
                             g_list_length (list),
                             (GpapaKey* (*) (gint, GpapaCallbackFunc,
                                             gpointer, void*)) get_clist_key, 
                             &default_key_index, list);
-
+#endif
   return clist;
 }
 

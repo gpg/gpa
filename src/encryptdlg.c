@@ -176,7 +176,7 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), scrollerKeys, TRUE, TRUE, 0);
   gtk_widget_set_usize (scrollerKeys, 300, 120);
 
-  clistKeys = gpa_public_key_list_new (parent);
+  clistKeys = gpa_public_key_list_new ();
   dialog.clist_keys = clistKeys;
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
   gtk_clist_set_selection_mode (GTK_CLIST (clistKeys), GTK_SELECTION_EXTENDED);

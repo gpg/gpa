@@ -1,3 +1,21 @@
+2002-10-03  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* fileman.c (count_sigs, free_file_info, attach_file),
+	(get_file): Removed obsolete.
+	(get_selected_files, add_file, show_file_detail, sign_files) 
+	(gpa_window_file_new): Change to use Gpgme.
+
+	* filesigndlg.c: Ported dialog to Gpgme. Use a GtkDialog.
+
+	* gpawidget.h, gpawidgets.c (gpa_key_list_new, gpa_key_list_add_key) 
+	(gpa_secret_key_list_new, gpa_public_key_list_new): Port to Gpgme.
+	(gpa_key_list_new_from_glist): Disable. Unused at the moment.
+
+	* encryptdlg.c (gpa_file_encrypt_dialog_run): Fix call to 
+	gpa_public_key_list_new.
+
+	* keyring.c (isdir): Remove obsolote.
+
 2002-09-28  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keyring.c (add_details_row): Use GtkLabel's always. Change alignment

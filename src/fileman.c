@@ -74,78 +74,9 @@ fileman_destroy (gpointer param)
   free (fileman);
 }
 
-/*
- * Count the sigs associated with a GpapaFile
- */
-struct _CountSigsParam {
-  gint valid_sigs;
-  gint invalid_sigs;
-  GtkWidget * window;
-};
-typedef struct _CountSigsParam CountSigsParam;
-
-static void
-count_sigs (gpointer data, gpointer user_data)
-{
-  GpapaSignature *signature = data;
-  CountSigsParam *count = user_data;
-
-  switch (gpapa_signature_get_validity (signature, gpa_callback,
-					count->window))
-    {
-    case GPAPA_SIG_VALID:
-      count->valid_sigs++;
-      break;
-    case GPAPA_SIG_INVALID:
-      count->invalid_sigs++;
-      break;
-    default:
-      break;
-    } /* switch */
-} /* count_sigs */
-
-/*
- * Functions to manage GpapaFiles attached to CList rows
- */
-
-struct _GPAFileInfo
-{
-  GpapaFile *file;
-  GtkWidget *window;
-};
-typedef struct _GPAFileInfo GPAFileInfo;
-
-static void
-free_file_info (gpointer param)
-{
-  GPAFileInfo *info = param;
-
-  gpapa_file_release (info->file, gpa_callback, info->window);
-  free (info);
-}
-
-static void
-attach_file (GPAFileManager *fileman, GtkCList *clist, gint row,
-	     GpapaFile *file)
-{
-  GPAFileInfo *info = xmalloc (sizeof (GPAFileInfo));
-  info->file = file;
-  info->window = fileman->window;
-
-  gtk_clist_set_row_data_full (clist, row, info, free_file_info);
-}
-
-static GpapaFile *
-get_file (GtkCList *clist, gint row)
-{
-  GPAFileInfo *info = gtk_clist_get_row_data (clist, row);
-  return info->file;
-}
-
-
-/* Return the currently selected files as a new list of GPAFileInfo
- * structs. The list has to be freed by the caller, but the file info
- * instances are still managed by the CList
+/* Return the currently selected files as a new list of filenames
+ * structs. The list has to be freed by the caller, but the texts themselves
+ * are still managed by the CList
  */
 static GList *
 get_selected_files (GtkCList *clist)
@@ -153,72 +84,42 @@ get_selected_files (GtkCList *clist)
   GList *files = NULL;
   GList *selection = clist->selection;
   gint row;
+  gchar *filename;
 
   while (selection)
     {
       row = GPOINTER_TO_INT (selection->data);
-      files = g_list_prepend (files, get_file (clist, row));
+      gtk_clist_get_text (clist, row, 0, &filename);
+      files = g_list_prepend (files, filename);
       selection = g_list_next (selection);
     }
 
   return files;
 }
-					       
-  
+
 
 /* Add file filename to the clist. Return the index of the new row */
 static gint
 add_file (GPAFileManager *fileman, gchar *filename)
 {
-  gchar *file_id;
-  gchar *entries[5];
-  GList *signatures;
-  gchar str_num_sigs[50];
-  gchar str_valid_sigs[50];
-  gchar str_invalid_sigs[50];
-  GpapaFile *file;
-  CountSigsParam count_param;
+  gchar *entries[2];
+  gchar *tmp;
   gint row;
 
-  file = gpapa_file_new (filename, gpa_callback, fileman->window);
-  signatures = gpapa_file_get_signatures (file, gpa_callback, fileman->window);
-  file_id = gpapa_file_get_name (file, gpa_callback, fileman->window);
   for (row = 0; row < fileman->clist_files->rows; row++)
     {
-      if (!strcmp (file_id,
-		   gpapa_file_get_identifier (get_file (fileman->clist_files,
-							row),
-					      gpa_callback,
-					      fileman->window)))
+      gtk_clist_get_text (fileman->clist_files, row, 0, &tmp);
+      if (g_str_equal (filename, tmp))
 	{
 	  gpa_window_error (_("The file is already open."), fileman->window);
 	  return -1;
 	}
     }
-  entries[0] = g_filename_to_utf8 (file_id, -1, NULL, NULL, NULL);
-  entries[1]
-    = gpa_file_status_string (gpapa_file_get_status (file, gpa_callback,
-						     fileman->window));
-  sprintf (str_num_sigs, "%d", g_list_length (signatures));
-  entries[2] = str_num_sigs;
-
-  count_param.valid_sigs = 0;
-  count_param.invalid_sigs = 0;
-  count_param.window = fileman->window;
-  g_list_foreach (signatures, count_sigs, &count_param);
-
-  sprintf (str_valid_sigs, "%d", count_param.valid_sigs);
-  entries[3] = str_valid_sigs;
-  if (count_param.invalid_sigs)
-    {
-      sprintf (str_invalid_sigs, "%d", count_param.invalid_sigs);
-      entries[4] = str_invalid_sigs;
-    }
-  else
-    entries[4] = "";
+  entries[0] = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+  /* FIXME: Check the file status when/if gpgme supports it */
+  entries[1] = _("Unknown");
 
   row = gtk_clist_append (fileman->clist_files, entries);
-  attach_file (fileman, fileman->clist_files, row, file);
 
   return row;
 }
@@ -295,8 +196,10 @@ show_file_detail (gpointer param)
       return;
     } /* if */
 
+#if 0
   file = get_file (fileman->clist_files,
 		   GPOINTER_TO_INT (fileman->clist_files->selection->data));
+#endif
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), _("Verifying file signature"));
   gtk_signal_connect_object (GTK_OBJECT (window), "delete_event",
@@ -412,6 +315,7 @@ sign_files (gpointer param)
 	}
       g_list_free (signed_files);
     }
+  g_list_free (files);
 }
 
 /*
@@ -425,7 +329,7 @@ encrypt_files (gpointer param)
   GList * files;
   GList *encrypted_files, *cur;
   gint row;
-  
+
   files = get_selected_files (fileman->clist_files);
   if (!files)
     return;
@@ -461,7 +365,7 @@ decrypt_files (gpointer param)
   gchar *filename, *newname, *extension;
   GList *cur;
   gint row;
-  
+
   files = get_selected_files (fileman->clist_files);
   if (!files)
     return;
@@ -562,8 +466,8 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
 static GtkWidget *
 gpa_window_file_new (GPAFileManager * fileman)
 {
-  char *clistFileTitle[5] = {
-    _("File"), _("Status"), _("Sigs total"), _("Valid Sigs"), _("Invalid Sigs")
+  char *clistFileTitle[] = {
+    _("File"), _("Status")
   };
   int i;
 
@@ -573,19 +477,13 @@ gpa_window_file_new (GPAFileManager * fileman)
 
   windowFile = gtk_frame_new (_("Files in work"));
   scrollerFile = gtk_scrolled_window_new (NULL, NULL);
-  clistFile = gtk_clist_new_with_titles (5, clistFileTitle);
+  clistFile = gtk_clist_new_with_titles (2, clistFileTitle);
   fileman->clist_files = GTK_CLIST (clistFile);
   gtk_clist_set_column_width (GTK_CLIST (clistFile), 0, 170);
   gtk_clist_set_column_width (GTK_CLIST (clistFile), 1, 100);
   gtk_clist_set_column_justification (GTK_CLIST (clistFile), 1,
 				      GTK_JUSTIFY_CENTER);
-  for (i = 2; i <= 4; i++)
-    {
-      gtk_clist_set_column_width (GTK_CLIST (clistFile), i, 100);
-      gtk_clist_set_column_justification (GTK_CLIST (clistFile), i,
-					  GTK_JUSTIFY_RIGHT);
-    } /* for */
-  for (i = 0; i <= 4; i++)
+  for (i = 0; i <= 1; i++)
     {
       gtk_clist_set_column_auto_resize (GTK_CLIST (clistFile), i, FALSE);
       gtk_clist_column_title_passive (GTK_CLIST (clistFile), i);

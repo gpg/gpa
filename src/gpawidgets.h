@@ -25,8 +25,8 @@
 
 extern GtkWidget *gpa_key_info_new (GpgmeKey key, GtkWidget *window);
 
-extern GtkWidget *gpa_secret_key_list_new (GtkWidget *window);
-extern GtkWidget *gpa_public_key_list_new (GtkWidget *window);
+extern GtkWidget *gpa_secret_key_list_new (void);
+extern GtkWidget *gpa_public_key_list_new (void);
 extern GtkWidget *gpa_key_list_new_from_glist (GtkWidget *window,
                                                       GList *list);
 extern gint gpa_key_list_selection_length (GtkWidget *clist);

@@ -558,16 +558,6 @@ keyring_editor_export (gpointer param)
     }
 }
 
-/* Return TRUE if filename is a directory */
-static gboolean
-isdir (const gchar * filename)
-{
-  struct stat statbuf;
-
-  return (stat (filename, &statbuf) == 0
-          && S_ISDIR (statbuf.st_mode));
-}
-
 /* backup the default keys */
 static void
 keyring_editor_backup (gpointer param)

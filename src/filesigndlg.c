@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <gpapa.h>
+#include <errno.h>
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
@@ -42,64 +43,147 @@ struct _GPAFileSignDialog {
 };
 typedef struct _GPAFileSignDialog GPAFileSignDialog;
 
+static FILE *
+open_destination_file (const gchar *filename, GpgmeSigMode sign_type,
+		       gboolean armor, gchar **target_filename,
+		       GtkWidget *parent)
+{
+  const gchar *extension;
+  FILE *target;
+  
+  if (!armor)
+    {
+      if (sign_type == GPGME_SIG_MODE_DETACH)
+	extension = ".sig";
+      else
+	extension = ".gpg";
+    }
+  else
+    extension = ".asc";
+  *target_filename = g_strconcat (filename, extension, NULL);
+  /* If the file exists, ask before overwriting */
+  if (g_file_test (*target_filename, G_FILE_TEST_EXISTS))
+    {
+      GtkWidget *msgbox = gtk_message_dialog_new 
+	(GTK_WINDOW(parent), GTK_DIALOG_MODAL,
+	 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
+	 _("The file %s already exists.\n"
+	   "Do you want to overwrite it?"), *target_filename);
+      gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
+			      GTK_STOCK_YES, GTK_RESPONSE_YES,
+			      GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
+      if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
+	{
+	  gtk_widget_destroy (msgbox);
+	  return NULL;
+	}
+      gtk_widget_destroy (msgbox);
+    }
+  target = fopen (*target_filename, "w");
+  if (!target)
+    {
+      gchar *message;
+      message = g_strdup_printf ("%s: %s", filename, strerror(errno));
+      gpa_window_error (message, parent);
+      g_free (message);
+      return NULL;
+    }
+  return target;
+}
 
 static void
-file_sign_do_sign (GPAFileSignDialog *dialog, gchar *key_id, gchar *passphrase,
-		   GpapaSignType sign_type, GpapaArmor armor)
+sign_files (GPAFileSignDialog *dialog, gchar *fpr, GpgmeSigMode sign_type, 
+	    gboolean armor)
 {
   GList *cur;
 
   dialog->signed_files = NULL;
 
-  cur = dialog->files;
-  while (cur)
+  for (cur = dialog->files; cur; cur = g_list_next (cur))
     {
-      GpapaFile *file;
-      const gchar *extension;
+      FILE *target;
       gchar *filename, *target_filename;
+      GpgmeData input, output;
+      GpgmeError err;
+      GpgmeKey signer;
 
-      global_lastCallbackResult = GPAPA_ACTION_NONE;
-
-      file = cur->data;
-      filename = gpapa_file_get_identifier (file, gpa_callback,
-					     dialog->window);
-      if (armor == GPAPA_NO_ARMOR)
-        {
-	  if (sign_type == GPAPA_SIGN_DETACH)
-	    extension = ".sig";
-	  else
-	    extension = ".gpg";
-        }
-      else
-        extension = ".asc";
-      target_filename = xstrcat2 (filename, extension);
-
-      gpapa_file_sign (file, target_filename, key_id, passphrase, sign_type, armor,
-		       gpa_callback, dialog->window);
-
-      if (global_lastCallbackResult == GPAPA_ACTION_ERROR)
+      /* Find out the name of the signed file */
+      filename = cur->data;
+      target = open_destination_file (filename, sign_type, armor, 
+				      &target_filename, dialog->window);
+      if (!target)
 	break;
+      /* Create the appropiate GpgmeData's*/
+      err = gpgme_data_new_from_file (&input, filename, 1);
+      if (err == GPGME_File_Error)
+	{
+	  gchar *message;
+	  message = g_strdup_printf ("%s: %s", filename, strerror(errno));
+	  gpa_window_error (message, dialog->window);
+	  g_free (message);
+	  break;
+	}
+      else if (err != GPGME_No_Error)
+	{
+	  gpa_gpgme_error (err);
+	}
+      err = gpgme_data_new (&output);
+      if (err != GPGME_No_Error)
+	{
+	  gpa_gpgme_error (err);
+	}
+      /* Sign */
+      gpgme_signers_clear (ctx);
+      signer = gpa_keytable_secret_lookup (keytable, fpr);
+      if (!signer)
+	{
+	  /* Can't happen */
+	  gpa_window_error (_("The key you selected is not available for "
+			      "signing"), dialog->window);
+	  break;
+	}
+      err = gpgme_signers_add (ctx, signer);
+      if (err != GPGME_No_Error)
+	{
+	  gpa_gpgme_error (err);
+	}
+      gpgme_set_armor (ctx, armor);
+      err = gpgme_op_sign (ctx, input, output, sign_type);
+      if (err == GPGME_No_Passphrase)
+	{
+	  gpa_window_error (_("Wrong passphrase!"), dialog->window);
+	  break;
+	}
+      else if (err == GPGME_Canceled)
+	{
+	  break;
+	}
+      else if (err != GPGME_No_Error)
+	{
+	  gpa_gpgme_error (err);
+	}      
+      /* Write the output */
+      dump_data_to_file (output, target);
+      fclose (target);
+      gpgme_data_release (input);
+      gpgme_data_release (output);
       dialog->signed_files = g_list_append (dialog->signed_files, target_filename);
-      cur = g_list_next (cur);
     }
 }
 
 static void
-file_sign_ok (gpointer param)
+file_sign_ok (GPAFileSignDialog *dialog)
 {
-  GPAFileSignDialog *dialog = param;
-  GpapaSignType sign_type;
-  GpapaArmor armor;
-  gchar *key_id;
-  GpapaSecretKey * key;
-  gchar *passphrase;
+  GpgmeSigMode sign_type;
+  gboolean armor;
+  gchar *fpr;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_comp)))
-    sign_type = GPAPA_SIGN_NORMAL;
+    sign_type = GPGME_SIG_MODE_NORMAL;
   else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->radio_sign)))
-    sign_type = GPAPA_SIGN_CLEAR;
+    sign_type = GPGME_SIG_MODE_CLEAR;
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(dialog->radio_sep)))
-    sign_type = GPAPA_SIGN_DETACH;
+    sign_type = GPGME_SIG_MODE_DETACH;
   else
     {
       gpa_window_error (_("Internal error:\nInvalid sign mode"), dialog->window);
@@ -108,54 +192,33 @@ file_sign_ok (gpointer param)
 
   if (gpa_simplified_ui ())
     {
-      if (sign_type == GPAPA_SIGN_DETACH)
-        armor = GPAPA_NO_ARMOR;
+      if (sign_type == GPGME_SIG_MODE_DETACH)
+        armor = FALSE;
       else
-	armor = GPAPA_ARMOR;
+	armor = TRUE;
     }
   else
     {
       if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->check_armor)))
-        armor = GPAPA_ARMOR;
+        armor = TRUE;
       else
-        armor = GPAPA_NO_ARMOR;
+        armor = FALSE;
     }
 
   if (dialog->clist_who->selection)
     {
       gint row = GPOINTER_TO_INT (dialog->clist_who->selection->data);
-      key_id = gtk_clist_get_row_data (dialog->clist_who, row);
-      key = gpapa_get_secret_key_by_ID (key_id, gpa_callback, dialog->window);
+      fpr = gtk_clist_get_row_data (dialog->clist_who, row);
     }
   else
     {
       gpa_window_error (_("No key selected!"), dialog->window);
       return;
     }
-  passphrase = gpa_passphrase_run_dialog (dialog->window, key);
-  if (passphrase)
-    {
-      file_sign_do_sign (dialog, key_id, passphrase, sign_type, armor);
-    }
-  free (passphrase);
-  gtk_widget_destroy (dialog->window);
+
+  sign_files (dialog, fpr, sign_type, armor);
 } /* file_sign_ok */
 
-
-static void
-file_sign_cancel (gpointer param)
-{
-  GPAFileSignDialog *dialog = param;
-
-  dialog->signed_files = NULL;
-  gtk_widget_destroy (dialog->window);
-}
-
-static void
-file_sign_destroy (GtkWidget * widget, gpointer param)
-{
-  gtk_main_quit ();
-}
 
 /* Run the file sign dialog and sign the files given by the arguments
  * files and num_files. Return a GList with the names of the newly
@@ -167,7 +230,7 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
 {
   GPAFileSignDialog dialog;
   GtkAccelGroup *accelGroup;
-  GtkWidget *windowSign;
+  GtkWidget *window;
   GtkWidget *vboxSign;
   GtkWidget *frameMode;
   GtkWidget *vboxMode;
@@ -179,14 +242,12 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
   GtkWidget *labelWho;
   GtkWidget *scrollerWho;
   GtkWidget *clistWho;
-  GtkWidget *hButtonBoxSign;
-  GtkWidget *buttonCancel;
-  GtkWidget *buttonSign;
+  GtkResponseType response;
 
   dialog.files = files;
   dialog.signed_files = NULL;
 
-  if (gpapa_get_secret_key_count (gpa_callback, parent) == 0)
+  if (gpa_keytable_secret_size (keytable) == 0)
     {
       gpa_window_error (_("No secret keys available for signing.\n"
 			  "Please generate or import a secret key first."),
@@ -194,16 +255,19 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
       return FALSE;
     } /* if */
 
-  windowSign = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (windowSign), _("Sign Files"));
-  dialog.window = windowSign;
-  gtk_signal_connect (GTK_OBJECT (windowSign), "destroy",
-		      GTK_SIGNAL_FUNC (file_sign_destroy), NULL);
+  window = gtk_dialog_new_with_buttons (_("Sign Files"), GTK_WINDOW(parent),
+					GTK_DIALOG_MODAL,
+					GTK_STOCK_OK, GTK_RESPONSE_OK,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+  dialog.window = window;
 
   accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (windowSign), accelGroup);
+  gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
 
-  vboxSign = gtk_vbox_new (FALSE, 0);
+  vboxSign = GTK_DIALOG (window)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vboxSign), 5);
 
   frameMode = gtk_frame_new (_("Signing Mode"));
@@ -266,33 +330,19 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
   gtk_widget_set_usize (scrollerWho, 260, 75);
   gtk_box_pack_start (GTK_BOX (vboxWho), scrollerWho, TRUE, TRUE, 0);
 
-  clistWho = gpa_secret_key_list_new (parent);
+  clistWho = gpa_secret_key_list_new ();
   dialog.clist_who = GTK_CLIST (clistWho);
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
   gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
 			      _("Sign _as "));
 
-  hButtonBoxSign = gtk_hbutton_box_new ();
-  gtk_box_pack_start (GTK_BOX (vboxSign), hButtonBoxSign, FALSE, FALSE, 0);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxSign),
-			     GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxSign), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxSign), 5);
-  buttonSign = gpa_button_new (accelGroup, "_OK");
-  gtk_signal_connect_object (GTK_OBJECT (buttonSign), "clicked",
-			     GTK_SIGNAL_FUNC (file_sign_ok),
-			     (gpointer) &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonSign);
+  gtk_widget_show_all (window);
+  response = gtk_dialog_run (GTK_DIALOG (window));
+  if (response == GTK_RESPONSE_OK)
+    {
+      file_sign_ok (&dialog);
+    }
 
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					(GtkSignalFunc) file_sign_cancel, 
-                                        (gpointer) &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonCancel);
-  gtk_container_add (GTK_CONTAINER (windowSign), vboxSign);
-  gpa_window_show_centered (windowSign, parent);
-  gtk_window_set_modal (GTK_WINDOW (windowSign), TRUE);
-
-  gtk_main ();
-
+  gtk_widget_destroy (window);
   return dialog.signed_files;
 } /* gpa_file_sign_dialog_run */
