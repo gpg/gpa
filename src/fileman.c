@@ -47,6 +47,7 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
+#include "siglist.h"
 #include "filemenu.h"
 #include "optionsmenu.h"
 #include "helpmenu.h"
@@ -352,8 +353,9 @@ show_file_detail (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxSignatures), scrollerSignatures, TRUE,
 		      TRUE, 0);
 
+  clistSignatures = gpa_siglist_new (fileman->window);
   signatures = gpapa_file_get_signatures (file, gpa_callback, fileman->window);
-  clistSignatures = gpa_signature_list_new (fileman->window, signatures);
+  gpa_siglist_set_signatures (clistSignatures, signatures, NULL);
   gtk_container_add (GTK_CONTAINER (scrollerSignatures), clistSignatures);
   gpa_connect_by_accelerator (GTK_LABEL (labelSignatures), clistSignatures,
 			      accelGroup, _("_Signatures"));
