@@ -402,17 +402,21 @@ help_about (void)
     }
 }
 
+static void
+help_license_destroy (GtkWidget * widget, gpointer param)
+{
+  gtk_main_quit ();
+}
 
 
 void
 help_license (gpointer param)
 {
-/* var */
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
   gpointer *paramClose;
   GtkWidget *parent = param;
-/* objects */
+
   GtkWidget *windowLicense;
   GtkWidget *vboxLicense;
   GtkWidget *vboxGPL;
@@ -423,7 +427,7 @@ help_license (gpointer param)
   GtkWidget *vscrollbarGPL;
   GtkWidget *hButtonBoxLicense;
   GtkWidget *buttonClose;
-/* commands */
+
   keeper = gpa_windowKeeper_new ();
   windowLicense = gtk_window_new (GTK_WINDOW_DIALOG);
   gpa_windowKeeper_set_window (keeper, windowLicense);
@@ -431,6 +435,9 @@ help_license (gpointer param)
 			_("GNU general public license"));
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowLicense), accelGroup);
+  gtk_signal_connect (GTK_OBJECT (windowLicense), "destroy",
+		      GTK_SIGNAL_FUNC (help_license_destroy), NULL);
+  
   vboxLicense = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxLicense), 5);
   vboxGPL = gtk_vbox_new (FALSE, 0);
@@ -465,7 +472,10 @@ help_license (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxLicense), hButtonBoxLicense, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowLicense), vboxLicense);
+
+  gtk_window_set_modal (GTK_WINDOW (windowLicense), TRUE);
   gpa_window_show_centered (windowLicense, parent);
+  gtk_main ();
 }
 
 void
