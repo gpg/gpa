@@ -729,21 +729,30 @@ keyring_editor_menubar_new (GtkWidget * window,
 
 /* add a single row to the details table */
 static GtkWidget *
-add_details_row (GtkWidget * table, gint row, gchar *text)
+add_details_row (GtkWidget * table, gint row, gchar *text,
+		 gboolean selectable)
 {
-  GtkWidget * label;
+  GtkWidget * widget;
 
-  label = gtk_label_new (text);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row + 1,
+  widget = gtk_label_new (text);
+  gtk_table_attach (GTK_TABLE (table), widget, 0, 1, row, row + 1,
 		    GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  
-  label = gtk_label_new ("");
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row + 1,
-		    GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_misc_set_alignment (GTK_MISC (widget), 1.0, 0.5);
 
-  return label;
+  if (!selectable)
+    {
+      widget = gtk_label_new ("");
+      gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
+    }
+  else
+    {
+      widget = gtk_entry_new ();
+      gtk_editable_set_editable (GTK_EDITABLE (widget), FALSE);
+    }
+  gtk_table_attach (GTK_TABLE (table), widget, 1, 2, row, row + 1,
+		    GTK_FILL | GTK_EXPAND, 0, 0, 0);
+
+  return widget;
 }
 
 
@@ -761,9 +770,10 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
   
-  editor->detail_name = add_details_row (table, 0, _("User Name:"));
-  editor->detail_fingerprint = add_details_row (table, 1, _("Fingerprint:"));
-  editor->detail_expiry = add_details_row (table, 2, _("Expires at:"));  
+  editor->detail_name = add_details_row (table, 0, _("User Name:"), FALSE);
+  editor->detail_fingerprint = add_details_row (table, 1, _("Fingerprint:"),
+						TRUE);
+  editor->detail_expiry = add_details_row (table, 2, _("Expires at:"), FALSE); 
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), table,
 			    gtk_label_new (_("Details")));
@@ -789,7 +799,8 @@ keyring_update_details_page (GPAKeyringEditor * editor)
 
       text = gpapa_public_key_get_fingerprint (key, gpa_callback,
 					       editor->window);
-      gtk_label_set_text (GTK_LABEL (editor->detail_fingerprint), text);
+      /*gtk_label_set_text (GTK_LABEL (editor->detail_fingerprint), text);*/
+      gtk_entry_set_text (GTK_ENTRY (editor->detail_fingerprint), text);
 
       expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
 					       editor->window);
