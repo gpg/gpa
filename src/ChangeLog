@@ -1,5 +1,11 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* keygenwizard.c (gpa_keygen_wizard_destroy):
+	(gpa_keygen_wizard_run): Add a destroy event handler and quit the
+	recursive main loop there.
+	(gpa_keygen_wizard_close): Instead of quitting the main loop,
+	destroy the dialog window. Also, use the correct prototype.
+
 	* keysigndlg.c (gpa_key_sign_run_dialog): Make sure dialog.result
 	is set to FALSE by default.
 
