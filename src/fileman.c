@@ -106,8 +106,7 @@ add_file (GPAFileManager *fileman, gchar *filename)
     {
       gtk_clist_get_text (fileman->clist_files, row, 0, &tmp);
       if (g_str_equal (filename, tmp))
-	{
-	  gpa_window_error (_("The file is already open."), fileman->window);
+        {
 	  return -1;
 	}
     }
@@ -139,7 +138,13 @@ open_file (gpointer param)
     {
       row = add_file (fileman, filename);
       if (row >= 0)
-	gtk_clist_select_row (fileman->clist_files, row, 0);
+        {
+          gtk_clist_select_row (fileman->clist_files, row, 0);
+        }
+      else
+        {
+          gpa_window_error (_("The file is already open."), fileman->window);
+        }
       free (filename);
     }
 }

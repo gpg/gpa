@@ -1,5 +1,8 @@
 2002-11-02  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* fileman.c (open_file, add_file): Only complain about an already
+	opened file when the user opens it from the menu.
+
 	* verifydlg.c (is_detached_sig): Take into account files without an
 	extension. Fixes segfault.
 
