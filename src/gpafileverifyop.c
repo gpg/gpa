@@ -69,6 +69,7 @@ gpa_file_verify_operation_init (GpaFileVerifyOperation *op)
   op->sig = NULL;
   op->signed_text = NULL;
   op->signed_file = NULL;
+  op->signature_file = NULL;
 }
 
 static GObject*
@@ -159,15 +160,38 @@ gpa_file_verify_operation_new (GtkWidget *window, GList *files)
 
 /* Internal */
 
+static gboolean
+ask_use_detached_sig (const gchar *file, const gchar *sig, GtkWidget *parent)
+{
+  GtkWidget *dialog = gtk_message_dialog_new 
+    (GTK_WINDOW(parent), GTK_DIALOG_MODAL,
+     GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
+     _("GPA found a file that could be a signature of %s."
+       "Would you like to verify it instead?\n\n"
+       "The file found is: %s"), file, sig);
+  gboolean result;
+  
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+			  GTK_STOCK_YES, GTK_RESPONSE_YES,
+			  GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
+  result = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES);
+  gtk_widget_destroy (dialog);
+  
+  return result;
+}
 
 /* Check whether the file is a detached signature and deduce the name of the
  * original file. Since we only have access to the filename, this is not
  * very solid.
  */
 static gboolean
-is_detached_sig (const gchar *filename, gchar **signed_file)
+is_detached_sig (const gchar *filename, gchar **signature_file,
+		 gchar **signed_file, GtkWidget *window)
 {
+  const gchar *sig_extension[] = {".sig", ".sign"};
+  int i;
   gchar *extension;
+  /* First, check whether this file is a dettached signature */
   *signed_file = g_strdup (filename);
   extension = g_strrstr (*signed_file, ".");
   if (extension &&
@@ -175,12 +199,32 @@ is_detached_sig (const gchar *filename, gchar **signed_file)
        g_str_equal (extension, ".sign")))
     {
       *extension++ = '\0';
+      *signature_file = g_strdup (filename);
       return TRUE;
     }
+  /* Now, check whether a dettached signature exists for this file */
   else
     {
       g_free (*signed_file);
       *signed_file = NULL;
+
+      for (i = 0; i < sizeof(sig_extension)/sizeof(sig_extension[0]); i++)
+	{
+	  gchar *sig = g_strconcat (filename, sig_extension[i], NULL);
+	  
+	  if (g_file_test (sig, G_FILE_TEST_EXISTS) &&
+	      ask_use_detached_sig (filename, sig, window))
+	    {
+	      *signed_file = g_strdup (filename);
+	      *signature_file = sig;
+	      return TRUE;
+	    }
+	  else
+	    {
+	      g_free (sig);
+	    }
+	}
+
       return FALSE;
     }
 }
@@ -191,10 +235,11 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 {
   gpg_error_t err;
 
-  if (is_detached_sig (sig_filename, &op->signed_file))
+  if (is_detached_sig (sig_filename, &op->signature_file, &op->signed_file,
+		       GPA_OPERATION (op)->window))
     {
       /* Allocate data objects for a detached signature */
-      op->sig_fd = gpa_open_input (sig_filename, &op->sig, 
+      op->sig_fd = gpa_open_input (op->signature_file, &op->sig, 
 				   GPA_OPERATION (op)->window);
       if (op->sig_fd == -1)
 	{
@@ -288,12 +333,15 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
       /* Add the file to the result dialog */
       gpa_file_verify_dialog_add_file (GPA_FILE_VERIFY_DIALOG (op->dialog),
 				       GPA_FILE_OPERATION (op)->current->data,
-				       op->signed_file, result->signatures);
+				       op->signed_file, op->signature_file,
+				       result->signatures);
       /* If this was a dettached sig, reset the signed file */
       if (op->signed_file)
 	{
 	  g_free (op->signed_file);
 	  op->signed_file = NULL;
+	  g_free (op->signature_file);
+	  op->signature_file = NULL;
 	}
       /* Go to the next file in the list and verify it */
       GPA_FILE_OPERATION (op)->current = g_list_next 

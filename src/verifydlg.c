@@ -344,7 +344,7 @@ signature_list (gpgme_signature_t sigs, gpgme_ctx_t ctx)
 
 static GtkWidget *
 verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
-		  gpgme_ctx_t ctx)
+		  const gchar *signature_file, gpgme_ctx_t ctx)
 {
   GtkWidget *vbox;
   GtkWidget *list;
@@ -357,6 +357,10 @@ verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
     {
       gchar *text = g_strdup_printf (_("Verified data in file: %s"),
 				     signed_file);
+      label = gtk_label_new (text);
+      gtk_box_pack_start_defaults (GTK_BOX (vbox), label);
+      g_free (text);
+      text = g_strdup_printf (_("Signature: %s"), signature_file);
       label = gtk_label_new (text);
       gtk_box_pack_start_defaults (GTK_BOX (vbox), label);
       g_free (text);
@@ -388,11 +392,13 @@ GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent)
 void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      const gchar *filename,
 				      const gchar *signed_file,
+				      const gchar *signature_file,
 				      gpgme_signature_t sigs)
 {
   GtkWidget *page;
   
-  page = verify_file_page (sigs, signed_file, dialog->ctx->ctx);
+  page = verify_file_page (sigs, signed_file, signature_file, 
+			   dialog->ctx->ctx);
   
   gtk_notebook_append_page (GTK_NOTEBOOK (dialog->notebook), page,
 			    gtk_label_new (filename));

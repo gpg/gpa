@@ -1,7 +1,8 @@
-Noteworthy changes in version 0.7.0 (unreleased)
+Noteworthy changes in version 0.7.1 (unreleased)
 ------------------------------------------------
 
-
+ * When verifying the signature on a file, GPA now tries to find
+   detached signatures and asks the user whether to verify them.
 
 Noteworthy changes in version 0.7.0 (2003-10-22)
 ------------------------------------------------

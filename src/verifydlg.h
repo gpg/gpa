@@ -58,6 +58,7 @@ GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent);
 void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      const gchar *filename,
 				      const gchar *signed_file,
+				      const gchar *signature_file,
 				      gpgme_signature_t sigs);
 
 #endif

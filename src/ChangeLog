@@ -1,3 +1,17 @@
+2003-10-27  Miguel Coca  <mcoca@gnu.org>
+
+	* gpafileverifyop.c (ask_use_detached_sig): New.
+	(is_detached_sig): Given a file, try to find a detached signature
+	in another file.
+	(gpa_file_verify_operation_init)
+	(gpa_file_verify_operation_done_cb): Save and use the filename of
+	the signature.
+
+	* verifydlg.h, verifydlg.c (gpa_file_verify_dialog_add_file)
+	(verify_file_page): Display the detached signature filename too.
+
+	* gpgmetools.c (gpa_generate_key_start): Remove fix for GPGME 0.4.3.
+
 2003-10-22  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (gpa_keyring_editor_new_key_cb): Update the default key
