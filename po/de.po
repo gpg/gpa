@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.3.1a\n"
 "POT-Creation-Date: 2002-01-14 11:33+0100\n"
-"PO-Revision-Date: 2001-02-15 15:22+01:00\n"
-"Last-Translator: Thomas Koester <tkoester@intevation.de>\n"
+"PO-Revision-Date: 2002-01-29  13:56+0100\n"
+"Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: GERMAN <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: src/encryptdlg.c:150 src/filemenu.c:1014
 msgid "No secret keys available to encrypt."
-msgstr "Keine öffentlichen Schlüssel vorhanden"
+msgstr "Keine privaten Schlüssel vorhanden"
 
 #: src/encryptdlg.c:159 src/filemenu.c:1027
 msgid "Encrypt files"
@@ -576,28 +576,24 @@ msgid "trust fully"
 msgstr "volles Vertrauen"
 
 #: src/gpapastrings.c:48
-#, fuzzy
 msgid "trust ultimately"
-msgstr "volles Vertrauen"
+msgstr "vollständiges Vertrauen"
 
 #: src/gpapastrings.c:49
 msgid "revoked"
-msgstr ""
+msgstr "widerrufen"
 
 #: src/gpapastrings.c:50
-#, fuzzy
 msgid "expired"
-msgstr "_verfällt am"
+msgstr "verfallen"
 
 #: src/gpapastrings.c:51
-#, fuzzy
 msgid "invalid"
-msgstr "gültig"
+msgstr "ungültig"
 
 #: src/gpapastrings.c:52
-#, fuzzy
 msgid "disabled"
-msgstr "detailliert"
+msgstr "abgeschaltet"
 
 #: src/gpapastrings.c:105 src/keysmenu.c:37
 msgid "days"
