@@ -422,18 +422,10 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
   for (cur = recipients; cur; cur = g_list_next (cur))
     {
       /* Check that all recipients are valid */
-      gchar *fpr = cur->data;
-      GpgmeKey key;
+      GpgmeKey key = cur->data;
       GpgmeValidity valid;
+      const char *fpr=gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
 
-      if (gpgme_get_key (GPA_OPERATION(op)->context->ctx, fpr, &key, 
-			 FALSE) == GPGME_EOF)
-	{
-	  /* Can't happen */
-	  gpa_window_error (_("The key you selected is not available for "
-			      "encryption"), GPA_OPERATION (op)->window);
-	  return FALSE;
-	}
       valid = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
       /* First, make sure the key is usable (not revoked or unusable) */
       if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_REVOKED, NULL, 0))
@@ -450,7 +442,7 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
       else if (valid == GPGME_VALIDITY_FULL || 
                valid == GPGME_VALIDITY_ULTIMATE)
 	{
-	  gpgme_recipients_add_name_with_validity (op->rset, cur->data, valid);
+	  gpgme_recipients_add_name_with_validity (op->rset, fpr, valid);
 	}
       else
 	{
@@ -461,7 +453,7 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
 	  if (response == GTK_RESPONSE_YES)
 	    {
 	      /* Assume the key is trusted */
-	      gpgme_recipients_add_name_with_validity (op->rset, cur->data,
+	      gpgme_recipients_add_name_with_validity (op->rset, fpr,
 						       GPGME_VALIDITY_FULL);
 	    }
 	  else
@@ -498,15 +490,7 @@ set_signers (GpaFileEncryptOperation *op, GList *signers)
     }
   for (cur = signers; cur; cur = g_list_next (cur))
     {
-      GpgmeKey key;
-      if (gpgme_get_key (GPA_OPERATION(op)->context->ctx, 
-			 (char*) cur->data, &key, FALSE) == GPGME_EOF)
-	{
-	  /* Can't happen */
-	  gpa_window_error (_("The key you selected is not available for "
-			      "signing"), GPA_OPERATION (op)->window);
-	  break;
-	}
+      GpgmeKey key = cur->data;
       err = gpgme_signers_add (GPA_OPERATION (op)->context->ctx, key);
       if (err != GPGME_No_Error)
 	{
@@ -559,6 +543,11 @@ static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
 	{
 	  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
 	}
+
+      g_list_foreach (signers, (GFunc) gpgme_key_unref, NULL);
+      g_list_free (signers);
+      g_list_foreach (recipients, (GFunc) gpgme_key_unref, NULL);
+      g_list_free (recipients);
     }
   else
     {

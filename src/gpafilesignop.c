@@ -284,15 +284,7 @@ set_signers (GpaFileSignOperation *op, GList *signers)
     }
   for (cur = signers; cur; cur = g_list_next (cur))
     {
-      GpgmeKey key;
-      if (gpgme_get_key (GPA_OPERATION(op)->context->ctx, 
-			 (char*) cur->data, &key, FALSE) == GPGME_EOF)
-	{
-	  /* Can't happen */
-	  gpa_window_error (_("The key you selected is not available for "
-			      "signing"), GPA_OPERATION (op)->window);
-	  break;
-	}
+      GpgmeKey key = cur->data;
       err = gpgme_signers_add (GPA_OPERATION (op)->context->ctx, key);
       if (err != GPGME_No_Error)
 	{
@@ -336,6 +328,9 @@ static void gpa_file_sign_operation_response_cb (GtkDialog *dialog,
 	{
 	  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
 	}
+
+      g_list_foreach (signers, (GFunc) gpgme_key_unref, NULL);
+      g_list_free (signers);
     }
   else
     {

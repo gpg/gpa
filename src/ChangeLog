@@ -1,3 +1,25 @@
+2003-05-15  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (gpa_SOURCES): Add gpakeyselector.{c,h}
+
+	* gpakeyselector.h, gpakeyselector.c: New. A replacement for the
+	gpa_key_list that lists the keys itself.
+
+	* gpafilesignop.c (gpa_file_sign_operation_response_cb) 
+	(set_signers):
+	* gpafileencryptop.c (set_recipients, set_signers) 
+	(gpa_file_encrypt_operation_response_cb): Adapt to receive GLists of
+	keys instead of fingerprints from the encrypt dialog.
+
+	* filesigndlg.c (gpa_file_sign_dialog_constructor) 
+	(gpa_file_sign_dialog_signers): Use a key selector.
+
+	* encryptdlg.c (select_row_cb, unselect_row_cb): Delete.
+	(changed_select_row_cb): New.
+	(gpa_file_encrypt_dialog_init)
+	(gpa_file_encrypt_dialog_recipients) 
+	(gpa_file_encrypt_dialog_signers): Use key selectors.
+
 2003-05-04  Miguel Coca  <mcoca@gnu.org>
 
 	* gpgmetools.c, server_access.c: Remove gpgmeparsers.h include.

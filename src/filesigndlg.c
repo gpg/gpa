@@ -27,6 +27,7 @@
 #include "gtktools.h"
 #include "gpawidgets.h"
 #include "filesigndlg.h"
+#include "gpakeyselector.h"
 
 /* Properties */
 enum
@@ -176,7 +177,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_widget_set_usize (scrollerWho, 260, 75);
   gtk_box_pack_start (GTK_BOX (vboxWho), scrollerWho, TRUE, TRUE, 0);
 
-  clistWho = gpa_secret_key_list_new ();
+  clistWho = gpa_key_selector_new (TRUE);
   dialog->clist_who = clistWho;
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
   gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
@@ -260,7 +261,7 @@ GtkWidget *gpa_file_sign_dialog_new (GtkWidget *parent)
 
 GList *gpa_file_sign_dialog_signers (GpaFileSignDialog *dialog)
 {
-  return gpa_key_list_selected_ids (dialog->clist_who);
+  return gpa_key_selector_get_selected_keys (GPA_KEY_SELECTOR(dialog->clist_who));
 }
 
 gboolean gpa_file_sign_dialog_get_armor (GpaFileSignDialog *dialog)

@@ -29,14 +29,13 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
+#include "gpakeyselector.h"
 #include "gpapastrings.h"
 #include "encryptdlg.h"
 
 /* Internal functions */
-static void select_row_cb (GtkCList *clist, gint row, gint column,
-			   GdkEventButton *event, gpointer user_data);
-static void unselect_row_cb (GtkCList *clist, gint row, gint column,
-			     GdkEventButton *event, gpointer user_data);
+static void changed_select_row_cb (GtkTreeSelection *treeselection,
+				   gpointer user_data);
 static void toggle_sign_cb (GtkToggleButton *togglebutton, gpointer user_data);
 
 
@@ -150,17 +149,19 @@ gpa_file_encrypt_dialog_init (GpaFileEncryptDialog *dialog)
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), labelKeys, FALSE, FALSE, 0);
 
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy  (GTK_SCROLLED_WINDOW (scrollerKeys),
+				   GTK_POLICY_AUTOMATIC,
+				   GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), scrollerKeys, TRUE, TRUE, 0);
-  gtk_widget_set_usize (scrollerKeys, 300, 120);
+  gtk_widget_set_usize (scrollerKeys, 350, 120);
 
-  clistKeys = gpa_public_key_list_new ();
-  gtk_signal_connect (GTK_OBJECT (clistKeys), "select-row",
-		      GTK_SIGNAL_FUNC (select_row_cb), dialog);
-  gtk_signal_connect (GTK_OBJECT (clistKeys), "unselect-row",
-		      GTK_SIGNAL_FUNC (unselect_row_cb), dialog);
+  clistKeys = gpa_key_selector_new (FALSE);
+  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
+			      (GTK_TREE_VIEW (clistKeys))),
+		    "changed", G_CALLBACK (changed_select_row_cb),
+		    dialog);
   dialog->clist_keys = clistKeys;
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
-  gtk_clist_set_selection_mode (GTK_CLIST (clistKeys), GTK_SELECTION_MULTIPLE);
   gpa_connect_by_accelerator (GTK_LABEL (labelKeys), clistKeys, accelGroup,
 			      _("_Public Keys"));
 
@@ -176,10 +177,13 @@ gpa_file_encrypt_dialog_init (GpaFileEncryptDialog *dialog)
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), labelWho, FALSE, TRUE, 0);
 
   scrollerWho = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_usize (scrollerWho, 260, 75);
+  gtk_scrolled_window_set_policy  (GTK_SCROLLED_WINDOW (scrollerWho),
+				   GTK_POLICY_AUTOMATIC,
+				   GTK_POLICY_AUTOMATIC);
+  gtk_widget_set_usize (scrollerWho, 350, 75);
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), scrollerWho, TRUE, TRUE, 0);
 
-  clistWho = gpa_secret_key_list_new ();
+  clistWho =  gpa_key_selector_new (TRUE);
   dialog->clist_who = clistWho;
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
   gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
@@ -235,7 +239,7 @@ GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent)
 
 GList *gpa_file_encrypt_dialog_recipients (GpaFileEncryptDialog *dialog)
 {
-  return gpa_key_list_selected_ids (dialog->clist_keys);
+  return gpa_key_selector_get_selected_keys (GPA_KEY_SELECTOR (dialog->clist_keys));
 }
 
 gboolean gpa_file_encrypt_dialog_sign (GpaFileEncryptDialog *dialog)
@@ -245,7 +249,7 @@ gboolean gpa_file_encrypt_dialog_sign (GpaFileEncryptDialog *dialog)
 
 GList *gpa_file_encrypt_dialog_signers (GpaFileEncryptDialog *dialog)
 {
-  return gpa_key_list_selected_ids (dialog->clist_who);
+  return gpa_key_selector_get_selected_keys (GPA_KEY_SELECTOR (dialog->clist_who));
 }
 
 gboolean gpa_file_encrypt_dialog_get_armor (GpaFileEncryptDialog *dialog)
@@ -254,25 +258,16 @@ gboolean gpa_file_encrypt_dialog_get_armor (GpaFileEncryptDialog *dialog)
 }
 
 static void
-select_row_cb (GtkCList *clist, gint row, gint column,
-	       GdkEventButton *event, gpointer user_data)
+changed_select_row_cb (GtkTreeSelection *treeselection, gpointer user_data)
 {
   GpaFileEncryptDialog *dialog = user_data;
   
-  if (g_list_length (GTK_CLIST (clist)->selection) > 0)
+  if (gpa_key_selector_has_selection (GPA_KEY_SELECTOR (dialog->clist_keys)))
     {
       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
 					 GTK_RESPONSE_OK, TRUE);
     }
-}
-
-static void
-unselect_row_cb (GtkCList *clist, gint row, gint column,
-		 GdkEventButton *event, gpointer user_data)
-{
-  GpaFileEncryptDialog *dialog = user_data;
-  
-  if (g_list_length (GTK_CLIST (clist)->selection) == 0)
+  else
     {
       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
 					 GTK_RESPONSE_OK, FALSE);
