@@ -73,7 +73,7 @@ typedef struct _GPAKeyList GPAKeyList;
 /* internal API */
 
 static void keylist_free (gpointer param);
-static void keylist_fill_list (GPAKeyList * keylist);
+static void keylist_fill_list (GPAKeyList * keylist, gboolean keep_selection);
 static void keylist_fill_column_titles (GPAKeyList * keylist);
 static void keylist_row_labels (GPAKeyList * keylist, GpapaPublicKey * key,
 				gchar ** labels);
@@ -184,9 +184,20 @@ keylist_free (gpointer param)
   free (keylist);
 }
 
-/* fill the list with the keys */
+/* Free the key of a g_hash_table. Usable as a GHFunc. */
 static void
-keylist_fill_list (GPAKeyList * keylist)
+free_hash_key (gpointer key, gpointer value, gpointer data)
+{
+  free (key);
+}
+
+
+/* fill the list with the keys. This is also used to update the list
+ * when the key list in gpapa may have changed. If keep_selection is
+ * true, try to keep the current selection.
+ */
+static void
+keylist_fill_list (GPAKeyList * keylist, gboolean keep_selection)
 {
   gint num_keys;
   gint key_index;
@@ -194,7 +205,25 @@ keylist_fill_list (GPAKeyList * keylist)
   GpapaPublicKey * key;
   gchar ** labels = xmalloc (keylist->max_columns * sizeof (gchar*));
   gchar * key_id;
+  GHashTable * sel_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
+  /* if keep_selection is true, remember the current selection. Use the
+   * hast table itself as the value just because its a non-NULL pointer
+   * and we're interested in finding out whether a given key_id is used
+   * as a key in the hash later */
+  if (keep_selection)
+    {
+      GList * selection = GTK_CLIST (keylist->clist)->selection;
+      while (selection)
+	{
+	  key_id = gtk_clist_get_row_data (GTK_CLIST (keylist->clist),
+					   GPOINTER_TO_INT (selection->data));
+	  g_hash_table_insert (sel_hash, xstrdup (key_id), sel_hash);
+	  selection = g_list_next (selection);
+	}
+    }
+
+  gtk_clist_freeze (GTK_CLIST (keylist->clist));
   gtk_clist_clear (GTK_CLIST (keylist->clist));
   num_keys = gpapa_get_public_key_count(gpa_callback, keylist->window);
   for (key_index = 0; key_index < num_keys; key_index++)
@@ -209,8 +238,19 @@ keylist_fill_list (GPAKeyList * keylist)
       gtk_clist_set_row_data_full (GTK_CLIST (keylist->clist), row,
 				   xstrdup (key_id), free);
       keylist_free_row_labels (keylist, labels);
+      if (keep_selection && g_hash_table_lookup (sel_hash, key_id))
+	{
+	  /* The key had been selected previously, so select it again */
+	  gtk_clist_select_row (GTK_CLIST (keylist->clist), row, 0);
+	}
     } /* for */
+
+  gtk_clist_thaw (GTK_CLIST (keylist->clist));
+
   free (labels);
+  
+  g_hash_table_foreach (sel_hash, free_hash_key, NULL);
+  g_hash_table_destroy (sel_hash);
 } /* keylist_fill_list */
 
 
@@ -307,11 +347,12 @@ gpa_keylist_update_list (GtkWidget * clist)
     {
       keylist_fill_column_titles (keylist);
     }
-  keylist_fill_list (keylist);
 
-  /* set all columns' width ot the optimal width, but only when the
-   * column defintions change so as not to annoy the user by changing
-   * user defined widths every time the list is updated */
+  keylist_fill_list (keylist, TRUE);
+
+  /* set the width of all columns to the optimal width, but only when
+   * the column defintions change so as not to annoy the user by
+   * changing user defined widths every time the list is updated */
   if (keylist->column_defs_changed)
     {
       for (i = 0; i < keylist->ncolumns; i++)
@@ -326,8 +367,7 @@ gpa_keylist_update_list (GtkWidget * clist)
 }
 
 
-/* Return TRUE if the list widget has at least one selected item. Usable
- * as a sensitivity callback.
+/* Return TRUE if the list widget has at least one selected item.
  */
 gboolean
 gpa_keylist_has_selection (GtkWidget * clist)
