@@ -33,7 +33,8 @@ gpa_SOURCES = gpa.c gpa.h \
 	      keylist.c keylist.h \
 	      gpawizard.c gpawizard.h \
 	      gpapastrings.c gpapastrings.h\
-		  w32reg.c w32reg.h
+		  w32reg.c w32reg.h\
+		  simple-gettext.c
 
 
 install-data-local:
