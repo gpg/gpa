@@ -28,6 +28,7 @@
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
+#include "icons.xpm"
 
 gchar *writtenKeytrust[4] = {
   N_("unknown"),
@@ -1406,7 +1407,7 @@ keys_openPublic (void)
   GtkWidget *buttonSend;
   GtkWidget *buttonReceive;
   GtkWidget *buttonExportKey;
-  GtkWidget *buttonDelete;
+  GtkWidget *buttonDelete, *buttonDeleteBox;
   GtkWidget *vboxLocally;
   GtkWidget *checkerLocally;
   GtkWidget *tableTrust;
@@ -1519,7 +1520,9 @@ keys_openPublic (void)
 			     (gpointer) paramExport);
   gtk_table_attach (GTK_TABLE (tableKey), buttonExportKey, 0, 1, 2, 3,
 		    GTK_FILL, GTK_FILL, 0, 0);
-  buttonDelete = gpa_button_new (accelGroup, _("_Delete keys"));
+
+  /* the 'delete key' button */
+  buttonDelete = gtk_button_new();
   paramDelete = (gpointer *) xmalloc (5 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramDelete);
   paramDelete[0] = keysSelected;
@@ -1532,6 +1535,11 @@ keys_openPublic (void)
 			     (gpointer) paramDelete);
   gtk_table_attach (GTK_TABLE (tableKey), buttonDelete, 1, 2, 2, 3, GTK_FILL,
 		    GTK_FILL, 0, 0);
+  /* associate this button with an icon */
+  buttonDeleteBox = gpa_xpm_label_box(windowPublic, trash_xpm,
+				  _("_Delete keys"), buttonDelete, accelGroup);
+  gtk_container_add (GTK_CONTAINER (buttonDelete), buttonDeleteBox);
+
   gtk_box_pack_start (GTK_BOX (hboxAction), tableKey, FALSE, FALSE, 0);
   vboxLocally = gtk_vbox_new (FALSE, 0);
   checkerLocally = gpa_check_button_new (accelGroup, _("sign only _locally"));
