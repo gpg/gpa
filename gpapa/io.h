@@ -46,11 +46,14 @@ int _gpgme_io_read ( int fd, void *buffer, size_t count );
 int _gpgme_io_write ( int fd, const void *buffer, size_t count );
 int _gpgme_io_pipe ( int filedes[2], int inherit_idx );
 int _gpgme_io_close ( int fd );
+int _gpgme_io_set_close_notify (int fd,
+                                void (*handler)(int, void*), void *value);
 int _gpgme_io_set_nonblocking ( int fd );
 int _gpgme_io_spawn ( const char *path, char **argv,
                       struct spawn_fd_item_s *fd_child_list,
                       struct spawn_fd_item_s *fd_parent_list );
 int _gpgme_io_waitpid ( int pid, int hang, int *r_status, int *r_signal );
+int _gpgme_io_kill ( int pid, int hard );
 int _gpgme_io_select ( struct io_select_fd_s *fds, size_t nfds);
 
 

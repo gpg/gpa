@@ -36,14 +36,22 @@
 #include "util.h"
 #include "io.h"
 
+static struct {
+    void (*handler)(int,void*);
+    void *value;
+} notify_table[256];
+
+
 int
 _gpgme_io_read ( int fd, void *buffer, size_t count )
 {
     int nread;
 
+    DEBUG2 ("fd %d: about to read %d bytes\n", fd, (int)count );
     do {
         nread = read (fd, buffer, count);
     } while (nread == -1 && errno == EINTR );
+    DEBUG2 ("fd %d: got %d bytes\n", fd, nread );
     return nread;
 }
 
@@ -53,9 +61,11 @@ _gpgme_io_write ( int fd, const void *buffer, size_t count )
 {
     int nwritten;
 
+    DEBUG2 ("fd %d: about to write %d bytes\n", fd, (int)count );
     do {
         nwritten = write (fd, buffer, count);
     } while (nwritten == -1 && errno == EINTR );
+    DEBUG2 ("fd %d:          wrote %d bytes\n", fd, (int)nwritten );
     return nwritten;
 }
 
@@ -71,8 +81,32 @@ _gpgme_io_close ( int fd )
 {
     if ( fd == -1 )
         return -1;
+    /* first call the notify handler */
+    DEBUG1 ("closing fd %d", fd );
+    if ( fd >= 0 && fd < DIM (notify_table) ) {
+        if (notify_table[fd].handler) {
+            notify_table[fd].handler (fd, notify_table[fd].value);
+            notify_table[fd].handler = NULL;
+            notify_table[fd].value = NULL;
+        }
+    }
+    /* then do the close */    
     return close (fd);
 }
+
+int
+_gpgme_io_set_close_notify (int fd, void (*handler)(int, void*), void *value)
+{
+    assert (fd != -1);
+
+    if ( fd < 0 || fd >= DIM (notify_table) )
+        return -1;
+    DEBUG1 ("set notification for fd %d", fd );
+    notify_table[fd].handler = handler;
+    notify_table[fd].value = value;
+    return 0;
+}
+
 
 int
 _gpgme_io_set_nonblocking ( int fd )
@@ -211,6 +245,12 @@ _gpgme_io_waitpid ( int pid, int hang, int *r_status, int *r_signal )
     return 0;
 }
 
+int
+_gpgme_io_kill ( int pid, int hard )
+{
+    return kill ( pid, hard? SIGKILL : SIGTERM );
+}
+
 
 /*
  * Select on the list of fds.
@@ -224,7 +264,7 @@ _gpgme_io_select ( struct io_select_fd_s *fds, size_t nfds )
     static fd_set readfds;
     static fd_set writefds;
     int any, i, max_fd, n, count;
-    struct timeval timeout = { 0, 50 }; /* Use a 50ms timeout */
+    struct timeval timeout = { 1, 0 }; /* Use a 1s timeout */
     void *dbg_help;
     
     FD_ZERO ( &readfds );
@@ -236,7 +276,10 @@ _gpgme_io_select ( struct io_select_fd_s *fds, size_t nfds )
     for ( i=0; i < nfds; i++ ) {
         if ( fds[i].fd == -1 ) 
             continue;
-        if ( fds[i].for_read ) {
+        if ( fds[i].frozen ) {
+            DEBUG_ADD1 (dbg_help, "f%d ", fds[i].fd );
+        }
+        else if ( fds[i].for_read ) {
             assert ( !FD_ISSET ( fds[i].fd, &readfds ) );
             FD_SET ( fds[i].fd, &readfds );
             if ( fds[i].fd > max_fd )

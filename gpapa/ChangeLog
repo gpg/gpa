@@ -1,3 +1,11 @@
+Mon 26 Feb 2001 23:10 Peter Gerwinski <peter@gerwinski.de>
+
+        * debug.c, gpgme.h, io.h, posix-io.c, rungpg.c, rungpg.h,
+          util.c, w32-io.c, wait.c, wait.h: GPGME upgrade.
+
+        * wait.c (_gpgme_wait_on_condition): mark GPAPA-specific
+          code with "#ifdef GPAPA".
+
 Thu 15 Feb 2001 18:51 Peter Gerwinski <peter@gerwinski.de>
 
         * gpapa.c (gpapa_refresh_public_keyring): refresh the secret
