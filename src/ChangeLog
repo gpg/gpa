@@ -1,5 +1,11 @@
 2003-01-08  Miguel Coca  <mcoca@gnu.org>
 
+	* expirydlg.c (gpa_expiry_dialog_run): Fix label typo.
+	(gpa_expiry_dialog_run): Use a GtkCalendar for choosing the
+	expiration date.
+	(expire_date_toggled_cb): New.
+	(expiry_ok): Change to use the calendar.
+
 	* gpafilesel.c, gpafilesel.h: Remove.
 	
 	* Makefile.am (gpa_SOURCES): Remove gpafilesel.{c,h}

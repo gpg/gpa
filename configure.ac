@@ -151,7 +151,23 @@ GNUPG_CHECK_TYPEDEF(u32, HAVE_U32_TYPEDEF)
 
 if test "$GCC" = yes; then
     if test "$USE_MAINTAINER_MODE" = "yes"; then
-        CFLAGS="$CFLAGS -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
+        # FIXME:
+	#
+        # Should have -Wshadow here too, but it causes too many warnings
+        # along with GTK+, due to:
+        #
+        # http://gcc.gnu.org/cgi-bin/gnatsweb.pl?cmd=view&pr=529&database=gcc
+        #
+        # Add it again if that bug is ever fixed.
+	#
+	# The same goes to -Wstrict-prototypes, as it causes too many warnings
+	# in gtkitemfactory.h:51 (see comment in the code for the reason).
+	#
+	# All those warnings make it difficult to tell apart real GPA
+	# warnings.
+	#
+	# CFLAGS="$CFLAGS -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
+        CFLAGS="$CFLAGS -Wall -Wcast-align"
     else
         CFLAGS="$CFLAGS -Wall"
     fi

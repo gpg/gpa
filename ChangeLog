@@ -1,5 +1,9 @@
 2003-01-08  Miguel Coca  <mcoca@gnu.org>
 
+	* configure.ac: Remove some flags from the maintainer's CFLAGS to avoid
+	a ton of warnings due to bugs in gcc and GTK+ (see bug report at
+	http://gcc.gnu.org/cgi-bin/gnatsweb.pl?cmd=view&pr=529&database=gcc).
+	
 	* configure.ac: Go back to GPGME 0.4.0 for the moment.
 
 2002-12-29  Miguel Coca  <mcoca@gnu.org>

@@ -35,8 +35,8 @@ typedef struct {
   GtkWidget * radio_never;
   GtkWidget * radio_date;
 
-  /* The date entry field */
-  GtkWidget * entry_date;
+  /* The calendar field */
+  GtkWidget * calendar;
 } GPAExpiryDialog;
 
 
@@ -51,13 +51,15 @@ expiry_ok (GPAExpiryDialog * dialog, GDate **new_date)
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_date)))
     {
-      *new_date = g_date_new ();
-      g_date_set_parse (*new_date,
-			gtk_entry_get_text (GTK_ENTRY (dialog->entry_date)));
+      gint day, month, year;
+      gtk_calendar_get_date (GTK_CALENDAR (dialog->calendar),
+                             &year, &month, &day);
+
+      *new_date = g_date_new_dmy (day, month+1, year);
 
       if (!g_date_valid (*new_date))
 	{
-	  /* FIXME: This error message should be more informative */
+	  /* Can't happen */
 	  gpa_window_error (_("Please provide a correct date."),
                             dialog->window);
 	  result = FALSE;
@@ -77,6 +79,14 @@ expiry_ok (GPAExpiryDialog * dialog, GDate **new_date)
   return result;
 } /* expiry_ok */
 
+static void
+expire_date_toggled_cb (GtkToggleButton *togglebutton, gpointer user_data)
+{
+  GtkWidget *calendar = user_data;
+  
+  gtk_widget_set_sensitive (calendar,
+                            gtk_toggle_button_get_active (togglebutton));
+}
 
 /* Run the expiry date dialog as a modal dialog and return TRUE and set
  * (*new_date) to the (newly allocated) new expiry date if the user
@@ -89,8 +99,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpgmeKey key, GDate ** new_date)
   GtkWidget * window;
   GtkWidget * vbox;
   GtkWidget * radio;
-  GtkWidget * hbox;
-  GtkWidget * entry;
+  GtkWidget * calendar;
   GtkAccelGroup * accel_group;
   unsigned long expiry_date;
 
@@ -98,7 +107,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpgmeKey key, GDate ** new_date)
 
   accel_group = gtk_accel_group_new ();
 
-  window = gtk_dialog_new_with_buttons (_("Change expiry data"),
+  window = gtk_dialog_new_with_buttons (_("Change expiry date"),
                                         GTK_WINDOW (parent),
                                         GTK_DIALOG_MODAL,
                                         GTK_STOCK_OK,
@@ -120,32 +129,34 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpgmeKey key, GDate ** new_date)
   dialog.radio_never = radio;
   gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-
-
   radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio),
-					    accel_group, _("_expire on"));
+					    accel_group, _("_expire on:"));
   dialog.radio_date = radio;
-  gtk_box_pack_start (GTK_BOX (hbox), radio, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, FALSE, 0);
 
-  entry = gtk_entry_new ();
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  dialog.entry_date = entry;
-  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
+  calendar = gtk_calendar_new ();
+  dialog.calendar = calendar;
+  /* Disable the calendar by default */
+  gtk_widget_set_sensitive (calendar, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), calendar, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (dialog.radio_date), "toggled",
+                    (GCallback) expire_date_toggled_cb, calendar);
 
   expiry_date = gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0);
   
   if (expiry_date > 0)
     {
-      gchar *buffer;
-      buffer = gpa_expiry_date_string (expiry_date);
-      gtk_entry_set_text (GTK_ENTRY (entry), buffer);
-      g_free (buffer);
-
+      GDate tmp;
+      g_date_set_time (&tmp, expiry_date);
+      gtk_calendar_select_month (GTK_CALENDAR (calendar),
+                                 g_date_get_month (&tmp)-1,
+                                 g_date_get_year (&tmp));
+      gtk_calendar_select_day (GTK_CALENDAR (calendar),
+                               g_date_get_day (&tmp));
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog.radio_date),
 				    TRUE);
-    } /* if */
+    }
   else
     {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog.radio_never),
