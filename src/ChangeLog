@@ -1,5 +1,17 @@
 2001-01-30  Bernhard Herzog  <bh@intevation.de>
 
+	* ownertrustdlg.c: Add comments
+	(ownertrust_ok):
+	(ownertrust_cancel): Destroy the dialog window
+	(gpa_ownertrust_run_dialog):
+	(ownertrust_destroy): Add a destroy event handler and quit the
+	recursive main loop there.
+	(ownertrust_delete_event): Removed because the default handler
+	does exactly what we need now.
+	(gpa_ownertrust_run_dialog): Use gpa_window_show_centered instead
+	of gpa_widget_show and use gtk_window_set_modal to get a modal
+	dialog
+
 	* keyeditdlg.c (gpa_key_edit_dialog_run):
 	(key_edit_destroy): Add a destroy event handler and quit the
 	recursive main loop there.
