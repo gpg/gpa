@@ -5,9 +5,11 @@
 
  - Dialogs: Set them up to find their size and position independently of the
    window manager!
+     wk: Why?
 
  - File dialogs: Let them _not_ be placed via mouse! Let them get to their
    standard position as every dialog else.
+     wk: Why?
 
  - File dialogs: Initialization!
 
@@ -19,6 +21,8 @@
    a lot of information that's not needed. It should be replaced by three
    independent dialogs, every one specialized for its own purpose. (Hell,
    GPA should be written in a _really_ object-oriented language...!)
+     wk GTK+ is implements an complete messaging and inheritance system;
+	aka OO.
 
  ? File clist: The file status isn't correctly recognized. Why?
 
@@ -65,8 +69,6 @@
 
  - Tips dialog and license dialog: Instead of texts shown now, insert file
    contents.
-
- ? Show version information.
 
  ? Show warranty information.
 

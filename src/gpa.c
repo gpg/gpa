@@ -19,10 +19,23 @@
  */
 
 #include <config.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <assert.h>
+
 #include <gdk/gdkkeysyms.h>
 #include <glib.h>
 #include <gtk/gtk.h>
+
 #include <gpapa.h>
+
+
+#include "argparse.h"
+#include "stringhelp.h"
+
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
@@ -31,9 +44,40 @@
 #include "optionsmenu.h"
 #include "helpmenu.h"
 
-gchar *namesKeyserver[1] = {
-  N_("blackhole.pca.dfn.de")
-};				/*!!! */
+
+gchar *writtenSigValidity[3] = {
+  N_("unknown"),
+  N_("!INVALID!"),
+  N_("valid")
+};
+
+enum cmd_and_opt_values { aNull = 0,
+    oQuiet	  = 'q',
+    oVerbose	  = 'v',
+
+    oNoVerbose = 500,
+    oOptions,
+    oDebug,
+    oDebugAll,
+    oNoGreeting,
+    oNoOptions,
+    oHomedir,
+    oTooltipKludge,
+aTest };
+
+
+static ARGPARSE_OPTS opts[] = {
+
+    { 301, NULL, 0, N_("@Options:\n ") },
+
+    { oVerbose, "verbose",   0, N_("verbose") },
+    { oQuiet,	"quiet",     0, N_("be somewhat more quiet") },
+    { oOptions, "options"  , 2, N_("read options from file")},
+    { oDebug,	"debug"     ,4|16, N_("set debugging flags")},
+    { oDebugAll, "debug-all" ,0, N_("enable full debugging")},
+    { oTooltipKludge, "tooltip-kludge", 0, "enable WM workaround"},
+{0} };
+
 
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain;
@@ -48,11 +92,196 @@ GList *global_defaultRecipients = NULL;
 gchar *global_homeDirectory;
 gchar *global_defaultKey;
 
-gchar *writtenSigValidity[3] = {
-  N_("unknown"),
-  N_("!INVALID!"),
-  N_("valid")
-};
+GtkWidget *gpa_windowMain_new (char *title);
+
+static const char *
+my_strusage( int level )
+{
+    const char *p;
+    switch( level ) {
+      case 11: p = "gpa";
+	break;
+      case 13: p = VERSION; break;
+      /*case 17: p = PRINTABLE_OS_NAME; break;*/
+      case 19: p =
+	    _("Please report bugs to <gpa-bugs@gnu.org>.\n");
+	break;
+      case 1:
+      case 40:	p =
+	    _("Usage: gpa [options] (-h for help)");
+	break;
+      case 41:	p =
+	    _("Syntax: gpa [options]\n"
+	      "Graphical frontend to GnuPG\n");
+	break;
+
+      default:	p = NULL;
+    }
+    return p;
+}
+
+
+
+static void
+i18n_init (void)
+{
+  #ifdef USE_SIMPLE_GETTEXT
+    set_gettext_file( PACKAGE );
+  #else
+  #ifdef ENABLE_NLS
+    #ifdef HAVE_LC_MESSAGES
+       setlocale( LC_TIME, "" );
+       setlocale( LC_MESSAGES, "" );
+    #else
+       setlocale( LC_ALL, "" );
+    #endif
+    bindtextdomain( PACKAGE, GPA_LOCALEDIR );
+    textdomain( PACKAGE );
+  #endif
+  #endif
+}
+
+int
+main (int argc, char **argv )
+{
+    ARGPARSE_ARGS pargs;
+    int orig_argc;
+    char **orig_argv;
+    FILE *configfp = NULL;
+    char *configname = NULL;
+    unsigned configlineno;
+    int parse_debug = 0;
+    int default_config =1;
+    int greeting = 0;
+    int nogreeting = 0;
+
+    set_strusage( my_strusage );
+    /*log_set_name ("gpa"); notyet implemented in logging.c */
+    i18n_init ();
+    gtk_init (&argc, &argv);
+
+    opt.homedir = getenv("GNUPGHOME");
+    if( !opt.homedir || !*opt.homedir ) {
+      #ifdef HAVE_DRIVE_LETTERS
+	opt.homedir = "c:/gnupg";
+      #else
+	opt.homedir = "~/.gnupg";
+      #endif
+    }
+
+    /* check whether we have a config file on the commandline */
+    orig_argc = argc;
+    orig_argv = argv;
+    pargs.argc = &argc;
+    pargs.argv = &argv;
+    pargs.flags= 1|(1<<6);  /* do not remove the args, ignore version */
+    while( arg_parse( &pargs, opts) ) {
+	if( pargs.r_opt == oDebug || pargs.r_opt == oDebugAll )
+	    parse_debug++;
+	else if( pargs.r_opt == oOptions ) {
+	    /* yes there is one, so we do not try the default one, but
+	     * read the option file when it is encountered at the commandline
+	     */
+	    default_config = 0;
+	}
+	else if( pargs.r_opt == oNoOptions )
+	    default_config = 0; /* --no-options */
+	else if( pargs.r_opt == oHomedir )
+	    opt.homedir = pargs.r.ret_str;
+    }
+
+    if( default_config )
+	configname = make_filename(opt.homedir, "gpa.conf", NULL );
+
+
+    argc = orig_argc;
+    argv = orig_argv;
+    pargs.argc = &argc;
+    pargs.argv = &argv;
+    pargs.flags=  1;  /* do not remove the args */
+  next_pass:
+    if( configname ) {
+	configlineno = 0;
+	configfp = fopen( configname, "r" );
+	if( !configfp ) {
+	    if( default_config ) {
+		if( parse_debug )
+		    log_info(_("NOTE: no default option file `%s'\n"),
+							    configname );
+	    }
+	    else {
+		log_error(_("option file `%s': %s\n"),
+				    configname, strerror(errno) );
+		exit(2);
+	    }
+	    free(configname); configname = NULL;
+	}
+	if( parse_debug && configname )
+	    log_info(_("reading options from `%s'\n"), configname );
+	default_config = 0;
+    }
+
+    while( optfile_parse( configfp, configname, &configlineno,
+						&pargs, opts) ) {
+	switch( pargs.r_opt ) {
+	  case oQuiet: opt.quiet = 1; break;
+	  case oVerbose: opt.verbose++; break;
+
+	  case oDebug: opt.debug |= pargs.r.ret_ulong; break;
+	  case oDebugAll: opt.debug = ~0; break;
+
+	  case oOptions:
+	    /* config files may not be nested (silently ignore them) */
+	    if( !configfp ) {
+		free(configname);
+		configname = xstrdup(pargs.r.ret_str);
+		goto next_pass;
+	    }
+	    break;
+	  case oNoGreeting: nogreeting = 1; break;
+	  case oNoVerbose: opt.verbose = 0; break;
+	  case oNoOptions: break; /* no-options */
+	  case oHomedir: opt.homedir = pargs.r.ret_str; break;
+	  case oTooltipKludge: opt.tooltip_kludge = 1; break;
+
+	  default : pargs.err = configfp? 1:2; break;
+	}
+    }
+    if( configfp ) {
+	fclose( configfp );
+	configfp = NULL;
+	free(configname); configname = NULL;
+	goto next_pass;
+    }
+    free( configname ); configname = NULL;
+    if( log_get_errorcount(0) )
+	exit(2);
+    if( nogreeting )
+	greeting = 0;
+
+    if( greeting ) {
+	fprintf(stderr, "%s %s; %s\n",
+			strusage(11), strusage(13), strusage(14) );
+	fprintf(stderr, "%s\n", strusage(15) );
+    }
+  #ifdef IS_DEVELOPMENT_VERSION
+    log_info("NOTE: this is a development version!\n");
+  #endif
+
+
+    /* fixme: read from options and add at least one default */
+    opt.keyserver_names = xcalloc (3, sizeof *opt.keyserver_names );
+    opt.keyserver_names[0] = "blackhole.pca.dfn.de";
+    opt.keyserver_names[1] = "horowitz.surfnet.nl";
+
+
+    global_windowMain = gpa_windowMain_new (_("GNU Privacy Assistant"));
+    gtk_signal_connect (GTK_OBJECT (global_windowMain), "delete_event",
+			GTK_SIGNAL_FUNC (file_quit), NULL);
+    gtk_widget_show_all (global_windowMain);
+    gtk_main ();
+    return 0;
+}
 
 gchar *
 getStringForSigValidity (GpapaSigValidity sigValidity)
@@ -366,98 +595,62 @@ delete_event (GtkWidget * widget, GdkEvent * event, gpointer data)
 GtkWidget *
 gpa_menubar_new (GtkWidget * window)
 {
-/* var */
   GtkItemFactory *itemFactory;
   GtkItemFactoryEntry menuItem[] = {
-    {_("/_File"), NULL, NULL, 0, "<Branch>"}
-    ,
-    {_("/File/_Open"), "<control>O", file_open, 0, NULL}
-    ,
-    {_("/File/S_how Detail"), "<control>H", file_showDetail, 0, NULL}
-    ,
-    {_("/File/sep1"), NULL, NULL, 0, "<Separator>"}
-    ,
-    {_("/File/_Sign"), NULL, file_sign, 0, NULL}
-    ,
-    {_("/File/_Encrypt"), NULL, file_encrypt, 0, NULL}
-    ,
-    {_("/File/E_ncrypt as"), NULL, file_encryptAs, 0, NULL}
-    ,
-    {_("/File/_Protect by Password"), NULL, file_protect, 0, NULL}
-    ,
-    {_("/File/P_rotect as"), NULL, file_protectAs, 0, NULL}
-    ,
-    {_("/File/_Decrypt"), NULL, file_decrypt, 0, NULL}
-    ,
-    {_("/File/Decrypt _as"), NULL, file_decryptAs, 0, NULL}
-    ,
-    {_("/File/sep2"), NULL, NULL, 0, "<Separator>"}
-    ,
-    {_("/File/_Close"), NULL, file_close, 0, NULL}
-    ,
-    {_("/File/_Quit"), "<control>Q", file_quit, 0, NULL}
-    ,
-    {_("/_Keys"), NULL, NULL, 0, "<Branch>"}
-    ,
-    {_("/Keys/Open _public Keyring"), "<control>K", keys_openPublic, 0, NULL}
-    ,
-    {_("/Keys/Open _secret Keyring"), NULL, keys_openSecret, 0, NULL}
-    ,
-    {_("/Keys/sep1"), NULL, NULL, 0, "<Separator>"}
-    ,
-    {_("/Keys/_Generate Key"), NULL, keys_generateKey, 0, NULL}
-    ,
+    {_("/_File"), NULL, NULL, 0, "<Branch>"},
+    {_("/File/_Open"), "<control>O", file_open, 0, NULL},
+    {_("/File/S_how Detail"), "<control>H", file_showDetail, 0, NULL},
+    {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
+    {_("/File/_Sign"), NULL, file_sign, 0, NULL},
+    {_("/File/_Encrypt"), NULL, file_encrypt, 0, NULL},
+    {_("/File/E_ncrypt as"), NULL, file_encryptAs, 0, NULL},
+    {_("/File/_Protect by Password"), NULL, file_protect, 0, NULL},
+    {_("/File/P_rotect as"), NULL, file_protectAs, 0, NULL},
+    {_("/File/_Decrypt"), NULL, file_decrypt, 0, NULL},
+    {_("/File/Decrypt _as"), NULL, file_decryptAs, 0, NULL},
+    {_("/File/sep2"), NULL, NULL, 0, "<Separator>"},
+    {_("/File/_Close"), NULL, file_close, 0, NULL},
+    {_("/File/_Quit"), "<control>Q", file_quit, 0, NULL},
 
-      {_("/Keys/Generate _Revocation Certificate"), NULL,
-     keys_generateRevocation, 0, NULL}
-    ,
-    {_("/Keys/_Import Keys"), NULL, keys_import, 0, NULL}
-    ,
-    {_("/Keys/Import _Ownertrust"), NULL, keys_importOwnertrust, 0, NULL}
-    ,
-    {_("/Keys/_Update Trust Database"), NULL, keys_updateTrust, 0, NULL}
-    ,
-    {_("/_Options"), NULL, NULL, 0, "<Branch>"}
-    ,
-    {_("/Options/_Keyserver"), NULL, options_keyserver, 0, NULL}
-    ,
-    {_("/Options/Default _Recipients"), NULL, options_recipients, 0, NULL}
-    ,
-    {_("/Options/_Default Key"), NULL, options_key, 0, NULL}
-    ,
-    {_("/Options/_Home Directory"), NULL, options_homedir, 0, NULL}
-    ,
-    {_("/Options/sep1"), NULL, NULL, 0, "<Separator>"}
-    ,
-    {_("/Options/Online _tips"), NULL, options_tips, 0, NULL}
-    ,
-    {_("/Options/_Load Options File"), NULL, options_load, 0, NULL}
-    ,
-    {_("/Options/_Save Options File"), NULL, options_save, 0, NULL}
-    ,
-    {_("/_Help"), NULL, NULL, 0, "<Branch>"}
-    ,
-    {_("/Help/_Version"), NULL, help_version, 0, NULL}
-    ,
-    {_("/Help/_License"), NULL, help_license, 0, NULL}
-    ,
-    {_("/Help/_Warranty"), NULL, help_warranty, 0, NULL}
-    ,
+    {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
+    {_("/Keys/Open _public Keyring"), "<control>K", keys_openPublic, 0, NULL},
+    {_("/Keys/Open _secret Keyring"), NULL, keys_openSecret, 0, NULL},
+    {_("/Keys/sep1"), NULL, NULL, 0, "<Separator>"},
+    {_("/Keys/_Generate Key"), NULL, keys_generateKey, 0, NULL},
+
+    {_("/Keys/Generate _Revocation Certificate"), NULL,
+					 keys_generateRevocation, 0, NULL},
+    {_("/Keys/_Import Keys"), NULL, keys_import, 0, NULL},
+    {_("/Keys/Import _Ownertrust"), NULL, keys_importOwnertrust, 0, NULL},
+    {_("/Keys/_Update Trust Database"), NULL, keys_updateTrust, 0, NULL},
+
+    {_("/_Options"), NULL, NULL, 0, "<Branch>"},
+    {_("/Options/_Keyserver"), NULL, options_keyserver, 0, NULL},
+    {_("/Options/Default _Recipients"), NULL, options_recipients, 0, NULL},
+    {_("/Options/_Default Key"), NULL, options_key, 0, NULL},
+    {_("/Options/_Home Directory"), NULL, options_homedir, 0, NULL},
+    {_("/Options/sep1"), NULL, NULL, 0, "<Separator>"},
+    {_("/Options/Online _tips"), NULL, options_tips, 0, NULL},
+    {_("/Options/_Load Options File"), NULL, options_load, 0, NULL},
+    {_("/Options/_Save Options File"), NULL, options_save, 0, NULL},
+
+    {_("/_Help"), NULL, NULL, 0, "<Branch>"},
+    {_("/Help/_About"), NULL, help_about, 0, NULL},
+    {_("/Help/_License"), NULL, help_license, 0, NULL},
+    {_("/Help/_Warranty"), NULL, help_warranty, 0, NULL},
     {_("/Help/_Help"), "F1", help_help, 0, NULL}
   };
   gint menuItems = sizeof (menuItem) / sizeof (menuItem[0]);
   GtkAccelGroup *accelGroup;
-/* objects */
   GtkWidget *menubar;
-/* commands */
+
   accelGroup = gtk_accel_group_new ();
-  itemFactory =
-    gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accelGroup);
+  itemFactory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accelGroup);
   gtk_item_factory_create_items (itemFactory, menuItems, menuItem, NULL);
   gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
   menubar = gtk_item_factory_get_widget (itemFactory, "<main>");
-  return (menubar);
-} /* gpa_menubar_new */
+  return menubar;
+}
 
 void
 gpa_popupMenu_init (void)
@@ -625,41 +818,9 @@ gpa_windowMain_new (char *title)
   gpa_homeDirSelect_init (_("Set home directory"));
   gpa_loadOptionsSelect_init (_("Load options file"));
   gpa_saveOptionsSelect_init (_("Save options file"));
-  global_keyserver = namesKeyserver[0];
+  assert( opt.keyserver_names[0] );
+  global_keyserver = opt.keyserver_names[0];  /* FIXME: bad style */
   global_defaultKey = NULL;
   return (window);
 } /* gpa_windowMain_new */
-
-
-static void
-i18n_init (void)
-{
-  #ifdef USE_SIMPLE_GETTEXT
-    set_gettext_file( PACKAGE );
-  #else
-  #ifdef ENABLE_NLS
-    #ifdef HAVE_LC_MESSAGES
-       setlocale( LC_TIME, "" );
-       setlocale( LC_MESSAGES, "" );
-    #else
-       setlocale( LC_ALL, "" );
-    #endif
-    bindtextdomain( PACKAGE, GPA_LOCALEDIR );
-    textdomain( PACKAGE );
-  #endif
-  #endif
-}
-
-int
-main (int params, char *param[])
-{
-  i18n_init ();
-  gtk_init (&params, &param);
-  global_windowMain = gpa_windowMain_new (_("GNU Privacy Assistant"));
-  gtk_signal_connect (GTK_OBJECT (global_windowMain), "delete_event",
-		      GTK_SIGNAL_FUNC (file_quit), NULL);
-  gtk_widget_show_all (global_windowMain);
-  gtk_main ();
-  return (0);
-} /* main */
 

@@ -1,5 +1,5 @@
 /* gtktools.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include <stdlib.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
@@ -41,9 +42,18 @@ gpa_widget_set_centered (GtkWidget * widget, GtkWidget * parent)
 void
 gpa_widget_show (GtkWidget * widget, GtkWidget * parent, gchar * tip)
 {
-  gtk_widget_show_all (widget);
-  gpa_widget_set_centered (widget, parent);
-  gpa_windowTip_show (tip);
+    if ( opt.tooltip_kludge ) {
+	/* Some windowmangers minimizes the new windows, so we
+	 * use this workaround to show them */
+	gpa_widget_set_centered (widget, parent);
+	gpa_windowTip_show (tip);
+	gtk_widget_show_all (widget);
+    }
+    else {
+	gtk_widget_show_all (widget);
+	gpa_widget_set_centered (widget, parent);
+	gpa_windowTip_show (tip);
+    }
 }				/* gpa_widget_show */
 
 void

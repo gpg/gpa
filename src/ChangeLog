@@ -1,3 +1,15 @@
+2000-05-24 10:01:06  Werner Koch  (wk@habibti.openit.de)
+
+  * gpa.c (gpa_menubar_new): Reformated menu list.
+  * helpmenu.c (help_version): renamed to ...
+  (help_about): .. this and implemented.
+
+  * gpa.c, gpa.h (namesKeyservers): Replaced by ..
+  (main): ... opt.keyserver_names and malloced array.
+  * optionsmenu.c (options_keyserver): Put all keyservers into the list.
+
+  * gtktools.c (gpa_widget_show): Kludge for Sawmill and Windowmaker.
+
 2000-05-16 19:57:28  Werner Koch  (wk@habibti.openit.de)
 
   Ran "indent -gnu -sc" on all source files.

@@ -1,5 +1,5 @@
 /* optionsmenu.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include <stdlib.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gpapa.h>
@@ -179,7 +180,15 @@ options_keyserver (void)
 			      GTK_COMBO (comboServer)->entry, accelGroup,
 			      _("_Key server: "));
   gtk_combo_set_value_in_list (GTK_COMBO (comboServer), FALSE, FALSE);
-  contentsServer = g_list_append (contentsServer, namesKeyserver[0]);	/*!!! */
+
+  {  int i;
+
+     for (i=0; opt.keyserver_names[i]; i++ ) {
+	contentsServer = g_list_append (contentsServer,
+					opt.keyserver_names[i]);
+    }
+  }
+
   gtk_combo_set_popdown_strings (GTK_COMBO (comboServer), contentsServer);
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboServer)->entry),
 		      global_keyserver);

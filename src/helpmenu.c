@@ -1,5 +1,5 @@
 /* helpmenu.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -25,10 +25,58 @@
 #include "gtktools.h"
 
 void
-help_version (void)
+help_about (void)
 {
-  g_print (_("Show Version Information\n"));	/*!!! */
-}				/* help_version */
+  GtkWidget *dialog;
+  GtkWidget *vbox;
+  GtkWidget *bbox;
+  GtkWidget *frame;
+  GtkWidget *label;
+  GtkWidget *button;
+
+  dialog = gtk_dialog_new ();
+  gtk_window_set_title (GTK_WINDOW (dialog), _("About GPA"));
+  gtk_window_set_policy (GTK_WINDOW (dialog), FALSE, FALSE, FALSE);
+  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
+  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+		      GTK_SIGNAL_FUNC (gtk_widget_destroy),
+		      GTK_OBJECT (dialog));
+
+  vbox = gtk_vbox_new (FALSE, 1);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+  gtk_container_add (GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), vbox);
+
+  frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+  gtk_container_set_border_width (GTK_CONTAINER (frame), 1);
+  gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, TRUE, 1);
+
+  vbox = gtk_vbox_new (FALSE, 1);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 1);
+  gtk_container_add (GTK_CONTAINER (frame), vbox);
+
+  label = gtk_label_new ( "GNU Privacy Assistant v" VERSION );
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 2);
+
+  label = gtk_label_new (_("See http://www.gnupg.org for news"));
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 2);
+
+  bbox = gtk_hbutton_box_new();
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area), bbox,
+							  TRUE, TRUE, 5);
+  gtk_button_box_set_child_size(GTK_BUTTON_BOX(bbox), 80, 0);
+  gtk_button_box_set_spacing(GTK_BUTTON_BOX(bbox), 10);
+
+  button = gtk_button_new_with_label(_("OK"));
+  gtk_container_add(GTK_CONTAINER(bbox), button);
+  gtk_signal_connect_object(GTK_OBJECT (button), "clicked",
+			    GTK_SIGNAL_FUNC(gtk_widget_destroy),
+			    GTK_OBJECT(dialog));
+
+  gtk_widget_show_all (dialog);
+}
+
+
 
 void
 help_license (void)
@@ -92,16 +140,16 @@ help_license (void)
   gtk_container_add (GTK_CONTAINER (windowLicense), vboxLicense);
   gtk_widget_show_all (windowLicense);
   gpa_widget_set_centered (windowLicense, global_windowMain);
-}				// help_license
+}
 
 void
 help_warranty (void)
 {
-  g_print (_("Show Warranty Information\n"));	/*!!! */
+  g_print (_("Show Warranty Information\n"));   /*!!! */
 }				/* help_warranty */
 
 void
 help_help (void)
 {
-  g_print (_("Show Help Text\n"));	/*!!! */
+  g_print (_("Show Help Text\n"));      /*!!! */
 }				/* help_help */

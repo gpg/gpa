@@ -26,7 +26,37 @@
 #ifndef LIBJNLIB_CONFIG_H
 #define LIBJNLIB_CONFIG_H
 
-#define LIBJNLIB_LOGGING_H 1 /* don't include the jnlib logging */
+#include "xmalloc.h"
+#include "logging.h"
+
+
+#define N_(a)	(a)
+#ifdef USE_SIMPLE_GETTEXT
+  int set_gettext_file( const char *filename );
+  const char *gettext( const char *msgid );
+
+  #define _(a) gettext (a)
+  #define N_(a) (a)
+
+#else
+#ifdef HAVE_LOCALE_H
+  #include <locale.h>
+#endif
+
+#ifdef ENABLE_NLS
+  #include <libintl.h>
+  #define _(a) gettext (a)
+  #ifdef gettext_noop
+    #define N_(a) gettext_noop (a)
+  #else
+    #define N_(a) (a)
+  #endif
+#else
+  #define _(a) (a)
+  #define N_(a) (a)
+#endif
+#endif /* !USE_SIMPLE_GETTEXT */
+
 
 #define jnlib_xmalloc(a)    xmalloc( (a) )
 #define jnlib_xcalloc(a,b)  xcalloc( (a), (b) )

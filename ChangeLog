@@ -1,3 +1,8 @@
+2000-05-24 09:04:44  Werner Koch  (wk@habibti.openit.de)
+
+	* configure.in: Removed -Wshadow because this hits glib's usage of
+	"index'.
+
 2000-05-17 10:25:54  Werner Koch  (wk@habibti.openit.de)
 
 	* TODO: Updated by Markus

@@ -117,7 +117,7 @@ dnl
 
 
 if test "$GCC" = yes; then
-    CFLAGS="$CFLAGS -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
+    CFLAGS="$CFLAGS -Wall -Wcast-align -Wstrict-prototypes"
 fi
 
 AC_OUTPUT_COMMANDS([

@@ -1,3 +1,11 @@
+2000-05-24 08:58:15  Werner Koch  (wk@habibti.openit.de)
+
+	* logging.c (log_get_errorcount): New.
+
+2000-05-24 08:44:47  Werner Koch  (wk@habibti.openit.de)
+
+	* stringhelp.c: Added a few filename related helper functions.
+
 2000-05-11 18:04:43  Werner Koch  (wk@habibti.openit.de)
 
 	* xmalloc.c (xstrcat2):  Replaced stpcpy to quickly address W32

@@ -32,6 +32,11 @@ unsigned int trim_trailing_chars( unsigned char *line, unsigned len,
 unsigned int trim_trailing_ws( unsigned char *line, unsigned len );
 
 
+char *make_basename(const char *filepath);
+char *make_dirname(const char *filepath);
+char *make_filename( const char *first_part, ... );
+int compare_filenames( const char *a, const char *b );
+
 #ifndef HAVE_MEMICMP
 int memicmp( const char *a, const char *b, size_t n );
 #endif

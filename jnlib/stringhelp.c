@@ -159,6 +159,109 @@ trim_trailing_ws( byte *line, unsigned len )
 }
 
 
+/***************
+ * Extract from a given path the filename component.
+ *
+ */
+char *
+make_basename(const char *filepath)
+{
+    char *p;
+
+    if ( !(p=strrchr(filepath, '/')) )
+      #ifdef HAVE_DRIVE_LETTERS
+	if ( !(p=strrchr(filepath, '\\')) )
+	    if ( !(p=strrchr(filepath, ':')) )
+      #endif
+	      {
+		return jnlib_xstrdup(filepath);
+	      }
+
+    return jnlib_xstrdup(p+1);
+}
+
+
+
+/***************
+ * Extract from a given filename the path prepended to it.
+ * If their isn't a path prepended to the filename, a dot
+ * is returned ('.').
+ *
+ */
+char *
+make_dirname(const char *filepath)
+{
+    char *dirname;
+    int  dirname_length;
+    char *p;
+
+    if ( !(p=strrchr(filepath, '/')) )
+      #ifdef HAVE_DRIVE_LETTERS
+	if ( !(p=strrchr(filepath, '\\')) )
+	    if ( !(p=strrchr(filepath, ':')) )
+      #endif
+	      {
+		return jnlib_xstrdup(".");
+	      }
+
+    dirname_length = p-filepath;
+    dirname = jnlib_xmalloc(dirname_length+1);
+    strncpy(dirname, filepath, dirname_length);
+    dirname[dirname_length] = 0;
+
+    return dirname;
+}
+
+
+
+/****************
+ * Construct a filename from the NULL terminated list of parts.
+ * Tilde expansion is done here.
+ */
+char *
+make_filename( const char *first_part, ... )
+{
+    va_list arg_ptr ;
+    size_t n;
+    const char *s;
+    char *name, *home, *p;
+
+    va_start( arg_ptr, first_part ) ;
+    n = strlen(first_part)+1;
+    while( (s=va_arg(arg_ptr, const char *)) )
+	n += strlen(s) + 1;
+    va_end(arg_ptr);
+
+    home = NULL;
+    if( *first_part == '~' && first_part[1] == '/'
+			   && (home = getenv("HOME")) && *home )
+	n += strlen(home);
+
+    name = jnlib_xmalloc(n);
+    p = home ? stpcpy(stpcpy(name,home), first_part+1)
+	     : stpcpy(name, first_part);
+    va_start( arg_ptr, first_part ) ;
+    while( (s=va_arg(arg_ptr, const char *)) )
+	p = stpcpy(stpcpy(p,"/"), s);
+    va_end(arg_ptr);
+
+    return name;
+}
+
+
+int
+compare_filenames( const char *a, const char *b )
+{
+    /* ? check whether this is an absolute filename and
+     * resolve symlinks?
+     */
+  #ifdef HAVE_DRIVE_LETTERS
+    return stricmp(a,b);
+  #else
+    return strcmp(a,b);
+  #endif
+}
+
 
 /*********************************************
  ********** missing string functions *********

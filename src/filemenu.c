@@ -461,11 +461,12 @@ file_sign_sign (gpointer param)
       return;
     }				/* else */
   armor = (GpapaArmor *) xmalloc (sizeof (GpapaArmor));
-  if (checkerArmor)
+  if (checkerArmor) {
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkerArmor)))
       *armor = GPAPA_ARMOR;
     else
       *armor = GPAPA_NO_ARMOR;
+  }
   errorCode = gtk_clist_get_text (GTK_CLIST (clistWho), *as, 1, &keyID);
   free (as);
   newParam = (gpointer *) xmalloc (5 * sizeof (gpointer));

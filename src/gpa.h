@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 #include <gpapa.h>
 #include "xmalloc.h"
+#include "logging.h"
 /*!!!
 #include <pgg.h>
 !!!*/
@@ -55,7 +56,19 @@
 #endif
 #endif /* !USE_SIMPLE_GETTEXT */
 
-extern gchar *namesKeyserver[1];	/*!!! */
+
+
+struct {
+    int verbose;
+    int quiet;
+    unsigned int debug;
+    char *homedir;
+    char **keyserver_names;
+    int tooltip_kludge;
+
+} opt;
+
+
 
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;

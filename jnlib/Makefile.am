@@ -11,6 +11,8 @@ noinst_LIBRARIES = libjnlib.a
 libjnlib_a_SOURCES = libjnlib-config.h	       \
 		     xmalloc.c xmalloc.h       \
 		     stringhelp.c stringhelp.h \
+		     argparse.c argparse.h     \
+		     logging.c logging.c       \
 		     types.h mischelp.h
 
 
