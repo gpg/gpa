@@ -423,6 +423,10 @@ gpa_keylist_update_list (GtkWidget * clist)
    * changing user defined widths every time the list is updated */
   if (keylist->column_defs_changed)
     {
+      /* First, make sure that the size changes in the title buttons are
+       * correctly accounted for */
+      gtk_container_check_resize (GTK_CONTAINER (keylist->clist));
+
       for (i = 0; i < keylist->ncolumns; i++)
 	{
 	  width = gtk_clist_optimal_column_width (GTK_CLIST (keylist->clist),
