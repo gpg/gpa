@@ -22,6 +22,47 @@
 #define ENCRYPTDLG_H
 
 #include <gtk/gtk.h>
-GList * gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files);
+#include "options.h"
+
+/* GObject stuff */
+#define GPA_FILE_ENCRYPT_DIALOG_TYPE	  (gpa_file_encrypt_dialog_get_type ())
+#define GPA_FILE_ENCRYPT_DIALOG(obj)	  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GPA_FILE_ENCRYPT_DIALOG_TYPE, GpaFileEncryptDialog))
+#define GPA_FILE_ENCRYPT_DIALOG_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GPA_FILE_ENCRYPT_DIALOG_TYPE, GpaFileEncryptDialogClass))
+#define GPA_IS_FILE_ENCRYPT_DIALOG(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_FILE_ENCRYPT_DIALOG_TYPE))
+#define GPA_IS_FILE_ENCRYPT_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_FILE_ENCRYPT_DIALOG_TYPE))
+#define GPA_FILE_ENCRYPT_DIALOG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GPA_FILE_ENCRYPT_DIALOG_TYPE, GpaFileEncryptDialogClass))
+
+typedef struct _GpaFileEncryptDialog GpaFileEncryptDialog;
+typedef struct _GpaFileEncryptDialogClass GpaFileEncryptDialogClass;
+
+struct _GpaFileEncryptDialog {
+  GtkDialog parent;
+
+  GtkWidget *clist_keys;
+  GtkWidget *check_sign;
+  GtkWidget *check_armor;
+  GtkWidget *clist_who;
+
+  GpaOptions *options;
+};
+
+struct _GpaFileEncryptDialogClass {
+  GtkDialogClass parent_class;
+};
+
+GType gpa_file_encrypt_dialog_get_type (void) G_GNUC_CONST;
+
+/* API */
+
+GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent,
+					GpaOptions *options);
+
+GList *gpa_file_encrypt_dialog_recipients (GpaFileEncryptDialog *dialog);
+
+gboolean gpa_file_encrypt_dialog_sign (GpaFileEncryptDialog *dialog);
+
+GList *gpa_file_encrypt_dialog_signers (GpaFileEncryptDialog *dialog);
+
+gboolean gpa_file_encrypt_dialog_get_armor (GpaFileEncryptDialog *dialog);
 
 #endif /* ENCRYPTDLG_H */

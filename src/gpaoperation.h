@@ -21,6 +21,7 @@
 #ifndef GPA_OPERATION_H
 #define GPA_OPERATION_H
 
+#include "gpa.h"
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>

@@ -28,7 +28,7 @@
 #include <io.h>
 #endif
 
-#include "i18n.h"
+#include "gpa.h"
 #include "gtktools.h"
 #include "gpgmetools.h"
 #include "gpafiledecryptop.h"
@@ -120,7 +120,8 @@ gpa_file_decrypt_operation_new (GpaOptions *options,
 
 /* Internal */
 
-gchar *destination_filename (const gchar *filename)
+static gchar *
+destination_filename (const gchar *filename)
 {
   gchar *extension, *plain_filename;
   
@@ -146,28 +147,27 @@ static gboolean
 gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 				  const gchar *cipher_filename)
 {
-  GpgmeData cipher, plain;
   GpgmeError err;
   
   op->plain_filename = destination_filename (cipher_filename);
   /* Open the files */
-  op->cipher_fd = gpa_open_input (cipher_filename, &cipher, 
+  op->cipher_fd = gpa_open_input (cipher_filename, &op->cipher, 
 				  GPA_OPERATION (op)->window);
   if (op->cipher_fd == -1)
     {
       return FALSE;
     }
-  op->plain_fd = gpa_open_output (op->plain_filename, &plain,
+  op->plain_fd = gpa_open_output (op->plain_filename, &op->plain,
 				  GPA_OPERATION (op)->window);
   if (op->plain_fd == -1)
     {
-      gpgme_data_release (cipher);
+      gpgme_data_release (op->cipher);
       close (op->cipher_fd);
       return FALSE;
     }
   /* Start the operation */
-  err = gpgme_op_decrypt_start (GPA_OPERATION (op)->context->ctx, cipher, 
-				plain);
+  err = gpgme_op_decrypt_start (GPA_OPERATION (op)->context->ctx, op->cipher, 
+				op->plain);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_warning (err);
@@ -197,7 +197,13 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
 				    GpgmeError err,
 				    GpaFileDecryptOperation *op)
 {
+  /* Do clean up on the operation */
+  gpgme_data_release (op->plain);
+  close (op->plain_fd);
+  gpgme_data_release (op->cipher);
+  close (op->cipher_fd);
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
+  /* Check for error */
   if (err != GPGME_No_Error) 
     {
       /* If an error happened, (or the user canceled) delete the created file

@@ -40,6 +40,7 @@ struct _GpaFileDecryptOperation {
   GpaFileOperation parent;
 
   int cipher_fd, plain_fd;
+  GpgmeData cipher, plain;
   gchar *plain_filename;
 };
 

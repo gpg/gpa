@@ -1,5 +1,6 @@
 /* encryptdlg.c  -  The GNU Privacy Assistant
  *	Copyright (C) 2000, 2001 G-N-U GmbH.
+ *      Copyright (C) 2002, 2003 Miguel Coca.
  *
  * This file is part of GPA
  *
@@ -29,426 +30,108 @@
 #include "gtktools.h"
 #include "gpawidgets.h"
 #include "gpapastrings.h"
+#include "encryptdlg.h"
 
-struct _GPAFileEncryptDialog {
-  GtkWidget *window;
-  GtkWidget *clist_keys;
-  GtkWidget *check_sign;
-  GtkWidget *check_armor;
-  GtkWidget *clist_who;
-  GList *files;
-  GList *encrypted_files;
+/* Internal functions */
+static void select_row_cb (GtkCList *clist, gint row, gint column,
+			   GdkEventButton *event, gpointer user_data);
+static void unselect_row_cb (GtkCList *clist, gint row, gint column,
+			     GdkEventButton *event, gpointer user_data);
+static void toggle_sign_cb (GtkToggleButton *togglebutton, gpointer user_data);
+
+
+/* Properties */
+enum
+{
+  PROP_0,
+  PROP_OPTIONS,
+  PROP_WINDOW,
 };
-typedef struct _GPAFileEncryptDialog GPAFileEncryptDialog;
 
-
-static FILE *
-open_destination_file (const gchar *filename, gboolean armor,
-		       gchar **target_filename, GtkWidget *parent)
-{
-  const gchar *extension;
-  FILE *target;
-  
-  if (!armor)
-    {
-      extension = ".gpg";
-    }
-  else
-    {
-      extension = ".asc";
-    }
-  *target_filename = g_strconcat (filename, extension, NULL);
-  target = gpa_fopen (*target_filename, parent);
-  if (!target)
-    {
-      g_free (*target_filename);
-    }
-  return target;
-}
-
-static GtkResponseType
-ignore_key_trust (GpgmeKey key, GtkWidget *parent)
-{
-  GtkWidget *dialog;
-  GtkWidget *key_info;
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-  GtkWidget *label;
-  GtkWidget *image;
-  GtkResponseType response;
-
-  dialog = gtk_dialog_new_with_buttons (_("Unknown Key"), GTK_WINDOW(parent),
-					GTK_DIALOG_MODAL, 
-					GTK_STOCK_YES, GTK_RESPONSE_YES,
-					GTK_STOCK_NO, GTK_RESPONSE_NO,
-					NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-
-  hbox = gtk_hbox_new (FALSE, 6);
-  image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
-				    GTK_ICON_SIZE_DIALOG);
-  gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
-  vbox = gtk_vbox_new (FALSE, 6);
-  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
-
-  label = gtk_label_new (_("You are going to encrypt a file using "
-			   "the following key:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
-  key_info = gpa_key_info_new (key);
-  gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5);
-  label = gtk_label_new (_("However, it is not certain that the key belongs "
-			   "to that person."));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), 
-			_("Do you <b>really</b> want to use this key?"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
-
-  gtk_widget_show_all (dialog);
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  gtk_widget_destroy (dialog);
-  return response;
-}
+static GObjectClass *parent_class = NULL;
 
 static void
-revoked_key (GpgmeKey key, GtkWidget *parent)
+gpa_file_encrypt_dialog_get_property (GObject     *object,
+				      guint        prop_id,
+				      GValue      *value,
+				      GParamSpec  *pspec)
 {
-  GtkWidget *dialog;
-  GtkWidget *key_info;
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-  GtkWidget *label;
-  GtkWidget *image;
-
-  dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent),
-					GTK_DIALOG_MODAL, 
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-					NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-
-  hbox = gtk_hbox_new (FALSE, 6);
-  image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
-				    GTK_ICON_SIZE_DIALOG);
-  gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
-  vbox = gtk_vbox_new (FALSE, 6);
-  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
-
-  label = gtk_label_new (_("The following key has been revoked by it's owner:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
-  key_info = gpa_key_info_new (key);
-  gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5);
-  label = gtk_label_new (_("And can not be used for encryption."));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
-
-  gtk_widget_show_all (dialog);
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
-}
-static void
-expired_key (GpgmeKey key, GtkWidget *parent)
-{
-  GtkWidget *dialog;
-  GtkWidget *key_info;
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-  GtkWidget *label;
-  GtkWidget *image;
-  gchar *message;
-
-  dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent),
-					GTK_DIALOG_MODAL, 
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-					NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-
-  hbox = gtk_hbox_new (FALSE, 6);
-  image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
-				    GTK_ICON_SIZE_DIALOG);
-  gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
-  vbox = gtk_vbox_new (FALSE, 6);
-  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
-
-  message = g_strdup_printf (_("The following key expired on %s:"),
-                             gpa_expiry_date_string 
-                             (gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE,
-                                                        NULL,0)));
-  label = gtk_label_new (message);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
-  key_info = gpa_key_info_new (key);
-  gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5);
-  label = gtk_label_new (_("And can not be used for encryption."));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
-
-  gtk_widget_show_all (dialog);
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
-}
-
-static gboolean
-set_recipients (GList *recipients, GpgmeRecipients *rset, GtkWidget *parent)
-{
-  GList *cur;
-  GpgmeError err;
-
-  err = gpgme_recipients_new (rset);
-  if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
-  for (cur = recipients; cur; cur = g_list_next (cur))
-    {
-      /* Check that all recipients are valid */
-      gchar *fpr = cur->data;
-      GpgmeKey key = gpa_keytable_lookup (keytable, fpr);
-      GpgmeValidity valid;
-      if (!key)
-	{
-	  /* Can't happen */
-	  gpa_window_error (_("The key you selected is not available for "
-			      "encryption"), parent);
-	  return FALSE;
-	}
-      valid = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
-      /* First, make sure the key is usable (not revoked or unusable) */
-      if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_REVOKED, NULL, 0))
-        {
-          revoked_key (key, parent);
-          return FALSE;
-        }
-      else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_EXPIRED, NULL, 0))
-        {
-          expired_key (key, parent);
-          return FALSE;
-        }
-      /* Now, check it's validity */
-      else if (valid == GPGME_VALIDITY_FULL || 
-               valid == GPGME_VALIDITY_ULTIMATE)
-	{
-	  gpgme_recipients_add_name_with_validity (*rset, cur->data, valid);
-	}
-      else
-	{
-	  /* If an untrusted key is found ask the user what to do */
-	  GtkResponseType response;
-
-	  response = ignore_key_trust (key, parent);
-	  if (response == GTK_RESPONSE_YES)
-	    {
-	      /* Assume the key is trusted */
-	      gpgme_recipients_add_name_with_validity (*rset, cur->data,
-						       GPGME_VALIDITY_FULL);
-	    }
-	  else
-	    {
-	      /* Abort the encryption */
-	      return FALSE;
-	    }
-	}
-      /* If we arrive here the key was added, so check for errors */
-      if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-    }
-  return TRUE;
-}
-
-static gboolean
-set_signers (GpgmeCtx ctx, GList *signers, GtkWidget *parent)
-{
-  GList *cur;
-  GpgmeError err;
-
-  gpgme_signers_clear (ctx);
-  if (!signers)
-    {
-      /* Can't happen */
-      gpa_window_error (_("You didn't select any key for signing"), parent);
-      return FALSE;
-    }
-  for (cur = signers; cur; cur = g_list_next (cur))
-    {
-      GpgmeKey key = gpa_keytable_secret_lookup (keytable, cur->data);
-      if (!key)
-	{
-	  /* Can't happen */
-	  gpa_window_error (_("The key you selected is not available for "
-			      "signing"), parent);
-	  break;
-	}
-      err = gpgme_signers_add (ctx, key);
-      if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-    }
-  return TRUE;
-}
-
-static gchar *
-encrypt_file (GpgmeCtx ctx, const gchar *filename, GpgmeRecipients rset,
-	      gboolean sign, gboolean armor, GtkWidget *parent)
-{
-  GpgmeError err;
-  GpgmeData input, output;
-  FILE *target;
-  gchar *target_filename;
+  GpaFileEncryptDialog *dialog = GPA_FILE_ENCRYPT_DIALOG (object);
   
-  target = open_destination_file (filename, armor, &target_filename,
-				  parent);
-  if (!target)
-    return NULL;
-
-  /* Create the appropiate GpgmeData's */
-  err = gpa_gpgme_data_new_from_file (&input, filename, parent);
-  if (err == GPGME_File_Error)
+  switch (prop_id)
     {
-      g_free (target_filename);
-      fclose (target);
-      return NULL;
-    }
-  else if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
-  err = gpgme_data_new (&output);
-  if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
-  /* Encrypt */
-  if (sign)
-    {
-      err = gpgme_op_encrypt_sign (ctx, rset, input, output);
-    }
-  else
-    {
-      err = gpgme_op_encrypt (ctx, rset, input, output);
-    }
-  if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
-  /* Write the output */
-  dump_data_to_file (output, target);
-  fclose (target);
-  gpgme_data_release (input);
-  gpgme_data_release (output);
-
-  return target_filename;
-}
-
-static void
-do_encrypt (GPAFileEncryptDialog *dialog, GList *recipients, gboolean sign,
-	    GList *signers, gboolean armor)
-{
-  GList *cur;
-  GpgmeRecipients rset;
-  gboolean success;
-  GpgmeCtx ctx = gpa_gpgme_new ();
-  
-  success = set_recipients (recipients, &rset, dialog->window);
-  if (!success)
-    return;
-  if (sign)
-    {
-      success = set_signers (ctx, signers, dialog->window);
-      if (!success)
-	return;
-    }
-  gpgme_set_armor (ctx, armor);
-  
-  /* Encrypt each file */
-  for (cur = dialog->files; cur; cur = g_list_next (cur))
-    {
-      gchar *target_filename;
-
-      target_filename = encrypt_file (ctx, cur->data, rset, sign, armor,
-				      dialog->window);
-      if (target_filename)
-	{
-	  dialog->encrypted_files = g_list_append (dialog->encrypted_files,
-						   target_filename);
-	}
-      else
-	{
-	  break;
-	}
-    }
-  g_list_free (recipients);
-  gpgme_recipients_release (rset);
-  gpgme_release (ctx);
-}
-
-static void
-file_encrypt_ok (GPAFileEncryptDialog *dialog)
-{
-  GList *recipients;
-  gboolean sign;
-  GList *signers;
-  gboolean armor;
-  
-  recipients = gpa_key_list_selected_ids (dialog->clist_keys);
-  armor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_armor));
-  sign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_sign));
-  signers = gpa_key_list_selected_ids (dialog->clist_who);
-  
-  do_encrypt (dialog, recipients, sign, signers, armor);
-}
-
-static void
-select_row_cb (GtkCList *clist, gint row, gint column,
-	       GdkEventButton *event, gpointer user_data)
-{
-  GPAFileEncryptDialog *dialog = user_data;
-  
-  if (g_list_length (GTK_CLIST (clist)->selection) > 0)
-    {
-      gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog->window),
-					 GTK_RESPONSE_OK, TRUE);
+    case PROP_WINDOW:
+      g_value_set_object (value,
+			  gtk_window_get_transient_for (GTK_WINDOW (dialog)));
+      break;
+    case PROP_OPTIONS:
+      g_value_set_object (value, dialog->options);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
 static void
-unselect_row_cb (GtkCList *clist, gint row, gint column,
-		 GdkEventButton *event, gpointer user_data)
+gpa_file_encrypt_dialog_set_property (GObject     *object,
+				      guint        prop_id,
+				      const GValue      *value,
+				      GParamSpec  *pspec)
 {
-  GPAFileEncryptDialog *dialog = user_data;
-  
-  if (g_list_length (GTK_CLIST (clist)->selection) == 0)
+  GpaFileEncryptDialog *dialog = GPA_FILE_ENCRYPT_DIALOG (object);
+
+  switch (prop_id)
     {
-      gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog->window),
-					 GTK_RESPONSE_OK, FALSE);
+    case PROP_WINDOW:
+      gtk_window_set_transient_for (GTK_WINDOW (dialog),
+				    g_value_get_object (value));
+      break;
+    case PROP_OPTIONS:
+      dialog->options = (GpaOptions*) g_value_get_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
 static void
-toggle_sign_cb (GtkToggleButton *togglebutton, gpointer user_data)
-{
-  GPAFileEncryptDialog *dialog = user_data;
-  gtk_widget_set_sensitive (dialog->clist_who,
-                            gtk_toggle_button_get_active (togglebutton));
+gpa_file_encrypt_dialog_finalize (GObject *object)
+{  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-GList *
-gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
+static void
+gpa_file_encrypt_dialog_class_init (GpaFileEncryptDialogClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
+  parent_class = g_type_class_peek_parent (klass);
+  
+  object_class->finalize = gpa_file_encrypt_dialog_finalize;
+  object_class->set_property = gpa_file_encrypt_dialog_set_property;
+  object_class->get_property = gpa_file_encrypt_dialog_get_property;
+
+  /* Properties */
+  g_object_class_install_property (object_class,
+				   PROP_WINDOW,
+				   g_param_spec_object 
+				   ("window", "Parent window",
+				    "Parent window", GTK_TYPE_WIDGET,
+				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_OPTIONS,
+				   g_param_spec_object 
+				   ("options", "options",
+				    "options", GPA_OPTIONS_TYPE,
+				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+}
+
+static void
+gpa_file_encrypt_dialog_init (GpaFileEncryptDialog *dialog)
 {
   GtkAccelGroup *accelGroup;
-  GtkWidget *window;
   GtkWidget *vboxEncrypt;
   GtkWidget *labelKeys;
   GtkWidget *scrollerKeys;
@@ -458,43 +141,21 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
   GtkWidget *labelWho;
   GtkWidget *scrollerWho;
   GtkWidget *clistWho;
-  GtkResponseType response;
 
-  GPAFileEncryptDialog dialog;
-
-  if (!gpa_keytable_size (keytable))
-    {
-      gpa_window_error (_("No public keys available.\n"
-			  "Currently, there is nobody who could read a\n"
-			  "file encrypted by you."),
-			parent);
-      return NULL;
-    } /* if */
-  if (!gpa_keytable_secret_size (keytable))
-    {
-      gpa_window_error (_("No secret keys available."),
-			parent);
-      return NULL;
-    } /* if */
-
-  dialog.files = files;
-  dialog.encrypted_files = NULL;
-
-  window = gtk_dialog_new_with_buttons (_("Encrypt files"), GTK_WINDOW(parent),
-					GTK_DIALOG_MODAL, 
-					GTK_STOCK_OK, GTK_RESPONSE_OK,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (window), GTK_RESPONSE_OK, 
+  /* Set up the dialog */
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+			  GTK_STOCK_OK, GTK_RESPONSE_OK,
+			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Encrypt files"));
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, 
 				     FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  dialog.window = window;
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
   accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
+  gtk_window_add_accel_group (GTK_WINDOW (dialog), accelGroup);
 
-  vboxEncrypt = GTK_DIALOG (window)->vbox;
+  vboxEncrypt = GTK_DIALOG (dialog)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vboxEncrypt), 5);
 
   labelKeys = gtk_label_new ("");
@@ -507,10 +168,10 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
 
   clistKeys = gpa_public_key_list_new ();
   gtk_signal_connect (GTK_OBJECT (clistKeys), "select-row",
-		      GTK_SIGNAL_FUNC (select_row_cb), &dialog);
+		      GTK_SIGNAL_FUNC (select_row_cb), dialog);
   gtk_signal_connect (GTK_OBJECT (clistKeys), "unselect-row",
-		      GTK_SIGNAL_FUNC (unselect_row_cb), &dialog);
-  dialog.clist_keys = clistKeys;
+		      GTK_SIGNAL_FUNC (unselect_row_cb), dialog);
+  dialog->clist_keys = clistKeys;
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
   gtk_clist_set_selection_mode (GTK_CLIST (clistKeys), GTK_SELECTION_MULTIPLE);
   gpa_connect_by_accelerator (GTK_LABEL (labelKeys), clistKeys, accelGroup,
@@ -519,9 +180,9 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
  
   checkerSign = gpa_check_button_new (accelGroup, _("_Sign"));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), checkerSign, FALSE, FALSE, 0);
-  dialog.check_sign = checkerSign;
+  dialog->check_sign = checkerSign;
   gtk_signal_connect (GTK_OBJECT (checkerSign), "toggled",
-		      GTK_SIGNAL_FUNC (toggle_sign_cb), &dialog);
+		      GTK_SIGNAL_FUNC (toggle_sign_cb), dialog);
 
   labelWho = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (labelWho), 0.0, 0.5);
@@ -532,7 +193,7 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), scrollerWho, TRUE, TRUE, 0);
 
   clistWho = gpa_secret_key_list_new ();
-  dialog.clist_who = clistWho;
+  dialog->clist_who = clistWho;
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
   gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
 			      _("Sign _as "));
@@ -540,15 +201,104 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
 
   checkerArmor = gpa_check_button_new (accelGroup, _("A_rmor"));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), checkerArmor, FALSE, FALSE, 0);
-  dialog.check_armor = checkerArmor;
+  dialog->check_armor = checkerArmor;
 
-  gtk_widget_show_all (window);
-  response = gtk_dialog_run (GTK_DIALOG (window));
-  if (response == GTK_RESPONSE_OK)
+}
+
+GType
+gpa_file_encrypt_dialog_get_type (void)
+{
+  static GType encrypt_dialog_type = 0;
+  
+  if (!encrypt_dialog_type)
     {
-      file_encrypt_ok (&dialog);
+      static const GTypeInfo encrypt_dialog_info =
+	{
+	  sizeof (GpaFileEncryptDialogClass),
+	  (GBaseInitFunc) NULL,
+	  (GBaseFinalizeFunc) NULL,
+	  (GClassInitFunc) gpa_file_encrypt_dialog_class_init,
+	  NULL,           /* class_finalize */
+	  NULL,           /* class_data */
+	  sizeof (GpaFileEncryptDialog),
+	  0,              /* n_preallocs */
+	  (GInstanceInitFunc) gpa_file_encrypt_dialog_init,
+	};
+      
+      encrypt_dialog_type = g_type_register_static (GTK_TYPE_DIALOG,
+						    "GpaFileEncryptDialog",
+						    &encrypt_dialog_info, 0);
     }
-  gtk_widget_destroy (window);
+  
+  return encrypt_dialog_type;
+}
 
-  return dialog.encrypted_files;
-} /* file_encrypt_dialog */
+/* API */
+
+GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent,
+					GpaOptions *options)
+{
+  GpaFileEncryptDialog *dialog;
+  
+  dialog = g_object_new (GPA_FILE_ENCRYPT_DIALOG_TYPE,
+			 "window", parent,
+			 "options", options,
+			 NULL);
+
+  return GTK_WIDGET(dialog);
+}
+
+GList *gpa_file_encrypt_dialog_recipients (GpaFileEncryptDialog *dialog)
+{
+  return gpa_key_list_selected_ids (dialog->clist_keys);
+}
+
+gboolean gpa_file_encrypt_dialog_sign (GpaFileEncryptDialog *dialog)
+{
+  return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_sign));
+}
+
+GList *gpa_file_encrypt_dialog_signers (GpaFileEncryptDialog *dialog)
+{
+  return gpa_key_list_selected_ids (dialog->clist_who);
+}
+
+gboolean gpa_file_encrypt_dialog_get_armor (GpaFileEncryptDialog *dialog)
+{
+  return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_armor));
+}
+
+static void
+select_row_cb (GtkCList *clist, gint row, gint column,
+	       GdkEventButton *event, gpointer user_data)
+{
+  GpaFileEncryptDialog *dialog = user_data;
+  
+  if (g_list_length (GTK_CLIST (clist)->selection) > 0)
+    {
+      gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+					 GTK_RESPONSE_OK, TRUE);
+    }
+}
+
+static void
+unselect_row_cb (GtkCList *clist, gint row, gint column,
+		 GdkEventButton *event, gpointer user_data)
+{
+  GpaFileEncryptDialog *dialog = user_data;
+  
+  if (g_list_length (GTK_CLIST (clist)->selection) == 0)
+    {
+      gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+					 GTK_RESPONSE_OK, FALSE);
+    }
+}
+
+static void
+toggle_sign_cb (GtkToggleButton *togglebutton, gpointer user_data)
+{
+  GpaFileEncryptDialog *dialog = user_data;
+  gtk_widget_set_sensitive (dialog->clist_who,
+                            gtk_toggle_button_get_active (togglebutton));
+}
+

@@ -45,10 +45,10 @@
 #include "icons.h"
 #include "fileman.h"
 #include "filesigndlg.h"
-#include "encryptdlg.h"
 #include "verifydlg.h"
 
 #include "gpafiledecryptop.h"
+#include "gpafileencryptop.h"
 
 struct _GPAFileManager {
   GtkWidget *window;
@@ -227,30 +227,15 @@ encrypt_files (gpointer param)
 {
   GPAFileManager *fileman = param;
   GList * files;
-  GList *encrypted_files, *cur;
-  gint row;
+  GpaFileEncryptOperation *op;
 
   files = get_selected_files (fileman->clist_files);
   if (!files)
     return;
 
-  encrypted_files = gpa_file_encrypt_dialog_run (fileman->window, files);
-  if (encrypted_files)
-    {
-      gtk_clist_unselect_all (fileman->clist_files);
-      cur = encrypted_files;
-      while (cur)
-	{
-	  row = add_file (fileman, (gchar*)(cur->data));
-	  if (row >= 0)
-	    gtk_clist_select_row (fileman->clist_files, row, 0);
-	  g_free (cur->data);
-	  cur = g_list_next (cur);
-	}
-      g_list_free (encrypted_files);
-    }
+  op = gpa_file_encrypt_operation_new (gpa_options, fileman->window, files);
 
-  g_list_free (files);
+  register_operation (fileman, GPA_FILE_OPERATION (op));
 }
 
 /*

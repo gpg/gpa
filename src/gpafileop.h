@@ -21,6 +21,7 @@
 #ifndef GPA_FILE_OP_H
 #define GPA_FILE_OP_H
 
+#include "gpa.h"
 #include <glib.h>
 #include <glib-object.h>
 #include "gpaoperation.h"

@@ -1,3 +1,22 @@
+2003-02-12  Miguel Coca  <mcoca@gnu.org>
+
+	* fileman.c (encrypt_files): Use the GpaFileEncryptOperation.
+
+	* gpafiledecryptop.c (destination_filename): Mark static.
+	(gpa_file_decrypt_operation_start): Save the GpgmeData's for later.
+	(gpa_file_decrypt_operation_done_cb): Do proper cleanup.
+
+	* gpafiledecryptop.h: Add the GpgmeData's to the structure.
+
+	* gpaoperation.h, gpafileop.h: Include gpa.h
+
+	* encryptdlg.h, encryptdlg.c: New API. Remove encryption itself from
+	this file, as it is handled by the operation.
+
+	* Makefile.am (gpa_SOURCES): Add new files.
+
+	* gpafileencryptop.h, gpafileencryptop.c: New.
+
 2003-02-10  Miguel Coca  <mcoca@gnu.org>
 
 	* options.c (read_next_word): Fix unsafe use of char with getc.
