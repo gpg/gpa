@@ -1,3 +1,9 @@
+2001-01-23  Werner Koch  <wk@gnupg.org>
+
+	* configure.in (GPG): Fixed initialization for W32. Changed test
+	for gpg.
+	* acconfig.h (GPG_PATH): New.
+
 2001-01-18  Werner Koch  <wk@gnupg.org>
 
 	* autogen.sh:  Add --build-w32 option

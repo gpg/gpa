@@ -18,11 +18,13 @@ dnl
 dnl Setup some stuff depending on host/target.
 dnl
 try_gettext=yes
+GPG=
 case "${target}" in
     *-*-mingw32)
         try_gettext=no
         AC_DEFINE(HAVE_DRIVE_LETTERS)
         AC_DEFINE(HAVE_DOSISH_SYSTEM)
+        GPG='c:\\gnupg\\gpg.exe'
         ;;
     *)
        ;;
@@ -40,7 +42,18 @@ AC_STDC_HEADERS
 AC_ARG_PROGRAM
 AC_PROG_RANLIB
 
-AC_PATH_PROG(GPG, gpg, /usr/local/bin/gpg )
+if test -z "$GPG"; then
+  AC_PATH_PROG(GPG, gpg)
+  if test -z "$GPG"; then
+       AC_MSG_ERROR([[
+***
+*** GnuPG not found. Please install GnuPG first. 
+*** See   http://www.gnupg.org/download.html
+***
+  ]])
+  fi
+fi
+AC_DEFINE_UNQUOTED(GPG_PATH, "$GPG")
 
 
 dnl
