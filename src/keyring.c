@@ -806,6 +806,15 @@ keyring_editor_copy (gpointer param)
     }
 }
 
+/* Reload the key list */
+static void
+keyring_editor_refresh (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+
+  gpa_keylist_start_reload (editor->keylist);
+}
+
 /* Create and return the menu bar for the key ring editor */
 static GtkWidget *
 keyring_editor_menubar_new (GtkWidget * window,
@@ -833,6 +842,9 @@ keyring_editor_menubar_new (GtkWidget * window,
   };
   GtkItemFactoryEntry keys_menu[] = {
     {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
+    {_("/Keys/_Refresh"), NULL, keyring_editor_refresh, 0,
+     "<StockItem>", GTK_STOCK_REFRESH},
+    {_("/Keys/sep0"), NULL, NULL, 0, "<Separator>"},
     {_("/Keys/_New Key..."), NULL, keyring_editor_generate_key, 0,
      "<StockItem>", GTK_STOCK_NEW},
     {_("/Keys/_Delete Keys..."), NULL, keyring_editor_delete, 0,
@@ -1482,6 +1494,12 @@ toolbar_preferences (GtkWidget *widget, gpointer param)
 }
 #endif
 
+static void
+toolbar_refresh (GtkWidget *widget, gpointer param)
+{
+  keyring_editor_refresh (param);
+}
+
 static GtkWidget *
 keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 {
@@ -1585,6 +1603,14 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
                                    GTK_SIGNAL_FUNC (toolbar_preferences),
                                    editor, -1);
 #endif
+
+  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
+  item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_REFRESH,
+                                   _("Refresh the keyring"),
+                                   _("refresh keyring"),
+                                   GTK_SIGNAL_FUNC (toolbar_refresh),
+                                   editor, -1);
 
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 

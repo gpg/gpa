@@ -1,5 +1,11 @@
 2003-10-27  Miguel Coca  <mcoca@gnu.org>
 
+	* keyring.c (keyring_editor_refresh, toolbar_refresh): New.
+	(keyring_toolbar_new): Add refresh toolbar icon.
+	(keyring_editor_menubar_new): Add refresh command.
+
+2003-10-27  Miguel Coca  <mcoca@gnu.org>
+
 	* gpafileverifyop.c (ask_use_detached_sig): New.
 	(is_detached_sig): Given a file, try to find a detached signature
 	in another file.
