@@ -70,8 +70,6 @@ extern GtkWidget *global_windowTip;
 extern GpapaAction global_lastCallbackResult;
 extern gchar *global_keyserver;
 extern GList *global_defaultRecipients;
-extern gchar *global_homeDirectory;
-extern gchar *global_defaultKey;
 
 extern GtkWidget *gpa_get_global_clist_file (void);
 extern void gpa_callback (GpapaAction action, gpointer actiondata,
