@@ -1,5 +1,5 @@
 /* keyexportdlg.h  -	 The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -24,7 +24,7 @@
 #include <gtk/gtk.h>
 
 gboolean key_export_dialog_run (GtkWidget * parent, gchar ** filename,
-				gboolean *armored);
+				gchar ** server, gboolean *armored);
 
 
 

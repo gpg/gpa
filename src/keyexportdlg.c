@@ -23,17 +23,49 @@
 #include <gtk/gtk.h>
 #include "gpa.h"
 #include "gtktools.h"
-
+#include "keyexportdlg.h"
 
 struct _GPAKeyExportDialog {
+
+  /* The toplevel dialog window */
   GtkWidget * window;
+
+  /* The filename radio button */
+  GtkWidget * radio_filename;
+
+  /* The filename entry widget */
   GtkWidget * entry_filename;
+
+  /* The server radio button */
+  GtkWidget * radio_server;
+
+  /* The server combo box */
+  GtkWidget * combo_server;
+
+  /* Whether to export ascii armored. Not used in the simple UI */
   GtkWidget * check_armored;
+
+  /*
+   * Result values:
+   */
+
+  /* True if the user clicked OK, FALSE otherwise */
+  gboolean result;
+  
+  /* filename */
   gchar * filename;
+
+  /* filename */
+  gchar * server;
+
+  /* armored */
   gboolean armored;
 };
 typedef struct _GPAKeyExportDialog GPAKeyExportDialog;
 
+
+/* Handler for the browse button. Run a modal file dialog and set the
+ * text of the file entry widget accordingly */
 static void
 export_browse (gpointer param)
 {
@@ -49,113 +81,184 @@ export_browse (gpointer param)
 			  filename);
       free (filename);
     }
-}
+} /* export_browse */
 
+
+/* Handler for the Cancel button. Set the results to NULL and destroy
+ * the main window */
 void
 export_cancel (gpointer param)
 {
   GPAKeyExportDialog * dialog = param;
 
   dialog->filename = NULL;
-  gtk_main_quit ();
-}
+  dialog->server = NULL;
+  gtk_widget_destroy (dialog->window);
+} /* export_cancel */
 
+
+/* Handler for the OK button. Extract the user input from the widgets
+ * and destroy the main window */
 void
 export_ok (gpointer param)
 {
   GPAKeyExportDialog * dialog = param;
 
-  dialog->filename = gtk_entry_get_text (GTK_ENTRY (dialog->entry_filename));
-  dialog->filename = xstrdup (dialog->filename);
-  dialog->armored \
-    = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->check_armored));
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_server)))
+    {
+      GtkWidget * entry = GTK_COMBO (dialog->combo_server)->entry;
+      dialog->server = gtk_entry_get_text (GTK_ENTRY (entry));
+      dialog->server = xstrdup (dialog->server);
+    }
+  else
+    {
+      dialog->filename = gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
+      dialog->filename = xstrdup (dialog->filename);
+    }
 
+  if (dialog->check_armored)
+    {
+      /* the armored toggle button is only present in advanced UI mode
+       */
+      GtkToggleButton * toggle = GTK_TOGGLE_BUTTON (dialog->check_armored);
+      dialog->armored = gtk_toggle_button_get_active(toggle);
+    }
+
+  dialog->result = TRUE;
+  gtk_widget_destroy (dialog->window);
+} /* export_ok */
+
+
+/* signal handler for the destroy signal. Quit the recursive main loop
+ */
+static void
+export_destroy (GtkWidget *widget, gpointer param)
+{
   gtk_main_quit ();
 }
 
 
+/* Run the key export dialog as a modal dialog and return TRUE if the
+ * user clicked OK, otherwise return FALSE.
+ */
 gboolean
 key_export_dialog_run (GtkWidget * parent, gchar ** filename,
-		       gboolean *armored)
+		       gchar ** keyserver, gboolean *armored)
 {
-  GtkAccelGroup *accelGroup;
+  GtkAccelGroup *accel_group;
 
-  GtkWidget *windowExport;
-  GtkWidget *vboxExport;
-  GtkWidget *hboxFilename;
-  GtkWidget *labelFilename;
-  GtkWidget *entryFilename;
-  GtkWidget *buttonBrowse;
-  GtkWidget *checkerArmor;
-  GtkWidget *hButtonBoxExport;
-  GtkWidget *buttonCancel;
-  GtkWidget *buttonExport;
+  GtkWidget *window;
+  GtkWidget *vbox;
+  GtkWidget *table;
+  GtkWidget *radio;
+  GtkWidget *entry;
+  GtkWidget *button;
+  GtkWidget *check;
+  GtkWidget *bbox;
+  GtkWidget *combo;
   GPAKeyExportDialog dialog;
+  GList * servers;
+  int i;
 
-  dialog.armored = 1;
+  dialog.result = FALSE;
   dialog.filename = NULL;
+  dialog.server = NULL;
+  dialog.armored = 1;
   
-  windowExport = gtk_window_new (GTK_WINDOW_DIALOG);
-  gtk_window_set_title (GTK_WINDOW (windowExport), _("Export keys"));
-  dialog.window = windowExport;
+  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  dialog.window = window;
+  gtk_window_set_title (GTK_WINDOW (window), _("Export keys"));
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (export_destroy), &dialog);
 
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (windowExport), accelGroup);
+  accel_group = gtk_accel_group_new ();
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
-  vboxExport = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxExport), 5);
-  hboxFilename = gtk_hbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (hboxFilename), 5);
-  labelFilename = gtk_label_new ("");
-  gtk_box_pack_start (GTK_BOX (hboxFilename), labelFilename, FALSE, FALSE, 0);
-  entryFilename = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX (hboxFilename), entryFilename, TRUE, TRUE, 0);
-  gtk_signal_connect_object (GTK_OBJECT (entryFilename), "activate",
-			     GTK_SIGNAL_FUNC (export_ok),
-			     (gpointer) &dialog);
-  gpa_connect_by_accelerator (GTK_LABEL (labelFilename), entryFilename,
-			      accelGroup, _("Export to _file:"));
-  buttonBrowse = gpa_button_new (accelGroup, _("_Browse..."));
-  gtk_signal_connect_object (GTK_OBJECT (buttonBrowse), "clicked",
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+
+  table = gtk_table_new (3, 2, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
+  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
+
+  /* File name entry */
+  radio = gtk_radio_button_new_with_label_from_widget (NULL,
+						       _("Export to _file:"));
+  dialog.radio_filename = radio;
+  gtk_table_attach (GTK_TABLE (table), radio, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+
+  entry = gtk_entry_new ();
+  dialog.entry_filename = entry;
+  gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, 
+		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+  gtk_signal_connect_object (GTK_OBJECT (entry), "activate",
+			     GTK_SIGNAL_FUNC (export_ok), (gpointer) &dialog);
+
+  button = gpa_button_new (accel_group, _("_Browse..."));
+  gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (export_browse),
 			     (gpointer) &dialog);
-  gtk_box_pack_start (GTK_BOX (hboxFilename), buttonBrowse, FALSE, FALSE, 5);
-  gtk_box_pack_start (GTK_BOX (vboxExport), hboxFilename, TRUE, TRUE, 0);
-  dialog.entry_filename = entryFilename;
 
-  checkerArmor = gpa_check_button_new (accelGroup, _("a_rmor"));
-  gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);
-  gtk_box_pack_start (GTK_BOX (vboxExport), checkerArmor, FALSE, FALSE, 0);
-  dialog.check_armored = checkerArmor;
+  /* Server combo */
+  radio = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON(radio),
+						       _("_Key server:"));
+  dialog.radio_server = radio;
+  gtk_table_attach (GTK_TABLE (table), radio, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+  combo = gtk_combo_new ();
+  dialog.combo_server = combo;
+  gtk_table_attach (GTK_TABLE (table), combo, 1, 3, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_combo_set_value_in_list (GTK_COMBO (combo), FALSE, FALSE);
+  servers = NULL;
+  for (i = 0; gpa_options.keyserver_names[i]; i++)
+    {
+      servers = g_list_append (servers, gpa_options.keyserver_names[i]);
+    }
 
-  hButtonBoxExport = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxExport),
-			     GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxExport), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxExport), 5);
+  gtk_combo_set_popdown_strings (GTK_COMBO (combo), servers);
+  gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
+		      global_keyserver);
 
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					export_cancel, &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxExport), buttonCancel);
-  buttonExport = gpa_button_new (accelGroup, _("Ok"));
-  gtk_signal_connect_object (GTK_OBJECT (buttonExport), "clicked",
-			     GTK_SIGNAL_FUNC (export_ok),
-			     (gpointer) &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxExport), buttonExport);
-  gtk_box_pack_start (GTK_BOX (vboxExport), hButtonBoxExport, FALSE, FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (windowExport), vboxExport);
-  gpa_window_show_centered (windowExport, parent);
-  gtk_widget_grab_focus (entryFilename);
+  if (!gpa_simplified_ui ())
+    {
+      check = gpa_check_button_new (accel_group, _("a_rmor"));
+      gtk_container_set_border_width (GTK_CONTAINER (check), 5);
+      gtk_box_pack_start (GTK_BOX (vbox), check, FALSE, FALSE, 0);
+      dialog.check_armored = check;
+    }
+  else
+    dialog.check_armored = NULL;
 
-  gtk_grab_add (windowExport);
+
+  /* The button box */
+  bbox = gtk_hbutton_box_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
+
+  button = gpa_button_cancel_new (accel_group, _("_Cancel"), export_cancel,
+				  &dialog);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
+
+  button = gpa_button_new (accel_group, _("Ok"));
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     GTK_SIGNAL_FUNC (export_ok), (gpointer) &dialog);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
+
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
+  gpa_window_show_centered (window, parent);
+
   gtk_main ();
-  gtk_grab_remove (windowExport);
-  gtk_widget_destroy (windowExport);
 
-  if (dialog.filename)
+  if (dialog.result)
     {
       *filename = dialog.filename;
+      *keyserver = dialog.server;
       *armored = dialog.armored;
     }
-  return dialog.filename != NULL;
-}				/* keyring_export_dialog */
+
+  return dialog.result;
+} /* keyring_export_dialog */
