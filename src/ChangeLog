@@ -1,3 +1,8 @@
+2002-12-26  Miguel Coca  <mcoca@gnu.org>
+
+	* options.c (gpa_options_update_default_key): Check whether the
+	default key is really available.
+
 2002-12-24  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (keyring_editor_mapped): Fix backup at startup.

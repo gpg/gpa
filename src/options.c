@@ -21,6 +21,7 @@
 #include <glib.h>
 #include "options.h"
 #include "gpa.h"
+#include "gtktools.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -234,11 +235,33 @@ determine_default_key (void)
 void
 gpa_options_update_default_key (GpaOptions *options)
 {
+  gboolean update = FALSE;
+  GpgmeKey key = NULL;
+
   if (!options->default_key)
+    {
+      update = TRUE;
+    }
+  else if (gpgme_get_key (ctx, options->default_key, &key, TRUE, FALSE) == 
+           GPGME_EOF)
+    {
+      gpa_window_error (_("The private key you selected as default is no "
+                          "longer available.\n"
+                          "GPA will try to choose a new default "
+                          "key automatically."), NULL);
+      update = TRUE;
+    }
+
+  if (update)
     {
       gchar *fpr = determine_default_key ();
       gpa_options_set_default_key (options, fpr);
       g_free (fpr);
+    }
+
+  if (key)
+    {
+      gpgme_key_unref (key);
     }
 }
 
