@@ -1026,35 +1026,56 @@ keyring_editor_menubar_new (GtkWidget * window,
   /* Items that must only be available if a key is selected */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Export Keys..."));
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_selection);
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_selection);
+    }
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Delete Keys..."));
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_selection);
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_selection);
+    }
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Edit/Copy"));
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_selection);
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_selection);
+    }
   /* Only if there is only ONE key selected */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Set Owner Trust..."));
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_single_selection);
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_single_selection);
+    }
   /* If the keys can be signed... */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Sign Keys..."));
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_can_sign);
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_can_sign);
+    }
   /* If the selected key has a private key */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Edit Private Key..."));
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_private_selected);
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_private_selected);
+    }
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Backup..."));
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_private_selected);
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_private_selected);
+    }
 
   return gtk_item_factory_get_widget (factory, "<main>");
 }

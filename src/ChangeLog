@@ -1,3 +1,9 @@
+2002-12-13  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (keyring_editor_menubar_new): Add some checks to avoid
+	crashes on bad translations, as the menu items are not found, and
+	NULL's are appended to the selection sensitive lists.
+
 2002-12-12  Miguel Coca  <mcoca@gnu.org>
 
 	* fileman.c (gpa_fileman_toolbar_new, toolbar_preferences):
