@@ -1,5 +1,15 @@
 2001-02-08  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_new): Initialize the details notebook
+	properly
+	(keyring_details_page_fill_key):
+	(keyring_details_notebook): Add some new fields to the details
+	page.
+	(keyring_details_page_fill_key): Add the secret key as a parameter
+	to be able to show whether the key is owned by the user
+	(idle_update_details): Determine the secret key too to pass to
+	keyring_details_page_fill_key
+
 	* expirydlg.c (gpa_expiry_dialog_run): Pass the secret key into
 	the dialog instead of the expiry date so that we can display it in
 	the password dialog. Update the headerfile accordingly.
@@ -12,7 +22,7 @@
 	* gpawidgets.c (gpa_key_info_new): Tweak the spacing a bit
 
 	* passphrasedlg.c (gpa_passphrase_run_dialog): Add a label asking
-	for he passphrase
+	for the passphrase
 
 	* keysigndlg.c (key_sign_ok): Pass the default key to the password
 	dialog
@@ -50,7 +60,7 @@
 	(gpa_keygen_wizard_wait_page): New function to create the
 	wait-page.
 	(gpa_keygen_wizard_run): Put the waitpage into the wizard. Also,
-	store the wizard wizard widget in the struct.
+	store the gpa wizard widget in the struct.
 
 	* gpawizard.h (gpa_wizard_next_page_no_action):
 	* gpawizard.c (gpa_wizard_next_page_no_action): New public
