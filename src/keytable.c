@@ -61,21 +61,27 @@ static void keytable_fill (GHashTable *hash, gboolean secret)
         gpa_gpgme_error (err);
   while( (err = gpgme_op_keylist_next( ctx, &key )) != GPGME_EOF )
     {
+      const char *s;
+
       if( err != GPGME_No_Error )
         gpa_gpgme_error (err);
-      fpr = g_strdup (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, 
-                                                NULL, 0 ));
+      s = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0 );
+      g_assert (s);
+      fpr = g_strdup (s);
       g_hash_table_insert (hash, fpr, key);
-      text = g_strdup_printf ("%i", ++i);
-      /* Change the progress bar */
-      gtk_label_set_text (GTK_LABEL (label), text);
-      g_free (text);
-      gtk_progress_bar_pulse (GTK_PROGRESS_BAR (progress));
-      /* Redraw */
-      while (gtk_events_pending ())
-	{
-	  gtk_main_iteration ();
-	}
+      if ( !(++i % 10) )
+        {
+          text = g_strdup_printf ("%i", i);
+          /* Change the progress bar */
+          gtk_label_set_text (GTK_LABEL (label), text);
+          g_free (text);
+          gtk_progress_bar_pulse (GTK_PROGRESS_BAR (progress));
+          /* Redraw */
+          while (gtk_events_pending ())
+            {
+              gtk_main_iteration ();
+            }
+        }
     }
   gtk_widget_destroy (window);
 }
