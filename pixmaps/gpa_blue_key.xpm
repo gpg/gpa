@@ -1,0 +1,21 @@
+/* XPM */
+static char *gpa_blue_key_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"22 11 4 1",
+"  c Gray0",
+". c #72706f",
+"X c #c2ebff",
+"o c None",
+/* pixels */
+"oooooooooooooooo ooooo",
+"ooooooooooooo   X  ooo",
+"ooooooooooooo XXXXX  o",
+"oo            XXXX X o",
+"o XXXXXXXXXXXXXXX . X ",
+"o XXXXXXXXXXXXXXX . X ",
+"o. X     X   XXXXX XX ",
+"oo   ...  ..  XXXXXX .",
+"oo........oo. XXXXXX o",
+"ooooooooooooo. XXX  .o",
+"oooooooooooooo.   ...o"
+};

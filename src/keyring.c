@@ -984,8 +984,10 @@ keyring_editor_menubar_new (GtkWidget * window,
   };
   GtkItemFactoryEntry keys_menu[] = {
     {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
-    {_("/Keys/_New Key..."), NULL, keyring_editor_generate_key, 0, NULL},
-    {_("/Keys/_Delete Keys..."), NULL, keyring_editor_delete, 0, NULL},
+    {_("/Keys/_New Key..."), NULL, keyring_editor_generate_key, 0,
+     "<StockItem>", GTK_STOCK_NEW},
+    {_("/Keys/_Delete Keys..."), NULL, keyring_editor_delete, 0,
+     "<StockItem>", GTK_STOCK_DELETE},
     {_("/Keys/sep1"), NULL, NULL, 0, "<Separator>"},
     {_("/Keys/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
     {_("/Keys/Set _Owner Trust..."), NULL, keyring_editor_trust, 0, NULL},
@@ -1450,6 +1452,12 @@ toolbar_import_keys (GtkWidget *widget, gpointer param)
   keyring_editor_import (param);
 }
 
+static void
+toolbar_preferences (GtkWidget *widget, gpointer param)
+{
+  gpa_open_settings_dialog ();
+}
+
 static GtkWidget *
 keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 {
@@ -1458,26 +1466,25 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   GtkWidget *item;
   GtkWidget *button;
 
-#ifdef __NEW_GTK__
   toolbar = gtk_toolbar_new ();
-#else
-  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
-#endif
+  gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar),
+                             GTK_ICON_SIZE_LARGE_TOOLBAR);
   
   icon = gpa_create_icon_widget (window, "edit");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Edit"),
-                                  _("Edit the selected key"), _("edit key"),
-                                  icon, GTK_SIGNAL_FUNC (toolbar_edit_key),
+                                  _("Edit the selected private key"),
+                                  _("edit key"), icon,
+                                  GTK_SIGNAL_FUNC (toolbar_edit_key),
                                   editor);
   add_selection_sensitive_widget (editor, item,
                                   keyring_editor_has_private_selected);
 
-  icon = gpa_create_icon_widget (window, "delete");
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Remove"),
-                                  _("Remove the selected key"),
-                                  _("remove key"), icon,
-                                  GTK_SIGNAL_FUNC (toolbar_remove_key),
-                                  editor);
+  
+  item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_DELETE,
+                                   _("Remove the selected key"),
+                                   _("remove key"),
+                                   GTK_SIGNAL_FUNC (toolbar_remove_key),
+                                   editor, -1);
   add_selection_sensitive_widget (editor, item,
                                   keyring_editor_has_selection);
 
@@ -1526,7 +1533,16 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
                               _("detailed"), icon,
                               GTK_SIGNAL_FUNC (keyring_set_detailed_listing),
                               editor);
-  
+
+  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
+  item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), 
+                                   GTK_STOCK_PREFERENCES,
+                                   _("Open the Preferences dialog"),
+                                   _("preferences"),
+                                   GTK_SIGNAL_FUNC (toolbar_preferences),
+                                   editor, -1);
+
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
   icon = gpa_create_icon_widget (window, "openfile");

@@ -9,14 +9,14 @@ EXTRA_DIST = $(tip_files) $(logo)
 
 bin_PROGRAMS = gpa
 
-INCLUDES = -I$(top_srcdir)/intl
+INCLUDES = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
 LDADD = @INTLLIBS@
 
 gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
 	      gtktools.c gtktools.h  \
 	      helpmenu.c helpmenu.h	  \
-	      icons.c icons.h icons.xpm \
+	      icons.c icons.h \
 	      gpawidgets.c gpawidgets.h \
               gpafilesel.c gpafilesel.h \
 	      fileman.c fileman.h \

@@ -361,7 +361,11 @@ gpa_options_read_settings (GpaOptions *options)
   options_file =  fopen (options->options_file, "r");
   if (!options_file)
     {
-      g_warning("%s: %s", options->options_file, strerror (errno));
+      /* If the config file just doesn't exist, it's not an error */
+      if (errno != ENOENT)
+        {
+          g_warning("%s: %s", options->options_file, strerror (errno));
+        }
     }
   else
     {

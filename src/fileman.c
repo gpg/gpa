@@ -462,7 +462,11 @@ toolbar_file_decrypt (GtkWidget *widget, gpointer param)
   decrypt_files (param);
 }
 
-
+static void
+toolbar_preferences (GtkWidget *widget, gpointer param)
+{
+  gpa_open_settings_dialog ();
+}
 
 static GtkWidget *
 gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
@@ -476,10 +480,10 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 #endif
   
   /* Open */
-  if ((icon = gpa_create_icon_widget (window, "openfile")))
-    gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Open"),
-                            _("Open a file"), _("open file"), icon,
-                            GTK_SIGNAL_FUNC (toolbar_file_open), fileman);
+  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_OPEN,
+                            _("Open a file"), _("open file"),
+                            GTK_SIGNAL_FUNC (toolbar_file_open),
+                            fileman, -1);
   /* Sign */
   if ((icon = gpa_create_icon_widget (window, "sign")))
     gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Sign"),
@@ -502,6 +506,15 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 			     _("Decrypt the selected file"), _("decrypt file"),
 			     icon, GTK_SIGNAL_FUNC (toolbar_file_decrypt),
 			     fileman);
+
+  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+  
+  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), 
+                            GTK_STOCK_PREFERENCES,
+                            _("Open the Preferences dialog"),
+                            _("preferences"),
+                            GTK_SIGNAL_FUNC (toolbar_preferences),
+                            fileman, -1);
 
 #if 0  /* FIXME: Help is not available yet. :-( */
   /* Help */

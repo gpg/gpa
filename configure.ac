@@ -195,6 +195,7 @@ Makefile
 intl/Makefile
 po/Makefile.in
 src/Makefile
+pixmaps/Makefile
 ])
 
 

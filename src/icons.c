@@ -25,8 +25,27 @@
 #include <string.h>
 
 #include "icons.h"
-#include "icons.xpm"
 #include "verify.xpm"
+#include "blue_key.xpm"
+#include "blue_yellow_key.xpm"
+#include "brief.xpm"
+#include "decrypt.xpm"
+#include "delete.xpm"
+#include "detailed.xpm"
+#include "edit.xpm"
+#include "encrypt.xpm"
+#include "export.xpm"
+#include "gpa_blue_key.xpm"
+#include "gpa_logo.xpm"
+#include "gpa_yellow_key.xpm"
+#include "help.xpm"
+#include "import.xpm"
+#include "keyring.xpm"
+#include "openfile.xpm"
+#include "sign.xpm"
+#include "wizard_backup.xpm"
+#include "wizard_genkey.xpm"
+
 
 struct {
   const char *name;
@@ -38,13 +57,7 @@ struct {
   {"decrypt",	decrypt_xpm  },
   {"sign",	sign_xpm  },
   {"verify",    verify_xpm },
-  {"gpa_sign_small", gpa_sign_small_xpm  },
   {"keyring",	keyring_xpm  },
-  {"trash",	trash_xpm  },
-  {"gpa_trust_fully",		gpa_trust_fully_xpm },
-  {"gpa_trust_marginally",	gpa_trust_marginally_xpm },
-  {"gpa_dont_trust",		gpa_dont_trust_xpm },
-  {"gpa_trust_unknown",	gpa_trust_unknown_xpm },
   {"gpa_blue_key",	gpa_blue_key_xpm},
   {"gpa_yellow_key",	gpa_yellow_key_xpm},
   {"blue_key",	blue_key_xpm},

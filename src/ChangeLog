@@ -1,3 +1,27 @@
+2002-12-12  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (gpa_SOURCES): Remove icons.xpm
+	(INCLUDES): Add pixmap directory.
+
+	* icons.c: Include new icon files.
+
+	* icons.xpm: Removed, replaced by files in ../pixmaps.
+	* encrypt.xpm: Removed.
+	* verify.xpm, floppy.xpm, folder.xpm, icons.xpm, open_folder.xpm: Moved
+	to pixmap directory.
+	
+	* fileman.c (gpa_fileman_toolbar_new): Add Preferences.
+	(toolbar_preferences): New.
+
+	* keyring.c (keyring_toolbar_new): Change tooltip for edit to make it
+	clear it's only for private keys.
+	Use stock icon for "Delete".
+	Add "Preferences".
+	(toolbar_preferences): New.
+
+	* options.c (gpa_options_read_settings): Don't report error if the
+	config file doesn't exist.
+
 2002-12-11  Miguel Coca  <mcoca@gnu.org>
 
 	* fileman.c (fileman_menu_new): Add the edit menu and stock icons.
