@@ -1,5 +1,29 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* keysmenu.h: Remove the prototypes of the functions deleted from
+	keysmenu.c
+
+	* keysmenu.c (keys_generateKey):
+	(keys_generateKey_generate):
+	(keys_openPublic):
+	(keys_openPublic_evalMouse):
+	(keys_openPublic_toggleClistKeys):
+	(keys_openPublic_fillClistKeys):
+	(keys_openPublic_receive):
+	(keys_openPublic_receive_receive):
+	(keys_openPublic_editKey):
+	(keys_openPublic_sign):
+	(keys_openPublic_sign_exec):
+	(keys_openPublic_editTrust):
+	(keys_openPublic_editTrust_accept):
+	(keys_openPublic_delete):
+	(getStringForKeytrust):
+	(getOwnertrustForString):
+	(writtenKeytrust):
+	(writtenOwnertrust):
+	(unitTime):
+	(writtenAlgorithm): Removed because they're not used anymore.
+
 	* optionsmenu.c (gpa_homeDirSelect_init):
 	(gpa_loadOptionsSelect_init):
 	(gpa_saveOptionsSelect_init): Remove commented out window tip code
