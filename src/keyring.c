@@ -77,6 +77,7 @@ struct _GPAKeyringEditor {
   GtkWidget *detail_owner_trust;
   GtkWidget *detail_key_trust;
   GtkWidget *detail_key_type;
+  GtkWidget *detail_creation;
 
   /* The signatures list in the notebook */
   GtkWidget *signatures_list;
@@ -585,14 +586,14 @@ keyring_editor_current_key_id (GPAKeyringEditor *editor)
   return gpa_keylist_current_key_id (editor->clist_keys);
 }
 
-
+#if 0
 /* Return the currently selected key. NULL if no key is selected */
 static GpapaPublicKey *
 keyring_editor_current_key (GPAKeyringEditor *editor)
 {
   return gpa_keylist_current_key (editor->clist_keys);
 }
-
+#endif
 
 /* Update everything that has to be updated when the selection in the
  * key list changes.
@@ -798,6 +799,8 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 					      _("Key Trust:"), FALSE);
   editor->detail_key_type = add_details_row (table, table_row++,
 					     _("Key Type:"), FALSE);
+  editor->detail_creation = add_details_row (table, table_row++,
+					     _("Created at:"), FALSE);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), vbox,
 			    gtk_label_new (_("Details")));
@@ -830,6 +833,7 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key,
 			       GpapaSecretKey * secret_key)
 {
   GDate * expiry_date;
+  GDate * creation_date;
   GpapaKeytrust key_trust;
   GpapaOwnertrust owner_trust;
   gchar * text;
@@ -870,6 +874,12 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key,
       gtk_label_set_text (GTK_LABEL (editor->detail_key_type),
 			  _("The key has only a public part"));
     }
+
+  creation_date = gpapa_key_get_creation_date (GPAPA_KEY (key), gpa_callback,
+					   editor->window);
+  text = gpa_creation_date_string (creation_date);
+  gtk_label_set_text (GTK_LABEL (editor->detail_creation), text);
+  free (text);
 
   gtk_widget_hide (editor->details_num_label);
   gtk_widget_show (editor->details_table);
@@ -1188,9 +1198,10 @@ keyring_update_status_bar (GPAKeyringEditor * editor)
   gchar * key_id = gpa_default_key ();
   GpapaPublicKey * key;
 
-  if (key_id)
+  if (key_id
+      && (key = gpapa_get_public_key_by_ID (key_id,
+                                            gpa_callback, editor->window)))
     {
-      key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
       gtk_label_set_text (GTK_LABEL (editor->status_key_user),
 			  gpapa_key_get_name (GPAPA_KEY (key), gpa_callback,
 					      editor->window));

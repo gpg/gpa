@@ -1,3 +1,13 @@
+2001-12-31  Werner Koch  <wk@gnupg.org>
+
+	* gpapastrings.c, gpapastrings.h: Suport for creation dates.
+	* keyring.c:Ditto.
+	* keyring.c (keyring_update_status_bar): Fixed segv in case a key
+	does not exist.  All by Michael Mauch.
+
+	* helpmenu.c (help_warranty): Added real code.  By Michael Fischer
+	v. Mollard.
+
 2001-08-23  Werner Koch  <wk@gnupg.org>
 
 	* gpapastrings.c: Added a few more strings and made

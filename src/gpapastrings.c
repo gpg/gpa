@@ -172,6 +172,22 @@ gpa_expiry_date_string (GDate * expiry_date)
   return result;
 } /* gpa_expiry_data_string */
 
+gchar *
+gpa_creation_date_string (GDate * creation_date)
+{
+  gchar date_buffer[256];
+  gchar *result;
+
+  if (creation_date != NULL)
+    {
+      g_date_strftime (date_buffer, 256, "%x", creation_date);
+      result = xstrdup (date_buffer);
+    } /* if */
+  else
+    result = xstrdup (_("unknown"));
+  return result;
+} /* gpa_creation_data_string */
+
 
 static gchar *file_status_strings[] = {
   N_("unknown"),
