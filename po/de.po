@@ -148,8 +148,8 @@ msgid "/File/_Open"
 msgstr "/Datei/_Öffnen"
 
 #: src/fileman.c:523
-msgid "/File/S_how Detail"
-msgstr "/Datei/_Detailansicht"
+msgid "/File/C_heck"
+msgstr "/Datei/_Prüfen"
 
 #: src/fileman.c:524
 msgid "/File/sep1"
@@ -352,8 +352,8 @@ msgstr "si_gnieren und komprimieren"
 msgid "sign, do_n't compress"
 msgstr "signieren, _nicht komprimieren"
 
-msgid "_copy and add signature"
-msgstr "_kopieren und Signatur hinzufügen"
+msgid "_cleartext signature"
+msgstr "_Klartextsignatur"
 
 #: src/filemenu.c:378 src/filesigndlg.c:217
 msgid "sign in separate _file"

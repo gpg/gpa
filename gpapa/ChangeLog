@@ -1,3 +1,8 @@
+2002-02-22  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gpapa.c (gpapa_receive_public_key_from_server): Moved gpgargv
+	variable declaration inside the block where it is actually used.
+
 2002-02-21  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gpapafile.c (gpapa_file_sign, gpapa_file_encrypt_and_sign):

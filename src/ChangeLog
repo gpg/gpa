@@ -1,3 +1,22 @@
+2002-02-22  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* Makefile.am (gpa_SOURCES): Added gpa.rc
+
+	* fileman.c (fileman_menu_new): Renamed "Show Detail" menu item to
+	"Check".
+
+	* filesigndlg.c (gpa_file_sign_dialog_run): Renamed "copy and add
+	signature" button to "cleartext signature". Cleaned the code for
+	the creation of the different radio buttons a bit.
+
+	* gpa.rc: New MS-Windows resource file, which adds a custom icon
+	to GPA.
+
+	* gpa.c (cmd_and_opt_values, opts, main): Added new option,
+	default-key.
+	(opts): Changed description of --advanced-ui.
+	(gpa_set_default_key): Save the default key to the config file.
+	
 2002-02-21  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* filemenu.c, filesigndlg.c: Reformatted to completely comply with

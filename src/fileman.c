@@ -523,9 +523,9 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
   GtkItemFactoryEntry file_menu[] = {
     {_("/_File"), NULL, NULL, 0, "<Branch>"},
     {_("/File/_Open"), "<control>O", open_file, 0, NULL},
-    {_("/File/S_how Detail"), "<control>H", show_file_detail, 0, NULL},
     {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
     {_("/File/_Sign"), NULL, sign_files, 0, NULL},
+    {_("/File/C_heck"), "<control>P", show_file_detail, 0, NULL},
     {_("/File/_Encrypt"), NULL, encrypt_files, 0, NULL},
     /*    {_("/File/E_ncrypt as"), NULL, file_encryptAs, 0, NULL},
     {_("/File/_Protect by Password"), NULL, file_protect, 0, NULL},

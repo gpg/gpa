@@ -218,11 +218,13 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
     {
       radio_sign_comp = NULL;
       dialog.radio_comp = radio_sign_comp;
-      radio_sign =
-	gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
-					  accelGroup, _("_copy and add signature"));
+      radio_sign = gpa_radio_button_new (accelGroup, _("_cleartext signature"));
       gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
       dialog.radio_sign = radio_sign;
+      radio_sign_sep =
+        gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign),
+				          accelGroup,
+				          _("sign in separate _file"));
     }
   else
     {
@@ -234,11 +236,11 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
 					  accelGroup, _("sign, do_n't compress"));
       gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
       dialog.radio_sign = radio_sign;
+      radio_sign_sep =
+        gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
+				          accelGroup,
+				          _("sign in separate _file"));
     }
-  radio_sign_sep =
-    gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
-				      accelGroup,
-				      _("sign in separate _file"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
   dialog.radio_sep = radio_sign_sep;
 

@@ -73,6 +73,7 @@ enum cmd_and_opt_values {
   oBackupGenerated,
 
   oKeyserver,
+  oDefaultKey,
 
   aTest
 };
@@ -87,10 +88,11 @@ static ARGPARSE_OPTS opts[] = {
     { oDebug,	"debug"     ,4|16, N_("set debugging flags")},
     { oDebugAll, "debug-all" ,0, N_("enable full debugging")},
     { oGPGBinary, "gpg-program", 2 , "@" },
-    { oAdvancedUI, "advanced-ui", 0,N_("use a advanced user interface")},
+    { oAdvancedUI, "advanced-ui", 0,N_("set the user interface to advanced mode")},
     { oBackupGenerated, "backup-generated", 0,N_("omit \"no backup yet\" warning at startup")},
 
     { oKeyserver, "keyserver", 2, "@" },
+    { oDefaultKey, "default-key", 2, "@" },
     {0}
 };
 
@@ -307,7 +309,7 @@ gpa_default_key (void)
 /* Set the default key. key is assumed to be newly malloced memory that
  * should not be free's by the caller afterwards. */
 void
-gpa_set_default_key (gchar * key)
+gpa_set_default_key (gchar *key)
 {
   gboolean emit;
 
@@ -318,6 +320,16 @@ gpa_set_default_key (gchar * key)
 
   free (default_key);
   default_key = key;
+
+  if (gpa_configname)
+    {
+      FILE *config = fopen (gpa_configname, "a");
+      if (config)
+        {
+	  fprintf (config, "default-key %s\n", default_key);
+	  fclose (config);
+        }
+    }
 
   if (emit)
     gpa_emit_default_key_changed ();
@@ -628,6 +640,11 @@ main (int argc, char **argv)
 	case oAdvancedUI: gpa_set_simplified_ui (FALSE); break;
 	case oBackupGenerated: gpa_set_backup_generated (TRUE); break;
         case oKeyserver: keyserver = pargs.r.ret_str; break;
+        case oDefaultKey:
+	  if (default_key)
+	    free (default_key);
+	  default_key = xstrdup (pargs.r.ret_str);
+	  break;
 
 	default : pargs.err = configfp? 1:2; break;
 	}

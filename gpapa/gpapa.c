@@ -436,7 +436,6 @@ gpapa_receive_public_key_from_server (const gchar *keyID,
   if (keyID && ServerName)
     {
 #ifdef __USE_HKP__
-      const gchar *gpgargv[2];
       gchar *key_buffer = g_malloc (KEY_BUFLEN);
       int rc;
       wsock_init ();
@@ -452,6 +451,7 @@ gpapa_receive_public_key_from_server (const gchar *keyID,
 	}
       else
 	{
+          const gchar *gpgargv[2];
           gpgargv[0] = "--import";
           gpgargv[1] = NULL;
           gpapa_call_gnupg (gpgargv, TRUE, key_buffer, NULL, NULL,
