@@ -99,7 +99,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   date_string = gpa_expiry_date_string (gpgme_key_get_ulong_attr 
                                         (key, GPGME_ATTR_EXPIRE, NULL, 0));
   label = gtk_label_new (date_string);
-  free (date_string);
+  g_free (date_string);
   dialog.expiry = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 

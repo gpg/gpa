@@ -242,7 +242,7 @@ gpa_expiry_frame_free (gpointer param)
   GPAExpiryFrame * frame = param;
   if (frame->expiryDate)
     g_date_free (frame->expiryDate);
-  free (frame);
+  g_free (frame);
 }
 
 static void
@@ -295,7 +295,7 @@ gpa_expiry_frame_at (GtkToggleButton * radioAt, gpointer param)
       gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
 			  "days");
       gtk_entry_set_text (GTK_ENTRY (frame->entryAt), dateBuffer);
-      free (dateBuffer);
+      g_free (dateBuffer);
     } /* if */
   else
     gtk_entry_set_text (GTK_ENTRY (frame->entryAt), _("01.01.2000")); /*!!! */
@@ -374,7 +374,7 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
       g_date_to_struct_tm (expiryDate, &tm);
       dateBuffer = gpa_expiry_date_string (mktime (&tm));
       gtk_entry_set_text (GTK_ENTRY (entryAt), dateBuffer);
-      free (dateBuffer);
+      g_free (dateBuffer);
     } /* if */
   gtk_box_pack_start (GTK_BOX (hboxAt), entryAt, FALSE, FALSE, 0);
 

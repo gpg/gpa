@@ -199,7 +199,7 @@ gpa_keygen_wizard_name_validate (gpointer data)
       result = FALSE;
     }
 
-  free (name);
+  g_free (name);
   return result;
 }
 
@@ -237,7 +237,7 @@ gpa_keygen_wizard_email_validate (gpointer data)
   /* FIXME: we should do much more checking. Best would be exactly the
    * same checks gpg does in interactive mode with --gen-key */
 
-  free (email);
+  g_free (email);
   return result;
 }
 
@@ -448,8 +448,8 @@ gpa_keygen_wizard_backup_dir_browse (GtkWidget * button, gpointer param)
     {
       dirname = file_dirname (filename);
       gtk_entry_set_text (GTK_ENTRY (entry), dirname);
-      free (filename);
-      free (dirname);
+      g_free (filename);
+      g_free (dirname);
     }
 }
   
@@ -565,7 +565,7 @@ gpa_keygen_wizard_backup_dir_action (gpointer data)
 				       message, buttons);
 	  if (!reply || strcmp (reply, _("_Overwrite")) != 0)
 	    result = FALSE;
-	  free (message);
+	  g_free (message);
 	}
 
       if (result && stat (keygen_wizard->pubkey_filename, &statbuf) == 0)
@@ -577,7 +577,7 @@ gpa_keygen_wizard_backup_dir_action (gpointer data)
 				       message, buttons);
 	  if (!reply || strcmp (reply, _("_Overwrite")) != 0)
 	    result = FALSE;
-	  free (message);
+	  g_free (message);
 	}
     }
   else
@@ -592,7 +592,7 @@ gpa_keygen_wizard_backup_dir_action (gpointer data)
 	= gpa_keygen_wizard_generate_action (keygen_wizard);
     }
 
-  free (dir);
+  g_free (dir);
   return result;
 }
 
@@ -703,11 +703,11 @@ free_keygen_wizard (gpointer data)
 {
   GPAKeyGenWizard * keygen_wizard = data;
 
-  free (keygen_wizard->pubkey_filename);
-  free (keygen_wizard->seckey_filename);
+  g_free (keygen_wizard->pubkey_filename);
+  g_free (keygen_wizard->seckey_filename);
   gdk_pixmap_unref (keygen_wizard->genkey_pixmap);
   gdk_pixmap_unref (keygen_wizard->backup_pixmap);
-  free (keygen_wizard);
+  g_free (keygen_wizard);
 }
 
 

@@ -457,8 +457,8 @@ keyring_editor_import (gpointer param)
         {
           if (!server_get_key (server, key_id, &data, editor->window))
             {
-              free (filename);
-              free (server);
+              g_free (filename);
+              g_free (server);
               return;
             }
         }
@@ -474,8 +474,8 @@ keyring_editor_import (gpointer param)
           fill_data_from_clipboard (data, gtk_clipboard_get
                                     (GDK_SELECTION_CLIPBOARD));
         }
-      free (filename);
-      free (server);
+      g_free (filename);
+      g_free (server);
       /* Import the key */
       err = gpgme_op_import (ctx, data);
       if (err != GPGME_No_Error &&
@@ -880,7 +880,7 @@ keyring_editor_destroy (gpointer param)
   GPAKeyringEditor * editor = param;
 
   g_list_free (editor->selection_sensitive_widgets);
-  free (editor);
+  g_free (editor);
 } /* keyring_editor_destroy */
 
 
@@ -1122,7 +1122,7 @@ keyring_details_page_fill_num_keys (GPAKeyringEditor * editor, gint num_key)
     {
       gchar * text = g_strdup_printf (_("%d keys selected"), num_key);
       gtk_label_set_text (GTK_LABEL (editor->details_num_label), text);
-      free (text);
+      g_free (text);
     }
 
   gtk_widget_show (editor->details_num_label);

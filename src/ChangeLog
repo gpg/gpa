@@ -1,3 +1,16 @@
+2002-11-13  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyserver.c: Replace all free() calls with g_free ().
+	* keyring.c: Likewise.
+	* keygenwizard.c: Likewise.
+	* keyeditdlg.c: Likewise.
+	* gpgmetools.c: Likewise.
+	* gpawindowkeeper.c: Likewise.
+	* gpawidgets.c: Likewise.
+	* gpa.c: Likewise.
+	* fileman.c: Likewise.
+	* expirydlg.c: Likewise.
+
 2002-11-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keylist.c (get_trust_value, get_ownertrust_value): Fix compiler

@@ -82,7 +82,7 @@ release_server_list (ServerName list)
   for (x=list; x; x=x2)
     {
       x2 = x->next;
-      free (x);
+      g_free (x);
     }
 }
 

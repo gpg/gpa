@@ -307,7 +307,7 @@ gpa_set_default_key (gchar *key)
   else
     emit = default_key != key;
 
-  free (default_key);
+  g_free (default_key);
   default_key = key;
 
   if (gpa_configname && key)
@@ -559,7 +559,7 @@ main (int argc, char **argv)
   if (gtkrc)
     {
       gtk_rc_parse (gtkrc);
-      free (gtkrc);
+      g_free (gtkrc);
     }
 
   /* Locate GPA's configuration file.
@@ -597,7 +597,7 @@ main (int argc, char **argv)
 		       configname, strerror(errno));
 	    exit(2);
 	  }
-	  free (configname);
+	  g_free (configname);
 	  configname = NULL;
 	}
       if (parse_debug && configname)
@@ -620,7 +620,7 @@ main (int argc, char **argv)
 	  /* config files may not be nested (silently ignore them) */
 	  if (!configfp)
 	    {
-	      free (configname);
+	      g_free (configname);
 	      configname = g_strdup (pargs.r.ret_str);
 	      goto next_pass;
 	    }
@@ -635,7 +635,7 @@ main (int argc, char **argv)
         case oKeyserver: keyserver = pargs.r.ret_str; break;
         case oDefaultKey:
 	  if (default_key)
-	    free (default_key);
+	    g_free (default_key);
 	  default_key = g_strdup (pargs.r.ret_str);
 	  break;
 
@@ -646,11 +646,11 @@ main (int argc, char **argv)
     {
       fclose(configfp);
       configfp = NULL;
-      free(configname);
+      g_free (configname);
       configname = NULL;
       goto next_pass;
     }
-  free (configname);
+  g_free (configname);
   configname = NULL;
   if (log_get_errorcount (0))
     exit(2);

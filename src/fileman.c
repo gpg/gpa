@@ -66,7 +66,7 @@ fileman_destroy (gpointer param)
 {
   GPAFileManager * fileman = param;
 
-  free (fileman);
+  g_free (fileman);
 }
 
 /* Return the currently selected files as a new list of filenames
@@ -144,7 +144,7 @@ open_file (gpointer param)
         {
           gpa_window_error (_("The file is already open."), fileman->window);
         }
-      free (filename);
+      g_free (filename);
     }
 }
 

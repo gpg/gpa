@@ -55,7 +55,7 @@ void
 gpa_windowKeeper_release_exec (gpointer data, gpointer userData)
 {
   if (data)
-    free (data);
+    g_free (data);
 }				/* gpa_windowKeeper_release_exec */
 
 void
@@ -64,5 +64,5 @@ gpa_windowKeeper_release (GpaWindowKeeper * keeper)
   gtk_widget_destroy (keeper->window);
   g_list_foreach (keeper->listParam, gpa_windowKeeper_release_exec, NULL);
   tempWindows = g_list_remove (tempWindows, keeper);
-  free (keeper);
+  g_free (keeper);
 }				/* gpa_windowKeeper_release */

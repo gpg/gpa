@@ -357,12 +357,12 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
 void
 gpa_key_gen_free_parameters(GPAKeyGenParameters * params)
 {
-  free (params->userID);
-  free (params->email);
-  free (params->comment);
+  g_free (params->userID);
+  g_free (params->email);
+  g_free (params->comment);
   if (params->expiryDate)
     g_date_free (params->expiryDate);
-  free (params);
+  g_free (params);
 }
 
 GPAKeyGenParameters *
@@ -583,7 +583,7 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
  * before being displayed to the user. */
 
 /* Return the user ID, making sure it is properly UTF-8 encoded.
- * Allocates a new string, which must be freed with g_free().
+ * Allocates a new string, which must be freed with g_free ().
  */
 gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
 {
@@ -612,7 +612,7 @@ gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
 }
 
 /* Return the key fingerprint, properly formatted according to the algorithm.
- * Allocates a new string, which must be freed with g_free().
+ * Allocates a new string, which must be freed with g_free ().
  * This is based on code from GPAPA's extract_fingerprint.
  */
 gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx)
