@@ -48,6 +48,10 @@
 #include "keyring.h"
 #include "fileman.h"
 
+#ifdef __MINGW32__
+#include "hidewnd.h"
+#endif
+
 /* icons for toolbars */
 #include "icons.h"
 
@@ -354,6 +358,10 @@ main (int argc, char **argv)
   int nogreeting = 0;
   const char *gpg_program = GPG_PROGRAM;
   gchar * gtkrc;
+
+#ifdef __MINGW32__
+  hide_gpa_console_window();
+#endif
 
   set_strusage (my_strusage);
   /*log_set_name ("gpa"); not yet implemented in logging.c */
