@@ -1,5 +1,5 @@
 /* gpapaintern.h  -  header for internal functions
- *	  Copyright (C) 2000 Free Software Foundation, Inc.
+ *	  Copyright (C) 2000 G-N-U GmbH.
  *
  * This file is part of GPAPA
  *

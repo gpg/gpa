@@ -3,7 +3,7 @@ Maintainer: ??
 
 Authors
 =======
-
+(Please put the names also into the file src/help.c)
 
 Markus Gerwinski <markus.gerwinski@sercon.de>
     Designed and implemented GPA.
