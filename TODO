@@ -16,9 +16,6 @@ In no particular order:
 
 * Context menus.
 
-* Check the GPAFileSelection. Should it be kept? It's around 20% of the GPA
-  code for something GTK already does.
-
 * Add more options to the "Edit key" dialog.
 ** Manage UID's.
 ** Manage subkeys.

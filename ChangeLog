@@ -1,3 +1,7 @@
+2003-01-08  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Go back to GPGME 0.4.0 for the moment.
+
 2002-12-29  Miguel Coca  <mcoca@gnu.org>
 
 	* configure.ac: Require GPGME 0.4.1.

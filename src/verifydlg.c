@@ -82,6 +82,7 @@ verify_file (const gchar *filename, GtkWidget *parent)
   GpgmeData sig, signed_text, plain_text;
   gchar *signed_file = NULL;
   const gchar *fpr;
+  GpgmeSigStat stat;
 
   if (is_detached_sig (filename, &signed_file))
     {
@@ -128,7 +129,7 @@ verify_file (const gchar *filename, GtkWidget *parent)
     }
 
   /* Verify */
-  err = gpgme_op_verify (ctx, sig, signed_text, plain_text);
+  err = gpgme_op_verify (ctx, sig, signed_text, plain_text, &stat);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);

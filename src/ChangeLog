@@ -1,3 +1,14 @@
+2003-01-08  Miguel Coca  <mcoca@gnu.org>
+
+	* gpafilesel.c, gpafilesel.h: Remove.
+	
+	* Makefile.am (gpa_SOURCES): Remove gpafilesel.{c,h}
+
+	* gtktools.c (file_dialog_ok, gpa_get_save_file_name): Use
+	GtkFileSelection.
+
+	* verifydlg.c (verify_file): Use the GPGME 0.4.0 interface.
+
 2002-12-31  Miguel Coca  <mcoca@gnu.org>
 
 	* gpgmetools.c (gpa_gpgme_key_get_userid): Tag revoked UID's as such.

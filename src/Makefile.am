@@ -18,7 +18,6 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      helpmenu.c helpmenu.h	  \
 	      icons.c icons.h \
 	      gpawidgets.c gpawidgets.h \
-              gpafilesel.c gpafilesel.h \
 	      fileman.c fileman.h \
 	      filesigndlg.c filesigndlg.h \
 	      encryptdlg.c encryptdlg.h \

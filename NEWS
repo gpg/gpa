@@ -1,14 +1,14 @@
 Noteworthy changes in version 0.6.1 (unreleased)
 ------------------------------------------------
 
+ * GPA now uses the standard GTK+ file selection dialog.
+
  * Revoked user names are properly treated. They are not displayed, save in
  the details notebook, and then they are clearly marked as revoked.
 
  * There is now a right click menu in the main key list.
 
  * The passphrase for a key can now be changed from the edit key dialog.
-
- * GPA now requires GPGME 0.4.1.
 
 Noteworthy changes in version 0.6.0 (2002-12-24)
 ------------------------------------------------

@@ -25,7 +25,6 @@
 #include <gtk/gtk.h>
 #include "gtktools.h"
 #include "gpawindowkeeper.h"
-#include "gpafilesel.h"
 #include "icons.h"
 
 
@@ -384,7 +383,7 @@ file_dialog_ok (gpointer param)
   GPASaveFileNameDialog *dialog = param;
 
   dialog->filename 
-      = (gchar *) gpa_file_selection_get_filename (GPA_FILE_SELECTION (dialog->window));
+      = (gchar *) gtk_file_selection_get_filename (GTK_FILE_SELECTION (dialog->window));
   if( dialog->filename != NULL )
 	  dialog->filename = g_strdup (dialog->filename);
 
@@ -413,7 +412,7 @@ gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
 			const gchar * directory)
 {
   GPASaveFileNameDialog dialog;
-  GtkWidget * window = gpa_file_selection_new (title);
+  GtkWidget * window = gtk_file_selection_new (title);
 
   dialog.window = window;
   dialog.filename = NULL;
@@ -421,11 +420,11 @@ gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (file_dialog_destroy), NULL);
 
-  gtk_signal_connect_object (GTK_OBJECT(GPA_FILE_SELECTION(window)->ok_button),
+  gtk_signal_connect_object (GTK_OBJECT(GTK_FILE_SELECTION(window)->ok_button),
 			     "clicked", GTK_SIGNAL_FUNC (file_dialog_ok),
 			     (gpointer) &dialog);
   gtk_signal_connect_object (
-		      GTK_OBJECT (GPA_FILE_SELECTION (window)->cancel_button),
+		      GTK_OBJECT (GTK_FILE_SELECTION (window)->cancel_button),
 		      "clicked", GTK_SIGNAL_FUNC (file_dialog_cancel),
 		      (gpointer) &dialog);
 
