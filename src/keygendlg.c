@@ -147,6 +147,10 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   dialog.window = windowGenerate;
   gtk_window_set_title (GTK_WINDOW (windowGenerate), _("Generate key"));
   gtk_window_add_accel_group (GTK_WINDOW (windowGenerate), accelGroup);
+  /* use gtk_signal_connect_object here to make the dialog pointer the
+   * first parameter of the handler */
+  gtk_signal_connect_object (GTK_OBJECT (windowGenerate), "delete-event",
+		      GTK_SIGNAL_FUNC (key_gen_cancel), (gpointer)&dialog);
 
   vboxGenerate = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowGenerate), vboxGenerate);
@@ -285,7 +289,8 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxGenerate), buttonGenerate);
 
-  gpa_widget_show (windowGenerate, parent, _("keys_generateKey.tip"));
+  gpa_window_show_centered (windowGenerate, parent);
+/*  gpa_widget_show (windowGenerate, parent, _("keys_generateKey.tip"));*/
 
   gtk_grab_add (windowGenerate);
   gtk_main ();
