@@ -80,6 +80,10 @@ gpa_file_verify_dialog_set_property (GObject     *object,
 static void
 gpa_file_verify_dialog_finalize (GObject *object)
 {  
+  GpaFileVerifyDialog *dialog = GPA_FILE_VERIFY_DIALOG (object);
+
+  gpa_context_destroy (dialog->ctx);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -104,6 +108,7 @@ gpa_file_verify_dialog_constructor (GType type,
   dialog = GPA_FILE_VERIFY_DIALOG (object);
   /* Initialize */
 
+  dialog->ctx = gpa_context_new ();
   /* Set up the dialog */
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
@@ -278,25 +283,22 @@ add_signature_to_model (GtkListStore *store, SignatureData *data)
 
 /* Fill the list of signatures with the data from the verification */
 static void
-fill_sig_model (GtkListStore *store, gpgme_ctx_t ctx)
+fill_sig_model (GtkListStore *store, gpgme_signature_t sigs,
+		gpgme_ctx_t ctx)
 {
   SignatureData *data;
-  const gchar *fpr;
-  int i;
+  gpgme_signature_t sig;
 
-  for (i = 0; (fpr = gpgme_get_sig_string_attr (ctx, i, GPGME_ATTR_FPR, 0));
-       i++)
+  for (sig = sigs; sig; sig = sig->next)
     {
       data = g_malloc (sizeof (SignatureData));
-      data->fpr = g_strdup (fpr);
+      data->fpr = g_strdup (sig->fpr);
       data->key = NULL;
-      gpgme_get_sig_key (ctx, i, &data->key);
-      data->validity = gpgme_get_sig_ulong_attr (ctx, i, GPGME_ATTR_VALIDITY, 
-						 0);
-      data->summary = gpgme_get_sig_ulong_attr (ctx, i, GPGME_ATTR_SIG_SUMMARY,
-						0);
-      data->created = gpgme_get_sig_ulong_attr (ctx, i, GPGME_ATTR_CREATED, 0);
-      data->expire = gpgme_get_sig_ulong_attr (ctx, i, GPGME_ATTR_EXPIRE, 0);
+      gpgme_get_key (ctx, sig->fpr, &data->key, FALSE);
+      data->validity = sig->validity;
+      data->summary = sig->summary;
+      data->created = sig->timestamp;
+      data->expire = sig->exp_timestamp;
       add_signature_to_model (store, data);
     }
 }
@@ -304,7 +306,7 @@ fill_sig_model (GtkListStore *store, gpgme_ctx_t ctx)
 
 /* Create the list of signatures */
 static GtkWidget *
-signature_list (gpgme_ctx_t ctx)
+signature_list (gpgme_signature_t sigs, gpgme_ctx_t ctx)
 {
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
@@ -335,13 +337,14 @@ signature_list (gpgme_ctx_t ctx)
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
-  fill_sig_model (store, ctx);
+  fill_sig_model (store, sigs, ctx);
 
   return list;
 }
 
 static GtkWidget *
-verify_file_page (gpgme_ctx_t ctx)
+verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
+		  gpgme_ctx_t ctx)
 {
   GtkWidget *vbox;
   GtkWidget *list;
@@ -350,11 +353,20 @@ verify_file_page (gpgme_ctx_t ctx)
   vbox = gtk_vbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
+  if (signed_file)
+    {
+      gchar *text = g_strdup_printf (_("Verified data in file: %s"),
+				     signed_file);
+      label = gtk_label_new (text);
+      gtk_box_pack_start_defaults (GTK_BOX (vbox), label);
+      g_free (text);
+    }
+
   label = gtk_label_new (_("Signatures:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start_defaults (GTK_BOX (vbox), label);
 
-  list = signature_list (ctx);
+  list = signature_list (sigs, ctx);
   gtk_box_pack_start_defaults (GTK_BOX (vbox), list);
 
   return vbox;
@@ -375,11 +387,12 @@ GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent)
 
 void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      const gchar *filename,
-				      gpgme_ctx_t ctx)
+				      const gchar *signed_file,
+				      gpgme_signature_t sigs)
 {
   GtkWidget *page;
   
-  page = verify_file_page (ctx);
+  page = verify_file_page (sigs, signed_file, dialog->ctx->ctx);
   
   gtk_notebook_append_page (GTK_NOTEBOOK (dialog->notebook), page,
 			    gtk_label_new (filename));

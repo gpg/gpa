@@ -68,6 +68,7 @@ gpa_file_verify_operation_init (GpaFileVerifyOperation *op)
   op->signed_text_fd = -1;
   op->sig = NULL;
   op->signed_text = NULL;
+  op->signed_file = NULL;
 }
 
 static GObject*
@@ -189,9 +190,8 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 				 const gchar *sig_filename)
 {
   gpg_error_t err;
-  gchar *signed_file;
 
-  if (is_detached_sig (sig_filename, &signed_file))
+  if (is_detached_sig (sig_filename, &op->signed_file))
     {
       /* Allocate data objects for a detached signature */
       op->sig_fd = gpa_open_input (sig_filename, &op->sig, 
@@ -200,7 +200,7 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 	{
 	  return FALSE;
 	}
-      op->signed_text_fd = gpa_open_input (signed_file, &op->signed_text,
+      op->signed_text_fd = gpa_open_input (op->signed_file, &op->signed_text,
 					   GPA_OPERATION (op)->window);
       if (op->signed_text_fd == -1)
 	{
@@ -209,7 +209,6 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 	  return FALSE;
 	}
       op->plain = NULL;
-      g_free (signed_file);
     }
   else
     {
@@ -283,10 +282,19 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
     }
   else
     {
+      gpgme_verify_result_t result;
+      
+      result = gpgme_op_verify_result (GPA_OPERATION (op)->context->ctx);
       /* Add the file to the result dialog */
       gpa_file_verify_dialog_add_file (GPA_FILE_VERIFY_DIALOG (op->dialog),
 				       GPA_FILE_OPERATION (op)->current->data,
-				       GPA_OPERATION (op)->context->ctx);
+				       op->signed_file, result->signatures);
+      /* If this was a dettached sig, reset the signed file */
+      if (op->signed_file)
+	{
+	  g_free (op->signed_file);
+	  op->signed_file = NULL;
+	}
       /* Go to the next file in the list and verify it */
       GPA_FILE_OPERATION (op)->current = g_list_next 
 	(GPA_FILE_OPERATION (op)->current);

@@ -41,6 +41,7 @@ struct _GpaFileVerifyOperation {
 
   int sig_fd, signed_text_fd;
   gpgme_data_t sig, signed_text, plain;
+  gchar *signed_file;
   GtkWidget *dialog;
 };
 

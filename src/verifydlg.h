@@ -41,6 +41,8 @@ struct _GpaFileVerifyDialog {
   GtkDialog parent;
 
   GtkWidget *notebook;
+  /* Context for retrieving signature's keys */
+  GpaContext *ctx;
 };
 
 struct _GpaFileVerifyDialogClass {
@@ -55,6 +57,7 @@ GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent);
 
 void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      const gchar *filename,
-				      gpgme_ctx_t ctx);
+				      const gchar *signed_file,
+				      gpgme_signature_t sigs);
 
 #endif

@@ -1,3 +1,22 @@
+2003-08-18  Miguel Coca  <mcoca@gnu.org>
+
+	* gpafileverifyop.c (gpa_file_verify_operation_init) 
+	(gpa_file_verify_operation_start) 
+	(gpa_file_verify_operation_done_cb): Add a field to the operation
+	to hold the name of the signed file for dettached signatures, and
+	use it.
+
+	* verifydlg.c (gpa_file_verify_dialog_finalize) 
+	(gpa_file_verify_dialog_constructor): Add a GpaContext to the dialog,
+	to retrieve signature keys.
+	(fill_sig_model): Replace deprecated gpgme calls.
+	(signature_list, verify_file_page): Pass along the signatures. List
+	the verified files for dettached signatures.
+
+	* verifydlg.h, verifydlg.c (gpa_file_verify_dialog_add_file): Remove
+	context parameter, add the signatures themselvers, and the name of
+	the signed file for dettached signatures.
+
 2003-07-30  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (key_has_been_signed): Remove deprecated gpgme calls.
