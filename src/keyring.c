@@ -842,15 +842,23 @@ keyring_update_signatures_page (GPAKeyringEditor * editor)
 {
   GpapaPublicKey * key = keyring_editor_current_key (editor);
   GList * signatures;
+  gchar * key_id = NULL;
 
+  /* in the simplified UI we don't want to list the self signatures */
   if (key)
     {
+      if (gpa_simplified_ui ())
+	{
+	  key_id = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
+					     editor->window);
+	}
+
       signatures = gpapa_public_key_get_signatures (key, gpa_callback,
 						    editor->window);
-      gpa_siglist_set_signatures (editor->signatures_list, signatures);
+      gpa_siglist_set_signatures (editor->signatures_list, signatures, key_id);
     }
   else
-    gpa_siglist_set_signatures (editor->signatures_list, NULL);
+    gpa_siglist_set_signatures (editor->signatures_list, NULL, NULL);
 }
 
 /* definitions for the brief and detailed key list. The names are at the
