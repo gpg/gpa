@@ -292,7 +292,7 @@ gpa_keygen_wizard_final_page (void)
 {
   return gpa_keygen_wizard_message_page
     (_("Congratulations!\n\n"
-       "You have sucessfully generated a key."
+       "You have successfully generated a key."
        " The key is indefinitely valid and has a length of 1024 bits."));
 }
 
