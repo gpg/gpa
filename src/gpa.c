@@ -96,6 +96,7 @@ static ARGPARSE_OPTS opts[] = {
     {0}
 };
 
+/* Directory where the gpa executable resides */
 static char *gpa_homedir = NULL;
 static char *gpa_configname = NULL;
 static char *keyservers_configname = NULL;
@@ -105,7 +106,16 @@ GtkWidget *global_windowMain = NULL;
 GpapaAction global_lastCallbackResult;
 GList *global_defaultRecipients = NULL;
 
-/* Search for a configuration file
+/* Search for a configuration file.
+ * It uses a different search order for Windows and Unix.
+ *
+ * On Unix:
+ *  1. in the GnuPG home directory
+ *  2. in GPA_DATADIR
+ * If the file is not found, return a filename that will create it
+ * in the GnuPG home directory.
+ *
+ * On Windows:
  *  1. in the directory where `gpa.exe' resides,
  *  2. in GPA_DATADIR
  *  3. in the GnuPG home directory.
@@ -116,42 +126,23 @@ static gchar *
 search_config_file (const gchar *filename)
 {
   gchar *candidate = NULL;
-
-  if (gpa_homedir)
-    candidate = g_strconcat (gpa_homedir, filename, NULL);
-  if (candidate)
+  gint i;
+  /* The search order for each OS, a NULL terminated array */
+#ifdef G_OS_UNIX
+  gchar *dirs[] = {gpa_options.homedir, GPA_DATADIR, NULL};
+#elif G_OS_WIN32
+  gchar *dirs[] = {gpa_homedir, GPA_DATADIR, gpa_options.homedir, NULL};
+#endif
+  for( i = 0; dirs[i]; i++ )
     {
+      candidate = g_build_filename (dirs[i], filename, NULL);
       if (g_file_test (candidate, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
         return candidate;
       else
         g_free (candidate);
     }
-
-  candidate = make_filename (GPA_DATADIR, filename, NULL);
-  if (candidate)
-    {
-      if (g_file_test (candidate, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
-	return candidate;
-      else
-	g_free (candidate);
-    }
-
-  if (gpa_options.homedir)
-    {
-      candidate = make_filename (gpa_options.homedir, filename, NULL);
-      if (candidate)
-	{
-	  if (g_file_test (candidate, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
-	    return candidate;
-	  else
-	    g_free (candidate);
-	}
-    }
-
-  if (gpa_homedir)
-    return g_strconcat (gpa_homedir, filename, NULL);
-  else
-    return NULL;
+  /* If no file exists, return the first option to be created */
+  return g_build_filename (dirs[0], filename, NULL);
 }
 
 static const char *
@@ -466,7 +457,6 @@ main (int argc, char **argv)
   const char *gpg_program = GPG_PROGRAM;
   gchar *gtkrc;
   const char *keyserver = NULL;
-  int l;
 
 #ifdef __MINGW32__
   hide_gpa_console_window();
@@ -489,14 +479,8 @@ main (int argc, char **argv)
                             | G_LOG_LEVEL_MESSAGE
                             | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
 
-  gpa_homedir = g_strdup (argv[0]);
-  l = strlen (gpa_homedir) - 2;
-  while (l > 0 && gpa_homedir[l] != '/' && gpa_homedir[l] != G_DIR_SEPARATOR)
-    l--;
-  if (gpa_homedir[l] == '/' || gpa_homedir[l] == G_DIR_SEPARATOR)
-    gpa_homedir[l+1] = 0;
-  else
-    gpa_homedir[0] = 0;
+  /* Find out where our executable lives */
+  gpa_homedir = g_path_get_dirname (argv[0]);
 
   set_strusage (my_strusage);
   /*log_set_name ("gpa"); not yet implemented in logging.c */

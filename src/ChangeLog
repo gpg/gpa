@@ -1,3 +1,13 @@
+2002-08-02  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpa.c (main): Use GLib to find out where the gpa executable
+	resides, instead of walking the pathname ourselves.
+	(search_config_file): Use different search order for Unix and
+	Windows. We should never use the executable path on Unix. Use
+	standard GLib functions. This does not fix the fact that if a
+	GPA_DATADIR/gpa.conf (i.e. /usr/local/share/gpa/gpa.conf) file
+	exists, gpa will try to write to it to remember options.
+
 2002-07-31  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* folder1.xpm, folder2.xpm, harddisk1.xpm, harddisk2.xpm,
