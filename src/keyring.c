@@ -609,7 +609,7 @@ keyring_editor_menubar_new (GtkWidget * window,
   };
   GtkItemFactoryEntry keys_menu[] = {
     {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
-    {_("/Keys/_Generate Key"), NULL, keyring_editor_generate_key, 0, NULL},
+    {_("/Keys/_Generate Key..."), NULL, keyring_editor_generate_key, 0, NULL},
     /*{_("/Keys/Generate _Revocation Certificate"), NULL,
 					 keys_generateRevocation, 0, NULL},*/
     /*{_("/Keys/_Import Keys"), NULL, keys_import, 0, NULL},*/
