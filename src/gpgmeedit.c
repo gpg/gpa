@@ -436,7 +436,7 @@ GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust)
   err = gpgme_data_new (&out);
   if (err != GPGME_No_Error)
     {
-      gpa_gpgme_error (err);
+      return err;
     }
   err = gpgme_op_edit (ctx, key, edit_ownertrust_fnc, &parms, out);
   gpgme_data_release (out);
@@ -454,7 +454,7 @@ GpgmeError gpa_gpgme_edit_expiry (GpgmeKey key, GDate *date)
   err = gpgme_data_new (&out);
   if (err != GPGME_No_Error)
     {
-      gpa_gpgme_error (err);
+      return err;
     }
   /* The new expiration date */
   if (date)
@@ -482,7 +482,7 @@ GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, gchar *private_key_fpr,
   err = gpgme_data_new (&out);
   if (err != GPGME_No_Error)
     {
-      gpa_gpgme_error (err);
+      return err;
     }  
   gpgme_signers_clear (ctx);
   err = gpgme_signers_add (ctx, secret_key);

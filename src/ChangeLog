@@ -1,5 +1,9 @@
 2002-09-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* gpgmeedit.c (gpa_gpgme_edit_ownertrust, gpa_gpgme_edit_expiry) 
+	(gpa_gpgme_edit_sign): Fix error reporting: always report errors to
+	the caller.
+
 	* keyring.c (keyring_details_page_fill_key): Display the
 	fingerprint in a proper format (using
 	gpa_gpgme_key_get_fingerprint).
