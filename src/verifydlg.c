@@ -130,7 +130,7 @@ verify_file (const gchar *filename, GtkWidget *parent)
     }
   gpgme_data_release (input);
   gpgme_data_release (plain);
-  if (status == GPGME_SIG_STAT_NOSIG)
+  if (status == GPGME_SIG_STAT_NOSIG || status == GPGME_SIG_STAT_NONE)
     {
       return FALSE;
     }

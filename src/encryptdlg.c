@@ -28,6 +28,7 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
+#include "gpapastrings.h"
 
 struct _GPAFileEncryptDialog {
   GtkWidget *window;
@@ -115,6 +116,88 @@ ignore_key_trust (GpgmeKey key, GtkWidget *parent)
   return response;
 }
 
+static void
+revoked_key (GpgmeKey key, GtkWidget *parent)
+{
+  GtkWidget *dialog;
+  GtkWidget *key_info;
+  GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *image;
+
+  dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent),
+					GTK_DIALOG_MODAL, 
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+
+  hbox = gtk_hbox_new (FALSE, 6);
+  image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
+				    GTK_ICON_SIZE_DIALOG);
+  gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
+  vbox = gtk_vbox_new (FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
+
+  label = gtk_label_new (_("The following key has been revoked by it's owner:"));
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
+  key_info = gpa_key_info_new (key);
+  gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5);
+  label = gtk_label_new (_("And can not be used for encryption."));
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
+
+  gtk_widget_show_all (dialog);
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+static void
+expired_key (GpgmeKey key, GtkWidget *parent)
+{
+  GtkWidget *dialog;
+  GtkWidget *key_info;
+  GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *image;
+  gchar *message;
+
+  dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent),
+					GTK_DIALOG_MODAL, 
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+
+  hbox = gtk_hbox_new (FALSE, 6);
+  image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
+				    GTK_ICON_SIZE_DIALOG);
+  gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
+  vbox = gtk_vbox_new (FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
+
+  message = g_strdup_printf (_("The following key expired on %s:"),
+                             gpa_expiry_date_string 
+                             (gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE,
+                                                        NULL,0)));
+  label = gtk_label_new (message);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
+  key_info = gpa_key_info_new (key);
+  gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5);
+  label = gtk_label_new (_("And can not be used for encryption."));
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
+
+  gtk_widget_show_all (dialog);
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
 static gboolean
 set_recipients (GList *recipients, GpgmeRecipients *rset, GtkWidget *parent)
 {
@@ -140,7 +223,20 @@ set_recipients (GList *recipients, GpgmeRecipients *rset, GtkWidget *parent)
 	  return FALSE;
 	}
       valid = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
-      if (valid == GPGME_VALIDITY_FULL || valid == GPGME_VALIDITY_ULTIMATE)
+      /* First, make sure the key is usable (not revoked or unusable) */
+      if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_REVOKED, NULL, 0))
+        {
+          revoked_key (key, parent);
+          return FALSE;
+        }
+      else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_EXPIRED, NULL, 0))
+        {
+          expired_key (key, parent);
+          return FALSE;
+        }
+      /* Now, check it's validity */
+      else if (valid == GPGME_VALIDITY_FULL || 
+               valid == GPGME_VALIDITY_ULTIMATE)
 	{
 	  gpgme_recipients_add_name_with_validity (*rset, cur->data, valid);
 	}

@@ -1,3 +1,13 @@
+2002-11-06  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* verifydlg.c (verify_file): Check for GPGME_SIG_STAT_NONE too.
+
+	* encryptdlg.c (revoked_key, expired_key): New functions.
+	(set_recipients): Complain about revoked and expired keys.
+
+	* keyserver.c (keyserver_read_list): Added a couple of LDAP keyservers
+	to the default list.
+
 2002-11-02  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* fileman.c (open_file, add_file): Only complain about an already
