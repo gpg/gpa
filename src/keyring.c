@@ -1172,6 +1172,7 @@ keyring_editor_new (void)
   gtk_signal_connect (GTK_OBJECT (window), "gpa_default_key_changed",
 		      (GtkSignalFunc)keyring_update_status_bar, editor);
 
+  keyring_update_status_bar (editor);
   update_selection_sensitive_widgets (editor);
 
   return window;
