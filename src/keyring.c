@@ -1452,11 +1452,13 @@ toolbar_import_keys (GtkWidget *widget, gpointer param)
   keyring_editor_import (param);
 }
 
+#if 0
 static void
 toolbar_preferences (GtkWidget *widget, gpointer param)
 {
   gpa_open_settings_dialog ();
 }
+#endif
 
 static GtkWidget *
 keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
@@ -1534,6 +1536,10 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
                               GTK_SIGNAL_FUNC (keyring_set_detailed_listing),
                               editor);
 
+#if 0
+  /* Disabled for now. The long label causes the toolbar to grow too much.
+   * See http://bugzilla.gnome.org/show_bug.cgi?id=75086
+   */
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
   item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), 
@@ -1542,6 +1548,7 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
                                    _("preferences"),
                                    GTK_SIGNAL_FUNC (toolbar_preferences),
                                    editor, -1);
+#endif
 
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 

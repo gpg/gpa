@@ -1,5 +1,10 @@
 2002-12-12  Miguel Coca  <mcoca@gnu.org>
 
+	* fileman.c (gpa_fileman_toolbar_new, toolbar_preferences):
+	Disable the preferences button in the toolbar. It's long label
+	makes the toolbar far too long.
+	* keyring.c (keyring_toolbar_new, toolbar_preferences): Likewise.
+
 	* expirydlg.c (expiry_ok): Replace the gpa_message_box_run.
 	* keylist.c (keylist_fill_list): Likewise.
 	* keygenwizard.c (gpa_keygen_wizard_password_validate): Likewise.

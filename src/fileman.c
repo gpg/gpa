@@ -462,11 +462,13 @@ toolbar_file_decrypt (GtkWidget *widget, gpointer param)
   decrypt_files (param);
 }
 
+#if 0
 static void
 toolbar_preferences (GtkWidget *widget, gpointer param)
 {
   gpa_open_settings_dialog ();
 }
+#endif
 
 static GtkWidget *
 gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
@@ -507,6 +509,10 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 			     icon, GTK_SIGNAL_FUNC (toolbar_file_decrypt),
 			     fileman);
 
+#if 0
+  /* Disabled for now. The long label causes the toolbar to grow too much.
+   * See http://bugzilla.gnome.org/show_bug.cgi?id=75086
+   */
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
   
   gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), 
@@ -515,6 +521,7 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
                             _("preferences"),
                             GTK_SIGNAL_FUNC (toolbar_preferences),
                             fileman, -1);
+#endif
 
 #if 0  /* FIXME: Help is not available yet. :-( */
   /* Help */
