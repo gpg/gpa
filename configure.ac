@@ -12,7 +12,7 @@ AC_PREREQ(2.52)
 # specific feature can already be done under the assumption that the
 # CVS vesiuon is the most recent one in a branch.
 #
-AC_INIT(gpa, 0.6.0, [bug-gpa@gnupg.org])
+AC_INIT(gpa, 0.6.1-cvs, [bug-gpa@gnupg.org])
 
 ALL_LINGUAS="de fr zh_TW.Big5 pt_BR ja nl es"
 AM_CONFIG_HEADER(config.h)
