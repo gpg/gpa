@@ -1,5 +1,9 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* gpa.h (global_noTips):
+	* gpa.c (global_noTips): Removed. not needed anymore now that the
+	tip window's gone
+
 	* optionsmenu.c (gpa_options_menu_add_to_factory): Remove the
 	"Online _tips" entry
 
