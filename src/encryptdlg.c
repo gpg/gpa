@@ -217,13 +217,9 @@ encrypt_file (const gchar *filename, GpgmeRecipients rset, gboolean sign,
     return NULL;
 
   /* Create the appropiate GpgmeData's */
-  err = gpgme_data_new_from_file (&input, filename, 1);
+  err = gpa_gpgme_data_new_from_file (&input, filename, parent);
   if (err == GPGME_File_Error)
     {
-      gchar *message;
-      message = g_strdup_printf ("%s: %s", filename, strerror(errno));
-      gpa_window_error (message, parent);
-      g_free (message);
       g_free (target_filename);
       fclose (target);
       return NULL;

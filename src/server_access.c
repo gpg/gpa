@@ -361,7 +361,7 @@ void server_get_key (const gchar *server, const gchar *keyid,
 			       parent);
   /* Read the output */
   /* No error checking: the import will take care of that. */
-  err = gpgme_data_new_from_file (data, output_filename, 1);
+  err = gpa_gpgme_data_new_from_file (data, output_filename, parent);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);

@@ -24,6 +24,7 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      fileman.c fileman.h \
 	      filesigndlg.c filesigndlg.h \
 	      encryptdlg.c encryptdlg.h \
+	      verifydlg.c verifydlg.h \
 	      keyring.c keyring.h \
 	      ownertrustdlg.c ownertrustdlg.h \
 	      keysigndlg.c keysigndlg.h \

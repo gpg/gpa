@@ -85,6 +85,12 @@ void dump_data_to_file (GpgmeData data, FILE *file);
  * overwrite!) */
 FILE *gpa_fopen (const char *filename, GtkWidget *parent);
 
+/* Do a gpgme_data_new_from_file and report any GPGME_File_Error to the user.
+ */
+GpgmeError gpa_gpgme_data_new_from_file (GpgmeData *data,
+					 const char *filename,
+					 GtkWidget *parent);
+
 /* Read the contents of the clipboard into the GpgmeData object.
  */
 void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard);

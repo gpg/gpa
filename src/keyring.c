@@ -404,13 +404,9 @@ keyring_editor_import (gpointer param)
         {
           /* Read keys from the user specified file.
            */
-          err = gpgme_data_new_from_file (&data, filename, 1);
+          err = gpa_gpgme_data_new_from_file (&data, filename, editor->window);
           if (err == GPGME_File_Error)
             {
-              gchar message[256];
-              g_snprintf (message, sizeof(message), "%s: %s",
-                          filename, strerror(errno));
-              gpa_window_error (message, editor->window);
               return;
             }
           else if (err != GPGME_No_Error)

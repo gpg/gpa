@@ -50,6 +50,7 @@
 #include "fileman.h"
 #include "filesigndlg.h"
 #include "encryptdlg.h"
+#include "verifydlg.h"
 
 struct _GPAFileManager {
   GtkWidget *window;
@@ -151,6 +152,14 @@ open_file (gpointer param)
 static void
 verify_files (gpointer param)
 {
+  GPAFileManager *fileman = param;
+  GList * files;
+  
+  files = get_selected_files (fileman->clist_files);
+  if (!files)
+    return;
+
+  gpa_file_verify_dialog_run (fileman->window, files);
 }
 
 
@@ -261,13 +270,9 @@ decrypt_files (gpointer param)
 	  plain_filename = g_strconcat (filename, ".txt");
 	}
       /* Open the ciphertext */
-      err = gpgme_data_new_from_file (&cipher, filename, 1);
+      err = gpa_gpgme_data_new_from_file (&cipher, filename, fileman->window);
       if (err == GPGME_File_Error)
 	{
-	  gchar *message;
-	  message = g_strdup_printf ("%s: %s", filename, strerror(errno));
-	  gpa_window_error (message, fileman->window);
-	  g_free (message);
 	  g_free (plain_filename);
 	  break;
 	}
@@ -294,8 +299,9 @@ decrypt_files (gpointer param)
 	}
       else if (err == GPGME_No_Data || err == GPGME_Decryption_Failed)
 	{
-	  gchar *message = g_strdup_printf (_("The file %s contained no valid"
-					      " encrypted data."), filename);
+	  gchar *message = g_strdup_printf (_("The file \"%s\" contained no "
+					      "valid encrypted data."),
+					    filename);
 	  gpa_window_error (message, fileman->window);
 	}
       else if (err != GPGME_No_Error)

@@ -106,13 +106,9 @@ sign_files (GPAFileSignDialog *dialog, gchar *fpr, GpgmeSigMode sign_type,
       if (!target)
 	break;
       /* Create the appropiate GpgmeData's*/
-      err = gpgme_data_new_from_file (&input, filename, 1);
+      err = gpa_gpgme_data_new_from_file (&input, filename, dialog->window);
       if (err == GPGME_File_Error)
 	{
-	  gchar *message;
-	  message = g_strdup_printf ("%s: %s", filename, strerror(errno));
-	  gpa_window_error (message, dialog->window);
-	  g_free (message);
 	  g_free (target_filename);
 	  fclose (target);
 	  break;

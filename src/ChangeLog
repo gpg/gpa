@@ -1,3 +1,22 @@
+2002-10-20  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* Makefile.am (gpa_SOURCES): Added verifydlc.{c,h}.
+
+	* verifydlg.h, verifydlg.c: New files. The "Verify files" dialog.
+
+	* fileman.c (verify_files): Implement.
+
+	* gpgmetools.h, gpgmetools.c (gpa_gpgme_data_new_from_file): New
+	function.
+
+	* encryptdlg.c (encrypt_file): Use gpa_gpgme_data_new_from_file.
+	* server_access.c (server_get_key): Likewise.
+	* keyring.c (keyring_editor_import): Likewise.
+	* fileman.c (decrypt_files): Likewise.
+	* filesigndlg.c (sign_files): Likewise.
+
+	* fileman.c (decrypt_files): Fix "typo" in error message.
+
 2002-10-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpawizard.c (gpa_wizard_new, gpa_wizard_append_page): Use g_free()

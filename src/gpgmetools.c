@@ -101,6 +101,24 @@ FILE *gpa_fopen (const char *filename, GtkWidget *parent)
   return target;
 }
 
+/* Do a gpgme_data_new_from_file and report any GPGME_File_Error to the user.
+ */
+GpgmeError gpa_gpgme_data_new_from_file (GpgmeData *data,
+					 const char *filename,
+					 GtkWidget *parent)
+{
+  GpgmeError err;
+  err = gpgme_data_new_from_file (data, filename, 1);
+  if (err == GPGME_File_Error)
+    {
+      gchar *message;
+      message = g_strdup_printf ("%s: %s", filename, strerror(errno));
+      gpa_window_error (message, NULL);
+      g_free (message);
+    }
+  return err;
+}
+
 /* Read the contents of the clipboard into the GpgmeData object.
  */
 void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard)
