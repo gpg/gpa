@@ -9,8 +9,6 @@
 	New functions implementing a flexible message box with caller
 	definable buttons.
 
-2001-01-12  Bernhard Herzog  <bh@intevation.de>
-
 	* gpa.h: Add the prototypes for gpa_simplified_ui and
 	gpa_set_simplified_ui
 
