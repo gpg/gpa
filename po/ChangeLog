@@ -1,3 +1,7 @@
+2001-02-08  Bernhard Herzog  <bh@intevation.de>
+
+	* POTFILES.in: Add the key delete dialog
+
 2001-02-07  Bernhard Herzog  <bh@intevation.de>
 
 	* POTFILES.in: Remove the no longer used keyreceivedlg.c and add

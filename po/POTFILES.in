@@ -10,6 +10,7 @@ src/gpawidgets.c
 src/gpawizard.c
 src/gtktools.c
 src/helpmenu.c
+src/keydeletedlg.c
 src/keyeditdlg.c
 src/keyexportdlg.c
 src/keygendlg.c
