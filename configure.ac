@@ -12,7 +12,7 @@ AC_PREREQ(2.52)
 # specific feature can already be done under the assumption that the
 # CVS vesiuon is the most recent one in a branch.
 #
-AC_INIT(gpa, 0.7.0, [bug-gpa@gnupg.org])
+AC_INIT(gpa, 0.7.1-cvs, [bug-gpa@gnupg.org])
 
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_SRCDIR(src/gpa.c)
