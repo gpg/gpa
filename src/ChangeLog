@@ -1,3 +1,7 @@
+2001-02-27	Jan-Oliver Wagner <jan@intevation.de>
+
+	* helpmenu.c: Added some authors for scroll text 
+
 2001-02-15  Thomas Koester  <tkoester@intevation.de>
 
 	* gpa.c (i18n_init): call gtk_set_locale even with USE_SIMPLE_GETTEXT
