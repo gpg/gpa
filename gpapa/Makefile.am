@@ -22,13 +22,14 @@ libgpapa_a_SOURCES = gpapa.c gpapa.h \
 		     ops.h \
 		     gpgme_types.h \
 		     io.h \
-		     status_table.h \
+		     status-table.h \
 		     util.c util.h \
 		     syshdr.h \
 		     posix-io.c \
 		     w32-io.c \
 		     data.c \
-		     errors.c 
+		     errors.c \
+		     context.h
 
 gpapatest_SOURCES = gpapatest.c
 gpapatest_LDADD =  -L . -lgpapa -L ../jnlib -ljnlib
