@@ -1,12 +1,41 @@
-Noteworthy changes in CVS-HEAD
+Noteworthy changes in version 0.6.0 [UNRELEASED]
 ------------------------------------------------
 
-* We have finished merging in the changes of the 0.5.0 release with the
-  changes to CVS since 0.4.3.
+ * GPA now supports GnuPG 1.2 or later, thanks to it's use of GPGME.
 
-* All the translations in the po/ directory, save the german one, are
-  largely obsolete and should be updated before they can be used.
+ * All the user preferences are set from a single dialog, and automatically
+ saved in gpa.conf, including the default keyserver and the use of
+ advanced/simple UI mode.
 
+ * The `--advanced-ui' command line options has been removed, as it is
+ available within the program itself.
+
+ * The new `-f' and `-k' options can be used to launch the keyring editor,
+ the file manager, or both on startup.
+
+ * All the user ID's in a key are now displayed in the `Details' section, and
+ in most dialogs.
+
+ * Key signatures are now displayed individually for each User ID, or in a
+ global listing for the key.
+
+ * The usual `Copy' and `Paste' commands can be used to import and export keys
+ from the clipboard.
+
+ * The `Edit key' option is now only available for private keys. Setting the
+ ownertrust of a key is now an independent operation.
+
+ * After every import operation, the user is informed of how many keys have
+ been imported.
+
+ * Errors or keyserver operations are now reported to the user.
+
+ * The `Verify file' dialog has been completely revamped to allow
+ verification of several files at the same time.
+
+ * Added Japanese, Brazilian Portuguese and Dutch translations.
+
+ * The user interface has been updated to use GTK+ 2.0 and stock items.
 
 Noteworthy changes in version 0.5.0 (2002-02-25)
 ------------------------------------------------
