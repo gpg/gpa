@@ -1719,7 +1719,7 @@ keyring_editor_new (void)
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);
-  markup = g_strdup_printf ("<span font_desc=\"Arial 16\">%s</span>", 
+  markup = g_strdup_printf ("<span font_desc=\"16\">%s</span>",
                             _("Keyring Editor"));
   gtk_label_set_markup (GTK_LABEL (label), markup);
   g_free (markup);

@@ -1,5 +1,7 @@
 2002-12-16  Miguel Coca  <mcoca@gnu.org>
 
+	* keyring.c (keyring_editor_new): Remove specific font name.
+
 	* gpa.h: Include config.h here. Solves i18n problems.
 
 2002-12-15  Miguel Coca  <mcoca@gnu.org>
