@@ -303,38 +303,27 @@ gpa_button_set_text (GtkWidget * button, gchar * text,
 void
 gpa_window_error (const gchar *message, GtkWidget *messenger)
 {
-  GpaWindowKeeper *keeper;
-  GtkAccelGroup *accelGroup;
   GtkWidget *windowError;
   GtkWidget *vboxError;
   GtkWidget *labelMessage;
-  GtkWidget *buttonClose;
 
-  keeper = gpa_windowKeeper_new ();
-  windowError = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gpa_windowKeeper_set_window (keeper, windowError);
-  gtk_window_set_title (GTK_WINDOW (windowError), _("GPA Error"));
-  gtk_window_set_modal (GTK_WINDOW (windowError), TRUE);
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (windowError), accelGroup);
-  vboxError = gtk_vbox_new (FALSE, 0);
+  windowError = gtk_dialog_new_with_buttons (_("GPA Error"),
+                                             (messenger ? 
+                                             GTK_WINDOW(messenger) : NULL),
+                                             GTK_DIALOG_MODAL,
+                                             GTK_STOCK_CLOSE,
+                                             GTK_RESPONSE_CLOSE,
+                                             NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (windowError),
+                                   GTK_RESPONSE_CLOSE);
+  vboxError = GTK_DIALOG (windowError)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vboxError), 10);
   labelMessage = gtk_label_new (message);
   gtk_box_pack_start (GTK_BOX (vboxError), labelMessage, TRUE, FALSE, 10);
-  buttonClose = gpa_button_new (accelGroup, _("_OK"));
-  gtk_signal_connect_object (GTK_OBJECT (buttonClose), "clicked",
-			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			     (gpointer) windowError);
-  gtk_widget_add_accelerator (buttonClose, "clicked", accelGroup, GDK_Escape,
-			      0, 0);
-  gtk_box_pack_start (GTK_BOX (vboxError), buttonClose, FALSE, FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (windowError), vboxError);
 
-  if (messenger)
-    gpa_window_show_centered (windowError, messenger);
-  else
-    gtk_widget_show_all (windowError);
-  gtk_widget_grab_focus (buttonClose);
+  gtk_widget_show_all (windowError);
+  gtk_dialog_run (GTK_DIALOG (windowError));
+  gtk_widget_destroy (windowError);
 } /* gpa_window_error */
 
 void

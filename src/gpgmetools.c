@@ -21,6 +21,7 @@
 /* A set of auxiliary functions for common tasks related to GPGME */
 
 #include "gpa.h"
+#include "gtktools.h"
 #include "gpgmetools.h"
 
 /* Report an unexpected error in GPGME and quit the application */
@@ -31,16 +32,8 @@ void _gpa_gpgme_error (GpgmeError err, const char *file, int line)
                                       "\t%s\n\n"
                                       "The application will be terminated"),
                                     file, line, gpgme_strerror (err));
-  GtkWidget *label = gtk_label_new (message);
-  GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Error"),
-                                                   NULL,
-                                                   GTK_DIALOG_MODAL,
-                                                   GTK_STOCK_CLOSE,
-                                                   GTK_RESPONSE_NONE,
-                                                   NULL);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
-  gtk_widget_show_all (dialog);
-  gtk_dialog_run (GTK_DIALOG(dialog));
+  gpa_window_error (message, NULL);
+  g_free (message);
   exit (EXIT_FAILURE);
 }
 

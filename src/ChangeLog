@@ -1,3 +1,16 @@
+2002-08-26  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpgmetools.c (_gpa_gpgme_error): Use gpa_window_error.
+
+	* gtktools.c (gpa_window_error): Use a GtkDialog.
+
+	* keysigndlg.c (gpa_key_sign_run_dialog): Increase the width of the
+	border of the dialog. Make "Yes" the default action.
+
+	* keydeletedlg.c (delete_ok, delete_cancel, delete_destroy): Removed.
+	A GtkDialog does not need callbacks.
+	(gpa_delete_dialog_run): Use a GtkDialog.
+
 2002-08-24  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* optionsmenu.c (add_key, options_key): Use the fingerprint

@@ -62,6 +62,8 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
                                         GTK_STOCK_NO,
                                         GTK_RESPONSE_NO,
                                         NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_YES);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
