@@ -30,6 +30,7 @@ src/keysigndlg.c
 src/keytable.c
 src/options.c
 src/ownertrustdlg.c
+src/passwddlg.c
 src/qdchkpwd.c
 src/server_access.c
 src/settingsdlg.c
