@@ -371,21 +371,25 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
 
 /* a simple but flexible message box */
 
-static gboolean
-message_box_delete (GtkWidget *widget, GdkEvent *event, gpointer param)
+
+typedef struct {
+  gchar * result;
+  GtkWidget * window;
+} GPAMessageBox;
+
+static void
+message_box_destroy (GtkWidget *widget, gpointer param)
 {
-  gtk_object_set_data (GTK_OBJECT (widget), "user_data", NULL);
   gtk_main_quit ();
-  return FALSE;
 }
 
 static void
 message_box_clicked (GtkWidget * button, gpointer param)
 {
-  GtkWidget * toplevel = gtk_widget_get_toplevel (button);
+  GPAMessageBox * dialog = param;
 
-  gtk_object_set_data (GTK_OBJECT (toplevel), "user_data", param);
-  gtk_main_quit ();
+  dialog->result = gtk_object_get_data (GTK_OBJECT (button), "user_data");
+  gtk_widget_destroy (dialog->window);
 }
 
 gchar *
@@ -399,12 +403,15 @@ gpa_message_box_run (GtkWidget * parent, const gchar * title,
   GtkWidget * bbox;
   GtkWidget * button;
   int i;
-  gchar * result;
+  GPAMessageBox dialog;
+
+  dialog.result = NULL;
 
   window = gtk_window_new (GTK_WINDOW_DIALOG);
+  dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), title);
-  gtk_signal_connect (GTK_OBJECT (window), "delete-event",
-		      GTK_SIGNAL_FUNC (message_box_delete),
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (message_box_destroy),
 		      NULL);
 
   vbox = gtk_vbox_new (FALSE, 5);
@@ -425,9 +432,11 @@ gpa_message_box_run (GtkWidget * parent, const gchar * title,
     {
       button = gtk_button_new_with_label (buttons[i]);
       gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+      gtk_object_set_data (GTK_OBJECT (button), "user_data",
+			   (gpointer)buttons[i]);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (message_box_clicked),
-			  (gpointer)buttons[i]);
+			  (gpointer)&dialog);
     }
 
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
@@ -435,11 +444,7 @@ gpa_message_box_run (GtkWidget * parent, const gchar * title,
 
   gtk_main ();
 
-  result = gtk_object_get_data (GTK_OBJECT (window), "user_data");
-
-  gtk_widget_destroy (window);
-
-  return result;
+  return dialog.result;
 }
   
 
