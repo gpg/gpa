@@ -42,7 +42,9 @@ static char *scroll_text[] =
   "Thomas Köster",
   "Peter Neuhaus",
   "Markus Gerwinski",
-  "Beate Esser"
+  "Beate Esser",
+  "Benedikt Wildenhain",
+  "Timo Schulz"
 };
 static int shuffle_array[ DIM(scroll_text) ];
 static int do_scrolling = 0;
@@ -132,10 +134,10 @@ about_dialog_timer (gpointer data)
 			  scroll_area->allocation.width,
 			  scroll_area->allocation.height);
       gdk_draw_string (scroll_pixmap,
-		       scroll_area->style->font,
+		       gtk_style_get_font (scroll_area->style),
 		       scroll_area->style->black_gc,
 		       scroll_area->allocation.width - scroll_offset,
-		       scroll_area->style->font->ascent,
+		       gtk_style_get_font (scroll_area->style),
 		       scroll_text[cur_scroll_text]);
       gdk_draw_pixmap (scroll_area->window,
 		       scroll_area->style->black_gc,
@@ -228,8 +230,9 @@ help_about (void)
       max_width = 0;
       for (i = 0; i < DIM(scroll_text); i++)
 	{
-	  scroll_text_widths[i] = gdk_string_width (frame->style->font,
-						    scroll_text[i]);
+	  scroll_text_widths[i] = PANGO_SCALE
+            * gdk_string_width (gtk_style_get_font (frame->style),
+                                scroll_text[i]);
 	  if (scroll_text_widths[i] > max_width)
 	    max_width = scroll_text_widths[i];
 	}
@@ -237,8 +240,8 @@ help_about (void)
       scroll_area = gtk_drawing_area_new ();
       gtk_drawing_area_size (GTK_DRAWING_AREA (scroll_area),
 			     max_width + 10,
-			     frame->style->font->ascent
-			     + frame->style->font->descent );
+			     gtk_style_get_font (frame->style)->ascent
+			     + gtk_style_get_font (frame->style)->descent );
       gtk_widget_set_events (scroll_area, GDK_BUTTON_PRESS_MASK);
       gtk_container_add (GTK_CONTAINER (frame), scroll_area);
       gtk_widget_show (scroll_area);
@@ -317,7 +320,7 @@ help_license (gpointer param)
   GtkWidget *buttonClose;
 
   keeper = gpa_windowKeeper_new ();
-  windowLicense = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowLicense = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowLicense);
   gtk_window_set_title (GTK_WINDOW (windowLicense),
 			_("GNU general public license"));
@@ -386,7 +389,7 @@ help_warranty (gpointer param)
   GtkWidget *buttonClose;
 
   keeper = gpa_windowKeeper_new ();
-  windowLicense = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowLicense = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowLicense);
   gtk_window_set_title (GTK_WINDOW (windowLicense),
 			_("GNU general public license"));
@@ -451,7 +454,9 @@ gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget * window)
     {_("/Help/_About"), NULL, help_about, 0, NULL},
     {_("/Help/_License"), NULL, help_license, 0, NULL},
     {_("/Help/_Warranty"), NULL, help_warranty, 0, NULL},
+#if 0  /* Help is not available yet. :-( */
     {_("/Help/_Help"), "F1", help_help, 0, NULL}
+#endif
   };
 
   gtk_item_factory_create_items (factory, sizeof (menu) / sizeof (menu[0]),

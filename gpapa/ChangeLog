@@ -1,3 +1,49 @@
+2002-02-05  Benedikt Wildenhain <benedikt.wildenhain@g-n-u.de>
+
+	* gpapa.c (extract_key): Changed to read only the short form of the 
+	key ID. Added some checks for ensuring the key ID is valid.
+
+	* gpapafile.c (linecallback_get_signatures): Changed to use new 
+	gpapa_signature_new prototype. The signature's keyID is now set here
+	and is the short form.
+
+	* gpapapublickey.c (extract_sig): Uses new gpapa_signature_new and
+	sets the signature keyID.
+
+	* gpapasignature.h, gpapasignature.c (gpapa_signature_new): Don't set
+	the signature's keyID here. Removed keyID from prototype.	
+	
+2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* README: Added comment to compile instructions.
+
+	* debug.c: Added includes needed for win32.
+	
+	* gpapa.c (gpapa_import_keys): Changed command line for gpg to allow 
+	import of secret keys.
+
+	* gpapatest.c (getpass): Fixed wrong call to WriteConsoleA.
+
+	* gpgme.h, gpgme_types.h (GpgmeDataMode): Moved type from 
+	gpgme_types.h to gpgme.h.
+
+	* gpgme.h (_gpgme_data_set_mode): Added declaration.
+
+	* w32io.h (_gpgme_io_kill): Removed compile time warning about
+	disabled function, but left the function still disabled.
+	(_gpgme_io_select): WaitForSingleObject's second argument is not a
+	pointer, don't use NULL.
+	
+	* gpapasignature.c: General code cleanup. Added parentheses around
+	return values and removed some comments.
+	
+	* gpapatest.c, gpapafile.c, gpapafile.h, gpapa.c, gpapa.h,
+	gpapaintern.c, gpapaintern.h, gpapakey.c, gpapakey.h,
+	gpapapublickey.c, gpapapublickey.h, gpapasecretkey.c,
+	gpapasecretkey.h: Changed  most declarations of variables type
+	"char*" to type "gchar*" or, where possible, "const gchar*". Added
+	casts where needed.
+	
 2001-12-31  Werner Koch  <wk@gnupg.org>
 
 	* gpapakey.c, gpapakey.h:  Support for creation date. 

@@ -1,0 +1,17 @@
+#################
+# GTKRC for GPA #
+#################
+
+style "big-label"
+{
+  font = "-adobe-helvetica-bold-r-normal--*-240-*-*-*-*-*-*"
+}
+widget "*big-label*" style "big-label"
+
+
+style "gpa-default"
+{
+  font_name = "Sans bold 16"  # <-- Hier die gewünschte Schriftart eintragen!
+               ############
+}
+class "*" style "gpa-default"

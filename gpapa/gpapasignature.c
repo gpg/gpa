@@ -25,23 +25,21 @@
 #include "gpapa.h"
 
 GpapaSignature *
-gpapa_signature_new (char *keyID, GpapaCallbackFunc callback,
-		     gpointer calldata)
+gpapa_signature_new (GpapaCallbackFunc callback, gpointer calldata)
 {
   GpapaSignature *sig = (GpapaSignature *) xmalloc (sizeof (GpapaSignature));
   memset (sig, 0, sizeof (GpapaSignature));
-  sig->KeyID = xstrdup (keyID);
   return (sig);
-} /* gpapa_signature_new */
+}
 
 char *
 gpapa_signature_get_identifier (GpapaSignature *signature,
 				GpapaCallbackFunc callback, gpointer calldata)
 {
   if (signature == NULL)
-    return (NULL);
+    return NULL;
   else
-    return (signature->KeyID);
+    return signature->KeyID;
 }
 
 char *
@@ -49,9 +47,9 @@ gpapa_signature_get_name (GpapaSignature *signature,
 			  GpapaCallbackFunc callback, gpointer calldata)
 {
   if (signature == NULL)
-    return (NULL);
+    return NULL;
   else
-    return (signature->UserID);
+    return signature->UserID;
 }
 
 GpapaSigValidity
@@ -59,9 +57,9 @@ gpapa_signature_get_validity (GpapaSignature *signature,
 			      GpapaCallbackFunc callback, gpointer calldata)
 {
   if (signature == NULL)
-    return (GPAPA_SIG_UNKNOWN);
+    return GPAPA_SIG_UNKNOWN;
   else
-    return (signature->validity);
+    return signature->validity;
 }
 
 void

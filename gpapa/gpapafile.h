@@ -77,48 +77,48 @@ extern gchar *gpapa_file_get_name (GpapaFile * file,
 				   GpapaCallbackFunc callback,
 				   gpointer calldata);
 
-extern GpapaFileStatus gpapa_file_get_status (GpapaFile * file,
+extern GpapaFileStatus gpapa_file_get_status (GpapaFile *file,
 					      GpapaCallbackFunc callback,
 					      gpointer calldata);
 
-extern gint gpapa_file_get_signature_count (GpapaFile * file,
+extern gint gpapa_file_get_signature_count (GpapaFile *file,
 					    GpapaCallbackFunc callback,
 					    gpointer calldata);
 
-extern GList *gpapa_file_get_signatures (GpapaFile * file,
+extern GList *gpapa_file_get_signatures (GpapaFile *file,
 					 GpapaCallbackFunc callback,
 					 gpointer calldata);
 
-extern void gpapa_file_sign (GpapaFile * file, gchar * targetFileID,
-			     gchar * keyID, gchar * PassPhrase,
+extern void gpapa_file_sign (GpapaFile *file, const gchar *targetFileID,
+			     const gchar *keyID, const gchar *PassPhrase,
 			     GpapaSignType SignType, GpapaArmor Armor,
 			     GpapaCallbackFunc callback, gpointer calldata);
 
-extern void gpapa_file_encrypt (GpapaFile * file, gchar * targetFileID,
-				GList * rcptKeyID, GpapaArmor Armor,
+extern void gpapa_file_encrypt (GpapaFile *file, const gchar *targetFileID,
+				GList *rcptKeyID, GpapaArmor Armor,
 				GpapaCallbackFunc callback,
 				gpointer calldata);
 
-extern void gpapa_file_encrypt_and_sign (GpapaFile * file,
-					 gchar * targetFileID,
-					 GList * rcptKeyIDs, gchar * keyID,
-					 gchar * PassPhrase,
+extern void gpapa_file_encrypt_and_sign (GpapaFile *file,
+					 const gchar *targetFileID,
+					 GList *rcptKeyIDs, gchar *keyID,
+					 const gchar *PassPhrase,
 					 GpapaSignType SignType,
 					 GpapaArmor Armor,
 					 GpapaCallbackFunc callback,
 					 gpointer calldata);
 
-extern void gpapa_file_protect (GpapaFile * file, gchar * targetFileID,
-				gchar * PassPhrase, GpapaArmor Armor,
+extern void gpapa_file_protect (GpapaFile *file, const gchar *targetFileID,
+				const gchar *PassPhrase, GpapaArmor Armor,
 				GpapaCallbackFunc callback,
 				gpointer calldata);
 
-extern void gpapa_file_decrypt (GpapaFile * file, gchar * targetFileID,
-				gchar * PassPhrase,
+extern void gpapa_file_decrypt (GpapaFile *file, gchar *targetFileID,
+				const gchar *PassPhrase,
 				GpapaCallbackFunc callback,
 				gpointer calldata);
 
-extern void gpapa_file_release (GpapaFile * file, GpapaCallbackFunc callback,
+extern void gpapa_file_release (GpapaFile *file, GpapaCallbackFunc callback,
 				gpointer calldata);
 
 #endif /* __GPAPAFILE_H__ */

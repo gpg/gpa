@@ -106,9 +106,9 @@ gpa_passphrase_run_dialog (GtkWidget * parent, GpapaSecretKey * key)
 
   dialog.passphrase = NULL;
 
-  windowPassphrase = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowPassphrase = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   dialog.window = windowPassphrase;
-  gtk_window_set_title (GTK_WINDOW (windowPassphrase), _("Enter Password"));
+  gtk_window_set_title (GTK_WINDOW (windowPassphrase), _("Enter Passphrase"));
   gtk_signal_connect (GTK_OBJECT (windowPassphrase), "destroy",
 		      GTK_SIGNAL_FUNC (passphrase_destroy), (gpointer)&dialog);
 
@@ -123,7 +123,7 @@ gpa_passphrase_run_dialog (GtkWidget * parent, GpapaSecretKey * key)
       GtkWidget * label;
       GtkWidget * info;
 
-      label = gtk_label_new (_("Please enter the password for"
+      label = gtk_label_new (_("Please enter the passphrase for"
 			       " the following key:"));
       gtk_box_pack_start (GTK_BOX (vboxPassphrase), label, FALSE, FALSE, 5);
       info = gpa_key_info_new (GPAPA_KEY (key), parent);
@@ -142,7 +142,7 @@ gpa_passphrase_run_dialog (GtkWidget * parent, GpapaSecretKey * key)
 			     (gpointer) &dialog);
   gtk_box_pack_start (GTK_BOX (hboxPasswd), entryPasswd, TRUE, TRUE, 0);
   gpa_connect_by_accelerator (GTK_LABEL (labelPasswd), entryPasswd,
-			      accelGroup, _("_Password: "));
+			      accelGroup, _("_Passphrase: "));
   gtk_box_pack_start (GTK_BOX (vboxPassphrase), hboxPasswd, TRUE, TRUE, 0);
 
   hButtonBoxPassphrase = gtk_hbutton_box_new ();
@@ -150,7 +150,7 @@ gpa_passphrase_run_dialog (GtkWidget * parent, GpapaSecretKey * key)
 			     GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxPassphrase), 10);
   buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					passphrase_cancel, (gpointer) &dialog);
+					(GtkSignalFunc) passphrase_cancel, (gpointer) &dialog);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxPassphrase), 5);
   gtk_container_add (GTK_CONTAINER (hButtonBoxPassphrase), buttonCancel);
   buttonOK = gpa_button_new (accelGroup, _("_OK"));

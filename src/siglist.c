@@ -96,6 +96,7 @@ gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
       
       contents[2] = gpapa_signature_get_name (sig, gpa_callback,
 					      siglist->window);
+
       if (!contents[2])
 	contents[2] = _("[Unknown user ID]");
 	  

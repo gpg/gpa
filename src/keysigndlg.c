@@ -122,7 +122,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
   dialog.passphrase = NULL;
   dialog.check_local = NULL;
 
-  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), _("Sign Key"));
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -190,7 +190,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxSign), 5);
 
   buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					key_sign_cancel, &dialog);
+					(GtkSignalFunc) key_sign_cancel, &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonCancel);
 
   buttonSign = gpa_button_new (accelGroup, _("_OK"));

@@ -108,7 +108,7 @@ gpapa_report_error_status (GpgStatusCode status,
  */
 typedef struct gpapa_data_s
   {
-    char *commands, *passphrase;
+    const gchar *commands, *passphrase;
     GpapaLineCallbackFunc line_callback;
     gpointer line_calldata;
     GpapaCallbackFunc callback;
@@ -180,13 +180,13 @@ command_handler (void *opaque, GpgStatusCode code, const char *key)
  * CALLBACK and CALLDATA are the usual GPAPA callback.
  */
 void
-gpapa_call_gnupg (char **user_args, gboolean do_wait,
-                  char *commands, char *passphrase,
+gpapa_call_gnupg (const gchar **user_args, gboolean do_wait,
+                  const gchar *commands, const gchar *passphrase,
                   GpapaLineCallbackFunc line_callback, gpointer line_calldata,
                   GpapaCallbackFunc callback, gpointer calldata)
 {
   GpgObject gpg;
-  char **arg;
+  const gchar **arg;
   int return_code = 0;
 
   /* This data we want to have available in our callbacks to

@@ -80,8 +80,7 @@ key_gen_ok (gpointer param)
   if (strcmp (gtk_entry_get_text (GTK_ENTRY (dialog->entryPasswd)),
 	      gtk_entry_get_text (GTK_ENTRY (dialog->entryRepeat))) != 0)
     {
-      gpa_window_error (_("In \"Password\" and \"Repeat Password\""
-			  "\nyou must enter the same password."),
+      gpa_window_error (_("In \"Passphrase\" and \"Repeat passphrase\"\nyou must enter the same passphrase."),
 			dialog->window);
     }
   else if ((expiry_error = gpa_expiry_frame_validate (dialog->frameExpire)))
@@ -143,7 +142,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
 
   accelGroup = gtk_accel_group_new ();
 
-  windowGenerate = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowGenerate = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   dialog.window = windowGenerate;
   gtk_window_set_title (GTK_WINDOW (windowGenerate), _("Generate key"));
   gtk_window_add_accel_group (GTK_WINDOW (windowGenerate), accelGroup);
@@ -223,7 +222,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryEmail = gtk_entry_new ();
   gpa_connect_by_accelerator (GTK_LABEL (labelEmail), entryEmail, accelGroup,
-			      _("E-_Mail: "));
+			      _("_Email: "));
   gtk_table_attach (GTK_TABLE (tableMisc), entryEmail, 1, 2, 1, 2, GTK_FILL,
 		    GTK_SHRINK, 0, 0);
 
@@ -233,7 +232,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryComment = gtk_entry_new ();
   gpa_connect_by_accelerator (GTK_LABEL (labelComment), entryComment,
-			      accelGroup, _("C_omment: "));
+			      accelGroup, _("_Comment: "));
   gtk_table_attach (GTK_TABLE (tableMisc), entryComment, 1, 2, 2, 3, GTK_FILL,
 		    GTK_SHRINK, 0, 0);
 
@@ -245,7 +244,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   dialog.entryPasswd = entryPasswd;
   gtk_entry_set_visibility (GTK_ENTRY (entryPasswd), FALSE);
   gpa_connect_by_accelerator (GTK_LABEL (labelPasswd), entryPasswd,
-			      accelGroup, _("_Password: "));
+			      accelGroup, _("_Passphrase: "));
   gtk_table_attach (GTK_TABLE (tableMisc), entryPasswd, 1, 2, 3, 4, GTK_FILL,
 		    GTK_SHRINK, 0, 0);
 
@@ -257,7 +256,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   dialog.entryRepeat = entryRepeat;
   gtk_entry_set_visibility (GTK_ENTRY (entryRepeat), FALSE);
   gpa_connect_by_accelerator (GTK_LABEL (labelRepeat), entryRepeat,
-			      accelGroup, _("_Repeat password: "));
+			      accelGroup, _("_Repeat passphrase: "));
   gtk_table_attach (GTK_TABLE (tableMisc), entryRepeat, 1, 2, 4, 5,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
 
@@ -312,9 +311,9 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
 
       params->password = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY(entryPasswd)));
 	  
-      temp = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO(comboAlgorithm)->entry));
+      temp = (gchar *) gtk_entry_get_text (GTK_ENTRY (GTK_COMBO(comboAlgorithm)->entry));
       params->algo = gpa_algorithm_from_string (temp);
-      temp = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (comboKeysize)->entry));
+      temp = (gchar *) gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (comboKeysize)->entry));
       params->keysize = atoi (temp);
 
       params->generate_revocation \

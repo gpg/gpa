@@ -40,7 +40,7 @@ How to build the DLL version for MS-Windows
 2. Configure and create GPA for that target:
 
    cd ..
-   ./configure --target=i386--mingw32
+   ./configure --target=i386--mingw32 #bw warum i386--minwg32 und nicht i386-mingw32 ?
    make
 
    At this point you should have a working version of GPA using

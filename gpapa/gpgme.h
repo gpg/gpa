@@ -99,6 +99,13 @@ typedef enum {
 } GpgmeDataType;
 
 typedef enum {
+    GPGME_DATA_MODE_NONE  = 0,
+    GPGME_DATA_MODE_IN    = 1,
+    GPGME_DATA_MODE_OUT   = 2,
+    GPGME_DATA_MODE_INOUT = 3
+} GpgmeDataMode;
+
+typedef enum {
     GPGME_SIG_STAT_NONE = 0,
     GPGME_SIG_STAT_GOOD = 1,
     GPGME_SIG_STAT_BAD  = 2,
@@ -211,6 +218,7 @@ GpgmeError    gpgme_data_read ( GpgmeData dh,
                                 char *buffer, size_t length, size_t *nread );
 GpgmeError    gpgme_data_write ( GpgmeData dh,
                                  const char *buffer, size_t length );
+void          _gpgme_data_set_mode ( GpgmeData dh, GpgmeDataMode mode );
 
 
 /* Key and trust functions */

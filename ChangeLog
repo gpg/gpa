@@ -1,4 +1,8 @@
-2002-04-17	Jan-Oliver Wagner <jan@intevation.de>
+2002-06-15  Werner Koch  <wk@gnupg.org>
+
+	* configure.ac: Bumbed version number to 0.4.4-cvs.
+
+2002-04-17  Jan-Oliver Wagner <jan@intevation.de>
 
 	* gpa.desktop (new): gnome desktop entry for gpa
 	* gpa-logo-48x48.png (new): small gpa logo for gnome desktop
@@ -8,6 +12,12 @@
 
 	* configure.ac (ALL_LINGUAS): Add pt_BR.
 
+2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* THANKS: Updated.
+ 
+	* gtkrc.gpa: Added file.
+ 	
 2002-01-14  Werner Koch  <wk@gnupg.org>
 
         Released 0.4.3.

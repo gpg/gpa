@@ -98,7 +98,7 @@ gpapa_file_get_status (GpapaFile *file, GpapaCallbackFunc callback,
   else
     {
       FileData data = { file, callback, calldata };
-      char *gpgargv[3];
+      const gchar *gpgargv[3];
       struct stat statbuf;
 
       /* First check explicitly whether the file exists and is a
@@ -201,23 +201,32 @@ linecallback_get_signatures (char *line, gpointer data, GpgStatusCode status)
       char *sigdata[2] = { NULL, NULL };
       if (status_check (line, STATUS_GOODSIG, status, sigdata))
         {
-          GpapaSignature *sig =
-            gpapa_signature_new (sigdata[0], d->callback, d->calldata);
+          GpapaSignature *sig = gpapa_signature_new (d->callback, d->calldata);
+          if (sigdata[0] == NULL || strlen(sigdata[0]) <= 8)
+            sig->KeyID = NULL;
+          else
+            sig->KeyID = xstrdup (sigdata[0] + 8);
           sig->validity = GPAPA_SIG_VALID;
           sig->UserID = xstrdup (sigdata[1]);
           d->file->sigs = g_list_append (d->file->sigs, sig);
         }
       else if (status_check (line, STATUS_BADSIG, status, sigdata))
         {
-          GpapaSignature *sig =
-            gpapa_signature_new (sigdata[0], d->callback, d->calldata);
+          GpapaSignature *sig = gpapa_signature_new (d->callback, d->calldata);
+          if (sigdata[0] == NULL || strlen(sigdata[0]) <= 8)
+            sig->KeyID = NULL;
+          else
+            sig->KeyID = xstrdup (sigdata[0] + 8);
           sig->validity = GPAPA_SIG_INVALID;
           d->file->sigs = g_list_append (d->file->sigs, sig);
         }
       else if (status_check (line, STATUS_ERRSIG, status, sigdata))
         {
-          GpapaSignature *sig =
-            gpapa_signature_new (sigdata[0], d->callback, d->calldata);
+          GpapaSignature *sig = gpapa_signature_new (d->callback, d->calldata);
+          if (sigdata[0] == NULL || strlen(sigdata[0]) <= 8)
+            sig->KeyID = NULL;
+          else
+            sig->KeyID = xstrdup (sigdata[0] + 8);
           sig->validity = GPAPA_SIG_UNKNOWN;
           d->file->sigs = g_list_append (d->file->sigs, sig);
         }
@@ -235,7 +244,7 @@ gpapa_file_get_signatures (GpapaFile *file, GpapaCallbackFunc callback,
       if (file->sigs == NULL && file->identifier != NULL)
         {
           FileData data = { file, callback, calldata };
-          char *gpgargv[3];
+          const gchar *gpgargv[3];
           gpgargv[0] = "--verify";
           gpgargv[1] = file->identifier;
           gpgargv[2] = NULL;
@@ -248,8 +257,8 @@ gpapa_file_get_signatures (GpapaFile *file, GpapaCallbackFunc callback,
 }
 
 void
-gpapa_file_sign (GpapaFile *file, char *targetFileID, char *keyID,
-                 char *PassPhrase, GpapaSignType SignType, GpapaArmor Armor,
+gpapa_file_sign (GpapaFile *file, const gchar *targetFileID, const gchar *keyID,
+                 const gchar *PassPhrase, GpapaSignType SignType, GpapaArmor Armor,
                  GpapaCallbackFunc callback, gpointer calldata)
 {
   if (file == NULL)
@@ -260,8 +269,8 @@ gpapa_file_sign (GpapaFile *file, char *targetFileID, char *keyID,
   else
     {
       FileData data = { file, callback, calldata };
-      char *full_keyID;
-      char *gpgargv[9];
+      gchar *full_keyID;
+      const gchar *gpgargv[9];
       int i = 0;
       switch (SignType)
         {
@@ -286,7 +295,7 @@ gpapa_file_sign (GpapaFile *file, char *targetFileID, char *keyID,
       if (targetFileID != NULL)
         {
           gpgargv[i++] = "-o";
-          gpgargv[i++] = targetFileID;
+          gpgargv[i++] = (char *) targetFileID;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
       gpgargv[i++] = file->identifier;
@@ -299,7 +308,7 @@ gpapa_file_sign (GpapaFile *file, char *targetFileID, char *keyID,
 }
 
 void
-gpapa_file_encrypt (GpapaFile *file, char *targetFileID,
+gpapa_file_encrypt (GpapaFile *file, const gchar *targetFileID,
                     GList *rcptKeyIDs, GpapaArmor Armor,
                     GpapaCallbackFunc callback, gpointer calldata)
 {
@@ -313,7 +322,7 @@ gpapa_file_encrypt (GpapaFile *file, char *targetFileID,
       FileData data = { file, callback, calldata };
       GList *R;
       int i = 0, l = g_list_length (rcptKeyIDs);
-      char **gpgargv = xmalloc ((7 + 2 * l) * sizeof (char *));
+      gchar **gpgargv = xmalloc ((7 + 2 * l) * sizeof (char *));
       R = rcptKeyIDs;
       while (R)
         {
@@ -327,12 +336,12 @@ gpapa_file_encrypt (GpapaFile *file, char *targetFileID,
       if (targetFileID != NULL)
         {
           gpgargv[i++] = "-o";
-          gpgargv[i++] = targetFileID;
+          gpgargv[i++] = (char *) targetFileID;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
       gpgargv[i++] = file->identifier;
       gpgargv[i] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+      gpapa_call_gnupg ((const gchar **) gpgargv, TRUE, NULL, NULL,
                         linecallback_check_gpg_status, &data,
                         callback, calldata);
       for (i = 1; i < 2 * l; i += 2)
@@ -342,9 +351,9 @@ gpapa_file_encrypt (GpapaFile *file, char *targetFileID,
 }
 
 void
-gpapa_file_encrypt_and_sign (GpapaFile *file, char *targetFileID,
+gpapa_file_encrypt_and_sign (GpapaFile *file, const gchar *targetFileID,
                              GList *rcptKeyIDs, char *keyID,
-                             char *PassPhrase, GpapaSignType SignType,
+                             const gchar *PassPhrase, GpapaSignType SignType,
                              GpapaArmor Armor, GpapaCallbackFunc callback,
                              gpointer calldata)
 {
@@ -379,12 +388,12 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, char *targetFileID,
       if (targetFileID != NULL)
         {
           gpgargv[i++] = "-o";
-          gpgargv[i++] = targetFileID;
+          gpgargv[i++] = (gchar *) targetFileID;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
       gpgargv[i++] = file->identifier;
       gpgargv[i] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, NULL, PassPhrase,
+      gpapa_call_gnupg ((const gchar **) gpgargv, TRUE, NULL, PassPhrase,
                         linecallback_check_gpg_status, &data,
                         callback, calldata);
       for (i = 1; i < 2 * l; i += 2)
@@ -395,8 +404,8 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, char *targetFileID,
 }
 
 void
-gpapa_file_protect (GpapaFile *file, char *targetFileID,
-                    char *PassPhrase, GpapaArmor Armor,
+gpapa_file_protect (GpapaFile *file, const gchar *targetFileID,
+                    const gchar *PassPhrase, GpapaArmor Armor,
                     GpapaCallbackFunc callback, gpointer calldata)
 {
   if (file == NULL)
@@ -407,7 +416,7 @@ gpapa_file_protect (GpapaFile *file, char *targetFileID,
   else
     {
       FileData data = { file, callback, calldata };
-      char *gpgargv[7];
+      const gchar *gpgargv[7];
       int i = 0;
       gpgargv[i++] = "--symmetric";
       if (Armor == GPAPA_ARMOR)
@@ -428,7 +437,7 @@ gpapa_file_protect (GpapaFile *file, char *targetFileID,
 
 void
 gpapa_file_decrypt (GpapaFile *file, char *targetFileID,
-                    char *PassPhrase, GpapaCallbackFunc callback,
+                    const gchar *PassPhrase, GpapaCallbackFunc callback,
                     gpointer calldata)
 {
   if (file == NULL)
@@ -439,7 +448,7 @@ gpapa_file_decrypt (GpapaFile *file, char *targetFileID,
   else
     {
       FileData data = { file, callback, calldata };
-      char *gpgargv[6];
+      const gchar *gpgargv[6];
       int i = 0;
       gpgargv[i++] = "--decrypt";
       if (targetFileID != NULL)

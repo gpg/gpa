@@ -27,6 +27,7 @@
 #include <gpapa.h>
 #include "gpa.h"
 #include "gpawindowkeeper.h"
+#include "gpafilesel.h"
 #include "gtktools.h"
 #include "filemenu.h"
 #include "keysmenu.h"
@@ -163,7 +164,7 @@ file_sign_sign_exec (gpointer param)
   gpointer *data;
   GpapaSignType *signType;
   GpapaArmor *armor;
-  gchar *keyID;
+  const gchar *keyID;
   GpaWindowKeeper *keeperSign;
   GtkWidget *entryPasswd;
   GpaWindowKeeper *keeperPassphrase;
@@ -181,11 +182,11 @@ file_sign_sign_exec (gpointer param)
   keeperPassphrase = localParam[2];
   signType = (GpapaSignType *) data[0];
   armor = (GpapaArmor *) data[1];
-  keyID = (gchar *) data[2];
+  keyID = data[2];
   keeperSign = (GpaWindowKeeper *) data[3];
   if (!filesSelected)
     {
-      gpa_window_error (_("No files selected for signing"),
+      gpa_window_error (_("No files selected for signing."),
 			keeperSign->window);
       return;
     }				/* if */
@@ -279,10 +280,10 @@ file_sign_sign (gpointer param)
     *signType = GPAPA_SIGN_DETACH;
   else
     {
-      gpa_window_error (_("!FATAL ERROR!\nInvalid sign mode"),
+      gpa_window_error (_("Internal error:\nInvalid sign mode"),
 			keeperSign->window);
       return;
-    }				/* else */
+    }
   armor = (GpapaArmor *) xmalloc (sizeof (GpapaArmor));
   if (checkerArmor) {
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkerArmor)))
@@ -301,14 +302,14 @@ file_sign_sign (gpointer param)
   newParam[4] = userData;
   gpa_window_passphrase (keeperSign->window, funcSign, "file_sign.tip",
 			 newParam);
-}				/* file_sign_sign */
+}
 
 void
 file_sign_as (GtkCList * clist, gint row, gint column, GdkEventButton * event,
 	      gpointer as)
 {
   *(gint *) as = row;
-}				/* file_sign_as */
+}
 
 void
 file_sign_dialog (GtkSignalFunc funcSign, GtkWidget * parent, gchar * tip,
@@ -349,13 +350,12 @@ file_sign_dialog (GtkSignalFunc funcSign, GtkWidget * parent, gchar * tip,
   contentsCountWho = gpapa_get_secret_key_count (gpa_callback, parent);
   if (contentsCountWho == 0)
     {
-      gpa_window_error (_
-			("No secret keys available for signing.\nImport a secret key first!"),
-parent);
+      gpa_window_error (_("No secret keys available for signing.\nPlease generate or import a secret key first."),
+                        parent);
       return;
-    }				/* if */
+    }
   keeper = gpa_windowKeeper_new ();
-  windowSign = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowSign = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowSign);
   gtk_window_set_title (GTK_WINDOW (windowSign), _("Sign files"));
   accelGroup = gtk_accel_group_new ();
@@ -467,17 +467,17 @@ parent);
   gtk_box_pack_start (GTK_BOX (vboxSign), hButtonBoxSign, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowSign), vboxSign);
   gpa_window_show_centered (windowSign, parent);
-}				/* file_sign_dialog */
+}
 
 
 void
 file_browse_ok (GtkWidget * param[])
 {
   gtk_entry_set_text (GTK_ENTRY (param[0]),
-		      gtk_file_selection_get_filename (GTK_FILE_SELECTION
+		      gpa_file_selection_get_filename (GPA_FILE_SELECTION
 						       (param[1])));
   gtk_widget_destroy (param[1]);
-}				/* file_browse_ok */
+}
 
 void
 file_browse (gpointer param)
@@ -496,21 +496,21 @@ file_browse (gpointer param)
   title = (gchar *) localParam[0];
   entryFilename = (GtkWidget *) localParam[1];
   keeper = gpa_windowKeeper_new ();
-  browseSelect = gtk_file_selection_new (title);
+  browseSelect = gpa_file_selection_new (title);
   gpa_windowKeeper_set_window (keeper, browseSelect);
   paramOK = (GtkWidget **) xmalloc (2 * sizeof (GtkWidget *));
   gpa_windowKeeper_add_param (keeper, paramOK);
   paramOK[0] = entryFilename;
   paramOK[1] = browseSelect;
   gtk_signal_connect_object (GTK_OBJECT
-			     (GTK_FILE_SELECTION (browseSelect)->ok_button),
+			     (GPA_FILE_SELECTION (browseSelect)->ok_button),
 			     "clicked", GTK_SIGNAL_FUNC (file_browse_ok),
 			     (gpointer) paramOK);
   paramClose = (gpointer *) xmalloc (2 * sizeof (gpointer));
   paramClose[0] = keeper;
   paramClose[1] = "";
   gtk_signal_connect_object (GTK_OBJECT
-			     (GTK_FILE_SELECTION (browseSelect)->
+			     (GPA_FILE_SELECTION (browseSelect)->
 			      cancel_button), "clicked",
 			     GTK_SIGNAL_FUNC (gpa_window_destroy),
 			     (gpointer) paramClose);
@@ -582,7 +582,7 @@ file_encrypt_detail (gpointer param)
 				    (gchar *) g_list_last (*keysSelected)->
 				    data, gpa_callback, windowEncrypt);
   keeper = gpa_windowKeeper_new ();
-  windowSigs = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowSigs = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowSigs);
   gtk_window_set_title (GTK_WINDOW (windowSigs), _("Show public key detail"));
   accelGroup = gtk_accel_group_new ();
@@ -639,11 +639,11 @@ file_encrypt_detail (gpointer param)
   gtk_entry_set_text (GTK_ENTRY (entryFingerprint), contentsFingerprint);
   gtk_editable_set_editable (GTK_EDITABLE (entryFingerprint), FALSE);
   gtk_widget_set_usize (entryFingerprint,
-			gdk_string_width (entryFingerprint->style->font,
-					  contentsFingerprint) +
-			gdk_string_width (entryFingerprint->style->font,
-					  "  ") +
-			entryFingerprint->style->klass->xthickness, 0);
+    PANGO_SCALE * (gdk_string_width (gtk_style_get_font (entryFingerprint->style),
+                                     contentsFingerprint)
+                   + gdk_string_width (gtk_style_get_font (entryFingerprint->style),
+                                       "  "))
+    + entryFingerprint->style->xthickness, 0);
   gtk_box_pack_start (GTK_BOX (vboxFingerprint), entryFingerprint, TRUE, TRUE,
 		      0);
   gtk_box_pack_start (GTK_BOX (vboxSigs), vboxFingerprint, FALSE, FALSE, 0);
@@ -739,7 +739,7 @@ file_encrypt_encrypt_and_sign (gpointer param)
   afterLastFile = g_list_length (filesOpened);
   if (entrySaveAs)
     {
-      fileID = gtk_entry_get_text (GTK_ENTRY (entrySaveAs));
+      fileID = (gchar *) gtk_entry_get_text (GTK_ENTRY (entrySaveAs));
       global_lastCallbackResult = GPAPA_ACTION_NONE;
       gpapa_file_encrypt_and_sign (
 				   (GpapaFile *) g_list_last (filesSelected)->
@@ -750,7 +750,7 @@ file_encrypt_encrypt_and_sign (gpointer param)
 				   windowEncrypt);
       if (global_lastCallbackResult != GPAPA_ACTION_ERROR)
 	file_add (fileID);
-    }				/* if */
+    }
   else
     {
       paramSign[0] = recipients;
@@ -761,7 +761,7 @@ file_encrypt_encrypt_and_sign (gpointer param)
       paramSign[5] = windowPassphrase;
       g_list_foreach (filesSelected, file_encrypt_encrypt_and_sign_exec,
 		      paramSign);
-    }				/* else */
+    }
   clistFile = gpa_get_global_clist_file ();
   gtk_clist_unselect_all (GTK_CLIST (clistFile));
   countFiles = g_list_length (filesOpened);
@@ -873,7 +873,8 @@ file_encrypt_encrypt (gpointer param)
   paramSign[4] = keeperEncrypt;
   paramSign[5] = entrySaveAs;
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkerSign)))
-    file_sign_dialog (file_encrypt_encrypt_and_sign, keeperEncrypt->window,
+    file_sign_dialog ((GtkSignalFunc) file_encrypt_encrypt_and_sign,
+                      keeperEncrypt->window,
 		      tip, TRUE, FALSE, paramSign);
   else
     {
@@ -881,7 +882,7 @@ file_encrypt_encrypt (gpointer param)
       afterLastFile = g_list_length (filesOpened);
       if (entrySaveAs)
 	{
-	  fileID = gtk_entry_get_text (GTK_ENTRY (entrySaveAs));
+	  fileID = (gchar *) gtk_entry_get_text (GTK_ENTRY (entrySaveAs));
 	  global_lastCallbackResult = GPAPA_ACTION_NONE;
 	  gpapa_file_encrypt (
 			      (GpapaFile *) g_list_last (filesSelected)->data,
@@ -889,7 +890,7 @@ file_encrypt_encrypt (gpointer param)
 			      keeperEncrypt->window);
 	  if (global_lastCallbackResult != GPAPA_ACTION_ERROR)
 	    file_add (fileID);
-	}			/* if */
+	}
       else
 	{
 	  paramEncrypt[0] = recipients;
@@ -897,7 +898,7 @@ file_encrypt_encrypt (gpointer param)
 	  paramEncrypt[2] = keeperEncrypt->window;
 	  g_list_foreach (filesSelected, file_encrypt_encrypt_exec,
 			  paramEncrypt);
-	}			/* else */
+	}
       gtk_clist_unselect_all (GTK_CLIST (clistFile));
       countFiles = g_list_length (filesOpened);
       while (afterLastFile < countFiles)
@@ -1011,7 +1012,7 @@ global_windowMain);
     gpapa_get_secret_key_count (gpa_callback, global_windowMain);
   if (!secretKeyCount)
     {
-      gpa_window_error (_("No secret keys available to encrypt."),
+      gpa_window_error (_("No secret keys available."),
 			global_windowMain);
       return;
     }				/* if */
@@ -1022,7 +1023,7 @@ global_windowMain);
       return;
     }				/* if */
   keeper = gpa_windowKeeper_new ();
-  windowEncrypt = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowEncrypt = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowEncrypt);
   gtk_window_set_title (GTK_WINDOW (windowEncrypt), _("Encrypt files"));
   accelGroup = gtk_accel_group_new ();
@@ -1156,7 +1157,7 @@ global_windowMain);
   paramRemove[1] = clistRecipients;
   paramRemove[2] = windowEncrypt;
   gtk_signal_connect_object (GTK_OBJECT (buttonRemove), "clicked",
-			     gpa_removeRecipients, (gpointer) paramRemove);
+			     (GtkSignalFunc) gpa_removeRecipients, (gpointer) paramRemove);
   gtk_container_add (GTK_CONTAINER (hButtonBoxRecKeys), buttonRemove);
   buttonAdd = gpa_button_new (accelGroup, _("Add _keys to recipients"));
   paramAdd = (gpointer *) xmalloc (4 * sizeof (gpointer));
@@ -1166,7 +1167,7 @@ global_windowMain);
   paramAdd[2] = clistRecipients;
   paramAdd[3] = windowEncrypt;
   gtk_signal_connect_object (GTK_OBJECT (buttonAdd), "clicked",
-			     gpa_addRecipients, (gpointer) paramAdd);
+			     (GtkSignalFunc) gpa_addRecipients, (gpointer) paramAdd);
   gtk_container_add (GTK_CONTAINER (hButtonBoxRecKeys), buttonAdd);
   buttonDetail = gpa_button_new (accelGroup, _("S_how detail"));
   gtk_signal_connect_object (GTK_OBJECT (buttonDetail), "clicked",
@@ -1306,7 +1307,7 @@ file_protect_protect (gpointer param)
 	      gtk_entry_get_text (GTK_ENTRY (entryRepeat))) != 0)
     {
       gpa_window_error (_
-			("In \"Password\" and \"Repeat Password\",\nyou must enter the same password."),
+			("In \"Passphrase\" and \"Repeat passphrase\",\nyou must enter the same passphrase."),
 keeperProtect->window);
       return;
     }				/* if */
@@ -1318,7 +1319,7 @@ keeperProtect->window);
   afterLastFile = g_list_length (filesOpened);
   if (entrySaveAs)
     {
-      fileID = gtk_entry_get_text (GTK_ENTRY (entrySaveAs));
+      fileID = (gchar *) gtk_entry_get_text (GTK_ENTRY (entrySaveAs));
       global_lastCallbackResult = GPAPA_ACTION_NONE;
       gpapa_file_protect (
 			  (GpapaFile *) g_list_last (filesSelected)->data,
@@ -1327,14 +1328,14 @@ keeperProtect->window);
 			  *armor, gpa_callback, keeperProtect->window);
       if (global_lastCallbackResult != GPAPA_ACTION_ERROR)
 	file_add (fileID);
-    }				/* if */
+    }
   else
     {
       paramProtect[0] = entryPasswd;
       paramProtect[1] = armor;
       paramProtect[2] = keeperProtect->window;
       g_list_foreach (filesSelected, file_protect_protect_exec, paramProtect);
-    }				/* else */
+    }
   clistFile = gpa_get_global_clist_file ();
   gtk_clist_unselect_all (GTK_CLIST (clistFile));
   countFiles = g_list_length (filesOpened);
@@ -1342,11 +1343,11 @@ keeperProtect->window);
     {
       gtk_clist_select_row (GTK_CLIST (clistFile), afterLastFile, 0);
       afterLastFile++;
-    }				/* while */
+    }
   paramDone[0] = keeperProtect;
   paramDone[1] = NULL;
   gpa_window_destroy (paramDone);
-}				/* file_protect_protect */
+}
 
 void
 file_protect_dialog (gboolean withSaveAs, gchar * tip)
@@ -1384,7 +1385,7 @@ file_protect_dialog (gboolean withSaveAs, gchar * tip)
       return;
     }				/* if */
   keeper = gpa_windowKeeper_new ();
-  windowProtect = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowProtect = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowProtect);
   gtk_window_set_title (GTK_WINDOW (windowProtect),
 			_("Protect files by Password"));
@@ -1561,13 +1562,14 @@ file_decryptAs_decrypt (gpointer param)
   entrySaveAs = (GtkWidget *) localParam[0];
   keeperDecrypt = (GpaWindowKeeper *) localParam[1];
   targetFileID = (gchar **) xmalloc (sizeof (gchar *));
-  *targetFileID = gtk_entry_get_text (GTK_ENTRY (entrySaveAs));
+  *targetFileID = (gchar *) gtk_entry_get_text (GTK_ENTRY (entrySaveAs));
   gpa_windowKeeper_add_param (keeperDecrypt, targetFileID);
   paramDecrypt = (gpointer *) xmalloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeperDecrypt, paramDecrypt);
   paramDecrypt[0] = targetFileID;
   paramDecrypt[1] = keeperDecrypt;
-  gpa_window_passphrase (keeperDecrypt->window, file_decryptAs_decrypt_exec,
+  gpa_window_passphrase (keeperDecrypt->window,
+                         (GtkSignalFunc) file_decryptAs_decrypt_exec,
 			 NULL, (gpointer) paramDecrypt);
 }				/* file_decryptAs_decrypt */
 
@@ -1599,7 +1601,7 @@ file_decryptAs (void)
       return;
     }				/* if */
   keeper = gpa_windowKeeper_new ();
-  windowDecrypt = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowDecrypt = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowDecrypt);
   gtk_window_set_title (GTK_WINDOW (windowDecrypt), "Decrypt file");
   accelGroup = gtk_accel_group_new ();

@@ -1,3 +1,99 @@
+2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* Makefile.am (gpa_SOURCES): Included gpafilesel.c and gpafilesel.h 
+	to the list.
+
+	* harddisk.xpm, harddisk1.xpm, harddisk2.xpm, harddisk3.xpm,
+	open_folder.xpm, open_folder1.xpm, open_folder2.xpm, floppy.xpm,
+	folder.xpm, folder1.xpm, folder2.xpm: New icons.	
+	
+	* encryptdlg.c, expirydlg.c, fileman.c, filemenu.c, filesigndlg.c,
+	gpawidgets.c, gpawidgets.c, gtktools.c, keygendlg.c,
+	keygenwizard.c, keysmenu.c, passphrasedlg.c: Small corrections to
+	message strings.
+
+	* encryptdlg.c, fileman.c, filemenu.c, filesigndlg.c,
+	gpawidgets.c, keyexportdlg.c, keygendlg.c, keygenwizard.c,
+	keyimportdlg.c, keysigndlg.c, keysmenu.c, optionsmenu.c,
+	ownertrustdlg.c, passphrasedlg.c: Added casts to remove compile
+	time warnings and other code cleanups. Changed comment layout.
+
+	* encryptdlg.c, expirydlg.c, fileman.c, filemenu.c, filesigndlg.c,
+	gtktools.c, helpmenu.c, keydeletedlg.c, keyeditdlg.c,
+	keyexportdlg.c, keygendlg.c, keygenwizard.c, keyimportdlg.c,
+	keysigndlg.c, keysmenu.c, optionsmenu.c, ownertrustdlg.c,
+	passphrasedlg.c: Changed to use GTK_WINDOW_TOPLEVEL instead of
+	GTK_WINDOW_DIALOG in all calls to gtk_window_new, since
+	GTK_WINDOW_DIALOG doesn't exist in GTK+ 2.0.
+	
+	* fileman.c (show_file_detail)
+	filemenu.c (file_encrypt_detail)
+	gpawidgets.c (gpa_expiry_frame_new)
+	helpmenu.c (help_about)
+	keysmenu.c (gpa_tableKey_new): Use the GTK+ 2.0 API for finding out
+	the right width for GtkEntry's.
+
+	* gpafilesel.c, gpafilesel.h: New files. They define a version of
+	the GtkFileSelection dialog (GpaFileSelection) modified to look
+	more like what users of MS-Windows are accustomed to. It is
+	directly based on the source code for GTK+ 2.0.
+
+	* icons.c, siglist.c: Formatting change.
+
+	* fileman.c (gpa_fileman_toolbar_new): Use new GTK+ 2.0 API.
+	Disabled the help button, since it does nothing at the moment.
+
+	* filemenu.c, gtktools.c, keysmenu.c: Now uses the new GpaFileSelection
+	instead of GtkFileSelection.
+
+	* gpa.c: Added include for w32reg.h.
+	(gpa_default_key_changed_marshal)
+	(gpa_create_default_key_signal): Disabled functions for
+	compilation with GTK+ 2.0.
+	(main): Fixed several compile time errors on win32. Now we use
+	UTF-8 for output.
+
+	* gtktools.c (gpa_button_set_text): Disabled code that doesn't
+	compile with GTK+ 2.0.
+
+	* helpmenu.c (scroll_text): Updated.
+	(about_dialog_timer)
+	(help_about): Use gtk_style_get_font instead of directly accessing
+	the style struct.
+	(gpa_help_menu_add_to_factory): Disabled help button.
+
+	* keyexportdlg.c (_GPAKeyExportDialog)
+	(key_export_dialog_run): Support for exporting keys to the
+	clipboard.
+
+	* keygenwizard.c (gpa_keygen_wizard_password_validate): Added
+	check for a passphrase that is obviously too simple. At the moment
+	that is defined as being less than 10 characters long.
+
+	* keyring.c (keyring_editor_current_key): Removed prototype.
+	(toolbar_edit_key)
+	(toolbar_remove_key)
+	(toolbar_sign_key)
+	(toolbar_export_key)
+	(toolbar_import_keys): Added prototypes.
+	(export_secret_key): New (empty) function.
+	(keyring_editor_generate_key_advanced): Changed #warning to a comment.
+	(keyring_editor_mapped): Remind the user to make a backup of his 
+	private key.
+	(keyring_editor_menubar_new): Added keyboard accelerator to the
+	File/Close menu item. Added key operations (sign, export, export
+	private, backup) to the menu. Moved "Options" menu to before
+	"Keys" menu.
+	(keyring_toolbar_new): Use new GTK+ 2.0 API. Disabled the help
+	button, since it does nothing at the moment. Added button to open
+	the file manager.
+	(keyring_editor_new): Changed default window size. Increased area
+	reserved for the key list.
+	
+	* keyimportdlg.c (_GPAKeyImportDialog)
+	(key_import_dialog_run): Support for exporting keys to the
+	clipboard.
+	
 2002-01-14  Werner Koch  <wk@gnupg.org>
 
 	* gpa.c (my_strusage): Take bug report address from configure.

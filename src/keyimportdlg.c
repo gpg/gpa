@@ -42,6 +42,9 @@ struct _GPAKeyImportDialog {
   /* The server combo box */
   GtkWidget * combo_server;
 
+  /* The clipboard radio button */
+  GtkWidget * radio_clipboard;
+
   /* The key id entry widget */
   GtkWidget * entry_key_id;
 
@@ -95,14 +98,14 @@ import_ok (gpointer param)
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_server)))
     {
       GtkWidget * entry = GTK_COMBO (dialog->combo_server)->entry;
-      dialog->server = gtk_entry_get_text (GTK_ENTRY (entry));
+      dialog->server = (gchar *) gtk_entry_get_text (GTK_ENTRY (entry));
       dialog->server = xstrdup_or_null (dialog->server);
-      dialog->key_id = gtk_entry_get_text (GTK_ENTRY (dialog->entry_key_id));
+      dialog->key_id = (gchar *) gtk_entry_get_text (GTK_ENTRY (dialog->entry_key_id));
       dialog->key_id = xstrdup_or_null (dialog->key_id);
     }
   else
     {
-      dialog->filename = gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
+      dialog->filename = (gchar *) gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
       dialog->filename = xstrdup_or_null (dialog->filename);
     }
 
@@ -158,7 +161,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   dialog.server = NULL;
   dialog.key_id = NULL;
 
-  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), _("Import Key"));
   accel_group = gtk_accel_group_new ();
@@ -171,10 +174,11 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
-  table = gtk_table_new (4, 2, FALSE);
+  table = gtk_table_new (5, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
   gtk_table_set_row_spacing (GTK_TABLE (table), 1, 10);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 3, 10);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 30);
 
   /* File name */
@@ -185,7 +189,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
 
   hbox = gtk_hbox_new (0, FALSE);
   gtk_table_attach (GTK_TABLE (table), hbox, 1, 2, 1, 2,
-		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+		    GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
   entry = gtk_entry_new ();
   dialog.entry_filename = entry;
@@ -208,7 +212,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
 
   server_table = gtk_table_new (2, 2, FALSE);
   gtk_table_attach (GTK_TABLE (table), server_table, 1, 2, 3, 4,
-		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+		    GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
   label = gtk_label_new ("");
   gtk_table_attach (GTK_TABLE (server_table), label, 0, 1, 0, 1,
@@ -218,7 +222,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   entry = gtk_entry_new ();
   dialog.entry_key_id = entry;
   gtk_table_attach (GTK_TABLE (server_table), entry, 1, 2, 0, 1,
-		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+		    GTK_FILL | GTK_EXPAND, 0, 0, 0);
   gtk_signal_connect_object (GTK_OBJECT (entry), "activate",
 			     GTK_SIGNAL_FUNC (import_ok), (gpointer) &dialog);
   gpa_connect_by_accelerator (GTK_LABEL (label), entry, accel_group,
@@ -243,6 +247,14 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gpa_connect_by_accelerator (GTK_LABEL (label), entry, accel_group,
 			      _("_Key Server:"));
 
+  /* Clipboard */
+  radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON(radio),
+					    accel_group,
+					    _("Import from _clipboard:"));
+  dialog.radio_clipboard = radio;
+  gtk_table_attach (GTK_TABLE (table), radio, 0, 2, 4, 5,
+                    GTK_FILL, 0, 0, 0);
+
   /* The button box */
   bbox = gtk_hbutton_box_new ();
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
@@ -250,7 +262,8 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), 10);
   gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
 
-  button = gpa_button_cancel_new (accel_group, _("_Cancel"), import_cancel,
+  button = gpa_button_cancel_new (accel_group, _("_Cancel"),
+                                  (GtkSignalFunc) import_cancel,
 				  &dialog);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 

@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include "gpa.h"
 #include "gpawindowkeeper.h"
+#include "gpafilesel.h"
 #include "icons.h"
 
 
@@ -283,6 +284,7 @@ gpa_button_set_text (GtkWidget * button, gchar * text,
 
   accel = gtk_label_parse_uline (GTK_LABEL (label), text);
 
+#if 0  /* @@@@@@ */
   /* In GTK 1.2.8, the visible_only parameter of
    * gtk_widget_remove_accelerators is not even looked at, it always
    * behaves as if it were TRUE. Therefore make sure that
@@ -295,6 +297,7 @@ gpa_button_set_text (GtkWidget * button, gchar * text,
       gtk_widget_add_accelerator (button, "clicked", accel_group,
 				  accel, GDK_MOD1_MASK, GTK_ACCEL_VISIBLE);
     }
+#endif
 }
 
 void
@@ -308,7 +311,7 @@ gpa_window_error (gchar * message, GtkWidget * messenger)
   GtkWidget *buttonClose;
 
   keeper = gpa_windowKeeper_new ();
-  windowError = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowError = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowError);
   gtk_window_set_title (GTK_WINDOW (windowError), _("GPA Error"));
   gtk_window_set_modal (GTK_WINDOW (windowError), TRUE);
@@ -347,7 +350,7 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
   GtkWidget *buttonClose;
 /* commands */
   keeper = gpa_windowKeeper_new ();
-  windowMessage = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowMessage = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowMessage);
   gtk_window_set_title (GTK_WINDOW (windowMessage), _("GPA Message"));
   gtk_window_set_modal (GTK_WINDOW (windowMessage), TRUE);
@@ -411,7 +414,7 @@ gpa_message_box_run (GtkWidget * parent, const gchar * title,
 
   dialog.result = NULL;
 
-  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), title);
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -475,10 +478,10 @@ gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func, gchar * tip,
   GtkWidget *buttonOK;
 /* commands */
   keeper = gpa_windowKeeper_new ();
-  windowPassphrase = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowPassphrase = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowPassphrase);
   gpa_windowKeeper_add_param (keeper, data);
-  gtk_window_set_title (GTK_WINDOW (windowPassphrase), _("Insert password"));
+  gtk_window_set_title (GTK_WINDOW (windowPassphrase), _("Insert passphrase"));
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowPassphrase), accelGroup);
   vboxPassphrase = gtk_vbox_new (FALSE, 0);
@@ -498,7 +501,7 @@ gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func, gchar * tip,
 			     GTK_SIGNAL_FUNC (func), (gpointer) param);
   gtk_box_pack_start (GTK_BOX (hboxPasswd), entryPasswd, TRUE, TRUE, 0);
   gpa_connect_by_accelerator (GTK_LABEL (labelPasswd), entryPasswd,
-			      accelGroup, _("_Password: "));
+			      accelGroup, _("_Passphrase: "));
   gtk_box_pack_start (GTK_BOX (vboxPassphrase), hboxPasswd, TRUE, TRUE, 0);
   hButtonBoxPassphrase = gtk_hbutton_box_new ();
   gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxPassphrase),
@@ -535,10 +538,10 @@ typedef struct _GPASaveFileNameDialog GPASaveFileNameDialog;
 static void
 file_dialog_ok (gpointer param)
 {
-  GPASaveFileNameDialog * dialog = param;
+  GPASaveFileNameDialog *dialog = param;
 
   dialog->filename 
-      = gtk_file_selection_get_filename (GTK_FILE_SELECTION (dialog->window));
+      = (gchar *) gpa_file_selection_get_filename (GPA_FILE_SELECTION (dialog->window));
   dialog->filename = xstrdup_or_null (dialog->filename);
 
   gtk_widget_destroy (dialog->window);
@@ -566,7 +569,7 @@ gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
 			const gchar * directory)
 {
   GPASaveFileNameDialog dialog;
-  GtkWidget * window = gtk_file_selection_new (title);
+  GtkWidget * window = gpa_file_selection_new (title);
 
   dialog.window = window;
   dialog.filename = NULL;
@@ -574,11 +577,11 @@ gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (file_dialog_destroy), NULL);
 
-  gtk_signal_connect_object (GTK_OBJECT(GTK_FILE_SELECTION(window)->ok_button),
+  gtk_signal_connect_object (GTK_OBJECT(GPA_FILE_SELECTION(window)->ok_button),
 			     "clicked", GTK_SIGNAL_FUNC (file_dialog_ok),
 			     (gpointer) &dialog);
   gtk_signal_connect_object (
-		      GTK_OBJECT (GTK_FILE_SELECTION (window)->cancel_button),
+		      GTK_OBJECT (GPA_FILE_SELECTION (window)->cancel_button),
 		      "clicked", GTK_SIGNAL_FUNC (file_dialog_cancel),
 		      (gpointer) &dialog);
 

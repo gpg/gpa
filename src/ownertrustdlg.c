@@ -59,31 +59,33 @@ struct _GPAOwnertrustDialog {
 typedef struct _GPAOwnertrustDialog GPAOwnertrustDialog;
 
 
-/* signal handler for the OK button. Determine the selected trust level,
- * set result to true and destroy the top level window */
+/* Signal handler for the OK button. Determine the selected trust level,
+ * set result to true and destroy the top level window.
+ */
 static void
 ownertrust_ok (gpointer param)
 {
-  GPAOwnertrustDialog * dialog = param;
+  GPAOwnertrustDialog *dialog = param;
   GpapaOwnertrust trust;
-  gchar * trust_text;
+  gchar *trust_text;
 
   dialog->result = TRUE;
 
-  trust_text = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(dialog->combo)->entry));
+  trust_text = (gchar *) gtk_entry_get_text (GTK_ENTRY(GTK_COMBO(dialog->combo)->entry));
   trust = gpa_ownertrust_from_string (trust_text);
   if (trust > GPAPA_OWNERTRUST_LAST)
     {
       gpa_window_error (_("Invalid ownertrust level."), dialog->window);
       return;
-    } /* if */
+    }
   dialog->trust = trust;
   gtk_widget_destroy (dialog->window);
-} /* ownertrust_ok */
+}
 
 
 /* Signal handler for the cancel button. Set result to FALSE and destroy
- * the top level window */
+ * the top level window.
+ */
 static void
 ownertrust_cancel (gpointer param)
 {
@@ -124,7 +126,7 @@ gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
   dialog.trust = gpapa_public_key_get_ownertrust (key, gpa_callback, parent);
   dialog.result = FALSE;
 
-  windowTrust = dialog.window = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowTrust = dialog.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (windowTrust), _("Change key ownertrust"));
   gtk_signal_connect (GTK_OBJECT (windowTrust), "destroy",
 		      GTK_SIGNAL_FUNC (ownertrust_destroy),
@@ -169,7 +171,7 @@ gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxTrust), 5);
 
   buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					ownertrust_cancel, &dialog);
+					(GtkSignalFunc) ownertrust_cancel, &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxTrust), buttonCancel);
   buttonAccept = gpa_button_new (accelGroup, _("_Accept"));
   gtk_signal_connect_object (GTK_OBJECT (buttonAccept), "clicked",

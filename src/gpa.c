@@ -50,6 +50,7 @@
 #include "keyserver.h"
 
 #ifdef __MINGW32__
+#include "w32reg.h"
 #include "hidewnd.h"
 #endif
 
@@ -174,6 +175,7 @@ static gchar *default_key = NULL;
 
 static guint default_key_changed_signal_id = 0;
 
+#if 0  /* @@@@@@ */
 /* create a new signal type for toplevel windows */
 static void
 gpa_default_key_changed_marshal (GtkObject *object,
@@ -183,10 +185,12 @@ gpa_default_key_changed_marshal (GtkObject *object,
 {
   ((GPADefaultKeyChanged)func)(func_data);
 }
+#endif
 
 static void
 gpa_create_default_key_signal (void)
 {
+#if 0  /* @@@@@@ */
   guint id;
 
   gpointer klass = gtk_type_class (gtk_window_get_type ());
@@ -195,6 +199,7 @@ gpa_create_default_key_signal (void)
 					 0, gpa_default_key_changed_marshal,
 					 GTK_TYPE_NONE, 0);
   default_key_changed_signal_id = id;
+#endif
 }
 
 static void
@@ -385,12 +390,12 @@ main (int argc, char **argv)
       free (gtkrc);
     }
 
-  #if defined(__MINGW32__) || defined(__CYGWIN__)
-    gpa_options.homedir = read_w32_registry_string( NULL, "Software\\GNU\\GnuPG", "HomeDir" );
-    gpg_program = read_w32_registry_string( NULL, "Software\\GNU\\GnuPG", "gpgProgram" );
-  #else
-     gpa_options.homedir = getenv ("GNUPGHOME");
-  #endif
+#if defined(__MINGW32__) || defined(__CYGWIN__)
+  gpa_options.homedir = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "HomeDir");
+  gpg_program = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "gpgProgram");
+#else
+  gpa_options.homedir = getenv ("GNUPGHOME");
+#endif
 
   if (!gpa_options.homedir || !*gpa_options.homedir)
     {
@@ -429,13 +434,13 @@ main (int argc, char **argv)
     }
 
   #ifdef HAVE_DOSISH_SYSTEM
-    if ( strchr (gpa_opt.homedir,'\\') ) {
-        char *d, *buf = m_alloc (strlen (opt.homedir)+1);
-        const char *s = gpa_opt.homedir;
-        for (d=buf,s=gpa_opt.homedir; *s; s++)
+    if ( strchr (gpa_options.homedir,'\\') ) {
+        char *d, *buf = xmalloc (strlen (gpa_options.homedir)+1);
+        const char *s = gpa_options.homedir;
+        for (d=buf,s=gpa_options.homedir; *s; s++)
             *d++ = *s == '\\'? '/': *s;
         *d = 0;
-        gpa_opt.homedir = buf;
+        gpa_options.homedir = buf;
     }
   #endif
 
@@ -539,6 +544,13 @@ main (int argc, char **argv)
 
   /* initialize the default key to a useful default */
   gpa_update_default_key ();
+
+#ifndef HAVE_DOSISH_SYSTEM
+  /* Internationalisation with gtk+-2.0 wants UTF8 instead of the
+   * character set determined by `locale'.
+   */
+  setenv ("OUTPUT_CHARSET", "utf8", 1);
+#endif
 
   /*global_windowMain = gpa_windowMain_new (_("GNU Privacy Assistant"));*/
   /*  global_windowMain = keyring_editor_new();

@@ -102,7 +102,7 @@ file_sign_ok (gpointer param)
     sign_type = GPAPA_SIGN_DETACH;
   else
     {
-      gpa_window_error (_("!FATAL ERROR!\nInvalid sign mode"), dialog->window);
+      gpa_window_error (_("Internal error:\nInvalid sign mode"), dialog->window);
       return;
     } /* else */
 
@@ -178,12 +178,12 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
   if (gpapa_get_secret_key_count (gpa_callback, parent) == 0)
     {
       gpa_window_error (_("No secret keys available for signing.\n"
-			  "Import a secret key first!"),
+			  "Please generate or import a secret key first."),
 			parent);
       return FALSE;
     } /* if */
 
-  windowSign = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowSign = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (windowSign), _("Sign Files"));
   dialog.window = windowSign;
   gtk_signal_connect (GTK_OBJECT (windowSign), "destroy",
@@ -248,7 +248,7 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxSign), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxSign), 5);
   buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					file_sign_cancel, (gpointer) &dialog);
+					(GtkSignalFunc) file_sign_cancel, (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonCancel);
 
   buttonSign = gpa_button_new (accelGroup, "_OK");

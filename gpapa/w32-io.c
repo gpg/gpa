@@ -715,10 +715,11 @@ _gpgme_io_waitpid ( int pid, int hang, int *r_status, int *r_signal )
 int
 _gpgme_io_kill ( int pid, int hard )
 {
+    /* @@@@@@ Warning: I am not sure how to kill a process!
+     * Figure out how this can be done.
+     *
     HANDLE proc = fd_to_handle (pid);
-
-    #warning I am not sure how to kill a process
-    /* fixme: figure out how this can be done */
+     */
     return 0;
 }
 
@@ -798,7 +799,7 @@ _gpgme_io_select ( struct io_select_fd_s *fds, size_t nfds )
          */
         any = 0;
         for (i=code - WAIT_OBJECT_0; i < nwait; i++ ) {
-            if (WaitForSingleObject ( waitbuf[i], NULL ) == WAIT_OBJECT_0) {
+            if (WaitForSingleObject ( waitbuf[i], 0 ) == WAIT_OBJECT_0) {
                 assert (waitidx[i] >=0 && waitidx[i] < nfds);
                 fds[waitidx[i]].signaled = 1;
                 any = 1;

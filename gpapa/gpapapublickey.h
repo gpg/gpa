@@ -94,7 +94,7 @@ extern GList *gpapa_public_key_get_signatures (GpapaPublicKey *key,
                                                gpointer calldata);
 
 extern void gpapa_public_key_export (GpapaPublicKey *key,
-                                     char *targetFileID, GpapaArmor Armor,
+                                     const gchar *targetFileID, GpapaArmor Armor,
                                      GpapaCallbackFunc callback,
                                      gpointer calldata);
 

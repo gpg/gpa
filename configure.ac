@@ -5,10 +5,14 @@ dnl (Process this file with autoconf to produce a configure script.)
 AC_REVISION($Revision$)dnl
 AC_PREREQ(2.52)
 
-dnl
-dnl The version number goes here
-dnl
-AC_INIT(gpa, 0.4.3a-cvs, [bug-gpa@gnupg.org])
+# The version number goes here. 
+#
+# The CVS version is usually the next intended release version with
+# the string "-cvs" appended.  The reason for this is that tests for a
+# specific feature can already be done under the assumption that the
+# CVS vesiuon is the most recent one in a branch.
+#
+AC_INIT(gpa, 0.4.4-cvs, [bug-gpa@gnupg.org])
 
 ALL_LINGUAS="de fr zh_TW.Big5 pt_BR"
 AM_CONFIG_HEADER(config.h)

@@ -27,6 +27,7 @@
 #include "filemenu.h"
 #include "gpa.h"
 #include "gpawindowkeeper.h"
+#include "gpafilesel.h"
 #include "gpapastrings.h"
 #include "gtktools.h"
 #include "icons.h"
@@ -154,11 +155,11 @@ gpa_tableKey_new (GpapaKey * key, GtkWidget * window)
   entryKeyname = gtk_entry_new ();
   contentsKeyname = gpapa_key_get_name (key, gpa_callback, window);
   gtk_widget_set_usize (entryKeyname,
-			gdk_string_width (entryKeyname->style->font,
-					  contentsKeyname) +
-			gdk_string_width (entryKeyname->style->font,
-					  "  ") +
-			entryKeyname->style->klass->xthickness, 0);
+    PANGO_SCALE * (gdk_string_width (gtk_style_get_font (entryKeyname->style),
+                                     contentsKeyname)
+                   + gdk_string_width (gtk_style_get_font (entryKeyname->style),
+                                       "  "))
+    + entryKeyname->style->xthickness, 0);
   gtk_entry_set_text (GTK_ENTRY (entryKeyname), contentsKeyname);
   gtk_editable_set_editable (GTK_EDITABLE (entryKeyname), FALSE);
   gtk_table_attach (GTK_TABLE (tableKey), entryKeyname, 1, 2, 0, 1,
@@ -287,8 +288,8 @@ gpa_frameExpire_new (GtkAccelGroup * accelGroup, GDate ** expiryDate,
   gtk_box_pack_start (GTK_BOX (hboxAfter), radioAfter, FALSE, FALSE, 0);
   entryAfter = gtk_entry_new ();
   gtk_widget_set_usize (entryAfter,
-			gdk_string_width (entryAfter->style->font, " 00000 "),
-			0);
+    PANGO_SCALE * gdk_string_width (gtk_style_get_font (entryAfter->style),
+                                    " 00000 "), 0);
   gtk_box_pack_start (GTK_BOX (hboxAfter), entryAfter, FALSE, FALSE, 0);
   comboAfter = gtk_combo_new ();
   gtk_combo_set_value_in_list (GTK_COMBO (comboAfter), TRUE, FALSE);
@@ -344,14 +345,14 @@ void
 keys_openPublic_export_export_exec (gpointer data, gpointer userData)
 {
 /* var */
-  gchar *keyID;
+  const gchar *keyID;
   gpointer *localParam;
-  gchar *fileID;
+  const gchar *fileID;
   GpapaArmor *armor;
   GtkWidget *windowExport;
   GpapaPublicKey *key;
 /* commands */
-  keyID = (gchar *) data;
+  keyID = (const gchar *) data;
   localParam = (gpointer *) userData;
   fileID = (gchar *) localParam[0];
   armor = (GpapaArmor *) localParam[1];
@@ -381,7 +382,7 @@ keys_openPublic_export_export (gpointer param)
   keysSelected = (GList **) localParam[2];
   entryFilename = (GtkWidget *) localParam[3];
   checkerArmor = (GtkWidget *) localParam[4];
-  fileID = gtk_entry_get_text (GTK_ENTRY (entryFilename));
+  fileID = (gchar *) gtk_entry_get_text (GTK_ENTRY (entryFilename));
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkerArmor)))
     armor = GPAPA_ARMOR;
   else
@@ -437,7 +438,7 @@ keys_export_dialog (gpointer param)
       return;
     }				/* if */
   keeper = gpa_windowKeeper_new ();
-  windowExport = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowExport = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowExport);
   gtk_window_set_title (GTK_WINDOW (windowExport), _("Export keys"));
   accelGroup = gtk_accel_group_new ();
@@ -561,8 +562,8 @@ keys_openPublic_exportTrust_export (gpointer param)
     armor = GPAPA_ARMOR;
   else
     armor = GPAPA_NO_ARMOR;
-  gpapa_export_ownertrust (gtk_file_selection_get_filename
-			   (GTK_FILE_SELECTION (keeperTrust->window)), armor,
+  gpapa_export_ownertrust (gpa_file_selection_get_filename
+			   (GPA_FILE_SELECTION (keeperTrust->window)), armor,
 			   gpa_callback, keeperTrust->window);
   paramClose[0] = keeperTrust;
   paramClose[1] = "keys_openPublic.tip";
@@ -586,14 +587,14 @@ keys_openPublic_exportTrust (gpointer param)
   checkerArmor = (GtkWidget *) localParam[0];
   windowPublic = (GtkWidget *) localParam[1];
   keeper = gpa_windowKeeper_new ();
-  selectTrust = gtk_file_selection_new (_("Export ownertrust to file"));
+  selectTrust = gpa_file_selection_new (_("Export ownertrust to file"));
   gpa_windowKeeper_set_window (keeper, selectTrust);
   paramExport = (gpointer *) xmalloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramExport);
   paramExport[0] = checkerArmor;
   paramExport[1] = keeper;
   gtk_signal_connect_object (GTK_OBJECT
-			     (GTK_FILE_SELECTION (selectTrust)->ok_button),
+			     (GPA_FILE_SELECTION (selectTrust)->ok_button),
 			     "clicked",
 			     GTK_SIGNAL_FUNC
 			     (keys_openPublic_exportTrust_export),
@@ -603,7 +604,7 @@ keys_openPublic_exportTrust (gpointer param)
   paramClose[0] = keeper;
   paramClose[1] = "keys_openPublic.tip";
   gtk_signal_connect_object (GTK_OBJECT
-			     (GTK_FILE_SELECTION (selectTrust)->
+			     (GPA_FILE_SELECTION (selectTrust)->
 			      cancel_button), "clicked",
 			     GTK_SIGNAL_FUNC (gpa_window_destroy),
 			     (gpointer) paramClose);
@@ -664,7 +665,7 @@ keys_openSecret_export_export (gpointer param)
   keysSelected = (GList **) localParam[2];
   entryFilename = (GtkWidget *) localParam[3];
   checkerArmor = (GtkWidget *) localParam[4];
-  fileID = gtk_entry_get_text (GTK_ENTRY (entryFilename));
+  fileID = (gchar *) gtk_entry_get_text (GTK_ENTRY (entryFilename));
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkerArmor)))
     armor = GPAPA_ARMOR;
   else
@@ -802,7 +803,7 @@ keys_openSecret_editKey_close (gpointer param)
 	      gtk_entry_get_text (GTK_ENTRY (entryRepeat))) != 0)
     {
       gpa_window_error (_
-			("In \"Password\" and \"Repeat Password\",\nyou must enter the same password."),
+			("In \"Passphrase\" and \"Repeat passphrase\",\nyou must enter the same passphrase."),
 keeperEdit->window);
       return;
     }				/* if */
@@ -813,7 +814,7 @@ keeperEdit->window);
     {
       i = atoi (gtk_entry_get_text (GTK_ENTRY (entryAfter)));
       unit =
-	getTimeunitForString (gtk_entry_get_text
+	getTimeunitForString ((gchar *) gtk_entry_get_text
 			      (GTK_ENTRY (GTK_COMBO (comboAfter)->entry)));
       gpapa_key_set_expiry_time (GPAPA_KEY (key), i, unit, gpa_callback,
 				 keeperEdit->window);
@@ -888,7 +889,7 @@ keys_openSecret_editKey (gpointer param)
   keyID = (gchar *) g_list_last (*keysSelected)->data;
   key = gpapa_get_secret_key_by_ID (keyID, gpa_callback, windowSecret);
   keeper = gpa_windowKeeper_new ();
-  windowEdit = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowEdit = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowEdit);
   keyEdited = (GList **) xmalloc (sizeof (GList *));
   gpa_windowKeeper_add_param (keeper, keyEdited);
@@ -911,7 +912,7 @@ keys_openSecret_editKey (gpointer param)
   entryPasswd = gtk_entry_new ();
   gtk_entry_set_visibility (GTK_ENTRY (entryPasswd), FALSE);
   gpa_connect_by_accelerator (GTK_LABEL (labelPasswd), entryPasswd,
-			      accelGroup, _("_Password: "));
+			      accelGroup, _("_Passphrase: "));
   gtk_table_attach (GTK_TABLE (tablePasswd), entryPasswd, 1, 2, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   labelRepeat = gtk_label_new ("");
@@ -921,7 +922,7 @@ keys_openSecret_editKey (gpointer param)
   entryRepeat = gtk_entry_new ();
   gtk_entry_set_visibility (GTK_ENTRY (entryRepeat), FALSE);
   gpa_connect_by_accelerator (GTK_LABEL (labelRepeat), entryRepeat,
-			      accelGroup, _("_Repeat password: "));
+			      accelGroup, _("_Repeat passphrase: "));
   gtk_table_attach (GTK_TABLE (tablePasswd), entryRepeat, 1, 2, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   gtk_signal_connect_object (GTK_OBJECT (entryPasswd), "activate",
@@ -1027,7 +1028,7 @@ keys_openSecret (void)
   GtkWidget *buttonClose;
 /* commands */
   keeper = gpa_windowKeeper_new ();
-  windowSecret = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowSecret = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowSecret);
   gtk_window_set_title (GTK_WINDOW (windowSecret),
 			_("Secret key ring editor"));
@@ -1221,7 +1222,7 @@ keys_generateRevocation (void)
   if (!contentsCountKeys)
     gpa_window_error (_("No secret keys available yet."), global_windowMain);
   keeper = gpa_windowKeeper_new ();
-  windowRevoc = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowRevoc = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowRevoc);
   gtk_window_set_title (GTK_WINDOW (windowRevoc),
 			_("Generate revocation certificate"));
@@ -1309,12 +1310,11 @@ void
 keys_import_ok (GpaWindowKeeper * keeperImport)
 {
 /* var */
-  gchar *fileID;
+  const gchar *fileID;
   gpointer paramDone[2];
 /* commands */
-  fileID =
-    gtk_file_selection_get_filename (GTK_FILE_SELECTION
-				     (keeperImport->window));
+  fileID = gpa_file_selection_get_filename (GPA_FILE_SELECTION
+                                            (keeperImport->window));
   gpapa_import_keys (fileID, gpa_callback, global_windowMain);
   paramDone[0] = keeperImport;
   paramDone[1] = NULL;
@@ -1330,10 +1330,10 @@ keys_import (void)
   gpointer *paramClose;
 /* commands */
   keeper = gpa_windowKeeper_new ();
-  windowImport = gtk_file_selection_new (_("Import keys"));
+  windowImport = gpa_file_selection_new (_("Import keys"));
   gpa_windowKeeper_set_window (keeper, windowImport);
   gtk_signal_connect_object (GTK_OBJECT
-			     (GTK_FILE_SELECTION (windowImport)->ok_button),
+			     (GPA_FILE_SELECTION (windowImport)->ok_button),
 			     "clicked", GTK_SIGNAL_FUNC (keys_import_ok),
 			     (gpointer) keeper);
   paramClose = (gpointer *) xmalloc (2 * sizeof (gpointer));
@@ -1341,7 +1341,7 @@ keys_import (void)
   paramClose[0] = keeper;
   paramClose[1] = NULL;
   gtk_signal_connect_object (GTK_OBJECT
-			     (GTK_FILE_SELECTION (windowImport)->
+			     (GPA_FILE_SELECTION (windowImport)->
 			      cancel_button), "clicked",
 			     GTK_SIGNAL_FUNC (gpa_window_destroy),
 			     (gpointer) paramClose);
@@ -1352,12 +1352,11 @@ void
 keys_importOwnertrust_ok (GpaWindowKeeper * keeperImport)
 {
 /* var */
-  gchar *fileID;
+  const gchar *fileID;
   gpointer paramDone[2];
 /* commands */
-  fileID =
-    gtk_file_selection_get_filename (GTK_FILE_SELECTION
-				     (keeperImport->window));
+  fileID = gpa_file_selection_get_filename (GPA_FILE_SELECTION
+                                            (keeperImport->window));
   gpapa_import_ownertrust (fileID, gpa_callback, global_windowMain);
   paramDone[0] = keeperImport;
   paramDone[1] = NULL;
@@ -1373,10 +1372,10 @@ keys_importOwnertrust (void)
   gpointer *paramClose;
 /* commands */
   keeper = gpa_windowKeeper_new ();
-  windowImport = gtk_file_selection_new (_("Import ownertrust"));
+  windowImport = gpa_file_selection_new (_("Import ownertrust"));
   gpa_windowKeeper_set_window (keeper, windowImport);
   gtk_signal_connect_object (GTK_OBJECT
-			     (GTK_FILE_SELECTION (windowImport)->ok_button),
+			     (GPA_FILE_SELECTION (windowImport)->ok_button),
 			     "clicked",
 			     GTK_SIGNAL_FUNC (keys_importOwnertrust_ok),
 			     (gpointer) keeper);
@@ -1385,7 +1384,7 @@ keys_importOwnertrust (void)
   paramClose[0] = keeper;
   paramClose[1] = NULL;
   gtk_signal_connect_object (GTK_OBJECT
-			     (GTK_FILE_SELECTION (windowImport)->
+			     (GPA_FILE_SELECTION (windowImport)->
 			      cancel_button), "clicked",
 			     GTK_SIGNAL_FUNC (gpa_window_destroy),
 			     (gpointer) paramClose);

@@ -27,7 +27,6 @@
 #include "icons.h"
 #include "icons.xpm"
 
-
 struct {
   const char *name;
   char **xpm;

@@ -38,8 +38,8 @@ typedef struct
 }
 SecretKeyData;
 
-extern void gpapa_secret_key_set_passphrase (GpapaSecretKey * key,
-					     gchar * passphrase,
+extern void gpapa_secret_key_set_passphrase (GpapaSecretKey *key,
+					     const gchar *passphrase,
 					     GpapaCallbackFunc callback,
 					     gpointer calldata);
 

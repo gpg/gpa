@@ -63,16 +63,16 @@ extern GpapaPublicKey *gpapa_get_public_key_by_index (gint idx,
 						      callback,
 						      gpointer calldata);
 
-extern GpapaPublicKey *gpapa_get_public_key_by_ID (char *keyID,
+extern GpapaPublicKey *gpapa_get_public_key_by_ID (const gchar *keyID,
 						   GpapaCallbackFunc callback,
 						   gpointer calldata);
 
-extern GpapaPublicKey *gpapa_get_public_key_by_userID (char *userID,
+extern GpapaPublicKey *gpapa_get_public_key_by_userID (const gchar *userID,
 						   GpapaCallbackFunc callback,
 						   gpointer calldata);
 
-extern GpapaPublicKey *gpapa_receive_public_key_from_server (char *keyID,
-							     char *ServerName,
+extern GpapaPublicKey *gpapa_receive_public_key_from_server (const gchar *keyID,
+							     const gchar *ServerName,
 							     GpapaCallbackFunc
 							     callback,
 							     gpointer
@@ -93,11 +93,11 @@ extern GpapaSecretKey *gpapa_get_secret_key_by_index (gint idx,
 						      callback,
 						      gpointer calldata);
 
-extern GpapaSecretKey *gpapa_get_secret_key_by_ID (char *keyID,
+extern GpapaSecretKey *gpapa_get_secret_key_by_ID (const gchar *keyID,
 						   GpapaCallbackFunc callback,
 						   gpointer calldata);
 
-extern GpapaSecretKey *gpapa_get_secret_key_by_userID (char *userID,
+extern GpapaSecretKey *gpapa_get_secret_key_by_userID (const gchar *userID,
 						   GpapaCallbackFunc callback,
 						   gpointer calldata);
 
@@ -113,18 +113,18 @@ extern void gpapa_create_key_pair (GpapaPublicKey **publicKey,
 				   GpapaCallbackFunc callback,
 				   gpointer calldata);
 
-extern void gpapa_export_ownertrust (char *targetFileID, GpapaArmor Armor,
+extern void gpapa_export_ownertrust (const gchar *targetFileID, GpapaArmor Armor,
 				     GpapaCallbackFunc callback,
 				     gpointer calldata);
 
-extern void gpapa_import_ownertrust (char *sourceFileID,
+extern void gpapa_import_ownertrust (const gchar *sourceFileID,
 				     GpapaCallbackFunc callback,
 				     gpointer calldata);
 
 extern void gpapa_update_trust_database (GpapaCallbackFunc callback,
 					 gpointer calldata);
 
-extern void gpapa_import_keys (char *sourceFileID,
+extern void gpapa_import_keys (const gchar *sourceFileID,
 			       GpapaCallbackFunc callback, gpointer calldata);
 
 /* Miscellaneous.

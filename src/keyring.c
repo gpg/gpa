@@ -101,10 +101,16 @@ static gboolean key_has_been_signed (GpapaPublicKey * key, gchar * key_id,
 
 static gboolean keyring_editor_has_selection (gpointer param);
 static gboolean keyring_editor_has_single_selection (gpointer param);
-static GpapaPublicKey *keyring_editor_current_key (GPAKeyringEditor * editor);
 static gchar *keyring_editor_current_key_id (GPAKeyringEditor * editor);
 
 static void keyring_update_details_notebook (GPAKeyringEditor *editor);
+
+static void toolbar_edit_key (GtkWidget *widget, gpointer param);
+static void toolbar_remove_key (GtkWidget *widget, gpointer param);
+static void toolbar_sign_key (GtkWidget *widget, gpointer param);
+static void toolbar_export_key (GtkWidget *widget, gpointer param);
+static void toolbar_import_keys (GtkWidget *widget, gpointer param);
+static void export_secret_key (GtkWidget *widget, gpointer param);
 
 /*
  *
@@ -524,7 +530,7 @@ keyring_editor_generate_key_advanced (gpointer param)
       if (params->send_to_server)
 	{
 	  printf ("send key to server\n");
-#warning key is not send to the server after generation
+/* @@@@@ warning: key is not send to the server after generation */
 	  /*
 	    gpapa_public_key_send_to_server (publicKey, global_keyserver,
 					   gpa_callback, editor->window);
@@ -628,13 +634,16 @@ keyring_editor_end_selection (GtkWidget * clistKeys, gpointer param)
 
 /* Signal handler for he map signal. If the simplified_ui flag is set
  * and there's no private key in the key ring, ask the user whether he
- * wants to generate a key. If so, call keyring_editor_generate_key
- * which calls runs the appropriate dialog
+ * wants to generate a key. If so, call keyring_editor_generate_key()
+ * which runs the appropriate dialog.
+ * Also, if the simplified_ui flag is set, remind the user if he has
+ * not yet created a backup copy of his private key.
  */
 static void
 keyring_editor_mapped (gpointer param)
 {
   static gboolean asked_about_key_generation = FALSE;
+  static gboolean asked_about_key_backup = FALSE;
   GPAKeyringEditor * editor = param;
 
   if (gpa_simplified_ui ())
@@ -654,6 +663,22 @@ keyring_editor_mapped (gpointer param)
 	    keyring_editor_generate_key (param);
 	  asked_about_key_generation = TRUE;
 	}
+      else if (gpapa_get_secret_key_count (gpa_callback, editor->window) != 0
+               && !asked_about_key_backup)
+        {
+	  const gchar * buttons[] = {_("_Backup key now"), _("Do it _later"),
+				     NULL};
+	  gchar * result;
+	  result = gpa_message_box_run (editor->window, _("No key backup"),
+					_("You do not have a backup copy of"
+                                          " your private key yet."
+					  " Do you want to backup your key now"
+					  " (recommended) or do it later?"),
+					buttons);
+	  if (result && strcmp(result, _("_Backup key now")) == 0)
+	    /* keyring_editor_backup_key (param) */;
+	  asked_about_key_backup = TRUE;
+        }
     }
 } /* keyring_editor_mapped */
 
@@ -688,7 +713,7 @@ keyring_editor_menubar_new (GtkWidget * window,
   GtkItemFactory *factory;
   GtkItemFactoryEntry file_menu[] = {
     {_("/_File"), NULL, NULL, 0, "<Branch>"},
-    {_("/File/_Close"), NULL, keyring_editor_close, 0, NULL},
+    {_("/File/_Close"), "<control>W", keyring_editor_close, 0, NULL},
     {_("/File/_Quit"), "<control>Q", file_quit, 0, NULL},
   };
   GtkItemFactoryEntry keys_menu[] = {
@@ -696,8 +721,12 @@ keyring_editor_menubar_new (GtkWidget * window,
     {_("/Keys/_Generate Key..."), NULL, keyring_editor_generate_key, 0, NULL},
     /*{_("/Keys/Generate _Revocation Certificate"), NULL,
 					 keys_generateRevocation, 0, NULL},*/
-    /*{_("/Keys/_Import Keys"), NULL, keys_import, 0, NULL},*/
-    /*{_("/Keys/Import _Ownertrust"), NULL, keys_importOwnertrust, 0, NULL},*/
+    {_("/Keys/_Sign Keys..."), NULL, toolbar_sign_key, 0, NULL},
+    {_("/Keys/_Import Keys..."), NULL, toolbar_import_keys, 0, NULL},
+    {_("/Keys/_Export Keys..."), NULL, toolbar_export_key, 0, NULL},
+    {_("/Keys/Export _Private Keys..."), NULL, export_secret_key, 0, NULL},
+    {_("/Keys/_Backup..."), NULL, export_secret_key, 0, NULL},
+    /*{_("/Keys/Import _Ownertrust..."), NULL, keys_importOwnertrust, 0, NULL},*/
     /*{_("/Keys/_Update Trust Database"), NULL, keys_updateTrust, 0, NULL},*/
   };
   GtkItemFactoryEntry win_menu[] = {
@@ -711,10 +740,10 @@ keyring_editor_menubar_new (GtkWidget * window,
   gtk_item_factory_create_items (factory,
 				 sizeof (file_menu) / sizeof (file_menu[0]),
 				 file_menu, editor);
-  gpa_options_menu_add_to_factory (factory, window);
   gtk_item_factory_create_items (factory,
 				 sizeof (keys_menu) / sizeof (keys_menu[0]),
 				 keys_menu, editor);
+  gpa_options_menu_add_to_factory (factory, window);
   gtk_item_factory_create_items (factory,
 				 sizeof (win_menu) / sizeof (win_menu[0]),
 				 win_menu, editor);
@@ -1083,6 +1112,12 @@ toolbar_import_keys (GtkWidget *widget, gpointer param)
   keyring_editor_import (param);
 }
 
+static void
+export_secret_key (GtkWidget *widget, gpointer param)
+{
+  /* keyring_editor_export (param); */
+}
+
 static GtkWidget *
 keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 {
@@ -1091,7 +1126,7 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   GtkWidget *item;
   GtkWidget *button;
 
-  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  toolbar = gtk_toolbar_new (/* GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH @@@@@@ */);
   
   icon = gpa_create_icon_widget (window, "edit");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Edit"),
@@ -1158,11 +1193,19 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
+  icon = gpa_create_icon_widget (window, "openfile");
+  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Files"),
+				  _("Open the File Manager"),
+				  _("file manager"), icon, GTK_SIGNAL_FUNC (gpa_open_filemanager),
+				  NULL);
+
+#if 0  /* Help is not available yet. :-( */
   icon = gpa_create_icon_widget (window, "help");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
 				  _("Understanding the GNU Privacy Assistant"),
 				  _("help"), icon, GTK_SIGNAL_FUNC (help_help),
 				  NULL);
+#endif
 
   return toolbar;
 } /* keyring_toolbar_new */
@@ -1257,7 +1300,7 @@ keyring_editor_new (void)
 			_("GNU Privacy Assistant - Keyring Editor"));
   gtk_object_set_data_full (GTK_OBJECT (window), "user_data", editor,
 			    keyring_editor_destroy);
-  /*gtk_window_set_default_size (GTK_WINDOW(window), 572, 400);*/
+  gtk_window_set_default_size (GTK_WINDOW (window), 580, 460);
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   gtk_signal_connect_object (GTK_OBJECT (window), "map",
@@ -1324,6 +1367,7 @@ keyring_editor_new (void)
 
   notebook = keyring_details_notebook (editor);
   gtk_paned_pack2 (GTK_PANED (paned), notebook, TRUE, TRUE);
+  gtk_paned_set_position (GTK_PANED (paned), 200);
 
   statusbar = keyring_statusbar_new (editor);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);

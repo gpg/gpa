@@ -36,7 +36,7 @@ typedef struct
 }
 GpapaKey;
 
-extern GpapaKey *gpapa_key_new (char *keyID, GpapaCallbackFunc callback,
+extern GpapaKey *gpapa_key_new (const gchar *keyID, GpapaCallbackFunc callback,
 				gpointer calldata);
 
 extern char *gpapa_key_get_identifier (GpapaKey *key,
@@ -55,7 +55,7 @@ extern GDate *gpapa_key_get_creation_date (GpapaKey *key,
 					   gpointer calldata);
 
 extern void gpapa_key_set_expiry_date (GpapaKey *key, GDate *date,
-				       char *password,
+				       const gchar *password,
 				       GpapaCallbackFunc callback,
 				       gpointer calldata);
 

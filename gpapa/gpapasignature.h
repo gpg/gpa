@@ -33,8 +33,7 @@ typedef struct
 }
 GpapaSignature;
 
-extern GpapaSignature *gpapa_signature_new (gchar *keyID,
-					    GpapaCallbackFunc callback,
+extern GpapaSignature *gpapa_signature_new (GpapaCallbackFunc callback,
 					    gpointer calldata);
 
 extern gchar *gpapa_signature_get_identifier (GpapaSignature *signature,

@@ -24,6 +24,9 @@
 #include <string.h>
 #include <stdarg.h>
 #include <unistd.h>
+#ifdef HAVE_PROCESS_H
+#include <process.h>
+#endif
 #include <assert.h>
 
 #include "util.h"

@@ -288,14 +288,14 @@ show_file_detail (gpointer param)
 
   if (!fileman->clist_files->selection)
     {
-      gpa_window_error (_("No file selected for detail view"),
+      gpa_window_error (_("No file selected for detail view."),
 			fileman->window);
       return;
     } /* if */
 
   file = get_file (fileman->clist_files,
 		   GPOINTER_TO_INT (fileman->clist_files->selection->data));
-  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), _("Detailed file view"));
   gtk_signal_connect_object (GTK_OBJECT (window), "delete_event",
 			     GTK_SIGNAL_FUNC (detail_delete_event),
@@ -316,11 +316,11 @@ show_file_detail (gpointer param)
   contentsFilename = gpapa_file_get_name (file, gpa_callback, fileman->window);
   gtk_entry_set_text (GTK_ENTRY (entryFilename), contentsFilename);
   gtk_widget_set_usize (entryFilename,
-			gdk_string_width (entryFilename->style->font,
-					  contentsFilename) +
-			gdk_string_width (entryFilename->style->font,
-					  "  ") +
-			entryFilename->style->klass->xthickness, 0);
+    PANGO_SCALE * (gdk_string_width (gtk_style_get_font (entryFilename->style),
+                                     contentsFilename)
+                   + gdk_string_width (gtk_style_get_font (entryFilename->style),
+                                       "  "))
+                   + entryFilename->style->xthickness, 0);
   gtk_table_attach (GTK_TABLE (tableTop), entryFilename, 1, 2, 0, 1, GTK_FILL,
 		    GTK_FILL, 0, 0);
 
@@ -366,7 +366,7 @@ show_file_detail (gpointer param)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxDetail), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxDetail), 5);
   buttonClose = gpa_button_cancel_new (accelGroup, _("_Close"),
-				       close_file_detail, fileman);
+				       (GtkSignalFunc) close_file_detail, fileman);
   gtk_container_add (GTK_CONTAINER (hButtonBoxDetail), buttonClose);
   gtk_box_pack_start (GTK_BOX (vboxDetail), hButtonBoxDetail, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vboxDetail);
@@ -629,7 +629,7 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 {
   GtkWidget *toolbar, *icon;
 
-  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  toolbar = gtk_toolbar_new (/* GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH @@@@@@ */);
   
   /* Open */
   if ((icon = gpa_create_icon_widget (window, "openfile")))
@@ -653,12 +653,15 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 			     _("Decrypt the selected file"), _("decrypt file"),
 			     icon, GTK_SIGNAL_FUNC (toolbar_file_decrypt),
 			     fileman);
+
+#if 0  /* Help is not available yet. :-( */                            
   /* Help */
   if ((icon = gpa_create_icon_widget (window, "help")))
     gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
 			     _("Understanding the GNU Privacy Assistant"),
 			     _("help"), icon,
 			     GTK_SIGNAL_FUNC (help_help), NULL);
+#endif
 
   return toolbar;
 } 

@@ -26,7 +26,7 @@
 #include "gpapa.h"
 
 static void
-linecallback_fingerprint (char *line, gpointer data, GpgStatusCode status)
+linecallback_fingerprint (gchar *line, gpointer data, GpgStatusCode status)
 {
   PublicKeyData *d = data;
   gpapa_report_error_status (status, d->callback, d->calldata);
@@ -47,8 +47,8 @@ gpapa_public_key_get_fingerprint (GpapaPublicKey *key,
       if (key->fingerprint == NULL && key->key != NULL)
         {
           PublicKeyData data = { key, callback, calldata };
-          char *key_id = xstrcat2 ("0x", key->key->KeyID);
-          char *gpgargv[4];
+          gchar *key_id = xstrcat2 ("0x", key->key->KeyID);
+          const gchar *gpgargv[4];
           gpgargv[0] = "--fingerprint";
           gpgargv[1] = "--with-colons";
           gpgargv[2] = key_id;
@@ -124,11 +124,11 @@ gpapa_public_key_set_ownertrust (GpapaPublicKey *key, GpapaOwnertrust trust,
 {
   if (key)
     {
-      char *gpgargv[3];
-      char *commands;
-      char *commands_sprintf_str;
+      const gchar *gpgargv[3];
+      gchar *commands;
+      gchar *commands_sprintf_str;
       int trust_int;
-      char trust_char;
+      gchar trust_char;
       switch (trust)
         {
           case GPAPA_OWNERTRUST_DISTRUST:
@@ -192,14 +192,17 @@ extract_sig (char *line, GpapaCallbackFunc callback, gpointer calldata)
     }
   else
     {
-      GpapaSignature *sig =
-        gpapa_signature_new (field[4], callback, calldata);
+      GpapaSignature *sig = gpapa_signature_new (callback, calldata);
       if (strcmp (field[1], "!") == 0)
         sig->validity = GPAPA_SIG_VALID;
       else if (strcmp (field[1], "-") == 0)
         sig->validity = GPAPA_SIG_INVALID;
       else
         sig->validity = GPAPA_SIG_UNKNOWN;
+      if (field[4] == NULL || strlen(field[4]) <= 8)
+        sig->KeyID = NULL;
+      else
+        sig->KeyID = xstrdup (field[4] + 8);
       sig->CreationDate = gpapa_extract_date (field[5]);
       sig->UserID = field[9][0] ? xstrdup (field[9]) : NULL;
       return (sig);
@@ -231,8 +234,8 @@ gpapa_public_key_get_signatures (GpapaPublicKey *key,
       if (key->sigs == NULL && key->key != NULL)
         {
           PublicKeyData data = { key, callback, calldata };
-          char *key_id = xstrcat2 ("0x", key->key->KeyID);
-          char *gpgargv[4];
+          gchar *key_id = xstrcat2 ("0x", key->key->KeyID);
+          const gchar *gpgargv[4];
           gpgargv[0] = "--check-sigs";
           gpgargv[1] = "--with-colons";
           gpgargv[2] = key_id;
@@ -247,7 +250,7 @@ gpapa_public_key_get_signatures (GpapaPublicKey *key,
 }
 
 void
-gpapa_public_key_export (GpapaPublicKey *key, char *targetFileID,
+gpapa_public_key_export (GpapaPublicKey *key, const gchar *targetFileID,
                          GpapaArmor Armor, GpapaCallbackFunc callback,
                          gpointer calldata)
 {
@@ -257,8 +260,8 @@ gpapa_public_key_export (GpapaPublicKey *key, char *targetFileID,
     callback (GPAPA_ACTION_ERROR, "target file not specified", calldata);
   if (key && targetFileID)
     {
-      char *full_keyID;
-      char *gpgargv[7];
+      gchar *full_keyID;
+      const gchar *gpgargv[7];
       int i = 0;
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
       gpgargv[i++] = "-o";
@@ -284,9 +287,9 @@ gpapa_public_key_delete (GpapaPublicKey *key, GpapaCallbackFunc callback,
     callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
   else
     {
-      char *full_keyID;
-      char *commands = "YES\n";
-      char *gpgargv[4];
+      gchar *full_keyID;
+      gchar *commands = "YES\n";
+      const gchar *gpgargv[4];
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
       gpgargv[0] = "--yes";
       gpgargv[1] = "--delete-key";
@@ -311,9 +314,9 @@ gpapa_public_key_send_to_server (GpapaPublicKey *key,
     callback (GPAPA_ACTION_ERROR, "keyserver not specified", calldata);
   if (key && ServerName)
     {
-      char *name = xstrdup (ServerName);
-      char *full_keyID;
-      char *gpgargv[5];
+      gchar *name = xstrdup (ServerName);
+      gchar *full_keyID;
+      const gchar *gpgargv[5];
 
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
       gpgargv[0] = "--keyserver";
@@ -342,9 +345,9 @@ gpapa_public_key_sign (GpapaPublicKey *key, char *keyID,
     callback (GPAPA_ACTION_ERROR, "no valid PassPhrase specified", calldata);
   if (key && keyID && PassPhrase)
     {
-      char *full_keyID;
-      char *commands = "YES\nYES\n";
-      char *gpgargv[6];
+      gchar *full_keyID;
+      gchar *commands = "YES\nYES\n";
+      const gchar *gpgargv[6];
       full_keyID = xstrcat2 ("", key->key->UserID);
       gpgargv[0] = "--yes";
       gpgargv[1] = "--local-user";

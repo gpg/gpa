@@ -117,7 +117,13 @@ getpass (const char *prompt)
     }
 
   SetConsoleMode (con.in, DEF_INPMODE);
+
+#if 0  /* What's this???? */
   WriteConsoleA (con.out, prompt, 2, "\r\n", NULL);
+#else
+  WriteConsoleA (con.out, "\r\n", 2, &nwritten, NULL);
+#endif
+
   buf[i] = 0;
   return buf;
 }
@@ -199,7 +205,7 @@ linecallback (gchar *line, void *data, GpgStatusCode status)
 void
 test_version (void)
 {
-  char *gpgargv[2];
+  const gchar *gpgargv[2];
   gpgargv[0] = "--version";
   gpgargv[1] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, linecallback, "pruzzel",
@@ -436,7 +442,7 @@ test_export_secret (char *keyID)
 void
 test_edithelp (void)
 {
-  char *gpgargv[3];
+  const gchar *gpgargv[3];
   gpgargv[0] = "--edit-key";
   gpgargv[1] = "test";
   gpgargv[2] = NULL;
@@ -447,7 +453,7 @@ test_edithelp (void)
 void
 test_genkey (void)
 {
-  char *gpgargv[3];
+  const gchar *gpgargv[3];
   gpgargv[0] = "--gen-key";
   gpgargv[1] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE,

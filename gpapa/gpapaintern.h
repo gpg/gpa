@@ -31,16 +31,16 @@ typedef void (*GpapaLineCallbackFunc) (char *line, void *opaque,
                                        GpgStatusCode status );
 				      
 
-extern gboolean gpapa_line_begins_with (gchar * line, gchar * keyword);
+extern gboolean gpapa_line_begins_with (gchar *line, gchar *keyword);
 
 extern void gpapa_report_error_status (GpgStatusCode status,
                                        GpapaCallbackFunc callback,
                                        gpointer calldata);
 
-extern void gpapa_call_gnupg (gchar ** argv, gboolean do_wait,
-			      gchar * commands, gchar *reserved,
+extern void gpapa_call_gnupg (const gchar **argv, gboolean do_wait,
+			      const gchar *commands, const gchar *reserved,
 			      GpapaLineCallbackFunc linecallback,
-			      void * linedata, GpapaCallbackFunc callback,
+			      void *linedata, GpapaCallbackFunc callback,
 			      gpointer calldata);
 
 /*-- gpapa.c --*/

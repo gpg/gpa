@@ -26,7 +26,7 @@
 #include "gpapa.h"
 
 void
-gpapa_secret_key_set_passphrase (GpapaSecretKey *key, char *passphrase,
+gpapa_secret_key_set_passphrase (GpapaSecretKey *key, const gchar *passphrase,
 				 GpapaCallbackFunc callback,
 				 gpointer calldata)
 {
@@ -45,8 +45,8 @@ gpapa_secret_key_export (GpapaSecretKey *key, char *targetFileID,
     callback (GPAPA_ACTION_ERROR, "target file not specified", calldata);
   if (key && targetFileID)
     {
-      char *full_keyID;
-      char *gpgargv[7];
+      gchar *full_keyID;
+      const gchar *gpgargv[7];
       int i = 0;
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
       gpgargv[i++] = "-o";
@@ -72,8 +72,8 @@ gpapa_secret_key_delete (GpapaSecretKey *key, GpapaCallbackFunc callback,
     callback (GPAPA_ACTION_ERROR, "no valid secret key specified", calldata);
   else
     {
-      char *full_keyID;
-      char *gpgargv[4];
+      gchar *full_keyID;
+      const gchar *gpgargv[4];
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
       gpgargv[0] = "--yes";
       gpgargv[1] = "--delete-secret-key";
@@ -100,8 +100,8 @@ gpapa_secret_key_create_revocation (GpapaSecretKey *key,
 {
   if (key)
     {
-      char *gpgargv[3];
-      char *commands = "yes \n1 \n\n";
+      const gchar *gpgargv[3];
+      gchar *commands = "yes \n1 \n\n";
       gpgargv[0] = "--gen-revoke";
       gpgargv[1] = key->key->KeyID;
       gpgargv[2] = NULL; 

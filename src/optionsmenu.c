@@ -78,7 +78,7 @@ options_keyserver (gpointer param)
   GtkWidget *buttonSet;
 
   keeper = gpa_windowKeeper_new ();
-  windowServer = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowServer = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowServer);
   gtk_window_set_title (GTK_WINDOW (windowServer), _("Set key server"));
   accelGroup = gtk_accel_group_new ();
@@ -137,7 +137,7 @@ static void
 options_recipients_fillDefault (gpointer data, gpointer userData)
 {
 /* var */
-  gchar *keyID;
+  const gchar *keyID;
   GtkWidget *clistDefault;
   GpapaPublicKey *key;
   gchar *contentsDefault[2];
@@ -147,9 +147,9 @@ options_recipients_fillDefault (gpointer data, gpointer userData)
   key = gpapa_get_public_key_by_ID (keyID, gpa_callback, global_windowMain);
   contentsDefault[0] =
     gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, global_windowMain);
-  contentsDefault[1] = keyID;
+  contentsDefault[1] = (gchar *) keyID;
   gtk_clist_append (GTK_CLIST (clistDefault), contentsDefault);
-}				/* options_recipients_fillDefault */
+}
 
 static void
 options_recipients_set (gpointer param)
@@ -172,9 +172,9 @@ options_recipients_set (gpointer param)
       gtk_clist_get_text (GTK_CLIST (clistDefault), i, 1, &keyID);
       global_defaultRecipients =
 	g_list_append (global_defaultRecipients, xstrdup_or_null (keyID));
-    }				/* for */
+    }
   gpa_recipientWindow_close (param);
-}				/* options_recipients_set */
+}
 
 
 static void
@@ -234,7 +234,7 @@ global_windowMain);
     } /* if */
 
   keeper = gpa_windowKeeper_new ();
-  windowRecipients = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowRecipients = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowRecipients);
   gtk_window_set_title (GTK_WINDOW (windowRecipients),
 			_("Set default recipients"));
@@ -456,7 +456,7 @@ options_key (gpointer param)
     }
   keeper = gpa_windowKeeper_new ();
 
-  windowKey = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowKey = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowKey);
   gtk_window_set_title (GTK_WINDOW (windowKey), _("Set default key"));
   accelGroup = gtk_accel_group_new ();

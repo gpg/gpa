@@ -46,6 +46,9 @@ struct _GPAKeyExportDialog {
   /* The server combo box */
   GtkWidget * combo_server;
 
+  /* The clipboard radio button */
+  GtkWidget * radio_clipboard;
+
   /* Whether to export ascii armored. Not used in the simple UI */
   GtkWidget * check_armored;
 
@@ -111,12 +114,12 @@ export_ok (gpointer param)
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_server)))
     {
       GtkWidget * entry = GTK_COMBO (dialog->combo_server)->entry;
-      dialog->server = gtk_entry_get_text (GTK_ENTRY (entry));
+      dialog->server = (gchar *) gtk_entry_get_text (GTK_ENTRY (entry));
       dialog->server = xstrdup_or_null (dialog->server);
     }
   else
     {
-      dialog->filename = gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
+      dialog->filename = (gchar *) gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
       dialog->filename = xstrdup_or_null (dialog->filename);
     }
 
@@ -167,7 +170,7 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   dialog.server = NULL;
   dialog.armored = 1;
   
-  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), _("Export keys"));
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -180,9 +183,10 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
-  table = gtk_table_new (3, 2, FALSE);
+  table = gtk_table_new (4, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 1, 2);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
 
   /* File name entry */
@@ -219,6 +223,12 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
 		      keyserver_get_current () );
 
+  /* Clipboard radio button */
+  radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio),
+					    accel_group, _("To _clipboard"));
+  dialog.radio_clipboard = radio;
+  gtk_table_attach (GTK_TABLE (table), radio, 0, 3, 2, 3, GTK_FILL, 0, 0, 0);
+
   if (!gpa_simplified_ui ())
     {
       check = gpa_check_button_new (accel_group, _("a_rmor"));
@@ -229,7 +239,6 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   else
     dialog.check_armored = NULL;
 
-
   /* The button box */
   bbox = gtk_hbutton_box_new ();
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
@@ -237,7 +246,8 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), 10);
   gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
 
-  button = gpa_button_cancel_new (accel_group, _("_Cancel"), export_cancel,
+  button = gpa_button_cancel_new (accel_group, _("_Cancel"),
+                                  (GtkSignalFunc) export_cancel,
 				  &dialog);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 

@@ -79,7 +79,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
 
   accel_group = gtk_accel_group_new ();
 
-  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), _("Edit Key"));
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);

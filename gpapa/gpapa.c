@@ -237,7 +237,10 @@ extract_key (char *line, GpapaCallbackFunc callback, gpointer calldata)
       key->KeyTrust = field[1][0];
       key->bits = atoi (field[2]);
       key->algorithm = atoi (field[3]);
-      key->KeyID = xstrdup (field[4]);
+      if (field[4] == NULL || strlen (field[4]) <= 8)
+        key->KeyID = NULL;
+      else 
+        key->KeyID = xstrdup (field[4] + 8);
       key->CreationDate = gpapa_extract_date (field[5]);
       key->ExpirationDate = gpapa_extract_date (field[6]);
       key->OwnerTrust = field[8][0];
@@ -294,7 +297,7 @@ void
 gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
 {
   PublicKeyData data = { NULL, callback, calldata };
-  char *gpgargv[4];
+  const gchar *gpgargv[4];
   if (SecRing)
     {
       release_secret_keyring (SecRing);
@@ -333,7 +336,7 @@ gpapa_get_public_key_by_index (gint idx, GpapaCallbackFunc callback,
 }
 
 GpapaPublicKey *
-gpapa_get_public_key_by_ID (char *keyID, GpapaCallbackFunc callback,
+gpapa_get_public_key_by_ID (const gchar *keyID, GpapaCallbackFunc callback,
 			    gpointer calldata)
 {
   GList *g;
@@ -367,11 +370,11 @@ linecallback_id_pub (char *line, gpointer data, GpgStatusCode status)
 }
 
 GpapaPublicKey *
-gpapa_get_public_key_by_userID (char *userID, GpapaCallbackFunc callback,
-			    gpointer calldata)
+gpapa_get_public_key_by_userID (const gchar *userID, GpapaCallbackFunc callback,
+			        gpointer calldata)
 {
   PublicKeyData data = { NULL, callback, calldata };
-  char *gpgargv[4];
+  const gchar *gpgargv[4];
   char *uid = xstrdup (userID);
   uid = strcpy (uid, userID);
   gpgargv[0] = "--list-keys";
@@ -397,13 +400,13 @@ gpapa_get_public_key_by_userID (char *userID, GpapaCallbackFunc callback,
 }
 
 GpapaPublicKey *
-gpapa_receive_public_key_from_server (char *keyID, char *ServerName,
+gpapa_receive_public_key_from_server (const gchar *keyID, const gchar *ServerName,
 				      GpapaCallbackFunc callback,
 				      gpointer calldata)
 {
   if (keyID && ServerName)
     {
-      char *gpgargv[5];
+      const gchar *gpgargv[5];
       char *id = xstrcat2 ("0x", keyID);
       gpgargv[0] = "--keyserver";
       gpgargv[1] = ServerName;
@@ -448,7 +451,7 @@ void
 gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
 {
   SecretKeyData data = { NULL, callback, calldata };
-  char *gpgargv[3];
+  const gchar *gpgargv[3];
   if (SecRing != NULL)
     {
       g_list_free (SecRing);
@@ -480,7 +483,7 @@ gpapa_get_secret_key_by_index (gint idx, GpapaCallbackFunc callback,
 }
 
 GpapaSecretKey *
-gpapa_get_secret_key_by_ID (char *keyID, GpapaCallbackFunc callback,
+gpapa_get_secret_key_by_ID (const gchar *keyID, GpapaCallbackFunc callback,
 			    gpointer calldata)
 {
   GList *g;
@@ -514,11 +517,11 @@ linecallback_id_sec (char *line, gpointer data, GpgStatusCode status)
 }
 
 GpapaSecretKey *
-gpapa_get_secret_key_by_userID (char *userID, GpapaCallbackFunc callback,
-			    gpointer calldata)
+gpapa_get_secret_key_by_userID (const gchar *userID, GpapaCallbackFunc callback,
+			        gpointer calldata)
 {
   SecretKeyData data = { NULL, callback, calldata };
-  char *gpgargv[4];
+  const gchar *gpgargv[4];
   char *uid = xstrdup (userID);
   uid = strcpy (uid, userID);
   gpgargv[0] = "--list-secret-keys";
@@ -552,7 +555,7 @@ gpapa_create_key_pair (GpapaPublicKey **publicKey,
 {
   if (aKeysize && aUserID && anEmail && aComment)
     {
-      char *gpgargv[3];
+      const gchar *gpgargv[3];
       char *commands = NULL;
       char *commands_sprintf_str;
       char *Algo, *Sub_Algo, *Name_Comment;
@@ -626,7 +629,7 @@ linecallback_export_ownertrust (gchar *line, gpointer data, GpgStatusCode status
 }
 
 void
-gpapa_export_ownertrust (gchar *targetFileID, GpapaArmor Armor,
+gpapa_export_ownertrust (const gchar *targetFileID, GpapaArmor Armor,
 			 GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!targetFileID)
@@ -639,7 +642,7 @@ gpapa_export_ownertrust (gchar *targetFileID, GpapaArmor Armor,
 		  "could not open target file for writing", calldata);
       else
 	{
-	  char *gpgargv[3];
+	  const gchar *gpgargv[3];
 	  int i = 0;
 	  if (Armor == GPAPA_ARMOR)
 	    gpgargv[i++] = "--armor";
@@ -653,16 +656,16 @@ gpapa_export_ownertrust (gchar *targetFileID, GpapaArmor Armor,
 }
 
 void
-gpapa_import_ownertrust (gchar *sourceFileID,
+gpapa_import_ownertrust (const gchar *sourceFileID,
 			 GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!sourceFileID)
     callback (GPAPA_ACTION_ERROR, "source file not specified", calldata);
   else
     {
-      char *gpgargv[3];
+      const gchar *gpgargv[3];
       gpgargv[0] = "--import-ownertrust";
-      gpgargv[1] = sourceFileID;
+      gpgargv[1] = (char *) sourceFileID;
       gpgargv[2] = NULL;
       gpapa_call_gnupg 	(gpgargv, TRUE, NULL, NULL,
                          NULL, NULL, callback, calldata);
@@ -672,7 +675,7 @@ gpapa_import_ownertrust (gchar *sourceFileID,
 void
 gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
 {
-  char *gpgargv[2];
+  const gchar *gpgargv[2];
   gpgargv[0] = "--update-trustdb";
   gpgargv[1] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
@@ -681,17 +684,18 @@ gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
 }
 
 void
-gpapa_import_keys (gchar *sourceFileID,
+gpapa_import_keys (const gchar *sourceFileID,
 		   GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!sourceFileID)
     callback (GPAPA_ACTION_ERROR, "source file not specified", calldata);
   else
     {
-      char *gpgargv[3];
-      gpgargv[0] = "--import";
-      gpgargv[1] = sourceFileID;
-      gpgargv[2] = NULL;
+      const gchar *gpgargv[4];
+      gpgargv[0] = "--allow-secret-key-import";
+      gpgargv[1] = "--import";
+      gpgargv[2] = (char *) sourceFileID;
+      gpgargv[3] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
 	                NULL, NULL, callback, calldata);
       gpapa_refresh_public_keyring (callback, calldata);

@@ -26,7 +26,7 @@
 #include "gpapa.h"
 
 GpapaKey *
-gpapa_key_new (char *keyID, GpapaCallbackFunc callback, gpointer calldata)
+gpapa_key_new (const gchar *keyID, GpapaCallbackFunc callback, gpointer calldata)
 {
   GpapaKey *key = (GpapaKey *) xmalloc (sizeof (GpapaKey));
   memset (key, 0, sizeof (GpapaKey));
@@ -75,14 +75,14 @@ gpapa_key_get_creation_date (GpapaKey *key, GpapaCallbackFunc callback,
 }
 
 void
-gpapa_key_set_expiry_date (GpapaKey *key, GDate *date, char *passphrase, 
+gpapa_key_set_expiry_date (GpapaKey *key, GDate *date, const gchar *passphrase, 
 			   GpapaCallbackFunc callback, gpointer calldata)
 {
   if (key)
     {
-      char *gpgargv[3];
-      char *commands;
-      char *commands_sprintf_str;
+      const gchar *gpgargv[3];
+      gchar *commands;
+      gchar *commands_sprintf_str;
       if (date)
 	{
 	  commands_sprintf_str = "expire\n%04u-%02u-%02u\nsave\n";

@@ -147,7 +147,7 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
     } /* if */
   if (!gpapa_get_secret_key_count (gpa_callback, parent))
     {
-      gpa_window_error (_("No secret keys available to encrypt."),
+      gpa_window_error (_("No secret keys available."),
 			parent);
       return NULL;
     } /* if */
@@ -155,7 +155,7 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
   dialog.files = files;
   dialog.encrypted_files = NULL;
 
-  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), _("Encrypt files"));
   dialog.window = window;
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -201,7 +201,7 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxEncrypt), 5);
 
   buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					file_encrypt_cancel,
+					(GtkSignalFunc) file_encrypt_cancel,
 					(gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxEncrypt), buttonCancel);
 

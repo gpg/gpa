@@ -314,8 +314,8 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   entryAfter = gtk_entry_new ();
   frame->entryAfter = entryAfter;
   gtk_widget_set_usize (entryAfter,
-			gdk_string_width (entryAfter->style->font, " 00000 "),
-			0);
+    PANGO_SCALE * gdk_string_width (gtk_style_get_font (entryAfter->style), " 00000 "),
+    0);
   gtk_box_pack_start (GTK_BOX (hboxAfter), entryAfter, FALSE, FALSE, 0);
 
   comboAfter = gtk_combo_new ();
@@ -369,7 +369,7 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
 {
   GPAExpiryFrame * frame = gtk_object_get_data (GTK_OBJECT (expiry_frame),
 						"user_data");
-  gchar * temp;
+  gchar *temp;
   gboolean result = FALSE;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (frame->radioDont)))
@@ -381,7 +381,7 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(frame->radioAfter)))
     {
       *interval = atoi (gtk_entry_get_text (GTK_ENTRY(frame->entryAfter)));
-      temp =gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(frame->comboAfter)->entry));
+      temp = (gchar *) gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(frame->comboAfter)->entry));
       *unit = gpa_time_unit_from_string (temp);
       *date = NULL;
       result = TRUE;
@@ -436,7 +436,7 @@ gpa_expiry_frame_validate(GtkWidget * expiry_frame)
 			gtk_entry_get_text (GTK_ENTRY (frame->entryAt)));
       if (!g_date_valid (date))
 	{
-	  result = _("Please provide a correct date");
+	  result = _("Please provide a correct date.");
 	}
       else
 	{
