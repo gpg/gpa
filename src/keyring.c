@@ -401,8 +401,7 @@ keyring_editor_import (gpointer param)
       free (server);
       /* Import the key */
       err = gpgme_op_import (ctx, data);
-      if (err != GPGME_No_Error &&
-          err != GPGME_EOF)
+      if (err != GPGME_No_Error)
         {
           gpa_gpgme_error (err);
         }
@@ -440,17 +439,16 @@ keyring_editor_export (gpointer param)
 
   if (key_export_dialog_run (editor->window, &filename, &server, &armored))
     {
+      GpgmeError err;
+      GpgmeData data;
+      GpgmeRecipients rset;
+      GList *selection = gpa_keylist_selection (editor->clist_keys);
+      FILE *file = NULL;
+
+      /* First: check any preconditions to the export (file/server accessible,
+       * etc) */
       if (filename)
         {
-          /* Export the selected keys to the user specified file. */
-          GpgmeError err;
-          GpgmeData data;
-          GpgmeRecipients rset;
-          GList *selection = gpa_keylist_selection (editor->clist_keys);
-          FILE *file;
-          
-          /* Before we do anything else, make sure we can open the file 
-           * for writing */
           file = fopen (filename, "w");
           if (!file)
             {
@@ -458,68 +456,68 @@ keyring_editor_export (gpointer param)
               g_snprintf (message, sizeof(message), "%s: %s",
                           filename, strerror(errno));
               gpa_window_error (message, editor->window);
+              free (filename);
+              free (server);
               return;
             }
-          /* Create the data buffer */
-          err = gpgme_data_new (&data);
+        }
+      else if (server)
+        {
+          /* Server */
+        }
+      else
+        {
+          /* Clipboard */
+        }
+
+      /* Create the data buffer */
+      err = gpgme_data_new (&data);
+      if (err != GPGME_No_Error)
+        gpa_gpgme_error (err);
+      gpgme_set_armor (ctx, armored);
+      /* Create the set of keys to export */
+      err = gpgme_recipients_new (&rset);
+      if (err != GPGME_No_Error)
+        gpa_gpgme_error (err);
+      while (selection)
+        {
+          gint row = GPOINTER_TO_INT (selection->data);
+          gchar *key_id = gtk_clist_get_row_data
+            (GTK_CLIST (editor->clist_keys), row);
+          err = gpgme_recipients_add_name (rset, key_id);
           if (err != GPGME_No_Error)
             gpa_gpgme_error (err);
-          gpgme_set_armor (ctx, 1);
-          /* Create the set of keys to export */
-          err = gpgme_recipients_new (&rset);
-          if (err != GPGME_No_Error)
-            gpa_gpgme_error (err);
-          while (selection)
+          selection = g_list_next (selection);
+        }
+      /* Export to the GpgmeData */
+      err = gpgme_op_export (ctx, rset, data);
+      if (err != GPGME_No_Error)
+        gpa_gpgme_error (err);
+      
+      /* Write the data somewhere */
+      if (filename)
+        {
+          /* Export the selected keys to the user specified file. */
+          if (file)
             {
-              gint row = GPOINTER_TO_INT (selection->data);
-              gchar *key_id = gtk_clist_get_row_data
-                (GTK_CLIST (editor->clist_keys), row);
-              err = gpgme_recipients_add_name (rset, key_id);
-              if (err != GPGME_No_Error)
-                gpa_gpgme_error (err);
-              selection = g_list_next (selection);
+              /* Dump the GpgmeData to the file */
+              dump_data_to_file (data, file);
+              fclose (file);
             }
-          /* Export to the GpgmeData */
-          err = gpgme_op_export (ctx, rset, data);
-          if (err != GPGME_No_Error)
-            gpa_gpgme_error (err);
-          /* Dump the GpgmeData to the file */
-          dump_data_to_file (data, file);
-          gpgme_data_release (data);
-          fclose (file);
         }
       else if (server)
         {
           /* Export the selected key to the user specified server.
            */
-          GList *selection = gpa_keylist_selection (editor->clist_keys);
-          gchar *key_id;
-          gint row;
-          GpapaPublicKey *key;
-
-          while (selection)
-            {
-              row = GPOINTER_TO_INT (selection->data);
-              key_id = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys),
-                                               row);
-              key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
-                                                editor->window);
-
-              gpapa_public_key_send_to_server (key, server, gpa_callback,
-                                               editor->window);
-              selection = g_list_next (selection);
-            }
         }
       else
         {
           /* Clipboard.
            */
-          GpapaPublicKey *key = gpa_keylist_current_key (editor->clist_keys);
-          gpapa_public_key_export_to_clipboard (key,
-                                                gpa_callback, editor->window);
         }
-      free (filename);
-      free (server);
+      g_free (filename);
+      g_free (server);
+      gpgme_data_release (data);
     }
 }
 
@@ -537,6 +535,7 @@ isdir (const gchar * filename)
 static void
 keyring_editor_backup (gpointer param)
 {
+#if 0
   GPAKeyringEditor *editor = param;
   gchar *key_id, *dir_name;
   GpapaSecretKey *secret_key;
@@ -632,6 +631,7 @@ keyring_editor_backup (gpointer param)
           g_free (seckey_filename);
         }
     }
+#endif
 }
 
 /* Run the advanced key generation dialog and if the user clicked OK,
@@ -716,7 +716,7 @@ keyring_editor_current_key_id (GPAKeyringEditor *editor)
 
 #if 0
 /* Return the currently selected key. NULL if no key is selected */
-static GpapaPublicKey *
+static GpgmeKey
 keyring_editor_current_key (GPAKeyringEditor *editor)
 {
   return gpa_keylist_current_key (editor->clist_keys);

@@ -24,12 +24,13 @@
 #include "gpgmetools.h"
 
 /* Report an unexpected error in GPGME and quit the application */
-void gpa_gpgme_error (GpgmeError err)
+void _gpa_gpgme_error (GpgmeError err, const char *file, int line)
 {
-  gchar *message = g_strdup_printf (_("Fatal Error in GPGME library:"
-                                      "\n\n\t%s\n\n"
+  gchar *message = g_strdup_printf (_("Fatal Error in GPGME library\n"
+                                      "(invoked from file %s, line %i):\n\n"
+                                      "\t%s\n\n"
                                       "The application will be terminated"),
-                                    gpgme_strerror (err));
+                                    file, line, gpgme_strerror (err));
   GtkWidget *label = gtk_label_new (message);
   GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Error"),
                                                    NULL,

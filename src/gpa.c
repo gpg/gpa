@@ -22,7 +22,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <errno.h>
 #include <assert.h>
 #include <time.h>
@@ -319,7 +318,7 @@ gpa_set_default_key (gchar *key)
   free (default_key);
   default_key = key;
 
-  if (gpa_configname)
+  if (gpa_configname && key)
     {
       FILE *config = fopen (gpa_configname, "a");
       if (config)
@@ -354,14 +353,14 @@ gpa_determine_default_key (void)
       fpr = g_strdup (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, 
                                                  NULL, 0 ));
       gpgme_key_release (key);
+      err = gpgme_op_keylist_end (ctx);
+      if( err != GPGME_No_Error )
+        gpa_gpgme_error (err); 
     }
   else if( err == GPGME_EOF )
     /* No secret keys found */
     fpr = NULL;
   else
-    gpa_gpgme_error (err);
-  err = gpgme_op_keylist_end (ctx);
-  if( err != GPGME_No_Error )
     gpa_gpgme_error (err);
 
   return fpr;

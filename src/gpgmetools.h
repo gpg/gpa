@@ -65,8 +65,11 @@ typedef struct {
   
 } GPAKeyGenParameters;
 
-/* Report an unexpected error in GPGME and quit the application */
-void gpa_gpgme_error (GpgmeError err);
+/* Report an unexpected error in GPGME and quit the application.
+ * Better to use the macro instead of the function
+ */
+#define gpa_gpgme_error(err) _gpa_gpgme_error (err, __FILE__, __LINE__);
+void _gpa_gpgme_error (GpgmeError err, const char *file, int line);
 
 /* Write the contents of the GpgmeData object to the file. Receives a
  * filehandle instead of the filename, so that the caller can make sure the
