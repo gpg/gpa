@@ -1255,7 +1255,7 @@ keyring_editor_new (void)
   icon = gpa_create_icon_widget (window, "keyring");
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
-  label = gtk_label_new ("Keyring Editor");
+  label = gtk_label_new (_("Keyring Editor"));
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
   gtk_widget_set_name (label, "big-label");
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
