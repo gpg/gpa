@@ -1,3 +1,25 @@
+2002-12-30  Miguel Coca  <mcoca@gnu.org>
+
+	* gpgmetools.c (gpa_passphrase_cb): Fix cleanup.
+
+	* gpgmeedit.c (edit_fnc): Ignore NEED_PASSPHRASE_SYM too.
+	(edit_passwd_fnc_action, edit_passwd_fnc_transit) 
+	(passwd_passphrase_cb, gpa_gpgme_edit_passwd): New. Change the key's
+	passphrase.
+
+	* gpgmeedit.h (gpa_gpgme_edit_passwd): New.
+
+	* keyeditdlg.c (gpa_key_edit_dialog_run): Add "change passphrase"
+	button.
+	(key_edit_change_passphrase): New.
+
+	* qdchkpwd.c, qdchkpwd.h (qdchkpwd): Change prototype to remove
+	warnings.
+
+	* passwddlg.c, passwddlg.h: New. The "new passphrase" dialog.
+
+	* Makefile.am (gpa_SOURCES): Add passwddlh.{c,h}.
+
 2002-12-29  Miguel Coca  <mcoca@gnu.org>
 
 	* verifydlg.c (verify_file): Update for GPGME 0.4.1.

@@ -19,6 +19,7 @@
  */
 
 #include "gpgmeedit.h"
+#include "passwddlg.h"
 
 /* The edit callback for all the edit operations is edit_fnc(). Each
  * operation is modelled as a sequential machine (a Moore machine, to be
@@ -72,6 +73,7 @@ edit_fnc (void *opaque, GpgmeStatusCode status, const char *args,
   if (status == GPGME_STATUS_EOF ||
       status == GPGME_STATUS_GOT_IT ||
       status == GPGME_STATUS_NEED_PASSPHRASE ||
+      status == GPGME_STATUS_NEED_PASSPHRASE_SYM ||
       status == GPGME_STATUS_GOOD_PASSPHRASE ||
       status == GPGME_STATUS_BAD_PASSPHRASE ||
       status == GPGME_STATUS_USERID_HINT ||
@@ -578,6 +580,106 @@ edit_sign_fnc_transit (int current_state, GpgmeStatusCode status,
   return next_state;
 }
 
+/* Change passphrase */
+
+typedef enum
+{
+  PASSWD_START,
+  PASSWD_COMMAND,
+  PASSWD_QUIT,
+  PASSWD_SAVE,
+  PASSWD_ERROR
+} PasswdState;
+
+static GpgmeError
+edit_passwd_fnc_action (int state, void *opaque, const char **result)
+{
+  switch (state)
+    {
+      /* Start the operation */
+    case PASSWD_COMMAND:
+      *result = "passwd";
+      break;
+      /* End the operation */
+    case PASSWD_QUIT:
+      *result = "quit";
+      break;
+      /* Save */
+    case PASSWD_SAVE:
+      *result = "Y";
+      break;
+      /* Special state: an error ocurred. Do nothing until we can quit */
+    case PASSWD_ERROR:
+      break;
+      /* Can't happen */
+    default:
+      return GPGME_General_Error;
+    }
+  return GPGME_No_Error;
+}
+
+static int
+edit_passwd_fnc_transit (int current_state, GpgmeStatusCode status, 
+			 const char *args, void *opaque, GpgmeError *err)
+{
+  int next_state;
+ 
+  switch (current_state)
+    {
+    case PASSWD_START:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          next_state = PASSWD_COMMAND;
+        }
+      else
+        {
+          next_state = PASSWD_ERROR;
+          *err = GPGME_General_Error;
+        }
+      break;
+    case PASSWD_COMMAND:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          next_state = PASSWD_QUIT;
+        }
+      else
+        {
+          next_state = PASSWD_ERROR;
+          *err = GPGME_General_Error;
+        }
+      break;
+    case PASSWD_QUIT:
+      if (status == GPGME_STATUS_GET_BOOL &&
+          g_str_equal (args, "keyedit.save.okay"))
+        {
+          next_state = PASSWD_SAVE;
+        }
+      else
+        {
+          next_state = PASSWD_ERROR;
+          *err = GPGME_General_Error;
+        }
+      break;
+    case PASSWD_ERROR:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          /* Go to quit operation state */
+          next_state = PASSWD_QUIT;
+        }
+      else
+        {
+          next_state = PASSWD_ERROR;
+        }
+      break;
+    default:
+      next_state = PASSWD_ERROR;
+      *err = GPGME_General_Error;
+    }
+  return next_state;
+}
 
 /* Change the ownertrust of a key */
 GpgmeError gpa_gpgme_edit_trust (GpgmeKey key, GpgmeValidity ownertrust)
@@ -661,4 +763,54 @@ GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, const gchar *private_key_fpr,
   gpgme_data_release (out);
   
   return err;
+}
+
+/* Change the passphrase of the key.
+ */
+
+/* Special passphrase callback for use within the passwd command */
+static const char *
+passwd_passphrase_cb (void *opaque, const char *desc, void **r_hd)
+{
+  int *i = opaque;
+
+  if (desc && desc[0] == 'E') /* It's "ENTER", so it's the beginning of a
+                               * passphrase question */
+    {
+      (*i)++;
+    }
+  
+  if (*i == 1)
+    {
+      return gpa_passphrase_cb (opaque, desc, r_hd);
+    }
+  else
+    {
+      return gpa_change_passphrase_dialog_run (opaque, desc, r_hd);
+    }
+}
+
+
+GpgmeError gpa_gpgme_edit_passwd (GpgmeKey key)
+{
+  struct edit_parms_s parms = {PASSWD_START, GPGME_No_Error,
+			       edit_passwd_fnc_action, edit_passwd_fnc_transit,
+			       (gchar *) ""};
+  GpgmeError err;
+  GpgmeData out;
+  int i = 0;
+
+  err = gpgme_data_new (&out);
+  if (err != GPGME_No_Error)
+    {
+      return err;
+    }
+  /* Use our own passphrase callback */
+  gpgme_set_passphrase_cb (ctx, passwd_passphrase_cb, &i);
+  err = gpgme_op_edit (ctx, key, edit_fnc, &parms, out);
+  gpgme_data_release (out);
+  /* Make sure the normal passphrase callback is used */
+  gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
+
+  return GPGME_No_Error;
 }

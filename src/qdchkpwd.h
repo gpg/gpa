@@ -20,6 +20,6 @@
 #ifndef QDCHKPWD_H
 #define QDCHKPWD_H
 
-extern double qdchkpwd (char *pwd);
+extern double qdchkpwd (const char *pwd);
 
 #endif /* QDCHKPWD_H */

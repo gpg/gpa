@@ -1,4 +1,4 @@
-/* gpgmeedit.h - The GNU Privacy Assistant
+/* passwddlg.h - The GNU Privacy Assistant
  *      Copyright (C) 2002, Miguel Coca.
  *
  * This file is part of GPA
@@ -18,28 +18,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-/* Wrappers around gpgme_op_edit for common tasks */
+/* The "new passphrase" dialog. It's really a GPGME passphrase callback. */
 
-#ifndef GPGMEEDIT_H
-#define GPGMEEDIT_H
+#ifndef PASSWDDLG_H
+#define PASSWDDLG_H
 
-#include "gpa.h"
-#include <glib.h>
-#include <gpgme.h>
-
-/* Change the ownertrust of a key */
-GpgmeError gpa_gpgme_edit_trust (GpgmeKey key, GpgmeValidity ownertrust);
-
-/* Change the expiry date of a key */
-GpgmeError gpa_gpgme_edit_expire (GpgmeKey key, GDate *date);
-
-/* Sign this key with the given private key. If local is true, make a local
- * signature. */
-GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, const gchar *private_key_fpr,
-                                gboolean local);
-
-/* Change the key's passphrase.
- */
-GpgmeError gpa_gpgme_edit_passwd (GpgmeKey key);
+const char *gpa_change_passphrase_dialog_run (void *opaque, 
+                                              const char *desc, void **r_hd);
 
 #endif

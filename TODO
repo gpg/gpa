@@ -20,7 +20,6 @@ In no particular order:
   code for something GTK already does.
 
 * Add more options to the "Edit key" dialog.
-** Change passphrase.
 ** Manage UID's.
 ** Manage subkeys.
 
@@ -35,8 +34,6 @@ In no particular order:
 * All operations (import/export/decrypt/backup, etc) should be carried out
   inside the *_dialog_run functions, to avoid passing too much control info
   back and forth.
-
-* Allow the user to choose which key to backup.
 
 * Support a "File Status" (encrypted, signed, etc..) column in the
   filemanager, if GPGME allows it.

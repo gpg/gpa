@@ -35,7 +35,7 @@ static char *test_str
     "This is a top secret password or passphrase.";
 
 double
-qdchkpwd (char *pwd)
+qdchkpwd (const char *pwd)
 {
   int i, l;
   unsigned hit_num[256];

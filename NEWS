@@ -1,6 +1,9 @@
 Noteworthy changes in version 0.6.1 (UNRELEASED)
 ------------------------------------------------
 
+ * The passphrase for a key can now be changed from the edit key dialog.
+
+ * GPA now requires GPGME 0.4.1.
 
 Noteworthy changes in version 0.6.0 (2002-12-24)
 ------------------------------------------------

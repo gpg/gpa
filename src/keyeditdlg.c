@@ -44,7 +44,7 @@ GPAKeyEditDialog;
 
 /* internal API */
 static void key_edit_change_expiry (GtkWidget *widget, gpointer param);
-
+static void key_edit_change_passphrase (GtkWidget *widget, gpointer param);
 
 /* run the key edit dialog as a modal dialog */
 gboolean
@@ -86,6 +86,12 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   /* info about the key */
   table = gpa_key_info_new (key);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
+
+  /* change passphrase */
+  button = gpa_button_new (accel_group, _("Change _passphrase"));
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, TRUE, 5);
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (key_edit_change_passphrase), &dialog);
 
   /* change expiry date */
   frame = gtk_frame_new (_("Expiry Date"));
@@ -171,3 +177,32 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
         }
     }
 }
+
+/* signal handler for the change passphrase button. */
+static void
+key_edit_change_passphrase (GtkWidget *widget, gpointer param)
+{
+  GPAKeyEditDialog * dialog = param;
+  GpgmeKey key;
+  GpgmeError err;
+
+  err = gpgme_get_key (ctx, dialog->fpr, &key, FALSE, FALSE);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  err = gpa_gpgme_edit_passwd (key);
+  if (err == GPGME_No_Passphrase)
+    {
+      gpa_window_error (_("Wrong passphrase!"), dialog->window);
+    }
+  else if (err == GPGME_Canceled)
+    {
+      /* Empty. If the user pressed "Cancel" he knows it */
+    }
+  else if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+}
+

@@ -530,6 +530,7 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
   GtkWidget * entry;
   GtkWidget * pixmap;
   GtkResponseType response;
+  gchar *passphrase;
 
   if (desc)
     {
@@ -561,22 +562,30 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
       /* Run the dialog */
       gtk_widget_show_all (dialog);
       response = gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_hide (dialog);
+      passphrase = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+      gtk_widget_destroy (dialog);
       if (response == GTK_RESPONSE_OK)
         {
-          return gtk_entry_get_text (GTK_ENTRY (entry));
+          *r_hd = passphrase;
+          return passphrase;
         }
       else
         {
           gpgme_cancel (ctx);
+          g_free (passphrase);
           return "";
         }
     }
+  else if (*r_hd)
+    {
+      /* Clean up */
+      passphrase = *r_hd;
+      g_free (passphrase);
+      *r_hd = NULL;
+      return NULL;
+    }
   else
     {
-      /* Free the dialog */
-      dialog = *r_hd;
-      gtk_widget_destroy (dialog);
       return NULL;
     }
 }
