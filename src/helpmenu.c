@@ -387,12 +387,13 @@ help_about (void)
 
 
 void
-help_license (void)
+help_license (gpointer param)
 {
 /* var */
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
   gpointer *paramClose;
+  GtkWidget *parent = param;
 /* objects */
   GtkWidget *windowLicense;
   GtkWidget *vboxLicense;
@@ -447,7 +448,7 @@ help_license (void)
 		      0);
   gtk_container_add (GTK_CONTAINER (windowLicense), vboxLicense);
   gtk_widget_show_all (windowLicense);
-  gpa_widget_set_centered (windowLicense, global_windowMain);
+  gpa_widget_set_centered (windowLicense, parent);
 }
 
 void
@@ -461,3 +462,19 @@ help_help (void)
 {
   g_print (_("Show Help Text\n"));      /*!!! */
 }				/* help_help */
+
+
+void
+gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget * window)
+{
+  GtkItemFactoryEntry menu[] = {
+    {_("/_Help"), NULL, NULL, 0, "<Branch>"},
+    {_("/Help/_About"), NULL, help_about, 0, NULL},
+    {_("/Help/_License"), NULL, help_license, 0, NULL},
+    {_("/Help/_Warranty"), NULL, help_warranty, 0, NULL},
+    {_("/Help/_Help"), "F1", help_help, 0, NULL}
+  };
+
+  gtk_item_factory_create_items (factory, sizeof (menu) / sizeof (menu[0]),
+				 menu, window);
+}

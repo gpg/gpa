@@ -29,3 +29,6 @@ extern void options_save (void);
 extern void gpa_homeDirSelect_init (gchar * title);
 extern void gpa_loadOptionsSelect_init (gchar * title);
 extern void gpa_saveOptionsSelect_init (gchar * title);
+
+void gpa_options_menu_add_to_factory (GtkItemFactory *factory,
+				      GtkWidget *window);

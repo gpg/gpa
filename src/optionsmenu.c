@@ -27,6 +27,7 @@
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
 #include "keysmenu.h"
+#include "help.h"
 
 static GtkWidget *homeDirSelect;
 static GtkWidget *loadOptionsSelect;
@@ -55,9 +56,9 @@ gpa_homeDirSelect_init (gchar * title)
 			     (gpointer) homeDirSelect);
   gtk_signal_connect (GTK_OBJECT (homeDirSelect), "delete_event",
 		      GTK_SIGNAL_FUNC (gtk_widget_hide), NULL);
-  gtk_signal_connect_object (GTK_OBJECT (homeDirSelect), "hide",
+  /*  gtk_signal_connect_object (GTK_OBJECT (homeDirSelect), "hide",
 			     GTK_SIGNAL_FUNC (gtk_widget_hide),
-			     (gpointer) global_windowTip);
+			     (gpointer) global_windowTip);*/
 }				/* gpa_homeDirSelect_init */
 
 void
@@ -86,9 +87,9 @@ gpa_loadOptionsSelect_init (gchar * title)
 			     (gpointer) loadOptionsSelect);
   gtk_signal_connect (GTK_OBJECT (loadOptionsSelect), "delete_event",
 		      GTK_SIGNAL_FUNC (gtk_widget_hide), NULL);
-  gtk_signal_connect_object (GTK_OBJECT (loadOptionsSelect), "hide",
+  /*  gtk_signal_connect_object (GTK_OBJECT (loadOptionsSelect), "hide",
 			     GTK_SIGNAL_FUNC (gtk_widget_hide),
-			     (gpointer) global_windowTip);
+			     (gpointer) global_windowTip);*/
 }				/* gpa_loadOptionsSelect_init */
 
 void
@@ -117,9 +118,9 @@ gpa_saveOptionsSelect_init (gchar * title)
 			     (gpointer) saveOptionsSelect);
   gtk_signal_connect (GTK_OBJECT (saveOptionsSelect), "delete_event",
 		      GTK_SIGNAL_FUNC (gtk_widget_hide), NULL);
-  gtk_signal_connect_object (GTK_OBJECT (saveOptionsSelect), "hide",
+  /*  gtk_signal_connect_object (GTK_OBJECT (saveOptionsSelect), "hide",
 			     GTK_SIGNAL_FUNC (gtk_widget_hide),
-			     (gpointer) global_windowTip);
+			     (gpointer) global_windowTip);*/
 }				/* gpa_saveOptionsSelect_init */
 
 void
@@ -145,7 +146,7 @@ options_keyserver_set (gpointer param)
 }				/* options_keyserver_set */
 
 void
-options_keyserver (void)
+options_keyserver (gpointer param)
 {
 /* var */
   GpaWindowKeeper *keeper;
@@ -153,6 +154,7 @@ options_keyserver (void)
   GList *contentsServer = NULL;
   gpointer *paramClose;
   gpointer *paramSet;
+  GtkWidget * main_window = param;
 /* objects */
   GtkWidget *windowServer;
   GtkWidget *vboxServer;
@@ -217,9 +219,8 @@ options_keyserver (void)
   gtk_box_pack_start (GTK_BOX (vboxServer), hButtonBoxServer, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowServer), vboxServer);
-  gpa_widget_show (windowServer, global_windowMain,
-		   _("options_keyserver.tip"));
-}				/* options_keyserver */
+  gpa_widget_show (windowServer, main_window, _("options_keyserver.tip"));
+} /* options_keyserver */
 
 void
 options_recipients_fillDefault (gpointer data, gpointer userData)
@@ -265,7 +266,7 @@ options_recipients_set (gpointer param)
 }				/* options_recipients_set */
 
 void
-options_recipients (void)
+options_recipients (gpointer param)
 {
 /* var */
   GpaWindowKeeper *keeper;
@@ -283,6 +284,7 @@ options_recipients (void)
   gpointer *paramAdd;
   gpointer *paramCancel;
   gpointer *paramSet;
+  GtkWidget *parent = param;
 /* objects */
   GtkWidget *windowRecipients;
   GtkWidget *vboxRecipients;
@@ -453,9 +455,8 @@ global_windowMain);
   gtk_box_pack_start (GTK_BOX (vboxRecipients), hButtonBoxRecipients, FALSE,
 		      FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowRecipients), vboxRecipients);
-  gpa_widget_show (windowRecipients, global_windowMain,
-		   _("options_recipients.tip"));
-}				/* options_recipients */
+  gpa_widget_show (windowRecipients, parent, _("options_recipients.tip"));
+} /* options_recipients */
 
 void
 options_key_select (GtkCList * clist, gint row, gint column,
@@ -489,7 +490,7 @@ options_key_set (gpointer param)
 }				/* options_key_set */
 
 void
-options_key (void)
+options_key (gpointer param)
 {
 /* var */
   GpaWindowKeeper *keeper;
@@ -502,6 +503,7 @@ options_key (void)
   gchar *contentsKeys[2];
   gpointer *paramSet;
   gpointer *paramClose;
+  GtkWidget *parent = param;
 /* objects */
   GtkWidget *windowKey;
   GtkWidget *vboxKey;
@@ -601,23 +603,24 @@ options_key (void)
   gtk_container_add (GTK_CONTAINER (hButtonBoxKey), buttonSet);
   gtk_box_pack_start (GTK_BOX (vboxKey), hButtonBoxKey, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowKey), vboxKey);
-  gpa_widget_show (windowKey, global_windowMain, _("options_key.tip"));
-}				/* options_key */
+  gpa_widget_show (windowKey, parent, _("options_key.tip"));
+} /* options_key */
 
 void
 options_homedir (void)
 {
   gtk_widget_show (homeDirSelect);
-  gpa_windowTip_show (_("options_homedir.tip"));
-}				/* options_homedir */
+  gpa_window_tip_show (_("options_homedir.tip"));
+} /* options_homedir */
 
 void
-options_tips (void)
+options_tips (gpointer param)
 {
 /* var */
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
   gpointer *paramClose;
+  GtkWidget *parent = param;
 /* objects */
   GtkWidget *windowTips;
   GtkWidget *hButtonBoxTips;
@@ -650,19 +653,39 @@ options_tips (void)
   buttonClose = gpa_buttonCancel_new (accelGroup, _("_Close"), paramClose);
   gtk_container_add (GTK_CONTAINER (hButtonBoxTips), buttonClose);
   gtk_container_add (GTK_CONTAINER (windowTips), hButtonBoxTips);
-  gpa_widget_show (windowTips, global_windowMain, _("options_tips.tip"));
-}				/* options_tips */
+  gpa_widget_show (windowTips, parent, _("options_tips.tip"));
+} /* options_tips */
 
 void
 options_load (void)
 {
   gtk_widget_show (loadOptionsSelect);
-  gpa_windowTip_show (_("options_load.tip"));
+  gpa_window_tip_show (_("options_load.tip"));
 }				/* options_load */
 
 void
 options_save (void)
 {
   gtk_widget_show (saveOptionsSelect);
-  gpa_windowTip_show (_("options_save.tip"));
+  gpa_window_tip_show (_("options_save.tip"));
 }				/* options_save */
+
+
+void
+gpa_options_menu_add_to_factory (GtkItemFactory *factory, GtkWidget *window)
+{
+  GtkItemFactoryEntry menu[] = {
+    {_("/_Options"), NULL, NULL, 0, "<Branch>"},
+    {_("/Options/_Keyserver"), NULL, options_keyserver, 0, NULL},
+    {_("/Options/Default _Recipients"), NULL, options_recipients, 0, NULL},
+    {_("/Options/_Default Key"), NULL, options_key, 0, NULL},
+    {_("/Options/_Home Directory"), NULL, options_homedir, 0, NULL},
+    {_("/Options/sep1"), NULL, NULL, 0, "<Separator>"},
+    {_("/Options/Online _tips"), NULL, options_tips, 0, NULL},
+    {_("/Options/_Load Options File"), NULL, options_load, 0, NULL},
+    {_("/Options/_Save Options File"), NULL, options_save, 0, NULL},
+  };
+
+  gtk_item_factory_create_items (factory, sizeof (menu) / sizeof (menu[0]),
+				 menu, window);
+}

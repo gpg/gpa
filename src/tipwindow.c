@@ -1,4 +1,4 @@
-/* help.c  - Help facility
+/* tipwindow.c  - Help facility
  * Copyright (C) 2000 OpenIT GmbH
  * Copyright (C) 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
  *
@@ -20,21 +20,9 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
-#ifdef HAVE_LOCALE_H
-  #include <locale.h>
-#endif
-
-#include "stringhelp.h"
 #include "gpa.h"
-#include "gtktools.h"
 
-
-static GtkWidget *global_textTip = NULL;
 static GtkWidget *global_windowTip = NULL;
 
 void
@@ -43,6 +31,7 @@ gpa_window_tip_init (void)
   GtkAccelGroup *accelGroup;
   GtkWidget *vboxTip;
   GtkWidget *vboxContents;
+  GtkWidget *labelJfdContents;
   GtkWidget *labelContents;
   GtkWidget *hboxContents;
   GtkWidget *textContents;
@@ -56,12 +45,14 @@ gpa_window_tip_init (void)
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (global_windowTip), accelGroup);
   vboxTip = gtk_vbox_new (FALSE, 0);
-  /* gtk_container_set_border_width (GTK_CONTAINER (vboxTip), 5);*/
+  gtk_container_set_border_width (GTK_CONTAINER (vboxTip), 5);
   vboxContents = gtk_vbox_new (FALSE, 0);
-  /*gtk_container_set_border_width (GTK_CONTAINER (vboxContents), 5);*/
+  gtk_container_set_border_width (GTK_CONTAINER (vboxContents), 5);
   labelContents = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC (labelContents), 0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vboxContents), labelContents, FALSE, TRUE, 0);
+  labelJfdContents =
+    gpa_widget_hjustified_new (labelContents, GTK_JUSTIFY_LEFT);
+  gtk_box_pack_start (GTK_BOX (vboxContents), labelJfdContents, FALSE, FALSE,
+		      0);
   hboxContents = gtk_hbox_new (FALSE, 0);
   textContents = gtk_text_new (NULL, NULL);
   gtk_text_set_editable (GTK_TEXT (textContents), FALSE);
@@ -76,15 +67,15 @@ gpa_window_tip_init (void)
   gtk_box_pack_start (GTK_BOX (vboxTip), vboxContents, TRUE, TRUE, 0);
   hboxTip = gtk_hbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hboxTip), 5);
-  buttonClose = gpa_button_new (accelGroup, _("_Close"));
+  buttonClose = gpa_button_new (accelGroup, _("   _Close   "));
   gtk_signal_connect_object (GTK_OBJECT (buttonClose), "clicked",
 			     GTK_SIGNAL_FUNC (gtk_widget_hide),
 			     (gpointer) global_windowTip);
   gtk_widget_add_accelerator (buttonClose, "clicked", accelGroup, GDK_Escape,
 			      0, 0);
   gtk_box_pack_end (GTK_BOX (hboxTip), buttonClose, FALSE, FALSE, 0);
-  checkerNomore = gpa_check_button_new (accelGroup,
-					_("_No more tips, please"));
+  checkerNomore =
+    gpa_check_button_new (accelGroup, _("_No more tips, please"));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkerNomore),
 				global_noTips);
   gtk_signal_connect (GTK_OBJECT (checkerNomore), "clicked",
@@ -94,51 +85,8 @@ gpa_window_tip_init (void)
   gtk_container_add (GTK_CONTAINER (global_windowTip), vboxTip);
 }				/* gpa_window_tip_init */
 
-/* Guess value of current locale from value of the environment variables.  */
-/* Taken from GNU gettext */
-static const char *
-get_language (void)
-{
-  const char *retval;
-
-  /* The highest priority value is the `LANGUAGE' environment
-     variable.	This is a GNU extension.  */
-  retval = getenv ("LANGUAGE");
-  if (retval != NULL && retval[0] != '\0')
-    goto leave;
-
-  /* `LANGUAGE' is not set.  So we have to proceed with the POSIX
-     methods of looking to `LC_ALL', `LC_xxx', and `LANG'.  On some
-     systems this can be done by the `setlocale' function itself.  */
-#if defined HAVE_SETLOCALE && defined HAVE_LC_MESSAGES && defined HAVE_LOCALE_NULL
-  retval = setlocale (LC_MESSAGES, NULL);
-  goto leave;
-#else
-  /* Setting of LC_ALL overwrites all other.  */
-  retval = getenv ("LC_ALL");
-  if (retval != NULL && retval[0] != '\0')
-    goto leave;
-
-  /* Next comes the name of the desired category.  */
-  retval = getenv ("LC_MESSAGES");
-  if (retval != NULL && retval[0] != '\0')
-    goto leave;
-
-  /* Last possibility is the LANG environment variable.  */
-  retval = getenv ("LANG");
-  if (retval != NULL && retval[0] != '\0')
-    goto leave;
-  retval = "en"; /* default is English */
-#endif
- leave:
-  if (!retval || !*retval || !strcmp( retval, "C" )
-      || !strcmp (retval, "POSIX"))
-    retval = "en";
-  return retval;
-} /* get_language */
-
 void
-gpa_window_tip_show (const char *key)
+gpa_windowTip_show (const char *key)
 {
   char line[512];
   FILE *fp;
@@ -212,7 +160,7 @@ gpa_window_tip_show (const char *key)
   if (fp)
     fclose (fp);
   gtk_widget_show_all (global_windowTip);
-} /* gpa_window_tip_show */
+}
 
 
 

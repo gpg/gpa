@@ -1,3 +1,60 @@
+2001-01-05  Bernhard Herzog  <bh@intevation.de>
+
+	* encryptdlg.c
+	* encryptdlg.h
+	* fileman.c
+	* fileman.h
+	* filesigndlg.c
+	* filesigndlg.h
+	* gpapastrings.c
+	* gpapastrings.h
+	* gpawidgets.c
+	* gpawidgets.h
+	* help.h
+	* keyexportdlg.c
+	* keyexportdlg.h
+	* keygendlg.c
+	* keygendlg.h
+	* keyreceivedlg.c
+	* keyreceivedlg.h
+	* keyring.c
+	* keyring.h
+	* keysigndlg.c
+	* keysigndlg.h
+	* ownertrustdlg.c
+	* ownertrustdlg.h
+	* passphrasedlg.c
+	* passphrasedlg.h
+	* tipwindow.c
+	new files
+
+	* filemenu.c:
+	* gpa.c: 
+	* gpa.h: 
+	* gtktools.c: 
+	* gtktools.h: 
+	* help.c: 
+	* helpmenu.c: 
+	* helpmenu.h: 
+	* optionsmenu.c: 
+	* optionsmenu.h: 
+
+	A lot of changes and reorganization of the code. Much of the code
+	is now in the new files.
+
+	The reorganization has two goals: 
+	
+	1. Change the user interface to make the keyring editor the main
+	window.
+
+	2. Internal changes to make the code more object oriented and more
+	maintainable.
+
+	The changes are very extensive and touch practically all parts of
+	the UI code.
+
+	* Makefile.am: Added the new files
+
 2000-09-01  Werner Koch  <wk@gnupg.org>
 
 	* icons.c, icons.h: New.  Changed all other includes of icons.xpm

@@ -30,6 +30,7 @@
 #include "gtktools.h"
 #include "filemenu.h"
 #include "keysmenu.h"
+#include "help.h"
 
 static GtkWidget *fileOpenSelect;
 
@@ -185,9 +186,9 @@ gpa_fileOpenSelect_init (char *title)
 			     (gpointer) fileOpenSelect);
   gtk_signal_connect (GTK_OBJECT (fileOpenSelect), "delete_event",
 		      GTK_SIGNAL_FUNC (gtk_widget_hide), NULL);
-  gtk_signal_connect_object (GTK_OBJECT (fileOpenSelect), "hide",
+  /*  gtk_signal_connect_object (GTK_OBJECT (fileOpenSelect), "hide",
 			     GTK_SIGNAL_FUNC (gtk_widget_hide),
-			     (gpointer) global_windowTip);
+			     (gpointer) global_windowTip);*/
 }				/* gpa_fileOpenSelect_init */
 
 void
@@ -195,7 +196,7 @@ file_open (void)
 {
   gtk_window_set_position (GTK_WINDOW (fileOpenSelect), GTK_WIN_POS_CENTER);
   gtk_widget_show (fileOpenSelect);
-  gpa_windowTip_show (_("file_open.tip"));
+  gpa_window_tip_show (_("file_open.tip"));
 }				/* file_open */
 
 void

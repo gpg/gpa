@@ -33,6 +33,8 @@ extern GtkWidget *gpa_xpm_label_box( GtkWidget *parent,
                                      GtkAccelGroup * accelGroup);
 extern GtkWidget *gpa_buttonCancel_new (GtkAccelGroup * accelGroup,
 					gchar * labelText, gpointer * param);
+extern GtkWidget *gpa_button_cancel_new (GtkAccelGroup * accel, gchar * label,
+					 GtkSignalFunc func, gpointer param);
 extern GtkWidget *gpa_check_button_new (GtkAccelGroup * accelGroup,
 					gchar * labelText);
 extern GtkWidget *gpa_radio_button_new (GtkAccelGroup * accelGroup,
@@ -53,3 +55,7 @@ extern void gpa_window_error (gchar * message, GtkWidget * messenger);
 extern void gpa_window_message (gchar * message, GtkWidget * messenger);
 extern void gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func,
 				   gchar * tip, gpointer data);
+gchar * gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
+				const gchar * directory);
+gchar * gpa_get_load_file_name (GtkWidget * parent, const gchar * title,
+				const gchar * directory);

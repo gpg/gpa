@@ -1,4 +1,4 @@
-/* helpmenu.h  -  The GNU Privacy Assistant
+/* gpa.h  -  main header
  *	Copyright (C) 2000 G-N-U GmbH.
  *
  * This file is part of GPA
@@ -18,8 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-extern void help_about (void);
-extern void help_license (void);
-extern void help_warranty (void);
-extern void help_help (void);
-void gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget *window);
+#ifndef HELP_H
+#define HELP_H
+
+void gpa_window_tip_init (void);
+void gpa_window_tip_show (const char *key);
+
+
+#endif

@@ -10,13 +10,26 @@ INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/gpapa	-I$(top_srcdir)/intl
 LDADD = -L ../gpapa -lgpapa -L ../jnlib -ljnlib @INTLLIBS@
 
 gpa_SOURCES = gpa.c gpa.h \
+	      keysmenu.c keysmenu.h	    \
 	      filemenu.c filemenu.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
 	      gtktools.c gtktools.h  \
-	      help.c helpmenu.c helpmenu.h	  \
-	      keysmenu.c keysmenu.h	    \
+	      help.c help.h helpmenu.c helpmenu.h	  \
 	      optionsmenu.c optionsmenu.h \
-	      icons.c icons.h icons.xpm
+	      icons.c icons.h icons.xpm \
+	      gpawidgets.c gpawidgets.h \
+	      fileman.c fileman.h \
+	      filesigndlg.c filesigndlg.h \
+	      encryptdlg.c encryptdlg.h \
+	      keyring.c keyring.h \
+	      ownertrustdlg.c ownertrustdlg.h \
+	      keysigndlg.c keysigndlg.h \
+	      passphrasedlg.c passphrasedlg.h \
+	      keyreceivedlg.c keyreceivedlg.h \
+	      keyexportdlg.c keyexportdlg.h \
+	      keygendlg.c keygendlg.h \
+	      gpapastrings.c gpapastrings.h
+
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)

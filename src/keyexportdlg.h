@@ -1,4 +1,4 @@
-/* helpmenu.h  -  The GNU Privacy Assistant
+/* keyexportdlg.h  -	 The GNU Privacy Assistant
  *	Copyright (C) 2000 G-N-U GmbH.
  *
  * This file is part of GPA
@@ -10,7 +10,7 @@
  *
  * GPA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -18,8 +18,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-extern void help_about (void);
-extern void help_license (void);
-extern void help_warranty (void);
-extern void help_help (void);
-void gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget *window);
+#ifndef KEYEXPORTDLG_H
+#define KEYEXPORTDLG_H
+
+#include <gtk/gtk.h>
+
+gboolean key_export_dialog_run (GtkWidget * parent, gchar ** filename,
+				gboolean *armored);
+
+
+
+#endif /* KEYEXPORTDLG_H */

@@ -37,6 +37,7 @@
 #include "argparse.h"
 #include "stringhelp.h"
 
+#include "gpapastrings.h"
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
@@ -44,30 +45,29 @@
 #include "keysmenu.h"
 #include "optionsmenu.h"
 #include "helpmenu.h"
+#include "help.h"
+#include "keyring.h"
+#include "fileman.h"
 
 /* icons for toolbars */
 #include "icons.h"
 
-gchar *writtenSigValidity[3] = {
-  N_("unknown"),
-  N_("!INVALID!"),
-  N_("valid")
+enum cmd_and_opt_values {
+  aNull = 0,
+  oQuiet	  = 'q',
+  oVerbose	  = 'v',
+
+  oNoVerbose = 500,
+  oOptions,
+  oDebug,
+  oDebugAll,
+  oNoGreeting,
+  oNoOptions,
+  oHomedir,
+  oGPGBinary,
+
+  aTest
 };
-
-enum cmd_and_opt_values { aNull = 0,
-    oQuiet	  = 'q',
-    oVerbose	  = 'v',
-
-    oNoVerbose = 500,
-    oOptions,
-    oDebug,
-    oDebugAll,
-    oNoGreeting,
-    oNoOptions,
-    oHomedir,
-    oGPGBinary,
-
-aTest };
 
 
 static ARGPARSE_OPTS opts[] = {
@@ -80,48 +80,51 @@ static ARGPARSE_OPTS opts[] = {
     { oDebug,	"debug"     ,4|16, N_("set debugging flags")},
     { oDebugAll, "debug-all" ,0, N_("enable full debugging")},
     { oGPGBinary, "gpg-program", 2 , "@" },
-{0} };
+    {0}
+};
 
 
 static GtkWidget *global_clistFile = NULL;
-GtkWidget *global_windowMain;
-GtkWidget *global_popupMenu;
-GtkWidget *global_windowTip;
-GList *global_tempWindows;
-GtkWidget *global_textTip;
+GtkWidget *global_windowMain = NULL;
+GtkWidget *global_popupMenu = NULL;
+GList *global_tempWindows = NULL;
 gboolean global_noTips = FALSE;
 GpapaAction global_lastCallbackResult;
-gchar *global_keyserver;
+gchar *global_keyserver = NULL;
 GList *global_defaultRecipients = NULL;
-gchar *global_homeDirectory;
-gchar *global_defaultKey;
+gchar *global_homeDirectory = NULL;
+gchar *global_defaultKey = NULL;
 
-GtkWidget *gpa_windowMain_new (char *title);
 
 static const char *
-my_strusage( int level )
+my_strusage(int level)
 {
-    const char *p;
-    switch( level ) {
-      case 11: p = "gpa";
-	break;
-      case 13: p = VERSION; break;
+  const char *p;
+  switch(level)
+    {
+    case 11:
+      p = "gpa";
+      break;
+    case 13:
+      p = VERSION;
+      break;
       /*case 17: p = PRINTABLE_OS_NAME; break;*/
-      case 19: p =
-	    _("Please report bugs to <gpa-bugs@gnu.org>.\n");
-	break;
-      case 1:
-      case 40:	p =
-	    _("Usage: gpa [options] (-h for help)");
-	break;
-      case 41:	p =
-	    _("Syntax: gpa [options]\n"
-	      "Graphical frontend to GnuPG\n");
-	break;
+    case 19:
+      p = _("Please report bugs to <gpa-bugs@gnu.org>.\n");
+      break;
+    case 1:
+    case 40:
+      p = _("Usage: gpa [options] (-h for help)");
+      break;
+    case 41:
+      p = _("Syntax: gpa [options]\n"
+	    "Graphical frontend to GnuPG\n");
+      break;
 
-      default:	p = NULL;
+    default:
+      p = NULL;
     }
-    return p;
+  return p;
 }
 
 
@@ -129,168 +132,239 @@ my_strusage( int level )
 static void
 i18n_init (void)
 {
-  #ifdef USE_SIMPLE_GETTEXT
-    set_gettext_file ( PACKAGE );
-  #else
-  #ifdef ENABLE_NLS
-    gtk_set_locale ();
-    bindtextdomain ( PACKAGE, GPA_LOCALEDIR );
-    textdomain ( PACKAGE );
-  #endif
-  #endif
+#ifdef USE_SIMPLE_GETTEXT
+  set_gettext_file (PACKAGE);
+#else
+#ifdef ENABLE_NLS
+  gtk_set_locale ();
+  bindtextdomain (PACKAGE, GPA_LOCALEDIR);
+  textdomain (PACKAGE);
+#endif
+#endif
 }
+
+
+static GtkWidget * keyringeditor = NULL;
+static GtkWidget * filemanager = NULL;
+
+static void
+quit_if_no_window (void)
+{
+  if (!keyringeditor && !filemanager)
+    {
+      gtk_main_quit ();
+    }
+}
+
+static void
+close_main_window (GtkWidget *widget, gpointer param)
+{
+  GtkWidget ** window = param;
+
+  *window = NULL;
+  quit_if_no_window ();
+}
+
+void
+gpa_open_keyring_editor (void)
+{
+  if (!keyringeditor)
+    {
+      keyringeditor = keyring_editor_new();
+      gtk_signal_connect (GTK_OBJECT (keyringeditor), "destroy",
+			  GTK_SIGNAL_FUNC (close_main_window), &keyringeditor);
+    }
+  gtk_widget_show_all (keyringeditor);
+  gdk_window_raise (keyringeditor->window);
+}
+
+void
+gpa_open_filemanager (void)
+{
+  if (!filemanager)
+    {
+      filemanager = gpa_fileman_new();
+      gtk_signal_connect (GTK_OBJECT (filemanager), "destroy",
+			  GTK_SIGNAL_FUNC (close_main_window), &filemanager);
+    }
+  gtk_widget_show_all (filemanager);
+  gdk_window_raise (filemanager->window);
+}
+
 
 int
-main (int argc, char **argv )
+main (int argc, char **argv)
 {
-    ARGPARSE_ARGS pargs;
-    int orig_argc;
-    char **orig_argv;
-    FILE *configfp = NULL;
-    char *configname = NULL;
-    unsigned configlineno;
-    int parse_debug = 0;
-    int default_config =1;
-    int greeting = 0;
-    int nogreeting = 0;
-    const char *gpg_program = GPG_PROGRAM;
+  ARGPARSE_ARGS pargs;
+  int orig_argc;
+  char **orig_argv;
+  FILE *configfp = NULL;
+  char *configname = NULL;
+  unsigned configlineno;
+  int parse_debug = 0;
+  int default_config =1;
+  int greeting = 0;
+  int nogreeting = 0;
+  const char *gpg_program = GPG_PROGRAM;
 
-    set_strusage( my_strusage );
-    /*log_set_name ("gpa"); not yet implemented in logging.c */
-    srand (time (NULL)); /* the about dialog uses rand() */
-    gtk_init (&argc, &argv);
-    i18n_init ();
+  set_strusage (my_strusage);
+  /*log_set_name ("gpa"); not yet implemented in logging.c */
+  srand (time (NULL)); /* the about dialog uses rand() */
+  gtk_init (&argc, &argv);
+  i18n_init ();
 
-    opt.homedir = getenv("GNUPGHOME");
-    if( !opt.homedir || !*opt.homedir ) {
-      #ifdef HAVE_DRIVE_LETTERS
-	opt.homedir = "c:/gnupg";
-      #else
-	opt.homedir = "~/.gnupg";
-      #endif
+  opt.homedir = getenv ("GNUPGHOME");
+  if (!opt.homedir || !*opt.homedir)
+    {
+#ifdef HAVE_DRIVE_LETTERS
+      opt.homedir = "c:/gnupg";
+#else
+      opt.homedir = "~/.gnupg";
+#endif
     }
 
-    /* check whether we have a config file on the commandline */
-    orig_argc = argc;
-    orig_argv = argv;
-    pargs.argc = &argc;
-    pargs.argv = &argv;
-    pargs.flags= 1|(1<<6);  /* do not remove the args, ignore version */
-    while( arg_parse( &pargs, opts) ) {
-	if( pargs.r_opt == oDebug || pargs.r_opt == oDebugAll )
-	    parse_debug++;
-	else if( pargs.r_opt == oOptions ) {
-	    /* yes there is one, so we do not try the default one, but
-	     * read the option file when it is encountered at the commandline
-	     */
-	    default_config = 0;
+  /* check whether we have a config file on the commandline */
+  orig_argc = argc;
+  orig_argv = argv;
+  pargs.argc = &argc;
+  pargs.argv = &argv;
+  pargs.flags= 1|(1<<6);  /* do not remove the args, ignore version */
+  while (arg_parse (&pargs, opts))
+    {
+      if (pargs.r_opt == oDebug || pargs.r_opt == oDebugAll)
+	parse_debug++;
+      else if (pargs.r_opt == oOptions)
+	{
+	  /* yes there is one, so we do not try the default one, but
+	   * read the option file when it is encountered at the commandline
+	   */
+	  default_config = 0;
 	}
-	else if( pargs.r_opt == oNoOptions )
-	    default_config = 0; /* --no-options */
-	else if( pargs.r_opt == oHomedir )
-	    opt.homedir = pargs.r.ret_str;
+      else if (pargs.r_opt == oNoOptions)
+	default_config = 0; /* --no-options */
+      else if (pargs.r_opt == oHomedir)
+	opt.homedir = pargs.r.ret_str;
     }
 
-    if( default_config )
-	configname = make_filename(opt.homedir, "gpa.conf", NULL );
+  if (default_config)
+    configname = make_filename (opt.homedir, "gpa.conf", NULL);
 
 
-    argc = orig_argc;
-    argv = orig_argv;
-    pargs.argc = &argc;
-    pargs.argv = &argv;
-    pargs.flags=  1;  /* do not remove the args */
-  next_pass:
-    if( configname ) {
-	configlineno = 0;
-	configfp = fopen( configname, "r" );
-	if( !configfp ) {
-	    if( default_config ) {
-		if( parse_debug )
-		    log_info(_("NOTE: no default option file `%s'\n"),
-							    configname );
+  argc = orig_argc;
+  argv = orig_argv;
+  pargs.argc = &argc;
+  pargs.argv = &argv;
+  pargs.flags=  1;  /* do not remove the args */
+
+ next_pass:
+  if (configname)
+    {
+      configlineno = 0;
+      configfp = fopen (configname, "r");
+      if (!configfp)
+	{
+	  if (default_config)
+	    {
+	      if (parse_debug)
+		log_info (_("NOTE: no default option file `%s'\n"),
+			  configname);
 	    }
-	    else {
-		log_error(_("option file `%s': %s\n"),
-				    configname, strerror(errno) );
-		exit(2);
-	    }
-	    free(configname); configname = NULL;
+	  else {
+	    log_error (_("option file `%s': %s\n"),
+		       configname, strerror(errno));
+	    exit(2);
+	  }
+	  free (configname);
+	  configname = NULL;
 	}
-	if( parse_debug && configname )
-	    log_info(_("reading options from `%s'\n"), configname );
-	default_config = 0;
+      if (parse_debug && configname)
+	log_info (_("reading options from `%s'\n"), configname);
+      default_config = 0;
     }
 
-    while( optfile_parse( configfp, configname, &configlineno,
-						&pargs, opts) ) {
-	switch( pargs.r_opt ) {
-	  case oQuiet: opt.quiet = 1; break;
-	  case oVerbose: opt.verbose++; break;
+  while (optfile_parse (configfp, configname, &configlineno,
+			&pargs, opts))
+    {
+      switch(pargs.r_opt)
+	{
+	case oQuiet: opt.quiet = 1; break;
+	case oVerbose: opt.verbose++; break;
 
-	  case oDebug: opt.debug |= pargs.r.ret_ulong; break;
-	  case oDebugAll: opt.debug = ~0; break;
+	case oDebug: opt.debug |= pargs.r.ret_ulong; break;
+	case oDebugAll: opt.debug = ~0; break;
 
-	  case oOptions:
-	    /* config files may not be nested (silently ignore them) */
-	    if( !configfp ) {
-		free(configname);
-		configname = xstrdup(pargs.r.ret_str);
-		goto next_pass;
+	case oOptions:
+	  /* config files may not be nested (silently ignore them) */
+	  if (!configfp)
+	    {
+	      free (configname);
+	      configname = xstrdup (pargs.r.ret_str);
+	      goto next_pass;
 	    }
-	    break;
-	  case oNoGreeting: nogreeting = 1; break;
-	  case oNoVerbose: opt.verbose = 0; break;
-	  case oNoOptions: break; /* no-options */
-	  case oHomedir: opt.homedir = pargs.r.ret_str; break;
-	  case oGPGBinary: gpg_program = pargs.r.ret_str;  break;
+	  break;
+	case oNoGreeting: nogreeting = 1; break;
+	case oNoVerbose: opt.verbose = 0; break;
+	case oNoOptions: break; /* no-options */
+	case oHomedir: opt.homedir = pargs.r.ret_str; break;
+	case oGPGBinary: gpg_program = pargs.r.ret_str;  break;
 
 
-	  default : pargs.err = configfp? 1:2; break;
+	default : pargs.err = configfp? 1:2; break;
 	}
     }
-    if( configfp ) {
-	fclose( configfp );
-	configfp = NULL;
-	free(configname); configname = NULL;
-	goto next_pass;
+  if (configfp)
+    {
+      fclose(configfp);
+      configfp = NULL;
+      free(configname);
+      configname = NULL;
+      goto next_pass;
     }
-    free( configname ); configname = NULL;
-    if( log_get_errorcount(0) )
-	exit(2);
-    if( nogreeting )
-	greeting = 0;
+  free (configname);
+  configname = NULL;
+  if (log_get_errorcount (0))
+    exit(2);
+  if (nogreeting)
+    greeting = 0;
 
-    if( greeting ) {
-	fprintf(stderr, "%s %s; %s\n",
-			strusage(11), strusage(13), strusage(14) );
-	fprintf(stderr, "%s\n", strusage(15) );
+  if (greeting)
+    {
+      fprintf(stderr, "%s %s; %s\n",
+	      strusage (11), strusage (13), strusage (14));
+      fprintf(stderr, "%s\n", strusage (15));
     }
-  #ifdef IS_DEVELOPMENT_VERSION
-    log_info("NOTE: this is a development version!\n");
-  #endif
+#ifdef IS_DEVELOPMENT_VERSION
+  log_info("NOTE: this is a development version!\n");
+#endif
 
+  /* fixme: read from options and add at least one default */
+  opt.keyserver_names = xcalloc (3, sizeof *opt.keyserver_names);
+  opt.keyserver_names[0] = "blackhole.pca.dfn.de";
+  opt.keyserver_names[1] = "horowitz.surfnet.nl";
 
-    /* fixme: read from options and add at least one default */
-    opt.keyserver_names = xcalloc (3, sizeof *opt.keyserver_names );
-    opt.keyserver_names[0] = "blackhole.pca.dfn.de";
-    opt.keyserver_names[1] = "horowitz.surfnet.nl";
+  global_keyserver = opt.keyserver_names[0];  /* FIXME: bad style */
 
-    gpapa_init ( gpg_program );
+  gpapa_init (gpg_program);
 
-    global_windowMain = gpa_windowMain_new (_("GNU Privacy Assistant"));
-    gtk_signal_connect (GTK_OBJECT (global_windowMain), "delete_event",
-			GTK_SIGNAL_FUNC (file_quit), NULL);
-    gtk_widget_show_all (global_windowMain);
-    gtk_main ();
-    return 0;
+  gpa_window_tip_init ();
+
+  gpa_homeDirSelect_init (_("Set home directory"));
+  gpa_loadOptionsSelect_init (_("Load options file"));
+  gpa_saveOptionsSelect_init (_("Save options file"));
+
+  /*global_windowMain = gpa_windowMain_new (_("GNU Privacy Assistant"));*/
+  /*  global_windowMain = keyring_editor_new();
+  gtk_signal_connect (GTK_OBJECT (global_windowMain), "delete_event",
+		      GTK_SIGNAL_FUNC (file_quit), NULL);
+  gtk_widget_show_all (global_windowMain);
+  */
+
+  gpa_open_keyring_editor ();
+  /* for development purposes open the file manager too: */
+  /*gpa_open_filemanager ();*/
+  gtk_main ();
+  return 0;
 }
-
-gchar *
-getStringForSigValidity (GpapaSigValidity sigValidity)
-{
-  return writtenSigValidity[sigValidity];
-}				/* getStringForSigValidity */
 
 void
 gpa_callback (GpapaAction action, gpointer actiondata, gpointer calldata)
@@ -321,67 +395,6 @@ gpa_switch_tips (void)
     global_noTips = TRUE;
 }				/* gpa_switch_tips */
 
-void
-gpa_windowTip_init (void)
-{
-/* var */
-  GtkAccelGroup *accelGroup;
-/* objects */
-  GtkWidget *vboxTip;
-  GtkWidget *vboxContents;
-  GtkWidget *labelJfdContents;
-  GtkWidget *labelContents;
-  GtkWidget *hboxContents;
-  GtkWidget *textContents;
-  GtkWidget *vscrollbarContents;
-  GtkWidget *hboxTip;
-  GtkWidget *checkerNomore;
-  GtkWidget *buttonClose;
-/* commands */
-  global_windowTip = gtk_window_new (GTK_WINDOW_DIALOG);
-  gtk_window_set_title (GTK_WINDOW (global_windowTip), _("GPA Tip"));
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (global_windowTip), accelGroup);
-  vboxTip = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxTip), 5);
-  vboxContents = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxContents), 5);
-  labelContents = gtk_label_new (_(""));
-  labelJfdContents =
-    gpa_widget_hjustified_new (labelContents, GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start (GTK_BOX (vboxContents), labelJfdContents, FALSE, FALSE,
-		      0);
-  hboxContents = gtk_hbox_new (FALSE, 0);
-  textContents = gtk_text_new (NULL, NULL);
-  gtk_text_set_editable (GTK_TEXT (textContents), FALSE);
-  gpa_connect_by_accelerator (GTK_LABEL (labelContents), textContents,
-			      accelGroup, _("_Tip:"));
-  global_textTip = textContents;
-  gtk_box_pack_start (GTK_BOX (hboxContents), textContents, TRUE, TRUE, 0);
-  vscrollbarContents = gtk_vscrollbar_new (GTK_TEXT (textContents)->vadj);
-  gtk_box_pack_start (GTK_BOX (hboxContents), vscrollbarContents, FALSE,
-		      FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vboxContents), hboxContents, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vboxTip), vboxContents, TRUE, TRUE, 0);
-  hboxTip = gtk_hbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (hboxTip), 5);
-  buttonClose = gpa_button_new (accelGroup, _("   _Close   "));
-  gtk_signal_connect_object (GTK_OBJECT (buttonClose), "clicked",
-			     GTK_SIGNAL_FUNC (gtk_widget_hide),
-			     (gpointer) global_windowTip);
-  gtk_widget_add_accelerator (buttonClose, "clicked", accelGroup, GDK_Escape,
-			      0, 0);
-  gtk_box_pack_end (GTK_BOX (hboxTip), buttonClose, FALSE, FALSE, 0);
-  checkerNomore =
-    gpa_check_button_new (accelGroup, _("_No more tips, please"));
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkerNomore),
-				global_noTips);
-  gtk_signal_connect (GTK_OBJECT (checkerNomore), "clicked",
-		      GTK_SIGNAL_FUNC (gpa_switch_tips), NULL);
-  gtk_box_pack_end (GTK_BOX (hboxTip), checkerNomore, FALSE, FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (vboxTip), hboxTip, FALSE, FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (global_windowTip), vboxTip);
-}				/* gpa_windowTip_init */
 
 
 void
@@ -403,7 +416,7 @@ sigs_append (gpointer data, gpointer userData)
   if (!contentsSignatures[0])
     contentsSignatures[0] = _("[Unknown user ID]");
   contentsSignatures[1] =
-    getStringForSigValidity (gpapa_signature_get_validity
+    gpa_sig_validity_string (gpapa_signature_get_validity
 			     (signature, gpa_callback, windowPublic));
   contentsSignatures[2] =
     gpapa_signature_get_identifier (signature, gpa_callback, windowPublic);
@@ -669,25 +682,6 @@ gpa_popupMenu_init (void)
   global_popupMenu = gtk_item_factory_get_widget (itemFactory, "<main>");
 } /* gpa_popupMenu_init */
 
-void
-setFileSelected (GtkWidget * clistFile, gint row, gint column,
-		 GdkEventButton * event, gboolean selected)
-{
-  /* var */
-  GpapaFile *aFile;
-  /* commands */
-  aFile = g_list_nth_data (filesOpened, row);
-  if (selected)
-    {
-      if (!g_list_find (filesSelected, aFile))
-	filesSelected = g_list_append (filesSelected, aFile);
-    }
-  else
-    {
-      if (g_list_find (filesSelected, aFile))
-	filesSelected = g_list_remove (filesSelected, aFile);
-    }
-} /* setFileSelected */
 
 gboolean
 evalKeyClistFile (GtkWidget * clistFile, GdkEventKey * event,
@@ -733,136 +727,5 @@ evalMouseClistFile (GtkWidget * clistFile, GdkEventButton * event,
   return (TRUE);
 }				/* evalMouseClistFile */
 
-GtkWidget *
-gpa_windowFile_new (void)
-{
-  /* var */
-  char *clistFileTitle[5] = {
-    N_("File"), N_("Status"), N_("Sigs total"), N_("Valid Sigs"),
-    N_("Invalid Sigs")
-  };
-  int i;
-  /* objects */
-  GtkWidget *windowFile;
-  GtkWidget *scrollerFile;
-  GtkWidget *clistFile;
-  /* commands */
-  windowFile = gtk_frame_new (_("Files in work"));
-  scrollerFile = gtk_scrolled_window_new (NULL, NULL);
-  clistFile = gtk_clist_new_with_titles (5, clistFileTitle);
-  gtk_clist_set_column_width (GTK_CLIST (clistFile), 0, 170);
-  gtk_clist_set_column_width (GTK_CLIST (clistFile), 1, 100);
-  gtk_clist_set_column_justification (GTK_CLIST (clistFile), 1,
-				      GTK_JUSTIFY_CENTER);
-  for (i = 2; i <= 4; i++)
-    {
-      gtk_clist_set_column_width (GTK_CLIST (clistFile), i, 100);
-      gtk_clist_set_column_justification (GTK_CLIST (clistFile), i,
-					  GTK_JUSTIFY_RIGHT);
-    }				/* for */
-  for (i = 0; i <= 4; i++)
-    {
-      gtk_clist_set_column_auto_resize (GTK_CLIST (clistFile), i, FALSE);
-      gtk_clist_column_title_passive (GTK_CLIST (clistFile), i);
-    }				/* for */
-  gtk_clist_set_selection_mode (GTK_CLIST (clistFile),
-				GTK_SELECTION_EXTENDED);
-  gtk_widget_grab_focus (clistFile);
-  gtk_signal_connect (GTK_OBJECT (clistFile), "select-row",
-		      GTK_SIGNAL_FUNC (setFileSelected), (gpointer) TRUE);
-  gtk_signal_connect (GTK_OBJECT (clistFile), "unselect-row",
-		      GTK_SIGNAL_FUNC (setFileSelected), (gpointer) FALSE);
-  gtk_signal_connect (GTK_OBJECT (clistFile), "key-press-event",
-		      GTK_SIGNAL_FUNC (evalKeyClistFile), NULL);
-  gtk_signal_connect (GTK_OBJECT (clistFile), "button-press-event",
-		      GTK_SIGNAL_FUNC (evalMouseClistFile), NULL);
-  global_clistFile = clistFile;
-  gtk_container_add (GTK_CONTAINER (scrollerFile), clistFile);
-  gtk_container_add (GTK_CONTAINER (windowFile), scrollerFile);
-  return (windowFile);
-} /* gpa_windowFile_new */
 
-GtkWidget *
-gpa_file_toolbar_new ( GtkWidget * window )
-{
-  GtkWidget *toolbar, *icon;
-
-  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
-  
-  /* Open */
-  if ( (icon = gpa_create_icon_widget ( window, "openfile" )))
-    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Open"),
-                            _("Open a file"), _("open file"), icon,
-                            GTK_SIGNAL_FUNC(file_open), NULL);
-  /* Sign */
-  if ( (icon = gpa_create_icon_widget ( window, "sign" )))
-    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Sign"),
-                            _("Sign the selected file"), _("sign file"), icon,
-                            GTK_SIGNAL_FUNC(file_sign), NULL);
-  /* Encrypt */
-  if ( (icon = gpa_create_icon_widget ( window, "encrypt" )))
-    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Encrypt"),
-                            _("Encrypt the selected file"), _("encrypt file"),
-                            icon, GTK_SIGNAL_FUNC(file_encrypt), NULL);
-  /* Decrypt */
-  if ( (icon = gpa_create_icon_widget ( window, "decrypt" )))
-    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _(" Decrypt "),
-                            _("Decrypt the selected file"), _("decrypt file"),
-                            icon, GTK_SIGNAL_FUNC(file_decrypt), NULL);
-  /* Public keyring */
-  if ( (icon = gpa_create_icon_widget ( window, "keyring" )))
-    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Keyring"),
-                            _("Open public keyring"),
-                            _("open public keyring"), icon,
-                            GTK_SIGNAL_FUNC(keys_openPublic), NULL);
-  /* Help */
-  if ( (icon = gpa_create_icon_widget ( window, "help" )))
-    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Help"),
-                            _("Understanding the GNU Privacy Assistant"),
-                            _("help"), icon,
-                            GTK_SIGNAL_FUNC(help_help), NULL);
-
-  return toolbar;
-} 
-
-GtkWidget *
-gpa_windowMain_new (char *title)
-{
-/* objects */
-  GtkWidget *window;
-  GtkWidget *vbox;
-  GtkWidget *menubar;
-  GtkWidget *fileBox;
-  GtkWidget *windowFile;
-  GtkWidget *toolbar;
-/* commands */
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), title);
-  gtk_widget_set_usize (window, 640, 480);
-  vbox = gtk_vbox_new (FALSE, 0);
-  menubar = gpa_menubar_new (window);
-  gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, TRUE, 0);
-
-  /* set up the toolbar */
-  toolbar = gpa_file_toolbar_new(window);
-  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
-  gtk_container_add(GTK_CONTAINER (vbox), toolbar);
-
-  fileBox = gtk_hbox_new (TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (fileBox), 5);
-  windowFile = gpa_windowFile_new ();
-  gtk_box_pack_start (GTK_BOX (fileBox), windowFile, TRUE, TRUE, 0);
-  gtk_box_pack_end (GTK_BOX (vbox), fileBox, TRUE, TRUE, 0);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
-  gpa_popupMenu_init ();
-  gpa_windowTip_init ();
-  gpa_fileOpenSelect_init (_("Open a file"));
-  gpa_homeDirSelect_init (_("Set home directory"));
-  gpa_loadOptionsSelect_init (_("Load options file"));
-  gpa_saveOptionsSelect_init (_("Save options file"));
-  assert( opt.keyserver_names[0] );
-  global_keyserver = opt.keyserver_names[0];  /* FIXME: bad style */
-  global_defaultKey = NULL;
-  return (window);
-} /* gpa_windowMain_new */
 

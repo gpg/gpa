@@ -25,6 +25,7 @@
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "icons.h"
+#include "help.h"
 
 void
 gpa_widget_set_centered (GtkWidget * widget, GtkWidget * parent)
@@ -45,7 +46,7 @@ gpa_widget_show (GtkWidget * widget, GtkWidget * parent, gchar * tip)
 {
     gtk_widget_show_all (widget);
     gpa_widget_set_centered (widget, parent);
-    gpa_windowTip_show (tip);
+    gpa_window_tip_show (tip);
 }				/* gpa_widget_show */
 
 void
@@ -63,10 +64,8 @@ gpa_window_destroy (gpointer param)
   if (tip)
     {
       if (strcmp (tip, "") != 0)
-	gpa_windowTip_show (tip);
+	gpa_window_tip_show (tip);
     }				/* if */
-  else
-    gtk_widget_hide (global_windowTip);
 }				/* gpa_window_destroy */
 
 GtkWidget *
@@ -177,6 +176,20 @@ gpa_buttonCancel_new (GtkAccelGroup * accelGroup, gchar * labelText,
 			      0, 0);
   return (buttonCancel);
 }				/* gpa_buttonCancel_new */
+
+/* an extended version of gpa_buttonCancel_new */
+GtkWidget *
+gpa_button_cancel_new (GtkAccelGroup * accel, gchar * label,
+		       GtkSignalFunc func, gpointer param)
+{
+  GtkWidget *button;
+
+  button = gpa_button_new (accel, label);
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked", func, param);
+  gtk_widget_add_accelerator (button, "clicked", accel, GDK_Escape, 0, 0);
+  return button;
+}				/* gpa_button_cancel_new */
+
 
 GtkWidget *
 gpa_check_button_new (GtkAccelGroup * accelGroup, gchar * labelText)
@@ -395,3 +408,70 @@ gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func, gchar * tip,
   gpa_widget_set_centered (windowPassphrase, messenger);
   gtk_widget_grab_focus (entryPasswd);
 }				/* gpa_window_passphrase */
+
+/*
+ * Modal file dialog
+ */
+
+struct _GPASAveFileNameDialog {
+  GtkWidget * dialog;
+  gchar * filename;
+};
+typedef struct _GPASAveFileNameDialog GPASAveFileNameDialog;
+
+static void
+file_dialog_ok (gpointer param)
+{
+  GPASAveFileNameDialog * dialog = param;
+
+  dialog->filename \
+      = gtk_file_selection_get_filename (GTK_FILE_SELECTION (dialog->dialog));
+  dialog->filename = xstrdup (dialog->filename);
+
+  gtk_main_quit ();
+}
+
+static void
+file_dialog_cancel (gpointer param)
+{
+  GPASAveFileNameDialog * dialog = param;
+  dialog->filename = NULL;
+  gtk_main_quit ();
+}
+
+/* Run the modal file selection dialog and return a new copy of the
+ * filename if the user pressed OK and NULL otherwise
+ */
+gchar *
+gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
+			const gchar * directory)
+{
+  GPASAveFileNameDialog dialog;
+  GtkWidget * window = gtk_file_selection_new (title);
+
+  dialog.dialog = window;
+  dialog.filename = NULL;
+
+  gtk_signal_connect_object (GTK_OBJECT(GTK_FILE_SELECTION(window)->ok_button),
+			     "clicked", GTK_SIGNAL_FUNC (file_dialog_ok),
+			     (gpointer) &dialog);
+  gtk_signal_connect_object (
+		      GTK_OBJECT (GTK_FILE_SELECTION (window)->cancel_button),
+		      "clicked", GTK_SIGNAL_FUNC (file_dialog_cancel),
+		      (gpointer) &dialog);
+  gpa_widget_show (window, parent, "");
+
+  gtk_grab_add (window);
+  gtk_main ();
+  gtk_grab_remove (window);
+  gtk_widget_destroy (window);
+
+  return dialog.filename;
+}
+
+gchar *
+gpa_get_load_file_name (GtkWidget * parent, const gchar * title,
+			const gchar * directory)
+{
+  return gpa_get_save_file_name (parent, title, directory);
+}

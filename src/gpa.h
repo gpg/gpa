@@ -79,8 +79,6 @@ extern GtkWidget *gpa_get_global_clist_file (void);
 extern void gpa_callback (GpapaAction action, gpointer actiondata,
 			  gpointer calldata);
 extern void gpa_switch_tips (void);
-extern void gpa_windowTip_init (void);
-extern void gpa_windowTip_show ( const char *text );
 extern void sigs_append (gpointer data, gpointer userData);
 extern void gpa_selectRecipient (GtkWidget * clist, gint row, gint column,
 				 GdkEventButton * event, gpointer userData);
@@ -89,5 +87,10 @@ extern void gpa_unselectRecipient (GtkWidget * clist, gint row, gint column,
 extern void gpa_removeRecipients (gpointer param);
 extern void gpa_addRecipients (gpointer param);
 extern void gpa_recipientWindow_close (gpointer param);
+
+
+void gpa_open_keyring_editor (void);
+void gpa_open_filemanager (void);
+
 
 #endif /*GPA_H */
