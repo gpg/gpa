@@ -1,5 +1,33 @@
 2001-01-17  Bernhard Herzog  <bh@intevation.de>
 
+	* keysigndlg.h (gpa_key_sign_run_dialog): Update the parameter
+	list.
+	
+	* keysigndlg.c (gpa_key_sign_run_dialog): Remove the list box with
+	the secret keys and the key_id paramter because we assume the
+	selected keys are always signed with the default key. Also, in
+	simplified ui mode, don't show the "sign locally" check box and
+	set dialog.check_local to NULL.
+	(key_sign_ok): Check whether dialog->check_local is NULL, i.e.
+	whether the dialog was created in simplified ui mode, before
+	retrieving the value. If it's NULL, set sign_type to normal.
+	(struct _GPAKeySignDialog): remove the key_id field and update all
+	users.
+
+	* keyring.c (keyring_editor_sign): Change default sign type to
+	normal which is probably better for the simplified UI mode. Also,
+	private_key_id is the default key now, because it's not a retrun
+	value of the key sign dialog anymore.
+
+	* gpa.c (gpa_determine_default_key): New function to guess a
+	useful default key.
+	(main): Use gpa_determine_default_key to initialize the default
+	key.
+
+	* gtktools.c (gpa_window_error): Make the messenger parameter
+	optional, i.e. it may be NULL now, so that gpa_callback can be
+	used with NULL as calldata.
+
 	* gpa.h:
 	* gpa.c: Turn the definition of opt in gpa.h into an extern
 	declaration and define it in gpa.c. Rename it to gpa_options. Fix
