@@ -109,7 +109,7 @@ get_trust_value (GpgmeKey key, GPAKeyList * keylist,
 		 gchar ** label, gboolean * free_label, GdkPixmap ** pixmap,
 		 GdkBitmap ** mask)
 {
-  *label = gpa_key_validity_string (key);
+  *label = (gchar*) gpa_key_validity_string (key);
   *free_label = FALSE;
   *pixmap = NULL;
   *mask = NULL;
@@ -120,7 +120,7 @@ get_ownertrust_value (GpgmeKey key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
-  *label = gpa_key_ownertrust_string (key);
+  *label = (gchar*) gpa_key_ownertrust_string (key);
   *free_label = FALSE;
   *pixmap = NULL;
   *mask = NULL;

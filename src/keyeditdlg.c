@@ -44,7 +44,6 @@ GPAKeyEditDialog;
 
 /* internal API */
 static void key_edit_change_expiry (GtkWidget *widget, gpointer param);
-static void key_edit_change_trust (GtkWidget *widget, gpointer param);
 
 
 /* run the key edit dialog as a modal dialog */

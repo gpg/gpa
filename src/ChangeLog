@@ -1,5 +1,14 @@
 2002-11-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* keylist.c (get_trust_value, get_ownertrust_value): Fix compiler
+	warnings.
+	* gpgmetools.c (gpa_backup_key): Likewise.
+	* gpgmeparsers.c (gpa_parse_engine_info, gpa_parse_import_info): Ditto.
+	
+	* keyeditdlg.c: Removed obsolete ownertrust prototype.
+
+	* fileman.c: Forgot one of Francis's patches.
+
 	* gpa.c, gpa.h, gpawidgets.c, gpawindowkeeper.c, gpawizard.c,
 	gpgmetools.c, gtktools.c, gtktools.h, helpmenu.c, gtktools.h,
 	helpmenu.c, helpmenu.h, keyexportdlg.c, keygendlg.c,

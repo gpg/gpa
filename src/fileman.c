@@ -37,7 +37,6 @@
 #include <gtk/gtk.h>
 
 #include "argparse.h"
-#include "stringhelp.h"
 
 #include "gpapastrings.h"
 
@@ -356,21 +355,21 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
   GtkItemFactory *factory;
   GtkItemFactoryEntry file_menu[] = {
     {_("/_File"), NULL, NULL, 0, "<Branch>"},
-    {_("/File/_Open"), "<control>O", open_file, 0, NULL},
+    {_("/File/_Open"), "<control>O", (GtkItemFactoryCallback)open_file, 0, NULL},
     {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Sign"), NULL, sign_files, 0, NULL},
-    {_("/File/C_heck"), "<control>P", verify_files, 0, NULL},
-    {_("/File/_Encrypt"), NULL, encrypt_files, 0, NULL},
-    /*    {_("/File/E_ncrypt as"), NULL, file_encryptAs, 0, NULL},
-    {_("/File/_Protect by Password"), NULL, file_protect, 0, NULL},
-    {_("/File/P_rotect as"), NULL, file_protectAs, 0, NULL},
+    {_("/File/_Sign"), NULL, (GtkItemFactoryCallback) sign_files, 0, NULL},
+    {_("/File/C_heck"), "<control>P", (GtkItemFactoryCallback) verify_files, 0, NULL},
+    {_("/File/_Encrypt"), NULL, (GtkItemFactoryCallback) encrypt_files, 0, NULL},
+    /*    {_("/File/E_ncrypt as"), NULL, (GtkItemFactoryCallback) file_encryptAs, 0, NULL},
+    {_("/File/_Protect by Password"), NULL, (GtkItemFactoryCallback) file_protect, 0, NULL},
+    {_("/File/P_rotect as"), NULL, (GtkItemFactoryCallback) file_protectAs, 0, NULL},
     */
-    {_("/File/_Decrypt"), NULL, decrypt_files, 0, NULL},
+    {_("/File/_Decrypt"), NULL, (GtkItemFactoryCallback) decrypt_files, 0, NULL},
     /*
-    {_("/File/Decrypt _as"), NULL, file_decryptAs, 0, NULL},
+    {_("/File/Decrypt _as"), NULL, (GtkItemFactoryCallback) file_decryptAs, 0, NULL},
     */
     {_("/File/sep2"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Close"), NULL, close_window, 0, NULL},
+    {_("/File/_Close"), NULL, (GtkItemFactoryCallback) close_window, 0, NULL},
     {_("/File/_Quit"), "<control>Q", gtk_main_quit, 0, NULL},
   };
   GtkItemFactoryEntry windows_menu[] = {
@@ -521,7 +520,7 @@ gpa_fileman_new ()
   GtkWidget *toolbar;
   GPAFileManager * fileman;
 
-  fileman = xmalloc (sizeof(GPAFileManager));
+  fileman = (GPAFileManager*) g_malloc (sizeof(GPAFileManager));
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window),
