@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = pga
+bin_PROGRAMS = gpa
 
 
-pga_SOURCES = pga.c pga.h \
+gpa_SOURCES = gpa.c gpa.h \
 	      help.c
 
 
