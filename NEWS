@@ -12,6 +12,8 @@ Noteworthy changes in version 0.6.2 (unreleased)
  * GPA now remembers the brief/detailed setting view and restores it
  when GPA is started. 
 
+ * Removed all deprecated widgets. GPA is now pure GTK+ 2.2.
+
 Noteworthy changes in version 0.6.1 (2003-01-29)
 ------------------------------------------------
 

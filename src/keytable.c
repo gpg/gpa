@@ -298,7 +298,7 @@ const gpgme_key_t gpa_keytable_lookup_key (GpaKeyTable *keytable,
        * FIXME: This is a hack and a basic problem. Hopefully it won't cause
        * any real problems.
        */
-      keytable->end = gtk_main_quit;
+      keytable->end = (GpaKeyTableEndFunc) gtk_main_quit;
       reload_cache (keytable);
       gtk_main ();
       keytable->end = NULL;

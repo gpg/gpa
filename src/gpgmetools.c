@@ -28,6 +28,7 @@
 #ifdef G_OS_UNIX
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 #else
@@ -347,7 +348,7 @@ static gchar * build_genkey_parms (GPAKeyGenParameters *params)
 /* Generate a key with the given parameters. It prepares the parameters
  * required by Gpgme and returns whatever gpgme_op_genkey returns.
  */
-gpg_error_t gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
+gpg_error_t gpa_generate_key (GPAKeyGenParameters *params, gpgme_key_t *key)
 {
   gchar *parm_string;
   gpg_error_t err;
@@ -359,7 +360,7 @@ gpg_error_t gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       GpgmeGenKeyResult result = gpgme_op_genkey_result (ctx);
-      *fpr = g_strdup (result->fpr);
+      gpgme_get_key (ctx, result->fpr, key, FALSE);
     }
   gpgme_release (ctx);
 

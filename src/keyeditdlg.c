@@ -179,11 +179,10 @@ static void
 key_edit_change_passphrase (GtkWidget *widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
-  gpgme_key_t key;
   gpg_error_t err;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
 
-  err = gpa_gpgme_edit_passwd (ctx, key);
+  err = gpa_gpgme_edit_passwd (ctx, dialog->key);
   if (gpg_err_code (err) == GPG_ERR_BAD_PASSPHRASE)
     {
       gpa_window_error (_("Wrong passphrase!"), dialog->window);

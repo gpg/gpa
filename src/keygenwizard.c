@@ -435,7 +435,7 @@ gpa_keygen_wizard_generate_action (gpointer data)
   GPAKeyGenWizard *keygen_wizard = data;
   GPAKeyGenParameters params;
   gpg_error_t err;
-  gchar *fpr;
+  gpgme_key_t key;
   gboolean do_backup;
   GtkWidget *radio;
 
@@ -465,16 +465,16 @@ gpa_keygen_wizard_generate_action (gpointer data)
   while (gtk_events_pending())
     gtk_main_iteration();
 
-  err = gpa_generate_key (&params, &fpr);
+  err = gpa_generate_key (&params, &key);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_error (err);
     }
   if (do_backup)
     {
-      key_backup_dialog_run (keygen_wizard->window, fpr);
+      key_backup_dialog_run (keygen_wizard->window, key);
     }
-  g_free (fpr);
+  gpgme_key_unref (key);
   g_free (params.userID);
   g_free (params.email);
   g_free (params.comment);

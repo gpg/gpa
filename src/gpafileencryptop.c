@@ -427,7 +427,6 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
       /* Check that all recipients are valid */
       gpgme_key_t key = cur->data;
       gpgme_validity_t valid;
-      const char *fpr=gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
 
       valid = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
       /* First, make sure the key is usable (not revoked or unusable) */

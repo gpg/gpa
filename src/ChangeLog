@@ -1,5 +1,23 @@
 2003-06-22  Miguel Coca  <mcoca@gnu.org>
 
+	* gpgmetools.c (gpa_generate_key): Return the key, not the fingerprint.
+	* keygenwizard.c (gpa_keygen_wizard_generate_action):
+	* keyring.c (keyring_editor_generate_key_advanced): Likewise.
+	
+	* gpgmetools.c: Add missing include.
+
+	* keytable.c (gpa_keytable_lookup_key): Fix warning.
+
+	* keylist.c: Add missing include.
+
+	* keyeditdlg.c (key_edit_change_passphrase): Remove unused variable.
+
+	* gpakeyselector.c (gpa_key_selector_next_key): Fix default key check.
+
+	* settingsdlg.c (key_selected_cb): Fix crash.
+
+2003-06-22  Miguel Coca  <mcoca@gnu.org>
+
 	* All files: Replace old style error checking with libgpg-error.
 	
 	* gpakeyselector.h, gpakeyselector.c: Use the keytable instead of

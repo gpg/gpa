@@ -22,6 +22,7 @@
 #include "keylist.h"
 #include "gpapastrings.h"
 #include "keytable.h"
+#include "icons.h"
 
 /* Callbacks */
 static void gpa_keylist_next (gpgme_key_t key, gpointer data);

@@ -172,8 +172,7 @@ GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
       gtk_tree_model_get_value (model, &iter, GPA_KEY_SELECTOR_COLUMN_KEY,
 				&value);
       key = g_value_get_pointer (&value);
-      g_value_unset(&value);      
-
+      g_value_unset(&value);
       keys = g_list_append (keys, key);
     }
 
@@ -214,8 +213,9 @@ void gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
 		      GPA_KEY_SELECTOR_COLUMN_KEY, key, -1);
   /* If this is a secret key selector, select the default key */
   if (selector->secret) {
-    const gchar *key_fpr = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
-    const gchar *default_key = gpa_options_get_default_key (gpa_options_get_instance());
+    const gchar *key_fpr = key->subkeys[0].fpr;
+    const gchar *default_key = gpa_options_get_default_key 
+      (gpa_options_get_instance())->subkeys[0].fpr;
 
     if (g_str_equal (key_fpr, default_key)) {
       gtk_tree_selection_select_iter 
