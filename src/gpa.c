@@ -157,20 +157,56 @@ gpa_set_simplified_ui (gboolean value)
   simplified_ui = value;
 }
 
+/*
+ * Manage the default key
+ */
+
+/* Key id of the default key as malloced memory. NULL means there is not
+ * default key.
+ */
 static gchar *default_key = NULL;
 
+/* Return the default key */
 gchar *
 gpa_default_key (void)
 {
   return default_key;
 }
 
+/* Set the default key. key is assumed to be newly malloced memory that
+ * should not be free's by the caller afterwards. */
 void
 gpa_set_default_key (gchar * key)
 {
   free (default_key);
   default_key = key;
 }
+
+/* Return the default key gpg would use, or at least a first
+ * approximation. Currently this means the secret key with index 0. If
+ * there's no secret key at all, return NULL
+ */
+gchar *
+gpa_determine_default_key (void)
+{
+  GpapaSecretKey *key;
+  gchar * id;
+
+  if (gpapa_get_secret_key_count (gpa_callback, NULL))
+    {
+      key = gpapa_get_secret_key_by_index (0, gpa_callback, NULL);
+      id = xstrdup (gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
+					      NULL));
+    }
+  else
+    id = NULL;
+
+  return id;
+}
+
+/*
+ *  Manage the two main windows
+ */
 
 static GtkWidget * keyringeditor = NULL;
 static GtkWidget * filemanager = NULL;
@@ -220,6 +256,10 @@ gpa_open_filemanager (void)
 }
 
 
+
+/*
+ *   Main function
+ */
 int
 main (int argc, char **argv)
 {
@@ -375,6 +415,9 @@ main (int argc, char **argv)
   global_keyserver = gpa_options.keyserver_names[0];  /* FIXME: bad style */
 
   gpapa_init (gpg_program);
+
+  /* initialize the default key to a useful default */
+  gpa_set_default_key (gpa_determine_default_key ());
 
   gpa_window_tip_init ();
 
