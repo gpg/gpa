@@ -90,6 +90,8 @@ extern void gpa_recipientWindow_close (gpointer param);
 gboolean gpa_simplified_ui (void);
 void gpa_set_simplified_ui (gboolean value);
 
+gchar * gpa_default_key (void);
+void gpa_set_default_key (gchar * key);
 
 void gpa_open_keyring_editor (void);
 void gpa_open_filemanager (void);
