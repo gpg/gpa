@@ -1,3 +1,7 @@
+2001-01-11  Bernhard Herzog  <bh@intevation.de>
+
+	* gtktools.c (gpa_window_show_centered): Make it actually work.
+
 2001-01-10  Bernhard Herzog  <bh@intevation.de>
 
 	* gtktools.c (gpa_window_show_centered): Removed the debug
