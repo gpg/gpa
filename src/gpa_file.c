@@ -33,7 +33,7 @@ void file_open_ok ( void ) {
 char message [ 100 ];
 sprintf ( message, _( "Open file '%s'\n" ), gtk_file_selection_get_filename ( GTK_FILE_SELECTION ( fileOpenSelect ) ) ); /*!!!*/
 g_print ( message ); /*!!!*/
-gtk_widget_hide ( fileOpenSelect );
+  gtk_widget_hide ( fileOpenSelect );
 } /* file_open_ok */
 
 void gpa_fileOpenSelect_init ( char *title ) {
@@ -53,6 +53,8 @@ void file_open ( void ) {
     GTK_WINDOW ( fileOpenSelect ), GTK_WIN_POS_CENTER
   );
   gtk_widget_show ( fileOpenSelect );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* file_open */
 
 void file_showDetail ( void ) {
@@ -90,7 +92,7 @@ void file_showDetail ( void ) {
     GTK_BOX ( hboxFilename ), labelFilename, FALSE, FALSE, 0
   );
   entryFilename = gtk_entry_new ();
-  gtk_entry_set_editable ( GTK_ENTRY ( entryFilename ), FALSE );
+  gtk_editable_set_editable ( GTK_EDITABLE ( entryFilename ), FALSE );
   gtk_box_pack_start (
     GTK_BOX ( hboxFilename ), entryFilename, TRUE, TRUE, 0
   );
@@ -151,6 +153,8 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowDetail ), vboxDetail );
   gtk_widget_show_all ( windowDetail );
   gpa_widget_set_centered ( windowDetail, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* file_showDetail */
 
 void file_sign_sign ( GtkWidget *windowSign ) {
@@ -267,6 +271,8 @@ void file_sign ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowSign ), vboxSign );
   gtk_widget_show_all ( windowSign );
   gpa_widget_set_centered ( windowSign, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* file_sign */
 
 void file_encrypt_detail_check ( void ) {
@@ -336,7 +342,7 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
     GTK_BOX ( hboxFingerprint ), labelFingerprint, FALSE, FALSE, 0
   );
   entryFingerprint = gtk_entry_new ();
-  gtk_entry_set_editable ( GTK_ENTRY ( entryFingerprint ), FALSE );
+  gtk_editable_set_editable ( GTK_EDITABLE ( entryFingerprint ), FALSE );
   gtk_box_pack_start (
     GTK_BOX ( hboxFingerprint ), entryFingerprint, TRUE, TRUE, 0
   );
@@ -359,6 +365,8 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowSigs ), vboxSigs );
   gtk_widget_show_all ( windowSigs );
   gpa_widget_set_centered ( windowSigs, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* file_encrypt_detail */
 
 void file_encrypt_encrypt ( GtkWidget *windowEncrypt ) {
@@ -547,6 +555,8 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowEncrypt ), vboxEncrypt );
   gtk_widget_show_all ( windowEncrypt );
   gpa_widget_set_centered ( windowEncrypt, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* file_encrypt */
 
 void file_protect_protect ( GtkWidget *windowProtect ) {
@@ -645,6 +655,8 @@ void file_protect ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowProtect ), vboxProtect );
   gtk_widget_show_all ( windowProtect );
   gpa_widget_set_centered ( windowProtect, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* file_protect */
 
 void file_decrypt_decrypt ( GtkWidget *windowDecrypt ) {
@@ -711,21 +723,31 @@ void file_decrypt ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowDecrypt ), vboxDecrypt );
   gtk_widget_show_all ( windowDecrypt );
   gpa_widget_set_centered ( windowDecrypt, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* file_decrypt */
 
-void file_decryptAs_browse_ok ( GtkWidget *browseSelect ) {
-  gtk_widget_destroy ( browseSelect );
+void file_decryptAs_browse_ok ( GtkWidget *param [] ) {
+  gtk_entry_set_text (
+    GTK_ENTRY ( param [ 0 ] ),
+    gtk_file_selection_get_filename ( GTK_FILE_SELECTION ( param [ 1 ] ) )
+  );
+  gtk_widget_destroy ( param [ 1 ] );
 } /* file_decryptAs_browse_ok */
 
 void file_decryptAs_browse ( GtkWidget *entryFilename ) {
+/* var */
+  static GtkWidget *param [ 2 ];
 /* objects */
   GtkWidget *browseSelect;
 /* commands */
   browseSelect = gtk_file_selection_new ( "Save decrypted file as" );
+  param [ 0 ] = entryFilename;
+  param [ 1 ] = browseSelect;
   gtk_signal_connect_object (
     GTK_OBJECT ( GTK_FILE_SELECTION ( browseSelect ) -> ok_button ),
     "clicked", GTK_SIGNAL_FUNC ( file_decryptAs_browse_ok ),
-    (gpointer) browseSelect
+    (gpointer) param
   );
   gtk_signal_connect_object (
     GTK_OBJECT ( GTK_FILE_SELECTION ( browseSelect ) -> cancel_button ),
@@ -734,14 +756,21 @@ void file_decryptAs_browse ( GtkWidget *entryFilename ) {
   gtk_widget_show ( browseSelect );
 } /* file_decryptAs_browse */
 
-void file_decryptAs_decrypt ( GtkWidget *windowDecrypt ) {
-g_print ( "Decrypt file and save with new name\n" ); /*!!!*/
-  gtk_widget_destroy ( windowDecrypt );
+void file_decryptAs_decrypt ( GtkWidget *param [] ) {
+/* var */
+  gchar *filename;
+char message [ 100 ]; /*!!!*/
+/* commands */
+  filename = gtk_entry_get_text ( GTK_ENTRY ( param [ 0 ] ) );
+sprintf ( message, "Decrypt file and save as %s\n", filename ); /*!!!*/
+g_print ( message ); /*!!!*/
+  gtk_widget_destroy ( param [ 1 ] );
 } /* file_decryptAs_decrypt */
 
 void file_decryptAs ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
+  static GtkWidget *param [ 2 ];
 /* objects */
   GtkWidget *windowDecrypt;
     GtkWidget *vboxDecrypt;
@@ -822,10 +851,11 @@ void file_decryptAs ( void ) {
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxDecrypt ), buttonCancel );
   buttonDecrypt = gpa_button_new ( accelGroup, _( "_Decrypt" ) );
+  param [ 0 ] = entryFilename;
+  param [ 1 ] = windowDecrypt;
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonDecrypt ), "clicked",
-    GTK_SIGNAL_FUNC ( file_decryptAs_decrypt ),
-    (gpointer) windowDecrypt
+    GTK_SIGNAL_FUNC ( file_decryptAs_decrypt ), (gpointer) param
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxDecrypt ), buttonDecrypt );
   gtk_box_pack_start (
@@ -834,6 +864,8 @@ void file_decryptAs ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowDecrypt ), vboxDecrypt );
   gtk_widget_show_all ( windowDecrypt );
   gpa_widget_set_centered ( windowDecrypt, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* file_decryptAs */
 
 void file_verify ( void ) {

@@ -27,5 +27,9 @@
 #define N_(a)	(a)
 
 GtkWidget *windowMain;
+gboolean noTips;
+
+extern void gpa_switch_tips ( void );
+extern void gpa_dialog_tip ( char *tip );
 
 #endif /*GPA_H*/

@@ -24,7 +24,9 @@ extern GtkWidget *gpa_space_new ( void );
 extern GtkWidget *gpa_widget_hjustified_new (
   GtkWidget *widget, GtkJustification jtype
 );
-extern GtkWidget *gpa_button_new ( GtkAccelGroup *accelGroup, gchar *labelText );
+extern GtkWidget *gpa_button_new (
+  GtkAccelGroup *accelGroup, gchar *labelText
+);
 extern GtkWidget *gpa_buttonCancel_new (
   GtkWidget *window, GtkAccelGroup *accelGroup, gchar *labelText
 );

@@ -146,6 +146,8 @@ void options_keyserver ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowServer ), vboxServer );
   gtk_widget_show_all ( windowServer );
   gpa_widget_set_centered ( windowServer, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* options_keyserver */
 
 void options_recipients ( void ) {
@@ -245,6 +247,8 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowRecipients ), vboxRecipients );
   gtk_widget_show_all ( windowRecipients );
   gpa_widget_set_centered ( windowRecipients, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* options_recipients */
 
 void options_key_set ( GtkWidget *windowKey ) {
@@ -302,16 +306,64 @@ void options_key ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowKey ), vboxKey );
   gtk_widget_show_all ( windowKey );
   gpa_widget_set_centered ( windowKey, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* options_key */
 
 void options_homedir ( void ) {
   gtk_widget_show ( homeDirSelect );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* options_homedir */
+
+void options_tips ( void ) {
+/* var */
+  GtkAccelGroup *accelGroup;
+/* objects */
+  GtkWidget *windowTips;
+    GtkWidget *hButtonBoxTips;
+      GtkWidget *toggleTips;
+      GtkWidget *buttonClose;
+/* commands */
+  windowTips = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gtk_window_set_title ( GTK_WINDOW ( windowTips ), _( "Show GPA Tips" ) );
+  accelGroup = gtk_accel_group_new ();
+  gtk_window_add_accel_group ( GTK_WINDOW ( windowTips ), accelGroup );
+  hButtonBoxTips = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout (
+    GTK_BUTTON_BOX ( hButtonBoxTips ), GTK_BUTTONBOX_END
+  );
+  gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxTips ), 10 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxTips ), 10 );
+  toggleTips = gpa_toggle_button_new ( accelGroup, _( "_Show GPA tips" ) );
+  if ( noTips == FALSE )
+    gtk_toggle_button_set_active ( GTK_TOGGLE_BUTTON ( toggleTips ), TRUE );
+  else
+    gtk_toggle_button_set_active ( GTK_TOGGLE_BUTTON ( toggleTips ), FALSE );
+  gtk_signal_connect (
+    GTK_OBJECT ( toggleTips ), "clicked",
+    GTK_SIGNAL_FUNC ( gpa_switch_tips ), NULL
+  );
+  gtk_container_add ( GTK_CONTAINER ( hButtonBoxTips ), toggleTips );
+  buttonClose = gpa_buttonCancel_new (
+    windowTips, accelGroup, _( "_Close" )
+  );
+  gtk_container_add ( GTK_CONTAINER ( hButtonBoxTips ), buttonClose );
+  gtk_container_add ( GTK_CONTAINER ( windowTips ), hButtonBoxTips );
+  gtk_widget_show_all ( windowTips );
+  gpa_widget_set_centered ( windowTips, windowMain );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) );
+} /* options_tips */
 
 void options_load ( void ) {
   gtk_widget_show ( loadOptionsSelect );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* options_load */
 
 void options_save ( void ) {
   gtk_widget_show ( saveOptionsSelect );
+  if ( noTips == FALSE )
+    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* options_save */

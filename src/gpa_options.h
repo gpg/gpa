@@ -22,6 +22,7 @@ extern void options_keyserver ( void );
 extern void options_recipients ( void );
 extern void options_key ( void );
 extern void options_homedir ( void );
+extern void options_tips ( void );
 extern void options_load ( void );
 extern void options_save ( void );
 

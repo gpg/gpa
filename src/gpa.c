@@ -22,18 +22,86 @@
 #include <gtk/gtk.h>
 #include "gpa.h"
 #include "gpa_file.h"
+#include "gpa_gtktools.h"
 #include "gpa_keys.h"
 #include "gpa_options.h"
 #include "gpa_help.h"
 
 /*!!!*/ static char *text5 [] = { N_( "Dummy Text" ), N_( "Dummy Text" ), N_( "Dummy Text" ), N_( "Dummy Text" ), N_( "Dummy Text" ) }; /*!!!*/
 
+void gpa_switch_tips ( void ) {
+  if ( noTips == TRUE )
+    noTips = FALSE;
+  else
+    noTips = TRUE;
+} /* gpa_switch_tips */
+
+void gpa_dialog_tip ( char *tip ) {
+/* var */
+  GtkAccelGroup *accelGroup;
+/* objects */
+  GtkWidget *windowTip;
+    GtkWidget *vboxTip;
+      GtkWidget *vboxContents;
+        GtkWidget *labelJfdContents;
+          GtkWidget *labelContents;
+        GtkWidget *textContents;
+      GtkWidget *hboxTip;
+        GtkWidget *checkerNomore;
+        GtkWidget *buttonClose;
+/* commands */
+  windowTip = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gtk_window_set_title ( GTK_WINDOW ( windowTip ), _( "GPA Tip" ) );
+  accelGroup = gtk_accel_group_new ();
+  gtk_window_add_accel_group ( GTK_WINDOW ( windowTip ), accelGroup );
+  vboxTip = gtk_vbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( vboxTip ), 5 );
+  vboxContents = gtk_vbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( vboxContents ), 5 );
+  labelContents = gtk_label_new ( _( "" ) );
+  labelJfdContents = gpa_widget_hjustified_new (
+    labelContents, GTK_JUSTIFY_LEFT
+  );
+  gtk_box_pack_start (
+    GTK_BOX ( vboxContents ), labelJfdContents, FALSE, FALSE, 0
+  );
+  textContents = gtk_text_new ( NULL, NULL );
+  gtk_text_set_editable ( GTK_TEXT ( textContents ), FALSE );
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelContents ), textContents, accelGroup, _( "_Tip:" )
+  );
+  gtk_box_pack_start ( GTK_BOX ( vboxContents ), textContents, TRUE, TRUE, 0 );
+  gtk_box_pack_start ( GTK_BOX ( vboxTip ), vboxContents, TRUE, TRUE, 0 );
+  hboxTip = gtk_hbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( hboxTip ), 5 );
+  buttonClose = gpa_buttonCancel_new (
+    windowTip, accelGroup, _( "  _Close  " )
+  );
+  gtk_box_pack_end ( GTK_BOX ( hboxTip ), buttonClose, FALSE, FALSE, 0 );
+  checkerNomore = gpa_check_button_new (
+    accelGroup, _( "_No more tips, please" )
+  );
+  gtk_toggle_button_set_active (
+    GTK_TOGGLE_BUTTON ( checkerNomore ), noTips
+  );
+  gtk_signal_connect (
+    GTK_OBJECT ( checkerNomore ), "clicked",
+    GTK_SIGNAL_FUNC ( gpa_switch_tips ), NULL
+  );
+  gtk_box_pack_end (
+    GTK_BOX ( hboxTip ), checkerNomore, FALSE, FALSE, 10
+  );
+  gtk_box_pack_start ( GTK_BOX ( vboxTip ), hboxTip, FALSE, FALSE, 0 );
+  gtk_container_add ( GTK_CONTAINER ( windowTip ), vboxTip );
+  gtk_widget_show_all ( windowTip );
+} /* gpa_dialog_tip */
+
 gint delete_event ( GtkWidget *widget, GdkEvent *event, gpointer data ) {
   file_quit ();
   return ( FALSE );
 } /* delete_event */
 
-GtkWidget *gpa_menubar_new ( GtkWidget *windowMain ) {
+GtkWidget *gpa_menubar_new ( GtkWidget *window ) {
 /* var */
   GtkItemFactory *itemFactory;
   GtkItemFactoryEntry menuItem [] = {
@@ -66,6 +134,7 @@ GtkWidget *gpa_menubar_new ( GtkWidget *windowMain ) {
     { _( "/Options/_Default Key" ), NULL, options_key, 0, NULL },
     { _( "/Options/_Home Directory" ), NULL, options_homedir, 0, NULL },
     { _( "/Options/sep1" ), NULL, NULL, 0, "<Separator>" },
+    { _( "/Options/Online _tips" ), NULL, options_tips, 0, NULL },
     { _( "/Options/_Load Options File" ), NULL, options_load, 0, NULL },
     { _( "/Options/_Save Options File" ), NULL, options_save, 0, NULL },
     { _( "/_Help" ), NULL, NULL, 0, "<Branch>" },
@@ -84,7 +153,7 @@ GtkWidget *gpa_menubar_new ( GtkWidget *windowMain ) {
     GTK_TYPE_MENU_BAR, "<main>", accelGroup
   );
   gtk_item_factory_create_items ( itemFactory, menuItems, menuItem, NULL );
-  gtk_window_add_accel_group ( GTK_WINDOW ( windowMain ), accelGroup );
+  gtk_window_add_accel_group ( GTK_WINDOW ( window ), accelGroup );
   menubar = gtk_item_factory_get_widget ( itemFactory, "<main>" );
   return ( menubar );
 } /* gpa_menubar_new */
@@ -128,33 +197,34 @@ gtk_clist_append ( GTK_CLIST ( fileList ), text5 ); /*!!!*/
 
 GtkWidget *gpa_windowMain_new ( char *title ) {
 /* objects */
-  GtkWidget *windowMain;
-    GtkWidget *vboxMain;
+  GtkWidget *window;
+    GtkWidget *vbox;
       GtkWidget *menubar;
       GtkWidget *fileBox;
         GtkWidget *fileFrame;
 /* commands */
-  windowMain = gtk_window_new ( GTK_WINDOW_TOPLEVEL );
-  gtk_window_set_title ( GTK_WINDOW ( windowMain ), title );
-  gtk_widget_set_usize ( windowMain, 640, 480 );
-  vboxMain = gtk_vbox_new ( FALSE, 0 );
-  menubar = gpa_menubar_new ( windowMain );
-  gtk_box_pack_start ( GTK_BOX ( vboxMain ), menubar, FALSE, TRUE, 0 );
+  window = gtk_window_new ( GTK_WINDOW_TOPLEVEL );
+  gtk_window_set_title ( GTK_WINDOW ( window ), title );
+  gtk_widget_set_usize ( window, 640, 480 );
+  vbox = gtk_vbox_new ( FALSE, 0 );
+  menubar = gpa_menubar_new ( window );
+  gtk_box_pack_start ( GTK_BOX ( vbox ), menubar, FALSE, TRUE, 0 );
   fileBox = gtk_hbox_new ( TRUE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( fileBox ), 5 );
   fileFrame = gpa_fileFrame_new ();
   gtk_box_pack_start ( GTK_BOX ( fileBox ), fileFrame, TRUE, TRUE, 0 );
-  gtk_box_pack_end ( GTK_BOX ( vboxMain ), fileBox, TRUE, TRUE, 0 );
-  gtk_container_add ( GTK_CONTAINER ( windowMain ), vboxMain );
+  gtk_box_pack_end ( GTK_BOX ( vbox ), fileBox, TRUE, TRUE, 0 );
+  gtk_container_add ( GTK_CONTAINER ( window ), vbox );
   gpa_fileOpenSelect_init ( _( "Open a file" ) );
   gpa_ringOpenSelect_init ( _( "Open key ring" ) );
   gpa_homeDirSelect_init ( _( "Set home directory" ) );
   gpa_loadOptionsSelect_init ( _( "Load options file" ) );
   gpa_saveOptionsSelect_init ( _( "Save options file" ) );
-  return ( windowMain );
+  return ( window );
 } /* gpa_windowMain_new */
 
 int main ( int params, char *param [] ) {
+  noTips = FALSE;
   gtk_init ( &params, &param );
   windowMain = gpa_windowMain_new ( _( "GNU Privacy Assistant" ) );
   gtk_signal_connect (

@@ -32,7 +32,6 @@ g_print ( _( "Show Version Information\n" ) ); /*!!!*/
 void help_license ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-char message [ 50 ];
 /* objects */
   GtkWidget *windowLicense;
     GtkWidget *vboxLicense;

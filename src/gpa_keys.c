@@ -63,8 +63,8 @@ GtkWidget *gpa_frameExpire_new ( GtkAccelGroup *accelGroup ) {
   gtk_widget_set_usize ( entryAfter, 50, 22 );
   gtk_box_pack_start ( GTK_BOX ( hboxAfter ), entryAfter, FALSE, FALSE, 0 );
   comboAfter = gtk_combo_new ();
-  gtk_entry_set_editable (
-    GTK_ENTRY ( GTK_COMBO ( comboAfter ) -> entry ), FALSE
+  gtk_editable_set_editable (
+    GTK_EDITABLE ( GTK_COMBO ( comboAfter ) -> entry ), FALSE
   );
   unitAfter = g_list_append ( unitAfter, _( "days" ) );
   unitAfter = g_list_append ( unitAfter, _( "weeks" ) );
@@ -158,8 +158,8 @@ void keys_openPublic_editTrust ( GtkWidget *parent ) {
   labelLevel = gtk_label_new ( _( "" ) );
   gtk_box_pack_start ( GTK_BOX ( hboxLevel ), labelLevel, FALSE, FALSE, 0 );
   comboLevel = gtk_combo_new ();
-  gtk_entry_set_editable (
-    GTK_ENTRY ( GTK_COMBO ( comboLevel ) -> entry ), FALSE
+  gtk_editable_set_editable (
+    GTK_EDITABLE ( GTK_COMBO ( comboLevel ) -> entry ), FALSE
   );
   valueLevel = g_list_append ( valueLevel, _( "don't know" ) );
   valueLevel = g_list_append ( valueLevel, _( "don't trust" ) );
@@ -202,6 +202,7 @@ void keys_openPublic_editTrust ( GtkWidget *parent ) {
   gtk_container_add ( GTK_CONTAINER ( windowTrust ), vboxTrust );
   gtk_widget_show_all ( windowTrust );
   gpa_widget_set_centered ( windowTrust, parent );
+  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openPublic_editTrust */
 
 void keys_openPublic_sign ( void ) {
@@ -263,7 +264,7 @@ void keys_openPublic_editKey ( GtkWidget *parent ) {
   labelKey = gtk_label_new ( _( "Key: " ) );
   gtk_box_pack_start ( GTK_BOX ( hboxKey ), labelKey, FALSE, FALSE, 0 );
   entryKey = gtk_entry_new ();
-  gtk_entry_set_editable ( GTK_ENTRY ( entryKey ), FALSE );
+  gtk_editable_set_editable ( GTK_EDITABLE ( entryKey ), FALSE );
   gtk_box_pack_start ( GTK_BOX ( hboxKey ), entryKey, FALSE, FALSE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxEdit ), hboxKey, FALSE, FALSE, 0 );
   vboxFingerprint = gtk_vbox_new ( FALSE, 0 );
@@ -276,7 +277,7 @@ void keys_openPublic_editKey ( GtkWidget *parent ) {
     GTK_BOX ( vboxFingerprint ), labelJfdFingerprint, FALSE, FALSE, 0
   );
   entryFingerprint = gtk_entry_new ();
-  gtk_entry_set_editable ( GTK_ENTRY ( entryFingerprint ), FALSE );
+  gtk_editable_set_editable ( GTK_EDITABLE ( entryFingerprint ), FALSE );
   gtk_box_pack_start (
     GTK_BOX ( vboxFingerprint ), entryFingerprint, FALSE, FALSE, 0
   );
@@ -349,7 +350,7 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   entryTrust = gtk_entry_new ();
-  gtk_entry_set_editable ( GTK_ENTRY ( entryTrust ), FALSE );
+  gtk_editable_set_editable ( GTK_EDITABLE ( entryTrust ), FALSE );
   gtk_table_attach (
     GTK_TABLE ( tableMisc ), entryTrust, 1, 2, 0, 1,
     GTK_FILL, GTK_SHRINK, 0, 0
@@ -361,7 +362,7 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   entryDate = gtk_entry_new ();
-  gtk_entry_set_editable ( GTK_ENTRY ( entryDate ), FALSE );
+  gtk_editable_set_editable ( GTK_EDITABLE ( entryDate ), FALSE );
   gtk_table_attach (
     GTK_TABLE ( tableMisc ), entryDate, 1, 2, 1, 2,
     GTK_FILL, GTK_SHRINK, 0, 0
@@ -399,7 +400,7 @@ gtk_clist_append ( GTK_CLIST ( clistSubkeys ), text ); /*!!!*/
   buttonEditTrust = gpa_button_new ( accelGroup, _( "Edit _Ownertrust" ) );
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditTrust ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), windowKey
+    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), (gpointer) windowKey
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonEditTrust );
   buttonExportKey = gpa_button_new ( accelGroup, _( "E_xport key" ) );
@@ -414,6 +415,7 @@ gtk_clist_append ( GTK_CLIST ( clistSubkeys ), text ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowKey ), vboxEdit );
   gtk_widget_show_all ( windowKey );
   gpa_widget_set_centered ( windowKey, parent );
+  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openPublic_editKey */
 
 void keys_openPublic_send ( void ) {
@@ -475,7 +477,7 @@ void keys_openPublic ( void ) {
   labelRingname = gtk_label_new ( _( "" ) );
   gtk_box_pack_start ( GTK_BOX ( hboxTop ), labelRingname, FALSE, FALSE, 0 );
   entryRingname = gtk_entry_new ();
-  gtk_entry_set_editable ( GTK_ENTRY ( entryRingname ), FALSE );
+  gtk_editable_set_editable ( GTK_EDITABLE ( entryRingname ), FALSE );
   gtk_box_pack_start ( GTK_BOX ( hboxTop ), entryRingname, FALSE, FALSE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxPublic ), hboxTop, FALSE, FALSE, 0 );
   scrollerKeys = gtk_scrolled_window_new ( NULL, NULL );
@@ -503,7 +505,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
   buttonEditKey = gpa_button_new ( accelGroup, _( "_Edit key" ) );
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditKey ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_openPublic_editKey ), windowPublic
+    GTK_SIGNAL_FUNC ( keys_openPublic_editKey ), (gpointer) windowPublic
   );
   gtk_table_attach (
     GTK_TABLE ( tableKey ), buttonEditKey, 0, 1, 0, 1,
@@ -576,7 +578,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
   buttonEditTrust = gpa_button_new ( accelGroup, _( "Edit _ownertrust" ) );
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditTrust ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), windowPublic
+    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), (gpointer) windowPublic
   );
   gtk_table_attach (
     GTK_TABLE ( tableTrust ), buttonEditTrust, 0, 1, 1, 2,
@@ -616,6 +618,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowPublic ), vboxPublic );
   gtk_widget_show_all ( windowPublic );
   gpa_widget_set_centered ( windowPublic, windowMain );
+  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openPublic */
 
 void keys_openSecret_editKey ( void ) {
@@ -653,7 +656,7 @@ void keys_openSecret_editKey ( void ) {
   labelKey = gtk_label_new ( "Key: " );
   gtk_box_pack_start ( GTK_BOX ( hboxTop ), labelKey, FALSE, FALSE, 0 );
   entryKey = gtk_entry_new ();
-  gtk_entry_set_editable ( GTK_ENTRY ( entryKey ), FALSE );
+  gtk_editable_set_editable ( GTK_EDITABLE ( entryKey ), FALSE );
   gtk_box_pack_start ( GTK_BOX ( hboxTop ), entryKey, TRUE, TRUE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxEdit ), hboxTop, FALSE, FALSE, 0 );
   tablePasswd = gtk_table_new ( 2, 2, FALSE );
@@ -724,6 +727,7 @@ void keys_openSecret_editKey ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowEdit ), vboxEdit );
   gtk_widget_show_all ( windowEdit );
   gpa_widget_set_centered ( windowEdit, windowMain );
+  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openSecret_editKey */
 
 void keys_openSecret ( void ) {
@@ -756,7 +760,7 @@ void keys_openSecret ( void ) {
   labelRingname = gtk_label_new ( _( "" ) );
   gtk_box_pack_start ( GTK_BOX ( hboxTop ), labelRingname, FALSE, FALSE, 0 );
   entryRingname = gtk_entry_new ();
-  gtk_entry_set_editable ( GTK_ENTRY ( entryRingname ), FALSE );
+  gtk_editable_set_editable ( GTK_EDITABLE ( entryRingname ), FALSE );
   gtk_box_pack_start ( GTK_BOX ( hboxTop ), entryRingname, FALSE, FALSE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxSecret ), hboxTop, FALSE, FALSE, 0 );
   scrollerKeys = gtk_scrolled_window_new ( NULL, NULL );
@@ -805,6 +809,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowSecret ), vboxSecret );
   gtk_widget_show_all ( windowSecret );
   gpa_widget_set_centered ( windowSecret, windowMain );
+  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openSecret */
 
 void keys_open ( void ) {
@@ -872,8 +877,8 @@ void keys_generateKey ( void ) {
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   comboAlgorithm = gtk_combo_new ();
-  gtk_entry_set_editable (
-    GTK_ENTRY ( GTK_COMBO ( comboAlgorithm ) -> entry ), FALSE
+  gtk_editable_set_editable (
+    GTK_EDITABLE ( GTK_COMBO ( comboAlgorithm ) -> entry ), FALSE
   );
   contentsAlgorithm = g_list_append (
     contentsAlgorithm, _( "DSA and ElGamal" )
@@ -1053,6 +1058,7 @@ void keys_generateKey ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowGenerate ), vboxGenerate );
   gtk_widget_show_all ( windowGenerate );
   gpa_widget_set_centered ( windowGenerate, windowMain );
+  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_generateKey */
 
 void keys_generateRevocation_generate ( GtkWidget *windowRevoc ) {
@@ -1123,6 +1129,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowRevoc ), vboxRevoc );
   gtk_widget_show_all ( windowRevoc );
   gpa_widget_set_centered ( windowRevoc, windowMain );
+  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_generateRevocation */
 
 void keys_import_ok ( GtkWidget *windowImport ) {
