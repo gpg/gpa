@@ -1,5 +1,8 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_edit_trust): Removed because its now
+	replaced by the key edit dialog.
+
 	* keygenwizard.c (gpa_keygen_wizard_destroy):
 	(gpa_keygen_wizard_run): Add a destroy event handler and quit the
 	recursive main loop there.
