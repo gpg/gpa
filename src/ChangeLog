@@ -1,5 +1,10 @@
 2001-01-19  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_can_sign): Check whether the default
+	has already signed the selected key and return FALSE in that case.
+	(keyring_editor_current_key_id): New function that returns the id
+	of the currently selected key.
+
 	* gpa.c (main): Read the gtkrc file
 	* Makefile.am: Add the gtkrc file
 	* gtkrc: New file with GTK style defaults
