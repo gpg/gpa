@@ -418,6 +418,7 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
       (gchar*) fpr, NULL
     };
   const gchar *path;
+  mode_t mask;
 
   /* Get the gpg path */
   path = get_gpg_path ();
@@ -427,7 +428,9 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
   pub_argv[0] = (gchar*) path;
   sec_argv[0] = (gchar*) path;
   /* Open the file */
+  mask = umask (0077);
   file = fopen (filename, "w");
+  umask (mask);
   if (!file)
     {
       gchar message[256];

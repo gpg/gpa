@@ -1,3 +1,8 @@
+2003-06-07  Miguel Coca  <mcoca@gnu.org>
+
+	* gpgmetools.c (gpa_backup_key): Make backups 600. Patch by 
+	Bastian Blank <waldi@debian.org>.
+
 2003-05-30  Miguel Coca  <mcoca@gnu.org>
 
 	* gpgmeedit.c (passwd_passphrase_cb): Use new passphrase interface.
