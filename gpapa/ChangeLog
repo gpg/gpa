@@ -1,3 +1,9 @@
+2001-08-23  Werner Koch  <wk@gnupg.org>
+
+	* gpapapublickey.h: Added a few	more keytrust values.
+	* gpapapublickey.c (gpapa_public_key_get_keytrust):
+	Ditto. Contributed by Miguel Coca. 
+	
 2001-05-30  Werner Koch  <wk@gnupg.org>
  
 	* gpapapublickey.c, gpapapublickey.h

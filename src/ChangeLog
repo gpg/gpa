@@ -1,3 +1,8 @@
+2001-08-23  Werner Koch  <wk@gnupg.org>
+
+	* gpapastrings.c: Added a few more strings and made
+	keytrust_strings_advanced code.  By Miguel Coca.
+
 2001-06-06  Werner Koch  <wk@gnupg.org>
 
 	* gpa.c (main): Convert the characters in the homedir from

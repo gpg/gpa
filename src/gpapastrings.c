@@ -28,17 +28,37 @@
  *	enums
  */
 
-static gchar *keytrust_strings[4] = {
+static gchar *keytrust_strings_simplified[] = {
   N_("unknown"),
   N_("don't trust"),
   N_("trust marginally"),
-  N_("trust fully")
+  N_("trust fully"),
+  N_("trust fully"),
+  N_("don't trust"),
+  N_("don't trust"),
+  N_("don't trust"),
+  N_("don't trust")
+};
+
+static gchar *keytrust_strings_advanced[] = {
+  N_("unknown"),
+  N_("don't trust"),
+  N_("trust marginally"),
+  N_("trust fully"),
+  N_("trust ultimately"),
+  N_("revoked"),
+  N_("expired"),
+  N_("invalid"),
+  N_("disabled")
 };
 
 gchar *
 gpa_keytrust_string (GpapaKeytrust keytrust)
 {
-  return _(keytrust_strings[keytrust]);
+  if( gpa_simplified_ui () )
+    return _(keytrust_strings_simplified[keytrust]);
+  else
+    return _(keytrust_strings_advanced[keytrust]);
 } /* gpa_keytrust_string */
 
 static gchar *ownertrust_strings[4] = {

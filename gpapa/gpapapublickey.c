@@ -77,6 +77,16 @@ gpapa_public_key_get_keytrust (GpapaPublicKey *key,
           return (GPAPA_KEYTRUST_MARGINALLY);
         case 'f':
           return (GPAPA_KEYTRUST_FULLY);
+        case 'u':
+          return (GPAPA_KEYTRUST_ULTIMATE);
+        case 'r':
+          return (GPAPA_KEYTRUST_REVOKED);
+        case 'e':
+          return (GPAPA_KEYTRUST_EXPIRED);
+        case 'i':
+          return (GPAPA_KEYTRUST_INVALID);
+        case 'd':
+          return (GPAPA_KEYTRUST_DISABLED);
         case 'q':
           return (GPAPA_KEYTRUST_UNKNOWN);
         default:
