@@ -4,9 +4,11 @@
 	signaturs in simplified UI mode.
 
 	* siglist.c: Add some comments
-	(gpa_siglist_set_signatures): Add a key_id parameter to filter out
-	signatures of a given key. Useful to hide the self signatures of
-	keys.
+
+	* siglist.h: 
+	* siglist.c (gpa_siglist_set_signatures): Add a key_id parameter
+	to filter out signatures of a given key. Useful to hide the self
+	signatures of keys.
 
 	* keyring.c (keyring_editor_new): Make the scrollbars of the
 	keylist appear automatically.
