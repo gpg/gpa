@@ -12,29 +12,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 # gpapa.c: Keyserver-Fehlermeldungen
-msgid "General error."
-msgstr "Allgemeiner Fehler."
+msgid "General error"
+msgstr "Allgemeiner Fehler"
 
-msgid "Error receiving key from server."
-msgstr "Fehler beim Empfang des Schlüssels vom Server."
+msgid "The keyserver returned an error message."
+msgstr "Der Server antwortete mit einer Fehlermeldung."
 
-msgid "Error sending key to server."
-msgstr "Fehler beim Versenden des Schlüssels zum Server."
+msgid "Keyserver timeout"
+msgstr "Server-Zeitüberschreitung"
 
-msgid "Keyserver timeout."
-msgstr "Server-Zeitüberschreitung."
+msgid "Error initializing network"
+msgstr "Fehler beim Initialisieren des Netzwerks"
 
-msgid "Error initializing network."
-msgstr "Fehler beim Initialisieren des Netzwerks."
+msgid "Error resolving host name"
+msgstr "Fehler bei der Namensauflösung"
 
-msgid "Error resolving host name."
-msgstr "Fehler bei der Namensauflösung."
+msgid "Socket error"
+msgstr "Fehler in der Netzwerkverbindung"
 
-msgid "Socket error."
-msgstr "Fehler beim Aufbau der Netzwerkverbindung."
-
-msgid "Error while connecting to keyserver."
-msgstr "Fehler beim Verbindungsaufbau zum Server."
+msgid "Error while connecting to keyserver"
+msgstr "Fehler beim Verbindungsaufbau zum Server"
 
 #: src/encryptdlg.c:78 src/filemenu.c:848
 msgid "No recipients chosen to encrypt for."
@@ -1249,6 +1246,9 @@ msgstr "/_Schlüssel"
 #: src/keyring.c:696
 msgid "/Keys/_Generate Key..."
 msgstr "/Schlüssel/_Erzeugen..."
+
+msgid "/Keys/_Delete Keys..."
+msgstr "/Schlüssel/_Löschen..."
 
 msgid "/Keys/_Sign Keys..."
 msgstr "/Schlüssel/_Signieren..."

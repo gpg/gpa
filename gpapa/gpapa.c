@@ -20,17 +20,25 @@
 
 #include "gpapa.h"
 
-#if defined(__MINGW32__) || defined(HAVE_DOSISH_SYSTEM)
-/* Defining __USE_HKP__ means to connect directly to keyservers
- * instead of running `gpg --recv-keys'.
- */
-#define __USE_HKP__
-#endif
-
 #ifdef __USE_HKP__
+
 #include <keyserver.h>
+
 #define KEY_BUFLEN 65536
-#endif
+
+const gchar *hkp_errtypestr[] =
+  {
+    "General error",
+    "The keyserver returned an error message.",
+    "The keyserver returned an error message.",
+    "Keyserver timeout",
+    "Error initializing network",
+    "Error resolving host name",
+    "Socket error",
+    "Error while connecting to keyserver"
+  };
+
+#endif /* __USE_HKP__ */
 
 #ifdef _WIN32
 #include <windows.h>
@@ -39,18 +47,6 @@
 char *global_keyServer;
 
 static char *gpg_program;
-
-const gchar *hkp_errmsg[] =
-  {
-    "General error.",
-    "Error receiving key from server.",
-    "Error sending key to server.",
-    "Keyserver timeout.",
-    "Error initializing network.",
-    "Error resolving host name.",
-    "Socket error."
-    "Error while connecting to keyserver."
-  };
 
 
 /* Key management.
@@ -450,7 +446,9 @@ gpapa_receive_public_key_from_server (const gchar *keyID,
         {
 	  if (rc < 1 || rc > 8)
 	    rc = 1;
-          callback (GPAPA_ACTION_ERROR, hkp_errmsg[rc - 1], calldata);
+	  if (rc == HKPERR_RECVKEY || rc == HKPERR_SENDKEY)
+            callback (GPAPA_ACTION_ERROR, kserver_strerror (), calldata);
+          callback (GPAPA_ACTION_ERROR, hkp_errtypestr[rc - 1], calldata);
 	}
       else
 	{

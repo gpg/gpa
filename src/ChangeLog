@@ -1,3 +1,8 @@
+2002-02-15  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* keyring.c (keyring_editor_menubar_new): Added "Delete Keys" menu
+	item.
+	
 2002-02-14  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* fileman.c Reformatted to completely comply with the GNU

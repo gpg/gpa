@@ -42,8 +42,15 @@
 
 #define GPAPA_MAX_GPG_KEY_FIELDS 20
 
-extern const gchar *hkp_errmsg[];
 extern char *global_keyServer;
+
+#if defined(__MINGW32__) || defined(HAVE_DOSISH_SYSTEM)
+/* Defining __USE_HKP__ means to connect directly to keyservers
+ * instead of running `gpg --recv-keys'.
+ */
+#define __USE_HKP__
+extern const gchar *hkp_errtypestr[];
+#endif
 
 /* Key management.
  */

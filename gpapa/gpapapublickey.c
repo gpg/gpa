@@ -29,6 +29,10 @@
 #include <windows.h>
 #endif
 
+#ifdef __USE_HKP__
+#include <keyserver.h>
+#endif
+
 static void
 linecallback_fingerprint (gchar *line, gpointer data, GpgStatusCode status)
 {
@@ -405,6 +409,34 @@ gpapa_public_key_send_to_server (GpapaPublicKey *key,
     callback (GPAPA_ACTION_ERROR, "keyserver not specified", calldata);
   if (key && ServerName)
     {
+#ifdef __USE_HKP__
+      gchar *full_keyID;
+      gchar *buffer_data = NULL;
+      const gchar *gpgargv[4];
+      int rc;
+      int i = 0;
+      full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      gpgargv[i++] = "--armor";
+      gpgargv[i++] = "--export";
+      gpgargv[i++] = full_keyID;
+      gpgargv[i] = NULL;
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
+                        linecallback_to_clipboard, &buffer_data,
+                        callback, calldata);
+      wsock_init ();
+      rc = kserver_sendkey (ServerName, buffer_data, strlen (buffer_data));
+      wsock_end ();
+      if (rc != 0)
+        {
+	  if (rc < 1 || rc > 8)
+	    rc = 1;
+	  if (rc == HKPERR_RECVKEY || rc == HKPERR_SENDKEY)
+            callback (GPAPA_ACTION_ERROR, kserver_strerror (), calldata);
+          callback (GPAPA_ACTION_ERROR, hkp_errtypestr[rc - 1], calldata);
+	}
+
+      free (full_keyID);
+#else /* not __USE_HKP__ */
       gchar *name = xstrdup (ServerName);
       gchar *full_keyID;
       const gchar *gpgargv[5];
@@ -419,6 +451,7 @@ gpapa_public_key_send_to_server (GpapaPublicKey *key,
                         NULL, NULL, callback, calldata);
       free (full_keyID);
       free (name);
+#endif /* not __USE_HKP__ */
     }
 }
 

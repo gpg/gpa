@@ -1,3 +1,16 @@
+2002-02-15  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gpapa.c, gpapa.h: Moved the defines controlling conditional
+	compilation of keyserver code from gpapa.c to gpapa.h. Renamed
+	hkp_errmsg to hkp_errtypestr.
+
+	* gpapa.c (gpapa_receive_public_key_from_server): Change to use
+	the keyserver.h error reporting in certain cases, in addition to
+	the hkp_errtypestr message.
+
+	* gpapapublickey.c (gpapa_public_key_send_to_server): Use the new
+	keyserver code for exporting keys.
+
 2002-02-14  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gpapa.c, gpapa.h (hkp_errmsg): New global variable. Contains the

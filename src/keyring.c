@@ -889,6 +889,7 @@ keyring_editor_menubar_new (GtkWidget * window,
     {_("/Keys/_Generate Key..."), NULL, keyring_editor_generate_key, 0, NULL},
     /*{_("/Keys/Generate _Revocation Certificate"), NULL,
 					 keys_generateRevocation, 0, NULL},*/
+    {_("/Keys/_Delete Keys..."), NULL, keyring_editor_delete, 0, NULL},
     {_("/Keys/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
     {_("/Keys/_Import Keys..."), NULL, keyring_editor_import, 0, NULL},
     {_("/Keys/_Export Keys..."), NULL, keyring_editor_export, 0, NULL},
