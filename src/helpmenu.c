@@ -1,5 +1,5 @@
 /* helpmenu.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -36,17 +36,17 @@ void help_license ( void ) {
   GtkWidget *windowLicense;
     GtkWidget *vboxLicense;
       GtkWidget *vboxGPL;
-        GtkWidget *labelJfdGPL;
-          GtkWidget *labelGPL;
-        GtkWidget *hboxGPL;
-          GtkWidget *textGPL;
-          GtkWidget *vscrollbarGPL;
+	GtkWidget *labelJfdGPL;
+	  GtkWidget *labelGPL;
+	GtkWidget *hboxGPL;
+	  GtkWidget *textGPL;
+	  GtkWidget *vscrollbarGPL;
       GtkWidget *hButtonBoxLicense;
-        GtkWidget *buttonClose;
+	GtkWidget *buttonClose;
 /* commands */
   windowLicense = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title (
-    GTK_WINDOW ( windowLicense ), _( "GNU general public license" ) 
+    GTK_WINDOW ( windowLicense ), _( "GNU general public license" )
   );
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group ( GTK_WINDOW ( windowLicense ), accelGroup );
@@ -88,8 +88,8 @@ void help_license ( void ) {
     GTK_BOX ( vboxLicense ), hButtonBoxLicense, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowLicense ), vboxLicense );
-  gtk_widget_show_all ( windowLicense );
   gpa_widget_set_centered ( windowLicense, global_windowMain );
+  gtk_widget_show_all ( windowLicense );
 } // help_license
 
 void help_warranty ( void ) {

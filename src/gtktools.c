@@ -1,5 +1,5 @@
 /* gtktools.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
- 
+
 #include <config.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -212,8 +212,8 @@ void gpa_window_error (
   buttonClose = gpa_buttonCancel_new ( windowError, accelGroup, _( "_OK" ) );
   gtk_box_pack_start ( GTK_BOX ( vboxError ), buttonClose, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowError ), vboxError );
-  gtk_widget_show_all ( windowError );
   gpa_widget_set_centered ( windowError, messenger );
+  gtk_widget_show_all ( windowError );
   gtk_widget_grab_focus ( buttonClose );
 } /* gpa_window_error */
 
@@ -227,11 +227,11 @@ void gpa_window_passphrase (
   GtkWidget *windowPassphrase;
     GtkWidget *vboxPassphrase;
       GtkWidget *hboxPasswd;
-        GtkWidget *labelPasswd;
-        GtkWidget *entryPasswd;
+	GtkWidget *labelPasswd;
+	GtkWidget *entryPasswd;
       GtkWidget *hButtonBoxPassphrase;
-        GtkWidget *buttonCancel;
-        GtkWidget *buttonOK;
+	GtkWidget *buttonCancel;
+	GtkWidget *buttonOK;
 /* commands */
   windowPassphrase = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title (
@@ -277,7 +277,7 @@ void gpa_window_passphrase (
     GTK_BOX ( vboxPassphrase ), hButtonBoxPassphrase, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowPassphrase ), vboxPassphrase );
-  gtk_widget_show_all ( windowPassphrase );
   gpa_widget_set_centered ( windowPassphrase, messenger );
+  gtk_widget_show_all ( windowPassphrase );
   gtk_widget_grab_focus ( entryPasswd );
 } /* gpa_window_passphrase */

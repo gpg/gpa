@@ -1,3 +1,8 @@
+2000-05-04 18:40:08  Werner Koch  (wk@habibti.openit.de)
+
+	* *.c: Moved all gpa_widget_set_centered() before the
+	gtk_widget_show_all(), so that the windows are displayed correctly.
+
 2000-05-02 19:57:29  Werner Koch  (wk@habibti.openit.de)
 
 	* gpa.c, keymenu.c, filemenu.c: Removed libiberty header.

@@ -472,8 +472,8 @@ void keys_openPublic_editTrust ( gpointer param ) {
     GTK_BOX ( vboxTrust ), hButtonBoxTrust, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowTrust ), vboxTrust );
-  gtk_widget_show_all ( windowTrust );
   gpa_widget_set_centered ( windowTrust, parent );
+  gtk_widget_show_all ( windowTrust );
   gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openPublic_editTrust */
 
@@ -704,8 +704,8 @@ void keys_openPublic_editKey ( gpointer param ) {
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonClose );
   gtk_box_pack_start ( GTK_BOX ( vboxEdit ), hButtonBoxEdit, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowKey ), vboxEdit );
-  gtk_widget_show_all ( windowKey );
   gpa_widget_set_centered ( windowKey, windowPublic );
+  gtk_widget_show_all ( windowKey );
   gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openPublic_editKey */
 
@@ -1024,8 +1024,8 @@ void keys_openPublic ( void ) {
     GTK_BOX ( vboxPublic ), hButtonBoxPublic, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowPublic ), vboxPublic );
-  gtk_widget_show_all ( windowPublic );
   gpa_widget_set_centered ( windowPublic, global_windowMain );
+  gtk_widget_show_all ( windowPublic );
   gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
   if ( ! gpapa_get_public_key_count )
     gpa_window_error ( _( "No public keys available yet." ), windowPublic );
@@ -1147,8 +1147,8 @@ void keys_openSecret_editKey ( gpointer param ) {
     GTK_BOX ( vboxEdit ), hButtonBoxEdit, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowEdit ), vboxEdit );
-  gtk_widget_show_all ( windowEdit );
   gpa_widget_set_centered ( windowEdit, windowSecret );
+  gtk_widget_show_all ( windowEdit );
   gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openSecret_editKey */
 
@@ -1259,8 +1259,8 @@ void keys_openSecret ( void ) {
     GTK_BOX ( vboxSecret ), hButtonBoxSecret, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowSecret ), vboxSecret );
-  gtk_widget_show_all ( windowSecret );
   gpa_widget_set_centered ( windowSecret, global_windowMain );
+  gtk_widget_show_all ( windowSecret );
   gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
   contentsCountKeys = gpapa_get_secret_key_count (
     gpa_callback, windowSecret
@@ -1527,8 +1527,8 @@ void keys_generateKey ( void ) {
     GTK_BOX ( vboxGenerate ), hButtonBoxGenerate, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowGenerate ), vboxGenerate );
-  gtk_widget_show_all ( windowGenerate );
   gpa_widget_set_centered ( windowGenerate, global_windowMain );
+  gtk_widget_show_all ( windowGenerate );
   gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_generateKey */
 
@@ -1648,9 +1648,9 @@ void keys_generateRevocation ( void ) {
     GTK_BOX ( vboxRevoc ), hButtonBoxRevoc, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowRevoc ), vboxRevoc );
-  gtk_widget_show_all ( windowRevoc );
   gpa_widget_set_centered ( windowRevoc, global_windowMain );
-  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
+  gtk_widget_show_all ( windowRevoc );
+  gpa_windowTip_show ( _( "Dummy text" ) ); /* !!!*/
 } /* keys_generateRevocation */
 
 void keys_import_ok ( GtkWidget *windowImport ) {

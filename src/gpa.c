@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+#include <stdio.h> /*!!!*/
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gpapa.h>
@@ -29,7 +30,6 @@
 #include "optionsmenu.h"
 #include "helpmenu.h"
 
-#include <stdio.h> /*!!!*/
 
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain;
@@ -314,7 +314,7 @@ void gpa_addRecipients ( gpointer param ) {
 /* commands */
   localParam = (gpointer*) param;
   keysSelected =       (GList**) localParam [ 0 ];
-  clistKeys =       (GtkWidget*) localParam [ 1 ];
+  clistKeys =	    (GtkWidget*) localParam [ 1 ];
   clistRecipients = (GtkWidget*) localParam [ 2 ];
   windowEncrypt =   (GtkWidget*) localParam [ 3 ];
   if ( ! *keysSelected )

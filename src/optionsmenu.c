@@ -1,5 +1,5 @@
 /* optionsmenu.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -103,11 +103,11 @@ void options_keyserver ( void ) {
   GtkWidget *windowServer;
     GtkWidget *vboxServer;
       GtkWidget *hboxServer;
-        GtkWidget *labelServer;
-        GtkWidget *comboServer;
+	GtkWidget *labelServer;
+	GtkWidget *comboServer;
       GtkWidget *hButtonBoxServer;
-        GtkWidget *buttonCancel;
-        GtkWidget *buttonSet;
+	GtkWidget *buttonCancel;
+	GtkWidget *buttonSet;
 /* commands */
   windowServer = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title ( GTK_WINDOW ( windowServer ), _( "Set key server" ) );
@@ -145,8 +145,8 @@ void options_keyserver ( void ) {
     GTK_BOX ( vboxServer ), hButtonBoxServer, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowServer ), vboxServer );
-  gtk_widget_show_all ( windowServer );
   gpa_widget_set_centered ( windowServer, global_windowMain );
+  gtk_widget_show_all ( windowServer );
   gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* options_keyserver */
 
@@ -168,20 +168,20 @@ void options_recipients ( void ) {
   GtkWidget *windowRecipients;
     GtkWidget *vboxRecipients;
       GtkWidget *hboxRecipients;
-        GtkWidget *vboxDefault;
-          GtkWidget *labelJfdDefault;
-            GtkWidget *labelDefault;
-          GtkWidget *scrollerDefault;
-            GtkWidget *clistDefault;
-        GtkWidget *vboxKeys;
-          GtkWidget *labelJfdKeys;
-            GtkWidget *labelKeys;
-          GtkWidget *scrollerKeys;
-            GtkWidget *clistKeys;
+	GtkWidget *vboxDefault;
+	  GtkWidget *labelJfdDefault;
+	    GtkWidget *labelDefault;
+	  GtkWidget *scrollerDefault;
+	    GtkWidget *clistDefault;
+	GtkWidget *vboxKeys;
+	  GtkWidget *labelJfdKeys;
+	    GtkWidget *labelKeys;
+	  GtkWidget *scrollerKeys;
+	    GtkWidget *clistKeys;
       GtkWidget *hButtonBoxRecipients;
-        GtkWidget *buttonDelete;
-        GtkWidget *buttonAdd;
-        GtkWidget *buttonClose;
+	GtkWidget *buttonDelete;
+	GtkWidget *buttonAdd;
+	GtkWidget *buttonClose;
 /* commands */
   contentsKeyCount = gpapa_get_public_key_count (
     gpa_callback, global_windowMain
@@ -189,8 +189,8 @@ void options_recipients ( void ) {
   if ( ! contentsKeyCount )
     {
       gpa_window_error (
-        _( "No public keys available to denote\nas default recipients." ),
-        global_windowMain
+	_( "No public keys available to denote\nas default recipients." ),
+	global_windowMain
       );
       return;
     } /* if */
@@ -271,13 +271,13 @@ void options_recipients ( void ) {
     {
       contentsKeyCount--;
       key = gpapa_get_public_key_by_index (
-        contentsKeyCount, gpa_callback, global_windowMain
+	contentsKeyCount, gpa_callback, global_windowMain
       );
       contentsAnyClist [ 0 ] = gpapa_key_get_name (
-        GPAPA_KEY ( key ), gpa_callback, global_windowMain
+	GPAPA_KEY ( key ), gpa_callback, global_windowMain
       );
       contentsAnyClist [ 1 ] = gpapa_key_get_identifier (
-        GPAPA_KEY ( key ), gpa_callback, global_windowMain
+	GPAPA_KEY ( key ), gpa_callback, global_windowMain
       );
       gtk_clist_prepend ( GTK_CLIST ( clistKeys ), contentsAnyClist );
     } /* while */
@@ -330,8 +330,8 @@ void options_recipients ( void ) {
     GTK_BOX ( vboxRecipients ), hButtonBoxRecipients, FALSE, FALSE, 0
   );
   gtk_container_add ( GTK_CONTAINER ( windowRecipients ), vboxRecipients );
-  gtk_widget_show_all ( windowRecipients );
   gpa_widget_set_centered ( windowRecipients, global_windowMain );
+  gtk_widget_show_all ( windowRecipients );
   gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* options_recipients */
 
@@ -382,13 +382,13 @@ void options_key ( void ) {
   GtkWidget *windowKey;
     GtkWidget *vboxKey;
       GtkWidget *vboxKeys;
-        GtkWidget *labelJfdKeys;
-          GtkWidget *labelKeys;
-        GtkWidget *scrollerKeys;
-          GtkWidget *clistKeys;
+	GtkWidget *labelJfdKeys;
+	  GtkWidget *labelKeys;
+	GtkWidget *scrollerKeys;
+	  GtkWidget *clistKeys;
       GtkWidget *hButtonBoxKey;
-        GtkWidget *buttonCancel;
-        GtkWidget *buttonSet;
+	GtkWidget *buttonCancel;
+	GtkWidget *buttonSet;
 /* commands */
   contentsKeyCount = gpapa_get_secret_key_count (
     gpa_callback, global_windowMain
@@ -396,8 +396,8 @@ void options_key ( void ) {
   if ( ! contentsKeyCount )
     {
       gpa_window_error (
-        _( "No secret keys available to\nselect a default key from." ),
-        global_windowMain
+	_( "No secret keys available to\nselect a default key from." ),
+	global_windowMain
       );
       return;
     } /* if */
@@ -430,13 +430,13 @@ void options_key ( void ) {
     {
       contentsKeyCount--;
       key = gpapa_get_secret_key_by_index (
-        contentsKeyCount, gpa_callback, global_windowMain
+	contentsKeyCount, gpa_callback, global_windowMain
       );
       contentsKeys [ 0 ] = gpapa_key_get_name (
-        GPAPA_KEY ( key ), gpa_callback, global_windowMain
+	GPAPA_KEY ( key ), gpa_callback, global_windowMain
       );
       contentsKeys [ 1 ] = gpapa_key_get_identifier (
-        GPAPA_KEY ( key ), gpa_callback, global_windowMain
+	GPAPA_KEY ( key ), gpa_callback, global_windowMain
       );
       gtk_clist_prepend ( GTK_CLIST ( clistKeys ), contentsKeys );
     } /* while */
@@ -466,8 +466,8 @@ void options_key ( void ) {
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxKey ), buttonSet );
   gtk_box_pack_start ( GTK_BOX ( vboxKey ), hButtonBoxKey, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowKey ), vboxKey );
-  gtk_widget_show_all ( windowKey );
   gpa_widget_set_centered ( windowKey, global_windowMain );
+  gtk_widget_show_all ( windowKey );
   gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* options_key */
 
@@ -510,8 +510,8 @@ void options_tips ( void ) {
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxTips ), buttonClose );
   gtk_container_add ( GTK_CONTAINER ( windowTips ), hButtonBoxTips );
-  gtk_widget_show_all ( windowTips );
   gpa_widget_set_centered ( windowTips, global_windowMain );
+  gtk_widget_show_all ( windowTips );
   gpa_windowTip_show ( _( "Dummy text" ) );
 } /* options_tips */
 
