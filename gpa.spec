@@ -28,11 +28,10 @@ make
 
 %install
 rm -rf ${RPM_BUILD_ROOT}
-mkdir -p ${RPM_BUILD_ROOT}
-install -D -m 644 gpa-logo-48x48.png \
-%{buildroot}%{_datadir}/pixmaps/gpa-logo-48x48.png
-install -D -m 644 gpa.desktop \
-%{buildroot}%{_datadir}/gnome/apps/Applications/gpa.desktop
+install -Dpm 644 gpa-logo-48x48.png \
+	%{buildroot}%{_datadir}/pixmaps/gpa.png
+install -Dpm 644 gpa.desktop \
+	%{buildroot}%{_datadir}/applications/gpa.desktop
 %makeinstall
 
 %clean
@@ -46,7 +45,7 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_datadir}/%{name}/*.*
 %config %{_datadir}/%{name}/gtkrc
 %{_datadir}/locale/*/*/gpa.mo
-%{_datadir}/gnome/apps/Applications/gpa.desktop
+%{_datadir}/applications/gpa.desktop
 %{_datadir}/pixmaps/gpa.png
 
 %changelog

@@ -8,6 +8,9 @@ Noteworthy changes in version 0.7.1 (unreleased)
    modified outside GPA (i.e. by reading emails with auto-key-retrieve
    on), you can see the new keys without restarting GPA.
 
+ * A .desktop file for integration with the Gnome and KDE menus is now
+   distributed with the tarball.
+
 Noteworthy changes in version 0.7.0 (2003-10-22)
 ------------------------------------------------
 

@@ -1,9 +1,9 @@
-
 [Desktop Entry]
 Name=GNU Privacy Assistant
 Name[en_US.ISO8859-1]=GNU Privacy Assistant
-Exec=gpa 
-Icon=/usr/share/pixmaps/gpa-logo-48x48.png
+Exec=gpa
+Icon=gpa.png
 Terminal=false
-MultipleArgs=false
+Encoding=UTF-8
 Type=Application
+Categories=GTK;Application;Security;Utility;
