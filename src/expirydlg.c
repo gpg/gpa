@@ -24,7 +24,6 @@
 #include "gpa.h"
 #include "gpapastrings.h"
 #include "gtktools.h"
-#include "passphrasedlg.h"
 #include "expirydlg.h"
 
 typedef struct {

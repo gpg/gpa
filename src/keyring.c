@@ -20,7 +20,6 @@
 
 #include "gpa.h"
 #include <config.h>
-#include <gpapa.h>
 #include <gpgme.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>

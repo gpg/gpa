@@ -20,7 +20,6 @@
 
 #include "gpa.h"
 #include <config.h>
-#include <gpapa.h>
 #include <gtk/gtk.h>
 #include "gtktools.h"
 #include "keyimportdlg.h"

@@ -207,7 +207,7 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
 
   vbox = gtk_vbox_new (FALSE, 3);
   gtk_object_set_data_full (GTK_OBJECT (vbox), "user_data", (gpointer)wizard,
-			    free);
+			    g_free);
 
   notebook = gtk_notebook_new ();
   wizard->notebook = notebook;
@@ -284,7 +284,7 @@ gpa_wizard_append_page (GtkWidget * widget, GtkWidget * page_widget,
   page->user_data = user_data;
   
   gtk_object_set_data_full (GTK_OBJECT (page_widget), "gpa_wizard_page",
-			    (gpointer)page, free);
+			    (gpointer)page, g_free);
   gtk_notebook_append_page (GTK_NOTEBOOK (wizard->notebook), page_widget,
 			    NULL);
 }

@@ -50,7 +50,6 @@
 #include "fileman.h"
 #include "filesigndlg.h"
 #include "encryptdlg.h"
-#include "passphrasedlg.h"
 
 struct _GPAFileManager {
   GtkWidget *window;

@@ -21,7 +21,6 @@
 #include "gpa.h"
 #include <time.h>
 #include <config.h>
-#include <gpapa.h>
 #include <gtk/gtk.h>
 #include "gpapastrings.h"
 #include "gtktools.h"

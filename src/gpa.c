@@ -28,7 +28,6 @@
 #include <assert.h>
 #include <time.h>
 
-#include <gpapa.h>
 #include <gpgme.h>
 
 #include "argparse.h"
@@ -99,7 +98,6 @@ static char *gpa_configname = NULL;
 static char *keyservers_configname = NULL;
 GPAOptions gpa_options;
 GtkWidget *global_windowMain = NULL;
-GpapaAction global_lastCallbackResult;
 GList *global_defaultRecipients = NULL;
 
 /* GPGME context used in all the program */

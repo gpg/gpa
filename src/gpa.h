@@ -24,9 +24,12 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <gpgme.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#include "gpadefs.h"
 #include "gpgmetools.h"
 #include "gtkhacks.h"
-#include <gpapa.h>
 #include "xmalloc.h"
 #include "logging.h"
 #include "keytable.h"
@@ -50,7 +53,6 @@
 
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
-extern GpapaAction global_lastCallbackResult;
 extern GList *global_defaultRecipients;
 extern GpgmeCtx ctx;
 extern GPAKeyTable *keytable;

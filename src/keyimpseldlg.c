@@ -22,11 +22,9 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <string.h>
-#include <gpapa.h>
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
-#include "passphrasedlg.h"
 #include "keyimpseldlg.h"
 
 typedef struct _GPAKeyImportSelectionDialog

@@ -25,7 +25,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
-#include <gpapa.h>
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"

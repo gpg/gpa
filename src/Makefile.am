@@ -27,7 +27,6 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      keyring.c keyring.h \
 	      ownertrustdlg.c ownertrustdlg.h \
 	      keysigndlg.c keysigndlg.h \
-	      passphrasedlg.c passphrasedlg.h \
 	      keyimportdlg.c keyimportdlg.h \
 	      keyimpseldlg.c keyimpseldlg.h \
 	      keyexportdlg.c keyexportdlg.h \

@@ -20,7 +20,6 @@
 
 #include "gpa.h"
 #include <config.h>
-#include <gpapa.h>
 #include "gpapastrings.h"
 
 /*
@@ -55,20 +54,21 @@ gpa_trust_string (GpgmeValidity keytrust)
     return _(trust_strings_advanced[keytrust]);
 }
 
-GpapaOwnertrust
+GpgmeValidity
 gpa_ownertrust_from_string (gchar * string)
 {
-  GpapaOwnertrust result;
+  GpgmeValidity result;
 
-  result = GPAPA_OWNERTRUST_FIRST;
-  while (result <= GPAPA_OWNERTRUST_LAST &&
+  result = 0;
+  while (result < sizeof(trust_strings_advanced)/
+	 sizeof(trust_strings_advanced[0]) &&
 	 strcmp (string, _(trust_strings_advanced[result])) != 0)
     result++;
   return result;
 } /* gpa_ownertrust_from_string */
 
 const char *
-gpa_ownertrust_icon_name (GpapaOwnertrust ownertrust)
+gpa_ownertrust_icon_name (GpgmeValidity ownertrust)
 {
   switch ( ownertrust )
     {
@@ -146,33 +146,4 @@ gpa_creation_date_string (unsigned long creation_time)
     result = g_strdup (_("unknown"));
   return result;
 } /* gpa_creation_data_string */
-
-static gchar *file_status_strings[] = {
-  N_("unknown"),
-  N_("clear"),
-  N_("encrypted"),
-  N_("protected"),
-  N_("signed"),
-  N_("clearsigned"),
-  N_("detach-signed")
-};
-
-gchar *
-gpa_file_status_string (GpapaFileStatus status)
-{
-  return _(file_status_strings[status]);
-} /* gpa_file_status_string */
-
-
-static gchar *sig_validity_strings[3] = {
-  N_("unknown"),
-  N_("!INVALID!"),
-  N_("valid")
-};
-
-gchar *
-gpa_sig_validity_string (GpapaSigValidity validity)
-{
-  return _(sig_validity_strings[validity]);
-} /* gpa_sig_validity_string */
 

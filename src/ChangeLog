@@ -1,5 +1,37 @@
 2002-10-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* gpawizard.c (gpa_wizard_new, gpa_wizard_append_page): Use g_free()
+	instead of free().
+
+	* filesigndlg.c: Don't include passphrasedlg.h.
+	* fileman.c: Likewise.
+	* expirydlg.c: Likewise.
+
+	* Makefile.am (gpa_SOURCES): Removed passphrasedlg.c, passphrasedlg.h.
+
+	* passphrasedlg.c, passphrasedlg.h: Removed files.
+
+	* gpa.h, gpa.c: Removed global_lastCallbackResult.
+
+	* keyring.c: Don't include gpgpa.h.
+	* siglist.c: Likewise.
+	* keyimpseldlg.c: Likewise.
+	* keyexportdlg.c: Likewise.
+	* keyimportdlg.c: Likewise.
+	* keyeditdlg.c: Likewise.
+	* gpapastrings.c: Likewise.
+
+	* gpapastrings.c, gpapastrings.h (gpa_ownertrust_from_string)
+	(gpa_ownertrust_icon_name): Fix prototype.
+	(gpa_file_status_string) 
+	(gpa_sig_validity_string): Removed.
+
+	* filesigndlg.c: Likewise.
+	* gpa.c: Likewise.
+	* encryptdlg.c: Likewise.
+	* gpapastrings.h: Likewise.
+	* gpa.h: Likewise.
+
 	* siglist.c (gpa_siglist_set_signatures): Disable until port to gpgme.
 
 	* keyimpseldlg.c (key_import_selection_do_import): Disable imports

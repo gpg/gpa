@@ -23,7 +23,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <config.h>
-#include <gpapa.h>
 #include "gpapastrings.h"
 #include "siglist.h"
 

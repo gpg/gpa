@@ -22,14 +22,10 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <string.h>
-#include <gpapa.h>
 #include <errno.h>
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
-#include "passphrasedlg.h"
-#include "filesigndlg.h"
-
 
 struct _GPAFileSignDialog {
   GtkWidget *window;
