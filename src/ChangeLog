@@ -1,5 +1,14 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* gtktools.c (GPASaveFileNameDialog): Rename the dialog field to
+	window as it's done in all other dialogs
+	(file_dialog_destroy):
+	(gpa_get_save_file_name): Add a destroy event handler and quit the
+	recursive main loop there.
+	(file_dialog_ok):
+	(file_dialog_cancel): Instead of quitting the main loop, destroy
+	the dialog window.
+
 	* gpa.c (gpa_addRecipient): Only add the key if it's not already
 	in the recipients list.
 
