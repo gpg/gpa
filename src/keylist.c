@@ -413,8 +413,11 @@ gpa_keylist_update_list (GtkWidget * clist)
 {
   gint i;
   gint width;
+  gboolean update_widths;
   GPAKeyList * keylist = gtk_object_get_data (GTK_OBJECT (clist),
 					      "gpa_keylist");
+
+  update_widths = keylist->column_defs_changed || GTK_CLIST (clist)->rows == 0;
 
   if (keylist->column_defs_changed)
     {
@@ -424,9 +427,10 @@ gpa_keylist_update_list (GtkWidget * clist)
   keylist_fill_list (keylist, TRUE);
 
   /* set the width of all columns to the optimal width, but only when
-   * the column defintions change so as not to annoy the user by
-   * changing user defined widths every time the list is updated */
-  if (keylist->column_defs_changed)
+   * the column defintions changed or the list was empty before so as
+   * not to annoy the user by changing user defined widths every time
+   * the list is updated */
+  if (update_widths)
     {
       /* First, make sure that the size changes in the title buttons are
        * correctly accounted for */

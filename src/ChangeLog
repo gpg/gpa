@@ -1,3 +1,28 @@
+2001-02-15  Bernhard Herzog  <bh@intevation.de>
+
+	* gpawizard.c (GPAWizard):
+	(gpa_wizard_new): Add some fields for a callback that's called
+	whenever a page is switched. (This should really be implemented as
+	a GTK signal)
+	(gpa_wizard_set_page_switched): Call the callback
+	(gpa_wizard_page_switched): Set the callback
+	(gpa_wizard_notebook_destroy): New. Handler for the notebook's
+	destroy signal to remove the callback to avoid segfaults
+	(gpa_wizard_new): Connect to the notebook's destroy signal.
+
+	* gpawizard.h: Add the new type and prototype
+
+	* keygenwizard.c (gpa_keygen_wizard_password_validate,
+	gpa_keygen_wizard_backup_action,
+	gpa_keygen_wizard_backup_dir_action): Don't change the pixmap.
+	(page_switched): Callback for the page switches of the wizard.
+	Change the pixmap depending on the current page.
+
+	* icons.xpm: Tweak the import icon a little
+
+	* keylist.c (gpa_keylist_update_list): Update the column widths
+	also when the list was empty before
+
 2001-02-14  Bernhard Herzog  <bh@intevation.de>
 
 	* keyring.c (keyring_editor_import): Update the widgets after

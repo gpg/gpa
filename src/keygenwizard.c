@@ -357,11 +357,6 @@ gpa_keygen_wizard_password_validate (gpointer data)
       result = FALSE;
     }
 
-  /* Switch to the backup pixmap. FIXME: There should be a much more
-   * generic way to handle the wizard images */
-  gtk_pixmap_set (GTK_PIXMAP (keygen_wizard->pixmap_widget),
-		  keygen_wizard->backup_pixmap, NULL);
-
   return result;
 }
 
@@ -416,11 +411,6 @@ gpa_keygen_wizard_backup_action (gpointer data)
   if (!do_backup)
     {
       gpa_wizard_next_page_no_action (keygen_wizard->wizard);
-      /* Switch back to the genkey pixmap. FIXME: There should be a much
-       * more generic way to handle the wizard images */
-      gtk_pixmap_set (GTK_PIXMAP (keygen_wizard->pixmap_widget),
-		      keygen_wizard->genkey_pixmap, NULL);
-
       keygen_wizard->successful
 	= gpa_keygen_wizard_generate_action (keygen_wizard);
     }
@@ -551,10 +541,6 @@ gpa_keygen_wizard_backup_dir_action (gpointer data)
 
   if (result)
     {
-      /* Switch back to the genkey pixmap. FIXME: There should be a much
-       * more generic way to handle the wizard images */
-      gtk_pixmap_set (GTK_PIXMAP (keygen_wizard->pixmap_widget),
-		      keygen_wizard->genkey_pixmap, NULL);
       keygen_wizard->successful
 	= gpa_keygen_wizard_generate_action (keygen_wizard);
     }
@@ -696,6 +682,7 @@ gpa_keygen_wizard_destroy (GtkWidget *widget, gpointer param)
   gtk_main_quit ();
 }
 
+
 static void
 free_keygen_wizard (gpointer data)
 {
@@ -707,6 +694,29 @@ free_keygen_wizard (gpointer data)
   gdk_pixmap_unref (keygen_wizard->backup_pixmap);
   free (keygen_wizard);
 }
+
+
+static void
+page_switched (GtkWidget * page, gpointer data)
+{
+  GPAKeyGenWizard * keygen_wizard = data;
+  GdkPixmap * pixmap;
+
+  printf ("page_switched\n");
+
+  if (page == keygen_wizard->backup_page
+      || page == keygen_wizard->backup_dir_page)
+    {
+      pixmap = keygen_wizard->backup_pixmap;
+    }
+  else
+    {
+      pixmap = keygen_wizard->genkey_pixmap;
+    }
+
+  gtk_pixmap_set (GTK_PIXMAP (keygen_wizard->pixmap_widget), pixmap, NULL);
+}
+
 
 gboolean
 gpa_keygen_wizard_run (GtkWidget * parent)
@@ -756,6 +766,7 @@ gpa_keygen_wizard_run (GtkWidget * parent)
 			   keygen_wizard);
   keygen_wizard->wizard = wizard;
   gtk_box_pack_start (GTK_BOX (hbox), wizard, TRUE, TRUE, 0);
+  gpa_wizard_set_page_switched (wizard, page_switched, keygen_wizard);
 
   keygen_wizard->name_page = gpa_keygen_wizard_name_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->name_page,

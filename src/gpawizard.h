@@ -35,4 +35,10 @@ void gpa_wizard_next_page (GtkWidget * widget);
 
 void gpa_wizard_next_page_no_action (GtkWidget * widget);
 
+typedef void (*GPAWizardPageSwitchedFunc)(GtkWidget * page_widget,
+					   gpointer param);
+void gpa_wizard_set_page_switched (GtkWidget * widget,
+				   GPAWizardPageSwitchedFunc,
+				   gpointer param);
+
 #endif /* GPAWIZARD_H */

@@ -34,6 +34,8 @@ typedef struct {
   GtkWidget * next_button;
   GtkWidget * close_button;
   GtkAccelGroup * accel_group;
+  GPAWizardPageSwitchedFunc page_switched;
+  gpointer page_switched_data;
 } GPAWizard;
 
 typedef struct {
@@ -126,6 +128,9 @@ gpa_wizard_page_switched (GtkWidget *notebook, GtkNotebookPage *page,
   GtkWidget * page_widget;
   int page_number;
   GtkWidget * focus;
+  GtkWidget * main_widget = user_data;
+  GPAWizard * wizard = gtk_object_get_data (GTK_OBJECT (main_widget),
+					    "user_data");
 
   /* switch-page is emitted also when pages are added to the notebook,
    * even when it's not even displayed yet. In that case the page number
@@ -144,7 +149,28 @@ gpa_wizard_page_switched (GtkWidget *notebook, GtkNotebookPage *page,
 	{
 	  gtk_widget_grab_focus (focus);
 	}
+
+      /* Call the page switched callback */
+      /* FIXME: this should really be a proper GTK signal */
+      if (wizard->page_switched)
+	{
+	  wizard->page_switched (page_widget, wizard->page_switched_data);
+	}
     }
+}
+
+
+/* Handler for the notebook's destroy signal. Remove the page_switch
+ * callback. For whatever reason, the notebook would emit page_switch
+ * signals during the destroy which could cause segfaults in the
+ * callback */
+static void
+gpa_wizard_notebook_destroy (GtkWidget * widget, gpointer param)
+{
+  GPAWizard * wizard = param;
+
+  wizard->page_switched = NULL;
+  wizard->page_switched_data = NULL;
 }
 
 GtkWidget *
@@ -159,6 +185,8 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
 
   GPAWizard * wizard = xmalloc (sizeof (*wizard));
   wizard->accel_group = accel_group;
+  wizard->page_switched = NULL;
+  wizard->page_switched_data = NULL;
 
   vbox = gtk_vbox_new (FALSE, 3);
   gtk_object_set_data_full (GTK_OBJECT (vbox), "user_data", (gpointer)wizard,
@@ -176,6 +204,9 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
   gtk_signal_connect_after (GTK_OBJECT (notebook), "switch-page",
 			    GTK_SIGNAL_FUNC (gpa_wizard_page_switched),
 			    (gpointer)vbox);
+  gtk_signal_connect (GTK_OBJECT (notebook), "destroy",
+		      GTK_SIGNAL_FUNC (gpa_wizard_notebook_destroy),
+		      wizard);
 
   hbox = gtk_hbox_new (FALSE, 3);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
@@ -269,4 +300,14 @@ gpa_wizard_next_page_no_action (GtkWidget * widget)
 {
   GPAWizard * wizard = gtk_object_get_data (GTK_OBJECT (widget), "user_data");
   gtk_notebook_next_page (GTK_NOTEBOOK (wizard->notebook));
+}
+
+/***/
+void gpa_wizard_set_page_switched (GtkWidget * widget,
+				   GPAWizardPageSwitchedFunc page_switched,
+				   gpointer param)
+{
+  GPAWizard * wizard = gtk_object_get_data (GTK_OBJECT (widget), "user_data");
+  wizard->page_switched = page_switched;
+  wizard->page_switched_data = param;
 }
