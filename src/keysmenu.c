@@ -561,7 +561,7 @@ keys_openPublic_exportTrust_export (gpointer param)
 			   (GTK_FILE_SELECTION (keeperTrust->window)), armor,
 			   gpa_callback, keeperTrust->window);
   paramClose[0] = keeperTrust;
-  paramClose[1] = _("keys_openPublic.tip");
+  paramClose[1] = "keys_openPublic.tip";
   gpa_window_destroy (paramClose);
 }				/* keys_openPublic_exportTrust_export */
 
@@ -597,7 +597,7 @@ keys_openPublic_exportTrust (gpointer param)
   paramClose = (gpointer *) xmalloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramClose);
   paramClose[0] = keeper;
-  paramClose[1] = _("keys_openPublic.tip");
+  paramClose[1] = "keys_openPublic.tip";
   gtk_signal_connect_object (GTK_OBJECT
 			     (GTK_FILE_SELECTION (selectTrust)->
 			      cancel_button), "clicked",
@@ -834,7 +834,7 @@ keeperEdit->window);
 						       (entryPasswd)),
 				   gpa_callback, keeperEdit->window);
   paramClose[0] = keeperEdit;
-  paramClose[1] = _("keys_openSecret.tip");
+  paramClose[1] = "keys_openSecret.tip";
   gpa_window_destroy (paramClose);
 }				/* keys_openSecret_editKey_close */
 
@@ -951,7 +951,7 @@ keys_openSecret_editKey (gpointer param)
   paramExport = (gpointer *) xmalloc (4 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramExport);
   paramExport[0] = keyEdited;
-  paramExport[1] = _("keys_openSecret_editKey.tip");
+  paramExport[1] = "keys_openSecret_editKey.tip";
   paramExport[2] = keys_openSecret_export_export;
   paramExport[3] = windowEdit;
   gtk_signal_connect_object (GTK_OBJECT (buttonExport), "clicked",
@@ -960,7 +960,7 @@ keys_openSecret_editKey (gpointer param)
   gtk_container_add (GTK_CONTAINER (hButtonBoxEdit), buttonExport);
   paramCancel = (gpointer *) xmalloc (2 * sizeof (gpointer));
   paramCancel[0] = keeper;
-  paramCancel[1] = _("keys_openSecret.tip");
+  paramCancel[1] = "keys_openSecret.tip";
   buttonCancel = gpa_buttonCancel_new (accelGroup, _("_Cancel"), paramCancel);
   gtk_container_add (GTK_CONTAINER (hButtonBoxEdit), buttonCancel);
   paramSave[6] = entryPasswd;
@@ -1085,7 +1085,7 @@ keys_openSecret (void)
   paramExport = (gpointer *) xmalloc (4 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramExport);
   paramExport[0] = keysSelected;
-  paramExport[1] = _("keys_openSecret.tip");
+  paramExport[1] = "keys_openSecret.tip";
   paramExport[2] = keys_openSecret_export_export;
   paramExport[3] = windowSecret;
   gtk_signal_connect_object (GTK_OBJECT (buttonExport), "clicked",

@@ -299,7 +299,7 @@ file_sign_sign (gpointer param)
   newParam[2] = keyID;
   newParam[3] = keeperSign;
   newParam[4] = userData;
-  gpa_window_passphrase (keeperSign->window, funcSign, _("file_sign.tip"),
+  gpa_window_passphrase (keeperSign->window, funcSign, "file_sign.tip",
 			 newParam);
 }				/* file_sign_sign */
 
@@ -1250,7 +1250,7 @@ global_windowMain);
 void
 file_encryptAs (void)
 {
-  file_encrypt_dialog (TRUE, _("file_encryptAs.tip"));
+  file_encrypt_dialog (TRUE, "file_encryptAs.tip");
 }				/* file_encryptAs */
 
 void
@@ -1491,13 +1491,13 @@ file_protect_dialog (gboolean withSaveAs, gchar * tip)
 void
 file_protect (void)
 {
-  file_protect_dialog (FALSE, _("file_protect.tip"));
+  file_protect_dialog (FALSE, "file_protect.tip");
 }				/* file_protect */
 
 void
 file_protectAs (void)
 {
-  file_protect_dialog (TRUE, _("file_protectAs.tip"));
+  file_protect_dialog (TRUE, "file_protectAs.tip");
 }				/* file_protectAs */
 
 
