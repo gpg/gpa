@@ -74,6 +74,7 @@ struct _GPAKeyringEditor {
   GtkWidget *detail_fingerprint;
   GtkWidget *detail_expiry;
   GtkWidget *detail_key_id;
+  GtkWidget *detail_owner_trust;
   GtkWidget *detail_key_trust;
   GtkWidget *detail_key_type;
 
@@ -786,6 +787,8 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 						_("Fingerprint:"), TRUE);
   editor->detail_expiry = add_details_row (table, table_row++,
 					   _("Expires at:"), FALSE); 
+  editor->detail_owner_trust = add_details_row (table, table_row++,
+						_("Owner Trust:"), FALSE);
   editor->detail_key_trust = add_details_row (table, table_row++,
 					      _("Key Trust:"), FALSE);
   editor->detail_key_type = add_details_row (table, table_row++,
@@ -822,7 +825,8 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key,
 			       GpapaSecretKey * secret_key)
 {
   GDate * expiry_date;
-  GpapaKeytrust trust;
+  GpapaKeytrust key_trust;
+  GpapaOwnertrust owner_trust;
   gchar * text;
 
   text = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, editor->window);
@@ -841,9 +845,15 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key,
   gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
   free (text);
 
-  trust = gpapa_public_key_get_keytrust (key, gpa_callback, editor->window);
-  text = gpa_ownertrust_string (trust);
+  key_trust = gpapa_public_key_get_keytrust (key, gpa_callback,
+					     editor->window);
+  text = gpa_keytrust_string (key_trust);
   gtk_label_set_text (GTK_LABEL (editor->detail_key_trust), text);
+
+  owner_trust = gpapa_public_key_get_ownertrust (key, gpa_callback,
+						 editor->window);
+  text = gpa_ownertrust_string (owner_trust);
+  gtk_label_set_text (GTK_LABEL (editor->detail_owner_trust), text);
 
   if (secret_key)
     {
