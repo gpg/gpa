@@ -91,6 +91,7 @@ file_sign_ok (gpointer param)
   GpapaSignType sign_type;
   GpapaArmor armor;
   gchar *key_id;
+  GpapaSecretKey * key;
   gchar *passphrase;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_comp)))
@@ -113,13 +114,14 @@ file_sign_ok (gpointer param)
     {
       gint row =  GPOINTER_TO_INT (dialog->clist_who->selection->data);
       key_id = gtk_clist_get_row_data (dialog->clist_who, row);
+      key = gpapa_get_secret_key_by_ID (key_id, gpa_callback, dialog->window);
     }
   else
     {
       gpa_window_error (_("No key selected!"), dialog->window);
       return;
     }
-  passphrase = gpa_passphrase_run_dialog (dialog->window, NULL);
+  passphrase = gpa_passphrase_run_dialog (dialog->window, key);
   if (passphrase)
     {
       file_sign_do_sign (dialog, key_id, passphrase, sign_type, armor);
