@@ -258,7 +258,7 @@ about_dialog_load_logo (GtkWidget *window)
 /****************
  * Scroll and logo stuff taken from GIMP 1.0
  */
-void
+static void
 help_about (void)
 {
 
@@ -409,7 +409,7 @@ help_license_destroy (GtkWidget * widget, gpointer param)
 }
 
 
-void
+static void
 help_license (gpointer param)
 {
   GpaWindowKeeper *keeper;
@@ -478,7 +478,7 @@ help_license (gpointer param)
   gtk_main ();
 }
 
-void
+static void
 help_warranty (void)
 {
   g_print (_("Show Warranty Information\n"));   /*!!! */

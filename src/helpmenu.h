@@ -1,5 +1,5 @@
 /* helpmenu.h  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -18,8 +18,5 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-extern void help_about (void);
-extern void help_license (void);
-extern void help_warranty (void);
 extern void help_help (void);
 void gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget *window);
