@@ -1,27 +1,26 @@
-# GNU Privacy Assistant German translation
 # Copyright (C) 2000 Free Software Foundation, Inc.
 # Written by Peter Neuhaus <pneuhaus@openit.de>
 #
 #. commands
-#: src/filemenu.c:133 src/filemenu.c:281 src/filemenu.c:568 src/filemenu.c:750
-#: src/filemenu.c:983 src/filemenu.c:1033 src/filemenu.c:1071
-#: src/filemenu.c:1171 src/filemenu.c:1294 src/filemenu.c:1309
-#: src/filemenu.c:1329 src/filemenu.c:1448 src/gpa.c:101 src/gtktools.c:63
-#: src/gtktools.c:97 src/gtktools.c:132 src/gtktools.c:150 src/gtktools.c:168
-#: src/gtktools.c:186 src/gtktools.c:344 src/helpmenu.c:58 src/keysmenu.c:212
-#: src/keysmenu.c:216 src/keysmenu.c:245 src/keysmenu.c:267 src/keysmenu.c:459
-#: src/keysmenu.c:630 src/keysmenu.c:791 src/keysmenu.c:1021
-#: src/keysmenu.c:1156 src/keysmenu.c:1196 src/keysmenu.c:1296
-#: src/keysmenu.c:1565 src/keysmenu.c:1583 src/keysmenu.c:1685
-#: src/keysmenu.c:1846 src/keysmenu.c:1881 src/keysmenu.c:1916
-#: src/keysmenu.c:1932 src/keysmenu.c:1946 src/keysmenu.c:1962
-#: src/keysmenu.c:1979 src/keysmenu.c:2089 src/optionsmenu.c:150
-#: src/optionsmenu.c:245 src/optionsmenu.c:281 src/optionsmenu.c:453
+#: src/filemenu.c:155 src/filemenu.c:288 src/filemenu.c:569 src/filemenu.c:785
+#: src/filemenu.c:1248 src/filemenu.c:1280 src/filemenu.c:1372
+#: src/filemenu.c:1595 src/filemenu.c:1621 src/filemenu.c:1631
+#: src/filemenu.c:1872 src/gpa.c:117 src/gtktools.c:73 src/gtktools.c:111
+#: src/gtktools.c:143 src/gtktools.c:159 src/gtktools.c:177 src/gtktools.c:193
+#: src/gtktools.c:315 src/helpmenu.c:63 src/keysmenu.c:254 src/keysmenu.c:257
+#: src/keysmenu.c:287 src/keysmenu.c:311 src/keysmenu.c:515 src/keysmenu.c:697
+#: src/keysmenu.c:942 src/keysmenu.c:1149 src/keysmenu.c:1290
+#: src/keysmenu.c:1328 src/keysmenu.c:1434 src/keysmenu.c:1878
+#: src/keysmenu.c:1888 src/keysmenu.c:2012 src/keysmenu.c:2303
+#: src/keysmenu.c:2321 src/keysmenu.c:2350 src/keysmenu.c:2359
+#: src/keysmenu.c:2368 src/keysmenu.c:2378 src/keysmenu.c:2388
+#: src/keysmenu.c:2521 src/optionsmenu.c:175 src/optionsmenu.c:318
+#: src/optionsmenu.c:350 src/optionsmenu.c:527
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-05-15 16:45+0200\n"
+"POT-Creation-Date: 2000-05-16 20:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Peter Neuhaus <pneuhaus@openit.de>\n"
 "Language-Team: GERMAN <de@li.org>\n"
@@ -29,58 +28,55 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. !!!
-#. gchar *global_keyserver;
-#. !!!
-#: src/gpa.c:43
+#: src/gpa.c:35
 msgid "blackhole.pca.dfn.de"
-msgstr ""
+msgstr "blackhole.pca.dfn.de"
 
-#: src/filemenu.c:41 src/gpa.c:46 src/keysmenu.c:33 src/keysmenu.c:40
+#: src/filemenu.c:40 src/gpa.c:52 src/keysmenu.c:33 src/keysmenu.c:40
 msgid "unknown"
 msgstr "unbekannt"
 
-#: src/gpa.c:47
+#: src/gpa.c:53
 msgid "!INVALID!"
-msgstr ""
+msgstr "!INVALID!"
 
-#: src/gpa.c:48
+#: src/gpa.c:54
 msgid "valid"
 msgstr "gültig"
 
-#: src/gpa.c:94
+#: src/gpa.c:110
 msgid "GPA Tip"
 msgstr "GPA-Tip"
 
-#: src/gpa.c:112
+#: src/gpa.c:126
 msgid "_Tip:"
 msgstr "_Tip:"
 
-#: src/gpa.c:130
+#: src/gpa.c:136
 msgid "   _Close   "
 msgstr "   _Schliessen   "
 
-#: src/gpa.c:140
+#: src/gpa.c:144
 msgid "_No more tips, please"
 msgstr "_Keine Tips mehr anzeigen"
 
-#: src/gpa.c:184
+#: src/gpa.c:183
 msgid "[Unknown user ID]"
 msgstr "[Unbekannte User ID]"
 
-#: src/gpa.c:273
+#: src/gpa.c:263
 msgid "No files selected to remove from recipients list"
 msgstr "Keine Dateien von Empfängerlisze ausgewählt"
 
-#: src/gpa.c:329
+#: src/gpa.c:319
 msgid "No keys selected to add to recipients list."
 msgstr "Keine Schlüssel ausgewählt"
 
-#: src/gpa.c:374
+#: src/gpa.c:372
 msgid "/_File"
 msgstr "/_Datei"
 
-#: src/gpa.c:375
+#: src/gpa.c:374
 msgid "/File/_Open"
 msgstr "/Datei/_Öffnen"
 
@@ -88,408 +84,394 @@ msgstr "/Datei/_Öffnen"
 msgid "/File/S_how Detail"
 msgstr "/Datei/_Detailansicht"
 
-#: src/gpa.c:377
+#: src/gpa.c:378
 msgid "/File/sep1"
 msgstr "/Datei/sep1"
 
-#: src/gpa.c:378
+#: src/gpa.c:380
 msgid "/File/_Sign"
 msgstr "/Datei/_Signieren"
 
-#: src/gpa.c:379
+#: src/gpa.c:382
 msgid "/File/_Encrypt"
 msgstr "/Datei/_Verschlüsseln"
 
-#: src/gpa.c:380
+#: src/gpa.c:384
 msgid "/File/E_ncrypt as"
 msgstr "/Datei/Ve_rschlüsseln als"
 
-#: src/gpa.c:381
+#: src/gpa.c:386
 msgid "/File/_Protect by Password"
 msgstr "/Datei/Mit _Passwort Schützen"
 
-#: src/gpa.c:382
+#: src/gpa.c:388
 msgid "/File/P_rotect as"
 msgstr "/Datei/Schüt_zen als"
 
-#: src/gpa.c:383
+#: src/gpa.c:390
 msgid "/File/_Decrypt"
 msgstr "/Datei/_Entschlüsseln"
 
-#: src/gpa.c:384
+#: src/gpa.c:392
 msgid "/File/Decrypt _as"
 msgstr "/Datei/Entschlüsseln _als"
 
-#: src/gpa.c:385
+#: src/gpa.c:394
 msgid "/File/sep2"
 msgstr "/Datei/sep2"
 
-#: src/gpa.c:386
+#: src/gpa.c:396
 msgid "/File/_Close"
 msgstr "/Datei/S_chliessen"
 
-#: src/gpa.c:387
+#: src/gpa.c:398
 msgid "/File/_Quit"
 msgstr "/Datei/_Beenden"
 
-#: src/gpa.c:388
+#: src/gpa.c:400
 msgid "/_Keys"
 msgstr "/_Schlüssel"
 
-#: src/gpa.c:389
+#: src/gpa.c:402
 msgid "/Keys/Open _public Keyring"
 msgstr "/Schlüssel/Ö_ffentl. Schlüsselbund öffnen"
 
-#: src/gpa.c:390
+#: src/gpa.c:404
 msgid "/Keys/Open _secret Keyring"
 msgstr "/Schlüssel/_Geheimen Schlüsselbund öffnen"
 
-#: src/gpa.c:391
+#: src/gpa.c:406
 msgid "/Keys/sep1"
 msgstr "/Schlüssel/sep1"
 
-#: src/gpa.c:392
+#: src/gpa.c:408
 msgid "/Keys/_Generate Key"
-msgstr "/Keys/Schlüssel _erzeugen"
+msgstr "/Schlüssel/Schlüssel _erzeugen"
 
-#: src/gpa.c:393
+#: src/gpa.c:411
 msgid "/Keys/Generate _Revocation Certificate"
-msgstr "/Keys/_Widerrufurkunde erzeugen"
+msgstr "/Schlüssel/_Widerrufurkunde erzeugen"
 
-#: src/gpa.c:394
+#: src/gpa.c:414
 msgid "/Keys/_Import Keys"
-msgstr "/Keys/Schlüssel _importieren"
+msgstr "/Schlüssel/Schlüssel _importieren"
 
-#: src/gpa.c:395
+#: src/gpa.c:416
 msgid "/Keys/Import _Ownertrust"
-msgstr "/Keys/_Ownertrust importieren"
+msgstr "/Schlüssel/_Ownertrust importieren"
 
-#: src/gpa.c:396
+#: src/gpa.c:418
 msgid "/Keys/_Update Trust Database"
-msgstr "/Keys/_Trust-Datenbank aktualisieren"
+msgstr "/Schlüssel/_Trust-Datenbank aktualisieren"
 
-#: src/gpa.c:397
+#: src/gpa.c:420
 msgid "/_Options"
 msgstr "/_Optionen"
 
-#: src/gpa.c:398
+#: src/gpa.c:422
 msgid "/Options/_Keyserver"
 msgstr "/Optionen/_Key Server"
 
-#: src/gpa.c:399
+#: src/gpa.c:424
 msgid "/Options/Default _Recipients"
 msgstr "/Optionen/_Empfängerliste"
 
-#: src/gpa.c:400
+#: src/gpa.c:426
 msgid "/Options/_Default Key"
 msgstr "/Optionen/_Default-Schlüssel"
 
-#: src/gpa.c:401
+#: src/gpa.c:428
 msgid "/Options/_Home Directory"
 msgstr "/Optionen/_Home-Verzeichnis"
 
-#: src/gpa.c:402
+#: src/gpa.c:430
 msgid "/Options/sep1"
 msgstr "/Optionen/sep1"
 
-#: src/gpa.c:403
+#: src/gpa.c:432
 msgid "/Options/Online _tips"
 msgstr "/Optionen/Online-_Tips"
 
-#: src/gpa.c:404
+#: src/gpa.c:434
 msgid "/Options/_Load Options File"
 msgstr "/Optionen/Konfigurationsdatei _laden"
 
-#: src/gpa.c:405
+#: src/gpa.c:436
 msgid "/Options/_Save Options File"
 msgstr "/Optionen/Konfigurationsdatei _speichern"
 
-#: src/gpa.c:406
+#: src/gpa.c:438
 msgid "/_Help"
 msgstr "/_Hilfe"
 
-#: src/gpa.c:407
+#: src/gpa.c:440
 msgid "/Help/_Version"
 msgstr "/Hilfe/_Version"
 
-#: src/gpa.c:408
+#: src/gpa.c:442
 msgid "/Help/_License"
 msgstr "/Hilfe/_Lizenz"
 
-#: src/gpa.c:409
+#: src/gpa.c:444
 msgid "/Help/_Warranty"
 msgstr "/Hilfe/_Gewährleistung"
 
-#: src/gpa.c:410
+#: src/gpa.c:446
 msgid "/Help/_Help"
 msgstr "/Hilfe/_Hilfe"
 
-#: src/gpa.c:431
+#: src/gpa.c:468
 msgid "/Show detail"
 msgstr "/Detailansicht"
 
-#: src/gpa.c:432
+#: src/gpa.c:469
 msgid "/sep1"
 msgstr "/sep1"
 
-#: src/gpa.c:433
+#: src/gpa.c:470
 msgid "/Sign"
 msgstr "/Signieren"
 
-#: src/gpa.c:434
+#: src/gpa.c:471
 msgid "/Encrypt"
 msgstr "/Verschlüsseln"
 
-#: src/gpa.c:435
+#: src/gpa.c:472
 msgid "/E_ncrypt as"
 msgstr "_Verschlüsseln als"
 
-#: src/gpa.c:436
+#: src/gpa.c:473
 msgid "/Protect by Password"
 msgstr "/Mit Passwort Schützen"
 
-#: src/gpa.c:437
+#: src/gpa.c:474
 msgid "/P_rotect as"
 msgstr "/Schützen als"
 
-#: src/gpa.c:438
+#: src/gpa.c:475
 msgid "/Decrypt"
 msgstr "/Entschlüsseln"
 
-#: src/gpa.c:439
+#: src/gpa.c:476
 msgid "/Decrypt _as"
 msgstr "/Entschlüsseln als"
 
-#: src/gpa.c:440
+#: src/gpa.c:477
 msgid "/sep2"
 msgstr "/sep2"
 
-#: src/gpa.c:441
+#: src/gpa.c:478
 msgid "/Close"
 msgstr "/Schliessen"
 
-#: src/gpa.c:522
+#: src/gpa.c:556
 msgid "File"
 msgstr "Datei"
 
-#: src/gpa.c:522
+#: src/gpa.c:556
 msgid "Status"
 msgstr "Status"
 
-#: src/gpa.c:522
+#: src/gpa.c:556
 msgid "Sigs total"
 msgstr "Sign. gesamt"
 
-#: src/gpa.c:522
+#: src/gpa.c:556
 msgid "Valid Sigs"
 msgstr "Gültige Sign."
 
-#: src/gpa.c:523
+#: src/gpa.c:557
 msgid "Invalid Sigs"
 msgstr "Ungültige Sign."
 
 #. commands
-#: src/gpa.c:531
+#: src/gpa.c:565
 msgid "Files in work"
 msgstr "Ausgewählte Dateien"
 
-#: src/gpa.c:596
+#: src/gpa.c:624
 msgid "Open a file"
 msgstr "Datei öffnen"
 
-#: src/gpa.c:597
+#: src/gpa.c:625
 msgid "Set home directory"
 msgstr "Home-Verzeichnis festlegen"
 
-#: src/gpa.c:598
+#: src/gpa.c:626
 msgid "Load options file"
 msgstr "Konfigurationsdatei laden"
 
-#: src/gpa.c:599
+#: src/gpa.c:627
 msgid "Save options file"
 msgstr "Konfigurationsdatei speichern"
 
-#: src/gpa.c:605
+#: src/gpa.c:658
 msgid "GNU Privacy Assistant"
 msgstr "GNU Privacy Assistant"
 
-#. !!!
-#: src/filemenu.c:35
-msgid "Dummy Text"
-msgstr "Dummy Text"
-
-#: src/filemenu.c:42
+#: src/filemenu.c:41
 msgid "clear"
 msgstr "Klartext"
 
-#: src/filemenu.c:43
+#: src/filemenu.c:42
 msgid "encrypted"
 msgstr "verschlüsselt"
 
-#: src/filemenu.c:44
+#: src/filemenu.c:43
 msgid "protected"
 msgstr "geschützt"
 
-#: src/filemenu.c:45
+#: src/filemenu.c:44
 msgid "signed"
 msgstr "signiert"
 
-#: src/filemenu.c:46
+#: src/filemenu.c:45
 msgid "clearsigned"
 msgstr "Klartextsignatur"
 
-#: src/filemenu.c:47
+#: src/filemenu.c:46
 msgid "detach-signed"
 msgstr "angehängte Signatur"
 
-#: src/filemenu.c:110
+#: src/filemenu.c:132
 msgid "The file is already open."
 msgstr "Datei ist bereits geöffnet"
 
-#: src/filemenu.c:175
+#: src/filemenu.c:198
 msgid "file_open.tip"
 msgstr ""
 
-#: src/filemenu.c:179
-msgid "Check signature validities\n"
-msgstr "Gültigkeit der Signaturen überprüfen\n"
-
-#: src/filemenu.c:187 src/filemenu.c:700 src/keysmenu.c:702
+#: src/filemenu.c:209 src/filemenu.c:738 src/keysmenu.c:855
 msgid "Signature"
 msgstr "Signatur"
 
-#: src/filemenu.c:187 src/filemenu.c:700 src/keysmenu.c:702
+#: src/filemenu.c:209 src/filemenu.c:738 src/keysmenu.c:855
 msgid "Validity"
 msgstr "Gültigkeit"
 
-#: src/filemenu.c:187 src/filemenu.c:700 src/filemenu.c:857 src/keysmenu.c:702
-#: src/keysmenu.c:1242 src/keysmenu.c:1653 src/keysmenu.c:2053
-#: src/optionsmenu.c:194 src/optionsmenu.c:415
+#: src/filemenu.c:209 src/filemenu.c:738 src/filemenu.c:1138
+#: src/keysmenu.c:855 src/keysmenu.c:1378 src/keysmenu.c:1975
+#: src/keysmenu.c:2485 src/optionsmenu.c:265 src/optionsmenu.c:488
 msgid "Key ID"
 msgstr "Schlüssel ID"
 
-#: src/filemenu.c:216
+#: src/filemenu.c:237
 msgid "No file selected for detail view"
 msgstr "Keine Auswahl für Detailansicht"
 
-#: src/filemenu.c:223
+#: src/filemenu.c:245
 msgid "Detailed file view"
 msgstr "Detailansicht"
 
-#: src/filemenu.c:231
+#: src/filemenu.c:252
 msgid "Filename: "
 msgstr "Dateiname: "
 
-#: src/filemenu.c:256
+#: src/filemenu.c:270
 msgid "Status: "
 msgstr "Status: "
 
-#: src/filemenu.c:295 src/filemenu.c:774
+#: src/filemenu.c:299 src/filemenu.c:805
 msgid "_Signatures"
 msgstr "_Signaturen"
 
-#: src/filemenu.c:326 src/filemenu.c:821
-msgid "Chec_k"
-msgstr "Überprüfen"
-
-#: src/filemenu.c:335 src/filemenu.c:830 src/helpmenu.c:87 src/keysmenu.c:923
-#: src/keysmenu.c:1481 src/keysmenu.c:1629 src/keysmenu.c:1748
-#: src/optionsmenu.c:354 src/optionsmenu.c:553
+#: src/filemenu.c:327 src/filemenu.c:848 src/helpmenu.c:88 src/keysmenu.c:1047
+#: src/keysmenu.c:1597 src/keysmenu.c:2088 src/optionsmenu.c:642
 msgid "_Close"
 msgstr "_Schliessen"
 
-#: src/filemenu.c:343
+#: src/filemenu.c:332
 msgid "file_showDetail.tip"
 msgstr ""
 
-#: src/filemenu.c:376 src/filemenu.c:523
+#: src/filemenu.c:365 src/filemenu.c:653
 msgid "No files selected for signing"
 msgstr "?Keine Dateien Ausgewählt"
 
-#. if
-#: src/filemenu.c:379
-msgid "Signing files:"
-msgstr "Signiere Dateien"
-
-#: src/filemenu.c:467
+#: src/filemenu.c:459
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid sign mode"
 msgstr ""
+"!FATAL ERROR!\n"
+"Invalid sign mode"
 
-#: src/filemenu.c:482 src/filemenu.c:631
+#: src/filemenu.c:478 src/filemenu.c:645
 msgid "file_sign.tip"
 msgstr ""
 
-#: src/filemenu.c:533
+#: src/filemenu.c:529
+#, fuzzy
 msgid ""
 "No secret keys available for signing.\n"
-"Import a secret key first!\n"
+"Import a secret key first!"
 msgstr ""
 "Kein geheimer Schlüssel zum signieren gefunden.\n"
-"Bitte zuerst geheimen Schlüssel importieren!\n"
+"Bitte zuerst geheimen Schlüssel importieren!"
 
-#: src/filemenu.c:538
+#: src/filemenu.c:536
 msgid "Sign files"
 msgstr "Dateien signieren"
 
-#: src/filemenu.c:543
+#: src/filemenu.c:541
 msgid "Signing mode"
 msgstr "Signiermodus"
 
-#: src/filemenu.c:548
+#: src/filemenu.c:545
 msgid "si_gn and compress"
 msgstr "si_gnieren und komprimieren"
 
-#: src/filemenu.c:553
+#: src/filemenu.c:549
 msgid "sign, do_n't compress"
 msgstr "signieren, _nicht komprimieren"
 
-#: src/filemenu.c:558
+#: src/filemenu.c:554
 msgid "sign in separate _file"
 msgstr "Signatur in seperate Datei"
 
-#: src/filemenu.c:563 src/filemenu.c:1203 src/filemenu.c:1366
-#: src/keysmenu.c:488
+#: src/filemenu.c:561 src/filemenu.c:1396 src/filemenu.c:1649
+#: src/keysmenu.c:533
 msgid "a_rmor"
 msgstr "ASCII-Armor"
 
-#: src/filemenu.c:599
+#: src/filemenu.c:612
 msgid "Sign _as "
 msgstr "Signieren _als"
 
-#: src/filemenu.c:613 src/filemenu.c:1212 src/filemenu.c:1380
-#: src/filemenu.c:1476 src/gtktools.c:370 src/keysmenu.c:502
-#: src/keysmenu.c:666 src/keysmenu.c:1044 src/keysmenu.c:2026
-#: src/keysmenu.c:2138 src/optionsmenu.c:499
+#: src/filemenu.c:625 src/filemenu.c:1404 src/filemenu.c:1671
+#: src/filemenu.c:1906 src/gtktools.c:338 src/keysmenu.c:545
+#: src/keysmenu.c:724 src/keysmenu.c:1172 src/keysmenu.c:1939
+#: src/keysmenu.c:2416 src/keysmenu.c:2569 src/optionsmenu.c:421
+#: src/optionsmenu.c:583
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
-#: src/filemenu.c:729
+#: src/filemenu.c:766
 msgid "No key selected for detail view."
 msgstr "Kein Schlüssel für Detailansicht ausgewählt"
 
-#: src/filemenu.c:739
+#: src/filemenu.c:775
 msgid "Show public key detail"
 msgstr "Detailansicht öffentlicher Schlüssel"
 
-#: src/filemenu.c:789
+#: src/filemenu.c:819
 msgid "Fingerprint: "
 msgstr "Fingerabdruck: "
 
-#: src/filemenu.c:836
+#: src/filemenu.c:852
 msgid "file_encrypt_detail.tip"
 msgstr ""
 
-#: src/filemenu.c:841
-msgid "Encrypt a file\n"
-msgstr "Datei verschlüsseln\n"
+#: src/filemenu.c:1036
+#, fuzzy
+msgid "No recipients chosen to encrypt for."
+msgstr "Keine öffentlichen Schlüssel vorhanden."
 
-#: src/filemenu.c:857 src/keysmenu.c:1241 src/optionsmenu.c:194
+#: src/filemenu.c:1138 src/keysmenu.c:1377 src/optionsmenu.c:265
 msgid "Key owner"
 msgstr "Schlüssel Inhaber"
 
-#: src/filemenu.c:920
+#: src/filemenu.c:1194
 msgid ""
 "No public keys available.\n"
 "Currently, there is nobody who could read a\n"
@@ -499,174 +481,172 @@ msgstr ""
 "für die Auswahl der Empfänger\n"
 "vorhanden."
 
-#: src/filemenu.c:931
+#: src/filemenu.c:1202
 msgid "No secret keys available to encrypt."
 msgstr "Keine öffentlichen Schlüssel vorhanden"
 
-#: src/filemenu.c:938
+#: src/filemenu.c:1208
 msgid "No files selected for encryption."
 msgstr "Keine Dateien zum verschlüsseln ausgewählt"
 
-#: src/filemenu.c:943
+#: src/filemenu.c:1215
 msgid "Encrypt files"
 msgstr "Dateien verschlüsseln"
 
-#: src/filemenu.c:953
+#: src/filemenu.c:1225
 msgid "Add _default recipients:"
 msgstr "_Empfänger hinzufügen"
 
-#: src/filemenu.c:1022
-msgid "Encr_ypt as"
-msgstr "_Verschlüsseln als"
-
-#: src/filemenu.c:1059
+#: src/filemenu.c:1272
 msgid "Rec_ipients"
 msgstr "_Empfänger"
 
-#: src/filemenu.c:1104 src/optionsmenu.c:293
+#: src/filemenu.c:1314 src/optionsmenu.c:363
 msgid "_Public keys"
 msgstr "_Öffentliche Schlüssel"
 
-#: src/filemenu.c:1136
+#: src/filemenu.c:1340
 msgid "Remo_ve keys from recipients"
 msgstr "Schlüssel von Empfängern _entfernen"
 
-#: src/filemenu.c:1146
+#: src/filemenu.c:1349
 msgid "Add _keys to recipients"
 msgstr "Schlüssel zu Empfängern hinzufügen"
 
-#: src/filemenu.c:1156
+#: src/filemenu.c:1359
 msgid "S_how detail"
 msgstr "Detail _zeigen"
 
-#: src/filemenu.c:1178
+#: src/filemenu.c:1376
 msgid "Save encrypted file _as: "
 msgstr "Verschlüsselte Datei speichern _als: "
 
-#: src/filemenu.c:1187 src/filemenu.c:1351 src/filemenu.c:1458
-#: src/keysmenu.c:475
+#: src/filemenu.c:1380 src/filemenu.c:1608 src/filemenu.c:1887
+#: src/keysmenu.c:523
 msgid "   _Browse   "
 msgstr "   _Durchsuchen   "
 
-#: src/filemenu.c:1188
+#: src/filemenu.c:1383
 msgid "Save encrypted file as"
 msgstr "Verschlüsselte Datei speichern als"
 
-#. if
-#: src/filemenu.c:1201
+#: src/filemenu.c:1394
 msgid "_sign"
 msgstr "_signieren"
 
-#: src/filemenu.c:1224
+#: src/filemenu.c:1416
 msgid "_Encrypt"
 msgstr "_Verschlüsseln"
 
-#: src/filemenu.c:1239
+#: src/filemenu.c:1440
 msgid "file_encrypt.tip"
 msgstr ""
 
-#: src/filemenu.c:1243
+#: src/filemenu.c:1446
 msgid "file_encryptAs.tip"
 msgstr ""
 
-#. commands
-#: src/filemenu.c:1250
-msgid "Protect a file by Password\n"
-msgstr "Datei mit Passwort schützen\n"
+#: src/filemenu.c:1502 src/keysmenu.c:1776 src/keysmenu.c:2189
+msgid ""
+"In \"Password\" and \"Repeat Password\",\n"
+"you must enter the same password."
+msgstr "Bitte zweimal das gleiche Mantra eingeben."
 
-#: src/filemenu.c:1283
+#: src/filemenu.c:1575
+#, fuzzy
+msgid "No files selected to protect."
+msgstr "Keine Schlüssel zum Exportieren ausgewählt."
+
+#: src/filemenu.c:1583
 msgid "Protect files by Password"
 msgstr "Dateien mit Passwort schützen"
 
-#: src/filemenu.c:1303
-msgid "P_assword: "
-msgstr "P_asswort: "
-
-#: src/filemenu.c:1320
-msgid "Repeat Pa_ssword: "
-msgstr "Pa_sswort wiederholen: "
-
-#: src/filemenu.c:1340
+#: src/filemenu.c:1602
 msgid "Save protected _file as: "
 msgstr "?Geschützte _Datei speichern unter: "
 
-#: src/filemenu.c:1352
+#: src/filemenu.c:1611
 msgid "Save protected file as"
 msgstr "?Geschützte Datei speichern unter"
 
-#: src/filemenu.c:1383
+#: src/filemenu.c:1628
+msgid "P_assword: "
+msgstr "P_asswort: "
+
+#: src/filemenu.c:1637
+msgid "Repeat Pa_ssword: "
+msgstr "Pa_sswort wiederholen: "
+
+#: src/filemenu.c:1673
 msgid "_Protect"
 msgstr "_Schützen"
 
-#: src/filemenu.c:1397
+#: src/filemenu.c:1687
 msgid "file_protect.tip"
 msgstr ""
 
-#: src/filemenu.c:1401
+#: src/filemenu.c:1693
 msgid "file_protectAs.tip"
 msgstr ""
 
-#: src/filemenu.c:1405
-msgid "Decrypt a file\n"
-msgstr "Datei entschlüsseln\n"
+#: src/filemenu.c:1760 src/filemenu.c:1858
+#, fuzzy
+msgid "No files selected to decrypt."
+msgstr "Keine Dateien zum Verschlüsseln ausgewählt."
 
-#: src/filemenu.c:1453
+#: src/filemenu.c:1883
 msgid "Save file _as: "
 msgstr "Datei _speichern unter: "
 
-#: src/filemenu.c:1459
+#: src/filemenu.c:1890
 msgid "Save decrypted file as"
 msgstr "Verschlüsselte Datei speichern unter"
 
-#: src/filemenu.c:1479
+#: src/filemenu.c:1908
 msgid "_Decrypt"
 msgstr "_Entschlüsseln"
 
-#: src/filemenu.c:1492
+#: src/filemenu.c:1916
 msgid "file_decryptAs.tip"
 msgstr ""
 
-#: src/filemenu.c:1506
+#: src/filemenu.c:1930
 msgid "No files selected for closing"
 msgstr "Keine Dateien ausgewählt"
 
-#: src/gtktools.c:221
-msgid "GPA action status"
-msgstr ""
-
-#: src/gtktools.c:269 src/gtktools.c:302 src/gtktools.c:374
+#: src/gtktools.c:236 src/gtktools.c:272 src/gtktools.c:341
 msgid "_OK"
 msgstr "_OK"
 
-#: src/gtktools.c:336
+#: src/gtktools.c:308
 msgid "Insert password"
 msgstr "Passwort eingeben"
 
-#: src/gtktools.c:357 src/keysmenu.c:1577 src/keysmenu.c:1973
+#: src/gtktools.c:328 src/keysmenu.c:1885 src/keysmenu.c:2385
 msgid "_Password: "
 msgstr "_Passwort: "
 
-#: src/help.c:59
+#: src/help.c:62
 msgid "Welcome to the GNU privacy guard assistant."
 msgstr "Willkommen beim GNU Privacy Assistant."
 
-#: src/helpmenu.c:29
+#: src/helpmenu.c:30
 msgid "Show Version Information\n"
 msgstr "Versionsinformation\n"
 
-#: src/helpmenu.c:50
+#: src/helpmenu.c:56
 msgid "GNU general public license"
 msgstr "GNU general public license"
 
-#: src/helpmenu.c:71
+#: src/helpmenu.c:73
 msgid "_GNU general public license"
 msgstr "_GNU general public license"
 
-#: src/helpmenu.c:99
+#: src/helpmenu.c:100
 msgid "Show Warranty Information\n"
 msgstr "Gewährleistung\n"
 
-#: src/helpmenu.c:103
+#: src/helpmenu.c:106
 msgid "Show Help Text\n"
 msgstr "Hilfe anzeigen\n"
 
@@ -698,456 +678,450 @@ msgstr "Monate"
 msgid "years"
 msgstr "Jahre"
 
-#: src/keysmenu.c:72
-msgid "never expires"
-msgstr "kein Verfallsdatum"
-
-#: src/keysmenu.c:157
-msgid "Key: "
-msgstr "Schlüssel: "
-
-#: src/keysmenu.c:238 src/keysmenu.c:244
-msgid "1"
-msgstr ""
-
-#: src/keysmenu.c:277
-msgid "01.01.2000"
-msgstr ""
-
-#. commands
-#: src/keysmenu.c:301
-msgid "Expiration"
-msgstr "Verfallsdatum"
-
-#: src/keysmenu.c:304
-msgid "_indefinitely valid"
-msgstr "_unbegrenzt gültig"
-
-#: src/keysmenu.c:308
-msgid "expire _after"
-msgstr "ungültig nach"
-
-#: src/keysmenu.c:327
-msgid "expire a_t"
-msgstr "ungültig ab"
-
-#: src/keysmenu.c:413
-msgid "Keys exported."
-msgstr "Schlüssel exportiert."
-
-#: src/keysmenu.c:446
-msgid "No keys selected to export."
-msgstr "Keine Schlüssel zum Exportieren ausgewählt"
-
-#: src/keysmenu.c:451
-msgid "Export public keys"
-msgstr "Öffentliche Schlüssel exportieren"
-
-#: src/keysmenu.c:469
-msgid "Export to _file: "
-msgstr "Exportieren in _Datei: "
-
-#: src/keysmenu.c:476
-msgid "Export public keys to file"
-msgstr "Öffentliche Schlüssel in Datei exportieren"
-
-#: src/keysmenu.c:505
-msgid "E_xport"
-msgstr "E_xportieren"
-
-#: src/keysmenu.c:524
-msgid "keys_openPublic_export.tip"
-msgstr ""
-
-#: src/keysmenu.c:550
-msgid "No keys selected to delete."
-msgstr "Keine Schlüssel zum Löschen ausgewählt"
-
-#: src/keysmenu.c:556
-msgid "!FATAL ERROR: Invalid key selection info!\n"
-msgstr ""
-
-#: src/keysmenu.c:579
-msgid "Accept new ownertrust level\n"
-msgstr "Neuen Ownertrust Level akzeptieren\n"
-
-#: src/keysmenu.c:611 src/keysmenu.c:745 src/keysmenu.c:1546
-msgid "No key selected for editing."
-msgstr "Kein Schlüssel zum Bearbeiten ausgewählt."
-
-#: src/keysmenu.c:619
-msgid "Change key ownertrust"
-msgstr "Ownertrust ändern"
-
-#: src/keysmenu.c:647
-msgid "_Ownertrust level: "
-msgstr "_Ownertrust Level: "
-
-#: src/keysmenu.c:669
-msgid "_Accept"
-msgstr "_Übernehmen"
-
-#: src/keysmenu.c:681
-msgid "keys_openPublic_editTrust.tip"
-msgstr ""
-
-#: src/keysmenu.c:686
-msgid "Sign keys\n"
-msgstr "Schlüssel signieren\n"
-
-#: src/keysmenu.c:690
-msgid "Check key signature validities\n"
-msgstr "Gültigkeit der Signaturen überprüfen\n"
-
-#: src/keysmenu.c:751
-msgid "Public key editor"
-msgstr "Schlüsseleditor"
-
-#: src/keysmenu.c:761
-msgid "Fingerprint:"
-msgstr "Fingerabdruck:"
-
-#: src/keysmenu.c:803
-msgid "S_ignatures"
-msgstr "S_ignaturen"
-
-#: src/keysmenu.c:832
-msgid "  _Sign  "
-msgstr "  _Signieren"
-
-#: src/keysmenu.c:841 src/keysmenu.c:1416
-msgid "sign only _locally"
-msgstr "Nur _lokal signieren"
-
-#: src/keysmenu.c:846
-msgid "  Chec_k  "
-msgstr "  Über_prüfen  "
-
-#: src/keysmenu.c:857
-msgid "Key Trust: "
-msgstr "Gültigkeit des Schlüssels: "
-
-#: src/keysmenu.c:875
-msgid "Expiry date: "
-msgstr "Verfallsdatum: "
-
-#: src/keysmenu.c:900
-msgid "Edit _Ownertrust"
-msgstr "_Ownertrust bearbeiten"
-
-#: src/keysmenu.c:903 src/keysmenu.c:913 src/keysmenu.c:929
-msgid "keys_openPublic_editKey.tip"
-msgstr ""
-
-#: src/keysmenu.c:909 src/keysmenu.c:1620
-msgid "E_xport key"
-msgstr "Schlüssel exportieren"
-
-#: src/keysmenu.c:921 src/keysmenu.c:990 src/keysmenu.c:1042
-#: src/keysmenu.c:1084 src/keysmenu.c:1110 src/keysmenu.c:1387
-#: src/keysmenu.c:1445 src/keysmenu.c:1497
-msgid "keys_openPublic.tip"
-msgstr ""
-
-#: src/keysmenu.c:958
-msgid "No keys selected for sending."
-msgstr "Keine Schlüssel ausgewählt"
-
-#: src/keysmenu.c:962
-msgid "Keys sent to server."
-msgstr "Schlüssel zum Keyserver gesendet."
-
-#: src/keysmenu.c:984
-msgid ""
-"An error occured while receiving\n"
-"the requested key from the keyserver."
-msgstr ""
-"Fehler beim übertragen des angeforderten"
-"Schlüssels vom Key Server"
-
-#: src/keysmenu.c:1013
-msgid "Receive key from server"
-msgstr "Schlüssel vom Server empfangen"
-
-#: src/keysmenu.c:1033
-msgid "_Key ID: "
-msgstr "_Schlüssel ID"
-
-#: src/keysmenu.c:1047
-msgid "_Receive"
-msgstr "_Empfangen"
-
-#: src/keysmenu.c:1059
-msgid "keys_openPublic_receive.tip"
-msgstr ""
-
-#: src/keysmenu.c:1101
-msgid "Export ownertrust to file"
-msgstr "Ownertrust in Datei exportieren"
-
-#: src/keysmenu.c:1116
-msgid "keys_openPublic_exportTrust.tip"
-msgstr ""
-
-#: src/keysmenu.c:1241
-msgid "Key trust"
-msgstr "Gültigkeit der Schlüssel"
-
-#: src/keysmenu.c:1241
-msgid "Ownertrust"
-msgstr "Ownertrust"
-
-#: src/keysmenu.c:1242
-msgid "Expiry date"
-msgstr "Verfallsdatum"
-
-#: src/keysmenu.c:1287
-msgid "Public key ring editor"
-msgstr "Schlüsseleditor für öffentlichen Schlüsselbund"
-
-#: src/keysmenu.c:1319
-msgid "_Public key Ring"
-msgstr "ö_ffentlicher Schlüsselbund"
-
-#: src/keysmenu.c:1347 src/keysmenu.c:1742
-msgid "_Edit key"
-msgstr "Schlüssel _bearbeiten"
-
-#: src/keysmenu.c:1356
-msgid "_Sign keys"
-msgstr "Schlüssel _signieren"
-
-#: src/keysmenu.c:1365
-msgid "Se_nd keys"
-msgstr "Schlüssel se_nden"
-
-#: src/keysmenu.c:1376
-msgid "_Receive keys"
-msgstr "Schlüssel _empfangen"
-
-#: src/keysmenu.c:1385 src/keysmenu.c:1730
-msgid "E_xport keys"
-msgstr "Schlüssel e_xportieren"
-
-#: src/keysmenu.c:1397 src/keysmenu.c:1736
-msgid "_Delete keys"
-msgstr "Schlüssel _löschen"
-
-#: src/keysmenu.c:1425
-msgid "ex_port armored"
-msgstr "_ASCII-armored exportieren"
-
-#: src/keysmenu.c:1429
-msgid "S_how ownertrust"
-msgstr "Ownertrust an_zeigen"
-
-#: src/keysmenu.c:1442
-msgid "Edit _ownertrust"
-msgstr "_Ownertrust bearbeiten"
-
-#: src/keysmenu.c:1455
-msgid "Export o_wnertrust"
-msgstr "O_wnertrust exportieren"
-
-#: src/keysmenu.c:1500
-msgid "No public keys available yet."
-msgstr "Kein öffentlicher Schlüssel vorhanden."
-
-#: src/keysmenu.c:1504
-msgid "Export secret keys\n"
-msgstr "Geheime Schlüssel exportieren\n"
-
-#: src/keysmenu.c:1508
-msgid "Delete secret keys\n"
-msgstr "Geheime Schlüssel löschen\n"
-
-#: src/keysmenu.c:1512
-msgid "Create revocation certificate\n"
-msgstr "Widerrufurkunde erzeugen\n"
-
-#: src/keysmenu.c:1554
-msgid "Secret key editor"
-msgstr "Schlüsseleditor für geheimen Schlüssel"
-
-#: src/keysmenu.c:1595 src/keysmenu.c:1991
-msgid "_Repeat password: "
-msgstr "Mantra wiederholen: "
-
-#: src/keysmenu.c:1614
-msgid "Create Re_vocation"
-msgstr ""
-
-#: src/keysmenu.c:1627 src/keysmenu.c:1764
-msgid "keys_openSecret.tip"
-msgstr ""
-
-#: src/keysmenu.c:1637
-msgid "keys_openSecret_editKey.tip"
-msgstr ""
-
-#: src/keysmenu.c:1653 src/keysmenu.c:2053 src/optionsmenu.c:415
-msgid "User identity / role"
-msgstr "User ID / ?"
-
-#: src/keysmenu.c:1677
-msgid "Secret key ring editor"
-msgstr "Schlüsseleditor für geheimen Schlüsselbund"
-
-#: src/keysmenu.c:1719
-msgid "_Secret key ring"
-msgstr "_Geheimer Schlüsselbund"
-
-#: src/keysmenu.c:1784 src/keysmenu.c:2077
-msgid "No secret keys available yet."
-msgstr "Kein geheimer Schlüssel vorhanden."
-
-#. commands
-#: src/keysmenu.c:1791
-msgid "Generate a new key\n"
-msgstr "Neuen Schlüssel erzeugen\n"
-
-#: src/keysmenu.c:1839
-msgid "Generate key"
-msgstr "Schlüssel erzeugen"
-
-#: src/keysmenu.c:1859
+#: src/keysmenu.c:56
 msgid "DSA and ElGamal"
 msgstr "DSA und ELGamal"
 
-#: src/keysmenu.c:1862
+#: src/keysmenu.c:57
 msgid "DSA (sign only)"
 msgstr "DSA (nur signieren)"
 
-#: src/keysmenu.c:1865
-msgid "ElGamal (sign and encrypt)"
-msgstr "ELGamal (signieren und verschlüsseln)"
+#: src/keysmenu.c:58
+#, fuzzy
+msgid "ElGamal (sign and encrypt"
+msgstr "ELGamal (signieren und verschlüsseln"
 
-#: src/keysmenu.c:1868
+#: src/keysmenu.c:59
 msgid "ElGamal (encrypt only)"
 msgstr "ELGamal (nur verschlüsseln)"
 
-#: src/keysmenu.c:1875
+#: src/keysmenu.c:128
+msgid "never expires"
+msgstr "kein Verfallsdatum"
+
+#: src/keysmenu.c:209
+msgid "Key: "
+msgstr "Schlüssel: "
+
+#: src/keysmenu.c:281 src/keysmenu.c:286
+msgid "1"
+msgstr "1"
+
+#: src/keysmenu.c:320
+msgid "01.01.2000"
+msgstr "01.01.2000"
+
+#. commands
+#: src/keysmenu.c:345
+msgid "Expiration"
+msgstr "Verfallsdatum"
+
+#: src/keysmenu.c:348
+msgid "_indefinitely valid"
+msgstr "_unbegrenzt gültig"
+
+#: src/keysmenu.c:353
+msgid "expire _after"
+msgstr "ungültig nach"
+
+#: src/keysmenu.c:370
+msgid "expire a_t"
+msgstr "ungültig ab"
+
+#: src/keysmenu.c:464 src/keysmenu.c:1670
+msgid "Keys exported."
+msgstr "Schlüssel exportiert."
+
+#: src/keysmenu.c:502
+msgid "No keys selected to export."
+msgstr "Keine Schlüssel zum Exportieren ausgewählt"
+
+#: src/keysmenu.c:508
+#, fuzzy
+msgid "Export keys"
+msgstr "Schlüssel exportieren"
+
+#: src/keysmenu.c:520
+msgid "Export to _file: "
+msgstr "Exportieren in _Datei: "
+
+#: src/keysmenu.c:526
+msgid "Export public keys to file"
+msgstr "Öffentliche Schlüssel in Datei exportieren"
+
+#: src/keysmenu.c:547
+msgid "E_xport"
+msgstr "E_xportieren"
+
+#: src/keysmenu.c:565
+msgid "keys_openPublic_export.tip"
+msgstr ""
+
+#: src/keysmenu.c:593 src/keysmenu.c:1698
+msgid "No keys selected to delete."
+msgstr "Keine Schlüssel zum Löschen ausgewählt"
+
+#: src/keysmenu.c:598 src/keysmenu.c:1703
+msgid "!FATAL ERROR: Invalid key selection info!\n"
+msgstr "!FATAL ERROR: Invalid key selection info!\n"
+
+#: src/keysmenu.c:638
+#, fuzzy
+msgid "Invalid ownertrust level."
+msgstr "Ungültiger Ownertrust Level: "
+
+#: src/keysmenu.c:678 src/keysmenu.c:899 src/keysmenu.c:1856
+msgid "No key selected for editing."
+msgstr "Kein Schlüssel zum Bearbeiten ausgewählt."
+
+#: src/keysmenu.c:687
+msgid "Change key ownertrust"
+msgstr "Ownertrust ändern"
+
+#: src/keysmenu.c:709
+msgid "_Ownertrust level: "
+msgstr "_Ownertrust Level: "
+
+#: src/keysmenu.c:726
+msgid "_Accept"
+msgstr "_Übernehmen"
+
+#: src/keysmenu.c:740
+msgid "keys_openPublic_editTrust.tip"
+msgstr ""
+
+#: src/keysmenu.c:778 src/keysmenu.c:836
+#, fuzzy
+msgid "No keys selected for signing."
+msgstr "Keine Schlüssel ausgewählt."
+
+#: src/keysmenu.c:796 src/keysmenu.c:806
+#, fuzzy
+msgid "An error occured while signing keys."
+msgstr "Fehler beim Übertragen des angeforderten Schlüssels vom Key Server."
+
+#: src/keysmenu.c:911
+msgid "Public key editor"
+msgstr "Schlüsseleditor"
+
+#: src/keysmenu.c:921
+msgid "Fingerprint:"
+msgstr "Fingerabdruck:"
+
+#: src/keysmenu.c:951
+msgid "S_ignatures"
+msgstr "S_ignaturen"
+
+#: src/keysmenu.c:976
+msgid "  _Sign  "
+msgstr "  _Signieren"
+
+#: src/keysmenu.c:977 src/keysmenu.c:1537
+msgid "sign only _locally"
+msgstr "Nur _lokal signieren"
+
+#: src/keysmenu.c:985 src/keysmenu.c:1027 src/keysmenu.c:1036
+#: src/keysmenu.c:1051
+msgid "keys_openPublic_editKey.tip"
+msgstr ""
+
+#: src/keysmenu.c:993
+msgid "Key Trust: "
+msgstr "Gültigkeit des Schlüssels: "
+
+#: src/keysmenu.c:1004
+msgid "Expiry date: "
+msgstr "Verfallsdatum: "
+
+#: src/keysmenu.c:1022
+msgid "Edit _Ownertrust"
+msgstr "_Ownertrust bearbeiten"
+
+#: src/keysmenu.c:1032 src/keysmenu.c:1925
+msgid "E_xport key"
+msgstr "Schlüssel exportieren"
+
+#: src/keysmenu.c:1046 src/keysmenu.c:1114 src/keysmenu.c:1171
+#: src/keysmenu.c:1209 src/keysmenu.c:1245 src/keysmenu.c:1514
+#: src/keysmenu.c:1543 src/keysmenu.c:1572 src/keysmenu.c:1611
+msgid "keys_openPublic.tip"
+msgstr ""
+
+#: src/keysmenu.c:1082
+msgid "No keys selected for sending."
+msgstr "Keine Schlüssel ausgewählt"
+
+#: src/keysmenu.c:1086
+msgid "Keys sent to server."
+msgstr "Schlüssel zum Keyserver gesendet."
+
+#: src/keysmenu.c:1109
+msgid ""
+"An error occured while receiving\n"
+"the requested key from the keyserver."
+msgstr "Fehler beim übertragen des angefordertenSchlüssels vom Key Server"
+
+#: src/keysmenu.c:1142
+msgid "Receive key from server"
+msgstr "Schlüssel vom Server empfangen"
+
+#: src/keysmenu.c:1162
+msgid "_Key ID: "
+msgstr "_Schlüssel ID"
+
+#: src/keysmenu.c:1174
+msgid "_Receive"
+msgstr "_Empfangen"
+
+#: src/keysmenu.c:1184
+msgid "keys_openPublic_receive.tip"
+msgstr ""
+
+#: src/keysmenu.c:1230
+msgid "Export ownertrust to file"
+msgstr "Ownertrust in Datei exportieren"
+
+#: src/keysmenu.c:1252
+msgid "keys_openPublic_exportTrust.tip"
+msgstr ""
+
+#: src/keysmenu.c:1377
+msgid "Key trust"
+msgstr "Gültigkeit der Schlüssel"
+
+#: src/keysmenu.c:1377
+msgid "Ownertrust"
+msgstr "Ownertrust"
+
+#: src/keysmenu.c:1378
+msgid "Expiry date"
+msgstr "Verfallsdatum"
+
+#: src/keysmenu.c:1426
+msgid "Public key ring editor"
+msgstr "Schlüsseleditor für öffentlichen Schlüsselbund"
+
+#: src/keysmenu.c:1453
+msgid "_Public key Ring"
+msgstr "ö_ffentlicher Schlüsselbund"
+
+#: src/keysmenu.c:1485 src/keysmenu.c:2083
+msgid "_Edit key"
+msgstr "Schlüssel _bearbeiten"
+
+#: src/keysmenu.c:1491
+msgid "_Sign keys"
+msgstr "Schlüssel _signieren"
+
+#: src/keysmenu.c:1494
+msgid "Se_nd keys"
+msgstr "Schlüssel se_nden"
+
+#: src/keysmenu.c:1504
+msgid "_Receive keys"
+msgstr "Schlüssel _empfangen"
+
+#: src/keysmenu.c:1510 src/keysmenu.c:2060
+msgid "E_xport keys"
+msgstr "Schlüssel e_xportieren"
+
+#: src/keysmenu.c:1522 src/keysmenu.c:2071
+msgid "_Delete keys"
+msgstr "Schlüssel _löschen"
+
+#: src/keysmenu.c:1550
+msgid "ex_port armored"
+msgstr "_ASCII-armored exportieren"
+
+#: src/keysmenu.c:1554
+msgid "S_how ownertrust"
+msgstr "Ownertrust an_zeigen"
+
+#: src/keysmenu.c:1567
+msgid "Edit _ownertrust"
+msgstr "_Ownertrust bearbeiten"
+
+#: src/keysmenu.c:1578
+msgid "Export o_wnertrust"
+msgstr "O_wnertrust exportieren"
+
+#: src/keysmenu.c:1613
+msgid "No public keys available yet."
+msgstr "Kein öffentlicher Schlüssel vorhanden."
+
+#: src/keysmenu.c:1653 src/keysmenu.c:1662
+#, fuzzy
+msgid ""
+"An error occurred while\n"
+"exporting secret keys."
+msgstr ""
+"Fehler beim übertragen des angeforderten\n"
+"Schlüssels vom Key Server."
+
+#: src/keysmenu.c:1738
+#, fuzzy
+msgid "Revocation certificate created."
+msgstr "Widerrufurkunde erzeugt."
+
+#: src/keysmenu.c:1803 src/keysmenu.c:2229
+msgid ""
+"!FATAL ERROR!\n"
+"Invalid insert mode for expiry date."
+msgstr ""
+"!FATAL ERROR!\n"
+"Invalid insert mode for expiry date."
+
+#: src/keysmenu.c:1812 src/keysmenu.c:1938 src/keysmenu.c:2064
+#: src/keysmenu.c:2102
+msgid "keys_openSecret.tip"
+msgstr ""
+
+#: src/keysmenu.c:1868
+msgid "Secret key editor"
+msgstr "Schlüsseleditor für geheimen Schlüssel"
+
+#: src/keysmenu.c:1895 src/keysmenu.c:2395
+msgid "_Repeat password: "
+msgstr "Mantra wiederholen: "
+
+#: src/keysmenu.c:1916
+msgid "Create Re_vocation"
+msgstr "_Widerrufurkunde erzeugen"
+
+#: src/keysmenu.c:1929 src/keysmenu.c:1956
+msgid "keys_openSecret_editKey.tip"
+msgstr ""
+
+#: src/keysmenu.c:1945
+msgid "_Save and exit"
+msgstr "_Speichern und Schliessen"
+
+#: src/keysmenu.c:1975 src/keysmenu.c:2485 src/optionsmenu.c:488
+msgid "User identity / role"
+msgstr "User ID / ?"
+
+#: src/keysmenu.c:2005
+msgid "Secret key ring editor"
+msgstr "Schlüsseleditor für geheimen Schlüsselbund"
+
+#: src/keysmenu.c:2051
+msgid "_Secret key ring"
+msgstr "_Geheimer Schlüsselbund"
+
+#: src/keysmenu.c:2120 src/keysmenu.c:2509
+msgid "No secret keys available yet."
+msgstr "Kein geheimer Schlüssel vorhanden."
+
+#: src/keysmenu.c:2172
+msgid "DUMMY"
+msgstr "DUMMY"
+
+#: src/keysmenu.c:2296
+msgid "Generate key"
+msgstr "Schlüssel erzeugen"
+
+#: src/keysmenu.c:2318
 msgid "_Encryption algorithm: "
 msgstr "_Verschlüsselungsalgorithmus"
 
-#: src/keysmenu.c:1893
+#: src/keysmenu.c:2330
 msgid "_Key size (bits): "
 msgstr "Schlüssellänge (bits): "
 
-#: src/keysmenu.c:1895
+#: src/keysmenu.c:2331
 msgid "768"
-msgstr ""
+msgstr "768"
 
-#: src/keysmenu.c:1896
+#: src/keysmenu.c:2332
 msgid "1024"
-msgstr ""
+msgstr "1024"
 
-#: src/keysmenu.c:1897
+#: src/keysmenu.c:2333
 msgid "2048"
-msgstr ""
+msgstr "2048"
 
-#: src/keysmenu.c:1926
+#: src/keysmenu.c:2356
 msgid "_User ID: "
 msgstr "_Benutzer ID: "
 
-#: src/keysmenu.c:1940
+#: src/keysmenu.c:2365
 msgid "E-_Mail: "
 msgstr "E_mail: "
 
-#: src/keysmenu.c:1956
+#: src/keysmenu.c:2375
 msgid "C_omment: "
 msgstr "_Bemerkung"
 
-#: src/keysmenu.c:2003
+#: src/keysmenu.c:2402
 msgid "generate re_vocation certificate"
 msgstr "_Widerrufurkunde erzeugen"
 
-#: src/keysmenu.c:2009
+#: src/keysmenu.c:2404
 msgid "_send to key server"
 msgstr "Zum Key Server _schicken"
 
-#: src/keysmenu.c:2029
+#: src/keysmenu.c:2418
 msgid "_Generate key"
 msgstr "Schlüssel _erzeugen"
 
-#: src/keysmenu.c:2040
+#: src/keysmenu.c:2437
 msgid "keys_generateKey.tip"
 msgstr ""
 
-#: src/keysmenu.c:2081
+#: src/keysmenu.c:2468
+#, fuzzy
+msgid "No keys selected to create revocation certificate for."
+msgstr "Keine Schlüssel ausgewählt."
+
+#: src/keysmenu.c:2514
 msgid "Generate revocation certificate"
 msgstr "Widerrufurkunde erzeugen"
 
-#: src/keysmenu.c:2127
+#: src/keysmenu.c:2560
 msgid "_Secret keys"
 msgstr "Geheime _Schlüssel"
 
-#: src/keysmenu.c:2149
+#: src/keysmenu.c:2580
 msgid "_Generate"
 msgstr "?Widerrufurkunde erzeu_gen"
 
-#: src/keysmenu.c:2161
+#: src/keysmenu.c:2593
 msgid "keys_generateRevocation.tip"
 msgstr ""
 
-#. commands
-#: src/keysmenu.c:2184
+#: src/keysmenu.c:2621
 msgid "Import keys"
 msgstr "Schlüssel _importieren"
 
-#: src/keysmenu.c:2195
+#: src/keysmenu.c:2636
 msgid "keys_import.tip"
 msgstr ""
 
-#. commands
-#: src/keysmenu.c:2217
+#: src/keysmenu.c:2664
 msgid "Import ownertrust"
 msgstr "Ownertrust importieren"
 
-#: src/keysmenu.c:2229
+#: src/keysmenu.c:2681
 msgid "keys_importOwnertrust.tip"
 msgstr ""
 
-#: src/keysmenu.c:2235
+#: src/keysmenu.c:2688
 msgid "Trust database updated."
 msgstr "Trust-Datenbank aktualisiert."
 
-#. !!!
-#: src/optionsmenu.c:37
-#, c-format
-msgid "Set home directory to %s\n"
-msgstr "Home-Verzeichnis ändern auf %s\n"
-
-#. !!!
-#: src/optionsmenu.c:64
-#, c-format
-msgid "Load options file %s\n"
-msgstr "?Konfigurationsdatei laden %s\n"
-
-#. !!!
-#: src/optionsmenu.c:92
-#, c-format
-msgid "Save options file %s\n"
-msgstr "?Konfigurationsdatei speichern %s\n"
-
-#. commands
-#: src/optionsmenu.c:122
-msgid "Set key server\n"
-msgstr "Key Server festlegen\n"
-
-#: src/optionsmenu.c:143
+#: src/optionsmenu.c:168
 msgid "Set key server"
 msgstr "Key Server festlegen"
 
-#: src/optionsmenu.c:155
+#: src/optionsmenu.c:180
 msgid "_Key server: "
 msgstr "_Key Server: "
 
-#: src/optionsmenu.c:186
+#: src/optionsmenu.c:212
 msgid "options_keyserver.tip"
 msgstr ""
 
-#: src/optionsmenu.c:229
+#: src/optionsmenu.c:302
 msgid ""
 "No public keys available to denote\n"
 "as default recipients."
@@ -1155,76 +1129,132 @@ msgstr ""
 "Keine öffentlichen Schlüssel für die\n"
 "Auswahl der Empfänger vorhanden."
 
-#: src/optionsmenu.c:236
+#: src/optionsmenu.c:310
 msgid "Set default recipients"
 msgstr "Empfängerliste festlegen"
 
-#: src/optionsmenu.c:270
+#: src/optionsmenu.c:342
 msgid "_Recipients"
 msgstr "_Empfänger"
 
-#: src/optionsmenu.c:335
+#: src/optionsmenu.c:400
 msgid "_Remove from recipients"
 msgstr "Aus Empfängerliste ent_fernen"
 
-#: src/optionsmenu.c:344
+#: src/optionsmenu.c:410
 msgid "_Add to recipients"
 msgstr "Zu Empfängerliste hinzufügen"
 
-#: src/optionsmenu.c:371
+#: src/optionsmenu.c:433 src/optionsmenu.c:585
+msgid "_Set"
+msgstr "Über_nehmen"
+
+#: src/optionsmenu.c:448
 msgid "options_recipients.tip"
 msgstr ""
 
-#: src/optionsmenu.c:402
-msgid "Set Default Key to "
-msgstr "Default-Schlüssel festlegen mals"
-
-#: src/optionsmenu.c:440
+#: src/optionsmenu.c:513
 msgid ""
 "No secret keys available to\n"
 "select a default key from."
 msgstr ""
-"Keine geheimen Schlüssel"
-"für die Auswahl eines"
-"Default-Schlüssels vorhanden"
+"Keine geheimen Schlüsselfür die Auswahl einesDefault-Schlüssels vorhanden"
 
-#: src/optionsmenu.c:446
+#: src/optionsmenu.c:520
 msgid "Set default key"
 msgstr "Default-Schlüssel festlegen"
 
-#: src/optionsmenu.c:486
+#: src/optionsmenu.c:571
 msgid "Default _key:"
 msgstr "Default _Schlüssel"
 
-#: src/optionsmenu.c:502
-msgid "_Set"
-msgstr "Über_nehmen"
-
-#: src/optionsmenu.c:512
+#: src/optionsmenu.c:596
 msgid "options_key.tip"
 msgstr ""
 
-#: src/optionsmenu.c:517
+#: src/optionsmenu.c:603
 msgid "options_homedir.tip"
 msgstr ""
 
-#: src/optionsmenu.c:531
+#: src/optionsmenu.c:622
 msgid "Show GPA Tips"
 msgstr "GPA-Tips anzeigen"
 
-#: src/optionsmenu.c:540
+#: src/optionsmenu.c:630
 msgid "_Show GPA tips"
 msgstr "GPA-Tips anzeigen"
 
-#: src/optionsmenu.c:557
+#: src/optionsmenu.c:645
 msgid "options_tips.tip"
 msgstr ""
 
-#: src/optionsmenu.c:562
+#: src/optionsmenu.c:652
 msgid "options_load.tip"
 msgstr ""
 
-#: src/optionsmenu.c:567
+#: src/optionsmenu.c:659
 msgid "options_save.tip"
 msgstr ""
 
+#~ msgid "Dummy Text"
+#~ msgstr "Dummy Text"
+
+#~ msgid "Check signature validities\n"
+#~ msgstr "Gültigkeit der Signaturen überprüfen\n"
+
+#~ msgid "Chec_k"
+#~ msgstr "Überprüfen"
+
+#~ msgid "Signing files:"
+#~ msgstr "Signiere Dateien"
+
+#~ msgid "Encrypt a file\n"
+#~ msgstr "Datei verschlüsseln\n"
+
+#~ msgid "Encr_ypt as"
+#~ msgstr "_Verschlüsseln als"
+
+#~ msgid "Protect a file by Password\n"
+#~ msgstr "Datei mit Passwort schützen\n"
+
+#~ msgid "Decrypt a file\n"
+#~ msgstr "Datei entschlüsseln\n"
+
+#~ msgid "Export public keys"
+#~ msgstr "Öffentliche Schlüssel exportieren"
+
+#~ msgid "Accept new ownertrust level\n"
+#~ msgstr "Neuen Ownertrust Level akzeptieren\n"
+
+#~ msgid "Sign keys\n"
+#~ msgstr "Schlüssel signieren\n"
+
+#~ msgid "Check key signature validities\n"
+#~ msgstr "Gültigkeit der Signaturen überprüfen\n"
+
+#~ msgid "  Chec_k  "
+#~ msgstr "  Über_prüfen  "
+
+#~ msgid "Export secret keys\n"
+#~ msgstr "Geheime Schlüssel exportieren\n"
+
+#~ msgid "Delete secret keys\n"
+#~ msgstr "Geheime Schlüssel löschen\n"
+
+#~ msgid "Generate a new key\n"
+#~ msgstr "Neuen Schlüssel erzeugen\n"
+
+#~ msgid "Set home directory to %s\n"
+#~ msgstr "Home-Verzeichnis ändern auf %s\n"
+
+#~ msgid "Load options file %s\n"
+#~ msgstr "?Konfigurationsdatei laden %s\n"
+
+#~ msgid "Save options file %s\n"
+#~ msgstr "?Konfigurationsdatei speichern %s\n"
+
+#~ msgid "Set key server\n"
+#~ msgstr "Key Server festlegen\n"
+
+#~ msgid "Set Default Key to "
+#~ msgstr "Default-Schlüssel festlegen mals"
