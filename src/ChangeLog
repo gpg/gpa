@@ -1,5 +1,7 @@
 2002-11-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* keyreceivedlg.c, keyreceivedlg.h: Removed obsolete.
+	
 	* gpgmeedit.c (edit_trust_fnc_action) 
 	(edit_trust_fnc_transit): Added a state for the "set_ultimate.okay"
 	prompt. Fixes a crash when setting a key to ultimate trust.
