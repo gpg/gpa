@@ -34,13 +34,13 @@
 struct _GPAKeySignDialog {
   gboolean result;
   GpapaSignType sign_type;
-  gchar * key_id;
   gchar * passphrase;
   GtkWidget * window;
   GtkWidget * check_local;
   GtkCList * clist_keys;
 };
 typedef struct _GPAKeySignDialog GPAKeySignDialog;
+
 
 static void
 key_sign_cancel (gpointer param)
@@ -50,6 +50,7 @@ key_sign_cancel (gpointer param)
   dialog->result = FALSE;
   gtk_main_quit ();
 } /* key_sign_cancel */
+
 
 static gboolean
 key_sign_delete (GtkWidget *widget, GdkEvent *event, gpointer param)
@@ -64,15 +65,15 @@ key_sign_ok (gpointer param)
 {
   GPAKeySignDialog * dialog = param;
   gint row;
+  GtkWidget * check;
 
   dialog->result = TRUE;
   if (dialog->clist_keys->selection)
     {
       row = GPOINTER_TO_INT (dialog->clist_keys->selection->data);
-      dialog->key_id = gtk_clist_get_row_data (dialog->clist_keys, row);
-      dialog->key_id = xstrdup (dialog->key_id);
 
-      if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_local)))
+      check = dialog->check_local;
+      if (check && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)))
 	dialog->sign_type = GPAPA_KEY_SIGN_LOCALLY;
       else
 	dialog->sign_type = GPAPA_KEY_SIGN_NORMAL;
@@ -83,43 +84,41 @@ key_sign_ok (gpointer param)
 } /* key_sign_ok */
 
 
-
+/* Run the key sign dialog as a modal dialog and return when the user *
+ * *ends the dialog. If the user clicks OK, return TRUE and set
+ * *sign_type according to the "sign locally" check box and *passphrase
+ * *to the passphrase. The passphrase must be freed.
+ *
+ * If the user clicked Cancel, return FALSE and do not modify *sign_type
+ * or *passphrase.
+ *
+ * When in simplified_ui mode, don't show the "sign locally" check box
+ * and if the user clicks OK, set *sign_type to normal.
+ */
 gboolean
 gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
 			 GpapaSignType * sign_type,
-			 gchar ** key_id, gchar ** passphrase)
+			 gchar ** passphrase)
 {
   GtkAccelGroup *accelGroup;
   GtkWidget *window;
   GtkWidget *vboxSign;
-  GtkWidget *vboxWho;
-  GtkWidget *labelWho;
-  GtkWidget *scrollerWho;
-  GtkWidget *clistWho;
   GtkWidget *hButtonBoxSign;
   GtkWidget *buttonCancel;
   GtkWidget *buttonSign;
-  GtkWidget *check;
+  GtkWidget *check = NULL;
   GtkWidget *table;
   GtkWidget *label;
 
   GPAKeySignDialog dialog;
 
   dialog.sign_type = *sign_type;
-  dialog.key_id = NULL;
   dialog.passphrase = NULL;
-
-  if (gpapa_get_secret_key_count (gpa_callback, parent) == 0)
-    {
-      gpa_window_error (_("No secret keys available for signing.\n"
-			  "Import a secret key first!"),
-			parent);
-      return FALSE;
-    } /* if */
+  dialog.check_local = NULL;
 
   window = gtk_window_new (GTK_WINDOW_DIALOG);
   dialog.window = window;
-  gtk_window_set_title (GTK_WINDOW (window), _("Sign Keys"));
+  gtk_window_set_title (GTK_WINDOW (window), _("Sign Key"));
   gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 		      GTK_SIGNAL_FUNC (key_sign_delete),
 		      (gpointer)&dialog);
@@ -136,7 +135,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
   table = gtk_table_new (2, 2, FALSE);
-  gtk_box_pack_start (GTK_BOX (vboxSign), table, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vboxSign), table, FALSE, TRUE, 10);
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
 
@@ -158,29 +157,25 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
-  vboxWho = gtk_vbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vboxSign), vboxWho, TRUE, FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxWho), 5);
+  label = gtk_label_new (_("Check the name and fingerprint carefully to"
+		   " be sure that it really is the key you want to sign."));
+  gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 10);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 
-  labelWho = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC (labelWho), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vboxWho), labelWho, FALSE, TRUE, 0);
+  label = gtk_label_new (_("The key will be signed with your default"
+			   " private key."));
+  gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 5);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
-  scrollerWho = gtk_scrolled_window_new (NULL, NULL);
-  gtk_box_pack_start (GTK_BOX (vboxWho), scrollerWho, TRUE, TRUE, 0);
-  gtk_widget_set_usize (scrollerWho, 260, 75);
-
-  clistWho = gpa_secret_key_list_new (parent);
-  gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
-  dialog.clist_keys = GTK_CLIST (clistWho);
-  gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
-			      _("Sign _as "));
-
-  check = gpa_check_button_new (accelGroup, _("Sign only _locally"));
-  dialog.check_local = check;
-  gtk_box_pack_start (GTK_BOX (vboxSign), check, FALSE, FALSE, 0);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check),
-				*sign_type == GPAPA_KEY_SIGN_LOCALLY);
+  if (!gpa_simplified_ui ())
+    {
+      check = gpa_check_button_new (accelGroup, _("Sign only _locally"));
+      dialog.check_local = check;
+      gtk_box_pack_start (GTK_BOX (vboxSign), check, FALSE, FALSE, 0);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check),
+				    *sign_type == GPAPA_KEY_SIGN_LOCALLY);
+    }
 
   hButtonBoxSign = gtk_hbutton_box_new ();
   gtk_box_pack_start (GTK_BOX (vboxSign), hButtonBoxSign, FALSE, FALSE, 0);
@@ -206,15 +201,13 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
   gtk_grab_remove (window);
   gtk_widget_destroy (window);
 
-  if (dialog.result && dialog.key_id && dialog.passphrase)
+  if (dialog.result && dialog.passphrase)
     {
       *sign_type = dialog.sign_type;
-      *key_id = dialog.key_id;
       *passphrase = dialog.passphrase;
     }
   else
     {
-      free (dialog.key_id);
       free (dialog.passphrase);
       dialog.result = FALSE;
     }
