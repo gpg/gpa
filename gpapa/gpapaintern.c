@@ -62,12 +62,12 @@ static gboolean status_check (
 /* user_args must be a NULL-terminated array of argument strings.
  */
 void gpapa_call_gnupg (
-  char **user_args, gboolean do_wait, gchar *passphrase,
+  char **user_args, gboolean do_wait, gchar *commands, gchar *passphrase,
   GpapaLineCallbackFunc linecallback, gpointer linedata,
   GpapaCallbackFunc callback, gpointer calldata
 ) {
   int pid;
-  int outputfd [ 2 ], statusfd [ 2 ], passfd [ 2 ], devnull;
+  int outputfd [ 2 ], statusfd [ 2 ], passfd [ 2 ], inputfd [ 2 ], devnull;
   char **argv;
   char statusfd_str [ 10 ], passfd_str [ 10 ];
   int argc, user_args_counter, standard_args_counter, i, j;
@@ -102,6 +102,8 @@ void gpapa_call_gnupg (
   if ( pipe ( statusfd ) == -1 )
     {
       callback ( GPAPA_ACTION_ERROR, "could not open status pipe", calldata );
+      close ( outputfd [ 0 ] );
+      close ( outputfd [ 1 ] );
       return;
     }
   sprintf ( statusfd_str, "%d", statusfd [ 1 ] );
@@ -113,11 +115,36 @@ void gpapa_call_gnupg (
       if ( pipe ( passfd ) == -1 )
 	{
 	  callback ( GPAPA_ACTION_ERROR, "could not open passphrase pipe", calldata );
+      close ( outputfd [ 0 ] );
+      close ( outputfd [ 1 ] );
+      close ( statusfd [ 0 ] );
+      close ( statusfd [ 1 ] );
 	  return;
 	}
       sprintf ( passfd_str, "%d", passfd [ 0 ] );
       write ( passfd [ 1 ], passphrase, strlen ( passphrase ) );
       write ( passfd [ 1 ], "\n", 1 );
+    }
+
+  if ( commands )
+    {
+      /* Open input pipe.
+       */
+      if ( pipe ( inputfd ) == -1 )
+	{
+	  callback ( GPAPA_ACTION_ERROR, "could not open input pipe", calldata );
+          close ( outputfd [ 0 ] );
+          close ( outputfd [ 1 ] );
+          close ( statusfd [ 0 ] );
+          close ( statusfd [ 1 ] );
+          if ( passphrase )
+            {
+              close ( passfd [ 0 ] );
+              close ( passfd [ 1 ] );
+            }
+	  return;
+	}
+      write ( inputfd [ 1 ], commands, strlen ( commands ) );
     }
 
   /* Construct the command line.
@@ -160,7 +187,13 @@ void gpapa_call_gnupg (
       close ( statusfd [ 0 ] );
       dup2 ( outputfd [ 1 ], 1 );
       close ( outputfd [ 1 ] );
-      dup2 ( devnull, 0 );
+      if ( commands )
+        {
+	  dup2 ( inputfd [ 0 ], 0 );
+	  close ( inputfd [ 0 ] );
+        }
+      else
+        dup2 ( devnull, 0 );
       dup2 ( devnull, 2 );
       close ( devnull );
       execv ( argv [ 0 ], argv );
@@ -323,10 +356,14 @@ void gpapa_call_gnupg (
       close ( statusfd [ 0 ] );
       if ( passphrase )
 	close ( passfd [ 1 ] );
+      if ( commands )
+	close ( inputfd [ 1 ] );
       close ( outputfd [ 1 ] );  /* @@ Shouldn't this be done earlier? */
       close ( statusfd [ 1 ] );
       if ( passphrase )
 	close ( passfd [ 0 ] );
+      if ( commands )
+	close ( inputfd [ 0 ] );
       close ( devnull );
     }
   free ( argv );

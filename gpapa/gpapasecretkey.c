@@ -20,10 +20,70 @@
 
 #include <config.h>
 #include <stdlib.h>
+#include <string.h>
 #include <glib.h>
-#include "gpapakey.h"
-#include "gpapasecretkey.h"
+#include "gpapa.h"
 
+void gpapa_secret_key_export (
+  GpapaSecretKey *key, gchar *targetFileID, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( ! key )
+    callback ( GPAPA_ACTION_ERROR, "no valid public key specified", calldata );
+  if ( ! targetFileID )
+    callback ( GPAPA_ACTION_ERROR, "target file not specified", calldata );
+  if ( key && targetFileID )
+    {
+      gchar *full_keyID;
+      char *gpgargv [ 7 ];
+      int i = 0;
+      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
+      gpgargv [ i++ ] = "-o";
+      gpgargv [ i++ ] = targetFileID;
+      gpgargv [ i++ ] = "--yes";  /* overwrite the file */
+      if ( Armor == GPAPA_ARMOR )
+	gpgargv [ i++ ] = "--armor";
+      gpgargv [ i++ ] = "--export-secret-key";
+      gpgargv [ i++ ] = full_keyID;
+      gpgargv [ i ] = NULL;
+      gpapa_call_gnupg
+	(
+	  gpgargv, TRUE, NULL, NULL,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
+      free ( full_keyID );
+    }
+} /* gpapa_secret_key_export */
+
+/* Due to gpg's security features, this currently does not work.
+ */
+void gpapa_secret_key_delete (
+  GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( ! key )
+    callback ( GPAPA_ACTION_ERROR, "no valid secret key specified", calldata );
+  else
+    {
+      gchar *full_keyID;
+      char *gpgargv [ 3 ];
+      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
+      gpgargv [ 0 ] = "--delete-secret-key";
+      gpgargv [ 1 ] = full_keyID;
+      gpgargv [ 2 ] = NULL;
+      gpapa_call_gnupg
+	(
+	  gpgargv, TRUE, NULL, NULL,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
+      free ( full_keyID );
+      gpapa_refresh_secret_keyring ( callback, calldata );
+    }
+} /* gpapa_secret_key_delete */;
+
+/* Due to gpg's security features, this currently does not work.
+ */
 void gpapa_secret_key_create_revocation (
   GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
 ) {

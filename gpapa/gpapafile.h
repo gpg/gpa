@@ -75,7 +75,7 @@ extern GpapaFileStatus gpapa_file_get_status (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 );
 
-extern gint *gpapa_file_get_signature_count (
+extern gint gpapa_file_get_signature_count (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 );
 

@@ -44,6 +44,15 @@ typedef enum {
 #define GPAPA_ALGO_FIRST GPAPA_ALGO_BOTH
 #define GPAPA_ALGO_LAST GPAPA_ALGO_ELG
 
+extern void gpapa_secret_key_export (
+  GpapaSecretKey *key, gchar *targetFileID, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_secret_key_delete (
+  GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
+);
+
 extern void gpapa_secret_key_create_revocation (
   GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
 );

@@ -130,7 +130,7 @@ static void linecallback_refresh_pub (
     }
 } /* linecallback_refresh_pub */
 
-static void refresh_public_keyring (
+void gpapa_refresh_public_keyring (
   GpapaCallbackFunc callback, gpointer calldata
 ) {
   PublicKeyData data = { NULL, callback, calldata };
@@ -144,16 +144,16 @@ static void refresh_public_keyring (
   gpgargv [ 1 ] = "--with-colons";
   gpgargv [ 2 ] = NULL;
   gpapa_call_gnupg (
-    gpgargv, TRUE, NULL,
+    gpgargv, TRUE, NULL, NULL,
     linecallback_refresh_pub, &data,
     callback, calldata
   );
-} /* refresh_public_keyring */
+} /* gpapa_refresh_public_keyring */
 
 gint gpapa_get_public_key_count (
   GpapaCallbackFunc callback, gpointer calldata
 ) {
-  refresh_public_keyring ( callback, calldata );
+  gpapa_refresh_public_keyring ( callback, calldata );
   return ( g_list_length ( PubRing ) );
 } /* gpapa_get_public_key_count */
 
@@ -161,7 +161,7 @@ GpapaPublicKey *gpapa_get_public_key_by_index (
   gint idx, GpapaCallbackFunc callback, gpointer calldata
 ) {
   if ( PubRing == NULL )
-    refresh_public_keyring ( callback, calldata );
+    gpapa_refresh_public_keyring ( callback, calldata );
   return ( g_list_nth_data ( PubRing, idx ) );
 } /* gpapa_get_public_key_by_index */
 
@@ -188,13 +188,36 @@ GpapaPublicKey *gpapa_get_public_key_by_ID (
   gpgargv [ 2 ] = id;
   gpgargv [ 3 ] = NULL;
   gpapa_call_gnupg (
-    gpgargv, TRUE, NULL,
+    gpgargv, TRUE, NULL, NULL,
     linecallback_id_pub, &data,
     callback, calldata
   );
   free ( id );
   return ( data.key );
 } /* gpapa_get_public_key_by_ID */
+
+GpapaPublicKey *gpapa_receive_public_key_from_server (
+  gchar *keyID, gchar *ServerName, GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( keyID && ServerName )
+    {
+      char *gpgargv [ 5 ];
+      char *id = xstrcat2 ( "0x", keyID );
+      gpgargv [ 0 ] = "--keyserver";
+      gpgargv [ 1 ] = ServerName;
+      gpgargv [ 2 ] = "--recv-keys";
+      gpgargv [ 3 ] = id;
+      gpgargv [ 4 ] = NULL;
+      gpapa_call_gnupg (
+        gpgargv, TRUE, NULL, NULL,
+        gpapa_linecallback_dummy, NULL,
+        callback, calldata
+      );
+      free ( id );
+      gpapa_refresh_public_keyring ( callback, calldata );
+    }
+  return ( gpapa_get_public_key_by_ID ( keyID, callback, calldata ) );
+} /* gpapa_receive_public_key_from_server */
 
 /* This is intentionally a global function, not a method of
  * GpapaPublicKey.
@@ -220,7 +243,7 @@ static void linecallback_refresh_sec (
     }
 } /* linecallback_refresh_sec */
 
-static void refresh_secret_keyring (
+void gpapa_refresh_secret_keyring (
   GpapaCallbackFunc callback, gpointer calldata
 ) {
   SecretKeyData data = { NULL, callback, calldata };
@@ -234,16 +257,16 @@ static void refresh_secret_keyring (
   gpgargv [ 1 ] = "--with-colons";
   gpgargv [ 2 ] = NULL;
   gpapa_call_gnupg (
-    gpgargv, TRUE, NULL,
+    gpgargv, TRUE, NULL, NULL,
     linecallback_refresh_sec, &data,
     callback, calldata
   );
-} /* refresh_secret_keyring */
+} /* gpapa_refresh_secret_keyring */
 
 gint gpapa_get_secret_key_count (
   GpapaCallbackFunc callback, gpointer calldata
 ) {
-  refresh_secret_keyring ( callback, calldata );
+  gpapa_refresh_secret_keyring ( callback, calldata );
   return ( g_list_length ( SecRing ) );
 } /* gpapa_get_secret_key_count */
 
@@ -251,7 +274,7 @@ GpapaSecretKey *gpapa_get_secret_key_by_index (
   gint idx, GpapaCallbackFunc callback, gpointer calldata
 ) {
   if ( SecRing == NULL )
-    refresh_secret_keyring ( callback, calldata );
+    gpapa_refresh_secret_keyring ( callback, calldata );
   return ( g_list_nth_data ( SecRing, idx ) );
 } /* gpapa_get_secret_key_by_index */
 
@@ -278,7 +301,7 @@ GpapaSecretKey *gpapa_get_secret_key_by_ID (
   gpgargv [ 2 ] = id;
   gpgargv [ 3 ] = NULL;
   gpapa_call_gnupg (
-    gpgargv, TRUE, NULL,
+    gpgargv, TRUE, NULL, NULL,
     linecallback_id_sec, &data,
     callback, calldata
   );
@@ -300,6 +323,44 @@ void gpapa_create_key_pair (
   GpapaCallbackFunc callback, gpointer calldata
 ) {
 } /* gpapa_create_key_pair */
+
+static void linecallback_export_ownertrust (
+  gchar *line, gpointer data, gboolean status
+) {
+  FILE *stream = data;
+  if ( stream && line );
+    fprintf ( stream, "%s\n", line );
+} /* linecallback_export_ownertrust */
+
+void gpapa_export_ownertrust (
+  gchar *targetFileID, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( ! targetFileID )
+    callback ( GPAPA_ACTION_ERROR, "target file not specified", calldata );
+  else
+    {
+      FILE *stream = fopen ( targetFileID, "w" );
+      if ( ! stream )
+        callback ( GPAPA_ACTION_ERROR, "could not open target file for writing", calldata );
+      else
+        {
+          char *gpgargv [ 3 ];
+          int i = 0;
+          if ( Armor == GPAPA_ARMOR )
+	    gpgargv [ i++ ] = "--armor";
+          gpgargv [ i++ ] = "--export-ownertrust";
+          gpgargv [ i ] = NULL;
+          gpapa_call_gnupg
+	    (
+	      gpgargv, TRUE, NULL, NULL,
+	      linecallback_export_ownertrust, stream,
+	      callback, calldata
+	    );
+          fclose ( stream );
+        }
+    }
+} /* gpapa_export_ownertrust */
 
 /* Miscellaneous.
  */

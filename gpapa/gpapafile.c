@@ -102,11 +102,11 @@ GpapaFileStatus gpapa_file_get_status (
       /* @@@ This should be rewritten once GnuPG supports
        * something like `--get-file-status'.
        */
-      gpgargv [ 0 ] = "--list-packets";
+      gpgargv [ 8 ] = "--list-packets";
       gpgargv [ 1 ] = file -> identifier;
       gpgargv [ 2 ] = NULL;
       file -> status_flags = 0;
-      gpapa_call_gnupg ( gpgargv, TRUE, FALSE,
+      gpapa_call_gnupg ( gpgargv, TRUE, NULL, NULL,
                          linecallback_get_status, &data,
                          callback, calldata );
       switch ( file -> status_flags)
@@ -132,7 +132,7 @@ GpapaFileStatus gpapa_file_get_status (
     }
 } /* gpapa_file_get_status */
 
-gint *gpapa_file_get_signature_count (
+gint gpapa_file_get_signature_count (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 ) {
   GList *sigs = gpapa_file_get_signatures ( file, callback, calldata );
@@ -227,7 +227,7 @@ GList *gpapa_file_get_signatures (
 	  gpgargv [ 1 ] = file -> identifier;
 	  gpgargv [ 2 ] = NULL;
 	  gpapa_call_gnupg (
-	    gpgargv, TRUE, FALSE,
+	    gpgargv, TRUE, NULL, NULL,
 	    linecallback_get_signatures, &data,
 	    callback, calldata
 	  );
@@ -246,7 +246,7 @@ void gpapa_file_sign (
   else
     {
       gchar *full_keyID;
-      char *gpgargv [ 8 ];
+      char *gpgargv [ 9 ];
       int i = 0;
       switch ( SignType )
 	{
@@ -277,12 +277,13 @@ void gpapa_file_sign (
 	{
 	  gpgargv [ i++ ] = "-o";
 	  gpgargv [ i++ ] = targetFileID;
+	  gpgargv [ i++ ] = "--yes";  /* overwrite the file */
 	}
       gpgargv [ i++ ] = file -> identifier;
       gpgargv [ i ] = NULL;
       gpapa_call_gnupg
 	(
-	  gpgargv, TRUE, PassPhrase,
+	  gpgargv, TRUE, NULL, PassPhrase,
 	  gpapa_linecallback_dummy, NULL,
 	  callback, calldata
 	);

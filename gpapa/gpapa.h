@@ -43,6 +43,10 @@ extern gchar *global_keyServer;
 
 extern GDate *extract_date ( gchar *buffer );
 
+extern void gpapa_refresh_public_keyring (
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
 extern gint gpapa_get_public_key_count (
   GpapaCallbackFunc callback, gpointer calldata
 );
@@ -55,8 +59,16 @@ extern GpapaPublicKey *gpapa_get_public_key_by_ID (
   gchar *keyID, GpapaCallbackFunc callback, gpointer calldata
 );
 
+extern GpapaPublicKey *gpapa_receive_public_key_from_server (
+  gchar *keyID, gchar *ServerName, GpapaCallbackFunc callback, gpointer calldata
+);
+
 extern void gpapa_release_public_key (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_refresh_secret_keyring (
+  GpapaCallbackFunc callback, gpointer calldata
 );
 
 extern gint gpapa_get_secret_key_count (
@@ -78,6 +90,11 @@ extern void gpapa_release_secret_key (
 extern void gpapa_create_key_pair (
   GpapaAlgo anAlgo, gint aKeysize, long anExpiryDate,
   gchar *aUserID, gchar *anEmail, gchar *aComment,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_export_ownertrust (
+  gchar *targetFileID, GpapaArmor Armor,
   GpapaCallbackFunc callback, gpointer calldata
 );
 

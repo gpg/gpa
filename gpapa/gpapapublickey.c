@@ -118,7 +118,7 @@ gchar *gpapa_public_key_get_fingerprint (
 	  gpgargv [ 2 ] = key_id;
 	  gpgargv [ 3 ] = NULL;
 	  gpapa_call_gnupg (
-	    gpgargv, TRUE, FALSE,
+	    gpgargv, TRUE, NULL, NULL,
 	    linecallback_fingerprint, &data,
 	    callback, calldata
 	  );
@@ -247,7 +247,7 @@ GList *gpapa_public_key_get_signatures (
 	  gpgargv [ 2 ] = key_id;
 	  gpgargv [ 3 ] = NULL;
 	  gpapa_call_gnupg (
-	    gpgargv, TRUE, FALSE,
+	    gpgargv, TRUE, NULL, NULL,
 	    linecallback_get_signatures, &data,
 	    callback, calldata
 	  );
@@ -262,17 +262,18 @@ void gpapa_public_key_export (
   GpapaCallbackFunc callback, gpointer calldata
 ) {
   if ( ! key )
-    callback ( GPAPA_ACTION_ERROR, "key not specified", calldata );
-  if ( ! key )
+    callback ( GPAPA_ACTION_ERROR, "no valid public key specified", calldata );
+  if ( ! targetFileID )
     callback ( GPAPA_ACTION_ERROR, "target file not specified", calldata );
   if ( key && targetFileID )
     {
       gchar *full_keyID;
-      char *gpgargv [ 6 ];
+      char *gpgargv [ 7 ];
       int i = 0;
       full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
       gpgargv [ i++ ] = "-o";
       gpgargv [ i++ ] = targetFileID;
+      gpgargv [ i++ ] = "--yes";  /* overwrite the file */
       if ( Armor == GPAPA_ARMOR )
 	gpgargv [ i++ ] = "--armor";
       gpgargv [ i++ ] = "--export";
@@ -280,7 +281,7 @@ void gpapa_public_key_export (
       gpgargv [ i ] = NULL;
       gpapa_call_gnupg
 	(
-	  gpgargv, TRUE, NULL,
+	  gpgargv, TRUE, NULL, NULL,
 	  gpapa_linecallback_dummy, NULL,
 	  callback, calldata
 	);
@@ -288,7 +289,60 @@ void gpapa_public_key_export (
     }
 } /* gpapa_public_key_export */
 
-void gpapa_public_key_send_to_server (
+void gpapa_public_key_delete (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
 ) {
+  if ( ! key )
+    callback ( GPAPA_ACTION_ERROR, "no valid public key specified", calldata );
+  else
+    {
+      gchar *full_keyID;
+      char *gpgargv [ 3 ];
+      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
+      gpgargv [ 0 ] = "--delete-key";
+      gpgargv [ 1 ] = full_keyID;
+      gpgargv [ 2 ] = NULL;
+      gpapa_call_gnupg
+	(
+	  gpgargv, TRUE, NULL, NULL,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
+      free ( full_keyID );
+      gpapa_refresh_public_keyring ( callback, calldata );
+    }
+} /* gpapa_public_key_delete */;
+
+void gpapa_public_key_sign (
+  GpapaPublicKey *key, gchar *targetFileID, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+} /* gpapa_public_key_sign */
+
+void gpapa_public_key_send_to_server (
+  GpapaPublicKey *key, gchar *ServerName, 
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( ! key )
+    callback ( GPAPA_ACTION_ERROR, "no valid public key specified", calldata );
+  if ( ! ServerName )
+    callback ( GPAPA_ACTION_ERROR, "keyserver not specified", calldata );
+  if ( key && ServerName )
+    {
+      gchar *full_keyID;
+      char *gpgargv [ 5 ];
+      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
+      gpgargv [ 0 ] = "--keyserver";
+      gpgargv [ 1 ] = ServerName;
+      gpgargv [ 2 ] = "--send-keys";
+      gpgargv [ 3 ] = full_keyID;
+      gpgargv [ 4 ] = NULL;
+      gpapa_call_gnupg
+	(
+	  gpgargv, TRUE, NULL, NULL,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
+      free ( full_keyID );
+    }
 } /* gpapa_public_key_send_to_server */

@@ -78,8 +78,12 @@ extern void gpapa_public_key_export (
   GpapaCallbackFunc callback, gpointer calldata
 );
 
-extern void gpapa_public_key_send_to_server (
+extern void gpapa_public_key_delete (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_public_key_send_to_server (
+  GpapaPublicKey *key, gchar *ServerName, GpapaCallbackFunc callback, gpointer calldata
 );
 
 #endif /* __GPAPAPUBLICKEY_H__ */
