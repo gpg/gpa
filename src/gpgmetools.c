@@ -738,7 +738,7 @@ const gchar *gpa_gpgme_key_sig_get_short_keyid (GpgmeKey key, int uid_idx,
 /* Return a string with the status of the key signature.
  */
 const gchar *gpa_gpgme_key_sig_get_sig_status (GpgmeKey key, int uid_idx,
-                                               int idx)
+                                               int idx, GHashTable *revoked)
 {
   const gchar *status;
   switch (gpgme_key_sig_get_ulong_attr (key, uid_idx, GPGME_ATTR_SIG_STATUS, 
@@ -757,8 +757,9 @@ const gchar *gpa_gpgme_key_sig_get_sig_status (GpgmeKey key, int uid_idx,
     {
       status = _("Expired");
     }
-  else if (gpgme_key_sig_get_ulong_attr (key, uid_idx, GPGME_ATTR_KEY_REVOKED, 
-                                         NULL, idx))
+  else if (g_hash_table_lookup (revoked, gpgme_key_sig_get_string_attr
+                                (key, uid_idx, GPGME_ATTR_KEYID, 
+                                 NULL, idx)))
     {
       status = _("Revoked");
     }

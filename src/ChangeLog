@@ -1,5 +1,17 @@
 2002-12-13  Miguel Coca  <mcoca@gnu.org>
 
+	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_sig_get_sig_status): Use
+	a hash of revoked signatures to check for them.
+
+	* siglist.c (gpa_siglist_set_userid, gpa_siglist_set_all) 
+	(gpa_siglist_clear_columns, gpa_siglist_all_add_columns) 
+	(gpa_siglist_uid_add_columns, gpa_siglist_new): Use different number
+	of columns and type for "all signatures" and individual uids.
+	(revoked_signatures, gpa_siglist_set_userid): Keep a list of revoked
+	signatures and use it.
+
+	* expirydlg.c (expiry_ok): Remove unused variable.
+
 	* keyring.c (keyring_editor_menubar_new): Add some checks to avoid
 	crashes on bad translations, as the menu items are not found, and
 	NULL's are appended to the selection sensitive lists.

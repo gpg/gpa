@@ -57,7 +57,6 @@ expiry_ok (GPAExpiryDialog * dialog, GDate **new_date)
 
       if (!g_date_valid (*new_date))
 	{
-	  const gchar * buttons[] = {_("_OK"), NULL};
 	  /* FIXME: This error message should be more informative */
 	  gpa_window_error (_("Please provide a correct date."),
                             dialog->window);

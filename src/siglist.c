@@ -38,12 +38,11 @@ typedef enum
   SIG_N_COLUMNS
 } SignatureListColumn;
 
+
 /* Create the list of signatures */
 GtkWidget *
 gpa_siglist_new (void)
 {
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
   GtkListStore *store;
   GtkWidget *list;
 
@@ -51,6 +50,53 @@ gpa_siglist_new (void)
 			      G_TYPE_STRING, G_TYPE_STRING);
   list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
   gtk_widget_set_size_request (list, 400, 100);
+
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+                                        SIG_USERID_COLUMN, GTK_SORT_ASCENDING);
+
+  return list;
+}
+
+/* Remove all columns from the list */
+static void
+gpa_siglist_clear_columns (GtkWidget *list)
+{
+  GList *columns, *i;
+
+  columns = gtk_tree_view_get_columns (GTK_TREE_VIEW (list));
+  for (i = columns; i; i = g_list_next (i))
+    {
+      gtk_tree_view_remove_column (GTK_TREE_VIEW (list),
+                                   (GtkTreeViewColumn*) i->data);
+    }
+}
+
+/* Add columns common to signatures on all UID's */
+static void
+gpa_siglist_all_add_columns (GtkWidget *list)
+{
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
+						     "text", SIG_KEYID_COLUMN,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
+						     "text", SIG_USERID_COLUMN,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
+}
+
+/* Add columns for signatures on one UID */
+static void
+gpa_siglist_uid_add_columns (GtkWidget *list)
+{
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
@@ -69,12 +115,8 @@ gpa_siglist_new (void)
 						     "text", SIG_USERID_COLUMN,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
-
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-                                        SIG_USERID_COLUMN, GTK_SORT_ASCENDING);
-
-  return list;
 }
+
 
 typedef struct
 {
@@ -112,9 +154,14 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
   int i, uid;
   int old_mode = gpgme_get_keylist_mode (ctx);
   const gchar *keyid;
+
   /* Create the hash table */
   GHashTable *hash = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
                                             (GDestroyNotify) signature_free);
+
+  /* Set the appropiate columns */
+  gpa_siglist_clear_columns (list);
+  gpa_siglist_all_add_columns (list);
 
   /* Get the key */
   gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
@@ -149,7 +196,7 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
               sig = g_malloc (sizeof (KeySignature));
               sig->keyid = gpa_gpgme_key_sig_get_short_keyid (key, uid, i);
               sig->userid = gpa_gpgme_key_sig_get_userid (key, uid, i);
-              sig->status = gpa_gpgme_key_sig_get_sig_status (key, uid, i);
+              sig->status = "";
               g_hash_table_insert (hash, (gchar*) keyid, sig);
             }
         }
@@ -164,6 +211,27 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
   gpgme_key_unref (key); 
 }
 
+static GHashTable*
+revoked_signatures (GpgmeKey key, int uid)
+{
+  int i;
+  const gchar *keyid;
+  GHashTable *hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+  for (i = 0; (keyid = gpgme_key_sig_get_string_attr (key, uid,
+                                                      GPGME_ATTR_KEYID, 
+                                                      NULL, i)); i++)
+    {
+      if (gpgme_key_sig_get_ulong_attr (key, uid, GPGME_ATTR_KEY_REVOKED, 
+                                        NULL, i))
+        {
+          g_hash_table_insert (hash, (gchar*) keyid, (gchar*) keyid);
+        }
+    }
+
+  return hash;
+}
+
 static void
 gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
 {
@@ -173,6 +241,11 @@ gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
   GpgmeError err;
   int i;
   int old_mode = gpgme_get_keylist_mode (ctx);
+  GHashTable *revoked;
+
+  /* Set the appropiate columns */
+  gpa_siglist_clear_columns (list);
+  gpa_siglist_uid_add_columns (list);
 
   /* Get the key */
   gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
@@ -183,30 +256,38 @@ gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
     }
   gpgme_set_keylist_mode (ctx, old_mode); 
 
+  /* Get the list of revoked signatures */
+  revoked = revoked_signatures (key, idx);
+
   /* Clear the model */
   gtk_list_store_clear (store);
   /* Add the signatures to the model */
   for (i = 0; gpgme_key_sig_get_string_attr (key, idx, GPGME_ATTR_KEYID, 
                                              NULL, i); i++)
     {
-      GtkTreeIter iter;
-      const gchar *keyid, *status;
-      gchar *userid;
-
-      /* The Key ID */
-      keyid = gpa_gpgme_key_sig_get_short_keyid (key, idx, i);
-      /* The user ID */
-      userid = gpa_gpgme_key_sig_get_userid (key, idx, i);
-      /* The signature status */
-      status = gpa_gpgme_key_sig_get_sig_status (key, idx, i);
-      /* Append it to the list */
-      gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter,
-                          SIG_KEYID_COLUMN, keyid, 
-                          SIG_STATUS_COLUMN, status,
-                          SIG_USERID_COLUMN, userid, -1);
-      /* Clean up */
-      g_free (userid);
+      /* Ignore revocation signatures */
+      if (!gpgme_key_sig_get_ulong_attr (key, idx, GPGME_ATTR_KEY_REVOKED, 
+                                         NULL, i))
+        {
+          GtkTreeIter iter;
+          const gchar *keyid, *status;
+          gchar *userid;
+          
+          /* The Key ID */
+          keyid = gpa_gpgme_key_sig_get_short_keyid (key, idx, i);
+          /* The user ID */
+          userid = gpa_gpgme_key_sig_get_userid (key, idx, i);
+          /* The signature status */
+          status = gpa_gpgme_key_sig_get_sig_status (key, idx, i, revoked);
+          /* Append it to the list */
+          gtk_list_store_append (store, &iter);
+          gtk_list_store_set (store, &iter,
+                              SIG_KEYID_COLUMN, keyid, 
+                              SIG_STATUS_COLUMN, status,
+                              SIG_USERID_COLUMN, userid, -1);
+          /* Clean up */
+          g_free (userid);
+        }
     }
   
   /* We don't need the key anymore */
