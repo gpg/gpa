@@ -1,5 +1,7 @@
 2001-02-01  Bernhard Herzog  <bh@intevation.de>
 
+	* Makefile.am (gpa_SOURCES): Add the new expiry dialog files
+
 	* expirydlg.h: 
 	* expirydlg.c: New files implementing the dialog to change the
 	expiry date
