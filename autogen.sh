@@ -149,8 +149,8 @@ aclocal
 echo "Running autoheader..."
 autoheader
 echo "Running automake --add-missing --gnu ..."
-automake --add-missing --gnu;
+automake --add-missing --gnu
 echo "Running autoconf..."
 autoconf
 
-echo "You may now run \"./configure\" and then \"make\"."
+echo "You may now run \"./configure --enable-maintainer-mode\" and then \"make\"."

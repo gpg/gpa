@@ -34,6 +34,12 @@ AH_TOP([
    and it should be used for new programs anyway */
 #define _GNU_SOURCE  1
 ])
+
+AH_BOTTOM([
+#include "gpadefs.h"
+])
+
+
 AM_MAINTAINER_MODE
 
 dnl Check for libraries
@@ -92,7 +98,8 @@ if test -z "$GPG"; then
   ]])
   fi
 fi
-AC_DEFINE_UNQUOTED(GPG_PATH, "$GPG")
+
+AC_DEFINE_UNQUOTED(GPG_PATH, "$GPG", [Path to the gpg binary.])
 
 
 dnl
