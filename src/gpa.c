@@ -290,7 +290,13 @@ main (int argc, char **argv)
       free (gtkrc);
     }
 
-  gpa_options.homedir = getenv ("GNUPGHOME");
+  #if defined(__MINGW32__) || defined(__CYGWIN__)
+    gpa_options.homedir = read_w32_registry_string( NULL, "Software\\GNU\\GnuPG", "HomeDir" );
+    gpg_program = read_w32_registry_string( NULL, "Software\\GNU\\GnuPG", "gpgProgram" );
+  #else
+     gpa_options.homedir = getenv ("GNUPGHOME");
+  #endif
+
   if (!gpa_options.homedir || !*gpa_options.homedir)
     {
 #ifdef HAVE_DRIVE_LETTERS
@@ -299,6 +305,10 @@ main (int argc, char **argv)
       gpa_options.homedir = "~/.gnupg";
 #endif
     }
+
+  if (!gpg_program || !*gpg_program) {
+      gpg_program = GPG_PROGRAM;
+  }
 
   /* check whether we have a config file on the commandline */
   orig_argc = argc;
