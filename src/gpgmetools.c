@@ -625,9 +625,18 @@ string_to_utf8 (const gchar *string)
 gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
 {
   const char * uid;
+  gchar *uid_utf8;
 
   uid = gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, idx);
-  return string_to_utf8 (uid);
+  uid_utf8 = string_to_utf8 (uid);
+  /* Tag revoked UID's*/
+  if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_UID_REVOKED, NULL, idx))
+    {
+      gchar *tmp = g_strdup_printf ("[%s] %s", _("Revoked"), uid_utf8);
+      g_free (uid_utf8);
+      uid_utf8 = tmp;
+    }
+  return uid_utf8;
 }
 
 /* Return the key fingerprint, properly formatted according to the algorithm.

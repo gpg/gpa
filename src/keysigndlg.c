@@ -87,11 +87,15 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
        gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, uid_count);
        uid_count++)
     {
-      string = gpa_gpgme_key_get_userid (key, uid_count);
-      label = gtk_label_new (string);
-      g_free (string);
-      gtk_box_pack_start_defaults (GTK_BOX(uid_box), label);
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      if (!gpgme_key_get_ulong_attr (key, GPGME_ATTR_UID_REVOKED, NULL, 
+                                     uid_count))
+        {
+          string = gpa_gpgme_key_get_userid (key, uid_count);
+          label = gtk_label_new (string);
+          g_free (string);
+          gtk_box_pack_start_defaults (GTK_BOX(uid_box), label);
+          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+        }
     }
 
   label = gtk_label_new ( uid_count == 1 ? _("User Name:") : _("User Names:"));

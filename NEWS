@@ -1,5 +1,8 @@
-Noteworthy changes in version 0.6.1 (UNRELEASED)
+Noteworthy changes in version 0.6.1 (unreleased)
 ------------------------------------------------
+
+ * Revoked user names are properly treated. They are not displayed, save in
+ the details notebook, and then they are clearly marked as revoked.
 
  * There is now a right click menu in the main key list.
 

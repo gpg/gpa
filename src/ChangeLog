@@ -1,5 +1,10 @@
 2002-12-31  Miguel Coca  <mcoca@gnu.org>
 
+	* gpgmetools.c (gpa_gpgme_key_get_userid): Tag revoked UID's as such.
+
+	* gpawidgets.c (gpa_key_info_new): Don't display revoked UID's.
+	* keysigndlg.c (gpa_key_sign_run_dialog): Likewise.
+
 	* keyring.c (keyring_editor_popup_menu_new): New. Creates the popup
 	menu.
 	(is_selected_row, display_popup_menu): Display it.

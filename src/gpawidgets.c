@@ -54,9 +54,13 @@ gpa_key_info_new (GpgmeKey key)
   string = gpa_gpgme_key_get_userid (key, 0);
   for (i = 1; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
     {
-      gchar *tmp = string;
-      string = g_strconcat (string, "\n", uid, NULL);
-      g_free (tmp);
+      /* Don't display revoked UID's */
+      if (!gpgme_key_get_ulong_attr (key, GPGME_ATTR_UID_REVOKED, NULL, i))
+        {
+          gchar *tmp = string;
+          string = g_strconcat (string, "\n", uid, NULL);
+          g_free (tmp);
+        }
     }
   label = gtk_label_new (string);
   g_free (string);
