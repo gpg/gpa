@@ -85,7 +85,7 @@ POSUB = po
 RANLIB = ranlib
 USE_INCLUDED_LIBINTL = no
 USE_NLS = yes
-VERSION = 0.3.0a
+VERSION = 0.3.1
 l = 
 
 INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/intl
