@@ -411,6 +411,7 @@ const gchar *gpa_key_ownertrust_string (GpgmeKey key)
     {
     case GPGME_VALIDITY_UNKNOWN:
     case GPGME_VALIDITY_UNDEFINED:
+    default:
       return _("Unknown");
       break;
     case GPGME_VALIDITY_NEVER:
@@ -439,6 +440,7 @@ const gchar *gpa_key_validity_string (GpgmeKey key)
     case GPGME_VALIDITY_UNDEFINED:
     case GPGME_VALIDITY_NEVER:
     case GPGME_VALIDITY_MARGINAL:
+    default:
       if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_REVOKED, NULL, 0))
         {
           return _("Revoked");
@@ -446,6 +448,15 @@ const gchar *gpa_key_validity_string (GpgmeKey key)
       else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_EXPIRED, NULL, 0))
         {
           return _("Expired");
+        }
+      else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_DISABLED, NULL, 
+                                         0))
+        {
+          return _("Disabled");
+        }
+      else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_UID_INVALID, NULL, 0))
+        {
+          return _("Incomplete");
         }
       else
         {

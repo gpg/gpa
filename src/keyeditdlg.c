@@ -111,54 +111,12 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc)key_edit_change_expiry, &dialog);
 
-
-  /* Owner Trust */
-  frame = gtk_frame_new (_("Owner Trust"));
-  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, TRUE, 5);
-  
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (frame), hbox);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_box_set_spacing (GTK_BOX (hbox), 10);
-
-  label = gtk_label_new (gpa_key_ownertrust_string(key));
-  dialog.ownertrust = label;
-  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-
-  button = gpa_button_new (accel_group, _("Change _trust"));
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc)key_edit_change_trust, &dialog);
-
-
   gtk_widget_show_all (window);
   gtk_dialog_run (GTK_DIALOG (window));
   gtk_widget_destroy (window);
   return dialog.key_has_changed;
 }
 
-
-/* signal handler for the owner trust change button. */
-static void
-key_edit_change_trust(GtkWidget * widget, gpointer param)
-{
-  GPAKeyEditDialog * dialog = param;
-  GpgmeKey key;
-  gboolean result;
-
-  key = gpa_keytable_lookup (keytable, dialog->fpr);
-  result = gpa_ownertrust_run_dialog (key, dialog->window);
-
-  if (result)
-    {
-      gpa_keytable_reload (keytable);
-      key = gpa_keytable_lookup (keytable, dialog->fpr);
-      gtk_label_set_text (GTK_LABEL (dialog->ownertrust),
-                          gpa_key_ownertrust_string (key));
-      dialog->key_has_changed = TRUE;
-    }
-}
-  
 
 /* signal handler for the expiry date change button. */
 static void

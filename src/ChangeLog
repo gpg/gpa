@@ -1,3 +1,16 @@
+2002-11-09  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpgmetools.c (gpa_key_validity_string): Add disabled and invalid
+	keys. Use "incomplete" for invalid.
+	(gpa_key_ownertrust_string): Add default option.
+
+	* keyring.c (keyring_editor_edit, keyring_editor_trust): New functions.
+	(keyring_editor_menubar_new): Add "edit" and "ownertrust" menu items.
+	(toolbar_edit_key): Use keyring_editor_edit.
+
+	* keyeditdlg.c (gpa_key_edit_dialog_run): Remove owner trust editing.
+	(key_edit_change_trust): Remove.
+
 2002-11-08  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* verifydlg.c (signature_status_label): Add support for

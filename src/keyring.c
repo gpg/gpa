@@ -118,6 +118,8 @@ static void toolbar_sign_key (GtkWidget *widget, gpointer param);
 static void toolbar_export_key (GtkWidget *widget, gpointer param);
 static void toolbar_import_keys (GtkWidget *widget, gpointer param);
 static void keyring_editor_sign (gpointer param);
+static void keyring_editor_edit (gpointer param);
+static void keyring_editor_trust (gpointer param);
 static void keyring_editor_import (gpointer param);
 static void keyring_editor_export (gpointer param);
 static void keyring_editor_backup (gpointer param);
@@ -389,6 +391,42 @@ keyring_editor_sign (gpointer param)
     }
 }
 
+/* Invoke the "edit key" dialog */
+static void
+keyring_editor_edit (gpointer param)
+{
+  GPAKeyringEditor * editor = param;  
+  gchar * fpr = keyring_editor_current_key_id (editor);
+
+  if (fpr)
+    {
+      if (gpa_key_edit_dialog_run (editor->window, fpr))
+        {
+          keyring_editor_fill_keylist (editor);
+          update_selection_sensitive_widgets (editor);
+          keyring_update_details_notebook (editor);
+        }
+    }
+}
+
+static void
+keyring_editor_trust (gpointer param)
+{
+  GPAKeyringEditor * editor = param;  
+  gchar * fpr = keyring_editor_current_key_id (editor);
+
+  if (fpr)
+    {
+      GpgmeKey key = gpa_keytable_lookup (keytable, fpr);
+      if (gpa_ownertrust_run_dialog (key, editor->window))
+        {
+          gpa_keytable_reload (keytable);
+          keyring_editor_fill_keylist (editor);
+          update_selection_sensitive_widgets (editor);
+          keyring_update_details_notebook (editor);
+        }
+    }
+}
 
 /* retrieve a key from the server */
 static void
@@ -866,9 +904,11 @@ keyring_editor_menubar_new (GtkWidget * window,
     {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
     {_("/Keys/_Generate Key..."), NULL, keyring_editor_generate_key, 0, NULL},
     {_("/Keys/_Delete Keys..."), NULL, keyring_editor_delete, 0, NULL},
+    {_("/Keys/_Edit Key..."), NULL, keyring_editor_edit, 0, NULL},
+    {_("/Keys/Change _Owner Trust..."), NULL, keyring_editor_trust, 0, NULL},
     {_("/Keys/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
     {_("/Keys/_Import Keys..."), NULL, keyring_editor_import, 0, NULL},
-    {_("/Keys/_Export Keys..."), NULL, keyring_editor_export, 0, NULL},
+    {_("/Keys/E_xport Keys..."), NULL, keyring_editor_export, 0, NULL},
     {_("/Keys/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
   };
   GtkItemFactoryEntry win_menu[] = {
@@ -1227,18 +1267,7 @@ keyring_set_detailed_listing (GtkWidget *widget, gpointer param)
 static void
 toolbar_edit_key (GtkWidget *widget, gpointer param)
 {
-  GPAKeyringEditor * editor = param;  
-  gchar * key_id = keyring_editor_current_key_id (editor);
-
-  if (key_id)
-    {
-      if (gpa_key_edit_dialog_run (editor->window, key_id))
-        {
-          keyring_editor_fill_keylist (editor);
-          update_selection_sensitive_widgets (editor);
-          keyring_update_details_notebook (editor);
-        }
-    }
+  keyring_editor_edit (param);
 }
 
 static void
