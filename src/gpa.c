@@ -697,6 +697,7 @@ main (int argc, char **argv)
 #endif
 
   gpa_open_keyring_editor ();
+
   /* for development purposes open the file manager too: */
   /*gpa_open_filemanager ();*/
   gtk_main ();

@@ -1,3 +1,8 @@
+2002-09-04  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keytable.c (keytable_fill): Display a dialog indicating that the
+	keyring is being read.
+
 2002-08-31  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* expirydlg.c (expiry_cancel, expiry_destroy): Removed.

@@ -35,6 +35,27 @@ static void keytable_fill (GHashTable *hash, gboolean secret)
   GpgmeError err;
   GpgmeKey key;
   gchar *fpr;
+  GtkWidget *window, *table, *label, *progress;
+  gchar *text;
+  gint i = 0;
+
+  /* Create the progress dialog */
+  window = gtk_dialog_new ();
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
+  gtk_window_set_title (GTK_WINDOW (window), _("GPA: Loading keyring"));
+  table = gtk_table_new (2, 2, FALSE);
+  label = gtk_label_new (secret ? 
+			 _("Loading secret keys") : _("Loading public keys"));
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
+  label = gtk_label_new ("0");
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
+  progress = gtk_progress_bar_new ();
+  gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (progress), 0.02);
+  gtk_table_attach_defaults (GTK_TABLE (table), progress, 0, 2, 1, 2);
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), table);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+  gtk_widget_show_all (window);
+  /* Load the keys */
   err = gpgme_op_keylist_start( ctx, NULL, secret );
   if( err != GPGME_No_Error )
         gpa_gpgme_error (err);
@@ -45,7 +66,18 @@ static void keytable_fill (GHashTable *hash, gboolean secret)
       fpr = g_strdup (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, 
                                                 NULL, 0 ));
       g_hash_table_insert (hash, fpr, key);
+      text = g_strdup_printf ("%i", ++i);
+      /* Change the progress bar */
+      gtk_label_set_text (GTK_LABEL (label), text);
+      g_free (text);
+      gtk_progress_bar_pulse (GTK_PROGRESS_BAR (progress));
+      /* Redraw */
+      while (gtk_events_pending ())
+	{
+	  gtk_main_iteration ();
+	}
     }
+  gtk_widget_destroy (window);
 }
 
 static gboolean true (const gchar *fpr, GpgmeKey key, gpointer data)
