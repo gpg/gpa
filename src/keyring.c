@@ -237,7 +237,10 @@ keyring_editor_delete (gpointer param)
 	{
 	  gpapa_secret_key_delete (secret_key, gpa_callback, editor->window);
 	}
-      gpapa_public_key_delete (public_key, gpa_callback, editor->window);
+      else
+	{
+	  gpapa_public_key_delete (public_key, gpa_callback, editor->window);
+	}
       selection = g_list_next (selection);
     }
   keyring_editor_fill_keylist (editor);
