@@ -62,7 +62,7 @@ gpa_key_info_new (GpgmeKey key)
   g_free (string);
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 		    GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
 
   /* User Name */
   label = gtk_label_new (i == 1 ? _("User Name:") : _("User Names:") );
@@ -70,7 +70,7 @@ gpa_key_info_new (GpgmeKey key)
                     0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.0);
 
-  /* User Name */
+  /* Key ID */
   label = gtk_label_new (_("Key ID:"));
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);

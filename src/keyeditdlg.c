@@ -61,7 +61,6 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   GtkAccelGroup *accel_group;
 
   GpgmeKey key;
-  GpgmeValidity trust;
   gchar *date_string;
 
   GPAKeyEditDialog dialog;
@@ -122,8 +121,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_set_spacing (GTK_BOX (hbox), 10);
 
-  trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
-  label = gtk_label_new (gpa_trust_string (trust));
+  label = gtk_label_new (gpa_key_ownertrust_string(key));
   dialog.ownertrust = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
@@ -146,29 +144,18 @@ key_edit_change_trust(GtkWidget * widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
   GpgmeKey key;
-  GpgmeValidity ownertrust;
-  GpgmeError err;
   gboolean result;
 
   key = gpa_keytable_lookup (keytable, dialog->fpr);
-  result = gpa_ownertrust_run_dialog (key, dialog->window,
-				      &ownertrust);
+  result = gpa_ownertrust_run_dialog (key, dialog->window);
 
   if (result)
     {
-      err = gpa_gpgme_edit_trust (key, ownertrust);
-      if (err == GPGME_No_Error)
-        {
-          gtk_label_set_text (GTK_LABEL (dialog->ownertrust),
-                              gpa_trust_string (ownertrust));
-          /* Reload all keys */
-          gpa_keytable_reload (keytable);
-          dialog->key_has_changed = TRUE;
-        }
-      else
-        {
-          gpa_gpgme_error (err);
-        }
+      gpa_keytable_reload (keytable);
+      key = gpa_keytable_lookup (keytable, dialog->fpr);
+      gtk_label_set_text (GTK_LABEL (dialog->ownertrust),
+                          gpa_key_ownertrust_string (key));
+      dialog->key_has_changed = TRUE;
     }
 }
   

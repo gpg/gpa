@@ -118,6 +118,12 @@ const gchar * gpa_algorithm_string (GPAKeyGenAlgo algo);
 
 GPAKeyGenAlgo gpa_algorithm_from_string (const gchar * string);
 
+/* Ownertrust strings */
+const gchar *gpa_key_ownertrust_string (GpgmeKey key);
+
+/* Key validity strings */
+const gchar *gpa_key_validity_string (GpgmeKey key);
+
 /* This is the function called by GPGME when it wants a passphrase */
 const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd);
 

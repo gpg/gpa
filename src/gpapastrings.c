@@ -27,60 +27,6 @@
  *	enums
  */
 
-static gchar *trust_strings_simplified[] = {
-  N_("unknown"),
-  N_("unknown"),
-  N_("don't trust"),
-  N_("trust marginally"),
-  N_("trust fully"),
-  N_("trust fully"),
-};
-
-static gchar *trust_strings_advanced[] = {
-  N_("undefined"),
-  N_("unknown"),
-  N_("don't trust"),
-  N_("trust marginally"),
-  N_("trust fully"),
-  N_("trust ultimately"),
-};
-
-gchar *
-gpa_trust_string (GpgmeValidity keytrust)
-{
-  if( gpa_simplified_ui () )
-    return _(trust_strings_simplified[keytrust]);
-  else
-    return _(trust_strings_advanced[keytrust]);
-}
-
-GpgmeValidity
-gpa_ownertrust_from_string (gchar * string)
-{
-  GpgmeValidity result;
-
-  result = 0;
-  while (result < sizeof(trust_strings_advanced)/
-	 sizeof(trust_strings_advanced[0]) &&
-	 strcmp (string, _(trust_strings_advanced[result])) != 0)
-    result++;
-  return result;
-} /* gpa_ownertrust_from_string */
-
-const char *
-gpa_ownertrust_icon_name (GpgmeValidity ownertrust)
-{
-  switch ( ownertrust )
-    {
-    case 0: return "gpa_trust_unknown";
-    case 1: return "gpa_dont_trust";
-    case 2: return "gpa_trust_marginally";
-    case 3: return "gpa_trust_fully";
-    }
-  return "oops";
-}
-
-
 static gchar *unit_expiry_time[4] = {
   N_("days"),
   N_("weeks"),

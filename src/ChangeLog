@@ -1,3 +1,28 @@
+2002-10-30  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpapastrings.c, gpapastrings.h (gpa_trust_string)
+	(gpa_ownertrust_from_string, gpa_ownertrust_icon_name): Remove
+	obsolete.
+
+	* ownertrustdialog.h, ownertrustdlg.c (gpa_ownertrust_run_dialog): 
+	Completedy redo the owner trust dialog. Edit the key inside this
+	function.
+
+	* keylist.c (get_trust_value, get_ownertrust_value): Rename key
+	trust as validity. Use new string functions.
+	* keyring.c (keyring_details_notebook) 
+	(keyring_details_page_fill_key): Likewise.
+
+	* keyeditdlg.c (gpa_key_edit_dialog_run): Use the new string
+	functions.
+	(key_edit_change_trust): Use new version of owner trust dialog.
+
+	* gpgmetools.h, gpgmetools.c (gpa_key_ownertrust_string) 
+	(gpa_key_validity_string): New functions.
+
+	* gpawidgets.c (gpa_key_info_new): Cosmetic fix to the label
+	alignment.
+
 2002-10-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* helpmenu.c (gpa_help_menu_add_to_factory, help_warranty): Remove

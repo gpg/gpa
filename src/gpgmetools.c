@@ -402,6 +402,62 @@ gpa_algorithm_from_string (const gchar * string)
   return result;
 }
 
+/* Ownertrust strings */
+const gchar *gpa_key_ownertrust_string (GpgmeKey key)
+{
+  GpgmeValidity trust;
+  trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
+  switch (trust) 
+    {
+    case GPGME_VALIDITY_UNKNOWN:
+    case GPGME_VALIDITY_UNDEFINED:
+      return _("Unknown");
+      break;
+    case GPGME_VALIDITY_NEVER:
+      return _("Never");
+      break;
+    case GPGME_VALIDITY_MARGINAL:
+      return _("Marginal");
+      break;
+    case GPGME_VALIDITY_FULL:
+      return _("Full");
+      break;
+    case GPGME_VALIDITY_ULTIMATE:
+      return _("Ultimate");
+      break;
+    }
+}
+
+/* Key validity strings */
+const gchar *gpa_key_validity_string (GpgmeKey key)
+{
+  GpgmeValidity valid;
+  valid = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
+  switch (valid) 
+    {
+    case GPGME_VALIDITY_UNKNOWN:
+    case GPGME_VALIDITY_UNDEFINED:
+    case GPGME_VALIDITY_NEVER:
+    case GPGME_VALIDITY_MARGINAL:
+      if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_REVOKED, NULL, 0))
+        {
+          return _("Revoked");
+        }
+      else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_EXPIRED, NULL, 0))
+        {
+          return _("Expired");
+        }
+      else
+        {
+          return _("Unknown");
+        }
+      break;
+    case GPGME_VALIDITY_FULL:
+    case GPGME_VALIDITY_ULTIMATE:
+      return _("Fully Valid");
+    }
+}
+
 static GtkWidget *passphrase_question_label (const gchar *desc)
 {
   GtkWidget *label;

@@ -109,10 +109,7 @@ get_trust_value (GpgmeKey key, GPAKeyList * keylist,
 		 gchar ** label, gboolean * free_label, GdkPixmap ** pixmap,
 		 GdkBitmap ** mask)
 {
-  GpgmeValidity trust;
-
-  trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
-  *label = gpa_trust_string (trust);
+  *label = gpa_key_validity_string (key);
   *free_label = FALSE;
   *pixmap = NULL;
   *mask = NULL;
@@ -123,10 +120,7 @@ get_ownertrust_value (GpgmeKey key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
-  GpgmeValidity trust;
-
-  trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
-  *label = gpa_trust_string (trust);
+  *label = gpa_key_ownertrust_string (key);
   *free_label = FALSE;
   *pixmap = NULL;
   *mask = NULL;
@@ -200,7 +194,7 @@ static ColumnDef column_defs[] = {
   {N_("User Name"), get_name_value},
   {N_("Key ID"), get_identifier_value},
   {N_("Expiry Date"), get_expirydate_value},
-  {N_("Key Trust"), get_trust_value},
+  {N_("Key Validity"), get_trust_value},
   {N_("Owner Trust"), get_ownertrust_value},
   {NULL, get_key_type_pixmap_value},
 };

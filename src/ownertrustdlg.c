@@ -26,96 +26,229 @@
 #include "gpawidgets.h"
 #include "gtktools.h"
 #include "gpapastrings.h"
-
-/*
- *	Some GUI construction functions
- */
-
-/* FIXME: this function should be in a separate module */
-extern GtkWidget *
-gpa_tableKey_new (GpgmeKey key, GtkWidget * window);
-
-
+#include "gpgmeedit.h"
 
 /*
  *	Owner Trust dialog
  */
 
-/* Run the owner trust dialog modally. */
-gboolean
-gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent,
-			   GpgmeValidity * trust)
-{
-  GtkAccelGroup *accelGroup;
-  GList *valueLevel = NULL;
-  GtkWidget *windowTrust;
-  GtkWidget *vboxTrust;
-  GtkWidget *tableKey;
-  GtkWidget *hboxLevel;
-  GtkWidget *labelLevel;
-  GtkWidget *comboLevel;
-
-  windowTrust = gtk_dialog_new_with_buttons (_("Change key ownertrust"),
-					     GTK_WINDOW (parent), 
-					     GTK_DIALOG_MODAL, 
-					     "_Set", GTK_RESPONSE_OK,
-					     GTK_STOCK_CANCEL, 
-					     GTK_RESPONSE_CANCEL, NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (windowTrust), GTK_RESPONSE_OK);
-  gtk_container_set_border_width (GTK_CONTAINER (windowTrust), 5);
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (windowTrust), accelGroup);
-
-  vboxTrust = GTK_DIALOG (windowTrust)->vbox;
-  gtk_container_set_border_width (GTK_CONTAINER (vboxTrust), 5);
-
-  tableKey = gpa_key_info_new (key);
-  gtk_container_set_border_width (GTK_CONTAINER (tableKey), 5);
-  gtk_box_pack_start (GTK_BOX (vboxTrust), tableKey, FALSE, FALSE, 0);
-
-  hboxLevel = gtk_hbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (hboxLevel), 5);
-
-  labelLevel = gtk_label_new ("");
-  gtk_box_pack_start (GTK_BOX (hboxLevel), labelLevel, FALSE, FALSE, 0);
-
-  comboLevel = gtk_combo_new ();
-  gtk_editable_set_editable (GTK_EDITABLE (GTK_COMBO (comboLevel)->entry),
-			     FALSE);
-  /* Not all values are used, and we can't be sure we can iterate over them,
-   * so we hardcode the validity values */
-  valueLevel = g_list_append (valueLevel, 
-                              gpa_trust_string (GPGME_VALIDITY_UNDEFINED));
-  valueLevel = g_list_append (valueLevel, 
-                              gpa_trust_string (GPGME_VALIDITY_NEVER));
-  valueLevel = g_list_append (valueLevel, 
-                              gpa_trust_string (GPGME_VALIDITY_MARGINAL));
-  valueLevel = g_list_append (valueLevel, 
-                              gpa_trust_string (GPGME_VALIDITY_FULL));
-  gtk_combo_set_popdown_strings (GTK_COMBO (comboLevel), valueLevel);
-  gpa_connect_by_accelerator (GTK_LABEL (labelLevel),
-			      GTK_COMBO (comboLevel)->entry, accelGroup,
-			      _("_Ownertrust level: "));
-  gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboLevel)->entry),
-		      gpa_trust_string (gpgme_key_get_ulong_attr
-					(key, GPGME_ATTR_VALIDITY, NULL,0)));
-  gtk_box_pack_start (GTK_BOX (hboxLevel), comboLevel, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vboxTrust), hboxLevel, TRUE, TRUE, 0);
-
-  gtk_widget_show_all (windowTrust);
-  if (gtk_dialog_run (GTK_DIALOG (windowTrust)) == GTK_RESPONSE_OK)
+static void
+init_radio_buttons (GpgmeValidity trust, GtkWidget *unknown_radio, 
+                    GtkWidget *never_radio, GtkWidget *marginal_radio, 
+                    GtkWidget *full_radio, GtkWidget *ultimate_radio)
+{  
+  switch (trust)
     {
-      gchar *trust_text;
-      
-      trust_text = (gchar *) gtk_entry_get_text
-	(GTK_ENTRY(GTK_COMBO(comboLevel)->entry));
-      *trust = gpa_ownertrust_from_string (trust_text);
-      gtk_widget_destroy (windowTrust);
-      return TRUE;
+    case GPGME_VALIDITY_UNKNOWN:
+    case GPGME_VALIDITY_UNDEFINED:
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (unknown_radio), TRUE);
+      break;
+    case GPGME_VALIDITY_NEVER:
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (never_radio), TRUE);
+      break;
+    case GPGME_VALIDITY_MARGINAL:
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (marginal_radio), TRUE);
+      break;
+    case GPGME_VALIDITY_FULL:
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (full_radio), TRUE);
+      break;
+    case GPGME_VALIDITY_ULTIMATE:
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ultimate_radio), TRUE);
+      break;
+    }
+}
+
+static GpgmeValidity
+get_selected_validity (GtkWidget *unknown_radio, GtkWidget *never_radio,
+                       GtkWidget *marginal_radio, GtkWidget *full_radio,
+                       GtkWidget *ultimate_radio)
+{
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (unknown_radio)))
+    {
+      return GPGME_VALIDITY_UNKNOWN;
+    }
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (never_radio)))
+    {
+      return GPGME_VALIDITY_NEVER;
+    }
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (marginal_radio)))
+    {
+      return GPGME_VALIDITY_MARGINAL;
+    }
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (full_radio)))
+    {
+      return GPGME_VALIDITY_FULL;
     }
   else
     {
-      gtk_widget_destroy (windowTrust);
-      return FALSE;
+      return GPGME_VALIDITY_ULTIMATE;
     }
-} /* gpa_ownertrust_run_dialog */
+}
+
+/* Run the owner trust dialog modally. */
+gboolean gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent)
+{
+  GtkWidget *dialog;
+  GtkWidget *key_info;
+  GtkWidget *table;
+  GtkWidget *frame;
+  GtkWidget *unknown_radio, *never_radio, *marginal_radio, *full_radio,
+    *ultimate_radio;
+  GtkWidget *label;
+  GtkResponseType response;
+  GpgmeValidity trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST,
+                                                  NULL, 0);
+  gboolean result;
+
+  /* Create the dialog */
+
+  dialog = gtk_dialog_new_with_buttons (_("Change key ownertrust"), 
+                                        GTK_WINDOW(parent),
+                                        GTK_DIALOG_MODAL,
+                                        GTK_STOCK_OK,
+                                        GTK_RESPONSE_OK,
+                                        GTK_STOCK_CANCEL,
+                                        GTK_RESPONSE_CANCEL,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+
+  key_info = gpa_key_info_new (key);
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), key_info);
+
+  /* Create the "Owner Trust" frame */
+
+  frame = gtk_frame_new (_("Owner Trust"));
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame);
+  table = gtk_table_new (10, 2, FALSE);
+  gtk_container_add (GTK_CONTAINER (frame), table);
+
+  unknown_radio = gtk_radio_button_new (NULL);
+  gtk_table_attach (GTK_TABLE (table), unknown_radio, 0, 1, 0, 1, 
+                    0, 0, 0, 0);
+  label = gtk_label_new_with_mnemonic (_("_Unknown"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), unknown_radio);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
+
+  label = gtk_label_new (_("You don't know how much to trust this user to "
+                           "verify other people's keys.\n"));
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
+
+  never_radio = gtk_radio_button_new_from_widget 
+    (GTK_RADIO_BUTTON (unknown_radio));
+  gtk_table_attach (GTK_TABLE (table), never_radio, 0, 1, 2, 3,
+                    0, 0, 0, 0);
+  label = gtk_label_new_with_mnemonic (_("_Never"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), never_radio);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 2, 3);
+
+  label = gtk_label_new (_("You don't trust this user at all to verify the "
+                           "validity of other people's keys at all.\n"));
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 3, 4);
+
+  marginal_radio = gtk_radio_button_new_from_widget 
+    (GTK_RADIO_BUTTON (unknown_radio));
+  gtk_table_attach (GTK_TABLE (table), marginal_radio, 0, 1, 4, 5,
+                    0, 0, 0, 0);
+  label = gtk_label_new_with_mnemonic (_("_Marginal"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), marginal_radio);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 4, 5);
+
+  label = gtk_label_new (_("You don't trust this user's ability to "
+                           "verify the validity of other people's keys "
+                           "enough to consider keys valid based on his/her "
+                           "sole word.\n"
+                           "However, provided this user's key is "
+                           "valid, you will consider a key signed by this "
+                           "user valid if it is also signed by at least "
+                           "other two marginally trusted users with "
+                           "valid keys\n"));
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 5, 6);
+
+  full_radio = gtk_radio_button_new_from_widget 
+    (GTK_RADIO_BUTTON (unknown_radio));
+  gtk_table_attach (GTK_TABLE (table), full_radio, 0, 1, 6, 7,
+                    0, 0, 0, 0);
+  label = gtk_label_new_with_mnemonic (_("_Full"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), full_radio);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 6, 7);
+
+  label = gtk_label_new (_("You trust this user's ability to "
+                           "verify the validity of other people's keys "
+                           "so much, that you'll consider valid any key "
+                           "signed by him/her, provided this user's key "
+                           "is valid.\n"));
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 7, 8);
+
+  ultimate_radio = gtk_radio_button_new_from_widget 
+    (GTK_RADIO_BUTTON (unknown_radio));
+  gtk_table_attach (GTK_TABLE (table), ultimate_radio, 0, 1, 8, 9,
+                    0, 0, 0, 0);
+  label = gtk_label_new_with_mnemonic (_("U_ltimate"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), ultimate_radio);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 8, 9);
+
+  label = gtk_label_new (_("You consider this key valid, and trust the user "
+                           "so much that you will consider any key signed "
+                           "by him/her fully valid.\n\n"
+                           "(Warning: This is intended to be used for keys "
+                           "you own. Don't use it with other people's keys "
+                           "unless you really know what you are doing.\n"));
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 9, 10);
+
+  /* Initialize */
+  init_radio_buttons (trust, unknown_radio, never_radio, marginal_radio, 
+                      full_radio, ultimate_radio);
+
+  /* Run */
+  gtk_widget_show_all (dialog);
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  /* Set the ownertrust */
+  if (response == GTK_RESPONSE_OK) 
+    {
+      GpgmeError err;
+      GpgmeValidity new_trust = get_selected_validity 
+              (unknown_radio, never_radio, marginal_radio, full_radio,
+               ultimate_radio);
+
+      /* If the user didn't change the trust, don't edit the key */
+      if (trust == new_trust ||
+          (trust == GPGME_VALIDITY_UNDEFINED && 
+           new_trust == GPGME_VALIDITY_UNKNOWN))
+        {
+          result = FALSE;
+        }
+      else
+        {
+          err = gpa_gpgme_edit_trust (key, new_trust);
+          if (err != GPGME_No_Error)
+            {
+              gpa_gpgme_error (err);
+            }
+          result = TRUE;
+        }
+    }
+  else
+    {
+      result = FALSE;
+    }
+
+  gtk_widget_destroy (dialog);
+  return result;
+}

@@ -979,7 +979,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   editor->detail_owner_trust = add_details_row (table, table_row++,
                                                 _("Owner Trust:"), FALSE);
   editor->detail_key_trust = add_details_row (table, table_row++,
-                                              _("Key Trust:"), FALSE);
+                                              _("Key Validity:"), FALSE);
   editor->detail_key_type = add_details_row (table, table_row++,
                                              _("Key Type:"), FALSE);
   editor->detail_creation = add_details_row (table, table_row++,
@@ -1014,8 +1014,6 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 static void
 keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
 {
-  GpgmeValidity key_trust;
-  GpgmeValidity owner_trust;
   gchar * text;
   gchar * uid;
   gint i;
@@ -1042,13 +1040,11 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
   gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
   g_free (text);
 
-  key_trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
-  text = gpa_trust_string (key_trust);
-  gtk_label_set_text (GTK_LABEL (editor->detail_key_trust), text);
+  gtk_label_set_text (GTK_LABEL (editor->detail_key_trust),
+                      gpa_key_validity_string (key));
 
-  owner_trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
-  text = gpa_trust_string (owner_trust);
-  gtk_label_set_text (GTK_LABEL (editor->detail_owner_trust), text);
+  gtk_label_set_text (GTK_LABEL (editor->detail_owner_trust),
+                      gpa_key_ownertrust_string (key));
 
   if (gpa_keytable_secret_lookup (keytable, gpgme_key_get_string_attr 
                                   (key, GPGME_ATTR_FPR, NULL, 0)))

@@ -24,10 +24,6 @@
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
-gboolean
-gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent,
-			   GpgmeValidity * trust);
-
-
+gboolean gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent);
 
 #endif /* OWNERTRUSTDLG_H */

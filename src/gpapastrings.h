@@ -29,11 +29,6 @@
 #include <glib.h>
 #include <gpgme.h>
 
-gchar * gpa_trust_string (GpgmeValidity keytrust);
-
-GpgmeValidity gpa_ownertrust_from_string (gchar * string);
-const char * gpa_ownertrust_icon_name (GpgmeValidity ownertrust);
-
 gchar * gpa_unit_expiry_time_string(int idx);
 gchar gpa_time_unit_from_string (gchar * string);
 gchar * gpa_expiry_date_string (unsigned long expiry_time);
