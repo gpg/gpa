@@ -100,7 +100,7 @@ gpapa_file_get_status (GpapaFile * file, GpapaCallbackFunc callback,
       /* @@@ This should be rewritten once GnuPG supports
        * something like `--get-file-status'.
        */
-      gpgargv[8] = "--list-packets";
+      gpgargv[0] = "--list-packets";
       gpgargv[1] = file->identifier;
       gpgargv[2] = NULL;
       file->status_flags = 0;

@@ -28,6 +28,7 @@ libgpapa_a_SOURCES = gpapa.c gpapa.h \
 		     posix-io.c \
 		     w32-io.c \
 		     posix-sema.c \
+		     sema.h \
 		     w32-sema.c \
 		     data.c \
 		     errors.c \

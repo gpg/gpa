@@ -1,3 +1,9 @@
+2001-02-13  Bernhard Herzog  <bh@intevation.de>
+
+	* Makefile.am (libgpapa_a_SOURCES): Add sema.h
+
+	* gpapafile.c (gpapa_file_get_status): Fix wrong gpgargv index.
+
 Sun 11 Feb 2001 26:42 Peter Gerwinski <peter@gerwinski.de>
 
         * gpapa.c (gpapa_create_key_pair): handle empty comments;
