@@ -89,6 +89,7 @@ struct _GPAKeyringEditor {
   /* The signatures list in the notebook */
   GtkWidget *signatures_list;
   GtkWidget *signatures_uids;
+  GtkWidget *signatures_label;
 
   /* Labels in the status bar */
   GtkWidget *status_key_user;
@@ -1222,6 +1223,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   gtk_box_pack_start (GTK_BOX (hbox), options, TRUE, TRUE, 0);
   gtk_widget_set_sensitive (options, FALSE);
   editor->signatures_uids = options;
+  editor->signatures_label = label;
   g_signal_connect (G_OBJECT (options), "changed",
                     G_CALLBACK (signatures_uid_selected), editor);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
@@ -1346,23 +1348,38 @@ keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
   gchar *uid;
   int i;
 
-  /* Create the menu for the popdown UID list */
-  menu = gtk_menu_new ();
-  label = gtk_menu_item_new_with_label (_("All signatures"));
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
-  for (i = 0; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
+  /* Create the menu for the popdown UID list, if there is more than une UID
+   */
+  if (key->uids && key->uids->next)
     {
-      label = gtk_menu_item_new_with_label (uid);
+      menu = gtk_menu_new ();
+      label = gtk_menu_item_new_with_label (_("All signatures"));
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
-      g_free (uid);
+      for (i = 0; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
+	{
+	  label = gtk_menu_item_new_with_label (uid);
+	  gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
+	  g_free (uid);
+	}
+      gtk_option_menu_set_menu (GTK_OPTION_MENU (editor->signatures_uids), 
+				menu);
+      gtk_widget_show_all (menu);
+      gtk_widget_show (editor->signatures_uids);
+      gtk_widget_show (editor->signatures_label);
+      gtk_widget_set_sensitive (editor->signatures_uids, TRUE);
+      /* Add the signatures */
+      gpa_siglist_set_signatures (editor->signatures_list, key, -1);
     }
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (editor->signatures_uids), menu);
-  gtk_widget_show_all (menu);
-  gtk_widget_set_sensitive (editor->signatures_uids, TRUE);
-  /* Add the signatures */
-  gpa_siglist_set_signatures (editor->signatures_list, key, -1);
+  else
+    {
+      /* If there is just one uid, display its signatures explicitly,
+       * and don't show the list of uids */
+      gtk_widget_hide (editor->signatures_uids);
+      gtk_widget_hide (editor->signatures_label);
+      gpa_siglist_set_signatures (editor->signatures_list, key, 0);
+    } 
 } /* keyring_signatures_page_fill_key */
-
+  
 
 /* Empty the list of signatures in the details notebook */
 static void

@@ -1,3 +1,10 @@
+2003-06-27  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (keyring_signatures_page_fill_key): Save the label in the
+	signature page for later use.
+	(keyring_signatures_page_fill_key): Only show the list of user ids if
+	there is more than one.
+
 2003-06-26  Miguel Coca  <mcoca@gnu.org>
 
 	* gpakeyselector.c (gpa_key_selector_done): Don't sort automatically.
