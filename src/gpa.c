@@ -166,6 +166,49 @@ gpa_set_simplified_ui (gboolean value)
  */
 static gchar *default_key = NULL;
 
+static guint default_key_changed_signal_id = 0;
+
+/* create a new signal type for toplevel windows */
+static void
+gpa_default_key_changed_marshal (GtkObject *object,
+				 GtkSignalFunc func,
+				 gpointer func_data,
+				 GtkArg *args)
+{
+  ((GPADefaultKeyChanged)func)(func_data);
+}
+
+static void
+gpa_create_default_key_signal (void)
+{
+  guint id;
+
+  gpointer klass = gtk_type_class (gtk_window_get_type ());
+
+  id = gtk_object_class_user_signal_new (klass, "gpa_default_key_changed",
+					 0, gpa_default_key_changed_marshal,
+					 GTK_TYPE_NONE, 0);
+  default_key_changed_signal_id = id;
+}
+
+static void
+gpa_emit_default_key_changed (void)
+{
+  GtkWidget * window;
+
+  window = gpa_get_keyring_editor ();
+  if (window)
+    {
+      gtk_signal_emit (GTK_OBJECT (window), default_key_changed_signal_id);
+    }
+  window = gpa_get_filenamager ();
+  if (window)
+    {
+      gtk_signal_emit (GTK_OBJECT (window), default_key_changed_signal_id);
+    }
+}
+
+
 /* Return the default key */
 gchar *
 gpa_default_key (void)
@@ -178,8 +221,18 @@ gpa_default_key (void)
 void
 gpa_set_default_key (gchar * key)
 {
+  gboolean emit;
+
+  if (default_key && key)
+    emit = strcmp (default_key, key) != 0;
+  else
+    emit = default_key != key;
+
   free (default_key);
   default_key = key;
+
+  if (emit)
+    gpa_emit_default_key_changed ();
 }
 
 /* Return the default key gpg would use, or at least a first
@@ -211,6 +264,7 @@ gpa_determine_default_key (void)
 static GtkWidget * keyringeditor = NULL;
 static GtkWidget * filemanager = NULL;
 
+
 static void
 quit_if_no_window (void)
 {
@@ -220,6 +274,7 @@ quit_if_no_window (void)
     }
 }
 
+
 static void
 close_main_window (GtkWidget *widget, gpointer param)
 {
@@ -228,6 +283,7 @@ close_main_window (GtkWidget *widget, gpointer param)
   *window = NULL;
   quit_if_no_window ();
 }
+
 
 void
 gpa_open_keyring_editor (void)
@@ -242,6 +298,7 @@ gpa_open_keyring_editor (void)
   gdk_window_raise (keyringeditor->window);
 }
 
+
 void
 gpa_open_filemanager (void)
 {
@@ -255,6 +312,19 @@ gpa_open_filemanager (void)
   gdk_window_raise (filemanager->window);
 }
 
+
+GtkWidget *
+gpa_get_keyring_editor (void)
+{
+  return keyringeditor;
+}
+
+
+GtkWidget *
+gpa_get_filenamager (void)
+{
+  return filemanager;
+}
 
 
 /*
@@ -281,6 +351,8 @@ main (int argc, char **argv)
   srand (time (NULL)); /* the about dialog uses rand() */
   gtk_init (&argc, &argv);
   i18n_init ();
+
+  gpa_create_default_key_signal ();
 
   /* read the gpa gtkrc */
   gtkrc = make_filename (GPA_DATADIR, "gtkrc", NULL);
