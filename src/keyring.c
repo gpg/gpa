@@ -643,8 +643,7 @@ keyring_editor_mapped (gpointer param)
 					  " Do you want to generate one now"
 					  " (recommended) or do it later?"),
 					buttons);
-	  printf ("message box result: %s\n", result);
-	  if (strcmp(result, _("Generate key now")) == 0)
+	  if (result && strcmp(result, _("Generate key now")) == 0)
 	    keyring_editor_generate_key (param);
 	  asked_about_key_generation = TRUE;
 	}
