@@ -1,5 +1,10 @@
 2001-02-06  Bernhard Herzog  <bh@intevation.de>
 
+	* helpmenu.c: Reformat several functions to conform more to GNU
+	standards.
+	(about_dialog_logo_expose): Don't add new timers here. Should fix
+	the segfaults that happened when the about dialog was closed.
+
 	* Makefile.am (gpa_SOURCES): Replace the keyreceivedlg files with
 	the keyimportdlg files.
 
