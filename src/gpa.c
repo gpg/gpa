@@ -235,11 +235,12 @@ gpa_set_default_key (gchar * key)
     gpa_emit_default_key_changed ();
 }
 
+
 /* Return the default key gpg would use, or at least a first
  * approximation. Currently this means the secret key with index 0. If
  * there's no secret key at all, return NULL
  */
-gchar *
+static gchar *
 gpa_determine_default_key (void)
 {
   GpapaSecretKey *key;
@@ -256,6 +257,17 @@ gpa_determine_default_key (void)
 
   return id;
 }
+
+
+/* If the default key is not set yet, set it to whatever
+ * gpa_determine_default_key suggests */
+void
+gpa_update_default_key (void)
+{
+  if (!default_key)
+    gpa_set_default_key (gpa_determine_default_key ());
+}
+
 
 /*
  *  Manage the two main windows
@@ -508,7 +520,7 @@ main (int argc, char **argv)
   gpapa_init (gpg_program);
 
   /* initialize the default key to a useful default */
-  gpa_set_default_key (gpa_determine_default_key ());
+  gpa_update_default_key ();
 
   gpa_window_tip_init ();
 
