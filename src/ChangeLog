@@ -1,3 +1,45 @@
+2003-02-07  Miguel Coca  <mcoca@gnu.org>
+
+	* fileman.c (get_selected_files): List files in the order they appear
+	on the screen.
+	(add_file): Add const to prototype.
+	(file_created_cb, register_operation): New. For use with operation
+	objects.
+	(decrypt_files): Use GpaFileDecryptOperation.
+
+	* passwddlg.c (gpa_change_passphrase_dialog_run): Use new prototype.
+
+	* gpgmetools.c (gpa_gpgme_new): Don't pass the context as data to
+	the passphrase callback. 
+	(check_overwriting): New.
+	(gpa_fopen): Use it.
+	(gpa_open_output, gpa_open_input): New.
+	(gpa_passphrase_cb): Use new prototype.
+
+	* gpgmeedit.c (passwd_passphrase_cb): Use new prototype.
+
+	* gpacontext.c (gpa_context_busy): New function.
+	(gpa_context_destroy): Add some checking.
+	(struct gpa_io_cb_data): Add "registered" field.
+	(queue_callback): Rename to...
+	(add_callback): New.
+	(register_queued_callbacks): Rename to...
+	(register_all_callbacks): New. Don't remove from the list, as it now
+	holds all callbacks.
+	(unregister_all_callbacks): New.
+	(gpa_context_register_cb): Always add callbacks to the list.
+	(gpa_context_remove_cb): Always remove callbacks from the list.
+	(gpa_context_passphrase_cb): New. Our own passphrase callback.
+	(gpa_context_start, gpa_context_done): Remove debugging
+	
+	* Makefile.am (gpa_SOURCES): Add new files.
+
+	* gpaprogressdlg.h, gpaprogressdlg.c: New. The progress dialog.
+
+	* gpaoperation.h, gpaoperation.c, gpafileop.h, gpafileop.c,
+	gpafiledecryptop.h, gpafiledecryptop.c: New. All operations will
+	now be objects.
+
 2003-02-02  Miguel Coca  <mcoca@gnu.org>
 
 	* gpacontext.c (register_callback, gpa_context_remove_cb): Fix clean

@@ -48,6 +48,8 @@
 #include "encryptdlg.h"
 #include "verifydlg.h"
 
+#include "gpafiledecryptop.h"
+
 struct _GPAFileManager {
   GtkWidget *window;
   GtkCList *clist_files;
@@ -82,7 +84,7 @@ get_selected_files (GtkCList *clist)
     {
       row = GPOINTER_TO_INT (selection->data);
       gtk_clist_get_text (clist, row, 0, &filename);
-      files = g_list_prepend (files, filename);
+      files = g_list_append (files, filename);
       selection = g_list_next (selection);
     }
 
@@ -92,7 +94,7 @@ get_selected_files (GtkCList *clist)
 
 /* Add file filename to the clist. Return the index of the new row */
 static gint
-add_file (GPAFileManager *fileman, gchar *filename)
+add_file (GPAFileManager *fileman, const gchar *filename)
 {
   gchar *entries[1];
   gchar *tmp;
@@ -114,6 +116,24 @@ add_file (GPAFileManager *fileman, gchar *filename)
   return row;
 }
 
+/* Add a file created by an operation to the list */
+static void
+file_created_cb (GpaFileOperation *op, const gchar *filename, gpointer data)
+{
+  GPAFileManager *fileman = data;
+  
+  add_file (fileman, filename);  
+}
+
+/* Do whatever is required with a file operation, to ensure proper clean up */
+static void
+register_operation (GPAFileManager *fileman, GpaFileOperation *op)
+{
+  g_signal_connect (G_OBJECT (op), "created_file",
+		    G_CALLBACK (file_created_cb), fileman);
+  g_signal_connect (G_OBJECT (op), "completed",
+		    G_CALLBACK (gpa_operation_destroy), NULL);
+}
 
 /*
  *	Callbacks
@@ -242,97 +262,15 @@ decrypt_files (gpointer param)
 {
   GPAFileManager *fileman = param;
   GList * files;
-  GList * cur;
-  GpgmeCtx ctx;
+  GpaFileDecryptOperation *op;
 
   files = get_selected_files (fileman->clist_files);
   if (!files)
     return;
 
-  /* Create a context */
-  ctx = gpa_gpgme_new ();
-  for (cur = files; cur; cur = g_list_next (cur))
-    {
-      GpgmeError err;
-      GpgmeData cipher, plain;
-      const gchar *filename = cur->data;
-      const gchar *extension;
-      gchar *plain_filename;
+  op = gpa_file_decrypt_operation_new (gpa_options, fileman->window, files);
 
-      /* Find out the destination file */
-      extension = g_strrstr (filename, ".");
-      if (extension && (g_str_equal (extension, ".asc") || 
-			g_str_equal (extension, ".gpg") ||
-			g_str_equal (extension, ".pgp")))
-	{
-	  /* Remove the extension */
-	  plain_filename = g_strdup (filename);
-	  *(plain_filename + (extension-filename)) = '\0';
-	}
-      else
-	{
-	  plain_filename = g_strconcat (filename, ".txt");
-	}
-      /* Open the ciphertext */
-      err = gpa_gpgme_data_new_from_file (&cipher, filename, fileman->window);
-      if (err == GPGME_File_Error)
-	{
-	  g_free (plain_filename);
-	  break;
-	}
-      else if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-      /* Create a GpgmeData for the output */
-      err = gpgme_data_new (&plain);
-      if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-      /* Decrypt */
-      err = gpgme_op_decrypt (ctx, cipher, plain);
-      if (err == GPGME_No_Passphrase)
-	{
-	  gpa_window_error (_("Wrong passphrase!"), fileman->window);
-	  break;
-	}
-      else if (err == GPGME_Canceled)
-	{
-	  break;
-	}
-      else if (err == GPGME_No_Data || err == GPGME_Decryption_Failed)
-	{
-	  gchar *message = g_strdup_printf (_("The file \"%s\" contained no "
-					      "valid encrypted data."),
-					    filename);
-	  gpa_window_error (message, fileman->window);
-	}
-      else if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-      else
-	{
-	  /* If everything went well, save the plaintext */
-	  FILE *plain_file = gpa_fopen (plain_filename, fileman->window);
-	  if (!plain_file)
-	    {
-	      gpgme_data_release (cipher);
-	      gpgme_data_release (plain);
-	      g_free (plain_filename);
-	      break;
-	    }
-	  dump_data_to_file (plain, plain_file);
-	  fclose (plain_file);
-	  add_file (fileman, plain_filename);
-	}
-      gpgme_data_release (cipher);
-      gpgme_data_release (plain);
-      g_free (plain_filename);
-    }
-  gpgme_release (ctx);
-  g_list_free (files);
+  register_operation (fileman, GPA_FILE_OPERATION (op));
 }
 
 

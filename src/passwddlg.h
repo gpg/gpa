@@ -23,7 +23,9 @@
 #ifndef PASSWDDLG_H
 #define PASSWDDLG_H
 
-const char *gpa_change_passphrase_dialog_run (void *opaque, 
-                                              const char *desc, void **r_hd);
+GpgmeError gpa_change_passphrase_dialog_run (void *opaque, 
+					     const char *desc, 
+					     void **r_hd,
+					     const char **result);
 
 #endif

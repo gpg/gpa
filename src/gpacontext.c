@@ -47,6 +47,12 @@ static void gpa_context_remove_cb (void *tag);
 static void gpa_context_event_cb (void *data, GpgmeEventIO type,
                                   void *type_data);
 
+static GpgmeError
+gpa_context_passphrase_cb (void *opaque, const char *desc, void **r_hd,
+			   const char **result);
+
+
+/* Signals */
 enum
 {
   START,
@@ -155,7 +161,8 @@ gpa_context_init (GpaContext *context)
     gpa_gpgme_error (err);
 
   /* Set the appropiate callbacks */
-  gpgme_set_passphrase_cb (context->ctx, gpa_passphrase_cb, context->ctx);
+  gpgme_set_passphrase_cb (context->ctx, gpa_context_passphrase_cb,
+			   context);
   /* Fill the CB structure */
   context->io_cbs = g_malloc (sizeof (struct GpgmeIOCbs));
   context->io_cbs->add = gpa_context_register_cb;
@@ -193,10 +200,25 @@ gpa_context_new (void)
   return context;
 }
 
-/* Destroy the GpaContext object */
+/* TRUE if an operation is in progress.
+ */
+gboolean
+gpa_context_busy (GpaContext *context)
+{
+  g_return_val_if_fail (context != NULL, FALSE);
+  g_return_val_if_fail (GPA_IS_CONTEXT (context), FALSE);
+
+  return context->busy;
+}
+
+/* Destroy the GpaContext object.
+ */
 void
 gpa_context_destroy (GpaContext *context)
 {
+  g_return_if_fail (context != NULL);
+  g_return_if_fail (GPA_IS_CONTEXT (context));
+
   g_object_run_dispose (G_OBJECT (context));
 }
 
@@ -218,6 +240,7 @@ struct gpa_io_cb_data
   void *fnc_data;
   gint watch;
   GpaContext *context;
+  gboolean registered;
 };
 
 /* This function is called by GLib. It's a wrapper for the callback
@@ -245,36 +268,54 @@ register_callback (struct gpa_io_cb_data *cb)
   cb->watch = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, 
 				   cb->dir ? READ_CONDITION : WRITE_CONDITION,
 				   gpa_io_cb, cb, NULL);
+  cb->registered = TRUE;
+  
   g_io_channel_unref (channel);
 }
 
 /* Queuing callbacks until the START event arrives */
 
-/* Add a callback to the queue, until the START event arrives
+/* Add a callback to the list, until the START event arrives
  */
 static void
-queue_callback (GpaContext *context, struct gpa_io_cb_data *cb)
+add_callback (GpaContext *context, struct gpa_io_cb_data *cb)
 { 
   context->cbs = g_list_append (context->cbs, cb);
 }
 
-/* Register with GLib and remove from the queue all callbacks GPGME
- * registered.
+/* Register with GLib all previously unregistered callbacks.
  */
 static void
-register_queued_callbacks (GpaContext *context)
+register_all_callbacks (GpaContext *context)
 {
   struct gpa_io_cb_data *cb;
   GList *list;
-
   
   for (list = context->cbs; list; list = g_list_next (list))
     {
       cb = list->data;
-      register_callback (cb);
+      if (!cb->registered)
+	{
+	  register_callback (cb);
+	}
     }
-  g_list_free (context->cbs);
-  context->cbs = NULL;
+}
+
+static void
+unregister_all_callbacks (GpaContext *context)
+{
+  struct gpa_io_cb_data *cb;
+  GList *list;
+  
+  for (list = context->cbs; list; list = g_list_next (list))
+    {
+      cb = list->data;
+      if (cb->registered)
+	{
+	  g_source_remove (cb->watch);
+	  cb->registered = FALSE;
+	}
+    }
 }
 
 /* The real GPGME callbacks */
@@ -288,22 +329,22 @@ gpa_context_register_cb (void *data, int fd, int dir, GpgmeIOCb fnc,
   GpaContext *context = data;
   struct gpa_io_cb_data *cb = g_malloc (sizeof (struct gpa_io_cb_data));
 
+  cb->registered = FALSE;
   cb->fd = fd;
   cb->dir = dir;  
   cb->fnc = fnc;
   cb->fnc_data = fnc_data;
   cb->context = context;
   /* If the context is busy, we already have a START event, and can
-   * register GLib callbacks freely. Else, we queue them until a START
-   * comes. */
+   * register GLib callbacks freely.
+   */
   if (context->busy)
     {
       register_callback (cb);
     }
-  else
-    {
-      queue_callback (context, cb);
-    }
+  /* In any case, we add it to the list.
+   */
+  add_callback (context, cb);
   *tag = cb;
 
   return GPGME_No_Error;
@@ -316,15 +357,11 @@ gpa_context_remove_cb (void *tag)
 {
   struct gpa_io_cb_data *cb = tag;
 
-  if (cb->context->busy)
+  if (cb->registered)
     {
       g_source_remove (cb->watch);
     }
-  else
-    {
-      cb->context->cbs = g_list_remove (cb->context->cbs, cb);
-    }
-
+  cb->context->cbs = g_list_remove (cb->context->cbs, cb);
   g_free (cb);
 }
 
@@ -364,16 +401,14 @@ gpa_context_event_cb (void *data, GpgmeEventIO type, void *type_data)
 static void
 gpa_context_start (GpaContext *context)
 {
-  fprintf (stderr, "START\n");
   context->busy = TRUE;
   /* We have START, register all queued callbacks */
-  register_queued_callbacks (context);
+  register_all_callbacks (context);
 }
 
 static void
 gpa_context_done (GpaContext *context, GpgmeError err)
 {
-  fprintf (stderr, "DONE\n");
   context->busy = FALSE;
 }
 
@@ -387,4 +422,19 @@ static void
 gpa_context_next_trust_item (GpaContext *context, GpgmeTrustItem item)
 {
   /* Do nothing yet */
+}
+
+/* The passphrase callback */
+static GpgmeError
+gpa_context_passphrase_cb (void *opaque, const char *desc, void **r_hd,
+			   const char **result)
+{
+  GpaContext *context = opaque;
+  GpgmeError err;
+
+  unregister_all_callbacks (context);
+  err = gpa_passphrase_cb (NULL, desc, r_hd, result);
+  register_all_callbacks (context);
+
+  return err;
 }

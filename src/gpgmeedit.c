@@ -770,8 +770,8 @@ GpgmeError gpa_gpgme_edit_sign (GpgmeCtx ctx, GpgmeKey key,
  */
 
 /* Special passphrase callback for use within the passwd command */
-static const char *
-passwd_passphrase_cb (void *opaque, const char *desc, void **r_hd)
+GpgmeError passwd_passphrase_cb (void *opaque, const char *desc, void **r_hd,
+				 const char **result)
 {
   int *i = opaque;
 
@@ -783,11 +783,11 @@ passwd_passphrase_cb (void *opaque, const char *desc, void **r_hd)
   
   if (*i == 1)
     {
-      return gpa_passphrase_cb (opaque, desc, r_hd);
+      return gpa_passphrase_cb (opaque, desc, r_hd, result);
     }
   else
     {
-      return gpa_change_passphrase_dialog_run (opaque, desc, r_hd);
+      return gpa_change_passphrase_dialog_run (opaque, desc, r_hd, result);
     }
 }
 

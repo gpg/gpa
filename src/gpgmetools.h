@@ -63,6 +63,7 @@ typedef struct {
  * Better to use the macro instead of the function
  */
 #define gpa_gpgme_error(err) _gpa_gpgme_error (err, __FILE__, __LINE__);
+#define gpa_gpgme_warning(err) _gpa_gpgme_error (err, __FILE__, __LINE__);
 void _gpa_gpgme_error (GpgmeError err, const char *file, int line);
 
 /* Initialize a GpgmeCtx for use with GPA */
@@ -87,6 +88,16 @@ FILE *gpa_fopen (const char *filename, GtkWidget *parent);
 GpgmeError gpa_gpgme_data_new_from_file (GpgmeData *data,
 					 const char *filename,
 					 GtkWidget *parent);
+
+/* Create a new GpgmeData from a file for writing, and return the file
+ * descriptor for the file. Always reports all errors to the user.
+ */
+int gpa_open_output (const char *filename, GpgmeData *data, GtkWidget *parent);
+
+/* Create a new GpgmeData from a file for reading, and return the file
+ * descriptor for the file. Always reports all errors to the user.
+ */
+int gpa_open_input (const char *filename, GpgmeData *data, GtkWidget *parent);
 
 /* Write the contents of the GpgmeData into the clipboard
  */
@@ -119,8 +130,8 @@ const gchar *gpa_key_ownertrust_string (GpgmeKey key);
 const gchar *gpa_key_validity_string (GpgmeKey key);
 
 /* This is the function called by GPGME when it wants a passphrase */
-const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd);
-
+GpgmeError gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd,
+			      const char **result);
 
 /* Convenience functions to access key attributes, which need to be filtered
  * before being displayed to the user. */

@@ -76,8 +76,10 @@ is_passphrase_correct (GtkWidget *parent, const gchar *passwd,
   return result;
 }
 
-const char *gpa_change_passphrase_dialog_run (void *opaque, const char *desc,
-                                              void **r_hd)
+GpgmeError gpa_change_passphrase_dialog_run (void *opaque, 
+					     const char *desc, 
+					     void **r_hd,
+					     const char **result)
 {
   GtkWidget *dialog;
   GtkWidget *vbox;
@@ -85,8 +87,6 @@ const char *gpa_change_passphrase_dialog_run (void *opaque, const char *desc,
   GtkWidget *label, *entry, *passwd_entry, *repeat_entry;
   GtkResponseType response;
   const gchar *passwd, *repeat;
-  gchar *result;
-  GpgmeCtx ctx = opaque;
   
   if (!desc)
     {
@@ -96,7 +96,7 @@ const char *gpa_change_passphrase_dialog_run (void *opaque, const char *desc,
           dialog = *r_hd;
           gtk_widget_destroy (dialog);
         }
-      return NULL;
+      return GPGME_No_Error;
     }
 
   dialog = gtk_dialog_new_with_buttons (_("Choose new passphrase"), NULL,
@@ -153,13 +153,11 @@ const char *gpa_change_passphrase_dialog_run (void *opaque, const char *desc,
 
   if (response == GTK_RESPONSE_OK)
     {
-      return passwd;
+      *result = passwd;
+      return GPGME_No_Error;
     }
   else
     {
-      gpgme_cancel (ctx);
-      return "";
+      return GPGME_Canceled;
     }
-  
-  return result;
 }

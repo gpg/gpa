@@ -26,6 +26,15 @@
 #include "gpgmetools.h"
 #include "gpgmeparsers.h"
 
+#ifdef G_OS_UNIX
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#else
+#include <io.h>
+#endif
+
 /* Report an unexpected error in GPGME and quit the application */
 void _gpa_gpgme_error (GpgmeError err, const char *file, int line)
 {
@@ -50,7 +59,7 @@ GpgmeCtx gpa_gpgme_new (void)
     {
       gpa_gpgme_error (err);
     }
-  gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, ctx);
+  gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
   
   return ctx;
 }
@@ -80,16 +89,9 @@ void dump_data_to_file (GpgmeData data, FILE *file)
   return;
 }
 
-/* Not really a gpgme function, but needed in most places dump_data_to_file
- * is used.
- * Opens a file for writing, asking the user to overwrite if it exists and
- * reporting any errors. Returns NULL on failure, but you can assume the user
- * has been informed of the error (or maybe he just didn't want to
- * overwrite!) */
-FILE *gpa_fopen (const char *filename, GtkWidget *parent)
+static gboolean
+check_overwriting (const char *filename, GtkWidget *parent)
 {
-  FILE *target;
-  
   /* If the file exists, ask before overwriting */
   if (g_file_test (filename, G_FILE_TEST_EXISTS))
     {
@@ -104,10 +106,25 @@ FILE *gpa_fopen (const char *filename, GtkWidget *parent)
       if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
 	{
 	  gtk_widget_destroy (msgbox);
-	  return NULL;
+	  return FALSE;
 	}
       gtk_widget_destroy (msgbox);
     }
+  return TRUE;
+}
+
+/* Not really a gpgme function, but needed in most places dump_data_to_file
+ * is used.
+ * Opens a file for writing, asking the user to overwrite if it exists and
+ * reporting any errors. Returns NULL on failure, but you can assume the user
+ * has been informed of the error (or maybe he just didn't want to
+ * overwrite!) */
+FILE *gpa_fopen (const char *filename, GtkWidget *parent)
+{
+  FILE *target;
+  
+  if (!check_overwriting (filename, parent))
+    return NULL;
   target = fopen (filename, "w");
   if (!target)
     {
@@ -117,6 +134,58 @@ FILE *gpa_fopen (const char *filename, GtkWidget *parent)
       g_free (message);
       return NULL;
     }
+  return target;
+}
+
+int
+gpa_open_output (const char *filename, GpgmeData *data, GtkWidget *parent)
+{
+  int target = -1;
+  
+  if (check_overwriting (filename, parent))
+    {
+      GpgmeError err;
+
+      target = creat (filename, 0666);
+      if (target == -1)
+	{
+	  gchar *message;
+	  message = g_strdup_printf ("%s: %s", filename, strerror(errno));
+	  gpa_window_error (message, parent);
+	  g_free (message);
+	}
+      err = gpgme_data_new_from_fd (data, target);
+      if (err != GPGME_No_Error)
+	{
+	  close (target);
+	  target = -1;
+	}
+    }
+
+  return target;
+}
+
+int
+gpa_open_input (const char *filename, GpgmeData *data, GtkWidget *parent)
+{
+  GpgmeError err;
+  int target = -1;
+
+  target = open (filename, O_RDONLY);
+  if (target == -1)
+    {
+      gchar *message;
+      message = g_strdup_printf ("%s: %s", filename, strerror(errno));
+      gpa_window_error (message, parent);
+      g_free (message);
+    }
+  err = gpgme_data_new_from_fd (data, target);
+  if (err != GPGME_No_Error)
+    {
+      close (target);
+      target = -1;
+    }
+
   return target;
 }
 
@@ -560,7 +629,8 @@ static GtkWidget *passphrase_question_label (const gchar *desc)
 }
 
 /* This is the function called by GPGME when it wants a passphrase */
-const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
+GpgmeError gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd,
+			      const char **result)
 {
   GtkWidget * dialog;
   GtkWidget * hbox;
@@ -569,7 +639,6 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
   GtkWidget * pixmap;
   GtkResponseType response;
   gchar *passphrase;
-  GpgmeCtx ctx = opaque;
 
   if (desc)
     {
@@ -606,13 +675,13 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
       if (response == GTK_RESPONSE_OK)
         {
           *r_hd = passphrase;
-          return passphrase;
+	  *result = passphrase;
+          return GPGME_No_Error;
         }
       else
         {
-	  gpgme_cancel (ctx);
           g_free (passphrase);
-          return "";
+          return GPGME_Canceled;
         }
     }
   else if (*r_hd)
@@ -621,11 +690,11 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
       passphrase = *r_hd;
       g_free (passphrase);
       *r_hd = NULL;
-      return NULL;
+      return GPGME_No_Error;
     }
   else
     {
-      return NULL;
+      return GPGME_General_Error;
     }
 }
 
