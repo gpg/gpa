@@ -1,5 +1,11 @@
 2001-02-09  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (key_has_been_signed): New function to test whether a
+	key has been signed by a given other key id
+	(keyring_editor_can_sign): Use the new function
+	(keyring_editor_sign): For each key, test whether it has already
+	been signed by the secret key.
+
 	* keygenwizard.c (string_strip_dup): Helper function to create a
 	copy of a string stripped off leading and trailing whitespace
 	(gpa_keygen_wizard_simple_get_text): Return a string_strip_dup'ed
