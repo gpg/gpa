@@ -34,11 +34,14 @@
 
 static char *scroll_text[] =
 {
-  "Markus Gerwinski",
+  "Bernhard Herzog",
   "Peter Gerwinski",
-  "Peter Neuhaus",
   "Werner Koch",
   "Jan-Oliver Wagner",
+  "Bernhard Reiter",
+  "Thomas Köster",
+  "Peter Neuhaus",
+  "Markus Gerwinski",
   "Beate Esser"
 };
 static int shuffle_array[ DIM(scroll_text) ];
