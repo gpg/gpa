@@ -226,6 +226,7 @@ typedef enum
   TRUST_START,
   TRUST_COMMAND,
   TRUST_VALUE,
+  TRUST_REALLY_ULTIMATE,
   TRUST_QUIT,
   TRUST_SAVE,
   TRUST_ERROR
@@ -245,6 +246,10 @@ edit_trust_fnc_action (int state, void *opaque, const char **result)
       /* Send the new trust date */
     case TRUST_VALUE:
       *result = trust;
+      break;
+      /* Really set to ultimate trust */
+    case TRUST_REALLY_ULTIMATE:
+      *result = "Y";
       break;
       /* End the operation */
     case TRUST_QUIT:
@@ -297,6 +302,23 @@ edit_trust_fnc_transit (int current_state, GpgmeStatusCode status,
         }
       break;
     case TRUST_VALUE:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          next_state = TRUST_QUIT;
+        }
+      else if (status == GPGME_STATUS_GET_BOOL &&
+               g_str_equal (args, "edit_ownertrust.set_ultimate.okay"))
+        {
+          next_state = TRUST_REALLY_ULTIMATE;
+        }
+      else
+        {
+          next_state = TRUST_ERROR;
+          *err = GPGME_General_Error;
+        }
+      break;
+    case TRUST_REALLY_ULTIMATE:
       if (status == GPGME_STATUS_GET_LINE &&
           g_str_equal (args, "keyedit.prompt"))
         {
