@@ -305,7 +305,7 @@ keyring_editor_can_sign (gpointer param)
       key_id = keyring_editor_current_key_id (editor);
       key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
 
-      if (key && strcmp (key_id, default_key_id) != 0)
+      if (key)
 	{
 	  result = TRUE;
 	  signatures = gpapa_public_key_get_signatures (key, gpa_callback,
