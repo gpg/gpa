@@ -1,5 +1,10 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_toolbar_new): Use the new help icon
+
+	* icons.xpm: 
+	* icons.c (xpms): Add some new icons
+
 	* keyring.c (keyring_editor_delete): Deleting keys has changed in
 	gpapa, so call either gpapa_secret_key_delete or
 	gpapa_public_key_delete, depending on whether there's a secret key
