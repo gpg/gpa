@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-13 20:33+0200\n"
-"PO-Revision-Date: 2003-10-12 17:43+0200\n"
+"POT-Creation-Date: 2003-10-13 23:21+0200\n"
+"PO-Revision-Date: 2003-10-18 13:35+0200\n"
 "Last-Translator: Miguel Coca <mcoca@gnu.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -578,7 +578,7 @@ msgstr "Puede cifrar"
 
 #: src/gpasubkeylist.c:122
 msgid "Can authenticate"
-msgstr ""
+msgstr "Puede autenticar"
 
 #: src/gpasubkeylist.c:135 src/gpgmetools.c:558 src/gpgmetools.c:729
 #: src/gpgmetools.c:855

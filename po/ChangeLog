@@ -1,3 +1,7 @@
+2003-10-18  Miguel Coca  <mcoca@gnu.org>
+
+	* es.po: Add missing string.
+
 2003-10-13  gettextize  <bug-gnu-gettext@gnu.org>
 
 	* Makefile.in.in: Upgrade to gettext-0.12.1.
