@@ -249,3 +249,15 @@ gpa_wizard_append_page (GtkWidget * widget, GtkWidget * page_widget,
   gtk_notebook_append_page (GTK_NOTEBOOK (wizard->notebook), page_widget,
 			    NULL);
 }
+
+
+/* Turn to the next page of the wizard and don't run the page action.
+ * This is used e.g. in keygenwizard.c by the action callback that is
+ * invoked by the finish button to display a "wait" message.
+ */
+void
+gpa_wizard_next_page_no_action (GtkWidget * widget)
+{
+  GPAWizard * wizard = gtk_object_get_data (GTK_OBJECT (widget), "user_data");
+  gtk_notebook_next_page (GTK_NOTEBOOK (wizard->notebook));
+}
