@@ -575,15 +575,19 @@ keyring_editor_backup (gpointer param)
       
       if (g_file_test (filename, (G_FILE_TEST_EXISTS)))
 	{
-	  const gchar *buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
-	  gchar *message = g_strdup_printf (_("The file %s already exists.\n"
-					      "Do you want to overwrite it?"),
-					    filename);
-	  gchar *reply = gpa_message_box_run (editor->window, _("File exists"),
-					      message, buttons);
-	  if (!reply || strcmp (reply, _("_Overwrite")) != 0)
-	    cancelled = TRUE;
-	  g_free (message);
+	  GtkWidget *msgbox = gtk_message_dialog_new 
+	    (GTK_WINDOW(editor->window), GTK_DIALOG_MODAL,
+	     GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
+	     _("The file %s already exists.\n"
+	       "Do you want to overwrite it?"), filename);
+	  gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
+				  GTK_STOCK_YES, GTK_RESPONSE_YES,
+				  GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
+	  if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
+	    {
+	      cancelled = TRUE;
+	    }
+	  gtk_widget_destroy (msgbox);
 	}
       if (!cancelled)
 	{
@@ -745,33 +749,53 @@ keyring_editor_mapped (gpointer param)
       if (!asked_about_key_generation
           && gpa_keytable_secret_size (keytable) == 0)
         {
-          const gchar * buttons[] = {_("_Generate key now"), _("Do it _later"),
-                                     NULL};
-          gchar * result;
-          result = gpa_message_box_run (editor->window, _("No key defined"),
-                                        _("You do not have a private key yet."
-                                          " Do you want to generate one now"
-                                          " (recommended) or do it later?"),
-                                        buttons);
-          if (result && strcmp(result, _("_Generate key now")) == 0)
-            keyring_editor_generate_key (param);
-          asked_about_key_generation = TRUE;
+	  GtkWidget *dialog;
+	  GtkResponseType response;
+
+	  dialog = gtk_message_dialog_new (GTK_WINDOW (editor->window),
+					   GTK_DIALOG_MODAL,
+					   GTK_MESSAGE_QUESTION,
+					   GTK_BUTTONS_NONE,
+					   _("You do not have a private key "
+					     "yet. Do you want to generate "
+					     "one now (recommended) or do it"
+					     " later?"));
+	  gtk_dialog_add_buttons (GTK_DIALOG (dialog), _("_Generate key now"),
+				  GTK_RESPONSE_OK, _("Do it _later"),
+				  GTK_RESPONSE_CANCEL, NULL);
+	  response = gtk_dialog_run (GTK_DIALOG (dialog));
+	  gtk_widget_destroy (dialog);
+          if (response == GTK_RESPONSE_OK)
+	    {
+	      keyring_editor_generate_key (param);
+	    }
+	  asked_about_key_generation = TRUE;
         }
       else if (!asked_about_key_backup
                && !gpa_backup_generated ()
                && gpa_keytable_secret_size (keytable) != 0)
         {
-          const gchar * buttons[] = {_("_Backup key now"), _("Do it _later"),
-                                     NULL};
-          gchar * result;
-          result = gpa_message_box_run (editor->window, _("No key backup"),
-                                        _("You do not have a backup copy of"
-                                          " your private key yet."
-                                          " Do you want to backup your key now"
-                                          " (recommended) or do it later?"),
-                                        buttons);
-          if (result && strcmp(result, _("_Backup key now")) == 0)
-            keyring_editor_backup (param);
+	  GtkWidget *dialog;
+	  GtkResponseType response;
+
+	  dialog = gtk_message_dialog_new (GTK_WINDOW (editor->window),
+					   GTK_DIALOG_MODAL,
+					   GTK_MESSAGE_QUESTION,
+					   GTK_BUTTONS_NONE,
+					   _("You do not have a backup copy of"
+					     " your private key yet."
+					     " Do you want to backup your key "
+					     "now (recommended) or do it "
+					     "later?"));
+	  gtk_dialog_add_buttons (GTK_DIALOG (dialog), _("_Backup key now"),
+				  GTK_RESPONSE_OK, _("Do it _later"),
+				  GTK_RESPONSE_CANCEL, NULL);
+	  response = gtk_dialog_run (GTK_DIALOG (dialog));
+	  gtk_widget_destroy (dialog);
+          if (response == GTK_RESPONSE_OK)
+	    {
+	      keyring_editor_backup (param);
+	    }
           asked_about_key_backup = TRUE;
         }
     }

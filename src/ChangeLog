@@ -1,5 +1,9 @@
 2002-10-20  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* keyring.c (keyring_editor_mapped): Use GtkMessageDialog's for the
+	questions.
+	(keyring_editor_backup): Likewise.
+
 	* Makefile.am (gpa_SOURCES): Added verifydlc.{c,h}.
 
 	* verifydlg.h, verifydlg.c: New files. The "Verify files" dialog.
