@@ -55,9 +55,6 @@ gpa_homeDirSelect_init (gchar * title)
 			     (gpointer) homeDirSelect);
   gtk_signal_connect (GTK_OBJECT (homeDirSelect), "delete_event",
 		      GTK_SIGNAL_FUNC (gtk_widget_hide), NULL);
-  /*  gtk_signal_connect_object (GTK_OBJECT (homeDirSelect), "hide",
-			     GTK_SIGNAL_FUNC (gtk_widget_hide),
-			     (gpointer) global_windowTip);*/
 }				/* gpa_homeDirSelect_init */
 
 void
@@ -89,9 +86,6 @@ gpa_loadOptionsSelect_init (gchar * title)
 			     (gpointer) loadOptionsSelect);
   gtk_signal_connect (GTK_OBJECT (loadOptionsSelect), "delete_event",
 		      GTK_SIGNAL_FUNC (gtk_widget_hide), NULL);
-  /*  gtk_signal_connect_object (GTK_OBJECT (loadOptionsSelect), "hide",
-			     GTK_SIGNAL_FUNC (gtk_widget_hide),
-			     (gpointer) global_windowTip);*/
 }				/* gpa_loadOptionsSelect_init */
 
 void
@@ -120,9 +114,6 @@ gpa_saveOptionsSelect_init (gchar * title)
 			     (gpointer) saveOptionsSelect);
   gtk_signal_connect (GTK_OBJECT (saveOptionsSelect), "delete_event",
 		      GTK_SIGNAL_FUNC (gtk_widget_hide), NULL);
-  /*  gtk_signal_connect_object (GTK_OBJECT (saveOptionsSelect), "hide",
-			     GTK_SIGNAL_FUNC (gtk_widget_hide),
-			     (gpointer) global_windowTip);*/
 }				/* gpa_saveOptionsSelect_init */
 
 void
