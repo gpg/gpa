@@ -1,0 +1,23 @@
+
+ - Implement the feature of differentiating between name and identifier of a
+   file. (For "normal" files: name = identifier without pathnames; for
+   mails: name = "Mail from/to ... [Date]
+
+ ? gpapa_import_ownertrust doesn't yield an error message when the file to
+   import from doesn't exist.
+
+
+FOR VERSION 1.x:
+
+ - Two possible ways of avoiding "modal" problems:
+   1. All of the windows do exist all time; they're never destroyed, just
+      hidden.
+   2. Every window _really_ is an object (i.e. a struct in this case). The
+      parameter pointers to pass to signal functions are not static, but
+      fields of these structs. Every window gets a constructor (they're
+      what is already existing in GPA 0.x) and a destructor, taking care of
+      the parameter pointers.
+   (Hell, what we need is a _really_ object oriented GUI lib!)
+
+ - Implement a unified way of keeping clist selections in memory. Currently,
+   it's a chaos...

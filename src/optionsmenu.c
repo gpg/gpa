@@ -155,6 +155,9 @@ void options_keyserver ( void ) {
     accelGroup, _( "_Key server: " )
   );
   gtk_combo_set_value_in_list ( GTK_COMBO ( comboServer ), FALSE, FALSE );
+  gtk_entry_set_text (
+    GTK_ENTRY ( GTK_COMBO ( comboServer ) -> entry ), global_keyserver
+  );
   gtk_box_pack_start ( GTK_BOX ( hboxServer ), comboServer, TRUE, TRUE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxServer ), hboxServer, TRUE, TRUE, 0 );
   hButtonBoxServer = gtk_hbutton_box_new ();

@@ -38,6 +38,9 @@ GtkWidget *global_windowTip;
 GtkWidget *global_textTip;
 gboolean global_noTips = FALSE;
 GpapaAction global_lastCallbackResult;
+/*!!!
+gchar *global_keyserver;
+!!!*/ gchar *global_keyserver = N_( "blackhole.pca.dfn.de" ); /*!!!*/
 
 gchar *writtenSigValidity [ 3 ] = {
   N_( "unknown" ),
@@ -207,7 +210,7 @@ printf ( "%d ", *(gint*) data ); /*!!!*/
 } /*!!!*/
 
 void gpa_selectRecipient (
-  GtkCList *clist, gint row, gint column, GdkEventButton *event,
+  GtkWidget *clist, gint row, gint column, GdkEventButton *event,
   gpointer userData
 ) {
 /* var */
@@ -226,7 +229,7 @@ g_print ( "\n" ); /*!!!*/
 } /* gpa_selectRecipient */
 
 void gpa_unselectRecipient (
-  GtkCList *clist, gint row, gint column, GdkEventButton *event,
+  GtkWidget *clist, gint row, gint column, GdkEventButton *event,
   gpointer userData
 ) {
 /* var */
@@ -379,7 +382,6 @@ GtkWidget *gpa_menubar_new ( GtkWidget *window ) {
     { _( "/File/P_rotect as" ), NULL, file_protectAs, 0, NULL },
     { _( "/File/_Decrypt" ), NULL, file_decrypt, 0, NULL },
     { _( "/File/Decrypt _as" ), NULL, file_decryptAs, 0, NULL },
-    { _( "/File/_Verify" ), NULL, file_verify, 0, NULL },
     { _( "/File/sep2" ), NULL, NULL, 0, "<Separator>" },
     { _( "/File/_Close" ), NULL, file_close, 0, NULL },
     { _( "/File/_Quit" ), "<control>Q", file_quit, 0, NULL },
@@ -389,7 +391,7 @@ GtkWidget *gpa_menubar_new ( GtkWidget *window ) {
     { _( "/Keys/sep1" ), NULL, NULL, 0, "<Separator>" },
     { _( "/Keys/_Generate Key" ), NULL, keys_generateKey, 0, NULL },
     { _( "/Keys/Generate _Revocation Certificate" ), NULL, keys_generateRevocation, 0, NULL },
-    { _( "/Keys/_Import" ), NULL, keys_import, 0, NULL },
+    { _( "/Keys/_Import Keys" ), NULL, keys_import, 0, NULL },
     { _( "/Keys/Import _Ownertrust" ), NULL, keys_importOwnertrust, 0, NULL },
     { _( "/Keys/_Update Trust Database" ), NULL, keys_updateTrust, 0, NULL },
     { _( "/_Options" ), NULL, NULL, 0, "<Branch>" },
@@ -435,7 +437,6 @@ void gpa_popupMenu_init ( void ) {
     { _( "/P_rotect as" ), NULL, file_protectAs, 0, NULL },
     { _( "/Decrypt" ), NULL, file_decrypt, 0, NULL },
     { _( "/Decrypt _as" ), NULL, file_decryptAs, 0, NULL },
-    { _( "/Verify" ), NULL, file_verify, 0, NULL },
     { _( "/sep2" ), NULL, NULL, 0, "<Separator>" },
     { _( "/Close" ), NULL, file_close, 0, NULL }
   };

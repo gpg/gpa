@@ -1493,10 +1493,6 @@ void file_decryptAs ( void ) {
   );
 } /* file_decryptAs */
 
-void file_verify ( void ) {
-g_print ( _( "Verify signatures of a file\n" ) ); /*!!!*/
-} /* file_verify */
-
 void file_close ( void ) {
 /* var */
   GList *indexFile, *previous;

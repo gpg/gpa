@@ -52,9 +52,7 @@ void gpa_window_destroy ( gpointer param ) {
   localParam = (gpointer*) param;
   window = (GtkWidget*) localParam [ 0 ];
   tip =        (gchar*) localParam [ 1 ];
-printf ( "Destroying: %d(@%d)\n", window, &window ); /*!!!*/
   gtk_widget_destroy ( window );
-printf ( "... destroyed\n" ); /*!!!*/
   if ( tip )
     gpa_windowTip_show ( tip );
   else

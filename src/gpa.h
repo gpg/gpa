@@ -35,6 +35,7 @@ extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
 extern gboolean global_noTips;
 extern GpapaAction global_lastCallbackResult;
+extern gchar *global_keyserver;
 
 extern GtkWidget *gpa_get_global_clist_file ( void );
 extern void gpa_callback (
@@ -45,11 +46,11 @@ extern void gpa_windowTip_init ( void );
 extern void gpa_windowTip_show ( gchar *text );
 extern void sigs_append ( gpointer data, gpointer userData );
 extern void gpa_selectRecipient (
-  GtkCList *clist, gint row, gint column, GdkEventButton *event,
+  GtkWidget *clist, gint row, gint column, GdkEventButton *event,
   gpointer userData
 );
 extern void gpa_unselectRecipient (
-  GtkCList *clist, gint row, gint column, GdkEventButton *event,
+  GtkWidget *clist, gint row, gint column, GdkEventButton *event,
   gpointer userData
 );
 extern void gpa_removeRecipients ( gpointer param );

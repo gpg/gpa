@@ -32,7 +32,6 @@ extern void file_protect ( void );
 extern void file_protectAs ( void );
 extern void file_decrypt ( void );
 extern void file_decryptAs ( void );
-extern void file_verify ( void );
 extern void file_close ( void );
 extern void file_quit ( void );
 
