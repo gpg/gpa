@@ -9,7 +9,7 @@ fi
 fname="$1"
 fromset=`sed -n '/^"Content-Type:/ s/.*charset=\([a-zA-Z0-9_-]*\).*/\1/p' $fname`
 
-iconv --from-code=$fromset --to-code=utf-8 < $fname | \
+iconv -f $fromset -t utf-8 < $fname | \
    sed '/^"Content-Type:/ s/charset=[a-zA-Z0-9_-]*/charset=utf-8/'
 
 

@@ -52,7 +52,6 @@ struct _GpaFileSelection
 {
   GtkDialog parent_instance;
 
-  GtkTreeModel *dir_list_model;
   GtkWidget *dir_list;
   GtkWidget *file_list;
   GtkWidget *selection_entry;

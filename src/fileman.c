@@ -323,7 +323,7 @@ show_file_detail (gpointer param)
     gdk_string_width (gtk_style_get_font (entryFilename->style),
                       contentsFilename)
     + gdk_string_width (gtk_style_get_font (entryFilename->style), "  ")
-    + entryFilename->style->xthickness, 0);
+    + my_gtk_style_get_xthickness (entryFilename->style), 0);
   gtk_table_attach (GTK_TABLE (tableTop), entryFilename, 1, 2, 0, 1, GTK_FILL,
 		    GTK_FILL, 0, 0);
 
@@ -632,7 +632,11 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 {
   GtkWidget *toolbar, *icon;
 
-  toolbar = gtk_toolbar_new (/* GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH @@@@@@ */);
+#ifdef __NEW_GTK__
+  toolbar = gtk_toolbar_new ();
+#else
+  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+#endif
   
   /* Open */
   if ((icon = gpa_create_icon_widget (window, "openfile")))

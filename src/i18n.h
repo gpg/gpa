@@ -22,8 +22,8 @@
 #define I18N_H
 
 #ifdef USE_SIMPLE_GETTEXT
-  int set_gettext_file( const char *filename );
-  const char *gettext( const char *msgid );
+  int set_gettext_file (const char *filename);
+  char *gettext (const char *msgid);
 
   #define _(a) gettext (a)
   #define N_(a) (a)

@@ -36,7 +36,7 @@
 #include "wait.h"
 #include "rungpg.h"
 #include "context.h"  /*temp hack until we have GpmeData methods to do I/O */
-#include "io.h"
+#include "gpgme_io.h"
 #include "sema.h"
 
 #include "status-table.h"

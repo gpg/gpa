@@ -1743,6 +1743,9 @@ msgstr "Verzeichnis erstellen"
 msgid "_Directory name:"
 msgstr "_Verzeichnisname:"
 
+msgid "Directory name:"
+msgstr "Verzeichnisname:"
+
 #. buttons
 #: gtk/gtkfilesel.c:1310 gtk/gtkfilesel.c:1438 gtk/gtkfilesel.c:1592
 #: gtk/gtkgamma.c:417
@@ -1755,6 +1758,9 @@ msgstr "_Öffnen"
 #: gtk/gtkfilesel.c:1322
 msgid "C_reate"
 msgstr "_Erstellen"
+
+msgid "Create"
+msgstr "Erstellen"
 
 #: gtk/gtkfilesel.c:1356
 #, c-format
@@ -1784,6 +1790,9 @@ msgstr "Fehler beim Löschen der Datei \"%s\": %s"
 #: gtk/gtkfilesel.c:1448
 msgid "_Delete"
 msgstr "_Löschen"
+
+msgid "Delete"
+msgstr "Löschen"
 
 #: gtk/gtkfilesel.c:1489 gtk/gtkfilesel.c:1503
 #, c-format
@@ -1823,6 +1832,9 @@ msgstr "Datei \"%s\" wirklich löschen?"
 #: gtk/gtkfilesel.c:1604
 msgid "_Rename"
 msgstr "_Umbenennen"
+
+msgid "Rename"
+msgstr "Umbenennen"
 
 #: gtk/gtkfilesel.c:2036
 msgid "Selection: "

@@ -33,6 +33,7 @@
 #include <sys/param.h>
 #endif
 #include <stdlib.h>
+#include <ctype.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -45,12 +46,17 @@
 #include <winsock.h>            /* For gethostname */
 #endif
 
+#include <io.h>
+#include <dirent.h>
 #include "fnmatch.h"
 
+#include <glib.h>
+#include <glib-object.h>
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include "gpafilesel.h"
+#include "gtkhacks.h"
 #include "i18n.h"
 
 #if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
@@ -313,7 +319,9 @@ static CompletionDirSent* open_new_dir     (gchar* dir_name,
 static gint           correct_dir_fullname (CompletionDir* cmpl_dir);
 static gint           correct_parent       (CompletionDir* cmpl_dir,
                                             struct stat *sbuf);
+#ifndef G_OS_WIN32              /* No inode numbers on Win32 */
 static gchar*         find_parent_dir_fullname    (gchar* dirname);
+#endif
 static CompletionDir* attach_dir           (CompletionDirSent* sent,
                                             gchar* dir_name,
                                             CompletionState *cmpl_state);
@@ -345,6 +353,7 @@ static void read_directory (GtkCTree *dir_list, GtkCTreeNode *parent,
                             gchar *path, gint sublevels);
 
 static void gpa_file_selection_class_init    (GpaFileSelectionClass *klass);
+#ifdef __NEW_GTK__
 static void gpa_file_selection_set_property  (GObject         *object,
                                               guint            prop_id,
                                               const GValue    *value,
@@ -353,8 +362,9 @@ static void gpa_file_selection_get_property  (GObject         *object,
                                               guint            prop_id,
                                               GValue          *value,
                                               GParamSpec      *pspec);
-static void gpa_file_selection_init          (GpaFileSelection      *filesel);
 static void gpa_file_selection_finalize      (GObject               *object);
+#endif
+static void gpa_file_selection_init          (GpaFileSelection      *filesel);
 static void gpa_file_selection_destroy       (GtkObject             *object);
 static gint gpa_file_selection_key_press     (GtkWidget             *widget,
                                               GdkEventKey           *event,
@@ -498,17 +508,18 @@ read_directory (GtkCTree *dir_list, GtkCTreeNode *parent,
 {
   gchar *text[1];
   GtkCTreeNode *this_node;
-  GDir *directory;
-  const gchar *dirent;
+  DIR *directory;
+  gchar *dir_name;
+  struct dirent *dirent;
 
   gtk_clist_freeze (GTK_CLIST (dir_list));
 
-  dirent = path + strlen (path) - 1;
-  while (dirent > path && *dirent != '/' && *dirent != G_DIR_SEPARATOR)
-    dirent--;
-  if (*dirent == '/' || *dirent == G_DIR_SEPARATOR)
-    dirent++;
-  text[0] = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
+  dir_name = path + strlen (path) - 1;
+  while (dir_name > path && *dir_name != '/' && *dir_name != G_DIR_SEPARATOR)
+    dir_name--;
+  if (*dir_name == '/' || *dir_name == G_DIR_SEPARATOR)
+    dir_name++;
+  text[0] = g_filename_to_utf8 (dir_name, -1, NULL, NULL, NULL);
 
   if (strcmp (path, "/") == 0)
     this_node = NULL;
@@ -547,22 +558,24 @@ read_directory (GtkCTree *dir_list, GtkCTreeNode *parent,
       if (this_node)
 	while (GTK_CTREE_ROW (this_node)->children)
 	  gtk_ctree_remove_node (dir_list, GTK_CTREE_ROW (this_node)->children);
-      directory = g_dir_open (path, 0, NULL);
+      directory = opendir (path);
       if (directory)
         {
           gboolean enough = FALSE;
-          while (!enough && (dirent = g_dir_read_name (directory)) != NULL)
+          while (!enough && (dirent = readdir (directory)) != NULL)
             {
               gchar *full_dir_name = g_strconcat (path, G_DIR_SEPARATOR_S,
-                                                  dirent, NULL);
-              if (g_file_test (full_dir_name, G_FILE_TEST_IS_DIR))
+                                                  dirent->d_name, NULL);
+              if (strcmp (dirent->d_name, ".") != 0
+                  && strcmp (dirent->d_name, "..") != 0
+                  && g_file_test (full_dir_name, G_FILE_TEST_IS_DIR))
                 {
                   if (sublevels > 0)
                     read_directory (dir_list, this_node, full_dir_name,
                                     sublevels - 1);
                   else
                     {
-                      text[0] = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
+                      text[0] = g_filename_to_utf8 (dirent->d_name, -1, NULL, NULL, NULL);
                       gtk_ctree_insert_node (dir_list, this_node, NULL, text, 5,
                                              pm_folder, mask_folder,
                                              pm_open_folder, mask_open_folder,
@@ -570,10 +583,9 @@ read_directory (GtkCTree *dir_list, GtkCTreeNode *parent,
                       enough = TRUE;
                     }
                 }
-	      g_free (dirent);
               g_free (full_dir_name);
             }
-          g_dir_close (directory);
+          closedir (directory);
         }
     }
   gtk_clist_thaw (GTK_CLIST (dir_list));
@@ -615,6 +627,7 @@ gpa_file_selection_class_init (GpaFileSelectionClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_DIALOG);
 
+#ifdef __NEW_GTK__
   gobject_class->finalize = gpa_file_selection_finalize;
   gobject_class->set_property = gpa_file_selection_set_property;
   gobject_class->get_property = gpa_file_selection_get_property;
@@ -634,8 +647,12 @@ gpa_file_selection_class_init (GpaFileSelectionClass *class)
                                                          FALSE,
                                                          G_PARAM_READABLE |
                                                          G_PARAM_WRITABLE));
+#endif /* __NEW_GTK__ */
+
   object_class->destroy = gpa_file_selection_destroy;
 }
+
+#ifdef __NEW_GTK__
 
 static void gpa_file_selection_set_property (GObject         *object,
                                              guint            prop_id,
@@ -695,12 +712,16 @@ static void gpa_file_selection_get_property (GObject         *object,
     }
 }
 
+#endif /* __NEW_GTK__ */
+
 static gboolean
 grab_default (GtkWidget *widget)
 {
   gtk_widget_grab_default (widget);
   return FALSE;
 }
+
+#ifdef __NEW_GTK__
 
 static void
 gtk_button_correct_label (GtkButton *button, gchar *label_text)
@@ -726,7 +747,9 @@ gtk_button_correct_label (GtkButton *button, gchar *label_text)
     {
       label = gtk_label_new_with_mnemonic (label_text);
 
+#ifdef __NEW_GTK__
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
+#endif
       
       image = gtk_image_new_from_stock (button->label_text, GTK_ICON_SIZE_BUTTON);
       hbox = gtk_hbox_new (FALSE, 2);
@@ -746,7 +769,9 @@ gtk_button_correct_label (GtkButton *button, gchar *label_text)
   if (button->use_underline)
     {
       label = gtk_label_new_with_mnemonic (button->label_text);
+#ifdef __NEW_GTK__
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
+#endif
     }
   else
     label = gtk_label_new (button->label_text);
@@ -756,6 +781,8 @@ gtk_button_correct_label (GtkButton *button, gchar *label_text)
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (button), label);
 }
+
+#endif /* __NEW_GTK__ */
      
 static void
 gpa_file_selection_init (GpaFileSelection *filesel)
@@ -879,6 +906,8 @@ gpa_file_selection_init (GpaFileSelection *filesel)
   /*  The OK/Cancel button area */
   confirm_area = dialog->action_area;
 
+#ifdef __NEW_GTK__
+
   /*  The Cancel button  */
   filesel->cancel_button = gtk_dialog_add_button (dialog,
                                                   GTK_STOCK_CANCEL,
@@ -890,6 +919,23 @@ gpa_file_selection_init (GpaFileSelection *filesel)
                                               GTK_STOCK_OK,
                                               GTK_RESPONSE_OK);
   gtk_button_correct_label (GTK_BUTTON (filesel->ok_button), _("_OK"));
+
+#else /* not __NEW_GTK__ */
+
+  /*  The Cancel button  */
+  filesel->ok_button = gtk_button_new_with_label (_("OK"));
+  GTK_WIDGET_SET_FLAGS (filesel->ok_button, GTK_CAN_DEFAULT);
+  gtk_box_pack_start (GTK_BOX (confirm_area), filesel->ok_button, TRUE, TRUE, 0);
+  gtk_widget_grab_default (filesel->ok_button);
+  gtk_widget_show (filesel->ok_button);
+
+  /*  The OK button  */
+  filesel->cancel_button = gtk_button_new_with_label (_("Cancel"));
+  GTK_WIDGET_SET_FLAGS (filesel->cancel_button, GTK_CAN_DEFAULT);
+  gtk_box_pack_start (GTK_BOX (confirm_area), filesel->cancel_button, TRUE, TRUE, 0);
+  gtk_widget_show (filesel->cancel_button);
+
+#endif /* not __NEW_GTK__ */
   
   gtk_widget_grab_default (filesel->ok_button);
 
@@ -950,6 +996,8 @@ gpa_file_selection_init (GpaFileSelection *filesel)
 
   gtk_widget_grab_focus (filesel->selection_entry);
 }
+
+#ifdef __NEW_GTK__
 
 static gchar *
 uri_list_extract_first_uri (const gchar* uri_list)
@@ -1169,6 +1217,9 @@ file_selection_setup_dnd (GpaFileSelection *filesel)
                       filesel);
 }
 
+#endif /* __NEW_GTK__ */
+
+
 GtkWidget*
 gpa_file_selection_new (const gchar *title)
 {
@@ -1176,9 +1227,13 @@ gpa_file_selection_new (const gchar *title)
 
   filesel = gtk_type_new (GPA_TYPE_FILE_SELECTION);
   gtk_window_set_title (GTK_WINDOW (filesel), title);
+  gtk_window_set_default_size (GTK_WINDOW (filesel), 580, 460);
+
+#ifdef __NEW_GTK__
   gtk_dialog_set_has_separator (GTK_DIALOG (filesel), FALSE);
 
   file_selection_setup_dnd (filesel);
+#endif
   
   return GTK_WIDGET (filesel);
 }
@@ -1221,7 +1276,9 @@ gpa_file_selection_show_fileop_buttons (GpaFileSelection *filesel)
                           filesel->fileop_ren_file, TRUE, TRUE, 0);
       gtk_widget_show (filesel->fileop_ren_file);
     }
+#ifdef __NEW_GTK__
   g_object_notify (G_OBJECT (filesel), "show_fileops");
+#endif
   gtk_widget_queue_resize (GTK_WIDGET (filesel));
 }
 
@@ -1375,6 +1432,8 @@ gpa_file_selection_destroy (GtkObject *object)
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
+#ifdef __NEW_GTK__
+
 static void
 gpa_file_selection_finalize (GObject *object)
 {
@@ -1385,14 +1444,18 @@ gpa_file_selection_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+#endif /* __NEW_GTK__ */
+
 /* Begin file operations callbacks */
 
 static void
 gpa_file_selection_fileop_error (GpaFileSelection *fs,
                                  gchar            *error_message)
 {
+#ifdef __NEW_GTK__
+
   GtkWidget *dialog;
-    
+
   g_return_if_fail (error_message != NULL);
 
   /* main dialog */
@@ -1401,6 +1464,54 @@ gpa_file_selection_fileop_error (GpaFileSelection *fs,
                                    GTK_MESSAGE_ERROR,
                                    GTK_BUTTONS_CLOSE,
                                    "%s", error_message);
+
+#else /* not __NEW_GTK__ */
+
+  GtkWidget *label;
+  GtkWidget *vbox;
+  GtkWidget *button;
+  GtkWidget *dialog;
+  
+  g_return_if_fail (error_message != NULL);
+
+  /* main dialog */
+  dialog = gtk_dialog_new ();
+  /*
+  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
+		      (gpointer) fs);
+  */
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Error"));
+  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  
+  /* If file dialog is grabbed, make this dialog modal too */
+  /* When error dialog is closed, file dialog will be grabbed again */
+  if (GTK_WINDOW(fs)->modal)
+      gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+
+  vbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+		     FALSE, FALSE, 0);
+  gtk_widget_show(vbox);
+
+  label = gtk_label_new(error_message);
+  gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
+  gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
+  gtk_widget_show(label);
+  
+  /* close button */
+  button = gtk_button_new_with_label (_("Close"));
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     (GtkSignalFunc) gtk_widget_destroy, 
+			     (gpointer) dialog);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default(button);
+  gtk_widget_show (button);
+
+#endif /* not __NEW_GTK__ */
 
   /* yes, we free it */
   g_free (error_message);
@@ -1509,20 +1620,29 @@ gpa_file_selection_create_dir (GtkWidget *widget,
                      FALSE, FALSE, 0);
   gtk_widget_show( vbox);
   
+#ifdef __NEW_GTK__
   label = gtk_label_new_with_mnemonic (_("_Directory name:"));
+#else
+  label = gtk_label_new_with_mnemonic (_("Directory name:"));
+#endif
   gtk_misc_set_alignment(GTK_MISC (label), 0.0, 0.0);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
   gtk_widget_show (label);
 
   /*  The directory entry widget  */
   fs->fileop_entry = gtk_entry_new ();
+#ifdef __NEW_GTK__
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), fs->fileop_entry);
+#endif
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
                       TRUE, TRUE, 5);
   GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
   gtk_widget_show (fs->fileop_entry);
   
   /* buttons */
+
+#ifdef __NEW_GTK__
+
   button = gtk_dialog_add_button (dialog, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   gtk_button_correct_label (GTK_BUTTON (button), _("_Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -1533,6 +1653,30 @@ gpa_file_selection_create_dir (GtkWidget *widget,
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
                       (GtkSignalFunc) gpa_file_selection_create_dir_confirmed, 
                       (gpointer) fs);
+
+#else /* not __NEW_GTK__ */
+  
+  /* buttons */
+  button = gtk_button_new_with_label (_("Create"));
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gpa_file_selection_create_dir_confirmed, 
+		      (gpointer) fs);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_show(button);
+  
+  button = gtk_button_new_with_label (_("Cancel"));
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     (GtkSignalFunc) gtk_widget_destroy, 
+			     (gpointer) dialog);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default(button);
+  gtk_widget_show (button);
+
+#endif /* not __NEW_GTK__ */
 
   gtk_widget_grab_focus (fs->fileop_entry);
   gtk_widget_show (dialog);
@@ -1642,6 +1786,9 @@ gpa_file_selection_delete_file (GtkWidget *widget,
   g_free (buf);
   
   /* buttons */
+
+#ifdef __NEW_GTK__
+
   button = gtk_dialog_add_button (dialog, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   gtk_button_correct_label (GTK_BUTTON (button), _("_Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -1652,6 +1799,30 @@ gpa_file_selection_delete_file (GtkWidget *widget,
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
                       (GtkSignalFunc) gpa_file_selection_delete_file_confirmed, 
                       (gpointer) fs);
+
+#else /* not __NEW_GTK__ */
+  
+  /* buttons */
+  button = gtk_button_new_with_label (_("Delete"));
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gpa_file_selection_delete_file_confirmed, 
+		      (gpointer) fs);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_show(button);
+  
+  button = gtk_button_new_with_label (_("Cancel"));
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     (GtkSignalFunc) gtk_widget_destroy, 
+			     (gpointer) dialog);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default(button);
+  gtk_widget_show (button);
+
+#endif /* not __NEW_GTK__ */
   
   gtk_widget_show (dialog);
 
@@ -1788,6 +1959,9 @@ gpa_file_selection_rename_file (GtkWidget *widget,
                               0, strlen (fs->fileop_file));
 
   /* buttons */
+
+#ifdef __NEW_GTK__
+
   button = gtk_dialog_add_button (dialog, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   gtk_button_correct_label (GTK_BUTTON (button), _("_Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -1798,6 +1972,30 @@ gpa_file_selection_rename_file (GtkWidget *widget,
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
                       (GtkSignalFunc) gpa_file_selection_rename_file_confirmed, 
                       (gpointer) fs);
+
+#else /* not __NEW_GTK__ */
+
+  /* buttons */
+  button = gtk_button_new_with_label (_("Rename"));
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gpa_file_selection_rename_file_confirmed, 
+		      (gpointer) fs);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_show(button);
+  
+  button = gtk_button_new_with_label (_("Cancel"));
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     (GtkSignalFunc) gtk_widget_destroy, 
+			     (gpointer) dialog);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default(button);
+  gtk_widget_show (button);
+
+#endif /* not __NEW_GTK__ */
 
   gtk_widget_show (dialog);
 }
@@ -2767,9 +2965,8 @@ open_new_dir (gchar       *dir_name,
               gboolean     stat_subdirs)
 {
   CompletionDirSent *sent;
-  GDir *directory;
-  const char *dirent;
-  GError *error;
+  DIR *directory;
+  struct dirent *dirent;
   gint entry_count = 0;
   gint n_entries = 0;
   gint i;
@@ -2791,38 +2988,37 @@ open_new_dir (gchar       *dir_name,
       return NULL;
     }
   
-  directory = g_dir_open (sys_dir_name, 0, &error);
+  directory = opendir (sys_dir_name);
   if (!directory)
     {
-      cmpl_errno = error->code; /* ??? */
       g_free (sys_dir_name);
       return NULL;
     }
 
-  while ((dirent = g_dir_read_name (directory)) != NULL)
+  while ((dirent = readdir (directory)) != NULL)
     entry_count++;
 
   sent->entries = g_new (CompletionDirEntry, entry_count);
   sent->entry_count = entry_count;
 
-  g_dir_rewind (directory);
+  rewinddir (directory);
 
   for (i = 0; i < entry_count; i += 1)
     {
-      dirent = g_dir_read_name (directory);
+      dirent = readdir (directory);
 
       if (!dirent)
         {
           g_warning ("Failure reading directory '%s'", sys_dir_name);
-          g_dir_close (directory);
+          closedir (directory);
           g_free (sys_dir_name);
           return NULL;
         }
 
-      sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
+      sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent->d_name, -1, NULL, NULL, NULL);
       if (!g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
         {
-          g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent);
+          g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent->d_name);
           continue;
         }
 
@@ -2831,7 +3027,7 @@ open_new_dir (gchar       *dir_name,
         {
           g_string_append_c (path, G_DIR_SEPARATOR);
         }
-      g_string_append (path, dirent);
+      g_string_append (path, dirent->d_name);
 
       if (stat_subdirs)
         {
@@ -2854,7 +3050,7 @@ open_new_dir (gchar       *dir_name,
   g_string_free (path, TRUE);
   qsort (sent->entries, sent->entry_count, sizeof (CompletionDirEntry), compare_cmpl_dir);
 
-  g_dir_close (directory);
+  closedir (directory);
 
   return sent;
 }
@@ -2935,9 +3131,10 @@ open_dir (gchar           *dir_name,
   struct stat sbuf;
   gboolean stat_subdirs;
   CompletionDirSent *sent;
-  GList* cdsl;
 
 #if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
+  GList* cdsl;
+
   if (!check_dir (dir_name, &sbuf, &stat_subdirs))
     return NULL;
 
@@ -3101,7 +3298,6 @@ correct_parent (CompletionDir *cmpl_dir,
   struct stat parbuf;
   gchar *last_slash;
   gchar *first_slash;
-  gchar *new_name;
   gchar *sys_filename;
   gchar c = 0;
 

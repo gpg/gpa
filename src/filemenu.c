@@ -643,7 +643,7 @@ file_encrypt_detail (gpointer param)
     gdk_string_width (gtk_style_get_font (entryFingerprint->style),
                       contentsFingerprint)
     + gdk_string_width (gtk_style_get_font (entryFingerprint->style), "  ")
-    + entryFingerprint->style->xthickness, 0);
+    + my_gtk_style_get_xthickness (entryFingerprint->style), 0);
   gtk_box_pack_start (GTK_BOX (vboxFingerprint), entryFingerprint, TRUE, TRUE,
 		      0);
   gtk_box_pack_start (GTK_BOX (vboxSigs), vboxFingerprint, FALSE, FALSE, 0);

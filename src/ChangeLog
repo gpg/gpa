@@ -1,3 +1,54 @@
+2002-02-19  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* Makefile.am (LDADD): Added two win32 specific libraries.
+
+	* gtkhacks.h: New file, contains some definitions to work around
+	incompatibilities between GTK+ 1.2 and 2.0.
+	
+	* fileman.c (show_file_detail): Use the new compatibility
+	functions defined in gtkhacks.h.
+	(gpa_fileman_toolbar_new): Allow compilation under both GTK 1.2
+	and 2.0.
+
+	* filemenu.c (file_encrypt_detail): Use the new compatibility
+	functions defined in gtkhacks.h.
+
+	* gpa.c (gpa_default_key_changed_marshal)
+	(gpa_create_default_key_signal): Enabled when compiling for GTK+
+	1.2, disabled for 2.0.
+	(dummy_log_func): New empty function.
+	(main): Disabled Glib/Gdk/Gtk error logging under all platforms to
+	keep MS-Windows from opening a console.
+
+	* gpa.h: Include the new gtkhacks.h. Define mkdir() and S_ISDIR
+	macros for win32.
+
+	* gpalicense.c, gpalicense.h: Cosmetic changes to the comments,
+	and added separated license texts for english and german. The
+	german text is used by default.
+
+	* gpafilesel.c, gpafilesel.h: Large changes for compatibility
+	between GTK+ versions.
+
+	* i18n.h: Removed "const" from gettext declaration.
+
+	* keyexportdlg.c (key_backup_dialog_run): Removed unused variable.
+
+	* keyring.c (keyring_editor_backup): Changed the type of some
+	variables to remove some warnings.
+	(keyring_editor_menubar_new): Removed unused variable.
+	(keyring_toolbar_new): Added some conditional compilation to allow
+	it to work with both GTK+ 1.2 and 2.0.
+
+	* keysmenu.c (gpa_tableKey_new): Use the new compatibility
+	functions defined in gtkhacks.h.
+
+	* optionsmenu.c: Removed everything related to the "default
+	recipients" menu item, to avoid confusing new users.
+
+	* simple-gettext.c (set_gettext_file): Return 0 instead of NULL,
+	since the function returns "int".
+	
 2002-02-15  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* keyring.c (keyring_editor_menubar_new): Added "Delete Keys" menu
@@ -151,6 +202,14 @@
 	* keysmenu.c (gpa_tableKey_new)
 	(gpa_frameExpire_new): Changed the way GtkEntries widths are
 	calculated.
+
+2002-02-05  Benedikt Wildenhain <benedikt.wildenhain@g-n-u.de>
+
+	* fileman.c (gpa_fileman_toolbar_new): Disabled the help button,
+	since it does nothing at the moment.
+
+	* keyring.c (keyring_toolbar_new): Disabled the help button, since
+	it does nothing at the moment.
 	
 2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
@@ -195,7 +254,6 @@
 	* icons.c, siglist.c: Formatting change.
 
 	* fileman.c (gpa_fileman_toolbar_new): Use new GTK+ 2.0 API.
-	Disabled the help button, since it does nothing at the moment.
 
 	* filemenu.c, gtktools.c, keysmenu.c: Now uses the new GpaFileSelection
 	instead of GtkFileSelection.
@@ -238,8 +296,7 @@
 	File/Close menu item. Added key operations (sign, export, export
 	private, backup) to the menu. Moved "Options" menu to before
 	"Keys" menu.
-	(keyring_toolbar_new): Use new GTK+ 2.0 API. Disabled the help
-	button, since it does nothing at the moment. Added button to open
+	(keyring_toolbar_new): Use new GTK+ 2.0 API. Added button to open
 	the file manager.
 	(keyring_editor_new): Changed default window size. Increased area
 	reserved for the key list.

@@ -592,7 +592,7 @@ keyring_editor_backup (gpointer param)
 	  gchar *pubkey_filename = g_strconcat (dir_name, "/pub_key.asc", NULL);
 	  gchar *seckey_filename = g_strconcat (dir_name, "/sec_key.asc", NULL);
           struct stat statbuf;
-	  gboolean *cancelled = FALSE;
+	  gboolean cancelled = FALSE;
 
 	  if (stat (pubkey_filename, &statbuf) == 0)
 	    {
@@ -600,8 +600,8 @@ keyring_editor_backup (gpointer param)
 	      gchar *message = g_strdup_printf (_("The file %s already exists.\n"
 		   			          "Do you want to overwrite it?"),
 					        pubkey_filename);
-	      gboolean reply = gpa_message_box_run (editor->window, _("File exists"),
-					            message, buttons);
+	      gchar *reply = gpa_message_box_run (editor->window, _("File exists"),
+					          message, buttons);
 	      if (!reply || strcmp (reply, _("_Overwrite")) != 0)
 		cancelled = TRUE;
 	      g_free (message);
@@ -612,8 +612,8 @@ keyring_editor_backup (gpointer param)
 	      gchar *message = g_strdup_printf (_("The file %s already exists.\n"
 		   			          "Do you want to overwrite it?"),
 					        seckey_filename);
-	      gboolean reply = gpa_message_box_run (editor->window, _("File exists"),
-					            message, buttons);
+	      gchar *reply = gpa_message_box_run (editor->window, _("File exists"),
+					          message, buttons);
 	      if (!reply || strcmp (reply, _("_Overwrite")) != 0)
 		cancelled = TRUE;
 	      g_free (message);
@@ -878,7 +878,6 @@ keyring_editor_menubar_new (GtkWidget * window,
 {
   GtkAccelGroup *accel_group;
   GtkItemFactory *factory;
-  GtkWidget *item;
   GtkItemFactoryEntry file_menu[] = {
     {_("/_File"), NULL, NULL, 0, "<Branch>"},
     {_("/File/_Close"), "<control>W", keyring_editor_close, 0, NULL},
@@ -1301,7 +1300,11 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   GtkWidget *item;
   GtkWidget *button;
 
-  toolbar = gtk_toolbar_new (/* GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH @@@@@@ */);
+#ifdef __NEW_GTK__
+  toolbar = gtk_toolbar_new ();
+#else
+  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+#endif
   
   icon = gpa_create_icon_widget (window, "edit");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Edit"),

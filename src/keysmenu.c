@@ -159,7 +159,7 @@ gpa_tableKey_new (GpapaKey * key, GtkWidget * window)
     gdk_string_width (gtk_style_get_font (entryKeyname->style),
                       contentsKeyname)
     + gdk_string_width (gtk_style_get_font (entryKeyname->style), "  ")
-    + entryKeyname->style->xthickness, 0);
+    + my_gtk_style_get_xthickness (entryKeyname->style), 0);
   gtk_entry_set_text (GTK_ENTRY (entryKeyname), contentsKeyname);
   gtk_editable_set_editable (GTK_EDITABLE (entryKeyname), FALSE);
   gtk_table_attach (GTK_TABLE (tableKey), entryKeyname, 1, 2, 0, 1,

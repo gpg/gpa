@@ -23,9 +23,20 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+#include "gtkhacks.h"
 #include <gpapa.h>
 #include "xmalloc.h"
 #include "logging.h"
+
+/* For mkdir() */
+#ifdef G_OS_WIN32
+#include <direct.h>
+#include <io.h>
+#define mkdir(p,m) _mkdir(p)
+#ifndef S_ISDIR
+#define S_ISDIR(mode) ((mode)&_S_IFDIR)
+#endif
+#endif
 
 #include "i18n.h"   /* fixme: file should go into each source file */
 #include "options.h" /* ditto */

@@ -1,4 +1,4 @@
-/* hkp-keyserver.c - W32 keyserver access based on WinPT
+/* keyserver.c - W32 keyserver access based on WinPT
  *   Copyright (C) 2000, 2001, 2002 Timo Schulz <twoaday@freakmail.de>
  *   Copyright (C) 2001 Marco Cunha <marco.cunha@ignocorp.com>
  *
@@ -22,7 +22,9 @@
 #if defined(__MINGW32__) || defined(HAVE_DOSISH_SYSTEM)
 #include <windows.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "keyserver.h"
 #include "xmalloc.h"
@@ -108,6 +110,8 @@ check_hkp_response(const char *resp, int recv)
   return 0;
 } /* check_hkp_response */
 
+#if 0  /* not used */
+
 static int
 sock_getline( int fd, char *buf, int buflen, int *nbytes )
 {
@@ -131,6 +135,8 @@ sock_getline( int fd, char *buf, int buflen, int *nbytes )
 		
   return 1;
 } /* sock_getline */
+
+#endif /* not used */
 
 static int
 sock_select(int fd)

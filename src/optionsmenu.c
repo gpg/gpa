@@ -133,6 +133,11 @@ options_keyserver (gpointer param)
   gtk_main ();
 } /* options_keyserver */
 
+/* This confuses novice users --> disabled for now.
+ * This can be put into the "advanced" mode, some day.
+ */
+#if 0
+
 static void
 options_recipients_fillDefault (gpointer data, gpointer userData)
 {
@@ -182,7 +187,6 @@ options_recipients_destroy (GtkWidget * widget, gpointer param)
 {
   gtk_main_quit ();
 }
-
 
 static void
 options_recipients (gpointer param)
@@ -382,6 +386,9 @@ global_windowMain);
   gpa_window_show_centered (windowRecipients, parent);
   gtk_main ();
 } /* options_recipients */
+
+#endif /* disabled */
+
 
 static void
 options_key_select (GtkCList * clist, gint row, gint column,

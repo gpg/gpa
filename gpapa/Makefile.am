@@ -22,7 +22,7 @@ libgpapa_a_SOURCES = gpapa.c gpapa.h \
 		     wait.c  wait.h \
 		     ops.h \
 		     gpgme_types.h \
-		     io.h \
+		     gpgme_io.h \
 		     status-table.h \
 		     util.c util.h \
 		     syshdr.h \
@@ -37,4 +37,4 @@ libgpapa_a_SOURCES = gpapa.c gpapa.h \
 		     context.h
 
 gpapatest_SOURCES = gpapatest.c
-gpapatest_LDADD =  -L . -lgpapa -L ../jnlib -ljnlib
+gpapatest_LDADD =  -L . -lgpapa -L ../jnlib -ljnlib -lwsock32 -liberty

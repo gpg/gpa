@@ -34,7 +34,7 @@
 #include "syshdr.h"
 
 #include "util.h"
-#include "io.h"
+#include "gpgme_io.h"
 
 static struct {
     void (*handler)(int,void*);

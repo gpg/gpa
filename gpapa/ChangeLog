@@ -1,3 +1,20 @@
+2002-02-19  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* Makefile.am (libgpapa_a_SOURCES): Renamed io.h to gpgme_io.h.
+	(gpapatest_LDADD): Added two win32 specific libraries.
+
+	* gpapa.c, gpapapublickey.c: Added some casts and "const" declarations.
+
+	* gpapa.h: Declared hkp_errtypestr as const and added declaration of
+	new function gpapa_import_keys_from_clipboard.
+
+	* io.h: Renamed to gpgme_io.h.
+
+	* keyserver.c: Removed (via #ifdef's) unused code.
+
+	* posix-io.c, rungpg.c, w32-io.c, wait.c: Include gpgme-io.h
+	instead of io.h.
+	
 2002-02-15  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gpapa.c, gpapa.h: Moved the defines controlling conditional

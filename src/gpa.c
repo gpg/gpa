@@ -252,7 +252,7 @@ static gchar *default_key = NULL;
 
 static guint default_key_changed_signal_id = 0;
 
-#if 0  /* @@@@@@ */
+#ifndef __NEW_GTK__ /* @@@@@@ */
 /* create a new signal type for toplevel windows */
 static void
 gpa_default_key_changed_marshal (GtkObject *object,
@@ -267,7 +267,7 @@ gpa_default_key_changed_marshal (GtkObject *object,
 static void
 gpa_create_default_key_signal (void)
 {
-#if 0  /* @@@@@@ */
+#ifndef __NEW_GTK__ /* @@@@@@ */
   guint id;
 
   gpointer klass = gtk_type_class (gtk_window_get_type ());
@@ -427,6 +427,14 @@ gpa_get_filenamager (void)
 }
 
 
+static void
+dummy_log_func (const gchar *log_domain, GLogLevelFlags log_level,
+                const gchar *message, gpointer user_data)
+{
+  /* empty */
+}
+
+
 /*
  *   Main function
  */
@@ -451,6 +459,23 @@ main (int argc, char **argv)
 #ifdef __MINGW32__
   hide_gpa_console_window();
 #endif
+
+  /* Disable logging to prevent MS Windows NT from opening a console.
+   */
+  g_log_set_handler ("Glib", G_LOG_LEVEL_CRITICAL
+                             | G_LOG_LEVEL_WARNING
+                             | G_LOG_LEVEL_MESSAGE
+                             | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
+
+  g_log_set_handler ("Gdk", G_LOG_LEVEL_CRITICAL
+                            | G_LOG_LEVEL_WARNING
+                            | G_LOG_LEVEL_MESSAGE
+                            | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
+
+  g_log_set_handler ("Gtk", G_LOG_LEVEL_CRITICAL
+                            | G_LOG_LEVEL_WARNING
+                            | G_LOG_LEVEL_MESSAGE
+                            | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
 
   gpa_homedir = g_strdup (argv[0]);
   l = strlen (gpa_homedir) - 2;

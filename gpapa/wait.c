@@ -32,7 +32,7 @@
 #include "ops.h"
 #include "wait.h"
 #include "sema.h"
-#include "io.h"
+#include "gpgme_io.h"
 
 struct wait_item_s;
 struct proc_s;

@@ -49,7 +49,7 @@ extern char *global_keyServer;
  * instead of running `gpg --recv-keys'.
  */
 #define __USE_HKP__
-extern const gchar *hkp_errtypestr[];
+extern gchar *hkp_errtypestr[];
 #endif
 
 /* Key management.
@@ -134,6 +134,9 @@ extern void gpapa_update_trust_database (GpapaCallbackFunc callback,
 
 extern void gpapa_import_keys (const gchar *sourceFileID,
 			       GpapaCallbackFunc callback, gpointer calldata);
+
+extern void gpapa_import_keys_from_clipboard (GpapaCallbackFunc callback,
+                                              gpointer calldata);
 
 /* Miscellaneous.
  */

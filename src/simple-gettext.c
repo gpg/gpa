@@ -269,7 +269,7 @@ set_gettext_file( const char *filename )
 	the_domain = NULL;
     }
     the_domain = domain;
-    return NULL;
+    return 0;
 }
 
 

@@ -35,7 +35,7 @@
 
 #include "util.h"
 #include "sema.h"
-#include "io.h"
+#include "gpgme_io.h"
 
 
 /* 

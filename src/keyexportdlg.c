@@ -399,7 +399,6 @@ key_backup_dialog_run (GtkWidget *parent, gchar **filename, gchar *key_id)
   GtkWidget *label;
   GtkWidget *entry;
   GtkWidget *button;
-  GtkWidget *check;
   GtkWidget *bbox;
   GPAKeyExportDialog dialog;
 

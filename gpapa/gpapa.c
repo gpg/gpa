@@ -26,7 +26,7 @@
 
 #define KEY_BUFLEN 65536
 
-const gchar *hkp_errtypestr[] =
+gchar *hkp_errtypestr[] =
   {
     "General error",
     "The keyserver returned an error message.",
@@ -447,7 +447,7 @@ gpapa_receive_public_key_from_server (const gchar *keyID,
 	  if (rc < 1 || rc > 8)
 	    rc = 1;
 	  if (rc == HKPERR_RECVKEY || rc == HKPERR_SENDKEY)
-            callback (GPAPA_ACTION_ERROR, kserver_strerror (), calldata);
+            callback (GPAPA_ACTION_ERROR, (char *) kserver_strerror (), calldata);
           callback (GPAPA_ACTION_ERROR, hkp_errtypestr[rc - 1], calldata);
 	}
       else
