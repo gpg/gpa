@@ -22,4 +22,4 @@ extern void keys_selectKey (GtkWidget * clistKeys, gint row, gint column,
 			    GdkEventButton * event, gpointer param);
 extern void keys_unselectKey (GtkWidget * clistKeys, gint row, gint column,
 			      GdkEventButton * event, gpointer param);
-extern GtkWidget *gpa_tableKey_new (GpapaKey * key, GtkWidget * window);
+extern GtkWidget *gpa_tableKey_new (GpgmeKey key, GtkWidget * window);

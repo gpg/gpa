@@ -37,8 +37,8 @@ const char * gpa_ownertrust_icon_name (GpapaOwnertrust ownertrust);
 
 gchar * gpa_unit_expiry_time_string(int index);
 gchar gpa_time_unit_from_string (gchar * string);
-gchar * gpa_expiry_date_string (GDate * expiry_date);
-gchar * gpa_creation_date_string (GDate * creation_date);
+gchar * gpa_expiry_date_string (unsigned long expiry_time);
+gchar * gpa_creation_date_string (unsigned long creation_time);
 
 gchar * gpa_file_status_string (GpapaFileStatus status);
 

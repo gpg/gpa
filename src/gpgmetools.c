@@ -226,3 +226,74 @@ gpa_algorithm_from_string (const gchar * string)
     result++;
   return result;
 }
+
+/* This is the function called by GPGME when it wants a passphrase */
+const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
+{
+  GtkWidget * dialog;
+  GtkWidget * vbox;
+  GtkWidget * entry;
+  GtkWidget * action_area;
+  GtkResponseType response;
+
+  if (desc)
+    {
+      dialog = gtk_dialog_new_with_buttons (_("Enter Passphrase"),
+                                            NULL, GTK_DIALOG_MODAL,
+                                            GTK_STOCK_OK,
+                                            GTK_RESPONSE_OK,
+                                            GTK_STOCK_CANCEL,
+                                            GTK_RESPONSE_CANCEL,
+                                            NULL);
+      vbox = GTK_DIALOG (dialog)->vbox;
+      action_area = GTK_DIALOG (dialog)->action_area;
+      /* The default button is OK */
+      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+      /* Set the contents of the dialog */
+      gtk_box_pack_start_defaults (GTK_BOX (vbox),
+                                   gtk_label_new (desc));
+      entry = gtk_entry_new ();
+      gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
+      gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+      gtk_box_pack_start_defaults (GTK_BOX (vbox), entry);
+      gtk_widget_grab_focus (entry);
+      /* Run the dialog */
+      gtk_widget_show_all (dialog);
+      response = gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_hide (dialog);
+      if (response == GTK_RESPONSE_OK)
+        {
+          return gtk_entry_get_text (GTK_ENTRY (entry));
+        }
+      else
+        {
+          return NULL;
+        }
+    }
+  else
+    {
+      /* Free the dialog */
+      dialog = *r_hd;
+      gtk_widget_destroy (dialog);
+      return NULL;
+    }
+}
+
+
+/*
+ * Edit functions. These are wrappers around the experimental gpgme key edit
+ * interface.
+ */
+
+/* Change the ownertrust of a key */
+GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust)
+{
+  return GPGME_No_Error;
+}
+
+/* Change the expiry date of a key */
+GpgmeError gpa_gpgme_edit_expiry (GpgmeKey key, GDate *date)
+{
+  return GPGME_No_Error;
+}
+

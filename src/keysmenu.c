@@ -19,7 +19,7 @@
  */
 
 #include <config.h>
-#include <gpapa.h>
+#include <gpgme.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <stdlib.h>
@@ -123,10 +123,10 @@ keys_ringEditor_close (gpointer param)
 }				/* keys_ringEditor_close */
 
 GtkWidget *
-gpa_tableKey_new (GpapaKey * key, GtkWidget * window)
+gpa_tableKey_new (GpgmeKey key, GtkWidget * window)
 {
 /* var */
-  gchar *contentsKeyname;
+  const gchar *contentsKeyname;
 /* objects */
   GtkWidget *tableKey;
   GtkWidget *labelJfdKeyID;
@@ -143,7 +143,8 @@ gpa_tableKey_new (GpapaKey * key, GtkWidget * window)
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryKeyID = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (entryKeyID),
-		      gpapa_key_get_identifier (key, gpa_callback, window));
+                      gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, 
+                                                 NULL, 0));
   gtk_editable_set_editable (GTK_EDITABLE (entryKeyID), FALSE);
   gtk_table_attach (GTK_TABLE (tableKey), entryKeyID, 1, 2, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -153,7 +154,8 @@ gpa_tableKey_new (GpapaKey * key, GtkWidget * window)
   gtk_table_attach (GTK_TABLE (tableKey), labelJfdKeyname, 0, 1, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryKeyname = gtk_entry_new ();
-  contentsKeyname = gpapa_key_get_name (key, gpa_callback, window);
+  contentsKeyname = gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, 
+                                               NULL, 0);
   gtk_widget_ensure_style (entryKeyname);
   gtk_widget_set_usize (entryKeyname,
     gdk_string_width (gtk_style_get_font (entryKeyname->style),

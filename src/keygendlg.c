@@ -35,33 +35,6 @@ struct _GPAKeyGenDialog {
 typedef struct _GPAKeyGenDialog GPAKeyGenDialog;
 
 
-static GPAKeyGenParameters *
-key_gen_params_new(void)
-{
-  GPAKeyGenParameters * params = xmalloc (sizeof (*params));
-  params->userID = NULL;
-  params->email = NULL;
-  params->comment = NULL;
-  params->expiryDate = NULL;
-  params->interval = 0;
-  params->generate_revocation = FALSE;
-  params->send_to_server = FALSE;
-  return params;
-}
-
-void
-gpa_key_gen_free_parameters(GPAKeyGenParameters * params)
-{
-  free (params->userID);
-  free (params->email);
-  free (params->comment);
-  if (params->expiryDate)
-    g_date_free (params->expiryDate);
-  free (params);
-}
-
-
-
 static void
 key_gen_cancel (gpointer param)
 {
@@ -135,7 +108,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   GPAKeyGenParameters * params = NULL;
 
   GList *contentsAlgorithm = NULL;
-  GpapaAlgo algo;
+  GPAKeyGenAlgo algo;
   GList *contentsKeysize = NULL;
 
   dialog.result = FALSE;
@@ -166,9 +139,9 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   comboAlgorithm = gtk_combo_new ();
   gtk_editable_set_editable (GTK_EDITABLE (GTK_COMBO (comboAlgorithm)->entry),
 			     FALSE);
-  for (algo = GPAPA_ALGO_FIRST; algo <= GPAPA_ALGO_LAST; algo++)
+  for (algo = GPA_KEYGEN_ALGO_FIRST; algo <= GPA_KEYGEN_ALGO_LAST; algo++)
     contentsAlgorithm = g_list_append (contentsAlgorithm,
-				       gpa_algorithm_string(algo));
+				       (gchar*) gpa_algorithm_string(algo));
   gtk_combo_set_popdown_strings (GTK_COMBO (comboAlgorithm),
 				 contentsAlgorithm);
   gpa_connect_by_accelerator (GTK_LABEL (labelAlgorithm),

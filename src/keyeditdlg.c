@@ -18,6 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <time.h>
 #include <config.h>
 #include <gpapa.h>
 #include <gtk/gtk.h>
@@ -34,7 +35,7 @@ typedef struct
   GtkWidget *window;
   GtkWidget *expiry;
   GtkWidget *ownertrust;
-  gchar *key_id;
+  gchar *fpr;
   gboolean key_has_changed;
 }
 GPAKeyEditDialog;
@@ -53,7 +54,7 @@ static void key_edit_change_trust (GtkWidget *widget, gpointer param);
 
 /* run the key edit dialog as a modal dialog */
 gboolean
-gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
+gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
 {
   GtkWidget *window;
   GtkWidget *vbox;
@@ -65,19 +66,16 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   GtkWidget *bbox;
   GtkAccelGroup *accel_group;
 
-  GpapaPublicKey *public_key;
-  GpapaSecretKey *secret_key;
-  GpapaOwnertrust trust;
-  GDate *expiry_date;
+  GpgmeKey key;
+  GpgmeValidity trust;
   gchar *date_string;
 
   GPAKeyEditDialog dialog;
 
-  dialog.key_id = key_id;
+  dialog.fpr = fpr;
   dialog.key_has_changed = FALSE;
 
-  public_key = gpapa_get_public_key_by_ID (key_id, gpa_callback, parent);
-  secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback, parent);
+  key = gpa_keytable_lookup (keytable, fpr);
 
   accel_group = gtk_accel_group_new ();
 
@@ -99,12 +97,11 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
   
   add_details_row (table, 0, _("User Name:"),
-		   gpapa_key_get_name (GPAPA_KEY (public_key), gpa_callback,
-				       parent), FALSE);
+                   (gchar*) gpgme_key_get_string_attr 
+                   (key, GPGME_ATTR_USERID, NULL, 0), FALSE);
   add_details_row (table, 1, _("Key ID:"),
-		   gpapa_key_get_identifier (GPAPA_KEY (public_key),
-					     gpa_callback, parent),
-		   FALSE);
+                   (gchar*) gpgme_key_get_string_attr 
+                   (key, GPGME_ATTR_KEYID, NULL, 0), FALSE);
 
 
   /* change expiry date */
@@ -116,9 +113,8 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_set_spacing (GTK_BOX (hbox), 10);
 
-  expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (public_key),
-					   gpa_callback, parent);
-  date_string = gpa_expiry_date_string (expiry_date);
+  date_string = gpa_expiry_date_string (gpgme_key_get_ulong_attr 
+                                        (key, GPGME_ATTR_EXPIRE, NULL, 0));
   label = gtk_label_new (date_string);
   free (date_string);
   dialog.expiry = label;
@@ -126,7 +122,8 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
 
   button = gpa_button_new (accel_group, _("Change _expiration"));
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-  gtk_widget_set_sensitive (button, secret_key != NULL);
+  gtk_widget_set_sensitive (button, gpa_keytable_secret_lookup 
+                            (keytable, fpr) != NULL);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc)key_edit_change_expiry, &dialog);
 
@@ -140,7 +137,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_set_spacing (GTK_BOX (hbox), 10);
 
-  trust = gpapa_public_key_get_ownertrust (public_key, gpa_callback, parent);
+  trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
   label = gtk_label_new (gpa_trust_string (trust));
   dialog.ownertrust = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
@@ -223,27 +220,28 @@ static void
 key_edit_change_trust(GtkWidget * widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
-  GpapaPublicKey * key;
-  GpapaOwnertrust ownertrust;
+  GpgmeKey key;
+  GpgmeValidity ownertrust;
+  GpgmeError err;
   gboolean result;
 
-  key = gpapa_get_public_key_by_ID (dialog->key_id, gpa_callback,
-				    dialog->window);
+  key = gpa_keytable_lookup (keytable, dialog->fpr);
   result = gpa_ownertrust_run_dialog (key, dialog->window,
 				      &ownertrust);
 
   if (result)
     {
-      gpapa_public_key_set_ownertrust (key, ownertrust, gpa_callback,
-				       dialog->window);
-
-      /*
-      ownertrust = gpapa_public_key_get_ownertrust (key, gpa_callback,
-						    dialog->window);
-						    */
-      gtk_label_set_text (GTK_LABEL (dialog->ownertrust),
-		      gpa_trust_string (ownertrust));
-      dialog->key_has_changed = TRUE;
+      err = gpa_gpgme_edit_ownertrust (key, ownertrust);
+      if (err == GPGME_No_Error)
+        {
+          gtk_label_set_text (GTK_LABEL (dialog->ownertrust),
+                              gpa_trust_string (ownertrust));
+          dialog->key_has_changed = TRUE;
+        }
+      else
+        {
+          gpa_gpgme_error (err);
+        }
     }
 }
   
@@ -253,25 +251,30 @@ static void
 key_edit_change_expiry(GtkWidget * widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
-  GpapaSecretKey * key;
-  GDate *new_date;
-  gchar * password;
+  GpgmeKey key;
+  GpgmeError err;
+  GDate * new_date;
+  struct tm tm;
 
-  key = gpapa_get_secret_key_by_ID (dialog->key_id, gpa_callback,
-				    dialog->window);
+  key = gpa_keytable_lookup (keytable, dialog->fpr);
 
-  if (gpa_expiry_dialog_run (dialog->window, key, &new_date, &password))
+  if (gpa_expiry_dialog_run (dialog->window, key, &new_date))
     {
       gchar * date_string;
-
-      gpapa_key_set_expiry_date (GPAPA_KEY (key), new_date, password,
-				 gpa_callback, dialog->window);
-      date_string = gpa_expiry_date_string (new_date);
-      gtk_label_set_text (GTK_LABEL (dialog->expiry), date_string);
-      free (date_string);
-      if (new_date)
-	g_date_free (new_date);
-      free (password);
-      dialog->key_has_changed = TRUE;
+      err = gpa_gpgme_edit_expiry (key, new_date);
+      if (err == GPGME_No_Error)
+        {
+          g_date_to_struct_tm (new_date, &tm);
+          date_string = gpa_expiry_date_string (mktime(&tm));
+          gtk_label_set_text (GTK_LABEL (dialog->expiry), date_string);
+          g_free (date_string);
+          if (new_date)
+            g_date_free (new_date);
+          dialog->key_has_changed = TRUE;
+        }
+      else
+        {
+          gpa_gpgme_error (err);
+        }
     }
 }

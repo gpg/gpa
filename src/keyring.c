@@ -1028,9 +1028,6 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 static void
 keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
 {
-  GDate * expiry_date = NULL;
-  GDate * creation_date = NULL;
-  unsigned long time;
   GpgmeValidity key_trust;
   GpgmeValidity owner_trust;
   gchar * text;
@@ -1043,16 +1040,10 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
 
   text = (gchar*) gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
   gtk_entry_set_text (GTK_ENTRY (editor->detail_fingerprint), text);
-
-  time = gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0);
-  if( time > 0 )
-    {
-      expiry_date = g_date_new();
-      g_date_set_time( expiry_date, time );
-    }
-  text = gpa_expiry_date_string (expiry_date);
+  text = gpa_expiry_date_string (
+          gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0));
   gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
-  free (text);
+  g_free (text);
 
   key_trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
   text = gpa_trust_string (key_trust);
@@ -1073,15 +1064,10 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
       gtk_label_set_text (GTK_LABEL (editor->detail_key_type),
                           _("The key has only a public part"));
     }
-  time = gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0);
-  if( time > 0 )
-    {
-      creation_date = g_date_new();
-      g_date_set_time( creation_date, time );
-    }
-  text = gpa_creation_date_string (creation_date);
+  text = gpa_creation_date_string (gpgme_key_get_ulong_attr 
+                                   (key, GPGME_ATTR_CREATED, NULL, 0));
   gtk_label_set_text (GTK_LABEL (editor->detail_creation), text);
-  free (text);
+  g_free (text);
 
   gtk_widget_hide (editor->details_num_label);
   gtk_widget_show (editor->details_table);

@@ -112,37 +112,40 @@ gpa_time_unit_from_string (gchar * string)
 } /* gpa_time_unit_from_string */
 
 gchar *
-gpa_expiry_date_string (GDate * expiry_date)
+gpa_expiry_date_string (unsigned long expiry_time)
 {
   gchar date_buffer[256];
   gchar *result;
+  GDate expiry_date;
 
-  if (expiry_date != NULL)
+  if( expiry_time > 0 )
     {
-      g_date_strftime (date_buffer, 256, "%x", expiry_date);
-      result = xstrdup (date_buffer);
-    } /* if */
+      g_date_set_time (&expiry_date, expiry_time);
+      g_date_strftime (date_buffer, 256, "%x", &expiry_date);
+      result = g_strdup (date_buffer);
+    }
   else
-    result = xstrdup (_("never expires"));
+    result = g_strdup (_("never expires"));
   return result;
 } /* gpa_expiry_data_string */
 
 gchar *
-gpa_creation_date_string (GDate * creation_date)
+gpa_creation_date_string (unsigned long creation_time)
 {
   gchar date_buffer[256];
   gchar *result;
+  GDate creation_date;
 
-  if (creation_date != NULL)
+  if( creation_time > 0 )
     {
-      g_date_strftime (date_buffer, 256, "%x", creation_date);
-      result = xstrdup (date_buffer);
-    } /* if */
+      g_date_set_time (&creation_date, creation_time);
+      g_date_strftime (date_buffer, 256, "%x", &creation_date);
+      result = g_strdup (date_buffer);
+    }
   else
-    result = xstrdup (_("unknown"));
+    result = g_strdup (_("unknown"));
   return result;
 } /* gpa_creation_data_string */
-
 
 static gchar *file_status_strings[] = {
   N_("unknown"),

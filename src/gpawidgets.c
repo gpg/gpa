@@ -23,6 +23,7 @@
  *	specific widgets
  */
 
+#include <time.h>
 #include <config.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -297,7 +298,9 @@ gpa_expiry_frame_at (GtkToggleButton * radioAt, gpointer param)
   gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "");
   if (frame->expiryDate)
     {
-      dateBuffer = gpa_expiry_date_string (frame->expiryDate);
+      struct tm tm;
+      g_date_to_struct_tm (frame->expiryDate, &tm);
+      dateBuffer = gpa_expiry_date_string (mktime (&tm));
       gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
 			  "days");
       gtk_entry_set_text (GTK_ENTRY (frame->entryAt), dateBuffer);
@@ -376,7 +379,9 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   frame->entryAt = entryAt;
   if (expiryDate)
     {
-      dateBuffer = gpa_expiry_date_string (expiryDate);
+      struct tm tm;
+      g_date_to_struct_tm (expiryDate, &tm);
+      dateBuffer = gpa_expiry_date_string (mktime (&tm));
       gtk_entry_set_text (GTK_ENTRY (entryAt), dateBuffer);
       free (dateBuffer);
     } /* if */

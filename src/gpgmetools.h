@@ -87,4 +87,18 @@ const gchar * gpa_algorithm_string (GPAKeyGenAlgo algo);
 
 GPAKeyGenAlgo gpa_algorithm_from_string (const gchar * string);
 
+/* This is the function called by GPGME when it wants a passphrase */
+const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd);
+
+/*
+ * Edit functions. These are wrappers around the experimental gpgme key edit
+ * interface.
+ */
+
+/* Change the ownertrust of a key */
+GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust);
+
+/* Change the expiry date of a key */
+GpgmeError gpa_gpgme_edit_expiry (GpgmeKey key, GDate *date);
+
 #endif

@@ -687,6 +687,7 @@ main (int argc, char **argv)
   err = gpgme_new (&ctx);
   if (err != GPGME_No_Error)
     gpa_gpgme_error (err);
+  gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
   /* initialize the default key to a useful default */
   gpa_update_default_key ();
   keytable = gpa_keytable_new ();

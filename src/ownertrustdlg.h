@@ -22,11 +22,11 @@
 #define OWNERTRUSTDLG_H
 
 #include <gtk/gtk.h>
-#include <gpapa.h>
+#include <gpgme.h>
 
 gboolean
-gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
-			   GpapaOwnertrust * trust);
+gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent,
+			   GpgmeValidity * trust);
 
 
 

@@ -138,16 +138,8 @@ get_expirydate_value (GpgmeKey key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
-  GDate * date = NULL;
-  unsigned long expiry_time = gpgme_key_get_ulong_attr( key, 
-                                                        GPGME_ATTR_EXPIRE, 
-                                                        NULL, 0 );
-  if( expiry_time > 0 )
-    {
-      date = g_date_new();
-      g_date_set_time( date, expiry_time );
-    }
-  *label = gpa_expiry_date_string (date);
+  *label = gpa_expiry_date_string 
+          (gpgme_key_get_ulong_attr( key, GPGME_ATTR_EXPIRE, NULL, 0 ));
   *free_label = TRUE;
   *pixmap = NULL;
   *mask = NULL;

@@ -22,6 +22,6 @@
 #define KEYEDITDLG_H
 
 #include <gtk/gtk.h>
-gboolean gpa_key_edit_dialog_run (GtkWidget * window, gchar * key_id);
+gboolean gpa_key_edit_dialog_run (GtkWidget * window, gchar * fpr);
 
 #endif /* KEYEDITDLG_H */

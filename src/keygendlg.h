@@ -22,41 +22,9 @@
 #define KEYGENDLG_H
 
 #include <gtk/gtk.h>
-#include <gpapa.h>
-
-typedef struct {
-  /* user id */
-  gchar *userID, *email, *comment;
-
-  /* algorithm */
-  GpapaAlgo algo;
-
-  /* key size. */
-  gint keysize;
-
-  /* the password to use */
-  gchar * password;
-
-  /* the expiry date. if expiryDate is not NULL it holds the expiry
-   * date, otherwise if interval is not zero, it defines the period of
-   * time until expiration together with unit (which is one of d, w, m,
-   * y), otherwise the user chose "never expire".
-   */
-  GDate *expiryDate;
-  gint interval;
-  gchar unit;
-
-  /* if true, generate a revocation certificate */
-  gboolean generate_revocation;
-
-  /* if true, send the key to a keyserver */
-  gboolean send_to_server;
-  
-} GPAKeyGenParameters;
+#include "gpgmetools.h"
 
 GPAKeyGenParameters * gpa_key_gen_run_dialog (GtkWidget * parent);
-
-void gpa_key_gen_free_parameters(GPAKeyGenParameters *);
 
 
 #endif /* KEYSIGNDLG_H */

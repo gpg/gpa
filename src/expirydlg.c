@@ -19,7 +19,7 @@
  */
 
 #include <config.h>
-#include <gpapa.h>
+#include <gpgme.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
 #include "gpapastrings.h"
@@ -36,11 +36,8 @@ typedef struct {
      never exipre */
   GDate * expiry_date;
 
-  /* The password for the key. */
-  gchar * password;
-
   /* The secret key that was passed into the dialog */
-  GpapaSecretKey * key;
+  GpgmeKey key;
 
   /* The toplevel window of the dialog */
   GtkWidget * window;
@@ -64,7 +61,6 @@ expiry_ok (GtkWidget *widget, gpointer param)
   GPAExpiryDialog * dialog = param;
   gboolean result;
   GDate * date = NULL;
-  gchar * password;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_date)))
     {
@@ -92,27 +88,9 @@ expiry_ok (GtkWidget *widget, gpointer param)
       date = NULL;
       result = TRUE;
     }
-
-  if (result)
-    {
-      /* The data is OK; now ask for the password */
-      password = gpa_passphrase_run_dialog (dialog->window, dialog->key);
-      if (!password)
-	{
-	  /* the user cancelled, so free the data that was allocated in
-	   * this function */
-	  if (date)
-	    g_date_free (date);
-	  result = FALSE;
-	}
-      else
-	{
-	  dialog->result = TRUE;
-	  dialog->expiry_date = date;
-	  dialog->password = password;
-	  gtk_widget_destroy (dialog->window);
-	}
-    }
+  dialog->result = TRUE;
+  dialog->expiry_date = date;
+  gtk_widget_destroy (dialog->window);
 } /* expiry_ok */
 
 
@@ -142,8 +120,7 @@ expiry_destroy (GtkWidget *widget, gpointer param)
  * *new_date == NULL means never expire
  */
 gboolean
-gpa_expiry_dialog_run (GtkWidget * parent, GpapaSecretKey * key,
-		       GDate ** new_date, gchar ** password)
+gpa_expiry_dialog_run (GtkWidget * parent, GpgmeKey key, GDate ** new_date)
 {
   GtkWidget * window;
   GtkWidget * vbox;
@@ -153,7 +130,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpapaSecretKey * key,
   GtkWidget * bbox;
   GtkWidget * button;
   GtkAccelGroup * accel_group;
-  GDate * expiry_date;
+  unsigned long expiry_date;
 
   GPAExpiryDialog dialog;
   dialog.result = FALSE;
@@ -191,9 +168,9 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpapaSecretKey * key,
   dialog.entry_date = entry;
   gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
 
-  expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
-					   dialog.window);
-  if (expiry_date)
+  expiry_date = gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0);
+  
+  if (expiry_date > 0)
     {
       gchar *buffer;
       buffer = gpa_expiry_date_string (expiry_date);
@@ -229,7 +206,6 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpapaSecretKey * key,
   if (dialog.result)
     {
       *new_date = dialog.expiry_date;
-      *password = dialog.password;
     }
   return dialog.result;
 } /* gpa_expiry_dialog_run */

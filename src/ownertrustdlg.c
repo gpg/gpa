@@ -19,7 +19,7 @@
  */
 
 #include <config.h>
-#include <gpapa.h>
+#include <gpgme.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "gpa.h"
@@ -32,7 +32,7 @@
 
 /* FIXME: this function should be in a separate module */
 extern GtkWidget *
-gpa_tableKey_new (GpapaKey * key, GtkWidget * window);
+gpa_tableKey_new (GpgmeKey key, GtkWidget * window);
 
 
 
@@ -48,7 +48,7 @@ struct _GPAOwnertrustDialog {
 
   /* The selected owner trust level if result is true. Undefined
    * otherwise */
-  GpapaOwnertrust trust;
+  GpgmeValidity trust;
 
   /* The ownertrust combo box */
   GtkWidget *combo;
@@ -66,18 +66,13 @@ static void
 ownertrust_ok (gpointer param)
 {
   GPAOwnertrustDialog *dialog = param;
-  GpapaOwnertrust trust;
+  GpgmeValidity trust;
   gchar *trust_text;
 
   dialog->result = TRUE;
 
   trust_text = (gchar *) gtk_entry_get_text (GTK_ENTRY(GTK_COMBO(dialog->combo)->entry));
   trust = gpa_ownertrust_from_string (trust_text);
-  if (trust > GPAPA_OWNERTRUST_LAST)
-    {
-      gpa_window_error (_("Invalid ownertrust level."), dialog->window);
-      return;
-    }
   dialog->trust = trust;
   gtk_widget_destroy (dialog->window);
 }
@@ -106,12 +101,11 @@ ownertrust_destroy (GtkWidget *widget, gpointer param)
 
 /* Run the owner trust dialog modally. */
 gboolean
-gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
-			   GpapaOwnertrust * trust)
+gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent,
+			   GpgmeValidity * trust)
 {
   GtkAccelGroup *accelGroup;
   GList *valueLevel = NULL;
-  GpapaOwnertrust ownertrust;
   GtkWidget *windowTrust;
   GtkWidget *vboxTrust;
   GtkWidget *tableKey;
@@ -123,7 +117,7 @@ gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
   GtkWidget *buttonAccept;
   GPAOwnertrustDialog dialog;
 
-  dialog.trust = gpapa_public_key_get_ownertrust (key, gpa_callback, parent);
+  dialog.trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
   dialog.result = FALSE;
 
   windowTrust = dialog.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -138,7 +132,7 @@ gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
   vboxTrust = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxTrust), 5);
 
-  tableKey = gpa_tableKey_new (GPAPA_KEY (key), windowTrust);
+  tableKey = gpa_tableKey_new (key, windowTrust);
   gtk_container_set_border_width (GTK_CONTAINER (tableKey), 5);
   gtk_box_pack_start (GTK_BOX (vboxTrust), tableKey, FALSE, FALSE, 0);
 
@@ -151,10 +145,16 @@ gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
   comboLevel = dialog.combo = gtk_combo_new ();
   gtk_editable_set_editable (GTK_EDITABLE (GTK_COMBO (comboLevel)->entry),
 			     FALSE);
-  for (ownertrust = GPAPA_OWNERTRUST_FIRST;
-       ownertrust <= GPAPA_OWNERTRUST_LAST; ownertrust++)
-    valueLevel =
-      g_list_append (valueLevel, gpa_trust_string (ownertrust));
+  /* Not all values are used, and we can't be sure we can iterate over them,
+   * so we hardcode the validity values */
+  valueLevel = g_list_append (valueLevel, 
+                              gpa_trust_string (GPGME_VALIDITY_UNDEFINED));
+  valueLevel = g_list_append (valueLevel, 
+                              gpa_trust_string (GPGME_VALIDITY_NEVER));
+  valueLevel = g_list_append (valueLevel, 
+                              gpa_trust_string (GPGME_VALIDITY_MARGINAL));
+  valueLevel = g_list_append (valueLevel, 
+                              gpa_trust_string (GPGME_VALIDITY_FULL));
   gtk_combo_set_popdown_strings (GTK_COMBO (comboLevel), valueLevel);
   gpa_connect_by_accelerator (GTK_LABEL (labelLevel),
 			      GTK_COMBO (comboLevel)->entry, accelGroup,

@@ -22,7 +22,7 @@
 #define EXPIRYDLG_H
 
 #include <gtk/gtk.h>
-gboolean gpa_expiry_dialog_run (GtkWidget * window, GpapaSecretKey * key,
-				GDate ** new_date, gchar ** password);
+gboolean gpa_expiry_dialog_run (GtkWidget * window, GpgmeKey key,
+                                GDate ** new_date);
 
 #endif /* EXPIRYDLG_H */
