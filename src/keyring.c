@@ -575,14 +575,11 @@ isdir (const gchar * filename)
 static void
 keyring_editor_backup (gpointer param)
 {
-#if 0
   GPAKeyringEditor *editor = param;
-  gchar *key_id, *dir_name;
-  GpapaSecretKey *secret_key;
-  GpapaPublicKey *public_key;
+  gchar *fpr, *filename;
 
-  key_id = gpa_default_key ();
-  if (!key_id)
+  fpr = gpa_default_key ();
+  if (!fpr)
     {
       /* this shouldn't happen because the menu item should be grayed out
        * in this case
@@ -591,87 +588,41 @@ keyring_editor_backup (gpointer param)
       return;
     }
 
-  secret_key = gpapa_get_secret_key_by_ID (key_id,
-                                           gpa_callback, editor->window);
-  public_key = gpapa_get_public_key_by_ID (key_id,
-                                           gpa_callback, editor->window);
-
-  if (key_backup_dialog_run (editor->window, &dir_name, key_id))
+  if (key_backup_dialog_run (editor->window, &filename, fpr))
     {
-      if (dir_name)
-        {
-          int l = strlen (dir_name) - 1;
-          if (dir_name[l] == '/' || dir_name[l] == G_DIR_SEPARATOR)
-            dir_name[l] = 0;
-        }
-      if (!isdir (dir_name))
-        {
-          const gchar *buttons[] = {_("C_reate"), _("_Cancel"), NULL};
-          gchar *message = g_strdup_printf (_("Directory %s does not exist.\n"
-                                              "Do you want to create it now?"),
-                                            dir_name);
-          gchar *reply = gpa_message_box_run (editor->window, _("Directory does not exist"),
-                                              message, buttons);
-          if (!reply || strcmp (reply, _("C_reate")) != 0)
-            return;
-          g_free (message);
-          if (mkdir (dir_name, 0755) < 0)
-            {
-              const gchar *buttons[] = {_("_OK"), NULL};
-              gchar *message = g_strdup_printf (_("Error creating directory \"%s\": %s\n"),
-                                                dir_name, g_strerror (errno));
-              gpa_message_box_run (editor->window, _("Error creating directory"),
-                                   message, buttons);
-              g_free (message);
-              return;
-            }
-        }
-      if (isdir (dir_name))
-        {
-          /* FIXME: we should also test for permissions */
-          gchar *pubkey_filename = g_strconcat (dir_name, "/pub_key.asc", NULL);
-          gchar *seckey_filename = g_strconcat (dir_name, "/sec_key.asc", NULL);
-          struct stat statbuf;
-          gboolean cancelled = FALSE;
-
-          if (stat (pubkey_filename, &statbuf) == 0)
-            {
-              const gchar *buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
-              gchar *message = g_strdup_printf (_("The file %s already exists.\n"
-                                                  "Do you want to overwrite it?"),
-                                                pubkey_filename);
-              gchar *reply = gpa_message_box_run (editor->window, _("File exists"),
-                                                  message, buttons);
-              if (!reply || strcmp (reply, _("_Overwrite")) != 0)
-                cancelled = TRUE;
-              g_free (message);
-            }
-          if (stat (seckey_filename, &statbuf) == 0)
-            {
-              const gchar *buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
-              gchar *message = g_strdup_printf (_("The file %s already exists.\n"
-                                                  "Do you want to overwrite it?"),
-                                                seckey_filename);
-              gchar *reply = gpa_message_box_run (editor->window, _("File exists"),
-                                                  message, buttons);
-              if (!reply || strcmp (reply, _("_Overwrite")) != 0)
-                cancelled = TRUE;
-              g_free (message);
-            }
-          if (!cancelled)
-            {
-              gpapa_public_key_export (public_key, pubkey_filename, GPAPA_ARMOR,
-                                       gpa_callback, editor->window);
-              gpapa_secret_key_export (secret_key, seckey_filename, GPAPA_ARMOR,
-                                       gpa_callback, editor->window);
-
-              gpa_remember_backup_generated ();
-            }
-          g_free (pubkey_filename);
-          g_free (seckey_filename);
-        }
+      gboolean cancelled = FALSE;
+      
+      if (g_file_test (filename, (G_FILE_TEST_EXISTS)))
+	{
+	  const gchar *buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
+	  gchar *message = g_strdup_printf (_("The file %s already exists.\n"
+					      "Do you want to overwrite it?"),
+					    filename);
+	  gchar *reply = gpa_message_box_run (editor->window, _("File exists"),
+					      message, buttons);
+	  if (!reply || strcmp (reply, _("_Overwrite")) != 0)
+	    cancelled = TRUE;
+	  g_free (message);
+	}
+      if (!cancelled)
+	{
+	  if (gpa_backup_key (fpr, filename))
+	    {
+	      gchar *message;
+	      message = g_strdup_printf (_("A copy of your secret key has "
+					   "been made to the file:\n\n"
+					   "\t\"%s\"\n\n"
+					   "This is sensitive information, "
+					   "and should be stored carefully\n"
+					   "(for example, in a floppy disk "
+					   "kept in a safe place)."),
+					 filename);
+	      gpa_window_message (message, editor->window);
+	      g_free (message);
+	      gpa_remember_backup_generated ();
+	    }
+	}
     }
-#endif
 }
 
 /* Run the advanced key generation dialog and if the user clicked OK,

@@ -90,6 +90,12 @@ void dump_data_to_clipboard (GpgmeData data, GtkClipboard *clipboard);
  */
 GpgmeError gpa_generate_key (GPAKeyGenParameters *params);
 
+/* Backup a key. It exports both the public and secret keys to a file.
+ * Returns TRUE on success and FALSE on error. It displays errors to the
+ * user.
+ */
+gboolean gpa_backup_key (const gchar *fpr, const char *filename);
+
 GPAKeyGenParameters * key_gen_params_new (void);
 
 void gpa_key_gen_free_parameters (GPAKeyGenParameters *params);

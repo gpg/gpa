@@ -28,6 +28,6 @@ extern gboolean key_export_dialog_run (GtkWidget *parent, gchar **filename,
 extern gboolean secret_key_export_dialog_run (GtkWidget *parent, gchar **filename,
                                               gboolean *armored);
 extern gboolean key_backup_dialog_run (GtkWidget *parent, gchar **filename,
-                                       gchar *key_id);
+                                       gchar *fpr);
 
 #endif /* KEYEXPORTDLG_H */

@@ -174,8 +174,7 @@ key_export_dialog_run (GtkWidget *parent, gchar **filename,
   dialog.entry_filename = entry;
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, 
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
-  gtk_signal_connect_object (GTK_OBJECT (entry), "activate",
-			     GTK_SIGNAL_FUNC (export_ok), (gpointer) &dialog);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 
   button = gpa_button_new (accel_group, _("B_rowse..."));
   gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1, GTK_FILL, 0, 0, 0);
@@ -236,7 +235,7 @@ key_export_dialog_run (GtkWidget *parent, gchar **filename,
  * user clicked OK, otherwise return FALSE.
  */
 gboolean
-key_backup_dialog_run (GtkWidget *parent, gchar **filename, gchar *key_id)
+key_backup_dialog_run (GtkWidget *parent, gchar **filename, gchar *fpr)
 {
   GtkAccelGroup *accel_group;
 
@@ -248,8 +247,9 @@ key_backup_dialog_run (GtkWidget *parent, gchar **filename, gchar *key_id)
   GtkWidget *entry;
   GtkWidget *button;
   GPAKeyExportDialog dialog;
+  GpgmeKey key;
 
-  gchar *id_text;
+  gchar *id_text, *default_file;
 
   dialog.filename = NULL;
   dialog.server = NULL;
@@ -282,21 +282,27 @@ key_backup_dialog_run (GtkWidget *parent, gchar **filename, gchar *key_id)
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
 
   /* Show the ID */
-  id_text = g_strdup_printf (_("Generating backup of key: %s"), key_id);
+  key = gpa_keytable_lookup (keytable, fpr);
+  id_text = g_strdup_printf (_("Generating backup of key: %s"),
+			     gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID,
+							NULL, 0));
   id_label = gtk_label_new (id_text);
   gtk_table_attach (GTK_TABLE (table), id_label, 0, 3, 0, 1, GTK_FILL, 0, 0, 0);
   g_free (id_text);
 
   /* File name entry */
-  label = gtk_label_new_with_mnemonic (_("_Backup to directory:"));
+  label = gtk_label_new_with_mnemonic (_("_Backup to file:"));
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
 
   entry = gtk_entry_new ();
   dialog.entry_filename = entry;
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, 
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
-  gtk_signal_connect_object (GTK_OBJECT (entry), "activate",
-			     GTK_SIGNAL_FUNC (export_ok), (gpointer) &dialog);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+  default_file = g_build_filename (g_get_home_dir (), "sec_key.asc", NULL);
+  gtk_entry_set_text (GTK_ENTRY (entry), default_file);
+  g_free (default_file);
+  gtk_widget_grab_focus (entry);
 
   button = gpa_button_new (accel_group, _("B_rowse..."));
   gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2, GTK_FILL, 0, 0, 0);
