@@ -1,3 +1,8 @@
+2002-08-29  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keydeletedlg.c (confirm_delete_secret): Make "No" the default reply
+	to the dialog.
+
 2002-08-28  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.c (find_gpg_executable): New function.
