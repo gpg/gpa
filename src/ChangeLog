@@ -1,5 +1,10 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* fileman.c (gpa_fileman_new): 
+	* keyring.c (keyring_editor_new): Realize the window before
+	creating the toolbar so that we can create pixmaps without
+	warnings
+
 	* keyring.c (keylist_columns_brief):
 	(keylist_columns_detailed): Add the new key type pixmap as the
 	first column
