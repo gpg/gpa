@@ -1,3 +1,23 @@
+2003-08-20  Miguel Coca  <mcoca@gnu.org>
+
+	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_sig_get_userid) 
+	(gpa_gpgme_key_sig_get_short_keyid) 
+	(gpa_gpgme_key_sig_get_sig_status): Change to work on key signatures
+	instead of whole keys.
+	(gpa_gpgme_key_sig_get_level): New.
+
+	* siglist.c (gpa_siglist_new): Add columns for signature level and
+	whether a signature is local. Connect a callback to a change in the
+	UI mode.
+	(gpa_siglist_uid_add_columns): Add columns for level and local if in
+	advanced mode.
+	(add_signature): Receive a gpgme_key_sig_t and process it.
+	(add_signature_cb): New.
+	(gpa_siglist_set_all, revoked_signatures)
+	(gpa_siglist_set_userid): Replace deprecated gpgme calls.
+	(gpa_siglist_ui_mode_changed_cb): New.
+	(gpa_siglist_set_signatures): Adapt to new internal interface.
+
 2003-08-18  Miguel Coca  <mcoca@gnu.org>
 
 	* gpafileverifyop.c (gpa_file_verify_operation_init) 

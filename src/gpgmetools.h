@@ -160,18 +160,21 @@ const gchar *gpa_gpgme_key_get_short_keyid (gpgme_key_t key, int idx);
 /* Return the user ID, making sure it is properly UTF-8 encoded.
  * Allocates a new string, which must be freed with g_free().
  */
-gchar *gpa_gpgme_key_sig_get_userid (gpgme_key_t key, int uid_idx, int idx);
+gchar *gpa_gpgme_key_sig_get_userid (gpgme_key_sig_t sig);
 
 /* Return the short key ID of the indicated key. The returned string is valid
  * as long as the key is valid.
  */
-const gchar *gpa_gpgme_key_sig_get_short_keyid (gpgme_key_t key, int uid_idx,
-                                                int idx);
+const gchar *gpa_gpgme_key_sig_get_short_keyid (gpgme_key_sig_t sig);
 
 /* Return a string with the status of the key signature.
  */
-const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_t key, int uid_idx,
-                                               int idx, GHashTable *revoked);
+const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_sig_t sig,
+					       GHashTable *revoked);
+
+/* Return a string with the level of the key signature.
+ */
+const gchar *gpa_gpgme_key_sig_get_level (gpgme_key_sig_t sig);
 
 /* Return a string listing the capabilities of a key.
  */

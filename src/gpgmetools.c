@@ -814,50 +814,34 @@ const gchar *gpa_gpgme_key_get_short_keyid (gpgme_key_t key, int idx)
 /* Return the user ID, making sure it is properly UTF-8 encoded.
  * Allocates a new string, which must be freed with g_free().
  */
-gchar *gpa_gpgme_key_sig_get_userid (gpgme_key_t key, int uid_idx, int idx)
+gchar *gpa_gpgme_key_sig_get_userid (gpgme_key_sig_t sig)
 {
-  const char * uid;
-
-  uid = gpgme_key_sig_get_string_attr (key, uid_idx, GPGME_ATTR_USERID, 
-                                       NULL, idx);
-  if (!uid || !*uid)
+  if (!sig->uid || !*sig->uid)
     {
       /* Duplicate it to make sure it can be g_free'd */
       return g_strdup (_("[Unknown user ID]"));
     }
   else
     {
-      return string_to_utf8 (uid);
+      return string_to_utf8 (sig->uid);
     }
 }
 
 /* Return the short key ID of the indicated key. The returned string is valid
  * as long as the key is valid.
  */
-const gchar *gpa_gpgme_key_sig_get_short_keyid (gpgme_key_t key, int uid_idx,
-                                                int idx)
+const gchar *gpa_gpgme_key_sig_get_short_keyid (gpgme_key_sig_t sig)
 {
-  const char *keyid;
-  keyid = gpgme_key_sig_get_string_attr (key, uid_idx, GPGME_ATTR_KEYID,
-                                         NULL, idx);
-  if (!keyid)
-    {
-      return NULL;
-    }
-  else
-    {
-      return keyid+8;
-    }
+  return sig->keyid+8;
 }
 
 /* Return a string with the status of the key signature.
  */
-const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_t key, int uid_idx,
-                                               int idx, GHashTable *revoked)
+const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_sig_t sig,
+					       GHashTable *revoked)
 {
   const gchar *status;
-  switch (gpgme_key_sig_get_ulong_attr (key, uid_idx, GPGME_ATTR_SIG_STATUS, 
-                                        NULL, idx))
+  switch (sig->status)
     {
     case GPGME_SIG_STAT_GOOD:
       status = _("Valid");
@@ -867,20 +851,40 @@ const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_t key, int uid_idx,
     default:
       status = _("Unknown");
     }
-  if (gpgme_key_sig_get_ulong_attr (key, uid_idx, GPGME_ATTR_KEY_EXPIRED, 
-                                        NULL, idx))
+  if (sig->expired)
     {
       status = _("Expired");
     }
-  else if (g_hash_table_lookup (revoked, gpgme_key_sig_get_string_attr
-                                (key, uid_idx, GPGME_ATTR_KEYID, 
-                                 NULL, idx)))
+  else if (g_hash_table_lookup (revoked, sig->keyid))
     {
       status = _("Revoked");
     }
   return status;
 }
 
+/* Return a string with the level of the key signature.
+ */
+const gchar *gpa_gpgme_key_sig_get_level (gpgme_key_sig_t sig)
+{
+  switch (sig->class)
+    {
+    case 0x10:
+      return _("Generic");
+      break;
+    case 0x11:
+      return _("Persona");
+      break;
+    case 0x12:
+      return _("Casual");
+      break;
+    case 0x13:
+      return _("Positive");
+      break;
+    default:
+      return _("Unknown");
+      break;
+    }
+}
 
 /* Return a string listing the capabilities of a key.
  */
