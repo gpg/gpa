@@ -206,7 +206,7 @@ gboolean gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent)
                            "by him/her fully valid.\n\n"
                            "(Warning: This is intended to be used for keys "
                            "you own. Don't use it with other people's keys "
-                           "unless you really know what you are doing.\n"));
+                           "unless you really know what you are doing)\n"));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
   gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 9, 10);

@@ -1,4 +1,17 @@
-2002-12-14  Miguel Coca  <mcoca@gnu.org>
+2002-12-15  Miguel Coca  <mcoca@gnu.org>
+
+	* gpawidgets.c (gpa_key_list_new): Use "User Name", as the rest of GPA
+	does.
+
+	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Fix typo in "ultimate"
+	description.
+
+	* fileman.c (gpa_fileman_toolbar_new): Remove extra spaces around
+	"decrypt".
+
+	* expirydlg.c (gpa_expiry_dialog_run): Fix dialog title.
+
+	* helpmenu.c (help_about): Fix formatting of copyright notice.
 
 	* keyring.c (keyring_editor_paste): Fix segfault when the clipboard
 	was empty.

@@ -98,7 +98,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpgmeKey key, GDate ** new_date)
 
   accel_group = gtk_accel_group_new ();
 
-  window = gtk_dialog_new_with_buttons (_("Export Key"),
+  window = gtk_dialog_new_with_buttons (_("Change expiry data"),
                                         GTK_WINDOW (parent),
                                         GTK_DIALOG_MODAL,
                                         GTK_STOCK_OK,

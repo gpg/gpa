@@ -504,7 +504,7 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 			     fileman);
   /* Decrypt */
   if ((icon = gpa_create_icon_widget (window, "decrypt")))
-    gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _(" Decrypt "),
+    gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Decrypt"),
 			     _("Decrypt the selected file"), _("decrypt file"),
 			     icon, GTK_SIGNAL_FUNC (toolbar_file_decrypt),
 			     fileman);

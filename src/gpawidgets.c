@@ -92,7 +92,7 @@ static GtkWidget *
 gpa_key_list_new (void)
 {
   GtkWidget *clist;
-  gchar *titles[2] = {_("Key ID"), _("User Identity/Role")};
+  gchar *titles[2] = {_("Key ID"), _("User Name")};
 
   clist = gtk_clist_new_with_titles (2, titles);
   gtk_clist_set_sort_column (GTK_CLIST (clist), 1);
