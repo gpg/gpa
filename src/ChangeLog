@@ -3,6 +3,8 @@
 	* keylist.c (gpa_keylist_update_list): Call
 	gtk_container_check_resize to make sure that the size changes in
 	the title buttons are correctly accounted for
+	(ColumnDef): title may now be NULL to indicate an empty title.
+	(keylist_fill_row): Handle NULL column titles.
 
 	* keyring.c (keyring_editor_mapped): Check for cancelling the
 	dialog via WM, in which case result is NULL
