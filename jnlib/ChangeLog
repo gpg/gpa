@@ -1,3 +1,9 @@
+2000-07-26 10:02:51  Werner Koch  (wk@habibti.openit.de)
+
+  * stringhelp.c.: Add stdarg.h
+  * argparse.h: s/ulong/unsigned long/ although this should be defined
+  by types.h.
+
 2000-06-28 19:40:23  Werner Koch  (wk@habibti.openit.de)
 
   * Makefile.am: Replaced second logging.c by .h

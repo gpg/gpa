@@ -167,12 +167,14 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
   if (!SetHandleInformation (si.hStdOutput, HANDLE_FLAG_INHERIT,
 			     HANDLE_FLAG_INHERIT))
     {
-      fprintf (stderr, "** SHI 1 failed: ec=%d\n", (int) GetLastError ());
+      if ( GetLastError() != ERROR_CALL_NOT_IMPLEMENTED )
+	fprintf (stderr, "** SHI 1 failed: ec=%d\n", (int) GetLastError ());
     }
   if (!SetHandleInformation (si.hStdError, HANDLE_FLAG_INHERIT,
 			     HANDLE_FLAG_INHERIT))
     {
-      fprintf (stderr, "** SHI 2 failed: ec=%d\n", (int) GetLastError ());
+      if ( GetLastError() != ERROR_CALL_NOT_IMPLEMENTED )
+	fprintf (stderr, "** SHI 2 failed: ec=%d\n", (int) GetLastError ());
     }
 
 
@@ -228,7 +230,11 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 	  int nread, ncount;
 
 	  ncount = WaitForMultipleObjects (nwait, waitbuf, FALSE, 0);
-	  if (ncount >= WAIT_OBJECT_0 && ncount < WAIT_OBJECT_0 + 2)
+	  if ( ncount == WAIT_FAILED ) {
+	    fprintf (stderr, "** WFMO failed: ec=%d\n", (int) GetLastError ());
+	  }
+	  if ( (ncount >= WAIT_OBJECT_0 && ncount < WAIT_OBJECT_0 + 2)
+	       || ncount == WAIT_FAILED )
 	    {
 	      int check_again;
 	      /* Hmm: I don't know how this should work: We always get
@@ -392,9 +398,13 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 
 	    case WAIT_FAILED:
 	      {
-		DWORD r;
-		fprintf ("waitbuf[0] %p = %d", waitbuf[0],
-			 GetHandleInformation (waitbuf[0], &r));
+		DWORD res;
+		fprintf (stderr, "wait failed");
+		if (!GetExitCodeProcess (pi.hProcess, &res))
+		  fprintf (stderr, "GetExitCodeProcess failed\n");
+		else
+		  fprintf (stderr, "** exit code=%lu\n", (unsigned long) res);
+		ready = 1;
 	      }
 	      break;
 
@@ -407,7 +417,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 	   */
 	  if (pendingsize > 0)
 	    {
-	      int newpendingsize = pendingsize + 1;
+	      insunewpendingsize = pendingsize + 1;
 	      pendingbuffer =
 		(char *) xrealloc (pendingbuffer, newpendingsize);
 	      pendingbuffer[newpendingsize - 1] = 0;

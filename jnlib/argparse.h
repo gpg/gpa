@@ -35,7 +35,7 @@ typedef struct {
      union {
 	 int   ret_int;
 	 long  ret_long;
-	 ulong ret_ulong;
+	 unsigned long ret_ulong;
 	 char *ret_str;
      } r;		    /* Return values */
      struct {
