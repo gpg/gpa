@@ -810,13 +810,20 @@ keyring_update_details_page (GPAKeyringEditor * editor)
 } /* keyring_update_details_page */
 
 
+/* definitions for the brief and detailed key list. The names are at the
+ * end so that they automatically take up all the surplus horizontal
+ * space allocated to he list because they usually need the most
+ * horizontal space.
+ */
 static GPAKeyListColumn keylist_columns_brief[] =
-{GPA_KEYLIST_NAME, GPA_KEYLIST_ID};
+{GPA_KEYLIST_ID, GPA_KEYLIST_NAME};
 
 static GPAKeyListColumn keylist_columns_detailed[] =
-{GPA_KEYLIST_NAME, GPA_KEYLIST_ID, GPA_KEYLIST_EXPIRYDATE,
- GPA_KEYLIST_OWNERTRUST, GPA_KEYLIST_KEYTRUST};
+{GPA_KEYLIST_ID, GPA_KEYLIST_EXPIRYDATE, GPA_KEYLIST_OWNERTRUST,
+ GPA_KEYLIST_KEYTRUST, GPA_KEYLIST_NAME};
 
+
+/* Change the keylist to brief listing */
 static void
 keyring_set_brief_listing (GtkWidget *widget, gpointer param)
 {
@@ -832,6 +839,8 @@ keyring_set_brief_listing (GtkWidget *widget, gpointer param)
     }
 }
 
+
+/* Change the keylist to detailed listing */
 static void
 keyring_set_detailed_listing (GtkWidget *widget, gpointer param)
 {
