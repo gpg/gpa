@@ -101,7 +101,7 @@ fi
 
 dnl Find the keyserver plugins. Assume that gpgkeys_ldap is always available
 AC_PATH_PROG(GPGKEYS_LDAP, gpgkeys_ldap, [${libexecdir}/gnupg/gpgkeys_ldap],
-             [$PATH:/usr/lib/gnupg/])
+             [$PATH:/usr/libexec/gnupg/:/usr/lib/gnupg/])
 KEYSERVER_HELPERS_DIR=`dirname $GPGKEYS_LDAP`
 
 AC_DEFINE_UNQUOTED(GPG_PATH, "$GPG", [Path to the gpg binary.])
