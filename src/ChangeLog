@@ -1,3 +1,15 @@
+2002-10-09  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* encryptdlg.c: Ported the dialog to Gpgme and a GtkDialog. Major
+	changes. Support for sign & encrypt as soon as some way to choose the
+	signing key is provided by the GUI.
+
+	* fileman.c (sign_files, encrypt_files): Use g_free() instead of
+	free().
+
+	* filesigndlg.c (sign_files): Only set the signer once for each group
+	of files. Other minor fixes.
+
 2002-10-03  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* fileman.c (count_sigs, free_file_info, attach_file),

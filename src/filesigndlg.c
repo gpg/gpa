@@ -96,16 +96,34 @@ sign_files (GPAFileSignDialog *dialog, gchar *fpr, GpgmeSigMode sign_type,
 	    gboolean armor)
 {
   GList *cur;
+  GpgmeError err;
+  GpgmeKey signer;
 
   dialog->signed_files = NULL;
 
+  /* Get ready to sign: common for all signed files */
+  gpgme_signers_clear (ctx);
+  signer = gpa_keytable_secret_lookup (keytable, fpr);
+  if (!signer)
+    {
+      /* Can't happen */
+      gpa_window_error (_("The key you selected is not available for "
+			  "signing"), dialog->window);
+      return;
+    }
+  err = gpgme_signers_add (ctx, signer);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  gpgme_set_armor (ctx, armor);
+  
+  /* Sign each file */
   for (cur = dialog->files; cur; cur = g_list_next (cur))
     {
       FILE *target;
       gchar *filename, *target_filename;
       GpgmeData input, output;
-      GpgmeError err;
-      GpgmeKey signer;
 
       /* Find out the name of the signed file */
       filename = cur->data;
@@ -133,21 +151,6 @@ sign_files (GPAFileSignDialog *dialog, gchar *fpr, GpgmeSigMode sign_type,
 	  gpa_gpgme_error (err);
 	}
       /* Sign */
-      gpgme_signers_clear (ctx);
-      signer = gpa_keytable_secret_lookup (keytable, fpr);
-      if (!signer)
-	{
-	  /* Can't happen */
-	  gpa_window_error (_("The key you selected is not available for "
-			      "signing"), dialog->window);
-	  break;
-	}
-      err = gpgme_signers_add (ctx, signer);
-      if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-      gpgme_set_armor (ctx, armor);
       err = gpgme_op_sign (ctx, input, output, sign_type);
       if (err == GPGME_No_Passphrase)
 	{
@@ -161,13 +164,14 @@ sign_files (GPAFileSignDialog *dialog, gchar *fpr, GpgmeSigMode sign_type,
       else if (err != GPGME_No_Error)
 	{
 	  gpa_gpgme_error (err);
-	}      
+	}
+      dialog->signed_files = g_list_append (dialog->signed_files,
+					    target_filename);
       /* Write the output */
       dump_data_to_file (output, target);
       fclose (target);
       gpgme_data_release (input);
       gpgme_data_release (output);
-      dialog->signed_files = g_list_append (dialog->signed_files, target_filename);
     }
 }
 

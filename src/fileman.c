@@ -310,7 +310,7 @@ sign_files (gpointer param)
 	  row = add_file (fileman, (gchar*)(cur->data));
 	  if (row >= 0)
 	    gtk_clist_select_row (fileman->clist_files, row, 0);
-	  free (cur->data);
+	  g_free (cur->data);
 	  cur = g_list_next (cur);
 	}
       g_list_free (signed_files);
@@ -344,7 +344,7 @@ encrypt_files (gpointer param)
 	  row = add_file (fileman, (gchar*)(cur->data));
 	  if (row >= 0)
 	    gtk_clist_select_row (fileman->clist_files, row, 0);
-	  free (cur->data);
+	  g_free (cur->data);
 	  cur = g_list_next (cur);
 	}
       g_list_free (encrypted_files);
