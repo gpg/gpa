@@ -1,5 +1,9 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_details_page_fill_key):
+	(keyring_details_notebook):
+	(GPAKeyringEditor): Add the owner trust to the details page.
+
 	* gpapastrings.c (gpa_ownertrust_string):
 	(gpa_unit_expiry_time_string): Translate the returned strings.
 
