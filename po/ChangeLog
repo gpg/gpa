@@ -1,3 +1,8 @@
+2001-02-07  Bernhard Herzog  <bh@intevation.de>
+
+	* POTFILES.in: Remove the no longer used keyreceivedlg.c and add
+	the new files in src
+
 2001-02-01  Bernhard Herzog  <bh@intevation.de>
 
 	* POTFILES.in: Remove the files deleted in ../src
