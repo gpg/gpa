@@ -1,0 +1,39 @@
+# gpa_tips.de - GPA help tips - German version
+#      Copyright (C) 2000 Free Software Foundation, Inc.
+#
+# This file is part of GPA
+#
+# GPA is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# GPA is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+#
+
+# The format of this file is pretty simple:
+# Everything after a # is ignored except if the hash is escaped by
+# a backslash.	Each tip section is begins by a line starting with
+# the sequence "\:" followed by the keystring for that section and
+# ends before the next such line.  The backslash is used as an escape
+# character which may in future be used to do some highlighting. Double
+# the backslash to insert itself.
+# All lines should be less than 256 characters.
+#
+
+\: options_homedir.tip
+Sowohl GnuPG als auch GPA benutzen ein directory um wichtige Status
+Informatioenne zu speichern.
+
+Hier können Sie dieses Directory ändern.
+\: foobar
+Fasel Fasel
+
+

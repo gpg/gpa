@@ -127,9 +127,11 @@ cat >gpadefs.tmp <<GPAEOF
 /* Generated automatically by configure */
 #ifdef HAVE_DRIVE_LETTERS
   #define GPA_LOCALEDIR "c:/lib/gnupg/locale"
+  #define GPA_DATADIR   "c:/lib/gnupg"
   #define GPG_PROGRAM   "c:/gnupg/gpg"
 #else
   #define GPA_LOCALEDIR "${prefix}/${DATADIRNAME}/locale"
+  #define GPA_DATADIR   "${datadir}/gpa"
   #define GPG_PROGRAM   "${GPG}"
 #endif
 GPAEOF

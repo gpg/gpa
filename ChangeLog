@@ -1,3 +1,7 @@
+2000-07-25 09:08:59  Werner Koch  (wk@habibti.openit.de)
+
+  * configure.in (GPA_DATADIR): Create this macro.
+
 2000-06-28 20:09:49  Werner Koch  (wk@habibti.openit.de)
 
   * VERSION: New because it is easier for the mkdiff script to move

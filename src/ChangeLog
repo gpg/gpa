@@ -1,3 +1,10 @@
+2000-07-25 09:02:34  Werner Koch  (wk@habibti.openit.de)
+
+  * gpa.c (gpa_windowTips_show): Moved from here to ...
+  * help.c: ... here.  Complete rewrote to read the tips rom a file.
+  (get_language): New.
+  (gpa_tips.en, gpa_tips.de): New.
+
 2000-06-28 17:23:03  Werner Koch  (wk@habibti.openit.de)
 
   * gpa.c:  Removed the --tooltip-kludge option, becuase the bug as

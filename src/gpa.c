@@ -160,8 +160,9 @@ main (int argc, char **argv )
     const char *gpg_program = GPG_PROGRAM;
 
     set_strusage( my_strusage );
-    /*log_set_name ("gpa"); notyet implemented in logging.c */
+    /*log_set_name ("gpa"); not yet implemented in logging.c */
     i18n_init ();
+    srand (time (NULL)); /* the about dialog uses rand() */
     gtk_init (&argc, &argv);
 
     opt.homedir = getenv("GNUPGHOME");
@@ -386,17 +387,6 @@ gpa_windowTip_init (void)
   gtk_container_add (GTK_CONTAINER (global_windowTip), vboxTip);
 }				/* gpa_windowTip_init */
 
-void
-gpa_windowTip_show (gchar * text)
-{
-  if (!global_noTips)
-    {
-      gtk_editable_delete_text (GTK_EDITABLE (global_textTip), 0, -1);
-      gtk_text_insert (GTK_TEXT (global_textTip), NULL,
-		       &global_textTip->style->black, NULL, text, -1);
-      gtk_widget_show_all (global_windowTip);
-    }				/* if */
-}				/* gpa_windowTip_show */
 
 void
 sigs_append (gpointer data, gpointer userData)

@@ -22,6 +22,7 @@
 #define LIBJNLIB_ARGPARSE_H
 
 #include <stdio.h>
+#include "types.h"
 
 typedef struct {
      int  *argc;	    /* pointer to argc (value subject to change) */

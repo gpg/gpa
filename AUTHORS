@@ -15,10 +15,11 @@ Peter Neuhaus <pneuhaus@openit.de>
     German translation.
 
 Werner Koch <wk@gnupg.org>
-    Glued everything together, fixes here and there, W32 porting.
+    Glued everything together, fixes here and there, W32 porting,
+    about dialog.
 
 Jan-Oliver Wagner <jan@intevation.de>
-	Polishing (toolbar, icons integration), some fixing. 
+	Polishing (toolbar, icons integration), some fixing.
 
 Beate Esser <begrafik@aol.com>
 	Icon design.
