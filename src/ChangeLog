@@ -1,5 +1,10 @@
 2001-01-17  Bernhard Herzog  <bh@intevation.de>
 
+	* gpa.h:
+	* gpa.c: Turn the definition of opt in gpa.h into an extern
+	declaration and define it in gpa.c. Rename it to gpa_options. Fix
+	all references to it. Introduce a typedef for the struct.
+
 	* keysigndlg.h: 
 	* keysigndlg.c (gpa_key_sign_run_dialog): Add the key to be signed
 	to the parameter list and display its user id and fingerprint.

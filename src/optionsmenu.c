@@ -188,9 +188,9 @@ options_keyserver (gpointer param)
 
   {  int i;
 
-     for (i=0; opt.keyserver_names[i]; i++ ) {
+     for (i=0; gpa_options.keyserver_names[i]; i++ ) {
 	contentsServer = g_list_append (contentsServer,
-					opt.keyserver_names[i]);
+					gpa_options.keyserver_names[i]);
     }
   }
 

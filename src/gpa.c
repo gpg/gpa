@@ -86,6 +86,7 @@ static ARGPARSE_OPTS opts[] = {
 };
 
 
+GPAOptions gpa_options;
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain = NULL;
 gboolean global_noTips = FALSE;
@@ -240,13 +241,13 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
   i18n_init ();
 
-  opt.homedir = getenv ("GNUPGHOME");
-  if (!opt.homedir || !*opt.homedir)
+  gpa_options.homedir = getenv ("GNUPGHOME");
+  if (!gpa_options.homedir || !*gpa_options.homedir)
     {
 #ifdef HAVE_DRIVE_LETTERS
-      opt.homedir = "c:/gnupg";
+      gpa_options.homedir = "c:/gnupg";
 #else
-      opt.homedir = "~/.gnupg";
+      gpa_options.homedir = "~/.gnupg";
 #endif
     }
 
@@ -270,11 +271,11 @@ main (int argc, char **argv)
       else if (pargs.r_opt == oNoOptions)
 	default_config = 0; /* --no-options */
       else if (pargs.r_opt == oHomedir)
-	opt.homedir = pargs.r.ret_str;
+	gpa_options.homedir = pargs.r.ret_str;
     }
 
   if (default_config)
-    configname = make_filename (opt.homedir, "gpa.conf", NULL);
+    configname = make_filename (gpa_options.homedir, "gpa.conf", NULL);
 
 
   argc = orig_argc;
@@ -314,11 +315,11 @@ main (int argc, char **argv)
     {
       switch(pargs.r_opt)
 	{
-	case oQuiet: opt.quiet = 1; break;
-	case oVerbose: opt.verbose++; break;
+	case oQuiet: gpa_options.quiet = 1; break;
+	case oVerbose: gpa_options.verbose++; break;
 
-	case oDebug: opt.debug |= pargs.r.ret_ulong; break;
-	case oDebugAll: opt.debug = ~0; break;
+	case oDebug: gpa_options.debug |= pargs.r.ret_ulong; break;
+	case oDebugAll: gpa_options.debug = ~0; break;
 
 	case oOptions:
 	  /* config files may not be nested (silently ignore them) */
@@ -330,9 +331,9 @@ main (int argc, char **argv)
 	    }
 	  break;
 	case oNoGreeting: nogreeting = 1; break;
-	case oNoVerbose: opt.verbose = 0; break;
+	case oNoVerbose: gpa_options.verbose = 0; break;
 	case oNoOptions: break; /* no-options */
-	case oHomedir: opt.homedir = pargs.r.ret_str; break;
+	case oHomedir: gpa_options.homedir = pargs.r.ret_str; break;
 	case oGPGBinary: gpg_program = pargs.r.ret_str;  break;
 	case oSimplifiedUI: gpa_set_simplified_ui (TRUE); break;
 
@@ -366,11 +367,12 @@ main (int argc, char **argv)
 #endif
 
   /* fixme: read from options and add at least one default */
-  opt.keyserver_names = xcalloc (3, sizeof *opt.keyserver_names);
-  opt.keyserver_names[0] = "blackhole.pca.dfn.de";
-  opt.keyserver_names[1] = "horowitz.surfnet.nl";
+  gpa_options.keyserver_names = xcalloc (3,
+					 sizeof *gpa_options.keyserver_names);
+  gpa_options.keyserver_names[0] = "blackhole.pca.dfn.de";
+  gpa_options.keyserver_names[1] = "horowitz.surfnet.nl";
 
-  global_keyserver = opt.keyserver_names[0];  /* FIXME: bad style */
+  global_keyserver = gpa_options.keyserver_names[0];  /* FIXME: bad style */
 
   gpapa_init (gpg_program);
 

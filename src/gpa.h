@@ -55,14 +55,14 @@
 
 
 
-struct {
+typdef struct {
     int verbose;
     int quiet;
     unsigned int debug;
     char *homedir;
     char **keyserver_names;
-} opt;
-
+} GPAOptions;
+extern GPAOptions gpa_options;
 
 
 extern GtkWidget *global_windowMain;
