@@ -34,14 +34,12 @@ typedef struct {
   GtkWidget * ownertrust;
   gchar * key_id;
   gboolean key_has_changed;
-  gboolean destroy_window;
 } GPAKeyEditDialog;
 
 
 /* internal API */
-static gboolean key_edit_delete_event (GtkWidget *widget, GdkEvent *event,
-				       gpointer param);
 static void key_edit_close (GtkWidget *widget, gpointer param);
+static void key_edit_destroy (GtkWidget *widget, gpointer param);
 
 static GtkWidget * add_details_row (GtkWidget * table, gint row, gchar *label,
 				    gchar * text, gboolean selectable);
@@ -84,9 +82,8 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), _("Edit Key"));
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  gtk_signal_connect (GTK_OBJECT (window), "delete-event",
-		      GTK_SIGNAL_FUNC (key_edit_delete_event),
-		      &dialog);
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (key_edit_destroy), &dialog);
 
   vbox = gtk_vbox_new (FALSE, 5);
   gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -182,16 +179,12 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   button = gtk_button_new_with_label (_("Close"));
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, TRUE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc)key_edit_close, NULL);
+		      (GtkSignalFunc)key_edit_close, &dialog);
 
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   gpa_window_show_centered (window, parent);
-  dialog.destroy_window = TRUE;
 
   gtk_main ();
-
-  if (dialog.destroy_window)
-    gtk_widget_destroy (window);
 
   return dialog.key_has_changed;
 }
@@ -226,21 +219,20 @@ add_details_row (GtkWidget * table, gint row, gchar *label_text,
 }
 
 
-/* signal handler for the delete-event siganl */
-static gboolean
-key_edit_delete_event (GtkWidget *widget, GdkEvent *event, gpointer param)
-{
-  GPAKeyEditDialog * dialog = param;
-
-  gtk_main_quit ();
-  dialog->destroy_window = FALSE;
-
-  return FALSE;
-}
-
 /* signal handler for the close button */
 static void
 key_edit_close (GtkWidget *widget, gpointer param)
+{
+  GPAKeyEditDialog * dialog = param;
+
+  gtk_widget_destroy (dialog->window);
+}
+
+
+/* signal handler for the destroy signal. Quit the recursive main loop
+ */
+static void
+key_edit_destroy (GtkWidget *widget, gpointer param)
 {
   gtk_main_quit ();
 }
