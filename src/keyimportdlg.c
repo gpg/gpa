@@ -134,7 +134,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   dialog.key_id = NULL;
 
   window = gtk_dialog_new_with_buttons (_("Import Key"),
-                                        parent, GTK_DIALOG_MODAL,
+                                        GTK_WINDOW (parent), GTK_DIALOG_MODAL,
                                         GTK_STOCK_OK,
                                         GTK_RESPONSE_OK,
                                         GTK_STOCK_CANCEL,
@@ -146,7 +146,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   vbox = GTK_DIALOG (window)->vbox;
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
   table = gtk_table_new (5, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);

@@ -979,7 +979,6 @@ GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, gchar *private_key_fpr,
       gpa_gpgme_error (err);
     }  
   gpgme_signers_clear (ctx);
-  gpgme_key_ref (secret_key);
   err = gpgme_signers_add (ctx, secret_key);
   if (err != GPGME_No_Error)
     {

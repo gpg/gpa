@@ -42,9 +42,6 @@ GPAKeyEditDialog;
 
 
 /* internal API */
-static void key_edit_close (GtkWidget *widget, gpointer param);
-static void key_edit_destroy (GtkWidget *widget, gpointer param);
-
 static GtkWidget *add_details_row (GtkWidget *table, gint row, gchar *label,
 				   gchar *text, gboolean selectable);
 
@@ -63,7 +60,6 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   GtkWidget *label;
   GtkWidget *button;
   GtkWidget *table;
-  GtkWidget *bbox;
   GtkAccelGroup *accel_group;
 
   GpgmeKey key;
@@ -79,16 +75,17 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
 
   accel_group = gtk_accel_group_new ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_dialog_new_with_buttons (_("Edit Key"), GTK_WINDOW(parent),
+                                        GTK_DIALOG_MODAL,
+                                        GTK_STOCK_CLOSE,
+                                        GTK_RESPONSE_CLOSE,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_CLOSE);
   dialog.window = window;
-  gtk_window_set_title (GTK_WINDOW (window), _("Edit Key"));
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (key_edit_destroy), &dialog);
 
-  vbox = gtk_vbox_new (FALSE, 5);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  vbox = GTK_DIALOG (window)->vbox;
 
   /* info about the key */
   table = gtk_table_new (2, 3, FALSE);
@@ -148,21 +145,9 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
 		      (GtkSignalFunc)key_edit_change_trust, &dialog);
 
 
-  /* buttons */
-  bbox = gtk_hbutton_box_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, TRUE, 5);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
-
-  button = gpa_button_new (accel_group, _("_Close"));
-  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, TRUE, 0);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc)key_edit_close, &dialog);
-
-  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-  gpa_window_show_centered (window, parent);
-
-  gtk_main ();
-
+  gtk_widget_show_all (window);
+  gtk_dialog_run (GTK_DIALOG (window));
+  gtk_widget_destroy (window);
   return dialog.key_has_changed;
 }
 
@@ -193,25 +178,6 @@ add_details_row (GtkWidget * table, gint row, gchar *label_text,
 		    GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
   return widget;
-}
-
-
-/* signal handler for the close button */
-static void
-key_edit_close (GtkWidget *widget, gpointer param)
-{
-  GPAKeyEditDialog * dialog = param;
-
-  gtk_widget_destroy (dialog->window);
-}
-
-
-/* signal handler for the destroy signal. Quit the recursive main loop
- */
-static void
-key_edit_destroy (GtkWidget *widget, gpointer param)
-{
-  gtk_main_quit ();
 }
 
 

@@ -151,12 +151,12 @@ key_export_dialog_run (GtkWidget *parent, gchar **filename,
                                         GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   dialog.window = window;
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   vbox = GTK_DIALOG (window)->vbox;
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
   table = gtk_table_new (4, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
@@ -266,13 +266,13 @@ key_backup_dialog_run (GtkWidget *parent, gchar **filename, gchar *fpr)
                                         GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   dialog.window = window;
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);  
 
   vbox = GTK_DIALOG (window)->vbox;
   gtk_container_add (GTK_CONTAINER (window), vbox);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
   table = gtk_table_new (3, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
