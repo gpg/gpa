@@ -1,5 +1,19 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* gpa.c (gpa_addRecipient): Only add the key if it's not already
+	in the recipients list.
+
+	* keysmenu.c (keys_openPublic_exportTrust_export): 
+	(keys_openPublic_exportTrust): 
+	(keys_openSecret_editKey_close): 
+	(keys_openSecret_editKey): 
+	(keys_openSecret): 
+	* filemenu.c (file_sign_sign):
+	(file_encryptAs):
+	(file_protect):
+	(file_protectAs): Don't translate the tip-strings. They aren't
+	used anymore at all and should be removed completely evetually.
+
 	* gpa.c (gpa_open_keyring_editor):
 	(gpa_open_filemanager): Only do a show_all once, when the window
 	is created for the first time. With recent changes not all
