@@ -364,6 +364,18 @@ keyring_editor_sign (gpointer param)
                   gpa_window_error (_("This key has expired! "
                                       "Unable to sign."), editor->window);
                 }
+              else if (err == GPGME_Conflict)
+                {
+                  /* Couldn't sign because the key was already signed */
+                  gpa_window_error (_("This key has already been signed with "
+                                      "your own!"), editor->window);
+                }
+              else if (err == GPGME_No_Recipients)
+                {
+                  /* Couldn't sign because the key was already signed */
+                  gpa_window_error (_("You haven't selected a default key "
+                                      "to sign with!"), editor->window);
+                }
               else if (err == GPGME_Canceled)
                 {
                   /* Do nothing, the user should know if he cancelled the

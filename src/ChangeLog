@@ -1,3 +1,15 @@
+2002-12-03  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_sign): Add const to
+	fingerprint declaration.
+
+	* keyring.c (keyring_editor_sign): Check for new return codes from
+	gpa_gpgme_edit_sign.
+
+	* gpgmeedit.c (edit_sign_fnc_transit): Set the error to GPGME_Conflict
+	if the key was already signed.
+	(gpa_gpgme_edit_sign): Check that there is really a default key.
+
 2002-12-02  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* server_access.c (do_spawn): Fix shutdown of GIOChannel. Should fix

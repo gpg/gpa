@@ -466,6 +466,12 @@ edit_sign_fnc_transit (int current_state, GpgmeStatusCode status,
         {
           next_state = SIGN_SET_CHECK_LEVEL;
         }
+      else if (status == GPGME_STATUS_ALREADY_SIGNED)
+        {
+          /* The key has already been signed with this key */
+          next_state = SIGN_ERROR;
+          *err = GPGME_Conflict; 
+        }
       else if (status == GPGME_STATUS_GET_LINE &&
           g_str_equal (args, "keyedit.prompt"))
         {
@@ -623,7 +629,7 @@ GpgmeError gpa_gpgme_edit_expire (GpgmeKey key, GDate *date)
 }
 
 /* Sign this key with the given private key */
-GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, gchar *private_key_fpr,
+GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, const gchar *private_key_fpr,
                                 gboolean local)
 {
   struct sign_parms_s sign_parms = {"0", local};
@@ -633,6 +639,12 @@ GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, gchar *private_key_fpr,
   GpgmeKey secret_key = gpa_keytable_secret_lookup (keytable, private_key_fpr);
   GpgmeError err = GPGME_No_Error;
   GpgmeData out;
+
+  /* This return code is a bit weird, but we must use one :-) */
+  if (!secret_key)
+    {
+      return GPGME_No_Recipients;
+    }
 
   err = gpgme_data_new (&out);
   if (err != GPGME_No_Error)

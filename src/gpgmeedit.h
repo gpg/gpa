@@ -35,7 +35,7 @@ GpgmeError gpa_gpgme_edit_expire (GpgmeKey key, GDate *date);
 
 /* Sign this key with the given private key. If local is true, make a local
  * signature. */
-GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, gchar *private_key_fpr,
+GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, const gchar *private_key_fpr,
                                 gboolean local);
 
 #endif
