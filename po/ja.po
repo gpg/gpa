@@ -1,13 +1,13 @@
 # Japanese translation for GPA.
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Yasunari Imado <master@it-translation.net>, 2002.
-# TAKAHASHI Tamotsu <tamo@momonga-linux.org>, 2002.
+# TAKAHASHI Tamotsu <tamo@momonga-linux.org>, 2002, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
 "POT-Creation-Date: 2003-01-20 23:09+0900\n"
-"PO-Revision-Date: 2003-01-20 23:10+0900\n"
+"PO-Revision-Date: 2003-01-21 22:30+0900\n"
 "Last-Translator: TAKAHASHI Tamotsu <tamo@momonga-linux.org>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
 "MIME-Version: 1.0\n"
@@ -177,7 +177,7 @@ msgstr "/編集 (_E)"
 
 #: src/fileman.c:374 src/keyring.c:1000
 msgid "/Edit/Select _All"
-msgstr "/編集 (_E)/すべて選択 (_A)"
+msgstr "/編集 (E)/すべて選択 (_A)"
 
 #: src/fileman.c:375 src/keyring.c:1001
 msgid "/Edit/sep2"
@@ -322,7 +322,7 @@ msgstr "平文署名 (_C)"
 
 #: src/filesigndlg.c:267 src/filesigndlg.c:282
 msgid "sign in separate _file"
-msgstr "別ファイルに署名する"
+msgstr "別ファイルに署名する (_F)"
 
 #: src/filesigndlg.c:271
 msgid "si_gn and compress"
@@ -436,7 +436,7 @@ msgstr "無期限有効 (_I)"
 
 #: src/gpawidgets.c:359
 msgid "expire _after"
-msgstr "有効期限 (_A)"
+msgstr "有効な期間 (_A):"
 
 #: src/gpawidgets.c:378
 msgid "expire o_n:"
@@ -1098,11 +1098,11 @@ msgstr "今すぐ鍵をバックアップする (_B)"
 
 #: src/keyring.c:995
 msgid "/Edit/_Copy"
-msgstr "/編集 (_E)/コピー (_C)"
+msgstr "/編集 (E)/コピー (_C)"
 
 #: src/keyring.c:997
 msgid "/Edit/_Paste"
-msgstr "/編集 (_E)/貼り付け (_P)"
+msgstr "/編集 (E)/貼り付け (_P)"
 
 #: src/keyring.c:999
 msgid "/Edit/sep1"
@@ -1154,31 +1154,31 @@ msgstr "/鍵 (K)/バックアップ... (_B)"
 
 #: src/keyring.c:1048
 msgid "/Keys/Export Keys..."
-msgstr "/鍵 (K)/鍵をエクスポート..."
+msgstr "/鍵 (K)/鍵をエクスポート... (X)"
 
 #: src/keyring.c:1055
 msgid "/Keys/Delete Keys..."
-msgstr "/鍵 (K)/鍵を削除..."
+msgstr "/鍵 (K)/鍵を削除... (D)"
 
 #: src/keyring.c:1062
 msgid "/Edit/Copy"
-msgstr "/編集 (_E)/コピー"
+msgstr "/編集 (E)/コピー (C)"
 
 #: src/keyring.c:1070
 msgid "/Keys/Set Owner Trust..."
-msgstr "/鍵 (_K)/所有者の信用度を指定..."
+msgstr "/鍵 (K)/所有者の信用度を指定... (O)"
 
 #: src/keyring.c:1078
 msgid "/Keys/Sign Keys..."
-msgstr "/鍵 (K)/鍵に署名..."
+msgstr "/鍵 (K)/鍵に署名... (S)"
 
 #: src/keyring.c:1086
 msgid "/Keys/Edit Private Key..."
-msgstr "/鍵 (K)/秘密鍵を編集..."
+msgstr "/鍵 (K)/秘密鍵を編集... (E)"
 
 #: src/keyring.c:1093
 msgid "/Keys/Backup..."
-msgstr "/鍵 (K)/バックアップ..."
+msgstr "/鍵 (K)/バックアップ... (B)"
 
 #: src/keyring.c:1110
 msgid "/_Copy"
@@ -1214,19 +1214,19 @@ msgstr "/バックアップ... (_B)"
 
 #: src/keyring.c:1133
 msgid "/Set Owner Trust..."
-msgstr "/所有者の信用度を指定..."
+msgstr "/所有者の信用度を指定... (O)"
 
 #: src/keyring.c:1141
 msgid "/Sign Keys..."
-msgstr "/鍵に署名..."
+msgstr "/鍵に署名... (S)"
 
 #: src/keyring.c:1149
 msgid "/Edit Private Key..."
-msgstr "/秘密鍵を編集..."
+msgstr "/秘密鍵を編集... (E)"
 
 #: src/keyring.c:1156
 msgid "/Backup..."
-msgstr "/バックアップ..."
+msgstr "/バックアップ... (B)"
 
 #: src/keyring.c:1253 src/keysigndlg.c:106
 msgid "Fingerprint:"
