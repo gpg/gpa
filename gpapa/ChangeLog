@@ -1,3 +1,8 @@
+10 May 2000 26:56 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+  All non-interactive parts of the public and secret key editors work.
+  Encrypting, decrypting, and signing files works.
+
 2000-05-02 19:45:30  Werner Koch  (wk@habibti.openit.de)
 
   Replaced all concat() by xstrcat2().	Replaced some parameters named
