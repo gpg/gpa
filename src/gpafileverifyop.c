@@ -319,7 +319,6 @@ gpa_file_verify_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 {
   gchar *message;
 
-  /* Capture fatal errors and quit the application */
   switch (err)
     {
     case GPG_ERR_NO_ERROR:

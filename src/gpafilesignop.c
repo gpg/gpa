@@ -343,7 +343,6 @@ static void
 gpa_file_sign_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 				       GpaFileSignOperation *op)
 {
-  /* Capture fatal errors and quit the application */
   switch (err)
     {
     case GPG_ERR_NO_ERROR:

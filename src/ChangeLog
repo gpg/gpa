@@ -1,3 +1,28 @@
+2003-07-25  Miguel Coca  <mcoca@gnu.org>
+
+	* gpakeydeleteop.c, gpakeydeleteop.h, gpakeyop.c, gpakeyop.h: New.
+
+	* Makefile.am (gpa_SOURCES): Add gpakeyop.{c,h} and
+	gpakeydeleteop.{c,h}.
+
+	* keyring.c (gpa_keyring_editor_changed_wot_cb): New.
+	(register_operation): New.
+	(keyring_editor_delete): Use the GpaKeyDeleteOperation.
+
+	* keylist.h, keylist.c (gpa_keylist_init, gpa_keylist_start_reload) 
+	(gpa_keylist_next): Display a warning while the trustdb rebuilds.
+
+	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): Remove
+	obsolete comment.
+	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): Likewise.
+	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb): 
+	Likewise.
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb):
+	Likewise.
+
+	* keyring.c (keyring_editor_selection_changed): Run update_widgets
+	after loading the new current key,
+
 2003-06-29  Miguel Coca  <mcoca@gnu.org>
 
 	* gpaprogressdlg.c (gpa_progress_dialog_set_property) 

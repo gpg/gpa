@@ -49,6 +49,8 @@
 #include "server_access.h"
 #include "options.h"
 
+#include "gpakeydeleteop.h"
+
 /*
  *      The public keyring editor
  */
@@ -226,33 +228,36 @@ keyring_editor_has_private_selected (gpointer param)
     (GPA_KEYLIST(editor->keylist));
 }
 
+/*
+ * Operations
+ */
+
+static void
+gpa_keyring_editor_changed_wot_cb (gpointer data)
+{
+  GPAKeyringEditor *editor = data;
+  gpa_keylist_start_reload (editor->keylist);  
+}
+
+static void
+register_operation (GPAKeyringEditor * editor, GpaKeyOperation *op)
+{
+  g_signal_connect_swapped (G_OBJECT (op), "changed_wot",
+			    G_CALLBACK (gpa_keyring_editor_changed_wot_cb),
+			    editor);
+  g_signal_connect (G_OBJECT (op), "completed",
+		    G_CALLBACK (gpa_operation_destroy), editor); 
+}
+
+
 /* delete the selected keys */
 static void
-keyring_editor_delete (gpointer param)
+keyring_editor_delete (GPAKeyringEditor * editor)
 {
-  GPAKeyringEditor * editor = param;
-  gpg_error_t err;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
-  GList *selection;
-
-  for (selection = gpa_keylist_get_selected_keys (editor->keylist); 
-       selection; selection = g_list_next (selection))
-    {
-      gpgme_key_t key = (gpgme_key_t) selection->data;
-
-      if (!gpa_delete_dialog_run (editor->window, key))
-        break;
-      err = gpgme_op_delete (ctx, key, 1);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-        {
-          gpa_gpgme_error (err);
-        }
-    }
-  gpgme_release (ctx);
-  /* Reload the whole keyring: deleting keys might change the whole WoT */
-  gpa_keylist_start_reload (editor->keylist);
-  /* Update the default key, as it could just have been deleted */
-  gpa_options_update_default_key (gpa_options_get_instance ());
+  GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
+  GpaKeyDeleteOperation *op = gpa_key_delete_operation_new (editor->window,
+							    selection);
+  register_operation (editor, op);
 }
 
 
@@ -735,7 +740,6 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
 				  gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  keyring_selection_update_widgets (editor);
   /* Update the current key */
   if (editor->current_key)
     {
@@ -763,6 +767,7 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
       editor->current_key = key;
       gpgme_release (ctx);
     }
+  keyring_selection_update_widgets (editor);
 }
 
 /* Signal handler for the map signal. If the simplified_ui flag is set

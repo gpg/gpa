@@ -83,6 +83,7 @@ gpa_keylist_init (GpaKeyList *list)
 
   list->secret = FALSE;
   list->keys = NULL;
+  list->dialog = NULL;
   /* Init the model */
   store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
 			      GDK_TYPE_PIXBUF,
@@ -321,11 +322,25 @@ GList *gpa_keylist_get_selected_keys (GpaKeyList * keylist)
 
 void gpa_keylist_start_reload (GpaKeyList * keylist)
 {
+  GtkTreeSelection *selection = 
+    gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
+  gtk_tree_selection_unselect_all (selection);
   gtk_list_store_clear (GTK_LIST_STORE (gtk_tree_view_get_model 
 					(GTK_TREE_VIEW (keylist))));
   g_list_foreach (keylist->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (keylist->keys);
   keylist->keys = NULL;
+  /* Display this warning until the first key is received.
+   * It may be shown at times when it's not needed. But it shouldn't appear
+   * for long those times.
+   */
+  keylist->dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, 
+					    GTK_MESSAGE_INFO, 
+					    GTK_BUTTONS_NONE,
+					    _("GnuPG is rebuilding the trust "
+					      "database.\nThis might take a "
+					      "few seconds."));
+  gtk_widget_show_all (keylist->dia log);
   gpa_keytable_force_reload (gpa_keytable_get_public_instance (),
 			     gpa_keylist_next, gpa_keylist_end, keylist);
 }
@@ -366,6 +381,13 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
   GtkTreeIter iter;
   const gchar *keyid, *ownertrust, *validity;
   gchar *userid, *expiry;
+
+  /* Remove the dialog if it is being displayed */
+  if (list->dialog) 
+    {
+      gtk_widget_destroy (list->dialog);
+      list->dialog = NULL;
+    }
   
   list->keys = g_list_append (list->keys, key);
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (list)));

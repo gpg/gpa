@@ -49,7 +49,7 @@ struct _GpaOperationClass {
   GObjectClass parent_class;
 
   /* Signal handlers */
-  void (*completed) (GpaContext *context);
+  void (*completed) (GpaOperation *operation);
 };
 
 GType gpa_operation_get_type (void) G_GNUC_CONST;

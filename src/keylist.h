@@ -40,6 +40,8 @@ struct _GpaKeyList {
   gboolean secret;
   /* Keys loaded into the model */
   GList *keys;
+  /* Dialog for warning about a trustdb rebuilding */
+  GtkWidget *dialog;
 };
 
 struct _GpaKeyListClass {

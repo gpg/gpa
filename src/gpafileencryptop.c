@@ -556,7 +556,6 @@ static void
 gpa_file_encrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 					  GpaFileEncryptOperation *op)
 {
-  /* Capture fatal errors and quit the application */
   switch (err)
     {
     case GPG_ERR_NO_ERROR:

@@ -270,7 +270,6 @@ gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 {
   gchar *message;
 
-  /* Capture fatal errors and quit the application */
   switch (gpg_err_code (err))
     {
     case GPG_ERR_NO_ERROR:
