@@ -1,3 +1,21 @@
+2002-10-27  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyimportdlg.h, keyimportdlg.c (key_import_results_dialog_run): 
+	New function.
+
+	* keyring.c (keyring_editor_import): Load only those keys we just
+	imported. Display a summary of the import results.
+
+	* keytable.c (keytable_fill, do_keylisting): Split the begining of
+	a keylist operation from actually reading the keys.
+	(load_keys): New function.
+
+	* keytable.h, keytable.c (gpa_keytable_load_key): New function.
+
+	* gpgmeparsers.c (gpa_parse_import_info, parse_import_info_text) 
+	(parse_import_info_end, parse_import_info_start): Parse the import
+	operation detailed results.
+
 2002-10-26  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gtkrc: Remove.

@@ -48,6 +48,7 @@
 #include "gpgmeedit.h"
 #include "keytable.h"
 #include "server_access.h"
+#include "gpgmeparsers.h"
 
 /*
  *      The public keyring editor
@@ -440,10 +441,31 @@ keyring_editor_import (gpointer param)
           gpa_gpgme_error (err);
         }
       gpgme_data_release (data);
-      /* Reload the list of keys to get the imported keys */
+      /* Load the keys we just imported */
       if (err != GPGME_No_Data)
         {
-          gpa_keytable_reload (keytable);
+          GpaImportInfo info;
+          GList *cur;
+          gchar **keyids;
+          gint i;
+
+          info.keyids = NULL;
+          gpa_parse_import_info (&info);
+	  /* If keys were imported, load them */
+	  if (info.keyids)
+	    {
+	      keyids = g_malloc ((g_list_length (info.keyids)+1) * 
+				 sizeof (gchar*));
+	      for (cur = info.keyids, i = 0; cur; cur = g_list_next (cur), i++)
+		{
+		  keyids[i] = cur->data;
+		}
+	      keyids[i] = NULL;
+	      gpa_keytable_load_keys (keytable, (const gchar**) keyids);
+	      g_strfreev (keyids);
+	      g_list_free (info.keyids);
+	    }
+	  key_import_results_dialog_run (editor->window, &info);
         }
       /* update the widgets
        */

@@ -31,6 +31,7 @@ struct parse_engine_info_s
   GpaEngineInfo *engine;
 };
 
+static
 void parse_engine_info_start (GMarkupParseContext *context,
 			      const gchar         *element_name,
 			      const gchar        **attribute_names,
@@ -42,6 +43,7 @@ void parse_engine_info_start (GMarkupParseContext *context,
   g_queue_push_head (data->tag_stack, (gpointer) element_name);
 }
 
+static
 void parse_engine_info_end (GMarkupParseContext *context,
 			    const gchar         *element_name,
 			    gpointer             user_data,
@@ -51,6 +53,7 @@ void parse_engine_info_end (GMarkupParseContext *context,
   g_queue_pop_head (data->tag_stack);
 }
 
+static
 void parse_engine_info_text (GMarkupParseContext *context,
 			     const gchar         *text,
 			     gsize                text_len,  
@@ -97,6 +100,145 @@ void gpa_parse_engine_info (GpaEngineInfo *info)
   GMarkupParseContext* context = g_markup_parse_context_new (&parser, 0,
 							     &data, NULL);
   g_markup_parse_context_parse (context, engine_info, strlen (engine_info),
+				NULL);
+  g_markup_parse_context_free (context);
+}
+
+/* Retrieve and parse the detailed results of an import operation */
+
+struct parse_import_info_s
+{
+  GQueue *tag_stack;
+  GpaImportInfo *info;
+};
+
+static
+void parse_import_info_start (GMarkupParseContext *context,
+			      const gchar         *element_name,
+			      const gchar        **attribute_names,
+			      const gchar        **attribute_values,
+			      gpointer             user_data,
+			      GError             **error)
+{
+  struct parse_import_info_s *data = user_data;
+  g_queue_push_head (data->tag_stack, (gpointer) element_name);
+}
+
+static
+void parse_import_info_end (GMarkupParseContext *context,
+			    const gchar         *element_name,
+			    gpointer             user_data,
+			    GError             **error)
+{
+  struct parse_import_info_s *data = user_data;
+  g_queue_pop_head (data->tag_stack);
+}
+
+static
+void parse_import_info_text (GMarkupParseContext *context,
+			     const gchar         *text,
+			     gsize                text_len,  
+			     gpointer             user_data,
+			     GError             **error)
+{
+  struct parse_import_info_s *data = user_data;
+  if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), "keyid"))
+    {
+      data->info->keyids = g_list_append (data->info->keyids, g_strdup (text));
+    }
+  else
+    {
+      gint num;
+      if (!sscanf (text, "%i", &num))
+        {
+          return;
+        }
+      if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), "count"))
+        {
+          data->info->count = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), 
+                            "no_user_id"))
+        {
+          data->info->no_user_id = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "imported"))
+        {
+          data->info->imported = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), 
+                            "imported_rsa"))
+        {
+          data->info->imported_rsa = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "unchanged"))
+        {
+          data->info->unchanged = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack), 
+                            "n_uids"))
+        {
+          data->info->n_uids = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "n_subk"))
+        {
+          data->info->n_subk = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "n_sigs"))
+        {
+          data->info->n_sigs = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "s_sigs"))
+        {
+          data->info->s_sigs = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "n_revoc"))
+        {
+          data->info->n_revoc = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "sec_read"))
+        {
+          data->info->sec_read = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "sec_imported"))
+        {
+          data->info->sec_imported = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "sec_dups"))
+        {
+          data->info->sec_dups = num;
+        }
+      else if (g_str_equal ((gchar*) g_queue_peek_head (data->tag_stack),
+                            "skipped_new"))
+        {
+          data->info->skipped_new = num;
+        }
+    }
+}
+
+void gpa_parse_import_info (GpaImportInfo *info)
+{
+  GMarkupParser parser = 
+    {
+      parse_import_info_start,
+      parse_import_info_end,
+      parse_import_info_text,
+      NULL, NULL
+    };
+  struct parse_import_info_s data = {g_queue_new(), info};
+  const gchar *import_info = gpgme_get_op_info (ctx, 0);
+  GMarkupParseContext* context = g_markup_parse_context_new (&parser, 0,
+							     &data, NULL);
+  g_markup_parse_context_parse (context, import_info, strlen (import_info),
 				NULL);
   g_markup_parse_context_free (context);
 }

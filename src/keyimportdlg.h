@@ -22,9 +22,11 @@
 #define KEYIMPORTDLG_H
 
 #include <gtk/gtk.h>
+#include "gpgmeparsers.h"
 
 gboolean key_import_dialog_run (GtkWidget * parent, gchar ** filename,
 				gchar ** server, gchar ** key_id);
 
+void key_import_results_dialog_run (GtkWidget *parent, GpaImportInfo *info);
 
 #endif /* KEYIMPORTDLG_H */

@@ -35,4 +35,14 @@ typedef struct
 
 void gpa_parse_engine_info (GpaEngineInfo *info);
 
+/* Retrieve and parse the detailed results of an import operation */
+typedef struct
+{
+  GList *keyids;
+  gint count, no_user_id, imported, imported_rsa, unchanged, n_uids, n_subk,
+    n_sigs, s_sigs, n_revoc, sec_read, sec_imported, sec_dups, skipped_new;
+} GpaImportInfo;
+
+void gpa_parse_import_info (GpaImportInfo *info);
+
 #endif

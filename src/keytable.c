@@ -30,7 +30,7 @@ struct _GPAKeyTable
 
 /* Auxiliary functions */
 
-static void keytable_fill (GHashTable *hash, gboolean secret)
+static void do_keylisting (GHashTable *hash, gboolean secret)
 {
   GpgmeError err;
   GpgmeKey key;
@@ -55,9 +55,6 @@ static void keytable_fill (GHashTable *hash, gboolean secret)
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   gtk_widget_show_all (window);
   /* Load the keys */
-  err = gpgme_op_keylist_start( ctx, NULL, secret );
-  if( err != GPGME_No_Error )
-        gpa_gpgme_error (err);
   while( (err = gpgme_op_keylist_next( ctx, &key )) != GPGME_EOF )
     {
       const char *s;
@@ -83,6 +80,26 @@ static void keytable_fill (GHashTable *hash, gboolean secret)
         }
     }
   gtk_widget_destroy (window);
+}
+
+static void keytable_fill (GHashTable *hash, gboolean secret)
+{
+  GpgmeError err;
+
+  err = gpgme_op_keylist_start( ctx, NULL, secret );
+  if( err != GPGME_No_Error )
+        gpa_gpgme_error (err);
+  do_keylisting (hash, secret);
+}
+
+static void load_keys (GHashTable *hash, const gchar **keys, gboolean secret)
+{
+  GpgmeError err;
+
+  err = gpgme_op_keylist_ext_start (ctx, keys, secret, 0);
+  if( err != GPGME_No_Error )
+        gpa_gpgme_error (err);
+  do_keylisting (hash, secret);
 }
 
 static gboolean true (const gchar *fpr, GpgmeKey key, gpointer data)
@@ -158,6 +175,20 @@ void gpa_keytable_load_key (GPAKeyTable * table, const gchar * fpr)
   /* Load the key */
   load_key (table->public_hash, fpr, FALSE);
   load_key (table->secret_hash, fpr, TRUE);
+}
+
+void gpa_keytable_load_keys (GPAKeyTable * table, const gchar **keys)
+{
+  gint i;
+  
+  /* Delete the old keys */
+  for (i = 0; keys[i]; i++)
+    {
+      gpa_keytable_remove (table, keys[i]);
+    }
+  /* Load the keys */
+  load_keys (table->public_hash, keys, FALSE);
+  load_keys (table->secret_hash, keys, TRUE);
 }
 
 GpgmeKey gpa_keytable_lookup (GPAKeyTable * table, const gchar * fpr)
