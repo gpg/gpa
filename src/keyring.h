@@ -1,4 +1,4 @@
-/* keysmenu.h  -  The GNU Privacy Assistant
+/* keyring.h  -  The GNU Privacy Assistant
  *      Copyright (C) 2000 G-N-U GmbH.
  *
  * This file is part of GPA
