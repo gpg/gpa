@@ -62,17 +62,11 @@ gpa_window_destroy (gpointer param)
 /* var */
   gpointer *localParam;
   GpaWindowKeeper *keeper;
-  gchar *tip;
+
 /* commands */
   localParam = (gpointer *) param;
   keeper = (GpaWindowKeeper *) localParam[0];
-  tip = (gchar *) localParam[1];
   gpa_windowKeeper_release (keeper);
-  if (tip)
-    {
-      if (strcmp (tip, "") != 0)
-	gpa_window_tip_show (tip);
-    }				/* if */
 }				/* gpa_window_destroy */
 
 GtkWidget *
