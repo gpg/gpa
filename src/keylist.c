@@ -41,7 +41,8 @@ typedef void (*ColumnValueFunc)(GpapaPublicKey * key,
 				GdkBitmap ** mask);
 
 typedef struct {
-  /* column title */
+  /* column title. May be NULL to indicate no title. Empty strings won't
+   * work properly because they're passed through _(). */
   gchar * title;
 
   /* function to return the value */
@@ -201,7 +202,7 @@ static ColumnDef column_defs[] = {
   {N_("Expiry Date"), get_expirydate_value},
   {N_("Key Trust"), get_trust_value},
   {N_("Owner Trust"), get_ownertrust_value},
-  {"", get_key_type_pixmap_value},
+  {NULL, get_key_type_pixmap_value},
 };
 
 
@@ -365,8 +366,12 @@ keylist_fill_column_titles (GPAKeyList * keylist)
 
   for (i = 0; i < keylist->ncolumns; i++)
     {
-      gtk_clist_set_column_title (GTK_CLIST (keylist->clist), i,
-				  _(keylist->column_defs[i]->title));
+      gchar * title = keylist->column_defs[i]->title;
+      if (title)
+	title = _(title);
+      else
+	title = "";
+      gtk_clist_set_column_title (GTK_CLIST (keylist->clist), i, title);
       gtk_clist_set_column_visibility (GTK_CLIST (keylist->clist), i, TRUE);
       /*      gtk_clist_column_title_passive (GTK_CLIST (keylist->clist), i);*/
     }
