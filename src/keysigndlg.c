@@ -30,53 +30,6 @@
 #include "gpawidgets.h"
 #include "keysigndlg.h"
 
-struct _GPAKeySignDialog {
-  gboolean result;
-  gboolean sign_locally;
-  GtkWidget * window;
-  GtkWidget * check_local;
-};
-typedef struct _GPAKeySignDialog GPAKeySignDialog;
-
-
-/* Signal handle for the cancel button. Set result to FALSE and destroy
- * the dialog window */
-static void
-key_sign_cancel (gpointer param)
-{
-  GPAKeySignDialog * dialog = param;
-
-  dialog->result = FALSE;
-  gtk_widget_destroy (dialog->window);
-} /* key_sign_cancel */
-
-
-/* Signal handler for the OK button. Read the user's input then destroy the
- * dialog window */
-static void
-key_sign_ok (gpointer param)
-{
-  GPAKeySignDialog * dialog = param;
-  GtkWidget * check;
-
-  dialog->result = TRUE;
-
-  check = dialog->check_local;
-  dialog->sign_locally = check && 
-          gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
-
-  gtk_widget_destroy (dialog->window);
-} /* key_sign_ok */
-
-
-/* Handle for the dialog window's destroy signal. Quit the recursive
- * main loop */
-static void
-key_sign_destroy (GtkWidget *widget, gpointer param)
-{
-  gtk_main_quit ();
-}
-
 
 /* Run the key sign dialog for signing the public key key with the
  * default key as a modal dialog and return when the user ends the
@@ -95,29 +48,25 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
   GtkAccelGroup *accelGroup;
   GtkWidget *window;
   GtkWidget *vboxSign;
-  GtkWidget *hButtonBoxSign;
-  GtkWidget *buttonCancel;
-  GtkWidget *buttonSign;
   GtkWidget *check = NULL;
   GtkWidget *table;
   GtkWidget *label;
+  GtkWidget *uid_box;
+  GtkResponseType response;
+  gint uid_count;
 
-  GPAKeySignDialog dialog;
-
-  dialog.sign_locally = *sign_locally;
-  dialog.check_local = NULL;
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  dialog.window = window;
-  gtk_window_set_title (GTK_WINDOW (window), _("Sign Key"));
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (key_sign_destroy), (gpointer)&dialog);
+  window = gtk_dialog_new_with_buttons (_("Sign Key"), GTK_WINDOW(parent),
+                                        GTK_DIALOG_MODAL,
+                                        GTK_STOCK_YES,
+                                        GTK_RESPONSE_YES,
+                                        GTK_STOCK_NO,
+                                        GTK_RESPONSE_NO,
+                                        NULL);
 
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
 
-  vboxSign = gtk_vbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (window), vboxSign);
+  vboxSign = GTK_DIALOG (window)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vboxSign), 5);
 
   label = gtk_label_new (_("Do you want to sign the following key?"));
@@ -129,15 +78,23 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
 
-  label = gtk_label_new (_("User ID:"));
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  /* Build this first, so that we can know how may user ID's there are */
+  uid_box = gtk_vbox_new (TRUE, 0);
+  for (uid_count = 0; 
+       gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, uid_count);
+       uid_count++)
+    {
+      label = gtk_label_new (gpgme_key_get_string_attr (key, GPGME_ATTR_USERID,
+                                                        NULL, uid_count));
+      gtk_box_pack_start_defaults (GTK_BOX(uid_box), label);
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    }
 
-  label = gtk_label_new (gpgme_key_get_string_attr (key, GPGME_ATTR_USERID,
-                                                    NULL, 0));
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  label = gtk_label_new ( uid_count == 1 ? _("User Name:") : _("User Names:"));
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.0);
 
+  gtk_table_attach (GTK_TABLE (table), uid_box, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
   label = gtk_label_new (_("Fingerprint:"));
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
@@ -153,6 +110,14 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 
+  if (uid_count > 1)
+    {
+      label = gtk_label_new (_("All user names in this key will be signed."));
+      gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 10);
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
+      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+    }
+
   label = gtk_label_new (_("The key will be signed with your default"
 			   " private key."));
   gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 5);
@@ -161,43 +126,22 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
   if (!gpa_simplified_ui ())
     {
       check = gpa_check_button_new (accelGroup, _("Sign only _locally"));
-      dialog.check_local = check;
       gtk_box_pack_start (GTK_BOX (vboxSign), check, FALSE, FALSE, 0);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), *sign_locally);
     }
 
-  hButtonBoxSign = gtk_hbutton_box_new ();
-  gtk_box_pack_start (GTK_BOX (vboxSign), hButtonBoxSign, FALSE, FALSE, 0);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxSign),
-			     GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxSign), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxSign), 5);
-
-  buttonSign = gpa_button_new (accelGroup, _("_OK"));
-  gtk_signal_connect_object (GTK_OBJECT (buttonSign), "clicked",
-			     GTK_SIGNAL_FUNC (key_sign_ok),
-			     (gpointer) &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonSign);
-
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					(GtkSignalFunc) key_sign_cancel, &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonCancel);
-
-  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-  gpa_window_show_centered (window, parent);
-
-  dialog.result = FALSE;
-
-  gtk_main ();
-
-  if (dialog.result)
+  gtk_widget_show_all (window);
+  response = gtk_dialog_run (GTK_DIALOG (window));
+  if (response == GTK_RESPONSE_YES)
     {
-      *sign_locally = dialog.sign_locally;
+      *sign_locally = check && 
+        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
+      gtk_widget_destroy (window);
+      return TRUE;
     }
   else
     {
-      dialog.result = FALSE;
+      gtk_widget_destroy (window);
+      return FALSE;
     }
-
-  return dialog.result;
-} /* gpa_key_sign_run_dialog */
+}

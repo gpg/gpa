@@ -1,3 +1,12 @@
+2002-08-23  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keysigndlg.c (gpa_key_sign_run_dialog): Change to use a GtkDialog.
+	(key_sign_cancel, key_sign_ok, key_sign_destroy): Deleted
+	functions, as the dialog does not need them. 
+	(gpa_key_sign_run_dialog): Display all user ID's. Warn that all of
+	them will be signed. Use "user name" instead of "user id" on
+	screen.
+
 2002-08-22  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.c (edit_sign_fnc, gpa_gpgme_edit_sign)
