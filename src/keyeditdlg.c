@@ -296,5 +296,6 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
       if (new_date)
 	g_date_free (new_date);
       free (password);
+      dialog->key_has_changed = TRUE;
     }
 }
