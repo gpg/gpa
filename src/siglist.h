@@ -24,7 +24,8 @@
 #include <gtk/gtk.h>
 
 GtkWidget * gpa_siglist_new (GtkWidget *window);
-void gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures);
+void gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
+				 gchar * key_id);
 
 
 #endif GPAWIDGETS_H
