@@ -1,3 +1,10 @@
+2002-12-29  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (keyring_editor_delete): Update the default key, in case
+	it's been deleted.
+
+	* server_access.c: Include signal.h.
+
 2002-12-26  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (key_has_been_signed): Account for a missing signing key.

@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <assert.h>
 #include <ctype.h>
+#include <signal.h>
 
 /* For unlink() */
 #ifdef G_OS_UNIX

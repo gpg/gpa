@@ -271,6 +271,8 @@ keyring_editor_delete (gpointer param)
           gpa_gpgme_error (err);
         }
     }
+  /* Update the default key, as it could just have been deleted */
+  gpa_options_update_default_key (gpa_options);
   gtk_clist_thaw (GTK_CLIST(editor->clist_keys));
 } /* keyring_editor_delete */
 
