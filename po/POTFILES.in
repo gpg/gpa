@@ -8,7 +8,6 @@ src/gpapastrings.c
 src/gpawidgets.c
 src/gpawizard.c
 src/gtktools.c
-src/help.c
 src/helpmenu.c
 src/keyexportdlg.c
 src/keygendlg.c
@@ -22,4 +21,3 @@ src/optionsmenu.c
 src/ownertrustdlg.c
 src/passphrasedlg.c
 src/siglist.c
-src/tipwindow.c
