@@ -33,6 +33,19 @@
 #include "gtktools.h"
 #include "server_access.h"
 
+/* WARNING: Keep this up to date with gnupg's include/keyserver.h */
+#define KEYSERVER_OK               0 /* not an error */
+#define KEYSERVER_INTERNAL_ERROR   1 /* gpgkeys_ internal error */
+#define KEYSERVER_NOT_SUPPORTED    2 /* operation not supported */
+#define KEYSERVER_VERSION_ERROR    3 /* VERSION mismatch */
+#define KEYSERVER_GENERAL_ERROR    4 /* keyserver internal error */
+#define KEYSERVER_NO_MEMORY        5 /* out of memory */
+#define KEYSERVER_KEY_NOT_FOUND    6 /* key not found */
+#define KEYSERVER_KEY_EXISTS       7 /* key already exists */
+#define KEYSERVER_KEY_INCOMPLETE   8 /* key incomplete (EOF) */
+
+#define KEYSERVER_SCHEME_NOT_FOUND 127
+
 #define COMMAND_TEMP_NAME "gpa-com-XXXXXX"
 #define OUTPUT_TEMP_NAME "gpa-out-XXXXXX"
 
@@ -118,6 +131,65 @@ parse_keyserver_uri (char *uri, char **scheme, char **host,
   return TRUE;
 }
 
+static gint
+parse_helper_output (const gchar *filename)
+{
+  FILE *file = fopen (filename, "r");
+  char line[80];
+  gint error = KEYSERVER_GENERAL_ERROR;
+  char keyid[17];
+
+  /* Can't happen */
+  if (!file)
+    return KEYSERVER_INTERNAL_ERROR;
+
+  while (fgets(line,sizeof(line),file) != NULL)
+    if (sscanf (line,"KEY %16s FAILED %i\n", keyid, &error) == 2 )
+      {
+	break;
+      }
+  fclose (file);
+  
+  return error;
+}
+
+static const gchar *
+error_string (gint error_code)
+{
+  switch (error_code)
+    {
+    case KEYSERVER_OK:
+      return _("No error");
+      break;
+    case KEYSERVER_INTERNAL_ERROR:
+      return _("Internal error");
+      break;
+    case KEYSERVER_NOT_SUPPORTED:
+      return _("Operation not supported");
+      break;
+    case KEYSERVER_VERSION_ERROR:
+      return _("Version mismatch");
+      break;
+    case KEYSERVER_GENERAL_ERROR:
+      return _("Internal keyserver error");
+      break;
+    case KEYSERVER_NO_MEMORY:
+      return _("Out of memory");
+      break;
+    case KEYSERVER_KEY_NOT_FOUND:
+      return _("Key not found");
+      break;
+    case KEYSERVER_KEY_EXISTS:
+      return _("Key already exists on server");
+      break;
+    case KEYSERVER_KEY_INCOMPLETE:
+      return _("Key incomplete");
+      break;
+    default:
+      return _("Unknown Error");
+    }
+}
+
 static void
 write_command (FILE *file, const char *host, const char *port, 
 	       const char *opaque, const char *command)
@@ -163,7 +235,6 @@ invoke_helper (const gchar *scheme, gchar *command_filename,
   GError *error = NULL;
   int exit_status;
   int output_fd;
-  gchar *helper_stderr;
   
   /* Open the output file */
   output_fd = g_file_open_tmp (OUTPUT_TEMP_NAME, output_filename, NULL);
@@ -174,23 +245,39 @@ invoke_helper (const gchar *scheme, gchar *command_filename,
   helper_argv[2] = *output_filename;
   helper_argv[3] = command_filename;
   g_spawn_sync (NULL, helper_argv, NULL, 
-		G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, NULL, 
-		&helper_stderr, &exit_status, &error);
+		G_SPAWN_STDOUT_TO_DEV_NULL|G_SPAWN_STDERR_TO_DEV_NULL, 
+		NULL, NULL, NULL, NULL, &exit_status, &error);
   if (error)
     {
+      /* An error ocurred in the fork/exec: we assume that there is no plugin.
+       */
       gpa_window_error (_("There is no plugin available for the keyserver\n"
 			  "protocol you specified."), parent);
     }
   else if (exit_status)
     {
-      gchar *message = g_strdup_printf (_("An error ocurred while contacting "
-					  "the server:\n\n%s"), helper_stderr);
-      gpa_window_error (message, parent);
+      /* Error during connection. Try to parse the output and report the 
+       * error.
+       */
+      gint error_code = parse_helper_output (*output_filename);
+      /* Not really errors */
+      if (error_code == KEYSERVER_OK ||
+	  error_code == KEYSERVER_KEY_NOT_FOUND ||
+	  error_code == KEYSERVER_KEY_EXISTS)
+	{
+	  exit_status = KEYSERVER_OK;
+	}
+      else
+	{
+	  gchar *message = g_strdup_printf (_("An error ocurred while "
+					      "contacting the server:\n\n%s"), 
+					    error_string (error_code));
+	  gpa_window_error (message, parent);
+	}
     }
   close (output_fd);
   g_free (helper);
   g_free (helper_path);
-  g_free (helper_stderr);
 
   return exit_status;
 }
@@ -203,7 +290,7 @@ void server_send_keys (const gchar *server, const gchar *keyid,
   gchar *keyserver = g_strdup (server);
   gchar *command_filename, *output_filename;
   int command_fd;
-  FILE *command, *output;
+  FILE *command;
   GtkWidget *dialog;
   gchar *scheme, *host, *port, *opaque;
   int exit_status;
@@ -228,12 +315,6 @@ void server_send_keys (const gchar *server, const gchar *keyid,
   fclose (command);
   exit_status = invoke_helper (scheme, command_filename, &output_filename,
 			       parent);
-  /* Read the output */
-  /* FIXME: Currently we ignore the output entirely, and just trust the exit
-   * code of the child. This should be fixed once the helpers do a more
-   * detailed error reporting. */
-  output = fopen (output_filename, "r");
-  fclose (output);
   /* Destroy the dialog */
   gtk_widget_destroy (dialog);
   g_free (keyserver);

@@ -1,3 +1,13 @@
+2002-09-27  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* server_access.c: Copied error codes from gnupg code.
+	(parse_helper_output): New function.
+	(invoke_helper): Try to parse the helper output if it returned and
+	error code.
+	(server_send_keys): Remove placeholder code.
+	
+	* keyring.c (keyring_editor_export): Minor fixes.
+
 2002-09-24  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_get_short_keyid): New

@@ -492,12 +492,12 @@ keyring_editor_export (gpointer param)
           file = fopen (filename, "w");
           if (!file)
             {
-              gchar message[256];
-              g_snprintf (message, sizeof(message), "%s: %s",
-                          filename, strerror(errno));
+              gchar *message = g_strdup_printf ("%s: %s", filename, 
+						strerror(errno));
               gpa_window_error (message, editor->window);
-              free (filename);
-              free (server);
+	      g_free (message);
+              g_free (filename);
+              g_free (server);
               return;
             }
         }
@@ -541,7 +541,7 @@ keyring_editor_export (gpointer param)
         {
           /* Export the selected key to the user specified server.
            */
-	  GpgmeKey *key = gpa_keytable_lookup (keytable, fpr);
+	  GpgmeKey key = gpa_keytable_lookup (keytable, fpr);
 	  server_send_keys (server, gpa_gpgme_key_get_short_keyid (key, 0),
 			    data, editor->window);
         }
