@@ -44,7 +44,8 @@ static char *scroll_text[] =
   "Markus Gerwinski",
   "Beate Esser",
   "Benedikt Wildenhain",
-  "Timo Schulz"
+  "Timo Schulz",
+  "Miguel Coca"
 };
 static int shuffle_array[ DIM(scroll_text) ];
 static int do_scrolling = 0;
@@ -398,11 +399,11 @@ void
 gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget * window)
 {
   GtkItemFactoryEntry menu[] = {
-    {_("/_Info"), NULL, NULL, 0, "<Branch>"},
-    {_("/Info/_About"), NULL, help_about, 0, NULL},
-    {_("/Info/_License"), NULL, help_license, 0, NULL},
+    {_("/_Help"), NULL, NULL, 0, "<Branch>"},
+    {_("/Help/_About"), NULL, help_about, 0, NULL},
+    {_("/Help/_License"), NULL, help_license, 0, NULL},
 #if 0  /* Help is not available yet. :-( */
-    {_("/Info/_Help"), "F1", help_help, 0, NULL}
+    {_("/Help/_Help"), "F1", help_help, 0, NULL}
 #endif
   };
 

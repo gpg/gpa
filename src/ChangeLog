@@ -1,5 +1,9 @@
 2002-11-10  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* helpmenu.c (gpa_help_menu_add_to_factory): Renamed "Info" menu
+	back to "Help" for consistency with other programs.
+	(scroll_text): Added myself to the about dialog.
+
 	* keygenwizard.c (gpa_keygen_wizard_email_page) 
 	(gpa_keygen_wizard_comment_page): Fix spelling of "address".
 
