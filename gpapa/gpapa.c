@@ -1,21 +1,21 @@
-/* gpapa.c  -  The GNU Privacy Assistant Pipe Access
- *        Copyright (C) 2000 G-N-U GmbH.
+/* gpapa.c - The GNU Privacy Assistant Pipe Access
+ * Copyright (C) 2000, 2001 G-N-U GmbH, http://www.g-n-u.de
  *
- * This file is part of GPAPA
+ * This file is part of GPAPA.
  *
- * GPAPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * GPAPA is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * GPAPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GPAPA is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * along with GPAPA; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #include "gpapa.h"
@@ -338,10 +338,10 @@ gpapa_release_secret_key (GpapaSecretKey * key, GpapaCallbackFunc callback,
 } /* gpapa_release_secret_key */
 
 void
-gpapa_create_key_pair (GpapaPublicKey ** publicKey,
-		       GpapaSecretKey ** secretKey, gchar * passphrase,
-		       GpapaAlgo anAlgo, gint aKeysize, gchar * aUserID,
-		       gchar * anEmail, gchar * aComment,
+gpapa_create_key_pair (GpapaPublicKey **publicKey,
+		       GpapaSecretKey **secretKey, gchar *passphrase,
+		       GpapaAlgo anAlgo, gint aKeysize, gchar *aUserID,
+		       gchar *anEmail, gchar *aComment,
 		       GpapaCallbackFunc callback, gpointer calldata)
 {
   if (aKeysize && aUserID && anEmail && aComment)
@@ -350,8 +350,9 @@ gpapa_create_key_pair (GpapaPublicKey ** publicKey,
       gchar *commands = NULL;
       gchar *commands_sprintf_str;
       gchar *Algo, *Sub_Algo;
-      if (anAlgo == GPAPA_ALGO_DSA ||  anAlgo == GPAPA_ALGO_ELG_BOTH || 
-	  anAlgo == GPAPA_ALGO_ELG)
+      if (anAlgo == GPAPA_ALGO_DSA
+          || anAlgo == GPAPA_ALGO_ELG_BOTH
+          || anAlgo == GPAPA_ALGO_ELG)
 	{
 	  if (anAlgo == GPAPA_ALGO_DSA) 
 	    Algo = "DSA";
@@ -367,13 +368,13 @@ gpapa_create_key_pair (GpapaPublicKey ** publicKey,
                                  "Expire-Date: 0\n"
                                  "Passphrase: %s\n"
                                  "%%commit\n";
-	  commands = (char *) (xmalloc (strlen (commands_sprintf_str) + 
-					strlen (Algo) + 4 
+	  commands = (char *) (xmalloc (strlen (commands_sprintf_str)
+					+ strlen (Algo) + 4 
 					/* 4 is max. length of aKeysize */
-					+ strlen (aUserID) + 
-                                        strlen (aComment) + 
-					strlen (anEmail) + 
-                                        strlen (passphrase)));
+					+ strlen (aUserID)
+                                        + strlen (aComment)
+					+ strlen (anEmail)
+                                        + strlen (passphrase)));
 	  sprintf (commands, commands_sprintf_str, Algo, aKeysize, 
 		   aUserID, aComment, anEmail, passphrase);
 	}
@@ -391,28 +392,28 @@ gpapa_create_key_pair (GpapaPublicKey ** publicKey,
                                  "Expire-Date: 0\n"
                                  "Passphrase: %s\n"
                                  "%%commit\n";
-	  commands = (char *) (xmalloc (strlen (commands_sprintf_str) + 
-					strlen (Algo) + strlen (Sub_Algo) + 8 
+	  commands = (char *) (xmalloc (strlen (commands_sprintf_str)
+					+ strlen (Algo) + strlen (Sub_Algo) + 8
 					/* 8 is max. length of both aKeysize */
-					+ strlen (aUserID) + 
-					strlen (aComment) + 
-					strlen (anEmail) + 
-					strlen (passphrase)));
+					+ strlen (aUserID)
+					+ strlen (aComment)
+					+ strlen (anEmail)
+					+ strlen (passphrase)));
 	  sprintf (commands, commands_sprintf_str, Algo, aKeysize, 
 		   Sub_Algo, aKeysize, aUserID, aComment, anEmail, passphrase);
 	}
       else 
 	callback (GPAPA_ACTION_ERROR, 
-		     "specified algorithm not supportet", calldata); 
+		     "specified algorithm not supported", calldata); 
       gpgargv[0] = "--gen-key";
       gpgargv[1] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, commands, passphrase, 
 			NULL, NULL, callback, calldata);
-      free(commands);
+      free (commands);
       *publicKey = gpapa_get_public_key_by_userID 
-	             ( aUserID, callback, calldata);
+	             (aUserID, callback, calldata);
       *secretKey = gpapa_get_secret_key_by_userID 
-	      ( aUserID, callback, calldata);
+	             (aUserID, callback, calldata);
     }
 } /* gpapa_create_key_pair */
 

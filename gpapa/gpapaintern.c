@@ -1,21 +1,21 @@
-/* gpapaintern.c  -  The GNU Privacy Assistant Pipe Access  -  internal routines
- * Copyright (C) 2000, 2001 G-N-U GmbH
+/* gpapaintern.c - The GNU Privacy Assistant Pipe Access - internal routines
+ * Copyright (C) 2000, 2001 G-N-U GmbH, http://www.g-n-u.de
  *
  * This file is part of GPAPA.
  *
- * GPAPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * GPAPA is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * GPAPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GPAPA is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * along with GPAPA; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #include "gpapa.h"
@@ -168,13 +168,17 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait,
   if (commands)
     {
       GpgmeData tmp;
+#ifdef DEBUG
+      fprintf (stderr, "commands:\n%s(end of commands)\n", commands);
+#endif
       return_code = gpgme_data_new_from_mem (&tmp, commands,
                                              strlen (commands), 0);
       if (return_code == 0)
         {
           _gpgme_data_set_mode (tmp, GPGME_DATA_MODE_OUT);
           _gpgme_gpg_add_arg (gpg, "--command-fd");
-          return_code = _gpgme_gpg_add_data (gpg, tmp, -2);
+          _gpgme_gpg_add_arg (gpg, "0");
+          return_code = _gpgme_gpg_add_data (gpg, tmp, 0);
         }
     }
   if (passphrase && return_code == 0)

@@ -1,3 +1,18 @@
+Mon 29 Jan 2001 25:14 Peter Gerwinski <peter@gerwinski.de>
+
+        All files: updated copyright notices.
+
+        * gpapa.c (gpapa_create_key_pair): cosmetical changes.
+
+        * gpapaintern.c (gpapa_call_gnupg): more debugging output;
+          pass the commands on fd 0 rather than on a special fd.
+          For whatever reason, this works (at least on a Linux-based
+          systems) while the other doesn't.
+
+        * gpapatest.c (test_genkey): cosmetical changes.
+          (test_gpapa_key_set_expiry_date): renamed to `test_expiry'.
+          (main) call `test_expiry' on keyword "expiry".
+
 2001-01-29  Bernhard Herzog  <bh@intevation.de>
 
 	* Makefile.am (libgpapa_a_SOURCES): Correct the filename of

@@ -35,7 +35,7 @@
 
 #include "io.h"
 
-#define DEBUG_SELECT_ENABLED 1
+#define DEBUG_SELECT_ENABLED 0
 
 #if DEBUG_SELECT_ENABLED
 # define DEBUG_SELECT(a) fprintf a

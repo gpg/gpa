@@ -1,21 +1,21 @@
 /* gpapatest.c - The GNU Privacy Assistant Pipe Access - test program
- * Copyright (C) 2000 G-N-U GmbH.
+ * Copyright (C) 2000, 2001 G-N-U GmbH, http://www.g-n-u.de
  *
- * This file is part of GPAPA
+ * This file is part of GPAPA.
  *
- * GPAPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * GPAPA is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * GPAPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GPAPA is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * along with GPAPA; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #include <config.h>
@@ -448,11 +448,33 @@ test_genkey (void)
   char *gpgargv[3];
   gpgargv[0] = "--gen-key";
   gpgargv[1] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, "%echo Generating a standard key\nKey-Type: DSA\nKey-Length: 1024\nSubkey-Type: ELG-E\nSubkey-Length: 1024\nName-Real: Joe Tester\nName-Comment: with stupid passphrase\nName-Email: joe@foo.bar\nExpire-Date: 0\nPassphrase: abc\n%pubring foo.pub\n%secring foo.sec\n%commit\n%echo done\n", NULL, linecallback, "pruzzel", callback, NULL);
+  gpapa_call_gnupg (gpgargv, TRUE,
+                    /* "%echo Generating a standard key\n" */
+                    "Key-Type: DSA\n"
+                    "Key-Length: 1024\n"
+                    "Subkey-Type: ELG-E\n"
+                    "Subkey-Length: 1024\n"
+                    "Name-Real: Joe Tester\n"
+                    "Name-Comment: with stupid passphrase\n"
+                    "Name-Email: joe@foo.bar\n"
+                    "Expire-Date: 0\n"
+                    "Passphrase: abc\n"
+                    /* "%pubring foo.pub\n" */
+                    /* "%secring foo.sec\n" */
+                    "%commit\n"
+                    /* "%echo done\n" */,
+                    NULL, linecallback, "pruzzel", callback, NULL);
+/*
+  gpapa_create_key_pair (GpapaPublicKey ** publicKey,
+                         GpapaSecretKey ** secretKey, gchar * passphrase,
+                         GpapaAlgo anAlgo, gint aKeysize, gchar * aUserID,
+                         gchar * anEmail, gchar * aComment,
+                         GpapaCallbackFunc callback, gpointer calldata)
+*/
 }
 
 void
-test_gpapa_key_set_expiry_date (void)
+test_expiry (void)
 {
   GpapaPublicKey *key;
   GDate *date; 
@@ -512,8 +534,8 @@ main (int argc, char **argv)
     test_edithelp ();
   else if (!strcmp (what, "genkey"))
     test_genkey ();
-  else if (!strcmp (what, "gpapa_expiry"))
-    test_gpapa_key_set_expiry_date ();
+  else if (!strcmp (what, "expiry"))
+    test_expiry ();
   else if (!strcmp (what, "encrypt"))
     test_encrypt (g_list_append (g_list_append (NULL, "983465DB21439422"),
 				 "6C7EE1B8621CC013"), "7D0908A0EE9A8BFB");
