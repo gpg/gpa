@@ -1,3 +1,15 @@
+2001-01-09  Bernhard Herzog  <bh@intevation.de>
+
+	* gpa.c (evalMouseClistFile): 
+	(gpa_menubar_new):
+	(delete_event): 
+	(evalKeyClistFile): 
+
+	Removed because they're no longer used
+
+	* keyexportdlg.c (key_export_dialog_run): 
+	get rid of the gpa_space_new () call
+
 2001-01-05  Bernhard Herzog  <bh@intevation.de>
 
 	* encryptdlg.c
