@@ -1,0 +1,101 @@
+dnl
+dnl Configure script source for PGA
+dnl
+dnl (Process this file with autoconf to produce a configure script.)
+AC_REVISION($Revision$)dnl
+AC_PREREQ(2.13)
+
+AC_INIT(src/pga.c)
+AM_CONFIG_HEADER(config.h)
+
+dnl
+dnl The version number goes here
+dnl
+AM_INIT_AUTOMAKE(pga,0.0.0)
+
+dnl
+dnl Setup some stuff depending on host/target.
+dnl
+case "${target}" in
+    *-*-mingw32)
+        # special stuff for Windoze NT
+        # Do we need to set cross_compiling here or is it sufficient
+        # to rely on AC_PROG_CC which is called later?
+        CC="${target}-gcc"
+        CPP="${target}-gcc -E"
+        RANLIB="${target}-ranlib"
+        ;;
+    *)
+       ;;
+esac
+
+
+AM_MAINTAINER_MODE
+
+dnl
+dnl Checks for programs
+dnl
+AC_PROG_CC
+AC_STDC_HEADERS
+AC_ARG_PROGRAM
+AC_PROG_RANLIB
+
+
+dnl
+dnl Checks for libraries
+dnl
+
+dnl Where is the GTK+ toolkit
+if test "$cross_compiling" = yes ; then
+  CFLAGS="$CFLAGS -I/negev/misc-src/gtkw32/include/gdk/win32 -I/negev/misc-src/gtkw32/include"
+  LIBS="$LIBS -L/negev/misc-src/gtkw32/lib -lgtk -lgdk -lglib"
+else
+  AM_PATH_GTK(1.2.1,
+            [LIBS="$LIBS $GTK_LIBS"
+            CFLAGS="$CFLAGS $GTK_CFLAGS"],
+            AC_MSG_ERROR(Cannot find GTK+: Is gtk-config in executable path ?))
+fi
+
+
+dnl
+dnl Checks for header files
+dnl
+
+
+dnl
+dnl Checks for typedefs and structures
+dnl
+
+GNUPG_CHECK_TYPEDEF(byte, HAVE_BYTE_TYPEDEF)
+
+
+dnl
+dnl Checks for compiler features
+dnl
+
+dnl
+dnl Checks for library functions
+dnl
+
+dnl These are needed by libjnlib
+AC_CHECK_FUNCS(memicmp stpcpy strlwr strtoul memmove stricmp)
+
+
+
+dnl
+dnl Checks for system services
+dnl
+
+
+if test "$GCC" = yes; then
+    CFLAGS="$CFLAGS -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
+fi
+
+
+AC_OUTPUT([
+Makefile
+jnlib/Makefile
+src/Makefile
+])
+
+dnl *-*wedit:notab*-*  Please keep this as the last line.
