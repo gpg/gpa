@@ -1,5 +1,10 @@
 2001-02-07  Bernhard Herzog  <bh@intevation.de>
 
+	* fileman.c (show_file_detail): Use the siglist to display the
+	list of signatures
+
+	* siglist.h: Change the include guard to something more unique
+
 	* keyring.c (keyring_editor_sign):
 	(keyring_selection_update_widgets): Use the new
 	keyring_update_details_notebook function to update the pages in
