@@ -683,7 +683,7 @@ keyring_editor_backup (gpointer param)
   GPAKeyringEditor *editor = param;
   const gchar *fpr;
 
-  fpr = gpa_options_get_default_key (gpa_options);
+  fpr = gpa_keylist_current_key_id (editor->clist_keys);
   if (!fpr)
     {
       /* this shouldn't happen because the menu item should be grayed out
@@ -970,6 +970,10 @@ keyring_editor_menubar_new (GtkWidget * window,
   /* If the selected key has a private key */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Edit Private Key..."));
+  add_selection_sensitive_widget (editor, item,
+                                  keyring_editor_has_private_selected);
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Keys/Backup..."));
   add_selection_sensitive_widget (editor, item,
                                   keyring_editor_has_private_selected);
 

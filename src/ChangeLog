@@ -1,3 +1,10 @@
+2002-12-11  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (keyring_editor_backup): Backup the selected key, not
+	the default one.
+	(keyring_editor_menubar_new): Enable "backup" only if a private key
+	has been selected.
+
 2002-12-10  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keyring.c (keyring_editor_has_private_selected): New.
