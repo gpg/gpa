@@ -63,15 +63,10 @@ gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent)
 
   gtk_widget_show_all (GTK_BIN (widget)->child);
   gtk_widget_realize (widget);
-  printf("size_allocation %d %d %d %d\n",
-	 widget->allocation.x, widget->allocation.y,
-	 widget->allocation.width, widget->allocation.height);
+
   gdk_window_get_size (widget->window, &width, &height);
-  printf("get_size %d %d\n", width, height);
   gdk_window_get_origin (parent->window, &parent_x, &parent_y);
-  printf("get_origin parent %d %d\n", parent_x, parent_y);
   gdk_window_get_size (parent->window, &parent_width, &parent_height);
-  printf("get_size parent %d %d\n", parent_width, parent_height);
   center_x = parent_x + (parent_width - width) / 2;
   center_y = parent_y + (parent_height - height) / 2;
 
