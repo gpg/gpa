@@ -1,5 +1,8 @@
 2001-01-15  Bernhard Herzog  <bh@intevation.de>
 
+	* keygendlg.c (gpa_key_gen_run_dialog): Connect to delete-event
+	and use the new gpa_window_show_centered function.
+
 	* gtktools.h: Update the prototype of gpa_button_set_text and add
 	the new message box functions
 
