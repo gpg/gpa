@@ -1,5 +1,5 @@
 /* gtktools.h  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 G-N-U GmbH.
+ *      Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -48,9 +48,11 @@ extern GtkWidget *gpa_toggle_button_new (GtkAccelGroup * accelGroup,
 extern void gpa_connect_by_accelerator (GtkLabel * label, GtkWidget * widget,
 					GtkAccelGroup * accelGroup,
 					gchar * labelText);
+void gpa_button_set_text (GtkWidget * button, gchar * text);
 extern void gpa_widget_set_centered (GtkWidget * widget, GtkWidget * parent);
 extern void gpa_widget_show (GtkWidget * widget, GtkWidget * parent,
 			     gchar * tip);
+extern void gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent);
 extern void gpa_window_error (gchar * message, GtkWidget * messenger);
 extern void gpa_window_message (gchar * message, GtkWidget * messenger);
 extern void gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func,
