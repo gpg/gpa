@@ -1,3 +1,12 @@
+2002-08-27  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyexportdlg.c (export_destroy, export_cancel): Removed.
+	(secret_key_export_dialog_run): Removed. We don't support exporting
+	secret keys anymore.
+	(key_export_dialog_run, key_backup_dialog_run): Use GtkDialog.
+	(key_export_dialog_run): Armor by default, even when in advanced ui
+	mode.
+
 2002-08-26  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keyring.c (keyring_editor_import): Implement importing keys from
