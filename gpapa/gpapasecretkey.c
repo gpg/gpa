@@ -50,7 +50,11 @@ gpapa_secret_key_export (GpapaSecretKey *key, char *targetFileID,
       const gchar *gpgargv[7];
       int i = 0;
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
+#ifdef HAVE_DOSISH_SYSTEM
       quoted_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+#else
+      quoted_filename = targetFileID;
+#endif
       gpgargv[i++] = "-o";
       gpgargv[i++] = quoted_filename;
       gpgargv[i++] = "--yes";  /* overwrite the file */
@@ -61,7 +65,9 @@ gpapa_secret_key_export (GpapaSecretKey *key, char *targetFileID,
       gpgargv[i] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 	                NULL, NULL, callback, calldata);
-      free (quoted_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_filename);
+#endif
       free (full_keyID);
     }
 }

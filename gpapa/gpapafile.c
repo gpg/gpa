@@ -122,13 +122,19 @@ gpapa_file_get_status (GpapaFile *file, GpapaCallbackFunc callback,
        * something like `--get-file-status'.
        */
       gpgargv[0] = "--list-packets";
+#ifdef HAVE_DOSISH_SYSTEM
       quoted_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+#else
+      quoted_filename = file->identifier;
+#endif
       gpgargv[1] = quoted_filename;
       gpgargv[2] = NULL;
       file->status_flags = 0;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
                         linecallback_get_status, &data, callback, calldata);
-      free (quoted_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_filename);
+#endif
       if (file->status_flags == GPAPA_FILE_STATUS_NODATA)
         return (GPAPA_FILE_CLEAR);
       else if (file->status_flags & GPAPA_FILE_STATUS_PUBKEY)
@@ -248,14 +254,20 @@ gpapa_file_get_signatures (GpapaFile *file, GpapaCallbackFunc callback,
         {
           FileData data = { file, callback, calldata };
           const gchar *gpgargv[3];
+#ifdef HAVE_DOSISH_SYSTEM
           gchar *quoted_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+#else
+          gchar *quoted_filename = file->identifier;
+#endif
           gpgargv[0] = "--verify";
           gpgargv[1] = quoted_filename;
           gpgargv[2] = NULL;
           gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
                             linecallback_get_signatures, &data,
                             callback, calldata);
-          free (quoted_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+          g_free (quoted_filename);
+#endif
         }
       return (file->sigs);
     }
@@ -300,22 +312,32 @@ gpapa_file_sign (GpapaFile *file, const gchar *targetFileID, const gchar *keyID,
         gpgargv[i++] = "--armor";
       if (targetFileID != NULL)
         {
+#ifdef HAVE_DOSISH_SYSTEM
           quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+#else
+          quoted_target_filename = (gchar*) targetFileID;
+#endif
           gpgargv[i++] = "-o";
           gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
       gpgargv[i++] = "--no-tty";
+#ifdef HAVE_DOSISH_SYSTEM
       quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+#else
+      quoted_source_filename = file->identifier;
+#endif
       gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, PassPhrase,
                         linecallback_check_gpg_status, &data,
                         callback, calldata);
       free (full_keyID);
-      free (quoted_source_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_source_filename);
       if (quoted_target_filename)
-        free (quoted_target_filename);
+        g_free (quoted_target_filename);
+#endif
     }
 }
 
@@ -347,12 +369,20 @@ gpapa_file_encrypt (GpapaFile *file, const gchar *targetFileID,
         gpgargv[i++] = "--armor";
       if (targetFileID != NULL)
         {
+#ifdef HAVE_DOSISH_SYSTEM
           quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+#else
+          quoted_target_filename = (gchar*) targetFileID;
+#endif
           gpgargv[i++] = "-o";
           gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
+#ifdef HAVE_DOSISH_SYSTEM
       quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+#else
+      quoted_source_filename = file->identifier;
+#endif
       gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg ((const gchar **) gpgargv, TRUE, NULL, NULL, NULL,
@@ -360,9 +390,11 @@ gpapa_file_encrypt (GpapaFile *file, const gchar *targetFileID,
                         callback, calldata);
       for (i = 1; i < 2 * l; i += 2)
         free (gpgargv[i]);
-      free (quoted_source_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_source_filename);
       if (quoted_target_filename)
-        free (quoted_target_filename);
+        g_free (quoted_target_filename);
+#endif
       free (gpgargv);
     }
 }
@@ -405,13 +437,21 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, const gchar *targetFileID,
         gpgargv[i++] = "--armor";
       if (targetFileID != NULL)
         {
+#ifdef HAVE_DOSISH_SYSTEM
           quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+#else
+          quoted_target_filename = (gchar*) targetFileID;
+#endif
           gpgargv[i++] = "-o";
           gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
       gpgargv[i++] = "--no-tty";
+#ifdef HAVE_DOSISH_SYSTEM
       quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+#else
+      quoted_source_filename = file->identifier;
+#endif
       gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg ((const gchar **) gpgargv, TRUE, NULL, NULL, PassPhrase,
@@ -420,9 +460,11 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, const gchar *targetFileID,
       for (i = 1; i < 2 * l; i += 2)
         free (gpgargv[i]);
       free (gpgargv);
-      free (quoted_source_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_source_filename);
       if (quoted_target_filename)
-        free (quoted_target_filename);
+        g_free (quoted_target_filename);
+#endif
       free (full_keyID);
     }
 }
@@ -448,20 +490,30 @@ gpapa_file_protect (GpapaFile *file, const gchar *targetFileID,
         gpgargv[i++] = "--armor";
       if (targetFileID != NULL)
         {
+#ifdef HAVE_DOSISH_SYSTEM
           quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+#else
+          quoted_target_filename = (gchar*) targetFileID;
+#endif
           gpgargv[i++] = "-o";
           gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
+#ifdef HAVE_DOSISH_SYSTEM
       quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+#else
+      quoted_source_filename = file->identifier;
+#endif
       gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, PassPhrase,
                         linecallback_check_gpg_status, &data,
                         callback, calldata);
-      free (quoted_source_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_source_filename);
       if (quoted_target_filename)
-        free (quoted_target_filename);
+        g_free (quoted_target_filename);
+#endif
     }
 }
 
@@ -484,20 +536,30 @@ gpapa_file_decrypt (GpapaFile *file, char *targetFileID,
       gpgargv[i++] = "--decrypt";
       if (targetFileID != NULL)
         {
+#ifdef HAVE_DOSISH_SYSTEM
           quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+#else
+          quoted_target_filename = targetFileID;
+#endif
           gpgargv[i++] = "-o";
           gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
+#ifdef HAVE_DOSISH_SYSTEM
       quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+#else
+      quoted_source_filename = file->identifier;
+#endif
       gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, PassPhrase,
                         linecallback_check_gpg_status, &data,
                         callback, calldata);
-      free (quoted_source_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_source_filename);
       if (quoted_target_filename)
-        free (quoted_target_filename);
+        g_free (quoted_target_filename);
+#endif
     }
 }
 

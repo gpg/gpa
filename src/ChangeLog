@@ -1,3 +1,12 @@
+2002-07-30  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpawidgets.c (gpa_key_list_new, gpa_secret_key_list_new) 
+	(gpa_public_key_list_new, gpa_key_list_new_from_glist): Move the
+	repeated code for creating the CList to a new gpa_key_list_new
+	function. Changed the others to use it.
+
+	* filemenu.c (file_sign_sign_exec): Remove unused function.
+
 2002-07-29  Werner Koch  <wk@gnupg.org>
 
 	* Makefile.am (LDADD): Don't hardcode libs but take them all from

@@ -1,3 +1,20 @@
+2002-07-30  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpapafile.c (gpapa_file_sign)
+	(gpapa_file_encrypt)
+	(gpapa_file_encrypt_and_sign)
+	(gpapa_file_protect)
+	(gpapa_file_decrypt)
+	(gpapa_file_get_status)
+	(gpapa_file_get_signatures)
+	gpapapublickey.c (gpapa_public_key_export)
+	(gpapa_public_key_sign)
+	gpapasecretkey.c (gpapa_secret_key_export)
+	gpapa.c (gpapa_import_ownertrust)
+	(gpapa_import_keys): Only do argument quotation on windows. Use
+	g_free() to free memory allocated by g_strconcat. This makes the
+	filemanager work again on Unix.
+
 2002-02-25  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gpapa.c (gpapa_http_quote)

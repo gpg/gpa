@@ -828,13 +828,19 @@ gpapa_import_ownertrust (const gchar *sourceFileID,
   else
     {
       const gchar *gpgargv[3];
+#ifdef HAVE_DOSISH_SYSTEM
       gchar *quoted_filename = g_strconcat ("\"", sourceFileID, "\"", NULL);
+#else
+      gchar *quoted_filename = sourceFileID;
+#endif
       gpgargv[0] = "--import-ownertrust";
       gpgargv[1] = (char *) quoted_filename;
       gpgargv[2] = NULL;
       gpapa_call_gnupg 	(gpgargv, TRUE, NULL, NULL, NULL,
                          NULL, NULL, callback, calldata);
-      free (quoted_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_filename);
+#endif
     }
 }
 
@@ -858,7 +864,11 @@ gpapa_import_keys (const gchar *sourceFileID,
   else
     {
       const gchar *gpgargv[4];
+#ifdef HAVE_DOSISH_SYSTEM
       gchar *quoted_filename = g_strconcat ("\"", sourceFileID, "\"", NULL);
+#else
+      gchar *quoted_filename = sourceFileID;
+#endif
       gpgargv[0] = "--allow-secret-key-import";
       gpgargv[1] = "--import";
       gpgargv[2] = (char *) quoted_filename;
@@ -866,7 +876,9 @@ gpapa_import_keys (const gchar *sourceFileID,
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 	                NULL, NULL, callback, calldata);
       gpapa_refresh_public_keyring (callback, calldata);
-      free (quoted_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_filename);
+#endif
     }
 }
 

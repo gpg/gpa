@@ -273,7 +273,11 @@ gpapa_public_key_export (GpapaPublicKey *key, const gchar *targetFileID,
       const gchar *gpgargv[7];
       int i = 0;
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
+#ifdef HAVE_DOSISH_SYSTEM
       quoted_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+#else
+      quoted_filename = targetFileID;
+#endif
       gpgargv[i++] = "-o";
       gpgargv[i++] = quoted_filename;
       gpgargv[i++] = "--yes";  /* overwrite the file */
@@ -283,8 +287,11 @@ gpapa_public_key_export (GpapaPublicKey *key, const gchar *targetFileID,
       gpgargv[i++] = full_keyID;
       gpgargv[i] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
+
                         NULL, NULL, callback, calldata);
-      free (quoted_filename);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (quoted_filename);
+#endif
       free (full_keyID);
     }
 }
@@ -465,7 +472,11 @@ gpapa_public_key_sign (GpapaPublicKey *key, char *keyID,
       gchar *full_keyID;
       gchar *commands = "YES\nYES\n";
       const gchar *gpgargv[6];
+#ifdef HAVE_DOSISH_SYSTEM
       full_keyID = g_strconcat ("\"", key->key->UserID, "\"", NULL);
+#else
+      full_keyID = key->key->UserID;
+#endif
       gpgargv[0] = "--yes";
       gpgargv[1] = "--local-user";
       gpgargv[2] = keyID;
@@ -477,7 +488,9 @@ gpapa_public_key_sign (GpapaPublicKey *key, char *keyID,
       gpgargv[5] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, commands, NULL, PassPhrase,
                         NULL, NULL, callback, calldata);
-      free (full_keyID);
+#ifdef HAVE_DOSISH_SYSTEM
+      g_free (full_keyID);
+#endif
 
       /* Enforce reloading of this key's signatures.
        */
