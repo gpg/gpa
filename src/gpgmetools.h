@@ -131,8 +131,9 @@ const gchar *gpa_key_ownertrust_string (gpgme_key_t key);
 const gchar *gpa_key_validity_string (gpgme_key_t key);
 
 /* This is the function called by GPGME when it wants a passphrase */
-gpgme_error_t gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd,
-			      const char **result);
+gpgme_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
+				 const char *passphrase_info, 
+				 int prev_was_bad, int fd);
 
 /* Convenience functions to access key attributes, which need to be filtered
  * before being displayed to the user. */

@@ -25,6 +25,7 @@
 #include <math.h>
 #include <zlib.h>
 #include <glib.h>
+#include <string.h>
 #include "qdchkpwd.h"
 
 static char *test_str

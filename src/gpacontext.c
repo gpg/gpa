@@ -48,9 +48,9 @@ static void gpa_context_event_cb (void *data, gpgme_event_io_t type,
                                   void *type_data);
 
 static gpgme_error_t
-gpa_context_passphrase_cb (void *opaque, const char *desc, void **r_hd,
-			   const char **result);
-
+gpa_context_passphrase_cb (void *hook, const char *uid_hint,
+			   const char *passphrase_info, int prev_was_bad, 
+			   int fd);
 
 /* Signals */
 enum
@@ -426,14 +426,15 @@ gpa_context_next_trust_item (GpaContext *context, gpgme_trust_item_t item)
 
 /* The passphrase callback */
 static gpgme_error_t
-gpa_context_passphrase_cb (void *opaque, const char *desc, void **r_hd,
-			   const char **result)
+gpa_context_passphrase_cb (void *hook, const char *uid_hint,
+			   const char *passphrase_info, int prev_was_bad, 
+			   int fd)
 {
-  GpaContext *context = opaque;
+  GpaContext *context = hook;
   gpgme_error_t err;
 
   unregister_all_callbacks (context);
-  err = gpa_passphrase_cb (NULL, desc, r_hd, result);
+  err = gpa_passphrase_cb (NULL, uid_hint, passphrase_info, prev_was_bad, fd);
   register_all_callbacks (context);
 
   return err;

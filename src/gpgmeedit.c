@@ -21,6 +21,8 @@
 #include "gpgmeedit.h"
 #include "passwddlg.h"
 
+#include <unistd.h>
+
 /* The edit callback for all the edit operations is edit_fnc(). Each
  * operation is modelled as a sequential machine (a Moore machine, to be
  * precise). Therefore, for each operation you must write two functions.
@@ -36,7 +38,7 @@
 
 /* Prototype of the action function. Returns the error if there is one */
 typedef gpgme_error_t (*EditAction) (int state, void *opaque,
-				  const char **result);
+				     char **result);
 /* Prototype of the transit function. Returns the next state. If and error
  * is found changes *err. If there is no error it should NOT touch it */
 typedef int (*EditTransit) (int current_state, gpgme_status_code_t status, 
@@ -64,10 +66,11 @@ struct edit_parms_s
 
 /* The edit callback proper */
 static gpgme_error_t
-edit_fnc (void *opaque, gpgme_status_code_t status, const char *args,
-	  const char **result)
+edit_fnc (void *opaque, gpgme_status_code_t status,
+	  const char *args, int fd)
 {
   struct edit_parms_s *parms = opaque;
+  char *result = NULL;
 
   /* Ignore these status lines, as they don't require any response */
   if (status == GPGME_STATUS_EOF ||
@@ -90,10 +93,16 @@ edit_fnc (void *opaque, gpgme_status_code_t status, const char *args,
     {
       gpgme_error_t err;
       /* Choose the action based on the state */
-      err = parms->action (parms->state, parms->opaque, result);
+      err = parms->action (parms->state, parms->opaque, &result);
       if (err != GPGME_No_Error)
 	{
 	  parms->err = err;
+	}
+      /* Send the command, if any was provided */
+      if (result)
+	{
+	  write (fd, result, strlen (result));
+	  write (fd, "\n", 1);
 	}
     }
   return parms->err;
@@ -113,9 +122,9 @@ typedef enum
 } ExpireState;
 
 static gpgme_error_t
-edit_expire_fnc_action (int state, void *opaque, const char **result)
+edit_expire_fnc_action (int state, void *opaque, char **result)
 {
-  const gchar *date = opaque;
+  gchar *date = opaque;
   
   switch (state)
     {
@@ -235,9 +244,9 @@ typedef enum
 } TrustState;
 
 static gpgme_error_t
-edit_trust_fnc_action (int state, void *opaque, const char **result)
+edit_trust_fnc_action (int state, void *opaque, char **result)
 {
-  const gchar *trust = opaque;
+  gchar *trust = opaque;
   
   switch (state)
     {
@@ -387,7 +396,7 @@ struct sign_parms_s
 };
 
 static gpgme_error_t
-edit_sign_fnc_action (int state, void *opaque, const char **result)
+edit_sign_fnc_action (int state, void *opaque, char **result)
 {
   struct sign_parms_s *parms = opaque;
   
@@ -592,7 +601,7 @@ typedef enum
 } PasswdState;
 
 static gpgme_error_t
-edit_passwd_fnc_action (int state, void *opaque, const char **result)
+edit_passwd_fnc_action (int state, void *opaque, char **result)
 {
   switch (state)
     {
@@ -746,7 +755,7 @@ gpgme_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
   /* This return code is a bit weird, but we must use one :-) */
   if (!secret_key)
     {
-      return GPGME_No_Recipients;
+      return GPGME_No_UserID;
     }
 
   err = gpgme_data_new (&out);
@@ -770,24 +779,27 @@ gpgme_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
  */
 
 /* Special passphrase callback for use within the passwd command */
-gpgme_error_t passwd_passphrase_cb (void *opaque, const char *desc, void **r_hd,
-				 const char **result)
+gpgme_error_t passwd_passphrase_cb (void *hook, const char *uid_hint,
+				    const char *passphrase_info, 
+				    int prev_was_bad, int fd)
 {
-  int *i = opaque;
+  int *i = hook;
 
-  if (desc && desc[0] == 'E') /* It's "ENTER", so it's the beginning of a
-                               * passphrase question */
+  if (!prev_was_bad) /* It's the beginning of a passphrase question */
     {
       (*i)++;
     }
   
   if (*i == 1)
     {
-      return gpa_passphrase_cb (opaque, desc, r_hd, result);
+      return gpa_passphrase_cb (hook, uid_hint, passphrase_info, 
+				prev_was_bad, fd);
     }
   else
     {
-      return gpa_change_passphrase_dialog_run (opaque, desc, r_hd, result);
+      return gpa_change_passphrase_dialog_run (hook, uid_hint, 
+					       passphrase_info, 
+					       prev_was_bad, fd);
     }
 }
 

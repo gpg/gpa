@@ -588,35 +588,26 @@ const gchar *gpa_key_validity_string (gpgme_key_t key)
     }
 }
 
-static GtkWidget *passphrase_question_label (const gchar *desc)
+static GtkWidget *passphrase_question_label (const char *uid_hint,
+					     const char *passphrase_info, 
+					     int prev_was_bad)
 {
   GtkWidget *label;
   gchar *input;
   gchar *text;
-  gchar *keyid, *userid, *action;
+  gchar *keyid, *userid;
   gint i;
-  input = g_strdup (desc);
-  /* The first line tells us whether this is the first time we ask for a
-   * passphrase or not. */
-  action = input;
-  for (i = 0; input[i] != '\n'; i++)
-    {
-    }
-  input[i++] = '\0';
-  /* The first word in the second line is the key ID */
-  keyid = input+i;
+  input = g_strdup (uid_hint);
+  /* The first word in the hint is the key ID */
+  keyid = input;
   for (i = 0; input[i] != ' '; i++)
     {
     }
   input[i++] = '\0';
-  /* The rest of the line is the user ID */
+  /* The rest of the hint is the user ID */
   userid = input+i;
-  for (i = 0; input[i] != '\n'; i++)
-    {
-    }
-  input[i++] = '\0';
   /* Build the label widget */
-  if (g_str_equal (action, "ENTER"))
+  if (!prev_was_bad)
     {
       text = g_strdup_printf ("%s\n\n%s %s\n%s %s",
                               _("Please enter the passphrase for"
@@ -638,8 +629,9 @@ static GtkWidget *passphrase_question_label (const gchar *desc)
 }
 
 /* This is the function called by GPGME when it wants a passphrase */
-gpgme_error_t gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd,
-			      const char **result)
+gpgme_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
+				 const char *passphrase_info, 
+				 int prev_was_bad, int fd)
 {
   GtkWidget * dialog;
   GtkWidget * hbox;
@@ -648,62 +640,54 @@ gpgme_error_t gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd,
   GtkWidget * pixmap;
   GtkResponseType response;
   gchar *passphrase;
-
-  if (desc)
-    {
-      dialog = gtk_dialog_new_with_buttons (_("Enter Passphrase"),
-                                            NULL, GTK_DIALOG_MODAL,
-                                            GTK_STOCK_OK,
-                                            GTK_RESPONSE_OK,
+  
+  dialog = gtk_dialog_new_with_buttons (_("Enter Passphrase"),
+					NULL, GTK_DIALOG_MODAL,
+					GTK_STOCK_OK,
+					GTK_RESPONSE_OK,
                                             GTK_STOCK_CANCEL,
-                                            GTK_RESPONSE_CANCEL,
-                                            NULL);
-      hbox = gtk_hbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, 
-                          TRUE, FALSE, 10);
-      pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION,
-                                         GTK_ICON_SIZE_DIALOG);
-      gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
-      vbox = gtk_vbox_new (TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, FALSE, 10);
-      /* The default button is OK */
-      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-      /* Set the contents of the dialog */
-      gtk_box_pack_start_defaults (GTK_BOX (vbox),
-                                   passphrase_question_label (desc));
-      entry = gtk_entry_new ();
-      gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
-      gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-      gtk_box_pack_start (GTK_BOX (vbox), entry, TRUE, FALSE, 10);
-      gtk_widget_grab_focus (entry);
-      /* Run the dialog */
-      gtk_widget_show_all (dialog);
-      response = gtk_dialog_run (GTK_DIALOG (dialog));
-      passphrase = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
-      gtk_widget_destroy (dialog);
-      if (response == GTK_RESPONSE_OK)
-        {
-          *r_hd = passphrase;
-	  *result = passphrase;
-          return GPGME_No_Error;
-        }
-      else
-        {
-          g_free (passphrase);
-          return GPGME_Canceled;
-        }
-    }
-  else if (*r_hd)
+					GTK_RESPONSE_CANCEL,
+					NULL);
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, 
+		      TRUE, FALSE, 10);
+  pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION,
+				     GTK_ICON_SIZE_DIALOG);
+  gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
+  vbox = gtk_vbox_new (TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, FALSE, 10);
+  /* The default button is OK */
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  /* Set the contents of the dialog */
+  gtk_box_pack_start_defaults (GTK_BOX (vbox),
+			       passphrase_question_label (uid_hint,
+							  passphrase_info,
+							  prev_was_bad));
+  entry = gtk_entry_new ();
+  gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), entry, TRUE, FALSE, 10);
+  gtk_widget_grab_focus (entry);
+  /* Run the dialog */
+  gtk_widget_show_all (dialog);
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  passphrase = g_strdup_printf ("%s\n", 
+				gtk_entry_get_text (GTK_ENTRY (entry)));
+  gtk_widget_destroy (dialog);
+  if (response == GTK_RESPONSE_OK)
     {
-      /* Clean up */
-      passphrase = *r_hd;
+      int res;
+      res = write (fd, passphrase, strlen (passphrase));
       g_free (passphrase);
-      *r_hd = NULL;
-      return GPGME_No_Error;
+      if (res == -1)
+	return GPGME_File_Error;
+      else
+	return GPGME_No_Error;
     }
   else
     {
-      return GPGME_General_Error;
+      g_free (passphrase);
+      return GPGME_Canceled;
     }
 }
 

@@ -40,7 +40,7 @@ struct _GpaFileEncryptOperation {
   GpaFileOperation parent;
 
   GtkWidget *encrypt_dialog;
-  gpgme_recipients_t rset;
+  gpgme_key_t *rset;
   int cipher_fd, plain_fd;
   gpgme_data_t cipher, plain;
   gchar *cipher_filename;

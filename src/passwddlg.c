@@ -23,6 +23,8 @@
 #include "gtktools.h"
 #include "qdchkpwd.h"
 
+#include <unistd.h>
+
 static void
 passwd_activated_cb (GtkWidget *entry, gpointer param)
 {
@@ -76,28 +78,18 @@ is_passphrase_correct (GtkWidget *parent, const gchar *passwd,
   return result;
 }
 
-gpgme_error_t gpa_change_passphrase_dialog_run (void *opaque, 
-					     const char *desc, 
-					     void **r_hd,
-					     const char **result)
+gpgme_error_t gpa_change_passphrase_dialog_run (void *hook, 
+						const char *uid_hint,
+						const char *passphrase_info, 
+						int prev_was_bad, int fd)
 {
   GtkWidget *dialog;
   GtkWidget *vbox;
   GtkWidget *table;
   GtkWidget *label, *entry, *passwd_entry, *repeat_entry;
   GtkResponseType response;
-  const gchar *passwd, *repeat;
-  
-  if (!desc)
-    {
-      if (*r_hd)
-        {
-          /* Free the dialog */
-          dialog = *r_hd;
-          gtk_widget_destroy (dialog);
-        }
-      return GPGME_No_Error;
-    }
+  gchar *passwd;
+  const gchar *repeat;
 
   dialog = gtk_dialog_new_with_buttons (_("Choose new passphrase"), NULL,
                                         GTK_DIALOG_MODAL,
@@ -143,17 +135,18 @@ gpgme_error_t gpa_change_passphrase_dialog_run (void *opaque,
       gtk_widget_grab_focus (passwd_entry);
       gtk_widget_show_all (dialog);
       response = gtk_dialog_run (GTK_DIALOG (dialog));
-      passwd = gtk_entry_get_text (GTK_ENTRY (passwd_entry));
+      passwd = g_strdup_printf ("%s\n",
+				gtk_entry_get_text (GTK_ENTRY (passwd_entry)));
       repeat = gtk_entry_get_text (GTK_ENTRY (repeat_entry));
     } 
   while (response == GTK_RESPONSE_OK &&
          !is_passphrase_correct (dialog, passwd, repeat));  
-  gtk_widget_hide (dialog);
-  *r_hd = dialog;
+  gtk_widget_destroy (dialog);
 
   if (response == GTK_RESPONSE_OK)
     {
-      *result = passwd;
+      write (fd, passwd, strlen (passwd));
+      g_free (passwd);
       return GPGME_No_Error;
     }
   else

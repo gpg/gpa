@@ -235,7 +235,8 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
     }
 }
 
-void key_import_results_dialog_run (GtkWidget *parent, GpgmeImportResult info)
+void key_import_results_dialog_run (GtkWidget *parent, 
+				    gpgme_import_result_t info)
 {
   GtkWidget *dialog;
 

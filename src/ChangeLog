@@ -1,3 +1,29 @@
+2003-05-30  Miguel Coca  <mcoca@gnu.org>
+
+	* gpgmeedit.c (passwd_passphrase_cb): Use new passphrase interface.
+	(edit_fnc): New prototype.
+
+	* settingsdlg.c (key_selected_cb): Fix pointer type.
+
+	* qdchkpwd.c: Add include to remove warning.
+
+	* passwddlg.c (gpa_change_passphrase_dialog_run): New prototype.
+	
+	* gpgmetools.h, gpgmetools.c (gpa_passphrase_cb)
+	(passphrase_question_label): Use new passphrase interface.
+
+	* keyring.c (keyring_editor_import_do_import): Use new gpgme type
+	names.
+	(keyring_editor_export_do_export): Use the new way to export keys
+	from gpgme.
+
+	* keyimportdlg.h, keyimportdlg.c (key_import_results_dialog_run): Use
+	new type name.
+
+	* gpafileencryptop.h: Change the way recipients are specified.
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_cb) 
+	(set_recipients, gpa_file_encrypt_operation_start): Likewise.
+
 2003-05-22  Miguel Coca  <mcoca@gnu.org>
 
 	* encryptdlg.c, encryptdlg.h, expirydlg.c, expirydlg.h, fileman.c, 

@@ -203,16 +203,21 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
       return FALSE;
     }
   /* Start the operation */
+  /* Always trust keys, because any untrusted keys were already confirmed
+   * by the user.
+   */
   if (gpa_file_encrypt_dialog_sign 
       (GPA_FILE_ENCRYPT_DIALOG (op->encrypt_dialog)))
     {
       err = gpgme_op_encrypt_sign_start (GPA_OPERATION (op)->context->ctx,
-					 op->rset, op->plain, op->cipher);
+					 op->rset, GPGME_ENCRYPT_ALWAYS_TRUST,
+					 op->plain, op->cipher);
     }
   else
     {
       err = gpgme_op_encrypt_start (GPA_OPERATION (op)->context->ctx,
-				    op->rset, op->plain, op->cipher);
+				    op->rset,GPGME_ENCRYPT_ALWAYS_TRUST,
+				    op->plain, op->cipher);
     }
   if (err != GPGME_No_Error)
     {
@@ -249,6 +254,7 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
   gpgme_data_release (op->cipher);
   close (op->cipher_fd);
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
+  g_free (op->rset);
   if (err != GPGME_No_Error) 
     {
       /* If an error happened, (or the user canceled) delete the created file
@@ -412,14 +418,11 @@ static gboolean
 set_recipients (GpaFileEncryptOperation *op, GList *recipients)
 {
   GList *cur;
-  gpgme_error_t err;
+  int i;
 
-  err = gpgme_recipients_new (&op->rset);
-  if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
-  for (cur = recipients; cur; cur = g_list_next (cur))
+  op->rset = g_malloc0 (sizeof(gpgme_key_t)*(g_list_length(recipients)+1));
+
+  for (cur = recipients, i = 0; cur; cur = g_list_next (cur), i++)
     {
       /* Check that all recipients are valid */
       gpgme_key_t key = cur->data;
@@ -442,7 +445,7 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
       else if (valid == GPGME_VALIDITY_FULL || 
                valid == GPGME_VALIDITY_ULTIMATE)
 	{
-	  gpgme_recipients_add_name_with_validity (op->rset, fpr, valid);
+	  op->rset[i] = key;
 	}
       else
 	{
@@ -452,20 +455,15 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
 	  response = ignore_key_trust (key, GPA_OPERATION (op)->window);
 	  if (response == GTK_RESPONSE_YES)
 	    {
-	      /* Assume the key is trusted */
-	      gpgme_recipients_add_name_with_validity (op->rset, fpr,
-						       GPGME_VALIDITY_FULL);
+	      op->rset[i] = key;
 	    }
 	  else
 	    {
 	      /* Abort the encryption */
+	      g_free (op->rset);
+	      op->rset = NULL;
 	      return FALSE;
 	    }
-	}
-      /* If we arrive here the key was added, so check for errors */
-      if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
 	}
     }
   return TRUE;

@@ -559,8 +559,8 @@ keyring_editor_import_do_import (GPAKeyringEditor *editor, gpgme_data_t data)
   /* Load the keys we just imported */
   if (err != GPGME_No_Data)
     {
-      GpgmeImportResult info;
-      GpgmeImportStatus cur;
+      gpgme_import_result_t info;
+      gpgme_import_status_t cur;
       gchar **keyids;
       gint i;
       
@@ -605,9 +605,10 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
                                  gboolean armored)
 {
   gpgme_error_t err;
-  gpgme_recipients_t rset;
   GList *selection = gpa_keylist_selection (editor->clist_keys);
   gpgme_ctx_t ctx = gpa_gpgme_new ();
+  const gchar **patterns = NULL;
+  int i;
 
   /* Create the data buffer */
   err = gpgme_data_new (data);
@@ -615,25 +616,22 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
     gpa_gpgme_error (err);
   gpgme_set_armor (ctx, armored);
   /* Create the set of keys to export */
-  err = gpgme_recipients_new (&rset);
-  if (err != GPGME_No_Error)
-    gpa_gpgme_error (err);
-  while (selection)
+  patterns = g_malloc0 (sizeof(gchar*)*(g_list_length(selection)+1));
+  for (i = 0; selection; i++, selection = g_list_next (selection))
     {
       const gchar *fpr;
       gint row = GPOINTER_TO_INT (selection->data);
       fpr = gtk_clist_get_row_data
         (GTK_CLIST (editor->clist_keys), row);
-      err = gpgme_recipients_add_name (rset, fpr);
-          if (err != GPGME_No_Error)
-            gpa_gpgme_error (err);
-          selection = g_list_next (selection);
+      patterns[i] = fpr;
     }
   /* Export to the gpgme_data_t */
-  err = gpgme_op_export (ctx, rset, *data);
+  err = gpgme_op_export_ext (ctx, patterns, 0, *data);
   if (err != GPGME_No_Error)
     gpa_gpgme_error (err);
+  /* Clean up */
   gpgme_release (ctx);
+  g_free (patterns);
 }
 
 /* export the selected keys to a file
