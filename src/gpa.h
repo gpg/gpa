@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include "config.h"
 #include "gpadefs.h"
 #include "gpgmetools.h"
 #include "gtkhacks.h"

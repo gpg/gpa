@@ -1,3 +1,7 @@
+2002-12-16  Miguel Coca  <mcoca@gnu.org>
+
+	* gpa.h: Include config.h here. Solves i18n problems.
+
 2002-12-15  Miguel Coca  <mcoca@gnu.org>
 
 	* gpawidgets.c (gpa_key_list_new): Use "User Name", as the rest of GPA
