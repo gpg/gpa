@@ -270,7 +270,7 @@ keyring_editor_delete (gpointer param)
 				   editor->window));
       reply = gpa_message_box_run (editor->window, _("Delete Key"),
 				   message, buttons);
-      if (strcmp (reply, _("Cancel")) == 0)
+      if (!reply || strcmp (reply, _("Cancel")) == 0)
 	break;
 
       if (secret_key)
