@@ -45,7 +45,6 @@
 #include "keysmenu.h"
 #include "optionsmenu.h"
 #include "helpmenu.h"
-#include "help.h"
 #include "keyring.h"
 #include "fileman.h"
 

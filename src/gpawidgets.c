@@ -32,7 +32,6 @@
 #include "gpapastrings.h"
 #include "gpa.h"
 #include "gtktools.h"
-#include "help.h"
 
 /*
  *	A CList showing a list of signatures

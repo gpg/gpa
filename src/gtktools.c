@@ -25,7 +25,6 @@
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "icons.h"
-#include "help.h"
 
 
 /* Show all children of the GtkWindow widget, realize it, set its

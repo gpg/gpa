@@ -26,7 +26,6 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
-#include "help.h"
 #include "passphrasedlg.h"
 #include "filesigndlg.h"
 

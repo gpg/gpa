@@ -27,7 +27,6 @@
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
 #include "keysmenu.h"
-#include "help.h"
 
 static GtkWidget *homeDirSelect;
 static GtkWidget *loadOptionsSelect;

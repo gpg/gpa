@@ -30,7 +30,6 @@
 #include "gpawidgets.h"
 #include "filemenu.h"
 #include "keysmenu.h"
-#include "help.h"
 
 static gchar *
 target_file_name (const gchar * filename, GpapaArmor armor)

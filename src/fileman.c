@@ -51,7 +51,6 @@
 #include "optionsmenu.h"
 #include "helpmenu.h"
 #include "icons.h"
-#include "help.h"
 #include "fileman.h"
 #include "filesigndlg.h"
 #include "encryptdlg.h"

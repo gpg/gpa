@@ -30,7 +30,6 @@
 #include "gtktools.h"
 #include "filemenu.h"
 #include "keysmenu.h"
-#include "help.h"
 
 static GtkWidget *fileOpenSelect;
 
