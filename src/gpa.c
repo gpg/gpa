@@ -669,25 +669,48 @@ gpa_removeRecipients (gpointer param)
 void
 gpa_addRecipient (gpointer data, gpointer userData)
 {
-/* var */
   gpointer *localParam;
   GpapaPublicKey *key;
   GtkWidget *clistRecipients;
   GtkWidget *windowEncrypt;
   gchar *contentsRecipients[2];
-/* commands */
+  gboolean do_insert = TRUE;
+  gint row, num_rows;
+
   localParam = (gpointer *) userData;
   clistRecipients = (GtkWidget *) localParam[0];
   windowEncrypt = (GtkWidget *) localParam[1];
-  key = gpapa_get_public_key_by_ID (
-				    (gchar *) data, gpa_callback,
-				    windowEncrypt);
-  contentsRecipients[0] =
-    gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, windowEncrypt);
-  contentsRecipients[1] =
-    gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback, windowEncrypt);
-  gtk_clist_append (GTK_CLIST (clistRecipients), contentsRecipients);
-}				/* gpa_addRecipient */
+
+  /* find out, whether the key is already in the recipients list and set
+   * do_insert to FALSE if that'sthe case. FIXME: This is very
+   * inefficient but it's simple and the real solution would be to
+   * rewrite the whole default recipients stuff completely anyway */
+  num_rows = GTK_CLIST (clistRecipients)->rows;
+  for (row = 0; row < num_rows; row++)
+    {
+      gchar * text = "";
+      gtk_clist_get_text (GTK_CLIST (clistRecipients), row, 1, &text);
+      if (strcmp (text, (const char*)data) == 0)
+	{
+	  do_insert = FALSE;
+	  break;
+	}
+    }
+
+  /* Insert the key in the recipients list if do_insert is true, i.e. if
+   * it's not already in the list */
+  if (do_insert)
+    {
+      key = gpapa_get_public_key_by_ID ((gchar *) data, gpa_callback,
+					windowEncrypt);
+      contentsRecipients[0] = gpapa_key_get_name (GPAPA_KEY (key),
+						  gpa_callback, windowEncrypt);
+      contentsRecipients[1] = gpapa_key_get_identifier (GPAPA_KEY (key),
+							gpa_callback,
+							windowEncrypt);
+      gtk_clist_append (GTK_CLIST (clistRecipients), contentsRecipients);
+    }
+} /* gpa_addRecipient */
 
 void
 gpa_addRecipients (gpointer param)
