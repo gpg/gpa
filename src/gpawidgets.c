@@ -107,7 +107,6 @@ gpa_key_list_new (void)
 struct add_key_data_s
 {
   GtkWidget *clist;
-  gint default_key_row;
 }; 
 
 static void
@@ -122,10 +121,6 @@ gpa_key_list_add_key  (const gchar * fpr, GpgmeKey key, gpointer data)
   row = gtk_clist_prepend (GTK_CLIST (add_data->clist), contents);
   gtk_clist_set_row_data_full (GTK_CLIST (add_data->clist), row,
 			       fpr ? g_strdup (fpr) : NULL, g_free);
-  if (gpa_options_get_default_key (gpa_options) && g_str_equal (gpa_options_get_default_key (gpa_options), fpr))
-    {
-      add_data->default_key_row = row;
-    }
   g_free (contents[0]);
   g_free (contents[1]);
 }
@@ -138,11 +133,25 @@ gpa_secret_key_list_new (void)
   struct add_key_data_s data;
   
   data.clist = gpa_key_list_new ();
-  data.default_key_row = 0;
   gtk_clist_freeze (GTK_CLIST (data.clist));
   gpa_keytable_secret_foreach (keytable, gpa_key_list_add_key, &data);
   gtk_clist_thaw (GTK_CLIST (data.clist));
-  gtk_clist_select_row (GTK_CLIST (data.clist), data.default_key_row, 0);
+  
+  /* Select the default key */
+  if (gpa_options_get_default_key (gpa_options))
+    {
+      gint i;
+      gchar *fpr;
+      
+      for (i = 0; (fpr = gtk_clist_get_row_data (GTK_CLIST (data.clist), i));
+           i++)
+        {
+          if (g_str_equal (gpa_options_get_default_key (gpa_options), fpr))
+            {
+              gtk_clist_select_row (GTK_CLIST (data.clist), i, 0);
+            }
+        }
+    }
 
   return data.clist;
 }
@@ -155,7 +164,6 @@ gpa_public_key_list_new (void)
   struct add_key_data_s data;
   
   data.clist = gpa_key_list_new ();
-  data.default_key_row = 0;
   gtk_clist_freeze (GTK_CLIST (data.clist));
   gpa_keytable_foreach (keytable, gpa_key_list_add_key, &data);
   gtk_clist_thaw (GTK_CLIST (data.clist));

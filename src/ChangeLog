@@ -1,5 +1,11 @@
 2002-11-29  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* gpawidgets.c (struct add_key_data_s, gpa_key_list_add_key) 
+	(gpa_public_key_list_new): Remove the default key row from here, as
+	reordering the clist was messing it up.
+	(gpa_secret_key_list_new): Add a loop to find and select the default
+	key.
+
 	* gpa.c: Rework the main function, and parsing of command line
 	arguments to use getopt.
 	
