@@ -1,0 +1,10 @@
+#
+# GTKRC for GPA
+#
+
+style "big-label"
+{
+  font = "-adobe-helvetica-bold-r-normal--*-240-*-*-*-*-*-*"
+}
+
+widget "*big-label*" style "big-label"
