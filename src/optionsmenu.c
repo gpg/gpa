@@ -120,9 +120,9 @@ options_keyserver (gpointer param)
   gpa_windowKeeper_add_param (keeper, paramClose);
   paramClose[0] = keeper;
   paramClose[1] = NULL;
-  buttonCancel = gpa_buttonCancel_new (accelGroup, "_Cancel", paramClose);
+  buttonCancel = gpa_buttonCancel_new (accelGroup, _("_Cancel"), paramClose);
   gtk_container_add (GTK_CONTAINER (hButtonBoxServer), buttonCancel);
-  buttonSet = gpa_button_new (accelGroup, "_Set");
+  buttonSet = gpa_button_new (accelGroup, _("_Set"));
   paramSet = (gpointer *) xmalloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramSet);
   paramSet[0] = comboServer;
