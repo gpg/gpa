@@ -1,5 +1,5 @@
 dnl
-dnl Configure script source for PGA
+dnl Configure script source for GPA
 dnl
 dnl (Process this file with autoconf to produce a configure script.)
 AC_REVISION($Revision$)dnl
