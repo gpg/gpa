@@ -1,5 +1,19 @@
 2002-10-25  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Use new prototype of
+	gpa_key_info_new.
+	* keydeletedlg.c (gpa_delete_dialog_run): Likewise.
+	* encryptdlg.c (ignore_key_trust): Likewise.
+
+	* gpawidgets.c, gpawidgets.h (gpa_key_info_new): Remove the unused
+	"window" argument.
+
+	* keyeditdlg.c (gpa_key_edit_dialog_run): Use gpa_key_info_new to show
+	the key information.
+	(add_details_row): Remove.
+
+	* gpawidgets.c (gpa_key_info_new): Show all user ID's.
+
 	* server_access.c (protocol_version): New function.
 	(invoke_helper): Added support for error reporting under both
 	GnuPG 1.2 and 1.3.

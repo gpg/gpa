@@ -101,7 +101,7 @@ gpa_delete_dialog_run (GtkWidget * parent, GpgmeKey key,
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
   
-  info = gpa_key_info_new (key, parent);
+  info = gpa_key_info_new (key);
   gtk_box_pack_start (GTK_BOX (vbox), info, TRUE, TRUE, 5);
 
   if (has_secret_key)

@@ -23,7 +23,7 @@
 
 #include <gtk/gtk.h>
 
-extern GtkWidget *gpa_key_info_new (GpgmeKey key, GtkWidget *window);
+extern GtkWidget *gpa_key_info_new (GpgmeKey key);
 
 extern GtkWidget *gpa_secret_key_list_new (void);
 extern GtkWidget *gpa_public_key_list_new (void);

@@ -95,7 +95,7 @@ ignore_key_trust (GpgmeKey key, GtkWidget *parent)
 			   "the following key:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
-  key_info = gpa_key_info_new (key, dialog);
+  key_info = gpa_key_info_new (key);
   gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5);
   label = gtk_label_new (_("However, it is not certain that the key belongs "
 			   "to that person."));

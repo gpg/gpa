@@ -29,6 +29,7 @@
 #include "ownertrustdlg.h"
 #include "expirydlg.h"
 #include "keyeditdlg.h"
+#include "gpawidgets.h"
 
 typedef struct
 {
@@ -42,9 +43,6 @@ GPAKeyEditDialog;
 
 
 /* internal API */
-static GtkWidget *add_details_row (GtkWidget *table, gint row, gchar *label,
-				   gchar *text, gboolean selectable);
-
 static void key_edit_change_expiry (GtkWidget *widget, gpointer param);
 static void key_edit_change_trust (GtkWidget *widget, gpointer param);
 
@@ -65,7 +63,6 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   GpgmeKey key;
   GpgmeValidity trust;
   gchar *date_string;
-  gchar *string;
 
   GPAKeyEditDialog dialog;
 
@@ -89,17 +86,8 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   vbox = GTK_DIALOG (window)->vbox;
 
   /* info about the key */
-  table = gtk_table_new (2, 3, FALSE);
+  table = gpa_key_info_new (key);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
-  
-  string = gpa_gpgme_key_get_userid (key, 0);
-  add_details_row (table, 0, _("User Name:"), string, FALSE);
-  g_free (string); 
-  add_details_row (table, 1, _("Key ID:"),
-                   (gchar*) gpa_gpgme_key_get_short_keyid (key, 0), FALSE);
-
 
   /* change expiry date */
   frame = gtk_frame_new (_("Expiry Date"));
@@ -149,35 +137,6 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   gtk_dialog_run (GTK_DIALOG (window));
   gtk_widget_destroy (window);
   return dialog.key_has_changed;
-}
-
-/* add a single row to the details table */
-static GtkWidget *
-add_details_row (GtkWidget * table, gint row, gchar *label_text,
-		 gchar * text, gboolean selectable)
-{
-  GtkWidget * widget;
-
-  widget = gtk_label_new (label_text);
-  gtk_table_attach (GTK_TABLE (table), widget, 0, 1, row, row + 1,
-		    GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (widget), 1.0, 0.5);
-
-  if (!selectable)
-    {
-      widget = gtk_label_new (text);
-      gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
-    }
-  else
-    {
-      widget = gtk_entry_new ();
-      gtk_editable_set_editable (GTK_EDITABLE (widget), FALSE);
-      gtk_entry_set_text (GTK_ENTRY (widget), text);
-    }
-  gtk_table_attach (GTK_TABLE (table), widget, 1, 2, row, row + 1,
-		    GTK_FILL | GTK_EXPAND, 0, 0, 0);
-
-  return widget;
 }
 
 
