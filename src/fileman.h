@@ -54,4 +54,8 @@ GtkWidget * gpa_file_manager_get_instance (void);
 
 gboolean gpa_file_manager_is_open (void);
 
+void gpa_file_manager_open_file (GpaFileManager *fileman,
+				 const gchar *filename);
+
+
 #endif /* FILEMAN_H */

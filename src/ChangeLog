@@ -1,5 +1,11 @@
 2003-04-05  Miguel Coca  <mcoca@gnu.org>
 
+	* gpa.c (main): Open extra arguments as files in the filemanager.
+
+	* fileman.h, fileman.c (gpa_file_manager_open_file): New.
+
+2003-04-05  Miguel Coca  <mcoca@gnu.org>	
+	
 	* fileman.c (fileman_menu_new): Add a "clear" entry.
 	(fileman_toolbar_new): Likewise.
 	(toolbar_close_all, close_all_files): New.

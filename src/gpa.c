@@ -307,6 +307,7 @@ main (int argc, char **argv)
 {
   char *configname = NULL, *keyservers_configname = NULL;
   GpaCommandLineArgs args = {FALSE, FALSE, NULL};
+  int i;
 
 #ifdef __MINGW32__
   hide_gpa_console_window();
@@ -403,13 +404,25 @@ main (int argc, char **argv)
   putenv ("OUTPUT_CHARSET=utf8");
 #endif
 
-  if (args.start_keyring_editor)
+  /* Don't open the keyring editor if any files are given on the command
+   * line */
+  if (args.start_keyring_editor && (optind >= argc))
     {
       gpa_open_keyring_editor ();
     }
-  if (args.start_file_manager)
+  
+  if (args.start_file_manager || (optind < argc))
     {
       gpa_open_filemanager ();
+    }
+
+  /* If there are any command line arguments that are not options, try
+   * to open them as files in the filemanager */
+  for (i = optind; i < argc; i++)
+    {
+      gpa_file_manager_open_file (GPA_FILE_MANAGER
+				  (gpa_file_manager_get_instance ()),
+				  argv[i]);
     }
 
   gtk_main ();

@@ -737,3 +737,11 @@ gboolean gpa_file_manager_is_open (void)
   return (instance != NULL);
 }
 
+void gpa_file_manager_open_file (GpaFileManager *fileman,
+				 const gchar *filename)
+
+{
+  if (!add_file (fileman, filename))
+    gpa_window_error (_("The file is already open."),
+		      GTK_WIDGET (fileman));
+}
