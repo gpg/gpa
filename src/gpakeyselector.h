@@ -60,8 +60,8 @@ GType gpa_key_selector_get_type (void) G_GNUC_CONST;
 
 GtkWidget *gpa_key_selector_new (gboolean secret);
 
-/* Return a list of selected GpgmeKey's. The caller must free the list and
- * dereference the keys.
+/* Return a list of selected GpgmeKey's. The caller must free the list, but
+ * not dereference the keys, as they belong to the selector.
  */
 GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector);
 

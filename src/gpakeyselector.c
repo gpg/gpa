@@ -150,8 +150,7 @@ GtkWidget *gpa_key_selector_new (gboolean secret)
   return sel;
 }
 
-/* Return a list of selected GpgmeKey's. The caller must free the list and
- * dereference the keys.
+/* Return a list of selected GpgmeKey's. The caller must free the list.
  */
 GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
 {
@@ -173,9 +172,8 @@ GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
       gtk_tree_model_get_value (model, &iter, GPA_KEY_SELECTOR_COLUMN_KEY,
 				&value);
       key = g_value_get_pointer (&value);
-      g_value_unset(&value);
-      
-      gpgme_key_ref (key);
+      g_value_unset(&value);      
+
       keys = g_list_append (keys, key);
     }
 

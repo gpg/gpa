@@ -35,7 +35,6 @@ key_selected_cb (GtkTreeSelection *treeselection, gpointer user_data)
 			       gpgme_key_get_string_attr 
 			       ((GpgmeKey*)selected->data, GPGME_ATTR_FPR,
 				NULL, 0 ));
-  g_list_foreach (selected, (GFunc) gpgme_key_unref, NULL);
   g_list_free (selected);
 }
 

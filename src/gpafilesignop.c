@@ -329,7 +329,6 @@ static void gpa_file_sign_operation_response_cb (GtkDialog *dialog,
 	  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
 	}
 
-      g_list_foreach (signers, (GFunc) gpgme_key_unref, NULL);
       g_list_free (signers);
     }
   else
