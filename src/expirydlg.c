@@ -24,7 +24,8 @@
 #include "gpa.h"
 #include "gpapastrings.h"
 #include "gtktools.h"
-
+#include "passphrasedlg.h"
+#include "expirydlg.h"
 
 typedef struct {
   
@@ -34,6 +35,9 @@ typedef struct {
   /* The new expiry date. Only valid if result is true. NULL means,
      never exipre */
   GDate * expiry_date;
+
+  /* The password for the key. */
+  gchar * password;
 
   /* The toplevel window of the dialog */
   GtkWidget * window;
@@ -45,7 +49,7 @@ typedef struct {
   /* The date entry field */
   GtkWidget * entry_date;
 } GPAExpiryDialog;
-    
+
 
 /* Handler for the OK button. Read and validate the user's input and set
  * result and expiry_date in the dialog struct accordingly. If all is
@@ -57,6 +61,7 @@ expiry_ok (GtkWidget *widget, gpointer param)
   GPAExpiryDialog * dialog = param;
   gboolean result;
   GDate * date = NULL;
+  gchar * password;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_date)))
     {
@@ -87,9 +92,23 @@ expiry_ok (GtkWidget *widget, gpointer param)
 
   if (result)
     {
-      dialog->result = TRUE;
-      dialog->expiry_date = date;
-      gtk_widget_destroy (dialog->window);
+      /* The data is OK now ask for the password */
+      password = gpa_passphrase_run_dialog (dialog->window);
+      if (!password)
+	{
+	  /* the user cancelled, so free the data that was allocated in
+	   * this function */
+	  if (date)
+	    g_date_free (date);
+	  result = FALSE;
+	}
+      else
+	{
+	  dialog->result = TRUE;
+	  dialog->expiry_date = date;
+	  dialog->password = password;
+	  gtk_widget_destroy (dialog->window);
+	}
     }
 } /* expiry_ok */
 
@@ -121,7 +140,7 @@ expiry_destroy (GtkWidget *widget, gpointer param)
  */
 gboolean
 gpa_expiry_dialog_run (GtkWidget * parent, GDate * expiry_date,
-		       GDate ** new_date)
+		       GDate ** new_date, gchar ** password)
 {
   GtkWidget * window;
   GtkWidget * vbox;
@@ -143,7 +162,6 @@ gpa_expiry_dialog_run (GtkWidget * parent, GDate * expiry_date,
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   gtk_window_set_title (GTK_WINDOW (window), _("Change Expiry Date"));
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  gtk_object_set_data_full (GTK_OBJECT (window), "user_data", &dialog, free);
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (expiry_destroy), &dialog);
 
@@ -204,7 +222,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, GDate * expiry_date,
   if (dialog.result)
     {
       *new_date = dialog.expiry_date;
+      *password = dialog.password;
     }
-
   return dialog.result;
 } /* gpa_expiry_dialog_run */

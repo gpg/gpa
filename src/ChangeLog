@@ -1,3 +1,23 @@
+2001-02-07  Bernhard Herzog  <bh@intevation.de>
+
+	* keyring.c (keyring_editor_generate_key_advanced): Pass the
+	password to gpapa_key_set_expiry_date
+
+	* keysmenu.c (keys_openSecret_editKey_close):
+	(keys_openSecret_editKey_close): Provide dummy passwords for
+	gpapa_key_set_expiry_date just to make them compile. The functions
+	are currently unused.
+
+	* keyeditdlg.c (key_edit_change_expiry): Use the new password
+	parameter of the expiry dialog and pass it to gpapa.
+
+	* expirydlg.h (gpa_expiry_dialog_run):
+	* expirydlg.c (gpa_expiry_dialog_run): Add a parameter to return
+	the password
+	(GPAExpiryDialog): Add a field for the password
+	(expiry_ok): Ask for the password and set the password field in
+	the dialog struct
+
 2001-02-06  Bernhard Herzog  <bh@intevation.de>
 
 	* gpa.h (global_defaultKey): Removed. Its definition was deleted

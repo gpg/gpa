@@ -1,3 +1,13 @@
+2001-02-07  Bernhard Herzog  <bh@intevation.de>
+
+	* gpapatest.c (test_expiry): Add a dummy passphrase to make
+	gpapatest compile with the changes in gpapakey.c
+
+	* gpapakey.h (gpapa_key_set_expiry_date): 
+	* gpapakey.c (gpapa_key_set_expiry_date): Add the password
+	parameter and pass it to gpg also treat a NULL date properly as
+	"never expire"
+
 Mon 29 Jan 2001 25:14 Peter Gerwinski <peter@gerwinski.de>
 
         All files: updated copyright notices.

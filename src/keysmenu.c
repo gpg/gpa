@@ -800,7 +800,7 @@ keeperEdit->window);
       return;
     }				/* if */
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radioDont)))
-    gpapa_key_set_expiry_date (GPAPA_KEY (key), NULL, gpa_callback,
+    gpapa_key_set_expiry_date (GPAPA_KEY (key), NULL, "", gpa_callback,
 			       keeperEdit->window);
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radioAfter)))
     {
@@ -815,7 +815,7 @@ keeperEdit->window);
     {
       date = g_date_new ();
       g_date_set_parse (date, gtk_entry_get_text (GTK_ENTRY (entryAt)));
-      gpapa_key_set_expiry_date (GPAPA_KEY (key), date, gpa_callback,
+      gpapa_key_set_expiry_date (GPAPA_KEY (key), date, "", gpa_callback,
 				 keeperEdit->window);
       free (date);
     }				/* else if */

@@ -482,7 +482,8 @@ test_expiry (void)
   userID = "test";
   date = g_date_new_dmy (2,2,2002); 
   key = gpapa_get_public_key_by_userID (userID,  callback, calldata);
-  gpapa_key_set_expiry_date (GPAPA_KEY (key), date, callback, calldata);
+  /* FIXME: the empty passphrase should be replaced by a real passphrase */
+  gpapa_key_set_expiry_date (GPAPA_KEY (key), date, "", callback, calldata);
 }
 
 void

@@ -51,6 +51,7 @@ extern GDate *gpapa_key_get_expiry_date (GpapaKey * key,
 					 gpointer calldata);
 
 extern void gpapa_key_set_expiry_date (GpapaKey * key, GDate * date,
+				       gchar * password,
 				       GpapaCallbackFunc callback,
 				       gpointer calldata);
 

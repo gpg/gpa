@@ -65,24 +65,29 @@ gpapa_key_get_expiry_date (GpapaKey * key, GpapaCallbackFunc callback,
 } /* gpapa_key_get_expiry_date */
 
 void
-gpapa_key_set_expiry_date (GpapaKey * key, GDate * date,
+gpapa_key_set_expiry_date (GpapaKey * key, GDate * date, gchar *passphrase, 
 			   GpapaCallbackFunc callback, gpointer calldata)
 {
-  if (key && date)
+  if (key)
     {
       gchar *gpgargv[3];
       gchar *commands;
       gchar *commands_sprintf_str;
-      commands_sprintf_str = "expire \n%04u-%02u-%02u \nsave \n";
-      commands = (char *) (xmalloc (strlen (commands_sprintf_str) + 8));
-      sprintf (commands, commands_sprintf_str, date->year, date->month,
-               date->day);
+      if (date)
+	{
+	  commands_sprintf_str = "expire \n%04u-%02u-%02u \nsave \n";
+	  commands = (char *) (xmalloc (strlen (commands_sprintf_str) + 8));
+	  sprintf (commands, commands_sprintf_str, date->year, date->month,
+		   date->day);
+	}
+      else
+	  commands = "expire \n0 \nsave \n";
       gpgargv[0] = "--edit-key";
       gpgargv[1] = key->KeyID;
       gpgargv[2] = NULL; 
-      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL,
+      gpapa_call_gnupg (gpgargv, TRUE, commands, passphrase,
                         NULL, NULL, callback, calldata); 
-      free (commands);
+      if (date) free (commands);
     }
 } /* gpapa_key_set_expiry_date */
 

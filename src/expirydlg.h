@@ -23,6 +23,6 @@
 
 #include <gtk/gtk.h>
 gboolean gpa_expiry_dialog_run (GtkWidget * window, GDate * expiry_date,
-				GDate ** new_date);
+				GDate ** new_date, gchar ** password);
 
 #endif /* EXPIRYDLG_H */

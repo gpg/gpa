@@ -510,9 +510,11 @@ keyring_editor_generate_key_advanced (gpointer param)
       if (params->expiryDate)
 	{
 	  gpapa_key_set_expiry_date (GPAPA_KEY (publicKey), params->expiryDate,
-				     gpa_callback, editor->window);
+				     params->password, gpa_callback,
+				     editor->window);
 	  gpapa_key_set_expiry_date (GPAPA_KEY (secretKey), params->expiryDate,
-				     gpa_callback, editor->window);
+				     params->password, gpa_callback,
+				     editor->window);
 	}
       else if (params->interval)
 	{
@@ -525,9 +527,11 @@ keyring_editor_generate_key_advanced (gpointer param)
 	}
       else
 	{
-	  gpapa_key_set_expiry_date (GPAPA_KEY (publicKey), NULL, gpa_callback,
+	  gpapa_key_set_expiry_date (GPAPA_KEY (publicKey), NULL,
+				     params->password, gpa_callback,
 				     editor->window);
-	  gpapa_key_set_expiry_date (GPAPA_KEY (secretKey), NULL, gpa_callback,
+	  gpapa_key_set_expiry_date (GPAPA_KEY (secretKey), NULL,
+				     params->password, gpa_callback,
 				     editor->window);
 	}
 
