@@ -1,5 +1,7 @@
 2002-12-12  Miguel Coca  <mcoca@gnu.org>
 
+	* config.sub, config.guess: Updated.
+	
 	* Makefile.am (SUBDIRS): Add pixmaps.
 	* configure.ac: Likewise.
 	
