@@ -297,12 +297,22 @@ gpa_keygen_wizard_final_page (void)
 }
 
 
+/* Handler for the close button. Destroy the main window */
 static void
-gpa_keygen_wizard_close (gpointer param)
+gpa_keygen_wizard_close (GtkWidget * widget, gpointer param)
+{
+  GPAKeyGenWizard * wizard = param;
+
+  gtk_widget_destroy (wizard->window);
+}
+
+
+/* handler for the destroy signal. Quit the recursive main loop */
+static void
+gpa_keygen_wizard_destroy (GtkWidget *widget, gpointer param)
 {
   gtk_main_quit ();
 }
-
 
 gboolean
 gpa_keygen_wizard_run (GtkWidget * parent)
@@ -323,11 +333,12 @@ gpa_keygen_wizard_run (GtkWidget * parent)
   gtk_window_set_title (GTK_WINDOW (window), _("Generate key"));
   gtk_object_set_data_full (GTK_OBJECT (window), "user_data",
 			    (gpointer) keygen_wizard, free);
-  gtk_signal_connect_object (GTK_OBJECT (window), "delete-event",
-			     GTK_SIGNAL_FUNC (gpa_keygen_wizard_close),
+  gtk_signal_connect_object (GTK_OBJECT (window), "destroy",
+			     GTK_SIGNAL_FUNC (gpa_keygen_wizard_destroy),
 			     (gpointer)keygen_wizard);
 
-  wizard = gpa_wizard_new (accel_group, gpa_keygen_wizard_close, NULL);
+  wizard = gpa_wizard_new (accel_group, gpa_keygen_wizard_close,
+			   keygen_wizard);
   gtk_container_add (GTK_CONTAINER (window), wizard);
 
   keygen_wizard->name_page = gpa_keygen_wizard_name_page ();
@@ -357,8 +368,6 @@ gpa_keygen_wizard_run (GtkWidget * parent)
   gpa_window_show_centered (window, parent);
 
   gtk_main ();
-
-  gtk_widget_destroy (window);
 
   return keygen_wizard->successful;
 }
