@@ -1,39 +1,47 @@
+2000-06-28 20:09:49  Werner Koch  (wk@habibti.openit.de)
+
+  * VERSION: New because it is easier for the mkdiff script to move
+  this file to the beginning, so that in trun patch can find the prereq
+  * Makefile.am, configure.in: Adjusted for that.
+
+  Version 0.3.1 has been released (without this entry :-()
+
 2000-05-25 17:55:29  Werner Koch  (wk@habibti.openit.de)
 
-	* configure.in: Check for gpg.
+  * configure.in: Check for gpg.
 
 2000-05-24 09:04:44  Werner Koch  (wk@habibti.openit.de)
 
-	* configure.in: Removed -Wshadow because this hits glib's usage of
-	"index'.
+  * configure.in: Removed -Wshadow because this hits glib's usage of
+  "index'.
 
 2000-05-17 10:25:54  Werner Koch  (wk@habibti.openit.de)
 
-	* TODO: Updated by Markus
-	* AUTHORS, THANKS: Updated.
+  * TODO: Updated by Markus
+  * AUTHORS, THANKS: Updated.
 
 2000-05-16 20:08:47  Werner Koch  (wk@habibti.openit.de)
 
-	Set version to 0.3 to indicate that we have a German
-	translation and GNU formatted source (I don't like the last
-	one but it is something which we can easily agree on).
+  Set version to 0.3 to indicate that we have a German
+  translation and GNU formatted source (I don't like the last
+  one but it is something which we can easily agree on).
 
 2000-05-15 16:49:59  Werner Koch  (wk@habibti.openit.de)
 
-	Added PO support.
+  Added PO support.
 
 2000-05-11 16:59:24  Werner Koch  (wk@habibti.openit.de)
 
-	* configure.in: Add a few function checks. Fixed some hardcoded
-	paths for the W32 version of Gtk+ - needs a better solution.
+  * configure.in: Add a few function checks. Fixed some hardcoded
+  paths for the W32 version of Gtk+ - needs a better solution.
 
-	GPA shows up on a Windows NT box and didn't crash.  This is a good
-	reason to increase the version number.
+  GPA shows up on a Windows NT box and didn't crash.  This is a good
+  reason to increase the version number.
 
-	Version 0.2.0
+  Version 0.2.0
 
 2000-05-03 20:09:17  Werner Koch  (wk@habibti.openit.de)
 
-	Version 0.1.0
+  Version 0.1.0
 
 

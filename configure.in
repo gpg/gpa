@@ -11,7 +11,7 @@ AM_CONFIG_HEADER(config.h)
 dnl
 dnl The version number goes here
 dnl
-AM_INIT_AUTOMAKE(gpa,0.3.1)
+AM_INIT_AUTOMAKE(gpa,`cat $srcdir/VERSION`)
 ALL_LINGUAS="de"
 
 dnl
