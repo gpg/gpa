@@ -1,5 +1,8 @@
 2002-11-08  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* verifydlg.c (signature_status_label): Add support for
+	revoked/expired keys. Don't talk about trust for keys.
+
 	* server_access.c (check_errors): Always return something.
 	(do_spawn): Report exec errors here, return boolean indicating
 	success.

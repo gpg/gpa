@@ -164,12 +164,22 @@ signature_status_label (SignatureData *data)
       text = _("Unknown Key");
       color = "red";
     }
+  else if (data->summary & GPGME_SIGSUM_KEY_REVOKED)
+    {
+      text = _("Revoked Key");
+      color = "red";
+    }
+  else if (data->summary & GPGME_SIGSUM_KEY_EXPIRED)
+    {
+      text = _("Expired Key");
+      color = "orange";
+    }
   else
     {
       /* If we arrived here we know the key is available, the signature is
        * not bad, but it's not completely valid. So, the signature is good
        * but the key is not valid. */
-      text = _("Untrusted Key");
+      text = _("Key NOT valid");
       color = "orange";
     }
 
