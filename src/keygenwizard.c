@@ -21,6 +21,7 @@
 #include <sys/stat.h>
 #include <gtk/gtk.h>
 #include <errno.h>
+#include <gpgme.h>
 #include "gpa.h"
 #include "gpapastrings.h"
 #include "icons.h"
@@ -28,6 +29,7 @@
 #include "gpawidgets.h"
 #include "gpawizard.h"
 #include "qdchkpwd.h"
+#include "gpgmetools.h"
 
 
 /*
@@ -49,7 +51,7 @@
 static gchar *
 string_strip_dup (gchar * string)
 {
-  return g_strstrip (xstrdup (string));
+  return g_strstrip (g_strdup (string));
 }
 
 /* Return TRUE if filename is a directory */
@@ -103,8 +105,6 @@ typedef struct {
   GdkPixmap * genkey_pixmap;
   GdkPixmap * backup_pixmap;
   gboolean create_backups;
-  GpapaPublicKey * public_key;
-  GpapaSecretKey * secret_key;
   gchar * pubkey_filename;
   gchar * seckey_filename;
   gboolean successful;
@@ -631,50 +631,31 @@ gpa_keygen_wizard_final_page (void)
 }
 
 
-/* Generate a key pair for the given name, email, comment and password.
- * Algorithm and keysize are set to default values suitable for new
- * users. The parent parameter is used as the parent widget for error
- * message boxes */
-static gboolean
-gpa_keygen_generate_key(gchar * name, gchar * email, gchar * comment,
-			gchar * password, GPAKeyGenWizard * keygen_wizard)
-{
-  /* default values for newbie mode */
-  GpapaAlgo algo = GPAPA_ALGO_BOTH;
-  gint keysize = 1024;
-
-  gpapa_create_key_pair (&(keygen_wizard->public_key),
-			 &(keygen_wizard->secret_key), password,
-			 algo, keysize, name, email, comment,
-			 gpa_callback, keygen_wizard->window);
-  return global_lastCallbackResult == GPAPA_ACTION_FINISHED;
-}
-
-
-/* Extract the values the user entered and call gpa_keygen_generate_key.
+/* Extract the values the user entered and call gpa_generate_key.
  * Return TRUE if the key was created successfully.
  */
 static gboolean
 gpa_keygen_wizard_generate_action (gpointer data)
 {
   GPAKeyGenWizard *keygen_wizard = data;
-  gchar *name;
-  gchar *email;
-  gchar *comment;
-  gchar *passwd;
-  gchar *backup_dir;
+  GPAKeyGenParameters params;
+  GpgmeError err;
 
-  gboolean successful;
+  /* The User ID */
+  params.userID = gpa_keygen_wizard_simple_get_text (keygen_wizard->name_page);
+  params.email = gpa_keygen_wizard_simple_get_text (keygen_wizard->email_page);
+  params.comment = gpa_keygen_wizard_simple_get_text (keygen_wizard
+                                                      ->comment_page);
+  params.password = gpa_keygen_wizard_password_get_password (keygen_wizard
+                                                             ->passwd_page);
 
-  name = gpa_keygen_wizard_simple_get_text (keygen_wizard->name_page);
-  email = gpa_keygen_wizard_simple_get_text (keygen_wizard->email_page);
-  comment = gpa_keygen_wizard_simple_get_text (keygen_wizard->comment_page);
-  passwd = gpa_keygen_wizard_password_get_password (keygen_wizard->passwd_page);
-  if (keygen_wizard->create_backups)
-    backup_dir = gpa_keygen_wizard_backup_get_text (keygen_wizard
-						    ->backup_dir_page);
-  else
-    backup_dir = NULL;
+  /* default values for newbie mode */
+  params.algo = GPA_KEYGEN_ALGO_DSA_ELGAMAL;
+  params.keysize = 1024;
+  params.expiryDate = NULL;
+  params.interval = 0;
+  params.generate_revocation = FALSE;
+  params.send_to_server = FALSE;
 
   /* Switch to the next page showing the "wait" message. */
   gpa_wizard_next_page_no_action (keygen_wizard->wizard);
@@ -683,29 +664,15 @@ gpa_keygen_wizard_generate_action (gpointer data)
   while (gtk_events_pending())
     gtk_main_iteration();
 
-  successful = gpa_keygen_generate_key (name, email, comment, passwd,
-					keygen_wizard);
+  err = gpa_generate_key (&params);
 
-  if (successful && keygen_wizard->create_backups)
-    {
-      gpapa_public_key_export (keygen_wizard->public_key,
-			       keygen_wizard->pubkey_filename,
-			       GPAPA_ARMOR, gpa_callback,
-			       keygen_wizard->window);
-      gpapa_secret_key_export (keygen_wizard->secret_key,
-			       keygen_wizard->seckey_filename,
-			       GPAPA_ARMOR, gpa_callback,
-			       keygen_wizard->window);
-      gpa_remember_backup_generated ();
-    }
+  keygen_wizard->successful = (err == GPGME_No_Error);
 
-  free (name);
-  free (email);
-  free (comment);
-  free (backup_dir);
-  
-  keygen_wizard->successful = successful;
-  return successful;
+  g_free (params.userID);
+  g_free (params.email);
+  g_free (params.comment);
+
+  return keygen_wizard->successful;
 }
 
 
