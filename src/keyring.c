@@ -77,6 +77,7 @@ struct _GPAKeyringEditor {
   /* Widgets in the details notebook page */
   GtkWidget *details_num_label;
   GtkWidget *details_table;
+  GtkWidget *detail_public_private;
   GtkWidget *detail_name;
   GtkWidget *detail_fingerprint;
   GtkWidget *detail_expiry;
@@ -1000,6 +1001,8 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
 
   table_row = 0;
+  editor->detail_public_private = add_details_row (table, table_row++,
+                                                   "", TRUE);
   editor->detail_name = add_details_row (table, table_row++,
                                          _("User Name:"), TRUE);
   editor->detail_key_id = add_details_row (table, table_row++,
@@ -1062,6 +1065,18 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
   gchar * uid;
   gint i;
 
+  if (gpa_keytable_secret_lookup (keytable, gpgme_key_get_string_attr 
+                                  (key, GPGME_ATTR_FPR, NULL, 0)))
+    {
+      gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
+                          _("The key has both a private and a public part"));
+    }
+  else
+    {
+      gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
+                          _("The key has only a public part"));
+    }
+
   /* One user ID on each line */
   text = gpa_gpgme_key_get_userid (key, 0);
   for (i = 1; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
@@ -1087,20 +1102,17 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
   gtk_label_set_text (GTK_LABEL (editor->detail_key_trust),
                       gpa_key_validity_string (key));
 
+  text = g_strdup_printf (_("%s %li bits"),
+                          gpgme_key_get_string_attr (key, GPGME_ATTR_ALGO,
+                                                    NULL, 0),
+                          gpgme_key_get_ulong_attr (key, GPGME_ATTR_LEN,
+                                                    NULL, 0));
+  gtk_label_set_text (GTK_LABEL (editor->detail_key_type), text);
+  g_free (text);
+
   gtk_label_set_text (GTK_LABEL (editor->detail_owner_trust),
                       gpa_key_ownertrust_string (key));
 
-  if (gpa_keytable_secret_lookup (keytable, gpgme_key_get_string_attr 
-                                  (key, GPGME_ATTR_FPR, NULL, 0)))
-    {
-      gtk_label_set_text (GTK_LABEL (editor->detail_key_type),
-                          _("The key has both a private and a public part"));
-    }
-  else
-    {
-      gtk_label_set_text (GTK_LABEL (editor->detail_key_type),
-                          _("The key has only a public part"));
-    }
   text = gpa_creation_date_string (gpgme_key_get_ulong_attr 
                                    (key, GPGME_ATTR_CREATED, NULL, 0));
   gtk_label_set_text (GTK_LABEL (editor->detail_creation), text);

@@ -1,3 +1,10 @@
+2002-12-09  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_details_page_fill_key) 
+	(keyring_details_notebook): Add key length and type to the details
+	notebook. They replace the public/private label, which is moved to the
+	top of the notebook.
+
 2002-12-07  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* siglist.c (gpa_siglist_set_userid): Fix idiot bug.
