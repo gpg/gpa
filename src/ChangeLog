@@ -1,5 +1,14 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* optionsmenu.c (gpa_options_menu_add_to_factory): Remove the
+	"Online _tips" entry
+
+	* optionsmenu.h (options_tips): 
+	* optionsmenu.c (options_tips): 
+	* gpa.h (gpa_switch_tips): 
+	* gpa.c (gpa_switch_tips): Removed because they're not needed
+	anymore now that the tip window's gone
+
 	* keyring.c (keyring_update_status_bar): Make the parameter
 	explicitly a GPAKeyringEditor pointer because it's not directly
 	used as a signal handler anymore
