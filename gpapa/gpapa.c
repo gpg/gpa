@@ -346,10 +346,14 @@ gpapa_create_key_pair (GpapaPublicKey **publicKey,
 {
   if (aKeysize && aUserID && anEmail && aComment)
     {
-      gchar *gpgargv[2];
-      gchar *commands = NULL;
-      gchar *commands_sprintf_str;
-      gchar *Algo, *Sub_Algo;
+      char *gpgargv[3];
+      char *commands = NULL;
+      char *commands_sprintf_str;
+      char *Algo, *Sub_Algo, *Name_Comment;
+      if (aComment && *aComment)
+        Name_Comment = g_strdup_printf ("Name-Comment: %s\n", aComment);
+      else
+        Name_Comment = "";
       if (anAlgo == GPAPA_ALGO_DSA
           || anAlgo == GPAPA_ALGO_ELG_BOTH
           || anAlgo == GPAPA_ALGO_ELG)
@@ -363,20 +367,15 @@ gpapa_create_key_pair (GpapaPublicKey **publicKey,
 	  commands_sprintf_str = "Key-Type: %s\n"
 	                         "Key-Length: %d\n"
 	                         "Name-Real: %s\n"
-                                 "Name-Comment: %s\n"
+                                 "%s"                /* Name_Comment */
                                  "Name-Email: %s\n"
                                  "Expire-Date: 0\n"
                                  "Passphrase: %s\n"
                                  "%%commit\n";
-	  commands = (char *) (xmalloc (strlen (commands_sprintf_str)
-					+ strlen (Algo) + 4 
-					/* 4 is max. length of aKeysize */
-					+ strlen (aUserID)
-                                        + strlen (aComment)
-					+ strlen (anEmail)
-                                        + strlen (passphrase)));
-	  sprintf (commands, commands_sprintf_str, Algo, aKeysize, 
-		   aUserID, aComment, anEmail, passphrase);
+	  commands = g_strdup_printf (commands_sprintf_str,
+                                      Algo, aKeysize, 
+		                      aUserID, Name_Comment, anEmail,
+                                      passphrase);
 	}
       else if (anAlgo == GPAPA_ALGO_BOTH)
 	{
@@ -387,26 +386,22 @@ gpapa_create_key_pair (GpapaPublicKey **publicKey,
                                  "Subkey-Type: %s\n"
                                  "Subkey-Length: %d\n"
                                  "Name-Real: %s\n"
-                                 "Name-Comment: %s\n"
+                                 "%s"                /* Name_Comment */
                                  "Name-Email: %s\n"
                                  "Expire-Date: 0\n"
                                  "Passphrase: %s\n"
                                  "%%commit\n";
-	  commands = (char *) (xmalloc (strlen (commands_sprintf_str)
-					+ strlen (Algo) + strlen (Sub_Algo) + 8
-					/* 8 is max. length of both aKeysize */
-					+ strlen (aUserID)
-					+ strlen (aComment)
-					+ strlen (anEmail)
-					+ strlen (passphrase)));
-	  sprintf (commands, commands_sprintf_str, Algo, aKeysize, 
-		   Sub_Algo, aKeysize, aUserID, aComment, anEmail, passphrase);
+	  commands = g_strdup_printf (commands_sprintf_str,
+                                      Algo, aKeysize, Sub_Algo, aKeysize,
+                                      aUserID, Name_Comment, anEmail,
+                                      passphrase);
 	}
       else 
 	callback (GPAPA_ACTION_ERROR, 
 		     "specified algorithm not supported", calldata); 
       gpgargv[0] = "--gen-key";
-      gpgargv[1] = NULL;
+      gpgargv[1] = "--batch";  /* not automatically added due to commands */
+      gpgargv[2] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, commands, passphrase, 
 			NULL, NULL, callback, calldata);
       free (commands);

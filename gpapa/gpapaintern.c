@@ -152,7 +152,6 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait,
   _gpgme_gpg_new (&gpg);
 
   _gpgme_gpg_add_arg (gpg, "--no-options");
-  _gpgme_gpg_add_arg (gpg, "--batch");
 
   _gpgme_gpg_set_status_handler (gpg, status_handler, &gpapa_data);
   _gpgme_gpg_set_colon_line_handler (gpg, line_handler, &gpapa_data);
@@ -181,6 +180,8 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait,
           return_code = _gpgme_gpg_add_data (gpg, tmp, 0);
         }
     }
+  else
+    _gpgme_gpg_add_arg (gpg, "--batch");
   if (passphrase && return_code == 0)
     {
       GpgmeData tmp;

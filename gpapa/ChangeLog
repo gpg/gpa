@@ -1,6 +1,24 @@
+Sun 11 Feb 2001 26:42 Peter Gerwinski <peter@gerwinski.de>
+
+        * gpapa.c (gpapa_create_key_pair): handle empty comments;
+          explicitly add the `--batch' option.
+
+        * gpapaintern.c (gpapa_call_gnupg): add the `--batch' option
+          only when there are no commands. Otherwise, gpg complains
+          about deletion of secret keys which cannot be done in batch mode.
+
+        * gpapasecretkey.c (gpapa_secret_key_delete): give a "YES" command;
+          also delete the public key.
+
+        * rungpg.c (build_argv): never add the `--batch' option;
+          let the caller do this.
+
+        * wait.c (_gpgme_wait_on_condition): do not consider `c->cancel'.
+          In fact `c' is not really a `GpgmeCtx'.
+
 Fri 9 Feb 2001 19:05 Peter Gerwinski <peter@gerwinski.de>
 
-        * posix-sema.c, w32-sema.c, debug.c: new files (from GPGME).
+        * posix-sema.c, w32-sema.c, sema.h, debug.c: new files (from GPGME).
 
 Fri 9 Feb 2001 11:05 Peter Gerwinski <peter@gerwinski.de>
 

@@ -160,8 +160,12 @@ _gpgme_wait_on_condition ( GpgmeCtx c, int hang, volatile int *cond )
         }
         if (hang)
             run_idle ();
+#ifdef GPAPA
+    } while (hang);
+#else
     } while (hang && !c->cancel );
     c->cancel = 0; /* fixme: fix all functions, to return a cancel error */
+#endif
     return c;
 }
 

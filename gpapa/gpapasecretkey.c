@@ -82,7 +82,14 @@ gpapa_secret_key_delete (GpapaSecretKey *key, GpapaCallbackFunc callback,
       gpgargv[2] = full_keyID;
       gpgargv[3] = NULL;
       gpapa_call_gnupg
-	(gpgargv, TRUE, "\n", NULL,
+	(gpgargv, TRUE, "YES\n", NULL,
+	 NULL, NULL, callback, calldata);
+      gpgargv[0] = "--yes";
+      gpgargv[1] = "--delete-key";
+      gpgargv[2] = full_keyID;
+      gpgargv[3] = NULL;
+      gpapa_call_gnupg
+	(gpgargv, TRUE, "YES\n", NULL,
 	 NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_secret_keyring (callback, calldata);

@@ -534,6 +534,7 @@ build_argv ( GpgObject gpg )
         }
         argc++;
     }
+#ifndef GPAPA
     if ( !gpg->cmd.used ) {
         argv[argc] = xtrystrdup ( "--batch" );
         if (!argv[argc]) {
@@ -543,6 +544,7 @@ build_argv ( GpgObject gpg )
         }
         argc++;
     }
+#endif /* not GPAPA */
     for ( a=gpg->arglist; a; a = a->next ) {
         if ( a->data ) {
             switch ( _gpgme_data_get_mode (a->data) ) {
