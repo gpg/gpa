@@ -32,6 +32,10 @@
  * function.
  */
 struct _GPAPassphraseDialog {
+
+  /* The toplevel window of the dialog */
+  GtkWidget * window;
+  
   /* the entry widget for the passphrase */
   GtkWidget * entry;
   
@@ -45,7 +49,7 @@ typedef struct _GPAPassphraseDialog GPAPassphraseDialog;
 
 
 /* Signal handler for the OK button. Copy the entered password to the
- * dialog struct and quit the recursive mainloop
+ * dialog struct and destroy the top level window.
  */
 static void
 passphrase_ok (gpointer param)
@@ -53,11 +57,11 @@ passphrase_ok (gpointer param)
   GPAPassphraseDialog * dialog = param;
 
   dialog->passphrase = xstrdup (gtk_entry_get_text (GTK_ENTRY(dialog->entry)));
-  gtk_main_quit ();
+  gtk_widget_destroy (dialog->window);
 }
 
 /* Signal handler for the Cancel button. Set the passpghrase in the
- * dialog struct to NULL and quit the recursive mainloop
+ * dialog struct to NULL and destroy the top level window.
  */
 static void
 passphrase_cancel (gpointer param)
@@ -65,19 +69,17 @@ passphrase_cancel (gpointer param)
   GPAPassphraseDialog * dialog = param;
 
   dialog->passphrase = NULL;
+  gtk_widget_destroy (dialog->window);
+}
+
+/* Handler for the dialog window's destroy signal. Quit the recursive
+ * main loop */
+static void
+passphrase_destroy (GtkWidget *widget, gpointer param)
+{
   gtk_main_quit ();
 }
 
-/* signal handler for the dialog winow's delete-event. Just call the
- * cancel signal handler and return FALSE to indicate that the window may
- * be closed.
- */
-static gboolean
-passphrase_delete_event (GtkWidget *widget, GdkEvent *event, gpointer param)
-{
-  passphrase_cancel (param);
-  return FALSE;
-}
 
 /* Create a modal dialog to ask for the passphrase, run the main-loop
  * recursively and return the entered passphrase if the user clicked OK,
@@ -101,10 +103,10 @@ gpa_passphrase_run_dialog (GtkWidget * parent)
   dialog.passphrase = NULL;
 
   windowPassphrase = gtk_window_new (GTK_WINDOW_DIALOG);
+  dialog.window = windowPassphrase;
   gtk_window_set_title (GTK_WINDOW (windowPassphrase), _("Enter Password"));
-  gtk_signal_connect (GTK_OBJECT (windowPassphrase), "delete_event",
-		      GTK_SIGNAL_FUNC (passphrase_delete_event),
-		      (gpointer)&dialog);
+  gtk_signal_connect (GTK_OBJECT (windowPassphrase), "destroy",
+		      GTK_SIGNAL_FUNC (passphrase_destroy), (gpointer)&dialog);
 
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowPassphrase), accelGroup);
@@ -144,11 +146,11 @@ gpa_passphrase_run_dialog (GtkWidget * parent)
 		      FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowPassphrase), vboxPassphrase);
   gpa_window_show_centered (windowPassphrase, parent);
+  gtk_window_set_modal (GTK_WINDOW (windowPassphrase), TRUE);
 
-  gtk_grab_add (windowPassphrase);
+  gtk_widget_grab_focus (entryPasswd);
+
   gtk_main ();
-  gtk_grab_remove (windowPassphrase);
-  gtk_widget_destroy (windowPassphrase);
 
   return dialog.passphrase;
 } /* gpa_passphrase_run_dialog */
