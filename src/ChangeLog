@@ -1,5 +1,35 @@
 2001-02-07  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_sign):
+	(keyring_selection_update_widgets): Use the new
+	keyring_update_details_notebook function to update the pages in
+	the details notebook
+	(keyring_details_notebook): Add a label to the details page and
+	introduce a vbox holding both the label and the table so that we
+	can switch between either the label or the table to show very
+	different information when exactly one key is selected or when
+	zero or more than one key is selected
+
+	(keyring_update_signatures_page):
+	(keyring_update_details_page): Removed
+	(keyring_details_page_fill_key):
+	(keyring_details_page_fill_num_keys):
+	(keyring_signatures_page_fill_key):
+	(keyring_signatures_page_empty):
+	(idle_update_details):
+	(keyring_update_details_notebook): New functions replacing
+	keyring_update_details_page and keyring_update_signatures_page so
+	that either the details of the current key is shown or the number
+	of selected keys if several or no key is selected. Also only
+	update the notebook when idle.
+	(GPAKeyringEditor): Add some new fields for the new widgets and
+	idle handling
+	(keyring_editor_new): Initialize the idle handler id.
+
+	* keylist.h (gpa_keylist_selection_length):
+	* keylist.c (gpa_keylist_selection_length): New function to
+	determine the number of selected keys
+
 	* keyring.c (keyring_editor_generate_key_advanced): Pass the
 	password to gpapa_key_set_expiry_date
 
