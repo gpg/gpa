@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.3.1a\n"
-"POT-Creation-Date: 2001-02-13 21:39+0100\n"
-"PO-Revision-Date: 2001-02-13 21:19+01:00\n"
+"POT-Creation-Date: 2001-02-15 15:21+0100\n"
+"PO-Revision-Date: 2001-02-15 15:22+01:00\n"
 "Last-Translator: Thomas Koester <tkoester@intevation.de>\n"
 "Language-Team: GERMAN <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -47,12 +47,12 @@ msgstr "ASCII-_Verpackung"
 
 #: src/encryptdlg.c:193 src/expirydlg.c:220 src/filemenu.c:449
 #: src/filemenu.c:1216 src/filemenu.c:1478 src/filemenu.c:1645
-#: src/filesigndlg.c:242 src/gpawizard.c:201 src/gtktools.c:511
+#: src/filesigndlg.c:242 src/gpawizard.c:234 src/gtktools.c:511
 #: src/keydeletedlg.c:145 src/keyexportdlg.c:242 src/keygendlg.c:283
-#: src/keyimportdlg.c:258 src/keysigndlg.c:192 src/keysmenu.c:476
-#: src/keysmenu.c:964 src/keysmenu.c:1278 src/optionsmenu.c:123
-#: src/optionsmenu.c:361 src/optionsmenu.c:534 src/ownertrustdlg.c:171
-#: src/passphrasedlg.c:152
+#: src/keygenwizard.c:500 src/keyimportdlg.c:258 src/keysigndlg.c:192
+#: src/keysmenu.c:476 src/keysmenu.c:964 src/keysmenu.c:1278
+#: src/optionsmenu.c:123 src/optionsmenu.c:361 src/optionsmenu.c:534
+#: src/ownertrustdlg.c:171 src/passphrasedlg.c:152
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
@@ -112,12 +112,12 @@ msgstr "Status:"
 msgid "_Signatures"
 msgstr "_Signaturen"
 
-#: src/fileman.c:368 src/filemenu.c:660 src/gpawizard.c:104 src/helpmenu.c:470
+#: src/fileman.c:368 src/filemenu.c:660 src/gpawizard.c:106 src/helpmenu.c:470
 #: src/keyeditdlg.c:157 src/keysmenu.c:1112
 msgid "_Close"
 msgstr "S_chließen"
 
-#: src/fileman.c:521 src/keyring.c:684
+#: src/fileman.c:521 src/keyring.c:688
 msgid "/_File"
 msgstr "/_Datei"
 
@@ -156,23 +156,23 @@ msgstr "/Datei/_Entschlüsseln"
 msgid "/File/sep2"
 msgstr "/Datei/sep2"
 
-#: src/fileman.c:536 src/keyring.c:685
+#: src/fileman.c:536 src/keyring.c:689
 msgid "/File/_Close"
 msgstr "/Datei/S_chließen"
 
-#: src/fileman.c:537 src/keyring.c:686
+#: src/fileman.c:537 src/keyring.c:690
 msgid "/File/_Quit"
 msgstr "/Datei/_Beenden"
 
-#: src/fileman.c:540 src/keyring.c:698
+#: src/fileman.c:540 src/keyring.c:702
 msgid "/_Windows"
 msgstr "/_Fenster"
 
-#: src/fileman.c:541 src/keyring.c:699
+#: src/fileman.c:541 src/keyring.c:703
 msgid "/Windows/_Filemanager"
 msgstr "/Fenster/_Dateimanager"
 
-#: src/fileman.c:542 src/keyring.c:700
+#: src/fileman.c:542 src/keyring.c:704
 msgid "/Windows/_Keyring Editor"
 msgstr "/Fenster/_Schlüsselverwaltung"
 
@@ -212,7 +212,7 @@ msgstr "Datei öffnen"
 msgid "open file"
 msgstr "Datei öffnen"
 
-#: src/fileman.c:641 src/keyring.c:1099
+#: src/fileman.c:641 src/keyring.c:1103
 msgid "Sign"
 msgstr "Signieren"
 
@@ -248,15 +248,15 @@ msgstr "Gewählte Datei entschlüsseln"
 msgid "decrypt file"
 msgstr "Datei entschlüsseln"
 
-#: src/fileman.c:658 src/keyring.c:1145
+#: src/fileman.c:658 src/keyring.c:1151
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/fileman.c:659 src/keyring.c:1146
+#: src/fileman.c:659 src/keyring.c:1152
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "Wie funktioniert der GNU Privacy Assistant?"
 
-#: src/fileman.c:660 src/keyring.c:1147
+#: src/fileman.c:660 src/keyring.c:1153
 msgid "help"
 msgstr "Hilfe"
 
@@ -612,13 +612,13 @@ msgid "valid"
 msgstr "gültig"
 
 #. User Name
-#: src/gpawidgets.c:53 src/keyeditdlg.c:99 src/keyring.c:783
+#: src/gpawidgets.c:53 src/keyeditdlg.c:99 src/keyring.c:787
 #: src/keysmenu.c:148
 msgid "User Name:"
 msgstr "Benutzer ID:"
 
 #. User Name
-#: src/gpawidgets.c:63 src/keyeditdlg.c:102 src/keyring.c:785
+#: src/gpawidgets.c:63 src/keyeditdlg.c:102 src/keyring.c:789
 #: src/keysmenu.c:138
 msgid "Key ID:"
 msgstr "Schlüssel ID:"
@@ -650,7 +650,6 @@ msgstr "verfä_llt am"
 
 #. this should never happen
 #: src/gpawidgets.c:398 src/keygendlg.c:331 src/keysmenu.c:828
-#, fuzzy
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -658,21 +657,21 @@ msgstr ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
 
-#: src/gpawizard.c:189 src/gpawizard.c:229
+#: src/gpawizard.c:222 src/gpawizard.c:262
 msgid "_Prev"
 msgstr "_Zurück"
 
-#: src/gpawizard.c:195 src/gpawizard.c:231
+#: src/gpawizard.c:228 src/gpawizard.c:264
 msgid "_Next"
 msgstr "_Weiter"
 
 #: src/gtktools.c:313
 msgid "GPA Error"
-msgstr ""
+msgstr "GPA Fehler"
 
 #: src/gtktools.c:352
 msgid "GPA Message"
-msgstr ""
+msgstr "GPA Meldung"
 
 #: src/gtktools.c:481
 msgid "Insert password"
@@ -797,7 +796,7 @@ msgstr "Schlüssel exportieren"
 msgid "E_xport to file:"
 msgstr "E_xportieren in Datei: "
 
-#: src/keyexportdlg.c:199 src/keyimportdlg.c:197
+#: src/keyexportdlg.c:199 src/keygenwizard.c:472 src/keyimportdlg.c:197
 msgid "B_rowse..."
 msgstr "D_urchsuchen..."
 
@@ -811,7 +810,7 @@ msgid ""
 "you must enter the same password."
 msgstr "Bitte zweimal das gleiche Mantra eingeben."
 
-#: src/keygendlg.c:148 src/keygenwizard.c:448
+#: src/keygendlg.c:148 src/keygenwizard.c:748
 msgid "Generate key"
 msgstr "Schlüssel erzeugen"
 
@@ -863,7 +862,7 @@ msgstr "_Zum Key Server schicken"
 msgid "_Generate key"
 msgstr "Schlüssel _erzeugen"
 
-#: src/keygenwizard.c:135
+#: src/keygenwizard.c:178
 msgid ""
 "Please insert your full name.\n"
 "\n"
@@ -875,16 +874,16 @@ msgstr ""
 "Ihr Name wird Teil des neuen Schüssels, damit diese leichter von anderen "
 "erkannt werden können."
 
-#: src/keygenwizard.c:140
+#: src/keygenwizard.c:183
 msgid "Your Name:"
 msgstr "Ihr Name:"
 
 #. The string is empty or consists entirely of whitespace
-#: src/keygenwizard.c:153
+#: src/keygenwizard.c:196
 msgid "Please insert your name"
 msgstr "Bitte Ihren Namen eingeben"
 
-#: src/keygenwizard.c:166
+#: src/keygenwizard.c:209
 msgid ""
 "Please insert your email address.\n"
 "\n"
@@ -898,16 +897,16 @@ msgstr ""
 "anderen erkannt werden können. Wenn Sie mehrere Email-Adressen besitzen, "
 "können Sie diese später hinzufügen."
 
-#: src/keygenwizard.c:173
+#: src/keygenwizard.c:216
 msgid "Your Email Adress:"
 msgstr "Ihre Email-Adresse:"
 
 #. The string is empty or consists entirely of whitespace
-#: src/keygenwizard.c:188
+#: src/keygenwizard.c:231
 msgid "Please insert your email address"
 msgstr "Bitte geben Sie Ihre Email-Adresse ein"
 
-#: src/keygenwizard.c:205
+#: src/keygenwizard.c:248
 msgid ""
 "If you want you can supply a comment that further identifies the key to "
 "other users. The comment is especially useful if you generate several keys "
@@ -919,36 +918,92 @@ msgstr ""
 "Schlüssel für die gleiche Email-Adresse erstellen. Der Kommentar ist "
 "optional, lassen Sie ihn einfach leer, wenn Sie keine Verwendung dafür haben."
 
-#: src/keygenwizard.c:211
+#: src/keygenwizard.c:254
 msgid "Comment:"
 msgstr "Bemerkung:"
 
-#: src/keygenwizard.c:237
-msgid ""
-"As the final step of the key generation you have to supply a password for "
-"the new key."
-msgstr ""
-"Als letzten Schritt der Schlüsselerstellung müssen Sie eine Mantra für Ihren "
-"neuen Schlüssel angeben."
+#: src/keygenwizard.c:280
+msgid "Please choose a passphrase for the new key."
+msgstr "Bitte wählen Sie ein Mantra für den neuen Schlüssel."
 
-#: src/keygenwizard.c:247
+#: src/keygenwizard.c:289
 msgid "Password:"
-msgstr "Mantra: "
+msgstr "Mantra:"
 
-#: src/keygenwizard.c:260
+#: src/keygenwizard.c:302
 msgid "Repeat Password:"
-msgstr "Mantra wiederholen: "
+msgstr "Mantra wiederholen:"
 
-#: src/keygenwizard.c:303
+#: src/keygenwizard.c:348
 msgid ""
 "Please insert the same password in \"Password\" and \"Repeat Password\"."
 msgstr "Bitte zweimal das gleiche Mantra eingeben."
 
-#: src/keygenwizard.c:306
+#: src/keygenwizard.c:355
 msgid "Please insert a password\n"
 msgstr "Mantra eingeben\n"
 
-#: src/keygenwizard.c:400
+#: src/keygenwizard.c:375
+msgid ""
+"It is recommended that you create a backup copy of your new key, once it has "
+"been generated.\n"
+"\n"
+"Do you want to create a backup copy?"
+msgstr ""
+"Es ist empfehlenswert, eine Sicherheitskopie ihres neuen Schlüssels anzulegen, sobald er erzeugt wurde.\n"
+"\n"
+"Möchten Sie eine Sicherheitskopie anlegen?"
+
+#: src/keygenwizard.c:384
+msgid "Create _backup copy"
+msgstr "_Sicherheitskopie anlegen"
+
+#: src/keygenwizard.c:391 src/keyring.c:643
+msgid "Do it _later"
+msgstr "_Später erledigen"
+
+#: src/keygenwizard.c:429
+msgid "Backup Directory"
+msgstr "Verzeichnis"
+
+#: src/keygenwizard.c:451
+msgid ""
+"Please enter a directory where your backup keys should be saved.\n"
+"\n"
+"GPA will create two files in that directory: pub_key.asc and sec_key.asc"
+msgstr ""
+"Bitte gebeb Sie ein Verzeichnis an, in welchem die Sicherheitskopie\n"
+"angelegt werden soll.\n"
+"\n"
+"GPA wird zwei Dateien in diesem Verzeichnis anlegen: pub_key.asc und\n"
+"sec_key.asc."
+
+#: src/keygenwizard.c:463
+msgid "Directory:"
+msgstr "Verzeichnis:"
+
+#: src/keygenwizard.c:500 src/keygenwizard.c:519 src/keygenwizard.c:531
+msgid "_Overwrite"
+msgstr "_Überschreiben"
+
+#: src/keygenwizard.c:514 src/keygenwizard.c:526
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Die Datei »%s« existiert bereits.\n"
+"Möchten Sie sie überschreiben"
+
+#: src/keygenwizard.c:517 src/keygenwizard.c:529
+msgid "File exists"
+msgstr "Datei existiert"
+
+#: src/keygenwizard.c:538
+msgid "Please enter a valid directory"
+msgstr "Bitte geben Sie ein gültiges Verzeichnis an"
+
+#: src/keygenwizard.c:575
 msgid ""
 "Your key is being generated\n"
 "\n"
@@ -958,7 +1013,7 @@ msgstr ""
 "\n"
 "Dies kann auch auf schnellen Computern etwas dauern. Bitte haben Sie Geduld\n"
 
-#: src/keygenwizard.c:409
+#: src/keygenwizard.c:584
 msgid ""
 "Congratulations!\n"
 "\n"
@@ -970,7 +1025,7 @@ msgstr ""
 "Sie haben erfolgreich einen neuen Schlüssel erstellt. Dieser Schlüssel ist "
 "unbegrenzt gültig und hat eine Länge von 1024 Bit."
 
-#: src/keygenwizard.c:479 src/keygenwizard.c:484 src/keygenwizard.c:488
+#: src/keygenwizard.c:796 src/keygenwizard.c:803 src/keygenwizard.c:807
 msgid "F_inish"
 msgstr "F_ertig"
 
@@ -1023,23 +1078,19 @@ msgstr "Kein geheimer Schlüssel zum signieren."
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:412 src/keysmenu.c:433
+#: src/keyring.c:416 src/keysmenu.c:433
 msgid "No keys selected to export."
 msgstr "Keine Schlüssel zum Exportieren ausgewählt."
 
-#: src/keyring.c:639 src/keyring.c:647
+#: src/keyring.c:643 src/keyring.c:651
 msgid "_Generate key now"
 msgstr "Jetzt Schlüssel _erzeugen"
 
-#: src/keyring.c:639
-msgid "Do it _later"
-msgstr "_Später erledigen"
-
-#: src/keyring.c:642
+#: src/keyring.c:646
 msgid "No key defined"
 msgstr "Kein Schlüssel"
 
-#: src/keyring.c:643
+#: src/keyring.c:647
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1047,144 +1098,148 @@ msgstr ""
 "Sie haben noch keinen geheimen Schlüssel. Wollen Sie jetzt einen erzeugen "
 "(empfohlen), oder dies später erledigen."
 
-#: src/keyring.c:689
+#: src/keyring.c:693
 msgid "/_Keys"
 msgstr "/_Schlüssel"
 
-#: src/keyring.c:690
+#: src/keyring.c:694
 msgid "/Keys/_Generate Key..."
 msgstr "/Schlüssel/Schlüssel _erzeugen..."
 
-#: src/keyring.c:787 src/keysigndlg.c:156
+#: src/keyring.c:791 src/keysigndlg.c:156
 msgid "Fingerprint:"
 msgstr "Fingerabdruck:"
 
-#: src/keyring.c:789
+#: src/keyring.c:793
 msgid "Expires at:"
 msgstr "ungültig ab:"
 
-#: src/keyring.c:791
+#: src/keyring.c:795
 msgid "Owner Trust:"
 msgstr "Benutzervertrauen:"
 
-#: src/keyring.c:793
+#: src/keyring.c:797
 msgid "Key Trust:"
 msgstr "Schlüsselvertrauen:"
 
-#: src/keyring.c:795
+#: src/keyring.c:799
 msgid "Key Type:"
 msgstr "Art: "
 
-#: src/keyring.c:798 src/keyring.c:1137
+#: src/keyring.c:802
 msgid "Details"
 msgstr "Details"
 
-#: src/keyring.c:814
+#: src/keyring.c:818
 msgid "Signatures"
 msgstr "Signaturen"
 
-#: src/keyring.c:861
+#: src/keyring.c:865
 msgid "The key has both a private and a public part"
 msgstr "Dieser Schlüssel hat einen öffentlichen und einen geheimen Teil"
 
-#: src/keyring.c:866
+#: src/keyring.c:870
 msgid "The key has only a public part"
 msgstr "Dieser Schlüssel hat nur einen öffentlichen Teil"
 
-#: src/keyring.c:882
+#: src/keyring.c:886
 msgid "No keys selected"
 msgstr "Keine Schlüssel ausgewählt"
 
-#: src/keyring.c:886
+#: src/keyring.c:890
 #, c-format
 msgid "%d keys selected"
 msgstr "%d Schlüssel ausgewählt"
 
-#: src/keyring.c:1082
+#: src/keyring.c:1086
 msgid "Edit"
 msgstr "Ändern"
 
-#: src/keyring.c:1083
+#: src/keyring.c:1087
 msgid "Edit the selected key"
 msgstr "Gewählten Schlüssel bearbeiten"
 
-#: src/keyring.c:1083
+#: src/keyring.c:1087
 msgid "edit key"
 msgstr "Schlüssel bearbeiten"
 
-#: src/keyring.c:1090
+#: src/keyring.c:1094
 msgid "Remove"
 msgstr "Löschen"
 
-#: src/keyring.c:1091
+#: src/keyring.c:1095
 msgid "Remove the selected key"
 msgstr "Gewählten Schlüssel entfernen"
 
-#: src/keyring.c:1092
+#: src/keyring.c:1096
 msgid "remove key"
 msgstr "Schlüssel entfernen"
 
-#: src/keyring.c:1100
+#: src/keyring.c:1104
 msgid "Sign the selected key"
 msgstr "Gewählten Schlüssel signieren"
 
-#: src/keyring.c:1100
+#: src/keyring.c:1104
 msgid "sign key"
 msgstr "Schlüssel signieren"
 
-#: src/keyring.c:1107
+#: src/keyring.c:1111
 msgid "Import"
 msgstr "Import"
 
-#: src/keyring.c:1108
+#: src/keyring.c:1112
 msgid "Import Keys"
 msgstr "Schlüssel importieren"
 
-#: src/keyring.c:1108
+#: src/keyring.c:1112
 msgid "import keys"
 msgstr "Schlüssel importieren"
 
-#: src/keyring.c:1113
+#: src/keyring.c:1117
 msgid "Export"
 msgstr "Export"
 
-#: src/keyring.c:1114
+#: src/keyring.c:1118
 msgid "Export Keys"
 msgstr "Schlüssel exportieren"
 
-#: src/keyring.c:1114
+#: src/keyring.c:1118
 msgid "export keys"
 msgstr "Schlüssel exportieren"
 
-#: src/keyring.c:1126
+#: src/keyring.c:1131
 msgid "Brief"
 msgstr "Liste"
 
-#: src/keyring.c:1126
+#: src/keyring.c:1131
 msgid "Show Brief Keylist"
 msgstr "Schlüssel in Listenansicht anzeigen"
 
-#: src/keyring.c:1127
+#: src/keyring.c:1132
 msgid "brief"
 msgstr "Liste"
 
-#: src/keyring.c:1137
+#: src/keyring.c:1143
+msgid "Detailed"
+msgstr "Detailliert"
+
+#: src/keyring.c:1143
 msgid "Show Key Details"
 msgstr "Schlüssel in Detailansicht anzeigen"
 
-#: src/keyring.c:1138
-msgid "details"
-msgstr "Details"
+#: src/keyring.c:1144
+msgid "detailed"
+msgstr "detailliert"
 
-#: src/keyring.c:1162
+#: src/keyring.c:1168
 msgid "Selected Default Key:"
 msgstr "Standard-Schlüssel:"
 
-#: src/keyring.c:1239
+#: src/keyring.c:1245
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - Schlüsselverwaltung"
 
-#: src/keyring.c:1268
+#: src/keyring.c:1274
 msgid "Keyring Editor"
 msgstr "Schlüsselverwaltung"
 
@@ -1257,7 +1312,6 @@ msgid "No keys selected to delete."
 msgstr "Keine Schlüssel zum Löschen ausgewählt."
 
 #: src/keysmenu.c:728
-#, fuzzy
 msgid "!FATAL ERROR: Invalid key selection info!\n"
 msgstr "!FATAL ERROR: Invalid key selection info!\n"
 
