@@ -169,7 +169,8 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaSignType * sign_type,
 			     GTK_SIGNAL_FUNC (key_sign_ok),
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonSign);
-  gpa_widget_show (windowSign, parent, _("key_sign.tip"));
+  gpa_window_show_centered (windowSign, parent);
+  /* set tip to "key_sign.tip" */
 
   gtk_grab_add (windowSign);
   gtk_main ();
