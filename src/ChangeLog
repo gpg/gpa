@@ -1,3 +1,23 @@
+2002-09-28  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (add_details_row): Use GtkLabel's always. Change alignment
+	of labels, so that we can have multiline fields.
+	(keyring_details_notebook): Add scrollbars. Make User names and
+	Key ID's scrollable.
+	(keyring_details_page_fill_key): Show all user ID's.
+	(keyring_editor_new): Increase default height of the details area.
+
+	* gpgmetools.c, gpgmetools.h (gpa_gpgme_key_get_short_keyid): Added
+	const qualifier.
+
+	* keylist.c (get_identifier_value): Always display short key ID's.
+	* keyexportdlg.c (key_backup_dialog_run): Likewise.
+	* keyeditdlg.c (gpa_key_edit_dialog_run): Likewise.
+	* gpawidgets.c (gpa_key_info_new): Likewise.
+	* keysmenu.c (gpa_tableKey_new): Likewise.
+	* keyring.c (keyring_details_page_fill_key)
+	(keyring_update_status_bar): Likewise.
+
 2002-09-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* server_access.c: Copied error codes from gnupg code.

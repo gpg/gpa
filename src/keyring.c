@@ -884,19 +884,13 @@ add_details_row (GtkWidget * table, gint row, gchar *text,
 
   widget = gtk_label_new (text);
   gtk_table_attach (GTK_TABLE (table), widget, 0, 1, row, row + 1,
-                    GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (widget), 1.0, 0.5);
+                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (widget), 1.0, 0.0);
 
-  if (!selectable)
-    {
-      widget = gtk_label_new ("");
-      gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
-    }
-  else
-    {
-      widget = gtk_entry_new ();
-      gtk_editable_set_editable (GTK_EDITABLE (widget), FALSE);
-    }
+  widget = gtk_label_new ("");
+  gtk_label_set_selectable (GTK_LABEL (widget), selectable);
+  gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
+
   gtk_table_attach (GTK_TABLE (table), widget, 1, 2, row, row + 1,
                     GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
@@ -914,13 +908,24 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   GtkWidget * label;
   GtkWidget * vbox;
   GtkWidget * scrolled;
+  GtkWidget * viewport;
   GtkWidget * siglist;
   gint table_row;
 
   notebook = gtk_notebook_new ();
 
   /* Details Page */
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
+				       GTK_SHADOW_NONE);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  viewport = gtk_viewport_new (NULL, NULL);
+  gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
   vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (viewport), vbox);
+  gtk_container_add (GTK_CONTAINER (scrolled), viewport);
 
   label = gtk_label_new ("");
   editor->details_num_label = label;
@@ -934,9 +939,9 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 
   table_row = 0;
   editor->detail_name = add_details_row (table, table_row++,
-                                         _("User Name:"), FALSE);
+                                         _("User Name:"), TRUE);
   editor->detail_key_id = add_details_row (table, table_row++,
-                                           _("Key ID:"), FALSE);
+                                           _("Key ID:"), TRUE);
   editor->detail_fingerprint = add_details_row (table, table_row++,
                                                 _("Fingerprint:"), TRUE);
   editor->detail_expiry = add_details_row (table, table_row++,
@@ -950,7 +955,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   editor->detail_creation = add_details_row (table, table_row++,
                                              _("Created at:"), FALSE);
 
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), vbox,
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), scrolled,
                             gtk_label_new (_("Details")));
 
   /* Signatures Page */
@@ -982,16 +987,25 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
   GpgmeValidity key_trust;
   GpgmeValidity owner_trust;
   gchar * text;
+  gchar * uid;
+  gint i;
 
+  /* One user ID on each line */
   text = gpa_gpgme_key_get_userid (key, 0);
+  for (i = 1; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
+    {
+      gchar *tmp = text;
+      text = g_strconcat (text, "\n", uid, NULL);
+      g_free (tmp);
+    }
   gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
   g_free (text);
 
-  text = (gchar*) gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, NULL, 0);
+  text = (gchar*) gpa_gpgme_key_get_short_keyid (key, 0);
   gtk_label_set_text (GTK_LABEL (editor->detail_key_id), text);
 
   text = gpa_gpgme_key_get_fingerprint (key, 0);
-  gtk_entry_set_text (GTK_ENTRY (editor->detail_fingerprint), text);
+  gtk_label_set_text (GTK_LABEL (editor->detail_fingerprint), text);
   g_free (text);
   text = gpa_expiry_date_string (
           gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0));
@@ -1356,8 +1370,7 @@ keyring_update_status_bar (GPAKeyringEditor * editor)
       gtk_label_set_text (GTK_LABEL (editor->status_key_user), string);
       g_free (string);
       gtk_label_set_text (GTK_LABEL (editor->status_key_id),
-                          gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID,
-                                                     NULL, 0));
+                          gpa_gpgme_key_get_short_keyid (key, 0));
     }
   else
     {
@@ -1472,7 +1485,7 @@ keyring_editor_new (void)
 
   notebook = keyring_details_notebook (editor);
   gtk_paned_pack2 (GTK_PANED (paned), notebook, TRUE, TRUE);
-  gtk_paned_set_position (GTK_PANED (paned), 200);
+  gtk_paned_set_position (GTK_PANED (paned), 190);
 
   statusbar = keyring_statusbar_new (editor);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);

@@ -284,8 +284,7 @@ key_backup_dialog_run (GtkWidget *parent, gchar **filename, gchar *fpr)
   /* Show the ID */
   key = gpa_keytable_lookup (keytable, fpr);
   id_text = g_strdup_printf (_("Generating backup of key: %s"),
-			     gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID,
-							NULL, 0));
+			     gpa_gpgme_key_get_short_keyid (key, 0));
   id_label = gtk_label_new (id_text);
   gtk_table_attach (GTK_TABLE (table), id_label, 0, 3, 0, 1, GTK_FILL, 0, 0, 0);
   g_free (id_text);

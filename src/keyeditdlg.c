@@ -99,8 +99,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   add_details_row (table, 0, _("User Name:"), string, FALSE);
   g_free (string); 
   add_details_row (table, 1, _("Key ID:"),
-                   (gchar*) gpgme_key_get_string_attr 
-                   (key, GPGME_ATTR_KEYID, NULL, 0), FALSE);
+                   (gchar*) gpa_gpgme_key_get_short_keyid (key, 0), FALSE);
 
 
   /* change expiry date */

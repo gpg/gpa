@@ -149,8 +149,7 @@ get_identifier_value (GpgmeKey key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
-  *label = g_strdup(gpgme_key_get_string_attr (key, 
-                                               GPGME_ATTR_KEYID, NULL, 0));
+  *label = g_strdup (gpa_gpgme_key_get_short_keyid (key, 0));
   *free_label = TRUE;
   *pixmap = NULL;
   *mask = NULL;

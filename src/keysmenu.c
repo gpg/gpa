@@ -143,8 +143,7 @@ gpa_tableKey_new (GpgmeKey key, GtkWidget * window)
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryKeyID = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (entryKeyID),
-                      gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, 
-                                                 NULL, 0));
+                      gpa_gpgme_key_get_short_keyid (key, 0));
   gtk_editable_set_editable (GTK_EDITABLE (entryKeyID), FALSE);
   gtk_table_attach (GTK_TABLE (tableKey), entryKeyID, 1, 2, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
