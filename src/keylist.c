@@ -166,10 +166,10 @@ get_key_type_pixmap_value (GpapaPublicKey * key, GPAKeyList * keylist,
   if (!pixmaps_created)
     {
       secret_pixmap = gpa_create_icon_pixmap (keylist->window,
-					      "gpa_yellow_key",
+					      "blue_yellow_key",
 					      &secret_mask);
       public_pixmap = gpa_create_icon_pixmap (keylist->window,
-					      "gpa_blue_key",
+					      "blue_key",
 					      &public_mask);
       pixmaps_created = TRUE;
     }

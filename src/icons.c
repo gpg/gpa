@@ -44,9 +44,18 @@ struct {
   {"gpa_trust_marginally",	gpa_trust_marginally_xpm },
   {"gpa_dont_trust",		gpa_dont_trust_xpm },
   {"gpa_trust_unknown",	gpa_trust_unknown_xpm },
-  {"gpa_help",		gpa_help_xpm},
   {"gpa_blue_key",	gpa_blue_key_xpm},
   {"gpa_yellow_key",	gpa_yellow_key_xpm},
+  {"blue_key",	blue_key_xpm},
+  {"blue_yellow_key",	blue_yellow_key_xpm},
+  {"export",	export_xpm},
+  {"import",	import_xpm},
+  {"brief",	brief_xpm},
+  {"detailed",	detailed_xpm},
+  {"edit",	edit_xpm},
+  {"delete",	delete_xpm},
+  {"wizard_genkey", wizard_genkey_xpm},
+  {"wizard_backup", wizard_backup_xpm},
   { NULL, NULL }
 };
 

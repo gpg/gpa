@@ -1,3 +1,45 @@
+2001-02-14  Bernhard Herzog  <bh@intevation.de>
+
+	* keyring.c (keyring_editor_import): Update the widgets after
+	importing the key
+	(keyring_toolbar_new): Change "details" to "detailed"
+
+	* icons.xpm: 
+	* icons.c (xpms): Add some new graphics
+
+	* keyring.c (keyring_toolbar_new): 
+	* fileman.c (gpa_fileman_toolbar_new): Use the new toolbar icons
+
+	* keylist.c (get_key_type_pixmap_value): Use the new key icons
+
+	* keygenwizard.c: Add an option to create backup copies of the
+	keys and add some graphics:
+	(GPAKeyGenWizard): Add a few fields for the backup feature and the
+	graphics
+	(gpa_keygen_wizard_password_page): The passphrase page is not the
+	last page before the actual key generation anymore, so change the
+	wording.
+	(gpa_keygen_wizard_password_validate): Now used directly as the
+	action callback of the passphrase page, so change it display the
+	messages instead of returning them and return the appropriate
+	boolean.
+	(gpa_keygen_wizard_backup_page):
+	(gpa_keygen_wizard_backup_action):
+	(gpa_keygen_wizard_backup_dir_page):
+	(gpa_keygen_wizard_backup_get_text):
+	(gpa_keygen_wizard_backup_dir_action): New functions implementing
+	the backup pages, actions and helper functions.
+	(gpa_keygen_generate_key): Store the generated keys in the
+	keygenwizard struct
+	(gpa_keygen_wizard_generate_action): Remove the password
+	validation because that's already been done. Create the backups
+	after generating the key pair.
+	(free_keygen_wizard): New function to free the keygenwizard struct
+	and the file names.
+	(gpa_keygen_wizard_run): Add the new pages and the pixmap window
+	(isdir):
+	(file_dirname): Two new helper functions
+
 2001-02-13  Thomas Koester  <tkoester@intevation.de>
 
 	* expirydlg.c (gpa_expiry_dialog_run): Conflicting accelerator.

@@ -392,6 +392,10 @@ keyring_editor_import (gpointer param)
 	}
       free (filename);
       free (server);
+
+      /* update the widgets */
+      keyring_editor_fill_keylist (editor);
+      update_selection_sensitive_widgets (editor);
     } /* if */
 }
 
@@ -1078,7 +1082,7 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 
   toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
   
-  icon = gpa_create_icon_widget (window, "help");
+  icon = gpa_create_icon_widget (window, "edit");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Edit"),
 				  _("Edit the selected key"), _("edit key"),
 				  icon, GTK_SIGNAL_FUNC (toolbar_edit_key),
@@ -1086,7 +1090,7 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   add_selection_sensitive_widget (editor, item,
 				  keyring_editor_has_single_selection);
 
-  icon = gpa_create_icon_widget (window, "trash");
+  icon = gpa_create_icon_widget (window, "delete");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Remove"),
 				  _("Remove the selected key"),
 				  _("remove key"), icon,
@@ -1103,13 +1107,13 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   add_selection_sensitive_widget (editor, item,
 				  keyring_editor_can_sign);
   
-  icon = gpa_create_icon_widget (window, "openfile");
+  icon = gpa_create_icon_widget (window, "import");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Import"),
 				  _("Import Keys"), _("import keys"),
 				  icon, GTK_SIGNAL_FUNC (toolbar_import_keys),
 				  editor);
 
-  icon = gpa_create_icon_widget (window, "openfile");
+  icon = gpa_create_icon_widget (window, "export");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Export"),
 				  _("Export Keys"), _("export keys"),
 				  icon, GTK_SIGNAL_FUNC (toolbar_export_key),
@@ -1121,10 +1125,11 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 
 
   button = gtk_radio_button_new (NULL);
+  icon = gpa_create_icon_widget (window, "brief");
   item = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
 				     GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
 				     _("Brief"), _("Show Brief Keylist"),
-				     _("brief"), NULL,
+				     _("brief"), icon,
 				   GTK_SIGNAL_FUNC (keyring_set_brief_listing),
 				     editor);
   gtk_signal_handler_block_by_data (GTK_OBJECT (item), editor);
@@ -1132,16 +1137,17 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   gtk_signal_handler_unblock_by_data (GTK_OBJECT (item), editor);
 
   button = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON (button));
+  icon = gpa_create_icon_widget (window, "detailed");
   gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
 			      GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
-			      _("Details"), _("Show Key Details"),
-			      _("details"), NULL,
+			      _("Detailed"), _("Show Key Details"),
+			      _("detailed"), icon,
 			      GTK_SIGNAL_FUNC (keyring_set_detailed_listing),
 			      editor);
   
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
-  icon = gpa_create_icon_widget (window, "gpa_help");
+  icon = gpa_create_icon_widget (window, "help");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
 				  _("Understanding the GNU Privacy Assistant"),
 				  _("help"), icon, GTK_SIGNAL_FUNC (help_help),

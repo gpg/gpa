@@ -654,7 +654,7 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 			     icon, GTK_SIGNAL_FUNC (toolbar_file_decrypt),
 			     fileman);
   /* Help */
-  if ((icon = gpa_create_icon_widget (window, "gpa_help")))
+  if ((icon = gpa_create_icon_widget (window, "help")))
     gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
 			     _("Understanding the GNU Privacy Assistant"),
 			     _("help"), icon,
