@@ -1,12 +1,12 @@
-# Written by Michael Anckaert <xantor@linux.be>
+# Written by Michael Anckaert <michael.anckaert@pi.be>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-13 20:33+0200\n"
-"PO-Revision-Date: 2003-01-21 11:54+0100\n"
-"Last-Translator: Michael Anckaert <xantor@linux.be>\n"
+"POT-Creation-Date: 2003-10-13 23:21+0200\n"
+"PO-Revision-Date: 2003-10-19 14:29+0200\n"
+"Last-Translator: Michael Anckaert <michael.anckaert@pi.be>\n"
 "Language-Team: DUTCH <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -65,9 +65,8 @@ msgid "/File/_Open"
 msgstr "/Bestand/_Openen"
 
 #: src/fileman.c:468
-#, fuzzy
 msgid "/File/C_lear"
-msgstr "/Bestand/_Sluiten"
+msgstr "/Bestand/_Leeg maken"
 
 #: src/fileman.c:469
 msgid "/File/sep1"
@@ -130,22 +129,18 @@ msgid "/Windows/_Keyring Editor"
 msgstr "/Vensters/_Keyring Editor"
 
 #: src/fileman.c:507
-#, fuzzy
 msgid "/File/Sign"
 msgstr "/Bestand/_Ondertekenen"
 
 #: src/fileman.c:514
-#, fuzzy
 msgid "/File/Verify"
-msgstr "/Bestand/_Ontsleutelen"
+msgstr "/Bestand/verifieren"
 
 #: src/fileman.c:521
-#, fuzzy
 msgid "/File/Encrypt"
 msgstr "/Bestand/_Versleutelen"
 
 #: src/fileman.c:528
-#, fuzzy
 msgid "/File/Decrypt"
 msgstr "/Bestand/_Ontsleutelen"
 
@@ -158,14 +153,12 @@ msgid "open file"
 msgstr "open bestand"
 
 #: src/fileman.c:553
-#, fuzzy
 msgid "Close all files"
-msgstr "Bestand openen"
+msgstr "Alle bestanden sluiten"
 
 #: src/fileman.c:553
-#, fuzzy
 msgid "close files"
-msgstr "open bestand"
+msgstr "sluit bestand"
 
 #: src/fileman.c:559 src/keyring.c:1496
 msgid "Sign"
@@ -244,9 +237,8 @@ msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - Bestands beheerder"
 
 #: src/filesigndlg.c:124
-#, fuzzy
 msgid "Sign files"
-msgstr "Onderteken bestanden"
+msgstr "Bestanden ondertekenen"
 
 #: src/filesigndlg.c:134
 msgid "Signing Mode"
@@ -299,9 +291,8 @@ msgstr ""
 "(bewaar deze kopie bijvoorbeeld op een floppy en in een veilige plaats)."
 
 #: src/gpabackupop.c:252
-#, fuzzy
 msgid "Backup key to file"
-msgstr "_Backup naar bestand:"
+msgstr "_Backup sleutel naar bestand:"
 
 #: src/gpabackupop.c:279
 msgid "Backup Keys"
@@ -362,21 +353,19 @@ msgstr ">.\n"
 
 #: src/gpaexportclipop.c:137
 msgid "The keys have been copied to the clipboard."
-msgstr ""
+msgstr "De sleutels werden naar het klembord gekopieerd."
 
 #: src/gpaexportfileop.c:131
 msgid "Export public keys to file"
 msgstr "Exporteer publieke sleutel naar bestand"
 
 #: src/gpaexportfileop.c:135
-#, fuzzy
 msgid "_armor"
 msgstr "ASCII-_Armor"
 
 #: src/gpaexportfileop.c:169
-#, fuzzy, c-format
 msgid "The keys have been exported to %s."
-msgstr "Deze sleutel is vervallen! Kan niet ondertekenen."
+msgstr "De sleutels werden naar %s geëxporteerd."
 
 #: src/gpaexportserverop.c:127
 #, c-format
@@ -385,20 +374,21 @@ msgid ""
 "server (\"%s\").\n"
 "Are you sure you want to distribute this key?"
 msgstr ""
+"De geselecteerde sleutel zal naar een publieke\n"
+"keyserver gestuurd worden (\"%s\").\n"
+"Bent u zeker dat u deze sleutel wilt verspreiden?"
 
 #: src/gpaexportserverop.c:185
 msgid "The keys have been sent to the server."
-msgstr ""
+msgstr "De sleutels werden naar de server gestuurd."
 
 #: src/gpafiledecryptop.c:89
-#, fuzzy
 msgid "Decrypting..."
-msgstr " Ontsleutel "
+msgstr "Aan het ontsleutelen..."
 
 #: src/gpafiledecryptop.c:280 src/gpafileverifyop.c:337
-#, fuzzy, c-format
 msgid "The file \"%s\" contained no OpenPGP data."
-msgstr "Het bestand \"%s\" bevat geen geldige versleutelde data."
+msgstr "Het bestand \"%s\" bevat geen OpenPGP data."
 
 #: src/gpafiledecryptop.c:288
 #, c-format
@@ -412,9 +402,8 @@ msgid "Wrong passphrase!"
 msgstr "Verkeerd wachtwoord!"
 
 #: src/gpafileencryptop.c:99
-#, fuzzy
 msgid "Encrypting..."
-msgstr "Versleutel"
+msgstr "Aan het versleutelen..."
 
 #: src/gpafileencryptop.c:295 src/verifydlg.c:221
 msgid "Unknown Key"
@@ -454,19 +443,16 @@ msgid "You didn't select any key for signing"
 msgstr "U hebt geen sleutel geselecteerd voor ondertekening"
 
 #: src/gpafilesignop.c:97
-#, fuzzy
 msgid "Signing..."
-msgstr "Onderteken modus"
+msgstr "Aan het ondertekenen..."
 
 #: src/gpafileverifyop.c:97
-#, fuzzy
 msgid "Verifying..."
-msgstr "Verifieer"
+msgstr "Aan het verifieren..."
 
 #: src/gpagenkeyadvop.c:78
-#, fuzzy
 msgid "Generating Key..."
-msgstr "/Sleutels/_Genereer Sleutel..."
+msgstr "Genereren van de sleutel..." 
 
 #: src/gpaimportfileop.c:129
 msgid "Import public keys from file"
@@ -546,28 +532,28 @@ msgstr "onbekend"
 #: src/gparecvkeydlg.c:100
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr ""
+"Welke sleutel wilt u importeren? (De sleutel moet aangeduid zijn\n"
+"met zijn sleutel id."
 
 #: src/gparecvkeydlg.c:115
 msgid "Key _ID:"
 msgstr "Sleutel _ID:"
 
 #: src/gpasubkeylist.c:70
-#, fuzzy
 msgid "Subkey ID"
-msgstr "Sleutel ID:"
+msgstr "Subsleutels ID"
 
 #: src/gpasubkeylist.c:76 src/siglist.c:118 src/verifydlg.c:329
 msgid "Status"
 msgstr "Status"
 
 #: src/gpasubkeylist.c:82
-#, fuzzy
 msgid "Algorithm"
-msgstr "_Versleutel algoritme: "
+msgstr "Algoritme"
 
 #: src/gpasubkeylist.c:89
 msgid "Size"
-msgstr ""
+msgstr "Grootte"
 
 #: src/gpasubkeylist.c:95 src/keyeditdlg.c:170 src/keylist.c:263
 msgid "Expiry Date"
@@ -575,20 +561,19 @@ msgstr "Verval datum"
 
 #: src/gpasubkeylist.c:102
 msgid "Can sign"
-msgstr ""
+msgstr "Kan ondertekend worden"
 
 #: src/gpasubkeylist.c:108
 msgid "Can certify"
-msgstr ""
+msgstr "Kan gecertifieerd worden"
 
 #: src/gpasubkeylist.c:115
-#, fuzzy
 msgid "Can encrypt"
-msgstr " Ontsleutel "
+msgstr "Kan versleuteld worden"
 
 #: src/gpasubkeylist.c:122
 msgid "Can authenticate"
-msgstr ""
+msgstr "Kan geauthenticeerd worden"
 
 #: src/gpasubkeylist.c:135 src/gpgmetools.c:558 src/gpgmetools.c:729
 #: src/gpgmetools.c:855
@@ -604,9 +589,8 @@ msgid "Disabled"
 msgstr "Uitgeschakeld"
 
 #: src/gpasubkeylist.c:147
-#, fuzzy
 msgid "Unsigned"
-msgstr "onderteken sleutel"
+msgstr "Niet ondertekend"
 
 #: src/gpasubkeylist.c:151 src/gpgmetools.c:842 src/verifydlg.c:211
 msgid "Valid"
@@ -678,6 +662,13 @@ msgid ""
 "This is probably a bug in GPA.\n"
 "GPA will now try to recover from this error."
 msgstr ""
+"De GPGME bibliotheek gaf een onverwachte fout.\n"
+"Deze fout was:\n"
+"\n"
+"\t%s\n"
+"\n"
+"Dit is waarschijnlijk een fout in GPA.\n"
+"GPA zal nu proberen te herstellen van deze fout."
 
 #: src/gpgmetools.c:433
 msgid ""
@@ -763,58 +754,62 @@ msgstr "Slecht"
 
 #: src/gpgmetools.c:867
 msgid "Generic"
-msgstr ""
+msgstr "Algemeen"
 
 #: src/gpgmetools.c:870
 msgid "Persona"
-msgstr ""
+msgstr "Persoonlijk"
 
 #: src/gpgmetools.c:873
 msgid "Casual"
-msgstr ""
+msgstr "Gewoon"
 
 #: src/gpgmetools.c:876
 msgid "Positive"
-msgstr ""
+msgstr "Positief"
 
 #: src/gpgmetools.c:894
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
+"De sleutel kan gebruikt worden voor certificatie, onderteken en "
+"versleuteling."
 
 #: src/gpgmetools.c:899
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
+"De sleutel kan gebruikt worden voor certificatie en ondertekenen, maar niet "
+"voor versleuteling."
 
 #: src/gpgmetools.c:907
-#, fuzzy
 msgid "The key can be used for certification and encryption."
-msgstr "En kan niet gebruikt worden voor versleuteling."
+msgstr ""
+"De sleutel kan gebruikt worden voor certificatie en "
+"versleuteling."
 
 #: src/gpgmetools.c:912
-#, fuzzy
 msgid "The key can be used only for certification."
-msgstr "En kan niet gebruikt worden voor versleuteling."
+msgstr "De sleutel kan alleen gebruikt worden voor certificatie."
 
 #: src/gpgmetools.c:922
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr ""
+"De sleutel kan enkel gebruikt worden voor ondertekenen en encryptie, maar "
+"niet voor certificatie."
 
 #: src/gpgmetools.c:927
-#, fuzzy
 msgid "The key can be used only for signing."
-msgstr "Geen sleutels geselecteerd voor ondertekening."
+msgstr "De sleutel kan alleen gebruikt worden voor ondertekenen."
 
 #: src/gpgmetools.c:934
-#, fuzzy
 msgid "The key can be used only for encryption."
-msgstr "En kan niet gebruikt worden voor versleuteling."
+msgstr "De sleutel kan alleen gebruikt worden voor versleuteling."
 
 #: src/gpgmetools.c:940
 msgid "This key is useless."
-msgstr ""
+msgstr "Deze sleutel is waardeloos."
 
 #: src/gtktools.c:311
 msgid "GPA Error"
@@ -1229,52 +1224,48 @@ msgid "/Keys/_Backup..."
 msgstr "/Sleutels/_Backup...."
 
 #: src/keyring.c:828
-#, fuzzy
 msgid "/_Server"
-msgstr "_Nooit"
+msgstr "/_Server"
 
 #: src/keyring.c:829
-#, fuzzy
 msgid "/Server/_Retrieve Keys..."
-msgstr "/Sleutels/_Verwijder sleutels...."
+msgstr "/Server/_Haal sleutels...."
 
 #: src/keyring.c:830
-#, fuzzy
 msgid "/Server/_Send Keys..."
-msgstr "/Sleutels/_Onderteken Sleutels..."
+msgstr "/Server/_Stuur Sleutels..."
 
 #: src/keyring.c:864
 msgid "/Keys/Export Keys..."
-msgstr "/Sleutels/_Exporteer Sleutels..."
+msgstr "/Sleutels/Exporteer Sleutels..."
 
 #: src/keyring.c:871
 msgid "/Keys/Delete Keys..."
-msgstr "/Sleutels/_Verwijder sleutels...."
+msgstr "/Sleutels/Verwijder sleutels...."
 
 #: src/keyring.c:878
 msgid "/Edit/Copy"
 msgstr "/Bewerk/Kopieer"
 
 #: src/keyring.c:885
-#, fuzzy
 msgid "/Server/Send Keys..."
-msgstr "/Sleutels/_Onderteken Sleutels..."
+msgstr "/Server/Stuur Sleutels..."
 
 #: src/keyring.c:894
 msgid "/Keys/Set Owner Trust..."
-msgstr "/Sleutels/Verander _Eigenaars Vertrouwen...."
+msgstr "/Sleutels/Verander Eigenaars Vertrouwen...."
 
 #: src/keyring.c:902
 msgid "/Keys/Sign Keys..."
-msgstr "/Sleutels/_Onderteken Sleutels..."
+msgstr "/Sleutels/Onderteken Sleutels..."
 
 #: src/keyring.c:910
 msgid "/Keys/Edit Private Key..."
-msgstr "/Sleutels/_Bewerk Sleutel..."
+msgstr "/Sleutels/Bewerk Sleutel..."
 
 #: src/keyring.c:917
 msgid "/Keys/Backup..."
-msgstr "/Sleutels/_Backup...."
+msgstr "/Sleutels/Backup...."
 
 #: src/keyring.c:934
 msgid "/_Copy"
@@ -1305,9 +1296,8 @@ msgid "/E_xport Keys..."
 msgstr "/E_xporteer Sleutels...."
 
 #: src/keyring.c:946
-#, fuzzy
 msgid "/Se_nd Keys to Server..."
-msgstr "_Key Server:"
+msgstr ""
 
 #: src/keyring.c:947
 msgid "/_Backup..."
@@ -1331,7 +1321,7 @@ msgstr "/Backup...."
 
 #: src/keyring.c:1054
 msgid "Subkeys"
-msgstr ""
+msgstr "Subsleutels"
 
 #: src/keyring.c:1125 src/keysigndlg.c:106
 msgid "Fingerprint:"
@@ -1378,9 +1368,9 @@ msgid "The key has only a public part"
 msgstr "De sleutel heeft enkel een publiek deel"
 
 #: src/keyring.c:1227
-#, fuzzy, c-format
+#, c-format
 msgid "%s %u bits"
-msgstr "%s %li bits"
+msgstr ""
 
 #: src/keyring.c:1253
 msgid "No keys selected"
@@ -1675,6 +1665,7 @@ msgid ""
 "%s"
 msgstr ""
 "Een fout deed zich voor terwijl de keyserver\n"
+"\n"
 "%s werd gecontacteerd."
 
 #: src/server_access.c:433
@@ -1714,13 +1705,12 @@ msgid "Settings"
 msgstr "Instellingen"
 
 #: src/siglist.c:126
-#, fuzzy
 msgid "Level"
-msgstr "Nooit"
+msgstr "Niveau"
 
 #: src/siglist.c:133
 msgid "Local"
-msgstr ""
+msgstr "Lokaal"
 
 #: src/verifydlg.c:115
 msgid "Verify files"
@@ -1737,7 +1727,7 @@ msgstr "Sleutel NIET geldig"
 #: src/verifydlg.c:358
 #, c-format
 msgid "Verified data in file: %s"
-msgstr ""
+msgstr "Geverifieerde data in bestand: %s"
 
 #: src/verifydlg.c:365
 msgid "Signatures:"
@@ -2162,3 +2152,4 @@ msgstr "Ondertekeningen:"
 
 #~ msgid "Signature"
 #~ msgstr "Ondertekening"
+
