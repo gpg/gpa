@@ -19,9 +19,4 @@ Some hints for compiling GPA for Windows:
 	The conversion to UTF-8 is not
 	automized. Just do the following:
 
-	sed -e "s/iso-8859-1/utf-8/" de.po > de_utf8.po
-	sed -e "s/iso-8859-1/utf-8/" fr.po > fr_utf8.po
-	recode latin1..utf-8 de_utf8.po
-	recode latin1..utf-8 fr_utf8.po
-	msgfmt -o de.mo de_utf8.po
-	msgfmt -o fr.mo fr_utf8.po
+        ./to-utf8 po/de.po | msgfmt -o po/de.mo -
