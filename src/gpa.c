@@ -32,6 +32,7 @@
 #include <gtk/gtk.h>
 
 #include <gpapa.h>
+#include <gpgme.h>
 
 #include "argparse.h"
 #include "stringhelp.h"
@@ -47,6 +48,7 @@
 #include "keyring.h"
 #include "fileman.h"
 #include "keyserver.h"
+#include "keytable.h"
 
 #ifdef __MINGW32__
 #include "w32reg.h"
@@ -105,6 +107,11 @@ static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain = NULL;
 GpapaAction global_lastCallbackResult;
 GList *global_defaultRecipients = NULL;
+
+/* GPGME context used in all the program */
+GpgmeCtx ctx;
+/* The global table of keys */
+GPAKeyTable *keytable;
 
 /* Search for a configuration file.
  * It uses a different search order for Windows and Unix.
@@ -328,25 +335,36 @@ gpa_set_default_key (gchar *key)
 
 
 /* Return the default key gpg would use, or at least a first
- * approximation. Currently this means the secret key with index 0. If
- * there's no secret key at all, return NULL
+ * approximation. Currently this means the first secret key in the keyring.
+ * If there's no secret key at all, return NULL
  */
 static gchar *
 gpa_determine_default_key (void)
 {
-  GpapaSecretKey *key;
-  gchar * id;
-
-  if (gpapa_get_secret_key_count (gpa_callback, NULL))
+  GpgmeKey key;
+  GpgmeError err;
+  gchar * fpr = NULL;
+  err = gpgme_op_keylist_start (ctx, NULL, 1);
+  if( err != GPGME_No_Error )
+    gpa_gpgme_error (err);
+  err = gpgme_op_keylist_next (ctx, &key);
+  if( err == GPGME_No_Error )
     {
-      key = gpapa_get_secret_key_by_index (0, gpa_callback, NULL);
-      id = xstrdup_or_null (gpapa_key_get_identifier (GPAPA_KEY (key),
-                                                      gpa_callback, NULL));
+      /* Copy the ID and release the key, since it's no longer needed */
+      fpr = g_strdup (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, 
+                                                 NULL, 0 ));
+      gpgme_key_release (key);
     }
+  else if( err == GPGME_EOF )
+    /* No secret keys found */
+    fpr = NULL;
   else
-    id = NULL;
+    gpa_gpgme_error (err);
+  err = gpgme_op_keylist_end (ctx);
+  if( err != GPGME_No_Error )
+    gpa_gpgme_error (err);
 
-  return id;
+  return fpr;
 }
 
 
@@ -437,7 +455,6 @@ dummy_log_func (const gchar *log_domain, GLogLevelFlags log_level,
   /* empty */
 }
 
-
 /*
  *   Main function
  */
@@ -457,6 +474,7 @@ main (int argc, char **argv)
   const char *gpg_program = GPG_PROGRAM;
   gchar *gtkrc;
   const char *keyserver = NULL;
+  GpgmeError err;
 
 #ifdef __MINGW32__
   hide_gpa_console_window();
@@ -502,7 +520,7 @@ main (int argc, char **argv)
 #ifdef HAVE_DRIVE_LETTERS
       gpa_options.homedir = "c:/gnupg";
 #else
-      gpa_options.homedir = "~/.gnupg";
+      gpa_options.homedir = g_build_filename (getenv("HOME"), ".gnupg", NULL);
 #endif
     }
 
@@ -664,10 +682,14 @@ main (int argc, char **argv)
   keyserver_read_list (keyservers_configname);
   keyserver_set_current (keyserver);
 
-  gpapa_init (gpg_program);
-
+  /* Initialize GPGME */
+  gpgme_check_version (NULL);
+  err = gpgme_new (&ctx);
+  if (err != GPGME_No_Error)
+    gpa_gpgme_error (err);
   /* initialize the default key to a useful default */
   gpa_update_default_key ();
+  keytable = gpa_keytable_new ();
 
 #ifndef HAVE_DOSISH_SYSTEM
   /* Internationalisation with gtk+-2.0 wants UTF8 instead of the
@@ -675,13 +697,6 @@ main (int argc, char **argv)
    */
   setenv ("OUTPUT_CHARSET", "utf8", 1);
 #endif
-
-  /*global_windowMain = gpa_windowMain_new (_("GNU Privacy Assistant"));*/
-  /*  global_windowMain = keyring_editor_new();
-  gtk_signal_connect (GTK_OBJECT (global_windowMain), "delete_event",
-		      GTK_SIGNAL_FUNC (file_quit), NULL);
-  gtk_widget_show_all (global_windowMain);
-  */
 
   gpa_open_keyring_editor ();
   /* for development purposes open the file manager too: */

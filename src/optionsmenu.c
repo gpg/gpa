@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
-#include <gpapa.h>
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
@@ -137,6 +136,10 @@ options_keyserver (gpointer param)
  * This can be put into the "advanced" mode, some day.
  */
 #if 0
+
+/* This uses gpapa. If it is ever enabled again, update it */
+
+#include <gpapa.h>
 
 static void
 options_recipients_fillDefault (gpointer data, gpointer userData)
@@ -426,6 +429,17 @@ options_key_destroy (GtkWidget * widget, gpointer param)
   gtk_main_quit ();
 }
 
+/* Callback for a gpa_keytable_foreach, that adds a key to the CList */
+static void
+add_key (const gchar *id, GpgmeKey key, GtkWidget *clistKeys)
+{
+  const gchar *contentsKeys[2];
+
+  contentsKeys[0] = gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, NULL, 0);
+  contentsKeys[1] = gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, 0);
+
+  gtk_clist_prepend (GTK_CLIST (clistKeys), (gchar**) contentsKeys);
+}
 
 static void
 options_key (gpointer param)
@@ -433,11 +447,8 @@ options_key (gpointer param)
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
   gchar *titlesKeys[] = { _("Key ID"), _("User identity / role") };
-  gint contentsKeyCount;
   gchar **keyID;
-  GpapaSecretKey *key;
   gint i, rows;
-  gchar *contentsKeys[2];
   gpointer *paramSet;
   gpointer *paramClose;
   GtkWidget *parent = param;
@@ -453,9 +464,7 @@ options_key (gpointer param)
   GtkWidget *buttonCancel;
   GtkWidget *buttonSet;
 
-  contentsKeyCount =
-    gpapa_get_secret_key_count (gpa_callback, global_windowMain);
-  if (!contentsKeyCount)
+  if (!gpa_keytable_secret_size (keytable))
     {
       gpa_window_error (_("No secret keys available to\n"
 			  "select a default key from."), global_windowMain);
@@ -490,19 +499,8 @@ options_key (gpointer param)
   gpa_windowKeeper_add_param (keeper, keyID);
   gtk_signal_connect (GTK_OBJECT (clistKeys), "select-row",
 		      GTK_SIGNAL_FUNC (options_key_select), (gpointer) keyID);
-  while (contentsKeyCount)
-    {
-      contentsKeyCount--;
-      key =
-	gpapa_get_secret_key_by_index (contentsKeyCount, gpa_callback,
-				       global_windowMain);
-      contentsKeys[0] =
-	gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
-				  global_windowMain);
-      contentsKeys[1] =
-	gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, global_windowMain);
-      gtk_clist_prepend (GTK_CLIST (clistKeys), contentsKeys);
-    }				/* while */
+  /* Add the keys to the list */
+  gpa_keytable_secret_foreach (keytable, (GPATableFunc)add_key, clistKeys);
   if (gpa_default_key ())
     {
       i = 0;

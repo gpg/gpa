@@ -141,7 +141,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   gtk_box_set_spacing (GTK_BOX (hbox), 10);
 
   trust = gpapa_public_key_get_ownertrust (public_key, gpa_callback, parent);
-  label = gtk_label_new (gpa_ownertrust_string (trust));
+  label = gtk_label_new (gpa_trust_string (trust));
   dialog.ownertrust = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
@@ -242,7 +242,7 @@ key_edit_change_trust(GtkWidget * widget, gpointer param)
 						    dialog->window);
 						    */
       gtk_label_set_text (GTK_LABEL (dialog->ownertrust),
-		      gpa_ownertrust_string (ownertrust));
+		      gpa_trust_string (ownertrust));
       dialog->key_has_changed = TRUE;
     }
 }

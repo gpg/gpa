@@ -1,3 +1,173 @@
+2002-08-16  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_import): Reload the keytable after
+	importing keys.
+
+2002-08-14  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_menubar_new): Remove commented out
+	menu entries.
+
+2002-08-13  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_can_sign): Use the keytable instead of
+	gpapa.
+	(key_has_been_signed): Disable function until it can be
+	implemented with gpgme.
+
+	* gtktools.c, gpgmetools.c (gpa_gpgme_error): Move function to 
+	gpgmetools.c
+
+2002-08-12  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_export_secret) 
+	(keyring_editor_menubar_new): Removed the option to export secret
+	keys.
+
+2002-08-11  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_export): Use a function in
+	gpgmetools.c to dump the data to a file.
+	(keyring_editor_import): Import keys from files using gpgme.
+
+	* Makefile.am (gpa_SOURCES): Added new files.
+
+	* gpgmetools.h, gpgmetools.c: New files.
+
+2002-08-10  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpapastrings.h: Include gpgme.h
+
+	* Makefile.am (gpa_SOURCES): Added new file.
+	
+	* gpapa.h: New file. All gpapa headers combined in one file that
+	can be used to compile GPA during the migration without any
+	problems.
+
+	* Makefile.am (INCLUDES): Removed gpapa directory.
+
+2002-08-09  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_export): Export keys to a file using
+	gpgme.
+
+	* gpawidgets.c (gpa_key_info_new): Port to GPGME.
+
+	* keydeletedlg.c (gpa_delete_dialog_run): Use GPGME instead of
+	GPAPA.
+
+	* keyring.c (keyring_editor_delete): Port to gpgme. Just delete
+	the selected keys from the clist and the keytable, but don't
+	reload anything else. Doesn't work right now, because of a known
+	bug in gpgme.
+
+	* keytable.c (gpa_keytable_remove): New function.
+
+2002-08-08  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpa.c (main): Changed the default value of gpa_options.homedir
+	on Unix. The metacharacter '~' is interpreted by the shell, not by
+	libc, so we read the HOME environmental variable ourselves.
+
+	* optionsmenu.c (add_key): New function.
+	(options_key): Iterate over the keyring using the keytable
+	_foreach function instead of gpapa.
+
+	* keyring.c (keyring_editor_mapped): Change to use the keytable
+	instead of gpgme.
+	(keyring_signatures_page_fill_key): Disabled for now.
+
+	* keytable.c (gpa_keytable_size, gpa_keytable_secret_size): New
+	functions.
+
+	* keylist.c (get_key_type_pixmap_value): Fixed to properly detect
+	secret keys.
+
+	* keytable.c (keytable_fill, keytable_empty, gpa_keytable_new) 
+	(gpa_keytable_reload, gpa_keytable_secret_lookup) 
+	(gpa_keytable_secret_foreach, gpa_keytable_destroy): Added the
+	secret keyring to the keytable.
+
+	* keyring.c (idle_update_details): Port to gpgme.
+	(keyring_details_page_fill_key): Remove secret key argument. Port
+	to GPGME, minus checking for a secret key.
+
+	* keylist.c (gpa_keylist_set_column_defs, keylist_fill_list)
+	(gpa_keylist_new): Added calls to sort the CList according to the
+	user name. Use g_malloc and g_free.
+
+	* keyeditdlg.c (gpa_key_edit_dialog_run, key_edit_change_trust),
+	ownertrustdlg.c (gpa_ownertrust_run_dialog),
+	keyring.c (keyring_details_page_fill_key): Replace string functions.
+
+	* gpapastrings.c, gpapastrings.h 
+	(gpa_keytrust_string, gpa_ownertrust_string, gpa_trust_string)
+	(gpa_ownertrust_from_string): Merged the trust strings fuctions
+	and arrays, since gpgme does not have different values for key
+	trust and owner trust.
+
+	* keylist.c (gpa_keylist_current_key): Ported to use gpgme and the
+	keytable.
+
+2002-08-06  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keylist.c (keylist_fill_list): Ported to gpgme. Use a foreach on
+	the key table for iterating over the keys. Removed the
+	keep_selection argument, since it was always called as true, and
+	would be needed in the new keylist_fill_row too.
+	(keylist_fill_row): Ported to gpgme. Now it's a callback for a
+	foreach iteration on a GpaKeyTable. Use fingerprints instead of
+	key ID's as the row data.
+	(get_name_value): Return the whole UserID, not just the name.
+	(get_expirydate_value): Fix the label for keys that don't expire.
+
+2002-08-05  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keylist.c (get_name_value, get_trust_value, get_ownertrust_value) 
+	(get_identifier_value, get_key_type_pixmap_value): Ported to use GPGME.
+
+	* gpa.c (main): Remove commented out code.
+
+	* keytable.c (keytable_fill): Check for errors in gpgme.
+
+	* gpa.c (gpa_determine_default_key, main): Add proper error
+	checking for gpgme.
+
+	* gtktools.c, gtktools.h (gpa_gpgme_error): New function for
+	reporting unexpected (and therefore fatal) errors in GPGME.
+
+	* gpa.h (IS_DEVELOPMENT_VERSION): Define macro.
+
+2002-08-04  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_update_status_bar): Use gpgme to read the
+	default key attributes.
+
+	* keylist.c, keylist.h (gpa_keylist_new): Use g_malloc instead of
+	xmalloc.
+
+	* keyring.c (keyring_editor_new): Use g_malloc instead of xmalloc.
+
+	* gpa.c, gpa.h : Added keytable and ctx global variables.
+
+	* gpa.c (main): Create a keytable here.
+
+	* keytable.h, keytable.c: New files. They implement a hash table
+	of all the keys in the keyring that can be accessed by fingerprint
+	or by iterating over it.
+
+	* gpa.c, gpa.h (main): Add creation of a GpgmeCtx for use by the
+	rest of the program.
+	(gpa_determine_default_key): Port to gpgme.
+
+	* gpa.h: Include gpgme.h.
+
+	* Makefile.am (LDADD): Removed gpapa.
+	(gpa_SOURCES): Added dummy_gpapa.c
+
+	* dummy_gpapa.c: New file. Just a dummy gpapa to assist during the
+	migration.
+
 2002-08-02  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpa.c (main): Use GLib to find out where the gpa executable

@@ -122,6 +122,11 @@ AM_PATH_GTK_2_0(2.0.0,
             CFLAGS="$CFLAGS $GTK_CFLAGS -DGTK_ENABLE_BROKEN"],
             AC_MSG_ERROR(Cannot find GTK+ 2.0))
 
+AM_PATH_GPGME(0.3.9,
+            [LIBS="$LIBS $GPGME_LIBS"
+            CFLAGS="$CFLAGS $GPGME_CFLAGS"],
+            AC_MSG_ERROR(Cannot find an up to date GPGME))
+
 dnl
 dnl Checks for header files
 dnl
@@ -194,7 +199,6 @@ Makefile
 intl/Makefile
 po/Makefile.in
 jnlib/Makefile
-gpapa/Makefile
 src/Makefile
 ])
 

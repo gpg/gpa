@@ -26,11 +26,12 @@
 #ifndef GPAPASTRINGS_H
 #define GPAPASTRINGS_H
 
+#include <glib.h>
+#include <gpgme.h>
 #include <gpapa.h>
 
-gchar * gpa_keytrust_string (GpapaKeytrust keytrust);
+gchar * gpa_trust_string (GpgmeValidity keytrust);
 
-gchar * gpa_ownertrust_string (GpapaOwnertrust ownertrust);
 GpapaOwnertrust gpa_ownertrust_from_string (gchar * string);
 const char * gpa_ownertrust_icon_name (GpapaOwnertrust ownertrust);
 

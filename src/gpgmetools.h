@@ -1,5 +1,5 @@
-/* keydeletedlg.h  -	 The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
+/* gpgmetools.h - The GNU Privacy Assistant
+ *      Copyright (C) 2002, Miguel Coca.
  *
  * This file is part of GPA
  *
@@ -10,7 +10,7 @@
  *
  * GPA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -18,11 +18,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef KEYDELETEDLG_H
-#define KEYDELETEDLG_H
+/* A set of auxiliary functions for common tasks related to GPGME */
 
-#include <gtk/gtk.h>
-gboolean gpa_delete_dialog_run (GtkWidget * parent, GpgmeKey key,
-				gboolean has_secret_key);
+#ifndef GPGMETOOLS_H
+#define GPGMETOOLS_H
 
-#endif /* KEYDELETEDLG_H */
+#include <gpgme.h>
+
+/* Report an unexpected error in GPGME and quit the application */
+void gpa_gpgme_error (GpgmeError err);
+
+/* Write the contents of the GpgmeData object to the file. Receives a
+ * filehandle instead of the filename, so that the caller can make sure the
+ * file is accesible before putting anything into data.
+ */
+void dump_data_to_file (GpgmeData data, FILE *file);
+
+#endif

@@ -23,10 +23,16 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <gpgme.h>
+#include "gpgmetools.h"
 #include "gtkhacks.h"
 #include <gpapa.h>
 #include "xmalloc.h"
 #include "logging.h"
+#include "keytable.h"
+
+/* This is a *very* development version */
+#define IS_DEVELOPMENT_VERSION
 
 /* For mkdir() */
 #ifdef G_OS_WIN32
@@ -46,6 +52,8 @@ extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
 extern GpapaAction global_lastCallbackResult;
 extern GList *global_defaultRecipients;
+extern GpgmeCtx ctx;
+extern GPAKeyTable *keytable;
 
 extern GtkWidget *gpa_get_global_clist_file (void);
 extern void gpa_callback (GpapaAction action, gpointer actiondata,

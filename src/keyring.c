@@ -20,6 +20,7 @@
 
 #include <config.h>
 #include <gpapa.h>
+#include <gpgme.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <stdlib.h>
@@ -45,6 +46,8 @@
 #include "keylist.h"
 #include "siglist.h"
 #include "keyring.h"
+#include "gpgmetools.h"
+#include "keytable.h"
 
 /*
  *      The public keyring editor
@@ -99,7 +102,7 @@ typedef struct _GPAKeyringEditor GPAKeyringEditor;
  *      Internal API
  */
 
-static gboolean key_has_been_signed (GpapaPublicKey * key, gchar * key_id,
+static gboolean key_has_been_signed (GpgmeKey key, gchar * key_id,
                                      GtkWidget * window);
 
 static gboolean keyring_editor_has_selection (gpointer param);
@@ -116,7 +119,6 @@ static void toolbar_import_keys (GtkWidget *widget, gpointer param);
 static void keyring_editor_sign (gpointer param);
 static void keyring_editor_import (gpointer param);
 static void keyring_editor_export (gpointer param);
-static void keyring_editor_export_secret (gpointer param);
 static void keyring_editor_backup (gpointer param);
 
 /*
@@ -226,36 +228,35 @@ keyring_editor_delete (gpointer param)
 {
   GPAKeyringEditor * editor = param;
   gint row;
-  gchar * key_id;
-  GpapaPublicKey *public_key;
-  GpapaSecretKey *secret_key;
+  gchar * fpr;
+  GpgmeKey key;
   GList * selection;
+  gboolean has_secret;
+  GpgmeError err;
 
   selection = gpa_keylist_selection (editor->clist_keys);
+  gtk_clist_freeze (GTK_CLIST(editor->clist_keys));
   while (selection)
     {
       row = GPOINTER_TO_INT (selection->data);
-      key_id = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
-      public_key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
-                                               editor->window);
-      secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback,
-                                               editor->window);
-
-      if (!gpa_delete_dialog_run (editor->window, public_key,
-                                  secret_key != NULL))
+      fpr = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
+      key = gpa_keytable_lookup (keytable, fpr);
+      has_secret = gpa_keytable_secret_lookup (keytable, fpr) != NULL;
+      if (!gpa_delete_dialog_run (editor->window, key, has_secret))
         break;
-
-      if (secret_key)
+      err = gpgme_op_delete (ctx, key, 1);
+      selection = g_list_next (selection);
+      if (err == GPGME_No_Error)
         {
-          gpapa_secret_key_delete (secret_key, gpa_callback, editor->window);
+          gtk_clist_remove (GTK_CLIST(editor->clist_keys), row);
+          gpa_keytable_remove (keytable, fpr);
         }
       else
         {
-          gpapa_public_key_delete (public_key, gpa_callback, editor->window);
+          gpa_gpgme_error (err);
         }
-      selection = g_list_next (selection);
     }
-  keyring_editor_fill_keylist (editor);
+  gtk_clist_thaw (GTK_CLIST(editor->clist_keys));
 } /* keyring_editor_delete */
 
 
@@ -263,26 +264,10 @@ keyring_editor_delete (gpointer param)
  * the id key_id, otherwise return FALSE. The window parameter is needed
  * for error reporting */
 static gboolean
-key_has_been_signed (GpapaPublicKey * key, gchar * key_id, GtkWidget * window)
+key_has_been_signed (GpgmeKey key, gchar * key_id, GtkWidget * window)
 {
-  gboolean result = FALSE;
-  GList * signatures;
-
-  signatures = gpapa_public_key_get_signatures (key, gpa_callback, window);
-  while (signatures)
-    {
-      GpapaSignature *sig = signatures->data;
-      gchar * sig_id = gpapa_signature_get_identifier (sig, gpa_callback,
-                                                       window);
-      if (strcmp (sig_id, key_id) == 0)
-        {
-          result = TRUE;
-          break;
-        }
-      signatures = g_list_next (signatures);
-    }
-
-  return result;
+  /* FIXME: When we can list signatures with GPGME, implement this */
+  return 0;
 }
 
 /* Return true if the key sign button should be sensitive, i.e. if
@@ -292,7 +277,7 @@ static gboolean
 keyring_editor_can_sign (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  GpapaPublicKey * key;
+  GpgmeKey key;
   gchar * key_id;
   gchar * default_key_id = gpa_default_key ();
   gboolean result = FALSE;
@@ -303,7 +288,7 @@ keyring_editor_can_sign (gpointer param)
        * whether the selected key was already signed with the default
        * key */
       key_id = keyring_editor_current_key_id (editor);
-      key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
+      key = gpa_keytable_lookup (keytable, key_id);
 
       if (key)
         {
@@ -388,7 +373,31 @@ keyring_editor_import (gpointer param)
         {
           /* Import keys from the user specified file.
            */
-          gpapa_import_keys (filename, gpa_callback, editor->window);
+          GpgmeData data;
+          GpgmeError err;
+          err = gpgme_data_new_from_file (&data, filename, 1);
+          if (err == GPGME_No_Error)
+            {
+              err = gpgme_op_import (ctx, data);
+              /* FIXME: Check for non fatal errors */
+              if (err != GPGME_No_Error)
+                {
+                  gpa_gpgme_error (err);
+                }
+              gpgme_data_release (data);
+            }
+          else if (err == GPGME_File_Error)
+            {
+              gchar message[256];
+              g_snprintf (message, sizeof(message), "%s: %s",
+                          filename, strerror(errno));
+              gpa_window_error (message, editor->window);
+              return;
+            }
+          else
+            {
+              gpa_gpgme_error (err);
+            }
         }
       else if (server)
         {
@@ -438,7 +447,8 @@ keyring_editor_import (gpointer param)
         }
       free (filename);
       free (server);
-
+      /* Reload the list of keys to get the imported keys */
+      gpa_keytable_reload (keytable);
       /* update the widgets
        */
       keyring_editor_fill_keylist (editor);
@@ -469,13 +479,51 @@ keyring_editor_export (gpointer param)
     {
       if (filename)
         {
-          /* Export the selected key to the user specified file.
-           * FIXME: We should really export all selected keys, but
-           * GPAPA currently cannot export multiple keys to one file.
-           */
-          GpapaPublicKey *key = gpa_keylist_current_key (editor->clist_keys);
-          gpapa_public_key_export (key, filename, armored,
-                                   gpa_callback, editor->window);
+          /* Export the selected keys to the user specified file. */
+          GpgmeError err;
+          GpgmeData data;
+          GpgmeRecipients rset;
+          GList *selection = gpa_keylist_selection (editor->clist_keys);
+          FILE *file;
+          
+          /* Before we do anything else, make sure we can open the file 
+           * for writing */
+          file = fopen (filename, "w");
+          if (!file)
+            {
+              gchar message[256];
+              g_snprintf (message, sizeof(message), "%s: %s",
+                          filename, strerror(errno));
+              gpa_window_error (message, editor->window);
+              return;
+            }
+          /* Create the data buffer */
+          err = gpgme_data_new (&data);
+          if (err != GPGME_No_Error)
+            gpa_gpgme_error (err);
+          gpgme_set_armor (ctx, 1);
+          /* Create the set of keys to export */
+          err = gpgme_recipients_new (&rset);
+          if (err != GPGME_No_Error)
+            gpa_gpgme_error (err);
+          while (selection)
+            {
+              gint row = GPOINTER_TO_INT (selection->data);
+              gchar *key_id = gtk_clist_get_row_data
+                (GTK_CLIST (editor->clist_keys), row);
+              err = gpgme_recipients_add_name (rset, key_id);
+              if (err != GPGME_No_Error)
+                gpa_gpgme_error (err);
+              selection = g_list_next (selection);
+            }
+          /* Export to the GpgmeData */
+          err = gpgme_op_export (ctx, rset, data);
+          if (err != GPGME_No_Error)
+            gpa_gpgme_error (err);
+          /* Dump the GpgmeData to the file */
+          dump_data_to_file (data, file);
+          gpgme_data_release (data);
+          fclose (file);
         }
       else if (server)
         {
@@ -509,50 +557,6 @@ keyring_editor_export (gpointer param)
         }
       free (filename);
       free (server);
-    }
-}
-
-
-static void
-keyring_editor_export_secret (gpointer param)
-{
-  GPAKeyringEditor *editor = param;
-  gchar *filename;
-  gboolean armored;
-
-  if (!gpa_keylist_has_selection (editor->clist_keys))
-    {
-      /* this shouldn't happen because the button should be grayed out
-       * in this case
-       */
-      gpa_window_error (_("No keys selected to export."), editor->window);
-      return;
-    }
-
-  if (secret_key_export_dialog_run (editor->window, &filename, &armored))
-    {
-      GpapaPublicKey *public_key
-        = gpa_keylist_current_key (editor->clist_keys);
-      GpapaSecretKey *key
-        = gpapa_get_secret_key_by_ID (gpapa_key_get_identifier (public_key->key,
-                                                                gpa_callback,
-                                                                editor->window),
-                                      gpa_callback, editor->window);
-      if (filename)
-        {
-          /* Export the selected key to the user specified file.
-           */
-          gpapa_secret_key_export (key, filename, armored,
-                                   gpa_callback, editor->window);
-        }
-      else
-        {
-          /* Export the selected key to the clipboard.
-           */
-          gpapa_secret_key_export_to_clipboard (key,
-                                                gpa_callback, editor->window);
-        }
-      free (filename);
     }
 }
 
@@ -849,7 +853,7 @@ keyring_editor_mapped (gpointer param)
   if (gpa_simplified_ui ())
     {
       if (!asked_about_key_generation
-          && gpapa_get_secret_key_count (gpa_callback, editor->window) == 0)
+          && gpa_keytable_secret_size (keytable) == 0)
         {
           const gchar * buttons[] = {_("_Generate key now"), _("Do it _later"),
                                      NULL};
@@ -865,7 +869,7 @@ keyring_editor_mapped (gpointer param)
         }
       else if (!asked_about_key_backup
                && !gpa_backup_generated ()
-               && gpapa_get_secret_key_count (gpa_callback, editor->window) != 0)
+               && gpa_keytable_secret_size (keytable) != 0)
         {
           const gchar * buttons[] = {_("_Backup key now"), _("Do it _later"),
                                      NULL};
@@ -920,16 +924,11 @@ keyring_editor_menubar_new (GtkWidget * window,
   GtkItemFactoryEntry keys_menu[] = {
     {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
     {_("/Keys/_Generate Key..."), NULL, keyring_editor_generate_key, 0, NULL},
-    /*{_("/Keys/Generate _Revocation Certificate"), NULL,
-                                         keys_generateRevocation, 0, NULL},*/
     {_("/Keys/_Delete Keys..."), NULL, keyring_editor_delete, 0, NULL},
     {_("/Keys/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
     {_("/Keys/_Import Keys..."), NULL, keyring_editor_import, 0, NULL},
     {_("/Keys/_Export Keys..."), NULL, keyring_editor_export, 0, NULL},
-    {_("/Keys/Export _Private Keys..."), NULL, keyring_editor_export_secret, 0, NULL},
     {_("/Keys/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
-    /*{_("/Keys/Import _Ownertrust..."), NULL, keys_importOwnertrust, 0, NULL},*/
-    /*{_("/Keys/_Update Trust Database"), NULL, keys_updateTrust, 0, NULL},*/
   };
   GtkItemFactoryEntry win_menu[] = {
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
@@ -1072,42 +1071,44 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 /* Fill the details page of the details notebook with the properties of
  * the publix key key */
 static void
-keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key,
-                               GpapaSecretKey * secret_key)
+keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
 {
-  GDate * expiry_date;
-  GDate * creation_date;
-  GpapaKeytrust key_trust;
-  GpapaOwnertrust owner_trust;
+  GDate * expiry_date = NULL;
+  GDate * creation_date = NULL;
+  unsigned long time;
+  GpgmeValidity key_trust;
+  GpgmeValidity owner_trust;
   gchar * text;
 
-  text = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, editor->window);
+  text = (gchar*) gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, 0);
   gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
 
-  text = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
-                                   editor->window);
+  text = (gchar*) gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, NULL, 0);
   gtk_label_set_text (GTK_LABEL (editor->detail_key_id), text);
 
-  text = gpapa_public_key_get_fingerprint (key, gpa_callback, editor->window);
+  text = (gchar*) gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
   gtk_entry_set_text (GTK_ENTRY (editor->detail_fingerprint), text);
 
-  expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
-                                           editor->window);
+  time = gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0);
+  if( time > 0 )
+    {
+      expiry_date = g_date_new();
+      g_date_set_time( expiry_date, time );
+    }
   text = gpa_expiry_date_string (expiry_date);
   gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
   free (text);
 
-  key_trust = gpapa_public_key_get_keytrust (key, gpa_callback,
-                                             editor->window);
-  text = gpa_keytrust_string (key_trust);
+  key_trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
+  text = gpa_trust_string (key_trust);
   gtk_label_set_text (GTK_LABEL (editor->detail_key_trust), text);
 
-  owner_trust = gpapa_public_key_get_ownertrust (key, gpa_callback,
-                                                 editor->window);
-  text = gpa_ownertrust_string (owner_trust);
+  owner_trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
+  text = gpa_trust_string (owner_trust);
   gtk_label_set_text (GTK_LABEL (editor->detail_owner_trust), text);
 
-  if (secret_key)
+  if (gpa_keytable_secret_lookup (keytable, gpgme_key_get_string_attr 
+                                  (key, GPGME_ATTR_FPR, NULL, 0)))
     {
       gtk_label_set_text (GTK_LABEL (editor->detail_key_type),
                           _("The key has both a private and a public part"));
@@ -1117,9 +1118,12 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key,
       gtk_label_set_text (GTK_LABEL (editor->detail_key_type),
                           _("The key has only a public part"));
     }
-
-  creation_date = gpapa_key_get_creation_date (GPAPA_KEY (key), gpa_callback,
-                                           editor->window);
+  time = gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0);
+  if( time > 0 )
+    {
+      creation_date = g_date_new();
+      g_date_set_time( creation_date, time );
+    }
   text = gpa_creation_date_string (creation_date);
   gtk_label_set_text (GTK_LABEL (editor->detail_creation), text);
   free (text);
@@ -1158,9 +1162,9 @@ keyring_details_page_fill_num_keys (GPAKeyringEditor * editor, gint num_key)
 /* Fill the signatures page of the details notebook with the signatures
  * of the public key key */
 static void
-keyring_signatures_page_fill_key (GPAKeyringEditor * editor,
-                                  GpapaPublicKey * key)
+keyring_signatures_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
 {
+#if 0
   GList * signatures;
   gchar * key_id = NULL;
 
@@ -1174,6 +1178,7 @@ keyring_signatures_page_fill_key (GPAKeyringEditor * editor,
   signatures = gpapa_public_key_get_signatures (key, gpa_callback,
                                                 editor->window);
   gpa_siglist_set_signatures (editor->signatures_list, signatures, key_id);
+#endif
 } /* keyring_signatures_page_fill_key */
 
 
@@ -1198,15 +1203,11 @@ idle_update_details (gpointer param)
   if (num_selected == 1)
     {
       gchar * key_id = keyring_editor_current_key_id (editor);
-      GpapaPublicKey * public_key;
-      GpapaSecretKey * secret_key;
+      GpgmeKey key;
 
-      public_key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
-                                               editor->window);
-      secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback,
-                                               editor->window);
-      keyring_details_page_fill_key (editor, public_key, secret_key);
-      keyring_signatures_page_fill_key (editor, public_key);
+      key = gpa_keytable_lookup (keytable, key_id);
+      keyring_details_page_fill_key (editor, key);
+      keyring_signatures_page_fill_key (editor, key);
     }
   else
     {
@@ -1450,20 +1451,18 @@ keyring_statusbar_new (GPAKeyringEditor *editor)
 static void
 keyring_update_status_bar (GPAKeyringEditor * editor)
 {
-  gchar * key_id = gpa_default_key ();
-  GpapaPublicKey * key;
+  gchar * fpr = gpa_default_key ();
+  GpgmeKey key;
 
-  if (key_id
-      && (key = gpapa_get_public_key_by_ID (key_id,
-                                            gpa_callback, editor->window)))
+  if (fpr
+      && (key = gpa_keytable_lookup (keytable, fpr)))
     {
       gtk_label_set_text (GTK_LABEL (editor->status_key_user),
-                          gpapa_key_get_name (GPAPA_KEY (key), gpa_callback,
-                                              editor->window));
+                          gpgme_key_get_string_attr (key, GPGME_ATTR_USERID,
+                                                     NULL, 0));
       gtk_label_set_text (GTK_LABEL (editor->status_key_id),
-                          gpapa_key_get_identifier (GPAPA_KEY (key),
-                                                    gpa_callback,
-                                                    editor->window));
+                          gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID,
+                                                     NULL, 0));
     }
   else
     {
@@ -1503,7 +1502,7 @@ keyring_editor_new (void)
   GtkWidget *paned;
   GtkWidget *statusbar;
 
-  editor = xmalloc(sizeof(GPAKeyringEditor));
+  editor = g_malloc(sizeof(GPAKeyringEditor));
   editor->selection_sensitive_widgets = NULL;
   editor->details_idle_id = 0;
 
@@ -1556,8 +1555,7 @@ keyring_editor_new (void)
 
   keylist =  gpa_keylist_new ((sizeof keylist_columns_brief)
                                 / (sizeof keylist_columns_brief[0]),
-                                keylist_columns_brief, 10,
-                                window);
+                                keylist_columns_brief, 10, window);
   editor->clist_keys = keylist;
   gtk_container_add (GTK_CONTAINER (scrolled), keylist);
   /*

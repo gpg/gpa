@@ -154,13 +154,13 @@ gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
   for (ownertrust = GPAPA_OWNERTRUST_FIRST;
        ownertrust <= GPAPA_OWNERTRUST_LAST; ownertrust++)
     valueLevel =
-      g_list_append (valueLevel, gpa_ownertrust_string (ownertrust));
+      g_list_append (valueLevel, gpa_trust_string (ownertrust));
   gtk_combo_set_popdown_strings (GTK_COMBO (comboLevel), valueLevel);
   gpa_connect_by_accelerator (GTK_LABEL (labelLevel),
 			      GTK_COMBO (comboLevel)->entry, accelGroup,
 			      _("_Ownertrust level: "));
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboLevel)->entry),
-		      gpa_ownertrust_string (dialog.trust));
+		      gpa_trust_string (dialog.trust));
   gtk_box_pack_start (GTK_BOX (hboxLevel), comboLevel, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxTrust), hboxLevel, TRUE, TRUE, 0);
 

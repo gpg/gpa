@@ -28,52 +28,32 @@
  *	enums
  */
 
-static gchar *keytrust_strings_simplified[] = {
+static gchar *trust_strings_simplified[] = {
+  N_("unknown"),
   N_("unknown"),
   N_("don't trust"),
   N_("trust marginally"),
   N_("trust fully"),
   N_("trust fully"),
-  N_("don't trust"),
-  N_("don't trust"),
-  N_("don't trust"),
-  N_("don't trust")
 };
 
-static gchar *keytrust_strings_advanced[] = {
+static gchar *trust_strings_advanced[] = {
+  N_("undefined"),
   N_("unknown"),
   N_("don't trust"),
   N_("trust marginally"),
   N_("trust fully"),
   N_("trust ultimately"),
-  N_("revoked"),
-  N_("expired"),
-  N_("invalid"),
-  N_("disabled")
 };
 
 gchar *
-gpa_keytrust_string (GpapaKeytrust keytrust)
+gpa_trust_string (GpgmeValidity keytrust)
 {
   if( gpa_simplified_ui () )
-    return _(keytrust_strings_simplified[keytrust]);
+    return _(trust_strings_simplified[keytrust]);
   else
-    return _(keytrust_strings_advanced[keytrust]);
-} /* gpa_keytrust_string */
-
-static gchar *ownertrust_strings[4] = {
-  N_("unknown"),
-  N_("don't trust"),
-  N_("trust marginally"),
-  N_("trust fully")
-};
-
-gchar *
-gpa_ownertrust_string (GpapaOwnertrust ownertrust)
-{
-  return _(ownertrust_strings[ownertrust]);
-} /* gpa_ownertrust_string */
-
+    return _(trust_strings_advanced[keytrust]);
+}
 
 GpapaOwnertrust
 gpa_ownertrust_from_string (gchar * string)
@@ -82,7 +62,7 @@ gpa_ownertrust_from_string (gchar * string)
 
   result = GPAPA_OWNERTRUST_FIRST;
   while (result <= GPAPA_OWNERTRUST_LAST &&
-	 strcmp (string, _(ownertrust_strings[result])) != 0)
+	 strcmp (string, _(trust_strings_advanced[result])) != 0)
     result++;
   return result;
 } /* gpa_ownertrust_from_string */

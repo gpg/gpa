@@ -40,7 +40,7 @@
  */ 
 
 GtkWidget *
-gpa_key_info_new (GpapaKey * key, GtkWidget * window)
+gpa_key_info_new (GpgmeKey key, GtkWidget * window)
 {
   GtkWidget * table;
   GtkWidget * label;
@@ -54,7 +54,8 @@ gpa_key_info_new (GpapaKey * key, GtkWidget * window)
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
-  label = gtk_label_new (gpapa_key_get_name (key, gpa_callback, window));
+  label = gtk_label_new (gpgme_key_get_string_attr (key, GPGME_ATTR_USERID,
+                                                    NULL, 0));
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -64,7 +65,8 @@ gpa_key_info_new (GpapaKey * key, GtkWidget * window)
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
-  label = gtk_label_new (gpapa_key_get_identifier (key, gpa_callback, window));
+  label = gtk_label_new (gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID,
+                                                    NULL, 0));
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);

@@ -21,7 +21,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <config.h>
-#include <gpapa.h>
+#include <gpgme.h>
 #include "icons.h"
 #include "gpa.h"
 #include "gpapastrings.h"
@@ -34,7 +34,7 @@ struct _GPAKeyList;
 /* A column definition. Consists of a title and a function that returns
  * the values for that column given a public key */
 
-typedef void (*ColumnValueFunc)(GpapaPublicKey * key,
+typedef void (*ColumnValueFunc)(GpgmeKey key,
 				struct _GPAKeyList * keylist,
 				gchar ** label,
 				gboolean * free_label,
@@ -74,65 +74,79 @@ typedef struct _GPAKeyList GPAKeyList;
 
 /* internal API */
 
-static void keylist_free (gpointer param);
-static void keylist_fill_list (GPAKeyList * keylist, gboolean keep_selection);
-static void keylist_fill_column_titles (GPAKeyList * keylist);
-static void keylist_fill_row (GPAKeyList * keylist, GpapaPublicKey * key,
-			      gint row);
+/* Auxiliary struct required because we need to keep two state elements when
+ * adding keys to the list: the list itself and the hash table of previously
+ * selected keys. */
+struct keylist_fill_data 
+{
+  GPAKeyList *keylist;
+  GHashTable *selected_keys;
+};
 
+static void keylist_free (gpointer param);
+static void keylist_fill_list (GPAKeyList * keylist);
+static void keylist_fill_column_titles (GPAKeyList * keylist);
+static void keylist_fill_row (const gchar * fpr, GpgmeKey key,
+                              struct keylist_fill_data *data);
 
 /*
  * ColumnDef functions
  */
 
 static void
-get_name_value (GpapaPublicKey * key, GPAKeyList * keylist,
+get_name_value (GpgmeKey key, GPAKeyList * keylist,
 		gchar ** label, gboolean * free_label, GdkPixmap ** pixmap,
 		GdkBitmap ** mask)
 {
-  *label = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, keylist->window);
-  *free_label = FALSE;
+  *label = g_strdup(gpgme_key_get_string_attr (key, GPGME_ATTR_USERID,
+                                               NULL, 0));
+  *free_label = TRUE;
   *pixmap = NULL;
   *mask = NULL;
 }
 
 static void
-get_trust_value (GpapaPublicKey * key, GPAKeyList * keylist,
+get_trust_value (GpgmeKey key, GPAKeyList * keylist,
 		 gchar ** label, gboolean * free_label, GdkPixmap ** pixmap,
 		 GdkBitmap ** mask)
 {
-  GpapaKeytrust trust;
+  GpgmeValidity trust;
 
-  trust = gpapa_public_key_get_keytrust (key, gpa_callback, keylist->window);
-  *label = gpa_keytrust_string (trust);
+  trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
+  *label = gpa_trust_string (trust);
   *free_label = FALSE;
   *pixmap = NULL;
   *mask = NULL;
 }
   
 static void
-get_ownertrust_value (GpapaPublicKey * key, GPAKeyList * keylist,
+get_ownertrust_value (GpgmeKey key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
-  GpapaOwnertrust trust;
+  GpgmeValidity trust;
 
-  trust = gpapa_public_key_get_ownertrust (key, gpa_callback, keylist->window);
-  *label = gpa_ownertrust_string (trust);
+  trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
+  *label = gpa_trust_string (trust);
   *free_label = FALSE;
   *pixmap = NULL;
   *mask = NULL;
 }
 
 static void
-get_expirydate_value (GpapaPublicKey * key, GPAKeyList * keylist,
+get_expirydate_value (GpgmeKey key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
-  GDate * date;
-
-  date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
-				    keylist->window);
+  GDate * date = NULL;
+  unsigned long expiry_time = gpgme_key_get_ulong_attr( key, 
+                                                        GPGME_ATTR_EXPIRE, 
+                                                        NULL, 0 );
+  if( expiry_time > 0 )
+    {
+      date = g_date_new();
+      g_date_set_time( date, expiry_time );
+    }
   *label = gpa_expiry_date_string (date);
   *free_label = TRUE;
   *pixmap = NULL;
@@ -140,24 +154,22 @@ get_expirydate_value (GpapaPublicKey * key, GPAKeyList * keylist,
 }
 
 static void
-get_identifier_value (GpapaPublicKey * key, GPAKeyList * keylist,
+get_identifier_value (GpgmeKey key, GPAKeyList * keylist,
 		      gchar ** label, gboolean * free_label,
 		      GdkPixmap ** pixmap, GdkBitmap ** mask)
 {
-  *label = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
-				     keylist->window);
-  *free_label = FALSE;
+  *label = g_strdup(gpgme_key_get_string_attr (key, 
+                                               GPGME_ATTR_KEYID, NULL, 0));
+  *free_label = TRUE;
   *pixmap = NULL;
   *mask = NULL;
 }
 
 static void
-get_key_type_pixmap_value (GpapaPublicKey *key, GPAKeyList *keylist,
+get_key_type_pixmap_value (GpgmeKey key, GPAKeyList *keylist,
 			   gchar **label, gboolean *free_label,
 			   GdkPixmap **pixmap, GdkBitmap **mask)
 {
-  gchar *key_id;
-  GpapaSecretKey *secret_key;
   static gboolean pixmaps_created = FALSE;
   static GdkPixmap *secret_pixmap = NULL;
   static GdkBitmap *secret_mask = NULL;
@@ -175,13 +187,10 @@ get_key_type_pixmap_value (GpapaPublicKey *key, GPAKeyList *keylist,
       pixmaps_created = TRUE;
     }
 
-  key_id = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
-				     keylist->window);
-  secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback,
-					   keylist->window);
   *label = NULL;
   *free_label = FALSE;
-  if (secret_key)
+  if (gpa_keytable_secret_lookup 
+      (keytable, gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0)))
     {
       *pixmap = secret_pixmap;
       *mask = secret_mask;
@@ -216,14 +225,14 @@ gpa_keylist_new (gint ncolumns, GPAKeyListColumn *columns, gint max_columns,
   GPAKeyList *keylist;
   int i;
 
-  keylist = xmalloc (sizeof (*keylist));
+  keylist = g_malloc (sizeof (*keylist));
 
   keylist->window = window;
 
   keylist->column_defs_changed = TRUE;
   keylist->max_columns = max_columns;
   keylist->ncolumns = ncolumns;
-  keylist->column_defs = xmalloc (ncolumns * sizeof (*keylist->column_defs));
+  keylist->column_defs = g_malloc (ncolumns * sizeof (*keylist->column_defs));
   for (i = 0; i < ncolumns; i++)
     {
       keylist->column_defs[i] = &(column_defs[columns[i]]);
@@ -236,6 +245,8 @@ gpa_keylist_new (gint ncolumns, GPAKeyListColumn *columns, gint max_columns,
 
   gtk_object_set_data_full (GTK_OBJECT (clist), "gpa_keylist",
 			    keylist, keylist_free);
+  gtk_clist_set_sort_column( GTK_CLIST (clist), ncolumns-1 );
+  gtk_clist_set_sort_type(GTK_CLIST (clist), GTK_SORT_ASCENDING);
 
   gpa_keylist_update_list (keylist->clist);
 
@@ -249,151 +260,133 @@ keylist_free (gpointer param)
 {
   GPAKeyList * keylist = param;
 
-  free (keylist->column_defs);
-  free (keylist);
+  g_free (keylist->column_defs);
+  g_free (keylist);
 }
 
 /* Free the key of a g_hash_table. Usable as a GHFunc. */
 static void
 free_hash_key (gpointer key, gpointer value, gpointer data)
 {
-  free (key);
+  g_free (key);
 }
 
 
 /* fill the list with the keys. This is also used to update the list
- * when the key list in gpapa may have changed. If keep_selection is
- * true, try to keep the current selection.
+ * when the key list in the keytable may have changed.
  */
 static void
-keylist_fill_list (GPAKeyList *keylist, gboolean keep_selection)
+keylist_fill_list (GPAKeyList *keylist)
 {
-  gint num_keys, num_skeys;
-  gint key_index;
-  gint row, col;
-  GpapaPublicKey *key;
-  GpapaSecretKey *skey;
-  gchar **labels;
-  gchar *key_id;
+  const gchar *fpr;
   GHashTable *sel_hash = g_hash_table_new (g_str_hash, g_str_equal);
-  gboolean secret_keys_okay;
+  struct keylist_fill_data fill_data = { keylist, sel_hash };
+  GpgmeError err;
+  GpgmeKey key;
 
-  /* if keep_selection is true, remember the current selection. Use the
+  /* Remember the current selection. Use the
    * hash table itself as the value just because its a non-NULL pointer
-   * and we're interested in finding out whether a given key_id is used
+   * and we're interested in finding out whether a given fpr is used
    * as a key in the hash later */
-  if (keep_selection)
+  GList *selection = GTK_CLIST (keylist->clist)->selection;
+  while (selection)
     {
-      GList *selection = GTK_CLIST (keylist->clist)->selection;
-      while (selection)
-	{
-	  key_id = gtk_clist_get_row_data (GTK_CLIST (keylist->clist),
-					   GPOINTER_TO_INT (selection->data));
-          if (key_id)
-            {
-              g_hash_table_insert (sel_hash, xstrdup (key_id), sel_hash);
-	      selection = g_list_next (selection);
-            }
-	}
+      fpr = gtk_clist_get_row_data (GTK_CLIST (keylist->clist),
+                                       GPOINTER_TO_INT (selection->data));
+      if (fpr)
+        {
+          g_hash_table_insert (sel_hash, g_strdup (fpr), sel_hash);
+          selection = g_list_next (selection);
+        }
     }
-
-  /* Fill a dummy list of labels. */
-  labels = xmalloc (keylist->max_columns * sizeof (gchar*));
-  for (col = 0; col < keylist->max_columns; col++)
-    labels[col] = "";
-
-  /* Clear the list and fill it again from gpapa's public key list */
+  
+  /* Clear the list and fill it again from our key table's key list */
   gtk_clist_freeze (GTK_CLIST (keylist->clist));
   gtk_clist_clear (GTK_CLIST (keylist->clist));
-  num_keys = gpapa_get_public_key_count(gpa_callback, keylist->window);
-  for (key_index = 0; key_index < num_keys; key_index++)
-    {
-      key = gpapa_get_public_key_by_index (key_index, gpa_callback,
-					   keylist->window);
-
-      row = gtk_clist_append (GTK_CLIST (keylist->clist), labels);
-      keylist_fill_row (keylist, key, row);
-      key_id = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
-					 keylist->window);
-      if (key_id)
-          {
-              gtk_clist_set_row_data_full (GTK_CLIST (keylist->clist), row,
-                                           xstrdup (key_id), free);
-              if (keep_selection && g_hash_table_lookup (sel_hash, key_id))
-                  {
-                      /* The key had been selected previously, so select it again */
-                      gtk_clist_select_row (GTK_CLIST (keylist->clist), row, 0);
-                  }
-          }
-    } /* for */
-
+  gpa_keytable_foreach (keytable, (GPATableFunc) keylist_fill_row, &fill_data);
+  /* Make sure the list is sorted before unfreezing it */
+  gtk_clist_sort (GTK_CLIST (keylist->clist));
   gtk_clist_thaw (GTK_CLIST (keylist->clist));
 
-  num_skeys = gpapa_get_secret_key_count (gpa_callback, keylist->window);
-  if (num_skeys > num_keys)
-    secret_keys_okay = FALSE;
-  else
+  /* Iterate over the secret keyring and verify that every key has a
+   * corresponding public key. */
+  /* FIXME: Do this with a gpa_keytable_secret_foreach() */
+  err = gpgme_op_keylist_start (ctx, NULL, 1);
+  if( err != GPGME_No_Error )
+    gpa_gpgme_error (err);
+  while( (err = gpgme_op_keylist_next( ctx, &key )) != GPGME_EOF )
     {
-      secret_keys_okay = TRUE;
-      for (key_index = 0; secret_keys_okay && key_index < num_skeys; key_index++)
-	{
-	  skey = gpapa_get_secret_key_by_index (key_index, gpa_callback,
-						keylist->window);
-	  key_id = gpapa_key_get_identifier (GPAPA_KEY (skey), gpa_callback,
-					     keylist->window);
-	  key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
-					    keylist->window);
-	  if (key == NULL)
-	    secret_keys_okay = FALSE;
-	}
+      if( err != GPGME_No_Error )
+        gpa_gpgme_error (err);
+      fpr = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
+      gpgme_key_release (key);
+      if( !gpa_keytable_lookup (keytable, fpr) )
+        {
+          const gchar * buttons[] = {_("_OK"),
+                                     NULL};
+          gpa_message_box_run (keylist->window, _("Missing public key"),
+                               _("You have a secret key without the\n"
+                                 "corresponding public key in your\n"
+                                 "key ring. In order to use this key\n"
+                                 "you will need to import the public\n"
+                                 "key, too."),
+                               buttons);
+        }
     }
-  if (!secret_keys_okay)
-    {
-      const gchar * buttons[] = {_("_OK"),
-				 NULL};
-      gpa_message_box_run (keylist->window, _("Missing public key"),
-			    _("You have a secret key without the\n"
-			      "corresponding public key in your\n"
-			      "key ring. In order to use this key\n"
-			      "you will need to import the public\n"
-			      "key, too."),
-			    buttons);
-    }
-
-  free (labels);
-  
   g_hash_table_foreach (sel_hash, free_hash_key, NULL);
   g_hash_table_destroy (sel_hash);
 } /* keylist_fill_list */
 
 
 /* Fill the clist row row with the labels and/or pixmaps of the given
- * key.
+ * key. This is a callback called for each key in the keyring.
  */
 static void
-keylist_fill_row (GPAKeyList * keylist, GpapaPublicKey * key, gint row)
+keylist_fill_row (const gchar *fpr, GpgmeKey key,
+                  struct keylist_fill_data *data)
 {
-  gint col;
-  gchar * label;
+  gint row, col;
   gboolean free_label;
+  gchar * label;
   GdkPixmap * pixmap;
   GdkBitmap * mask;
-  
-  for (col = 0; col < keylist->ncolumns; col++)
+  gchar **labels = g_malloc (data->keylist->max_columns * sizeof (gchar*));
+  /* Fill a dummy list of labels. */
+  /* FIXME: There must be a cleaner way to do this */
+  for (col = 0; col < data->keylist->max_columns; col++)
+    labels[col] = "";
+  /* Get a new empty row */
+  row = gtk_clist_append (GTK_CLIST (data->keylist->clist), labels);
+  /* Set the right value for each column */
+  for (col = 0; col < data->keylist->ncolumns; col++)
     {
-      keylist->column_defs[col]->value_func(key, keylist, &label, &free_label,
-					    &pixmap, &mask);
+      data->keylist->column_defs[col]->value_func(key, data->keylist, 
+                                                  &label, &free_label, 
+                                                  &pixmap, &mask);
       if (pixmap)
-	{
-	  gtk_clist_set_pixmap (GTK_CLIST (keylist->clist), row, col,
-				pixmap, mask);
-	}
+        {
+          gtk_clist_set_pixmap (GTK_CLIST (data->keylist->clist), row, col,
+                                pixmap, mask);
+        }
       else if (label)
-	{
-	  gtk_clist_set_text (GTK_CLIST (keylist->clist), row, col, label);
-	}
+        {
+          gtk_clist_set_text (GTK_CLIST (data->keylist->clist), 
+                              row, col, label);
+        }
       if (free_label)
-	free (label);
+        g_free (label);
+    }
+  
+  /* The labels are no longer needed */
+  g_free (labels);
+  /* Each row remembers the associated fingerprint */
+  gtk_clist_set_row_data_full (GTK_CLIST (data->keylist->clist), row,
+                               g_strdup (fpr), free);
+
+  if (g_hash_table_lookup (data->selected_keys, fpr))
+    {
+      /* The key had been selected previously, so select it again */
+      gtk_clist_select_row (GTK_CLIST (data->keylist->clist), row, 0);
     }
 }
 
@@ -432,20 +425,22 @@ gpa_keylist_set_column_defs (GtkWidget * clist, gint ncolumns,
 					      "gpa_keylist");
   gint i;
 
-  free (keylist->column_defs);
+  g_free (keylist->column_defs);
 
   keylist->ncolumns = ncolumns;
-  keylist->column_defs = xmalloc (ncolumns * sizeof (*keylist->column_defs));
+  keylist->column_defs = g_malloc (ncolumns * sizeof (*keylist->column_defs));
   for (i = 0; i < ncolumns; i++)
     {
       keylist->column_defs[i] = &(column_defs[columns[i]]);
     }
+  gtk_clist_set_sort_column( GTK_CLIST (clist), ncolumns-1 );
+  gtk_clist_set_sort_type(GTK_CLIST (clist), GTK_SORT_ASCENDING);
 
   keylist->column_defs_changed = TRUE;
 }
 
 
-/* Update the list to reflect the current state of gpapa and apply
+/* Update the list to reflect the current state of the keytable and apply
  * changes made to the column definitions.
  */
 void
@@ -464,7 +459,7 @@ gpa_keylist_update_list (GtkWidget * clist)
       keylist_fill_column_titles (keylist);
     }
 
-  keylist_fill_list (keylist, TRUE);
+  keylist_fill_list (keylist);
 
   /* set the width of all columns to the optimal width, but only when
    * the column defintions changed or the list was empty before so as
@@ -522,21 +517,19 @@ gpa_keylist_current_key_id (GtkWidget * clist)
 
 
 /* Return the currently selected key. NULL if no key is selected */
-GpapaPublicKey *
+GpgmeKey
 gpa_keylist_current_key (GtkWidget * clist)
 {
   int row;
-  gchar * key_id;
-  GpapaPublicKey * key = NULL;
-  GPAKeyList * keylist = gtk_object_get_data (GTK_OBJECT (clist),
-					      "gpa_keylist");
+  gchar * fpr;
+  GpgmeKey key = NULL;
 
   if (GTK_CLIST (clist)->selection)
     {
       row = GPOINTER_TO_INT (GTK_CLIST (clist)->selection->data);
-      key_id = gtk_clist_get_row_data (GTK_CLIST (clist), row);
+      fpr = gtk_clist_get_row_data (GTK_CLIST (clist), row);
 
-      key = gpapa_get_public_key_by_ID (key_id, gpa_callback, keylist->window);
+      key = gpa_keytable_lookup (keytable, fpr);
     }
 
   return key;

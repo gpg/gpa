@@ -19,7 +19,7 @@
  */
 
 #include <config.h>
-#include <gpapa.h>
+#include <gpgme.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
 #include "gtktools.h"
@@ -73,7 +73,7 @@ delete_destroy (GtkWidget *widget, gpointer param)
  * deleting secret keys.
  */
 gboolean
-gpa_delete_dialog_run (GtkWidget * parent, GpapaPublicKey * key,
+gpa_delete_dialog_run (GtkWidget * parent, GpgmeKey key,
 		       gboolean has_secret_key)
 {
   GtkWidget * window;
@@ -106,7 +106,7 @@ gpa_delete_dialog_run (GtkWidget * parent, GpapaPublicKey * key,
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
   
-  info = gpa_key_info_new (GPAPA_KEY (key), parent);
+  info = gpa_key_info_new (key, parent);
   gtk_box_pack_start (GTK_BOX (vbox), info, TRUE, TRUE, 0);
 
   if (has_secret_key)
