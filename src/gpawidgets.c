@@ -121,7 +121,7 @@ gpa_secret_key_list_new (GtkWidget *window)
       row = gtk_clist_prepend (GTK_CLIST (clist), contents);
       gtk_clist_set_row_data_full (GTK_CLIST (clist), row,
 				   xstrdup (contents[1]), free);
-      if (global_defaultKey && strcmp (global_defaultKey, contents[1]) == 0)
+      if (gpa_default_key () && strcmp (gpa_default_key (), contents[1]) == 0)
 	{
 	  default_key_index = num_keys;
 	}

@@ -1,5 +1,5 @@
 /* filemenu.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -595,10 +595,10 @@ parent);
   gpa_windowKeeper_add_param (keeper, as);
   *as = 0;
   rows = GTK_CLIST (clistWho)->rows;
-  if (global_defaultKey)
+  if (gpa_default_key ())
     {
       gtk_clist_get_text (GTK_CLIST (clistWho), *as, 1, &keyID);
-      while (*as < rows && strcmp (global_defaultKey, keyID) != 0)
+      while (*as < rows && strcmp (gpa_default_key (), keyID) != 0)
 	{
 	  (*as)++;
 	  if (*as < rows)

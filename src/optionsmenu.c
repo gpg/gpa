@@ -1,5 +1,5 @@
 /* optionsmenu.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -64,11 +64,14 @@ gpa_homeDirSelect_init (gchar * title)
 void
 gpa_loadOptionsSelect_ok (void)
 {
+  gchar * default_key = NULL;
+
   gpapa_load_options (gtk_file_selection_get_filename
 		      (GTK_FILE_SELECTION (loadOptionsSelect)),
 		      &global_keyserver, &global_defaultRecipients,
-		      &global_defaultKey, &global_homeDirectory, gpa_callback,
+		      &default_key, &global_homeDirectory, gpa_callback,
 		      global_windowMain);
+  gpa_set_default_key (default_key);
   gtk_widget_hide (loadOptionsSelect);
 }				/* gpa_loadOptionsSelect_ok */
 
@@ -98,7 +101,7 @@ gpa_saveOptionsSelect_ok (void)
   gpapa_save_options (gtk_file_selection_get_filename
 		      (GTK_FILE_SELECTION (saveOptionsSelect)),
 		      global_keyserver, global_defaultRecipients,
-		      global_defaultKey, global_homeDirectory, gpa_callback,
+		      gpa_default_key (), global_homeDirectory, gpa_callback,
 		      global_windowMain);
   gtk_widget_hide (saveOptionsSelect);
 }				/* gpa_saveOptionsSelect_ok */
@@ -481,9 +484,7 @@ options_key_set (gpointer param)
   localParam = (gpointer *) param;
   keyID = (gchar **) localParam[0];
   keeperKey = (GpaWindowKeeper *) localParam[1];
-  if (global_defaultKey)
-    free (global_defaultKey);
-  global_defaultKey = xstrdup (*keyID);
+  gpa_set_default_key (xstrdup (*keyID));
   paramDone[0] = keeperKey;
   paramDone[1] = NULL;
   gpa_window_destroy (paramDone);
@@ -562,12 +563,12 @@ options_key (gpointer param)
 				  global_windowMain);
       gtk_clist_prepend (GTK_CLIST (clistKeys), contentsKeys);
     }				/* while */
-  if (global_defaultKey)
+  if (gpa_default_key ())
     {
       i = 0;
       rows = GTK_CLIST (clistKeys)->rows;
       gtk_clist_get_text (GTK_CLIST (clistKeys), i, 1, keyID);
-      while (i < rows && strcmp (global_defaultKey, *keyID) != 0)
+      while (i < rows && strcmp (gpa_default_key (), *keyID) != 0)
 	{
 	  i++;
 	  if (i < rows)
