@@ -1,3 +1,8 @@
+2003-01-19  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Add check for development version, adapted
+	from GnuPG with some changes.
+
 2003-01-08  Miguel Coca  <mcoca@gnu.org>
 
 	* configure.ac: Remove some flags from the maintainer's CFLAGS to avoid

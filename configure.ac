@@ -46,6 +46,24 @@ dnl Check for libraries
 AC_CHECK_LIB(m, sin)
 AC_CHECK_LIB(z, compress)
 
+development_version=no
+# Allow users to append something to the version string (other than -cvs)
+# without flagging it as development version.  The user version parts is
+# considered everything after a dash. 
+if test "$development_version" != yes; then
+  changequote(,)dnl
+  tmp_pat='[a-zA-Z]'
+  changequote([,])dnl
+  if echo "$VERSION" | sed 's/-.*//' | grep "$tmp_pat" >/dev/null ||
+     echo "$VERSION" | grep -- "-cvs$" >/dev/null; then
+    development_version=yes
+  fi
+fi
+if test "$development_version" = yes; then
+    AC_DEFINE(IS_DEVELOPMENT_VERSION,1,
+            [Defined if this is not a regular release])
+fi
+
 dnl
 dnl Setup some stuff depending on host/target.
 dnl

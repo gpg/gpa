@@ -1,5 +1,7 @@
 2003-01-19  Miguel Coca  <mcoca@gnu.org>
 
+	* gpa.h: Remove IS_DEVELOPMENT_VERSION define from this file.
+
 	* keygenwizard.c (gpa_keygen_wizard_run): Use the new wizard
 	interface.
 

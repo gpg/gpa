@@ -34,9 +34,6 @@
 #include "keytable.h"
 #include "options.h"
 
-/* This is a *very* development version */
-#define IS_DEVELOPMENT_VERSION
-
 /* For mkdir() */
 #ifdef G_OS_WIN32
 #include <direct.h>
