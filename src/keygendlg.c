@@ -194,6 +194,9 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboKeysize)->entry), "1024");
   gtk_table_attach (GTK_TABLE (tableTop), comboKeysize, 1, 2, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
+  /* FIXME: In the above we should either translate all key sizes
+   * (including the one in the gtk_entry_set_text call) or generate all
+   * strings via sprintf or a similar locale aware function */
 
   frameExpire = gpa_expiry_frame_new (accelGroup, NULL);
   dialog.frameExpire = frameExpire;

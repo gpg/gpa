@@ -191,7 +191,7 @@ about_dialog_load_logo (GtkWidget *window)
 
   {
     char *fname;
-    const char *datadir = "." /*GPA_DATADIR */;
+    const char *datadir = GPA_DATADIR;
 
     fname = xmalloc (strlen(datadir) + 20);
     strcpy (stpcpy (fname, datadir), "/gpa_logo.ppm");

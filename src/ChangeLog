@@ -1,3 +1,18 @@
+2001-02-13  Bernhard Herzog  <bh@intevation.de>
+
+	* Makefile.am (install-data-local):
+	(pkgdata_DATA): Remove install-data-local and use pkgdata_DATA to
+	install data files.
+
+	(logo):
+	(EXTRA_DIST): Add the gpa logo file and put it into pkgdata_DATA
+	and EXTRA_DIST
+
+	* helpmenu.c (about_dialog_load_logo): Take the logo from the data
+	dir.
+
+	* keygendlg.c (gpa_key_gen_run_dialog): Add some comments
+
 2001-02-13	Jan-Oliver Wagner <jan@intevation.de>
 
 	* hidewnd.c (new): Hiding console window on W98 and ME

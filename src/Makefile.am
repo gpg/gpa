@@ -2,8 +2,11 @@
 
 tip_files = gpa_tips.en gpa_tips.de
 gtkrc = gtkrc
+logo = gpa_logo.ppm
 
-EXTRA_DIST = $(tip_files) $(gtkrc)
+pkgdata_DATA = $(tip_files) $(gtkrc) $(logo)
+
+EXTRA_DIST = $(tip_files) $(gtkrc)  $(logo)
 
 bin_PROGRAMS = gpa
 
@@ -40,12 +43,4 @@ gpa_SOURCES = gpa.c gpa.h \
 		  w32reg.c w32reg.h\
 		  simple-gettext.c\
 		  hidewnd.c hidewnd.h
-
-
-install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
-	for i in $(tip_files); do \
-	    $(INSTALL_DATA) $(srcdir)/$$i $(DESTDIR)$(pkgdatadir)/$$i; \
-	done
-	$(INSTALL_DATA) $(srcdir)/$(gtkrc) $(DESTDIR)$(pkgdatadir)/$(gtkrc);
 
