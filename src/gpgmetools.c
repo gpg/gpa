@@ -531,6 +531,10 @@ gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
   const gchar *s;
 
   uid = gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, idx);
+  if (!uid)
+    {
+      return uid;
+    }
   /* Make sure the encoding is UTF-8.
    * Test structure suggested by Werner Koch */
   for (s = uid; *s && !(*s & 0x80); s++)

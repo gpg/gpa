@@ -3,6 +3,8 @@
 	* gpgmetools.c, gpgmetools.h, gpgmeedit.c, gpgmeedit.h: Moved the
 	wrappers around gpgme_op_edit and related functions to the new
 	files gpgmeedit.{c,h}
+	(gpa_gpgme_key_get_userid): Return NULL if
+	gpgme_key_key_string_attr does.
 
 	* gpgmetools.c, gpgmetools.h (gpa_gpgme_key_get_userid): New
 	function, returns the User ID's of a key, always in UTF-8.
