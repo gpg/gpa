@@ -1100,6 +1100,69 @@ keyring_editor_menubar_new (GtkWidget * window,
   return gtk_item_factory_get_widget (factory, "<main>");
 }
 
+/* Create the popup menu for the key list */
+static GtkWidget *
+keyring_editor_popup_menu_new (GtkWidget * window,
+                               GPAKeyringEditor * editor)
+{
+  GtkItemFactory *factory;
+  GtkItemFactoryEntry popup_menu[] = {
+    {_("/_Copy"), NULL, keyring_editor_copy, 0, "<StockItem>",
+     GTK_STOCK_COPY},
+    {_("/_Paste"), NULL, keyring_editor_paste, 0, "<StockItem>",
+     GTK_STOCK_PASTE},
+    {_("/_Delete Keys..."), NULL, keyring_editor_delete, 0,
+     "<StockItem>", GTK_STOCK_DELETE},
+    {"/sep1", NULL, NULL, 0, "<Separator>"},
+    {_("/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
+    {_("/Set _Owner Trust..."), NULL, keyring_editor_trust, 0, NULL},
+    {_("/_Edit Private Key..."), NULL, keyring_editor_edit, 0, NULL},
+    {"/sep2", NULL, NULL, 0, "<Separator>"},
+    {_("/E_xport Keys..."), NULL, keyring_editor_export, 0, NULL},
+    {_("/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
+  };
+  GtkWidget *item;
+
+  factory = gtk_item_factory_new (GTK_TYPE_MENU, "<main>", NULL);
+  gtk_item_factory_create_items (factory,
+                                 sizeof (popup_menu) / sizeof (popup_menu[0]),
+                                 popup_menu, editor);
+
+  /* Only if there is only ONE key selected */
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Set Owner Trust..."));
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_single_selection);
+    }
+  /* If the keys can be signed... */
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Sign Keys..."));
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_can_sign);
+    }
+  /* If the selected key has a private key */
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Edit Private Key..."));
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_private_selected);
+    }
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Backup..."));
+  if (item)
+    {
+      add_selection_sensitive_widget (editor, item,
+                                      keyring_editor_has_private_selected);
+    }
+
+  return gtk_item_factory_get_widget (factory, "<main>");
+}
+
 /*
  *      The details notebook
  */ 
@@ -1658,6 +1721,58 @@ keyring_update_status_bar (GPAKeyringEditor * editor)
     }     
 }
 
+static gboolean
+is_selected_row (GtkWidget *clist, gint row)
+{
+  GList *selection = gpa_keylist_selection (clist);
+  for (;selection; selection = g_list_next (selection))
+    {
+      if (GPOINTER_TO_INT (selection->data) == row)
+        {
+          return TRUE;
+        }
+    }
+  return FALSE;
+}
+
+static gint
+display_popup_menu (GtkWidget *widget, GdkEvent *event, GtkWidget *clist)
+{
+  GtkMenu *menu;
+  GdkEventButton *event_button;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+  
+  /* The "widget" is the menu that was supplied when 
+   * g_signal_connect_swapped() was called.
+   */
+  menu = GTK_MENU (widget);
+  
+  if (event->type == GDK_BUTTON_PRESS)
+    {
+      event_button = (GdkEventButton *) event;
+      if (event_button->button == 3)
+	{
+          gint row, column;
+          /* Make sure the clicked key is selected */
+          gtk_clist_get_selection_info (GTK_CLIST (clist), event_button->x,
+                                        event_button->y, &row, &column);
+          if (!is_selected_row (clist, row))
+            {
+              gtk_clist_unselect_all (GTK_CLIST (clist));
+              gtk_clist_select_row (GTK_CLIST (clist), row, column);
+            }
+	  gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
+			  event_button->button, event_button->time);
+	  return TRUE;
+	}
+    }
+
+  return FALSE;
+}
+
 /* signal handler for the "changed_default_key" signal. Update the
  * status bar and the selection sensitive widgets because some depend on
  * the default key */
@@ -1760,6 +1875,11 @@ keyring_editor_new (void)
   gtk_signal_connect (GTK_OBJECT (keylist), "end-selection",
                       GTK_SIGNAL_FUNC (keyring_editor_end_selection),
                       (gpointer) editor);
+
+  g_signal_connect_swapped (GTK_OBJECT (keylist), "button_press_event",
+                            G_CALLBACK (display_popup_menu),
+                            GTK_OBJECT (keyring_editor_popup_menu_new 
+                                        (window, editor)));
 
   notebook = keyring_details_notebook (editor);
   gtk_paned_pack2 (GTK_PANED (paned), notebook, TRUE, TRUE);

@@ -1,6 +1,8 @@
 Noteworthy changes in version 0.6.1 (UNRELEASED)
 ------------------------------------------------
 
+ * There is now a right click menu in the main key list.
+
  * The passphrase for a key can now be changed from the edit key dialog.
 
  * GPA now requires GPGME 0.4.1.
