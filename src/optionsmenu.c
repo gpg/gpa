@@ -29,7 +29,7 @@
 #include "keysmenu.h"
 
 
-void
+static void
 options_keyserver_set (gpointer param)
 {
 /* var */
@@ -51,7 +51,7 @@ options_keyserver_set (gpointer param)
   gpa_window_destroy (paramDone);
 }				/* options_keyserver_set */
 
-void
+static void
 options_keyserver (gpointer param)
 {
 /* var */
@@ -128,7 +128,7 @@ options_keyserver (gpointer param)
   gpa_window_show_centered (windowServer, main_window);
 } /* options_keyserver */
 
-void
+static void
 options_recipients_fillDefault (gpointer data, gpointer userData)
 {
 /* var */
@@ -146,7 +146,7 @@ options_recipients_fillDefault (gpointer data, gpointer userData)
   gtk_clist_append (GTK_CLIST (clistDefault), contentsDefault);
 }				/* options_recipients_fillDefault */
 
-void
+static void
 options_recipients_set (gpointer param)
 {
 /* var */
@@ -179,7 +179,7 @@ options_recipients_destroy (GtkWidget * widget, gpointer param)
 }
 
 
-void
+static void
 options_recipients (gpointer param)
 {
   GpaWindowKeeper *keeper;
@@ -378,7 +378,7 @@ global_windowMain);
   gtk_main ();
 } /* options_recipients */
 
-void
+static void
 options_key_select (GtkCList * clist, gint row, gint column,
 		    GdkEventButton * event, gpointer userData)
 {
@@ -389,7 +389,7 @@ options_key_select (GtkCList * clist, gint row, gint column,
   gtk_clist_get_text (clist, row, 1, keyID);
 }				/* options_key_select */
 
-void
+static void
 options_key_set (gpointer param)
 {
 /* var */
@@ -415,7 +415,7 @@ options_key_destroy (GtkWidget * widget, gpointer param)
 }
 
 
-void
+static void
 options_key (gpointer param)
 {
   GpaWindowKeeper *keeper;
