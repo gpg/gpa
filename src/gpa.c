@@ -44,6 +44,8 @@
 #include "optionsmenu.h"
 #include "helpmenu.h"
 
+/* icons for toolbars */
+#include "icons.xpm"
 
 gchar *writtenSigValidity[3] = {
   N_("unknown"),
@@ -800,6 +802,54 @@ gpa_windowFile_new (void)
 } /* gpa_windowFile_new */
 
 GtkWidget *
+gpa_file_toolbar_new ( GtkWidget * window ) {
+	GtkWidget *toolbar, *iconw;
+	GtkStyle *style;
+	GdkPixmap *icon;
+	GdkBitmap *mask;
+
+	toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+	style = gtk_widget_get_style(window);
+	icon = gdk_pixmap_create_from_xpm_d(window->window,&mask,
+		&style->bg[GTK_STATE_NORMAL],(gchar **)openfile);
+	/* Open */
+	iconw = gtk_pixmap_new(icon, mask);
+	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Open"),
+		_("Open a file"), _("open file"), iconw,
+		GTK_SIGNAL_FUNC(file_open), NULL);
+	/* Sign */
+	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Sign"),
+		_("Sign the selected file"), _("sign file"), NULL,
+		GTK_SIGNAL_FUNC(file_sign), NULL);
+	/* Encrypt */
+	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Encrypt"),
+		_("Encrypt the selected file"), _("encrypt file"), NULL,
+	GTK_SIGNAL_FUNC(file_encrypt), NULL);
+	/* Decrypt */
+	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Decrypt"),
+		_("Decrypt the selected file"), _("decrypt file"), NULL,
+	GTK_SIGNAL_FUNC(file_decrypt), NULL);
+	/* Protect */
+	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Protect"),
+		_("Protect the selected file as"), _("protect file"), NULL,
+	GTK_SIGNAL_FUNC(file_protect), NULL);
+	/* Public keyring */
+	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Public Keyring"),
+		_("Open public keyring"), _("open public keyring"), NULL,
+	GTK_SIGNAL_FUNC(keys_openPublic), NULL);
+	/* Secret keyring */
+	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Secret Keyring"),
+		_("Open secret keyring"), _("open secret keyring"), NULL,
+	GTK_SIGNAL_FUNC(keys_openSecret), NULL);
+	/* Help */
+	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Help"),
+		_("Understanding the GNU Privacy Assistant"), _("help"), NULL,
+	GTK_SIGNAL_FUNC(help_help), NULL);
+
+	return toolbar;
+} /* gpa_file_toolbar_new */
+
+GtkWidget *
 gpa_windowMain_new (char *title)
 {
 /* objects */
@@ -808,6 +858,7 @@ gpa_windowMain_new (char *title)
   GtkWidget *menubar;
   GtkWidget *fileBox;
   GtkWidget *windowFile;
+  GtkWidget *toolbar;
 /* commands */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), title);
@@ -815,6 +866,12 @@ gpa_windowMain_new (char *title)
   vbox = gtk_vbox_new (FALSE, 0);
   menubar = gpa_menubar_new (window);
   gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, TRUE, 0);
+
+  /* set up the toolbar */
+  toolbar = gpa_file_toolbar_new(window);
+  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
+  gtk_container_add(GTK_CONTAINER (vbox), toolbar);
+
   fileBox = gtk_hbox_new (TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (fileBox), 5);
   windowFile = gpa_windowFile_new ();
