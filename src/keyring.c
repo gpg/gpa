@@ -1032,9 +1032,6 @@ keyring_editor_new (void)
   GtkWidget *label;
   GtkWidget *scrolled;
   GtkWidget *keylist;
-  GtkWidget *hseparator;
-  GtkWidget *bbox;
-  GtkWidget *button;
   GtkWidget *notebook;
   GtkWidget *toolbar;
   GtkWidget *hbox;
@@ -1114,24 +1111,6 @@ keyring_editor_new (void)
 
   notebook = keyring_details_notebook (editor);
   gtk_paned_pack2 (GTK_PANED (paned), notebook, TRUE, TRUE);
-
-  
-  hseparator = gtk_hseparator_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), hseparator, FALSE, FALSE, 0);
-
-
-  bbox = gtk_hbutton_box_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
-  gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
-
-  button = gpa_button_new (accel_group, _("_Close"));
-  gtk_widget_add_accelerator (button, "clicked", accel_group, GDK_Escape,
-			      0, 0);
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC (keyring_editor_close),
-			     (gpointer) editor);
-  gtk_container_add (GTK_CONTAINER (bbox), button);
 
   update_selection_sensitive_widgets (editor);
 
