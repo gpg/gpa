@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.3.1a\n"
-"POT-Creation-Date: 2001-02-27 13:59+0100\n"
+"POT-Creation-Date: 2001-04-05 16:13+0200\n"
 "PO-Revision-Date: 2001-02-15 15:22+01:00\n"
 "Last-Translator: Thomas Koester <tkoester@intevation.de>\n"
 "Language-Team: GERMAN <de@li.org>\n"
@@ -68,7 +68,7 @@ msgstr "_OK"
 msgid "Invalid Date"
 msgstr "Ungültiges Datum"
 
-#: src/expirydlg.c:80 src/gpawidgets.c:437
+#: src/expirydlg.c:80 src/gpawidgets.c:439
 msgid "Please provide a correct date"
 msgstr "Bitte geben Sie ein gültiges Datum ein"
 
@@ -112,7 +112,7 @@ msgstr "Status:"
 msgid "_Signatures"
 msgstr "_Signaturen"
 
-#: src/fileman.c:368 src/filemenu.c:660 src/gpawizard.c:106 src/helpmenu.c:355
+#: src/fileman.c:368 src/filemenu.c:660 src/gpawizard.c:106 src/helpmenu.c:358
 #: src/keyeditdlg.c:157 src/keysmenu.c:1114
 msgid "_Close"
 msgstr "S_chließen"
@@ -351,7 +351,7 @@ msgid "Validity"
 msgstr "Gültigkeit"
 
 #: src/filemenu.c:550 src/filemenu.c:950 src/gpawidgets.c:86
-#: src/gpawidgets.c:125 src/keylist.c:201 src/keysmenu.c:1001
+#: src/gpawidgets.c:126 src/keylist.c:201 src/keysmenu.c:1001
 #: src/keysmenu.c:1196 src/optionsmenu.c:200 src/optionsmenu.c:435
 #: src/siglist.c:48
 msgid "Key ID"
@@ -623,33 +623,33 @@ msgstr "Benutzer ID:"
 msgid "Key ID:"
 msgstr "Schlüssel ID:"
 
-#: src/gpawidgets.c:86 src/gpawidgets.c:125
+#: src/gpawidgets.c:86 src/gpawidgets.c:126
 msgid "User Identity/Role"
 msgstr "Benutzer ID"
 
-#: src/gpawidgets.c:266 src/keysmenu.c:251
+#: src/gpawidgets.c:268 src/keysmenu.c:251
 msgid "01.01.2000"
 msgstr "01.01.2000"
 
 #. commands
-#: src/gpawidgets.c:293 src/keysmenu.c:277
+#: src/gpawidgets.c:295 src/keysmenu.c:277
 msgid "Expiration"
 msgstr "Verfallsdatum"
 
-#: src/gpawidgets.c:300 src/keysmenu.c:280
+#: src/gpawidgets.c:302 src/keysmenu.c:280
 msgid "_indefinitely valid"
 msgstr "_unbegrenzt gültig"
 
-#: src/gpawidgets.c:309 src/keysmenu.c:285
+#: src/gpawidgets.c:311 src/keysmenu.c:285
 msgid "expire _after"
 msgstr "verfällt _nach"
 
-#: src/gpawidgets.c:332 src/keysmenu.c:302
+#: src/gpawidgets.c:334 src/keysmenu.c:302
 msgid "expire a_t"
 msgstr "verfä_llt am"
 
 #. this should never happen
-#: src/gpawidgets.c:398 src/keygendlg.c:331 src/keysmenu.c:830
+#: src/gpawidgets.c:400 src/keygendlg.c:331 src/keysmenu.c:830
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -682,53 +682,53 @@ msgstr "Mantra eingeben"
 msgid "_Password: "
 msgstr "Man_tra: "
 
-#: src/helpmenu.c:178
+#: src/helpmenu.c:181
 msgid "About GPA"
 msgstr "Über den GPA"
 
-#: src/helpmenu.c:209
+#: src/helpmenu.c:212
 msgid "brought to you by"
 msgstr "wurde Ihnen überreicht von"
 
-#: src/helpmenu.c:243
+#: src/helpmenu.c:246
 msgid "See http://www.gnupg.org for news"
 msgstr ""
 "Neuigkeiten finden Sie\n"
 "auf http://www.gnupg.org"
 
-#: src/helpmenu.c:320
+#: src/helpmenu.c:323
 msgid "GNU general public license"
 msgstr "GNU general public license"
 
-#: src/helpmenu.c:340
+#: src/helpmenu.c:343
 msgid "_GNU general public license"
 msgstr "_GNU general public license"
 
-#: src/helpmenu.c:369
+#: src/helpmenu.c:372
 msgid "Show Warranty Information\n"
 msgstr "Gewährleistung\n"
 
-#: src/helpmenu.c:375
+#: src/helpmenu.c:378
 msgid "Show Help Text\n"
 msgstr "Hilfe anzeigen\n"
 
-#: src/helpmenu.c:383
+#: src/helpmenu.c:386
 msgid "/_Help"
 msgstr "/_Hilfe"
 
-#: src/helpmenu.c:384
+#: src/helpmenu.c:387
 msgid "/Help/_About"
 msgstr "/Hilfe/_Über"
 
-#: src/helpmenu.c:385
+#: src/helpmenu.c:388
 msgid "/Help/_License"
 msgstr "/Hilfe/_Lizenz"
 
-#: src/helpmenu.c:386
+#: src/helpmenu.c:389
 msgid "/Help/_Warranty"
 msgstr "/Hilfe/_Gewährleistung"
 
-#: src/helpmenu.c:387
+#: src/helpmenu.c:390
 msgid "/Help/_Help"
 msgstr "/Hilfe/_Hilfe"
 

@@ -1,3 +1,7 @@
+2001-04-05  Werner Koch  <wk@gnupg.org>
+
+	* VERSION: Release 0.4.1 
+
 2001-02-27  Werner Koch  <wk@gnupg.org>
 
 	* to-utf8: New.

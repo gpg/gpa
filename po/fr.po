@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2001-02-27 14:40+0100\n"
+"POT-Creation-Date: 2001-04-05 16:13+0200\n"
 "PO-Revision-Date: 2001-03-11 19:40+0100\n"
 "Last-Translator: FULL NAME <pplf@geocities.com>\n"
 "Language-Team: FRENCH <fr@li.org>\n"
@@ -70,7 +70,7 @@ msgstr "_OK"
 msgid "Invalid Date"
 msgstr "Date invalide"
 
-#: src/expirydlg.c:80 src/gpawidgets.c:437
+#: src/expirydlg.c:80 src/gpawidgets.c:439
 msgid "Please provide a correct date"
 msgstr "Veuillez indiquer une date correcte"
 
@@ -353,7 +353,7 @@ msgid "Validity"
 msgstr "Validité"
 
 #: src/filemenu.c:550 src/filemenu.c:950 src/gpawidgets.c:86
-#: src/gpawidgets.c:125 src/keylist.c:201 src/keysmenu.c:1001
+#: src/gpawidgets.c:126 src/keylist.c:201 src/keysmenu.c:1001
 #: src/keysmenu.c:1196 src/optionsmenu.c:200 src/optionsmenu.c:435
 #: src/siglist.c:48
 msgid "Key ID"
@@ -631,33 +631,33 @@ msgstr "Nom d'utilisateur:"
 msgid "Key ID:"
 msgstr "ID de clef:"
 
-#: src/gpawidgets.c:86 src/gpawidgets.c:125
+#: src/gpawidgets.c:86 src/gpawidgets.c:126
 msgid "User Identity/Role"
 msgstr "Identité de l'utilisateur"
 
-#: src/gpawidgets.c:266 src/keysmenu.c:251
+#: src/gpawidgets.c:268 src/keysmenu.c:251
 msgid "01.01.2000"
 msgstr "01.01.2000"
 
 #. commands
-#: src/gpawidgets.c:293 src/keysmenu.c:277
+#: src/gpawidgets.c:295 src/keysmenu.c:277
 msgid "Expiration"
 msgstr "Expiration"
 
-#: src/gpawidgets.c:300 src/keysmenu.c:280
+#: src/gpawidgets.c:302 src/keysmenu.c:280
 msgid "_indefinitely valid"
 msgstr "_valide de manière indéfinie"
 
-#: src/gpawidgets.c:309 src/keysmenu.c:285
+#: src/gpawidgets.c:311 src/keysmenu.c:285
 msgid "expire _after"
 msgstr "expire _après"
 
-#: src/gpawidgets.c:332 src/keysmenu.c:302
+#: src/gpawidgets.c:334 src/keysmenu.c:302
 msgid "expire a_t"
 msgstr "expire l_e"
 
 #. this should never happen
-#: src/gpawidgets.c:398 src/keygendlg.c:331 src/keysmenu.c:830
+#: src/gpawidgets.c:400 src/keygendlg.c:331 src/keysmenu.c:830
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
