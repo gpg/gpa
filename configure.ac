@@ -99,6 +99,11 @@ if test -z "$GPG"; then
   fi
 fi
 
+dnl Find the keyserver plugins. Assume that gpgkeys_ldap is always available
+AC_PATH_PROG(GPGKEYS_LDAP, gpgkeys_ldap, [${libexecdir}/gnupg/gpgkeys_ldap],
+             [$PATH:/usr/lib/gnupg/])
+KEYSERVER_HELPERS_DIR=`dirname $GPGKEYS_LDAP`
+
 AC_DEFINE_UNQUOTED(GPG_PATH, "$GPG", [Path to the gpg binary.])
 
 
@@ -183,7 +188,7 @@ cat >gpadefs.tmp <<GPAEOF
   #define GPA_LOCALEDIR "${prefix}/${DATADIRNAME}/locale"
   #define GPA_DATADIR   "${datadir}/gpa"
   #define GPG_PROGRAM   "${GPG}"
-  #define GPA_KEYSERVER_HELPERS_DIR "${libexecdir}/gnupg"
+  #define GPA_KEYSERVER_HELPERS_DIR "$KEYSERVER_HELPERS_DIR"
 #endif
 GPAEOF
 if cmp -s gpadefs.h gpadefs.tmp 2>/dev/null; then
@@ -198,7 +203,7 @@ fi
 prefix=$prefix
 exec_prefix=$exec_prefix
 libdir=$libdir
-libexecdir=$libexecdir
+KEYSERVER_HELPERS_DIR=$KEYSERVER_HELPERS_DIR
 datadir=$datadir
 DATADIRNAME=$DATADIRNAME
 GPG=$GPG
