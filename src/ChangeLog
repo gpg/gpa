@@ -1,3 +1,8 @@
+2002-12-02  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* server_access.c (do_spawn): Fix shutdown of GIOChannel. Should fix
+	segfault on some systems.
+
 2002-11-29  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpawidgets.c (struct add_key_data_s, gpa_key_list_add_key) 

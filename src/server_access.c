@@ -391,7 +391,8 @@ do_spawn (const gchar *scheme, const gchar *command_filename,
   channel = g_io_channel_unix_new (standard_error);
   g_io_channel_read_to_end (channel, error_output, &length, NULL);
   g_io_channel_unref (channel);
-  g_io_channel_shutdown (channel, TRUE, NULL);
+  /* Make sure the pipe is closed */
+  close (standard_error);
 #endif
 
   return TRUE;
