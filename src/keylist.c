@@ -150,7 +150,7 @@ gpa_keylist_init (GpaKeyList *list)
 			      G_TYPE_INT,
 			      G_TYPE_ULONG,
 			      G_TYPE_ULONG,
-			      G_TYPE_ULONG);
+			      G_TYPE_LONG);
 
   /* The view */
   gtk_tree_view_set_model (GTK_TREE_VIEW (list), GTK_TREE_MODEL (store));
@@ -533,6 +533,7 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
   const gchar *keyid, *ownertrust, *validity;
   gchar *userid, *expiry;
   gboolean has_secret;
+  long int val_value;
 
   /* Remove the dialog if it is being displayed */
   remove_trustdb_dialog (list);
@@ -572,6 +573,17 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
     }
   /* Append the key to the list */
   gtk_list_store_append (store, &iter);
+
+  /* Set an appropiate value for sorting revoked and expired keys. This 
+   * includes a hack for forcing a value to a range outside the
+   * usual validity values */
+  if (key->subkeys->revoked)
+      val_value = GPGME_VALIDITY_UNKNOWN-2;
+  else if (key->subkeys->expired)
+      val_value = GPGME_VALIDITY_UNKNOWN-1;
+  else
+      val_value = key->uids->validity;
+
   gtk_list_store_set (store, &iter,
 		      GPA_KEYLIST_COLUMN_IMAGE, get_key_pixbuf (key),
 		      GPA_KEYLIST_COLUMN_KEYID, keyid, 
@@ -585,8 +597,11 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
 		      GPA_KEYLIST_COLUMN_EXPIRY_TS, 
 		      key->subkeys->expires ? 
 		      key->subkeys->expires : G_MAXULONG,
-		      GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE, key->owner_trust,
-		      GPA_KEYLIST_COLUMN_VALIDITY_VALUE, key->uids[0].validity,
+		      GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE, 
+		      key->owner_trust,
+		      /* Set revoked and expired keys to "never trust" for 
+		       * sorting */
+		      GPA_KEYLIST_COLUMN_VALIDITY_VALUE, val_value,
 		      -1);
   /* Clean up */
   g_free (userid);

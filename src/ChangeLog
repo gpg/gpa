@@ -1,3 +1,9 @@
+2003-12-15  Miguel Coca  <mcoca@gnu.org>
+
+	* keylist.c (gpa_keylist_next, gpa_keylist_init): Change the sorting
+	value for revoked and expired keys. This requires supporting negative
+	values in the sorting column.
+
 2003-11-27  Miguel Coca  <mcoca@gnu.org>
 
 	* keylist.c (gpa_keylist_elgamal_dialog): New.
