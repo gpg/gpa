@@ -1,3 +1,8 @@
+2002-12-14  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (keyring_editor_paste): Fix segfault when the clipboard
+	was empty.
+
 2002-12-13  Miguel Coca  <mcoca@gnu.org>
 
 	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_sig_get_sig_status): Use

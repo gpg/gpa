@@ -929,9 +929,18 @@ keyring_editor_paste (gpointer param)
   gchar *text = gtk_clipboard_wait_for_text (gtk_clipboard_get
                                              (GDK_SELECTION_CLIPBOARD));
 
-  /* Fill the data from the selection clipboard.
-   */
-  err = gpgme_data_new_from_mem (&data, text, strlen (text), FALSE);
+  if (text)
+    {
+      /* Fill the data from the selection clipboard.
+       */
+      err = gpgme_data_new_from_mem (&data, text, strlen (text), FALSE);
+    }
+  else
+    {
+      /* If the keyboard was empty, create an empty data
+       */
+      err = gpgme_data_new (&data);
+    }
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);
@@ -939,7 +948,10 @@ keyring_editor_paste (gpointer param)
   /* Import */
   keyring_editor_import_do_import (editor, data);
   gpgme_data_release (data);
-  g_free (text);
+  if (text)
+    {
+      g_free (text);
+    }
 }
 
 /* Copy the keys into the clipboard */
