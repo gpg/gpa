@@ -443,8 +443,29 @@ test_edithelp (void)
   gpgargv[0] = "--edit-key";
   gpgargv[1] = "test";
   gpgargv[2] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, "help\nquit\n", NULL,
+  gpapa_call_gnupg (gpgargv, TRUE, "help\nexpire\n0\nsave\n", NULL,
 		    linecallback, "pruzzel", callback, NULL);
+}
+
+void
+test_genkey (void)
+{
+  char *gpgargv[3];
+  gpgargv[0] = "--gen-key";
+  gpgargv[1] = NULL;
+  gpapa_call_gnupg (gpgargv, TRUE, "%echo Generating a standard key\nKey-Type: DSA\nKey-Length: 1024\nSubkey-Type: ELG-E\nSubkey-Length: 1024\nName-Real: Joe Tester\nName-Comment: with stupid passphrase\nName-Email: joe@foo.bar\nExpire-Date: 0\nPassphrase: abc\n%pubring foo.pub\n%secring foo.sec\n%commit\n%echo done\n", NULL, linecallback, "pruzzel", callback, NULL);
+}
+
+void
+test_gpapa_key_set_expiry_date (void)
+{
+  GpapaPublicKey *key;
+  GDate *date; 
+  char *userID;
+  userID = "test";
+  date = g_date_new_dmy (2,2,2002); 
+  key = gpapa_get_public_key_by_userID (userID,  callback, calldata);
+  gpapa_key_set_expiry_date (GPAPA_KEY (key), date, callback, calldata);
 }
 
 void
@@ -494,9 +515,15 @@ main (int argc, char **argv)
     test_export_secret ("7D0908A0EE9A8BFB");
   else if (!strcmp (what, "edithelp"))
     test_edithelp ();
+  else if (!strcmp (what, "genkey"))
+    test_genkey ();
+  else if (!strcmp (what, "gpapa_expiry"))
+    test_gpapa_key_set_expiry_date ();
   else if (!strcmp (what, "encrypt"))
     test_encrypt (g_list_append (g_list_append (NULL, "983465DB21439422"),
 				 "6C7EE1B8621CC013"), "7D0908A0EE9A8BFB");
 
   return (0);
 }				/* main */
+
+

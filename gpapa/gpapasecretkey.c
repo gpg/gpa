@@ -75,13 +75,14 @@ gpapa_secret_key_delete (GpapaSecretKey * key, GpapaCallbackFunc callback,
   else
     {
       gchar *full_keyID;
-      char *gpgargv[3];
+      char *gpgargv[4];
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
-      gpgargv[0] = "--delete-secret-key";
-      gpgargv[1] = full_keyID;
-      gpgargv[2] = NULL;
+      gpgargv[0] = "--yes";
+      gpgargv[1] = "--delete-secret-key";
+      gpgargv[2] = full_keyID;
+      gpgargv[3] = NULL;
       gpapa_call_gnupg
-	(gpgargv, TRUE, NULL, NULL,
+	(gpgargv, TRUE, "\n", NULL,
 	 NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_secret_keyring (callback, calldata);
@@ -95,7 +96,28 @@ gpapa_secret_key_create_revocation (GpapaSecretKey * key,
 				    GpapaCallbackFunc callback,
 				    gpointer calldata)
 {
-  g_print ("Create revocation certificate for key 0x");	/*!!! */
-  g_print (gpapa_key_get_identifier (GPAPA_KEY (key), callback, calldata));	/*!!! */
-  g_print ("\n");		/*!!! */
+
+  if(key)
+    {
+      gchar *gpgargv[3];
+      gchar *commands;
+      gchar *commands_sprintf_str;
+      commands_sprintf_str = "yes \n1 \n\n";
+      commands = (char *) (xmalloc (strlen (commands_sprintf_str)));
+      sprintf (commands, commands_sprintf_str);
+/* printf("\n-->%s<--\n",commands);  */
+      gpgargv[0] = "--gen-revoke";
+      gpgargv[1] = key->key->KeyID;
+      gpgargv[2] = NULL; 
+      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL,
+                        NULL, NULL, callback, calldata); 
+      free(commands);
+    }
+  /*  g_print ("Create revocation certificate for key 0x");	/*!!! */
+  /* g_print (gpapa_key_get_identifier (GPAPA_KEY (key), callback, calldata));	/*!!! */
+  /* g_print ("\n");*/		/*!!! */
 }				/* gpapa_secret_key_create_revocation */
+
+
+
+

@@ -40,7 +40,6 @@
 #include "stringhelp.h"
 
 #define DEBUG 1
-/* #define TEST_PASSPHRASE "test" */
 
 #ifdef __MINGW32__
 struct gpg_object_private {
@@ -439,7 +438,7 @@ gpapa_gnupg_close ( GPG_OBJECT *gpg )
 
 #ifndef __MINGW32__
 static GPG_OBJECT * 
-spawn_gnupg(char **user_args, gchar * commands,
+spawn_gnupg(char **user_args, gchar * commands, gchar * passphrase,
                 GpapaCallbackFunc callback, gpointer calldata)
 {
   int pid;
@@ -449,11 +448,8 @@ spawn_gnupg(char **user_args, gchar * commands,
   int argc, user_args_counter, standard_args_counter, i, j;
   GPG_OBJECT *gpg = NULL;
 
-#ifdef TEST_PASSPHRASE
   int passfd[2];
   char passfd_str[10];
-  gchar passphrase[] = "test";
-#endif
 
   /* FIXME: Make user_args const and copy/release the argument array */
 
@@ -493,7 +489,6 @@ spawn_gnupg(char **user_args, gchar * commands,
     }
   sprintf (statusfd_str, "%d", statusfd[1]);
 
-#ifdef TEST_PASSPHRASE
   if (passphrase)
     {
       /* Open passphrase pipe.
@@ -512,7 +507,6 @@ spawn_gnupg(char **user_args, gchar * commands,
       write (passfd[1], passphrase, strlen (passphrase));
       write (passfd[1], "\n", 1);
     }
-#endif
 
   if (commands)
     {
@@ -527,13 +521,11 @@ spawn_gnupg(char **user_args, gchar * commands,
 	  close (statusfd[0]);
 	  close (statusfd[1]);
 
-#ifdef TEST_PASSPHRASE
   	  if (passphrase)
   	    {
   	      close (passfd[0]);
   	      close (passfd[1]); 
   	    } 
-#endif
 	  return NULL;
 	}
       write (inputfd[1], commands, strlen (commands));
@@ -550,10 +542,8 @@ spawn_gnupg(char **user_args, gchar * commands,
     standard_args_counter++;
   argc = 1 + standard_args_counter + user_args_counter;
 
-#ifdef TEST_PASSPHRASE
     if (passphrase)
       argc += 2;
-#endif
 
     if (commands) 
 	argc += 2;
@@ -563,13 +553,11 @@ spawn_gnupg(char **user_args, gchar * commands,
   for (j = 0; j < standard_args_counter; j++)
     argv[i++] = standard_args[j];
 
-#ifdef TEST_PASSPHRASE
     if (passphrase)
       {
         argv[i++] = "--passphrase-fd";
         argv[i++] = passfd_str;
       }
-#endif
 
     if (commands)
     { 
@@ -936,7 +924,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar *commands,
   if (!line_cb)
     line_cb = dummy_linecallback;
 
-  gpg = spawn_gnupg (user_args, commands, callback, calldata);
+  gpg = spawn_gnupg (user_args, commands, passphrase, callback, calldata);
   if (!gpg)
     {
       callback (GPAPA_ACTION_ERROR, "spawn_gnupg failed", calldata);

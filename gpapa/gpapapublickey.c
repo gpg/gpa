@@ -140,11 +140,16 @@ gpapa_public_key_get_keytrust (GpapaPublicKey * key,
       {
       case 'n':
 	return (GPAPA_KEYTRUST_DISTRUST);
+	break;
       case 'm':
 	return (GPAPA_KEYTRUST_MARGINALLY);
+	break;
       case 'f':
-      case 'u':
 	return (GPAPA_KEYTRUST_FULLY);
+	break;
+      case 'q':
+	return (GPAPA_KEYTRUST_UNKNOWN);
+	break;
       default:
 	return (GPAPA_KEYTRUST_UNKNOWN);
       }
@@ -162,11 +167,16 @@ gpapa_public_key_get_ownertrust (GpapaPublicKey * key,
       {
       case 'n':
 	return (GPAPA_OWNERTRUST_DISTRUST);
+	break;
       case 'm':
 	return (GPAPA_OWNERTRUST_MARGINALLY);
+	break;
       case 'f':
-      case 'u':
 	return (GPAPA_OWNERTRUST_FULLY);
+	break;
+      case 'q':
+	return (GPAPA_KEYTRUST_UNKNOWN);
+	break;
       default:
 	return (GPAPA_OWNERTRUST_UNKNOWN);
       }
@@ -177,9 +187,36 @@ gpapa_public_key_set_ownertrust (GpapaPublicKey * key, GpapaOwnertrust trust,
 				 GpapaCallbackFunc callback,
 				 gpointer calldata)
 {
-  if (key)
-    printf ("Setting ownertrust of key 0x%s to level %d\n",
-	    key->key->KeyID, trust);
+  if(key)
+    {
+      gchar *gpgargv[3];
+      gchar *commands;
+      gchar *commands_sprintf_str;
+      int trust_int;
+      switch (trust)
+	{
+	  case GPAPA_OWNERTRUST_DISTRUST:
+	    trust_int = 2;
+	    break;
+	  case GPAPA_OWNERTRUST_MARGINALLY:
+	    trust_int = 3;
+	    break;
+	  case GPAPA_OWNERTRUST_FULLY:
+	    trust_int = 4;
+	    break;
+	  default:
+	    trust_int = 1;
+	}
+      commands_sprintf_str = "trust \n%u \nquit \n";
+      commands = (char *) (xmalloc (strlen (commands_sprintf_str) + 1));
+      sprintf (commands, commands_sprintf_str, trust_int);
+      gpgargv[0] = "--edit-key";
+      gpgargv[1] = key->key->KeyID;
+      gpgargv[2] = NULL; 
+      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL,
+                        NULL, NULL, callback, calldata); 
+      free(commands);
+    }
 }				/* gpapa_public_key_set_ownertrust */
 
 static GpapaSignature *
@@ -318,13 +355,14 @@ gpapa_public_key_delete (GpapaPublicKey * key, GpapaCallbackFunc callback,
   else
     {
       gchar *full_keyID;
-      char *gpgargv[3];
+      char *gpgargv[4];
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
-      gpgargv[0] = "--delete-key";
-      gpgargv[1] = full_keyID;
-      gpgargv[2] = NULL;
+      gpgargv[0] = "--yes";
+      gpgargv[1] = "--delete-key";
+      gpgargv[2] = full_keyID;
+      gpgargv[3] = NULL;
       gpapa_call_gnupg
-	(gpgargv, TRUE, NULL, NULL,
+	(gpgargv, TRUE, "\n\n", NULL,
 	 NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_public_keyring (callback, calldata);
@@ -393,6 +431,12 @@ gpapa_public_key_sign (GpapaPublicKey * key, gchar * keyID,
        SignType == GPAPA_KEY_SIGN_LOCALLY ? "Locally signing" : "signing",
        key->key->KeyID, keyID); */
 }				/* gpapa_public_key_sign */
+
+
+
+
+
+
 
 
 

@@ -58,6 +58,10 @@ extern GpapaPublicKey *gpapa_get_public_key_by_ID (gchar * keyID,
 						   GpapaCallbackFunc callback,
 						   gpointer calldata);
 
+extern GpapaPublicKey *gpapa_get_public_key_by_userID (gchar * userID,
+						   GpapaCallbackFunc callback,
+						   gpointer calldata);
+
 extern GpapaPublicKey *gpapa_receive_public_key_from_server (gchar * keyID,
 							     gchar *
 							     ServerName,
@@ -82,6 +86,10 @@ extern GpapaSecretKey *gpapa_get_secret_key_by_index (gint idx,
 						      gpointer calldata);
 
 extern GpapaSecretKey *gpapa_get_secret_key_by_ID (gchar * keyID,
+						   GpapaCallbackFunc callback,
+						   gpointer calldata);
+
+extern GpapaSecretKey *gpapa_get_secret_key_by_userID (gchar * userID,
 						   GpapaCallbackFunc callback,
 						   gpointer calldata);
 

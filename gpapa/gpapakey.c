@@ -68,8 +68,22 @@ void
 gpapa_key_set_expiry_date (GpapaKey * key, GDate * date,
 			   GpapaCallbackFunc callback, gpointer calldata)
 {
-  if (key)
-    printf ("Setting expiry date of key 0x%s.\n", key->KeyID);
+  if (key && date)
+    {
+      gchar *gpgargv[3];
+      gchar *commands;
+      gchar *commands_sprintf_str;
+      commands_sprintf_str = "expire \n%04u-%02u-%02u \nsave \n";
+      commands = (char *) (xmalloc (strlen (commands_sprintf_str) + 8));
+      sprintf (commands, commands_sprintf_str, date->year, date->month,
+               date->day);
+      gpgargv[0] = "--edit-key";
+      gpgargv[1] = key->KeyID;
+      gpgargv[2] = NULL; 
+      gpapa_call_gnupg (gpgargv, TRUE, commands, NULL,
+                        NULL, NULL, callback, calldata); 
+      free(commands);
+    }
 }				/* gpapa_key_set_expiry_date */
 
 void

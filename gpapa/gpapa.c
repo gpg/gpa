@@ -197,6 +197,25 @@ gpapa_get_public_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
 }				/* gpapa_get_public_key_by_ID */
 
 GpapaPublicKey *
+gpapa_get_public_key_by_userID (gchar * userID, GpapaCallbackFunc callback,
+			    gpointer calldata)
+{
+  PublicKeyData data = { NULL, callback, calldata };
+  char *gpgargv[4];
+  char *uid = (char *) xmalloc (strlen (userID));
+  uid = strcpy (uid, userID);
+  gpgargv[0] = "--list-keys";
+  gpgargv[1] = "--with-colons";
+  gpgargv[2] = uid;
+  gpgargv[3] = NULL;
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+		    linecallback_id_pub, &data, callback, calldata);
+  free (uid);
+  return (data.key);
+}
+
+
+GpapaPublicKey *
 gpapa_receive_public_key_from_server (gchar * keyID, gchar * ServerName,
 				      GpapaCallbackFunc callback,
 				      gpointer calldata)
@@ -306,6 +325,24 @@ gpapa_get_secret_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
   return (data.key);
 }				/* gpapa_get_secret_key_by_ID */
 
+GpapaSecretKey *
+gpapa_get_secret_key_by_userID (gchar * userID, GpapaCallbackFunc callback,
+			    gpointer calldata)
+{
+  SecretKeyData data = { NULL, callback, calldata };
+  char *gpgargv[4];
+  char *uid = (char *) xmalloc (strlen (userID));
+  uid = strcpy (uid, userID);
+  gpgargv[0] = "--list-secret-keys";
+  gpgargv[1] = "--with-colons";
+  gpgargv[2] = uid;
+  gpgargv[3] = NULL;
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+		    linecallback_id_sec, &data, callback, calldata);
+  free(uid);
+  return (data.key);
+}
+
 void
 gpapa_release_secret_key (GpapaSecretKey * key, GpapaCallbackFunc callback,
 			  gpointer calldata)
@@ -322,7 +359,7 @@ gpapa_create_key_pair (GpapaPublicKey ** publicKey,
 		       gchar * anEmail, gchar * aComment,
 		       GpapaCallbackFunc callback, gpointer calldata)
 {
-  if (passphrase && aKeysize && aUserID && anEmail && aComment)
+  if (aKeysize && aUserID && anEmail && aComment)
     {
       gchar *gpgargv[2];
       gchar *commands;
@@ -387,8 +424,10 @@ gpapa_create_key_pair (GpapaPublicKey ** publicKey,
       gpapa_call_gnupg (gpgargv, TRUE, commands, passphrase, 
 			NULL, NULL, callback, calldata);
       free(commands);
-      /*      *publicKey = gpapa_get_public_key_by_ID ( aUserID, callback, calldata);
-       *secretKey = gpapa_get_secret_key_by_ID ( aUserID, callback, calldata); */
+      *publicKey = gpapa_get_public_key_by_userID 
+	             ( aUserID, callback, calldata);
+      *secretKey = gpapa_get_secret_key_by_userID 
+	      ( aUserID, callback, calldata);
     }
 }				/* gpapa_create_key_pair */
 
