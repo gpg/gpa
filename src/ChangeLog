@@ -1,5 +1,13 @@
 2002-11-08  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* server_access.c (check_errors): Always return something.
+	(do_spawn): Report exec errors here, return boolean indicating
+	success.
+	(invoke_helper): Return boolean indicating success. Properly check
+	the return code of check_errors.
+	(server_send_keys, server_get_key): Check the return value of
+	invoke_helper.
+
 	* keyring.c (keyring_editor_import): Check for errors getting keys
 	from the server.
 

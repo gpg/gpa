@@ -317,6 +317,7 @@ check_errors (int exit_status, gchar *error_message, gchar *output_filename,
           return TRUE;
         }
     }
+  return FALSE;
 }
 
 /* This is a hack: when a SIGCHLD is received, close the dialog. We need a
@@ -328,23 +329,28 @@ close_dialog (int sig)
   gtk_dialog_response (GTK_DIALOG (waiting_dlg), GTK_RESPONSE_CLOSE);
 }
 
-/* Run the helper, and update the dialog if possible */
-static void
+/* Run the helper, and update the dialog if possible. Returns FALSE on error */
+static gboolean
 do_spawn (const gchar *scheme, const gchar *command_filename,
           const gchar *output_filename, gchar **error_output,
-          gint *exit_status, GError **error, GtkWidget *dialog)
+          gint *exit_status, GtkWidget *dialog)
 {
   gchar *helper_argv[] = {NULL, "-o", NULL, NULL, NULL};
+  GError *error = NULL;
 #ifdef G_OS_UNIX
   pid_t pid;
   gint standard_error, length;
   GIOChannel *channel;
 #endif
 
+  /* Make sure output parameters get a sane value */
+  *error_output = NULL;
+  *exit_status = 127;
   /* Build the command line */
   helper_argv[0] = helper_path (scheme);
   helper_argv[2] = (gchar*) output_filename;
   helper_argv[3] = (gchar*) command_filename;
+
   /* Invoke the keyserver helper */
 #ifdef G_OS_UNIX
   /* On Unix, run the helper asyncronously, so that we can update the dialog */
@@ -352,7 +358,27 @@ do_spawn (const gchar *scheme, const gchar *command_filename,
                             G_SPAWN_STDOUT_TO_DEV_NULL|
                             G_SPAWN_DO_NOT_REAP_CHILD, 
                             NULL, NULL, &pid, NULL, NULL, &standard_error,
-                            error);
+                            &error);
+#else
+  /* On Windows, use syncronous spawn */
+  g_spawn_sync (NULL, helper_argv, NULL, 
+		G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, 
+		NULL, error_output, exit_status, error);
+#endif
+
+  /* Free the helper's filename */
+  g_free (helper_argv[0]);
+
+  if (error)
+    {
+      /* An error ocurred in the fork/exec: we assume that there is no plugin.
+       */
+      gpa_window_error (_("There is no plugin available for the keyserver\n"
+                          "protocol you specified."), dialog);
+      return FALSE;
+    }
+
+#ifdef G_OS_UNIX
   /* FIXME: Could we do this properly, without a global variable? */
   /* We run the dialog until we get a SIGCHLD, meaning the helper has
    * finnished, then we wait for it. */
@@ -366,53 +392,41 @@ do_spawn (const gchar *scheme, const gchar *command_filename,
   g_io_channel_read_to_end (channel, error_output, &length, NULL);
   g_io_channel_unref (channel);
   g_io_channel_shutdown (channel, TRUE, NULL);
-#else
-  /* On Windows, use syncronous spawn */
-  g_spawn_sync (NULL, helper_argv, NULL, 
-		G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, 
-		NULL, error_output, exit_status, error);
 #endif
-  /* Free the helper's filename */
-  g_free (helper_argv[0]);
+
+  return TRUE;
 }
 
-static int
+static gboolean
 invoke_helper (const gchar *server, const gchar *scheme,
                gchar *command_filename, gchar **output_filename,
                GtkWidget *parent)
 {
-  GError *error = NULL;
   int exit_status;
   int output_fd;
   gchar *error_output;
-  GtkWidget *dialog;
+  GtkWidget *dialog = NULL;
+  gboolean result = TRUE;
 
   /* Display a pretty dialog */
-  dialog = wait_dialog (server, parent);  
+  dialog = wait_dialog (server, parent);
   /* Open the output file */
   output_fd = g_file_open_tmp (OUTPUT_TEMP_NAME, output_filename, NULL);
   /* Run the helper */
-  do_spawn (scheme, command_filename, *output_filename, &error_output,
-            &exit_status, &error, dialog);
-  /* Error checking */
-  if (error)
+  result = do_spawn (scheme, command_filename, *output_filename, &error_output,
+                     &exit_status, dialog);
+  /* If the exec went well, check for errors in the output */
+  if (result)
     {
-      /* An error ocurred in the fork/exec: we assume that there is no plugin.
-       */
-      gpa_window_error (_("There is no plugin available for the keyserver\n"
-			  "protocol you specified."), dialog);
-    }
-  else
-    {
-      check_errors (exit_status, error_output, *output_filename,
-                    protocol_version (scheme), dialog);
+      result = !check_errors (exit_status, error_output, *output_filename,
+                              protocol_version (scheme), dialog);
     }
   close (output_fd);
   g_free (error_output);
   /* Destroy the dialog */
   gtk_widget_destroy (dialog);
 
-  return exit_status;
+  return result;
 }
 
 /* Public functions */
@@ -425,7 +439,7 @@ gboolean server_send_keys (const gchar *server, const gchar *keyid,
   int command_fd;
   FILE *command;
   gchar *scheme, *host, *port, *opaque;
-  int exit_status;
+  gboolean success;
 
   /* Parse the URI */
   if (!parse_keyserver_uri (keyserver, &scheme, &host, &port, &opaque))
@@ -443,8 +457,8 @@ gboolean server_send_keys (const gchar *server, const gchar *keyid,
   dump_data_to_file (data, command);
   fprintf (command, "\nKEY %s END\n", keyid);
   fclose (command);
-  exit_status = invoke_helper (server, scheme, command_filename, 
-                               &output_filename, parent);
+  success = invoke_helper (server, scheme, command_filename, 
+                           &output_filename, parent);
   g_free (keyserver);
   /* Delete temp files */
   unlink (command_filename);
@@ -452,7 +466,7 @@ gboolean server_send_keys (const gchar *server, const gchar *keyid,
   unlink (output_filename);
   g_free (output_filename);
 
-  return (exit_status == 0);
+  return success;
 }
 
 gboolean server_get_key (const gchar *server, const gchar *keyid,
@@ -463,7 +477,7 @@ gboolean server_get_key (const gchar *server, const gchar *keyid,
   int command_fd;
   FILE *command;
   gchar *scheme, *host, *port, *opaque;
-  int exit_status;
+  int success;
   GpgmeError err;
 
   /* Parse the URI */
@@ -486,8 +500,8 @@ gboolean server_get_key (const gchar *server, const gchar *keyid,
   /* Write the keys to the file */
   fprintf (command, "0x%s\n", keyid);
   fclose (command);
-  exit_status = invoke_helper (server, scheme, command_filename,
-                               &output_filename, parent);
+  success = invoke_helper (server, scheme, command_filename,
+                           &output_filename, parent);
   /* Read the output */
   /* No error checking: the import will take care of that. */
   err = gpa_gpgme_data_new_from_file (data, output_filename, parent);
@@ -502,5 +516,5 @@ gboolean server_get_key (const gchar *server, const gchar *keyid,
   unlink (output_filename);
   g_free (output_filename);
 
-  return (exit_status == 0);
+  return success;
 }
