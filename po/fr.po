@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2002-12-17 15:04+0100\n"
-"PO-Revision-Date: 2001-03-11 19:40+0100\n"
+"PO-Revision-Date: 2002-12-18 13:55+0100\n"
 "Last-Translator: FULL NAME <pplf@geocities.com>\n"
 "Language-Team: FRENCH <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -158,9 +158,8 @@ msgid "/File/_Sign"
 msgstr "/Fichier/_Signer"
 
 #: src/fileman.c:365
-#, fuzzy
 msgid "/File/_Verify"
-msgstr "/Fichier/_Déchiffrer"
+msgstr "/Fichier/_Verify"
 
 #: src/fileman.c:366
 msgid "/File/_Encrypt"
@@ -1407,6 +1406,7 @@ msgid "/Edit/sep1"
 msgstr "/Fichier/sep1"
 
 #: src/keyring.c:998
+#, fuzzy
 msgid "/_Keys"
 msgstr "/_Clefs"
 

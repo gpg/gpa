@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
 "POT-Creation-Date: 2002-12-17 15:04+0100\n"
-"PO-Revision-Date: 2002-12-18 13:23+0100\n"
+"PO-Revision-Date: 2002-12-18 17:35+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: GERMAN <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -156,7 +156,6 @@ msgid "/File/_Sign"
 msgstr "/Datei/_Signieren"
 
 #: src/fileman.c:365
-#, fuzzy
 msgid "/File/_Verify"
 msgstr "/Datei/Über_prüfen"
 
@@ -1400,9 +1399,8 @@ msgid "/_Keys"
 msgstr "/_Schlüssel"
 
 #: src/keyring.c:999
-#, fuzzy
 msgid "/Keys/_New Key..."
-msgstr "/Schlüssel/E_xportieren..."
+msgstr "/Schlüssel/_Neuer Schlüssel..."
 
 #: src/keyring.c:1001
 msgid "/Keys/_Delete Keys..."
@@ -1417,14 +1415,12 @@ msgid "/Keys/_Sign Keys..."
 msgstr "/Schlüssel/_Signieren..."
 
 #: src/keyring.c:1005
-#, fuzzy
 msgid "/Keys/Set _Owner Trust..."
-msgstr "Benutzervertrauen ändern"
+msgstr "/Schlüssel/_Vertrauen einstellen..."
 
 #: src/keyring.c:1006
-#, fuzzy
 msgid "/Keys/_Edit Private Key..."
-msgstr "/Schlüssel/_Geheime Schlüssel exportieren..."
+msgstr "/Schlüssel/G_eheimen Schlüssel Bearbeiten..."
 
 #: src/keyring.c:1007
 msgid "/Keys/sep2"
@@ -1455,18 +1451,16 @@ msgid "/Edit/Copy"
 msgstr ""
 
 #: src/keyring.c:1066
-#, fuzzy
 msgid "/Keys/Set Owner Trust..."
-msgstr "Benutzervertrauen ändern"
+msgstr "/Schlüssel/Vertrauen einstellen..."
 
 #: src/keyring.c:1075
 msgid "/Keys/Sign Keys..."
 msgstr "/Schlüssel/Signieren..."
 
 #: src/keyring.c:1084
-#, fuzzy
 msgid "/Keys/Edit Private Key..."
-msgstr "/Schlüssel/_Geheime Schlüssel exportieren..."
+msgstr "/Schlüssel/Geheimen Schlüssel Bearbeiten..."
 
 #: src/keyring.c:1092
 #, fuzzy
