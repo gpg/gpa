@@ -1,5 +1,17 @@
 2001-02-08  Bernhard Herzog  <bh@intevation.de>
 
+	* keydeletedlg.h:
+	* keydeletedlg.c: New files for the key delete dialog.
+
+	* Makefile.am (gpa_SOURCES): Add the new key delete dialog files.
+
+	* keyring.c (keyring_editor_delete): Use the new delete dialog
+	instead of a simple message box.
+
+	* gpawidgets.h (gpa_key_info_new):
+	* gpawidgets.c (gpa_key_info_new): New function to create a simple
+	table with info about a key.
+
 	* keygenwizard.c (GPAKeyGenWizard): Add fields for the wizard
 	widget and the wait-page.
 	(gpa_keygen_wizard_password_action): Switch to the wait-page.
