@@ -73,6 +73,9 @@ struct _GPAKeyringEditor {
   GtkWidget *detail_name;
   GtkWidget *detail_fingerprint;
   GtkWidget *detail_expiry;
+  GtkWidget *detail_key_id;
+  GtkWidget *detail_key_trust;
+  GtkWidget *detail_key_type;
 
   /* The signatures list in the notebook */
   GtkWidget *signatures_list;
@@ -738,6 +741,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   GtkWidget * vbox;
   GtkWidget * scrolled;
   GtkWidget * siglist;
+  gint table_row;
 
   notebook = gtk_notebook_new ();
 
@@ -748,16 +752,25 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   editor->details_num_label = label;
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
   
-  table = gtk_table_new (2, 3, FALSE);
+  table = gtk_table_new (2, 6, FALSE);
   editor->details_table = table;
   gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
-  
-  editor->detail_name = add_details_row (table, 0, _("User Name:"), FALSE);
-  editor->detail_fingerprint = add_details_row (table, 1, _("Fingerprint:"),
-						TRUE);
-  editor->detail_expiry = add_details_row (table, 2, _("Expires at:"), FALSE); 
+
+  table_row = 0;
+  editor->detail_name = add_details_row (table, table_row++,
+					 _("User Name:"), FALSE);
+  editor->detail_key_id = add_details_row (table, table_row++,
+					   _("Key ID:"), FALSE);
+  editor->detail_fingerprint = add_details_row (table, table_row++,
+						_("Fingerprint:"), TRUE);
+  editor->detail_expiry = add_details_row (table, table_row++,
+					   _("Expires at:"), FALSE); 
+  editor->detail_key_trust = add_details_row (table, table_row++,
+					      _("Key Trust:"), FALSE);
+  editor->detail_key_type = add_details_row (table, table_row++, _("Key Type"),
+					     FALSE);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), vbox,
 			    gtk_label_new (_("Details")));
@@ -786,13 +799,19 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 /* Fill the details page of the details notebook with the properties of
  * the publix key key */
 static void
-keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key)
+keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key,
+			       GpapaSecretKey * secret_key)
 {
   GDate * expiry_date;
+  GpapaKeytrust trust;
   gchar * text;
 
   text = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, editor->window);
   gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
+
+  text = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
+				   editor->window);
+  gtk_label_set_text (GTK_LABEL (editor->detail_key_id), text);
 
   text = gpapa_public_key_get_fingerprint (key, gpa_callback, editor->window);
   gtk_entry_set_text (GTK_ENTRY (editor->detail_fingerprint), text);
@@ -803,7 +822,21 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key)
   gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
   free (text);
 
-  
+  trust = gpapa_public_key_get_keytrust (key, gpa_callback, editor->window);
+  text = gpa_ownertrust_string (trust);
+  gtk_label_set_text (GTK_LABEL (editor->detail_key_trust), text);
+
+  if (secret_key)
+    {
+      gtk_label_set_text (GTK_LABEL (editor->detail_key_type),
+			  _("The key has both a private and a public part"));
+    }
+  else
+    {
+      gtk_label_set_text (GTK_LABEL (editor->detail_key_type),
+			  _("The key has only a public part"));
+    }
+
   gtk_widget_hide (editor->details_num_label);
   gtk_widget_show (editor->details_table);
 } /* keyring_details_page_fill_key */
@@ -877,9 +910,16 @@ idle_update_details (gpointer param)
 
   if (num_selected == 1)
     {
-      GpapaPublicKey * key = keyring_editor_current_key (editor);
-      keyring_details_page_fill_key (editor, key);
-      keyring_signatures_page_fill_key (editor, key);
+      gchar * key_id = keyring_editor_current_key_id (editor);
+      GpapaPublicKey * public_key;
+      GpapaSecretKey * secret_key;
+
+      public_key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
+					       editor->window);
+      secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback,
+					       editor->window);
+      keyring_details_page_fill_key (editor, public_key, secret_key);
+      keyring_signatures_page_fill_key (editor, public_key);
     }
   else
     {
@@ -1242,6 +1282,7 @@ keyring_editor_new (void)
 
   keyring_update_status_bar (editor);
   update_selection_sensitive_widgets (editor);
+  keyring_update_details_notebook (editor);
 
   return window;
 } /* keyring_editor_new */
