@@ -26,7 +26,6 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include "gpacontext.h"
-#include "options.h"
 
 /* GObject stuff */
 #define GPA_OPERATION_TYPE	  (gpa_operation_get_type ())
@@ -43,7 +42,6 @@ struct _GpaOperation {
   GObject parent;
 
   GtkWidget *window;
-  GpaOptions *options;
   GpaContext *context;
 };
 

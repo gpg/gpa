@@ -28,7 +28,7 @@ static void
 key_selected_cb (GtkCList *clist, gint row, gint column,
                  GdkEventButton *event, gpointer user_data)
 {
-  gpa_options_set_default_key (gpa_options,
+  gpa_options_set_default_key (gpa_options_get_instance (),
                                gpa_key_list_selected_id (GTK_WIDGET(clist)));
 }
 
@@ -57,7 +57,7 @@ default_key_frame (void)
 static void
 keyserver_selected_cb (GtkWidget *entry, gpointer user_data)
 {
-  gpa_options_set_default_keyserver (gpa_options,
+  gpa_options_set_default_keyserver (gpa_options_get_instance (),
                                      gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
@@ -84,7 +84,8 @@ default_keyserver_frame (void)
   /* Set current value */
   gtk_combo_set_popdown_strings (GTK_COMBO (combo), keyserver_get_as_glist ());
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
-                      gpa_options_get_default_keyserver (gpa_options));
+                      gpa_options_get_default_keyserver 
+		      (gpa_options_get_instance ()));
   /* Connect signals */
   g_signal_connect (G_OBJECT (GTK_COMBO (combo)->entry), "activate",
                     G_CALLBACK (keyserver_selected_cb), NULL);
@@ -103,11 +104,11 @@ advanced_mode_toggled (GtkToggleButton *yes_button, gpointer user_data)
 {
   if (gtk_toggle_button_get_active (yes_button))
     {
-      gpa_options_set_simplified_ui (gpa_options, FALSE);
+      gpa_options_set_simplified_ui (gpa_options_get_instance (), FALSE);
     }
   else
     {
-      gpa_options_set_simplified_ui (gpa_options, TRUE);
+      gpa_options_set_simplified_ui (gpa_options_get_instance (), TRUE);
     }
 }
 
@@ -129,7 +130,7 @@ user_interface_mode_frame (void)
     (GTK_RADIO_BUTTON (yes_button), _("_No"));
   gtk_box_pack_start_defaults (GTK_BOX (hbox), no_button);
   /* Select default value */
-  if (gpa_options_get_simplified_ui (gpa_options))
+  if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (no_button), TRUE);
     }

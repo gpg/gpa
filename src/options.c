@@ -153,18 +153,48 @@ gpa_options_finalize (GObject *object)
 
 /* API */
 
+/* The object */
+static GpaOptions *instance = NULL;
+
 /* Create a new GpaOptions object, reading the options, reading the options
  * from the file given */
-GpaOptions *
-gpa_options_new (const gchar *filename)
+static GpaOptions *
+gpa_options_new (void)
 {
   GpaOptions *options;
   
   options = g_object_new (GPA_OPTIONS_TYPE, NULL);
-  options->options_file = g_strdup (filename);
-  gpa_options_read_settings (options);
 
   return options;
+}
+
+GpaOptions *
+gpa_options_get_instance (void)
+{
+  if (!instance)
+    {
+      instance = gpa_options_new ();
+    }
+  return instance;
+}
+
+
+/* Choose the file the options should be read from and written to.
+ */
+void
+gpa_options_set_file (GpaOptions *options, const gchar *filename)
+{
+  if (options->options_file)
+    {
+      g_free (options->options_file);
+    }
+  options->options_file = g_strdup (filename);
+  gpa_options_read_settings (options);
+}
+
+const gchar *gpa_options_get_file (GpaOptions *options)
+{
+  return options->options_file;
 }
 
 /* Set whether the ui should be in simplified mode */

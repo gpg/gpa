@@ -55,8 +55,7 @@ GType gpa_file_decrypt_operation_get_type (void) G_GNUC_CONST;
 /* Creates a new decryption operation.
  */
 GpaFileDecryptOperation*
-gpa_file_decrypt_operation_new (GpaOptions *options,
-				GtkWidget *window,
+gpa_file_decrypt_operation_new (GtkWidget *window,
 				GList *files);
 
 #endif

@@ -55,8 +55,7 @@ GType gpa_file_verify_operation_get_type (void) G_GNUC_CONST;
 /* Creates a new verifyion operation.
  */
 GpaFileVerifyOperation*
-gpa_file_verify_operation_new (GpaOptions *options,
-			       GtkWidget *window,
+gpa_file_verify_operation_new (GtkWidget *window,
 			       GList *files);
 
 #endif

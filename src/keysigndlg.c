@@ -132,7 +132,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
   gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 5);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
-  if (!gpa_options_get_simplified_ui (gpa_options))
+  if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
       check = gpa_check_button_new (accelGroup, _("Sign only _locally"));
       gtk_box_pack_start (GTK_BOX (vboxSign), check, FALSE, FALSE, 0);

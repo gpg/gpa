@@ -32,7 +32,6 @@
 enum
 {
   PROP_0,
-  PROP_OPTIONS,
   PROP_WINDOW,
 };
 
@@ -51,9 +50,6 @@ gpa_file_sign_dialog_get_property (GObject     *object,
     case PROP_WINDOW:
       g_value_set_object (value,
 			  gtk_window_get_transient_for (GTK_WINDOW (dialog)));
-      break;
-    case PROP_OPTIONS:
-      g_value_set_object (value, dialog->options);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -74,9 +70,6 @@ gpa_file_sign_dialog_set_property (GObject     *object,
     case PROP_WINDOW:
       gtk_window_set_transient_for (GTK_WINDOW (dialog),
 				    g_value_get_object (value));
-      break;
-    case PROP_OPTIONS:
-      dialog->options = (GpaOptions*) g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -153,7 +146,7 @@ gpa_file_sign_dialog_constructor (GType type,
     gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
 				      accelGroup, 
 				      gpa_options_get_simplified_ui 
-				      (dialog->options) ?
+				      (gpa_options_get_instance ()) ?
 				      _("_cleartext signature") :
 				      _("sign, do_n't compress"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
@@ -189,7 +182,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
 			      _("Sign _as "));
 
-  if (gpa_options_get_simplified_ui (dialog->options))
+  if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
       gtk_widget_hide (dialog->radio_comp);
       gtk_widget_hide (dialog->check_armor);
@@ -221,12 +214,6 @@ gpa_file_sign_dialog_class_init (GpaFileSignDialogClass *klass)
 				   g_param_spec_object 
 				   ("window", "Parent window",
 				    "Parent window", GTK_TYPE_WIDGET,
-				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class,
-				   PROP_OPTIONS,
-				   g_param_spec_object 
-				   ("options", "options",
-				    "options", GPA_OPTIONS_TYPE,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
 
@@ -260,14 +247,12 @@ gpa_file_sign_dialog_get_type (void)
 
 /* API */
 
-GtkWidget *gpa_file_sign_dialog_new (GtkWidget *parent,
-					GpaOptions *options)
+GtkWidget *gpa_file_sign_dialog_new (GtkWidget *parent)
 {
   GpaFileSignDialog *dialog;
   
   dialog = g_object_new (GPA_FILE_SIGN_DIALOG_TYPE,
 			 "window", parent,
-			 "options", options,
 			 NULL);
 
   return GTK_WIDGET(dialog);

@@ -274,7 +274,7 @@ keyring_editor_delete (gpointer param)
     }
   gpgme_release (ctx);
   /* Update the default key, as it could just have been deleted */
-  gpa_options_update_default_key (gpa_options);
+  gpa_options_update_default_key (gpa_options_get_instance ());
   gtk_clist_thaw (GTK_CLIST(editor->clist_keys));
 } /* keyring_editor_delete */
 
@@ -349,7 +349,8 @@ keyring_editor_can_sign (gpointer param)
 {
   GPAKeyringEditor * editor = param;
   gchar * fpr;
-  const gchar * default_key = gpa_options_get_default_key (gpa_options);
+  const gchar * default_key = gpa_options_get_default_key
+    (gpa_options_get_instance ());
   gboolean result = FALSE;
 
   if (keyring_editor_has_selection (param) && default_key)
@@ -388,7 +389,7 @@ keyring_editor_sign (gpointer param)
       return;
     }
 
-  private_key_fpr = gpa_options_get_default_key (gpa_options);
+  private_key_fpr = gpa_options_get_default_key (gpa_options_get_instance ());
   if (!private_key_fpr)
     {
       /* this shouldn't happen because the button should be grayed out
@@ -755,7 +756,7 @@ keyring_editor_generate_key_advanced (gpointer param)
        * keys are available
        */
       gpa_keytable_reload (keytable);
-      gpa_options_update_default_key (gpa_options);
+      gpa_options_update_default_key (gpa_options_get_instance ());
       keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
     }
@@ -776,7 +777,7 @@ keyring_editor_generate_key_simple (gpointer param)
        * keys are available
        */
       gpa_keytable_reload (keytable);
-      gpa_options_update_default_key (gpa_options);
+      gpa_options_update_default_key (gpa_options_get_instance ());
       keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
     }
@@ -790,7 +791,7 @@ keyring_editor_generate_key_simple (gpointer param)
 static void
 keyring_editor_generate_key (gpointer param)
 {
-  if (gpa_options_get_simplified_ui (gpa_options))
+  if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     keyring_editor_generate_key_simple (param);
   else
     keyring_editor_generate_key_advanced (param);
@@ -850,7 +851,7 @@ keyring_editor_mapped (gpointer param)
   static gboolean asked_about_key_backup = FALSE;
   GPAKeyringEditor * editor = param;
 
-  if (gpa_options_get_simplified_ui (gpa_options))
+  if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
       if (!asked_about_key_generation
           && gpa_keytable_secret_size (keytable) == 0)
@@ -878,7 +879,8 @@ keyring_editor_mapped (gpointer param)
 	  asked_about_key_generation = TRUE;
         }
       else if (!asked_about_key_backup
-               && !gpa_options_get_backup_generated (gpa_options)
+               && !gpa_options_get_backup_generated 
+	       (gpa_options_get_instance ())
                && gpa_keytable_secret_size (keytable) != 0)
         {
 	  GtkWidget *dialog;
@@ -901,7 +903,7 @@ keyring_editor_mapped (gpointer param)
           if (response == GTK_RESPONSE_OK)
 	    {
               key_backup_dialog_run (editor->window,
-                                     gpa_options_get_default_key (gpa_options));
+                                     gpa_options_get_default_key (gpa_options_get_instance ()));
 	    }
           asked_about_key_backup = TRUE;
         }
@@ -1712,7 +1714,7 @@ keyring_statusbar_new (GPAKeyringEditor *editor)
 static void
 keyring_update_status_bar (GPAKeyringEditor * editor)
 {
-  const gchar * fpr = gpa_options_get_default_key (gpa_options);
+  const gchar * fpr = gpa_options_get_default_key (gpa_options_get_instance ());
   GpgmeKey key;
   gchar *string;
 
@@ -1898,7 +1900,8 @@ keyring_editor_new (void)
 
   statusbar = keyring_statusbar_new (editor);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);
-  g_signal_connect (G_OBJECT (gpa_options), "changed_default_key",
+  g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
+		    "changed_default_key",
                     (GCallback)keyring_default_key_changed, editor);
 
   keyring_update_status_bar (editor);

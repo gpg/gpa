@@ -181,7 +181,7 @@ verify_files (gpointer param)
   if (!files)
     return;
 
-  op = gpa_file_verify_operation_new (gpa_options, fileman->window, files);
+  op = gpa_file_verify_operation_new (fileman->window, files);
 
   register_operation (fileman, GPA_FILE_OPERATION (op));
 }
@@ -202,7 +202,7 @@ sign_files (gpointer param)
   if (!files)
     return;
 
-  op = gpa_file_sign_operation_new (gpa_options, fileman->window, files);
+  op = gpa_file_sign_operation_new (fileman->window, files);
 
   register_operation (fileman, GPA_FILE_OPERATION (op));
 }
@@ -222,7 +222,7 @@ encrypt_files (gpointer param)
   if (!files)
     return;
 
-  op = gpa_file_encrypt_operation_new (gpa_options, fileman->window, files);
+  op = gpa_file_encrypt_operation_new (fileman->window, files);
 
   register_operation (fileman, GPA_FILE_OPERATION (op));
 }
@@ -242,7 +242,7 @@ decrypt_files (gpointer param)
   if (!files)
     return;
 
-  op = gpa_file_decrypt_operation_new (gpa_options, fileman->window, files);
+  op = gpa_file_decrypt_operation_new (fileman->window, files);
 
   register_operation (fileman, GPA_FILE_OPERATION (op));
 }
@@ -390,11 +390,7 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 {
   GtkWidget *toolbar, *icon;
 
-#ifdef __NEW_GTK__
   toolbar = gtk_toolbar_new ();
-#else
-  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
-#endif
   
   /* Open */
   gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_OPEN,
@@ -487,8 +483,6 @@ gpa_fileman_new ()
   gtk_box_pack_start (GTK_BOX (fileBox), windowFile, TRUE, TRUE, 0);
   gtk_box_pack_end (GTK_BOX (vbox), fileBox, TRUE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
-  /*  gpa_popupMenu_init ();
-*/
 
   return window;
 } /* gpa_fileman_new */

@@ -22,7 +22,6 @@
 #define ENCRYPTDLG_H
 
 #include <gtk/gtk.h>
-#include "options.h"
 
 /* GObject stuff */
 #define GPA_FILE_ENCRYPT_DIALOG_TYPE	  (gpa_file_encrypt_dialog_get_type ())
@@ -42,8 +41,6 @@ struct _GpaFileEncryptDialog {
   GtkWidget *check_sign;
   GtkWidget *check_armor;
   GtkWidget *clist_who;
-
-  GpaOptions *options;
 };
 
 struct _GpaFileEncryptDialogClass {
@@ -54,8 +51,7 @@ GType gpa_file_encrypt_dialog_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent,
-					GpaOptions *options);
+GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent);
 
 GList *gpa_file_encrypt_dialog_recipients (GpaFileEncryptDialog *dialog);
 

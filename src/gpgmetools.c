@@ -48,6 +48,18 @@ void _gpa_gpgme_error (GpgmeError err, const char *file, int line)
   exit (EXIT_FAILURE);
 }
 
+void gpa_gpgme_warning (GpgmeError err)
+{
+  gchar *message = g_strdup_printf (_("The GPGME library returned an unexpected\n"
+				      "error. The error was:\n\n"
+                                      "\t%s\n\n"
+                                      "This is probably a bug in GPA.\n"
+				      "GPA will now try to recover from this error."),
+                                    gpgme_strerror (err));
+  gpa_window_error (message, NULL);
+  g_free (message);
+}
+
 /* Initialize a GpgmeCtx for use with GPA */
 GpgmeCtx gpa_gpgme_new (void)
 {

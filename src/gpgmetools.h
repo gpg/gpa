@@ -63,8 +63,9 @@ typedef struct {
  * Better to use the macro instead of the function
  */
 #define gpa_gpgme_error(err) _gpa_gpgme_error (err, __FILE__, __LINE__);
-#define gpa_gpgme_warning(err) _gpa_gpgme_error (err, __FILE__, __LINE__);
 void _gpa_gpgme_error (GpgmeError err, const char *file, int line);
+/* The same, without quitting */
+void gpa_gpgme_warning (GpgmeError err);
 
 /* Initialize a GpgmeCtx for use with GPA */
 GpgmeCtx gpa_gpgme_new (void);

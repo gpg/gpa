@@ -61,9 +61,14 @@ GType gpa_options_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-/* Create a new GpaOptions object, reading the options, reading the options
- * from the file given */
-GpaOptions *gpa_options_new (const gchar *filename);
+/* Return the GpaOptions object. This class has a single instance.
+ */
+GpaOptions *gpa_options_get_instance (void);
+
+/* Choose the file the options should be read from and written to.
+ */
+void gpa_options_set_file (GpaOptions *options, const gchar *filename);
+const gchar *gpa_options_get_file (GpaOptions *options);
 
 /* Set whether the ui should be in simplified mode */
 void gpa_options_set_simplified_ui (GpaOptions *options, gboolean value);

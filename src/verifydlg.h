@@ -40,7 +40,6 @@ typedef struct _GpaFileVerifyDialogClass GpaFileVerifyDialogClass;
 struct _GpaFileVerifyDialog {
   GtkDialog parent;
 
-  GpaOptions *options;
   GtkWidget *notebook;
 };
 
@@ -52,7 +51,7 @@ GType gpa_file_verify_dialog_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent, GpaOptions *options);
+GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent);
 
 void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      const gchar *filename,

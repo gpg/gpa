@@ -36,6 +36,9 @@
 
 /* Internal functions */
 static gboolean gpa_file_verify_operation_idle_cb (gpointer data);
+static void gpa_file_verify_operation_done_error_cb (GpaContext *context,
+						     GpgmeError err,
+						     GpaFileVerifyOperation *op);
 static void gpa_file_verify_operation_done_cb (GpaContext *context, 
 						GpgmeError err,
 						GpaFileVerifyOperation *op);
@@ -85,13 +88,14 @@ gpa_file_verify_operation_constructor (GType type,
   g_idle_add (gpa_file_verify_operation_idle_cb, op);
   /* Connect to the "done" signal */
   g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
+		    G_CALLBACK (gpa_file_verify_operation_done_error_cb), op);
+  g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
 		    G_CALLBACK (gpa_file_verify_operation_done_cb), op);
   /* Give a title to the progress dialog */
   gtk_window_set_title (GTK_WINDOW (GPA_FILE_OPERATION (op)->progress_dialog),
 			_("Verifying..."));
   /* Create the verification dialog */
-  op->dialog = gpa_file_verify_dialog_new (GPA_OPERATION (op)->window,
-					   GPA_OPERATION (op)->options);
+  op->dialog = gpa_file_verify_dialog_new (GPA_OPERATION (op)->window);
   g_signal_connect (G_OBJECT (op->dialog), "response",
 		    G_CALLBACK (gpa_file_verify_operation_response_cb), op);
   
@@ -140,14 +144,11 @@ gpa_file_verify_operation_get_type (void)
 /* API */
 
 GpaFileVerifyOperation*
-gpa_file_verify_operation_new (GpaOptions *options,
-				GtkWidget *window,
-				GList *files)
+gpa_file_verify_operation_new (GtkWidget *window, GList *files)
 {
   GpaFileVerifyOperation *op;
   
   op = g_object_new (GPA_FILE_VERIFY_OPERATION_TYPE,
-		     "options", options,
 		     "window", window,
 		     "input_files", files,
 		     NULL);
@@ -310,4 +311,57 @@ gpa_file_verify_operation_response_cb (GtkDialog *dialog,
 {
   GpaFileVerifyOperation *op = GPA_FILE_VERIFY_OPERATION (user_data);
   g_signal_emit_by_name (GPA_OPERATION (op), "completed");  
+}
+
+static void
+gpa_file_verify_operation_done_error_cb (GpaContext *context, GpgmeError err,
+					 GpaFileVerifyOperation *op)
+{
+  gchar *message;
+
+  /* Capture fatal errors and quit the application */
+  switch (err)
+    {
+    case GPGME_No_Error:
+    case GPGME_Canceled:
+      /* Ignore these */
+      break;
+    case GPGME_No_Data:
+      message = g_strdup_printf (_("The file \"%s\" contained no OpenPGP "
+				   "data."),
+				 gpa_file_operation_current_file 
+				 (GPA_FILE_OPERATION(op)));
+      gpa_window_error (message, GPA_OPERATION (op)->window);
+      g_free (message);
+      break;
+    case GPGME_No_Passphrase:
+      gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
+      break;
+    case GPGME_Invalid_Recipients:
+    case GPGME_No_Recipients:
+    case GPGME_Invalid_Key:
+    case GPGME_File_Error:
+    case GPGME_EOF:
+    case GPGME_Decryption_Failed:
+
+      /* These are always unexpected errors */
+    case GPGME_General_Error:
+    case GPGME_Out_Of_Core:
+    case GPGME_Invalid_Value:
+    case GPGME_Busy:
+    case GPGME_No_Request:
+    case GPGME_Exec_Error:
+    case GPGME_Too_Many_Procs:
+    case GPGME_Pipe_Error:
+    case GPGME_Conflict:
+    case GPGME_Not_Implemented:
+    case GPGME_Read_Error:
+    case GPGME_Write_Error:
+    case GPGME_Invalid_Type:
+    case GPGME_Invalid_Mode:
+    case GPGME_Invalid_Engine:
+    default:
+      gpa_gpgme_warning (err);
+      break;
+    }
 }

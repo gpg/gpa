@@ -144,7 +144,7 @@ gpa_secret_key_list_new (void)
   gtk_clist_thaw (GTK_CLIST (data.clist));
   
   /* Select the default key */
-  if (gpa_options_get_default_key (gpa_options))
+  if (gpa_options_get_default_key (gpa_options_get_instance ()))
     {
       gint i;
       gchar *fpr;
@@ -152,7 +152,8 @@ gpa_secret_key_list_new (void)
       for (i = 0; (fpr = gtk_clist_get_row_data (GTK_CLIST (data.clist), i));
            i++)
         {
-          if (g_str_equal (gpa_options_get_default_key (gpa_options), fpr))
+          if (g_str_equal (gpa_options_get_default_key 
+			   (gpa_options_get_instance()), fpr))
             {
               gtk_clist_select_row (GTK_CLIST (data.clist), i, 0);
             }

@@ -22,13 +22,6 @@
 #include "gtktools.h"
 #include "gpafileop.h"
 
-static void gpa_file_operation_done_cb (GpaContext *context, 
-					GpgmeError err,
-					GpaFileOperation *op);
-static void gpa_file_operation_done_error_cb (GpaContext *context, 
-					      GpgmeError err,
-					      GpaFileOperation *op);
-
 /* Signals */
 enum
 {
@@ -120,8 +113,6 @@ gpa_file_operation_constructor (GType type,
   /* Initialize */
   op->progress_dialog = gpa_progress_dialog_new (GPA_OPERATION(op)->window,
 						 GPA_OPERATION(op)->context);
-  g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
-		    G_CALLBACK (gpa_file_operation_done_error_cb), op);
 
   return object;
 }
@@ -215,31 +206,5 @@ gpa_file_operation_current_file (GpaFileOperation *op)
   else
     {
       return NULL;
-    }
-}
-
-/* Internal callbacks */
-
-static void gpa_file_operation_done_error_cb (GpaContext *context, 
-					      GpgmeError err,
-					      GpaFileOperation *op)
-{
-  gchar *message;
-  switch (err)
-    {
-    case GPGME_No_Data:
-      message = g_strdup_printf (_("The file \"%s\" contained no OpenPGP "
-				   "data."),
-				 gpa_file_operation_current_file (op));
-      gpa_window_error (message, GPA_OPERATION (op)->window);
-      break;
-    case GPGME_Decryption_Failed:
-      message = g_strdup_printf (_("The file \"%s\" contained no "
-				   "valid encrypted data."),
-				 gpa_file_operation_current_file (op));
-      gpa_window_error (message, GPA_OPERATION (op)->window);
-      break;
-    default:
-      break;
     }
 }

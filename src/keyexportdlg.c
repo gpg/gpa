@@ -195,9 +195,10 @@ key_export_dialog_run (GtkWidget *parent, gchar **filename,
   gtk_combo_set_popdown_strings (GTK_COMBO (combo),
                                  keyserver_get_as_glist ());
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
-		      gpa_options_get_default_keyserver (gpa_options));
+		      gpa_options_get_default_keyserver 
+		      (gpa_options_get_instance ()));
 
-  if (!gpa_options_get_simplified_ui (gpa_options))
+  if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
       check = gpa_check_button_new (accel_group, _("a_rmor"));
       gtk_container_set_border_width (GTK_CONTAINER (check), 5);
@@ -261,7 +262,8 @@ do_backup (const gchar *fpr, gchar *filename, GtkWidget *parent)
 					 filename);
 	      gpa_window_message (message, parent);
 	      g_free (message);
-	      gpa_options_set_backup_generated (gpa_options, TRUE);
+	      gpa_options_set_backup_generated (gpa_options_get_instance (),
+						TRUE);
         }
     }
 }

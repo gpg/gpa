@@ -37,6 +37,9 @@
 #include "gpapastrings.h"
 
 /* Internal functions */
+static void gpa_file_sign_operation_done_error_cb (GpaContext *context, 
+						   GpgmeError err,
+						   GpaFileSignOperation *op);
 static void gpa_file_sign_operation_done_cb (GpaContext *context, 
 						GpgmeError err,
 						GpaFileSignOperation *op);
@@ -81,11 +84,12 @@ gpa_file_sign_operation_constructor (GType type,
   op = GPA_FILE_SIGN_OPERATION (object);
   /* Initialize */
   /* Create the "Sign" dialog */
-  op->sign_dialog = gpa_file_sign_dialog_new 
-    (GPA_OPERATION (op)->window, GPA_OPERATION (op)->options);
+  op->sign_dialog = gpa_file_sign_dialog_new (GPA_OPERATION (op)->window);
   g_signal_connect (G_OBJECT (op->sign_dialog), "response",
 		    G_CALLBACK (gpa_file_sign_operation_response_cb), op);
   /* Connect to the "done" signal */
+  g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
+		    G_CALLBACK (gpa_file_sign_operation_done_error_cb), op);
   g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
 		    G_CALLBACK (gpa_file_sign_operation_done_cb), op);
   /* Give a title to the progress dialog */
@@ -139,14 +143,11 @@ gpa_file_sign_operation_get_type (void)
 /* API */
 
 GpaFileSignOperation*
-gpa_file_sign_operation_new (GpaOptions *options,
-				GtkWidget *window,
-				GList *files)
+gpa_file_sign_operation_new (GtkWidget *window, GList *files)
 {
   GpaFileSignOperation *op;
   
   op = g_object_new (GPA_FILE_SIGN_OPERATION_TYPE,
-		     "options", options,
 		     "window", window,
 		     "input_files", files,
 		     NULL);
@@ -341,5 +342,49 @@ static void gpa_file_sign_operation_response_cb (GtkDialog *dialog,
       /* The dialog was canceled, so we do nothing and complete the
        * operation */
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+    }
+}
+
+static void
+gpa_file_sign_operation_done_error_cb (GpaContext *context, GpgmeError err,
+				       GpaFileSignOperation *op)
+{
+  /* Capture fatal errors and quit the application */
+  switch (err)
+    {
+    case GPGME_No_Error:
+    case GPGME_Canceled:
+      /* Ignore these */
+      break;
+    case GPGME_No_Passphrase:
+      gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
+      break;
+    case GPGME_Invalid_Recipients:
+    case GPGME_No_Recipients:
+    case GPGME_Invalid_Key:
+    case GPGME_File_Error:
+    case GPGME_EOF:
+    case GPGME_Decryption_Failed:
+    case GPGME_No_Data:
+
+      /* These are always unexpected errors */
+    case GPGME_General_Error:
+    case GPGME_Out_Of_Core:
+    case GPGME_Invalid_Value:
+    case GPGME_Busy:
+    case GPGME_No_Request:
+    case GPGME_Exec_Error:
+    case GPGME_Too_Many_Procs:
+    case GPGME_Pipe_Error:
+    case GPGME_Conflict:
+    case GPGME_Not_Implemented:
+    case GPGME_Read_Error:
+    case GPGME_Write_Error:
+    case GPGME_Invalid_Type:
+    case GPGME_Invalid_Mode:
+    case GPGME_Invalid_Engine:
+    default:
+      gpa_gpgme_warning (err);
+      break;
     }
 }

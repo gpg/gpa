@@ -57,8 +57,7 @@ GType gpa_file_sign_operation_get_type (void) G_GNUC_CONST;
 /* Creates a new sign operation.
  */
 GpaFileSignOperation*
-gpa_file_sign_operation_new (GpaOptions *options,
-			     GtkWidget *window,
+gpa_file_sign_operation_new (GtkWidget *window,
 			     GList *files);
 
 #endif

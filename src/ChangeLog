@@ -1,3 +1,28 @@
+2003-03-22  Miguel Coca  <mcoca@gnu.org>
+	
+	* options.h, options.c (gpa_options_get_instance): New. Turn the
+	GpaOptions object into a singleton.
+
+	* Change all users of GpaOptions.
+	
+	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): 
+	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): 
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb): 
+	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb): Make
+	all error cheking here.
+
+	* gpafileop.c (gpa_file_operation_done_error_cb): Remove error
+	handling.
+	* gpaoperation.c (gpa_operation_done_error_cb): Same here.
+
+	* gpgmetools.h, gpgmetools.c (gpa_gpgme_warning): New.
+
+	* fileman.c (gpa_fileman_toolbar_new): Remove GTK+ 1.2 compatibility.
+
+	* gpa.h: Remove gtkhacks.h. Remove gpa_options global variable.
+
+	* gtkhacks.h: Deleted.
+
 2003-03-18  Miguel Coca  <mcoca@gnu.org>
 
 	* verifydlg.h, verifydlg.c: Rewrite as widget.

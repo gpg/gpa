@@ -212,7 +212,8 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_combo_set_popdown_strings (GTK_COMBO (combo),
                                  keyserver_get_as_glist ());
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
-                      gpa_options_get_default_keyserver (gpa_options));
+                      gpa_options_get_default_keyserver 
+		      (gpa_options_get_instance ()));
 
   gpa_connect_by_accelerator (GTK_LABEL (label), entry, accel_group,
 			      _("_Key Server:"));

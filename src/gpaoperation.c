@@ -24,10 +24,6 @@
 #include "gpgmetools.h"
 #include "i18n.h"
 
-/* Internal functions */
-static void
-gpa_operation_done_cb (GpaContext *context, GpgmeError err, GpaOperation *op);
-
 /* Signals */
 enum
 {
@@ -40,7 +36,6 @@ enum
 {
   PROP_0,
   PROP_WINDOW,
-  PROP_OPTIONS
 };
 
 static GObjectClass *parent_class = NULL;
@@ -58,9 +53,6 @@ gpa_operation_get_property (GObject     *object,
     {
     case PROP_WINDOW:
       g_value_set_object (value, op->window);
-      break;
-    case PROP_OPTIONS:
-      g_value_set_object (value, op->options);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -80,9 +72,6 @@ gpa_operation_set_property (GObject     *object,
     {
     case PROP_WINDOW:
       op->window = (GtkWidget*) g_value_get_object (value);
-      break;
-    case PROP_OPTIONS:
-      op->options = (GpaOptions*) g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -104,7 +93,6 @@ static void
 gpa_operation_init (GpaOperation *op)
 {
   op->window = NULL;
-  op->options = NULL;
   op->context = NULL;
 }
 
@@ -123,8 +111,6 @@ gpa_operation_constructor (GType                  type,
   op = GPA_OPERATION (object);
   /* Initialize */
   op->context = gpa_context_new ();
-  g_signal_connect (G_OBJECT (op->context), "done",
-		    G_CALLBACK (gpa_operation_done_cb), op);
 
   return object;
 }
@@ -158,12 +144,6 @@ gpa_operation_class_init (GpaOperationClass *klass)
 				   g_param_spec_object 
 				   ("window", "Parent window",
 				    "Parent window", GTK_TYPE_WIDGET,
-				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class,
-				   PROP_OPTIONS,
-				   g_param_spec_object 
-				   ("options", "options",
-				    "options", GPA_OPTIONS_TYPE,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
 
@@ -217,46 +197,4 @@ gpa_operation_destroy (GpaOperation *op)
   g_return_if_fail (GPA_IS_OPERATION (op));
 
   g_object_run_dispose (G_OBJECT (op));
-}
-
-/* Internal functions */
-
-static void
-gpa_operation_done_cb (GpaContext *context, GpgmeError err, GpaOperation *op)
-{
-  /* Capture fatal errors and quit the application */
-  switch (err)
-    {
-    case GPGME_No_Error:
-    case GPGME_Canceled:
-    case GPGME_No_Data:
-    case GPGME_Decryption_Failed:
-      /* Ignore: to be handled by subclasses */
-      break;
-    case GPGME_No_Passphrase:
-      gpa_window_error (_("Wrong passphrase!"), op->window);
-      break;
-    case GPGME_EOF:
-    case GPGME_General_Error:
-    case GPGME_Out_Of_Core:
-    case GPGME_Invalid_Value:
-    case GPGME_Busy:
-    case GPGME_No_Request:
-    case GPGME_Exec_Error:
-    case GPGME_Too_Many_Procs:
-    case GPGME_Pipe_Error:
-    case GPGME_Invalid_Recipients:
-    case GPGME_Conflict:
-    case GPGME_Not_Implemented:
-    case GPGME_Read_Error:
-    case GPGME_Write_Error:
-    case GPGME_Invalid_Type:
-    case GPGME_Invalid_Mode:
-    case GPGME_File_Error:
-    case GPGME_Invalid_Key:
-    case GPGME_Invalid_Engine:
-    case GPGME_No_Recipients:
-      gpa_gpgme_warning (err);
-      break;
-    }
 }
