@@ -59,7 +59,16 @@ struct _GPAKeyringEditor {
   /* The "Show Ownertrust" toggle button */
   GtkWidget *toggle_show;
 
-  /* Labels in the details notebook page */
+  /* The details notebook */
+  GtkWidget *notebook_details;
+
+  /* idle handler id for updates of the notebook. Will be nonzero
+   * whenever a handler is currently set and zero otherwise */
+  guint details_idle_id;
+
+  /* Widgets in the details notebook page */
+  GtkWidget *details_num_label;
+  GtkWidget *details_table;
   GtkWidget *detail_name;
   GtkWidget *detail_fingerprint;
   GtkWidget *detail_expiry;
@@ -86,8 +95,7 @@ static gboolean keyring_editor_has_single_selection (gpointer param);
 static GpapaPublicKey *keyring_editor_current_key (GPAKeyringEditor * editor);
 static gchar *keyring_editor_current_key_id (GPAKeyringEditor * editor);
 
-static void keyring_update_details_page (GPAKeyringEditor * editor);
-static void keyring_update_signatures_page (GPAKeyringEditor * editor);
+static void keyring_update_details_notebook (GPAKeyringEditor *editor);
 
 /*
  *
@@ -380,7 +388,7 @@ keyring_editor_sign (gpointer param)
 
   /* Update the signatures details page and the widgets because some
    * depend on what signatures a key has*/
-  keyring_update_signatures_page (editor);
+  keyring_update_details_notebook (editor);
   update_selection_sensitive_widgets (editor);
 } /* keyring_editor_sign */
 
@@ -618,8 +626,7 @@ static void
 keyring_selection_update_widgets (GPAKeyringEditor * editor)
 {
   update_selection_sensitive_widgets (editor);
-  keyring_update_details_page (editor);
-  keyring_update_signatures_page (editor);
+  keyring_update_details_notebook (editor);
 }  
 
 /* Signal handler for select-row and unselect-row. Call
@@ -781,6 +788,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 {
   GtkWidget * notebook;
   GtkWidget * table;
+  GtkWidget * label;
   GtkWidget * vbox;
   GtkWidget * scrolled;
   GtkWidget * siglist;
@@ -788,7 +796,15 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   notebook = gtk_notebook_new ();
 
   /* Details Page */
+  vbox = gtk_vbox_new (FALSE, 0);
+
+  label = gtk_label_new ("");
+  editor->details_num_label = label;
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+  
   table = gtk_table_new (2, 3, FALSE);
+  editor->details_table = table;
+  gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
   
@@ -797,7 +813,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 						TRUE);
   editor->detail_expiry = add_details_row (table, 2, _("Expires at:"), FALSE); 
 
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), table,
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), vbox,
 			    gtk_label_new (_("Details")));
 
   /* Signatures Page */
@@ -816,62 +832,135 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), vbox,
 			    gtk_label_new (_("Signatures")));
 
+  editor->notebook_details = notebook;
   return notebook;
 }
 
 
-/* Update the labels of the details notebook page to the values of the
- * currently selected key
- */
+/* Fill the details page of the details notebook with the properties of
+ * the publix key key */
 static void
-keyring_update_details_page (GPAKeyringEditor * editor)
+keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key)
 {
-  GpapaPublicKey * key = keyring_editor_current_key (editor);
   GDate * expiry_date;
   gchar * text;
 
-  if (key)
-    {
-      text = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback,
-				 editor->window);
-      gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
+  text = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, editor->window);
+  gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
 
-      text = gpapa_public_key_get_fingerprint (key, gpa_callback,
-					       editor->window);
-      /*gtk_label_set_text (GTK_LABEL (editor->detail_fingerprint), text);*/
-      gtk_entry_set_text (GTK_ENTRY (editor->detail_fingerprint), text);
+  text = gpapa_public_key_get_fingerprint (key, gpa_callback, editor->window);
+  gtk_entry_set_text (GTK_ENTRY (editor->detail_fingerprint), text);
 
-      expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
-					       editor->window);
-      text = gpa_expiry_date_string (expiry_date);
-      gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
-    }
-} /* keyring_update_details_page */
+  expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
+					   editor->window);
+  text = gpa_expiry_date_string (expiry_date);
+  gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
+
+  
+  gtk_widget_hide (editor->details_num_label);
+  gtk_widget_show (editor->details_table);
+} /* keyring_details_page_fill_key */
 
 
+/* Show the number of keys num_key in the details page of the details
+ * notebook and make sure that that page is in front */
 static void
-keyring_update_signatures_page (GPAKeyringEditor * editor)
+keyring_details_page_fill_num_keys (GPAKeyringEditor * editor, gint num_key)
 {
-  GpapaPublicKey * key = keyring_editor_current_key (editor);
+  if (!num_key)
+    {
+      gtk_label_set_text (GTK_LABEL (editor->details_num_label),
+			  _("No keys selected"));
+    }
+  else
+    {
+      gchar * text = g_strdup_printf (_("%d keys selected"), num_key);
+      gtk_label_set_text (GTK_LABEL (editor->details_num_label), text);
+      free (text);
+    }
+
+  gtk_widget_show (editor->details_num_label);
+  gtk_widget_hide (editor->details_table);
+
+  /* Assume that the 0th page is the details page. This should be done
+   * better */
+  gtk_notebook_set_page (GTK_NOTEBOOK (editor->notebook_details), 0);
+} /* keyring_details_page_fill_num_keys */
+
+
+/* Fill the signatures page of the details notebook with the signatures
+ * of the public key key */
+static void
+keyring_signatures_page_fill_key (GPAKeyringEditor * editor,
+				  GpapaPublicKey * key)
+{
   GList * signatures;
   gchar * key_id = NULL;
 
   /* in the simplified UI we don't want to list the self signatures */
-  if (key)
+  if (gpa_simplified_ui ())
     {
-      if (gpa_simplified_ui ())
-	{
-	  key_id = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
-					     editor->window);
-	}
+      key_id = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
+					 editor->window);
+    }
 
-      signatures = gpapa_public_key_get_signatures (key, gpa_callback,
-						    editor->window);
-      gpa_siglist_set_signatures (editor->signatures_list, signatures, key_id);
+  signatures = gpapa_public_key_get_signatures (key, gpa_callback,
+						editor->window);
+  gpa_siglist_set_signatures (editor->signatures_list, signatures, key_id);
+} /* keyring_signatures_page_fill_key */
+
+
+/* Empty the list of signatures in the details notebook */
+static void
+keyring_signatures_page_empty (GPAKeyringEditor * editor)
+{
+  gpa_siglist_set_signatures (editor->signatures_list, NULL, NULL);
+} /* keyring_signatures_page_empty */
+
+
+/* Update the details notebook according to the current selection. This
+ * means that if there's exactly one key selected, display it's
+ * properties in the pages, otherwise show the number of currently
+ * selected keys */
+static int
+idle_update_details (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+  gint num_selected = gpa_keylist_selection_length (editor->clist_keys);
+
+  if (num_selected == 1)
+    {
+      GpapaPublicKey * key = keyring_editor_current_key (editor);
+      keyring_details_page_fill_key (editor, key);
+      keyring_signatures_page_fill_key (editor, key);
     }
   else
-    gpa_siglist_set_signatures (editor->signatures_list, NULL, NULL);
-} /* keyring_update_signatures_page */
+    {
+      keyring_details_page_fill_num_keys (editor, num_selected);
+      keyring_signatures_page_empty (editor);
+    }
+
+  /* Set the idle id to NULL to indicate that the idle handler has been
+   * run */
+  editor->details_idle_id = 0;
+  
+  /* Return 0 to indicate that this function shouldn't be called again
+   * by GTK, only when we expicitly add it again */
+  return 0;
+}
+
+
+/* Add an idle handler to update the details notebook, but only when
+ * none has been set yet */
+static void
+keyring_update_details_notebook (GPAKeyringEditor * editor)
+{
+  if (!editor->details_idle_id)
+    {
+      editor->details_idle_id = gtk_idle_add (idle_update_details, editor);
+    }
+}
+					  
 
 
 /* definitions for the brief and detailed key list. The names are at the
@@ -1126,6 +1215,7 @@ keyring_editor_new (void)
 
   editor = xmalloc(sizeof(GPAKeyringEditor));
   editor->selection_sensitive_widgets = NULL;
+  editor->details_idle_id = 0;
 
   window = editor->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window),
