@@ -126,7 +126,7 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd);
  */
 gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx);
 
-/* Return the key fingerprint, properly formatted according to the algorithm.
+/* Return the key fingerprint, properly formatted according to the key version.
  * Allocates a new string, which must be freed with g_free().
  * This is based on code from GPAPA's extract_fingerprint.
  */

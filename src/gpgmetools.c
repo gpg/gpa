@@ -637,7 +637,7 @@ gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
   return uid_utf8;
 }
 
-/* Return the key fingerprint, properly formatted according to the algorithm.
+/* Return the key fingerprint, properly formatted according to the key version.
  * Allocates a new string, which must be freed with g_free ().
  * This is based on code from GPAPA's extract_fingerprint.
  */
@@ -648,7 +648,7 @@ gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx)
   const char *fpraw = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR,
 						 NULL, idx);
 
-  if (algorithm == 1 || algorithm == 2 ||algorithm == 3 )  /* RSA */
+  if (strlen (fpraw) == 32 )  /* v3 */
     {
       char *fp = g_malloc (strlen (fpraw) + 16 + 1);
       const char *r = fpraw;

@@ -1,3 +1,12 @@
+2003-01-21  Miguel Coca  <mcoca@gnu.org>
+
+	* gpgmetools.c (gpa_gpgme_key_get_fingerprint): Check the fingerprint
+	length, instead of the algorithm, when deciding how to format the
+	fingerprint.
+
+	* gpgmetools.h (gpa_gpgme_key_get_fingerprint): Fix function
+	description.
+
 2003-01-19  Miguel Coca  <mcoca@gnu.org>
 
 	* gpa.h: Remove IS_DEVELOPMENT_VERSION define from this file.
