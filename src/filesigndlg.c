@@ -123,7 +123,7 @@ file_sign_ok (gpointer param)
 
   if (dialog->clist_who->selection)
     {
-      gint row =  GPOINTER_TO_INT (dialog->clist_who->selection->data);
+      gint row = GPOINTER_TO_INT (dialog->clist_who->selection->data);
       key_id = gtk_clist_get_row_data (dialog->clist_who, row);
       key = gpapa_get_secret_key_by_ID (key_id, gpa_callback, dialog->window);
     }

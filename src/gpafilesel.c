@@ -922,14 +922,14 @@ gpa_file_selection_init (GpaFileSelection *filesel)
 
 #else /* not __NEW_GTK__ */
 
-  /*  The Cancel button  */
+  /* The OK button  */
   filesel->ok_button = gtk_button_new_with_label (_("OK"));
   GTK_WIDGET_SET_FLAGS (filesel->ok_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (confirm_area), filesel->ok_button, TRUE, TRUE, 0);
   gtk_widget_grab_default (filesel->ok_button);
   gtk_widget_show (filesel->ok_button);
 
-  /*  The OK button  */
+  /* The Cancel button  */
   filesel->cancel_button = gtk_button_new_with_label (_("Cancel"));
   GTK_WIDGET_SET_FLAGS (filesel->cancel_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (confirm_area), filesel->cancel_button, TRUE, TRUE, 0);
@@ -1109,7 +1109,7 @@ filenames_dropped (GtkWidget        *widget,
                                        GTK_DIALOG_DESTROY_WITH_PARENT,
                                        GTK_MESSAGE_QUESTION,
                                        GTK_BUTTONS_YES_NO,
-                                       _("The file \"%s\" resides on another machine (called %s) and may not be availible to this program.\n"
+                                       _("The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
                                          "Are you sure that you want to select it?"), filename, hostname);
 
       g_object_set_data_full (G_OBJECT (dialog), "gtk-fs-dnd-filename", g_strdup (filename), g_free);
@@ -2277,15 +2277,17 @@ gpa_file_selection_dir_expand (GtkWidget *widget, GtkCTreeNode *node,
 
   gtk_ctree_get_node_info (GTK_CTREE (fs->dir_list), node, &temp,
                            NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-  filename = g_strdup (temp);
+  filename = g_filename_from_utf8 (temp, -1, NULL, NULL, NULL);
   parent_node = GTK_CTREE_ROW (node)->parent;
   while (parent_node)
     {
       gchar *temp_filename;
       gtk_ctree_get_node_info (GTK_CTREE (fs->dir_list), parent_node, &temp,
                                NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      temp = g_filename_from_utf8 (temp, -1, NULL, NULL, NULL);
       temp_filename = filename;
       filename = g_strconcat (temp, G_DIR_SEPARATOR_S, temp_filename, NULL);
+      g_free (temp);
       g_free (temp_filename);
       parent_node = GTK_CTREE_ROW (parent_node)->parent;
     }

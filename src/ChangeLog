@@ -1,3 +1,51 @@
+2002-02-25  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gpafilesel.c (gpa_file_selection_dir_expand): Account for the
+	use of UTF8 for filenames.
+
+2002-02-24  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* Makefile.am (gpa_SOURCES): Added keyimpseldlg.c and keyimpseldlg.h.
+
+	* encrypt.xpm, verify.xpm: New icons.
+
+	* fileman.c (show_file_detail): Changed all the references to
+	"detail view" to "verify signature" in messages.
+	(toolbar_file_verify): New function.
+	(gpa_fileman_toolbar_new): Added "verify" button.
+
+	* filesigndlg.c: Small formatting changes.
+
+	* gpafilesel.c: Fixes to comments and spelling.
+
+	* gpawidgets.c (gpa_secret_key_list_new, gpa_public_key_list_new):
+	Swapped column titles. Changed default widths.
+	(gpa_key_list_new_from_glist): New function.
+
+	* gpawidgets.h: Added "extern" to declarations. Adde
+	gpa_key_list_new_from_glist function.
+
+	* gtktools.c (gpa_window_error): Remove call to gettext for the
+	error message. Was not needed.
+
+	* icons.c (xpms): Added verify_xpm to the list.
+
+	* keyimpseldlg.h, keyimpseldlg.c: New files. A new "key import
+	selection dialog" which shows the result of a key search on the
+	server and letws the user import them.
+
+	* keyring.c: Formatting changes all over.
+	(keyring_editor_import): Use the key import selection dialog when
+	the search returns more than one result.
+
+	* keysmenu.c (keys_generateRevocation): Swapped column titles.
+	Changed default widths.
+
+	* optionsmenu.c (options_recipients_set)
+	(options_recipients)
+	(options_key_select)
+	(options_key): Swapped column titles. Changed default widths.
+	
 2002-02-22  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* Makefile.am (gpa_SOURCES): Added gpa.rc

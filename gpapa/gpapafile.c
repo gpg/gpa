@@ -107,13 +107,13 @@ gpapa_file_get_status (GpapaFile *file, GpapaCallbackFunc callback,
        */
       if (stat (file->identifier, &statbuf) != 0)
         {
-          callback (GPAPA_ACTION_ERROR, "error accessing file", calldata);
+          callback (GPAPA_ACTION_ERROR, _("Error accessing file"), calldata);
           file->status_flags = GPAPA_FILE_STATUS_NODATA;
           return (GPAPA_FILE_UNKNOWN);
         }
       else if (! S_ISREG (statbuf.st_mode))
         {
-          callback (GPAPA_ACTION_ERROR, "not a regular file", calldata);
+          callback (GPAPA_ACTION_ERROR, _("Not a regular file"), calldata);
           file->status_flags = GPAPA_FILE_STATUS_NODATA;
           return (GPAPA_FILE_UNKNOWN);
         }
@@ -267,9 +267,9 @@ gpapa_file_sign (GpapaFile *file, const gchar *targetFileID, const gchar *keyID,
                  GpapaCallbackFunc callback, gpointer calldata)
 {
   if (file == NULL)
-    callback (GPAPA_ACTION_ERROR, "missing file name", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Missing file name"), calldata);
   else if (keyID == NULL)
-    callback (GPAPA_ACTION_ERROR, "missing private key ID for signing",
+    callback (GPAPA_ACTION_ERROR, _("Missing private key ID for signing"),
               calldata);
   else
     {
@@ -290,7 +290,7 @@ gpapa_file_sign (GpapaFile *file, const gchar *targetFileID, const gchar *keyID,
             gpgargv[i++] = "--detach-sign";
             break;
           default:
-            callback (GPAPA_ACTION_ERROR, "invalid signature type", calldata);
+            callback (GPAPA_ACTION_ERROR, _("Invalid signature type"), calldata);
             return;
         }
       gpgargv[i++] = "-u";
@@ -324,9 +324,9 @@ gpapa_file_encrypt (GpapaFile *file, const gchar *targetFileID,
                     GList *rcptKeyIDs, GpapaArmor Armor,
                     GpapaCallbackFunc callback, gpointer calldata) {
   if (file == NULL)
-    callback (GPAPA_ACTION_ERROR, "missing file name", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Missing file name"), calldata);
   else if (rcptKeyIDs == NULL)
-    callback (GPAPA_ACTION_ERROR, "missing public key ID(s) for encrypting",
+    callback (GPAPA_ACTION_ERROR, _("Missing public key ID(s) for encrypting"),
               calldata);
   else
     {
@@ -375,9 +375,9 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, const gchar *targetFileID,
                              gpointer calldata)
 {
   if (file == NULL)
-    callback (GPAPA_ACTION_ERROR, "missing file name", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Missing file name"), calldata);
   else if (rcptKeyIDs == NULL)
-    callback (GPAPA_ACTION_ERROR, "missing public key ID(s) for encrypting",
+    callback (GPAPA_ACTION_ERROR, _("Missing public key ID(s) for encrypting"),
               calldata);
   else
     {
@@ -433,10 +433,10 @@ gpapa_file_protect (GpapaFile *file, const gchar *targetFileID,
                     GpapaCallbackFunc callback, gpointer calldata)
 {
   if (file == NULL)
-    callback (GPAPA_ACTION_ERROR, "missing file name", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Missing file name"), calldata);
   else if (PassPhrase == NULL)
     callback (GPAPA_ACTION_ERROR,
-              "missing passphrase for symmetric encrypting", calldata);
+              _("Missing passphrase for symmetric encrypting"), calldata);
   else
     {
       FileData data = { file, callback, calldata };
@@ -471,10 +471,10 @@ gpapa_file_decrypt (GpapaFile *file, char *targetFileID,
                     gpointer calldata)
 {
   if (file == NULL)
-    callback (GPAPA_ACTION_ERROR, "missing file name", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Missing file name"), calldata);
   else if (PassPhrase == NULL)
     callback (GPAPA_ACTION_ERROR,
-              "missing passphrase for decrypting", calldata);
+              _("Missing passphrase for decrypting"), calldata);
   else
     {
       FileData data = { file, callback, calldata };

@@ -60,38 +60,38 @@ gpapa_report_error_status (GpgStatusCode status,
   switch (status)
     {
       case STATUS_ABORT:
-        errstr = "gpg execution aborted";
+        errstr = N_("GnuPG execution aborted");
         break;
       case STATUS_BADARMOR:
-        errstr = "invalid file: bad armor";
+        errstr = N_("Invalid file: bad armor");
         break;
       case STATUS_BADMDC:
-        errstr = "invalid file: bad MDC";
+        errstr = N_("Invalid file: bad MDC");
         break;
       case STATUS_BAD_PASSPHRASE:
-        errstr = "bad passphrase";
+        errstr = N_("Bad passphrase");
         break;
       case STATUS_DECRYPTION_FAILED:
-        errstr = "decryption failed";
+        errstr = N_("Decryption failed");
         break;
       case STATUS_DELETE_PROBLEM:
-        errstr = "delete problem";
+        errstr = N_("Delete problem");
         break;
       case STATUS_ERRMDC:
-        errstr = "error in MDC";
+        errstr = N_("Error in MDC");
         break;
       case STATUS_ERRSIG:
-        errstr = "error in signature";
+        errstr = N_("Error in signature");
         break;
       case STATUS_FILE_ERROR:
-        errstr = "file error";
+        errstr = N_("File error");
         break;
       case STATUS_MISSING_PASSPHRASE:
-        errstr = "missing passphrase";
+        errstr = N_("Missing passphrase");
         break;
       case STATUS_NODATA:
         if (nodata_counter == 0)
-          errstr = "no valid OpenPGP data found";
+          errstr = N_("No valid OpenPGP data found");
         else
           errstr = NULL;
         nodata_counter++;
@@ -101,7 +101,7 @@ gpapa_report_error_status (GpgStatusCode status,
         break;
     }
   if (errstr)
-    callback (GPAPA_ACTION_ERROR, errstr, calldata);
+    callback (GPAPA_ACTION_ERROR, _(errstr), calldata);
 }
 
 /* A structure to pass our parameters through GPGME.
@@ -282,7 +282,9 @@ gpapa_call_gnupg (const gchar **user_args, gboolean do_wait,
 
   if (return_code != 0)
     callback (GPAPA_ACTION_ERROR,
-              "GnuPG execution failed: internal error while setting command handler",
+              _("GnuPG execution failed:\n"
+                "internal error while setting\n"
+                "command handler"),
               calldata);
   else
     {
@@ -292,7 +294,8 @@ gpapa_call_gnupg (const gchar **user_args, gboolean do_wait,
       return_code = _gpgme_gpg_spawn (gpg, &gpapa_data);
       if (return_code != 0)
         callback (GPAPA_ACTION_ERROR,
-                  "GnuPG execution failed: could not spawn external program",
+                  _("GnuPG execution failed:\n"
+                    "could not spawn external program"),
                   calldata);
       else
         {
@@ -301,7 +304,7 @@ gpapa_call_gnupg (const gchar **user_args, gboolean do_wait,
           /* FIXME: Currently we cannot know the exit status of the
            * GnuPG execution.
            */
-          callback (GPAPA_ACTION_FINISHED, "GnuPG execution terminated", calldata);
+          callback (GPAPA_ACTION_FINISHED, _("GnuPG execution terminated"), calldata);
         }
     }
 

@@ -1195,7 +1195,7 @@ keys_generateRevocation (void)
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
   gint contentsCountKeys;
-  gchar *titlesKeys[2] = { N_("User identity / role"), N_("Key ID") };
+  gchar *titlesKeys[2] = { N_("Key ID"), N_("User identity / role"), };
   gint i;
   gchar *contentsKeys[2];
   GpapaSecretKey *key;
@@ -1237,8 +1237,8 @@ keys_generateRevocation (void)
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_usize (scrollerKeys, 280, 200);
   clistKeys = gtk_clist_new_with_titles (2, titlesKeys);
-  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 0, 180);
-  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 1, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 0, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 1, 200);
   for (i = 0; i < 2; i++)
     gtk_clist_column_title_passive (GTK_CLIST (clistKeys), i);
   gtk_clist_set_selection_mode (GTK_CLIST (clistKeys),
@@ -1250,10 +1250,10 @@ keys_generateRevocation (void)
 	gpapa_get_secret_key_by_index (contentsCountKeys, gpa_callback,
 				       global_windowMain);
       contentsKeys[0] =
-	gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, global_windowMain);
-      contentsKeys[1] =
 	gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
 				  global_windowMain);
+      contentsKeys[1] =
+	gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, global_windowMain);
       gtk_clist_prepend (GTK_CLIST (clistKeys), contentsKeys);
     }				/* while */
   keysSelected = (GList **) xmalloc (sizeof (GList *));

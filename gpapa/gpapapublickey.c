@@ -194,7 +194,7 @@ extract_sig (char *line, GpapaCallbackFunc callback, gpointer calldata)
   if (fields < 11)
     {
       callback (GPAPA_ACTION_ERROR,
-                "invalid number of fields in output of `gpg --check-sigs'",
+                _("Invalid number of fields in output of `gpg --check-sigs'"),
                 calldata);
       return (NULL);
     }
@@ -263,9 +263,9 @@ gpapa_public_key_export (GpapaPublicKey *key, const gchar *targetFileID,
                          gpointer calldata)
 {
   if (!key)
-    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid public key specified"), calldata);
   if (!targetFileID)
-    callback (GPAPA_ACTION_ERROR, "target file not specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Target file not specified"), calldata);
   if (key && targetFileID)
     {
       gchar *full_keyID;
@@ -349,7 +349,7 @@ gpapa_public_key_export_to_clipboard (GpapaPublicKey *key,
                                       gpointer calldata)
 {
   if (!key)
-    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid public key specified"), calldata);
   if (key)
     {
       gchar *full_keyID;
@@ -379,7 +379,7 @@ gpapa_public_key_delete (GpapaPublicKey *key, GpapaCallbackFunc callback,
                          gpointer calldata)
 {
   if (!key)
-    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid public key specified"), calldata);
   else
     {
       gchar *full_keyID;
@@ -404,9 +404,9 @@ gpapa_public_key_send_to_server (GpapaPublicKey *key,
                                  gpointer calldata)
 {
   if (!key)
-    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid public key specified"), calldata);
   if (!ServerName)
-    callback (GPAPA_ACTION_ERROR, "keyserver not specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Keyserver not specified"), calldata);
   if (key && ServerName)
     {
 #ifdef __USE_HKP__
@@ -427,13 +427,7 @@ gpapa_public_key_send_to_server (GpapaPublicKey *key,
       rc = kserver_sendkey (ServerName, buffer_data, strlen (buffer_data));
       wsock_end ();
       if (rc != 0)
-        {
-	  if (rc < 1 || rc > 8)
-	    rc = 1;
-	  if (rc == HKPERR_RECVKEY || rc == HKPERR_SENDKEY)
-            callback (GPAPA_ACTION_ERROR, (char *) kserver_strerror (), calldata);
-          callback (GPAPA_ACTION_ERROR, hkp_errtypestr[rc - 1], calldata);
-	}
+        gpapa_report_hkp_error (rc, callback, calldata);
 
       free (full_keyID);
 #else /* not __USE_HKP__ */
@@ -461,11 +455,11 @@ gpapa_public_key_sign (GpapaPublicKey *key, char *keyID,
                        GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!key)
-    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid public key specified"), calldata);
   if (!keyID)
-    callback (GPAPA_ACTION_ERROR, "no valid secret key specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid secret key specified"), calldata);
   if (!PassPhrase)
-    callback (GPAPA_ACTION_ERROR, "no valid PassPhrase specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid passphrase specified"), calldata);
   if (key && keyID && PassPhrase)
     {
       gchar *full_keyID;

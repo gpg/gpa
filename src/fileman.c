@@ -291,7 +291,7 @@ show_file_detail (gpointer param)
 
   if (!fileman->clist_files->selection)
     {
-      gpa_window_error (_("No file selected for detail view."),
+      gpa_window_error (_("No file selected for verifying signature."),
 			fileman->window);
       return;
     } /* if */
@@ -299,7 +299,7 @@ show_file_detail (gpointer param)
   file = get_file (fileman->clist_files,
 		   GPOINTER_TO_INT (fileman->clist_files->selection->data));
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), _("Detailed file view"));
+  gtk_window_set_title (GTK_WINDOW (window), _("Verifying file signature"));
   gtk_signal_connect_object (GTK_OBJECT (window), "delete_event",
 			     GTK_SIGNAL_FUNC (detail_delete_event),
 			     (gpointer)fileman);
@@ -614,6 +614,12 @@ toolbar_file_sign (GtkWidget *widget, gpointer param)
 }
 
 static void
+toolbar_file_verify (GtkWidget *widget, gpointer param)
+{
+  show_file_detail (param);
+}
+
+static void
 toolbar_file_encrypt (GtkWidget *widget, gpointer param)
 {
   encrypt_files (param);
@@ -648,6 +654,11 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
     gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Sign"),
 			     _("Sign the selected file"), _("sign file"), icon,
 			     GTK_SIGNAL_FUNC (toolbar_file_sign), fileman);
+  /* Verify */
+  if ((icon = gpa_create_icon_widget (window, "verify")))
+    gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Verify"),
+			     _("Check signatures of selected file"), _("verify file"), icon,
+			     GTK_SIGNAL_FUNC (toolbar_file_verify), fileman);
   /* Encrypt */
   if ((icon = gpa_create_icon_widget (window, "encrypt")))
     gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Encrypt"),
@@ -661,7 +672,7 @@ gpa_fileman_toolbar_new (GtkWidget * window, GPAFileManager *fileman)
 			     icon, GTK_SIGNAL_FUNC (toolbar_file_decrypt),
 			     fileman);
 
-#if 0  /* Help is not available yet. :-( */                            
+#if 0  /* FIXME: Help is not available yet. :-( */
   /* Help */
   if ((icon = gpa_create_icon_widget (window, "help")))
     gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),

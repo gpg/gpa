@@ -40,9 +40,9 @@ gpapa_secret_key_export (GpapaSecretKey *key, char *targetFileID,
 			 gpointer calldata)
 {
   if (!key)
-    callback (GPAPA_ACTION_ERROR, "no valid secret key specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid secret key specified"), calldata);
   if (!targetFileID)
-    callback (GPAPA_ACTION_ERROR, "target file not specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Target file not specified"), calldata);
   if (key && targetFileID)
     {
       gchar *full_keyID;
@@ -72,7 +72,7 @@ gpapa_secret_key_export_to_clipboard (GpapaSecretKey *key,
                                       gpointer calldata)
 {
   if (!key)
-    callback (GPAPA_ACTION_ERROR, "no valid secret key specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid secret key specified"), calldata);
   if (key)
     {
       gchar *full_keyID;
@@ -102,7 +102,7 @@ gpapa_secret_key_delete (GpapaSecretKey *key, GpapaCallbackFunc callback,
 			 gpointer calldata)
 {
   if (!key)
-    callback (GPAPA_ACTION_ERROR, "no valid secret key specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("No valid secret key specified"), calldata);
   else
     {
       gchar *full_keyID;

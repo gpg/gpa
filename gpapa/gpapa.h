@@ -29,6 +29,7 @@
 #include <sys/stat.h>
 
 #include "xmalloc.h"
+#include "../src/i18n.h"
 
 #include <glib.h>
 
@@ -79,12 +80,18 @@ extern GpapaPublicKey *gpapa_get_public_key_by_userID (const gchar *userID,
 						   GpapaCallbackFunc callback,
 						   gpointer calldata);
 
+extern void gpapa_report_hkp_error (int rc, GpapaCallbackFunc callback,
+                                            gpointer calldata);
+
 extern GpapaPublicKey *gpapa_receive_public_key_from_server (const gchar *keyID,
-							     const gchar *ServerName,
-							     GpapaCallbackFunc
-							     callback,
-							     gpointer
-							     calldata);
+                                                             const gchar *ServerName,
+                                                             GpapaCallbackFunc callback,
+                                                             gpointer calldata);
+
+extern GList *gpapa_search_public_keys_on_server (const gchar *keyID,
+                                                  const gchar *ServerName,
+                                                  GpapaCallbackFunc callback,
+                                                  gpointer calldata);
 
 extern void gpapa_release_public_key (GpapaPublicKey *key,
 				      GpapaCallbackFunc callback,

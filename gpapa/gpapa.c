@@ -28,14 +28,14 @@
 
 gchar *hkp_errtypestr[] =
   {
-    "General error",
-    "The keyserver returned an error message.",
-    "The keyserver returned an error message.",
-    "Keyserver timeout",
-    "Error initializing network",
-    "Error resolving host name",
-    "Socket error",
-    "Error while connecting to keyserver"
+    N_("General error"),
+    N_("The keyserver returned an error message:\n\n%s"),
+    N_("The keyserver returned an error message:\n\n%s"),
+    N_("Keyserver timeout"),
+    N_("Error initializing network"),
+    N_("Error resolving host name"),
+    N_("Socket error"),
+    N_("Error while connecting to keyserver")
   };
 
 #endif /* __USE_HKP__ */
@@ -140,7 +140,7 @@ gpapa_extract_fingerprint (char *line, int algorithm,
   if (fields < 10)
     {
       callback (GPAPA_ACTION_ERROR,
-                "invalid number of fields in GPG colon output", calldata);
+                _("Invalid number of fields in GnuPG colon output"), calldata);
       return (NULL);
     }
   else
@@ -252,7 +252,7 @@ extract_key (char *line, GpapaCallbackFunc callback, gpointer calldata)
   if (fields < 10)
     {
       callback (GPAPA_ACTION_ERROR,
-                "invalid number of fields in GPG colon output", calldata);
+                _("Invalid number of fields in GnuPG colon output"), calldata);
       return (NULL);
     }
   else
@@ -427,6 +427,72 @@ gpapa_get_public_key_by_userID (const gchar *userID, GpapaCallbackFunc callback,
     return NULL;
 }
 
+static gchar *
+gpapa_http_quote (const gchar *s)
+{
+  gchar *quoted, *q;
+  const gchar *p, hexchr[] = "0123456789abcdef";
+
+  quoted = xmalloc (3 * strlen (s) + 1);
+  q = quoted;
+  for (p = s; *p; p++)
+    {
+      if ((*p >= 'A' && *p <= 'Z')
+          || (*p >= 'a' && *p <= 'z')
+          || (*p >= '0' && *p <= '9'))
+        *q++ = *p;
+      else
+        {
+          *q++ = '%';
+          *q++ = hexchr[*p / 16];
+          *q++ = hexchr[*p % 16];
+        }
+    }
+  *q = 0;
+  return quoted;
+}
+
+/* Remove HTML tags.
+ */
+static gchar *
+gpapa_dehtml (const gchar *p)
+{
+  gchar *result = xmalloc (strlen (p));
+  gchar *q = result;
+  while (*p)
+    {
+      if (*p == '<')
+        {
+          while (*p && *p != '>')
+            p++;
+          p++;
+        }
+      else
+        *q++ = *p++;
+    }
+  *q = 0;
+  return result;
+}
+
+void
+gpapa_report_hkp_error (int rc, GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (rc < 1 && rc > 8)
+    rc = HKPERR_GENERAL;
+  if (rc == HKPERR_RECVKEY || rc == HKPERR_SENDKEY)
+    {
+      gchar *server_errmsg, *errmsg;
+      server_errmsg = gpapa_dehtml (kserver_strerror ());
+      errmsg = g_strdup_printf (_(hkp_errtypestr[rc - 1]),
+                                server_errmsg);
+      callback (GPAPA_ACTION_ERROR, errmsg, calldata);
+      g_free (server_errmsg);
+      g_free (errmsg);
+    }
+  else
+    callback (GPAPA_ACTION_ERROR, _(hkp_errtypestr[rc - 1]), calldata);
+}
+
 GpapaPublicKey *
 gpapa_receive_public_key_from_server (const gchar *keyID,
                                       const gchar *ServerName,
@@ -437,18 +503,14 @@ gpapa_receive_public_key_from_server (const gchar *keyID,
     {
 #ifdef __USE_HKP__
       gchar *key_buffer = g_malloc (KEY_BUFLEN);
+      gchar *quoted_keyID = gpapa_http_quote (keyID);
       int rc;
       wsock_init ();
-      rc = kserver_recvkey (ServerName, keyID, key_buffer, KEY_BUFLEN);
+      rc = kserver_recvkey (ServerName, quoted_keyID, key_buffer, KEY_BUFLEN);
+      free (quoted_keyID);
       wsock_end ();
       if (rc != 0)
-        {
-	  if (rc < 1 || rc > 8)
-	    rc = 1;
-	  if (rc == HKPERR_RECVKEY || rc == HKPERR_SENDKEY)
-            callback (GPAPA_ACTION_ERROR, (char *) kserver_strerror (), calldata);
-          callback (GPAPA_ACTION_ERROR, hkp_errtypestr[rc - 1], calldata);
-	}
+        gpapa_report_hkp_error (rc, callback, calldata);
       else
 	{
           const gchar *gpgargv[2];
@@ -473,6 +535,45 @@ gpapa_receive_public_key_from_server (const gchar *keyID,
       gpapa_refresh_public_keyring (callback, calldata);
     }
   return (gpapa_get_public_key_by_userID (keyID, callback, calldata));
+}
+
+GList *
+gpapa_search_public_keys_on_server (const gchar *keyID, const gchar *ServerName,
+				    GpapaCallbackFunc callback,
+				    gpointer calldata)
+{
+  int rc, conn_fd;
+  keyserver_key key_buffer;
+  GList *g = NULL;
+  gchar *quoted_keyID;
+
+  if (!ServerName)
+    return NULL;
+  wsock_init ();
+  quoted_keyID = gpapa_http_quote (keyID);
+  rc = kserver_search_init (ServerName, quoted_keyID, &conn_fd);
+  free (quoted_keyID);
+  if (rc != 0)
+    {
+      gpapa_report_hkp_error (rc, callback, calldata);
+      wsock_end ();
+      return NULL;
+    }
+  while ((rc = kserver_search (conn_fd, &key_buffer)) == 0)
+    {
+      if (key_buffer.keyid[0])
+        {
+          GpapaKey *key = gpapa_key_new (key_buffer.keyid, callback, calldata);
+          key->UserID = xstrdup (key_buffer.uid);
+          g = g_list_append (g, key);
+        }
+    }
+  wsock_end ();
+  if (rc != 1)
+    {
+      gpapa_report_hkp_error (rc, callback, calldata);
+    }
+  return g;
 }
 
 static void
@@ -662,7 +763,7 @@ gpapa_create_key_pair (GpapaPublicKey **publicKey,
 	}
       else 
 	callback (GPAPA_ACTION_ERROR, 
-		     "specified algorithm not supported", calldata); 
+		  _("Specified algorithm not supported"), calldata); 
       gpgargv[0] = "--gen-key";
       gpgargv[1] = "--batch";  /* not automatically added due to commands */
       gpgargv[2] = NULL;
@@ -688,13 +789,13 @@ gpapa_export_ownertrust (const gchar *targetFileID, GpapaArmor Armor,
 			 GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!targetFileID)
-    callback (GPAPA_ACTION_ERROR, "target file not specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Target file not specified"), calldata);
   else
     {
       FILE *stream = fopen (targetFileID, "w");
       if (!stream)
 	callback (GPAPA_ACTION_ERROR,
-		  "could not open target file for writing", calldata);
+		  "Could not open target file for writing", calldata);
       else
 	{
 	  const gchar *gpgargv[3];
@@ -715,7 +816,7 @@ gpapa_import_ownertrust (const gchar *sourceFileID,
 			 GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!sourceFileID)
-    callback (GPAPA_ACTION_ERROR, "source file not specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Source file not specified"), calldata);
   else
     {
       const gchar *gpgargv[3];
@@ -745,7 +846,7 @@ gpapa_import_keys (const gchar *sourceFileID,
 		   GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!sourceFileID)
-    callback (GPAPA_ACTION_ERROR, "source file not specified", calldata);
+    callback (GPAPA_ACTION_ERROR, _("Source file not specified"), calldata);
   else
     {
       const gchar *gpgargv[4];

@@ -1,3 +1,40 @@
+2002-02-24  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* Makefile.am (noinst_PROGRAMS): Removed gpapatest.
+
+	* gpapa.c, gpapafile.c, gpapaintern.c, gpapapublickey.c,
+	gpapasecretkey.c: gettextify output.
+
+	* gpapa.c (gpapa_http_quote): New function. Quotes a string for an
+	HTTP request.
+	(gpapa_dehtml): New function. Removes every HTML tag from a string.
+	(gpapa_report_hkp_error): New function, which reports to the
+	application an error when contacting the keyserver.
+	(gpapa_receive_public_key_from_server): Quote the key ID before
+	sending it to the server. Use gpapa_report_hkp_error when
+	appropiate.
+	(gpapa_search_public_keys_on_server): New function. Looks for keys
+	matching some search terms on the keyserver and returns a list
+	with them.
+
+	* gpapa.h: Added gpapa_report_hkp_error and
+	gpapa_search_public_keys_on_server functions.
+
+	* gpapapublickey.c (gpapa_public_key_send_to_server): Use
+	gpapa_report_hkp_error when appropiate.
+
+	* keyserver.c: Changed the hardcoded port 11371 to the HKP_PORT
+	constant defined in keyserver.h. Set to debug mode (defined
+	DEBUG).
+	(sock_getline)
+	(kserver_search_init)
+	(kserver_search): New functions.
+
+	* keyserver.h: Added HKP_PORT constant. Defined keyserver_key type.
+	(kserver_search_init)
+	(kserver_search): New functions. They use code from WinPT (file
+	Src/wptKeyserver.cpp).
+	
 2002-02-22  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gpapa.c (gpapa_receive_public_key_from_server): Moved gpgargv

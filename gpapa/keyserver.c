@@ -33,6 +33,8 @@
 #endif
 #define xfree(foo) free (foo)
 
+#define DEBUG
+
 static char base64code[] =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -289,7 +291,7 @@ kserver_connect(const char *hostname, int *conn_fd)
 {
   int rc, fd;
   DWORD iaddr;
-  WORD port = 11371;
+  WORD port = HKP_PORT;
   char host[128];
   struct hostent *hp;
   struct sockaddr_in sock;
@@ -415,7 +417,7 @@ kserver_send_request( const char *hostname, const char *pubkey, int octets )
                  "\r\n"
                  "keytext=%s"
                  "\n",
-                 hostname, 11371, hostname, 11371, hkp_proxy_base64user,
+                 hostname, HKP_PORT, hostname, HKP_PORT, hkp_proxy_base64user,
                  enc_octets+9, enc_pubkey);
     }
   else
@@ -430,7 +432,7 @@ kserver_send_request( const char *hostname, const char *pubkey, int octets )
                  "\r\n"
                  "keytext=%s"
                  "\n",
-                 hostname, 11371, enc_octets+9, enc_pubkey);
+                 hostname, HKP_PORT, enc_octets+9, enc_pubkey);
     }
   xfree(enc_pubkey);
 
@@ -468,14 +470,14 @@ kserver_recvkey( const char *hostname, const char *keyid, char *key,
           _snprintf(request, 255,
                     "GET http://%s:%d/pks/lookup?op=get&search=%s "
                     "HTTP/1.0\r\nProxy-Authorization: Basic %s\r\n\r\n",
-                    hostname, 11371, keyid, hkp_proxy_base64user);
+                    hostname, HKP_PORT, keyid, hkp_proxy_base64user);
         }
       else
         {
           _snprintf(request, 255, 
                     "GET http://%s:%d/pks/lookup?op=get&search=%s "
                     "HTTP/1.0\r\n\r\n",
-                    hostname, 11371, keyid);
+                    hostname, HKP_PORT, keyid);
         }
     }
   else
@@ -561,6 +563,143 @@ leave:
   return rc;
 } /* kserver_sendkey */
 
+static int
+sock_getline( int fd, char *buf, int buflen, int *nbytes )
+{
+	char ch;
+	int count = 0;
+	
+	*nbytes = 0;
+	*buf = 0;
+
+	while ( recv(fd, &ch, 1, 0) > 0 ) {
+		*buf++ = ch;
+		count++;	
+		if ( ch == '\n' || count == (buflen-1) ) {
+			*buf = 0;
+			*nbytes = count;
+			return 0;
+		}
+	}
+		
+	return 1;
+} /* sock_getline */
+
+int
+kserver_search_init(const char *hostname, const char *keyid, int *conn_fd)
+{
+	int rc, sock_fd;
+	char *request = NULL;
+
+	rc = kserver_connect(hostname, &sock_fd);
+	if (rc) {
+		*conn_fd = 0;
+		goto leave;
+	}
+	
+	request = xmalloc (256+1);
+
+	if (hkp_use_proxy) {
+		if (hkp_use_proxy_user) {
+			_snprintf(request, 255, 
+				"GET http://%s:%d/pks/lookup?op=index&search=%s HTTP/1.0\r\nProxy-Authorization: Basic %s\r\n\r\n",
+				hostname, HKP_PORT, keyid, hkp_proxy_base64user);
+		}
+		else {
+			_snprintf(request, 255,
+				"GET http://%s:%d/pks/lookup?op=index&search=%s HTTP/1.0\r\n\r\n",
+				hostname, HKP_PORT, keyid);
+		}
+	}
+	else {
+		_snprintf(request, 255,
+				  "GET /pks/lookup?op=index&search=%s HTTP/1.0\r\n\r\n",
+				  keyid);
+	}
+
+#ifdef DEBUG
+	fprintf (stderr, "HKP request: %s\n", request);
+	fflush (stderr);
+#endif
+		
+	if (sock_write(sock_fd, request, strlen(request)) == SOCKET_ERROR) {
+		rc = -1;
+		goto leave;
+	}
+
+	*conn_fd = sock_fd;
+
+leave:
+	if (request) {
+		free (request);
+		request = NULL;
+	}
+	return rc;
+} /* kserver_search_init */
+
+int
+kserver_search( int fd, keyserver_key *key )
+{
+	char buf[ 1024 ], *p;
+	int rc, uid_len, nbytes;
+	
+	rc = sock_getline(fd, buf, sizeof(buf), &nbytes);
+	if ( rc )
+		return 1;
+#ifdef DEBUG
+	fprintf (stderr, "kserver_search: %s\n", buf);
+	fflush (stderr);
+#endif
+        if (!strncmp (buf, "pub", 3))
+          {
+            key->bits = atol (buf + 3);
+            memcpy (key->keyid, buf + 57, 8);
+            key->keyid[8] = '\0';
+            memcpy (key->date, buf + 70, 10);
+            key->date[10] = '\0';
+            p = strstr (buf + 81, "&lt;");
+            if (p)
+              {
+                uid_len = (p - buf) - 81;
+                if (uid_len < sizeof (key->uid))
+                  {
+                    char *q;
+                    memcpy (key->uid, buf + 81, uid_len);
+                    q = key->uid + uid_len;
+                    while (*p)
+                      {
+                        if (strncmp (p, "&lt;", 4) == 0)
+                          { 
+                            *q++ = '<';
+                            p += 4;
+                          }
+                        else if (strncmp (p, "&gt;", 4) == 0)
+                          { 
+                            *q++ = '>';
+                            p += 4;
+                            *p = 0;  /* finish after the email address */
+                          }
+                        else if (*p == '<')
+                          { 
+                            while (*p && *p != '>')
+                              p++;
+                            p++;
+                          }
+                        else
+                          *q++ = *p++;
+                      }
+                    *q = 0;
+                  }
+              }
+          }
+	else {
+		key->bits = 0;
+		memset( key->date, 0, sizeof(key->date) );
+		memset( key->keyid, 0, sizeof(key->keyid) );
+		memset( key->uid, 0, sizeof(key->uid) );
+	}
+		
+	return 0;
+} /* kserver_search */
+
 #endif /*__MINGW32__*/
-
-

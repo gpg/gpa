@@ -26,6 +26,7 @@
 
 #include "icons.h"
 #include "icons.xpm"
+#include "verify.xpm"
 
 struct {
   const char *name;
@@ -36,6 +37,7 @@ struct {
   {"encrypt",	encrypt_xpm  },
   {"decrypt",	decrypt_xpm  },
   {"sign",	sign_xpm  },
+  {"verify",    verify_xpm },
   {"gpa_sign_small", gpa_sign_small_xpm  },
   {"keyring",	keyring_xpm  },
   {"trash",	trash_xpm  },

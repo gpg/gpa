@@ -23,19 +23,21 @@
 
 #include <gtk/gtk.h>
 
-GtkWidget * gpa_key_info_new (GpapaKey * key, GtkWidget * window);
+extern GtkWidget *gpa_key_info_new (GpapaKey *key, GtkWidget *window);
 
-GtkWidget * gpa_secret_key_list_new (GtkWidget *window);
-GtkWidget * gpa_public_key_list_new (GtkWidget *window);
-gint gpa_key_list_selection_length (GtkWidget *clist);
-GList * gpa_key_list_selected_ids (GtkWidget *clist);
-gchar * gpa_key_list_selected_id (GtkWidget *clist);
+extern GtkWidget *gpa_secret_key_list_new (GtkWidget *window);
+extern GtkWidget *gpa_public_key_list_new (GtkWidget *window);
+extern GtkWidget *gpa_key_list_new_from_glist (GtkWidget *window,
+                                                      GList *list);
+extern gint gpa_key_list_selection_length (GtkWidget *clist);
+extern GList *gpa_key_list_selected_ids (GtkWidget *clist);
+extern gchar *gpa_key_list_selected_id (GtkWidget *clist);
 
-GtkWidget * gpa_expiry_frame_new (GtkAccelGroup * accelGroup,
-				  GDate * expiryDate);
-gchar * gpa_expiry_frame_validate(GtkWidget * expiry_frame);
-gboolean gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame,
-					 GDate ** date,
-					 int * interval, gchar * unit);
+extern GtkWidget *gpa_expiry_frame_new (GtkAccelGroup *accelGroup,
+				        GDate *expiryDate);
+extern gchar *gpa_expiry_frame_validate (GtkWidget *expiry_frame);
+extern gboolean gpa_expiry_frame_get_expiration(GtkWidget *expiry_frame,
+					        GDate **date,
+					        int *interval, gchar *unit);
 
 #endif /* GPAWIDGETS_H */

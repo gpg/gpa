@@ -174,7 +174,7 @@ options_recipients_set (gpointer param)
   rows = GTK_CLIST (clistDefault)->rows;
   for (i = 0; i < rows; i++)
     {
-      gtk_clist_get_text (GTK_CLIST (clistDefault), i, 1, &keyID);
+      gtk_clist_get_text (GTK_CLIST (clistDefault), i, 0, &keyID);
       global_defaultRecipients =
 	g_list_append (global_defaultRecipients, xstrdup_or_null (keyID));
     }
@@ -194,7 +194,7 @@ options_recipients (gpointer param)
   GpaWindowKeeper *keeper;
   gint contentsKeyCount;
   GtkAccelGroup *accelGroup;
-  gchar *titlesAnyClist[] = { _("Key owner"), _("Key ID") };
+  gchar *titlesAnyClist[] = { _("Key ID"), _("Key owner") };
   gint i;
   GList **recipientsSelected = NULL;
   gchar *contentsAnyClist[2];
@@ -260,8 +260,8 @@ global_windowMain);
   scrollerDefault = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_usize (scrollerDefault, 250, 140);
   clistDefault = gtk_clist_new_with_titles (2, titlesAnyClist);
-  gtk_clist_set_column_width (GTK_CLIST (clistDefault), 0, 180);
-  gtk_clist_set_column_width (GTK_CLIST (clistDefault), 1, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clistDefault), 0, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clistDefault), 1, 200);
   for (i = 0; i < 2; i++)
     gtk_clist_column_title_passive (GTK_CLIST (clistDefault), i);
   gtk_clist_set_selection_mode (GTK_CLIST (clistDefault),
@@ -290,8 +290,8 @@ global_windowMain);
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_usize (scrollerKeys, 250, 140);
   clistKeys = gtk_clist_new_with_titles (2, titlesAnyClist);
-  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 0, 180);
-  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 1, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 0, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 1, 200);
   for (i = 0; i < 2; i++)
     gtk_clist_column_title_passive (GTK_CLIST (clistKeys), i);
   gtk_clist_set_selection_mode (GTK_CLIST (clistKeys),
@@ -318,10 +318,10 @@ global_windowMain);
 	gpapa_get_public_key_by_index (contentsKeyCount, gpa_callback,
 				       global_windowMain);
       contentsAnyClist[0] =
-	gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, global_windowMain);
-      contentsAnyClist[1] =
 	gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
 				  global_windowMain);
+      contentsAnyClist[1] =
+	gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, global_windowMain);
       gtk_clist_prepend (GTK_CLIST (clistKeys), contentsAnyClist);
     }				/* while */
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
@@ -398,8 +398,8 @@ options_key_select (GtkCList * clist, gint row, gint column,
   gchar **keyID;
 /* commands */
   keyID = (gchar **) userData;
-  gtk_clist_get_text (clist, row, 1, keyID);
-}				/* options_key_select */
+  gtk_clist_get_text (clist, row, 0, keyID);
+}
 
 static void
 options_key_set (gpointer param)
@@ -432,7 +432,7 @@ options_key (gpointer param)
 {
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
-  gchar *titlesKeys[] = { _("User identity / role"), _("Key ID") };
+  gchar *titlesKeys[] = { _("Key ID"), _("User identity / role") };
   gint contentsKeyCount;
   gchar **keyID;
   GpapaSecretKey *key;
@@ -481,8 +481,8 @@ options_key (gpointer param)
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_usize (scrollerKeys, 250, 120);
   clistKeys = gtk_clist_new_with_titles (2, titlesKeys);
-  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 0, 180);
-  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 1, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 0, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clistKeys), 1, 200);
   for (i = 0; i < 2; i++)
     gtk_clist_column_title_passive (GTK_CLIST (clistKeys), i);
   gtk_clist_set_selection_mode (GTK_CLIST (clistKeys), GTK_SELECTION_SINGLE);
@@ -497,22 +497,22 @@ options_key (gpointer param)
 	gpapa_get_secret_key_by_index (contentsKeyCount, gpa_callback,
 				       global_windowMain);
       contentsKeys[0] =
-	gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, global_windowMain);
-      contentsKeys[1] =
 	gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
 				  global_windowMain);
+      contentsKeys[1] =
+	gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, global_windowMain);
       gtk_clist_prepend (GTK_CLIST (clistKeys), contentsKeys);
     }				/* while */
   if (gpa_default_key ())
     {
       i = 0;
       rows = GTK_CLIST (clistKeys)->rows;
-      gtk_clist_get_text (GTK_CLIST (clistKeys), i, 1, keyID);
+      gtk_clist_get_text (GTK_CLIST (clistKeys), i, 0, keyID);
       while (i < rows && strcmp (gpa_default_key (), *keyID) != 0)
 	{
 	  i++;
 	  if (i < rows)
-	    gtk_clist_get_text (GTK_CLIST (clistKeys), i, 1, keyID);
+	    gtk_clist_get_text (GTK_CLIST (clistKeys), i, 0, keyID);
 	}			/* while */
       if (i < rows)
 	gtk_clist_select_row (GTK_CLIST (clistKeys), i, 0);

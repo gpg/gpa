@@ -83,28 +83,28 @@ gpa_secret_key_list_new (GtkWidget *window)
   gint num_keys;
   GpapaSecretKey *key;
   gint default_key_index = 0;
-  gchar *titles[2] = {_("User Identity/Role"), _("Key ID")};
+  gchar *titles[2] = {_("Key ID"), _("User Identity/Role")};
   gchar *contents[2];
   gint row;
 
   clist = gtk_clist_new_with_titles (2, titles);
 
   /* FIXME: widths shouldn't be hard-coded: */
-  gtk_clist_set_column_width (GTK_CLIST (clist), 0, 185);
-  gtk_clist_set_column_width (GTK_CLIST (clist), 1, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clist), 0, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clist), 1, 200);
   num_keys = gpapa_get_secret_key_count (gpa_callback, window);
   while (num_keys)
     {
       num_keys--;
       key = gpapa_get_secret_key_by_index (num_keys, gpa_callback, window);
-      contents[0] = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, window);
-      contents[1] = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
+      contents[0] = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
 					      window);
+      contents[1] = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, window);
       row = gtk_clist_prepend (GTK_CLIST (clist), contents);
       gtk_clist_set_row_data_full (GTK_CLIST (clist), row,
-				   contents[1]? xstrdup (contents[1]):NULL,
+				   contents[0]? xstrdup (contents[0]):NULL,
                                    free);
-      if (gpa_default_key () && strcmp (gpa_default_key (), contents[1]) == 0)
+      if (gpa_default_key () && strcmp (gpa_default_key (), contents[0]) == 0)
 	{
 	  default_key_index = num_keys;
 	}
@@ -123,26 +123,61 @@ gpa_public_key_list_new (GtkWidget *window)
   GtkWidget *clist;
   gint num_keys;
   GpapaPublicKey *key;
-  gchar *titles[2] = {_("User Identity/Role"), _("Key ID")};
+  gchar *titles[2] = {_("Key ID"), _("User Identity/Role")};
   gchar *contents[2];
   gint row;
 
   clist = gtk_clist_new_with_titles (2, titles);
 
   /* FIXME: widths shouldn't be hard-coded: */
-  gtk_clist_set_column_width (GTK_CLIST (clist), 0, 185);
-  gtk_clist_set_column_width (GTK_CLIST (clist), 1, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clist), 0, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clist), 1, 200);
   num_keys = gpapa_get_public_key_count (gpa_callback, window);
   while (num_keys)
     {
       num_keys--;
       key = gpapa_get_public_key_by_index (num_keys, gpa_callback, window);
-      contents[0] = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, window);
-      contents[1] = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
+      contents[0] = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
 					      window);
+      contents[1] = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback, window);
       row = gtk_clist_prepend (GTK_CLIST (clist), contents);
       gtk_clist_set_row_data_full (GTK_CLIST (clist), row,
-				   contents[1]?xstrdup (contents[1]):NULL,
+				   contents[0]?xstrdup (contents[0]):NULL,
+                                   free);
+    } /* while */
+  gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_SINGLE);
+  gtk_clist_column_title_passive (GTK_CLIST (clist), 0);
+  gtk_clist_column_title_passive (GTK_CLIST (clist), 1);
+
+  return clist;
+}
+
+GtkWidget *
+gpa_key_list_new_from_glist (GtkWidget *window, GList *list)
+{
+  GtkWidget *clist;
+  gint num_keys;
+  GpapaKey *key;
+  gchar *titles[2] = {_("Key ID"), _("User Identity/Role")};
+  gchar *contents[2];
+  gint row;
+
+  clist = gtk_clist_new_with_titles (2, titles);
+
+  /* FIXME: widths shouldn't be hard-coded: */
+  gtk_clist_set_column_width (GTK_CLIST (clist), 0, 120);
+  gtk_clist_set_column_width (GTK_CLIST (clist), 1, 200);
+  num_keys = g_list_length (list);
+  while (num_keys)
+    {
+      num_keys--;
+      key = (GpapaKey *) g_list_nth_data (list, num_keys);
+      contents[0] = gpapa_key_get_identifier (key, gpa_callback,
+					      window);
+      contents[1] = gpapa_key_get_name (key, gpa_callback, window);
+      row = gtk_clist_prepend (GTK_CLIST (clist), contents);
+      gtk_clist_set_row_data_full (GTK_CLIST (clist), row,
+				   contents[0]?xstrdup (contents[0]):NULL,
                                    free);
     } /* while */
   gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_SINGLE);

@@ -21,7 +21,10 @@
 #ifndef HKP_KEYSERVER_H
 #define HKP_KEYSERVER_H
 
-enum {
+#define HKP_PORT 11371
+
+enum
+{
   HKPERR_GENERAL = 1,
   HKPERR_RECVKEY = 2,
   HKPERR_SENDKEY = 3,
@@ -31,6 +34,14 @@ enum {
   HKPERR_SOCKET = 7,
   HKPERR_CONNECT = 8
 };
+
+typedef struct _keyserver_key
+{
+  int bits;
+  char date[16];
+  char keyid[16];
+  char uid[1024];
+} keyserver_key;
 
 int wsock_init(void);
 void wsock_end(void);
@@ -43,6 +54,7 @@ int kserver_connect(const char *hostname, int *conn_fd);
 int kserver_recvkey( const char *hostname, const char *keyid, char *key,
                      int maxkeylen );
 int kserver_sendkey( const char *hostname, const char *pubkey, int len );
+int kserver_search_init(const char *hostname, const char *keyid, int *conn_fd);
+int kserver_search( int fd, keyserver_key *key );
 
 #endif /*HKP_KEYSERVER_H*/
-

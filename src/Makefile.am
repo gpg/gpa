@@ -31,6 +31,7 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      keysigndlg.c keysigndlg.h \
 	      passphrasedlg.c passphrasedlg.h \
 	      keyimportdlg.c keyimportdlg.h \
+	      keyimpseldlg.c keyimpseldlg.h \
 	      keyexportdlg.c keyexportdlg.h \
 	      keygendlg.c keygendlg.h \
 	      keygenwizard.c keygenwizard.h \
