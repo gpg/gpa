@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2001-02-27 14:40+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2001-03-11 19:40+0100\n"
 "Last-Translator: FULL NAME <pplf@geocities.com>\n"
 "Language-Team: FRENCH <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "_Signer"
 
 #: src/encryptdlg.c:191
 msgid "A_rmor"
-msgstr "A-rmure"
+msgstr "Armure"
 
 #: src/encryptdlg.c:203 src/expirydlg.c:220 src/filemenu.c:449
 #: src/filemenu.c:1216 src/filemenu.c:1478 src/filemenu.c:1645
@@ -104,7 +104,7 @@ msgstr "Vue détaillée du fichier"
 
 #: src/fileman.c:310
 msgid "Filename: "
-msgstr "Nome de fichier: "
+msgstr "Nom de fichier: "
 
 #: src/fileman.c:327
 msgid "Status:"
@@ -220,7 +220,7 @@ msgstr "Signer"
 
 #: src/fileman.c:642
 msgid "Sign the selected file"
-msgstr "Signer le fichier sélectionner"
+msgstr "Signer le fichier sélectionné"
 
 #: src/fileman.c:642
 msgid "sign file"
@@ -565,15 +565,15 @@ msgstr "Aucune clef sélectionnée pour ajouter à la liste des clefs"
 
 #: src/gpapastrings.c:33 src/gpapastrings.c:46
 msgid "don't trust"
-msgstr "ne fais pas confiance"
+msgstr "pas confiance"
 
 #: src/gpapastrings.c:34 src/gpapastrings.c:47
 msgid "trust marginally"
-msgstr "fais confiance de manière marginale"
+msgstr "confiance de manière marginale"
 
 #: src/gpapastrings.c:35 src/gpapastrings.c:48
 msgid "trust fully"
-msgstr "fais entièrement confiance"
+msgstr "entièrement confiance"
 
 #: src/gpapastrings.c:85 src/keysmenu.c:35
 msgid "days"
@@ -696,7 +696,7 @@ msgstr "A propos de GPA"
 
 #: src/helpmenu.c:212
 msgid "brought to you by"
-msgstr "vous est fournir par"
+msgstr "vous est fourni par"
 
 #: src/helpmenu.c:246
 msgid "See http://www.gnupg.org for news"
@@ -879,7 +879,7 @@ msgid ""
 msgstr ""
 "Veuillez indiquer votre nom complet.\n"
 "\n"
-"Votre nom fera partie de notre nouvelle clef pour permettre aux autres "
+"Votre nom fera partie de la nouvelle clef pour permettre aux autres "
 "d'identifier plus facilement les clefs."
 
 #: src/keygenwizard.c:183
@@ -901,9 +901,9 @@ msgid ""
 msgstr ""
 "Veuillez indiquer votre adresse e-mail.\n"
 "\n"
-"Votre adresse e-mail fera partie de notre nouvelle clef pour permettre aux "
+"Votre adresse e-mail fera partie de la nouvelle clef pour permettre aux "
 "autres d'identifier plus facilement les clefs. Si vous avez plusieurs "
-"adresses e-mail, vous pourrez d'autres adresses e-mail plus tard."
+"adresses e-mail, vous pourrez ajouter d'autres adresses e-mail plus tard."
 
 #: src/keygenwizard.c:216
 msgid "Your Email Adress:"
@@ -1069,7 +1069,7 @@ msgstr "Nom d'utilisateur"
 
 #: src/keylist.c:203
 msgid "Key Trust"
-msgstr "Confiance de la clef"
+msgstr "Confiance dans la clef"
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
@@ -1179,7 +1179,7 @@ msgstr "Retirer"
 
 #: src/keyring.c:1095
 msgid "Remove the selected key"
-msgstr "Retirer la clef sélectioner"
+msgstr "Retirer la clef sélectionnée"
 
 #: src/keyring.c:1096
 msgid "remove key"
@@ -1400,7 +1400,7 @@ msgstr "Importer clefs"
 
 #: src/keysmenu.c:1374
 msgid "Import ownertrust"
-msgstr "Importer confiance"
+msgstr "Importer confiance du propriétaire"
 
 #: src/keysmenu.c:1397
 msgid "Trust database updated."
