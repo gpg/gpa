@@ -96,7 +96,7 @@ void gpa_parse_engine_info (GpaEngineInfo *info)
       NULL, NULL
     };
   struct parse_engine_info_s data = {g_queue_new(), FALSE, info};
-  const gchar *engine_info = gpgme_get_engine_info ();
+  const char *engine_info = gpgme_get_engine_info ();
   GMarkupParseContext* context = g_markup_parse_context_new (&parser, 0,
 							     &data, NULL);
   g_markup_parse_context_parse (context, engine_info, strlen (engine_info),
@@ -235,7 +235,7 @@ void gpa_parse_import_info (GpaImportInfo *info)
       NULL, NULL
     };
   struct parse_import_info_s data = {g_queue_new(), info};
-  const gchar *import_info = gpgme_get_op_info (ctx, 0);
+  char *import_info = gpgme_get_op_info (ctx, 0);
   GMarkupParseContext* context = g_markup_parse_context_new (&parser, 0,
 							     &data, NULL);
   g_markup_parse_context_parse (context, import_info, strlen (import_info),

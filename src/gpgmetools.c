@@ -288,15 +288,16 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
   GpaEngineInfo info;
   gchar *header_argv[] = 
     {
-      NULL, "--batch", "--no-tty", "--fingerprint", fpr, NULL
+      NULL, "--batch", "--no-tty", "--fingerprint", (gchar*) fpr, NULL
     };
   gchar *pub_argv[] = 
     {
-      NULL, "--batch", "--no-tty", "--armor", "--export", fpr, NULL
+      NULL, "--batch", "--no-tty", "--armor", "--export", (gchar*) fpr, NULL
     };
   gchar *sec_argv[] = 
     {
-      NULL, "--batch", "--no-tty", "--armor", "--export-secret-key", fpr, NULL
+      NULL, "--batch", "--no-tty", "--armor", "--export-secret-key", 
+      (gchar*) fpr, NULL
     };
 
   gpa_parse_engine_info (&info);
