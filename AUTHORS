@@ -6,7 +6,7 @@ Authors
 =======
 (Please put the names also into the file src/help.c)
 
-Markus Gerwinski <markus.gerwinski@sercon.de> [email address no longer valid]
+Markus Gerwinski <markus@gnu.de>
         Designed GPA and GPAPA, implemented GPA.
 
 Peter Gerwinski <peter.gerwinski@g-n-u.de>
