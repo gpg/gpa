@@ -443,6 +443,7 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
       gtk_calendar_get_date (GTK_CALENDAR (frame->calendar),
                              &year, &month, &day);
       *date = g_date_new_dmy (day, month+1, year);
+      result = TRUE;
     } 
   else
     {

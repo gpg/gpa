@@ -1,5 +1,8 @@
 2003-01-15  Miguel Coca  <mcoca@gnu.org>
 
+	* gpawidgets.c (gpa_expiry_frame_get_expiration): Fix bug in previous
+	change.
+	
 	* gpawidgets.c (gpa_expiry_frame_dont, gpa_expiry_frame_after) 
 	(gpa_expiry_frame_at, expire_date_toggled_cb) 
 	(gpa_expiry_frame_new, gpa_expiry_frame_get_expiration) 
