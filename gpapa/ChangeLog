@@ -1,3 +1,8 @@
+2001-01-18  Werner Koch  <wk@gnupg.org>
+
+	* gpapaintern.c, util.c (stpcpy): Removed.
+	* w32-io.c (stpcpy): New.
+
 Tue 16 Jan 2001 23:25 Jan van Heys <jan.van.heys@uni-essen.de>
                       Peter Gerwinski <peter@gerwinski.de>
 

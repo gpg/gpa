@@ -37,19 +37,6 @@ gpapa_line_begins_with (gchar *line, gchar *keyword)
     return (FALSE);
 }	
 
-/* Needed by GPGME.
- */
-#ifndef HAVE_STPCPY
-char *
-stpcpy(char *a,const char *b)
-{
-    while( *b )
-	*a++ = *b++;
-    *a = 0;
-
-    return (char*)a;
-}
-#endif
 
 /* A dummy line_callback function to avoid "if (line_callback)"
  * in various places.

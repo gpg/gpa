@@ -1,3 +1,8 @@
+2001-01-18  Werner Koch  <wk@gnupg.org>
+
+	* autogen.sh:  Add --build-w32 option
+	* configure.in: Modifications for the new MingW32/CPD version.
+
 2000-07-25 13:15:56  Werner Koch  (wk@habibti.openit.de)
 
   Changed the copyright notices from FSF to G-N-U because we have not

@@ -44,7 +44,18 @@
 # define DEBUG_SELECT(a) do { } while(0)
 #endif
 
-
+/* need a static stpcpy her due to conflicts with jnlib */
+#ifndef HAVE_STPCPY
+static char *
+stpcpy (char *a, const char *b)
+{
+    while( *b )
+	*a++ = *b++;
+    *a = 0;
+    
+    return a;
+}
+#endif
 
 /* 
  * We assume that a HANDLE can be represented by an int which should be true   

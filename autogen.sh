@@ -1,13 +1,66 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
+#
+# Use --build-w32 to prepare the cross compiling build for Windoze
+#
 
 PGM=GPA
-DIE=no
-
+lib_config_files="gtk-config"
 autoconf_vers=2.13
 automake_vers=1.4
 aclocal_vers=1.4
 libtool_vers=1.3
+
+DIE=no
+if test "$1" = "--build-w32"; then
+    shift
+    target=i386--mingw32
+    if [ ! -f ./config.guess ]; then
+        echo "config.guess not found" >&2
+        exit 1
+    fi
+    host=`./config.guess`
+        
+    if ! mingw32 --version >/dev/null; then
+        echo "We need at least version 0.3 of MingW32/CPD" >&2
+        exit 1
+    fi
+
+    if [ -f config.h ]; then
+        if grep HAVE_DOSISH_SYSTEM config.h | grep undef >/dev/null; then
+            echo "Pease run a 'make distclean' first" >&2
+            exit 1
+        fi
+    fi
+
+    crossbindir=`mingw32 --install-dir`/bin
+    CC=`mingw32 --get-path gcc`
+    CPP=`mingw32 --get-path cpp`
+    AR=`mingw32 --get-path ar`
+    RANLIB=`mingw32 --get-path ranlib`
+    export CC CPP AR RANLIB 
+
+    disable_foo_tests=""
+    for i in $lib_config_files; do
+        j=`echo $i | tr '[a-z-]' '[A-Z_]'`
+        eval "$j=${crossbindir}/$i"
+        export $j
+        disable_foo_tests="$disable_foo_tests --disable-`echo $i| \
+                           sed 's,-config$,,'`-test"
+        if [ ! -f "${crossbindir}/$i" ]; then                   
+            echo "$i not installed for MingW32" >&2
+            DIE=yes
+        fi
+    done
+
+    [ $DIE = yes ] && exit 1
+
+    ./configure --host=${host} --target=${target} \
+                ${disable_foo_tests} $*
+    exit $?
+fi
+
+
 
 if (autoconf --version) < /dev/null > /dev/null 2>&1 ; then
     if (autoconf --version | awk 'NR==1 { if( $3 >= '$autoconf_vers') \

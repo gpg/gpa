@@ -34,6 +34,14 @@
 #undef HAVE_U16_TYPEDEF
 #undef HAVE_U32_TYPEDEF
 
+/* defined if we run on some of the PCDOS like systems (DOS, Windoze. OS/2)
+ * with special properties like no file modes */
+#undef HAVE_DOSISH_SYSTEM
+/* defined if the filesystem uses driver letters */
+#undef HAVE_DRIVE_LETTERS
+/* Some systems have a mkdir that takes a single argument. */
+#undef MKDIR_TAKES_ONE_ARG
+
 
 @BOTTOM@
 

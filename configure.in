@@ -20,13 +20,9 @@ dnl
 try_gettext=yes
 case "${target}" in
     *-*-mingw32)
-        # special stuff for Windoze NT
-        # Do we need to set cross_compiling here or is it sufficient
-        # to rely on AC_PROG_CC which is called later?
-        CC="${target}-gcc"
-        CPP="${target}-gcc -E"
-        RANLIB="${target}-ranlib"
         try_gettext=no
+        AC_DEFINE(HAVE_DRIVE_LETTERS)
+        AC_DEFINE(HAVE_DOSISH_SYSTEM)
         ;;
     *)
        ;;
@@ -61,16 +57,11 @@ AC_SUBST(USE_INCLUDED_LIBINTL)
 fi
 
 dnl Where is the GTK+ toolkit
-if test "$cross_compiling" = yes ; then
-  CFLAGS="$CFLAGS -I/home/wk/work/gtk+w32/include/gtk+/gdk/win32 \
- -I/home/wk/work/gtk+w32/include -I/home/wk/work/gtk+w32/include/gtk+"
-  LIBS="$LIBS     -L/home/wk/work/gtk+w32/lib -lgtk -lgdk -lglib"
-else
-  AM_PATH_GTK(1.2.1,
+AM_PATH_GTK(1.2.1,
             [LIBS="$LIBS $GTK_LIBS"
             CFLAGS="$CFLAGS $GTK_CFLAGS"],
             AC_MSG_ERROR(Cannot find GTK+: Is gtk-config in executable path ?))
-fi
+
 
 
 dnl
