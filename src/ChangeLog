@@ -1,5 +1,8 @@
 2001-01-11  Bernhard Herzog  <bh@intevation.de>
 
+	* keysigndlg.c (gpa_key_sign_run_dialog):
+	(key_sign_delete): Add signal handler for the delete-event signal.
+
 	* passphrasedlg.c 
 	Add some comments
 	(gpa_passphrase_run_dialog): The handler for the
