@@ -611,7 +611,6 @@ void
 options_homedir (void)
 {
   gtk_widget_show (homeDirSelect);
-  gpa_window_tip_show (_("options_homedir.tip"));
 } /* options_homedir */
 
 void
@@ -661,14 +660,12 @@ void
 options_load (void)
 {
   gtk_widget_show (loadOptionsSelect);
-  gpa_window_tip_show (_("options_load.tip"));
 }				/* options_load */
 
 void
 options_save (void)
 {
   gtk_widget_show (saveOptionsSelect);
-  gpa_window_tip_show (_("options_save.tip"));
 }				/* options_save */
 
 
