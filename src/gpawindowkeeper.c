@@ -1,5 +1,5 @@
 /* gpawindowkeeper.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -24,6 +24,8 @@
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 
+static GList *tempWindows = NULL;
+
 GpaWindowKeeper *
 gpa_windowKeeper_new (void)
 {
@@ -33,7 +35,7 @@ gpa_windowKeeper_new (void)
   keeper = (GpaWindowKeeper *) xmalloc (sizeof (GpaWindowKeeper));
   keeper->window = NULL;
   keeper->listParam = NULL;
-  global_tempWindows = g_list_append (global_tempWindows, keeper);
+  tempWindows = g_list_append (tempWindows, keeper);
   return (keeper);
 }				/* GpaWindowKeeper */
 
@@ -61,6 +63,6 @@ gpa_windowKeeper_release (GpaWindowKeeper * keeper)
 {
   gtk_widget_destroy (keeper->window);
   g_list_foreach (keeper->listParam, gpa_windowKeeper_release_exec, NULL);
-  global_tempWindows = g_list_remove (global_tempWindows, keeper);
+  tempWindows = g_list_remove (tempWindows, keeper);
   free (keeper);
 }				/* gpa_windowKeeper_release */

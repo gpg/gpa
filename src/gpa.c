@@ -89,7 +89,6 @@ static ARGPARSE_OPTS opts[] = {
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain = NULL;
 GtkWidget *global_popupMenu = NULL;
-GList *global_tempWindows = NULL;
 gboolean global_noTips = FALSE;
 GpapaAction global_lastCallbackResult;
 gchar *global_keyserver = NULL;
