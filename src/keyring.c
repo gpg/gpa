@@ -56,10 +56,30 @@ struct _GPAKeyringEditor {
   /* The "Show Ownertrust" toggle button */
   GtkWidget *toggle_show;
 
+  /* Labels in the details notebook page */
+  GtkWidget *detail_name;
+  GtkWidget *detail_fingerprint;
+  GtkWidget *detail_expiry;
+
   /* List of sensitive widgets. See below */
   GList * selection_sensitive_widgets;
 };
 typedef struct _GPAKeyringEditor GPAKeyringEditor;
+
+
+/*
+ *	Internal API
+ */ 
+
+static gboolean keyring_editor_has_selection (gpointer param);
+static gboolean keyring_editor_has_single_selection (gpointer param);
+static GpapaPublicKey  *keyring_editor_current_key (GPAKeyringEditor * editor);
+
+static void keyring_update_details_page (GPAKeyringEditor * editor);
+
+/*
+ *
+ */
 
 /*
  * A simple sensitivity callback mechanism
@@ -90,8 +110,10 @@ typedef gboolean (*SensitivityFunc)(gpointer);
 /* Add widget to the list of sensitive widgets of editor */
 static void
 add_selection_sensitive_widget (GPAKeyringEditor * editor,
-				GtkWidget * widget)
+				GtkWidget * widget,
+				SensitivityFunc callback)
 {
+  gtk_object_set_data (GTK_OBJECT (widget), "gpa_sensitivity", callback);
   editor->selection_sensitive_widgets \
     = g_list_append(editor->selection_sensitive_widgets, widget);
 } /* add_selection_sensitive_widget */
@@ -146,32 +168,9 @@ keyring_editor_has_single_selection (gpointer param)
 }
 
 
-/* Signal handler for select-row and unselect-row. Call
- * update_selection_sensitive_widgets */
-void
-keyring_editor_selection_changed (GtkWidget * clistKeys, gint row,
-				  gint column, GdkEventButton * event,
-				  gpointer param)
-{
-    GPAKeyringEditor * editor = param;
-
-    update_selection_sensitive_widgets (editor);
-} /* keyring_editor_selection_changed */
-
-
-/* Signal handler for end-selection. Call
- * update_selection_sensitive_widgets */
-void
-keyring_editor_end_selection (GtkWidget * clistKeys, gpointer param)
-{
-    GPAKeyringEditor * editor = param;
-
-    update_selection_sensitive_widgets (editor);
-} /* keyring_editor_end_selection */
-
 
 /* Fill the GtkCList with the keys */
-void
+static void
 keyring_editor_fill_keylist (GPAKeyringEditor * editor)
 {
   gint contentsCountKeys;
@@ -182,8 +181,8 @@ keyring_editor_fill_keylist (GPAKeyringEditor * editor)
   int show_trust;
   int row;
 
-  show_trust \
-      = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (editor->toggle_show));
+  show_trust = FALSE;
+  /*= gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (editor->toggle_show));*/
   gtk_clist_clear (editor->clist_keys);
   contentsCountKeys = gpapa_get_public_key_count(gpa_callback, editor->window);
   while (contentsCountKeys > 0)
@@ -302,16 +301,27 @@ keyring_editor_delete (gpointer param)
   GPAKeyringEditor * editor = param;
   gint row;
   gchar * key_id;
-  GpapaPublicKey *key;
+  GpapaPublicKey *public_key;
+  GpapaSecretKey *secret_key;
+  GList * selection;
 
-  while (editor->clist_keys->selection)
+  selection = editor->clist_keys->selection;
+  while (selection)
     {
       row = GPOINTER_TO_INT (editor->clist_keys->selection->data);
       key_id = gtk_clist_get_row_data (editor->clist_keys, row);
-      key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
-      gpapa_public_key_delete (key, gpa_callback, editor->window);
-      gtk_clist_remove (editor->clist_keys, row);
+      public_key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
+					       editor->window);
+      secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback,
+					       editor->window);
+      if (secret_key)
+	{
+	  gpapa_secret_key_delete (secret_key, gpa_callback, editor->window);
+	}
+      gpapa_public_key_delete (public_key, gpa_callback, editor->window);
+      selection = g_list_next (selection);
     }
+  keyring_editor_fill_keylist (editor);
 } /* keyring_editor_delete */
 
 
@@ -323,6 +333,7 @@ keyring_editor_can_sign (gpointer param)
 {
   return (keyring_editor_has_selection (param) && gpa_default_key ());
 } /* keyring_editor_can_sign */
+
 
 /* sign the selected keys */
 static void
@@ -407,27 +418,6 @@ keyring_editor_export (gpointer param)
       free (filename);
     }
 }
-
-
-/* close the keyring editor */
-static void
-keyring_editor_close (gpointer param)
-{
-  GPAKeyringEditor * editor = param;
-
-  gtk_widget_destroy (editor->window);
-} /* keyring_editor_close */
-
-
-/* free the data structures associated with the keyring editor */
-static void
-keyring_editor_destroy (gpointer param)
-{
-  GPAKeyringEditor * editor = param;
-
-  g_list_free (editor->selection_sensitive_widgets);
-  free (editor);
-} /* keyring_editor_destroy */
 
 
 /* Run the advanced key generation dialog and if the user clicked OK,
@@ -562,6 +552,57 @@ keyring_editor_generate_key (gpointer param)
 } /* keyring_editor_generate_key */
 
 
+/* Return the currently selected key. NULL if no key is selected */
+static GpapaPublicKey *
+keyring_editor_current_key (GPAKeyringEditor *editor)
+{
+  int row;
+  gchar * key_id;
+  GpapaPublicKey * key = NULL;
+
+  if (editor->clist_keys->selection)
+    {
+      row = GPOINTER_TO_INT (editor->clist_keys->selection->data);
+      key_id = gtk_clist_get_row_data (editor->clist_keys, row);
+      
+      key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
+    }
+
+  return key;
+}
+
+
+/* Update everything that has to be updated when the selection in the
+ * key list changes.
+ */
+static void
+keyring_selection_update_widgets (GPAKeyringEditor * editor)
+{
+  update_selection_sensitive_widgets (editor);
+  keyring_update_details_page (editor);
+}  
+
+/* Signal handler for select-row and unselect-row. Call
+ * update_selection_sensitive_widgets */
+static void
+keyring_editor_selection_changed (GtkWidget * clistKeys, gint row,
+				  gint column, GdkEventButton * event,
+				  gpointer param)
+{
+  keyring_selection_update_widgets (param);
+} /* keyring_editor_selection_changed */
+
+
+/* Signal handler for end-selection. Call
+ * update_selection_sensitive_widgets */
+static void
+keyring_editor_end_selection (GtkWidget * clistKeys, gpointer param)
+{
+  keyring_selection_update_widgets (param);
+} /* keyring_editor_end_selection */
+
+
+
 /* Signal handler for he map signal. If the simplified_ui flag is set
  * and there's no private key in the key ring, ask the user whether he
  * wants to generate a key. If so, call keyring_editor_generate_key
@@ -595,8 +636,29 @@ keyring_editor_mapped (gpointer param)
 } /* keyring_editor_mapped */
 
 
+/* close the keyring editor */
+static void
+keyring_editor_close (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+
+  gtk_widget_destroy (editor->window);
+} /* keyring_editor_close */
+
+
+/* free the data structures associated with the keyring editor */
+static void
+keyring_editor_destroy (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+
+  g_list_free (editor->selection_sensitive_widgets);
+  free (editor);
+} /* keyring_editor_destroy */
+
+
 /* Create and return the menu bar for the key ring editor */
-GtkWidget *
+static GtkWidget *
 keyring_editor_menubar_new (GtkWidget * window,
 			    GPAKeyringEditor * editor)
 {
@@ -639,11 +701,167 @@ keyring_editor_menubar_new (GtkWidget * window,
   return gtk_item_factory_get_widget (factory, "<main>");
 }
 
+/*
+ *	The details notebook
+ */ 
 
-/* Macro to add callback as the sensitivity callback to button */
-#define GPA_SENSITIVE_BUTTON(button, callback) \
-  gtk_object_set_data (GTK_OBJECT (button), "gpa_sensitivity", callback); \
-  add_selection_sensitive_widget (editor, (button))
+/* add a single row to the details table */
+static GtkWidget *
+add_details_row (GtkWidget * table, gint row, gchar *text)
+{
+  GtkWidget * label;
+
+  label = gtk_label_new (text);
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row + 1,
+		    GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  
+  label = gtk_label_new ("");
+  gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row + 1,
+		    GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
+  return label;
+}
+
+/* Create and return the Details/Signatures notebook
+ */
+static GtkWidget *
+keyring_details_notebook (GPAKeyringEditor *editor)
+{
+  GtkWidget * notebook;
+  GtkWidget * table;
+  notebook = gtk_notebook_new ();
+
+  /* Details Page */
+  table = gtk_table_new (2, 3, FALSE);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
+  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
+  
+  editor->detail_name = add_details_row (table, 0, _("User Name:"));
+  editor->detail_fingerprint = add_details_row (table, 1, _("Fingerprint:"));
+  editor->detail_expiry = add_details_row (table, 2, _("Expires at:"));  
+
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), table,
+			    gtk_label_new (_("Details")));
+  return notebook;
+}
+
+
+/* Update the labels of the details notebook page to the values of the
+ * currently selected key
+ */
+static void
+keyring_update_details_page (GPAKeyringEditor * editor)
+{
+  GpapaPublicKey * key = keyring_editor_current_key (editor);
+  GDate * expiry_date;
+  gchar * text;
+
+  if (key)
+    {
+      text = gpapa_key_get_name (GPAPA_KEY (key), gpa_callback,
+				 editor->window);
+      gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
+
+      text = gpapa_public_key_get_fingerprint (key, gpa_callback,
+					       editor->window);
+      gtk_label_set_text (GTK_LABEL (editor->detail_fingerprint), text);
+
+      expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
+					       editor->window);
+      text = gpa_expiry_date_string (expiry_date);
+      gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
+    }
+} /* keyring_update_details_page */
+
+
+
+static void
+toolbar_edit_key (GtkWidget *widget, gpointer param)
+{
+}
+
+static void
+toolbar_remove_key (GtkWidget *widget, gpointer param)
+{
+  keyring_editor_delete (param);
+}
+
+static void
+toolbar_sign_key (GtkWidget *widget, gpointer param)
+{
+  keyring_editor_sign (param);
+}
+
+
+static void
+toolbar_export_key (GtkWidget *widget, gpointer param)
+{
+}
+
+static void
+toolbar_import_keys (GtkWidget *widget, gpointer param)
+{
+}
+
+static GtkWidget *
+keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
+{
+  GtkWidget *toolbar;
+  GtkWidget *icon;
+  GtkWidget *item;
+
+  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  
+  icon = gpa_create_icon_widget (window, "help");
+  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Edit"),
+				  _("Edit the selected key"), _("edit key"),
+				  icon, GTK_SIGNAL_FUNC (toolbar_edit_key),
+				  editor);
+  add_selection_sensitive_widget (editor, item,
+				  keyring_editor_has_single_selection);
+
+  icon = gpa_create_icon_widget (window, "trash");
+  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Remove"),
+				  _("Remove the selected file"),
+				  _("remove key"), icon,
+				  GTK_SIGNAL_FUNC (toolbar_remove_key),
+				  editor);
+  add_selection_sensitive_widget (editor, item,
+				  keyring_editor_has_selection);
+
+  icon = gpa_create_icon_widget (window, "sign");
+  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Sign"),
+				  _("Sign the selected key"), _("sign key"),
+				  icon, GTK_SIGNAL_FUNC (toolbar_sign_key),
+				  editor);
+  add_selection_sensitive_widget (editor, item,
+				  keyring_editor_can_sign);
+  
+  icon = gpa_create_icon_widget (window, "openfile");
+  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Import"),
+				  _("Import Keys"), _("import keys"),
+				  icon, GTK_SIGNAL_FUNC (toolbar_import_keys),
+				  editor);
+
+  icon = gpa_create_icon_widget (window, "openfile");
+  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Export"),
+				  _("Export Keys"), _("export keys"),
+				  icon, GTK_SIGNAL_FUNC (toolbar_export_key),
+				  editor);
+  add_selection_sensitive_widget (editor, item,
+				  keyring_editor_has_selection);
+
+  icon = gpa_create_icon_widget (window, "help");
+  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
+				  _("Understanding the GNU Privacy Assistant"),
+				  _("help"), icon, GTK_SIGNAL_FUNC (help_help),
+				  NULL);
+
+  return toolbar;
+} 
+
 
 
 /* Create and return a new key ring editor window */
@@ -659,23 +877,13 @@ keyring_editor_new (void)
   GtkWidget *labelRingname;
   GtkWidget *scrollerKeys;
   GtkWidget *clistKeys;
-  GtkWidget *hboxAction;
-  GtkWidget *tableKey;
-  GtkWidget *buttonEditKey;
-  GtkWidget *buttonSign, *buttonSignBox;
-  GtkWidget *buttonSend;
-  GtkWidget *buttonReceive;
-  GtkWidget *buttonExportKey;
-  GtkWidget *buttonDelete, *buttonDeleteBox;
-  GtkWidget *tableTrust;
-  GtkWidget *toggleShow;
-  GtkWidget *buttonEditTrust;
-  GtkWidget *buttonExportTrust;
-  GtkWidget *vboxTrust;
-  GtkWidget *checkerArmor;
   GtkWidget *hSeparatorPublic;
   GtkWidget *hButtonBoxPublic;
   GtkWidget *buttonClose;
+  GtkWidget *notebook;
+  GtkWidget *toolbar;
+  GtkWidget *hbox;
+  GtkWidget *icon;
 
   gchar *titlesKeys[] = {
     _("Key owner"), _("Key trust"), _("Ownertrust"), _("Expiry date"),
@@ -691,7 +899,7 @@ keyring_editor_new (void)
 			_("GNU Privacy Assistant - Keyring Editor"));
   gtk_object_set_data_full (GTK_OBJECT (windowPublic), "user_data", editor,
 			    keyring_editor_destroy);
-  gtk_window_set_default_size (GTK_WINDOW(windowPublic), 572, 400);
+  /*gtk_window_set_default_size (GTK_WINDOW(windowPublic), 572, 400);*/
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowPublic), accelGroup);
   gtk_signal_connect_object (GTK_OBJECT (windowPublic), "map",
@@ -703,12 +911,23 @@ keyring_editor_new (void)
   gtk_box_pack_start (GTK_BOX (vboxPublic),
 		      keyring_editor_menubar_new (windowPublic, editor),
 		      FALSE, TRUE, 0);
+
+  toolbar = keyring_toolbar_new(windowPublic, editor);
+  gtk_box_pack_start (GTK_BOX (vboxPublic), toolbar, FALSE, TRUE, 0);
+
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vboxPublic), hbox, FALSE, TRUE, 0);
+  
+  icon = gpa_create_icon_widget (windowPublic, "keyring");
+  gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
+
+  labelRingname = gtk_label_new ("Keyring Editor");
+  gtk_box_pack_start (GTK_BOX (hbox), labelRingname, TRUE, TRUE, 10);
+  gtk_widget_set_name (labelRingname, "big-label");
+  gtk_misc_set_alignment (GTK_MISC (labelRingname), 0, 0.5);
   
   vboxKeys = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
-  labelRingname = gtk_label_new ("");
-  gtk_box_pack_start (GTK_BOX (vboxKeys), labelRingname, FALSE, TRUE, 0);
-  gtk_misc_set_alignment (GTK_MISC (labelRingname), 0, 0.5);
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
   clistKeys = gtk_clist_new_with_titles (5, titlesKeys);
   editor->clist_keys = GTK_CLIST (clistKeys);
@@ -724,8 +943,10 @@ keyring_editor_new (void)
   gtk_clist_set_column_width (GTK_CLIST (clistKeys), 4, 120);
   for (i = 0; i < 5; i++)
     gtk_clist_column_title_passive (GTK_CLIST (clistKeys), i);
+  /*
   gpa_connect_by_accelerator (GTK_LABEL (labelRingname), clistKeys,
-			      accelGroup, _("_Public key Ring"));
+			      accelGroup, _("_Public key Ring"));*/
+
   gtk_signal_connect (GTK_OBJECT (clistKeys), "select-row",
 		      GTK_SIGNAL_FUNC (keyring_editor_selection_changed),
 		      (gpointer) editor);
@@ -741,100 +962,10 @@ keyring_editor_new (void)
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
   gtk_box_pack_start (GTK_BOX (vboxKeys), scrollerKeys, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxPublic), vboxKeys, TRUE, TRUE, 0);
-  hboxAction = gtk_hbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (hboxAction), 5);
-  tableKey = gtk_table_new (3, 2, TRUE);
-  buttonEditKey = gpa_button_new (accelGroup, _("_Edit key"));
-/*  gtk_signal_connect_object (GTK_OBJECT (buttonEditKey), "clicked",
-		      GTK_SIGNAL_FUNC (keyring_openPublic_editKey),
-		      (gpointer) editor);*/
-  gtk_table_attach (GTK_TABLE (tableKey), buttonEditKey, 0, 1, 0, 1, GTK_FILL,
-		    GTK_FILL, 0, 0);
-  GPA_SENSITIVE_BUTTON (buttonEditKey, keyring_editor_has_single_selection);
 
-  /* the 'sign key' button */
-  buttonSign = gtk_button_new();
-  gtk_table_attach (GTK_TABLE (tableKey), buttonSign, 1, 2, 0, 1,
-		    GTK_FILL, GTK_FILL, 0, 0);
-  /* associate this button with an icon */
-  buttonSignBox = gpa_xpm_label_box(windowPublic, "gpa_sign_small",
-				  _("_Sign keys..."), buttonSign, accelGroup);
-  gtk_container_add (GTK_CONTAINER (buttonSign), buttonSignBox);
-  GPA_SENSITIVE_BUTTON (buttonSign, keyring_editor_can_sign);
-  gtk_signal_connect_object (GTK_OBJECT (buttonSign), "clicked",
-			     GTK_SIGNAL_FUNC (keyring_editor_sign),
-			     (gpointer)editor);
+  notebook = keyring_details_notebook (editor);
+  gtk_box_pack_start (GTK_BOX (vboxPublic), notebook, TRUE, TRUE, 0);
 
-  buttonSend = gpa_button_new (accelGroup, _("Se_nd keys..."));
-/*  gtk_signal_connect_object (GTK_OBJECT (buttonSend), "clicked",
-		      GTK_SIGNAL_FUNC (keyring_openPublic_send),
-		      (gpointer) editor);*/
-  gtk_table_attach (GTK_TABLE (tableKey), buttonSend, 0, 1, 1, 2, GTK_FILL,
-		    GTK_FILL, 0, 0);
-  GPA_SENSITIVE_BUTTON (buttonSend, keyring_editor_has_selection);
-
-  buttonReceive = gpa_button_new (accelGroup, _("_Receive keys..."));
-  gtk_signal_connect_object (GTK_OBJECT (buttonReceive), "clicked",
-			     GTK_SIGNAL_FUNC (keyring_editor_receive),
-			     (gpointer) editor);
-  gtk_table_attach (GTK_TABLE (tableKey), buttonReceive, 1, 2, 1, 2, GTK_FILL,
-		    GTK_FILL, 0, 0);
-  
-  buttonExportKey = gpa_button_new (accelGroup, _("E_xport keys..."));
-  gtk_signal_connect_object (GTK_OBJECT (buttonExportKey), "clicked",
-			     GTK_SIGNAL_FUNC (keyring_editor_export),
-			     (gpointer) editor);
-  gtk_table_attach (GTK_TABLE (tableKey), buttonExportKey, 0, 1, 2, 3,
-		    GTK_FILL, GTK_FILL, 0, 0);
-  GPA_SENSITIVE_BUTTON (buttonExportKey, keyring_editor_has_selection);
-
-  /* the 'delete key' button */
-  buttonDelete = gtk_button_new();
-  gtk_signal_connect_object (GTK_OBJECT (buttonDelete), "clicked",
-			     GTK_SIGNAL_FUNC (keyring_editor_delete),
-			     (gpointer) editor);
-  gtk_table_attach (GTK_TABLE (tableKey), buttonDelete, 1, 2, 2, 3, GTK_FILL,
-		    GTK_FILL, 0, 0);
-  /* associate this button with an icon */
-  buttonDeleteBox = gpa_xpm_label_box(windowPublic, "trash",
-				  _("_Delete keys"), buttonDelete, accelGroup);
-  gtk_container_add (GTK_CONTAINER (buttonDelete), buttonDeleteBox);
-  GPA_SENSITIVE_BUTTON (buttonDelete, keyring_editor_has_selection);
-
-  gtk_box_pack_start (GTK_BOX (hboxAction), tableKey, FALSE, FALSE, 0);
-
-  vboxTrust = gtk_vbox_new (FALSE, 0);
-  checkerArmor = gpa_check_button_new (accelGroup, _("ex_port armored"));
-  gtk_box_pack_end (GTK_BOX (vboxTrust), checkerArmor, FALSE, FALSE, 0);
-  gtk_box_pack_end (GTK_BOX (hboxAction), vboxTrust, FALSE, FALSE, 0);
-
-  tableTrust = gtk_table_new (3, 1, TRUE);
-  toggleShow = editor->toggle_show \
-    = gpa_toggle_button_new (accelGroup, _("S_how ownertrust"));
-  gtk_signal_connect_object (GTK_OBJECT (toggleShow), "clicked",
-			     GTK_SIGNAL_FUNC(keyring_editor_toggle_show_trust),
-			     (gpointer) editor);
-  gtk_table_attach (GTK_TABLE (tableTrust), toggleShow, 0, 1, 0, 1, GTK_FILL,
-		    GTK_FILL, 0, 0);
-  keyring_editor_fill_keylist (editor);
-  buttonEditTrust = gpa_button_new (accelGroup, _("Edit _ownertrust..."));
-  gtk_signal_connect_object (GTK_OBJECT (buttonEditTrust), "clicked",
-			     GTK_SIGNAL_FUNC(keyring_editor_edit_trust),
-			     (gpointer) editor);
-  GPA_SENSITIVE_BUTTON (buttonEditTrust, keyring_editor_has_single_selection);
-
-  gtk_table_attach (GTK_TABLE (tableTrust), buttonEditTrust, 0, 1, 1, 2,
-		    GTK_FILL, GTK_FILL, 0, 0);
-  buttonExportTrust = gpa_button_new (accelGroup, _("Export o_wnertrust..."));
-/*  gtk_signal_connect_object (GTK_OBJECT (buttonExportTrust), "clicked",
-		      GTK_SIGNAL_FUNC (keyring_openPublic_exportTrust),
-		      (gpointer) editor);*/
-  gtk_table_attach (GTK_TABLE (tableTrust), buttonExportTrust, 0, 1, 2, 3,
-		    GTK_FILL, GTK_FILL, 0, 0);
-  GPA_SENSITIVE_BUTTON (buttonExportTrust, keyring_editor_has_selection);
-
-  gtk_box_pack_end (GTK_BOX (hboxAction), tableTrust, FALSE, FALSE, 5);
-  gtk_box_pack_start (GTK_BOX (vboxPublic), hboxAction, FALSE, FALSE, 0);
   hSeparatorPublic = gtk_hseparator_new ();
   gtk_box_pack_start (GTK_BOX (vboxPublic), hSeparatorPublic, FALSE, FALSE,
 		      0);
@@ -853,9 +984,9 @@ keyring_editor_new (void)
 		      0);
   gtk_container_add (GTK_CONTAINER (windowPublic), vboxPublic);
 
+  keyring_editor_fill_keylist (editor);
   update_selection_sensitive_widgets (editor);
 
   return windowPublic;
 } /* keyring_editor_new */
-#undef GPA_SENSITIVE_BUTTON
 
