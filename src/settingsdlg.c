@@ -155,6 +155,7 @@ gpa_settings_dialog_new (void)
                                         0,
                                         GTK_STOCK_CLOSE,
                                         GTK_RESPONSE_CLOSE, NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 5);
 

@@ -186,7 +186,7 @@ gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
   /* Clear the model */
   gtk_list_store_clear (store);
   /* Add the signatures to the model */
-  for (i = 0; gpgme_key_sig_get_string_attr (key, 0, GPGME_ATTR_KEYID, 
+  for (i = 0; gpgme_key_sig_get_string_attr (key, idx, GPGME_ATTR_KEYID, 
                                              NULL, i); i++)
     {
       GtkTreeIter iter;

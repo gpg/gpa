@@ -1,5 +1,9 @@
 2002-12-07  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* siglist.c (gpa_siglist_set_userid): Fix idiot bug.
+
+	* settingsdlg.c (gpa_settings_dialog_new): Close on enter.
+
 	* siglist.c (gpa_siglist_new): Sort the list by user ID. We should
 	find a way to make Unknown come last always.
 
