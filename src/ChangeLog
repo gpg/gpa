@@ -1,3 +1,17 @@
+2003-05-16  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (gpa_SOURCES): Remove keyimpseldlg.{c,h}, as they
+	were not being used.
+
+	* gpawidgets.c (gpa_key_list_add_key, gpa_secret_key_list_new) 
+	(gpa_public_key_list_new, gpa_key_list_new_from_glist) 
+	(gpa_key_list_selection_length, gpa_key_list_selected_ids) 
+	(gpa_key_list_selected_id): Remove the gpa_key_list.
+
+	* gpawidgets.h, gpawidgets.c (gpa_key_list_new): 
+
+	* settingsdlg.c (default_key_frame): Use a GpaKeySelector.
+
 2003-05-15  Miguel Coca  <mcoca@gnu.org>
 
 	* Makefile.am (gpa_SOURCES): Add gpakeyselector.{c,h}

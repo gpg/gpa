@@ -25,14 +25,6 @@
 
 extern GtkWidget *gpa_key_info_new (GpgmeKey key);
 
-extern GtkWidget *gpa_secret_key_list_new (void);
-extern GtkWidget *gpa_public_key_list_new (void);
-extern GtkWidget *gpa_key_list_new_from_glist (GtkWidget *window,
-                                                      GList *list);
-extern gint gpa_key_list_selection_length (GtkWidget *clist);
-extern GList *gpa_key_list_selected_ids (GtkWidget *clist);
-extern gchar *gpa_key_list_selected_id (GtkWidget *clist);
-
 extern GtkWidget *gpa_expiry_frame_new (GtkAccelGroup *accelGroup,
 				        GDate *expiryDate);
 extern gchar *gpa_expiry_frame_validate (GtkWidget *expiry_frame);

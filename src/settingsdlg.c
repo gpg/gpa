@@ -20,16 +20,23 @@
 
 #include "gpa.h"
 #include "settingsdlg.h"
-#include "gpawidgets.h"
+#include "gpakeyselector.h"
 #include "keyserver.h"
 
 /* Default key section */
 static void
-key_selected_cb (GtkCList *clist, gint row, gint column,
-                 GdkEventButton *event, gpointer user_data)
+key_selected_cb (GtkTreeSelection *treeselection, gpointer user_data)
 {
+  GpaKeySelector *sel = user_data;
+  GList *selected;
+  
+  selected = gpa_key_selector_get_selected_keys (sel);
   gpa_options_set_default_key (gpa_options_get_instance (),
-                               gpa_key_list_selected_id (GTK_WIDGET(clist)));
+			       gpgme_key_get_string_attr 
+			       ((GpgmeKey*)selected->data, GPGME_ATTR_FPR,
+				NULL, 0 ));
+  g_list_foreach (selected, (GFunc) gpgme_key_unref, NULL);
+  g_list_free (selected);
 }
 
 static GtkWidget *
@@ -41,15 +48,20 @@ default_key_frame (void)
   label = gtk_label_new_with_mnemonic (_("Default _key:"));
   frame = gtk_frame_new (NULL);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
-  list = gpa_secret_key_list_new ();
+  list = gpa_key_selector_new (TRUE);
+  gtk_tree_selection_set_mode (gtk_tree_view_get_selection 
+			       (GTK_TREE_VIEW (list)), GTK_SELECTION_SINGLE);
   scroller = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy  (GTK_SCROLLED_WINDOW (scroller),
+				   GTK_POLICY_AUTOMATIC,
+				   GTK_POLICY_AUTOMATIC);
   gtk_widget_set_usize (scroller, 320, 120);
   gtk_container_set_border_width (GTK_CONTAINER (scroller), 5);
   gtk_container_add (GTK_CONTAINER (scroller), list);
   gtk_container_add (GTK_CONTAINER (frame), scroller);
   /* Connect signals */
-  g_signal_connect (G_OBJECT (list), "select-row", 
-                    G_CALLBACK (key_selected_cb), NULL);
+  g_signal_connect (G_OBJECT(gtk_tree_view_get_selection(GTK_TREE_VIEW(list))),
+		    "changed", G_CALLBACK (key_selected_cb), list);
   return frame;
 }
 
