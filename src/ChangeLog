@@ -1,3 +1,8 @@
+2002-11-28  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* server_access.c (protocol_version): The version number is
+	printed to stdout, not stderr!
+
 2002-11-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keyreceivedlg.c, keyreceivedlg.h: Removed obsolete.

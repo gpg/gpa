@@ -157,9 +157,9 @@ protocol_version (const gchar *scheme)
   gchar *output = NULL;
   gint version;
   
-  g_spawn_sync (NULL, helper, NULL, G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, 
-		NULL, &output, NULL, NULL);
-  if (output && output[0])
+  g_spawn_sync (NULL, helper, NULL, G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, 
+		&output, NULL, NULL, NULL);
+  if (output && *output)
     {
       /* The version is a number, and it's value is it's ascii code minus
        * the ascii code of 0 */
