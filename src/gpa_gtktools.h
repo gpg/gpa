@@ -1,4 +1,4 @@
-/* gpa.h  -  main header
+/* gpa_gtktools.h  -  The GNU Privacy Assistant
  *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -18,14 +18,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef GPA_H
-#define GPA_H
-
 #include <gtk/gtk.h>
 
-#define _(a)	(a)
-#define N_(a)	(a)
-
-
-
-#endif /*GPA_H*/
+GtkWidget *gpa_space_new ();
+GtkWidget *gpa_widget_hjustified_new (
+  GtkWidget *widget, GtkJustification jtype
+);

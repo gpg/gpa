@@ -1,4 +1,4 @@
-/* gpa.h  -  main header
+/* gpa_keys.h  -  The GNU Privacy Assistant
  *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -18,14 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef GPA_H
-#define GPA_H
-
-#include <gtk/gtk.h>
-
-#define _(a)	(a)
-#define N_(a)	(a)
-
-
-
-#endif /*GPA_H*/
+void keys_openPublic ( void );
+void keys_openSecret ( void );
+void keys_open ( void );
+void keys_generateKey ( void );
+void keys_generateRevocation ( void );
+void keys_import ( void );
+void keys_importOwnertrust ( void );
+void keys_updateTrust ( void );

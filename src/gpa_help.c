@@ -1,4 +1,4 @@
-/* gpa.h  -  main header
+/* gpa_help.c  -  The GNU Privacy Assistant
  *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -18,14 +18,21 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef GPA_H
-#define GPA_H
-
+#include <config.h>
 #include <gtk/gtk.h>
 
-#define _(a)	(a)
-#define N_(a)	(a)
+void help_version ( void ) {
+g_print ( "Show Version Information\n" ); /*!!!*/
+} /* help_version */
 
+void help_license ( void ) {
+g_print ( "Show GNU General Public License\n" ); /*!!!*/
+} // help_license
 
+void help_warranty ( void ) {
+g_print ( "Show Warranty Information\n" ); /*!!!*/
+} /* help_warranty */
 
-#endif /*GPA_H*/
+void help_help ( void ) {
+g_print ( "Show Help Text\n" ); /*!!!*/
+} /* help_help */

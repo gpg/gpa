@@ -1,4 +1,4 @@
-/* gpa.h  -  main header
+/* gpa_options.h  -  The GNU Privacy Assistant
  *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -18,14 +18,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef GPA_H
-#define GPA_H
+void options_keyserver ( void );
+void options_recipients ( void );
+void options_key ( void );
+void options_homedir ( void );
+void options_load ( void );
+void options_save ( void );
 
-#include <gtk/gtk.h>
-
-#define _(a)	(a)
-#define N_(a)	(a)
-
-
-
-#endif /*GPA_H*/

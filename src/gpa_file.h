@@ -1,4 +1,4 @@
-/* gpa.h  -  main header
+/* gpa_file.h  -  The GNU Privacy Assistant
  *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -18,14 +18,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef GPA_H
-#define GPA_H
+void file_open ( void );
+void file_showDetail ( void );
+void file_sign ( void );
+void file_encrypt ( void );
+void file_protect ( void );
+void file_decrypt ( void );
+void file_verify ( void );
+void file_close ( void );
+void file_quit ( void );
 
-#include <gtk/gtk.h>
+void gpa_fileOpenSelect_init ( char *title );
 
-#define _(a)	(a)
-#define N_(a)	(a)
-
-
-
-#endif /*GPA_H*/

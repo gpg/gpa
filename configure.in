@@ -5,7 +5,7 @@ dnl (Process this file with autoconf to produce a configure script.)
 AC_REVISION($Revision$)dnl
 AC_PREREQ(2.13)
 
-AC_INIT(src/pga.c)
+AC_INIT(src/gpa.c)
 AM_CONFIG_HEADER(config.h)
 
 dnl

@@ -1,4 +1,4 @@
-/* gpa.c  - The GNU Privacy Assistant
+/* gpa.c  -  The GNU Privacy Assistant
  *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -19,267 +19,151 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <gtk/gtk.h>
+#include "gpa_file.h"
+#include "gpa_keys.h"
+#include "gpa_options.h"
+#include "gpa_help.h"
 
-#include "gpa.h"
+/*!!!*/ static char *text5 [] = { "Dummy Text", "Dummy Text", "Dummy Text", "Dummy Text", "Dummy Text" }; /*!!!*/
 
+gint delete_event ( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+  file_quit ();
+  return ( FALSE );
+} /* delete_event */
 
-GtkWidget	*box1, *box2,
-		*files_box, *crypt_op_box,  *file_op_box, *file_expert_box,
-		*keys_box, *key_op_box, *key_expert_box;
-char *file_to_crypt=NULL;
-char *file_to_import=NULL;
-int key_expert_mode=0, file_expert_mode=0;
+GtkWidget *gpa_menubar_new ( GtkWidget *windowMain ) {
+/* var */
+  GtkItemFactory *itemFactory;
+  GtkItemFactoryEntry menuItem [] = {
+    { "/_File", NULL, NULL, 0, "<Branch>" },
+    { "/File/_Open", "<control>O", file_open, 0, NULL },
+    { "/File/S_how Detail", "<control>H", file_showDetail, 0, NULL },
+    { "/File/sep1", NULL, NULL, 0, "<Separator>" },
+    { "/File/_Sign", NULL, file_sign, 0, NULL },
+    { "/File/_Encrypt", NULL, file_encrypt, 0, NULL },
+    { "/File/_Protect by Password", NULL, file_protect, 0, NULL },
+    { "/File/_Decrypt", NULL, file_decrypt, 0, NULL },
+    { "/File/_Verify", NULL, file_verify, 0, NULL },
+    { "/File/sep2", NULL, NULL, 0, "<Separator>" },
+    { "/File/_Close", NULL, file_close, 0, NULL },
+    { "/File/_Quit", "<control>Q", file_quit, 0, NULL },
+    { "/_Keys", NULL, NULL, 0, "<Branch>" },
+    { "/Keys/Open _public Keyring", "<control>K", keys_openPublic, 0, NULL },
+    { "/Keys/Open _secret Keyring", NULL, keys_openSecret, 0, NULL  },
+    { "/Keys/Open _keyring", NULL, keys_open, 0, NULL },
+    { "/Keys/sep1", NULL, NULL, 0, "<Separator>" },
+    { "/Keys/_Generate Key", NULL, keys_generateKey, 0, NULL },
+    { "/Keys/Generate _Revocation Certificate", NULL, keys_generateRevocation, 0, NULL },
+    { "/Keys/_Import", NULL, keys_import, 0, NULL },
+    { "/Keys/Import _Ownertrust", NULL, keys_importOwnertrust, 0, NULL },
+    { "/Keys/_Update Trust Database", NULL, keys_updateTrust, 0, NULL },
+    { "/_Options", NULL, NULL, 0, "<Branch>" },
+    { "/Options/_Keyserver", NULL, options_keyserver, 0, NULL },
+    { "/Options/Default _Recipients", NULL, options_recipients, 0, NULL },
+    { "/Options/_Default Key", NULL, options_key, 0, NULL },
+    { "/Options/_Home Directory", NULL, options_homedir, 0, NULL },
+    { "/Options/sep1", NULL, NULL, 0, "<Separator>" },
+    { "/Options/_Load Options File", NULL, options_load, 0, NULL },
+    { "/Options/_Save Options File", NULL, options_save, 0, NULL },
+    { "/_Help", NULL, NULL, 0, "<Branch>" },
+    { "/Help/_Version", NULL, help_version, 0, NULL },
+    { "/Help/_License", NULL, help_license, 0, NULL },
+    { "/Help/_Warranty", NULL, help_warranty, 0, NULL },
+    { "/Help/_Help", "F1", help_help, 0, NULL }
+  };
+  gint menuItems = sizeof ( menuItem ) / sizeof ( menuItem [ 0 ] );
+  GtkAccelGroup *accelGroup;
+/* objects */
+  GtkWidget *menubar;
+/* commands */
+  accelGroup = gtk_accel_group_new ();
+  itemFactory = gtk_item_factory_new (
+    GTK_TYPE_MENU_BAR, "<main>", accelGroup
+  );
+  gtk_item_factory_create_items ( itemFactory, menuItems, menuItem, NULL );
+  gtk_window_add_accel_group ( GTK_WINDOW ( windowMain ), accelGroup );
+  menubar = gtk_item_factory_get_widget ( itemFactory, "<main>" );
+  return ( menubar );
+} /* gpa_menubar_new */
 
-void cb_main(GtkWidget *widget, gpointer data)
-{
-	g_print ("button \"%s\" was pressed\n", (char *) data);
-	if (!strcmp(data, "files")) {
-		gtk_widget_hide(keys_box);
-		gtk_widget_show(files_box);
-	}
-	if (!strcmp(data, "keys")) {
-		gtk_widget_hide(files_box);
-		gtk_widget_show(keys_box);
-	}
-	if (!strcmp(data, "select files")) {
+GtkWidget *gpa_fileFrame_new () {
+/* var */
+  char *fileListTitle [ 5 ] = {
+    "File", "Encrypted", "Sigs total", "Valid Sigs", "Invalid Sigs"
+  };
+  int i;
+/* objects */
+  GtkWidget *fileFrame;
+    GtkWidget *fileScroller;
+      GtkWidget *fileList;
+/* commands */
+  fileFrame = gtk_frame_new ( "Files in work" );
+  fileScroller = gtk_scrolled_window_new ( NULL, NULL );
+  fileList = gtk_clist_new_with_titles ( 5, fileListTitle );
+  gtk_clist_set_column_width ( GTK_CLIST ( fileList ), 0, 170 );
+  gtk_clist_set_column_width ( GTK_CLIST ( fileList ), 1, 100 );
+  gtk_clist_set_column_justification (
+    GTK_CLIST ( fileList ), 1, GTK_JUSTIFY_CENTER
+  );
+  for ( i = 2; i <= 4; i++ )
+    {
+      gtk_clist_set_column_width ( GTK_CLIST ( fileList ), i, 100 );
+      gtk_clist_set_column_justification (
+	GTK_CLIST ( fileList ), i, GTK_JUSTIFY_RIGHT
+      );
+    } /* for */
+  for ( i = 0; i <= 4; i++ )
+    gtk_clist_set_column_auto_resize ( GTK_CLIST ( fileList ), i, FALSE );
+gtk_clist_append ( GTK_CLIST ( fileList ), text5 ); /*!!!*/
+gtk_clist_append ( GTK_CLIST ( fileList ), text5 ); /*!!!*/
+gtk_clist_append ( GTK_CLIST ( fileList ), text5 ); /*!!!*/
+  gtk_widget_show ( fileList );
+  gtk_container_add ( GTK_CONTAINER ( fileScroller ), fileList );
+  gtk_widget_show ( fileScroller );
+  gtk_container_add ( GTK_CONTAINER ( fileFrame ), fileScroller );
+  return ( fileFrame );
+} /* gpa_fileFrame_new */
 
-		/*file_to_crypt=select_files();*/
-		help_set_text(_("source file: "));
-		help_set_text(file_to_crypt);
-		help_set_text("\n");
-	}
-}
+GtkWidget *gpa_windowMain_new ( char *title ) {
+/* objects */
+  GtkWidget *windowMain;
+    GtkWidget *vboxMain;
+      GtkWidget *menubar;
+      GtkWidget *fileBox;
+	GtkWidget *fileFrame;
+/* commands */
+  windowMain = gtk_window_new ( GTK_WINDOW_TOPLEVEL );
+  gtk_window_set_title ( GTK_WINDOW ( windowMain ), title );
+  gtk_widget_set_usize ( windowMain, 640, 480 );
+  vboxMain = gtk_vbox_new ( FALSE, 0 );
+  menubar = gpa_menubar_new ( windowMain );
+  gtk_widget_show ( menubar );
+  gtk_box_pack_start ( GTK_BOX ( vboxMain ), menubar, FALSE, TRUE, 0 );
+  fileBox = gtk_hbox_new ( TRUE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( fileBox ), 5 );
+  fileFrame = gpa_fileFrame_new ();
+  gtk_widget_show ( fileFrame );
+  gtk_box_pack_start ( GTK_BOX ( fileBox ), fileFrame, TRUE, TRUE, 0 );
+  gtk_widget_show ( fileBox );
+  gtk_box_pack_end ( GTK_BOX ( vboxMain ), fileBox, TRUE, TRUE, 0 );
+  gtk_widget_show ( vboxMain );
+  gtk_container_add ( GTK_CONTAINER ( windowMain ), vboxMain );
+  gpa_fileOpenSelect_init ( "Open a file" );
+  return ( windowMain );
+} /* gpa_windowMain_new */
 
-void cb_file(GtkWidget *widget, gpointer data)
-{
-	static int file_op_flags=0, files_selected=0;
-
-	g_print ("button \"%s\" was pressed\n", (char *) data);
-	if (!strcmp(data, "select files")) {
-		/*select_files();*/
-	}
-	if (!strcmp(data, "options")) {
-		if ((file_expert_mode^=1)) {
-			gtk_widget_show(file_expert_box);
-		} else {
-			gtk_widget_hide(file_expert_box);
-		}
-	}
-	if (!strcmp(data, "crypt ok")) {
-		if (!file_op_flags && !files_selected) {
-			help_set_text(_("Select file(s) and operation(s) to perform."));
-		} else if (!file_op_flags) {
-			help_set_text(_("Select operation(s) to perform."));
-		} else if (!files_selected) {
-			help_set_text(_("Select file(s) to process."));
-		}
-	}
-}
-
-void cb_keys(GtkWidget *widget, gpointer data)
-{
-	g_print ("button \"%s\" was pressed\n", (char *) data);
-	if (!strcmp(data, "select files")) {
-		/*select_files();*/
-	}
-	if (!strcmp(data, "options")) {
-		if ((key_expert_mode^=1)) {
-			gtk_widget_show(key_expert_box);
-		} else {
-			gtk_widget_hide(key_expert_box);
-		}
-	}
-	if (!strcmp(data, "import")) {
-	      #if 0
-		file_to_import=select_files();
-		if (file_to_import)
-			import_keys_from_file(file_to_import);
-	      #endif
-	}
-
-}
-
-
-
-
-
-static void
-make_windows( void )
-{
-    GtkWidget *window, *button;
-    GtkWidget *separator;
-    gint i;
-
-    /* a generic toplevel window */
-    window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_signal_connect(GTK_OBJECT(window), "delete_event",
-				    GTK_SIGNAL_FUNC(gtk_main_quit), NULL);
-    gtk_container_set_border_width(GTK_CONTAINER(window), 5);
-
-    /* *** */
-    box1=gtk_vbox_new(FALSE, 0);
-    gtk_container_add(GTK_CONTAINER(window), box1);
-    gtk_widget_show(box1);
-    box2=gtk_hbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(box1), box2, TRUE, TRUE, 0);
-    gtk_widget_show(box2);
-    separator=gtk_hseparator_new();
-    gtk_box_pack_start(GTK_BOX(box1), separator, FALSE, TRUE, 0);
-    gtk_widget_show(separator);
-    keys_box=gtk_vbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(box1), keys_box, TRUE, TRUE, 0);
-    gtk_widget_show(keys_box);
-    files_box=gtk_vbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(box1), files_box, TRUE, TRUE, 0);
-    /*	gtk_widget_show(files_box); */
-    separator=gtk_hseparator_new();
-    gtk_box_pack_start(GTK_BOX(box1), separator, FALSE, TRUE, 0);
-    gtk_widget_show(separator);
-
-    crypt_op_box=gtk_hbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(files_box), crypt_op_box, TRUE, TRUE, 0);
-    gtk_widget_show(crypt_op_box);
-    separator=gtk_hseparator_new();
-    gtk_box_pack_start(GTK_BOX(files_box), separator, FALSE, TRUE, 0);
-    gtk_widget_show(separator);
-    file_op_box=gtk_hbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(files_box), file_op_box, TRUE, TRUE, 0);
-    gtk_widget_show(file_op_box);
-    separator=gtk_hseparator_new();
-    gtk_box_pack_start(GTK_BOX(files_box), separator, FALSE, TRUE, 0);
-    gtk_widget_show(separator);
-    file_expert_box=gtk_hbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(files_box), file_expert_box, TRUE, TRUE, 0);
-    if (file_expert_mode)
-	gtk_widget_show(file_expert_box);
-
-    key_op_box=gtk_hbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(keys_box), key_op_box, TRUE, TRUE, 0);
-    gtk_widget_show(key_op_box);
-    separator=gtk_hseparator_new();
-    gtk_box_pack_start(GTK_BOX(keys_box), separator, FALSE, TRUE, 0);
-    gtk_widget_show(separator);
-    key_expert_box=gtk_hbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(keys_box), key_expert_box, TRUE, TRUE, 0);
-    if (key_expert_mode)
-	    gtk_widget_show(key_expert_box);
-
-    button=gtk_button_new_with_label("keys");
-    gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_main), (gpointer) "keys");
-    button=gtk_button_new_with_label("files");
-    gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_main), (gpointer) "files");
-    button=gtk_radio_button_new_with_label(NULL, "encrypt");
-    gtk_box_pack_start(GTK_BOX(crypt_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_file), (gpointer) "encrypt");
-    button=gtk_radio_button_new_with_label(NULL, "sign");
-    gtk_box_pack_start(GTK_BOX(crypt_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_file), (gpointer) "");
-    button=gtk_radio_button_new_with_label(NULL, "decrypt");
-    gtk_box_pack_start(GTK_BOX(crypt_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_file), (gpointer) "decrypt");
-    button=gtk_radio_button_new_with_label(NULL, "check signature");
-    gtk_box_pack_start(GTK_BOX(crypt_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_file), (gpointer) "check");
-
-    button=gtk_button_new_with_label("select files");
-    gtk_box_pack_start(GTK_BOX(file_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_file), (gpointer) "select files");
-    button=gtk_button_new_with_label("ok");
-    gtk_box_pack_start(GTK_BOX(file_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_file), (gpointer) "crypt ok");
-    button=gtk_button_new_with_label("options");
-    gtk_box_pack_start(GTK_BOX(file_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_file), (gpointer) "options");
-    button=gtk_button_new_with_label("enarmour");
-    gtk_box_pack_start(GTK_BOX(file_expert_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_file), (gpointer) "enarmour");
-    button=gtk_button_new_with_label("dearmour");
-    gtk_box_pack_start(GTK_BOX(file_expert_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_file), (gpointer) "dearmour");
-  #if 0
-    separator=gtk_hseparator_new();
-    gtk_box_pack_start(GTK_BOX(box1), separator, FALSE, TRUE, 0);
-    gtk_widget_show(separator);
-  #endif
-    button=gtk_button_new_with_label("import");
-    gtk_box_pack_start(GTK_BOX(key_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_keys), (gpointer) "import");
-    button=gtk_button_new_with_label("edit");
-    gtk_box_pack_start(GTK_BOX(key_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    button=gtk_button_new_with_label("delete");
-    gtk_box_pack_start(GTK_BOX(key_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_keys), (gpointer) "delete");
-    button=gtk_button_new_with_label("options");
-    gtk_box_pack_start(GTK_BOX(key_op_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_keys), (gpointer) "options");
-    button=gtk_button_new_with_label("generate");
-    gtk_box_pack_start(GTK_BOX(key_expert_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_keys), (gpointer) "generate");
-    button=gtk_button_new_with_label("revoke");
-    gtk_box_pack_start(GTK_BOX(key_expert_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_keys), (gpointer) "revoke");
-    button=gtk_button_new_with_label("sign");
-    gtk_box_pack_start(GTK_BOX(key_expert_box), button, TRUE, TRUE, 0);
-    gtk_widget_show(button);
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC(cb_keys), (gpointer) "sign");
-
-   /* key_tree_init(box1);*/
-    help_init(box1);
-    gtk_widget_show(window);
-}
-
-
-
-
-
-int
-main( int argc, char **argv )
-{
-
-    gtk_init(&argc, &argv);
-
-    make_windows();
-
-    gtk_main();
-
-    return 0;
-}
-
+int main ( int params, char *param [] ) {
+/* objects */
+  GtkWidget *windowMain;
+/* commands */
+  gtk_init ( &params, &param );
+  windowMain = gpa_windowMain_new ( "GNU Privacy Assistant" );
+  gtk_signal_connect (
+    GTK_OBJECT ( windowMain ), "delete_event",
+    GTK_SIGNAL_FUNC ( file_quit ), NULL
+  );
+  gtk_widget_show ( windowMain );
+  gtk_main ();
+  return ( 0 );
+} /* main */
