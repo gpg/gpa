@@ -152,6 +152,7 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
   GpgmeKey key;
   GpgmeError err;
   int i, uid;
+  GpgmeCtx ctx = gpa_gpgme_new ();
   int old_mode = gpgme_get_keylist_mode (ctx);
   const gchar *keyid;
 
@@ -209,6 +210,8 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
   
   /* We don't need the key anymore */
   gpgme_key_unref (key); 
+
+  gpgme_release (ctx);
 }
 
 static GHashTable*
@@ -240,6 +243,7 @@ gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
   GpgmeKey key;
   GpgmeError err;
   int i;
+  GpgmeCtx ctx = gpa_gpgme_new ();
   int old_mode = gpgme_get_keylist_mode (ctx);
   GHashTable *revoked;
 
@@ -292,6 +296,8 @@ gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
   
   /* We don't need the key anymore */
   gpgme_key_unref (key);
+
+  gpgme_release (ctx);
 }
 
 /* Update the list of signatures */

@@ -72,6 +72,7 @@ sign_files (GPAFileSignDialog *dialog, gchar *fpr, GpgmeSigMode sign_type,
   GList *cur;
   GpgmeError err;
   GpgmeKey signer;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   dialog->signed_files = NULL;
 
@@ -145,6 +146,7 @@ sign_files (GPAFileSignDialog *dialog, gchar *fpr, GpgmeSigMode sign_type,
       gpgme_data_release (input);
       gpgme_data_release (output);
     }
+  gpgme_release (ctx);
 }
 
 static void

@@ -39,6 +39,21 @@ void _gpa_gpgme_error (GpgmeError err, const char *file, int line)
   exit (EXIT_FAILURE);
 }
 
+/* Initialize a GpgmeCtx for use with GPA */
+GpgmeCtx gpa_gpgme_new (void)
+{
+  GpgmeCtx ctx;
+  GpgmeError err;
+  
+  err = gpgme_new (&ctx);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, ctx);
+  
+  return ctx;
+}
 
 /* Write the contents of the GpgmeData object to the file. Receives a
  * filehandle instead of the filename, so that the caller can make sure the
@@ -257,6 +272,7 @@ GpgmeError gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
   gchar *parm_string;
   GpgmeError err;
   char *fpr_ret;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   parm_string = build_genkey_parms (params);
   err = gpgme_op_genkey (ctx, parm_string, NULL, NULL, &fpr_ret);
@@ -273,6 +289,7 @@ GpgmeError gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
     {
       gpa_keytable_load_key (keytable, *fpr);
     }
+  gpgme_release (ctx);
 
   return err;
 }
@@ -552,6 +569,7 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
   GtkWidget * pixmap;
   GtkResponseType response;
   gchar *passphrase;
+  GpgmeCtx ctx = opaque;
 
   if (desc)
     {
@@ -592,7 +610,7 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd)
         }
       else
         {
-          gpgme_cancel (ctx);
+	  gpgme_cancel (ctx);
           g_free (passphrase);
           return "";
         }

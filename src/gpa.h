@@ -51,7 +51,6 @@
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
 extern GList *global_defaultRecipients;
-extern GpgmeCtx ctx;
 extern GPAKeyTable *keytable;
 extern GpaOptions *gpa_options;
 

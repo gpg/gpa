@@ -132,13 +132,14 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
   GpgmeError err;
   GDate * new_date;
   struct tm tm;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   key = gpa_keytable_lookup (keytable, dialog->fpr);
 
   if (gpa_expiry_dialog_run (dialog->window, key, &new_date))
     {
       gchar * date_string;
-      err = gpa_gpgme_edit_expire (key, new_date);
+      err = gpa_gpgme_edit_expire (ctx, key, new_date);
       if (err == GPGME_No_Error)
         {
           if (new_date)
@@ -176,6 +177,7 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
           gpa_gpgme_error (err);
         }
     }
+  gpgme_release (ctx);
 }
 
 /* signal handler for the change passphrase button. */
@@ -185,13 +187,14 @@ key_edit_change_passphrase (GtkWidget *widget, gpointer param)
   GPAKeyEditDialog * dialog = param;
   GpgmeKey key;
   GpgmeError err;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   err = gpgme_get_key (ctx, dialog->fpr, &key, FALSE, FALSE);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);
     }
-  err = gpa_gpgme_edit_passwd (key);
+  err = gpa_gpgme_edit_passwd (ctx, key);
   if (err == GPGME_No_Passphrase)
     {
       gpa_window_error (_("Wrong passphrase!"), dialog->window);
@@ -204,5 +207,6 @@ key_edit_change_passphrase (GtkWidget *widget, gpointer param)
     {
       gpa_gpgme_error (err);
     }
+  gpgme_release (ctx);
 }
 

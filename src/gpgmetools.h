@@ -23,6 +23,7 @@
 #ifndef GPGMETOOLS_H
 #define GPGMETOOLS_H
 
+#include <gtk/gtk.h>
 #include <gpgme.h>
 
 typedef enum
@@ -63,6 +64,9 @@ typedef struct {
  */
 #define gpa_gpgme_error(err) _gpa_gpgme_error (err, __FILE__, __LINE__);
 void _gpa_gpgme_error (GpgmeError err, const char *file, int line);
+
+/* Initialize a GpgmeCtx for use with GPA */
+GpgmeCtx gpa_gpgme_new (void);
 
 /* Write the contents of the GpgmeData object to the file. Receives a
  * filehandle instead of the filename, so that the caller can make sure the

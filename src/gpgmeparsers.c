@@ -152,6 +152,7 @@ void gpa_parse_import_info (GpaImportInfo *info)
       parse_import_info_text,
       NULL, NULL
     };
+  GpgmeCtx ctx = gpa_gpgme_new ();
   struct parse_import_info_s data = {g_queue_new(), info};
   char *import_info = gpgme_get_op_info (ctx, 0);
   GMarkupParseContext* context = g_markup_parse_context_new (&parser, 0,
@@ -160,4 +161,5 @@ void gpa_parse_import_info (GpaImportInfo *info)
 				NULL);
   g_markup_parse_context_free (context);
   free (import_info);
+  gpgme_release (ctx);
 }

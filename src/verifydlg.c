@@ -76,7 +76,7 @@ is_detached_sig (const gchar *filename, gchar **signed_file)
 /* Run gpgme_op_verify on the file.
  */
 static gboolean
-verify_file (const gchar *filename, GtkWidget *parent)
+verify_file (GpgmeCtx ctx, const gchar *filename, GtkWidget *parent)
 {
   GpgmeError err;
   GpgmeData sig, signed_text, plain_text;
@@ -251,8 +251,9 @@ fill_sig_model (GtkListStore *store, const gchar *filename, GtkWidget *parent)
   SignatureData *data;
   const gchar *fpr;
   int i;
+  GpgmeCtx ctx = gpa_gpgme_new ();
   
-  if (!verify_file (filename, parent))
+  if (!verify_file (ctx, filename, parent))
     {
       return;
     }
@@ -271,6 +272,8 @@ fill_sig_model (GtkListStore *store, const gchar *filename, GtkWidget *parent)
       data->expire = gpgme_get_sig_ulong_attr (ctx, i, GPGME_ATTR_EXPIRE, 0);
       add_signature_to_model (store, data);
     }
+
+  gpgme_release (ctx);
 }
 
 /* Create the list of signatures */

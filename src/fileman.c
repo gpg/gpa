@@ -243,11 +243,14 @@ decrypt_files (gpointer param)
   GPAFileManager *fileman = param;
   GList * files;
   GList * cur;
+  GpgmeCtx ctx;
 
   files = get_selected_files (fileman->clist_files);
   if (!files)
     return;
 
+  /* Create a context */
+  ctx = gpa_gpgme_new ();
   for (cur = files; cur; cur = g_list_next (cur))
     {
       GpgmeError err;
@@ -328,7 +331,7 @@ decrypt_files (gpointer param)
       gpgme_data_release (plain);
       g_free (plain_filename);
     }
-
+  gpgme_release (ctx);
   g_list_free (files);
 }
 

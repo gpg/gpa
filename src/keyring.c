@@ -248,6 +248,7 @@ keyring_editor_delete (gpointer param)
   GList * selection;
   gboolean has_secret;
   GpgmeError err;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   selection = gpa_keylist_selection (editor->clist_keys);
   gtk_clist_freeze (GTK_CLIST(editor->clist_keys));
@@ -271,6 +272,7 @@ keyring_editor_delete (gpointer param)
           gpa_gpgme_error (err);
         }
     }
+  gpgme_release (ctx);
   /* Update the default key, as it could just have been deleted */
   gpa_options_update_default_key (gpa_options);
   gtk_clist_thaw (GTK_CLIST(editor->clist_keys));
@@ -288,6 +290,7 @@ key_has_been_signed (const gchar *fpr, const gchar *signer)
   GpgmeKey key, signer_key;
   gboolean uid_signed, key_signed;
   const char *signer_id;
+  GpgmeCtx ctx = gpa_gpgme_new ();
   int old_mode = gpgme_get_keylist_mode (ctx);
 
   /* Get the signing key ID */
@@ -333,6 +336,7 @@ key_has_been_signed (const gchar *fpr, const gchar *signer)
   /* Forget the keys */
   gpgme_key_unref (key);
   gpgme_key_unref (signer_key);
+  gpgme_release (ctx);
   
   return key_signed;
 }
@@ -373,6 +377,7 @@ keyring_editor_sign (gpointer param)
   gboolean sign_locally = FALSE;
   GList *selection;
   gint signed_count = 0;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   if (!gpa_keylist_has_selection (editor->clist_keys))
     {
@@ -402,7 +407,7 @@ keyring_editor_sign (gpointer param)
       key = gpa_keytable_lookup (keytable, key_fpr);
       if (gpa_key_sign_run_dialog (editor->window, key, &sign_locally))
         {
-          err = gpa_gpgme_edit_sign (key, private_key_fpr, sign_locally);
+          err = gpa_gpgme_edit_sign (ctx, key, private_key_fpr, sign_locally);
           if (err == GPGME_No_Error)
             {
               signed_count++;
@@ -455,6 +460,8 @@ keyring_editor_sign (gpointer param)
       keyring_update_details_notebook (editor);
       update_selection_sensitive_widgets (editor);
     }
+
+  gpgme_release (ctx);
 }
 
 /* Invoke the "edit key" dialog */
@@ -540,6 +547,7 @@ static void
 keyring_editor_import_do_import (GPAKeyringEditor *editor, GpgmeData data)
 {
   GpgmeError err;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   /* Import the key */
   err = gpgme_op_import (ctx, data);
@@ -574,6 +582,7 @@ keyring_editor_import_do_import (GPAKeyringEditor *editor, GpgmeData data)
         }
       key_import_results_dialog_run (editor->window, &info);
     }
+  gpgme_release (ctx);
   /* update the widgets
    */
   keyring_editor_fill_keylist (editor);
@@ -601,6 +610,7 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, GpgmeData *data,
   GpgmeError err;
   GpgmeRecipients rset;
   GList *selection = gpa_keylist_selection (editor->clist_keys);
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   /* Create the data buffer */
   err = gpgme_data_new (data);
@@ -626,6 +636,7 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, GpgmeData *data,
   err = gpgme_op_export (ctx, rset, *data);
   if (err != GPGME_No_Error)
     gpa_gpgme_error (err);
+  gpgme_release (ctx);
 }
 
 /* export the selected keys to a file

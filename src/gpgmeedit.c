@@ -682,7 +682,8 @@ edit_passwd_fnc_transit (int current_state, GpgmeStatusCode status,
 }
 
 /* Change the ownertrust of a key */
-GpgmeError gpa_gpgme_edit_trust (GpgmeKey key, GpgmeValidity ownertrust)
+GpgmeError gpa_gpgme_edit_trust (GpgmeCtx ctx, GpgmeKey key,
+				 GpgmeValidity ownertrust)
 {
   const gchar *trust_strings[] = {"1", "1", "2", "3", "4", "5"};
   struct edit_parms_s parms = {TRUST_START, GPGME_No_Error, 
@@ -702,7 +703,7 @@ GpgmeError gpa_gpgme_edit_trust (GpgmeKey key, GpgmeValidity ownertrust)
 }
 
 /* Change the expire date of a key */
-GpgmeError gpa_gpgme_edit_expire (GpgmeKey key, GDate *date)
+GpgmeError gpa_gpgme_edit_expire (GpgmeCtx ctx, GpgmeKey key, GDate *date)
 {
   gchar buf[12];
   struct edit_parms_s parms = {EXPIRE_START, GPGME_No_Error, 
@@ -731,8 +732,8 @@ GpgmeError gpa_gpgme_edit_expire (GpgmeKey key, GDate *date)
 }
 
 /* Sign this key with the given private key */
-GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, const gchar *private_key_fpr,
-                                gboolean local)
+GpgmeError gpa_gpgme_edit_sign (GpgmeCtx ctx, GpgmeKey key,
+				const gchar *private_key_fpr, gboolean local)
 {
   struct sign_parms_s sign_parms = {"0", local};
   struct edit_parms_s parms = {SIGN_START, GPGME_No_Error,
@@ -791,7 +792,7 @@ passwd_passphrase_cb (void *opaque, const char *desc, void **r_hd)
 }
 
 
-GpgmeError gpa_gpgme_edit_passwd (GpgmeKey key)
+GpgmeError gpa_gpgme_edit_passwd (GpgmeCtx ctx, GpgmeKey key)
 {
   struct edit_parms_s parms = {PASSWD_START, GPGME_No_Error,
 			       edit_passwd_fnc_action, edit_passwd_fnc_transit,

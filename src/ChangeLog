@@ -1,3 +1,32 @@
+2003-02-01  Miguel Coca  <mcoca@gnu.org>
+
+	* fileman.c (decrypt_files): Use one GpgmeCtx per operation.
+	* filesigndlg.c (sign_files):
+	* encryptdlg.c (encrypt_file, set_signers, do_encrypt): 
+	* keyring.c (keyring_editor_delete, key_has_been_signed) 
+	(keyring_editor_import_do_import) 
+	(keyring_editor_export_do_export, keyring_editor_sign): 
+	* keyeditdlg.c (key_edit_change_passphrase) 
+	(key_edit_change_expiry): 
+	* options.c (determine_default_key): 
+	* gpgmetools.c (gpa_generate_key): 
+	* keytable.c (do_keylisting, keytable_fill, load_keys): 
+	* siglist.c (gpa_siglist_set_all, gpa_siglist_set_userid): 
+	* keylist.c (keylist_fill_list):  Likewise.
+
+	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_trust)
+	(gpa_gpgme_edit_expire, gpa_gpgme_edit_sign)
+	(gpa_gpgme_edit_passwd): Add ctx argument.
+
+	* gpgmetools.c (gpa_passphrase_cb): Use the context as user data.
+	* passwddlg.c (gpa_change_passphrase_dialog_run): Likewise.
+
+	* gpa.h: Remove ctx global variable.
+
+	* gpa.c (main): Remove GpgmeCtx initialitation.
+
+	* gpgmetools.h, gpgmetools.c (gpa_gpgme_new): New.
+
 2003-01-30  Miguel Coca  <mcoca@gnu.org>
 
 	* gpgmetools.c (gpa_gpgme_key_get_fingerprint): Remove unnecessary

@@ -86,6 +86,7 @@ const char *gpa_change_passphrase_dialog_run (void *opaque, const char *desc,
   GtkResponseType response;
   const gchar *passwd, *repeat;
   gchar *result;
+  GpgmeCtx ctx = opaque;
   
   if (!desc)
     {

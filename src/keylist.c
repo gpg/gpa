@@ -267,6 +267,7 @@ keylist_fill_list (GPAKeyList *keylist)
   struct keylist_fill_data fill_data = { keylist, sel_hash };
   GpgmeError err;
   GpgmeKey key;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   /* Remember the current selection. Use the
    * hash table itself as the value just because its a non-NULL pointer
@@ -313,6 +314,7 @@ keylist_fill_list (GPAKeyList *keylist)
         }
       gpgme_key_release (key);
     }
+  gpgme_release (ctx);
   g_hash_table_foreach (sel_hash, free_hash_key, NULL);
   g_hash_table_destroy (sel_hash);
 } /* keylist_fill_list */

@@ -226,6 +226,7 @@ gboolean gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent)
       GpgmeValidity new_trust = get_selected_validity 
               (unknown_radio, never_radio, marginal_radio, full_radio,
                ultimate_radio);
+      GpgmeCtx ctx = gpa_gpgme_new ();
 
       /* If the user didn't change the trust, don't edit the key */
       if (trust == new_trust ||
@@ -236,13 +237,15 @@ gboolean gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent)
         }
       else
         {
-          err = gpa_gpgme_edit_trust (key, new_trust);
+          err = gpa_gpgme_edit_trust (ctx, key, new_trust);
           if (err != GPGME_No_Error)
             {
               gpa_gpgme_error (err);
             }
           result = TRUE;
         }
+
+      gpgme_release (ctx);
     }
   else
     {

@@ -208,6 +208,7 @@ determine_default_key (void)
 {
   GpgmeKey key;
   GpgmeError err;
+  GpgmeCtx ctx = gpa_gpgme_new ();
   gchar * fpr = NULL;
   err = gpgme_op_keylist_start (ctx, NULL, 1);
   if( err != GPGME_No_Error )
@@ -229,6 +230,7 @@ determine_default_key (void)
   else
     gpa_gpgme_error (err);
 
+  gpgme_release (ctx);
   return fpr;
 }
 
@@ -237,6 +239,7 @@ gpa_options_update_default_key (GpaOptions *options)
 {
   gboolean update = FALSE;
   GpgmeKey key = NULL;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   if (!options->default_key)
     {
@@ -263,6 +266,8 @@ gpa_options_update_default_key (GpaOptions *options)
     {
       gpgme_key_unref (key);
     }
+
+  gpgme_release (ctx);
 }
 
 /* Specify the default keyserver */

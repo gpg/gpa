@@ -30,7 +30,7 @@ struct _GPAKeyTable
 
 /* Auxiliary functions */
 
-static void do_keylisting (GHashTable *hash, gboolean secret)
+static void do_keylisting (GpgmeCtx ctx, GHashTable *hash, gboolean secret)
 {
   GpgmeError err;
   GpgmeKey key;
@@ -85,21 +85,25 @@ static void do_keylisting (GHashTable *hash, gboolean secret)
 static void keytable_fill (GHashTable *hash, gboolean secret)
 {
   GpgmeError err;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   err = gpgme_op_keylist_start( ctx, NULL, secret );
   if( err != GPGME_No_Error )
-        gpa_gpgme_error (err);
-  do_keylisting (hash, secret);
+    gpa_gpgme_error (err);
+  do_keylisting (ctx, hash, secret);
+  gpgme_release (ctx);
 }
 
 static void load_keys (GHashTable *hash, const gchar **keys, gboolean secret)
 {
   GpgmeError err;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   err = gpgme_op_keylist_ext_start (ctx, keys, secret, 0);
   if( err != GPGME_No_Error )
         gpa_gpgme_error (err);
-  do_keylisting (hash, secret);
+  do_keylisting (ctx, hash, secret);
+  gpgme_release (ctx);
 }
 
 static gboolean true (const gchar *fpr, GpgmeKey key, gpointer data)
@@ -118,6 +122,7 @@ static void load_key (GHashTable *hash, const gchar *fpr, gboolean secret)
   GpgmeError err;
   GpgmeKey key;
   gchar *key_fpr;
+  GpgmeCtx ctx = gpa_gpgme_new ();
 
   /* List the key with a specific fingerprint */
   err = gpgme_op_keylist_start( ctx, fpr, secret );
@@ -140,6 +145,7 @@ static void load_key (GHashTable *hash, const gchar *fpr, gboolean secret)
           g_free (key_fpr);
         }
     }
+  gpgme_release (ctx);
 }
 
 /* Public functions for the table */

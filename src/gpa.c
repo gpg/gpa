@@ -55,8 +55,6 @@ gchar *gpa_exec_dir;
 gchar *gnupg_homedir;
 /* The GpaOptions object */
 GpaOptions *gpa_options;
-/* GPGME context used in all the program */
-GpgmeCtx ctx;
 /* The global table of keys */
 GPAKeyTable *keytable;
 
@@ -378,10 +376,6 @@ main (int argc, char **argv)
 
   /* Initialize GPGME */
   gpgme_check_version (NULL);
-  err = gpgme_new (&ctx);
-  if (err != GPGME_No_Error)
-    gpa_gpgme_error (err);
-  gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
 
   /* Locate GPA's configuration file.
    */

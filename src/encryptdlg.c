@@ -268,7 +268,7 @@ set_recipients (GList *recipients, GpgmeRecipients *rset, GtkWidget *parent)
 }
 
 static gboolean
-set_signers (GList *signers, GtkWidget *parent)
+set_signers (GpgmeCtx ctx, GList *signers, GtkWidget *parent)
 {
   GList *cur;
   GpgmeError err;
@@ -300,8 +300,8 @@ set_signers (GList *signers, GtkWidget *parent)
 }
 
 static gchar *
-encrypt_file (const gchar *filename, GpgmeRecipients rset, gboolean sign,
-	      gboolean armor, GtkWidget *parent)
+encrypt_file (GpgmeCtx ctx, const gchar *filename, GpgmeRecipients rset,
+	      gboolean sign, gboolean armor, GtkWidget *parent)
 {
   GpgmeError err;
   GpgmeData input, output;
@@ -359,13 +359,14 @@ do_encrypt (GPAFileEncryptDialog *dialog, GList *recipients, gboolean sign,
   GList *cur;
   GpgmeRecipients rset;
   gboolean success;
+  GpgmeCtx ctx = gpa_gpgme_new ();
   
   success = set_recipients (recipients, &rset, dialog->window);
   if (!success)
     return;
   if (sign)
     {
-      success = set_signers (signers, dialog->window);
+      success = set_signers (ctx, signers, dialog->window);
       if (!success)
 	return;
     }
@@ -376,7 +377,7 @@ do_encrypt (GPAFileEncryptDialog *dialog, GList *recipients, gboolean sign,
     {
       gchar *target_filename;
 
-      target_filename = encrypt_file (cur->data, rset, sign, armor,
+      target_filename = encrypt_file (ctx, cur->data, rset, sign, armor,
 				      dialog->window);
       if (target_filename)
 	{
@@ -390,6 +391,7 @@ do_encrypt (GPAFileEncryptDialog *dialog, GList *recipients, gboolean sign,
     }
   g_list_free (recipients);
   gpgme_recipients_release (rset);
+  gpgme_release (ctx);
 }
 
 static void
