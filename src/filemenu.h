@@ -36,4 +36,5 @@ extern void file_verify ( void );
 extern void file_close ( void );
 extern void file_quit ( void );
 
+extern void file_browse ( gpointer param );
 extern void gpa_fileOpenSelect_init ( char *title );

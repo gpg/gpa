@@ -33,9 +33,11 @@
 
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain;
+GtkWidget *global_popupMenu;
 GtkWidget *global_windowTip;
 GtkWidget *global_textTip;
 gboolean global_noTips = FALSE;
+GpapaAction global_lastCallbackResult;
 
 gchar *writtenSigValidity [ 3 ] = {
   N_( "unknown" ),
@@ -56,6 +58,7 @@ void gpa_callback (
       break;
     default: break;
   } /* switch */
+  global_lastCallbackResult = action;
 } /* gpa_callback */
 
 GtkWidget *gpa_get_global_clist_file ( void ) {
@@ -419,6 +422,30 @@ GtkWidget *gpa_menubar_new ( GtkWidget *window ) {
   return ( menubar );
 } /* gpa_menubar_new */
 
+void gpa_popupMenu_init ( void ) {
+/* var */
+  GtkItemFactory *itemFactory;
+  GtkItemFactoryEntry menuItem [] = {
+    { _( "/Show detail" ), NULL, file_showDetail, 0, NULL },
+    { _( "/sep1" ), NULL, NULL, 0, "<Separator>" },
+    { _( "/Sign" ), NULL, file_sign, 0, NULL },
+    { _( "/Encrypt" ), NULL, file_encrypt, 0, NULL },
+    { _( "/E_ncrypt as" ), NULL, file_encryptAs, 0, NULL },
+    { _( "/Protect by Password" ), NULL, file_protect, 0, NULL },
+    { _( "/P_rotect as" ), NULL, file_protectAs, 0, NULL },
+    { _( "/Decrypt" ), NULL, file_decrypt, 0, NULL },
+    { _( "/Decrypt _as" ), NULL, file_decryptAs, 0, NULL },
+    { _( "/Verify" ), NULL, file_verify, 0, NULL },
+    { _( "/sep2" ), NULL, NULL, 0, "<Separator>" },
+    { _( "/Close" ), NULL, file_close, 0, NULL }
+  };
+  gint menuItems = sizeof ( menuItem ) / sizeof ( menuItem [ 0 ] );
+/* commands */
+  itemFactory = gtk_item_factory_new ( GTK_TYPE_MENU, "<main>", NULL );
+  gtk_item_factory_create_items ( itemFactory, menuItems, menuItem, NULL );
+  global_popupMenu = gtk_item_factory_get_widget ( itemFactory, "<main>" );
+} /* gpa_popupMenu_init */
+
 void setFileSelected (
   GtkWidget *clistFile, gint row, gint column,
   GdkEventButton *event, gboolean selected
@@ -442,6 +469,51 @@ void setFileSelected (
 	filesSelected = g_list_remove ( filesSelected, aFile );
     } /* else */
 } /* setFileSelected */
+
+gboolean evalKeyClistFile (
+  GtkWidget *clistFile, GdkEventKey *event, gpointer userData
+) {
+  switch ( event -> keyval ) {
+    case GDK_Delete: file_close (); break;
+    case GDK_Insert: file_open (); break;
+  } /* switch */
+  return ( TRUE );
+} /* evalKeyClistFile */
+
+gboolean evalMouseClistFile (
+  GtkWidget *clistFile, GdkEventButton *event, gpointer userData
+) {
+/* var */
+  gint x, y;
+  gint row, column;
+/* commands */
+  if ( event -> button == 3 )
+    {
+      x = event -> x;
+      y = event -> y;
+      if (
+        gtk_clist_get_selection_info (
+          GTK_CLIST ( clistFile ), x, y, &row, &column
+        )
+      )
+        {
+          if (
+            ! (
+              event -> state & GDK_SHIFT_MASK ||
+              event -> state & GDK_CONTROL_MASK
+            )
+          )
+            gtk_clist_unselect_all ( GTK_CLIST ( clistFile ) );
+          gtk_clist_select_row ( GTK_CLIST ( clistFile ), row, column );
+          gtk_menu_popup (
+            GTK_MENU ( global_popupMenu ), NULL, NULL, NULL, NULL, 3, 0
+          );
+        } /* if */
+    } /* if */
+  else if ( event -> type == GDK_2BUTTON_PRESS )
+    file_showDetail ();
+  return ( TRUE );
+} /* evalMouseClistFile */
 
 GtkWidget *gpa_windowFile_new ( void ) {
 /* var */
@@ -484,6 +556,14 @@ GtkWidget *gpa_windowFile_new ( void ) {
     GTK_OBJECT ( clistFile ), "unselect-row",
     GTK_SIGNAL_FUNC ( setFileSelected ), (gpointer) FALSE
   );
+  gtk_signal_connect (
+    GTK_OBJECT ( clistFile ), "key-press-event",
+    GTK_SIGNAL_FUNC ( evalKeyClistFile ), NULL
+  );
+  gtk_signal_connect (
+    GTK_OBJECT ( clistFile ), "button-press-event",
+    GTK_SIGNAL_FUNC ( evalMouseClistFile ), NULL
+  );
   global_clistFile = clistFile;
   gtk_container_add ( GTK_CONTAINER ( scrollerFile ), clistFile );
   gtk_container_add ( GTK_CONTAINER ( windowFile ), scrollerFile );
@@ -510,6 +590,7 @@ GtkWidget *gpa_windowMain_new ( char *title ) {
   gtk_box_pack_start ( GTK_BOX ( fileBox ), windowFile, TRUE, TRUE, 0 );
   gtk_box_pack_end ( GTK_BOX ( vbox ), fileBox, TRUE, TRUE, 0 );
   gtk_container_add ( GTK_CONTAINER ( window ), vbox );
+  gpa_popupMenu_init ();
   gpa_windowTip_init ();
   gpa_fileOpenSelect_init ( _( "Open a file" ) );
   gpa_homeDirSelect_init ( _( "Set home directory" ) );

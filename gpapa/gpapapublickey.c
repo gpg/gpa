@@ -215,7 +215,18 @@ static void linecallback_get_signatures (
   if ( line && strncmp ( line, "sig", 3 ) == 0 )
     {
       GpapaSignature *sig = extract_sig ( line, d -> callback, d -> calldata );
-      d -> key -> sigs = g_list_append ( d -> key -> sigs, sig );
+      if ( strcmp ( d -> key -> key -> KeyID, sig -> KeyID ) == 0 )
+        {
+          /* Self-signature.  Only report it if it is not valid.
+           */
+          if ( sig -> validity == GPAPA_SIG_VALID )
+            {
+              gpapa_signature_release ( sig, d -> callback, d -> calldata );
+              sig = NULL;
+            }
+        }
+      if ( sig )
+        d -> key -> sigs = g_list_append ( d -> key -> sigs, sig );
     }
 } /* linecallback_get_signatures */
 
@@ -245,6 +256,37 @@ GList *gpapa_public_key_get_signatures (
       return ( key -> sigs );
     }
 } /* gpapa_public_key_get_signatures */
+
+void gpapa_public_key_export (
+  GpapaPublicKey *key, gchar *targetFileID, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+) {
+  if ( ! key )
+    callback ( GPAPA_ACTION_ERROR, "key not specified", calldata );
+  if ( ! key )
+    callback ( GPAPA_ACTION_ERROR, "target file not specified", calldata );
+  if ( key && targetFileID )
+    {
+      gchar *full_keyID;
+      char *gpgargv [ 6 ];
+      int i = 0;
+      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
+      gpgargv [ i++ ] = "-o";
+      gpgargv [ i++ ] = targetFileID;
+      if ( Armor == GPAPA_ARMOR )
+	gpgargv [ i++ ] = "--armor";
+      gpgargv [ i++ ] = "--export";
+      gpgargv [ i++ ] = full_keyID;
+      gpgargv [ i ] = NULL;
+      gpapa_call_gnupg
+	(
+	  gpgargv, TRUE, NULL,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
+      free ( full_keyID );
+    }
+} /* gpapa_public_key_export */
 
 void gpapa_public_key_send_to_server (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata

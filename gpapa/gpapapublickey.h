@@ -73,6 +73,11 @@ extern GList *gpapa_public_key_get_signatures (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
 );
 
+extern void gpapa_public_key_export (
+  GpapaPublicKey *key, gchar *targetFileID, GpapaArmor Armor,
+  GpapaCallbackFunc callback, gpointer calldata
+);
+
 extern void gpapa_public_key_send_to_server (
   GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
 );

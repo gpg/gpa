@@ -208,9 +208,49 @@ void gpa_connect_by_accelerator (
   );
 } /* gpa_connect_by_accelerator */
 
-void gpa_window_error (
-  gchar *message, GtkWidget *messenger
-) {
+GtkWidget **gpa_window_progress ( gchar *message, GtkWidget *messenger ) {
+/* var */
+  static GtkWidget *result [ 2 ];
+/* objects */
+  GtkWidget *windowProgress;
+    GtkWidget *vboxProgress;
+      GtkWidget *labelJfdProgress;
+        GtkWidget *labelProgress;
+      GtkWidget *progress;
+/* commands */
+  windowProgress = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gtk_window_set_title (
+    GTK_WINDOW ( windowProgress ), _( "GPA action status" )
+  );
+  vboxProgress = gtk_vbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( vboxProgress ), 10 );
+  labelProgress = gtk_label_new ( message );
+  labelJfdProgress = gpa_widget_hjustified_new (
+    labelProgress, GTK_JUSTIFY_LEFT
+  );
+  gtk_box_pack_start (
+    GTK_BOX ( vboxProgress ), labelJfdProgress, FALSE, FALSE, 0
+  );
+  progress = gtk_progress_bar_new ();
+  gtk_box_pack_start ( GTK_BOX ( vboxProgress ), progress, TRUE, TRUE, 0 );
+  gtk_container_add ( GTK_CONTAINER ( windowProgress ), vboxProgress );
+  gtk_widget_show_all ( windowProgress );
+  gpa_widget_set_centered ( windowProgress, messenger );
+  gtk_widget_show_now ( windowProgress );
+  result [ 0 ] = progress;
+  result [ 1 ] = windowProgress;
+  return ( result );
+} /* gpa_window_progress */
+
+void gpa_window_progress_set ( GtkWidget **progress, gfloat percentage ) {
+  gtk_progress_bar_update ( GTK_PROGRESS_BAR ( progress [ 0 ] ), percentage );
+} /* gpa_window_progress_set */
+
+void gpa_window_progress_destroy ( GtkWidget **progress ) {
+  gtk_widget_destroy ( progress [ 1 ] );
+} /* gpa_window_progress_destroy */
+
+void gpa_window_error ( gchar *message, GtkWidget *messenger ) {
 /* var */
   GtkAccelGroup *accelGroup;
 /* objects */
@@ -220,7 +260,7 @@ void gpa_window_error (
       GtkWidget *buttonClose;
 /* commands */
   windowError = gtk_window_new ( GTK_WINDOW_DIALOG );
-  gtk_window_set_title ( GTK_WINDOW ( windowError ), "Error" );
+  gtk_window_set_title ( GTK_WINDOW ( windowError ), "GPA Error" );
   gtk_window_set_modal ( GTK_WINDOW ( windowError ), TRUE );
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group ( GTK_WINDOW ( windowError ), accelGroup );
@@ -242,6 +282,39 @@ void gpa_window_error (
   gpa_widget_set_centered ( windowError, messenger );
   gtk_widget_grab_focus ( buttonClose );
 } /* gpa_window_error */
+
+void gpa_window_message ( gchar *message, GtkWidget *messenger ) {
+/* var */
+  GtkAccelGroup *accelGroup;
+/* objects */
+  GtkWidget *windowMessage;
+    GtkWidget *vboxMessage;
+      GtkWidget *labelMessage;
+      GtkWidget *buttonClose;
+/* commands */
+  windowMessage = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gtk_window_set_title ( GTK_WINDOW ( windowMessage ), "GPA Message" );
+  gtk_window_set_modal ( GTK_WINDOW ( windowMessage ), TRUE );
+  accelGroup = gtk_accel_group_new ();
+  gtk_window_add_accel_group ( GTK_WINDOW ( windowMessage ), accelGroup );
+  vboxMessage = gtk_vbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( vboxMessage ), 10 );
+  labelMessage = gtk_label_new ( message );
+  gtk_box_pack_start ( GTK_BOX ( vboxMessage ), labelMessage, TRUE, FALSE, 10 );
+  buttonClose = gpa_button_new ( accelGroup, _( "_OK" ) );
+  gtk_signal_connect_object (
+    GTK_OBJECT ( buttonClose ), "clicked",
+    GTK_SIGNAL_FUNC ( gtk_widget_destroy ), (gpointer) windowMessage
+  );
+  gtk_widget_add_accelerator (
+    buttonClose, "clicked", accelGroup, GDK_Escape, 0, 0
+  );
+  gtk_box_pack_start ( GTK_BOX ( vboxMessage ), buttonClose, FALSE, FALSE, 0 );
+  gtk_container_add ( GTK_CONTAINER ( windowMessage ), vboxMessage );
+  gtk_widget_show_all ( windowMessage );
+  gpa_widget_set_centered ( windowMessage, messenger );
+  gtk_widget_grab_focus ( buttonClose );
+} /* gpa_window_message */
 
 void gpa_window_passphrase (
   GtkWidget *messenger, GtkSignalFunc func, gchar *tip, gpointer data
@@ -274,6 +347,13 @@ void gpa_window_passphrase (
   gtk_box_pack_start ( GTK_BOX ( hboxPasswd ), labelPasswd, FALSE, FALSE, 0 );
   entryPasswd = gtk_entry_new ();
   gtk_entry_set_visibility ( GTK_ENTRY ( entryPasswd ), FALSE );
+  param [ 0 ] = data;
+  param [ 1 ] = entryPasswd;
+  param [ 2 ] = windowPassphrase;
+  gtk_signal_connect_object (
+    GTK_OBJECT ( entryPasswd ), "activate",
+    GTK_SIGNAL_FUNC ( func ), (gpointer) param
+  );
   gtk_box_pack_start ( GTK_BOX ( hboxPasswd ), entryPasswd, TRUE, TRUE, 0 );
   gpa_connect_by_accelerator (
     GTK_LABEL ( labelPasswd ), entryPasswd, accelGroup, _( "_Password: " )
@@ -294,9 +374,6 @@ void gpa_window_passphrase (
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxPassphrase), 5 );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxPassphrase ), buttonCancel );
   buttonOK = gpa_button_new ( accelGroup, _( "_OK" ) );
-  param [ 0 ] = data;
-  param [ 1 ] = entryPasswd;
-  param [ 2 ] = windowPassphrase;
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonOK ), "clicked",
     GTK_SIGNAL_FUNC ( func ), (gpointer) param

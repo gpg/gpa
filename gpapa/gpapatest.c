@@ -47,6 +47,65 @@ void versiontest ( void )
   gpapa_call_gnupg ( gpgargv, TRUE, NULL, linecallback, "pruzzel", callback, NULL );
 }
 
+void print_status ( gchar *filename )
+{
+  GpapaFile *F = gpapa_file_new ( filename, callback, calldata );
+  printf ( "%s: \t", filename );
+  switch ( gpapa_file_get_status ( F, callback, calldata ) )
+    {
+      case GPAPA_FILE_UNKNOWN:
+        printf ( "UNKNOWN" );
+        break;
+      case GPAPA_FILE_CLEAR:
+        printf ( "clear" );
+        break;
+      case GPAPA_FILE_ENCRYPTED:
+        printf ( "encrypted" );
+        break;
+      case GPAPA_FILE_PROTECTED:
+        printf ( "protected" );
+        break;
+      case GPAPA_FILE_SIGNED:
+        printf ( "signed" );
+        break;
+      case GPAPA_FILE_CLEARSIGNED:
+        printf ( "clearsigned" );
+        break;
+      case GPAPA_FILE_DETACHED_SIGNATURE:
+        printf ( "detached signature" );
+        break;
+    }
+  printf ( "\t(%d signatures)\n", gpapa_file_get_signature_count ( F, callback, calldata ) );
+  gpapa_file_release ( F, callback, calldata );
+}
+
+void test_status ( void )
+{
+  print_status ( "test-clsig.txt.asc" );
+  print_status ( "test-dsig.txt.gpg" );
+  print_status ( "test-dsig.txt.pgp" );
+  print_status ( "test-enc.txt.asc" );
+  print_status ( "test-enc.txt.asc.gpg" );
+  print_status ( "test-enc.txt.gpg" );
+  print_status ( "test-encsig.pgp" );
+  print_status ( "test-encsig.txt.gpg" );
+  print_status ( "test-sig.txt.pgp" );
+  print_status ( "test-sig.txt.asc" );
+  print_status ( "test-sig.txt.gpg" );
+  print_status ( "test-symm.txt.gpg" );
+  print_status ( "test.txt" );
+  print_status ( "test.txt.asc" );
+  print_status ( "test.txt.gpg" );
+  print_status ( "test.txt.sig" );
+}
+
+void test_export ( char *keyID )
+{
+  GpapaPublicKey *P = gpapa_get_public_key_by_ID ( keyID, callback, calldata );
+  gpapa_public_key_export ( P, "exported.asc", GPAPA_ARMOR, callback, calldata ); 
+  gpapa_release_public_key ( P, callback, calldata );
+}
+
 int main ( int argc, char **argv )
 {
   int i, seccount, pubcount;
@@ -54,6 +113,9 @@ int main ( int argc, char **argv )
   GpapaPublicKey *P;
   GpapaFile *F;
   calldata = argv [ 0 ];
+
+#if 0
+
   seccount = gpapa_get_secret_key_count ( callback, calldata );
   printf ( "Secret keys: %d\n", seccount );
   printf ( "\n" );
@@ -174,5 +236,12 @@ int main ( int argc, char **argv )
     }
   else
     printf ( "File test.txt.gpg: not available\n" );
+
+  test_status ( );
+
+#endif
+
+  test_export ( "4875B1DC979B6F2A" );
+
   return ( 0 );
 } /* main */

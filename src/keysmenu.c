@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
+#include "filemenu.h"
 #include "gpa.h"
 #include "gtktools.h"
 
@@ -353,17 +354,174 @@ GtkWidget *gpa_frameExpire_new (
   return ( frameExpire );
 } /* gpa_frameExpire_new */
 
-void keys_export ( void ) {
-g_print ( _( "Export keys\n" ) ); /*!!!*/
-} /* keys_export */
+void keys_openPublic_export_export_exec ( gpointer data, gpointer userData ) {
+/* var */
+  gchar *keyID;
+  gpointer *localParam;
+  gchar *fileID;
+  GpapaArmor *armor;
+  GtkWidget *windowExport;
+  GpapaPublicKey *key;
+/* commands */
+  keyID = (gchar*) data;
+  localParam = (gpointer*) userData;
+  fileID =           (gchar*) localParam [ 0 ];
+  armor =       (GpapaArmor*) localParam [ 1 ];
+  windowExport = (GtkWidget*) localParam [ 2 ];
+  key = gpapa_get_public_key_by_ID ( keyID, gpa_callback, windowExport );
+  gpapa_public_key_export ( key, fileID, *armor, gpa_callback, windowExport );
+} /* keys_openPublic_export_export_exec */
 
-void keys_delete ( void ) {
-g_print ( _( "Delete keys\n" ) ); /*!!!*/
-} /* keys_delete */
+void keys_openPublic_export_export ( gpointer param ) {
+/* var */
+  gpointer *localParam;
+  GtkWidget *windowExport;
+  gchar *tip;
+  GList **keysSelected;
+  GtkWidget *entryFilename;
+  GtkWidget *checkerArmor;
+  gchar *fileID;
+  GpapaArmor armor;
+  static gpointer paramExec [ 3 ];
+  gpointer paramDone [ 2 ];
+/* commands */
+  localParam = (gpointer*) param;
+  windowExport =  (GtkWidget*) localParam [ 0 ];
+  tip =               (gchar*) localParam [ 1 ];
+  keysSelected =     (GList**) localParam [ 2 ];
+  entryFilename = (GtkWidget*) localParam [ 3 ];
+  checkerArmor =  (GtkWidget*) localParam [ 4 ];
+  fileID = gtk_entry_get_text ( GTK_ENTRY ( entryFilename ) );
+  if ( gtk_toggle_button_get_active ( GTK_TOGGLE_BUTTON ( checkerArmor ) ) )
+    armor = GPAPA_ARMOR;
+  else
+    armor = GPAPA_NO_ARMOR;
+  paramExec [ 0 ] = fileID;
+  paramExec [ 1 ] = &armor;
+  paramExec [ 2 ] = windowExport;
+  g_list_foreach (
+    *keysSelected, keys_openPublic_export_export_exec, (gpointer) paramExec
+  );
+  paramDone [ 0 ] = windowExport;
+  paramDone [ 1 ] = tip;
+  gpa_window_message ( _( "Keys exported." ), windowExport );
+  gpa_window_destroy ( paramDone );
+} /* keys_openPublic_export_export */
 
-void keys_revocation ( void ) {
-g_print ( _( "Create revocation certificate\n" ) ); /*!!!*/
-} /* keys_revocation */
+void keys_openPublic_export ( gpointer param ) {
+/* var */
+  gpointer *localParam;
+  GList **keysSelected;
+  gchar *tip;
+  GtkWidget *parent;
+  GtkAccelGroup *accelGroup;
+  static gpointer paramBrowse [ 2 ];
+  static gpointer paramClose [ 2 ];
+  static gpointer paramExport [ 5 ];
+/* objects */
+  GtkWidget *windowExport;
+    GtkWidget *vboxExport;
+      GtkWidget *hboxFilename;
+        GtkWidget *labelFilename;
+        GtkWidget *entryFilename;
+        GtkWidget *spaceBrowse;
+        GtkWidget *buttonBrowse;
+      GtkWidget *checkerArmor;
+      GtkWidget *hButtonBoxExport;
+        GtkWidget *buttonCancel;
+        GtkWidget *buttonExport;
+/* commands */
+  localParam = (gpointer*) param;
+  keysSelected = (GList**) localParam [ 0 ];
+  tip =           (gchar*) localParam [ 1 ];
+  parent =    (GtkWidget*) localParam [ 2 ];
+  if ( ! *keysSelected )
+    {
+      gpa_window_error ( _( "No keys selected to export." ), parent );
+      return;
+    } /* if */
+  windowExport = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gtk_window_set_title (
+    GTK_WINDOW ( windowExport ), _( "Export public keys" )
+  );
+  accelGroup = gtk_accel_group_new ();
+  gtk_window_add_accel_group ( GTK_WINDOW ( windowExport ), accelGroup );
+  vboxExport = gtk_vbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( vboxExport ), 5 );
+  hboxFilename = gtk_hbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( hboxFilename ), 5 );
+  labelFilename = gtk_label_new ( _( "" ) );
+  gtk_box_pack_start (
+    GTK_BOX ( hboxFilename ), labelFilename, FALSE, FALSE, 0
+  );
+  entryFilename = gtk_entry_new ();
+  gtk_box_pack_start (
+    GTK_BOX ( hboxFilename ), entryFilename, TRUE, TRUE, 0
+  );
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelFilename ), entryFilename,
+    accelGroup, _( "Export to _file: " )
+  );
+  spaceBrowse = gpa_space_new ();
+  gtk_box_pack_start (
+    GTK_BOX ( hboxFilename ), spaceBrowse, FALSE, FALSE, 5
+  );
+  buttonBrowse = gpa_button_new ( accelGroup, _( "   _Browse   " ) );
+  paramBrowse [ 0 ] = _( "Export public keys to file" );
+  paramBrowse [ 1 ] = entryFilename;
+  gtk_signal_connect_object (
+    GTK_OBJECT ( buttonBrowse ), "clicked",
+    GTK_SIGNAL_FUNC ( file_browse ), (gpointer) paramBrowse
+  );
+  gtk_box_pack_start (
+    GTK_BOX ( hboxFilename ), buttonBrowse, FALSE, FALSE, 0
+  );
+  gtk_box_pack_start (
+    GTK_BOX ( vboxExport ), hboxFilename, TRUE, TRUE, 0
+  );
+  checkerArmor = gpa_check_button_new ( accelGroup, _( "a_rmor" ) );
+  gtk_container_set_border_width ( GTK_CONTAINER ( checkerArmor ), 5 );
+  gtk_box_pack_start (
+    GTK_BOX ( vboxExport ), checkerArmor, FALSE, FALSE, 0
+  );
+  hButtonBoxExport = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout (
+    GTK_BUTTON_BOX ( hButtonBoxExport ), GTK_BUTTONBOX_END
+  );
+  gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxExport ), 10 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxExport ), 5 );
+  paramClose [ 0 ] = windowExport;
+  paramClose [ 1 ] = tip;
+  buttonCancel = gpa_buttonCancel_new (
+    accelGroup, _( "_Cancel" ), paramClose
+  );
+  gtk_container_add ( GTK_CONTAINER ( hButtonBoxExport ), buttonCancel );
+  buttonExport = gpa_button_new ( accelGroup, _( "E_xport" ) );
+  paramExport [ 0 ] = windowExport;
+  paramExport [ 1 ] = tip;
+  paramExport [ 2 ] = keysSelected;
+  paramExport [ 3 ] = entryFilename;
+  paramExport [ 4 ] = checkerArmor;
+  gtk_signal_connect_object (
+    GTK_OBJECT ( buttonExport ), "clicked",
+    GTK_SIGNAL_FUNC ( keys_openPublic_export_export ), (gpointer) paramExport
+  );
+  gtk_signal_connect_object (
+    GTK_OBJECT ( entryFilename ), "activate",
+    GTK_SIGNAL_FUNC ( keys_openPublic_export_export ), (gpointer) paramExport
+  );
+  gtk_container_add ( GTK_CONTAINER ( hButtonBoxExport ), buttonExport );
+  gtk_box_pack_start (
+    GTK_BOX ( vboxExport ), hButtonBoxExport, FALSE, FALSE, 0
+  );
+  gtk_container_add ( GTK_CONTAINER ( windowExport ), vboxExport );
+  gpa_widget_show ( windowExport, parent, _( "keys_openPublic_export.tip" ) );
+  gtk_widget_grab_focus ( entryFilename );
+} /* keys_openPublic_export */
+
+void keys_openPublic_delete ( void ) {
+g_print ( _( "Delete public keys\n" ) ); /*!!!*/
+} /* keys_openPublic_delete */
 
 void keys_openPublic_editTrust_accept ( gpointer param ) {
 g_print ( _( "Accept new ownertrust level\n" ) ); /*!!!*/
@@ -499,6 +657,7 @@ void keys_openPublic_editKey ( gpointer param ) {
   gpointer *localParam;
   GList **keysSelected;
   GtkWidget *windowPublic;
+  gchar *keyID;
   GpapaPublicKey *key;
   GtkAccelGroup *accelGroup;
   gchar *titlesSignatures [] = {
@@ -507,6 +666,8 @@ void keys_openPublic_editKey ( gpointer param ) {
   GList *signatures = NULL;
   static gpointer paramAppend [ 2 ];
   static gpointer paramTrust [ 3 ];
+  static GList *keyEdited = NULL;
+  static gpointer paramExport [ 3 ];
   static gpointer paramClose [ 2 ];
   gchar *contentsFingerprint;
 /* objects */
@@ -546,9 +707,8 @@ void keys_openPublic_editKey ( gpointer param ) {
       gpa_window_error ( _( "No key selected for editing." ), windowPublic );
       return;
     } /* if */
-  key = gpapa_get_public_key_by_ID (
-    (gchar*) g_list_last ( *keysSelected ) -> data, gpa_callback, windowPublic
-  );
+  keyID = (gchar*) g_list_last ( *keysSelected ) -> data;
+  key = gpapa_get_public_key_by_ID ( keyID, gpa_callback, windowPublic );
   windowKey = gtk_window_new ( GTK_WINDOW_DIALOG );
 printf ( "new windowKey: %d(@%d)\n", windowKey, &windowKey ); /*!!!*/
   gtk_window_set_title ( GTK_WINDOW ( windowKey ), _( "Public key editor" ) );
@@ -710,9 +870,14 @@ printf ( "new windowKey: %d(@%d)\n", windowKey, &windowKey ); /*!!!*/
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonEditTrust );
   buttonExportKey = gpa_button_new ( accelGroup, _( "E_xport key" ) );
-  gtk_signal_connect (
+  keyEdited = NULL;
+  keyEdited = g_list_append ( keyEdited, keyID );
+  paramExport [ 0 ] = &keyEdited;
+  paramExport [ 1 ] = _( "keys_openPublic_editKey.tip" );
+  paramExport [ 2 ] = windowKey;
+  gtk_signal_connect_object (
     GTK_OBJECT ( buttonExportKey ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_export ), NULL
+    GTK_SIGNAL_FUNC ( keys_openPublic_export ), (gpointer) paramExport
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonExportKey );
   paramClose [ 0 ] = windowKey;
@@ -728,8 +893,34 @@ printf ( "new windowKey: %d(@%d)\n", windowKey, &windowKey ); /*!!!*/
   );
 } /* keys_openPublic_editKey */
 
-void keys_openPublic_send ( void ) {
-g_print ( _( "Send keys\n" ) ); /*!!!*/
+void keys_openPublic_send_key ( gpointer data, gpointer userData ) {
+/* var */
+  gchar *keyID;
+  GtkWidget *windowPublic;
+  GpapaPublicKey *key;
+/* commands */
+  keyID = (gchar*) data;
+  windowPublic = (GtkWidget*) userData;
+  key = gpapa_get_public_key_by_ID ( keyID, gpa_callback, windowPublic );
+  gpapa_public_key_send_to_server ( key, gpa_callback, windowPublic );
+} /* keys_openPublic_send_key */
+
+void keys_openPublic_send ( gpointer param ) {
+/* var */
+  gpointer *localParam;
+  GList **keysSelected;
+  GtkWidget *windowPublic;
+/* commands */
+  localParam = (gpointer*) param;
+  keysSelected = (GList**)    localParam [ 0 ];
+  windowPublic = (GtkWidget*) localParam [ 1 ];
+  if ( ! *keysSelected )
+    {
+      gpa_window_error ( _( "No keys selected for sending." ), windowPublic );
+      return;
+    } /* if */
+  g_list_foreach ( *keysSelected, keys_openPublic_send_key, windowPublic );
+  gpa_window_message ( _( "Keys sent to server." ), windowPublic );
 } /* keys_openPublic_send */
 
 void keys_openPublic_receive ( void ) {
@@ -821,6 +1012,14 @@ void keys_openPublic_toggleClistKeys ( gpointer param ) {
     } /* while */
 } /* keys_openPublic_toggleClistKeys */
 
+gboolean keys_openPublic_evalMouse (
+  GtkWidget *clistKeys, GdkEventButton *event, gpointer param
+) {
+  if ( event -> type == GDK_2BUTTON_PRESS )
+    keys_openPublic_editKey ( param );
+  return ( TRUE );
+} /* keys_openPublic_evalMouse */
+
 void keys_openPublic ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
@@ -833,6 +1032,8 @@ void keys_openPublic ( void ) {
   static gint columnKeyID = 4;
   static gpointer paramKeys [ 3 ];
   static gpointer paramEdit [ 2 ];
+  static gpointer paramSend [ 2 ];
+  static gpointer paramExport [ 3 ];
   static gpointer paramTrust [ 3 ];
   static gpointer paramShow [ 3 ];
   static gpointer paramClose [ 2 ];
@@ -910,6 +1111,12 @@ void keys_openPublic ( void ) {
     GTK_OBJECT ( clistKeys ), "unselect-row",
     GTK_SIGNAL_FUNC ( keys_unselectKey ), (gpointer) paramKeys
   );
+  paramEdit [ 0 ] = &keysSelected;
+  paramEdit [ 1 ] = windowPublic;
+  gtk_signal_connect (
+    GTK_OBJECT ( clistKeys ), "button-press-event",
+    GTK_SIGNAL_FUNC ( keys_openPublic_evalMouse ), (gpointer) paramEdit
+  );
   gtk_container_add ( GTK_CONTAINER ( scrollerKeys ), clistKeys );
   gtk_box_pack_start ( GTK_BOX ( vboxKeys ), scrollerKeys, TRUE, TRUE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxPublic ), vboxKeys, TRUE, TRUE, 0 );
@@ -917,8 +1124,6 @@ void keys_openPublic ( void ) {
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxAction ), 5 );
   tableKey = gtk_table_new ( 3, 2, TRUE );
   buttonEditKey = gpa_button_new ( accelGroup, _( "_Edit key" ) );
-  paramEdit [ 0 ] = &keysSelected;
-  paramEdit [ 1 ] = windowPublic;
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditKey ), "clicked",
     GTK_SIGNAL_FUNC ( keys_openPublic_editKey ), (gpointer) paramEdit
@@ -937,9 +1142,11 @@ void keys_openPublic ( void ) {
     GTK_FILL, GTK_FILL, 0, 0
   );
   buttonSend = gpa_button_new ( accelGroup, _( "Se_nd keys" ) );
-  gtk_signal_connect (
+  paramSend [ 0 ] = &keysSelected;
+  paramSend [ 1 ] = windowPublic;
+  gtk_signal_connect_object (
     GTK_OBJECT ( buttonSend ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_openPublic_send ), NULL
+    GTK_SIGNAL_FUNC ( keys_openPublic_send ), (gpointer) paramSend
   );
   gtk_table_attach (
     GTK_TABLE ( tableKey ), buttonSend, 0, 1, 1, 2,
@@ -955,9 +1162,12 @@ void keys_openPublic ( void ) {
     GTK_FILL, GTK_FILL, 0, 0
   );
   buttonExportKey = gpa_button_new ( accelGroup, _( "E_xport keys" ) );
-  gtk_signal_connect (
+  paramExport [ 0 ] = &keysSelected;
+  paramExport [ 1 ] = _( "keys_openPublic.tip" );
+  paramExport [ 2 ] = windowPublic;
+  gtk_signal_connect_object (
     GTK_OBJECT ( buttonExportKey ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_export ), NULL
+    GTK_SIGNAL_FUNC ( keys_openPublic_export ), (gpointer) paramExport
   );
   gtk_table_attach (
     GTK_TABLE ( tableKey ), buttonExportKey, 0, 1, 2, 3,
@@ -966,7 +1176,7 @@ void keys_openPublic ( void ) {
   buttonDelete = gpa_button_new ( accelGroup, _( "_Delete keys" ) );
   gtk_signal_connect (
     GTK_OBJECT ( buttonDelete ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_delete ), NULL
+    GTK_SIGNAL_FUNC ( keys_openPublic_delete ), NULL
   );
   gtk_table_attach (
     GTK_TABLE ( tableKey ), buttonDelete, 1, 2, 2, 3,
@@ -1036,6 +1246,9 @@ void keys_openPublic ( void ) {
   );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxPublic ), 5 );
   buttonClose = gpa_button_new ( accelGroup, _( "_Close" ) );
+  gtk_widget_add_accelerator (
+    buttonClose, "clicked", accelGroup, GDK_Escape, 0, 0
+  );
   paramClose [ 0 ] = &keysSelected;
   paramClose [ 1 ] = windowPublic;
   gtk_signal_connect_object (
@@ -1053,6 +1266,18 @@ void keys_openPublic ( void ) {
   if ( ! gpapa_get_public_key_count )
     gpa_window_error ( _( "No public keys available yet." ), windowPublic );
 } /* keys_openPublic */
+
+void keys_openSecret_export ( void ) {
+g_print ( _( "Export secret keys\n" ) ); /*!!!*/
+} /* keys_openSecret_export */
+
+void keys_openSecret_delete ( void ) {
+g_print ( _( "Delete secret keys\n" ) ); /*!!!*/
+} /* keys_openSecret_delete */
+
+void keys_openSecret_revocation ( void ) {
+g_print ( _( "Create revocation certificate\n" ) ); /*!!!*/
+} /* keys_openSecret_revocation */
 
 void keys_openSecret_editKey ( gpointer param ) {
 /* var */
@@ -1156,13 +1381,13 @@ void keys_openSecret_editKey ( gpointer param ) {
   buttonRevoc = gpa_button_new ( accelGroup, _( "Create Re_vocation" ) );
   gtk_signal_connect (
     GTK_OBJECT ( buttonRevoc ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_revocation ), NULL
+    GTK_SIGNAL_FUNC ( keys_openSecret_revocation ), NULL
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonRevoc );
   buttonExport = gpa_button_new ( accelGroup, _( "E_xport key" ) );
   gtk_signal_connect (
     GTK_OBJECT ( buttonExport ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_export ), NULL
+    GTK_SIGNAL_FUNC ( keys_openSecret_export ), NULL
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonExport );
   paramClose [ 0 ] = windowEdit;
@@ -1179,6 +1404,14 @@ void keys_openSecret_editKey ( gpointer param ) {
     windowEdit, windowSecret, _( "keys_openSecret_editKey.tip" )
   );
 } /* keys_openSecret_editKey */
+
+gboolean keys_openSecret_evalMouse (
+  GtkWidget *clistKeys, GdkEventButton *event, gpointer param
+) {
+  if ( event -> type == GDK_2BUTTON_PRESS )
+    keys_openSecret_editKey ( param );
+  return ( TRUE );
+} /* keys_openSecret_evalMouse */
 
 void keys_openSecret ( void ) {
 /* var */
@@ -1243,6 +1476,12 @@ void keys_openSecret ( void ) {
     GTK_OBJECT ( clistKeys ), "unselect-row",
     GTK_SIGNAL_FUNC ( keys_unselectKey ), (gpointer) paramKeys
   );
+  paramEdit [ 0 ] = &keysSelected;
+  paramEdit [ 1 ] = windowSecret;
+  gtk_signal_connect (
+    GTK_OBJECT ( clistKeys ), "button-press-event",
+    GTK_SIGNAL_FUNC ( keys_openSecret_evalMouse ), (gpointer) paramEdit
+  );
   gpa_connect_by_accelerator (
     GTK_LABEL ( labelRingname ), clistKeys, accelGroup, _( "_Secret key ring" )
   );
@@ -1258,24 +1497,25 @@ void keys_openSecret ( void ) {
   buttonExport = gpa_button_new ( accelGroup, _( "E_xport keys" ) );
   gtk_signal_connect (
     GTK_OBJECT ( buttonExport ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_export ), NULL
+    GTK_SIGNAL_FUNC ( keys_openSecret_export ), NULL
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxSecret ), buttonExport );
   buttonDelete = gpa_button_new ( accelGroup, _( "_Delete keys" ) );
   gtk_signal_connect (
     GTK_OBJECT ( buttonDelete ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_delete ), NULL
+    GTK_SIGNAL_FUNC ( keys_openSecret_delete ), NULL
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxSecret ), buttonDelete );
   buttonEditKey = gpa_button_new ( accelGroup, _( "_Edit key" ) );
-  paramEdit [ 0 ] = &keysSelected;
-  paramEdit [ 1 ] = windowSecret;
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditKey ), "clicked",
     GTK_SIGNAL_FUNC ( keys_openSecret_editKey ), (gpointer) paramEdit
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxSecret ), buttonEditKey );
   buttonClose = gpa_button_new ( accelGroup, _( "_Close" ) );
+  gtk_widget_add_accelerator (
+    buttonClose, "clicked", accelGroup, GDK_Escape, 0, 0
+  );
   paramClose [ 0 ] = &keysSelected;
   paramClose [ 1 ] = windowSecret;
   gtk_signal_connect_object (
@@ -1569,7 +1809,7 @@ void keys_generateKey ( void ) {
 } /* keys_generateKey */
 
 void keys_generateRevocation_generate ( gpointer param ) {
-  keys_revocation (); /*!!!*/
+  keys_openSecret_revocation (); /*!!!*/
   keys_ringEditor_close ( param );
 } /* keys_generateRevocation_generate */
 
@@ -1706,7 +1946,7 @@ void keys_import ( void ) {
   GtkWidget *windowImport;
   static gpointer paramClose [ 2 ];
 /* commands */
-  windowImport = gtk_file_selection_new ( "Import keys" );
+  windowImport = gtk_file_selection_new ( _( "Import keys" ) );
   gtk_signal_connect_object (
     GTK_OBJECT ( GTK_FILE_SELECTION ( windowImport ) -> ok_button ), "clicked",
     GTK_SIGNAL_FUNC ( keys_import_ok ), (gpointer) windowImport
@@ -1737,7 +1977,7 @@ void keys_importOwnertrust ( void ) {
   GtkWidget *windowImport;
   static gpointer paramClose [ 2 ];
 /* commands */
-  windowImport = gtk_file_selection_new ( "Import ownertrust" );
+  windowImport = gtk_file_selection_new ( _( "Import ownertrust" ) );
   gtk_signal_connect_object (
     GTK_OBJECT ( GTK_FILE_SELECTION ( windowImport ) -> ok_button ), "clicked",
     GTK_SIGNAL_FUNC ( keys_importOwnertrust_ok ), (gpointer) windowImport

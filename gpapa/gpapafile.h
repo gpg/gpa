@@ -28,22 +28,36 @@ typedef struct {
   gchar *identifier;
   gchar *name;
   GList *sigs;
+  unsigned status_flags;
 } GpapaFile;
 
 typedef enum {
+  GPAPA_FILE_UNKNOWN,
   GPAPA_FILE_CLEAR,
   GPAPA_FILE_ENCRYPTED,
-  GPAPA_FILE_PROTECTED
+  GPAPA_FILE_PROTECTED,
+  GPAPA_FILE_SIGNED,
+  GPAPA_FILE_CLEARSIGNED,
+  GPAPA_FILE_DETACHED_SIGNATURE
 } GpapaFileStatus;
+
+#define GPAPA_FILE_FIRST GPAPA_FILE_UNKNOWN
+#define GPAPA_FILE_LAST GPAPA_FILE_DETACHED_SIGNATURE
+
+/* For internal use.
+ */
+#define GPAPA_FILE_STATUS_LITERAL       0x0001
+#define GPAPA_FILE_STATUS_PUBKEY        0x0002
+#define GPAPA_FILE_STATUS_SYMKEY        0x0004
+#define GPAPA_FILE_STATUS_COMPRESSED    0x0008
+#define GPAPA_FILE_STATUS_SIGNATURE     0x0010
+#define GPAPA_FILE_STATUS_NODATA        0x0020
 
 typedef struct {
   GpapaFile *file;
   GpapaCallbackFunc callback;
   gpointer calldata;
 } FileData;
-
-#define GPAPA_FILE_FIRST GPAPA_FILE_CLEAR
-#define GPAPA_FILE_LAST GPAPA_FILE_PROTECTED
 
 extern GpapaFile *gpapa_file_new (
   gchar *fileID, GpapaCallbackFunc callback, gpointer calldata
@@ -61,11 +75,11 @@ extern GpapaFileStatus gpapa_file_get_status (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 );
 
-extern GList *gpapa_file_get_signatures (
+extern gint *gpapa_file_get_signature_count (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 );
 
-extern void gpapa_file_release (
+extern GList *gpapa_file_get_signatures (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 );
 
@@ -73,6 +87,10 @@ extern void gpapa_file_sign (
   GpapaFile *file, gchar *targetFileID, gchar *keyID, gchar *PassPhrase,
   GpapaSignType SignType, GpapaArmor Armor,
   GpapaCallbackFunc callback, gpointer calldata
+);
+
+extern void gpapa_file_release (
+  GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 );
 
 #endif /* __GPAPAFILE_H__ */

@@ -31,6 +31,18 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
+gboolean gpapa_line_begins_with ( gchar *line, gchar *keyword )
+{
+  if ( strncmp ( line, keyword, strlen ( keyword ) ) == 0 )
+    return ( TRUE );
+  else
+    return ( FALSE );
+} /* gpapa_line_begins_with */
+
+void gpapa_linecallback_dummy ( char *line, gpointer data, gboolean status ) {
+  /* empty */
+} /* gpapa_linecallback_dummy */
+
 static gboolean status_check (
   gchar *buffer,
   GpapaCallbackFunc callback, gpointer calldata,
@@ -148,6 +160,7 @@ void gpapa_call_gnupg (
       close ( statusfd [ 0 ] );
       dup2 ( outputfd [ 1 ], 1 );
       close ( outputfd [ 1 ] );
+      dup2 ( devnull, 0 );
       dup2 ( devnull, 2 );
       close ( devnull );
       execv ( argv [ 0 ], argv );
@@ -257,9 +270,7 @@ void gpapa_call_gnupg (
                             status_check ( bufptr, callback, calldata, "BAD_PASSPHRASE",
                                            "bad passphrase" );
                           status_check ( bufptr, callback, calldata, "DECRYPTION_FAILED",
-                                         "symmetrical decryption failed" );
-                          status_check ( bufptr, callback, calldata, "DECRYPTION_FAILED",
-                                         "symmetrical decryption failed" );
+                                         "decryption failed" );
                           status_check ( bufptr, callback, calldata, "NO_PUBKEY",
                                          "public key not available" );
                           status_check ( bufptr, callback, calldata, "NO_SECKEY",

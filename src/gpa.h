@@ -34,6 +34,7 @@
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
 extern gboolean global_noTips;
+extern GpapaAction global_lastCallbackResult;
 
 extern GtkWidget *gpa_get_global_clist_file ( void );
 extern void gpa_callback (

@@ -28,6 +28,10 @@ typedef void (*GpapaLineCallbackFunc) (
   gchar *line, gpointer data, gboolean status
 );
 
+extern gboolean gpapa_line_begins_with ( gchar *line, gchar *keyword );
+
+extern void gpapa_linecallback_dummy ( char *line, gpointer data, gboolean status );
+
 extern void gpapa_call_gnupg (
   gchar **argv, gboolean do_wait, gchar *passphrase,
   GpapaLineCallbackFunc linecallback, gpointer linedata,

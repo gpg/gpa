@@ -56,11 +56,88 @@ gchar *gpapa_file_get_name (
     return ( NULL );
 } /* gpapa_file_get_name */
 
+static void linecallback_get_status (
+  gchar *line, gpointer data, gboolean status
+) {
+  FileData *d = data;
+  if ( line )
+    {
+      if ( status )
+        {
+          if ( gpapa_line_begins_with ( line, "[GNUPG:] NODATA" ) )
+            d -> file -> status_flags |= GPAPA_FILE_STATUS_NODATA;
+
+          /* Suppress error reporting.
+           */
+          line [ 0 ] = 0;
+        }
+      else
+        {
+          if ( gpapa_line_begins_with ( line, ":literal data packet:" ) )
+            d -> file -> status_flags |= GPAPA_FILE_STATUS_LITERAL;
+          if ( gpapa_line_begins_with ( line, ":pubkey enc packet:" ) )
+            d -> file -> status_flags |= GPAPA_FILE_STATUS_PUBKEY;
+          if ( gpapa_line_begins_with ( line, ":symkey enc packet:" ) )
+            d -> file -> status_flags |= GPAPA_FILE_STATUS_SYMKEY;
+          if ( gpapa_line_begins_with ( line, ":compressed packet:" ) )
+            d -> file -> status_flags |= GPAPA_FILE_STATUS_COMPRESSED;
+          if ( gpapa_line_begins_with ( line, ":onepass_sig packet:" ) )
+            d -> file -> status_flags |= GPAPA_FILE_STATUS_SIGNATURE;
+          if ( gpapa_line_begins_with ( line, ":signature packet:" ) )
+            d -> file -> status_flags |= GPAPA_FILE_STATUS_SIGNATURE;
+        }
+    }
+} /* linecallback_get_status */
+
 GpapaFileStatus gpapa_file_get_status (
   GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
 ) {
-return ( GPAPA_FILE_CLEAR ); /*!!!*/
+  if ( file == NULL )
+    return ( GPAPA_FILE_CLEAR );
+  else
+    {
+      FileData data = { file, callback, calldata };
+      char *gpgargv [ 3 ];
+
+      /* @@@ This should be rewritten once GnuPG supports
+       * something like `--get-file-status'.
+       */
+      gpgargv [ 0 ] = "--list-packets";
+      gpgargv [ 1 ] = file -> identifier;
+      gpgargv [ 2 ] = NULL;
+      file -> status_flags = 0;
+      gpapa_call_gnupg ( gpgargv, TRUE, FALSE,
+                         linecallback_get_status, &data,
+                         callback, calldata );
+      switch ( file -> status_flags)
+        {
+          case GPAPA_FILE_STATUS_NODATA:
+            return ( GPAPA_FILE_CLEAR );
+          case GPAPA_FILE_STATUS_PUBKEY:
+            return ( GPAPA_FILE_ENCRYPTED );
+          case GPAPA_FILE_STATUS_SYMKEY:
+            return ( GPAPA_FILE_PROTECTED );
+          case GPAPA_FILE_STATUS_SIGNATURE
+               | GPAPA_FILE_STATUS_COMPRESSED
+               | GPAPA_FILE_STATUS_LITERAL:
+            return ( GPAPA_FILE_SIGNED );
+          case GPAPA_FILE_STATUS_SIGNATURE
+               | GPAPA_FILE_STATUS_LITERAL:
+            return ( GPAPA_FILE_CLEARSIGNED );
+          case GPAPA_FILE_STATUS_SIGNATURE:
+            return ( GPAPA_FILE_DETACHED_SIGNATURE );
+          default:
+            return ( GPAPA_FILE_UNKNOWN );
+        }
+    }
 } /* gpapa_file_get_status */
+
+gint *gpapa_file_get_signature_count (
+  GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
+) {
+  GList *sigs = gpapa_file_get_signatures ( file, callback, calldata );
+  return ( g_list_length ( sigs ) );
+} /* gpapa_file_get_signature_count */
 
 static gboolean status_check (
   gchar *buffer, gchar *keyword,
@@ -120,6 +197,12 @@ static void linecallback_get_signatures (
           sig -> UserID = xstrdup ( sigdata [ 1 ] );
           d -> file -> sigs = g_list_append ( d -> file -> sigs, sig );
         }
+      else if ( status_check ( line, "BADSIG", sigdata ) )
+        {
+          GpapaSignature *sig = gpapa_signature_new ( sigdata [ 0 ], d -> callback, d -> calldata );
+          sig -> validity = GPAPA_SIG_INVALID;
+          d -> file -> sigs = g_list_append ( d -> file -> sigs, sig );
+        }
       else if ( status_check ( line, "ERRSIG", sigdata ) )
         {
           GpapaSignature *sig = gpapa_signature_new ( sigdata [ 0 ], d -> callback, d -> calldata );
@@ -152,18 +235,6 @@ GList *gpapa_file_get_signatures (
       return ( file -> sigs );
     }
 } /* gpapa_file_get_signatures */
-
-void gpapa_file_release (
-  GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
-) {
-  free ( file -> identifier );
-  free ( file -> name );
-  free ( file );
-} /* gpapa_file_release */
-
-static void linecallback_dummy ( char *line, gpointer data, gboolean status ) {
-  /* empty */
-} /* linecallback_dummy */
 
 void gpapa_file_sign (
   GpapaFile *file, gchar *targetFileID, gchar *keyID, gchar *PassPhrase,
@@ -212,9 +283,19 @@ void gpapa_file_sign (
       gpapa_call_gnupg
 	(
 	  gpgargv, TRUE, PassPhrase,
-	  linecallback_dummy, NULL,
+	  gpapa_linecallback_dummy, NULL,
 	  callback, calldata
 	);
       free ( full_keyID );
     }
 } /* gpapa_file_sign */
+
+void gpapa_file_release (
+  GpapaFile *file, GpapaCallbackFunc callback, gpointer calldata
+) {
+  free ( file -> identifier );
+  free ( file -> name );
+  if ( file -> sigs )
+    g_list_free ( file -> sigs );
+  free ( file );
+} /* gpapa_file_release */
