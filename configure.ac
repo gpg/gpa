@@ -178,10 +178,12 @@ cat >gpadefs.tmp <<GPAEOF
   #define GPA_LOCALEDIR "c:/lib/gnupg/locale"
   #define GPA_DATADIR   "c:/lib/gnupg"
   #define GPG_PROGRAM   "c:/gnupg/gpg"
+  #define KEYSERVER_DIR "c:/gnupg"
 #else
   #define GPA_LOCALEDIR "${prefix}/${DATADIRNAME}/locale"
   #define GPA_DATADIR   "${datadir}/gpa"
   #define GPG_PROGRAM   "${GPG}"
+  #define GPA_KEYSERVER_HELPERS_DIR "${libexecdir}/gnupg"
 #endif
 GPAEOF
 if cmp -s gpadefs.h gpadefs.tmp 2>/dev/null; then
@@ -196,6 +198,7 @@ fi
 prefix=$prefix
 exec_prefix=$exec_prefix
 libdir=$libdir
+libexecdir=$libexecdir
 datadir=$datadir
 DATADIRNAME=$DATADIRNAME
 GPG=$GPG
