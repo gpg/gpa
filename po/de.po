@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
 "POT-Creation-Date: 2002-12-17 15:04+0100\n"
-"PO-Revision-Date: 2002-07-29 14:03+0200\n"
+"PO-Revision-Date: 2002-12-18 13:23+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: GERMAN <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr "Wollen Sie den folgenden Schlüssel signieren?"
 
 #: src/encryptdlg.c:102
 msgid "However, it is not certain that the key belongs to that person."
-msgstr ""
+msgstr "Allerdings ist nicht sicher, dass der Schlüssel der Person gehört"
 
 #: src/encryptdlg.c:108
 #, fuzzy
@@ -37,7 +37,7 @@ msgstr "Schlüssel entfernen"
 
 #: src/encryptdlg.c:144
 msgid "The following key has been revoked by it's owner:"
-msgstr ""
+msgstr "Der folgende Schlüssel wurde vom Besitzer zurückgezogen:"
 
 #: src/encryptdlg.c:149 src/encryptdlg.c:192
 #, fuzzy
@@ -47,7 +47,7 @@ msgstr "Keine Dateien zum verschlüsseln ausgewählt."
 #: src/encryptdlg.c:183
 #, c-format
 msgid "The following key expired on %s:"
-msgstr ""
+msgstr "The folgende Schlüssel lief am %s aus:"
 
 #. Can't happen
 #: src/encryptdlg.c:221
@@ -137,7 +137,7 @@ msgstr "Unsicherer Passwortsatz"
 #: src/fileman.c:303
 #, c-format
 msgid "The file \"%s\" contained no valid encrypted data."
-msgstr ""
+msgstr "Die Datei \"%s\" enthält keine korrekt verschlüsselten Daten."
 
 #: src/fileman.c:361 src/keyring.c:980
 msgid "/_File"
@@ -158,7 +158,7 @@ msgstr "/Datei/_Signieren"
 #: src/fileman.c:365
 #, fuzzy
 msgid "/File/_Verify"
-msgstr "/Datei/_Entschlüsseln"
+msgstr "/Datei/Über_prüfen"
 
 #: src/fileman.c:366
 msgid "/File/_Encrypt"
@@ -181,22 +181,20 @@ msgid "/File/_Quit"
 msgstr "/Datei/_Beenden"
 
 #: src/fileman.c:373 src/keyring.c:986
-#, fuzzy
 msgid "/_Edit"
-msgstr "Ändern"
+msgstr "/_Bearbeiten"
 
 #: src/fileman.c:374 src/keyring.c:992
 msgid "/Edit/Select _All"
-msgstr ""
+msgstr "/Bearbeiten/Alle A_uswählen"
 
 #: src/fileman.c:375 src/keyring.c:993
-#, fuzzy
 msgid "/Edit/sep2"
-msgstr "/Datei/sep2"
+msgstr "/Bearbeiten/sep2"
 
 #: src/fileman.c:376 src/keyring.c:994
 msgid "/Edit/Pr_eferences..."
-msgstr ""
+msgstr "/Bearbeiten/_Einstellungen"
 
 #: src/fileman.c:380 src/keyring.c:1013
 msgid "/_Windows"
@@ -277,11 +275,11 @@ msgstr "Datei entschlüsseln"
 
 #: src/fileman.c:520 src/keyring.c:1587
 msgid "Open the Preferences dialog"
-msgstr ""
+msgstr "Öffne Dialog für die Einstellungen"
 
 #: src/fileman.c:521 src/keyring.c:1588
 msgid "preferences"
-msgstr ""
+msgstr "Einstellungen"
 
 #: src/fileman.c:529 src/keyring.c:1603
 msgid "Help"
@@ -350,11 +348,11 @@ msgstr "ASCII-_Verpackung"
 
 #: src/gpa.c:238
 msgid "display this help and exit"
-msgstr ""
+msgstr "diese Hilfe anzeigen und beenden"
 
 #: src/gpa.c:239
 msgid "output version information and exit"
-msgstr ""
+msgstr "Versionsinformationen anzeigen und beenden"
 
 #: src/gpa.c:240
 #, fuzzy
@@ -368,7 +366,7 @@ msgstr "Dateiverwaltung"
 
 #: src/gpa.c:242
 msgid "read options from file"
-msgstr ""
+msgstr "Optionen von Datei lesen"
 
 #: src/gpa.c:266
 msgid ""
@@ -383,7 +381,7 @@ msgstr "/_Optionen"
 
 #: src/gpa.c:274
 msgid "Please report bugs to <"
-msgstr ""
+msgstr "Fehler Bitte berichten an <"
 
 #: src/gpa.c:274
 msgid ">.\n"
@@ -1387,16 +1385,15 @@ msgstr "_Sicherheitskopie anlegen"
 
 #: src/keyring.c:987
 msgid "/Edit/_Copy"
-msgstr ""
+msgstr "/Bearbeiten/_Kopieren"
 
 #: src/keyring.c:989
 msgid "/Edit/_Paste"
-msgstr ""
+msgstr "/Bearbeiten/Ein_fügen"
 
 #: src/keyring.c:991
-#, fuzzy
 msgid "/Edit/sep1"
-msgstr "/Datei/sep1"
+msgstr "/Bearbeiten/sep1"
 
 #: src/keyring.c:998
 msgid "/_Keys"
@@ -1412,9 +1409,8 @@ msgid "/Keys/_Delete Keys..."
 msgstr "/Schlüssel/_Löschen..."
 
 #: src/keyring.c:1003
-#, fuzzy
 msgid "/Keys/sep1"
-msgstr "/Datei/sep1"
+msgstr "/Schlüssel/sep1"
 
 #: src/keyring.c:1004
 msgid "/Keys/_Sign Keys..."
@@ -1431,16 +1427,14 @@ msgid "/Keys/_Edit Private Key..."
 msgstr "/Schlüssel/_Geheime Schlüssel exportieren..."
 
 #: src/keyring.c:1007
-#, fuzzy
 msgid "/Keys/sep2"
-msgstr "/Datei/sep2"
+msgstr "/Schlüssel/sep2"
 
 #: src/keyring.c:1008
 msgid "/Keys/_Import Keys..."
 msgstr "/Schlüssel/_Importieren..."
 
 #: src/keyring.c:1009
-#, fuzzy
 msgid "/Keys/E_xport Keys..."
 msgstr "/Schlüssel/E_xportieren..."
 
@@ -1449,14 +1443,12 @@ msgid "/Keys/_Backup..."
 msgstr "/Schlüssel/Sicherheitskopie _anlegen..."
 
 #: src/keyring.c:1041
-#, fuzzy
 msgid "/Keys/Export Keys..."
-msgstr "/Schlüssel/E_xportieren..."
+msgstr "/Schlüssel/Exportieren..."
 
 #: src/keyring.c:1049
-#, fuzzy
 msgid "/Keys/Delete Keys..."
-msgstr "/Schlüssel/_Löschen..."
+msgstr "/Schlüssel/Löschen..."
 
 #: src/keyring.c:1057
 msgid "/Edit/Copy"
@@ -1468,9 +1460,8 @@ msgid "/Keys/Set Owner Trust..."
 msgstr "Benutzervertrauen ändern"
 
 #: src/keyring.c:1075
-#, fuzzy
 msgid "/Keys/Sign Keys..."
-msgstr "/Schlüssel/_Signieren..."
+msgstr "/Schlüssel/Signieren..."
 
 #: src/keyring.c:1084
 #, fuzzy
