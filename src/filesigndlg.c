@@ -127,7 +127,7 @@ file_sign_ok (gpointer param)
       file_sign_do_sign (dialog, key_id, passphrase, sign_type, armor);
     }
   free (passphrase);
-  gtk_main_quit ();
+  gtk_widget_destroy (dialog->window);
 } /* file_sign_ok */
 
 
@@ -137,6 +137,12 @@ file_sign_cancel (gpointer param)
   GPAFileSignDialog *dialog = param;
 
   dialog->signed_files = NULL;
+  gtk_widget_destroy (dialog->window);
+}
+
+static void
+file_sign_destroy (GtkWidget * widget, gpointer param)
+{
   gtk_main_quit ();
 }
 
@@ -177,9 +183,11 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
       return FALSE;
     } /* if */
 
-  windowSign = dialog.window = gtk_window_new (GTK_WINDOW_DIALOG);
+  windowSign = gtk_window_new (GTK_WINDOW_DIALOG);
   gtk_window_set_title (GTK_WINDOW (windowSign), _("Sign Files"));
   dialog.window = windowSign;
+  gtk_signal_connect (GTK_OBJECT (windowSign), "destroy",
+		      GTK_SIGNAL_FUNC (file_sign_destroy), NULL);
 
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowSign), accelGroup);
@@ -250,11 +258,9 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
   gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonSign);
   gtk_container_add (GTK_CONTAINER (windowSign), vboxSign);
   gpa_window_show_centered (windowSign, parent);
+  gtk_window_set_modal (GTK_WINDOW (windowSign), TRUE);
 
-  gtk_grab_add (windowSign);
   gtk_main ();
-  gtk_grab_remove (windowSign);
-  gtk_widget_destroy (windowSign);
 
   return dialog.signed_files;
 } /* gpa_file_sign_dialog_run */

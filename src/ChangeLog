@@ -1,5 +1,14 @@
 2001-02-15  Bernhard Herzog  <bh@intevation.de>
 
+	* filesigndlg.c (file_sign_ok, file_sign_cancel): Instead of
+	quitting the main loop, destroy the dialog window.
+	(file_sign_destroy, gpa_file_sign_dialog_run): Add a destroy event
+	handler and quit the recursive main loop there.
+	(gpa_file_sign_dialog_run): Make the dialog properly modal.
+
+	* gpapastrings.c (gpa_algorithm_from_string): Translate the
+	strings before comparing them.
+
 	* gpapastrings.c (gpa_ownertrust_from_string): Translate the
 	strings before comparing them.
 

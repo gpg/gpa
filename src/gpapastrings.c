@@ -131,7 +131,7 @@ gpa_algorithm_from_string (gchar * string)
 
   result = GPAPA_ALGO_FIRST;
   while (result <= GPAPA_ALGO_LAST &&
-	 strcmp (string, algorithm_strings[result]) != 0)
+	 strcmp (string, _(algorithm_strings[result])) != 0)
     result++;
   return result;
 } /* gpa_algorithm_from_string */
