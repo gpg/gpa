@@ -1,3 +1,7 @@
+2002-03-15  Werner Koch  <wk@gnupg.org>
+
+	* configure.ac (ALL_LINGUAS): Add pt_BR.
+
 2002-01-14  Werner Koch  <wk@gnupg.org>
 
         Released 0.4.3.

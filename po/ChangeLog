@@ -1,3 +1,7 @@
+2002-03-15  Werner Koch  <wk@gnupg.org>
+
+	* pt_BR.po: New. Contributed by Renato Martini.
+
 2002-01-29  Werner Koch  <wk@gnupg.org>
 
 	* de.po: Fixed the fuzzy marked translations

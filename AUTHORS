@@ -28,7 +28,7 @@ Bernhard Herzog  <bh@intevation.de>
         Revamped the whole src/ code.
 
 Shell Hung <shell@linux.org.hk>
-       Chines translation (Big5)
+       Chinese translation (Big5)
 
 Peter Hanecak <hanecak@megaloman.sk>
        Wrote gpa.spec
@@ -38,5 +38,8 @@ Michael Fischer v. Mollard <mfvm@epost.de>
 
 Michael Mauch <michael.mauch@gmx.de>
         See ChangeLogs.
+
+Renato Martini <rmartini@cipsga.org.br>
+      Brazilian translation.
 
 
