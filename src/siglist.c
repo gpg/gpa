@@ -35,9 +35,6 @@
 typedef struct {
   /* The main window to use for the gpa_callback */
   GtkWidget * window;
-
-  /* Whether the widths of the columns were set to their optimal values */
-  gboolean widths_set;
 } GPASigList;
 
 
@@ -54,7 +51,6 @@ gpa_siglist_new (GtkWidget *window)
   GPASigList * siglist = xmalloc (sizeof (*siglist));
 
   siglist->window = window;
-  siglist->widths_set = FALSE;
 
   clist = gtk_clist_new_with_titles (3, titles);
   for (i = 0; i < 3; i++)
@@ -62,7 +58,7 @@ gpa_siglist_new (GtkWidget *window)
   gtk_object_set_data_full (GTK_OBJECT (clist), "gpa_siglist", siglist, free);
 
   return clist;
-}
+} /* gpa_siglist_new */
 
 
 /* Update the list of signatures to show the GList signatures. If key_id
@@ -77,6 +73,7 @@ gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
   GpapaSignature *sig;
   GpapaSigValidity validity;
   gchar *contents[3];
+  gint i, width;
 
   gtk_clist_freeze (GTK_CLIST (clist));
   gtk_clist_clear (GTK_CLIST (clist));
@@ -105,17 +102,12 @@ gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
       gtk_clist_append (GTK_CLIST (clist), contents);
     }
 
-  if (!siglist->widths_set)
+  for (i = 0; i < 3; i++)
     {
-      gint i, width;
-      for (i = 0; i < 3; i++)
-	{
-	  width = gtk_clist_optimal_column_width (GTK_CLIST (clist), i);
-	  gtk_clist_set_column_width (GTK_CLIST (clist), i, width);
-	}
+      width = gtk_clist_optimal_column_width (GTK_CLIST (clist), i);
+      gtk_clist_set_column_width (GTK_CLIST (clist), i, width);
     }
-  siglist->widths_set = TRUE;
 
   gtk_clist_thaw (GTK_CLIST (clist));
-}
+} /* gpa_siglist_set_signatures */
 
