@@ -12,7 +12,7 @@ dnl
 dnl The version number goes here
 dnl
 AM_INIT_AUTOMAKE(gpa,`cat $srcdir/VERSION`)
-ALL_LINGUAS="de fr"
+ALL_LINGUAS="de fr zh_TW.Big5"
 
 dnl
 dnl Setup some stuff depending on host/target.

@@ -428,6 +428,17 @@ main (int argc, char **argv)
 	gpa_options.homedir = pargs.r.ret_str;
     }
 
+  #ifdef HAVE_DOSISH_SYSTEM
+    if ( strchr (gpa_opt.homedir,'\\') ) {
+        char *d, *buf = m_alloc (strlen (opt.homedir)+1);
+        const char *s = gpa_opt.homedir;
+        for (d=buf,s=gpa_opt.homedir; *s; s++)
+            *d++ = *s == '\\'? '/': *s;
+        *d = 0;
+        gpa_opt.homedir = buf;
+    }
+  #endif
+
   if (default_config)
     configname = make_filename (gpa_options.homedir, "gpa.conf", NULL);
 
