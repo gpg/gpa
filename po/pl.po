@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gpa-0.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-08-21 19:11+0200\n"
-"PO-Revision-Date: 2004-08-19 23:03+0200\n"
+"PO-Revision-Date: 2004-08-22 02:23+0200\n"
 "Last-Translator: Emilian Nowak <emil5@go2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: src/encryptdlg.c:135
 msgid "Encrypt files"
-msgstr "Zaszyfruj plik "
+msgstr "Zaszyfruj pliki"
 
 #: src/encryptdlg.c:166
 msgid "_Public Keys"
@@ -33,7 +33,7 @@ msgstr "Podpisz _jako "
 
 #: src/encryptdlg.c:193
 msgid "A_rmor"
-msgstr ""
+msgstr "Opa_kowanie ASCII"
 
 #: src/expirydlg.c:63
 msgid "Please provide a correct date."
@@ -89,7 +89,7 @@ msgstr "/Plik/_Zaszyfruj"
 
 #: src/fileman.c:473
 msgid "/File/_Decrypt"
-msgstr "/Plik/_Odszyfruj"
+msgstr "/Plik/O_dszyfruj"
 
 #: src/fileman.c:474
 msgid "/File/sep2"
@@ -97,11 +97,11 @@ msgstr "/Plik/sep2"
 
 #: src/fileman.c:475 src/keyring.c:827
 msgid "/File/_Close"
-msgstr "/Plik/_Zamknij"
+msgstr "/Plik/Z_amknij"
 
 #: src/fileman.c:476 src/keyring.c:829
 msgid "/File/_Quit"
-msgstr "/Plik/_Zakończ"
+msgstr "/Plik/Za_kończ"
 
 #: src/fileman.c:479 src/keyring.c:832
 msgid "/_Edit"
@@ -129,7 +129,7 @@ msgstr "/Okna/Menadżer _plików"
 
 #: src/fileman.c:488 src/keyring.c:869
 msgid "/Windows/_Keyring Editor"
-msgstr "/Okna/Edytor zbioru kluczy"
+msgstr "/Okna/Edytor zbioru _kluczy"
 
 #: src/fileman.c:507
 msgid "/File/Sign"
@@ -261,7 +261,7 @@ msgstr "podpis do _oddzielnego pliku"
 
 #: src/filesigndlg.c:159
 msgid "a_rmor"
-msgstr ""
+msgstr "opa_kowanie ASCII"
 
 #: src/gpabackupop.c:211 src/gpgmetools.c:113
 #, c-format
@@ -357,11 +357,11 @@ msgstr "Klucze zostały skopiowane do schowka."
 
 #: src/gpaexportfileop.c:131
 msgid "Export public keys to file"
-msgstr "Eksportuj klucze publiczne do pliku"
+msgstr "Eksport kluczy publicznych do pliku"
 
 #: src/gpaexportfileop.c:135
 msgid "_armor"
-msgstr ""
+msgstr "opa_kowanie ASCII"
 
 #: src/gpaexportfileop.c:169
 #, c-format
@@ -460,6 +460,10 @@ msgid ""
 "\n"
 "The file found is: %s"
 msgstr ""
+"GPA odnalazł plik, który wygląda jakby zawierał podpis dla %s. Czy chcesz "
+"przeprowadzić weryfikację?\n"
+"\n"
+"Odnaleziony plik to: %s"
 
 #: src/gpagenkeyadvop.c:78
 msgid "Generating Key..."
@@ -467,7 +471,7 @@ msgstr "Generowanie klucza..."
 
 #: src/gpaimportfileop.c:129
 msgid "Import public keys from file"
-msgstr "Importuj klucze publiczne z pliku"
+msgstr "Import kluczy publicznych z pliku"
 
 #: src/gpaimportop.c:186
 msgid "No keys were found."
@@ -862,7 +866,7 @@ msgstr "Powszechna Licencja Publiczna _GNU"
 
 #: src/helpmenu.c:384
 msgid "_Close"
-msgstr "_Zamknij"
+msgstr "Z_amknij"
 
 #: src/helpmenu.c:398
 msgid "Show Help Text\n"
@@ -1152,7 +1156,7 @@ msgstr ""
 
 #: src/keylist.c:493
 msgid "GPA Warning"
-msgstr ""
+msgstr "Ostrzeżenie GPA"
 
 #: src/keylist.c:511
 msgid ""
@@ -1164,6 +1168,12 @@ msgid ""
 "\n"
 "The affected key is:"
 msgstr ""
+"Jeden z twoich tajnych kluczy zawierał klucz podpisujący ElGamal. Z powodu "
+"błędu w GnuPG (począwszy od wersji 1.0.2) wszystkie klucze ElGamal używane "
+"przez wymienione wersje GnuPG powinny być uznane za uszkodzone. \n"
+"\n"
+"Zalecamy uniważnienie tego klucza jak najszybciej.\n"
+" Ostrzeżenie dotyczy klucza:"
 
 #: src/keyring.c:434
 msgid "No keys selected for signing."
@@ -1211,12 +1221,11 @@ msgstr "/_Klucze"
 
 #: src/keyring.c:845
 msgid "/Keys/_Refresh"
-msgstr ""
+msgstr "/Klucze/_Odśwież"
 
 #: src/keyring.c:847
-#, fuzzy
 msgid "/Keys/sep0"
-msgstr "/Klucze/sep1"
+msgstr "/Klucze/sep0"
 
 #: src/keyring.c:848
 msgid "/Keys/_New Key..."
@@ -1498,11 +1507,11 @@ msgstr "szczegółowy"
 
 #: src/keyring.c:1610
 msgid "Refresh the keyring"
-msgstr ""
+msgstr "Odświeża zbiór kluczy"
 
 #: src/keyring.c:1611
 msgid "refresh keyring"
-msgstr ""
+msgstr "odświeża zbiór kluczy"
 
 #: src/keyring.c:1618
 msgid "Files"
@@ -1757,7 +1766,7 @@ msgstr "Lokalny"
 
 #: src/verifydlg.c:115
 msgid "Verify files"
-msgstr "Weryfikuj pliki"
+msgstr "Weryfikacja plików"
 
 #: src/verifydlg.c:231
 msgid "Expired Key"
@@ -1773,9 +1782,9 @@ msgid "Verified data in file: %s"
 msgstr "Zweryfikowano poprawność danych w pliku: %s"
 
 #: src/verifydlg.c:363
-#, fuzzy, c-format
+#, c-format
 msgid "Signature: %s"
-msgstr "Podpisy"
+msgstr "Podpis: %s"
 
 #: src/verifydlg.c:369
 msgid "Signatures:"
