@@ -316,16 +316,12 @@ keyring_editor_delete (gpointer param)
 
 
 /* Return true if the key sign button should be sensitive, i.e. if
- * there's at least one selected key and at least one secret key
- * available
+ * there's at least one selected key and there is a default key.
  */
 static gboolean
 keyring_editor_can_sign (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-
-  return (keyring_editor_has_selection (param)
-	  && gpapa_get_secret_key_count (gpa_callback, editor->window) > 0);
+  return (keyring_editor_has_selection (param) && gpa_default_key ());
 } /* keyring_editor_can_sign */
 
 /* sign the selected keys */
@@ -520,8 +516,15 @@ keyring_editor_generate_key_advanced (gpointer param)
 	}
       gpa_key_gen_free_parameters (params);
 
-      /* finally, update the key list. */
+      /* finally, update the default key if there is none because now
+       * there is at least one secret key, update the key list and the
+       * sensitive widgets because some may depend on whether secret
+       * keys are available
+       */
+      if (!gpa_default_key ())
+	gpa_set_default_key (gpa_determine_default_key ());
       keyring_editor_fill_keylist (editor);
+      update_selection_sensitive_widgets (editor);
     }
 } /* keyring_editor_generate_key_advanced */
 
@@ -532,7 +535,17 @@ keyring_editor_generate_key_simple (gpointer param)
   GPAKeyringEditor * editor = param;
 
   if (gpa_keygen_wizard_run (editor->window))
-    keyring_editor_fill_keylist (editor);
+    {
+      /* update the default key if there is none because now
+       * there is at least one secret key, update the key list and the
+       * sensitive widgets because some may depend on whether secret
+       * keys are available
+       */
+      if (!gpa_default_key ())
+	gpa_set_default_key (gpa_determine_default_key ());
+      keyring_editor_fill_keylist (editor);
+      update_selection_sensitive_widgets (editor);
+    }
 } /* keyring_editor_generate_key_simple */
 
 /* Depending on the simple_ui flag call either
