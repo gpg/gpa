@@ -1,5 +1,22 @@
 2001-01-16  Bernhard Herzog  <bh@intevation.de>
 
+	* filemenu.c (file_sign_dialog): 
+	* gpawidgets.c (gpa_secret_key_list_new): 
+	* optionsmenu.c (gpa_loadOptionsSelect_ok):
+	(gpa_saveOptionsSelect_ok):
+	(options_key_set):
+	(options_key): Use gpa_default_key and gpa_set_default_key instead
+	of accessing global_defaultKey directly.
+	
+	* gpa.h: Add the two new functions gpa_default_key
+	gpa_set_default_key
+
+	* gpa.c (global_defaultKey):
+	(gpa_default_key):
+	(gpa_set_default_key): Turn global_defaultKey into a static
+	varible default_key and introduce gpa_set_default_key and
+	gpa_default_key to set and get its value
+
 	* gpa.c (gpa_popupMenu_init):
 	(global_popupMenu) Removed because they're no longer used.
 
