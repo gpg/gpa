@@ -492,7 +492,6 @@ main (int argc, char **argv)
   gpa_homedir = g_path_get_dirname (argv[0]);
 
   set_strusage (my_strusage);
-  /*log_set_name ("gpa"); not yet implemented in logging.c */
   srand (time (NULL)); /* the about dialog uses rand() */
   gtk_init (&argc, &argv);
   i18n_init ();
@@ -553,15 +552,6 @@ main (int argc, char **argv)
     }
   #endif
 
-  /* Read GPA's gtkrc.
-   */
-  gtkrc = search_config_file ("gtkrc");
-  if (gtkrc)
-    {
-      gtk_rc_parse (gtkrc);
-      g_free (gtkrc);
-    }
-
   /* Locate GPA's configuration file.
    */
   if (default_config)
@@ -589,11 +579,11 @@ main (int argc, char **argv)
 	  if (default_config)
 	    {
 	      if (parse_debug)
-		log_info (_("NOTE: no default option file `%s'\n"),
-			  configname);
+                fprintf (stderr, _("NOTE: no default option file `%s'\n"),
+                         configname);
 	    }
 	  else {
-	    log_error (_("option file `%s': %s\n"),
+	    fprintf (stderr, _("option file `%s': %s\n"),
 		       configname, strerror(errno));
 	    exit(2);
 	  }
@@ -601,7 +591,7 @@ main (int argc, char **argv)
 	  configname = NULL;
 	}
       if (parse_debug && configname)
-	log_info (_("reading options from `%s'\n"), configname);
+	fprintf (stderr, _("reading options from `%s'\n"), configname);
       default_config = 0;
     }
 
@@ -652,8 +642,6 @@ main (int argc, char **argv)
     }
   g_free (configname);
   configname = NULL;
-  if (log_get_errorcount (0))
-    exit(2);
   if (nogreeting)
     greeting = 0;
 
@@ -665,7 +653,7 @@ main (int argc, char **argv)
       fflush (stderr);
     }
 #ifdef IS_DEVELOPMENT_VERSION
-  log_info ("NOTE: this is a development version!\n");
+  fprintf (stderr, "NOTE: this is a development version!\n");
 #endif
 
   /* Read the list of available keyservers.

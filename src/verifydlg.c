@@ -59,8 +59,8 @@ is_detached_sig (const gchar *filename, gchar **signed_file)
   *signed_file = g_strdup (filename);
   extension = g_strrstr (*signed_file, ".");
   if (extension &&
-      (g_str_equal (extension, "sig") ||
-       g_str_equal (extension, "sign")))
+      (g_str_equal (extension, ".sig") ||
+       g_str_equal (extension, ".sign")))
     {
       *extension++ = '\0';
       return TRUE;
@@ -79,13 +79,14 @@ static gboolean
 verify_file (const gchar *filename, GtkWidget *parent)
 {
   GpgmeError err;
-  GpgmeData input, plain;
+  GpgmeData sig, signed_text, plain_text;
   gchar *signed_file = NULL;
   GpgmeSigStat status;
 
   if (is_detached_sig (filename, &signed_file))
     {
-      err = gpa_gpgme_data_new_from_file (&input, filename, parent);
+      /* Allocate data objects for a detached signature */
+      err = gpa_gpgme_data_new_from_file (&sig, filename, parent);
       if (err == GPGME_File_Error)
 	{
 	  return FALSE;
@@ -94,20 +95,22 @@ verify_file (const gchar *filename, GtkWidget *parent)
 	{
 	  gpa_gpgme_error (err);
 	}
-      err = gpa_gpgme_data_new_from_file (&plain, signed_file, parent);
+      err = gpa_gpgme_data_new_from_file (&signed_text, signed_file, parent);
       if (err == GPGME_File_Error)
 	{
-	  gpgme_data_release (input);
+	  gpgme_data_release (sig);
 	  return FALSE;
 	}
       else if (err != GPGME_No_Error)
 	{
 	  gpa_gpgme_error (err);
 	}
+      plain_text = NULL;
     }
   else
     {
-      err = gpa_gpgme_data_new_from_file (&input, filename, parent);
+      /* Allocate data object for non-detached signatures */
+      err = gpa_gpgme_data_new_from_file (&sig, filename, parent);
       if (err == GPGME_File_Error)
 	{
 	  return FALSE;
@@ -116,20 +119,36 @@ verify_file (const gchar *filename, GtkWidget *parent)
 	{
 	  gpa_gpgme_error (err);
 	}
-      err = gpgme_data_new (&plain);
+      err = gpgme_data_new (&plain_text);
       if (err != GPGME_No_Error)
 	{
 	  gpa_gpgme_error (err);
 	}
+      signed_text = NULL;
     }
 
-  err = gpgme_op_verify (ctx, input, plain, &status);
+  /* Verify */
+  err = gpgme_op_verify (ctx, sig, signed_text, plain_text, &status);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);
     }
-  gpgme_data_release (input);
-  gpgme_data_release (plain);
+
+  /* Release the data objects */
+  if (sig)
+    {
+      gpgme_data_release (sig);
+    }
+  if (signed_text)
+    {
+      gpgme_data_release (signed_text);
+    }
+  if (plain_text) 
+    {
+      gpgme_data_release (plain_text);
+    }
+
+  /* Check for unsigned files */
   if (status == GPGME_SIG_STAT_NOSIG || status == GPGME_SIG_STAT_NONE)
     {
       return FALSE;

@@ -643,6 +643,7 @@ gpa_keygen_wizard_generate_action (gpointer data)
   GPAKeyGenWizard *keygen_wizard = data;
   GPAKeyGenParameters params;
   GpgmeError err;
+  gchar *fpr;
 
   /* The User ID */
   params.userID = gpa_keygen_wizard_simple_get_text (keygen_wizard->name_page);
@@ -667,7 +668,8 @@ gpa_keygen_wizard_generate_action (gpointer data)
   while (gtk_events_pending())
     gtk_main_iteration();
 
-  err = gpa_generate_key (&params);
+  err = gpa_generate_key (&params, &fpr);
+  g_free (fpr);
 
   keygen_wizard->successful = (err == GPGME_No_Error);
 

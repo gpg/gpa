@@ -684,15 +684,17 @@ keyring_editor_generate_key_advanced (gpointer param)
   GPAKeyringEditor * editor = param;
   GPAKeyGenParameters * params;
   GpgmeError err;
+  gchar *fpr;
 
   params = gpa_key_gen_run_dialog(editor->window);
   if (params)
     {
-      err = gpa_generate_key (params);
+      err = gpa_generate_key (params, &fpr);
       if (err != GPGME_No_Error)
         {
           gpa_gpgme_error (err);
         }
+      g_free (fpr);
       gpa_key_gen_free_parameters (params);
 
       /* finally, update the default key if there is none because now

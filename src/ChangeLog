@@ -1,3 +1,24 @@
+2002-11-20  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_generate_key_advanced): Use the new
+	prototype of gpa_generate_key().
+	* keygenwizard.c (gpa_keygen_wizard_generate_action): Likewise.
+
+	* gpgmetools.h, gpgmetools.c (gpa_generate_key): Return the key
+	fingerprint.
+	
+	* gpgmetools.c (dump_data_to_file, fill_data_from_clipboard) 
+	(dump_data_to_clipboard): Change for GPGME 0.4.0.
+
+	* verifydlg.c (is_detached_sig): Fix dettached signatures.
+	(verify_file): Change for GPGME 0.4.0.
+
+	* verifydlg.c (verify_file): Changes for new verify ptrtotype on
+	GPGME 0.4.0.
+
+	* gpa.c (main): We no longer use a gtkrc.
+	Remove jnlib logging.
+
 2002-11-13  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keyserver.c: Replace all free() calls with g_free ().

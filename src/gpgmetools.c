@@ -53,12 +53,15 @@ void dump_data_to_file (GpgmeData data, FILE *file)
   err = gpgme_data_rewind (data);
   if (err != GPGME_No_Error)
     gpa_gpgme_error (err);
-  while ( !(err = gpgme_data_read (data, buffer, sizeof(buffer), &nread)) ) 
+  while ( (nread = gpgme_data_read (data, buffer, sizeof(buffer))) > 0 ) 
     {
       fwrite ( buffer, nread, 1, file );
     }
-  if (err != GPGME_EOF)
-    gpa_gpgme_error (err);
+  if (nread == -1)
+    {
+      gpa_window_error (strerror (errno), NULL);
+      exit (EXIT_FAILURE);
+    }
   return;
 }
 
@@ -124,14 +127,13 @@ GpgmeError gpa_gpgme_data_new_from_file (GpgmeData *data,
  */
 void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard)
 {
-  GpgmeError err;
   gchar *text = gtk_clipboard_wait_for_text (clipboard);
   if (text)
     {
-      err = gpgme_data_write (data, text, strlen (text));
-      if (err != GPGME_No_Error)
+      if (gpgme_data_write (data, text, strlen (text)) == -1)
         {
-          gpa_gpgme_error (err);
+          gpa_window_error (strerror (errno), NULL);
+          exit (EXIT_FAILURE);
         }
     }
   g_free (text);
@@ -150,14 +152,17 @@ void dump_data_to_clipboard (GpgmeData data, GtkClipboard *clipboard)
   err = gpgme_data_rewind (data);
   if (err != GPGME_No_Error)
     gpa_gpgme_error (err);
-  while ( !(err = gpgme_data_read (data, buffer, sizeof(buffer), &nread)) ) 
+  while ( (nread = gpgme_data_read (data, buffer, sizeof(buffer))) > 0 ) 
     {
       text = g_realloc (text, len+nread);
       strncpy (text+len, buffer, nread);
       len += nread;
     }
-  if (err != GPGME_EOF)
-    gpa_gpgme_error (err);
+  if (nread == -1)
+    {
+      gpa_window_error (strerror (errno), NULL);
+      exit (EXIT_FAILURE);
+    }
   gtk_clipboard_set_text (clipboard, text, len);
   g_free (text);
   return;
@@ -263,14 +268,21 @@ static gchar * build_genkey_parms (GPAKeyGenParameters *params)
 /* Generate a key with the given parameters. It prepares the parameters
  * required by Gpgme and returns whatever gpgme_op_genkey returns.
  */
-GpgmeError gpa_generate_key (GPAKeyGenParameters *params)
+GpgmeError gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
 {
   gchar *parm_string;
   GpgmeError err;
+  char *fpr_ret;
 
   parm_string = build_genkey_parms (params);
-  err = gpgme_op_genkey (ctx, parm_string, NULL, NULL);
+  err = gpgme_op_genkey (ctx, parm_string, NULL, NULL, &fpr_ret);
   g_free (parm_string);
+  /* This is not strictly needed, but there is no guarantee that memory
+   * reserved with malloc() can be freed by g_free(), which is used all over
+   * GPA. To avoid having to keep track of which string was allocated by
+   * each method, we duplicate the fingerprint with GLib */
+  *fpr = g_strdup (fpr_ret);
+  free (fpr_ret);
 
   return err;
 }

@@ -100,9 +100,10 @@ void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard);
 void dump_data_to_clipboard (GpgmeData data, GtkClipboard *clipboard);
 
 /* Generate a key with the given parameters. It prepares the parameters
- * required by Gpgme and returns whatever gpgme_op_genkey returns.
+ * required by Gpgme and returns whatever gpgme_op_genkey returns, along with
+ * the fingerprint of the key generated in fpr.
  */
-GpgmeError gpa_generate_key (GPAKeyGenParameters *params);
+GpgmeError gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr);
 
 /* Backup a key. It exports both the public and secret keys to a file.
  * Returns TRUE on success and FALSE on error. It displays errors to the
