@@ -354,7 +354,10 @@ gpa_window_error (gchar * message, GtkWidget * messenger)
   gtk_box_pack_start (GTK_BOX (vboxError), buttonClose, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowError), vboxError);
 
-  gpa_window_show_centered (windowError, messenger);
+  if (messenger)
+    gpa_window_show_centered (windowError, messenger);
+  else
+    gtk_widget_show_all (windowError);
   gtk_widget_grab_focus (buttonClose);
 } /* gpa_window_error */
 
