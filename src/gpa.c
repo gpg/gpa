@@ -93,7 +93,6 @@ GpapaAction global_lastCallbackResult;
 gchar *global_keyserver = NULL;
 GList *global_defaultRecipients = NULL;
 gchar *global_homeDirectory = NULL;
-gchar *global_defaultKey = NULL;
 
 
 static const char *
@@ -157,6 +156,20 @@ gpa_set_simplified_ui (gboolean value)
   simplified_ui = value;
 }
 
+static gchar *default_key = NULL;
+
+gchar *
+gpa_default_key (void)
+{
+  return default_key;
+}
+
+void
+gpa_set_default_key (gchar * key)
+{
+  free (default_key);
+  default_key = key;
+}
 
 static GtkWidget * keyringeditor = NULL;
 static GtkWidget * filemanager = NULL;
