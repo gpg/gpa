@@ -1,3 +1,16 @@
+2002-08-31  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* expirydlg.c (expiry_cancel, expiry_destroy): Removed.
+	(expiry_ok): Modify not to be a callback.
+	(gpa_expiry_dialog_run): Use a GtkDialog.
+
+	* ownertrustdlg.c (ownertrust_cancel, ownertrust_destroy) 
+	(ownertrust_ok): Remove functions.
+	(gpa_ownertrust_run_dialog): Use a GtkDialog.
+
+	* gtktools.c (gpa_window_message): Use a GtkDialog.
+	(gpa_window_error): Fixed border widths.
+
 2002-08-30  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.c (gpa_gpgme_edit_sign): Fix reference count for the key.

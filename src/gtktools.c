@@ -315,12 +315,13 @@ gpa_window_error (const gchar *message, GtkWidget *messenger)
                                              GTK_STOCK_CLOSE,
                                              GTK_RESPONSE_CLOSE,
                                              NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (windowError), 5);
   gtk_dialog_set_default_response (GTK_DIALOG (windowError),
                                    GTK_RESPONSE_CLOSE);
   hboxError = gtk_hbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hboxError), 5);
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (windowError)->vbox),
                                hboxError);
-  gtk_container_set_border_width (GTK_CONTAINER (hboxError), 10);
   pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
                                      GTK_ICON_SIZE_DIALOG);
   gtk_box_pack_start (GTK_BOX (hboxError), pixmap, TRUE, FALSE, 10);
@@ -335,36 +336,34 @@ gpa_window_error (const gchar *message, GtkWidget *messenger)
 void
 gpa_window_message (gchar * message, GtkWidget * messenger)
 {
-/* var */
-  GpaWindowKeeper *keeper;
-  GtkAccelGroup *accelGroup;
-/* objects */
-  GtkWidget *windowMessage;
-  GtkWidget *vboxMessage;
+  GtkWidget *window;
+  GtkWidget *hbox;
   GtkWidget *labelMessage;
-  GtkWidget *buttonClose;
-/* commands */
-  keeper = gpa_windowKeeper_new ();
-  windowMessage = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gpa_windowKeeper_set_window (keeper, windowMessage);
-  gtk_window_set_title (GTK_WINDOW (windowMessage), _("GPA Message"));
-  gtk_window_set_modal (GTK_WINDOW (windowMessage), TRUE);
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (windowMessage), accelGroup);
-  vboxMessage = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxMessage), 10);
+  GtkWidget *pixmap;
+
+  window = gtk_dialog_new_with_buttons (_("GPA Message"),
+					(messenger ? 
+					 GTK_WINDOW(messenger) : NULL),
+					GTK_DIALOG_MODAL,
+					GTK_STOCK_CLOSE,
+					GTK_RESPONSE_CLOSE,
+					NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+  gtk_dialog_set_default_response (GTK_DIALOG (window),
+                                   GTK_RESPONSE_CLOSE);
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox),
+                               hbox);
+  pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
+                                     GTK_ICON_SIZE_DIALOG);
+  gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
   labelMessage = gtk_label_new (message);
-  gtk_box_pack_start (GTK_BOX (vboxMessage), labelMessage, TRUE, FALSE, 10);
-  buttonClose = gpa_button_new (accelGroup, _("_OK"));
-  gtk_signal_connect_object (GTK_OBJECT (buttonClose), "clicked",
-			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			     (gpointer) windowMessage);
-  gtk_widget_add_accelerator (buttonClose, "clicked", accelGroup, GDK_Escape,
-			      0, 0);
-  gtk_box_pack_start (GTK_BOX (vboxMessage), buttonClose, FALSE, FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (windowMessage), vboxMessage);
-  gpa_window_show_centered (windowMessage, messenger);
-  gtk_widget_grab_focus (buttonClose);
+  gtk_box_pack_start (GTK_BOX (hbox), labelMessage, TRUE, FALSE, 10);
+
+  gtk_widget_show_all (window);
+  gtk_dialog_run (GTK_DIALOG (window));
+  gtk_widget_destroy (window);
 }				/* gpa_window_message */
 
 

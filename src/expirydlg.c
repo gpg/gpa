@@ -29,16 +29,6 @@
 
 typedef struct {
   
-  /* True, if the user clicked OK, false otherwise */
-  gboolean result;
-
-  /* The new expiry date. Only valid if result is true. NULL means,
-     never exipre */
-  GDate * expiry_date;
-
-  /* The secret key that was passed into the dialog */
-  GpgmeKey key;
-
   /* The toplevel window of the dialog */
   GtkWidget * window;
 
@@ -55,28 +45,26 @@ typedef struct {
  * result and expiry_date in the dialog struct accordingly. If all is
  * OK, destroy the dialog.
  */
-static void
-expiry_ok (GtkWidget *widget, gpointer param)
+static gboolean
+expiry_ok (GPAExpiryDialog * dialog, GDate **new_date)
 {
-  GPAExpiryDialog * dialog = param;
   gboolean result;
-  GDate * date = NULL;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_date)))
     {
-      date = g_date_new ();
-      g_date_set_parse (date,
+      *new_date = g_date_new ();
+      g_date_set_parse (*new_date,
 			gtk_entry_get_text (GTK_ENTRY (dialog->entry_date)));
 
-      if (!g_date_valid (date))
+      if (!g_date_valid (*new_date))
 	{
 	  const gchar * buttons[] = {_("_OK"), NULL};
 	  /* FIXME: This error message should be more informative */
 	  gpa_message_box_run (dialog->window, _("Invalid Date"),
 			       _("Please provide a correct date."), buttons);
 	  result = FALSE;
-	  g_date_free (date);
-	  date = NULL;
+	  g_date_free (*new_date);
+	  *new_date = NULL;
 	}
       else
 	{
@@ -85,33 +73,11 @@ expiry_ok (GtkWidget *widget, gpointer param)
     }
   else
     {
-      date = NULL;
+      *new_date = NULL;
       result = TRUE;
     }
-  dialog->result = TRUE;
-  dialog->expiry_date = date;
-  gtk_widget_destroy (dialog->window);
+  return result;
 } /* expiry_ok */
-
-
-/* Handler for the cancel button. Just destroy the window.
- * dialog->result is false by default */
-static void
-expiry_cancel (gpointer param)
-{
-  GPAExpiryDialog * dialog = param;
-
-  gtk_widget_destroy (dialog->window);
-}
-
-
-/* Handler for the destroy signal of the dialog window. Just quit the
- * recursive mainloop */
-static void
-expiry_destroy (GtkWidget *widget, gpointer param)
-{
-  gtk_main_quit ();
-}
 
 
 /* Run the expiry date dialog as a modal dialog and return TRUE and set
@@ -127,27 +93,28 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpgmeKey key, GDate ** new_date)
   GtkWidget * radio;
   GtkWidget * hbox;
   GtkWidget * entry;
-  GtkWidget * bbox;
-  GtkWidget * button;
   GtkAccelGroup * accel_group;
   unsigned long expiry_date;
 
   GPAExpiryDialog dialog;
-  dialog.result = FALSE;
-  dialog.expiry_date = NULL;
-  dialog.key = key;
 
   accel_group = gtk_accel_group_new ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  dialog.window = window;
-  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-  gtk_window_set_title (GTK_WINDOW (window), _("Change Expiry Date"));
+  window = gtk_dialog_new_with_buttons (_("Export Key"),
+                                        GTK_WINDOW (parent),
+                                        GTK_DIALOG_MODAL,
+                                        GTK_STOCK_OK,
+                                        GTK_RESPONSE_OK,
+                                        GTK_STOCK_CANCEL,
+                                        GTK_RESPONSE_CANCEL,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (expiry_destroy), &dialog);
+  dialog.window = window;
+  accel_group = gtk_accel_group_new ();
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
-  vbox = gtk_vbox_new (TRUE, 0);
+  vbox = GTK_DIALOG (window)->vbox;
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
@@ -165,6 +132,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpgmeKey key, GDate ** new_date)
   gtk_box_pack_start (GTK_BOX (hbox), radio, FALSE, FALSE, 0);
 
   entry = gtk_entry_new ();
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   dialog.entry_date = entry;
   gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
 
@@ -181,31 +149,22 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpgmeKey key, GDate ** new_date)
 				    TRUE);
     } /* if */
   else
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog.radio_never),
-				  TRUE);
-
-  /* buttons */
-  bbox = gtk_hbutton_box_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, TRUE, 5);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
-
-  button = gpa_button_new (accel_group, _("_OK"));
-  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, TRUE, 0);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc)expiry_ok, &dialog);
-
-  button = gpa_button_cancel_new (accel_group, _("_Cancel"),
-				  (GtkSignalFunc)expiry_cancel, &dialog);
-  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, TRUE, 0);
-
-  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-  gpa_window_show_centered (window, parent);
-
-  gtk_main ();
-
-  if (dialog.result)
     {
-      *new_date = dialog.expiry_date;
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog.radio_never),
+				    TRUE);
     }
-  return dialog.result;
-} /* gpa_expiry_dialog_run */
+
+  gtk_widget_show_all (window);
+  if (gtk_dialog_run (GTK_DIALOG (window)) == GTK_RESPONSE_OK)
+    {
+      gboolean result;
+      result =  expiry_ok (&dialog, new_date);
+      gtk_widget_destroy (window);
+      return result;
+    }
+  else
+    {
+      gtk_widget_destroy (window);
+      return FALSE;
+    }
+}

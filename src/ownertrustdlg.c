@@ -40,65 +40,6 @@ gpa_tableKey_new (GpgmeKey key, GtkWidget * window);
  *	Owner Trust dialog
  */
 
-struct _GPAOwnertrustDialog {
-
-  /* true after OK, false after Cancel or deleting the window (via
-   * window manager) */
-  gboolean result;
-
-  /* The selected owner trust level if result is true. Undefined
-   * otherwise */
-  GpgmeValidity trust;
-
-  /* The ownertrust combo box */
-  GtkWidget *combo;
-
-  /* The top-level dialog window */
-  GtkWidget *window;
-};
-typedef struct _GPAOwnertrustDialog GPAOwnertrustDialog;
-
-
-/* Signal handler for the OK button. Determine the selected trust level,
- * set result to true and destroy the top level window.
- */
-static void
-ownertrust_ok (gpointer param)
-{
-  GPAOwnertrustDialog *dialog = param;
-  GpgmeValidity trust;
-  gchar *trust_text;
-
-  dialog->result = TRUE;
-
-  trust_text = (gchar *) gtk_entry_get_text (GTK_ENTRY(GTK_COMBO(dialog->combo)->entry));
-  trust = gpa_ownertrust_from_string (trust_text);
-  dialog->trust = trust;
-  gtk_widget_destroy (dialog->window);
-}
-
-
-/* Signal handler for the cancel button. Set result to FALSE and destroy
- * the top level window.
- */
-static void
-ownertrust_cancel (gpointer param)
-{
-  GPAOwnertrustDialog * dialog = param;
-
-  dialog->result = FALSE;
-  gtk_widget_destroy (dialog->window);
-} /* ownertrust_cancel */
-
-
-/* Handler for the destroy signal. Quit the recursive main loop */
-static void
-ownertrust_destroy (GtkWidget *widget, gpointer param)
-{
-  gtk_main_quit ();
-} /* ownertrust_destroy */
-
-
 /* Run the owner trust dialog modally. */
 gboolean
 gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent,
@@ -112,24 +53,19 @@ gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent,
   GtkWidget *hboxLevel;
   GtkWidget *labelLevel;
   GtkWidget *comboLevel;
-  GtkWidget *hButtonBoxTrust;
-  GtkWidget *buttonCancel;
-  GtkWidget *buttonAccept;
-  GPAOwnertrustDialog dialog;
 
-  dialog.trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
-  dialog.result = FALSE;
-
-  windowTrust = dialog.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (windowTrust), _("Change key ownertrust"));
-  gtk_signal_connect (GTK_OBJECT (windowTrust), "destroy",
-		      GTK_SIGNAL_FUNC (ownertrust_destroy),
-		      (gpointer) &dialog);
-
+  windowTrust = gtk_dialog_new_with_buttons (_("Change key ownertrust"),
+					     GTK_WINDOW (parent), 
+					     GTK_DIALOG_MODAL, 
+					     "_Set", GTK_RESPONSE_OK,
+					     GTK_STOCK_CANCEL, 
+					     GTK_RESPONSE_CANCEL, NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (windowTrust), GTK_RESPONSE_OK);
+  gtk_container_set_border_width (GTK_CONTAINER (windowTrust), 5);
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowTrust), accelGroup);
 
-  vboxTrust = gtk_vbox_new (FALSE, 0);
+  vboxTrust = GTK_DIALOG (windowTrust)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vboxTrust), 5);
 
   tableKey = gpa_tableKey_new (key, windowTrust);
@@ -142,7 +78,7 @@ gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent,
   labelLevel = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (hboxLevel), labelLevel, FALSE, FALSE, 0);
 
-  comboLevel = dialog.combo = gtk_combo_new ();
+  comboLevel = gtk_combo_new ();
   gtk_editable_set_editable (GTK_EDITABLE (GTK_COMBO (comboLevel)->entry),
 			     FALSE);
   /* Not all values are used, and we can't be sure we can iterate over them,
@@ -160,33 +96,25 @@ gpa_ownertrust_run_dialog (GpgmeKey key, GtkWidget *parent,
 			      GTK_COMBO (comboLevel)->entry, accelGroup,
 			      _("_Ownertrust level: "));
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboLevel)->entry),
-		      gpa_trust_string (dialog.trust));
+		      gpa_trust_string (gpgme_key_get_ulong_attr
+					(key, GPGME_ATTR_VALIDITY, NULL,0)));
   gtk_box_pack_start (GTK_BOX (hboxLevel), comboLevel, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxTrust), hboxLevel, TRUE, TRUE, 0);
 
-  hButtonBoxTrust = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxTrust),
-			     GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxTrust), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxTrust), 5);
-
-  buttonAccept = gpa_button_new (accelGroup, _("_Accept"));
-  gtk_signal_connect_object (GTK_OBJECT (buttonAccept), "clicked",
-			     GTK_SIGNAL_FUNC (ownertrust_ok),
-			     (gpointer) &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxTrust), buttonAccept);
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					(GtkSignalFunc) ownertrust_cancel, &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxTrust), buttonCancel);
-  gtk_box_pack_start (GTK_BOX (vboxTrust), hButtonBoxTrust, FALSE, FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (windowTrust), vboxTrust);
-  gpa_window_show_centered (windowTrust, parent);
-  gtk_window_set_modal (GTK_WINDOW (windowTrust), TRUE);
-
-  gtk_main ();
-
-  if (dialog.result)
-    *trust = dialog.trust;
-
-  return dialog.result;
+  gtk_widget_show_all (windowTrust);
+  if (gtk_dialog_run (GTK_DIALOG (windowTrust)) == GTK_RESPONSE_OK)
+    {
+      gchar *trust_text;
+      
+      trust_text = (gchar *) gtk_entry_get_text
+	(GTK_ENTRY(GTK_COMBO(comboLevel)->entry));
+      *trust = gpa_ownertrust_from_string (trust_text);
+      gtk_widget_destroy (windowTrust);
+      return TRUE;
+    }
+  else
+    {
+      gtk_widget_destroy (windowTrust);
+      return FALSE;
+    }
 } /* gpa_ownertrust_run_dialog */
