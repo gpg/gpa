@@ -15,8 +15,27 @@ libgpapa_a_SOURCES = gpapa.c gpapa.h \
 		     gpapakey.c       gpapakey.h     \
 		     gpapapublickey.c gpapapublickey.h \
 		     gpapasecretkey.c gpapasecretkey.h \
-		     gpapasignature.c gpapasignature.h
-
+		     gpapasignature.c gpapasignature.h \
+		     rungpg.c  rungpg.h \
+		     gpgme.c  gpgme.h \
+		     wait.c  wait.h \
+		     ops.h \
+		     gpgme_types.h \
+		     io.h \
+		     status_table.h \
+		     util.c util.h \
+		     syshdr.h \
+		     posix-io.c \
+		     w32-io.c \
+		     data.c \
+		     errors.c 
 
 gpapatest_SOURCES = gpapatest.c
-gpapatest_LDADD =  -L . -lgpapa -L ../jnlib -ljnlib -lgpgme
+gpapatest_LDADD =  -L . -lgpapa -L ../jnlib -ljnlib
+
+
+
+
+
+
+

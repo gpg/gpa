@@ -22,7 +22,7 @@
 
 /* GPGME includes.
  */
-#include "types.h"
+#include "gpgme_types.h"
 #include "rungpg.h"
 #include "gpgme.h"
 

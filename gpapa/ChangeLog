@@ -1,4 +1,11 @@
-Mon 15 Jan 2001 Peter Gerwinski <peter@gerwinski.de>
+Tue 16 Jan 2001 23:25 Jan van Heys <jan.van.heys@uni-essen.de>
+                      Peter Gerwinski <peter@gerwinski.de>
+
+        Copied relevant files from GPGME.
+
+        * Makefile.am: added new files.
+
+Mon 15 Jan 2001 28:30 Peter Gerwinski <peter@gerwinski.de>
 
         Re-wrote the GnuPG communication layer to use GPGME.
 
