@@ -1,3 +1,9 @@
+2002-04-17	Jan-Oliver Wagner <jan@intevation.de>
+
+	* gpa.desktop (new): gnome desktop entry for gpa
+	* gpa-logo-48x48.png (new): small gpa logo for gnome desktop
+	* gpa.spec: added gnome menu entry
+
 2002-03-15  Werner Koch  <wk@gnupg.org>
 
 	* configure.ac (ALL_LINGUAS): Add pt_BR.
