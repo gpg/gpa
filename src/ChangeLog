@@ -1,5 +1,15 @@
 2001-01-09  Bernhard Herzog  <bh@intevation.de>
 
+	* gtktools.c (gpa_window_show_centered): New function. This is a
+	better way to center windows and it should replace
+	gpa_widget_set_centered one day.
+	(gpa_window_error): Use the new gpa_window_show_centered instead
+	of gpa_widget_show
+	(gpa_button_set_text): New function to update the text of a button
+	widget
+
+	* gtktools.h: Add the two new function in gtktools.c
+
 	* gpa.c (evalMouseClistFile): 
 	(gpa_menubar_new):
 	(delete_event): 
