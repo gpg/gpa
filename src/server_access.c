@@ -43,6 +43,7 @@
 #define KEYSERVER_KEY_NOT_FOUND    6 /* key not found */
 #define KEYSERVER_KEY_EXISTS       7 /* key already exists */
 #define KEYSERVER_KEY_INCOMPLETE   8 /* key incomplete (EOF) */
+#define KEYSERVER_UNREACHABLE      9 /* unable to contact keyserver */
 
 #define KEYSERVER_SCHEME_NOT_FOUND 127
 
@@ -184,6 +185,9 @@ error_string (gint error_code)
       break;
     case KEYSERVER_KEY_INCOMPLETE:
       return _("Key incomplete");
+      break;
+    case KEYSERVER_UNREACHABLE:
+      return _("Could not contact keyserver");
       break;
     default:
       return _("Unknown Error");

@@ -1,5 +1,8 @@
 2002-10-11  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* server_access.c (error_string): Added KEYSERVER_UNREACHABLE error
+	code.
+
 	* gpgmeedit.c (edit_fnc, edit_expire_fnc_action) 
 	(edit_expire_fnc_transit, edit_trust_fnc_action) 
 	(edit_trust_fnc_transit, edit_sign_fnc_action) 
