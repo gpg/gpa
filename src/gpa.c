@@ -302,8 +302,8 @@ gpa_open_keyring_editor (void)
       keyringeditor = keyring_editor_new();
       gtk_signal_connect (GTK_OBJECT (keyringeditor), "destroy",
 			  GTK_SIGNAL_FUNC (close_main_window), &keyringeditor);
+      gtk_widget_show_all (keyringeditor);
     }
-  gtk_widget_show_all (keyringeditor);
   gdk_window_raise (keyringeditor->window);
 }
 
@@ -316,8 +316,8 @@ gpa_open_filemanager (void)
       filemanager = gpa_fileman_new();
       gtk_signal_connect (GTK_OBJECT (filemanager), "destroy",
 			  GTK_SIGNAL_FUNC (close_main_window), &filemanager);
+      gtk_widget_show_all (filemanager);
     }
-  gtk_widget_show_all (filemanager);
   gdk_window_raise (filemanager->window);
 }
 
