@@ -1,5 +1,7 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* gpapastrings.c (algorithm_strings): Add a missing ')'
+
 	* gtktools.c (GPASaveFileNameDialog): Rename the dialog field to
 	window as it's done in all other dialogs
 	(file_dialog_destroy):
