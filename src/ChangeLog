@@ -1,3 +1,23 @@
+2003-07-29  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (gpa_SOURCES): Add gpakeytrustop.{c,h}.
+
+	* gpakeytrustop.h, gpakeytrustop.c: New.
+
+	* gpakeysignop.h: Remove unneeded include.
+
+	* keyring.c (keyring_editor_delete, keyring_editor_sign): Fix warnings.
+	(keyring_editor_trust): Use the GpaKeyTrustOperation.
+
+	* ownertrustdlg.h, ownertrustdlg.c (gpa_ownertrust_run_dialog): Return
+	the selected trust in an argument. Don't edit the key from this
+	function.
+
+	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_trust_parms_new) 
+	(gpa_gpgme_edit_trust_parms_release): New.
+	(gpa_gpgme_edit_trust): Renamed to:
+	(gpa_gpgme_edit_trust_start): Same changes as the "sign" operation.
+	
 2003-07-28  Miguel Coca  <mcoca@gnu.org>
 
 	* Makefile.am (gpa_SOURCES): Add gpakeysignop.{c,h}

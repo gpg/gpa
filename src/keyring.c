@@ -51,6 +51,7 @@
 
 #include "gpakeydeleteop.h"
 #include "gpakeysignop.h"
+#include "gpakeytrustop.h"
 
 /*
  *      The public keyring editor
@@ -258,7 +259,7 @@ keyring_editor_delete (GPAKeyringEditor * editor)
   GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
   GpaKeyDeleteOperation *op = gpa_key_delete_operation_new (editor->window,
 							    selection);
-  register_operation (editor, op);
+  register_operation (editor, GPA_KEY_OPERATION (op));
 }
 
 
@@ -340,7 +341,7 @@ keyring_editor_sign (gpointer param)
       GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
       GpaKeySignOperation *op = gpa_key_sign_operation_new (editor->window,
 							    selection);
-      register_operation (editor, op);
+      register_operation (editor, GPA_KEY_OPERATION (op));
     }
 }
 
@@ -372,12 +373,10 @@ keyring_editor_trust (gpointer param)
 
   if (key)
     {
-      if (gpa_ownertrust_run_dialog (key, editor->window))
-        {
-	  gpa_keylist_start_reload (editor->keylist);
-          update_selection_sensitive_widgets (editor);
-          keyring_update_details_notebook (editor);
-        }
+      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
+      GpaKeyTrustOperation *op = gpa_key_trust_operation_new (editor->window, 
+							      selection);
+      register_operation (editor, GPA_KEY_OPERATION (op));
     }
 }
 

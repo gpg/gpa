@@ -29,8 +29,8 @@
 #include <gpgme.h>
 
 /* Change the ownertrust of a key */
-gpg_error_t gpa_gpgme_edit_trust (gpgme_ctx_t ctx, gpgme_key_t key,
-				  gpgme_validity_t ownertrust);
+gpg_error_t gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
+					gpgme_validity_t ownertrust);
 
 /* Change the expiry date of a key */
 gpg_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, 

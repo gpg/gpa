@@ -694,14 +694,53 @@ edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status,
   return next_state;
 }
 
+/* Release the edit parameters needed for setting owner trust. The prototype
+ * is that of a GpaContext's "done" signal handler.
+ */
+static void
+gpa_gpgme_edit_trust_parms_release (GpaContext *ctx, gpg_error_t err,
+				   struct edit_parms_s* parms)
+{
+  gpgme_data_release (parms->out);
+  if (parms->signal_id != 0)
+    {
+      /* Don't run this signal handler again if the context is reused */
+      g_signal_handler_disconnect (ctx, parms->signal_id);
+    }
+  g_free (parms->opaque);
+  g_free (parms);
+}
+
+/* Generate the edit parameters needed for setting owner trust.
+ */
+static struct edit_parms_s*
+gpa_gpgme_edit_trust_parms_new (GpaContext *ctx, const char *trust_string,
+				gpgme_data_t out)
+{
+  struct edit_parms_s *edit_parms = g_malloc (sizeof (struct edit_parms_s));
+
+  edit_parms->state = TRUST_START;
+  edit_parms->err = gpg_error (GPG_ERR_NO_ERROR);
+  edit_parms->action = edit_trust_fnc_action;
+  edit_parms->transit = edit_trust_fnc_transit;
+  edit_parms->signal_id = 0;
+  edit_parms->out = out;
+  edit_parms->opaque = g_strdup (trust_string);
+
+  /* Make sure the cleanup is run when the edit completes */
+  g_signal_connect (G_OBJECT (ctx), "done", 
+		    G_CALLBACK (gpa_gpgme_edit_trust_parms_release),
+		    edit_parms);
+
+  return edit_parms;
+}
+
 /* Change the ownertrust of a key */
-gpg_error_t gpa_gpgme_edit_trust (gpgme_ctx_t ctx, gpgme_key_t key,
-				 gpgme_validity_t ownertrust)
+gpg_error_t gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
+					gpgme_validity_t ownertrust)
 {
   const gchar *trust_strings[] = {"1", "1", "2", "3", "4", "5"};
-  struct edit_parms_s parms = {TRUST_START, gpg_error (GPG_ERR_NO_ERROR), 
-			       edit_trust_fnc_action, edit_trust_fnc_transit,
-			       NULL, 0, (char*) trust_strings[ownertrust]};
+  struct edit_parms_s *parms = NULL;
   gpg_error_t err;
   gpgme_data_t out = NULL;
 
@@ -710,8 +749,8 @@ gpg_error_t gpa_gpgme_edit_trust (gpgme_ctx_t ctx, gpgme_key_t key,
     {
       return err;
     }
-  err = gpgme_op_edit (ctx, key, edit_fnc, &parms, out);
-  gpgme_data_release (out);
+  parms = gpa_gpgme_edit_trust_parms_new (ctx, trust_strings[ownertrust], out);
+  err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
   return err;
 }
 
@@ -779,6 +818,7 @@ gpa_gpgme_edit_sign_parms_new (GpaContext *ctx, char *check_level,
   sign_parms->check_level = check_level;
   sign_parms->local = local;
 
+  /* Make sure the cleanup is run when the edit completes */
   g_signal_connect (G_OBJECT (ctx), "done", 
 		    G_CALLBACK (gpa_gpgme_edit_sign_parms_release),
 		    edit_parms);

@@ -25,7 +25,6 @@
 #include <glib-object.h>
 #include "gpa.h"
 #include "gpakeyop.h"
-#include "keysigndlg.h"
 
 /* GObject stuff */
 #define GPA_KEY_SIGN_OPERATION_TYPE	  (gpa_key_sign_operation_get_type ())

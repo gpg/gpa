@@ -86,7 +86,8 @@ get_selected_validity (GtkWidget *unknown_radio, GtkWidget *never_radio,
 }
 
 /* Run the owner trust dialog modally. */
-gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent)
+gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
+				    gpgme_validity_t *return_trust)
 {
   GtkWidget *dialog;
   GtkWidget *key_info;
@@ -219,15 +220,14 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent)
   gtk_widget_show_all (dialog);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-  /* Set the ownertrust */
+  /* Return the ownertrust */
   if (response == GTK_RESPONSE_OK) 
     {
-      gpg_error_t err;
-      gpgme_validity_t new_trust = get_selected_validity 
-              (unknown_radio, never_radio, marginal_radio, full_radio,
-               ultimate_radio);
-      gpgme_ctx_t ctx = gpa_gpgme_new ();
-
+      gpgme_validity_t new_trust = get_selected_validity (unknown_radio,
+							  never_radio, 
+							  marginal_radio,
+							  full_radio,
+							  ultimate_radio);
       /* If the user didn't change the trust, don't edit the key */
       if (trust == new_trust ||
           (trust == GPGME_VALIDITY_UNDEFINED && 
@@ -237,15 +237,9 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent)
         }
       else
         {
-          err = gpa_gpgme_edit_trust (ctx, key, new_trust);
-          if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-            {
-              gpa_gpgme_error (err);
-            }
+	  *return_trust = new_trust;
           result = TRUE;
         }
-
-      gpgme_release (ctx);
     }
   else
     {
