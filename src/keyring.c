@@ -769,8 +769,8 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 					   _("Expires at:"), FALSE); 
   editor->detail_key_trust = add_details_row (table, table_row++,
 					      _("Key Trust:"), FALSE);
-  editor->detail_key_type = add_details_row (table, table_row++, _("Key Type"),
-					     FALSE);
+  editor->detail_key_type = add_details_row (table, table_row++,
+					     _("Key Type:"), FALSE);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), vbox,
 			    gtk_label_new (_("Details")));
