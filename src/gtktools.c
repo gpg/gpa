@@ -1,5 +1,5 @@
 /* gtktools.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -48,6 +48,37 @@ gpa_widget_show (GtkWidget * widget, GtkWidget * parent, gchar * tip)
     gpa_widget_set_centered (widget, parent);
     gpa_window_tip_show (tip);
 }				/* gpa_widget_show */
+
+
+/* Show all children of the GtkWindow widget, realize it, set its
+ * position so that it's in the center of the parent and show the window
+ * itself.
+ */
+void
+gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent)
+{
+  int parent_x, parent_y, parent_width, parent_height;
+  int center_x, center_y;
+  int width, height;
+
+  gtk_widget_show_all (GTK_BIN (widget)->child);
+  gtk_widget_realize (widget);
+  printf("size_allocation %d %d %d %d\n",
+	 widget->allocation.x, widget->allocation.y,
+	 widget->allocation.width, widget->allocation.height);
+  gdk_window_get_size (widget->window, &width, &height);
+  printf("get_size %d %d\n", width, height);
+  gdk_window_get_origin (parent->window, &parent_x, &parent_y);
+  printf("get_origin parent %d %d\n", parent_x, parent_y);
+  gdk_window_get_size (parent->window, &parent_width, &parent_height);
+  printf("get_size parent %d %d\n", parent_width, parent_height);
+  center_x = parent_x + (parent_width - width) / 2;
+  center_y = parent_y + (parent_height - height) / 2;
+
+  gtk_window_set_position (GTK_WINDOW(widget), GTK_WIN_POS_NONE);
+  gtk_widget_set_uposition (widget, center_x, center_y);
+  gtk_widget_show_all (widget);
+} /* gpa_window_show_centered */
 
 void
 gpa_window_destroy (gpointer param)
@@ -269,18 +300,25 @@ gpa_connect_by_accelerator (GtkLabel * label, GtkWidget * widget,
 			      GDK_MOD1_MASK, 0);
 }				/* gpa_connect_by_accelerator */
 
+
+/* Set the text of the GtkButton button to text */
+void
+gpa_button_set_text (GtkWidget * button, gchar * text)
+{
+  GtkWidget * label = GTK_BIN (button)->child;
+  gtk_label_set_text (GTK_LABEL (label), text);
+}
+
 void
 gpa_window_error (gchar * message, GtkWidget * messenger)
 {
-/* var */
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
-/* objects */
   GtkWidget *windowError;
   GtkWidget *vboxError;
   GtkWidget *labelMessage;
   GtkWidget *buttonClose;
-/* commands */
+
   keeper = gpa_windowKeeper_new ();
   windowError = gtk_window_new (GTK_WINDOW_DIALOG);
   gpa_windowKeeper_set_window (keeper, windowError);
@@ -300,10 +338,10 @@ gpa_window_error (gchar * message, GtkWidget * messenger)
 			      0, 0);
   gtk_box_pack_start (GTK_BOX (vboxError), buttonClose, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowError), vboxError);
-  gtk_widget_show_all (windowError);
-  gpa_widget_set_centered (windowError, messenger);
+
+  gpa_window_show_centered (windowError, messenger);
   gtk_widget_grab_focus (buttonClose);
-}				/* gpa_window_error */
+} /* gpa_window_error */
 
 void
 gpa_window_message (gchar * message, GtkWidget * messenger)
