@@ -1,3 +1,11 @@
+2001-01-25  Bernhard Herzog  <bh@intevation.de>
+
+	* filemenu.c: 
+	* gtktools.c: 
+	* helpmenu.c: 
+	* keysmenu.c: 
+	* optionsmenu.c: Replace all those silly _("") with ""
+
 2001-01-25	Jan-Oliver Wagner <jan@intevation.de>
 
 	* simple-gettext.c (get_string): removed  ISO-8859-1 to IBM-CP-850
