@@ -1,5 +1,5 @@
 /* gpa.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -17,17 +17,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
-                  
+
 #include <config.h>
+#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
+#include <pgg.h>
 #include "gpa.h"
-#include "gpa_file.h"
-#include "gpa_gtktools.h"
-#include "gpa_keys.h"
-#include "gpa_options.h"
-#include "gpa_help.h"
+#include "gtktools.h"
+#include "gpafile.h"
+#include "filemenu.h"
+#include "keysmenu.h"
+#include "optionsmenu.h"
+#include "helpmenu.h"
 
 /*!!!*/ static char *text5 [] = { N_( "Dummy Text" ), N_( "Dummy Text" ), N_( "Dummy Text" ), N_( "Dummy Text" ), N_( "Dummy Text" ) }; /*!!!*/
+static GtkWidget *globalFileClist = NULL;
+GtkWidget *windowMain;
+GtkWidget *windowTip;
+gboolean noTips = FALSE;
+PggErrenv errenv;
+gchar bufferPassphrase [ 256 ];
+
+GtkWidget *gpa_get_global_file_clist ( void ) {
+  return ( globalFileClist );
+} /* gpa_get_global_file_clist */
 
 void gpa_switch_tips ( void ) {
   if ( noTips == TRUE )
@@ -36,19 +49,18 @@ void gpa_switch_tips ( void ) {
     noTips = TRUE;
 } /* gpa_switch_tips */
 
-void gpa_dialog_tip ( char *tip ) {
+void gpa_windowTip_init ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
 /* objects */
-  GtkWidget *windowTip;
-    GtkWidget *vboxTip;
-      GtkWidget *vboxContents;
-        GtkWidget *labelJfdContents;
-          GtkWidget *labelContents;
-        GtkWidget *textContents;
-      GtkWidget *hboxTip;
-        GtkWidget *checkerNomore;
-        GtkWidget *buttonClose;
+  GtkWidget *vboxTip;
+    GtkWidget *vboxContents;
+      GtkWidget *labelJfdContents;
+	GtkWidget *labelContents;
+      GtkWidget *textContents;
+    GtkWidget *hboxTip;
+      GtkWidget *checkerNomore;
+      GtkWidget *buttonClose;
 /* commands */
   windowTip = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title ( GTK_WINDOW ( windowTip ), _( "GPA Tip" ) );
@@ -74,8 +86,13 @@ void gpa_dialog_tip ( char *tip ) {
   gtk_box_pack_start ( GTK_BOX ( vboxTip ), vboxContents, TRUE, TRUE, 0 );
   hboxTip = gtk_hbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxTip ), 5 );
-  buttonClose = gpa_buttonCancel_new (
-    windowTip, accelGroup, _( "  _Close  " )
+  buttonClose = gpa_button_new ( accelGroup, _( "   _Close   " ) );
+  gtk_signal_connect_object (
+    GTK_OBJECT ( buttonClose ), "clicked",
+    GTK_SIGNAL_FUNC ( gtk_widget_hide ), (gpointer) windowTip
+  );
+  gtk_widget_add_accelerator (
+    buttonClose, "clicked", accelGroup, GDK_Escape, 0, 0
   );
   gtk_box_pack_end ( GTK_BOX ( hboxTip ), buttonClose, FALSE, FALSE, 0 );
   checkerNomore = gpa_check_button_new (
@@ -93,8 +110,12 @@ void gpa_dialog_tip ( char *tip ) {
   );
   gtk_box_pack_start ( GTK_BOX ( vboxTip ), hboxTip, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowTip ), vboxTip );
+} /* gpa_windowTip_init */
+
+void gpa_windowTip_show ( gchar *text ) {
+  /* Kommt noch was */ /*!!!*/
   gtk_widget_show_all ( windowTip );
-} /* gpa_dialog_tip */
+} /* gpa_windowTip_show */
 
 gint delete_event ( GtkWidget *widget, GdkEvent *event, gpointer data ) {
   file_quit ();
@@ -158,6 +179,17 @@ GtkWidget *gpa_menubar_new ( GtkWidget *window ) {
   return ( menubar );
 } /* gpa_menubar_new */
 
+void setFileSelected (
+  GtkWidget *fileList, gint row, gint column,
+  GdkEventButton *event, gboolean selected
+) {
+/* var */
+  GpaFile *aFile;
+/* commands */
+  aFile = g_list_nth_data ( filesOpened, row );
+  gpa_file_set_selected ( aFile, selected );
+} /* setFileSelected */
+
 GtkWidget *gpa_fileFrame_new ( void ) {
 /* var */
   char *fileListTitle [ 5 ] = {
@@ -182,14 +214,24 @@ GtkWidget *gpa_fileFrame_new ( void ) {
     {
       gtk_clist_set_column_width ( GTK_CLIST ( fileList ), i, 100 );
       gtk_clist_set_column_justification (
-        GTK_CLIST ( fileList ), i, GTK_JUSTIFY_RIGHT
+	GTK_CLIST ( fileList ), i, GTK_JUSTIFY_RIGHT
       );
     } /* for */
   for ( i = 0; i <= 4; i++ )
     gtk_clist_set_column_auto_resize ( GTK_CLIST ( fileList ), i, FALSE );
-gtk_clist_append ( GTK_CLIST ( fileList ), text5 ); /*!!!*/
-gtk_clist_append ( GTK_CLIST ( fileList ), text5 ); /*!!!*/
-gtk_clist_append ( GTK_CLIST ( fileList ), text5 ); /*!!!*/
+  gtk_clist_set_selection_mode (
+    GTK_CLIST ( fileList ), GTK_SELECTION_EXTENDED
+  );
+  gtk_widget_grab_focus ( fileList );
+  gtk_signal_connect (
+    GTK_OBJECT ( fileList ), "select_row",
+    GTK_SIGNAL_FUNC ( setFileSelected ), (gpointer) TRUE
+  );
+  gtk_signal_connect (
+    GTK_OBJECT ( fileList ), "unselect_row",
+    GTK_SIGNAL_FUNC ( setFileSelected ), (gpointer) FALSE
+  );
+  globalFileClist = fileList;
   gtk_container_add ( GTK_CONTAINER ( fileScroller ), fileList );
   gtk_container_add ( GTK_CONTAINER ( fileFrame ), fileScroller );
   return ( fileFrame );
@@ -201,7 +243,7 @@ GtkWidget *gpa_windowMain_new ( char *title ) {
     GtkWidget *vbox;
       GtkWidget *menubar;
       GtkWidget *fileBox;
-        GtkWidget *fileFrame;
+	GtkWidget *fileFrame;
 /* commands */
   window = gtk_window_new ( GTK_WINDOW_TOPLEVEL );
   gtk_window_set_title ( GTK_WINDOW ( window ), title );
@@ -215,6 +257,7 @@ GtkWidget *gpa_windowMain_new ( char *title ) {
   gtk_box_pack_start ( GTK_BOX ( fileBox ), fileFrame, TRUE, TRUE, 0 );
   gtk_box_pack_end ( GTK_BOX ( vbox ), fileBox, TRUE, TRUE, 0 );
   gtk_container_add ( GTK_CONTAINER ( window ), vbox );
+  gpa_windowTip_init ();
   gpa_fileOpenSelect_init ( _( "Open a file" ) );
   gpa_ringOpenSelect_init ( _( "Open key ring" ) );
   gpa_homeDirSelect_init ( _( "Set home directory" ) );
@@ -224,7 +267,7 @@ GtkWidget *gpa_windowMain_new ( char *title ) {
 } /* gpa_windowMain_new */
 
 int main ( int params, char *param [] ) {
-  noTips = FALSE;
+  pgg_errenv_reset ( errenv );
   gtk_init ( &params, &param );
   windowMain = gpa_windowMain_new ( _( "GNU Privacy Assistant" ) );
   gtk_signal_connect (

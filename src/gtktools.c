@@ -25,6 +25,11 @@
 
 /*!!!*/ #include <stdio.h> /*!!!*/
 
+void gpa_window_destroy ( GtkWidget *window ) {
+  gtk_widget_destroy ( window );
+  gtk_widget_hide ( windowTip );
+} /* gpa_window_destroy */
+
 GtkWidget *gpa_space_new ( void ) {
   return gtk_label_new ( _( "" ) );
 } /* gpa_space_new */
@@ -79,7 +84,7 @@ GtkWidget *gpa_buttonCancel_new (
   buttonCancel = gpa_button_new ( accelGroup, labelText );
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonCancel ), "clicked",
-    GTK_SIGNAL_FUNC ( gtk_widget_destroy ), (gpointer) window
+    GTK_SIGNAL_FUNC ( gpa_window_destroy ), (gpointer) window
   );
   gtk_widget_add_accelerator (
     buttonCancel, "clicked", accelGroup, GDK_Escape, 0, 0

@@ -22,14 +22,20 @@
 #define GPA_H
 
 #include <gtk/gtk.h>
+#include <pgg.h>
 
 #define _(a)	(a)
 #define N_(a)	(a)
 
-GtkWidget *windowMain;
-gboolean noTips;
+extern GtkWidget *windowMain;
+extern GtkWidget *windowTip;
+extern gboolean noTips;
+extern PggErrenv errenv;
+extern gchar bufferPassphrase [ 256 ];
 
+extern GtkWidget *gpa_get_global_file_clist ( void );
 extern void gpa_switch_tips ( void );
-extern void gpa_dialog_tip ( char *tip );
+extern void gpa_windowTip_init ( void );
+extern void gpa_windowTip_show ( gchar *text );
 
 #endif /*GPA_H*/

@@ -1,5 +1,5 @@
 /* gpa_help.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -21,7 +21,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
-#include "gpa_gtktools.h"
+#include "gtktools.h"
 
 #include <stdio.h> /*!!!*/
 
@@ -36,15 +36,15 @@ void help_license ( void ) {
   GtkWidget *windowLicense;
     GtkWidget *vboxLicense;
       GtkWidget *vboxGPL;
-        GtkWidget *labelJfdGPL;
-          GtkWidget *labelGPL;
-        GtkWidget *textGPL;
+	GtkWidget *labelJfdGPL;
+	  GtkWidget *labelGPL;
+	GtkWidget *textGPL;
       GtkWidget *hButtonBoxLicense;
-        GtkWidget *buttonClose;
+	GtkWidget *buttonClose;
 /* commands */
   windowLicense = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title (
-    GTK_WINDOW ( windowLicense ), _( "GNU general public license" ) 
+    GTK_WINDOW ( windowLicense ), _( "GNU general public license" )
   );
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group ( GTK_WINDOW ( windowLicense ), accelGroup );

@@ -1,5 +1,5 @@
 /* gpa_options.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -21,7 +21,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
-#include "gpa_gtktools.h"
+#include "gtktools.h"
 
 #include <stdio.h> /*!!!*/
 
@@ -92,7 +92,7 @@ void gpa_saveOptionsSelect_init ( gchar *title ) {
 
 void options_keyserver_set ( GtkWidget *windowServer ) {
 g_print ( _( "Set key server\n" ) ); /*!!!*/
-  gtk_widget_destroy ( windowServer );
+  gpa_window_destroy ( windowServer );
 } /* options_keyserver_set */
 
 void options_keyserver ( void ) {
@@ -102,11 +102,11 @@ void options_keyserver ( void ) {
   GtkWidget *windowServer;
     GtkWidget *vboxServer;
       GtkWidget *hboxServer;
-        GtkWidget *labelServer;
-        GtkWidget *comboServer;
+	GtkWidget *labelServer;
+	GtkWidget *comboServer;
       GtkWidget *hButtonBoxServer;
-        GtkWidget *buttonCancel;
-        GtkWidget *buttonSet;
+	GtkWidget *buttonCancel;
+	GtkWidget *buttonSet;
 /* commands */
   windowServer = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title ( GTK_WINDOW ( windowServer ), _( "Set key server" ) );
@@ -147,7 +147,7 @@ void options_keyserver ( void ) {
   gtk_widget_show_all ( windowServer );
   gpa_widget_set_centered ( windowServer, windowMain );
   if ( noTips == FALSE )
-    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+    gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* options_keyserver */
 
 void options_recipients ( void ) {
@@ -157,20 +157,20 @@ void options_recipients ( void ) {
   GtkWidget *windowRecipients;
     GtkWidget *vboxRecipients;
       GtkWidget *hboxRecipients;
-        GtkWidget *vboxDefault;
-          GtkWidget *labelJfdDefault;
-            GtkWidget *labelDefault;
-          GtkWidget *scrollerDefault;
-            GtkWidget *clistDefault;
-        GtkWidget *vboxKeys;
-          GtkWidget *labelJfdKeys;
-            GtkWidget *labelKeys;
-          GtkWidget *scrollerKeys;
-            GtkWidget *clistKeys;
+	GtkWidget *vboxDefault;
+	  GtkWidget *labelJfdDefault;
+	    GtkWidget *labelDefault;
+	  GtkWidget *scrollerDefault;
+	    GtkWidget *clistDefault;
+	GtkWidget *vboxKeys;
+	  GtkWidget *labelJfdKeys;
+	    GtkWidget *labelKeys;
+	  GtkWidget *scrollerKeys;
+	    GtkWidget *clistKeys;
       GtkWidget *hButtonBoxRecipients;
-        GtkWidget *buttonAdd;
-        GtkWidget *buttonDelete;
-        GtkWidget *buttonClose;
+	GtkWidget *buttonAdd;
+	GtkWidget *buttonDelete;
+	GtkWidget *buttonClose;
 /* commands */
   windowRecipients = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title (
@@ -248,12 +248,12 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   gtk_widget_show_all ( windowRecipients );
   gpa_widget_set_centered ( windowRecipients, windowMain );
   if ( noTips == FALSE )
-    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+    gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* options_recipients */
 
 void options_key_set ( GtkWidget *windowKey ) {
 g_print ( _( "Set Default Key\n" ) ); /*!!!*/
-  gtk_widget_destroy ( windowKey );
+  gpa_window_destroy ( windowKey );
 } /*!!!*/
 
 void options_key ( void ) {
@@ -263,11 +263,11 @@ void options_key ( void ) {
   GtkWidget *windowKey;
     GtkWidget *vboxKey;
       GtkWidget *hboxKey;
-        GtkWidget *labelKey;
-        GtkWidget *comboKey;
+	GtkWidget *labelKey;
+	GtkWidget *comboKey;
       GtkWidget *hButtonBoxKey;
-        GtkWidget *buttonCancel;
-        GtkWidget *buttonSet;
+	GtkWidget *buttonCancel;
+	GtkWidget *buttonSet;
 /* commands */
   windowKey = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title ( GTK_WINDOW ( windowKey ), _( "Set default key" ) );
@@ -307,13 +307,13 @@ void options_key ( void ) {
   gtk_widget_show_all ( windowKey );
   gpa_widget_set_centered ( windowKey, windowMain );
   if ( noTips == FALSE )
-    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+    gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* options_key */
 
 void options_homedir ( void ) {
   gtk_widget_show ( homeDirSelect );
   if ( noTips == FALSE )
-    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+    gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* options_homedir */
 
 void options_tips ( void ) {
@@ -353,17 +353,17 @@ void options_tips ( void ) {
   gtk_widget_show_all ( windowTips );
   gpa_widget_set_centered ( windowTips, windowMain );
   if ( noTips == FALSE )
-    gpa_dialog_tip ( _( "Dummy text" ) );
+    gpa_windowTip_show ( _( "Dummy text" ) );
 } /* options_tips */
 
 void options_load ( void ) {
   gtk_widget_show ( loadOptionsSelect );
   if ( noTips == FALSE )
-    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+    gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* options_load */
 
 void options_save ( void ) {
   gtk_widget_show ( saveOptionsSelect );
   if ( noTips == FALSE )
-    gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+    gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* options_save */

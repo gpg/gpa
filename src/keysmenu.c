@@ -1,5 +1,5 @@
 /* gpa_keys.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 Free Software Foundation, Inc.
+ *	Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -17,11 +17,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
-                  
+
 #include <config.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
-#include "gpa_gtktools.h"
+#include "gtktools.h"
 
 #include <stdio.h> /*!!!*/
 
@@ -38,12 +38,12 @@ GtkWidget *gpa_frameExpire_new ( GtkAccelGroup *accelGroup ) {
     GtkWidget *vboxExpire;
       GtkWidget *radioDont;
       GtkWidget *hboxAfter;
-        GtkWidget *radioAfter;
-        GtkWidget *entryAfter;
-        GtkWidget *comboAfter;
+	GtkWidget *radioAfter;
+	GtkWidget *entryAfter;
+	GtkWidget *comboAfter;
       GtkWidget *hboxAt;
-        GtkWidget *radioAt;
-        GtkWidget *entryAt;
+	GtkWidget *radioAt;
+	GtkWidget *entryAt;
 /* commands */
   frameExpire = gtk_frame_new ( _( "Expiration" ) );
   vboxExpire = gtk_vbox_new ( TRUE, 0 );
@@ -122,12 +122,12 @@ g_print ( _( "Create revocation certificate\n" ) ); /*!!!*/
 
 void keys_openPublic_editTrust_accept ( GtkWidget *windowTrust ) {
 g_print ( _( "Accept new ownertrust level\n" ) ); /*!!!*/
-  gtk_widget_destroy ( windowTrust );
+  gpa_window_destroy ( windowTrust );
 } /* keys_openPublic_editTrust_accept */
 
 void keys_openPublic_editTrust_export ( GtkWidget *windowTrust ) {
 g_print ( _( "Accept and export new ownertrust level\n" ) ); /*!!!*/
-  gtk_widget_destroy ( windowTrust );
+  gpa_window_destroy ( windowTrust );
 } /* keys_openPublic_editTrust_export */
 
 void keys_openPublic_editTrust ( GtkWidget *parent ) {
@@ -138,12 +138,12 @@ void keys_openPublic_editTrust ( GtkWidget *parent ) {
   GtkWidget *windowTrust;
     GtkWidget *vboxTrust;
       GtkWidget *hboxLevel;
-        GtkWidget *labelLevel;
-        GtkWidget *comboLevel;
+	GtkWidget *labelLevel;
+	GtkWidget *comboLevel;
       GtkWidget *hButtonBoxTrust;
-        GtkWidget *buttonCancel;
-        GtkWidget *buttonAccept;
-        GtkWidget *buttonExport;
+	GtkWidget *buttonCancel;
+	GtkWidget *buttonAccept;
+	GtkWidget *buttonExport;
 /* commands */
   windowTrust = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title (
@@ -202,7 +202,7 @@ void keys_openPublic_editTrust ( GtkWidget *parent ) {
   gtk_container_add ( GTK_CONTAINER ( windowTrust ), vboxTrust );
   gtk_widget_show_all ( windowTrust );
   gpa_widget_set_centered ( windowTrust, parent );
-  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openPublic_editTrust */
 
 void keys_openPublic_sign ( void ) {
@@ -221,37 +221,37 @@ void keys_openPublic_editKey ( GtkWidget *parent ) {
   GtkWidget *windowKey;
     GtkWidget *vboxEdit;
       GtkWidget *hboxKey;
-        GtkWidget *labelKey;
-        GtkWidget *entryKey;
+	GtkWidget *labelKey;
+	GtkWidget *entryKey;
       GtkWidget *vboxFingerprint;
-        GtkWidget *labelJfdFingerprint;
-          GtkWidget *labelFingerprint;
-        GtkWidget *entryFingerprint;
+	GtkWidget *labelJfdFingerprint;
+	  GtkWidget *labelFingerprint;
+	GtkWidget *entryFingerprint;
       GtkWidget *vboxSignatures;
-        GtkWidget *labelJfdSignatures;
-          GtkWidget *labelSignatures;
-        GtkWidget *scrollerSignatures;
-          GtkWidget *clistSignatures;
+	GtkWidget *labelJfdSignatures;
+	  GtkWidget *labelSignatures;
+	GtkWidget *scrollerSignatures;
+	  GtkWidget *clistSignatures;
       GtkWidget *hboxSignatures;
-        GtkWidget *buttonSign;
-        GtkWidget *checkerLocally;
-        GtkWidget *buttonCheck;
+	GtkWidget *buttonSign;
+	GtkWidget *checkerLocally;
+	GtkWidget *buttonCheck;
       GtkWidget *tableMisc;
-        GtkWidget *labelJfdTrust;
-          GtkWidget *labelTrust;
-        GtkWidget *entryTrust;
-        GtkWidget *labelJfdDate;
-          GtkWidget *labelDate;
-        GtkWidget *entryDate;
+	GtkWidget *labelJfdTrust;
+	  GtkWidget *labelTrust;
+	GtkWidget *entryTrust;
+	GtkWidget *labelJfdDate;
+	  GtkWidget *labelDate;
+	GtkWidget *entryDate;
       GtkWidget *vboxSubkeys;
-        GtkWidget *labelJfdSubkeys;
-          GtkWidget *labelSubkeys;
-        GtkWidget *scrollerSubkeys;
-          GtkWidget *clistSubkeys;
+	GtkWidget *labelJfdSubkeys;
+	  GtkWidget *labelSubkeys;
+	GtkWidget *scrollerSubkeys;
+	  GtkWidget *clistSubkeys;
       GtkWidget *hButtonBoxEdit;
-        GtkWidget *buttonEditTrust;
-        GtkWidget *buttonExportKey;
-        GtkWidget *buttonClose;
+	GtkWidget *buttonEditTrust;
+	GtkWidget *buttonExportKey;
+	GtkWidget *buttonClose;
 /* commands */
   windowKey = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title ( GTK_WINDOW ( windowKey ), _( "Public key editor" ) );
@@ -415,7 +415,7 @@ gtk_clist_append ( GTK_CLIST ( clistSubkeys ), text ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowKey ), vboxEdit );
   gtk_widget_show_all ( windowKey );
   gpa_widget_set_centered ( windowKey, parent );
-  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openPublic_editKey */
 
 void keys_openPublic_send ( void ) {
@@ -441,24 +441,24 @@ void keys_openPublic ( void ) {
   GtkWidget *windowPublic;
     GtkWidget *vboxPublic;
       GtkWidget *hboxTop;
-        GtkWidget *labelRingname;
-        GtkWidget *entryRingname;
+	GtkWidget *labelRingname;
+	GtkWidget *entryRingname;
     GtkWidget *scrollerKeys;
       GtkWidget *clistKeys;
     GtkWidget *hboxAction;
       GtkWidget *tableKey;
-        GtkWidget *buttonEditKey;
-        GtkWidget *buttonSign;
-        GtkWidget *buttonSend;
-        GtkWidget *buttonReceive;
-        GtkWidget *buttonExportKey;
-        GtkWidget *buttonDelete;
+	GtkWidget *buttonEditKey;
+	GtkWidget *buttonSign;
+	GtkWidget *buttonSend;
+	GtkWidget *buttonReceive;
+	GtkWidget *buttonExportKey;
+	GtkWidget *buttonDelete;
       GtkWidget *vboxLocally;
-        GtkWidget *checkerLocally;
+	GtkWidget *checkerLocally;
       GtkWidget *tableTrust;
-        GtkWidget *toggleShow;
-        GtkWidget *buttonEditTrust;
-        GtkWidget *buttonExportTrust;
+	GtkWidget *toggleShow;
+	GtkWidget *buttonEditTrust;
+	GtkWidget *buttonExportTrust;
     GtkWidget *hSeparatorPublic;
     GtkWidget *hButtonBoxPublic;
       GtkWidget *buttonClose;
@@ -488,7 +488,7 @@ void keys_openPublic ( void ) {
     {
       gtk_clist_set_column_width ( GTK_CLIST ( clistKeys ), i, 100 );
       gtk_clist_set_column_justification (
-        GTK_CLIST ( clistKeys ), i, GTK_JUSTIFY_CENTER
+	GTK_CLIST ( clistKeys ), i, GTK_JUSTIFY_CENTER
       );
     } /* for */
   gpa_connect_by_accelerator (
@@ -618,7 +618,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowPublic ), vboxPublic );
   gtk_widget_show_all ( windowPublic );
   gpa_widget_set_centered ( windowPublic, windowMain );
-  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openPublic */
 
 void keys_openSecret_editKey ( void ) {
@@ -628,20 +628,20 @@ void keys_openSecret_editKey ( void ) {
   GtkWidget *windowEdit;
     GtkWidget *vboxEdit;
       GtkWidget *hboxTop;
-        GtkWidget *labelKey;
-        GtkWidget *entryKey;
+	GtkWidget *labelKey;
+	GtkWidget *entryKey;
       GtkWidget *tablePasswd;
-        GtkWidget *labelJfdPasswd;
-          GtkWidget *labelPasswd;
-        GtkWidget *entryPasswd;
-        GtkWidget *labelJfdRepeat;
-          GtkWidget *labelRepeat;
-        GtkWidget *entryRepeat;
+	GtkWidget *labelJfdPasswd;
+	  GtkWidget *labelPasswd;
+	GtkWidget *entryPasswd;
+	GtkWidget *labelJfdRepeat;
+	  GtkWidget *labelRepeat;
+	GtkWidget *entryRepeat;
       GtkWidget *frameExpire;
       GtkWidget *hButtonBoxEdit;
-        GtkWidget *buttonRevoc;
-        GtkWidget *buttonExport;
-        GtkWidget *buttonClose;
+	GtkWidget *buttonRevoc;
+	GtkWidget *buttonExport;
+	GtkWidget *buttonClose;
 /* commands */
   windowEdit = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title (
@@ -727,7 +727,7 @@ void keys_openSecret_editKey ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowEdit ), vboxEdit );
   gtk_widget_show_all ( windowEdit );
   gpa_widget_set_centered ( windowEdit, windowMain );
-  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openSecret_editKey */
 
 void keys_openSecret ( void ) {
@@ -737,15 +737,15 @@ void keys_openSecret ( void ) {
   GtkWidget *windowSecret;
     GtkWidget *vboxSecret;
       GtkWidget *hboxTop;
-        GtkWidget *labelRingname;
-        GtkWidget *entryRingname;
+	GtkWidget *labelRingname;
+	GtkWidget *entryRingname;
       GtkWidget *scrollerKeys;
-        GtkWidget *clistKeys;
+	GtkWidget *clistKeys;
       GtkWidget *hButtonBoxSecret;
-        GtkWidget *buttonExport;
-        GtkWidget *buttonDelete;
-        GtkWidget *buttonEditKey;
-        GtkWidget *buttonClose;
+	GtkWidget *buttonExport;
+	GtkWidget *buttonDelete;
+	GtkWidget *buttonEditKey;
+	GtkWidget *buttonClose;
 /* commands */
   windowSecret = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title (
@@ -809,7 +809,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowSecret ), vboxSecret );
   gtk_widget_show_all ( windowSecret );
   gpa_widget_set_centered ( windowSecret, windowMain );
-  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_openSecret */
 
 void keys_open ( void ) {
@@ -818,7 +818,7 @@ void keys_open ( void ) {
 
 void keys_generateKey_generate ( GtkWidget *windowGenerate ) {
 g_print ( _( "Generate a new key\n" ) ); /*!!!*/
-  gtk_widget_destroy ( windowGenerate );
+  gpa_window_destroy ( windowGenerate );
 } /* keys_generateKey_generate */
 
 void keys_generateKey ( void ) {
@@ -830,35 +830,35 @@ void keys_generateKey ( void ) {
   GtkWidget *windowGenerate;
     GtkWidget *vboxGenerate;
       GtkWidget *tableTop;
-        GtkWidget *labelJfdAlgorithm;
-          GtkWidget *labelAlgorithm;
-        GtkWidget *comboAlgorithm;
-        GtkWidget *labelJfdKeysize;
-          GtkWidget *labelKeysize;
-        GtkWidget *comboKeysize;
+	GtkWidget *labelJfdAlgorithm;
+	  GtkWidget *labelAlgorithm;
+	GtkWidget *comboAlgorithm;
+	GtkWidget *labelJfdKeysize;
+	  GtkWidget *labelKeysize;
+	GtkWidget *comboKeysize;
       GtkWidget *frameExpire;
       GtkWidget *tableMisc;
-        GtkWidget *labelJfdUserID;
-          GtkWidget *labelUserID;
-        GtkWidget *entryUserID;
-        GtkWidget *labelJfdEmail;
-          GtkWidget *labelEmail;
-        GtkWidget *entryEmail;
-        GtkWidget *labelJfdComment;
-          GtkWidget *labelComment;
-        GtkWidget *entryComment;
-        GtkWidget *labelJfdPassword;
-          GtkWidget *labelPassword;
-        GtkWidget *entryPassword;
-        GtkWidget *labelJfdRepeat;
-          GtkWidget *labelRepeat;
-        GtkWidget *entryRepeat;
+	GtkWidget *labelJfdUserID;
+	  GtkWidget *labelUserID;
+	GtkWidget *entryUserID;
+	GtkWidget *labelJfdEmail;
+	  GtkWidget *labelEmail;
+	GtkWidget *entryEmail;
+	GtkWidget *labelJfdComment;
+	  GtkWidget *labelComment;
+	GtkWidget *entryComment;
+	GtkWidget *labelJfdPassword;
+	  GtkWidget *labelPassword;
+	GtkWidget *entryPassword;
+	GtkWidget *labelJfdRepeat;
+	  GtkWidget *labelRepeat;
+	GtkWidget *entryRepeat;
       GtkWidget *vboxMisc;
-        GtkWidget *checkerRevoc;
-        GtkWidget *checkerSend;
+	GtkWidget *checkerRevoc;
+	GtkWidget *checkerSend;
       GtkWidget *hButtonBoxGenerate;
-        GtkWidget *buttonCancel;
-        GtkWidget *buttonGenerate;
+	GtkWidget *buttonCancel;
+	GtkWidget *buttonGenerate;
 /* commands */
   windowGenerate = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title ( GTK_WINDOW ( windowGenerate ), _( "Generate key" ) );
@@ -1058,12 +1058,12 @@ void keys_generateKey ( void ) {
   gtk_container_add ( GTK_CONTAINER ( windowGenerate ), vboxGenerate );
   gtk_widget_show_all ( windowGenerate );
   gpa_widget_set_centered ( windowGenerate, windowMain );
-  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_generateKey */
 
 void keys_generateRevocation_generate ( GtkWidget *windowRevoc ) {
   keys_revocation (); /*!!!*/
-  gtk_widget_destroy ( windowRevoc );
+  gpa_window_destroy ( windowRevoc );
 } /* keys_generateRevocation_generate */
 
 void keys_generateRevocation ( void ) {
@@ -1073,17 +1073,17 @@ void keys_generateRevocation ( void ) {
   GtkWidget *windowRevoc;
     GtkWidget *vboxRevoc;
       GtkWidget *vboxKeys;
-        GtkWidget *labelJfdKeys;
-          GtkWidget *labelKeys;
-        GtkWidget *scrollerKeys;
-          GtkWidget *clistKeys;
+	GtkWidget *labelJfdKeys;
+	  GtkWidget *labelKeys;
+	GtkWidget *scrollerKeys;
+	  GtkWidget *clistKeys;
       GtkWidget *hButtonBoxRevoc;
-        GtkWidget *buttonCancel;
-        GtkWidget *buttonGenerate;
+	GtkWidget *buttonCancel;
+	GtkWidget *buttonGenerate;
 /* commands */
   windowRevoc = gtk_window_new ( GTK_WINDOW_DIALOG );
   gtk_window_set_title ( GTK_WINDOW ( windowRevoc ),
-    _( "Generate revocation certificate" ) 
+    _( "Generate revocation certificate" )
   );
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group ( GTK_WINDOW ( windowRevoc ), accelGroup );
@@ -1129,14 +1129,14 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   gtk_container_add ( GTK_CONTAINER ( windowRevoc ), vboxRevoc );
   gtk_widget_show_all ( windowRevoc );
   gpa_widget_set_centered ( windowRevoc, windowMain );
-  gpa_dialog_tip ( _( "Dummy text" ) ); /*!!!*/
+  gpa_windowTip_show ( _( "Dummy text" ) ); /*!!!*/
 } /* keys_generateRevocation */
 
 void keys_import_ok ( GtkWidget *windowImport ) {
 char message [ 100 ];
 sprintf ( message, _( "Import keys from '%s'\n" ), gtk_file_selection_get_filename ( GTK_FILE_SELECTION ( windowImport ) ) ); /*!!!*/
 g_print ( message ); /*!!!*/
-  gtk_widget_destroy ( windowImport );
+  gpa_window_destroy ( windowImport );
 } /* keys_import_ok */
 
 void keys_import ( void ) {
@@ -1159,7 +1159,7 @@ void keys_importOwnertrust_ok ( GtkWidget *windowImport ) {
 char message [ 100 ];
 sprintf ( message, _( "Import ownertrust from '%s'\n" ), gtk_file_selection_get_filename ( GTK_FILE_SELECTION ( windowImport ) ) ); /*!!!*/
 g_print ( message ); /*!!!*/
-  gtk_widget_destroy ( windowImport );
+  gpa_window_destroy ( windowImport );
 } /*!!!*/
 
 void keys_importOwnertrust ( void ) {
