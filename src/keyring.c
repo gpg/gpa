@@ -38,6 +38,7 @@
 #include "keygendlg.h"
 #include "keygenwizard.h"
 #include "keylist.h"
+#include "siglist.h"
 #include "keyring.h"
 
 /*
@@ -62,6 +63,9 @@ struct _GPAKeyringEditor {
   GtkWidget *detail_fingerprint;
   GtkWidget *detail_expiry;
 
+  /* The signatures list in the notebook */
+  GtkWidget *signatures_list;
+
   /* List of sensitive widgets. See below */
   GList * selection_sensitive_widgets;
 };
@@ -78,6 +82,7 @@ static GpapaPublicKey *keyring_editor_current_key (GPAKeyringEditor * editor);
 static gchar *keyring_editor_current_key_id (GPAKeyringEditor * editor);
 
 static void keyring_update_details_page (GPAKeyringEditor * editor);
+static void keyring_update_signatures_page (GPAKeyringEditor * editor);
 
 /*
  *
@@ -602,6 +607,7 @@ keyring_selection_update_widgets (GPAKeyringEditor * editor)
 {
   update_selection_sensitive_widgets (editor);
   keyring_update_details_page (editor);
+  keyring_update_signatures_page (editor);
 }  
 
 /* Signal handler for select-row and unselect-row. Call
@@ -763,6 +769,10 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 {
   GtkWidget * notebook;
   GtkWidget * table;
+  GtkWidget * vbox;
+  GtkWidget * scrolled;
+  GtkWidget * siglist;
+
   notebook = gtk_notebook_new ();
 
   /* Details Page */
@@ -777,6 +787,23 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), table,
 			    gtk_label_new (_("Details")));
+
+  /* Signatures Page */
+  vbox = gtk_vbox_new (FALSE, 0);
+
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
+
+  siglist = gpa_siglist_new (editor->window);
+  editor->signatures_list = siglist;
+  gtk_container_add (GTK_CONTAINER (scrolled), siglist);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
+				  GTK_POLICY_AUTOMATIC,
+				  GTK_POLICY_AUTOMATIC);
+
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), vbox,
+			    gtk_label_new (_("Signatures")));
+
   return notebook;
 }
 
@@ -809,6 +836,22 @@ keyring_update_details_page (GPAKeyringEditor * editor)
     }
 } /* keyring_update_details_page */
 
+
+static void
+keyring_update_signatures_page (GPAKeyringEditor * editor)
+{
+  GpapaPublicKey * key = keyring_editor_current_key (editor);
+  GList * signatures;
+
+  if (key)
+    {
+      signatures = gpapa_public_key_get_signatures (key, gpa_callback,
+						    editor->window);
+      gpa_siglist_set_signatures (editor->signatures_list, signatures);
+    }
+  else
+    gpa_siglist_set_signatures (editor->signatures_list, NULL);
+}
 
 /* definitions for the brief and detailed key list. The names are at the
  * end so that they automatically take up all the surplus horizontal
