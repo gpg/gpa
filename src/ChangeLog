@@ -1,5 +1,8 @@
 2001-01-16  Bernhard Herzog  <bh@intevation.de>
 
+	* gpa.c (gpa_popupMenu_init):
+	(global_popupMenu) Removed because they're no longer used.
+
 	* gpa.h: Removed global_tempWindows
 
 	* gpa.c: 
