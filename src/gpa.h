@@ -1,5 +1,5 @@
 /* gpa.h  -  main header
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -87,6 +87,9 @@ extern void gpa_unselectRecipient (GtkWidget * clist, gint row, gint column,
 extern void gpa_removeRecipients (gpointer param);
 extern void gpa_addRecipients (gpointer param);
 extern void gpa_recipientWindow_close (gpointer param);
+
+gboolean gpa_simplified_ui (void);
+void gpa_set_simplified_ui (gboolean value);
 
 
 void gpa_open_keyring_editor (void);
