@@ -1,5 +1,8 @@
 2001-01-15  Bernhard Herzog  <bh@intevation.de>
 
+	* gtktools.h: Update the prototype of gpa_button_set_text and add
+	the new message box functions
+
 	* gtktools.c (gpa_button_set_text): Handle accelerators
 
 	(message_box_delete): 
