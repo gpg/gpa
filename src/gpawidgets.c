@@ -33,6 +33,45 @@
 #include "gpa.h"
 #include "gtktools.h"
 
+
+/*
+ *	A table showing some basic information about the key, such as
+ *	the key id and the user name
+ */ 
+
+GtkWidget *
+gpa_key_info_new (GpapaKey * key, GtkWidget * window)
+{
+  GtkWidget * table;
+  GtkWidget * label;
+
+  table = gtk_table_new (2, 2, FALSE);
+  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 5);
+
+  /* User Name */
+  label = gtk_label_new (_("User Name:"));
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+
+  label = gtk_label_new (gpapa_key_get_name (key, gpa_callback, window));
+  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
+  /* User Name */
+  label = gtk_label_new (_("Key ID:"));
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+
+  label = gtk_label_new (gpapa_key_get_identifier (key, gpa_callback, window));
+  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
+  return table;
+}
+
 /*
  *	A CList for choosing from secret keys
  */
