@@ -1,5 +1,11 @@
 2001-02-09  Bernhard Herzog  <bh@intevation.de>
 
+	* helpmenu.h
+	* helpmenu.c (help_license):
+	(help_about):
+	(help_warranty): Make them static and remove them from the header
+	file as they're only used in helpmenu.c.
+
 	* helpmenu.c (help_license_destroy):
 	(help_license): Make the default license dialog properly modal
 	with a recursive main loop and a handler for the destroy signal
