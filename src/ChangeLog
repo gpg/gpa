@@ -1,5 +1,9 @@
 2002-12-07  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* keyring.c (keyring_details_notebook): Add label to the menu. 
+	(keyring_details_page_fill_num_keys): Change the text for "all
+	signatures."
+
 	* gpa.c (gpa_open_settings_dialog): Use the close_main_window callback
 	to track the destruction of the dialog.
 

@@ -971,6 +971,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   GtkWidget * viewport;
   GtkWidget * siglist;
   GtkWidget * options;
+  GtkWidget * hbox;
   gint table_row;
 
   notebook = gtk_notebook_new ();
@@ -1023,16 +1024,20 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   vbox = gtk_vbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
+  /* UID menu and label */
+  hbox = gtk_hbox_new (FALSE, 5);
+  label = gtk_label_new (_("Show signatures on user name:"));
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
   options = gtk_option_menu_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), options, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), options, TRUE, TRUE, 0);
   gtk_widget_set_sensitive (options, FALSE);
   editor->signatures_uids = options;
   g_signal_connect (G_OBJECT (options), "changed",
                     G_CALLBACK (signatures_uid_selected), editor);
-
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  /* Signature list */
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
-
   siglist = gpa_siglist_new ();
   editor->signatures_list = siglist;
   gtk_container_add (GTK_CONTAINER (scrolled), siglist);
@@ -1145,7 +1150,7 @@ keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gchar *fpr)
 
   /* Create the menu for the popdown UID list */
   menu = gtk_menu_new ();
-  label = gtk_menu_item_new_with_label (_("Display all signatures on the key"));
+  label = gtk_menu_item_new_with_label (_("All signatures"));
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
   for (i = 0; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
     {
