@@ -917,7 +917,7 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 
   icon = gpa_create_icon_widget (window, "trash");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Remove"),
-				  _("Remove the selected file"),
+				  _("Remove the selected key"),
 				  _("remove key"), icon,
 				  GTK_SIGNAL_FUNC (toolbar_remove_key),
 				  editor);

@@ -1,3 +1,8 @@
+2001-02-02  Bernhard Herzog  <bh@intevation.de>
+
+	* keyring.c (keyring_toolbar_new): Correct the tooltip for the
+	remove button
+
 2001-02-01  Bernhard Herzog  <bh@intevation.de>
 
 	* Makefile.am (gpa_SOURCES): Add the new expiry dialog files
