@@ -636,7 +636,7 @@ keyring_editor_mapped (gpointer param)
       if (gpapa_get_secret_key_count (gpa_callback, editor->window) == 0
 	  && !asked_about_key_generation)
 	{
-	  const gchar * buttons[] = {_("Generate key now"), _("Do it later"),
+	  const gchar * buttons[] = {_("_Generate key now"), _("Do it _later"),
 				     NULL};
 	  gchar * result;
 	  result = gpa_message_box_run (editor->window, _("No key defined"),
@@ -644,7 +644,7 @@ keyring_editor_mapped (gpointer param)
 					  " Do you want to generate one now"
 					  " (recommended) or do it later?"),
 					buttons);
-	  if (result && strcmp(result, _("Generate key now")) == 0)
+	  if (result && strcmp(result, _("_Generate key now")) == 0)
 	    keyring_editor_generate_key (param);
 	  asked_about_key_generation = TRUE;
 	}

@@ -179,8 +179,8 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 30);
 
   /* File name */
-  radio = gtk_radio_button_new_with_label_from_widget (NULL,
-						     _("Import from file:"));
+  radio = gpa_radio_button_new_from_widget (NULL, accel_group,
+					    _("I_mport from file:"));
   dialog.radio_filename = radio;
   gtk_table_attach (GTK_TABLE (table), radio, 0, 2, 0, 1, GTK_FILL, 0, 0, 0);
 
@@ -194,15 +194,16 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_signal_connect_object (GTK_OBJECT (entry), "activate",
 			     GTK_SIGNAL_FUNC (import_ok), (gpointer) &dialog);
 
-  button = gpa_button_new (accel_group, _("_Browse..."));
+  button = gpa_button_new (accel_group, _("B_rowse..."));
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, TRUE, 0);
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (import_browse),
 			     (gpointer) &dialog);
 
   /* Server */
-  radio = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON(radio),
-						   _("Receive from server:"));
+  radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON(radio),
+					    accel_group,
+					    _("Receive from _server:"));
   dialog.radio_server = radio;
   gtk_table_attach (GTK_TABLE (table), radio, 0, 2, 2, 3, GTK_FILL, 0, 0, 0);
 
@@ -210,7 +211,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_table_attach (GTK_TABLE (table), server_table, 1, 2, 3, 4,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
 
-  label = gtk_label_new (_("Key ID:"));
+  label = gtk_label_new ("");
   gtk_table_attach (GTK_TABLE (server_table), label, 0, 1, 0, 1,
 		    GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
@@ -221,8 +222,10 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_signal_connect_object (GTK_OBJECT (entry), "activate",
 			     GTK_SIGNAL_FUNC (import_ok), (gpointer) &dialog);
+  gpa_connect_by_accelerator (GTK_LABEL (label), entry, accel_group,
+			      _("Key _ID:"));
 
-  label = gtk_label_new (_("Key Server:"));
+  label = gtk_label_new ("");
   gtk_table_attach (GTK_TABLE (server_table), label, 0, 1, 1, 2,
 		    GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
@@ -242,6 +245,9 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
 		      global_keyserver);
 
+  gpa_connect_by_accelerator (GTK_LABEL (label), entry, accel_group,
+			      _("_Key Server:"));
+
   /* The button box */
   bbox = gtk_hbutton_box_new ();
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
@@ -253,7 +259,7 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
 				  &dialog);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  button = gpa_button_new (accel_group, _("Ok"));
+  button = gpa_button_new (accel_group, _("_OK"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (import_ok), (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (bbox), button);

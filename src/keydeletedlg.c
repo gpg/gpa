@@ -137,7 +137,7 @@ gpa_delete_dialog_run (GtkWidget * parent, GpapaPublicKey * key,
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, TRUE, 5);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
 
-  button = gpa_button_new (accel_group, _("_Ok"));
+  button = gpa_button_new (accel_group, _("_OK"));
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, TRUE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc)delete_ok, &dialog);

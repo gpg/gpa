@@ -185,7 +185,7 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
 
   /* File name entry */
   radio = gpa_radio_button_new_from_widget (NULL, accel_group,
-					    _("Export to _file:"));
+					    _("E_xport to file:"));
   dialog.radio_filename = radio;
   gtk_table_attach (GTK_TABLE (table), radio, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
 
@@ -196,7 +196,7 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   gtk_signal_connect_object (GTK_OBJECT (entry), "activate",
 			     GTK_SIGNAL_FUNC (export_ok), (gpointer) &dialog);
 
-  button = gpa_button_new (accel_group, _("_Browse..."));
+  button = gpa_button_new (accel_group, _("B_rowse..."));
   gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1, GTK_FILL, 0, 0, 0);
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (export_browse),
@@ -243,7 +243,7 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
 				  &dialog);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  button = gpa_button_new (accel_group, _("Ok"));
+  button = gpa_button_new (accel_group, _("_OK"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (export_ok), (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (bbox), button);

@@ -74,7 +74,7 @@ expiry_ok (GtkWidget *widget, gpointer param)
 
       if (!g_date_valid (date))
 	{
-	  const gchar * buttons[] = {_("Ok"), NULL};
+	  const gchar * buttons[] = {_("_OK"), NULL};
 	  /* FIXME: This error message should be more informative */
 	  gpa_message_box_run (dialog->window, _("Invalid Date"),
 			       _("Please provide a correct date"), buttons);
@@ -212,7 +212,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpapaSecretKey * key,
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, TRUE, 5);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
 
-  button = gpa_button_new (accel_group, _("_Ok"));
+  button = gpa_button_new (accel_group, _("_OK"));
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, TRUE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc)expiry_ok, &dialog);

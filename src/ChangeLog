@@ -1,5 +1,32 @@
 2001-02-13  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_mapped): Add accelerators for the
+	message box
+
+	* gtktools.c (gpa_message_box_run): Add an accelgroup and handle
+	accelerators in the button labels.
+
+	* keyimportdlg.c (key_import_dialog_run): Make the accelerators
+	for the radio buttons and entry fields work
+
+	* keyeditdlg.c (gpa_key_edit_dialog_run): Remove the sign frame.
+	Add an accel-group and make the accelerators work.
+
+2001-02-13  Thomas Koester  <tkoester@intevation.de>
+
+	* expirydlg.c (expiry_ok):
+	(gpa_expiry_dialog_run):
+	keydeletedlg.c (gpa_delete_dialog_run):
+	* keyexportdlg.c (key_export_dialog_run):
+	* keyimportdlg.c (key_import_dialog_run): Use "_OK" instead of "Ok".
+
+	* keyeditdlg.c (gpa_key_edit_dialog_run):
+	* gpawizard.c (gpa_wizard_new):
+	* keyexportdlg.c (key_export_dialog_run):
+	* keyimportdlg.c (key_import_dialog_run): Add/Change accelerators.
+
+2001-02-13  Bernhard Herzog  <bh@intevation.de>
+
 	* gpawizard.h: Add prototype of gpa_wizard_next_page
 
 	* gpawizard.c (gpa_wizard_next_page):

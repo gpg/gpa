@@ -398,6 +398,8 @@ gpa_message_box_run (GtkWidget * parent, const gchar * title,
 		     const gchar * message,
 		     const gchar ** buttons)
 {
+  GtkAccelGroup *accel_group;
+
   GtkWidget * window;
   GtkWidget * vbox;
   GtkWidget * label;
@@ -405,6 +407,7 @@ gpa_message_box_run (GtkWidget * parent, const gchar * title,
   GtkWidget * button;
   int i;
   GPAMessageBox dialog;
+  
 
   dialog.result = NULL;
 
@@ -414,6 +417,9 @@ gpa_message_box_run (GtkWidget * parent, const gchar * title,
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (message_box_destroy),
 		      NULL);
+
+  accel_group = gtk_accel_group_new ();
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   vbox = gtk_vbox_new (FALSE, 5);
   gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -431,7 +437,7 @@ gpa_message_box_run (GtkWidget * parent, const gchar * title,
 
   for (i = 0; buttons[i]; i++)
     {
-      button = gtk_button_new_with_label (buttons[i]);
+      button = gpa_button_new (accel_group, (gchar*)(buttons[i]));
       gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
       gtk_object_set_data (GTK_OBJECT (button), "user_data",
 			   (gpointer)buttons[i]);

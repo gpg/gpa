@@ -61,14 +61,11 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   GtkWidget * button;
   GtkWidget * table;
   GtkWidget * bbox;
-  GtkWidget * vbox_sign;
-  GtkWidget * siglist;
-  GtkWidget * scrolled;
+  GtkAccelGroup * accel_group;
 
   GpapaPublicKey * public_key;
   GpapaSecretKey * secret_key;
   GpapaOwnertrust trust;
-  GList * signatures;
   GDate * expiry_date;
   gchar * date_string;
 
@@ -80,9 +77,12 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   public_key = gpapa_get_public_key_by_ID (key_id, gpa_callback, parent);
   secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback, parent);
 
+  accel_group = gtk_accel_group_new ();
+
   window = gtk_window_new (GTK_WINDOW_DIALOG);
   dialog.window = window;
   gtk_window_set_title (GTK_WINDOW (window), _("Edit Key"));
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (key_edit_destroy), &dialog);
@@ -112,6 +112,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (frame), hbox);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+  gtk_box_set_spacing (GTK_BOX (hbox), 10);
 
   expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (public_key),
 					   gpa_callback, parent);
@@ -121,7 +122,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   dialog.expiry = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
-  button = gtk_button_new_with_label (_("Change"));
+  button = gpa_button_new (accel_group, _("Change _expiration"));
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   gtk_widget_set_sensitive (button, secret_key != NULL);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
@@ -135,44 +136,17 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (frame), hbox);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+  gtk_box_set_spacing (GTK_BOX (hbox), 10);
 
   trust = gpapa_public_key_get_ownertrust (public_key, gpa_callback, parent);
   label = gtk_label_new (gpa_ownertrust_string (trust));
   dialog.ownertrust = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
-  button = gtk_button_new_with_label (_("Change"));
+  button = gpa_button_new (accel_group, _("Change _trust"));
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc)key_edit_change_trust, &dialog);
-
-
-  /* Sign */
-  frame = gtk_frame_new (_("Signatures"));
-  gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 5);
-
-  vbox_sign = gtk_vbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (frame), vbox_sign);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox_sign), 5);
-
-  scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_box_pack_start (GTK_BOX (vbox_sign), scrolled, TRUE, TRUE, 0);
-
-  siglist = gpa_siglist_new (window);
-  gtk_container_add (GTK_CONTAINER (scrolled), siglist);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
-				  GTK_POLICY_AUTOMATIC,
-				  GTK_POLICY_AUTOMATIC);
-  signatures = gpapa_public_key_get_signatures (public_key, gpa_callback,
-						parent);
-  gpa_siglist_set_signatures (siglist, signatures, key_id);
-
-  bbox = gtk_hbutton_box_new ();
-  gtk_box_pack_start (GTK_BOX (vbox_sign), bbox, FALSE, TRUE, 5);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
-
-  button = gtk_button_new_with_label (_("Sign"));
-  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
 
   /* buttons */
@@ -180,7 +154,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * key_id)
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, TRUE, 5);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
 
-  button = gtk_button_new_with_label (_("Close"));
+  button = gpa_button_new (accel_group, _("_Close"));
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, TRUE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc)key_edit_close, &dialog);
