@@ -1,5 +1,6 @@
 
 src/encryptdlg.c
+src/expirydlg.c
 src/fileman.c
 src/filemenu.c
 src/filesigndlg.c
@@ -9,11 +10,12 @@ src/gpawidgets.c
 src/gpawizard.c
 src/gtktools.c
 src/helpmenu.c
+src/keyeditdlg.c
 src/keyexportdlg.c
 src/keygendlg.c
 src/keygenwizard.c
+src/keyimportdlg.c
 src/keylist.c
-src/keyreceivedlg.c
 src/keyring.c
 src/keysigndlg.c
 src/keysmenu.c
