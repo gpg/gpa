@@ -1,3 +1,8 @@
+2001-03-12	Jan-Oliver Wagner <jan@intevation.de>
+
+	* fr.po: several typos and some language improvements
+			 (work done by <pplf@geocities.com>)
+
 2001-03-09	Jan-Oliver Wagner <jan@intevation.de>
 
 	* fr.po: three bugs fixed (double menu Fenetre(s), GTK warnings)
