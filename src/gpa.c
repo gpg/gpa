@@ -320,7 +320,6 @@ int
 main (int argc, char **argv)
 {
   char *configname = NULL, *keyservers_configname = NULL;
-  GpgmeError err;
   GpaCommandLineArgs args = {FALSE, FALSE, NULL};
 
 #ifdef __MINGW32__

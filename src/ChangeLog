@@ -1,5 +1,12 @@
 2003-02-01  Miguel Coca  <mcoca@gnu.org>
 
+	* Makefile.am (gpa_SOURCES): Add gpacontext.{c,h}
+
+	* gpacontext.h, gpacontext.c: New. A wrapper around the GpgmeCtx to
+	hook it to the gtk event loop.
+
+	* gpa.c (main): Remove unneeded variable.
+
 	* fileman.c (decrypt_files): Use one GpgmeCtx per operation.
 	* filesigndlg.c (sign_files):
 	* encryptdlg.c (encrypt_file, set_signers, do_encrypt): 
