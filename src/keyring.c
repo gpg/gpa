@@ -1132,7 +1132,7 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
-  icon = gpa_create_icon_widget (window, "help");
+  icon = gpa_create_icon_widget (window, "gpa_help");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
 				  _("Understanding the GNU Privacy Assistant"),
 				  _("help"), icon, GTK_SIGNAL_FUNC (help_help),
