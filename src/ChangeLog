@@ -1,3 +1,36 @@
+2002-02-13  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gpa.c, keylist.c: Reformatted to completely comply with the GNU
+	Coding Standards.
+
+	* gpa.c (gpa_homedir): New global variable. Contains the directory
+	where the gpa executable is installed.
+	(search_config_file): New funtion to search for config
+	files in a series of typical locations.
+	(main) Set the gpa_homedir variable by manipulating argv[0]. Use
+	search_config_file. Delayed reading the gtkrc until we know the
+	GnuPG homedir.
+
+	* keygenwizard.c (gpa_keygen_wizard_backup_dir_action): Create the
+	backup directory if needed.
+	(gpa_keygen_wizard_generate_action): Save whether the key backup
+	was generated to the config file.
+
+	* keylist.c (keylist_fill_list): Added checks to verify that every
+	secret key has a corresponding public key in the keyring.
+	
+2002-02-11  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* keyring.c (keyring_editor_backup): Test for the directory the user
+	provided, and create it if it doesn't exist.
+
+	* optionsmenu.c (gpa_options_menu_add_to_factory): Disabled
+	"Default Recipients" menu item.
+
+	* gpafilesel.c: Extensive changes to the way directories are
+	handled. Now the directory list is a tree that expands as the user
+	navigates the filesystem.
+	
 2002-02-10  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* Makefile.am (LDADD): Added -lm and -lz to the hardcoded libraries.

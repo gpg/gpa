@@ -1,21 +1,21 @@
-/* gpa.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
+/* gpa.c - The GNU Privacy Assistant
+ * Copyright (C) 2000-2002 G-N-U GmbH.
  *
- * This file is part of GPA
+ * This file is part of GPA.
  *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * GPA is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GPA is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * along with GPA; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #include <config.h>
@@ -32,7 +32,6 @@
 #include <gtk/gtk.h>
 
 #include <gpapa.h>
-
 
 #include "argparse.h"
 #include "stringhelp.h"
@@ -78,7 +77,6 @@ enum cmd_and_opt_values {
   aTest
 };
 
-
 static ARGPARSE_OPTS opts[] = {
 
     { 301, NULL, 0, N_("@Options:\n ") },
@@ -96,7 +94,7 @@ static ARGPARSE_OPTS opts[] = {
     {0}
 };
 
-
+static char *gpa_homedir = NULL;
 static char *gpa_configname = NULL;
 GPAOptions gpa_options;
 static GtkWidget *global_clistFile = NULL;
@@ -104,6 +102,54 @@ GtkWidget *global_windowMain = NULL;
 GpapaAction global_lastCallbackResult;
 GList *global_defaultRecipients = NULL;
 
+/* Search for a configuration file
+ *  1. in the directory where `gpa.exe' resides,
+ *  2. in GPA_DATADIR
+ *  3. in the GnuPG home directory.
+ * If the file is not found, return a filename that will create it
+ * in the directory where `gpa.exe' resides.
+ */
+static gchar *
+search_config_file (const gchar *filename)
+{
+  gchar *candidate = NULL;
+
+  if (gpa_homedir)
+    candidate = g_strconcat (gpa_homedir, filename);
+  if (candidate)
+    {
+      if (g_file_test (candidate, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
+        return candidate;
+      else
+        g_free (candidate);
+    }
+
+  candidate = make_filename (GPA_DATADIR, filename, NULL);
+  if (candidate)
+    {
+      if (g_file_test (candidate, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
+	return candidate;
+      else
+	g_free (candidate);
+    }
+
+  if (gpa_options.homedir)
+    {
+      candidate = make_filename (gpa_options.homedir, filename, NULL);
+      if (candidate)
+	{
+	  if (g_file_test (candidate, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
+	    return candidate;
+	  else
+	    g_free (candidate);
+	}
+    }
+
+  if (gpa_homedir)
+    return g_strconcat (gpa_homedir, filename);
+  else
+    return NULL;
+}
 
 static const char *
 my_strusage(int level)
@@ -135,8 +181,6 @@ my_strusage(int level)
     }
   return p;
 }
-
-
 
 static void
 i18n_init (void)
@@ -316,8 +360,8 @@ gpa_update_default_key (void)
  *  Manage the two main windows
  */
 
-static GtkWidget * keyringeditor = NULL;
-static GtkWidget * filemanager = NULL;
+static GtkWidget *keyringeditor = NULL;
+static GtkWidget *filemanager = NULL;
 
 
 static void
@@ -399,12 +443,22 @@ main (int argc, char **argv)
   int greeting = 0;
   int nogreeting = 0;
   const char *gpg_program = GPG_PROGRAM;
-  gchar * gtkrc;
+  gchar *gtkrc;
   const char *keyserver = NULL;
+  int l;
 
 #ifdef __MINGW32__
   hide_gpa_console_window();
 #endif
+
+  gpa_homedir = g_strdup (argv[0]);
+  l = strlen (gpa_homedir) - 2;
+  while (l > 0 && gpa_homedir[l] != '/' && gpa_homedir[l] != G_DIR_SEPARATOR)
+    l--;
+  if (gpa_homedir[l] == '/' || gpa_homedir[l] == G_DIR_SEPARATOR)
+    gpa_homedir[l+1] = 0;
+  else
+    gpa_homedir[0] = 0;
 
   set_strusage (my_strusage);
   /*log_set_name ("gpa"); not yet implemented in logging.c */
@@ -414,20 +468,20 @@ main (int argc, char **argv)
 
   gpa_create_default_key_signal ();
 
-  /* read the gpa gtkrc */
-  gtkrc = make_filename (GPA_DATADIR, "gtkrc", NULL);
-  if (gtkrc)
-    {
-      gtk_rc_parse (gtkrc);
-      free (gtkrc);
-    }
-
 #if defined(__MINGW32__) || defined(__CYGWIN__)
   gpa_options.homedir = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "HomeDir");
   gpg_program = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "gpgProgram");
 #else
   gpa_options.homedir = getenv ("GNUPGHOME");
 #endif
+
+  /* read the gpa gtkrc */
+  gtkrc = search_config_file ("gtkrc");
+  if (gtkrc)
+    {
+      gtk_rc_parse (gtkrc);
+      free (gtkrc);
+    }
 
   if (!gpa_options.homedir || !*gpa_options.homedir)
     {
@@ -477,8 +531,7 @@ main (int argc, char **argv)
   #endif
 
   if (default_config)
-    configname = make_filename (gpa_options.homedir, "gpa.conf", NULL);
-
+    configname = search_config_file ("gpa.conf");
 
   argc = orig_argc;
   argv = orig_argv;

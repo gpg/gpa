@@ -42,7 +42,7 @@
 #include <pwd.h>
 #endif
 #ifdef HAVE_WINSOCK_H
-#include <winsock.h>		/* For gethostname */
+#include <winsock.h>            /* For gethostname */
 #endif
 
 #include "fnmatch.h"
@@ -237,8 +237,8 @@ static gint                cmpl_state_okay        (CompletionState* cmpl_state);
 static const gchar*        cmpl_strerror          (gint);
 
 static PossibleCompletion* cmpl_completion_matches(gchar           *text_to_complete,
-						   gchar          **remaining_text,
-						   CompletionState *cmpl_state);
+                                                   gchar          **remaining_text,
+                                                   CompletionState *cmpl_state);
 
 /* Returns a name for consideration, possibly a completion, this name
  * will be invalid after the next call to cmpl_next_completion.
@@ -292,31 +292,31 @@ static gchar*              cmpl_completion_fullname (const gchar*, CompletionSta
 
 /* Directory operations. */
 static CompletionDir* open_ref_dir         (gchar* text_to_complete,
-					    gchar** remaining_text,
-					    CompletionState* cmpl_state);
+                                            gchar** remaining_text,
+                                            CompletionState* cmpl_state);
 #if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
 static gboolean       check_dir            (gchar *dir_name, 
-					    struct stat *result, 
-					    gboolean *stat_subdirs);
+                                            struct stat *result, 
+                                            gboolean *stat_subdirs);
 #endif
 static CompletionDir* open_dir             (gchar* dir_name,
-					    CompletionState* cmpl_state);
+                                            CompletionState* cmpl_state);
 #ifdef HAVE_PWD_H
 static CompletionDir* open_user_dir        (const gchar* text_to_complete,
-					    CompletionState *cmpl_state);
+                                            CompletionState *cmpl_state);
 #endif
 static CompletionDir* open_relative_dir    (gchar* dir_name, CompletionDir* dir,
-					    CompletionState *cmpl_state);
+                                            CompletionState *cmpl_state);
 static CompletionDirSent* open_new_dir     (gchar* dir_name, 
-					    struct stat* sbuf,
-					    gboolean stat_subdirs);
+                                            struct stat* sbuf,
+                                            gboolean stat_subdirs);
 static gint           correct_dir_fullname (CompletionDir* cmpl_dir);
 static gint           correct_parent       (CompletionDir* cmpl_dir,
-					    struct stat *sbuf);
+                                            struct stat *sbuf);
 static gchar*         find_parent_dir_fullname    (gchar* dirname);
 static CompletionDir* attach_dir           (CompletionDirSent* sent,
-					    gchar* dir_name,
-					    CompletionState *cmpl_state);
+                                            gchar* dir_name,
+                                            CompletionState *cmpl_state);
 static void           free_dir_sent (CompletionDirSent* sent);
 static void           free_dir      (CompletionDir  *dir);
 static void           prune_memory_usage(CompletionState *cmpl_state);
@@ -324,14 +324,14 @@ static void           prune_memory_usage(CompletionState *cmpl_state);
 /* Completion operations */
 #ifdef HAVE_PWD_H
 static PossibleCompletion* attempt_homedir_completion(gchar* text_to_complete,
-						      CompletionState *cmpl_state);
+                                                      CompletionState *cmpl_state);
 #endif
 static PossibleCompletion* attempt_file_completion(CompletionState *cmpl_state);
 static CompletionDir* find_completion_dir(gchar* text_to_complete,
-					  gchar** remaining_text,
-					  CompletionState* cmpl_state);
+                                          gchar** remaining_text,
+                                          CompletionState* cmpl_state);
 static PossibleCompletion* append_completion_text(gchar* text,
-						  CompletionState* cmpl_state);
+                                                  CompletionState* cmpl_state);
 #ifdef HAVE_PWD_H
 static gint get_pwdb(CompletionState* cmpl_state);
 static gint compare_user_dir(const void* a, const void* b);
@@ -339,51 +339,54 @@ static gint compare_user_dir(const void* a, const void* b);
 static gint first_diff_index(gchar* pat, gchar* text);
 static gint compare_cmpl_dir(const void* a, const void* b);
 static void update_cmpl(PossibleCompletion* poss,
-			CompletionState* cmpl_state);
+                        CompletionState* cmpl_state);
 
 static void read_directory (GtkCTree *dir_list, GtkCTreeNode *parent,
-                            gchar *path, gint level);
-static void directory_expand (GtkCTree *dir_list, gpointer data);
+                            gchar *path, gint sublevels);
 
 static void gpa_file_selection_class_init    (GpaFileSelectionClass *klass);
 static void gpa_file_selection_set_property  (GObject         *object,
-					      guint            prop_id,
-					      const GValue    *value,
-					      GParamSpec      *pspec);
+                                              guint            prop_id,
+                                              const GValue    *value,
+                                              GParamSpec      *pspec);
 static void gpa_file_selection_get_property  (GObject         *object,
-					      guint            prop_id,
-					      GValue          *value,
-					      GParamSpec      *pspec);
+                                              guint            prop_id,
+                                              GValue          *value,
+                                              GParamSpec      *pspec);
 static void gpa_file_selection_init          (GpaFileSelection      *filesel);
 static void gpa_file_selection_finalize      (GObject               *object);
 static void gpa_file_selection_destroy       (GtkObject             *object);
 static gint gpa_file_selection_key_press     (GtkWidget             *widget,
-					      GdkEventKey           *event,
-					      gpointer               user_data);
+                                              GdkEventKey           *event,
+                                              gpointer               user_data);
 static gint gpa_file_selection_insert_text   (GtkWidget             *widget,
-					      const gchar           *new_text,
-					      gint                   new_text_length,
-					      gint                  *position,
-					      gpointer               user_data);
+                                              const gchar           *new_text,
+                                              gint                   new_text_length,
+                                              gint                  *position,
+                                              gpointer               user_data);
 
 static void gpa_file_selection_file_button (GtkWidget *widget,
-					    gint row, 
-					    gint column, 
-					    GdkEventButton *bevent,
-					    gpointer user_data);
+                                            gint row, 
+                                            gint column, 
+                                            GdkEventButton *bevent,
+                                            gpointer user_data);
 
 static void gpa_file_selection_dir_button (GtkWidget *widget,
-					   gint row, 
-					   gint column, 
-					   GdkEventButton *bevent,
-					   gpointer data);
+                                           gint row, 
+                                           gint column, 
+                                           GdkEventButton *bevent,
+                                           gpointer data);
+
+static void gpa_file_selection_dir_expand (GtkWidget *widget,
+                                           GtkCTreeNode *node,
+                                           gpointer user_data);
 
 static void gpa_file_selection_populate (GpaFileSelection *fs, gchar *rel_path,
-					 gint try_complete);
+                                         gint try_complete);
 static void gpa_file_selection_abort (GpaFileSelection *fs);
 
 static void gpa_file_selection_update_history_menu (GpaFileSelection       *fs,
-						    gchar                  *current_dir);
+                                                    gchar                  *current_dir);
 
 static void gpa_file_selection_create_dir (GtkWidget *widget, gpointer data);
 static void gpa_file_selection_delete_file (GtkWidget *widget, gpointer data);
@@ -449,8 +452,8 @@ translate_win32_path (GpaFileSelection *filesel)
     {
       int index;
       for (index = 0; path[index] != '\0'; index++)
-	if (path[index] == '\\')
-	  path[index] = '/';
+        if (path[index] == '\\')
+          path[index] = '/';
       
       updated = 1;
     }
@@ -464,64 +467,114 @@ translate_win32_path (GpaFileSelection *filesel)
 #include "floppy.xpm"
 #include "harddisk.xpm"
 
+static GtkCTreeNode *
+find_node (GtkCTree *tree, GtkCTreeNode *parent, gchar *text)
+{
+  GtkCTreeNode *child;
+
+  if (!tree || !text)
+    return NULL;
+  if (parent)
+    child = GTK_CTREE_ROW (parent)->children;
+  else
+    child = GTK_CTREE_NODE (GTK_CLIST (tree)->row_list);
+  while (child)
+    {
+      gchar *temp = NULL;
+      gtk_ctree_get_node_info (tree, child, &temp,
+                               NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      if (strcmp (temp, text) == 0)
+        {
+          return child;
+        }
+      child = GTK_CTREE_NODE_NEXT (child);
+    }
+  return NULL;
+}
+
 static void
 read_directory (GtkCTree *dir_list, GtkCTreeNode *parent,
-                gchar *path, gint level)
+                gchar *path, gint sublevels)
 {
   gchar *text[1];
   GtkCTreeNode *this_node;
   GDir *directory;
   const gchar *dirent;
 
+  gtk_clist_freeze (GTK_CLIST (dir_list));
+
   text[0] = path + strlen (path) - 1;
-  while (text[0] > path && *text[0] != '/')
+  while (text[0] > path && *text[0] != '/' && *text[0] != G_DIR_SEPARATOR)
     text[0]--;
-  if (*text[0] == '/')
+  if (*text[0] == '/' || *text[0] == G_DIR_SEPARATOR)
     text[0]++;
 
   if (strcmp (path, "/") == 0)
     this_node = NULL;
-  else if (strcmp (path, "A:") == 0 || strcmp (path, "B:") == 0)
-    this_node = gtk_ctree_insert_node (dir_list, parent, NULL, text, 5,
-                                       pm_floppy, mask_floppy,
-                                       pm_floppy, mask_floppy,
-                                       FALSE, FALSE);
-  else if (path[1] == ':' && path[2] == 0)
-    this_node = gtk_ctree_insert_node (dir_list, parent, NULL, text, 5,
-                                       pm_harddisk, mask_harddisk,
-                                       pm_harddisk, mask_harddisk,
-                                       FALSE, FALSE);
   else
-    this_node = gtk_ctree_insert_node (dir_list, parent, NULL, text, 5,
-                                       pm_folder, mask_folder,
-                                       pm_open_folder, mask_open_folder,
-                                       FALSE, FALSE);
-  directory = g_dir_open (path, 0, NULL);
-  if (directory)
     {
-      while ((dirent = g_dir_read_name (directory)) != NULL)
+      this_node = find_node (dir_list, parent, text[0]);
+      if (this_node == NULL)
         {
-          gchar *full_dir_name = g_strconcat (path, "/", dirent, NULL);
-          if (g_file_test (full_dir_name, G_FILE_TEST_IS_DIR))
-            {
-              text[0] = (gchar *) dirent;
-              if (level < 3)
-                read_directory (dir_list, this_node, full_dir_name, level + 1);
-              else
-                gtk_ctree_insert_node (dir_list, this_node, NULL, text, 5,
-                                       pm_folder, mask_folder,
-                                       pm_open_folder, mask_open_folder,
-                                       FALSE, FALSE);
-            }
-          g_free (full_dir_name);
+          if (strcmp (path, "A:") == 0 || strcmp (path, "B:") == 0)
+            this_node = gtk_ctree_insert_node (dir_list, parent, NULL, text, 5,
+                                               pm_floppy, mask_floppy,
+                                               pm_floppy, mask_floppy,
+                                               FALSE, FALSE);
+          else if (path[1] == ':' && path[2] == 0)
+            this_node = gtk_ctree_insert_node (dir_list, parent, NULL, text, 5,
+                                               pm_harddisk, mask_harddisk,
+                                               pm_harddisk, mask_harddisk,
+                                               FALSE, FALSE);
+          else
+            this_node = gtk_ctree_insert_node (dir_list, parent, NULL, text, 5,
+                                               pm_folder, mask_folder,
+                                               pm_open_folder, mask_open_folder,
+                                               FALSE, FALSE);
         }
-      g_dir_close (directory);
     }
-}
-
-static void
-directory_expand (GtkCTree *dir_list, gpointer data)
-{
+  if ((strcmp (path, "A:") == 0 || strcmp (path, "B:") == 0)
+      && (sublevels == 0))
+    {
+      text[0] = "some_sub_directory";
+      gtk_ctree_insert_node (dir_list, this_node, NULL, text, 5,
+                             pm_folder, mask_folder, pm_open_folder,
+                             mask_open_folder, FALSE, FALSE);
+    }
+  else
+    {
+      if (this_node)
+	while (GTK_CTREE_ROW (this_node)->children)
+	  gtk_ctree_remove_node (dir_list, GTK_CTREE_ROW (this_node)->children);
+      directory = g_dir_open (path, 0, NULL);
+      if (directory)
+        {
+          gboolean enough = FALSE;
+          while (!enough && (dirent = g_dir_read_name (directory)) != NULL)
+            {
+              gchar *full_dir_name = g_strconcat (path, G_DIR_SEPARATOR_S,
+                                                  dirent, NULL);
+              if (g_file_test (full_dir_name, G_FILE_TEST_IS_DIR))
+                {
+                  text[0] = (gchar *) dirent;
+                  if (sublevels > 0)
+                    read_directory (dir_list, this_node, full_dir_name,
+                                    sublevels - 1);
+                  else
+                    {
+                      gtk_ctree_insert_node (dir_list, this_node, NULL, text, 5,
+                                             pm_folder, mask_folder,
+                                             pm_open_folder, mask_open_folder,
+                                             FALSE, FALSE);
+                      enough = TRUE;
+                    }
+                }
+              g_free (full_dir_name);
+            }
+          g_dir_close (directory);
+        }
+    }
+  gtk_clist_thaw (GTK_CLIST (dir_list));
 }
 
 GtkType
@@ -533,13 +586,13 @@ gpa_file_selection_get_type (void)
     {
       static const GtkTypeInfo filesel_info =
       {
-	"GpaFileSelection",
-	sizeof (GpaFileSelection),
-	sizeof (GpaFileSelectionClass),
-	(GtkClassInitFunc) gpa_file_selection_class_init,
-	(GtkObjectInitFunc) gpa_file_selection_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
+        "GpaFileSelection",
+        sizeof (GpaFileSelection),
+        sizeof (GpaFileSelectionClass),
+        (GtkClassInitFunc) gpa_file_selection_class_init,
+        (GtkObjectInitFunc) gpa_file_selection_init,
+        /* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 
@@ -572,20 +625,20 @@ gpa_file_selection_class_init (GpaFileSelectionClass *class)
                                                         NULL,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
-				   PROP_SHOW_FILEOPS,
-				   g_param_spec_boolean ("show_fileops",
-							 _("Show file operations"),
-							 _("Whether buttons for creating/manipulating files should be displayed."),
-							 FALSE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+                                   PROP_SHOW_FILEOPS,
+                                   g_param_spec_boolean ("show_fileops",
+                                                         _("Show file operations"),
+                                                         _("Whether buttons for creating/manipulating files should be displayed."),
+                                                         FALSE,
+                                                         G_PARAM_READABLE |
+                                                         G_PARAM_WRITABLE));
   object_class->destroy = gpa_file_selection_destroy;
 }
 
 static void gpa_file_selection_set_property (GObject         *object,
-					     guint            prop_id,
-					     const GValue    *value,
-					     GParamSpec      *pspec)
+                                             guint            prop_id,
+                                             const GValue    *value,
+                                             GParamSpec      *pspec)
 {
   GpaFileSelection *filesel;
 
@@ -600,9 +653,9 @@ static void gpa_file_selection_set_property (GObject         *object,
       
     case PROP_SHOW_FILEOPS:
       if (g_value_get_boolean (value))
-	 gpa_file_selection_show_fileop_buttons (filesel);
+         gpa_file_selection_show_fileop_buttons (filesel);
       else
-	 gpa_file_selection_hide_fileop_buttons (filesel);
+         gpa_file_selection_hide_fileop_buttons (filesel);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -611,9 +664,9 @@ static void gpa_file_selection_set_property (GObject         *object,
 }
 
 static void gpa_file_selection_get_property (GObject         *object,
-					     guint            prop_id,
-					     GValue          *value,
-					     GParamSpec      *pspec)
+                                             guint            prop_id,
+                                             GValue          *value,
+                                             GParamSpec      *pspec)
 {
   GpaFileSelection *filesel;
 
@@ -631,8 +684,8 @@ static void gpa_file_selection_get_property (GObject         *object,
        * adding a field to the object.
        */
       g_value_set_boolean (value, (filesel->fileop_c_dir && 
-				   filesel->fileop_del_file &&
-				   filesel->fileop_ren_file));
+                                   filesel->fileop_del_file &&
+                                   filesel->fileop_ren_file));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -664,7 +717,7 @@ gtk_button_correct_label (GtkButton *button, gchar *label_text)
 
   if (GTK_BIN (button)->child)
     gtk_container_remove (GTK_CONTAINER (button),
-			  GTK_BIN (button)->child);
+                          GTK_BIN (button)->child);
 
   
   if (gtk_stock_lookup (button->label_text, &item))
@@ -733,7 +786,7 @@ gpa_file_selection_init (GpaFileSelection *filesel)
   gtk_button_box_set_layout (GTK_BUTTON_BOX (filesel->button_area), GTK_BUTTONBOX_START);
   gtk_box_set_spacing (GTK_BOX (filesel->button_area), 0);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), filesel->button_area, 
-		      FALSE, FALSE, 0);
+                      FALSE, FALSE, 0);
   gtk_widget_show (filesel->button_area);
   
   gpa_file_selection_show_fileop_buttons (filesel);
@@ -747,7 +800,7 @@ gpa_file_selection_init (GpaFileSelection *filesel)
   filesel->history_pulldown = gtk_option_menu_new ();
   gtk_widget_show (filesel->history_pulldown);
   gtk_box_pack_start (GTK_BOX (pulldown_hbox), filesel->history_pulldown, 
-		      FALSE, FALSE, 0);
+                      FALSE, FALSE, 0);
     
   /*  The horizontal box containing the directory and file listboxes  */
   list_hbox = gtk_hbox_new (FALSE, 5);
@@ -760,8 +813,11 @@ gpa_file_selection_init (GpaFileSelection *filesel)
   filesel->dir_list = gtk_ctree_new_with_titles (1, 0, (gchar**) dir_title);
   gtk_widget_set_usize (filesel->dir_list, DIR_LIST_WIDTH, DIR_LIST_HEIGHT);
   gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "select_row",
-		      (GtkSignalFunc) gpa_file_selection_dir_button, 
-		      (gpointer) filesel);
+                      (GtkSignalFunc) gpa_file_selection_dir_button, 
+                      (gpointer) filesel);
+  gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "tree-expand",
+                      (GtkSignalFunc) gpa_file_selection_dir_expand, 
+                      (gpointer) filesel);
   gtk_clist_set_column_auto_resize (GTK_CLIST (filesel->dir_list), 0, TRUE);
   gtk_clist_column_titles_passive (GTK_CLIST (filesel->dir_list));
   gtk_ctree_set_line_style (GTK_CTREE (filesel->dir_list), GTK_CTREE_LINES_SOLID);
@@ -769,13 +825,10 @@ gpa_file_selection_init (GpaFileSelection *filesel)
   if (GTK_CLIST (filesel->dir_list)->row_height < 16)
     gtk_clist_set_row_height (GTK_CLIST (filesel->dir_list), 16);
 
-  gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "tree_expand",
-                      (GtkSignalFunc) directory_expand, NULL);
-
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->dir_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
   gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
   gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
   gtk_widget_show (filesel->dir_list);
@@ -801,15 +854,15 @@ gpa_file_selection_init (GpaFileSelection *filesel)
   filesel->file_list = gtk_clist_new_with_titles (1, (gchar**) file_title);
   gtk_widget_set_usize (filesel->file_list, FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
   gtk_signal_connect (GTK_OBJECT (filesel->file_list), "select_row",
-		      (GtkSignalFunc) gpa_file_selection_file_button, 
-		      (gpointer) filesel);
+                      (GtkSignalFunc) gpa_file_selection_file_button, 
+                      (gpointer) filesel);
   gtk_clist_set_column_auto_resize (GTK_CLIST (filesel->file_list), 0, TRUE);
   gtk_clist_column_titles_passive (GTK_CLIST (filesel->file_list));
 
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->file_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
   gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
   gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
   gtk_widget_show (filesel->file_list);
@@ -818,7 +871,7 @@ gpa_file_selection_init (GpaFileSelection *filesel)
   /* action area for packing buttons into. */
   filesel->action_area = gtk_hbox_new (TRUE, 0);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), filesel->action_area, 
-		      FALSE, FALSE, 0);
+                      FALSE, FALSE, 0);
   gtk_widget_show (filesel->action_area);
   
   /*  The OK/Cancel button area */
@@ -853,12 +906,12 @@ gpa_file_selection_init (GpaFileSelection *filesel)
 
   filesel->selection_entry = gtk_entry_new ();
   gtk_signal_connect (GTK_OBJECT (filesel->selection_entry), "key_press_event",
-		      (GtkSignalFunc) gpa_file_selection_key_press, filesel);
+                      (GtkSignalFunc) gpa_file_selection_key_press, filesel);
   gtk_signal_connect (GTK_OBJECT (filesel->selection_entry), "insert_text",
-		      (GtkSignalFunc) gpa_file_selection_insert_text, NULL);
+                      (GtkSignalFunc) gpa_file_selection_insert_text, NULL);
   gtk_signal_connect_object (GTK_OBJECT (filesel->selection_entry), "focus_in_event",
-			     (GtkSignalFunc) grab_default,
-			     GTK_OBJECT (filesel->ok_button));
+                             (GtkSignalFunc) grab_default,
+                             GTK_OBJECT (filesel->ok_button));
   gtk_signal_connect_object (GTK_OBJECT (filesel->selection_entry), "activate",
                              (GtkSignalFunc) gtk_button_clicked,
                              GTK_OBJECT (filesel->ok_button));
@@ -873,11 +926,11 @@ gpa_file_selection_init (GpaFileSelection *filesel)
       int len = strlen (drive);
       drive[len - 1] = 0;
       drive[0] = toupper (drive[0]);
-      read_directory (GTK_CTREE (filesel->dir_list), NULL, drive, 1);
+      read_directory (GTK_CTREE (filesel->dir_list), NULL, drive, 0);
       drive += (len + 1);
     }
 #else /* not HAVE_DRIVE_LETTERS */
-  read_directory (GTK_CTREE (filesel->dir_list), NULL, "/", 0);
+  read_directory (GTK_CTREE (filesel->dir_list), NULL, "/", 1);
 #endif /* not HAVE_DRIVE_LETTERS */
 
   if (!cmpl_state_okay (filesel->cmpl_state))
@@ -914,27 +967,27 @@ uri_list_extract_first_uri (const gchar* uri_list)
   while (p)
     {
       if (*p != '#')
-	{
-	  while (g_ascii_isspace(*p))
-	    p++;
-	  
-	  q = p;
-	  while (*q && (*q != '\n') && (*q != '\r'))
-	    q++;
-	  
-	  if (q > p)
-	    {
-	      q--;
-	      while (q > p && g_ascii_isspace (*q))
-		q--;
+        {
+          while (g_ascii_isspace(*p))
+            p++;
+          
+          q = p;
+          while (*q && (*q != '\n') && (*q != '\r'))
+            q++;
+          
+          if (q > p)
+            {
+              q--;
+              while (q > p && g_ascii_isspace (*q))
+                q--;
 
-	      if (q > p)
-		return g_strndup (p, q - p + 1);
-	    }
-	}
+              if (q > p)
+                return g_strndup (p, q - p + 1);
+            }
+        }
       p = strchr (p, '\n');
       if (p)
-	p++;
+        p++;
     }
   return NULL;
 }
@@ -957,12 +1010,12 @@ dnd_really_drop  (GtkWidget *dialog, gint response_id, GpaFileSelection *fs)
 
 static void
 filenames_dropped (GtkWidget        *widget,
-		   GdkDragContext   *context,
-		   gint              x,
-		   gint              y,
-		   GtkSelectionData *selection_data,
-		   guint             info,
-		   guint             time)
+                   GdkDragContext   *context,
+                   gint              x,
+                   gint              y,
+                   GtkSelectionData *selection_data,
+                   guint             info,
+                   guint             time)
 {
   char *uri = NULL;
   char *filename = NULL;
@@ -970,7 +1023,7 @@ filenames_dropped (GtkWidget        *widget,
   char this_hostname[257];
   int res;
   GError *error = NULL;
-	
+        
   if (!selection_data->data)
     return;
 
@@ -985,7 +1038,7 @@ filenames_dropped (GtkWidget        *widget,
   if (!filename)
     {
       g_warning ("Error getting dropped filename: %s\n",
-		 error->message);
+                 error->message);
       g_error_free (error);
       return;
     }
@@ -997,23 +1050,23 @@ filenames_dropped (GtkWidget        *widget,
       (res == 0 && strcmp (hostname, this_hostname) == 0) ||
       (strcmp (hostname, "localhost") == 0))
     gpa_file_selection_set_filename (GPA_FILE_SELECTION (widget),
-				     filename);
+                                     filename);
   else
     {
       GtkWidget *dialog;
       
       dialog = gtk_message_dialog_new (GTK_WINDOW (widget),
-				       GTK_DIALOG_DESTROY_WITH_PARENT,
-				       GTK_MESSAGE_QUESTION,
-				       GTK_BUTTONS_YES_NO,
-				       _("The file \"%s\" resides on another machine (called %s) and may not be availible to this program.\n"
-					 "Are you sure that you want to select it?"), filename, hostname);
+                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_QUESTION,
+                                       GTK_BUTTONS_YES_NO,
+                                       _("The file \"%s\" resides on another machine (called %s) and may not be availible to this program.\n"
+                                         "Are you sure that you want to select it?"), filename, hostname);
 
       g_object_set_data_full (G_OBJECT (dialog), "gtk-fs-dnd-filename", g_strdup (filename), g_free);
       
       g_signal_connect_data (dialog, "response",
-			     (GCallback) dnd_really_drop, 
-			     widget, NULL, 0);
+                             (GCallback) dnd_really_drop, 
+                             widget, NULL, 0);
       
       gtk_widget_show (dialog);
     }
@@ -1034,11 +1087,11 @@ enum
 
 static void
 filenames_drag_get (GtkWidget        *widget,
-		    GdkDragContext   *context,
-		    GtkSelectionData *selection_data,
-		    guint             info,
-		    guint             time,
-		    GpaFileSelection *filesel)
+                    GdkDragContext   *context,
+                    GtkSelectionData *selection_data,
+                    guint             info,
+                    guint             time,
+                    GpaFileSelection *filesel)
 {
   const gchar *file;
   gchar *uri_list;
@@ -1051,29 +1104,29 @@ filenames_drag_get (GtkWidget        *widget,
   if (file)
     {
       if (info == TARGET_URILIST)
-	{
-	  res = gethostname (hostname, 256);
-	  
-	  error = NULL;
-	  uri_list = g_filename_to_uri (file, (!res)?hostname:NULL, &error);
-	  if (!uri_list)
-	    {
-	      g_warning ("Error getting filename: %s\n",
-			 error->message);
-	      g_error_free (error);
-	      return;
-	    }
-	  
-	  gtk_selection_data_set (selection_data,
-				  selection_data->target, 8,
-				  (void *)uri_list, strlen((char *)uri_list));
-	  g_free (uri_list);
-	}
+        {
+          res = gethostname (hostname, 256);
+          
+          error = NULL;
+          uri_list = g_filename_to_uri (file, (!res)?hostname:NULL, &error);
+          if (!uri_list)
+            {
+              g_warning ("Error getting filename: %s\n",
+                         error->message);
+              g_error_free (error);
+              return;
+            }
+          
+          gtk_selection_data_set (selection_data,
+                                  selection_data->target, 8,
+                                  (void *)uri_list, strlen((char *)uri_list));
+          g_free (uri_list);
+        }
       else
-	{
-	  g_print ("Setting text: '%s'\n", file);
-	  gtk_selection_data_set_text (selection_data, file, -1);
-	}
+        {
+          g_print ("Setting text: '%s'\n", file);
+          gtk_selection_data_set_text (selection_data, file, -1);
+        }
     }
 }
 
@@ -1095,23 +1148,23 @@ file_selection_setup_dnd (GpaFileSelection *filesel)
   static gint n_drag_types = sizeof(drag_types)/sizeof(drag_types[0]);
 
   gtk_drag_dest_set (GTK_WIDGET (filesel),
-		     GTK_DEST_DEFAULT_ALL,
-		     drop_types, n_drop_types,
-		     GDK_ACTION_COPY);
+                     GTK_DEST_DEFAULT_ALL,
+                     drop_types, n_drop_types,
+                     GDK_ACTION_COPY);
 
   gtk_signal_connect (GTK_OBJECT(filesel), "drag_data_received",
-		      GTK_SIGNAL_FUNC(filenames_dropped), NULL);
+                      GTK_SIGNAL_FUNC(filenames_dropped), NULL);
 
   eventbox = gtk_widget_get_parent (filesel->selection_text);
   gtk_drag_source_set (eventbox,
-		       GDK_BUTTON1_MASK,
-		       drag_types, n_drag_types,
-		       GDK_ACTION_COPY);
+                       GDK_BUTTON1_MASK,
+                       drag_types, n_drag_types,
+                       GDK_ACTION_COPY);
 
   gtk_signal_connect (GTK_OBJECT (eventbox),
-		      "drag_data_get",
-		      GTK_SIGNAL_FUNC (filenames_drag_get),
-		      filesel);
+                      "drag_data_get",
+                      GTK_SIGNAL_FUNC (filenames_drag_get),
+                      filesel);
 }
 
 GtkWidget*
@@ -1138,21 +1191,21 @@ gpa_file_selection_show_fileop_buttons (GpaFileSelection *filesel)
     {
       filesel->fileop_c_dir = gtk_button_new_with_mnemonic (_("Create Dir"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_c_dir), "clicked",
-			  (GtkSignalFunc) gpa_file_selection_create_dir, 
-			  (gpointer) filesel);
+                          (GtkSignalFunc) gpa_file_selection_create_dir, 
+                          (gpointer) filesel);
       gtk_box_pack_start (GTK_BOX (filesel->button_area), 
-			  filesel->fileop_c_dir, TRUE, TRUE, 0);
+                          filesel->fileop_c_dir, TRUE, TRUE, 0);
       gtk_widget_show (filesel->fileop_c_dir);
     }
-	
+        
   if (!filesel->fileop_del_file) 
     {
       filesel->fileop_del_file = gtk_button_new_with_mnemonic (_("Delete File"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_del_file), "clicked",
-			  (GtkSignalFunc) gpa_file_selection_delete_file, 
-			  (gpointer) filesel);
+                          (GtkSignalFunc) gpa_file_selection_delete_file, 
+                          (gpointer) filesel);
       gtk_box_pack_start (GTK_BOX (filesel->button_area), 
-			  filesel->fileop_del_file, TRUE, TRUE, 0);
+                          filesel->fileop_del_file, TRUE, TRUE, 0);
       gtk_widget_show (filesel->fileop_del_file);
     }
 
@@ -1160,10 +1213,10 @@ gpa_file_selection_show_fileop_buttons (GpaFileSelection *filesel)
     {
       filesel->fileop_ren_file = gtk_button_new_with_mnemonic (_("Rename File"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_ren_file), "clicked",
-			  (GtkSignalFunc) gpa_file_selection_rename_file, 
-			  (gpointer) filesel);
+                          (GtkSignalFunc) gpa_file_selection_rename_file, 
+                          (gpointer) filesel);
       gtk_box_pack_start (GTK_BOX (filesel->button_area), 
-			  filesel->fileop_ren_file, TRUE, TRUE, 0);
+                          filesel->fileop_ren_file, TRUE, TRUE, 0);
       gtk_widget_show (filesel->fileop_ren_file);
     }
   g_object_notify (G_OBJECT (filesel), "show_fileops");
@@ -1199,7 +1252,7 @@ gpa_file_selection_hide_fileop_buttons (GpaFileSelection *filesel)
 
 void
 gpa_file_selection_set_filename (GpaFileSelection *filesel,
-				 const gchar      *filename)
+                                 const gchar      *filename)
 {
   gchar *buf;
   const char *name, *last_slash;
@@ -1259,7 +1312,7 @@ gpa_file_selection_get_filename (GpaFileSelection *filesel)
     {
       sys_filename = g_filename_from_utf8 (cmpl_completion_fullname (text, filesel->cmpl_state), -1, NULL, NULL, NULL);
       if (!sys_filename)
-	return nothing;
+        return nothing;
       strncpy (something, sys_filename, sizeof (something));
       g_free (sys_filename);
       return something;
@@ -1270,7 +1323,7 @@ gpa_file_selection_get_filename (GpaFileSelection *filesel)
 
 void
 gpa_file_selection_complete (GpaFileSelection *filesel,
-			     const gchar      *pattern)
+                             const gchar      *pattern)
 {
   g_return_if_fail (GPA_IS_FILE_SELECTION (filesel));
   g_return_if_fail (pattern != NULL);
@@ -1301,12 +1354,12 @@ gpa_file_selection_destroy (GtkObject *object)
     {
       list = filesel->history_list;
       while (list)
-	{
-	  callback_arg = list->data;
-	  g_free (callback_arg->directory);
-	  g_free (callback_arg);
-	  list = list->next;
-	}
+        {
+          callback_arg = list->data;
+          g_free (callback_arg->directory);
+          g_free (callback_arg);
+          list = list->next;
+        }
       g_list_free (filesel->history_list);
       filesel->history_list = NULL;
     }
@@ -1334,7 +1387,7 @@ gpa_file_selection_finalize (GObject *object)
 
 static void
 gpa_file_selection_fileop_error (GpaFileSelection *fs,
-				 gchar            *error_message)
+                                 gchar            *error_message)
 {
   GtkWidget *dialog;
     
@@ -1342,10 +1395,10 @@ gpa_file_selection_fileop_error (GpaFileSelection *fs,
 
   /* main dialog */
   dialog = gtk_message_dialog_new (GTK_WINDOW (fs),
-				   GTK_DIALOG_DESTROY_WITH_PARENT,
-				   GTK_MESSAGE_ERROR,
-				   GTK_BUTTONS_CLOSE,
-				   "%s", error_message);
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_ERROR,
+                                   GTK_BUTTONS_CLOSE,
+                                   "%s", error_message);
 
   /* yes, we free it */
   g_free (error_message);
@@ -1353,15 +1406,15 @@ gpa_file_selection_fileop_error (GpaFileSelection *fs,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
   gtk_signal_connect_object (GTK_OBJECT (dialog), "response",
-			     (GtkSignalFunc) gtk_widget_destroy, 
-			     (gpointer) dialog);
+                             (GtkSignalFunc) gtk_widget_destroy, 
+                             (gpointer) dialog);
 
   gtk_widget_show (dialog);
 }
 
 static void
 gpa_file_selection_fileop_destroy (GtkWidget *widget,
-				   gpointer   data)
+                                   gpointer   data)
 {
   GpaFileSelection *fs = data;
 
@@ -1373,7 +1426,7 @@ gpa_file_selection_fileop_destroy (GtkWidget *widget,
 
 static void
 gpa_file_selection_create_dir_confirmed (GtkWidget *widget,
-					 gpointer   data)
+                                         gpointer   data)
 {
   GpaFileSelection *fs = data;
   const gchar *dirname;
@@ -1395,10 +1448,10 @@ gpa_file_selection_create_dir_confirmed (GtkWidget *widget,
   if (error)
     {
       if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
-	buf = g_strdup_printf (_("The directory name \"%s\" contains symbols that are not allowed in filenames"), dirname);
+        buf = g_strdup_printf (_("The directory name \"%s\" contains symbols that are not allowed in filenames"), dirname);
       else
-	buf = g_strdup_printf (_("Error creating directory \"%s\": %s\n%s"), dirname, error->message,
-			       _("You probably used symbols not allowed in filenames."));
+        buf = g_strdup_printf (_("Error creating directory \"%s\": %s\n%s"), dirname, error->message,
+                               _("You probably used symbols not allowed in filenames."));
       gpa_file_selection_fileop_error (fs, buf);
       g_error_free (error);
       goto out;
@@ -1407,7 +1460,7 @@ gpa_file_selection_create_dir_confirmed (GtkWidget *widget,
   if (mkdir (sys_full_path, 0755) < 0) 
     {
       buf = g_strdup_printf (_("Error creating directory \"%s\": %s\n"), dirname,
-			     g_strerror (errno));
+                             g_strerror (errno));
       gpa_file_selection_fileop_error (fs, buf);
     }
 
@@ -1421,7 +1474,7 @@ gpa_file_selection_create_dir_confirmed (GtkWidget *widget,
   
 static void
 gpa_file_selection_create_dir (GtkWidget *widget,
-			       gpointer   data)
+                               gpointer   data)
 {
   GpaFileSelection *fs = data;
   GtkWidget *label;
@@ -1438,8 +1491,8 @@ gpa_file_selection_create_dir (GtkWidget *widget,
   dialog = gtk_dialog_new ();
   fs->fileop_dialog = dialog;
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-		      (GtkSignalFunc) gpa_file_selection_fileop_destroy, 
-		      (gpointer) fs);
+                      (GtkSignalFunc) gpa_file_selection_fileop_destroy, 
+                      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), _("Create Directory"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
 
@@ -1451,7 +1504,7 @@ gpa_file_selection_create_dir (GtkWidget *widget,
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
-		     FALSE, FALSE, 0);
+                     FALSE, FALSE, 0);
   gtk_widget_show( vbox);
   
   label = gtk_label_new_with_mnemonic (_("_Directory name:"));
@@ -1463,7 +1516,7 @@ gpa_file_selection_create_dir (GtkWidget *widget,
   fs->fileop_entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), fs->fileop_entry);
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
-		      TRUE, TRUE, 5);
+                      TRUE, TRUE, 5);
   GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
   gtk_widget_show (fs->fileop_entry);
   
@@ -1471,13 +1524,13 @@ gpa_file_selection_create_dir (GtkWidget *widget,
   button = gtk_dialog_add_button (dialog, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   gtk_button_correct_label (GTK_BUTTON (button), _("_Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     (GtkSignalFunc) gtk_widget_destroy, 
-			     (gpointer) dialog);
+                             (GtkSignalFunc) gtk_widget_destroy, 
+                             (gpointer) dialog);
   button = gtk_dialog_add_button (dialog, GTK_STOCK_OK, GTK_RESPONSE_OK);
-  gtk_button_correct_label (GTK_BUTTON (button), _("_Create"));
+  gtk_button_correct_label (GTK_BUTTON (button), _("C_reate"));
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gpa_file_selection_create_dir_confirmed, 
-		      (gpointer) fs);
+                      (GtkSignalFunc) gpa_file_selection_create_dir_confirmed, 
+                      (gpointer) fs);
 
   gtk_widget_grab_focus (fs->fileop_entry);
   gtk_widget_show (dialog);
@@ -1485,7 +1538,7 @@ gpa_file_selection_create_dir (GtkWidget *widget,
 
 static void
 gpa_file_selection_delete_file_confirmed (GtkWidget *widget,
-					  gpointer   data)
+                                          gpointer   data)
 {
   GpaFileSelection *fs = data;
   CompletionState *cmpl_state;
@@ -1505,12 +1558,12 @@ gpa_file_selection_delete_file_confirmed (GtkWidget *widget,
   if (error)
     {
       if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
-	buf = g_strdup_printf (_("The filename \"%s\" contains symbols that are not allowed in filenames"),
-			       fs->fileop_file);
+        buf = g_strdup_printf (_("The filename \"%s\" contains symbols that are not allowed in filenames"),
+                               fs->fileop_file);
       else
-	buf = g_strdup_printf (_("Error deleting file \"%s\": %s\n%s"),
-			       fs->fileop_file, error->message,
-			       _("It probably contains symbols not allowed in filenames."));
+        buf = g_strdup_printf (_("Error deleting file \"%s\": %s\n%s"),
+                               fs->fileop_file, error->message,
+                               _("It probably contains symbols not allowed in filenames."));
       
       gpa_file_selection_fileop_error (fs, buf);
       g_error_free (error);
@@ -1520,7 +1573,7 @@ gpa_file_selection_delete_file_confirmed (GtkWidget *widget,
   if (unlink (sys_full_path) < 0) 
     {
       buf = g_strdup_printf (_("Error deleting file \"%s\": %s"),
-			     fs->fileop_file, g_strerror (errno));
+                             fs->fileop_file, g_strerror (errno));
       gpa_file_selection_fileop_error (fs, buf);
     }
   
@@ -1534,7 +1587,7 @@ gpa_file_selection_delete_file_confirmed (GtkWidget *widget,
 
 static void
 gpa_file_selection_delete_file (GtkWidget *widget,
-				gpointer   data)
+                                gpointer   data)
 {
   GpaFileSelection *fs = data;
   GtkWidget *label;
@@ -1547,7 +1600,7 @@ gpa_file_selection_delete_file (GtkWidget *widget,
   g_return_if_fail (GPA_IS_FILE_SELECTION (fs));
 
   if (fs->fileop_dialog)
-	  return;
+          return;
 
 #ifdef G_WITH_CYGWIN
   translate_win32_path (fs);
@@ -1563,8 +1616,8 @@ gpa_file_selection_delete_file (GtkWidget *widget,
   /* main dialog */
   fs->fileop_dialog = dialog = gtk_dialog_new ();
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-		      (GtkSignalFunc) gpa_file_selection_fileop_destroy, 
-		      (gpointer) fs);
+                      (GtkSignalFunc) gpa_file_selection_fileop_destroy, 
+                      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), _("Delete File"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
 
@@ -1576,7 +1629,7 @@ gpa_file_selection_delete_file (GtkWidget *widget,
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
-		     FALSE, FALSE, 0);
+                     FALSE, FALSE, 0);
   gtk_widget_show (vbox);
 
   buf = g_strdup_printf (_("Really delete file \"%s\"?"), filename);
@@ -1590,13 +1643,13 @@ gpa_file_selection_delete_file (GtkWidget *widget,
   button = gtk_dialog_add_button (dialog, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   gtk_button_correct_label (GTK_BUTTON (button), _("_Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     (GtkSignalFunc) gtk_widget_destroy, 
-			     (gpointer) dialog);
+                             (GtkSignalFunc) gtk_widget_destroy, 
+                             (gpointer) dialog);
   button = gtk_dialog_add_button (dialog, GTK_STOCK_OK, GTK_RESPONSE_OK);
   gtk_button_correct_label (GTK_BUTTON (button), _("_Delete"));
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gpa_file_selection_delete_file_confirmed, 
-		      (gpointer) fs);
+                      (GtkSignalFunc) gpa_file_selection_delete_file_confirmed, 
+                      (gpointer) fs);
   
   gtk_widget_show (dialog);
 
@@ -1604,7 +1657,7 @@ gpa_file_selection_delete_file (GtkWidget *widget,
 
 static void
 gpa_file_selection_rename_file_confirmed (GtkWidget *widget,
-					  gpointer   data)
+                                          gpointer   data)
 {
   GpaFileSelection *fs = data;
   gchar *buf;
@@ -1630,11 +1683,11 @@ gpa_file_selection_rename_file_confirmed (GtkWidget *widget,
   if (error)
     {
       if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
-	buf = g_strdup_printf (_("The file name \"%s\" contains symbols that are not allowed in filenames"), new_filename);
+        buf = g_strdup_printf (_("The file name \"%s\" contains symbols that are not allowed in filenames"), new_filename);
       else
-	buf = g_strdup_printf (_("Error renaming file to \"%s\": %s\n%s"),
-			       new_filename, error->message,
-			       _("You probably used symbols not allowed in filenames."));
+        buf = g_strdup_printf (_("Error renaming file to \"%s\": %s\n%s"),
+                               new_filename, error->message,
+                               _("You probably used symbols not allowed in filenames."));
       gpa_file_selection_fileop_error (fs, buf);
       g_error_free (error);
       goto out1;
@@ -1644,11 +1697,11 @@ gpa_file_selection_rename_file_confirmed (GtkWidget *widget,
   if (error)
     {
       if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
-	buf = g_strdup_printf (_("The file name \"%s\" contains symbols that are not allowed in filenames"), old_filename);
+        buf = g_strdup_printf (_("The file name \"%s\" contains symbols that are not allowed in filenames"), old_filename);
       else
-	buf = g_strdup_printf (_("Error renaming file \"%s\": %s\n%s"),
-			       old_filename, error->message,
-			       _("It probably contains symbols not allowed in filenames."));
+        buf = g_strdup_printf (_("Error renaming file \"%s\": %s\n%s"),
+                               old_filename, error->message,
+                               _("It probably contains symbols not allowed in filenames."));
       gpa_file_selection_fileop_error (fs, buf);
       g_error_free (error);
       goto out2;
@@ -1657,8 +1710,8 @@ gpa_file_selection_rename_file_confirmed (GtkWidget *widget,
   if (rename (sys_old_filename, sys_new_filename) < 0) 
     {
       buf = g_strdup_printf (_("Error renaming file \"%s\" to \"%s\": %s"),
-			     sys_old_filename, sys_new_filename,
-			     g_strerror (errno));
+                             sys_old_filename, sys_new_filename,
+                             g_strerror (errno));
       gpa_file_selection_fileop_error (fs, buf);
     }
   
@@ -1676,7 +1729,7 @@ gpa_file_selection_rename_file_confirmed (GtkWidget *widget,
   
 static void
 gpa_file_selection_rename_file (GtkWidget *widget,
-				gpointer   data)
+                                gpointer   data)
 {
   GpaFileSelection *fs = data;
   GtkWidget *label;
@@ -1688,7 +1741,7 @@ gpa_file_selection_rename_file (GtkWidget *widget,
   g_return_if_fail (GPA_IS_FILE_SELECTION (fs));
 
   if (fs->fileop_dialog)
-	  return;
+          return;
 
   g_free (fs->fileop_file);
   fs->fileop_file = g_strdup (gtk_entry_get_text (GTK_ENTRY (fs->selection_entry)));
@@ -1698,8 +1751,8 @@ gpa_file_selection_rename_file (GtkWidget *widget,
   /* main dialog */
   fs->fileop_dialog = dialog = gtk_dialog_new ();
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-		      (GtkSignalFunc) gpa_file_selection_fileop_destroy, 
-		      (gpointer) fs);
+                      (GtkSignalFunc) gpa_file_selection_fileop_destroy, 
+                      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), _("Rename File"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
 
@@ -1711,7 +1764,7 @@ gpa_file_selection_rename_file (GtkWidget *widget,
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
-		      FALSE, FALSE, 0);
+                      FALSE, FALSE, 0);
   gtk_widget_show(vbox);
   
   buf = g_strdup_printf (_("Rename file \"%s\" to:"), fs->fileop_file);
@@ -1724,35 +1777,35 @@ gpa_file_selection_rename_file (GtkWidget *widget,
   /* New filename entry */
   fs->fileop_entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
-		      TRUE, TRUE, 5);
+                      TRUE, TRUE, 5);
   GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
   gtk_widget_show (fs->fileop_entry);
   
   gtk_entry_set_text (GTK_ENTRY (fs->fileop_entry), fs->fileop_file);
   gtk_editable_select_region (GTK_EDITABLE (fs->fileop_entry),
-			      0, strlen (fs->fileop_file));
+                              0, strlen (fs->fileop_file));
 
   /* buttons */
   button = gtk_dialog_add_button (dialog, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   gtk_button_correct_label (GTK_BUTTON (button), _("_Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     (GtkSignalFunc) gtk_widget_destroy, 
-			     (gpointer) dialog);
+                             (GtkSignalFunc) gtk_widget_destroy, 
+                             (gpointer) dialog);
   button = gtk_dialog_add_button (dialog, GTK_STOCK_OK, GTK_RESPONSE_OK);
   gtk_button_correct_label (GTK_BUTTON (button), _("_Rename"));
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gpa_file_selection_rename_file_confirmed, 
-		      (gpointer) fs);
+                      (GtkSignalFunc) gpa_file_selection_rename_file_confirmed, 
+                      (gpointer) fs);
 
   gtk_widget_show (dialog);
 }
 
 static gint
 gpa_file_selection_insert_text (GtkWidget   *widget,
-				const gchar *new_text,
-				gint         new_text_length,
-				gint        *position,
-				gpointer     user_data)
+                                const gchar *new_text,
+                                gint         new_text_length,
+                                gint        *position,
+                                gpointer     user_data)
 {
   gchar *filename;
 
@@ -1772,8 +1825,8 @@ gpa_file_selection_insert_text (GtkWidget   *widget,
 
 static gint
 gpa_file_selection_key_press (GtkWidget   *widget,
-			      GdkEventKey *event,
-			      gpointer     user_data)
+                              GdkEventKey *event,
+                              gpointer     user_data)
 {
   GpaFileSelection *fs;
   char *text;
@@ -1804,7 +1857,7 @@ gpa_file_selection_key_press (GtkWidget   *widget,
 
 static void
 gpa_file_selection_history_callback (GtkWidget *widget,
-				     gpointer   data)
+                                     gpointer   data)
 {
   GpaFileSelection *fs = data;
   HistoryCallbackArg *callback_arg;
@@ -1819,8 +1872,8 @@ gpa_file_selection_history_callback (GtkWidget *widget,
     
     if (callback_arg->menu_item == widget)
       {
-	gpa_file_selection_populate (fs, callback_arg->directory, FALSE);
-	break;
+        gpa_file_selection_populate (fs, callback_arg->directory, FALSE);
+        break;
       }
     
     list = list->next;
@@ -1829,7 +1882,7 @@ gpa_file_selection_history_callback (GtkWidget *widget,
 
 static void 
 gpa_file_selection_update_history_menu (GpaFileSelection *fs,
-					gchar            *current_directory)
+                                        gchar            *current_directory)
 {
   HistoryCallbackArg *callback_arg;
   GtkWidget *menu_item;
@@ -1846,10 +1899,10 @@ gpa_file_selection_update_history_menu (GpaFileSelection *fs,
   if (fs->history_menu) 
     {
       while (list) {
-	callback_arg = list->data;
-	g_free (callback_arg->directory);
-	g_free (callback_arg);
-	list = list->next;
+        callback_arg = list->data;
+        g_free (callback_arg->directory);
+        g_free (callback_arg);
+        list = list->next;
       }
       g_list_free (fs->history_list);
       fs->history_list = NULL;
@@ -1868,52 +1921,52 @@ gpa_file_selection_update_history_menu (GpaFileSelection *fs,
       /* the i == dir_len is to catch the full path for the first 
        * entry. */
       if ( (current_dir[i] == G_DIR_SEPARATOR) || (i == dir_len))
-	{
-	  /* another small hack to catch the full path */
-	  if (i != dir_len) 
-		  current_dir[i + 1] = '\0';
+        {
+          /* another small hack to catch the full path */
+          if (i != dir_len) 
+                  current_dir[i + 1] = '\0';
 #ifdef G_WITH_CYGWIN
-	  if (!strcmp (current_dir, "//"))
-	    continue;
+          if (!strcmp (current_dir, "//"))
+            continue;
 #endif
-	  menu_item = gtk_menu_item_new_with_mnemonic (current_dir);
-	  
-	  callback_arg = g_new (HistoryCallbackArg, 1);
-	  callback_arg->menu_item = menu_item;
-	  
-	  /* since the autocompletion gets confused if you don't 
-	   * supply a trailing '/' on a dir entry, set the full
-	   * (current) path to "" which just refreshes the filesel */
-	  if (dir_len == i)
-	    {
-	      callback_arg->directory = g_strdup ("");
-	    }
-	  else
-	    {
-	      callback_arg->directory = g_strdup (current_dir);
-	    }
-	  
-	  fs->history_list = g_list_append (fs->history_list, callback_arg);
-	  
-	  gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			      (GtkSignalFunc) gpa_file_selection_history_callback,
-			      (gpointer) fs);
-	  gtk_menu_shell_append (GTK_MENU_SHELL (fs->history_menu), menu_item);
-	  gtk_widget_show (menu_item);
-	}
+          menu_item = gtk_menu_item_new_with_mnemonic (current_dir);
+          
+          callback_arg = g_new (HistoryCallbackArg, 1);
+          callback_arg->menu_item = menu_item;
+          
+          /* since the autocompletion gets confused if you don't 
+           * supply a trailing '/' on a dir entry, set the full
+           * (current) path to "" which just refreshes the filesel */
+          if (dir_len == i)
+            {
+              callback_arg->directory = g_strdup ("");
+            }
+          else
+            {
+              callback_arg->directory = g_strdup (current_dir);
+            }
+          
+          fs->history_list = g_list_append (fs->history_list, callback_arg);
+          
+          gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+                              (GtkSignalFunc) gpa_file_selection_history_callback,
+                              (gpointer) fs);
+          gtk_menu_shell_append (GTK_MENU_SHELL (fs->history_menu), menu_item);
+          gtk_widget_show (menu_item);
+        }
     }
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (fs->history_pulldown), 
-			    fs->history_menu);
+                            fs->history_menu);
   g_free (current_dir);
 }
 
 static void
 gpa_file_selection_file_button (GtkWidget      *widget,
-				gint            row, 
-				gint            column, 
-				GdkEventButton *bevent,
-				gpointer        user_data)
+                                gint            row, 
+                                gint            column, 
+                                GdkEventButton *bevent,
+                                gpointer        user_data)
 {
   GpaFileSelection *fs = NULL;
   gchar *filename, *temp = NULL;
@@ -1940,18 +1993,18 @@ gpa_file_selection_file_button (GtkWidget      *widget,
   if (filename)
     {
       if (bevent)
-	switch (bevent->type)
-	  {
-	  case GDK_2BUTTON_PRESS:
-	    gtk_button_clicked (GTK_BUTTON (fs->ok_button));
-	    break;
-	    
-	  default:
-	    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	    break;
-	  }
+        switch (bevent->type)
+          {
+          case GDK_2BUTTON_PRESS:
+            gtk_button_clicked (GTK_BUTTON (fs->ok_button));
+            break;
+            
+          default:
+            gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+            break;
+          }
       else
-	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+        gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
 
       g_free (filename);
     }
@@ -1959,16 +2012,16 @@ gpa_file_selection_file_button (GtkWidget      *widget,
 
 static void
 gpa_file_selection_dir_button (GtkWidget      *widget,
-			       gint            row, 
-			       gint            column, 
-			       GdkEventButton *bevent,
-			       gpointer        user_data)
+                               gint            row, 
+                               gint            column, 
+                               GdkEventButton *bevent,
+                               gpointer        user_data)
 {
   GpaFileSelection *fs = NULL;
-  gchar *filename, *plain_filename, *temp = NULL;
+  gchar *filename, *plain_filename = NULL;
   GtkCTreeNode *node;
 
-  g_return_if_fail (GTK_IS_CLIST (widget));
+  g_return_if_fail (GTK_IS_CTREE (widget));
 
   fs = GPA_FILE_SELECTION (user_data);
   g_return_if_fail (GPA_IS_FILE_SELECTION (fs));
@@ -1979,14 +2032,13 @@ gpa_file_selection_dir_button (GtkWidget      *widget,
   else
     node = GTK_CTREE_NODE (GTK_CLIST (fs->dir_list)->row_list);
 
-  gtk_ctree_get_node_info (GTK_CTREE (fs->dir_list), node, &temp,
+  gtk_ctree_get_node_info (GTK_CTREE (fs->dir_list), node, &plain_filename,
                            NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-  plain_filename = g_strdup (temp);
   filename = g_strconcat (plain_filename, G_DIR_SEPARATOR_S, NULL);
   node = GTK_CTREE_ROW (node)->parent;
   while (node)
     {
-      gchar *temp_filename;
+      gchar *temp = NULL, *temp_filename;
       gtk_ctree_get_node_info (GTK_CTREE (fs->dir_list), node, &temp,
                                NULL, NULL, NULL, NULL, NULL, NULL, NULL);
       temp_filename = filename;
@@ -2009,14 +2061,51 @@ gpa_file_selection_dir_button (GtkWidget      *widget,
       gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), "");
       g_free (filename);
     }
-  if (plain_filename)
-    g_free (plain_filename);
+}
+
+static void
+gpa_file_selection_dir_expand (GtkWidget *widget, GtkCTreeNode *node,
+                               gpointer user_data)
+{
+  GpaFileSelection *fs = NULL;
+  gchar *filename, *temp = NULL;
+  GtkCTreeNode *parent_node;
+
+  g_return_if_fail (GTK_IS_CTREE (widget));
+  fs = GPA_FILE_SELECTION (user_data);
+  g_return_if_fail (GPA_IS_FILE_SELECTION (fs));
+
+  gtk_ctree_get_node_info (GTK_CTREE (fs->dir_list), node, &temp,
+                           NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+  filename = g_strdup (temp);
+  parent_node = GTK_CTREE_ROW (node)->parent;
+  while (parent_node)
+    {
+      gchar *temp_filename;
+      gtk_ctree_get_node_info (GTK_CTREE (fs->dir_list), parent_node, &temp,
+                               NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      temp_filename = filename;
+      filename = g_strconcat (temp, G_DIR_SEPARATOR_S, temp_filename, NULL);
+      g_free (temp_filename);
+      parent_node = GTK_CTREE_ROW (parent_node)->parent;
+    }
+#ifndef HAVE_DRIVE_LETTERS
+  if (filename)
+    {
+      gchar *temp_filename = filename;
+      filename = g_strconcat (G_DIR_SEPARATOR_S, temp_filename, NULL);
+      g_free (temp_filename);
+    }
+#endif
+  read_directory (GTK_CTREE (fs->dir_list), GTK_CTREE_ROW (node)->parent,
+                  filename, 1);
+  g_free (filename);
 }
 
 static void
 gpa_file_selection_populate (GpaFileSelection *fs,
-			     gchar            *rel_path,
-			     gint              try_complete)
+                             gchar            *rel_path,
+                             gint              try_complete)
 {
   CompletionState *cmpl_state;
   PossibleCompletion* poss;
@@ -2053,13 +2142,13 @@ gpa_file_selection_populate (GpaFileSelection *fs,
 
           filename = cmpl_this_completion (poss);
 
-	  text[0] = filename;
-	  
+          text[0] = filename;
+          
           if (cmpl_is_directory (poss))
             /* Mark the entry in the tree, somehow. */;
           else
-	    gtk_clist_append (GTK_CLIST (fs->file_list), text);
-	}
+            gtk_clist_append (GTK_CLIST (fs->file_list), text);
+        }
       poss = cmpl_next_completion (cmpl_state);
     }
 
@@ -2082,7 +2171,7 @@ gpa_file_selection_populate (GpaFileSelection *fs,
 
           if (cmpl_updated_dir (cmpl_state))
             {
-	      gchar* dir_name = g_strdup (cmpl_updated_text (cmpl_state));
+              gchar* dir_name = g_strdup (cmpl_updated_text (cmpl_state));
 
               did_recurse = TRUE;
 
@@ -2092,7 +2181,7 @@ gpa_file_selection_populate (GpaFileSelection *fs,
             }
           else
             {
-	      if (fs->selection_entry)
+              if (fs->selection_entry)
                 gtk_entry_set_text (GTK_ENTRY (fs->selection_entry),
                                     cmpl_updated_text (cmpl_state));
             }
@@ -2101,35 +2190,35 @@ gpa_file_selection_populate (GpaFileSelection *fs,
         {
           selection_index = cmpl_last_valid_char (cmpl_state) -
                             (strlen (rel_path) - strlen (rem_path));
-	  if (fs->selection_entry)
-	    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), rem_path);
+          if (fs->selection_entry)
+            gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), rem_path);
         }
     }
   else
     {
       if (fs->selection_entry)
-	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), "");
+        gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), "");
     }
 
   if (!did_recurse)
     {
       if (fs->selection_entry)
-	gtk_entry_set_position (GTK_ENTRY (fs->selection_entry), selection_index);
+        gtk_entry_set_position (GTK_ENTRY (fs->selection_entry), selection_index);
 
       if (fs->selection_entry)
-	{
-	  sel_text = g_strconcat (_("Selection: "),
-				  cmpl_reference_position (cmpl_state),
-				  NULL);
+        {
+          sel_text = g_strconcat (_("Selection: "),
+                                  cmpl_reference_position (cmpl_state),
+                                  NULL);
 
-	  gtk_label_set_text (GTK_LABEL (fs->selection_text), sel_text);
-	  g_free (sel_text);
-	}
+          gtk_label_set_text (GTK_LABEL (fs->selection_text), sel_text);
+          g_free (sel_text);
+        }
 
       if (fs->history_pulldown) 
-	{
-	  gpa_file_selection_update_history_menu (fs, cmpl_reference_position (cmpl_state));
-	}
+        {
+          gpa_file_selection_update_history_menu (fs, cmpl_reference_position (cmpl_state));
+        }
       
     }
 }
@@ -2148,7 +2237,7 @@ gpa_file_selection_abort (GpaFileSelection *fs)
 }
 
 /**********************************************************************/
-/*			  External Interface                          */
+/*                        External Interface                          */
 /**********************************************************************/
 
 /* The four completion state selectors
@@ -2179,7 +2268,7 @@ cmpl_last_valid_char (CompletionState *cmpl_state)
 
 static gchar*
 cmpl_completion_fullname (const gchar     *text,
-			  CompletionState *cmpl_state)
+                          CompletionState *cmpl_state)
 {
   static char nothing[2] = "";
 
@@ -2200,28 +2289,28 @@ cmpl_completion_fullname (const gchar     *text,
       dir = open_user_dir (text, cmpl_state);
 
       if (!dir)
-	{
-	  /* spencer says just return ~something, so
-	   * for now just do it. */
-	  strcpy (cmpl_state->updated_text, text);
-	}
+        {
+          /* spencer says just return ~something, so
+           * for now just do it. */
+          strcpy (cmpl_state->updated_text, text);
+        }
       else
-	{
+        {
 
-	  strcpy (cmpl_state->updated_text, dir->fullname);
+          strcpy (cmpl_state->updated_text, dir->fullname);
 
-	  slash = strchr (text, G_DIR_SEPARATOR);
+          slash = strchr (text, G_DIR_SEPARATOR);
 
-	  if (slash)
-	    strcat (cmpl_state->updated_text, slash);
-	}
+          if (slash)
+            strcat (cmpl_state->updated_text, slash);
+        }
     }
 #endif
   else
     {
       strcpy (cmpl_state->updated_text, cmpl_state->reference_dir->fullname);
       if (cmpl_state->updated_text[strlen (cmpl_state->updated_text) - 1] != G_DIR_SEPARATOR)
-	strcat (cmpl_state->updated_text, G_DIR_SEPARATOR_S);
+        strcat (cmpl_state->updated_text, G_DIR_SEPARATOR_S);
       strcat (cmpl_state->updated_text, text);
     }
 
@@ -2249,7 +2338,7 @@ cmpl_is_a_completion (PossibleCompletion* pc)
 }
 
 /**********************************************************************/
-/*	                 Construction, deletion                       */
+/*                       Construction, deletion                       */
 /**********************************************************************/
 
 static CompletionState*
@@ -2380,9 +2469,9 @@ prune_memory_usage (CompletionState *cmpl_state)
   while (cdl)
     {
       if (cdl->data == cmpl_state->reference_dir)
-	cmpl_state->directory_storage = g_list_prepend (NULL, cdl->data);
+        cmpl_state->directory_storage = g_list_prepend (NULL, cdl->data);
       else
-	free_dir (cdl->data);
+        free_dir (cdl->data);
       cdl = cdl->next;
     }
 
@@ -2395,8 +2484,8 @@ prune_memory_usage (CompletionState *cmpl_state)
 
 static PossibleCompletion*
 cmpl_completion_matches (gchar           *text_to_complete,
-			 gchar          **remaining_text,
-			 CompletionState *cmpl_state)
+                         gchar          **remaining_text,
+                         CompletionState *cmpl_state)
 {
 #ifdef HAVE_PWD_H
   gchar* first_slash;
@@ -2481,14 +2570,14 @@ cmpl_next_completion (CompletionState* cmpl_state)
 }
 
 /**********************************************************************/
-/*			 Directory Operations                         */
+/*                       Directory Operations                         */
 /**********************************************************************/
 
 /* Open the directory where completion will begin from, if possible. */
 static CompletionDir*
 open_ref_dir (gchar           *text_to_complete,
-	      gchar          **remaining_text,
-	      CompletionState *cmpl_state)
+              gchar          **remaining_text,
+              CompletionState *cmpl_state)
 {
   gchar* first_slash;
   CompletionDir *new_dir;
@@ -2504,7 +2593,7 @@ open_ref_dir (gchar           *text_to_complete,
       new_dir = open_dir (root_dir, cmpl_state);
 
       if (new_dir) {
-	*remaining_text = text_to_complete + 4;
+        *remaining_text = text_to_complete + 4;
       }
     }
 #else
@@ -2517,16 +2606,16 @@ open_ref_dir (gchar           *text_to_complete,
       new_dir = open_user_dir (text_to_complete, cmpl_state);
 
       if (new_dir)
-	{
-	  if (first_slash)
-	    *remaining_text = first_slash + 1;
-	  else
-	    *remaining_text = text_to_complete + strlen (text_to_complete);
-	}
+        {
+          if (first_slash)
+            *remaining_text = first_slash + 1;
+          else
+            *remaining_text = text_to_complete + strlen (text_to_complete);
+        }
       else
-	{
-	  return NULL;
-	}
+        {
+          return NULL;
+        }
     }
 #endif
   else if (g_path_is_absolute (text_to_complete) || !cmpl_state->reference_dir)
@@ -2536,38 +2625,38 @@ open_ref_dir (gchar           *text_to_complete,
 
       p = tmp;
       while (*p && *p != '*' && *p != '?')
-	p++;
+        p++;
 
       *p = '\0';
       p = strrchr (tmp, G_DIR_SEPARATOR);
       if (p)
-	{
-	  if (p == tmp)
-	    p++;
+        {
+          if (p == tmp)
+            p++;
       
-	  *p = '\0';
+          *p = '\0';
 
-	  new_dir = open_dir (tmp, cmpl_state);
+          new_dir = open_dir (tmp, cmpl_state);
 
-	  if (new_dir)
-	    *remaining_text = text_to_complete + 
-	      ((p == tmp + 1) ? (p - tmp) : (p + 1 - tmp));
-	}
+          if (new_dir)
+            *remaining_text = text_to_complete + 
+              ((p == tmp + 1) ? (p - tmp) : (p + 1 - tmp));
+        }
       else
-	{
-	  /* If no possible candidates, use the cwd */
-	  gchar *sys_curdir = g_get_current_dir ();
-	  gchar *utf8_curdir = g_filename_to_utf8 (sys_curdir, -1, NULL, NULL, NULL);
+        {
+          /* If no possible candidates, use the cwd */
+          gchar *sys_curdir = g_get_current_dir ();
+          gchar *utf8_curdir = g_filename_to_utf8 (sys_curdir, -1, NULL, NULL, NULL);
 
-	  g_free (sys_curdir);
+          g_free (sys_curdir);
 
-	  new_dir = open_dir (utf8_curdir, cmpl_state);
+          new_dir = open_dir (utf8_curdir, cmpl_state);
 
-	  if (new_dir)
-	    *remaining_text = text_to_complete;
+          if (new_dir)
+            *remaining_text = text_to_complete;
 
-	  g_free (utf8_curdir);
-	}
+          g_free (utf8_curdir);
+        }
 
       g_free (tmp);
     }
@@ -2592,7 +2681,7 @@ open_ref_dir (gchar           *text_to_complete,
 /* open a directory by user name */
 static CompletionDir*
 open_user_dir (const gchar     *text_to_complete,
-	       CompletionState *cmpl_state)
+               CompletionState *cmpl_state)
 {
   CompletionDir *result;
   gchar *first_slash;
@@ -2614,9 +2703,9 @@ open_user_dir (const gchar     *text_to_complete,
       gchar *utf8_homedir = g_filename_to_utf8 (homedir, -1, NULL, NULL, NULL);
 
       if (utf8_homedir)
-	result = open_dir (utf8_homedir, cmpl_state);
+        result = open_dir (utf8_homedir, cmpl_state);
       else
-	result = NULL;
+        result = NULL;
       
       g_free (utf8_homedir);
     }
@@ -2632,10 +2721,10 @@ open_user_dir (const gchar     *text_to_complete,
       pwd = getpwnam (copy);
       g_free (copy);
       if (!pwd)
-	{
-	  cmpl_errno = errno;
-	  return NULL;
-	}
+        {
+          cmpl_errno = errno;
+          return NULL;
+        }
       utf8_dir = g_filename_to_utf8 (pwd->pw_dir, -1, NULL, NULL, NULL);
       result = open_dir (utf8_dir, cmpl_state);
       g_free (utf8_dir);
@@ -2648,8 +2737,8 @@ open_user_dir (const gchar     *text_to_complete,
 /* open a directory relative the the current relative directory */
 static CompletionDir*
 open_relative_dir (gchar           *dir_name,
-		   CompletionDir   *dir,
-		   CompletionState *cmpl_state)
+                   CompletionDir   *dir,
+                   CompletionState *cmpl_state)
 {
   CompletionDir *result;
   GString *path;
@@ -2672,8 +2761,8 @@ open_relative_dir (gchar           *dir_name,
 /* after the cache lookup fails, really open a new directory */
 static CompletionDirSent*
 open_new_dir (gchar       *dir_name,
-	      struct stat *sbuf,
-	      gboolean     stat_subdirs)
+              struct stat *sbuf,
+              gboolean     stat_subdirs)
 {
   CompletionDirSent *sent;
   GDir *directory;
@@ -2721,39 +2810,39 @@ open_new_dir (gchar       *dir_name,
       dirent = g_dir_read_name (directory);
 
       if (!dirent)
-	{
-	  g_warning ("Failure reading directory '%s'", sys_dir_name);
-	  g_dir_close (directory);
-	  g_free (sys_dir_name);
-	  return NULL;
-	}
+        {
+          g_warning ("Failure reading directory '%s'", sys_dir_name);
+          g_dir_close (directory);
+          g_free (sys_dir_name);
+          return NULL;
+        }
 
       sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
       if (!g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
-	{
-	  g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent);
-	  continue;
-	}
+        {
+          g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent);
+          continue;
+        }
 
       g_string_assign (path, sys_dir_name);
       if (path->str[path->len-1] != G_DIR_SEPARATOR)
-	{
-	  g_string_append_c (path, G_DIR_SEPARATOR);
-	}
+        {
+          g_string_append_c (path, G_DIR_SEPARATOR);
+        }
       g_string_append (path, dirent);
 
       if (stat_subdirs)
-	{
-	  /* Here we know path->str is a "system charset" string */
-	  if (stat (path->str, &ent_sbuf) >= 0 && S_ISDIR (ent_sbuf.st_mode))
-	    sent->entries[n_entries].is_dir = TRUE;
-	  else
-	    /* stat may fail, and we don't mind, since it could be a
-	     * dangling symlink. */
-	    sent->entries[n_entries].is_dir = FALSE;
-	}
+        {
+          /* Here we know path->str is a "system charset" string */
+          if (stat (path->str, &ent_sbuf) >= 0 && S_ISDIR (ent_sbuf.st_mode))
+            sent->entries[n_entries].is_dir = TRUE;
+          else
+            /* stat may fail, and we don't mind, since it could be a
+             * dangling symlink. */
+            sent->entries[n_entries].is_dir = FALSE;
+        }
       else
-	sent->entries[n_entries].is_dir = 1;
+        sent->entries[n_entries].is_dir = 1;
 
       n_entries++;
     }
@@ -2772,8 +2861,8 @@ open_new_dir (gchar       *dir_name,
 
 static gboolean
 check_dir (gchar       *dir_name,
-	   struct stat *result,
-	   gboolean    *stat_subdirs)
+           struct stat *result,
+           gboolean    *stat_subdirs)
 {
   /* A list of directories that we know only contain other directories.
    * Trying to stat every file in these directories would be very
@@ -2798,10 +2887,10 @@ check_dir (gchar       *dir_name,
     {
       initialized = TRUE;
       for (i = 0; i < n_no_stat_dirs; i++)
-	{
-	  if (stat (no_stat_dirs[i].name, &no_stat_dirs[i].statbuf) == 0)
-	    no_stat_dirs[i].present = TRUE;
-	}
+        {
+          if (stat (no_stat_dirs[i].name, &no_stat_dirs[i].statbuf) == 0)
+            no_stat_dirs[i].present = TRUE;
+        }
     }
 
   sys_dir_name = g_filename_from_utf8 (dir_name, -1, NULL, NULL, NULL);
@@ -2823,12 +2912,12 @@ check_dir (gchar       *dir_name,
   for (i = 0; i < n_no_stat_dirs; i++)
     {
       if (no_stat_dirs[i].present &&
-	  (no_stat_dirs[i].statbuf.st_dev == result->st_dev) &&
-	  (no_stat_dirs[i].statbuf.st_ino == result->st_ino))
-	{
-	  *stat_subdirs = FALSE;
-	  break;
-	}
+          (no_stat_dirs[i].statbuf.st_dev == result->st_dev) &&
+          (no_stat_dirs[i].statbuf.st_ino == result->st_ino))
+        {
+          *stat_subdirs = FALSE;
+          break;
+        }
     }
 
   return TRUE;
@@ -2839,7 +2928,7 @@ check_dir (gchar       *dir_name,
 /* open a directory by absolute pathname */
 static CompletionDir*
 open_dir (gchar           *dir_name,
-	  CompletionState *cmpl_state)
+          CompletionState *cmpl_state)
 {
   struct stat sbuf;
   gboolean stat_subdirs;
@@ -2857,9 +2946,9 @@ open_dir (gchar           *dir_name,
       sent = cdsl->data;
 
       if (sent->inode == sbuf.st_ino &&
-	  sent->mtime == sbuf.st_mtime &&
-	  sent->device == sbuf.st_dev)
-	return attach_dir (sent, dir_name, cmpl_state);
+          sent->mtime == sbuf.st_mtime &&
+          sent->device == sbuf.st_dev)
+        return attach_dir (sent, dir_name, cmpl_state);
 
       cdsl = cdsl->next;
     }
@@ -2872,7 +2961,7 @@ open_dir (gchar           *dir_name,
   if (sent)
     {
       cmpl_state->directory_sent_storage =
-	g_list_prepend (cmpl_state->directory_sent_storage, sent);
+        g_list_prepend (cmpl_state->directory_sent_storage, sent);
 
       return attach_dir (sent, dir_name, cmpl_state);
     }
@@ -2882,8 +2971,8 @@ open_dir (gchar           *dir_name,
 
 static CompletionDir*
 attach_dir (CompletionDirSent *sent,
-	    gchar             *dir_name,
-	    CompletionState   *cmpl_state)
+            gchar             *dir_name,
+            CompletionState   *cmpl_state)
 {
   CompletionDir* new_dir;
 
@@ -2913,89 +3002,89 @@ correct_dir_fullname (CompletionDir* cmpl_dir)
     {
       /* Is it just the root directory (on a drive) ? */
       if (cmpl_dir->fullname + length - 2 == first_slash)
-	{
-	  cmpl_dir->fullname[length - 1] = 0;
-	  cmpl_dir->fullname_len = length - 1;
-	  return TRUE;
-	}
+        {
+          cmpl_dir->fullname[length - 1] = 0;
+          cmpl_dir->fullname_len = length - 1;
+          return TRUE;
+        }
       else
-	{
-	  cmpl_dir->fullname[length - 2] = 0;
-	}
+        {
+          cmpl_dir->fullname[length - 2] = 0;
+        }
     }
 
   /* Ends with /./ (\.\)? */
   else if (length >= 3 &&
-	   strcmp (cmpl_dir->fullname + length - 3,
-		   G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S) == 0)
+           strcmp (cmpl_dir->fullname + length - 3,
+                   G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S) == 0)
     cmpl_dir->fullname[length - 2] = 0;
 
   /* Ends with /.. (\..) ? */
   else if (length >= 3 &&
-	   strcmp (cmpl_dir->fullname + length - 3,
-		   G_DIR_SEPARATOR_S "..") == 0)
+           strcmp (cmpl_dir->fullname + length - 3,
+                   G_DIR_SEPARATOR_S "..") == 0)
     {
       /* Is it just /.. (X:\..)? */
       if (cmpl_dir->fullname + length - 3 == first_slash)
-	{
-	  cmpl_dir->fullname[length - 2] = 0;
-	  cmpl_dir->fullname_len = length - 2;
-	  return TRUE;
-	}
+        {
+          cmpl_dir->fullname[length - 2] = 0;
+          cmpl_dir->fullname_len = length - 2;
+          return TRUE;
+        }
 
       sys_filename = g_filename_from_utf8 (cmpl_dir->fullname, -1, NULL, NULL, NULL);
       if (!sys_filename)
-	{
-	  cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
-	  return FALSE;
-	}
+        {
+          cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+          return FALSE;
+        }
       
       if (stat (sys_filename, &sbuf) < 0)
-	{
-	  g_free (sys_filename);
-	  cmpl_errno = errno;
-	  return FALSE;
-	}
+        {
+          g_free (sys_filename);
+          cmpl_errno = errno;
+          return FALSE;
+        }
       g_free (sys_filename);
 
       cmpl_dir->fullname[length - 3] = 0;
 
       if (!correct_parent (cmpl_dir, &sbuf))
-	return FALSE;
+        return FALSE;
     }
 
   /* Ends with /../ (\..\)? */
   else if (length >= 4 &&
-	   strcmp (cmpl_dir->fullname + length - 4,
-		   G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S) == 0)
+           strcmp (cmpl_dir->fullname + length - 4,
+                   G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S) == 0)
     {
       /* Is it just /../ (X:\..\)? */
       if (cmpl_dir->fullname + length - 4 == first_slash)
-	{
-	  cmpl_dir->fullname[length - 3] = 0;
-	  cmpl_dir->fullname_len = length - 3;
-	  return TRUE;
-	}
+        {
+          cmpl_dir->fullname[length - 3] = 0;
+          cmpl_dir->fullname_len = length - 3;
+          return TRUE;
+        }
 
       sys_filename = g_filename_from_utf8 (cmpl_dir->fullname, -1, NULL, NULL, NULL);
       if (!sys_filename)
-	{
-	  cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
-	  return FALSE;
-	}
+        {
+          cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+          return FALSE;
+        }
       
       if (stat (sys_filename, &sbuf) < 0)
-	{
-	  g_free (sys_filename);
-	  cmpl_errno = errno;
-	  return FALSE;
-	}
+        {
+          g_free (sys_filename);
+          cmpl_errno = errno;
+          return FALSE;
+        }
       g_free (sys_filename);
 
       cmpl_dir->fullname[length - 4] = 0;
 
       if (!correct_parent (cmpl_dir, &sbuf))
-	return FALSE;
+        return FALSE;
     }
 
   cmpl_dir->fullname_len = strlen (cmpl_dir->fullname);
@@ -3005,7 +3094,7 @@ correct_dir_fullname (CompletionDir* cmpl_dir)
 
 static gint
 correct_parent (CompletionDir *cmpl_dir,
-		struct stat   *sbuf)
+                struct stat   *sbuf)
 {
   struct stat parbuf;
   gchar *last_slash;
@@ -3036,7 +3125,7 @@ correct_parent (CompletionDir *cmpl_dir,
     {
       cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
       if (!c)
-	last_slash[0] = G_DIR_SEPARATOR;
+        last_slash[0] = G_DIR_SEPARATOR;
       return FALSE;
     }
   
@@ -3045,12 +3134,12 @@ correct_parent (CompletionDir *cmpl_dir,
       g_free (sys_filename);
       cmpl_errno = errno;
       if (!c)
-	last_slash[0] = G_DIR_SEPARATOR;
+        last_slash[0] = G_DIR_SEPARATOR;
       return FALSE;
     }
   g_free (sys_filename);
 
-#ifndef G_OS_WIN32		/* No inode numbers on Win32 */
+#ifndef G_OS_WIN32              /* No inode numbers on Win32 */
   if (parbuf.st_ino == sbuf->st_ino && parbuf.st_dev == sbuf->st_dev)
     /* it wasn't a link */
     return TRUE;
@@ -3128,7 +3217,7 @@ find_parent_dir_fullname (gchar* dirname)
 
 static PossibleCompletion*
 attempt_homedir_completion (gchar           *text_to_complete,
-			    CompletionState *cmpl_state)
+                            CompletionState *cmpl_state)
 {
   gint index, length;
 
@@ -3142,19 +3231,19 @@ attempt_homedir_completion (gchar           *text_to_complete,
   while (cmpl_state->user_completion_index < cmpl_state->user_directories_len)
     {
       index = first_diff_index (text_to_complete + 1,
-				cmpl_state->user_directories
-				[cmpl_state->user_completion_index].login);
+                                cmpl_state->user_directories
+                                [cmpl_state->user_completion_index].login);
 
       switch (index)
-	{
-	case PATTERN_MATCH:
-	  break;
-	default:
-	  if (cmpl_state->last_valid_char < (index + 1))
-	    cmpl_state->last_valid_char = index + 1;
-	  cmpl_state->user_completion_index += 1;
-	  continue;
-	}
+        {
+        case PATTERN_MATCH:
+          break;
+        default:
+          if (cmpl_state->last_valid_char < (index + 1))
+            cmpl_state->last_valid_char = index + 1;
+          cmpl_state->user_completion_index += 1;
+          continue;
+        }
 
       cmpl_state->the_completion.is_a_completion = 1;
       cmpl_state->the_completion.is_directory = TRUE;
@@ -3162,8 +3251,8 @@ attempt_homedir_completion (gchar           *text_to_complete,
       append_completion_text ("~", cmpl_state);
 
       append_completion_text (cmpl_state->
-			      user_directories[cmpl_state->user_completion_index].login,
-			      cmpl_state);
+                              user_directories[cmpl_state->user_completion_index].login,
+                              cmpl_state);
 
       return append_completion_text (G_DIR_SEPARATOR_S, cmpl_state);
     }
@@ -3196,7 +3285,7 @@ attempt_homedir_completion (gchar           *text_to_complete,
  * PATTERN_MATCH if the completion matches */
 static gint
 first_diff_index (gchar *pat,
-		  gchar *text)
+                  gchar *text)
 {
   gint diff = 0;
 
@@ -3215,7 +3304,7 @@ first_diff_index (gchar *pat,
 
 static PossibleCompletion*
 append_completion_text (gchar           *text,
-			CompletionState *cmpl_state)
+                        CompletionState *cmpl_state)
 {
   gint len, i = 1;
 
@@ -3248,8 +3337,8 @@ append_completion_text (gchar           *text,
 
 static CompletionDir*
 find_completion_dir (gchar          *text_to_complete,
-		    gchar          **remaining_text,
-		    CompletionState *cmpl_state)
+                    gchar          **remaining_text,
+                    CompletionState *cmpl_state)
 {
   gchar* first_slash = strchr (text_to_complete, G_DIR_SEPARATOR);
   CompletionDir* dir = cmpl_state->reference_dir;
@@ -3268,47 +3357,47 @@ find_completion_dir (gchar          *text_to_complete,
       pat_buf[len] = 0;
 
       for (i = 0; i < dir->sent->entry_count; i += 1)
-	{
-	  if (dir->sent->entries[i].is_dir &&
-	     fnmatch (pat_buf, dir->sent->entries[i].entry_name,
-		      FNMATCH_FLAGS)!= FNM_NOMATCH)
-	    {
-	      if (found)
-		{
-		  g_free (pat_buf);
-		  return dir;
-		}
-	      else
-		{
-		  found = 1;
-		  found_name = dir->sent->entries[i].entry_name;
-		}
-	    }
-	}
+        {
+          if (dir->sent->entries[i].is_dir &&
+             fnmatch (pat_buf, dir->sent->entries[i].entry_name,
+                      FNMATCH_FLAGS)!= FNM_NOMATCH)
+            {
+              if (found)
+                {
+                  g_free (pat_buf);
+                  return dir;
+                }
+              else
+                {
+                  found = 1;
+                  found_name = dir->sent->entries[i].entry_name;
+                }
+            }
+        }
 
       if (!found)
-	{
-	  /* Perhaps we are trying to open an automount directory */
-	  found_name = pat_buf;
-	}
+        {
+          /* Perhaps we are trying to open an automount directory */
+          found_name = pat_buf;
+        }
 
       next = open_relative_dir (found_name, dir, cmpl_state);
       
       if (!next)
-	{
-	  g_free (pat_buf);
-	  return NULL;
-	}
+        {
+          g_free (pat_buf);
+          return NULL;
+        }
       
       next->cmpl_parent = dir;
       
       dir = next;
       
       if (!correct_dir_fullname (dir))
-	{
-	  g_free (pat_buf);
-	  return NULL;
-	}
+        {
+          g_free (pat_buf);
+          return NULL;
+        }
       
       *remaining_text = first_slash + 1;
       first_slash = strchr (*remaining_text, G_DIR_SEPARATOR);
@@ -3321,7 +3410,7 @@ find_completion_dir (gchar          *text_to_complete,
 
 static void
 update_cmpl (PossibleCompletion *poss,
-	     CompletionState    *cmpl_state)
+             CompletionState    *cmpl_state)
 {
   gint cmpl_len;
 
@@ -3333,8 +3422,8 @@ update_cmpl (PossibleCompletion *poss,
   if (cmpl_state->updated_text_alloc < cmpl_len + 1)
     {
       cmpl_state->updated_text =
-	(gchar*)g_realloc (cmpl_state->updated_text,
-			   cmpl_state->updated_text_alloc);
+        (gchar*)g_realloc (cmpl_state->updated_text,
+                           cmpl_state->updated_text_alloc);
       cmpl_state->updated_text_alloc = 2*cmpl_len;
     }
 
@@ -3351,16 +3440,16 @@ update_cmpl (PossibleCompletion *poss,
   else
     {
       gint first_diff =
-	first_diff_index (cmpl_state->updated_text,
-			  cmpl_this_completion (poss));
+        first_diff_index (cmpl_state->updated_text,
+                          cmpl_this_completion (poss));
 
       cmpl_state->re_complete = FALSE;
 
       if (first_diff == PATTERN_MATCH)
-	return;
+        return;
 
       if (first_diff > cmpl_state->updated_text_len)
-	strcpy (cmpl_state->updated_text, cmpl_this_completion (poss));
+        strcpy (cmpl_state->updated_text, cmpl_this_completion (poss));
 
       cmpl_state->updated_text_len = first_diff;
       cmpl_state->updated_text[first_diff] = 0;
@@ -3378,17 +3467,17 @@ attempt_file_completion (CompletionState *cmpl_state)
   if (dir->cmpl_index == dir->sent->entry_count)
     {
       if (dir->cmpl_parent == NULL)
-	{
-	  cmpl_state->active_completion_dir = NULL;
+        {
+          cmpl_state->active_completion_dir = NULL;
 
-	  return NULL;
-	}
+          return NULL;
+        }
       else
-	{
-	  cmpl_state->active_completion_dir = dir->cmpl_parent;
+        {
+          cmpl_state->active_completion_dir = dir->cmpl_parent;
 
-	  return attempt_file_completion (cmpl_state);
-	}
+          return attempt_file_completion (cmpl_state);
+        }
     }
 
   g_assert (dir->cmpl_text);
@@ -3414,68 +3503,68 @@ attempt_file_completion (CompletionState *cmpl_state)
        * on any .help files, for instance.
        */
       if (strchr (pat_buf, '*') == NULL)
-	strcpy (pat_buf + len, "*");
+        strcpy (pat_buf + len, "*");
     }
 
   if (first_slash)
     {
       if (dir->sent->entries[dir->cmpl_index].is_dir)
-	{
-	  if (fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
-		       FNMATCH_FLAGS) != FNM_NOMATCH)
-	    {
-	      CompletionDir* new_dir;
+        {
+          if (fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
+                       FNMATCH_FLAGS) != FNM_NOMATCH)
+            {
+              CompletionDir* new_dir;
 
-	      new_dir = open_relative_dir (dir->sent->entries[dir->cmpl_index].entry_name,
-					   dir, cmpl_state);
+              new_dir = open_relative_dir (dir->sent->entries[dir->cmpl_index].entry_name,
+                                           dir, cmpl_state);
 
-	      if (!new_dir)
-		{
-		  g_free (pat_buf);
-		  return NULL;
-		}
+              if (!new_dir)
+                {
+                  g_free (pat_buf);
+                  return NULL;
+                }
 
-	      new_dir->cmpl_parent = dir;
+              new_dir->cmpl_parent = dir;
 
-	      new_dir->cmpl_index = -1;
-	      new_dir->cmpl_text = first_slash + 1;
+              new_dir->cmpl_index = -1;
+              new_dir->cmpl_text = first_slash + 1;
 
-	      cmpl_state->active_completion_dir = new_dir;
+              cmpl_state->active_completion_dir = new_dir;
 
-	      g_free (pat_buf);
-	      return attempt_file_completion (cmpl_state);
-	    }
-	  else
-	    {
-	      g_free (pat_buf);
-	      return attempt_file_completion (cmpl_state);
-	    }
-	}
+              g_free (pat_buf);
+              return attempt_file_completion (cmpl_state);
+            }
+          else
+            {
+              g_free (pat_buf);
+              return attempt_file_completion (cmpl_state);
+            }
+        }
       else
-	{
-	  g_free (pat_buf);
-	  return attempt_file_completion (cmpl_state);
-	}
+        {
+          g_free (pat_buf);
+          return attempt_file_completion (cmpl_state);
+        }
     }
   else
     {
       if (dir->cmpl_parent != NULL)
-	{
-	  append_completion_text (dir->fullname +
-				  strlen (cmpl_state->completion_dir->fullname) + 1,
-				  cmpl_state);
-	  append_completion_text (G_DIR_SEPARATOR_S, cmpl_state);
-	}
+        {
+          append_completion_text (dir->fullname +
+                                  strlen (cmpl_state->completion_dir->fullname) + 1,
+                                  cmpl_state);
+          append_completion_text (G_DIR_SEPARATOR_S, cmpl_state);
+        }
 
       append_completion_text (dir->sent->entries[dir->cmpl_index].entry_name, cmpl_state);
 
       cmpl_state->the_completion.is_a_completion =
-	fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
-		 FNMATCH_FLAGS) != FNM_NOMATCH;
+        fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
+                 FNMATCH_FLAGS) != FNM_NOMATCH;
 
       cmpl_state->the_completion.is_directory = dir->sent->entries[dir->cmpl_index].is_dir;
       if (dir->sent->entries[dir->cmpl_index].is_dir)
-	append_completion_text (G_DIR_SEPARATOR_S, cmpl_state);
+        append_completion_text (G_DIR_SEPARATOR_S, cmpl_state);
 
       g_free (pat_buf);
       return &cmpl_state->the_completion;
@@ -3520,10 +3609,10 @@ get_pwdb (CompletionState* cmpl_state)
     {
       pwd_ptr = getpwent ();
       if (!pwd_ptr)
-	{
-	  cmpl_errno = errno;
-	  goto error;
-	}
+        {
+          cmpl_errno = errno;
+          goto error;
+        }
 
       utf8 = g_filename_to_utf8 (pwd_ptr->pw_name, -1, NULL, NULL, NULL);
       strcpy (buf_ptr, utf8);
@@ -3545,9 +3634,9 @@ get_pwdb (CompletionState* cmpl_state)
     }
 
   qsort (cmpl_state->user_directories,
-	 cmpl_state->user_directories_len,
-	 sizeof (CompletionUserDir),
-	 compare_user_dir);
+         cmpl_state->user_directories_len,
+         sizeof (CompletionUserDir),
+         compare_user_dir);
 
   endpwent ();
 
@@ -3568,24 +3657,24 @@ error:
 
 static gint
 compare_user_dir (const void *a,
-		  const void *b)
+                  const void *b)
 {
   return strcmp ((((CompletionUserDir*)a))->login,
-		 (((CompletionUserDir*)b))->login);
+                 (((CompletionUserDir*)b))->login);
 }
 
 #endif
 
 static gint
 compare_cmpl_dir (const void *a,
-		  const void *b)
+                  const void *b)
 {
 #if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
   return strcmp ((((CompletionDirEntry*)a))->entry_name,
-		 (((CompletionDirEntry*)b))->entry_name);
+                 (((CompletionDirEntry*)b))->entry_name);
 #else
   return g_strcasecmp ((((CompletionDirEntry*)a))->entry_name,
-		       (((CompletionDirEntry*)b))->entry_name);
+                       (((CompletionDirEntry*)b))->entry_name);
 #endif
 }
 

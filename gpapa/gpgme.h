@@ -21,7 +21,7 @@
 #ifndef GPGME_H
 #define GPGME_H
 
-#define DEBUG
+/* #define DEBUG */
 
 #include <stdio.h> /* for FILE * */
 #ifdef _MSC_VER

@@ -99,6 +99,7 @@ gpapa_file_get_status (GpapaFile *file, GpapaCallbackFunc callback,
     {
       FileData data = { file, callback, calldata };
       const gchar *gpgargv[3];
+      gchar *quoted_filename = NULL;
       struct stat statbuf;
 
       /* First check explicitly whether the file exists and is a
@@ -121,11 +122,13 @@ gpapa_file_get_status (GpapaFile *file, GpapaCallbackFunc callback,
        * something like `--get-file-status'.
        */
       gpgargv[0] = "--list-packets";
-      gpgargv[1] = file->identifier;
+      quoted_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+      gpgargv[1] = quoted_filename;
       gpgargv[2] = NULL;
       file->status_flags = 0;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
                         linecallback_get_status, &data, callback, calldata);
+      free (quoted_filename);
       if (file->status_flags == GPAPA_FILE_STATUS_NODATA)
         return (GPAPA_FILE_CLEAR);
       else if (file->status_flags & GPAPA_FILE_STATUS_PUBKEY)
@@ -245,12 +248,14 @@ gpapa_file_get_signatures (GpapaFile *file, GpapaCallbackFunc callback,
         {
           FileData data = { file, callback, calldata };
           const gchar *gpgargv[3];
+          gchar *quoted_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
           gpgargv[0] = "--verify";
-          gpgargv[1] = file->identifier;
+          gpgargv[1] = quoted_filename;
           gpgargv[2] = NULL;
           gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
                             linecallback_get_signatures, &data,
                             callback, calldata);
+          free (quoted_filename);
         }
       return (file->sigs);
     }
@@ -269,7 +274,8 @@ gpapa_file_sign (GpapaFile *file, const gchar *targetFileID, const gchar *keyID,
   else
     {
       FileData data = { file, callback, calldata };
-      gchar *full_keyID, *quoted_filename = NULL;
+      gchar *full_keyID;
+      gchar *quoted_source_filename = NULL, *quoted_target_filename = NULL;
       const gchar *gpgargv[9];
       int i = 0;
       switch (SignType)
@@ -294,19 +300,21 @@ gpapa_file_sign (GpapaFile *file, const gchar *targetFileID, const gchar *keyID,
         gpgargv[i++] = "--armor";
       if (targetFileID != NULL)
         {
-          quoted_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+          quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
           gpgargv[i++] = "-o";
-          gpgargv[i++] = quoted_filename;
+          gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
-      gpgargv[i++] = file->identifier;
+      quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+      gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, PassPhrase,
                         linecallback_check_gpg_status, &data,
                         callback, calldata);
       free (full_keyID);
-      if (quoted_filename)
-        free (quoted_filename);
+      free (quoted_source_filename);
+      if (quoted_target_filename)
+        free (quoted_target_filename);
     }
 }
 
@@ -325,7 +333,7 @@ gpapa_file_encrypt (GpapaFile *file, const gchar *targetFileID,
       FileData data = { file, callback, calldata };
       GList *R;
       int i = 0, l = g_list_length (rcptKeyIDs);
-      gchar *quoted_filename = NULL;
+      gchar *quoted_source_filename = NULL, *quoted_target_filename = NULL;
       gchar **gpgargv = xmalloc ((7 + 2 * l) * sizeof (char *));
       R = rcptKeyIDs;
       while (R)
@@ -339,20 +347,22 @@ gpapa_file_encrypt (GpapaFile *file, const gchar *targetFileID,
         gpgargv[i++] = "--armor";
       if (targetFileID != NULL)
         {
-          quoted_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+          quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
           gpgargv[i++] = "-o";
-          gpgargv[i++] = quoted_filename;
+          gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
-      gpgargv[i++] = file->identifier;
+      quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+      gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg ((const gchar **) gpgargv, TRUE, NULL, NULL, NULL,
                         linecallback_check_gpg_status, &data,
                         callback, calldata);
       for (i = 1; i < 2 * l; i += 2)
         free (gpgargv[i]);
-      if (quoted_filename)
-        free (quoted_filename);
+      free (quoted_source_filename);
+      if (quoted_target_filename)
+        free (quoted_target_filename);
       free (gpgargv);
     }
 }
@@ -374,7 +384,8 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, const gchar *targetFileID,
       FileData data = { file, callback, calldata };
       GList *R;
       int i = 0, l = g_list_length (rcptKeyIDs);
-      char *full_keyID, *quoted_filename = NULL;
+      char *full_keyID;
+      gchar *quoted_source_filename = NULL, *quoted_target_filename = NULL;
       char **gpgargv = xmalloc ((10 + 2 * l) * sizeof (char *));
       R = rcptKeyIDs;
       while (R)
@@ -394,12 +405,13 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, const gchar *targetFileID,
         gpgargv[i++] = "--armor";
       if (targetFileID != NULL)
         {
-          quoted_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+          quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
           gpgargv[i++] = "-o";
-          gpgargv[i++] = quoted_filename;
+          gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
-      gpgargv[i++] = file->identifier;
+      quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+      gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg ((const gchar **) gpgargv, TRUE, NULL, NULL, PassPhrase,
                         linecallback_check_gpg_status, &data,
@@ -407,8 +419,9 @@ gpapa_file_encrypt_and_sign (GpapaFile *file, const gchar *targetFileID,
       for (i = 1; i < 2 * l; i += 2)
         free (gpgargv[i]);
       free (gpgargv);
-      if (quoted_filename)
-        free (quoted_filename);
+      free (quoted_source_filename);
+      if (quoted_target_filename)
+        free (quoted_target_filename);
       free (full_keyID);
     }
 }
@@ -427,25 +440,27 @@ gpapa_file_protect (GpapaFile *file, const gchar *targetFileID,
     {
       FileData data = { file, callback, calldata };
       const gchar *gpgargv[7];
-      gchar *quoted_filename = NULL;
+      gchar *quoted_source_filename = NULL, *quoted_target_filename = NULL;
       int i = 0;
       gpgargv[i++] = "--symmetric";
       if (Armor == GPAPA_ARMOR)
         gpgargv[i++] = "--armor";
       if (targetFileID != NULL)
         {
-          quoted_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+          quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
           gpgargv[i++] = "-o";
-          gpgargv[i++] = quoted_filename;
+          gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
-      gpgargv[i++] = file->identifier;
+      quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+      gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, PassPhrase,
                         linecallback_check_gpg_status, &data,
                         callback, calldata);
-      if (quoted_filename)
-        free (quoted_filename);
+      free (quoted_source_filename);
+      if (quoted_target_filename)
+        free (quoted_target_filename);
     }
 }
 
@@ -463,23 +478,25 @@ gpapa_file_decrypt (GpapaFile *file, char *targetFileID,
     {
       FileData data = { file, callback, calldata };
       const gchar *gpgargv[6];
-      gchar *quoted_filename = NULL;
+      gchar *quoted_source_filename, *quoted_target_filename = NULL;
       int i = 0;
       gpgargv[i++] = "--decrypt";
       if (targetFileID != NULL)
         {
-          quoted_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
+          quoted_target_filename = g_strconcat ("\"", targetFileID, "\"", NULL);
           gpgargv[i++] = "-o";
-          gpgargv[i++] = quoted_filename;
+          gpgargv[i++] = quoted_target_filename;
         }
       gpgargv[i++] = "--yes";  /* overwrite the file */
-      gpgargv[i++] = file->identifier;
+      quoted_source_filename = g_strconcat ("\"", file->identifier, "\"", NULL);
+      gpgargv[i++] = quoted_source_filename;
       gpgargv[i] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, PassPhrase,
                         linecallback_check_gpg_status, &data,
                         callback, calldata);
-      if (quoted_filename)
-        free (quoted_filename);
+      free (quoted_source_filename);
+      if (quoted_target_filename)
+        free (quoted_target_filename);
     }
 }
 

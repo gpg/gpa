@@ -558,6 +558,34 @@ keyring_editor_backup (gpointer param)
 
   if (key_backup_dialog_run (editor->window, &dir_name, key_id))
     {
+      if (dir_name)
+        {
+          int l = strlen (dir_name) - 1;
+	  if (dir_name[l] == '/' || dir_name[l] == G_DIR_SEPARATOR)
+	    dir_name[l] = 0;
+        }
+      if (!isdir (dir_name))
+        {
+	  const gchar *buttons[] = {_("C_reate"), _("_Cancel"), NULL};
+	  gchar *message = g_strdup_printf (_("Directory %s does not exist.\n"
+					      "Do you want to create it now?"),
+					    dir_name);
+	  gchar *reply = gpa_message_box_run (editor->window, _("Directory does not exist"),
+					      message, buttons);
+	  if (!reply || strcmp (reply, _("C_reate")) != 0)
+	    return;
+	  g_free (message);
+          if (mkdir (dir_name, 0755) < 0)
+            {
+	      const gchar *buttons[] = {_("_OK"), NULL};
+	      gchar *message = g_strdup_printf (_("Error creating directory \"%s\": %s\n"),
+		                                dir_name, g_strerror (errno));
+              gpa_message_box_run (editor->window, _("Error creating directory"),
+                                   message, buttons);
+	      g_free (message);
+              return;
+	    }
+	}
       if (isdir (dir_name))
 	{
 	  /* FIXME: we should also test for permissions */

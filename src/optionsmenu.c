@@ -550,7 +550,7 @@ gpa_options_menu_add_to_factory (GtkItemFactory *factory, GtkWidget *window)
   GtkItemFactoryEntry menu[] = {
     {_("/_Options"), NULL, NULL, 0, "<Branch>"},
     {_("/Options/_Keyserver"), NULL, options_keyserver, 0, NULL},
-    {_("/Options/Default _Recipients"), NULL, options_recipients, 0, NULL},
+/*    {_("/Options/Default _Recipients"), NULL, options_recipients, 0, NULL}, */
     {_("/Options/_Default Key"), NULL, options_key, 0, NULL},
   };
 

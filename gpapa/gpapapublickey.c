@@ -438,7 +438,7 @@ gpapa_public_key_sign (GpapaPublicKey *key, char *keyID,
       gchar *full_keyID;
       gchar *commands = "YES\nYES\n";
       const gchar *gpgargv[6];
-      full_keyID = xstrcat2 ("", key->key->UserID);
+      full_keyID = g_strconcat ("\"", key->key->UserID, "\"");
       gpgargv[0] = "--yes";
       gpgargv[1] = "--local-user";
       gpgargv[2] = keyID;

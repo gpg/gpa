@@ -47,6 +47,7 @@ static char *gpg_program;
 /* The public and secret key ring. We only allow for one of each.
  */
 static GList *PubRing = NULL, *SecRing = NULL;
+static gboolean pubring_initialized = FALSE, secring_initialized = FALSE;
 
 /* Release a public key ring G. This is the only place where
  * gpapa_public_key_release() is called.
@@ -333,13 +334,14 @@ gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 		    linecallback_refresh_pub, &data, callback, calldata);
   PubRing = g_list_sort (PubRing, compare_public_keys);
+  pubring_initialized = TRUE;
   gpapa_refresh_secret_keyring (callback, calldata);
 }
 
 gint
 gpapa_get_public_key_count (GpapaCallbackFunc callback, gpointer calldata)
 {
-  if (! PubRing)
+  if (! pubring_initialized)
     gpapa_refresh_public_keyring (callback, calldata);
   return (g_list_length (PubRing));
 }
@@ -348,7 +350,7 @@ GpapaPublicKey *
 gpapa_get_public_key_by_index (gint idx, GpapaCallbackFunc callback,
 			       gpointer calldata)
 {
-  if (! PubRing)
+  if (! pubring_initialized)
     gpapa_refresh_public_keyring (callback, calldata);
   return (g_list_nth_data (PubRing, idx));
 }
@@ -359,7 +361,7 @@ gpapa_get_public_key_by_ID (const gchar *keyID, GpapaCallbackFunc callback,
 {
   GList *g;
   GpapaPublicKey *p = NULL;
-  if (! PubRing)
+  if (! pubring_initialized)
     gpapa_refresh_public_keyring (callback, calldata);
   g = PubRing;
   while (g && g->data
@@ -493,12 +495,13 @@ gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 		    linecallback_refresh_sec, &data, callback, calldata);
   SecRing = g_list_sort (SecRing, compare_secret_keys);
+  secring_initialized = TRUE;
 }
 
 gint
 gpapa_get_secret_key_count (GpapaCallbackFunc callback, gpointer calldata)
 {
-  if (! SecRing)
+  if (! secring_initialized)
     gpapa_refresh_secret_keyring (callback, calldata);
   return (g_list_length (SecRing));
 }
@@ -507,7 +510,7 @@ GpapaSecretKey *
 gpapa_get_secret_key_by_index (gint idx, GpapaCallbackFunc callback,
 			       gpointer calldata)
 {
-  if (SecRing == NULL)
+  if (! secring_initialized)
     gpapa_refresh_secret_keyring (callback, calldata);
   return (g_list_nth_data (SecRing, idx));
 }
@@ -518,7 +521,7 @@ gpapa_get_secret_key_by_ID (const gchar *keyID, GpapaCallbackFunc callback,
 {
   GList *g;
   GpapaSecretKey *s = NULL;
-  if (! SecRing)
+  if (! secring_initialized)
     gpapa_refresh_secret_keyring (callback, calldata);
   g = SecRing;
   while (g && g->data
@@ -694,11 +697,13 @@ gpapa_import_ownertrust (const gchar *sourceFileID,
   else
     {
       const gchar *gpgargv[3];
+      gchar *quoted_filename = g_strconcat ("\"", sourceFileID, "\"", NULL);
       gpgargv[0] = "--import-ownertrust";
-      gpgargv[1] = (char *) sourceFileID;
+      gpgargv[1] = (char *) quoted_filename;
       gpgargv[2] = NULL;
       gpapa_call_gnupg 	(gpgargv, TRUE, NULL, NULL, NULL,
                          NULL, NULL, callback, calldata);
+      free (quoted_filename);
     }
 }
 
@@ -722,13 +727,15 @@ gpapa_import_keys (const gchar *sourceFileID,
   else
     {
       const gchar *gpgargv[4];
+      gchar *quoted_filename = g_strconcat ("\"", sourceFileID, "\"", NULL);
       gpgargv[0] = "--allow-secret-key-import";
       gpgargv[1] = "--import";
-      gpgargv[2] = (char *) sourceFileID;
+      gpgargv[2] = (char *) quoted_filename;
       gpgargv[3] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 	                NULL, NULL, callback, calldata);
       gpapa_refresh_public_keyring (callback, calldata);
+      free (quoted_filename);
     }
 }
 

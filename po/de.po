@@ -826,6 +826,9 @@ msgstr "Öffentliche Schlüssel in Datei exportieren"
 msgid "Export keys"
 msgstr "Schlüssel exportieren"
 
+msgid "Export secret keys"
+msgstr "Geheime Schlüssel exportieren"
+
 #: src/keyexportdlg.c:190
 msgid "E_xport to file:"
 msgstr "E_xportieren in Datei: "
@@ -850,6 +853,19 @@ msgstr "Sicherheitskopie von Schlüssel %s erstellen"
 
 msgid "_Backup to directory:"
 msgstr "_Verzeichnis für Sicherheitskopie:"
+
+msgid "Directory does not exist"
+msgstr "Verzeichnis existiert nicht"
+
+msgid ""
+"Directory %s does not exist.\n"
+"Do you want to create it now?"
+msgstr ""
+"Verzeichnis %s existiert nicht.\n"
+"Möchten Sie es jetzt erstellen?"
+
+msgid "Error creating directory"
+msgstr "Fehler beim Erstellen des Verzeichnisses"
 
 #: src/keygendlg.c:148 src/keygenwizard.c:750
 msgid "Generate key"
@@ -981,7 +997,7 @@ msgid ""
 "It is needed to protect your private key."
 msgstr ""
 "Sie haben keinen Passwortsatz eingegeben.\n"
-"Dieser wird aber benötigt, um Ihren privaten\n"
+"Dieser wird aber benötigt, um Ihren geheimen\n"
 "Schlüssel vor unbefugtem Zugriff zu schützen."
 
 #: src/keygenwizard.c:362 src/keygenwizard.c:370
@@ -1134,6 +1150,22 @@ msgstr "Benutzerkennung"
 msgid "Key Trust"
 msgstr "Schlüsselvertrauen"
 
+msgid "Missing public key"
+msgstr "Öffentlicher Schlüssel fehlt"
+
+msgid ""
+"You have a secret key without the\n"
+"corresponding public key in your\n"
+"key ring. In order to use this key\n"
+"you will need to import the public\n"
+"key, too."
+msgstr ""
+"Sie haben einen geheimen Schlüssel ohne den\n"
+"zugehörigen öffentlichen Schlüssel in Ihrem\n"
+"Schlüsselbund. Um diesen Schlüssel nutzen zu\n"
+"können, müssen Sie den öffentlichen Schlüssel\n"
+"ebenfalls importieren."
+
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
@@ -1203,7 +1235,7 @@ msgid "/Keys/_Export Keys..."
 msgstr "/Schlüssel/E_xportieren..."
 
 msgid "/Keys/Export _Private Keys..."
-msgstr "/Schlüssel/_Private Schlüssel exportieren..."
+msgstr "/Schlüssel/_Geheime Schlüssel exportieren..."
 
 msgid "/Keys/_Backup..."
 msgstr "/Schlüssel/Sicherheitskopie _anlegen..."
@@ -1423,7 +1455,7 @@ msgid ""
 "exporting secret keys."
 msgstr ""
 "Fehler beim Exportieren\n"
-"privater Schlüssel."
+"geheimer Schlüssel."
 
 #: src/keysmenu.c:727
 msgid "No keys selected to delete."
@@ -1696,7 +1728,7 @@ msgid "_Open"
 msgstr "_Öffnen"
 
 #: gtk/gtkfilesel.c:1322
-msgid "_Create"
+msgid "C_reate"
 msgstr "_Erstellen"
 
 #: gtk/gtkfilesel.c:1356

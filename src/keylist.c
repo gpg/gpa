@@ -25,6 +25,7 @@
 #include "icons.h"
 #include "gpa.h"
 #include "gpapastrings.h"
+#include "gtktools.h"
 #include "keylist.h"
 
 
@@ -151,17 +152,17 @@ get_identifier_value (GpapaPublicKey * key, GPAKeyList * keylist,
 }
 
 static void
-get_key_type_pixmap_value (GpapaPublicKey * key, GPAKeyList * keylist,
-			   gchar ** label, gboolean * free_label,
-			   GdkPixmap ** pixmap, GdkBitmap ** mask)
+get_key_type_pixmap_value (GpapaPublicKey *key, GPAKeyList *keylist,
+			   gchar **label, gboolean *free_label,
+			   GdkPixmap **pixmap, GdkBitmap **mask)
 {
-  gchar * key_id;
-  GpapaSecretKey * secret_key;
+  gchar *key_id;
+  GpapaSecretKey *secret_key;
   static gboolean pixmaps_created = FALSE;
-  static GdkPixmap * secret_pixmap = NULL;
-  static GdkBitmap * secret_mask = NULL;
-  static GdkPixmap * public_pixmap = NULL;
-  static GdkBitmap * public_mask = NULL;
+  static GdkPixmap *secret_pixmap = NULL;
+  static GdkBitmap *secret_mask = NULL;
+  static GdkPixmap *public_pixmap = NULL;
+  static GdkBitmap *public_mask = NULL;
 
   if (!pixmaps_created)
     {
@@ -208,11 +209,11 @@ static ColumnDef column_defs[] = {
 
 /* Create and return a new keylist widget */
 GtkWidget *
-gpa_keylist_new (gint ncolumns, GPAKeyListColumn * columns, gint max_columns,
-		 GtkWidget * window)
+gpa_keylist_new (gint ncolumns, GPAKeyListColumn *columns, gint max_columns,
+		 GtkWidget *window)
 {
-  GtkWidget * clist;
-  GPAKeyList * keylist;
+  GtkWidget *clist;
+  GPAKeyList *keylist;
   int i;
 
   keylist = xmalloc (sizeof (*keylist));
@@ -265,23 +266,25 @@ free_hash_key (gpointer key, gpointer value, gpointer data)
  * true, try to keep the current selection.
  */
 static void
-keylist_fill_list (GPAKeyList * keylist, gboolean keep_selection)
+keylist_fill_list (GPAKeyList *keylist, gboolean keep_selection)
 {
-  gint num_keys;
+  gint num_keys, num_skeys;
   gint key_index;
   gint row, col;
-  GpapaPublicKey * key;
-  gchar ** labels;
-  gchar * key_id;
-  GHashTable * sel_hash = g_hash_table_new (g_str_hash, g_str_equal);
+  GpapaPublicKey *key;
+  GpapaSecretKey *skey;
+  gchar **labels;
+  gchar *key_id;
+  GHashTable *sel_hash = g_hash_table_new (g_str_hash, g_str_equal);
+  gboolean secret_keys_okay;
 
   /* if keep_selection is true, remember the current selection. Use the
-   * hast table itself as the value just because its a non-NULL pointer
+   * hash table itself as the value just because its a non-NULL pointer
    * and we're interested in finding out whether a given key_id is used
    * as a key in the hash later */
   if (keep_selection)
     {
-      GList * selection = GTK_CLIST (keylist->clist)->selection;
+      GList *selection = GTK_CLIST (keylist->clist)->selection;
       while (selection)
 	{
 	  key_id = gtk_clist_get_row_data (GTK_CLIST (keylist->clist),
@@ -326,6 +329,37 @@ keylist_fill_list (GPAKeyList * keylist, gboolean keep_selection)
 
   gtk_clist_thaw (GTK_CLIST (keylist->clist));
 
+  num_skeys = gpapa_get_secret_key_count (gpa_callback, keylist->window);
+  if (num_skeys > num_keys)
+    secret_keys_okay = FALSE;
+  else
+    {
+      secret_keys_okay = TRUE;
+      for (key_index = 0; secret_keys_okay && key_index < num_skeys; key_index++)
+	{
+	  skey = gpapa_get_secret_key_by_index (key_index, gpa_callback,
+						keylist->window);
+	  key_id = gpapa_key_get_identifier (GPAPA_KEY (skey), gpa_callback,
+					     keylist->window);
+	  key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
+					    keylist->window);
+	  if (key == NULL)
+	    secret_keys_okay = FALSE;
+	}
+    }
+  if (!secret_keys_okay)
+    {
+      const gchar * buttons[] = {_("_OK"),
+				 NULL};
+      gpa_message_box_run (keylist->window, _("Missing public key"),
+			    _("You have a secret key without the\n"
+			      "corresponding public key in your\n"
+			      "key ring. In order to use this key\n"
+			      "you will need to import the public\n"
+			      "key, too."),
+			    buttons);
+    }
+
   free (labels);
   
   g_hash_table_foreach (sel_hash, free_hash_key, NULL);
@@ -366,13 +400,13 @@ keylist_fill_row (GPAKeyList * keylist, GpapaPublicKey * key, gint row)
 
 /* Set the titles of the visible columns and make the rest invisible */
 static void
-keylist_fill_column_titles (GPAKeyList * keylist)
+keylist_fill_column_titles (GPAKeyList *keylist)
 {
   gint i;
 
   for (i = 0; i < keylist->ncolumns; i++)
     {
-      gchar * title = keylist->column_defs[i]->title;
+      gchar *title = keylist->column_defs[i]->title;
       if (title)
 	title = _(title);
       else

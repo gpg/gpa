@@ -521,6 +521,31 @@ gpa_keygen_wizard_backup_dir_action (gpointer data)
   
   dir = gpa_keygen_wizard_backup_get_text (keygen_wizard->backup_dir_page);
 
+  if (!isdir (dir))
+    {
+      const gchar *buttons[] = {_("C_reate"), _("_Cancel"), NULL};
+      gchar *message = g_strdup_printf (_("Directory %s does not exist.\n"
+					  "Do you want to create it now?"),
+					dir);
+      gchar *reply = gpa_message_box_run (keygen_wizard->window, _("Directory does not exist"),
+				          message, buttons);
+      if (!reply || strcmp (reply, _("C_reate")) != 0)
+	result = FALSE;
+      else
+        {
+	  g_free (message);
+	  if (mkdir (dir, 0755) < 0)
+	    {
+	      const gchar *buttons[] = {_("_OK"), NULL};
+	      gchar *message = g_strdup_printf (_("Error creating directory \"%s\": %s\n"),
+						dir, g_strerror (errno));
+	      gpa_message_box_run (keygen_wizard->window, _("Error creating directory"),
+				   message, buttons);
+	      g_free (message);
+	      result = FALSE;
+	    }
+	}
+    }
   if (isdir (dir))
     {
       /* FIXME: we should also test for permissions */
@@ -670,6 +695,7 @@ gpa_keygen_wizard_generate_action (gpointer data)
 			       keygen_wizard->seckey_filename,
 			       GPAPA_ARMOR, gpa_callback,
 			       keygen_wizard->window);
+      gpa_remember_backup_generated ();
     }
 
   free (name);
