@@ -1,3 +1,27 @@
+2003-01-15  Miguel Coca  <mcoca@gnu.org>
+
+	* gpawidgets.c (gpa_expiry_frame_dont, gpa_expiry_frame_after) 
+	(gpa_expiry_frame_at, expire_date_toggled_cb) 
+	(gpa_expiry_frame_new, gpa_expiry_frame_get_expiration) 
+	(gpa_expiry_frame_validate): Use a calendar for choosing the
+	expiration date.
+
+	* keygendlg.c (gpa_key_gen_run_dialog): Port to use GTK+2 widgets.
+	(key_gen_cancel, key_gen_ok): Removed.
+	(response_cb): New.
+
+	* gpawidgets.c (gpa_expiry_frame_new): 
+
+	* keygenwizard.c (gpa_keygen_wizard_generate_action): Don't set the
+	removed fields.
+	* gpgmetools.c (key_gen_params_new): Likewise.
+
+	* gpgmetools.h (GPAKeyGenParameters): Remove unused revocation and
+	send_to_server fields.
+
+	* options.c (gpa_options_update_default_key): Fix check for default
+	key, so that it is triggered if the key is deleted.
+
 2003-01-08  Miguel Coca  <mcoca@gnu.org>
 
 	* expirydlg.c (gpa_expiry_dialog_run): Fix label typo.

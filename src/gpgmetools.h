@@ -56,13 +56,6 @@ typedef struct {
   GDate *expiryDate;
   gint interval;
   gchar unit;
-
-  /* if true, generate a revocation certificate */
-  gboolean generate_revocation;
-
-  /* if true, send the key to a keyserver */
-  gboolean send_to_server;
-  
 } GPAKeyGenParameters;
 
 /* Report an unexpected error in GPGME and quit the application.

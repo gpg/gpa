@@ -376,8 +376,6 @@ key_gen_params_new(void)
   params->comment = NULL;
   params->expiryDate = NULL;
   params->interval = 0;
-  params->generate_revocation = FALSE;
-  params->send_to_server = FALSE;
   return params;
 }
 

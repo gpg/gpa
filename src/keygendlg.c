@@ -32,40 +32,33 @@ struct _GPAKeyGenDialog {
   GtkWidget * entryPasswd;
   GtkWidget * entryRepeat;
   GtkWidget * frameExpire;
-  gboolean result;
 };
 typedef struct _GPAKeyGenDialog GPAKeyGenDialog;
 
-
+/* This callback gets called each time the user clicks on the [OK] or [Cancel]
+ * buttons. If the button was [OK], it verifies that the input makes sense.
+ */
 static void
-key_gen_cancel (gpointer param)
-{
-  GPAKeyGenDialog * dialog = param;
-
-  dialog->result = FALSE;
-  gtk_main_quit ();
-}
-
-static void
-key_gen_ok (gpointer param)
+response_cb(GtkDialog *dlg, gint response, gpointer param)
 {
   GPAKeyGenDialog * dialog = param;
   gchar * expiry_error;
 
-  if (strcmp (gtk_entry_get_text (GTK_ENTRY (dialog->entryPasswd)),
-	      gtk_entry_get_text (GTK_ENTRY (dialog->entryRepeat))) != 0)
+  if (response == GTK_RESPONSE_OK)
     {
-      gpa_window_error (_("In \"Passphrase\" and \"Repeat passphrase\"\nyou must enter the same passphrase."),
-			dialog->window);
-    }
-  else if ((expiry_error = gpa_expiry_frame_validate (dialog->frameExpire)))
-    {
-      gpa_window_error (expiry_error, dialog->window);
-    }
-  else
-    {
-      dialog->result = TRUE;
-      gtk_main_quit ();
+      if (strcmp (gtk_entry_get_text (GTK_ENTRY (dialog->entryPasswd)),
+                  gtk_entry_get_text (GTK_ENTRY (dialog->entryRepeat))) != 0)
+        {
+          gpa_window_error (_("In \"Passphrase\" and \"Repeat passphrase\"\n"
+                              "you must enter the same passphrase."),
+                            dialog->window);
+          g_signal_stop_emission_by_name (dlg, "response");
+        }
+      else if ((expiry_error = gpa_expiry_frame_validate (dialog->frameExpire)))
+        {
+          g_signal_stop_emission_by_name (dlg, "response");
+          gpa_window_error (expiry_error, dialog->window);
+        }
     }
 }
 
@@ -100,11 +93,6 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   GtkWidget *labelRepeat;
   GtkWidget *entryRepeat;
   GtkWidget *vboxMisc;
-  GtkWidget *checkerRevoc;
-  GtkWidget *checkerSend;
-  GtkWidget *hButtonBoxGenerate;
-  GtkWidget *buttonCancel;
-  GtkWidget *buttonGenerate;
 
   GPAKeyGenDialog dialog;
   GPAKeyGenParameters * params = NULL;
@@ -113,20 +101,28 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   GPAKeyGenAlgo algo;
   GList *contentsKeysize = NULL;
 
-  dialog.result = FALSE;
-
   accelGroup = gtk_accel_group_new ();
 
-  windowGenerate = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  windowGenerate = gtk_dialog_new_with_buttons (_("Generate key"),
+                                                GTK_WINDOW (parent),
+                                                GTK_DIALOG_MODAL,
+                                                GTK_STOCK_OK,
+                                                GTK_RESPONSE_OK,
+                                                GTK_STOCK_CANCEL,
+                                                GTK_RESPONSE_CANCEL,
+                                                NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (windowGenerate),
+                                   GTK_RESPONSE_OK);
   dialog.window = windowGenerate;
-  gtk_window_set_title (GTK_WINDOW (windowGenerate), _("Generate key"));
   gtk_window_add_accel_group (GTK_WINDOW (windowGenerate), accelGroup);
   /* use gtk_signal_connect_object here to make the dialog pointer the
    * first parameter of the handler */
-  gtk_signal_connect_object (GTK_OBJECT (windowGenerate), "delete-event",
-		      GTK_SIGNAL_FUNC (key_gen_cancel), (gpointer)&dialog);
+  g_signal_connect (G_OBJECT (windowGenerate), "delete-event",
+                    G_CALLBACK (gtk_widget_destroy), &dialog);
+  g_signal_connect (G_OBJECT (windowGenerate), "response",
+                    G_CALLBACK(response_cb), &dialog);
 
-  vboxGenerate = gtk_vbox_new (FALSE, 0);
+  vboxGenerate = GTK_DIALOG(dialog.window)->vbox;
   gtk_container_add (GTK_CONTAINER (windowGenerate), vboxGenerate);
   gtk_container_set_border_width (GTK_CONTAINER (vboxGenerate), 5);
 
@@ -148,7 +144,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
 				 contentsAlgorithm);
   gpa_connect_by_accelerator (GTK_LABEL (labelAlgorithm),
 			      GTK_COMBO (comboAlgorithm)->entry, accelGroup,
-			      _("_Encryption algorithm: "));
+			      _("_Algorithm: "));
   gtk_table_attach (GTK_TABLE (tableTop), comboAlgorithm, 1, 2, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
 
@@ -239,40 +235,8 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   gtk_box_pack_start (GTK_BOX (vboxGenerate), vboxMisc, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxMisc), 5);
 
-  checkerRevoc = gpa_check_button_new (accelGroup,
-				       _("generate re_vocation certificate"));
-  gtk_box_pack_start (GTK_BOX (vboxMisc), checkerRevoc, FALSE, FALSE, 0);
-
-  checkerSend = gpa_check_button_new (accelGroup, _("_send to key server"));
-  gtk_box_pack_start (GTK_BOX (vboxMisc), checkerSend, FALSE, FALSE, 0);
-
-  hButtonBoxGenerate = gtk_hbutton_box_new ();
-  gtk_box_pack_start (GTK_BOX (vboxGenerate), hButtonBoxGenerate, FALSE,
-		      FALSE, 0);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxGenerate),
-			     GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxGenerate), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxGenerate), 5);
-
-  buttonGenerate = gpa_button_new (accelGroup, _("_Generate key"));
-
-  gtk_signal_connect_object (GTK_OBJECT (buttonGenerate), "clicked",
-			     GTK_SIGNAL_FUNC (key_gen_ok),
-			     (gpointer) &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxGenerate), buttonGenerate);
-
-  buttonCancel = gpa_button_cancel_new(accelGroup, _("_Cancel"),
-				       GTK_SIGNAL_FUNC (key_gen_cancel),
-				       (gpointer)&dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxGenerate), buttonCancel);
-
-  gpa_window_show_centered (windowGenerate, parent);
-
-  gtk_grab_add (windowGenerate);
-  gtk_main ();
-  gtk_grab_remove (windowGenerate);
-
-  if (dialog.result)
+  gtk_widget_show_all (windowGenerate);
+  if (gtk_dialog_run (GTK_DIALOG (windowGenerate)) == GTK_RESPONSE_OK)
   {
       /* the user pressed OK, so create a GPAKeyGenParameters struct and
        * fill it with the values from the dialog
@@ -291,11 +255,6 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
       temp = (gchar *) gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (comboKeysize)->entry));
       params->keysize = atoi (temp);
 
-      params->generate_revocation \
-	  = (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkerRevoc)));
-      params->send_to_server \
-	  = (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkerSend)));
-
       params->expiryDate = NULL;
       params->interval = 0;
       if (!gpa_expiry_frame_get_expiration (frameExpire, &(params->expiryDate),
@@ -309,7 +268,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
 	  params = NULL;
       }
   }
-  else /* if !dialog.result */
+  else
   {
       params = NULL;
   }

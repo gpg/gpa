@@ -243,7 +243,7 @@ typedef struct {
   GtkWidget *frame;
   GtkWidget *entryAfter;
   GtkWidget *comboAfter;
-  GtkWidget *entryAt;
+  GtkWidget *calendar;
   GtkWidget *radioDont;
   GtkWidget *radioAfter;
   GtkWidget *radioAt;
@@ -269,7 +269,6 @@ gpa_expiry_frame_dont (GtkToggleButton * radioDont, gpointer param)
   gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "");
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
 		      "days");
-  gtk_entry_set_text (GTK_ENTRY (frame->entryAt), "");
 } /* gpa_expiry_frame_dont */
 
 static void
@@ -287,7 +286,6 @@ gpa_expiry_frame_after (GtkToggleButton * radioAfter, gpointer param)
     } /* if */
   else
     gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "1");
-  gtk_entry_set_text (GTK_ENTRY (frame->entryAt), "");
   gtk_widget_grab_focus (frame->entryAfter);
 } /* gpa_expiry_frame_after */
 
@@ -308,20 +306,24 @@ gpa_expiry_frame_at (GtkToggleButton * radioAt, gpointer param)
       dateBuffer = gpa_expiry_date_string (mktime (&tm));
       gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
 			  "days");
-      gtk_entry_set_text (GTK_ENTRY (frame->entryAt), dateBuffer);
       g_free (dateBuffer);
     } /* if */
-  else
-    gtk_entry_set_text (GTK_ENTRY (frame->entryAt), _("01.01.2000")); /*!!! */
-  gtk_widget_grab_focus (frame->entryAt);
 } /* gpa_expiry_frame_at */
+
+static void
+expire_date_toggled_cb (GtkToggleButton *togglebutton, gpointer user_data)
+{
+  GtkWidget *calendar = user_data;
+  
+  gtk_widget_set_sensitive (calendar,
+                            gtk_toggle_button_get_active (togglebutton));
+}
 
 GtkWidget *
 gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
 {
   GList *contentsAfter = NULL;
   gint i;
-  gchar *dateBuffer;
 
   GtkWidget *expiry_frame;
   GtkWidget *vboxExpire;
@@ -330,9 +332,8 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   GtkWidget *radioAfter;
   GtkWidget *entryAfter;
   GtkWidget *comboAfter;
-  GtkWidget *hboxAt;
   GtkWidget *radioAt;
-  GtkWidget *entryAt;
+  GtkWidget *calendar;
 
   GPAExpiryFrame * frame;
 
@@ -342,7 +343,7 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   expiry_frame = gtk_frame_new (_("Expiration"));
   frame->frame = expiry_frame;
 
-  vboxExpire = gtk_vbox_new (TRUE, 0);
+  vboxExpire = gtk_vbox_new (FALSE, 5);
   gtk_container_add (GTK_CONTAINER (expiry_frame), vboxExpire);
   gtk_container_set_border_width (GTK_CONTAINER (vboxExpire), 5);
 
@@ -373,24 +374,26 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   gtk_combo_set_popdown_strings (GTK_COMBO (comboAfter), contentsAfter);
   gtk_box_pack_start (GTK_BOX (hboxAfter), comboAfter, FALSE, FALSE, 0);
 
-  hboxAt = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vboxExpire), hboxAt, FALSE, FALSE, 0);
-
   radioAt = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radioDont),
-					      accelGroup, _("expire a_t"));
+					      accelGroup, _("expire o_n:"));
   frame->radioAt = radioAt;
-  gtk_box_pack_start (GTK_BOX (hboxAt), radioAt, FALSE, FALSE, 0);
-  entryAt = gtk_entry_new ();
-  frame->entryAt = entryAt;
+  gtk_box_pack_start (GTK_BOX (vboxExpire), radioAt, FALSE, FALSE, 0);
+  calendar = gtk_calendar_new ();
+  frame->calendar = calendar;
+  gtk_widget_set_sensitive (calendar, FALSE);
+  gtk_box_pack_start (GTK_BOX (vboxExpire), calendar, FALSE, FALSE, 0);
+  g_signal_connect (G_OBJECT (frame->radioAt), "toggled",
+                    (GCallback) expire_date_toggled_cb, calendar);
   if (expiryDate)
     {
-      struct tm tm;
-      g_date_to_struct_tm (expiryDate, &tm);
-      dateBuffer = gpa_expiry_date_string (mktime (&tm));
-      gtk_entry_set_text (GTK_ENTRY (entryAt), dateBuffer);
-      g_free (dateBuffer);
+      gtk_calendar_select_month (GTK_CALENDAR (calendar),
+                                 g_date_get_month (expiryDate)-1,
+                                 g_date_get_year (expiryDate));
+      gtk_calendar_select_day (GTK_CALENDAR (calendar),
+                               g_date_get_day (expiryDate));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (frame->radioAt),
+				    TRUE);
     } /* if */
-  gtk_box_pack_start (GTK_BOX (hboxAt), entryAt, FALSE, FALSE, 0);
 
   if (expiryDate)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radioAt), TRUE);
@@ -436,11 +439,10 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
     }
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (frame->radioAt)))
     {
-      *date = g_date_new ();
-      g_date_set_parse (*date,
-			gtk_entry_get_text (GTK_ENTRY (frame->entryAt)));
-      *interval = 0;
-      result = TRUE;
+      gint day, month, year;
+      gtk_calendar_get_date (GTK_CALENDAR (frame->calendar),
+                             &year, &month, &day);
+      *date = g_date_new_dmy (day, month+1, year);
     } 
   else
     {
@@ -479,18 +481,8 @@ gpa_expiry_frame_validate(GtkWidget * expiry_frame)
     }
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (frame->radioAt)))
     {
-      GDate *date = g_date_new ();
-      g_date_set_parse (date,
-			gtk_entry_get_text (GTK_ENTRY (frame->entryAt)));
-      if (!g_date_valid (date))
-	{
-	  result = _("Please provide a correct date.");
-	}
-      else
-	{
-	  result = NULL;
-	}
-      g_date_free (date);
+      /* This case is always correct */
+      result = NULL;
     } 
   return result;
 } /* gpa_expiry_frame_validate */

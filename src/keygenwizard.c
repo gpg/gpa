@@ -457,8 +457,6 @@ gpa_keygen_wizard_generate_action (gpointer data)
   params.keysize = 1024;
   params.expiryDate = NULL;
   params.interval = 0;
-  params.generate_revocation = FALSE;
-  params.send_to_server = FALSE;
 
   /* Switch to the next page showing the "wait" message. */
   gpa_wizard_next_page_no_action (keygen_wizard->wizard);
