@@ -1,5 +1,10 @@
 2002-07-31  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* folder1.xpm, folder2.xpm, harddisk1.xpm, harddisk2.xpm,
+	harddisk3.xpm, open_folder1.xpm, open_folder2.xpm: Removed unused
+	icons. They were drafts of the final icons and should never have
+	been included.
+
 	* helpmenu.c (help_warranty): Changed the position of the cursor
 	in the GPL editable to a value less dependent on the length of
 	license text.
