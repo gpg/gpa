@@ -882,7 +882,8 @@ keyring_editor_mapped (gpointer param)
 	  gtk_widget_destroy (dialog);
           if (response == GTK_RESPONSE_OK)
 	    {
-	      keyring_editor_backup (param);
+              key_backup_dialog_run (editor->window,
+                                     gpa_options_get_default_key (gpa_options));
 	    }
           asked_about_key_backup = TRUE;
         }
