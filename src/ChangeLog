@@ -1,5 +1,51 @@
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
+	* gtktools.h (gpa_widget_set_centered):
+	* gtktools.c (gpa_widget_set_centered): Removed. Use
+	gpa_window_show_centered instead
+
+	* gtktools.c (gpa_window_passphrase): 
+	(gpa_window_message): 
+	* helpmenu.c (help_license): Use gpa_window_show_centered instead
+	of gpa_widget_set_centered.
+
+	* gtktools.h (gpa_widget_show):
+	* gtktools.c (gpa_widget_show): Removed. Use
+	gpa_window_show_centered instead
+
+	* encryptdlg.c (gpa_file_encrypt_dialog_run): 
+	* fileman.c (show_file_detail): 
+	* filemenu.c (file_showDetail): 
+	(file_sign_dialog): 
+	(file_encrypt_detail): 
+	(file_encrypt_dialog): 
+	(file_protect_dialog): 
+	(file_decryptAs): 
+	* filesigndlg.c (gpa_file_sign_dialog_run): 
+	* gtktools.c (gpa_window_error): 
+	* keyexportdlg.c (key_export_dialog_run): 
+	* keyreceivedlg.c (key_receive_run_dialog): 
+	* keysmenu.c (keys_export_dialog): 
+	(keys_openPublic_editTrust): 
+	(keys_openPublic_editKey): 
+	(keys_openPublic_receive): 
+	(keys_openPublic_exportTrust): 
+	(keys_openPublic): 
+	(keys_openSecret_editKey): 
+	(keys_openSecret): 
+	(keys_generateKey): 
+	(keys_generateRevocation): 
+	(keys_import): 
+	(keys_importOwnertrust): 
+	* optionsmenu.c (options_keyserver): 
+	(options_recipients): 
+	(options_key): 
+	(options_tips): 
+	Call gpa_window_show_centered instead of gpa_widget_show
+
+	* keygendlg.c (gpa_key_gen_run_dialog): Remove the commented out
+	gpa_widget_show call
+
 	* keyring.c (keyring_editor_edit_trust): Removed because its now
 	replaced by the key edit dialog.
 

@@ -144,7 +144,7 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   gtk_container_add (GTK_CONTAINER (hButtonBoxExport), buttonExport);
   gtk_box_pack_start (GTK_BOX (vboxExport), hButtonBoxExport, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowExport), vboxExport);
-  gpa_widget_show (windowExport, parent, _("keyring_openPublic_export.tip"));
+  gpa_window_show_centered (windowExport, parent);
   gtk_widget_grab_focus (entryFilename);
 
   gtk_grab_add (windowExport);

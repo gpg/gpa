@@ -1,5 +1,5 @@
 /* fileman.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -364,7 +364,7 @@ show_file_detail (gpointer param)
   gtk_container_add (GTK_CONTAINER (hButtonBoxDetail), buttonClose);
   gtk_box_pack_start (GTK_BOX (vboxDetail), hButtonBoxDetail, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vboxDetail);
-  gpa_widget_show (window, fileman->window, _("file_showDetail.tip"));
+  gpa_window_show_centered (window, fileman->window);
 
   gtk_grab_add (window);
   gtk_main ();

@@ -1,5 +1,5 @@
 /* keyring.c  -	 The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -124,7 +124,7 @@ key_receive_run_dialog (GtkWidget * parent)
   gtk_box_pack_start (GTK_BOX (vboxReceive), hButtonBoxReceive, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowReceive), vboxReceive);
-  gpa_widget_show (windowReceive, parent, _("keyring_openPublic_receive.tip"));
+  gpa_window_show_centered (windowReceive, parent);
   gtk_widget_grab_focus (entryKey);
 
   gtk_grab_add (windowReceive);

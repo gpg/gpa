@@ -330,7 +330,7 @@ file_showDetail (void)
   gtk_box_pack_start (GTK_BOX (vboxDetail), hButtonBoxDetail, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowDetail), vboxDetail);
-  gpa_widget_show (windowDetail, global_windowMain, _("file_showDetail.tip"));
+  gpa_window_show_centered (windowDetail, global_windowMain);
 }				/* file_showDetail */
 
 void
@@ -644,7 +644,7 @@ parent);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonSign);
   gtk_box_pack_start (GTK_BOX (vboxSign), hButtonBoxSign, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowSign), vboxSign);
-  gpa_widget_show (windowSign, parent, _("file_sign.tip"));
+  gpa_window_show_centered (windowSign, parent);
 }				/* file_sign_dialog */
 
 void
@@ -851,7 +851,7 @@ file_encrypt_detail (gpointer param)
   gtk_container_add (GTK_CONTAINER (hButtonBoxSigs), buttonClose);
   gtk_box_pack_start (GTK_BOX (vboxSigs), hButtonBoxSigs, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowSigs), vboxSigs);
-  gpa_widget_show (windowSigs, windowEncrypt, _("file_encrypt_detail.tip"));
+  gpa_window_show_centered (windowSigs, windowEncrypt);
 }				/* file_encrypt_detail */
 
 void
@@ -1433,7 +1433,7 @@ global_windowMain);
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), hButtonBoxEncrypt, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowEncrypt), vboxEncrypt);
-  gpa_widget_show (windowEncrypt, global_windowMain, tip);
+  gpa_window_show_centered (windowEncrypt, global_windowMain);
 }				/* file_encrypt_dialog */
 
 void
@@ -1680,7 +1680,7 @@ file_protect_dialog (gboolean withSaveAs, gchar * tip)
   gtk_box_pack_start (GTK_BOX (vboxProtect), hButtonBoxProtect, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowProtect), vboxProtect);
-  gpa_widget_show (windowProtect, global_windowMain, tip);
+  gpa_window_show_centered (windowProtect, global_windowMain);
 }				/* file_protect_dialog */
 
 void
@@ -1915,7 +1915,7 @@ file_decryptAs (void)
   gtk_box_pack_start (GTK_BOX (vboxDecrypt), hButtonBoxDecrypt, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowDecrypt), vboxDecrypt);
-  gpa_widget_show (windowDecrypt, global_windowMain, _("file_decryptAs.tip"));
+  gpa_window_show_centered (windowDecrypt, global_windowMain);
 }				/* file_decryptAs */
 
 void

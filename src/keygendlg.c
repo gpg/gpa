@@ -290,7 +290,6 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   gtk_container_add (GTK_CONTAINER (hButtonBoxGenerate), buttonGenerate);
 
   gpa_window_show_centered (windowGenerate, parent);
-/*  gpa_widget_show (windowGenerate, parent, _("keys_generateKey.tip"));*/
 
   gtk_grab_add (windowGenerate);
   gtk_main ();

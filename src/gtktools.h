@@ -49,9 +49,6 @@ extern void gpa_connect_by_accelerator (GtkLabel * label, GtkWidget * widget,
 					GtkAccelGroup * accelGroup,
 					gchar * labelText);
 void gpa_button_set_text (GtkWidget * button, gchar * text, GtkAccelGroup *);
-extern void gpa_widget_set_centered (GtkWidget * widget, GtkWidget * parent);
-extern void gpa_widget_show (GtkWidget * widget, GtkWidget * parent,
-			     gchar * tip);
 extern void gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent);
 extern void gpa_window_error (gchar * message, GtkWidget * messenger);
 extern void gpa_window_message (gchar * message, GtkWidget * messenger);

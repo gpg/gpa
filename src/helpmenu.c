@@ -447,8 +447,7 @@ help_license (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxLicense), hButtonBoxLicense, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowLicense), vboxLicense);
-  gtk_widget_show_all (windowLicense);
-  gpa_widget_set_centered (windowLicense, parent);
+  gpa_window_show_centered (windowLicense, parent);
 }
 
 void

@@ -578,7 +578,7 @@ keys_export_dialog (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxExport), hButtonBoxExport, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowExport), vboxExport);
-  gpa_widget_show (windowExport, parent, _("keys_openPublic_export.tip"));
+  gpa_window_show_centered (windowExport, parent);
   gtk_widget_grab_focus (entryFilename);
 }				/* keys_export_dialog */
 
@@ -753,7 +753,7 @@ keys_openPublic_editTrust (gpointer param)
   gtk_container_add (GTK_CONTAINER (hButtonBoxTrust), buttonAccept);
   gtk_box_pack_start (GTK_BOX (vboxTrust), hButtonBoxTrust, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowTrust), vboxTrust);
-  gpa_widget_show (windowTrust, parent, _("keys_openPublic_editTrust.tip"));
+  gpa_window_show_centered (windowTrust, parent);
 }				/* keys_openPublic_editTrust */
 
 void
@@ -1064,7 +1064,7 @@ keys_openPublic_editKey (gpointer param)
   gtk_container_add (GTK_CONTAINER (hButtonBoxEdit), buttonClose);
   gtk_box_pack_start (GTK_BOX (vboxEdit), hButtonBoxEdit, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowKey), vboxEdit);
-  gpa_widget_show (windowKey, windowPublic, _("keys_openPublic_editKey.tip"));
+  gpa_window_show_centered (windowKey, windowPublic);
 }				/* keys_openPublic_editKey */
 
 void
@@ -1196,8 +1196,7 @@ keys_openPublic_receive (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxReceive), hButtonBoxReceive, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowReceive), vboxReceive);
-  gpa_widget_show (windowReceive, windowPublic,
-		   _("keys_openPublic_receive.tip"));
+  gpa_window_show_centered (windowReceive, windowPublic);
   gtk_widget_grab_focus (entryKey);
 }				/* keys_openPublic_receive */
 
@@ -1264,8 +1263,7 @@ keys_openPublic_exportTrust (gpointer param)
 			      cancel_button), "clicked",
 			     GTK_SIGNAL_FUNC (gpa_window_destroy),
 			     (gpointer) paramClose);
-  gpa_widget_show (selectTrust, windowPublic,
-		   _("keys_openPublic_exportTrust.tip"));
+  gpa_window_show_centered (selectTrust, windowPublic);
 }				/* keys_openPublic_exportTrust */
 
 void
@@ -1651,7 +1649,7 @@ keys_openPublic (void)
   gtk_box_pack_start (GTK_BOX (vboxPublic), hButtonBoxPublic, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowPublic), vboxPublic);
-  gpa_widget_show (windowPublic, global_windowMain, _("keys_openPublic.tip"));
+  gpa_window_show_centered (windowPublic, global_windowMain);
   if (!gpapa_get_public_key_count)
     gpa_window_error (_("No public keys available yet."), windowPublic);
 }				/* keys_openPublic */
@@ -1995,8 +1993,7 @@ keys_openSecret_editKey (gpointer param)
 			     (gpointer) buttonSave);
   gtk_box_pack_start (GTK_BOX (vboxEdit), hButtonBoxEdit, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowEdit), vboxEdit);
-  gpa_widget_show (windowEdit, windowSecret,
-		   _("keys_openSecret_editKey.tip"));
+  gpa_window_show_centered (windowEdit, windowSecret);
 }				/* keys_openSecret_editKey */
 
 gboolean
@@ -2142,7 +2139,7 @@ keys_openSecret (void)
   gtk_box_pack_start (GTK_BOX (vboxSecret), hButtonBoxSecret, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowSecret), vboxSecret);
-  gpa_widget_show (windowSecret, global_windowMain, _("keys_openSecret.tip"));
+  gpa_window_show_centered (windowSecret, global_windowMain);
   contentsCountKeys = gpapa_get_secret_key_count (gpa_callback, windowSecret);
   if (contentsCountKeys)
     do
@@ -2476,8 +2473,7 @@ keys_generateKey (void)
   gtk_box_pack_start (GTK_BOX (vboxGenerate), hButtonBoxGenerate, FALSE,
 		      FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowGenerate), vboxGenerate);
-  gpa_widget_show (windowGenerate, global_windowMain,
-		   _("keys_generateKey.tip"));
+  gpa_window_show_centered (windowGenerate, global_windowMain);
 }				/* keys_generateKey */
 
 void
@@ -2632,8 +2628,7 @@ keys_generateRevocation (void)
   gtk_container_add (GTK_CONTAINER (hButtonBoxRevoc), buttonGenerate);
   gtk_box_pack_start (GTK_BOX (vboxRevoc), hButtonBoxRevoc, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowRevoc), vboxRevoc);
-  gpa_widget_show (windowRevoc, global_windowMain,
-		   _("keys_generateRevocation.tip"));
+  gpa_window_show_centered (windowRevoc, global_windowMain);
 }				/* keys_generateRevocation */
 
 void
@@ -2676,7 +2671,7 @@ keys_import (void)
 			      cancel_button), "clicked",
 			     GTK_SIGNAL_FUNC (gpa_window_destroy),
 			     (gpointer) paramClose);
-  gpa_widget_show (windowImport, global_windowMain, _("keys_import.tip"));
+  gpa_window_show_centered (windowImport, global_windowMain);
 }				/* keys_import */
 
 void
@@ -2720,8 +2715,7 @@ keys_importOwnertrust (void)
 			      cancel_button), "clicked",
 			     GTK_SIGNAL_FUNC (gpa_window_destroy),
 			     (gpointer) paramClose);
-  gpa_widget_show (windowImport, global_windowMain,
-		   _("keys_importOwnertrust.tip"));
+  gpa_window_show_centered (windowImport, global_windowMain);
 }				/* keys_importOwnertrust */
 
 void

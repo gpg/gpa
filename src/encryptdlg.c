@@ -1,5 +1,5 @@
 /* encryptdlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -202,7 +202,7 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxEncrypt), buttonEncrypt);
 
-  gpa_widget_show (window, parent, _("file_encrypt.tip"));
+  gpa_window_show_centered (window, parent);
 
   gtk_grab_add (window);
   gtk_main ();

@@ -222,7 +222,7 @@ options_keyserver (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxServer), hButtonBoxServer, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowServer), vboxServer);
-  gpa_widget_show (windowServer, main_window, _("options_keyserver.tip"));
+  gpa_window_show_centered (windowServer, main_window);
 } /* options_keyserver */
 
 void
@@ -458,7 +458,7 @@ global_windowMain);
   gtk_box_pack_start (GTK_BOX (vboxRecipients), hButtonBoxRecipients, FALSE,
 		      FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowRecipients), vboxRecipients);
-  gpa_widget_show (windowRecipients, parent, _("options_recipients.tip"));
+  gpa_window_show_centered (windowRecipients, parent);
 } /* options_recipients */
 
 void
@@ -604,7 +604,7 @@ options_key (gpointer param)
   gtk_container_add (GTK_CONTAINER (hButtonBoxKey), buttonSet);
   gtk_box_pack_start (GTK_BOX (vboxKey), hButtonBoxKey, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowKey), vboxKey);
-  gpa_widget_show (windowKey, parent, _("options_key.tip"));
+  gpa_window_show_centered (windowKey, parent);
 } /* options_key */
 
 void
@@ -654,7 +654,7 @@ options_tips (gpointer param)
   buttonClose = gpa_buttonCancel_new (accelGroup, _("_Close"), paramClose);
   gtk_container_add (GTK_CONTAINER (hButtonBoxTips), buttonClose);
   gtk_container_add (GTK_CONTAINER (windowTips), hButtonBoxTips);
-  gpa_widget_show (windowTips, parent, _("options_tips.tip"));
+  gpa_window_show_centered (windowTips, parent);
 } /* options_tips */
 
 void

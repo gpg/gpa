@@ -1,5 +1,5 @@
 /* filesigndlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -248,7 +248,7 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonSign);
   gtk_container_add (GTK_CONTAINER (windowSign), vboxSign);
-  gpa_widget_show (windowSign, parent, _("file_sign.tip"));
+  gpa_window_show_centered (windowSign, parent);
 
   gtk_grab_add (windowSign);
   gtk_main ();

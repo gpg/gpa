@@ -27,28 +27,6 @@
 #include "icons.h"
 #include "help.h"
 
-void
-gpa_widget_set_centered (GtkWidget * widget, GtkWidget * parent)
-{
-/* var */
-  int x0, y0, w0, h0, x, y, w, h;
-/* commands */
-  gdk_window_get_size (widget->window, &w, &h);
-  gdk_window_get_origin (parent->window, &x0, &y0);
-  gdk_window_get_size (parent->window, &w0, &h0);
-  x = x0 + (w0 - w) / 2;
-  y = y0 + (h0 - h) / 2;
-  gdk_window_move_resize (widget->window, x, y, w, h);
-}				/* gpa_widget_set_centered */
-
-void
-gpa_widget_show (GtkWidget * widget, GtkWidget * parent, gchar * tip)
-{
-    gtk_widget_show_all (widget);
-    gpa_widget_set_centered (widget, parent);
-    gpa_window_tip_show (tip);
-}				/* gpa_widget_show */
-
 
 /* Show all children of the GtkWindow widget, realize it, set its
  * position so that it's in the center of the parent and show the window
@@ -76,6 +54,7 @@ gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent)
   gtk_widget_set_uposition (widget, center_x, center_y);
   gtk_widget_show_all (widget);
 } /* gpa_window_show_centered */
+
 
 void
 gpa_window_destroy (gpointer param)
@@ -392,8 +371,7 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
 			      0, 0);
   gtk_box_pack_start (GTK_BOX (vboxMessage), buttonClose, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowMessage), vboxMessage);
-  gtk_widget_show_all (windowMessage);
-  gpa_widget_set_centered (windowMessage, messenger);
+  gpa_window_show_centered (windowMessage, messenger);
   gtk_widget_grab_focus (buttonClose);
 }				/* gpa_window_message */
 
@@ -535,8 +513,7 @@ gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func, gchar * tip,
   gtk_box_pack_start (GTK_BOX (vboxPassphrase), hButtonBoxPassphrase, FALSE,
 		      FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowPassphrase), vboxPassphrase);
-  gtk_widget_show_all (windowPassphrase);
-  gpa_widget_set_centered (windowPassphrase, messenger);
+  gpa_window_show_centered (windowPassphrase, messenger);
   gtk_widget_grab_focus (entryPasswd);
 }				/* gpa_window_passphrase */
 
@@ -590,7 +567,7 @@ gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
 		      GTK_OBJECT (GTK_FILE_SELECTION (window)->cancel_button),
 		      "clicked", GTK_SIGNAL_FUNC (file_dialog_cancel),
 		      (gpointer) &dialog);
-  gpa_widget_show (window, parent, "");
+  gpa_window_show_centered (window, parent);
 
   gtk_grab_add (window);
   gtk_main ();
