@@ -171,10 +171,17 @@ options_recipients_set (gpointer param)
   gpa_recipientWindow_close (param);
 }				/* options_recipients_set */
 
+
+static void
+options_recipients_destroy (GtkWidget * widget, gpointer param)
+{
+  gtk_main_quit ();
+}
+
+
 void
 options_recipients (gpointer param)
 {
-/* var */
   GpaWindowKeeper *keeper;
   gint contentsKeyCount;
   GtkAccelGroup *accelGroup;
@@ -191,7 +198,7 @@ options_recipients (gpointer param)
   gpointer *paramCancel;
   gpointer *paramSet;
   GtkWidget *parent = param;
-/* objects */
+
   GtkWidget *windowRecipients;
   GtkWidget *vboxRecipients;
   GtkWidget *hboxRecipients;
@@ -210,7 +217,7 @@ options_recipients (gpointer param)
   GtkWidget *buttonAdd;
   GtkWidget *buttonCancel;
   GtkWidget *buttonSet;
-/* commands */
+
   contentsKeyCount =
     gpapa_get_public_key_count (gpa_callback, global_windowMain);
   if (!contentsKeyCount)
@@ -219,7 +226,8 @@ options_recipients (gpointer param)
 			("No public keys available to denote\nas default recipients."),
 global_windowMain);
       return;
-    }				/* if */
+    } /* if */
+
   keeper = gpa_windowKeeper_new ();
   windowRecipients = gtk_window_new (GTK_WINDOW_DIALOG);
   gpa_windowKeeper_set_window (keeper, windowRecipients);
@@ -227,6 +235,9 @@ global_windowMain);
 			_("Set default recipients"));
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowRecipients), accelGroup);
+  gtk_signal_connect (GTK_OBJECT (windowRecipients), "destroy",
+		      GTK_SIGNAL_FUNC (options_recipients_destroy), NULL);
+  
   vboxRecipients = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxRecipients), 5);
   hboxRecipients = gtk_hbox_new (TRUE, 0);
@@ -361,7 +372,10 @@ global_windowMain);
   gtk_box_pack_start (GTK_BOX (vboxRecipients), hButtonBoxRecipients, FALSE,
 		      FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowRecipients), vboxRecipients);
+
+  gtk_window_set_modal (GTK_WINDOW (windowRecipients), TRUE);
   gpa_window_show_centered (windowRecipients, parent);
+  gtk_main ();
 } /* options_recipients */
 
 void
