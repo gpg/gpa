@@ -1,8 +1,7 @@
 Noteworthy changes in version 0.6.1 (unreleased)
 ------------------------------------------------
 
- * The key generation dialog for the advanced mode has been revamped to use
- GTK+2 stock widgets.
+ * The key generation dialogs have been revamped to use GTK+2 stock widgets.
 
  * Keys' expiration dates can now be choosen by clicking on a calendar.
 

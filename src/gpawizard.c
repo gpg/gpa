@@ -33,6 +33,8 @@ typedef struct
   GtkWidget *notebook;
   GtkWidget *prev_button;
   GtkWidget *next_button;
+  GtkWidget *finish_button;
+  GtkWidget *cancel_button;
   GtkWidget *close_button;
   GtkAccelGroup *accel_group;
   GPAWizardPageSwitchedFunc page_switched;
@@ -42,8 +44,7 @@ GPAWizard;
 
 typedef struct
 {
-  gchar *prev_label;
-  gchar *next_label;
+  gboolean is_last;
   GPAWizardAction action;
   gpointer user_data;
 }
@@ -65,7 +66,7 @@ gpa_wizard_get_current_page (GPAWizard * wizard)
 }
 
 /* Update the buttons of the wizard depending on the current page */
-static void
+void
 gpa_wizard_update_buttons (GtkWidget * widget)
 {
   GPAWizard * wizard = gtk_object_get_data (GTK_OBJECT (widget), "user_data");
@@ -78,25 +79,22 @@ gpa_wizard_update_buttons (GtkWidget * widget)
 
   page = gpa_wizard_get_current_page (wizard);
 
-  gpa_button_set_text (wizard->prev_button, page->prev_label,
-		       wizard->accel_group);
-  gpa_button_set_text (wizard->next_button, page->next_label,
-		       wizard->accel_group);
-
-  /* if we're at the first page, make the prev-button insensitive. */
-  if (page_number == 0)
+  /* Choose whether to show "Next" or "Finish" button based on the data
+   * provided */
+  if (page->is_last) 
     {
-      gtk_widget_set_sensitive (wizard->prev_button, FALSE);
+      gtk_widget_hide (wizard->next_button);
+      gtk_widget_show (wizard->finish_button);
     }
   else
     {
-      gtk_widget_set_sensitive (wizard->prev_button, TRUE);
+      gtk_widget_show (wizard->next_button);
+      gtk_widget_hide (wizard->finish_button);
     }
 
   /* if we're at the last page, assume that whatever the wizard was
    * supposed to do has been achieved. Therefore make both prev and next
-   * button insensitive and change the label of the cancel button to
-   * "close"
+   * button insensitive, hide the cancel button and show the close one.
    */
   /* There doesn't seem to be a simple way to get the number of pages in
    * a notebook, so try to get the next page and if that is NULL, we're
@@ -107,19 +105,41 @@ gpa_wizard_update_buttons (GtkWidget * widget)
     {
       gtk_widget_set_sensitive (wizard->prev_button, FALSE);
       gtk_widget_set_sensitive (wizard->next_button, FALSE);
+      gtk_widget_set_sensitive (wizard->finish_button, FALSE);
       gtk_widget_set_sensitive (wizard->close_button, TRUE);
-      gpa_button_set_text (wizard->close_button, _("_Close"),
-			   wizard->accel_group);
+      gtk_widget_set_sensitive (wizard->cancel_button, TRUE);
+      gtk_widget_show (wizard->close_button);
+      gtk_widget_hide (wizard->cancel_button);
+    }
+  else
+    {
+      gtk_widget_set_sensitive (wizard->prev_button, TRUE);
+      gtk_widget_set_sensitive (wizard->next_button, TRUE);
+      gtk_widget_set_sensitive (wizard->finish_button, TRUE);
+      gtk_widget_set_sensitive (wizard->close_button, TRUE);
+      gtk_widget_set_sensitive (wizard->cancel_button, TRUE);
+      gtk_widget_hide (wizard->close_button);
+      gtk_widget_show (wizard->cancel_button);
     }
 
-  /* @@@@@@@ KLUDGE: If we are on the "wait" page, disable all buttons.
+  /* if we're at the first page, make the prev-button insensitive. */
+  if (page_number == 0)
+    {
+      gtk_widget_set_sensitive (wizard->prev_button, FALSE);
+    }
+
+  /* FIXME: If we are on the "wait" page, disable all buttons.
    */
-  else if (!gtk_notebook_get_nth_page (GTK_NOTEBOOK (wizard->notebook),
-				       page_number + 2))
+  if (gtk_notebook_get_nth_page (GTK_NOTEBOOK (wizard->notebook),
+				  page_number + 1) &&
+      !gtk_notebook_get_nth_page (GTK_NOTEBOOK (wizard->notebook),
+                                  page_number + 2))
     {
       gtk_widget_set_sensitive (wizard->prev_button, FALSE);
       gtk_widget_set_sensitive (wizard->next_button, FALSE);
+      gtk_widget_set_sensitive (wizard->finish_button, FALSE);
       gtk_widget_set_sensitive (wizard->close_button, FALSE);
+      gtk_widget_set_sensitive (wizard->cancel_button, FALSE);
     }
 }
 
@@ -232,23 +252,36 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
   button_box = gtk_hbutton_box_new ();
   gtk_box_pack_start (GTK_BOX (hbox), button_box, TRUE, TRUE, 5);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (button_box), GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (button_box), 0);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (button_box), 10);
 
-  button = gtk_button_new_with_label (_("_Prev"));
+  button = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
   wizard->prev_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (gpa_wizard_prev), (gpointer) wizard);
   
-  button = gtk_button_new_with_label (_("_Next"));
+  button = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
   wizard->next_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (gpa_wizard_next), (gpointer) vbox);
 
-  button = gpa_button_new (wizard->accel_group, _("_Cancel"));
+  button = gtk_button_new_from_stock (GTK_STOCK_APPLY);
+  wizard->finish_button = button;
+  gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (gpa_wizard_next), (gpointer) vbox);
+
+  button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
   wizard->close_button = button;
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 5);
+  gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 5);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked", close_func, close_data);
+  gtk_widget_add_accelerator (button, "clicked", accel_group, GDK_Escape,
+			      0, 0);
+
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  wizard->cancel_button = button;
+  gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 5);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", close_func, close_data);
   gtk_widget_add_accelerator (button, "clicked", accel_group, GDK_Escape,
 			      0, 0);
@@ -267,19 +300,13 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
  */
 void
 gpa_wizard_append_page (GtkWidget * widget, GtkWidget * page_widget,
-			gchar * prev_label, gchar * next_label,
+			gboolean is_last,
 			GPAWizardAction action, gpointer user_data)
 {
   GPAWizard * wizard = gtk_object_get_data (GTK_OBJECT (widget), "user_data");
   GPAWizardPage * page = g_malloc (sizeof (*page));
 
-  if (!prev_label)
-    prev_label = _("_Prev");
-  if (!next_label)
-    next_label = _("_Next");
-
-  page->prev_label = prev_label;
-  page->next_label = next_label;
+  page->is_last = is_last;
   page->action = action;
   page->user_data = user_data;
   

@@ -28,8 +28,8 @@ typedef gboolean (*GPAWizardAction)(gpointer user_data);
 GtkWidget *gpa_wizard_new (GtkAccelGroup * accel_group,
 	                   GtkSignalFunc close_func, gpointer close_data);
 void gpa_wizard_append_page (GtkWidget * widget, GtkWidget * page_widget,
-			     gchar * back_label, gchar * next_label,
-			     GPAWizardAction action, gpointer user_data);
+			     gboolean is_last, GPAWizardAction action,
+                             gpointer user_data);
 
 void gpa_wizard_next_page (GtkWidget * widget);
 
@@ -40,5 +40,7 @@ typedef void (*GPAWizardPageSwitchedFunc)(GtkWidget * page_widget,
 void gpa_wizard_set_page_switched (GtkWidget * widget,
 				   GPAWizardPageSwitchedFunc,
 				   gpointer param);
+
+void gpa_wizard_update_buttons (GtkWidget * widget);
 
 #endif /* GPAWIZARD_H */

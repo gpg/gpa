@@ -1,3 +1,12 @@
+2003-01-19  Miguel Coca  <mcoca@gnu.org>
+
+	* keygenwizard.c (gpa_keygen_wizard_run): Use the new wizard
+	interface.
+
+	* gpawizard.c, gpawizard.h (gpa_wizard_update_buttons) 
+	(gpa_wizard_new, gpa_wizard_append_page): Changes to use GTK+2 stock
+	buttons.
+
 2003-01-17  Miguel Coca  <mcoca@gnu.org>
 
 	* keygendlg.c (gpa_key_gen_run_dialog): More UI Fixes.

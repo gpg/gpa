@@ -585,26 +585,26 @@ gpa_keygen_wizard_run (GtkWidget * parent)
 
   keygen_wizard->name_page = gpa_keygen_wizard_name_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->name_page,
-			  NULL, NULL,
+			  FALSE,
 			  gpa_keygen_wizard_name_validate, keygen_wizard);
 
   keygen_wizard->email_page = gpa_keygen_wizard_email_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->email_page,
-			  NULL, NULL,
+			  FALSE,
 			  gpa_keygen_wizard_email_validate, keygen_wizard);
 
   keygen_wizard->comment_page = gpa_keygen_wizard_comment_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->comment_page,
-			  NULL, NULL, NULL, NULL);
+			  FALSE, NULL, NULL);
 			  
   keygen_wizard->passwd_page = gpa_keygen_wizard_password_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->passwd_page,
-			  NULL, NULL, gpa_keygen_wizard_password_validate,
+			  FALSE, gpa_keygen_wizard_password_validate,
 			  keygen_wizard);
 
   keygen_wizard->backup_page = gpa_keygen_wizard_backup_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->backup_page,
-			  NULL, NULL,
+			  TRUE,
 			  gpa_keygen_wizard_generate_action, keygen_wizard);
 
   /* Don't use F as the accelerator in "Finish" because Meta-F is
@@ -612,14 +612,18 @@ gpa_keygen_wizard_run (GtkWidget * parent)
 
   keygen_wizard->wait_page = gpa_keygen_wizard_wait_page ();
   gpa_wizard_append_page (wizard, keygen_wizard->wait_page,
-			  NULL, _("F_inish"), NULL, NULL);
+			  TRUE, NULL, NULL);
 
   keygen_wizard->final_page = gpa_keygen_wizard_final_page ();
   gpa_wizard_append_page (wizard, keygen_wizard->final_page,
-			  NULL, _("F_inish"), NULL, NULL);
+			  TRUE, NULL, NULL);
 
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   gpa_window_show_centered (window, parent);
+  /* FIXME: This is a kludge to make sure that the proper buttons are shown
+   * (must be done after the show_all). All this should be fixed properly
+   * some day */
+  gpa_wizard_update_buttons (wizard);
 
   gtk_main ();
 

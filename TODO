@@ -2,8 +2,8 @@
 
 In no particular order:
 
-* Rework the Key Generation Wizard to make it simpler and use stock buttons.
-  This can probably be done using gtk_dialog_run ().
+* Redo the key generation wizard stuff, as it is one ugly hack on top of
+  another at this point.
 
 * Dialogs should check user input and react to it.
 ** Don't allow the user to go on unless the input makes sense (particularly
@@ -37,3 +37,6 @@ In no particular order:
 
 * Use the fd/stream gpgme data objects in the filemanager, to support large
   files.
+
+* Use the GPGME event loop inteface to avoid blocking on long operations.
+  This is important mostly for the file manager.
