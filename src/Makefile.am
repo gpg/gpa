@@ -31,7 +31,8 @@ gpa_SOURCES = gpa.c gpa.h \
 	      keygendlg.c keygendlg.h \
 	      keygenwizard.c keygenwizard.h \
 	      gpawizard.c gpawizard.h \
-	      gpapastrings.c gpapastrings.h
+	      gpapastrings.c gpapastrings.h\
+		  w32reg.c w32reg.h
 
 
 install-data-local:
