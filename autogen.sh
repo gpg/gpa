@@ -6,10 +6,10 @@
 
 PGM=GPA
 lib_config_files="gtk-config"
-autoconf_vers=2.13
-automake_vers=1.4
-aclocal_vers=1.4
-libtool_vers=1.3
+autoconf_vers=2.52
+automake_vers=1.5
+aclocal_vers=1.5
+libtool_vers=1.4
 
 DIE=no
 if test "$1" = "--build-w32"; then
@@ -107,7 +107,7 @@ else
 fi
 
 
-if (gettext --version </dev/null 2>/dev/null | awk 'NR==1 { split($4,A,"\."); \
+if (gettext --version </dev/null 2>/dev/null | awk 'NR==1 { split($4,A,"."); \
     X=10000*A[1]+100*A[2]+A[3]; echo X; if( X >= 1035 ) exit 1; exit 0}')
     then
     echo "**Error**: You must have "\`gettext\'" installed to compile $PGM."

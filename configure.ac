@@ -3,16 +3,36 @@ dnl Configure script source for GPA
 dnl
 dnl (Process this file with autoconf to produce a configure script.)
 AC_REVISION($Revision$)dnl
-AC_PREREQ(2.13)
-
-AC_INIT(src/gpa.c)
-AM_CONFIG_HEADER(config.h)
+AC_PREREQ(2.52)
 
 dnl
 dnl The version number goes here
 dnl
-AM_INIT_AUTOMAKE(gpa,`cat $srcdir/VERSION`)
+AC_INIT(gpa, 0.4.3, [bug-gpa@gnupg.org])
+
 ALL_LINGUAS="de fr zh_TW.Big5"
+AM_CONFIG_HEADER(config.h)
+AC_CONFIG_SRCDIR(src/gpa.c)
+AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
+
+PACKAGE=$PACKAGE_NAME
+VERSION=$PACKAGE_VERSION
+AC_SUBST(PACKAGE)
+AC_SUBST(VERSION)
+AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of this package])
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version of this package])
+
+AC_DEFINE_UNQUOTED(PACKAGE_BUGREPORT, "$PACKAGE_BUGREPORT",
+                                      [address for reporting bugs])
+
+AH_TOP([
+/* We need this, because some autoconf tests rely on this (e.g. stpcpy)
+   and it should be used for new programs anyway */
+#define _GNU_SOURCE  1
+])
+AM_MAINTAINER_MODE
+
+
 
 dnl
 dnl Setup some stuff depending on host/target.
@@ -22,27 +42,35 @@ GPG=
 case "${target}" in
     *-*-mingw32)
         try_gettext=no
-        try_gdbm=no
-dnl        AC_DEFINE(USE_ONLY_8DOT3)
-        AC_DEFINE(HAVE_DRIVE_LETTERS)
-        AC_DEFINE(HAVE_DOSISH_SYSTEM)
-        AC_DEFINE(USE_SIMPLE_GETTEXT)
+dnl     AC_DEFINE(USE_ONLY_8DOT3,1,
+dnl               [set this to limit filenames to the 8.3 format])
+        AC_DEFINE(HAVE_DRIVE_LETTERS,1,
+                  [defined if we must run on a stupid file system])
+        AC_DEFINE(HAVE_DOSISH_SYSTEM,1,
+                  [defined if we run on some of the PCDOS like systems 
+                   (DOS, Windoze. OS/2) with special properties like
+                    no file modes])
+        AC_DEFINE(USE_SIMPLE_GETTEXT,1,
+                  [because the Unix gettext has too much overhead on
+                   MingW32 systems and these systems lack Posix functions,
+                   we use a simplified version of gettext])
         GPG='c:\\gnupg\\gpg.exe'
         ;;
     *)
        ;;
 esac
 
-
-AM_MAINTAINER_MODE
-
 dnl
 dnl Checks for programs
 dnl
+AM_MISSING_PROG(ACLOCAL, aclocal, $missing_dir)
+AM_MISSING_PROG(AUTOCONF, autoconf, $missing_dir)
+AM_MISSING_PROG(AUTOMAKE, automake, $missing_dir)
+AM_MISSING_PROG(AUTOHEADER, autoheader, $missing_dir)
+AM_MISSING_PROG(MAKEINFO, makeinfo, $missing_dir)
 AC_PROG_CC
 AC_ISC_POSIX
 AC_STDC_HEADERS
-AC_ARG_PROGRAM
 AC_PROG_RANLIB
 
 if test -z "$GPG"; then
@@ -57,6 +85,12 @@ if test -z "$GPG"; then
   fi
 fi
 AC_DEFINE_UNQUOTED(GPG_PATH, "$GPG")
+
+
+dnl
+dnl Checks for compiler features
+dnl
+
 
 
 dnl
@@ -111,27 +145,15 @@ fi
 
 
 
-dnl
-dnl Checks for compiler features
-dnl
-
-dnl
-dnl Checks for library functions
-dnl
-
-
-
-
-dnl
-dnl Checks for system services
-dnl
-
-
 if test "$GCC" = yes; then
-    CFLAGS="$CFLAGS -Wall -Wcast-align -Wstrict-prototypes"
+    if test "$USE_MAINTAINER_MODE" = "yes"; then
+        CFLAGS="$CFLAGS -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
+    else
+        CFLAGS="$CFLAGS -Wall"
+    fi
 fi
 
-AC_OUTPUT_COMMANDS([
+AC_CONFIG_COMMANDS(gpadefs.h,[[
 cat >gpadefs.tmp <<GPAEOF
 /* Generated automatically by configure */
 #ifdef HAVE_DRIVE_LETTERS
@@ -152,16 +174,16 @@ else
     mv gpadefs.tmp gpadefs.h
     echo "gpadefs.h created"
 fi
-],[
+]],[[
 prefix=$prefix
 exec_prefix=$exec_prefix
 libdir=$libdir
 datadir=$datadir
 DATADIRNAME=$DATADIRNAME
 GPG=$GPG
-])
+]])
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 intl/Makefile
 po/Makefile.in
@@ -170,4 +192,5 @@ gpapa/Makefile
 src/Makefile
 ])
 
-dnl *-*wedit:notab*-*  Please keep this as the last line.
+
+AC_OUTPUT

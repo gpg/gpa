@@ -2,7 +2,6 @@ dnl
 dnl autoconf macros for this project
 dnl
 
-
 dnl GNUPG_CHECK_TYPEDEF(TYPE, HAVE_NAME)
 dnl Check whether a typedef exists and create a #define $2 if it exists
 dnl
@@ -20,5 +19,3 @@ AC_DEFUN(GNUPG_CHECK_TYPEDEF,
     fi
   ])
 
-
-dnl *-*wedit:notab*-*  Please keep this as the last line.

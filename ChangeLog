@@ -1,3 +1,13 @@
+2002-01-14  Werner Koch  <wk@gnupg.org>
+
+        Released 0.4.3.
+	
+	* configure.in: Replaced by
+	* configure.ac: autoconf 2.5 suggested file.  Adjusted for it.
+	* VERSION: Removed
+	* Makefile.am: Create the VERSION file in the dist tarball.
+	* autogen.sh: Fixed required versions 
+
 2001-08-03  Werner Koch  <wk@gnupg.org>
 
 	* gpa.spec: New.  Contributed by Peter Hanecak.

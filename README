@@ -1,14 +1,19 @@
 		    GPA - The GNU Privacy Assistant
 
-			    Version 0.3
+			    Version 0.4
 
-
-
-			 Overview
-			 --------
 
 This is a graphical frontend for the GNU Privacy Guard
 
-	     THIS IS WORK IN PROGRESS!!!!
+	     THIS IS STILL WORK IN PROGRESS!!!!
+
+Basic installation:
+
+$ ./configure
+$ make
+$ su
+$ make install
+
+for details see INSTALL.
 
 
