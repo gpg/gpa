@@ -32,7 +32,7 @@ gpapa_key_new (gchar * keyID, GpapaCallbackFunc callback, gpointer calldata)
   memset (key, 0, sizeof (GpapaKey));
   key->KeyID = xstrdup (keyID);
   return (key);
-}				/* gpapa_key_new */
+} /* gpapa_key_new */
 
 gchar *
 gpapa_key_get_identifier (GpapaKey * key, GpapaCallbackFunc callback,
@@ -42,7 +42,7 @@ gpapa_key_get_identifier (GpapaKey * key, GpapaCallbackFunc callback,
     return (NULL);
   else
     return (key->KeyID);
-}				/* gpapa_key_get_identifier */
+} /* gpapa_key_get_identifier */
 
 gchar *
 gpapa_key_get_name (GpapaKey * key, GpapaCallbackFunc callback,
@@ -52,7 +52,7 @@ gpapa_key_get_name (GpapaKey * key, GpapaCallbackFunc callback,
     return (NULL);
   else
     return (key->UserID);
-}				/* gpapa_key_get_name */
+} /* gpapa_key_get_name */
 
 GDate *
 gpapa_key_get_expiry_date (GpapaKey * key, GpapaCallbackFunc callback,
@@ -62,7 +62,7 @@ gpapa_key_get_expiry_date (GpapaKey * key, GpapaCallbackFunc callback,
     return (NULL);
   else
     return (key->ExpirationDate);
-}				/* gpapa_key_get_expiry_date */
+} /* gpapa_key_get_expiry_date */
 
 void
 gpapa_key_set_expiry_date (GpapaKey * key, GDate * date,
@@ -82,9 +82,9 @@ gpapa_key_set_expiry_date (GpapaKey * key, GDate * date,
       gpgargv[2] = NULL; 
       gpapa_call_gnupg (gpgargv, TRUE, commands, NULL,
                         NULL, NULL, callback, calldata); 
-      free(commands);
+      free (commands);
     }
-}				/* gpapa_key_set_expiry_date */
+} /* gpapa_key_set_expiry_date */
 
 void
 gpapa_key_set_expiry_time (GpapaKey * key, gint number, gchar unit,
@@ -93,7 +93,7 @@ gpapa_key_set_expiry_time (GpapaKey * key, gint number, gchar unit,
   if (key)
     printf ("Setting expiry time of key 0x%s to %d %c.\n",
 	    key->KeyID, number, unit);
-}				/* gpapa_key_set_expiry_time */
+} /* gpapa_key_set_expiry_time */
 
 void
 gpapa_key_release (GpapaKey * key, GpapaCallbackFunc callback,
@@ -112,4 +112,4 @@ gpapa_key_release (GpapaKey * key, GpapaCallbackFunc callback,
 	g_date_free (key->ExpirationDate);
       free (key);
     }
-}				/* gpapa_key_release */
+} /* gpapa_key_release */

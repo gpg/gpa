@@ -36,7 +36,7 @@ gpapa_file_new (gchar * fileID, GpapaCallbackFunc callback, gpointer calldata)
   fileNew->identifier = (gchar *) xstrdup (fileID);
   fileNew->name = (gchar *) xstrdup (fileID);	/*!!! */
   return (fileNew);
-}				/* gpapa_file_new */
+} /* gpapa_file_new */
 
 gchar *
 gpapa_file_get_identifier (GpapaFile * file, GpapaCallbackFunc callback,
@@ -46,7 +46,7 @@ gpapa_file_get_identifier (GpapaFile * file, GpapaCallbackFunc callback,
     return (file->identifier);
   else
     return (NULL);
-}				/* gpapa_file_get_identifier */
+} /* gpapa_file_get_identifier */
 
 gchar *
 gpapa_file_get_name (GpapaFile * file, GpapaCallbackFunc callback,
@@ -56,7 +56,7 @@ gpapa_file_get_name (GpapaFile * file, GpapaCallbackFunc callback,
     return (file->name);
   else
     return (NULL);
-}				/* gpapa_file_get_name */
+} /* gpapa_file_get_name */
 
 static void
 linecallback_get_status (gchar * line, gpointer data, gboolean status)
@@ -89,7 +89,7 @@ linecallback_get_status (gchar * line, gpointer data, gboolean status)
 	    d->file->status_flags |= GPAPA_FILE_STATUS_SIGNATURE;
 	}
     }
-}				/* linecallback_get_status */
+} /* linecallback_get_status */
 
 GpapaFileStatus
 gpapa_file_get_status (GpapaFile * file, GpapaCallbackFunc callback,
@@ -130,7 +130,7 @@ gpapa_file_get_status (GpapaFile * file, GpapaCallbackFunc callback,
 	  return (GPAPA_FILE_UNKNOWN);
 	}
     }
-}				/* gpapa_file_get_status */
+} /* gpapa_file_get_status */
 
 gint
 gpapa_file_get_signature_count (GpapaFile * file, GpapaCallbackFunc callback,
@@ -138,7 +138,7 @@ gpapa_file_get_signature_count (GpapaFile * file, GpapaCallbackFunc callback,
 {
   GList *sigs = gpapa_file_get_signatures (file, callback, calldata);
   return (g_list_length (sigs));
-}				/* gpapa_file_get_signature_count */
+} /* gpapa_file_get_signature_count */
 
 static gboolean
 status_check (gchar * buffer, gchar * keyword, gchar ** data)
@@ -175,7 +175,7 @@ status_check (gchar * buffer, gchar * keyword, gchar ** data)
       result = TRUE;
     }
   return (result);
-}				/* status_check */
+} /* status_check */
 
 static void
 linecallback_get_signatures (gchar * line, gpointer data, gboolean status)
@@ -213,7 +213,7 @@ linecallback_get_signatures (gchar * line, gpointer data, gboolean status)
 	  d->file->sigs = g_list_append (d->file->sigs, sig);
 	}
     }
-}				/* linecallback_get_signatures */
+} /* linecallback_get_signatures */
 
 GList *
 gpapa_file_get_signatures (GpapaFile * file, GpapaCallbackFunc callback,
@@ -236,7 +236,7 @@ gpapa_file_get_signatures (GpapaFile * file, GpapaCallbackFunc callback,
 	}
       return (file->sigs);
     }
-}				/* gpapa_file_get_signatures */
+} /* gpapa_file_get_signatures */
 
 void
 gpapa_file_sign (GpapaFile * file, gchar * targetFileID, gchar * keyID,
@@ -286,7 +286,7 @@ gpapa_file_sign (GpapaFile * file, gchar * targetFileID, gchar * keyID,
 	 NULL, NULL, callback, calldata);
       free (full_keyID);
     }
-}				/* gpapa_file_sign */
+} /* gpapa_file_sign */
 
 void
 gpapa_file_encrypt (GpapaFile * file, gchar * targetFileID,
@@ -328,7 +328,7 @@ gpapa_file_encrypt (GpapaFile * file, gchar * targetFileID,
 	free (gpgargv[i]);
       free (gpgargv);
     }
-}				/* gpapa_file_encrypt */
+} /* gpapa_file_encrypt */
 
 void
 gpapa_file_encrypt_and_sign (GpapaFile * file, gchar * targetFileID,
@@ -380,7 +380,7 @@ gpapa_file_encrypt_and_sign (GpapaFile * file, gchar * targetFileID,
       free (gpgargv);
       free (full_keyID);
     }
-}				/* gpapa_file_encrypt_and_sign */
+} /* gpapa_file_encrypt_and_sign */
 
 void
 gpapa_file_protect (GpapaFile * file, gchar * targetFileID,
@@ -411,7 +411,7 @@ gpapa_file_protect (GpapaFile * file, gchar * targetFileID,
 	(gpgargv, TRUE, NULL, PassPhrase,
 	 NULL, NULL, callback, calldata);
     }
-}				/* gpapa_file_protect */
+} /* gpapa_file_protect */
 
 void
 gpapa_file_decrypt (GpapaFile * file, gchar * targetFileID,
@@ -440,7 +440,7 @@ gpapa_file_decrypt (GpapaFile * file, gchar * targetFileID,
 	(gpgargv, TRUE, NULL, PassPhrase,
 	 NULL, NULL, callback, calldata);
     }
-}				/* gpapa_file_protect */
+} /* gpapa_file_protect */
 
 void
 gpapa_file_release (GpapaFile * file, GpapaCallbackFunc callback,
@@ -451,4 +451,4 @@ gpapa_file_release (GpapaFile * file, GpapaCallbackFunc callback,
   if (file->sigs)
     g_list_free (file->sigs);
   free (file);
-}				/* gpapa_file_release */
+} /* gpapa_file_release */

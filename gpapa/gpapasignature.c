@@ -32,7 +32,7 @@ gpapa_signature_new (gchar * keyID, GpapaCallbackFunc callback,
   memset (sig, 0, sizeof (GpapaSignature));
   sig->KeyID = xstrdup (keyID);
   return (sig);
-}				/* gpapa_signature_new */
+} /* gpapa_signature_new */
 
 gchar *
 gpapa_signature_get_identifier (GpapaSignature * signature,
@@ -42,7 +42,7 @@ gpapa_signature_get_identifier (GpapaSignature * signature,
     return (NULL);
   else
     return (signature->KeyID);
-}				/* gpapa_signature_get_identifier */
+} /* gpapa_signature_get_identifier */
 
 gchar *
 gpapa_signature_get_name (GpapaSignature * signature,
@@ -52,7 +52,7 @@ gpapa_signature_get_name (GpapaSignature * signature,
     return (NULL);
   else
     return (signature->UserID);
-}				/* gpapa_signature_get_name */
+} /* gpapa_signature_get_name */
 
 GpapaSigValidity
 gpapa_signature_get_validity (GpapaSignature * signature,
@@ -62,7 +62,7 @@ gpapa_signature_get_validity (GpapaSignature * signature,
     return (GPAPA_SIG_UNKNOWN);
   else
     return (signature->validity);
-}				/* gpapa_signature_is_valid */
+} /* gpapa_signature_is_valid */
 
 void
 gpapa_signature_release (GpapaSignature * signature,
@@ -76,16 +76,4 @@ gpapa_signature_release (GpapaSignature * signature,
 	g_date_free (signature->CreationDate);
       free (signature);
     }
-}				/* gpapa_signature_release */
-
-
-
-
-
-
-
-
-
-
-
-
+} /* gpapa_signature_release */

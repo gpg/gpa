@@ -111,8 +111,6 @@ status_check (char *line,
 }		
 
 
-
-
 #ifdef __MINGW32__
 static GPG_OBJECT * 
 spawn_gnupg(char **user_args, gchar * commands,
@@ -746,7 +744,6 @@ gpapa_gnupg_close ( GPG_OBJECT *gpg )
   free (gpg);
 }
 
-
 #endif /*__MINGW32__*/
 
 
@@ -756,15 +753,13 @@ gpapa_gnupg_create ( int foo )
   return NULL;
 }
 
-
-
 /*
  * Handle the status output of GnuPG.  This function does read entire lines
  * and passes them as C strings to the callback function (we can use C Strings
  * because the status output is always UTF-8 encoded).  Of course we have to
  * buffer the lines to cope with long lines e.g. with a large user ID.
  * Note: We can optimize this to only cope with status line code we know about
- * and skipp all other stuff without buffering (i.e. without extending the
+ * and skip all other stuff without buffering (i.e. without extending the
  * buffer).
  */
 static void
@@ -850,10 +845,9 @@ handle_status (GPG_OBJECT *gpg,
 }
 
 /*
- * nearly the same as handle_status. this one is used for gpg's keylinsting
+ * Nearly the same as handle_status. this one is used for gpg's keylinsting
  * and other line oriented output.
  */
-
 static void
 handle_output_line (GPG_OBJECT *gpg,
                     GpapaLineCallbackFunc line_cb, void *line_opaque)

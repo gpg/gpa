@@ -72,7 +72,7 @@ extract_date (gchar * buffer)
     return (g_date_new_dmy (atoi (day), atoi (month), atoi (year)));
   else
     return (NULL);
-}                               /* extract_date */
+} /* extract_date */
 
 static GpapaKey *
 extract_key (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
@@ -118,7 +118,7 @@ extract_key (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
       key->UserID = xstrdup (field[9]);
       return (key);
     }
-}                               /* extract_key */
+} /* extract_key */
 
 static void
 linecallback_refresh_pub (gchar * line, gpointer data, gboolean status)
@@ -132,7 +132,7 @@ linecallback_refresh_pub (gchar * line, gpointer data, gboolean status)
       key->key = extract_key (line, d->callback, d->calldata);
       PubRing = g_list_append (PubRing, key);
     }
-}                               /* linecallback_refresh_pub */
+} /* linecallback_refresh_pub */
 
 void
 gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
@@ -149,14 +149,14 @@ gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpgargv[2] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
 		    linecallback_refresh_pub, &data, callback, calldata);
-}				/* gpapa_refresh_public_keyring */
+} /* gpapa_refresh_public_keyring */
 
 gint
 gpapa_get_public_key_count (GpapaCallbackFunc callback, gpointer calldata)
 {
   gpapa_refresh_public_keyring (callback, calldata);
   return (g_list_length (PubRing));
-}				/* gpapa_get_public_key_count */
+} /* gpapa_get_public_key_count */
 
 GpapaPublicKey *
 gpapa_get_public_key_by_index (gint idx, GpapaCallbackFunc callback,
@@ -165,7 +165,7 @@ gpapa_get_public_key_by_index (gint idx, GpapaCallbackFunc callback,
   if (PubRing == NULL)
     gpapa_refresh_public_keyring (callback, calldata);
   return (g_list_nth_data (PubRing, idx));
-}				/* gpapa_get_public_key_by_index */
+} /* gpapa_get_public_key_by_index */
 
 static void
 linecallback_id_pub (gchar * line, gpointer data, gboolean status)
@@ -177,7 +177,7 @@ linecallback_id_pub (gchar * line, gpointer data, gboolean status)
       memset (d->key, 0, sizeof (GpapaPublicKey));
       d->key->key = extract_key (line, d->callback, d->calldata);
     }
-}				/* linecallback_id_pub */
+} /* linecallback_id_pub */
 
 GpapaPublicKey *
 gpapa_get_public_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
@@ -194,7 +194,7 @@ gpapa_get_public_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
 		    linecallback_id_pub, &data, callback, calldata);
   free (id);
   return (data.key);
-}				/* gpapa_get_public_key_by_ID */
+} /* gpapa_get_public_key_by_ID */
 
 GpapaPublicKey *
 gpapa_get_public_key_by_userID (gchar * userID, GpapaCallbackFunc callback,
@@ -213,7 +213,6 @@ gpapa_get_public_key_by_userID (gchar * userID, GpapaCallbackFunc callback,
   free (uid);
   return (data.key);
 }
-
 
 GpapaPublicKey *
 gpapa_receive_public_key_from_server (gchar * keyID, gchar * ServerName,
@@ -235,7 +234,7 @@ gpapa_receive_public_key_from_server (gchar * keyID, gchar * ServerName,
       gpapa_refresh_public_keyring (callback, calldata);
     }
   return (gpapa_get_public_key_by_ID (keyID, callback, calldata));
-}				/* gpapa_receive_public_key_from_server */
+} /* gpapa_receive_public_key_from_server */
 
 /* This is intentionally a global function, not a method of
  * GpapaPublicKey.
@@ -247,7 +246,7 @@ gpapa_release_public_key (GpapaPublicKey * key, GpapaCallbackFunc callback,
   /* Do nothing.
    * Public keys will be released with the PubRing.
    */
-}				/* gpapa_release_public_key */
+} /* gpapa_release_public_key */
 
 static void
 linecallback_refresh_sec (gchar * line, gpointer data, gboolean status)
@@ -261,7 +260,7 @@ linecallback_refresh_sec (gchar * line, gpointer data, gboolean status)
       key->key = extract_key (line, d->callback, d->calldata);
       SecRing = g_list_append (SecRing, key);
     }
-}				/* linecallback_refresh_sec */
+} /* linecallback_refresh_sec */
 
 void
 gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
@@ -278,14 +277,14 @@ gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpgargv[2] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
 		    linecallback_refresh_sec, &data, callback, calldata);
-}				/* gpapa_refresh_secret_keyring */
+} /* gpapa_refresh_secret_keyring */
 
 gint
 gpapa_get_secret_key_count (GpapaCallbackFunc callback, gpointer calldata)
 {
   gpapa_refresh_secret_keyring (callback, calldata);
   return (g_list_length (SecRing));
-}				/* gpapa_get_secret_key_count */
+} /* gpapa_get_secret_key_count */
 
 GpapaSecretKey *
 gpapa_get_secret_key_by_index (gint idx, GpapaCallbackFunc callback,
@@ -294,7 +293,7 @@ gpapa_get_secret_key_by_index (gint idx, GpapaCallbackFunc callback,
   if (SecRing == NULL)
     gpapa_refresh_secret_keyring (callback, calldata);
   return (g_list_nth_data (SecRing, idx));
-}				/* gpapa_get_secret_key_by_index */
+} /* gpapa_get_secret_key_by_index */
 
 static void
 linecallback_id_sec (gchar * line, gpointer data, gboolean status)
@@ -306,7 +305,7 @@ linecallback_id_sec (gchar * line, gpointer data, gboolean status)
       memset (d->key, 0, sizeof (GpapaSecretKey));
       d->key->key = extract_key (line, d->callback, d->calldata);
     }
-}				/* linecallback_id_sec */
+} /* linecallback_id_sec */
 
 GpapaSecretKey *
 gpapa_get_secret_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
@@ -323,8 +322,8 @@ gpapa_get_secret_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
 		    linecallback_id_sec, &data, callback, calldata);
   free (id);
   return (data.key);
-}				/* gpapa_get_secret_key_by_ID */
-
+} /* gpapa_get_secret_key_by_ID */
+ 
 GpapaSecretKey *
 gpapa_get_secret_key_by_userID (gchar * userID, GpapaCallbackFunc callback,
 			    gpointer calldata)
@@ -350,7 +349,7 @@ gpapa_release_secret_key (GpapaSecretKey * key, GpapaCallbackFunc callback,
   /* Do nothing.
    * Secret keys will be released with the SecRing.
    */
-}				/* gpapa_release_secret_key */
+} /* gpapa_release_secret_key */
 
 void
 gpapa_create_key_pair (GpapaPublicKey ** publicKey,
@@ -429,7 +428,7 @@ gpapa_create_key_pair (GpapaPublicKey ** publicKey,
       *secretKey = gpapa_get_secret_key_by_userID 
 	      ( aUserID, callback, calldata);
     }
-}				/* gpapa_create_key_pair */
+} /* gpapa_create_key_pair */
 
 static void
 linecallback_export_ownertrust (gchar * line, gpointer data, gboolean status)
@@ -437,7 +436,7 @@ linecallback_export_ownertrust (gchar * line, gpointer data, gboolean status)
   FILE *stream = data;
   if (stream && line);
   fprintf (stream, "%s\n", line);
-}				/* linecallback_export_ownertrust */
+} /* linecallback_export_ownertrust */
 
 void
 gpapa_export_ownertrust (gchar * targetFileID, GpapaArmor Armor,
@@ -465,7 +464,7 @@ gpapa_export_ownertrust (gchar * targetFileID, GpapaArmor Armor,
 	  fclose (stream);
 	}
     }
-}				/* gpapa_export_ownertrust */
+} /* gpapa_export_ownertrust */
 
 void
 gpapa_import_ownertrust (gchar * sourceFileID,
@@ -482,7 +481,7 @@ gpapa_import_ownertrust (gchar * sourceFileID,
       gpapa_call_gnupg 	(gpgargv, TRUE, NULL, NULL,
                          NULL, NULL, callback, calldata);
     }
-}				/* gpapa_import_ownertrust */
+} /* gpapa_import_ownertrust */
 
 void
 gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
@@ -492,7 +491,7 @@ gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
   gpgargv[1] = NULL;
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
                     NULL, NULL, callback, calldata);
-}				
+}
 
 void
 gpapa_import_keys (gchar * sourceFileID,
@@ -510,7 +509,8 @@ gpapa_import_keys (gchar * sourceFileID,
 	(gpgargv, TRUE, NULL, NULL,
 	 NULL, NULL, callback, calldata);
     }
-}				/* gpapa_import_keys */
+} /* gpapa_import_keys */
+
 
 /* Options.
  */
@@ -524,7 +524,7 @@ gpapa_load_options (gchar * optionsFileID,
   g_print ("Load options from file ");  /*!!! */
   g_print (optionsFileID);	/*!!! */
   g_print ("\n");               /*!!! */
-}				/* gpapa_load_options */
+} /* gpapa_load_options */
 
 void
 gpapa_save_options (gchar * optionsFileID,
@@ -535,24 +535,24 @@ gpapa_save_options (gchar * optionsFileID,
   g_print ("Save options to file ");    /*!!! */
   g_print (optionsFileID);	/*!!! */
   g_print ("\n");               /*!!! */
-}				/* gpapa_save_options */
+} /* gpapa_save_options */
+
 
 /* Miscellaneous.
  */
 
 const char *
-gpapa_private_get_gpg_program ( )
+gpapa_private_get_gpg_program ()
 {
-    return gpg_program;
+  return gpg_program;
 }
 
 void
-gpapa_init ( const char *gpg )
+gpapa_init (const char *gpg)
 {
-    free ( gpg_program );
-    gpg_program = xstrdup ( gpg? gpg : "/usr/bin/gpg" );
-
-}  /* gpapa_init */
+  free (gpg_program);
+  gpg_program = xstrdup (gpg ? gpg : "/usr/bin/gpg");
+} /* gpapa_init */
 
 void
 gpapa_fini (void)
@@ -567,8 +567,9 @@ gpapa_fini (void)
       g_list_free (SecRing);
       SecRing = NULL;
     }
-  free ( gpg_program ); gpg_program = NULL;
-}  /* gpapa_fini */
+  free (gpg_program);
+  gpg_program = NULL;
+} /* gpapa_fini */
 
 void
 gpapa_idle (void)
@@ -579,4 +580,4 @@ gpapa_idle (void)
    *
    * Right now, just do nothing.
    */
-}				/* gpapa_idle */
+} /* gpapa_idle */

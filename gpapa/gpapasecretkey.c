@@ -32,7 +32,7 @@ gpapa_secret_key_set_passphrase (GpapaSecretKey * key, gchar * passphrase,
 {
   if (key)
     printf ("Setting passphrase of secret key 0x%s.\n", key->key->KeyID);
-}				/* gpapa_secret_key_set_passphrase */
+} /* gpapa_secret_key_set_passphrase */
 
 void
 gpapa_secret_key_export (GpapaSecretKey * key, gchar * targetFileID,
@@ -62,7 +62,7 @@ gpapa_secret_key_export (GpapaSecretKey * key, gchar * targetFileID,
 	 NULL, NULL, callback, calldata);
       free (full_keyID);
     }
-}				/* gpapa_secret_key_export */
+} /* gpapa_secret_key_export */
 
 /* Due to gpg's security features, this currently does not work.
  */
@@ -87,7 +87,7 @@ gpapa_secret_key_delete (GpapaSecretKey * key, GpapaCallbackFunc callback,
       free (full_keyID);
       gpapa_refresh_secret_keyring (callback, calldata);
     }
-} /* gpapa_secret_key_delete */ ;
+} /* gpapa_secret_key_delete */
 
 /* Due to gpg's security features, this currently does not work.
  */
@@ -113,11 +113,4 @@ gpapa_secret_key_create_revocation (GpapaSecretKey * key,
                         NULL, NULL, callback, calldata); 
       free(commands);
     }
-  /*  g_print ("Create revocation certificate for key 0x");	/*!!! */
-  /* g_print (gpapa_key_get_identifier (GPAPA_KEY (key), callback, calldata));	/*!!! */
-  /* g_print ("\n");*/		/*!!! */
-}				/* gpapa_secret_key_create_revocation */
-
-
-
-
+} /* gpapa_secret_key_create_revocation */

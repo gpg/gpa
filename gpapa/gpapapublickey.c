@@ -100,7 +100,7 @@ linecallback_fingerprint (gchar * line, gpointer data, gboolean status)
 	  d->key->fingerprint = fp;
 	}
     }
-}				/* linecallback_fingerprint */
+} /* linecallback_fingerprint */
 
 gchar *
 gpapa_public_key_get_fingerprint (GpapaPublicKey * key,
@@ -127,7 +127,7 @@ gpapa_public_key_get_fingerprint (GpapaPublicKey * key,
 	}
       return (key->fingerprint);
     }
-}				/* gpapa_public_key_get_fingerprint */
+} /* gpapa_public_key_get_fingerprint */
 
 GpapaKeytrust
 gpapa_public_key_get_keytrust (GpapaPublicKey * key,
@@ -140,20 +140,16 @@ gpapa_public_key_get_keytrust (GpapaPublicKey * key,
       {
       case 'n':
 	return (GPAPA_KEYTRUST_DISTRUST);
-	break;
       case 'm':
 	return (GPAPA_KEYTRUST_MARGINALLY);
-	break;
       case 'f':
 	return (GPAPA_KEYTRUST_FULLY);
-	break;
       case 'q':
 	return (GPAPA_KEYTRUST_UNKNOWN);
-	break;
       default:
 	return (GPAPA_KEYTRUST_UNKNOWN);
       }
-}				/* gpapa_public_key_get_keytrust */
+} /* gpapa_public_key_get_keytrust */
 
 GpapaOwnertrust
 gpapa_public_key_get_ownertrust (GpapaPublicKey * key,
@@ -167,20 +163,16 @@ gpapa_public_key_get_ownertrust (GpapaPublicKey * key,
       {
       case 'n':
 	return (GPAPA_OWNERTRUST_DISTRUST);
-	break;
       case 'm':
 	return (GPAPA_OWNERTRUST_MARGINALLY);
-	break;
       case 'f':
 	return (GPAPA_OWNERTRUST_FULLY);
-	break;
       case 'q':
 	return (GPAPA_KEYTRUST_UNKNOWN);
-	break;
       default:
 	return (GPAPA_OWNERTRUST_UNKNOWN);
       }
-}				/* gpapa_public_key_get_ownertrust */
+} /* gpapa_public_key_get_ownertrust */
 
 extern void
 gpapa_public_key_set_ownertrust (GpapaPublicKey * key, GpapaOwnertrust trust,
@@ -206,6 +198,7 @@ gpapa_public_key_set_ownertrust (GpapaPublicKey * key, GpapaOwnertrust trust,
 	    break;
 	  default:
 	    trust_int = 1;
+	    break;
 	}
       commands_sprintf_str = "trust \n%u \nquit \n";
       commands = (char *) (xmalloc (strlen (commands_sprintf_str) + 1));
@@ -217,7 +210,7 @@ gpapa_public_key_set_ownertrust (GpapaPublicKey * key, GpapaOwnertrust trust,
                         NULL, NULL, callback, calldata); 
       free(commands);
     }
-}				/* gpapa_public_key_set_ownertrust */
+} /* gpapa_public_key_set_ownertrust */
 
 static GpapaSignature *
 extract_sig (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
@@ -265,7 +258,7 @@ extract_sig (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
       sig->UserID = field[9][0] ? xstrdup (field[9]) : NULL;
       return (sig);
     }
-}				/* extract_sig */
+} /* extract_sig */
 
 static void
 linecallback_get_signatures (gchar * line, gpointer data, gboolean status)
@@ -287,7 +280,7 @@ linecallback_get_signatures (gchar * line, gpointer data, gboolean status)
       if (sig)
 	d->key->sigs = g_list_append (d->key->sigs, sig);
     }
-}				/* linecallback_get_signatures */
+} /* linecallback_get_signatures */
 
 GList *
 gpapa_public_key_get_signatures (GpapaPublicKey * key,
@@ -314,7 +307,7 @@ gpapa_public_key_get_signatures (GpapaPublicKey * key,
 	}
       return (key->sigs);
     }
-}				/* gpapa_public_key_get_signatures */
+} /* gpapa_public_key_get_signatures */
 
 void
 gpapa_public_key_export (GpapaPublicKey * key, gchar * targetFileID,
@@ -344,7 +337,7 @@ gpapa_public_key_export (GpapaPublicKey * key, gchar * targetFileID,
 	 NULL, NULL, callback, calldata);
       free (full_keyID);
     }
-}				/* gpapa_public_key_export */
+} /* gpapa_public_key_export */
 
 void
 gpapa_public_key_delete (GpapaPublicKey * key, GpapaCallbackFunc callback,
@@ -393,7 +386,7 @@ gpapa_public_key_send_to_server (GpapaPublicKey * key, gchar * ServerName,
 	 NULL, NULL, callback, calldata);
       free (full_keyID);
     }
-}				/* gpapa_public_key_send_to_server */
+} /* gpapa_public_key_send_to_server */
 
 void
 gpapa_public_key_sign (GpapaPublicKey * key, gchar * keyID,
@@ -426,19 +419,4 @@ gpapa_public_key_sign (GpapaPublicKey * key, gchar * keyID,
 	 callback, calldata);
       free (full_keyID);
     }    
- /* printf
-      ("%s public key 0x%s\nwith secret key 0x%s\nwith some passphrase.\n",
-       SignType == GPAPA_KEY_SIGN_LOCALLY ? "Locally signing" : "signing",
-       key->key->KeyID, keyID); */
-}				/* gpapa_public_key_sign */
-
-
-
-
-
-
-
-
-
-
-
+} /* gpapa_public_key_sign */

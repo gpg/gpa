@@ -70,7 +70,6 @@ init_w32_tty (void)
     }
 }
 
-
 static char *
 getpass (const char *prompt)
 {
@@ -103,8 +102,9 @@ getpass (const char *prompt)
       if (c == '\t')
 	c = ' ';
       else if (c > 0xa0)
-	;			/* we don't allow 0xa0, as this is a protected blank which may
-				 * confuse the user */
+	;			/* We don't allow 0xa0, as this is a protected blank which may
+				 * confuse the user.
+                                 */
       else if (iscntrl (c))
 	continue;
       if (!(i < n - 1))
@@ -121,15 +121,12 @@ getpass (const char *prompt)
   return buf;
 }
 
-
-
 static void
 out_of_core(void)
 {
     fputs("\nfatal: out of memory\n", stderr );
     exit(2);
 }
-
 
 void *
 xmalloc( size_t n )
@@ -166,7 +163,6 @@ xstrdup( const char *string )
     return p;
 }
 
-
 char *
 xstrcat2( const char *a, const char *b )
 {
@@ -183,9 +179,7 @@ xstrcat2( const char *a, const char *b )
     return p;
 }
 
-
 #endif /* __MINGW32__ */
-
 
 char *calldata;
 
@@ -193,13 +187,13 @@ void
 callback (GpapaAction action, gpointer actiondata, gpointer localcalldata)
 {
   fprintf (stderr, "%s: %s\n", (char *) localcalldata, (char *) actiondata);
-}				/* callback */
+} /* callback */
 
 void
 linecallback (gchar * line, gpointer data, gboolean status)
 {
   printf ("---> %s <---%s\n", line, (gchar *) data);
-}				/* linecallback */
+} /* linecallback */
 
 void
 test_version (void)
@@ -317,7 +311,7 @@ test_pubring (void)
 		  validity);
 	  g = g_list_next (g);
 	}
-/*	gpapa_public_key_send_to_server ( P, "blackhole.pca.dfn.de", callback, calldata ); */
+/*	gpapa_public_key_send_to_server (P, "blackhole.pca.dfn.de", callback, calldata); */
       gpapa_release_public_key (P, callback, calldata);
     }
   else
@@ -443,7 +437,7 @@ test_edithelp (void)
   gpgargv[0] = "--edit-key";
   gpgargv[1] = "test";
   gpgargv[2] = NULL;
-  gpapa_call_gnupg (gpgargv, TRUE, "help\nexpire\n0\nsave\n", NULL,
+  gpapa_call_gnupg (gpgargv, TRUE, "help\nquit\n", NULL,
 		    linecallback, "pruzzel", callback, NULL);
 }
 
@@ -524,6 +518,4 @@ main (int argc, char **argv)
 				 "6C7EE1B8621CC013"), "7D0908A0EE9A8BFB");
 
   return (0);
-}				/* main */
-
-
+} /* main */
