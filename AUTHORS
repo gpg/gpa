@@ -1,5 +1,5 @@
 Program: GPA, GPAPA
-Maintainer: Miguel Coca <e970095@zipi.fi.upm.es>
+Maintainer: Miguel Coca <mcoca@gnu.org>
 
 
 Authors
@@ -43,8 +43,8 @@ Michael Mauch <michael.mauch@gmx.de>
 Benedikt Wildenhain <mail@benedikt-wildenhain.de>
         Helped to debug GPA and to make it compile under CygWin.
 
-Miguel Coca <e970095@zipi.fi.upm.es>
-        Merged version 0.4.3 with 0.5.0.
+Miguel Coca <mcoca@gnu.org>
+        Merged version 0.4.3 with 0.5.0, ported to GPGME.
 
 Renato Martini <rmartini@cipsga.org.br>
         Brazilian translation.
