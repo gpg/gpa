@@ -1,5 +1,17 @@
 2001-01-30  Bernhard Herzog  <bh@intevation.de>
 
+	* keysigndlg.c (key_sign_destroy):
+	(gpa_key_sign_run_dialog): Add a destroy event handler and quit
+	the recursive main loop there.
+	(key_sign_cancel):
+	(key_sign_ok): Instead of quitting the main loop, destroy the
+	dialog window.
+	(key_sign_delete): Removed because the default handler does
+	exactly what we need now.
+	(GPAKeySignDialog):
+	(key_sign_ok): Remove the clist_keys field completely and don't
+	access it in key_sign_ok.
+
 	* ownertrustdlg.c (ownertrust_ok):
 	(ownertrust_cancel): Fix comments
 
