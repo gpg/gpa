@@ -27,6 +27,7 @@
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
 #include "keysmenu.h"
+#include "keyserver.h"
 
 
 static void
@@ -43,13 +44,12 @@ options_keyserver_set (gpointer param)
   keeperServer = (GpaWindowKeeper *) localParam[1];
 
   entry = GTK_COMBO (comboServer)->entry;
-  /* FIXME: In this form, setting the default server is a memory leak */
-  global_keyserver = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY (entry)));
+  keyserver_set_current (gtk_entry_get_text (GTK_ENTRY (entry)));
 
   paramDone[0] = keeperServer;
   paramDone[1] = NULL;
   gpa_window_destroy (paramDone);
-} /* options_keyserver_set */
+}
 
 
 static void
@@ -64,11 +64,9 @@ options_keyserver (gpointer param)
 {
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
-  GList *contentsServer = NULL;
   gpointer *paramClose;
   gpointer *paramSet;
   GtkWidget * main_window = param;
-  int i;
 
   GtkWidget *windowServer;
   GtkWidget *vboxServer;
@@ -100,15 +98,10 @@ options_keyserver (gpointer param)
 			      _("_Key server: "));
   gtk_combo_set_value_in_list (GTK_COMBO (comboServer), FALSE, FALSE);
 
-  for (i=0; gpa_options.keyserver_names[i]; i++ )
-    {
-      contentsServer = g_list_append (contentsServer,
-				      gpa_options.keyserver_names[i]);
-    }
-
-  gtk_combo_set_popdown_strings (GTK_COMBO (comboServer), contentsServer);
+  gtk_combo_set_popdown_strings (GTK_COMBO (comboServer), 
+                                 keyserver_get_as_glist () );
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboServer)->entry),
-		      global_keyserver);
+		      keyserver_get_current ());
   gtk_box_pack_start (GTK_BOX (hboxServer), comboServer, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxServer), hboxServer, TRUE, TRUE, 0);
   hButtonBoxServer = gtk_hbutton_box_new ();

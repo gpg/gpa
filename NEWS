@@ -1,0 +1,12 @@
+
+* The list of keyservers is now read form a file "keyserver" in the
+  GPA configuration directory which by default is ~/.gnupg.  The new
+  option keyserver may be used in the gpa.conf file to select the
+  default keyserver -it implictly adds this server to the list of
+  keyservers.
+
+
+
+
+
+

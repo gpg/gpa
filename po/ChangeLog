@@ -1,3 +1,13 @@
+2001-05-28  Werner Koch  <wk@gnupg.org>
+
+	* fr.po: Fixed the header entry.
+
+2001-05-28  gettextize  <bug-gnu-utils@gnu.org>
+
+	* Makefile.in.in: Upgrade to gettext-0.10.38.
+	* cat-id-tbl.c: Remove file.
+	* stamp-cat-id: Remove file.
+
 2001-03-12	Jan-Oliver Wagner <jan@intevation.de>
 
 	* fr.po: several typos and some language improvements

@@ -47,6 +47,7 @@
 #include "helpmenu.h"
 #include "keyring.h"
 #include "fileman.h"
+#include "keyserver.h"
 
 #ifdef __MINGW32__
 #include "hidewnd.h"
@@ -70,6 +71,8 @@ enum cmd_and_opt_values {
   oGPGBinary,
   oAdvancedUI,
 
+  oKeyserver,
+
   aTest
 };
 
@@ -85,6 +88,8 @@ static ARGPARSE_OPTS opts[] = {
     { oDebugAll, "debug-all" ,0, N_("enable full debugging")},
     { oGPGBinary, "gpg-program", 2 , "@" },
     { oAdvancedUI, "advanced-ui", 0,N_("use a advanced user interface")},
+
+    { oKeyserver, "keyserver", 2, "@" },
     {0}
 };
 
@@ -93,7 +98,6 @@ GPAOptions gpa_options;
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain = NULL;
 GpapaAction global_lastCallbackResult;
-gchar *global_keyserver = NULL;
 GList *global_defaultRecipients = NULL;
 
 
@@ -359,6 +363,7 @@ main (int argc, char **argv)
   int nogreeting = 0;
   const char *gpg_program = GPG_PROGRAM;
   gchar * gtkrc;
+  const char *keyserver = NULL;
 
 #ifdef __MINGW32__
   hide_gpa_console_window();
@@ -485,7 +490,7 @@ main (int argc, char **argv)
 	case oHomedir: gpa_options.homedir = pargs.r.ret_str; break;
 	case oGPGBinary: gpg_program = pargs.r.ret_str;  break;
 	case oAdvancedUI: gpa_set_simplified_ui (FALSE); break;
-
+        case oKeyserver: keyserver = pargs.r.ret_str; break;
 
 	default : pargs.err = configfp? 1:2; break;
 	}
@@ -515,13 +520,9 @@ main (int argc, char **argv)
   log_info("NOTE: this is a development version!\n");
 #endif
 
-  /* fixme: read from options and add at least one default */
-  gpa_options.keyserver_names = xcalloc (3,
-					 sizeof *gpa_options.keyserver_names);
-  gpa_options.keyserver_names[0] = "blackhole.pca.dfn.de";
-  gpa_options.keyserver_names[1] = "horowitz.surfnet.nl";
-
-  global_keyserver = gpa_options.keyserver_names[0];  /* FIXME: bad style */
+  /* read the list of available keyservers */
+  keyserver_read_list ("keyservers");
+  keyserver_set_current (keyserver);
 
   gpapa_init (gpg_program);
 

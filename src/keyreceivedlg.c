@@ -24,6 +24,7 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "keyreceivedlg.h"
+#include "keyserver.h"
 
 struct _GPAKeyReceiveDialog {
   GtkWidget * window;
@@ -40,7 +41,9 @@ receive_ok (gpointer param)
 
   global_lastCallbackResult = GPAPA_ACTION_NONE;
   key_id = gtk_entry_get_text (GTK_ENTRY (dialog->entry));
-  gpapa_receive_public_key_from_server (key_id, global_keyserver, gpa_callback,
+  gpapa_receive_public_key_from_server (key_id,
+                                        keyserver_get_current ();
+                                        gpa_callback,
 					dialog->window);
   if (global_lastCallbackResult == GPAPA_ACTION_ERROR)
     {

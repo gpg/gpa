@@ -19,11 +19,15 @@
  */
 
 #include <config.h>
+#include <stdlib.h>
 #include <gpapa.h>
 #include <gtk/gtk.h>
+
 #include "gpa.h"
 #include "gtktools.h"
+#include "keyserver.h"
 #include "keyexportdlg.h"
+
 
 struct _GPAKeyExportDialog {
 
@@ -157,8 +161,6 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   GtkWidget *bbox;
   GtkWidget *combo;
   GPAKeyExportDialog dialog;
-  GList * servers;
-  int i;
 
   dialog.result = FALSE;
   dialog.filename = NULL;
@@ -211,15 +213,11 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   dialog.combo_server = combo;
   gtk_table_attach (GTK_TABLE (table), combo, 1, 3, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_combo_set_value_in_list (GTK_COMBO (combo), FALSE, FALSE);
-  servers = NULL;
-  for (i = 0; gpa_options.keyserver_names[i]; i++)
-    {
-      servers = g_list_append (servers, gpa_options.keyserver_names[i]);
-    }
 
-  gtk_combo_set_popdown_strings (GTK_COMBO (combo), servers);
+  gtk_combo_set_popdown_strings (GTK_COMBO (combo),
+                                 keyserver_get_as_glist ());
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
-		      global_keyserver);
+		      keyserver_get_current () );
 
   if (!gpa_simplified_ui ())
     {

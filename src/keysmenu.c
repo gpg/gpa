@@ -30,6 +30,8 @@
 #include "gpapastrings.h"
 #include "gtktools.h"
 #include "icons.h"
+#include "keyserver.h"
+
 
 gchar *unitExpiryTime[4] = {
   N_("days"),
@@ -44,10 +46,9 @@ gchar unitTime[4] = { 'd', 'w', 'm', 'y' };
 gchar
 getTimeunitForString (gchar * aString)
 {
-/* var */
   gchar result = ' ';
   gint i;
-/* commands */
+
   i = 0;
   while (i < 4 && strcmp (aString, unitExpiryTime[i]) != 0)
     i++;
@@ -508,17 +509,18 @@ keys_export_dialog (gpointer param)
 void
 keys_openPublic_send_key (gpointer data, gpointer userData)
 {
-/* var */
   gchar *keyID;
   GtkWidget *windowPublic;
   GpapaPublicKey *key;
-/* commands */
+
   keyID = (gchar *) data;
   windowPublic = (GtkWidget *) userData;
   key = gpapa_get_public_key_by_ID (keyID, gpa_callback, windowPublic);
-  gpapa_public_key_send_to_server (key, global_keyserver, gpa_callback,
+  gpapa_public_key_send_to_server (key, 
+                                   keyserver_get_current (),
+                                   gpa_callback,
 				   windowPublic);
-}				/* keys_openPublic_send_key */
+}
 
 void
 keys_openPublic_send (gpointer param)

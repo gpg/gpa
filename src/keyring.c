@@ -523,6 +523,7 @@ keyring_editor_generate_key_advanced (gpointer param)
       if (params->send_to_server)
 	{
 	  printf ("send key to server\n");
+#warning key is not send to the server after generation
 	  /*
 	    gpapa_public_key_send_to_server (publicKey, global_keyserver,
 					   gpa_callback, editor->window);

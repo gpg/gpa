@@ -10,8 +10,8 @@ msgstr ""
 "Last-Translator: FULL NAME <pplf@geocities.com>\n"
 "Language-Team: FRENCH <fr@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: src/encryptdlg.c:78 src/filemenu.c:848
 msgid "No recipients chosen to encrypt for."

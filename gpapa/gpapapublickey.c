@@ -290,7 +290,7 @@ gpapa_public_key_delete (GpapaPublicKey *key, GpapaCallbackFunc callback,
 }
 
 void
-gpapa_public_key_send_to_server (GpapaPublicKey *key, char *ServerName,
+gpapa_public_key_send_to_server (GpapaPublicKey *key, const char *ServerName,
                                  GpapaCallbackFunc callback,
                                  gpointer calldata)
 {
@@ -300,11 +300,12 @@ gpapa_public_key_send_to_server (GpapaPublicKey *key, char *ServerName,
     callback (GPAPA_ACTION_ERROR, "keyserver not specified", calldata);
   if (key && ServerName)
     {
+      char *servername = xstrdup (ServerName);
       char *full_keyID;
       char *gpgargv[5];
       full_keyID = xstrcat2 ("0x", key->key->KeyID);
       gpgargv[0] = "--keyserver";
-      gpgargv[1] = ServerName;
+      gpgargv[1] = servername;
       gpgargv[2] = "--send-keys";
       gpgargv[3] = full_keyID;
       gpgargv[4] = NULL;
@@ -312,6 +313,7 @@ gpapa_public_key_send_to_server (GpapaPublicKey *key, char *ServerName,
         (gpgargv, TRUE, NULL, NULL,
          NULL, NULL, callback, calldata);
       free (full_keyID);
+      free (servername);
     }
 }
 

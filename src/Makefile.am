@@ -41,7 +41,8 @@ gpa_SOURCES = gpa.c gpa.h \
 	      gpawizard.c gpawizard.h \
 	      gpapastrings.c gpapastrings.h\
 	      gpa_license.c gpa_license.h \
-		  w32reg.c w32reg.h\
-		  simple-gettext.c\
-		  hidewnd.c hidewnd.h
+	      keyserver.c keyserver.h \
+              w32reg.c w32reg.h\
+              simple-gettext.c\
+	      hidewnd.c hidewnd.h
 

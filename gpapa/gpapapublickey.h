@@ -98,7 +98,7 @@ extern void gpapa_public_key_delete (GpapaPublicKey *key,
                                      gpointer calldata);
 
 extern void gpapa_public_key_send_to_server (GpapaPublicKey *key,
-                                             char *ServerName,
+                                             const char *ServerName,
                                              GpapaCallbackFunc callback,
                                              gpointer calldata);
 

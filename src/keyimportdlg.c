@@ -24,6 +24,7 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "keyimportdlg.h"
+#include "keyserver.h"
 
 struct _GPAKeyImportDialog {
   /* The toplevel dialog window */
@@ -151,8 +152,6 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   GtkWidget *label;
 
   GPAKeyImportDialog dialog;
-  GList * servers;
-  int i;
 
   dialog.result = FALSE;
   dialog.filename = NULL;
@@ -235,15 +234,11 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_table_attach (GTK_TABLE (server_table), combo, 1, 2, 1, 2,
 		    GTK_EXPAND | GTK_FILL, 0, 0, 0);
   gtk_combo_set_value_in_list (GTK_COMBO (combo), FALSE, FALSE);
-  servers = NULL;
-  for (i = 0; gpa_options.keyserver_names[i]; i++)
-    {
-      servers = g_list_append (servers, gpa_options.keyserver_names[i]);
-    }
 
-  gtk_combo_set_popdown_strings (GTK_COMBO (combo), servers);
+  gtk_combo_set_popdown_strings (GTK_COMBO (combo),
+                                 keyserver_get_as_glist () );
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
-		      global_keyserver);
+		      keyserver_get_current () );
 
   gpa_connect_by_accelerator (GTK_LABEL (label), entry, accel_group,
 			      _("_Key Server:"));
@@ -278,3 +273,4 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
 
   return dialog.result;
 } /* key_import_run_dialog */
+

@@ -1,6 +1,24 @@
+2001-05-30  Werner Koch  <wk@gnupg.org>
+
+	* i18n.h, options.h: New. 
+	* gpa.h: Moved some code to the new header files.
+
+	* keyserver.c, keyserver.h: New.
+	* keyexportdlg.c (key_export_dialog_run): Use functions from
+	keyserver to setup the list.
+	* keyimportdlg.c (key_import_dialog_run): Ditto.
+	* optionsmenu.c (options_keyserver): Ditto.
+	* gpa.c (main): Ditto.
+	* keysmenu.c (keys_openPublic_send_key): Ditto.
+	* keyreceivedlg.c (receive_ok):  Ditto.
+	* optionsmenu.c (options_keyserver_set): Ditto.
+	* gpa.c, gpa.h (global_keyserver): Removed.
+
+	* gpa.c: New option --keyserver.
+
 2001-03-28  Werner Koch  <wk@gnupg.org>
 
-	* gpa.c (gpa_determine_default_key): Replaced xstrduup by
+	* gpa.c (gpa_determine_default_key): Replaced xstrdup by
 	xstrdup_or_null to avoid a segv. 
 	* optionsmenu.c (options_key_set): Ditto, to make it more robust.
 	(options_keyserver_set): Ditto.
