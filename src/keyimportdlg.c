@@ -235,11 +235,11 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
     }
 }
 
-void key_import_results_dialog_run (GtkWidget *parent, GpaImportInfo *info)
+void key_import_results_dialog_run (GtkWidget *parent, GpgmeImportResult info)
 {
   GtkWidget *dialog;
 
-  if (info->count == 0)
+  if (info->considered == 0)
     {
       dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
                                        GTK_DIALOG_MODAL,
@@ -259,9 +259,10 @@ void key_import_results_dialog_run (GtkWidget *parent, GpaImportInfo *info)
                                          "%i secret keys read\n"
                                          "%i secret keys imported\n"
                                          "%i secret keys unchanged"),
-                                       info->count, info->imported,
-                                       info->unchanged, info->sec_read,
-                                       info->sec_imported, info->sec_dups);
+                                       info->considered, info->imported,
+                                       info->unchanged, info->secret_read,
+                                       info->secret_imported,
+				       info->secret_unchanged);
     }			   
 
   /* Run the dialog */

@@ -47,7 +47,6 @@
 #include "gpgmeedit.h"
 #include "keytable.h"
 #include "server_access.h"
-#include "gpgmeparsers.h"
 #include "options.h"
 
 /*
@@ -294,7 +293,7 @@ key_has_been_signed (const gchar *fpr, const gchar *signer)
   int old_mode = gpgme_get_keylist_mode (ctx);
 
   /* Get the signing key ID */
-  err = gpgme_get_key (ctx, signer, &signer_key, FALSE, FALSE);
+  err = gpgme_get_key (ctx, signer, &signer_key, FALSE);
   if (err == GPGME_EOF)
     {
       /* Can't happen */
@@ -307,7 +306,7 @@ key_has_been_signed (const gchar *fpr, const gchar *signer)
   signer_id = gpgme_key_get_string_attr (signer_key, GPGME_ATTR_KEYID, 0, 0);
   /* Get the key */
   gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
-  err = gpgme_get_key (ctx, fpr, &key, FALSE, FALSE);
+  err = gpgme_get_key (ctx, fpr, &key, FALSE);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);
@@ -560,28 +559,25 @@ keyring_editor_import_do_import (GPAKeyringEditor *editor, GpgmeData data)
   /* Load the keys we just imported */
   if (err != GPGME_No_Data)
     {
-      GpaImportInfo info;
-      GList *cur;
+      GpgmeImportResult info;
+      GpgmeImportStatus cur;
       gchar **keyids;
       gint i;
       
-      info.keyids = NULL;
-      gpa_parse_import_info (&info);
+      info = gpgme_op_import_result (ctx);
       /* If keys were imported, load them */
-      if (info.keyids)
+      if (info->imports)
         {
-          keyids = g_malloc ((g_list_length (info.keyids)+1) * 
-                             sizeof (gchar*));
-          for (cur = info.keyids, i = 0; cur; cur = g_list_next (cur), i++)
+          keyids = g_malloc (info->imported * sizeof (gchar*));
+          for (cur = info->imports, i = 0; cur; cur = cur->next, i++)
             {
-              keyids[i] = cur->data;
+              keyids[i] = cur->fpr;
             }
           keyids[i] = NULL;
           gpa_keytable_load_keys (keytable, (const gchar**) keyids);
           g_strfreev (keyids);
-          g_list_free (info.keyids);
         }
-      key_import_results_dialog_run (editor->window, &info);
+      key_import_results_dialog_run (editor->window, info);
     }
   gpgme_release (ctx);
   /* update the widgets

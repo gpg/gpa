@@ -287,7 +287,7 @@ gpa_options_update_default_key (GpaOptions *options)
     {
       update = TRUE;
     }
-  else if (gpgme_get_key (ctx, options->default_key, &key, TRUE, TRUE) == 
+  else if (gpgme_get_key (ctx, options->default_key, &key, TRUE) == 
            GPGME_EOF)
     {
       gpa_window_error (_("The private key you selected as default is no "

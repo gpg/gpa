@@ -286,7 +286,7 @@ set_signers (GpaFileSignOperation *op, GList *signers)
     {
       GpgmeKey key;
       if (gpgme_get_key (GPA_OPERATION(op)->context->ctx, 
-			 (char*) cur->data, &key, FALSE, FALSE) == GPGME_EOF)
+			 (char*) cur->data, &key, FALSE) == GPGME_EOF)
 	{
 	  /* Can't happen */
 	  gpa_window_error (_("The key you selected is not available for "
@@ -380,8 +380,6 @@ gpa_file_sign_operation_done_error_cb (GpaContext *context, GpgmeError err,
     case GPGME_Not_Implemented:
     case GPGME_Read_Error:
     case GPGME_Write_Error:
-    case GPGME_Invalid_Type:
-    case GPGME_Invalid_Mode:
     case GPGME_Invalid_Engine:
     default:
       gpa_gpgme_warning (err);

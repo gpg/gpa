@@ -167,7 +167,7 @@ gpa_siglist_set_all (GtkWidget * list, const char *fpr)
 
   /* Get the key */
   gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
-  err = gpgme_get_key (ctx, fpr, &key, FALSE, FALSE);
+  err = gpgme_get_key (ctx, fpr, &key, FALSE);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);
@@ -254,7 +254,7 @@ gpa_siglist_set_userid (GtkWidget * list, const char *fpr, int idx)
 
   /* Get the key */
   gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
-  err = gpgme_get_key (ctx, fpr, &key, FALSE, FALSE);
+  err = gpgme_get_key (ctx, fpr, &key, FALSE);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);

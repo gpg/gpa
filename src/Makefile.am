@@ -46,7 +46,6 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      keytable.c keytable.h \
 	      gpgmetools.h gpgmetools.c \
 	      gpgmeedit.h gpgmeedit.c \
-	      gpgmeparsers.h gpgmeparsers.c \
 	      server_access.h server_access.c \
 	      settingsdlg.h settingsdlg.c \
 	      passwddlg.h passwddlg.c \

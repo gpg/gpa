@@ -189,7 +189,7 @@ key_edit_change_passphrase (GtkWidget *widget, gpointer param)
   GpgmeError err;
   GpgmeCtx ctx = gpa_gpgme_new ();
 
-  err = gpgme_get_key (ctx, dialog->fpr, &key, FALSE, FALSE);
+  err = gpgme_get_key (ctx, dialog->fpr, &key, FALSE);
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);

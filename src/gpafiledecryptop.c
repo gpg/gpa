@@ -315,8 +315,6 @@ gpa_file_decrypt_operation_done_error_cb (GpaContext *context, GpgmeError err,
     case GPGME_Not_Implemented:
     case GPGME_Read_Error:
     case GPGME_Write_Error:
-    case GPGME_Invalid_Type:
-    case GPGME_Invalid_Mode:
     case GPGME_Invalid_Engine:
     default:
       gpa_gpgme_warning (err);

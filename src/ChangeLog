@@ -1,3 +1,26 @@
+2003-05-04  Miguel Coca  <mcoca@gnu.org>
+
+	* gpgmeparsers.c, gpgmeparsers.h: Delete.
+
+	* Makefile.am (gpa_SOURCES): Remove gpgmeparsers.{c,h}
+
+	* keyimportdlg.c (key_import_results_dialog_run): 
+	* keyring.c (keyring_editor_import_do_import): Use a GpgmeImportResult.
+
+	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): 
+	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): 
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb): 
+	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb): Remove
+	error codes that no longer exist.
+
+	* siglist.c (gpa_siglist_set_all, gpa_siglist_set_userid):
+	* options.c (gpa_options_update_default_key): 
+	* keyring.c (key_has_been_signed): 
+	* gpafilesignop.c (set_signers):
+	* keyeditdlg.c (key_edit_change_passphrase):
+	* gpafileencryptop.c (set_recipients, set_signers): New gpgme_get_key
+	prototype.
+
 2003-04-27  Miguel Coca  <mcoca@gnu.org>
 
 	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb): 
