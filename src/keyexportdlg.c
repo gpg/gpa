@@ -184,8 +184,8 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
 
   /* File name entry */
-  radio = gtk_radio_button_new_with_label_from_widget (NULL,
-						       _("Export to _file:"));
+  radio = gpa_radio_button_new_from_widget (NULL, accel_group,
+					    _("Export to _file:"));
   dialog.radio_filename = radio;
   gtk_table_attach (GTK_TABLE (table), radio, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
 
@@ -203,8 +203,8 @@ key_export_dialog_run (GtkWidget * parent, gchar ** filename,
 			     (gpointer) &dialog);
 
   /* Server combo */
-  radio = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON(radio),
-						       _("_Key server:"));
+  radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio),
+					    accel_group, _("_Key server:"));
   dialog.radio_server = radio;
   gtk_table_attach (GTK_TABLE (table), radio, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   combo = gtk_combo_new ();
