@@ -55,7 +55,7 @@
 
 
 
-typdef struct {
+typedef struct {
     int verbose;
     int quiet;
     unsigned int debug;
