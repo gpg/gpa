@@ -377,6 +377,11 @@ keyring_editor_sign (gpointer param)
 	}
       selection = g_list_next (selection);
     }
+
+  /* Update the signatures details page and the widgets because some
+   * depend on what signatures a key has*/
+  keyring_update_signatures_page (editor);
+  update_selection_sensitive_widgets (editor);
 } /* keyring_editor_sign */
 
 
@@ -1019,12 +1024,10 @@ keyring_statusbar_new (GPAKeyringEditor *editor)
 } /* keyring_statusbar_new */
 
 
-/* signal handler for the "gpa_default_key_changed" signal. Update the
-   status bar */
+/* Update the status bar */
 static void
-keyring_update_status_bar (gpointer param)
+keyring_update_status_bar (GPAKeyringEditor * editor)
 {
-  GPAKeyringEditor * editor = param;
   gchar * key_id = gpa_default_key ();
   GpapaPublicKey * key;
 
@@ -1044,6 +1047,18 @@ keyring_update_status_bar (gpointer param)
       gtk_label_set_text (GTK_LABEL (editor->status_key_user), "");
       gtk_label_set_text (GTK_LABEL (editor->status_key_id), "");
     }     
+}
+
+/* signal handler for the "gpa_default_key_changed" signal. Update the
+ * status bar and the selection sensitive widgets because some depend on
+ * the default key */
+static void
+keyring_default_key_changed (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+
+  keyring_update_status_bar (editor);  
+  update_selection_sensitive_widgets (editor);
 }
 
 /* Create and return a new key ring editor window */
@@ -1142,7 +1157,7 @@ keyring_editor_new (void)
   statusbar = keyring_statusbar_new (editor);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);
   gtk_signal_connect (GTK_OBJECT (window), "gpa_default_key_changed",
-		      (GtkSignalFunc)keyring_update_status_bar, editor);
+		      (GtkSignalFunc)keyring_default_key_changed, editor);
 
   keyring_update_status_bar (editor);
   update_selection_sensitive_widgets (editor);
