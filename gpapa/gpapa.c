@@ -1,5 +1,5 @@
 /* gpapa.c  -  The GNU Privacy Assistant Pipe Access
- *	  Copyright (C) 2000 G-N-U GmbH.
+ *        Copyright (C) 2000 G-N-U GmbH.
  *
  * This file is part of GPAPA
  *
@@ -72,7 +72,7 @@ extract_date (gchar * buffer)
     return (g_date_new_dmy (atoi (day), atoi (month), atoi (year)));
   else
     return (NULL);
-}				/* extract_date */
+}                               /* extract_date */
 
 static GpapaKey *
 extract_key (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
@@ -86,26 +86,23 @@ extract_key (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
     {
       field[i] = p;
       while (*p && *p != ':')
-	p++;
+        p++;
       if (*p == ':')
-	{
-	  *p = 0;
-	  p++;
-	}
+        {
+          *p = 0;
+          p++;
+        }
       i++;
       if (i >= GPAPA_MAX_GPG_KEY_FIELDS)
-	callback (GPAPA_ACTION_ERROR,
-		  "too many fields in GPG colon output", calldata);
+        callback (GPAPA_ACTION_ERROR,
+                  "too many fields in GPG colon output", calldata);
     }
   fields = i;
   if (fields != 10)
     {
-#ifdef __MINGW32__
       fprintf (stderr, "colon line=%s'\n", line);
-#endif
-
       callback (GPAPA_ACTION_ERROR,
-		"invalid number of fields in GPG colon output", calldata);
+                "invalid number of fields in GPG colon output", calldata);
       return (NULL);
     }
   else
@@ -121,28 +118,28 @@ extract_key (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
       key->UserID = xstrdup (field[9]);
       return (key);
     }
-}				/* extract_key */
+}                               /* extract_key */
 
 static void
 linecallback_refresh_pub (gchar * line, gpointer data, gboolean status)
 {
   PublicKeyData *d = data;
-  if (line && strncmp (line, "pub", 3) == 0)
+  if (line && !strncmp (line, "pub:", 4) )
     {
       GpapaPublicKey *key =
-	(GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
+        (GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
       memset (key, 0, sizeof (GpapaPublicKey));
       key->key = extract_key (line, d->callback, d->calldata);
       PubRing = g_list_append (PubRing, key);
     }
-}				/* linecallback_refresh_pub */
+}                               /* linecallback_refresh_pub */
 
 void
 gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
 {
   PublicKeyData data = { NULL, callback, calldata };
   char *gpgargv[3];
-  if (PubRing != NULL)
+  if ( PubRing )
     {
       g_list_free (PubRing);
       PubRing = NULL;
@@ -174,7 +171,7 @@ static void
 linecallback_id_pub (gchar * line, gpointer data, gboolean status)
 {
   PublicKeyData *d = data;
-  if (line && strncmp (line, "pub", 3) == 0)
+  if (line && strncmp (line, "pub:", 4) == 0)
     {
       d->key = (GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
       memset (d->key, 0, sizeof (GpapaPublicKey));
@@ -214,7 +211,7 @@ gpapa_receive_public_key_from_server (gchar * keyID, gchar * ServerName,
       gpgargv[3] = id;
       gpgargv[4] = NULL;
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
-			gpapa_linecallback_dummy, NULL, callback, calldata);
+			NULL, NULL, callback, calldata);
       free (id);
       gpapa_refresh_public_keyring (callback, calldata);
     }
@@ -376,9 +373,8 @@ gpapa_import_ownertrust (gchar * sourceFileID,
       gpgargv[0] = "--import-ownertrust";
       gpgargv[1] = sourceFileID;
       gpgargv[2] = NULL;
-      gpapa_call_gnupg
-	(gpgargv, TRUE, NULL, NULL,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+      gpapa_call_gnupg 	(gpgargv, TRUE, NULL, NULL,
+                         NULL, NULL, callback, calldata);
     }
 }				/* gpapa_import_ownertrust */
 
@@ -388,10 +384,9 @@ gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
   char *gpgargv[2];
   gpgargv[0] = "--update-trustdb";
   gpgargv[1] = NULL;
-  gpapa_call_gnupg
-    (gpgargv, TRUE, NULL, NULL,
-     gpapa_linecallback_dummy, NULL, callback, calldata);
-}				/* gpapa_update_trust_database */
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+                    NULL, NULL, callback, calldata);
+}				
 
 void
 gpapa_import_keys (gchar * sourceFileID,
@@ -407,7 +402,7 @@ gpapa_import_keys (gchar * sourceFileID,
       gpgargv[2] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, NULL,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
     }
 }				/* gpapa_import_keys */
 

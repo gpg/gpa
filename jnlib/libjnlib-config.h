@@ -30,7 +30,7 @@
 #include "logging.h"
 
 
-#define N_(a)	(a)
+
 #ifdef USE_SIMPLE_GETTEXT
   int set_gettext_file( const char *filename );
   const char *gettext( const char *msgid );

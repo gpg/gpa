@@ -304,7 +304,7 @@ gpapa_public_key_export (GpapaPublicKey * key, gchar * targetFileID,
       gpgargv[i] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, NULL,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
       free (full_keyID);
     }
 }				/* gpapa_public_key_export */
@@ -325,7 +325,7 @@ gpapa_public_key_delete (GpapaPublicKey * key, GpapaCallbackFunc callback,
       gpgargv[2] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, NULL,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_public_keyring (callback, calldata);
     }
@@ -352,7 +352,7 @@ gpapa_public_key_send_to_server (GpapaPublicKey * key, gchar * ServerName,
       gpgargv[4] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, NULL,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
       free (full_keyID);
     }
 }				/* gpapa_public_key_send_to_server */

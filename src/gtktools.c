@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include "gpa.h"
 #include "gpawindowkeeper.h"
+#include "icons.h"
 
 void
 gpa_widget_set_centered (GtkWidget * widget, GtkWidget * parent)
@@ -119,11 +120,12 @@ gpa_button_new (GtkAccelGroup * accelGroup, gchar * labelText)
 
 /* Create a new hbox with an image and a label packed into it
  * and return the box. Then treat the accelerators. */
-GtkWidget *gpa_xpm_label_box( GtkWidget *parent,
-						 gchar	   **xpm,
-						 gchar	   *label_text,
-						 GtkWidget * button,
-						 GtkAccelGroup * accelGroup)
+GtkWidget *
+gpa_xpm_label_box( GtkWidget *parent,
+                   const char *xpm_name,
+                   gchar	   *label_text,
+                   GtkWidget * button,
+                   GtkAccelGroup * accelGroup)
 {
    guint accelKey;
    GtkWidget *box1;
@@ -131,20 +133,13 @@ GtkWidget *gpa_xpm_label_box( GtkWidget *parent,
    GtkWidget *pixmapwid;
    GdkPixmap *pixmap;
    GdkBitmap *mask;
-   GtkStyle *style;
 
    /* Create box for xpm and label */
    box1 = gtk_hbox_new (FALSE, 0);
    gtk_container_set_border_width (GTK_CONTAINER (box1), 2);
 
-   /* Get the style of the button to get the
-	* background color. */
-   style = gtk_widget_get_style(parent);
-
    /* Now on to the xpm stuff */
-   pixmap = gdk_pixmap_create_from_xpm_d (parent->window, &mask,
-						&style->bg[GTK_STATE_NORMAL],
-						(gchar **)xpm);
+   pixmap = gpa_create_icon_pixmap ( parent, xpm_name, &mask );
    pixmapwid = gtk_pixmap_new (pixmap, mask);
 
    /* Create a label for the button */
@@ -155,16 +150,16 @@ GtkWidget *gpa_xpm_label_box( GtkWidget *parent,
   gtk_widget_add_accelerator (button, "clicked", accelGroup, accelKey,
 			      GDK_MOD1_MASK, 0);
 
-   /* Pack the pixmap and label into the box */
-   gtk_box_pack_start (GTK_BOX (box1),
-			   pixmapwid, FALSE, FALSE, 3);
+  /* Pack the pixmap and label into the box */
+  gtk_box_pack_start (GTK_BOX (box1),
+                      pixmapwid, FALSE, FALSE, 3);
+  
+  gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 3);
+  
+  gtk_widget_show(pixmapwid);
+  gtk_widget_show(label);
 
-   gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 3);
-
-   gtk_widget_show(pixmapwid);
-   gtk_widget_show(label);
-
-   return(box1);
+  return(box1);
 }
 
 GtkWidget *

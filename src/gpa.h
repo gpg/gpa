@@ -26,10 +26,7 @@
 #include <gpapa.h>
 #include "xmalloc.h"
 #include "logging.h"
-/*!!!
-#include <pgg.h>
-!!!*/
-#define N_(a)	(a)
+
 #ifdef USE_SIMPLE_GETTEXT
   int set_gettext_file( const char *filename );
   const char *gettext( const char *msgid );

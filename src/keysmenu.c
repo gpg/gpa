@@ -28,7 +28,7 @@
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
-#include "icons.xpm"
+#include "icons.h"
 
 gchar *writtenKeytrust[4] = {
   N_("unknown"),
@@ -44,12 +44,6 @@ gchar *writtenOwnertrust[4] = {
   N_("trust fully")
 };
 
-gchar **iconOwnertrust[4] = {
-  gpa_trust_unknown_xpm,
-  gpa_dont_trust_xpm,
-  gpa_trust_marginally_xpm,
-  gpa_trust_fully_xpm,
-};
 
 gchar *unitExpiryTime[4] = {
   N_("days"),
@@ -79,11 +73,19 @@ getStringForOwnertrust (GpapaOwnertrust ownertrust)
   return (writtenOwnertrust[ownertrust]);
 }				/* getStringForOwnertrust */
 
-gchar **
-getIconForOwnertrust (GpapaOwnertrust ownertrust)
+const char *
+getIconNameForOwnertrust (GpapaOwnertrust ownertrust)
 {
-  return iconOwnertrust[ownertrust];
-}				/* getIconForOwnertrust */
+  switch ( ownertrust )
+    {
+    case 0: return "ppa_trust_unknown";
+    case 1: return "gpa_dont_trust";
+    case 2: return "gpa_trust_marginally";
+    case 3: return "gpa_trust_fully";
+    }
+  return "oops";
+}
+
 
 GpapaOwnertrust
 getOwnertrustForString (gchar * aString)
@@ -1325,39 +1327,37 @@ keys_openPublic_toggleClistKeys (gpointer param)
   gint i;
   GpapaPublicKey *key;
   gchar *contents;
-	GtkStyle *style;
-	GdkPixmap *icon;
-	GdkBitmap *mask;
-/* commands */
+  GdkPixmap *icon;
+  GdkBitmap *mask;
+  
+  /* commands */
   localParam = (gpointer *) param;
   clistKeys = (GtkWidget *) localParam[0];
   toggleShow = (GtkWidget *) localParam[1];
   windowPublic = (GtkWidget *) localParam[2];
 
-	style = gtk_widget_get_style(windowPublic);
-
-	contentsCountKeys = gpapa_get_public_key_count (gpa_callback, windowPublic);
-	for (i = 0; i < contentsCountKeys; i++) {
-		key = gpapa_get_public_key_by_index (i, gpa_callback, windowPublic);
-
-		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggleShow))) {
-			contents = getStringForOwnertrust (gpapa_public_key_get_ownertrust
-				(key, gpa_callback, windowPublic));
-
-			icon = gdk_pixmap_create_from_xpm_d(windowPublic->window,&mask,
-				&style->bg[GTK_STATE_NORMAL],
-				(gchar **)getIconForOwnertrust(
-					gpapa_public_key_get_ownertrust(key, gpa_callback,
-						windowPublic)));
-			gtk_clist_set_pixtext (GTK_CLIST (clistKeys), i, 2, contents,
-				8, icon, mask);
-		} else {
-			contents = _("");
-			gtk_clist_set_text (GTK_CLIST (clistKeys), i, 2, contents);
-		}
-
-    }				/* while */
-}				/* keys_openPublic_toggleClistKeys */
+  contentsCountKeys = gpapa_get_public_key_count (gpa_callback, windowPublic);
+  for (i = 0; i < contentsCountKeys; i++) {
+    key = gpapa_get_public_key_by_index (i, gpa_callback, windowPublic);
+    
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggleShow))) {
+      contents = getStringForOwnertrust (gpapa_public_key_get_ownertrust
+                                         (key, gpa_callback, windowPublic));
+      
+      icon = gpa_create_icon_pixmap ( windowPublic,
+                 getIconNameForOwnertrust (
+                    gpapa_public_key_get_ownertrust(key, gpa_callback,
+                                                    windowPublic)),
+                                      &mask );
+      if ( icon )
+        gtk_clist_set_pixtext (GTK_CLIST (clistKeys), i, 2, contents,
+                               8, icon, mask);
+    } else {
+      contents = _("");
+      gtk_clist_set_text (GTK_CLIST (clistKeys), i, 2, contents);
+    }
+  }
+}	
 
 gboolean
 keys_openPublic_evalMouse (GtkWidget * clistKeys, GdkEventButton * event,
@@ -1533,7 +1533,7 @@ keys_openPublic (void)
   gtk_table_attach (GTK_TABLE (tableKey), buttonSend, 0, 1, 1, 2, GTK_FILL,
 		    GTK_FILL, 0, 0);
   /* associate this button with an icon */
-  buttonSignBox = gpa_xpm_label_box(windowPublic, gpa_sign_small_xpm,
+  buttonSignBox = gpa_xpm_label_box(windowPublic, "gpa_sign_small",
 				  _("_Sign keys"), buttonSign, accelGroup);
   gtk_container_add (GTK_CONTAINER (buttonSign), buttonSignBox);
 
@@ -1571,7 +1571,7 @@ keys_openPublic (void)
   gtk_table_attach (GTK_TABLE (tableKey), buttonDelete, 1, 2, 2, 3, GTK_FILL,
 		    GTK_FILL, 0, 0);
   /* associate this button with an icon */
-  buttonDeleteBox = gpa_xpm_label_box(windowPublic, trash_xpm,
+  buttonDeleteBox = gpa_xpm_label_box(windowPublic, "trash",
 				  _("_Delete keys"), buttonDelete, accelGroup);
   gtk_container_add (GTK_CONTAINER (buttonDelete), buttonDeleteBox);
 

@@ -473,6 +473,8 @@ main (int argc, char **argv)
 {
   const char *what = argc > 1 ? argv[1] : "version";
   calldata = argc > 2 ? argv[2] : "foo";
+ 
+  gpapa_init ( "/usr/local/bin/gpg" );
 
   if (!strcmp (what, "version"))
     test_version ();
@@ -485,9 +487,9 @@ main (int argc, char **argv)
   else if (!strcmp (what, "status"))
     test_status ();
   else if (!strcmp (what, "export_public"))
-    test_export_public ("4875B1DC979B6F2A");
+    test_export_public ("2D727CC768697734");
   else if (!strcmp (what, "export_public-2"))
-    test_export_public ("6C7EE1B8621CC013");
+    test_export_public ("E92A792B1D6BA060");
   else if (!strcmp (what, "export_secret"))
     test_export_secret ("7D0908A0EE9A8BFB");
   else if (!strcmp (what, "edithelp"))

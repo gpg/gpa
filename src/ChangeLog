@@ -1,3 +1,17 @@
+2000-09-01  Werner Koch  <wk@gnupg.org>
+
+	* icons.c, icons.h: New.  Changed all other includes of icons.xpm
+	to icons.h.
+	* gpa.c (gpa_file_toolbar_new): Use this new function here.
+	* gtktools.c (gpa_xpm_label_box): Ditto
+	* keysmenu.c (getIconNameForOwnertrust): Replaces
+	getIconForOwnertrust.  Chnaged all callers to provide a string now.
+	
+2000-08-17  Werner Koch  <wk@gnupg.org>
+
+	* gpa.c (i18n_init,main): Fixed locale setting as suggested by
+	Clive Lin.
+
 2000-07-25 09:02:34  Werner Koch  (wk@habibti.openit.de)
 
   * gpa.c (gpa_windowTips_show): Moved from here to ...

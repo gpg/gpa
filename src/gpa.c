@@ -25,6 +25,7 @@
 #include <string.h>
 #include <errno.h>
 #include <assert.h>
+#include <time.h>
 
 #include <gdk/gdkkeysyms.h>
 #include <glib.h>
@@ -45,7 +46,7 @@
 #include "helpmenu.h"
 
 /* icons for toolbars */
-#include "icons.xpm"
+#include "icons.h"
 
 gchar *writtenSigValidity[3] = {
   N_("unknown"),
@@ -129,17 +130,12 @@ static void
 i18n_init (void)
 {
   #ifdef USE_SIMPLE_GETTEXT
-    set_gettext_file( PACKAGE );
+    set_gettext_file ( PACKAGE );
   #else
   #ifdef ENABLE_NLS
-    #ifdef HAVE_LC_MESSAGES
-       setlocale( LC_TIME, "" );
-       setlocale( LC_MESSAGES, "" );
-    #else
-       setlocale( LC_ALL, "" );
-    #endif
-    bindtextdomain( PACKAGE, GPA_LOCALEDIR );
-    textdomain( PACKAGE );
+    gtk_set_locale ();
+    bindtextdomain ( PACKAGE, GPA_LOCALEDIR );
+    textdomain ( PACKAGE );
   #endif
   #endif
 }
@@ -161,9 +157,9 @@ main (int argc, char **argv )
 
     set_strusage( my_strusage );
     /*log_set_name ("gpa"); not yet implemented in logging.c */
-    i18n_init ();
     srand (time (NULL)); /* the about dialog uses rand() */
     gtk_init (&argc, &argv);
+    i18n_init ();
 
     opt.homedir = getenv("GNUPGHOME");
     if( !opt.homedir || !*opt.homedir ) {
@@ -787,59 +783,47 @@ gpa_windowFile_new (void)
 } /* gpa_windowFile_new */
 
 GtkWidget *
-gpa_file_toolbar_new ( GtkWidget * window ) {
-	GtkWidget *toolbar, *iconw;
-	GtkStyle *style;
-	GdkPixmap *icon;
-	GdkBitmap *mask;
+gpa_file_toolbar_new ( GtkWidget * window )
+{
+  GtkWidget *toolbar, *icon;
 
-	toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
-	style = gtk_widget_get_style(window);
-	/* Open */
-	icon = gdk_pixmap_create_from_xpm_d(window->window,&mask,
-		&style->bg[GTK_STATE_NORMAL],(gchar **)openfile_xpm);
-	iconw = gtk_pixmap_new(icon, mask);
-	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Open"),
-		_("Open a file"), _("open file"), iconw,
-		GTK_SIGNAL_FUNC(file_open), NULL);
-	/* Sign */
-	icon = gdk_pixmap_create_from_xpm_d(window->window,&mask,
-		&style->bg[GTK_STATE_NORMAL],(gchar **)sign_xpm);
-	iconw = gtk_pixmap_new(icon, mask);
-	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Sign"),
-		_("Sign the selected file"), _("sign file"), iconw,
-		GTK_SIGNAL_FUNC(file_sign), NULL);
-	/* Encrypt */
-	icon = gdk_pixmap_create_from_xpm_d(window->window,&mask,
-		&style->bg[GTK_STATE_NORMAL],(gchar **)encrypt_xpm);
-	iconw = gtk_pixmap_new(icon, mask);
-	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Encrypt"),
-		_("Encrypt the selected file"), _("encrypt file"), iconw,
-		GTK_SIGNAL_FUNC(file_encrypt), NULL);
-	/* Decrypt */
-	icon = gdk_pixmap_create_from_xpm_d(window->window,&mask,
-		&style->bg[GTK_STATE_NORMAL],(gchar **)decrypt_xpm);
-	iconw = gtk_pixmap_new(icon, mask);
-	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _(" Decrypt "),
-		_("Decrypt the selected file"), _("decrypt file"), iconw,
-		GTK_SIGNAL_FUNC(file_decrypt), NULL);
-	/* Public keyring */
-	icon = gdk_pixmap_create_from_xpm_d(window->window,&mask,
-		&style->bg[GTK_STATE_NORMAL],(gchar **)keyring_xpm);
-	iconw = gtk_pixmap_new(icon, mask);
-	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Keyring"),
-		_("Open public keyring"), _("open public keyring"), iconw,
-		GTK_SIGNAL_FUNC(keys_openPublic), NULL);
-	/* Help */
-	icon = gdk_pixmap_create_from_xpm_d(window->window,&mask,
-		&style->bg[GTK_STATE_NORMAL],(gchar **)help_xpm);
-	iconw = gtk_pixmap_new(icon, mask);
-	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Help"),
-		_("Understanding the GNU Privacy Assistant"), _("help"), iconw,
-		GTK_SIGNAL_FUNC(help_help), NULL);
+  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  
+  /* Open */
+  if ( (icon = gpa_create_icon_widget ( window, "openfile" )))
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Open"),
+                            _("Open a file"), _("open file"), icon,
+                            GTK_SIGNAL_FUNC(file_open), NULL);
+  /* Sign */
+  if ( (icon = gpa_create_icon_widget ( window, "sign" )))
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Sign"),
+                            _("Sign the selected file"), _("sign file"), icon,
+                            GTK_SIGNAL_FUNC(file_sign), NULL);
+  /* Encrypt */
+  if ( (icon = gpa_create_icon_widget ( window, "encrypt" )))
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Encrypt"),
+                            _("Encrypt the selected file"), _("encrypt file"),
+                            icon, GTK_SIGNAL_FUNC(file_encrypt), NULL);
+  /* Decrypt */
+  if ( (icon = gpa_create_icon_widget ( window, "decrypt" )))
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _(" Decrypt "),
+                            _("Decrypt the selected file"), _("decrypt file"),
+                            icon, GTK_SIGNAL_FUNC(file_decrypt), NULL);
+  /* Public keyring */
+  if ( (icon = gpa_create_icon_widget ( window, "keyring" )))
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Keyring"),
+                            _("Open public keyring"),
+                            _("open public keyring"), icon,
+                            GTK_SIGNAL_FUNC(keys_openPublic), NULL);
+  /* Help */
+  if ( (icon = gpa_create_icon_widget ( window, "help" )))
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Help"),
+                            _("Understanding the GNU Privacy Assistant"),
+                            _("help"), icon,
+                            GTK_SIGNAL_FUNC(help_help), NULL);
 
-	return toolbar;
-} /* gpa_file_toolbar_new */
+  return toolbar;
+} 
 
 GtkWidget *
 gpa_windowMain_new (char *title)

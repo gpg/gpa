@@ -66,7 +66,7 @@ linecallback_get_status (gchar * line, gpointer data, gboolean status)
     {
       if (status)
 	{
-	  if (gpapa_line_begins_with (line, "[GNUPG:] NODATA"))
+	  if (gpapa_line_begins_with (line, "NODATA"))
 	    d->file->status_flags |= GPAPA_FILE_STATUS_NODATA;
 
 	  /* Suppress error reporting.
@@ -143,11 +143,12 @@ gpapa_file_get_signature_count (GpapaFile * file, GpapaCallbackFunc callback,
 static gboolean
 status_check (gchar * buffer, gchar * keyword, gchar ** data)
 {
-  gchar *checkval = xstrcat2 ("[GNUPG:] ", keyword);
   gboolean result = FALSE;
-  if (strncmp (buffer, checkval, strlen (checkval)) == 0)
+  size_t n = strlen(keyword);
+
+  if ( !strncmp ( buffer, keyword, n ) && (buffer[n] == ' ' || !buffer[n] ) )
     {
-      gchar *p = buffer + strlen (checkval);
+      char *p = buffer + n;
       while (*p == ' ')
 	p++;
       data[0] = p;
@@ -173,7 +174,6 @@ status_check (gchar * buffer, gchar * keyword, gchar ** data)
       *buffer = 0;
       result = TRUE;
     }
-  free (checkval);
   return (result);
 }				/* status_check */
 
@@ -283,7 +283,7 @@ gpapa_file_sign (GpapaFile * file, gchar * targetFileID, gchar * keyID,
       gpgargv[i] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, PassPhrase,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
       free (full_keyID);
     }
 }				/* gpapa_file_sign */
@@ -323,7 +323,7 @@ gpapa_file_encrypt (GpapaFile * file, gchar * targetFileID,
       gpgargv[i] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, NULL,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
       for (i = 1; i < 2 * l; i += 2)
 	free (gpgargv[i]);
       free (gpgargv);
@@ -374,7 +374,7 @@ gpapa_file_encrypt_and_sign (GpapaFile * file, gchar * targetFileID,
       gpgargv[i] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, PassPhrase,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
       for (i = 1; i < 2 * l; i += 2)
 	free (gpgargv[i]);
       free (gpgargv);
@@ -409,7 +409,7 @@ gpapa_file_protect (GpapaFile * file, gchar * targetFileID,
       gpgargv[i] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, PassPhrase,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
     }
 }				/* gpapa_file_protect */
 
@@ -438,7 +438,7 @@ gpapa_file_decrypt (GpapaFile * file, gchar * targetFileID,
       gpgargv[i] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, PassPhrase,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
     }
 }				/* gpapa_file_protect */
 

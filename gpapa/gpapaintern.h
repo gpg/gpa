@@ -24,21 +24,22 @@
 #include <glib.h>
 #include "gpapa.h"
 
-typedef void (*GpapaLineCallbackFunc) (gchar * line, gpointer data,
-				       gboolean status);
+typedef void (*GpapaLineCallbackFunc) (char *line, void *opaque,
+                                       int is_status );
+				      
 
 extern gboolean gpapa_line_begins_with (gchar * line, gchar * keyword);
 
-extern void gpapa_linecallback_dummy (char *line, gpointer data,
-				      gboolean status);
-
 extern void gpapa_call_gnupg (gchar ** argv, gboolean do_wait,
-			      gchar * commands, gchar * passphrase,
+			      gchar * commands, gchar *reserved,
 			      GpapaLineCallbackFunc linecallback,
-			      gpointer linedata, GpapaCallbackFunc callback,
+			      void * linedata, GpapaCallbackFunc callback,
 			      gpointer calldata);
 
 /*-- gpapa.c --*/
 const char *gpapa_private_get_gpg_program (void);
 
 #endif /* __GPAPAINTERN_H__ */
+
+
+

@@ -7,7 +7,7 @@ EXTRA_DIST = $(tip_files)
 bin_PROGRAMS = gpa
 
 INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/gpapa	-I$(top_srcdir)/intl
-LDADD = -L ../gpapa -lgpapa -L ../jnlib -ljnlib
+LDADD = -L ../gpapa -lgpapa -L ../jnlib -ljnlib @INTLLIBS@
 
 gpa_SOURCES = gpa.c gpa.h \
 	      filemenu.c filemenu.h \
@@ -16,7 +16,7 @@ gpa_SOURCES = gpa.c gpa.h \
 	      help.c helpmenu.c helpmenu.h	  \
 	      keysmenu.c keysmenu.h	    \
 	      optionsmenu.c optionsmenu.h \
-	      icons.xpm
+	      icons.c icons.h icons.xpm
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)

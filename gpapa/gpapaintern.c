@@ -28,11 +28,14 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
+#include <errno.h>
 #ifdef __MINGW32__
 #include <windows.h>
 #else
 #include <sys/wait.h>
 #endif
+#include <sys/types.h>
+#include <signal.h>
 #include <fcntl.h>
 #include "stringhelp.h"
 
@@ -50,16 +53,33 @@ struct gpg_object_private {
 };
 #endif
 
+typedef enum {
+  STATUS_CHANNEL,
+  OUTPUT_CHANNEL
+} GPG_CHANNEL;
+
+typedef struct channel {
+    int avail;
+    int eof;
+    size_t bufsize;
+    char *buffer;
+    size_t readpos;
+} CHANNEL;
+
 typedef struct {
   struct gpg_object_private private;
-  int (*status_cb) ( const void *buffer, size_t buflen, void *closure);
-  int (*output_cb) ( const void *buffer, size_t buflen, void *closure);
-  int (*input_cb) ( const void *buffer, size_t buflen, void *closure);
-  int (*control_cb) ( int reason, void *closure );
-  void *closure;
+  int running;
+  int exit_status;
+  int exit_signal;
+  CHANNEL status;
+  CHANNEL output;
 } GPG_OBJECT;
 
 
+static void
+dummy_linecallback ( char *a, void *opaque, int is_status )
+{
+}
 
 
 gboolean
@@ -69,77 +89,26 @@ gpapa_line_begins_with (gchar * line, gchar * keyword)
     return (TRUE);
   else
     return (FALSE);
-}				/* gpapa_line_begins_with */
+}	
 
-static void
-dummy_datacallback (void *data, size_t datalen, void *closure)
-{
-}
+
 
 static gboolean
-status_check (gchar * buffer,
+status_check (char *line, 
 	      GpapaCallbackFunc callback, gpointer calldata,
-	      gchar * keyword, gchar * message)
+	      const char *keyword, const char *message)
 {
-  gchar *checkval = xstrcat2 ("[GNUPG:] ", keyword);
-  gboolean result = FALSE;
-  if (strncmp (buffer, checkval, strlen (checkval)) == 0)
+  size_t n = strlen(keyword);
+
+  if ( !strncmp ( line, keyword, n ) && (line[n] == ' ' || !line[n] ) )
     {
-      result = TRUE;
-      callback (GPAPA_ACTION_ERROR, message, calldata);
+      char *p = xstrdup ( message );
+      callback (GPAPA_ACTION_ERROR, p, calldata);
+      free ( p );
+      return 1;
     }
-  free (checkval);
-  return (result);
-}				/* status_check */
-
-#if 0
-static int
-output_handler ( int nread, int npending, .... )
-{
-  while ( nread > 0 )
-    {
-      int n = 0;
-      
-      check_again = 1;
-      fprintf (stderr, "outputfd has %d bytes\n", nread);
-      while ( n < nread && buffer[n] != '\n')
-        n++;
-
-      if ( n < nread)
-        {
-          if ( npending > 0)
-            {
-              int new_n = npending + n + 1;
-              pendingbuffer = xrealloc (pendingbuffer, new_n);
-                                      
-              memcpy (pendingbuffer + npending, buffer, n);
-              pendingbuffer[new_n-1] = 0;
-              linecallback (pendingbuffer, linedata, FALSE);
-              free (pendingbuffer);
-              pendingbuffer = NULL;
-              pendingsize = 0;
-            }
-          else
-            {
-              buffer[q] = 0;
-              linecallback (buffer, linedata, FALSE);
-            }
-          memmove (buffer, buffer + q + 1, nread - q - 1);
-          nread -= q + 1;
-        }
-      else
-        {
-          int newpendingsize = pendingsize + nread;
-          pendingbuffer = xrealloc (pendingbuffer,
-                                    newpendingsize);
-          memcpy (pendingbuffer + pendingsize, buffer, nread);
-          pendingsize = newpendingsize;
-          nread = 0;
-        }
-    }
-}
-#endif
-
+  return 0;
+}		
 
 
 
@@ -279,224 +248,34 @@ spawn_gnupg(char **user_args, gchar * commands,
   gpg = xcalloc (1, sizeof *gpg );
   gpg->private.
 }
-#endif
 
-
-#ifndef __MINGW32__
-static GPG_OBJECT * 
-spawn_gnupg(char **user_args, gchar * commands,
-                GpapaCallbackFunc callback, gpointer calldata)
+static int /* Windows version */
+wait_gnupg ( GPG_OBJECT *gpg, int no_hang )
 {
-  int pid;
-  int outputfd[2], statusfd[2], passfd[2], inputfd[2], devnull;
-  char **argv;
-  char statusfd_str[10], passfd_str[10];
-  int argc, user_args_counter, standard_args_counter, i, j;
-
-  char *standard_args[] = {
-    "--status-fd",
-    statusfd_str,
-    "--no-options",
-    "--batch",
-    NULL
-  };
-
-  /* Open /dev/null for redirecting stderr.
-   */
-  devnull = open ("/dev/null", O_RDWR);
-  if (devnull == -1)
-    {
-      callback (GPAPA_ACTION_ERROR, "could not open `/dev/null'", calldata);
-      return NULL;
-    }
-
-  /* Open output pipe.
-   */
-  if (pipe (outputfd) == -1)
-    {
-      callback (GPAPA_ACTION_ERROR, "could not open output pipe", calldata);
-      return NULL;
-    }
-
-  /* Open status pipe.
-   */
-  if (pipe (statusfd) == -1)
-    {
-      callback (GPAPA_ACTION_ERROR, "could not open status pipe", calldata);
-      close (outputfd[0]);
-      close (outputfd[1]);
-      return NULL;
-    }
-  sprintf (statusfd_str, "%d", statusfd[1]);
-
-  if (passphrase)
-    {
-      /* Open passphrase pipe.
-       */
-      if (pipe (passfd) == -1)
-	{
-	  callback (GPAPA_ACTION_ERROR, "could not open passphrase pipe",
-		    calldata);
-	  close (outputfd[0]);
-	  close (outputfd[1]);
-	  close (statusfd[0]);
-	  close (statusfd[1]);
-	  return;
-	}
-      sprintf (passfd_str, "%d", passfd[0]);
-      write (passfd[1], passphrase, strlen (passphrase));
-      write (passfd[1], "\n", 1);
-    }
-
-  if (commands)
-    {
-      /* Open input pipe.
-       */
-      if (pipe (inputfd) == -1)
-	{
-	  callback (GPAPA_ACTION_ERROR, "could not open input pipe",
-		    calldata);
-	  close (outputfd[0]);
-	  close (outputfd[1]);
-	  close (statusfd[0]);
-	  close (statusfd[1]);
-	  if (passphrase)
-	    {
-	      close (passfd[0]);
-	      close (passfd[1]);
-	    }
-	  return NULL;
-	}
-      write (inputfd[1], commands, strlen (commands));
-    }
-
-  /* Construct the command line.
-   */
-  user_args_counter = 0;
-  while (user_args[user_args_counter] != NULL)
-    user_args_counter++;
-  standard_args_counter = 0;
-  while (standard_args[standard_args_counter] != NULL)
-    standard_args_counter++;
-  argc = 1 + standard_args_counter + user_args_counter;
-  if (passphrase)
-    argc += 2;
-  argv = (char **) xmalloc ((argc + 1) * sizeof (char *));
-  i = 0;
-  argv[i++] = gpapa_private_get_gpg_program ();
-  for (j = 0; j < standard_args_counter; j++)
-    argv[i++] = standard_args[j];
-  if (passphrase)
-    {
-      argv[i++] = "--passphrase-fd";
-      argv[i++] = passfd_str;
-    }
-  for (j = 0; j < user_args_counter; j++)
-    argv[i++] = user_args[j];
-  argv[i] = NULL;
-
-#ifdef DEBUG
-  for (j = 0; j < i; j++)
-    fprintf (stderr, "%s ", argv[j]);
-  fprintf (stderr, "\n");
-#endif
-
-  pid = fork ();
-  if (pid == -1)
-    {
-      callback (GPAPA_ACTION_ERROR, "fork() failed", calldata);
-      /* fixme: add cleanups */
-      return NULL;
-    }
-
-  if ( !pid ) /* child */
-    {
-      close (outputfd[0]);
-      close (statusfd[0]);
-      dup2 (outputfd[1], 1);
-      close (outputfd[1]);
-      if (commands)
-	{
-	  dup2 (inputfd[0], 0);
-	  close (inputfd[0]);
-	}
-      else
-	dup2 (devnull, 0);
-#ifndef DEBUG
-      dup2 (devnull, 2);
-#endif
-      close (devnull);
-      execv (argv[0], argv);
-
-      /* Reached only if execution failed (we are not the child)*/
-      callback (GPAPA_ACTION_ERROR, "GnuPG execution failed", calldata);
-      /* fixme: need some cleanup here */
-      return NULL;
-    }
-
-  /* everything is fine */
-  gpg = xcalloc (1, sizeof *gpg );
-  gpg->private.pid = pid;
-  gpg->private.output_fd = outputfd[0];
-  gpg->private.status_fd = statusfd[0];
-  return gpg;
-}
-
-/* user_args must be a NULL-terminated array of argument strings.
- */
-void
-gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
-		  char * passphrase, GpapaDataCallbackFunc data_callback,
-		  gpointer data_closure, GpapaCallbackFunc callback,
-		  gpointer calldata)
-{
-  GPG_OBJECT *gpg;
+  int rc = 0;
+  int status;
+  pid_t retpid;
+  fd_set readfds;
+  int nfds;
+  struct timeval timeout = { 0, 0 };
   
-    if ( !data_callback )
-        data_callback = dummy_datacallback;
+  gpg->output.avail = 0;
+  gpg->status.avail = 0;
+  if ( !gpg->running )
+    return rc;  
 
-  gpg = spawn_gnupg (user_args, commands, callback, calldata );
-  if ( !gpg ) {
-      callback (GPAPA_ACTION_DEBUG, "spawn_gnupg failed", calldata);
-      return;
-  }
-
-  fprintf (stderr, "** start waiting for this processs ...\n");
-
-
-
-      int ready, status, retpid;
-      size_t bufsize = 8192;
-      size_t pendingsize = 0;
-      char *buffer = (char *) xmalloc (bufsize);
-      char *pendingbuffer = NULL;
-
-      for (ready = 0; !ready;)
-	{
+  /* first have a look at the pipes */
 	  HANDLE waitbuf[3] = { pi.hProcess, outputfd[0], statusfd[0] };
 	  int nwait = 3;
 	  int nread, ncount;
+   ncount = WaitForMultipleObjectsEx (nwait, waitbuf, FALSE, INFINITE, TRUE);
 
-	  ncount = WaitForMultipleObjectsEx (nwait, waitbuf, FALSE, INFINITE, TRUE);
 	  if ( ncount == WAIT_FAILED ) {
 	    fprintf (stderr, "** WFMO failed: ec=%d\n", (int) GetLastError ());
 	  }
 	  if ( (ncount >= WAIT_OBJECT_0 && ncount < WAIT_OBJECT_0 + 2)
 	       || ncount == WAIT_FAILED )
-	    {
-	      int check_again;
-	      /* Hmm: I don't know how this should work: We always get
-	       * an event for the outputfd but most of the time the pipe
-	       * is empty.  I have never seen an event for the status_fd.
-	       * The workaround is to check on any event for data on one
-	       * of these pipes.
-	       */
-	      do
-		{
-		  DWORD navail;
-		  check_again = 0;
-
-		  /* check outputfd */
+	
 		  if (!PeekNamedPipe (outputfd[0], NULL, 0, NULL,
 				      &navail, NULL))
 		    {
@@ -513,69 +292,26 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 		      nread = 0;
 		    }
 
-		  /* check statusfd */
-		  if (!PeekNamedPipe (statusfd[0], NULL, 0, NULL,
-				      &navail, NULL))
-		    {
-		      fprintf (stderr, "** PeekPipe failed: ec=%d\n",
-			       (int) GetLastError ());
-		      navail = 0;
-		    }
-		  nread = 0;
-		  if (navail && !ReadFile (statusfd[0], buffer, bufsize,
-					   &nread, NULL))
-		    {
-		      fprintf (stderr, "** ReadFile failed: ec=%d\n",
-			       (int) GetLastError ());
-		      nread = 0;
-		    }
-		  if (nread > 0)
-		    {
-		      char *bufptr = buffer;
-		      check_again = 1;
-		      fprintf (stderr, "statusfd has %d bytes\n", nread);
 
-		      buffer[MIN (bufsize - 1, nread)] = 0;
-		      while (*bufptr)
-			{
-			  char *qq = bufptr;
-			  char nlsave;
-			  while (*qq && *qq != '\n')
-			    qq++;
-			  nlsave = *qq;
-			  *qq = 0;
-			  linecallback (bufptr, linedata, TRUE);
-			  status_check (bufptr, callback, calldata, "NODATA",
-					"no data found");
-			  status_check (bufptr, callback, calldata,
-					"BADARMOR",
-					"ASCII armor is corrupted");
-			  if (status_check
-			      (bufptr, callback, calldata,
-			       "MISSING_PASSPHRASE", "missing passphrase"))
-			    missing_passphrase = TRUE;
-			  if (!missing_passphrase)
-			    status_check (bufptr, callback, calldata,
-					  "BAD_PASSPHRASE", "bad passphrase");
-			  status_check (bufptr, callback, calldata,
-					"DECRYPTION_FAILED",
-					"decryption failed");
-			  status_check (bufptr, callback, calldata,
-					"NO_PUBKEY",
-					"public key not available");
-			  status_check (bufptr, callback, calldata,
-					"NO_SECKEY",
-					"secret key not available");
-			  *qq = nlsave;
-			  if (*qq)
-			    qq++;
-			  bufptr = qq;
-			}
-		    }
-		}
-	      while (check_again);
-	    }			/* end read pipes */
 
+   
+
+  nfds = select ( nfds, &readfds, NULL, NULL, no_hang? &timeout : NULL);
+  if ( nfds > 0 )
+    {
+      if ( FD_ISSET ( gpg->private.output_fd, &readfds ) )
+        gpg->output.avail = 1;
+      if ( FD_ISSET ( gpg->private.status_fd, &readfds ) )
+        gpg->status.avail = 1;
+    }
+  else if ( nfds && errno != EINTR )
+    { 
+      fprintf (stderr, "wait_gpg: select failed: %s\n", strerror (errno) );
+      rc = -1;
+    }
+
+  /* see whether gpg is still running */
+  
 	  switch (ncount)
 	    {
 	    case WAIT_TIMEOUT:
@@ -621,193 +357,594 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 	      break;
 	    }
 
-	  /* Handle remaining output data.
-	   */
-	  if (pendingsize > 0)
-	    {
-	      int newpendingsize = pendingsize + 1;
-	      pendingbuffer =
-		(char *) xrealloc (pendingbuffer, newpendingsize);
-	      pendingbuffer[newpendingsize - 1] = 0;
-	      linecallback (pendingbuffer, linedata, FALSE);
-	      free (pendingbuffer);
-	      pendingbuffer = NULL;
-	      pendingsize = 0;
-	    }
+
+if ( retpid == gpg->private.pid )
+    {
+      gpg->running = 0;     
+      if ( WIFSIGNALED (status) )
+        {
+          gpg->exit_status = 4;
+          gpg->exit_signal = WTERMSIG (status);
+        }
+      else if ( WIFEXITED (status) )
+        {
+          gpg->exit_status = WEXITSTATUS (status);
+        }
+      else /* oops */
+        {
+          rc = -1;
+        }
+    }
+
+  return rc;
+}
+
+static int
+channel_read ( GPG_OBJECT *gpg, GPG_CHANNEL channel,
+               void *buffer, size_t bufsize )
+{
+  int fd=-1, avail=0, nread;
+
+  switch ( channel )
+    {
+    case STATUS_CHANNEL:
+      fd = gpg->private.status_fd;
+      avail = gpg->status.avail;
+      break;
+    case OUTPUT_CHANNEL:
+      fd = gpg->private.output_fd;
+      avail = gpg->output.avail;
+      break;
+    }
+
+  if ( !avail )
+    return 0;
+
+  do 
+    nread = read ( fd, buffer, bufsize );
+  while ( nread == -1 && errno == EINTR );
+
+  if ( nread == -1 )
+    fprintf ( stderr, "gnupg_read on channel %d failed: %s\n",
+              channel, strerror ( errno ) );
+
+  return nread;
+}
+
+void
+gpapa_gnupg_close ( GPG_OBJECT *gpg )
+{
+  if ( !gpg )
+    return;
+
+  if ( gpg->running )
+    {  /* still running? Must send a killer */
+      kill ( gpg->private.pid, SIGTERM);
+      sleep (2);
+      if ( !waitpid (gpg->private.pid, NULL, WNOHANG) )
+        {  /* pay the murderer better and then forget about it */
+          kill (gpg->private.pid, SIGKILL);
+        }
+    }
+
+  close ( gpg->private.output_fd );
+  close ( gpg->private.status_fd );
+
+  free (gpg);
+}
+
+#endif /*__MINGW32__*/
+
+
+#ifndef __MINGW32__
+static GPG_OBJECT * 
+spawn_gnupg(char **user_args, gchar * commands,
+                GpapaCallbackFunc callback, gpointer calldata)
+{
+  int pid;
+  int outputfd[2], statusfd[2], inputfd[2], devnull;
+  char **argv;
+  char statusfd_str[10];
+  int argc, user_args_counter, standard_args_counter, i, j;
+  GPG_OBJECT *gpg = NULL;
+
+  /* FIXME: Make user_args const and copy/release the argument array */
+
+  char *standard_args[] = {
+    "--status-fd",
+    statusfd_str,
+    "--no-options",
+    "--batch",
+    NULL
+  };
+
+  /* Open /dev/null for redirecting stderr.
+   */
+  devnull = open ("/dev/null", O_RDWR);
+  if (devnull == -1)
+    {
+      callback (GPAPA_ACTION_ERROR, "could not open `/dev/null'", calldata);
+      return NULL;
+    }
+
+  /* Open output pipe.
+   */
+  if (pipe (outputfd) == -1)
+    {
+      callback (GPAPA_ACTION_ERROR, "could not open output pipe", calldata);
+      return NULL;
+    }
+
+  /* Open status pipe.
+   */
+  if (pipe (statusfd) == -1)
+    {
+      callback (GPAPA_ACTION_ERROR, "could not open status pipe", calldata);
+      close (outputfd[0]);
+      close (outputfd[1]);
+      return NULL;
+    }
+  sprintf (statusfd_str, "%d", statusfd[1]);
+
 #if 0
-	  if (WIFEXITED (status) && WEXITSTATUS (status) != 0)
-	    {
-	      char msg[80];
-	      sprintf (msg, "GnuPG execution terminated with error code %d",
-		       WEXITSTATUS (status));
-	      callback (GPAPA_ACTION_ABORTED, msg, calldata);
-	    }
-	  else if (WIFSIGNALED (status) && WTERMSIG (status) != 0)
-	    {
-	      char msg[80];
-	      sprintf (msg,
-		       "GnuPG execution terminated by uncaught signal %d",
-		       WTERMSIG (status));
-	      callback (GPAPA_ACTION_ABORTED, msg, calldata);
-	    }
-	  else
-	    callback (GPAPA_ACTION_FINISHED,
-		      "GnuPG execution terminated normally", calldata);
-#endif
+  if (passphrase)
+    {
+      /* Open passphrase pipe.
+       */
+      if (pipe (passfd) == -1)
+	{
+	  callback (GPAPA_ACTION_ERROR, "could not open passphrase pipe",
+		    calldata);
+	  close (outputfd[0]);
+	  close (outputfd[1]);
+	  close (statusfd[0]);
+	  close (statusfd[1]);
+	  return NULL;
 	}
-
-      free (buffer);
-  CloseHandle (outputfd[0]);
-  CloseHandle (statusfd[0]);
-
-  fprintf (stderr, "** gpapa_call_gnupg ready\n");
-#else /* Here is the code for something we call a real operating system */
-
-
-
-      
-               int status, retpid, dataavail;
-           size_t bufsize = MIN (8192, SSIZE_MAX);
-           size_t pendingsize = 0;
-           char *buffer = (char *) xmalloc (bufsize);
-           char *pendingbuffer = NULL;
-           fd_set readfds;
-           int maxfd = MAX (outputfd[0], statusfd[0]);
-           struct timeval timeout = { 0, 0 };
-           gboolean missing_passphrase = FALSE;
-                  
-	  /* Check for data in the pipe and whether the GnuPG
-	   * process is still running.
-	   */
-	  retpid = waitpid (pid, &status, WNOHANG);
-	  FD_ZERO (&readfds);
-	  FD_SET (outputfd[0], &readfds);
-	  FD_SET (statusfd[0], &readfds);
-	  dataavail = select (maxfd + 1, &readfds, NULL, NULL, &timeout);
-
-	  while (retpid == 0 || dataavail != 0)
-	    {
-	      int p, q;
-              int nread;
-
-	      /* Handle output data.
-	       */
-              nread = 0;
-	      if (FD_ISSET (outputfd[0], &readfds))
-		nread = read (outputfd[0], buffer, bufsize);
-	      
-		
-	      if ( nread > 0 ) 
-		  linecallback ( buffer, linedata, FALSE);
-			
-
-	      /* Handle status data.
-	       */
-	      if (FD_ISSET (statusfd[0], &readfds))
-		{
-		  char *bufptr = buffer;
-		  p = read (statusfd[0], buffer, bufsize);
-		  buffer[MIN (bufsize - 1, p)] = 0;
-		  if (p)
-		    {
-#ifdef DEBUG
-		      fprintf (stderr, "status data: %s\n", buffer);
+      sprintf (passfd_str, "%d", passfd[0]);
+      write (passfd[1], passphrase, strlen (passphrase));
+      write (passfd[1], "\n", 1);
+    }
 #endif
-		      while (*bufptr)
-			{
-			  char *qq = bufptr;
-			  char nlsave;
-			  while (*qq && *qq != '\n')
-			    qq++;
-			  nlsave = *qq;
-			  *qq = 0;
-			  linecallback (bufptr, linedata, TRUE);
-			  status_check (bufptr, callback, calldata, "NODATA",
-					"no data found");
-			  status_check (bufptr, callback, calldata,
-					"BADARMOR",
-					"ASCII armor is corrupted");
-			  if (status_check
-			      (bufptr, callback, calldata,
-			       "MISSING_PASSPHRASE", "missing passphrase"))
-			    missing_passphrase = TRUE;
-			  if (!missing_passphrase)
-			    status_check (bufptr, callback, calldata,
-					  "BAD_PASSPHRASE", "bad passphrase");
-			  status_check (bufptr, callback, calldata,
-					"DECRYPTION_FAILED",
-					"decryption failed");
-			  status_check (bufptr, callback, calldata,
-					"NO_PUBKEY",
-					"public key not available");
-			  status_check (bufptr, callback, calldata,
-					"NO_SECKEY",
-					"secret key not available");
-			  *qq = nlsave;
-			  if (*qq)
-			    qq++;
-			  bufptr = qq;
-			}
-		    }
-		}
+  if (commands)
+    {
+      /* Open input pipe.
+       */
+      if (pipe (inputfd) == -1)
+	{
+	  callback (GPAPA_ACTION_ERROR, "could not open input pipe",
+		    calldata);
+	  close (outputfd[0]);
+	  close (outputfd[1]);
+	  close (statusfd[0]);
+	  close (statusfd[1]);
+/*  	  if (passphrase) */
+/*  	    { */
+/*  	      close (passfd[0]); */
+/*  	      close (passfd[1]); */
+/*  	    } */
+	  return NULL;
+	}
+      write (inputfd[1], commands, strlen (commands));
+    }
 
-	      /* Check for more data in the pipes and whether the GnuPG
-	       * process is still running.
-	       */
-	      if (retpid == 0)
-		retpid = waitpid (pid, &status, WNOHANG);
-	      FD_ZERO (&readfds);
-	      FD_SET (outputfd[0], &readfds);
-	      FD_SET (statusfd[0], &readfds);
-	      dataavail = select (maxfd + 1, &readfds, NULL, NULL, &timeout);
-	    }
+  /* Construct the command line.
+   */
+  user_args_counter = 0;
+  while (user_args[user_args_counter] != NULL)
+    user_args_counter++;
+  standard_args_counter = 0;
+  while (standard_args[standard_args_counter] != NULL)
+    standard_args_counter++;
+  argc = 1 + standard_args_counter + user_args_counter;
+/*    if (passphrase) */
+/*      argc += 2; */
+  argv = (char **) xmalloc ((argc + 1) * sizeof (char *));
+  i = 0;
+  argv[i++] = xstrdup (gpapa_private_get_gpg_program () );
+  for (j = 0; j < standard_args_counter; j++)
+    argv[i++] = standard_args[j];
+/*    if (passphrase) */
+/*      { */
+/*        argv[i++] = "--passphrase-fd"; */
+/*        argv[i++] = passfd_str; */
+/*      } */
+  for (j = 0; j < user_args_counter; j++)
+    argv[i++] = user_args[j];
+  argv[i] = NULL;
 
-	  /* Handle remaining output data.
-	   */
-	  if (pendingsize > 0)
-	    {
-	      int newpendingsize = pendingsize + 1;
-	      pendingbuffer =
-		(char *) xrealloc (pendingbuffer, newpendingsize);
-	      pendingbuffer[newpendingsize - 1] = 0;
-	      linecallback (pendingbuffer, linedata, FALSE);
-	      free (pendingbuffer);
-	      pendingbuffer = NULL;
-	      pendingsize = 0;
-	    }
-	  if (WIFEXITED (status) && WEXITSTATUS (status) != 0)
-	    {
-	      char msg[80];
-	      sprintf (msg, "GnuPG execution terminated with error code %d",
-		       WEXITSTATUS (status));
-	      callback (GPAPA_ACTION_ABORTED, msg, calldata);
-	    }
-	  else if (WIFSIGNALED (status) && WTERMSIG (status) != 0)
-	    {
-	      char msg[80];
-	      sprintf (msg,
-		       "GnuPG execution terminated by uncaught signal %d",
-		       WTERMSIG (status));
-	      callback (GPAPA_ACTION_ABORTED, msg, calldata);
-	    }
-	  else
-	    callback (GPAPA_ACTION_FINISHED,
-		      "GnuPG execution terminated normally", calldata);
-	  free (buffer);
-         
+  pid = fork ();
+  if (pid == -1)
+    {
+      callback (GPAPA_ACTION_ERROR, "fork() failed", calldata);
+      /* fixme: add cleanups */
+      return NULL;
+    }
+
+  if ( !pid ) /* child */
+    {
       close (outputfd[0]);
       close (statusfd[0]);
-      if (passphrase)
-	close (passfd[1]);
+      dup2 (outputfd[1], 1);
+      close (outputfd[1]);
       if (commands)
-	close (inputfd[1]);
-      close (outputfd[1]);	/* @@ Shouldn't this be done earlier? */
-      close (statusfd[1]);
-      if (passphrase)
-	close (passfd[0]);
-      if (commands)
-	close (inputfd[0]);
+	{
+	  dup2 (inputfd[0], 0);
+	  close (inputfd[0]);
+	}
+      else
+	dup2 (devnull, 0);
       close (devnull);
-  free (argv);
-#endif /* real operating system */
-} /* gpapa_call_gnupg */
+      execv (argv[0], argv);
+
+      /* Reached only if execution failed (we are not the child)*/
+      callback (GPAPA_ACTION_ERROR, "GnuPG execution failed", calldata);
+      /* fixme: need some cleanup here */
+      return NULL;
+    }
+
+  /* everything is fine */
+  gpg = xcalloc (1, sizeof *gpg );
+  gpg->private.pid = pid;
+  gpg->private.output_fd = outputfd[0];
+  gpg->private.status_fd = statusfd[0];
+  gpg->running = 1;
+  return gpg;
+}
+
+/*
+ * select on gpgs pipes and check whether gpg is still running
+ * If NO_HANG is true, the function will block but may get interrupted
+ * by interrupts in which case it will simply return as if with NO_HANG not
+ * set.
+ */
+
+static int
+wait_gnupg ( GPG_OBJECT *gpg, int no_hang )
+{
+  int rc = 0;
+  int status;
+  pid_t retpid;
+  fd_set readfds;
+  int nfds;
+  struct timeval timeout = { 0, 0 };
+  
+  gpg->output.avail = 0;
+  gpg->status.avail = 0;
+  if ( !gpg->running )
+    return rc;  
+
+ restart:
+  /* see whether gpg is still running */
+  retpid = waitpid ( gpg->private.pid, &status, WNOHANG );
+  if ( retpid == gpg->private.pid )
+    {
+      gpg->running = 0;     
+      if ( WIFSIGNALED (status) )
+        {
+          gpg->exit_status = 4;
+          gpg->exit_signal = WTERMSIG (status);
+        }
+      else if ( WIFEXITED (status) )
+        {
+          gpg->exit_status = WEXITSTATUS (status);
+        }
+      else /* oops */
+        {
+          rc = -1;
+        }
+    }
+
+  if ( !no_hang && gpg->running )
+    {
+      /* gpg may have stopped meanwhile, therefore we can't relay on the
+       * running flag hang in select. So we simply use a timeout to
+       * workaround this race and check again later
+       * FIXME: Use SIGCHLD */
+      timeout.tv_sec = 1;
+      timeout.tv_usec = 0;
+    }
+  
+
+  /* first have a look at the pipes */
+  FD_ZERO (&readfds);
+  FD_SET (gpg->private.output_fd, &readfds);
+  FD_SET (gpg->private.status_fd, &readfds);
+  nfds = MAX ( gpg->private.output_fd, gpg->private.status_fd ) + 1;
+  nfds = select ( nfds, &readfds, NULL, NULL, &timeout );
+  if ( nfds > 0 )
+    {
+      if ( FD_ISSET ( gpg->private.output_fd, &readfds ) )
+        gpg->output.avail = 1;
+      if ( FD_ISSET ( gpg->private.status_fd, &readfds ) )
+        gpg->status.avail = 1;
+    }
+  else if ( nfds && errno != EINTR )
+    { 
+      fprintf (stderr, "wait_gpg: select failed: %s\n", strerror (errno) );
+      rc = -1;
+    }
+  else if ( !nfds && !no_hang && gpg->running )
+    goto restart;
+
+
+  return rc;
+}
+
+static int
+channel_read ( GPG_OBJECT *gpg, GPG_CHANNEL channel,
+               void *buffer, size_t bufsize )
+{
+  int fd=-1, avail=0, nread;
+  int dummy = 1;
+  int *eofflag = &dummy;
+
+  switch ( channel )
+    {
+    case STATUS_CHANNEL:
+      fd = gpg->private.status_fd;
+      avail = gpg->status.avail;
+      eofflag = &gpg->status.eof;
+      break;
+    case OUTPUT_CHANNEL:
+      fd = gpg->private.output_fd;
+      avail = gpg->output.avail;
+      eofflag = &gpg->status.eof;
+      break;
+    }
+
+  if ( !avail || *eofflag )
+    return 0;
+
+  do 
+    nread = read ( fd, buffer, bufsize );
+  while ( nread == -1 && errno == EINTR );
+
+  if ( nread == -1 )
+    fprintf ( stderr, "gnupg_read on channel %d failed: %s\n",
+              channel, strerror ( errno ) );
+
+  if ( !nread )
+      *eofflag = 1;
+
+  return nread;
+}
+
+void
+gpapa_gnupg_close ( GPG_OBJECT *gpg )
+{
+  if ( !gpg )
+    return;
+
+  if ( gpg->running )
+    {  /* still running? Must send a killer */
+      kill ( gpg->private.pid, SIGTERM);
+      sleep (2);
+      if ( !waitpid (gpg->private.pid, NULL, WNOHANG) )
+        {  /* pay the murderer better and then forget about it */
+          kill (gpg->private.pid, SIGKILL);
+        }
+    }
+
+  close ( gpg->private.output_fd );
+  close ( gpg->private.status_fd );
+
+  free (gpg);
+}
+
+
+#endif /*__MINGW32__*/
+
+
+GPG_OBJECT *
+gpapa_gnupg_create ( int foo )
+{
+  return NULL;
+}
+
+
+
+/*
+ * Handle the status output of GnuPG.  This function does read entire lines
+ * and passes them as C strings to the callback function (we can use C Strings
+ * because the status output is always UTF-8 encoded).  Of course we have to
+ * buffer the lines to cope with long lines e.g. with a large user ID.
+ * Note: We can optimize this to only cope with status line code we know about
+ * and skipp all other stuff without buffering (i.e. without extending the
+ * buffer).
+ */
+static void
+handle_status ( GPG_OBJECT *gpg,
+                GpapaLineCallbackFunc line_cb, void *line_opaque,
+                GpapaCallbackFunc callback,  gpointer calldata)
+{
+  char *p;
+  int nread;
+  size_t bufsize = gpg->status.bufsize; 
+  char *buffer = gpg->status.buffer;
+  size_t readpos = gpg->status.readpos; 
+
+  if ( !gpg->status.avail )
+      return;
+
+  /* Hmmm: should we handle EOFs or error here? */
+  if ( !buffer )
+    {
+      bufsize = 1024;
+      buffer = xmalloc ( bufsize );
+      readpos = 0;
+    }
+  else if ( bufsize - readpos < 256 ) /* make more room for the read */
+    {
+      bufsize += 1024;
+      buffer = xrealloc ( buffer, bufsize );
+    }
+
+  nread = channel_read ( gpg, STATUS_CHANNEL,
+                         buffer+readpos, bufsize - readpos );
+  while ( nread > 0 )
+    {
+      /* we require that the last line is terminated by a LF */
+      for ( p=buffer+readpos; nread; nread--, p++ )
+        {
+        if ( *p == '\n' )
+          {
+            *p = 0;
+            fprintf (stderr, "gpg status: `%s'\n", buffer);
+            if ( !strncmp ( buffer, "[GNUPG:] ", 9 ) )
+              {
+                char *line = buffer + 9;
+                /* Note that the callback is allowed to modify the line */
+                line_cb ( line, line_opaque, 1 );
+                /* Do some status check of our own here */
+                status_check (line, callback, calldata, "NODATA",
+                              "no data found");
+                status_check (line, callback, calldata,
+                              "BADARMOR",
+                              "ASCII armor is corrupted");
+                status_check (line, callback, calldata,
+                              "MISSING_PASSPHRASE", "missing passphrase");
+                status_check (line, callback, calldata,
+                              "BAD_PASSPHRASE", "bad passphrase");
+                status_check (line, callback, calldata,
+                              "DECRYPTION_FAILED", "decryption failed");
+                status_check (line, callback, calldata,
+                              "NO_PUBKEY", "public key not available");
+                status_check (line, callback, calldata,
+                              "NO_SECKEY", "secret key not available");
+              }
+            /* to reuse the buffer for the next line we have to shift
+             * the remaining data to the buffer start and restart the loop
+             * Hmmm: We can optimize this function by lookink forward in
+             * the buffer to see whether a second complete line is available
+             * and in this case avoid the memmove for this line. */
+            nread--; p++;
+            if ( nread )
+              memmove ( buffer, p, nread );
+            readpos = 0;
+            break; /* the inner loop */
+          }
+        }
+    } 
+  /* update the gpg object */
+  gpg->status.bufsize = bufsize;
+  gpg->status.buffer = buffer;
+  gpg->status.readpos = readpos;
+  gpg->status.avail = 0;  /* make sure that a wait_gnupg must be called */
+}
+
+/*
+ * nearly the same as handle_status. this one is used for gpg's keylinsting
+ * and other line oriented output.
+ */
+
+static void
+handle_output_line ( GPG_OBJECT *gpg,
+                     GpapaLineCallbackFunc line_cb, void *line_opaque )
+{
+  char *p;
+  int nread;
+  size_t bufsize = gpg->output.bufsize; 
+  char *buffer = gpg->output.buffer;
+  size_t readpos = gpg->output.readpos; 
+
+  if ( !gpg->output.avail )
+      return;
+
+  /* Hmmm: should we handle EOFs or error here? */
+  if ( !buffer )
+    {
+      bufsize = 1024;
+      buffer = xmalloc ( bufsize );
+      readpos = 0;
+    }
+  else if ( bufsize - readpos < 256 ) /* make more room for the read */
+    {
+      bufsize += 1024;
+      buffer = xrealloc ( buffer, bufsize );
+    }
+
+  nread = channel_read ( gpg, OUTPUT_CHANNEL,
+                         buffer+readpos, bufsize - readpos );
+  while ( nread > 0 )
+    {
+      /* we require that the last line is terminated by a LF */
+      for ( p=buffer+readpos; nread; nread--, p++ )
+        {
+        if ( *p == '\n' )
+          {
+            *p = 0;
+            fprintf (stderr, "gpg output: `%s'\n", buffer);
+            line_cb ( buffer, line_opaque, 0 );
+            /* to reuse the buffer for the next line we have to shift
+             * the remaining data to the buffer start and restart the loop */
+            nread--; p++;
+            if ( nread )
+              memmove ( buffer, p, nread );
+            readpos = 0;
+            break; /* the inner loop */
+          }
+        }
+    } 
+  /* update the gpg object */
+  gpg->output.bufsize = bufsize;
+  gpg->output.buffer = buffer;
+  gpg->output.readpos = readpos;
+  gpg->output.avail = 0;
+}
+
+
+
+
+/* user_args must be a NULL-terminated array of argument strings.  */
+void
+gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
+		  char * passphrase, GpapaLineCallbackFunc line_cb,
+		  gpointer line_opaque, GpapaCallbackFunc callback,
+		  gpointer calldata)
+{
+  GPG_OBJECT *gpg;
+  
+  if ( !line_cb )
+    line_cb = dummy_linecallback;
+
+  gpg = spawn_gnupg (user_args, commands, callback, calldata );
+  if ( !gpg ) {
+      callback (GPAPA_ACTION_ERROR, "spawn_gnupg failed", calldata);
+      return;
+  }
+
+  /* we ignore do_wait and simply wait for now */
+  do 
+    {
+      if ( wait_gnupg ( gpg, 0 ) )
+        {
+          callback (GPAPA_ACTION_ERROR, "wait_gnupg failed", calldata );
+          gpapa_gnupg_close ( gpg );
+          return;
+        }
+
+      handle_status ( gpg, line_cb, line_opaque, callback, calldata );
+      handle_output_line ( gpg, line_cb, line_opaque );
+    }
+  while ( gpg->running );
+    
+  if ( gpg->exit_status )
+    {
+      char msg[80];
+      
+      if ( gpg->exit_signal )
+        sprintf (msg, "gpg execution terminated by uncaught signal %d",
+                 gpg->exit_signal );
+      else
+        sprintf (msg, "gpg execution terminated with error code %d",
+                 gpg->exit_status );
+      callback (GPAPA_ACTION_ABORTED, msg, calldata);
+    }
+  else
+    callback (GPAPA_ACTION_FINISHED, "GnuPG execution terminated normally",
+              calldata);
+    
+}
+
+

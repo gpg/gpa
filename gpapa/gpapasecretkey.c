@@ -59,7 +59,7 @@ gpapa_secret_key_export (GpapaSecretKey * key, gchar * targetFileID,
       gpgargv[i] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, NULL,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
       free (full_keyID);
     }
 }				/* gpapa_secret_key_export */
@@ -82,7 +82,7 @@ gpapa_secret_key_delete (GpapaSecretKey * key, GpapaCallbackFunc callback,
       gpgargv[2] = NULL;
       gpapa_call_gnupg
 	(gpgargv, TRUE, NULL, NULL,
-	 gpapa_linecallback_dummy, NULL, callback, calldata);
+	 NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_secret_keyring (callback, calldata);
     }
