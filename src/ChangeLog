@@ -1,5 +1,19 @@
 2001-02-01  Bernhard Herzog  <bh@intevation.de>
 
+	* gtktools.c (GPAMessageBox):
+	(message_box_clicked):
+	(message_box_destroy):
+	(message_box_delete):
+	(gpa_message_box_run): Connect to destroy instead of delete-event
+	and quit the main loop there. Also introduce the struct
+	GPAMessageBox to pass data to the various signal handlers and
+	results back to the message box function.
+
+	* keyring.c (keyring_editor_delete): Check whether the return
+	value from the message box is NULL, too, when checking for
+	"cancel". (it may be null if the user exited the message box
+	through the window manager)
+
 	* keyeditdlg.c (key_edit_change_trust): 
 	* ownertrustdlg.h (gpa_ownertrust_run_dialog): 
 	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Remove the tip
