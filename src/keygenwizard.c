@@ -331,16 +331,25 @@ gpa_keygen_wizard_password_validate (gpointer data)
   else if (strlen (gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 10
            || qdchkpwd ((char*)gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 0.6)
     {
-      const gchar * buttons[] = {_("_Enter new passphrase"), _("Take this one _anyway"),
-                                 NULL};
-      gchar * dlg_result;
-      dlg_result = gpa_message_box_run (keygen_wizard->window, _("Weak passphrase"),
-                                        _("Warning: You have entered a passphrase\n"
-                                          "that is obviously not secure.\n\n"
-                                          "Please enter a new passphrase."),
-                                        buttons);
-      if (dlg_result && strcmp (dlg_result, _("_Enter new passphrase")) == 0)
-        result = FALSE;
+      GtkWidget *dialog;
+      
+      dialog = gtk_message_dialog_new (GTK_WINDOW (keygen_wizard->window),
+                                       GTK_DIALOG_MODAL,
+                                       GTK_MESSAGE_WARNING,
+                                       GTK_BUTTONS_NONE,
+                                       _("Warning: You have entered a "
+                                         "passphrase\n"
+                                         "that is obviously not secure.\n\n"
+                                         "Please enter a new passphrase."));
+      gtk_dialog_add_buttons (GTK_DIALOG (dialog), 
+                              _("_Enter new passphrase"), GTK_RESPONSE_CANCEL,
+                              _("Take this one _anyway"), GTK_RESPONSE_OK,
+                              NULL);
+      if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
+        {
+          result = FALSE;
+        }
+      gtk_widget_destroy (dialog);
     }
 
   return result;

@@ -1,5 +1,12 @@
 2002-12-12  Miguel Coca  <mcoca@gnu.org>
 
+	* expirydlg.c (expiry_ok): Replace the gpa_message_box_run.
+	* keylist.c (keylist_fill_list): Likewise.
+	* keygenwizard.c (gpa_keygen_wizard_password_validate): Likewise.
+
+	* gtktools.h, gtktools.c (message_box_destroy, message_box_clicked) 
+	(gpa_message_box_run, gpa_window_passphrase): Removed obsolete.
+
 	* Makefile.am (gpa_SOURCES): Remove icons.xpm
 	(INCLUDES): Add pixmap directory.
 

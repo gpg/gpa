@@ -305,15 +305,11 @@ keylist_fill_list (GPAKeyList *keylist)
       fpr = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
       if( !gpa_keytable_lookup (keytable, fpr) )
         {
-          const gchar * buttons[] = {_("_OK"),
-                                     NULL};
-          gpa_message_box_run (keylist->window, _("Missing public key"),
-                               _("You have a secret key without the\n"
-                                 "corresponding public key in your\n"
-                                 "key ring. In order to use this key\n"
-                                 "you will need to import the public\n"
-                                 "key, too."),
-                               buttons);
+          gpa_window_error (_("You have a secret key without the\n"
+                              "corresponding public key in your\n"
+                              "key ring. In order to use this key\n"
+                              "you will need to import the public\n"
+                              "key, too."), keylist->window);
         }
       gpgme_key_release (key);
     }
