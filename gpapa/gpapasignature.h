@@ -33,26 +33,23 @@ typedef struct
 }
 GpapaSignature;
 
-extern GpapaSignature *gpapa_signature_new (gchar * keyID,
+extern GpapaSignature *gpapa_signature_new (gchar *keyID,
 					    GpapaCallbackFunc callback,
 					    gpointer calldata);
 
-extern gchar *gpapa_signature_get_identifier (GpapaSignature * signature,
+extern gchar *gpapa_signature_get_identifier (GpapaSignature *signature,
 					      GpapaCallbackFunc callback,
 					      gpointer calldata);
 
-extern gchar *gpapa_signature_get_name (GpapaSignature * signature,
+extern gchar *gpapa_signature_get_name (GpapaSignature *signature,
 					GpapaCallbackFunc callback,
 					gpointer calldata);
 
-extern GpapaSigValidity gpapa_signature_get_validity (GpapaSignature *
-						      signature,
+extern GpapaSigValidity gpapa_signature_get_validity (GpapaSignature *signature,
 						      GpapaCallbackFunc
 						      callback,
 						      gpointer calldata);
 
-extern void gpapa_signature_release (GpapaSignature * signature,
-				     GpapaCallbackFunc callback,
-				     gpointer calldata);
+extern void gpapa_signature_release (GpapaSignature *signature);
 
 #endif /* __GPAPASIGNATURE_H__ */

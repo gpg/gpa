@@ -425,6 +425,17 @@ linecallback_refresh_sec (char *line, gpointer data, GpgStatusCode status)
 	(GpapaSecretKey *) xmalloc (sizeof (GpapaSecretKey));
       memset (key, 0, sizeof (GpapaSecretKey));
       key->key = extract_key (line, d->callback, d->calldata);
+      if (key->key && key->key->KeyID)
+        {
+          GpapaPublicKey *pubkey
+            = gpapa_get_public_key_by_ID (key->key->KeyID,
+                                          d->callback, d->calldata);
+          if (pubkey)
+            {
+              gpapa_key_release (key->key);
+              key->key = pubkey->key;
+            }
+        }
       SecRing = g_list_append (SecRing, key);
     }
 }

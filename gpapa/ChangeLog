@@ -1,3 +1,23 @@
+Wed 13 Feb 2001 26:14 Peter Gerwinski <peter@gerwinski.de>
+
+        * gpapa.c (linecallback_refresh_sec): merge the GpapaKey subobjects
+          of public and secret keys.
+
+        * gpapakey.c (gpapa_key_set_expiry_date): note the new expiration
+          date in the key object.
+
+        * gpapapublickey.c (gpapa_public_key_set_ownertrust): note the new
+          ownertrust in the key object.
+          (gpapa_public_key_sign): answer "YES" two times - for all user IDs
+          and for signing; enforce reloading of the key's signatures.
+          (gpapa_public_key_release_sigs): new function.
+          (gpapa_public_key_release): use gpapa_public_key_release_sigs().
+
+        * gpapasecretkey.c (gpapa_secret_key_delete): refresh the public key
+          ring first, so the GpapaKey subobjects can be merged.
+          (gpapa_secret_key_release): do _not_ gpapa_key_release (key->key)
+          because key->key is owned by the public key object now.
+
 Wed 13 Feb 2001 23:24 Peter Gerwinski <peter@gerwinski.de>
 
         * gpapapublickey.c (gpapa_public_key_delete): pass "YES" as a command.

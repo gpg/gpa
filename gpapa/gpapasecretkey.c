@@ -88,8 +88,8 @@ gpapa_secret_key_delete (GpapaSecretKey *key, GpapaCallbackFunc callback,
       gpapa_call_gnupg (gpgargv, TRUE, "YES\n", NULL,
 	                NULL, NULL, callback, calldata);
       free (full_keyID);
-      gpapa_refresh_secret_keyring (callback, calldata);
       gpapa_refresh_public_keyring (callback, calldata);
+      gpapa_refresh_secret_keyring (callback, calldata);
     }
 }
 
@@ -115,7 +115,9 @@ gpapa_secret_key_release (GpapaSecretKey *key)
 {
   if (key != NULL)
     {
-      gpapa_key_release (key->key);
+      /* We do _not_ gpapa_key_release (key->key)
+       * since key->key is owned by the public key object.
+       */
       free (key);
     }
 }

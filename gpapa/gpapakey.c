@@ -75,19 +75,26 @@ gpapa_key_set_expiry_date (GpapaKey *key, GDate *date, char *passphrase,
       char *commands_sprintf_str;
       if (date)
 	{
-	  commands_sprintf_str = "expire \n%04u-%02u-%02u \nsave \n";
+	  commands_sprintf_str = "expire\n%04u-%02u-%02u\nsave\n";
 	  commands = g_strdup_printf (commands_sprintf_str,
                                       date->year, date->month, date->day);
 	}
       else
-        commands = "expire \n0 \nsave \n";
+        commands = "expire\n0\nsave\n";
       gpgargv[0] = "--edit-key";
       gpgargv[1] = key->KeyID;
       gpgargv[2] = NULL; 
       gpapa_call_gnupg (gpgargv, TRUE, commands, passphrase,
                         NULL, NULL, callback, calldata); 
+      if (key->ExpirationDate)
+        g_date_free (key->ExpirationDate);
       if (date)
-        g_free (commands);
+        {
+          g_free (commands);
+          key->ExpirationDate = g_date_new_dmy (date->day, date->month, date->year);
+        }
+      else
+        key->ExpirationDate = NULL;
     }
 }
 

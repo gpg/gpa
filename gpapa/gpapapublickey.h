@@ -108,6 +108,8 @@ extern void gpapa_public_key_sign (GpapaPublicKey *key, char *keyID,
                                    GpapaCallbackFunc callback,
                                    gpointer calldata);
 
+extern void gpapa_public_key_release_sigs (GpapaPublicKey *key);
+
 extern void gpapa_public_key_release (GpapaPublicKey *key);
 
 #endif /* __GPAPAPUBLICKEY_H__ */
