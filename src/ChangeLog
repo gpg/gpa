@@ -2,6 +2,9 @@
 
 	* keyring.c (keyring_editor_new): Make the scrollbars of the
 	keylist appear automatically.
+	(keyring_editor_new): Put the keylist and the details notebook
+	into a paned window so that users can allocate the vertical space
+	for the widgets. Clean up the code a bit, too.
 
 	* Makefile.am (gpa_SOURCES):
 	* siglist.h: 
