@@ -32,36 +32,44 @@
 static void
 options_keyserver_set (gpointer param)
 {
-/* var */
   gpointer *localParam;
   GtkWidget *comboServer;
   GpaWindowKeeper *keeperServer;
   gpointer paramDone[2];
-/* commands */
+  GtkWidget *entry;
+
   localParam = (gpointer *) param;
   comboServer = (GtkWidget *) localParam[0];
   keeperServer = (GpaWindowKeeper *) localParam[1];
-/*!!!
-  global_keyserver = gtk_entry_get_text (
-    GTK_ENTRY ( GTK_COMBO ( comboServer ) -> entry )
-  );
-!!!*/
+
+  entry = GTK_COMBO (comboServer)->entry;
+  /* FIXME: In this form, setting the default server is a memory leak */
+  global_keyserver = xstrdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+
   paramDone[0] = keeperServer;
   paramDone[1] = NULL;
   gpa_window_destroy (paramDone);
-}				/* options_keyserver_set */
+} /* options_keyserver_set */
+
+
+static void
+options_keyserver_destroy (GtkWidget * widget, gpointer param)
+{
+  gtk_main_quit ();
+}
+
 
 static void
 options_keyserver (gpointer param)
 {
-/* var */
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
   GList *contentsServer = NULL;
   gpointer *paramClose;
   gpointer *paramSet;
   GtkWidget * main_window = param;
-/* objects */
+  int i;
+
   GtkWidget *windowServer;
   GtkWidget *vboxServer;
   GtkWidget *hboxServer;
@@ -70,13 +78,16 @@ options_keyserver (gpointer param)
   GtkWidget *hButtonBoxServer;
   GtkWidget *buttonCancel;
   GtkWidget *buttonSet;
-/* commands */
+
   keeper = gpa_windowKeeper_new ();
   windowServer = gtk_window_new (GTK_WINDOW_DIALOG);
   gpa_windowKeeper_set_window (keeper, windowServer);
   gtk_window_set_title (GTK_WINDOW (windowServer), _("Set key server"));
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowServer), accelGroup);
+  gtk_signal_connect (GTK_OBJECT (windowServer), "destroy",
+		      GTK_SIGNAL_FUNC (options_keyserver_destroy), NULL);
+
   vboxServer = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxServer), 5);
   hboxServer = gtk_hbox_new (FALSE, 0);
@@ -89,13 +100,11 @@ options_keyserver (gpointer param)
 			      _("_Key server: "));
   gtk_combo_set_value_in_list (GTK_COMBO (comboServer), FALSE, FALSE);
 
-  {  int i;
-
-     for (i=0; gpa_options.keyserver_names[i]; i++ ) {
-	contentsServer = g_list_append (contentsServer,
-					gpa_options.keyserver_names[i]);
+  for (i=0; gpa_options.keyserver_names[i]; i++ )
+    {
+      contentsServer = g_list_append (contentsServer,
+				      gpa_options.keyserver_names[i]);
     }
-  }
 
   gtk_combo_set_popdown_strings (GTK_COMBO (comboServer), contentsServer);
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboServer)->entry),
@@ -125,7 +134,10 @@ options_keyserver (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxServer), hButtonBoxServer, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowServer), vboxServer);
+
+  gtk_window_set_modal (GTK_WINDOW (windowServer), TRUE);
   gpa_window_show_centered (windowServer, main_window);
+  gtk_main ();
 } /* options_keyserver */
 
 static void
