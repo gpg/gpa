@@ -92,7 +92,10 @@ typedef struct _GPAKeyringEditor GPAKeyringEditor;
 
 /*
  *	Internal API
- */ 
+ */
+
+static gboolean key_has_been_signed (GpapaPublicKey * key, gchar * key_id,
+				     GtkWidget * window);
 
 static gboolean keyring_editor_has_selection (gpointer param);
 static gboolean keyring_editor_has_single_selection (gpointer param);
@@ -241,6 +244,32 @@ keyring_editor_delete (gpointer param)
 } /* keyring_editor_delete */
 
 
+/* Return true, if the public key key has been signed by the key with
+ * the id key_id, otherwise return FALSE. The window parameter is needed
+ * for error reporting */
+static gboolean
+key_has_been_signed (GpapaPublicKey * key, gchar * key_id, GtkWidget * window)
+{
+  gboolean result = FALSE;
+  GList * signatures;
+
+  signatures = gpapa_public_key_get_signatures (key, gpa_callback, window);
+  while (signatures)
+    {
+      GpapaSignature *sig = signatures->data;
+      gchar * sig_id = gpapa_signature_get_identifier (sig, gpa_callback,
+						       window);
+      if (strcmp (sig_id, key_id) == 0)
+	{
+	  result = TRUE;
+	  break;
+	}
+      signatures = g_list_next (signatures);
+    }
+
+  return result;
+}
+
 /* Return true if the key sign button should be sensitive, i.e. if
  * there's at least one selected key and there is a default key.
  */
@@ -251,7 +280,6 @@ keyring_editor_can_sign (gpointer param)
   GpapaPublicKey * key;
   gchar * key_id;
   gchar * default_key_id = gpa_default_key ();
-  GList * signatures;
   gboolean result = FALSE;
 
   if (keyring_editor_has_selection (param) && default_key_id)
@@ -264,22 +292,8 @@ keyring_editor_can_sign (gpointer param)
 
       if (key)
 	{
-	  result = TRUE;
-	  signatures = gpapa_public_key_get_signatures (key, gpa_callback,
-							editor->window);
-	  while (signatures)
-	    {
-	      GpapaSignature *sig = signatures->data;
-	      gchar * sig_id = gpapa_signature_get_identifier (sig,
-							       gpa_callback,
-							       editor->window);
-	      if (strcmp (sig_id, default_key_id) == 0)
-		{
-		  result = FALSE;
-		  break;
-		}
-	      signatures = g_list_next (signatures);
-	    }
+	  result = !key_has_been_signed (key, default_key_id,
+					 editor->window);
 	}
     }
   return result;
@@ -325,12 +339,15 @@ keyring_editor_sign (gpointer param)
       key_id = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
 				   
       key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
-      if (gpa_key_sign_run_dialog (editor->window, key, &sign_type,
-				   &passphrase))
+      if (!key_has_been_signed (key, private_key_id, editor->window))
 	{
-	  gpapa_public_key_sign (key, private_key_id, passphrase, sign_type,
-				 gpa_callback, editor->window);
-	  free (passphrase);
+	  if (gpa_key_sign_run_dialog (editor->window, key, &sign_type,
+				       &passphrase))
+	    {
+	      gpapa_public_key_sign (key, private_key_id, passphrase,
+				     sign_type, gpa_callback, editor->window);
+	      free (passphrase);
+	    }
 	}
       selection = g_list_next (selection);
     }
