@@ -30,6 +30,7 @@ gpa_SOURCES = gpa.c gpa.h \
 	      keyexportdlg.c keyexportdlg.h \
 	      keygendlg.c keygendlg.h \
 	      keygenwizard.c keygenwizard.h \
+	      keylist.c keylist.h \
 	      gpawizard.c gpawizard.h \
 	      gpapastrings.c gpapastrings.h\
 		  w32reg.c w32reg.h
