@@ -393,10 +393,17 @@ options_key_set (gpointer param)
   gpa_window_destroy (paramDone);
 }				/* options_key_set */
 
+
+static void
+options_key_destroy (GtkWidget * widget, gpointer param)
+{
+  gtk_main_quit ();
+}
+
+
 void
 options_key (gpointer param)
 {
-/* var */
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
   gchar *titlesKeys[] = { N_("User identity / role"), N_("Key ID") };
@@ -408,7 +415,7 @@ options_key (gpointer param)
   gpointer *paramSet;
   gpointer *paramClose;
   GtkWidget *parent = param;
-/* objects */
+
   GtkWidget *windowKey;
   GtkWidget *vboxKey;
   GtkWidget *vboxKeys;
@@ -419,7 +426,7 @@ options_key (gpointer param)
   GtkWidget *hButtonBoxKey;
   GtkWidget *buttonCancel;
   GtkWidget *buttonSet;
-/* commands */
+
   contentsKeyCount =
     gpapa_get_secret_key_count (gpa_callback, global_windowMain);
   if (!contentsKeyCount)
@@ -429,11 +436,15 @@ options_key (gpointer param)
       return;
     }
   keeper = gpa_windowKeeper_new ();
+
   windowKey = gtk_window_new (GTK_WINDOW_DIALOG);
   gpa_windowKeeper_set_window (keeper, windowKey);
   gtk_window_set_title (GTK_WINDOW (windowKey), _("Set default key"));
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowKey), accelGroup);
+  gtk_signal_connect (GTK_OBJECT (windowKey), "destroy",
+		      (GtkSignalFunc)options_key_destroy, NULL);
+
   vboxKey = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKey), 5);
   vboxKeys = gtk_vbox_new (FALSE, 0);
@@ -507,7 +518,10 @@ options_key (gpointer param)
   gtk_container_add (GTK_CONTAINER (hButtonBoxKey), buttonSet);
   gtk_box_pack_start (GTK_BOX (vboxKey), hButtonBoxKey, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowKey), vboxKey);
+
+  gtk_window_set_modal (GTK_WINDOW (windowKey), TRUE);
   gpa_window_show_centered (windowKey, parent);
+  gtk_main ();
 } /* options_key */
 
 
