@@ -1,5 +1,14 @@
 2001-02-15  Bernhard Herzog  <bh@intevation.de>
 
+	* helpmenu.c (help_license): Display the text of the GPL, not
+	just the title
+
+	* gpa_license.h:
+	* gpa_license.c: New file containing the GPL as a C string and the
+	corresponding header.
+
+	* Makefile.am (gpa_SOURCES): Add the new files
+
 	* icons.xpm:
 	* icons.c (xpms): Add the new logo
 

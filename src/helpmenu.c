@@ -30,7 +30,7 @@
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
 #include "icons.h"
-
+#include "gpa_license.h"
 
 static char *scroll_text[] =
 {
@@ -334,8 +334,8 @@ help_license (gpointer param)
   textGPL = gtk_text_new (NULL, NULL);
   gtk_text_set_editable (GTK_TEXT (textGPL), FALSE);
   gtk_text_insert (GTK_TEXT (textGPL), NULL, &textGPL->style->black, NULL,
-		   "GNU General public license", -1);
-  gtk_widget_set_usize (textGPL, 280, 400);
+		   gpa_license_text, -1);
+  gtk_widget_set_usize (textGPL, 500, 300);
   gpa_connect_by_accelerator (GTK_LABEL (labelGPL), textGPL, accelGroup,
 			      _("_GNU general public license"));
   gtk_box_pack_start (GTK_BOX (hboxGPL), textGPL, TRUE, TRUE, 0);
