@@ -1,5 +1,5 @@
 /* filemenu.h  -  The GNU Privacy Assistant
- *      Copyright (C) 2000 G-N-U GmbH.
+ *      Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -23,20 +23,13 @@
 extern GList *filesOpened;
 extern GList *filesSelected;
 
-extern void file_open (void);
-extern void file_showDetail (void);
-extern void file_sign (void);
-extern void file_encrypt (void);
 extern void file_encryptAs (void);
 extern void file_protect (void);
 extern void file_protectAs (void);
-extern void file_decrypt (void);
 extern void file_decryptAs (void);
-extern void file_close (void);
 extern void file_quit (void);
 
 extern void file_browse (gpointer param);
 extern void file_sign_dialog (GtkSignalFunc funcSign, GtkWidget * parent,
 			      gchar * tip, gboolean withRadio,
 			      gboolean withCheckerArmor, gpointer userData);
-extern void gpa_fileOpenSelect_init (char *title);
