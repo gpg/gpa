@@ -683,6 +683,8 @@ gpa_fileman_new ()
   gtk_object_set_data_full (GTK_OBJECT (window), "user_data", fileman,
 			    fileman_destroy);
   fileman->window = window;
+  /* Realize the window so that we can create pixmaps without warnings */
+  gtk_widget_realize (window);
 
   vbox = gtk_vbox_new (FALSE, 0);
   menubar = fileman_menu_new (window, fileman);

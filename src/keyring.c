@@ -1236,6 +1236,8 @@ keyring_editor_new (void)
   gtk_signal_connect_object (GTK_OBJECT (window), "map",
 			     GTK_SIGNAL_FUNC (keyring_editor_mapped),
 			     (gpointer)editor);
+  /* Realize the window so that we can create pixmaps without warnings */
+  gtk_widget_realize (window);
 
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
