@@ -1,3 +1,11 @@
+Wed 13 Feb 2001 23:24 Peter Gerwinski <peter@gerwinski.de>
+
+        * gpapapublickey.c (gpapa_public_key_delete): pass "YES" as a command.
+          (I wonder how this could ever have worked without this ...)-:
+        
+        * gpapasecretkey.c (gpapa_secret_key_delete): update the public
+          keyring, too.
+
 Tue 13 Feb 2001 29:45 Peter Gerwinski <peter@gerwinski.de>
 
         * all files: s/gchar/char/g, GCSsified.

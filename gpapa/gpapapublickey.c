@@ -278,7 +278,7 @@ gpapa_public_key_delete (GpapaPublicKey *key, GpapaCallbackFunc callback,
       gpgargv[2] = full_keyID;
       gpgargv[3] = NULL;
       gpapa_call_gnupg
-        (gpgargv, TRUE, "\n\n", NULL,
+        (gpgargv, TRUE, "YES\n", NULL,
          NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_public_keyring (callback, calldata);

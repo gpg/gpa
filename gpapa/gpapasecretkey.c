@@ -89,6 +89,7 @@ gpapa_secret_key_delete (GpapaSecretKey *key, GpapaCallbackFunc callback,
 	                NULL, NULL, callback, calldata);
       free (full_keyID);
       gpapa_refresh_secret_keyring (callback, calldata);
+      gpapa_refresh_public_keyring (callback, calldata);
     }
 }
 
