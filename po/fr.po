@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2001-02-27 13:59+0100\n"
+"POT-Creation-Date: 2001-02-27 14:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <pplf@geocities.com>\n"
 "Language-Team: FRENCH <fr@li.org>\n"
@@ -114,7 +114,7 @@ msgstr "Etat:"
 msgid "_Signatures"
 msgstr "_Signatures"
 
-#: src/fileman.c:368 src/filemenu.c:660 src/gpawizard.c:106 src/helpmenu.c:355
+#: src/fileman.c:368 src/filemenu.c:660 src/gpawizard.c:106 src/helpmenu.c:358
 #: src/keyeditdlg.c:157 src/keysmenu.c:1114
 msgid "_Close"
 msgstr "_Fermer"
@@ -172,7 +172,7 @@ msgstr "/_Fenêtres"
 
 #: src/fileman.c:541 src/keyring.c:703
 msgid "/Windows/_Filemanager"
-msgstr "/Fenêtre/_Gestionnaire de fichier"
+msgstr "/Fenêtres/_Gestionnaire de fichier"
 
 #: src/fileman.c:542 src/keyring.c:704
 msgid "/Windows/_Keyring Editor"
@@ -690,53 +690,53 @@ msgstr "Insérer mot de passe"
 msgid "_Password: "
 msgstr "_Mot de passe"
 
-#: src/helpmenu.c:178
+#: src/helpmenu.c:181
 msgid "About GPA"
 msgstr "A propos de GPA"
 
-#: src/helpmenu.c:209
+#: src/helpmenu.c:212
 msgid "brought to you by"
 msgstr "vous est fournir par"
 
-#: src/helpmenu.c:243
+#: src/helpmenu.c:246
 msgid "See http://www.gnupg.org for news"
 msgstr "Voir http://www.gnupg.org pour des nouvelles"
 
-#: src/helpmenu.c:320
+#: src/helpmenu.c:323
 msgid "GNU general public license"
 msgstr "GNU general public license"
 
-#: src/helpmenu.c:340
+#: src/helpmenu.c:343
 msgid "_GNU general public license"
 msgstr "_GNU general public license"
 
-#: src/helpmenu.c:369
+#: src/helpmenu.c:372
 msgid "Show Warranty Information\n"
 msgstr "Montrer les informations sur la garantie\n"
 
-#: src/helpmenu.c:375
+#: src/helpmenu.c:378
 msgid "Show Help Text\n"
 msgstr "Montrer le texte d'aide\n"
 
-#: src/helpmenu.c:383
+#: src/helpmenu.c:386
 msgid "/_Help"
 msgstr "/_Aide"
 
-#: src/helpmenu.c:384
+#: src/helpmenu.c:387
 msgid "/Help/_About"
 msgstr "/Aide/_A propos"
 
-#: src/helpmenu.c:385
+#: src/helpmenu.c:388
 msgid "/Help/_License"
 msgstr "/Aide/_Licence"
 
-#: src/helpmenu.c:386
+#: src/helpmenu.c:389
 msgid "/Help/_Warranty"
 msgstr "/Aide/_Garantie"
 
-#: src/helpmenu.c:387
+#: src/helpmenu.c:390
 msgid "/Help/_Help"
-msgstr "Aide/_Aide"
+msgstr "/Aide/_Aide"
 
 #: src/keydeletedlg.c:95
 msgid "Remove Key"
@@ -1468,7 +1468,7 @@ msgstr "/Préférences/_Serveur de clefs"
 
 #: src/optionsmenu.c:560
 msgid "/Options/Default _Recipients"
-msgstr "Préférences/Destinataires _par défaut"
+msgstr "/Préférences/Destinataires _par défaut"
 
 #: src/optionsmenu.c:561
 msgid "/Options/_Default Key"
