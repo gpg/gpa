@@ -107,20 +107,10 @@ GPAKeyGenAlgo gpa_algorithm_from_string (const gchar * string);
 /* This is the function called by GPGME when it wants a passphrase */
 const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd);
 
-/*
- * Edit functions. These are wrappers around the experimental gpgme key edit
- * interface.
- */
 
-/* Change the ownertrust of a key */
-GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust);
+/* Convenience functions to access key attributes, which need to be filtered
+ * before being displayed to the user. */
 
-/* Change the expiry date of a key */
-GpgmeError gpa_gpgme_edit_expiry (GpgmeKey key, GDate *date);
-
-/* Sign this key with the given private key. If local is true, make a local
- * signature. */
-GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, gchar *private_key_fpr,
-                                gboolean local);
+gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx);
 
 #endif

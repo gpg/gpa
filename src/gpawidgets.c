@@ -45,6 +45,7 @@ gpa_key_info_new (GpgmeKey key, GtkWidget * window)
 {
   GtkWidget * table;
   GtkWidget * label;
+  gchar *string;
 
   table = gtk_table_new (2, 2, FALSE);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
@@ -55,8 +56,9 @@ gpa_key_info_new (GpgmeKey key, GtkWidget * window)
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
-  label = gtk_label_new (gpgme_key_get_string_attr (key, GPGME_ATTR_USERID,
-                                                    NULL, 0));
+  string = gpa_gpgme_key_get_userid (key, 0);
+  label = gtk_label_new (string);
+  g_free (string);
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);

@@ -126,7 +126,7 @@ GtkWidget *
 gpa_tableKey_new (GpgmeKey key, GtkWidget * window)
 {
 /* var */
-  const gchar *contentsKeyname;
+  gchar *contentsKeyname;
 /* objects */
   GtkWidget *tableKey;
   GtkWidget *labelJfdKeyID;
@@ -154,8 +154,7 @@ gpa_tableKey_new (GpgmeKey key, GtkWidget * window)
   gtk_table_attach (GTK_TABLE (tableKey), labelJfdKeyname, 0, 1, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryKeyname = gtk_entry_new ();
-  contentsKeyname = gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, 
-                                               NULL, 0);
+  contentsKeyname = gpa_gpgme_key_get_userid (key, 0);
   gtk_widget_ensure_style (entryKeyname);
   gtk_widget_set_usize (entryKeyname,
     gdk_string_width (gtk_style_get_font (entryKeyname->style),
@@ -163,6 +162,7 @@ gpa_tableKey_new (GpgmeKey key, GtkWidget * window)
     + gdk_string_width (gtk_style_get_font (entryKeyname->style), "  ")
     + my_gtk_style_get_xthickness (entryKeyname->style), 0);
   gtk_entry_set_text (GTK_ENTRY (entryKeyname), contentsKeyname);
+  g_free (contentsKeyname);
   gtk_editable_set_editable (GTK_EDITABLE (entryKeyname), FALSE);
   gtk_table_attach (GTK_TABLE (tableKey), entryKeyname, 1, 2, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);

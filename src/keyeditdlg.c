@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 #include "gpapastrings.h"
 #include "gtktools.h"
+#include "gpgmeedit.h"
 #include "siglist.h"
 #include "ownertrustdlg.h"
 #include "expirydlg.h"
@@ -65,6 +66,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   GpgmeKey key;
   GpgmeValidity trust;
   gchar *date_string;
+  gchar *string;
 
   GPAKeyEditDialog dialog;
 
@@ -93,9 +95,9 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gchar * fpr)
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
   
-  add_details_row (table, 0, _("User Name:"),
-                   (gchar*) gpgme_key_get_string_attr 
-                   (key, GPGME_ATTR_USERID, NULL, 0), FALSE);
+  string = gpa_gpgme_key_get_userid (key, 0);
+  add_details_row (table, 0, _("User Name:"), string, FALSE);
+  g_free (string); 
   add_details_row (table, 1, _("Key ID:"),
                    (gchar*) gpgme_key_get_string_attr 
                    (key, GPGME_ATTR_KEYID, NULL, 0), FALSE);
@@ -251,6 +253,7 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
         }
       else if (err == GPGME_No_Passphrase)
         {
+	  gpa_window_error (_("Wrong passphrase!"), dialog->window);
           if (new_date)
             g_date_free (new_date);
           dialog->key_has_changed = FALSE;

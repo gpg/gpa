@@ -436,9 +436,10 @@ add_key (const gchar *id, GpgmeKey key, GtkWidget *clistKeys)
   const gchar *contentsKeys[2];
 
   contentsKeys[0] = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
-  contentsKeys[1] = gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, 0);
+  contentsKeys[1] = gpa_gpgme_key_get_userid (key, 0);
 
   gtk_clist_prepend (GTK_CLIST (clistKeys), (gchar**) contentsKeys);
+  g_free (contentsKeys[1]);
 }
 
 static void

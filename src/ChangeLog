@@ -1,3 +1,27 @@
+2002-09-11  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpgmetools.c, gpgmetools.h, gpgmeedit.c, gpgmeedit.h: Moved the
+	wrappers around gpgme_op_edit and related functions to the new
+	files gpgmeedit.{c,h}
+
+	* gpgmetools.c, gpgmetools.h (gpa_gpgme_key_get_userid): New
+	function, returns the User ID's of a key, always in UTF-8.
+
+	* optionsmenu.c (add_key): Get the user ID's with
+	gpa_gpgme_key_get_userid, so that it is always in UTF-8.
+	* keysmenu.c (gpa_tableKey_new): Likewise.
+	* keysigndlg.c (gpa_key_sign_run_dialog): Likewise.
+	* keyring.c (keyring_details_page_fill_key) 
+	(keyring_update_status_bar): Likewise.
+	* keylist.c (get_name_value): Likewise.
+	* keyeditdlg.c (gpa_key_edit_dialog_run): Likewise.
+	* gpawidgets.c (gpa_key_info_new): Likewise.
+
+	* Makefile.am (gpa_SOURCES): Added gpgmeedit.{c,h} files.
+
+	* keyeditdlg.c (key_edit_change_expiry): Report an error if a wrong
+	passphrase was provided.
+
 2002-09-04  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keytable.c (keytable_fill): Display a dialog indicating that the

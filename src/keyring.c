@@ -47,6 +47,7 @@
 #include "siglist.h"
 #include "keyring.h"
 #include "gpgmetools.h"
+#include "gpgmeedit.h"
 #include "keytable.h"
 
 /*
@@ -986,8 +987,9 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
   GpgmeValidity owner_trust;
   gchar * text;
 
-  text = (gchar*) gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, 0);
+  text = gpa_gpgme_key_get_userid (key, 0);
   gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
+  g_free (text);
 
   text = (gchar*) gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, NULL, 0);
   gtk_label_set_text (GTK_LABEL (editor->detail_key_id), text);
@@ -1348,13 +1350,14 @@ keyring_update_status_bar (GPAKeyringEditor * editor)
 {
   gchar * fpr = gpa_default_key ();
   GpgmeKey key;
+  gchar *string;
 
   if (fpr
       && (key = gpa_keytable_lookup (keytable, fpr)))
     {
-      gtk_label_set_text (GTK_LABEL (editor->status_key_user),
-                          gpgme_key_get_string_attr (key, GPGME_ATTR_USERID,
-                                                     NULL, 0));
+      string =  gpa_gpgme_key_get_userid (key, 0);
+      gtk_label_set_text (GTK_LABEL (editor->status_key_user), string);
+      g_free (string);
       gtk_label_set_text (GTK_LABEL (editor->status_key_id),
                           gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID,
                                                      NULL, 0));
