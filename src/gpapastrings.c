@@ -114,7 +114,7 @@ gpa_time_unit_from_string (gchar * string)
 static gchar *algorithm_strings[4] = {
   N_("DSA and ElGamal"),
   N_("DSA (sign only)"),
-  N_("ElGamal (sign and encrypt"),
+  N_("ElGamal (sign and encrypt)"),
   N_("ElGamal (encrypt only)")
 };
 
