@@ -129,7 +129,7 @@ msgstr "/Fichier/_Ouvrir"
 
 #: src/fileman.c:523
 msgid "/File/S_how Detail"
-msgstr "/Fichiers/M_ontrer Détails"
+msgstr "/Fichier/M_ontrer Détails"
 
 #: src/fileman.c:524
 msgid "/File/sep1"
