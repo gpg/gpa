@@ -372,7 +372,7 @@ gpa_keygen_wizard_backup_page (GPAKeyGenWizard * keygen_wizard)
   vbox = gtk_vbox_new (FALSE, 0);
 
   description = gtk_label_new
-    (_("We recommend that you create backup copies of your new key,"
+    (_("It is recommended that you create a backup copy of your new key,"
        " once it has been generated.\n\n"
        "Do you want to create a backup copy?"));
   gtk_box_pack_start (GTK_BOX (vbox), description, TRUE, TRUE, 0);
@@ -701,8 +701,6 @@ page_switched (GtkWidget * page, gpointer data)
 {
   GPAKeyGenWizard * keygen_wizard = data;
   GdkPixmap * pixmap;
-
-  printf ("page_switched\n");
 
   if (page == keygen_wizard->backup_page
       || page == keygen_wizard->backup_dir_page)

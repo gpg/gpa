@@ -1,5 +1,10 @@
 2001-02-15  Bernhard Herzog  <bh@intevation.de>
 
+	* keygenwizard.c (page_switched): Remove a debug printf
+	(gpa_keygen_wizard_backup_page): Change the wording a little
+
+	* gpa_logo.ppm: Update to new logo
+
 	* gpawizard.c (GPAWizard):
 	(gpa_wizard_new): Add some fields for a callback that's called
 	whenever a page is switched. (This should really be implemented as

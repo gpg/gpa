@@ -173,6 +173,8 @@ gpa_wizard_notebook_destroy (GtkWidget * widget, gpointer param)
   wizard->page_switched_data = NULL;
 }
 
+
+/* Create a new GPA Wizard */
 GtkWidget *
 gpa_wizard_new (GtkAccelGroup * accel_group,
 		GtkSignalFunc close_func, gpointer close_data)
