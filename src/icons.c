@@ -41,7 +41,7 @@ struct {
   { "keyring",          keyring_xpm  },
   { "trash",          trash_xpm  },
   { "gpa_trust_fully",          gpa_trust_fully_xpm },
-  { "gpa_trust_marginal",        gpa_trust_marginally_xpm },
+  { "gpa_trust_marginally",        gpa_trust_marginally_xpm },
   { "gpa_dont_trust",        gpa_dont_trust_xpm },
   { "gpa_trust_unknown",        gpa_trust_unknown_xpm },
   { NULL, NULL }
