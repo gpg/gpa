@@ -85,11 +85,12 @@ key_sign_ok (gpointer param)
 
 
 gboolean
-gpa_key_sign_run_dialog (GtkWidget * parent, GpapaSignType * sign_type,
+gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
+			 GpapaSignType * sign_type,
 			 gchar ** key_id, gchar ** passphrase)
 {
   GtkAccelGroup *accelGroup;
-  GtkWidget *windowSign;
+  GtkWidget *window;
   GtkWidget *vboxSign;
   GtkWidget *vboxWho;
   GtkWidget *labelWho;
@@ -99,6 +100,8 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaSignType * sign_type,
   GtkWidget *buttonCancel;
   GtkWidget *buttonSign;
   GtkWidget *check;
+  GtkWidget *table;
+  GtkWidget *label;
 
   GPAKeySignDialog dialog;
 
@@ -114,19 +117,46 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaSignType * sign_type,
       return FALSE;
     } /* if */
 
-  windowSign = gtk_window_new (GTK_WINDOW_DIALOG);
-  dialog.window = windowSign;
-  gtk_window_set_title (GTK_WINDOW (windowSign), _("Sign Keys"));
-  gtk_signal_connect (GTK_OBJECT (windowSign), "delete_event",
+  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  dialog.window = window;
+  gtk_window_set_title (GTK_WINDOW (window), _("Sign Keys"));
+  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 		      GTK_SIGNAL_FUNC (key_sign_delete),
 		      (gpointer)&dialog);
 
   accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (windowSign), accelGroup);
+  gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
 
   vboxSign = gtk_vbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (windowSign), vboxSign);
+  gtk_container_add (GTK_CONTAINER (window), vboxSign);
   gtk_container_set_border_width (GTK_CONTAINER (vboxSign), 5);
+
+  label = gtk_label_new (_("Do you want to sign the following key?"));
+  gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 5);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
+  table = gtk_table_new (2, 2, FALSE);
+  gtk_box_pack_start (GTK_BOX (vboxSign), table, FALSE, TRUE, 0);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
+  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
+
+  label = gtk_label_new (_("User ID:"));
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+
+  label = gtk_label_new (gpapa_key_get_name (GPAPA_KEY (key), gpa_callback,
+					     parent));
+  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
+  label = gtk_label_new (_("Fingerprint:"));
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  
+  label = gtk_label_new (gpapa_public_key_get_fingerprint (key, gpa_callback,
+							   parent));
+  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
   vboxWho = gtk_vbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vboxSign), vboxWho, TRUE, FALSE, 0);
@@ -145,7 +175,6 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaSignType * sign_type,
   dialog.clist_keys = GTK_CLIST (clistWho);
   gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
 			      _("Sign _as "));
-
 
   check = gpa_check_button_new (accelGroup, _("Sign only _locally"));
   dialog.check_local = check;
@@ -169,13 +198,13 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaSignType * sign_type,
 			     GTK_SIGNAL_FUNC (key_sign_ok),
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonSign);
-  gpa_window_show_centered (windowSign, parent);
+  gpa_window_show_centered (window, parent);
   /* set tip to "key_sign.tip" */
 
-  gtk_grab_add (windowSign);
+  gtk_grab_add (window);
   gtk_main ();
-  gtk_grab_remove (windowSign);
-  gtk_widget_destroy (windowSign);
+  gtk_grab_remove (window);
+  gtk_widget_destroy (window);
 
   if (dialog.result && dialog.key_id && dialog.passphrase)
     {

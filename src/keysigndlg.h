@@ -1,5 +1,5 @@
 /* keysigndlg.h  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -23,7 +23,7 @@
 
 #include <gtk/gtk.h>
 
-gboolean gpa_key_sign_run_dialog (GtkWidget * parent,
+gboolean gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
 				  GpapaSignType * sign_type,
 				  gchar ** key_id, gchar ** passphrase);
 
