@@ -4,11 +4,24 @@ Some hints for compiling GPA for Windows:
 	(things are in flux. please ask on the
 	developer mailing list for details)
 
-- for Windows, GTK 1.3 is used requireing
+- once you have the cross-compiler set up:
+	./autogen.sh
+	./autogen.sh --build-w32
+	make
+	and if you want to make gpa.exe lean:
+	cd src
+	rm gpa
+	(compile gpa again with option -mwindows)
+	mingw32 strip gpa
+
+- for Windows, GTK 1.3 is used requirering
 	UTF-8 encoding of the .mo file.
 	The conversion to UTF-8 is not
-	automaized. Just do the following:
+	automized. Just do the following:
 
 	sed -e "s/iso-8859-1/utf-8/" de.po > de_utf8.po
+	sed -e "s/iso-8859-1/utf-8/" fr.po > fr_utf8.po
 	recode latin1..utf-8 de_utf8.po
-	msgfmt -o gpa.mo de_utf8.po
+	recode latin1..utf-8 fr_utf8.po
+	msgfmt -o de.mo de_utf8.po
+	msgfmt -o fr.mo fr_utf8.po
