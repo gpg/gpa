@@ -51,6 +51,7 @@ gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent)
 
   gtk_window_set_position (GTK_WINDOW(widget), GTK_WIN_POS_NONE);
   gtk_widget_set_uposition (widget, center_x, center_y);
+  gtk_window_set_transient_for(GTK_WINDOW(widget), GTK_WINDOW(parent));
   gtk_widget_show_all (widget);
 } /* gpa_window_show_centered */
 

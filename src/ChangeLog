@@ -1,5 +1,9 @@
 2001-02-02  Bernhard Herzog  <bh@intevation.de>
 
+	* gtktools.c (gpa_window_show_centered): Set the WM_TRANSIENT_FOR
+	window manager hint so that the window manager treats dialog
+	windows properly
+
 	* keyring.c (keyring_toolbar_new): Correct the tooltip for the
 	remove button
 
