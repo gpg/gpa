@@ -1,5 +1,5 @@
 /* gpa.h  -  main header
- *	Copyright (C) 2000 Free Software Foundation, Inc.
+ *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
-
+                   
 #ifndef GPA_H
 #define GPA_H
 
@@ -26,6 +26,9 @@
 #define _(a)	(a)
 #define N_(a)	(a)
 
-
+GtkWidget *gpa_button_new ( GtkAccelGroup *accelGroup, gchar *label );
+GtkWidget *gpa_buttonCancel_new (
+  GtkWidget *window, GtkAccelGroup *accelGroup, gchar *label
+);
 
 #endif /*GPA_H*/

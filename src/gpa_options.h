@@ -1,5 +1,5 @@
 /* gpa_options.h  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 Free Software Foundation, Inc.
+ *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -25,3 +25,6 @@ void options_homedir ( void );
 void options_load ( void );
 void options_save ( void );
 
+void gpa_homeDirSelect_init ( gchar *title );
+void gpa_loadOptionsSelect_init ( gchar *title );
+void gpa_saveOptionsSelect_init ( gchar *title );

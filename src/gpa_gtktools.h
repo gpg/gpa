@@ -1,5 +1,5 @@
 /* gpa_gtktools.h  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 Free Software Foundation, Inc.
+ *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *

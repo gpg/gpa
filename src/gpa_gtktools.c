@@ -1,5 +1,5 @@
 /* gpa_gtktools.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 Free Software Foundation, Inc.
+ *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -17,13 +17,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
-
+ 
 #include <config.h>
-
 #include <gtk/gtk.h>
 
+#include "gpa.h"
+
 GtkWidget *gpa_space_new () {
-  return gtk_label_new ( "" );
+  return gtk_label_new ( _( "" ) );
 } /* gpa_space_new */
 
 GtkWidget *gpa_widget_hjustified_new (

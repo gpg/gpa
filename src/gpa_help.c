@@ -1,5 +1,5 @@
 /* gpa_help.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 Free Software Foundation, Inc.
+ *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -20,19 +20,20 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "gpa.h"
 
 void help_version ( void ) {
-g_print ( "Show Version Information\n" ); /*!!!*/
+g_print ( _( "Show Version Information\n" ) ); /*!!!*/
 } /* help_version */
 
 void help_license ( void ) {
-g_print ( "Show GNU General Public License\n" ); /*!!!*/
+g_print ( _( "Show GNU General Public License\n" ) ); /*!!!*/
 } // help_license
 
 void help_warranty ( void ) {
-g_print ( "Show Warranty Information\n" ); /*!!!*/
+g_print ( _( "Show Warranty Information\n" ) ); /*!!!*/
 } /* help_warranty */
 
 void help_help ( void ) {
-g_print ( "Show Help Text\n" ); /*!!!*/
+g_print ( _( "Show Help Text\n" ) ); /*!!!*/
 } /* help_help */

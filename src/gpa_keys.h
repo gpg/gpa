@@ -1,5 +1,5 @@
 /* gpa_keys.h  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 Free Software Foundation, Inc.
+ *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
  *
@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
-
+                  
 void keys_openPublic ( void );
 void keys_openSecret ( void );
 void keys_open ( void );
@@ -26,3 +26,5 @@ void keys_generateRevocation ( void );
 void keys_import ( void );
 void keys_importOwnertrust ( void );
 void keys_updateTrust ( void );
+
+void gpa_ringOpenSelect_init ( gchar* title );
