@@ -22,6 +22,36 @@
 #define FILEMAN_H
 
 #include <gtk/gtk.h>
-GtkWidget * gpa_fileman_new (void);
+
+/* GObject stuff */
+#define GPA_FILE_MANAGER_TYPE	  (gpa_file_manager_get_type ())
+#define GPA_FILE_MANAGER(obj)	  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GPA_FILE_MANAGER_TYPE, GpaFileManager))
+#define GPA_FILE_MANAGER_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GPA_FILE_MANAGER_TYPE, GpaFileManagerClass))
+#define GPA_IS_FILE_MANAGER(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_FILE_MANAGER_TYPE))
+#define GPA_IS_FILE_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_FILE_MANAGER_TYPE))
+#define GPA_FILE_MANAGER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GPA_FILE_MANAGER_TYPE, GpaFileManagerClass))
+
+typedef struct _GpaFileManager GpaFileManager;
+typedef struct _GpaFileManagerClass GpaFileManagerClass;
+
+struct _GpaFileManager {
+  GtkWindow parent;
+
+  GtkWidget *window;
+  GtkWidget *list_files;
+  GList *selection_sensitive_widgets;
+};
+
+struct _GpaFileManagerClass {
+  GtkWindowClass parent_class;
+};
+
+GType gpa_file_manager_get_type (void) G_GNUC_CONST;
+
+/* API */
+
+GtkWidget * gpa_file_manager_get_instance (void);
+
+gboolean gpa_file_manager_is_open (void);
 
 #endif /* FILEMAN_H */

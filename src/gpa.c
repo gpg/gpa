@@ -117,13 +117,12 @@ i18n_init (void)
  */
 
 static GtkWidget *keyringeditor = NULL;
-static GtkWidget *filemanager = NULL;
 static GtkWidget *settings_dialog = NULL;
 
 static void
 quit_if_no_window (void)
 {
-  if (!keyringeditor && !filemanager)
+  if (!keyringeditor && !gpa_file_manager_is_open ())
     {
       gtk_main_quit ();
     }
@@ -157,14 +156,10 @@ gpa_open_keyring_editor (void)
 void
 gpa_open_filemanager (void)
 {
-  if (!filemanager)
-    {
-      filemanager = gpa_fileman_new();
-      gtk_signal_connect (GTK_OBJECT (filemanager), "destroy",
-			  GTK_SIGNAL_FUNC (close_main_window), &filemanager);
-      gtk_widget_show_all (filemanager);
-    }
-  gdk_window_raise (filemanager->window);
+  gtk_signal_connect (GTK_OBJECT (gpa_file_manager_get_instance ()), "destroy",
+		      GTK_SIGNAL_FUNC (quit_if_no_window), NULL);
+  gtk_widget_show_all (gpa_file_manager_get_instance ());
+  gdk_window_raise (gpa_file_manager_get_instance ()->window);
 }
 
 void
@@ -185,13 +180,6 @@ GtkWidget *
 gpa_get_keyring_editor (void)
 {
   return keyringeditor;
-}
-
-
-GtkWidget *
-gpa_get_filenamager (void)
-{
-  return filemanager;
 }
 
 GtkWidget *

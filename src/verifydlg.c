@@ -314,6 +314,7 @@ signature_list (GpgmeCtx ctx)
   store = gtk_list_store_new (SIG_N_COLUMNS, G_TYPE_STRING,
 			      G_TYPE_STRING, G_TYPE_STRING);
   list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
   gtk_widget_set_size_request (list, 400, 100);
 
   renderer = gtk_cell_renderer_text_new ();

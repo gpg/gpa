@@ -82,7 +82,8 @@ static void
 gpa_file_operation_finalize (GObject *object)
 {
   GpaFileOperation *op = GPA_FILE_OPERATION (object);
-  
+
+  g_list_foreach (op->input_files, (GFunc) g_free, NULL);
   g_list_free (op->input_files);
   gtk_widget_destroy (op->progress_dialog);
   

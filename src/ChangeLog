@@ -1,3 +1,17 @@
+2003-04-05  Miguel Coca  <mcoca@gnu.org>
+
+	* gpa.c (quit_if_no_window, gpa_open_filemanager): Use new filemanager.
+	(gpa_get_filenamager): Remove.
+
+	* gpafileop.c (gpa_file_operation_finalize): Free the filenames too.
+
+	* verifydlg.c (signature_list): Show alternate colors for the list.
+	* siglist.c (gpa_siglist_new): Likewise.
+
+	* fileman.h, fileman.c: Reworked file manager. Use pure GTK+2 lists,
+	disable buttons when no file is selected, and don't display scrollbars
+	unless they are needed.
+	
 2003-03-23  Andy Ruddock <andy.ruddock@minnesund.net>
 
 	* options.h: Added 'detailed_view' configuration file option for
