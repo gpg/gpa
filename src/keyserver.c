@@ -26,10 +26,9 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include "mischelp.h"
-
-#include "options.h"
 #include "keyserver.h"
+
+#define DIM(v)		     (sizeof(v)/sizeof((v)[0]))
 
 typedef struct server_name_s *ServerName;
 struct server_name_s
@@ -150,14 +149,6 @@ read_list (const char *fname)
       return -1;
     }
   
-  /* fine: switch to new list */
-  {
-    const char *current = keyserver_get_current (FALSE);
-    release_server_list (serverlist);
-    serverlist = list;
-    keyserver_set_current (current);
-  }
-
   return 0;
 }
 
@@ -183,41 +174,6 @@ keyserver_read_list (const char *confname)
 
   return rc;
 }
-
-/*
- * Set the standard server to use.  If this one is not yet in the list,
- * it will be added to the list.  With a NAME of NULL a selected server
- * will be unselected.
- */
-void
-keyserver_set_current (const char *name)
-{
-  ServerName x;
-
-  for (x=serverlist; x; x = x->next)
-    x->selected = 0;
-  if (!name)
-    return;
-  x = add_server (&serverlist, name);
-  x->selected = 1;
-}
-
-const char *
-keyserver_get_current (gboolean non_null)
-{
-  ServerName x;
-
-  for (x=serverlist; x; x = x->next)
-    {
-      if (x->selected)
-        return x->name;
-    }
-  if (non_null)
-    return "";
-  else
-    return NULL;
-}
-
 
 GList *
 keyserver_get_as_glist (void)

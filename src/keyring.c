@@ -49,6 +49,7 @@
 #include "keytable.h"
 #include "server_access.h"
 #include "gpgmeparsers.h"
+#include "options.h"
 
 /*
  *      The public keyring editor
@@ -103,7 +104,7 @@ typedef struct _GPAKeyringEditor GPAKeyringEditor;
  *      Internal API
  */
 
-static gboolean key_has_been_signed (GpgmeKey key, gchar * key_id,
+static gboolean key_has_been_signed (GpgmeKey key, const gchar * key_id,
                                      GtkWidget * window);
 
 static gboolean keyring_editor_has_selection (gpointer param);
@@ -267,7 +268,7 @@ keyring_editor_delete (gpointer param)
  * the id key_id, otherwise return FALSE. The window parameter is needed
  * for error reporting */
 static gboolean
-key_has_been_signed (GpgmeKey key, gchar * key_id, GtkWidget * window)
+key_has_been_signed (GpgmeKey key, const gchar * key_id, GtkWidget * window)
 {
   /* FIXME: When we can list signatures with GPGME, implement this */
   return 0;
@@ -282,7 +283,7 @@ keyring_editor_can_sign (gpointer param)
   GPAKeyringEditor * editor = param;
   GpgmeKey key;
   gchar * key_id;
-  gchar * default_key_id = gpa_default_key ();
+  const gchar * default_key_id = gpa_options_get_default_key (gpa_options);
   gboolean result = FALSE;
 
   if (keyring_editor_has_selection (param) && default_key_id)
@@ -308,7 +309,7 @@ static void
 keyring_editor_sign (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  gchar *private_key_fpr;
+  const gchar *private_key_fpr;
   gint row;
   gchar *key_fpr;
   GpgmeKey key;
@@ -326,7 +327,7 @@ keyring_editor_sign (gpointer param)
       return;
     }
 
-  private_key_fpr = gpa_default_key ();
+  private_key_fpr = gpa_options_get_default_key (gpa_options);
   if (!private_key_fpr)
     {
       /* this shouldn't happen because the button should be grayed out
@@ -622,9 +623,9 @@ static void
 keyring_editor_backup (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  gchar *fpr;
+  const gchar *fpr;
 
-  fpr = gpa_default_key ();
+  fpr = gpa_options_get_default_key (gpa_options);
   if (!fpr)
     {
       /* this shouldn't happen because the menu item should be grayed out
@@ -665,7 +666,7 @@ keyring_editor_generate_key_advanced (gpointer param)
        * keys are available
        */
       gpa_keytable_reload (keytable);
-      gpa_update_default_key ();
+      gpa_options_update_default_key (gpa_options);
       keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
     }
@@ -686,7 +687,7 @@ keyring_editor_generate_key_simple (gpointer param)
        * keys are available
        */
       gpa_keytable_reload (keytable);
-      gpa_update_default_key ();
+      gpa_options_update_default_key (gpa_options);
       keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
     }
@@ -700,7 +701,7 @@ keyring_editor_generate_key_simple (gpointer param)
 static void
 keyring_editor_generate_key (gpointer param)
 {
-  if (gpa_simplified_ui ())
+  if (gpa_options_get_simplified_ui (gpa_options))
     keyring_editor_generate_key_simple (param);
   else
     keyring_editor_generate_key_advanced (param);
@@ -769,7 +770,7 @@ keyring_editor_mapped (gpointer param)
   static gboolean asked_about_key_backup = FALSE;
   GPAKeyringEditor * editor = param;
 
-  if (gpa_simplified_ui ())
+  if (gpa_options_get_simplified_ui (gpa_options))
     {
       if (!asked_about_key_generation
           && gpa_keytable_secret_size (keytable) == 0)
@@ -797,7 +798,7 @@ keyring_editor_mapped (gpointer param)
 	  asked_about_key_generation = TRUE;
         }
       else if (!asked_about_key_backup
-               && !gpa_backup_generated ()
+               && !gpa_options_get_backup_generated (gpa_options)
                && gpa_keytable_secret_size (keytable) != 0)
         {
 	  GtkWidget *dialog;
@@ -1108,7 +1109,7 @@ keyring_signatures_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
   gchar * key_id = NULL;
 
   /* in the simplified UI we don't want to list the self signatures */
-  if (gpa_simplified_ui ())
+  if (gpa_options_get_simplified_ui (gpa_options))
     {
       key_id = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
                                          editor->window);
@@ -1379,7 +1380,7 @@ keyring_statusbar_new (GPAKeyringEditor *editor)
 static void
 keyring_update_status_bar (GPAKeyringEditor * editor)
 {
-  gchar * fpr = gpa_default_key ();
+  const gchar * fpr = gpa_options_get_default_key (gpa_options);
   GpgmeKey key;
   gchar *string;
 
@@ -1399,11 +1400,11 @@ keyring_update_status_bar (GPAKeyringEditor * editor)
     }     
 }
 
-/* signal handler for the "gpa_default_key_changed" signal. Update the
+/* signal handler for the "changed_default_key" signal. Update the
  * status bar and the selection sensitive widgets because some depend on
  * the default key */
 static void
-keyring_default_key_changed (gpointer param)
+keyring_default_key_changed (GpaOptions *options, gpointer param)
 {
   GPAKeyringEditor * editor = param;
 
@@ -1514,8 +1515,8 @@ keyring_editor_new (void)
 
   statusbar = keyring_statusbar_new (editor);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);
-  gtk_signal_connect (GTK_OBJECT (window), "gpa_default_key_changed",
-                      (GtkSignalFunc)keyring_default_key_changed, editor);
+  g_signal_connect (G_OBJECT (gpa_options), "changed_default_key",
+                    (GCallback)keyring_default_key_changed, editor);
 
   keyring_update_status_bar (editor);
   update_selection_sensitive_widgets (editor);

@@ -42,7 +42,8 @@ options_keyserver_set (gpointer param)
   keeperServer = (GpaWindowKeeper *) localParam[1];
 
   entry = GTK_COMBO (comboServer)->entry;
-  keyserver_set_current (gtk_entry_get_text (GTK_ENTRY (entry)));
+  gpa_options_set_default_keyserver (gpa_options, 
+                                     gtk_entry_get_text (GTK_ENTRY (entry)));
 
   paramDone[0] = keeperServer;
   paramDone[1] = NULL;
@@ -99,7 +100,7 @@ options_keyserver (gpointer param)
   gtk_combo_set_popdown_strings (GTK_COMBO (comboServer), 
                                  keyserver_get_as_glist () );
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboServer)->entry),
-		      keyserver_get_current (TRUE));
+                      gpa_options_get_default_keyserver (gpa_options));
   gtk_box_pack_start (GTK_BOX (hboxServer), comboServer, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxServer), hboxServer, TRUE, TRUE, 0);
   hButtonBoxServer = gtk_hbutton_box_new ();
@@ -155,7 +156,8 @@ options_key_set (gpointer param)
   localParam = (gpointer *) param;
   keyID = (gchar **) localParam[0];
   keeperKey = (GpaWindowKeeper *) localParam[1];
-  gpa_set_default_key ((*keyID != NULL) ? g_strdup(*keyID) : NULL);
+  gpa_options_set_default_key (gpa_options,
+                               (*keyID != NULL) ? g_strdup(*keyID) : NULL);
   paramDone[0] = keeperKey;
   paramDone[1] = NULL;
   gpa_window_destroy (paramDone);
@@ -208,7 +210,7 @@ options_key (gpointer param)
   if (!gpa_keytable_secret_size (keytable))
     {
       gpa_window_error (_("No secret keys available to\n"
-			  "select a default key from."), global_windowMain);
+			  "select a default key from."), NULL);
       return;
     }
   keeper = gpa_windowKeeper_new ();
@@ -242,12 +244,12 @@ options_key (gpointer param)
 		      GTK_SIGNAL_FUNC (options_key_select), (gpointer) keyID);
   /* Add the keys to the list */
   gpa_keytable_secret_foreach (keytable, (GPATableFunc)add_key, clistKeys);
-  if (gpa_default_key ())
+  if (gpa_options_get_default_key (gpa_options))
     {
       i = 0;
       rows = GTK_CLIST (clistKeys)->rows;
       gtk_clist_get_text (GTK_CLIST (clistKeys), i, 0, keyID);
-      while (i < rows && strcmp (gpa_default_key (), *keyID) != 0)
+      while (i < rows && strcmp (gpa_options_get_default_key (gpa_options), *keyID) != 0)
 	{
 	  i++;
 	  if (i < rows)

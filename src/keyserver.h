@@ -25,8 +25,6 @@
 
 
 int keyserver_read_list (const char *filename);
-void keyserver_set_current (const char *name);
-const char *keyserver_get_current (gboolean non_null);
 GList *keyserver_get_as_glist (void);
 
 

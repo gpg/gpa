@@ -25,7 +25,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include "mischelp.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
 #include "icons.h"
@@ -46,6 +45,7 @@ static char *scroll_text[] =
   "Timo Schulz",
   "Miguel Coca"
 };
+#define DIM(v)		     (sizeof(v)/sizeof((v)[0]))
 static int shuffle_array[ DIM(scroll_text) ];
 static int do_scrolling = 0;
 static int scroll_state = 0;
@@ -211,7 +211,7 @@ help_about (void)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
-      label = gtk_label_new ("Copyright (C) 2000-2002 G-N-U GmbH");
+      label = gtk_label_new ("Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 

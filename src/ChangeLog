@@ -1,3 +1,43 @@
+2002-11-29  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpa.c: Rework the main function, and parsing of command line
+	arguments to use getopt.
+	
+	* gpa.h, gpa.c (gpa_simplified_ui, gpa_set_simplified_ui)
+	(gpa_backup_generated, gpa_set_backup_generated)
+	(gpa_remember_backup_generated): Remove, superseded by the options
+	object.
+
+	* filesigndlg.c (file_sign_ok, gpa_file_sign_dialog_run) 
+	(gpa_file_sign_dialog_run): Use the options object.
+	* gpawidgets.c (gpa_key_list_add_key):
+	* keyexportdlg.c (do_backup):
+	* keyimportdlg.c (key_import_dialog_run):
+	* keyring.c (keyring_editor_backup) 
+	(keyring_editor_generate_key_advanced) 
+	(keyring_editor_generate_key_simple, keyring_editor_generate_key) 
+	(keyring_editor_mapped, keyring_editor_mapped) 
+	(keyring_signatures_page_fill_key, keyring_update_status_bar) 
+	(keyring_default_key_changed, keyring_editor_new): 
+	* keysigndlg.c (gpa_key_sign_run_dialog): 
+	* optionsmenu.c (options_keyserver_set, options_keyserver) 
+	(options_key_set, options_key): Likewise.
+	
+	* keyserver.c, keyserver.h: Remove management of the current
+	keyserver.
+	
+	* fileman.c: Remove jnlib includes.
+	* gpa.h:
+	* helpmenu.c: Likewise.
+
+	* Makefile.am (INCLUDES, LDADD): Remove jnlib.
+	(gpa_SOURCES): Add options.c.
+
+	* options.c: New.
+	* options.h: Might as well be considered new.
+
+	* helpmenu.c (help_about): Fix copyright notice.
+	
 2002-11-28  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* server_access.c (protocol_version): The version number is

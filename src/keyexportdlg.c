@@ -195,7 +195,7 @@ key_export_dialog_run (GtkWidget *parent, gchar **filename,
   gtk_combo_set_popdown_strings (GTK_COMBO (combo),
                                  keyserver_get_as_glist ());
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
-		      keyserver_get_current (TRUE));
+		      gpa_options_get_default_keyserver (gpa_options));
 
   /* Clipboard radio button */
   radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio),
@@ -203,7 +203,7 @@ key_export_dialog_run (GtkWidget *parent, gchar **filename,
   dialog.radio_clipboard = radio;
   gtk_table_attach (GTK_TABLE (table), radio, 0, 3, 2, 3, GTK_FILL, 0, 0, 0);
 
-  if (!gpa_simplified_ui ())
+  if (!gpa_options_get_simplified_ui (gpa_options))
     {
       check = gpa_check_button_new (accel_group, _("a_rmor"));
       gtk_container_set_border_width (GTK_CONTAINER (check), 5);
@@ -267,7 +267,7 @@ do_backup (gchar *fpr, gchar *filename, GtkWidget *parent)
 					 filename);
 	      gpa_window_message (message, parent);
 	      g_free (message);
-	      gpa_remember_backup_generated ();
+	      gpa_options_set_backup_generated (gpa_options, TRUE);
         }
     }
 }

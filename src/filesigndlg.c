@@ -166,7 +166,7 @@ file_sign_ok (GPAFileSignDialog *dialog)
       return;
     } /* else */
 
-  if (gpa_simplified_ui ())
+  if (gpa_options_get_simplified_ui (gpa_options))
     {
       if (sign_type == GPGME_SIG_MODE_DETACH)
         armor = FALSE;
@@ -254,7 +254,7 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
   gtk_container_set_border_width (GTK_CONTAINER (vboxMode), 5);
   gtk_container_add (GTK_CONTAINER (frameMode), vboxMode);
 
-  if (gpa_simplified_ui ())
+  if (gpa_options_get_simplified_ui (gpa_options))
     {
       radio_sign_comp = NULL;
       dialog.radio_comp = radio_sign_comp;
@@ -284,7 +284,7 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
   dialog.radio_sep = radio_sign_sep;
 
-  if (gpa_simplified_ui ())
+  if (gpa_options_get_simplified_ui (gpa_options))
     checkerArmor = NULL;
   else
     {

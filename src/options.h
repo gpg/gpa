@@ -21,15 +21,71 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-typedef struct {
-    int verbose;
-    int quiet;
-    unsigned int debug;
-    char *homedir;
-} GPAOptions;
+#include <glib.h>
+#include <glib-object.h>
 
-extern GPAOptions gpa_options;
+/* GObject stuff */
+#define GPA_OPTIONS_TYPE	  (gpa_options_get_type ())
+#define GPA_OPTIONS(obj)	  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GPA_OPTIONS_TYPE, GpaOptions))
+#define GPA_OPTIONS_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GPA_OPTIONS_TYPE, GpaOptionsClass))
+#define GPA_IS_OPTIONS(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_OPTIONS_TYPE))
+#define GPA_IS_OPTIONS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_OPTIONS_TYPE))
+#define GPA_OPTIONS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GPA_OPTIONS_TYPE, GpaOptionsClass))
 
+typedef struct _GpaOptions GpaOptions;
+typedef struct _GpaOptionsClass GpaOptionsClass;
+
+struct _GpaOptions {
+  GObject parent;
+
+  gchar *options_file;
+
+  gboolean simplified_ui;
+  gboolean backup_generated;
+
+  gchar *default_key;
+  gchar *default_keyserver;
+};
+
+struct _GpaOptionsClass {
+  GObjectClass parent_class;
+
+  /* Signal handlers */
+  void (*changed_ui_mode) (GpaOptions *options);
+  void (*changed_default_key) (GpaOptions *options);
+  void (*changed_default_keyserver) (GpaOptions *options);
+  void (*changed_backup_generated) (GpaOptions *options);
+};
+
+GType gpa_options_get_type (void) G_GNUC_CONST;
+
+/* API */
+
+/* Create a new GpaOptions object, reading the options, reading the options
+ * from the file given */
+GpaOptions *gpa_options_new (const gchar *filename);
+
+/* Set whether the ui should be in simplified mode */
+void gpa_options_set_simplified_ui (GpaOptions *options, gboolean value);
+gboolean gpa_options_get_simplified_ui (GpaOptions *options);
+
+/* Choose the default key */
+void gpa_options_set_default_key (GpaOptions *options, const gchar *fpr);
+const gchar *gpa_options_get_default_key (GpaOptions *options);
+/* Try to find a reasonable value for the default key if there wasn't one */
+void gpa_options_update_default_key (GpaOptions *options);
+
+/* Specify the default keyserver */
+void gpa_options_set_default_keyserver (GpaOptions *options,
+                                        const gchar *keyserver);
+const gchar *gpa_options_get_default_keyserver (GpaOptions *options);
+
+/* Remember whether the default key has already been backed up */
+void gpa_options_set_backup_generated (GpaOptions *options, gboolean value);
+gboolean gpa_options_get_backup_generated (GpaOptions *options);
+
+/* Destroy the GpaOptions object */
+void gpa_options_destroy (GpaOptions *options);
 
 #endif /*OPTIONS_H*/
 

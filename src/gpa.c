@@ -29,8 +29,7 @@
 #include <time.h>
 
 #include <gpgme.h>
-
-#include "argparse.h"
+#include <getopt.h>
 
 #include "gpapastrings.h"
 #include "gpa.h"
@@ -51,54 +50,11 @@
 /* icons for toolbars */
 #include "icons.h"
 
-enum cmd_and_opt_values {
-  aNull = 0,
-  oQuiet	  = 'q',
-  oVerbose	  = 'v',
-
-  oNoVerbose = 500,
-  oOptions,
-  oDebug,
-  oDebugAll,
-  oNoGreeting,
-  oNoOptions,
-  oHomedir,
-  oGPGBinary,
-  oAdvancedUI,
-  oBackupGenerated,
-
-  oKeyserver,
-  oDefaultKey,
-
-  aTest
-};
-
-static ARGPARSE_OPTS opts[] = {
-
-    { 301, NULL, 0, N_("@Options:\n ") },
-
-    { oVerbose, "verbose",   0, N_("verbose") },
-    { oQuiet,	"quiet",     0, N_("be somewhat more quiet") },
-    { oOptions, "options"  , 2, N_("read options from file")},
-    { oDebug,	"debug"     ,4|16, N_("set debugging flags")},
-    { oDebugAll, "debug-all" ,0, N_("enable full debugging")},
-    { oGPGBinary, "gpg-program", 2 , "@" },
-    { oAdvancedUI, "advanced-ui", 0,N_("set the user interface to advanced mode")},
-    { oBackupGenerated, "backup-generated", 0,N_("omit \"no backup yet\" warning at startup")},
-
-    { oKeyserver, "keyserver", 2, "@" },
-    { oDefaultKey, "default-key", 2, "@" },
-    {0}
-};
-
-/* Directory where the gpa executable resides */
-static char *gpa_homedir = NULL;
-static char *gpa_configname = NULL;
-static char *keyservers_configname = NULL;
-GPAOptions gpa_options;
-GtkWidget *global_windowMain = NULL;
-GList *global_defaultRecipients = NULL;
-
+/* Global variables */
+gchar *gpa_exec_dir;
+gchar *gnupg_homedir;
+/* The GpaOptions object */
+GpaOptions *gpa_options;
 /* GPGME context used in all the program */
 GpgmeCtx ctx;
 /* The global table of keys */
@@ -127,9 +83,9 @@ search_config_file (const gchar *filename)
   gint i;
   /* The search order for each OS, a NULL terminated array */
 #ifdef G_OS_UNIX
-  gchar *dirs[] = {gpa_options.homedir, GPA_DATADIR, NULL};
+  gchar *dirs[] = {gnupg_homedir, GPA_DATADIR, NULL};
 #elif G_OS_WIN32
-  gchar *dirs[] = {gpa_homedir, GPA_DATADIR, gpa_options.homedir, NULL};
+  gchar *dirs[] = {gpa_exec_dir, GPA_DATADIR, gnupg_homedir, NULL};
 #endif
   for( i = 0; dirs[i]; i++ )
     {
@@ -141,37 +97,6 @@ search_config_file (const gchar *filename)
     }
   /* If no file exists, return the first option to be created */
   return g_build_filename (dirs[0], filename, NULL);
-}
-
-static const char *
-my_strusage(int level)
-{
-  const char *p;
-  switch(level)
-    {
-    case 11:
-      p = "gpa";
-      break;
-    case 13:
-      p = VERSION;
-      break;
-      /*case 17: p = PRINTABLE_OS_NAME; break;*/
-    case 19:
-      p = _("Please report bugs to <" PACKAGE_BUGREPORT ">.\n");
-      break;
-    case 1:
-    case 40:
-      p = _("Usage: gpa [options] (-h for help)");
-      break;
-    case 41:
-      p = _("Syntax: gpa [options]\n"
-	    "Graphical frontend to GnuPG\n");
-      break;
-
-    default:
-      p = NULL;
-    }
-  return p;
 }
 
 static void
@@ -187,185 +112,6 @@ i18n_init (void)
   textdomain (PACKAGE);
 #endif
 #endif
-}
-
-static gboolean simplified_ui = TRUE;
-
-gboolean
-gpa_simplified_ui (void)
-{
-  return simplified_ui;
-}
-
-void
-gpa_set_simplified_ui (gboolean value)
-{
-  simplified_ui = value;
-}
-
-static gboolean backup_generated = FALSE;
-
-gboolean
-gpa_backup_generated (void)
-{
-  return backup_generated;
-}
-
-void
-gpa_set_backup_generated (gboolean value)
-{
-  backup_generated = value;
-}
-
-void
-gpa_remember_backup_generated (void)
-{
-  if (gpa_configname && !gpa_backup_generated ())
-    {
-      FILE *config = fopen (gpa_configname, "a");
-      if (config)
-        {
-	  fprintf (config, "backup-generated\n");
-	  fclose (config);
-        }
-    }
-  gpa_set_backup_generated (TRUE);
-}
-
-/*
- * Manage the default key
- */
-
-/* Key id of the default key as malloced memory. NULL means there is not
- * default key.
- */
-static gchar *default_key = NULL;
-
-static guint default_key_changed_signal_id = 0;
-
-#ifndef __NEW_GTK__ /* @@@@@@ */
-/* create a new signal type for toplevel windows */
-static void
-gpa_default_key_changed_marshal (GtkObject *object,
-				 GtkSignalFunc func,
-				 gpointer func_data,
-				 GtkArg *args)
-{
-  ((GPADefaultKeyChanged)func)(func_data);
-}
-#endif
-
-static void
-gpa_create_default_key_signal (void)
-{
-#ifndef __NEW_GTK__ /* @@@@@@ */
-  guint id;
-
-  gpointer klass = gtk_type_class (gtk_window_get_type ());
-
-  id = gtk_object_class_user_signal_new (klass, "gpa_default_key_changed",
-					 0, gpa_default_key_changed_marshal,
-					 GTK_TYPE_NONE, 0);
-  default_key_changed_signal_id = id;
-#endif
-}
-
-static void
-gpa_emit_default_key_changed (void)
-{
-  GtkWidget * window;
-
-  window = gpa_get_keyring_editor ();
-  if (window)
-    {
-      gtk_signal_emit (GTK_OBJECT (window), default_key_changed_signal_id);
-    }
-  window = gpa_get_filenamager ();
-  if (window)
-    {
-      gtk_signal_emit (GTK_OBJECT (window), default_key_changed_signal_id);
-    }
-}
-
-
-/* Return the default key */
-gchar *
-gpa_default_key (void)
-{
-  return default_key;
-}
-
-/* Set the default key. key is assumed to be newly malloced memory that
- * should not be free's by the caller afterwards. */
-void
-gpa_set_default_key (gchar *key)
-{
-  gboolean emit;
-
-  if (default_key && key)
-    emit = strcmp (default_key, key) != 0;
-  else
-    emit = default_key != key;
-
-  g_free (default_key);
-  default_key = key;
-
-  if (gpa_configname && key)
-    {
-      FILE *config = fopen (gpa_configname, "a");
-      if (config)
-        {
-	  fprintf (config, "default-key %s\n", default_key);
-	  fclose (config);
-        }
-    }
-
-  if (emit)
-    gpa_emit_default_key_changed ();
-}
-
-
-/* Return the default key gpg would use, or at least a first
- * approximation. Currently this means the first secret key in the keyring.
- * If there's no secret key at all, return NULL
- */
-static gchar *
-gpa_determine_default_key (void)
-{
-  GpgmeKey key;
-  GpgmeError err;
-  gchar * fpr = NULL;
-  err = gpgme_op_keylist_start (ctx, NULL, 1);
-  if( err != GPGME_No_Error )
-    gpa_gpgme_error (err);
-  err = gpgme_op_keylist_next (ctx, &key);
-  if( err == GPGME_No_Error )
-    {
-      /* Copy the ID and release the key, since it's no longer needed */
-      fpr = g_strdup (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, 
-                                                 NULL, 0 ));
-      gpgme_key_release (key);
-      err = gpgme_op_keylist_end (ctx);
-      if( err != GPGME_No_Error )
-        gpa_gpgme_error (err); 
-    }
-  else if( err == GPGME_EOF )
-    /* No secret keys found */
-    fpr = NULL;
-  else
-    gpa_gpgme_error (err);
-
-  return fpr;
-}
-
-
-/* If the default key is not set yet, set it to whatever
- * gpa_determine_default_key suggests */
-void
-gpa_update_default_key (void)
-{
-  if (!default_key)
-    gpa_set_default_key (gpa_determine_default_key ());
 }
 
 
@@ -446,29 +192,125 @@ dummy_log_func (const gchar *log_domain, GLogLevelFlags log_level,
   /* empty */
 }
 
+typedef struct
+{
+  gboolean start_keyring_editor;
+  gboolean start_file_manager;
+  gchar *options_filename;
+} GpaCommandLineArgs;
+
+struct option longopts[] =
+{
+  { "version", no_argument, NULL, 'v' },
+  { "help", no_argument, NULL, 'h' },
+  { "keyring", no_argument, NULL, 'k' },
+  { "files", no_argument, NULL, 'f' },
+  { "options", required_argument, NULL, 'o' },
+  { NULL, 0, NULL, 0 }
+};
+
+struct
+{
+  char short_opt;
+  char *long_opt;
+  char *description;
+} option_desc[] = 
+{
+  {'h', "help", N_("display this help and exit")},
+  {'v', "version", N_("output version information and exit")},
+  {'k', "keyring", N_("open keyring editor (default)")},
+  {'f', "files", N_("open filemanager")},
+  {'o', "options", N_("read options from file")},
+  {0, NULL, NULL}
+};
+
+/* The copyright notice */
+const char *copyright = 
+"Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
+"This program comes with ABSOLUTELY NO WARRANTY.\n"
+"This is free software, and you are welcome to redistribute it\n"
+"under certain conditions. See the file COPYING for details.\n";
+
+static void
+print_copyright (void)
+{
+  printf ("%s %s\n%s", PACKAGE, VERSION, copyright);
+}
+
+/* Help option */
+static void
+usage (void)
+{
+  int i;
+  
+  print_copyright ();
+  printf ("%s\n", _("Syntax: gpa [options]\n"
+                    "Graphical frontend to GnuPG\n"));
+  printf ("%s:\n\n", _("Options"));
+  for (i = 0; option_desc[i].long_opt; i++)
+    {
+      printf (" -%c, --%s\t\t%s\n", option_desc[i].short_opt,
+              option_desc[i].long_opt, _(option_desc[i].description));
+    }
+  printf ("\n%s", _("Please report bugs to <" PACKAGE_BUGREPORT ">.\n"));
+}
+
+/* Parse the command line. */
+static void
+parse_command_line (int argc, char **argv, GpaCommandLineArgs *args)
+{
+  int optc;
+
+  opterr = 1;
+  
+  while ((optc = getopt_long (argc, argv, "hvo:kf", longopts, (int *) 0))
+         != EOF)
+    {
+      switch (optc)
+        {
+        case 'h':
+          usage ();
+          exit (EXIT_SUCCESS);
+        case 'v':
+          print_copyright ();
+          exit (EXIT_SUCCESS);
+          break;
+        case 'o':
+          args->options_filename = g_strdup (optarg);
+          break;
+        case 'k':
+          args->start_keyring_editor = TRUE;
+          break;
+        case 'f':
+          args->start_file_manager = TRUE;
+          break;
+        default:
+          exit (EXIT_FAILURE);
+        }
+    }
+
+  /* Start the keyring editor by default. */
+  if (!args->start_keyring_editor && !args->start_file_manager)
+    {
+      args->start_keyring_editor = TRUE;
+    }
+}
+
 /*
  *   Main function
  */
 int
 main (int argc, char **argv)
 {
-  ARGPARSE_ARGS pargs;
-  int orig_argc;
-  char **orig_argv;
-  char *configname = NULL;
-  FILE *configfp = NULL;
-  unsigned configlineno;
-  int parse_debug = 0;
-  int default_config = 1;
-  int greeting = 0;
-  int nogreeting = 0;
-  const char *gpg_program = GPG_PROGRAM;
-  const char *keyserver = NULL;
+  char *configname = NULL, *keyservers_configname = NULL;
   GpgmeError err;
+  GpaCommandLineArgs args = {FALSE, FALSE, NULL};
 
 #ifdef __MINGW32__
   hide_gpa_console_window();
 #endif
+
+  parse_command_line (argc, argv, &args);
 
   /* Disable logging to prevent MS Windows NT from opening a console.
    */
@@ -488,177 +330,32 @@ main (int argc, char **argv)
                             | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
 
   /* Find out where our executable lives */
-  gpa_homedir = g_path_get_dirname (argv[0]);
+  gpa_exec_dir = g_path_get_dirname (argv[0]);
 
-  set_strusage (my_strusage);
   srand (time (NULL)); /* the about dialog uses rand() */
   gtk_init (&argc, &argv);
   i18n_init ();
 
-  gpa_create_default_key_signal ();
-
-#if defined(__MINGW32__) || defined(__CYGWIN__)
-  gpa_options.homedir = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "HomeDir");
-  gpg_program = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "gpgProgram");
+  /* Try to find the GnuPG homedir (~/.gnupg) dinamically */
+#ifdef G_OS_WIN32
+  gnupg_homedir = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "HomeDir");
 #else
-  gpa_options.homedir = getenv ("GNUPGHOME");
+  gnupg_homedir = getenv ("GNUPGHOME");
 #endif
 
-  if (!gpa_options.homedir || !*gpa_options.homedir)
+  /* If the previous guess failed, resot to the default value */
+  if (!gnupg_homedir || !*gnupg_homedir)
     {
-#ifdef HAVE_DRIVE_LETTERS
-      gpa_options.homedir = "c:/gnupg";
+#ifdef G_OS_WIN32
+      gnupg_homedir = "c:/gnupg";
 #else
-      gpa_options.homedir = g_build_filename (getenv("HOME"), ".gnupg", NULL);
+      gnupg_homedir = g_build_filename (getenv("HOME"), ".gnupg", NULL);
 #endif
     }
 
-  if (!gpg_program || !*gpg_program) {
-      gpg_program = GPG_PROGRAM;
-  }
-
-  /* check whether we have a config file on the commandline */
-  orig_argc = argc;
-  orig_argv = argv;
-  pargs.argc = &argc;
-  pargs.argv = &argv;
-  pargs.flags= 1|(1<<6);  /* do not remove the args, ignore version */
-  while (arg_parse (&pargs, opts))
-    {
-      if (pargs.r_opt == oDebug || pargs.r_opt == oDebugAll)
-	parse_debug++;
-      else if (pargs.r_opt == oOptions)
-	{
-	  /* yes there is one, so we do not try the default one, but
-	   * read the option file when it is encountered at the commandline
-	   */
-	  default_config = 0;
-	}
-      else if (pargs.r_opt == oNoOptions)
-	default_config = 0; /* --no-options */
-      else if (pargs.r_opt == oHomedir)
-	gpa_options.homedir = pargs.r.ret_str;
-    }
-
-  #ifdef HAVE_DOSISH_SYSTEM
-    if ( strchr (gpa_options.homedir,'\\') ) {
-        char *d, *buf = (char*) g_malloc (strlen (gpa_options.homedir)+1);
-        const char *s = gpa_options.homedir;
-        for (d=buf,s=gpa_options.homedir; *s; s++)
-            *d++ = *s == '\\'? '/': *s;
-        *d = 0;
-        gpa_options.homedir = buf;
-    }
-  #endif
-
-  /* Locate GPA's configuration file.
-   */
-  if (default_config)
-    configname = search_config_file ("gpa.conf");
-
-  gpa_configname = g_strdup (configname);
-
-  /* Locate the list of keyservers.
-   */
-  keyservers_configname = search_config_file ("keyservers");
-
-  argc = orig_argc;
-  argv = orig_argv;
-  pargs.argc = &argc;
-  pargs.argv = &argv;
-  pargs.flags=  1;  /* do not remove the args */
-
- next_pass:
-  if (configname)
-    {
-      configlineno = 0;
-      configfp = fopen (configname, "r");
-      if (!configfp)
-	{
-	  if (default_config)
-	    {
-	      if (parse_debug)
-                fprintf (stderr, _("NOTE: no default option file `%s'\n"),
-                         configname);
-	    }
-	  else {
-	    fprintf (stderr, _("option file `%s': %s\n"),
-		       configname, strerror(errno));
-	    exit(2);
-	  }
-	  g_free (configname);
-	  configname = NULL;
-	}
-      if (parse_debug && configname)
-	fprintf (stderr, _("reading options from `%s'\n"), configname);
-      default_config = 0;
-    }
-
-  while (optfile_parse (configfp, configname, &configlineno,
-			&pargs, opts))
-    {
-      switch(pargs.r_opt)
-	{
-	case oQuiet: gpa_options.quiet = 1; break;
-	case oVerbose: gpa_options.verbose++; break;
-
-	case oDebug: gpa_options.debug |= pargs.r.ret_ulong; break;
-	case oDebugAll: gpa_options.debug = ~0; break;
-
-	case oOptions:
-	  /* config files may not be nested (silently ignore them) */
-	  if (!configfp)
-	    {
-	      g_free (configname);
-	      configname = g_strdup (pargs.r.ret_str);
-	      goto next_pass;
-	    }
-	  break;
-	case oNoGreeting: nogreeting = 1; break;
-	case oNoVerbose: gpa_options.verbose = 0; break;
-	case oNoOptions: break; /* no-options */
-	case oHomedir: gpa_options.homedir = pargs.r.ret_str; break;
-	case oGPGBinary: gpg_program = pargs.r.ret_str;  break;
-	case oAdvancedUI: gpa_set_simplified_ui (FALSE); break;
-	case oBackupGenerated: gpa_set_backup_generated (TRUE); break;
-        case oKeyserver: keyserver = pargs.r.ret_str; break;
-        case oDefaultKey:
-	  if (default_key)
-	    g_free (default_key);
-	  default_key = g_strdup (pargs.r.ret_str);
-	  break;
-
-	default : pargs.err = configfp? 1:2; break;
-	}
-    }
-  if (configfp)
-    {
-      fclose(configfp);
-      configfp = NULL;
-      g_free (configname);
-      configname = NULL;
-      goto next_pass;
-    }
-  g_free (configname);
-  configname = NULL;
-  if (nogreeting)
-    greeting = 0;
-
-  if (greeting)
-    {
-      fprintf (stderr, "%s %s; %s\n",
-	       strusage (11), strusage (13), strusage (14));
-      fprintf (stderr, "%s\n", strusage (15));
-      fflush (stderr);
-    }
 #ifdef IS_DEVELOPMENT_VERSION
   fprintf (stderr, "NOTE: this is a development version!\n");
 #endif
-
-  /* Read the list of available keyservers.
-   */
-  keyserver_read_list (keyservers_configname);
-  keyserver_set_current (keyserver);
 
   /* Initialize GPGME */
   gpgme_check_version (NULL);
@@ -666,21 +363,55 @@ main (int argc, char **argv)
   if (err != GPGME_No_Error)
     gpa_gpgme_error (err);
   gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
-  /* initialize the default key to a useful default */
-  gpa_update_default_key ();
+
+  /* Locate GPA's configuration file.
+   */
+  if (!args.options_filename)
+    {
+      configname = search_config_file ("gpa.conf");
+    }
+  else
+    {
+      configname = args.options_filename;
+    }
+  gpa_options = gpa_options_new (configname);
+  g_free (configname);
+
+  /* Locate the list of keyservers.
+   */
+  keyservers_configname = search_config_file ("keyservers");
+  /* Read the list of available keyservers.
+   */
+  keyserver_read_list (keyservers_configname);
+
+  /* Now, make sure there are reasonable defaults for the default key and
+   * keyserver */
+  gpa_options_update_default_key (gpa_options);
+  if (!gpa_options_get_default_keyserver (gpa_options))
+    {
+      GList *keyservers = keyserver_get_as_glist ();
+      gpa_options_set_default_keyserver (gpa_options, keyservers->data);
+    }
+
+  /* Load the list of keys */
   keytable = gpa_keytable_new ();
 
-#ifndef HAVE_DOSISH_SYSTEM
+#ifndef G_OS_WIN32
   /* Internationalisation with gtk+-2.0 wants UTF8 instead of the
    * character set determined by `locale'.
    */
   setenv ("OUTPUT_CHARSET", "utf8", 1);
 #endif
 
-  gpa_open_keyring_editor ();
+  if (args.start_keyring_editor)
+    {
+      gpa_open_keyring_editor ();
+    }
+  if (args.start_file_manager)
+    {
+      gpa_open_filemanager ();
+    }
 
-  /* for development purposes open the file manager too: */
-  /*gpa_open_filemanager ();*/
   gtk_main ();
   return 0;
 }

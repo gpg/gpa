@@ -30,8 +30,8 @@
 #include "gpadefs.h"
 #include "gpgmetools.h"
 #include "gtkhacks.h"
-#include "logging.h"
 #include "keytable.h"
+#include "options.h"
 
 /* This is a *very* development version */
 #define IS_DEVELOPMENT_VERSION
@@ -55,13 +55,7 @@ extern GtkWidget *global_windowTip;
 extern GList *global_defaultRecipients;
 extern GpgmeCtx ctx;
 extern GPAKeyTable *keytable;
-
-extern gboolean gpa_simplified_ui (void);
-extern void gpa_set_simplified_ui (gboolean value);
-
-extern gboolean gpa_backup_generated (void);
-extern void gpa_set_backup_generated (gboolean value);
-extern void gpa_remember_backup_generated (void);
+extern GpaOptions *gpa_options;
 
 gchar *gpa_default_key (void);
 void gpa_set_default_key (gchar * key);

@@ -122,7 +122,7 @@ gpa_key_list_add_key  (const gchar * fpr, GpgmeKey key, gpointer data)
   row = gtk_clist_prepend (GTK_CLIST (add_data->clist), contents);
   gtk_clist_set_row_data_full (GTK_CLIST (add_data->clist), row,
 			       fpr ? g_strdup (fpr) : NULL, g_free);
-  if (gpa_default_key () && g_str_equal (gpa_default_key (), fpr))
+  if (gpa_options_get_default_key (gpa_options) && g_str_equal (gpa_options_get_default_key (gpa_options), fpr))
     {
       add_data->default_key_row = row;
     }

@@ -36,8 +36,6 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "argparse.h"
-
 #include "gpapastrings.h"
 
 #include "gtktools.h"

@@ -9,8 +9,8 @@ EXTRA_DIST = $(tip_files) $(logo)
 
 bin_PROGRAMS = gpa
 
-INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/intl
-LDADD = -L ../jnlib -ljnlib @INTLLIBS@
+INCLUDES = -I$(top_srcdir)/intl
+LDADD = @INTLLIBS@
 
 gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
@@ -50,4 +50,4 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpgmeedit.h gpgmeedit.c \
 	      gpgmeparsers.h gpgmeparsers.c \
 	      server_access.h server_access.c \
-	      gtkhacks.h gpa.rc
+	      gtkhacks.h options.c gpa.rc
