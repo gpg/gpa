@@ -1,3 +1,7 @@
+2003-05-20  Miguel Coca  <mcoca@gnu.org>
+
+	* gpawidgets.c (gpa_key_info_new): Fix memory leak.
+
 2003-05-17  Miguel Coca  <mcoca@gnu.org>
 
 	* gpakeyselector.c (gpa_key_selector_get_selected_keys): Don't

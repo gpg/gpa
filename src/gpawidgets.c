@@ -60,6 +60,7 @@ gpa_key_info_new (GpgmeKey key)
           gchar *tmp = string;
           string = g_strconcat (string, "\n", uid, NULL);
           g_free (tmp);
+	  g_free (uid);
         }
     }
   label = gtk_label_new (string);
