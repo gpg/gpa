@@ -23,6 +23,7 @@
  *	specific widgets
  */
 
+#include "gpa.h"
 #include <time.h>
 #include <config.h>
 #include <gdk/gdkkeysyms.h>
@@ -31,7 +32,6 @@
 #include <gpapa.h>
 
 #include "gpapastrings.h"
-#include "gpa.h"
 #include "gtktools.h"
 
 

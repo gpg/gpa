@@ -35,7 +35,7 @@ void _gpa_gpgme_error (GpgmeError err, const char *file, int line)
   GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Error"),
                                                    NULL,
                                                    GTK_DIALOG_MODAL,
-                                                   GTK_STOCK_OK,
+                                                   GTK_STOCK_CLOSE,
                                                    GTK_RESPONSE_NONE,
                                                    NULL);
   gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);

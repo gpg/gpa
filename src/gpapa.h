@@ -21,6 +21,7 @@
 #ifndef __GPAPA_H__
 #define __GPAPA_H__
 
+#include <glib.h>
 #include <config.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,8 +31,6 @@
 
 #include "xmalloc.h"
 #include "../src/i18n.h"
-
-#include <glib.h>
 
 typedef int GpgStatusCode;
 

@@ -18,9 +18,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include "gpa.h"
 #include <config.h>
 #include <gpapa.h>
-#include "gpa.h"
 #include "gpapastrings.h"
 
 /*
@@ -92,9 +92,9 @@ static gchar *unit_expiry_time[4] = {
 static gchar unit_time[4] = { 'd', 'w', 'm', 'y' };
 
 gchar *
-gpa_unit_expiry_time_string(int index)
+gpa_unit_expiry_time_string(int idx)
 {
-  return _(unit_expiry_time[index]);
+  return _(unit_expiry_time[idx]);
 }
 
 gchar

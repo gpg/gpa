@@ -20,15 +20,13 @@
 
 #include <config.h>
 
+#include <gtk/gtk.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <assert.h>
 #include <time.h>
-
-#include <gdk/gdkkeysyms.h>
-#include <glib.h>
-#include <gtk/gtk.h>
 
 #include <gpapa.h>
 #include <gpgme.h>

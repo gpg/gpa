@@ -29,22 +29,6 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef HAVE_SYS_PARAM_H
-#include <sys/param.h>
-#endif
-#include <stdlib.h>
-#include <ctype.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-#include <string.h>
-#include <errno.h>
-#ifdef HAVE_PWD_H
-#include <pwd.h>
-#endif
-#ifdef HAVE_WINSOCK_H
-#include <winsock.h>            /* For gethostname */
-#endif
 
 #ifdef HAVE_DOSISH_SYSTEM
 #include <io.h>
@@ -60,6 +44,23 @@
 #include "gpafilesel.h"
 #include "gtkhacks.h"
 #include "i18n.h"
+
+#include <string.h>
+#ifdef HAVE_SYS_PARAM_H
+#include <sys/param.h>
+#endif
+#include <stdlib.h>
+#include <ctype.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#include <errno.h>
+#ifdef HAVE_PWD_H
+#include <pwd.h>
+#endif
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h>            /* For gethostname */
+#endif
 
 #if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
 #define STRICT

@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include "gpa.h"
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +27,6 @@
 #include <gtk/gtk.h>
 #include "mischelp.h"
 #include "stringhelp.h"
-#include "gpa.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
 #include "icons.h"

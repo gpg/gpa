@@ -35,7 +35,7 @@ gchar * gpa_trust_string (GpgmeValidity keytrust);
 GpapaOwnertrust gpa_ownertrust_from_string (gchar * string);
 const char * gpa_ownertrust_icon_name (GpapaOwnertrust ownertrust);
 
-gchar * gpa_unit_expiry_time_string(int index);
+gchar * gpa_unit_expiry_time_string(int idx);
 gchar gpa_time_unit_from_string (gchar * string);
 gchar * gpa_expiry_date_string (unsigned long expiry_time);
 gchar * gpa_creation_date_string (unsigned long creation_time);

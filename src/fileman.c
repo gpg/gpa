@@ -22,7 +22,7 @@
  *	The file encryption/decryption/sign window
  */
 
-
+#include "gpa.h"
 #include <config.h>
 
 #include <stdio.h>
@@ -44,7 +44,6 @@
 
 #include "gpapastrings.h"
 
-#include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
 #include "siglist.h"

@@ -18,12 +18,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include "gpa.h"
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
 #include <config.h>
 #include <gpapa.h>
-#include "gpa.h"
 #include "gpapastrings.h"
 #include "siglist.h"
 
