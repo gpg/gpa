@@ -135,20 +135,20 @@ gpa_tableKey_new (GpapaKey * key, GtkWidget * window)
   GtkWidget *entryKeyname;
 /* commands */
   tableKey = gtk_table_new (2, 2, FALSE);
-  labelKeyID = gtk_label_new (_("Key: "));
+  labelKeyID = gtk_label_new (_("Key ID:"));
   labelJfdKeyID = gpa_widget_hjustified_new (labelKeyID, GTK_JUSTIFY_RIGHT);
-  gtk_table_attach (GTK_TABLE (tableKey), labelJfdKeyID, 0, 1, 0, 1,
+  gtk_table_attach (GTK_TABLE (tableKey), labelJfdKeyID, 0, 1, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryKeyID = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (entryKeyID),
 		      gpapa_key_get_identifier (key, gpa_callback, window));
   gtk_editable_set_editable (GTK_EDITABLE (entryKeyID), FALSE);
-  gtk_table_attach (GTK_TABLE (tableKey), entryKeyID, 1, 2, 0, 1,
+  gtk_table_attach (GTK_TABLE (tableKey), entryKeyID, 1, 2, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
-  labelKeyname = gtk_label_new ("Key owner: ");
+  labelKeyname = gtk_label_new (_("User Name:"));
   labelJfdKeyname =
     gpa_widget_hjustified_new (labelKeyname, GTK_JUSTIFY_RIGHT);
-  gtk_table_attach (GTK_TABLE (tableKey), labelJfdKeyname, 0, 1, 1, 2,
+  gtk_table_attach (GTK_TABLE (tableKey), labelJfdKeyname, 0, 1, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryKeyname = gtk_entry_new ();
   contentsKeyname = gpapa_key_get_name (key, gpa_callback, window);
@@ -160,7 +160,7 @@ gpa_tableKey_new (GpapaKey * key, GtkWidget * window)
 			entryKeyname->style->klass->xthickness, 0);
   gtk_entry_set_text (GTK_ENTRY (entryKeyname), contentsKeyname);
   gtk_editable_set_editable (GTK_EDITABLE (entryKeyname), FALSE);
-  gtk_table_attach (GTK_TABLE (tableKey), entryKeyname, 1, 2, 1, 2,
+  gtk_table_attach (GTK_TABLE (tableKey), entryKeyname, 1, 2, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   return (tableKey);
 }				/* gpa_tableKey_new */

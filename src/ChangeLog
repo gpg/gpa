@@ -1,5 +1,8 @@
 2001-02-13  Bernhard Herzog  <bh@intevation.de>
 
+	* keysmenu.c (gpa_tableKey_new): Swap the table rows and change
+	the labels to be more consistent with the rest of the UI.
+
 	* keyring.c (keyring_editor_mapped): Add accelerators for the
 	message box
 
