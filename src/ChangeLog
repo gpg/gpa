@@ -1,3 +1,8 @@
+2003-11-24  Ling Li  <ling@caltech.edu>
+
+	* keyring.c (keyring_editor_can_sign):
+	  Disable the key sign button when there's no default key.
+
 2003-11-23  Miguel Coca  <mcoca@gnu.org>
 
 	* keytable.c (gpa_keytable_init, done_cb)

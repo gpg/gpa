@@ -397,20 +397,20 @@ key_has_been_signed (const gpgme_key_t key,
 static gboolean
 keyring_editor_can_sign (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
   const gpgme_key_t default_key = gpa_options_get_default_key
     (gpa_options_get_instance ());
   gboolean result = FALSE;
 
-  if (keyring_editor_has_single_selection (param) && default_key)
+  if (default_key && keyring_editor_has_single_selection (param))
     {
       /* the most important requirements have been met, now find out
        * whether the selected key was already signed with the default
        * key */
+      GPAKeyringEditor * editor = param;
       gpgme_key_t key = keyring_editor_current_key (editor);
       result = !key_has_been_signed (key, default_key);
     }
-  else if (keyring_editor_has_selection (param))
+  else if (default_key && keyring_editor_has_selection (param))
     {
       /* Always allow signing many keys at once.
        */
