@@ -1,5 +1,8 @@
 2001-01-24  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_new): Make the scrollbars of the
+	keylist appear automatically.
+
 	* Makefile.am (gpa_SOURCES):
 	* siglist.h: 
 	* siglist.c: New files implementing the list of signatures in the
