@@ -1,5 +1,9 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* keylist.c (gpa_keylist_update_list): Call
+	gtk_container_check_resize to make sure that the size changes in
+	the title buttons are correctly accounted for
+
 	* keyring.c (keyring_editor_mapped): Check for cancelling the
 	dialog via WM, in which case result is NULL
 
