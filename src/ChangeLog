@@ -2,6 +2,8 @@
 
 	* keysigndlg.c (gpa_key_sign_run_dialog):
 	(key_sign_delete): Add signal handler for the delete-event signal.
+	(gpa_key_sign_run_dialog): Use gpa_window_show_centered instead of
+	gpa_widget_show
 
 	* passphrasedlg.c 
 	Add some comments
