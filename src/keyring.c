@@ -122,11 +122,21 @@ struct _GPAKeyringEditor {
   GtkWidget *status_key_user;
   GtkWidget *status_key_id;
 
+  /* The popup menu */
+  GtkWidget *popup_menu;
+
   /* List of sensitive widgets. See below */
   GList * selection_sensitive_widgets;
 
   /* The currently selected key */
   gpgme_key_t current_key;
+
+  /* Context used for retrieving the current key */
+  GpaContext *ctx;
+
+  /* Hack: warn the selection callback to ignore changes. Don't, ever, asign
+   * a value directly. Raise and lower it with increments. */
+  int freeze_selection;
 };
 typedef struct _GPAKeyringEditor GPAKeyringEditor;
 
@@ -582,6 +592,19 @@ keyring_selection_update_widgets (GPAKeyringEditor * editor)
   keyring_update_details_notebook (editor);
 }  
 
+/* Callback for key listings. Used to receive and set the new current key.
+ */
+static void
+keyring_editor_key_listed (GpaContext *ctx, gpgme_key_t key, gpointer param)
+{
+  GPAKeyringEditor *editor = param;
+  if (editor->current_key)
+    gpgme_key_unref (editor->current_key);
+  editor->current_key = key;
+
+  keyring_selection_update_widgets (editor);
+}
+
 /* Signal handler for selection changes.
  */
 static void
@@ -589,6 +612,12 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
 				  gpointer param)
 {
   GPAKeyringEditor *editor = param;
+  
+  /* Some other piece of the keyring wants us to ignore this signal */
+  if (editor->freeze_selection)
+    {
+      return;
+    }
   /* Update the current key */
   if (editor->current_key)
     {
@@ -596,27 +625,35 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
       gpgme_key_unref (editor->current_key);
       editor->current_key = NULL;
     }
+  /* Abort retrieval of the current key */
+  if (gpa_context_busy (editor->ctx))
+    {
+      gpgme_op_keylist_end (editor->ctx->ctx);
+    }
   /* Load the new one */
   if (gpa_keylist_has_single_selection (editor->keylist)) 
     {
       gpg_error_t err;
       GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
       gpgme_key_t key = (gpgme_key_t) selection->data;
-      gpgme_ctx_t ctx = gpa_gpgme_new ();
-      int old_mode = gpgme_get_keylist_mode (ctx);
+
+      int old_mode = gpgme_get_keylist_mode (editor->ctx->ctx);
       /* With all the signatures */
-      gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
-      err = gpgme_get_key (ctx, key->subkeys->fpr, &key, FALSE);
+      gpgme_set_keylist_mode (editor->ctx->ctx, 
+			      old_mode | GPGME_KEYLIST_MODE_SIGS);
+      err = gpgme_op_keylist_start (editor->ctx->ctx, key->subkeys->fpr, 
+				    FALSE);
       if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	{
 	  gpa_gpgme_warning (err);
 	}
-      gpgme_set_keylist_mode (ctx, old_mode);
+      gpgme_set_keylist_mode (editor->ctx->ctx, old_mode);
       g_list_free (selection);
-      editor->current_key = key;
-      gpgme_release (ctx);
     }
-  keyring_selection_update_widgets (editor);
+  else
+    {
+      keyring_selection_update_widgets (editor);
+    }
 }
 
 /* Signal handler for the map signal. If the simplified_ui flag is set
@@ -1324,6 +1361,14 @@ idle_update_details (gpointer param)
   if (gpa_keylist_has_single_selection (editor->keylist))
     {
       gpgme_key_t key = keyring_editor_current_key (editor);
+      if (!key)
+	{
+	  /* There is a single key selected, but the current key is NULL.
+	   * This means the key has not been returned yet, so we exit the
+	   * function asking GTK to run it again when there is time.
+	   */
+	  return TRUE;
+	}
       keyring_details_page_fill_key (editor, key);
       keyring_signatures_page_fill_key (editor, key);
       keyring_subkeys_page_fill_key (editor, key);
@@ -1594,19 +1639,19 @@ keyring_update_status_bar (GPAKeyringEditor * editor)
 }
 
 static gint
-display_popup_menu (GtkWidget *widget, GdkEvent *event, GpaKeyList *list)
+display_popup_menu (GPAKeyringEditor *editor, GdkEvent *event, 
+		    GpaKeyList *list)
 {
   GtkMenu *menu;
   GdkEventButton *event_button;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
+  g_return_val_if_fail (editor != NULL, FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
   /* The "widget" is the menu that was supplied when 
    * g_signal_connect_swapped() was called.
    */
-  menu = GTK_MENU (widget);
+  menu = GTK_MENU (editor->popup_menu);
   
   if (event->type == GDK_BUTTON_PRESS)
     {
@@ -1627,8 +1672,11 @@ display_popup_menu (GtkWidget *widget, GdkEvent *event, GpaKeyList *list)
 	      gtk_tree_model_get_iter (gtk_tree_view_get_model 
 				       (GTK_TREE_VIEW(list)), &iter, path);
 	      if (!gtk_tree_selection_iter_is_selected (selection, &iter))
-		{	      
+		{
+		  /* Block selection updates */
+		  editor->freeze_selection++;
 		  gtk_tree_selection_unselect_all (selection);
+		  editor->freeze_selection--;
 		  gtk_tree_selection_select_path (selection, path);
 		}
 	      gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
@@ -1765,10 +1813,9 @@ keyring_editor_new (void)
 		    "changed", G_CALLBACK (keyring_editor_selection_changed),
 		    (gpointer) editor);
 
+  editor->popup_menu = keyring_editor_popup_menu_new (window, editor);
   g_signal_connect_swapped (GTK_OBJECT (keylist), "button_press_event",
-                            G_CALLBACK (display_popup_menu),
-                            GTK_OBJECT (keyring_editor_popup_menu_new 
-                                        (window, editor)));
+                            G_CALLBACK (display_popup_menu), editor);
 
   notebook = keyring_details_notebook (editor);
   gtk_paned_pack2 (GTK_PANED (paned), notebook, TRUE, TRUE);
@@ -1788,6 +1835,11 @@ keyring_editor_new (void)
   keyring_update_details_notebook (editor);
 
   editor->current_key = NULL;
+  editor->ctx = gpa_context_new ();
+  editor->freeze_selection = 0;
+
+  g_signal_connect (G_OBJECT (editor->ctx), "next_key",
+		    G_CALLBACK (keyring_editor_key_listed), editor);
 
   return window;
 } /* keyring_editor_new */

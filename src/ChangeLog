@@ -1,3 +1,14 @@
+2003-10-03  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (keyring_editor_key_listed): New.
+	(keyring_editor_selection_changed): Change to list the current key
+	asynchronously. Use the callback above.
+	(idle_update_details): Make sure the current key has been listed
+	before using it. Otherwise, wait until it's ready.
+	(display_popup_menu): Change to receive the editor. Block the
+	"selection changed" signal while messing with the selection.
+	(keyring_editor_new): Add new initialization.
+
 2003-09-21  Miguel Coca  <mcoca@gnu.org>
 
 	* passwddlg.c (gpa_change_passphrase_dialog_run): Fix bug by which the
