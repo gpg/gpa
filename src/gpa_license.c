@@ -875,4 +875,4 @@ Ende der Bedingungen\n\
    Anmerkung des Übersetzers.]\n\
 ";
 
-char *gpa_license_text = gpa_license_text_german;
+char *gpa_license_text = gpa_license_text_english;

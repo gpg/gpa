@@ -1,5 +1,14 @@
-2002-07-30  Miguel Coca  <e970095@zipi.fi.upm.es>
+2002-07-31  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* helpmenu.c (help_warranty): Changed the position of the cursor
+	in the GPL editable to a value less dependent on the length of
+	license text.
+
+	* gpa_license.c: Use the license in English, since it's the only
+	authoritative one.
+
+2002-07-30  Miguel Coca  <e970095@zipi.fi.upm.es>
+	
 	* gpawidgets.c (gpa_key_list_new, gpa_secret_key_list_new) 
 	(gpa_public_key_list_new, gpa_key_list_new_from_glist): Move the
 	repeated code for creating the CList to a new gpa_key_list_new
