@@ -44,6 +44,13 @@ gchar *writtenOwnertrust[4] = {
   N_("trust fully")
 };
 
+gchar **iconOwnertrust[4] = {
+  gpa_trust_unknown_xpm,
+  gpa_dont_trust_xpm,
+  gpa_trust_marginally_xpm,
+  gpa_trust_fully_xpm,
+};
+
 gchar *unitExpiryTime[4] = {
   N_("days"),
   N_("weeks"),
@@ -71,6 +78,12 @@ getStringForOwnertrust (GpapaOwnertrust ownertrust)
 {
   return (writtenOwnertrust[ownertrust]);
 }				/* getStringForOwnertrust */
+
+gchar **
+getIconForOwnertrust (GpapaOwnertrust ownertrust)
+{
+  return iconOwnertrust[ownertrust];
+}				/* getIconForOwnertrust */
 
 GpapaOwnertrust
 getOwnertrustForString (gchar * aString)
@@ -1312,22 +1325,37 @@ keys_openPublic_toggleClistKeys (gpointer param)
   gint i;
   GpapaPublicKey *key;
   gchar *contents;
+	GtkStyle *style;
+	GdkPixmap *icon;
+	GdkBitmap *mask;
 /* commands */
   localParam = (gpointer *) param;
   clistKeys = (GtkWidget *) localParam[0];
   toggleShow = (GtkWidget *) localParam[1];
   windowPublic = (GtkWidget *) localParam[2];
-  contentsCountKeys = gpapa_get_public_key_count (gpa_callback, windowPublic);
-  for (i = 0; i < contentsCountKeys; i++)
-    {
-      key = gpapa_get_public_key_by_index (i, gpa_callback, windowPublic);
-      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggleShow)))
-	contents =
-	  getStringForOwnertrust (gpapa_public_key_get_ownertrust
-				  (key, gpa_callback, windowPublic));
-      else
-	contents = _("");
-      gtk_clist_set_text (GTK_CLIST (clistKeys), i, 2, contents);
+
+	style = gtk_widget_get_style(windowPublic);
+
+	contentsCountKeys = gpapa_get_public_key_count (gpa_callback, windowPublic);
+	for (i = 0; i < contentsCountKeys; i++) {
+		key = gpapa_get_public_key_by_index (i, gpa_callback, windowPublic);
+
+		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggleShow))) {
+			contents = getStringForOwnertrust (gpapa_public_key_get_ownertrust
+				(key, gpa_callback, windowPublic));
+
+			icon = gdk_pixmap_create_from_xpm_d(windowPublic->window,&mask,
+				&style->bg[GTK_STATE_NORMAL],
+				(gchar **)getIconForOwnertrust(
+					gpapa_public_key_get_ownertrust(key, gpa_callback,
+						windowPublic)));
+			gtk_clist_set_pixtext (GTK_CLIST (clistKeys), i, 2, contents,
+				8, icon, mask);
+		} else {
+			contents = _("");
+			gtk_clist_set_text (GTK_CLIST (clistKeys), i, 2, contents);
+		}
+
     }				/* while */
 }				/* keys_openPublic_toggleClistKeys */
 
@@ -1403,7 +1431,7 @@ keys_openPublic (void)
   GtkWidget *hboxAction;
   GtkWidget *tableKey;
   GtkWidget *buttonEditKey;
-  GtkWidget *buttonSign;
+  GtkWidget *buttonSign, *buttonSignBox;
   GtkWidget *buttonSend;
   GtkWidget *buttonReceive;
   GtkWidget *buttonExportKey;
@@ -1489,7 +1517,9 @@ keys_openPublic (void)
 			     (gpointer) paramEdit);
   gtk_table_attach (GTK_TABLE (tableKey), buttonEditKey, 0, 1, 0, 1, GTK_FILL,
 		    GTK_FILL, 0, 0);
-  buttonSign = gpa_button_new (accelGroup, _("_Sign keys"));
+
+  /* the 'sign key' button */
+  buttonSign = gtk_button_new();
   gtk_table_attach (GTK_TABLE (tableKey), buttonSign, 1, 2, 0, 1,
 		    GTK_FILL, GTK_FILL, 0, 0);
   buttonSend = gpa_button_new (accelGroup, _("Se_nd keys"));
@@ -1502,6 +1532,11 @@ keys_openPublic (void)
 			     (gpointer) paramSend);
   gtk_table_attach (GTK_TABLE (tableKey), buttonSend, 0, 1, 1, 2, GTK_FILL,
 		    GTK_FILL, 0, 0);
+  /* associate this button with an icon */
+  buttonSignBox = gpa_xpm_label_box(windowPublic, gpa_sign_small_xpm,
+				  _("_Sign keys"), buttonSign, accelGroup);
+  gtk_container_add (GTK_CONTAINER (buttonSign), buttonSignBox);
+
   buttonReceive = gpa_button_new (accelGroup, _("_Receive keys"));
   gtk_signal_connect_object (GTK_OBJECT (buttonReceive), "clicked",
 			     GTK_SIGNAL_FUNC (keys_openPublic_receive),
