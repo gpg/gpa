@@ -65,6 +65,7 @@ enum cmd_and_opt_values {
   oNoOptions,
   oHomedir,
   oGPGBinary,
+  oSimplifiedUI,
 
   aTest
 };
@@ -80,6 +81,7 @@ static ARGPARSE_OPTS opts[] = {
     { oDebug,	"debug"     ,4|16, N_("set debugging flags")},
     { oDebugAll, "debug-all" ,0, N_("enable full debugging")},
     { oGPGBinary, "gpg-program", 2 , "@" },
+    { oSimplifiedUI, "simplified-ui", 0,N_("use a simplified user interface")},
     {0}
 };
 
@@ -141,6 +143,20 @@ i18n_init (void)
   textdomain (PACKAGE);
 #endif
 #endif
+}
+
+static gboolean simplified_ui = FALSE;
+
+gboolean
+gpa_simplified_ui (void)
+{
+  return simplified_ui;
+}
+
+void
+gpa_set_simplified_ui (gboolean value)
+{
+  simplified_ui = value;
 }
 
 
@@ -307,6 +323,7 @@ main (int argc, char **argv)
 	case oNoOptions: break; /* no-options */
 	case oHomedir: opt.homedir = pargs.r.ret_str; break;
 	case oGPGBinary: gpg_program = pargs.r.ret_str;  break;
+	case oSimplifiedUI: gpa_set_simplified_ui (TRUE); break;
 
 
 	default : pargs.err = configfp? 1:2; break;
