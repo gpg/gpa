@@ -1,4 +1,4 @@
-Noteworthy changes in version 0.7.0 (unreleased)
+Noteworthy changes in version 0.7.0 (2003-10-22)
 ------------------------------------------------
 
  * Long file operations no longer block GPA, so several operations can be
@@ -34,6 +34,8 @@ Noteworthy changes in version 0.7.0 (unreleased)
  when GPA is started. 
 
  * Removed all deprecated widgets. GPA is now pure GTK+ 2.2.
+
+ * Fixed a hang on startup on PowerPC machines.
 
 Noteworthy changes in version 0.6.1 (2003-01-29)
 ------------------------------------------------

@@ -1,3 +1,7 @@
+2003-10-22  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Release 0.7.0.
+
 2003-10-13  gettextize  <bug-gnu-gettext@gnu.org>
 
 	* Makefile.am (SUBDIRS): Add m4.
