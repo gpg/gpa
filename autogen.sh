@@ -7,8 +7,8 @@
 PGM=GPA
 lib_config_files="gtk-config"
 autoconf_vers=2.52
-automake_vers=1.5
-aclocal_vers=1.5
+automake_vers=1.6
+aclocal_vers=1.6
 libtool_vers=1.4
 
 DIE=no
@@ -137,11 +137,6 @@ fi
 if test "$DIE" = "yes"; then
     exit 1
 fi
-
-echo "Running gettextize...  Ignore non-fatal messages."
-echo "no" | gettextize --force
-#echo "Running libtoolize...  Ignore non-fatal messages."
-#echo "no" | libtoolize
 
 
 echo "Running aclocal..."
