@@ -10,7 +10,8 @@ noinst_LIBRARIES = libjnlib.a
 #libjnlib_a_LDFLAGS =
 libjnlib_a_SOURCES = libjnlib-config.h	       \
 		     xmalloc.c xmalloc.h       \
-		     mischelp.h
+		     stringhelp.c stringhelp.h \
+		     types.h mischelp.h
 
 
 

@@ -28,10 +28,13 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#ifndef __MINGW32__
+#ifdef __MINGW32__
+  #include <windows.h>
+#else
   #include <sys/wait.h>
 #endif
 #include <fcntl.h>
+#include "stringhelp.h"
 
 gboolean gpapa_line_begins_with ( gchar *line, gchar *keyword )
 {
@@ -61,6 +64,9 @@ static gboolean status_check (
   return ( result );
 } /* status_check */
 
+
+
+
 /* user_args must be a NULL-terminated array of argument strings.
  */
 void gpapa_call_gnupg (
@@ -72,9 +78,342 @@ void gpapa_call_gnupg (
   /* Hmm, let's see how we can tackle this for the W32 API:
    *
    */
-  callback ( GPAPA_ACTION_ERROR, "gpg calling not yet done for W32", calldata );
 
-#else /* Here is the code for something we call an operating system */
+    SECURITY_ATTRIBUTES sec_attr;
+    PROCESS_INFORMATION pi = { NULL, /* returns process handle */
+			       0,    /* returns primary thread handle */
+			       0,    /* returns pid */
+			       0     /* returns tid */
+			     };
+    STARTUPINFO si = {0, NULL, NULL, NULL,
+		      0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		      NULL, NULL, NULL, NULL };
+    char *envblock = NULL;
+    int cr_flags = CREATE_DEFAULT_ERROR_MODE
+		   | GetPriorityClass ( GetCurrentProcess () );
+    int rc;
+    HANDLE save_stdout;
+    HANDLE outputfd [ 2 ], statusfd [ 2 ], inputfd [ 2 ];
+    gboolean missing_passphrase = FALSE;
+    char *arg_string = NULL;
+    char *standard_args [ ] = {
+      "--status-fd=2",
+      "--no-options",
+      "--batch",
+      NULL
+    };
+
+    sec_attr.nLength = sizeof ( sec_attr );
+    sec_attr.bInheritHandle = FALSE;
+    sec_attr.lpSecurityDescriptor = NULL;
+
+
+    /* Open output pipe. */
+    if ( !CreatePipe ( outputfd+0, outputfd+1, NULL, 0 ) ) {
+	callback ( GPAPA_ACTION_ERROR, "could not open output pipe", calldata );
+	return;
+    }
+
+    /* Open status pipe. */
+    if ( !CreatePipe ( statusfd+0, statusfd+1, NULL, 0 ) ) {
+	callback ( GPAPA_ACTION_ERROR, "could not open status pipe", calldata );
+	CloseHandle ( outputfd [ 0 ] );
+	CloseHandle ( outputfd [ 1 ] );
+	return;
+    }
+
+  /* fixme: open passphrase pipe - Hmmm: Should we really use it?? */
+
+  /* fixme: setup input pipe */
+
+
+    /* Construct the command line. */
+    fprintf( stderr, "+++ constructing commandline\n");
+    fflush(stderr);
+    {
+	int i, n=0;
+	char *p;
+
+	for ( i=0; standard_args[i]; i++ )
+	    n += strlen ( standard_args[i] ) + 1;
+	for ( i=0; user_args[i]; i++ )
+	    n += strlen ( user_args[i] ) + 1;
+	n += 5; /* "gpg " */
+	p = arg_string = xmalloc ( n );
+	p = stpcpy ( p, "gpg" );
+	for ( i=0; standard_args[i]; i++ )
+	    p = stpcpy (stpcpy( p, " "), standard_args[i]);
+	for ( i=0; user_args[i]; i++ )
+	    p = stpcpy (stpcpy( p, " "), user_args[i]);
+
+    }
+
+    fprintf( stderr, "+++ setting handles\n");
+    fflush(stderr);
+    si.cb = sizeof ( si );
+    si.dwFlags = STARTF_USESTDHANDLES;
+    si.hStdInput = GetStdHandle( STD_INPUT_HANDLE );
+    si.hStdOutput= GetStdHandle( STD_OUTPUT_HANDLE );
+    si.hStdError = GetStdHandle( STD_ERROR_HANDLE );
+    si.hStdOutput= outputfd[1];
+    si.hStdError = statusfd[1];
+    if ( !SetHandleInformation( si.hStdOutput, HANDLE_FLAG_INHERIT,
+					       HANDLE_FLAG_INHERIT ) ) {
+	fprintf ( stderr, "** SHI 1 failed: ec=%d\n", (int)GetLastError () );
+    }
+    if ( !SetHandleInformation( si.hStdError,  HANDLE_FLAG_INHERIT,
+					       HANDLE_FLAG_INHERIT ) ) {
+	fprintf ( stderr, "** SHI 2 failed: ec=%d\n", (int)GetLastError () );
+    }
+
+
+    fputs ( "** CreateProcess ...\n", stderr );
+    fprintf(stderr, "** args=`%s'\n", arg_string );
+    fflush(stderr);
+    rc = CreateProcessA ( "c:\\gnupg\\gpg.exe",
+			arg_string,
+			&sec_attr, /* process security attributes */
+			&sec_attr, /* thread security attributes */
+			TRUE,	   /* inherit handles */
+			cr_flags,  /* creation flags */
+			envblock,  /* environment */
+			NULL,	   /* use current drive/directory */
+			&si,	   /* startup information */
+			&pi	   /* returns process information */
+		      );
+
+    if ( !rc ) {
+	fprintf ( stderr, "** CreateProcess failed: ec=%d\n", (int)GetLastError () );
+	fflush(stderr);
+	callback ( GPAPA_ACTION_ERROR, "CreateProcess failed", calldata );
+	return;
+    }
+
+    CloseHandle ( outputfd[1] );
+    CloseHandle ( statusfd[1] );
+
+    fprintf ( stderr, "** CreateProcess ready\n" );
+    fprintf ( stderr, "**   hProcess=%p  hThread=%p\n",
+			      pi.hProcess, pi.hThread );
+    fprintf ( stderr, "**   dwProcessID=%d dwThreadId=%d\n",
+			      (int)pi.dwProcessId, (int)pi.dwThreadId );
+    fflush(stderr);
+
+
+    fprintf ( stderr, "** start waiting for this processs ...\n" );
+    fflush(stderr);
+
+    SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_HIGHEST);
+
+    if ( do_wait ) {
+	int ready, status, retpid;
+	size_t bufsize = 8192;
+	size_t pendingsize = 0;
+	char *buffer = (char *) xmalloc ( bufsize );
+	char *pendingbuffer = NULL;
+
+	for ( ready=0; !ready; ) {
+	    HANDLE waitbuf[3] = {pi.hProcess, outputfd[0], statusfd[0] };
+	    int nwait = 3;
+	    int nread, ncount;
+
+	    ncount = WaitForMultipleObjects (nwait, waitbuf, FALSE, 0 );
+	    if ( ncount >= WAIT_OBJECT_0 && ncount < WAIT_OBJECT_0+2 )	{
+		int check_again;
+		/* Hmm: I don't know how this should work: We always get
+		 * an event for the outputfd but most of the time the pipe
+		 * is empty.  I have never seen an event for the status_fd.
+		 * The workaround is to check on any event for data on one
+		 * of these pipes.
+		 */
+		do {
+		    DWORD navail;
+		    check_again = 0;
+
+		    /* check outputfd */
+		    if ( !PeekNamedPipe ( outputfd[0], NULL, 0, NULL,
+							     &navail, NULL )) {
+			fprintf ( stderr, "** PeekPipe failed: ec=%d\n", (int)GetLastError () );
+			navail = 0;
+		    }
+		    nread = 0;
+		    if( navail && !ReadFile ( outputfd[0], buffer, bufsize,
+							     &nread, NULL )) {
+			fprintf ( stderr, "** ReadFile failed: ec=%d\n", (int)GetLastError () );
+			nread = 0;
+		    }
+		    while ( nread > 0 ) { /* process this data */
+			int q=0;
+
+			check_again = 1;
+			fprintf ( stderr, "outputfd has %d bytes\n", nread );
+			while ( q < nread && buffer [ q ] != '\n' )
+			    q++;
+			if ( q < nread ) {
+			    if ( pendingsize > 0 ) {
+				int newpendingsize = pendingsize + q + 1;
+				pendingbuffer = xrealloc ( pendingbuffer,
+							   newpendingsize );
+				memcpy ( pendingbuffer + pendingsize, buffer, q );
+				pendingbuffer [ newpendingsize - 1 ] = 0;
+				linecallback ( pendingbuffer, linedata, FALSE );
+				free ( pendingbuffer );
+				pendingbuffer = NULL;
+				pendingsize = 0;
+			    }
+			    else {
+				buffer [ q ] = 0;
+				linecallback ( buffer, linedata, FALSE );
+			    }
+			    memmove ( buffer, buffer + q + 1, nread - q - 1 );
+			    nread -= q + 1;
+			}
+			else {
+			    int newpendingsize = pendingsize + nread;
+			    pendingbuffer = xrealloc ( pendingbuffer,
+						       newpendingsize );
+			    memcpy ( pendingbuffer + pendingsize, buffer, nread );
+			    pendingsize = newpendingsize;
+			    nread = 0;
+			}
+		    }
+
+		    /* check statusfd */
+		    if ( !PeekNamedPipe ( statusfd[0], NULL, 0, NULL,
+							     &navail, NULL )) {
+			fprintf ( stderr, "** PeekPipe failed: ec=%d\n", (int)GetLastError () );
+			navail = 0;
+		    }
+		    nread = 0;
+		    if( navail && !ReadFile ( statusfd[0], buffer, bufsize,
+							     &nread, NULL )) {
+			fprintf ( stderr, "** ReadFile failed: ec=%d\n", (int)GetLastError () );
+			nread = 0;
+		    }
+		    if( nread > 0 ) {
+			char *bufptr = buffer;
+			check_again = 1;
+			fprintf ( stderr, "statusfd has %d bytes\n", nread );
+
+			buffer [ MIN ( bufsize - 1, nread ) ] = 0;
+			while ( *bufptr )
+			  {
+			    char *qq = bufptr;
+			    char nlsave;
+			    while ( *qq && *qq != '\n' )
+			      qq++;
+			    nlsave = *qq;
+			    *qq = 0;
+			    linecallback ( bufptr, linedata, TRUE );
+			    status_check ( bufptr, callback, calldata, "NODATA",
+					   "no data found" );
+			    status_check ( bufptr, callback, calldata, "BADARMOR",
+					   "ASCII armor is corrupted" );
+			    if ( status_check ( bufptr, callback, calldata, "MISSING_PASSPHRASE",
+						"missing passphrase" ) )
+			      missing_passphrase = TRUE;
+			    if ( ! missing_passphrase )
+			      status_check ( bufptr, callback, calldata, "BAD_PASSPHRASE",
+					     "bad passphrase" );
+			    status_check ( bufptr, callback, calldata, "DECRYPTION_FAILED",
+					   "decryption failed" );
+			    status_check ( bufptr, callback, calldata, "NO_PUBKEY",
+					   "public key not available" );
+			    status_check ( bufptr, callback, calldata, "NO_SECKEY",
+					   "secret key not available" );
+			    *qq = nlsave;
+			    if ( *qq )
+			      qq++;
+			    bufptr = qq;
+			}
+		    }
+		} while ( check_again );
+	    } /* end read pipes */
+
+	    switch ( ncount ) {
+	      case WAIT_TIMEOUT:
+		fprintf ( stderr, "WFMO timed out after signal");
+		if ( WaitForSingleObject (pi.hProcess, 0) != WAIT_OBJECT_0 ) {
+		    fprintf ( stderr, "subprocess still alive after signal");
+		    break;
+		}
+		fprintf ( stderr, "subprocess exited after signal");
+		/* fall thru */
+	      case WAIT_OBJECT_0: {
+		    DWORD res;
+		    fprintf ( stderr, "subprocess exited");
+		    if (!GetExitCodeProcess (pi.hProcess, &res))
+			fprintf ( stderr, "GetExitCodeProcess failed\n");
+		    else
+			fprintf ( stderr, "** exit code=%lu\n", (unsigned long)res );
+		    ready = 1;
+		}
+		break;
+
+	      case WAIT_OBJECT_0+1:
+	      case WAIT_OBJECT_0+2:
+		/* already handled */
+		break;
+
+	      case WAIT_FAILED: {
+		    DWORD r;
+		    fprintf ("waitbuf[0] %p = %d", waitbuf[0],
+				   GetHandleInformation (waitbuf[0], &r));
+		}
+		break;
+
+	      default:
+		fprintf ( stderr, "WFMO returned invalid value\n" );
+		break;
+	    }
+
+	  /* Handle remaining output data.
+	   */
+	  if ( pendingsize > 0 )
+	    {
+	      int newpendingsize = pendingsize + 1;
+	      pendingbuffer = (char *) xrealloc ( pendingbuffer, newpendingsize );
+	      pendingbuffer [ newpendingsize - 1 ] = 0;
+	      linecallback ( pendingbuffer, linedata, FALSE );
+	      free ( pendingbuffer );
+	      pendingbuffer = NULL;
+	      pendingsize = 0;
+	    }
+	 #if 0
+	  if ( WIFEXITED ( status ) && WEXITSTATUS ( status ) != 0 )
+	    {
+	      char msg [ 80 ];
+	      sprintf ( msg, "GnuPG execution terminated with error code %d",
+			     WEXITSTATUS ( status ) );
+	      callback ( GPAPA_ACTION_ABORTED, msg, calldata );
+	    }
+	  else if ( WIFSIGNALED ( status ) && WTERMSIG ( status ) != 0 )
+	    {
+	      char msg [ 80 ];
+	      sprintf ( msg, "GnuPG execution terminated by uncaught signal %d",
+			     WTERMSIG ( status ) );
+	      callback ( GPAPA_ACTION_ABORTED, msg, calldata );
+	    }
+	  else
+	    callback ( GPAPA_ACTION_FINISHED,
+		       "GnuPG execution terminated normally", calldata );
+	#endif
+	}
+
+	free ( buffer );
+    }
+    else {
+	  /* @@ To be implemented:
+	   *
+	   * Install linecallback() in a way that gpapa_idle()
+	   * will call it for each line coming from this pipe.
+	   */
+    }
+    CloseHandle ( outputfd [ 0 ] );
+    CloseHandle ( statusfd [ 0 ] );
+
+    fprintf ( stderr, "** gpapa_call_gnupg ready\n" );
+#else /* Here is the code for something we call a real operating system */
   int pid;
   int outputfd [ 2 ], statusfd [ 2 ], passfd [ 2 ], inputfd [ 2 ], devnull;
   char **argv;

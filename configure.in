@@ -12,10 +12,12 @@ dnl
 dnl The version number goes here
 dnl
 AM_INIT_AUTOMAKE(gpa,0.2.0)
+ALL_LINGUAS=""
 
 dnl
 dnl Setup some stuff depending on host/target.
 dnl
+try_gettext=yes
 case "${target}" in
     *-*-mingw32)
         # special stuff for Windoze NT
@@ -24,6 +26,7 @@ case "${target}" in
         CC="${target}-gcc"
         CPP="${target}-gcc -E"
         RANLIB="${target}-ranlib"
+        try_gettext=no
         ;;
     *)
        ;;
@@ -36,6 +39,7 @@ dnl
 dnl Checks for programs
 dnl
 AC_PROG_CC
+AC_ISC_POSIX
 AC_STDC_HEADERS
 AC_ARG_PROGRAM
 AC_PROG_RANLIB
@@ -44,6 +48,15 @@ AC_PROG_RANLIB
 dnl
 dnl Checks for libraries
 dnl
+
+if test "$try_gettext" = yes; then
+AM_GNU_GETTEXT
+else
+USE_NLS=no
+USE_INCLUDED_LIBINTL=no
+AC_SUBST(USE_NLS)
+AC_SUBST(USE_INCLUDED_LIBINTL)
+fi
 
 dnl Where is the GTK+ toolkit
 if test "$cross_compiling" = yes ; then
@@ -61,7 +74,8 @@ fi
 dnl
 dnl Checks for header files
 dnl
-AC_CHECK_FUNCS(stpcpy strlwr stricmp memicmp)
+dnl These are needed by libjnlib
+AC_CHECK_FUNCS(memicmp stpcpy strlwr strtoul memmove stricmp)
 
 
 dnl
@@ -69,6 +83,21 @@ dnl Checks for typedefs and structures
 dnl
 
 GNUPG_CHECK_TYPEDEF(byte, HAVE_BYTE_TYPEDEF)
+GNUPG_CHECK_TYPEDEF(ushort, HAVE_USHORT_TYPEDEF)
+GNUPG_CHECK_TYPEDEF(ulong, HAVE_ULONG_TYPEDEF)
+GNUPG_CHECK_TYPEDEF(u16, HAVE_U16_TYPEDEF)
+GNUPG_CHECK_TYPEDEF(u32, HAVE_U32_TYPEDEF)
+# We should not use them in this software;
+# However jnlib/types.h needs them - so we take the easy way.
+AC_CHECK_SIZEOF(unsigned short, 2)
+AC_CHECK_SIZEOF(unsigned int, 4)
+AC_CHECK_SIZEOF(unsigned long, 4)
+if test "$ac_cv_sizeof_unsigned_short" = "0" \
+   || test "$ac_cv_sizeof_unsigned_int" = "0" \
+   || test "$ac_cv_sizeof_unsigned_long" = "0"; then
+    AC_MSG_WARN([Hmmm, something is wrong with the sizes - using defaults]);
+fi
+
 
 
 dnl
@@ -79,8 +108,6 @@ dnl
 dnl Checks for library functions
 dnl
 
-dnl These are needed by libjnlib
-AC_CHECK_FUNCS(memicmp stpcpy strlwr strtoul memmove stricmp)
 
 
 
@@ -96,6 +123,8 @@ fi
 
 AC_OUTPUT([
 Makefile
+intl/Makefile
+po/Makefile.in
 jnlib/Makefile
 gpapa/Makefile
 src/Makefile

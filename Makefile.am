@@ -1,4 +1,4 @@
 
-SUBDIRS = jnlib gpapa src
+SUBDIRS = intl jnlib gpapa src po
 EXTRA_DIST = TODO
 

@@ -1,3 +1,7 @@
+2000-05-15 16:49:59  Werner Koch  (wk@habibti.openit.de)
+
+	Added PO support.
+
 2000-05-11 16:59:24  Werner Koch  (wk@habibti.openit.de)
 
 	* configure.in: Add a few function checks. Fixed some hardcoded

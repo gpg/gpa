@@ -97,6 +97,9 @@ static GpapaKey *extract_key (
   fields = i;
   if ( fields != 10 )
     {
+	#ifdef __MINGW32__
+	  fprintf (stderr,"colon line=`%s'\n", line );
+	#endif
       callback ( GPAPA_ACTION_ERROR,
 		 "invalid number of fields in GPG colon output",
 		 calldata );
@@ -209,9 +212,9 @@ GpapaPublicKey *gpapa_receive_public_key_from_server (
       gpgargv [ 3 ] = id;
       gpgargv [ 4 ] = NULL;
       gpapa_call_gnupg (
-        gpgargv, TRUE, NULL, NULL,
-        gpapa_linecallback_dummy, NULL,
-        callback, calldata
+	gpgargv, TRUE, NULL, NULL,
+	gpapa_linecallback_dummy, NULL,
+	callback, calldata
       );
       free ( id );
       gpapa_refresh_public_keyring ( callback, calldata );
@@ -342,23 +345,23 @@ void gpapa_export_ownertrust (
     {
       FILE *stream = fopen ( targetFileID, "w" );
       if ( ! stream )
-        callback ( GPAPA_ACTION_ERROR, "could not open target file for writing", calldata );
+	callback ( GPAPA_ACTION_ERROR, "could not open target file for writing", calldata );
       else
-        {
-          char *gpgargv [ 3 ];
-          int i = 0;
-          if ( Armor == GPAPA_ARMOR )
+	{
+	  char *gpgargv [ 3 ];
+	  int i = 0;
+	  if ( Armor == GPAPA_ARMOR )
 	    gpgargv [ i++ ] = "--armor";
-          gpgargv [ i++ ] = "--export-ownertrust";
-          gpgargv [ i ] = NULL;
-          gpapa_call_gnupg
+	  gpgargv [ i++ ] = "--export-ownertrust";
+	  gpgargv [ i ] = NULL;
+	  gpapa_call_gnupg
 	    (
 	      gpgargv, TRUE, NULL, NULL,
 	      linecallback_export_ownertrust, stream,
 	      callback, calldata
 	    );
-          fclose ( stream );
-        }
+	  fclose ( stream );
+	}
     }
 } /* gpapa_export_ownertrust */
 
@@ -376,11 +379,11 @@ void gpapa_import_ownertrust (
       gpgargv [ 1 ] = sourceFileID;
       gpgargv [ 2 ] = NULL;
       gpapa_call_gnupg
-        (
-          gpgargv, TRUE, NULL, NULL,
-          gpapa_linecallback_dummy, NULL,
-          callback, calldata
-        );
+	(
+	  gpgargv, TRUE, NULL, NULL,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
     }
 } /* gpapa_import_ownertrust */
 
@@ -413,11 +416,11 @@ void gpapa_import_keys (
       gpgargv [ 1 ] = sourceFileID;
       gpgargv [ 2 ] = NULL;
       gpapa_call_gnupg
-        (
-          gpgargv, TRUE, NULL, NULL,
-          gpapa_linecallback_dummy, NULL,
-          callback, calldata
-        );
+	(
+	  gpgargv, TRUE, NULL, NULL,
+	  gpapa_linecallback_dummy, NULL,
+	  callback, calldata
+	);
     }
 } /* gpapa_import_keys */
 

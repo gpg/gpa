@@ -25,6 +25,99 @@
 #include <glib.h>
 #include "gpapa.h"
 
+#ifdef __MINGW32__
+  #include <windows.h>
+  #include <ctype.h>
+
+static struct {
+    HANDLE in, out;
+} con;
+#define DEF_INPMODE  (ENABLE_LINE_INPUT|ENABLE_ECHO_INPUT    \
+					|ENABLE_PROCESSED_INPUT )
+#define HID_INPMODE  (ENABLE_LINE_INPUT|ENABLE_PROCESSED_INPUT )
+#define DEF_OUTMODE  (ENABLE_WRAP_AT_EOL_OUTPUT|ENABLE_PROCESSED_OUTPUT)
+
+static void
+init_w32_tty ( void )
+{
+    static int initialized = 0;
+
+    if ( !initialized ) {
+	SECURITY_ATTRIBUTES sa;
+
+	memset(&sa, 0, sizeof(sa));
+	sa.nLength = sizeof(sa);
+	sa.bInheritHandle = TRUE;
+	con.out = CreateFileA( "CONOUT$", GENERIC_READ|GENERIC_WRITE,
+			       FILE_SHARE_READ|FILE_SHARE_WRITE,
+			       &sa, OPEN_EXISTING, 0, 0 );
+	if( con.out == INVALID_HANDLE_VALUE )
+	    abort ();
+	memset(&sa, 0, sizeof(sa));
+	sa.nLength = sizeof(sa);
+	sa.bInheritHandle = TRUE;
+	con.in = CreateFileA( "CONIN$", GENERIC_READ|GENERIC_WRITE,
+			       FILE_SHARE_READ|FILE_SHARE_WRITE,
+			       &sa, OPEN_EXISTING, 0, 0 );
+	if( con.in == INVALID_HANDLE_VALUE )
+	    abort ();
+	SetConsoleMode(con.in, DEF_INPMODE );
+	SetConsoleMode(con.out, DEF_OUTMODE );
+	initialized = 1;
+    }
+}
+
+
+static char *
+getpass ( const char *prompt )
+{
+    char *buf;
+    unsigned char cbuf[1];
+    int c, n, i;
+    DWORD nwritten;
+
+    init_w32_tty();
+    n = strlen( prompt );
+    WriteConsoleA ( con.out, prompt, n, &nwritten, NULL );
+
+    buf = xmalloc(n=50);
+    i = 0;
+
+    SetConsoleMode(con.in, HID_INPMODE );
+
+    for(;;) {
+	DWORD nread;
+
+	if( !ReadConsoleA( con.in, cbuf, 1, &nread, NULL ) )
+	    abort ();
+	if( !nread )
+	    continue;
+	if( *cbuf == '\n' )
+	    break;
+
+	c = *cbuf;
+	if( c == '\t' )
+	    c = ' ';
+	else if( c > 0xa0 )
+	    ; /* we don't allow 0xa0, as this is a protected blank which may
+	       * confuse the user */
+	else if( iscntrl(c) )
+	    continue;
+	if( !(i < n-1) ) {
+	    n += 50;
+	    buf = xrealloc( buf, n );
+	}
+	buf[i++] = c;
+    }
+
+    SetConsoleMode(con.in, DEF_INPMODE );
+    WriteConsoleA ( con.out, prompt, 2, "\r\n", NULL );
+    buf[i] = 0;
+    return buf;
+}
+#endif /* __MINGW32__ */
+
+
 char *calldata;
 
 void callback (
@@ -122,8 +215,8 @@ void test_pubring ( void )
     }
   P = gpapa_get_public_key_by_ID ( "6C7EE1B8621CC013", callback, calldata );
   gpapa_public_key_delete ( P, callback, calldata );
-  P = gpapa_receive_public_key_from_server ( "6C7EE1B8621CC013", 
-        "blackhole.pca.dfn.de", callback, calldata );
+  P = gpapa_receive_public_key_from_server ( "6C7EE1B8621CC013",
+	"blackhole.pca.dfn.de", callback, calldata );
   if ( P != NULL )
     {
       GList *g;
@@ -149,7 +242,7 @@ void test_pubring ( void )
 		   validity );
 	  g = g_list_next ( g );
 	}
-/*      gpapa_public_key_send_to_server ( P, "blackhole.pca.dfn.de", callback, calldata ); */
+/*	gpapa_public_key_send_to_server ( P, "blackhole.pca.dfn.de", callback, calldata ); */
       gpapa_release_public_key ( P, callback, calldata );
     }
   else
@@ -196,26 +289,26 @@ void print_status ( gchar *filename )
   switch ( gpapa_file_get_status ( F, callback, calldata ) )
     {
       case GPAPA_FILE_UNKNOWN:
-        printf ( "UNKNOWN" );
-        break;
+	printf ( "UNKNOWN" );
+	break;
       case GPAPA_FILE_CLEAR:
-        printf ( "clear" );
-        break;
+	printf ( "clear" );
+	break;
       case GPAPA_FILE_ENCRYPTED:
-        printf ( "encrypted" );
-        break;
+	printf ( "encrypted" );
+	break;
       case GPAPA_FILE_PROTECTED:
-        printf ( "protected" );
-        break;
+	printf ( "protected" );
+	break;
       case GPAPA_FILE_SIGNED:
-        printf ( "signed" );
-        break;
+	printf ( "signed" );
+	break;
       case GPAPA_FILE_CLEARSIGNED:
-        printf ( "clearsigned" );
-        break;
+	printf ( "clearsigned" );
+	break;
       case GPAPA_FILE_DETACHED_SIGNATURE:
-        printf ( "detached signature" );
-        break;
+	printf ( "detached signature" );
+	break;
     }
   printf ( "\t(%d signatures)\n", gpapa_file_get_signature_count ( F, callback, calldata ) );
   gpapa_file_release ( F, callback, calldata );
@@ -244,19 +337,19 @@ void test_status ( void )
 void test_export_public ( char *keyID )
 {
   GpapaPublicKey *P = gpapa_get_public_key_by_ID ( keyID, callback, calldata );
-  gpapa_public_key_export ( P, "exported.asc", GPAPA_ARMOR, callback, calldata ); 
+  gpapa_public_key_export ( P, "exported.asc", GPAPA_ARMOR, callback, calldata );
   gpapa_release_public_key ( P, callback, calldata );
-  gpapa_export_ownertrust ( "exptrust.asc", GPAPA_ARMOR, callback, calldata ); 
-  gpapa_import_ownertrust ( "exptrust.asc", callback, calldata ); 
-  gpapa_import_keys ( "peter.elg-dsa.public-key.asc", callback, calldata ); 
-  gpapa_update_trust_database ( callback, calldata ); 
+  gpapa_export_ownertrust ( "exptrust.asc", GPAPA_ARMOR, callback, calldata );
+  gpapa_import_ownertrust ( "exptrust.asc", callback, calldata );
+  gpapa_import_keys ( "peter.elg-dsa.public-key.asc", callback, calldata );
+  gpapa_update_trust_database ( callback, calldata );
 }
 
 void test_export_secret ( char *keyID )
 {
   GpapaSecretKey *P = gpapa_get_secret_key_by_ID ( keyID, callback, calldata );
-  gpapa_secret_key_export ( P, "exportedsec.asc", GPAPA_ARMOR, callback, calldata ); 
-  gpapa_secret_key_delete ( P, callback, calldata ); 
+  gpapa_secret_key_export ( P, "exportedsec.asc", GPAPA_ARMOR, callback, calldata );
+  gpapa_secret_key_delete ( P, callback, calldata );
   gpapa_release_secret_key ( P, callback, calldata );
 }
 
@@ -267,7 +360,7 @@ void test_edithelp ( void )
   gpgargv [ 1 ] = "test";
   gpgargv [ 2 ] = NULL;
   gpapa_call_gnupg ( gpgargv, TRUE, "help\nquit\n", NULL,
-                     linecallback, "pruzzel", callback, NULL );
+		     linecallback, "pruzzel", callback, NULL );
 }
 
 void test_encrypt ( GList *rcptKeyIDs, char *keyID )
@@ -275,40 +368,51 @@ void test_encrypt ( GList *rcptKeyIDs, char *keyID )
   GpapaFile *F = gpapa_file_new ( "test.txt", callback, calldata );
   char *PassPhrase;
   gpapa_file_encrypt ( F, NULL, rcptKeyIDs, GPAPA_ARMOR,
-                       callback, calldata );
+		       callback, calldata );
   PassPhrase = getpass ( "Please enter passphrase for signing: " );
   gpapa_file_encrypt_and_sign ( F, NULL, rcptKeyIDs,
-                                keyID, PassPhrase, GPAPA_SIGN_NORMAL, GPAPA_ARMOR,
-                                callback, calldata );
+				keyID, PassPhrase, GPAPA_SIGN_NORMAL, GPAPA_ARMOR,
+				callback, calldata );
   PassPhrase = getpass ( "Please enter passphrase for protecting: " );
   printf ( "Encrypting ..." );
   gpapa_file_protect ( F, NULL, PassPhrase, GPAPA_ARMOR,
-                       callback, calldata );
+		       callback, calldata );
   printf ( " done.\nDecrypting ..." );
   gpapa_file_release ( F, callback, calldata );
   F = gpapa_file_new ( "test.txt.asc", callback, calldata );
   gpapa_file_decrypt ( F, NULL, PassPhrase,
-                       callback, calldata );
+		       callback, calldata );
   printf ( " done.\n" );
   gpapa_file_release ( F, callback, calldata );
 }
 
 int main ( int argc, char **argv )
 {
-  calldata = argv [ 0 ];
-/*
-  test_version ( );
-  test_pubring ( );
-  test_secring ( );
-  test_files ( );
-  test_status ( );
-  test_export_public ( "4875B1DC979B6F2A" );
-  test_export_public ( "6C7EE1B8621CC013" );
-  test_export_secret ( "7D0908A0EE9A8BFB" );
-  test_edithelp ( );
-*/
-  test_encrypt ( g_list_append ( g_list_append ( NULL, "983465DB21439422" ),
-                                 "6C7EE1B8621CC013" ),
-                 "7D0908A0EE9A8BFB");
+  const char *what = argc > 1 ? argv[1] : "version";
+  calldata = argc > 2? argv [ 2 ] : "foo";
+
+  if( !strcmp( what, "version" ) )
+      test_version ( );
+  else if( !strcmp( what, "pubring" ) )
+      test_pubring ( );
+  else if( !strcmp( what, "secring" ) )
+      test_secring ( );
+  else if( !strcmp( what, "files" ) )
+      test_files ( );
+  else if( !strcmp( what, "status" ) )
+      test_status ( );
+  else if( !strcmp( what, "export_public" ) )
+      test_export_public ( "4875B1DC979B6F2A" );
+  else if( !strcmp( what, "export_public-2" ) )
+      test_export_public ( "6C7EE1B8621CC013" );
+  else if( !strcmp( what, "export_secret" ) )
+      test_export_secret ( "7D0908A0EE9A8BFB" );
+  else if( !strcmp( what, "edithelp" ) )
+      test_edithelp ( );
+  else if( !strcmp( what, "encrypt" ) )
+      test_encrypt ( g_list_append ( g_list_append ( NULL, "983465DB21439422" ),
+				 "6C7EE1B8621CC013" ),
+		 "7D0908A0EE9A8BFB");
+
   return ( 0 );
 } /* main */
