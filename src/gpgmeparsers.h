@@ -26,15 +26,6 @@
 #include <glib.h>
 #include "gpa.h"
 
-/* Retrieve and parse the result of gpgme_get_engine_info () */
-typedef struct
-{
-  gchar *version;
-  gchar *path;
-} GpaEngineInfo;
-
-void gpa_parse_engine_info (GpaEngineInfo *info);
-
 /* Retrieve and parse the detailed results of an import operation */
 typedef struct
 {

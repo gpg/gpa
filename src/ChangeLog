@@ -1,3 +1,19 @@
+2003-01-30  Miguel Coca  <mcoca@gnu.org>
+
+	* gpgmetools.c (gpa_gpgme_key_get_fingerprint): Remove unnecessary
+	variable.
+	(get_gpg_path): New function.
+	(gpa_backup_key): Use it.
+
+	* verifydlg.c (verify_file): Remove gpgme 0.4.0 compatibility.
+
+	* gpgmeparsers.h, gpgmeparsers.c (gpa_parse_engine_info)
+	(parse_engine_info_text, parse_engine_info_end)
+	(parse_engine_info_start): Removed. No longer needed due to changes
+	in GPGME.
+
+	* helpmenu.c (help_about): Fix formatting and copyright message.
+	
 2003-01-24  Miguel Coca  <mcoca@gnu.org>
 
 	* gpa.c (main): Replace getenv with more portable putenv.

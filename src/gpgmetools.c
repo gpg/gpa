@@ -277,6 +277,28 @@ GpgmeError gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
   return err;
 }
 
+/* Retrieve the path to the gpg executable */
+static const gchar *get_gpg_path (void)
+{
+  GpgmeEngineInfo engine;
+  const gchar *path = NULL;
+  
+  gpgme_get_engine_info (&engine);
+  
+  for (;engine; engine = engine->next)
+    {
+      if (engine->protocol == GPGME_PROTOCOL_OpenPGP)
+        {
+          break;
+        }
+    }
+  if (engine)
+    {
+      path = engine->file_name;
+    }
+  return path;
+}
+
 /* Backup a key. It exports both the public and secret keys to a file.
  * Returns TRUE on success and FALSE on error. It displays errors to the
  * user.
@@ -287,7 +309,6 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
   gchar *err;
   FILE *file;
   gint ret_code;
-  GpaEngineInfo info;
   gchar *header_argv[] = 
     {
       NULL, "--batch", "--no-tty", "--fingerprint", (gchar*) fpr, NULL
@@ -301,11 +322,15 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
       NULL, "--batch", "--no-tty", "--armor", "--export-secret-key", 
       (gchar*) fpr, NULL
     };
+  const gchar *path;
 
-  gpa_parse_engine_info (&info);
-  header_argv[0] = info.path;
-  pub_argv[0] = info.path;
-  sec_argv[0] = info.path;
+  /* Get the gpg path */
+  path = get_gpg_path ();
+  g_assert (path != NULL);
+  /* Add the executable to the arg arrays */
+  header_argv[0] = (gchar*) path;
+  pub_argv[0] = (gchar*) path;
+  sec_argv[0] = (gchar*) path;
   /* Open the file */
   file = fopen (filename, "w");
   if (!file)
@@ -349,8 +374,6 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
   fputs (sec_key, file);
   g_free (err);
   g_free (sec_key);
-  g_free (info.path);
-  g_free (info.version);
 
   fclose (file);
   return TRUE;
@@ -643,8 +666,6 @@ gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
  */
 gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx)
 {
-  unsigned long algorithm = gpgme_key_get_ulong_attr (key, GPGME_ATTR_ALGO,
-						      NULL, idx);
   const char *fpraw = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR,
 						 NULL, idx);
 

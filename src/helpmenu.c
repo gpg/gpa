@@ -211,9 +211,8 @@ help_about (void)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
-      label = gtk_label_new ("Copyright (C) 2000-2002 Miguel Coca,\n"
-                             "\t\t\t\t\t    G-N-U GmbH,\n"
-                             "\t\t\t\t\t    Intevation GmbH");
+      label = gtk_label_new ("Copyright (C) 2000-2003,\n"
+                             "Miguel Coca,\nG-N-U GmbH,\nIntevation GmbH");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
