@@ -122,8 +122,6 @@ gpa_file_operation_constructor (GType type,
 						 GPA_OPERATION(op)->context);
   g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
 		    G_CALLBACK (gpa_file_operation_done_error_cb), op);
-  g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
-		    G_CALLBACK (gpa_file_operation_done_cb), op);
 
   return object;
 }
@@ -244,12 +242,4 @@ static void gpa_file_operation_done_error_cb (GpaContext *context,
     default:
       break;
     }
-}
-
-static void gpa_file_operation_done_cb (GpaContext *context, 
-					GpgmeError err,
-					GpaFileOperation *op)
-{
-  /* Advance the current file */
-  op->current = g_list_next (op->current);
 }

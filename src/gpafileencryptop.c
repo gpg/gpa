@@ -262,6 +262,8 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
 			     op->cipher_filename);
       g_free (op->cipher_filename);
       /* Go to the next file in the list and encrypt it */
+      GPA_FILE_OPERATION (op)->current = g_list_next 
+	(GPA_FILE_OPERATION (op)->current);
       gpa_file_encrypt_operation_next (op);
     }
 }

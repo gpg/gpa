@@ -258,6 +258,8 @@ gpa_file_sign_operation_done_cb (GpaContext *context,
 			     op->sig_filename);
       g_free (op->sig_filename);
       /* Go to the next file in the list and sign it */
+      GPA_FILE_OPERATION (op)->current = g_list_next 
+	(GPA_FILE_OPERATION (op)->current);
       gpa_file_sign_operation_next (op);
     }
 }

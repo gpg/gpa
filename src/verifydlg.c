@@ -1,5 +1,5 @@
-/* verifydlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2002 Miguel Coca.
+/* fileverifydlg.c  -  The GNU Privacy Assistant
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -21,14 +21,171 @@
 #include <config.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
-#include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include <errno.h>
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
 #include "verifydlg.h"
+
+/* Properties */
+enum
+{
+  PROP_0,
+  PROP_OPTIONS,
+  PROP_WINDOW,
+};
+
+static GObjectClass *parent_class = NULL;
+
+static void
+gpa_file_verify_dialog_get_property (GObject     *object,
+				      guint        prop_id,
+				      GValue      *value,
+				      GParamSpec  *pspec)
+{
+  GpaFileVerifyDialog *dialog = GPA_FILE_VERIFY_DIALOG (object);
+  
+  switch (prop_id)
+    {
+    case PROP_WINDOW:
+      g_value_set_object (value,
+			  gtk_window_get_transient_for (GTK_WINDOW (dialog)));
+      break;
+    case PROP_OPTIONS:
+      g_value_set_object (value, dialog->options);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gpa_file_verify_dialog_set_property (GObject     *object,
+				   guint        prop_id,
+				   const GValue      *value,
+				   GParamSpec  *pspec)
+{
+  GpaFileVerifyDialog *dialog = GPA_FILE_VERIFY_DIALOG (object);
+
+  switch (prop_id)
+    {
+    case PROP_WINDOW:
+      gtk_window_set_transient_for (GTK_WINDOW (dialog),
+				    g_value_get_object (value));
+      break;
+    case PROP_OPTIONS:
+      dialog->options = (GpaOptions*) g_value_get_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gpa_file_verify_dialog_finalize (GObject *object)
+{  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+
+static void
+gpa_file_verify_dialog_init (GpaFileVerifyDialog *dialog)
+{
+}
+
+static GObject*
+gpa_file_verify_dialog_constructor (GType type,
+				  guint n_construct_properties,
+				  GObjectConstructParam *construct_properties)
+{
+  GObject *object;
+  GpaFileVerifyDialog *dialog;
+
+  /* Invoke parent's constructor */
+  object = parent_class->constructor (type,
+				      n_construct_properties,
+				      construct_properties);
+  dialog = GPA_FILE_VERIFY_DIALOG (object);
+  /* Initialize */
+
+  /* Set up the dialog */
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+			  GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Verify files"));
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+
+  dialog->notebook = gtk_notebook_new ();
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+			       dialog->notebook);
+  /* Hide on response */
+  g_signal_connect (G_OBJECT (dialog), "response",
+		    G_CALLBACK (gtk_widget_hide), NULL);
+
+
+  return object;
+}
+
+static void
+gpa_file_verify_dialog_class_init (GpaFileVerifyDialogClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
+  parent_class = g_type_class_peek_parent (klass);
+  
+  object_class->constructor = gpa_file_verify_dialog_constructor;
+  object_class->finalize = gpa_file_verify_dialog_finalize;
+  object_class->set_property = gpa_file_verify_dialog_set_property;
+  object_class->get_property = gpa_file_verify_dialog_get_property;
+
+  /* Properties */
+  g_object_class_install_property (object_class,
+				   PROP_WINDOW,
+				   g_param_spec_object 
+				   ("window", "Parent window",
+				    "Parent window", GTK_TYPE_WIDGET,
+				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_OPTIONS,
+				   g_param_spec_object 
+				   ("options", "options",
+				    "options", GPA_OPTIONS_TYPE,
+				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+}
+
+GType
+gpa_file_verify_dialog_get_type (void)
+{
+  static GType verify_dialog_type = 0;
+  
+  if (!verify_dialog_type)
+    {
+      static const GTypeInfo verify_dialog_info =
+	{
+	  sizeof (GpaFileVerifyDialogClass),
+	  (GBaseInitFunc) NULL,
+	  (GBaseFinalizeFunc) NULL,
+	  (GClassInitFunc) gpa_file_verify_dialog_class_init,
+	  NULL,           /* class_finalize */
+	  NULL,           /* class_data */
+	  sizeof (GpaFileVerifyDialog),
+	  0,              /* n_preallocs */
+	  (GInstanceInitFunc) gpa_file_verify_dialog_init,
+	};
+      
+      verify_dialog_type = g_type_register_static (GTK_TYPE_DIALOG,
+						    "GpaFileVerifyDialog",
+						    &verify_dialog_info, 0);
+    }
+  
+  return verify_dialog_type;
+}
+
+/* Internal */
+
 
 typedef struct
 {
@@ -47,118 +204,6 @@ typedef enum
   SIG_USERID_COLUMN,
   SIG_N_COLUMNS
 } SignatureListColumn;
-
-/* Check whether the file is a detached signature and deduce the name of the
- * original file. Since we only have access to the filename, this is not
- * very solid.
- */
-static gboolean
-is_detached_sig (const gchar *filename, gchar **signed_file)
-{
-  gchar *extension;
-  *signed_file = g_strdup (filename);
-  extension = g_strrstr (*signed_file, ".");
-  if (extension &&
-      (g_str_equal (extension, ".sig") ||
-       g_str_equal (extension, ".sign")))
-    {
-      *extension++ = '\0';
-      return TRUE;
-    }
-  else
-    {
-      g_free (*signed_file);
-      *signed_file = NULL;
-      return FALSE;
-    }
-}
-
-/* Run gpgme_op_verify on the file.
- */
-static gboolean
-verify_file (GpgmeCtx ctx, const gchar *filename, GtkWidget *parent)
-{
-  GpgmeError err;
-  GpgmeData sig, signed_text, plain_text;
-  gchar *signed_file = NULL;
-  const gchar *fpr;
-
-  if (is_detached_sig (filename, &signed_file))
-    {
-      /* Allocate data objects for a detached signature */
-      err = gpa_gpgme_data_new_from_file (&sig, filename, parent);
-      if (err == GPGME_File_Error)
-	{
-	  return FALSE;
-	}
-      else if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-      err = gpa_gpgme_data_new_from_file (&signed_text, signed_file, parent);
-      if (err == GPGME_File_Error)
-	{
-	  gpgme_data_release (sig);
-	  return FALSE;
-	}
-      else if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-      plain_text = NULL;
-    }
-  else
-    {
-      /* Allocate data object for non-detached signatures */
-      err = gpa_gpgme_data_new_from_file (&sig, filename, parent);
-      if (err == GPGME_File_Error)
-	{
-	  return FALSE;
-	}
-      else if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-      err = gpgme_data_new (&plain_text);
-      if (err != GPGME_No_Error)
-	{
-	  gpa_gpgme_error (err);
-	}
-      signed_text = NULL;
-    }
-
-  /* Verify */
-  err = gpgme_op_verify (ctx, sig, signed_text, plain_text);
-  if (err != GPGME_No_Error)
-    {
-      gpa_gpgme_error (err);
-    }
-
-  /* Release the data objects */
-  if (sig)
-    {
-      gpgme_data_release (sig);
-    }
-  if (signed_text)
-    {
-      gpgme_data_release (signed_text);
-    }
-  if (plain_text) 
-    {
-      gpgme_data_release (plain_text);
-    }
-
-  /* Check for unsigned files */
-  fpr = gpgme_get_sig_status (ctx, 0, NULL, NULL);
-  if (!fpr || !*fpr)
-    {
-      return FALSE;
-    }
-  else
-    {
-      return TRUE;
-    }
-}
 
 /* Return the text of the "status" column in pango markup language.
  */
@@ -246,17 +291,12 @@ add_signature_to_model (GtkListStore *store, SignatureData *data)
 
 /* Fill the list of signatures with the data from the verification */
 static void
-fill_sig_model (GtkListStore *store, const gchar *filename, GtkWidget *parent)
+fill_sig_model (GtkListStore *store, GpgmeCtx ctx)
 {
   SignatureData *data;
   const gchar *fpr;
   int i;
-  GpgmeCtx ctx = gpa_gpgme_new ();
-  
-  if (!verify_file (ctx, filename, parent))
-    {
-      return;
-    }
+
   for (i = 0; (fpr = gpgme_get_sig_string_attr (ctx, i, GPGME_ATTR_FPR, 0));
        i++)
     {
@@ -272,13 +312,12 @@ fill_sig_model (GtkListStore *store, const gchar *filename, GtkWidget *parent)
       data->expire = gpgme_get_sig_ulong_attr (ctx, i, GPGME_ATTR_EXPIRE, 0);
       add_signature_to_model (store, data);
     }
-
-  gpgme_release (ctx);
 }
+
 
 /* Create the list of signatures */
 static GtkWidget *
-signature_list (const gchar *filename, GtkWidget *parent)
+signature_list (GpgmeCtx ctx)
 {
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
@@ -308,13 +347,13 @@ signature_list (const gchar *filename, GtkWidget *parent)
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
-  fill_sig_model (store, filename, parent);
+  fill_sig_model (store, ctx);
 
   return list;
 }
 
 static GtkWidget *
-verify_file_page (GtkWidget *parent, const gchar *filename)
+verify_file_page (GpgmeCtx ctx)
 {
   GtkWidget *vbox;
   GtkWidget *list;
@@ -327,35 +366,35 @@ verify_file_page (GtkWidget *parent, const gchar *filename)
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start_defaults (GTK_BOX (vbox), label);
 
-  list = signature_list (filename, parent);
+  list = signature_list (ctx);
   gtk_box_pack_start_defaults (GTK_BOX (vbox), list);
 
   return vbox;
 }
 
-void gpa_file_verify_dialog_run (GtkWidget *parent, GList *files)
-{
-  GtkWidget *dialog;
-  GtkWidget *notebook;
-  GList *cur;
-  
-  dialog = gtk_dialog_new_with_buttons (_("Verify files"), GTK_WINDOW(parent),
-					GTK_DIALOG_MODAL, 
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-					NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  notebook = gtk_notebook_new ();
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), notebook);
-  for (cur = files; cur; cur = g_list_next (cur))
-    {
-      GtkWidget *contents;
-      contents = verify_file_page (parent, cur->data);
-      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), contents,
-				gtk_label_new (cur->data));
-    }
+/* API */
 
-  gtk_widget_show_all (dialog);
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent,
+					GpaOptions *options)
+{
+  GpaFileVerifyDialog *dialog;
+  
+  dialog = g_object_new (GPA_FILE_VERIFY_DIALOG_TYPE,
+			 "window", parent,
+			 "options", options,
+			 NULL);
+
+  return GTK_WIDGET(dialog);
+}
+
+void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
+				      const gchar *filename,
+				      GpgmeCtx ctx)
+{
+  GtkWidget *page;
+  
+  page = verify_file_page (ctx);
+  
+  gtk_notebook_append_page (GTK_NOTEBOOK (dialog->notebook), page,
+			    gtk_label_new (filename));
 }

@@ -1,5 +1,5 @@
-/* verifydlg.h  -  The GNU Privacy Assistant
- *	Copyright (C) 2002 Miguel Coca.
+/* verifydlg.h - The GpaFileVerifyDialog object.
+ *	Copyright (C) 2003, Miguel Coca.
  *
  * This file is part of GPA
  *
@@ -18,10 +18,44 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef VERIFYDLG_H
-#define VERIFYDLG_H
+#ifndef GPA_FILE_VERIFY_DIALOG_H
+#define GPA_FILE_VERIFY_DIALOG_H
 
+#include <glib.h>
+#include <glib-object.h>
 #include <gtk/gtk.h>
-void gpa_file_verify_dialog_run (GtkWidget *parent, GList *files);
+#include "gpacontext.h"
+
+/* GObject stuff */
+#define GPA_FILE_VERIFY_DIALOG_TYPE	  (gpa_file_verify_dialog_get_type ())
+#define GPA_FILE_VERIFY_DIALOG(obj)	  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GPA_FILE_VERIFY_DIALOG_TYPE, GpaFileVerifyDialog))
+#define GPA_FILE_VERIFY_DIALOG_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GPA_FILE_VERIFY_DIALOG_TYPE, GpaFileVerifyDialogClass))
+#define GPA_IS_FILE_VERIFY_DIALOG(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_FILE_VERIFY_DIALOG_TYPE))
+#define GPA_IS_FILE_VERIFY_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_FILE_VERIFY_DIALOG_TYPE))
+#define GPA_FILE_VERIFY_DIALOG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GPA_FILE_VERIFY_DIALOG_TYPE, GpaFileVerifyDialogClass))
+
+typedef struct _GpaFileVerifyDialog GpaFileVerifyDialog;
+typedef struct _GpaFileVerifyDialogClass GpaFileVerifyDialogClass;
+
+struct _GpaFileVerifyDialog {
+  GtkDialog parent;
+
+  GpaOptions *options;
+  GtkWidget *notebook;
+};
+
+struct _GpaFileVerifyDialogClass {
+  GtkDialogClass parent_class;
+};
+
+GType gpa_file_verify_dialog_get_type (void) G_GNUC_CONST;
+
+/* API */
+
+GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent, GpaOptions *options);
+
+void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
+				      const gchar *filename,
+				      GpgmeCtx ctx);
 
 #endif

@@ -1,3 +1,18 @@
+2003-03-18  Miguel Coca  <mcoca@gnu.org>
+
+	* verifydlg.h, verifydlg.c: Rewrite as widget.
+
+	* gpafileverifyop.c, gpafileverifyop.h: New.
+
+	* Makefile.am (gpa_SOURCES): Add new files.
+
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_cb): Advance the
+	current file here.
+	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_cb): Likewise.
+	* gpafilesignop.c (gpa_file_sign_operation_done_cb): Likewise.
+
+	* gpafileop.c (gpa_file_operation_done_cb): Remove.
+
 2003-03-09  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (keyring_editor_delete): Remove the key from the keytable

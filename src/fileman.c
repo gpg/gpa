@@ -44,12 +44,11 @@
 #include "helpmenu.h"
 #include "icons.h"
 #include "fileman.h"
-#include "filesigndlg.h"
-#include "verifydlg.h"
 
 #include "gpafiledecryptop.h"
 #include "gpafileencryptop.h"
 #include "gpafilesignop.h"
+#include "gpafileverifyop.h"
 
 struct _GPAFileManager {
   GtkWidget *window;
@@ -176,12 +175,15 @@ verify_files (gpointer param)
 {
   GPAFileManager *fileman = param;
   GList * files;
-  
+  GpaFileVerifyOperation *op;
+
   files = get_selected_files (fileman->clist_files);
   if (!files)
     return;
 
-  gpa_file_verify_dialog_run (fileman->window, files);
+  op = gpa_file_verify_operation_new (gpa_options, fileman->window, files);
+
+  register_operation (fileman, GPA_FILE_OPERATION (op));
 }
 
 

@@ -245,6 +245,8 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
 			     op->plain_filename);
       g_free (op->plain_filename);
       /* Go to the next file in the list and decrypt it */
+      GPA_FILE_OPERATION (op)->current = g_list_next 
+	(GPA_FILE_OPERATION (op)->current);
       gpa_file_decrypt_operation_next (op);
     }
 }
