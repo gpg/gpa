@@ -3,7 +3,6 @@ src/expirydlg.c
 src/fileman.c
 src/filesigndlg.c
 src/gpa.c
-src/gpafilesel.c
 src/gpa_license.c
 src/gpapastrings.c
 src/gpawidgets.c
