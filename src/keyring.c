@@ -545,8 +545,7 @@ keyring_editor_generate_key_advanced (gpointer param)
        * sensitive widgets because some may depend on whether secret
        * keys are available
        */
-      if (!gpa_default_key ())
-	gpa_set_default_key (gpa_determine_default_key ());
+      gpa_update_default_key ();
       keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
     }
@@ -566,8 +565,7 @@ keyring_editor_generate_key_simple (gpointer param)
        * sensitive widgets because some may depend on whether secret
        * keys are available
        */
-      if (!gpa_default_key ())
-	gpa_set_default_key (gpa_determine_default_key ());
+      gpa_update_default_key ();
       keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
     }
