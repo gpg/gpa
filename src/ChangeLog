@@ -1,5 +1,10 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_mapped): Check for cancelling the
+	dialog via WM, in which case result is NULL
+
+	* fileman.c (gpa_fileman_toolbar_new): Use the new help icon
+
 	* gpapastrings.c (algorithm_strings): Add a missing ')'
 
 	* gtktools.c (GPASaveFileNameDialog): Rename the dialog field to
