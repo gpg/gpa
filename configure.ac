@@ -45,6 +45,7 @@ AM_MAINTAINER_MODE
 dnl Check for libraries
 AC_CHECK_LIB(m, sin)
 AC_CHECK_LIB(z, compress)
+AC_CHECK_FUNCS(strsep)
 
 development_version=no
 # Allow users to append something to the version string (other than -cvs)
@@ -156,6 +157,23 @@ AM_PATH_GPGME(0.4.0,
             [LIBS="$LIBS $GPGME_LIBS"
             CFLAGS="$CFLAGS $GPGME_CFLAGS"],
             AC_MSG_ERROR(Cannot find an up to date GPGME))
+
+dnl FIXME: Remove after 0.4.1 is released.
+dnl Hack to be compatible with gpgme versions 0.4.1 and later.
+AC_ARG_WITH(gpgme-prefix,
+            AC_HELP_STRING([--with-gpgme-prefix=PFX],
+                           [prefix where GPGME is installed (optional)]),
+     gpgme_config_prefix="$withval", gpgme_config_prefix="")
+if test x$gpgme_config_prefix != x ; then
+   gpgme_config_args="$gpgme_config_args --prefix=$gpgme_config_prefix"
+   if test x${GPGME_CONFIG+set} != xset ; then
+      GPGME_CONFIG=$gpgme_config_prefix/bin/gpgme-config
+   fi
+fi
+GPGME_VERSION=`$GPGME_CONFIG $gpgme_config_args --version`
+if test $GPGME_VERSION == "0.4.0"; then
+   AC_DEFINE(GPGME_VERSION_0_4_0,1,[Defined if using GPGME 0.4.0])   
+fi
 
 dnl
 dnl Checks for typedefs and structures

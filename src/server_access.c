@@ -56,6 +56,63 @@
 
 /* Internal API */
 
+/* FIXME: THIS SHOULDN'T BE HERE 
+ * The strsep function is not portable, yet parse_keyserver_uri needs it and
+ * I'm too lazy to rewrite it using GLib or ANSI functions, so we copy an
+ * implementation here. If there is no other way around it, this kind or
+ * portability function should be moved to a new file, maybe even in a
+ * separate directory. I'm putting it here to have a solution for the 0.6.1
+ * release, and should be revised at some point after that.
+ */
+
+#ifndef HAVE_STRSEP
+/* code taken from glibc-2.2.1/sysdeps/generic/strsep.c */
+char *
+strsep (char **stringp, const char *delim)
+{
+  char *begin, *end;
+
+  begin = *stringp;
+  if (begin == NULL)
+    return NULL;
+
+  /* A frequent case is when the delimiter string contains only one
+     character.  Here we don't need to call the expensive `strpbrk'
+     function and instead work using `strchr'.  */
+  if (delim[0] == '\0' || delim[1] == '\0')
+    {
+      char ch = delim[0];
+
+      if (ch == '\0')
+        end = NULL;
+      else
+        {
+          if (*begin == ch)
+            end = begin;
+          else if (*begin == '\0')
+            end = NULL;
+          else
+            end = strchr (begin + 1, ch);
+        }
+    }
+  else
+    /* Find the end of the token.  */
+    end = strpbrk (begin, delim);
+
+  if (end)
+    {
+      /* Terminate the token and set *STRINGP past NUL character.  */
+      *end++ = '\0';
+      *stringp = end;
+    }
+  else
+    /* No more delimiters; this is the last token.  */
+    *stringp = NULL;
+
+  return begin;
+}
+#endif /*HAVE_STRSEP*/
+
 /* Code adapted from GnuPG (file g10/keyserver.c) */
 static gboolean 
 parse_keyserver_uri (char *uri, char **scheme, char **host,

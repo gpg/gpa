@@ -129,7 +129,11 @@ verify_file (const gchar *filename, GtkWidget *parent)
     }
 
   /* Verify */
+#if GPGME_VERSION_0_4_0
   err = gpgme_op_verify (ctx, sig, signed_text, plain_text, &stat);
+#else
+  err = gpgme_op_verify (ctx, sig, signed_text, plain_text);
+#endif
   if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);

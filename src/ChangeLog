@@ -1,3 +1,11 @@
+2003-01-23  Miguel Coca  <mcoca@gnu.org>
+
+	* verifydlg.c (verify_file): Another ugly hack, this time to allow
+	compilation with both gpgme 0.4.0 and 0.4.1.
+
+	* server_access.c (strsep): Ugly hack to get this to compile on
+	systems without strsep. To be fixed after the next release.
+
 2003-01-21  Miguel Coca  <mcoca@gnu.org>
 
 	* gpgmetools.c (gpa_gpgme_key_get_fingerprint): Check the fingerprint

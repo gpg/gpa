@@ -1,3 +1,10 @@
+2003-01-23  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Add check for strsep
+
+	* configure.ac: Add a hack to detect gpgme 0.4.0. To be removed after
+	the release.
+
 2003-01-19  Miguel Coca  <mcoca@gnu.org>
 
 	* configure.ac: Add check for development version, adapted
