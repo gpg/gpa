@@ -18,12 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <config.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <glib.h>
-#include "gpapafile.h"
+#include "gpapa.h"
 
 GpapaFile *
 gpapa_file_new (gchar * fileID, GpapaCallbackFunc callback, gpointer calldata)
@@ -59,21 +54,21 @@ gpapa_file_get_name (GpapaFile * file, GpapaCallbackFunc callback,
 } /* gpapa_file_get_name */
 
 static void
-linecallback_get_status (gchar * line, gpointer data, gboolean status)
+linecallback_get_status (gchar * line, gpointer data, GpgStatusCode status)
 {
-  FileData *d = data;
-  if (line)
+  if (line && data)
     {
-      if (status)
+      FileData *d = data;
+      if (status == STATUS_NODATA)
 	{
-	  if (gpapa_line_begins_with (line, "NODATA"))
-	    d->file->status_flags |= GPAPA_FILE_STATUS_NODATA;
-
+	  d->file->status_flags |= GPAPA_FILE_STATUS_NODATA;
+#if 0
 	  /* Suppress error reporting.
 	   */
 	  line[0] = 0;
+#endif
 	}
-      else
+      else if (status == NO_STATUS)
 	{
 	  if (gpapa_line_begins_with (line, ":literal data packet:"))
 	    d->file->status_flags |= GPAPA_FILE_STATUS_LITERAL;
@@ -141,14 +136,13 @@ gpapa_file_get_signature_count (GpapaFile * file, GpapaCallbackFunc callback,
 } /* gpapa_file_get_signature_count */
 
 static gboolean
-status_check (gchar * buffer, gchar * keyword, gchar ** data)
+status_check (gchar *buffer, GpgStatusCode code, GpgStatusCode status, gchar **data)
 {
   gboolean result = FALSE;
-  size_t n = strlen(keyword);
 
-  if ( !strncmp ( buffer, keyword, n ) && (buffer[n] == ' ' || !buffer[n] ) )
+  if (status == code)
     {
-      char *p = buffer + n;
+      char *p = buffer;
       while (*p == ' ')
 	p++;
       data[0] = p;
@@ -178,19 +172,19 @@ status_check (gchar * buffer, gchar * keyword, gchar ** data)
 } /* status_check */
 
 static void
-linecallback_get_signatures (gchar * line, gpointer data, gboolean status)
+linecallback_get_signatures (gchar * line, gpointer data, GpgStatusCode status)
 {
   FileData *d = data;
-  if (status && line)
+  if (status != NO_STATUS)
     {
       char *sigdata[2] = { NULL, NULL };
-      if (status_check (line, "NODATA", sigdata))
+      if (status_check (line, STATUS_NODATA, status, sigdata))
 	{
 	  /* Just let `status_check' clear the buffer to avoid
 	   * gpapa_call_gnupg() to trigger error messages.
 	   */
 	}
-      else if (status_check (line, "GOODSIG", sigdata))
+      else if (status_check (line, STATUS_GOODSIG, status, sigdata))
 	{
 	  GpapaSignature *sig =
 	    gpapa_signature_new (sigdata[0], d->callback, d->calldata);
@@ -198,14 +192,14 @@ linecallback_get_signatures (gchar * line, gpointer data, gboolean status)
 	  sig->UserID = xstrdup (sigdata[1]);
 	  d->file->sigs = g_list_append (d->file->sigs, sig);
 	}
-      else if (status_check (line, "BADSIG", sigdata))
+      else if (status_check (line, STATUS_BADSIG, status, sigdata))
 	{
 	  GpapaSignature *sig =
 	    gpapa_signature_new (sigdata[0], d->callback, d->calldata);
 	  sig->validity = GPAPA_SIG_INVALID;
 	  d->file->sigs = g_list_append (d->file->sigs, sig);
 	}
-      else if (status_check (line, "ERRSIG", sigdata))
+      else if (status_check (line, STATUS_ERRSIG, status, sigdata))
 	{
 	  GpapaSignature *sig =
 	    gpapa_signature_new (sigdata[0], d->callback, d->calldata);

@@ -21,10 +21,14 @@
 #ifndef __GPAPA_H__
 #define __GPAPA_H__
 
-#include <glib.h>
-
+#include <config.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "xmalloc.h"
+
+#include <glib.h>
 
 #include "gpapatypedefs.h"
 #include "gpapafile.h"

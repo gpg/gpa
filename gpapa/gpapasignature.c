@@ -35,7 +35,7 @@ gpapa_signature_new (gchar * keyID, GpapaCallbackFunc callback,
 } /* gpapa_signature_new */
 
 gchar *
-gpapa_signature_get_identifier (GpapaSignature * signature,
+gpapa_signature_get_identifier (GpapaSignature *signature,
 				GpapaCallbackFunc callback, gpointer calldata)
 {
   if (signature == NULL)
@@ -45,7 +45,7 @@ gpapa_signature_get_identifier (GpapaSignature * signature,
 } /* gpapa_signature_get_identifier */
 
 gchar *
-gpapa_signature_get_name (GpapaSignature * signature,
+gpapa_signature_get_name (GpapaSignature *signature,
 			  GpapaCallbackFunc callback, gpointer calldata)
 {
   if (signature == NULL)
@@ -55,7 +55,7 @@ gpapa_signature_get_name (GpapaSignature * signature,
 } /* gpapa_signature_get_name */
 
 GpapaSigValidity
-gpapa_signature_get_validity (GpapaSignature * signature,
+gpapa_signature_get_validity (GpapaSignature *signature,
 			      GpapaCallbackFunc callback, gpointer calldata)
 {
   if (signature == NULL)
@@ -65,7 +65,7 @@ gpapa_signature_get_validity (GpapaSignature * signature,
 } /* gpapa_signature_is_valid */
 
 void
-gpapa_signature_release (GpapaSignature * signature,
+gpapa_signature_release (GpapaSignature *signature,
 			 GpapaCallbackFunc callback, gpointer calldata)
 {
   if (signature != NULL)

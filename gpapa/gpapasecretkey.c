@@ -26,7 +26,7 @@
 #include "gpapa.h"
 
 void
-gpapa_secret_key_set_passphrase (GpapaSecretKey * key, gchar * passphrase,
+gpapa_secret_key_set_passphrase (GpapaSecretKey *key, gchar *passphrase,
 				 GpapaCallbackFunc callback,
 				 gpointer calldata)
 {
@@ -35,7 +35,7 @@ gpapa_secret_key_set_passphrase (GpapaSecretKey * key, gchar * passphrase,
 } /* gpapa_secret_key_set_passphrase */
 
 void
-gpapa_secret_key_export (GpapaSecretKey * key, gchar * targetFileID,
+gpapa_secret_key_export (GpapaSecretKey *key, gchar *targetFileID,
 			 GpapaArmor Armor, GpapaCallbackFunc callback,
 			 gpointer calldata)
 {
@@ -67,7 +67,7 @@ gpapa_secret_key_export (GpapaSecretKey * key, gchar * targetFileID,
 /* Due to gpg's security features, this currently does not work.
  */
 void
-gpapa_secret_key_delete (GpapaSecretKey * key, GpapaCallbackFunc callback,
+gpapa_secret_key_delete (GpapaSecretKey *key, GpapaCallbackFunc callback,
 			 gpointer calldata)
 {
   if (!key)
@@ -92,12 +92,11 @@ gpapa_secret_key_delete (GpapaSecretKey * key, GpapaCallbackFunc callback,
 /* Due to gpg's security features, this currently does not work.
  */
 void
-gpapa_secret_key_create_revocation (GpapaSecretKey * key,
+gpapa_secret_key_create_revocation (GpapaSecretKey *key,
 				    GpapaCallbackFunc callback,
 				    gpointer calldata)
 {
-
-  if(key)
+  if (key)
     {
       gchar *gpgargv[3];
       gchar *commands;

@@ -18,21 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <config.h>
-#include <glib.h>
-
 #include "gpapa.h"
-#include "gpapafile.h"
-#include "gpapakey.h"
-#include "gpapapublickey.h"
-#include "gpapasecretkey.h"
-#include "gpapasignature.h"
-#include "gpapaintern.h"
-
-#include <stdio.h>
-
-#include <stdlib.h>
-#include <string.h>
 
 gchar *global_keyServer;
 
@@ -121,11 +107,11 @@ extract_key (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
 } /* extract_key */
 
 static void
-linecallback_refresh_pub (gchar * line, gpointer data, gboolean status)
+linecallback_refresh_pub (gchar * line, gpointer data, GpgStatusCode status)
 {
-  PublicKeyData *d = data;
-  if (line && !strncmp (line, "pub:", 4) )
+  if (status == NO_STATUS && line && !strncmp (line, "pub:", 4) )
     {
+      PublicKeyData *d = data;
       GpapaPublicKey *key =
         (GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
       memset (key, 0, sizeof (GpapaPublicKey));
@@ -168,11 +154,11 @@ gpapa_get_public_key_by_index (gint idx, GpapaCallbackFunc callback,
 } /* gpapa_get_public_key_by_index */
 
 static void
-linecallback_id_pub (gchar * line, gpointer data, gboolean status)
+linecallback_id_pub (gchar * line, gpointer data, GpgStatusCode status)
 {
-  PublicKeyData *d = data;
-  if (line && strncmp (line, "pub:", 4) == 0)
+  if (status == NO_STATUS && line && strncmp (line, "pub:", 4) == 0)
     {
+      PublicKeyData *d = data;
       d->key = (GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
       memset (d->key, 0, sizeof (GpapaPublicKey));
       d->key->key = extract_key (line, d->callback, d->calldata);
@@ -249,11 +235,11 @@ gpapa_release_public_key (GpapaPublicKey * key, GpapaCallbackFunc callback,
 } /* gpapa_release_public_key */
 
 static void
-linecallback_refresh_sec (gchar * line, gpointer data, gboolean status)
+linecallback_refresh_sec (gchar * line, gpointer data, GpgStatusCode status)
 {
-  SecretKeyData *d = data;
-  if (line && strncmp (line, "sec", 3) == 0)
+  if (status == NO_STATUS && line && strncmp (line, "sec", 3) == 0)
     {
+      SecretKeyData *d = data;
       GpapaSecretKey *key =
 	(GpapaSecretKey *) xmalloc (sizeof (GpapaSecretKey));
       memset (key, 0, sizeof (GpapaSecretKey));
@@ -296,11 +282,11 @@ gpapa_get_secret_key_by_index (gint idx, GpapaCallbackFunc callback,
 } /* gpapa_get_secret_key_by_index */
 
 static void
-linecallback_id_sec (gchar * line, gpointer data, gboolean status)
+linecallback_id_sec (gchar * line, gpointer data, GpgStatusCode status)
 {
-  SecretKeyData *d = data;
-  if (line && strncmp (line, "sec", 3) == 0)
+  if (status == NO_STATUS && line && strncmp (line, "sec", 3) == 0)
     {
+      SecretKeyData *d = data;
       d->key = (GpapaSecretKey *) xmalloc (sizeof (GpapaSecretKey));
       memset (d->key, 0, sizeof (GpapaSecretKey));
       d->key->key = extract_key (line, d->callback, d->calldata);
@@ -431,11 +417,11 @@ gpapa_create_key_pair (GpapaPublicKey ** publicKey,
 } /* gpapa_create_key_pair */
 
 static void
-linecallback_export_ownertrust (gchar * line, gpointer data, gboolean status)
+linecallback_export_ownertrust (gchar * line, gpointer data, GpgStatusCode status)
 {
   FILE *stream = data;
-  if (stream && line);
-  fprintf (stream, "%s\n", line);
+  if (status == NO_STATUS && stream && line)
+    fprintf (stream, "%s\n", line);
 } /* linecallback_export_ownertrust */
 
 void

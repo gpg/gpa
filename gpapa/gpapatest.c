@@ -231,23 +231,23 @@ test_secring (void)
       printf ("\n");
       gpapa_release_secret_key (S, callback, calldata);
     }
-  S = gpapa_get_secret_key_by_ID ("983465DB21439422", callback, calldata);
+  S = gpapa_get_secret_key_by_ID ("D80C6F3A193AB8CA", callback, calldata);
   if (S != NULL)
     {
       gchar *PassPhrase;
-      printf ("Secret key 983465DB21439422: %s\n",
+      printf ("Secret key D80C6F3A193AB8CA: %s\n",
 	      gpapa_key_get_name (GPAPA_KEY (S), callback, calldata));
       gpapa_release_secret_key (S, callback, calldata);
       printf ("\n");
       PassPhrase = getpass ("Please enter passphrase: ");
       printf ("Signing file `test.txt' ... ");
       F = gpapa_file_new ("test.txt", callback, calldata);
-      gpapa_file_sign (F, NULL, "983465DB21439422", PassPhrase,
+      gpapa_file_sign (F, NULL, "D80C6F3A193AB8CA", PassPhrase,
 		       GPAPA_SIGN_CLEAR, GPAPA_ARMOR, callback, calldata);
       printf ("done.\n\n");
     }
   else
-    printf ("Secret key 983465DB21439422: not available\n\n");
+    printf ("Secret key D80C6F3A193AB8CA: not available\n\n");
 }
 
 void
@@ -281,15 +281,15 @@ test_pubring (void)
       printf ("\n");
       gpapa_release_public_key (P, callback, calldata);
     }
-  P = gpapa_get_public_key_by_ID ("6C7EE1B8621CC013", callback, calldata);
+  P = gpapa_get_public_key_by_ID ("983465DB21439422", callback, calldata);
   gpapa_public_key_delete (P, callback, calldata);
-  P = gpapa_receive_public_key_from_server ("6C7EE1B8621CC013",
+  P = gpapa_receive_public_key_from_server ("983465DB21439422",
 					    "blackhole.pca.dfn.de", callback,
 					    calldata);
   if (P != NULL)
     {
       GList *g;
-      printf ("Public key 6C7EE1B8621CC013 %s\n",
+      printf ("Public key 983465DB21439422 %s\n",
 	      gpapa_key_get_name (GPAPA_KEY (P), callback, calldata));
       printf ("Signatures:\n");
       g = gpapa_public_key_get_signatures (P, callback, calldata);
@@ -315,7 +315,7 @@ test_pubring (void)
       gpapa_release_public_key (P, callback, calldata);
     }
   else
-    printf ("Public key 6C7EE1B8621CC013 not available\n");
+    printf ("Public key 983465DB21439422 not available\n");
 }
 
 void
@@ -502,7 +502,7 @@ main (int argc, char **argv)
   else if (!strcmp (what, "status"))
     test_status ();
   else if (!strcmp (what, "export_public"))
-    test_export_public ("2D727CC768697734");
+    test_export_public ("983465DB21439422");
   else if (!strcmp (what, "export_public-2"))
     test_export_public ("E92A792B1D6BA060");
   else if (!strcmp (what, "export_secret"))

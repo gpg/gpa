@@ -1,3 +1,42 @@
+Mon 15 Jan 2001 Peter Gerwinski <peter@gerwinski.de>
+
+        Re-wrote the GnuPG communication layer to use GPGME.
+
+        * Makefile.am:
+          (gpapatest_LDADD): added `-lgpgme'.
+
+        * gpapa.c:
+          (top level): let "gpapa.h" include the standard headers.
+          (linecallback_refresh_pub): parameter list changed
+          according to the new requirements of gpapa_call_gnupg();
+          body changed accordingly.
+          (linecallback_refresh_sec): likewise.
+          (linecallback_id_sec): likewise.
+          (linecallback_export_ownertrust): likewise.
+
+        * gpapa.h: include standard headers.
+
+        * gpapafile.c: 
+          (top level): let "gpapa.h" include the standard headers.
+          (linecallback_get_status): parameter list changed (see above).
+          (status_check): pass status as a GpgStatusCode rather than a char*.
+          (linecallback_get_signatures): parameter list changed (see above).
+
+        * gpapaintern.c: rewritten. Use functions from GPGME for
+          communication with GnuPG.
+          (stpcpy): new function.
+
+        * gpapaintern.h:
+          (NO_STATUS): constant to indicate that something is _not_ a
+          GPG status code.
+          @@@@ This must be kept in sync with GPGME!
+
+        * gpapapublickey.c:
+          (linecallback_fingerprint): parameter list changed (see above).
+          (linecallback_get_signatures): likewise.
+
+        Cosmetical changes (GCS, etc.) in other files.
+
 2000-12-20  Werner Koch  <wk@gnupg.org>
 
 	Applied patches from Jan's tarball dated 2000-12-18.  

@@ -23,9 +23,12 @@
 
 #include <glib.h>
 #include "gpapa.h"
+#include "rungpg.h"
+
+#define NO_STATUS (STATUS_END_STREAM + 1)
 
 typedef void (*GpapaLineCallbackFunc) (char *line, void *opaque,
-                                       int is_status );
+                                       GpgStatusCode status );
 				      
 
 extern gboolean gpapa_line_begins_with (gchar * line, gchar * keyword);

@@ -26,11 +26,11 @@
 #include "gpapa.h"
 
 static void
-linecallback_fingerprint (gchar * line, gpointer data, gboolean status)
+linecallback_fingerprint (gchar * line, gpointer data, GpgStatusCode status)
 {
-  PublicKeyData *d = data;
-  if (line && strncmp (line, "fpr", 3) == 0)
+  if (status == NO_STATUS && line && strncmp (line, "fpr", 3) == 0)
     {
+      PublicKeyData *d = data;
       gchar *field[GPAPA_MAX_GPG_KEY_FIELDS];
       gchar *p = line;
       gint i = 0;
@@ -261,11 +261,11 @@ extract_sig (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
 } /* extract_sig */
 
 static void
-linecallback_get_signatures (gchar * line, gpointer data, gboolean status)
+linecallback_get_signatures (gchar * line, gpointer data, GpgStatusCode status)
 {
-  PublicKeyData *d = data;
-  if (line && strncmp (line, "sig", 3) == 0)
+  if (status == NO_STATUS && line && strncmp (line, "sig", 3) == 0)
     {
+      PublicKeyData *d = data;
       GpapaSignature *sig = extract_sig (line, d->callback, d->calldata);
       if (strcmp (d->key->key->KeyID, sig->KeyID) == 0)
 	{
