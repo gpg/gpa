@@ -58,10 +58,11 @@ is_detached_sig (const gchar *filename, gchar **signed_file)
   gchar *extension;
   *signed_file = g_strdup (filename);
   extension = g_strrstr (*signed_file, ".");
-  *extension++ = '\0';
-  if (g_str_equal (extension, "sig") ||
-      g_str_equal (extension, "sign"))
+  if (extension &&
+      (g_str_equal (extension, "sig") ||
+       g_str_equal (extension, "sign")))
     {
+      *extension++ = '\0';
       return TRUE;
     }
   else
