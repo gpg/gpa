@@ -1017,118 +1017,116 @@ GtkWidget *
 keyring_editor_new (void)
 {
   GPAKeyringEditor *editor;
-  GtkAccelGroup *accelGroup;
+  GtkAccelGroup *accel_group;
 
-  GtkWidget *windowPublic;
-  GtkWidget *vboxPublic;
-  GtkWidget *vboxKeys;
-  GtkWidget *labelRingname;
-  GtkWidget *scrollerKeys;
-  GtkWidget *clistKeys;
-  GtkWidget *hSeparatorPublic;
-  GtkWidget *hButtonBoxPublic;
-  GtkWidget *buttonClose;
+  GtkWidget *window;
+  GtkWidget *vbox;
+  GtkWidget *label;
+  GtkWidget *scrolled;
+  GtkWidget *keylist;
+  GtkWidget *hseparator;
+  GtkWidget *bbox;
+  GtkWidget *button;
   GtkWidget *notebook;
   GtkWidget *toolbar;
   GtkWidget *hbox;
   GtkWidget *icon;
-
-  /*  gchar *titlesKeys[] = {
-    _("Key owner"), _("Key trust"), _("Ownertrust"), _("Expiry date"),
-    _("Key ID")
-  };*/
+  GtkWidget *paned;
 
   editor = xmalloc(sizeof(GPAKeyringEditor));
   editor->selection_sensitive_widgets = NULL;
 
-  windowPublic = editor->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (windowPublic),
+  window = editor->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window),
 			_("GNU Privacy Assistant - Keyring Editor"));
-  gtk_object_set_data_full (GTK_OBJECT (windowPublic), "user_data", editor,
+  gtk_object_set_data_full (GTK_OBJECT (window), "user_data", editor,
 			    keyring_editor_destroy);
-  /*gtk_window_set_default_size (GTK_WINDOW(windowPublic), 572, 400);*/
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (windowPublic), accelGroup);
-  gtk_signal_connect_object (GTK_OBJECT (windowPublic), "map",
+  /*gtk_window_set_default_size (GTK_WINDOW(window), 572, 400);*/
+  accel_group = gtk_accel_group_new ();
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+  gtk_signal_connect_object (GTK_OBJECT (window), "map",
 			     GTK_SIGNAL_FUNC (keyring_editor_mapped),
 			     (gpointer)editor);
 
-  vboxPublic = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
 
-  gtk_box_pack_start (GTK_BOX (vboxPublic),
-		      keyring_editor_menubar_new (windowPublic, editor),
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      keyring_editor_menubar_new (window, editor),
 		      FALSE, TRUE, 0);
 
-  toolbar = keyring_toolbar_new(windowPublic, editor);
-  gtk_box_pack_start (GTK_BOX (vboxPublic), toolbar, FALSE, TRUE, 0);
+  toolbar = keyring_toolbar_new(window, editor);
+  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
+
 
   hbox = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vboxPublic), hbox, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
   
-  icon = gpa_create_icon_widget (windowPublic, "keyring");
+  icon = gpa_create_icon_widget (window, "keyring");
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
-  labelRingname = gtk_label_new ("Keyring Editor");
-  gtk_box_pack_start (GTK_BOX (hbox), labelRingname, TRUE, TRUE, 10);
-  gtk_widget_set_name (labelRingname, "big-label");
-  gtk_misc_set_alignment (GTK_MISC (labelRingname), 0, 0.5);
-  
-  vboxKeys = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
-  scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollerKeys),
+  label = gtk_label_new ("Keyring Editor");
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
+  gtk_widget_set_name (label, "big-label");
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+
+
+  paned = gtk_vpaned_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), paned, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (paned), 5);
+
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_paned_pack1 (GTK_PANED (paned), scrolled, TRUE, TRUE);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
 				  GTK_POLICY_AUTOMATIC,
 				  GTK_POLICY_AUTOMATIC);
 
-  clistKeys =  gpa_keylist_new ((sizeof keylist_columns_brief)
+  keylist =  gpa_keylist_new ((sizeof keylist_columns_brief)
 				/ (sizeof keylist_columns_brief[0]),
 				keylist_columns_brief, 10,
-				windowPublic);
-  editor->clist_keys = clistKeys;
+				window);
+  editor->clist_keys = keylist;
+  gtk_container_add (GTK_CONTAINER (scrolled), keylist);
   /*
-  gpa_connect_by_accelerator (GTK_LABEL (labelRingname), clistKeys,
-			      accelGroup, _("_Public key Ring"));*/
+  gpa_connect_by_accelerator (GTK_LABEL (label), keylist,
+			      accel_group, _("_Public key Ring"));*/
 
-  gtk_signal_connect (GTK_OBJECT (clistKeys), "select-row",
+  gtk_signal_connect (GTK_OBJECT (keylist), "select-row",
 		      GTK_SIGNAL_FUNC (keyring_editor_selection_changed),
 		      (gpointer) editor);
-  gtk_signal_connect (GTK_OBJECT (clistKeys), "unselect-row",
+  gtk_signal_connect (GTK_OBJECT (keylist), "unselect-row",
 		      GTK_SIGNAL_FUNC (keyring_editor_selection_changed),
 		      (gpointer) editor);
-  gtk_signal_connect (GTK_OBJECT (clistKeys), "end-selection",
+  gtk_signal_connect (GTK_OBJECT (keylist), "end-selection",
 		      GTK_SIGNAL_FUNC (keyring_editor_end_selection),
 		      (gpointer) editor);
-  /*  gtk_signal_connect (GTK_OBJECT (clistKeys), "button-press-event",
+  /*  gtk_signal_connect (GTK_OBJECT (keylist), "button-press-event",
 		      GTK_SIGNAL_FUNC (keyring_openPublic_evalMouse),
 		      (gpointer) editor);*/
-  gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
-  gtk_box_pack_start (GTK_BOX (vboxKeys), scrollerKeys, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vboxPublic), vboxKeys, TRUE, TRUE, 0);
 
   notebook = keyring_details_notebook (editor);
-  gtk_box_pack_start (GTK_BOX (vboxPublic), notebook, TRUE, TRUE, 0);
+  gtk_paned_pack2 (GTK_PANED (paned), notebook, TRUE, TRUE);
 
-  hSeparatorPublic = gtk_hseparator_new ();
-  gtk_box_pack_start (GTK_BOX (vboxPublic), hSeparatorPublic, FALSE, FALSE,
-		      0);
-  hButtonBoxPublic = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxPublic),
-			     GTK_BUTTONBOX_END);
-  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxPublic), 5);
-  buttonClose = gpa_button_new (accelGroup, _("_Close"));
-  gtk_widget_add_accelerator (buttonClose, "clicked", accelGroup, GDK_Escape,
+  
+  hseparator = gtk_hseparator_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), hseparator, FALSE, FALSE, 0);
+
+
+  bbox = gtk_hbutton_box_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
+  gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
+
+  button = gpa_button_new (accel_group, _("_Close"));
+  gtk_widget_add_accelerator (button, "clicked", accel_group, GDK_Escape,
 			      0, 0);
-  gtk_signal_connect_object (GTK_OBJECT (buttonClose), "clicked",
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (keyring_editor_close),
 			     (gpointer) editor);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxPublic), buttonClose);
-  gtk_box_pack_start (GTK_BOX (vboxPublic), hButtonBoxPublic, FALSE, FALSE,
-		      0);
-  gtk_container_add (GTK_CONTAINER (windowPublic), vboxPublic);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  /*keyring_editor_fill_keylist (editor);*/
   update_selection_sensitive_widgets (editor);
 
-  return windowPublic;
+  return window;
 } /* keyring_editor_new */
 
