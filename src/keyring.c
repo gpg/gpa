@@ -290,7 +290,12 @@ key_has_been_signed (const gchar *fpr, const gchar *signer)
 
   /* Get the signing key ID */
   err = gpgme_get_key (ctx, signer, &signer_key, FALSE, FALSE);
-  if (err != GPGME_No_Error)
+  if (err == GPGME_EOF)
+    {
+      /* Can't happen */
+      return FALSE;
+    }
+  else if (err != GPGME_No_Error)
     {
       gpa_gpgme_error (err);
     }

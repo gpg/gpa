@@ -1,5 +1,7 @@
 2002-12-26  Miguel Coca  <mcoca@gnu.org>
 
+	* keyring.c (key_has_been_signed): Account for a missing signing key.
+
 	* options.c (gpa_options_update_default_key): Check whether the
 	default key is really available.
 
