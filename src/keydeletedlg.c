@@ -26,6 +26,46 @@
 #include "gpawidgets.h"
 #include "keydeletedlg.h"
 
+/* Emit a last warning that a secret key is going to be deleted, and ask for
+ * confirmation.
+ */
+static gboolean
+confirm_delete_secret (GtkWidget * parent)
+{
+  GtkWidget * window;
+  GtkWidget * label;
+  GtkWidget * hbox;
+  
+  window = gtk_dialog_new_with_buttons (_("Removing Secret Key"),
+                                        GTK_WINDOW(parent),
+                                        GTK_DIALOG_MODAL,
+                                        GTK_STOCK_YES,
+                                        GTK_RESPONSE_YES,
+                                        GTK_STOCK_NO,
+                                        GTK_RESPONSE_NO,
+                                        NULL);
+  hbox = gtk_hbox_new (FALSE, 10);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 10);
+  gtk_box_pack_start_defaults (GTK_BOX (hbox), gtk_image_new_from_stock
+                               (GTK_STOCK_DIALOG_WARNING, 
+                                GTK_ICON_SIZE_DIALOG));
+  label = gtk_label_new (_("If you delete this key, you won't be able to\n"
+                           "read messages encrypted with it.\n\n"
+                           "Are you really sure you want to delete it?"));
+  gtk_box_pack_start_defaults (GTK_BOX (hbox), label);
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), hbox);
+  gtk_widget_show_all (window);
+  if (gtk_dialog_run (GTK_DIALOG (window)) == GTK_RESPONSE_YES)
+    {
+      gtk_widget_destroy (window);
+      return TRUE;
+    }
+  else
+    {
+      gtk_widget_destroy (window);
+      return FALSE;
+    }
+}
 
 /* Run the delete key dialog as a modal dialog and return TRUE if the
  * user chose Yes, FALSE otherwise. Display information about the public
@@ -41,7 +81,6 @@ gpa_delete_dialog_run (GtkWidget * parent, GpgmeKey key,
   GtkWidget * vbox;
   GtkWidget * label;
   GtkWidget * info;
-  GtkResponseType response;
 
   window = gtk_dialog_new_with_buttons (_("Remove Key"), GTK_WINDOW(parent),
                                         GTK_DIALOG_MODAL,
@@ -88,15 +127,24 @@ gpa_delete_dialog_run (GtkWidget * parent, GpgmeKey key,
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
 
   gtk_widget_show_all (window);
-  response = gtk_dialog_run (GTK_DIALOG (window));
-  gtk_widget_destroy (window);
 
-  if (response == GTK_RESPONSE_YES)
+  if (gtk_dialog_run (GTK_DIALOG (window)) == GTK_RESPONSE_YES)
     {
-      return TRUE;
+      if (has_secret_key)
+        {
+          gboolean result = confirm_delete_secret (window);
+          gtk_widget_destroy (window);
+          return result;
+        }
+      else
+        {
+          gtk_widget_destroy (window);
+          return TRUE;
+        }
     }
   else
     {
+      gtk_widget_destroy (window);
       return FALSE;
     }
 } /* gpa_delete_dialog_run */

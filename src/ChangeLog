@@ -1,5 +1,9 @@
 2002-08-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* keydeletedlg.c (confirm_delete_secret): New function.
+	(gpa_delete_dialog_run): Emit an extra warning if a secret key is to
+	be removed.
+
 	* keyexportdlg.c (export_destroy, export_cancel): Removed.
 	(secret_key_export_dialog_run): Removed. We don't support exporting
 	secret keys anymore.
