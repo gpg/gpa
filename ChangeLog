@@ -1,3 +1,7 @@
+2001-02-27	Jan-Oliver Wagner <jan@intevation.de>
+
+	* configure.in: added french as available language
+
 2001-01-25	Jan-Oliver Wagner <jan@intevation.de>
 
 	* README.W32: New
