@@ -520,29 +520,35 @@ gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func, gchar * tip,
  * Modal file dialog
  */
 
-struct _GPASAveFileNameDialog {
-  GtkWidget * dialog;
+struct _GPASaveFileNameDialog {
+  GtkWidget * window;
   gchar * filename;
 };
-typedef struct _GPASAveFileNameDialog GPASAveFileNameDialog;
+typedef struct _GPASaveFileNameDialog GPASaveFileNameDialog;
 
 static void
 file_dialog_ok (gpointer param)
 {
-  GPASAveFileNameDialog * dialog = param;
+  GPASaveFileNameDialog * dialog = param;
 
   dialog->filename \
-      = gtk_file_selection_get_filename (GTK_FILE_SELECTION (dialog->dialog));
+      = gtk_file_selection_get_filename (GTK_FILE_SELECTION (dialog->window));
   dialog->filename = xstrdup (dialog->filename);
 
-  gtk_main_quit ();
+  gtk_widget_destroy (dialog->window);
 }
 
 static void
 file_dialog_cancel (gpointer param)
 {
-  GPASAveFileNameDialog * dialog = param;
+  GPASaveFileNameDialog * dialog = param;
   dialog->filename = NULL;
+  gtk_widget_destroy (dialog->window);
+}
+
+static void
+file_dialog_destroy (GtkWidget * widget, gpointer param)
+{
   gtk_main_quit ();
 }
 
@@ -553,11 +559,14 @@ gchar *
 gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
 			const gchar * directory)
 {
-  GPASAveFileNameDialog dialog;
+  GPASaveFileNameDialog dialog;
   GtkWidget * window = gtk_file_selection_new (title);
 
-  dialog.dialog = window;
+  dialog.window = window;
   dialog.filename = NULL;
+
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (file_dialog_destroy), NULL);
 
   gtk_signal_connect_object (GTK_OBJECT(GTK_FILE_SELECTION(window)->ok_button),
 			     "clicked", GTK_SIGNAL_FUNC (file_dialog_ok),
@@ -566,12 +575,11 @@ gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
 		      GTK_OBJECT (GTK_FILE_SELECTION (window)->cancel_button),
 		      "clicked", GTK_SIGNAL_FUNC (file_dialog_cancel),
 		      (gpointer) &dialog);
+
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   gpa_window_show_centered (window, parent);
 
-  gtk_grab_add (window);
   gtk_main ();
-  gtk_grab_remove (window);
-  gtk_widget_destroy (window);
 
   return dialog.filename;
 }
