@@ -43,25 +43,63 @@
  *	The public keyring editor
  */
 
+/* Struct passed to all signal handlers of the keyring editor as user
+ * data */
 struct _GPAKeyringEditor {
+
+  /* The toplevel window of the editor */
   GtkWidget *window;
+
+  /* The central list of keys */
   GtkCList  *clist_keys;
+
+  /* The "Show Ownertrust" toggle button */
   GtkWidget *toggle_show;
+
+  /* List of sensitive widgets. See below */
   GList * selection_sensitive_widgets;
 };
 typedef struct _GPAKeyringEditor GPAKeyringEditor;
 
-/* A simple sensitivity callback mechanism */
+/*
+ * A simple sensitivity callback mechanism
+ *
+ * The basic idea is that buttons (and other widgets like menu items as
+ * well) should know when they should be sensitive or not. The
+ * implementation here is very simple and quite specific for the keyring
+ * editor's needs.
+ *
+ * We maintain a list of sensitive widgets and each of which has a
+ * sensitivity callback associated with them as the "gpa_sensitivity"
+ * data. The callback returns TRUE when the widget should be sensitive
+ * and FALSE otherwise.
+ *
+ * Whenever the selection in the key list widget changes we call
+ * update_selection_sensitive_widgets which iterates through the widgets
+ * in the list, calls the sensitivity callback and changes the widget's
+ * sensitivity accordingly.
+ */
+
+/* Prototype of a sensitivity callback. Return TRUE if the widget should
+ * be senstitive, FALSE otherwise. The parameter is a pointer to the
+ * GPAKeyringEditor struct.
+ */
 typedef gboolean (*SensitivityFunc)(gpointer);
 
+
+/* Add widget to the list of sensitive widgets of editor */
 static void
 add_selection_sensitive_widget (GPAKeyringEditor * editor,
 				GtkWidget * widget)
 {
   editor->selection_sensitive_widgets \
     = g_list_append(editor->selection_sensitive_widgets, widget);
-}
+} /* add_selection_sensitive_widget */
 
+
+/* Update the sensitivity of the widget data and pass param through to
+ * the sensitivity callback. Usable as iterator function in
+ * g_list_foreach */
 static void
 update_selection_sensitive_widget (gpointer data, gpointer param)
 {
@@ -69,24 +107,36 @@ update_selection_sensitive_widget (gpointer data, gpointer param)
 
   func = gtk_object_get_data (GTK_OBJECT (data), "gpa_sensitivity");
   gtk_widget_set_sensitive (GTK_WIDGET (data), func (param));
-}
+} /* update_selection_sensitive_widget */
 
+
+/* Call update_selection_sensitive_widget for all widgets in the list of
+ * sensitive widgets and pass editor through as the user data parameter
+ */
 static void
 update_selection_sensitive_widgets (GPAKeyringEditor * editor)
 {
   g_list_foreach (editor->selection_sensitive_widgets,
 		  update_selection_sensitive_widget,
 		  (gpointer) editor);
-}
+} /* update_selection_sensitive_widgets */
 
+
+/* Return TRUE if the key list widget of the keyring editor has at least
+ * one selected item
+ */
 static gboolean
 keyring_editor_has_selection (gpointer param)
 {
   GPAKeyringEditor * editor = param;
 
   return (editor->clist_keys->selection != NULL);
-}
+} /* keyring_editor_has_selection */
 
+
+/* Return TRUE if the key list widget of the keyring editor has exactly
+ * one selected item
+ */
 static gboolean
 keyring_editor_has_single_selection (gpointer param)
 {
@@ -95,6 +145,9 @@ keyring_editor_has_single_selection (gpointer param)
   return (g_list_length (editor->clist_keys->selection) == 1);
 }
 
+
+/* Signal handler for select-row and unselect-row. Call
+ * update_selection_sensitive_widgets */
 void
 keyring_editor_selection_changed (GtkWidget * clistKeys, gint row,
 				  gint column, GdkEventButton * event,
@@ -103,16 +156,18 @@ keyring_editor_selection_changed (GtkWidget * clistKeys, gint row,
     GPAKeyringEditor * editor = param;
 
     update_selection_sensitive_widgets (editor);
-}
+} /* keyring_editor_selection_changed */
 
+
+/* Signal handler for end-selection. Call
+ * update_selection_sensitive_widgets */
 void
 keyring_editor_end_selection (GtkWidget * clistKeys, gpointer param)
 {
     GPAKeyringEditor * editor = param;
 
     update_selection_sensitive_widgets (editor);
-}
-
+} /* keyring_editor_end_selection */
 
 
 /* Fill the GtkCList with the keys */
@@ -360,7 +415,9 @@ keyring_editor_destroy (gpointer param)
 } /* keyring_editor_destroy */
 
 
-/* generate a new key pair */
+/* Run the advanced key generation dialog and if the user clicked OK,
+ * generate a new key pair and updat the key list
+ */
 static void
 keyring_editor_generate_key_advanced (gpointer param)
 {
@@ -437,8 +494,9 @@ keyring_editor_generate_key_advanced (gpointer param)
       /* finally, update the key list. */
       keyring_editor_fill_keylist (editor);
     }
-}
+} /* keyring_editor_generate_key_advanced */
 
+/* Call the key generation wizard and update the key list if necessary */
 static void
 keyring_editor_generate_key_simple (gpointer param)
 {
@@ -446,8 +504,12 @@ keyring_editor_generate_key_simple (gpointer param)
 
   if (gpa_keygen_wizard_run (editor->window))
     keyring_editor_fill_keylist (editor);
-}
+} /* keyring_editor_generate_key_simple */
 
+/* Depending on the simple_ui flag call either
+ * keyring_editor_generate_key_advanced or
+ * keyring_editor_generate_key_simple
+ */
 static void
 keyring_editor_generate_key (gpointer param)
 {
@@ -455,8 +517,14 @@ keyring_editor_generate_key (gpointer param)
     keyring_editor_generate_key_simple (param);
   else
     keyring_editor_generate_key_advanced (param);
-}
+} /* keyring_editor_generate_key */
 
+
+/* Signal handler for he map signal. If the simplified_ui flag is set
+ * and there's no private key in the key ring, ask the user whether he
+ * wants to generate a key. If so, call keyring_editor_generate_key
+ * which calls runs the appropriate dialog
+ */
 static void
 keyring_editor_mapped (gpointer param)
 {
@@ -482,10 +550,10 @@ keyring_editor_mapped (gpointer param)
 	  asked_about_key_generation = TRUE;
 	}
     }
-}
+} /* keyring_editor_mapped */
 
-/* Create a new keyring editor */
 
+/* Create and return the menu bar for the key ring editor */
 GtkWidget *
 keyring_editor_menubar_new (GtkWidget * window,
 			    GPAKeyringEditor * editor)
@@ -530,11 +598,13 @@ keyring_editor_menubar_new (GtkWidget * window,
 }
 
 
+/* Macro to add callback as the sensitivity callback to button */
 #define GPA_SENSITIVE_BUTTON(button, callback) \
   gtk_object_set_data (GTK_OBJECT (button), "gpa_sensitivity", callback); \
   add_selection_sensitive_widget (editor, (button))
 
 
+/* Create and return a new key ring editor window */
 GtkWidget *
 keyring_editor_new (void)
 {
