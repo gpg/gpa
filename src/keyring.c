@@ -350,11 +350,6 @@ keyring_editor_sign (gpointer param)
       return;
     }
 
-  if (!gpa_key_sign_run_dialog (editor->window, &sign_type, &private_key_id,
-				&passphrase))
-    return;
-
-
   selection = editor->clist_keys->selection;
   while (selection)
     {
@@ -362,14 +357,16 @@ keyring_editor_sign (gpointer param)
       key_id = gtk_clist_get_row_data (editor->clist_keys, row);
 				   
       key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
-      gpapa_public_key_sign (key, private_key_id, passphrase, sign_type,
-			     gpa_callback, editor->window);
+      if (gpa_key_sign_run_dialog (editor->window, key, &sign_type,
+				   &private_key_id, &passphrase))
+	{
+	  gpapa_public_key_sign (key, private_key_id, passphrase, sign_type,
+				 gpa_callback, editor->window);
+	  free (private_key_id);
+	  free (passphrase);
+	}
       selection = g_list_next (selection);
     }
-      
-  free (private_key_id);
-  free (passphrase);
-    
 } /* keyring_editor_sign */
 
 /* retrieve a key from the server */
@@ -467,6 +464,16 @@ keyring_editor_generate_key_advanced (gpointer param)
 			     params->algo, params->keysize, params->userID,
 			     params->email, params->comment,
 			     gpa_callback, editor->window);
+      if (!publicKey || !secretKey)
+	{
+	  /* something went wrong. The gpa_callback should have popped
+	   * up an message box with an error message, so simply clean up
+	   * *and return here
+	   */
+	  gpa_key_gen_free_parameters (params);
+	  return;
+	}
+	  
       if (params->expiryDate)
 	{
 	  gpapa_key_set_expiry_date (GPAPA_KEY (publicKey), params->expiryDate,
