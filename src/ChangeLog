@@ -1,5 +1,9 @@
 2001-02-09  Bernhard Herzog  <bh@intevation.de>
 
+	* helpmenu.c (help_license_destroy):
+	(help_license): Make the default license dialog properly modal
+	with a recursive main loop and a handler for the destroy signal
+
 	* optionsmenu.c (options_key):
 	(options_key_destroy): Make the default key dialog properly modal
 	with a recursive main loop and a handler for the destroy signal
