@@ -1,5 +1,19 @@
 2001-01-24  Bernhard Herzog  <bh@intevation.de>
 
+	* Makefile.am (gpa_SOURCES):
+	* siglist.h: 
+	* siglist.c: New files implementing the list of signatures in the
+	keying editor.
+
+	* keyring.c (keyring_details_notebook): Add the signatures page
+	(keyring_update_signatures_page): New function to update the
+	signatures page
+	(keyring_selection_update_widgets): Update the signatures page
+	too.
+	(GPAKeyringEditor): Add the signatures list widget
+
+	* keylist.c: Remove some uneeded includes
+	
 	* keylist.c (keylist_fill_list): Try to keep the current selection
 	if the new keep_selection parameter is TRUE.
 	(gpa_keylist_update_list): Keep the current selection.
