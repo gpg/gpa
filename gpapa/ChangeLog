@@ -1,3 +1,8 @@
+2000-08-30  Werner Koch  <wk@gnupg.org>
+
+	* gpapaintern.c (spawn_gnupg): New. Started to rework the GnuPG
+	invocation stuff for easier debugging of Windows problem.
+
 2000-07-31 16:35:40  Werner Koch  (wk@habibti.openit.de)
 
   * gpapaintern.c (gpapa_call_gnupg) [MINGW32]: SetHandleInformation() is not

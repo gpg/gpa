@@ -36,6 +36,32 @@
 #include <fcntl.h>
 #include "stringhelp.h"
 
+#define DEBUG 1
+
+#ifdef __MINGW32__
+struct gpg_object_private {
+  int foo;
+};
+#else
+struct gpg_object_private {
+  pid_t pid;
+  int output_fd;
+  int status_fd;
+};
+#endif
+
+typedef struct {
+  struct gpg_object_private private;
+  int (*status_cb) ( const void *buffer, size_t buflen, void *closure);
+  int (*output_cb) ( const void *buffer, size_t buflen, void *closure);
+  int (*input_cb) ( const void *buffer, size_t buflen, void *closure);
+  int (*control_cb) ( int reason, void *closure );
+  void *closure;
+} GPG_OBJECT;
+
+
+
+
 gboolean
 gpapa_line_begins_with (gchar * line, gchar * keyword)
 {
@@ -45,11 +71,10 @@ gpapa_line_begins_with (gchar * line, gchar * keyword)
     return (FALSE);
 }				/* gpapa_line_begins_with */
 
-void
-gpapa_linecallback_dummy (char *line, gpointer data, gboolean status)
+static void
+dummy_datacallback (void *data, size_t datalen, void *closure)
 {
-  /* empty */
-}				/* gpapa_linecallback_dummy */
+}
 
 static gboolean
 status_check (gchar * buffer,
@@ -67,22 +92,63 @@ status_check (gchar * buffer,
   return (result);
 }				/* status_check */
 
-
-
-
-/* user_args must be a NULL-terminated array of argument strings.
- */
-void
-gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
-		  gchar * passphrase, GpapaLineCallbackFunc linecallback,
-		  gpointer linedata, GpapaCallbackFunc callback,
-		  gpointer calldata)
+#if 0
+static int
+output_handler ( int nread, int npending, .... )
 {
-#ifdef __MINGW32__
-  /* Hmm, let's see how we can tackle this for the W32 API:
-   *
-   */
+  while ( nread > 0 )
+    {
+      int n = 0;
+      
+      check_again = 1;
+      fprintf (stderr, "outputfd has %d bytes\n", nread);
+      while ( n < nread && buffer[n] != '\n')
+        n++;
 
+      if ( n < nread)
+        {
+          if ( npending > 0)
+            {
+              int new_n = npending + n + 1;
+              pendingbuffer = xrealloc (pendingbuffer, new_n);
+                                      
+              memcpy (pendingbuffer + npending, buffer, n);
+              pendingbuffer[new_n-1] = 0;
+              linecallback (pendingbuffer, linedata, FALSE);
+              free (pendingbuffer);
+              pendingbuffer = NULL;
+              pendingsize = 0;
+            }
+          else
+            {
+              buffer[q] = 0;
+              linecallback (buffer, linedata, FALSE);
+            }
+          memmove (buffer, buffer + q + 1, nread - q - 1);
+          nread -= q + 1;
+        }
+      else
+        {
+          int newpendingsize = pendingsize + nread;
+          pendingbuffer = xrealloc (pendingbuffer,
+                                    newpendingsize);
+          memcpy (pendingbuffer + pendingsize, buffer, nread);
+          pendingsize = newpendingsize;
+          nread = 0;
+        }
+    }
+}
+#endif
+
+
+
+
+
+#ifdef __MINGW32__
+static GPG_OBJECT * 
+spawn_gnupg(char **user_args, gchar * commands,
+                GpapaCallbackFunc callback, gpointer calldata)
+{
   SECURITY_ATTRIBUTES sec_attr;
   PROCESS_INFORMATION pi = { NULL,	/* returns process handle */
     0,				/* returns primary thread handle */
@@ -95,7 +161,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
   };
   char *envblock = NULL;
   int cr_flags = CREATE_DEFAULT_ERROR_MODE
-    | GetPriorityClass (GetCurrentProcess ());
+      | GetPriorityClass (GetCurrentProcess ());
   int rc;
   HANDLE save_stdout;
   HANDLE outputfd[2], statusfd[2], inputfd[2];
@@ -116,8 +182,8 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
   /* Open output pipe. */
   if (!CreatePipe (outputfd + 0, outputfd + 1, NULL, 0))
     {
-      callback (GPAPA_ACTION_ERROR, "could not open output pipe", calldata);
-      return;
+        callback (GPAPA_ACTION_ERROR, "could not open output pipe", calldata);
+        return;
     }
 
   /* Open status pipe. */
@@ -181,7 +247,8 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
   fputs ("** CreateProcess ...\n", stderr);
   fprintf (stderr, "** args=`%s'\n", arg_string);
   fflush (stderr);
-  rc = CreateProcessA ("c:\\gnupg\\gpg.exe", arg_string, &sec_attr,     /* process security attributes */
+  rc = CreateProcessA ("c:\\gnupg\\gpg.exe", arg_string,
+                       &sec_attr,     /* process security attributes */
 		       &sec_attr,	/* thread security attributes */
 		       TRUE,	/* inherit handles */
 		       cr_flags,	/* creation flags */
@@ -209,14 +276,195 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 	   (int) pi.dwProcessId, (int) pi.dwThreadId);
   fflush (stderr);
 
+  gpg = xcalloc (1, sizeof *gpg );
+  gpg->private.
+}
+#endif
+
+
+#ifndef __MINGW32__
+static GPG_OBJECT * 
+spawn_gnupg(char **user_args, gchar * commands,
+                GpapaCallbackFunc callback, gpointer calldata)
+{
+  int pid;
+  int outputfd[2], statusfd[2], passfd[2], inputfd[2], devnull;
+  char **argv;
+  char statusfd_str[10], passfd_str[10];
+  int argc, user_args_counter, standard_args_counter, i, j;
+
+  char *standard_args[] = {
+    "--status-fd",
+    statusfd_str,
+    "--no-options",
+    "--batch",
+    NULL
+  };
+
+  /* Open /dev/null for redirecting stderr.
+   */
+  devnull = open ("/dev/null", O_RDWR);
+  if (devnull == -1)
+    {
+      callback (GPAPA_ACTION_ERROR, "could not open `/dev/null'", calldata);
+      return NULL;
+    }
+
+  /* Open output pipe.
+   */
+  if (pipe (outputfd) == -1)
+    {
+      callback (GPAPA_ACTION_ERROR, "could not open output pipe", calldata);
+      return NULL;
+    }
+
+  /* Open status pipe.
+   */
+  if (pipe (statusfd) == -1)
+    {
+      callback (GPAPA_ACTION_ERROR, "could not open status pipe", calldata);
+      close (outputfd[0]);
+      close (outputfd[1]);
+      return NULL;
+    }
+  sprintf (statusfd_str, "%d", statusfd[1]);
+
+  if (passphrase)
+    {
+      /* Open passphrase pipe.
+       */
+      if (pipe (passfd) == -1)
+	{
+	  callback (GPAPA_ACTION_ERROR, "could not open passphrase pipe",
+		    calldata);
+	  close (outputfd[0]);
+	  close (outputfd[1]);
+	  close (statusfd[0]);
+	  close (statusfd[1]);
+	  return;
+	}
+      sprintf (passfd_str, "%d", passfd[0]);
+      write (passfd[1], passphrase, strlen (passphrase));
+      write (passfd[1], "\n", 1);
+    }
+
+  if (commands)
+    {
+      /* Open input pipe.
+       */
+      if (pipe (inputfd) == -1)
+	{
+	  callback (GPAPA_ACTION_ERROR, "could not open input pipe",
+		    calldata);
+	  close (outputfd[0]);
+	  close (outputfd[1]);
+	  close (statusfd[0]);
+	  close (statusfd[1]);
+	  if (passphrase)
+	    {
+	      close (passfd[0]);
+	      close (passfd[1]);
+	    }
+	  return NULL;
+	}
+      write (inputfd[1], commands, strlen (commands));
+    }
+
+  /* Construct the command line.
+   */
+  user_args_counter = 0;
+  while (user_args[user_args_counter] != NULL)
+    user_args_counter++;
+  standard_args_counter = 0;
+  while (standard_args[standard_args_counter] != NULL)
+    standard_args_counter++;
+  argc = 1 + standard_args_counter + user_args_counter;
+  if (passphrase)
+    argc += 2;
+  argv = (char **) xmalloc ((argc + 1) * sizeof (char *));
+  i = 0;
+  argv[i++] = gpapa_private_get_gpg_program ();
+  for (j = 0; j < standard_args_counter; j++)
+    argv[i++] = standard_args[j];
+  if (passphrase)
+    {
+      argv[i++] = "--passphrase-fd";
+      argv[i++] = passfd_str;
+    }
+  for (j = 0; j < user_args_counter; j++)
+    argv[i++] = user_args[j];
+  argv[i] = NULL;
+
+#ifdef DEBUG
+  for (j = 0; j < i; j++)
+    fprintf (stderr, "%s ", argv[j]);
+  fprintf (stderr, "\n");
+#endif
+
+  pid = fork ();
+  if (pid == -1)
+    {
+      callback (GPAPA_ACTION_ERROR, "fork() failed", calldata);
+      /* fixme: add cleanups */
+      return NULL;
+    }
+
+  if ( !pid ) /* child */
+    {
+      close (outputfd[0]);
+      close (statusfd[0]);
+      dup2 (outputfd[1], 1);
+      close (outputfd[1]);
+      if (commands)
+	{
+	  dup2 (inputfd[0], 0);
+	  close (inputfd[0]);
+	}
+      else
+	dup2 (devnull, 0);
+#ifndef DEBUG
+      dup2 (devnull, 2);
+#endif
+      close (devnull);
+      execv (argv[0], argv);
+
+      /* Reached only if execution failed (we are not the child)*/
+      callback (GPAPA_ACTION_ERROR, "GnuPG execution failed", calldata);
+      /* fixme: need some cleanup here */
+      return NULL;
+    }
+
+  /* everything is fine */
+  gpg = xcalloc (1, sizeof *gpg );
+  gpg->private.pid = pid;
+  gpg->private.output_fd = outputfd[0];
+  gpg->private.status_fd = statusfd[0];
+  return gpg;
+}
+
+/* user_args must be a NULL-terminated array of argument strings.
+ */
+void
+gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
+		  char * passphrase, GpapaDataCallbackFunc data_callback,
+		  gpointer data_closure, GpapaCallbackFunc callback,
+		  gpointer calldata)
+{
+  GPG_OBJECT *gpg;
+  
+    if ( !data_callback )
+        data_callback = dummy_datacallback;
+
+  gpg = spawn_gnupg (user_args, commands, callback, calldata );
+  if ( !gpg ) {
+      callback (GPAPA_ACTION_DEBUG, "spawn_gnupg failed", calldata);
+      return;
+  }
 
   fprintf (stderr, "** start waiting for this processs ...\n");
-  fflush (stderr);
 
-  SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_HIGHEST);
 
-  if (do_wait)
-    {
+
       int ready, status, retpid;
       size_t bufsize = 8192;
       size_t pendingsize = 0;
@@ -229,7 +477,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 	  int nwait = 3;
 	  int nread, ncount;
 
-	  ncount = WaitForMultipleObjects (nwait, waitbuf, FALSE, 0);
+	  ncount = WaitForMultipleObjectsEx (nwait, waitbuf, FALSE, INFINITE, TRUE);
 	  if ( ncount == WAIT_FAILED ) {
 	    fprintf (stderr, "** WFMO failed: ec=%d\n", (int) GetLastError ());
 	  }
@@ -263,46 +511,6 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 		      fprintf (stderr, "** ReadFile failed: ec=%d\n",
 			       (int) GetLastError ());
 		      nread = 0;
-		    }
-		  while (nread > 0)
-		    {		/* process this data */
-		      int q = 0;
-
-		      check_again = 1;
-		      fprintf (stderr, "outputfd has %d bytes\n", nread);
-		      while (q < nread && buffer[q] != '\n')
-			q++;
-		      if (q < nread)
-			{
-			  if (pendingsize > 0)
-			    {
-			      int newpendingsize = pendingsize + q + 1;
-			      pendingbuffer = xrealloc (pendingbuffer,
-							newpendingsize);
-			      memcpy (pendingbuffer + pendingsize, buffer, q);
-			      pendingbuffer[newpendingsize - 1] = 0;
-			      linecallback (pendingbuffer, linedata, FALSE);
-			      free (pendingbuffer);
-			      pendingbuffer = NULL;
-			      pendingsize = 0;
-			    }
-			  else
-			    {
-			      buffer[q] = 0;
-			      linecallback (buffer, linedata, FALSE);
-			    }
-			  memmove (buffer, buffer + q + 1, nread - q - 1);
-			  nread -= q + 1;
-			}
-		      else
-			{
-			  int newpendingsize = pendingsize + nread;
-			  pendingbuffer = xrealloc (pendingbuffer,
-						    newpendingsize);
-			  memcpy (pendingbuffer + pendingsize, buffer, nread);
-			  pendingsize = newpendingsize;
-			  nread = 0;
-			}
 		    }
 
 		  /* check statusfd */
@@ -417,7 +625,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 	   */
 	  if (pendingsize > 0)
 	    {
-	      insunewpendingsize = pendingsize + 1;
+	      int newpendingsize = pendingsize + 1;
 	      pendingbuffer =
 		(char *) xrealloc (pendingbuffer, newpendingsize);
 	      pendingbuffer[newpendingsize - 1] = 0;
@@ -449,174 +657,25 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 	}
 
       free (buffer);
-    }
-  else
-    {
-      /* @@ To be implemented:
-       *
-       * Install linecallback() in a way that gpapa_idle()
-       * will call it for each line coming from this pipe.
-       */
-    }
   CloseHandle (outputfd[0]);
   CloseHandle (statusfd[0]);
 
   fprintf (stderr, "** gpapa_call_gnupg ready\n");
 #else /* Here is the code for something we call a real operating system */
-  int pid;
-  int outputfd[2], statusfd[2], passfd[2], inputfd[2], devnull;
-  char **argv;
-  char statusfd_str[10], passfd_str[10];
-  int argc, user_args_counter, standard_args_counter, i, j;
 
-  char *standard_args[] = {
-    "--status-fd",
-    statusfd_str,
-    "--no-options",
-    "--batch",
-    NULL
-  };
 
-  /* Open /dev/null for redirecting stderr.
-   */
-  devnull = open ("/dev/null", O_RDWR);
-  if (devnull == -1)
-    {
-      callback (GPAPA_ACTION_ERROR, "could not open `/dev/null'", calldata);
-      return;
-    }
 
-  /* Open output pipe.
-   */
-  if (pipe (outputfd) == -1)
-    {
-      callback (GPAPA_ACTION_ERROR, "could not open output pipe", calldata);
-      return;
-    }
-
-  /* Open status pipe.
-   */
-  if (pipe (statusfd) == -1)
-    {
-      callback (GPAPA_ACTION_ERROR, "could not open status pipe", calldata);
-      close (outputfd[0]);
-      close (outputfd[1]);
-      return;
-    }
-  sprintf (statusfd_str, "%d", statusfd[1]);
-
-  if (passphrase)
-    {
-      /* Open passphrase pipe.
-       */
-      if (pipe (passfd) == -1)
-	{
-	  callback (GPAPA_ACTION_ERROR, "could not open passphrase pipe",
-		    calldata);
-	  close (outputfd[0]);
-	  close (outputfd[1]);
-	  close (statusfd[0]);
-	  close (statusfd[1]);
-	  return;
-	}
-      sprintf (passfd_str, "%d", passfd[0]);
-      write (passfd[1], passphrase, strlen (passphrase));
-      write (passfd[1], "\n", 1);
-    }
-
-  if (commands)
-    {
-      /* Open input pipe.
-       */
-      if (pipe (inputfd) == -1)
-	{
-	  callback (GPAPA_ACTION_ERROR, "could not open input pipe",
-		    calldata);
-	  close (outputfd[0]);
-	  close (outputfd[1]);
-	  close (statusfd[0]);
-	  close (statusfd[1]);
-	  if (passphrase)
-	    {
-	      close (passfd[0]);
-	      close (passfd[1]);
-	    }
-	  return;
-	}
-      write (inputfd[1], commands, strlen (commands));
-    }
-
-  /* Construct the command line.
-   */
-  user_args_counter = 0;
-  while (user_args[user_args_counter] != NULL)
-    user_args_counter++;
-  standard_args_counter = 0;
-  while (standard_args[standard_args_counter] != NULL)
-    standard_args_counter++;
-  argc = 1 + standard_args_counter + user_args_counter;
-  if (passphrase)
-    argc += 2;
-  argv = (char **) xmalloc ((argc + 1) * sizeof (char *));
-  i = 0;
-  argv[i++] = gpapa_private_get_gpg_program ();
-  for (j = 0; j < standard_args_counter; j++)
-    argv[i++] = standard_args[j];
-  if (passphrase)
-    {
-      argv[i++] = "--passphrase-fd";
-      argv[i++] = passfd_str;
-    }
-  for (j = 0; j < user_args_counter; j++)
-    argv[i++] = user_args[j];
-  argv[i] = NULL;
-
-#ifdef DEBUG
-  for (j = 0; j < i; j++)
-    fprintf (stderr, "%s ", argv[j]);
-  fprintf (stderr, "\n");
-#endif
-
-  pid = fork ();
-  if (pid == -1)		/* error */
-    callback (GPAPA_ACTION_ERROR, "fork() failed", calldata);
-  else if (pid == 0)		/* child */
-    {
-      close (outputfd[0]);
-      close (statusfd[0]);
-      dup2 (outputfd[1], 1);
-      close (outputfd[1]);
-      if (commands)
-	{
-	  dup2 (inputfd[0], 0);
-	  close (inputfd[0]);
-	}
-      else
-	dup2 (devnull, 0);
-#ifndef DEBUG
-      dup2 (devnull, 2);
-#endif
-      close (devnull);
-      execv (argv[0], argv);
-
-      /* Reached only if execution failed.
-       */
-      callback (GPAPA_ACTION_ERROR, "GnuPG execution failed", calldata);
-    }
-  else				/* parent */
-    {
-      if (do_wait)
-	{
-	  int status, retpid, dataavail;
-	  size_t bufsize = MIN (8192, SSIZE_MAX);
-	  size_t pendingsize = 0;
-	  char *buffer = (char *) xmalloc (bufsize);
-	  char *pendingbuffer = NULL;
-	  fd_set readfds;
-	  int maxfd = MAX (outputfd[0], statusfd[0]);
-	  struct timeval timeout = { 0, 0 };
-	  gboolean missing_passphrase = FALSE;
-
+      
+               int status, retpid, dataavail;
+           size_t bufsize = MIN (8192, SSIZE_MAX);
+           size_t pendingsize = 0;
+           char *buffer = (char *) xmalloc (bufsize);
+           char *pendingbuffer = NULL;
+           fd_set readfds;
+           int maxfd = MAX (outputfd[0], statusfd[0]);
+           struct timeval timeout = { 0, 0 };
+           gboolean missing_passphrase = FALSE;
+                  
 	  /* Check for data in the pipe and whether the GnuPG
 	   * process is still running.
 	   */
@@ -629,50 +688,18 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 	  while (retpid == 0 || dataavail != 0)
 	    {
 	      int p, q;
+              int nread;
 
 	      /* Handle output data.
 	       */
+              nread = 0;
 	      if (FD_ISSET (outputfd[0], &readfds))
-		p = read (outputfd[0], buffer, bufsize);
-	      else
-		p = 0;
-	      while (p > 0)
-		{
-		  q = 0;
-		  while (q < p && buffer[q] != '\n')
-		    q++;
-		  if (q < p)
-		    {
-		      if (pendingsize > 0)
-			{
-			  int newpendingsize = pendingsize + q + 1;
-			  pendingbuffer =
-			    (char *) xrealloc (pendingbuffer, newpendingsize);
-			  memcpy (pendingbuffer + pendingsize, buffer, q);
-			  pendingbuffer[newpendingsize - 1] = 0;
-			  linecallback (pendingbuffer, linedata, FALSE);
-			  free (pendingbuffer);
-			  pendingbuffer = NULL;
-			  pendingsize = 0;
-			}
-		      else
-			{
-			  buffer[q] = 0;
-			  linecallback (buffer, linedata, FALSE);
-			}
-		      memmove (buffer, buffer + q + 1, p - q - 1);
-		      p -= q + 1;
-		    }
-		  else
-		    {
-		      int newpendingsize = pendingsize + p;
-		      pendingbuffer =
-			(char *) xrealloc (pendingbuffer, newpendingsize);
-		      memcpy (pendingbuffer + pendingsize, buffer, p);
-		      pendingsize = newpendingsize;
-		      p = 0;
-		    }
-		}
+		nread = read (outputfd[0], buffer, bufsize);
+	      
+		
+	      if ( nread > 0 ) 
+		  linecallback ( buffer, linedata, FALSE);
+			
 
 	      /* Handle status data.
 	       */
@@ -767,15 +794,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
 	    callback (GPAPA_ACTION_FINISHED,
 		      "GnuPG execution terminated normally", calldata);
 	  free (buffer);
-	}
-      else
-	{
-	  /* @@ To be implemented:
-	   *
-	   * Install linecallback() in a way that gpapa_idle()
-	   * will call it for each line coming from this pipe.
-	   */
-	}
+         
       close (outputfd[0]);
       close (statusfd[0]);
       if (passphrase)
@@ -789,7 +808,6 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
       if (commands)
 	close (inputfd[0]);
       close (devnull);
-    }
   free (argv);
 #endif /* real operating system */
-}				/* gpapa_call_gnupg */
+} /* gpapa_call_gnupg */
