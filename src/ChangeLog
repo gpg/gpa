@@ -1,5 +1,14 @@
 2001-02-08  Bernhard Herzog  <bh@intevation.de>
 
+	* expirydlg.c (gpa_expiry_dialog_run): Pass the secret key into
+	the dialog instead of the expiry date so that we can display it in
+	the password dialog. Update the headerfile accordingly.
+	(GPAExpiryDialog): Add the key field.
+	(expiry_ok): Pass the key to the password dialog.
+
+	* keyeditdlg.c (key_edit_change_expiry): gpa_expiry_dialog_run has
+	a new calling sequence.
+
 	* gpawidgets.c (gpa_key_info_new): Tweak the spacing a bit
 
 	* passphrasedlg.c (gpa_passphrase_run_dialog): Add a label asking

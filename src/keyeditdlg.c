@@ -277,18 +277,14 @@ static void
 key_edit_change_expiry(GtkWidget * widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
-  GpapaPublicKey * key;
-  GDate * expiry_date, *new_date;
+  GpapaSecretKey * key;
+  GDate *new_date;
   gchar * password;
 
-  key = gpapa_get_public_key_by_ID (dialog->key_id, gpa_callback,
+  key = gpapa_get_secret_key_by_ID (dialog->key_id, gpa_callback,
 				    dialog->window);
 
-  expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
-					   dialog->window);
-
-  if (gpa_expiry_dialog_run (dialog->window, expiry_date, &new_date,
-			     &password))
+  if (gpa_expiry_dialog_run (dialog->window, key, &new_date, &password))
     {
       gchar * date_string;
 

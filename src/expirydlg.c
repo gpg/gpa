@@ -39,6 +39,9 @@ typedef struct {
   /* The password for the key. */
   gchar * password;
 
+  /* The secret key that was passed into the dialog */
+  GpapaSecretKey * key;
+
   /* The toplevel window of the dialog */
   GtkWidget * window;
 
@@ -92,8 +95,8 @@ expiry_ok (GtkWidget *widget, gpointer param)
 
   if (result)
     {
-      /* The data is OK now ask for the password */
-      password = gpa_passphrase_run_dialog (dialog->window, NULL);
+      /* The data is OK; now ask for the password */
+      password = gpa_passphrase_run_dialog (dialog->window, dialog->key);
       if (!password)
 	{
 	  /* the user cancelled, so free the data that was allocated in
@@ -134,12 +137,12 @@ expiry_destroy (GtkWidget *widget, gpointer param)
 
 
 /* Run the expiry date dialog as a modal dialog and return TRUE and set
- * ** (*new_date) to the (newly allocated) new expiry date if the user *
- * *clicked OK, otherwise return FALSE and don't modify *new_date.
+ * (*new_date) to the (newly allocated) new expiry date if the user
+ * clicked OK, otherwise return FALSE and don't modify *new_date.
  * *new_date == NULL means never expire
  */
 gboolean
-gpa_expiry_dialog_run (GtkWidget * parent, GDate * expiry_date,
+gpa_expiry_dialog_run (GtkWidget * parent, GpapaSecretKey * key,
 		       GDate ** new_date, gchar ** password)
 {
   GtkWidget * window;
@@ -150,10 +153,12 @@ gpa_expiry_dialog_run (GtkWidget * parent, GDate * expiry_date,
   GtkWidget * bbox;
   GtkWidget * button;
   GtkAccelGroup * accel_group;
+  GDate * expiry_date;
 
   GPAExpiryDialog dialog;
   dialog.result = FALSE;
   dialog.expiry_date = NULL;
+  dialog.key = key;
 
   accel_group = gtk_accel_group_new ();
 
@@ -186,6 +191,8 @@ gpa_expiry_dialog_run (GtkWidget * parent, GDate * expiry_date,
   dialog.entry_date = entry;
   gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
 
+  expiry_date = gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
+					   dialog.window);
   if (expiry_date)
     {
       gchar *buffer;
