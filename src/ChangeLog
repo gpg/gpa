@@ -1,3 +1,10 @@
+2001-01-23	Jan-Oliver Wagner	<jan@intevation.de>
+
+	* w32reg: new module copied from gnupg
+	Access to Windows Registry
+	* Makefile.am: added w32reg
+	* gpa.c (main): now reads from Registry under Windows
+
 2001-01-22  Bernhard Herzog  <bh@intevation.de>
 
 	* keyring.c (keyring_editor_delete): Ask for confirmation before
