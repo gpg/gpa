@@ -60,6 +60,7 @@ key_sign_ok (gpointer param)
 {
   GPAKeySignDialog * dialog = param;
   GtkWidget * check;
+  GpapaSecretKey * secret_key;
 
   dialog->result = TRUE;
 
@@ -69,7 +70,11 @@ key_sign_ok (gpointer param)
   else
     dialog->sign_type = GPAPA_KEY_SIGN_NORMAL;
 
-  dialog->passphrase = gpa_passphrase_run_dialog (dialog->window, NULL);
+  /* assume that the dialog will only be run if there actually is a
+   * default key */
+  secret_key = gpapa_get_secret_key_by_ID (gpa_default_key (), gpa_callback,
+					   dialog->window);
+  dialog->passphrase = gpa_passphrase_run_dialog (dialog->window, secret_key);
 
   gtk_widget_destroy (dialog->window);
 } /* key_sign_ok */
@@ -84,8 +89,9 @@ key_sign_destroy (GtkWidget *widget, gpointer param)
 }
 
 
-/* Run the key sign dialog as a modal dialog and return when the user
- * ends the dialog. If the user clicks OK, return TRUE and set sign_type
+/* Run the key sign dialog for signing the public key key with the
+ * default key as a modal dialog and return when the user ends the
+ * dialog. If the user clicks OK, return TRUE and set sign_type
  * according to the "sign locally" check box and *passphrase to the
  * passphrase. The passphrase must be freed.
  *

@@ -120,7 +120,13 @@ gpa_passphrase_run_dialog (GtkWidget * parent, GpapaSecretKey * key)
 
   if (key)
     {
-      GtkWidget * info = gpa_key_info_new (GPAPA_KEY (key), parent);
+      GtkWidget * label;
+      GtkWidget * info;
+
+      label = gtk_label_new (_("Please enter the password for"
+			       " the following key:"));
+      gtk_box_pack_start (GTK_BOX (vboxPassphrase), label, FALSE, FALSE, 5);
+      info = gpa_key_info_new (GPAPA_KEY (key), parent);
       gtk_box_pack_start (GTK_BOX (vboxPassphrase), info, FALSE, FALSE, 0);
     }
 

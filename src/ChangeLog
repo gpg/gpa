@@ -1,5 +1,11 @@
 2001-02-08  Bernhard Herzog  <bh@intevation.de>
 
+	* passphrasedlg.c (gpa_passphrase_run_dialog): Add a label asking
+	for he passphrase
+
+	* keysigndlg.c (key_sign_ok): Pass the default key to the password
+	dialog
+
 	* passphrasedlg.h (gpa_passphrase_run_dialog): 
 	* passphrasedlg.c (gpa_passphrase_run_dialog): Add a key parameter
 	and display information about the key whose password is required.
