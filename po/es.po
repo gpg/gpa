@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-10-12 13:39+0200\n"
-"PO-Revision-Date: 2003-10-12 17:29+0200\n"
+"PO-Revision-Date: 2003-10-12 17:43+0200\n"
 "Last-Translator: Miguel Coca <mcoca@gnu.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -295,9 +295,8 @@ msgstr ""
 "(por ejemplo, en un diskette guardado en lugar seguro)."
 
 #: src/gpabackupop.c:252
-#, fuzzy
 msgid "Backup key to file"
-msgstr "_Archivo de copia de seguridad:"
+msgstr "Archivo de copia de seguridad:"
 
 #: src/gpabackupop.c:279
 msgid "Backup Keys"
@@ -368,14 +367,13 @@ msgstr "Exportar clave publica a un archivo"
 
 #. Customize the dialog, adding the "armor" option
 #: src/gpaexportfileop.c:135
-#, fuzzy
 msgid "_armor"
 msgstr "A_rmadura"
 
 #: src/gpaexportfileop.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "The keys have been exported to %s."
-msgstr "¡Esta clave ha caducado! No se puede firmar."
+msgstr "Las claves se han exportado a %s."
 
 #: src/gpaexportserverop.c:127
 #, c-format
@@ -397,14 +395,14 @@ msgid "Decrypting..."
 msgstr "Descifrando..."
 
 #: src/gpafiledecryptop.c:280 src/gpafileverifyop.c:337
-#, fuzzy, c-format
+#, c-format
 msgid "The file \"%s\" contained no OpenPGP data."
-msgstr "El archivo \\\"%s\\\" no contiene datos cifrados válidos."
+msgstr "El archivo \"%s\" no contiene datos OpenPGP válidos."
 
 #: src/gpafiledecryptop.c:288
 #, c-format
 msgid "The file \"%s\" contained no valid encrypted data."
-msgstr "El archivo \\\"%s\\\" no contiene datos cifrados válidos."
+msgstr "El archivo \"%s\" no contiene datos cifrados válidos."
 
 #: src/gpafiledecryptop.c:296 src/gpafileencryptop.c:566
 #: src/gpafilesignop.c:353 src/gpafileverifyop.c:345 src/gpakeyexpireop.c:232
@@ -413,9 +411,8 @@ msgid "Wrong passphrase!"
 msgstr "¡Contraseña incorrecta!"
 
 #: src/gpafileencryptop.c:99
-#, fuzzy
 msgid "Encrypting..."
-msgstr "Cifrar"
+msgstr "Cifrando..."
 
 #: src/gpafileencryptop.c:295 src/verifydlg.c:221
 msgid "Unknown Key"
@@ -457,19 +454,16 @@ msgid "You didn't select any key for signing"
 msgstr "No se seleccionó ninguna clave con la que firmar"
 
 #: src/gpafilesignop.c:97
-#, fuzzy
 msgid "Signing..."
-msgstr "Modo de Firma"
+msgstr "Firmando..."
 
 #: src/gpafileverifyop.c:97
-#, fuzzy
 msgid "Verifying..."
-msgstr "Verificar"
+msgstr "Verificando..."
 
 #: src/gpagenkeyadvop.c:78
-#, fuzzy
 msgid "Generating Key..."
-msgstr "Generar clave"
+msgstr "Generando Clave..."
 
 #: src/gpaimportfileop.c:129
 msgid "Import public keys from file"
@@ -557,18 +551,16 @@ msgid "Key _ID:"
 msgstr "_ID de Clave:"
 
 #: src/gpasubkeylist.c:68
-#, fuzzy
 msgid "Subkey ID"
-msgstr "ID de Clave"
+msgstr "ID de Subclave"
 
 #: src/gpasubkeylist.c:74 src/siglist.c:118 src/verifydlg.c:329
 msgid "Status"
 msgstr "Estado"
 
 #: src/gpasubkeylist.c:80
-#, fuzzy
 msgid "Algorithm"
-msgstr "A_lgoritmo: "
+msgstr "Algoritmo"
 
 #: src/gpasubkeylist.c:87
 msgid "Size"
@@ -605,9 +597,8 @@ msgid "Disabled"
 msgstr "Desactivada"
 
 #: src/gpasubkeylist.c:138
-#, fuzzy
 msgid "Unsigned"
-msgstr "firmar clave"
+msgstr "Sin firmar"
 
 #: src/gpasubkeylist.c:142 src/gpgmetools.c:842 src/verifydlg.c:211
 msgid "Valid"
@@ -685,7 +676,7 @@ msgstr ""
 "La biblioteca GPGME devolvió un error\n"
 "inesperado. El error fue:\n"
 "\n"
-"\\t%s\n"
+"\t%s\n"
 "\n"
 "Esto probablemente se deba a un fallo en GPA.\n"
 "GPA intentará recuperarse de este error."
@@ -777,59 +768,57 @@ msgstr "Incorrecta"
 
 #: src/gpgmetools.c:867
 msgid "Generic"
-msgstr ""
+msgstr "Genérica"
 
 #: src/gpgmetools.c:870
 msgid "Persona"
-msgstr ""
+msgstr "Persona"
 
 #: src/gpgmetools.c:873
 msgid "Casual"
-msgstr ""
+msgstr "Casual"
 
 #: src/gpgmetools.c:876
 msgid "Positive"
-msgstr ""
+msgstr "Positiva"
 
 #: src/gpgmetools.c:894
 msgid "The key can be used for certification, signing and encryption."
-msgstr ""
+msgstr "Esta clave puede utilizarse para certificación, firma y cifrado."
 
 #: src/gpgmetools.c:899
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
-msgstr ""
+msgstr "Esta clave puede utilizarse para certificación y firma, pero no para cifrado."
 
 #: src/gpgmetools.c:907
-#, fuzzy
 msgid "The key can be used for certification and encryption."
-msgstr "Y no se puede usar para cifrado."
+msgstr "Esta clave puede utilizarse para certificación y cifrado."
 
 #: src/gpgmetools.c:912
-#, fuzzy
 msgid "The key can be used only for certification."
-msgstr "Y no se puede usar para cifrado."
+msgstr "Esta clave puede utilizarse solo para certificación."
 
 #: src/gpgmetools.c:922
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr ""
+"Esta clave puede utilizarse solo para firma y cifrado, pero no para\n"
+"certificación."
 
 #: src/gpgmetools.c:927
-#, fuzzy
 msgid "The key can be used only for signing."
-msgstr "No hay ninguna clave seleccionada para firmar."
+msgstr "Esta clave puede utilizarse tan solo para firma."
 
 #: src/gpgmetools.c:934
-#, fuzzy
 msgid "The key can be used only for encryption."
-msgstr "Y no se puede usar para cifrado."
+msgstr "Esta clave puede utilizarse tan solo para cifrado."
 
 #. Can't happen, even for subkeys
 #: src/gpgmetools.c:940
 msgid "This key is useless."
-msgstr ""
+msgstr "Esta clave no vale para nada."
 
 #: src/gtktools.c:311
 msgid "GPA Error"
@@ -1183,6 +1172,8 @@ msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
 msgstr ""
+"GnuPG está reconstruyendo la base de datos de confianza\n"
+"Esto podría llevar unos segundos."
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
@@ -1272,19 +1263,16 @@ msgid "/Keys/_Backup..."
 msgstr "/Claves/_Copia de Seguridad..."
 
 #: src/keyring.c:829
-#, fuzzy
 msgid "/_Server"
-msgstr "_Nunca"
+msgstr "/_Servidor"
 
 #: src/keyring.c:830
-#, fuzzy
 msgid "/Server/_Retrieve Keys..."
-msgstr "/Claves/_Borrar Claves..."
+msgstr "/Servidor/_Descargar Claves..."
 
 #: src/keyring.c:831
-#, fuzzy
 msgid "/Server/_Send Keys..."
-msgstr "/Claves/_Firmar Claves..."
+msgstr "/Servidor/_Enviar Claves..."
 
 #: src/keyring.c:865
 msgid "/Keys/Export Keys..."
@@ -1299,9 +1287,8 @@ msgid "/Edit/Copy"
 msgstr "/Editar/Copiar"
 
 #: src/keyring.c:886
-#, fuzzy
 msgid "/Server/Send Keys..."
-msgstr "/Claves/Firmar Claves..."
+msgstr "/Servidor/Enviar Claves..."
 
 #: src/keyring.c:895
 msgid "/Keys/Set Owner Trust..."
@@ -1348,9 +1335,8 @@ msgid "/E_xport Keys..."
 msgstr "/E_xportar Claves..."
 
 #: src/keyring.c:947
-#, fuzzy
 msgid "/Se_nd Keys to Server..."
-msgstr "Servidor de _Claves"
+msgstr "E_nviar claves al servidor"
 
 #: src/keyring.c:948
 msgid "/_Backup..."
@@ -1374,7 +1360,7 @@ msgstr "/Copia de Seguridad..."
 
 #: src/keyring.c:1055
 msgid "Subkeys"
-msgstr ""
+msgstr "Subclaves"
 
 #: src/keyring.c:1126 src/keysigndlg.c:106
 msgid "Fingerprint:"
@@ -1421,9 +1407,9 @@ msgid "The key has only a public part"
 msgstr "Esta clave solo tiene una parte pública"
 
 #: src/keyring.c:1228
-#, fuzzy, c-format
+#, c-format
 msgid "%s %u bits"
-msgstr "%s %li bits"
+msgstr "%s %u bits"
 
 #: src/keyring.c:1258
 #, c-format
@@ -1759,13 +1745,12 @@ msgid "Settings"
 msgstr "Preferencias"
 
 #: src/siglist.c:126
-#, fuzzy
 msgid "Level"
-msgstr "Nunca"
+msgstr "Nivel"
 
 #: src/siglist.c:133
 msgid "Local"
-msgstr ""
+msgstr "Local"
 
 #: src/verifydlg.c:115
 msgid "Verify files"
@@ -1785,7 +1770,7 @@ msgstr "Clave NO válida"
 #: src/verifydlg.c:358
 #, c-format
 msgid "Verified data in file: %s"
-msgstr ""
+msgstr "Se verificaron los datos en el archivo: %s"
 
 #: src/verifydlg.c:365
 msgid "Signatures:"
