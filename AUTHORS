@@ -1,5 +1,6 @@
 Program: GPA, GPAPA
-Maintainer: G-N-U GmbH (http://www.g-n-u.de)
+Maintainer: Miguel Coca <e970095@zipi.fi.upm.es>
+
 
 Authors
 =======
@@ -47,4 +48,7 @@ Miguel Coca <e970095@zipi.fi.upm.es>
 
 Renato Martini <rmartini@cipsga.org.br>
         Brazilian translation.
+
+Yasunari Imado <master@it-translation.net>
+        Japanese translation.
 
