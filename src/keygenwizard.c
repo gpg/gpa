@@ -210,12 +210,12 @@ gpa_keygen_wizard_email_page (GPAKeyGenWizard * keygen_wizard)
     (keygen_wizard,
      _("Please insert your email address."
        "\n\n"
-       " Your email adress will be part of the"
+       " Your email address will be part of the"
        " new key to make it easier for others to"
        " identify keys."
-       " If you have several email adresses, you can add further email"
+       " If you have several email addresses, you can add further email"
        " adresses later."),
-     _("Your Email Adress:"));
+     _("Your Email Address:"));
 }
 
 
@@ -250,7 +250,7 @@ gpa_keygen_wizard_comment_page (GPAKeyGenWizard * keygen_wizard)
      _("If you want you can supply a comment that further identifies"
        " the key to other users."
        " The comment is especially useful if you generate several keys"
-       " for the same email adress."
+       " for the same email address."
        " The comment is completely optional."
        " Leave it empty if you don't have a use for it."),
      _("Comment:"));

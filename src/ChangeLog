@@ -1,3 +1,8 @@
+2002-11-10  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keygenwizard.c (gpa_keygen_wizard_email_page) 
+	(gpa_keygen_wizard_comment_page): Fix spelling of "address".
+
 2002-11-09  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.c (gpa_key_validity_string): Add disabled and invalid
