@@ -398,8 +398,7 @@ expired_key (gpgme_key_t key, GtkWidget *parent)
 
   message = g_strdup_printf (_("The following key expired on %s:"),
                              gpa_expiry_date_string 
-                             (gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE,
-                                                        NULL,0)));
+                             (key->subkeys->expires));
   label = gtk_label_new (message);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
@@ -428,14 +427,14 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
       gpgme_key_t key = cur->data;
       gpgme_validity_t valid;
 
-      valid = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
+      valid = key->uids->validity;
       /* First, make sure the key is usable (not revoked or unusable) */
-      if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_REVOKED, NULL, 0))
+      if (key->revoked)
         {
           revoked_key (key, GPA_OPERATION (op)->window);
           return FALSE;
         }
-      else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_EXPIRED, NULL, 0))
+      else if (key->expired)
         {
           expired_key (key, GPA_OPERATION (op)->window);
           return FALSE;

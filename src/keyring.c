@@ -232,6 +232,19 @@ update_selection_sensitive_widgets (GPAKeyringEditor * editor)
                   (gpointer) editor);
 }
 
+/* Disable all the widgets in the list of sensitive widgets. To be used while
+ * the selection changes.
+ */
+static void
+disable_selection_sensitive_widgets (GPAKeyringEditor * editor)
+{
+  GList *cur;
+  
+  for (cur = editor->selection_sensitive_widgets; cur; cur = g_list_next (cur))
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (cur->data), FALSE);
+    }
+}
 
 /* Return TRUE if the key list widget of the keyring editor has at least
  * one selected item. Usable as a sensitivity callback.
@@ -434,14 +447,18 @@ keyring_editor_edit (gpointer param)
 {
   GPAKeyringEditor * editor = param;
   gpgme_key_t key = keyring_editor_current_key (editor);
-  GtkWidget *dialog = gpa_key_edit_dialog_new (editor->window, key);
 
-  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
-
-  g_signal_connect (G_OBJECT (dialog), "key_modified",
-		    G_CALLBACK (gpa_keyring_editor_key_modified), editor);
-
-  gtk_widget_show_all (dialog);
+  if (key)
+    {
+      GtkWidget *dialog = gpa_key_edit_dialog_new (editor->window, key);
+      
+      gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+      
+      g_signal_connect (G_OBJECT (dialog), "key_modified",
+			G_CALLBACK (gpa_keyring_editor_key_modified), editor);
+      
+      gtk_widget_show_all (dialog);
+    }
 }
 
 static void
@@ -640,6 +657,9 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
 	}
       gpgme_set_keylist_mode (editor->ctx->ctx, old_mode);
       g_list_free (selection);
+
+      /* Make sure the actions that depend on a current key are disabled */
+      disable_selection_sensitive_widgets (editor);
     }
   else
     {

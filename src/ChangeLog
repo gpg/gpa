@@ -1,3 +1,16 @@
+2003-10-17  Miguel Coca  <mcoca@gnu.org>
+
+	* gpakeytrustop.c (gpa_key_trust_operation_finalize): Remove unused
+	variable.
+
+	* gpafileencryptop.c (set_recipients): Remove deprecated gpgme calls.
+	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Likewise.
+	* expirydlg.c (gpa_expiry_dialog_run): Likewise.
+
+	* keyring.c (disable_selection_sensitive_widgets): New.
+	(keyring_editor_selection_changed): Use it.
+	(keyring_editor_edit): Don't proceed without a valid key.
+
 2003-10-13  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c: Delete stale include.

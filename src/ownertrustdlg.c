@@ -97,8 +97,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
     *ultimate_radio;
   GtkWidget *label;
   GtkResponseType response;
-  gpgme_validity_t trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST,
-                                                  NULL, 0);
+  gpgme_validity_t trust = key->owner_trust;
   gboolean result;
 
   /* Create the dialog */

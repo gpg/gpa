@@ -143,7 +143,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, gpgme_key_t key, GDate ** new_date)
   g_signal_connect (G_OBJECT (dialog.radio_date), "toggled",
                     (GCallback) expire_date_toggled_cb, calendar);
 
-  expiry_date = gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0);
+  expiry_date = key->subkeys->expires;
   
   if (expiry_date > 0)
     {

@@ -50,8 +50,6 @@ static GObjectClass *parent_class = NULL;
 static void
 gpa_key_trust_operation_finalize (GObject *object)
 {
-  GpaKeyTrustOperation *op = GPA_KEY_TRUST_OPERATION (object);
-
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
