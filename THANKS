@@ -1,7 +1,7 @@
-GPA was originally written by Markus Gerwinski.  The included GPAPA library
+GPA was originally written by Markus Gerwinski. The included GPAPA library
 is due to Peter Gerwinski. Other people contributed by reporting problems,
-suggesting various improvements or submitting actual code.  Here is a list
-of those people.  Help us keep it complete and free of errors.	See the
+suggesting various improvements or submitting actual code. Here is a list
+of those people. Help us keep it complete and free of errors. See the
 file AUTHORS for the current maintainer.
 
 Beate Esser             begrafik@aol.com
@@ -17,8 +17,9 @@ Peter Gerwinski 	peter.gerwinski@g-n-u.de
 Peter Hanecak           hanecak@megaloman.sk
 Peter Neuhaus		pneuhaus@openit.de
 Richard Becker		becker@it-fabrik.de
-Werner Koch		wk@gnupg.org
 Shell Hung              shell@linux.org.hk
+Timo Schulz             ts@winpt.org
+Werner Koch		wk@gnupg.org
 
 Thanks to Michael Roth for his PGG project which heavily influenced GPAPA.
 

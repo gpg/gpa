@@ -24,6 +24,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include "gtktools.h"
 #include "icons.h"
 #include "gpa.h"
@@ -391,6 +392,10 @@ keyring_editor_import (gpointer param)
         }
       else if (server)
         {
+#ifndef __USE_HKP__
+           gpapa_receive_public_key_from_server (key_id, server, gpa_callback,
+                                                 editor->window);
+#else /* __USE_HKP__ */
           /* Fetch the key given by key_id from the server.
            * If there is more than one, display a chooser.
            */
@@ -423,6 +428,7 @@ keyring_editor_import (gpointer param)
               list_item = g_list_next (list_item);
             }
           g_list_free (list);
+#endif /* __USE_HKP__ */
         }
       else
         {

@@ -1,3 +1,8 @@
+2002-07-29  Werner Koch  <wk@gnupg.org>
+
+	* configure.ac: Bumbed version number to 0.5.1 now that Miguel
+	solved the 0.4.3-0.5.0 schism.
+
 2002-06-15  Werner Koch  <wk@gnupg.org>
 
 	* configure.ac: Bumbed version number to 0.4.4-cvs.
@@ -12,6 +17,12 @@
 
 	* configure.ac (ALL_LINGUAS): Add pt_BR.
 
+Mon 25 Feb 2002 25:15 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+        Released 0.5.0.
+
+        See `NEWS' for an overview of the changes since 0.4.3.
+	
 2002-02-20  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gtkrc.gpa: Splitted into two new files: gtkrc-1.2.gpa and
@@ -146,5 +157,3 @@
 2000-05-03 20:09:17  Werner Koch  (wk@habibti.openit.de)
 
   Version 0.1.0
-
-

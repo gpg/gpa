@@ -427,6 +427,8 @@ gpapa_get_public_key_by_userID (const gchar *userID, GpapaCallbackFunc callback,
     return NULL;
 }
 
+#ifdef __USE_HKP__
+
 static gchar *
 gpapa_http_quote (const gchar *s)
 {
@@ -493,6 +495,8 @@ gpapa_report_hkp_error (int rc, GpapaCallbackFunc callback, gpointer calldata)
     callback (GPAPA_ACTION_ERROR, _(hkp_errtypestr[rc - 1]), calldata);
 }
 
+#endif /* __USE_HKP__ */
+
 GpapaPublicKey *
 gpapa_receive_public_key_from_server (const gchar *keyID,
                                       const gchar *ServerName,
@@ -531,11 +535,13 @@ gpapa_receive_public_key_from_server (const gchar *keyID,
       gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 			NULL, NULL, callback, calldata);
       free (id);
-#endif /* not __USE_HKP */
+#endif /* not __USE_HKP__ */
       gpapa_refresh_public_keyring (callback, calldata);
     }
   return (gpapa_get_public_key_by_userID (keyID, callback, calldata));
 }
+
+#ifdef __USE_HKP__
 
 GList *
 gpapa_search_public_keys_on_server (const gchar *keyID, const gchar *ServerName,
@@ -575,6 +581,8 @@ gpapa_search_public_keys_on_server (const gchar *keyID, const gchar *ServerName,
     }
   return g;
 }
+
+#endif /* __USE_HKP__ */
 
 static void
 linecallback_refresh_sec (char *line, gpointer data, GpgStatusCode status)

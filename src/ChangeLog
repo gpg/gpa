@@ -2,6 +2,17 @@
 
 	* gpafilesel.c (gpa_file_selection_dir_expand): Account for the
 	use of UTF8 for filenames.
+	Include io.h just when compiling for Windows.
+	(correct_parent): Fix to compile under non-Windows OS's.
+
+	* gpafilesel.h (gpa_file_selection_get_filename): Change return type
+	to const gchar*.
+
+	* keygenwizard.c: Include errno.h.
+
+	* keyring.c: Include errno.h.
+	(keyring_editor_import): Use different ways to import keys
+	depending on whether we are using HKP or gpg --recv-keys.
 
 2002-02-24  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 

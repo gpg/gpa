@@ -1,3 +1,11 @@
+2002-02-25  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gpapa.c (gpapa_http_quote)
+	(gpapa_dehtml)
+	(gpapa_report_hkp_error)
+	(gpapa_search_public_keys_on_server): Compile only if configured
+	to connect directly to the keyserver.
+	
 2002-02-24  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* Makefile.am (noinst_PROGRAMS): Removed gpapatest.

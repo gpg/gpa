@@ -46,7 +46,9 @@
 #include <winsock.h>            /* For gethostname */
 #endif
 
+#ifdef HAVE_DOSISH_SYSTEM
 #include <io.h>
+#endif
 #include <dirent.h>
 #include "fnmatch.h"
 
@@ -3302,6 +3304,9 @@ correct_parent (CompletionDir *cmpl_dir,
   gchar *first_slash;
   gchar *sys_filename;
   gchar c = 0;
+#ifndef G_OS_WIN32
+  gchar *new_name;
+#endif
 
   last_slash = strrchr (cmpl_dir->fullname, G_DIR_SEPARATOR);
   g_assert (last_slash);

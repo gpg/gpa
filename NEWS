@@ -1,20 +1,68 @@
 Noteworthy changes in CVS-HEAD
 ------------------------------------------------
 
-* We are currently merging in the changes of the 0.5.0 release....
+* We have finished merging in the changes of the 0.5.0 release with the
+  changes to CVS since 0.4.3.
+
+* All the translations in the po/ directory, save the german one, are
+  largely obsolete and should be updated before they can be used.
 
 
-Noteworthy changes in version 0.4.3 (2002-01-14)
+Noteworthy changes in version 0.5.0 (2002-02-25)
 ------------------------------------------------
 
-* The list of keyservers is now read form the file "keyservers" in the
-  GPA configuration directory which by default is ~/.gnupg.  The new
-  option keyserver may be used in the gpa.conf file to select the
-  default keyserver - it implictly adds this server to the list of
-  keyservers.
+ * The file selection dialog has been significantly changed from the
+   standard GTK+ file selection dialog to look more like what users
+   of MS-Windows are accustomed to.
 
+ * "Show Details" in the menu of the file manager is now named
+   "Verify Signatures", and it is now accessible through an icon in
+   the tool bar, too.
 
+ * Keyserver access via a direct HTTP request now allows for
+   searching for keys on keyservers.
 
+ * GPAPA's output is now gettext()ified.
 
+ * The standard key is now remembered in `gpa.conf'.
 
+ * The "Sign File" dialog has been simplified.
 
+ * The creation of a backup copy of your public and private keys
+   works now. It is remembered in `gpa.conf'. If a backup does not
+   yet exist, the user is asked at startup to create one.
+
+ * GPA now has a nice icon in the upper left corner of its window. :-)
+
+ * Many bugfixes (for instance: crashes when signing files and keys,
+   handling of spaces in file names, etc.).
+
+ * Makefiles do contain `-mwindows' now to suppress the console
+   window.
+
+ * The "Help" menus is now called "Info". The license is displayed
+   in the (unofficial) German translation now. (This should be
+   improved to honor "locale" settings.)
+
+ * GPA is now ready to compile with GTK+ version 2 once it is
+   released.
+
+ * In the key manager, there are now menu entries for key operations.
+
+ * A secret key without a matching public key is now warned about.
+
+ * Keys now can be imported from and exported to the MS Windows
+   clipboard.
+
+ * Secret keys can be imported now.
+
+ * When a key is generated, a passphrase which is too stupid is
+   warned about.
+
+ * There now is an icon in the tool bar to switch from the keyring
+   manager to the file manager.
+ 
+ * GPA can now be compiled using a standard GNU toolchain.
+   In particular it can be cross-compiled from GNU/Linux to
+   mingw32/MS-Windows (which is what we did for the GnuPP CD),
+   or compiled natively under MS-Windows using CygWin.

@@ -93,7 +93,7 @@ void       gpa_file_selection_set_filename        (GpaFileSelection *filesel,
  * The returned string points to a statically allocated buffer and
  * should be copied away.
  */
-G_CONST_RETURN gchar* gpa_file_selection_get_filename        (GpaFileSelection *filesel);
+const gchar *gpa_file_selection_get_filename      (GpaFileSelection *filesel);
 
 void	   gpa_file_selection_complete		  (GpaFileSelection *filesel,
 						   const gchar	    *pattern);

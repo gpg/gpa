@@ -20,6 +20,7 @@
 
 #include <sys/stat.h>
 #include <gtk/gtk.h>
+#include <errno.h>
 #include "gpa.h"
 #include "gpapastrings.h"
 #include "icons.h"

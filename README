@@ -1,19 +1,190 @@
-		    GPA - The GNU Privacy Assistant
+*********************************************************
+Welcome to GPA, the GNU Privacy Assistant, version 0.5.0!
+*********************************************************
 
-			    Version 0.4
+GPA is a graphical frontend for the GNU Privacy Guard (GnuPG,
+http://www.gnupg.org). GPA can be used to encrypt, decrypt, and
+sign files, to verify signatures and to manage the private and
+public keys.
+
+Copyright (C) 2000-2002 G-N-U GmbH (http://www.g-n-u.de)
+
+GPA uses fragments from the following programs and libraries:
+JNLIB, Copyright (C) 1998-2000 Free Software Foundation, Inc.
+GPGME, Copyright (C) 2000-2001 Werner Koch
+WinPT, Copyright (C) 2000-2002 Timo Schulz
+(For details, see the file `AUTHORS'.)
+
+There is a mailing list devoted to the development of GPA.
+See http://www.gnupg.org/gpa.html for more information.
 
 
-This is a graphical frontend for the GNU Privacy Guard
+GPA is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
-	     THIS IS STILL WORK IN PROGRESS!!!!
+GPA is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
-Basic installation:
-
-$ ./configure
-$ make
-$ su
-$ make install
-
-for details see INSTALL.
+You should have received a copy of the GNU General Public License
+along with GPA; if not, write to the Free Software Foundation, Inc.,
+59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 
+Installation under a GNU operating system (such as GNU/Linux)
+=============================================================
+
+You need the GNU development tools plus the GTK+ library, version
+1.3 or higher, installed on your system. Unpack the tarball, `cd'
+into the new directory, configure, compile, and install GPA:
+
+    tar xvzf gpa-0.5.0.tar.gz
+    cd gpa-0.5.0
+    ./configure
+    make
+    su -c "make install"
+
+In order to do anything useful with GPA you also need the
+GNU Privacy Guard (GnuPG) installed - see http://www.gnupg.org.
+
+Please report any problems to gpa-dev@gnupg.org.
+
+
+Installation under MS-Windows
+=============================
+
+Instead of compiling GPA by yourself, you probably want to download
+the ready-to-use installer from http://www.gnupp.de, don't you? ;-)
+
+Okay - here is how to compile your own `gpa.exe'!
+
+In order to compile GPA you need the GNU development toolchain
+consisting of a compiler, linker, a `make' utility, a Unix-like
+command interpreter (shell), etc., plus the GTK+ library.
+
+You can either cross-compile GPA from a Unix-like operating system
+to MS-Windows, or compile it natively under MS-Windows. For security
+reasons, we recommend to cross-compile GPA from an entirely free
+operating system (such as GNU/Linux) whose source code you have
+carefully reviewed before, line by line - or at least some
+approximation to this.
+
+There are (at least;-) four possibilities how to build a working
+`gpa.exe' for MS-Windows:
+
+  1) Cross compile it from a Unix-like system to mingw32/MS-Windows.
+  2) Cross compile it from CygWin/MS-Windows to mingw32/MS-Windows.
+  3) Compile it semi-natively under CygWin with the `-mno-cygwin'
+     switch to generate mingw32/MS-Windows output.
+  4) Compile it natively using the CygWin environment with the
+     mingw32 compiler.
+
+For (2) through (4), you need to install the CygWin development
+tools, available from http://www.cygwin.com.
+
+In all four cases, you need GTK+ for mingw32/MS-Windows. Get it from
+http://www.gimp.org/win32/.
+
+Methods (3) and (4) are untested, but they should work more or less
+straightforward. In the following, I will explain (1) and (2).
+
+Once CygWin is installed, the procedure for (1) and (2) is exactly
+the same:
+
+ * Download the source of the mingw32 GCC and binutils from
+   http://www.mingw.org.
+   
+ * Unpack the archives. This will create two new sub-directories.
+
+ * In both sub-directories, type:
+
+     ./configure --host=i386-mingw32 --target=i386-mingw32'
+     make
+     su -c "make install"
+
+   (See the GCC installation instructions for details.)
+
+ * Install GTK+ for mingw32 in the /usr/local/i386-mingw32 directory.
+
+ * Unarchive the GPA source and `cd' to the new subdirectory
+   `gpa-0.5.0'.
+
+The next step is to "configure" GPA itself.
+
+To compensate for some bugs in older versions of `autoconf' and
+friends (and some other hacks), I call `configure' indirectly using
+the following script:
+
+8< ---- configure.pg -----------------------------------------------
+
+#!/bin/sh
+./configure --silent \
+  --prefix=$HOME/usr/i386-mingw32 \
+  CFLAGS="-g -O -Wall -mwindows" \
+  --with-gtk-prefix=$HOME/usr/i386-mingw32 \
+  --host=i386-mingw32 --target=i386-mingw32
+
+rm -f src/Makefile.orig
+mv src/Makefile src/Makefile.orig
+cat src/Makefile.orig | sed -e 's/ #PG#//g' > src/Makefile
+
+rm -f config.h.orig
+mv config.h config.h.orig
+cat config.h.orig \
+  | sed -e 's/^#include "gpadefs\.h"/\/* #include "gpadefs.h" -- disabled by $0 *\//' \
+  > config.h
+cat - >> config.h << EOF
+
+/* Fixes by $0 */
+
+#define HAVE_PROCESS_H 1
+#define HAVE_MEMICMP 1
+#define HAVE_DOSISH_SYSTEM 1
+#define HAVE_DRIVE_LETTERS 1
+#define USE_SIMPLE_GETTEXT 1
+#include "gpadefs.h"
+EOF
+
+echo "timestamp" > stamp-h
+
+cat - > gpadefs.h << EOF
+/* Generated by $0 */
+
+#define GPA_LOCALEDIR "C:\\\\GnuPP\\\\locale"
+#define GPA_DATADIR   "C:\\\\GnuPP\\\\GPA"
+#define GPG_PROGRAM   "C:\\\\GnuPP\\\\GnuPG\\\\gpg.exe"
+EOF
+
+8< ---- end of configure.pg ----------------------------------------
+
+Please save this as a file `configure.pg' and give it the
+"executable" bit:
+
+    chmod +x configure.pg
+
+In this setup, the toolchain is installed in $HOME/usr, and GPA's
+fallback directories (when a registry and PATH search did not lead
+to a result) reside under "C:\GnuPP". Please do not use this script
+blindly, but instead adapt it to match your system!
+
+Now we are ready to configure and compile GPA:
+
+    ./configure.pg
+    make
+
+This will create `gpa.exe' in the subdirectory `src'.
+
+The version of GPA which is distributed on the GnuPP CD of March
+2002 (see http://www.gnupp.de) was cross-compiled from a GNU/Linux
+system (Debian 2.2 "Potato") to mingw32/MS-Windows this way.
+
+Please see the notes in GnuPG's README file about MS-Windows
+registry entries when installing under MS-Windows.
+
+In order to do anything useful with GPA you also need the
+GNU Privacy Guard (GnuPG) - see http://www.gnupg.org.
+
+Have fun!

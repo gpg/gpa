@@ -1,22 +1,22 @@
 Program: GPA, GPAPA
-Maintainer: ??
+Maintainer: G-N-U GmbH (http://www.g-n-u.de)
 
 Authors
 =======
 (Please put the names also into the file src/help.c)
 
-Markus Gerwinski <markus.gerwinski@sercon.de>
-    Designed and implemented GPA.
+Markus Gerwinski <markus.gerwinski@sercon.de> [email address no longer valid]
+        Designed GPA and GPAPA, implemented GPA.
 
 Peter Gerwinski <peter.gerwinski@g-n-u.de>
-    Designed and implemented GPAPA.
+        Implemented GPAPA; did changes everywhere in GPA.
 
 Peter Neuhaus <pneuhaus@openit.de>
-    German translation.
+        German translation.
 
 Werner Koch <wk@gnupg.org>
-    Glued everything together, fixes here and there, W32 porting,
-    about dialog.
+        Glued everything together, fixes here and there, W32 porting,
+        about dialog.
 
 Jan-Oliver Wagner <jan@intevation.de>
 	Polishing (toolbar, icons integration), some fixing.
@@ -28,20 +28,23 @@ Bernhard Herzog  <bh@intevation.de>
         Revamped the whole src/ code.
 
 Shell Hung <shell@linux.org.hk>
-       Chinese translation (Big5)
+        Chinese translation (Big5)
 
 Peter Hanecak <hanecak@megaloman.sk>
-       Wrote gpa.spec
+        Wrote gpa.spec
 
 Michael Fischer v. Mollard <mfvm@epost.de>
-       See ChangeLog.
+        See ChangeLog.
 
 Michael Mauch <michael.mauch@gmx.de>
         See ChangeLogs.
+
+Benedikt Wildenhain <mail@benedikt-wildenhain.de>
+        Helped to debug GPA and to make it compile under CygWin.
 
 Miguel Coca <e970095@zipi.fi.upm.es>
         Merged version 0.4.3 with 0.5.0.
 
 Renato Martini <rmartini@cipsga.org.br>
-      Brazilian translation.
+        Brazilian translation.
 
