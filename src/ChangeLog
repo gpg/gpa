@@ -1,3 +1,8 @@
+2003-03-09  Miguel Coca  <mcoca@gnu.org>
+
+	* keyring.c (keyring_editor_delete): Remove the key from the keytable
+	before deleting the key from the list.
+
 2003-03-07  Miguel Coca  <mcoca@gnu.org>
 
 	* gpaoperation.c (gpa_operation_class_init) 

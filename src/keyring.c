@@ -264,8 +264,8 @@ keyring_editor_delete (gpointer param)
       selection = g_list_next (selection);
       if (err == GPGME_No_Error)
         {
-          gtk_clist_remove (GTK_CLIST(editor->clist_keys), row);
           gpa_keytable_remove (keytable, fpr);
+          gtk_clist_remove (GTK_CLIST(editor->clist_keys), row);
         }
       else
         {
