@@ -440,8 +440,8 @@ keyring_editor_export (gpointer param)
 	      key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
 						editor->window);
 
-	      gpapa_public_key_send_to_server (key, global_keyserver,
-					       gpa_callback, editor->window);
+	      gpapa_public_key_send_to_server (key, server, gpa_callback,
+					       editor->window);
 	      selection = g_list_next (selection);
 	    }
 	}
