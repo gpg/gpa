@@ -1,3 +1,9 @@
+2000-07-10 18:11:21  Werner Koch  (wk@habibti.openit.de)
+
+  * build-dll, README: New.
+
+  * gpapatest.c [MINGW32]: Implement xmalloc etc. here
+
 2000-05-25 17:51:21  Werner Koch  (wk@habibti.openit.de)
 
   * gpapa.c (gpapa_init): Add gpg parameter.

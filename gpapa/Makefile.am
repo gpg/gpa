@@ -1,5 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
+EXTRA_DIST = README build-dll
 INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/intl
 
 noinst_LIBRARIES = libgpapa.a
