@@ -188,10 +188,10 @@ gpa_expiry_dialog_run (GtkWidget * parent, GDate * expiry_date,
 
   if (expiry_date)
     {
-      gchar buffer[256];
-      /* FIXME: The date template string should be translatable */
-      g_date_strftime (buffer, 256, "%d.%m.%Y", expiry_date);
+      gchar *buffer;
+      buffer = gpa_expiry_date_string (expiry_date);
       gtk_entry_set_text (GTK_ENTRY (entry), buffer);
+      free (buffer);
 
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog.radio_date),
 				    TRUE);

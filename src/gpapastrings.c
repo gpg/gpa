@@ -144,7 +144,7 @@ gpa_expiry_date_string (GDate * expiry_date)
 
   if (expiry_date != NULL)
     {
-      g_date_strftime (date_buffer, 256, "%d.%m.%Y", expiry_date);
+      g_date_strftime (date_buffer, 256, "%x", expiry_date);
       result = xstrdup (date_buffer);
     } /* if */
   else

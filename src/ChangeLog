@@ -1,3 +1,16 @@
+2001-02-07  Thomas Koester  <tkoester@intevation.de>
+
+	* gpapastrings.c (gpa_expiry_date_string): Use %x instead of
+	  %d.%m.%Y as date format string.
+	
+	* expirydlg.c (gpa_expiry_dialog_run):
+	* gpawidgets.c (gpa_expiry_frame_at):
+	(gpa_expiry_frame_new):
+	* keysmenu.c (gpa_frameExpire_at):
+	(gpa_frameExpire_new): Use gpa_expiry_date_string.
+
+	* keyring.c (keyring_details_page_fill_key): free unused text.
+
 2001-02-07  Bernhard Herzog  <bh@intevation.de>
 
 	* gpawidgets.h (gpa_signature_list_new):

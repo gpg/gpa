@@ -855,6 +855,7 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpapaPublicKey * key)
 					   editor->window);
   text = gpa_expiry_date_string (expiry_date);
   gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
+  free (text);
 
   
   gtk_widget_hide (editor->details_num_label);

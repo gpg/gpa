@@ -210,18 +210,18 @@ static void
 gpa_expiry_frame_at (GtkToggleButton * radioAt, gpointer param)
 {
   GPAExpiryFrame * frame = (GPAExpiryFrame*)param;
-  gchar dateBuffer[256];
+  gchar *dateBuffer;
 
   if (!gtk_toggle_button_get_active (radioAt))
     return;
   gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "");
   if (frame->expiryDate)
     {
-      /* FIXME: The date template string should be translatable */
-      g_date_strftime (dateBuffer, 256, "%d.%m.%Y", frame->expiryDate);
+      dateBuffer = gpa_expiry_date_string (frame->expiryDate);
       gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
 			  "days");
       gtk_entry_set_text (GTK_ENTRY (frame->entryAt), dateBuffer);
+      free (dateBuffer);
     } /* if */
   else
     gtk_entry_set_text (GTK_ENTRY (frame->entryAt), _("01.01.2000")); /*!!! */
@@ -233,7 +233,7 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
 {
   GList *contentsAfter = NULL;
   gint i;
-  gchar dateBuffer[256];
+  gchar *dateBuffer;
 
   GtkWidget *expiry_frame;
   GtkWidget *vboxExpire;
@@ -297,9 +297,9 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   frame->entryAt = entryAt;
   if (expiryDate)
     {
-      /* FIXME: The date template string should be translatable */
-      g_date_strftime (dateBuffer, 256, "%d.%m.%Y", expiryDate);
+      dateBuffer = gpa_expiry_date_string (expiryDate);
       gtk_entry_set_text (GTK_ENTRY (entryAt), dateBuffer);
+      free (dateBuffer);
     } /* if */
   gtk_box_pack_start (GTK_BOX (hboxAt), entryAt, FALSE, FALSE, 0);
 

@@ -27,6 +27,7 @@
 #include "filemenu.h"
 #include "gpa.h"
 #include "gpawindowkeeper.h"
+#include "gpapastrings.h"
 #include "gtktools.h"
 #include "icons.h"
 
@@ -226,7 +227,7 @@ gpa_frameExpire_at (GtkToggleButton * radioAt, gpointer param)
   GtkWidget *comboAfter;
   GtkWidget *entryAt;
   GtkWidget *window;
-  gchar dateBuffer[256];
+  gchar *dateBuffer;
 /* commands */
   if (!gtk_toggle_button_get_active (radioAt))
     return;
@@ -239,10 +240,11 @@ gpa_frameExpire_at (GtkToggleButton * radioAt, gpointer param)
   gtk_entry_set_text (GTK_ENTRY (entryAfter), "");
   if (*expiryDate)
     {
-      g_date_strftime (dateBuffer, 256, "%d.%m.%Y", *expiryDate);
+      dateBuffer = gpa_expiry_date_string (*expiryDate);
       gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboAfter)->entry),
 			  unitExpiryTime[0]);
       gtk_entry_set_text (GTK_ENTRY (entryAt), dateBuffer);
+      free (dateBuffer);
     }				/* if */
   else
     gtk_entry_set_text (GTK_ENTRY (entryAt), _("01.01.2000"));	/*!!! */
@@ -257,7 +259,7 @@ gpa_frameExpire_new (GtkAccelGroup * accelGroup, GDate ** expiryDate,
   GList *contentsAfter = NULL;
   gpointer *param;
   gint i;
-  gchar dateBuffer[256];
+  gchar *dateBuffer;
 /* objects */
   GtkWidget *frameExpire;
   GtkWidget *vboxExpire;
@@ -300,8 +302,9 @@ gpa_frameExpire_new (GtkAccelGroup * accelGroup, GDate ** expiryDate,
   entryAt = gtk_entry_new ();
   if (*expiryDate)
     {
-      g_date_strftime (dateBuffer, 256, "%d.%m.%Y", *expiryDate);
+      dateBuffer = gpa_expiry_date_string (*expiryDate);
       gtk_entry_set_text (GTK_ENTRY (entryAt), dateBuffer);
+      free (dateBuffer);
     }				/* if */
   gtk_box_pack_start (GTK_BOX (hboxAt), entryAt, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vboxExpire), hboxAt, FALSE, FALSE, 0);
