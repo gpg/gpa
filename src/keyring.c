@@ -105,9 +105,6 @@ typedef struct _GPAKeyringEditor GPAKeyringEditor;
  *      Internal API
  */
 
-static gboolean key_has_been_signed (GpgmeKey key, const gchar * key_id,
-                                     GtkWidget * window);
-
 static gboolean keyring_editor_has_selection (gpointer param);
 static gboolean keyring_editor_has_single_selection (gpointer param);
 static gchar *keyring_editor_current_key_id (GPAKeyringEditor * editor);
@@ -213,6 +210,19 @@ keyring_editor_has_single_selection (gpointer param)
   return gpa_keylist_has_single_selection (editor->clist_keys);
 }
 
+/* Return TRUE if the key list widget of the keyring editor has exactly
+ * one selected item and it's a private key.  Usable as a sensitivity
+ * callback.
+ */
+static gboolean
+keyring_editor_has_private_selected (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+  const gchar *fpr = gpa_keylist_current_key_id (editor->clist_keys);
+
+  return gpa_keylist_has_single_selection (editor->clist_keys) &&
+          gpa_keytable_secret_lookup (keytable, fpr);
+}
 
 
 /* Fill the GtkCList with the keys */
@@ -269,10 +279,55 @@ keyring_editor_delete (gpointer param)
  * the id key_id, otherwise return FALSE. The window parameter is needed
  * for error reporting */
 static gboolean
-key_has_been_signed (GpgmeKey key, const gchar * key_id, GtkWidget * window)
+key_has_been_signed (const gchar *fpr, const gchar *signer)
 {
-  /* FIXME: When we can list signatures with GPGME, implement this */
-  return 0;
+  gint uid, idx;
+  GpgmeError err;
+  GpgmeKey key, signer_key;
+  gboolean uid_signed, key_signed;
+  const char *signer_id;
+  int old_mode = gpgme_get_keylist_mode (ctx);
+
+  /* Get the signing key ID */
+  err = gpgme_get_key (ctx, signer, &signer_key, FALSE, FALSE);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  signer_id = gpgme_key_get_string_attr (signer_key, GPGME_ATTR_KEYID, 0, 0);
+  /* Get the key */
+  gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
+  err = gpgme_get_key (ctx, fpr, &key, FALSE, FALSE);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  gpgme_set_keylist_mode (ctx, old_mode); 
+  /* We consider the key signed if all user ID's have been signed */
+  key_signed = TRUE;
+  for (uid = 0;
+       key_signed &&
+         gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, 0, uid); uid++)
+    {
+      const gchar *keyid;
+      
+      uid_signed = FALSE;
+      for (idx = 0; !uid_signed && (keyid = gpgme_key_sig_get_string_attr
+                                    (key, uid, GPGME_ATTR_KEYID, NULL, idx));
+           idx++)
+        {
+          if (g_str_equal (signer_id, keyid))
+            {
+              uid_signed = TRUE;
+            }
+        }
+      key_signed = key_signed && uid_signed;
+    }
+  /* Forget the keys */
+  gpgme_key_unref (key);
+  gpgme_key_unref (signer_key);
+  
+  return key_signed;
 }
 
 /* Return true if the key sign button should be sensitive, i.e. if
@@ -282,24 +337,17 @@ static gboolean
 keyring_editor_can_sign (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  GpgmeKey key;
-  gchar * key_id;
-  const gchar * default_key_id = gpa_options_get_default_key (gpa_options);
+  gchar * fpr;
+  const gchar * default_key = gpa_options_get_default_key (gpa_options);
   gboolean result = FALSE;
 
-  if (keyring_editor_has_selection (param) && default_key_id)
+  if (keyring_editor_has_selection (param) && default_key)
     {
       /* the most important requirements have been met, now find out
        * whether the selected key was already signed with the default
        * key */
-      key_id = keyring_editor_current_key_id (editor);
-      key = gpa_keytable_lookup (keytable, key_id);
-
-      if (key)
-        {
-          result = !key_has_been_signed (key, default_key_id,
-                                         editor->window);
-        }
+      fpr = keyring_editor_current_key_id (editor);
+      result = !key_has_been_signed (fpr, default_key);
     }
   return result;
 } /* keyring_editor_can_sign */
@@ -345,47 +393,44 @@ keyring_editor_sign (gpointer param)
       key_fpr = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
                                    
       key = gpa_keytable_lookup (keytable, key_fpr);
-      if (!key_has_been_signed (key, private_key_fpr, editor->window))
+      if (gpa_key_sign_run_dialog (editor->window, key, &sign_locally))
         {
-          if (gpa_key_sign_run_dialog (editor->window, key, &sign_locally))
+          err = gpa_gpgme_edit_sign (key, private_key_fpr, sign_locally);
+          if (err == GPGME_No_Error)
             {
-              err = gpa_gpgme_edit_sign (key, private_key_fpr, sign_locally);
-              if (err == GPGME_No_Error)
-                {
-                  signed_count++;
-                }
-              else if (err == GPGME_No_Passphrase)
-                {
-                  gpa_window_error (_("Wrong passphrase!"),
-                                    editor->window);
-                }
-              else if (err == GPGME_Invalid_Key)
-                {
-                  /* Couldn't sign because the key was expired */
-                  gpa_window_error (_("This key has expired! "
-                                      "Unable to sign."), editor->window);
-                }
-              else if (err == GPGME_Conflict)
-                {
-                  /* Couldn't sign because the key was already signed */
-                  gpa_window_error (_("This key has already been signed with "
-                                      "your own!"), editor->window);
-                }
-              else if (err == GPGME_No_Recipients)
-                {
-                  /* Couldn't sign because there is no default key */
-                  gpa_window_error (_("You haven't selected a default key "
-                                      "to sign with!"), editor->window);
-                }
-              else if (err == GPGME_Canceled)
-                {
-                  /* Do nothing, the user should know if he cancelled the
-                   * operation */
-                }
-              else
-                {
-                  gpa_gpgme_error (err);
-                }
+              signed_count++;
+            }
+          else if (err == GPGME_No_Passphrase)
+            {
+              gpa_window_error (_("Wrong passphrase!"),
+                                editor->window);
+            }
+          else if (err == GPGME_Invalid_Key)
+            {
+              /* Couldn't sign because the key was expired */
+              gpa_window_error (_("This key has expired! "
+                                  "Unable to sign."), editor->window);
+            }
+          else if (err == GPGME_Conflict)
+            {
+              /* Couldn't sign because the key was already signed */
+              gpa_window_error (_("This key has already been signed with "
+                                  "your own!"), editor->window);
+            }
+          else if (err == GPGME_No_Recipients)
+            {
+              /* Couldn't sign because there is no default key */
+              gpa_window_error (_("You haven't selected a default key "
+                                  "to sign with!"), editor->window);
+            }
+          else if (err == GPGME_Canceled)
+            {
+              /* Do nothing, the user should know if he cancelled the
+               * operation */
+            }
+          else
+            {
+              gpa_gpgme_error (err);
             }
         }
       selection = g_list_next (selection);
@@ -729,15 +774,6 @@ keyring_editor_current_key_id (GPAKeyringEditor *editor)
   return gpa_keylist_current_key_id (editor->clist_keys);
 }
 
-#if 0
-/* Return the currently selected key. NULL if no key is selected */
-static GpgmeKey
-keyring_editor_current_key (GPAKeyringEditor *editor)
-{
-  return gpa_keylist_current_key (editor->clist_keys);
-}
-#endif
-
 /* Update everything that has to be updated when the selection in the
  * key list changes.
  */
@@ -878,11 +914,13 @@ keyring_editor_menubar_new (GtkWidget * window,
   };
   GtkItemFactoryEntry keys_menu[] = {
     {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
-    {_("/Keys/_Generate Key..."), NULL, keyring_editor_generate_key, 0, NULL},
+    {_("/Keys/_New Key..."), NULL, keyring_editor_generate_key, 0, NULL},
     {_("/Keys/_Delete Keys..."), NULL, keyring_editor_delete, 0, NULL},
-    {_("/Keys/_Edit Key..."), NULL, keyring_editor_edit, 0, NULL},
-    {_("/Keys/Change _Owner Trust..."), NULL, keyring_editor_trust, 0, NULL},
+    {_("/Keys/sep1"), NULL, NULL, 0, "<Separator>"},
     {_("/Keys/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
+    {_("/Keys/Set _Owner Trust..."), NULL, keyring_editor_trust, 0, NULL},
+    {_("/Keys/_Edit Private Key..."), NULL, keyring_editor_edit, 0, NULL},
+    {_("/Keys/sep2"), NULL, NULL, 0, "<Separator>"},    
     {_("/Keys/_Import Keys..."), NULL, keyring_editor_import, 0, NULL},
     {_("/Keys/E_xport Keys..."), NULL, keyring_editor_export, 0, NULL},
     {_("/Keys/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
@@ -892,6 +930,7 @@ keyring_editor_menubar_new (GtkWidget * window,
     {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
     {_("/Windows/_Keyring Editor"), NULL, gpa_open_keyring_editor, 0, NULL},
   };
+  GtkWidget *item;
 
   accel_group = gtk_accel_group_new ();
   factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
@@ -907,16 +946,32 @@ keyring_editor_menubar_new (GtkWidget * window,
   gpa_help_menu_add_to_factory (factory, window);
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
-#if 0  /* @@@ :-( */
-  item = gtk_item_factory_get_widget (factory, _("/Keys/_Sign Keys..."));
-  printf ("%x\n", item);
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_can_sign);
-  item = gtk_item_factory_get_widget (factory, _("/Keys/_Export Keys..."));
-  printf ("%x\n", item);
+  /* The menu paths given here MUST NOT contain underscores. Tough luck for
+   * translators :-( */
+  /* Items that must only be available if a key is selected */
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Keys/Export Keys..."));
   add_selection_sensitive_widget (editor, item,
                                   keyring_editor_has_selection);
-#endif
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Keys/Delete Keys..."));
+  add_selection_sensitive_widget (editor, item,
+                                  keyring_editor_has_selection);
+  /* Only if there is only ONE key selected */
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Keys/Set Owner Trust..."));
+  add_selection_sensitive_widget (editor, item,
+                                  keyring_editor_has_single_selection);
+  /* If the keys can be signed... */
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Keys/Sign Keys..."));
+  add_selection_sensitive_widget (editor, item,
+                                  keyring_editor_can_sign);
+  /* If the selected key has a private key */
+  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
+                                      _("/Keys/Edit Private Key..."));
+  add_selection_sensitive_widget (editor, item,
+                                  keyring_editor_has_private_selected);
 
   return gtk_item_factory_get_widget (factory, "<main>");
 }
@@ -1334,7 +1389,7 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
                                   icon, GTK_SIGNAL_FUNC (toolbar_edit_key),
                                   editor);
   add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_single_selection);
+                                  keyring_editor_has_private_selected);
 
   icon = gpa_create_icon_widget (window, "delete");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Remove"),

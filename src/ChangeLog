@@ -1,3 +1,17 @@
+2002-12-10  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* keyring.c (keyring_editor_has_private_selected): New.
+	(key_has_been_signed): Reimplement.
+	(keyring_editor_can_sign): Use new key_has_been_signed.
+	(keyring_editor_sign): No need to check whether the key has been
+	signed, as the edit function handles that case gracefully (and it
+	should never happen anyway).
+	(keyring_editor_current_key): Removed #ifdef'ed out function.
+	(keyring_editor_menubar_new): Bring some order to the keys menu.
+	Only enable menu items when appropiate.
+	(keyring_toolbar_new): Only show the "edit" button if a private key
+	is selected.
+
 2002-12-09  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keyring.c (keyring_details_page_fill_key) 
