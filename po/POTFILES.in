@@ -1,9 +1,23 @@
 
-src/gpa.c
+src/encryptdlg.c
+src/fileman.c
 src/filemenu.c
-src/gpawindowkeeper.c
+src/filesigndlg.c
+src/gpa.c
+src/gpapastrings.c
+src/gpawidgets.c
+src/gpawizard.c
 src/gtktools.c
+src/help.c
 src/helpmenu.c
+src/keyexportdlg.c
+src/keygendlg.c
+src/keygenwizard.c
+src/keyreceivedlg.c
+src/keyring.c
+src/keysigndlg.c
 src/keysmenu.c
 src/optionsmenu.c
-
+src/ownertrustdlg.c
+src/passphrasedlg.c
+src/tipwindow.c
