@@ -1,3 +1,9 @@
+2001-02-01  Bernhard Herzog  <bh@intevation.de>
+
+	* keyring.c (keyring_editor_can_sign): Don't check explicitly
+	whether the selected key is the default key because the list of
+	signatures contains the self signature now.
+
 2001-01-31  Bernhard Herzog  <bh@intevation.de>
 
 	* gpa.h (global_noTips):
