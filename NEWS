@@ -1,4 +1,4 @@
-Noteworthy changes in version 0.6.0 [UNRELEASED]
+Noteworthy changes in version 0.6.0 (UNRELEASED)
 ------------------------------------------------
 
  * GPA now supports GnuPG 1.2 or later, thanks to it's use of GPGME.
@@ -33,7 +33,7 @@ Noteworthy changes in version 0.6.0 [UNRELEASED]
  * The `Verify file' dialog has been completely revamped to allow
  verification of several files at the same time.
 
- * Added Japanese, Brazilian Portuguese and Dutch translations.
+ * Added Japanese, Brazilian Portuguese, Dutch and Spanish translations.
 
  * The user interface has been updated to use GTK+ 2.0 and stock items.
 

@@ -1,3 +1,7 @@
+2002-12-23  Miguel Coca  <mcoca@gnu.org>
+
+	* NEWS, THANKS: Update.
+
 2002-12-17  Miguel Coca  <mcoca@gnu.org>
 
 	* configure.ac (ALL_LINGUAS): Add Spanish.
