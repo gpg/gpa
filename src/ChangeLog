@@ -1,3 +1,8 @@
+2001-01-22  Bernhard Herzog  <bh@intevation.de>
+
+	* keyring.c (keyring_editor_delete): Ask for confirmation before
+	deleting keys.
+
 2001-01-19  Bernhard Herzog  <bh@intevation.de>
 
 	* keyring.c (keyring_editor_can_sign): Check whether the default
