@@ -54,19 +54,33 @@ gpa_file_encrypt_operation_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static void
-gpa_file_encrypt_operation_class_init (GpaFileEncryptOperationClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gpa_file_encrypt_operation_finalize;
-}
 
 static void
 gpa_file_encrypt_operation_init (GpaFileEncryptOperation *op)
 {
+  op->rset = NULL;
+  op->cipher_fd = -1;
+  op->plain_fd = -1;
+  op->cipher = NULL;
+  op->plain = NULL;
+  op->cipher_filename = NULL;
+  op->encrypt_dialog = NULL;
+}
+
+static GObject*
+gpa_file_encrypt_operation_constructor (GType type,
+					guint n_construct_properties,
+					GObjectConstructParam *construct_properties)
+{
+  GObject *object;
+  GpaFileEncryptOperation *op;
+
+  /* Invoke parent's constructor */
+  object = parent_class->constructor (type,
+				      n_construct_properties,
+				      construct_properties);
+  op = GPA_FILE_ENCRYPT_OPERATION (object);
+  /* Initialize */
   /* Create the "Encrypt" dialog */
   op->encrypt_dialog = gpa_file_encrypt_dialog_new 
     (GPA_OPERATION (op)->window, GPA_OPERATION (op)->options);
@@ -80,6 +94,19 @@ gpa_file_encrypt_operation_init (GpaFileEncryptOperation *op)
 			_("Encrypting..."));
   /* Here we go... */
   gtk_widget_show_all (op->encrypt_dialog);
+
+  return object;
+}
+
+static void
+gpa_file_encrypt_operation_class_init (GpaFileEncryptOperationClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->constructor = gpa_file_encrypt_operation_constructor;
+  object_class->finalize = gpa_file_encrypt_operation_finalize;
 }
 
 GType

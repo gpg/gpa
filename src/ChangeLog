@@ -1,3 +1,17 @@
+2003-03-07  Miguel Coca  <mcoca@gnu.org>
+
+	* gpaoperation.c (gpa_operation_class_init) 
+	(gpa_operation_constructor): Use a constructor.
+	* gpafileop.c, gpafileencryptop.c, gpafiledecryptop.c: Likewise.
+
+	* filesigndlg.c, filesigndlg.h: New API. Rewrite as a widget.
+
+	* fileman.c (sign_files): Use the GpaFileSignOperation.
+
+	* gpafilesignop.c, gpafilesignop.h: New.
+
+	* Makefile.am (gpa_SOURCES): Add new files.
+
 2003-02-12  Miguel Coca  <mcoca@gnu.org>
 
 	* fileman.c (encrypt_files): Use the GpaFileEncryptOperation.

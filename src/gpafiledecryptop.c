@@ -49,19 +49,31 @@ gpa_file_decrypt_operation_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static void
-gpa_file_decrypt_operation_class_init (GpaFileDecryptOperationClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gpa_file_decrypt_operation_finalize;
-}
 
 static void
 gpa_file_decrypt_operation_init (GpaFileDecryptOperation *op)
 {
+  op->cipher_fd = -1;
+  op->plain_fd = -1;
+  op->cipher = NULL;
+  op->plain = NULL;
+  op->plain_filename = NULL;
+}
+
+static GObject*
+gpa_file_decrypt_operation_constructor (GType type,
+					guint n_construct_properties,
+					GObjectConstructParam *construct_properties)
+{
+  GObject *object;
+  GpaFileDecryptOperation *op;
+
+  /* Invoke parent's constructor */
+  object = parent_class->constructor (type,
+				      n_construct_properties,
+				      construct_properties);
+  op = GPA_FILE_DECRYPT_OPERATION (object);
+  /* Initialize */
   /* Start with the first file after going back into the main loop */
   g_idle_add (gpa_file_decrypt_operation_idle_cb, op);
   /* Connect to the "done" signal */
@@ -70,6 +82,19 @@ gpa_file_decrypt_operation_init (GpaFileDecryptOperation *op)
   /* Give a title to the progress dialog */
   gtk_window_set_title (GTK_WINDOW (GPA_FILE_OPERATION (op)->progress_dialog),
 			_("Decrypting..."));
+
+  return object;
+}
+
+static void
+gpa_file_decrypt_operation_class_init (GpaFileDecryptOperationClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->constructor = gpa_file_decrypt_operation_constructor;
+  object_class->finalize = gpa_file_decrypt_operation_finalize;
 }
 
 GType

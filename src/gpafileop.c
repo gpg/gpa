@@ -97,12 +97,45 @@ gpa_file_operation_finalize (GObject *object)
 }
 
 static void
+gpa_file_operation_init (GpaFileOperation *op)
+{
+  op->input_files = NULL;
+  op->current = NULL;
+  op->progress_dialog = NULL;
+}
+
+static GObject*
+gpa_file_operation_constructor (GType type,
+				guint n_construct_properties,
+				GObjectConstructParam *construct_properties)
+{
+  GObject *object;
+  GpaFileOperation *op;
+
+  /* Invoke parent's constructor */
+  object = parent_class->constructor (type,
+				      n_construct_properties,
+				      construct_properties);
+  op = GPA_FILE_OPERATION (object);
+  /* Initialize */
+  op->progress_dialog = gpa_progress_dialog_new (GPA_OPERATION(op)->window,
+						 GPA_OPERATION(op)->context);
+  g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
+		    G_CALLBACK (gpa_file_operation_done_error_cb), op);
+  g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
+		    G_CALLBACK (gpa_file_operation_done_cb), op);
+
+  return object;
+}
+
+static void
 gpa_file_operation_class_init (GpaFileOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->constructor = gpa_file_operation_constructor;
   object_class->finalize = gpa_file_operation_finalize;
   object_class->set_property = gpa_file_operation_set_property;
   object_class->get_property = gpa_file_operation_get_property;
@@ -126,18 +159,6 @@ gpa_file_operation_class_init (GpaFileOperationClass *klass)
 				   ("input_files", "Files",
 				    "Files",
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
-}
-
-static void
-gpa_file_operation_init (GpaFileOperation *op)
-{
-  op->input_files = NULL;
-  op->progress_dialog = gpa_progress_dialog_new (GPA_OPERATION(op)->window,
-						 GPA_OPERATION(op)->context);
-  g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
-		    G_CALLBACK (gpa_file_operation_done_error_cb), op);
-  g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
-		    G_CALLBACK (gpa_file_operation_done_cb), op);
 }
 
 GType

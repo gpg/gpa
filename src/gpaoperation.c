@@ -101,12 +101,42 @@ gpa_operation_finalize (GObject *object)
 }
 
 static void
+gpa_operation_init (GpaOperation *op)
+{
+  op->window = NULL;
+  op->options = NULL;
+  op->context = NULL;
+}
+
+static GObject*
+gpa_operation_constructor (GType                  type,
+			   guint                  n_construct_properties,
+			   GObjectConstructParam *construct_properties)
+{
+  GObject *object;
+  GpaOperation *op;
+
+  /* Invoke parent's constructor */
+  object = parent_class->constructor (type,
+				      n_construct_properties,
+				      construct_properties);
+  op = GPA_OPERATION (object);
+  /* Initialize */
+  op->context = gpa_context_new ();
+  g_signal_connect (G_OBJECT (op->context), "done",
+		    G_CALLBACK (gpa_operation_done_cb), op);
+
+  return object;
+}
+
+static void
 gpa_operation_class_init (GpaOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->constructor = gpa_operation_constructor;
   object_class->finalize = gpa_operation_finalize;
   object_class->set_property = gpa_operation_set_property;
   object_class->get_property = gpa_operation_get_property;
@@ -135,16 +165,6 @@ gpa_operation_class_init (GpaOperationClass *klass)
 				   ("options", "options",
 				    "options", GPA_OPTIONS_TYPE,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
-}
-
-static void
-gpa_operation_init (GpaOperation *op)
-{
-  op->window = NULL;
-  op->options = NULL;
-  op->context = gpa_context_new ();
-  g_signal_connect (G_OBJECT (op->context), "done",
-		    G_CALLBACK (gpa_operation_done_cb), op);
 }
 
 GType

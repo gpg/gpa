@@ -49,6 +49,7 @@
 
 #include "gpafiledecryptop.h"
 #include "gpafileencryptop.h"
+#include "gpafilesignop.h"
 
 struct _GPAFileManager {
   GtkWidget *window;
@@ -193,29 +194,15 @@ sign_files (gpointer param)
 {
   GPAFileManager *fileman = param;
   GList * files;
-  GList *signed_files, *cur;
-  gint row;
-  
+  GpaFileSignOperation *op;
+
   files = get_selected_files (fileman->clist_files);
   if (!files)
     return;
 
-  signed_files = gpa_file_sign_dialog_run (fileman->window, files);
-  if (signed_files)
-    {
-      gtk_clist_unselect_all (fileman->clist_files);
-      cur = signed_files;
-      while (cur)
-	{
-	  row = add_file (fileman, (gchar*)(cur->data));
-	  if (row >= 0)
-	    gtk_clist_select_row (fileman->clist_files, row, 0);
-	  g_free (cur->data);
-	  cur = g_list_next (cur);
-	}
-      g_list_free (signed_files);
-    }
-  g_list_free (files);
+  op = gpa_file_sign_operation_new (gpa_options, fileman->window, files);
+
+  register_operation (fileman, GPA_FILE_OPERATION (op));
 }
 
 /*
