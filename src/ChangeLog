@@ -1,5 +1,8 @@
 2003-10-22  Miguel Coca  <mcoca@gnu.org>
 
+	* keyring.c (gpa_keyring_editor_new_key_cb): Update the default key
+	after generation.
+
 	* options.c (gpa_options_update_default_key)
 	(gpa_options_set_default_key): Catch a NULL key. Fixes crash at
 	startup for new users.

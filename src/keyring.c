@@ -307,6 +307,8 @@ gpa_keyring_editor_new_key_cb (gpointer data, const gchar *fpr)
   GPAKeyringEditor *editor = data;
   
   gpa_keylist_new_key (GPA_KEYLIST (editor->keylist), fpr);
+
+  gpa_options_update_default_key (gpa_options_get_instance ());
 }
 
 static void
