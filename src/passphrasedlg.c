@@ -1,5 +1,5 @@
 /* passphrasedlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -25,14 +25,28 @@
 #include "gtktools.h"
 #include "passphrasedlg.h"
 
+/* a pointer to a GPAPassphraseDialog struct is passed to all callbacks
+ * used in passphrase dialog and is used to pass widget pointers into
+ * the signal handlers so that they can read their contents and to pass
+ * information from the callbacks back to the gpa_passphrase_run_dialog
+ * function.
+ */
 struct _GPAPassphraseDialog {
-  gchar * passphrase;
+  /* the entry widget for the passphrase */
   GtkWidget * entry;
   
+  /* The OK button handler sets passphrase to a copy of the contents of
+   * the entry widget, the Cancel handler sets it to NULL. This field is
+   * also used to indicate whether the user cancelled the dialog or not.
+   */
+  gchar * passphrase;
 };
 typedef struct _GPAPassphraseDialog GPAPassphraseDialog;
 
 
+/* Signal handler for the OK button. Copy the entered password to the
+ * dialog struct and quit the recursive mainloop
+ */
 static void
 passphrase_ok (gpointer param)
 {
@@ -42,6 +56,9 @@ passphrase_ok (gpointer param)
   gtk_main_quit ();
 }
 
+/* Signal handler for the Cancel button. Set the passpghrase in the
+ * dialog struct to NULL and quit the recursive mainloop
+ */
 static void
 passphrase_cancel (gpointer param)
 {
@@ -51,14 +68,23 @@ passphrase_cancel (gpointer param)
   gtk_main_quit ();
 }
 
+/* signal handler for the dialog winow's delete-event. Just call the
+ * cancel signal handler and return FALSE to indicate that the window may
+ * be closed.
+ */
 static gboolean
 passphrase_delete_event (GtkWidget *widget, GdkEvent *event, gpointer param)
 {
   passphrase_cancel (param);
-  return TRUE;
+  return FALSE;
 }
 
-gchar *
+/* Create a modal dialog to ask for the passphrase, run the main-loop
+ * recursively and return the entered passphrase if the user clicked OK,
+ * and NULL if the user cancelled. The returned string uses malloced
+ * memory and has to be free()ed by the caller.
+ */
+gchar * 
 gpa_passphrase_run_dialog (GtkWidget * parent)
 {
   GtkAccelGroup *accelGroup;
@@ -76,9 +102,9 @@ gpa_passphrase_run_dialog (GtkWidget * parent)
 
   windowPassphrase = gtk_window_new (GTK_WINDOW_DIALOG);
   gtk_window_set_title (GTK_WINDOW (windowPassphrase), _("Enter Password"));
-  gtk_signal_connect_object (GTK_OBJECT (windowPassphrase), "delete_event",
-			     GTK_SIGNAL_FUNC (passphrase_delete_event),
-			     (gpointer)&dialog);
+  gtk_signal_connect (GTK_OBJECT (windowPassphrase), "delete_event",
+		      GTK_SIGNAL_FUNC (passphrase_delete_event),
+		      (gpointer)&dialog);
 
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowPassphrase), accelGroup);
@@ -117,7 +143,7 @@ gpa_passphrase_run_dialog (GtkWidget * parent)
   gtk_box_pack_start (GTK_BOX (vboxPassphrase), hButtonBoxPassphrase, FALSE,
 		      FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowPassphrase), vboxPassphrase);
-  gtk_widget_show_all (windowPassphrase);
+  gpa_window_show_centered (windowPassphrase, parent);
 
   gtk_grab_add (windowPassphrase);
   gtk_main ();
@@ -125,4 +151,4 @@ gpa_passphrase_run_dialog (GtkWidget * parent)
   gtk_widget_destroy (windowPassphrase);
 
   return dialog.passphrase;
-}				/* gpa_window_passphrase */
+} /* gpa_passphrase_run_dialog */
