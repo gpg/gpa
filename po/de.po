@@ -1,19 +1,19 @@
 # translation of de.po to deutsch
 # Written by Peter Neuhaus <pneuhaus@openit.de>
-# Steffen Michalek <steffen@michalek.de>, 2003
+# Steffen Michalek <steffen@michalek.de>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-13 20:33+0200\n"
-"PO-Revision-Date: 2003-02-03 19:30+0100\n"
+"POT-Creation-Date: 2003-10-13 23:21+0200\n"
+"PO-Revision-Date: 2003-10-21 23:49+0200\n"
 "Last-Translator: Steffen Michalek <steffen@michalek.de>\n"
 "Language-Team: deutsch <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.1\n"
+"X-Generator: KBabel 1.0.2\n"
 
 #: src/encryptdlg.c:135
 msgid "Encrypt files"
@@ -133,22 +133,18 @@ msgid "/Windows/_Keyring Editor"
 msgstr "/Fenster/_Schlüsselverwaltung"
 
 #: src/fileman.c:507
-#, fuzzy
 msgid "/File/Sign"
 msgstr "/Datei/_Signieren"
 
 #: src/fileman.c:514
-#, fuzzy
 msgid "/File/Verify"
 msgstr "/Datei/Über_prüfen"
 
 #: src/fileman.c:521
-#, fuzzy
 msgid "/File/Encrypt"
 msgstr "/Datei/_Verschlüsseln"
 
 #: src/fileman.c:528
-#, fuzzy
 msgid "/File/Decrypt"
 msgstr "/Datei/_Entschlüsseln"
 
@@ -161,14 +157,12 @@ msgid "open file"
 msgstr "Datei öffnen"
 
 #: src/fileman.c:553
-#, fuzzy
 msgid "Close all files"
-msgstr "Datei öffnen"
+msgstr "Alle Dateien schließen"
 
 #: src/fileman.c:553
-#, fuzzy
 msgid "close files"
-msgstr "Datei öffnen"
+msgstr "Dateien schließen"
 
 #: src/fileman.c:559 src/keyring.c:1496
 msgid "Sign"
@@ -302,9 +296,8 @@ msgstr ""
 "(z.B. auf einer Diskette, die an einem sicheren Ort verwahrt wird)."
 
 #: src/gpabackupop.c:252
-#, fuzzy
 msgid "Backup key to file"
-msgstr "_Sicherheitskopie in Datei:"
+msgstr "_Sicherheitskopie des Schlüssels in Datei:"
 
 #: src/gpabackupop.c:279
 msgid "Backup Keys"
@@ -365,21 +358,20 @@ msgstr ">.\n"
 
 #: src/gpaexportclipop.c:137
 msgid "The keys have been copied to the clipboard."
-msgstr ""
+msgstr "Die Schlüssel wurden in die Zwischenablage kopiert."
 
 #: src/gpaexportfileop.c:131
 msgid "Export public keys to file"
 msgstr "Öffentliche Schlüssel in Datei exportieren"
 
 #: src/gpaexportfileop.c:135
-#, fuzzy
 msgid "_armor"
 msgstr "ASCII-_Verpackung"
 
 #: src/gpaexportfileop.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "The keys have been exported to %s."
-msgstr "Der Schlüssels ist abgelaufen! Signieren nicht möglich."
+msgstr "Die Schlüssel wurden exportiert nach %s."
 
 #: src/gpaexportserverop.c:127
 #, c-format
@@ -388,20 +380,22 @@ msgid ""
 "server (\"%s\").\n"
 "Are you sure you want to distribute this key?"
 msgstr ""
+"Der ausgewählte Schlüssel wird an einen öffentlichen\n"
+"Schlüssel-Server (\"%s\") gesandt.\n"
+"Sind Sie sicher, dass Sie diesen Schlüssel veröffentlichen wollen?"
 
 #: src/gpaexportserverop.c:185
 msgid "The keys have been sent to the server."
-msgstr ""
+msgstr "Die Schlüssel wurden zum Server gesandt."
 
 #: src/gpafiledecryptop.c:89
-#, fuzzy
 msgid "Decrypting..."
 msgstr "_Entschlüsseln"
 
 #: src/gpafiledecryptop.c:280 src/gpafileverifyop.c:337
-#, fuzzy, c-format
+#, c-format
 msgid "The file \"%s\" contained no OpenPGP data."
-msgstr "Die Datei \"%s\" enthält keine korrekt verschlüsselten Daten."
+msgstr "Die Datei \"%s\" enthält keine korrekt verschlüsselten OpenPGP-Daten."
 
 #: src/gpafiledecryptop.c:288
 #, c-format
@@ -415,9 +409,8 @@ msgid "Wrong passphrase!"
 msgstr "Unsicherer Passwortsatz!"
 
 #: src/gpafileencryptop.c:99
-#, fuzzy
 msgid "Encrypting..."
-msgstr "Verschlüsseln"
+msgstr "Verschlüsseln ..."
 
 #: src/gpafileencryptop.c:295 src/verifydlg.c:221
 msgid "Unknown Key"
@@ -433,7 +426,7 @@ msgstr "Allerdings ist nicht sicher, dass der Schlüssel dieser Person gehört."
 
 #: src/gpafileencryptop.c:323
 msgid "Do you <b>really</b> want to use this key?"
-msgstr "Wollen Sie diesen Schlüssel wirklich benutzen?"
+msgstr "Wollen Sie diesen Schlüssel tatsächlich benutzen?"
 
 #: src/gpafileencryptop.c:344 src/gpafileencryptop.c:384 src/verifydlg.c:226
 msgid "Revoked Key"
@@ -457,19 +450,16 @@ msgid "You didn't select any key for signing"
 msgstr "Es wurde kein Schlüssel zum Signieren ausgewählt."
 
 #: src/gpafilesignop.c:97
-#, fuzzy
 msgid "Signing..."
-msgstr "Signiermodus"
+msgstr "Signieren ..."
 
 #: src/gpafileverifyop.c:97
-#, fuzzy
 msgid "Verifying..."
-msgstr "Prüfen"
+msgstr "Prüfen ..."
 
 #: src/gpagenkeyadvop.c:78
-#, fuzzy
 msgid "Generating Key..."
-msgstr "/Schlüssel/_Erzeugen..."
+msgstr "Schlüssel erzeugen..."
 
 #: src/gpaimportfileop.c:129
 msgid "Import public keys from file"
@@ -548,51 +538,47 @@ msgstr "unbekannt"
 
 #: src/gparecvkeydlg.c:100
 msgid "Which key do you want to import? (The key must be specified by key ID)."
-msgstr ""
+msgstr "Welchen Schlüssel möchten Sie importieren? (Schlüsselkennung angeben)"
 
 #: src/gparecvkeydlg.c:115
 msgid "Key _ID:"
-msgstr "_Suchbegriff:"
+msgstr "Schlüssel_kennung:"
 
 #: src/gpasubkeylist.c:70
-#, fuzzy
 msgid "Subkey ID"
-msgstr "Schlüsselkennung"
+msgstr "Kennung des untergeordneten Schlüssels"
 
 #: src/gpasubkeylist.c:76 src/siglist.c:118 src/verifydlg.c:329
 msgid "Status"
 msgstr "Gültigkeit der Beglaubigung"
 
 #: src/gpasubkeylist.c:82
-#, fuzzy
 msgid "Algorithm"
-msgstr "_Verschlüsselungsalgorithmus: "
+msgstr "_Verschlüsselungsalgorithmus"
 
 #: src/gpasubkeylist.c:89
 msgid "Size"
-msgstr ""
+msgstr "Größe"
 
 #: src/gpasubkeylist.c:95 src/keyeditdlg.c:170 src/keylist.c:263
 msgid "Expiry Date"
 msgstr "Verfallsdatum"
 
 #: src/gpasubkeylist.c:102
-#, fuzzy
 msgid "Can sign"
-msgstr "_signieren"
+msgstr "Zum Signieren verwendbar"
 
 #: src/gpasubkeylist.c:108
 msgid "Can certify"
-msgstr ""
+msgstr "Zum Überprüfen verwendbar"
 
 #: src/gpasubkeylist.c:115
-#, fuzzy
 msgid "Can encrypt"
-msgstr "verschlüsselt"
+msgstr "Zum Verschlüsseln verwendbar"
 
 #: src/gpasubkeylist.c:122
 msgid "Can authenticate"
-msgstr ""
+msgstr "Zum Autentifizieren verwendbar"
 
 #: src/gpasubkeylist.c:135 src/gpgmetools.c:558 src/gpgmetools.c:729
 #: src/gpgmetools.c:855
@@ -608,9 +594,8 @@ msgid "Disabled"
 msgstr "Deaktiviert"
 
 #: src/gpasubkeylist.c:147
-#, fuzzy
 msgid "Unsigned"
-msgstr "signiert"
+msgstr "Nicht beglaubigt"
 
 #: src/gpasubkeylist.c:151 src/gpgmetools.c:842 src/verifydlg.c:211
 msgid "Valid"
@@ -673,6 +658,7 @@ msgstr ""
 
 #: src/gpgmetools.c:53
 #, c-format
+#, fuzzy
 msgid ""
 "The GPGME library returned an unexpected\n"
 "error. The error was:\n"
@@ -682,6 +668,13 @@ msgid ""
 "This is probably a bug in GPA.\n"
 "GPA will now try to recover from this error."
 msgstr ""
+"Die GPGME-Biblothek gab eine unerwartete\n"
+"Fehlermeldung zurück:\n"
+"\n"
+"\t%s\n"
+"\n"
+"Dies ist wahrscheinlich ein Fehler in GPA.\n"
+"GPA versucht nun, sich davon wieder zu erholen."
 
 #: src/gpgmetools.c:433
 msgid ""
@@ -770,58 +763,55 @@ msgstr "Ungültig"
 #: src/gpgmetools.c:867
 #, fuzzy
 msgid "Generic"
-msgstr "Erzeu_gen"
+msgstr "Allgemein (?)"
 
 #: src/gpgmetools.c:870
+#, fuzzy
 msgid "Persona"
-msgstr ""
+msgstr "Person (?)"
 
 #: src/gpgmetools.c:873
+#, fuzzy
 msgid "Casual"
-msgstr ""
+msgstr "Situationsabhängig (?)"
 
 #: src/gpgmetools.c:876
 msgid "Positive"
-msgstr ""
+msgstr "Positiv"
 
 #: src/gpgmetools.c:894
 msgid "The key can be used for certification, signing and encryption."
-msgstr ""
+msgstr "Der Schlüssel kann zur Zertifizierung, zum Signieren und zur Verschlüsselung verwendet werden."
 
 #: src/gpgmetools.c:899
-msgid ""
-"The key can be used for certification and signing, but not for encryption."
-msgstr ""
+msgid "The key can be used for certification and signing, but not for encryption."
+msgstr "Der Schlüssel kann zur Zertifizierung und zum Signieren verwendet werden, nicht aber zur Verschlüsselung."
 
 #: src/gpgmetools.c:907
-#, fuzzy
 msgid "The key can be used for certification and encryption."
-msgstr "und kann nicht zum Verschlüsseln benutzt werden."
+msgstr "Der Schlüssel kann zur Zertifizierung und zur Verschlüsselung verwendet werden."
 
 #: src/gpgmetools.c:912
-#, fuzzy
 msgid "The key can be used only for certification."
-msgstr "und kann nicht zum Verschlüsseln benutzt werden."
+msgstr "Der Schlüssel ist ausschließlich zum Zertifizieren verwendbar."
 
 #: src/gpgmetools.c:922
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
-msgstr ""
+msgstr "Der Schlüssel ist nur zum Signieren und Verschlüsseln verwendbar, nicht aber zum Zertifizieren."
 
 #: src/gpgmetools.c:927
-#, fuzzy
 msgid "The key can be used only for signing."
-msgstr "Keine Schlüssel ausgewählt."
+msgstr "Der Schlüssel ist ausschließlich zum Signieren verwendbar."
 
 #: src/gpgmetools.c:934
-#, fuzzy
 msgid "The key can be used only for encryption."
-msgstr "und kann nicht zum Verschlüsseln benutzt werden."
+msgstr "Der Schlüssel ist ausschließlich zum Verschlüsseln verwendbar."
 
 #: src/gpgmetools.c:940
 msgid "This key is useless."
-msgstr ""
+msgstr "Dieser Schlüssel ist nicht verwendbar."
 
 #: src/gtktools.c:311
 msgid "GPA Error"
@@ -1150,6 +1140,8 @@ msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
 msgstr ""
+"GnuPG stellt die Verlässlichkeits-Datenbank wieder her.\n"
+"Das kann einige Sekunden dauern."
 
 #: src/keyring.c:419
 msgid "No keys selected for signing."
@@ -1236,19 +1228,16 @@ msgid "/Keys/_Backup..."
 msgstr "/Schlüssel/Sicherheitskopie _anlegen..."
 
 #: src/keyring.c:828
-#, fuzzy
 msgid "/_Server"
-msgstr "_Niemals"
+msgstr "/_Server"
 
 #: src/keyring.c:829
-#, fuzzy
 msgid "/Server/_Retrieve Keys..."
-msgstr "/Schlüssel/_Löschen..."
+msgstr "/Server/_Schlüssel erhalten..."
 
 #: src/keyring.c:830
-#, fuzzy
 msgid "/Server/_Send Keys..."
-msgstr "/Schlüssel/_Signieren..."
+msgstr "/Server/_Schlüssel verschicken..."
 
 #: src/keyring.c:864
 msgid "/Keys/Export Keys..."
@@ -1263,9 +1252,8 @@ msgid "/Edit/Copy"
 msgstr "/Bearbeiten/Kopieren"
 
 #: src/keyring.c:885
-#, fuzzy
 msgid "/Server/Send Keys..."
-msgstr "/Schlüssel/Signieren..."
+msgstr "/Server/Schlüssel verschicken..."
 
 #: src/keyring.c:894
 msgid "/Keys/Set Owner Trust..."
@@ -1312,9 +1300,8 @@ msgid "/E_xport Keys..."
 msgstr "/Schlüssel e_xportieren..."
 
 #: src/keyring.c:946
-#, fuzzy
 msgid "/Se_nd Keys to Server..."
-msgstr "_Key-Server:"
+msgstr "/Schlüssel _zum Server senden ..."
 
 #: src/keyring.c:947
 msgid "/_Backup..."
@@ -1337,9 +1324,8 @@ msgid "/Backup..."
 msgstr "/Sicherheitskopie _anlegen..."
 
 #: src/keyring.c:1054
-#, fuzzy
 msgid "Subkeys"
-msgstr "Öffentliche _Schlüssel"
+msgstr "Untergeordnete Schlüssel"
 
 #: src/keyring.c:1125 src/keysigndlg.c:106
 msgid "Fingerprint:"
@@ -1371,8 +1357,7 @@ msgstr "Details"
 
 #: src/keyring.c:1146
 msgid "Show signatures on user name:"
-msgstr ""
-"Signaturen für die einzelnen im Schlüssel enthaltenen Benutzernamen anzeigen:"
+msgstr "Signaturen für die einzelnen im Schlüssel enthaltenen Benutzernamen anzeigen:"
 
 #: src/keyring.c:1167
 msgid "Signatures"
@@ -1387,9 +1372,9 @@ msgid "The key has only a public part"
 msgstr "Dieser Schlüssel hat nur einen öffentlichen Teil"
 
 #: src/keyring.c:1227
-#, fuzzy, c-format
+#, c-format
 msgid "%s %u bits"
-msgstr "%s %li bit"
+msgstr "%s %u bit"
 
 #: src/keyring.c:1253
 msgid "No keys selected"
@@ -1550,8 +1535,7 @@ msgid "_Unknown"
 msgstr "_unbekannt"
 
 #: src/ownertrustdlg.c:135
-msgid ""
-"You don't know how much to trust this user to verify other people's keys.\n"
+msgid "You don't know how much to trust this user to verify other people's keys.\n"
 msgstr ""
 "Sie wissen nicht, in wie weit Sie diesem Benutzer vertrauen können, die "
 "Schlüssel Dritter zu beglaubigen.\n"
@@ -1728,13 +1712,12 @@ msgid "Settings"
 msgstr "Einstellungen"
 
 #: src/siglist.c:126
-#, fuzzy
 msgid "Level"
-msgstr "niemals"
+msgstr "Stufe"
 
 #: src/siglist.c:133
 msgid "Local"
-msgstr ""
+msgstr "Lokal"
 
 #: src/verifydlg.c:115
 msgid "Verify files"
@@ -1751,7 +1734,7 @@ msgstr "Schlüssel ist NICHT gültig!"
 #: src/verifydlg.c:358
 #, c-format
 msgid "Verified data in file: %s"
-msgstr ""
+msgstr "Überprüfte Daten in Datei: %s"
 
 #: src/verifydlg.c:365
 msgid "Signatures:"
@@ -2597,3 +2580,4 @@ msgstr "Signaturen (Beglaubigungen)"
 
 #~ msgid "No valid passphrase specified"
 #~ msgstr "Kein gültiger Passwortsatz angegeben"
+
