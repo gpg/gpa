@@ -400,7 +400,7 @@ static void
 keyring_editor_export (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  gchar * filename;
+  gchar * filename, *server;
   gboolean armored;
 
   if (!gpa_keylist_has_selection (editor->clist_keys))
@@ -412,12 +412,49 @@ keyring_editor_export (gpointer param)
       return;
     } /* if */
 
-  if (key_export_dialog_run (editor->window, &filename, &armored))
+  if (key_export_dialog_run (editor->window, &filename, &server, &armored))
     {
-      printf ("export to %s; armored %d\n", filename, armored);
+      if (filename)
+	{
+	  /* Export the selected key to the user specified file. FIXME:
+	   * We should really export all selected keys, but gpapa
+	   * currently can't export multiple keys to one file */
+	  GpapaPublicKey * key = gpa_keylist_current_key (editor->clist_keys);
+	  gpapa_public_key_export (key, filename, armored,
+				   gpa_callback, editor->window);
+	}
+      else if (server)
+	{
+	  /* Export the selected key to the user specified server.
+	   * FIXME: We should really export all selected keys */
+	  GList * selection = gpa_keylist_selection (editor->clist_keys);
+	  gchar * key_id;
+	  gint row;
+	  GpapaPublicKey * key;
+
+	  while (selection)
+	    {
+	      row = GPOINTER_TO_INT (selection->data);
+	      key_id = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys),
+					       row);
+	      key = gpapa_get_public_key_by_ID (key_id, gpa_callback,
+						editor->window);
+
+	      gpapa_public_key_send_to_server (key, global_keyserver,
+					       gpa_callback, editor->window);
+	      selection = g_list_next (selection);
+	    }
+	}
+      else
+	{
+	  /* Should never happen because the dialog should ensure that
+	   * either filename or server is not NULL */
+	  printf ("neither filename nor server supplied\n");
+	}
       free (filename);
-    }
-}
+      free (server);
+    } /* if */
+} /* keyring_editor_export */
 
 
 /* Run the advanced key generation dialog and if the user clicked OK,
