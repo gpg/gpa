@@ -1,5 +1,11 @@
 2001-01-18  Bernhard Herzog  <bh@intevation.de>
 
+	* gpa.c (cmd_and_opt_values): 
+	(opts):
+	(main): 
+	Rename the option simplified-ui to advanced-ui and
+	reverse its meaning. The simplified UI is now the default.
+	
 	* keyring.c (keyring_editor_menubar_new): Add ... to "generate
 	key" because it pops up a dialog
 
