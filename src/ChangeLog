@@ -1,3 +1,7 @@
+2003-01-24  Miguel Coca  <mcoca@gnu.org>
+
+	* gpa.c (main): Replace getenv with more portable putenv.
+
 2003-01-23  Miguel Coca  <mcoca@gnu.org>
 
 	* verifydlg.c (verify_file): Another ugly hack, this time to allow

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
-"POT-Creation-Date: 2002-12-18 19:12+0100\n"
+"POT-Creation-Date: 2003-01-24 15:41+0100\n"
 "PO-Revision-Date: 2002-12-23 11:31+0100\n"
 "Last-Translator: Steffen Michalek <steffen@michalek.de>\n"
 "Language-Team: GERMAN <de@li.org>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/encryptdlg.c:80 src/verifydlg.c:183
+#: src/encryptdlg.c:80 src/verifydlg.c:189
 msgid "Unknown Key"
 msgstr "Unbekannter Schlüssel"
 
@@ -27,7 +27,7 @@ msgstr "Allerdings ist nicht sicher, dass der Schlüssel dieser Person gehört."
 msgid "Do you <b>really</b> want to use this key?"
 msgstr "Wollen Sie diesen Schlüssel wirklich benutzen?"
 
-#: src/encryptdlg.c:129 src/encryptdlg.c:168 src/verifydlg.c:188
+#: src/encryptdlg.c:129 src/encryptdlg.c:168 src/verifydlg.c:194
 msgid "Revoked Key"
 msgstr "Zurückgezogener Schlüssel"
 
@@ -93,22 +93,23 @@ msgstr "_Signieren als"
 msgid "A_rmor"
 msgstr "ASCII-_Verpackung"
 
-#. FIXME: This error message should be more informative
-#: src/expirydlg.c:61 src/gpawidgets.c:483
+#. Can't happen
+#: src/expirydlg.c:63
 msgid "Please provide a correct date."
 msgstr "Bitte geben Sie ein gültiges Datum ein."
 
-#: src/expirydlg.c:101
+#: src/expirydlg.c:110
 #, fuzzy
-msgid "Change expiry data"
+msgid "Change expiry date"
 msgstr "Verfallsdatum ändern"
 
-#: src/expirydlg.c:119
+#: src/expirydlg.c:128
 msgid "_never expire"
 msgstr "_kein Verfallsdatum"
 
-#: src/expirydlg.c:128
-msgid "_expire on"
+#: src/expirydlg.c:133
+#, fuzzy
+msgid "_expire on:"
 msgstr "_verfällt am"
 
 #: src/fileman.c:132
@@ -119,8 +120,8 @@ msgstr "Datei öffnen"
 msgid "The file is already open."
 msgstr "Die Datei ist bereits geöffnet."
 
-#: src/fileman.c:294 src/filesigndlg.c:129 src/keyeditdlg.c:157
-#: src/keyring.c:405
+#: src/fileman.c:294 src/filesigndlg.c:129 src/keyeditdlg.c:163
+#: src/keyeditdlg.c:197 src/keyring.c:412
 msgid "Wrong passphrase!"
 msgstr "Unsicherer Passwortsatz!"
 
@@ -129,7 +130,7 @@ msgstr "Unsicherer Passwortsatz!"
 msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "Die Datei \"%s\" enthält keine korrekt verschlüsselten Daten."
 
-#: src/fileman.c:361 src/keyring.c:980
+#: src/fileman.c:361 src/keyring.c:988
 msgid "/_File"
 msgstr "/_Datei"
 
@@ -161,39 +162,39 @@ msgstr "/Datei/_Entschlüsseln"
 msgid "/File/sep2"
 msgstr "/Datei/sep2"
 
-#: src/fileman.c:369 src/keyring.c:981
+#: src/fileman.c:369 src/keyring.c:989
 msgid "/File/_Close"
 msgstr "/Datei/_Fenster schließen"
 
-#: src/fileman.c:370 src/keyring.c:983
+#: src/fileman.c:370 src/keyring.c:991
 msgid "/File/_Quit"
 msgstr "/Datei/_Beenden"
 
-#: src/fileman.c:373 src/keyring.c:986
+#: src/fileman.c:373 src/keyring.c:994
 msgid "/_Edit"
 msgstr "/_Bearbeiten"
 
-#: src/fileman.c:374 src/keyring.c:992
+#: src/fileman.c:374 src/keyring.c:1000
 msgid "/Edit/Select _All"
 msgstr "/Bearbeiten/Alle A_uswählen"
 
-#: src/fileman.c:375 src/keyring.c:993
+#: src/fileman.c:375 src/keyring.c:1001
 msgid "/Edit/sep2"
 msgstr "/Bearbeiten/sep2"
 
-#: src/fileman.c:376 src/keyring.c:994
+#: src/fileman.c:376 src/keyring.c:1002
 msgid "/Edit/Pr_eferences..."
 msgstr "/Bearbeiten/_Einstellungen"
 
-#: src/fileman.c:380 src/keyring.c:1013
+#: src/fileman.c:380 src/keyring.c:1021
 msgid "/_Windows"
 msgstr "/_Fenster"
 
-#: src/fileman.c:381 src/keyring.c:1014
+#: src/fileman.c:381 src/keyring.c:1022
 msgid "/Windows/_Filemanager"
 msgstr "/Fenster/_Dateiverwaltung"
 
-#: src/fileman.c:382 src/keyring.c:1015
+#: src/fileman.c:382 src/keyring.c:1023
 msgid "/Windows/_Keyring Editor"
 msgstr "/Fenster/_Schlüsselverwaltung"
 
@@ -213,7 +214,7 @@ msgstr "Datei öffnen"
 msgid "open file"
 msgstr "Datei öffnen"
 
-#: src/fileman.c:491 src/keyring.c:1527
+#: src/fileman.c:491 src/keyring.c:1598
 msgid "Sign"
 msgstr "Signieren"
 
@@ -262,23 +263,23 @@ msgstr "Gewählte Datei entschlüsseln"
 msgid "decrypt file"
 msgstr "Datei entschlüsseln"
 
-#: src/fileman.c:520 src/keyring.c:1580
+#: src/fileman.c:520 src/keyring.c:1651
 msgid "Open the Preferences dialog"
 msgstr "Öffne den Dialog für die Einstellungen"
 
-#: src/fileman.c:521 src/keyring.c:1581
+#: src/fileman.c:521 src/keyring.c:1652
 msgid "preferences"
 msgstr "Einstellungen"
 
-#: src/fileman.c:529 src/keyring.c:1596
+#: src/fileman.c:529 src/keyring.c:1667
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/fileman.c:530 src/keyring.c:1597
+#: src/fileman.c:530 src/keyring.c:1668
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "Wie funktioniert der GNU Privacy Assistant?"
 
-#: src/fileman.c:531 src/keyring.c:1598
+#: src/fileman.c:531 src/keyring.c:1669
 #, fuzzy
 msgid "help"
 msgstr "Hilfe"
@@ -381,254 +382,6 @@ msgstr "Fehler bitte berichten an <"
 msgid ">.\n"
 msgstr ""
 
-# ~ msgid "Show Warranty Information\n"
-# ~ msgstr "Gewährleistung\n"
-#: src/gpafilesel.c:641
-msgid "Filename"
-msgstr "Dateiname"
-
-#: src/gpafilesel.c:642
-msgid "The currently selected filename."
-msgstr "Der momentan ausgewählte Dateiname."
-
-#: src/gpafilesel.c:648
-#, fuzzy
-msgid "Show file operations"
-msgstr "Dateiaktionen anzeigen"
-
-#: src/gpafilesel.c:649
-msgid "Whether buttons for creating/manipulating files should be displayed."
-msgstr ""
-"Sollen Knöpfe zum Erstellen bzw. Verwalten von Dateien angezeigt werden?"
-
-#. The directories ctree
-#: src/gpafilesel.c:843
-msgid "Directories"
-msgstr "Verzeichnisse"
-
-#. The files ctree
-#: src/gpafilesel.c:884 src/keyring.c:1589
-msgid "Files"
-msgstr "Dateien"
-
-#: src/gpafilesel.c:918 src/gpafilesel.c:1650 src/gpafilesel.c:1796
-#: src/gpafilesel.c:1969 src/gpawizard.c:249 src/keygendlg.c:264
-#: src/keyimpseldlg.c:157
-msgid "_Cancel"
-msgstr "_Abbrechen"
-
-#: src/gpafilesel.c:924
-msgid "_OK"
-msgstr "_OK"
-
-#. The OK button
-#: src/gpafilesel.c:929
-msgid "OK"
-msgstr "OK"
-
-#. The Cancel button
-#: src/gpafilesel.c:936 src/gpafilesel.c:1672 src/gpafilesel.c:1818
-#: src/gpafilesel.c:1991
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: src/gpafilesel.c:991 src/gpafilesel.c:2436
-#, c-format
-msgid "Directory unreadable: %s"
-msgstr "Verzeichnis nicht lesbar: %s"
-
-#: src/gpafilesel.c:1115
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"Die Datei \"%s\" befindet sich auf einer anderen Maschine (%s)\n"
-"und ist möglicherweise für dieses Programm nicht erreichbar.\n"
-"Sind Sie sicher, dass Sie diese Datei auswählen möchten?"
-
-#: src/gpafilesel.c:1252
-msgid "Create Dir"
-msgstr "Verzeichnis erstellen"
-
-#: src/gpafilesel.c:1263 src/gpafilesel.c:1770
-msgid "Delete File"
-msgstr "Datei löschen"
-
-#: src/gpafilesel.c:1274 src/gpafilesel.c:1932
-msgid "Rename File"
-msgstr "Datei umbenennen"
-
-#.
-#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
-#. (gpointer) fs);
-#.
-#: src/gpafilesel.c:1487
-msgid "Error"
-msgstr "Fehler"
-
-#. close button
-#: src/gpafilesel.c:1507
-msgid "Close"
-msgstr "Schließen"
-
-#: src/gpafilesel.c:1567
-#, fuzzy, c-format
-msgid ""
-"The directory name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Der Verzeichnisname \"%s\" enthält Symbole, die nicht in Dateinamen "
-"vorkommen dürfen."
-
-#: src/gpafilesel.c:1569
-#, c-format
-msgid ""
-"Error creating directory \"%s\": %s\n"
-"%s"
-msgstr ""
-"Fehler beim Erstellen des Verzeichnisses \"%s\": %s\n"
-"%s"
-
-#: src/gpafilesel.c:1570 src/gpafilesel.c:1866
-#, fuzzy
-msgid "You probably used symbols not allowed in filenames."
-msgstr ""
-"Sie haben wahrscheinlich Symbole benutzt, die nicht in Dateinamen vorkommen "
-"dürfen."
-
-#: src/gpafilesel.c:1578
-#, c-format
-msgid "Error creating directory \"%s\": %s\n"
-msgstr "Fehler beim Erstellen des Verzeichnisses \"%s\": %s\n"
-
-#: src/gpafilesel.c:1612
-msgid "Create Directory"
-msgstr "Verzeichnis erstellen"
-
-#: src/gpafilesel.c:1627
-msgid "_Directory name:"
-msgstr "_Verzeichnisname:"
-
-#: src/gpafilesel.c:1629
-msgid "Directory name:"
-msgstr "Verzeichnisname:"
-
-#: src/gpafilesel.c:1655
-msgid "C_reate"
-msgstr "_Erstellen"
-
-#. buttons
-#: src/gpafilesel.c:1663
-msgid "Create"
-msgstr "Erstellen"
-
-#: src/gpafilesel.c:1710
-#, fuzzy, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Der Dateiname \"%s\" enthält Symbole, die nicht in Dateinamen vorkommen "
-"dürfen."
-
-#: src/gpafilesel.c:1713
-#, c-format
-msgid ""
-"Error deleting file \"%s\": %s\n"
-"%s"
-msgstr ""
-"Fehler beim Löschen der Datei \"%s\": %s\n"
-"%s"
-
-#: src/gpafilesel.c:1715 src/gpafilesel.c:1880
-#, fuzzy
-msgid "It probably contains symbols not allowed in filenames."
-msgstr ""
-"Sie enthält wahrscheinlich Symbole, die nicht in Dateinamen vorkommen dürfen."
-
-#: src/gpafilesel.c:1724
-#, c-format
-msgid "Error deleting file \"%s\": %s"
-msgstr "Fehler beim Löschen der Datei \"%s\": %s"
-
-#: src/gpafilesel.c:1784
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "Datei \"%s\" wirklich löschen?"
-
-#: src/gpafilesel.c:1801
-msgid "_Delete"
-msgstr "_Löschen"
-
-#. buttons
-#: src/gpafilesel.c:1809
-msgid "Delete"
-msgstr "Löschen"
-
-#: src/gpafilesel.c:1862 src/gpafilesel.c:1876
-#, fuzzy, c-format
-msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Der Dateiname \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt sind."
-
-#: src/gpafilesel.c:1864
-#, c-format
-msgid ""
-"Error renaming file to \"%s\": %s\n"
-"%s"
-msgstr ""
-"Fehler beim Umbenennen der Datei in \"%s\": %s\n"
-"%s"
-
-#: src/gpafilesel.c:1878
-#, c-format
-msgid ""
-"Error renaming file \"%s\": %s\n"
-"%s"
-msgstr ""
-"Fehler beim Umbenennen der Datei \"%s\": %s\n"
-"%s"
-
-#: src/gpafilesel.c:1888
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Fehler beim Umbenennen der Datei \"%s\" in \"%s\": %s"
-
-#: src/gpafilesel.c:1946
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "Neuer Name für Datei \"%s\":"
-
-#: src/gpafilesel.c:1974
-msgid "_Rename"
-msgstr "_Umbenennen"
-
-#. buttons
-#: src/gpafilesel.c:1982
-msgid "Rename"
-msgstr "Umbenennen"
-
-#: src/gpafilesel.c:2415
-msgid "Selection: "
-msgstr "Auswahl:"
-
-#: src/gpafilesel.c:3026
-#, c-format
-msgid ""
-"The filename %s couldn't be converted to UTF-8. Try setting the environment "
-"variable G_BROKEN_FILENAMES."
-msgstr ""
-"Der Dateiname %s konnte nicht in UTF-8 umgewandelt werden. Versuchen Sie, "
-"die Umgebungsvariable G_BROKEN_FILENAMES zu belegen."
-
-#: src/gpafilesel.c:3897
-msgid "Name too long"
-msgstr "Diese Name ist zu lang."
-
-#: src/gpafilesel.c:3899
-msgid "Couldn't convert filename"
-msgstr "Der Dateiname konnte nicht umgewandelt werden."
-
 #: src/gpapastrings.c:31
 msgid "days"
 msgstr "Tagen"
@@ -654,54 +407,51 @@ msgid "unknown"
 msgstr "unbekannt"
 
 #. User Name
-#: src/gpawidgets.c:68 src/gpgmetools.c:508 src/gpgmetools.c:515
-#: src/keyring.c:1178 src/keysigndlg.c:97
+#: src/gpawidgets.c:72 src/gpgmetools.c:506 src/gpgmetools.c:513
+#: src/keyring.c:1249 src/keysigndlg.c:101
 msgid "User Name:"
 msgstr "Benutzerkennung:"
 
-#: src/gpawidgets.c:68 src/keysigndlg.c:97
+#: src/gpawidgets.c:72 src/keysigndlg.c:101
 #, fuzzy
 msgid "User Names:"
 msgstr "Benutzerkennungen:"
 
 #. Key ID
-#: src/gpawidgets.c:74 src/gpgmetools.c:509 src/gpgmetools.c:516
-#: src/keyring.c:1180
+#: src/gpawidgets.c:78 src/gpgmetools.c:507 src/gpgmetools.c:514
+#: src/keyring.c:1251
 msgid "Key ID:"
 msgstr "Schlüsselkennung:"
 
-#: src/gpawidgets.c:95 src/keylist.c:195 src/siglist.c:82 src/siglist.c:102
-#: src/verifydlg.c:290
+#: src/gpawidgets.c:99 src/keylist.c:195 src/siglist.c:82 src/siglist.c:102
+#: src/verifydlg.c:296
 msgid "Key ID"
 msgstr "Schlüsselkennung"
 
-#: src/gpawidgets.c:95 src/keylist.c:194 src/siglist.c:88 src/siglist.c:114
-#: src/verifydlg.c:302
+#: src/gpawidgets.c:99 src/keylist.c:194 src/siglist.c:88 src/siglist.c:114
+#: src/verifydlg.c:308
 msgid "User Name"
 msgstr "Benutzerkennung"
 
-#: src/gpawidgets.c:311
-msgid "01.01.2000"
-msgstr "01.01.2000"
-
-#: src/gpawidgets.c:338
+#: src/gpawidgets.c:343
 msgid "Expiration"
 msgstr "Verfallsdatum"
 
-#: src/gpawidgets.c:345
+#: src/gpawidgets.c:350
 msgid "_indefinitely valid"
 msgstr "_unbegrenzt gültig"
 
-#: src/gpawidgets.c:354
+#: src/gpawidgets.c:359
 msgid "expire _after"
 msgstr "verfällt _nach"
 
-#: src/gpawidgets.c:376
-msgid "expire a_t"
-msgstr "verfä_llt am"
+#: src/gpawidgets.c:378
+#, fuzzy
+msgid "expire o_n:"
+msgstr "_verfällt am"
 
 #. this should never happen
-#: src/gpawidgets.c:444 src/keygendlg.c:305
+#: src/gpawidgets.c:451 src/keygendlg.c:285
 #, fuzzy
 msgid ""
 "!FATAL ERROR!\n"
@@ -709,18 +459,6 @@ msgid ""
 msgstr ""
 "!FATAL ERROR! - Schicksalhafter Fehler! :-)\n"
 "Ungültiger Eingabemodus für das Verfallsdatum."
-
-#: src/gpawizard.c:111 src/helpmenu.c:380
-msgid "_Close"
-msgstr "_Fenster schließen"
-
-#: src/gpawizard.c:237 src/gpawizard.c:277
-msgid "_Prev"
-msgstr "_Zurück"
-
-#: src/gpawizard.c:243 src/gpawizard.c:279
-msgid "_Next"
-msgstr "_Weiter"
 
 #: src/gpgmetools.c:32
 #, fuzzy, c-format
@@ -773,96 +511,96 @@ msgstr ""
 "Der in dieser Datei gesicherte Schlüssel ist:\n"
 "\n"
 
-#: src/gpgmetools.c:385
+#: src/gpgmetools.c:383
 msgid "DSA and ElGamal (default)"
 msgstr "DSA und ElGamal (Voreinstellung)"
 
-#: src/gpgmetools.c:386
+#: src/gpgmetools.c:384
 msgid "DSA (sign only)"
 msgstr "DSA (nur signieren)"
 
-#: src/gpgmetools.c:387
+#: src/gpgmetools.c:385
 msgid "RSA (sign only)"
 msgstr "RSA (nur signieren)"
 
-#: src/gpgmetools.c:418 src/gpgmetools.c:466 src/gpgmetools.c:753
+#: src/gpgmetools.c:416 src/gpgmetools.c:464 src/gpgmetools.c:769
 #, fuzzy
 msgid "Unknown"
 msgstr "unbekannt"
 
-#: src/gpgmetools.c:421
+#: src/gpgmetools.c:419
 msgid "Never"
 msgstr "nie(mals)"
 
-#: src/gpgmetools.c:424
+#: src/gpgmetools.c:422
 #, fuzzy
 msgid "Marginal"
 msgstr "geringfügig (am Rande)"
 
-#: src/gpgmetools.c:427
+#: src/gpgmetools.c:425
 #, fuzzy
 msgid "Full"
 msgstr "voll(ständig)"
 
-#: src/gpgmetools.c:430
+#: src/gpgmetools.c:428
 msgid "Ultimate"
 msgstr ""
 
-#: src/gpgmetools.c:449 src/gpgmetools.c:764
+#: src/gpgmetools.c:447 src/gpgmetools.c:633 src/gpgmetools.c:780
 #, fuzzy
 msgid "Revoked"
 msgstr "widerrufen"
 
-#: src/gpgmetools.c:453 src/gpgmetools.c:758
+#: src/gpgmetools.c:451 src/gpgmetools.c:774
 #, fuzzy
 msgid "Expired"
 msgstr "verfallen"
 
-#: src/gpgmetools.c:458
+#: src/gpgmetools.c:456
 #, fuzzy
 msgid "Disabled"
 msgstr "abgeschaltet"
 
-#: src/gpgmetools.c:462
+#: src/gpgmetools.c:460
 msgid "Incomplete"
 msgstr "unvollständig"
 
-#: src/gpgmetools.c:471
+#: src/gpgmetools.c:469
 msgid "Fully Valid"
 msgstr "voll gültig"
 
-#: src/gpgmetools.c:506
+#: src/gpgmetools.c:504
 msgid "Please enter the passphrase for the following key:"
 msgstr "Bitte geben Sie den Passwortsatz für den folgenden Schlüssel ein:"
 
-#: src/gpgmetools.c:514
+#: src/gpgmetools.c:512
 msgid "Wrong passphrase, please try again:"
 msgstr "Falscher Passwortsatz, bitte versuchen Sie es erneut:"
 
-#: src/gpgmetools.c:536
+#: src/gpgmetools.c:535
 msgid "Enter Passphrase"
 msgstr "Passwortsatz eingeben"
 
 #. Duplicate it to make sure it can be g_free'd
-#: src/gpgmetools.c:711 src/verifydlg.c:230
+#: src/gpgmetools.c:727 src/verifydlg.c:236
 msgid "[Unknown user ID]"
 msgstr "[Unbekannte Benutzerkennung]"
 
-#: src/gpgmetools.c:748 src/verifydlg.c:173
+#: src/gpgmetools.c:764 src/verifydlg.c:179
 #, fuzzy
 msgid "Valid"
 msgstr "gültig"
 
-#: src/gpgmetools.c:751 src/verifydlg.c:178
+#: src/gpgmetools.c:767 src/verifydlg.c:184
 #, fuzzy
 msgid "Bad"
 msgstr "schlecht / falsch"
 
-#: src/gtktools.c:312
+#: src/gtktools.c:311
 msgid "GPA Error"
 msgstr "GPA Fehler"
 
-#: src/gtktools.c:345
+#: src/gtktools.c:344
 msgid "GPA Message"
 msgstr "GPA Meldung"
 
@@ -898,6 +636,10 @@ msgstr "GNU general public license"
 #: src/helpmenu.c:365
 msgid "_GNU general public license"
 msgstr "_GNU general public license"
+
+#: src/helpmenu.c:380
+msgid "_Close"
+msgstr "_Fenster schließen"
 
 #: src/helpmenu.c:394
 msgid "Show Help Text\n"
@@ -970,12 +712,18 @@ msgstr "Wollen Sie diesen Schlüssel wirklich löschen?"
 msgid "Edit Key"
 msgstr "Schlüssel bearbeiten"
 
+#. change passphrase
+#: src/keyeditdlg.c:91
+#, fuzzy
+msgid "Change _passphrase"
+msgstr "Falscher Passwortsatz"
+
 #. change expiry date
-#: src/keyeditdlg.c:91 src/keylist.c:196
+#: src/keyeditdlg.c:97 src/keylist.c:196
 msgid "Expiry Date"
 msgstr "Verfallsdatum"
 
-#: src/keyeditdlg.c:106
+#: src/keyeditdlg.c:112
 msgid "Change _expiration"
 msgstr "_Verfallsdatum ändern"
 
@@ -1027,70 +775,89 @@ msgstr "Sicherheitskopie von Schlüssel %s erstellen"
 msgid "_Backup to file:"
 msgstr "_Verzeichnis für Sicherheitskopie:"
 
-#: src/keygendlg.c:58
+#: src/keygendlg.c:54 src/keygenwizard.c:319 src/passwddlg.c:41
+#, fuzzy
 msgid ""
-"In \"Passphrase\" and \"Repeat passphrase\"\n"
+"In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
 msgstr ""
 "Bitte achten Sie darauf, daß Sie unter\n"
 "\"Passwortsatz\" und \"Passwortsatz wiederholen\"\n"
 "genau denselben Passwortsatz eingeben."
 
-#: src/keygendlg.c:122 src/keygenwizard.c:566
+#: src/keygendlg.c:61 src/keygenwizard.c:326 src/passwddlg.c:48
+msgid ""
+"You did not enter a passphrase.\n"
+"It is needed to protect your private key."
+msgstr ""
+"Sie haben keinen Passwortsatz eingegeben.\n"
+"Dieser wird aber benötigt, um Ihren geheimen\n"
+"Schlüssel vor unbefugtem Zugriff zu schützen."
+
+#: src/keygendlg.c:74 src/keygenwizard.c:340 src/passwddlg.c:61
+msgid ""
+"Warning: You have entered a passphrase\n"
+"that is obviously not secure.\n"
+"\n"
+"Please enter a new passphrase."
+msgstr ""
+"Warnung: Sie haben einen Passwortsatz eingegeben,\n"
+"der offensichtlich unsicher ist.\n"
+"\n"
+"Bitte geben Sie einen neuen Passwortsatz ein."
+
+#: src/keygendlg.c:79 src/keygenwizard.c:345 src/passwddlg.c:66
+msgid "_Enter new passphrase"
+msgstr "_Neuen Passwortsatz eingeben"
+
+#: src/keygendlg.c:80 src/keygenwizard.c:346 src/passwddlg.c:67
+msgid "Take this one _anyway"
+msgstr "Diesen _trotzdem verwenden"
+
+#: src/keygendlg.c:135 src/keygenwizard.c:564
 msgid "Generate key"
 msgstr "Schlüssel erzeugen"
 
-#: src/keygendlg.c:151
-msgid "_Encryption algorithm: "
+#: src/keygendlg.c:176
+#, fuzzy
+msgid "_Algorithm: "
 msgstr "_Verschlüsselungsalgorithmus: "
 
-#: src/keygendlg.c:163
+#: src/keygendlg.c:188
 msgid "_Key size (bits): "
 msgstr "_Schlüssellänge (Bit): "
 
-#: src/keygendlg.c:164
+#: src/keygendlg.c:189
 msgid "768"
 msgstr "768"
 
-#: src/keygendlg.c:165
+#: src/keygendlg.c:190
 msgid "1024"
 msgstr "1024"
 
-#: src/keygendlg.c:166
+#: src/keygendlg.c:191
 msgid "2048"
 msgstr "2048"
 
-#: src/keygendlg.c:190
+#: src/keygendlg.c:206
 msgid "_User ID: "
 msgstr "_Benutzerkennung: "
 
-#: src/keygendlg.c:200
+#: src/keygendlg.c:216
 msgid "_Email: "
 msgstr "_E-Mail: "
 
-#: src/keygendlg.c:210
+#: src/keygendlg.c:226
 msgid "_Comment: "
 msgstr "_Kommentar: "
 
-#: src/keygendlg.c:222
+#: src/keygendlg.c:238
 msgid "_Passphrase: "
 msgstr "_Passwortsatz: "
 
-#: src/keygendlg.c:234
+#: src/keygendlg.c:250
 msgid "_Repeat passphrase: "
 msgstr "_Passwortsatz wiederholen: "
-
-#: src/keygendlg.c:243
-msgid "generate re_vocation certificate"
-msgstr "_Rückrufurkunde erzeugen"
-
-#: src/keygendlg.c:246
-msgid "_send to key server"
-msgstr "_Zum Key-Server schicken"
-
-#: src/keygendlg.c:257
-msgid "_Generate key"
-msgstr "Schlüssel _erzeugen"
 
 #: src/keygenwizard.c:149
 msgid ""
@@ -1158,52 +925,13 @@ msgstr "Bemerkung:"
 msgid "Please choose a passphrase for the new key."
 msgstr "Bitte geben Sie den Passwortsatz für Ihren neuen Schlüssel an:"
 
-#: src/keygenwizard.c:260
+#: src/keygenwizard.c:260 src/passwddlg.c:113
 msgid "Passphrase: "
 msgstr "Passwortsatz: "
 
-#: src/keygenwizard.c:273
+#: src/keygenwizard.c:273 src/passwddlg.c:122
 msgid "Repeat Passphrase: "
 msgstr "Passwortsatz wiederholen: "
-
-#: src/keygenwizard.c:319
-#, fuzzy
-msgid ""
-"In \"Passphrase\" and \"Repeat passphrase\",\n"
-"you must enter the same passphrase."
-msgstr ""
-"Bitte achten Sie darauf, daß Sie unter\n"
-"\"Passwortsatz\" und \"Passwortsatz wiederholen\"\n"
-"genau denselben Passwortsatz eingeben."
-
-#: src/keygenwizard.c:326
-msgid ""
-"You did not enter a passphrase.\n"
-"It is needed to protect your private key."
-msgstr ""
-"Sie haben keinen Passwortsatz eingegeben.\n"
-"Dieser wird aber benötigt, um Ihren geheimen\n"
-"Schlüssel vor unbefugtem Zugriff zu schützen."
-
-#: src/keygenwizard.c:340
-msgid ""
-"Warning: You have entered a passphrase\n"
-"that is obviously not secure.\n"
-"\n"
-"Please enter a new passphrase."
-msgstr ""
-"Warnung: Sie haben einen Passwortsatz eingegeben,\n"
-"der offensichtlich unsicher ist.\n"
-"\n"
-"Bitte geben Sie einen neuen Passwortsatz ein."
-
-#: src/keygenwizard.c:345
-msgid "_Enter new passphrase"
-msgstr "_Neuen Passwortsatz eingeben"
-
-#: src/keygenwizard.c:346
-msgid "Take this one _anyway"
-msgstr "Diesen _trotzdem verwenden"
 
 #: src/keygenwizard.c:370
 msgid ""
@@ -1221,7 +949,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "_Sicherheitskopie anlegen"
 
-#: src/keygenwizard.c:386 src/keyring.c:852 src/keyring.c:879
+#: src/keygenwizard.c:386 src/keyring.c:859 src/keyring.c:886
 msgid "Do it _later"
 msgstr "Später _erledigen"
 
@@ -1245,10 +973,6 @@ msgstr ""
 "Herzlichen Glückwunsch!\n"
 "Sie haben erfolgreich Ihren neuen Schlüssel erzeugt. Dieser Schlüssel hat "
 "eine Länge von 1024 Bit und ist auf unbegrenzte Zeit gültig."
-
-#: src/keygenwizard.c:617 src/keygenwizard.c:621
-msgid "F_inish"
-msgstr "F_ertig"
 
 #: src/keyimportdlg.c:75
 msgid "Import public keys from file"
@@ -1290,7 +1014,7 @@ msgid ""
 "%i secret keys unchanged"
 msgstr ""
 
-#: src/keyimpseldlg.c:63 src/keyring.c:1305
+#: src/keyimpseldlg.c:63 src/keyring.c:1376
 msgid "No keys selected"
 msgstr "Keine Schlüssel ausgewählt"
 
@@ -1307,6 +1031,10 @@ msgstr "Schlüssel zum Importieren auswählen"
 #: src/keyimpseldlg.c:143
 msgid "_Import"
 msgstr "_Importieren"
+
+#: src/keyimpseldlg.c:157
+msgid "_Cancel"
+msgstr "_Abbrechen"
 
 #: src/keylist.c:197
 #, fuzzy
@@ -1335,29 +1063,29 @@ msgstr ""
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:375
+#: src/keyring.c:382
 msgid "No keys selected for signing."
 msgstr "Keine Schlüssel ausgewählt."
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:385
+#: src/keyring.c:392
 msgid "No private key for signing."
 msgstr "Kein geheimer Schlüssel zum signieren."
 
 #. Couldn't sign because the key was expired
-#: src/keyring.c:411
+#: src/keyring.c:418
 msgid "This key has expired! Unable to sign."
 msgstr ""
 
 #. Couldn't sign because the key was already signed
-#: src/keyring.c:417
+#: src/keyring.c:424
 msgid "This key has already been signed with your own!"
 msgstr ""
 
 #. Couldn't sign because there is no default key
-#: src/keyring.c:423
+#: src/keyring.c:430
 #, fuzzy
 msgid "You haven't selected a default key to sign with!"
 msgstr "Keine Dateien zum Signieren ausgewählt."
@@ -1365,18 +1093,18 @@ msgstr "Keine Dateien zum Signieren ausgewählt."
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:638
+#: src/keyring.c:645
 msgid "No keys selected to export."
 msgstr "Keine Schlüssel zum Exportieren ausgewählt."
 
 #. this shouldn't happen because the menu item should be grayed out
 #. * in this case
 #.
-#: src/keyring.c:705
+#: src/keyring.c:712
 msgid "No private key to backup."
 msgstr "Kein privater Schlüssel vorhanden."
 
-#: src/keyring.c:847
+#: src/keyring.c:854
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1384,11 +1112,11 @@ msgstr ""
 "Sie haben noch keinen geheimen Schlüssel. Wollen Sie jetzt einen erzeugen "
 "(empfohlen), oder dies später erledigen?"
 
-#: src/keyring.c:851
+#: src/keyring.c:858
 msgid "_Generate key now"
 msgstr "Jetzt Schlüssel _erzeugen"
 
-#: src/keyring.c:873
+#: src/keyring.c:880
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1396,250 +1124,314 @@ msgstr ""
 "Sie haben noch keine Sicherheitskopie Ihres geheimen Schlüssels. Wollen Sie "
 "jetzt einen Sicherheitskopie anlegen (empfohlen), oder dies später erledigen?"
 
-#: src/keyring.c:878
+#: src/keyring.c:885
 msgid "_Backup key now"
 msgstr "_Sicherheitskopie anlegen"
 
-#: src/keyring.c:987
+#: src/keyring.c:995
 msgid "/Edit/_Copy"
 msgstr "/Bearbeiten/_Kopieren"
 
-#: src/keyring.c:989
+#: src/keyring.c:997
 msgid "/Edit/_Paste"
 msgstr "/Bearbeiten/Ein_fügen"
 
-#: src/keyring.c:991
+#: src/keyring.c:999
 msgid "/Edit/sep1"
 msgstr "/Bearbeiten/sep1"
 
-#: src/keyring.c:998
+#: src/keyring.c:1006
 msgid "/_Keys"
 msgstr "/_Schlüssel"
 
-#: src/keyring.c:999
+#: src/keyring.c:1007
 msgid "/Keys/_New Key..."
 msgstr "/Schlüssel/_Neuer Schlüssel..."
 
-#: src/keyring.c:1001
+#: src/keyring.c:1009
 msgid "/Keys/_Delete Keys..."
 msgstr "/Schlüssel/_Löschen..."
 
-#: src/keyring.c:1003
+#: src/keyring.c:1011
 msgid "/Keys/sep1"
 msgstr "/Schlüssel/sep1"
 
-#: src/keyring.c:1004
+#: src/keyring.c:1012
 msgid "/Keys/_Sign Keys..."
 msgstr "/Schlüssel/_Signieren..."
 
-#: src/keyring.c:1005
+#: src/keyring.c:1013
 msgid "/Keys/Set _Owner Trust..."
 msgstr "/Schlüssel/_Vertrauen einstellen..."
 
-#: src/keyring.c:1006
+#: src/keyring.c:1014
 msgid "/Keys/_Edit Private Key..."
 msgstr "/Schlüssel/G_eheimen Schlüssel Bearbeiten..."
 
-#: src/keyring.c:1007
+#: src/keyring.c:1015
 msgid "/Keys/sep2"
 msgstr "/Schlüssel/sep2"
 
-#: src/keyring.c:1008
+#: src/keyring.c:1016
 msgid "/Keys/_Import Keys..."
 msgstr "/Schlüssel/_Importieren..."
 
-#: src/keyring.c:1009
+#: src/keyring.c:1017
 msgid "/Keys/E_xport Keys..."
 msgstr "/Schlüssel/E_xportieren..."
 
-#: src/keyring.c:1010
+#: src/keyring.c:1018
 msgid "/Keys/_Backup..."
 msgstr "/Schlüssel/Sicherheitskopie _anlegen..."
 
-#: src/keyring.c:1040
+#: src/keyring.c:1048
 msgid "/Keys/Export Keys..."
 msgstr "/Schlüssel/Exportieren..."
 
-#: src/keyring.c:1047
+#: src/keyring.c:1055
 msgid "/Keys/Delete Keys..."
 msgstr "/Schlüssel/Löschen..."
 
-#: src/keyring.c:1054
+#: src/keyring.c:1062
 msgid "/Edit/Copy"
 msgstr ""
 
-#: src/keyring.c:1062
+#: src/keyring.c:1070
 msgid "/Keys/Set Owner Trust..."
 msgstr "/Schlüssel/Vertrauen einstellen..."
 
-#: src/keyring.c:1070
+#: src/keyring.c:1078
 msgid "/Keys/Sign Keys..."
 msgstr "/Schlüssel/Signieren..."
 
-#: src/keyring.c:1078
+#: src/keyring.c:1086
 msgid "/Keys/Edit Private Key..."
 msgstr "/Schlüssel/Geheimen Schlüssel Bearbeiten..."
 
-#: src/keyring.c:1085
+#: src/keyring.c:1093
 #, fuzzy
 msgid "/Keys/Backup..."
 msgstr "/Schlüssel/Sicherheitskopie _anlegen..."
 
-#: src/keyring.c:1182 src/keysigndlg.c:102
+#: src/keyring.c:1110
+#, fuzzy
+msgid "/_Copy"
+msgstr "/Bearbeiten/_Kopieren"
+
+#: src/keyring.c:1112
+#, fuzzy
+msgid "/_Paste"
+msgstr "/Bearbeiten/Ein_fügen"
+
+#: src/keyring.c:1114
+#, fuzzy
+msgid "/_Delete Keys..."
+msgstr "/Schlüssel/_Löschen..."
+
+#: src/keyring.c:1117
+#, fuzzy
+msgid "/_Sign Keys..."
+msgstr "/Schlüssel/_Signieren..."
+
+#: src/keyring.c:1118
+#, fuzzy
+msgid "/Set _Owner Trust..."
+msgstr "/Schlüssel/_Vertrauen einstellen..."
+
+#: src/keyring.c:1119
+#, fuzzy
+msgid "/_Edit Private Key..."
+msgstr "/Schlüssel/G_eheimen Schlüssel Bearbeiten..."
+
+#: src/keyring.c:1121
+#, fuzzy
+msgid "/E_xport Keys..."
+msgstr "/Schlüssel/E_xportieren..."
+
+#: src/keyring.c:1122
+#, fuzzy
+msgid "/_Backup..."
+msgstr "/Schlüssel/Sicherheitskopie _anlegen..."
+
+#: src/keyring.c:1133
+#, fuzzy
+msgid "/Set Owner Trust..."
+msgstr "/Schlüssel/Vertrauen einstellen..."
+
+#: src/keyring.c:1141
+#, fuzzy
+msgid "/Sign Keys..."
+msgstr "/Schlüssel/Signieren..."
+
+#: src/keyring.c:1149
+#, fuzzy
+msgid "/Edit Private Key..."
+msgstr "/Schlüssel/Geheimen Schlüssel Bearbeiten..."
+
+#: src/keyring.c:1156
+#, fuzzy
+msgid "/Backup..."
+msgstr "/Schlüssel/Sicherheitskopie _anlegen..."
+
+#: src/keyring.c:1253 src/keysigndlg.c:106
 msgid "Fingerprint:"
 msgstr "Fingerabdruck:"
 
-#: src/keyring.c:1184
+#: src/keyring.c:1255
 msgid "Expires at:"
 msgstr "ungültig ab:"
 
-#: src/keyring.c:1186
+#: src/keyring.c:1257
 msgid "Owner Trust:"
 msgstr "Benutzervertrauen:"
 
-#: src/keyring.c:1188
+#: src/keyring.c:1259
 #, fuzzy
 msgid "Key Validity:"
 msgstr "Gültigkeit"
 
-#: src/keyring.c:1190
+#: src/keyring.c:1261
 msgid "Key Type:"
 msgstr "Art:"
 
-#: src/keyring.c:1192
+#: src/keyring.c:1263
 msgid "Created at:"
 msgstr "erzeugt am:"
 
-#: src/keyring.c:1195
+#: src/keyring.c:1266
 msgid "Details"
 msgstr "Details"
 
-#: src/keyring.c:1203
+#: src/keyring.c:1274
 #, fuzzy
 msgid "Show signatures on user name:"
 msgstr "Signatur der ausgewählten Datei prüfen"
 
-#: src/keyring.c:1223
+#: src/keyring.c:1294
 msgid "Signatures"
 msgstr "Signaturen"
 
-#: src/keyring.c:1243
+#: src/keyring.c:1314
 msgid "The key has both a private and a public part"
 msgstr "Dieser Schlüssel hat einen öffentlichen und einen geheimen Teil"
 
-#: src/keyring.c:1248
+#: src/keyring.c:1319
 msgid "The key has only a public part"
 msgstr "Dieser Schlüssel hat nur einen öffentlichen Teil"
 
-#: src/keyring.c:1276
+#: src/keyring.c:1347
 #, c-format
 msgid "%s %li bits"
 msgstr ""
 
-#: src/keyring.c:1309
+#: src/keyring.c:1380
 #, c-format
 msgid "%d keys selected"
 msgstr "%d Schlüssel ausgewählt"
 
-#: src/keyring.c:1336
+#: src/keyring.c:1407
 #, fuzzy
 msgid "All signatures"
 msgstr "Signaturen"
 
-#: src/keyring.c:1509
+#: src/keyring.c:1580
 msgid "Edit"
 msgstr "Ändern"
 
-#: src/keyring.c:1510
+#: src/keyring.c:1581
 #, fuzzy
 msgid "Edit the selected private key"
 msgstr "Gewählten Schlüssel bearbeiten"
 
-#: src/keyring.c:1511
+#: src/keyring.c:1582
 msgid "edit key"
 msgstr "Schlüssel bearbeiten"
 
-#: src/keyring.c:1519
+#: src/keyring.c:1590
 msgid "Remove the selected key"
 msgstr "Gewählten Schlüssel entfernen"
 
-#: src/keyring.c:1520
+#: src/keyring.c:1591
 msgid "remove key"
 msgstr "Schlüssel entfernen"
 
-#: src/keyring.c:1528
+#: src/keyring.c:1599
 msgid "Sign the selected key"
 msgstr "Gewählten Schlüssel signieren"
 
-#: src/keyring.c:1528
+#: src/keyring.c:1599
 msgid "sign key"
 msgstr "Schlüssel signieren"
 
-#: src/keyring.c:1535
+#: src/keyring.c:1606
 msgid "Import"
 msgstr "Import"
 
-#: src/keyring.c:1536
+#: src/keyring.c:1607
 msgid "Import Keys"
 msgstr "Schlüssel importieren"
 
-#: src/keyring.c:1536
+#: src/keyring.c:1607
 msgid "import keys"
 msgstr "Schlüssel importieren"
 
-#: src/keyring.c:1541
+#: src/keyring.c:1612
 msgid "Export"
 msgstr "Export"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1613
 msgid "Export Keys"
 msgstr "Schlüssel exportieren"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1613
 msgid "export keys"
 msgstr "Schlüssel exportieren"
 
-#: src/keyring.c:1555
+#: src/keyring.c:1626
 msgid "Brief"
 msgstr "Übersicht"
 
-#: src/keyring.c:1555
+#: src/keyring.c:1626
 msgid "Show Brief Keylist"
 msgstr "Schlüssel nur mit Benutzerkennung anzeigen"
 
-#: src/keyring.c:1556
+#: src/keyring.c:1627
 msgid "brief"
 msgstr "Übersicht"
 
-#: src/keyring.c:1567
+#: src/keyring.c:1638
 msgid "Detailed"
 msgstr "Details"
 
-#: src/keyring.c:1567
+#: src/keyring.c:1638
 msgid "Show Key Details"
 msgstr "Schlüssel mit Verfallsdatum und Vertrauenswerten anzeigen"
 
-#: src/keyring.c:1568
+#: src/keyring.c:1639
 msgid "detailed"
 msgstr "detailliert"
 
-#: src/keyring.c:1590
+#: src/keyring.c:1660
+msgid "Files"
+msgstr "Dateien"
+
+#: src/keyring.c:1661
 msgid "Open the File Manager"
 msgstr "Dateiverwaltung aufrufen"
 
-#: src/keyring.c:1591
+#: src/keyring.c:1662
 msgid "file manager"
 msgstr "Dateiverwaltung"
 
-#: src/keyring.c:1614
+#: src/keyring.c:1685
 msgid "Selected Default Key:"
 msgstr "Standard-Schlüssel:"
 
-#: src/keyring.c:1692
+#: src/keyring.c:1815
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - Schlüsselverwaltung"
 
-#: src/keyring.c:1723
+#: src/keyring.c:1846
 msgid "Keyring Editor"
 msgstr "Schlüsselverwaltung"
 
@@ -1651,7 +1443,7 @@ msgstr "Schlüssel signieren"
 msgid "Do you want to sign the following key?"
 msgstr "Wollen Sie den folgenden Schlüssel signieren?"
 
-#: src/keysigndlg.c:112
+#: src/keysigndlg.c:116
 msgid ""
 "Check the name and fingerprint carefully to be sure that it really is the "
 "key you want to sign."
@@ -1659,15 +1451,15 @@ msgstr ""
 "Überprüfen Sie sorgfältig den Namen und den Fingerabdruck, damit Sie sicher "
 "sind, daß dies der Schlüssel ist, den Sie signieren wollen."
 
-#: src/keysigndlg.c:120
+#: src/keysigndlg.c:124
 msgid "All user names in this key will be signed."
 msgstr ""
 
-#: src/keysigndlg.c:126
+#: src/keysigndlg.c:130
 msgid "The key will be signed with your default private key."
 msgstr "Der Schlüssel wird mit Ihrem Standard-Schlüssel signiert."
 
-#: src/keysigndlg.c:133
+#: src/keysigndlg.c:137
 msgid "Sign only _locally"
 msgstr "Nur _lokal signieren"
 
@@ -1684,6 +1476,12 @@ msgstr "Geheime Schlüssel exportieren"
 #, fuzzy
 msgid "Loading public keys"
 msgstr "Öffentlicher Schlüssel fehlt"
+
+#: src/options.c:248
+msgid ""
+"The private key you selected as default is no longer available.\n"
+"GPA will try to choose a new default key automatically."
+msgstr ""
 
 #. Create the dialog
 #: src/ownertrustdlg.c:105
@@ -1747,65 +1545,70 @@ msgid ""
 "other people's keys unless you really know what you are doing)\n"
 msgstr ""
 
-#: src/server_access.c:207
+#: src/passwddlg.c:101
+#, fuzzy
+msgid "Choose new passphrase"
+msgstr "_Neuen Passwortsatz eingeben"
+
+#: src/server_access.c:265
 #, fuzzy
 msgid "No error"
 msgstr "Fehler in der Netzwerkverbindung"
 
 # gpapa.c: Keyserver-Fehlermeldungen
-#: src/server_access.c:210
+#: src/server_access.c:268
 #, fuzzy
 msgid "Internal error"
 msgstr "Allgemeiner Fehler"
 
-#: src/server_access.c:213
+#: src/server_access.c:271
 #, fuzzy
 msgid "Operation not supported"
 msgstr "Algorithmus wird nicht unterstützt"
 
-#: src/server_access.c:216
+#: src/server_access.c:274
 msgid "Version mismatch"
 msgstr ""
 
-#: src/server_access.c:219
+#: src/server_access.c:277
 msgid "Internal keyserver error"
 msgstr ""
 
-#: src/server_access.c:222
+#: src/server_access.c:280
 msgid "Out of memory"
 msgstr ""
 
-#: src/server_access.c:225
+#: src/server_access.c:283
 msgid "Key not found"
 msgstr ""
 
-#: src/server_access.c:228
+#: src/server_access.c:286
 #, fuzzy
 msgid "Key already exists on server"
 msgstr "Schlüssel zum Key-Server gesendet."
 
-#: src/server_access.c:231
+#: src/server_access.c:289
 msgid "Key incomplete"
 msgstr ""
 
-#: src/server_access.c:234
+#: src/server_access.c:292
 #, fuzzy
 msgid "Could not contact keyserver"
 msgstr "_Zum Key-Server schicken"
 
-#: src/server_access.c:237
+#: src/server_access.c:295
 #, fuzzy
 msgid "Unknown Error"
 msgstr "[Unbekannte Benutzerkennung]"
 
-#: src/server_access.c:270
+#: src/server_access.c:328
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
 "Please wait."
 msgstr ""
 
-#: src/server_access.c:293 src/server_access.c:313
+#: src/server_access.c:351 src/server_access.c:371
 #, fuzzy, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -1817,13 +1620,13 @@ msgstr ""
 
 #. An error ocurred in the fork/exec: we assume that there is no plugin.
 #.
-#: src/server_access.c:376
+#: src/server_access.c:434
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
 msgstr ""
 
-#: src/server_access.c:448 src/server_access.c:493
+#: src/server_access.c:506 src/server_access.c:551
 #, fuzzy
 msgid "The keyserver you specified is not valid"
 msgstr "Kein Key-Server angegeben"
@@ -1857,11 +1660,11 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/siglist.c:108 src/verifydlg.c:296
+#: src/siglist.c:108 src/verifydlg.c:302
 msgid "Status"
 msgstr "Status"
 
-#: src/verifydlg.c:193
+#: src/verifydlg.c:199
 #, fuzzy
 msgid "Expired Key"
 msgstr "Schlüssel exportieren"
@@ -1869,19 +1672,226 @@ msgstr "Schlüssel exportieren"
 #. If we arrived here we know the key is available, the signature is
 #. * not bad, but it's not completely valid. So, the signature is good
 #. * but the key is not valid.
-#: src/verifydlg.c:201
+#: src/verifydlg.c:207
 msgid "Key NOT valid"
 msgstr ""
 
-#: src/verifydlg.c:322
+#: src/verifydlg.c:328
 #, fuzzy
 msgid "Signatures:"
 msgstr "Signaturen"
 
-#: src/verifydlg.c:338
+#: src/verifydlg.c:344
 #, fuzzy
 msgid "Verify files"
 msgstr "Datei prüfen"
+
+# ~ msgid "Show Warranty Information\n"
+# ~ msgstr "Gewährleistung\n"
+#~ msgid "Filename"
+#~ msgstr "Dateiname"
+
+#~ msgid "The currently selected filename."
+#~ msgstr "Der momentan ausgewählte Dateiname."
+
+#, fuzzy
+#~ msgid "Show file operations"
+#~ msgstr "Dateiaktionen anzeigen"
+
+#~ msgid "Whether buttons for creating/manipulating files should be displayed."
+#~ msgstr ""
+#~ "Sollen Knöpfe zum Erstellen bzw. Verwalten von Dateien angezeigt werden?"
+
+#~ msgid "Directories"
+#~ msgstr "Verzeichnisse"
+
+#~ msgid "_OK"
+#~ msgstr "_OK"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Cancel"
+#~ msgstr "Abbrechen"
+
+#~ msgid "Directory unreadable: %s"
+#~ msgstr "Verzeichnis nicht lesbar: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "Die Datei \"%s\" befindet sich auf einer anderen Maschine (%s)\n"
+#~ "und ist möglicherweise für dieses Programm nicht erreichbar.\n"
+#~ "Sind Sie sicher, dass Sie diese Datei auswählen möchten?"
+
+#~ msgid "Create Dir"
+#~ msgstr "Verzeichnis erstellen"
+
+#~ msgid "Delete File"
+#~ msgstr "Datei löschen"
+
+#~ msgid "Rename File"
+#~ msgstr "Datei umbenennen"
+
+#~ msgid "Error"
+#~ msgstr "Fehler"
+
+#~ msgid "Close"
+#~ msgstr "Schließen"
+
+#, fuzzy
+#~ msgid ""
+#~ "The directory name \"%s\" contains symbols that are not allowed in "
+#~ "filenames"
+#~ msgstr ""
+#~ "Der Verzeichnisname \"%s\" enthält Symbole, die nicht in Dateinamen "
+#~ "vorkommen dürfen."
+
+#~ msgid ""
+#~ "Error creating directory \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Fehler beim Erstellen des Verzeichnisses \"%s\": %s\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "You probably used symbols not allowed in filenames."
+#~ msgstr ""
+#~ "Sie haben wahrscheinlich Symbole benutzt, die nicht in Dateinamen "
+#~ "vorkommen dürfen."
+
+#~ msgid "Error creating directory \"%s\": %s\n"
+#~ msgstr "Fehler beim Erstellen des Verzeichnisses \"%s\": %s\n"
+
+#~ msgid "Create Directory"
+#~ msgstr "Verzeichnis erstellen"
+
+#~ msgid "_Directory name:"
+#~ msgstr "_Verzeichnisname:"
+
+#~ msgid "Directory name:"
+#~ msgstr "Verzeichnisname:"
+
+#~ msgid "C_reate"
+#~ msgstr "_Erstellen"
+
+#~ msgid "Create"
+#~ msgstr "Erstellen"
+
+#, fuzzy
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Der Dateiname \"%s\" enthält Symbole, die nicht in Dateinamen vorkommen "
+#~ "dürfen."
+
+#~ msgid ""
+#~ "Error deleting file \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Fehler beim Löschen der Datei \"%s\": %s\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "It probably contains symbols not allowed in filenames."
+#~ msgstr ""
+#~ "Sie enthält wahrscheinlich Symbole, die nicht in Dateinamen vorkommen "
+#~ "dürfen."
+
+#~ msgid "Error deleting file \"%s\": %s"
+#~ msgstr "Fehler beim Löschen der Datei \"%s\": %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "Datei \"%s\" wirklich löschen?"
+
+#~ msgid "_Delete"
+#~ msgstr "_Löschen"
+
+#~ msgid "Delete"
+#~ msgstr "Löschen"
+
+#, fuzzy
+#~ msgid ""
+#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Der Dateiname \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt "
+#~ "sind."
+
+#~ msgid ""
+#~ "Error renaming file to \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Fehler beim Umbenennen der Datei in \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Error renaming file \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Fehler beim Umbenennen der Datei \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Fehler beim Umbenennen der Datei \"%s\" in \"%s\": %s"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Neuer Name für Datei \"%s\":"
+
+#~ msgid "_Rename"
+#~ msgstr "_Umbenennen"
+
+#~ msgid "Rename"
+#~ msgstr "Umbenennen"
+
+#~ msgid "Selection: "
+#~ msgstr "Auswahl:"
+
+#~ msgid ""
+#~ "The filename %s couldn't be converted to UTF-8. Try setting the "
+#~ "environment variable G_BROKEN_FILENAMES."
+#~ msgstr ""
+#~ "Der Dateiname %s konnte nicht in UTF-8 umgewandelt werden. Versuchen Sie, "
+#~ "die Umgebungsvariable G_BROKEN_FILENAMES zu belegen."
+
+#~ msgid "Name too long"
+#~ msgstr "Diese Name ist zu lang."
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Der Dateiname konnte nicht umgewandelt werden."
+
+#~ msgid "01.01.2000"
+#~ msgstr "01.01.2000"
+
+#~ msgid "expire a_t"
+#~ msgstr "verfä_llt am"
+
+#~ msgid "_Prev"
+#~ msgstr "_Zurück"
+
+#~ msgid "_Next"
+#~ msgstr "_Weiter"
+
+#~ msgid ""
+#~ "In \"Passphrase\" and \"Repeat passphrase\"\n"
+#~ "you must enter the same passphrase."
+#~ msgstr ""
+#~ "Bitte achten Sie darauf, daß Sie unter\n"
+#~ "\"Passwortsatz\" und \"Passwortsatz wiederholen\"\n"
+#~ "genau denselben Passwortsatz eingeben."
+
+#~ msgid "generate re_vocation certificate"
+#~ msgstr "_Rückrufurkunde erzeugen"
+
+#~ msgid "_send to key server"
+#~ msgstr "_Zum Key-Server schicken"
+
+#~ msgid "_Generate key"
+#~ msgstr "Schlüssel _erzeugen"
+
+#~ msgid "F_inish"
+#~ msgstr "F_ertig"
 
 #~ msgid "User Identity/Role"
 #~ msgstr "Benutzerkennung"
@@ -2386,9 +2396,6 @@ msgstr "Datei prüfen"
 
 #~ msgid "Invalid file: bad MDC"
 #~ msgstr "Fehlerhafte Datei: ungültige MDC"
-
-#~ msgid "Bad passphrase"
-#~ msgstr "Falscher Passwortsatz"
 
 #~ msgid "Decryption failed"
 #~ msgstr "Entschlüsselung fehlgeschlagen"

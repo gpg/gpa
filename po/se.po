@@ -1,65 +1,63 @@
-# Chinese (Big5) Translation for Gnu Privacy Assistant
-# Copyright (C) 2001, 2002 Shell Hung
-# Shell Hung <shell@linux.org.hk>, 2001, 2002
-#
+# Written by Peter Neuhaus <pneuhaus@openit.de>
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: gpa-0.4.1\n"
+"Project-Id-Version: GPA 0.6.1\n"
 "POT-Creation-Date: 2003-01-24 15:41+0100\n"
-"PO-Revision-Date: 2002-12-18 12:39+0800\n"
-"Last-Translator: Shell Hung <shell@linux.org.hk>\n"
-"Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
+"PO-Revision-Date: 2003-01-24 15:37+0100\n"
+"Last-Translator: Mick Öhrberg <mick@ohrberg.org>\n"
+"Language-Team: Swedish <se@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=big5\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/encryptdlg.c:80 src/verifydlg.c:189
 msgid "Unknown Key"
-msgstr "¥¼ª¾ªº¤½Æ_"
+msgstr "Okänd nyckel"
 
 #: src/encryptdlg.c:96
 msgid "You are going to encrypt a file using the following key:"
-msgstr "±z¥¿¨Ï¥Î¥H¤Uªº±KÆ_¥[±K³o­ÓÀÉ®×:"
+msgstr "Data kommer att krypteras med följande nyckel:"
 
 #: src/encryptdlg.c:102
 msgid "However, it is not certain that the key belongs to that person."
-msgstr "¤£¹L, ±KÆ_¨Ã¤£ÄÝ©ó¹ï¤èªº"
+msgstr "Det är emellertid osäkert om nyckeln verkligen hör till denna person."
 
 #: src/encryptdlg.c:108
 msgid "Do you <b>really</b> want to use this key?"
-msgstr "±z½T©w­n¨Ï¥Î³o­Ó±KÆ_ ?"
+msgstr "Vill du <b>verkligen</b> använda denna nyckel?"
 
 #: src/encryptdlg.c:129 src/encryptdlg.c:168 src/verifydlg.c:194
 msgid "Revoked Key"
-msgstr "²¾°£±KÆ_"
+msgstr "Ogiltigförklarad nyckel"
 
 #: src/encryptdlg.c:144
 msgid "The following key has been revoked by it's owner:"
-msgstr "³o¤½Æ_¤w³Q¹ï¤è¨ú®ø¤F:"
+msgstr "Följande nyckel har ogiltigförklarats av sin ägare:"
 
 #: src/encryptdlg.c:149 src/encryptdlg.c:192
 msgid "And can not be used for encryption."
-msgstr "¦Ó¥B¤£¥i¥H¨Ï¥Î§@¬°¥[±K¤§¥Î."
+msgstr "och kan ej användas för kryptering."
 
 #: src/encryptdlg.c:183
 #, c-format
 msgid "The following key expired on %s:"
-msgstr "³o±KÆ_·|¦b %s ¥¢®Ä :"
+msgstr "Följande nyckels giltighetstid gick ut på %s:"
 
 #. Can't happen
 #: src/encryptdlg.c:221
 msgid "The key you selected is not available for encryption"
-msgstr "¨S¦³¥i¥Îªº¥[±K¨pÆ_"
+msgstr "Vald nyckel kan ej användas för kryptering."
 
 #. Can't happen
 #: src/encryptdlg.c:280
 msgid "You didn't select any key for signing"
-msgstr "¨S¦³¿ï¾ÜÃ±¸pªºÀÉ®×"
+msgstr "Du valde ingen nyckel för signering."
 
 #. Can't happen
 #: src/encryptdlg.c:289 src/filesigndlg.c:84
 msgid "The key you selected is not available for signing"
-msgstr "¨S¦³¿ï¾Ü§@Ã±¸pªº±KÆ_."
+msgstr "Vlad nyckel kan ej användas för signering."
 
 #: src/encryptdlg.c:465
 msgid ""
@@ -67,311 +65,318 @@ msgid ""
 "Currently, there is nobody who could read a\n"
 "file encrypted by you."
 msgstr ""
-"¨S¦³¥i¥Îªº¤½Æ_\n"
-"²{®É¨S¦³¤H¥i¥HÅª¨ú\n"
-"¥Ñ±z¥[±Kªº¤å¥ó"
+"Det finns inga tillgängliga öppna nycklar.\n"
+"Data som krypterats av dig kan därför inte\n"
+"läsas av någon."
 
 #: src/encryptdlg.c:473
 msgid "No secret keys available."
-msgstr "¨S¦³¥i¥Îªº¨pÆ_."
+msgstr "Hemlig nyckel ej tillgänglig."
 
 #: src/encryptdlg.c:481
 msgid "Encrypt files"
-msgstr "¥[±KÀÉ®×"
+msgstr "Kryptera filer"
 
 #: src/encryptdlg.c:515
 msgid "_Public Keys"
-msgstr "¤½Æ_ (&P)"
+msgstr "Ö_ppna Nycklar"
 
 #: src/encryptdlg.c:518
 msgid "_Sign"
-msgstr "Ã±¸p (&S)"
+msgstr "_Signera"
 
 #: src/encryptdlg.c:536 src/filesigndlg.c:313
 msgid "Sign _as "
-msgstr "Ã±¸p¬° (&a)"
+msgstr "_Signieren als"
 
 #: src/encryptdlg.c:539
 msgid "A_rmor"
-msgstr "¯Â¤å¦r (&r)"
+msgstr "ASCII-fö_rpackning"
 
 #. Can't happen
 #: src/expirydlg.c:63
 msgid "Please provide a correct date."
-msgstr "½Ð´£¨Ñ¥¿½T¤é´Á"
+msgstr "Ange giltigt datum."
 
 #: src/expirydlg.c:110
 #, fuzzy
 msgid "Change expiry date"
-msgstr "§ó§ï¦³®Ä¤é´Á"
+msgstr "Ändra giltighetstid."
 
 #: src/expirydlg.c:128
 msgid "_never expire"
-msgstr "¥Ã»·¥Í®Ä (&n)"
+msgstr "Oä_ndlig giltighet"
 
 #: src/expirydlg.c:133
 #, fuzzy
 msgid "_expire on:"
-msgstr "¥¢®Ä´Á¬° (&e)"
+msgstr "Giltigh_etstid utgår"
 
 #: src/fileman.c:132
 msgid "Open File"
-msgstr "¶}±ÒÀÉ®×"
+msgstr "Öppna fil"
 
 #: src/fileman.c:142
 msgid "The file is already open."
-msgstr "³o­ÓÀÉ®×¤w¸g¶}±Ò."
+msgstr "Filen är redan öppen."
 
 #: src/fileman.c:294 src/filesigndlg.c:129 src/keyeditdlg.c:163
 #: src/keyeditdlg.c:197 src/keyring.c:412
 msgid "Wrong passphrase!"
-msgstr "±K½X¿ù»~!"
+msgstr "Fel lösen!"
 
 #: src/fileman.c:303
 #, c-format
 msgid "The file \"%s\" contained no valid encrypted data."
-msgstr "ÀÉ®× \"%s\" ¨S¦³¥¿½Tªº¥[±K¸ê®Æ."
+msgstr "Filen \"%s\" innehåller inget giltigt kryptering."
 
 #: src/fileman.c:361 src/keyring.c:988
 msgid "/_File"
-msgstr "/ÀÉ®×"
+msgstr "/_Arkiv"
 
 #: src/fileman.c:362
 msgid "/File/_Open"
-msgstr "/ÀÉ®×/¶}±Ò (&O)"
+msgstr "/Arkiv/_Öppna"
 
 #: src/fileman.c:363
 msgid "/File/sep1"
-msgstr "/ÀÉ®×/sep1"
+msgstr "/Arkiv/sep1"
 
 #: src/fileman.c:364
 msgid "/File/_Sign"
-msgstr "/ÀÉ®×/Ã±¸p (&S)"
+msgstr "/Arkiv/_Signera"
 
 #: src/fileman.c:365
 msgid "/File/_Verify"
-msgstr "/ÀÉ®×/ÅçÃÒ (&V)"
+msgstr "/Arkiv/_Verifiera"
 
 #: src/fileman.c:366
 msgid "/File/_Encrypt"
-msgstr "/ÀÉ®×/¥[±K (&E)"
+msgstr "/Arkiv/_Kryptera"
 
 #: src/fileman.c:367
 msgid "/File/_Decrypt"
-msgstr "/ÀÉ®×/¸Ñ±K (&D)"
+msgstr "/Arkiv/_Avkryptera"
 
 #: src/fileman.c:368
 msgid "/File/sep2"
-msgstr "/ÀÉ®×/sep2"
+msgstr "/Arkiv/sep2"
 
 #: src/fileman.c:369 src/keyring.c:989
 msgid "/File/_Close"
-msgstr "/ÀÉ®×/Ãö³¬ (&C)"
+msgstr "/Arkiv/Stäng _fönster"
 
 #: src/fileman.c:370 src/keyring.c:991
 msgid "/File/_Quit"
-msgstr "/ÀÉ®×/Â÷¶} (&Q)"
+msgstr "/Arkiv/A_vsluta"
 
 #: src/fileman.c:373 src/keyring.c:994
 msgid "/_Edit"
-msgstr "/½s¿è"
+msgstr "/_Ändra"
 
 #: src/fileman.c:374 src/keyring.c:1000
 msgid "/Edit/Select _All"
-msgstr "/½s¿è/¥þ³¡¿ï¾Ü (&A)"
+msgstr "/Ändra/Välj _alla"
 
 #: src/fileman.c:375 src/keyring.c:1001
 msgid "/Edit/sep2"
-msgstr "/½s¿è/sep2"
+msgstr "/Ändra/sep2"
 
 #: src/fileman.c:376 src/keyring.c:1002
 msgid "/Edit/Pr_eferences..."
-msgstr "/½s¿è/³]©w (&E)"
+msgstr "/Ändra/_Inställningar"
 
 #: src/fileman.c:380 src/keyring.c:1021
 msgid "/_Windows"
-msgstr "/µøµ¡"
+msgstr "/_Fönster"
 
 #: src/fileman.c:381 src/keyring.c:1022
 msgid "/Windows/_Filemanager"
-msgstr "/µøµ¡/ÀÉ®×ºÞ²z (&F)"
+msgstr "/Fönster/_Filhanterare"
 
 #: src/fileman.c:382 src/keyring.c:1023
 msgid "/Windows/_Keyring Editor"
-msgstr "/µøµ¡/Æ_°é½s¿è¾¹ (&K)"
+msgstr "/Fönster/_Nyckelringshanterare"
 
 #: src/fileman.c:406
 msgid "File"
-msgstr "ÀÉ®×"
+msgstr "Arkiv"
 
 #: src/fileman.c:414
 msgid "Files in work"
-msgstr "ÀÉ®×°õ¦æ¤¤"
+msgstr "Filer i process"
 
 #: src/fileman.c:486
 msgid "Open a file"
-msgstr "¶}±ÒÀÉ®×"
+msgstr "Öppna en fil"
 
 #: src/fileman.c:486
 msgid "open file"
-msgstr "¶}±ÒÀÉ®×"
+msgstr "Öppen fil"
 
 #: src/fileman.c:491 src/keyring.c:1598
 msgid "Sign"
-msgstr "Ã±¸p"
+msgstr "Signera"
 
 #: src/fileman.c:492
 msgid "Sign the selected file"
-msgstr "Ã±¸p¤w¿ï¾ÜÀÉ®×"
+msgstr "Signera markerad fil"
 
 #: src/fileman.c:492
 msgid "sign file"
-msgstr "ÀÉ®×Ã±¸p"
+msgstr "signera fil"
 
 #: src/fileman.c:496
 msgid "Verify"
-msgstr "ÅçÃÒ"
+msgstr "Verifiera"
 
 #: src/fileman.c:497
 msgid "Check signatures of selected file"
-msgstr "ÀË¬d¤w¿ï¾ÜÀÉ®×ªºÃ±¸p"
+msgstr "Verifiera signatur på markerad fil"
 
 #: src/fileman.c:497
 msgid "verify file"
-msgstr "ÅçÃÒÀÉ®×"
+msgstr "Verifiera fil"
 
 #: src/fileman.c:501
 msgid "Encrypt"
-msgstr "¥[±K"
+msgstr "Kryptera"
 
 #: src/fileman.c:502
 msgid "Encrypt the selected file"
-msgstr "¥[±K¤w¿ï¾ÜÀÉ®×"
+msgstr "Kryptera markerad fil"
 
 #: src/fileman.c:502
 msgid "encrypt file"
-msgstr "¥[±KÀÉ®×"
+msgstr "kryptera fil"
 
 #: src/fileman.c:507
+#, fuzzy
 msgid "Decrypt"
-msgstr "¸Ñ±K"
+msgstr "Avkryptera"
 
 #: src/fileman.c:508
 msgid "Decrypt the selected file"
-msgstr "¸Ñ±K¤w¿ï¾ÜÀÉ®×"
+msgstr "Avkrytpera markerad fil"
 
 #: src/fileman.c:508
 msgid "decrypt file"
-msgstr "¸Ñ±KÀÉ®×"
+msgstr "avkryptera fil"
 
 #: src/fileman.c:520 src/keyring.c:1651
 msgid "Open the Preferences dialog"
-msgstr "¶}±Ò³]©wµøµ¡"
+msgstr "Öppna Inställningsdialogen"
 
 #: src/fileman.c:521 src/keyring.c:1652
 msgid "preferences"
-msgstr "³]©w"
+msgstr "inställningar"
 
 #: src/fileman.c:529 src/keyring.c:1667
 msgid "Help"
-msgstr "¨D§U"
+msgstr "Hjälp"
 
 #: src/fileman.c:530 src/keyring.c:1668
 msgid "Understanding the GNU Privacy Assistant"
-msgstr "¤F¸ÑGNU Privacy Assistant"
+msgstr "Hur funkar GNU Privacy Assistant?"
 
 #: src/fileman.c:531 src/keyring.c:1669
+#, fuzzy
 msgid "help"
-msgstr "¨D§U"
+msgstr "hjälp"
 
 #: src/fileman.c:553
 msgid "GNU Privacy Assistant - File Manager"
-msgstr "GNU Privacy Assistant - ÀÉ®×ºÞ²z"
+msgstr "GNU Privacy Assistant - Filhanterare"
 
 #: src/filesigndlg.c:165
 msgid ""
 "Internal error:\n"
 "Invalid sign mode"
 msgstr ""
-"¤º³¡¿ù»~ :\n"
-"¤£¥¿½TªºÃ±¸p¼Ò¦¡"
+"Internt fel:\n"
+"Ogiltigt signeringsläge"
 
 #: src/filesigndlg.c:191
 msgid "No key selected!"
-msgstr "¨S¦³¿ï¾ÜÆ_"
+msgstr "Ingen nyckel markerad!"
 
 #: src/filesigndlg.c:228
 msgid ""
 "No secret keys available for signing.\n"
 "Please generate or import a secret key first."
 msgstr ""
-"¨S¦³¥i¥Îªº¨pÆ_¨ÑÃ±¸p.\n"
-"½Ð¥ý¶×¤J©Î«Ø¥ß¨pÆ_."
+"Ingen hemlig nyckel tillgänglig för signering.\n"
+"Skapa eller importera en hemlig nyckel först."
 
 #. if
 #: src/filesigndlg.c:234
 msgid "Sign Files"
-msgstr "Ã±¸pÀÉ®×"
+msgstr "Signera filer"
 
 #: src/filesigndlg.c:249
 msgid "Signing Mode"
-msgstr "Ã±¸p¤¤"
+msgstr "Signeringsläge"
 
 #: src/filesigndlg.c:261
 msgid "_cleartext signature"
-msgstr "¯Â¤å¦rÃ±¸p (&C)"
+msgstr "Signatur i klar_text"
 
 #: src/filesigndlg.c:267 src/filesigndlg.c:282
 msgid "sign in separate _file"
-msgstr "Ã±¸p¬°¿W¥ßÀÉ®× (&f)"
+msgstr "Signatur i separat _fil"
 
 #: src/filesigndlg.c:271
 msgid "si_gn and compress"
-msgstr "Ã±¸p¤ÎÀ£ÁY (&g)"
+msgstr "Signera och _komprimera"
 
 #: src/filesigndlg.c:276
 msgid "sign, do_n't compress"
-msgstr "Ã±¸p¦ý¤£À£ÁY (&n)"
+msgstr "Signera, komprimera _ej"
 
 #: src/filesigndlg.c:291 src/keyexportdlg.c:202
 msgid "a_rmor"
-msgstr "¯Â¤å¦r (&r)"
+msgstr "ASCII-_förpackning"
 
 #: src/gpa.c:238
+#, fuzzy
 msgid "display this help and exit"
-msgstr "Åã¥Ü¨D§U°T®§¤ÎÂ÷¶}"
+msgstr "Visa hjälp och avsluta sedan"
 
 #: src/gpa.c:239
+#, fuzzy
 msgid "output version information and exit"
-msgstr "Åã¥Üª©¥»¸ê®Æ¤ÎÂ÷¶}"
+msgstr "Visa versionoch avsluta sedan"
 
 #: src/gpa.c:240
 msgid "open keyring editor (default)"
-msgstr "¶}±ÒÆ_°é½s¿è¾¹ (¹w³])"
+msgstr "Starta nyckelringshanteraren"
 
 #: src/gpa.c:241
 msgid "open filemanager"
-msgstr "¶}±ÒÀÉ®×ºÞ²z­û"
+msgstr "Öppna filhanteraren"
 
 #: src/gpa.c:242
+#, fuzzy
 msgid "read options from file"
-msgstr "¥ÑÀÉ®×¤¤Åª¨ú¿ï¶µ"
+msgstr "Läs konfigurering från fil"
 
 #: src/gpa.c:266
+#, fuzzy
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
 msgstr ""
-"»yªk: gpa [¿ï¶µ]\n"
-"GnuPGªº¹Ï¹³¤¶­±\n"
+"Syntax: gpa [val]\n"
+"Grafiskt användargränssnitt till GnuPG\n"
 
 #: src/gpa.c:268
+#, fuzzy
 msgid "Options"
-msgstr "¿ï¶µ"
+msgstr "/_Val"
 
 #: src/gpa.c:274
 msgid "Please report bugs to <"
-msgstr "¦^³ø¯äÂÎ¦Ü <"
+msgstr "Rapportera buggar till <"
 
 #: src/gpa.c:274
 msgid ">.\n"
@@ -379,82 +384,84 @@ msgstr ">.\n"
 
 #: src/gpapastrings.c:31
 msgid "days"
-msgstr "¤é"
+msgstr "dagar"
 
 #: src/gpapastrings.c:32
 msgid "weeks"
-msgstr "¬P´Á"
+msgstr "veckor"
 
 #: src/gpapastrings.c:33
 msgid "months"
-msgstr "¤ë"
+msgstr "månader"
 
 #: src/gpapastrings.c:34
 msgid "years"
-msgstr "¦~"
+msgstr "år"
 
 #: src/gpapastrings.c:74
 msgid "never expires"
-msgstr "¥Ã»·¥Í®Ä"
+msgstr "oändlig giltighetstid"
 
 #: src/gpapastrings.c:92
 msgid "unknown"
-msgstr "¤£ª¾¦W"
+msgstr "okänt"
 
 #. User Name
 #: src/gpawidgets.c:72 src/gpgmetools.c:506 src/gpgmetools.c:513
 #: src/keyring.c:1249 src/keysigndlg.c:101
 msgid "User Name:"
-msgstr "¥ÎªÌ¦WºÙ :"
+msgstr "Användarnamn:"
 
 #: src/gpawidgets.c:72 src/keysigndlg.c:101
+#, fuzzy
 msgid "User Names:"
-msgstr "¥ÎªÌ¦WºÙ :"
+msgstr "Användarnamn:"
 
 #. Key ID
 #: src/gpawidgets.c:78 src/gpgmetools.c:507 src/gpgmetools.c:514
 #: src/keyring.c:1251
 msgid "Key ID:"
-msgstr "±KÆ_ ID:"
+msgstr "Nyckelidentitet:"
 
 #: src/gpawidgets.c:99 src/keylist.c:195 src/siglist.c:82 src/siglist.c:102
 #: src/verifydlg.c:296
 msgid "Key ID"
-msgstr "±KÆ_ID"
+msgstr "Nyckelidentitet"
 
 #: src/gpawidgets.c:99 src/keylist.c:194 src/siglist.c:88 src/siglist.c:114
 #: src/verifydlg.c:308
 msgid "User Name"
-msgstr "¥ÎªÌ¦WºÙ"
+msgstr "Användarnamn"
 
 #: src/gpawidgets.c:343
 msgid "Expiration"
-msgstr "¦³®Ä´Á"
+msgstr "Giltighetsupphörande"
 
 #: src/gpawidgets.c:350
 msgid "_indefinitely valid"
-msgstr "¤£¥¿½Tªº¦Xªk (&i)"
+msgstr "_obegränsad giltighetstid"
 
 #: src/gpawidgets.c:359
 msgid "expire _after"
-msgstr "¥¢®Ä¦Û (&a)"
+msgstr "ogiltig _efter"
 
 #: src/gpawidgets.c:378
 #, fuzzy
 msgid "expire o_n:"
-msgstr "¥¢®Ä´Á¬° (&e)"
+msgstr "Giltigh_etstid utgår"
 
 #. this should never happen
 #: src/gpawidgets.c:451 src/keygendlg.c:285
+#, fuzzy
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
 msgstr ""
-"!°õ¦æ¿ù»~!\n"
-"¦³®Ä´Á¤£ªkªº´¡¤J¼Ò¦¡."
+"!KATASTROFALT FEL!\n"
+"Ogiltigt införande av datum för upphörande av giltighet."
 
 #: src/gpgmetools.c:32
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
 "(invoked from file %s, line %i):\n"
@@ -463,12 +470,12 @@ msgid ""
 "\n"
 "The application will be terminated"
 msgstr ""
-"GPGME µ{¦¡®wªºÄY­«¿ù»~ \n"
-"(¦b %s ¦æ %i ¤¤µo¥Í):\n"
+"Kritiskt fel i GPGme biblioteket\n"
+"(anrop från fil %s, rad %i):\n"
 "\n"
 "\t%s\n"
 "\n"
-"µ{¦¡·|³Q²×¤î"
+"Applikation kommer nu att avslutas."
 
 #: src/gpgmetools.c:84 src/keyexportdlg.c:238
 #, c-format
@@ -476,11 +483,12 @@ msgid ""
 "The file %s already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
-"ÀÉ®× %s ¤w¸g¦s¦b.\n"
-"­n¶i¦æÂÐ¼g¶Ü?"
+"Filen existerar redan.\n"
+"Vill du skriva över?"
 
 #. Get the keys and write them into the file
 #: src/gpgmetools.c:320
+#, fuzzy
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -488,10 +496,10 @@ msgid ""
 "************************************************************************\n"
 "\n"
 msgstr ""
-"****************************************\n"
-"* Äµ§i: ³o­ÓÀÉ®×¬O±KÆ_ªº³Æ¥÷. ½Ð«O¦s¦b *\n"
-"* ¦w¥þªº¦a¤è                           *\n"
-"****************************************\n"
+"************************************************************************\n"
+"* VARNING: Denna fil är en kopia av din hemliga nyckel. Förvara den    *\n"
+"*                            på ett säkert ställe!                     *\n"
+"************************************************************************\n"
 "\n"
 
 #: src/gpgmetools.c:325
@@ -499,113 +507,122 @@ msgid ""
 "The key backed up in this file is:\n"
 "\n"
 msgstr ""
-"¤w³Æ¥÷ªºÆ_¹ï¦bÀÉ®×ªº¬O :\n"
+"Nyckeln som sparats i denna fil är:\n"
 "\n"
 
 #: src/gpgmetools.c:383
 msgid "DSA and ElGamal (default)"
-msgstr "DSA ¤Î EIGamal (¹w³])"
+msgstr "DSA och ElGamal (standard)"
 
 #: src/gpgmetools.c:384
 msgid "DSA (sign only)"
-msgstr "¥uÃ±¸pªºDSA"
+msgstr "DSA (endast signering)"
 
 #: src/gpgmetools.c:385
 msgid "RSA (sign only)"
-msgstr "¥uÃ±¸pªº RSA"
+msgstr "RSA (endast signering)"
 
 #: src/gpgmetools.c:416 src/gpgmetools.c:464 src/gpgmetools.c:769
+#, fuzzy
 msgid "Unknown"
-msgstr "¤£ª¾¦W"
+msgstr "Okänt"
 
 #: src/gpgmetools.c:419
 msgid "Never"
-msgstr "¥Ã¤£«H¥ô"
+msgstr "Aldrig"
 
 #: src/gpgmetools.c:422
+#, fuzzy
 msgid "Marginal"
-msgstr "³¡¥÷«H¥ô"
+msgstr "Marignell"
 
 #: src/gpgmetools.c:425
+#, fuzzy
 msgid "Full"
-msgstr "§¹¥þ«H¥ô"
+msgstr "Fullständig"
 
 #: src/gpgmetools.c:428
 msgid "Ultimate"
-msgstr "¥Ã»·«H¥ô"
+msgstr "Ultimat"
 
 #: src/gpgmetools.c:447 src/gpgmetools.c:633 src/gpgmetools.c:780
+#, fuzzy
 msgid "Revoked"
-msgstr "²¾°£"
+msgstr "Ogiltigförklarat"
 
 #: src/gpgmetools.c:451 src/gpgmetools.c:774
+#, fuzzy
 msgid "Expired"
-msgstr "¤w¸g¹L®É"
+msgstr "giltighet upphört"
 
 #: src/gpgmetools.c:456
+#, fuzzy
 msgid "Disabled"
-msgstr "¤w¸g¥¢®Ä"
+msgstr "Otillämpligt"
 
 #: src/gpgmetools.c:460
 msgid "Incomplete"
-msgstr "¤£§¹¾ãªº"
+msgstr "Ej fullständigt"
 
 #: src/gpgmetools.c:469
 msgid "Fully Valid"
-msgstr "§¹¥þ¦Xªkªº"
+msgstr "Fullt giltig"
 
 #: src/gpgmetools.c:504
 msgid "Please enter the passphrase for the following key:"
-msgstr "¿é¤J¥H¤U±KÆ_ªº±K½X:"
+msgstr "Ange lösen för följande nyckel:"
 
 #: src/gpgmetools.c:512
 msgid "Wrong passphrase, please try again:"
-msgstr "±K½X¿ù»~, ½Ð¦A¹Á¸Õ :"
+msgstr "Felaktigt lösen - försök igen:"
 
 #: src/gpgmetools.c:535
 msgid "Enter Passphrase"
-msgstr "¿é¤J±K½X"
+msgstr "Ange lösen"
 
 #. Duplicate it to make sure it can be g_free'd
 #: src/gpgmetools.c:727 src/verifydlg.c:236
 msgid "[Unknown user ID]"
-msgstr "[¤£¦W¥ÎªÌID]"
+msgstr "[Okänd användaridentitet]"
 
 #: src/gpgmetools.c:764 src/verifydlg.c:179
+#, fuzzy
 msgid "Valid"
-msgstr "¥¿½T"
+msgstr "Giltig"
 
 #: src/gpgmetools.c:767 src/verifydlg.c:184
+#, fuzzy
 msgid "Bad"
-msgstr "¤£¦Xªkªº"
+msgstr "Felaktigt"
 
 #: src/gtktools.c:311
 msgid "GPA Error"
-msgstr "GPA ¿ù»~"
+msgstr "GPA fel"
 
 #: src/gtktools.c:344
 msgid "GPA Message"
-msgstr "GPA °T®§"
+msgstr "GPA Meddelande"
 
 #: src/helpmenu.c:183
+#, fuzzy
 msgid "About GPA"
-msgstr "Ãö©óGPA"
+msgstr "Om GPA"
 
 #: src/helpmenu.c:220
 msgid "Brought to you by:"
-msgstr "¥Ñ¥L­Ì±aµ¹±zªº¬O:"
+msgstr "Skapat av:"
 
 #: src/helpmenu.c:256
 msgid "GPA is free software under the"
-msgstr "GPA ¬O¦Û¥Ñ³n¥ó, ¨Ã¥H"
+msgstr "GPA är fri mjukvara under"
 
 #: src/helpmenu.c:260
 msgid "GNU General Public License."
-msgstr "GNU ¤½²³³\¥iµý"
+msgstr "GNU General Public License."
 
 #: src/helpmenu.c:264
 msgid "For news see:"
-msgstr "·s»D¤§¥Î:"
+msgstr "För nyheter och info, se:"
 
 #: src/helpmenu.c:268
 msgid "http://www.gnupg.org"
@@ -613,39 +630,44 @@ msgstr "http://www.gnupg.org"
 
 #: src/helpmenu.c:345
 msgid "GNU general public license"
-msgstr "GNU ¤½²³³\¥iµý"
+msgstr "GNU general public license"
 
 #: src/helpmenu.c:365
 msgid "_GNU general public license"
-msgstr "GNU ¤½²³³\¥iµý (&G)"
+msgstr "_GNU general public license"
 
 #: src/helpmenu.c:380
 msgid "_Close"
-msgstr "Ãö³¬ (&C)"
+msgstr "_Stäng"
 
 #: src/helpmenu.c:394
 msgid "Show Help Text\n"
-msgstr "Åã¥Ü¨D§U¤å¦r\n"
+msgstr "Visa hjälptext\n"
 
 #: src/helpmenu.c:402
+#, fuzzy
 msgid "/_Help"
-msgstr "/¨D§U"
+msgstr "_Hjälp"
 
 #: src/helpmenu.c:404
+#, fuzzy
 msgid "/Help/_Contents"
-msgstr "/¨D§U/¤º®e (&L)"
+msgstr "/Hjälp/_Innehåll"
 
 #: src/helpmenu.c:407
+#, fuzzy
 msgid "/Help/_License"
-msgstr "/¨D§U/³\¥iµý (&L)"
+msgstr "/Info/_Licens"
 
 #: src/helpmenu.c:408
+#, fuzzy
 msgid "/Help/_About"
-msgstr "/¨D§U/Ãö©ó (&A)"
+msgstr "/Info/_Om"
 
 #: src/keydeletedlg.c:39
+#, fuzzy
 msgid "Removing Secret Key"
-msgstr "²¾°£±KÆ_"
+msgstr "Readerar privat nyckel"
 
 #: src/keydeletedlg.c:53
 msgid ""
@@ -654,24 +676,26 @@ msgid ""
 "\n"
 "Are you really sure you want to delete it?"
 msgstr ""
-"¦pªG±z§R°£³o­Ó±KÆ_, ±z±N¤£¯à¨Ï¥Î¥Ñ³o­Ó±KÆ_¥[±K\n"
-"ªºÀÉ®×.\n"
+"Om du raderar denna nyckel kommer du inte att kunna\n"
+"läsa meddelanden som krypterats med den.\n"
 "\n"
-"­n½T©w§R°£¶Ü ?"
+"Är du verklien säker på att du vill radera den?"
 
 #: src/keydeletedlg.c:86
 msgid "Remove Key"
-msgstr "²¾°£±KÆ_"
+msgstr "Radera nyckel"
 
 #: src/keydeletedlg.c:99
 msgid "You have selected the following key for removal:"
-msgstr "±z¿ï¾Ü²¾°£¥H¤Uªº±KÆ_:"
+msgstr "Du har angett att du vill radera följande nyckel:"
 
 #: src/keydeletedlg.c:109
 msgid ""
 "This key has a secret key. Deleting this key cannot be undone, unless you "
 "have a backup copy."
-msgstr "³o±KÆ_¥]§t¨pÆ_. §R°£«á¤£½Æ­ì, °£«D±z¦³³Æ¥÷."
+msgstr ""
+"Detta är en privat nyckel. Raderar du denna nyckel är de för evigt borta, "
+"såvida du inte har en säkerhetskopia av den."
 
 #: src/keydeletedlg.c:118
 msgid ""
@@ -679,50 +703,53 @@ msgid ""
 "although you may be able to get a new copy  from the owner or from a key "
 "server."
 msgstr ""
-"³o¬O¤½Æ_. §R°£«á¤£¯à»´©ö½Æ­ì, °£«D±z¥i¥H±q¾Ö¦³¤H©ÎKey Server¤¤¨ú±o·s¤½Æ_."
+"Detta är en öppen nyckel. Raderar du denna nyckel kan du vara tvungen att "
+"kontakta nyckelägaren för en ny nyckel, eller söka upp den på en "
+"nyckelserver."
 
 #: src/keydeletedlg.c:127
 msgid "Are you sure you want to delete this key?"
-msgstr "±z½T©w­n§R°£³o±KÆ_?"
+msgstr "Är du säker på att du vill radera denna nyckel?"
 
 #: src/keyeditdlg.c:74
 msgid "Edit Key"
-msgstr "­×§ï±KÆ_"
+msgstr "Ändra nyckel"
 
 #. change passphrase
 #: src/keyeditdlg.c:91
 #, fuzzy
 msgid "Change _passphrase"
-msgstr "±K½X¿ù»~!"
+msgstr "Falscher Passwortsatz"
 
 #. change expiry date
 #: src/keyeditdlg.c:97 src/keylist.c:196
 msgid "Expiry Date"
-msgstr "¦³®Ä¤é´Á"
+msgstr "Giltighetstid utgår"
 
 #: src/keyeditdlg.c:112
 msgid "Change _expiration"
-msgstr "§ïÅÜ¦³®Ä¤é´Á"
+msgstr "_Ändra utgång av giltighetstid"
 
 #: src/keyexportdlg.c:80
 msgid "Export public keys to file"
-msgstr "¿é¥X¤½Æ_¬°ÀÉ®×"
+msgstr "Exportera öppen nyckel till fil"
 
 #: src/keyexportdlg.c:145
+#, fuzzy
 msgid "Export Key"
-msgstr "¶×¥X±KÆ_"
+msgstr "Exportera nyckel"
 
 #: src/keyexportdlg.c:169
 msgid "E_xport to file:"
-msgstr "¿é¥X¦ÜÀÉ®× (&x):"
+msgstr "E_xportera till fil: "
 
 #: src/keyexportdlg.c:179 src/keyexportdlg.c:341 src/keyimportdlg.c:171
 msgid "B_rowse..."
-msgstr "ÂsÄý (&r)"
+msgstr "_Bläddra..."
 
 #: src/keyexportdlg.c:187
 msgid "_Key server:"
-msgstr "¤½Æ_¦øªA¾¹ (&K):"
+msgstr "_Nyckelserver: "
 
 #: src/keyexportdlg.c:254
 #, c-format
@@ -734,42 +761,46 @@ msgid ""
 "This is sensitive information, and should be stored carefully\n"
 "(for example, in a floppy disk kept in a safe place)."
 msgstr ""
-"±KÆ_¤w¸g³Q½Æ»s¨ì·sÀÉ®× :\n"
+"En kopia av din privata nyckel har skapats i filen:\n"
 "\n"
 "\t\"%s\"\n"
 "\n"
-"½Ð¤p¤ß«O¦s³o­ÓÀÉ®×\n"
-"(¨Ò¦p, Àx¦s¦bºÏºÐ¤ù¤¤¨Ã©ñ¦b¦w¥þ¦a¤è¤¤¦w¸m)."
+"Detta är känslig information som bör bevaras på ett noggrannt utvalt "
+"ställe,\n"
+"t.ex. på en diskett i ett kassaskåp."
 
 #: src/keyexportdlg.c:295
+#, fuzzy
 msgid "Backup Keys"
-msgstr "³Æ¥÷±KÆ_"
+msgstr "Säkerhetskopiera nyckel"
 
 #: src/keyexportdlg.c:321
 #, c-format
 msgid "Generating backup of key: %s"
-msgstr "¥¿¦b«Ø¥ß %s ªº³Æ¥÷"
+msgstr "Skapar säkerhetskopia av nyckel: %s"
 
 #. File name entry
 #: src/keyexportdlg.c:328
+#, fuzzy
 msgid "_Backup to file:"
-msgstr "¿é¥X¦ÜÀÉ®× (&B):"
+msgstr "_Säkerhetskopia till fil: "
 
 #: src/keygendlg.c:54 src/keygenwizard.c:319 src/passwddlg.c:41
+#, fuzzy
 msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
 msgstr ""
-"¦b \"±K½X\"¤Î\"­«½Æ±K½X\",\n"
-"±z»Ý­n¿é¤J¬Û¦Pªº±K½X."
+"För \"Lösen\" und \"Repetera lösen\"\n"
+"måste du ange exakt samma lösen."
 
 #: src/keygendlg.c:61 src/keygenwizard.c:326 src/passwddlg.c:48
 msgid ""
 "You did not enter a passphrase.\n"
 "It is needed to protect your private key."
 msgstr ""
-"±z¨Ã¨S¦³¿é¤J±K½X.\n"
-"³o­Ó±K½X¬O»Ý­n¥Î§@«OÅ@±KÆ_ªº."
+"Du angav inget lösen. Du behöver ett lösen för att\n"
+"skydda din privata nyckel."
 
 #: src/keygendlg.c:74 src/keygenwizard.c:340 src/passwddlg.c:61
 msgid ""
@@ -778,31 +809,30 @@ msgid ""
 "\n"
 "Please enter a new passphrase."
 msgstr ""
-"Äµ§i: ±z©Ò¿é¤Jªº±K½X¨Ã¤£¬O\n"
-"³Ì¦w¥þªº±K½X.\n"
+"Varning: Du har angett ett lösen osom är uppenbart osäkert.\n"
 "\n"
-"½Ð¿é¤J·sªº±K½X."
+"Välj ett annat lösen."
 
 #: src/keygendlg.c:79 src/keygenwizard.c:345 src/passwddlg.c:66
 msgid "_Enter new passphrase"
-msgstr "¿é¤J·s±K½X (&E)"
+msgstr "Mata in _nytt lösen"
 
 #: src/keygendlg.c:80 src/keygenwizard.c:346 src/passwddlg.c:67
 msgid "Take this one _anyway"
-msgstr "±j¦æ¨Ï¥Î³o­Ó±K½X (&A)"
+msgstr "Använd detta lösen _ändå"
 
 #: src/keygendlg.c:135 src/keygenwizard.c:564
 msgid "Generate key"
-msgstr "«Ø¥ß·sÆ_"
+msgstr "Skapa nyckel"
 
 #: src/keygendlg.c:176
 #, fuzzy
 msgid "_Algorithm: "
-msgstr "¥[±Kºâ¦¡ (&E):"
+msgstr "_Krypteringsalgoritm: "
 
 #: src/keygendlg.c:188
 msgid "_Key size (bits): "
-msgstr "±KÆ_¤j¤p (¦ì):"
+msgstr "_Nyckelstorlek (bits): "
 
 #: src/keygendlg.c:189
 msgid "768"
@@ -818,23 +848,23 @@ msgstr "2048"
 
 #: src/keygendlg.c:206
 msgid "_User ID: "
-msgstr "¥ÎªÌID (&U):"
+msgstr "_Användaridentitet: "
 
 #: src/keygendlg.c:216
 msgid "_Email: "
-msgstr "¹q¶l (&E):"
+msgstr "_Emailadress: "
 
 #: src/keygendlg.c:226
 msgid "_Comment: "
-msgstr "³Æµù (&C):"
+msgstr "_Kommentar: "
 
 #: src/keygendlg.c:238
 msgid "_Passphrase: "
-msgstr "±K½X (&P):"
+msgstr "_Lösen: "
 
 #: src/keygendlg.c:250
 msgid "_Repeat passphrase: "
-msgstr "­«½Æ±K½X (&R):"
+msgstr "_Repetera lösen: "
 
 #: src/keygenwizard.c:149
 msgid ""
@@ -843,20 +873,21 @@ msgid ""
 "Your name will be part of the new key to make it easier for others to "
 "identify keys."
 msgstr ""
-"½Ð¿é¤J±zªº¥þ¦W.\n"
+"Ange för- och efternamn.\n"
 "\n"
-"³o­Ó¦W¦r·|¬OÆ_ªº¤@³¡¥÷¨Ï¨ä¥L¤H®e©ö¿ë»{±zªº±KÆ_."
+"Andra kan använda ditt namn för att finna dun öppna nyckel."
 
 #: src/keygenwizard.c:154
 msgid "Your Name:"
-msgstr "±zªº¦W¦r:"
+msgstr "För- och efternamn:"
 
 #. The string is empty or consists entirely of whitespace
 #: src/keygenwizard.c:167
 msgid "Please insert your name"
-msgstr "½Ð¿é¤J±zªº¦W¦r"
+msgstr "Ange för- och efternamn."
 
 #: src/keygenwizard.c:180
+#, fuzzy
 msgid ""
 "Please insert your email address.\n"
 "\n"
@@ -864,45 +895,48 @@ msgid ""
 "to identify keys. If you have several email addresses, you can add further "
 "email adresses later."
 msgstr ""
-"½Ð¿é¤J±zªº¹q¶l.\n"
+"Ange din emailadress.\n"
 "\n"
-"±zªº¹q¶l¦a§}·|¬OÆ_ªº¤@³¡¥÷¨Ï¨ä¥L¤H®e©ö¿ë»{±z. ¦pªG±z¦³¦h­Ó¹q¶l¦a§}, ±z¥i¥H¦b"
-"¤é«á¦A¼W¥[."
+"Andra kan använda din emailadress för att finna din öppna nyckel.Har du "
+"flera emailadresser kan du lägga till dem senare."
 
 #: src/keygenwizard.c:187
+#, fuzzy
 msgid "Your Email Address:"
-msgstr "±zªº¹q¶l¦a§}:"
+msgstr "Ange emailadress:"
 
 #. The string is empty or consists entirely of whitespace
 #: src/keygenwizard.c:202
 msgid "Please insert your email address"
-msgstr "½Ð¿é¤J±zªº¹q©Ò¦a§}"
+msgstr "Ange emailadress"
 
 #: src/keygenwizard.c:219
+#, fuzzy
 msgid ""
 "If you want you can supply a comment that further identifies the key to "
 "other users. The comment is especially useful if you generate several keys "
 "for the same email address. The comment is completely optional. Leave it "
 "empty if you don't have a use for it."
 msgstr ""
-"¦p±z³ßÅw, ±z¥ç¥i¦P®É´£¨Ñ¤@¬q³Æµù¥H¹ï¨ä¥L¤H»¡©ú³o±ø±KÆ_. ³o­Ó³Æµù¦b¦pªG±z«Ø¥ß"
-"¦h­Ó¦P¤@¹q¶l®É«Ü¦³¥Î, ¤£¹L¥ç¥u¬O¿ï¾Ü©Ê´£¨Ñ, ¦pªG±z¤£¥´ºâ¿é¤J, ¥i¥H§â¥¦¯dªÅ."
+"Om du vill kan du mata in en kommentar som kan göra din nyckel ännu enklare "
+"att finna. Detta är speciellt användbart om du har flera nycklar med samma "
+"emailadress. Om du ej önskar ha en kommentar, lämna fältet tomt."
 
 #: src/keygenwizard.c:225
 msgid "Comment:"
-msgstr "³Æµù:"
+msgstr "Kommentar:"
 
 #: src/keygenwizard.c:251
 msgid "Please choose a passphrase for the new key."
-msgstr "½Ð¿é¤J·sÆ_ªº±K½X."
+msgstr "Välj lösen för den nya nyckeln."
 
 #: src/keygenwizard.c:260 src/passwddlg.c:113
 msgid "Passphrase: "
-msgstr "±K½X :"
+msgstr "Lösen: "
 
 #: src/keygenwizard.c:273 src/passwddlg.c:122
 msgid "Repeat Passphrase: "
-msgstr "­«½Æ±K½X :"
+msgstr "Repetera lösen: "
 
 #: src/keygenwizard.c:370
 msgid ""
@@ -911,17 +945,18 @@ msgid ""
 "\n"
 "Do you want to create a backup copy?"
 msgstr ""
-"·íÆ_³Q«Ø¥ß«á, «ØÄ³±z¥i¥H»s§@¤@­Ó³Æ¥÷.\n"
+"Det rekommenderas att du gör en säkerhetskopia av den nyligen skapade "
+"nyckeln.\n"
 "\n"
-"±z¬O§_·Q»s§@¤@­Ó³Æ¥÷?"
+"Vill du skapa en säkerhetskopia nu?"
 
 #: src/keygenwizard.c:379
 msgid "Create _backup copy"
-msgstr "«Ø¥ß³Æ¥÷ (&b)"
+msgstr "Skapa _säkerhetskopia"
 
 #: src/keygenwizard.c:386 src/keyring.c:859 src/keyring.c:886
 msgid "Do it _later"
-msgstr "©¹«á¤~¶i¦æ (&l)"
+msgstr "_Vänta till senare"
 
 #: src/keygenwizard.c:414
 msgid ""
@@ -929,9 +964,9 @@ msgid ""
 "\n"
 "Even on fast computers this may take a while. Please be patient."
 msgstr ""
-"·sªºÆ_¥¿¦b«Ø¥ß¤¤\n"
+"Din nyckel kommer nu att skapas.\n"
 "\n"
-"¦b§ó§Öªº¹q¸£¤W¤]¥i¯à­nµ¥«J¤@¬q®É¶¡. ½Ðµ¥«J..."
+"Detta kan ta tid även på kraftfulla datorer."
 
 #: src/keygenwizard.c:423
 msgid ""
@@ -940,37 +975,38 @@ msgid ""
 "You have successfully generated a key. The key is indefinitely valid and has "
 "a length of 1024 bits."
 msgstr ""
-"®¥³ß!\n"
-"\n"
-"·sªºÆ_¤w¸g«Ø¥ß. ³oÆ_¤w³Q»{¥¿¤Î¨ä­«ªø1024 bits."
+"Gratulerar!\n"
+"Du har skapat en nyckel som är 1024 bitar lång. Giltighetstiden är "
+"obegränsad."
 
 #: src/keyimportdlg.c:75
 msgid "Import public keys from file"
-msgstr "¥ÑÀÉ®×¤¤¶×¤J¤½Æ_"
+msgstr "Importera öppen nyckel från fil"
 
 #: src/keyimportdlg.c:134
 msgid "Import Key"
-msgstr "¶×¤J±KÆ_"
+msgstr "Importera nyckel"
 
 #: src/keyimportdlg.c:158
 msgid "I_mport from file:"
-msgstr "¥ÑÀÉ®×¤¤¶×¤J(&m):"
+msgstr "_Importera från fil:"
 
 #: src/keyimportdlg.c:180
 msgid "Receive from _server:"
-msgstr "¥Ñ¦øªA¾¹¤¤¨ú±o(&s):"
+msgstr "_Hämta öppen nyckel från nyckelserver:"
 
 #: src/keyimportdlg.c:199
 msgid "Key _ID:"
-msgstr "Key _ID:"
+msgstr "_Nyckelidentitet:"
 
 #: src/keyimportdlg.c:218
 msgid "_Key Server:"
-msgstr "¤½Æ_¦øªA¾¹(&K):"
+msgstr "Nyckel_server:"
 
 #: src/keyimportdlg.c:247
+#, fuzzy
 msgid "No keys were found."
-msgstr "§ä¤£¨ì±KÆ_."
+msgstr "Inga nycklar hittades."
 
 #: src/keyimportdlg.c:255
 #, c-format
@@ -982,41 +1018,42 @@ msgid ""
 "%i secret keys imported\n"
 "%i secret keys unchanged"
 msgstr ""
-"%i ¤½Æ_³QÅª¨ú\n"
-"%i ¤½Æ_¤w¶×¤J\n"
-"%i ¤½Æ_¨S§ïÅÜ\n"
-"%i ¨pÆ_³QÅª¨ú\n"
-"%i ¨pÆ_¤w¶×¤J\n"
-"%i ¨pÆ_¤w¶×¤J"
+"%i öppna nycklar inlästa\n"
+"%i öppna anycklar importerade\n"
+"%i öppna nycklar ej ändrade\n"
+"%i privata nycklar inlästa\n"
+"%i privata nycklar importerade\n"
+"%i privata nycklar ej ändrade"
 
 #: src/keyimpseldlg.c:63 src/keyring.c:1376
 msgid "No keys selected"
-msgstr "¨S¦³¿ï¾Ü±KÆ_"
+msgstr "Ingen nyckel markerad"
 
 #: src/keyimpseldlg.c:110
 msgid "Keyserver did not return any matching keys."
-msgstr "¦øªA¾¹¨S¦³¦^¶Ç°t¦Xªº¤½Æ_."
+msgstr "Fann ingen matchande nyckel på servern."
 
 #: src/keyimpseldlg.c:116
 msgid "Select keys to import"
-msgstr "¿ï¾Ü­n¶×¤Jªº±KÆ_"
+msgstr "Markera nycklar du vill importera"
 
 #: src/keyimpseldlg.c:143
 msgid "_Import"
-msgstr "¶×¤J (&I)"
+msgstr "_Importera"
 
 #: src/keyimpseldlg.c:157
 msgid "_Cancel"
-msgstr "¨ú®ø (&C)"
+msgstr "_Avbryt"
 
 #: src/keylist.c:197
+#, fuzzy
 msgid "Key Validity"
-msgstr "ÆJÃÒ¤½Æ_"
+msgstr "Giltighet"
 
 #. Create the "Owner Trust" frame
 #: src/keylist.c:198 src/ownertrustdlg.c:121
 msgid "Owner Trust"
-msgstr "¬Û«H¾Ö¦³ªÌ"
+msgstr "Ägarförtroende"
 
 #: src/keylist.c:308
 msgid ""
@@ -1026,413 +1063,427 @@ msgid ""
 "you will need to import the public\n"
 "key, too."
 msgstr ""
-"¦bÆ_°é¤¤ªº¨pÆ_¨Ã¨S¦³°t¦Xªº¤½Æ_.\n"
-"\n"
-"­n¨Ï¥Î³o­Ó¨pÆ_, ±z»Ý­n¦P®É¶×¤J\n"
-"¦X¾A¨p¤½Æ_."
+"Du har en privat nyckel utan motsvarande\n"
+"öppna nyckel på din nyckelring. Du kan inte\n"
+"använda denna nyckel förrän du har importerat\n"
+"den öppna nyckeln."
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
 #: src/keyring.c:382
 msgid "No keys selected for signing."
-msgstr "¨S¦³¿ï¾Ü§@Ã±¸pªº±KÆ_."
+msgstr "Ingen signeringsnyckel markerad."
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
 #: src/keyring.c:392
 msgid "No private key for signing."
-msgstr "¨S¦³¿ï¾Ü§@Ã±¸pªº¨pÆ_."
+msgstr "Ingen privat nyckel för signering."
 
 #. Couldn't sign because the key was expired
 #: src/keyring.c:418
 msgid "This key has expired! Unable to sign."
-msgstr "³o¤½Æ_¤w¬O¹L®Éªº! ¤£¯à¥Î§@Ã±¸p."
+msgstr "Den här nyckelns giltighetstid har gått ut. Kan inte signera!"
 
 #. Couldn't sign because the key was already signed
 #: src/keyring.c:424
 msgid "This key has already been signed with your own!"
-msgstr "³o¤½Æ_¤w³QÃ±¸p¤F!"
+msgstr "Den här nyckeln har redan signerats med din egen nyckel!"
 
 #. Couldn't sign because there is no default key
 #: src/keyring.c:430
+#, fuzzy
 msgid "You haven't selected a default key to sign with!"
-msgstr "¨S¦³¿ï¾Ü¹w³]Ã±¸pªº±KÆ_!"
+msgstr "Du har inte markerat en standardnyckel för signering!"
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
 #.
 #: src/keyring.c:645
 msgid "No keys selected to export."
-msgstr "¨S¦³¿ï¾Ü§@¿é¥Xªº±KÆ_."
+msgstr "Inga nycklar markerades för export."
 
 #. this shouldn't happen because the menu item should be grayed out
 #. * in this case
 #.
 #: src/keyring.c:712
 msgid "No private key to backup."
-msgstr "¨S¦³¿ï¾Ü§@³Æ¥÷ªº¨pÆ_."
+msgstr "Ingen privat nyckel att ta säkerhetskopia av."
 
 #: src/keyring.c:854
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
-msgstr "±z¨Ã¨S¦³¨pÆ_, «ØÄ³±z²{¦b«Ø¥ß©Î¬O©¹«á¤~«Ø¥ß?"
+msgstr ""
+"Du har inte skapat en privat nyckel ännu. Vill du skapa en nu "
+"(rekommenderas) eller vänta till senare?"
 
 #: src/keyring.c:858
 msgid "_Generate key now"
-msgstr "²{¦b«Ø¥ßÆ_ (&G)"
+msgstr "Skapa nyckel _nu"
 
 #: src/keyring.c:880
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
-msgstr "±z¨Ã¨S¦³¨pÆ_, «ØÄ³±z²{¦b«Ø¥ß©Î¬O©¹«á¤~«Ø¥ß?"
+msgstr ""
+"Du har inte gjort en säkerhetskopia av din privata nyckel ännu. Vill du göra "
+"en nu (rekommenderas) eller vänta till senare?"
 
 #: src/keyring.c:885
 msgid "_Backup key now"
-msgstr "²{¦b¶i¦æ³Æ¥÷ (&G)"
+msgstr "Skapa _säkerhetskopia nu"
 
 #: src/keyring.c:995
 msgid "/Edit/_Copy"
-msgstr "/½s¿è/½Æ»s (&C)"
+msgstr "/Ändra/_Kopiera"
 
 #: src/keyring.c:997
 msgid "/Edit/_Paste"
-msgstr "/½s¿è/¶K¤W (&P)"
+msgstr "/Ändra/_Klistra in"
 
 #: src/keyring.c:999
 msgid "/Edit/sep1"
-msgstr "/½s¿è/sep1"
+msgstr "/Ändra/sep1"
 
 #: src/keyring.c:1006
 msgid "/_Keys"
-msgstr "/Æ_¹ï"
+msgstr "/_Nycklar"
 
 #: src/keyring.c:1007
 msgid "/Keys/_New Key..."
-msgstr "/Æ_¹ï/«Ø¥ß·sÆ_... (&N)"
+msgstr "/Nycklar/_Ny nyckel..."
 
 #: src/keyring.c:1009
 msgid "/Keys/_Delete Keys..."
-msgstr "/Æ_¹ï/§R°£·sÆ_... (&D)"
+msgstr "/Nycklar/_Radera nycklar..."
 
 #: src/keyring.c:1011
 msgid "/Keys/sep1"
-msgstr "/Æ_¹ï/sep1"
+msgstr "/Nycklar/sep1"
 
 #: src/keyring.c:1012
 msgid "/Keys/_Sign Keys..."
-msgstr "/Æ_¹ï/Ã±¸p¤½Æ_... (&S)"
+msgstr "/Nycklar/_Signera..."
 
 #: src/keyring.c:1013
 msgid "/Keys/Set _Owner Trust..."
-msgstr "/Æ_¹ï/§ïÅÜ«H¥ô«×... (&O)"
+msgstr "/Nycklar/Ändra _Ägarförtroende..."
 
 #: src/keyring.c:1014
 msgid "/Keys/_Edit Private Key..."
-msgstr "/Æ_¹ï/­×§ï±KÆ_... (&E)"
+msgstr "/Nycklar/Ändra _privat nyckel..."
 
 #: src/keyring.c:1015
 msgid "/Keys/sep2"
-msgstr "/Æ_¹ï/sep2"
+msgstr "/Nycklar/sep2"
 
 #: src/keyring.c:1016
 msgid "/Keys/_Import Keys..."
-msgstr "/Æ_¹ï/¶×¤JÆ_¹ï... (&I)"
+msgstr "/Nycklar/_Importera..."
 
 #: src/keyring.c:1017
 msgid "/Keys/E_xport Keys..."
-msgstr "/Æ_¹ï/¶×¥XÆ_¹ï... (&X)"
+msgstr "/Nycklar/E_xportera..."
 
 #: src/keyring.c:1018
 msgid "/Keys/_Backup..."
-msgstr "/Æ_¹ï/³Æ¥÷... (&B)"
+msgstr "/Nycklar/Skapa säkerhets_kopia..."
 
 #: src/keyring.c:1048
 msgid "/Keys/Export Keys..."
-msgstr "/Æ_¹ï/¶×¥XÆ_¹ï..."
+msgstr "/Nycklar/Exportera..."
 
 #: src/keyring.c:1055
 msgid "/Keys/Delete Keys..."
-msgstr "/Æ_¹ï/«Ø¥ß·sÆ_... (&G)"
+msgstr "/Nycklar/Radera Nycklar..."
 
 #: src/keyring.c:1062
 msgid "/Edit/Copy"
-msgstr "/½s¿è/½Æ»s"
+msgstr "/Ändra/Kopiera"
 
 #: src/keyring.c:1070
 msgid "/Keys/Set Owner Trust..."
-msgstr "/Æ_¹ï/§ïÅÜ«H¥ô«×..."
+msgstr "/Nycklar/Ändra ägarförtroende..."
 
 #: src/keyring.c:1078
 msgid "/Keys/Sign Keys..."
-msgstr "/Æ_¹ï/Ã±¸p¤½Æ_..."
+msgstr "/Nycklar/Signera..."
 
 #: src/keyring.c:1086
 msgid "/Keys/Edit Private Key..."
-msgstr "/Æ_¹ï/­×§ï±KÆ_..."
+msgstr "/Nycklar/Ändra privat nyckel..."
 
 #: src/keyring.c:1093
+#, fuzzy
 msgid "/Keys/Backup..."
-msgstr "/Æ_¹ï/³Æ¥÷..."
+msgstr "/Nycklar/Ta säkerhetskopia..."
 
 #: src/keyring.c:1110
 #, fuzzy
 msgid "/_Copy"
-msgstr "/½s¿è/½Æ»s (&C)"
+msgstr "/Ändra/_Kopiera"
 
 #: src/keyring.c:1112
 #, fuzzy
 msgid "/_Paste"
-msgstr "/½s¿è/¶K¤W (&P)"
+msgstr "/Ändra/_Klistra in"
 
 #: src/keyring.c:1114
 #, fuzzy
 msgid "/_Delete Keys..."
-msgstr "/Æ_¹ï/§R°£·sÆ_... (&D)"
+msgstr "/Nycklar/_Radera nycklar..."
 
 #: src/keyring.c:1117
 #, fuzzy
 msgid "/_Sign Keys..."
-msgstr "/Æ_¹ï/Ã±¸p¤½Æ_... (&S)"
+msgstr "/Nycklar/_Signera..."
 
 #: src/keyring.c:1118
 #, fuzzy
 msgid "/Set _Owner Trust..."
-msgstr "/Æ_¹ï/§ïÅÜ«H¥ô«×... (&O)"
+msgstr "/Nycklar/Ändra _Ägarförtroende..."
 
 #: src/keyring.c:1119
 #, fuzzy
 msgid "/_Edit Private Key..."
-msgstr "/Æ_¹ï/­×§ï±KÆ_... (&E)"
+msgstr "/Nycklar/Ändra _privat nyckel..."
 
 #: src/keyring.c:1121
 #, fuzzy
 msgid "/E_xport Keys..."
-msgstr "/Æ_¹ï/¶×¥XÆ_¹ï... (&X)"
+msgstr "/Nycklar/E_xportera..."
 
 #: src/keyring.c:1122
 #, fuzzy
 msgid "/_Backup..."
-msgstr "/Æ_¹ï/³Æ¥÷... (&B)"
+msgstr "/Nycklar/Skapa säkerhets_kopia..."
 
 #: src/keyring.c:1133
 #, fuzzy
 msgid "/Set Owner Trust..."
-msgstr "/Æ_¹ï/§ïÅÜ«H¥ô«×..."
+msgstr "/Nycklar/Ändra ägarförtroende..."
 
 #: src/keyring.c:1141
 #, fuzzy
 msgid "/Sign Keys..."
-msgstr "/Æ_¹ï/Ã±¸p¤½Æ_..."
+msgstr "/Nycklar/Signera..."
 
 #: src/keyring.c:1149
 #, fuzzy
 msgid "/Edit Private Key..."
-msgstr "/Æ_¹ï/­×§ï±KÆ_..."
+msgstr "/Nycklar/Ändra privat nyckel..."
 
 #: src/keyring.c:1156
 #, fuzzy
 msgid "/Backup..."
-msgstr "/Æ_¹ï/³Æ¥÷..."
+msgstr "/Nycklar/Ta säkerhetskopia..."
 
 #: src/keyring.c:1253 src/keysigndlg.c:106
 msgid "Fingerprint:"
-msgstr "«ü¯¾:"
+msgstr "Fingeravtryck:"
 
 #: src/keyring.c:1255
 msgid "Expires at:"
-msgstr "¦³®Ä´Á¦Ü:"
+msgstr "Giltighetstid upphör:"
 
 #: src/keyring.c:1257
 msgid "Owner Trust:"
-msgstr "¾Ö¦³ªÌ«H¥ô:"
+msgstr "Ägarförtroende:"
 
 #: src/keyring.c:1259
+#, fuzzy
 msgid "Key Validity:"
-msgstr "»{¥¿¤½Æ_:"
+msgstr "Nyckelgiltighet"
 
 #: src/keyring.c:1261
 msgid "Key Type:"
-msgstr "±KÆ_ºØÃþ:"
+msgstr "Nyckeltyp:"
 
 #: src/keyring.c:1263
 msgid "Created at:"
-msgstr "«Ø¥ß¦b :"
+msgstr "Skapad:"
 
 #: src/keyring.c:1266
 msgid "Details"
-msgstr "¸Ô±¡"
+msgstr "Detaljer"
 
 #: src/keyring.c:1274
+#, fuzzy
 msgid "Show signatures on user name:"
-msgstr "¦b¥ÎªÌ¦WºÙÅã¥ÜÃ±¸p:"
+msgstr "Visa signaturer på användarnamn"
 
 #: src/keyring.c:1294
 msgid "Signatures"
-msgstr "Ã±¸p"
+msgstr "Signaturer"
 
 #: src/keyring.c:1314
 msgid "The key has both a private and a public part"
-msgstr "³o¬O¦³¨p¤H¤Î¤½¦@³¡¥÷ªº§¹Æ_"
+msgstr "Denna nyckel har en öppen och en privat del."
 
 #: src/keyring.c:1319
 msgid "The key has only a public part"
-msgstr "³o±KÆ_¥u¦³¤½¦@³¡¥÷"
+msgstr "Denna nyckel har bara en öppen del."
 
 #: src/keyring.c:1347
 #, c-format
 msgid "%s %li bits"
-msgstr "%s %li ¦ì"
+msgstr "%s %li bitar"
 
 #: src/keyring.c:1380
 #, c-format
 msgid "%d keys selected"
-msgstr "%d ±KÆ_³Q¿ï¾Ü"
+msgstr "%d nycklar markerade"
 
 #: src/keyring.c:1407
+#, fuzzy
 msgid "All signatures"
-msgstr "©Ò¦³Ã±¸p"
+msgstr "Alla signaturer"
 
 #: src/keyring.c:1580
 msgid "Edit"
-msgstr "­×§ï"
+msgstr "Ändra"
 
 #: src/keyring.c:1581
+#, fuzzy
 msgid "Edit the selected private key"
-msgstr "­×§ï¤w¿ï¾Üªº±KÆ_"
+msgstr "Ändra markerad privata nyckel"
 
 #: src/keyring.c:1582
 msgid "edit key"
-msgstr "­×§ï±KÆ_"
+msgstr "Ändra nyckel"
 
 #: src/keyring.c:1590
 msgid "Remove the selected key"
-msgstr "²¾°£¤w¿ï¾Üªº±KÆ_"
+msgstr "Radera markerad nyckel"
 
 #: src/keyring.c:1591
 msgid "remove key"
-msgstr "²¾°£±KÆ_"
+msgstr "Radera nyckel"
 
 #: src/keyring.c:1599
 msgid "Sign the selected key"
-msgstr "Ã±¸p¤w¿ï¾Üªº±KÆ_"
+msgstr "Signera markerad nyckel"
 
 #: src/keyring.c:1599
 msgid "sign key"
-msgstr "Ã±¸p±KÆ_"
+msgstr "Signera nyckel"
 
 #: src/keyring.c:1606
 msgid "Import"
-msgstr "¶×¤J"
+msgstr "Importera"
 
 #: src/keyring.c:1607
 msgid "Import Keys"
-msgstr "¶×¤J±KÆ_"
+msgstr "Importera nycklar"
 
 #: src/keyring.c:1607
 msgid "import keys"
-msgstr "¶×¤J±KÆ_"
+msgstr "importera nycklar"
 
 #: src/keyring.c:1612
 msgid "Export"
-msgstr "¿é¥X"
+msgstr "Exportera"
 
 #: src/keyring.c:1613
 msgid "Export Keys"
-msgstr "¿é¥X±KÆ_"
+msgstr "Exportera nycklar"
 
 #: src/keyring.c:1613
 msgid "export keys"
-msgstr "¿é¥X±KÆ_"
+msgstr "exportera nycklar"
 
 #: src/keyring.c:1626
 msgid "Brief"
-msgstr "ºK­n"
+msgstr "Kortfattad"
 
 #: src/keyring.c:1626
 msgid "Show Brief Keylist"
-msgstr "Åã¥Ü±KÆ_²M³æºK­n"
+msgstr "Visa kortfattad nyckellista"
 
 #: src/keyring.c:1627
 msgid "brief"
-msgstr "ºK­n"
+msgstr "kortfattad"
 
 #: src/keyring.c:1638
 msgid "Detailed"
-msgstr "¸Ô±¡"
+msgstr "Detaljerad"
 
 #: src/keyring.c:1638
 msgid "Show Key Details"
-msgstr "Åã¥Ü±KÆ_¸Ô±¡"
+msgstr "Visa nyckeldetaljer"
 
 #: src/keyring.c:1639
 msgid "detailed"
-msgstr "¸Ô±¡"
+msgstr "detaljerad"
 
 #: src/keyring.c:1660
 msgid "Files"
-msgstr "ÀÉ®×"
+msgstr "Filer"
 
 #: src/keyring.c:1661
 msgid "Open the File Manager"
-msgstr "¶}±ÒÀÉ®×ºÞ²z­û"
+msgstr "Öppna filehanteraren"
 
 #: src/keyring.c:1662
 msgid "file manager"
-msgstr "ÀÉ®×ºÞ²z­û"
+msgstr "filhanterare"
 
 #: src/keyring.c:1685
 msgid "Selected Default Key:"
-msgstr "¿ï¾Ü¹w³]±KÆ_:"
+msgstr "Markerade standardnycklar:"
 
 #: src/keyring.c:1815
 msgid "GNU Privacy Assistant - Keyring Editor"
-msgstr "GNU Privacy Assistant - Æ_°é½s¿è¾¹"
+msgstr "GNU Privacy Assistant - Nyckelringshanterare"
 
 #: src/keyring.c:1846
 msgid "Keyring Editor"
-msgstr "Æ_°é½s¿è¾¹"
+msgstr "Nyckelringshanterare"
 
 #: src/keysigndlg.c:59
 msgid "Sign Key"
-msgstr "Ã±¸p±KÆ_"
+msgstr "Signerad nyckel"
 
 #: src/keysigndlg.c:75
 msgid "Do you want to sign the following key?"
-msgstr "±z§Æ±æÃ±¸p¥H¤Uªº±KÆ_ ?"
+msgstr "Vill du signera följande nyckel?"
 
 #: src/keysigndlg.c:116
 msgid ""
 "Check the name and fingerprint carefully to be sure that it really is the "
 "key you want to sign."
-msgstr "ÀË¬d±KÆ_ªº¦WºÙ¤Î«ü¯¾¥H½T©w¨S¦³¿ù»~."
+msgstr ""
+"Kontrollera namnet och fingeravtrycket noggrannt. Är du säker på att detta "
+"är nyckeln du vill signera?"
 
 #: src/keysigndlg.c:124
 msgid "All user names in this key will be signed."
-msgstr "©Ò¦³¦b³o­ÓÆ_¤Uªº¥ÎªÌ³£§@Ã±¸p."
+msgstr "Alla användarnamn i denna nyckel kommer att signeras."
 
 #: src/keysigndlg.c:130
 msgid "The key will be signed with your default private key."
-msgstr "³o±KÆ_·|¥H±zªº¨pÆ_Ã±¸p."
+msgstr "Nyckeln kommer att signeras med din privata standardnyckel."
 
 #: src/keysigndlg.c:137
 msgid "Sign only _locally"
-msgstr "¥u¬O¥»¦a¤WªºÃ±¸p (&l)"
+msgstr "Signera endast _lokalt"
 
 #: src/keytable.c:45
 msgid "GPA: Loading keyring"
-msgstr "GPA: ¸ü¤JÆ_°é"
+msgstr "GPA: Laddar nyckelring"
 
 #: src/keytable.c:48
+#, fuzzy
 msgid "Loading secret keys"
-msgstr "¸ü¤J¨pÆ_¤¤"
+msgstr "Laddar privata nycklar"
 
 #: src/keytable.c:48
+#, fuzzy
 msgid "Loading public keys"
-msgstr "¸ü¤J¤½Æ_¤¤"
+msgstr "Ladda öppna nycklar"
 
 #: src/options.c:248
 msgid ""
@@ -1443,30 +1494,33 @@ msgstr ""
 #. Create the dialog
 #: src/ownertrustdlg.c:105
 msgid "Change key ownertrust"
-msgstr "§ïÅÜ«H¥ô«×"
+msgstr "Ändra nyckels ägarförtroende"
 
 #: src/ownertrustdlg.c:129
+#, fuzzy
 msgid "_Unknown"
-msgstr "¤£ª¾¦W (&U)"
+msgstr "_Okänt"
 
 #: src/ownertrustdlg.c:134
 msgid ""
 "You don't know how much to trust this user to verify other people's keys.\n"
-msgstr "¤£ª¾¹D«H¥ô³o¤½Æ_ªº«H¥ôµ{«×.\n"
+msgstr ""
+"Du vet inte hur mycket du litar på denne persons förtroende för andra "
+"nycklar.\n"
 
 #: src/ownertrustdlg.c:144
 msgid "_Never"
-msgstr "¥Ã¤£«H¥ô (&N)"
+msgstr "_Aldrig"
 
 #: src/ownertrustdlg.c:149
 msgid ""
 "You don't trust this user at all to verify the validity of other people's "
 "keys at all.\n"
-msgstr "§¹¥þ¤£«H¥ô©Ò¦³³o­Ó¥ÎªÌªº¸ê®Æ\n"
+msgstr "Du litar INTE på denne persons förtroende för andra nycklar.\n"
 
 #: src/ownertrustdlg.c:159
 msgid "_Marginal"
-msgstr "³¡¥÷«H¥ô (&M)"
+msgstr "_Marginell"
 
 #: src/ownertrustdlg.c:164
 msgid ""
@@ -1476,13 +1530,13 @@ msgid ""
 "by this user valid if it is also signed by at least other two marginally "
 "trusted users with valid keys\n"
 msgstr ""
-"±z¤£«H¥ô³o­Ó¥ÎªÌ¦³¯à¤OÅçÃÒ¨ä¥L¤Hªº¤½Æ_.\n"
-"¦ý¬O³o­Ó¥ÎªÌªº¤½Æ_¬O¦Xªkªº, ¦pªG³o­Ó¥ÎªÌªº¤½Æ_³Q¨â¤H¥H«e©ÒÃ±¸p, ±z·|«H¥ô³o­Ó"
-"¤½Æ_\n"
+"Du litar inte på denna persons förtroende för andra nycklar. En nyckel som "
+"är signerad av denna person och minst två andra marginellt tillitliga "
+"nycklar anses emellertid som tillförlitlig.\n"
 
 #: src/ownertrustdlg.c:181
 msgid "_Full"
-msgstr "§¹¥þ«H¥ô (&F)"
+msgstr "_Fullständigt"
 
 #: src/ownertrustdlg.c:186
 msgid ""
@@ -1490,12 +1544,12 @@ msgid ""
 "so much, that you'll consider valid any key signed by him/her, provided this "
 "user's key is valid.\n"
 msgstr ""
-"±z«H¥ô³o­Ó¥ÎªÌ¦³¯à¤OÅçÃÒ¨ä¥L¤Hªº¤½Æ_.¨Ã¥B±z·|»{¬°©Ò¦³¥Ñ³o­Ó¤½Æ_©ÒÃ±¸pªº¤å¥ó³£"
-"·|¬O¦Xªk¤Î¥¿½Tªº.\n"
+"Du litar på denne persons förtroende för andra nycklar, och alla nycklar "
+"signerade med dennes (giltiga) nyckel anses som tillförlitlig.\n"
 
 #: src/ownertrustdlg.c:199
 msgid "U_ltimate"
-msgstr "¥Ã»·«H¥ô (&L)"
+msgstr "_Ultimat"
 
 #: src/ownertrustdlg.c:204
 msgid ""
@@ -1505,58 +1559,66 @@ msgid ""
 "(Warning: This is intended to be used for keys you own. Don't use it with "
 "other people's keys unless you really know what you are doing)\n"
 msgstr ""
-"±z¥þ§¹«H¥ô³o­Ó¥ÎªÌªº¯à¤O¤Î¨ä¤½Æ_, ¨Ã«H¥ô¤@¤Á¥Ñ³o­Ó¥ÎªÌÃ±¸pªº©Ò¦³¤å¥ó.\n"
-"\n"
-"(Äµ§i: °£«D¥²­n, ½Ð¤£­n»P¨ä¥L¤½Æ_¦P®É¨Ï¥Î³o­Ó¥ÎªÌªº¤½Æ_)\n"
+"Du litar på denne persons förtroende för andra nycklar, och alla nycklar "
+"signerade med dennes nyckel anses som tillförlitlig.\n"
+"(Varning: Detta är tänkt att användas på nycklar du själv äger. Använd det "
+"inte på andra nycklar utan att förstå var det innebär)\n"
 
 #: src/passwddlg.c:101
 #, fuzzy
 msgid "Choose new passphrase"
-msgstr "¿é¤J·s±K½X (&E)"
+msgstr "Mata in _nytt lösen"
 
 #: src/server_access.c:265
+#, fuzzy
 msgid "No error"
-msgstr "¨S¦³¿ù»~"
+msgstr "Inget fel"
 
+# gpapa.c: Keyserver-Fehlermeldungen
 #: src/server_access.c:268
+#, fuzzy
 msgid "Internal error"
-msgstr "¤º³¡¿ù»~"
+msgstr "Intern fel"
 
 #: src/server_access.c:271
+#, fuzzy
 msgid "Operation not supported"
-msgstr "¾Þ§@¤£¤ä´©"
+msgstr "Felaktig operation"
 
 #: src/server_access.c:274
 msgid "Version mismatch"
-msgstr "ª©¥»¤£¹ï"
+msgstr "Felaktig version"
 
 #: src/server_access.c:277
 msgid "Internal keyserver error"
-msgstr "¤º³¡¤½Æ_¦øªA¾¹¿ù»~"
+msgstr "Intern nyckelserverfel"
 
 #: src/server_access.c:280
 msgid "Out of memory"
-msgstr "°O¾ÐÅé¤£¨¬"
+msgstr "Slut på minne"
 
 #: src/server_access.c:283
 msgid "Key not found"
-msgstr "§ä¤£¨ì¤½Æ_"
+msgstr "Nyckel ej funnen"
 
 #: src/server_access.c:286
+#, fuzzy
 msgid "Key already exists on server"
-msgstr "¤w¸g±H¨ì¦øªA¾¹."
+msgstr "Nyckel fanns redan på nyckelservern."
 
 #: src/server_access.c:289
 msgid "Key incomplete"
-msgstr "Æ_¹ï¤£§¹¾ã"
+msgstr "Ofullständig nyckel"
 
 #: src/server_access.c:292
+#, fuzzy
 msgid "Could not contact keyserver"
-msgstr "§ä¤£¨ì¤½Æ_¦øªA¾¹"
+msgstr "Kunde inte kontakta nyckelserver."
 
 #: src/server_access.c:295
+#, fuzzy
 msgid "Unknown Error"
-msgstr "¤£¦Wªº¿ù»~"
+msgstr "[Okänt fel]"
 
 #: src/server_access.c:328
 #, c-format
@@ -1564,17 +1626,17 @@ msgid ""
 "Connecting to server \"%s\".\n"
 "Please wait."
 msgstr ""
-"¥¿¦bÁpµ¸¦øªA¾¹ \"%s\" ¤¤\n"
-"½Ðµ¥­Ô..."
+"Kopplar upp till server \"%s\".\n"
+"Var god dröj..."
 
 #: src/server_access.c:351 src/server_access.c:371
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
 "\n"
 "%s"
 msgstr ""
-"Ápµ¸¦øªA¾¹®Éµo¥Í¿ù»~:\n"
+"Ett fel uppstod vid uppkoppling till nyckelserver:\n"
 "\n"
 "%s"
 
@@ -1584,244 +1646,64 @@ msgstr ""
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
-msgstr ""
-"¨S¦³»P¦øªA¾¹³q°T¨ó©w¨Ï¥Îªº\n"
-"¥~±¾¼Ò²Õ"
+msgstr "Det finns ingen plugin för nyckelserverprotokollet du specificerade."
 
 #: src/server_access.c:506 src/server_access.c:551
+#, fuzzy
 msgid "The keyserver you specified is not valid"
-msgstr "¦øªA¾¹¨Ã¤£¥¿½T"
+msgstr "Ogiltig nyckelserver"
 
 #. Build UI
 #: src/settingsdlg.c:41
 msgid "Default _key:"
-msgstr "¹w³]±KÆ_ (&K):"
+msgstr "_Standardnycklar:"
 
 #. Build UI
 #: src/settingsdlg.c:77
+#, fuzzy
 msgid "Default key_server: "
-msgstr "¹w³]¤½Æ_¦øªA¾¹ :"
+msgstr "_Standardnyckelserver:"
 
 #. Build UI
 #: src/settingsdlg.c:120
 msgid "Use _advanced mode:"
-msgstr "¨Ï¥Î¶i¶¥¼Ò¦¡ (&A):"
+msgstr "Gå till _avancerat läge:"
 
 #: src/settingsdlg.c:126
+#, fuzzy
 msgid "_Yes"
-msgstr "¬O (&Y)"
+msgstr "_Ja"
 
 #: src/settingsdlg.c:129
 msgid "_No"
-msgstr "§_ (&N)"
+msgstr "_Nej"
 
 #: src/settingsdlg.c:153
 msgid "Settings"
-msgstr "³]©w"
+msgstr "Inställningar"
 
 #: src/siglist.c:108 src/verifydlg.c:302
 msgid "Status"
-msgstr "ª¬ºA"
+msgstr "Status"
 
 #: src/verifydlg.c:199
+#, fuzzy
 msgid "Expired Key"
-msgstr "¤w¹L®Éªº¤½Æ_"
+msgstr "Nycklar vars giltighetstid gått ut"
 
 #. If we arrived here we know the key is available, the signature is
 #. * not bad, but it's not completely valid. So, the signature is good
 #. * but the key is not valid.
 #: src/verifydlg.c:207
 msgid "Key NOT valid"
-msgstr "¤½Æ_¤£¥¿½T"
+msgstr "Nyckel är EJ giltig"
 
 #: src/verifydlg.c:328
+#, fuzzy
 msgid "Signatures:"
-msgstr "Ã±¸p"
+msgstr "Signaturer:"
 
 #: src/verifydlg.c:344
+#, fuzzy
 msgid "Verify files"
-msgstr "ÅçÃÒÀÉ®×"
-
-#~ msgid "Filename"
-#~ msgstr "ÀÉ®×¦WºÙ"
-
-#~ msgid "The currently selected filename."
-#~ msgstr "²{¦b¿ï¾ÜªºÀÉ®×."
-
-#~ msgid "Show file operations"
-#~ msgstr "Åã¥ÜÀÉ®×¾Þ§@"
-
-#~ msgid "Whether buttons for creating/manipulating files should be displayed."
-#~ msgstr "Åã¥Ü©Ò¦³±µÁä."
-
-#~ msgid "Directories"
-#~ msgstr "¥Ø¿ý"
-
-#~ msgid "_OK"
-#~ msgstr "½T©w (&O)"
-
-#~ msgid "OK"
-#~ msgstr "½T©w"
-
-#~ msgid "Cancel"
-#~ msgstr "¨ú®ø"
-
-#~ msgid "Directory unreadable: %s"
-#~ msgstr "¥Ø¿ý¨Ã¤£¯à¶i¤J: %s"
-
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "ÀÉ®× \"%s\" ¦b¾÷¾¹ (%s) ¨Ã¤£¯à¦b³o­Óµ{¦¡¤¤¨Ï¥Î.\n"
-#~ "±z½T­n¿ï¾Ü³o­ÓÀÉ®× ?"
-
-#~ msgid "Create Dir"
-#~ msgstr "«Ø¥ß¥Ø¿ý"
-
-#~ msgid "Delete File"
-#~ msgstr "§R°£ÀÉ®×"
-
-#~ msgid "Rename File"
-#~ msgstr "­«·s¦W©R"
-
-#~ msgid "Error"
-#~ msgstr "GPA ¿ù»~"
-
-#~ msgid "Close"
-#~ msgstr "Ãö³¬"
-
-#~ msgid ""
-#~ "The directory name \"%s\" contains symbols that are not allowed in "
-#~ "filenames"
-#~ msgstr "¥Ø¿ý \"%s\" ¤¤¦s¦³¤£¯à¥Î§@¦WºÙªº²Å¸¹"
-
-#~ msgid ""
-#~ "Error creating directory \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "«Ø¥ß¥Ø¿ýµo¥Í¿ù»~ \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr "±z¨Ï¥Î¤F¤£¾A¦X¥Î§@ÀÉ®×¦WºÙªº²Å¸¹."
-
-#~ msgid "Error creating directory \"%s\": %s\n"
-#~ msgstr "«Ø¥ß¥Ø¿ýµo¥Í¿ù»~ \"%s\": %s\n"
-
-#~ msgid "Create Directory"
-#~ msgstr "«Ø¥ß¥Ø¿ý"
-
-#~ msgid "_Directory name:"
-#~ msgstr "¥Ø¿ý¦WºÙ (&D):"
-
-#~ msgid "Directory name:"
-#~ msgstr "¥Ø¿ý:"
-
-#~ msgid "C_reate"
-#~ msgstr "«Ø¥ß (&R)"
-
-#~ msgid "Create"
-#~ msgstr "«Ø¥ß"
-
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "ÀÉ®× \"%s\" ¦WºÙ¤¤¦³¤£¥¿½Tªº²Å¸¹, ¤£¯à¥Î§@ÀÉ®×¦WºÙ"
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "§R°£ÀÉ®×¿ù»~ `%s' : %s \n"
-#~ "%s"
-
-#~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr "ÀÉ®×¦WºÙ¤¤¦³¤£¥¿½Tªº²Å¸¹"
-
-#~ msgid "Error deleting file \"%s\": %s"
-#~ msgstr "§R°£ÀÉ®×¿ù»~ `%s' : %s"
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "½T©w­n§R°£ÀÉ®× \"%s\"?"
-
-#~ msgid "_Delete"
-#~ msgstr "§R°£ (&D)"
-
-#~ msgid "Delete"
-#~ msgstr "§R°£"
-
-#~ msgid ""
-#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "ÀÉ®×¦WºÙ \"%s\" ¦³¤£¯à¥Î§@ÀÉ®×¦WºÙªº²Å¸¹"
-
-#~ msgid ""
-#~ "Error renaming file to \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "­«·s¦W©R®Éµo¥Í¿ù»~ \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "Error renaming file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "­«·s¦W©RÀÉ®×®Éµo¥Í¿ù»~ `%s' : %s \n"
-#~ "%s"
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "§ó§ï \"%s\" ¬° \"%s\" ®Éµo¥Í¿ù»~: %s"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "­«·s¦W©RÀÉ®× \"%s\" ¬°:"
-
-#~ msgid "_Rename"
-#~ msgstr "­«·s¦W©R (&R)"
-
-#~ msgid "Rename"
-#~ msgstr "­«·s¦W©R"
-
-#~ msgid "Selection: "
-#~ msgstr "¿ï¾Ü : "
-
-#~ msgid ""
-#~ "The filename %s couldn't be converted to UTF-8. Try setting the "
-#~ "environment variable G_BROKEN_FILENAMES."
-#~ msgstr "ÀÉ®×¦WºÙ %s ¤£¯àÂà¬° UTF-8, ½Ð¸Õ¨ä¥LªºÀô¹ÒÅÜ¼Æ G_BROKEN_FILENAMES."
-
-#~ msgid "Name too long"
-#~ msgstr "¦WºÙ¤Óªø"
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "¤£¯àÂà´«ÀÉ®×"
-
-#~ msgid "01.01.2000"
-#~ msgstr "01.01.2000"
-
-#~ msgid "expire a_t"
-#~ msgstr "¥¢®Ä¦b (&t)"
-
-#~ msgid "_Prev"
-#~ msgstr "¤W¤@¨B (&P)"
-
-#~ msgid "_Next"
-#~ msgstr "¤U¤@¨B (&N)"
-
-#~ msgid ""
-#~ "In \"Passphrase\" and \"Repeat passphrase\"\n"
-#~ "you must enter the same passphrase."
-#~ msgstr ""
-#~ "¦b\"±K½X\"¤Î\"­«½Æ±K½X\"¤¤\n"
-#~ "±z»Ý­n¿é¤J¬Û¦P±K½X."
-
-#~ msgid "generate re_vocation certificate"
-#~ msgstr "«Ø¥ß¼o°£µý®Ñ (&v)"
-
-#~ msgid "_send to key server"
-#~ msgstr "±HÆ_¨ì¦øªA¾¹ (&s)"
-
-#~ msgid "_Generate key"
-#~ msgstr "«Ø¥ß·sÆ_ (&G)"
-
-#~ msgid "F_inish"
-#~ msgstr "§¹¦¨ (&F)"
+msgstr "Verifiera filer"

@@ -419,7 +419,7 @@ main (int argc, char **argv)
   /* Internationalisation with gtk+-2.0 wants UTF8 instead of the
    * character set determined by `locale'.
    */
-  setenv ("OUTPUT_CHARSET", "utf8", 1);
+  putenv ("OUTPUT_CHARSET=utf8");
 #endif
 
   if (args.start_keyring_editor)

@@ -14,7 +14,7 @@ AC_PREREQ(2.52)
 #
 AC_INIT(gpa, 0.6.1-cvs, [bug-gpa@gnupg.org])
 
-ALL_LINGUAS="de fr zh_TW.Big5 pt_BR ja nl es"
+ALL_LINGUAS="de fr zh_TW.Big5 pt_BR ja nl es se"
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_SRCDIR(src/gpa.c)
 AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
@@ -86,7 +86,6 @@ dnl               [set this to limit filenames to the 8.3 format])
                    MingW32 systems and these systems lack Posix functions,
                    we use a simplified version of gettext])
 	AC_CHECK_LIB(wsock32, connect)
-	AC_CHECK_LIB(iberty, getopt_long)
         GPG='c:\\gnupg\\gpg.exe'
         ;;
     *)
@@ -146,6 +145,12 @@ AC_SUBST(USE_NLS)
 AC_SUBST(USE_INCLUDED_LIBINTL)
 AC_SUBST(BUILD_INCLUDED_LIBINTL)
 fi
+
+AC_CHECK_FUNC(getopt_long,
+    AC_MSG_RESULT(using libc's getopt_long),
+    AC_CHECK_LIB(iberty, getopt_long,
+	AC_CHECK_LIB(gnugetopt, getopt_long,
+	    AC_MSG_ERROR(Cannot find a getopt_long function))))
 
 dnl Where is the GTK+ toolkit
 AM_PATH_GTK_2_0(2.0.0,

@@ -1,3 +1,9 @@
+2003-01-24  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac (ALL_LINGUAS): Add Swedish.
+
+	* configure.ac: Add checks for getopt_long.
+
 2003-01-23  Miguel Coca  <mcoca@gnu.org>
 
 	* configure.ac: Add check for strsep

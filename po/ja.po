@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
-"POT-Creation-Date: 2003-01-20 23:09+0900\n"
+"POT-Creation-Date: 2003-01-24 15:41+0100\n"
 "PO-Revision-Date: 2003-01-21 22:30+0900\n"
 "Last-Translator: TAKAHASHI Tamotsu <tamo@momonga-linux.org>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=EUC-JP\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/encryptdlg.c:80 src/verifydlg.c:185
+#: src/encryptdlg.c:80 src/verifydlg.c:189
 msgid "Unknown Key"
 msgstr "未確認の鍵"
 
@@ -30,7 +30,7 @@ msgstr "とはいえ、その鍵がその人に属しているかどうかは確実ではありません。"
 msgid "Do you <b>really</b> want to use this key?"
 msgstr "<b>本当に</b>この鍵を使いたいのですか?"
 
-#: src/encryptdlg.c:129 src/encryptdlg.c:168 src/verifydlg.c:190
+#: src/encryptdlg.c:129 src/encryptdlg.c:168 src/verifydlg.c:194
 msgid "Revoked Key"
 msgstr "破棄済みの鍵"
 
@@ -417,12 +417,12 @@ msgid "Key ID:"
 msgstr "鍵 ID:"
 
 #: src/gpawidgets.c:99 src/keylist.c:195 src/siglist.c:82 src/siglist.c:102
-#: src/verifydlg.c:292
+#: src/verifydlg.c:296
 msgid "Key ID"
 msgstr "鍵 ID"
 
 #: src/gpawidgets.c:99 src/keylist.c:194 src/siglist.c:88 src/siglist.c:114
-#: src/verifydlg.c:304
+#: src/verifydlg.c:308
 msgid "User Name"
 msgstr "ユーザ名"
 
@@ -565,15 +565,15 @@ msgid "Enter Passphrase"
 msgstr "パスフレーズを入力"
 
 #. Duplicate it to make sure it can be g_free'd
-#: src/gpgmetools.c:727 src/verifydlg.c:232
+#: src/gpgmetools.c:727 src/verifydlg.c:236
 msgid "[Unknown user ID]"
 msgstr "[未確認ユーザ ID]"
 
-#: src/gpgmetools.c:764 src/verifydlg.c:175
+#: src/gpgmetools.c:764 src/verifydlg.c:179
 msgid "Valid"
 msgstr "有効"
 
-#: src/gpgmetools.c:767 src/verifydlg.c:180
+#: src/gpgmetools.c:767 src/verifydlg.c:184
 msgid "Bad"
 msgstr "不正"
 
@@ -1513,51 +1513,51 @@ msgstr ""
 msgid "Choose new passphrase"
 msgstr "新しいパスフレーズを選択"
 
-#: src/server_access.c:208
+#: src/server_access.c:265
 msgid "No error"
 msgstr "エラーなし"
 
-#: src/server_access.c:211
+#: src/server_access.c:268
 msgid "Internal error"
 msgstr "内部エラー"
 
-#: src/server_access.c:214
+#: src/server_access.c:271
 msgid "Operation not supported"
 msgstr "操作がサポートされていません"
 
-#: src/server_access.c:217
+#: src/server_access.c:274
 msgid "Version mismatch"
 msgstr "バージョンが合っていません"
 
-#: src/server_access.c:220
+#: src/server_access.c:277
 msgid "Internal keyserver error"
 msgstr "鍵サーバ関連の内部エラー"
 
-#: src/server_access.c:223
+#: src/server_access.c:280
 msgid "Out of memory"
 msgstr "メモリ不足"
 
-#: src/server_access.c:226
+#: src/server_access.c:283
 msgid "Key not found"
 msgstr "鍵が見付かりません"
 
-#: src/server_access.c:229
+#: src/server_access.c:286
 msgid "Key already exists on server"
 msgstr "サーバに既に鍵が存在します"
 
-#: src/server_access.c:232
+#: src/server_access.c:289
 msgid "Key incomplete"
 msgstr "鍵が不完全です"
 
-#: src/server_access.c:235
+#: src/server_access.c:292
 msgid "Could not contact keyserver"
 msgstr "鍵サーバーと連絡がとれません"
 
-#: src/server_access.c:238
+#: src/server_access.c:295
 msgid "Unknown Error"
 msgstr "未確認エラー"
 
-#: src/server_access.c:271
+#: src/server_access.c:328
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -1566,7 +1566,7 @@ msgstr ""
 "サーバ \"%s\" に接続中です。\n"
 "お待ちください。"
 
-#: src/server_access.c:294 src/server_access.c:314
+#: src/server_access.c:351 src/server_access.c:371
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -1579,7 +1579,7 @@ msgstr ""
 
 #. An error ocurred in the fork/exec: we assume that there is no plugin.
 #.
-#: src/server_access.c:377
+#: src/server_access.c:434
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
@@ -1587,7 +1587,7 @@ msgstr ""
 "指定されたプロトコルの鍵サーバに\n"
 "使えるプラグインはありません。"
 
-#: src/server_access.c:449 src/server_access.c:494
+#: src/server_access.c:506 src/server_access.c:551
 msgid "The keyserver you specified is not valid"
 msgstr "指定された鍵サーバは無効です"
 
@@ -1618,26 +1618,26 @@ msgstr "いいえ (_N)"
 msgid "Settings"
 msgstr "設定"
 
-#: src/siglist.c:108 src/verifydlg.c:298
+#: src/siglist.c:108 src/verifydlg.c:302
 msgid "Status"
 msgstr "ステータス"
 
-#: src/verifydlg.c:195
+#: src/verifydlg.c:199
 msgid "Expired Key"
 msgstr "期限切れの鍵"
 
 #. If we arrived here we know the key is available, the signature is
 #. * not bad, but it's not completely valid. So, the signature is good
 #. * but the key is not valid.
-#: src/verifydlg.c:203
+#: src/verifydlg.c:207
 msgid "Key NOT valid"
 msgstr "鍵は有効では「ありません」"
 
-#: src/verifydlg.c:324
+#: src/verifydlg.c:328
 msgid "Signatures:"
 msgstr "署名:"
 
-#: src/verifydlg.c:340
+#: src/verifydlg.c:344
 msgid "Verify files"
 msgstr "ファイル検証"
 
