@@ -410,6 +410,7 @@ edit_sign_fnc (void *opaque, GpgmeStatusCode status, const char *args,
       status == GPGME_STATUS_GOT_IT ||
       status == GPGME_STATUS_NEED_PASSPHRASE ||
       status == GPGME_STATUS_GOOD_PASSPHRASE ||
+      status == GPGME_STATUS_BAD_PASSPHRASE ||
       status == GPGME_STATUS_USERID_HINT ||
       status == GPGME_STATUS_SIGEXPIRED ||
       status == GPGME_STATUS_KEYEXPIRED)

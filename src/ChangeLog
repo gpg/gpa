@@ -1,3 +1,9 @@
+2002-09-12  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpgmeedit.c (edit_sign_fnc): Ignore "bad passphrase" status
+	lines. This solves the problem where a wrong passphrase terminated
+	GPA.
+
 2002-09-11  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmeedit.c (edit_sign_fnc_action, edit_sign_fnc_transit) 
