@@ -183,7 +183,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, GpapaSecretKey * key,
 
 
   radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio),
-					    accel_group, _("expire _on"));
+					    accel_group, _("_expire on"));
   dialog.radio_date = radio;
   gtk_box_pack_start (GTK_BOX (hbox), radio, FALSE, FALSE, 0);
 

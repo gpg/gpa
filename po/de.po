@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.3.1a\n"
-"POT-Creation-Date: 2001-02-13 21:18+0100\n"
+"POT-Creation-Date: 2001-02-13 21:39+0100\n"
 "PO-Revision-Date: 2001-02-13 21:19+01:00\n"
 "Last-Translator: Thomas Koester <tkoester@intevation.de>\n"
 "Language-Team: GERMAN <de@li.org>\n"
@@ -81,7 +81,7 @@ msgid "_never expire"
 msgstr "_kein Verfallsdatum"
 
 #: src/expirydlg.c:186
-msgid "expire _on"
+msgid "_expire on"
 msgstr "_verfällt am"
 
 #: src/fileman.c:193 src/filemenu.c:127

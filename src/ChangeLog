@@ -1,3 +1,7 @@
+2001-02-13  Thomas Koester  <tkoester@intevation.de>
+
+	* expirydlg.c (gpa_expiry_dialog_run): Conflicting accelerator.
+
 2001-02-13  Bernhard Herzog  <bh@intevation.de>
 
 	* keysmenu.c (gpa_tableKey_new): Swap the table rows and change
