@@ -1,5 +1,31 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keylist_columns_brief):
+	(keylist_columns_detailed): Add the new key type pixmap as the
+	first column
+
+	* keylist.h (GPAKeyListColumn):
+	* keylist.c (column_defs):
+	(get_key_type_pixmap_value): New value func and column defintion
+	to return a pixmap indicating the type of key: public only or
+	secret+public.
+
+	* keylist.c (ColumnValueFunc):
+	(ColumnDef):
+	(get_name_value):
+	(get_trust_value):
+	(get_ownertrust_value):
+	(get_expirydate_value):
+	(get_identifier_value): Change the prototype of ColumnValueFunc
+	and update all value functions accordingly. Now the value may be a
+	pixmap, but all existing functions only rerturn text as before.
+	The function itself now also indicates whether the text has to be
+	freed.
+	(keylist_row_labels):
+	(keylist_free_row_labels): Removed.
+	(keylist_fill_row): New function to fill a row with the
+	labels/pixmaps for one key
+	
 	* keyring.c (keyring_toolbar_new): Use the new help icon
 
 	* icons.xpm: 
