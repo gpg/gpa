@@ -51,7 +51,7 @@ _gpgme_io_read ( int fd, void *buffer, size_t count )
     do {
         nread = read (fd, buffer, count);
     } while (nread == -1 && errno == EINTR );
-    DEBUG2 ("fd %d: got %d bytes\n", fd, nread );
+    DEBUG4 ("fd %d: got %d bytes (%.*s)\n", fd, nread, nread, buffer );
     return nread;
 }
 

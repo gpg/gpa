@@ -1,3 +1,7 @@
+2001-03-28  Werner Koch  <wk@gnupg.org>
+
+	* xmalloc.c, xmalloc.h (xstrdup_or_null): New.
+
 2000-07-26 10:02:51  Werner Koch  (wk@habibti.openit.de)
 
   * stringhelp.c.: Add stdarg.h

@@ -170,12 +170,10 @@ extract_sig (char *line, GpapaCallbackFunc callback, gpointer calldata)
         }
       i++;
       if (i >= GPAPA_MAX_GPG_KEY_FIELDS)
-        callback (GPAPA_ACTION_ERROR,
-                  "too many fields in output of `gpg --check-sigs'",
-                  calldata);
+          break;
     }
   fields = i;
-  if (fields != 11)
+  if (fields < 11)
     {
       callback (GPAPA_ACTION_ERROR,
                 "invalid number of fields in output of `gpg --check-sigs'",

@@ -286,8 +286,11 @@ keylist_fill_list (GPAKeyList * keylist, gboolean keep_selection)
 	{
 	  key_id = gtk_clist_get_row_data (GTK_CLIST (keylist->clist),
 					   GPOINTER_TO_INT (selection->data));
-	  g_hash_table_insert (sel_hash, xstrdup (key_id), sel_hash);
-	  selection = g_list_next (selection);
+          if (key_id)
+            {
+              g_hash_table_insert (sel_hash, xstrdup (key_id), sel_hash);
+	      selection = g_list_next (selection);
+            }
 	}
     }
 
@@ -309,13 +312,16 @@ keylist_fill_list (GPAKeyList * keylist, gboolean keep_selection)
       keylist_fill_row (keylist, key, row);
       key_id = gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
 					 keylist->window);
-      gtk_clist_set_row_data_full (GTK_CLIST (keylist->clist), row,
-				   xstrdup (key_id), free);
-      if (keep_selection && g_hash_table_lookup (sel_hash, key_id))
-	{
-	  /* The key had been selected previously, so select it again */
-	  gtk_clist_select_row (GTK_CLIST (keylist->clist), row, 0);
-	}
+      if (key_id)
+          {
+              gtk_clist_set_row_data_full (GTK_CLIST (keylist->clist), row,
+                                           xstrdup (key_id), free);
+              if (keep_selection && g_hash_table_lookup (sel_hash, key_id))
+                  {
+                      /* The key had been selected previously, so select it again */
+                      gtk_clist_select_row (GTK_CLIST (keylist->clist), row, 0);
+                  }
+          }
     } /* for */
 
   gtk_clist_thaw (GTK_CLIST (keylist->clist));

@@ -1,7 +1,16 @@
+2001-03-28  Werner Koch  <wk@gnupg.org>
+
+	* gpapa.c (gpapa_extract_fingerprint): No warning when tehre are
+	more fields in gpg's output.  Just check for the minimum required
+	number of fields. 
+	Note: the parsing code does not seem to be correct.
+	(extract_key): Ditto.
+	* gpapapublickey.c (extract_sig): Ditto
+
 Tue Feb 27 10:10:03 CET 2001 Jan-Oliver Wagner <jan@intevation.de>
 
-		* util.c: removed stpcpy() which is already in
-		  jnlib/stringhelp.c
+	* util.c: removed stpcpy() which is already in
+        jnlib/stringhelp.c
 		
 Mon 26 Feb 2001 23:10 Peter Gerwinski <peter@gerwinski.de>
 

@@ -57,7 +57,7 @@ passphrase_ok (gpointer param)
 {
   GPAPassphraseDialog * dialog = param;
 
-  dialog->passphrase = xstrdup (gtk_entry_get_text (GTK_ENTRY(dialog->entry)));
+  dialog->passphrase = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY(dialog->entry)));
   gtk_widget_destroy (dialog->window);
 }
 

@@ -108,12 +108,12 @@ export_ok (gpointer param)
     {
       GtkWidget * entry = GTK_COMBO (dialog->combo_server)->entry;
       dialog->server = gtk_entry_get_text (GTK_ENTRY (entry));
-      dialog->server = xstrdup (dialog->server);
+      dialog->server = xstrdup_or_null (dialog->server);
     }
   else
     {
       dialog->filename = gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
-      dialog->filename = xstrdup (dialog->filename);
+      dialog->filename = xstrdup_or_null (dialog->filename);
     }
 
   if (dialog->check_armored)

@@ -306,11 +306,11 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
       gchar * temp;
 
       params = key_gen_params_new ();
-      params->userID = xstrdup (gtk_entry_get_text (GTK_ENTRY (entryUserID)));
-      params->email = xstrdup(gtk_entry_get_text (GTK_ENTRY (entryEmail)));
-      params->comment = xstrdup (gtk_entry_get_text (GTK_ENTRY(entryComment)));
+      params->userID = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY (entryUserID)));
+      params->email = xstrdup_or_null(gtk_entry_get_text (GTK_ENTRY (entryEmail)));
+      params->comment = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY(entryComment)));
 
-      params->password = xstrdup (gtk_entry_get_text (GTK_ENTRY(entryPasswd)));
+      params->password = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY(entryPasswd)));
 	  
       temp = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO(comboAlgorithm)->entry));
       params->algo = gpa_algorithm_from_string (temp);

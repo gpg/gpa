@@ -69,6 +69,13 @@ xstrdup( const char *string )
     return p;
 }
 
+char *
+xstrdup_or_null ( const char *string )
+{
+    return string? xstrdup (string):NULL;
+}
+
+
 
 char *
 xstrcat2( const char *a, const char *b )

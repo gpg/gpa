@@ -25,6 +25,7 @@ void *xmalloc( size_t n );
 void *xrealloc( void *a, size_t n );
 void *xcalloc( size_t n, size_t m );
 char *xstrdup( const char *string );
+char *xstrdup_or_null( const char *string );
 char *xstrcat2( const char *a, const char *b );
 
 

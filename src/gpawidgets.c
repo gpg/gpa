@@ -102,7 +102,8 @@ gpa_secret_key_list_new (GtkWidget *window)
 					      window);
       row = gtk_clist_prepend (GTK_CLIST (clist), contents);
       gtk_clist_set_row_data_full (GTK_CLIST (clist), row,
-				   xstrdup (contents[1]), free);
+				   contents[1]? xstrdup (contents[1]):NULL,
+                                   free);
       if (gpa_default_key () && strcmp (gpa_default_key (), contents[1]) == 0)
 	{
 	  default_key_index = num_keys;
@@ -141,7 +142,8 @@ gpa_public_key_list_new (GtkWidget *window)
 					      window);
       row = gtk_clist_prepend (GTK_CLIST (clist), contents);
       gtk_clist_set_row_data_full (GTK_CLIST (clist), row,
-				   xstrdup (contents[1]), free);
+				   contents[1]?xstrdup (contents[1]):NULL,
+                                   free);
     } /* while */
   gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_SINGLE);
   gtk_clist_column_title_passive (GTK_CLIST (clist), 0);

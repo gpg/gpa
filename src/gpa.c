@@ -251,8 +251,8 @@ gpa_determine_default_key (void)
   if (gpapa_get_secret_key_count (gpa_callback, NULL))
     {
       key = gpapa_get_secret_key_by_index (0, gpa_callback, NULL);
-      id = xstrdup (gpapa_key_get_identifier (GPAPA_KEY (key), gpa_callback,
-					      NULL));
+      id = xstrdup_or_null (gpapa_key_get_identifier (GPAPA_KEY (key),
+                                                      gpa_callback, NULL));
     }
   else
     id = NULL;

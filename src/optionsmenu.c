@@ -44,7 +44,7 @@ options_keyserver_set (gpointer param)
 
   entry = GTK_COMBO (comboServer)->entry;
   /* FIXME: In this form, setting the default server is a memory leak */
-  global_keyserver = xstrdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+  global_keyserver = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY (entry)));
 
   paramDone[0] = keeperServer;
   paramDone[1] = NULL;
@@ -178,7 +178,7 @@ options_recipients_set (gpointer param)
     {
       gtk_clist_get_text (GTK_CLIST (clistDefault), i, 1, &keyID);
       global_defaultRecipients =
-	g_list_append (global_defaultRecipients, xstrdup (keyID));
+	g_list_append (global_defaultRecipients, xstrdup_or_null (keyID));
     }				/* for */
   gpa_recipientWindow_close (param);
 }				/* options_recipients_set */
@@ -413,7 +413,7 @@ options_key_set (gpointer param)
   localParam = (gpointer *) param;
   keyID = (gchar **) localParam[0];
   keeperKey = (GpaWindowKeeper *) localParam[1];
-  gpa_set_default_key (xstrdup (*keyID));
+  gpa_set_default_key (xstrdup_or_null (*keyID));
   paramDone[0] = keeperKey;
   paramDone[1] = NULL;
   gpa_window_destroy (paramDone);

@@ -537,9 +537,9 @@ file_dialog_ok (gpointer param)
 {
   GPASaveFileNameDialog * dialog = param;
 
-  dialog->filename \
+  dialog->filename 
       = gtk_file_selection_get_filename (GTK_FILE_SELECTION (dialog->window));
-  dialog->filename = xstrdup (dialog->filename);
+  dialog->filename = xstrdup_or_null (dialog->filename);
 
   gtk_widget_destroy (dialog->window);
 }

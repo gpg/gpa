@@ -109,11 +109,10 @@ gpapa_extract_fingerprint (char *line, int algorithm,
         }
       i++;
       if (i >= GPAPA_MAX_GPG_KEY_FIELDS)
-        callback (GPAPA_ACTION_ERROR,
-                  "too many fields in GPG colon output", calldata);
+          break;
     }
   fields = i;
-  if (fields != 10)
+  if (fields < 10)
     {
       callback (GPAPA_ACTION_ERROR,
                 "invalid number of fields in GPG colon output", calldata);
@@ -222,11 +221,10 @@ extract_key (char *line, GpapaCallbackFunc callback, gpointer calldata)
         }
       i++;
       if (i >= GPAPA_MAX_GPG_KEY_FIELDS)
-        callback (GPAPA_ACTION_ERROR,
-                  "too many fields in GPG colon output", calldata);
+          break;
     }
   fields = i;
-  if (fields != 10)
+  if (fields < 10)
     {
       callback (GPAPA_ACTION_ERROR,
                 "invalid number of fields in GPG colon output", calldata);

@@ -1,3 +1,18 @@
+2001-03-28  Werner Koch  <wk@gnupg.org>
+
+	* gpa.c (gpa_determine_default_key): Replaced xstrduup by
+	xstrdup_or_null to avoid a segv. 
+	* optionsmenu.c (options_key_set): Ditto, to make it more robust.
+	(options_keyserver_set): Ditto.
+	* passphrasedlg.c (passphrase_ok): Ditto.
+	* keyimportdlg.c (import_ok): Ditto.
+	* keygendlg.c (gpa_key_gen_run_dialog): Ditto.
+	* keyexportdlg.c (export_ok): Ditto.
+	* gtktools.c (file_dialog_ok): Ditto.
+	* gpawidgets.c (gpa_secret_key_list_new): Ditto.
+	(gpa_public_key_list_new): Ditto.
+	* keylist.c (keylist_fill_list): Insert only if we got a keyID.
+
 2001-02-27	Jan-Oliver Wagner <jan@intevation.de>
 
 	* helpmenu.c: Added some authors for scroll text 
