@@ -34,9 +34,15 @@
 #undef HAVE_U16_TYPEDEF
 #undef HAVE_U32_TYPEDEF
 
+/* set this to limit filenames to the 8.3 format */
+#undef USE_ONLY_8DOT3
 /* defined if we run on some of the PCDOS like systems (DOS, Windoze. OS/2)
  * with special properties like no file modes */
 #undef HAVE_DOSISH_SYSTEM
+/* because the Unix gettext has to much overhead on MingW32 systems
+ *  * and these systems lack Posix functions, we use a simplified version
+ *   * of gettext */
+#undef USE_SIMPLE_GETTEXT
 /* defined if the filesystem uses driver letters */
 #undef HAVE_DRIVE_LETTERS
 /* Some systems have a mkdir that takes a single argument. */
