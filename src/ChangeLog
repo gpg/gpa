@@ -1,5 +1,8 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* gpapastrings.c (gpa_ownertrust_string):
+	(gpa_unit_expiry_time_string): Translate the returned strings.
+
 	* keyring.c (keyring_editor_new): Mark the big label for
 	translation
 
