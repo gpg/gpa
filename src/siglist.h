@@ -18,8 +18,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef GPAWIDGETS_H
-#define GPAWIDGETS_H
+#ifndef SIGLIST_H
+#define SIGLIST_H
 
 #include <gtk/gtk.h>
 
@@ -28,4 +28,4 @@ void gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
 				 gchar * key_id);
 
 
-#endif GPAWIDGETS_H
+#endif /* SIGLIST_H */
