@@ -1,5 +1,8 @@
 2001-02-02  Bernhard Herzog  <bh@intevation.de>
 
+	* gpa.c (gpa_removeRecipients): Change "files" to "keys" in the
+	error message when no items are selected
+
 	* keyring.c (toolbar_export_key): Call keyring_editor_export
 
 	* gtktools.c (gpa_window_show_centered): Set the WM_TRANSIENT_FOR

@@ -656,7 +656,7 @@ gpa_removeRecipients (gpointer param)
   windowEncrypt = (GtkWidget *) localParam[2];
   if (!*recipientsSelected)
     {
-      gpa_window_error (_("No files selected to remove from recipients list"),
+      gpa_window_error (_("No keys selected to remove from recipients list"),
 			windowEncrypt);
       return;
     }				/* if */
