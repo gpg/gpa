@@ -28,6 +28,8 @@ gpa_SOURCES = gpa.c gpa.h \
 	      keyreceivedlg.c keyreceivedlg.h \
 	      keyexportdlg.c keyexportdlg.h \
 	      keygendlg.c keygendlg.h \
+	      keygenwizard.c keygenwizard.h \
+	      gpawizard.c gpawizard.h \
 	      gpapastrings.c gpapastrings.h
 
 

@@ -1,5 +1,13 @@
 2001-01-15  Bernhard Herzog  <bh@intevation.de>
 
+	* gpawizard.c: 
+	* gpawizard.h: 
+	New files implementing a simple generic wizard interface
+
+	* keygenwizard.h: 
+	* keygenwizard.c: 
+	New files implementing the key generation wizard
+
 	* keygendlg.c (gpa_key_gen_run_dialog): Connect to delete-event
 	and use the new gpa_window_show_centered function.
 

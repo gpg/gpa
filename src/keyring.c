@@ -36,6 +36,7 @@
 #include "keyreceivedlg.h"
 #include "keyexportdlg.h"
 #include "keygendlg.h"
+#include "keygenwizard.h"
 #include "keyring.h"
 
 /*
@@ -361,7 +362,7 @@ keyring_editor_destroy (gpointer param)
 
 /* generate a new key pair */
 static void
-keyring_editor_generate_key (gpointer param)
+keyring_editor_generate_key_advanced (gpointer param)
 {
   GPAKeyringEditor * editor = param;
   GPAKeyGenParameters * params;
@@ -438,6 +439,50 @@ keyring_editor_generate_key (gpointer param)
     }
 }
 
+static void
+keyring_editor_generate_key_simple (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+
+  if (gpa_keygen_wizard_run (editor->window))
+    keyring_editor_fill_keylist (editor);
+}
+
+static void
+keyring_editor_generate_key (gpointer param)
+{
+  if (gpa_simplified_ui ())
+    keyring_editor_generate_key_simple (param);
+  else
+    keyring_editor_generate_key_advanced (param);
+}
+
+static void
+keyring_editor_mapped (gpointer param)
+{
+  static gboolean asked_about_key_generation = FALSE;
+  GPAKeyringEditor * editor = param;
+
+  if (gpa_simplified_ui ())
+    {
+      if (gpapa_get_secret_key_count (gpa_callback, editor->window) == 0
+	  && !asked_about_key_generation)
+	{
+	  const gchar * buttons[] = {_("Generate key now"), _("Do it later"),
+				     NULL};
+	  gchar * result;
+	  result = gpa_message_box_run (editor->window, _("No key defined"),
+					_("You don not have a private key yet."
+					  " Do you want to generate one now"
+					  " (recommended) or do it later?"),
+					buttons);
+	  printf ("message box result: %s\n", result);
+	  if (strcmp(result, _("Generate key now")) == 0)
+	    keyring_editor_generate_key (param);
+	  asked_about_key_generation = TRUE;
+	}
+    }
+}
 
 /* Create a new keyring editor */
 
@@ -455,7 +500,6 @@ keyring_editor_menubar_new (GtkWidget * window,
   GtkItemFactoryEntry keys_menu[] = {
     {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
     {_("/Keys/_Generate Key"), NULL, keyring_editor_generate_key, 0, NULL},
-
     /*{_("/Keys/Generate _Revocation Certificate"), NULL,
 					 keys_generateRevocation, 0, NULL},*/
     /*{_("/Keys/_Import Keys"), NULL, keys_import, 0, NULL},*/
@@ -538,6 +582,9 @@ keyring_editor_new (void)
   gtk_window_set_default_size (GTK_WINDOW(windowPublic), 572, 400);
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowPublic), accelGroup);
+  gtk_signal_connect_object (GTK_OBJECT (windowPublic), "map",
+			     GTK_SIGNAL_FUNC (keyring_editor_mapped),
+			     (gpointer)editor);
 
   vboxPublic = gtk_vbox_new (FALSE, 0);
 
