@@ -1,5 +1,9 @@
 2001-02-08  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_toggle_show_trust): Removed because
+	it's no longer used. A similar effect is available with the
+	brief/detailed listings.
+ 
 	* keydeletedlg.h:
 	* keydeletedlg.c: New files for the key delete dialog.
 
