@@ -25,6 +25,7 @@
 #include "gpawidgets.h"
 #include "gpawizard.h"
 
+
 /*
  * The key generation wizard
  *
@@ -34,6 +35,25 @@
  * and we use a wizard interface to present the necessary options like
  * user id and password in a step by step manner.
  */
+
+
+/*
+ * Helper functions
+ */
+ 
+/* Return a copy of string with leading and trailing whitespace stripped */
+static gchar *
+string_strip_dup (gchar * string)
+{
+  return g_strstrip (xstrdup (string));
+}
+
+
+/*
+ * The wizard itself
+ */
+
+
 
 typedef struct {
   GtkWidget * window;
@@ -90,7 +110,7 @@ gpa_keygen_wizard_simple_get_text (GtkWidget * vbox)
   GtkWidget * entry;
 
   entry = gtk_object_get_data (GTK_OBJECT (vbox), "gpa_keygen_entry");
-  return gtk_entry_get_text (GTK_ENTRY (entry));
+  return string_strip_dup (gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
 
@@ -106,6 +126,23 @@ gpa_keygen_wizard_name_page (void)
      _("Your Name:"));
 }
 
+static gboolean
+gpa_keygen_wizard_name_validate (gpointer data)
+{
+  GPAKeyGenWizard * keygen_wizard = data;
+  gboolean result = TRUE;
+  gchar * name = gpa_keygen_wizard_simple_get_text (keygen_wizard->name_page);
+
+  if (!*name)
+    {
+      /* The string is empty or consists entirely of whitespace */
+      gpa_window_error (_("Please insert your name"), keygen_wizard->window);
+      result = FALSE;
+    }
+
+  free (name);
+  return result;
+}
 
 static GtkWidget *
 gpa_keygen_wizard_email_page (void)
@@ -119,6 +156,29 @@ gpa_keygen_wizard_email_page (void)
        " If you have several email adresses, you can add further email"
        " adresses later."),
      _("Your Email Adress:"));
+}
+
+
+static gboolean
+gpa_keygen_wizard_email_validate (gpointer data)
+{
+  GPAKeyGenWizard * keygen_wizard = data;
+  gboolean result = TRUE;
+  gchar * email;
+
+  email = gpa_keygen_wizard_simple_get_text (keygen_wizard->email_page); 
+  if (!*email)
+    {
+      /* The string is empty or consists entirely of whitespace */
+      gpa_window_error (_("Please insert your email address"),
+			keygen_wizard->window);
+      result = FALSE;
+    }
+  /* FIXME: we should do much more checking. Best would be exactly the
+   * same checks gpg does in interactive mode with --gen-key */
+
+  free (email);
+  return result;
 }
 
 
@@ -195,6 +255,9 @@ gpa_keygen_wizard_password_get_password (GtkWidget * vbox)
 /* Validate the password in both entries and return NULL if they're OK,
  * otherwise return a suitable message to be shown to the user.
  */
+/* FIXME: We should add some checks for whitespace because leading and
+ * trailing whitespace is stripped somewhere in gpapa/gpg and whitespace
+ * only passwords are not allowed */
 static gchar *
 gpa_keygen_wizard_password_validate (GtkWidget * vbox)
 {
@@ -272,6 +335,11 @@ gpa_keygen_wizard_password_action (gpointer data)
 
   successful = gpa_keygen_generate_key (name, email, comment, passwd,
 					keygen_wizard->window);
+
+  free (name);
+  free (email);
+  free (comment);
+  
   keygen_wizard->successful = successful;
   return successful;
 }
@@ -360,15 +428,18 @@ gpa_keygen_wizard_run (GtkWidget * parent)
 
   keygen_wizard->name_page = gpa_keygen_wizard_name_page ();
   gpa_wizard_append_page (wizard, keygen_wizard->name_page,
-			  NULL, NULL, NULL, NULL);
+			  NULL, NULL,
+			  gpa_keygen_wizard_name_validate, keygen_wizard);
 
   keygen_wizard->email_page = gpa_keygen_wizard_email_page ();
   gpa_wizard_append_page (wizard, keygen_wizard->email_page,
-			  NULL, NULL, NULL, NULL);
+			  NULL, NULL,
+			  gpa_keygen_wizard_email_validate, keygen_wizard);
 
   keygen_wizard->comment_page = gpa_keygen_wizard_comment_page ();
   gpa_wizard_append_page (wizard, keygen_wizard->comment_page,
 			  NULL, NULL, NULL, NULL);
+			  
 
   keygen_wizard->passwd_page = gpa_keygen_wizard_password_page ();
   /* Don't use F as the accelerator in "Finish" because Meta-F is
