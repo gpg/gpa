@@ -555,9 +555,6 @@ edit_sign_fnc_action (struct sign_parms_s *parms, const char **result)
       /* Special state: an error ocurred. Do nothing until we can quit */
     case 8:
       break;
-    case 9:
-      *result = "quit";
-      break;
       /* Can't happen */
     default:
       parms->err = GPGME_General_Error;
@@ -579,8 +576,8 @@ edit_sign_fnc_transit (struct sign_parms_s *parms, GpgmeStatusCode status,
         }
       else if (status == GPGME_STATUS_KEYEXPIRED)
         {
-          parms->err = GPGME_Invalid_Key;
-          parms->state = 8;
+          /* Skip every "signature by an expired key" status line */
+          parms->state = 0;
         }
       else
         {
@@ -605,6 +602,13 @@ edit_sign_fnc_transit (struct sign_parms_s *parms, GpgmeStatusCode status,
         {
           parms->state = 4;
         }
+      else if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          /* Failed sign: expired key */
+          parms->state = 8;
+          parms->err = GPGME_Invalid_Key;
+        }
       else
         {
           parms->state = 8;
@@ -622,6 +626,13 @@ edit_sign_fnc_transit (struct sign_parms_s *parms, GpgmeStatusCode status,
                g_str_equal (args, "sign_uid.class"))
         {
           parms->state = 4;
+        }
+      else if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          /* Failed sign: expired key */
+          parms->state = 8;
+          parms->err = GPGME_Invalid_Key;
         }
       else
         {
@@ -681,7 +692,8 @@ edit_sign_fnc_transit (struct sign_parms_s *parms, GpgmeStatusCode status,
       if (status == GPGME_STATUS_GET_LINE &&
           g_str_equal (args, "keyedit.prompt"))
         {
-          parms->state = 9;
+          /* Go to quit operation state */
+          parms->state = 6;
         }
       else
         {
