@@ -1,3 +1,14 @@
+2001-01-16  Bernhard Herzog  <bh@intevation.de>
+
+	* gpa.h: Removed global_tempWindows
+
+	* gpa.c: 
+	* gpawindowkeeper.c: 
+	Moved global_tempWindows to gpawindowkeeper as it's only used
+	there, made it static and renamed it to tempWindows because it's
+	not a global variable anymore.
+	
+
 2001-01-15  Bernhard Herzog  <bh@intevation.de>
 
 	* keygenwizard.c (gpa_keygen_wizard_final_page): 
