@@ -8,7 +8,7 @@ AC_PREREQ(2.52)
 dnl
 dnl The version number goes here
 dnl
-AC_INIT(gpa, 0.4.3, [bug-gpa@gnupg.org])
+AC_INIT(gpa, 0.4.3a-cvs, [bug-gpa@gnupg.org])
 
 ALL_LINGUAS="de fr zh_TW.Big5"
 AM_CONFIG_HEADER(config.h)
