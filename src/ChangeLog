@@ -1,5 +1,8 @@
 2001-02-05  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_export): Use the server returned by
+	the dialog and not the default server.
+
 	* siglist.c (GPASigList):
 	(gpa_siglist_new):
 	(gpa_siglist_set_signatures): Don't try to be too clever about
