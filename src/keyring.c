@@ -1076,7 +1076,10 @@ keyring_editor_new (void)
   vboxKeys = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
-  
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollerKeys),
+				  GTK_POLICY_AUTOMATIC,
+				  GTK_POLICY_AUTOMATIC);
+
   clistKeys =  gpa_keylist_new ((sizeof keylist_columns_brief)
 				/ (sizeof keylist_columns_brief[0]),
 				keylist_columns_brief, 10,
