@@ -1,3 +1,14 @@
+2003-03-23  Andy Ruddock <andy.ruddock@minnesund.net>
+
+	* options.h: Added 'detailed_view' configuration file option for
+	keylist window key view.
+	
+	* options.c: Added functions to read/write 'detailed_view'
+	configuration file option.
+	
+	* keyring.c: keylist window view reads configuration file and
+	defaults to brief/detailed view last used.
+
 2003-03-22  Miguel Coca  <mcoca@gnu.org>
 
 	* Makefile.am (gpa_SOURCES): Really remove gtkhacks.h.

@@ -1516,6 +1516,7 @@ keyring_set_brief_listing (GtkWidget *widget, gpointer param)
                                    (sizeof keylist_columns_brief)
                                    / (sizeof keylist_columns_brief[0]),
                                    keylist_columns_brief);
+      gpa_options_set_detailed_view (gpa_options_get_instance (), FALSE);
       gpa_keylist_update_list (editor->clist_keys);
     }
 } /* keyring_set_brief_listing */
@@ -1533,6 +1534,7 @@ keyring_set_detailed_listing (GtkWidget *widget, gpointer param)
                                    (sizeof keylist_columns_detailed)
                                    / (sizeof keylist_columns_detailed[0]),
                                    keylist_columns_detailed);
+      gpa_options_set_detailed_view (gpa_options_get_instance (), TRUE);
       gpa_keylist_update_list (editor->clist_keys);
     }
 } /* keyring_set_detailed_listing */
@@ -1584,6 +1586,8 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   GtkWidget *icon;
   GtkWidget *item;
   GtkWidget *button;
+  GtkWidget *view_b;
+  GtkWidget *view_d;
 
   toolbar = gtk_toolbar_new ();
   gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar),
@@ -1634,25 +1638,37 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 
   button = gtk_radio_button_new (NULL);
   icon = gpa_create_icon_widget (window, "brief");
-  item = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
-                                     GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
-                                     _("Brief"), _("Show Brief Keylist"),
-                                     _("brief"), icon,
-                                   GTK_SIGNAL_FUNC (keyring_set_brief_listing),
-                                     editor);
-  gtk_signal_handler_block_by_data (GTK_OBJECT (item), editor);
+  view_b = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
+                                       GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
+                                       _("Brief"), _("Show Brief Keylist"),
+                                       _("brief"), icon,
+                                       GTK_SIGNAL_FUNC (keyring_set_brief_listing),
+                                       editor);
+  /*gtk_signal_handler_block_by_data (GTK_OBJECT (item), editor);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), TRUE);
-  gtk_signal_handler_unblock_by_data (GTK_OBJECT (item), editor);
+  gtk_signal_handler_unblock_by_data (GTK_OBJECT (item), editor);*/
 
   button = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON (button));
   icon = gpa_create_icon_widget (window, "detailed");
-  gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
-                              GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
-                              _("Detailed"), _("Show Key Details"),
-                              _("detailed"), icon,
-                              GTK_SIGNAL_FUNC (keyring_set_detailed_listing),
-                              editor);
-
+  view_d = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
+                                       GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
+                                       _("Detailed"), _("Show Key Details"),
+                                       _("detailed"), icon,
+                                       GTK_SIGNAL_FUNC (keyring_set_detailed_listing),
+                                       editor);
+   /* Set brief or detailed button active according to option */
+   if (gpa_options_get_detailed_view (gpa_options_get_instance()) )
+     {
+       item = view_d;
+     }
+   else
+     {
+       item = view_b;
+     }
+   gtk_signal_handler_block_by_data (GTK_OBJECT (item), editor);
+   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), TRUE);
+   gtk_signal_handler_unblock_by_data (GTK_OBJECT (item), editor);
+ 
 #if 0
   /* Disabled for now. The long label causes the toolbar to grow too much.
    * See http://bugzilla.gnome.org/show_bug.cgi?id=75086
@@ -1873,9 +1889,20 @@ keyring_editor_new (void)
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
 
-  keylist =  gpa_keylist_new ((sizeof keylist_columns_brief)
-                                / (sizeof keylist_columns_brief[0]),
-                                keylist_columns_brief, 10, window);
+
+  if (gpa_options_get_detailed_view (gpa_options_get_instance()))
+    {
+      keylist = gpa_keylist_new ((sizeof keylist_columns_detailed)
+                                   / (sizeof keylist_columns_detailed[0]),
+                                   keylist_columns_detailed, 10, window);
+    }
+  else
+    {
+      keylist =  gpa_keylist_new ((sizeof keylist_columns_brief)
+                                    / (sizeof keylist_columns_brief[0]),
+                                    keylist_columns_brief, 10, window);
+    }
+
   editor->clist_keys = keylist;
   gtk_container_add (GTK_CONTAINER (scrolled), keylist);
 

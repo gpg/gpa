@@ -44,6 +44,7 @@ enum
   CHANGED_DEFAULT_KEY,
   CHANGED_DEFAULT_KEYSERVER,
   CHANGED_BACKUP_GENERATED,
+  CHANGED_VIEW,
   LAST_SIGNAL
 };
 
@@ -91,6 +92,7 @@ gpa_options_class_init (GpaOptionsClass *klass)
   klass->changed_default_key = gpa_options_save_settings;
   klass->changed_default_keyserver = gpa_options_save_settings;
   klass->changed_backup_generated = gpa_options_save_settings;
+  klass->changed_view = gpa_options_save_settings;
 
   /* Signals */
   signals[CHANGED_UI_MODE] =
@@ -118,6 +120,15 @@ gpa_options_class_init (GpaOptionsClass *klass)
                         NULL, NULL,
                         g_cclosure_marshal_VOID__VOID,
                         G_TYPE_NONE, 0);
+  signals[CHANGED_VIEW] =
+          g_signal_new ("changed_view",
+                        G_TYPE_FROM_CLASS (object_class),
+                        G_SIGNAL_RUN_FIRST,
+                        G_STRUCT_OFFSET (GpaOptionsClass,
+                                         changed_view),
+                        NULL, NULL,
+                        g_cclosure_marshal_VOID__VOID,
+                        G_TYPE_NONE, 0);
   signals[CHANGED_BACKUP_GENERATED] =
           g_signal_new ("changed_backup_generated",
                         G_TYPE_FROM_CLASS (object_class),
@@ -137,6 +148,7 @@ gpa_options_init (GpaOptions *options)
   options->backup_generated = FALSE;
   options->default_key = NULL;
   options->default_keyserver = NULL;
+  options->detailed_view = FALSE;
 }
 
 static void
@@ -318,6 +330,21 @@ gpa_options_get_default_keyserver (GpaOptions *options)
   return options->default_keyserver;
 }
 
+/* Remember whether using brief or detailed view */
+void
+gpa_options_set_detailed_view (GpaOptions *options, gboolean value)
+{
+  options->detailed_view = value;
+  g_signal_emit (options, signals[CHANGED_VIEW], 0);
+}
+
+gboolean
+gpa_options_get_detailed_view (GpaOptions *options)
+{
+  return options->detailed_view;
+}
+
+
 /* Remember whether the default key has already been backed up */
 void
 gpa_options_set_backup_generated (GpaOptions *options, gboolean value)
@@ -368,6 +395,10 @@ gpa_options_save_settings (GpaOptions *options)
       if (!options->simplified_ui)
         {
           fprintf (options_file, "%s\n", "advanced-ui");
+        }
+      if (options->detailed_view)
+        {
+          fprintf (options_file, "%s\n", "detailed-view");
         }
       fclose (options_file);
     }
@@ -453,6 +484,10 @@ gpa_options_read_settings (GpaOptions *options)
               else if (g_str_equal (next_word, "advanced-ui"))
                 {
                   options->simplified_ui = FALSE;
+                }
+              else if (g_str_equal (next_word, "detailed-view"))
+                {
+                  options->detailed_view = TRUE;
                 }
               break;
             case PARSE_OPTIONS_STATE_HAVE_KEY:

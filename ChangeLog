@@ -1,3 +1,7 @@
+2003-03-25  Miguel Coca  <mcoca@gnu.org>
+
+	* AUTHORS, NEWS: Updated.
+
 2003-02-07  Miguel Coca  <mcoca@gnu.org>
 
 	* Makefile.am (EXTRA_DIST): Add logo.

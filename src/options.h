@@ -45,6 +45,8 @@ struct _GpaOptions {
 
   gchar *default_key;
   gchar *default_keyserver;
+
+  gboolean detailed_view;
 };
 
 struct _GpaOptionsClass {
@@ -55,6 +57,7 @@ struct _GpaOptionsClass {
   void (*changed_default_key) (GpaOptions *options);
   void (*changed_default_keyserver) (GpaOptions *options);
   void (*changed_backup_generated) (GpaOptions *options);
+  void (*changed_view) (GpaOptions *options);
 };
 
 GType gpa_options_get_type (void) G_GNUC_CONST;
@@ -88,6 +91,10 @@ const gchar *gpa_options_get_default_keyserver (GpaOptions *options);
 /* Remember whether the default key has already been backed up */
 void gpa_options_set_backup_generated (GpaOptions *options, gboolean value);
 gboolean gpa_options_get_backup_generated (GpaOptions *options);
+
+/* Set whether the ui should be in detailed view */
+void gpa_options_set_detailed_view (GpaOptions *options, gboolean value);
+gboolean gpa_options_get_detailed_view (GpaOptions *options);
 
 /* Destroy the GpaOptions object */
 void gpa_options_destroy (GpaOptions *options);
