@@ -151,7 +151,7 @@ gpa_keylist_new (gint ncolumns, GPAKeyListColumn * columns, gint max_columns,
 
   keylist->window = window;
 
-  keylist->column_defs_changed = FALSE;
+  keylist->column_defs_changed = TRUE;
   keylist->max_columns = max_columns;
   keylist->ncolumns = ncolumns;
   keylist->column_defs = xmalloc (ncolumns * sizeof (*keylist->column_defs));
@@ -163,13 +163,12 @@ gpa_keylist_new (gint ncolumns, GPAKeyListColumn * columns, gint max_columns,
   clist = gtk_clist_new (max_columns);
   keylist->clist = clist;
   gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_EXTENDED);
-  keylist_fill_column_titles (keylist);
   gtk_clist_column_titles_show (GTK_CLIST (clist));
 
   gtk_object_set_data_full (GTK_OBJECT (clist), "gpa_keylist",
 			    keylist, keylist_free);
 
-  keylist_fill_list (keylist);
+  gpa_keylist_update_list (keylist->clist);
 
   return clist;
 }
@@ -299,14 +298,31 @@ gpa_keylist_set_column_defs (GtkWidget * clist, gint ncolumns,
 void
 gpa_keylist_update_list (GtkWidget * clist)
 {
+  gint i;
+  gint width;
   GPAKeyList * keylist = gtk_object_get_data (GTK_OBJECT (clist),
 					      "gpa_keylist");
+
   if (keylist->column_defs_changed)
     {
       keylist_fill_column_titles (keylist);
     }
-  keylist->column_defs_changed = FALSE;
   keylist_fill_list (keylist);
+
+  /* set all columns' width ot the optimal width, but only when the
+   * column defintions change so as not to annoy the user by changing
+   * user defined widths every time the list is updated */
+  if (keylist->column_defs_changed)
+    {
+      for (i = 0; i < keylist->ncolumns; i++)
+	{
+	  width = gtk_clist_optimal_column_width (GTK_CLIST (keylist->clist),
+						  i);
+	  gtk_clist_set_column_width (GTK_CLIST (keylist->clist), i, width);
+	}
+    }
+
+  keylist->column_defs_changed = FALSE;
 }
 
 
