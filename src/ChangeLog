@@ -1,3 +1,14 @@
+2001-01-24  Bernhard Herzog  <bh@intevation.de>
+
+	* keyring.c (keylist_columns_detailed):
+	(keylist_columns_brief): Put the name at the end.
+
+	* keylist.c (gpa_keylist_update_list): Make all columns have the
+	optimal width.
+	(gpa_keylist_new): Use gpa_keylist_update_list to fill the keylist
+	and create the title buttons, so that the columns havethe optimal
+	width.
+
 2001-01-23  Bernhard Herzog  <bh@intevation.de>
 
 	* keyring.c (keyring_toolbar_new): Add buttons for brief and
