@@ -13,7 +13,7 @@ bin_PROGRAMS = gpa
 INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/gpapa	-I$(top_srcdir)/intl
 LDADD = -L ../gpapa -lgpapa -L ../jnlib -ljnlib @INTLLIBS@
 
-gpa_SOURCES = gpa.c gpa.h \
+gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      keysmenu.c keysmenu.h	    \
 	      filemenu.c filemenu.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
