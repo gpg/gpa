@@ -29,6 +29,8 @@
 #include "optionsmenu.h"
 #include "helpmenu.h"
 
+#include <stdio.h> /*!!!*/
+
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain;
 GtkWidget *global_windowTip;
@@ -153,18 +155,187 @@ void sigs_append ( gpointer data, gpointer userData ) {
   gpointer *localParam;
   GtkWidget *clistSignatures;
   GtkWidget *windowPublic;
-  gchar *contentsSignatures [ 2 ];
+  gchar *contentsSignatures [ 3 ];
 /* commands */
   signature = (GpapaSignature*) data;
   localParam = (gpointer*) userData;
   clistSignatures = (GtkWidget*) localParam [ 0 ];
   windowPublic =    (GtkWidget*) localParam [ 1 ];
-  contentsSignatures [ 0 ] = gpapa_signature_get_identifier (
-    signature, gpa_callback, windowPublic
-  );
+contentsSignatures [ 0 ] = _( "Owner's name" ); /*!!!*/
 contentsSignatures [ 1 ] = _( "unknown" ); /*!!!*/
   gtk_clist_append ( GTK_CLIST ( clistSignatures ), contentsSignatures );
+  contentsSignatures [ 2 ] = gpapa_signature_get_identifier (
+    signature, gpa_callback, windowPublic
+  );
 } /* sigs_append */
+
+gint compareInts ( gconstpointer a, gconstpointer b ) {
+/* var */
+  gint aInt, bInt;
+/* commands */
+  aInt = *(gint*) a;
+  bInt = *(gint*) b;
+  if ( aInt > bInt )
+    return 1;
+  else if ( aInt < bInt )
+    return -1;
+  else
+    return 0;
+} /* compareInts */
+
+void printRow ( gpointer data, gpointer userData ) { /*!!!*/
+printf ( "%d ", *(gint*) data ); /*!!!*/
+} /*!!!*/
+
+void gpa_selectRecipient (
+  GtkCList *clist, gint row, gint column, GdkEventButton *event,
+  gpointer userData
+) {
+/* var */
+  GList **recipientsSelected;
+  gint *rowData;
+/* commands */
+  recipientsSelected = (GList**) userData;
+  rowData = (gint*) xmalloc ( sizeof ( gint ) );
+  *rowData = row;
+  *recipientsSelected = g_list_insert_sorted (
+    *recipientsSelected, rowData, compareInts
+  );
+g_print ( ":: " ); /*!!!*/
+g_list_foreach ( *recipientsSelected, printRow, NULL ); /*!!!*/
+g_print ( "\n" ); /*!!!*/
+} /* gpa_selectRecipient */
+
+void gpa_unselectRecipient (
+  GtkCList *clist, gint row, gint column, GdkEventButton *event,
+  gpointer userData
+) {
+/* var */
+  GList **recipientsSelected;
+  GList *indexRecipient, *indexNext;
+  gpointer data;
+/* commands */
+  recipientsSelected = (GList**) userData;
+  indexRecipient = g_list_first ( *recipientsSelected );
+  while ( indexRecipient )
+    {
+      indexNext = g_list_next ( indexRecipient );
+      if ( *(gint*) indexRecipient -> data == row )
+	{
+	  data = indexRecipient -> data;
+	  *recipientsSelected = g_list_remove ( *recipientsSelected, data );
+	  free ( data );
+	} /* if */
+      indexRecipient = indexNext;
+    } /* while */
+g_print ( ":: " ); /*!!!*/
+g_list_foreach ( *recipientsSelected, printRow, NULL ); /*!!!*/
+g_print ( "\n" ); /*!!!*/
+} /* gpa_unselectRecipient */
+
+void gpa_removeRecipients ( gpointer param ) {
+/* var */
+  gpointer *localParam;
+  GList **recipientsSelected;
+  GtkWidget *clistRecipients;
+  GtkWidget *windowEncrypt;
+  GList *indexRecipient;
+/* commands */
+  localParam = (gpointer*) param;
+  recipientsSelected = (GList**) localParam [ 0 ];
+  clistRecipients = (GtkWidget*) localParam [ 1 ];
+  windowEncrypt =   (GtkWidget*) localParam [ 2 ];
+  if ( ! *recipientsSelected )
+    {
+      gpa_window_error (
+	_( "No files selected to remove from recipients list" ), windowEncrypt
+      );
+      return;
+    } /* if */
+  indexRecipient = g_list_last ( *recipientsSelected );
+  while ( indexRecipient )
+    {
+      gtk_clist_remove (
+	GTK_CLIST ( clistRecipients ), *(gint*) indexRecipient -> data
+      );
+      free ( indexRecipient -> data );
+      indexRecipient = g_list_previous ( indexRecipient );
+    } /* while */
+  g_list_free ( *recipientsSelected );
+} /* gpa_removeRecipients */
+
+void gpa_addRecipient ( gpointer data, gpointer userData ) {
+/* var */
+  gpointer *localParam;
+  GpapaPublicKey *key;
+  GtkWidget *clistRecipients;
+  GtkWidget *windowEncrypt;
+  gchar *contentsRecipients [ 2 ];
+/* commands */
+  localParam = (gpointer*) userData;
+  clistRecipients = (GtkWidget*) localParam [ 0 ];
+  windowEncrypt =   (GtkWidget*) localParam [ 1 ];
+  key = gpapa_get_public_key_by_ID (
+    (gchar*) data, gpa_callback, windowEncrypt
+  );
+  contentsRecipients [ 0 ] = gpapa_key_get_name (
+    GPAPA_KEY ( key ), gpa_callback, windowEncrypt
+  );
+  contentsRecipients [ 1 ] = gpapa_key_get_identifier (
+    GPAPA_KEY ( key ), gpa_callback, windowEncrypt
+  );
+  gtk_clist_append ( GTK_CLIST ( clistRecipients ), contentsRecipients );
+} /* gpa_addRecipient */
+
+void gpa_addRecipients ( gpointer param ) {
+/* var */
+  gpointer *localParam;
+  GList **keysSelected;
+  GtkWidget *clistKeys;
+  GtkWidget *clistRecipients;
+  GtkWidget *windowEncrypt;
+  gpointer newParam [ 2 ];
+/* commands */
+  localParam = (gpointer*) param;
+  keysSelected =       (GList**) localParam [ 0 ];
+  clistKeys =       (GtkWidget*) localParam [ 1 ];
+  clistRecipients = (GtkWidget*) localParam [ 2 ];
+  windowEncrypt =   (GtkWidget*) localParam [ 3 ];
+  if ( ! *keysSelected )
+    {
+      gpa_window_error (
+	_( "No keys selected to add to recipients list." ), windowEncrypt
+      );
+      return;
+    } /* if */
+  newParam [ 0 ] = clistRecipients;
+  newParam [ 1 ] = windowEncrypt;
+  g_list_foreach (
+    *keysSelected, gpa_addRecipient, (gpointer) newParam
+  );
+  gtk_clist_unselect_all ( GTK_CLIST ( clistKeys ) );
+} /* gpa_addRecipients */
+
+void freeRowData ( gpointer data, gpointer userData ) {
+  free ( data );
+} /* freeRowData */
+
+void gpa_recipientWindow_close ( gpointer param ) {
+/* var */
+  gpointer *localParam;
+  GList **recipientsSelected;
+  GList **keysSelected;
+  GtkWidget *windowEncrypt;
+/* commands */
+  localParam = (gpointer*) param;
+  recipientsSelected = (GList**) localParam [ 0 ];
+  keysSelected =       (GList**) localParam [ 1 ];
+  windowEncrypt =   (GtkWidget*) localParam [ 2 ];
+  g_list_foreach ( *recipientsSelected, freeRowData, NULL );
+  g_list_free ( *recipientsSelected );
+  g_list_free ( *keysSelected );
+  gpa_window_destroy ( windowEncrypt );
+} /* gpa_recipientWindow_close */
 
 gint delete_event ( GtkWidget *widget, GdkEvent *event, gpointer data ) {
   file_quit ();

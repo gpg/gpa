@@ -65,7 +65,7 @@ MAINT =
 MAKEINFO = /home/wk/work/gpa/missing makeinfo
 PACKAGE = gpa
 RANLIB = ranlib
-VERSION = 0.0.0
+VERSION = 0.1.0
 
 INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/intl
 

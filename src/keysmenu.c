@@ -28,8 +28,6 @@
 
 #include <stdio.h> /*!!!*/
 
-/*!!!*/ static char *text2 [] = { N_( "Dummy Text" ), N_( "Dummy Text" ) }; /*!!!*/
-
 gchar *writtenKeytrust [ 4 ] = {
   N_( "unknown" ),
   N_( "don't trust" ),
@@ -191,7 +189,6 @@ GtkWidget *gpa_tableKey_new ( GpapaKey *key, GtkWidget *window ) {
 void gpa_frameExpire_dont ( GtkToggleButton *radioDont, gpointer param ) {
 /* var */
   gpointer *localParam;
-  GpapaSecretKey *key;
   GtkWidget *entryAfter;
   GtkWidget *comboAfter;
   GtkWidget *entryAt;
@@ -199,7 +196,6 @@ void gpa_frameExpire_dont ( GtkToggleButton *radioDont, gpointer param ) {
   if ( ! gtk_toggle_button_get_active ( radioDont ) )
     return;
   localParam = (gpointer*) param;
-  key =   (GpapaSecretKey*) localParam [ 0 ];
   entryAfter = (GtkWidget*) localParam [ 1 ];
   comboAfter = (GtkWidget*) localParam [ 2 ];
   entryAt =    (GtkWidget*) localParam [ 3 ];
@@ -496,7 +492,9 @@ void keys_openPublic_editKey ( gpointer param ) {
   GtkWidget *windowPublic;
   GpapaPublicKey *key;
   GtkAccelGroup *accelGroup;
-  gchar *titlesSignatures [] = { N_( "Signature" ), N_( "valid" ) };
+  gchar *titlesSignatures [] = {
+    N_( "Signature" ), N_( "valid" ), N_( "Key ID" )
+  };
   GList *signatures = NULL;
   gpointer paramAppend [ 2 ];
   gchar *contentsFingerprint;
@@ -589,19 +587,23 @@ void keys_openPublic_editKey ( gpointer param ) {
     GTK_BOX ( vboxSignatures ), labelJfdSignatures, FALSE, FALSE, 0
   );
   scrollerSignatures = gtk_scrolled_window_new ( NULL, NULL );
-  gtk_widget_set_usize ( scrollerSignatures, 320, 100 );
-  clistSignatures = gtk_clist_new_with_titles ( 2, titlesSignatures );
+  gtk_widget_set_usize ( scrollerSignatures, 350, 100 );
+  clistSignatures = gtk_clist_new_with_titles ( 3, titlesSignatures );
   gpa_connect_by_accelerator (
     GTK_LABEL ( labelSignatures ), clistSignatures,
     accelGroup, _( "S_ignatures" )
   );
-  gtk_clist_set_column_width ( GTK_CLIST ( clistSignatures ), 0, 200 );
+  gtk_clist_set_column_width ( GTK_CLIST ( clistSignatures ), 0, 180 );
   gtk_clist_set_column_justification (
     GTK_CLIST ( clistSignatures ), 0, GTK_JUSTIFY_LEFT
   );
   gtk_clist_set_column_width ( GTK_CLIST ( clistSignatures ), 1, 80 );
   gtk_clist_set_column_justification (
     GTK_CLIST ( clistSignatures ), 1, GTK_JUSTIFY_CENTER
+  );
+  gtk_clist_set_column_width ( GTK_CLIST ( clistSignatures ), 2, 120 );
+  gtk_clist_set_column_justification (
+    GTK_CLIST ( clistSignatures ), 2, GTK_JUSTIFY_LEFT
   );
   signatures = gpapa_public_key_get_sigs (
     key, gpa_callback, windowPublic
@@ -1035,7 +1037,7 @@ void keys_openSecret_editKey ( gpointer param ) {
   GList **keysSelected;
   GtkWidget *windowSecret;
   GpapaSecretKey *key;
-  GDate *expiryDate;
+  static GDate *expiryDate;
   GtkAccelGroup *accelGroup;
 /* objects */
   GtkWidget *windowEdit;
@@ -1291,7 +1293,7 @@ void keys_generateKey ( void ) {
   GtkAccelGroup *accelGroup;
   GList *contentsAlgorithm = NULL;
   GList *contentsKeysize = NULL;
-  GDate *expiryDate = NULL;
+  static GDate *expiryDate = NULL;
 /* objects */
   GtkWidget *windowGenerate;
     GtkWidget *vboxGenerate;

@@ -36,11 +36,6 @@ extern GtkWidget *global_windowTip;
 extern gboolean global_noTips;
 
 extern GtkWidget *gpa_get_global_clist_file ( void );
-/*!!!
-extern int gpa_passcache_callback (
-  PggPasscache passcache, PggPasscache_CbCmd cmd, const char *keyID
-);
-!!!*/
 extern void gpa_callback (
   GpapaAction action, gpointer actiondata, gpointer calldata
 );
@@ -48,5 +43,16 @@ extern void gpa_switch_tips ( void );
 extern void gpa_windowTip_init ( void );
 extern void gpa_windowTip_show ( gchar *text );
 extern void sigs_append ( gpointer data, gpointer userData );
+extern void gpa_selectRecipient (
+  GtkCList *clist, gint row, gint column, GdkEventButton *event,
+  gpointer userData
+);
+extern void gpa_unselectRecipient (
+  GtkCList *clist, gint row, gint column, GdkEventButton *event,
+  gpointer userData
+);
+extern void gpa_removeRecipients ( gpointer param );
+extern void gpa_addRecipients ( gpointer param );
+extern void gpa_recipientWindow_close ( gpointer param );
 
 #endif /*GPA_H*/
