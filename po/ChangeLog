@@ -1,3 +1,11 @@
+2004-08-21  Miguel Coca  <mcoca@gnu.org>
+
+	* pl.po: Add polish translation, by Emilian Nowak.
+
+	* tr.po: New turkish translation, provided by Can Berk Güder.
+
+	* LINGUAS: Add tr and pl.
+
 2003-11-03  Miguel Coca  <mcoca@gnu.org>
 
 	* ja.po: Updated by TAKAHASHI Tamotsu.

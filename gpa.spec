@@ -1,5 +1,5 @@
 %define name gpa
-%define version 0.4.3
+%define version 0.7.0
 
 Summary: Graphical user interface for the GnuPG.
 Name: %{name}

@@ -1,3 +1,10 @@
+2004-08-21  Miguel Coca  <mcoca@gnu.org>
+
+	* gpaexportop.c (gpa_export_operation_idle_cb): Armor by default.
+
+	* gpaexportfileop.c (gpa_export_file_operation_get_destination): Use
+	the provided armor value as default.
+
 2003-12-15  Miguel Coca  <mcoca@gnu.org>
 
 	* keylist.c (gpa_keylist_next, gpa_keylist_init): Change the sorting

@@ -133,10 +133,10 @@ gpa_export_file_operation_get_destination (GpaExportOperation *operation,
 
   /* Customize the dialog, adding the "armor" option */
   GtkWidget *armor_check = gtk_check_button_new_with_mnemonic (_("_armor"));
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (armor_check), *armor);
   if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
       GtkWidget *vbox = GTK_DIALOG (dialog)->vbox;
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (armor_check), TRUE);
       gtk_box_pack_start (GTK_BOX (vbox), armor_check, FALSE, FALSE, 0);
       gtk_widget_show_all (armor_check);
     }

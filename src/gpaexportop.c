@@ -191,7 +191,7 @@ static gboolean
 gpa_export_operation_idle_cb (gpointer data)
 {
   GpaExportOperation *op = data;
-  gboolean armor = FALSE;
+  gboolean armor = TRUE;
 
   if (GPA_EXPORT_OPERATION_GET_CLASS (op)->get_destination (op, &op->dest,
 							    &armor))
