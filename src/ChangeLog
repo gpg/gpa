@@ -1,5 +1,13 @@
 2001-01-24  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_update_signatures_page): Don't list the self
+	signaturs in simplified UI mode.
+
+	* siglist.c: Add some comments
+	(gpa_siglist_set_signatures): Add a key_id parameter to filter out
+	signatures of a given key. Useful to hide the self signatures of
+	keys.
+
 	* keyring.c (keyring_editor_new): Make the scrollbars of the
 	keylist appear automatically.
 	(keyring_editor_new): Put the keylist and the details notebook
