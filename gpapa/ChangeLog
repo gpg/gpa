@@ -1,3 +1,8 @@
+2001-01-29  Bernhard Herzog  <bh@intevation.de>
+
+	* Makefile.am (libgpapa_a_SOURCES): Correct the filename of
+	status-table.h and add context.h so that make dist works again
+
 Sat 27 Jan 2001 27:42 Peter Gerwinski <peter@gerwinski.de>
 
         * gpapaintern.c (line_handler, status_handler): added debug output.
