@@ -1,0 +1,128 @@
+
+Soft Tempest Demonstration Fonts 1.0
+------------------------------------
+
+Copyright © 1998 Markus G. Kuhn <mkuhn@acm.org>
+
+    This is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    The GNU General Public License is available from
+    <ftp://prep.ai.mit.edu/pub/gnu/COPYING> or from Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307,
+    USA
+
+This package contains Soft Tempest filtered and anti-aliased versions
+of the Courier font. These fonts were produced using the public domain
+X11 pixel font -adobe-courier-*-r-normal--40-386-75-75-m-0-iso8859-1.
+The two available fixed glyph cell sizes are 13x24 pixels and 8x13
+pixels, in both medium (m) and bold (b) weight.
+
+The enclosed files are
+
+  cur-13x24b-a.gif  cur-13x24m-a.gif  cur-8x14b-a.gif   cur-8x14m-a.gif
+  cur-13x24b-b.gif  cur-13x24m-b.gif  cur-8x14b-b.gif   cur-8x14m-b.gif
+  cur-13x24b-c.gif  cur-13x24m-c.gif  cur-8x14b-c.gif   cur-8x14m-c.gif
+  cur-13x24b-d.gif  cur-13x24m-d.gif  cur-8x14b-d.gif   cur-8x14m-d.gif
+
+To use the fonts, just cut the provided images into 16x12 blocks of
+the respective cell size and supply these 8-bit greyscale bitmaps to
+your text-output routine. The provided glyps cover the entire ISO/IEC
+8859-1 character set.
+
+Every font is provided in four variations (a/b/c/d), which differ
+slightly in their sampling offset and filter parameters. We recommend
+that display routines switch randomly between the four variations, in
+order to make automatic character recognition in eavesdropping
+receivers more challenging. It is also possible to add some amount of
+random noise when placing characters on the screen. This random noise
+should be added individually for every character in the displayed text
+and not commonly for all characters in the glyph table (otherwise the
+noise would become characteristic for a character and would just aid
+pattern matching algorithms that try to distinguish between
+characters). If the characters are displayed in video modes with less
+than 256 luminosity levels, then the noise should be added to the
+8-bit glyph-pixel values before the least significant bits are
+stripped off for the display buffer (dithering).
+
+Some Background Information
+
+Computer monitors (both CRT and LCD) emit the video signal that they
+display as electromagnetic waves over the air and via the power supply
+lines. Eavesdroppers can pick up this signal at a distance and can
+reconstruct the screen content [1]. Some signals can easily be picked
+up in neighbor rooms even using cheap modified household equipment.
+With professional eavesdropping receivers and antennas, this works
+even outside the building in which the computer is located, under good
+conditions even hundreds of meters away.
+
+Professional monitoring receivers for compromising radiation use
+automatic character recognition algorithms to transcribe received
+display signals into text files. These can then be indexed, searched
+for relevant information, and archived for further reference in
+intelligence gathering databases. Experiments indicate that the
+reception and especially the automatic recognition of characters can
+be made significantly more difficult with a number of software
+countermeasures [2,3]. Greyscale fonts in which high-frequency
+vertical edges have been carefully smoothed by low-pass filters emit
+significantly less energy and the emitted remaining signal is more
+difficult to separate from the background noise. Minor random
+variations of the glyph shapes increase the number of patterns that
+the matching algorithms in eavesdropping receivers have to cope with.
+These variations help to increase significantly the error rate of the
+pattern recognition process, thus reducing the value of the gathered
+data for automatic processing.
+
+Filtered fonts do not guarantee the same level of protection as fully
+shielded Tempest-certified hardware, but they can be implemented at a
+significantly lower cost and can often achieve the required level of
+protection if they are used together with a reasonable security
+policy. Filtered fonts do for instance not provide protection against
+malicious software that modifies the screen content at a pixel level
+in order to transmit data covertly [2]. Protection against malicious
+software requires secure operating systems--preferably with mandatory
+access control--and strict adherence to adequate operational
+procedures. Since filtered fonts require successful eavesdroppers to
+come much closer to the target machine, they reduce the probability of
+a successful interception of confidential text considerably. They are
+therefore a valuable additional precaution that can be applied easily
+to maintain a reasonable level of communication and computer security.
+
+Tempest protection by filtered fonts and related techniques are in the
+process of being patented internationally. This demonstration font can
+be copied and used freely in products for which the source code is
+made freely available (see the GNU General Public License for
+details). Contact the author for further information if you want to
+use this technology in commercial or military products.
+
+This package is available from
+
+  http://www.cl.cam.ac.uk/~mgk25/st-fonts.zip
+
+
+References:
+
+ [1] Wim van Eck. Electromagnetic Radiation from Video Display Units:
+     An Eavesdropping Risk? Computers & Security, vol 4, no 4,
+     pp 269--286, December 1985
+
+ [2] Markus G. Kuhn and Ross J. Anderson. Soft Tempest: Hidden Data
+     Transmission Using Electromagnetic Emanations, in Proceedings of
+     the Second International Workshop on Information Hiding, Portland,
+     Oregon, USA, April 15-17, 1998, Springer-Verlag, Berlin, Heidelberg,
+     LNCS 1525, pp 126-143
+
+ [3] Markus G. Kuhn, Ross J. Anderson: Low Cost Countermeasures
+     Against Compromising Electromagnetic Computer Emanations. UK
+     patent application no 9801745.2, January 28, 1998
+
+-- 
+Markus G. Kuhn, Security Group, Computer Lab, Cambridge University, UK
+email: mkuhn at acm.org,  home page: <http://www.cl.cam.ac.uk/~mgk25/>
