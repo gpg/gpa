@@ -298,12 +298,30 @@ gpa_connect_by_accelerator (GtkLabel * label, GtkWidget * widget,
 }				/* gpa_connect_by_accelerator */
 
 
-/* Set the text of the GtkButton button to text */
+/* Set the text of the GtkButton button to text, remove existing
+ * accelerators and and add new accelerators if accel_group is not NULL
+ */
 void
-gpa_button_set_text (GtkWidget * button, gchar * text)
+gpa_button_set_text (GtkWidget * button, gchar * text,
+		     GtkAccelGroup * accel_group)
 {
   GtkWidget * label = GTK_BIN (button)->child;
-  gtk_label_set_text (GTK_LABEL (label), text);
+  guint accel;
+
+  accel = gtk_label_parse_uline (GTK_LABEL (label), text);
+
+  /* In GTK 1.2.8, the visible_only parameter of
+   * gtk_widget_remove_accelerators is not even looked at, it always
+   * behaves as if it were TRUE. Therefore make sure that
+   * gtk_widget_add_accelerator is called with the GTK_ACCEL_VISIBLE
+   * flag set to make remvoing the accels work.
+   */
+  gtk_widget_remove_accelerators (button, "clicked", TRUE);
+  if (accel_group && accel != GDK_VoidSymbol)
+    {
+      gtk_widget_add_accelerator (button, "clicked", accel_group,
+				  accel, GDK_MOD1_MASK, GTK_ACCEL_VISIBLE);
+    }
 }
 
 void
@@ -375,6 +393,81 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
   gpa_widget_set_centered (windowMessage, messenger);
   gtk_widget_grab_focus (buttonClose);
 }				/* gpa_window_message */
+
+
+/* a simple but flexible message box */
+
+static gboolean
+message_box_delete (GtkWidget *widget, GdkEvent *event, gpointer param)
+{
+  gtk_object_set_data (GTK_OBJECT (widget), "user_data", NULL);
+  gtk_main_quit ();
+  return FALSE;
+}
+
+static void
+message_box_clicked (GtkWidget * button, gpointer param)
+{
+  GtkWidget * toplevel = gtk_widget_get_toplevel (button);
+
+  gtk_object_set_data (GTK_OBJECT (toplevel), "user_data", param);
+  gtk_main_quit ();
+}
+
+gchar *
+gpa_message_box_run (GtkWidget * parent, const gchar * title,
+		     const gchar * message,
+		     const gchar ** buttons)
+{
+  GtkWidget * window;
+  GtkWidget * vbox;
+  GtkWidget * label;
+  GtkWidget * bbox;
+  GtkWidget * button;
+  int i;
+  gchar * result;
+
+  window = gtk_window_new (GTK_WINDOW_DIALOG);
+  gtk_window_set_title (GTK_WINDOW (window), title);
+  gtk_signal_connect (GTK_OBJECT (window), "delete-event",
+		      GTK_SIGNAL_FUNC (message_box_delete),
+		      NULL);
+
+  vbox = gtk_vbox_new (FALSE, 5);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+
+  label = gtk_label_new (message);
+  gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+
+  bbox = gtk_hbutton_box_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), bbox, TRUE, TRUE, 0);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_SPREAD);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), 10);
+
+  for (i = 0; buttons[i]; i++)
+    {
+      button = gtk_button_new_with_label (buttons[i]);
+      gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (message_box_clicked),
+			  (gpointer)buttons[i]);
+    }
+
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
+  gpa_window_show_centered (window, parent);
+
+  gtk_main ();
+
+  result = gtk_object_get_data (GTK_OBJECT (window), "user_data");
+
+  gtk_widget_destroy (window);
+
+  return result;
+}
+  
 
 void
 gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func, gchar * tip,
