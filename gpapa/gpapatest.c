@@ -120,6 +120,70 @@ getpass (const char *prompt)
   buf[i] = 0;
   return buf;
 }
+
+
+
+static void
+out_of_core(void)
+{
+    fputs("\nfatal: out of memory\n", stderr );
+    exit(2);
+}
+
+
+void *
+xmalloc( size_t n )
+{
+    void *p = malloc( n );
+    if( !p )
+	out_of_core();
+    return p;
+}
+
+void *
+xrealloc( void *a, size_t n )
+{
+    void *p = realloc( a, n );
+    if( !p )
+	out_of_core();
+    return p;
+}
+
+void *
+xcalloc( size_t n, size_t m )
+{
+    void *p = calloc( n, m );
+    if( !p )
+	out_of_core();
+    return p;
+}
+
+char *
+xstrdup( const char *string )
+{
+    void *p = xmalloc( strlen(string)+1 );
+    strcpy( p, string );
+    return p;
+}
+
+
+char *
+xstrcat2( const char *a, const char *b )
+{
+    size_t n1;
+    char *p;
+
+    if( !b )
+	return xstrdup( a );
+
+    n1 = strlen(a);
+    p = xmalloc( n1 + strlen(b) + 1 );
+    memcpy(p, a, n1 );
+    strcpy(p+n1, b );
+    return p;
+}
+
+
 #endif /* __MINGW32__ */
 
 
