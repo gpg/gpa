@@ -283,6 +283,12 @@ GpgmeError gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
    * each method, we duplicate the fingerprint with GLib */
   *fpr = g_strdup (fpr_ret);
   free (fpr_ret);
+  /* Load the key into the keytable. Needed if we are to make a backup right
+   * now. */
+  if (fpr)
+    {
+      gpa_keytable_load_key (keytable, *fpr);
+    }
 
   return err;
 }

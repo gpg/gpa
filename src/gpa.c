@@ -463,7 +463,6 @@ main (int argc, char **argv)
   int greeting = 0;
   int nogreeting = 0;
   const char *gpg_program = GPG_PROGRAM;
-  gchar *gtkrc;
   const char *keyserver = NULL;
   GpgmeError err;
 

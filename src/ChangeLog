@@ -1,5 +1,28 @@
 2002-11-20  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* gpgmetools.c (gpa_generate_key): Load the generated key into the
+	keytable.
+
+	* keygenwizard.c (file_dirname, isdir): Removed.
+	(gpa_keygen_wizard_run): Remove the backup directory page.
+	(gpa_keygen_wizard_backup_dir_browse) 
+	(gpa_keygen_wizard_backup_dir_page) 
+	(gpa_keygen_wizard_backup_get_text) 
+	(gpa_keygen_wizard_backup_dir_action): Removed.
+	(gpa_keygen_wizard_backup_action): Removed, replaced by
+	_generate_action.
+	(gpa_keygen_wizard_run, free_keygen_wizard): Remove backup filenames.
+	(gpa_keygen_wizard_generate_action): Do the key backup here.
+	(gpa_keygen_wizard_run): Make generate the action for the backup page.
+
+	* keyexportdlg.c (do_backup): New.
+	(key_backup_dialog_run): Do the backup here.
+
+	* keyring.c (keyring_editor_backup): Assume backups are done by the
+	dialog.
+	
+	* gpa.c (main): Remove unused variable.
+	
 	* keyring.c (keyring_editor_generate_key_advanced): Use the new
 	prototype of gpa_generate_key().
 	* keygenwizard.c (gpa_keygen_wizard_generate_action): Likewise.

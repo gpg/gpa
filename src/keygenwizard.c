@@ -30,7 +30,7 @@
 #include "gpawizard.h"
 #include "qdchkpwd.h"
 #include "gpgmetools.h"
-
+#include "keyexportdlg.h"
 
 /*
  * The key generation wizard
@@ -52,34 +52,6 @@ static gchar *
 string_strip_dup (gchar * string)
 {
   return g_strstrip (g_strdup (string));
-}
-
-/* Return TRUE if filename is a directory */
-gboolean
-isdir (const gchar * filename)
-{
-  struct stat statbuf;
-
-  return (stat (filename, &statbuf) == 0
-	  && S_ISDIR (statbuf.st_mode));
-}
-
-/* Return a copy of filename if it's a directory, its (malloced)
- * basename otherwise */
-gchar *
-file_dirname (const gchar * filename)
-{
-  gchar * result;
-  if (!isdir (filename))
-    {
-      result = g_dirname (filename);
-    }
-  else
-    {
-      result = g_strdup (filename);
-    }
-
-  return result;
 }
 
 
@@ -104,9 +76,6 @@ typedef struct {
   GtkAccelGroup * accel_group;
   GdkPixmap * genkey_pixmap;
   GdkPixmap * backup_pixmap;
-  gboolean create_backups;
-  gchar * pubkey_filename;
-  gchar * seckey_filename;
   gboolean successful;
 } GPAKeyGenWizard;
 
@@ -411,192 +380,6 @@ gpa_keygen_wizard_backup_page (GPAKeyGenWizard * keygen_wizard)
   return vbox;
 }
 
-
-static gboolean
-gpa_keygen_wizard_backup_action (gpointer data)
-{
-  GPAKeyGenWizard * keygen_wizard = data;
-  GtkWidget * radio;
-  gboolean do_backup;
-
-  radio = gtk_object_get_data (GTK_OBJECT (keygen_wizard->backup_page),
-			       "gpa_keygen_backup");
-  do_backup = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio));
-
-  keygen_wizard->create_backups = do_backup;
-
-  if (!do_backup)
-    {
-      gpa_wizard_next_page_no_action (keygen_wizard->wizard);
-      keygen_wizard->successful
-	= gpa_keygen_wizard_generate_action (keygen_wizard);
-    }
-  return TRUE;
-}
-
-
-static void
-gpa_keygen_wizard_backup_dir_browse (GtkWidget * button, gpointer param)
-{
-  GtkWidget * entry = param;
-  gchar * filename;
-  gchar * dirname;
-
-  filename = gpa_get_load_file_name (gtk_widget_get_toplevel (button),
-				     _("Backup Directory"), NULL);
-  if (filename)
-    {
-      dirname = file_dirname (filename);
-      gtk_entry_set_text (GTK_ENTRY (entry), dirname);
-      g_free (filename);
-      g_free (dirname);
-    }
-}
-  
-  
-
-static GtkWidget *
-gpa_keygen_wizard_backup_dir_page (GPAKeyGenWizard * keygen_wizard)
-{
-  GtkWidget * vbox;
-  GtkWidget * description;
-  GtkWidget * hbox;
-  GtkWidget * entry;
-  GtkWidget * label;
-  GtkWidget * button;
-  
-  vbox = gtk_vbox_new (FALSE, 0);
-
-  description = gtk_label_new (_("Please enter a directory where your"
-				 " backup keys should be saved.\n\n"
-				 "GPA will create two files in that directory:"
-				 " pub_key.asc and sec_key.asc"));
-  gtk_box_pack_start (GTK_BOX (vbox), description, TRUE, TRUE, 0);
-  gtk_misc_set_alignment (GTK_MISC (description), 0.0, 0.0);
-  gtk_label_set_line_wrap (GTK_LABEL (description), TRUE);
-  gtk_label_set_justify (GTK_LABEL (description), GTK_JUSTIFY_LEFT);
-
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
-
-  label = gtk_label_new (_("Directory:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-
-  entry = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 5);
-  gtk_signal_connect (GTK_OBJECT (entry), "activate",
-		      GTK_SIGNAL_FUNC (switch_to_next_page), keygen_wizard);
-
-  button = gpa_button_new (keygen_wizard->accel_group, _("B_rowse..."));
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, TRUE, 0);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (gpa_keygen_wizard_backup_dir_browse),
-		      entry);
-
-  gtk_object_set_data (GTK_OBJECT (vbox), "gpa_keygen_entry", entry);
-  gtk_object_set_data (GTK_OBJECT (vbox), "gpa_wizard_focus_child", entry);
-
-  return vbox;
-}
-
-static gchar *
-gpa_keygen_wizard_backup_get_text (GtkWidget * vbox)
-{
-  GtkWidget * entry;
-
-  entry = gtk_object_get_data (GTK_OBJECT (vbox), "gpa_keygen_entry");
-  return string_strip_dup ((gchar *) gtk_entry_get_text (GTK_ENTRY (entry)));
-}
-
-static gboolean
-gpa_keygen_wizard_backup_dir_action (gpointer data)
-{
-  GPAKeyGenWizard * keygen_wizard = data;
-  gchar * dir;
-  struct stat statbuf;
-  gboolean result = FALSE;
-/*  const gchar * buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
-  gchar * message;
-  gchar * reply;
-  */
-  dir = gpa_keygen_wizard_backup_get_text (keygen_wizard->backup_dir_page);
-
-  if (!isdir (dir))
-    {
-      const gchar *buttons[] = {_("C_reate"), _("_Cancel"), NULL};
-      gchar *message = g_strdup_printf (_("Directory %s does not exist.\n"
-					  "Do you want to create it now?"),
-					dir);
-      gchar *reply = gpa_message_box_run (keygen_wizard->window, _("Directory does not exist"),
-				          message, buttons);
-      if (!reply || strcmp (reply, _("C_reate")) != 0)
-	result = FALSE;
-      else
-        {
-	  g_free (message);
-	  if (mkdir (dir, 0755) < 0)
-	    {
-	      const gchar *buttons_1[] = {_("_OK"), NULL};
-	      gchar *message1 = g_strdup_printf (_("Error creating directory \"%s\": %s\n"),
-						dir, g_strerror (errno));
-	      gpa_message_box_run (keygen_wizard->window, _("Error creating directory"),
-				   message, buttons_1);
-	      g_free (message1);
-	      result = FALSE;
-	    }
-	}
-    }
-  if (isdir (dir))
-    {
-      const gchar * buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
-      gchar * message;
-      gchar * reply;
-      /* FIXME: we should also test for permissions */
-      keygen_wizard->pubkey_filename = g_strconcat (dir, "/pub_key.asc", NULL);
-      keygen_wizard->seckey_filename = g_strconcat (dir, "/sec_key.asc", NULL);
-      result = TRUE;
-      if (stat (keygen_wizard->pubkey_filename, &statbuf) == 0)
-	{
-	  message = g_strdup_printf (_("The file %s already exists.\n"
-				       "Do you want to overwrite it?"),
-				     keygen_wizard->pubkey_filename);
-	  reply = gpa_message_box_run (keygen_wizard->window, _("File exists"),
-				       message, buttons);
-	  if (!reply || strcmp (reply, _("_Overwrite")) != 0)
-	    result = FALSE;
-	  g_free (message);
-	}
-
-      if (result && stat (keygen_wizard->pubkey_filename, &statbuf) == 0)
-	{
-	  message = g_strdup_printf (_("The file %s already exists.\n"
-				       "Do you want to overwrite it?"),
-				     keygen_wizard->seckey_filename);
-	  reply = gpa_message_box_run (keygen_wizard->window, _("File exists"),
-				       message, buttons);
-	  if (!reply || strcmp (reply, _("_Overwrite")) != 0)
-	    result = FALSE;
-	  g_free (message);
-	}
-    }
-  else
-    {
-      gpa_window_error (_("Please enter a valid directory"),
-			  keygen_wizard->window);
-    }
-
-  if (result)
-    {
-      keygen_wizard->successful
-	= gpa_keygen_wizard_generate_action (keygen_wizard);
-    }
-
-  g_free (dir);
-  return result;
-}
-
-
 static GtkWidget *
 gpa_keygen_wizard_message_page (const gchar * description_text)
 {
@@ -644,6 +427,13 @@ gpa_keygen_wizard_generate_action (gpointer data)
   GPAKeyGenParameters params;
   GpgmeError err;
   gchar *fpr;
+  gboolean do_backup;
+  GtkWidget *radio;
+
+  /* Shall we make backups? */
+  radio = gtk_object_get_data (GTK_OBJECT (keygen_wizard->backup_page),
+			       "gpa_keygen_backup");
+  do_backup = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio));
 
   /* The User ID */
   params.userID = gpa_keygen_wizard_simple_get_text (keygen_wizard->name_page);
@@ -669,15 +459,21 @@ gpa_keygen_wizard_generate_action (gpointer data)
     gtk_main_iteration();
 
   err = gpa_generate_key (&params, &fpr);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }
+  if (do_backup)
+    {
+      key_backup_dialog_run (keygen_wizard->window, fpr);
+    }
   g_free (fpr);
-
-  keygen_wizard->successful = (err == GPGME_No_Error);
-
   g_free (params.userID);
   g_free (params.email);
   g_free (params.comment);
 
-  return keygen_wizard->successful;
+  keygen_wizard->successful = TRUE;
+  return TRUE;
 }
 
 
@@ -705,8 +501,6 @@ free_keygen_wizard (gpointer data)
 {
   GPAKeyGenWizard * keygen_wizard = data;
 
-  g_free (keygen_wizard->pubkey_filename);
-  g_free (keygen_wizard->seckey_filename);
   gdk_pixmap_unref (keygen_wizard->genkey_pixmap);
   gdk_pixmap_unref (keygen_wizard->backup_pixmap);
   g_free (keygen_wizard);
@@ -747,8 +541,6 @@ gpa_keygen_wizard_run (GtkWidget * parent)
 
   keygen_wizard = g_malloc (sizeof (*keygen_wizard));
   keygen_wizard->successful = FALSE;
-  keygen_wizard->pubkey_filename = NULL;
-  keygen_wizard->seckey_filename = NULL;
   keygen_wizard->genkey_pixmap = gpa_create_icon_pixmap (parent,
 							 "wizard_genkey",
 							 NULL);
@@ -806,13 +598,8 @@ gpa_keygen_wizard_run (GtkWidget * parent)
   keygen_wizard->backup_page = gpa_keygen_wizard_backup_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->backup_page,
 			  NULL, NULL,
-			  gpa_keygen_wizard_backup_action, keygen_wizard);
+			  gpa_keygen_wizard_generate_action, keygen_wizard);
 
-  keygen_wizard->backup_dir_page
-    = gpa_keygen_wizard_backup_dir_page (keygen_wizard);
-  gpa_wizard_append_page (wizard, keygen_wizard->backup_dir_page,
-			  NULL, _("F_inish"),
-			  gpa_keygen_wizard_backup_dir_action, keygen_wizard);
   /* Don't use F as the accelerator in "Finish" because Meta-F is
    * already bound in the entry widget */
 

@@ -622,7 +622,7 @@ static void
 keyring_editor_backup (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  gchar *fpr, *filename;
+  gchar *fpr;
 
   fpr = gpa_default_key ();
   if (!fpr)
@@ -634,45 +634,7 @@ keyring_editor_backup (gpointer param)
       return;
     }
 
-  if (key_backup_dialog_run (editor->window, &filename, fpr))
-    {
-      gboolean cancelled = FALSE;
-      
-      if (g_file_test (filename, (G_FILE_TEST_EXISTS)))
-	{
-	  GtkWidget *msgbox = gtk_message_dialog_new 
-	    (GTK_WINDOW(editor->window), GTK_DIALOG_MODAL,
-	     GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
-	     _("The file %s already exists.\n"
-	       "Do you want to overwrite it?"), filename);
-	  gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
-				  GTK_STOCK_YES, GTK_RESPONSE_YES,
-				  GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
-	  if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
-	    {
-	      cancelled = TRUE;
-	    }
-	  gtk_widget_destroy (msgbox);
-	}
-      if (!cancelled)
-	{
-	  if (gpa_backup_key (fpr, filename))
-	    {
-	      gchar *message;
-	      message = g_strdup_printf (_("A copy of your secret key has "
-					   "been made to the file:\n\n"
-					   "\t\"%s\"\n\n"
-					   "This is sensitive information, "
-					   "and should be stored carefully\n"
-					   "(for example, in a floppy disk "
-					   "kept in a safe place)."),
-					 filename);
-	      gpa_window_message (message, editor->window);
-	      g_free (message);
-	      gpa_remember_backup_generated ();
-	    }
-	}
-    }
+  key_backup_dialog_run (editor->window, fpr);
 }
 
 /* Run the advanced key generation dialog and if the user clicked OK,
