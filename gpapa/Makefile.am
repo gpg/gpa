@@ -27,8 +27,11 @@ libgpapa_a_SOURCES = gpapa.c gpapa.h \
 		     syshdr.h \
 		     posix-io.c \
 		     w32-io.c \
+		     posix-sema.c \
+		     w32-sema.c \
 		     data.c \
 		     errors.c \
+		     debug.c \
 		     context.h
 
 gpapatest_SOURCES = gpapatest.c

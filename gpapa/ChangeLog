@@ -1,3 +1,7 @@
+Fri 9 Feb 2001 19:05 Peter Gerwinski <peter@gerwinski.de>
+
+        * posix-sema.c, w32-sema.c, debug.c: new files (from GPGME).
+
 Fri 9 Feb 2001 11:05 Peter Gerwinski <peter@gerwinski.de>
 
         * context.h, data.c, gpgme.c, gpgme.h, ops.h, posix-io.c,

@@ -718,7 +718,7 @@ _gpgme_gpg_spawn( GpgObject gpg, void *opaque )
     fd_parent_list[n].dup_to = -1;
 
 
-    pid = _gpgme_io_spawn (_gpgme_get_gpg_path (),
+    pid = _gpgme_io_spawn (gpapa_private_get_gpg_program (),
                            gpg->argv, fd_child_list, fd_parent_list);
     xfree (fd_child_list);
     if (pid == -1) {
