@@ -134,6 +134,7 @@ static void
 i18n_init (void)
 {
 #ifdef USE_SIMPLE_GETTEXT
+  gtk_set_locale ();
   set_gettext_file (PACKAGE);
 #else
 #ifdef ENABLE_NLS

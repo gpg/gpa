@@ -217,6 +217,7 @@ gpa_frameExpire_after (GtkToggleButton * radioAfter, gpointer param)
   gtk_widget_grab_focus (entryAfter);
 }				/* gpa_frameExpire_after */
 
+/* obsolete: use gpa_expiry_frame_at from gpawidgets.c */
 void
 gpa_frameExpire_at (GtkToggleButton * radioAt, gpointer param)
 {
@@ -251,6 +252,7 @@ gpa_frameExpire_at (GtkToggleButton * radioAt, gpointer param)
   gtk_widget_grab_focus (entryAt);
 }				/* gpa_frameExpire_at */
 
+/* obsolete: use gpa_expiry_frame_new from gpawidgets.c */
 GtkWidget *
 gpa_frameExpire_new (GtkAccelGroup * accelGroup, GDate ** expiryDate,
 		     GpaWindowKeeper * keeper, gpointer * paramSave)

@@ -1,3 +1,8 @@
+2001-02-15  Thomas Koester  <tkoester@intevation.de>
+
+	* gpa.c (i18n_init): call gtk_set_locale even with USE_SIMPLE_GETTEXT
+	* keysmenu.c (gpa_frameExpire_at, gpa_frameExpire_after): obsolete
+
 2001-02-15  Bernhard Herzog  <bh@intevation.de>
 
 	* keygenwizard.c (gpa_keygen_wizard_backup_dir_browse): Check for
