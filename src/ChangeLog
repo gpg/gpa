@@ -1,3 +1,22 @@
+2002-10-11  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpgmeedit.c (edit_fnc, edit_expire_fnc_action) 
+	(edit_expire_fnc_transit, edit_trust_fnc_action) 
+	(edit_trust_fnc_transit, edit_sign_fnc_action) 
+	(edit_sign_fnc_transit, gpa_gpgme_edit_trust) 
+	(gpa_gpgme_edit_sign, gpa_gpgme_edit_expire): Rebuilt key editing to
+	follow a more consistent model. Use the same edit callback, with
+	different data, for all operations. Hopefully this will make it easier
+	to understand and write new operations.
+
+	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_trust)
+	(gpa_gpgme_edit_expire)
+	(gpa_gpgme_edit_ownertrust)
+	(gpa_gpgme_edit_expiry): Renamed functions to match the edit commands.
+
+	* keyeditdlg.c (key_edit_change_trust, key_edit_change_expiry): Use
+	new names for edit operations.
+
 2002-10-09  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* encryptdlg.c: Ported the dialog to Gpgme and a GtkDialog. Major

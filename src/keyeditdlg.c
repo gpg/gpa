@@ -198,7 +198,7 @@ key_edit_change_trust(GtkWidget * widget, gpointer param)
 
   if (result)
     {
-      err = gpa_gpgme_edit_ownertrust (key, ownertrust);
+      err = gpa_gpgme_edit_trust (key, ownertrust);
       if (err == GPGME_No_Error)
         {
           gtk_label_set_text (GTK_LABEL (dialog->ownertrust),
@@ -230,7 +230,7 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
   if (gpa_expiry_dialog_run (dialog->window, key, &new_date))
     {
       gchar * date_string;
-      err = gpa_gpgme_edit_expiry (key, new_date);
+      err = gpa_gpgme_edit_expire (key, new_date);
       if (err == GPGME_No_Error)
         {
           if (new_date)

@@ -28,10 +28,10 @@
 #include <gpgme.h>
 
 /* Change the ownertrust of a key */
-GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust);
+GpgmeError gpa_gpgme_edit_trust (GpgmeKey key, GpgmeValidity ownertrust);
 
 /* Change the expiry date of a key */
-GpgmeError gpa_gpgme_edit_expiry (GpgmeKey key, GDate *date);
+GpgmeError gpa_gpgme_edit_expire (GpgmeKey key, GDate *date);
 
 /* Sign this key with the given private key. If local is true, make a local
  * signature. */
