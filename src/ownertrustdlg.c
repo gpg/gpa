@@ -222,7 +222,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent)
   /* Set the ownertrust */
   if (response == GTK_RESPONSE_OK) 
     {
-      gpgme_error_t err;
+      gpg_error_t err;
       gpgme_validity_t new_trust = get_selected_validity 
               (unknown_radio, never_radio, marginal_radio, full_radio,
                ultimate_radio);
@@ -238,7 +238,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent)
       else
         {
           err = gpa_gpgme_edit_trust (ctx, key, new_trust);
-          if (err != GPGME_No_Error)
+          if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
             {
               gpa_gpgme_error (err);
             }

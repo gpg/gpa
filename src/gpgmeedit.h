@@ -28,21 +28,21 @@
 #include <gpgme.h>
 
 /* Change the ownertrust of a key */
-gpgme_error_t gpa_gpgme_edit_trust (gpgme_ctx_t ctx, gpgme_key_t key,
-				    gpgme_validity_t ownertrust);
+gpg_error_t gpa_gpgme_edit_trust (gpgme_ctx_t ctx, gpgme_key_t key,
+				  gpgme_validity_t ownertrust);
 
 /* Change the expiry date of a key */
-gpgme_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, 
-				     GDate *date);
+gpg_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, 
+				   GDate *date);
 
 /* Sign this key with the given private key. If local is true, make a local
  * signature. */
-gpgme_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
-				   gpgme_key_t secret_key,
-				   gboolean local);
+gpg_error_t gpa_gpgme_edit_sign (gpgme_ctx_t ctx, gpgme_key_t key,
+				 gpgme_key_t secret_key,
+				 gboolean local);
 
 /* Change the key's passphrase.
  */
-gpgme_error_t gpa_gpgme_edit_passwd (gpgme_ctx_t ctx, gpgme_key_t key);
+gpg_error_t gpa_gpgme_edit_passwd (gpgme_ctx_t ctx, gpgme_key_t key);
 
 #endif

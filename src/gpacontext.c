@@ -33,21 +33,21 @@ static void gpa_context_finalize (GObject *object);
 /* Default signal handlers */
 
 static void gpa_context_start (GpaContext *context);
-static void gpa_context_done (GpaContext *context, gpgme_error_t err);
+static void gpa_context_done (GpaContext *context, gpg_error_t err);
 static void gpa_context_next_key (GpaContext *context, gpgme_key_t key);
 static void gpa_context_next_trust_item (GpaContext *context,
                                          gpgme_trust_item_t item);
 
 /* The GPGME I/O callbacks */
 
-static gpgme_error_t gpa_context_register_cb (void *data, int fd, int dir,
+static gpg_error_t gpa_context_register_cb (void *data, int fd, int dir,
                                            gpgme_io_cb_t fnc, void *fnc_data, 
                                            void **tag);
 static void gpa_context_remove_cb (void *tag);
 static void gpa_context_event_cb (void *data, gpgme_event_io_t type,
                                   void *type_data);
 
-static gpgme_error_t
+static gpg_error_t
 gpa_context_passphrase_cb (void *hook, const char *uid_hint,
 			   const char *passphrase_info, int prev_was_bad, 
 			   int fd);
@@ -148,7 +148,7 @@ gpa_context_class_init (GpaContextClass *klass)
 static void
 gpa_context_init (GpaContext *context)
 {
-  gpgme_error_t err;
+  gpg_error_t err;
 
   context->busy = FALSE;
 
@@ -157,8 +157,11 @@ gpa_context_init (GpaContext *context)
 
   /* The context itself */
   err = gpgme_new (&context->ctx);
-  if (err != GPGME_No_Error)
-    gpa_gpgme_error (err);
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+    {
+      gpa_gpgme_warning (err);
+      return;
+    }
 
   /* Set the appropiate callbacks */
   gpgme_set_passphrase_cb (context->ctx, gpa_context_passphrase_cb,
@@ -322,7 +325,7 @@ unregister_all_callbacks (GpaContext *context)
 
 /* Register a callback.
  */
-static gpgme_error_t
+static gpg_error_t
 gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
                          void *fnc_data, void **tag)
 {
@@ -347,7 +350,7 @@ gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
   add_callback (context, cb);
   *tag = cb;
 
-  return GPGME_No_Error;
+  return gpg_error (GPG_ERR_NO_ERROR);
 }
 
 /* Remove a callback.
@@ -372,7 +375,7 @@ static void
 gpa_context_event_cb (void *data, gpgme_event_io_t type, void *type_data)
 {
   GpaContext *context = data;
-  gpgme_error_t *err;
+  gpg_error_t *err;
   
   switch (type)
     {
@@ -407,7 +410,7 @@ gpa_context_start (GpaContext *context)
 }
 
 static void
-gpa_context_done (GpaContext *context, gpgme_error_t err)
+gpa_context_done (GpaContext *context, gpg_error_t err)
 {
   context->busy = FALSE;
 }
@@ -425,13 +428,13 @@ gpa_context_next_trust_item (GpaContext *context, gpgme_trust_item_t item)
 }
 
 /* The passphrase callback */
-static gpgme_error_t
+static gpg_error_t
 gpa_context_passphrase_cb (void *hook, const char *uid_hint,
 			   const char *passphrase_info, int prev_was_bad, 
 			   int fd)
 {
   GpaContext *context = hook;
-  gpgme_error_t err;
+  gpg_error_t err;
 
   unregister_all_callbacks (context);
   err = gpa_passphrase_cb (NULL, uid_hint, passphrase_info, prev_was_bad, fd);

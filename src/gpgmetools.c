@@ -35,7 +35,7 @@
 #endif
 
 /* Report an unexpected error in GPGME and quit the application */
-void _gpa_gpgme_error (gpgme_error_t err, const char *file, int line)
+void _gpa_gpgme_error (gpg_error_t err, const char *file, int line)
 {
   gchar *message = g_strdup_printf (_("Fatal Error in GPGME library\n"
                                       "(invoked from file %s, line %i):\n\n"
@@ -47,7 +47,7 @@ void _gpa_gpgme_error (gpgme_error_t err, const char *file, int line)
   exit (EXIT_FAILURE);
 }
 
-void gpa_gpgme_warning (gpgme_error_t err)
+void gpa_gpgme_warning (gpg_error_t err)
 {
   gchar *message = g_strdup_printf (_("The GPGME library returned an unexpected\n"
 				      "error. The error was:\n\n"
@@ -63,10 +63,10 @@ void gpa_gpgme_warning (gpgme_error_t err)
 gpgme_ctx_t gpa_gpgme_new (void)
 {
   gpgme_ctx_t ctx;
-  gpgme_error_t err;
+  gpg_error_t err;
   
   err = gpgme_new (&ctx);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_error (err);
     }
@@ -83,10 +83,10 @@ void dump_data_to_file (gpgme_data_t data, FILE *file)
 {
   char buffer[128];
   int nread;
-  gpgme_error_t err;
+  gpg_error_t err;
 
   err = gpgme_data_rewind (data);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     gpa_gpgme_error (err);
   while ( (nread = gpgme_data_read (data, buffer, sizeof(buffer))) > 0 ) 
     {
@@ -155,7 +155,7 @@ gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
   
   if (check_overwriting (filename, parent))
     {
-      gpgme_error_t err;
+      gpg_error_t err;
 
       target = creat (filename, 0666);
       if (target == -1)
@@ -166,7 +166,7 @@ gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
 	  g_free (message);
 	}
       err = gpgme_data_new_from_fd (data, target);
-      if (err != GPGME_No_Error)
+      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	{
 	  close (target);
 	  target = -1;
@@ -179,7 +179,7 @@ gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
 int
 gpa_open_input (const char *filename, gpgme_data_t *data, GtkWidget *parent)
 {
-  gpgme_error_t err;
+  gpg_error_t err;
   int target = -1;
 
   target = open (filename, O_RDONLY);
@@ -191,7 +191,7 @@ gpa_open_input (const char *filename, gpgme_data_t *data, GtkWidget *parent)
       g_free (message);
     }
   err = gpgme_data_new_from_fd (data, target);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       close (target);
       target = -1;
@@ -202,13 +202,13 @@ gpa_open_input (const char *filename, gpgme_data_t *data, GtkWidget *parent)
 
 /* Do a gpgme_data_new_from_file and report any GPGME_File_Error to the user.
  */
-gpgme_error_t gpa_gpgme_data_new_from_file (gpgme_data_t *data,
+gpg_error_t gpa_gpgme_data_new_from_file (gpgme_data_t *data,
 					 const char *filename,
 					 GtkWidget *parent)
 {
-  gpgme_error_t err;
+  gpg_error_t err;
   err = gpgme_data_new_from_file (data, filename, 1);
-  if (err == GPGME_File_Error)
+  if (gpg_err_code_to_errno (err) != 0)
     {
       gchar *message;
       message = g_strdup_printf ("%s: %s", filename, strerror(errno));
@@ -224,12 +224,12 @@ void dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard)
 {
   char buffer[128];
   int nread;
-  gpgme_error_t err;
+  gpg_error_t err;
   gchar *text = NULL;
   gint len = 0;
 
   err = gpgme_data_rewind (data);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     gpa_gpgme_error (err);
   while ( (nread = gpgme_data_read (data, buffer, sizeof(buffer))) > 0 ) 
     {
@@ -347,16 +347,16 @@ static gchar * build_genkey_parms (GPAKeyGenParameters *params)
 /* Generate a key with the given parameters. It prepares the parameters
  * required by Gpgme and returns whatever gpgme_op_genkey returns.
  */
-gpgme_error_t gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
+gpg_error_t gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
 {
   gchar *parm_string;
-  gpgme_error_t err;
+  gpg_error_t err;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   parm_string = build_genkey_parms (params);
   err = gpgme_op_genkey (ctx, parm_string, NULL, NULL);
   g_free (parm_string);
-  if (err == GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       GpgmeGenKeyResult result = gpgme_op_genkey_result (ctx);
       *fpr = g_strdup (result->fpr);
@@ -626,7 +626,7 @@ static GtkWidget *passphrase_question_label (const char *uid_hint,
 }
 
 /* This is the function called by GPGME when it wants a passphrase */
-gpgme_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
+gpg_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
 				 const char *passphrase_info, 
 				 int prev_was_bad, int fd)
 {
@@ -677,14 +677,14 @@ gpgme_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
       res = write (fd, passphrase, strlen (passphrase));
       g_free (passphrase);
       if (res == -1)
-	return GPGME_File_Error;
+	return gpg_error (gpg_err_code_from_errno (errno));
       else
-	return GPGME_No_Error;
+	return gpg_error (GPG_ERR_NO_ERROR);
     }
   else
     {
       g_free (passphrase);
-      return GPGME_Canceled;
+      return gpg_error (GPG_ERR_CANCELED);
     }
 }
 

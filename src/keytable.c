@@ -26,7 +26,7 @@
 #include "gtktools.h"
 
 /* Internal */
-static void done_cb (GpaContext *context, gpgme_error_t err,
+static void done_cb (GpaContext *context, gpg_error_t err,
 		     GpaKeyTable *keytable);
 static void next_key_cb (GpaContext *context, gpgme_key_t key,
 			 GpaKeyTable *keytable);
@@ -107,11 +107,11 @@ gpa_keytable_finalize (GObject *object)
 
 static void reload_cache (GpaKeyTable *keytable)
 {
-  gpgme_error_t err;
+  gpg_error_t err;
   
   err = gpgme_op_keylist_start (keytable->context->ctx, NULL,
 				keytable->secret);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_warning (err);
       if (keytable->end)
@@ -123,10 +123,10 @@ static void reload_cache (GpaKeyTable *keytable)
   keytable->tmp_list = NULL;
 }
 
-static void done_cb (GpaContext *context, gpgme_error_t err,
+static void done_cb (GpaContext *context, gpg_error_t err,
 		     GpaKeyTable *keytable)
 {
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_warning (err);
       return;

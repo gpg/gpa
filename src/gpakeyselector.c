@@ -20,14 +20,12 @@
 
 #include "gpa.h"
 #include "gpakeyselector.h"
+#include "keytable.h"
 
 /* Callbacks */
 
-void gpa_key_selector_start  (GpaContext *context, gpointer data);
-void gpa_key_selector_next_key (GpaContext *context, gpgme_key_t key,
-				gpointer data);
-void gpa_key_selector_done (GpaContext *context, gpgme_error_t err, 
-			    gpointer data);
+void gpa_key_selector_next_key (gpgme_key_t key, gpointer data);
+void gpa_key_selector_done (gpointer data);
 
 /* GObject */
 
@@ -38,7 +36,6 @@ gpa_key_selector_finalize (GObject *object)
 {  
   GpaKeySelector *sel = GPA_KEY_SELECTOR (object);
 
-  gpa_context_destroy (sel->context);
   /* Dereference all keys in the list */
   g_list_foreach (sel->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (sel->keys);
@@ -98,15 +95,6 @@ gpa_key_selector_init (GpaKeySelector *selector)
   gtk_tree_view_append_column (GTK_TREE_VIEW (selector), column);
 
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-
-  /* The context used for listing keys */
-  selector->context = gpa_context_new ();
-  g_signal_connect (G_OBJECT (selector->context), "start",
-		    G_CALLBACK (gpa_key_selector_start), selector);
-  g_signal_connect (G_OBJECT (selector->context), "next_key",
-		    G_CALLBACK (gpa_key_selector_next_key), selector);
-  g_signal_connect (G_OBJECT (selector->context), "done",
-		    G_CALLBACK (gpa_key_selector_done), selector);
 }
 
 GType
@@ -144,8 +132,20 @@ GtkWidget *gpa_key_selector_new (gboolean secret)
   GtkWidget *sel = (GtkWidget*) g_object_new (GPA_KEY_SELECTOR_TYPE, NULL);
 
   GPA_KEY_SELECTOR (sel)->secret = secret;
-  gpgme_op_keylist_start (GPA_KEY_SELECTOR(sel)->context->ctx,
-			  NULL, secret);
+  /* Disable the list while loading keys */
+  gtk_widget_set_sensitive (GTK_WIDGET (sel), FALSE);
+  if (secret)
+    {
+      gpa_keytable_list_keys (gpa_keytable_get_secret_instance (),
+			      gpa_key_selector_next_key, 
+			      gpa_key_selector_done, sel);
+    }
+  else
+    {
+      gpa_keytable_list_keys (gpa_keytable_get_public_instance (),
+			      gpa_key_selector_next_key, 
+			      gpa_key_selector_done, sel);
+    }
 
   return sel;
 }
@@ -192,16 +192,7 @@ gboolean gpa_key_selector_has_selection (GpaKeySelector * selector)
 
 /* Internal */
 
-void gpa_key_selector_start  (GpaContext *context, gpointer data)
-{
-  GpaKeySelector *selector = data;
-  
-  /* Disable the list while we are loading it */
-  gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
-}
-
-void gpa_key_selector_next_key (GpaContext *context, gpgme_key_t key,
-				gpointer data)
+void gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
 {
   GpaKeySelector *selector = data;
   GtkListStore *store;
@@ -209,8 +200,9 @@ void gpa_key_selector_next_key (GpaContext *context, gpgme_key_t key,
   const gchar *keyid;
   gchar *userid;
   
-  selector->keys = g_list_append (selector->keys, key);
-  store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (selector)));  /* The Key ID */
+  selector->keys = g_list_prepend (selector->keys, key);
+  store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (selector)));
+  /* The Key ID */
   keyid = gpa_gpgme_key_get_short_keyid (key, 0);
   /* The user ID */
   userid = gpa_gpgme_key_get_userid (key, 0);
@@ -234,17 +226,13 @@ void gpa_key_selector_next_key (GpaContext *context, gpgme_key_t key,
   g_free (userid);
 }
 
-void gpa_key_selector_done (GpaContext *context, gpgme_error_t err, 
-			    gpointer data)
+void gpa_key_selector_done (gpointer data)
 {
   GpaKeySelector *selector = data;
   GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model 
 					(GTK_TREE_VIEW (selector)));
 
-  if (err != GPGME_No_Error) {
-    gpa_gpgme_warning (err);
-  }
-  /* Sort the column */
+  /* Sort the list */
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
                                         GPA_KEY_SELECTOR_COLUMN_USERID,
 					GTK_SORT_ASCENDING);

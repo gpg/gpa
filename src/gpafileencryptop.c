@@ -38,10 +38,10 @@
 
 /* Internal functions */
 static void gpa_file_encrypt_operation_done_error_cb (GpaContext *context, 
-						      gpgme_error_t err,
+						      gpg_error_t err,
 						      GpaFileEncryptOperation *op);
 static void gpa_file_encrypt_operation_done_cb (GpaContext *context, 
-						gpgme_error_t err,
+						gpg_error_t err,
 						GpaFileEncryptOperation *op);
 static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
 						    gint response,
@@ -183,7 +183,7 @@ static gboolean
 gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
 				  const gchar *plain_filename)
 {
-  gpgme_error_t err;
+  gpg_error_t err;
   
   op->cipher_filename = destination_filename 
     (plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx));
@@ -219,7 +219,7 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
 				    op->rset,GPGME_ENCRYPT_ALWAYS_TRUST,
 				    op->plain, op->cipher);
     }
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_warning (err);
       return FALSE;
@@ -245,7 +245,7 @@ gpa_file_encrypt_operation_next (GpaFileEncryptOperation *op)
 
 static void
 gpa_file_encrypt_operation_done_cb (GpaContext *context, 
-				    gpgme_error_t err,
+				    gpg_error_t err,
 				    GpaFileEncryptOperation *op)
 {
   /* Do clean up on the operation */
@@ -255,7 +255,7 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
   close (op->cipher_fd);
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
   g_free (op->rset);
-  if (err != GPGME_No_Error) 
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR) 
     {
       /* If an error happened, (or the user canceled) delete the created file
        * and abort further encryptions
@@ -476,7 +476,7 @@ static gboolean
 set_signers (GpaFileEncryptOperation *op, GList *signers)
 {
   GList *cur;
-  gpgme_error_t err;
+  gpg_error_t err;
 
   gpgme_signers_clear (GPA_OPERATION (op)->context->ctx);
   if (!signers)
@@ -490,7 +490,7 @@ set_signers (GpaFileEncryptOperation *op, GList *signers)
     {
       gpgme_key_t key = cur->data;
       err = gpgme_signers_add (GPA_OPERATION (op)->context->ctx, key);
-      if (err != GPGME_No_Error)
+      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	{
 	  gpa_gpgme_error (err);
 	}
@@ -554,41 +554,19 @@ static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
 }
 
 static void
-gpa_file_encrypt_operation_done_error_cb (GpaContext *context, gpgme_error_t err,
+gpa_file_encrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 					  GpaFileEncryptOperation *op)
 {
   /* Capture fatal errors and quit the application */
   switch (err)
     {
-    case GPGME_No_Error:
-    case GPGME_Canceled:
+    case GPG_ERR_NO_ERROR:
+    case GPG_ERR_CANCELED:
       /* Ignore these */
       break;
-    case GPGME_No_Passphrase:
+    case GPG_ERR_BAD_PASSPHRASE:
       gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
       break;
-    case GPGME_Invalid_UserID:
-    case GPGME_No_Recipients:
-    case GPGME_Invalid_Key:
-    case GPGME_File_Error:
-    case GPGME_EOF:
-    case GPGME_No_Data:
-    case GPGME_Decryption_Failed:
-
-      /* These are always unexpected errors */
-    case GPGME_General_Error:
-    case GPGME_Out_Of_Core:
-    case GPGME_Invalid_Value:
-    case GPGME_Busy:
-    case GPGME_No_Request:
-    case GPGME_Exec_Error:
-    case GPGME_Too_Many_Procs:
-    case GPGME_Pipe_Error:
-    case GPGME_Conflict:
-    case GPGME_Not_Implemented:
-    case GPGME_Read_Error:
-    case GPGME_Write_Error:
-    case GPGME_Invalid_Engine:
     default:
       gpa_gpgme_warning (err);
       break;

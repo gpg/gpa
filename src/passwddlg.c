@@ -78,10 +78,10 @@ is_passphrase_correct (GtkWidget *parent, const gchar *passwd,
   return result;
 }
 
-gpgme_error_t gpa_change_passphrase_dialog_run (void *hook, 
-						const char *uid_hint,
-						const char *passphrase_info, 
-						int prev_was_bad, int fd)
+gpg_error_t gpa_change_passphrase_dialog_run (void *hook, 
+					      const char *uid_hint,
+					      const char *passphrase_info, 
+					      int prev_was_bad, int fd)
 {
   GtkWidget *dialog;
   GtkWidget *vbox;
@@ -147,10 +147,10 @@ gpgme_error_t gpa_change_passphrase_dialog_run (void *hook,
     {
       write (fd, passwd, strlen (passwd));
       g_free (passwd);
-      return GPGME_No_Error;
+      return gpg_error (GPG_ERR_NO_ERROR);
     }
   else
     {
-      return GPGME_Canceled;
+      return gpg_error (GPG_ERR_CANCELED);
     }
 }

@@ -23,9 +23,9 @@
 #ifndef PASSWDDLG_H
 #define PASSWDDLG_H
 
-gpgme_error_t gpa_change_passphrase_dialog_run (void *hook, 
-						const char *uid_hint,
-						const char *passphrase_info, 
-						int prev_was_bad, int fd);
+gpg_error_t gpa_change_passphrase_dialog_run (void *hook, 
+					      const char *uid_hint,
+					      const char *passphrase_info, 
+					      int prev_was_bad, int fd);
 
 #endif

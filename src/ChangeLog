@@ -1,3 +1,10 @@
+2003-06-22  Miguel Coca  <mcoca@gnu.org>
+
+	* All files: Replace old style error checking with libgpg-error.
+	
+	* gpakeyselector.h, gpakeyselector.c: Use the keytable instead of
+	listing keys ourselves.
+
 2003-06-21  Miguel Coca  <mcoca@gnu.org>
 
 	* siglist.h, siglist.c (gpa_siglist_set_all)

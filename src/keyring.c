@@ -230,7 +230,7 @@ static void
 keyring_editor_delete (gpointer param)
 {
   GPAKeyringEditor * editor = param;
-  gpgme_error_t err;
+  gpg_error_t err;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
   GList *selection;
 
@@ -242,7 +242,7 @@ keyring_editor_delete (gpointer param)
       if (!gpa_delete_dialog_run (editor->window, key))
         break;
       err = gpgme_op_delete (ctx, key, 1);
-      if (err != GPGME_No_Error)
+      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
         {
           gpa_gpgme_error (err);
         }
@@ -320,7 +320,7 @@ keyring_editor_sign (gpointer param)
 {
   GPAKeyringEditor *editor = param;
   gpgme_key_t key, signer_key;
-  gpgme_error_t err;
+  gpg_error_t err;
   gboolean sign_locally = FALSE;
   GList *selection;
   gint signed_count = 0;
@@ -352,34 +352,34 @@ keyring_editor_sign (gpointer param)
       if (gpa_key_sign_run_dialog (editor->window, key, &sign_locally))
         {
           err = gpa_gpgme_edit_sign (ctx, key, signer_key, sign_locally);
-          if (err == GPGME_No_Error)
+          if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
             {
               signed_count++;
             }
-          else if (err == GPGME_No_Passphrase)
+          else if (gpg_err_code (err) == GPG_ERR_BAD_PASSPHRASE)
             {
               gpa_window_error (_("Wrong passphrase!"),
                                 editor->window);
             }
-          else if (err == GPGME_Invalid_Key)
+          else if (gpg_err_code (err) == GPG_ERR_UNUSABLE_PUBKEY)
             {
               /* Couldn't sign because the key was expired */
               gpa_window_error (_("This key has expired! "
                                   "Unable to sign."), editor->window);
             }
-          else if (err == GPGME_Conflict)
+          else if (gpg_err_code (err) == GPG_ERR_CONFLICT)
             {
               /* Couldn't sign because the key was already signed */
               gpa_window_error (_("This key has already been signed with "
                                   "your own!"), editor->window);
             }
-          else if (err == GPGME_No_Recipients)
+          else if (gpg_err_code (err) == GPG_ERR_NO_SECKEY)
             {
               /* Couldn't sign because there is no default key */
               gpa_window_error (_("You haven't selected a default key "
                                   "to sign with!"), editor->window);
             }
-          else if (err == GPGME_Canceled)
+          else if (gpg_err_code (err) == GPG_ERR_CANCELED)
             {
               /* Do nothing, the user should know if he cancelled the
                * operation */
@@ -449,7 +449,7 @@ static gboolean
 keyring_editor_import_get_source (GPAKeyringEditor *editor, gpgme_data_t *data)
 {
   gchar *filename, *server, *key_id;
-  gpgme_error_t err;
+  gpg_error_t err;
 
   if (key_import_dialog_run (editor->window, &filename, &server, &key_id))
     {
@@ -458,11 +458,12 @@ keyring_editor_import_get_source (GPAKeyringEditor *editor, gpgme_data_t *data)
           /* Read keys from the user specified file.
            */
           err = gpa_gpgme_data_new_from_file (data, filename, editor->window);
-          if (err == GPGME_File_Error)
+	  /* Check if a file error ocurred */
+          if (gpgme_err_code_to_errno (gpg_err_code (err)))
             {
               return FALSE;
             }
-          else if (err != GPGME_No_Error)
+          else if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
             {
               gpa_gpgme_error (err);
             }
@@ -489,18 +490,18 @@ keyring_editor_import_get_source (GPAKeyringEditor *editor, gpgme_data_t *data)
 static void
 keyring_editor_import_do_import (GPAKeyringEditor *editor, gpgme_data_t data)
 {
-  gpgme_error_t err;
+  gpg_error_t err;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   /* Import the key */
   err = gpgme_op_import (ctx, data);
-  if (err != GPGME_No_Error &&
-      err != GPGME_No_Data)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR &&
+      gpg_err_code (err) != GPG_ERR_NO_DATA)
     {
       gpa_gpgme_error (err);
     }
   /* Load the keys we just imported */
-  if (err != GPGME_No_Data)
+  if (gpg_err_code (err) != GPG_ERR_NO_DATA)
     {
       gpgme_import_result_t info;
       
@@ -536,7 +537,7 @@ static void
 keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
                                  gboolean armored)
 {
-  gpgme_error_t err;
+  gpg_error_t err;
   GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
   gpgme_ctx_t ctx = gpa_gpgme_new ();
   const gchar **patterns = NULL;
@@ -544,7 +545,7 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
 
   /* Create the data buffer */
   err = gpgme_data_new (data);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     gpa_gpgme_error (err);
   gpgme_set_armor (ctx, armored);
   /* Create the set of keys to export */
@@ -556,7 +557,7 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
     }
   /* Export to the gpgme_data_t */
   err = gpgme_op_export_ext (ctx, patterns, 0, *data);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     gpa_gpgme_error (err);
   /* Clean up */
   gpgme_release (ctx);
@@ -648,14 +649,14 @@ keyring_editor_generate_key_advanced (gpointer param)
 {
   GPAKeyringEditor * editor = param;
   GPAKeyGenParameters * params;
-  gpgme_error_t err;
+  gpg_error_t err;
   gchar *fpr;
 
   params = gpa_key_gen_run_dialog(editor->window);
   if (params)
     {
       err = gpa_generate_key (params, &fpr);
-      if (err != GPGME_No_Error)
+      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
         {
           gpa_gpgme_error (err);
         }
@@ -744,7 +745,7 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
   /* Load the new one */
   if (gpa_keylist_has_single_selection (editor->keylist)) 
     {
-      gpgme_error_t err;
+      gpg_error_t err;
       GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
       gpgme_key_t key = (gpgme_key_t) selection->data;
       gpgme_ctx_t ctx = gpa_gpgme_new ();
@@ -752,7 +753,7 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
       /* With all the signatures */
       gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
       err = gpgme_get_key (ctx, key->subkeys[0].fpr, &key, FALSE);
-      if (err != GPGME_No_Error)
+      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	{
 	  gpa_gpgme_warning (err);
 	}
@@ -877,7 +878,7 @@ keyring_editor_paste (gpointer param)
 {
   GPAKeyringEditor * editor = param;
   gpgme_data_t data;
-  gpgme_error_t err;
+  gpg_error_t err;
   gchar *text = gtk_clipboard_wait_for_text (gtk_clipboard_get
                                              (GDK_SELECTION_CLIPBOARD));
 
@@ -893,7 +894,7 @@ keyring_editor_paste (gpointer param)
        */
       err = gpgme_data_new (&data);
     }
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_error (err);
     }

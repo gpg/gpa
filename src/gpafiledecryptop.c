@@ -36,10 +36,10 @@
 /* Internal functions */
 static gboolean gpa_file_decrypt_operation_idle_cb (gpointer data);
 static void gpa_file_decrypt_operation_done_cb (GpaContext *context, 
-						gpgme_error_t err,
+						gpg_error_t err,
 						GpaFileDecryptOperation *op);
 static void gpa_file_decrypt_operation_done_error_cb (GpaContext *context,
-						      gpgme_error_t err,
+						      gpg_error_t err,
 						      GpaFileDecryptOperation *op);
 
 /* GObject */
@@ -175,7 +175,7 @@ static gboolean
 gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 				  const gchar *cipher_filename)
 {
-  gpgme_error_t err;
+  gpg_error_t err;
   
   op->plain_filename = destination_filename (cipher_filename);
   /* Open the files */
@@ -196,7 +196,7 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
   /* Start the operation */
   err = gpgme_op_decrypt_start (GPA_OPERATION (op)->context->ctx, op->cipher, 
 				op->plain);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_warning (err);
       return FALSE;
@@ -222,7 +222,7 @@ gpa_file_decrypt_operation_next (GpaFileDecryptOperation *op)
 
 static void
 gpa_file_decrypt_operation_done_cb (GpaContext *context, 
-				    gpgme_error_t err,
+				    gpg_error_t err,
 				    GpaFileDecryptOperation *op)
 {
   /* Do clean up on the operation */
@@ -232,7 +232,7 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
   close (op->cipher_fd);
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
   /* Check for error */
-  if (err != GPGME_No_Error) 
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       /* If an error happened, (or the user canceled) delete the created file
        * and abort further decryptions
@@ -265,19 +265,19 @@ gpa_file_decrypt_operation_idle_cb (gpointer data)
 }
 
 static void
-gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpgme_error_t err,
+gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 					  GpaFileDecryptOperation *op)
 {
   gchar *message;
 
   /* Capture fatal errors and quit the application */
-  switch (err)
+  switch (gpg_err_code (err))
     {
-    case GPGME_No_Error:
-    case GPGME_Canceled:
+    case GPG_ERR_NO_ERROR:
+    case GPG_ERR_CANCELED:
       /* Ignore these */
       break;
-    case GPGME_No_Data:
+    case GPG_ERR_NO_DATA:
       message = g_strdup_printf (_("The file \"%s\" contained no OpenPGP "
 				   "data."),
 				 gpa_file_operation_current_file 
@@ -285,7 +285,7 @@ gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpgme_error_t err
       gpa_window_error (message, GPA_OPERATION (op)->window);
       g_free (message);
       break;
-    case GPGME_Decryption_Failed:
+    case GPG_ERR_DECRYPT_FAILED:
       message = g_strdup_printf (_("The file \"%s\" contained no "
 				   "valid encrypted data."),
 				 gpa_file_operation_current_file
@@ -293,29 +293,9 @@ gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpgme_error_t err
       gpa_window_error (message, GPA_OPERATION (op)->window);
       g_free (message);
       break;
-    case GPGME_No_Passphrase:
+    case GPG_ERR_BAD_PASSPHRASE:
       gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
       break;
-    case GPGME_Invalid_UserID:
-    case GPGME_Invalid_Key:
-    case GPGME_No_Recipients:
-    case GPGME_File_Error:
-    case GPGME_EOF:
-
-      /* These are always unexpected errors */
-    case GPGME_General_Error:
-    case GPGME_Out_Of_Core:
-    case GPGME_Invalid_Value:
-    case GPGME_Busy:
-    case GPGME_No_Request:
-    case GPGME_Exec_Error:
-    case GPGME_Too_Many_Procs:
-    case GPGME_Pipe_Error:
-    case GPGME_Conflict:
-    case GPGME_Not_Implemented:
-    case GPGME_Read_Error:
-    case GPGME_Write_Error:
-    case GPGME_Invalid_Engine:
     default:
       gpa_gpgme_warning (err);
       break;

@@ -63,9 +63,9 @@ typedef struct {
  * Better to use the macro instead of the function
  */
 #define gpa_gpgme_error(err) _gpa_gpgme_error (err, __FILE__, __LINE__);
-void _gpa_gpgme_error (gpgme_error_t err, const char *file, int line);
+void _gpa_gpgme_error (gpg_error_t err, const char *file, int line);
 /* The same, without quitting */
-void gpa_gpgme_warning (gpgme_error_t err);
+void gpa_gpgme_warning (gpg_error_t err);
 
 /* Initialize a gpgme_ctx_t for use with GPA */
 gpgme_ctx_t gpa_gpgme_new (void);
@@ -86,7 +86,7 @@ FILE *gpa_fopen (const char *filename, GtkWidget *parent);
 
 /* Do a gpgme_data_new_from_file and report any GPGME_File_Error to the user.
  */
-gpgme_error_t gpa_gpgme_data_new_from_file (gpgme_data_t *data,
+gpg_error_t gpa_gpgme_data_new_from_file (gpgme_data_t *data,
 					 const char *filename,
 					 GtkWidget *parent);
 
@@ -108,7 +108,7 @@ void dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard);
  * required by Gpgme and returns whatever gpgme_op_genkey returns, along with
  * the fingerprint of the key generated in fpr.
  */
-gpgme_error_t gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr);
+gpg_error_t gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr);
 
 /* Backup a key. It exports both the public and secret keys to a file.
  * Returns TRUE on success and FALSE on error. It displays errors to the
@@ -131,9 +131,9 @@ const gchar *gpa_key_ownertrust_string (gpgme_key_t key);
 const gchar *gpa_key_validity_string (gpgme_key_t key);
 
 /* This is the function called by GPGME when it wants a passphrase */
-gpgme_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
-				 const char *passphrase_info, 
-				 int prev_was_bad, int fd);
+gpg_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
+			       const char *passphrase_info, 
+			       int prev_was_bad, int fd);
 
 /* Convenience functions to access key attributes, which need to be filtered
  * before being displayed to the user. */

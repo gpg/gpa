@@ -37,10 +37,10 @@
 /* Internal functions */
 static gboolean gpa_file_verify_operation_idle_cb (gpointer data);
 static void gpa_file_verify_operation_done_error_cb (GpaContext *context,
-						     gpgme_error_t err,
+						     gpg_error_t err,
 						     GpaFileVerifyOperation *op);
 static void gpa_file_verify_operation_done_cb (GpaContext *context, 
-						gpgme_error_t err,
+						gpg_error_t err,
 						GpaFileVerifyOperation *op);
 static void gpa_file_verify_operation_response_cb (GtkDialog *dialog,
 						   gint response,
@@ -188,7 +188,7 @@ static gboolean
 gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 				 const gchar *sig_filename)
 {
-  gpgme_error_t err;
+  gpg_error_t err;
   gchar *signed_file;
 
   if (is_detached_sig (sig_filename, &signed_file))
@@ -220,7 +220,7 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 	{
 	  return FALSE;
 	}
-      if (gpgme_data_new (&op->plain) != GPGME_No_Error)
+      if (gpg_err_code (gpgme_data_new (&op->plain)) != GPG_ERR_NO_ERROR)
 	{
 	  gpgme_data_release (op->sig);
 	  close (op->sig_fd);
@@ -233,7 +233,7 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
   /* Start the operation */
   err = gpgme_op_verify_start (GPA_OPERATION (op)->context->ctx, op->sig,
 			       op->signed_text, op->plain);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_warning (err);
       return FALSE;
@@ -260,7 +260,7 @@ gpa_file_verify_operation_next (GpaFileVerifyOperation *op)
 
 static void
 gpa_file_verify_operation_done_cb (GpaContext *context, 
-				    gpgme_error_t err,
+				    gpg_error_t err,
 				    GpaFileVerifyOperation *op)
 {
   /* Do clean up on the operation */
@@ -277,7 +277,7 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
   close (op->sig_fd);
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
   /* Check for error */
-  if (err != GPGME_No_Error) 
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       /* Abort further verifications */
     }
@@ -314,7 +314,7 @@ gpa_file_verify_operation_response_cb (GtkDialog *dialog,
 }
 
 static void
-gpa_file_verify_operation_done_error_cb (GpaContext *context, gpgme_error_t err,
+gpa_file_verify_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 					 GpaFileVerifyOperation *op)
 {
   gchar *message;
@@ -322,11 +322,11 @@ gpa_file_verify_operation_done_error_cb (GpaContext *context, gpgme_error_t err,
   /* Capture fatal errors and quit the application */
   switch (err)
     {
-    case GPGME_No_Error:
-    case GPGME_Canceled:
+    case GPG_ERR_NO_ERROR:
+    case GPG_ERR_CANCELED:
       /* Ignore these */
       break;
-    case GPGME_No_Data:
+    case GPG_ERR_NO_DATA:
       message = g_strdup_printf (_("The file \"%s\" contained no OpenPGP "
 				   "data."),
 				 gpa_file_operation_current_file 
@@ -334,30 +334,9 @@ gpa_file_verify_operation_done_error_cb (GpaContext *context, gpgme_error_t err,
       gpa_window_error (message, GPA_OPERATION (op)->window);
       g_free (message);
       break;
-    case GPGME_No_Passphrase:
+    case GPG_ERR_BAD_PASSPHRASE:
       gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
       break;
-    case GPGME_Invalid_UserID:
-    case GPGME_No_Recipients:
-    case GPGME_Invalid_Key:
-    case GPGME_File_Error:
-    case GPGME_EOF:
-    case GPGME_Decryption_Failed:
-
-      /* These are always unexpected errors */
-    case GPGME_General_Error:
-    case GPGME_Out_Of_Core:
-    case GPGME_Invalid_Value:
-    case GPGME_Busy:
-    case GPGME_No_Request:
-    case GPGME_Exec_Error:
-    case GPGME_Too_Many_Procs:
-    case GPGME_Pipe_Error:
-    case GPGME_Conflict:
-    case GPGME_Not_Implemented:
-    case GPGME_Read_Error:
-    case GPGME_Write_Error:
-    case GPGME_Invalid_Engine:
     default:
       gpa_gpgme_warning (err);
       break;

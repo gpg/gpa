@@ -536,14 +536,14 @@ gboolean server_get_key (const gchar *server, const gchar *keyid,
   FILE *command;
   gchar *scheme, *host, *port, *opaque;
   int success;
-  gpgme_error_t err;
+  gpg_error_t err;
 
   /* Parse the URI */
   if (!parse_keyserver_uri (keyserver, &scheme, &host, &port, &opaque))
     {
       /* Create an empty gpgme_data_t, so that we always return a valid one */
       err = gpgme_data_new (data);
-      if (err != GPGME_No_Error)
+      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
         {
           gpa_gpgme_error (err);
         }
@@ -563,7 +563,7 @@ gboolean server_get_key (const gchar *server, const gchar *keyid,
   /* Read the output */
   /* No error checking: the import will take care of that. */
   err = gpa_gpgme_data_new_from_file (data, output_filename, parent);
-  if (err != GPGME_No_Error)
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_error (err);
     }

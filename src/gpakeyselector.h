@@ -39,8 +39,6 @@ typedef struct _GpaKeySelectorClass GpaKeySelectorClass;
 
 struct _GpaKeySelector {
   GtkTreeView parent;
-  /* The context used for listings */
-  GpaContext *context;
   /* Whether we are listing secret or public keys */
   gboolean secret;
   /* All gpgme_key_ts we hold. We keep them here to free them.

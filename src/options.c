@@ -251,26 +251,35 @@ gpa_options_get_default_key (GpaOptions *options)
 static gpgme_key_t
 determine_default_key (void)
 {
-  gpgme_key_t key;
-  gpgme_error_t err;
+  gpgme_key_t key = NULL;
+  gpg_error_t err;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
-  gchar * fpr = NULL;
-  err = gpgme_op_keylist_start (ctx, NULL, 1);
-  if( err != GPGME_No_Error )
-    gpa_gpgme_error (err);
-  err = gpgme_op_keylist_next (ctx, &key);
-  if( err == GPGME_No_Error )
-    {
-      err = gpgme_op_keylist_end (ctx);
-      if( err != GPGME_No_Error )
-        gpa_gpgme_warning (err); 
-    }
-  else if( err == GPGME_EOF )
-    /* No secret keys found */
-    fpr = NULL;
-  else
-    gpa_gpgme_warning (err);
 
+  err = gpgme_op_keylist_start (ctx, NULL, 1);
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+    {
+      gpa_gpgme_warning (err);
+    }
+  else
+    {
+      err = gpgme_op_keylist_next (ctx, &key);
+      if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
+	{
+	  err = gpgme_op_keylist_end (ctx);
+	  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+	    {
+	      gpa_gpgme_warning (err); 
+	    }
+	}
+      else if (gpg_err_code (err) == GPG_ERR_EOF)
+	{
+	  /* No secret keys found */
+	}
+      else
+	{
+	  gpa_gpgme_warning (err);
+	}
+    }
   gpgme_release (ctx);
   return key;
 }
@@ -286,8 +295,8 @@ gpa_options_update_default_key (GpaOptions *options)
     {
       update = TRUE;
     }
-  else if (gpgme_get_key (ctx, options->default_key_fpr, &key, TRUE) == 
-           GPGME_EOF)
+  else if (gpg_err_code (gpgme_get_key (ctx, options->default_key_fpr, 
+					&key, TRUE)) == GPG_ERR_EOF)
     {
       gpa_window_error (_("The private key you selected as default is no "
                           "longer available.\n"

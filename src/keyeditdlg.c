@@ -127,7 +127,7 @@ static void
 key_edit_change_expiry(GtkWidget * widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
-  gpgme_error_t err;
+  gpg_error_t err;
   GDate * new_date;
   struct tm tm;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
@@ -136,7 +136,7 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
     {
       gchar * date_string;
       err = gpa_gpgme_edit_expire (ctx, dialog->key, new_date);
-      if (err == GPGME_No_Error)
+      if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
         {
           if (new_date)
             {
@@ -153,14 +153,14 @@ key_edit_change_expiry(GtkWidget * widget, gpointer param)
             g_date_free (new_date);
           dialog->key_has_changed = TRUE;
         }
-      else if (err == GPGME_Bad_Passphrase)
+      else if (gpg_err_code (err) == GPG_ERR_BAD_PASSPHRASE)
         {
 	  gpa_window_error (_("Wrong passphrase!"), dialog->window);
           if (new_date)
             g_date_free (new_date);
           dialog->key_has_changed = FALSE;
         }
-      else if (err == GPGME_Canceled)
+      else if (gpg_err_code (err) == GPG_ERR_CANCELED)
         {
           if (new_date)
             g_date_free (new_date);
@@ -180,19 +180,19 @@ key_edit_change_passphrase (GtkWidget *widget, gpointer param)
 {
   GPAKeyEditDialog * dialog = param;
   gpgme_key_t key;
-  gpgme_error_t err;
+  gpg_error_t err;
   gpgme_ctx_t ctx = gpa_gpgme_new ();
 
   err = gpa_gpgme_edit_passwd (ctx, key);
-  if (err == GPGME_Bad_Passphrase)
+  if (gpg_err_code (err) == GPG_ERR_BAD_PASSPHRASE)
     {
       gpa_window_error (_("Wrong passphrase!"), dialog->window);
     }
-  else if (err == GPGME_Canceled)
+  else if (gpg_err_code (err) == GPG_ERR_CANCELED)
     {
       /* Empty. If the user pressed "Cancel" he knows it */
     }
-  else if (err != GPGME_No_Error)
+  else if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_error (err);
     }
