@@ -116,16 +116,7 @@ gpa_wizard_prev (GtkWidget * button, gpointer data)
 static void
 gpa_wizard_next (GtkWidget * button, gpointer data)
 {
-  GPAWizard * wizard = data;
-  GPAWizardPage * page;
-  
-  page = gpa_wizard_get_current_page (wizard);
-  if (page->action)
-    {
-      if (!page->action(page->user_data))
-	return;
-    }
-  gtk_notebook_next_page (GTK_NOTEBOOK (wizard->notebook));
+  gpa_wizard_next_page ((GtkWidget *)data);
 }
 
 static void
@@ -205,7 +196,7 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
   wizard->next_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (gpa_wizard_next), (gpointer) wizard);
+		      GTK_SIGNAL_FUNC (gpa_wizard_next), (gpointer) vbox);
 
   button = gpa_button_new (wizard->accel_group, _("_Cancel"));
   wizard->close_button = button;
@@ -248,6 +239,24 @@ gpa_wizard_append_page (GtkWidget * widget, GtkWidget * page_widget,
 			    (gpointer)page, free);
   gtk_notebook_append_page (GTK_NOTEBOOK (wizard->notebook), page_widget,
 			    NULL);
+}
+
+
+/* Turn to the next page of the wizard and run the page action.
+ */
+void
+gpa_wizard_next_page (GtkWidget * widget)
+{
+  GPAWizard * wizard =  gtk_object_get_data (GTK_OBJECT (widget), "user_data");
+  GPAWizardPage * page;
+  
+  page = gpa_wizard_get_current_page (wizard);
+  if (page->action)
+    {
+      if (!page->action(page->user_data))
+	return;
+    }
+  gtk_notebook_next_page (GTK_NOTEBOOK (wizard->notebook));
 }
 
 

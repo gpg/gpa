@@ -1,5 +1,32 @@
 2001-02-13  Bernhard Herzog  <bh@intevation.de>
 
+	* gpawizard.h: Add prototype of gpa_wizard_next_page
+
+	* gpawizard.c (gpa_wizard_next_page):
+	(gpa_wizard_next): Put practically all of gpa_wizard_next in the
+	new public function gpa_wizard_next_page and just call the public
+	function in gpa_wizard_next. The user data parameter of
+	gpa_wizard_next is now the vbox widget.
+	(gpa_wizard_new): Pass the vbox widget as parameter to the
+	Next-button's callback.
+
+	* keygenwizard.c (switch_to_next_page): New. Handler for the
+	activate signals of several entry fields to switch the wizard to
+	the next page
+	(gpa_keygen_wizard_simple_page): Add the keygen_wizard as
+	parameter and connect to the entry's activate signal to switch to
+	the next page.
+	(gpa_keygen_wizard_comment_page):
+	(gpa_keygen_wizard_email_page):
+	(gpa_keygen_wizard_name_page): Add the keygen_wizard as parameter
+	and pass it through to gpa_keygen_wizard_simple_page
+	(focus_repeat_passphrase): New. Handler for the activate signal of
+	the passphrase entry to focus the repeat passhrase entry
+	(gpa_keygen_wizard_password_page): Add the keygen_wizard as
+	parameter and connect to the repeat pasphrase entry's activate
+	signal to switch to the next page. Also focus the repeat entry in
+	the activate handler of the passphrase entry.
+
 	* siglist.c (gpa_siglist_set_signatures): Call
 	gtk_container_check_resize to make sure that the sizes of the
 	title buttons are also taken into account.

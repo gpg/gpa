@@ -67,12 +67,23 @@ typedef struct {
   gboolean successful;
 } GPAKeyGenWizard;
 
+
+/* Handler for the activate signals of several entry fields in the
+ * wizard. Switch the wizard to the next page. */
+static void
+switch_to_next_page (GtkEditable *editable, gpointer user_data)
+{
+  gpa_wizard_next_page (((GPAKeyGenWizard*)user_data)->wizard);
+}
+
+
 /*
  * The user ID pages
  */
 
 static GtkWidget *
-gpa_keygen_wizard_simple_page (const gchar * description_text,
+gpa_keygen_wizard_simple_page (GPAKeyGenWizard * keygen_wizard,
+			       const gchar * description_text,
 			       const gchar * label_text)
 {
   GtkWidget * vbox;
@@ -98,6 +109,8 @@ gpa_keygen_wizard_simple_page (const gchar * description_text,
 
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 5);
+  gtk_signal_connect (GTK_OBJECT (entry), "activate",
+		      GTK_SIGNAL_FUNC (switch_to_next_page), keygen_wizard);
 
   gtk_object_set_data (GTK_OBJECT (vbox), "gpa_keygen_entry", entry);
   gtk_object_set_data (GTK_OBJECT (vbox), "gpa_wizard_focus_child", entry);
@@ -115,10 +128,11 @@ gpa_keygen_wizard_simple_get_text (GtkWidget * vbox)
 
 
 static GtkWidget *
-gpa_keygen_wizard_name_page (void)
+gpa_keygen_wizard_name_page (GPAKeyGenWizard * keygen_wizard)
 {
   return gpa_keygen_wizard_simple_page
-    (_("Please insert your full name."
+    (keygen_wizard,
+     _("Please insert your full name."
        "\n\n"
        "Your name will be part of the new key"
        " to make it easier for others to identify"
@@ -145,10 +159,11 @@ gpa_keygen_wizard_name_validate (gpointer data)
 }
 
 static GtkWidget *
-gpa_keygen_wizard_email_page (void)
+gpa_keygen_wizard_email_page (GPAKeyGenWizard * keygen_wizard)
 {
   return gpa_keygen_wizard_simple_page
-    (_("Please insert your email address."
+    (keygen_wizard,
+     _("Please insert your email address."
        "\n\n"
        " Your email adress will be part of the"
        " new key to make it easier for others to"
@@ -183,10 +198,11 @@ gpa_keygen_wizard_email_validate (gpointer data)
 
 
 static GtkWidget *
-gpa_keygen_wizard_comment_page (void)
+gpa_keygen_wizard_comment_page (GPAKeyGenWizard * keygen_wizard)
 {
   return gpa_keygen_wizard_simple_page
-    (_("If you want you can supply a comment that further identifies"
+    (keygen_wizard,
+     _("If you want you can supply a comment that further identifies"
        " the key to other users."
        " The comment is especially useful if you generate several keys"
        " for the same email adress."
@@ -195,14 +211,25 @@ gpa_keygen_wizard_comment_page (void)
      _("Comment:"));
 }
 
+
+/* Handler for the activate signal of the passphrase entry. Focus the
+ * repeat passhrase entry. */
+static void
+focus_repeat_passphrase (GtkEditable *editable, gpointer user_data)
+{
+  gtk_widget_grab_focus ((GtkWidget*)user_data);
+}
+
+
+
 static GtkWidget *
-gpa_keygen_wizard_password_page (void)
+gpa_keygen_wizard_password_page (GPAKeyGenWizard * keygen_wizard)
 {
   GtkWidget * vbox;
   GtkWidget * description;
   GtkWidget * table;
   GtkWidget * label;
-  GtkWidget * entry;
+  GtkWidget * entry, *passwd_entry;
 
   vbox = gtk_vbox_new (FALSE, 0);
 
@@ -221,7 +248,7 @@ gpa_keygen_wizard_password_page (void)
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
-  entry = gtk_entry_new ();
+  entry = passwd_entry = gtk_entry_new ();
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
@@ -240,6 +267,10 @@ gpa_keygen_wizard_password_page (void)
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
   gtk_object_set_data (GTK_OBJECT (vbox), "gpa_keygen_passwd_repeat",
 		       (gpointer)entry);
+  gtk_signal_connect (GTK_OBJECT (entry), "activate",
+		      GTK_SIGNAL_FUNC (switch_to_next_page), keygen_wizard);
+  gtk_signal_connect (GTK_OBJECT (passwd_entry), "activate",
+		      GTK_SIGNAL_FUNC (focus_repeat_passphrase), entry);
 
   return vbox;
 }
@@ -426,22 +457,22 @@ gpa_keygen_wizard_run (GtkWidget * parent)
   keygen_wizard->wizard = wizard;
   gtk_container_add (GTK_CONTAINER (window), wizard);
 
-  keygen_wizard->name_page = gpa_keygen_wizard_name_page ();
+  keygen_wizard->name_page = gpa_keygen_wizard_name_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->name_page,
 			  NULL, NULL,
 			  gpa_keygen_wizard_name_validate, keygen_wizard);
 
-  keygen_wizard->email_page = gpa_keygen_wizard_email_page ();
+  keygen_wizard->email_page = gpa_keygen_wizard_email_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->email_page,
 			  NULL, NULL,
 			  gpa_keygen_wizard_email_validate, keygen_wizard);
 
-  keygen_wizard->comment_page = gpa_keygen_wizard_comment_page ();
+  keygen_wizard->comment_page = gpa_keygen_wizard_comment_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->comment_page,
 			  NULL, NULL, NULL, NULL);
 			  
 
-  keygen_wizard->passwd_page = gpa_keygen_wizard_password_page ();
+  keygen_wizard->passwd_page = gpa_keygen_wizard_password_page (keygen_wizard);
   /* Don't use F as the accelerator in "Finish" because Meta-F is
    * already bound in the entry widget */
   gpa_wizard_append_page (wizard, keygen_wizard->passwd_page,

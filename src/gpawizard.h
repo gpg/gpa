@@ -31,6 +31,8 @@ void gpa_wizard_append_page (GtkWidget * widget, GtkWidget * page_widget,
 			     gchar * back_label, gchar * next_label,
 			     GPAWizardAction action, gpointer user_data);
 
+void gpa_wizard_next_page (GtkWidget * widget);
+
 void gpa_wizard_next_page_no_action (GtkWidget * widget);
 
 #endif /* GPAWIZARD_H */
