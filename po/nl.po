@@ -641,7 +641,7 @@ msgstr "vervalt nooit"
 
 #: src/gpapastrings.c:92
 msgid "unknown"
-msgstr "onbekent"
+msgstr "onbekend"
 
 #. User Name
 #: src/gpawidgets.c:68 src/gpgmetools.c:508 src/gpgmetools.c:515
@@ -651,7 +651,7 @@ msgstr "Gebruiker naam:"
 
 #: src/gpawidgets.c:68 src/keysigndlg.c:97
 msgid "User Names:"
-msgstr "Gebruiker namen:"
+msgstr "Gebruikers Namen:"
 
 #. Key ID
 #: src/gpawidgets.c:74 src/gpgmetools.c:509 src/gpgmetools.c:516
@@ -679,7 +679,7 @@ msgstr "Vervaldag"
 
 #: src/gpawidgets.c:345
 msgid "_indefinitely valid"
-msgstr "_zeker ongeldig"
+msgstr "_oneindig geldig"
 
 #: src/gpawidgets.c:354
 msgid "expire _after"
@@ -1391,7 +1391,7 @@ msgstr "/_Sleutels"
 
 #: src/keyring.c:999
 msgid "/Keys/_New Key..."
-msgstr "/Sleutels/_Bewerk Sleutel..."
+msgstr "/Sleutels/_Nieuwe Sleutel..."
 
 #: src/keyring.c:1001
 msgid "/Keys/_Delete Keys..."
@@ -1625,7 +1625,7 @@ msgid ""
 "key you want to sign."
 msgstr ""
 "Controleer de naam en de vingerafdruk zorgvuldig en wees zeker dat dit "
-"echtde sleutel is die uw wilt ondertekenen."
+"echt de sleutel is die uw wilt ondertekenen."
 
 #: src/keysigndlg.c:120
 msgid "All user names in this key will be signed."
@@ -1699,7 +1699,7 @@ msgstr ""
 
 #: src/ownertrustdlg.c:181
 msgid "_Full"
-msgstr "_Vol"
+msgstr "_Volledig"
 
 #: src/ownertrustdlg.c:186
 msgid ""
@@ -1815,16 +1815,16 @@ msgstr "_Standaard sleutel:"
 #. Build UI
 #: src/settingsdlg.c:77
 msgid "Default key_server: "
-msgstr "_Standaard sleutel:"
+msgstr "_Standaard KeyServer:"
 
 #. Build UI
 #: src/settingsdlg.c:120
 msgid "Use _advanced mode:"
-msgstr ""
+msgstr "Gebruik ge_avanceerde mode:"
 
 #: src/settingsdlg.c:126
 msgid "_Yes"
-msgstr "/_Sleutels"
+msgstr "_Ja"
 
 #: src/settingsdlg.c:129
 msgid "_No"
