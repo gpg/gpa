@@ -1,18 +1,22 @@
 Noteworthy changes in version 0.6.1 (unreleased)
 ------------------------------------------------
 
+ * Added a popup menu to the keyring view, with all the common operations.
+
+ * Keys' expiration dates can be choosen by clicking on a calendar.
+
  * The key generation dialogs have been revamped to use GTK+2 stock widgets.
 
- * Keys' expiration dates can now be choosen by clicking on a calendar.
-
- * GPA now uses the standard GTK+ file selection dialog.
+ * The passphrase for a key can be changed from the edit key dialog.
 
  * Revoked user names are properly treated. They are not displayed, save in
  the details notebook, and then they are clearly marked as revoked.
 
- * There is now a right click menu in the main key list.
+ * GPA now uses the standard GTK+ file selection dialog.
 
- * The passphrase for a key can now be changed from the edit key dialog.
+ * Added Swedish translation.
+
+ * Many other bugfixes, including several portability issues.
 
 Noteworthy changes in version 0.6.0 (2002-12-24)
 ------------------------------------------------

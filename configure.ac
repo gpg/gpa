@@ -148,8 +148,8 @@ fi
 
 AC_CHECK_FUNC(getopt_long,
     AC_MSG_RESULT(using libc's getopt_long),
-    AC_CHECK_LIB(iberty, getopt_long,
-	AC_CHECK_LIB(gnugetopt, getopt_long,
+    AC_CHECK_LIB(iberty, getopt_long,[LIBS="$LIBS -liberty"],
+	AC_CHECK_LIB(gnugetopt, getopt_long,[LIBS="$LIBS -lgnugetopt"],
 	    AC_MSG_ERROR(Cannot find a getopt_long function))))
 
 dnl Where is the GTK+ toolkit
