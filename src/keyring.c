@@ -338,7 +338,7 @@ keyring_editor_sign (gpointer param)
   gint row;
   gchar * key_id;
   GpapaPublicKey *key;
-  GpapaSignType sign_type = GPAPA_KEY_SIGN_LOCALLY;
+  GpapaSignType sign_type = GPAPA_KEY_SIGN_NORMAL;
   GList * selection;
 
   if (!editor->clist_keys->selection)
@@ -350,6 +350,16 @@ keyring_editor_sign (gpointer param)
       return;
     }
 
+  private_key_id = gpa_default_key ();
+  if (!private_key_id)
+    {
+      /* this shouldn't happen because the button should be grayed out
+       * in this case
+       */
+      gpa_window_error (_("No private key for signing."), editor->window);
+      return;
+    }
+
   selection = editor->clist_keys->selection;
   while (selection)
     {
@@ -358,11 +368,10 @@ keyring_editor_sign (gpointer param)
 				   
       key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
       if (gpa_key_sign_run_dialog (editor->window, key, &sign_type,
-				   &private_key_id, &passphrase))
+				   &passphrase))
 	{
 	  gpapa_public_key_sign (key, private_key_id, passphrase, sign_type,
 				 gpa_callback, editor->window);
-	  free (private_key_id);
 	  free (passphrase);
 	}
       selection = g_list_next (selection);
