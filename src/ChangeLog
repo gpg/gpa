@@ -1,5 +1,18 @@
 2001-02-09  Bernhard Herzog  <bh@intevation.de>
 
+	* keygenwizard.c (string_strip_dup): Helper function to create a
+	copy of a string stripped off leading and trailing whitespace
+	(gpa_keygen_wizard_simple_get_text): Return a string_strip_dup'ed
+	version of the user input
+	(gpa_keygen_wizard_password_action): Free the values read from the
+	"simple pages" because they're now malloced copies.
+	(gpa_keygen_wizard_name_validate):
+	(gpa_keygen_wizard_email_validate): New functions to validate the
+	user input for the name and email pages. The validation for the
+	emails address could be much more thorough.
+	(gpa_keygen_wizard_run): Hook up the new validation functions with
+	the pages.
+
 	* optionsmenu.c (options_keyserver):
 	(options_keyserver_destroy): Make the default key server dialog
 	properly modal with a recursive main loop and a handler for the
