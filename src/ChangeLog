@@ -1,5 +1,11 @@
 2003-04-05  Miguel Coca  <mcoca@gnu.org>
 
+	* fileman.c (fileman_menu_new): Add a "clear" entry.
+	(fileman_toolbar_new): Likewise.
+	(toolbar_close_all, close_all_files): New.
+
+2003-04-05  Miguel Coca  <mcoca@gnu.org>
+
 	* gpa.c (quit_if_no_window, gpa_open_filemanager): Use new filemanager.
 	(gpa_get_filenamager): Remove.
 

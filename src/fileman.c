@@ -243,6 +243,16 @@ open_file (gpointer param)
     }
 }
 
+static void
+close_all_files (gpointer param)
+{
+  GpaFileManager *fileman = param;
+  GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
+                                        (GTK_TREE_VIEW (fileman->list_files)));
+
+  gtk_list_store_clear (store);
+}
+
 /*
  *  Verify Signed Files
  */
@@ -352,6 +362,12 @@ toolbar_file_open (GtkWidget *widget, gpointer param)
 }
 
 static void
+toolbar_close_all (GtkWidget *widget, gpointer param)
+{
+  close_all_files (param);
+}
+
+static void
 toolbar_file_sign (GtkWidget *widget, gpointer param)
 {
   sign_files (param);
@@ -449,6 +465,7 @@ fileman_menu_new (GpaFileManager *fileman)
   GtkItemFactoryEntry file_menu[] = {
     {_("/_File"), NULL, NULL, 0, "<Branch>"},
     {_("/File/_Open"), NULL, open_file, 0, "<StockItem>", GTK_STOCK_OPEN},
+    {_("/File/C_lear"), NULL, close_all_files, 0, "<StockItem>", GTK_STOCK_CLEAR},
     {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
     {_("/File/_Sign"), NULL, sign_files, 0, NULL},
     {_("/File/_Verify"), "<control>P", verify_files, 0, NULL},
@@ -531,6 +548,10 @@ fileman_toolbar_new (GpaFileManager *fileman)
   gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_OPEN,
                             _("Open a file"), _("open file"),
                             GTK_SIGNAL_FUNC (toolbar_file_open),
+                            fileman, -1);
+  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_CLEAR,
+                            _("Close all files"), _("close files"),
+                            GTK_SIGNAL_FUNC (toolbar_close_all),
                             fileman, -1);
   /* Sign */
   if ((icon = gpa_create_icon_widget (GTK_WIDGET (fileman), "sign")))
