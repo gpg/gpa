@@ -1,5 +1,22 @@
 2002-10-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* keyring.c (keyring_editor_export): Use gpa_fopen.
+
+	* fileman.c (decrypt_files): Implemented using Gpgme.
+	(show_file_detail): Removed.
+	(verify_files): New. Empty for now.
+	(toolbar_file_verify, fileman_menu_new): Use verify_files instead
+	of show_file_detail.
+	(encrypt_files): Free the list of files.
+	(gpa_window_file_new, add_file): Set the file list to have
+	just one column, the filename, as the other one left was useless.
+	
+	* filesigndlg.c (open_destination_file): Make sure there is proper
+	cleanup on error. Use gpa_fopen.
+	* encryptdlg.c (open_destination_file): Likewise.
+
+	* gpgmetools.h, gpgmetools.c (gpa_fopen): New function.
+
 	* gpafile.h, gpafile.c: Removed obsolete files.
 
 2002-10-11  Miguel Coca  <e970095@zipi.fi.upm.es>

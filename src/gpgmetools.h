@@ -77,6 +77,14 @@ void _gpa_gpgme_error (GpgmeError err, const char *file, int line);
  */
 void dump_data_to_file (GpgmeData data, FILE *file);
 
+/* Not really a gpgme function, but needed in most places dump_data_to_file
+ * is used.
+ * Opens a file for writing, asking the user to overwrite if it exists and
+ * reporting any errors. Returns NULL on failure, but you can assume the user
+ * has been informed of the error (or maybe he just didn't want to
+ * overwrite!) */
+FILE *gpa_fopen (const char *filename, GtkWidget *parent);
+
 /* Read the contents of the clipboard into the GpgmeData object.
  */
 void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard);

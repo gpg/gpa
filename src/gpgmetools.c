@@ -61,6 +61,46 @@ void dump_data_to_file (GpgmeData data, FILE *file)
   return;
 }
 
+/* Not really a gpgme function, but needed in most places dump_data_to_file
+ * is used.
+ * Opens a file for writing, asking the user to overwrite if it exists and
+ * reporting any errors. Returns NULL on failure, but you can assume the user
+ * has been informed of the error (or maybe he just didn't want to
+ * overwrite!) */
+FILE *gpa_fopen (const char *filename, GtkWidget *parent)
+{
+  FILE *target;
+  
+  /* If the file exists, ask before overwriting */
+  if (g_file_test (filename, G_FILE_TEST_EXISTS))
+    {
+      GtkWidget *msgbox = gtk_message_dialog_new 
+	(GTK_WINDOW(parent), GTK_DIALOG_MODAL,
+	 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
+	 _("The file %s already exists.\n"
+	   "Do you want to overwrite it?"), filename);
+      gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
+			      GTK_STOCK_YES, GTK_RESPONSE_YES,
+			      GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
+      if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
+	{
+	  gtk_widget_destroy (msgbox);
+	  return NULL;
+	}
+      gtk_widget_destroy (msgbox);
+    }
+  target = fopen (filename, "w");
+  if (!target)
+    {
+      gchar *message;
+      message = g_strdup_printf ("%s: %s", filename, strerror(errno));
+      gpa_window_error (message, parent);
+      g_free (message);
+      return NULL;
+    }
+  return target;
+}
+
 /* Read the contents of the clipboard into the GpgmeData object.
  */
 void fill_data_from_clipboard (GpgmeData data, GtkClipboard *clipboard)

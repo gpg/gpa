@@ -61,32 +61,10 @@ open_destination_file (const gchar *filename, GpgmeSigMode sign_type,
   else
     extension = ".asc";
   *target_filename = g_strconcat (filename, extension, NULL);
-  /* If the file exists, ask before overwriting */
-  if (g_file_test (*target_filename, G_FILE_TEST_EXISTS))
-    {
-      GtkWidget *msgbox = gtk_message_dialog_new 
-	(GTK_WINDOW(parent), GTK_DIALOG_MODAL,
-	 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
-	 _("The file %s already exists.\n"
-	   "Do you want to overwrite it?"), *target_filename);
-      gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
-			      GTK_STOCK_YES, GTK_RESPONSE_YES,
-			      GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
-      if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
-	{
-	  gtk_widget_destroy (msgbox);
-	  return NULL;
-	}
-      gtk_widget_destroy (msgbox);
-    }
-  target = fopen (*target_filename, "w");
+  target = gpa_fopen (*target_filename, parent);
   if (!target)
     {
-      gchar *message;
-      message = g_strdup_printf ("%s: %s", filename, strerror(errno));
-      gpa_window_error (message, parent);
-      g_free (message);
-      return NULL;
+      g_free (*target_filename);
     }
   return target;
 }
@@ -139,6 +117,8 @@ sign_files (GPAFileSignDialog *dialog, gchar *fpr, GpgmeSigMode sign_type,
 	  message = g_strdup_printf ("%s: %s", filename, strerror(errno));
 	  gpa_window_error (message, dialog->window);
 	  g_free (message);
+	  g_free (target_filename);
+	  fclose (target);
 	  break;
 	}
       else if (err != GPGME_No_Error)

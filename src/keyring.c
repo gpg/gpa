@@ -489,7 +489,7 @@ keyring_editor_export (gpointer param)
       /* First: check any preconditions to the export */
       if (filename)
         {
-          file = fopen (filename, "w");
+          file = gpa_fopen (filename, editor->window);
           if (!file)
             {
               gchar *message = g_strdup_printf ("%s: %s", filename, 

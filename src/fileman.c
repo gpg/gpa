@@ -36,9 +36,6 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include <gpapa.h>
-
-
 #include "argparse.h"
 #include "stringhelp.h"
 
@@ -102,7 +99,7 @@ get_selected_files (GtkCList *clist)
 static gint
 add_file (GPAFileManager *fileman, gchar *filename)
 {
-  gchar *entries[2];
+  gchar *entries[1];
   gchar *tmp;
   gint row;
 
@@ -116,8 +113,7 @@ add_file (GPAFileManager *fileman, gchar *filename)
 	}
     }
   entries[0] = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-  /* FIXME: Check the file status when/if gpgme supports it */
-  entries[1] = _("Unknown");
+  /* FIXME: Add the file status when/if gpgme supports it */
 
   row = gtk_clist_append (fileman->clist_files, entries);
 
@@ -150,138 +146,14 @@ open_file (gpointer param)
 }
 
 /*
- *  File/Show Detail
+ *  Verify Signed Files
  */
 
 
 static void
-close_file_detail (gpointer param)
+verify_files (gpointer param)
 {
-  gtk_main_quit ();
 }
-
-static gboolean
-detail_delete_event (GtkWidget *widget, GdkEvent *event, gpointer param)
-{
-  close_file_detail (param);
-  return TRUE;
-}
-
-static void
-show_file_detail (gpointer param)
-{
-  GPAFileManager *fileman = param;
-  GpapaFile *file;
-  GtkAccelGroup *accelGroup;
-  gchar *contentsFilename;
-  GList *signatures;
-  GtkWidget *window;
-  GtkWidget *vboxDetail;
-  GtkWidget *tableTop;
-  GtkWidget *labelFilename;
-  GtkWidget *entryFilename;
-  GtkWidget *labelEncrypted;
-  GtkWidget *entryEncrypted;
-  GtkWidget *vboxSignatures;
-  GtkWidget *labelSignatures;
-  GtkWidget *scrollerSignatures;
-  GtkWidget *clistSignatures;
-  GtkWidget *hButtonBoxDetail;
-  GtkWidget *buttonClose;
-
-  if (!fileman->clist_files->selection)
-    {
-      gpa_window_error (_("No file selected for verifying signature."),
-			fileman->window);
-      return;
-    } /* if */
-
-#if 0
-  file = get_file (fileman->clist_files,
-		   GPOINTER_TO_INT (fileman->clist_files->selection->data));
-#endif
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), _("Verifying file signature"));
-  gtk_signal_connect_object (GTK_OBJECT (window), "delete_event",
-			     GTK_SIGNAL_FUNC (detail_delete_event),
-			     (gpointer)fileman);
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
-
-  vboxDetail = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxDetail), 5);
-  tableTop = gtk_table_new (2, 2, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (tableTop), 5);
-  labelFilename = gtk_label_new (_("Filename: "));
-  gtk_misc_set_alignment (GTK_MISC (labelFilename), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (tableTop), labelFilename, 0, 1, 0, 1,
-		    GTK_FILL, GTK_FILL, 0, 0);
-  entryFilename = gtk_entry_new ();
-  gtk_editable_set_editable (GTK_EDITABLE (entryFilename), FALSE);
-  contentsFilename = gpapa_file_get_name (file, gpa_callback, fileman->window);
-  gtk_entry_set_text (GTK_ENTRY (entryFilename), contentsFilename);
-  gtk_widget_ensure_style (entryFilename);
-  gtk_widget_set_usize (entryFilename,
-    gdk_string_width (gtk_style_get_font (entryFilename->style),
-                      contentsFilename)
-    + gdk_string_width (gtk_style_get_font (entryFilename->style), "  ")
-    + my_gtk_style_get_xthickness (entryFilename->style), 0);
-  gtk_table_attach (GTK_TABLE (tableTop), entryFilename, 1, 2, 0, 1, GTK_FILL,
-		    GTK_FILL, 0, 0);
-
-  labelEncrypted = gtk_label_new (_("Status:"));
-  gtk_misc_set_alignment (GTK_MISC (labelEncrypted), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (tableTop), labelEncrypted, 0, 1, 1, 2,
-		    GTK_FILL, GTK_FILL, 0, 0);
-  entryEncrypted = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (entryEncrypted),
-		      gpa_file_status_string (gpapa_file_get_status
-					      (file, gpa_callback,
-					       global_windowMain)));
-  gtk_editable_set_editable (GTK_EDITABLE (entryEncrypted), FALSE);
-  gtk_table_attach (GTK_TABLE (tableTop), entryEncrypted, 1, 2, 1, 2,
-		    GTK_FILL, GTK_FILL, 0, 0);
-
-  gtk_box_pack_start (GTK_BOX (vboxDetail), tableTop, FALSE, FALSE, 0);
-
-  vboxSignatures = gtk_vbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vboxDetail), vboxSignatures, TRUE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxSignatures), 5);
-
-  labelSignatures = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC (labelSignatures), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vboxSignatures), labelSignatures, FALSE, TRUE,
-		      0);
-
-  scrollerSignatures = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_usize (scrollerSignatures, 350, 200);
-  gtk_box_pack_start (GTK_BOX (vboxSignatures), scrollerSignatures, TRUE,
-		      TRUE, 0);
-
-  clistSignatures = gpa_siglist_new (fileman->window);
-  signatures = gpapa_file_get_signatures (file, gpa_callback, fileman->window);
-  gpa_siglist_set_signatures (clistSignatures, signatures, NULL);
-  gtk_container_add (GTK_CONTAINER (scrollerSignatures), clistSignatures);
-  gpa_connect_by_accelerator (GTK_LABEL (labelSignatures), clistSignatures,
-			      accelGroup, _("_Signatures"));
-
-  hButtonBoxDetail = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxDetail),
-			     GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxDetail), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxDetail), 5);
-  buttonClose = gpa_button_cancel_new (accelGroup, _("_Close"),
-				       (GtkSignalFunc) close_file_detail, fileman);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxDetail), buttonClose);
-  gtk_box_pack_start (GTK_BOX (vboxDetail), hButtonBoxDetail, FALSE, FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (window), vboxDetail);
-  gpa_window_show_centered (window, fileman->window);
-
-  gtk_grab_add (window);
-  gtk_main ();
-  gtk_grab_remove (window);
-  gtk_widget_destroy (window);
-} /* show_file_detail */
 
 
 /*
@@ -349,6 +221,8 @@ encrypt_files (gpointer param)
 	}
       g_list_free (encrypted_files);
     }
+
+  g_list_free (files);
 }
 
 /*
@@ -360,48 +234,96 @@ decrypt_files (gpointer param)
 {
   GPAFileManager *fileman = param;
   GList * files;
-  GpapaFile *file;
-  gchar *passphrase;
-  gchar *filename, *newname, *extension;
-  GList *cur;
-  gint row;
+  GList * cur;
 
   files = get_selected_files (fileman->clist_files);
   if (!files)
     return;
 
-  passphrase = gpa_passphrase_run_dialog (fileman->window, NULL);
-  if (passphrase)
+  for (cur = files; cur; cur = g_list_next (cur))
     {
-      cur = files;
-      while (cur)
+      GpgmeError err;
+      GpgmeData cipher, plain;
+      const gchar *filename = cur->data;
+      const gchar *extension;
+      gchar *plain_filename;
+
+      /* Find out the destination file */
+      extension = g_strrstr (filename, ".");
+      if (extension && (g_str_equal (extension, ".asc") || 
+			g_str_equal (extension, ".gpg") ||
+			g_str_equal (extension, ".pgp")))
 	{
-	  file = cur->data;
-	  filename = gpapa_file_get_identifier (file, gpa_callback,
-						fileman->window);
-	  extension = filename + strlen (filename) - 4;
-	  if (strcmp (extension, ".gpg") == 0
-	      || strcmp (extension, ".asc") == 0)
-	    {
-	      newname = xstrdup (filename);
-	      newname[strlen (filename) - 4] = 0;
-	    } /* if */
-	  else
-	    newname = xstrcat2 (filename, ".txt");
-	  global_lastCallbackResult = GPAPA_ACTION_NONE;
-	  gpapa_file_decrypt (file, newname, passphrase, gpa_callback,
-			      fileman->window);
-	  if (global_lastCallbackResult != GPAPA_ACTION_ERROR)
-	    {
-	      row = add_file (fileman, newname);
-	      if (row >= 0)
-		gtk_clist_select_row (fileman->clist_files, row, 0);
-	    }
-	  free (newname);
-	  cur = g_list_next (cur);
+	  /* Remove the extension */
+	  plain_filename = g_strdup (filename);
+	  *(plain_filename + (extension-filename)) = '\0';
 	}
+      else
+	{
+	  plain_filename = g_strconcat (filename, ".txt");
+	}
+      /* Open the ciphertext */
+      err = gpgme_data_new_from_file (&cipher, filename, 1);
+      if (err == GPGME_File_Error)
+	{
+	  gchar *message;
+	  message = g_strdup_printf ("%s: %s", filename, strerror(errno));
+	  gpa_window_error (message, fileman->window);
+	  g_free (message);
+	  g_free (plain_filename);
+	  break;
+	}
+      else if (err != GPGME_No_Error)
+	{
+	  gpa_gpgme_error (err);
+	}
+      /* Create a GpgmeData for the output */
+      err = gpgme_data_new (&plain);
+      if (err != GPGME_No_Error)
+	{
+	  gpa_gpgme_error (err);
+	}
+      /* Decrypt */
+      err = gpgme_op_decrypt (ctx, cipher, plain);
+      if (err == GPGME_No_Passphrase)
+	{
+	  gpa_window_error (_("Wrong passphrase!"), fileman->window);
+	  break;
+	}
+      else if (err == GPGME_Canceled)
+	{
+	  break;
+	}
+      else if (err == GPGME_No_Data || err == GPGME_Decryption_Failed)
+	{
+	  gchar *message = g_strdup_printf (_("The file %s contained no valid"
+					      " encrypted data."), filename);
+	  gpa_window_error (message, fileman->window);
+	}
+      else if (err != GPGME_No_Error)
+	{
+	  gpa_gpgme_error (err);
+	}
+      else
+	{
+	  /* If everything went well, save the plaintext */
+	  FILE *plain_file = gpa_fopen (plain_filename, fileman->window);
+	  if (!plain_file)
+	    {
+	      gpgme_data_release (cipher);
+	      gpgme_data_release (plain);
+	      g_free (plain_filename);
+	      break;
+	    }
+	  dump_data_to_file (plain, plain_file);
+	  fclose (plain_file);
+	  add_file (fileman, plain_filename);
+	}
+      gpgme_data_release (cipher);
+      gpgme_data_release (plain);
+      g_free (plain_filename);
     }
-  free (passphrase);
+
   g_list_free (files);
 }
 
@@ -428,7 +350,7 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
     {_("/File/_Open"), "<control>O", open_file, 0, NULL},
     {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
     {_("/File/_Sign"), NULL, sign_files, 0, NULL},
-    {_("/File/C_heck"), "<control>P", show_file_detail, 0, NULL},
+    {_("/File/C_heck"), "<control>P", verify_files, 0, NULL},
     {_("/File/_Encrypt"), NULL, encrypt_files, 0, NULL},
     /*    {_("/File/E_ncrypt as"), NULL, file_encryptAs, 0, NULL},
     {_("/File/_Protect by Password"), NULL, file_protect, 0, NULL},
@@ -467,7 +389,7 @@ static GtkWidget *
 gpa_window_file_new (GPAFileManager * fileman)
 {
   char *clistFileTitle[] = {
-    _("File"), _("Status")
+    _("File")
   };
   int i;
 
@@ -477,10 +399,8 @@ gpa_window_file_new (GPAFileManager * fileman)
 
   windowFile = gtk_frame_new (_("Files in work"));
   scrollerFile = gtk_scrolled_window_new (NULL, NULL);
-  clistFile = gtk_clist_new_with_titles (2, clistFileTitle);
+  clistFile = gtk_clist_new_with_titles (1, clistFileTitle);
   fileman->clist_files = GTK_CLIST (clistFile);
-  gtk_clist_set_column_width (GTK_CLIST (clistFile), 0, 170);
-  gtk_clist_set_column_width (GTK_CLIST (clistFile), 1, 100);
   gtk_clist_set_column_justification (GTK_CLIST (clistFile), 1,
 				      GTK_JUSTIFY_CENTER);
   for (i = 0; i <= 1; i++)
@@ -513,7 +433,7 @@ toolbar_file_sign (GtkWidget *widget, gpointer param)
 static void
 toolbar_file_verify (GtkWidget *widget, gpointer param)
 {
-  show_file_detail (param);
+  verify_files (param);
 }
 
 static void
