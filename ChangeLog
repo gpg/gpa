@@ -1,3 +1,7 @@
+2002-12-29  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Require GPGME 0.4.1.
+
 2002-12-24  Miguel Coca  <mcoca@gnu.org>
 
 	* configure.ac, NEWS: Bump version number.
