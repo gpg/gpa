@@ -23,9 +23,8 @@
 
 #include <gtk/gtk.h>
 
-gboolean gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
-				  GpapaSignType * sign_type,
-				  gchar ** passphrase);
+gboolean gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
+				  gboolean * sign_locally);
 
 
 #endif /* KEYSIGNDLG_H */

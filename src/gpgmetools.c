@@ -509,6 +509,215 @@ edit_ownertrust_fnc (void *opaque, GpgmeStatusCode status, const char *args,
   return GPGME_No_Error;
 }
 
+/* Sign a key */
+
+struct sign_parms_s
+{
+  int state;
+  gchar *check_level;
+  gboolean local;
+  GpgmeError err;
+};
+
+static GpgmeError
+edit_sign_fnc_action (struct sign_parms_s *parms, const char **result)
+{
+  switch (parms->state)
+    {
+      /* Start the operation */
+    case 1:
+      *result = parms->local ? "lsign" : "sign";
+      break;
+      /* Sign all user ID's */
+    case 2:
+      *result = "Y";
+      break;
+      /* The signature expires at the same time as the key */
+    case 3:
+      *result = "Y";
+      break;
+      /* Set the check level on the key */
+    case 4:
+      *result = parms->check_level;
+      break;
+      /* Confirm the signature */
+    case 5:
+      *result = "Y";
+      break;
+      /* End the operation */
+    case 6:
+      *result = "quit";
+      break;
+      /* Save */
+    case 7:
+      *result = "Y";
+      break;
+      /* Special state: an error ocurred. Do nothing until we can quit */
+    case 8:
+      break;
+    case 9:
+      *result = "quit";
+      break;
+      /* Can't happen */
+    default:
+      parms->err = GPGME_General_Error;
+    }
+  return parms->err;
+}
+
+static void
+edit_sign_fnc_transit (struct sign_parms_s *parms, GpgmeStatusCode status, 
+                       const char *args)
+{
+  switch (parms->state)
+    {
+    case 0:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          parms->state = 1;
+        }
+      else if (status == GPGME_STATUS_KEYEXPIRED)
+        {
+          parms->err = GPGME_Invalid_Key;
+          parms->state = 8;
+        }
+      else
+        {
+          parms->state = 8;
+          parms->err = GPGME_General_Error;
+        }
+      break;
+    case 1:
+      if (status == GPGME_STATUS_GET_BOOL &&
+          g_str_equal (args, "keyedit.sign_all.okay"))
+        {
+          parms->state = 2;
+        }
+      else if (status == GPGME_STATUS_GET_LINE &&
+               g_str_equal (args, "sign_uid.expire"))
+        {
+          parms->state = 3;
+          break;
+        }
+      else if (status == GPGME_STATUS_GET_LINE &&
+               g_str_equal (args, "sign_uid.class"))
+        {
+          parms->state = 4;
+        }
+      else
+        {
+          parms->state = 8;
+          parms->err = GPGME_General_Error;
+        }
+      break;
+    case 2:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "sign_uid.expire"))
+        {
+          parms->state = 3;
+          break;
+        }
+      else if (status == GPGME_STATUS_GET_LINE &&
+               g_str_equal (args, "sign_uid.class"))
+        {
+          parms->state = 4;
+        }
+      else
+        {
+          parms->state = 8;
+          parms->err = GPGME_General_Error;
+        }
+      break;
+    case 3:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "sign_uid.class"))
+        {
+          parms->state = 4;
+        }
+      else
+        {
+          parms->state = 8;
+          parms->err = GPGME_General_Error;
+        }
+      break;
+    case 4:
+      if (status == GPGME_STATUS_GET_BOOL &&
+          g_str_equal (args, "sign_uid.okay"))
+        {
+          parms->state = 5;
+        }
+      else
+        {
+          parms->state = 8;
+          parms->err = GPGME_General_Error;
+        }
+      break;
+    case 5:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          parms->state = 6;
+        }
+      else
+        {
+          parms->state = 8;
+          parms->err = GPGME_General_Error;
+        }
+      break;
+    case 6:
+      if (status == GPGME_STATUS_GET_BOOL &&
+          g_str_equal (args, "keyedit.save.okay"))
+        {
+          parms->state = 7;
+        }
+      else
+        {
+          parms->state = 8;
+          parms->err = GPGME_General_Error;
+        }
+      break;
+    case 8:
+      if (status == GPGME_STATUS_GET_LINE &&
+          g_str_equal (args, "keyedit.prompt"))
+        {
+          parms->state = 9;
+        }
+      else
+        {
+          parms->state = 8;
+        }
+      break;
+    default:
+      parms->state = 8;
+      parms->err = GPGME_General_Error;
+    }
+}
+
+static GpgmeError
+edit_sign_fnc (void *opaque, GpgmeStatusCode status, const char *args,
+               const char **result)
+{
+  struct sign_parms_s *parms = opaque;
+
+  /* Ignore these status lines, as they don't require any response */
+  if (status == GPGME_STATUS_EOF ||
+      status == GPGME_STATUS_GOT_IT ||
+      status == GPGME_STATUS_NEED_PASSPHRASE ||
+      status == GPGME_STATUS_GOOD_PASSPHRASE ||
+      status == GPGME_STATUS_USERID_HINT ||
+      status == GPGME_STATUS_SIGEXPIRED)
+    {
+      return parms->err;
+    }
+
+  /* Choose the next state based on the current one and the input */
+  edit_sign_fnc_transit (parms, status, args);
+
+  /* Choose the action based on the state */
+  return edit_sign_fnc_action (parms, result);
+}
+
 /* Change the ownertrust of a key */
 GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust)
 {
@@ -554,3 +763,29 @@ GpgmeError gpa_gpgme_edit_expiry (GpgmeKey key, GDate *date)
   return err;
 }
 
+/* Sign this key with the given private key */
+GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, gchar *private_key_fpr,
+                                gboolean local)
+{
+  struct sign_parms_s parms = {0, "0", local, GPGME_No_Error};
+  GpgmeKey secret_key = gpa_keytable_secret_lookup (keytable, private_key_fpr);
+  GpgmeError err = GPGME_No_Error;
+  GpgmeData out;
+
+  err = gpgme_data_new (&out);
+  if (err != GPGME_No_Error)
+    {
+      gpa_gpgme_error (err);
+    }  
+  gpgme_signers_clear (ctx);
+  gpgme_key_ref (secret_key);
+  err = gpgme_signers_add (ctx, secret_key);
+  if (err != GPGME_No_Error)
+    {
+      return err;
+    }
+  err = gpgme_op_edit (ctx, key, edit_sign_fnc, &parms, out);
+  gpgme_data_release (out);
+  
+  return err;
+}

@@ -1,3 +1,15 @@
+2002-08-22  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpgmetools.c (edit_sign_fnc, gpa_gpgme_edit_sign)
+	(edit_sign_fnc_action): New funtions.
+
+	* keyring.c (keyring_editor_sign): Reimplement with gpgme.
+
+	* keysigndlg.c (key_sign_ok): Remove passphrase stuff.
+	(gpa_key_sign_run_dialog): Port to gpgme. Remove unneeded
+	parameters and change the sign_type to just say whether the key
+	should be signed locally.
+
 2002-08-21  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.c (_gpa_gpgme_error): Changed "OK" button to "Close".

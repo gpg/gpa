@@ -305,13 +305,14 @@ static void
 keyring_editor_sign (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  gchar *private_key_id;
-  gchar *passphrase;
+  gchar *private_key_fpr;
   gint row;
-  gchar *key_id;
-  GpapaPublicKey *key;
-  GpapaSignType sign_type = GPAPA_KEY_SIGN_NORMAL;
+  gchar *key_fpr;
+  GpgmeKey key;
+  GpgmeError err;
+  gboolean sign_locally = FALSE;
   GList *selection;
+  gint signed_count = 0;
 
   if (!gpa_keylist_has_selection (editor->clist_keys))
     {
@@ -322,8 +323,8 @@ keyring_editor_sign (gpointer param)
       return;
     }
 
-  private_key_id = gpa_default_key ();
-  if (!private_key_id)
+  private_key_fpr = gpa_default_key ();
+  if (!private_key_fpr)
     {
       /* this shouldn't happen because the button should be grayed out
        * in this case
@@ -336,17 +337,38 @@ keyring_editor_sign (gpointer param)
   while (selection)
     {
       row = GPOINTER_TO_INT (selection->data);
-      key_id = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
+      key_fpr = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
                                    
-      key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
-      if (!key_has_been_signed (key, private_key_id, editor->window))
+      key = gpa_keytable_lookup (keytable, key_fpr);
+      if (!key_has_been_signed (key, private_key_fpr, editor->window))
         {
-          if (gpa_key_sign_run_dialog (editor->window, key, &sign_type,
-                                       &passphrase))
+          if (gpa_key_sign_run_dialog (editor->window, key, &sign_locally))
             {
-              gpapa_public_key_sign (key, private_key_id, passphrase,
-                                     sign_type, gpa_callback, editor->window);
-              free (passphrase);
+              err = gpa_gpgme_edit_sign (key, private_key_fpr, sign_locally);
+              if (err == GPGME_No_Error)
+                {
+                  signed_count++;
+                }
+              else if (err == GPGME_No_Passphrase)
+                {
+                  gpa_window_error (_("Wrong passphrase!"),
+                                    editor->window);
+                }
+              else if (err == GPGME_Invalid_Key)
+                {
+                  /* Couldn't sign because the key was expired */
+                  gpa_window_error (_("This key has expired! "
+                                      "Unable to sign."), editor->window);
+                }
+              else if (err == GPGME_Canceled)
+                {
+                  /* Do nothing, the user should know if he cancelled the
+                   * operation */
+                }
+              else
+                {
+                  gpa_gpgme_error (err);
+                }
             }
         }
       selection = g_list_next (selection);
@@ -355,8 +377,15 @@ keyring_editor_sign (gpointer param)
   /* Update the signatures details page and the widgets because some
    * depend on what signatures a key has
    */
-  keyring_update_details_notebook (editor);
-  update_selection_sensitive_widgets (editor);
+  if (signed_count > 0)
+    {
+      /* Reload the list of keys: a new signature may change the 
+       * trust values on several keys.*/
+      gpa_keytable_reload (keytable);
+      keyring_editor_fill_keylist (editor);
+      keyring_update_details_notebook (editor);
+      update_selection_sensitive_widgets (editor);
+    }
 }
 
 

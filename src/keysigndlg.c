@@ -24,17 +24,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <gpapa.h>
+#include <gpgme.h>
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
-#include "passphrasedlg.h"
 #include "keysigndlg.h"
 
 struct _GPAKeySignDialog {
   gboolean result;
-  GpapaSignType sign_type;
-  gchar * passphrase;
+  gboolean sign_locally;
   GtkWidget * window;
   GtkWidget * check_local;
 };
@@ -53,28 +51,19 @@ key_sign_cancel (gpointer param)
 } /* key_sign_cancel */
 
 
-/* Signal handler for the OK button. Read the user's input and ask for
- * the password, then destroy the dialog window */
+/* Signal handler for the OK button. Read the user's input then destroy the
+ * dialog window */
 static void
 key_sign_ok (gpointer param)
 {
   GPAKeySignDialog * dialog = param;
   GtkWidget * check;
-  GpapaSecretKey * secret_key;
 
   dialog->result = TRUE;
 
   check = dialog->check_local;
-  if (check && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)))
-    dialog->sign_type = GPAPA_KEY_SIGN_LOCALLY;
-  else
-    dialog->sign_type = GPAPA_KEY_SIGN_NORMAL;
-
-  /* assume that the dialog will only be run if there actually is a
-   * default key */
-  secret_key = gpapa_get_secret_key_by_ID (gpa_default_key (), gpa_callback,
-					   dialog->window);
-  dialog->passphrase = gpa_passphrase_run_dialog (dialog->window, secret_key);
+  dialog->sign_locally = check && 
+          gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
 
   gtk_widget_destroy (dialog->window);
 } /* key_sign_ok */
@@ -91,20 +80,17 @@ key_sign_destroy (GtkWidget *widget, gpointer param)
 
 /* Run the key sign dialog for signing the public key key with the
  * default key as a modal dialog and return when the user ends the
- * dialog. If the user clicks OK, return TRUE and set sign_type
- * according to the "sign locally" check box and *passphrase to the
- * passphrase. The passphrase must be freed.
+ * dialog. If the user clicks OK, return TRUE and set sign_locally
+ * according to the "sign locally" check box.
  *
- * If the user clicked Cancel, return FALSE and do not modify *sign_type
- * or *passphrase.
+ * If the user clicked Cancel, return FALSE and do not modify *sign_locally
  *
  * When in simplified_ui mode, don't show the "sign locally" check box
- * and if the user clicks OK, set *sign_type to normal.
+ * and if the user clicks OK, set *sign_locally to false.
  */
 gboolean
-gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
-			 GpapaSignType * sign_type,
-			 gchar ** passphrase)
+gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
+                         gboolean * sign_locally)
 {
   GtkAccelGroup *accelGroup;
   GtkWidget *window;
@@ -118,8 +104,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
 
   GPAKeySignDialog dialog;
 
-  dialog.sign_type = *sign_type;
-  dialog.passphrase = NULL;
+  dialog.sign_locally = *sign_locally;
   dialog.check_local = NULL;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -148,8 +133,8 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
-  label = gtk_label_new (gpapa_key_get_name (GPAPA_KEY (key), gpa_callback,
-					     parent));
+  label = gtk_label_new (gpgme_key_get_string_attr (key, GPGME_ATTR_USERID,
+                                                    NULL, 0));
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
@@ -157,8 +142,8 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   
-  label = gtk_label_new (gpapa_public_key_get_fingerprint (key, gpa_callback,
-							   parent));
+  label = gtk_label_new (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR,
+                                                    NULL, 0));
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
@@ -178,8 +163,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
       check = gpa_check_button_new (accelGroup, _("Sign only _locally"));
       dialog.check_local = check;
       gtk_box_pack_start (GTK_BOX (vboxSign), check, FALSE, FALSE, 0);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check),
-				    *sign_type == GPAPA_KEY_SIGN_LOCALLY);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), *sign_locally);
     }
 
   hButtonBoxSign = gtk_hbutton_box_new ();
@@ -206,14 +190,12 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
 
   gtk_main ();
 
-  if (dialog.result && dialog.passphrase)
+  if (dialog.result)
     {
-      *sign_type = dialog.sign_type;
-      *passphrase = dialog.passphrase;
+      *sign_locally = dialog.sign_locally;
     }
   else
     {
-      free (dialog.passphrase);
       dialog.result = FALSE;
     }
 

@@ -104,4 +104,9 @@ GpgmeError gpa_gpgme_edit_ownertrust (GpgmeKey key, GpgmeValidity ownertrust);
 /* Change the expiry date of a key */
 GpgmeError gpa_gpgme_edit_expiry (GpgmeKey key, GDate *date);
 
+/* Sign this key with the given private key. If local is true, make a local
+ * signature. */
+GpgmeError gpa_gpgme_edit_sign (GpgmeKey key, gchar *private_key_fpr,
+                                gboolean local);
+
 #endif
