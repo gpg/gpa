@@ -36,7 +36,9 @@ AH_TOP([
 ])
 AM_MAINTAINER_MODE
 
-
+dnl Check for libraries
+AC_CHECK_LIB(m, sin)
+AC_CHECK_LIB(z, compress)
 
 dnl
 dnl Setup some stuff depending on host/target.
@@ -58,6 +60,8 @@ dnl               [set this to limit filenames to the 8.3 format])
                   [because the Unix gettext has too much overhead on
                    MingW32 systems and these systems lack Posix functions,
                    we use a simplified version of gettext])
+	AC_CHECK_LIB(wsock32, connect)
+	AC_CHECK_LIB(iberty, getopt_long)
         GPG='c:\\gnupg\\gpg.exe'
         ;;
     *)
@@ -113,12 +117,10 @@ AC_SUBST(BUILD_INCLUDED_LIBINTL)
 fi
 
 dnl Where is the GTK+ toolkit
-AM_PATH_GTK(1.2.1,
+AM_PATH_GTK_2_0(2.0.0,
             [LIBS="$LIBS $GTK_LIBS"
-            CFLAGS="$CFLAGS $GTK_CFLAGS"],
-            AC_MSG_ERROR(Cannot find GTK+: Is gtk-config in executable path ?))
-
-
+            CFLAGS="$CFLAGS $GTK_CFLAGS -DGTK_ENABLE_BROKEN"],
+            AC_MSG_ERROR(Cannot find GTK+ 2.0))
 
 dnl
 dnl Checks for header files

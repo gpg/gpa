@@ -1,3 +1,8 @@
+2002-07-29  Werner Koch  <wk@gnupg.org>
+
+	* Makefile.am (LDADD): Don't hardcode libs but take them all from
+	configure.
+
 2002-02-25  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gpafilesel.c (gpa_file_selection_dir_expand): Account for the
