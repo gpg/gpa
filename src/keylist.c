@@ -260,6 +260,7 @@ keylist_fill_column_titles (GPAKeyList * keylist)
     {
       gtk_clist_set_column_title (GTK_CLIST (keylist->clist), i,
 				  _(keylist->column_defs[i]->title));
+      gtk_clist_set_column_visibility (GTK_CLIST (keylist->clist), i, TRUE);
       /*      gtk_clist_column_title_passive (GTK_CLIST (keylist->clist), i);*/
     }
   for (i = keylist->ncolumns; i < keylist->max_columns; i++)

@@ -1,3 +1,8 @@
+2001-01-23  Bernhard Herzog  <bh@intevation.de>
+
+	* keylist.c (keylist_fill_column_titles): Set the first
+	keylist->ncolumns to visible.
+
 2001-01-23	Jan-Oliver Wagner <jan@intevation.de>
 
 	* simple-gettext.c: (new) "simple gettext method for
