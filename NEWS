@@ -1,4 +1,4 @@
-Noteworthy changes in version 0.6.0 (UNRELEASED)
+Noteworthy changes in version 0.6.0 (2002-12-24)
 ------------------------------------------------
 
  * GPA now supports GnuPG 1.2 or later, thanks to it's use of GPGME.

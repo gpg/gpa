@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
-"POT-Creation-Date: 2002-12-17 15:04+0100\n"
+"POT-Creation-Date: 2002-12-18 19:12+0100\n"
 "PO-Revision-Date: 2002-12-15 22:13+0100\n"
 "Last-Translator: Michael Anckaert <xantor@linux.be>\n"
 "Language-Team: DUTCH <nl@li.org>\n"
@@ -214,7 +214,7 @@ msgstr "Bestand openen"
 msgid "open file"
 msgstr "open bestand"
 
-#: src/fileman.c:491 src/keyring.c:1534
+#: src/fileman.c:491 src/keyring.c:1527
 msgid "Sign"
 msgstr "Ondertekenen"
 
@@ -262,23 +262,23 @@ msgstr "Ontsleutel het geselecteerde bestand"
 msgid "decrypt file"
 msgstr "ontsleutel bestand"
 
-#: src/fileman.c:520 src/keyring.c:1587
+#: src/fileman.c:520 src/keyring.c:1580
 msgid "Open the Preferences dialog"
 msgstr "Open de voorkeuren dialoog"
 
-#: src/fileman.c:521 src/keyring.c:1588
+#: src/fileman.c:521 src/keyring.c:1581
 msgid "preferences"
 msgstr "voorkeuren"
 
-#: src/fileman.c:529 src/keyring.c:1603
+#: src/fileman.c:529 src/keyring.c:1596
 msgid "Help"
 msgstr "Help"
 
-#: src/fileman.c:530 src/keyring.c:1604
+#: src/fileman.c:530 src/keyring.c:1597
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "De GNU Privacy Assistent verstaan"
 
-#: src/fileman.c:531 src/keyring.c:1605
+#: src/fileman.c:531 src/keyring.c:1598
 msgid "help"
 msgstr "help"
 
@@ -399,7 +399,7 @@ msgid "Directories"
 msgstr "Mappen"
 
 #. The files ctree
-#: src/gpafilesel.c:884 src/keyring.c:1596
+#: src/gpafilesel.c:884 src/keyring.c:1589
 msgid "Files"
 msgstr "Bestanden"
 
@@ -645,7 +645,7 @@ msgstr "onbekend"
 
 #. User Name
 #: src/gpawidgets.c:68 src/gpgmetools.c:508 src/gpgmetools.c:515
-#: src/keyring.c:1185 src/keysigndlg.c:97
+#: src/keyring.c:1178 src/keysigndlg.c:97
 msgid "User Name:"
 msgstr "Gebruiker naam:"
 
@@ -655,7 +655,7 @@ msgstr "Gebruikers Namen:"
 
 #. Key ID
 #: src/gpawidgets.c:74 src/gpgmetools.c:509 src/gpgmetools.c:516
-#: src/keyring.c:1187
+#: src/keyring.c:1180
 msgid "Key ID:"
 msgstr "Sleutel ID:"
 
@@ -1268,7 +1268,7 @@ msgstr ""
 "%i geheime sleutels geïmporteerd\n"
 "%i geheime sleutels onveranderd"
 
-#: src/keyimpseldlg.c:63 src/keyring.c:1312
+#: src/keyimpseldlg.c:63 src/keyring.c:1305
 msgid "No keys selected"
 msgstr "Geen sleutels geselecteerd"
 
@@ -1429,185 +1429,185 @@ msgstr "/Sleutels/E_xporteer Sleutels...."
 msgid "/Keys/_Backup..."
 msgstr "/Sleutels/_Backup...."
 
-#: src/keyring.c:1041
+#: src/keyring.c:1040
 msgid "/Keys/Export Keys..."
 msgstr "/Sleutels/_Exporteer Sleutels..."
 
-#: src/keyring.c:1049
+#: src/keyring.c:1047
 msgid "/Keys/Delete Keys..."
 msgstr "/Sleutels/_Verwijder sleutels...."
 
-#: src/keyring.c:1057
+#: src/keyring.c:1054
 msgid "/Edit/Copy"
 msgstr "/Bewerk/Kopieer"
 
-#: src/keyring.c:1066
+#: src/keyring.c:1062
 msgid "/Keys/Set Owner Trust..."
 msgstr "/Sleutels/Verander _Eigenaars Vertrouwen...."
 
-#: src/keyring.c:1075
+#: src/keyring.c:1070
 msgid "/Keys/Sign Keys..."
 msgstr "/Sleutels/_Onderteken Sleutels..."
 
-#: src/keyring.c:1084
+#: src/keyring.c:1078
 msgid "/Keys/Edit Private Key..."
 msgstr "/Sleutels/_Bewerk Sleutel..."
 
-#: src/keyring.c:1092
+#: src/keyring.c:1085
 msgid "/Keys/Backup..."
 msgstr "/Sleutels/_Backup...."
 
-#: src/keyring.c:1189 src/keysigndlg.c:102
+#: src/keyring.c:1182 src/keysigndlg.c:102
 msgid "Fingerprint:"
 msgstr "Vingerafdruk:"
 
-#: src/keyring.c:1191
+#: src/keyring.c:1184
 msgid "Expires at:"
 msgstr "Vervalt op:"
 
-#: src/keyring.c:1193
+#: src/keyring.c:1186
 msgid "Owner Trust:"
 msgstr "Eigenaars Vertrouwen:"
 
-#: src/keyring.c:1195
+#: src/keyring.c:1188
 msgid "Key Validity:"
 msgstr "Sleutel geldigheid:"
 
-#: src/keyring.c:1197
+#: src/keyring.c:1190
 msgid "Key Type:"
 msgstr "Sleutel Type:"
 
-#: src/keyring.c:1199
+#: src/keyring.c:1192
 msgid "Created at:"
 msgstr "Gemaakt op:"
 
-#: src/keyring.c:1202
+#: src/keyring.c:1195
 msgid "Details"
 msgstr "Details"
 
-#: src/keyring.c:1210
+#: src/keyring.c:1203
 msgid "Show signatures on user name:"
 msgstr "Controleer ondertekeningen van het geselecteerde bestand"
 
-#: src/keyring.c:1230
+#: src/keyring.c:1223
 msgid "Signatures"
 msgstr "Ondertekeningen"
 
-#: src/keyring.c:1250
+#: src/keyring.c:1243
 msgid "The key has both a private and a public part"
 msgstr "De sleutel heeft een geheim en publiek deel"
 
-#: src/keyring.c:1255
+#: src/keyring.c:1248
 msgid "The key has only a public part"
 msgstr "De sleutel heeft enkel een publiek deel"
 
-#: src/keyring.c:1283
+#: src/keyring.c:1276
 #, c-format
 msgid "%s %li bits"
 msgstr "%s %li bits"
 
-#: src/keyring.c:1316
+#: src/keyring.c:1309
 #, c-format
 msgid "%d keys selected"
 msgstr "%d sleutels geselecteerd"
 
-#: src/keyring.c:1343
+#: src/keyring.c:1336
 msgid "All signatures"
 msgstr "Ondertekeningen"
 
-#: src/keyring.c:1516
+#: src/keyring.c:1509
 msgid "Edit"
 msgstr "Bewerk"
 
-#: src/keyring.c:1517
+#: src/keyring.c:1510
 msgid "Edit the selected private key"
 msgstr "Bewerk de geselecteerde sleutel"
 
-#: src/keyring.c:1518
+#: src/keyring.c:1511
 msgid "edit key"
 msgstr "bewerk sleutel"
 
-#: src/keyring.c:1526
+#: src/keyring.c:1519
 msgid "Remove the selected key"
 msgstr "Verwijder de geselecteerde sleutel"
 
-#: src/keyring.c:1527
+#: src/keyring.c:1520
 msgid "remove key"
 msgstr "verwijder sleutel"
 
-#: src/keyring.c:1535
+#: src/keyring.c:1528
 msgid "Sign the selected key"
 msgstr "Onderteken de geselecteerde sleutel"
 
-#: src/keyring.c:1535
+#: src/keyring.c:1528
 msgid "sign key"
 msgstr "onderteken sleutel"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1535
 msgid "Import"
 msgstr "Importeer"
 
-#: src/keyring.c:1543
+#: src/keyring.c:1536
 msgid "Import Keys"
 msgstr "Importeer sleutels"
 
-#: src/keyring.c:1543
+#: src/keyring.c:1536
 msgid "import keys"
 msgstr "importeer sleutels"
 
-#: src/keyring.c:1548
+#: src/keyring.c:1541
 msgid "Export"
 msgstr "Exporteer"
 
-#: src/keyring.c:1549
+#: src/keyring.c:1542
 msgid "Export Keys"
 msgstr "Exporteer Sleutels"
 
-#: src/keyring.c:1549
+#: src/keyring.c:1542
 msgid "export keys"
 msgstr "exporteer sleutels"
 
-#: src/keyring.c:1562
+#: src/keyring.c:1555
 msgid "Brief"
 msgstr "Beperkt"
 
-#: src/keyring.c:1562
+#: src/keyring.c:1555
 msgid "Show Brief Keylist"
 msgstr "Toon beperkte sleutellijst"
 
-#: src/keyring.c:1563
+#: src/keyring.c:1556
 msgid "brief"
 msgstr "beperkt"
 
-#: src/keyring.c:1574
+#: src/keyring.c:1567
 msgid "Detailed"
 msgstr "Details"
 
-#: src/keyring.c:1574
+#: src/keyring.c:1567
 msgid "Show Key Details"
 msgstr "Toon Sleutel Details"
 
-#: src/keyring.c:1575
+#: src/keyring.c:1568
 msgid "detailed"
 msgstr "gedetailleerd"
 
-#: src/keyring.c:1597
+#: src/keyring.c:1590
 msgid "Open the File Manager"
 msgstr "Open de bestandsbeheerder"
 
-#: src/keyring.c:1598
+#: src/keyring.c:1591
 msgid "file manager"
 msgstr "bestandsbeheerder"
 
-#: src/keyring.c:1621
+#: src/keyring.c:1614
 msgid "Selected Default Key:"
 msgstr "Selecteer Standaard Sleutel:"
 
-#: src/keyring.c:1699
+#: src/keyring.c:1692
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistent - Keyring Editor"
 
-#: src/keyring.c:1730
+#: src/keyring.c:1723
 msgid "Keyring Editor"
 msgstr "Keyring Editor"
 
@@ -1624,8 +1624,8 @@ msgid ""
 "Check the name and fingerprint carefully to be sure that it really is the "
 "key you want to sign."
 msgstr ""
-"Controleer de naam en de vingerafdruk zorgvuldig en wees zeker dat dit "
-"echt de sleutel is die uw wilt ondertekenen."
+"Controleer de naam en de vingerafdruk zorgvuldig en wees zeker dat dit echt "
+"de sleutel is die uw wilt ondertekenen."
 
 #: src/keysigndlg.c:120
 msgid "All user names in this key will be signed."

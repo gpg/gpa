@@ -1,5 +1,7 @@
 2002-12-23  Miguel Coca  <mcoca@gnu.org>
 
+	* configure.ac: Release 0.6.0.
+
 	* NEWS, THANKS: Update.
 
 2002-12-17  Miguel Coca  <mcoca@gnu.org>

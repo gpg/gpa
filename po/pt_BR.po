@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-12-15 16:43+0100\n"
+"POT-Creation-Date: 2002-12-18 19:12+0100\n"
 "PO-Revision-Date: 2002-12-21 23:28+0100\n"
 "Last-Translator: Renato Martini <rmartini@cipsga.org.br>\n"
 "Language-Team: PORTUGUES <rmartini@cipsga.org.br>\n"
@@ -290,9 +290,7 @@ msgstr "GNU Privacy Assistant - Gerenciador de arquivos"
 msgid ""
 "Internal error:\n"
 "Invalid sign mode"
-msgstr ""
-"Erro interno:/n"
-"Modo de assinatura inválido"
+msgstr "Erro interno:/nModo de assinatura inválido"
 
 #: src/filesigndlg.c:191
 msgid "No key selected!"
@@ -335,27 +333,27 @@ msgstr "assinar, não comprimir"
 msgid "a_rmor"
 msgstr "a_rmor"
 
-#: src/gpa.c:237
+#: src/gpa.c:238
 msgid "display this help and exit"
 msgstr "mostra esta ajuda e sai"
 
-#: src/gpa.c:238
+#: src/gpa.c:239
 msgid "output version information and exit"
 msgstr "informa a versão e sai"
 
-#: src/gpa.c:239
+#: src/gpa.c:240
 msgid "open keyring editor (default)"
 msgstr "abre editor do chaveiro digital (padrão)"
 
-#: src/gpa.c:240
+#: src/gpa.c:241
 msgid "open filemanager"
 msgstr "abre Gerenciador de arquivos"
 
-#: src/gpa.c:241
+#: src/gpa.c:242
 msgid "read options from file"
 msgstr "ler as preferências do arquivo"
 
-#: src/gpa.c:265
+#: src/gpa.c:266
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -363,15 +361,15 @@ msgstr ""
 "Sintaxe: gpa [opções]\n"
 "Interface gráfica para o GnuPG\n"
 
-#: src/gpa.c:267
+#: src/gpa.c:268
 msgid "Options"
 msgstr "/Opções"
 
-#: src/gpa.c:273
+#: src/gpa.c:274
 msgid "Please report bugs to <"
 msgstr "Por favor envie os bugs para <"
 
-#: src/gpa.c:273
+#: src/gpa.c:274
 msgid ">.\n"
 msgstr ">.\n"
 
@@ -436,7 +434,7 @@ msgid ""
 msgstr ""
 "O arquivo \"%s\" reside em outra máquina (chamada %s) e pode não estar "
 "disponível para este programa.\n"
-"Você está certo que deseja selecioná-lo?"  
+"Você está certo que deseja selecioná-lo?"
 
 #: src/gpafilesel.c:1252
 msgid "Create Dir"
@@ -468,7 +466,9 @@ msgstr "_Fechar"
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "O nome de diretório \"%s\" contém símbolos que não são permitidos em nomes de arquivos"
+msgstr ""
+"O nome de diretório \"%s\" contém símbolos que não são permitidos em nomes "
+"de arquivos"
 
 #: src/gpafilesel.c:1569
 #, c-format
@@ -481,7 +481,8 @@ msgstr ""
 
 #: src/gpafilesel.c:1570 src/gpafilesel.c:1866
 msgid "You probably used symbols not allowed in filenames."
-msgstr "Você provavelmente usou símbolos que não são permitidos em nomes de arquivos."
+msgstr ""
+"Você provavelmente usou símbolos que não são permitidos em nomes de arquivos."
 
 #: src/gpafilesel.c:1578
 #, c-format
@@ -512,7 +513,9 @@ msgstr "Criado"
 #: src/gpafilesel.c:1710
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "O nome do arquivo \"%s\" contém símbolos que não são permitidos em nomes de arquivos"
+msgstr ""
+"O nome do arquivo \"%s\" contém símbolos que não são permitidos em nomes de "
+"arquivos"
 
 #: src/gpafilesel.c:1713
 #, c-format
@@ -525,7 +528,9 @@ msgstr ""
 
 #: src/gpafilesel.c:1715 src/gpafilesel.c:1880
 msgid "It probably contains symbols not allowed in filenames."
-msgstr "Ele provavelmente contém símbolos que não são permitidos em nomes de arquivos."
+msgstr ""
+"Ele provavelmente contém símbolos que não são permitidos em nomes de "
+"arquivos."
 
 #: src/gpafilesel.c:1724
 #, c-format
@@ -549,7 +554,9 @@ msgstr "_Apagar"
 #: src/gpafilesel.c:1862 src/gpafilesel.c:1876
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "O nome do arquivo \"%s\" contém símbolos que não são permitidos em nomes de arquivos"
+msgstr ""
+"O nome do arquivo \"%s\" contém símbolos que não são permitidos em nomes de "
+"arquivos"
 
 #: src/gpafilesel.c:1864
 #, c-format
@@ -557,7 +564,7 @@ msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
-"Erro ao renomear arquivo para \"%s\": %s\n" 
+"Erro ao renomear arquivo para \"%s\": %s\n"
 "%s"
 
 #: src/gpafilesel.c:1878
@@ -565,13 +572,15 @@ msgstr ""
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
-msgstr "Erro renomeando arquivo\"%s\": %s\n"
+msgstr ""
+"Erro renomeando arquivo\"%s\": %s\n"
 "%s"
 
 #: src/gpafilesel.c:1888
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Erro renomeando arquivo\"%s\": %s\n"
+msgstr ""
+"Erro renomeando arquivo\"%s\": %s\n"
 "%s"
 
 #: src/gpafilesel.c:1946
@@ -597,7 +606,8 @@ msgstr "Escolha: "
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
 "variable G_BROKEN_FILENAMES."
-msgstr "O nome do arquivo não pôde ser convertido para UTF-8. Tente mudar a variável "
+msgstr ""
+"O nome do arquivo não pôde ser convertido para UTF-8. Tente mudar a variável "
 "de ambiente G_BROKEN_FILENAMES."
 
 #: src/gpafilesel.c:3897
@@ -716,7 +726,6 @@ msgstr ""
 "\n"
 "O aplicativo será encerrado"
 
-
 #: src/gpgmetools.c:84 src/keyexportdlg.c:238
 #, c-format
 msgid ""
@@ -736,12 +745,12 @@ msgid ""
 "\n"
 msgstr ""
 "****************************************************************************\n"
-"* AVISO: Este arquivo é um backup de sua chave secreta. Por favor guarde-o *\n"
-"* num lugar seguro.                                                        *\n"
+"* AVISO: Este arquivo é um backup de sua chave secreta. Por favor guarde-o "
+"*\n"
+"* num lugar seguro.                                                        "
+"*\n"
 "****************************************************************************\n"
 "\n"
-
-
 
 #: src/gpgmetools.c:325
 msgid ""
@@ -982,7 +991,6 @@ msgstr ""
 "Isto é uma informação sensível, e deve ser guardada com cuidado\n"
 "(por exemplo, num disquete e colocado num lugar seguro)."
 
-
 #: src/keyexportdlg.c:295
 msgid "Backup Keys"
 msgstr "Backup de chaves"
@@ -1197,7 +1205,8 @@ msgid ""
 msgstr ""
 "Sua chave está para ser gerada\n"
 "\n"
-"Mesmo em máquinas rápidas, isto pode demorar um pouco. Por favor seja paciente"
+"Mesmo em máquinas rápidas, isto pode demorar um pouco. Por favor seja "
+"paciente"
 
 #: src/keygenwizard.c:423
 msgid ""
@@ -1260,7 +1269,6 @@ msgstr ""
 "%i chave secreta importada\n"
 "%i chave secreta sem alterações"
 
-
 #: src/keyimpseldlg.c:63 src/keyring.c:1305
 msgid "No keys selected"
 msgstr "Nenhuma chave selecionada"
@@ -1294,12 +1302,11 @@ msgid ""
 "you will need to import the public\n"
 "key, too."
 msgstr ""
-"Você tem uma chave secreta sem a"
-"chave pública correspondente em seu chaveiro\n" 
+"Você tem uma chave secreta sem achave pública correspondente em seu "
+"chaveiro\n"
 "digital. Para usar esta chave\n"
 "você precisará importar também\n"
 "a chave pública."
-
 
 #. this shouldn't happen because the button should be grayed out
 #. * in this case
@@ -1361,8 +1368,8 @@ msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
 msgstr ""
-"Você não tem uma cópia de backup de sua chave privada. Você quer fazer isso agora "
-"(recomendado) ou fazer mais tarde?"
+"Você não tem uma cópia de backup de sua chave privada. Você quer fazer isso "
+"agora (recomendado) ou fazer mais tarde?"
 
 #: src/keyring.c:878
 msgid "_Backup key now"
@@ -1659,7 +1666,8 @@ msgstr "_Desconhecido"
 msgid ""
 "You don't know how much to trust this user to verify other people's keys.\n"
 msgstr ""
-"Você não conhece o grau de confiabilidade deste usuário para verificar as outras chaves pessoais.\n"
+"Você não conhece o grau de confiabilidade deste usuário para verificar as "
+"outras chaves pessoais.\n"
 
 #: src/ownertrustdlg.c:144
 msgid "_Never"
@@ -1670,9 +1678,9 @@ msgid ""
 "You don't trust this user at all to verify the validity of other people's "
 "keys at all.\n"
 msgstr ""
-"Você não conhece o grau de confiabilidade deste usuário para verificar a validade das outras\n" 
+"Você não conhece o grau de confiabilidade deste usuário para verificar a "
+"validade das outras\n"
 "chaves pessoais.\n"
-
 
 #: src/ownertrustdlg.c:159
 msgid "_Marginal"
@@ -1689,11 +1697,11 @@ msgstr ""
 "Você não tem confiança na habilidade deste usuário em verificar a validade "
 "das outras chaves pessoais, o suficiente para considerar as chaves válidas \n"
 "baseadas apenas nesta ou naquela palavra. \n"
-"Mas, contanto que esta chave do usuário seja válida, você considerará uma chave \n"
-"assinada por este usuário válida se ela também é assinada por ao menos dois outros \n"
+"Mas, contanto que esta chave do usuário seja válida, você considerará uma "
+"chave \n"
+"assinada por este usuário válida se ela também é assinada por ao menos dois "
+"outros \n"
 "usuários com pouca ou moderada confiança e com chaves válidas\n"
- 
-
 
 #: src/ownertrustdlg.c:181
 msgid "_Full"
@@ -1705,10 +1713,10 @@ msgid ""
 "so much, that you'll consider valid any key signed by him/her, provided this "
 "user's key is valid.\n"
 msgstr ""
-"Você tem confiança na habilidade deste usuário de verificar a validade de outras "
-"chaves pessoais, de maneira que você considera válida qualquer chave por ele/ela \n"
+"Você tem confiança na habilidade deste usuário de verificar a validade de "
+"outras chaves pessoais, de maneira que você considera válida qualquer chave "
+"por ele/ela \n"
 "assinado(a), contanto que esta chave do usuário seja válida. \n"
-
 
 #: src/ownertrustdlg.c:199
 msgid "U_ltimate"
@@ -1725,9 +1733,9 @@ msgstr ""
 "Você considera esta chave válida, e confia bastante no usuário, e "
 "considerará qualquer chave assinada por ele/ela como totalmente válida. \n"
 "\n"
-"(Aviso: Isto se destina a ser usado para suas próprias chaves. Não use com "
-"a chave de outras pessoas, a menos que você realmente saiba o que está fazendo)\n" 
-
+"(Aviso: Isto se destina a ser usado para suas próprias chaves. Não use com a "
+"chave de outras pessoas, a menos que você realmente saiba o que está "
+"fazendo)\n"
 
 #: src/server_access.c:207
 msgid "No error"
@@ -2268,4 +2276,3 @@ msgstr "Verificar arquivos"
 
 #~ msgid "Show Warranty Information\n"
 #~ msgstr "Mostrar as informações sobre a garantia\n"
-
