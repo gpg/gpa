@@ -1,5 +1,9 @@
 2003-03-22  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (gpa_SOURCES): Really remove gtkhacks.h.
 	
+2003-03-22  Miguel Coca  <mcoca@gnu.org>
+
 	* options.h, options.c (gpa_options_get_instance): New. Turn the
 	GpaOptions object into a singleton.
 
