@@ -1,5 +1,7 @@
 2002-11-22  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* Makefile.am (gpa_SOURCES): Add gtkhacks.h
+
 	* keylist.c (keylist_fill_list): Don't release the key until we are
 	done with it.
 

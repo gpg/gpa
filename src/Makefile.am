@@ -50,4 +50,4 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpgmeedit.h gpgmeedit.c \
 	      gpgmeparsers.h gpgmeparsers.c \
 	      server_access.h server_access.c \
-	      gpa.rc
+	      gtkhacks.h gpa.rc
