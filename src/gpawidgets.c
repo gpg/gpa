@@ -322,7 +322,7 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
 
   GPAExpiryFrame * frame;
 
-  frame = xmalloc(sizeof(*frame));
+  frame = g_malloc(sizeof(*frame));
   frame->expiryDate = expiryDate;
 
   expiry_frame = gtk_frame_new (_("Expiration"));

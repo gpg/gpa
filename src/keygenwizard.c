@@ -76,7 +76,7 @@ file_dirname (const gchar * filename)
     }
   else
     {
-      result = xstrdup (filename);
+      result = g_strdup (filename);
     }
 
   return result;
@@ -360,7 +360,7 @@ gpa_keygen_wizard_password_validate (gpointer data)
       result = FALSE;
     }
   else if (strlen (gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 10
-           || qdchkpwd (gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 0.6)
+           || qdchkpwd ((char*)gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 0.6)
     {
       const gchar * buttons[] = {_("_Enter new passphrase"), _("Take this one _anyway"),
                                  NULL};
@@ -516,10 +516,10 @@ gpa_keygen_wizard_backup_dir_action (gpointer data)
   gchar * dir;
   struct stat statbuf;
   gboolean result = FALSE;
-  const gchar * buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
+/*  const gchar * buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
   gchar * message;
   gchar * reply;
-  
+  */
   dir = gpa_keygen_wizard_backup_get_text (keygen_wizard->backup_dir_page);
 
   if (!isdir (dir))
@@ -537,18 +537,21 @@ gpa_keygen_wizard_backup_dir_action (gpointer data)
 	  g_free (message);
 	  if (mkdir (dir, 0755) < 0)
 	    {
-	      const gchar *buttons[] = {_("_OK"), NULL};
-	      gchar *message = g_strdup_printf (_("Error creating directory \"%s\": %s\n"),
+	      const gchar *buttons_1[] = {_("_OK"), NULL};
+	      gchar *message1 = g_strdup_printf (_("Error creating directory \"%s\": %s\n"),
 						dir, g_strerror (errno));
 	      gpa_message_box_run (keygen_wizard->window, _("Error creating directory"),
-				   message, buttons);
-	      g_free (message);
+				   message, buttons_1);
+	      g_free (message1);
 	      result = FALSE;
 	    }
 	}
     }
   if (isdir (dir))
     {
+      const gchar * buttons[] = {_("_Overwrite"), _("_Cancel"), NULL};
+      gchar * message;
+      gchar * reply;
       /* FIXME: we should also test for permissions */
       keygen_wizard->pubkey_filename = g_strconcat (dir, "/pub_key.asc", NULL);
       keygen_wizard->seckey_filename = g_strconcat (dir, "/sec_key.asc", NULL);
@@ -740,7 +743,7 @@ gpa_keygen_wizard_run (GtkWidget * parent)
 
 
 
-  keygen_wizard = xmalloc (sizeof (*keygen_wizard));
+  keygen_wizard = g_malloc (sizeof (*keygen_wizard));
   keygen_wizard->successful = FALSE;
   keygen_wizard->pubkey_filename = NULL;
   keygen_wizard->seckey_filename = NULL;

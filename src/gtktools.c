@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
+#include "gtktools.h"
 #include "gpawindowkeeper.h"
 #include "gpafilesel.h"
 #include "icons.h"
@@ -486,7 +487,7 @@ gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func, gchar * tip,
   gtk_box_pack_start (GTK_BOX (hboxPasswd), labelPasswd, FALSE, FALSE, 0);
   entryPasswd = gtk_entry_new ();
   gtk_entry_set_visibility (GTK_ENTRY (entryPasswd), FALSE);
-  param = (gpointer *) xmalloc (3 * sizeof (gpointer));
+  param = (gpointer *) g_malloc (3 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, param);
   param[0] = data;
   param[1] = entryPasswd;
@@ -501,7 +502,7 @@ gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func, gchar * tip,
   gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxPassphrase),
 			     GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxPassphrase), 10);
-  paramClose = (gpointer *) xmalloc (2 * sizeof (gpointer));
+  paramClose = (gpointer *) g_malloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramClose);
   paramClose[0] = keeper;
   paramClose[1] = tip;
@@ -536,7 +537,8 @@ file_dialog_ok (gpointer param)
 
   dialog->filename 
       = (gchar *) gpa_file_selection_get_filename (GPA_FILE_SELECTION (dialog->window));
-  dialog->filename = xstrdup_or_null (dialog->filename);
+  if( dialog->filename != NULL )
+	  dialog->filename = g_strdup (dialog->filename);
 
   gtk_widget_destroy (dialog->window);
 }

@@ -17,6 +17,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
-
+#ifndef HELPMENU_H__
+#define HELPMENU_H__
 extern void help_help (void);
 void gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget *window);
+#endif /* HELPMENU_H__ */

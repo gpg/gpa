@@ -30,7 +30,6 @@
 #include "gpadefs.h"
 #include "gpgmetools.h"
 #include "gtkhacks.h"
-#include "xmalloc.h"
 #include "logging.h"
 #include "keytable.h"
 

@@ -200,7 +200,7 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
   GtkWidget * button_box;
   GtkWidget * button;
 
-  GPAWizard * wizard = xmalloc (sizeof (*wizard));
+  GPAWizard * wizard = g_malloc (sizeof (*wizard));
   wizard->accel_group = accel_group;
   wizard->page_switched = NULL;
   wizard->page_switched_data = NULL;
@@ -271,7 +271,7 @@ gpa_wizard_append_page (GtkWidget * widget, GtkWidget * page_widget,
 			GPAWizardAction action, gpointer user_data)
 {
   GPAWizard * wizard = gtk_object_get_data (GTK_OBJECT (widget), "user_data");
-  GPAWizardPage * page = xmalloc (sizeof (*page));
+  GPAWizardPage * page = g_malloc (sizeof (*page));
 
   if (!prev_label)
     prev_label = _("_Prev");

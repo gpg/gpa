@@ -107,12 +107,12 @@ options_keyserver (gpointer param)
 			     GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxServer), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxServer), 5);
-  paramClose = (gpointer *) xmalloc (2 * sizeof (gpointer));
+  paramClose = (gpointer *) g_malloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramClose);
   paramClose[0] = keeper;
   paramClose[1] = NULL;
   buttonSet = gpa_button_new (accelGroup, _("_Set"));
-  paramSet = (gpointer *) xmalloc (2 * sizeof (gpointer));
+  paramSet = (gpointer *) g_malloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramSet);
   paramSet[0] = comboServer;
   paramSet[1] = keeper;
@@ -155,7 +155,7 @@ options_key_set (gpointer param)
   localParam = (gpointer *) param;
   keyID = (gchar **) localParam[0];
   keeperKey = (GpaWindowKeeper *) localParam[1];
-  gpa_set_default_key (xstrdup_or_null (*keyID));
+  gpa_set_default_key ((*keyID != NULL) ? g_strdup(*keyID) : NULL);
   paramDone[0] = keeperKey;
   paramDone[1] = NULL;
   gpa_window_destroy (paramDone);
@@ -236,7 +236,7 @@ options_key (gpointer param)
   for (i = 0; i < 2; i++)
     gtk_clist_column_title_passive (GTK_CLIST (clistKeys), i);
   gtk_clist_set_selection_mode (GTK_CLIST (clistKeys), GTK_SELECTION_SINGLE);
-  keyID = (gchar **) xmalloc (sizeof (gchar *));
+  keyID = (gchar **) g_malloc (sizeof (gchar *));
   gpa_windowKeeper_add_param (keeper, keyID);
   gtk_signal_connect (GTK_OBJECT (clistKeys), "select-row",
 		      GTK_SIGNAL_FUNC (options_key_select), (gpointer) keyID);
@@ -266,14 +266,14 @@ options_key (gpointer param)
 			     GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxKey), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxKey), 5);
-  paramClose = (gpointer *) xmalloc (2 * sizeof (gpointer));
+  paramClose = (gpointer *) g_malloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramClose);
   paramClose[0] = keeper;
   paramClose[1] = NULL;
   buttonCancel = gpa_buttonCancel_new (accelGroup, _("_Cancel"), paramClose);
   gtk_container_add (GTK_CONTAINER (hButtonBoxKey), buttonCancel);
   buttonSet = gpa_button_new (accelGroup, _("_Set"));
-  paramSet = (gpointer *) xmalloc (2 * sizeof (gpointer));
+  paramSet = (gpointer *) g_malloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramSet);
   paramSet[0] = keyID;
   paramSet[1] = keeper;
@@ -295,9 +295,9 @@ gpa_options_menu_add_to_factory (GtkItemFactory *factory, GtkWidget *window)
 {
   GtkItemFactoryEntry menu[] = {
     {_("/_Options"), NULL, NULL, 0, "<Branch>"},
-    {_("/Options/_Keyserver"), NULL, options_keyserver, 0, NULL},
-/*    {_("/Options/Default _Recipients"), NULL, options_recipients, 0, NULL}, */
-    {_("/Options/_Default Key"), NULL, options_key, 0, NULL},
+    {_("/Options/_Keyserver"), NULL, (GtkItemFactoryCallback)options_keyserver, 0, NULL},
+/*    {_("/Options/Default _Recipients"), NULL, (GtkItemFactoryCallback)options_recipients, 0, NULL}, */
+    {_("/Options/_Default Key"), NULL, (GtkItemFactoryCallback)options_key, 0, NULL},
   };
 
   gtk_item_factory_create_items (factory, sizeof (menu) / sizeof (menu[0]),

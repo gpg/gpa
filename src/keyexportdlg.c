@@ -105,7 +105,8 @@ export_ok (GPAKeyExportDialog * dialog)
     {
       GtkWidget * entry = GTK_COMBO (dialog->combo_server)->entry;
       dialog->server = (gchar *) gtk_entry_get_text (GTK_ENTRY (entry));
-      dialog->server = xstrdup_or_null (dialog->server);
+      if( dialog->server != NULL )
+         dialog->server = g_strdup (dialog->server);
     }
 
   if (dialog->check_armored)

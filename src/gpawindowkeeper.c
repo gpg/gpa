@@ -32,7 +32,7 @@ gpa_windowKeeper_new (void)
 /* var */
   GpaWindowKeeper *keeper;
 /* commands */
-  keeper = (GpaWindowKeeper *) xmalloc (sizeof (GpaWindowKeeper));
+  keeper = (GpaWindowKeeper *) g_malloc (sizeof (GpaWindowKeeper));
   keeper->window = NULL;
   keeper->listParam = NULL;
   tempWindows = g_list_append (tempWindows, keeper);

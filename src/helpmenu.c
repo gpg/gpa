@@ -26,7 +26,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "mischelp.h"
-#include "stringhelp.h"
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
 #include "icons.h"
@@ -230,8 +229,7 @@ help_about (void)
       gtk_container_add (GTK_CONTAINER (alignment), frame);
       gtk_widget_show (frame);
 
-      scroll_text_widths = xcalloc (DIM(scroll_text),
-				    sizeof *scroll_text_widths);
+      scroll_text_widths = g_malloc0 (DIM(scroll_text)*sizeof *scroll_text_widths);
 
       gtk_widget_ensure_style (GTK_WIDGET (frame));
       max_width = 0;
@@ -373,7 +371,7 @@ help_license (gpointer param)
 			     GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxLicense), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxLicense), 5);
-  paramClose = (gpointer *) xmalloc (2 * sizeof (gpointer));
+  paramClose = (gpointer *) g_malloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramClose);
   paramClose[0] = keeper;
   paramClose[1] = NULL;
@@ -400,10 +398,10 @@ gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget * window)
 {
   GtkItemFactoryEntry menu[] = {
     {_("/_Help"), NULL, NULL, 0, "<Branch>"},
-    {_("/Help/_About"), NULL, help_about, 0, NULL},
-    {_("/Help/_License"), NULL, help_license, 0, NULL},
+    {_("/Help/_About"), NULL, (GtkItemFactoryCallback)help_about, 0, NULL},
+    {_("/Help/_License"), NULL, (GtkItemFactoryCallback)help_license, 0, NULL},
 #if 0  /* Help is not available yet. :-( */
-    {_("/Help/_Help"), "F1", help_help, 0, NULL}
+    {_("/Help/_Help"), "F1", (GtkItemFactoryCallback)help_help, 0, NULL}
 #endif
   };
 

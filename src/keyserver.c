@@ -26,10 +26,8 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include "stringhelp.h"
 #include "mischelp.h"
 
-#include "xmalloc.h"
 #include "options.h"
 #include "keyserver.h"
 
@@ -67,7 +65,7 @@ add_server (ServerName *rlist, const char *name)
   if (rlist && (x=get_server (*rlist, name)) )
     return x; /* already in list */
 
-  x = xmalloc (sizeof *x + strlen (name) );
+  x = g_malloc (sizeof *x + strlen (name) );
   strcpy (x->name, name);
   x->selected = 0;
   x->next = *rlist;
@@ -120,7 +118,8 @@ read_list (const char *fname)
           break;
 	}
       
-      trim_spaces (line);
+
+      g_strstrip (line);
       if( !*line || *line == '#' )
         continue; /* comment or empty line */
 

@@ -367,7 +367,7 @@ gpa_key_gen_free_parameters(GPAKeyGenParameters * params)
 GPAKeyGenParameters *
 key_gen_params_new(void)
 {
-  GPAKeyGenParameters * params = xmalloc (sizeof (*params));
+  GPAKeyGenParameters * params = g_malloc (sizeof (*params));
   params->userID = NULL;
   params->email = NULL;
   params->comment = NULL;

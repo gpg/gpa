@@ -25,6 +25,8 @@
 #include "keyimportdlg.h"
 #include "keyserver.h"
 
+#define	XSTRDUP_OR_NULL(s)	((s != NULL) ? g_strdup(s) : NULL )
+
 struct _GPAKeyImportDialog {
   /* The toplevel dialog window */
   GtkWidget * window;
@@ -94,9 +96,9 @@ import_ok (GPAKeyImportDialog * dialog)
     {
       GtkWidget * entry = GTK_COMBO (dialog->combo_server)->entry;
       dialog->server = (gchar *) gtk_entry_get_text (GTK_ENTRY (entry));
-      dialog->server = xstrdup_or_null (dialog->server);
+      dialog->server = XSTRDUP_OR_NULL (dialog->server);
       dialog->key_id = (gchar *) gtk_entry_get_text (GTK_ENTRY (dialog->entry_key_id));
-      dialog->key_id = xstrdup_or_null (dialog->key_id);
+      dialog->key_id = XSTRDUP_OR_NULL (dialog->key_id);
     }
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_filename)))
     {

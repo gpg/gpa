@@ -47,7 +47,7 @@ gpa_siglist_new (GtkWidget *window)
     _("Key ID"), _("Validity"), _("Signature")
   };
   gint i;
-  GPASigList * siglist = xmalloc (sizeof (*siglist));
+  GPASigList * siglist = g_malloc (sizeof (*siglist));
 
   siglist->window = window;
 

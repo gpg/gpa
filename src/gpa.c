@@ -31,7 +31,6 @@
 #include <gpgme.h>
 
 #include "argparse.h"
-#include "stringhelp.h"
 
 #include "gpapastrings.h"
 #include "gpa.h"
@@ -545,7 +544,7 @@ main (int argc, char **argv)
 
   #ifdef HAVE_DOSISH_SYSTEM
     if ( strchr (gpa_options.homedir,'\\') ) {
-        char *d, *buf = xmalloc (strlen (gpa_options.homedir)+1);
+        char *d, *buf = (char*) g_malloc (strlen (gpa_options.homedir)+1);
         const char *s = gpa_options.homedir;
         for (d=buf,s=gpa_options.homedir; *s; s++)
             *d++ = *s == '\\'? '/': *s;
@@ -568,7 +567,7 @@ main (int argc, char **argv)
   if (default_config)
     configname = search_config_file ("gpa.conf");
 
-  gpa_configname = xstrdup (configname);
+  gpa_configname = g_strdup (configname);
 
   /* Locate the list of keyservers.
    */
@@ -622,7 +621,7 @@ main (int argc, char **argv)
 	  if (!configfp)
 	    {
 	      free (configname);
-	      configname = xstrdup (pargs.r.ret_str);
+	      configname = g_strdup (pargs.r.ret_str);
 	      goto next_pass;
 	    }
 	  break;
@@ -637,7 +636,7 @@ main (int argc, char **argv)
         case oDefaultKey:
 	  if (default_key)
 	    free (default_key);
-	  default_key = xstrdup (pargs.r.ret_str);
+	  default_key = g_strdup (pargs.r.ret_str);
 	  break;
 
 	default : pargs.err = configfp? 1:2; break;

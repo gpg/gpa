@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef GTK_TOOLS_H_
+#define GTK_TOOLS_H_
+
 #include <gtk/gtk.h>
 
 extern void gpa_window_destroy (gpointer param);
@@ -61,3 +64,4 @@ gchar * gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
 				const gchar * directory);
 gchar * gpa_get_load_file_name (GtkWidget * parent, const gchar * title,
 				const gchar * directory);
+#endif /* GTK_TOOLS_H_ */

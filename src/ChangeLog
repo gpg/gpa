@@ -1,3 +1,14 @@
+2002-11-12  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpa.c, gpa.h, gpawidgets.c, gpawindowkeeper.c, gpawizard.c,
+	gpgmetools.c, gtktools.c, gtktools.h, helpmenu.c, gtktools.h,
+	helpmenu.c, helpmenu.h, keyexportdlg.c, keygendlg.c,
+	keygenwizard.c, keyimportdlg.c, keyserver.c, optionsmenu.c,
+	siglist.c: Remove all calls to jnlib memory management and string
+	functions, fix compiler warnings and add conditional compilation
+	of headers where missing.
+	Submitted by Francis J. A. Pinteric <linuxdoctor@linux.ca>
+	
 2002-11-11  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.c (build_genkey_parms): Fix the date string.

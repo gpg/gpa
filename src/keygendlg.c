@@ -25,6 +25,8 @@
 #include "gtktools.h"
 #include "keygendlg.h"
 
+#define	XSTRDUP_OR_NULL(s)	((s != NULL) ? g_strdup(s): NULL)
+
 struct _GPAKeyGenDialog {
   GtkWidget * window;
   GtkWidget * entryPasswd;
@@ -278,11 +280,11 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
       gchar * temp;
 
       params = key_gen_params_new ();
-      params->userID = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY (entryUserID)));
-      params->email = xstrdup_or_null(gtk_entry_get_text (GTK_ENTRY (entryEmail)));
-      params->comment = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY(entryComment)));
+      params->userID = XSTRDUP_OR_NULL (gtk_entry_get_text (GTK_ENTRY (entryUserID)));
+      params->email = XSTRDUP_OR_NULL(gtk_entry_get_text (GTK_ENTRY (entryEmail)));
+      params->comment = XSTRDUP_OR_NULL (gtk_entry_get_text (GTK_ENTRY(entryComment)));
 
-      params->password = xstrdup_or_null (gtk_entry_get_text (GTK_ENTRY(entryPasswd)));
+      params->password = XSTRDUP_OR_NULL (gtk_entry_get_text (GTK_ENTRY(entryPasswd)));
 	  
       temp = (gchar *) gtk_entry_get_text (GTK_ENTRY (GTK_COMBO(comboAlgorithm)->entry));
       params->algo = gpa_algorithm_from_string (temp);
