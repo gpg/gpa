@@ -9,6 +9,8 @@ desktop_DATA = gpa.desktop
 icondir = $(datadir)/pixmaps
 icon_DATA = gpa.png
 
+pkgdata_DATA = gpa.png
+
 # Create a VERSION file which we need for the Prereq: patch file trick.
 dist-hook:
 	@set -e; echo "$(VERSION)" > $(distdir)/VERSION

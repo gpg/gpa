@@ -1,3 +1,7 @@
+2003-11-25  Miguel Coca  <mcoca@gnu.org>
+
+	* gpa.c (main): Add a default icon for the application windows.
+
 2003-11-24  Ling Li  <ling@caltech.edu>
 
 	* keyring.c (keyring_editor_can_sign):

@@ -1,5 +1,9 @@
 2003-11-25  Miguel Coca  <mcoca@gnu.org>
 
+	* Makefile.am (pkgdata_DATA): Save the icon to the DATADIR too.
+
+2003-11-25  Miguel Coca  <mcoca@gnu.org>
+
 	* gpa.png: New icon by Josué Burgos.
 
 2003-11-21  Miguel Coca  <mcoca@gnu.org>

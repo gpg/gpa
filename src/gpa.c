@@ -306,6 +306,7 @@ main (int argc, char **argv)
   char *configname = NULL, *keyservers_configname = NULL;
   GpaCommandLineArgs args = {FALSE, FALSE, NULL};
   int i;
+  GError *err;
 
 #ifdef __MINGW32__
   hide_gpa_console_window();
@@ -336,6 +337,10 @@ main (int argc, char **argv)
   srand (time (NULL)); /* the about dialog uses rand() */
   gtk_init (&argc, &argv);
   i18n_init ();
+  /* Default icon for all windows */
+  gtk_window_set_default_icon_from_file (GPA_DATADIR "/gpa.png", &err);
+  if (err)
+    g_error_free (err);
 
   /* Try to find the GnuPG homedir (~/.gnupg) dinamically */
 #ifdef G_OS_WIN32
