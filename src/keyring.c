@@ -870,6 +870,8 @@ keyring_editor_menubar_new (GtkWidget * window,
   GtkItemFactory *factory;
   GtkItemFactoryEntry file_menu[] = {
     {_("/_File"), NULL, NULL, 0, "<Branch>"},
+    {_("/File/Se_ttings"), NULL, gpa_open_settings_dialog, 0, NULL},
+    {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
     {_("/File/_Close"), "<control>W", keyring_editor_close, 0, NULL},
     {_("/File/_Quit"), "<control>Q", gtk_main_quit, 0, NULL},
   };
@@ -888,7 +890,6 @@ keyring_editor_menubar_new (GtkWidget * window,
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
     {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
     {_("/Windows/_Keyring Editor"), NULL, gpa_open_keyring_editor, 0, NULL},
-    {_("/Windows/_Settings"), NULL, gpa_open_settings_dialog, 0, NULL},
   };
 
   accel_group = gtk_accel_group_new ();

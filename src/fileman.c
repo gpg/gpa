@@ -366,6 +366,8 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
     {_("/File/Decrypt _as"), NULL, (GtkItemFactoryCallback) file_decryptAs, 0, NULL},
     */
     {_("/File/sep2"), NULL, NULL, 0, "<Separator>"},
+    {_("/File/Se_ttings"), NULL, gpa_open_settings_dialog, 0, NULL},
+    {_("/File/sep3"), NULL, NULL, 0, "<Separator>"},
     {_("/File/_Close"), NULL, (GtkItemFactoryCallback) close_window, 0, NULL},
     {_("/File/_Quit"), "<control>Q", gtk_main_quit, 0, NULL},
   };
@@ -373,7 +375,6 @@ fileman_menu_new (GtkWidget * window, GPAFileManager *fileman)
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
     {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
     {_("/Windows/_Keyring Editor"), NULL, gpa_open_keyring_editor, 0, NULL},
-    {_("/Windows/_Settings"), NULL, gpa_open_settings_dialog, 0, NULL},
   };
   GtkAccelGroup *accel_group;
 

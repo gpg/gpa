@@ -176,8 +176,11 @@ gpa_open_settings_dialog (void)
   if (!settings_dialog)
     {
       settings_dialog = gpa_settings_dialog_new ();
+      gtk_signal_connect (GTK_OBJECT (settings_dialog), "destroy",
+			  GTK_SIGNAL_FUNC (close_main_window),
+                          &settings_dialog);
+      gtk_widget_show_all (settings_dialog);
     }
-  gtk_widget_show_all (settings_dialog);
   gdk_window_raise (settings_dialog->window);
 }
 

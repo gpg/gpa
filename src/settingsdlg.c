@@ -173,7 +173,7 @@ gpa_settings_dialog_new (void)
   /* Close the dialog when asked to */
   g_signal_connect_swapped (GTK_OBJECT (dialog), 
                             "response", 
-                            G_CALLBACK (gtk_widget_hide),
+                            G_CALLBACK (gtk_widget_destroy),
                             GTK_OBJECT (dialog));
 
   /* Don't run the dialog here: leave that to gtk_main */

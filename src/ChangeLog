@@ -1,5 +1,15 @@
 2002-12-07  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* gpa.c (gpa_open_settings_dialog): Use the close_main_window callback
+	to track the destruction of the dialog.
+
+	* settingsdlg.c (gpa_settings_dialog_new): Destroy, not hide, the
+	dialog on close.
+
+	* keyring.c (keyring_editor_menubar_new): Move the settings menu item
+	to the file menu.
+	* fileman.c (fileman_menu_new): Likewise.
+
 	* keyring.c (signatures_uid_selected): New.
 	(keyring_details_notebook): Add the User ID popdown menu.
 	(keyring_signatures_page_fill_key): Rewrite to use the new siglist.
