@@ -171,6 +171,10 @@ keyring_editor_has_single_selection (gpointer param)
 
 
 /* Fill the GtkCList with the keys */
+/* XXX This function is also used to update the list after it may have
+ * been changed (e.g. by deleting keys), but for that the current
+ * implementation is broken because the selection information is lost.
+ */
 static void
 keyring_editor_fill_keylist (GPAKeyringEditor * editor)
 {
@@ -305,6 +309,9 @@ keyring_editor_delete (gpointer param)
   GpapaPublicKey *public_key;
   GpapaSecretKey *secret_key;
   GList * selection;
+  gchar message[500];
+  gchar * reply;
+  const gchar * buttons[] = {_("Ok"), _("Cancel"), NULL};
 
   selection = editor->clist_keys->selection;
   while (selection)
@@ -315,6 +322,19 @@ keyring_editor_delete (gpointer param)
 					       editor->window);
       secret_key = gpapa_get_secret_key_by_ID (key_id, gpa_callback,
 					       editor->window);
+
+      /* XXX we should probably display more information about the key
+       * (fingerprint?). We also shouldn't use a fixed size array. */
+      sprintf (message, _("Are you sure that you want to delete the"
+			  " following key?\n"
+			  "%.300s\n"),
+	       gpapa_key_get_name (GPAPA_KEY (public_key), gpa_callback,
+				   editor->window));
+      reply = gpa_message_box_run (editor->window, _("Delete Key"),
+				   message, buttons);
+      if (strcmp (reply, _("Cancel")) == 0)
+	break;
+
       if (secret_key)
 	{
 	  gpapa_secret_key_delete (secret_key, gpa_callback, editor->window);
