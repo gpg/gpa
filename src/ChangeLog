@@ -1,5 +1,13 @@
 2001-01-17  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_can_sign): Change the condition.
+	Signing is possible when at least one key is selected and there is
+	a default key.
+
+	(keyring_editor_generate_key_simple):
+	(keyring_editor_generate_key_advanced): Update the default key and
+	make sure all potentially sensitive widgets are updated.
+
 	* keysigndlg.h (gpa_key_sign_run_dialog): Update the parameter
 	list.
 	
