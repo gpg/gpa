@@ -1,5 +1,8 @@
 2001-01-15  Bernhard Herzog  <bh@intevation.de>
 
+	* keygenwizard.c (gpa_keygen_wizard_final_page): 
+	Fix typo
+
 	* keyring.c: Add and update comments
 	(keyring_editor_can_sign): New function. Sensitivity callback for
 	the sign key button.
