@@ -1,5 +1,21 @@
 2001-01-30  Bernhard Herzog  <bh@intevation.de>
 
+	* ownertrustdlg.c (ownertrust_ok):
+	(ownertrust_cancel): Fix comments
+
+	* passphrasedlg.c (passphrase_destroy):
+	(gpa_passphrase_run_dialog): Add a destroy event handler and quit
+	the recursive main loop there.
+	(passphrase_ok):
+	(passphrase_cancel): Instead of quitting the main loop, destroy
+	the dialog window.
+	(passphrase_delete_event): Removed because the default handler
+	does exactly what we need now.
+	(gpa_passphrase_run_dialog): use gtk_window_set_modal to get a
+	modal dialog and focus the password entry widget
+	(GPAPassphraseDialog): Add the window field to pass the dialog
+	window into the callbacks.
+
 	* ownertrustdlg.c: Add comments
 	(ownertrust_ok):
 	(ownertrust_cancel): Destroy the dialog window
