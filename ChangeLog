@@ -1,5 +1,9 @@
 2002-10-25  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* gtkrc-1.2.gpa, gtkrc-1.3.12+.gpa: Removed unused files.
+	
+2002-10-25  Miguel Coca  <e970095@zipi.fi.upm.es>
+
 	* configure.ac: Check for the keyserver plugins directories, instead
 	of using always the same directory. This allows some flexibility in
 	case of compiling GPA against a GnuPG installed via a package manager.
