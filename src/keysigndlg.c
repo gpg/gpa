@@ -196,6 +196,8 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   gpa_window_show_centered (window, parent);
 
+  dialog.result = FALSE;
+
   gtk_main ();
 
   if (dialog.result && dialog.passphrase)
