@@ -689,11 +689,7 @@ keyring_editor_generate_key_advanced (gpointer param)
   if (params)
     {
       err = gpa_generate_key (params);
-      if (err == GPGME_General_Error)
-        {
-          gpa_window_error (gpgme_strerror (err), editor->window);
-        }
-      else if (err != GPGME_No_Error)
+      if (err != GPGME_No_Error)
         {
           gpa_gpgme_error (err);
         }

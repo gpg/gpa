@@ -1,3 +1,10 @@
+2002-11-11  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gpgmetools.c (build_genkey_parms): Fix the date string.
+
+	* keyring.c (keyring_editor_generate_key_advanced): Remove bogus error
+	check.
+
 2002-11-10  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* helpmenu.c (gpa_help_menu_add_to_factory): Renamed "Info" menu

@@ -213,7 +213,7 @@ static gchar * build_genkey_parms (GPAKeyGenParameters *params)
   /* Build the expiration date string if needed */
   if (params->expiryDate)
     {
-      expire = g_strdup_printf ("Expire-Date: %i-%i-%i\n", 
+      expire = g_strdup_printf ("Expire-Date: %i-%02i-%02i\n", 
                                 g_date_get_year(params->expiryDate),
                                 g_date_get_month(params->expiryDate),
                                 g_date_get_day(params->expiryDate));
