@@ -1,3 +1,12 @@
+2003-11-23  Miguel Coca  <mcoca@gnu.org>
+
+	* keytable.c (gpa_keytable_init, done_cb)
+	(gpa_keytable_lookup_key): Use initialized to test whether the
+	keytable has been filled from gpgme. This is needed because an empty
+	but initialized list is NULL, just as an unitialized one.
+
+	* keytable.h: Add "initialized" field to GpaKeyTable.
+
 2003-11-21  Miguel Coca  <mcoca@gnu.org>
 
 	* filesigndlg.c (gpa_file_sign_dialog_constructor): Use the name 

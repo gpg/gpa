@@ -86,6 +86,7 @@ gpa_keytable_init (GpaKeyTable *keytable)
   keytable->context = gpa_context_new ();
   keytable->keys = NULL;
   keytable->secret = FALSE;
+  keytable->initialized = FALSE;
   keytable->new_key = FALSE;
   keytable->tmp_list = NULL;
   g_signal_connect (G_OBJECT (keytable->context), "next_key",
@@ -153,6 +154,7 @@ static void done_cb (GpaContext *context, gpg_error_t err,
 	}
       keytable->keys = keytable->tmp_list;
     }
+  keytable->initialized = TRUE;
   if (keytable->end)
     {
       keytable->end (keytable->data);
@@ -309,7 +311,7 @@ void gpa_keytable_load_new (GpaKeyTable *keytable,
 const gpgme_key_t gpa_keytable_lookup_key (GpaKeyTable *keytable,
 					   const char *fpr)
 {
-  if (keytable->keys)
+  if (keytable->initialized)
     {
       GList *cur;
       for (cur = keytable->keys; cur; cur = g_list_next (cur))

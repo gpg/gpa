@@ -53,6 +53,7 @@ struct _GpaKeyTable {
 
   gboolean secret;
   gboolean new_key;
+  gboolean initialized;
   GpaKeyTableNextFunc next;
   GpaKeyTableEndFunc end;
   gpointer data;
