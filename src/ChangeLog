@@ -11,6 +11,14 @@
 	(keyring_editor_new): Use keylist_columns_brief to initialize the
 	key list
 
+	(add_details_row):
+	(keyring_details_notebook):
+	(keyring_update_details_page): Turn the fingerprint label in the
+	details notebook into an uneditable entry field so that users can
+	copy and paste the fingerprint. To that end add a new parameter to
+	add_details_row to indicate whether a label or entry is to be
+	created.
+
 	* keylist.c (keylist_fill_column_titles): Set the first
 	keylist->ncolumns to visible.
 
