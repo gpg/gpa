@@ -50,7 +50,7 @@ extern void gpa_connect_by_accelerator (GtkLabel * label, GtkWidget * widget,
 					gchar * labelText);
 void gpa_button_set_text (GtkWidget * button, gchar * text, GtkAccelGroup *);
 extern void gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent);
-extern void gpa_window_error (gchar * message, GtkWidget * messenger);
+extern void gpa_window_error (const gchar * message, GtkWidget * messenger);
 extern void gpa_window_message (gchar * message, GtkWidget * messenger);
 gchar * gpa_message_box_run (GtkWidget * parent, const gchar * title,
 			     const gchar * message,

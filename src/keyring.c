@@ -679,66 +679,19 @@ keyring_editor_generate_key_advanced (gpointer param)
 {
   GPAKeyringEditor * editor = param;
   GPAKeyGenParameters * params;
-  GpapaPublicKey *publicKey;
-  GpapaSecretKey *secretKey;
+  GpgmeError err;
 
   params = gpa_key_gen_run_dialog(editor->window);
   if (params)
     {
-      gpapa_create_key_pair (&publicKey, &secretKey, params->password,
-                             params->algo, params->keysize, params->userID,
-                             params->email, params->comment,
-                             gpa_callback, editor->window);
-      if (!publicKey || !secretKey)
+      err = gpa_generate_key (params);
+      if (err == GPGME_General_Error)
         {
-          /* something went wrong. The gpa_callback should have popped
-           * up an message box with an error message, so simply clean up
-           * *and return here
-           */
-          gpa_key_gen_free_parameters (params);
-          return;
+          gpa_window_error (gpgme_strerror (err), editor->window);
         }
-          
-      if (params->expiryDate)
+      else if (err != GPGME_No_Error)
         {
-          gpapa_key_set_expiry_date (GPAPA_KEY (publicKey), params->expiryDate,
-                                     params->password, gpa_callback,
-                                     editor->window);
-          gpapa_key_set_expiry_date (GPAPA_KEY (secretKey), params->expiryDate,
-                                     params->password, gpa_callback,
-                                     editor->window);
-        }
-      else if (params->interval)
-        {
-          gpapa_key_set_expiry_time (GPAPA_KEY (publicKey), params->interval,
-                                     params->unit, gpa_callback,
-                                     editor->window);
-          gpapa_key_set_expiry_time (GPAPA_KEY (secretKey), params->interval,
-                                     params->unit, gpa_callback,
-                                     editor->window);
-        }
-      else
-        {
-          gpapa_key_set_expiry_date (GPAPA_KEY (publicKey), NULL,
-                                     params->password, gpa_callback,
-                                     editor->window);
-          gpapa_key_set_expiry_date (GPAPA_KEY (secretKey), NULL,
-                                     params->password, gpa_callback,
-                                     editor->window);
-        }
-
-      if (params->generate_revocation)
-        gpapa_secret_key_create_revocation (secretKey, gpa_callback,
-                                            editor->window);
-      if (params->send_to_server)
-        {
-          fprintf (stderr, "send key to server\n");
-          fflush (stderr);
-/* @@@@@ warning: key is not send to the server after generation */
-          /*
-            gpapa_public_key_send_to_server (publicKey, global_keyserver,
-                                           gpa_callback, editor->window);
-          */
+          gpa_gpgme_error (err);
         }
       gpa_key_gen_free_parameters (params);
 
@@ -747,6 +700,7 @@ keyring_editor_generate_key_advanced (gpointer param)
        * sensitive widgets because some may depend on whether secret
        * keys are available
        */
+      gpa_keytable_reload (keytable);
       gpa_update_default_key ();
       keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);
@@ -767,6 +721,7 @@ keyring_editor_generate_key_simple (gpointer param)
        * sensitive widgets because some may depend on whether secret
        * keys are available
        */
+      gpa_keytable_reload (keytable);
       gpa_update_default_key ();
       keyring_editor_fill_keylist (editor);
       update_selection_sensitive_widgets (editor);

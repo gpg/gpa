@@ -65,3 +65,164 @@ void dump_data_to_file (GpgmeData data, FILE *file)
     gpa_gpgme_error (err);
   return;
 }
+
+/* Assemble the parameter string for gpgme_op_genkey for GnuPG. We don't need
+ * worry about the user ID being UTF-8 as long as we are using GTK+2, because
+ * all user input is UTF-8 in it.
+ */
+static gchar * build_genkey_parms (GPAKeyGenParameters *params)
+{
+  gchar *string;
+  gchar *key_algo;
+  gchar *subkeys, *email, *comment, *expire;
+
+  /* Choose which keys and subkeys to generate */
+  switch (params->algo)
+    {
+    case GPA_KEYGEN_ALGO_DSA_ELGAMAL:
+      key_algo = "DSA";
+      subkeys = g_strdup_printf ("SubKey-Type: ELG-E\n"
+                                 "Subkey-Length: %i\n", params->keysize);
+      break;
+    case GPA_KEYGEN_ALGO_DSA:
+      key_algo = "DSA";
+      subkeys = "";
+      break;
+    case GPA_KEYGEN_ALGO_RSA:
+      key_algo = "RSA";
+      subkeys = "";
+      break;
+    default:
+      /* Can't happen */
+      return NULL;
+    }
+  /* Build the extra fields of the user ID if supplied by the user */
+  if (params->email && params->email[0])
+    {
+      email = g_strdup_printf ("Name-Email: %s\n", params->email);
+    }
+  else
+    {
+      email = "";
+    }
+  if (params->comment && params->comment[0])
+    {
+      comment = g_strdup_printf ("Name-Comment: %s\n", params->comment);
+    }
+  else
+    {
+      comment = "";
+    }
+  /* Build the expiration date string if needed */
+  if (params->expiryDate)
+    {
+      expire = g_strdup_printf ("Expire-Date: %i-%i-%i\n", 
+                                g_date_get_year(params->expiryDate),
+                                g_date_get_month(params->expiryDate),
+                                g_date_get_day(params->expiryDate));
+    }
+  else if (params->interval)
+    {
+      expire = g_strdup_printf ("Expire-Date: %i%c\n", params->interval,
+                                params->unit);
+    }
+  else
+    expire = "";
+  /* Assemble the final parameter string */
+  string = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n"
+                            "Key-Type: %s\n"
+                            "Key-Length: %i\n"
+                            "%s" /* Subkeys */
+                            "Name-Real: %s\n"
+                            "%s" /* Email Address */
+                            "%s" /* Comment */
+                            "%s" /* Expiration date */
+                            "Passphrase: %s\n"
+                            "</GnupgKeyParms>\n", key_algo, params->keysize,
+                            subkeys, params->userID, email, comment, expire,
+                            params->password);
+
+  /* Free auxiliary strings if they are not empty */
+  if (subkeys[0])
+    {
+      g_free (subkeys);
+    }
+  if (email[0])
+    {
+      g_free (email);
+    }
+  if (comment[0])
+    {
+      g_free (comment);
+    }
+  if (expire[0])
+    {
+      g_free (expire);
+    }
+  
+  return string;
+}
+
+/* Generate a key with the given parameters. It prepares the parameters
+ * required by Gpgme and returns whatever gpgme_op_genkey returns.
+ */
+GpgmeError gpa_generate_key (GPAKeyGenParameters *params)
+{
+  gchar *parm_string;
+  GpgmeError err;
+
+  parm_string = build_genkey_parms (params);
+  err = gpgme_op_genkey (ctx, parm_string, NULL, NULL);
+  g_free (parm_string);
+
+  return err;
+}
+
+void
+gpa_key_gen_free_parameters(GPAKeyGenParameters * params)
+{
+  free (params->userID);
+  free (params->email);
+  free (params->comment);
+  if (params->expiryDate)
+    g_date_free (params->expiryDate);
+  free (params);
+}
+
+GPAKeyGenParameters *
+key_gen_params_new(void)
+{
+  GPAKeyGenParameters * params = xmalloc (sizeof (*params));
+  params->userID = NULL;
+  params->email = NULL;
+  params->comment = NULL;
+  params->expiryDate = NULL;
+  params->interval = 0;
+  params->generate_revocation = FALSE;
+  params->send_to_server = FALSE;
+  return params;
+}
+
+static gchar *algorithm_strings[] = {
+  N_("DSA and ElGamal (default)"),
+  N_("DSA (sign only)"),
+  N_("RSA (sign only)"),
+};
+
+const gchar *
+gpa_algorithm_string (GPAKeyGenAlgo algo)
+{
+  return _(algorithm_strings[algo]);
+}
+
+GPAKeyGenAlgo
+gpa_algorithm_from_string (const gchar * string)
+{
+  GPAKeyGenAlgo result;
+
+  result = GPA_KEYGEN_ALGO_FIRST;
+  while (result <= GPA_KEYGEN_ALGO_LAST &&
+	 strcmp (string, _(algorithm_strings[result])) != 0)
+    result++;
+  return result;
+}

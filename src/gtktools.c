@@ -301,7 +301,7 @@ gpa_button_set_text (GtkWidget * button, gchar * text,
 }
 
 void
-gpa_window_error (gchar *message, GtkWidget *messenger)
+gpa_window_error (const gchar *message, GtkWidget *messenger)
 {
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;

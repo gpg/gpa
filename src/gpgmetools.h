@@ -25,6 +25,46 @@
 
 #include <gpgme.h>
 
+typedef enum
+  {
+    GPA_KEYGEN_ALGO_DSA_ELGAMAL,
+    GPA_KEYGEN_ALGO_DSA,
+    GPA_KEYGEN_ALGO_RSA
+  } GPAKeyGenAlgo;
+
+#define GPA_KEYGEN_ALGO_FIRST GPA_KEYGEN_ALGO_DSA_ELGAMAL
+#define GPA_KEYGEN_ALGO_LAST GPA_KEYGEN_ALGO_RSA
+
+typedef struct {
+  /* user id */
+  gchar *userID, *email, *comment;
+
+  /* algorithm */
+  GPAKeyGenAlgo algo;
+
+  /* key size. */
+  gint keysize;
+
+  /* the password to use */
+  gchar * password;
+
+  /* the expiry date. if expiryDate is not NULL it holds the expiry
+   * date, otherwise if interval is not zero, it defines the period of
+   * time until expiration together with unit (which is one of d, w, m,
+   * y), otherwise the user chose "never expire".
+   */
+  GDate *expiryDate;
+  gint interval;
+  gchar unit;
+
+  /* if true, generate a revocation certificate */
+  gboolean generate_revocation;
+
+  /* if true, send the key to a keyserver */
+  gboolean send_to_server;
+  
+} GPAKeyGenParameters;
+
 /* Report an unexpected error in GPGME and quit the application */
 void gpa_gpgme_error (GpgmeError err);
 
@@ -33,5 +73,18 @@ void gpa_gpgme_error (GpgmeError err);
  * file is accesible before putting anything into data.
  */
 void dump_data_to_file (GpgmeData data, FILE *file);
+
+/* Generate a key with the given parameters. It prepares the parameters
+ * required by Gpgme and returns whatever gpgme_op_genkey returns.
+ */
+GpgmeError gpa_generate_key (GPAKeyGenParameters *params);
+
+GPAKeyGenParameters * key_gen_params_new (void);
+
+void gpa_key_gen_free_parameters (GPAKeyGenParameters *params);
+
+const gchar * gpa_algorithm_string (GPAKeyGenAlgo algo);
+
+GPAKeyGenAlgo gpa_algorithm_from_string (const gchar * string);
 
 #endif

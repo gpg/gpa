@@ -111,31 +111,6 @@ gpa_time_unit_from_string (gchar * string)
   return result;
 } /* gpa_time_unit_from_string */
 
-static gchar *algorithm_strings[4] = {
-  N_("DSA and ElGamal"),
-  N_("DSA (sign only)"),
-  N_("ElGamal (sign and encrypt)"),
-  N_("ElGamal (encrypt only)")
-};
-
-gchar *
-gpa_algorithm_string (GpapaAlgo algo)
-{
-  return _(algorithm_strings[algo]);
-}
-
-GpapaAlgo
-gpa_algorithm_from_string (gchar * string)
-{
-  GpapaAlgo result;
-
-  result = GPAPA_ALGO_FIRST;
-  while (result <= GPAPA_ALGO_LAST &&
-	 strcmp (string, _(algorithm_strings[result])) != 0)
-    result++;
-  return result;
-} /* gpa_algorithm_from_string */
-
 gchar *
 gpa_expiry_date_string (GDate * expiry_date)
 {
