@@ -1,3 +1,8 @@
+2002-11-22  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* POTFILES.in: Update to reflect the removal of GPAPA and the
+	inclusion of new files.
+
 2002-09-06  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* ja.po: Updated by TAKAHASHI Tamotsu.
