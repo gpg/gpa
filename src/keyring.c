@@ -37,6 +37,7 @@
 #include "keyexportdlg.h"
 #include "keygendlg.h"
 #include "keygenwizard.h"
+#include "keyeditdlg.h"
 #include "keylist.h"
 #include "siglist.h"
 #include "keyring.h"
@@ -916,6 +917,17 @@ keyring_set_detailed_listing (GtkWidget *widget, gpointer param)
 static void
 toolbar_edit_key (GtkWidget *widget, gpointer param)
 {
+  GPAKeyringEditor * editor = param;  
+  gchar * key_id = keyring_editor_current_key_id (editor);
+
+  if (key_id)
+    {
+      if (gpa_key_edit_dialog_run (editor->window, key_id))
+	{
+	  keyring_editor_fill_keylist (editor);
+	  update_selection_sensitive_widgets (editor);
+	}
+    }
 }
 
 static void
