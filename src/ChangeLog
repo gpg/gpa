@@ -1,3 +1,14 @@
+2001-02-05  Bernhard Herzog  <bh@intevation.de>
+
+	* keyring.c (keyring_editor_export): Actually call the appropriate
+	gpap functions and handle sending keys to key servers as well.
+
+	* keyexportdlg.h: 
+	* keyexportdlg.c: Substantial changes in practically all functions
+	to extend the dialog to support sending keys to key servers (which
+	includes a new parameter in key_export_dialog_run) as well and to
+	handle delete-event and destroy correctly.
+
 2001-02-02  Bernhard Herzog  <bh@intevation.de>
 
 	* gpa.c (gpa_removeRecipients): Change "files" to "keys" in the
