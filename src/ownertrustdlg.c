@@ -60,7 +60,7 @@ typedef struct _GPAOwnertrustDialog GPAOwnertrustDialog;
 
 
 /* signal handler for the OK button. Determine the selected trust level,
- * set result to true and quit the recursive main loop */
+ * set result to true and destroy the top level window */
 static void
 ownertrust_ok (gpointer param)
 {
@@ -82,7 +82,8 @@ ownertrust_ok (gpointer param)
 } /* ownertrust_ok */
 
 
-/* Signal handler for the cancel button */
+/* Signal handler for the cancel button. Set result to FALSE and destroy
+ * the top level window */
 static void
 ownertrust_cancel (gpointer param)
 {
