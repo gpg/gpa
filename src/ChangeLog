@@ -1,5 +1,16 @@
 2001-01-23  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_toolbar_new): Add buttons for brief and
+	detailed listing.
+	(keyring_set_brief_listing):
+	(keyring_set_detailed_listing): New. Signal handlers for the diref
+	and detailed listing buttons of the toolbar.
+	(keylist_columns_detailed):
+	(keylist_columns_brief): Definitions of the brief and detailed key
+	listing.
+	(keyring_editor_new): Use keylist_columns_brief to initialize the
+	key list
+
 	* keylist.c (keylist_fill_column_titles): Set the first
 	keylist->ncolumns to visible.
 
