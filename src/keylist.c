@@ -57,13 +57,20 @@ gpa_keylist_class_init (GpaKeyListClass *klass)
 
 typedef enum
 {
+  /* These are the displayed columns */
   GPA_KEYLIST_COLUMN_IMAGE,
   GPA_KEYLIST_COLUMN_KEYID,
   GPA_KEYLIST_COLUMN_EXPIRY,
   GPA_KEYLIST_COLUMN_OWNERTRUST,
   GPA_KEYLIST_COLUMN_VALIDITY,
   GPA_KEYLIST_COLUMN_USERID,
+  /* This column contains the gpgme_key_t */
   GPA_KEYLIST_COLUMN_KEY,
+  /* These columns are used only internally for sorting */
+  GPA_KEYLIST_COLUMN_HAS_SECRET,
+  GPA_KEYLIST_COLUMN_EXPIRY_TS,
+  GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE,
+  GPA_KEYLIST_COLUMN_VALIDITY_VALUE,
   GPA_KEYLIST_N_COLUMNS
 } GpaKeyListColumn;
 
@@ -84,7 +91,11 @@ gpa_keylist_init (GpaKeyList *list)
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
-			      G_TYPE_POINTER);
+			      G_TYPE_POINTER,
+			      G_TYPE_INT,
+			      G_TYPE_ULONG,
+			      G_TYPE_ULONG,
+			      G_TYPE_ULONG);
 
   /* The view */
   gtk_tree_view_set_model (GTK_TREE_VIEW (list), GTK_TREE_MODEL (store));
@@ -146,6 +157,8 @@ void gpa_keylist_set_brief (GpaKeyList * keylist)
 						     GPA_KEYLIST_COLUMN_IMAGE,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_HAS_SECRET);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
@@ -153,13 +166,17 @@ void gpa_keylist_set_brief (GpaKeyList * keylist)
 						     GPA_KEYLIST_COLUMN_KEYID,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_KEYID);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
 						     "text",
 						     GPA_KEYLIST_COLUMN_USERID,
 						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);  
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_USERID);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 }
 
 void gpa_keylist_set_detailed (GpaKeyList * keylist)
@@ -175,6 +192,8 @@ void gpa_keylist_set_detailed (GpaKeyList * keylist)
 						     GPA_KEYLIST_COLUMN_IMAGE,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_HAS_SECRET);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
@@ -182,6 +201,8 @@ void gpa_keylist_set_detailed (GpaKeyList * keylist)
 						     GPA_KEYLIST_COLUMN_KEYID,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_KEYID);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Expiry Date"), 
@@ -190,6 +211,8 @@ void gpa_keylist_set_detailed (GpaKeyList * keylist)
 						     GPA_KEYLIST_COLUMN_EXPIRY,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_EXPIRY_TS);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Owner Trust"), 
@@ -198,6 +221,8 @@ void gpa_keylist_set_detailed (GpaKeyList * keylist)
 						     GPA_KEYLIST_COLUMN_OWNERTRUST,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Key Validity"),
@@ -206,6 +231,8 @@ void gpa_keylist_set_detailed (GpaKeyList * keylist)
 						     GPA_KEYLIST_COLUMN_VALIDITY,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_VALIDITY_VALUE);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
@@ -213,6 +240,8 @@ void gpa_keylist_set_detailed (GpaKeyList * keylist)
 						     GPA_KEYLIST_COLUMN_USERID,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);  
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_USERID);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 }
 
 gboolean gpa_keylist_has_selection (GpaKeyList * keylist)
@@ -340,8 +369,7 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (list)));
   /* Get the column values */
   keyid = gpa_gpgme_key_get_short_keyid (key, 0);
-  expiry = gpa_expiry_date_string (gpgme_key_get_ulong_attr 
-				   (key, GPGME_ATTR_EXPIRE, NULL, 0 ));
+  expiry = gpa_expiry_date_string (key->subkeys[0].expires);
   ownertrust = gpa_key_ownertrust_string (key);
   validity = gpa_key_validity_string (key);
   userid = gpa_gpgme_key_get_userid (key, 0);
@@ -354,7 +382,18 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
 		      GPA_KEYLIST_COLUMN_OWNERTRUST, ownertrust,
 		      GPA_KEYLIST_COLUMN_VALIDITY, validity,
 		      GPA_KEYLIST_COLUMN_USERID, userid,
-		      GPA_KEYLIST_COLUMN_KEY, key, -1);
+		      GPA_KEYLIST_COLUMN_KEY, key, 
+		      GPA_KEYLIST_COLUMN_HAS_SECRET, 
+		      (gpa_keytable_lookup_key 
+		       (gpa_keytable_get_secret_instance(), 
+			key->subkeys[0].fpr) != NULL),
+		      /* Set "no expiration" to a large value for sorting */
+		      GPA_KEYLIST_COLUMN_EXPIRY_TS, 
+		      key->subkeys[0].expires ? 
+		      key->subkeys[0].expires : G_MAXULONG,
+		      GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE, key->owner_trust,
+		      GPA_KEYLIST_COLUMN_VALIDITY_VALUE, key->uids[0].validity,
+		      -1);
   /* Clean up */
   g_free (userid);
   g_free (expiry);

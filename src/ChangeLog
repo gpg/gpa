@@ -1,3 +1,13 @@
+2003-06-26  Miguel Coca  <mcoca@gnu.org>
+
+	* gpakeyselector.c (gpa_key_selector_done): Don't sort automatically.
+	(gpa_key_selector_init): Allow sorting by different fields.
+
+	* keylist.c (gpa_keylist_next): Remove deprecated gpgme call.
+	(gpa_keylist_set_brief, gpa_keylist_set_detailed): Allow sorting
+	by columns.
+	(gpa_keylist_init, gpa_keylist_next): Add auxiliary sorting columns.
+
 2003-06-22  Miguel Coca  <mcoca@gnu.org>
 
 	* gpakeyselector.c (gpa_key_selector_new): Hack to fix default key

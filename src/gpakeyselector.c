@@ -86,6 +86,8 @@ gpa_key_selector_init (GpaKeySelector *selector)
 						     GPA_KEY_SELECTOR_COLUMN_KEYID,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (selector), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEY_SELECTOR_COLUMN_KEYID);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
@@ -93,6 +95,8 @@ gpa_key_selector_init (GpaKeySelector *selector)
 						     GPA_KEY_SELECTOR_COLUMN_USERID,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (selector), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEY_SELECTOR_COLUMN_USERID);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 }
@@ -235,13 +239,7 @@ void gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
 void gpa_key_selector_done (gpointer data)
 {
   GpaKeySelector *selector = data;
-  GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model 
-					(GTK_TREE_VIEW (selector)));
 
-  /* Sort the list */
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-                                        GPA_KEY_SELECTOR_COLUMN_USERID,
-					GTK_SORT_ASCENDING);
   /* Enable the list again */
   gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
 }

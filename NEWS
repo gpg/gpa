@@ -1,6 +1,12 @@
 Noteworthy changes in version 0.6.2 (unreleased)
 ------------------------------------------------
 
+ * The keyring editor can now sort keys by any column. By default, they are
+ listed in the order they appear in the keyring.
+
+ * The key list is now displayed while it is being filled, allowing for
+ faster startup times.
+
  * Invoking GPA with file names as arguments will open those files in the
  file manager.
 
