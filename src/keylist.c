@@ -21,6 +21,7 @@
 #include "gpa.h"
 #include "keylist.h"
 #include "gpapastrings.h"
+#include "gpawidgets.h"
 #include "keytable.h"
 #include "icons.h"
 
@@ -481,6 +482,48 @@ get_key_pixbuf (gpgme_key_t key)
     }
 }
 
+static GtkWidget *gpa_keylist_elgamal_dialog (gpgme_key_t key)
+{
+  GtkWidget *window;
+  GtkWidget *hbox, *vbox;
+  GtkWidget *pixmap;
+  GtkWidget *key_info;
+  GtkWidget *label;
+  
+  window = gtk_dialog_new_with_buttons (_("GPA Warning"), NULL,
+					GTK_DIALOG_MODAL,
+					GTK_STOCK_CLOSE,
+					GTK_RESPONSE_CLOSE,
+					NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+  gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_CLOSE);
+
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), hbox);
+
+  pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
+                                     GTK_ICON_SIZE_DIALOG);
+  gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, FALSE, 10);
+
+  label = gtk_label_new (_("One of your secret keys contains an ElGamal "
+			   "signing key. Due to a bug in GnuPG, all ElGamal "
+			   "keys used with GnuPG 1.0.2 and later must be "
+			   "considered compromised.\n\nPlease revoke your key "
+			   "as soon as possible.\n\nThe affected key is:"));
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, FALSE, 2);
+
+  key_info = gpa_key_info_new (key);
+  gtk_box_pack_start (GTK_BOX (vbox), key_info, TRUE, FALSE, 2);
+
+  g_signal_connect (G_OBJECT (window), "response", 
+		    G_CALLBACK (gtk_widget_destroy), NULL);
+
+  return window;
+}
 
 static void gpa_keylist_next (gpgme_key_t key, gpointer data)
 {
@@ -489,6 +532,7 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
   GtkTreeIter iter;
   const gchar *keyid, *ownertrust, *validity;
   gchar *userid, *expiry;
+  gboolean has_secret;
 
   /* Remove the dialog if it is being displayed */
   remove_trustdb_dialog (list);
@@ -501,6 +545,31 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
   ownertrust = gpa_key_ownertrust_string (key);
   validity = gpa_key_validity_string (key);
   userid = gpa_gpgme_key_get_userid (key, 0);
+  has_secret = (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
+					 key->subkeys->fpr) != NULL);
+  /* Check for ElGamal signing keys and warn the user.
+   * See http://lists.gnupg.org/pipermail/gnupg-announce/2003q4/000276.html
+   * for details.
+   */
+  if (has_secret)
+    {
+      gpgme_subkey_t subkey;
+      gboolean has_elg = FALSE;
+
+      for (subkey = key->subkeys; subkey && !has_elg; subkey = subkey->next)
+	{
+	  if (subkey->pubkey_algo == GPGME_PK_ELG && 
+	      !subkey->revoked && !subkey->expired)
+	    {
+	      has_elg = TRUE;
+	    }
+	}
+      if (has_elg)
+	{
+	  GtkWidget *dialog = gpa_keylist_elgamal_dialog (key);
+	  gtk_widget_show_all (dialog);
+	}
+    }
   /* Append the key to the list */
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
@@ -511,10 +580,7 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
 		      GPA_KEYLIST_COLUMN_VALIDITY, validity,
 		      GPA_KEYLIST_COLUMN_USERID, userid,
 		      GPA_KEYLIST_COLUMN_KEY, key, 
-		      GPA_KEYLIST_COLUMN_HAS_SECRET, 
-		      (gpa_keytable_lookup_key 
-		       (gpa_keytable_get_secret_instance(), 
-			key->subkeys->fpr) != NULL),
+		      GPA_KEYLIST_COLUMN_HAS_SECRET, has_secret,
 		      /* Set "no expiration" to a large value for sorting */
 		      GPA_KEYLIST_COLUMN_EXPIRY_TS, 
 		      key->subkeys->expires ? 
