@@ -1,3 +1,8 @@
+2001-01-31  Bernhard Herzog  <bh@intevation.de>
+
+	* keysigndlg.c (gpa_key_sign_run_dialog): Make sure dialog.result
+	is set to FALSE by default.
+
 2001-01-30  Bernhard Herzog  <bh@intevation.de>
 
 	* keysigndlg.c (key_sign_destroy):
