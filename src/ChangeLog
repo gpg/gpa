@@ -1,3 +1,12 @@
+2002-10-26  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* gtkrc: Remove.
+
+	* Makefile.am: Remove references to gtkrc.
+
+	* keyring.c (keyring_editor_new): Set the font of the large label
+	with pango markup. The gtkrc file is no longer needed.
+
 2002-10-25  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Use new prototype of

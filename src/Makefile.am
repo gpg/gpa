@@ -1,12 +1,11 @@
 ## Process this file with automake to produce Makefile.in
 
 tip_files = gpa_tips.en gpa_tips.de
-gtkrc = gtkrc
 logo = gpa_logo.ppm
 
-pkgdata_DATA = $(tip_files) $(gtkrc) $(logo)
+pkgdata_DATA = $(tip_files) $(logo)
 
-EXTRA_DIST = $(tip_files) $(gtkrc)  $(logo)
+EXTRA_DIST = $(tip_files) $(logo)
 
 bin_PROGRAMS = gpa
 

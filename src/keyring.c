@@ -1418,6 +1418,8 @@ keyring_editor_new (void)
   GtkWidget *paned;
   GtkWidget *statusbar;
 
+  gchar *markup;
+
   editor = g_malloc(sizeof(GPAKeyringEditor));
   editor->selection_sensitive_widgets = NULL;
   editor->details_idle_id = 0;
@@ -1453,9 +1455,12 @@ keyring_editor_new (void)
   icon = gpa_create_icon_widget (window, "keyring");
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
-  label = gtk_label_new (_("Keyring Editor"));
+  label = gtk_label_new (NULL);
+  markup = g_strdup_printf ("<span font_desc=\"Arial 16\">%s</span>", 
+                            _("Keyring Editor"));
+  gtk_label_set_markup (GTK_LABEL (label), markup);
+  g_free (markup);
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
-  gtk_widget_set_name (label, "big-label");
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
 
