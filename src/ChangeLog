@@ -1,3 +1,9 @@
+2001-01-23	Jan-Oliver Wagner <jan@intevation.de>
+
+	* simple-gettext.c: (new) "simple gettext method for
+	Windows (copied from gnupg
+	* Makefile.am: added simple-gettext
+
 2001-01-23  Bernhard Herzog  <bh@intevation.de>
 
 	* Makefile.am (gpa_SOURCES): Add the keylist files.

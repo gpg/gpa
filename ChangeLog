@@ -1,3 +1,8 @@
+2001-01-23	Jan-Oliver Wagner <jan@intevation.de>
+
+	* acconfig.h: added USE_ONLY_8DOT3 and  USE_SIMPLE_GETTEXT
+	* configure.in: added USE_SIMPLE_GETTEXT for Windows
+
 2001-01-23  Werner Koch  <wk@gnupg.org>
 
 	* configure.in (GPG): Fixed initialization for W32. Changed test
