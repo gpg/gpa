@@ -51,7 +51,7 @@ static gchar *ownertrust_strings[4] = {
 gchar *
 gpa_ownertrust_string (GpapaOwnertrust ownertrust)
 {
-  return ownertrust_strings[ownertrust];
+  return _(ownertrust_strings[ownertrust]);
 } /* gpa_ownertrust_string */
 
 
@@ -94,7 +94,7 @@ static gchar unit_time[4] = { 'd', 'w', 'm', 'y' };
 gchar *
 gpa_unit_expiry_time_string(int index)
 {
-  return unit_expiry_time[index];
+  return _(unit_expiry_time[index]);
 }
 
 gchar
