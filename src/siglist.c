@@ -18,13 +18,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <gtk/gtk.h>
 #include <stdlib.h>
+#include <string.h>
+#include <gtk/gtk.h>
 #include <config.h>
 #include <gpapa.h>
 #include "gpa.h"
 #include "gpapastrings.h"
 #include "siglist.h"
+
+/*
+ *  Implement a CList showing signatures
+ */
 
 
 typedef struct {
@@ -36,6 +41,8 @@ typedef struct {
 } GPASigList;
 
 
+/* Create and return a new signature CList. The window is the toplevel
+ * window to be passed to the gpa_callback */
 GtkWidget *
 gpa_siglist_new (GtkWidget *window)
 {
@@ -57,8 +64,13 @@ gpa_siglist_new (GtkWidget *window)
   return clist;
 }
 
+
+/* Update the list of signatures to show the GList signatures. If key_id
+ * is given, signatures for that key won't be listed (useful to filter
+ * out the self signatures of a key */
 void
-gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures)
+gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures,
+			    gchar * key_id)
 {
   GPASigList * siglist = gtk_object_get_data (GTK_OBJECT (clist),
 					      "gpa_siglist");
@@ -71,22 +83,26 @@ gpa_siglist_set_signatures (GtkWidget * clist, GList * signatures)
   while (signatures)
     {
       sig = (GpapaSignature *)(signatures->data);
+      signatures = g_list_next (signatures);
 
       contents[0] = gpapa_signature_get_identifier (sig, gpa_callback,
 						    siglist->window);
 
+      /* if key_id is given and the same as the id of the signature
+       * ignore the signature */
+      if (key_id && strcmp (contents[0], key_id) == 0)
+	continue;
+
       validity = gpapa_signature_get_validity (sig, gpa_callback,
 					       siglist->window);
       contents[1] = gpa_sig_validity_string (validity);
-
+      
       contents[2] = gpapa_signature_get_name (sig, gpa_callback,
 					      siglist->window);
       if (!contents[2])
 	contents[2] = _("[Unknown user ID]");
-
+	  
       gtk_clist_append (GTK_CLIST (clist), contents);
-
-      signatures = g_list_next (signatures);
     }
 
   if (!siglist->widths_set)
