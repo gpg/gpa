@@ -1,3 +1,13 @@
+2003-04-27  Miguel Coca  <mcoca@gnu.org>
+
+	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb): 
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb): 
+	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): 
+	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): Use
+	new names for error codes.
+
+	* gpgmetools.c (gpa_generate_key): Use new gpgme_op_genkey.
+
 2003-04-05  Miguel Coca  <mcoca@gnu.org>
 
 	* gpa.c (main): Open extra arguments as files in the filemanager.

@@ -352,18 +352,16 @@ GpgmeError gpa_generate_key (GPAKeyGenParameters *params, gchar **fpr)
 {
   gchar *parm_string;
   GpgmeError err;
-  char *fpr_ret;
   GpgmeCtx ctx = gpa_gpgme_new ();
 
   parm_string = build_genkey_parms (params);
-  err = gpgme_op_genkey (ctx, parm_string, NULL, NULL, &fpr_ret);
+  err = gpgme_op_genkey (ctx, parm_string, NULL, NULL);
   g_free (parm_string);
-  /* This is not strictly needed, but there is no guarantee that memory
-   * reserved with malloc() can be freed by g_free(), which is used all over
-   * GPA. To avoid having to keep track of which string was allocated by
-   * each method, we duplicate the fingerprint with GLib */
-  *fpr = g_strdup (fpr_ret);
-  free (fpr_ret);
+  if (err == GPGME_No_Error)
+    {
+      GpgmeGenKeyResult result = gpgme_op_genkey_result (ctx);
+      *fpr = g_strdup (result->fpr);
+    }
   /* Load the key into the keytable. Needed if we are to make a backup right
    * now. */
   if (fpr)

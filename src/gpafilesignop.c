@@ -359,7 +359,7 @@ gpa_file_sign_operation_done_error_cb (GpaContext *context, GpgmeError err,
     case GPGME_No_Passphrase:
       gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
       break;
-    case GPGME_Invalid_Recipients:
+    case GPGME_Invalid_UserID:
     case GPGME_No_Recipients:
     case GPGME_Invalid_Key:
     case GPGME_File_Error:
