@@ -62,7 +62,7 @@ gpa_ownertrust_from_string (gchar * string)
 
   result = GPAPA_OWNERTRUST_FIRST;
   while (result <= GPAPA_OWNERTRUST_LAST &&
-	 strcmp (string, ownertrust_strings[result]) != 0)
+	 strcmp (string, _(ownertrust_strings[result])) != 0)
     result++;
   return result;
 } /* gpa_ownertrust_from_string */

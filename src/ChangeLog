@@ -1,5 +1,11 @@
 2001-02-15  Bernhard Herzog  <bh@intevation.de>
 
+	* gpapastrings.c (gpa_ownertrust_from_string): Translate the
+	strings before comparing them.
+
+	* filesigndlg.c (gpa_file_sign_dialog_run): Make the key list
+	resize properly
+
 	* helpmenu.c (help_license): Display the text of the GPL, not
 	just the title
 

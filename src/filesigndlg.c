@@ -217,7 +217,7 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
 
   vboxWho = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxWho), 5);
-  gtk_box_pack_start (GTK_BOX (vboxSign), vboxWho, TRUE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vboxSign), vboxWho, TRUE, TRUE, 0);
 
   labelWho = gtk_label_new ("");
   gtk_misc_set_alignment (GTK_MISC (labelWho), 0.0, 0.5);
