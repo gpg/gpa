@@ -1,5 +1,5 @@
 %define name gpa
-%define version 0.4.1
+%define version 0.4.3
 
 Summary: Graphical user interface for the GnuPG.
 Name: %{name}
@@ -29,6 +29,10 @@ make
 %install
 rm -rf ${RPM_BUILD_ROOT}
 mkdir -p ${RPM_BUILD_ROOT}
+install -D -m 644 gpa-logo-48x48.png \
+%{buildroot}%{_datadir}/pixmaps/gpa-logo-48x48.png
+install -D -m 644 gpa.desktop \
+%{buildroot}%{_datadir}/gnome/apps/Applications/gpa.desktop
 %makeinstall
 
 %clean
@@ -42,8 +46,14 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_datadir}/%{name}/*.*
 %config %{_datadir}/%{name}/gtkrc
 %{_datadir}/locale/*/*/gpa.mo
+%{_datadir}/gnome/apps/Applications/gpa.desktop
+%{_datadir}/pixmaps/gpa.png
 
 %changelog
+* Tue Mar 19 2002 Keith Hudson <kwhudson@netin.com
+- updated for 0.4.3
+- added gnome menu entry
 * Fri Aug  3 2001 Peter Hanecak <hanecak@megaloman.sk>
 [0.4.1-1]
 - initial spec
+ 
