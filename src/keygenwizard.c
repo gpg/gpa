@@ -37,10 +37,12 @@
 
 typedef struct {
   GtkWidget * window;
+  GtkWidget * wizard;
   GtkWidget * name_page;
   GtkWidget * email_page;
   GtkWidget * comment_page;
   GtkWidget * passwd_page;
+  GtkWidget * wait_page;
   GtkWidget * final_page;
   gboolean successful;
 } GPAKeyGenWizard;
@@ -261,6 +263,13 @@ gpa_keygen_wizard_password_action (gpointer data)
   comment = gpa_keygen_wizard_simple_get_text (keygen_wizard->comment_page);
   passwd = gpa_keygen_wizard_password_get_password(keygen_wizard->passwd_page);
 
+  /* Switch to the next page showing the "wait" message. */
+  gpa_wizard_next_page_no_action (keygen_wizard->wizard);
+
+  /* Handle some events so that the page is correctly displayed */
+  while (gtk_events_pending())
+    gtk_main_iteration();
+
   successful = gpa_keygen_generate_key (name, email, comment, passwd,
 					keygen_wizard->window);
   keygen_wizard->successful = successful;
@@ -283,6 +292,16 @@ gpa_keygen_wizard_message_page (const gchar * description_text)
 
   return vbox;
 }
+
+
+static GtkWidget *
+gpa_keygen_wizard_wait_page (void)
+{
+  return gpa_keygen_wizard_message_page
+    (_("Your key is being generated\n\n"
+       "Even on fast computers this may take a while. Please be patient\n"));
+}
+
 
 static GtkWidget *
 gpa_keygen_wizard_final_page (void)
@@ -336,6 +355,7 @@ gpa_keygen_wizard_run (GtkWidget * parent)
 
   wizard = gpa_wizard_new (accel_group, gpa_keygen_wizard_close,
 			   keygen_wizard);
+  keygen_wizard->wizard = wizard;
   gtk_container_add (GTK_CONTAINER (window), wizard);
 
   keygen_wizard->name_page = gpa_keygen_wizard_name_page ();
@@ -356,6 +376,10 @@ gpa_keygen_wizard_run (GtkWidget * parent)
   gpa_wizard_append_page (wizard, keygen_wizard->passwd_page,
 			  NULL, _("F_inish"),
 			  gpa_keygen_wizard_password_action, keygen_wizard);
+
+  keygen_wizard->wait_page = gpa_keygen_wizard_wait_page ();
+  gpa_wizard_append_page (wizard, keygen_wizard->wait_page,
+			  NULL, NULL, NULL, NULL);
 
   keygen_wizard->final_page = gpa_keygen_wizard_final_page ();
   gpa_wizard_append_page (wizard, keygen_wizard->final_page,
