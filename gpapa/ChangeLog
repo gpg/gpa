@@ -1,0 +1,62 @@
+2000-05-02 19:45:30  Werner Koch  (wk@habibti.openit.de)
+
+  Replaced all concat() by xstrdup2().	Replcaed some parameters named
+  index by idx to avoid compiler warnings due to the index(3).
+
+2000-05-02 18:32:57  Werner Koch  (wk@habibti.openit.de)
+
+  * Makefile.am: New.
+
+  Included the config.h as the header of each .c file.	Removed
+  the libiberty.h header.
+
+Wed 26 Apr 2000 26:07 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+  * gpapa.c: re-implemented key ring extraction to keep them in
+    memory.  This is much faster for now but does not scale well
+    and must be replaced by something more sophisticated in the
+    future.
+
+Wed 26 Apr 2000 12:53 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+  * m: create an `.a'.
+
+  * upload: new file.
+
+Wed 26 Apr 2000 10:10 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+  * gpapaintern.c: gpapa_call_gnupg(): get the passphrase as an
+    additional parameter instead of using a callback.
+
+Tue 25 Apr 2000 26:25 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+  Signing works.
+
+  * gpapaintern.c: gpapa_call_gnupg() can handle passphrases.
+    In fact for the way it is implemented, the callback is not
+    necessary.	Do we want to keep it?
+
+Tue 25 Apr 2000 14:00 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+  Getting information about keys works, including fingerprints
+  and such, but not including signatures and such.
+
+Sun 23 Apr 2000 28:00 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+  * gpapaintern.c: gpapa_call_gnupg() works.
+
+Sat 22 Apr 2000 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+  Started implementing.
+
+Thu 20 Apr 2000 Markus Gerwinski <markus.gerwinski@sercon.de>
+
+  Finished design.
+
+Tue 18 Apr 2000 Markus Gerwinski <markus.gerwinski@sercon.de>
+
+  Started with design.	Created the name "GPAPA".
+
+Wed 5 Apr 2000 Markus Gerwinski <markus.gerwinski@sercon.de>
+
+  Wrote down requirements.

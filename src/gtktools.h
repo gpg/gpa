@@ -1,4 +1,4 @@
-/* gpa_gtktools.h  -  The GNU Privacy Assistant
+/* gtktools.h  -  The GNU Privacy Assistant
  *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -20,6 +20,7 @@
 
 #include <gtk/gtk.h>
 
+extern void gpa_window_destroy ( GtkWidget *window );
 extern GtkWidget *gpa_space_new ( void );
 extern GtkWidget *gpa_widget_hjustified_new (
   GtkWidget *widget, GtkJustification jtype
@@ -47,3 +48,9 @@ extern void gpa_connect_by_accelerator (
   GtkAccelGroup *accelGroup, gchar *labelText
 );
 extern void gpa_widget_set_centered ( GtkWidget *widget, GtkWidget *parent );
+extern void gpa_window_error (
+  gchar *message, GtkWidget *messenger
+);
+extern void gpa_window_passphrase (
+  GtkWidget *messenger, GtkSignalFunc func, gpointer data
+);

@@ -1,0 +1,6 @@
+2000-05-02 19:57:29  Werner Koch  (wk@habibti.openit.de)
+
+	* gpa.c, keymenu.c, filemenu.c: Removed libiberty header.
+	* gpa.h: Included xmalloc header.
+
+

@@ -95,6 +95,7 @@ fi
 AC_OUTPUT([
 Makefile
 jnlib/Makefile
+gpapa/Makefile
 src/Makefile
 ])
 

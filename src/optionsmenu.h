@@ -1,4 +1,4 @@
-/* gpa_options.h  -  The GNU Privacy Assistant
+/* optionsmenu.h  -  The GNU Privacy Assistant
  *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA

@@ -1,4 +1,4 @@
 
-SUBDIRS = jnlib src
+SUBDIRS = jnlib gpapa src
 EXTRA_DIST = TODO
 

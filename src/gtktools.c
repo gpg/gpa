@@ -1,4 +1,4 @@
-/* gpa_gtktools.c  -  The GNU Privacy Assistant
+/* gtktools.c  -  The GNU Privacy Assistant
  *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -25,9 +25,21 @@
 
 /*!!!*/ #include <stdio.h> /*!!!*/
 
+void gpa_widget_set_centered ( GtkWidget *widget, GtkWidget *parent ) {
+/* var */
+  int x0, y0, w0, h0, x, y, w, h;
+/* commands */
+  gdk_window_get_size ( widget -> window, &w, &h );
+  gdk_window_get_origin ( parent -> window, &x0, &y0 );
+  gdk_window_get_size ( parent -> window, &w0, &h0 );
+  x = x0 + ( w0 - w ) / 2;
+  y = y0 + ( h0 - h ) / 2;
+  gdk_window_move_resize ( widget -> window, x, y, 0, 0 );
+} /* gpa_widget_set_centered */
+
 void gpa_window_destroy ( GtkWidget *window ) {
   gtk_widget_destroy ( window );
-  gtk_widget_hide ( windowTip );
+  gtk_widget_hide ( global_windowTip );
 } /* gpa_window_destroy */
 
 GtkWidget *gpa_space_new ( void ) {
@@ -177,14 +189,95 @@ void gpa_connect_by_accelerator (
   );
 } /* gpa_connect_by_accelerator */
 
-void gpa_widget_set_centered ( GtkWidget *widget, GtkWidget *parent ) {
+void gpa_window_error (
+  gchar *message, GtkWidget *messenger
+) {
 /* var */
-  int x0, y0, w0, h0, x, y, w, h;
+  GtkAccelGroup *accelGroup;
+/* objects */
+  GtkWidget *windowError;
+    GtkWidget *vboxError;
+      GtkWidget *labelMessage;
+      GtkWidget *buttonClose;
 /* commands */
-  gdk_window_get_size ( widget -> window, &w, &h );
-  gdk_window_get_origin ( parent -> window, &x0, &y0 );
-  gdk_window_get_size ( parent -> window, &w0, &h0 );
-  x = x0 + ( w0 - w ) / 2;
-  y = y0 + ( h0 - h ) / 2;
-  gdk_window_move_resize ( widget -> window, x, y, 0, 0 );
-} /* gpa_window_set_centered */
+  windowError = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gtk_window_set_title ( GTK_WINDOW ( windowError ), "Error" );
+  gtk_window_set_modal ( GTK_WINDOW ( windowError ), TRUE );
+  accelGroup = gtk_accel_group_new ();
+  gtk_window_add_accel_group ( GTK_WINDOW ( windowError ), accelGroup );
+  vboxError = gtk_vbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( vboxError ), 10 );
+  labelMessage = gtk_label_new ( message );
+  gtk_box_pack_start ( GTK_BOX ( vboxError ), labelMessage, TRUE, FALSE, 10 );
+  buttonClose = gpa_buttonCancel_new ( windowError, accelGroup, _( "_OK" ) );
+  gtk_box_pack_start ( GTK_BOX ( vboxError ), buttonClose, FALSE, FALSE, 0 );
+  gtk_container_add ( GTK_CONTAINER ( windowError ), vboxError );
+  gtk_widget_show_all ( windowError );
+  gpa_widget_set_centered ( windowError, messenger );
+  gtk_widget_grab_focus ( buttonClose );
+} /* gpa_window_error */
+
+void gpa_window_passphrase (
+  GtkWidget *messenger, GtkSignalFunc func, gpointer data
+) {
+/* var */
+  GtkAccelGroup *accelGroup;
+  static gpointer param [ 3 ];
+/* objects */
+  GtkWidget *windowPassphrase;
+    GtkWidget *vboxPassphrase;
+      GtkWidget *hboxPasswd;
+        GtkWidget *labelPasswd;
+        GtkWidget *entryPasswd;
+      GtkWidget *hButtonBoxPassphrase;
+        GtkWidget *buttonCancel;
+        GtkWidget *buttonOK;
+/* commands */
+  windowPassphrase = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gtk_window_set_title (
+    GTK_WINDOW ( windowPassphrase ), _( "Insert password" )
+  );
+  accelGroup = gtk_accel_group_new ();
+  gtk_window_add_accel_group ( GTK_WINDOW ( windowPassphrase ), accelGroup );
+  vboxPassphrase = gtk_vbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( vboxPassphrase ), 5 );
+  hboxPasswd = gtk_hbox_new ( FALSE, 0 );
+  gtk_container_set_border_width ( GTK_CONTAINER ( hboxPasswd ), 5 );
+  labelPasswd = gtk_label_new ( _( "" ) );
+  gtk_box_pack_start ( GTK_BOX ( hboxPasswd ), labelPasswd, FALSE, FALSE, 0 );
+  entryPasswd = gtk_entry_new ();
+  gtk_entry_set_visibility ( GTK_ENTRY ( entryPasswd ), FALSE );
+  gtk_box_pack_start ( GTK_BOX ( hboxPasswd ), entryPasswd, TRUE, TRUE, 0 );
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelPasswd ), entryPasswd, accelGroup, _( "_Password: " )
+  );
+  gtk_box_pack_start (
+    GTK_BOX ( vboxPassphrase ), hboxPasswd, TRUE, TRUE, 0
+  );
+  hButtonBoxPassphrase = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout (
+    GTK_BUTTON_BOX ( hButtonBoxPassphrase ), GTK_BUTTONBOX_END
+  );
+  gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxPassphrase ), 10 );
+  buttonCancel = gpa_buttonCancel_new (
+    windowPassphrase, accelGroup, _( "_Cancel" )
+  );
+  gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxPassphrase), 5 );
+  gtk_container_add ( GTK_CONTAINER ( hButtonBoxPassphrase ), buttonCancel );
+  buttonOK = gpa_button_new ( accelGroup, _( "_OK" ) );
+  param [ 0 ] = data;
+  param [ 1 ] = entryPasswd;
+  param [ 2 ] = windowPassphrase;
+  gtk_signal_connect_object (
+    GTK_OBJECT ( buttonOK ), "clicked",
+    GTK_SIGNAL_FUNC ( func ), (gpointer) param
+  );
+  gtk_container_add ( GTK_CONTAINER ( hButtonBoxPassphrase ), buttonOK );
+  gtk_box_pack_start (
+    GTK_BOX ( vboxPassphrase ), hButtonBoxPassphrase, FALSE, FALSE, 0
+  );
+  gtk_container_add ( GTK_CONTAINER ( windowPassphrase ), vboxPassphrase );
+  gtk_widget_show_all ( windowPassphrase );
+  gpa_widget_set_centered ( windowPassphrase, messenger );
+  gtk_widget_grab_focus ( entryPasswd );
+} /* gpa_window_passphrase */

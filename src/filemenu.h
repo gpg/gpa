@@ -1,4 +1,4 @@
-/* gpa_file.h  -  The GNU Privacy Assistant
+/* filemenu.h  -  The GNU Privacy Assistant
  *      Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPA
@@ -20,7 +20,8 @@
 
 #include <config.h>
 
-GList *filesOpened;
+extern GList *filesOpened;
+extern GList *filesSelected;
 
 extern void file_open ( void );
 extern void file_showDetail ( void );

@@ -2,6 +2,8 @@
 
 bin_PROGRAMS = gpa
 
+INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/gpapa	-I$(top_srcdir)/intl
+LDADD = -L ../gpapa -lgpapa -L ../jnlib -ljnlib
 
 gpa_SOURCES = gpa.c gpa.h \
 	      gpafile.c gpafile.h \
@@ -11,6 +13,4 @@ gpa_SOURCES = gpa.c gpa.h \
 	      keysmenu.c keysmenu.h	    \
 	      optionsmenu.c optionsmenu.h
 
-LDADD = -L ../../pgg/src -lpgg
-INCLUDES = -I ../../pgg/src
 

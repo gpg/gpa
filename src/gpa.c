@@ -21,32 +21,40 @@
 #include <config.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
-#include <pgg.h>
+#include <gpapa.h>
 #include "gpa.h"
 #include "gtktools.h"
-#include "gpafile.h"
 #include "filemenu.h"
 #include "keysmenu.h"
 #include "optionsmenu.h"
 #include "helpmenu.h"
 
-/*!!!*/ static char *text5 [] = { N_( "Dummy Text" ), N_( "Dummy Text" ), N_( "Dummy Text" ), N_( "Dummy Text" ), N_( "Dummy Text" ) }; /*!!!*/
-static GtkWidget *globalFileClist = NULL;
-GtkWidget *windowMain;
-GtkWidget *windowTip;
-gboolean noTips = FALSE;
-PggErrenv errenv;
-gchar bufferPassphrase [ 256 ];
+static GtkWidget *global_clistFile = NULL;
+GtkWidget *global_windowMain;
+GtkWidget *global_windowTip;
+GtkWidget *global_textTip;
+gboolean global_noTips = FALSE;
 
-GtkWidget *gpa_get_global_file_clist ( void ) {
-  return ( globalFileClist );
-} /* gpa_get_global_file_clist */
+void gpa_callback (
+  GpapaAction action, gpointer actiondata, gpointer calldata
+) {
+  switch ( action ) {
+    case GPAPA_ACTION_ERROR:
+      gpa_window_error ( (gchar*) actiondata, (GtkWidget*) calldata );
+      break;
+    default: break;
+  } /* switch */
+} /* gpa_callback */
+
+GtkWidget *gpa_get_global_clist_file ( void ) {
+  return ( global_clistFile );
+} /* gpa_get_global_clist_file */
 
 void gpa_switch_tips ( void ) {
-  if ( noTips == TRUE )
-    noTips = FALSE;
+  if ( global_noTips == TRUE )
+    global_noTips = FALSE;
   else
-    noTips = TRUE;
+    global_noTips = TRUE;
 } /* gpa_switch_tips */
 
 void gpa_windowTip_init ( void ) {
@@ -57,15 +65,17 @@ void gpa_windowTip_init ( void ) {
     GtkWidget *vboxContents;
       GtkWidget *labelJfdContents;
 	GtkWidget *labelContents;
-      GtkWidget *textContents;
+      GtkWidget *hboxContents;
+	GtkWidget *textContents;
+	GtkWidget *vscrollbarContents;
     GtkWidget *hboxTip;
       GtkWidget *checkerNomore;
       GtkWidget *buttonClose;
 /* commands */
-  windowTip = gtk_window_new ( GTK_WINDOW_DIALOG );
-  gtk_window_set_title ( GTK_WINDOW ( windowTip ), _( "GPA Tip" ) );
+  global_windowTip = gtk_window_new ( GTK_WINDOW_DIALOG );
+  gtk_window_set_title ( GTK_WINDOW ( global_windowTip ), _( "GPA Tip" ) );
   accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group ( GTK_WINDOW ( windowTip ), accelGroup );
+  gtk_window_add_accel_group ( GTK_WINDOW ( global_windowTip ), accelGroup );
   vboxTip = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxTip ), 5 );
   vboxContents = gtk_vbox_new ( FALSE, 0 );
@@ -77,19 +87,32 @@ void gpa_windowTip_init ( void ) {
   gtk_box_pack_start (
     GTK_BOX ( vboxContents ), labelJfdContents, FALSE, FALSE, 0
   );
+  hboxContents = gtk_hbox_new ( FALSE, 0 );
   textContents = gtk_text_new ( NULL, NULL );
   gtk_text_set_editable ( GTK_TEXT ( textContents ), FALSE );
   gpa_connect_by_accelerator (
     GTK_LABEL ( labelContents ), textContents, accelGroup, _( "_Tip:" )
   );
-  gtk_box_pack_start ( GTK_BOX ( vboxContents ), textContents, TRUE, TRUE, 0 );
+  global_textTip = textContents;
+  gtk_box_pack_start (
+    GTK_BOX ( hboxContents ), textContents, TRUE, TRUE, 0
+  );
+  vscrollbarContents = gtk_vscrollbar_new (
+    GTK_TEXT ( textContents ) -> vadj
+  );
+  gtk_box_pack_start (
+    GTK_BOX ( hboxContents ), vscrollbarContents, FALSE, FALSE, 0
+  );
+  gtk_box_pack_start (
+    GTK_BOX ( vboxContents ), hboxContents, TRUE, TRUE, 0
+  );
   gtk_box_pack_start ( GTK_BOX ( vboxTip ), vboxContents, TRUE, TRUE, 0 );
   hboxTip = gtk_hbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxTip ), 5 );
   buttonClose = gpa_button_new ( accelGroup, _( "   _Close   " ) );
   gtk_signal_connect_object (
     GTK_OBJECT ( buttonClose ), "clicked",
-    GTK_SIGNAL_FUNC ( gtk_widget_hide ), (gpointer) windowTip
+    GTK_SIGNAL_FUNC ( gtk_widget_hide ), (gpointer) global_windowTip
   );
   gtk_widget_add_accelerator (
     buttonClose, "clicked", accelGroup, GDK_Escape, 0, 0
@@ -99,7 +122,7 @@ void gpa_windowTip_init ( void ) {
     accelGroup, _( "_No more tips, please" )
   );
   gtk_toggle_button_set_active (
-    GTK_TOGGLE_BUTTON ( checkerNomore ), noTips
+    GTK_TOGGLE_BUTTON ( checkerNomore ), global_noTips
   );
   gtk_signal_connect (
     GTK_OBJECT ( checkerNomore ), "clicked",
@@ -109,13 +132,39 @@ void gpa_windowTip_init ( void ) {
     GTK_BOX ( hboxTip ), checkerNomore, FALSE, FALSE, 10
   );
   gtk_box_pack_start ( GTK_BOX ( vboxTip ), hboxTip, FALSE, FALSE, 0 );
-  gtk_container_add ( GTK_CONTAINER ( windowTip ), vboxTip );
+  gtk_container_add ( GTK_CONTAINER ( global_windowTip ), vboxTip );
 } /* gpa_windowTip_init */
 
 void gpa_windowTip_show ( gchar *text ) {
-  /* Kommt noch was */ /*!!!*/
-  gtk_widget_show_all ( windowTip );
+  if ( global_noTips == FALSE )
+    {
+      gtk_editable_delete_text ( GTK_EDITABLE ( global_textTip ), 0, -1 );
+      gtk_text_insert (
+	GTK_TEXT ( global_textTip ), NULL, &global_textTip -> style -> black,
+	NULL, text, -1
+      );
+      gtk_widget_show_all ( global_windowTip );
+    } /* if */
 } /* gpa_windowTip_show */
+
+void sigs_append ( gpointer data, gpointer userData ) {
+/* var */
+  GpapaSignature *signature;
+  gpointer *localParam;
+  GtkWidget *clistSignatures;
+  GtkWidget *windowPublic;
+  gchar *contentsSignatures [ 2 ];
+/* commands */
+  signature = (GpapaSignature*) data;
+  localParam = (gpointer*) userData;
+  clistSignatures = (GtkWidget*) localParam [ 0 ];
+  windowPublic =    (GtkWidget*) localParam [ 1 ];
+  contentsSignatures [ 0 ] = gpapa_signature_get_identifier (
+    signature, gpa_callback, windowPublic
+  );
+contentsSignatures [ 1 ] = _( "unknown" ); /*!!!*/
+  gtk_clist_append ( GTK_CLIST ( clistSignatures ), contentsSignatures );
+} /* sigs_append */
 
 gint delete_event ( GtkWidget *widget, GdkEvent *event, gpointer data ) {
   file_quit ();
@@ -142,7 +191,6 @@ GtkWidget *gpa_menubar_new ( GtkWidget *window ) {
     { _( "/_Keys" ), NULL, NULL, 0, "<Branch>" },
     { _( "/Keys/Open _public Keyring" ), "<control>K", keys_openPublic, 0, NULL },
     { _( "/Keys/Open _secret Keyring" ), NULL, keys_openSecret, 0, NULL  },
-    { _( "/Keys/Open _keyring" ), NULL, keys_open, 0, NULL },
     { _( "/Keys/sep1" ), NULL, NULL, 0, "<Separator>" },
     { _( "/Keys/_Generate Key" ), NULL, keys_generateKey, 0, NULL },
     { _( "/Keys/Generate _Revocation Certificate" ), NULL, keys_generateRevocation, 0, NULL },
@@ -180,62 +228,75 @@ GtkWidget *gpa_menubar_new ( GtkWidget *window ) {
 } /* gpa_menubar_new */
 
 void setFileSelected (
-  GtkWidget *fileList, gint row, gint column,
+  GtkWidget *clistFile, gint row, gint column,
   GdkEventButton *event, gboolean selected
 ) {
 /* var */
-  GpaFile *aFile;
+  GpapaFile *aFile;
 /* commands */
   aFile = g_list_nth_data ( filesOpened, row );
-  gpa_file_set_selected ( aFile, selected );
+  if ( selected )
+    {
+      if (
+	! g_list_find ( filesSelected, aFile )
+      )
+	filesSelected = g_list_append ( filesSelected, aFile );
+    } /* if */
+  else
+    {
+      if (
+	g_list_find ( filesSelected, aFile )
+      )
+	filesSelected = g_list_remove ( filesSelected, aFile );
+    } /* else */
 } /* setFileSelected */
 
-GtkWidget *gpa_fileFrame_new ( void ) {
+GtkWidget *gpa_windowFile_new ( void ) {
 /* var */
-  char *fileListTitle [ 5 ] = {
+  char *clistFileTitle [ 5 ] = {
     N_( "File" ), N_( "Encrypted" ), N_( "Sigs total" ), N_( "Valid Sigs" ),
     N_( "Invalid Sigs" )
   };
   int i;
 /* objects */
-  GtkWidget *fileFrame;
-    GtkWidget *fileScroller;
-      GtkWidget *fileList;
+  GtkWidget *windowFile;
+    GtkWidget *scrollerFile;
+      GtkWidget *clistFile;
 /* commands */
-  fileFrame = gtk_frame_new ( _( "Files in work" ) );
-  fileScroller = gtk_scrolled_window_new ( NULL, NULL );
-  fileList = gtk_clist_new_with_titles ( 5, fileListTitle );
-  gtk_clist_set_column_width ( GTK_CLIST ( fileList ), 0, 170 );
-  gtk_clist_set_column_width ( GTK_CLIST ( fileList ), 1, 100 );
+  windowFile = gtk_frame_new ( _( "Files in work" ) );
+  scrollerFile = gtk_scrolled_window_new ( NULL, NULL );
+  clistFile = gtk_clist_new_with_titles ( 5, clistFileTitle );
+  gtk_clist_set_column_width ( GTK_CLIST ( clistFile ), 0, 170 );
+  gtk_clist_set_column_width ( GTK_CLIST ( clistFile ), 1, 100 );
   gtk_clist_set_column_justification (
-    GTK_CLIST ( fileList ), 1, GTK_JUSTIFY_CENTER
+    GTK_CLIST ( clistFile ), 1, GTK_JUSTIFY_CENTER
   );
   for ( i = 2; i <= 4; i++ )
     {
-      gtk_clist_set_column_width ( GTK_CLIST ( fileList ), i, 100 );
+      gtk_clist_set_column_width ( GTK_CLIST ( clistFile ), i, 100 );
       gtk_clist_set_column_justification (
-	GTK_CLIST ( fileList ), i, GTK_JUSTIFY_RIGHT
+	GTK_CLIST ( clistFile ), i, GTK_JUSTIFY_RIGHT
       );
     } /* for */
   for ( i = 0; i <= 4; i++ )
-    gtk_clist_set_column_auto_resize ( GTK_CLIST ( fileList ), i, FALSE );
+    gtk_clist_set_column_auto_resize ( GTK_CLIST ( clistFile ), i, FALSE );
   gtk_clist_set_selection_mode (
-    GTK_CLIST ( fileList ), GTK_SELECTION_EXTENDED
+    GTK_CLIST ( clistFile ), GTK_SELECTION_EXTENDED
   );
-  gtk_widget_grab_focus ( fileList );
+  gtk_widget_grab_focus ( clistFile );
   gtk_signal_connect (
-    GTK_OBJECT ( fileList ), "select_row",
+    GTK_OBJECT ( clistFile ), "select-row",
     GTK_SIGNAL_FUNC ( setFileSelected ), (gpointer) TRUE
   );
   gtk_signal_connect (
-    GTK_OBJECT ( fileList ), "unselect_row",
+    GTK_OBJECT ( clistFile ), "unselect-row",
     GTK_SIGNAL_FUNC ( setFileSelected ), (gpointer) FALSE
   );
-  globalFileClist = fileList;
-  gtk_container_add ( GTK_CONTAINER ( fileScroller ), fileList );
-  gtk_container_add ( GTK_CONTAINER ( fileFrame ), fileScroller );
-  return ( fileFrame );
-} /* gpa_fileFrame_new */
+  global_clistFile = clistFile;
+  gtk_container_add ( GTK_CONTAINER ( scrollerFile ), clistFile );
+  gtk_container_add ( GTK_CONTAINER ( windowFile ), scrollerFile );
+  return ( windowFile );
+} /* gpa_windowFile_new */
 
 GtkWidget *gpa_windowMain_new ( char *title ) {
 /* objects */
@@ -243,7 +304,7 @@ GtkWidget *gpa_windowMain_new ( char *title ) {
     GtkWidget *vbox;
       GtkWidget *menubar;
       GtkWidget *fileBox;
-	GtkWidget *fileFrame;
+	GtkWidget *windowFile;
 /* commands */
   window = gtk_window_new ( GTK_WINDOW_TOPLEVEL );
   gtk_window_set_title ( GTK_WINDOW ( window ), title );
@@ -253,13 +314,12 @@ GtkWidget *gpa_windowMain_new ( char *title ) {
   gtk_box_pack_start ( GTK_BOX ( vbox ), menubar, FALSE, TRUE, 0 );
   fileBox = gtk_hbox_new ( TRUE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( fileBox ), 5 );
-  fileFrame = gpa_fileFrame_new ();
-  gtk_box_pack_start ( GTK_BOX ( fileBox ), fileFrame, TRUE, TRUE, 0 );
+  windowFile = gpa_windowFile_new ();
+  gtk_box_pack_start ( GTK_BOX ( fileBox ), windowFile, TRUE, TRUE, 0 );
   gtk_box_pack_end ( GTK_BOX ( vbox ), fileBox, TRUE, TRUE, 0 );
   gtk_container_add ( GTK_CONTAINER ( window ), vbox );
   gpa_windowTip_init ();
   gpa_fileOpenSelect_init ( _( "Open a file" ) );
-  gpa_ringOpenSelect_init ( _( "Open key ring" ) );
   gpa_homeDirSelect_init ( _( "Set home directory" ) );
   gpa_loadOptionsSelect_init ( _( "Load options file" ) );
   gpa_saveOptionsSelect_init ( _( "Save options file" ) );
@@ -267,14 +327,13 @@ GtkWidget *gpa_windowMain_new ( char *title ) {
 } /* gpa_windowMain_new */
 
 int main ( int params, char *param [] ) {
-  pgg_errenv_reset ( errenv );
   gtk_init ( &params, &param );
-  windowMain = gpa_windowMain_new ( _( "GNU Privacy Assistant" ) );
+  global_windowMain = gpa_windowMain_new ( _( "GNU Privacy Assistant" ) );
   gtk_signal_connect (
-    GTK_OBJECT ( windowMain ), "delete_event",
+    GTK_OBJECT ( global_windowMain ), "delete_event",
     GTK_SIGNAL_FUNC ( file_quit ), NULL
   );
-  gtk_widget_show_all ( windowMain );
+  gtk_widget_show_all ( global_windowMain );
   gtk_main ();
   return ( 0 );
 } /* main */

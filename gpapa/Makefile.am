@@ -1,0 +1,23 @@
+## Process this file with automake to produce Makefile.in
+
+INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/intl
+
+noinst_LIBRARIES = libgpapa.a
+noinst_PROGRAMS = gpapatest
+
+
+#libgpapa_a_LDFLAGS =
+libgpapa_a_SOURCES = gpapa.c gpapa.h \
+		     gpapatypedefs.h \
+		     gpapafile.c      gpapafile.h \
+		     gpapaintern.c    gpapaintern.h \
+		     gpapakey.c       gpapakey.h     \
+		     gpapapublickey.c gpapapublickey.h \
+		     gpapasecretkey.c gpapasecretkey.h \
+		     gpapasignature.c gpapasignature.h
+
+
+gpapatest_SOURCES = gpapatest.c
+gpapatest_LDADD =  -L . -lgpapa -L ../jnlib -ljnlib
+
+
