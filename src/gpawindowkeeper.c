@@ -24,37 +24,43 @@
 #include "gpa.h"
 #include "gpawindowkeeper.h"
 
-GpaWindowKeeper *gpa_windowKeeper_new ( void ) {
+GpaWindowKeeper *
+gpa_windowKeeper_new (void)
+{
 /* var */
   GpaWindowKeeper *keeper;
 /* commands */
-  keeper = (GpaWindowKeeper*) xmalloc ( sizeof ( GpaWindowKeeper ) );
-  keeper -> window = NULL;
-  keeper -> listParam = NULL;
-  global_tempWindows = g_list_append ( global_tempWindows, keeper );
-  return ( keeper );
-} /* GpaWindowKeeper */
+  keeper = (GpaWindowKeeper *) xmalloc (sizeof (GpaWindowKeeper));
+  keeper->window = NULL;
+  keeper->listParam = NULL;
+  global_tempWindows = g_list_append (global_tempWindows, keeper);
+  return (keeper);
+}				/* GpaWindowKeeper */
 
-void gpa_windowKeeper_set_window (
-  GpaWindowKeeper *keeper, GtkWidget *window
-) {
-  keeper -> window = window;
-} /* gpa_windowKeeper_set_window */
+void
+gpa_windowKeeper_set_window (GpaWindowKeeper * keeper, GtkWidget * window)
+{
+  keeper->window = window;
+}				/* gpa_windowKeeper_set_window */
 
-void gpa_windowKeeper_add_param (
-  GpaWindowKeeper *keeper, gpointer param
-) {
-  g_list_append ( keeper -> listParam, param );
-} /* gpa_windowKeeper_add_param */
+void
+gpa_windowKeeper_add_param (GpaWindowKeeper * keeper, gpointer param)
+{
+  g_list_append (keeper->listParam, param);
+}				/* gpa_windowKeeper_add_param */
 
-void gpa_windowKeeper_release_exec ( gpointer data, gpointer userData ) {
-  if ( data )
-    free ( data );
-} /* gpa_windowKeeper_release_exec */
+void
+gpa_windowKeeper_release_exec (gpointer data, gpointer userData)
+{
+  if (data)
+    free (data);
+}				/* gpa_windowKeeper_release_exec */
 
-void gpa_windowKeeper_release ( GpaWindowKeeper *keeper ) {
-  gtk_widget_destroy ( keeper -> window );
-  g_list_foreach ( keeper -> listParam, gpa_windowKeeper_release_exec, NULL );
-  global_tempWindows = g_list_remove ( global_tempWindows, keeper );
-  free ( keeper );
-} /* gpa_windowKeeper_release */
+void
+gpa_windowKeeper_release (GpaWindowKeeper * keeper)
+{
+  gtk_widget_destroy (keeper->window);
+  g_list_foreach (keeper->listParam, gpa_windowKeeper_release_exec, NULL);
+  global_tempWindows = g_list_remove (global_tempWindows, keeper);
+  free (keeper);
+}				/* gpa_windowKeeper_release */

@@ -24,51 +24,56 @@
 #include <glib.h>
 #include "gpapa.h"
 
-GpapaSignature *gpapa_signature_new (
-  gchar *keyID, GpapaCallbackFunc callback, gpointer calldata
-) {
-  GpapaSignature *sig = (GpapaSignature *) xmalloc ( sizeof ( GpapaSignature ) );
-  memset ( sig, 0, sizeof ( GpapaSignature ) );
-  sig -> KeyID = xstrdup ( keyID );
-  return ( sig );
-} /* gpapa_signature_new */
+GpapaSignature *
+gpapa_signature_new (gchar * keyID, GpapaCallbackFunc callback,
+		     gpointer calldata)
+{
+  GpapaSignature *sig = (GpapaSignature *) xmalloc (sizeof (GpapaSignature));
+  memset (sig, 0, sizeof (GpapaSignature));
+  sig->KeyID = xstrdup (keyID);
+  return (sig);
+}				/* gpapa_signature_new */
 
-gchar *gpapa_signature_get_identifier (
-  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( signature == NULL )
-    return ( NULL );
+gchar *
+gpapa_signature_get_identifier (GpapaSignature * signature,
+				GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (signature == NULL)
+    return (NULL);
   else
-    return ( signature -> KeyID );
-} /* gpapa_signature_get_identifier */
+    return (signature->KeyID);
+}				/* gpapa_signature_get_identifier */
 
-gchar *gpapa_signature_get_name (
-  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( signature == NULL )
-    return ( NULL );
+gchar *
+gpapa_signature_get_name (GpapaSignature * signature,
+			  GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (signature == NULL)
+    return (NULL);
   else
-    return ( signature -> UserID );
-} /* gpapa_signature_get_name */
+    return (signature->UserID);
+}				/* gpapa_signature_get_name */
 
-GpapaSigValidity gpapa_signature_get_validity (
-  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( signature == NULL )
-    return ( GPAPA_SIG_UNKNOWN );
+GpapaSigValidity
+gpapa_signature_get_validity (GpapaSignature * signature,
+			      GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (signature == NULL)
+    return (GPAPA_SIG_UNKNOWN);
   else
-    return ( signature -> validity );
-} /* gpapa_signature_is_valid */
+    return (signature->validity);
+}				/* gpapa_signature_is_valid */
 
-void gpapa_signature_release (
-  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( signature != NULL )
+void
+gpapa_signature_release (GpapaSignature * signature,
+			 GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (signature != NULL)
     {
-      free ( signature -> KeyID );
-      free ( signature -> UserID );
-      if ( signature -> CreationDate != NULL )
-	g_date_free ( signature -> CreationDate );
-      free ( signature );
+      free (signature->KeyID);
+      free (signature->UserID);
+      if (signature->CreationDate != NULL)
+	g_date_free (signature->CreationDate);
+      free (signature);
     }
-} /* gpapa_signature_release */
+}				/* gpapa_signature_release */

@@ -25,78 +25,77 @@
 #include <glib.h>
 #include "gpapa.h"
 
-void gpapa_secret_key_set_passphrase (
-  GpapaSecretKey *key, gchar *passphrase,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( key )
-    printf ( "Setting passphrase of secret key 0x%s.\n", key -> key -> KeyID );
-} /* gpapa_secret_key_set_passphrase */
+void
+gpapa_secret_key_set_passphrase (GpapaSecretKey * key, gchar * passphrase,
+				 GpapaCallbackFunc callback,
+				 gpointer calldata)
+{
+  if (key)
+    printf ("Setting passphrase of secret key 0x%s.\n", key->key->KeyID);
+}				/* gpapa_secret_key_set_passphrase */
 
-void gpapa_secret_key_export (
-  GpapaSecretKey *key, gchar *targetFileID, GpapaArmor Armor,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( ! key )
-    callback ( GPAPA_ACTION_ERROR, "no valid public key specified", calldata );
-  if ( ! targetFileID )
-    callback ( GPAPA_ACTION_ERROR, "target file not specified", calldata );
-  if ( key && targetFileID )
+void
+gpapa_secret_key_export (GpapaSecretKey * key, gchar * targetFileID,
+			 GpapaArmor Armor, GpapaCallbackFunc callback,
+			 gpointer calldata)
+{
+  if (!key)
+    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+  if (!targetFileID)
+    callback (GPAPA_ACTION_ERROR, "target file not specified", calldata);
+  if (key && targetFileID)
     {
       gchar *full_keyID;
-      char *gpgargv [ 7 ];
+      char *gpgargv[7];
       int i = 0;
-      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
-      gpgargv [ i++ ] = "-o";
-      gpgargv [ i++ ] = targetFileID;
-      gpgargv [ i++ ] = "--yes";  /* overwrite the file */
-      if ( Armor == GPAPA_ARMOR )
-	gpgargv [ i++ ] = "--armor";
-      gpgargv [ i++ ] = "--export-secret-key";
-      gpgargv [ i++ ] = full_keyID;
-      gpgargv [ i ] = NULL;
+      full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      gpgargv[i++] = "-o";
+      gpgargv[i++] = targetFileID;
+      gpgargv[i++] = "--yes";	/* overwrite the file */
+      if (Armor == GPAPA_ARMOR)
+	gpgargv[i++] = "--armor";
+      gpgargv[i++] = "--export-secret-key";
+      gpgargv[i++] = full_keyID;
+      gpgargv[i] = NULL;
       gpapa_call_gnupg
-	(
-	  gpgargv, TRUE, NULL, NULL,
-	  gpapa_linecallback_dummy, NULL,
-	  callback, calldata
-	);
-      free ( full_keyID );
+	(gpgargv, TRUE, NULL, NULL,
+	 gpapa_linecallback_dummy, NULL, callback, calldata);
+      free (full_keyID);
     }
-} /* gpapa_secret_key_export */
+}				/* gpapa_secret_key_export */
 
 /* Due to gpg's security features, this currently does not work.
  */
-void gpapa_secret_key_delete (
-  GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( ! key )
-    callback ( GPAPA_ACTION_ERROR, "no valid secret key specified", calldata );
+void
+gpapa_secret_key_delete (GpapaSecretKey * key, GpapaCallbackFunc callback,
+			 gpointer calldata)
+{
+  if (!key)
+    callback (GPAPA_ACTION_ERROR, "no valid secret key specified", calldata);
   else
     {
       gchar *full_keyID;
-      char *gpgargv [ 3 ];
-      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
-      gpgargv [ 0 ] = "--delete-secret-key";
-      gpgargv [ 1 ] = full_keyID;
-      gpgargv [ 2 ] = NULL;
+      char *gpgargv[3];
+      full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      gpgargv[0] = "--delete-secret-key";
+      gpgargv[1] = full_keyID;
+      gpgargv[2] = NULL;
       gpapa_call_gnupg
-	(
-	  gpgargv, TRUE, NULL, NULL,
-	  gpapa_linecallback_dummy, NULL,
-	  callback, calldata
-	);
-      free ( full_keyID );
-      gpapa_refresh_secret_keyring ( callback, calldata );
+	(gpgargv, TRUE, NULL, NULL,
+	 gpapa_linecallback_dummy, NULL, callback, calldata);
+      free (full_keyID);
+      gpapa_refresh_secret_keyring (callback, calldata);
     }
-} /* gpapa_secret_key_delete */;
+} /* gpapa_secret_key_delete */ ;
 
 /* Due to gpg's security features, this currently does not work.
  */
-void gpapa_secret_key_create_revocation (
-  GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
-) {
-g_print ( "Create revocation certificate for key 0x" ); /*!!!*/
-g_print ( gpapa_key_get_identifier ( GPAPA_KEY ( key ), callback, calldata ) ); /*!!!*/
-g_print ( "\n" ); /*!!!*/
-} /* gpapa_secret_key_create_revocation */
+void
+gpapa_secret_key_create_revocation (GpapaSecretKey * key,
+				    GpapaCallbackFunc callback,
+				    gpointer calldata)
+{
+  g_print ("Create revocation certificate for key 0x");	/*!!! */
+  g_print (gpapa_key_get_identifier (GPAPA_KEY (key), callback, calldata));	/*!!! */
+  g_print ("\n");		/*!!! */
+}				/* gpapa_secret_key_create_revocation */

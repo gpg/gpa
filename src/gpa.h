@@ -32,7 +32,7 @@
 #define _(a)	(a)
 #define N_(a)	(a)
 
-extern gchar *namesKeyserver [ 1 ]; /*!!!*/
+extern gchar *namesKeyserver[1];	/*!!! */
 
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
@@ -44,24 +44,19 @@ extern GList *global_defaultRecipients;
 extern gchar *global_homeDirectory;
 extern gchar *global_defaultKey;
 
-extern GtkWidget *gpa_get_global_clist_file ( void );
-extern void gpa_callback (
-  GpapaAction action, gpointer actiondata, gpointer calldata
-);
-extern void gpa_switch_tips ( void );
-extern void gpa_windowTip_init ( void );
-extern void gpa_windowTip_show ( gchar *text );
-extern void sigs_append ( gpointer data, gpointer userData );
-extern void gpa_selectRecipient (
-  GtkWidget *clist, gint row, gint column, GdkEventButton *event,
-  gpointer userData
-);
-extern void gpa_unselectRecipient (
-  GtkWidget *clist, gint row, gint column, GdkEventButton *event,
-  gpointer userData
-);
-extern void gpa_removeRecipients ( gpointer param );
-extern void gpa_addRecipients ( gpointer param );
-extern void gpa_recipientWindow_close ( gpointer param );
+extern GtkWidget *gpa_get_global_clist_file (void);
+extern void gpa_callback (GpapaAction action, gpointer actiondata,
+			  gpointer calldata);
+extern void gpa_switch_tips (void);
+extern void gpa_windowTip_init (void);
+extern void gpa_windowTip_show (gchar * text);
+extern void sigs_append (gpointer data, gpointer userData);
+extern void gpa_selectRecipient (GtkWidget * clist, gint row, gint column,
+				 GdkEventButton * event, gpointer userData);
+extern void gpa_unselectRecipient (GtkWidget * clist, gint row, gint column,
+				   GdkEventButton * event, gpointer userData);
+extern void gpa_removeRecipients (gpointer param);
+extern void gpa_addRecipients (gpointer param);
+extern void gpa_recipientWindow_close (gpointer param);
 
-#endif /*GPA_H*/
+#endif /*GPA_H */

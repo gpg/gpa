@@ -27,35 +27,37 @@
 
 GtkWidget *text;
 
-void help_set_text(char *string) {
-	gtk_text_freeze(GTK_TEXT(text));
-	gtk_text_insert(GTK_TEXT(text), NULL, &text->style->black, NULL,
-			   string, -1);
-	gtk_text_insert(GTK_TEXT(text), NULL, &text->style->black, NULL,
-			   "\n", -1);
-	gtk_text_thaw(GTK_TEXT(text));
-}
-
-void help_init(GtkWidget *box1)
+void
+help_set_text (char *string)
 {
-	GtkWidget *table, *vscrollbar;
-
-	table = gtk_table_new(2, 2, FALSE);
-	gtk_table_set_row_spacing(GTK_TABLE(table), 0, 2);
-	gtk_table_set_col_spacing(GTK_TABLE(table), 0, 2);
-	gtk_box_pack_start(GTK_BOX(box1), table, TRUE, TRUE, 0);
-	gtk_widget_show(table);
-	text = gtk_text_new(NULL, NULL);
-	gtk_text_set_line_wrap(GTK_TEXT(text), FALSE);
-	gtk_table_attach(GTK_TABLE(table), text, 0, 1, 0, 1,
-			    GTK_EXPAND | GTK_SHRINK | GTK_FILL,
-			    GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
-	gtk_widget_show(text);
-
-	vscrollbar = gtk_vscrollbar_new(GTK_TEXT(text)->vadj);
-	gtk_table_attach(GTK_TABLE(table), vscrollbar, 1, 2, 0, 1,
-			    GTK_FILL, GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
-	gtk_widget_show(vscrollbar);
-	help_set_text(_("Welcome to the GNU privacy guard assistant."));
+  gtk_text_freeze (GTK_TEXT (text));
+  gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL,
+		   string, -1);
+  gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL,
+		   "\n", -1);
+  gtk_text_thaw (GTK_TEXT (text));
 }
 
+void
+help_init (GtkWidget * box1)
+{
+  GtkWidget *table, *vscrollbar;
+
+  table = gtk_table_new (2, 2, FALSE);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
+  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 2);
+  gtk_box_pack_start (GTK_BOX (box1), table, TRUE, TRUE, 0);
+  gtk_widget_show (table);
+  text = gtk_text_new (NULL, NULL);
+  gtk_text_set_line_wrap (GTK_TEXT (text), FALSE);
+  gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
+		    GTK_EXPAND | GTK_SHRINK | GTK_FILL,
+		    GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
+  gtk_widget_show (text);
+
+  vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
+  gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
+		    GTK_FILL, GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
+  gtk_widget_show (vscrollbar);
+  help_set_text (_("Welcome to the GNU privacy guard assistant."));
+}

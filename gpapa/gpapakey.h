@@ -26,42 +26,39 @@
 
 #define GPAPA_KEY(obj) ( ( obj ) -> key )
 
-typedef struct {
-  gchar KeyTrust, OwnerTrust;  /* OwnerTrust might get a different type in future versions. */
+typedef struct
+{
+  gchar KeyTrust, OwnerTrust;	/* OwnerTrust might get a different type in future versions. */
   gint bits, algorithm;
   GList *uids, *subs;
   gchar *KeyID, *LocalID, *UserID;
   GDate *CreationDate, *ExpirationDate;
-} GpapaKey;
+}
+GpapaKey;
 
-extern GpapaKey *gpapa_key_new (
-  gchar *keyID, GpapaCallbackFunc callback, gpointer calldata
-);
+extern GpapaKey *gpapa_key_new (gchar * keyID, GpapaCallbackFunc callback,
+				gpointer calldata);
 
-extern gchar *gpapa_key_get_identifier (
-  GpapaKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern gchar *gpapa_key_get_identifier (GpapaKey * key,
+					GpapaCallbackFunc callback,
+					gpointer calldata);
 
-extern gchar *gpapa_key_get_name (
-  GpapaKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern gchar *gpapa_key_get_name (GpapaKey * key, GpapaCallbackFunc callback,
+				  gpointer calldata);
 
-extern GDate *gpapa_key_get_expiry_date (
-  GpapaKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern GDate *gpapa_key_get_expiry_date (GpapaKey * key,
+					 GpapaCallbackFunc callback,
+					 gpointer calldata);
 
-extern void gpapa_key_set_expiry_date (
-  GpapaKey *key, GDate *date,
-  GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_key_set_expiry_date (GpapaKey * key, GDate * date,
+				       GpapaCallbackFunc callback,
+				       gpointer calldata);
 
-extern void gpapa_key_set_expiry_time (
-  GpapaKey *key, gint number, gchar unit,
-  GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_key_set_expiry_time (GpapaKey * key, gint number,
+				       gchar unit, GpapaCallbackFunc callback,
+				       gpointer calldata);
 
-extern void gpapa_key_release (
-  GpapaKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_key_release (GpapaKey * key, GpapaCallbackFunc callback,
+			       gpointer calldata);
 
 #endif /* __GPAPAKEY_H__ */

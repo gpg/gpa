@@ -25,339 +25,346 @@
 #include <glib.h>
 #include "gpapa.h"
 
-static void linecallback_fingerprint (
-  gchar *line, gpointer data, gboolean status
-) {
+static void
+linecallback_fingerprint (gchar * line, gpointer data, gboolean status)
+{
   PublicKeyData *d = data;
-  if ( line && strncmp ( line, "fpr", 3 ) == 0 )
+  if (line && strncmp (line, "fpr", 3) == 0)
     {
-      gchar *field [ GPAPA_MAX_GPG_KEY_FIELDS ];
+      gchar *field[GPAPA_MAX_GPG_KEY_FIELDS];
       gchar *p = line;
       gint i = 0;
       gint fields;
 
-      while ( *p )
+      while (*p)
 	{
-	  field [ i ] = p;
-	  while ( *p && *p != ':' )
+	  field[i] = p;
+	  while (*p && *p != ':')
 	    p++;
-	  if ( *p == ':' )
+	  if (*p == ':')
 	    {
 	      *p = 0;
 	      p++;
 	    }
 	  i++;
-	  if ( i >= GPAPA_MAX_GPG_KEY_FIELDS )
-	    d -> callback ( GPAPA_ACTION_ERROR,
-			    "too many fields in output of `gpg --fingerprint'",
-			    d -> calldata );
+	  if (i >= GPAPA_MAX_GPG_KEY_FIELDS)
+	    d->callback (GPAPA_ACTION_ERROR,
+			 "too many fields in output of `gpg --fingerprint'",
+			 d->calldata);
 	}
       fields = i;
-      if ( fields != 10 )
-	d -> callback ( GPAPA_ACTION_ERROR,
-			"invalid number of fields in output of `gpg --fingerprint'",
-			d -> calldata );
-      else if ( d -> key -> key -> algorithm == 1 )  /* RSA */
+      if (fields != 10)
+	d->callback (GPAPA_ACTION_ERROR,
+		     "invalid number of fields in output of `gpg --fingerprint'",
+		     d->calldata);
+      else if (d->key->key->algorithm == 1)	/* RSA */
 	{
-	  gchar *fpraw = field [ 9 ];
-	  gchar *fp = xmalloc ( strlen ( fpraw ) + 16 + 1 );
+	  gchar *fpraw = field[9];
+	  gchar *fp = xmalloc (strlen (fpraw) + 16 + 1);
 	  gchar *r = fpraw, *q = fp;
 	  gint c = 0;
-	  while ( *r )
+	  while (*r)
 	    {
 	      *q++ = *r++;
 	      c++;
-	      if ( c < 32 )
+	      if (c < 32)
 		{
-		  if ( c % 2 == 0 )
+		  if (c % 2 == 0)
 		    *q++ = ' ';
-		  if ( c % 16 == 0 )
+		  if (c % 16 == 0)
 		    *q++ = ' ';
 		}
 	    }
 	  *q = 0;
-	  d -> key -> fingerprint = fp;
+	  d->key->fingerprint = fp;
 	}
       else
 	{
-	  gchar *fpraw = field [ 9 ];
-	  gchar *fp = xmalloc ( strlen ( fpraw ) + 10 + 1 );
+	  gchar *fpraw = field[9];
+	  gchar *fp = xmalloc (strlen (fpraw) + 10 + 1);
 	  gchar *r = fpraw, *q = fp;
 	  gint c = 0;
-	  while ( *r )
+	  while (*r)
 	    {
 	      *q++ = *r++;
 	      c++;
-	      if ( c < 40 )
+	      if (c < 40)
 		{
-		  if ( c % 4 == 0 )
+		  if (c % 4 == 0)
 		    *q++ = ' ';
-		  if ( c % 20 == 0 )
+		  if (c % 20 == 0)
 		    *q++ = ' ';
 		}
 	    }
 	  *q = 0;
-	  d -> key -> fingerprint = fp;
+	  d->key->fingerprint = fp;
 	}
     }
-} /* linecallback_fingerprint */
+}				/* linecallback_fingerprint */
 
-gchar *gpapa_public_key_get_fingerprint (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( key == NULL )
-    return ( NULL );
+gchar *
+gpapa_public_key_get_fingerprint (GpapaPublicKey * key,
+				  GpapaCallbackFunc callback,
+				  gpointer calldata)
+{
+  if (key == NULL)
+    return (NULL);
   else
     {
-      if ( key -> fingerprint == NULL && key -> key != NULL )
+      if (key->fingerprint == NULL && key->key != NULL)
 	{
 	  PublicKeyData data = { key, callback, calldata };
-	  char *key_id = xstrcat2 ( "0x", key -> key -> KeyID );
-	  char *gpgargv [ 4 ];
-	  gpgargv [ 0 ] = "--fingerprint";
-	  gpgargv [ 1 ] = "--with-colons";
-	  gpgargv [ 2 ] = key_id;
-	  gpgargv [ 3 ] = NULL;
-	  gpapa_call_gnupg (
-	    gpgargv, TRUE, NULL, NULL,
-	    linecallback_fingerprint, &data,
-	    callback, calldata
-	  );
-	  free ( key_id );
+	  char *key_id = xstrcat2 ("0x", key->key->KeyID);
+	  char *gpgargv[4];
+	  gpgargv[0] = "--fingerprint";
+	  gpgargv[1] = "--with-colons";
+	  gpgargv[2] = key_id;
+	  gpgargv[3] = NULL;
+	  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+			    linecallback_fingerprint, &data,
+			    callback, calldata);
+	  free (key_id);
 	}
-      return ( key -> fingerprint );
+      return (key->fingerprint);
     }
-} /* gpapa_public_key_get_fingerprint */
+}				/* gpapa_public_key_get_fingerprint */
 
-GpapaKeytrust gpapa_public_key_get_keytrust (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( key == NULL || key -> key == NULL )
-    return ( GPAPA_KEYTRUST_UNKNOWN );
+GpapaKeytrust
+gpapa_public_key_get_keytrust (GpapaPublicKey * key,
+			       GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (key == NULL || key->key == NULL)
+    return (GPAPA_KEYTRUST_UNKNOWN);
   else
-    switch ( key -> key -> KeyTrust )
+    switch (key->key->KeyTrust)
       {
-	case 'n': return ( GPAPA_KEYTRUST_DISTRUST );
-	case 'm': return ( GPAPA_KEYTRUST_MARGINALLY );
-	case 'f':
-	case 'u': return ( GPAPA_KEYTRUST_FULLY );
-	default:  return ( GPAPA_KEYTRUST_UNKNOWN );
+      case 'n':
+	return (GPAPA_KEYTRUST_DISTRUST);
+      case 'm':
+	return (GPAPA_KEYTRUST_MARGINALLY);
+      case 'f':
+      case 'u':
+	return (GPAPA_KEYTRUST_FULLY);
+      default:
+	return (GPAPA_KEYTRUST_UNKNOWN);
       }
-} /* gpapa_public_key_get_keytrust */
+}				/* gpapa_public_key_get_keytrust */
 
-GpapaOwnertrust gpapa_public_key_get_ownertrust (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( key == NULL || key -> key == NULL )
-    return ( GPAPA_OWNERTRUST_UNKNOWN );
+GpapaOwnertrust
+gpapa_public_key_get_ownertrust (GpapaPublicKey * key,
+				 GpapaCallbackFunc callback,
+				 gpointer calldata)
+{
+  if (key == NULL || key->key == NULL)
+    return (GPAPA_OWNERTRUST_UNKNOWN);
   else
-    switch ( key -> key -> OwnerTrust )
+    switch (key->key->OwnerTrust)
       {
-	case 'n': return ( GPAPA_OWNERTRUST_DISTRUST );
-	case 'm': return ( GPAPA_OWNERTRUST_MARGINALLY );
-	case 'f':
-	case 'u': return ( GPAPA_OWNERTRUST_FULLY );
-	default:  return ( GPAPA_OWNERTRUST_UNKNOWN );
+      case 'n':
+	return (GPAPA_OWNERTRUST_DISTRUST);
+      case 'm':
+	return (GPAPA_OWNERTRUST_MARGINALLY);
+      case 'f':
+      case 'u':
+	return (GPAPA_OWNERTRUST_FULLY);
+      default:
+	return (GPAPA_OWNERTRUST_UNKNOWN);
       }
-} /* gpapa_public_key_get_ownertrust */
+}				/* gpapa_public_key_get_ownertrust */
 
-extern void gpapa_public_key_set_ownertrust (
-  GpapaPublicKey *key, GpapaOwnertrust trust,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( key )
-    printf ( "Setting ownertrust of key 0x%s to level %d\n",
-             key -> key -> KeyID, trust );
-} /* gpapa_public_key_set_ownertrust */
+extern void
+gpapa_public_key_set_ownertrust (GpapaPublicKey * key, GpapaOwnertrust trust,
+				 GpapaCallbackFunc callback,
+				 gpointer calldata)
+{
+  if (key)
+    printf ("Setting ownertrust of key 0x%s to level %d\n",
+	    key->key->KeyID, trust);
+}				/* gpapa_public_key_set_ownertrust */
 
-static GpapaSignature *extract_sig (
-  gchar *line,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  gchar *field [ GPAPA_MAX_GPG_KEY_FIELDS ];
+static GpapaSignature *
+extract_sig (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
+{
+  gchar *field[GPAPA_MAX_GPG_KEY_FIELDS];
   gchar *p = line;
   gint i = 0;
   gint fields;
 
-  while ( *p )
+  while (*p)
     {
-      field [ i ] = p;
-      while ( *p && *p != ':' )
+      field[i] = p;
+      while (*p && *p != ':')
 	p++;
-      if ( *p == ':' )
+      if (*p == ':')
 	{
 	  *p = 0;
 	  p++;
 	}
       i++;
-      if ( i >= GPAPA_MAX_GPG_KEY_FIELDS )
-	callback ( GPAPA_ACTION_ERROR,
-		   "too many fields in output of `gpg --check-sigs'",
-		    calldata );
+      if (i >= GPAPA_MAX_GPG_KEY_FIELDS)
+	callback (GPAPA_ACTION_ERROR,
+		  "too many fields in output of `gpg --check-sigs'",
+		  calldata);
     }
   fields = i;
-  if ( fields != 11 )
+  if (fields != 11)
     {
-      callback ( GPAPA_ACTION_ERROR,
-		 "invalid number of fields in output of `gpg --check-sigs'",
-		 calldata );
-      return ( NULL );
+      callback (GPAPA_ACTION_ERROR,
+		"invalid number of fields in output of `gpg --check-sigs'",
+		calldata);
+      return (NULL);
     }
   else
     {
-      GpapaSignature *sig = gpapa_signature_new ( field [ 4 ], callback, calldata );
-      if ( strcmp ( field [ 1 ], "!" ) == 0 )
-	sig -> validity = GPAPA_SIG_VALID;
-      else if ( strcmp ( field [ 1 ], "-" ) == 0 )
-	sig -> validity = GPAPA_SIG_INVALID;
+      GpapaSignature *sig =
+	gpapa_signature_new (field[4], callback, calldata);
+      if (strcmp (field[1], "!") == 0)
+	sig->validity = GPAPA_SIG_VALID;
+      else if (strcmp (field[1], "-") == 0)
+	sig->validity = GPAPA_SIG_INVALID;
       else
-	sig -> validity = GPAPA_SIG_UNKNOWN;
-      sig -> CreationDate = extract_date ( field [ 5 ] );
-      sig -> UserID = field [ 9 ] [ 0 ] ? xstrdup ( field [ 9 ] ) : NULL;
-      return ( sig );
+	sig->validity = GPAPA_SIG_UNKNOWN;
+      sig->CreationDate = extract_date (field[5]);
+      sig->UserID = field[9][0] ? xstrdup (field[9]) : NULL;
+      return (sig);
     }
-} /* extract_sig */
+}				/* extract_sig */
 
-static void linecallback_get_signatures (
-  gchar *line, gpointer data, gboolean status
-) {
+static void
+linecallback_get_signatures (gchar * line, gpointer data, gboolean status)
+{
   PublicKeyData *d = data;
-  if ( line && strncmp ( line, "sig", 3 ) == 0 )
+  if (line && strncmp (line, "sig", 3) == 0)
     {
-      GpapaSignature *sig = extract_sig ( line, d -> callback, d -> calldata );
-      if ( strcmp ( d -> key -> key -> KeyID, sig -> KeyID ) == 0 )
-        {
-          /* Self-signature.  Only report it if it is not valid.
-           */
-          if ( sig -> validity == GPAPA_SIG_VALID )
-            {
-              gpapa_signature_release ( sig, d -> callback, d -> calldata );
-              sig = NULL;
-            }
-        }
-      if ( sig )
-        d -> key -> sigs = g_list_append ( d -> key -> sigs, sig );
+      GpapaSignature *sig = extract_sig (line, d->callback, d->calldata);
+      if (strcmp (d->key->key->KeyID, sig->KeyID) == 0)
+	{
+	  /* Self-signature.  Only report it if it is not valid.
+	   */
+	  if (sig->validity == GPAPA_SIG_VALID)
+	    {
+	      gpapa_signature_release (sig, d->callback, d->calldata);
+	      sig = NULL;
+	    }
+	}
+      if (sig)
+	d->key->sigs = g_list_append (d->key->sigs, sig);
     }
-} /* linecallback_get_signatures */
+}				/* linecallback_get_signatures */
 
-GList *gpapa_public_key_get_signatures (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( key == NULL )
-    return ( NULL );
+GList *
+gpapa_public_key_get_signatures (GpapaPublicKey * key,
+				 GpapaCallbackFunc callback,
+				 gpointer calldata)
+{
+  if (key == NULL)
+    return (NULL);
   else
     {
-      if ( key -> sigs == NULL && key -> key != NULL )
+      if (key->sigs == NULL && key->key != NULL)
 	{
 	  PublicKeyData data = { key, callback, calldata };
-	  char *key_id = xstrcat2 ( "0x", key -> key -> KeyID );
-	  char *gpgargv [ 4 ];
-	  gpgargv [ 0 ] = "--check-sigs";
-	  gpgargv [ 1 ] = "--with-colons";
-	  gpgargv [ 2 ] = key_id;
-	  gpgargv [ 3 ] = NULL;
-	  gpapa_call_gnupg (
-	    gpgargv, TRUE, NULL, NULL,
-	    linecallback_get_signatures, &data,
-	    callback, calldata
-	  );
-	  free ( key_id );
+	  char *key_id = xstrcat2 ("0x", key->key->KeyID);
+	  char *gpgargv[4];
+	  gpgargv[0] = "--check-sigs";
+	  gpgargv[1] = "--with-colons";
+	  gpgargv[2] = key_id;
+	  gpgargv[3] = NULL;
+	  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+			    linecallback_get_signatures, &data,
+			    callback, calldata);
+	  free (key_id);
 	}
-      return ( key -> sigs );
+      return (key->sigs);
     }
-} /* gpapa_public_key_get_signatures */
+}				/* gpapa_public_key_get_signatures */
 
-void gpapa_public_key_export (
-  GpapaPublicKey *key, gchar *targetFileID, GpapaArmor Armor,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( ! key )
-    callback ( GPAPA_ACTION_ERROR, "no valid public key specified", calldata );
-  if ( ! targetFileID )
-    callback ( GPAPA_ACTION_ERROR, "target file not specified", calldata );
-  if ( key && targetFileID )
+void
+gpapa_public_key_export (GpapaPublicKey * key, gchar * targetFileID,
+			 GpapaArmor Armor, GpapaCallbackFunc callback,
+			 gpointer calldata)
+{
+  if (!key)
+    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+  if (!targetFileID)
+    callback (GPAPA_ACTION_ERROR, "target file not specified", calldata);
+  if (key && targetFileID)
     {
       gchar *full_keyID;
-      char *gpgargv [ 7 ];
+      char *gpgargv[7];
       int i = 0;
-      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
-      gpgargv [ i++ ] = "-o";
-      gpgargv [ i++ ] = targetFileID;
-      gpgargv [ i++ ] = "--yes";  /* overwrite the file */
-      if ( Armor == GPAPA_ARMOR )
-	gpgargv [ i++ ] = "--armor";
-      gpgargv [ i++ ] = "--export";
-      gpgargv [ i++ ] = full_keyID;
-      gpgargv [ i ] = NULL;
+      full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      gpgargv[i++] = "-o";
+      gpgargv[i++] = targetFileID;
+      gpgargv[i++] = "--yes";	/* overwrite the file */
+      if (Armor == GPAPA_ARMOR)
+	gpgargv[i++] = "--armor";
+      gpgargv[i++] = "--export";
+      gpgargv[i++] = full_keyID;
+      gpgargv[i] = NULL;
       gpapa_call_gnupg
-	(
-	  gpgargv, TRUE, NULL, NULL,
-	  gpapa_linecallback_dummy, NULL,
-	  callback, calldata
-	);
-      free ( full_keyID );
+	(gpgargv, TRUE, NULL, NULL,
+	 gpapa_linecallback_dummy, NULL, callback, calldata);
+      free (full_keyID);
     }
-} /* gpapa_public_key_export */
+}				/* gpapa_public_key_export */
 
-void gpapa_public_key_delete (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( ! key )
-    callback ( GPAPA_ACTION_ERROR, "no valid public key specified", calldata );
+void
+gpapa_public_key_delete (GpapaPublicKey * key, GpapaCallbackFunc callback,
+			 gpointer calldata)
+{
+  if (!key)
+    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
   else
     {
       gchar *full_keyID;
-      char *gpgargv [ 3 ];
-      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
-      gpgargv [ 0 ] = "--delete-key";
-      gpgargv [ 1 ] = full_keyID;
-      gpgargv [ 2 ] = NULL;
+      char *gpgargv[3];
+      full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      gpgargv[0] = "--delete-key";
+      gpgargv[1] = full_keyID;
+      gpgargv[2] = NULL;
       gpapa_call_gnupg
-	(
-	  gpgargv, TRUE, NULL, NULL,
-	  gpapa_linecallback_dummy, NULL,
-	  callback, calldata
-	);
-      free ( full_keyID );
-      gpapa_refresh_public_keyring ( callback, calldata );
+	(gpgargv, TRUE, NULL, NULL,
+	 gpapa_linecallback_dummy, NULL, callback, calldata);
+      free (full_keyID);
+      gpapa_refresh_public_keyring (callback, calldata);
     }
-} /* gpapa_public_key_delete */;
+} /* gpapa_public_key_delete */ ;
 
-void gpapa_public_key_send_to_server (
-  GpapaPublicKey *key, gchar *ServerName, 
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( ! key )
-    callback ( GPAPA_ACTION_ERROR, "no valid public key specified", calldata );
-  if ( ! ServerName )
-    callback ( GPAPA_ACTION_ERROR, "keyserver not specified", calldata );
-  if ( key && ServerName )
+void
+gpapa_public_key_send_to_server (GpapaPublicKey * key, gchar * ServerName,
+				 GpapaCallbackFunc callback,
+				 gpointer calldata)
+{
+  if (!key)
+    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+  if (!ServerName)
+    callback (GPAPA_ACTION_ERROR, "keyserver not specified", calldata);
+  if (key && ServerName)
     {
       gchar *full_keyID;
-      char *gpgargv [ 5 ];
-      full_keyID = xstrcat2 ( "0x", key -> key -> KeyID );
-      gpgargv [ 0 ] = "--keyserver";
-      gpgargv [ 1 ] = ServerName;
-      gpgargv [ 2 ] = "--send-keys";
-      gpgargv [ 3 ] = full_keyID;
-      gpgargv [ 4 ] = NULL;
+      char *gpgargv[5];
+      full_keyID = xstrcat2 ("0x", key->key->KeyID);
+      gpgargv[0] = "--keyserver";
+      gpgargv[1] = ServerName;
+      gpgargv[2] = "--send-keys";
+      gpgargv[3] = full_keyID;
+      gpgargv[4] = NULL;
       gpapa_call_gnupg
-	(
-	  gpgargv, TRUE, NULL, NULL,
-	  gpapa_linecallback_dummy, NULL,
-	  callback, calldata
-	);
-      free ( full_keyID );
+	(gpgargv, TRUE, NULL, NULL,
+	 gpapa_linecallback_dummy, NULL, callback, calldata);
+      free (full_keyID);
     }
-} /* gpapa_public_key_send_to_server */
+}				/* gpapa_public_key_send_to_server */
 
-void gpapa_public_key_sign (
-  GpapaPublicKey *key, gchar *keyID, gchar *PassPhrase,
-  GpapaKeySignType SignType,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( key && keyID && PassPhrase )
-    printf ( "%s public key 0x%s\nwith secret key 0x%s\nwith some passphrase.\n",
-             SignType == GPAPA_KEY_SIGN_LOCALLY ? "Locally signing" : "signing",
-             key -> key -> KeyID, keyID );
-} /* gpapa_public_key_sign */
+void
+gpapa_public_key_sign (GpapaPublicKey * key, gchar * keyID,
+		       gchar * PassPhrase, GpapaKeySignType SignType,
+		       GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (key && keyID && PassPhrase)
+    printf
+      ("%s public key 0x%s\nwith secret key 0x%s\nwith some passphrase.\n",
+       SignType == GPAPA_KEY_SIGN_LOCALLY ? "Locally signing" : "signing",
+       key->key->KeyID, keyID);
+}				/* gpapa_public_key_sign */

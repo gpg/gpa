@@ -26,393 +26,411 @@
 #include "gpapa.h"
 
 #ifdef __MINGW32__
-  #include <windows.h>
-  #include <ctype.h>
+#include <windows.h>
+#include <ctype.h>
 
-static struct {
-    HANDLE in, out;
-} con;
+static struct
+{
+  HANDLE in, out;
+}
+con;
 #define DEF_INPMODE  (ENABLE_LINE_INPUT|ENABLE_ECHO_INPUT    \
 					|ENABLE_PROCESSED_INPUT )
 #define HID_INPMODE  (ENABLE_LINE_INPUT|ENABLE_PROCESSED_INPUT )
 #define DEF_OUTMODE  (ENABLE_WRAP_AT_EOL_OUTPUT|ENABLE_PROCESSED_OUTPUT)
 
 static void
-init_w32_tty ( void )
+init_w32_tty (void)
 {
-    static int initialized = 0;
+  static int initialized = 0;
 
-    if ( !initialized ) {
-	SECURITY_ATTRIBUTES sa;
+  if (!initialized)
+    {
+      SECURITY_ATTRIBUTES sa;
 
-	memset(&sa, 0, sizeof(sa));
-	sa.nLength = sizeof(sa);
-	sa.bInheritHandle = TRUE;
-	con.out = CreateFileA( "CONOUT$", GENERIC_READ|GENERIC_WRITE,
-			       FILE_SHARE_READ|FILE_SHARE_WRITE,
-			       &sa, OPEN_EXISTING, 0, 0 );
-	if( con.out == INVALID_HANDLE_VALUE )
-	    abort ();
-	memset(&sa, 0, sizeof(sa));
-	sa.nLength = sizeof(sa);
-	sa.bInheritHandle = TRUE;
-	con.in = CreateFileA( "CONIN$", GENERIC_READ|GENERIC_WRITE,
-			       FILE_SHARE_READ|FILE_SHARE_WRITE,
-			       &sa, OPEN_EXISTING, 0, 0 );
-	if( con.in == INVALID_HANDLE_VALUE )
-	    abort ();
-	SetConsoleMode(con.in, DEF_INPMODE );
-	SetConsoleMode(con.out, DEF_OUTMODE );
-	initialized = 1;
+      memset (&sa, 0, sizeof (sa));
+      sa.nLength = sizeof (sa);
+      sa.bInheritHandle = TRUE;
+      con.out = CreateFileA ("CONOUT$", GENERIC_READ | GENERIC_WRITE,
+			     FILE_SHARE_READ | FILE_SHARE_WRITE,
+			     &sa, OPEN_EXISTING, 0, 0);
+      if (con.out == INVALID_HANDLE_VALUE)
+	abort ();
+      memset (&sa, 0, sizeof (sa));
+      sa.nLength = sizeof (sa);
+      sa.bInheritHandle = TRUE;
+      con.in = CreateFileA ("CONIN$", GENERIC_READ | GENERIC_WRITE,
+			    FILE_SHARE_READ | FILE_SHARE_WRITE,
+			    &sa, OPEN_EXISTING, 0, 0);
+      if (con.in == INVALID_HANDLE_VALUE)
+	abort ();
+      SetConsoleMode (con.in, DEF_INPMODE);
+      SetConsoleMode (con.out, DEF_OUTMODE);
+      initialized = 1;
     }
 }
 
 
 static char *
-getpass ( const char *prompt )
+getpass (const char *prompt)
 {
-    char *buf;
-    unsigned char cbuf[1];
-    int c, n, i;
-    DWORD nwritten;
+  char *buf;
+  unsigned char cbuf[1];
+  int c, n, i;
+  DWORD nwritten;
 
-    init_w32_tty();
-    n = strlen( prompt );
-    WriteConsoleA ( con.out, prompt, n, &nwritten, NULL );
+  init_w32_tty ();
+  n = strlen (prompt);
+  WriteConsoleA (con.out, prompt, n, &nwritten, NULL);
 
-    buf = xmalloc(n=50);
-    i = 0;
+  buf = xmalloc (n = 50);
+  i = 0;
 
-    SetConsoleMode(con.in, HID_INPMODE );
+  SetConsoleMode (con.in, HID_INPMODE);
 
-    for(;;) {
-	DWORD nread;
+  for (;;)
+    {
+      DWORD nread;
 
-	if( !ReadConsoleA( con.in, cbuf, 1, &nread, NULL ) )
-	    abort ();
-	if( !nread )
-	    continue;
-	if( *cbuf == '\n' )
-	    break;
+      if (!ReadConsoleA (con.in, cbuf, 1, &nread, NULL))
+	abort ();
+      if (!nread)
+	continue;
+      if (*cbuf == '\n')
+	break;
 
-	c = *cbuf;
-	if( c == '\t' )
-	    c = ' ';
-	else if( c > 0xa0 )
-	    ; /* we don't allow 0xa0, as this is a protected blank which may
-	       * confuse the user */
-	else if( iscntrl(c) )
-	    continue;
-	if( !(i < n-1) ) {
-	    n += 50;
-	    buf = xrealloc( buf, n );
+      c = *cbuf;
+      if (c == '\t')
+	c = ' ';
+      else if (c > 0xa0)
+	;			/* we don't allow 0xa0, as this is a protected blank which may
+				 * confuse the user */
+      else if (iscntrl (c))
+	continue;
+      if (!(i < n - 1))
+	{
+	  n += 50;
+	  buf = xrealloc (buf, n);
 	}
-	buf[i++] = c;
+      buf[i++] = c;
     }
 
-    SetConsoleMode(con.in, DEF_INPMODE );
-    WriteConsoleA ( con.out, prompt, 2, "\r\n", NULL );
-    buf[i] = 0;
-    return buf;
+  SetConsoleMode (con.in, DEF_INPMODE);
+  WriteConsoleA (con.out, prompt, 2, "\r\n", NULL);
+  buf[i] = 0;
+  return buf;
 }
 #endif /* __MINGW32__ */
 
 
 char *calldata;
 
-void callback (
-  GpapaAction action, gpointer actiondata, gpointer localcalldata
-) {
-  fprintf ( stderr, "%s: %s\n", (char *) localcalldata, (char *) actiondata );
-} /* callback */
-
-void linecallback (
-  gchar *line, gpointer data, gboolean status
-) {
-  printf ( "---> %s <---%s\n", line, (gchar *) data );
-} /* linecallback */
-
-void test_version ( void )
+void
+callback (GpapaAction action, gpointer actiondata, gpointer localcalldata)
 {
-  char *gpgargv [ 2 ];
-  gpgargv [ 0 ] = "--version";
-  gpgargv [ 1 ] = NULL;
-  gpapa_call_gnupg ( gpgargv, TRUE, NULL, NULL, linecallback, "pruzzel", callback, NULL );
+  fprintf (stderr, "%s: %s\n", (char *) localcalldata, (char *) actiondata);
+}				/* callback */
+
+void
+linecallback (gchar * line, gpointer data, gboolean status)
+{
+  printf ("---> %s <---%s\n", line, (gchar *) data);
+}				/* linecallback */
+
+void
+test_version (void)
+{
+  char *gpgargv[2];
+  gpgargv[0] = "--version";
+  gpgargv[1] = NULL;
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, linecallback, "pruzzel",
+		    callback, NULL);
 }
 
-void test_secring ( void )
+void
+test_secring (void)
 {
   int seccount, i;
   GpapaSecretKey *S;
   GpapaFile *F;
-  seccount = gpapa_get_secret_key_count ( callback, calldata );
-  printf ( "Secret keys: %d\n", seccount );
-  printf ( "\n" );
-  for ( i = MAX ( 0, seccount - 2 ); i < seccount; i++ )
+  seccount = gpapa_get_secret_key_count (callback, calldata);
+  printf ("Secret keys: %d\n", seccount);
+  printf ("\n");
+  for (i = MAX (0, seccount - 2); i < seccount; i++)
     {
       GDate *expiry_date;
-      char buffer [ 256 ];
-      S = gpapa_get_secret_key_by_index ( i, callback, calldata );
-      printf ( "Secret key #%d: %s\n", i,
-	       gpapa_key_get_name ( GPAPA_KEY ( S ), callback, calldata ) );
-      expiry_date = gpapa_key_get_expiry_date ( GPAPA_KEY ( S ), callback, calldata );
-      if ( expiry_date )
-	g_date_strftime ( buffer, 256, "%d.%m.%Y", expiry_date );
+      char buffer[256];
+      S = gpapa_get_secret_key_by_index (i, callback, calldata);
+      printf ("Secret key #%d: %s\n", i,
+	      gpapa_key_get_name (GPAPA_KEY (S), callback, calldata));
+      expiry_date =
+	gpapa_key_get_expiry_date (GPAPA_KEY (S), callback, calldata);
+      if (expiry_date)
+	g_date_strftime (buffer, 256, "%d.%m.%Y", expiry_date);
       else
-	strcpy ( buffer, "never" );
-      printf ( "Expires: %s\n", buffer );
-      printf ( "\n" );
-      gpapa_release_secret_key ( S, callback, calldata );
+	strcpy (buffer, "never");
+      printf ("Expires: %s\n", buffer);
+      printf ("\n");
+      gpapa_release_secret_key (S, callback, calldata);
     }
-  S = gpapa_get_secret_key_by_ID ( "983465DB21439422", callback, calldata);
-  if ( S != NULL )
+  S = gpapa_get_secret_key_by_ID ("983465DB21439422", callback, calldata);
+  if (S != NULL)
     {
       gchar *PassPhrase;
-      printf ( "Secret key 983465DB21439422: %s\n",
-	       gpapa_key_get_name ( GPAPA_KEY ( S ), callback, calldata ) );
-      gpapa_release_secret_key ( S, callback, calldata );
-      printf ( "\n" );
-      PassPhrase = getpass ( "Please enter passphrase: " );
-      printf ( "Signing file `test.txt' ... " );
-      F = gpapa_file_new ( "test.txt", callback, calldata );
-      gpapa_file_sign ( F, NULL, "983465DB21439422", PassPhrase,
-			GPAPA_SIGN_CLEAR, GPAPA_ARMOR,
-			callback, calldata );
-      printf ( "done.\n\n" );
+      printf ("Secret key 983465DB21439422: %s\n",
+	      gpapa_key_get_name (GPAPA_KEY (S), callback, calldata));
+      gpapa_release_secret_key (S, callback, calldata);
+      printf ("\n");
+      PassPhrase = getpass ("Please enter passphrase: ");
+      printf ("Signing file `test.txt' ... ");
+      F = gpapa_file_new ("test.txt", callback, calldata);
+      gpapa_file_sign (F, NULL, "983465DB21439422", PassPhrase,
+		       GPAPA_SIGN_CLEAR, GPAPA_ARMOR, callback, calldata);
+      printf ("done.\n\n");
     }
   else
-    printf ( "Secret key 983465DB21439422: not available\n\n" );
+    printf ("Secret key 983465DB21439422: not available\n\n");
 }
 
-void test_pubring ( void )
+void
+test_pubring (void)
 {
   int pubcount, i;
   GpapaPublicKey *P;
-  pubcount = gpapa_get_public_key_count ( callback, calldata );
-  printf ( "Public keys: %d\n", pubcount );
-  printf ( "\n" );
-  for ( i = MAX ( 0, pubcount - 2 ); i < pubcount; i++ )
+  pubcount = gpapa_get_public_key_count (callback, calldata);
+  printf ("Public keys: %d\n", pubcount);
+  printf ("\n");
+  for (i = MAX (0, pubcount - 2); i < pubcount; i++)
     {
       GDate *expiry_date;
-      char buffer [ 256 ];
-      P = gpapa_get_public_key_by_index ( i, callback, calldata );
-      printf ( "Public key #%d: %s\n", i,
-	       gpapa_key_get_name ( GPAPA_KEY ( P ), callback, calldata ) );
-      printf ( "Key trust: %d\n",
-	       gpapa_public_key_get_keytrust ( P, callback, calldata ) );
-      printf ( "Owner trust: %d\n",
-	       gpapa_public_key_get_ownertrust ( P, callback, calldata ) );
-      printf ( "Fingerprint: %s\n",
-	       gpapa_public_key_get_fingerprint ( P, callback, calldata ) );
-      expiry_date = gpapa_key_get_expiry_date ( GPAPA_KEY ( P ), callback, calldata );
-      if ( expiry_date )
-	g_date_strftime ( buffer, 256, "%d.%m.%Y", expiry_date );
+      char buffer[256];
+      P = gpapa_get_public_key_by_index (i, callback, calldata);
+      printf ("Public key #%d: %s\n", i,
+	      gpapa_key_get_name (GPAPA_KEY (P), callback, calldata));
+      printf ("Key trust: %d\n",
+	      gpapa_public_key_get_keytrust (P, callback, calldata));
+      printf ("Owner trust: %d\n",
+	      gpapa_public_key_get_ownertrust (P, callback, calldata));
+      printf ("Fingerprint: %s\n",
+	      gpapa_public_key_get_fingerprint (P, callback, calldata));
+      expiry_date =
+	gpapa_key_get_expiry_date (GPAPA_KEY (P), callback, calldata);
+      if (expiry_date)
+	g_date_strftime (buffer, 256, "%d.%m.%Y", expiry_date);
       else
-	strcpy ( buffer, "never" );
-      printf ( "Expires: %s\n", buffer );
-      printf ( "\n" );
-      gpapa_release_public_key ( P, callback, calldata );
+	strcpy (buffer, "never");
+      printf ("Expires: %s\n", buffer);
+      printf ("\n");
+      gpapa_release_public_key (P, callback, calldata);
     }
-  P = gpapa_get_public_key_by_ID ( "6C7EE1B8621CC013", callback, calldata );
-  gpapa_public_key_delete ( P, callback, calldata );
-  P = gpapa_receive_public_key_from_server ( "6C7EE1B8621CC013",
-	"blackhole.pca.dfn.de", callback, calldata );
-  if ( P != NULL )
+  P = gpapa_get_public_key_by_ID ("6C7EE1B8621CC013", callback, calldata);
+  gpapa_public_key_delete (P, callback, calldata);
+  P = gpapa_receive_public_key_from_server ("6C7EE1B8621CC013",
+					    "blackhole.pca.dfn.de", callback,
+					    calldata);
+  if (P != NULL)
     {
       GList *g;
-      printf ( "Public key 6C7EE1B8621CC013 %s\n",
-	       gpapa_key_get_name ( GPAPA_KEY ( P ), callback, calldata ) );
-      printf ( "Signatures:\n" );
-      g = gpapa_public_key_get_signatures ( P, callback, calldata );
-      while ( g )
+      printf ("Public key 6C7EE1B8621CC013 %s\n",
+	      gpapa_key_get_name (GPAPA_KEY (P), callback, calldata));
+      printf ("Signatures:\n");
+      g = gpapa_public_key_get_signatures (P, callback, calldata);
+      while (g)
 	{
-	  GpapaSignature *sig = g -> data;
+	  GpapaSignature *sig = g->data;
 	  char *validity;
-	  if ( sig -> validity == GPAPA_SIG_UNKNOWN )
+	  if (sig->validity == GPAPA_SIG_UNKNOWN)
 	    validity = "unknown";
-	  else if ( sig -> validity == GPAPA_SIG_VALID )
+	  else if (sig->validity == GPAPA_SIG_VALID)
 	    validity = "valid";
-	  else if ( sig -> validity == GPAPA_SIG_INVALID )
+	  else if (sig->validity == GPAPA_SIG_INVALID)
 	    validity = "invalid";
 	  else
 	    validity = "BROKEN";
-	  printf ( "0x%s %s (%s)\n",
-		   gpapa_signature_get_identifier ( sig, callback, calldata ),
-		   gpapa_signature_get_name ( sig, callback, calldata ),
-		   validity );
-	  g = g_list_next ( g );
+	  printf ("0x%s %s (%s)\n",
+		  gpapa_signature_get_identifier (sig, callback, calldata),
+		  gpapa_signature_get_name (sig, callback, calldata),
+		  validity);
+	  g = g_list_next (g);
 	}
 /*	gpapa_public_key_send_to_server ( P, "blackhole.pca.dfn.de", callback, calldata ); */
-      gpapa_release_public_key ( P, callback, calldata );
+      gpapa_release_public_key (P, callback, calldata);
     }
   else
-    printf ( "Public key 6C7EE1B8621CC013 not available\n" );
+    printf ("Public key 6C7EE1B8621CC013 not available\n");
 }
 
-void test_files ( void )
+void
+test_files (void)
 {
   GpapaFile *F;
-  F = gpapa_file_new ( "test.txt.gpg", callback, calldata );
-  if ( F != NULL )
+  F = gpapa_file_new ("test.txt.gpg", callback, calldata);
+  if (F != NULL)
     {
       GList *g;
-      printf ( "File test.txt.gpg:\nSignatures:\n" );
-      g = gpapa_file_get_signatures ( F, callback, calldata );
-      while ( g )
+      printf ("File test.txt.gpg:\nSignatures:\n");
+      g = gpapa_file_get_signatures (F, callback, calldata);
+      while (g)
 	{
-	  GpapaSignature *sig = g -> data;
+	  GpapaSignature *sig = g->data;
 	  char *validity;
-	  if ( sig -> validity == GPAPA_SIG_UNKNOWN )
+	  if (sig->validity == GPAPA_SIG_UNKNOWN)
 	    validity = "unknown";
-	  else if ( sig -> validity == GPAPA_SIG_VALID )
+	  else if (sig->validity == GPAPA_SIG_VALID)
 	    validity = "valid";
-	  else if ( sig -> validity == GPAPA_SIG_INVALID )
+	  else if (sig->validity == GPAPA_SIG_INVALID)
 	    validity = "invalid";
 	  else
 	    validity = "BROKEN";
-	  printf ( "0x%s %s (%s)\n",
-		   gpapa_signature_get_identifier ( sig, callback, calldata ),
-		   gpapa_signature_get_name ( sig, callback, calldata ),
-		   validity );
-	  g = g_list_next ( g );
+	  printf ("0x%s %s (%s)\n",
+		  gpapa_signature_get_identifier (sig, callback, calldata),
+		  gpapa_signature_get_name (sig, callback, calldata),
+		  validity);
+	  g = g_list_next (g);
 	}
-      gpapa_file_release ( F, callback, calldata );
+      gpapa_file_release (F, callback, calldata);
     }
   else
-    printf ( "File test.txt.gpg: not available\n" );
+    printf ("File test.txt.gpg: not available\n");
 }
 
-void print_status ( gchar *filename )
+void
+print_status (gchar * filename)
 {
-  GpapaFile *F = gpapa_file_new ( filename, callback, calldata );
-  printf ( "%s: \t", filename );
-  switch ( gpapa_file_get_status ( F, callback, calldata ) )
+  GpapaFile *F = gpapa_file_new (filename, callback, calldata);
+  printf ("%s: \t", filename);
+  switch (gpapa_file_get_status (F, callback, calldata))
     {
-      case GPAPA_FILE_UNKNOWN:
-	printf ( "UNKNOWN" );
-	break;
-      case GPAPA_FILE_CLEAR:
-	printf ( "clear" );
-	break;
-      case GPAPA_FILE_ENCRYPTED:
-	printf ( "encrypted" );
-	break;
-      case GPAPA_FILE_PROTECTED:
-	printf ( "protected" );
-	break;
-      case GPAPA_FILE_SIGNED:
-	printf ( "signed" );
-	break;
-      case GPAPA_FILE_CLEARSIGNED:
-	printf ( "clearsigned" );
-	break;
-      case GPAPA_FILE_DETACHED_SIGNATURE:
-	printf ( "detached signature" );
-	break;
+    case GPAPA_FILE_UNKNOWN:
+      printf ("UNKNOWN");
+      break;
+    case GPAPA_FILE_CLEAR:
+      printf ("clear");
+      break;
+    case GPAPA_FILE_ENCRYPTED:
+      printf ("encrypted");
+      break;
+    case GPAPA_FILE_PROTECTED:
+      printf ("protected");
+      break;
+    case GPAPA_FILE_SIGNED:
+      printf ("signed");
+      break;
+    case GPAPA_FILE_CLEARSIGNED:
+      printf ("clearsigned");
+      break;
+    case GPAPA_FILE_DETACHED_SIGNATURE:
+      printf ("detached signature");
+      break;
     }
-  printf ( "\t(%d signatures)\n", gpapa_file_get_signature_count ( F, callback, calldata ) );
-  gpapa_file_release ( F, callback, calldata );
+  printf ("\t(%d signatures)\n",
+	  gpapa_file_get_signature_count (F, callback, calldata));
+  gpapa_file_release (F, callback, calldata);
 }
 
-void test_status ( void )
+void
+test_status (void)
 {
-  print_status ( "test-clsig.txt.asc" );
-  print_status ( "test-dsig.txt.gpg" );
-  print_status ( "test-dsig.txt.pgp" );
-  print_status ( "test-enc.txt.asc" );
-  print_status ( "test-enc.txt.asc.gpg" );
-  print_status ( "test-enc.txt.gpg" );
-  print_status ( "test-encsig.pgp" );
-  print_status ( "test-encsig.txt.gpg" );
-  print_status ( "test-sig.txt.pgp" );
-  print_status ( "test-sig.txt.asc" );
-  print_status ( "test-sig.txt.gpg" );
-  print_status ( "test-symm.txt.gpg" );
-  print_status ( "test.txt" );
-  print_status ( "test.txt.asc" );
-  print_status ( "test.txt.gpg" );
-  print_status ( "test.txt.sig" );
+  print_status ("test-clsig.txt.asc");
+  print_status ("test-dsig.txt.gpg");
+  print_status ("test-dsig.txt.pgp");
+  print_status ("test-enc.txt.asc");
+  print_status ("test-enc.txt.asc.gpg");
+  print_status ("test-enc.txt.gpg");
+  print_status ("test-encsig.pgp");
+  print_status ("test-encsig.txt.gpg");
+  print_status ("test-sig.txt.pgp");
+  print_status ("test-sig.txt.asc");
+  print_status ("test-sig.txt.gpg");
+  print_status ("test-symm.txt.gpg");
+  print_status ("test.txt");
+  print_status ("test.txt.asc");
+  print_status ("test.txt.gpg");
+  print_status ("test.txt.sig");
 }
 
-void test_export_public ( char *keyID )
+void
+test_export_public (char *keyID)
 {
-  GpapaPublicKey *P = gpapa_get_public_key_by_ID ( keyID, callback, calldata );
-  gpapa_public_key_export ( P, "exported.asc", GPAPA_ARMOR, callback, calldata );
-  gpapa_release_public_key ( P, callback, calldata );
-  gpapa_export_ownertrust ( "exptrust.asc", GPAPA_ARMOR, callback, calldata );
-  gpapa_import_ownertrust ( "exptrust.asc", callback, calldata );
-  gpapa_import_keys ( "peter.elg-dsa.public-key.asc", callback, calldata );
-  gpapa_update_trust_database ( callback, calldata );
+  GpapaPublicKey *P = gpapa_get_public_key_by_ID (keyID, callback, calldata);
+  gpapa_public_key_export (P, "exported.asc", GPAPA_ARMOR, callback,
+			   calldata);
+  gpapa_release_public_key (P, callback, calldata);
+  gpapa_export_ownertrust ("exptrust.asc", GPAPA_ARMOR, callback, calldata);
+  gpapa_import_ownertrust ("exptrust.asc", callback, calldata);
+  gpapa_import_keys ("peter.elg-dsa.public-key.asc", callback, calldata);
+  gpapa_update_trust_database (callback, calldata);
 }
 
-void test_export_secret ( char *keyID )
+void
+test_export_secret (char *keyID)
 {
-  GpapaSecretKey *P = gpapa_get_secret_key_by_ID ( keyID, callback, calldata );
-  gpapa_secret_key_export ( P, "exportedsec.asc", GPAPA_ARMOR, callback, calldata );
-  gpapa_secret_key_delete ( P, callback, calldata );
-  gpapa_release_secret_key ( P, callback, calldata );
+  GpapaSecretKey *P = gpapa_get_secret_key_by_ID (keyID, callback, calldata);
+  gpapa_secret_key_export (P, "exportedsec.asc", GPAPA_ARMOR, callback,
+			   calldata);
+  gpapa_secret_key_delete (P, callback, calldata);
+  gpapa_release_secret_key (P, callback, calldata);
 }
 
-void test_edithelp ( void )
+void
+test_edithelp (void)
 {
-  char *gpgargv [ 3 ];
-  gpgargv [ 0 ] = "--edit-key";
-  gpgargv [ 1 ] = "test";
-  gpgargv [ 2 ] = NULL;
-  gpapa_call_gnupg ( gpgargv, TRUE, "help\nquit\n", NULL,
-		     linecallback, "pruzzel", callback, NULL );
+  char *gpgargv[3];
+  gpgargv[0] = "--edit-key";
+  gpgargv[1] = "test";
+  gpgargv[2] = NULL;
+  gpapa_call_gnupg (gpgargv, TRUE, "help\nquit\n", NULL,
+		    linecallback, "pruzzel", callback, NULL);
 }
 
-void test_encrypt ( GList *rcptKeyIDs, char *keyID )
+void
+test_encrypt (GList * rcptKeyIDs, char *keyID)
 {
-  GpapaFile *F = gpapa_file_new ( "test.txt", callback, calldata );
+  GpapaFile *F = gpapa_file_new ("test.txt", callback, calldata);
   char *PassPhrase;
-  gpapa_file_encrypt ( F, NULL, rcptKeyIDs, GPAPA_ARMOR,
-		       callback, calldata );
-  PassPhrase = getpass ( "Please enter passphrase for signing: " );
-  gpapa_file_encrypt_and_sign ( F, NULL, rcptKeyIDs,
-				keyID, PassPhrase, GPAPA_SIGN_NORMAL, GPAPA_ARMOR,
-				callback, calldata );
-  PassPhrase = getpass ( "Please enter passphrase for protecting: " );
-  printf ( "Encrypting ..." );
-  gpapa_file_protect ( F, NULL, PassPhrase, GPAPA_ARMOR,
-		       callback, calldata );
-  printf ( " done.\nDecrypting ..." );
-  gpapa_file_release ( F, callback, calldata );
-  F = gpapa_file_new ( "test.txt.asc", callback, calldata );
-  gpapa_file_decrypt ( F, NULL, PassPhrase,
-		       callback, calldata );
-  printf ( " done.\n" );
-  gpapa_file_release ( F, callback, calldata );
+  gpapa_file_encrypt (F, NULL, rcptKeyIDs, GPAPA_ARMOR, callback, calldata);
+  PassPhrase = getpass ("Please enter passphrase for signing: ");
+  gpapa_file_encrypt_and_sign (F, NULL, rcptKeyIDs,
+			       keyID, PassPhrase, GPAPA_SIGN_NORMAL,
+			       GPAPA_ARMOR, callback, calldata);
+  PassPhrase = getpass ("Please enter passphrase for protecting: ");
+  printf ("Encrypting ...");
+  gpapa_file_protect (F, NULL, PassPhrase, GPAPA_ARMOR, callback, calldata);
+  printf (" done.\nDecrypting ...");
+  gpapa_file_release (F, callback, calldata);
+  F = gpapa_file_new ("test.txt.asc", callback, calldata);
+  gpapa_file_decrypt (F, NULL, PassPhrase, callback, calldata);
+  printf (" done.\n");
+  gpapa_file_release (F, callback, calldata);
 }
 
-int main ( int argc, char **argv )
+int
+main (int argc, char **argv)
 {
   const char *what = argc > 1 ? argv[1] : "version";
-  calldata = argc > 2? argv [ 2 ] : "foo";
+  calldata = argc > 2 ? argv[2] : "foo";
 
-  if( !strcmp( what, "version" ) )
-      test_version ( );
-  else if( !strcmp( what, "pubring" ) )
-      test_pubring ( );
-  else if( !strcmp( what, "secring" ) )
-      test_secring ( );
-  else if( !strcmp( what, "files" ) )
-      test_files ( );
-  else if( !strcmp( what, "status" ) )
-      test_status ( );
-  else if( !strcmp( what, "export_public" ) )
-      test_export_public ( "4875B1DC979B6F2A" );
-  else if( !strcmp( what, "export_public-2" ) )
-      test_export_public ( "6C7EE1B8621CC013" );
-  else if( !strcmp( what, "export_secret" ) )
-      test_export_secret ( "7D0908A0EE9A8BFB" );
-  else if( !strcmp( what, "edithelp" ) )
-      test_edithelp ( );
-  else if( !strcmp( what, "encrypt" ) )
-      test_encrypt ( g_list_append ( g_list_append ( NULL, "983465DB21439422" ),
-				 "6C7EE1B8621CC013" ),
-		 "7D0908A0EE9A8BFB");
+  if (!strcmp (what, "version"))
+    test_version ();
+  else if (!strcmp (what, "pubring"))
+    test_pubring ();
+  else if (!strcmp (what, "secring"))
+    test_secring ();
+  else if (!strcmp (what, "files"))
+    test_files ();
+  else if (!strcmp (what, "status"))
+    test_status ();
+  else if (!strcmp (what, "export_public"))
+    test_export_public ("4875B1DC979B6F2A");
+  else if (!strcmp (what, "export_public-2"))
+    test_export_public ("6C7EE1B8621CC013");
+  else if (!strcmp (what, "export_secret"))
+    test_export_secret ("7D0908A0EE9A8BFB");
+  else if (!strcmp (what, "edithelp"))
+    test_edithelp ();
+  else if (!strcmp (what, "encrypt"))
+    test_encrypt (g_list_append (g_list_append (NULL, "983465DB21439422"),
+				 "6C7EE1B8621CC013"), "7D0908A0EE9A8BFB");
 
-  return ( 0 );
-} /* main */
+  return (0);
+}				/* main */

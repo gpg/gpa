@@ -1,3 +1,7 @@
+2000-05-16 19:53:49  Werner Koch  (wk@habibti.openit.de)
+
+  Ran "indent -gnu -sc" on all source files.
+
 2000-05-16 17:38:06  Werner Koch  (wk@habibti.openit.de)
 
   * gpapaintern.c (gpapa_call_gnupg) [MINGW32]: Some stuff works now.

@@ -24,31 +24,35 @@
 #include <glib.h>
 #include "gpapatypedefs.h"
 
-typedef struct {
+typedef struct
+{
   gchar *identifier;
   gchar *KeyID, *UserID;
   GDate *CreationDate;
   GpapaSigValidity validity;
-} GpapaSignature;
+}
+GpapaSignature;
 
-extern GpapaSignature *gpapa_signature_new (
-  gchar *keyID, GpapaCallbackFunc callback, gpointer calldata
-);
+extern GpapaSignature *gpapa_signature_new (gchar * keyID,
+					    GpapaCallbackFunc callback,
+					    gpointer calldata);
 
-extern gchar *gpapa_signature_get_identifier (
-  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
-);
+extern gchar *gpapa_signature_get_identifier (GpapaSignature * signature,
+					      GpapaCallbackFunc callback,
+					      gpointer calldata);
 
-extern gchar *gpapa_signature_get_name (
-  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
-);
+extern gchar *gpapa_signature_get_name (GpapaSignature * signature,
+					GpapaCallbackFunc callback,
+					gpointer calldata);
 
-extern GpapaSigValidity gpapa_signature_get_validity (
-  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
-);
+extern GpapaSigValidity gpapa_signature_get_validity (GpapaSignature *
+						      signature,
+						      GpapaCallbackFunc
+						      callback,
+						      gpointer calldata);
 
-extern void gpapa_signature_release (
-  GpapaSignature *signature, GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_signature_release (GpapaSignature * signature,
+				     GpapaCallbackFunc callback,
+				     gpointer calldata);
 
 #endif /* __GPAPASIGNATURE_H__ */

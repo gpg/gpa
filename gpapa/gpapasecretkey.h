@@ -24,32 +24,36 @@
 #include <glib.h>
 #include "gpapatypedefs.h"
 
-typedef struct {
+typedef struct
+{
   GpapaKey *key;
-} GpapaSecretKey;
+}
+GpapaSecretKey;
 
-typedef struct {
+typedef struct
+{
   GpapaSecretKey *key;
   GpapaCallbackFunc callback;
   gpointer calldata;
-} SecretKeyData;
+}
+SecretKeyData;
 
-extern void gpapa_secret_key_set_passphrase (
-  GpapaSecretKey *key, gchar *passphrase,
-  GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_secret_key_set_passphrase (GpapaSecretKey * key,
+					     gchar * passphrase,
+					     GpapaCallbackFunc callback,
+					     gpointer calldata);
 
-extern void gpapa_secret_key_export (
-  GpapaSecretKey *key, gchar *targetFileID, GpapaArmor Armor,
-  GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_secret_key_export (GpapaSecretKey * key,
+				     gchar * targetFileID, GpapaArmor Armor,
+				     GpapaCallbackFunc callback,
+				     gpointer calldata);
 
-extern void gpapa_secret_key_delete (
-  GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_secret_key_delete (GpapaSecretKey * key,
+				     GpapaCallbackFunc callback,
+				     gpointer calldata);
 
-extern void gpapa_secret_key_create_revocation (
-  GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_secret_key_create_revocation (GpapaSecretKey * key,
+						GpapaCallbackFunc callback,
+						gpointer calldata);
 
 #endif /* __GPAPASECRETKEY_H__ */

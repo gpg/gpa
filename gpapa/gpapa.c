@@ -40,439 +40,425 @@ gchar *global_keyServer;
 
 static GList *PubRing = NULL, *SecRing = NULL;
 
-GDate *extract_date ( gchar *buffer )
+GDate *
+extract_date (gchar * buffer)
 {
   char *p, *year, *month, *day;
-  if ( buffer == NULL )
-    return ( NULL );
+  if (buffer == NULL)
+    return (NULL);
   p = buffer;
   year = p;
-  while ( *p >= '0' && *p <= '9' )
+  while (*p >= '0' && *p <= '9')
     p++;
-  if ( *p )
+  if (*p)
     {
       *p = 0;
       p++;
     }
   month = p;
-  while ( *p >= '0' && *p <= '9' )
+  while (*p >= '0' && *p <= '9')
     p++;
-  if ( *p )
+  if (*p)
     {
       *p = 0;
       p++;
     }
   day = p;
-  if ( year && *year && month && *month && day && *day )
-    return ( g_date_new_dmy ( atoi ( day ), atoi ( month ), atoi ( year ) ) );
+  if (year && *year && month && *month && day && *day)
+    return (g_date_new_dmy (atoi (day), atoi (month), atoi (year)));
   else
-    return ( NULL );
-} /* extract_date */
+    return (NULL);
+}				/* extract_date */
 
-static GpapaKey *extract_key (
-  gchar *line,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  gchar *field [ GPAPA_MAX_GPG_KEY_FIELDS ];
+static GpapaKey *
+extract_key (gchar * line, GpapaCallbackFunc callback, gpointer calldata)
+{
+  gchar *field[GPAPA_MAX_GPG_KEY_FIELDS];
   gchar *p = line;
   gint i = 0;
   gint fields;
 
-  while ( *p )
+  while (*p)
     {
-      field [ i ] = p;
-      while ( *p && *p != ':' )
+      field[i] = p;
+      while (*p && *p != ':')
 	p++;
-      if ( *p == ':' )
+      if (*p == ':')
 	{
 	  *p = 0;
 	  p++;
 	}
       i++;
-      if ( i >= GPAPA_MAX_GPG_KEY_FIELDS )
-	callback ( GPAPA_ACTION_ERROR,
-		   "too many fields in GPG colon output",
-		    calldata );
+      if (i >= GPAPA_MAX_GPG_KEY_FIELDS)
+	callback (GPAPA_ACTION_ERROR,
+		  "too many fields in GPG colon output", calldata);
     }
   fields = i;
-  if ( fields != 10 )
+  if (fields != 10)
     {
-     #ifdef __MINGW32__
-        fprintf (stderr,"colon line=%s'\n", line );
-     #endif
-    
-      callback ( GPAPA_ACTION_ERROR,
-		 "invalid number of fields in GPG colon output",
-		 calldata );
-      return ( NULL );
+#ifdef __MINGW32__
+      fprintf (stderr, "colon line=%s'\n", line);
+#endif
+
+      callback (GPAPA_ACTION_ERROR,
+		"invalid number of fields in GPG colon output", calldata);
+      return (NULL);
     }
   else
     {
-      GpapaKey *key = gpapa_key_new ( field [ 7 ], callback, calldata );
-      key -> KeyTrust = field [ 1 ] [ 0 ];
-      key -> bits = atoi ( field [ 2 ] );
-      key -> algorithm = atoi ( field [ 3 ] );
-      key -> KeyID = xstrdup ( field [ 4 ] );
-      key -> CreationDate = extract_date ( field [ 5 ] );
-      key -> ExpirationDate = extract_date ( field [ 6 ] );
-      key -> OwnerTrust = field [ 8 ] [ 0 ];
-      key -> UserID = xstrdup ( field [ 9 ] );
-      return ( key );
+      GpapaKey *key = gpapa_key_new (field[7], callback, calldata);
+      key->KeyTrust = field[1][0];
+      key->bits = atoi (field[2]);
+      key->algorithm = atoi (field[3]);
+      key->KeyID = xstrdup (field[4]);
+      key->CreationDate = extract_date (field[5]);
+      key->ExpirationDate = extract_date (field[6]);
+      key->OwnerTrust = field[8][0];
+      key->UserID = xstrdup (field[9]);
+      return (key);
     }
-} /* extract_key */
+}				/* extract_key */
 
-static void linecallback_refresh_pub (
-  gchar *line, gpointer data, gboolean status
-) {
+static void
+linecallback_refresh_pub (gchar * line, gpointer data, gboolean status)
+{
   PublicKeyData *d = data;
-  if ( line && strncmp ( line, "pub", 3 ) == 0 )
+  if (line && strncmp (line, "pub", 3) == 0)
     {
-      GpapaPublicKey *key = (GpapaPublicKey *) xmalloc ( sizeof ( GpapaPublicKey ) );
-      memset ( key, 0, sizeof ( GpapaPublicKey ) );
-      key -> key = extract_key ( line, d -> callback, d -> calldata );
-      PubRing = g_list_append ( PubRing, key );
+      GpapaPublicKey *key =
+	(GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
+      memset (key, 0, sizeof (GpapaPublicKey));
+      key->key = extract_key (line, d->callback, d->calldata);
+      PubRing = g_list_append (PubRing, key);
     }
-} /* linecallback_refresh_pub */
+}				/* linecallback_refresh_pub */
 
-void gpapa_refresh_public_keyring (
-  GpapaCallbackFunc callback, gpointer calldata
-) {
+void
+gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
+{
   PublicKeyData data = { NULL, callback, calldata };
-  char *gpgargv [ 3 ];
-  if ( PubRing != NULL )
+  char *gpgargv[3];
+  if (PubRing != NULL)
     {
-      g_list_free ( PubRing );
+      g_list_free (PubRing);
       PubRing = NULL;
     }
-  gpgargv [ 0 ] = "--list-keys";
-  gpgargv [ 1 ] = "--with-colons";
-  gpgargv [ 2 ] = NULL;
-  gpapa_call_gnupg (
-    gpgargv, TRUE, NULL, NULL,
-    linecallback_refresh_pub, &data,
-    callback, calldata
-  );
-} /* gpapa_refresh_public_keyring */
+  gpgargv[0] = "--list-keys";
+  gpgargv[1] = "--with-colons";
+  gpgargv[2] = NULL;
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+		    linecallback_refresh_pub, &data, callback, calldata);
+}				/* gpapa_refresh_public_keyring */
 
-gint gpapa_get_public_key_count (
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  gpapa_refresh_public_keyring ( callback, calldata );
-  return ( g_list_length ( PubRing ) );
-} /* gpapa_get_public_key_count */
+gint
+gpapa_get_public_key_count (GpapaCallbackFunc callback, gpointer calldata)
+{
+  gpapa_refresh_public_keyring (callback, calldata);
+  return (g_list_length (PubRing));
+}				/* gpapa_get_public_key_count */
 
-GpapaPublicKey *gpapa_get_public_key_by_index (
-  gint idx, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( PubRing == NULL )
-    gpapa_refresh_public_keyring ( callback, calldata );
-  return ( g_list_nth_data ( PubRing, idx ) );
-} /* gpapa_get_public_key_by_index */
+GpapaPublicKey *
+gpapa_get_public_key_by_index (gint idx, GpapaCallbackFunc callback,
+			       gpointer calldata)
+{
+  if (PubRing == NULL)
+    gpapa_refresh_public_keyring (callback, calldata);
+  return (g_list_nth_data (PubRing, idx));
+}				/* gpapa_get_public_key_by_index */
 
-static void linecallback_id_pub (
-  gchar *line, gpointer data, gboolean status
-) {
+static void
+linecallback_id_pub (gchar * line, gpointer data, gboolean status)
+{
   PublicKeyData *d = data;
-  if ( line && strncmp ( line, "pub", 3 ) == 0 )
+  if (line && strncmp (line, "pub", 3) == 0)
     {
-      d -> key = (GpapaPublicKey *) xmalloc ( sizeof ( GpapaPublicKey ) );
-      memset ( d -> key, 0, sizeof ( GpapaPublicKey ) );
-      d -> key -> key = extract_key ( line, d -> callback, d -> calldata );
+      d->key = (GpapaPublicKey *) xmalloc (sizeof (GpapaPublicKey));
+      memset (d->key, 0, sizeof (GpapaPublicKey));
+      d->key->key = extract_key (line, d->callback, d->calldata);
     }
-} /* linecallback_id_pub */
+}				/* linecallback_id_pub */
 
-GpapaPublicKey *gpapa_get_public_key_by_ID (
-  gchar *keyID, GpapaCallbackFunc callback, gpointer calldata
-) {
+GpapaPublicKey *
+gpapa_get_public_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
+			    gpointer calldata)
+{
   PublicKeyData data = { NULL, callback, calldata };
-  char *gpgargv [ 4 ];
-  char *id = xstrcat2 ( "0x", keyID );
-  gpgargv [ 0 ] = "--list-keys";
-  gpgargv [ 1 ] = "--with-colons";
-  gpgargv [ 2 ] = id;
-  gpgargv [ 3 ] = NULL;
-  gpapa_call_gnupg (
-    gpgargv, TRUE, NULL, NULL,
-    linecallback_id_pub, &data,
-    callback, calldata
-  );
-  free ( id );
-  return ( data.key );
-} /* gpapa_get_public_key_by_ID */
+  char *gpgargv[4];
+  char *id = xstrcat2 ("0x", keyID);
+  gpgargv[0] = "--list-keys";
+  gpgargv[1] = "--with-colons";
+  gpgargv[2] = id;
+  gpgargv[3] = NULL;
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+		    linecallback_id_pub, &data, callback, calldata);
+  free (id);
+  return (data.key);
+}				/* gpapa_get_public_key_by_ID */
 
-GpapaPublicKey *gpapa_receive_public_key_from_server (
-  gchar *keyID, gchar *ServerName, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( keyID && ServerName )
+GpapaPublicKey *
+gpapa_receive_public_key_from_server (gchar * keyID, gchar * ServerName,
+				      GpapaCallbackFunc callback,
+				      gpointer calldata)
+{
+  if (keyID && ServerName)
     {
-      char *gpgargv [ 5 ];
-      char *id = xstrcat2 ( "0x", keyID );
-      gpgargv [ 0 ] = "--keyserver";
-      gpgargv [ 1 ] = ServerName;
-      gpgargv [ 2 ] = "--recv-keys";
-      gpgargv [ 3 ] = id;
-      gpgargv [ 4 ] = NULL;
-      gpapa_call_gnupg (
-        gpgargv, TRUE, NULL, NULL,
-        gpapa_linecallback_dummy, NULL,
-        callback, calldata
-      );
-      free ( id );
-      gpapa_refresh_public_keyring ( callback, calldata );
+      char *gpgargv[5];
+      char *id = xstrcat2 ("0x", keyID);
+      gpgargv[0] = "--keyserver";
+      gpgargv[1] = ServerName;
+      gpgargv[2] = "--recv-keys";
+      gpgargv[3] = id;
+      gpgargv[4] = NULL;
+      gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+			gpapa_linecallback_dummy, NULL, callback, calldata);
+      free (id);
+      gpapa_refresh_public_keyring (callback, calldata);
     }
-  return ( gpapa_get_public_key_by_ID ( keyID, callback, calldata ) );
-} /* gpapa_receive_public_key_from_server */
+  return (gpapa_get_public_key_by_ID (keyID, callback, calldata));
+}				/* gpapa_receive_public_key_from_server */
 
 /* This is intentionally a global function, not a method of
  * GpapaPublicKey.
  */
-void gpapa_release_public_key (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-) {
+void
+gpapa_release_public_key (GpapaPublicKey * key, GpapaCallbackFunc callback,
+			  gpointer calldata)
+{
   /* Do nothing.
    * Public keys will be released with the PubRing.
    */
-} /* gpapa_release_public_key */
+}				/* gpapa_release_public_key */
 
-static void linecallback_refresh_sec (
-  gchar *line, gpointer data, gboolean status
-) {
+static void
+linecallback_refresh_sec (gchar * line, gpointer data, gboolean status)
+{
   SecretKeyData *d = data;
-  if ( line && strncmp ( line, "sec", 3 ) == 0 )
+  if (line && strncmp (line, "sec", 3) == 0)
     {
-      GpapaSecretKey *key = (GpapaSecretKey *) xmalloc ( sizeof ( GpapaSecretKey ) );
-      memset ( key, 0, sizeof ( GpapaSecretKey ) );
-      key -> key = extract_key ( line, d -> callback, d -> calldata );
-      SecRing = g_list_append ( SecRing, key );
+      GpapaSecretKey *key =
+	(GpapaSecretKey *) xmalloc (sizeof (GpapaSecretKey));
+      memset (key, 0, sizeof (GpapaSecretKey));
+      key->key = extract_key (line, d->callback, d->calldata);
+      SecRing = g_list_append (SecRing, key);
     }
-} /* linecallback_refresh_sec */
+}				/* linecallback_refresh_sec */
 
-void gpapa_refresh_secret_keyring (
-  GpapaCallbackFunc callback, gpointer calldata
-) {
+void
+gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
+{
   SecretKeyData data = { NULL, callback, calldata };
-  char *gpgargv [ 3 ];
-  if ( SecRing != NULL )
+  char *gpgargv[3];
+  if (SecRing != NULL)
     {
-      g_list_free ( SecRing );
+      g_list_free (SecRing);
       SecRing = NULL;
     }
-  gpgargv [ 0 ] = "--list-secret-keys";
-  gpgargv [ 1 ] = "--with-colons";
-  gpgargv [ 2 ] = NULL;
-  gpapa_call_gnupg (
-    gpgargv, TRUE, NULL, NULL,
-    linecallback_refresh_sec, &data,
-    callback, calldata
-  );
-} /* gpapa_refresh_secret_keyring */
+  gpgargv[0] = "--list-secret-keys";
+  gpgargv[1] = "--with-colons";
+  gpgargv[2] = NULL;
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+		    linecallback_refresh_sec, &data, callback, calldata);
+}				/* gpapa_refresh_secret_keyring */
 
-gint gpapa_get_secret_key_count (
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  gpapa_refresh_secret_keyring ( callback, calldata );
-  return ( g_list_length ( SecRing ) );
-} /* gpapa_get_secret_key_count */
+gint
+gpapa_get_secret_key_count (GpapaCallbackFunc callback, gpointer calldata)
+{
+  gpapa_refresh_secret_keyring (callback, calldata);
+  return (g_list_length (SecRing));
+}				/* gpapa_get_secret_key_count */
 
-GpapaSecretKey *gpapa_get_secret_key_by_index (
-  gint idx, GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( SecRing == NULL )
-    gpapa_refresh_secret_keyring ( callback, calldata );
-  return ( g_list_nth_data ( SecRing, idx ) );
-} /* gpapa_get_secret_key_by_index */
+GpapaSecretKey *
+gpapa_get_secret_key_by_index (gint idx, GpapaCallbackFunc callback,
+			       gpointer calldata)
+{
+  if (SecRing == NULL)
+    gpapa_refresh_secret_keyring (callback, calldata);
+  return (g_list_nth_data (SecRing, idx));
+}				/* gpapa_get_secret_key_by_index */
 
-static void linecallback_id_sec (
-  gchar *line, gpointer data, gboolean status
-) {
+static void
+linecallback_id_sec (gchar * line, gpointer data, gboolean status)
+{
   SecretKeyData *d = data;
-  if ( line && strncmp ( line, "sec", 3 ) == 0 )
+  if (line && strncmp (line, "sec", 3) == 0)
     {
-      d -> key = (GpapaSecretKey *) xmalloc ( sizeof ( GpapaSecretKey ) );
-      memset ( d -> key, 0, sizeof ( GpapaSecretKey ) );
-      d -> key -> key = extract_key ( line, d -> callback, d -> calldata );
+      d->key = (GpapaSecretKey *) xmalloc (sizeof (GpapaSecretKey));
+      memset (d->key, 0, sizeof (GpapaSecretKey));
+      d->key->key = extract_key (line, d->callback, d->calldata);
     }
-} /* linecallback_id_sec */
+}				/* linecallback_id_sec */
 
-GpapaSecretKey *gpapa_get_secret_key_by_ID (
-  gchar *keyID, GpapaCallbackFunc callback, gpointer calldata
-) {
+GpapaSecretKey *
+gpapa_get_secret_key_by_ID (gchar * keyID, GpapaCallbackFunc callback,
+			    gpointer calldata)
+{
   SecretKeyData data = { NULL, callback, calldata };
-  char *gpgargv [ 4 ];
-  char *id = xstrcat2 ( "0x", keyID );
-  gpgargv [ 0 ] = "--list-secret-keys";
-  gpgargv [ 1 ] = "--with-colons";
-  gpgargv [ 2 ] = id;
-  gpgargv [ 3 ] = NULL;
-  gpapa_call_gnupg (
-    gpgargv, TRUE, NULL, NULL,
-    linecallback_id_sec, &data,
-    callback, calldata
-  );
-  free ( id );
-  return ( data.key );
-} /* gpapa_get_secret_key_by_ID */
+  char *gpgargv[4];
+  char *id = xstrcat2 ("0x", keyID);
+  gpgargv[0] = "--list-secret-keys";
+  gpgargv[1] = "--with-colons";
+  gpgargv[2] = id;
+  gpgargv[3] = NULL;
+  gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL,
+		    linecallback_id_sec, &data, callback, calldata);
+  free (id);
+  return (data.key);
+}				/* gpapa_get_secret_key_by_ID */
 
-void gpapa_release_secret_key (
-  GpapaSecretKey *key, GpapaCallbackFunc callback, gpointer calldata
-) {
+void
+gpapa_release_secret_key (GpapaSecretKey * key, GpapaCallbackFunc callback,
+			  gpointer calldata)
+{
   /* Do nothing.
    * Secret keys will be released with the SecRing.
    */
-} /* gpapa_release_secret_key */
+}				/* gpapa_release_secret_key */
 
-void gpapa_create_key_pair (
-  GpapaPublicKey **publicKey, GpapaSecretKey **secretKey,
-  gchar *passphrase, GpapaAlgo anAlgo, gint aKeysize,
-  gchar *aUserID, gchar *anEmail, gchar *aComment,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-g_print ( "Generate a new key pair.\n" );
-} /* gpapa_create_key_pair */
+void
+gpapa_create_key_pair (GpapaPublicKey ** publicKey,
+		       GpapaSecretKey ** secretKey, gchar * passphrase,
+		       GpapaAlgo anAlgo, gint aKeysize, gchar * aUserID,
+		       gchar * anEmail, gchar * aComment,
+		       GpapaCallbackFunc callback, gpointer calldata)
+{
+  g_print ("Generate a new key pair.\n");
+}				/* gpapa_create_key_pair */
 
-static void linecallback_export_ownertrust (
-  gchar *line, gpointer data, gboolean status
-) {
+static void
+linecallback_export_ownertrust (gchar * line, gpointer data, gboolean status)
+{
   FILE *stream = data;
-  if ( stream && line );
-    fprintf ( stream, "%s\n", line );
-} /* linecallback_export_ownertrust */
+  if (stream && line);
+  fprintf (stream, "%s\n", line);
+}				/* linecallback_export_ownertrust */
 
-void gpapa_export_ownertrust (
-  gchar *targetFileID, GpapaArmor Armor,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( ! targetFileID )
-    callback ( GPAPA_ACTION_ERROR, "target file not specified", calldata );
+void
+gpapa_export_ownertrust (gchar * targetFileID, GpapaArmor Armor,
+			 GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (!targetFileID)
+    callback (GPAPA_ACTION_ERROR, "target file not specified", calldata);
   else
     {
-      FILE *stream = fopen ( targetFileID, "w" );
-      if ( ! stream )
-        callback ( GPAPA_ACTION_ERROR, "could not open target file for writing", calldata );
+      FILE *stream = fopen (targetFileID, "w");
+      if (!stream)
+	callback (GPAPA_ACTION_ERROR,
+		  "could not open target file for writing", calldata);
       else
-        {
-          char *gpgargv [ 3 ];
-          int i = 0;
-          if ( Armor == GPAPA_ARMOR )
-	    gpgargv [ i++ ] = "--armor";
-          gpgargv [ i++ ] = "--export-ownertrust";
-          gpgargv [ i ] = NULL;
-          gpapa_call_gnupg
-	    (
-	      gpgargv, TRUE, NULL, NULL,
-	      linecallback_export_ownertrust, stream,
-	      callback, calldata
-	    );
-          fclose ( stream );
-        }
+	{
+	  char *gpgargv[3];
+	  int i = 0;
+	  if (Armor == GPAPA_ARMOR)
+	    gpgargv[i++] = "--armor";
+	  gpgargv[i++] = "--export-ownertrust";
+	  gpgargv[i] = NULL;
+	  gpapa_call_gnupg
+	    (gpgargv, TRUE, NULL, NULL,
+	     linecallback_export_ownertrust, stream, callback, calldata);
+	  fclose (stream);
+	}
     }
-} /* gpapa_export_ownertrust */
+}				/* gpapa_export_ownertrust */
 
-void gpapa_import_ownertrust (
-  gchar *sourceFileID,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( ! sourceFileID )
-    callback ( GPAPA_ACTION_ERROR, "source file not specified", calldata );
+void
+gpapa_import_ownertrust (gchar * sourceFileID,
+			 GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (!sourceFileID)
+    callback (GPAPA_ACTION_ERROR, "source file not specified", calldata);
   else
     {
-      char *gpgargv [ 3 ];
-      gpgargv [ 0 ] = "--import-ownertrust";
-      gpgargv [ 1 ] = sourceFileID;
-      gpgargv [ 2 ] = NULL;
+      char *gpgargv[3];
+      gpgargv[0] = "--import-ownertrust";
+      gpgargv[1] = sourceFileID;
+      gpgargv[2] = NULL;
       gpapa_call_gnupg
-        (
-          gpgargv, TRUE, NULL, NULL,
-          gpapa_linecallback_dummy, NULL,
-          callback, calldata
-        );
+	(gpgargv, TRUE, NULL, NULL,
+	 gpapa_linecallback_dummy, NULL, callback, calldata);
     }
-} /* gpapa_import_ownertrust */
+}				/* gpapa_import_ownertrust */
 
-void gpapa_update_trust_database (
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  char *gpgargv [ 2 ];
-  gpgargv [ 0 ] = "--update-trustdb";
-  gpgargv [ 1 ] = NULL;
+void
+gpapa_update_trust_database (GpapaCallbackFunc callback, gpointer calldata)
+{
+  char *gpgargv[2];
+  gpgargv[0] = "--update-trustdb";
+  gpgargv[1] = NULL;
   gpapa_call_gnupg
-    (
-      gpgargv, TRUE, NULL, NULL,
-      gpapa_linecallback_dummy, NULL,
-      callback, calldata
-    );
-} /* gpapa_update_trust_database */
+    (gpgargv, TRUE, NULL, NULL,
+     gpapa_linecallback_dummy, NULL, callback, calldata);
+}				/* gpapa_update_trust_database */
 
-void gpapa_import_keys (
-  gchar *sourceFileID,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-  if ( ! sourceFileID )
-    callback ( GPAPA_ACTION_ERROR, "source file not specified", calldata );
+void
+gpapa_import_keys (gchar * sourceFileID,
+		   GpapaCallbackFunc callback, gpointer calldata)
+{
+  if (!sourceFileID)
+    callback (GPAPA_ACTION_ERROR, "source file not specified", calldata);
   else
     {
-      char *gpgargv [ 3 ];
-      gpgargv [ 0 ] = "--import";
-      gpgargv [ 1 ] = sourceFileID;
-      gpgargv [ 2 ] = NULL;
+      char *gpgargv[3];
+      gpgargv[0] = "--import";
+      gpgargv[1] = sourceFileID;
+      gpgargv[2] = NULL;
       gpapa_call_gnupg
-        (
-          gpgargv, TRUE, NULL, NULL,
-          gpapa_linecallback_dummy, NULL,
-          callback, calldata
-        );
+	(gpgargv, TRUE, NULL, NULL,
+	 gpapa_linecallback_dummy, NULL, callback, calldata);
     }
-} /* gpapa_import_keys */
+}				/* gpapa_import_keys */
 
 /* Options.
  */
 
-void gpapa_load_options (
-  gchar *optionsFileID,
-  gchar **keyServer, GList **defaultRecipients, gchar **defaultKey,
-  gchar **homeDirectory,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-g_print ( "Load options from file " ); /*!!!*/
-g_print ( optionsFileID ); /*!!!*/
-g_print ( "\n" ); /*!!!*/
-} /* gpapa_load_options */
+void
+gpapa_load_options (gchar * optionsFileID,
+		    gchar ** keyServer, GList ** defaultRecipients,
+		    gchar ** defaultKey, gchar ** homeDirectory,
+		    GpapaCallbackFunc callback, gpointer calldata)
+{
+  g_print ("Load options from file ");	/*!!! */
+  g_print (optionsFileID);	/*!!! */
+  g_print ("\n");		/*!!! */
+}				/* gpapa_load_options */
 
-void gpapa_save_options (
-  gchar *optionsFileID,
-  gchar *keyServer, GList *defaultRecipients, gchar *defaultKey,
-  gchar *homeDirectory,
-  GpapaCallbackFunc callback, gpointer calldata
-) {
-g_print ( "Save options to file " ); /*!!!*/
-g_print ( optionsFileID ); /*!!!*/
-g_print ( "\n" ); /*!!!*/
-} /* gpapa_save_options */
+void
+gpapa_save_options (gchar * optionsFileID,
+		    gchar * keyServer, GList * defaultRecipients,
+		    gchar * defaultKey, gchar * homeDirectory,
+		    GpapaCallbackFunc callback, gpointer calldata)
+{
+  g_print ("Save options to file ");	/*!!! */
+  g_print (optionsFileID);	/*!!! */
+  g_print ("\n");		/*!!! */
+}				/* gpapa_save_options */
 
 /* Miscellaneous.
  */
 
-void gpapa_init ( void )
+void
+gpapa_init (void)
 {
   /* For the moment, do nothing.
    */
-} /* gpapa_init */
+}				/* gpapa_init */
 
-void gpapa_fini ( void )
+void
+gpapa_fini (void)
 {
-  if ( PubRing != NULL )
+  if (PubRing != NULL)
     {
-      g_list_free ( PubRing );
+      g_list_free (PubRing);
       PubRing = NULL;
     }
-  if ( SecRing != NULL )
+  if (SecRing != NULL)
     {
-      g_list_free ( SecRing );
+      g_list_free (SecRing);
       SecRing = NULL;
     }
-} /* gpapa_fini */
+}				/* gpapa_fini */
 
-void gpapa_idle ( void )
+void
+gpapa_idle (void)
 {
   /* In the future, we will call a non-blocking select() and
    * waitpid() here to read data from an open pipe and see
@@ -480,4 +466,4 @@ void gpapa_idle ( void )
    *
    * Right now, just do nothing.
    */
-} /* gpapa_idle */
+}				/* gpapa_idle */

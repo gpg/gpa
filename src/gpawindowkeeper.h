@@ -22,16 +22,16 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-typedef struct {
+typedef struct
+{
   GtkWidget *window;
   GList *listParam;
-} GpaWindowKeeper;
+}
+GpaWindowKeeper;
 
-extern GpaWindowKeeper *gpa_windowKeeper_new ( void );
-extern void gpa_windowKeeper_set_window (
-  GpaWindowKeeper *keeper, GtkWidget *window
-);
-extern void gpa_windowKeeper_add_param (
-  GpaWindowKeeper *keeper, gpointer param
-);
-extern void gpa_windowKeeper_release ( GpaWindowKeeper *keeper );
+extern GpaWindowKeeper *gpa_windowKeeper_new (void);
+extern void gpa_windowKeeper_set_window (GpaWindowKeeper * keeper,
+					 GtkWidget * window);
+extern void gpa_windowKeeper_add_param (GpaWindowKeeper * keeper,
+					gpointer param);
+extern void gpa_windowKeeper_release (GpaWindowKeeper * keeper);

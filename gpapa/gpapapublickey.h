@@ -25,76 +25,87 @@
 #include "gpapatypedefs.h"
 #include "gpapakey.h"
 
-typedef struct {
+typedef struct
+{
   GpapaKey *key;
   GList *uids, *sigs;
   gchar *fingerprint;
-} GpapaPublicKey;
+}
+GpapaPublicKey;
 
-typedef struct {
+typedef struct
+{
   GpapaPublicKey *key;
   GpapaCallbackFunc callback;
   gpointer calldata;
-} PublicKeyData;
+}
+PublicKeyData;
 
-typedef enum {
+typedef enum
+{
   GPAPA_OWNERTRUST_UNKNOWN,
   GPAPA_OWNERTRUST_DISTRUST,
   GPAPA_OWNERTRUST_MARGINALLY,
   GPAPA_OWNERTRUST_FULLY
-} GpapaOwnertrust;
+}
+GpapaOwnertrust;
 
 #define GPAPA_OWNERTRUST_FIRST GPAPA_OWNERTRUST_UNKNOWN
 #define GPAPA_OWNERTRUST_LAST GPAPA_OWNERTRUST_FULLY
 
-typedef enum {
+typedef enum
+{
   GPAPA_KEYTRUST_UNKNOWN,
   GPAPA_KEYTRUST_DISTRUST,
   GPAPA_KEYTRUST_MARGINALLY,
   GPAPA_KEYTRUST_FULLY
-} GpapaKeytrust;
+}
+GpapaKeytrust;
 
 #define GPAPA_KEYTRUST_FIRST GPAPA_KEYTRUST_UNKNOWN
 #define GPAPA_KEYTRUST_LAST GPAPA_KEYTRUST_FULLY
 
-extern gchar *gpapa_public_key_get_fingerprint (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern gchar *gpapa_public_key_get_fingerprint (GpapaPublicKey * key,
+						GpapaCallbackFunc callback,
+						gpointer calldata);
 
-extern GpapaKeytrust gpapa_public_key_get_keytrust (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern GpapaKeytrust gpapa_public_key_get_keytrust (GpapaPublicKey * key,
+						    GpapaCallbackFunc
+						    callback,
+						    gpointer calldata);
 
-extern GpapaOwnertrust gpapa_public_key_get_ownertrust (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern GpapaOwnertrust gpapa_public_key_get_ownertrust (GpapaPublicKey * key,
+							GpapaCallbackFunc
+							callback,
+							gpointer calldata);
 
-extern void gpapa_public_key_set_ownertrust (
-  GpapaPublicKey *key, GpapaOwnertrust trust,
-  GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_public_key_set_ownertrust (GpapaPublicKey * key,
+					     GpapaOwnertrust trust,
+					     GpapaCallbackFunc callback,
+					     gpointer calldata);
 
-extern GList *gpapa_public_key_get_signatures (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern GList *gpapa_public_key_get_signatures (GpapaPublicKey * key,
+					       GpapaCallbackFunc callback,
+					       gpointer calldata);
 
-extern void gpapa_public_key_export (
-  GpapaPublicKey *key, gchar *targetFileID, GpapaArmor Armor,
-  GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_public_key_export (GpapaPublicKey * key,
+				     gchar * targetFileID, GpapaArmor Armor,
+				     GpapaCallbackFunc callback,
+				     gpointer calldata);
 
-extern void gpapa_public_key_delete (
-  GpapaPublicKey *key, GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_public_key_delete (GpapaPublicKey * key,
+				     GpapaCallbackFunc callback,
+				     gpointer calldata);
 
-extern void gpapa_public_key_send_to_server (
-  GpapaPublicKey *key, gchar *ServerName, GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_public_key_send_to_server (GpapaPublicKey * key,
+					     gchar * ServerName,
+					     GpapaCallbackFunc callback,
+					     gpointer calldata);
 
-extern void gpapa_public_key_sign (
-  GpapaPublicKey *key, gchar *keyID, gchar *PassPhrase,
-  GpapaKeySignType SignType,
-  GpapaCallbackFunc callback, gpointer calldata
-);
+extern void gpapa_public_key_sign (GpapaPublicKey * key, gchar * keyID,
+				   gchar * PassPhrase,
+				   GpapaKeySignType SignType,
+				   GpapaCallbackFunc callback,
+				   gpointer calldata);
 
 #endif /* __GPAPAPUBLICKEY_H__ */

@@ -20,39 +20,31 @@
 
 #include <gtk/gtk.h>
 
-extern void gpa_window_destroy ( gpointer param );
-extern GtkWidget *gpa_space_new ( void );
-extern GtkWidget *gpa_widget_hjustified_new (
-  GtkWidget *widget, GtkJustification jtype
-);
-extern GtkWidget *gpa_button_new (
-  GtkAccelGroup *accelGroup, gchar *labelText
-);
-extern GtkWidget *gpa_buttonCancel_new (
-  GtkAccelGroup *accelGroup, gchar *labelText, gpointer *param
-);
-extern GtkWidget *gpa_check_button_new (
-  GtkAccelGroup *accelGroup, gchar *labelText
-);
-extern GtkWidget *gpa_radio_button_new (
-  GtkAccelGroup *accelGroup, gchar *labelText
-);
-extern GtkWidget *gpa_radio_button_new_from_widget (
-  GtkRadioButton *widget, GtkAccelGroup *accelGroup, gchar *labelText
-);
-extern GtkWidget *gpa_toggle_button_new (
-  GtkAccelGroup *accelGroup, gchar *labelText
-);
-extern void gpa_connect_by_accelerator (
-  GtkLabel *label, GtkWidget *widget,
-  GtkAccelGroup *accelGroup, gchar *labelText
-);
-extern void gpa_widget_set_centered ( GtkWidget *widget, GtkWidget *parent );
-extern void gpa_widget_show (
-  GtkWidget *widget, GtkWidget *parent, gchar *tip
-);
-extern void gpa_window_error ( gchar *message, GtkWidget *messenger );
-extern void gpa_window_message ( gchar *message, GtkWidget *messenger );
-extern void gpa_window_passphrase (
-  GtkWidget *messenger, GtkSignalFunc func, gchar *tip, gpointer data
-);
+extern void gpa_window_destroy (gpointer param);
+extern GtkWidget *gpa_space_new (void);
+extern GtkWidget *gpa_widget_hjustified_new (GtkWidget * widget,
+					     GtkJustification jtype);
+extern GtkWidget *gpa_button_new (GtkAccelGroup * accelGroup,
+				  gchar * labelText);
+extern GtkWidget *gpa_buttonCancel_new (GtkAccelGroup * accelGroup,
+					gchar * labelText, gpointer * param);
+extern GtkWidget *gpa_check_button_new (GtkAccelGroup * accelGroup,
+					gchar * labelText);
+extern GtkWidget *gpa_radio_button_new (GtkAccelGroup * accelGroup,
+					gchar * labelText);
+extern GtkWidget *gpa_radio_button_new_from_widget (GtkRadioButton * widget,
+						    GtkAccelGroup *
+						    accelGroup,
+						    gchar * labelText);
+extern GtkWidget *gpa_toggle_button_new (GtkAccelGroup * accelGroup,
+					 gchar * labelText);
+extern void gpa_connect_by_accelerator (GtkLabel * label, GtkWidget * widget,
+					GtkAccelGroup * accelGroup,
+					gchar * labelText);
+extern void gpa_widget_set_centered (GtkWidget * widget, GtkWidget * parent);
+extern void gpa_widget_show (GtkWidget * widget, GtkWidget * parent,
+			     gchar * tip);
+extern void gpa_window_error (gchar * message, GtkWidget * messenger);
+extern void gpa_window_message (gchar * message, GtkWidget * messenger);
+extern void gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func,
+				   gchar * tip, gpointer data);

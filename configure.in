@@ -11,8 +11,8 @@ AM_CONFIG_HEADER(config.h)
 dnl
 dnl The version number goes here
 dnl
-AM_INIT_AUTOMAKE(gpa,0.2.0)
-ALL_LINGUAS=""
+AM_INIT_AUTOMAKE(gpa,0.3.0)
+ALL_LINGUAS="de"
 
 dnl
 dnl Setup some stuff depending on host/target.
