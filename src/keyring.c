@@ -1009,6 +1009,7 @@ toolbar_edit_key (GtkWidget *widget, gpointer param)
 	{
 	  keyring_editor_fill_keylist (editor);
 	  update_selection_sensitive_widgets (editor);
+	  keyring_update_details_notebook (editor);
 	}
     }
 }
