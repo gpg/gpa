@@ -195,13 +195,13 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
   gtk_button_box_set_layout (GTK_BUTTON_BOX (button_box), GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (button_box), 0);
 
-  button = gtk_button_new_with_label (_("Prev"));
+  button = gtk_button_new_with_label (_("_Prev"));
   wizard->prev_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (gpa_wizard_prev), (gpointer) wizard);
   
-  button = gtk_button_new_with_label (_("Next"));
+  button = gtk_button_new_with_label (_("_Next"));
   wizard->next_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",

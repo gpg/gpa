@@ -450,11 +450,11 @@ gpa_keygen_wizard_run (GtkWidget * parent)
 
   keygen_wizard->wait_page = gpa_keygen_wizard_wait_page ();
   gpa_wizard_append_page (wizard, keygen_wizard->wait_page,
-			  NULL, NULL, NULL, NULL);
+			  NULL, _("F_inish"), NULL, NULL);
 
   keygen_wizard->final_page = gpa_keygen_wizard_final_page ();
   gpa_wizard_append_page (wizard, keygen_wizard->final_page,
-			  NULL, NULL, NULL, NULL);
+			  NULL, _("F_inish"), NULL, NULL);
 
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   gpa_window_show_centered (window, parent);

@@ -1,3 +1,11 @@
+2001-02-13  Thomas Koester  <tkoester@intevation.de>
+
+	* gtktools.c (gpa_window_error):
+	(gpa_window_message): Translate window titles.
+	* keygenwizard.c (gpa_keygen_wizard_run): Use "Finish" button
+ 	instead of "Next" on wait_page and final_page.
+	* gpawizard.c (gpa_wizard_new): Add accelerator to "Next" and "Prev"
+
 2001-02-13  Bernhard Herzog  <bh@intevation.de>
 
 	* Makefile.am (install-data-local):

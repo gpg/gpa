@@ -310,7 +310,7 @@ gpa_window_error (gchar * message, GtkWidget * messenger)
   keeper = gpa_windowKeeper_new ();
   windowError = gtk_window_new (GTK_WINDOW_DIALOG);
   gpa_windowKeeper_set_window (keeper, windowError);
-  gtk_window_set_title (GTK_WINDOW (windowError), "GPA Error");
+  gtk_window_set_title (GTK_WINDOW (windowError), _("GPA Error"));
   gtk_window_set_modal (GTK_WINDOW (windowError), TRUE);
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowError), accelGroup);
@@ -349,7 +349,7 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
   keeper = gpa_windowKeeper_new ();
   windowMessage = gtk_window_new (GTK_WINDOW_DIALOG);
   gpa_windowKeeper_set_window (keeper, windowMessage);
-  gtk_window_set_title (GTK_WINDOW (windowMessage), "GPA Message");
+  gtk_window_set_title (GTK_WINDOW (windowMessage), _("GPA Message"));
   gtk_window_set_modal (GTK_WINDOW (windowMessage), TRUE);
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowMessage), accelGroup);
