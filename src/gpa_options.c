@@ -21,6 +21,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
+#include "gpa_gtktools.h"
 
 #include <stdio.h> /*!!!*/
 
@@ -97,7 +98,6 @@ g_print ( _( "Set key server\n" ) ); /*!!!*/
 void options_keyserver ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowServer;
     GtkWidget *vboxServer;
@@ -117,14 +117,11 @@ void options_keyserver ( void ) {
   hboxServer = gtk_hbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxServer), 5 );
   labelServer = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelServer ), "_Key server: "
-  );
   gtk_box_pack_start ( GTK_BOX ( hboxServer ), labelServer, FALSE, FALSE, 0 );
   comboServer = gtk_combo_new ();
-  gtk_widget_add_accelerator (
-    GTK_COMBO ( comboServer ) -> entry, "grab_focus", accelGroup, accelKey,
-    GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelServer ), GTK_COMBO ( comboServer ) -> entry,
+    accelGroup, _( "_Key server: " )
   );
   gtk_combo_set_value_in_list ( GTK_COMBO ( comboServer ), FALSE, FALSE );
   gtk_box_pack_start ( GTK_BOX ( hboxServer ), comboServer, TRUE, TRUE, 0 );
@@ -148,12 +145,12 @@ void options_keyserver ( void ) {
   );
   gtk_container_add ( GTK_CONTAINER ( windowServer ), vboxServer );
   gtk_widget_show_all ( windowServer );
+  gpa_widget_set_centered ( windowServer, windowMain );
 } /* options_keyserver */
 
 void options_recipients ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowRecipients;
     GtkWidget *vboxRecipients;
@@ -185,9 +182,6 @@ void options_recipients ( void ) {
   vboxDefault = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxDefault ), 5 );
   labelDefault = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelDefault ), _( "_Recipients" )
-  );
   labelJfdDefault = gpa_widget_hjustified_new (
     labelDefault, GTK_JUSTIFY_LEFT
   );
@@ -197,8 +191,8 @@ void options_recipients ( void ) {
   scrollerDefault = gtk_scrolled_window_new ( NULL, NULL );
   gtk_widget_set_usize ( scrollerDefault, 200, 140 );
   clistDefault = gtk_clist_new ( 1 );
-  gtk_widget_add_accelerator (
-    clistDefault, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelDefault ), clistDefault, accelGroup, _( "_Recipients" )
   );
 gtk_clist_append ( GTK_CLIST ( clistDefault ), text ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistDefault ), text ); /*!!!*/
@@ -213,15 +207,12 @@ gtk_clist_append ( GTK_CLIST ( clistDefault ), text ); /*!!!*/
   vboxKeys = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxKeys ), 5 );
   labelKeys = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelKeys ), _( "_Public keys" )
-  );
   labelJfdKeys = gpa_widget_hjustified_new ( labelKeys, GTK_JUSTIFY_LEFT );
   gtk_box_pack_start ( GTK_BOX ( vboxKeys), labelJfdKeys, FALSE, FALSE, 0 );
   scrollerKeys = gtk_scrolled_window_new ( NULL, NULL );
   clistKeys = gtk_clist_new ( 1 );
-  gtk_widget_add_accelerator (
-    clistKeys, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelKeys ), clistKeys, accelGroup, _( "_Public keys" )
   );
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
@@ -253,6 +244,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   );
   gtk_container_add ( GTK_CONTAINER ( windowRecipients ), vboxRecipients );
   gtk_widget_show_all ( windowRecipients );
+  gpa_widget_set_centered ( windowRecipients, windowMain );
 } /* options_recipients */
 
 void options_key_set ( GtkWidget *windowKey ) {
@@ -263,7 +255,6 @@ g_print ( _( "Set Default Key\n" ) ); /*!!!*/
 void options_key ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowKey;
     GtkWidget *vboxKey;
@@ -283,11 +274,12 @@ void options_key ( void ) {
   hboxKey = gtk_hbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxKey ), 5 );
   labelKey = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelKey ), _( "Default _key: " )
-  );
   gtk_box_pack_start ( GTK_BOX ( hboxKey ), labelKey, FALSE, FALSE, 0 );
   comboKey = gtk_combo_new ();
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelKey ), GTK_COMBO ( comboKey ) -> entry,
+    accelGroup, _( "Default _key: " )
+  );
   gtk_box_pack_start ( GTK_BOX ( hboxKey ), comboKey, TRUE, TRUE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxKey ), hboxKey, TRUE, TRUE, 0 );
   hButtonBoxKey = gtk_hbutton_box_new ();
@@ -309,6 +301,7 @@ void options_key ( void ) {
   gtk_box_pack_start ( GTK_BOX ( vboxKey ), hButtonBoxKey, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowKey ), vboxKey );
   gtk_widget_show_all ( windowKey );
+  gpa_widget_set_centered ( windowKey, windowMain );
 } /* options_key */
 
 void options_homedir ( void ) {

@@ -20,7 +20,28 @@
 
 #include <gtk/gtk.h>
 
-GtkWidget *gpa_space_new ();
-GtkWidget *gpa_widget_hjustified_new (
+extern GtkWidget *gpa_space_new ( void );
+extern GtkWidget *gpa_widget_hjustified_new (
   GtkWidget *widget, GtkJustification jtype
 );
+extern GtkWidget *gpa_button_new ( GtkAccelGroup *accelGroup, gchar *labelText );
+extern GtkWidget *gpa_buttonCancel_new (
+  GtkWidget *window, GtkAccelGroup *accelGroup, gchar *labelText
+);
+extern GtkWidget *gpa_check_button_new (
+  GtkAccelGroup *accelGroup, gchar *labelText
+);
+extern GtkWidget *gpa_radio_button_new (
+  GtkAccelGroup *accelGroup, gchar *labelText
+);
+extern GtkWidget *gpa_radio_button_new_from_widget (
+  GtkRadioButton *widget, GtkAccelGroup *accelGroup, gchar *labelText
+);
+extern GtkWidget *gpa_toggle_button_new (
+  GtkAccelGroup *accelGroup, gchar *labelText
+);
+extern void gpa_connect_by_accelerator (
+  GtkLabel *label, GtkWidget *widget,
+  GtkAccelGroup *accelGroup, gchar *labelText
+);
+extern void gpa_widget_set_centered ( GtkWidget *widget, GtkWidget *parent );

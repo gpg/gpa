@@ -18,13 +18,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
                   
-void keys_openPublic ( void );
-void keys_openSecret ( void );
-void keys_open ( void );
-void keys_generateKey ( void );
-void keys_generateRevocation ( void );
-void keys_import ( void );
-void keys_importOwnertrust ( void );
-void keys_updateTrust ( void );
+extern void keys_openPublic ( void );
+extern void keys_openSecret ( void );
+extern void keys_open ( void );
+extern void keys_generateKey ( void );
+extern void keys_generateRevocation ( void );
+extern void keys_import ( void );
+extern void keys_importOwnertrust ( void );
+extern void keys_updateTrust ( void );
 
-void gpa_ringOpenSelect_init ( gchar* title );
+extern void gpa_ringOpenSelect_init ( gchar* title );

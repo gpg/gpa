@@ -19,7 +19,6 @@
  */
                   
 #include <config.h>
-#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
 #include "gpa_gtktools.h"
@@ -50,13 +49,15 @@ void gpa_fileOpenSelect_init ( char *title ) {
 } /* gpa_fileOpenSelect_init */
 
 void file_open ( void ) {
+  gtk_window_set_position (
+    GTK_WINDOW ( fileOpenSelect ), GTK_WIN_POS_CENTER
+  );
   gtk_widget_show ( fileOpenSelect );
 } /* file_open */
 
 void file_showDetail ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
   gchar *titlesSignatures [ 2 ] = { N_( "Signature" ), N_( "Validity" ) };
 /* objects */
   GtkWidget *windowDetail;
@@ -111,9 +112,6 @@ void file_showDetail ( void ) {
   vboxSignatures = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxSignatures ), 5 );
   labelSignatures = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelSignatures ), _( "_Signatures" )
-  );
   labelJfdSignatures = gpa_widget_hjustified_new (
     labelSignatures, GTK_JUSTIFY_LEFT
   );
@@ -122,8 +120,9 @@ void file_showDetail ( void ) {
   );
   scrollerSignatures = gtk_scrolled_window_new ( NULL, NULL );
   clistSignatures = gtk_clist_new_with_titles ( 2, titlesSignatures );
-  gtk_widget_add_accelerator (
-    clistSignatures, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelSignatures ), clistSignatures,
+    accelGroup, _( "_Signatures" )
   );
 gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
@@ -151,6 +150,7 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
   );
   gtk_container_add ( GTK_CONTAINER ( windowDetail ), vboxDetail );
   gtk_widget_show_all ( windowDetail );
+  gpa_widget_set_centered ( windowDetail, windowMain );
 } /* file_showDetail */
 
 void file_sign_sign ( GtkWidget *windowSign ) {
@@ -161,7 +161,6 @@ g_print ( _( "Sign a file\n" ) ); /*!!!*/
 void file_sign ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowSign;
     GtkWidget *vboxSign;
@@ -193,70 +192,43 @@ void file_sign ( void ) {
   gtk_container_set_border_width ( GTK_CONTAINER ( frameMode ), 5 );
   vboxMode = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxMode ), 5 );
-  radioSignComp = gtk_radio_button_new_with_label ( NULL, _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( radioSignComp ) -> child ), _( "si_gn and compress" )
-  );
-  gtk_widget_add_accelerator (
-    radioSignComp, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  radioSignComp = gpa_radio_button_new (
+    accelGroup, _( "si_gn and compress" )
   );
   gtk_box_pack_start ( GTK_BOX ( vboxMode ), radioSignComp, FALSE, FALSE, 0 );
-  radioSign = gtk_radio_button_new_with_label_from_widget ( 
-    GTK_RADIO_BUTTON ( radioSignComp ), _( "" )
-  );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( radioSign ) -> child ), _( "sign, do_n't compress" )
-  );
-  gtk_widget_add_accelerator (
-    radioSign, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  radioSign = gpa_radio_button_new_from_widget (
+    GTK_RADIO_BUTTON ( radioSignComp ), accelGroup,
+    _( "sign, do_n't compress" )
   );
   gtk_box_pack_start ( GTK_BOX ( vboxMode ), radioSign, FALSE, FALSE, 0 );
-  radioSignSep = gtk_radio_button_new_with_label_from_widget (
-    GTK_RADIO_BUTTON ( radioSignComp ), _( "" )
-  );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( radioSignSep ) -> child ),
+  radioSignSep = gpa_radio_button_new_from_widget (
+    GTK_RADIO_BUTTON ( radioSignComp  ), accelGroup,
     _( "sign in separate _file" )
-  );
-  gtk_widget_add_accelerator (
-    radioSignSep, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
   );
   gtk_box_pack_start ( GTK_BOX ( vboxMode ), radioSignSep, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( frameMode ), vboxMode );
   gtk_box_pack_start ( GTK_BOX ( vboxSign ), frameMode, FALSE, FALSE, 0 );
-  checkerArmor = gtk_check_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( checkerArmor ) -> child ), _( "A_rmor" )
-  );
-  gtk_widget_add_accelerator (
-    checkerArmor, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
-  );
+  checkerArmor = gpa_check_button_new ( accelGroup, _( "a_rmor" ) );
   gtk_container_set_border_width ( GTK_CONTAINER ( checkerArmor ), 5 );
   gtk_box_pack_start ( GTK_BOX ( vboxSign ), checkerArmor, FALSE, FALSE, 0 );
   tableWho = gtk_table_new ( 2, 2, FALSE );
   gtk_container_set_border_width ( GTK_CONTAINER ( tableWho ), 5 );
   labelWho = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelWho ), _( "Sign _as " )
-  );
   labelJfdWho = gpa_widget_hjustified_new ( labelWho, GTK_JUSTIFY_RIGHT );
   gtk_table_attach (
     GTK_TABLE ( tableWho ), labelJfdWho, 0, 1, 0, 1,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   comboWho = gtk_combo_new ();
-  gtk_widget_add_accelerator (
-    GTK_COMBO ( comboWho ) -> entry, "grab_focus", accelGroup, accelKey,
-    GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelWho ), GTK_COMBO ( comboWho ) -> entry,
+    accelGroup, _( "Sign _as " )
   );
   gtk_table_attach (
     GTK_TABLE ( tableWho ), comboWho, 1, 2, 0, 1,
     GTK_SHRINK, GTK_SHRINK, 0, 0
   );
   labelPasswd = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelPasswd ), _( "_Password: " )
-  );
   labelJfdPasswd = gpa_widget_hjustified_new (
     labelPasswd, GTK_JUSTIFY_RIGHT
   );
@@ -265,8 +237,8 @@ void file_sign ( void ) {
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   entryPasswd = gtk_entry_new ();
-  gtk_widget_add_accelerator (
-    entryPasswd, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelPasswd ), entryPasswd, accelGroup, _( "_Password: " )
   );
   gtk_entry_set_visibility ( GTK_ENTRY ( entryPasswd ), FALSE );
   entryJfdPasswd = gpa_widget_hjustified_new ( entryPasswd, GTK_JUSTIFY_LEFT );
@@ -294,6 +266,7 @@ void file_sign ( void ) {
   gtk_box_pack_start ( GTK_BOX ( vboxSign ), hButtonBoxSign, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowSign ), vboxSign );
   gtk_widget_show_all ( windowSign );
+  gpa_widget_set_centered ( windowSign, windowMain );
 } /* file_sign */
 
 void file_encrypt_detail_check ( void ) {
@@ -303,7 +276,6 @@ g_print ( _( "Check signature validities\n" ) ); /*!!!*/
 void file_encrypt_detail ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
   char *titlesSignatures [] = { N_( "Signature" ), N_( "valid" ) };
 /* objects */
   GtkWidget *windowSigs;
@@ -331,9 +303,6 @@ void file_encrypt_detail ( void ) {
   vboxSignatures = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxSignatures ), 5 );
   labelSignatures = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelSignatures ), _( "_Signatures" )
-  );
   labelJfdSignatures = gpa_widget_hjustified_new (
     labelSignatures, GTK_JUSTIFY_LEFT
   );
@@ -348,8 +317,9 @@ void file_encrypt_detail ( void ) {
   gtk_clist_set_column_justification (
     GTK_CLIST ( clistSignatures ), 1, GTK_JUSTIFY_CENTER
   );
-  gtk_widget_add_accelerator (
-    clistSignatures, "grab-focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelSignatures ), clistSignatures,
+    accelGroup, _( "_Signatures" )
   );
 gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
@@ -388,6 +358,7 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
   gtk_box_pack_start ( GTK_BOX ( vboxSigs ), hButtonBoxSigs, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowSigs ), vboxSigs );
   gtk_widget_show_all ( windowSigs );
+  gpa_widget_set_centered ( windowSigs, windowMain );
 } /* file_encrypt_detail */
 
 void file_encrypt_encrypt ( GtkWidget *windowEncrypt ) {
@@ -398,7 +369,6 @@ g_print ( _( "Encrypt a file\n" ) ); /*!!!*/
 void file_encrypt ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowEncrypt;
     GtkWidget *vboxEncrypt;
@@ -442,13 +412,8 @@ void file_encrypt ( void ) {
   tableRecKeys = gtk_table_new ( 2, 2, FALSE );
   vboxDefault = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxDefault ), 5 );
-  checkerDefault = gtk_check_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( checkerDefault ) -> child ),
-    _( "Add _default recipients:" )
-  );
-  gtk_widget_add_accelerator (
-    checkerDefault, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  checkerDefault = gpa_check_button_new (
+    accelGroup, _( "Add _default recipients:"  )
   );
   checkerJfdDefault = gpa_widget_hjustified_new (
     checkerDefault, GTK_JUSTIFY_LEFT
@@ -476,9 +441,6 @@ gtk_clist_append ( GTK_CLIST ( clistDefault ), text ); /*!!!*/
   vboxRecipients = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxRecipients ), 5 );
   labelRecipients = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelRecipients ), _( "Rec_ipients" )
-  );
   labelJfdRecipients = gpa_widget_hjustified_new (
     labelRecipients, GTK_JUSTIFY_LEFT
   );
@@ -491,8 +453,9 @@ gtk_clist_append ( GTK_CLIST ( clistDefault ), text ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistRecipients ), text ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistRecipients ), text ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistRecipients ), text ); /*!!!*/
-  gtk_widget_add_accelerator (
-    clistRecipients, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelRecipients ),
+    clistRecipients, accelGroup, _( "Rec_ipients" )
   );
   gtk_container_add ( GTK_CONTAINER ( scrollerRecipients ), clistRecipients );
   gtk_box_pack_start (
@@ -505,9 +468,6 @@ gtk_clist_append ( GTK_CLIST ( clistRecipients ), text ); /*!!!*/
   vboxKeys = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxKeys ), 5 );
   labelKeys = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelKeys ), _( "_Public keys" )
-  );
   labelJfdKeys = gpa_widget_hjustified_new ( labelKeys, GTK_JUSTIFY_LEFT );
   gtk_box_pack_start (
     GTK_BOX ( vboxKeys ), labelJfdKeys, FALSE, FALSE, 0
@@ -515,8 +475,8 @@ gtk_clist_append ( GTK_CLIST ( clistRecipients ), text ); /*!!!*/
   scrollerKeys = gtk_scrolled_window_new ( NULL, NULL );
   gtk_widget_set_usize ( scrollerKeys, 180, 200 );
   clistKeys = gtk_clist_new ( 1 );
-  gtk_widget_add_accelerator (
-    clistKeys, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelKeys ), clistKeys, accelGroup, _( "_Public keys" )
   );
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
@@ -552,31 +512,17 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxMisc ), 5 );
   hboxSaveAs = gtk_hbox_new ( FALSE, 0 );
   labelSaveAs = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelSaveAs ), _( "Save encrypted file _as: " )
-  );
   gtk_box_pack_start ( GTK_BOX ( hboxSaveAs ), labelSaveAs, FALSE, FALSE, 0 );
   entrySaveAs = gtk_entry_new ();
-  gtk_widget_add_accelerator (
-    entrySaveAs, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelSaveAs ), entrySaveAs,
+    accelGroup, _( "Save encrypted file _as: " )
   );
   gtk_box_pack_start ( GTK_BOX ( hboxSaveAs ), entrySaveAs, TRUE, TRUE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxMisc ), hboxSaveAs, FALSE, FALSE, 0 );
-  checkerSign = gtk_check_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( checkerSign ) -> child ), _( "_sign" )
-  );
-  gtk_widget_add_accelerator (
-    checkerSign, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
-  );
+  checkerSign = gpa_check_button_new ( accelGroup, _( "_sign" ) );
   gtk_box_pack_start ( GTK_BOX ( vboxMisc ), checkerSign, FALSE, FALSE, 0 );
-  checkerArmor = gtk_check_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( checkerArmor ) -> child ), _( "a_rmor" )
-  );
-  gtk_widget_add_accelerator (
-    checkerArmor, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
-  );
+  checkerArmor = gpa_check_button_new ( accelGroup, _( "a_rmor" ) );
   gtk_box_pack_start ( GTK_BOX ( vboxMisc ), checkerArmor, FALSE, FALSE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxEncrypt ), vboxMisc, FALSE, FALSE, 0 );
   hButtonBoxEncrypt = gtk_hbutton_box_new ();
@@ -600,6 +546,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   );
   gtk_container_add ( GTK_CONTAINER ( windowEncrypt ), vboxEncrypt );
   gtk_widget_show_all ( windowEncrypt );
+  gpa_widget_set_centered ( windowEncrypt, windowMain );
 } /* file_encrypt */
 
 void file_protect_protect ( GtkWidget *windowProtect ) {
@@ -610,7 +557,6 @@ g_print ( _( "Protect a file by Password\n" ) ); /*!!!*/
 void file_protect ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowProtect;
     GtkWidget *vboxProtect;
@@ -637,9 +583,6 @@ void file_protect ( void ) {
   tablePasswd = gtk_table_new ( 2, 2, FALSE );
   gtk_container_set_border_width ( GTK_CONTAINER ( tablePasswd ), 5 );
   labelPasswd = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelPasswd ), _( "P_assword: " )
-  );
   labelJfdPasswd = gpa_widget_hjustified_new ( labelPasswd, GTK_JUSTIFY_RIGHT );
   gtk_table_attach (
     GTK_TABLE ( tablePasswd ), labelJfdPasswd, 0, 1, 0, 1,
@@ -647,17 +590,14 @@ void file_protect ( void ) {
   );
   entryPasswd = gtk_entry_new ();
   gtk_entry_set_visibility ( GTK_ENTRY ( entryPasswd ), FALSE );
-  gtk_widget_add_accelerator (
-    entryPasswd, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelPasswd ), entryPasswd, accelGroup, _( "P_assword: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tablePasswd ), entryPasswd, 1, 2, 0, 1,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   labelRepeat = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelRepeat ), _( "Repeat Pa_ssword: " )
-  );
   labelJfdRepeat = gpa_widget_hjustified_new (
     labelRepeat, GTK_JUSTIFY_RIGHT
   );
@@ -666,8 +606,9 @@ void file_protect ( void ) {
     GTK_EXPAND, GTK_SHRINK, 0, 0
   );
   entryRepeat = gtk_entry_new ();
-  gtk_widget_add_accelerator (
-    entryRepeat, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelRepeat ), entryRepeat,
+    accelGroup, _( "Repeat Pa_ssword: " )
   );
   gtk_entry_set_visibility ( GTK_ENTRY ( entryRepeat ), FALSE );
   gtk_table_attach (
@@ -677,13 +618,7 @@ void file_protect ( void ) {
   gtk_box_pack_start (
     GTK_BOX ( vboxProtect ), tablePasswd, TRUE, TRUE, 0
   );
-  checkerArmor = gtk_check_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( checkerArmor ) -> child ), _( "A_rmor" )
-  );
-  gtk_widget_add_accelerator (
-    checkerArmor, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
-  );
+  checkerArmor = gpa_check_button_new ( accelGroup, _( "a_rmor" ) );
   gtk_container_set_border_width ( GTK_CONTAINER ( checkerArmor ), 5 );
   gtk_box_pack_start (
     GTK_BOX ( vboxProtect ), checkerArmor, FALSE, FALSE, 0
@@ -709,6 +644,7 @@ void file_protect ( void ) {
   );
   gtk_container_add ( GTK_CONTAINER ( windowProtect ), vboxProtect );
   gtk_widget_show_all ( windowProtect );
+  gpa_widget_set_centered ( windowProtect, windowMain );
 } /* file_protect */
 
 void file_decrypt_decrypt ( GtkWidget *windowDecrypt ) {
@@ -719,7 +655,6 @@ g_print ( _( "Decrypt a file\n" ) ); /*!!!*/
 void file_decrypt ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowDecrypt;
     GtkWidget *vboxDecrypt;
@@ -739,15 +674,13 @@ void file_decrypt ( void ) {
   hboxPasswd = gtk_hbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxPasswd ), 5 );
   labelPasswd = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelPasswd ), _( "_Password: " )
-  );
   gtk_box_pack_start (
     GTK_BOX ( hboxPasswd ), labelPasswd, FALSE, FALSE, 0
   );
   entryPasswd = gtk_entry_new ();
-  gtk_widget_add_accelerator (
-    entryPasswd, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelPasswd ), entryPasswd,
+    accelGroup, _( "_Password: " )
   );
   gtk_entry_set_visibility ( GTK_ENTRY ( entryPasswd ), FALSE );
   gtk_box_pack_start (
@@ -777,6 +710,7 @@ void file_decrypt ( void ) {
   );
   gtk_container_add ( GTK_CONTAINER ( windowDecrypt ), vboxDecrypt );
   gtk_widget_show_all ( windowDecrypt );
+  gpa_widget_set_centered ( windowDecrypt, windowMain );
 } /* file_decrypt */
 
 void file_decryptAs_browse_ok ( GtkWidget *browseSelect ) {
@@ -808,7 +742,6 @@ g_print ( "Decrypt file and save with new name\n" ); /*!!!*/
 void file_decryptAs ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowDecrypt;
     GtkWidget *vboxDecrypt;
@@ -833,9 +766,6 @@ void file_decryptAs ( void ) {
   tableTop = gtk_table_new ( 2, 3, FALSE );
   gtk_container_set_border_width ( GTK_CONTAINER ( tableTop ), 5 );
   labelFilename = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelFilename ), _( "Save file _as: " )
-  );
   labelJfdFilename = gpa_widget_hjustified_new (
     labelFilename, GTK_JUSTIFY_RIGHT
   );
@@ -844,8 +774,9 @@ void file_decryptAs ( void ) {
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   entryFilename = gtk_entry_new ();
-  gtk_widget_add_accelerator (
-    entryFilename, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelFilename ), entryFilename,
+    accelGroup, _( "Save file _as: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tableTop ), entryFilename, 1, 2, 0, 1,
@@ -864,17 +795,14 @@ void file_decryptAs ( void ) {
   labelJfdPasswd = gpa_widget_hjustified_new (
     labelPasswd, GTK_JUSTIFY_RIGHT
   );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelPasswd ), _( "_Password: " )
-  );
   gtk_table_attach (
     GTK_TABLE ( tableTop ), labelJfdPasswd, 0, 1, 1, 2,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   entryPasswd = gtk_entry_new ();
   gtk_entry_set_visibility ( GTK_ENTRY ( entryPasswd ), FALSE );
-  gtk_widget_add_accelerator (
-    entryPasswd, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelPasswd ), entryPasswd, accelGroup, _( "_Password: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tableTop ), entryPasswd, 1, 2, 1, 2,
@@ -905,6 +833,7 @@ void file_decryptAs ( void ) {
   );
   gtk_container_add ( GTK_CONTAINER ( windowDecrypt ), vboxDecrypt );
   gtk_widget_show_all ( windowDecrypt );
+  gpa_widget_set_centered ( windowDecrypt, windowMain );
 } /* file_decryptAs */
 
 void file_verify ( void ) {

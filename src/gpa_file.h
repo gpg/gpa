@@ -19,15 +19,15 @@
  */
                   
 
-void file_open ( void );
-void file_showDetail ( void );
-void file_sign ( void );
-void file_encrypt ( void );
-void file_protect ( void );
-void file_decrypt ( void );
-void file_decryptAs ( void );
-void file_verify ( void );
-void file_close ( void );
-void file_quit ( void );
+extern void file_open ( void );
+extern void file_showDetail ( void );
+extern void file_sign ( void );
+extern void file_encrypt ( void );
+extern void file_protect ( void );
+extern void file_decrypt ( void );
+extern void file_decryptAs ( void );
+extern void file_verify ( void );
+extern void file_close ( void );
+extern void file_quit ( void );
 
-void gpa_fileOpenSelect_init ( char *title );
+extern void gpa_fileOpenSelect_init ( char *title );

@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-void help_version ( void );
-void help_license ( void );
-void help_warranty ( void );
-void help_help ( void );
+extern void help_version ( void );
+extern void help_license ( void );
+extern void help_warranty ( void );
+extern void help_help ( void );

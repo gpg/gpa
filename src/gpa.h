@@ -26,9 +26,6 @@
 #define _(a)	(a)
 #define N_(a)	(a)
 
-GtkWidget *gpa_button_new ( GtkAccelGroup *accelGroup, gchar *label );
-GtkWidget *gpa_buttonCancel_new (
-  GtkWidget *window, GtkAccelGroup *accelGroup, gchar *label
-);
+GtkWidget *windowMain;
 
 #endif /*GPA_H*/

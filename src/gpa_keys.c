@@ -19,7 +19,6 @@
  */
                   
 #include <config.h>
-#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include "gpa.h"
 #include "gpa_gtktools.h"
@@ -33,7 +32,6 @@ static GtkWidget *ringOpenSelect;
 
 GtkWidget *gpa_frameExpire_new ( GtkAccelGroup *accelGroup ) {
 /* var */
-  guint accelKey;
   GList *unitAfter = NULL;
 /* objects */
   GtkWidget *frameExpire;
@@ -50,23 +48,11 @@ GtkWidget *gpa_frameExpire_new ( GtkAccelGroup *accelGroup ) {
   frameExpire = gtk_frame_new ( _( "Expiration" ) );
   vboxExpire = gtk_vbox_new ( TRUE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxExpire ), 5 );
-  radioDont = gtk_radio_button_new_with_label ( NULL, _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( radioDont ) -> child ), _( "_indefinitely valid" )
-  );
-  gtk_widget_add_accelerator (
-    radioDont, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
-  );
+  radioDont = gpa_radio_button_new ( accelGroup, _( "_indefinitely valid" ) );
   gtk_box_pack_start ( GTK_BOX ( vboxExpire ), radioDont, FALSE, FALSE, 0 );
   hboxAfter = gtk_hbox_new ( FALSE, 0 );
-  radioAfter = gtk_radio_button_new_with_label_from_widget (
-    GTK_RADIO_BUTTON ( radioDont ), _( "" )
-  );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( radioAfter ) -> child ), _( "expire _after " )
-  );
-  gtk_widget_add_accelerator (
-    radioAfter, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  radioAfter = gpa_radio_button_new_from_widget (
+    GTK_RADIO_BUTTON ( radioDont ), accelGroup, _( "expire _after" )
   );
   gtk_box_pack_start ( GTK_BOX ( hboxAfter ), radioAfter, FALSE, FALSE, 0 );
   entryAfter = gtk_entry_new ();
@@ -88,14 +74,8 @@ GtkWidget *gpa_frameExpire_new ( GtkAccelGroup *accelGroup ) {
   gtk_box_pack_start ( GTK_BOX ( hboxAfter ), comboAfter, FALSE, FALSE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxExpire ), hboxAfter, FALSE, FALSE, 0 );
   hboxAt = gtk_hbox_new ( FALSE, 0 );
-  radioAt = gtk_radio_button_new_with_label_from_widget (
-    GTK_RADIO_BUTTON ( radioDont ), _( "" )
-  );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( radioAt ) -> child ), _( "expire a_t " )
-  );
-  gtk_widget_add_accelerator (
-    radioAt, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  radioAt = gpa_radio_button_new_from_widget (
+    GTK_RADIO_BUTTON ( radioDont ), accelGroup, _( "expire a_t" )
   );
   gtk_box_pack_start ( GTK_BOX ( hboxAt ), radioAt, FALSE, FALSE, 0 );
   entryAt = gtk_entry_new ();
@@ -150,10 +130,9 @@ g_print ( _( "Accept and export new ownertrust level\n" ) ); /*!!!*/
   gtk_widget_destroy ( windowTrust );
 } /* keys_openPublic_editTrust_export */
 
-void keys_openPublic_editTrust ( void ) {
+void keys_openPublic_editTrust ( GtkWidget *parent ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
   GList *valueLevel = NULL;
 /* objects */
   GtkWidget *windowTrust;
@@ -177,9 +156,6 @@ void keys_openPublic_editTrust ( void ) {
   hboxLevel = gtk_hbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxLevel ), 5 );
   labelLevel = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelLevel ), _( "_Ownertrust level: " )
-  );
   gtk_box_pack_start ( GTK_BOX ( hboxLevel ), labelLevel, FALSE, FALSE, 0 );
   comboLevel = gtk_combo_new ();
   gtk_entry_set_editable (
@@ -190,9 +166,9 @@ void keys_openPublic_editTrust ( void ) {
   valueLevel = g_list_append ( valueLevel, _( "trust marginally" ) );
   valueLevel = g_list_append ( valueLevel, _( "trust fully" ) );
   gtk_combo_set_popdown_strings ( GTK_COMBO ( comboLevel ), valueLevel );
-  gtk_widget_add_accelerator (
-    GTK_COMBO ( comboLevel ) -> entry, "grab_focus", accelGroup, accelKey,
-    GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelLevel ), GTK_COMBO ( comboLevel ) -> entry,
+    accelGroup, _( "_Ownertrust level: " )
   );
   gtk_box_pack_start ( GTK_BOX ( hboxLevel ), comboLevel, TRUE, TRUE, 0 );
   gtk_box_pack_start ( GTK_BOX ( vboxTrust ), hboxLevel, TRUE, TRUE, 0 );
@@ -225,6 +201,7 @@ void keys_openPublic_editTrust ( void ) {
   );
   gtk_container_add ( GTK_CONTAINER ( windowTrust ), vboxTrust );
   gtk_widget_show_all ( windowTrust );
+  gpa_widget_set_centered ( windowTrust, parent );
 } /* keys_openPublic_editTrust */
 
 void keys_openPublic_sign ( void ) {
@@ -235,10 +212,9 @@ void keys_openPublic_editKey_check ( void ) {
 g_print ( _( "Check key signature validities\n" ) ); /*!!!*/
 } /* keys_openPublic_editKey_check */
 
-void keys_openPublic_editKey ( void ) {
+void keys_openPublic_editKey ( GtkWidget *parent ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
   char *titlesSignatures [] = { N_( "Signature" ), N_( "valid" ) };
 /* objects */
   GtkWidget *windowKey;
@@ -310,9 +286,6 @@ void keys_openPublic_editKey ( void ) {
   vboxSignatures = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxSignatures ), 5 );
   labelSignatures = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelSignatures ), _( "S_ignatures" )
-  );
   labelJfdSignatures = gpa_widget_hjustified_new (
     labelSignatures, GTK_JUSTIFY_LEFT
   );
@@ -322,8 +295,9 @@ void keys_openPublic_editKey ( void ) {
   scrollerSignatures = gtk_scrolled_window_new ( NULL, NULL );
   gtk_widget_set_usize ( scrollerSignatures, 320, 100 );
   clistSignatures = gtk_clist_new_with_titles ( 2, titlesSignatures );
-  gtk_widget_add_accelerator (
-    clistSignatures, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelSignatures ), clistSignatures,
+    accelGroup, _( "S_ignatures" )
   );
   gtk_clist_set_column_width ( GTK_CLIST ( clistSignatures ), 0, 200 );
   gtk_clist_set_column_justification (
@@ -351,13 +325,8 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
   gtk_box_pack_start (
     GTK_BOX ( hboxSignatures ), buttonSign, FALSE, FALSE, 0
   );
-  checkerLocally = gtk_check_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( checkerLocally ) -> child ),
-    _( "sign only _locally" )
-  );
-  gtk_widget_add_accelerator (
-    checkerLocally, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  checkerLocally = gpa_check_button_new (
+    accelGroup, _( "sign only _locally" )
   );
   gtk_box_pack_start (
     GTK_BOX ( hboxSignatures ), checkerLocally, FALSE, FALSE, 5
@@ -401,9 +370,6 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
   vboxSubkeys = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxSubkeys ), 5 );
   labelSubkeys = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelSubkeys ), _( "S_ubkeys" )
-  );
   labelJfdSubkeys = gpa_widget_hjustified_new (
     labelSubkeys, GTK_JUSTIFY_LEFT
   );
@@ -413,8 +379,8 @@ gtk_clist_append ( GTK_CLIST ( clistSignatures ), text2 ); /*!!!*/
   scrollerSubkeys = gtk_scrolled_window_new ( NULL, NULL );
   gtk_widget_set_usize ( scrollerSubkeys, 320, 100 );
   clistSubkeys = gtk_clist_new ( 1 );
-  gtk_widget_add_accelerator (
-    clistSubkeys, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelSubkeys ), clistSubkeys, accelGroup, _( "S_ubkeys" )
   );
 gtk_clist_append ( GTK_CLIST ( clistSubkeys ), text ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistSubkeys ), text ); /*!!!*/
@@ -431,9 +397,9 @@ gtk_clist_append ( GTK_CLIST ( clistSubkeys ), text ); /*!!!*/
   gtk_button_box_set_spacing ( GTK_BUTTON_BOX ( hButtonBoxEdit ), 10 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hButtonBoxEdit ), 5 );
   buttonEditTrust = gpa_button_new ( accelGroup, _( "Edit _Ownertrust" ) );
-  gtk_signal_connect (
+  gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditTrust ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), NULL
+    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), windowKey
   );
   gtk_container_add ( GTK_CONTAINER ( hButtonBoxEdit ), buttonEditTrust );
   buttonExportKey = gpa_button_new ( accelGroup, _( "E_xport key" ) );
@@ -447,6 +413,7 @@ gtk_clist_append ( GTK_CLIST ( clistSubkeys ), text ); /*!!!*/
   gtk_box_pack_start ( GTK_BOX ( vboxEdit ), hButtonBoxEdit, FALSE, FALSE, 0 );
   gtk_container_add ( GTK_CONTAINER ( windowKey ), vboxEdit );
   gtk_widget_show_all ( windowKey );
+  gpa_widget_set_centered ( windowKey, parent );
 } /* keys_openPublic_editKey */
 
 void keys_openPublic_send ( void ) {
@@ -464,7 +431,6 @@ g_print ( _( "Export ownertrust\n" ) ); /*!!!*/
 void keys_openPublic ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
   gchar *titlesKeys [] = {
     N_( "Key" ), N_( "Key trust" ), N_( "Ownertrust" ), N_( "Expiry date" )
   };
@@ -507,9 +473,6 @@ void keys_openPublic ( void ) {
   hboxTop = gtk_hbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxTop ), 5 );
   labelRingname = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelRingname ), _( "_Key Ring " )
-  );
   gtk_box_pack_start ( GTK_BOX ( hboxTop ), labelRingname, FALSE, FALSE, 0 );
   entryRingname = gtk_entry_new ();
   gtk_entry_set_editable ( GTK_ENTRY ( entryRingname ), FALSE );
@@ -526,8 +489,8 @@ void keys_openPublic ( void ) {
         GTK_CLIST ( clistKeys ), i, GTK_JUSTIFY_CENTER
       );
     } /* for */
-  gtk_widget_add_accelerator (
-    clistKeys, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelRingname ), clistKeys, accelGroup, _( "_Key Ring " )
   );
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
@@ -538,9 +501,9 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxAction ), 5 );
   tableKey = gtk_table_new ( 3, 2, TRUE );
   buttonEditKey = gpa_button_new ( accelGroup, _( "_Edit key" ) );
-  gtk_signal_connect (
+  gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditKey ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_openPublic_editKey ), NULL
+    GTK_SIGNAL_FUNC ( keys_openPublic_editKey ), windowPublic
   );
   gtk_table_attach (
     GTK_TABLE ( tableKey ), buttonEditKey, 0, 1, 0, 1,
@@ -595,13 +558,8 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
     GTK_BOX ( hboxAction ), tableKey, FALSE, FALSE, 0
   );
   vboxLocally = gtk_vbox_new ( FALSE, 0 );
-  checkerLocally = gtk_check_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( checkerLocally ) -> child ),
-    _( "sign only _locally" )
-  );
-  gtk_widget_add_accelerator (
-    checkerLocally, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  checkerLocally = gpa_check_button_new (
+    accelGroup, _( "sign only _locally" )
   );
   gtk_box_pack_start (
     GTK_BOX ( vboxLocally ), checkerLocally, FALSE, FALSE, 0
@@ -610,21 +568,15 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
     GTK_BOX ( hboxAction ), vboxLocally, FALSE, FALSE, 5
   );
   tableTrust = gtk_table_new ( 3, 1, TRUE );
-  toggleShow = gtk_toggle_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( toggleShow ) -> child ), _( "S_how ownertrust" )
-  );
-  gtk_widget_add_accelerator (
-    toggleShow, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
-  );
+  toggleShow = gpa_toggle_button_new ( accelGroup, _( "S_how ownertrust" ) );
   gtk_table_attach (
     GTK_TABLE ( tableTrust ), toggleShow, 0, 1, 0, 1,
     GTK_FILL, GTK_FILL, 0, 0
   );
   buttonEditTrust = gpa_button_new ( accelGroup, _( "Edit _ownertrust" ) );
-  gtk_signal_connect (
+  gtk_signal_connect_object (
     GTK_OBJECT ( buttonEditTrust ), "clicked",
-    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), NULL
+    GTK_SIGNAL_FUNC ( keys_openPublic_editTrust ), windowPublic
   );
   gtk_table_attach (
     GTK_TABLE ( tableTrust ), buttonEditTrust, 0, 1, 1, 2,
@@ -663,12 +615,12 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text4 ); /*!!!*/
   );
   gtk_container_add ( GTK_CONTAINER ( windowPublic ), vboxPublic );
   gtk_widget_show_all ( windowPublic );
+  gpa_widget_set_centered ( windowPublic, windowMain );
 } /* keys_openPublic */
 
-void keys_openSecret_editKey () {
+void keys_openSecret_editKey ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowEdit;
     GtkWidget *vboxEdit;
@@ -707,9 +659,6 @@ void keys_openSecret_editKey () {
   tablePasswd = gtk_table_new ( 2, 2, FALSE );
   gtk_container_set_border_width ( GTK_CONTAINER ( tablePasswd ), 5 );
   labelPasswd = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelPasswd ), _( "_Password: " )
-  );
   labelJfdPasswd = gpa_widget_hjustified_new (
     labelPasswd, GTK_JUSTIFY_RIGHT
   );
@@ -719,17 +668,15 @@ void keys_openSecret_editKey () {
   );
   entryPasswd = gtk_entry_new ();
   gtk_entry_set_visibility ( GTK_ENTRY ( entryPasswd ), FALSE );
-  gtk_widget_add_accelerator (
-    entryPasswd, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelPasswd ), entryPasswd,
+    accelGroup, _( "_Password: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tablePasswd ), entryPasswd, 1, 2, 0, 1,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   labelRepeat = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelRepeat ), _( "_Repeat password: " )
-  );
   labelJfdRepeat = gpa_widget_hjustified_new (
     labelRepeat, GTK_JUSTIFY_RIGHT
   );
@@ -739,8 +686,9 @@ void keys_openSecret_editKey () {
   );
   entryRepeat = gtk_entry_new ();
   gtk_entry_set_visibility ( GTK_ENTRY ( entryRepeat ), FALSE );
-  gtk_widget_add_accelerator (
-    entryRepeat, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelRepeat ), entryRepeat,
+    accelGroup, _( "_Repeat password: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tablePasswd ), entryRepeat, 1, 2, 1, 2,
@@ -775,12 +723,12 @@ void keys_openSecret_editKey () {
   );
   gtk_container_add ( GTK_CONTAINER ( windowEdit ), vboxEdit );
   gtk_widget_show_all ( windowEdit );
+  gpa_widget_set_centered ( windowEdit, windowMain );
 } /* keys_openSecret_editKey */
 
 void keys_openSecret ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowSecret;
     GtkWidget *vboxSecret;
@@ -806,9 +754,6 @@ void keys_openSecret ( void ) {
   hboxTop = gtk_hbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( hboxTop ), 5 );
   labelRingname = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelRingname ), _( "_Key ring: " )
-  );
   gtk_box_pack_start ( GTK_BOX ( hboxTop ), labelRingname, FALSE, FALSE, 0 );
   entryRingname = gtk_entry_new ();
   gtk_entry_set_editable ( GTK_ENTRY ( entryRingname ), FALSE );
@@ -818,8 +763,8 @@ void keys_openSecret ( void ) {
   gtk_container_set_border_width ( GTK_CONTAINER ( scrollerKeys ), 5 );
   gtk_widget_set_usize ( scrollerKeys, 400, 280 );
   clistKeys = gtk_clist_new ( 1 );
-  gtk_widget_add_accelerator (
-    clistKeys, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelRingname ), clistKeys, accelGroup, _( "_Key ring: " )
   );
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
@@ -859,6 +804,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   );
   gtk_container_add ( GTK_CONTAINER ( windowSecret ), vboxSecret );
   gtk_widget_show_all ( windowSecret );
+  gpa_widget_set_centered ( windowSecret, windowMain );
 } /* keys_openSecret */
 
 void keys_open ( void ) {
@@ -873,7 +819,6 @@ g_print ( _( "Generate a new key\n" ) ); /*!!!*/
 void keys_generateKey ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
   GList *contentsAlgorithm = NULL;
   GList *contentsKeysize = NULL;
 /* objects */
@@ -919,9 +864,6 @@ void keys_generateKey ( void ) {
   tableTop = gtk_table_new ( 2, 2, FALSE );
   gtk_container_set_border_width ( GTK_CONTAINER ( tableTop ), 5 );
   labelAlgorithm = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelAlgorithm ), _( "_Encryption algorithm: " )
-  );
   labelJfdAlgorithm = gpa_widget_hjustified_new (
     labelAlgorithm, GTK_JUSTIFY_RIGHT
   );
@@ -948,18 +890,15 @@ void keys_generateKey ( void ) {
   gtk_combo_set_popdown_strings (
     GTK_COMBO ( comboAlgorithm ), contentsAlgorithm
   );
-  gtk_widget_add_accelerator (
-    GTK_COMBO ( comboAlgorithm ) -> entry, "grab_focus", accelGroup, accelKey,
-    GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelAlgorithm ), GTK_COMBO ( comboAlgorithm ) -> entry,
+    accelGroup, _( "_Encryption algorithm: ")
   );
   gtk_table_attach (
     GTK_TABLE ( tableTop ), comboAlgorithm, 1, 2, 0, 1,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   labelKeysize = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelKeysize ), _( "_Key size (bits): " )
-  );
   labelJfdKeysize = gpa_widget_hjustified_new (
     labelKeysize, GTK_JUSTIFY_RIGHT
   );
@@ -969,9 +908,9 @@ void keys_generateKey ( void ) {
   );
   comboKeysize = gtk_combo_new ();
   gtk_combo_set_value_in_list ( GTK_COMBO ( comboKeysize ), FALSE, FALSE );
-  gtk_widget_add_accelerator (
-    GTK_COMBO ( comboKeysize ) -> entry, "grab_focus", accelGroup, accelKey,
-    GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelKeysize ), GTK_COMBO ( comboKeysize ) -> entry,
+    accelGroup, _( "_Key size (bits): " )
   );
   contentsKeysize = g_list_append ( contentsKeysize, _( "1024" ) );
   contentsKeysize = g_list_append ( contentsKeysize, _( "768" ) );
@@ -992,9 +931,6 @@ void keys_generateKey ( void ) {
   tableMisc = gtk_table_new ( 5, 2, FALSE );
   gtk_container_set_border_width ( GTK_CONTAINER ( tableMisc ), 5 );
   labelUserID = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelUserID ), _( "_User ID: " )
-  );
   labelJfdUserID = gpa_widget_hjustified_new (
     labelUserID, GTK_JUSTIFY_RIGHT
   );
@@ -1003,34 +939,28 @@ void keys_generateKey ( void ) {
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   entryUserID = gtk_entry_new ();
-  gtk_widget_add_accelerator (
-    entryUserID, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelUserID ), entryUserID, accelGroup, _( "_User ID: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tableMisc ), entryUserID, 1, 2, 0, 1,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   labelEmail = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelEmail ), _( "E-_Mail: " )
-  );
   labelJfdEmail = gpa_widget_hjustified_new ( labelEmail, GTK_JUSTIFY_RIGHT );
   gtk_table_attach (
     GTK_TABLE ( tableMisc ), labelJfdEmail, 0, 1, 1, 2,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   entryEmail = gtk_entry_new ();
-  gtk_widget_add_accelerator (
-    entryEmail, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelEmail ), entryEmail, accelGroup, _( "E-_Mail: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tableMisc ), entryEmail, 1, 2, 1, 2,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   labelComment = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelComment ), _( "C_omment: " )
-  );
   labelJfdComment = gpa_widget_hjustified_new (
     labelComment, GTK_JUSTIFY_RIGHT
   );
@@ -1039,17 +969,14 @@ void keys_generateKey ( void ) {
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   entryComment = gtk_entry_new ();
-  gtk_widget_add_accelerator (
-    entryComment, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelComment ), entryComment, accelGroup, _( "C_omment: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tableMisc ), entryComment, 1, 2, 2, 3,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   labelPassword = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelPassword ), _( "_Password: " )
-  );
   labelJfdPassword = gpa_widget_hjustified_new (
     labelPassword, GTK_JUSTIFY_RIGHT
   );
@@ -1059,17 +986,14 @@ void keys_generateKey ( void ) {
   );
   entryPassword = gtk_entry_new ();
   gtk_entry_set_visibility ( GTK_ENTRY ( entryPassword ), FALSE );
-  gtk_widget_add_accelerator (
-    entryPassword, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelPassword ), entryPassword, accelGroup, _( "_Password: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tableMisc ), entryPassword, 1, 2, 3, 4,
     GTK_FILL, GTK_SHRINK, 0, 0
   );
   labelRepeat = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelRepeat ), _( "_Repeat password: " )
-  );
   labelJfdRepeat = gpa_widget_hjustified_new (
     labelRepeat, GTK_JUSTIFY_RIGHT
   );
@@ -1079,8 +1003,9 @@ void keys_generateKey ( void ) {
   );
   entryRepeat = gtk_entry_new ();
   gtk_entry_set_visibility ( GTK_ENTRY ( entryRepeat ), FALSE );
-  gtk_widget_add_accelerator (
-    entryRepeat, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelRepeat ), entryRepeat,
+    accelGroup, _( "_Repeat password: " )
   );
   gtk_table_attach (
     GTK_TABLE ( tableMisc ), entryRepeat, 1, 2, 4, 5,
@@ -1091,23 +1016,14 @@ void keys_generateKey ( void ) {
   );
   vboxMisc = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxMisc ), 5 );
-  checkerRevoc = gtk_check_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( checkerRevoc ) -> child ),
-    _( "generate re_vocation certificate" )
-  );
-  gtk_widget_add_accelerator (
-    checkerRevoc, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  checkerRevoc = gpa_check_button_new (
+    accelGroup, _( "generate re_vocation certificate" )
   );
   gtk_box_pack_start (
     GTK_BOX ( vboxMisc ), checkerRevoc, FALSE, FALSE, 0
   );
-  checkerSend = gtk_check_button_new_with_label ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( GTK_BIN ( checkerSend ) -> child ), _( "_send to key server" )
-  );
-  gtk_widget_add_accelerator (
-    checkerSend, "clicked", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  checkerSend = gpa_check_button_new (
+    accelGroup, _( "_send to key server" )
   );
   gtk_box_pack_start (
     GTK_BOX ( vboxMisc ), checkerSend, FALSE, FALSE, 0
@@ -1136,6 +1052,7 @@ void keys_generateKey ( void ) {
   );
   gtk_container_add ( GTK_CONTAINER ( windowGenerate ), vboxGenerate );
   gtk_widget_show_all ( windowGenerate );
+  gpa_widget_set_centered ( windowGenerate, windowMain );
 } /* keys_generateKey */
 
 void keys_generateRevocation_generate ( GtkWidget *windowRevoc ) {
@@ -1146,7 +1063,6 @@ void keys_generateRevocation_generate ( GtkWidget *windowRevoc ) {
 void keys_generateRevocation ( void ) {
 /* var */
   GtkAccelGroup *accelGroup;
-  guint accelKey;
 /* objects */
   GtkWidget *windowRevoc;
     GtkWidget *vboxRevoc;
@@ -1170,16 +1086,13 @@ void keys_generateRevocation ( void ) {
   vboxKeys = gtk_vbox_new ( FALSE, 0 );
   gtk_container_set_border_width ( GTK_CONTAINER ( vboxKeys ), 5 );
   labelKeys = gtk_label_new ( _( "" ) );
-  accelKey = gtk_label_parse_uline (
-    GTK_LABEL ( labelKeys ), _( "_Secret keys" )
-  );
   labelJfdKeys = gpa_widget_hjustified_new ( labelKeys, GTK_JUSTIFY_LEFT );
   gtk_box_pack_start ( GTK_BOX ( vboxKeys ), labelJfdKeys, FALSE, FALSE, 0 );
   scrollerKeys = gtk_scrolled_window_new ( NULL, NULL );
   gtk_widget_set_usize ( scrollerKeys, 280, 200 );
   clistKeys = gtk_clist_new ( 1 );
-  gtk_widget_add_accelerator (
-    clistKeys, "grab_focus", accelGroup, accelKey, GDK_MOD1_MASK, 0
+  gpa_connect_by_accelerator (
+    GTK_LABEL ( labelKeys ), clistKeys, accelGroup, _( "_Secret keys" )
   );
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
 gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
@@ -1209,6 +1122,7 @@ gtk_clist_append ( GTK_CLIST ( clistKeys ), text ); /*!!!*/
   );
   gtk_container_add ( GTK_CONTAINER ( windowRevoc ), vboxRevoc );
   gtk_widget_show_all ( windowRevoc );
+  gpa_widget_set_centered ( windowRevoc, windowMain );
 } /* keys_generateRevocation */
 
 void keys_import_ok ( GtkWidget *windowImport ) {
