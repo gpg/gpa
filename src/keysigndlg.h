@@ -25,7 +25,7 @@
 
 gboolean gpa_key_sign_run_dialog (GtkWidget * parent, GpapaPublicKey *key,
 				  GpapaSignType * sign_type,
-				  gchar ** key_id, gchar ** passphrase);
+				  gchar ** passphrase);
 
 
 #endif /* KEYSIGNDLG_H */
