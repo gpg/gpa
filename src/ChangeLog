@@ -1,3 +1,28 @@
+2001-01-15  Bernhard Herzog  <bh@intevation.de>
+
+	* gtktools.c (gpa_button_set_text): Handle accelerators
+
+	(message_box_delete): 
+	(message_box_clicked): 
+	(gpa_message_box_run): 
+
+	New functions implementing a flexible message box with caller
+	definable buttons.
+
+2001-01-12  Bernhard Herzog  <bh@intevation.de>
+
+	* gpa.h: Add the prototypes for gpa_simplified_ui and
+	gpa_set_simplified_ui
+
+	* gpa.c (opts): 
+	(cmd_and_opt_values)
+	Add a new option "simplified-ui" to turn on the simplified interface
+	(gpa_simplified_ui): 
+	(gpa_set_simplified_ui): 
+	New functions to read and set the simplified ui flag
+
+	(main): handle the simplified ui option in argument parsing
+
 2001-01-11  Bernhard Herzog  <bh@intevation.de>
 
 	* keysigndlg.c (gpa_key_sign_run_dialog):
