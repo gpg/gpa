@@ -1,5 +1,5 @@
 /* keysmenu.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -267,10 +267,10 @@ gpa_frameExpire_dont (GtkToggleButton * radioDont, gpointer param)
   entryAfter = (GtkWidget *) localParam[1];
   comboAfter = (GtkWidget *) localParam[2];
   entryAt = (GtkWidget *) localParam[3];
-  gtk_entry_set_text (GTK_ENTRY (entryAfter), _(""));
+  gtk_entry_set_text (GTK_ENTRY (entryAfter), "");
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (comboAfter)->entry),
 		      unitExpiryTime[0]);
-  gtk_entry_set_text (GTK_ENTRY (entryAt), _(""));
+  gtk_entry_set_text (GTK_ENTRY (entryAt), "");
 }				/* gpa_frameExpire_dont */
 
 void
@@ -300,7 +300,7 @@ gpa_frameExpire_after (GtkToggleButton * radioAfter, gpointer param)
     }				/* if */
   else
     gtk_entry_set_text (GTK_ENTRY (entryAfter), _("1"));
-  gtk_entry_set_text (GTK_ENTRY (entryAt), _(""));
+  gtk_entry_set_text (GTK_ENTRY (entryAt), "");
   gtk_widget_grab_focus (entryAfter);
 }				/* gpa_frameExpire_after */
 
@@ -324,7 +324,7 @@ gpa_frameExpire_at (GtkToggleButton * radioAt, gpointer param)
   comboAfter = (GtkWidget *) localParam[2];
   entryAt = (GtkWidget *) localParam[3];
   window = (GtkWidget *) localParam[4];
-  gtk_entry_set_text (GTK_ENTRY (entryAfter), _(""));
+  gtk_entry_set_text (GTK_ENTRY (entryAfter), "");
   if (*expiryDate)
     {
       g_date_strftime (dateBuffer, 256, "%d.%m.%Y", *expiryDate);
@@ -528,7 +528,7 @@ keys_export_dialog (gpointer param)
   gtk_container_set_border_width (GTK_CONTAINER (vboxExport), 5);
   hboxFilename = gtk_hbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hboxFilename), 5);
-  labelFilename = gtk_label_new (_(""));
+  labelFilename = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (hboxFilename), labelFilename, FALSE, FALSE, 0);
   entryFilename = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (hboxFilename), entryFilename, TRUE, TRUE, 0);
@@ -710,7 +710,7 @@ keys_openPublic_editTrust (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxTrust), tableKey, FALSE, FALSE, 0);
   hboxLevel = gtk_hbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hboxLevel), 5);
-  labelLevel = gtk_label_new (_(""));
+  labelLevel = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (hboxLevel), labelLevel, FALSE, FALSE, 0);
   comboLevel = gtk_combo_new ();
   gtk_editable_set_editable (GTK_EDITABLE (GTK_COMBO (comboLevel)->entry),
@@ -955,7 +955,7 @@ keys_openPublic_editKey (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxEdit), vboxFingerprint, FALSE, FALSE, 0);
   vboxSignatures = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxSignatures), 5);
-  labelSignatures = gtk_label_new (_(""));
+  labelSignatures = gtk_label_new ("");
   labelJfdSignatures =
     gpa_widget_hjustified_new (labelSignatures, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxSignatures), labelJfdSignatures, FALSE,
@@ -1162,7 +1162,7 @@ keys_openPublic_receive (gpointer param)
   gtk_container_set_border_width (GTK_CONTAINER (vboxReceive), 5);
   hboxKey = gtk_hbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hboxKey), 5);
-  labelKey = gtk_label_new (_(""));
+  labelKey = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (hboxKey), labelKey, FALSE, FALSE, 0);
   entryKey = gtk_entry_new ();
   paramReceive = (gpointer *) xmalloc (2 * sizeof (gpointer));
@@ -1303,7 +1303,7 @@ keys_openPublic_fillClistKeys (gpointer param)
 	  getStringForOwnertrust (gpapa_public_key_get_ownertrust
 				  (key, gpa_callback, windowPublic));
       else
-	contentsKeys[2] = _("");
+	contentsKeys[2] = "";
       expiryDate =
 	gpapa_key_get_expiry_date (GPAPA_KEY (key), gpa_callback,
 				   windowPublic);
@@ -1353,7 +1353,7 @@ keys_openPublic_toggleClistKeys (gpointer param)
         gtk_clist_set_pixtext (GTK_CLIST (clistKeys), i, 2, contents,
                                8, icon, mask);
     } else {
-      contents = _("");
+      contents = "";
       gtk_clist_set_text (GTK_CLIST (clistKeys), i, 2, contents);
     }
   }
@@ -1460,7 +1460,7 @@ keys_openPublic (void)
   gtk_container_set_border_width (GTK_CONTAINER (vboxPublic), 5);
   vboxKeys = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
-  labelRingname = gtk_label_new (_(""));
+  labelRingname = gtk_label_new ("");
   labelJfdRingname =
     gpa_widget_hjustified_new (labelRingname, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxKeys), labelJfdRingname, FALSE, FALSE, 0);
@@ -1918,7 +1918,7 @@ keys_openSecret_editKey (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxEdit), tableKey, FALSE, FALSE, 0);
   tablePasswd = gtk_table_new (2, 2, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (tablePasswd), 5);
-  labelPasswd = gtk_label_new (_(""));
+  labelPasswd = gtk_label_new ("");
   labelJfdPasswd = gpa_widget_hjustified_new (labelPasswd, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tablePasswd), labelJfdPasswd, 0, 1, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -1928,7 +1928,7 @@ keys_openSecret_editKey (gpointer param)
 			      accelGroup, _("_Password: "));
   gtk_table_attach (GTK_TABLE (tablePasswd), entryPasswd, 1, 2, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
-  labelRepeat = gtk_label_new (_(""));
+  labelRepeat = gtk_label_new ("");
   labelJfdRepeat = gpa_widget_hjustified_new (labelRepeat, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tablePasswd), labelJfdRepeat, 0, 1, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -2052,7 +2052,7 @@ keys_openSecret (void)
   gtk_container_set_border_width (GTK_CONTAINER (vboxSecret), 5);
   vboxKeys = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
-  labelRingname = gtk_label_new (_(""));
+  labelRingname = gtk_label_new ("");
   labelJfdRingname =
     gpa_widget_hjustified_new (labelRingname, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxKeys), labelJfdRingname, FALSE, FALSE, 0);
@@ -2343,7 +2343,7 @@ keys_generateKey (void)
   gtk_container_set_border_width (GTK_CONTAINER (vboxGenerate), 5);
   tableTop = gtk_table_new (2, 2, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (tableTop), 5);
-  labelAlgorithm = gtk_label_new (_(""));
+  labelAlgorithm = gtk_label_new ("");
   labelJfdAlgorithm =
     gpa_widget_hjustified_new (labelAlgorithm, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tableTop), labelJfdAlgorithm, 0, 1, 0, 1,
@@ -2361,7 +2361,7 @@ keys_generateKey (void)
 			      _("_Encryption algorithm: "));
   gtk_table_attach (GTK_TABLE (tableTop), comboAlgorithm, 1, 2, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
-  labelKeysize = gtk_label_new (_(""));
+  labelKeysize = gtk_label_new ("");
   labelJfdKeysize =
     gpa_widget_hjustified_new (labelKeysize, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tableTop), labelJfdKeysize, 0, 1, 1, 2,
@@ -2390,7 +2390,7 @@ keys_generateKey (void)
   gtk_box_pack_start (GTK_BOX (vboxGenerate), frameExpire, FALSE, FALSE, 0);
   tableMisc = gtk_table_new (5, 2, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (tableMisc), 5);
-  labelUserID = gtk_label_new (_(""));
+  labelUserID = gtk_label_new ("");
   labelJfdUserID = gpa_widget_hjustified_new (labelUserID, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tableMisc), labelJfdUserID, 0, 1, 0, 1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -2399,7 +2399,7 @@ keys_generateKey (void)
 			      accelGroup, _("_User ID: "));
   gtk_table_attach (GTK_TABLE (tableMisc), entryUserID, 1, 2, 0, 1, GTK_FILL,
 		    GTK_SHRINK, 0, 0);
-  labelEmail = gtk_label_new (_(""));
+  labelEmail = gtk_label_new ("");
   labelJfdEmail = gpa_widget_hjustified_new (labelEmail, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tableMisc), labelJfdEmail, 0, 1, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -2408,7 +2408,7 @@ keys_generateKey (void)
 			      _("E-_Mail: "));
   gtk_table_attach (GTK_TABLE (tableMisc), entryEmail, 1, 2, 1, 2, GTK_FILL,
 		    GTK_SHRINK, 0, 0);
-  labelComment = gtk_label_new (_(""));
+  labelComment = gtk_label_new ("");
   labelJfdComment =
     gpa_widget_hjustified_new (labelComment, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tableMisc), labelJfdComment, 0, 1, 2, 3,
@@ -2418,7 +2418,7 @@ keys_generateKey (void)
 			      accelGroup, _("C_omment: "));
   gtk_table_attach (GTK_TABLE (tableMisc), entryComment, 1, 2, 2, 3, GTK_FILL,
 		    GTK_SHRINK, 0, 0);
-  labelPasswd = gtk_label_new (_(""));
+  labelPasswd = gtk_label_new ("");
   labelJfdPasswd = gpa_widget_hjustified_new (labelPasswd, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tableMisc), labelJfdPasswd, 0, 1, 3, 4,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -2428,7 +2428,7 @@ keys_generateKey (void)
 			      accelGroup, _("_Password: "));
   gtk_table_attach (GTK_TABLE (tableMisc), entryPasswd, 1, 2, 3, 4, GTK_FILL,
 		    GTK_SHRINK, 0, 0);
-  labelRepeat = gtk_label_new (_(""));
+  labelRepeat = gtk_label_new ("");
   labelJfdRepeat = gpa_widget_hjustified_new (labelRepeat, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tableMisc), labelJfdRepeat, 0, 1, 4, 5,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -2561,7 +2561,7 @@ keys_generateRevocation (void)
   gtk_container_set_border_width (GTK_CONTAINER (vboxRevoc), 5);
   vboxKeys = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
-  labelKeys = gtk_label_new (_(""));
+  labelKeys = gtk_label_new ("");
   labelJfdKeys = gpa_widget_hjustified_new (labelKeys, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxKeys), labelJfdKeys, FALSE, FALSE, 0);
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);

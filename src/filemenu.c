@@ -153,7 +153,7 @@ file_add (gchar * anIdentifier)
       fileEntry[4] = xstrdup (buffer);
     }				/* if */
   else
-    fileEntry[4] = _("");
+    fileEntry[4] = "";
   fileList = gpa_get_global_clist_file ();
   gtk_clist_append (GTK_CLIST (fileList), fileEntry);
   gtk_widget_grab_focus (fileList);
@@ -286,7 +286,7 @@ file_showDetail (void)
   gtk_box_pack_start (GTK_BOX (vboxDetail), tableTop, FALSE, FALSE, 0);
   vboxSignatures = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxSignatures), 5);
-  labelSignatures = gtk_label_new (_(""));
+  labelSignatures = gtk_label_new ("");
   labelJfdSignatures =
     gpa_widget_hjustified_new (labelSignatures, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxSignatures), labelJfdSignatures, FALSE,
@@ -568,7 +568,7 @@ parent);
     checkerArmor = NULL;
   vboxWho = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxWho), 5);
-  labelWho = gtk_label_new (_(""));
+  labelWho = gtk_label_new ("");
   labelJfdWho = gpa_widget_hjustified_new (labelWho, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxWho), labelJfdWho, FALSE, FALSE, 0);
   scrollerWho = gtk_scrolled_window_new (NULL, NULL);
@@ -784,7 +784,7 @@ file_encrypt_detail (gpointer param)
   gtk_box_pack_start (GTK_BOX (vboxSigs), tableKey, FALSE, FALSE, 0);
   vboxSignatures = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxSignatures), 5);
-  labelSignatures = gtk_label_new (_(""));
+  labelSignatures = gtk_label_new ("");
   labelJfdSignatures =
     gpa_widget_hjustified_new (labelSignatures, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxSignatures), labelJfdSignatures, FALSE,
@@ -1247,7 +1247,7 @@ global_windowMain);
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   vboxRecipients = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxRecipients), 5);
-  labelRecipients = gtk_label_new (_(""));
+  labelRecipients = gtk_label_new ("");
   labelJfdRecipients =
     gpa_widget_hjustified_new (labelRecipients, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxRecipients), labelJfdRecipients, FALSE,
@@ -1279,7 +1279,7 @@ global_windowMain);
 		    GTK_FILL, GTK_FILL, 0, 0);
   vboxKeys = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
-  labelKeys = gtk_label_new (_(""));
+  labelKeys = gtk_label_new ("");
   labelJfdKeys = gpa_widget_hjustified_new (labelKeys, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxKeys), labelJfdKeys, FALSE, FALSE, 0);
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
@@ -1371,7 +1371,7 @@ global_windowMain);
   if (withSaveAs)
     {
       hboxSaveAs = gtk_hbox_new (FALSE, 0);
-      labelSaveAs = gtk_label_new (_(""));
+      labelSaveAs = gtk_label_new ("");
       gtk_box_pack_start (GTK_BOX (hboxSaveAs), labelSaveAs, FALSE, FALSE, 0);
       entrySaveAs = gtk_entry_new ();
       gpa_connect_by_accelerator (GTK_LABEL (labelSaveAs), entrySaveAs,
@@ -1594,7 +1594,7 @@ file_protect_dialog (gboolean withSaveAs, gchar * tip)
   gtk_container_set_border_width (GTK_CONTAINER (tablePasswd), 5);
   if (withSaveAs)
     {
-      labelSaveAs = gtk_label_new (_(""));
+      labelSaveAs = gtk_label_new ("");
       labelJfdSaveAs =
 	gpa_widget_hjustified_new (labelSaveAs, GTK_JUSTIFY_RIGHT);
       gtk_table_attach (GTK_TABLE (tablePasswd), labelJfdSaveAs, 0, 1, 0, 1,
@@ -1620,7 +1620,7 @@ file_protect_dialog (gboolean withSaveAs, gchar * tip)
     }				/* if */
   else
     entrySaveAs = NULL;
-  labelPasswd = gtk_label_new (_(""));
+  labelPasswd = gtk_label_new ("");
   labelJfdPasswd = gpa_widget_hjustified_new (labelPasswd, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tablePasswd), labelJfdPasswd, 0, 1, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -1630,7 +1630,7 @@ file_protect_dialog (gboolean withSaveAs, gchar * tip)
 			      accelGroup, _("P_assword: "));
   gtk_table_attach (GTK_TABLE (tablePasswd), entryPasswd, 1, 2, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
-  labelRepeat = gtk_label_new (_(""));
+  labelRepeat = gtk_label_new ("");
   labelJfdRepeat = gpa_widget_hjustified_new (labelRepeat, GTK_JUSTIFY_RIGHT);
   gtk_table_attach (GTK_TABLE (tablePasswd), labelJfdRepeat, 0, 1, 2, 3,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -1871,7 +1871,7 @@ file_decryptAs (void)
   gtk_container_set_border_width (GTK_CONTAINER (vboxDecrypt), 5);
   hboxTop = gtk_hbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hboxTop), 5);
-  labelFilename = gtk_label_new (_(""));
+  labelFilename = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (hboxTop), labelFilename, FALSE, FALSE, 0);
   entryFilename = gtk_entry_new ();
   paramDecrypt = (gpointer *) xmalloc (2 * sizeof (gpointer));

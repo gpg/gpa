@@ -178,7 +178,7 @@ options_keyserver (gpointer param)
   gtk_container_set_border_width (GTK_CONTAINER (vboxServer), 5);
   hboxServer = gtk_hbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hboxServer), 5);
-  labelServer = gtk_label_new (_(""));
+  labelServer = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (hboxServer), labelServer, FALSE, FALSE, 0);
   comboServer = gtk_combo_new ();
   gpa_connect_by_accelerator (GTK_LABEL (labelServer),
@@ -329,7 +329,7 @@ global_windowMain);
   hboxRecipients = gtk_hbox_new (TRUE, 0);
   vboxDefault = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxDefault), 5);
-  labelDefault = gtk_label_new (_(""));
+  labelDefault = gtk_label_new ("");
   labelJfdDefault =
     gpa_widget_hjustified_new (labelDefault, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxDefault), labelJfdDefault, FALSE, FALSE,
@@ -361,7 +361,7 @@ global_windowMain);
   gtk_box_pack_start (GTK_BOX (hboxRecipients), vboxDefault, TRUE, TRUE, 0);
   vboxKeys = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
-  labelKeys = gtk_label_new (_(""));
+  labelKeys = gtk_label_new ("");
   labelJfdKeys = gpa_widget_hjustified_new (labelKeys, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxKeys), labelJfdKeys, FALSE, FALSE, 0);
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
@@ -535,7 +535,7 @@ options_key (gpointer param)
   gtk_container_set_border_width (GTK_CONTAINER (vboxKey), 5);
   vboxKeys = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
-  labelKeys = gtk_label_new (_(""));
+  labelKeys = gtk_label_new ("");
   labelJfdKeys = gpa_widget_hjustified_new (labelKeys, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxKeys), labelJfdKeys, FALSE, FALSE, 0);
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);

@@ -1,5 +1,5 @@
 /* helpmenu.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *	Copyright (C) 1995 Spencer Kimball and Peter Mattis
  *
  * This file is part of GPA
@@ -417,7 +417,7 @@ help_license (gpointer param)
   gtk_container_set_border_width (GTK_CONTAINER (vboxLicense), 5);
   vboxGPL = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxGPL), 5);
-  labelGPL = gtk_label_new (_(""));
+  labelGPL = gtk_label_new ("");
   labelJfdGPL = gpa_widget_hjustified_new (labelGPL, GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (vboxGPL), labelJfdGPL, FALSE, FALSE, 0);
   hboxGPL = gtk_hbox_new (FALSE, 0);

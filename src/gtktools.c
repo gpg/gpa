@@ -99,7 +99,7 @@ gpa_window_destroy (gpointer param)
 GtkWidget *
 gpa_space_new (void)
 {
-  return gtk_label_new (_(""));
+  return gtk_label_new ("");
 }				/* gpa_space_new */
 
 GtkWidget *
@@ -137,7 +137,7 @@ gpa_button_new (GtkAccelGroup * accelGroup, gchar * labelText)
 /* objects */
   GtkWidget *button;
 /* commands */
-  button = gtk_button_new_with_label (_(""));
+  button = gtk_button_new_with_label ("");
   accelKey =
     gtk_label_parse_uline (GTK_LABEL (GTK_BIN (button)->child), labelText);
   gtk_widget_add_accelerator (button, "clicked", accelGroup, accelKey,
@@ -227,7 +227,7 @@ gpa_check_button_new (GtkAccelGroup * accelGroup, gchar * labelText)
 /* objects */
   GtkWidget *checker;
 /* commands */
-  checker = gtk_check_button_new_with_label (_(""));
+  checker = gtk_check_button_new_with_label ("");
   accelKey =
     gtk_label_parse_uline (GTK_LABEL (GTK_BIN (checker)->child), labelText);
   gtk_widget_add_accelerator (checker, "clicked", accelGroup, accelKey,
@@ -243,7 +243,7 @@ gpa_radio_button_new (GtkAccelGroup * accelGroup, gchar * labelText)
 /* objects */
   GtkWidget *radio;
 /* commands */
-  radio = gtk_radio_button_new_with_label (NULL, _(""));
+  radio = gtk_radio_button_new_with_label (NULL, "");
   accelKey =
     gtk_label_parse_uline (GTK_LABEL (GTK_BIN (radio)->child), labelText);
   gtk_widget_add_accelerator (radio, "clicked", accelGroup, accelKey,
@@ -261,7 +261,7 @@ gpa_radio_button_new_from_widget (GtkRadioButton * widget,
 /* objects */
   GtkWidget *radio;
 /* commands */
-  radio = gtk_radio_button_new_with_label_from_widget (widget, _(""));
+  radio = gtk_radio_button_new_with_label_from_widget (widget, "");
   accelKey =
     gtk_label_parse_uline (GTK_LABEL (GTK_BIN (radio)->child), labelText);
   gtk_widget_add_accelerator (radio, "clicked", accelGroup, accelKey,
@@ -277,7 +277,7 @@ gpa_toggle_button_new (GtkAccelGroup * accelGroup, gchar * labelText)
 /* objects */
   GtkWidget *toggle;
 /* commands */
-  toggle = gtk_toggle_button_new_with_label (_(""));
+  toggle = gtk_toggle_button_new_with_label ("");
   accelKey =
     gtk_label_parse_uline (GTK_LABEL (GTK_BIN (toggle)->child), labelText);
   gtk_widget_add_accelerator (toggle, "clicked", accelGroup, accelKey,
@@ -502,7 +502,7 @@ gpa_window_passphrase (GtkWidget * messenger, GtkSignalFunc func, gchar * tip,
   gtk_container_set_border_width (GTK_CONTAINER (vboxPassphrase), 5);
   hboxPasswd = gtk_hbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hboxPasswd), 5);
-  labelPasswd = gtk_label_new (_(""));
+  labelPasswd = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (hboxPasswd), labelPasswd, FALSE, FALSE, 0);
   entryPasswd = gtk_entry_new ();
   gtk_entry_set_visibility (GTK_ENTRY (entryPasswd), FALSE);
