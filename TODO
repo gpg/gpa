@@ -1,92 +1,38 @@
+-*- outline -*-
 
- - Important: update jnlib/
+In no particular order:
 
-2001-02-27 <jan@intevation.de>
-	First of all: check which of the following items are already
-	fixed or meanwhile obsolete!
+* Completely remove jnlib/ At the moment the only thing from jnlib still
+  used is the command line argument parser.  
 
-Earlier than 2001-02-27:
+* Check command line arguments: which are obsolete, which are useful.
 
- - All dummy functions are marked by a comment containing !!!.
+* Listing key signatures.
 
- - Not yet done: Check for memory leaks.
+* Implement a unified options object, along with signals, which would allow to:
+** Change from advanced-ui to simple-ui at runtime.
+** Change the default key status line when the default key changes.
+** Separate option file parsing from command line parsing.
+** Set all options (default key, keyserver, UI, and maybe others) from a
+   single dialog.
 
- - Dialogs: Set them up to find their size and position independently of the
-   window manager!
-     wk: Why?
+* Rework the Key Generation Wizard to make it simpler and use stock buttons.
+  This can probably be done using gtk_dialog_run ().
 
- - File dialogs: Let them _not_ be placed via mouse! Let them get to their
-   standard position as every dialog else.
-     wk: Why?
+* Dialogs should check user input and react to it.
+** Don't allow the user to go on unless the input makes sense (particularly
+   for the advanced key generation dialog and the import dialog).
+** Select options automatically if it's clearly what the user intends
+   For example, if a filename is written in the export dialog, obviously the
+   user intends to export to a file. We should either check the "export to
+   file" radio button automatically, or disable the file entry unless it's
+   checked.
 
- - File dialogs: Initialization!
+* Check the GPAFileSelection. Should it be kept?
 
- - File dialogs: Check selected file for validity -- e.g. in the homedir
-   dialog, if the selected path really is a directory.
+* Add more options to the "Edit key" dialog.
 
- - Sign dialogs: There's one file_sign_dialog now for the file_sign,
-   file_encrypt and key_openPublic_sign processes; in every case, it carries
-   a lot of information that's not needed. It should be replaced by three
-   independent dialogs, every one specialized for its own purpose. (Hell,
-   GPA should be written in a _really_ object-oriented language...!)
-     wk GTK+ is implements an complete messaging and inheritance system;
-	aka OO.
+* Check which options should be available from the toolbar. Draw new icons if
+  needed.
 
- ? File clist: The file status isn't correctly recognized. Why?
-
- - Implement some widget with a progress bar -- signing and encrypting lasts
-   quite long.
-
- - Up to now, all of the dialogs work on the list of currently selected
-   files. They should better work on a copy of this list, made at the moment
-   where the dialogs are created. Same thing with dialogs that work on a key
-   list.
-
- - Implement the feature of differentiating between name and identifier of a
-   file. (For "normal" files: name = identifier without pathnames; for
-   mails: name = "Mail from/to ... [Date]")
-   => In the file/show Detail dialog: Additional read-only entry with the
-      complete file identifier! In the main file clist: tooltips with the
-      complete file identifier(?).
-
- - Implement command line parameters to start GPA with
-   - a given file or file list (thus enabling "Wind$$s Double-Clicking")
-     (use function file_add from module filemenu.h of GPA)
-   - a given key (import them at once and open key ring editor(?))
-
- - Insert new menu item: "Sign and save as"? Or remove all the "save as"
-   menu items for other processes? (Symmetry!)
-
- - Public key ring editor:
-   ? "Delete keys" still yields a segfault...
-
- - frameExpire: fill entryAfter and comboAfter with reasonable values,
-   calculated from the key's expiry date.
-
- ? gpapa_import_ownertrust doesn't yield an error message when the file to
-   import from doesn't exist.
-
- - In all "Sign as" dialogs: In the resp. clists, initialize the scrollbars
-   as to present the selected row (AKA the default key).
-
- ? Set/get the list of default recipients.
-
- ? Set/get the home directory.
-
- ? Load/save options file.
-
- ? Show warranty information.
-
- ? Help texts.
-
-
-FOR VERSION 2.x:
-
- - Implement a unified way of keeping clist selections in memory. Currently,
-   it's a chaos...
-
- - Include import functions into key editors? (Hmm, better wait for feedback
-   by users before starting this...)
-
- - Implement some command pattern or similar stuff to enable undo
-   operations?
+* Documentation!
