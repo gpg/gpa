@@ -1,3 +1,7 @@
+2001-01-26  Bernhard Herzog  <bh@intevation.de>
+
+	* keyring.c (keyring_editor_new): Remove the close button. 
+
 2001-01-25  Bernhard Herzog  <bh@intevation.de>
 
 	* filemenu.c: 

@@ -1,3 +1,8 @@
+2001-01-26  Bernhard Herzog  <bh@intevation.de>
+
+	* de.po: Make sure the menu entries are translated correctly to
+	avoid strange additional pulldown menus
+
 2001-01-25  Bernhard Herzog  <bh@intevation.de>
 
 	* POTFILES.in: Added the new files
