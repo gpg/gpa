@@ -434,27 +434,6 @@ keyring_editor_generate_key_advanced (gpointer param)
   params = gpa_key_gen_run_dialog(editor->window);
   if (params)
     {
-      printf ("User ID %s\n", params->userID);
-      printf ("Email %s\n", params->email);
-      printf ("Comment %s\n", params->comment);
-      printf ("Password %s\n", params->password);
-      printf ("Algorithm %s\n", gpa_algorithm_string(params->algo));
-      printf ("Key Size %d\n", params->keysize);
-      if (params->expiryDate)
-	{
-	  gchar buf[256];
-	  g_date_strftime (buf, 256, "%d.%m.%Y", params->expiryDate);
-	  printf ("Expiry Date %s\n", buf);
-	}
-      else if (params->interval)
-	{
-	  printf ("Expire in %d%c\n", params->interval, params->unit);
-	}
-      else
-	{
-	  printf ("Expire never\n");
-	}
-
       gpapa_create_key_pair (&publicKey, &secretKey, params->password,
 			     params->algo, params->keysize, params->userID,
 			     params->email, params->comment,

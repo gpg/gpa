@@ -261,9 +261,6 @@ gpa_keygen_wizard_password_action (gpointer data)
   comment = gpa_keygen_wizard_simple_get_text (keygen_wizard->comment_page);
   passwd = gpa_keygen_wizard_password_get_password(keygen_wizard->passwd_page);
 
-  printf ("name: %s\nemail: %s\ncomment: %s\npasswd: %s\n",
-	  name, email, comment, passwd);
-
   successful = gpa_keygen_generate_key (name, email, comment, passwd,
 					keygen_wizard->window);
   keygen_wizard->successful = successful;
