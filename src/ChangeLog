@@ -1,3 +1,16 @@
+2001-02-06  Bernhard Herzog  <bh@intevation.de>
+
+	* Makefile.am (gpa_SOURCES): Replace the keyreceivedlg files with
+	the keyimportdlg files.
+
+	* keyimportdlg.h: 
+	* keyimportdlg.c: New files implementing the import dialog
+
+	* keyring.c (keyring_editor_import):
+	(keyring_editor_receive): Rename keyring_editor_receive to
+	keyring_editor_import and implement it with the new import dialog
+	(toolbar_import_keys): call keyring_editor_import.
+
 2001-02-05  Bernhard Herzog  <bh@intevation.de>
 
 	* keyring.c (keyring_editor_export): Use the server returned by
