@@ -11,7 +11,7 @@ AM_CONFIG_HEADER(config.h)
 dnl
 dnl The version number goes here
 dnl
-AM_INIT_AUTOMAKE(gpa,0.3.0)
+AM_INIT_AUTOMAKE(gpa,0.3.0a)
 ALL_LINGUAS="de"
 
 dnl
@@ -43,6 +43,8 @@ AC_ISC_POSIX
 AC_STDC_HEADERS
 AC_ARG_PROGRAM
 AC_PROG_RANLIB
+
+AC_PATH_PROG(GPG, gpg, /usr/local/bin/gpg )
 
 
 dnl
@@ -125,8 +127,10 @@ cat >gpadefs.tmp <<GPAEOF
 /* Generated automatically by configure */
 #ifdef HAVE_DRIVE_LETTERS
   #define GPA_LOCALEDIR "c:/lib/gnupg/locale"
+  #define GPG_PROGRAM   "c:/gnupg/gpg"
 #else
   #define GPA_LOCALEDIR "${prefix}/${DATADIRNAME}/locale"
+  #define GPG_PROGRAM   "${GPG}"
 #endif
 GPAEOF
 if cmp -s gpadefs.h gpadefs.tmp 2>/dev/null; then
@@ -143,6 +147,7 @@ exec_prefix=$exec_prefix
 libdir=$libdir
 datadir=$datadir
 DATADIRNAME=$DATADIRNAME
+GPG=$GPG
 ])
 
 AC_OUTPUT([

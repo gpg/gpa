@@ -1,3 +1,7 @@
+2000-05-25 17:55:29  Werner Koch  (wk@habibti.openit.de)
+
+	* configure.in: Check for gpg.
+
 2000-05-24 09:04:44  Werner Koch  (wk@habibti.openit.de)
 
 	* configure.in: Removed -Wshadow because this hits glib's usage of

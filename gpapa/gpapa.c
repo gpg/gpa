@@ -27,6 +27,7 @@
 #include "gpapapublickey.h"
 #include "gpapasecretkey.h"
 #include "gpapasignature.h"
+#include "gpapaintern.h"
 
 #include <stdio.h>
 
@@ -34,6 +35,9 @@
 #include <string.h>
 
 gchar *global_keyServer;
+
+static char *gpg_program;
+
 
 /* Key management.
  */
@@ -416,9 +420,9 @@ gpapa_load_options (gchar * optionsFileID,
 		    gchar ** defaultKey, gchar ** homeDirectory,
 		    GpapaCallbackFunc callback, gpointer calldata)
 {
-  g_print ("Load options from file ");	/*!!! */
+  g_print ("Load options from file ");  /*!!! */
   g_print (optionsFileID);	/*!!! */
-  g_print ("\n");		/*!!! */
+  g_print ("\n");               /*!!! */
 }				/* gpapa_load_options */
 
 void
@@ -427,20 +431,27 @@ gpapa_save_options (gchar * optionsFileID,
 		    gchar * defaultKey, gchar * homeDirectory,
 		    GpapaCallbackFunc callback, gpointer calldata)
 {
-  g_print ("Save options to file ");	/*!!! */
+  g_print ("Save options to file ");    /*!!! */
   g_print (optionsFileID);	/*!!! */
-  g_print ("\n");		/*!!! */
+  g_print ("\n");               /*!!! */
 }				/* gpapa_save_options */
 
 /* Miscellaneous.
  */
 
-void
-gpapa_init (void)
+const char *
+gpapa_private_get_gpg_program ( )
 {
-  /* For the moment, do nothing.
-   */
-}				/* gpapa_init */
+    return gpg_program;
+}
+
+void
+gpapa_init ( const char *gpg )
+{
+    free ( gpg_program );
+    gpg_program = xstrdup ( gpg? gpg : "/usr/bin/gpg" );
+
+}  /* gpapa_init */
 
 void
 gpapa_fini (void)
@@ -455,7 +466,8 @@ gpapa_fini (void)
       g_list_free (SecRing);
       SecRing = NULL;
     }
-}				/* gpapa_fini */
+  free ( gpg_program ); gpg_program = NULL;
+}  /* gpapa_fini */
 
 void
 gpapa_idle (void)

@@ -34,6 +34,7 @@
 #undef HAVE_U16_TYPEDEF
 #undef HAVE_U32_TYPEDEF
 
+
 @BOTTOM@
 
 #include "gpadefs.h"

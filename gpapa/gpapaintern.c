@@ -179,7 +179,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
   fputs ("** CreateProcess ...\n", stderr);
   fprintf (stderr, "** args=`%s'\n", arg_string);
   fflush (stderr);
-  rc = CreateProcessA ("c:\\gnupg\\gpg.exe", arg_string, &sec_attr,	/* process security attributes */
+  rc = CreateProcessA ("c:\\gnupg\\gpg.exe", arg_string, &sec_attr,     /* process security attributes */
 		       &sec_attr,	/* thread security attributes */
 		       TRUE,	/* inherit handles */
 		       cr_flags,	/* creation flags */
@@ -549,7 +549,7 @@ gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
     argc += 2;
   argv = (char **) xmalloc ((argc + 1) * sizeof (char *));
   i = 0;
-  argv[i++] = "/usr/local/bin/gpg";
+  argv[i++] = gpapa_private_get_gpg_program ();
   for (j = 0; j < standard_args_counter; j++)
     argv[i++] = standard_args[j];
   if (passphrase)

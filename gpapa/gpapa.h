@@ -131,7 +131,7 @@ extern void gpapa_save_options (gchar * optionsFileID,
 /* Miscellaneous.
  */
 
-extern void gpapa_init (void);
+extern void gpapa_init ( const char *gpg );
 
 extern void gpapa_fini (void);
 

@@ -1,3 +1,9 @@
+2000-05-25 17:54:29  Werner Koch  (wk@habibti.openit.de)
+
+  * gpa.c (main): Add a call to gpapa_init
+
+  New option --gpg-program.
+
 2000-05-24 10:01:06  Werner Koch  (wk@habibti.openit.de)
 
   * gpa.c (gpa_menubar_new): Reformated menu list.

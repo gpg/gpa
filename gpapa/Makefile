@@ -64,6 +64,7 @@ DATADIRNAME = share
 GENCAT = 
 GMOFILES =  de.gmo
 GMSGFMT = /usr/bin/msgfmt
+GPG = /usr/local/bin/gpg
 GTK_CFLAGS = -I/usr/lib/glib/include -I/usr/X11R6/include
 GTK_CONFIG = /usr/bin/gtk-config
 GTK_LIBS = -L/usr/lib -L/usr/X11R6/lib -lgtk -lgdk -rdynamic -lgmodule -lglib -ldl -lXi -lXext -lX11 -lm
@@ -84,7 +85,7 @@ POSUB = po
 RANLIB = ranlib
 USE_INCLUDED_LIBINTL = no
 USE_NLS = yes
-VERSION = 0.3.0
+VERSION = 0.3.0a
 l = 
 
 INCLUDES = -I$(top_srcdir)/jnlib -I$(top_srcdir)/intl

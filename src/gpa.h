@@ -65,7 +65,6 @@ struct {
     char *homedir;
     char **keyserver_names;
     int tooltip_kludge;
-
 } opt;
 
 

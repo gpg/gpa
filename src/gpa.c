@@ -62,6 +62,9 @@ enum cmd_and_opt_values { aNull = 0,
     oNoGreeting,
     oNoOptions,
     oHomedir,
+    oGPGBinary,
+
+
     oTooltipKludge,
 aTest };
 
@@ -75,6 +78,7 @@ static ARGPARSE_OPTS opts[] = {
     { oOptions, "options"  , 2, N_("read options from file")},
     { oDebug,	"debug"     ,4|16, N_("set debugging flags")},
     { oDebugAll, "debug-all" ,0, N_("enable full debugging")},
+    { oGPGBinary, "gpg-program", 2 , "@" },
     { oTooltipKludge, "tooltip-kludge", 0, "enable WM workaround"},
 {0} };
 
@@ -154,6 +158,7 @@ main (int argc, char **argv )
     int default_config =1;
     int greeting = 0;
     int nogreeting = 0;
+    const char *gpg_program = GPG_PROGRAM;
 
     set_strusage( my_strusage );
     /*log_set_name ("gpa"); notyet implemented in logging.c */
@@ -242,6 +247,9 @@ main (int argc, char **argv )
 	  case oNoVerbose: opt.verbose = 0; break;
 	  case oNoOptions: break; /* no-options */
 	  case oHomedir: opt.homedir = pargs.r.ret_str; break;
+	  case oGPGBinary: gpg_program = pargs.r.ret_str;  break;
+
+
 	  case oTooltipKludge: opt.tooltip_kludge = 1; break;
 
 	  default : pargs.err = configfp? 1:2; break;
@@ -274,6 +282,7 @@ main (int argc, char **argv )
     opt.keyserver_names[0] = "blackhole.pca.dfn.de";
     opt.keyserver_names[1] = "horowitz.surfnet.nl";
 
+    gpapa_init ( gpg_program );
 
     global_windowMain = gpa_windowMain_new (_("GNU Privacy Assistant"));
     gtk_signal_connect (GTK_OBJECT (global_windowMain), "delete_event",

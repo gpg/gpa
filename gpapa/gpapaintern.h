@@ -1,5 +1,5 @@
 /* gpapaintern.h  -  header for internal functions
- *        Copyright (C) 2000 Free Software Foundation, Inc.
+ *	  Copyright (C) 2000 Free Software Foundation, Inc.
  *
  * This file is part of GPAPA
  *
@@ -37,5 +37,8 @@ extern void gpapa_call_gnupg (gchar ** argv, gboolean do_wait,
 			      GpapaLineCallbackFunc linecallback,
 			      gpointer linedata, GpapaCallbackFunc callback,
 			      gpointer calldata);
+
+/*-- gpapa.c --*/
+const char *gpapa_private_get_gpg_program (void);
 
 #endif /* __GPAPAINTERN_H__ */

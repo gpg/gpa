@@ -1,3 +1,9 @@
+2000-05-25 17:51:21  Werner Koch  (wk@habibti.openit.de)
+
+  * gpapa.c (gpapa_init): Add gpg parameter.
+  (gpapa_private_get_gpg_program): New.
+  * gpapaintern.c (gpapa_call_gnupg): Use this new function.
+
 2000-05-16 19:53:49  Werner Koch  (wk@habibti.openit.de)
 
   Ran "indent -gnu -sc" on all source files.
