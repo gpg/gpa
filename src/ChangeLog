@@ -1,3 +1,35 @@
+2003-09-21  Miguel Coca  <mcoca@gnu.org>
+
+	* passwddlg.c (gpa_change_passphrase_dialog_run): Fix bug by which the
+	dialog always complained about the passphrase confirmation.
+
+	* keyring.c (gpa_keyring_editor_key_modified): New. Signal
+	handler for edit dialog "key_modified".
+	(keyring_editor_edit): Use the new edit dialog.
+
+	* keyeditdlg.c, keyeditdlg.h: Turn the dialog into a subclass of
+	GtkDialog. Now it emits signals and can run concurrently with the
+	main keyring window.
+
+	* gpgmeedit.c (gpa_gpgme_edit_trust_parms_new)
+	(gpa_gpgme_edit_sign_parms_new): Do save the signal ID, so that
+	we don't run clean up twice for the same operation. Was broken
+	before.
+	(gpa_gpgme_edit_expire_parms_release)
+	(gpa_gpgme_edit_passwd_parms_release)
+	(gpa_gpgme_edit_expire_parms_new)
+	(gpa_gpgme_edit_passwd_parms_new): New.
+	(gpa_gpgme_edit_expire_start)
+	(gpa_gpgme_edit_passwd_start): Use the above. Change name (to
+	_start), receive a GpaContext, and change to only start the
+	operation without waiting for it.
+
+	* Makefile.am (gpa_SOURCES): Add gpakeyexpireop.h, gpakeyexpireop.c,
+	gpakeypasswdop.h, gpakeypasswdop.c.
+
+	* gpakeyexpireop.h, gpakeyexpireop.c, gpakeypasswdop.h,
+	gpakeypasswdop.c: New. Operations for the options in the edit dialog.
+
 2003-09-18  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (register_key_operation, register_import_operation)

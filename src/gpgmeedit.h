@@ -33,8 +33,8 @@ gpg_error_t gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
 					gpgme_validity_t ownertrust);
 
 /* Change the expiry date of a key */
-gpg_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, 
-				   GDate *date);
+gpg_error_t gpa_gpgme_edit_expire_start (GpaContext *ctx, gpgme_key_t key, 
+					 GDate *date);
 
 /* Sign this key with the given private key. If local is true, make a local
  * signature. */
@@ -44,6 +44,6 @@ gpg_error_t gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
 
 /* Change the key's passphrase.
  */
-gpg_error_t gpa_gpgme_edit_passwd (gpgme_ctx_t ctx, gpgme_key_t key);
+gpg_error_t gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key);
 
 #endif

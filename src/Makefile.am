@@ -60,6 +60,8 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpakeydeleteop.h gpakeydeleteop.c \
 	      gpakeysignop.h gpakeysignop.c \
 	      gpakeytrustop.h gpakeytrustop.c \
+	      gpakeyexpireop.h gpakeyexpireop.c \
+	      gpakeypasswdop.h gpakeypasswdop.c \
 	      gpaexportop.h gpaexportop.c \
 	      gpaexportfileop.h gpaexportfileop.c \
 	      gpaexportclipop.h gpaexportclipop.c \

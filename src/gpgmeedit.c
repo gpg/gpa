@@ -604,6 +604,13 @@ typedef enum
   PASSWD_ERROR
 } PasswdState;
 
+struct passwd_parms_s 
+{
+  gpgme_passphrase_cb_t func;
+  void *opaque;
+  int request_count;
+};
+
 static gpg_error_t
 edit_passwd_fnc_action (int state, void *opaque, char **result)
 {
@@ -728,9 +735,10 @@ gpa_gpgme_edit_trust_parms_new (GpaContext *ctx, const char *trust_string,
   edit_parms->opaque = g_strdup (trust_string);
 
   /* Make sure the cleanup is run when the edit completes */
-  g_signal_connect (G_OBJECT (ctx), "done", 
-		    G_CALLBACK (gpa_gpgme_edit_trust_parms_release),
-		    edit_parms);
+  edit_parms->signal_id =
+    g_signal_connect (G_OBJECT (ctx), "done", 
+		      G_CALLBACK (gpa_gpgme_edit_trust_parms_release),
+		      edit_parms);
 
   return edit_parms;
 }
@@ -754,13 +762,65 @@ gpg_error_t gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
   return err;
 }
 
-/* Change the expire date of a key */
-gpg_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, GDate *date)
+/* Release the edit parameters needed for changing the expiry date. The 
+ * prototype is that of a GpaContext's "done" signal handler.
+ */
+static void
+gpa_gpgme_edit_expire_parms_release (GpaContext *ctx, gpg_error_t err,
+				     struct edit_parms_s* parms)
 {
-  gchar buf[12];
-  struct edit_parms_s parms = {EXPIRE_START, gpg_error (GPG_ERR_NO_ERROR), 
-			       edit_expire_fnc_action, edit_expire_fnc_transit,
-			       NULL, 0, buf};
+  gpgme_data_release (parms->out);
+  if (parms->signal_id != 0)
+    {
+      /* Don't run this signal handler again if the context is reused */
+      g_signal_handler_disconnect (ctx, parms->signal_id);
+    }
+  g_free (parms->opaque);
+  g_free (parms);
+}
+
+/* Generate the edit parameters needed for changing the expiry date.
+ */
+static struct edit_parms_s*
+gpa_gpgme_edit_expire_parms_new (GpaContext *ctx, GDate *date,
+				 gpgme_data_t out)
+{
+  struct edit_parms_s *edit_parms = g_malloc (sizeof (struct edit_parms_s));
+  int buf_len = 12;
+  gchar *buf = g_malloc (buf_len);
+
+  edit_parms->state = EXPIRE_START;
+  edit_parms->err = gpg_error (GPG_ERR_NO_ERROR);
+  edit_parms->action = edit_expire_fnc_action;
+  edit_parms->transit = edit_expire_fnc_transit;
+  edit_parms->signal_id = 0;
+  edit_parms->out = out;
+  edit_parms->opaque = buf;
+
+  /* The new expiration date */
+  if (date)
+    {
+      g_date_strftime (buf, buf_len, "%F", date);
+    }
+  else
+    {
+      strncpy (buf, "0", buf_len);
+    }
+
+  /* Make sure the cleanup is run when the edit completes */
+  edit_parms->signal_id = 
+    g_signal_connect (G_OBJECT (ctx), "done", 
+		      G_CALLBACK (gpa_gpgme_edit_expire_parms_release),
+		      edit_parms);
+
+  return edit_parms;
+}
+
+/* Change the expire date of a key */
+gpg_error_t gpa_gpgme_edit_expire_start (GpaContext *ctx, gpgme_key_t key,
+					 GDate *date)
+{
+  struct edit_parms_s *parms;
   gpg_error_t err;
   gpgme_data_t out = NULL;
 
@@ -769,17 +829,9 @@ gpg_error_t gpa_gpgme_edit_expire (gpgme_ctx_t ctx, gpgme_key_t key, GDate *date
     {
       return err;
     }
-  /* The new expiration date */
-  if (date)
-    {
-      g_date_strftime (buf, sizeof(buf), "%F", date);
-    }
-  else
-    {
-      strncpy (buf, "0", sizeof (buf));
-    }
-  err = gpgme_op_edit (ctx, key, edit_fnc, &parms, out);
-  gpgme_data_release (out);
+
+  parms = gpa_gpgme_edit_expire_parms_new (ctx, date, out);
+  err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
   return err;
 }
 
@@ -819,9 +871,10 @@ gpa_gpgme_edit_sign_parms_new (GpaContext *ctx, char *check_level,
   sign_parms->local = local;
 
   /* Make sure the cleanup is run when the edit completes */
-  g_signal_connect (G_OBJECT (ctx), "done", 
-		    G_CALLBACK (gpa_gpgme_edit_sign_parms_release),
-		    edit_parms);
+  edit_parms->signal_id =
+    g_signal_connect (G_OBJECT (ctx), "done", 
+		      G_CALLBACK (gpa_gpgme_edit_sign_parms_release),
+		      edit_parms);
 
   return edit_parms;
 }
@@ -880,26 +933,78 @@ gpg_error_t passwd_passphrase_cb (void *hook, const char *uid_hint,
 }
 
 
-gpg_error_t gpa_gpgme_edit_passwd (gpgme_ctx_t ctx, gpgme_key_t key)
+/* Release the edit parameters needed for changing the passphrase. The 
+ * prototype is that of a GpaContext's "done" signal handler.
+ */
+static void
+gpa_gpgme_edit_passwd_parms_release (GpaContext *ctx, gpg_error_t err,
+				     struct edit_parms_s* parms)
 {
-  struct edit_parms_s parms = {PASSWD_START, gpg_error (GPG_ERR_NO_ERROR),
-			       edit_passwd_fnc_action, edit_passwd_fnc_transit,
-			       NULL, 0, (gchar *) ""};
+  struct passwd_parms_s *passwd_parms = parms->opaque;
+
+  gpgme_data_release (parms->out);
+
+  /* Make sure the normal passphrase callback is used */
+  gpgme_set_passphrase_cb (ctx->ctx, passwd_parms->func, passwd_parms->opaque);
+
+  if (parms->signal_id != 0)
+    {
+      /* Don't run this signal handler again if the context is reused */
+      g_signal_handler_disconnect (ctx, parms->signal_id);
+    }
+  
+  g_free (parms);
+  g_free (parms->opaque);
+}
+
+/* Generate the edit parameters needed for changing the passphrase.
+ */
+static struct edit_parms_s*
+gpa_gpgme_edit_passwd_parms_new (GpaContext *ctx, gpgme_data_t out)
+{
+  struct edit_parms_s *edit_parms = g_malloc (sizeof (struct edit_parms_s));
+  struct passwd_parms_s *passwd_parms = g_malloc (sizeof 
+						  (struct passwd_parms_s));
+
+  edit_parms->state = PASSWD_START;
+  edit_parms->err = gpg_error (GPG_ERR_NO_ERROR);
+  edit_parms->action = edit_passwd_fnc_action;
+  edit_parms->transit = edit_passwd_fnc_transit;
+  edit_parms->signal_id = 0;
+  edit_parms->out = out;
+  edit_parms->opaque = passwd_parms;
+  passwd_parms->request_count = 0;
+  gpgme_get_passphrase_cb (ctx->ctx, &passwd_parms->func,
+			   &passwd_parms->opaque);
+
+  /* Make sure the cleanup is run when the edit completes */
+  edit_parms->signal_id = 
+    g_signal_connect (G_OBJECT (ctx), "done", 
+		      G_CALLBACK (gpa_gpgme_edit_passwd_parms_release),
+		      edit_parms);
+
+  return edit_parms;
+}
+
+gpg_error_t gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
+{
+  struct edit_parms_s *parms;
   gpg_error_t err;
   gpgme_data_t out;
-  int i = 0;
 
   err = gpgme_data_new (&out);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       return err;
     }
-  /* Use our own passphrase callback */
-  gpgme_set_passphrase_cb (ctx, passwd_passphrase_cb, &i);
-  err = gpgme_op_edit (ctx, key, edit_fnc, &parms, out);
-  gpgme_data_release (out);
-  /* Make sure the normal passphrase callback is used */
-  gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
+  parms = gpa_gpgme_edit_passwd_parms_new (ctx, out);
 
-  return gpg_error (GPG_ERR_NO_ERROR);
+  /* Use our own passphrase callback: the data is a pointer to an int
+   * that counts the passphrase requests received */
+  gpgme_set_passphrase_cb (ctx->ctx, passwd_passphrase_cb,
+			   &(((struct passwd_parms_s*) 
+			      parms->opaque)->request_count));
+  err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
+
+  return err;
 }

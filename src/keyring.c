@@ -269,6 +269,14 @@ gpa_keyring_editor_changed_wot_cb (gpointer data)
 }
 
 static void
+gpa_keyring_editor_key_modified (GpaKeyEditDialog *dialog, gpgme_key_t key,
+				 gpointer data)
+{
+  GPAKeyringEditor *editor = data;
+  gpa_keylist_start_reload (editor->keylist);  
+}
+
+static void
 register_key_operation (GPAKeyringEditor * editor, GpaKeyOperation *op)
 {
   g_signal_connect_swapped (G_OBJECT (op), "changed_wot",
@@ -396,18 +404,14 @@ keyring_editor_edit (gpointer param)
 {
   GPAKeyringEditor * editor = param;
   gpgme_key_t key = keyring_editor_current_key (editor);
+  GtkWidget *dialog = gpa_key_edit_dialog_new (editor->window, key);
 
-  if (key)
-    {
-      /* Should be called when just one key is selected.
-       */
-      if (gpa_key_edit_dialog_run (editor->window, key))
-        {
-	  gpa_keylist_start_reload (editor->keylist);
-          update_selection_sensitive_widgets (editor);
-          keyring_update_details_notebook (editor);
-        }
-    }
+  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+
+  g_signal_connect (G_OBJECT (dialog), "key_modified",
+		    G_CALLBACK (gpa_keyring_editor_key_modified), editor);
+
+  gtk_widget_show_all (dialog);
 }
 
 static void
