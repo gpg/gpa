@@ -123,7 +123,7 @@ update_selection_sensitive_widgets (GPAKeyringEditor * editor)
 
 
 /* Return TRUE if the key list widget of the keyring editor has at least
- * one selected item
+ * one selected item. Usable as a sensitivity callback.
  */
 static gboolean
 keyring_editor_has_selection (gpointer param)
@@ -135,7 +135,7 @@ keyring_editor_has_selection (gpointer param)
 
 
 /* Return TRUE if the key list widget of the keyring editor has exactly
- * one selected item
+ * one selected item.  Usable as a sensitivity callback.
  */
 static gboolean
 keyring_editor_has_single_selection (gpointer param)
@@ -314,6 +314,19 @@ keyring_editor_delete (gpointer param)
     }
 } /* keyring_editor_delete */
 
+
+/* Return true if the key sign button should be sensitive, i.e. if
+ * there's at least one selected key and at least one secret key
+ * available
+ */
+static gboolean
+keyring_editor_can_sign (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+
+  return (keyring_editor_has_selection (param)
+	  && gpapa_get_secret_key_count (gpa_callback, editor->window) > 0);
+} /* keyring_editor_can_sign */
 
 /* sign the selected keys */
 static void
@@ -718,7 +731,7 @@ keyring_editor_new (void)
   buttonSignBox = gpa_xpm_label_box(windowPublic, "gpa_sign_small",
 				  _("_Sign keys..."), buttonSign, accelGroup);
   gtk_container_add (GTK_CONTAINER (buttonSign), buttonSignBox);
-  GPA_SENSITIVE_BUTTON (buttonSign, keyring_editor_has_selection);
+  GPA_SENSITIVE_BUTTON (buttonSign, keyring_editor_can_sign);
   gtk_signal_connect_object (GTK_OBJECT (buttonSign), "clicked",
 			     GTK_SIGNAL_FUNC (keyring_editor_sign),
 			     (gpointer)editor);
