@@ -1,5 +1,8 @@
 2001-02-09  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_details_notebook): Add a missing : in the key
+	type label
+
 	* helpmenu.h
 	* helpmenu.c (help_license):
 	(help_about):
