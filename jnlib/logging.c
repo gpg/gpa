@@ -31,6 +31,9 @@
 #include <stdarg.h>
 #include <errno.h>
 #include <time.h>
+#ifdef __MINGW32__
+  #include <io.h>
+#endif
 
 #include "libjnlib-config.h"
 #include "logging.h"

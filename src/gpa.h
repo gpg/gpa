@@ -64,7 +64,6 @@ struct {
     unsigned int debug;
     char *homedir;
     char **keyserver_names;
-    int tooltip_kludge;
 } opt;
 
 

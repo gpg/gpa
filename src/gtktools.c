@@ -42,18 +42,9 @@ gpa_widget_set_centered (GtkWidget * widget, GtkWidget * parent)
 void
 gpa_widget_show (GtkWidget * widget, GtkWidget * parent, gchar * tip)
 {
-    if ( opt.tooltip_kludge ) {
-	/* Some windowmangers minimizes the new windows, so we
-	 * use this workaround to show them */
-	gpa_widget_set_centered (widget, parent);
-	gpa_windowTip_show (tip);
-	gtk_widget_show_all (widget);
-    }
-    else {
-	gtk_widget_show_all (widget);
-	gpa_widget_set_centered (widget, parent);
-	gpa_windowTip_show (tip);
-    }
+    gtk_widget_show_all (widget);
+    gpa_widget_set_centered (widget, parent);
+    gpa_windowTip_show (tip);
 }				/* gpa_widget_show */
 
 void
@@ -129,8 +120,8 @@ gpa_button_new (GtkAccelGroup * accelGroup, gchar * labelText)
 /* Create a new hbox with an image and a label packed into it
  * and return the box. Then treat the accelerators. */
 GtkWidget *gpa_xpm_label_box( GtkWidget *parent,
-						 gchar     **xpm,
-						 gchar     *label_text,
+						 gchar	   **xpm,
+						 gchar	   *label_text,
 						 GtkWidget * button,
 						 GtkAccelGroup * accelGroup)
 {

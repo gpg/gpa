@@ -518,11 +518,10 @@ options_key (void)
     gpapa_get_secret_key_count (gpa_callback, global_windowMain);
   if (!contentsKeyCount)
     {
-      gpa_window_error (_
-			("No secret keys available to\nselect a default key from."),
-global_windowMain);
+      gpa_window_error (_("No secret keys available to\n"
+			  "select a default key from."), global_windowMain);
       return;
-    }				/* if */
+    }
   keeper = gpa_windowKeeper_new ();
   windowKey = gtk_window_new (GTK_WINDOW_DIALOG);
   gpa_windowKeeper_set_window (keeper, windowKey);

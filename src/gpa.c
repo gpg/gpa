@@ -66,8 +66,6 @@ enum cmd_and_opt_values { aNull = 0,
     oHomedir,
     oGPGBinary,
 
-
-    oTooltipKludge,
 aTest };
 
 
@@ -81,7 +79,6 @@ static ARGPARSE_OPTS opts[] = {
     { oDebug,	"debug"     ,4|16, N_("set debugging flags")},
     { oDebugAll, "debug-all" ,0, N_("enable full debugging")},
     { oGPGBinary, "gpg-program", 2 , "@" },
-    { oTooltipKludge, "tooltip-kludge", 0, "enable WM workaround"},
 {0} };
 
 
@@ -251,8 +248,6 @@ main (int argc, char **argv )
 	  case oHomedir: opt.homedir = pargs.r.ret_str; break;
 	  case oGPGBinary: gpg_program = pargs.r.ret_str;  break;
 
-
-	  case oTooltipKludge: opt.tooltip_kludge = 1; break;
 
 	  default : pargs.err = configfp? 1:2; break;
 	}
