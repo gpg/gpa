@@ -379,8 +379,8 @@ gpapa_public_key_send_to_server (GpapaPublicKey * key, gchar * ServerName,
 } /* gpapa_public_key_send_to_server */
 
 void
-gpapa_public_key_sign (GpapaPublicKey * key, gchar * keyID,
-		       gchar * PassPhrase, GpapaKeySignType SignType,
+gpapa_public_key_sign (GpapaPublicKey *key, gchar *keyID,
+		       gchar *PassPhrase, GpapaKeySignType SignType,
 		       GpapaCallbackFunc callback, gpointer calldata)
 {
   if (!key)

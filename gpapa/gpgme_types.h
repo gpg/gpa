@@ -37,9 +37,10 @@
 
 #include "gpgme.h"  /* external objects and prototypes */
 
-#ifndef GPAPA
+#ifndef HAVE_BYTE_TYPEDEF
+#define HAVE_BYTE_TYPEDEF
 typedef unsigned char byte;
-#endif /* not GPAPA */
+#endif
 
 
 typedef enum {

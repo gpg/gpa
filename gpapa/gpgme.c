@@ -50,7 +50,6 @@ gpgme_new (GpgmeCtx *r_ctx)
     if (!c)
         return mk_error (Out_Of_Core);
     c->verbosity = 1;
-    c->use_armor = 1; /* fixme: reset this to 0 */
     *r_ctx = c;
 
     return 0;
@@ -72,6 +71,9 @@ gpgme_release ( GpgmeCtx c )
     gpgme_key_release ( c->tmp_key );
     gpgme_data_release ( c->help_data_1 );
     gpgme_data_release ( c->notation );
+    gpgme_signers_clear (c);
+    if (c->signers)
+        xfree (c->signers);
     /* fixme: release the key_queue */
     xfree (c);
 }
@@ -111,6 +113,8 @@ _gpgme_release_result ( GpgmeCtx c )
 void
 gpgme_cancel (GpgmeCtx c)
 {
+    return_if_fail (c);
+
     c->cancel = 1;
 }
 
@@ -131,7 +135,6 @@ gpgme_get_notation ( GpgmeCtx c )
         return NULL;
     return _gpgme_data_get_as_string ( c->notation );
 }
-
 
 /**
  * gpgme_set_armor:
@@ -176,7 +179,7 @@ gpgme_set_textmode ( GpgmeCtx c, int yes )
 void
 gpgme_set_keylist_mode ( GpgmeCtx c, int mode )
 {
-    if (c)
+    if (!c)
         return;
     c->keylist_mode = mode;
 }
@@ -239,5 +242,12 @@ gpgme_set_progress_cb ( GpgmeCtx c, GpgmeProgressCb cb, void *cb_value )
     c->progress_cb = cb;
     c->progress_cb_value = cb_value;
 }
+
+
+
+
+
+
+
 
 

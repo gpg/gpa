@@ -84,6 +84,7 @@ struct gpg_object_s {
         int eof;
         GpgColonLineHandler fnc;  /* this indicate use of this structrue */
         void *fnc_value;
+        int simple;
     } colon;
 
     char **argv;  
@@ -376,7 +377,22 @@ _gpgme_gpg_set_colon_line_handler ( GpgObject gpg,
     gpg->colon.eof = 0;
     gpg->colon.fnc = fnc;
     gpg->colon.fnc_value = fnc_value;
+    gpg->colon.simple = 0;
     return 0;
+}
+
+
+GpgmeError
+_gpgme_gpg_set_simple_line_handler ( GpgObject gpg,
+                                     GpgColonLineHandler fnc,
+                                     void *fnc_value ) 
+{
+    GpgmeError err;
+
+    err = _gpgme_gpg_set_colon_line_handler (gpg, fnc, fnc_value);
+    if (!err)
+        gpg->colon.simple = 1;
+    return err;
 }
 
 
@@ -464,25 +480,18 @@ build_argv ( GpgObject gpg )
     }
 
     argc++; /* for argv[0] */
-    for ( a=gpg->arglist; a; a = a->next )
-      {
+    for ( a=gpg->arglist; a; a = a->next ) {
         argc++;
-        if (a->data)
-          {
-#ifdef DEBUG
-            fprintf (stderr, "build_argv: data\n");
-#endif
+        if (a->data) {
+            /*fprintf (stderr, "build_argv: data\n" );*/
             datac++;
-            if (a->dup_to == -1 && !a->print_fd)
-              need_special = 1;
-          }
-        else
-          {
-#ifdef DEBUG
-            fprintf (stderr, "build_argv: arg=`%s'\n", a->arg);
-#endif
-          }
-      }
+            if ( a->dup_to == -1 && !a->print_fd )
+                need_special = 1;
+        }
+        else {
+            /*   fprintf (stderr, "build_argv: arg=`%s'\n", a->arg );*/
+        }
+    }
     if ( need_special )
         argc++;
     if (use_agent)
@@ -709,7 +718,8 @@ _gpgme_gpg_spawn( GpgObject gpg, void *opaque )
     fd_parent_list[n].dup_to = -1;
 
 
-    pid = _gpgme_io_spawn (GPG_PATH, gpg->argv, fd_child_list, fd_parent_list);
+    pid = _gpgme_io_spawn (_gpgme_get_gpg_path (),
+                           gpg->argv, fd_child_list, fd_parent_list);
     xfree (fd_child_list);
     if (pid == -1) {
         return mk_error (Exec_Error);
@@ -780,7 +790,7 @@ gpg_inbound_handler ( void *opaque, int pid, int fd )
 
     nread = _gpgme_io_read (fd, buf, 200 );
     if ( nread < 0 ) {
-        fprintf (stderr, "read_mem_data: read failed on fd %d (n=%d): %s\n",
+        DEBUG3 ("read_mem_data: read failed on fd %d (n=%d): %s",
                  fd, nread, strerror (errno) );
         return 1;
     }
@@ -793,7 +803,7 @@ gpg_inbound_handler ( void *opaque, int pid, int fd )
     
     err = _gpgme_data_append ( dh, buf, nread );
     if ( err ) {
-        fprintf (stderr, "_gpgme_append_data failed: %s\n",
+        DEBUG1 ("_gpgme_append_data failed: %s\n",
                  gpgme_strerror(err));
         /* Fixme: we should close the pipe or read it to /dev/null in
          * this case. Returnin EOF is not sufficient */
@@ -827,8 +837,8 @@ write_mem_data ( GpgmeData dh, int fd )
     if (nwritten == -1 && errno == EAGAIN )
         return 0;
     if ( nwritten < 1 ) {
-        fprintf (stderr, "write_mem_data(%d): write failed (n=%d): %s\n",
-                 fd, nwritten, strerror (errno) );
+        DEBUG3 ("write_mem_data(%d): write failed (n=%d): %s",
+                fd, nwritten, strerror (errno) );
         _gpgme_io_close (fd);
         return 1;
     }
@@ -854,8 +864,8 @@ write_cb_data ( GpgmeData dh, int fd )
     if (nwritten == -1 && errno == EAGAIN )
         return 0;
     if ( nwritten < 1 ) {
-        fprintf (stderr, "write_cb_data(%d): write failed (n=%d): %s\n",
-                 fd, nwritten, strerror (errno) );
+        DEBUG3 ("write_cb_data(%d): write failed (n=%d): %s",
+                fd, nwritten, strerror (errno) );
         _gpgme_io_close (fd);
         return 1;
     }
@@ -863,7 +873,7 @@ write_cb_data ( GpgmeData dh, int fd )
     if ( nwritten < nbytes ) {
         /* ugly, ugly: It does currently only for for MEM type data */
         if ( _gpgme_data_unread (dh, buffer + nwritten, nbytes - nwritten ) )
-            fprintf (stderr, "wite_cb_data: unread of %d bytes failed\n",
+            DEBUG1 ("wite_cb_data: unread of %d bytes failed\n",
                      nbytes - nwritten );
         _gpgme_io_close (fd);
         return 1;
@@ -906,7 +916,7 @@ gpg_status_handler ( void *opaque, int pid, int fd )
     assert ( fd == gpg->status.fd[0] );
     rc = read_status ( gpg );
     if ( rc ) {
-        fprintf (stderr, "gpg_handler: read_status problem %d\n - stop", rc);
+        DEBUG1 ("gpg_handler: read_status problem %d\n - stop", rc);
         return 1;
     }
 
@@ -997,19 +1007,20 @@ read_status ( GpgObject gpg )
                                 return mk_error (Out_Of_Core);
                             /* this should be the last thing we have received
                              * and the next thing will be that the command
-                             * handler does it action */
+                             * handler does its action */
                             if ( nread > 1 )
-                                fprintf (stderr, "** ERROR, unxpected data in"
-                                         " read_status\n" );
+                                DEBUG0 ("ERROR, unexpected data in read_status");
                             _gpgme_thaw_fd (gpg->cmd.fd);
                         }
                         else if ( gpg->status.fnc ) {
                             gpg->status.fnc ( gpg->status.fnc_value, 
                                               r->code, rest);
                         }
-                    }
-                    if ( r->code == STATUS_END_STREAM ) {
-                        /* _gpgme_freeze_fd ( ? );*/
+                    
+                        if ( r->code == STATUS_END_STREAM ) {
+                            if ( gpg->cmd.used )
+                                _gpgme_freeze_fd ( gpg->cmd.fd );
+                        }
                     }
                 }
                 /* To reuse the buffer for the next line we have to
@@ -1052,12 +1063,12 @@ gpg_colon_line_handler ( void *opaque, int pid, int fd )
     assert ( fd == gpg->colon.fd[0] );
     rc = read_colon_line ( gpg );
     if ( rc ) {
-        fprintf (stderr, "gpg_colon_line_handler: "
+        DEBUG1 ("gpg_colon_line_handler: "
                  "read problem %d\n - stop", rc);
         return 1;
     }
 
-    return gpg->status.eof;
+    return gpg->colon.eof;
 }
 
 static GpgmeError
@@ -1101,7 +1112,8 @@ read_colon_line ( GpgObject gpg )
                  * some other printed information.
                  */
                 *p = 0;
-                if ( *buffer && strchr (buffer, ':') ) {
+                if ( gpg->colon.simple
+                     || (*buffer && strchr (buffer, ':')) ) {
                     assert (gpg->colon.fnc);
                     gpg->colon.fnc ( gpg->colon.fnc_value, buffer );
                 }
@@ -1181,7 +1193,7 @@ pipemode_cb ( void *opaque, char *buffer, size_t length, size_t *nread )
             *nread = 2;
         }
         else if (err) {
-            fprintf (stderr, "** pipemode_cb: copy sig failed: %s\n",
+            DEBUG1 ("pipemode_cb: copy sig failed: %s\n",
                      gpgme_strerror (err) );
             return -1;
         }
@@ -1195,7 +1207,7 @@ pipemode_cb ( void *opaque, char *buffer, size_t length, size_t *nread )
             *nread = 4;
         }
         else if (err) {
-            fprintf (stderr, "** pipemode_cb: copy data failed: %s\n",
+            DEBUG1 ("pipemode_cb: copy data failed: %s\n",
                      gpgme_strerror (err) );
             return -1;
         }
@@ -1220,32 +1232,32 @@ command_cb ( void *opaque, char *buffer, size_t length, size_t *nread )
     const char *value;
     int value_len;
 
-    fprintf (stderr, "** command_cb: enter\n");
+    DEBUG0 ("command_cb: enter\n");
     assert (gpg->cmd.used);
     if ( !buffer || !length || !nread )
         return 0; /* those values are reserved for extensions */
     *nread =0;
     if ( !gpg->cmd.code ) {
-        fprintf (stderr, "** command_cb: no code\n");
+        DEBUG0 ("command_cb: no code\n");
         return -1;
     }
     
     if ( !gpg->cmd.fnc ) {
-        fprintf (stderr, "** command_cb: no user cb\n");
+        DEBUG0 ("command_cb: no user cb\n");
         return -1;
     }
 
     value = gpg->cmd.fnc ( gpg->cmd.fnc_value, 
                            gpg->cmd.code, gpg->cmd.keyword );
     if ( !value ) {
-        fprintf (stderr, "** command_cb: no data from user cb\n");
+        DEBUG0 ("command_cb: no data from user cb\n");
         gpg->cmd.fnc ( gpg->cmd.fnc_value, 0, value);
         return -1;
     }
 
     value_len = strlen (value);
     if ( value_len+1 > length ) {
-        fprintf (stderr, "** command_cb: too much data from user cb\n");
+        DEBUG0 ("command_cb: too much data from user cb\n");
         gpg->cmd.fnc ( gpg->cmd.fnc_value, 0, value);
         return -1;
     }
@@ -1255,8 +1267,6 @@ command_cb ( void *opaque, char *buffer, size_t length, size_t *nread )
         buffer[value_len++] = '\n';
     *nread = value_len;
     
-    fprintf (stderr, "** command_cb: leave (wrote `%.*s')\n",
-             (int)*nread-1, buffer);
     gpg->cmd.fnc ( gpg->cmd.fnc_value, 0, value);
     gpg->cmd.code = 0;
     /* and sleep again until read_status will wake us up again */

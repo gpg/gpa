@@ -1,3 +1,11 @@
+Fri 9 Feb 2001 11:05 Peter Gerwinski <peter@gerwinski.de>
+
+        * context.h, data.c, gpgme.c, gpgme.h, ops.h, posix-io.c,
+          rungpg.c, rungpg.h, util.c, util.h, w32-io.c, wait.c,
+          gpgme_types.h: updated to current GPGME.
+
+        * sema.h: new file (from GPGME).
+
 2001-02-07  Bernhard Herzog  <bh@intevation.de>
 
 	* gpapatest.c (test_expiry): Add a dummy passphrase to make
