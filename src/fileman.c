@@ -464,7 +464,7 @@ decrypt_files (gpointer param)
   if (!files)
     return;
 
-  passphrase = gpa_passphrase_run_dialog (fileman->window);
+  passphrase = gpa_passphrase_run_dialog (fileman->window, NULL);
   if (passphrase)
     {
       cur = files;

@@ -119,7 +119,7 @@ file_sign_ok (gpointer param)
       gpa_window_error (_("No key selected!"), dialog->window);
       return;
     }
-  passphrase = gpa_passphrase_run_dialog (dialog->window);
+  passphrase = gpa_passphrase_run_dialog (dialog->window, NULL);
   if (passphrase)
     {
       file_sign_do_sign (dialog, key_id, passphrase, sign_type, armor);

@@ -1,5 +1,16 @@
 2001-02-08  Bernhard Herzog  <bh@intevation.de>
 
+	* passphrasedlg.h (gpa_passphrase_run_dialog): 
+	* passphrasedlg.c (gpa_passphrase_run_dialog): Add a key parameter
+	and display information about the key whose password is required.
+
+	* keysigndlg.c (key_sign_ok): 
+	* filesigndlg.c (file_sign_ok): 
+	* fileman.c (decrypt_files): 
+	* expirydlg.c (expiry_ok): Call gpa_passphrase_run_dialog with
+	NULL as the new key parameter. Should be replaced with the correct
+	key later.
+
 	* keyring.c (keyring_editor_toggle_show_trust): Removed because
 	it's no longer used. A similar effect is available with the
 	brief/detailed listings.

@@ -93,7 +93,7 @@ expiry_ok (GtkWidget *widget, gpointer param)
   if (result)
     {
       /* The data is OK now ask for the password */
-      password = gpa_passphrase_run_dialog (dialog->window);
+      password = gpa_passphrase_run_dialog (dialog->window, NULL);
       if (!password)
 	{
 	  /* the user cancelled, so free the data that was allocated in

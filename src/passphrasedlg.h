@@ -1,5 +1,5 @@
 /* passphrasedlg.h  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
  *
@@ -23,7 +23,7 @@
 
 #include <gtk/gtk.h>
 
-gchar * gpa_passphrase_run_dialog (GtkWidget * parent);
+gchar * gpa_passphrase_run_dialog (GtkWidget * parent, GpapaSecretKey * key);
 
 
 #endif /* PASSPHRASEDLG_H */

@@ -69,7 +69,7 @@ key_sign_ok (gpointer param)
   else
     dialog->sign_type = GPAPA_KEY_SIGN_NORMAL;
 
-  dialog->passphrase = gpa_passphrase_run_dialog (dialog->window);
+  dialog->passphrase = gpa_passphrase_run_dialog (dialog->window, NULL);
 
   gtk_widget_destroy (dialog->window);
 } /* key_sign_ok */

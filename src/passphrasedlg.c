@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include "gpa.h"
 #include "gtktools.h"
+#include "gpawidgets.h"
 #include "passphrasedlg.h"
 
 /* a pointer to a GPAPassphraseDialog struct is passed to all callbacks
@@ -85,9 +86,12 @@ passphrase_destroy (GtkWidget *widget, gpointer param)
  * recursively and return the entered passphrase if the user clicked OK,
  * and NULL if the user cancelled. The returned string uses malloced
  * memory and has to be free()ed by the caller.
+ *
+ * If the secret key key is not NULL, display information about that key
+ * so that the user knows which password is required.
  */
 gchar * 
-gpa_passphrase_run_dialog (GtkWidget * parent)
+gpa_passphrase_run_dialog (GtkWidget * parent, GpapaSecretKey * key)
 {
   GtkAccelGroup *accelGroup;
   GtkWidget *windowPassphrase;
@@ -113,6 +117,12 @@ gpa_passphrase_run_dialog (GtkWidget * parent)
 
   vboxPassphrase = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxPassphrase), 5);
+
+  if (key)
+    {
+      GtkWidget * info = gpa_key_info_new (GPAPA_KEY (key), parent);
+      gtk_box_pack_start (GTK_BOX (vboxPassphrase), info, FALSE, FALSE, 0);
+    }
 
   hboxPasswd = gtk_hbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hboxPasswd), 5);
