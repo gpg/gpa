@@ -1,3 +1,7 @@
+2001-01-25	Jan-Oliver Wagner <jan@intevation.de>
+
+	* README.W32: New
+
 2001-01-23	Jan-Oliver Wagner <jan@intevation.de>
 
 	* acconfig.h: added USE_ONLY_8DOT3 and  USE_SIMPLE_GETTEXT
