@@ -1,8 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
 tip_files = gpa_tips.en gpa_tips.de
+gtkrc = gtkrc
 
-EXTRA_DIST = $(tip_files)
+EXTRA_DIST = $(tip_files) $(gtkrc)
 
 bin_PROGRAMS = gpa
 
@@ -38,4 +39,5 @@ install-data-local:
 	for i in $(tip_files); do \
 	    $(INSTALL_DATA) $(srcdir)/$$i $(DESTDIR)$(pkgdatadir)/$$i; \
 	done
+	$(INSTALL_DATA) $(srcdir)/$(gtkrc) $(DESTDIR)$(pkgdatadir)/$(gtkrc);
 
