@@ -1,3 +1,37 @@
+2002-02-13  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gpapa.c (gpapa_import_ownertrust)
+	(gpapa_import_keys)
+	gpapafile.c (gpapa_file_get_status)
+	(gpapa_file_get_status)
+	(gpapa_file_get_signatures)
+	(gpapa_file_sign)
+	(gpapa_file_encrypt)
+	(gpapa_file_encrypt_and_sign)
+	(gpapa_file_protect)
+	(gpapa_file_decrypt): More filename quoting.
+
+	* gpapa.c (pubring_initialized)
+	(secring_initialized): New global variables.
+	(gpapa_refresh_secret_keyring)
+	(gpapa_refresh_public_keyring): Mark the keyrings as initialized.
+	(gpapa_get_public_key_count)
+	(gpapa_get_public_key_by_index)
+	(gpapa_get_public_key_by_ID)
+	(gpapa_get_secret_key_count)
+	(gpapa_get_secret_key_by_index)
+	(gpapa_get_secret_key_by_ID): Check whether the keyring has been
+	initialized, and read it if it hasn't.
+
+	* gpapasecretkey.c: Fixed error messages.
+	
+2002-02-11  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gpapapublickey.c (gpapa_public_key_sign): Changed to quote the
+	key ID with double quotes. Same problems as with quoting filenames.
+
+	* gpgme.h: Commented out DEBUG define.
+	
 2002-02-10  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 	
 	* Makefile.am (libgpapa_a_SOURCES): Added  keyserver.c and
