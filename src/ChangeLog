@@ -1,5 +1,13 @@
 2002-09-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* keyring.c (keyring_details_page_fill_key): Display the
+	fingerprint in a proper format (using
+	gpa_gpgme_key_get_fingerprint).
+	* keysigndlg.c (gpa_key_sign_run_dialog): Likewise.
+
+	* gpgmetools.c (gpa_gpgme_key_get_userid): A bit of cleaning up.
+	(gpa_gpgme_key_get_fingerprint): New function. Based on GPAPA code.
+
 	* gpgmeedit.c (edit_sign_fnc): Ignore "bad passphrase" status
 	lines. This solves the problem where a wrong passphrase terminated
 	GPA.

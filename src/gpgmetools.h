@@ -111,6 +111,15 @@ const char * gpa_passphrase_cb (void *opaque, const char *desc, void **r_hd);
 /* Convenience functions to access key attributes, which need to be filtered
  * before being displayed to the user. */
 
+/* Return the user ID, making sure it is properly UTF-8 encoded.
+ * Allocates a new string, which must be freed with g_free().
+ */
 gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx);
+
+/* Return the key fingerprint, properly formatted according to the algorithm.
+ * Allocates a new string, which must be freed with g_free().
+ * This is based on code from GPAPA's extract_fingerprint.
+ */
+gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx);
 
 #endif

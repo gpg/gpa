@@ -54,6 +54,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
   GtkWidget *uid_box;
   GtkResponseType response;
   gint uid_count;
+  gchar *string;
 
   window = gtk_dialog_new_with_buttons (_("Sign Key"), GTK_WINDOW(parent),
                                         GTK_DIALOG_MODAL,
@@ -86,7 +87,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
        gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, uid_count);
        uid_count++)
     {
-      gchar *string = gpa_gpgme_key_get_userid (key, uid_count);
+      string = gpa_gpgme_key_get_userid (key, uid_count);
       label = gtk_label_new (string);
       g_free (string);
       gtk_box_pack_start_defaults (GTK_BOX(uid_box), label);
@@ -102,8 +103,9 @@ gpa_key_sign_run_dialog (GtkWidget * parent, GpgmeKey key,
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   
-  label = gtk_label_new (gpgme_key_get_string_attr (key, GPGME_ATTR_FPR,
-                                                    NULL, 0));
+  string = gpa_gpgme_key_get_fingerprint (key, 0);
+  label = gtk_label_new (string);
+  g_free (string);
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 

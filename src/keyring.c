@@ -994,8 +994,9 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, GpgmeKey key)
   text = (gchar*) gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, NULL, 0);
   gtk_label_set_text (GTK_LABEL (editor->detail_key_id), text);
 
-  text = (gchar*) gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
+  text = gpa_gpgme_key_get_fingerprint (key, 0);
   gtk_entry_set_text (GTK_ENTRY (editor->detail_fingerprint), text);
+  g_free (text);
   text = gpa_expiry_date_string (
           gpgme_key_get_ulong_attr (key, GPGME_ATTR_EXPIRE, NULL, 0));
   gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);

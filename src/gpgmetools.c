@@ -533,7 +533,7 @@ gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
   uid = gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, idx);
   if (!uid)
     {
-      return uid;
+      return NULL;
     }
   /* Make sure the encoding is UTF-8.
    * Test structure suggested by Werner Koch */
@@ -548,5 +548,60 @@ gchar *gpa_gpgme_key_get_userid (GpgmeKey key, int idx)
     {
       /* The string is already in UTF-8 */
       return g_strdup (uid);
+    }
+}
+
+/* Return the key fingerprint, properly formatted according to the algorithm.
+ * Allocates a new string, which must be freed with g_free().
+ * This is based on code from GPAPA's extract_fingerprint.
+ */
+gchar *gpa_gpgme_key_get_fingerprint (GpgmeKey key, int idx)
+{
+  unsigned long algorithm = gpgme_key_get_ulong_attr (key, GPGME_ATTR_ALGO,
+						      NULL, idx);
+  const char *fpraw = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR,
+						 NULL, idx);
+
+  if (algorithm == 1 || algorithm == 2 ||algorithm == 3 )  /* RSA */
+    {
+      char *fp = g_malloc (strlen (fpraw) + 16 + 1);
+      const char *r = fpraw;
+      char *q = fp;
+      gint c = 0;
+      while (*r)
+	{
+	  *q++ = *r++;
+	  c++;
+	  if (c < 32)
+	    {
+	      if (c % 2 == 0)
+		*q++ = ' ';
+	      if (c % 16 == 0)
+		*q++ = ' ';
+	    }
+	}
+      *q = 0;
+      return fp;
+    }
+  else
+    {
+      char *fp = g_malloc (strlen (fpraw) + 10 + 1);
+      const char *r = fpraw;
+      char *q = fp;
+      gint c = 0;
+      while (*r)
+	{
+	  *q++ = *r++;
+	  c++;
+	  if (c < 40)
+	    {
+	      if (c % 4 == 0)
+		*q++ = ' ';
+	      if (c % 20 == 0)
+		*q++ = ' ';
+	    }
+	}
+      *q = 0;
+      return fp;
     }
 }
