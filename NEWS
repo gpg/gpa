@@ -1,6 +1,14 @@
 Noteworthy changes in version 0.6.2 (unreleased)
 ------------------------------------------------
 
+ * Invoking GPA with file names as arguments will open those files in the
+ file manager.
+
+ * Long file operations no longer block GPA, so several operations can be
+ run at the same time.
+
+ * Cosmetical and minor fixes to the file manager window.
+
  * GPA now remembers the brief/detailed setting view and restores it
  when GPA is started. 
 
