@@ -286,7 +286,7 @@ key_backup_dialog_run (GtkWidget *parent, gpgme_key_t key)
   GPAKeyExportDialog dialog;
 
   gchar *id_text, *default_file;
-  const char *fpr = key->subkeys[0].fpr;
+  const char *fpr = key->subkeys->fpr;
 
   dialog.filename = NULL;
   dialog.server = NULL;

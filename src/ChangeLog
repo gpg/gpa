@@ -1,3 +1,21 @@
+2003-06-29  Miguel Coca  <mcoca@gnu.org>
+
+	* gpaprogressdlg.c (gpa_progress_dialog_set_property) 
+	(gpa_progress_dialog_progress_cb): Receive progress signals from the
+	context.
+	(gpa_progress_dialog_pulse, gpa_progress_dialog_start_cb)
+	(gpa_progress_dialog_done_cb): Remove the iddle function.
+
+	* gpacontext.h, gpacontext.c (gpa_context_class_init, gpa_context_init)
+	(gpa_context_progress, gpa_context_progress_cb): Add "progress" signal.
+
+	* keylist.c (gpa_keylist_start_reload): Empty the list before
+	reloading.
+
+	* gpakeyselector.c, keydeletedlg.c, keyeditdlg.c, keyexportdlg.c,
+	keylist.c, keyring.c, keytable.c, options.c: Fix syntax for accessing
+	the primary key.
+
 2003-06-27  Miguel Coca  <mcoca@gnu.org>
 
 	* keyring.c (keyring_signatures_page_fill_key): Save the label in the

@@ -235,7 +235,7 @@ gpa_options_set_default_key (GpaOptions *options, gpgme_key_t key)
     }
   gpgme_key_ref (key);
   options->default_key = key;
-  options->default_key_fpr = g_strdup (key->subkeys[0].fpr);
+  options->default_key_fpr = g_strdup (key->subkeys->fpr);
   g_signal_emit (options, signals[CHANGED_DEFAULT_KEY], 0);
 }
 
@@ -399,7 +399,7 @@ gpa_options_save_settings (GpaOptions *options)
       if (options->default_key)
         {
           fprintf (options_file, "default-key %s\n",
-		   options->default_key->subkeys[0].fpr);
+		   options->default_key->subkeys->fpr);
         }
       if (options->default_keyserver)
         {

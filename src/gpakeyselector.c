@@ -223,7 +223,7 @@ void gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
 		      GPA_KEY_SELECTOR_COLUMN_KEY, key, -1);
   /* If this is a secret key selector, select the default key */
   if (selector->secret) {
-    const gchar *key_fpr = key->subkeys[0].fpr;
+    const gchar *key_fpr = key->subkeys->fpr;
     const gchar *default_key = gpa_options_get_default_key 
       (gpa_options_get_instance())->subkeys[0].fpr;
 

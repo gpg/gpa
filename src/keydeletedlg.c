@@ -85,7 +85,7 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
 
   gboolean has_secret_key = (gpa_keytable_lookup_key 
 			     (gpa_keytable_get_secret_instance(), 
-			      key->subkeys[0].fpr) != NULL);
+			      key->subkeys->fpr) != NULL);
 
   window = gtk_dialog_new_with_buttons (_("Remove Key"), GTK_WINDOW(parent),
                                         GTK_DIALOG_MODAL,

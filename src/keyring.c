@@ -554,7 +554,7 @@ keyring_editor_export_do_export (GPAKeyringEditor *editor, gpgme_data_t *data,
   for (i = 0; selection; i++, selection = g_list_next (selection))
     {
       gpgme_key_t key = (gpgme_key_t) selection->data;
-      patterns[i] = key->subkeys[0].fpr;
+      patterns[i] = key->subkeys->fpr;
     }
   /* Export to the gpgme_data_t */
   err = gpgme_op_export_ext (ctx, patterns, 0, *data);
@@ -753,7 +753,7 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
       int old_mode = gpgme_get_keylist_mode (ctx);
       /* With all the signatures */
       gpgme_set_keylist_mode (ctx, old_mode | GPGME_KEYLIST_MODE_SIGS);
-      err = gpgme_get_key (ctx, key->subkeys[0].fpr, &key, FALSE);
+      err = gpgme_get_key (ctx, key->subkeys->fpr, &key, FALSE);
       if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	{
 	  gpa_gpgme_warning (err);
@@ -1255,7 +1255,7 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
   gint i;
 
   if (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
-			       key->subkeys[0].fpr) != NULL)
+			       key->subkeys->fpr) != NULL)
     {
       gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
                           _("The key has both a private and a public part"));

@@ -27,6 +27,9 @@ gpa_progress_dialog_start_cb (GpaContext *context,
 static void
 gpa_progress_dialog_done_cb (GpaContext *context, gpg_error_t err,
 			     GpaProgressDialog *dialog);
+static void
+gpa_progress_dialog_progress_cb (GpaContext *context, int current, int total,
+				 GpaProgressDialog *dialog);
 
 /* Properties */
 enum
@@ -82,6 +85,8 @@ gpa_progress_dialog_set_property (GObject     *object,
 			G_CALLBACK (gpa_progress_dialog_start_cb), dialog);
       g_signal_connect (G_OBJECT (dialog->context), "done",
 			G_CALLBACK (gpa_progress_dialog_done_cb), dialog);
+      g_signal_connect (G_OBJECT (dialog->context), "progress",
+			G_CALLBACK (gpa_progress_dialog_progress_cb), dialog);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -195,28 +200,30 @@ gpa_progress_dialog_set_label (GpaProgressDialog *dialog, const gchar *label)
 
 /* Internal functions */
 
-static gboolean
-gpa_progress_dialog_pulse (gpointer data)
+static void
+gpa_progress_dialog_progress_cb (GpaContext *context, int current, int total,
+				 GpaProgressDialog *dialog)
 {
-  GpaProgressDialog *dialog = data;
-
-  gtk_progress_bar_pulse (GTK_PROGRESS_BAR (dialog->progress_bar));
-
-  return TRUE;
+  if (total > 0) 
+    {
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (dialog->progress_bar),
+				     (gdouble)current/(gdouble)total);
+    }
+  else
+    {
+      gtk_progress_bar_pulse (GTK_PROGRESS_BAR (dialog->progress_bar));
+    }
 }
 
 static void
 gpa_progress_dialog_start_cb (GpaContext *context,
 			      GpaProgressDialog *dialog)
 {
-  dialog->timer = gtk_timeout_add (100, gpa_progress_dialog_pulse,
-				   dialog);
 }
 
 static void
 gpa_progress_dialog_done_cb (GpaContext *context, gpg_error_t err,
 			     GpaProgressDialog *dialog)
 {
-  gtk_idle_remove (dialog->timer);
 }
 

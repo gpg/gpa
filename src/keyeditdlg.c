@@ -111,7 +111,7 @@ gpa_key_edit_dialog_run (GtkWidget * parent, gpgme_key_t key)
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   gtk_widget_set_sensitive (button,(gpa_keytable_lookup_key 
 			     (gpa_keytable_get_secret_instance(), 
-			      key->subkeys[0].fpr) != NULL));
+			      key->subkeys->fpr) != NULL));
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc)key_edit_change_expiry, &dialog);
 

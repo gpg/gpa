@@ -280,7 +280,7 @@ gboolean gpa_keylist_has_single_secret_selection (GpaKeyList * keylist)
       g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
       g_list_free (list);
       return (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
-				       key->subkeys[0].fpr) != NULL);
+				       key->subkeys->fpr) != NULL);
     }
   else
     {
@@ -321,6 +321,8 @@ GList *gpa_keylist_get_selected_keys (GpaKeyList * keylist)
 
 void gpa_keylist_start_reload (GpaKeyList * keylist)
 {
+  gtk_list_store_clear (GTK_LIST_STORE (gtk_tree_view_get_model 
+					(GTK_TREE_VIEW (keylist))));
   g_list_foreach (keylist->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (keylist->keys);
   keylist->keys = NULL;
@@ -346,7 +348,7 @@ get_key_pixbuf (gpgme_key_t key)
 
   if (gpa_keytable_lookup_key 
       (gpa_keytable_get_secret_instance(), 
-       key->subkeys[0].fpr) != NULL)
+       key->subkeys->fpr) != NULL)
     {
       return secret_pixbuf;
     }
@@ -369,7 +371,7 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (list)));
   /* Get the column values */
   keyid = gpa_gpgme_key_get_short_keyid (key, 0);
-  expiry = gpa_expiry_date_string (key->subkeys[0].expires);
+  expiry = gpa_expiry_date_string (key->subkeys->expires);
   ownertrust = gpa_key_ownertrust_string (key);
   validity = gpa_key_validity_string (key);
   userid = gpa_gpgme_key_get_userid (key, 0);
@@ -386,11 +388,11 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
 		      GPA_KEYLIST_COLUMN_HAS_SECRET, 
 		      (gpa_keytable_lookup_key 
 		       (gpa_keytable_get_secret_instance(), 
-			key->subkeys[0].fpr) != NULL),
+			key->subkeys->fpr) != NULL),
 		      /* Set "no expiration" to a large value for sorting */
 		      GPA_KEYLIST_COLUMN_EXPIRY_TS, 
-		      key->subkeys[0].expires ? 
-		      key->subkeys[0].expires : G_MAXULONG,
+		      key->subkeys->expires ? 
+		      key->subkeys->expires : G_MAXULONG,
 		      GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE, key->owner_trust,
 		      GPA_KEYLIST_COLUMN_VALIDITY_VALUE, key->uids[0].validity,
 		      -1);

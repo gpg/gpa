@@ -37,6 +37,7 @@ static void gpa_context_done (GpaContext *context, gpg_error_t err);
 static void gpa_context_next_key (GpaContext *context, gpgme_key_t key);
 static void gpa_context_next_trust_item (GpaContext *context,
                                          gpgme_trust_item_t item);
+static void gpa_context_progress (GpaContext *context, int current, int total);
 
 /* The GPGME I/O callbacks */
 
@@ -51,6 +52,9 @@ static gpg_error_t
 gpa_context_passphrase_cb (void *hook, const char *uid_hint,
 			   const char *passphrase_info, int prev_was_bad, 
 			   int fd);
+static void
+gpa_context_progress_cb (void *opaque, const char *what,
+			 int type, int current, int total);
 
 /* Signals */
 enum
@@ -59,6 +63,7 @@ enum
   DONE,
   NEXT_KEY,
   NEXT_TRUST_ITEM,
+  PROGRESS,
   LAST_SIGNAL
 };
 
@@ -106,6 +111,7 @@ gpa_context_class_init (GpaContextClass *klass)
   klass->done = gpa_context_done;
   klass->next_key = gpa_context_next_key;
   klass->next_trust_item = gpa_context_next_trust_item;
+  klass->progress = gpa_context_progress;
 
   /* Signals */
   signals[START] =
@@ -143,6 +149,15 @@ gpa_context_class_init (GpaContextClass *klass)
                         g_cclosure_marshal_VOID__POINTER,
                         G_TYPE_NONE, 1,
 			G_TYPE_POINTER);
+  signals[PROGRESS] =
+          g_signal_new ("progress",
+                        G_TYPE_FROM_CLASS (object_class),
+                        G_SIGNAL_RUN_FIRST,
+                        G_STRUCT_OFFSET (GpaContextClass, progress),
+                        NULL, NULL,
+			gtk_marshal_VOID__INT_INT,
+                        G_TYPE_NONE, 2,
+			G_TYPE_INT, G_TYPE_INT);
 }
 
 static void
@@ -164,8 +179,8 @@ gpa_context_init (GpaContext *context)
     }
 
   /* Set the appropiate callbacks */
-  gpgme_set_passphrase_cb (context->ctx, gpa_context_passphrase_cb,
-			   context);
+  gpgme_set_passphrase_cb (context->ctx, gpa_context_passphrase_cb, context);
+  gpgme_set_progress_cb (context->ctx, gpa_context_progress_cb, context);
   /* Fill the CB structure */
   context->io_cbs = g_malloc (sizeof (struct gpgme_io_cbs));
   context->io_cbs->add = gpa_context_register_cb;
@@ -427,6 +442,12 @@ gpa_context_next_trust_item (GpaContext *context, gpgme_trust_item_t item)
   /* Do nothing yet */
 }
 
+static void
+gpa_context_progress (GpaContext *context, int current, int total)
+{
+  /* Do nothing yet */
+}
+
 /* The passphrase callback */
 static gpg_error_t
 gpa_context_passphrase_cb (void *hook, const char *uid_hint,
@@ -442,3 +463,13 @@ gpa_context_passphrase_cb (void *hook, const char *uid_hint,
 
   return err;
 }
+
+/* The progress callback */
+static void
+gpa_context_progress_cb (void *opaque, const char *what,
+			 int type, int current, int total)
+{
+  GpaContext *context = opaque;
+  g_signal_emit (context, signals[PROGRESS], 0, current, total);  
+}
+

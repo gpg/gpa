@@ -285,7 +285,7 @@ const gpgme_key_t gpa_keytable_lookup_key (GpaKeyTable *keytable,
       for (cur = keytable->keys; cur; cur = g_list_next (cur))
 	{
 	  gpgme_key_t key = (gpgme_key_t) cur->data;
-	  if (g_str_equal (fpr, key->subkeys[0].fpr))
+	  if (g_str_equal (fpr, key->subkeys->fpr))
 	    {
 	      return key;
 	    }
