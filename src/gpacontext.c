@@ -244,7 +244,7 @@ register_callback (struct gpa_io_cb_data *cb)
   channel = g_io_channel_unix_new (cb->fd);
   cb->watch = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, 
 				   cb->dir ? READ_CONDITION : WRITE_CONDITION,
-				   gpa_io_cb, cb, g_free);
+				   gpa_io_cb, cb, NULL);
   g_io_channel_unref (channel);
 }
 
@@ -324,6 +324,8 @@ gpa_context_remove_cb (void *tag)
     {
       cb->context->cbs = g_list_remove (cb->context->cbs, cb);
     }
+
+  g_free (cb);
 }
 
 /* The event callback. This just emits signals for the GpaContext. The signal

@@ -1,3 +1,8 @@
+2003-02-02  Miguel Coca  <mcoca@gnu.org>
+
+	* gpacontext.c (register_callback, gpa_context_remove_cb): Fix clean
+	up issues.
+
 2003-02-01  Miguel Coca  <mcoca@gnu.org>
 
 	* Makefile.am (gpa_SOURCES): Add gpacontext.{c,h}
