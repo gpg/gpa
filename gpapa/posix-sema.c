@@ -41,7 +41,7 @@
 void
 _gpgme_sema_subsystem_init ()
 {
-#warning Posix semaphore support has not yet been implemented 
+  /*#warning Posix semaphore support has not yet been implemented */
 }
 
 

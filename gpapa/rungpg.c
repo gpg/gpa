@@ -24,8 +24,8 @@
 #include <string.h>
 #include <assert.h>
 #include <errno.h>
-#include <sys/time.h>
 #include <sys/types.h>
+#include <time.h>
 #include <signal.h>
 #include <fcntl.h>
 #include "unistd.h"

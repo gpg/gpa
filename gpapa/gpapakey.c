@@ -64,6 +64,16 @@ gpapa_key_get_expiry_date (GpapaKey *key, GpapaCallbackFunc callback,
     return (key->ExpirationDate);
 }
 
+GDate *
+gpapa_key_get_creation_date (GpapaKey *key, GpapaCallbackFunc callback,
+			     gpointer calldata)
+{
+  if (key == NULL)
+    return (NULL);
+  else
+    return (key->CreationDate);
+}
+
 void
 gpapa_key_set_expiry_date (GpapaKey *key, GDate *date, char *passphrase, 
 			   GpapaCallbackFunc callback, gpointer calldata)

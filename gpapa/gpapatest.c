@@ -260,6 +260,7 @@ test_pubring (void)
   for (i = MAX (0, pubcount - 2); i < pubcount; i++)
     {
       GDate *expiry_date;
+      GDate *creation_date;
       char buffer[256];
       P = gpapa_get_public_key_by_index (i, callback, calldata);
       printf ("Public key #%d: %s\n", i,
@@ -274,6 +275,13 @@ test_pubring (void)
 	gpapa_key_get_expiry_date (GPAPA_KEY (P), callback, calldata);
       if (expiry_date)
 	g_date_strftime (buffer, 256, "%d.%m.%Y", expiry_date);
+      else
+	strcpy (buffer, "never");
+      printf ("Expires: %s\n", buffer);
+      creation_date =
+	gpapa_key_get_creation_date (GPAPA_KEY (P), callback, calldata);
+      if (creation_date)
+	g_date_strftime (buffer, 256, "%d.%m.%Y", creation_date);
       else
 	strcpy (buffer, "never");
       printf ("Expires: %s\n", buffer);
