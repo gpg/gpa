@@ -193,46 +193,6 @@ keyring_editor_fill_keylist (GPAKeyringEditor * editor)
 } /* keyring_editor_fill_keylist */
 
 
-/* Edit the ownertrust level of the currently selected key */
-static void
-keyring_editor_edit_trust (gpointer param)
-{
-  GPAKeyringEditor * editor = param;
-  GpapaPublicKey *key;
-  GpapaOwnertrust ownertrust;
-  gint row;
-  gchar * key_id;
-  gboolean result;
-  GList * selection;
-
-  /* find out which key is selected */
-  if (!gpa_keylist_has_selection (editor->clist_keys))
-    {
-      /* this shouldn't happen because the button should be grayed out
-       * in this case
-       */
-      gpa_window_error (_("No key selected for editing."), editor->window);
-      return;
-    }
-
-  selection = gpa_keylist_selection (editor->clist_keys);
-  row = GPOINTER_TO_INT (selection->data);
-  key_id = gtk_clist_get_row_data (GTK_CLIST (editor->clist_keys), row);
-  key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
-
-  /* Let the user select a new one */
-  result = gpa_ownertrust_run_dialog (key, editor->window,
-				      "keyring_editor_public_edit_trust.tip",
-				      &ownertrust);
-
-  /* If the user clicked OK, set the new trust level */
-  if (result)
-    gpapa_public_key_set_ownertrust (key, ownertrust, gpa_callback,
-				     editor->window);
-} /* keyring_editor_edit_trust */
-
-
-
 #if 0
 /* toggle the visibility of the ownertrust values */
 static void
