@@ -1,3 +1,17 @@
+2002-02-14  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gpapa.c, gpapa.h (hkp_errmsg): New global variable. Contains the
+	error strings for each possible error returned by the key impor
+	functions.
+	
+	* gpapa.c (gpapa_refresh_public_keyring)
+	(gpapa_refresh_secret_keyring): Changed the place where the
+	keyrings are considered initialized.
+	(gpapa_receive_public_key_from_server): Added error checking and
+	reporting.
+	(linecallback_refresh_sec): Check that we don't release the public
+	key unless the public keyring is loaded.
+	
 2002-02-13  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gpapa.c (gpapa_import_ownertrust)

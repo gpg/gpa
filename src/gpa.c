@@ -96,6 +96,7 @@ static ARGPARSE_OPTS opts[] = {
 
 static char *gpa_homedir = NULL;
 static char *gpa_configname = NULL;
+static char *keyservers_configname = NULL;
 GPAOptions gpa_options;
 static GtkWidget *global_clistFile = NULL;
 GtkWidget *global_windowMain = NULL;
@@ -115,7 +116,7 @@ search_config_file (const gchar *filename)
   gchar *candidate = NULL;
 
   if (gpa_homedir)
-    candidate = g_strconcat (gpa_homedir, filename);
+    candidate = g_strconcat (gpa_homedir, filename, NULL);
   if (candidate)
     {
       if (g_file_test (candidate, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
@@ -146,7 +147,7 @@ search_config_file (const gchar *filename)
     }
 
   if (gpa_homedir)
-    return g_strconcat (gpa_homedir, filename);
+    return g_strconcat (gpa_homedir, filename, NULL);
   else
     return NULL;
 }
@@ -475,14 +476,6 @@ main (int argc, char **argv)
   gpa_options.homedir = getenv ("GNUPGHOME");
 #endif
 
-  /* read the gpa gtkrc */
-  gtkrc = search_config_file ("gtkrc");
-  if (gtkrc)
-    {
-      gtk_rc_parse (gtkrc);
-      free (gtkrc);
-    }
-
   if (!gpa_options.homedir || !*gpa_options.homedir)
     {
 #ifdef HAVE_DRIVE_LETTERS
@@ -530,16 +523,31 @@ main (int argc, char **argv)
     }
   #endif
 
+  /* Read GPA's gtkrc.
+   */
+  gtkrc = search_config_file ("gtkrc");
+  if (gtkrc)
+    {
+      gtk_rc_parse (gtkrc);
+      free (gtkrc);
+    }
+
+  /* Locate GPA's configuration file.
+   */
   if (default_config)
     configname = search_config_file ("gpa.conf");
+
+  gpa_configname = xstrdup (configname);
+
+  /* Locate the list of keyservers.
+   */
+  keyservers_configname = search_config_file ("keyservers");
 
   argc = orig_argc;
   argv = orig_argv;
   pargs.argc = &argc;
   pargs.argv = &argv;
   pargs.flags=  1;  /* do not remove the args */
-
-  gpa_configname = xstrdup (configname);
 
  next_pass:
   if (configname)
@@ -625,8 +633,9 @@ main (int argc, char **argv)
   log_info ("NOTE: this is a development version!\n");
 #endif
 
-  /* read the list of available keyservers */
-  keyserver_read_list ("keyservers");
+  /* Read the list of available keyservers.
+   */
+  keyserver_read_list (keyservers_configname);
   keyserver_set_current (keyserver);
 
   gpapa_init (gpg_program);

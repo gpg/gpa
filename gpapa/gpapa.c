@@ -40,6 +40,18 @@ char *global_keyServer;
 
 static char *gpg_program;
 
+const gchar *hkp_errmsg[] =
+  {
+    "General error.",
+    "Error receiving key from server.",
+    "Error sending key to server.",
+    "Keyserver timeout.",
+    "Error initializing network.",
+    "Error resolving host name.",
+    "Socket error."
+    "Error while connecting to keyserver."
+  };
+
 
 /* Key management.
  */
@@ -317,6 +329,7 @@ gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
 {
   PublicKeyData data = { NULL, callback, calldata };
   const gchar *gpgargv[4];
+  pubring_initialized = TRUE;
   if (SecRing)
     {
       release_secret_keyring (SecRing);
@@ -334,7 +347,6 @@ gpapa_refresh_public_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 		    linecallback_refresh_pub, &data, callback, calldata);
   PubRing = g_list_sort (PubRing, compare_public_keys);
-  pubring_initialized = TRUE;
   gpapa_refresh_secret_keyring (callback, calldata);
 }
 
@@ -430,12 +442,24 @@ gpapa_receive_public_key_from_server (const gchar *keyID,
 #ifdef __USE_HKP__
       const gchar *gpgargv[2];
       gchar *key_buffer = g_malloc (KEY_BUFLEN);
-      kserver_recvkey (ServerName, keyID, key_buffer, KEY_BUFLEN);
-      gpgargv[0] = "--import";
-      gpgargv[1] = NULL;
-      gpapa_call_gnupg (gpgargv, TRUE, key_buffer, NULL, NULL,
-			NULL, NULL, callback, calldata);
-      g_free (key_buffer);
+      int rc;
+      wsock_init ();
+      rc = kserver_recvkey (ServerName, keyID, key_buffer, KEY_BUFLEN);
+      wsock_end ();
+      if (rc != 0)
+        {
+	  if (rc < 1 || rc > 8)
+	    rc = 1;
+          callback (GPAPA_ACTION_ERROR, hkp_errmsg[rc - 1], calldata);
+	}
+      else
+	{
+          gpgargv[0] = "--import";
+          gpgargv[1] = NULL;
+          gpapa_call_gnupg (gpgargv, TRUE, key_buffer, NULL, NULL,
+			    NULL, NULL, callback, calldata);
+          g_free (key_buffer);
+	}
 #else /* not __USE_HKP__ */
       const gchar *gpgargv[5];
       char *id = xstrcat2 ("0x", keyID);
@@ -464,7 +488,7 @@ linecallback_refresh_sec (char *line, gpointer data, GpgStatusCode status)
 	(GpapaSecretKey *) xmalloc (sizeof (GpapaSecretKey));
       memset (key, 0, sizeof (GpapaSecretKey));
       key->key = extract_key (line, d->callback, d->calldata);
-      if (key->key && key->key->KeyID)
+      if (key->key && key->key->KeyID && PubRing)
         {
           GpapaPublicKey *pubkey
             = gpapa_get_public_key_by_ID (key->key->KeyID,
@@ -484,6 +508,7 @@ gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
 {
   SecretKeyData data = { NULL, callback, calldata };
   const gchar *gpgargv[3];
+  secring_initialized = TRUE;
   if (SecRing != NULL)
     {
       g_list_free (SecRing);
@@ -495,7 +520,6 @@ gpapa_refresh_secret_keyring (GpapaCallbackFunc callback, gpointer calldata)
   gpapa_call_gnupg (gpgargv, TRUE, NULL, NULL, NULL,
 		    linecallback_refresh_sec, &data, callback, calldata);
   SecRing = g_list_sort (SecRing, compare_secret_keys);
-  secring_initialized = TRUE;
 }
 
 gint

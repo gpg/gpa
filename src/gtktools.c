@@ -301,7 +301,7 @@ gpa_button_set_text (GtkWidget * button, gchar * text,
 }
 
 void
-gpa_window_error (gchar * message, GtkWidget * messenger)
+gpa_window_error (gchar *message, GtkWidget *messenger)
 {
   GpaWindowKeeper *keeper;
   GtkAccelGroup *accelGroup;
@@ -319,7 +319,7 @@ gpa_window_error (gchar * message, GtkWidget * messenger)
   gtk_window_add_accel_group (GTK_WINDOW (windowError), accelGroup);
   vboxError = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxError), 10);
-  labelMessage = gtk_label_new (message);
+  labelMessage = gtk_label_new (_(message));
   gtk_box_pack_start (GTK_BOX (vboxError), labelMessage, TRUE, FALSE, 10);
   buttonClose = gpa_button_new (accelGroup, _("_OK"));
   gtk_signal_connect_object (GTK_OBJECT (buttonClose), "clicked",

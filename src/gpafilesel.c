@@ -503,11 +503,12 @@ read_directory (GtkCTree *dir_list, GtkCTreeNode *parent,
 
   gtk_clist_freeze (GTK_CLIST (dir_list));
 
-  text[0] = path + strlen (path) - 1;
-  while (text[0] > path && *text[0] != '/' && *text[0] != G_DIR_SEPARATOR)
-    text[0]--;
-  if (*text[0] == '/' || *text[0] == G_DIR_SEPARATOR)
-    text[0]++;
+  dirent = path + strlen (path) - 1;
+  while (dirent > path && *dirent != '/' && *dirent != G_DIR_SEPARATOR)
+    dirent--;
+  if (*dirent == '/' || *dirent == G_DIR_SEPARATOR)
+    dirent++;
+  text[0] = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
 
   if (strcmp (path, "/") == 0)
     this_node = NULL;
@@ -556,12 +557,12 @@ read_directory (GtkCTree *dir_list, GtkCTreeNode *parent,
                                                   dirent, NULL);
               if (g_file_test (full_dir_name, G_FILE_TEST_IS_DIR))
                 {
-                  text[0] = (gchar *) dirent;
                   if (sublevels > 0)
                     read_directory (dir_list, this_node, full_dir_name,
                                     sublevels - 1);
                   else
                     {
+                      text[0] = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
                       gtk_ctree_insert_node (dir_list, this_node, NULL, text, 5,
                                              pm_folder, mask_folder,
                                              pm_open_folder, mask_open_folder,
@@ -569,6 +570,7 @@ read_directory (GtkCTree *dir_list, GtkCTreeNode *parent,
                       enough = TRUE;
                     }
                 }
+	      g_free (dirent);
               g_free (full_dir_name);
             }
           g_dir_close (directory);

@@ -42,7 +42,7 @@ struct server_name_s
 };
 
 
-static ServerName serverlist;
+static ServerName serverlist = NULL;
 
 static ServerName
 get_server (ServerName list, const char *name)
@@ -90,21 +90,24 @@ release_server_list (ServerName list)
 
 
 static int
-read_list (const char *confname)
+read_list (const char *fname)
 {
-  char *fname = make_filename (gpa_options.homedir, confname, NULL);
   FILE *fp;
   char line[256], *p;
   int lnr = 0;
   const char *err = NULL;
   ServerName list = NULL;
-  
+
+  if (!fname)
+    return -1;
+
   fp = fopen (fname, "r");
   if (!fp)       
     {
+/*
       fprintf (stderr, "can't open `%s': %s\n", fname, strerror (errno) );
       fflush (stderr);
-      free (fname);
+ */
       return -1;
     }
 
@@ -132,32 +135,31 @@ read_list (const char *confname)
       add_server (&list, line);
     }
 
-    if (err)
-      fprintf (stderr, "%s:%d: %s\n", fname, lnr, err);
-    else if (ferror (fp))
-      {
-        fprintf (stderr, "%s:%d: read error: %s\n",
-                 fname, lnr, strerror (errno));
-        err = "";
-      }
-    fflush (stderr);
-    fclose (fp);
-    free (fname);
-    if (err)
-      {
-        release_server_list (list);
-        return -1;
-      }
-    
-    /* fine: switch to new list */
+  if (err)
+    fprintf (stderr, "%s:%d: %s\n", fname, lnr, err);
+  else if (ferror (fp))
     {
-      const char *current = keyserver_get_current (FALSE);
-      release_server_list (serverlist);
-      serverlist = list;
-      keyserver_set_current (current);
+      fprintf (stderr, "%s:%d: read error: %s\n",
+	       fname, lnr, strerror (errno));
+      err = "";
     }
+  fflush (stderr);
+  fclose (fp);
+  if (err)
+    {
+      release_server_list (list);
+      return -1;
+    }
+  
+  /* fine: switch to new list */
+  {
+    const char *current = keyserver_get_current (FALSE);
+    release_server_list (serverlist);
+    serverlist = list;
+    keyserver_set_current (current);
+  }
 
-    return 0;
+  return 0;
 }
 
 /*
@@ -171,6 +173,7 @@ keyserver_read_list (const char *confname)
   int rc;
 
   rc = read_list (confname);
+
   if (!serverlist)
     { /* no entries in list - use default values */
       add_server (&serverlist, "blackhole.pca.dfn.de");

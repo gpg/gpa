@@ -42,6 +42,7 @@
 
 #define GPAPA_MAX_GPG_KEY_FIELDS 20
 
+extern const gchar *hkp_errmsg[];
 extern char *global_keyServer;
 
 /* Key management.

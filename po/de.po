@@ -11,6 +11,31 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+# gpapa.c: Keyserver-Fehlermeldungen
+msgid "General error."
+msgstr "Allgemeiner Fehler."
+
+msgid "Error receiving key from server."
+msgstr "Fehler beim Empfang des Schlüssels vom Server."
+
+msgid "Error sending key to server."
+msgstr "Fehler beim Versenden des Schlüssels zum Server."
+
+msgid "Keyserver timeout."
+msgstr "Server-Zeitüberschreitung."
+
+msgid "Error initializing network."
+msgstr "Fehler beim Initialisieren des Netzwerks."
+
+msgid "Error resolving host name."
+msgstr "Fehler bei der Namensauflösung."
+
+msgid "Socket error."
+msgstr "Fehler beim Aufbau der Netzwerkverbindung."
+
+msgid "Error while connecting to keyserver."
+msgstr "Fehler beim Verbindungsaufbau zum Server."
+
 #: src/encryptdlg.c:78 src/filemenu.c:848
 msgid "No recipients chosen to encrypt for."
 msgstr "Es sind keine Empfänger ausgewählt."

@@ -72,21 +72,24 @@ typedef struct _GPAKeyExportDialog GPAKeyExportDialog;
 
 
 /* Handler for the browse button. Run a modal file dialog and set the
- * text of the file entry widget accordingly */
+ * text of the file entry widget accordingly.
+ */
 static void
 export_browse (gpointer param)
 {
-  GPAKeyExportDialog * dialog = param;
-  gchar * filename;
+  GPAKeyExportDialog *dialog = param;
+  gchar *filename;
 
   filename = gpa_get_save_file_name (dialog->window,
 				     _("Export public keys to file"),
 				     NULL);
   if (filename)
     {
+      gchar *utf8_filename = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
       gtk_entry_set_text (GTK_ENTRY (dialog->entry_filename),
-			  filename);
-      free (filename);
+			  utf8_filename);
+      g_free (utf8_filename);
+      g_free (filename);
     }
 } /* export_browse */
 
@@ -115,7 +118,7 @@ export_ok (gpointer param)
       || gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_filename)))
     {
       dialog->filename = (gchar *) gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
-      dialog->filename = xstrdup_or_null (dialog->filename);
+      dialog->filename = g_filename_from_utf8 (dialog->filename, -1, NULL, NULL, NULL);
     }
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_server)))
     {

@@ -1,3 +1,33 @@
+2002-02-14  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* fileman.c Reformatted to completely comply with the GNU
+	Coding Standards.
+	(add_file): Display filenames in UTF8.
+
+	* gpa.c (keyservers_configname)
+	(main): Find out the file where keyserver list using the new
+	search_config_file(). Changed the order in which config files are
+	read.
+	(search_config_file): Fixed broken g_strconcat calls.	
+
+	* gpafilesel.c (read_directory): Display the directory names using
+	UTF8.
+
+	* gtktools.c (gpa_window_error): i18n the message string.
+
+	* keyexportdlg.c (export_browse)
+	(export_ok)
+	keyimportdlg.c (import_browse)
+	(import_ok): Display filenames in UTF8.
+
+	* keyring.c (keyring_editor_backup): Only write to disk that we've
+	generated the backup (for later sessions) if the action was not
+	cancelled.
+
+	* keyserver.c (serverlist): Initialize as NULL.
+	(read_list): Changed to assume we receive the full pathname to the
+	keyserver file. Commented out error messages.
+	
 2002-02-13  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gpa.c, keylist.c: Reformatted to completely comply with the GNU

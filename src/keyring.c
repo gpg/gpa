@@ -617,8 +617,6 @@ keyring_editor_backup (gpointer param)
 	      if (!reply || strcmp (reply, _("_Overwrite")) != 0)
 		cancelled = TRUE;
 	      g_free (message);
-
-	      gpa_remember_backup_generated ();
 	    }
 	  if (!cancelled)
 	    {
@@ -626,6 +624,8 @@ keyring_editor_backup (gpointer param)
 			               gpa_callback, editor->window);
               gpapa_secret_key_export (secret_key, seckey_filename, GPAPA_ARMOR,
 			               gpa_callback, editor->window);
+
+	      gpa_remember_backup_generated ();
 	    }
 	  g_free (pubkey_filename);
 	  g_free (seckey_filename);

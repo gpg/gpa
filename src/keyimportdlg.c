@@ -81,9 +81,11 @@ import_browse (gpointer param)
 				     NULL);
   if (filename)
     {
+      gchar *utf8_filename = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
       gtk_entry_set_text (GTK_ENTRY (dialog->entry_filename),
-			  filename);
-      free (filename);
+			  utf8_filename);
+      g_free (utf8_filename);
+      g_free (filename);
     }
 } /* import_browse */
 
@@ -106,7 +108,7 @@ import_ok (gpointer param)
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_filename)))
     {
       dialog->filename = (gchar *) gtk_entry_get_text(GTK_ENTRY(dialog->entry_filename));
-      dialog->filename = xstrdup_or_null (dialog->filename);
+      dialog->filename = g_filename_from_utf8 (dialog->filename, -1, NULL, NULL, NULL);
     }
 
   dialog->result = TRUE;

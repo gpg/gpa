@@ -109,7 +109,8 @@ count_sigs (gpointer data, gpointer user_data)
  * Functions to manage GpapaFiles attached to CList rows
  */
 
-struct _GPAFileInfo {
+struct _GPAFileInfo
+{
   GpapaFile *file;
   GtkWidget *window;
 };
@@ -136,22 +137,22 @@ attach_file (GPAFileManager *fileman, GtkCList *clist, gint row,
 }
 
 static GpapaFile *
-get_file (GtkCList * clist, gint row)
+get_file (GtkCList *clist, gint row)
 {
   GPAFileInfo *info = gtk_clist_get_row_data (clist, row);
   return info->file;
 }
 
 
-/* return the currently selected files as a new list of GPAFileInfo
+/* Return the currently selected files as a new list of GPAFileInfo
  * structs. The list has to be freed by the caller, but the file info
  * instances are still managed by the CList
  */
 static GList *
 get_selected_files (GtkCList *clist)
 {
-  GList * files = NULL;
-  GList * selection = clist->selection;
+  GList *files = NULL;
+  GList *selection = clist->selection;
   gint row;
 
   while (selection)
@@ -168,8 +169,9 @@ get_selected_files (GtkCList *clist)
 
 /* Add file filename to the clist. Return the index of the new row */
 static gint
-add_file (GPAFileManager * fileman, gchar * filename)
+add_file (GPAFileManager *fileman, gchar *filename)
 {
+  gchar *file_id;
   gchar *entries[5];
   GList *signatures;
   gchar str_num_sigs[50];
@@ -181,10 +183,10 @@ add_file (GPAFileManager * fileman, gchar * filename)
 
   file = gpapa_file_new (filename, gpa_callback, fileman->window);
   signatures = gpapa_file_get_signatures (file, gpa_callback, fileman->window);
-  entries[0] = gpapa_file_get_name (file, gpa_callback, fileman->window);
+  file_id = gpapa_file_get_name (file, gpa_callback, fileman->window);
   for (row = 0; row < fileman->clist_files->rows; row++)
     {
-      if (!strcmp (entries[0],
+      if (!strcmp (file_id,
 		   gpapa_file_get_identifier (get_file (fileman->clist_files,
 							row),
 					      gpa_callback,
@@ -192,8 +194,9 @@ add_file (GPAFileManager * fileman, gchar * filename)
 	{
 	  gpa_window_error (_("The file is already open."), fileman->window);
 	  return -1;
-	} /* if */
-    } /* for */
+	}
+    }
+  entries[0] = g_filename_to_utf8 (file_id, -1, NULL, NULL, NULL);
   entries[1]
     = gpa_file_status_string (gpapa_file_get_status (file, gpa_callback,
 						     fileman->window));
@@ -211,7 +214,7 @@ add_file (GPAFileManager * fileman, gchar * filename)
     {
       sprintf (str_invalid_sigs, "%d", count_param.invalid_sigs);
       entries[4] = str_invalid_sigs;
-    } /* if */
+    }
   else
     entries[4] = "";
 
@@ -219,7 +222,7 @@ add_file (GPAFileManager * fileman, gchar * filename)
   attach_file (fileman, fileman->clist_files, row, file);
 
   return row;
-} /* add_file */
+}
 
 
 /*
