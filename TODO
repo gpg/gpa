@@ -9,6 +9,11 @@
  - File dialogs: Let them _not_ be placed via mouse! Let them get to their
    standard position as every dialog else.
 
+ - File dialogs: Initialization!
+
+ - File dialogs: Check selected file for validity -- e.g. in the homedir
+   dialog, if the selected path really is a directory.
+
  - Sign dialogs: There's one file_sign_dialog now for the file_sign,
    file_encrypt and key_openPublic_sign processes; in every case, it carries
    a lot of information that's not needed. It should be replaced by three
@@ -27,15 +32,18 @@
 
  - Implement the feature of differentiating between name and identifier of a
    file. (For "normal" files: name = identifier without pathnames; for
-   mails: name = "Mail from/to ... [Date]
+   mails: name = "Mail from/to ... [Date]")
+   => In the file/show Detail dialog: Additional read-only entry with the
+      complete file identifier! In the main file clist: tooltips with the
+      complete file identifier(?).
 
  - Implement command line parameters to start GPA with
-   - a given file or file list ("Wind$$s Double-Clicking")
+   - a given file or file list (thus enabling "Wind$$s Double-Clicking")
      (use function file_add from module filemenu.h of GPA)
    - a given key (import them at once and open key ring editor(?))
 
  - Insert new menu item: "Sign and save as"? Or remove all the "save as"
-   menu items for other processes?
+   menu items for other processes? (Symmetry!)
 
  - Public key ring editor:
    ? "Delete keys" still yields a segfault...
@@ -47,7 +55,7 @@
    import from doesn't exist.
 
  - In all "Sign as" dialogs: In the resp. clists, initialize the scrollbars
-   as to present the selected row AKA the default key.
+   as to present the selected row (AKA the default key).
 
  ? Set/get the list of default recipients.
 

@@ -7,6 +7,8 @@
  * and it should be used for new programs anyway. */
 #define _GNU_SOURCE  1
 
+@TOP@
+
 /* Define if your locale.h file contains LC_MESSAGES.  */
 #undef HAVE_LC_MESSAGES
 
@@ -26,9 +28,6 @@
 
 #undef HAVE_STPCPY
 
-
-@TOP@
-
 #undef HAVE_BYTE_TYPEDEF
 #undef HAVE_USHORT_TYPEDEF
 #undef HAVE_ULONG_TYPEDEF
@@ -37,5 +36,6 @@
 
 @BOTTOM@
 
+#include "gpadefs.h"
 
 #endif /*GPA_CONFIG_H*/

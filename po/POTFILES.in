@@ -1,9 +1,8 @@
 
-
 src/gpa.c
 src/filemenu.c
+src/gpawindowkeeper.c
 src/gtktools.c
-src/help.c
 src/helpmenu.c
 src/keysmenu.c
 src/optionsmenu.c

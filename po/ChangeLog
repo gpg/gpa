@@ -1,3 +1,7 @@
+2000-05-17 10:25:38  Werner Koch  (wk@habibti.openit.de)
+
+	* POTFILES.in: Fixed the list of files.
+
 2000-05-16 20:07:52  Werner Koch  (wk@habibti.openit.de)
 
 	* de.po: Added

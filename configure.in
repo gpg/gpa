@@ -120,6 +120,30 @@ if test "$GCC" = yes; then
     CFLAGS="$CFLAGS -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
 fi
 
+AC_OUTPUT_COMMANDS([
+cat >gpadefs.tmp <<GPAEOF
+/* Generated automatically by configure */
+#ifdef HAVE_DRIVE_LETTERS
+  #define GPA_LOCALEDIR "c:/lib/gnupg/locale"
+#else
+  #define GPA_LOCALEDIR "${prefix}/${DATADIRNAME}/locale"
+#endif
+GPAEOF
+if cmp -s gpadefs.h gpadefs.tmp 2>/dev/null; then
+    echo "gpadefs.h is unchanged"
+    rm -f gpadefs.tmp
+else
+    rm -f gpadefs.h
+    mv gpadefs.tmp gpadefs.h
+    echo "gpadefs.h created"
+fi
+],[
+prefix=$prefix
+exec_prefix=$exec_prefix
+libdir=$libdir
+datadir=$datadir
+DATADIRNAME=$DATADIRNAME
+])
 
 AC_OUTPUT([
 Makefile

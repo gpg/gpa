@@ -407,7 +407,7 @@ gpa_menubar_new (GtkWidget * window)
     ,
     {_("/Keys/_Generate Key"), NULL, keys_generateKey, 0, NULL}
     ,
-    
+
       {_("/Keys/Generate _Revocation Certificate"), NULL,
      keys_generateRevocation, 0, NULL}
     ,
@@ -457,12 +457,12 @@ gpa_menubar_new (GtkWidget * window)
   gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
   menubar = gtk_item_factory_get_widget (itemFactory, "<main>");
   return (menubar);
-}				/* gpa_menubar_new */
+} /* gpa_menubar_new */
 
 void
 gpa_popupMenu_init (void)
 {
-/* var */
+  /* var */
   GtkItemFactory *itemFactory;
   GtkItemFactoryEntry menuItem[] = {
     {_("/Show detail"), NULL, file_showDetail, 0, NULL},
@@ -478,31 +478,31 @@ gpa_popupMenu_init (void)
     {_("/Close"), NULL, file_close, 0, NULL}
   };
   gint menuItems = sizeof (menuItem) / sizeof (menuItem[0]);
-/* commands */
+  /* commands */
   itemFactory = gtk_item_factory_new (GTK_TYPE_MENU, "<main>", NULL);
   gtk_item_factory_create_items (itemFactory, menuItems, menuItem, NULL);
   global_popupMenu = gtk_item_factory_get_widget (itemFactory, "<main>");
-}				/* gpa_popupMenu_init */
+} /* gpa_popupMenu_init */
 
 void
 setFileSelected (GtkWidget * clistFile, gint row, gint column,
 		 GdkEventButton * event, gboolean selected)
 {
-/* var */
+  /* var */
   GpapaFile *aFile;
-/* commands */
+  /* commands */
   aFile = g_list_nth_data (filesOpened, row);
   if (selected)
     {
       if (!g_list_find (filesSelected, aFile))
 	filesSelected = g_list_append (filesSelected, aFile);
-    }				/* if */
+    }
   else
     {
       if (g_list_find (filesSelected, aFile))
 	filesSelected = g_list_remove (filesSelected, aFile);
-    }				/* else */
-}				/* setFileSelected */
+    }
+} /* setFileSelected */
 
 gboolean
 evalKeyClistFile (GtkWidget * clistFile, GdkEventKey * event,
@@ -516,18 +516,18 @@ evalKeyClistFile (GtkWidget * clistFile, GdkEventKey * event,
     case GDK_Insert:
       file_open ();
       break;
-    }				/* switch */
+    }
   return (TRUE);
-}				/* evalKeyClistFile */
+} /* evalKeyClistFile */
 
 gboolean
 evalMouseClistFile (GtkWidget * clistFile, GdkEventButton * event,
 		    gpointer userData)
 {
-/* var */
+  /* var */
   gint x, y;
   gint row, column;
-/* commands */
+  /* commands */
   if (event->button == 3)
     {
       x = event->x;
@@ -551,17 +551,17 @@ evalMouseClistFile (GtkWidget * clistFile, GdkEventButton * event,
 GtkWidget *
 gpa_windowFile_new (void)
 {
-/* var */
+  /* var */
   char *clistFileTitle[5] = {
     N_("File"), N_("Status"), N_("Sigs total"), N_("Valid Sigs"),
     N_("Invalid Sigs")
   };
   int i;
-/* objects */
+  /* objects */
   GtkWidget *windowFile;
   GtkWidget *scrollerFile;
   GtkWidget *clistFile;
-/* commands */
+  /* commands */
   windowFile = gtk_frame_new (_("Files in work"));
   scrollerFile = gtk_scrolled_window_new (NULL, NULL);
   clistFile = gtk_clist_new_with_titles (5, clistFileTitle);
@@ -595,7 +595,7 @@ gpa_windowFile_new (void)
   gtk_container_add (GTK_CONTAINER (scrollerFile), clistFile);
   gtk_container_add (GTK_CONTAINER (windowFile), scrollerFile);
   return (windowFile);
-}				/* gpa_windowFile_new */
+} /* gpa_windowFile_new */
 
 GtkWidget *
 gpa_windowMain_new (char *title)
@@ -628,11 +628,32 @@ gpa_windowMain_new (char *title)
   global_keyserver = namesKeyserver[0];
   global_defaultKey = NULL;
   return (window);
-}				/* gpa_windowMain_new */
+} /* gpa_windowMain_new */
+
+
+static void
+i18n_init (void)
+{
+  #ifdef USE_SIMPLE_GETTEXT
+    set_gettext_file( PACKAGE );
+  #else
+  #ifdef ENABLE_NLS
+    #ifdef HAVE_LC_MESSAGES
+       setlocale( LC_TIME, "" );
+       setlocale( LC_MESSAGES, "" );
+    #else
+       setlocale( LC_ALL, "" );
+    #endif
+    bindtextdomain( PACKAGE, GPA_LOCALEDIR );
+    textdomain( PACKAGE );
+  #endif
+  #endif
+}
 
 int
 main (int params, char *param[])
 {
+  i18n_init ();
   gtk_init (&params, &param);
   global_windowMain = gpa_windowMain_new (_("GNU Privacy Assistant"));
   gtk_signal_connect (GTK_OBJECT (global_windowMain), "delete_event",
@@ -640,4 +661,5 @@ main (int params, char *param[])
   gtk_widget_show_all (global_windowMain);
   gtk_main ();
   return (0);
-}				/* main */
+} /* main */
+

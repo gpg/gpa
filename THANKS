@@ -1,4 +1,16 @@
-
+GPA was originally written by Markus Gerwinski.  The included GPAPA library
+is due to Peter Gerwinski. Other people contributed by reporting problems,
+suggesting various improvements or submitting actual code.  Here is a list
+of those people.  Help us keep it complete and free of errors.	See the
+file AUTHORS for the current maintainer.
 
 Markus Gerwinski	markus.gerwinski@sercon.de
+Michael Roth		mroth@nessie.de
+Peter Gerwinski 	peter@g-n-u.de
+Peter Neuhaus		pneuhaus@openit.de
+Werner Koch		wk@gnupg.org
 
+Thanks to Michael Roth for his PGG project which heavily influenced GPAPA.
+
+The development of this software has partly been funded by the German
+Ministry for Economics and Technology under grant VIB3-68553.168-001/1999.

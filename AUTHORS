@@ -1,12 +1,20 @@
-Program: GPA
-Original author:  markus.gerwinski@sercon.de
-Current maintainer:
+Program: GPA, GPAPA
+Maintainer: ??
 
-Authors with copyright assignments:
-
-
+Authors
+=======
 
 
+Markus Gerwinski <markus.gerwinski@sercon.de>
+    Designed and implemented GPA.
 
-Other Maintainers:
+Peter Gerwinski <markus.gerwinski@sercon.de>
+    Designed and implemented GPAPA.
+
+Peter Neuhaus <pneuhaus@openit.de>
+    German translation.
+
+Werner Koch <wk@gnupg.org>
+    Glued everything together, fixes here and there, W32 porting.
+
 
