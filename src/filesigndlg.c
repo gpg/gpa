@@ -278,15 +278,16 @@ gpa_file_sign_dialog_run (GtkWidget * parent, GList *files)
 			     GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxSign), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxSign), 5);
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					(GtkSignalFunc) file_sign_cancel, (gpointer) &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonCancel);
-
   buttonSign = gpa_button_new (accelGroup, "_OK");
   gtk_signal_connect_object (GTK_OBJECT (buttonSign), "clicked",
 			     GTK_SIGNAL_FUNC (file_sign_ok),
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonSign);
+
+  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
+					(GtkSignalFunc) file_sign_cancel, 
+                                        (gpointer) &dialog);
+  gtk_container_add (GTK_CONTAINER (hButtonBoxSign), buttonCancel);
   gtk_container_add (GTK_CONTAINER (windowSign), vboxSign);
   gpa_window_show_centered (windowSign, parent);
   gtk_window_set_modal (GTK_WINDOW (windowSign), TRUE);

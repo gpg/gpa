@@ -115,15 +115,15 @@ key_receive_run_dialog (GtkWidget * parent)
   gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxReceive),
 			     GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxReceive), 10);
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					receive_cancel, &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxReceive), buttonCancel);
-
   buttonReceive = gpa_button_new (accelGroup, _("_Receive"));
   gtk_container_add (GTK_CONTAINER (hButtonBoxReceive), buttonReceive);
   gtk_signal_connect_object (GTK_OBJECT (buttonReceive), "clicked",
 			     GTK_SIGNAL_FUNC (receive_ok),
 			     (gpointer) &dialog);
+
+  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
+					receive_cancel, &dialog);
+  gtk_container_add (GTK_CONTAINER (hButtonBoxReceive), buttonCancel);
   gtk_box_pack_start (GTK_BOX (vboxReceive), hButtonBoxReceive, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowReceive), vboxReceive);

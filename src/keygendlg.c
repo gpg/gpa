@@ -279,17 +279,17 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxGenerate), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxGenerate), 5);
 
-  buttonCancel = gpa_button_cancel_new(accelGroup, _("_Cancel"),
-				       GTK_SIGNAL_FUNC (key_gen_cancel),
-				       (gpointer)&dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxGenerate), buttonCancel);
-
   buttonGenerate = gpa_button_new (accelGroup, _("_Generate key"));
 
   gtk_signal_connect_object (GTK_OBJECT (buttonGenerate), "clicked",
 			     GTK_SIGNAL_FUNC (key_gen_ok),
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxGenerate), buttonGenerate);
+
+  buttonCancel = gpa_button_cancel_new(accelGroup, _("_Cancel"),
+				       GTK_SIGNAL_FUNC (key_gen_cancel),
+				       (gpointer)&dialog);
+  gtk_container_add (GTK_CONTAINER (hButtonBoxGenerate), buttonCancel);
 
   gpa_window_show_centered (windowGenerate, parent);
 

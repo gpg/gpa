@@ -200,16 +200,16 @@ gpa_file_encrypt_dialog_run (GtkWidget *parent, GList *files)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxEncrypt), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxEncrypt), 5);
 
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					(GtkSignalFunc) file_encrypt_cancel,
-					(gpointer) &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxEncrypt), buttonCancel);
-
   buttonEncrypt = gpa_button_new (accelGroup, _("_OK"));
   gtk_signal_connect_object (GTK_OBJECT (buttonEncrypt), "clicked",
 			     GTK_SIGNAL_FUNC (file_encrypt_ok),
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxEncrypt), buttonEncrypt);
+
+  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
+					(GtkSignalFunc) file_encrypt_cancel,
+					(gpointer) &dialog);
+  gtk_container_add (GTK_CONTAINER (hButtonBoxEncrypt), buttonCancel);
 
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   gpa_window_show_centered (window, parent);

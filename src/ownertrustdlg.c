@@ -170,14 +170,14 @@ gpa_ownertrust_run_dialog (GpapaPublicKey *key, GtkWidget *parent,
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxTrust), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxTrust), 5);
 
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					(GtkSignalFunc) ownertrust_cancel, &dialog);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxTrust), buttonCancel);
   buttonAccept = gpa_button_new (accelGroup, _("_Accept"));
   gtk_signal_connect_object (GTK_OBJECT (buttonAccept), "clicked",
 			     GTK_SIGNAL_FUNC (ownertrust_ok),
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxTrust), buttonAccept);
+  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
+					(GtkSignalFunc) ownertrust_cancel, &dialog);
+  gtk_container_add (GTK_CONTAINER (hButtonBoxTrust), buttonCancel);
   gtk_box_pack_start (GTK_BOX (vboxTrust), hButtonBoxTrust, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowTrust), vboxTrust);
   gpa_window_show_centered (windowTrust, parent);

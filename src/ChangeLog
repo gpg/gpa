@@ -1,5 +1,16 @@
 2002-08-16  Miguel Coca  <e970095@zipi.fi.upm.es>
 
+	* passphrasedlg.c (gpa_passphrase_run_dialog): In dialogs, set the
+	button ordering to [OK] [Cancel] in all cases.
+	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Likewise. 
+	* keyreceivedlg.c (key_receive_run_dialog): Likewise.
+	* keyimpseldlg.c (gpa_key_import_selection_dialog_run): Likewise.
+	* keyimportdlg.c (key_import_dialog_run): Likewise.
+	* keyexportdlg.c (key_export_dialog_run) 
+	(secret_key_export_dialog_run, key_backup_dialog_run): Likewise.
+	* filesigndlg.c (gpa_file_sign_dialog_run): Likewise.
+	* encryptdlg.c (gpa_file_encrypt_dialog_run): Likewise.
+
 	* keyring.c (keyring_editor_import): Reload the keytable after
 	importing keys.
 

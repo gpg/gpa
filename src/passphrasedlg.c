@@ -149,15 +149,15 @@ gpa_passphrase_run_dialog (GtkWidget * parent, GpapaSecretKey * key)
   gtk_button_box_set_layout (GTK_BUTTON_BOX (hButtonBoxPassphrase),
 			     GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxPassphrase), 10);
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					(GtkSignalFunc) passphrase_cancel, (gpointer) &dialog);
-  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxPassphrase), 5);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxPassphrase), buttonCancel);
   buttonOK = gpa_button_new (accelGroup, _("_OK"));
   gtk_signal_connect_object (GTK_OBJECT (buttonOK), "clicked",
 			     GTK_SIGNAL_FUNC (passphrase_ok),
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxPassphrase), buttonOK);
+  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
+					(GtkSignalFunc) passphrase_cancel, (gpointer) &dialog);
+  gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxPassphrase), 5);
+  gtk_container_add (GTK_CONTAINER (hButtonBoxPassphrase), buttonCancel);
   gtk_box_pack_start (GTK_BOX (vboxPassphrase), hButtonBoxPassphrase, FALSE,
 		      FALSE, 0);
   gtk_container_add (GTK_CONTAINER (windowPassphrase), vboxPassphrase);

@@ -264,14 +264,14 @@ key_import_dialog_run (GtkWidget * parent, gchar ** filename, gchar ** server,
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), 10);
   gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
 
-  button = gpa_button_cancel_new (accel_group, _("_Cancel"),
-                                  (GtkSignalFunc) import_cancel,
-				  &dialog);
-  gtk_container_add (GTK_CONTAINER (bbox), button);
-
   button = gpa_button_new (accel_group, _("_OK"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (import_ok), (gpointer) &dialog);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
+
+  button = gpa_button_cancel_new (accel_group, _("_Cancel"),
+                                  (GtkSignalFunc) import_cancel,
+				  &dialog);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);

@@ -112,8 +112,6 @@ options_keyserver (gpointer param)
   gpa_windowKeeper_add_param (keeper, paramClose);
   paramClose[0] = keeper;
   paramClose[1] = NULL;
-  buttonCancel = gpa_buttonCancel_new (accelGroup, _("_Cancel"), paramClose);
-  gtk_container_add (GTK_CONTAINER (hButtonBoxServer), buttonCancel);
   buttonSet = gpa_button_new (accelGroup, _("_Set"));
   paramSet = (gpointer *) xmalloc (2 * sizeof (gpointer));
   gpa_windowKeeper_add_param (keeper, paramSet);
@@ -123,6 +121,8 @@ options_keyserver (gpointer param)
 			     GTK_SIGNAL_FUNC (options_keyserver_set),
 			     (gpointer) paramSet);
   gtk_container_add (GTK_CONTAINER (hButtonBoxServer), buttonSet);
+  buttonCancel = gpa_buttonCancel_new (accelGroup, _("_Cancel"), paramClose);
+  gtk_container_add (GTK_CONTAINER (hButtonBoxServer), buttonCancel);
   gtk_box_pack_start (GTK_BOX (vboxServer), hButtonBoxServer, FALSE, FALSE,
 		      0);
   gtk_container_add (GTK_CONTAINER (windowServer), vboxServer);
