@@ -52,7 +52,7 @@ struct _GPAKeyringEditor {
   GtkWidget *window;
 
   /* The central list of keys */
-  GtkWidget  *clist_keys;
+  GtkWidget *clist_keys;
 
   /* The "Show Ownertrust" toggle button */
   GtkWidget *toggle_show;
@@ -799,6 +799,43 @@ keyring_update_details_page (GPAKeyringEditor * editor)
 } /* keyring_update_details_page */
 
 
+static GPAKeyListColumn keylist_columns_brief[] =
+{GPA_KEYLIST_NAME, GPA_KEYLIST_ID};
+
+static GPAKeyListColumn keylist_columns_detailed[] =
+{GPA_KEYLIST_NAME, GPA_KEYLIST_ID, GPA_KEYLIST_EXPIRYDATE,
+ GPA_KEYLIST_OWNERTRUST, GPA_KEYLIST_KEYTRUST};
+
+static void
+keyring_set_brief_listing (GtkWidget *widget, gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+    {
+      gpa_keylist_set_column_defs (editor->clist_keys, 
+				   (sizeof keylist_columns_brief)
+				   / (sizeof keylist_columns_brief[0]),
+				   keylist_columns_brief);
+      gpa_keylist_update_list (editor->clist_keys);
+    }
+}
+
+static void
+keyring_set_detailed_listing (GtkWidget *widget, gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+    {
+      gpa_keylist_set_column_defs (editor->clist_keys, 
+				   (sizeof keylist_columns_detailed)
+				   / (sizeof keylist_columns_detailed[0]),
+				   keylist_columns_detailed);
+      gpa_keylist_update_list (editor->clist_keys);
+    }
+}
+
 
 static void
 toolbar_edit_key (GtkWidget *widget, gpointer param)
@@ -834,6 +871,7 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   GtkWidget *toolbar;
   GtkWidget *icon;
   GtkWidget *item;
+  GtkWidget *button;
 
   toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
   
@@ -876,6 +914,30 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   add_selection_sensitive_widget (editor, item,
 				  keyring_editor_has_selection);
 
+  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
+
+  button = gtk_radio_button_new (NULL);
+  item = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
+				     GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
+				     _("Brief"), _("Show Brief Keylist"),
+				     _("brief"), NULL,
+				   GTK_SIGNAL_FUNC (keyring_set_brief_listing),
+				     editor);
+  gtk_signal_handler_block_by_data (GTK_OBJECT (item), editor);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), TRUE);
+  gtk_signal_handler_unblock_by_data (GTK_OBJECT (item), editor);
+
+  button = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON (button));
+  gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
+			      GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
+			      _("Details"), _("Show Key Details"),
+			      _("details"), NULL,
+			      GTK_SIGNAL_FUNC (keyring_set_detailed_listing),
+			      editor);
+  
+  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
   icon = gpa_create_icon_widget (window, "help");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
 				  _("Understanding the GNU Privacy Assistant"),
@@ -912,8 +974,6 @@ keyring_editor_new (void)
     _("Key owner"), _("Key trust"), _("Ownertrust"), _("Expiry date"),
     _("Key ID")
   };*/
-  GPAKeyListColumn keylist_columns[] = {GPA_KEYLIST_NAME, GPA_KEYLIST_ID,
-					GPA_KEYLIST_EXPIRYDATE};
 
   editor = xmalloc(sizeof(GPAKeyringEditor));
   editor->selection_sensitive_widgets = NULL;
@@ -954,9 +1014,9 @@ keyring_editor_new (void)
   gtk_container_set_border_width (GTK_CONTAINER (vboxKeys), 5);
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
   
-  clistKeys =  gpa_keylist_new ((sizeof keylist_columns)
-				/ (sizeof keylist_columns[0]),
-				keylist_columns, 10,
+  clistKeys =  gpa_keylist_new ((sizeof keylist_columns_brief)
+				/ (sizeof keylist_columns_brief[0]),
+				keylist_columns_brief, 10,
 				windowPublic);
   editor->clist_keys = clistKeys;
   /*
