@@ -66,6 +66,10 @@ struct _GPAKeyringEditor {
   /* The signatures list in the notebook */
   GtkWidget *signatures_list;
 
+  /* Labels in the status bar */
+  GtkWidget *status_key_user;
+  GtkWidget *status_key_id;
+
   /* List of sensitive widgets. See below */
   GList * selection_sensitive_widgets;
 };
@@ -96,7 +100,7 @@ static void keyring_update_signatures_page (GPAKeyringEditor * editor);
  * implementation here is very simple and quite specific for the keyring
  * editor's needs.
  *
- * We maintain a list of sensitive widgets and each of which has a
+ * We maintain a list of sensitive widgets each of which has a
  * sensitivity callback associated with them as the "gpa_sensitivity"
  * data. The callback returns TRUE when the widget should be sensitive
  * and FALSE otherwise.
@@ -414,6 +418,7 @@ keyring_editor_sign (gpointer param)
     }
 } /* keyring_editor_sign */
 
+
 /* retrieve a key from the server */
 static void
 keyring_editor_receive (gpointer param)
@@ -547,6 +552,7 @@ keyring_editor_generate_key_advanced (gpointer param)
     }
 } /* keyring_editor_generate_key_advanced */
 
+
 /* Call the key generation wizard and update the key list if necessary */
 static void
 keyring_editor_generate_key_simple (gpointer param)
@@ -651,7 +657,7 @@ keyring_editor_mapped (gpointer param)
 				     NULL};
 	  gchar * result;
 	  result = gpa_message_box_run (editor->window, _("No key defined"),
-					_("You don not have a private key yet."
+					_("You do not have a private key yet."
 					  " Do you want to generate one now"
 					  " (recommended) or do it later?"),
 					buttons);
@@ -859,7 +865,8 @@ keyring_update_signatures_page (GPAKeyringEditor * editor)
     }
   else
     gpa_siglist_set_signatures (editor->signatures_list, NULL, NULL);
-}
+} /* keyring_update_signatures_page */
+
 
 /* definitions for the brief and detailed key list. The names are at the
  * end so that they automatically take up all the surplus horizontal
@@ -888,7 +895,7 @@ keyring_set_brief_listing (GtkWidget *widget, gpointer param)
 				   keylist_columns_brief);
       gpa_keylist_update_list (editor->clist_keys);
     }
-}
+} /* keyring_set_brief_listing */
 
 
 /* Change the keylist to detailed listing */
@@ -905,7 +912,7 @@ keyring_set_detailed_listing (GtkWidget *widget, gpointer param)
 				   keylist_columns_detailed);
       gpa_keylist_update_list (editor->clist_keys);
     }
-}
+} /* keyring_set_detailed_listing */
 
 
 static void
@@ -1016,9 +1023,58 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 				  NULL);
 
   return toolbar;
-} 
+} /* keyring_toolbar_new */
 
 
+static GtkWidget *
+keyring_statusbar_new (GPAKeyringEditor *editor)
+{
+  GtkWidget * hbox;
+  GtkWidget * label;
+
+  hbox = gtk_hbox_new (FALSE, 0);
+
+  label = gtk_label_new (_("Selected Default Key:"));
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+
+  label = gtk_label_new ("");
+  editor->status_key_user = label;
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+  
+  label = gtk_label_new ("");
+  editor->status_key_id = label;
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+
+  return hbox;
+} /* keyring_statusbar_new */
+
+
+/* signal handler for the "gpa_default_key_changed" signal. Update the
+   status bar */
+static void
+keyring_update_status_bar (gpointer param)
+{
+  GPAKeyringEditor * editor = param;
+  gchar * key_id = gpa_default_key ();
+  GpapaPublicKey * key;
+
+  if (key_id)
+    {
+      key = gpapa_get_public_key_by_ID (key_id, gpa_callback, editor->window);
+      gtk_label_set_text (GTK_LABEL (editor->status_key_user),
+			  gpapa_key_get_name (GPAPA_KEY (key), gpa_callback,
+					      editor->window));
+      gtk_label_set_text (GTK_LABEL (editor->status_key_id),
+			  gpapa_key_get_identifier (GPAPA_KEY (key),
+						    gpa_callback,
+						    editor->window));
+    }
+  else
+    {
+      gtk_label_set_text (GTK_LABEL (editor->status_key_user), "");
+      gtk_label_set_text (GTK_LABEL (editor->status_key_id), "");
+    }     
+}
 
 /* Create and return a new key ring editor window */
 GtkWidget *
@@ -1037,6 +1093,7 @@ keyring_editor_new (void)
   GtkWidget *hbox;
   GtkWidget *icon;
   GtkWidget *paned;
+  GtkWidget *statusbar;
 
   editor = xmalloc(sizeof(GPAKeyringEditor));
   editor->selection_sensitive_widgets = NULL;
@@ -1111,6 +1168,11 @@ keyring_editor_new (void)
 
   notebook = keyring_details_notebook (editor);
   gtk_paned_pack2 (GTK_PANED (paned), notebook, TRUE, TRUE);
+
+  statusbar = keyring_statusbar_new (editor);
+  gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);
+  gtk_signal_connect (GTK_OBJECT (window), "gpa_default_key_changed",
+		      (GtkSignalFunc)keyring_update_status_bar, editor);
 
   update_selection_sensitive_widgets (editor);
 
