@@ -22,8 +22,11 @@ GPG=
 case "${target}" in
     *-*-mingw32)
         try_gettext=no
+        try_gdbm=no
+dnl        AC_DEFINE(USE_ONLY_8DOT3)
         AC_DEFINE(HAVE_DRIVE_LETTERS)
         AC_DEFINE(HAVE_DOSISH_SYSTEM)
+        AC_DEFINE(USE_SIMPLE_GETTEXT)
         GPG='c:\\gnupg\\gpg.exe'
         ;;
     *)
