@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GPA 0.6.1\n"
+"Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-10-12 13:39+0200\n"
-"PO-Revision-Date: 2003-04-05 20:54+0200\n"
+"PO-Revision-Date: 2003-10-12 17:29+0200\n"
 "Last-Translator: Miguel Coca <mcoca@gnu.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -360,7 +360,7 @@ msgstr ">.\n"
 
 #: src/gpaexportclipop.c:137
 msgid "The keys have been copied to the clipboard."
-msgstr ""
+msgstr "Las claves se han copiado al portapapeles."
 
 #: src/gpaexportfileop.c:131
 msgid "Export public keys to file"
@@ -384,15 +384,17 @@ msgid ""
 "server (\"%s\").\n"
 "Are you sure you want to distribute this key?"
 msgstr ""
+"La clave seleccionada se enviará a un servidor de\n"
+"claves público (\"%s\").\n"
+"¿Está seguro de que quiere distribuir esta clave?"
 
 #: src/gpaexportserverop.c:185
 msgid "The keys have been sent to the server."
-msgstr ""
+msgstr "Las claves se han enviado al servidor."
 
 #: src/gpafiledecryptop.c:89
-#, fuzzy
 msgid "Decrypting..."
-msgstr "Descifrar"
+msgstr "Descifrando..."
 
 #: src/gpafiledecryptop.c:280 src/gpafileverifyop.c:337
 #, fuzzy, c-format
@@ -548,7 +550,7 @@ msgstr "desconocida"
 
 #: src/gparecvkeydlg.c:100
 msgid "Which key do you want to import? (The key must be specified by key ID)."
-msgstr ""
+msgstr "¿Qué clave desea importar? (La clave debe especificarse por su ID de clave)."
 
 #: src/gparecvkeydlg.c:115
 msgid "Key _ID:"
@@ -570,7 +572,7 @@ msgstr "A_lgoritmo: "
 
 #: src/gpasubkeylist.c:87
 msgid "Size"
-msgstr ""
+msgstr "Tamaño"
 
 #. change expiry date
 #: src/gpasubkeylist.c:93 src/keyeditdlg.c:170 src/keylist.c:263
@@ -579,16 +581,15 @@ msgstr "Fecha de Caducidad"
 
 #: src/gpasubkeylist.c:100
 msgid "Can sign"
-msgstr ""
+msgstr "Puede firmar"
 
 #: src/gpasubkeylist.c:106
 msgid "Can certify"
-msgstr ""
+msgstr "Puede certificar"
 
 #: src/gpasubkeylist.c:113
-#, fuzzy
 msgid "Can encrypt"
-msgstr "Descifrar"
+msgstr "Puede cifrar"
 
 #: src/gpasubkeylist.c:126 src/gpgmetools.c:558 src/gpgmetools.c:729
 #: src/gpgmetools.c:855
@@ -681,6 +682,13 @@ msgid ""
 "This is probably a bug in GPA.\n"
 "GPA will now try to recover from this error."
 msgstr ""
+"La biblioteca GPGME devolvió un error\n"
+"inesperado. El error fue:\n"
+"\n"
+"\\t%s\n"
+"\n"
+"Esto probablemente se deba a un fallo en GPA.\n"
+"GPA intentará recuperarse de este error."
 
 #. Get the keys and write them into the file
 #: src/gpgmetools.c:433
