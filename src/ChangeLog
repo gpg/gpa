@@ -1,5 +1,9 @@
 2001-02-12  Bernhard Herzog  <bh@intevation.de>
 
+	* optionsmenu.c (options_recipients):
+	(options_key): Translate the CList column titles
+	(options_keyserver): Translate the buttons
+
 	* keyring.c (keyring_details_page_fill_key):
 	(keyring_details_notebook):
 	(GPAKeyringEditor): Add the owner trust to the details page.
