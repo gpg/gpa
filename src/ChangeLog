@@ -1,5 +1,23 @@
 2001-01-15  Bernhard Herzog  <bh@intevation.de>
 
+	* keyring.c (keyring_editor_generate_key):
+	(keyring_editor_generate_key_advanced): Renamed
+	keyring_editor_generate_key to
+	keyring_editor_generate_key_advanced.
+	
+	(keyring_editor_generate_key_simple): New function to call the key
+	generation wizard
+	
+	(keyring_editor_generate_key): New function. Depending on the
+	simple_ui flag call either keyring_editor_generate_key_advanced or
+	keyring_editor_generate_key_simple
+	
+	(keyring_editor_mapped): New function. Signal handler handler for
+	the map signal. If the simple_ui flag is set and no private key
+	is in the keyring, suggest creating a new keypair.
+
+	(keyring_editor_new): Connect to the map signal
+
 	* gpawizard.c: 
 	* gpawizard.h: 
 	New files implementing a simple generic wizard interface
@@ -7,6 +25,8 @@
 	* keygenwizard.h: 
 	* keygenwizard.c: 
 	New files implementing the key generation wizard
+
+	* Makefile.am: Add the new files.
 
 	* keygendlg.c (gpa_key_gen_run_dialog): Connect to delete-event
 	and use the new gpa_window_show_centered function.
