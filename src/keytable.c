@@ -50,7 +50,6 @@ static void keytable_fill (GHashTable *hash, gboolean secret)
   label = gtk_label_new ("0");
   gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
   progress = gtk_progress_bar_new ();
-  gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (progress), 0.02);
   gtk_table_attach_defaults (GTK_TABLE (table), progress, 0, 2, 1, 2);
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), table);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
