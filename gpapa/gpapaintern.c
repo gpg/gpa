@@ -40,6 +40,7 @@
 #include "stringhelp.h"
 
 #define DEBUG 1
+/* #define TEST_PASSPHRASE "test" */
 
 #ifdef __MINGW32__
 struct gpg_object_private {
@@ -448,6 +449,12 @@ spawn_gnupg(char **user_args, gchar * commands,
   int argc, user_args_counter, standard_args_counter, i, j;
   GPG_OBJECT *gpg = NULL;
 
+#ifdef TEST_PASSPHRASE
+  int passfd[2];
+  char passfd_str[10];
+  gchar passphrase[] = "test";
+#endif
+
   /* FIXME: Make user_args const and copy/release the argument array */
 
   char *standard_args[] = {
@@ -486,7 +493,7 @@ spawn_gnupg(char **user_args, gchar * commands,
     }
   sprintf (statusfd_str, "%d", statusfd[1]);
 
-#if 0
+#ifdef TEST_PASSPHRASE
   if (passphrase)
     {
       /* Open passphrase pipe.
@@ -506,6 +513,7 @@ spawn_gnupg(char **user_args, gchar * commands,
       write (passfd[1], "\n", 1);
     }
 #endif
+
   if (commands)
     {
       /* Open input pipe.
@@ -518,14 +526,18 @@ spawn_gnupg(char **user_args, gchar * commands,
 	  close (outputfd[1]);
 	  close (statusfd[0]);
 	  close (statusfd[1]);
-/*  	  if (passphrase) */
-/*  	    { */
-/*  	      close (passfd[0]); */
-/*  	      close (passfd[1]); */
-/*  	    } */
+
+#ifdef TEST_PASSPHRASE
+  	  if (passphrase)
+  	    {
+  	      close (passfd[0]);
+  	      close (passfd[1]); 
+  	    } 
+#endif
 	  return NULL;
 	}
       write (inputfd[1], commands, strlen (commands));
+      close (inputfd[1]);
     }
 
   /* Construct the command line.
@@ -537,18 +549,33 @@ spawn_gnupg(char **user_args, gchar * commands,
   while (standard_args[standard_args_counter] != NULL)
     standard_args_counter++;
   argc = 1 + standard_args_counter + user_args_counter;
-/*    if (passphrase) */
-/*      argc += 2; */
+
+#ifdef TEST_PASSPHRASE
+    if (passphrase)
+      argc += 2;
+#endif
+
+    if (commands) 
+	argc += 2;
   argv = (char **) xmalloc ((argc + 1) * sizeof (char *));
   i = 0;
   argv[i++] = xstrdup (gpapa_private_get_gpg_program () );
   for (j = 0; j < standard_args_counter; j++)
     argv[i++] = standard_args[j];
-/*    if (passphrase) */
-/*      { */
-/*        argv[i++] = "--passphrase-fd"; */
-/*        argv[i++] = passfd_str; */
-/*      } */
+
+#ifdef TEST_PASSPHRASE
+    if (passphrase)
+      {
+        argv[i++] = "--passphrase-fd";
+        argv[i++] = passfd_str;
+      }
+#endif
+
+    if (commands)
+    { 
+      argv[i++] = "--command-fd";
+      argv[i++] = "0";
+    }
   for (j = 0; j < user_args_counter; j++)
     argv[i++] = user_args[j];
   argv[i] = NULL;
@@ -576,7 +603,6 @@ spawn_gnupg(char **user_args, gchar * commands,
 	dup2 (devnull, 0);
       close (devnull);
       execv (argv[0], argv);
-
       /* Reached only if execution failed (we are not the child)*/
       callback (GPAPA_ACTION_ERROR, "GnuPG execution failed", calldata);
       /* fixme: need some cleanup here */
@@ -652,7 +678,7 @@ wait_gnupg ( GPG_OBJECT *gpg, int no_hang )
   FD_SET (gpg->private.status_fd, &readfds);
   nfds = MAX ( gpg->private.output_fd, gpg->private.status_fd ) + 1;
   nfds = select ( nfds, &readfds, NULL, NULL, &timeout );
-  if ( nfds > 0 )
+   if ( nfds > 0 )
     {
       if ( FD_ISSET ( gpg->private.output_fd, &readfds ) )
         gpg->output.avail = 1;
@@ -754,9 +780,9 @@ gpapa_gnupg_create ( int foo )
  * buffer).
  */
 static void
-handle_status ( GPG_OBJECT *gpg,
-                GpapaLineCallbackFunc line_cb, void *line_opaque,
-                GpapaCallbackFunc callback,  gpointer calldata)
+handle_status (GPG_OBJECT *gpg,
+               GpapaLineCallbackFunc line_cb, void *line_opaque,
+               GpapaCallbackFunc callback, gpointer calldata)
 {
   char *p;
   int nread;
@@ -764,69 +790,71 @@ handle_status ( GPG_OBJECT *gpg,
   char *buffer = gpg->status.buffer;
   size_t readpos = gpg->status.readpos; 
 
-  if ( !gpg->status.avail )
-      return;
+  if (!gpg->status.avail)
+    return;
 
-  /* Hmmm: should we handle EOFs or error here? */
-  if ( !buffer )
+  /* Hmmm: should we handle EOFs or error here?  */
+  if (!buffer)
     {
       bufsize = 1024;
-      buffer = xmalloc ( bufsize );
+      buffer = xmalloc (bufsize);
       readpos = 0;
     }
-  else if ( bufsize - readpos < 256 ) /* make more room for the read */
+  else if (bufsize - readpos < 256) /* make more room for the read */
     {
       bufsize += 1024;
-      buffer = xrealloc ( buffer, bufsize );
+      buffer = xrealloc (buffer, bufsize);
     }
 
-  nread = channel_read ( gpg, STATUS_CHANNEL,
-                         buffer+readpos, bufsize - readpos );
-  while ( nread > 0 )
+  nread = channel_read (gpg, STATUS_CHANNEL,
+                        buffer + readpos, bufsize - readpos);
+  while (nread > 0)
     {
-      /* we require that the last line is terminated by a LF */
-      for ( p=buffer+readpos; nread; nread--, p++ )
+      /* We require that the last line is terminated by a LF.  */
+      for (p = buffer + readpos; nread; nread--, p++)
         {
-        if ( *p == '\n' )
-          {
-            *p = 0;
-            fprintf (stderr, "gpg status: `%s'\n", buffer);
-            if ( !strncmp ( buffer, "[GNUPG:] ", 9 ) )
-              {
-                char *line = buffer + 9;
-                /* Note that the callback is allowed to modify the line */
-                line_cb ( line, line_opaque, 1 );
-                /* Do some status check of our own here */
-                status_check (line, callback, calldata, "NODATA",
-                              "no data found");
-                status_check (line, callback, calldata,
-                              "BADARMOR",
-                              "ASCII armor is corrupted");
-                status_check (line, callback, calldata,
-                              "MISSING_PASSPHRASE", "missing passphrase");
-                status_check (line, callback, calldata,
-                              "BAD_PASSPHRASE", "bad passphrase");
-                status_check (line, callback, calldata,
-                              "DECRYPTION_FAILED", "decryption failed");
-                status_check (line, callback, calldata,
-                              "NO_PUBKEY", "public key not available");
-                status_check (line, callback, calldata,
-                              "NO_SECKEY", "secret key not available");
-              }
-            /* to reuse the buffer for the next line we have to shift
-             * the remaining data to the buffer start and restart the loop
-             * Hmmm: We can optimize this function by lookink forward in
-             * the buffer to see whether a second complete line is available
-             * and in this case avoid the memmove for this line. */
-            nread--; p++;
-            if ( nread )
-              memmove ( buffer, p, nread );
-            readpos = 0;
-            break; /* the inner loop */
-          }
+          if ( *p == '\n' )
+            {
+              *p = 0;
+              fprintf (stderr, "gpg status: `%s'\n", buffer);
+              if (!strncmp (buffer, "[GNUPG:] ", 9 ))
+                {
+                  char *line = buffer + 9;
+                  /* Note that the callback is allowed to modify the line.  */
+                  line_cb ( line, line_opaque, 1 );
+                  /* Do some status check of our own here.  */
+                  status_check (line, callback, calldata, "NODATA",
+                                "no data found");
+                  status_check (line, callback, calldata,
+                                "BADARMOR",
+                                "ASCII armor is corrupted");
+                  status_check (line, callback, calldata,
+                                "MISSING_PASSPHRASE", "missing passphrase");
+                  status_check (line, callback, calldata,
+                                "BAD_PASSPHRASE", "bad passphrase");
+                  status_check (line, callback, calldata,
+                                "DECRYPTION_FAILED", "decryption failed");
+                  status_check (line, callback, calldata,
+                                "NO_PUBKEY", "public key not available");
+                  status_check (line, callback, calldata,
+                                "NO_SECKEY", "secret key not available");
+                }
+              /* To reuse the buffer for the next line we have to shift
+                 the remaining data to the buffer start and restart the loop
+                 Hmmm: We can optimize this function by lookink forward in
+                 the buffer to see whether a second complete line is available
+                 and in this case avoid the memmove for this line.  */
+              nread--; p++;
+              if (nread)
+                memmove (buffer, p, nread);
+              readpos = 0;
+              break; /* the inner loop */
+            }
+          else
+            readpos++;
         }
     } 
-  /* update the gpg object */
+  /* Update the gpg object.  */
   gpg->status.bufsize = bufsize;
   gpg->status.buffer = buffer;
   gpg->status.readpos = readpos;
@@ -839,8 +867,8 @@ handle_status ( GPG_OBJECT *gpg,
  */
 
 static void
-handle_output_line ( GPG_OBJECT *gpg,
-                     GpapaLineCallbackFunc line_cb, void *line_opaque )
+handle_output_line (GPG_OBJECT *gpg,
+                    GpapaLineCallbackFunc line_cb, void *line_opaque)
 {
   char *p;
   int nread;
@@ -848,103 +876,98 @@ handle_output_line ( GPG_OBJECT *gpg,
   char *buffer = gpg->output.buffer;
   size_t readpos = gpg->output.readpos; 
 
-  if ( !gpg->output.avail )
-      return;
+  if (!gpg->output.avail)
+    return;
 
-  /* Hmmm: should we handle EOFs or error here? */
-  if ( !buffer )
+  /* Hmmm: should we handle EOFs or error here?  */
+  if (!buffer)
     {
       bufsize = 1024;
-      buffer = xmalloc ( bufsize );
+      buffer = xmalloc (bufsize);
       readpos = 0;
     }
-  else if ( bufsize - readpos < 256 ) /* make more room for the read */
+  else if (bufsize - readpos < 256)  /* Make more room for the read.  */
     {
       bufsize += 1024;
-      buffer = xrealloc ( buffer, bufsize );
+      buffer = xrealloc (buffer, bufsize);
     }
 
-  nread = channel_read ( gpg, OUTPUT_CHANNEL,
-                         buffer+readpos, bufsize - readpos );
-  while ( nread > 0 )
+  nread = channel_read (gpg, OUTPUT_CHANNEL,
+                        buffer+readpos, bufsize - readpos);
+  while (nread > 0)
     {
-      /* we require that the last line is terminated by a LF */
-      for ( p=buffer+readpos; nread; nread--, p++ )
+      /* We require that the last line is terminated by a LF.  */
+      for (p = buffer + readpos; nread; nread--, p++)
         {
-        if ( *p == '\n' )
-          {
-            *p = 0;
-            fprintf (stderr, "gpg output: `%s'\n", buffer);
-            line_cb ( buffer, line_opaque, 0 );
-            /* to reuse the buffer for the next line we have to shift
-             * the remaining data to the buffer start and restart the loop */
-            nread--; p++;
-            if ( nread )
-              memmove ( buffer, p, nread );
-            readpos = 0;
-            break; /* the inner loop */
-          }
+          if (*p == '\n')
+            {
+              *p = 0;
+              fprintf (stderr, "gpg output: `%s'\n", buffer);
+              line_cb (buffer, line_opaque, 0);
+              /* To reuse the buffer for the next line we have to
+                 shift the remaining data to the buffer start and
+                 restart the loop.  */
+              nread--; p++;
+              if (nread)
+                memmove (buffer, p, nread);
+              readpos = 0;
+              break; /* the inner loop */
+            }
+          else
+            readpos++;
         }
     } 
-  /* update the gpg object */
+  /* Update the gpg object.  */
   gpg->output.bufsize = bufsize;
   gpg->output.buffer = buffer;
   gpg->output.readpos = readpos;
   gpg->output.avail = 0;
 }
 
-
-
-
 /* user_args must be a NULL-terminated array of argument strings.  */
 void
-gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar * commands,
-		  char * passphrase, GpapaLineCallbackFunc line_cb,
+gpapa_call_gnupg (char **user_args, gboolean do_wait, gchar *commands,
+		  char *passphrase, GpapaLineCallbackFunc line_cb,
 		  gpointer line_opaque, GpapaCallbackFunc callback,
 		  gpointer calldata)
 {
   GPG_OBJECT *gpg;
   
-  if ( !line_cb )
+  if (!line_cb)
     line_cb = dummy_linecallback;
 
-  gpg = spawn_gnupg (user_args, commands, callback, calldata );
-  if ( !gpg ) {
+  gpg = spawn_gnupg (user_args, commands, callback, calldata);
+  if (!gpg)
+    {
       callback (GPAPA_ACTION_ERROR, "spawn_gnupg failed", calldata);
       return;
-  }
-
-  /* we ignore do_wait and simply wait for now */
+    }
+  /* We ignore do_wait and simply wait for now.  */
   do 
     {
-      if ( wait_gnupg ( gpg, 0 ) )
+      if (wait_gnupg (gpg, 0))
         {
-          callback (GPAPA_ACTION_ERROR, "wait_gnupg failed", calldata );
-          gpapa_gnupg_close ( gpg );
+          callback (GPAPA_ACTION_ERROR, "wait_gnupg failed", calldata);
+          gpapa_gnupg_close (gpg);
           return;
         }
-
-      handle_status ( gpg, line_cb, line_opaque, callback, calldata );
-      handle_output_line ( gpg, line_cb, line_opaque );
+      handle_status (gpg, line_cb, line_opaque, callback, calldata);
+      handle_output_line (gpg, line_cb, line_opaque);
     }
-  while ( gpg->running );
-    
-  if ( gpg->exit_status )
+  while (gpg->running);
+  if (gpg->exit_status)
     {
       char msg[80];
       
-      if ( gpg->exit_signal )
+      if (gpg->exit_signal)
         sprintf (msg, "gpg execution terminated by uncaught signal %d",
-                 gpg->exit_signal );
+                 gpg->exit_signal);
       else
         sprintf (msg, "gpg execution terminated with error code %d",
-                 gpg->exit_status );
+                 gpg->exit_status);
       callback (GPAPA_ACTION_ABORTED, msg, calldata);
     }
   else
     callback (GPAPA_ACTION_FINISHED, "GnuPG execution terminated normally",
               calldata);
-    
 }
-
-

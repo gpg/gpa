@@ -1,3 +1,17 @@
+Wed 25 Oct 2000 16:42 Jan van Heys <jan.van.heys@uni-essen.de>
+                      Peter Gerwinski <peter@gerwinski.de>
+
+        * gpapaintern.c: introduced "#define TEST_PASSPHRASE" hack
+          to provide a dummy passphrase "test" for testing purposes.
+          (spawn_gnupg): close the input pipe after writing the
+          commands to it.
+          (handle_status, handle_output_line): fixed bug which
+          caused incomplete lines to jam the pipe i/o.
+
+        * gpapa.c (gpapa_create_key_pair): function implemented.
+
+        * gpapapublickey.c (gpapa_public_key_sign): function implemented.
+
 2000-09-01  Werner Koch  <wk@gnupg.org>
 
 	* gpapafile.c (status_check): Avoid extra allocation and made

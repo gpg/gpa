@@ -362,9 +362,39 @@ gpapa_public_key_sign (GpapaPublicKey * key, gchar * keyID,
 		       gchar * PassPhrase, GpapaKeySignType SignType,
 		       GpapaCallbackFunc callback, gpointer calldata)
 {
+  if (!key)
+    callback (GPAPA_ACTION_ERROR, "no valid public key specified", calldata);
+  if (!keyID)
+    callback (GPAPA_ACTION_ERROR, "no valid secret key specified", calldata);
+  if (!PassPhrase)
+    callback (GPAPA_ACTION_ERROR, "no valid PassPhrase specified", calldata);
   if (key && keyID && PassPhrase)
-    printf
+    {
+      gchar *full_keyID;
+      char commands[] = "\n";
+      char *gpgargv[6];
+      full_keyID = xstrcat2 ("", key->key->UserID);
+      gpgargv[0] = "--yes";
+      gpgargv[1] = "--local-user";
+      gpgargv[2] = keyID;
+      if (SignType == GPAPA_KEY_SIGN_NORMAL)
+	gpgargv[3] = "--sign-key";
+      else
+	gpgargv[3] = "--lsign-key";
+      gpgargv[4] = full_keyID;
+      gpgargv[5] = NULL;
+      gpapa_call_gnupg
+	(gpgargv, TRUE, commands, PassPhrase, NULL, NULL,
+	 callback, calldata);
+      free (full_keyID);
+    }    
+ /* printf
       ("%s public key 0x%s\nwith secret key 0x%s\nwith some passphrase.\n",
        SignType == GPAPA_KEY_SIGN_LOCALLY ? "Locally signing" : "signing",
-       key->key->KeyID, keyID);
+       key->key->KeyID, keyID); */
 }				/* gpapa_public_key_sign */
+
+
+
+
+
