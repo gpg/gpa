@@ -1,4 +1,4 @@
-/* keyring.c  -	 The GNU Privacy Assistant
+/* keylist.c  -	 The GNU Privacy Assistant
  *	Copyright (C) 2000, 2001 G-N-U GmbH.
  *
  * This file is part of GPA
@@ -18,12 +18,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <config.h>
-#include <gpapa.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
-#include <string.h>
-#include "gtktools.h"
+#include <config.h>
+#include <gpapa.h>
 #include "icons.h"
 #include "gpa.h"
 #include "gpapastrings.h"
