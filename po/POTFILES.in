@@ -13,6 +13,7 @@ src/helpmenu.c
 src/keyexportdlg.c
 src/keygendlg.c
 src/keygenwizard.c
+src/keylist.c
 src/keyreceivedlg.c
 src/keyring.c
 src/keysigndlg.c
@@ -20,4 +21,5 @@ src/keysmenu.c
 src/optionsmenu.c
 src/ownertrustdlg.c
 src/passphrasedlg.c
+src/siglist.c
 src/tipwindow.c
