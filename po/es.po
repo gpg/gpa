@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1\n"
 "POT-Creation-Date: 2003-01-27 20:16+0100\n"
-"PO-Revision-Date: 2003-01-19 13:37+0100\n"
+"PO-Revision-Date: 2003-02-07 19:53+0100\n"
 "Last-Translator: Miguel Coca <mcoca@gnu.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1390,7 +1390,7 @@ msgstr "Clave por Defecto Seleccionada:"
 
 #: src/keyring.c:1815
 msgid "GNU Privacy Assistant - Keyring Editor"
-msgstr "GNU Privacy Assisntant - Editor del Anillo"
+msgstr "GNU Privacy Assistant - Editor del Anillo"
 
 #: src/keyring.c:1846
 msgid "Keyring Editor"
