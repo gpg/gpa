@@ -274,12 +274,21 @@ main (int argc, char **argv)
   int greeting = 0;
   int nogreeting = 0;
   const char *gpg_program = GPG_PROGRAM;
+  gchar * gtkrc;
 
   set_strusage (my_strusage);
   /*log_set_name ("gpa"); not yet implemented in logging.c */
   srand (time (NULL)); /* the about dialog uses rand() */
   gtk_init (&argc, &argv);
   i18n_init ();
+
+  /* read the gpa gtkrc */
+  gtkrc = make_filename (GPA_DATADIR, "gtkrc", NULL);
+  if (gtkrc)
+    {
+      gtk_rc_parse (gtkrc);
+      free (gtkrc);
+    }
 
   gpa_options.homedir = getenv ("GNUPGHOME");
   if (!gpa_options.homedir || !*gpa_options.homedir)
