@@ -976,11 +976,11 @@ keyring_update_details_notebook (GPAKeyringEditor * editor)
  * horizontal space.
  */
 static GPAKeyListColumn keylist_columns_brief[] =
-{GPA_KEYLIST_ID, GPA_KEYLIST_NAME};
+{GPA_KEYLIST_KEY_TYPE_PIXMAP, GPA_KEYLIST_ID, GPA_KEYLIST_NAME};
 
 static GPAKeyListColumn keylist_columns_detailed[] =
-{GPA_KEYLIST_ID, GPA_KEYLIST_EXPIRYDATE, GPA_KEYLIST_OWNERTRUST,
- GPA_KEYLIST_KEYTRUST, GPA_KEYLIST_NAME};
+{GPA_KEYLIST_KEY_TYPE_PIXMAP, GPA_KEYLIST_ID, GPA_KEYLIST_EXPIRYDATE,
+ GPA_KEYLIST_OWNERTRUST, GPA_KEYLIST_KEYTRUST, GPA_KEYLIST_NAME};
 
 
 /* Change the keylist to brief listing */
