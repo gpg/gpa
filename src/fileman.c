@@ -141,6 +141,11 @@ get_file (GtkCList * clist, gint row)
   return info->file;
 }
 
+
+/* return the currently selected files as a new list of GPAFileInfo
+ * structs. The list has to be freed by the caller, but the file info
+ * instances are still managed by the CList
+ */
 static GList *
 get_selected_files (GtkCList *clist)
 {
@@ -485,6 +490,7 @@ decrypt_files (gpointer param)
 		gtk_clist_select_row (fileman->clist_files, row, 0);
 	    }
 	  free (newname);
+	  cur = g_list_next (cur);
 	}
     }
   free (passphrase);
