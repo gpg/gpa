@@ -1,3 +1,49 @@
+2001-01-19  Bernhard Herzog  <bh@intevation.de>
+
+	* keyring.c (keyring_editor_selection_changed):
+	(keyring_editor_end_selection):
+	(keyring_editor_fill_keylist):
+	(keyring_editor_menubar_new): make them static
+
+	(add_selection_sensitive_widget): Add the callback as a new
+	parameter.
+	(GPA_SENSITIVE_BUTTON): Get rid of this widget and use
+	add_selection_sensitive_widget.
+
+	(keyring_editor_new): Add a notebook showing details of the
+	selected key and a toolbar at the top which replaces the buttons
+	at the bottom
+	(GPAKeyringEditor): Add three new fields for the labels of the
+	details view.
+
+	(keyring_toolbar_new): New function to create the new toolbar
+	(toolbar_import_keys):
+	(toolbar_export_key):
+	(toolbar_sign_key):
+	(toolbar_remove_key):
+	(toolbar_edit_key): Signal handlers for the toolbar.
+
+	(add_details_row):
+	(keyring_details_notebook):
+	(keyring_update_details_page): New functions to create and update
+	the new details notebook.
+
+	(keyring_editor_current_key): New function to return the currently
+	selected key.
+
+	(keyring_selection_update_widgets): New function that bundles all
+	the updates that have to happen when the selection changes. Change
+	the relevant signal handlers to use it.
+
+	(keyring_editor_fill_keylist): The "show ownertrust" button is
+	unavailable for now, so assume that it's not checked by default,
+	just to make it work without the button.
+
+	(keyring_editor_delete): Check for the existence of a private key
+	and delete that first if it exists.
+
+	* keyring.c: Substantial code reorganization
+
 2001-01-18  Bernhard Herzog  <bh@intevation.de>
 
 	* gpa.c (cmd_and_opt_values): 
