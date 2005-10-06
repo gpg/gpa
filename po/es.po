@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-21 19:11+0200\n"
+"POT-Creation-Date: 2005-10-06 17:48+0200\n"
 "PO-Revision-Date: 2003-10-18 13:35+0200\n"
 "Last-Translator: Miguel Coca <mcoca@gnu.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -263,7 +263,7 @@ msgstr "firma en otro _archivo"
 msgid "a_rmor"
 msgstr "a_rmadura"
 
-#: src/gpabackupop.c:211 src/gpgmetools.c:113
+#: src/gpabackupop.c:211 src/gpgmetools.c:117
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -585,16 +585,16 @@ msgstr "Puede cifrar"
 msgid "Can authenticate"
 msgstr "Puede autenticar"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:558 src/gpgmetools.c:729
-#: src/gpgmetools.c:855
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:562 src/gpgmetools.c:733
+#: src/gpgmetools.c:859
 msgid "Revoked"
 msgstr "Revocada"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:562 src/gpgmetools.c:851
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:566 src/gpgmetools.c:855
 msgid "Expired"
 msgstr "Caducada"
 
-#: src/gpasubkeylist.c:143 src/gpgmetools.c:567
+#: src/gpasubkeylist.c:143 src/gpgmetools.c:571
 msgid "Disabled"
 msgstr "Desactivada"
 
@@ -602,11 +602,11 @@ msgstr "Desactivada"
 msgid "Unsigned"
 msgstr "Sin firmar"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:842 src/verifydlg.c:211
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:846 src/verifydlg.c:211
 msgid "Valid"
 msgstr "Válida"
 
-#: src/gpawidgets.c:73 src/gpgmetools.c:608 src/gpgmetools.c:615
+#: src/gpawidgets.c:73 src/gpgmetools.c:612 src/gpgmetools.c:619
 #: src/keyring.c:1155 src/keysigndlg.c:101
 msgid "User Name:"
 msgstr "Nombre de Usuario:"
@@ -615,7 +615,7 @@ msgstr "Nombre de Usuario:"
 msgid "User Names:"
 msgstr "Nombres de Usuario:"
 
-#: src/gpawidgets.c:79 src/gpgmetools.c:609 src/gpgmetools.c:616
+#: src/gpawidgets.c:79 src/gpgmetools.c:613 src/gpgmetools.c:620
 #: src/keyring.c:1157
 msgid "Key ID:"
 msgstr "ID de Clave:"
@@ -644,7 +644,7 @@ msgstr ""
 "¡ERROR FATAL!\n"
 "Modo de inserción no válido para la fecha de caducidad."
 
-#: src/gpgmetools.c:41
+#: src/gpgmetools.c:45
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -661,7 +661,7 @@ msgstr ""
 "\n"
 "Se abortará la aplicación"
 
-#: src/gpgmetools.c:53
+#: src/gpgmetools.c:57
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -680,7 +680,7 @@ msgstr ""
 "Esto probablemente se deba a un fallo en GPA.\n"
 "GPA intentará recuperarse de este error."
 
-#: src/gpgmetools.c:433
+#: src/gpgmetools.c:437
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -694,7 +694,7 @@ msgstr ""
 "************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:438
+#: src/gpgmetools.c:442
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -702,102 +702,102 @@ msgstr ""
 "La clave contenida en este archivo es:\n"
 "\n"
 
-#: src/gpgmetools.c:494
+#: src/gpgmetools.c:498
 msgid "DSA and ElGamal (default)"
 msgstr "DSA y ElGamal (por defecto)"
 
-#: src/gpgmetools.c:495
+#: src/gpgmetools.c:499
 msgid "DSA (sign only)"
 msgstr "DSA (solo firma)"
 
-#: src/gpgmetools.c:496
+#: src/gpgmetools.c:500
 msgid "RSA (sign only)"
 msgstr "RSA (solo firma)"
 
-#: src/gpgmetools.c:527 src/gpgmetools.c:575 src/gpgmetools.c:847
-#: src/gpgmetools.c:879
+#: src/gpgmetools.c:531 src/gpgmetools.c:579 src/gpgmetools.c:851
+#: src/gpgmetools.c:883
 msgid "Unknown"
 msgstr "Desconocida"
 
-#: src/gpgmetools.c:530
+#: src/gpgmetools.c:534
 msgid "Never"
 msgstr "Nunca"
 
-#: src/gpgmetools.c:533
+#: src/gpgmetools.c:537
 msgid "Marginal"
 msgstr "Parcial"
 
-#: src/gpgmetools.c:536
+#: src/gpgmetools.c:540
 msgid "Full"
 msgstr "Total"
 
-#: src/gpgmetools.c:539
+#: src/gpgmetools.c:543
 msgid "Ultimate"
 msgstr "Absoluta"
 
-#: src/gpgmetools.c:571
+#: src/gpgmetools.c:575
 msgid "Incomplete"
 msgstr "Incompleta"
 
-#: src/gpgmetools.c:580
+#: src/gpgmetools.c:584
 msgid "Fully Valid"
 msgstr "Totalmente Válida"
 
-#: src/gpgmetools.c:606
+#: src/gpgmetools.c:610
 msgid "Please enter the passphrase for the following key:"
 msgstr "Por favor introduzca la contraseña para la siguiente clave:"
 
-#: src/gpgmetools.c:614
+#: src/gpgmetools.c:618
 msgid "Wrong passphrase, please try again:"
 msgstr "Contraseña incorrecta, por favor vuelva a intentarlo:"
 
-#: src/gpgmetools.c:637
+#: src/gpgmetools.c:641
 msgid "Enter Passphrase"
 msgstr "Introduzca Contraseña"
 
-#: src/gpgmetools.c:817 src/verifydlg.c:268
+#: src/gpgmetools.c:821 src/verifydlg.c:268
 msgid "[Unknown user ID]"
 msgstr "[Usuario desconocido]"
 
-#: src/gpgmetools.c:845 src/verifydlg.c:216
+#: src/gpgmetools.c:849 src/verifydlg.c:216
 msgid "Bad"
 msgstr "Incorrecta"
 
-#: src/gpgmetools.c:867
+#: src/gpgmetools.c:871
 msgid "Generic"
 msgstr "Genérica"
 
-#: src/gpgmetools.c:870
+#: src/gpgmetools.c:874
 msgid "Persona"
 msgstr "Persona"
 
-#: src/gpgmetools.c:873
+#: src/gpgmetools.c:877
 msgid "Casual"
 msgstr "Casual"
 
-#: src/gpgmetools.c:876
+#: src/gpgmetools.c:880
 msgid "Positive"
 msgstr "Positiva"
 
-#: src/gpgmetools.c:894
+#: src/gpgmetools.c:898
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Esta clave puede utilizarse para certificación, firma y cifrado."
 
-#: src/gpgmetools.c:899
+#: src/gpgmetools.c:903
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Esta clave puede utilizarse para certificación y firma, pero no para cifrado."
 
-#: src/gpgmetools.c:907
+#: src/gpgmetools.c:911
 msgid "The key can be used for certification and encryption."
 msgstr "Esta clave puede utilizarse para certificación y cifrado."
 
-#: src/gpgmetools.c:912
+#: src/gpgmetools.c:916
 msgid "The key can be used only for certification."
 msgstr "Esta clave puede utilizarse solo para certificación."
 
-#: src/gpgmetools.c:922
+#: src/gpgmetools.c:926
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -805,15 +805,15 @@ msgstr ""
 "Esta clave puede utilizarse solo para firma y cifrado, pero no para\n"
 "certificación."
 
-#: src/gpgmetools.c:927
+#: src/gpgmetools.c:931
 msgid "The key can be used only for signing."
 msgstr "Esta clave puede utilizarse tan solo para firma."
 
-#: src/gpgmetools.c:934
+#: src/gpgmetools.c:938
 msgid "The key can be used only for encryption."
 msgstr "Esta clave puede utilizarse tan solo para cifrado."
 
-#: src/gpgmetools.c:940
+#: src/gpgmetools.c:944
 msgid "This key is useless."
 msgstr "Esta clave no vale para nada."
 

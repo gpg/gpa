@@ -1,3 +1,9 @@
+2005-10-06  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Invoke CHECK_ZLIB instead of generic AC_CHECK_LIB
+	macro (which doesn't support a --with-foo-prefix argument).  Check
+	for stpcpy.
+
 2004-08-21  Miguel Coca  <mcoca@gnu.org>
 
 	* gpa.spec: Fix version number. Reported by jan.grobecker@gmx.net.

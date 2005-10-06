@@ -78,7 +78,7 @@ search_config_file (const gchar *filename)
   /* The search order for each OS, a NULL terminated array */
 #ifdef G_OS_UNIX
   gchar *dirs[] = {gnupg_homedir, GPA_DATADIR, NULL};
-#elif G_OS_WIN32
+#elif defined(G_OS_WIN32)
   gchar *dirs[] = {gpa_exec_dir, GPA_DATADIR, gnupg_homedir, NULL};
 #endif
   for( i = 0; dirs[i]; i++ )

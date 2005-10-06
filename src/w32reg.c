@@ -27,7 +27,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include <windows.h>
-#include "util.h"
 #include "memory.h"
 
 

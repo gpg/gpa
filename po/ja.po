@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-21 19:11+0200\n"
+"POT-Creation-Date: 2005-10-06 17:48+0200\n"
 "PO-Revision-Date: 2003-11-03 17:11+0100\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
@@ -263,7 +263,7 @@ msgstr "別ファイルに署名する (_F)"
 msgid "a_rmor"
 msgstr "アーマ形成 (_R)"
 
-#: src/gpabackupop.c:211 src/gpgmetools.c:113
+#: src/gpabackupop.c:211 src/gpgmetools.c:117
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -583,16 +583,16 @@ msgstr "暗号化可能"
 msgid "Can authenticate"
 msgstr "認証可能"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:558 src/gpgmetools.c:729
-#: src/gpgmetools.c:855
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:562 src/gpgmetools.c:733
+#: src/gpgmetools.c:859
 msgid "Revoked"
 msgstr "破棄済み"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:562 src/gpgmetools.c:851
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:566 src/gpgmetools.c:855
 msgid "Expired"
 msgstr "期限切れ"
 
-#: src/gpasubkeylist.c:143 src/gpgmetools.c:567
+#: src/gpasubkeylist.c:143 src/gpgmetools.c:571
 msgid "Disabled"
 msgstr "無効"
 
@@ -600,11 +600,11 @@ msgstr "無効"
 msgid "Unsigned"
 msgstr "署名なし"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:842 src/verifydlg.c:211
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:846 src/verifydlg.c:211
 msgid "Valid"
 msgstr "有効"
 
-#: src/gpawidgets.c:73 src/gpgmetools.c:608 src/gpgmetools.c:615
+#: src/gpawidgets.c:73 src/gpgmetools.c:612 src/gpgmetools.c:619
 #: src/keyring.c:1155 src/keysigndlg.c:101
 msgid "User Name:"
 msgstr "ユーザ名:"
@@ -613,7 +613,7 @@ msgstr "ユーザ名:"
 msgid "User Names:"
 msgstr "ユーザ名:"
 
-#: src/gpawidgets.c:79 src/gpgmetools.c:609 src/gpgmetools.c:616
+#: src/gpawidgets.c:79 src/gpgmetools.c:613 src/gpgmetools.c:620
 #: src/keyring.c:1157
 msgid "Key ID:"
 msgstr "鍵 ID:"
@@ -642,7 +642,7 @@ msgstr ""
 "！致命的エラー！\n"
 "有効期限の入力方式が不正です"
 
-#: src/gpgmetools.c:41
+#: src/gpgmetools.c:45
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -659,7 +659,7 @@ msgstr ""
 "\n"
 "このアプリケーションは終了します"
 
-#: src/gpgmetools.c:53
+#: src/gpgmetools.c:57
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -678,7 +678,7 @@ msgstr ""
 "これはおそらく GPA のバグです。\n"
 "ただいまエラーからの復旧を試みます。"
 
-#: src/gpgmetools.c:433
+#: src/gpgmetools.c:437
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -692,7 +692,7 @@ msgstr ""
 "**********************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:438
+#: src/gpgmetools.c:442
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -700,115 +700,115 @@ msgstr ""
 "このファイルにバックアップされている鍵は:\n"
 "\n"
 
-#: src/gpgmetools.c:494
+#: src/gpgmetools.c:498
 msgid "DSA and ElGamal (default)"
 msgstr "DSA と ElGamel (デフォルト)"
 
-#: src/gpgmetools.c:495
+#: src/gpgmetools.c:499
 msgid "DSA (sign only)"
 msgstr "DSA (署名のみ)"
 
-#: src/gpgmetools.c:496
+#: src/gpgmetools.c:500
 msgid "RSA (sign only)"
 msgstr "RSA (署名のみ)"
 
-#: src/gpgmetools.c:527 src/gpgmetools.c:575 src/gpgmetools.c:847
-#: src/gpgmetools.c:879
+#: src/gpgmetools.c:531 src/gpgmetools.c:579 src/gpgmetools.c:851
+#: src/gpgmetools.c:883
 msgid "Unknown"
 msgstr "未確認"
 
-#: src/gpgmetools.c:530
+#: src/gpgmetools.c:534
 msgid "Never"
 msgstr "不信"
 
-#: src/gpgmetools.c:533
+#: src/gpgmetools.c:537
 msgid "Marginal"
 msgstr "一部"
 
-#: src/gpgmetools.c:536
+#: src/gpgmetools.c:540
 msgid "Full"
 msgstr "完全"
 
-#: src/gpgmetools.c:539
+#: src/gpgmetools.c:543
 msgid "Ultimate"
 msgstr "究極"
 
-#: src/gpgmetools.c:571
+#: src/gpgmetools.c:575
 msgid "Incomplete"
 msgstr "不完全"
 
-#: src/gpgmetools.c:580
+#: src/gpgmetools.c:584
 msgid "Fully Valid"
 msgstr "完全に有効"
 
-#: src/gpgmetools.c:606
+#: src/gpgmetools.c:610
 msgid "Please enter the passphrase for the following key:"
 msgstr "以下の鍵のパスワードを入力して下さい:"
 
-#: src/gpgmetools.c:614
+#: src/gpgmetools.c:618
 msgid "Wrong passphrase, please try again:"
 msgstr "パスフレーズが違います。もう一度お願いします:"
 
-#: src/gpgmetools.c:637
+#: src/gpgmetools.c:641
 msgid "Enter Passphrase"
 msgstr "パスフレーズを入力"
 
-#: src/gpgmetools.c:817 src/verifydlg.c:268
+#: src/gpgmetools.c:821 src/verifydlg.c:268
 msgid "[Unknown user ID]"
 msgstr "[未確認ユーザ ID]"
 
-#: src/gpgmetools.c:845 src/verifydlg.c:216
+#: src/gpgmetools.c:849 src/verifydlg.c:216
 msgid "Bad"
 msgstr "不正"
 
-#: src/gpgmetools.c:867
+#: src/gpgmetools.c:871
 msgid "Generic"
 msgstr "一般"
 
-#: src/gpgmetools.c:870
+#: src/gpgmetools.c:874
 msgid "Persona"
 msgstr "個人"
 
-#: src/gpgmetools.c:873
+#: src/gpgmetools.c:877
 msgid "Casual"
 msgstr "カジュアル"
 
-#: src/gpgmetools.c:876
+#: src/gpgmetools.c:880
 msgid "Positive"
 msgstr "ポジティヴ"
 
-#: src/gpgmetools.c:894
+#: src/gpgmetools.c:898
 msgid "The key can be used for certification, signing and encryption."
 msgstr "証明、署名、暗号化に使える鍵です。"
 
-#: src/gpgmetools.c:899
+#: src/gpgmetools.c:903
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr "証明および署名に使えますが、暗号化には使えない鍵です。"
 
-#: src/gpgmetools.c:907
+#: src/gpgmetools.c:911
 msgid "The key can be used for certification and encryption."
 msgstr "証明と暗号化に使える鍵です。"
 
-#: src/gpgmetools.c:912
+#: src/gpgmetools.c:916
 msgid "The key can be used only for certification."
 msgstr "証明にのみ使える鍵です。"
 
-#: src/gpgmetools.c:922
+#: src/gpgmetools.c:926
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr "署名および暗号化に使えますが、証明には使えない鍵です。"
 
-#: src/gpgmetools.c:927
+#: src/gpgmetools.c:931
 msgid "The key can be used only for signing."
 msgstr "署名にのみ使える鍵です。"
 
-#: src/gpgmetools.c:934
+#: src/gpgmetools.c:938
 msgid "The key can be used only for encryption."
 msgstr "暗号化にのみ使える鍵です。"
 
-#: src/gpgmetools.c:940
+#: src/gpgmetools.c:944
 msgid "This key is useless."
 msgstr "この鍵は使えません。"
 

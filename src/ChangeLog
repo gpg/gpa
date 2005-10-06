@@ -1,3 +1,9 @@
+2005-10-06  Marcus Brinkmann  <marcus@g10code.de>
+
+	* w32reg.c: Don't include util.h.
+	* gpa.c (search_config_file): Check existance of G_OS_WIN32, not
+	value.
+
 2004-08-21  Miguel Coca  <mcoca@gnu.org>
 
 	* gpaexportop.c (gpa_export_operation_idle_cb): Armor by default.

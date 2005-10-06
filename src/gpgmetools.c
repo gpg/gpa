@@ -20,17 +20,21 @@
 
 /* A set of auxiliary functions for common tasks related to GPGME */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <errno.h>
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpgmetools.h"
 
+#include <fcntl.h>
 #ifdef G_OS_UNIX
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <fcntl.h>
 #else
 #include <io.h>
 #endif

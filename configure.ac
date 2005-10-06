@@ -43,8 +43,9 @@ AM_MAINTAINER_MODE
 
 dnl Check for libraries
 AC_CHECK_LIB(m, sin)
-AC_CHECK_LIB(z, compress)
+CHECK_ZLIB
 AC_CHECK_FUNCS(strsep)
+AC_CHECK_FUNCS(stpcpy)
 
 development_version=no
 # Allow users to append something to the version string (other than -cvs)
