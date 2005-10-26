@@ -15,6 +15,9 @@ Noteworthy changes in version 0.7.1 (unreleased)
  when minimized (and on the window title if supported by the window
  manager).
 
+ * It is again possible to do a build for Windows.
+
+
 Noteworthy changes in version 0.7.0 (2003-10-22)
 ------------------------------------------------
 

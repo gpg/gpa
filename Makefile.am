@@ -1,4 +1,7 @@
 
+ACLOCAL_AMFLAGS = -I m4
+AUTOMAKE_OPTIONS = dist-bzip2
+
 SUBDIRS = m4  intl src po pixmaps
 EXTRA_DIST = config.rpath  TODO README-alpha to-utf8 autogen.sh gpa.spec gpa.desktop gpa.png
 DISTCLEANFILES = gpadefs.h 
@@ -15,5 +18,3 @@ pkgdata_DATA = gpa.png
 dist-hook:
 	@set -e; echo "$(VERSION)" > $(distdir)/VERSION
 
-
-ACLOCAL_AMFLAGS = -I m4
