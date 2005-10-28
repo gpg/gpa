@@ -1,22 +1,22 @@
-/* keytable.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2002 Miguel Coca
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+/* keytable.c - The GNU Privacy Assistant key table.
+   Copyright (C) 2002 Miguel Coca
+   Copyright (C) 2005 g10 Code GmbH.
+
+   This file is part of GPA
+
+   GPA is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with GPA; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
 
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -306,10 +306,9 @@ void gpa_keytable_load_new (GpaKeyTable *keytable,
 }
 
 /* Return the key with a given fingerprint from the keytable, NULL if
- * there is none. No reference is provided.
- */
-const gpgme_key_t gpa_keytable_lookup_key (GpaKeyTable *keytable,
-					   const char *fpr)
+   there is none. No reference is provided.  */
+gpgme_key_t
+gpa_keytable_lookup_key (GpaKeyTable *keytable, const char *fpr)
 {
   if (keytable->initialized)
     {

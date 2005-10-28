@@ -292,7 +292,7 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
     }
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (frame->radioAt)))
     {
-      gint day, month, year;
+      guint day, month, year;
       gtk_calendar_get_date (GTK_CALENDAR (frame->calendar),
                              &year, &month, &day);
       *date = g_date_new_dmy (day, month+1, year);

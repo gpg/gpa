@@ -51,7 +51,7 @@ expiry_ok (GPAExpiryDialog * dialog, GDate **new_date)
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_date)))
     {
-      gint day, month, year;
+      guint day, month, year;
       gtk_calendar_get_date (GTK_CALENDAR (dialog->calendar),
                              &year, &month, &day);
 

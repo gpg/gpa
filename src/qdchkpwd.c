@@ -67,7 +67,8 @@ qdchkpwd (const char *pwd)
   source_length = strlen (source_buffer);
   dest_length = 2 * source_length + 256;
   dest_buffer = g_malloc (dest_length);
-  if (compress (dest_buffer, &dest_length, source_buffer, source_length) != 0)
+  if (compress ((unsigned char *) dest_buffer, &dest_length,
+		(unsigned char *) source_buffer, source_length) != 0)
     return -1.0;
   test_comp_length = dest_length;
   g_free (source_buffer);
@@ -77,7 +78,8 @@ qdchkpwd (const char *pwd)
   source_length = strlen (source_buffer);
   dest_length = 2 * source_length + 256;
   dest_buffer = g_malloc (dest_length);
-  if (compress (dest_buffer, &dest_length, source_buffer, source_length) != 0)
+  if (compress ((unsigned char *) dest_buffer, &dest_length,
+		(unsigned char *) source_buffer, source_length) != 0)
     return -1.0;
   comp_length = dest_length;
   g_free (source_buffer);

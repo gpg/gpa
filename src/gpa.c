@@ -1,24 +1,26 @@
-/* gpa.c - The GNU Privacy Assistant
- * Copyright (C) 2000-2002 G-N-U GmbH.
- *
- * This file is part of GPA.
- *
- * GPA is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with GPA; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- */
+/* gpa.c - The GNU Privacy Assistant main file.
+   Copyright (C) 2000-2002 G-N-U GmbH.
+   Copyright (C) 2005 g10 Code GmbH.
 
+   This file is part of GPA.
+
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with GPA; if not, write to the Free Software Foundation, Inc.,
+   59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
+
+#if HAVE_CONFIG_H
 #include <config.h>
+#endif
 
 #include <gtk/gtk.h>
 
@@ -365,6 +367,14 @@ main (int argc, char **argv)
 
   /* Initialize GPGME */
   gpgme_check_version (NULL);
+#ifdef USE_SIMPLE_GETTEXT
+  /* FIXME */
+#else
+#ifdef ENABLE_NLS
+  gpgme_set_locale (NULL, LC_CTYPE, setlocale (LC_CTYPE, NULL));
+  gpgme_set_locale (NULL, LC_MESSAGES, setlocale (LC_MESSAGES, NULL));
+#endif
+#endif
 
   /* Locate GPA's configuration file.
    */

@@ -396,7 +396,8 @@ do_spawn (const gchar *scheme, const gchar *command_filename,
   GError *error = NULL;
 #ifdef G_OS_UNIX
   pid_t pid;
-  gint standard_error, length;
+  gint standard_error;
+  gsize length;
   GIOChannel *channel;
 #endif
 
