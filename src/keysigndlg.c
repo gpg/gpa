@@ -1,24 +1,27 @@
 /* keysigndlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2000, 2001 G-N-U GmbH.
+   Copyright (C) 2005 g10 Code GmbH.
 
+   This file is part of GPA
+
+   GPA is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with GPA; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+
+#if HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
@@ -53,8 +56,8 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   GtkWidget *label;
   GtkWidget *uid_box;
   GtkResponseType response;
-  gint uid_count;
   gchar *string;
+  gpgme_user_id_t uid;
 
   window = gtk_dialog_new_with_buttons (_("Sign Key"), GTK_WINDOW(parent),
                                         GTK_DIALOG_MODAL,
@@ -83,23 +86,32 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
 
   /* Build this first, so that we can know how may user ID's there are */
   uid_box = gtk_vbox_new (TRUE, 0);
-  for (uid_count = 0; 
-       gpgme_key_get_string_attr (key, GPGME_ATTR_USERID, NULL, uid_count);
-       uid_count++)
+
+  /* One user ID on each line.  */
+  string = gpa_gpgme_key_get_userid (key->uids);
+  uid = key->uids->next;
+  while (uid)
     {
-      if (!gpgme_key_get_ulong_attr (key, GPGME_ATTR_UID_REVOKED, NULL, 
-                                     uid_count))
-        {
-          string = gpa_gpgme_key_get_userid (key, uid_count);
+      if (!uid->revoked)
+	{
+	  gchar *uid_string = gpa_gpgme_key_get_userid (uid);
+          gchar *tmp = string;
+          string = g_strconcat (string, "\n", uid_string, NULL);
+          g_free (tmp);
+	  g_free (uid_string);
+
           label = gtk_label_new (string);
           g_free (string);
           gtk_box_pack_start_defaults (GTK_BOX(uid_box), label);
           gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         }
+      uid = uid->next;
     }
 
-  label = gtk_label_new ( uid_count == 1 ? _("User Name:") : _("User Names:"));
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+  label = gtk_label_new (key->uids->next == NULL
+			 ? _("User Name:") : _("User Names:"));
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+		    GTK_FILL, GTK_FILL, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.0);
 
   gtk_table_attach (GTK_TABLE (table), uid_box, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
@@ -119,7 +131,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 
-  if (uid_count > 1)
+  if (key->uids->next)
     {
       label = gtk_label_new (_("All user names in this key will be signed."));
       gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 10);

@@ -1,22 +1,23 @@
-/* gpgmetools.h - The GNU Privacy Assistant
- *      Copyright (C) 2002, Miguel Coca.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+/* gpgmetools.h - additional gpgme support functions for GPA.
+   Copyright (C) 2002, Miguel Coca.
+   Copyright (C) 2005 g10 Code GmbH.
+
+   This file is part of GPA.
+
+   GPA is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with GPA; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+
 
 /* A set of auxiliary functions for common tasks related to GPGME */
 
@@ -136,13 +137,14 @@ gpg_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
 			       const char *passphrase_info, 
 			       int prev_was_bad, int fd);
 
-/* Convenience functions to access key attributes, which need to be filtered
- * before being displayed to the user. */
+
+/* Convenience functions to access key attributes, which need to be
+   filtered before being displayed to the user. */
 
-/* Return the user ID, making sure it is properly UTF-8 encoded.
- * Allocates a new string, which must be freed with g_free().
- */
-gchar *gpa_gpgme_key_get_userid (gpgme_key_t key, int idx);
+/* Return the user ID string, making sure it is properly UTF-8
+  encoded.  Allocates a new string, which must be freed with
+  g_free().  */
+gchar *gpa_gpgme_key_get_userid (gpgme_user_id_t key);
 
 /* Return the key fingerprint, properly formatted according to the key version.
  * Allocates a new string, which must be freed with g_free().

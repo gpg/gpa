@@ -1,5 +1,24 @@
 2005-10-28  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpgmetools.c (gpa_gpgme_key_get_userid): Work directly on
+	gpgme_user_id_t objects.
+	* gpgmetools.h (gpa_gpgme_key_get_userid): Work directly on
+	gpgme_user_id_t objects.
+	* gpawidgets.c (gpa_key_info_new): Rework using above changes..
+	* verifydlg.c [!HAVE_CONFIG_H]: Don't include config.h.
+	(add_signature_to_model): Invoke gpa_gpgme_key_get_userid with
+	right argument.
+	* keyring.c [!HAVE_CONFIG_H]: Do not include config.h.
+	(keyring_details_page_fill_key, keyring_signatures_page_fill_key) 
+	(keyring_update_status_bar): Fix callers of gpa_gpgme_key_get_userid.
+	* keysigndlg.c [!HAVE_CONFIG_H]: Do not include config.h.
+	(gpa_key_sign_run_dialog): Fix caller of gpa_gpgme_key_get_userid.
+	* keylist.c [HAVE_CONFIG_H]: Include config.h.
+	(gpa_keylist_next): Fix caller of gpa_gpgme_key_get_userid.
+	* gpakeyselector.c [HAVE_CONFIG_H]: Include config.h.
+	(gpa_key_selector_next_key): Fix caller of
+	gpa_gpgme_key_get_userid.
+
 	* gpa.c [!HAVE_CONFIG_H]: Don't include config.h.
 	(main) [!USE_SIMPLE_GETTEXT && ENABLE_NLS]: Invoke
 	gpgme_set_locale.	
@@ -9,6 +28,7 @@
 	* keytable.c (gpa_keytable_lookup_key): Likewise.
 	* gpawidgets.c (gpa_expiry_frame_get_expiration): Make day, month
 	and year of type guint.
+
 	* expirydlg.c (expiry_ok): Likewise.
 	* qdchkpwd.c (qdchkpwd): Cast char pointer to unsigned char
 	pointer for compress.

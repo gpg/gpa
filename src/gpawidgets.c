@@ -43,25 +43,27 @@ gpa_key_info_new (gpgme_key_t key)
 {
   GtkWidget * table;
   GtkWidget * label;
-  gchar *string, *uid;
-  int i;
+  gchar *string;
+  gpgme_user_id_t uid;
 
   table = gtk_table_new (2, 2, FALSE);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 0);
 
-  /* One user ID on each line */
-  string = gpa_gpgme_key_get_userid (key, 0);
-  for (i = 1; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
+  /* One user ID on each line.  */
+  string = gpa_gpgme_key_get_userid (key->uids);
+  uid = key->uids->next;
+  while (uid)
     {
-      /* Don't display revoked UID's */
-      if (!gpgme_key_get_ulong_attr (key, GPGME_ATTR_UID_REVOKED, NULL, i))
-        {
+      if (!uid->revoked)
+	{
+	  gchar *uid_string = gpa_gpgme_key_get_userid (uid);
           gchar *tmp = string;
-          string = g_strconcat (string, "\n", uid, NULL);
+          string = g_strconcat (string, "\n", uid_string, NULL);
           g_free (tmp);
-	  g_free (uid);
+	  g_free (uid_string);
         }
+      uid = uid->next;
     }
   label = gtk_label_new (string);
   g_free (string);
@@ -70,7 +72,8 @@ gpa_key_info_new (gpgme_key_t key)
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
 
   /* User Name */
-  label = gtk_label_new (i == 1 ? _("User Name:") : _("User Names:") );
+  label = gtk_label_new (key->uids->next == NULL
+			 ? _("User Name:") : _("User Names:") );
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 
                     0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.0);

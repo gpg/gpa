@@ -1,25 +1,28 @@
-/* keyring.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000, 2001 G-N-U GmbH.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+/* keyring.c - The GNU Privacy Assistant keyring.
+   Copyright (C) 2000, 2001 G-N-U GmbH.
+   Copyright (C) 2005 g10 Code GmbH.
+
+   This file is part of GPA
+
+   GPA is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with GPA; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "gpa.h"
-#include <config.h>
 #include <gpgme.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -1211,14 +1214,13 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   return notebook;
 }
 
-/* Fill the details page of the details notebook with the properties of
- * the publix key key */
+/* Fill the details page of the details notebook with the properties
+   of the publix key key */
 static void
 keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
 {
-  gchar * text;
-  gchar * uid;
-  gint i;
+  gpgme_user_id_t uid;
+  gchar *text;
 
   if (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
 			       key->subkeys->fpr) != NULL)
@@ -1234,13 +1236,18 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
   gtk_label_set_text (GTK_LABEL (editor->detail_capabilities),
 		      gpa_get_key_capabilities_text (key));
 
-  /* One user ID on each line */
-  text = gpa_gpgme_key_get_userid (key, 0);
-  for (i = 1; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
+  /* One user ID on each line.  */
+  text = gpa_gpgme_key_get_userid (key->uids);
+  uid = key->uids->next;
+  while (uid)
     {
+      gchar *uid_string = gpa_gpgme_key_get_userid (uid);
       gchar *tmp = text;
-      text = g_strconcat (text, "\n", uid, NULL);
+      text = g_strconcat (text, "\n", uid_string, NULL);
       g_free (tmp);
+      g_free (uid_string);
+
+      uid = uid->next;
     }
   gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
   g_free (text);
@@ -1309,22 +1316,28 @@ keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
 {
   GtkWidget *menu;
   GtkWidget *label;
-  gchar *uid;
-  int i;
 
-  /* Create the menu for the popdown UID list, if there is more than une UID
-   */
+  /* Create the menu for the popdown UID list, if there is more than
+     one UID.  */
   if (key->uids && key->uids->next)
     {
+      gpgme_user_id_t uid;
+
       menu = gtk_menu_new ();
       label = gtk_menu_item_new_with_label (_("All signatures"));
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
-      for (i = 0; (uid = gpa_gpgme_key_get_userid (key, i)) != NULL; i++)
+
+      uid = key->uids;
+      while (uid)
 	{
-	  label = gtk_menu_item_new_with_label (uid);
+	  gchar *uid_string = gpa_gpgme_key_get_userid (uid);
+	  label = gtk_menu_item_new_with_label (uid_string);
 	  gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
-	  g_free (uid);
+	  g_free (uid_string);
+
+	  uid = uid->next;
 	}
+
       gtk_option_menu_set_menu (GTK_OPTION_MENU (editor->signatures_uids), 
 				menu);
       gtk_widget_show_all (menu);
@@ -1660,11 +1673,11 @@ static void
 keyring_update_status_bar (GPAKeyringEditor * editor)
 {
   gpgme_key_t key = gpa_options_get_default_key (gpa_options_get_instance ());
-  gchar *string;
 
   if (key)
     {
-      string =  gpa_gpgme_key_get_userid (key, 0);
+      gchar *string = gpa_gpgme_key_get_userid (key->uids);
+
       gtk_label_set_text (GTK_LABEL (editor->status_key_user), string);
       g_free (string);
       gtk_label_set_text (GTK_LABEL (editor->status_key_id),
