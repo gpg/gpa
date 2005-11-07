@@ -8,6 +8,8 @@ sign files, to verify signatures and to manage the private and
 public keys.
 
 Copyright (C) 2000-2002 G-N-U GmbH (http://www.g-n-u.de)
+Copyright (C) 2002-2003 Miguel Coca.
+Copyright (C) 2005 g10 Code GmbH.
 
 GPA uses fragments from the following programs and libraries:
 JNLIB, Copyright (C) 1998-2000 Free Software Foundation, Inc.
@@ -18,6 +20,8 @@ WinPT, Copyright (C) 2000-2002 Timo Schulz
 There is a mailing list devoted to the development of GPA.
 See http://www.gnupg.org/gpa.html for more information.
 
+There is also a project site available at:
+http://wald.intevation.org/projects/gpa/
 
 GPA is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by

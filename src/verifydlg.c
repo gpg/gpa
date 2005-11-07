@@ -259,7 +259,7 @@ add_signature_to_model (GtkListStore *store, SignatureData *data)
 
   if (data->key)
     {
-      keyid = gpa_gpgme_key_get_short_keyid (data->key, 0);
+      keyid = gpa_gpgme_key_get_short_keyid (data->key);
       userid = gpa_gpgme_key_get_userid (data->key->uids);
       status = signature_status_label (data);
     }

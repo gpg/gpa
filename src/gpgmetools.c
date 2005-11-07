@@ -1,5 +1,5 @@
 /* gpgmetools.h - additional gpgme support functions for GPA.
-   Copyright (C) 2002, Miguel Coca.
+   Copyright (C) 2002 Miguel Coca.
    Copyright (C) 2005 g10 Code GmbH.
 
    This file is part of GPA.
@@ -40,8 +40,10 @@
 #include <io.h>
 #endif
 
-/* Report an unexpected error in GPGME and quit the application */
-void _gpa_gpgme_error (gpg_error_t err, const char *file, int line)
+
+/* Report an unexpected error in GPGME and quit the application.  */
+void
+_gpa_gpgme_error (gpg_error_t err, const char *file, int line)
 {
   gchar *message = g_strdup_printf (_("Fatal Error in GPGME library\n"
                                       "(invoked from file %s, line %i):\n\n"
@@ -53,7 +55,9 @@ void _gpa_gpgme_error (gpg_error_t err, const char *file, int line)
   exit (EXIT_FAILURE);
 }
 
-void gpa_gpgme_warning (gpg_error_t err)
+
+void
+gpa_gpgme_warning (gpg_error_t err)
 {
   gchar *message = g_strdup_printf (_("The GPGME library returned an unexpected\n"
 				      "error. The error was:\n\n"
@@ -65,8 +69,10 @@ void gpa_gpgme_warning (gpg_error_t err)
   g_free (message);
 }
 
-/* Initialize a gpgme_ctx_t for use with GPA */
-gpgme_ctx_t gpa_gpgme_new (void)
+
+/* Initialize a gpgme_ctx_t for use with GPA.  */
+gpgme_ctx_t
+gpa_gpgme_new (void)
 {
   gpgme_ctx_t ctx;
   gpg_error_t err;
@@ -81,23 +87,25 @@ gpgme_ctx_t gpa_gpgme_new (void)
   return ctx;
 }
 
-/* Write the contents of the gpgme_data_t object to the file. Receives a
- * filehandle instead of the filename, so that the caller can make sure the
- * file is accesible before putting anything into data.
- */
-void dump_data_to_file (gpgme_data_t data, FILE *file)
+
+/* Write the contents of the gpgme_data_t object to the file.
+   Receives a filehandle instead of the filename, so that the caller
+   can make sure the file is accesible before putting anything into
+   data.  */
+void
+dump_data_to_file (gpgme_data_t data, FILE *file)
 {
   char buffer[128];
   int nread;
-  gpg_error_t err;
 
-  err = gpgme_data_rewind (data);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-    gpa_gpgme_error (err);
-  while ( (nread = gpgme_data_read (data, buffer, sizeof(buffer))) > 0 ) 
+  nread = gpgme_data_seek (data, 0, SEEK_SET);
+  if (nread == -1)
     {
-      fwrite ( buffer, nread, 1, file );
+      gpa_window_error (strerror (errno), NULL);
+      exit (EXIT_FAILURE);
     }
+  while ((nread = gpgme_data_read (data, buffer, sizeof (buffer))) > 0)
+    fwrite (buffer, nread, 1, file);
   if (nread == -1)
     {
       gpa_window_error (strerror (errno), NULL);
@@ -106,10 +114,11 @@ void dump_data_to_file (gpgme_data_t data, FILE *file)
   return;
 }
 
+
 static gboolean
 check_overwriting (const char *filename, GtkWidget *parent)
 {
-  /* If the file exists, ask before overwriting */
+  /* If the file exists, ask before overwriting.  */
   if (g_file_test (filename, G_FILE_TEST_EXISTS))
     {
       GtkWidget *msgbox = gtk_message_dialog_new 
@@ -130,13 +139,13 @@ check_overwriting (const char *filename, GtkWidget *parent)
   return TRUE;
 }
 
-/* Not really a gpgme function, but needed in most places dump_data_to_file
- * is used.
- * Opens a file for writing, asking the user to overwrite if it exists and
- * reporting any errors. Returns NULL on failure, but you can assume the user
- * has been informed of the error (or maybe he just didn't want to
- * overwrite!) */
-FILE *gpa_fopen (const char *filename, GtkWidget *parent)
+/* Not really a gpgme function, but needed in most places
+   dump_data_to_file is used.  Opens a file for writing, asking the
+   user to overwrite if it exists and reporting any errors.  Returns
+   NULL on failure, but you can assume the user has been informed of
+   the error (or maybe he just didn't want to overwrite!).  */
+FILE *
+gpa_fopen (const char *filename, GtkWidget *parent)
 {
   FILE *target;
   
@@ -153,6 +162,7 @@ FILE *gpa_fopen (const char *filename, GtkWidget *parent)
     }
   return target;
 }
+
 
 int
 gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
@@ -182,6 +192,7 @@ gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
   return target;
 }
 
+
 int
 gpa_open_input (const char *filename, gpgme_data_t *data, GtkWidget *parent)
 {
@@ -206,11 +217,13 @@ gpa_open_input (const char *filename, gpgme_data_t *data, GtkWidget *parent)
   return target;
 }
 
-/* Do a gpgme_data_new_from_file and report any GPGME_File_Error to the user.
- */
-gpg_error_t gpa_gpgme_data_new_from_file (gpgme_data_t *data,
-					 const char *filename,
-					 GtkWidget *parent)
+
+/* Do a gpgme_data_new_from_file and report any GPGME_File_Error to
+   the user.  */
+gpg_error_t
+gpa_gpgme_data_new_from_file (gpgme_data_t *data,
+			      const char *filename,
+			      GtkWidget *parent)
 {
   gpg_error_t err;
   err = gpgme_data_new_from_file (data, filename, 1);
@@ -224,23 +237,25 @@ gpg_error_t gpa_gpgme_data_new_from_file (gpgme_data_t *data,
   return err;
 }
 
-/* Write the contents of the gpgme_data_t into the clipboard
- */
-void dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard)
+/* Write the contents of the gpgme_data_t into the clipboard.  */
+void
+dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard)
 {
   char buffer[128];
   int nread;
-  gpg_error_t err;
   gchar *text = NULL;
   gint len = 0;
 
-  err = gpgme_data_rewind (data);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-    gpa_gpgme_error (err);
-  while ( (nread = gpgme_data_read (data, buffer, sizeof(buffer))) > 0 ) 
+  nread = gpgme_data_seek (data, 0, SEEK_SET);
+  if (nread == -1)
     {
-      text = g_realloc (text, len+nread);
-      strncpy (text+len, buffer, nread);
+      gpa_window_error (strerror (errno), NULL);
+      exit (EXIT_FAILURE);
+    }
+  while ((nread = gpgme_data_read (data, buffer, sizeof (buffer))) > 0)
+    {
+      text = g_realloc (text, len + nread);
+      strncpy (text + len, buffer, nread);
       len += nread;
     }
   if (nread == -1)
@@ -253,17 +268,18 @@ void dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard)
   return;
 }
 
-/* Assemble the parameter string for gpgme_op_genkey for GnuPG. We don't need
- * worry about the user ID being UTF-8 as long as we are using GTK+2, because
- * all user input is UTF-8 in it.
- */
-static gchar * build_genkey_parms (GPAKeyGenParameters *params)
+
+/* Assemble the parameter string for gpgme_op_genkey for GnuPG.  We
+   don't need worry about the user ID being UTF-8 as long as we are
+   using GTK+2, because all user input is UTF-8 in it.  */
+static gchar *
+build_genkey_parms (GPAKeyGenParameters *params)
 {
   gchar *string;
   gchar *key_algo;
   gchar *subkeys, *email, *comment, *expire;
 
-  /* Choose which keys and subkeys to generate */
+  /* Choose which keys and subkeys to generate.  */
   switch (params->algo)
     {
     case GPA_KEYGEN_ALGO_DSA_ELGAMAL:
@@ -283,23 +299,18 @@ static gchar * build_genkey_parms (GPAKeyGenParameters *params)
       /* Can't happen */
       return NULL;
     }
-  /* Build the extra fields of the user ID if supplied by the user */
+
+  /* Build the extra fields of the user ID if supplied by the user.  */
   if (params->email && params->email[0])
-    {
-      email = g_strdup_printf ("Name-Email: %s\n", params->email);
-    }
+    email = g_strdup_printf ("Name-Email: %s\n", params->email);
   else
-    {
-      email = "";
-    }
+    email = "";
+
   if (params->comment && params->comment[0])
-    {
-      comment = g_strdup_printf ("Name-Comment: %s\n", params->comment);
-    }
+    comment = g_strdup_printf ("Name-Comment: %s\n", params->comment);
   else
-    {
-      comment = "";
-    }
+    comment = "";
+
   /* Build the expiration date string if needed */
   if (params->expiryDate)
     {
@@ -309,10 +320,8 @@ static gchar * build_genkey_parms (GPAKeyGenParameters *params)
                                 g_date_get_day(params->expiryDate));
     }
   else if (params->interval)
-    {
-      expire = g_strdup_printf ("Expire-Date: %i%c\n", params->interval,
-                                params->unit);
-    }
+    expire = g_strdup_printf ("Expire-Date: %i%c\n", params->interval,
+			      params->unit);
   else
     expire = "";
   /* Assemble the final parameter string */
@@ -331,31 +340,22 @@ static gchar * build_genkey_parms (GPAKeyGenParameters *params)
 
   /* Free auxiliary strings if they are not empty */
   if (subkeys[0])
-    {
-      g_free (subkeys);
-    }
+    g_free (subkeys);
   if (email[0])
-    {
-      g_free (email);
-    }
+    g_free (email);
   if (comment[0])
-    {
-      g_free (comment);
-    }
+    g_free (comment);
   if (expire[0])
-    {
-      g_free (expire);
-    }
+    g_free (expire);
 
   return string;
 }
 
-/* Begin generation of a key with the given parameters. It prepares the
- * parameters required by Gpgme and returns whatever gpgme_op_genkey_start 
- * returns.
- */
-gpg_error_t gpa_generate_key_start (gpgme_ctx_t ctx, 
-				    GPAKeyGenParameters *params)
+/* Begin generation of a key with the given parameters.  It prepares
+   the parameters required by GPGME and returns whatever
+   gpgme_op_genkey_start returns.  */
+gpg_error_t
+gpa_generate_key_start (gpgme_ctx_t ctx, GPAKeyGenParameters *params)
 {
   gchar *parm_string;
   gpg_error_t err;
@@ -367,33 +367,29 @@ gpg_error_t gpa_generate_key_start (gpgme_ctx_t ctx,
   return err;
 }
 
-/* Retrieve the path to the gpg executable */
-static const gchar *get_gpg_path (void)
+
+/* Retrieve the path to the GnuPG executable.  */
+static const gchar *
+get_gpg_path (void)
 {
-  GpgmeEngineInfo engine;
-  const gchar *path = NULL;
+  gpgme_engine_info_t engine;
   
   gpgme_get_engine_info (&engine);
-  
-  for (;engine; engine = engine->next)
+  while (engine)
     {
       if (engine->protocol == GPGME_PROTOCOL_OpenPGP)
-        {
-          break;
-        }
+	return engine->file_name;
+      engine = engine->next;
     }
-  if (engine)
-    {
-      path = engine->file_name;
-    }
-  return path;
+  return NULL;
 }
 
+
 /* Backup a key. It exports both the public and secret keys to a file.
- * Returns TRUE on success and FALSE on error. It displays errors to the
- * user.
- */
-gboolean gpa_backup_key (const gchar *fpr, const char *filename)
+   Returns TRUE on success and FALSE on error. It displays errors to
+   the user.  */
+gboolean
+gpa_backup_key (const gchar *fpr, const char *filename)
 {
   gchar *header, *pub_key, *sec_key;
   gchar *err;
@@ -472,6 +468,7 @@ gboolean gpa_backup_key (const gchar *fpr, const char *filename)
   return TRUE;
 }
 
+
 void
 gpa_key_gen_free_parameters(GPAKeyGenParameters * params)
 {
@@ -482,6 +479,7 @@ gpa_key_gen_free_parameters(GPAKeyGenParameters * params)
     g_date_free (params->expiryDate);
   g_free (params);
 }
+
 
 GPAKeyGenParameters *
 key_gen_params_new(void)
@@ -495,17 +493,20 @@ key_gen_params_new(void)
   return params;
 }
 
+
 static gchar *algorithm_strings[] = {
   N_("DSA and ElGamal (default)"),
   N_("DSA (sign only)"),
   N_("RSA (sign only)"),
 };
 
+
 const gchar *
 gpa_algorithm_string (GPAKeyGenAlgo algo)
 {
   return _(algorithm_strings[algo]);
 }
+
 
 GPAKeyGenAlgo
 gpa_algorithm_from_string (const gchar * string)
@@ -519,12 +520,12 @@ gpa_algorithm_from_string (const gchar * string)
   return result;
 }
 
-/* Ownertrust strings */
-const gchar *gpa_key_ownertrust_string (gpgme_key_t key)
+
+/* Ownertrust strings.  */
+const gchar *
+gpa_key_ownertrust_string (gpgme_key_t key)
 {
-  gpgme_validity_t trust;
-  trust = gpgme_key_get_ulong_attr (key, GPGME_ATTR_OTRUST, NULL, 0);
-  switch (trust) 
+  switch (key->owner_trust) 
     {
     case GPGME_VALIDITY_UNKNOWN:
     case GPGME_VALIDITY_UNDEFINED:
@@ -546,39 +547,28 @@ const gchar *gpa_key_ownertrust_string (gpgme_key_t key)
     }
 }
 
-/* Key validity strings */
-const gchar *gpa_key_validity_string (gpgme_key_t key)
+
+/* Key validity strings.  */
+const gchar *
+gpa_key_validity_string (gpgme_key_t key)
 {
-  gpgme_validity_t valid;
-  valid = gpgme_key_get_ulong_attr (key, GPGME_ATTR_VALIDITY, NULL, 0);
-  switch (valid) 
+  switch (key->uids->validity) 
     {
     case GPGME_VALIDITY_UNKNOWN:
     case GPGME_VALIDITY_UNDEFINED:
     case GPGME_VALIDITY_NEVER:
     case GPGME_VALIDITY_MARGINAL:
     default:
-      if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_REVOKED, NULL, 0))
-        {
-          return _("Revoked");
-        }
-      else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_EXPIRED, NULL, 0))
-        {
-          return _("Expired");
-        }
-      else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_KEY_DISABLED, NULL, 
-                                         0))
-        {
-          return _("Disabled");
-        }
-      else if (gpgme_key_get_ulong_attr (key, GPGME_ATTR_UID_INVALID, NULL, 0))
-        {
-          return _("Incomplete");
-        }
+      if (key->subkeys->revoked)
+	return _("Revoked");
+      else if (key->subkeys->expired)
+	return _("Expired");
+      else if (key->subkeys->disabled)
+	return _("Disabled");
+      else if (key->subkeys->invalid)
+	return _("Incomplete");
       else
-        {
-          return _("Unknown");
-        }
+	return _("Unknown");
       break;
     case GPGME_VALIDITY_FULL:
     case GPGME_VALIDITY_ULTIMATE:
@@ -586,9 +576,11 @@ const gchar *gpa_key_validity_string (gpgme_key_t key)
     }
 }
 
-static GtkWidget *passphrase_question_label (const char *uid_hint,
-					     const char *passphrase_info, 
-					     int prev_was_bad)
+
+static GtkWidget *
+passphrase_question_label (const char *uid_hint,
+			   const char *passphrase_info, 
+			   int prev_was_bad)
 {
   GtkWidget *label;
   gchar *input;
@@ -626,10 +618,12 @@ static GtkWidget *passphrase_question_label (const char *uid_hint,
   return label;
 }
 
-/* This is the function called by GPGME when it wants a passphrase */
-gpg_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
-				 const char *passphrase_info, 
-				 int prev_was_bad, int fd)
+
+/* This is the function called by GPGME when it wants a passphrase.  */
+gpg_error_t
+gpa_passphrase_cb (void *hook, const char *uid_hint,
+		   const char *passphrase_info, 
+		   int prev_was_bad, int fd)
 {
   GtkWidget * dialog;
   GtkWidget * hbox;
@@ -689,13 +683,12 @@ gpg_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
     }
 }
 
-/* Convenience functions to access key attributes, which need to be filtered
- * before being displayed to the user. */
+
+/* Convenience functions to access key attributes, which need to be
+   filtered before being displayed to the user.  */
 
 /* Return the user ID, making sure it is properly UTF-8 encoded.
- * Allocates a new string, which must be freed with g_free ().
- */
-
+   Allocates a new string, which must be freed with g_free ().  */
 static gchar *
 string_to_utf8 (const gchar *string)
 {
@@ -705,23 +698,25 @@ string_to_utf8 (const gchar *string)
     {
       return NULL;
     }
-  /* Make sure the encoding is UTF-8.
-   * Test structure suggested by Werner Koch */
+  /* Make sure the encoding is UTF-8.  Test structure suggested by
+     Werner Koch.  */
   for (s = string; *s && !(*s & 0x80); s++)
     ;
   if (*s && !strchr (string, 0xc3))
     {
-      /* The string is Latin-1 */
+      /* The string is Latin-1.  */
       return  g_convert (string, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
     }
   else
     {
-      /* The string is already in UTF-8 */
+      /* The string is already in UTF-8.  */
       return g_strdup (string);
     }
 }
 
-gchar *gpa_gpgme_key_get_userid (gpgme_user_id_t uid)
+
+gchar *
+gpa_gpgme_key_get_userid (gpgme_user_id_t uid)
 {
   gchar *uid_utf8;
 
@@ -737,15 +732,14 @@ gchar *gpa_gpgme_key_get_userid (gpgme_user_id_t uid)
   return uid_utf8;
 }
 
-/* Return the key fingerprint, properly formatted according to the key version.
- * Allocates a new string, which must be freed with g_free ().
- * This is based on code from GPAPA's extract_fingerprint.
- */
-gchar *gpa_gpgme_key_get_fingerprint (gpgme_key_t key, int idx)
-{
-  const char *fpraw = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR,
-						 NULL, idx);
 
+/* Return the key fingerprint, properly formatted according to the key
+   version.  Allocates a new string, which must be freed with
+   g_free().  This is based on code from GPAPA's
+   extract_fingerprint.  */
+gchar *
+gpa_gpgme_key_format_fingerprint (const char *fpraw)
+{
   if (strlen (fpraw) == 32 )  /* v3 */
     {
       char *fp = g_malloc (strlen (fpraw) + 16 + 1);
@@ -790,54 +784,48 @@ gchar *gpa_gpgme_key_get_fingerprint (gpgme_key_t key, int idx)
     }
 }
 
-/* Return the short key ID of the indicated key. The returned string is valid
- * as long as the key is valid.
- */
-const gchar *gpa_gpgme_key_get_short_keyid (gpgme_key_t key, int idx)
+
+/* Return the short key ID of the indicated key.  The returned string
+   is valid as long as the key is valid.  */
+const gchar *
+gpa_gpgme_key_get_short_keyid (gpgme_key_t key)
 {
-  const char *keyid;
-  keyid = gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, NULL, idx);
+  const char *keyid = key->subkeys->keyid;
   if (!keyid)
-    {
-      return NULL;
-    }
+    return NULL;
   else
-    {
-      return keyid+8;
-    }
+    return keyid + 8;
 }
 
-/* Convenience function to access key signature attibutes, much like the
- * previous ones */
+
+/* Convenience function to access key signature attibutes, much like
+   the previous ones.  */
 
 /* Return the user ID, making sure it is properly UTF-8 encoded.
- * Allocates a new string, which must be freed with g_free().
- */
-gchar *gpa_gpgme_key_sig_get_userid (gpgme_key_sig_t sig)
+   Allocates a new string, which must be freed with g_free().  */
+gchar *
+gpa_gpgme_key_sig_get_userid (gpgme_key_sig_t sig)
 {
   if (!sig->uid || !*sig->uid)
-    {
-      /* Duplicate it to make sure it can be g_free'd */
-      return g_strdup (_("[Unknown user ID]"));
-    }
+    /* Duplicate it to make sure it can be g_free'd.  */
+    return g_strdup (_("[Unknown user ID]"));
   else
-    {
-      return string_to_utf8 (sig->uid);
-    }
+    return string_to_utf8 (sig->uid);
 }
 
-/* Return the short key ID of the indicated key. The returned string is valid
- * as long as the key is valid.
- */
-const gchar *gpa_gpgme_key_sig_get_short_keyid (gpgme_key_sig_t sig)
+
+/* Return the short key ID of the indicated key.  The returned string
+   is valid as long as the key is valid.  */
+const gchar *
+gpa_gpgme_key_sig_get_short_keyid (gpgme_key_sig_t sig)
 {
-  return sig->keyid+8;
+  return sig->keyid + 8;
 }
 
-/* Return a string with the status of the key signature.
- */
-const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_sig_t sig,
-					       GHashTable *revoked)
+/* Return a string with the status of the key signature.  */
+const gchar *
+gpa_gpgme_key_sig_get_sig_status (gpgme_key_sig_t sig,
+				  GHashTable *revoked)
 {
   const gchar *status;
   switch (sig->status)
@@ -861,11 +849,12 @@ const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_sig_t sig,
   return status;
 }
 
-/* Return a string with the level of the key signature.
- */
-const gchar *gpa_gpgme_key_sig_get_level (gpgme_key_sig_t sig)
+
+/* Return a string with the level of the key signature.  */
+const gchar *
+gpa_gpgme_key_sig_get_level (gpgme_key_sig_t sig)
 {
-  switch (sig->class)
+  switch (sig->sig_class)
     {
     case 0x10:
       return _("Generic");
@@ -885,36 +874,29 @@ const gchar *gpa_gpgme_key_sig_get_level (gpgme_key_sig_t sig)
     }
 }
 
-/* Return a string listing the capabilities of a key.
- */
-const gchar *gpa_get_key_capabilities_text (gpgme_key_t key)
+
+/* Return a string listing the capabilities of a key.  */
+const gchar *
+gpa_get_key_capabilities_text (gpgme_key_t key)
 {
   if (key->can_certify)
     {
       if (key->can_sign)
 	{
 	  if (key->can_encrypt)
-	    {
-	      return _("The key can be used for certification, signing "
-		       "and encryption.");
-	    }
+	    return _("The key can be used for certification, signing "
+		     "and encryption.");
 	  else
-	    {
-	      return _("The key can be used for certification and "
-		       "signing, but not for encryption.");
-	    }
+	    return _("The key can be used for certification and "
+		     "signing, but not for encryption.");
 	}
       else
 	{
 	  if (key->can_encrypt)
-	    {
-	      return _("The key can be used for certification and "
-		       "encryption.");
-	    }
+	    return _("The key can be used for certification and "
+		     "encryption.");
 	  else
-	    {
-	      return _("The key can be used only for certification.");
-	    }
+	    return _("The key can be used only for certification.");
 	}
     }
   else
@@ -922,27 +904,18 @@ const gchar *gpa_get_key_capabilities_text (gpgme_key_t key)
       if (key->can_sign)
 	{
 	  if (key->can_encrypt)
-	    {
-	      return _("The key can be used only for signing and "
-		       "encryption, but not for certification.");
-	    }
+	    return _("The key can be used only for signing and "
+		     "encryption, but not for certification.");
 	  else
-	    {
-	      return _("The key can be used only for signing.");
-	    }
+	    return _("The key can be used only for signing.");
 	}
       else
 	{
 	  if (key->can_encrypt)
-	    {
-	      return _("The key can be used only for encryption.");
-
-	    }
+	    return _("The key can be used only for encryption.");
 	  else
-	    {
-	      /* Can't happen, even for subkeys */
+	    /* Can't happen, even for subkeys.  */
 	      return _("This key is useless.");
-	    }
 	}
     }
 }

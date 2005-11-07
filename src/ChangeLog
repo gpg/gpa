@@ -1,3 +1,31 @@
+2005-11-07  Marcus Brinkmann  <marcus@g10code.de>
+
+	* keyring.c (keyring_details_page_fill_key): Use
+	gpa_gpgme_key_format_fingerprint.
+	* keysigndlg.c (gpa_key_sign_run_dialog): Likewise.
+	* gpgmetools.c (dump_data_to_file): Use gpgme_data_seek instead
+	gpgme_data_rewind.
+	(dump_data_to_clipboard): Likewise.
+	(get_gpg_path): Rewritten.
+	(gpa_gpgme_key_sig_get_level): Use sig_class, not class.
+	(gpa_key_ownertrust_string): Use key->owner_trust.
+	(gpa_key_validity_string): Use key->uids->validity and the various
+	key->subkeys flags.
+	(gpa_gpgme_key_get_fingerprint): Renamed to ...
+	(gpa_gpgme_key_format_fingerprint): ... this.  Accept only a
+	string as argument.
+	* gpgmetools.h (gpa_gpgme_key_get_fingerprint): Replace with ...
+	(gpa_gpgme_key_format_fingerprint): ... this.
+	(gpa_gpgme_key_get_short_keyid): Remove IDX argument from prototype.
+	* gpabackupop.c (gpa_backup_operation_set_property): Adjust caller
+	of gpa_gpgme_key_get_short_keyid.
+	* gpakeyselector.c (gpa_key_selector_next_key): Likewise.
+	* gpawidgets.c (gpa_key_info_new): Likewise.
+	* keylist.c (gpa_keylist_next): Likewise.
+	* keyring.c (keyring_details_page_fill_key): Likewise.
+	(keyring_update_status_bar): Likewise.
+	* verifydlg.c (add_signature_to_model): Likewise.
+
 2005-10-28  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpgmetools.c (gpa_gpgme_key_get_userid): Work directly on

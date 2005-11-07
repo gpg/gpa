@@ -119,7 +119,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   
-  string = gpa_gpgme_key_get_fingerprint (key, 0);
+  string = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
   label = gtk_label_new (string);
   g_free (string);
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);

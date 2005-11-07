@@ -216,7 +216,7 @@ void gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
   selector->keys = g_list_prepend (selector->keys, key);
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (selector)));
   /* The Key ID */
-  keyid = gpa_gpgme_key_get_short_keyid (key, 0);
+  keyid = gpa_gpgme_key_get_short_keyid (key);
   /* The user ID */
   userid = gpa_gpgme_key_get_userid (key->uids);
   /* Append it to the list */

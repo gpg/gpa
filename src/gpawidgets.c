@@ -1,31 +1,32 @@
 /* gpawidgets.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2000, 2001 G-N-U GmbH.
+   Copyright (C) 2005 g10 Code GmbH.
 
-/*
- *	Functions to construct a number of commonly used but GPA
- *	specific widgets
- */
+   This file is part of GPA.
+
+   GPA is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with GPA; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+
+/* Functions to construct a number of commonly used but GPA specific
+   widgets.  */
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "gpa.h"
 #include <time.h>
-#include <config.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
@@ -33,11 +34,8 @@
 #include "gtktools.h"
 
 
-/*
- *	A table showing some basic information about the key, such as
- *	the key id and the user name
- */ 
-
+/* A table showing some basic information about the key, such as the
+   key id and the user name.  */ 
 GtkWidget *
 gpa_key_info_new (gpgme_key_t key)
 {
@@ -83,7 +81,7 @@ gpa_key_info_new (gpgme_key_t key)
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
-  label = gtk_label_new (gpa_gpgme_key_get_short_keyid (key, 0));
+  label = gtk_label_new (gpa_gpgme_key_get_short_keyid (key));
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -91,11 +89,10 @@ gpa_key_info_new (gpgme_key_t key)
   return table;
 }      
 
-/*
- *	A Frame to select an expiry date
- */
+/* A Frame to select an expiry date.  */
 
-typedef struct {
+typedef struct
+{
   GtkWidget *frame;
   GtkWidget *entryAfter;
   GtkWidget *comboAfter;
@@ -125,7 +122,7 @@ gpa_expiry_frame_dont (GtkToggleButton * radioDont, gpointer param)
   gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "");
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
 		      "days");
-} /* gpa_expiry_frame_dont */
+}
 
 static void
 gpa_expiry_frame_after (GtkToggleButton * radioAfter, gpointer param)
@@ -139,11 +136,11 @@ gpa_expiry_frame_after (GtkToggleButton * radioAfter, gpointer param)
       gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "1"); /*!!! */
       gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
 			  "days");
-    } /* if */
+    }
   else
     gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "1");
   gtk_widget_grab_focus (frame->entryAfter);
-} /* gpa_expiry_frame_after */
+}
 
 
 static void
@@ -163,8 +160,8 @@ gpa_expiry_frame_at (GtkToggleButton * radioAt, gpointer param)
       gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
 			  "days");
       g_free (dateBuffer);
-    } /* if */
-} /* gpa_expiry_frame_at */
+    }
+}
 
 static void
 expire_date_toggled_cb (GtkToggleButton *togglebutton, gpointer user_data)
@@ -249,7 +246,7 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
                                g_date_get_day (expiryDate));
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (frame->radioAt),
 				    TRUE);
-    } /* if */
+    }
 
   if (expiryDate)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radioAt), TRUE);
@@ -267,7 +264,7 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   gtk_object_set_data_full (GTK_OBJECT (expiry_frame), "user_data",
 			    (gpointer) frame, gpa_expiry_frame_free);
   return expiry_frame;
-} /* gpa_expiry_frame_new */
+}
 
 
 gboolean
@@ -312,13 +309,13 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
       result = FALSE;
     }
   return result;
-} /* gpa_expiry_frame_get_expiration */
+}
 
 
 /* Return NULL if the values are correct and an error message if not.
- * The error message is suitable for a message box. Currently only the
- * date is validated if the "expire at" radio button is active.
- */
+   The error message is suitable for a message box.  Currently only
+   the date is validated if the "expire at" radio button is
+   active.  */
 gchar *
 gpa_expiry_frame_validate(GtkWidget * expiry_frame)
 {
@@ -338,9 +335,9 @@ gpa_expiry_frame_validate(GtkWidget * expiry_frame)
     }
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (frame->radioAt)))
     {
-      /* This case is always correct */
+      /* This case is always correct.  */
       result = NULL;
     } 
   return result;
-} /* gpa_expiry_frame_validate */
+}
     

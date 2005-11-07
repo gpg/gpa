@@ -545,7 +545,7 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
   list->keys = g_list_append (list->keys, key);
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (list)));
   /* Get the column values */
-  keyid = gpa_gpgme_key_get_short_keyid (key, 0);
+  keyid = gpa_gpgme_key_get_short_keyid (key);
   expiry = gpa_expiry_date_string (key->subkeys->expires);
   ownertrust = gpa_key_ownertrust_string (key);
   validity = gpa_key_validity_string (key);

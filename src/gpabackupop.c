@@ -1,22 +1,26 @@
 /* gpabackupop.c - The GpaBackupOperation object.
- *	Copyright (C) 2003, Miguel Coca.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2003 Miguel Coca.
+   Copyright (C) 2005 g10 Code GmbH.
+
+   This file is part of GPA.
+
+   GPA is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with GPA; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <gpgme.h>
 #include "gpa.h"
@@ -28,9 +32,9 @@ static GObjectClass *parent_class = NULL;
 
 static gboolean gpa_backup_operation_idle_cb (gpointer data);
 
-/* GObject boilerplate */
+/* GObject boilerplate.  */
 
-/* Properties */
+/* Properties.  */
 enum
 {
   PROP_0,
@@ -79,7 +83,7 @@ gpa_backup_operation_set_property (GObject     *object,
 	  op->key = key;
 	  gpgme_key_ref (op->key);
 	  op->fpr = g_strdup (op->key->subkeys->fpr);
-	  op->key_id = g_strdup (gpa_gpgme_key_get_short_keyid (op->key, 0));
+	  op->key_id = g_strdup (gpa_gpgme_key_get_short_keyid (op->key));
 	}
       break;
     case PROP_FINGERPRINT:

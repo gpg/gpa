@@ -1252,10 +1252,10 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
   gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
   g_free (text);
 
-  text = (gchar*) gpa_gpgme_key_get_short_keyid (key, 0);
+  text = (gchar*) gpa_gpgme_key_get_short_keyid (key);
   gtk_label_set_text (GTK_LABEL (editor->detail_key_id), text);
 
-  text = gpa_gpgme_key_get_fingerprint (key, 0);
+  text = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
   gtk_label_set_text (GTK_LABEL (editor->detail_fingerprint), text);
   g_free (text);
   text = gpa_expiry_date_string (key->subkeys->expires);
@@ -1681,7 +1681,7 @@ keyring_update_status_bar (GPAKeyringEditor * editor)
       gtk_label_set_text (GTK_LABEL (editor->status_key_user), string);
       g_free (string);
       gtk_label_set_text (GTK_LABEL (editor->status_key_id),
-                          gpa_gpgme_key_get_short_keyid (key, 0));
+                          gpa_gpgme_key_get_short_keyid (key));
     }
   else
     {
