@@ -1,3 +1,7 @@
+2005-11-08  Marcus Brinkmann  <marcus@g10code.de>
+
+	* keysigndlg.c (gpa_key_sign_run_dialog): Fix last change.
+
 2005-11-07  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpabackupop.c (export_browse): Pass ENTRY as parent to

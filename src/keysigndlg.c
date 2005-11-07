@@ -87,19 +87,13 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   /* Build this first, so that we can know how may user ID's there are */
   uid_box = gtk_vbox_new (TRUE, 0);
 
-  /* One user ID on each line.  */
-  string = gpa_gpgme_key_get_userid (key->uids);
-  uid = key->uids->next;
+  uid = key->uids;
   while (uid)
     {
       if (!uid->revoked)
 	{
-	  gchar *uid_string = gpa_gpgme_key_get_userid (uid);
-          gchar *tmp = string;
-          string = g_strconcat (string, "\n", uid_string, NULL);
-          g_free (tmp);
-	  g_free (uid_string);
-
+	  /* One user ID on each line.  */
+	  string = gpa_gpgme_key_get_userid (uid);
           label = gtk_label_new (string);
           g_free (string);
           gtk_box_pack_start_defaults (GTK_BOX(uid_box), label);
