@@ -1,5 +1,8 @@
 2005-11-07  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpabackupop.c (export_browse): Pass ENTRY as parent to
+	gpa_get_save_file_name.
+	
 	* keyring.c (keyring_details_page_fill_key): Use
 	gpa_gpgme_key_format_fingerprint.
 	* keysigndlg.c (gpa_key_sign_run_dialog): Likewise.
@@ -19,6 +22,7 @@
 	(gpa_gpgme_key_get_short_keyid): Remove IDX argument from prototype.
 	* gpabackupop.c (gpa_backup_operation_set_property): Adjust caller
 	of gpa_gpgme_key_get_short_keyid.
+
 	* gpakeyselector.c (gpa_key_selector_next_key): Likewise.
 	* gpawidgets.c (gpa_key_info_new): Likewise.
 	* keylist.c (gpa_keylist_next): Likewise.

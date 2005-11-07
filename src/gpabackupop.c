@@ -253,7 +253,7 @@ export_browse (gpointer param)
   GtkWidget *entry = param;
   gchar *filename;
 
-  filename = gpa_get_save_file_name (NULL, _("Backup key to file"), NULL);
+  filename = gpa_get_save_file_name (entry, _("Backup key to file"), NULL);
   if (filename)
     {
       gchar *utf8_filename = g_filename_to_utf8 (filename, -1, NULL, NULL, 
