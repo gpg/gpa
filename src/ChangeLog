@@ -1,5 +1,8 @@
 2005-11-08  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpgmeedit.c (edit_sign_fnc_transit): Handle early
+	"sign_uid.okay".
+
 	* keysigndlg.c (gpa_key_sign_run_dialog): Fix last change.
 
 2005-11-07  Marcus Brinkmann  <marcus@g10code.de>

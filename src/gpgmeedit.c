@@ -470,6 +470,11 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
         {
           next_state = SIGN_UIDS;
         }
+      else if (status == GPGME_STATUS_GET_BOOL &&
+          g_str_equal (args, "sign_uid.okay"))
+        {
+          next_state = SIGN_CONFIRM;
+        }
       else if (status == GPGME_STATUS_GET_LINE &&
                g_str_equal (args, "sign_uid.expire"))
         {
