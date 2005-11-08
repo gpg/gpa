@@ -166,9 +166,8 @@ keyserver_read_list (const char *confname)
 
   if (!serverlist)
     { /* no entries in list - use default values */
-      add_server (&serverlist, "ldap://pgp.surfnet.nl:11370");
-      add_server (&serverlist, "ldap://keyserver.pgp.com");
       add_server (&serverlist, "hkp://keyserver.kjsl.com");
+      add_server (&serverlist, "ldap://keyserver.pgp.com");
     }
 
   return rc;

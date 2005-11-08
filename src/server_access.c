@@ -1,22 +1,26 @@
-/* server_access.c - The GNU Privacy Assistant
- *      Copyright (C) 2002, Miguel Coca.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+/* server_access.c - The GNU Privacy Assistant keyserver access.
+   Copyright (C) 2002 Miguel Coca.
+   Copyright (C) 2005 g10 Code GmbH.
+
+   This file is part of GPA
+
+   GPA is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with GPA; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "gpa.h"
 #include <glib.h>
@@ -296,10 +300,13 @@ error_string (gint error_code)
 }
 
 static void
-write_command (FILE *file, const char *host, const char *port, 
+write_command (FILE *file, const char *scheme,
+	       const char *host, const char *port, 
 	       const char *opaque, const char *command)
 {
-  fprintf (file, "%s\n", "VERSION 0");
+  fprintf (file, "%s\n", "VERSION 1");
+  fprintf (file, "SCHEME %s\n", scheme);
+
   if (opaque)
     {
       fprintf (file, "OPAQUE %s\n", opaque);
@@ -355,7 +362,7 @@ check_errors (int exit_status, gchar *error_message, gchar *output_filename,
         }
     }
   /* If version != 0, at least try to use version 1 error codes */
-  else
+  else if (exit_status)
     {
       gint error_code = parse_helper_output (output_filename);
       /* Not really errors */
@@ -510,7 +517,7 @@ gboolean server_send_keys (const gchar *server, const gchar *keyid,
   command_fd = g_file_open_tmp (COMMAND_TEMP_NAME, &command_filename, NULL);
   command = fdopen (command_fd, "w");
   /* Write the command to the file */
-  write_command (command, host, port, opaque, "SEND");
+  write_command (command, scheme, host, port, opaque, "SEND");
   /* Write the keys to the file */
   fprintf (command, "\nKEY %s BEGIN\n", keyid);
   dump_data_to_file (data, command);
@@ -555,7 +562,7 @@ gboolean server_get_key (const gchar *server, const gchar *keyid,
   command_fd = g_file_open_tmp (COMMAND_TEMP_NAME, &command_filename, NULL);
   command = fdopen (command_fd, "w");
   /* Write the command to the file */
-  write_command (command, host, port, opaque, "GET");
+  write_command (command, scheme, host, port, opaque, "GET");
   /* Write the keys to the file */
   fprintf (command, "0x%s\n", keyid);
   fclose (command);

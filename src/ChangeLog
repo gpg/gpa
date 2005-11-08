@@ -1,5 +1,12 @@
 2005-11-08  Marcus Brinkmann  <marcus@g10code.de>
 
+	* server_access.c (write_command): New argument scheme.
+	(server_send_keys): Also to invocation.
+	(server_get_key): Likewise.
+	(check_errors): Don't look for errors if the exit status looks OK.
+	* keyserver.c (keyserver_read_list): Use HKP server as default,
+	drop LDAP surfnet server (seems to be down).
+
 	* gpgmeedit.c (edit_sign_fnc_transit): Handle early
 	"sign_uid.okay".
 
