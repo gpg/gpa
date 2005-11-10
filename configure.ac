@@ -66,33 +66,6 @@ if test "$development_version" = yes; then
 fi
 
 dnl
-dnl Setup some stuff depending on host/target.
-dnl
-try_gettext=yes
-GPG=
-case "${target}" in
-    *-*-mingw32)
-        try_gettext=no
-dnl     AC_DEFINE(USE_ONLY_8DOT3,1,
-dnl               [set this to limit filenames to the 8.3 format])
-        AC_DEFINE(HAVE_DRIVE_LETTERS,1,
-                  [defined if we must run on a stupid file system])
-        AC_DEFINE(HAVE_DOSISH_SYSTEM,1,
-                  [defined if we run on some of the PCDOS like systems 
-                   (DOS, Windoze. OS/2) with special properties like
-                    no file modes])
-        AC_DEFINE(USE_SIMPLE_GETTEXT,1,
-                  [because the Unix gettext has too much overhead on
-                   MingW32 systems and these systems lack Posix functions,
-                   we use a simplified version of gettext])
-	AC_CHECK_LIB(wsock32, connect)
-        GPG='c:\\gnupg\\gpg.exe'
-        ;;
-    *)
-       ;;
-esac
-
-dnl
 dnl Checks for programs
 dnl
 AM_MISSING_PROG(ACLOCAL, aclocal, $missing_dir)
@@ -137,16 +110,7 @@ dnl
 
 AM_GNU_GETTEXT_VERSION(0.12.1)
 
-if test "$try_gettext" = yes; then
 AM_GNU_GETTEXT
-else
-USE_NLS=no
-USE_INCLUDED_LIBINTL=no
-BUILD_INCLUDED_LIBINTL=no
-AC_SUBST(USE_NLS)
-AC_SUBST(USE_INCLUDED_LIBINTL)
-AC_SUBST(BUILD_INCLUDED_LIBINTL)
-fi
 
 AC_CHECK_FUNC(getopt_long,
     AC_MSG_RESULT(using libc's getopt_long),

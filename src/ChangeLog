@@ -1,3 +1,7 @@
+2005-11-10  Marcus Brinkmann  <marcus@g10code.de>
+
+	* simple-gettext.c: Unused file removed.
+	
 2005-11-08  Marcus Brinkmann  <marcus@g10code.de>
 
 	* server_access.c (write_command): New argument scheme.

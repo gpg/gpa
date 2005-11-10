@@ -1,3 +1,8 @@
+2005-11-10  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac (IS_DEVELOPMENT_VERSION): Remove unused ming32
+	cruft.
+
 2005-11-07  Marcus Brinkmann  <marcus@g10code.de>
 
 	* configure.ac: Require GPGME 0.4.5.
