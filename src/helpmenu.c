@@ -30,6 +30,14 @@
 #include "icons.h"
 #include "gpa_license.h"
 
+/* W32 target is broken with regards to GdkFont functions.  */
+#ifndef G_OS_WIN32
+#define SCROLLING	1
+#endif
+
+static GtkWidget *about_dialog = NULL;
+
+#ifdef SCROLLING
 static char *scroll_text[] =
 {
   "Bernhard Herzog",
@@ -51,23 +59,24 @@ static int do_scrolling = 0;
 static int scroll_state = 0;
 static int scroll_offset = 0;
 static int *scroll_text_widths;
-static GtkWidget *about_dialog = NULL;
 static GtkWidget *scroll_area = NULL;
 static GdkPixmap *scroll_pixmap = NULL;
 static int cur_scroll_text = 0;
 static int cur_scroll_index = 0;
 static int timer = 0;
-
+#endif
 
 
 static void
 about_dialog_unmap (void)
 {
+#ifdef SCROLLING
   if (timer)
     {
       gtk_timeout_remove (timer);
       timer = 0;
     }
+#endif
 }
 
 static void
@@ -81,14 +90,17 @@ about_dialog_destroy (void)
 static int
 about_dialog_button (GtkWidget *widget, GdkEventButton *event)
 {
+#ifdef SCROLLING
   if (timer)
     gtk_timeout_remove (timer);
   timer = 0;
+#endif
   gtk_widget_hide (about_dialog);
   return FALSE;
 }
 
 
+#ifdef SCROLLING
 static int
 about_dialog_timer (gpointer data)
 {
@@ -158,7 +170,7 @@ about_dialog_timer (gpointer data)
 
   return return_val;
 }
-
+#endif
 
 
 
@@ -174,10 +186,12 @@ help_about (void)
       GtkWidget *vbox;
       GtkWidget *frame;
       GtkWidget *label;
-      GtkWidget *alignment;
       GtkWidget *pixmap;
+#ifdef SCROLLING
+      GtkWidget *alignment;
       int max_width;
       int i;
+#endif
 
       about_dialog = gtk_dialog_new ();
       gtk_window_set_title (GTK_WINDOW (about_dialog), _("About GPA"));
@@ -211,11 +225,19 @@ help_about (void)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
-      label = gtk_label_new ("Copyright (C) 2000-2003,\n"
-                             "Miguel Coca,\nG-N-U GmbH,\nIntevation GmbH");
+      label = gtk_label_new ("Copyright (C) 2000-2002 G-N-U GmbH");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
+      label = gtk_label_new ("Copyright (C) 2002-2003 Miguel Coca");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+      gtk_widget_show (label);
+
+      label = gtk_label_new ("Copyright (C) 2005 g10 Code GmbH");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+      gtk_widget_show (label);
+
+#if SCROLLING
       label = gtk_label_new (_("Brought to you by:"));
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
@@ -251,6 +273,7 @@ help_about (void)
       gtk_widget_set_events (scroll_area, GDK_BUTTON_PRESS_MASK);
       gtk_container_add (GTK_CONTAINER (frame), scroll_area);
       gtk_widget_show (scroll_area);
+#endif
 
       label = gtk_label_new (_("GPA is free software under the"));
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
@@ -268,18 +291,22 @@ help_about (void)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
+#ifdef SCROLLING
       gtk_widget_realize (scroll_area);
       gdk_window_set_background (scroll_area->window,
 				 &scroll_area->style->white);
-
+#endif
     }
 
   if (!GTK_WIDGET_VISIBLE (about_dialog))
     {
+#if SCROLLING
       int i;
+#endif
 
       gtk_widget_show (about_dialog);
 
+#if SCROLLING
       do_scrolling = 0;
       scroll_state = 0;
 
@@ -304,6 +331,7 @@ help_about (void)
       do_scrolling = 1;
       about_dialog_timer (about_dialog);
       timer = gtk_timeout_add (75, about_dialog_timer, NULL);
+#endif
     }
   else
     {
