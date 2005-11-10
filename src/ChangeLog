@@ -1,5 +1,13 @@
 2005-11-10  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpa.c [G_OS_WIN32]: Include <windows.h>.
+	(CSIDL_APPDATA, CSIDL_LOCAL_APPDATA, CSIDL_FLAG_CREATE)
+	[G_OS_WIN32]: Define.
+	(w32_strerror, dlopen, dlsym, dlerror, dlclose,
+	w32_shgetfolderpath) [G_OS_WIN32]: Define.
+	(search_config_file) [G_OS_WIN32]: Check for shared application
+	local data folder, and in there for gnupg's home directory.
+
 	* helpmenu.c [G_OS_WIN32]: Disable broken scroll text.
 
 	* simple-gettext.c: Unused file removed.

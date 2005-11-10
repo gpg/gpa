@@ -56,6 +56,109 @@
 gchar *gpa_exec_dir;
 gchar *gnupg_homedir;
 
+#ifdef G_OS_WIN32
+#include <windows.h> 
+#ifndef CSIDL_APPDATA
+#define CSIDL_APPDATA 0x001a
+#endif
+#ifndef CSIDL_LOCAL_APPDATA
+#define CSIDL_LOCAL_APPDATA 0x001c
+#endif
+#ifndef CSIDL_FLAG_CREATE
+#define CSIDL_FLAG_CREATE 0x8000
+#endif
+#define DIM(v)		     (sizeof(v)/sizeof((v)[0]))
+
+#define RTLD_LAZY 0
+const char *
+w32_strerror (int w32_errno)
+{
+  static char strerr[256];
+  int ec = (int)GetLastError ();
+
+  if (w32_errno == 0)
+    w32_errno = ec;
+  FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM, NULL, w32_errno,
+                 MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),
+                 strerr, DIM (strerr)-1, NULL);
+  return strerr;
+}
+
+static __inline__ void *
+dlopen (const char * name, int flag)
+{
+  void * hd = LoadLibrary (name);
+  return hd;
+}
+
+static __inline__ void *
+dlsym (void * hd, const char * sym)
+{
+  if (hd && sym)
+    {
+      void * fnc = GetProcAddress (hd, sym);
+      if (!fnc)
+        return NULL;
+      return fnc;
+    }
+  return NULL;
+}
+
+
+static __inline__ const char *
+dlerror (void)
+{
+  return w32_strerror (0);
+}
+
+
+static __inline__ int
+dlclose (void * hd)
+{
+  if (hd)
+    {
+      FreeLibrary (hd);
+      return 0;
+    }
+  return -1;
+}  
+
+static HRESULT
+w32_shgetfolderpath (HWND a, int b, HANDLE c, DWORD d, LPSTR e)
+{
+  static int initialized;
+  static HRESULT (WINAPI * func)(HWND,int,HANDLE,DWORD,LPSTR);
+
+  if (!initialized)
+    {
+      static char *dllnames[] = { "shell32.dll", "shfolder.dll", NULL };
+      void *handle;
+      int i;
+
+      initialized = 1;
+
+      for (i=0, handle = NULL; !handle && dllnames[i]; i++)
+        {
+          handle = dlopen (dllnames[i], RTLD_LAZY);
+          if (handle)
+            {
+              func = dlsym (handle, "SHGetFolderPathA");
+              if (!func)
+                {
+                  dlclose (handle);
+                  handle = NULL;
+                }
+            }
+        }
+    }
+
+  if (func)
+    return func (a,b,c,d,e);
+  else
+    return -1;
+}
+#endif
+
 /* Search for a configuration file.
  * It uses a different search order for Windows and Unix.
  *
@@ -66,6 +169,7 @@ gchar *gnupg_homedir;
  * in the GnuPG home directory.
  *
  * On Windows:
+ *  0. The gnupg home directory.
  *  1. in the directory where `gpa.exe' resides,
  *  2. in GPA_DATADIR
  *  3. in the GnuPG home directory.
@@ -75,24 +179,65 @@ gchar *gnupg_homedir;
 static gchar *
 search_config_file (const gchar *filename)
 {
-  gchar *candidate = NULL;
-  gint i;
-  /* The search order for each OS, a NULL terminated array */
-#ifdef G_OS_UNIX
-  gchar *dirs[] = {gnupg_homedir, GPA_DATADIR, NULL};
-#elif defined(G_OS_WIN32)
-  gchar *dirs[] = {gpa_exec_dir, GPA_DATADIR, gnupg_homedir, NULL};
-#endif
-  for( i = 0; dirs[i]; i++ )
+#ifdef G_OS_WIN32
+  char *dir;
+
+  dir = getenv("GNUPGHOME");
+  if (!dir || !*dir)
+    dir = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "HomeDir");
+  if (!dir || !*dir)
     {
-      candidate = g_build_filename (dirs[i], filename, NULL);
-      if (g_file_test (candidate, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
-        return candidate;
-      else
-        g_free (candidate);
+      char path[MAX_PATH];
+      
+      /* It might be better to use LOCAL_APPDATA because this is
+         defined as "non roaming" and thus more likely to be kept
+         locally.  For private keys this is desired.  However, given
+         that many users copy private keys anyway forth and back,
+         using a system roaming serives might be better than to let
+         them do it manually.  A security conscious user will anyway
+         use the registry entry to have better control.  */
+      if (w32_shgetfolderpath (NULL, CSIDL_APPDATA|CSIDL_FLAG_CREATE, 
+                               NULL, 0, path) >= 0) 
+        {
+	  dir = g_build_filename (path, "gnupg", NULL);
+
+          /* Try to create the directory if it does not yet
+             exists.  */
+          if (access (dir, F_OK))
+            CreateDirectory (dir, NULL);
+        }
     }
-  /* If no file exists, return the first option to be created */
-  return g_build_filename (dirs[0], filename, NULL);
+  if (dir)
+    {
+      char *tmp = g_build_filename (dir, filename, NULL);
+      g_free (dir);
+      return tmp;
+    }
+  /* Fall-through.  */
+#endif
+
+  {
+    gchar *candidate = NULL;
+    gint i;
+    /* The search order for each OS, a NULL terminated array */
+#ifdef G_OS_UNIX
+    gchar *dirs[] = {gnupg_homedir, GPA_DATADIR, NULL};
+#elif defined(G_OS_WIN32)
+    gchar *dirs[] = {gpa_exec_dir, GPA_DATADIR, gnupg_homedir, NULL};
+#endif
+    for(i = 0; dirs[i]; i++)
+      {
+	candidate = g_build_filename (dirs[i], filename, NULL);
+	if (g_file_test (candidate,
+			 G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
+	  return candidate;
+	else
+	  g_free (candidate);
+      }
+
+    /* If no file exists, return the first option to be created */
+    return g_build_filename (dirs[0], filename, NULL);
+  }
 }
 
 static void
