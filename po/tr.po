@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-21 13:29+0200\n"
+"POT-Creation-Date: 2005-11-08 13:27+0100\n"
 "PO-Revision-Date: 2004-06-20 14:42+0300\n"
 "Last-Translator: Mert Çetin <mertc@su.sabanciuniv.edu>\n"
 "Language-Team: xTc & Déjà Vu\n"
@@ -59,7 +59,7 @@ msgstr "Dosyayý Aç"
 msgid "The file is already open."
 msgstr "Bu dosya zaten açýk"
 
-#: src/fileman.c:466 src/keyring.c:826
+#: src/fileman.c:466 src/keyring.c:829
 msgid "/_File"
 msgstr "/_Dosya"
 
@@ -95,39 +95,39 @@ msgstr "/Dosya/Çö_z"
 msgid "/File/sep2"
 msgstr "/Dosya/bol2"
 
-#: src/fileman.c:475 src/keyring.c:827
+#: src/fileman.c:475 src/keyring.c:830
 msgid "/File/_Close"
 msgstr "/Dosya/_Kapat"
 
-#: src/fileman.c:476 src/keyring.c:829
+#: src/fileman.c:476 src/keyring.c:832
 msgid "/File/_Quit"
 msgstr "/Dosya/_Çýkýþ"
 
-#: src/fileman.c:479 src/keyring.c:832
+#: src/fileman.c:479 src/keyring.c:835
 msgid "/_Edit"
 msgstr "/Dü_zen"
 
-#: src/fileman.c:480 src/keyring.c:838
+#: src/fileman.c:480 src/keyring.c:841
 msgid "/Edit/Select _All"
 msgstr "/Düzen/_Tümünü Seç"
 
-#: src/fileman.c:481 src/keyring.c:839
+#: src/fileman.c:481 src/keyring.c:842
 msgid "/Edit/sep2"
 msgstr "/Düzen/bol2"
 
-#: src/fileman.c:482 src/keyring.c:840
+#: src/fileman.c:482 src/keyring.c:843
 msgid "/Edit/Pr_eferences..."
 msgstr "/Düzen/Te_rcihler..."
 
-#: src/fileman.c:486 src/keyring.c:867
+#: src/fileman.c:486 src/keyring.c:870
 msgid "/_Windows"
 msgstr "/_Pencereler"
 
-#: src/fileman.c:487 src/keyring.c:868
+#: src/fileman.c:487 src/keyring.c:871
 msgid "/Windows/_Filemanager"
 msgstr "/Pencereler/_Dosya Yöneticisi"
 
-#: src/fileman.c:488 src/keyring.c:869
+#: src/fileman.c:488 src/keyring.c:872
 msgid "/Windows/_Keyring Editor"
 msgstr "/Pencereler/_Anahtarlýk Düzenleyicisi"
 
@@ -163,7 +163,7 @@ msgstr "Bütün dosyalarý kapat"
 msgid "close files"
 msgstr "dosyalarý kapat"
 
-#: src/fileman.c:559 src/keyring.c:1536
+#: src/fileman.c:559 src/keyring.c:1549
 msgid "Sign"
 msgstr "Ýmzala"
 
@@ -211,23 +211,23 @@ msgstr "Seçili dosyayý çöz"
 msgid "decrypt file"
 msgstr "dosyayý çöz"
 
-#: src/fileman.c:605 src/keyring.c:1601
+#: src/fileman.c:605 src/keyring.c:1614
 msgid "Open the Preferences dialog"
 msgstr "Tercihler penceresini aç"
 
-#: src/fileman.c:606 src/keyring.c:1602
+#: src/fileman.c:606 src/keyring.c:1615
 msgid "preferences"
 msgstr "tercihler"
 
-#: src/fileman.c:614 src/keyring.c:1625
+#: src/fileman.c:614 src/keyring.c:1638
 msgid "Help"
 msgstr "Yardým"
 
-#: src/fileman.c:615 src/keyring.c:1626
+#: src/fileman.c:615 src/keyring.c:1639
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "GNU Gizlilik Asistanýný Anlamak"
 
-#: src/fileman.c:616 src/keyring.c:1627
+#: src/fileman.c:616 src/keyring.c:1640
 msgid "help"
 msgstr "yardým"
 
@@ -263,7 +263,7 @@ msgstr "_farklý bir dosyaya imzala"
 msgid "a_rmor"
 msgstr "_kalkan"
 
-#: src/gpabackupop.c:211 src/gpgmetools.c:117
+#: src/gpabackupop.c:215 src/gpgmetools.c:127
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -272,7 +272,7 @@ msgstr ""
 "%s dosyasý zaten var. \n"
 "Üzerine yazmak istiyor musunuz?"
 
-#: src/gpabackupop.c:227
+#: src/gpabackupop.c:231
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -289,48 +289,48 @@ msgstr ""
 "Bu önemli bir bilgidir, ve dikkatlica saklanmasý gerekmektedir\n"
 "(örneðin, güvenli bir yerde saklayacaðýnýz bir diskette)."
 
-#: src/gpabackupop.c:252
+#: src/gpabackupop.c:256
 msgid "Backup key to file"
 msgstr "Anahtarý dosyaya yedekle"
 
-#: src/gpabackupop.c:279
+#: src/gpabackupop.c:283
 msgid "Backup Keys"
 msgstr "Anahtarlarý Yedekle"
 
-#: src/gpabackupop.c:303
+#: src/gpabackupop.c:307
 #, c-format
 msgid "Generating backup of key: %s"
 msgstr "%s anahtarýnýn yedeklemesi yapýlýyor"
 
-#: src/gpabackupop.c:309
+#: src/gpabackupop.c:313
 msgid "_Backup to file:"
 msgstr "Dosyaya _Yedekle"
 
-#: src/gpabackupop.c:321
+#: src/gpabackupop.c:325
 msgid "B_rowse..."
 msgstr "_Göz At"
 
-#: src/gpa.c:220
+#: src/gpa.c:222
 msgid "display this help and exit"
 msgstr "bu yardýmý görüntüle ve çýk"
 
-#: src/gpa.c:221
+#: src/gpa.c:223
 msgid "output version information and exit"
 msgstr "sürüm bilgisini göster ve çýk"
 
-#: src/gpa.c:222
+#: src/gpa.c:224
 msgid "open keyring editor (default)"
 msgstr "anahtarlýk düzenleyicisini aç (varsayýlan)"
 
-#: src/gpa.c:223
+#: src/gpa.c:225
 msgid "open filemanager"
 msgstr "dosya yöneticisini aç"
 
-#: src/gpa.c:224
+#: src/gpa.c:226
 msgid "read options from file"
 msgstr "seçenekleri dosyadan oku"
 
-#: src/gpa.c:248
+#: src/gpa.c:250
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -338,15 +338,15 @@ msgstr ""
 "Sentaks: gpa [seçenekler]\n"
 "GnuPG'ye grafiksel uçbirim\n"
 
-#: src/gpa.c:250
+#: src/gpa.c:252
 msgid "Options"
 msgstr "Seçenekler"
 
-#: src/gpa.c:256
+#: src/gpa.c:258
 msgid "Please report bugs to <"
 msgstr "Lütfen hatalarý <"
 
-#: src/gpa.c:256
+#: src/gpa.c:258
 msgid ">.\n"
 msgstr "> adresine bildirin.\n"
 
@@ -406,7 +406,7 @@ msgstr "Hatalý þifre!"
 msgid "Encrypting..."
 msgstr "Þifreliyor..."
 
-#: src/gpafileencryptop.c:295 src/verifydlg.c:221
+#: src/gpafileencryptop.c:295 src/verifydlg.c:224
 msgid "Unknown Key"
 msgstr "Bilinmeyen Anahtar"
 
@@ -422,7 +422,7 @@ msgstr "Yine de, anahtarýn o kiþiye ait olduðu kesin deðil."
 msgid "Do you <b>really</b> want to use this key?"
 msgstr "Bu anahtarý <b>gerçekten</b> kullanmak istiyor musunuz?"
 
-#: src/gpafileencryptop.c:344 src/gpafileencryptop.c:384 src/verifydlg.c:226
+#: src/gpafileencryptop.c:344 src/gpafileencryptop.c:384 src/verifydlg.c:229
 msgid "Revoked Key"
 msgstr "Feshedilmiþ Anahtar"
 
@@ -489,13 +489,13 @@ msgstr ""
 "%i gizli anahtar dýþarýdan alýndý\n"
 "%i gizli anahtar deðiþtirilmedi"
 
-#: src/gpakeyselector.c:84 src/keylist.c:220 src/keylist.c:255
-#: src/siglist.c:92 src/siglist.c:112 src/verifydlg.c:323
+#: src/gpakeyselector.c:88 src/keylist.c:224 src/keylist.c:259
+#: src/siglist.c:92 src/siglist.c:112 src/verifydlg.c:326
 msgid "Key ID"
 msgstr "Anahtar Kimliði"
 
-#: src/gpakeyselector.c:93 src/keylist.c:229 src/keylist.c:294
-#: src/siglist.c:98 src/siglist.c:141 src/verifydlg.c:335
+#: src/gpakeyselector.c:97 src/keylist.c:233 src/keylist.c:298
+#: src/siglist.c:98 src/siglist.c:141 src/verifydlg.c:338
 msgid "User Name"
 msgstr "Kullanýcý Adý"
 
@@ -553,7 +553,7 @@ msgstr "Anahtar _Kimliði:"
 msgid "Subkey ID"
 msgstr "Altanahtar Kimliði"
 
-#: src/gpasubkeylist.c:76 src/siglist.c:118 src/verifydlg.c:329
+#: src/gpasubkeylist.c:76 src/siglist.c:118 src/verifydlg.c:332
 msgid "Status"
 msgstr "Durum"
 
@@ -565,7 +565,7 @@ msgstr "Algoritma"
 msgid "Size"
 msgstr "Boyut"
 
-#: src/gpasubkeylist.c:95 src/keyeditdlg.c:170 src/keylist.c:264
+#: src/gpasubkeylist.c:95 src/keyeditdlg.c:170 src/keylist.c:268
 msgid "Expiry Date"
 msgstr "Bitim Tarihi"
 
@@ -585,16 +585,16 @@ msgstr "Þifreleyebilir"
 msgid "Can authenticate"
 msgstr "Doðrulayabilir"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:562 src/gpgmetools.c:733
-#: src/gpgmetools.c:859
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:563 src/gpgmetools.c:728
+#: src/gpgmetools.c:847
 msgid "Revoked"
 msgstr "Feshedilmiþ"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:566 src/gpgmetools.c:855
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:565 src/gpgmetools.c:843
 msgid "Expired"
 msgstr "Sona Ermiþ"
 
-#: src/gpasubkeylist.c:143 src/gpgmetools.c:571
+#: src/gpasubkeylist.c:143 src/gpgmetools.c:567
 msgid "Disabled"
 msgstr "Geçersiz Kýlýnmýþ"
 
@@ -602,21 +602,21 @@ msgstr "Geçersiz Kýlýnmýþ"
 msgid "Unsigned"
 msgstr "Ýmzalanmamýþ"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:846 src/verifydlg.c:211
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:834 src/verifydlg.c:214
 msgid "Valid"
 msgstr "Geçerli"
 
-#: src/gpawidgets.c:73 src/gpgmetools.c:612 src/gpgmetools.c:619
-#: src/keyring.c:1155 src/keysigndlg.c:101
+#: src/gpawidgets.c:74 src/gpgmetools.c:605 src/gpgmetools.c:612
+#: src/keyring.c:1158 src/keysigndlg.c:106
 msgid "User Name:"
 msgstr "Kullanýcý Adý:"
 
-#: src/gpawidgets.c:73 src/keysigndlg.c:101
+#: src/gpawidgets.c:74 src/keysigndlg.c:106
 msgid "User Names:"
 msgstr "Kullanýcý Adlarý:"
 
-#: src/gpawidgets.c:79 src/gpgmetools.c:613 src/gpgmetools.c:620
-#: src/keyring.c:1157
+#: src/gpawidgets.c:80 src/gpgmetools.c:606 src/gpgmetools.c:613
+#: src/keyring.c:1160
 msgid "Key ID:"
 msgstr "Anahtar Kimliði:"
 
@@ -644,7 +644,7 @@ msgstr ""
 "!TEHLÝKELÝ HATA!\n"
 "Bitim tarihi için geçersiz ekleme biçimi."
 
-#: src/gpgmetools.c:45
+#: src/gpgmetools.c:48
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -661,7 +661,7 @@ msgstr ""
 "\n"
 "Uygulama kapatýlacaktýr"
 
-#: src/gpgmetools.c:57
+#: src/gpgmetools.c:62
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -680,7 +680,7 @@ msgstr ""
 "Bu büyük ihtimalle GPA'deki bir hata.\n"
 "GPA þimdi bu hatadan toparlanmaya çalýþacaktýr."
 
-#: src/gpgmetools.c:437
+#: src/gpgmetools.c:434
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -694,7 +694,7 @@ msgstr ""
 "************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:442
+#: src/gpgmetools.c:439
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -714,91 +714,91 @@ msgstr "DSA (sadece imzalama)"
 msgid "RSA (sign only)"
 msgstr "RSA (sadece imzalama)"
 
-#: src/gpgmetools.c:531 src/gpgmetools.c:579 src/gpgmetools.c:851
-#: src/gpgmetools.c:883
+#: src/gpgmetools.c:533 src/gpgmetools.c:571 src/gpgmetools.c:839
+#: src/gpgmetools.c:872
 msgid "Unknown"
 msgstr "Bilinmiyor"
 
-#: src/gpgmetools.c:534
+#: src/gpgmetools.c:536
 msgid "Never"
 msgstr "Hiç"
 
-#: src/gpgmetools.c:537
+#: src/gpgmetools.c:539
 msgid "Marginal"
 msgstr "Sýnýrlý"
 
-#: src/gpgmetools.c:540
+#: src/gpgmetools.c:542
 msgid "Full"
 msgstr "Tam"
 
-#: src/gpgmetools.c:543
+#: src/gpgmetools.c:545
 msgid "Ultimate"
 msgstr "Sonsuz"
 
-#: src/gpgmetools.c:575
+#: src/gpgmetools.c:569
 msgid "Incomplete"
 msgstr "Eksik"
 
-#: src/gpgmetools.c:584
+#: src/gpgmetools.c:575
 msgid "Fully Valid"
 msgstr "Tamamen Geçerli"
 
-#: src/gpgmetools.c:610
+#: src/gpgmetools.c:603
 msgid "Please enter the passphrase for the following key:"
 msgstr "Lütfen þu anahtar için þifre girin:"
 
-#: src/gpgmetools.c:618
+#: src/gpgmetools.c:611
 msgid "Wrong passphrase, please try again:"
 msgstr "Hatalý þifre, lütfen tekrar deneyin:"
 
-#: src/gpgmetools.c:641
+#: src/gpgmetools.c:636
 msgid "Enter Passphrase"
 msgstr "Þifreyi Girin"
 
-#: src/gpgmetools.c:821 src/verifydlg.c:268
+#: src/gpgmetools.c:811 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[Bilinmeyen kullanýcý kimliði]"
 
-#: src/gpgmetools.c:849 src/verifydlg.c:216
+#: src/gpgmetools.c:837 src/verifydlg.c:219
 msgid "Bad"
 msgstr "Kötü"
 
-#: src/gpgmetools.c:871
+#: src/gpgmetools.c:860
 msgid "Generic"
 msgstr "Genel"
 
-#: src/gpgmetools.c:874
+#: src/gpgmetools.c:863
 msgid "Persona"
 msgstr "Kiþisel"
 
-#: src/gpgmetools.c:877
+#: src/gpgmetools.c:866
 msgid "Casual"
 msgstr "Hafif"
 
-#: src/gpgmetools.c:880
+#: src/gpgmetools.c:869
 msgid "Positive"
 msgstr "Olumlu"
 
-#: src/gpgmetools.c:898
+#: src/gpgmetools.c:887
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Anahtar onaylama, imzalama, ve þifreleme için kullanýlabilir."
 
-#: src/gpgmetools.c:903
+#: src/gpgmetools.c:890
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Anahtar onaylama ve imzalama için kullanýlabilir ama þifreleme için "
 "kullanýlamaz."
 
-#: src/gpgmetools.c:911
+#: src/gpgmetools.c:896
 msgid "The key can be used for certification and encryption."
 msgstr "Anahtar onaylama ve þifreleme için kullanýlabilir."
 
-#: src/gpgmetools.c:916
+#: src/gpgmetools.c:899
 msgid "The key can be used only for certification."
 msgstr "Anahtar sadece onaylama için kullanýlabilir."
 
-#: src/gpgmetools.c:926
+#: src/gpgmetools.c:907
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -806,15 +806,15 @@ msgstr ""
 "Anahtar sadece imzalama ve þifreleme için kullanýlabilir, ama onaylama için "
 "kullanýlamaz."
 
-#: src/gpgmetools.c:931
+#: src/gpgmetools.c:910
 msgid "The key can be used only for signing."
 msgstr "Anahtar sadece imzalama için kullanýlabilir."
 
-#: src/gpgmetools.c:938
+#: src/gpgmetools.c:915
 msgid "The key can be used only for encryption."
 msgstr "Anahtar sadece þifreleme için kullanýlabilir."
 
-#: src/gpgmetools.c:944
+#: src/gpgmetools.c:918
 msgid "This key is useless."
 msgstr "Bu anahtar iþe yaramaz."
 
@@ -1105,7 +1105,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "Yedek _kopya yarat"
 
-#: src/keygenwizard.c:388 src/keyring.c:706 src/keyring.c:734
+#: src/keygenwizard.c:388 src/keyring.c:709 src/keyring.c:737
 msgid "Do it _later"
 msgstr "So_nra yap"
 
@@ -1131,15 +1131,15 @@ msgstr ""
 "Baþarýyla bir anahtar yarattýnýz. Anahtar sonsuz geçerliliðe sahip, ve 1024 "
 "bit uzunluðundadýr."
 
-#: src/keylist.c:274 src/ownertrustdlg.c:121
+#: src/keylist.c:278 src/ownertrustdlg.c:121
 msgid "Owner Trust"
 msgstr "Sahibine Güven"
 
-#: src/keylist.c:284
+#: src/keylist.c:288
 msgid "Key Validity"
 msgstr "Anahtar Geçerliliði"
 
-#: src/keylist.c:435
+#: src/keylist.c:439
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1147,11 +1147,11 @@ msgstr ""
 "GnuPG güven veritabanýný yeniden yapýlandýrýyor.\n"
 "Bu birkaç saniyenizi alabilir."
 
-#: src/keylist.c:493
+#: src/keylist.c:497
 msgid "GPA Warning"
 msgstr ""
 
-#: src/keylist.c:511
+#: src/keylist.c:515
 msgid ""
 "One of your secret keys contains an ElGamal signing key. Due to a bug in "
 "GnuPG, all ElGamal keys used with GnuPG 1.0.2 and later must be considered "
@@ -1162,11 +1162,11 @@ msgid ""
 "The affected key is:"
 msgstr ""
 
-#: src/keyring.c:434
+#: src/keyring.c:437
 msgid "No keys selected for signing."
 msgstr "Ýmzalamak için hiçbir anahtar seçilmedi."
 
-#: src/keyring.c:701
+#: src/keyring.c:704
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1174,11 +1174,11 @@ msgstr ""
 "Hala bir özel anahtara sahip deðilsiniz. Bir tane yaratmak ister misiniz "
 "(önerilen) ya da daha sonra da yapabilirsiniz?"
 
-#: src/keyring.c:705
+#: src/keyring.c:708
 msgid "_Generate key now"
 msgstr "Anahtarý þimdi _yarat"
 
-#: src/keyring.c:728
+#: src/keyring.c:731
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1186,354 +1186,354 @@ msgstr ""
 "Hala özel anahtarýnýzýn bir yedek kopyasýna sahip deðilsiniz. Anahtarýnýzý "
 "þimdi mi yedeklemek istersiniz (önerilen) ya da daha sonra da yapabilirsiniz?"
 
-#: src/keyring.c:733
+#: src/keyring.c:736
 msgid "_Backup key now"
 msgstr "Anahtarý þimdi ye_dekle"
 
-#: src/keyring.c:833
+#: src/keyring.c:836
 msgid "/Edit/_Copy"
 msgstr "/Düzen/_Kopyala"
 
-#: src/keyring.c:835
+#: src/keyring.c:838
 msgid "/Edit/_Paste"
 msgstr "/Düzen/_Yapýþtýr"
 
-#: src/keyring.c:837
+#: src/keyring.c:840
 msgid "/Edit/sep1"
 msgstr "/Düzen/bol1"
 
-#: src/keyring.c:844
+#: src/keyring.c:847
 msgid "/_Keys"
 msgstr "/_Anahtarlar"
 
-#: src/keyring.c:845
+#: src/keyring.c:848
 msgid "/Keys/_Refresh"
 msgstr ""
 
-#: src/keyring.c:847
+#: src/keyring.c:850
 #, fuzzy
 msgid "/Keys/sep0"
 msgstr "/Anahtarlar/bol1"
 
-#: src/keyring.c:848
+#: src/keyring.c:851
 msgid "/Keys/_New Key..."
 msgstr "/Anahtarlar/_Yeni Anahtar..."
 
-#: src/keyring.c:850
+#: src/keyring.c:853
 msgid "/Keys/_Delete Keys..."
 msgstr "/Anahtarlar/Anahtarlarý _Sil..."
 
-#: src/keyring.c:852
+#: src/keyring.c:855
 msgid "/Keys/sep1"
 msgstr "/Anahtarlar/bol1"
 
-#: src/keyring.c:853
+#: src/keyring.c:856
 msgid "/Keys/_Sign Keys..."
 msgstr "/Anahtarlar/Anahtarlarý Ý_mzala..."
 
-#: src/keyring.c:854
+#: src/keyring.c:857
 msgid "/Keys/Set _Owner Trust..."
 msgstr "/Anahtarlar/Sahibine _Güveni Belirle..."
 
-#: src/keyring.c:855
+#: src/keyring.c:858
 msgid "/Keys/_Edit Private Key..."
 msgstr "/Anahtarlar/Özel Anahtarý _Düzenle..."
 
-#: src/keyring.c:856
+#: src/keyring.c:859
 msgid "/Keys/sep2"
 msgstr "/Anahtarlar/bol2"
 
-#: src/keyring.c:857
+#: src/keyring.c:860
 msgid "/Keys/_Import Keys..."
 msgstr "/Anahtarlar/A_nahtarlarý Dýþarýdan Al..."
 
-#: src/keyring.c:858
+#: src/keyring.c:861
 msgid "/Keys/E_xport Keys..."
 msgstr "/Anahtarlar/Ana_htarlarý Yaz..."
 
-#: src/keyring.c:859
+#: src/keyring.c:862
 msgid "/Keys/_Backup..."
 msgstr "/Anahtarlar/Yed_ekle..."
 
-#: src/keyring.c:862
+#: src/keyring.c:865
 msgid "/_Server"
 msgstr "/_Sunucu"
 
-#: src/keyring.c:863
+#: src/keyring.c:866
 msgid "/Server/_Retrieve Keys..."
 msgstr "/Sunucu/A_nahtarlarý Edin..."
 
-#: src/keyring.c:864
+#: src/keyring.c:867
 msgid "/Server/_Send Keys..."
 msgstr "/Sunucu/Anahtarlarý _Gönder..."
 
-#: src/keyring.c:898
+#: src/keyring.c:901
 msgid "/Keys/Export Keys..."
 msgstr "/Anahtarlar/Anahtarlarý Dýþarý Yaz..."
 
-#: src/keyring.c:905
+#: src/keyring.c:908
 msgid "/Keys/Delete Keys..."
 msgstr "/Anahtarlar/Anahtarlarý Sil..."
 
-#: src/keyring.c:912
+#: src/keyring.c:915
 msgid "/Edit/Copy"
 msgstr "/Düzen/Kopyala"
 
-#: src/keyring.c:919
+#: src/keyring.c:922
 msgid "/Server/Send Keys..."
 msgstr "/Sunucu/Anahtarlarý Gönder..."
 
-#: src/keyring.c:928
+#: src/keyring.c:931
 msgid "/Keys/Set Owner Trust..."
 msgstr "/Anahtarlar/Sahibine Güveni Belirle..."
 
-#: src/keyring.c:936
+#: src/keyring.c:939
 msgid "/Keys/Sign Keys..."
 msgstr "/Anahtarlar/Anahtarlarý Ýmzala..."
 
-#: src/keyring.c:944
+#: src/keyring.c:947
 msgid "/Keys/Edit Private Key..."
 msgstr "/Anahtarlar/Özel Anahtarý Düzenle..."
 
-#: src/keyring.c:951
+#: src/keyring.c:954
 msgid "/Keys/Backup..."
 msgstr "/Anahtarlar/Yedekle..."
 
-#: src/keyring.c:968
+#: src/keyring.c:971
 msgid "/_Copy"
 msgstr "/_Kopyala"
 
-#: src/keyring.c:970
+#: src/keyring.c:973
 msgid "/_Paste"
 msgstr "/_Yapýþtýr"
 
-#: src/keyring.c:972
+#: src/keyring.c:975
 msgid "/_Delete Keys..."
 msgstr "/Anahtarlarý _Sil..."
 
-#: src/keyring.c:975
+#: src/keyring.c:978
 msgid "/_Sign Keys..."
 msgstr "/Anahtarlarý Ým_zala..."
 
-#: src/keyring.c:976
+#: src/keyring.c:979
 msgid "/Set _Owner Trust..."
 msgstr "/Sahibine _Güveni Belirle..."
 
-#: src/keyring.c:977
+#: src/keyring.c:980
 msgid "/_Edit Private Key..."
 msgstr "/Özel Anahtarý _Düzenle..."
 
-#: src/keyring.c:979
+#: src/keyring.c:982
 msgid "/E_xport Keys..."
 msgstr "/Anahtarlarý _Yaz..."
 
-#: src/keyring.c:980
+#: src/keyring.c:983
 msgid "/Se_nd Keys to Server..."
 msgstr "/Anahtarlarý Sunucuya _Gönder..."
 
-#: src/keyring.c:981
+#: src/keyring.c:984
 msgid "/_Backup..."
 msgstr "/_Yedekle..."
 
-#: src/keyring.c:992
+#: src/keyring.c:995
 msgid "/Set Owner Trust..."
 msgstr "/Sahibine Güveni Belirle..."
 
-#: src/keyring.c:1000
+#: src/keyring.c:1003
 msgid "/Sign Keys..."
 msgstr "Anahtarlarý Ýmzala..."
 
-#: src/keyring.c:1008
+#: src/keyring.c:1011
 msgid "/Edit Private Key..."
 msgstr "Özel Anahtarý Düzenle..."
 
-#: src/keyring.c:1015
+#: src/keyring.c:1018
 msgid "/Backup..."
 msgstr "/Yedekle..."
 
-#: src/keyring.c:1088
+#: src/keyring.c:1091
 msgid "Subkeys"
 msgstr "Altanahtarlar"
 
-#: src/keyring.c:1159 src/keysigndlg.c:106
+#: src/keyring.c:1162 src/keysigndlg.c:112
 msgid "Fingerprint:"
 msgstr "Parmakizi:"
 
-#: src/keyring.c:1161
+#: src/keyring.c:1164
 msgid "Expires at:"
 msgstr "Bitim tarihi:"
 
-#: src/keyring.c:1163
+#: src/keyring.c:1166
 msgid "Owner Trust:"
 msgstr "Sahibine Güven:"
 
-#: src/keyring.c:1165
+#: src/keyring.c:1168
 msgid "Key Validity:"
 msgstr "Anahtar Geçerliliði"
 
-#: src/keyring.c:1167
+#: src/keyring.c:1170
 msgid "Key Type:"
 msgstr "Anahtar Tipi:"
 
-#: src/keyring.c:1169
+#: src/keyring.c:1172
 msgid "Created at:"
 msgstr "Yaratýlma Tarihi:"
 
-#: src/keyring.c:1172
+#: src/keyring.c:1175
 msgid "Details"
 msgstr "Detaylar"
 
-#: src/keyring.c:1180
+#: src/keyring.c:1183
 msgid "Show signatures on user name:"
 msgstr "Þu kullanýcý adýndaki imzalarý göster:"
 
-#: src/keyring.c:1201
+#: src/keyring.c:1204
 msgid "Signatures"
 msgstr "Ýmzalar"
 
-#: src/keyring.c:1227
+#: src/keyring.c:1229
 msgid "The key has both a private and a public part"
 msgstr "Anahtar hem genel hem de özel bölümler içeriyor"
 
-#: src/keyring.c:1232
+#: src/keyring.c:1234
 msgid "The key has only a public part"
 msgstr "Anahtar sadece genel bölüme sahip"
 
-#: src/keyring.c:1261
+#: src/keyring.c:1268
 #, c-format
 msgid "%s %u bits"
 msgstr "%s %u bit"
 
-#: src/keyring.c:1287
+#: src/keyring.c:1294
 msgid "No keys selected"
 msgstr "Hiçbir anahtar seçilmedi"
 
-#: src/keyring.c:1291
+#: src/keyring.c:1298
 #, c-format
 msgid "%d keys selected"
 msgstr "%d anahtar seçildi"
 
-#: src/keyring.c:1320
+#: src/keyring.c:1327
 msgid "All signatures"
 msgstr "Tüm imzalar"
 
-#: src/keyring.c:1518
+#: src/keyring.c:1531
 msgid "Edit"
 msgstr "Düzenle"
 
-#: src/keyring.c:1519
+#: src/keyring.c:1532
 msgid "Edit the selected private key"
 msgstr "Seçili özel anahtarý düzenle"
 
-#: src/keyring.c:1520
+#: src/keyring.c:1533
 msgid "edit key"
 msgstr "anahtarý düzenle"
 
-#: src/keyring.c:1528
+#: src/keyring.c:1541
 msgid "Remove the selected key"
 msgstr "Seçili anahtarý kaldýr"
 
-#: src/keyring.c:1529
+#: src/keyring.c:1542
 msgid "remove key"
 msgstr "anahtarý kaldýr"
 
-#: src/keyring.c:1537
+#: src/keyring.c:1550
 msgid "Sign the selected key"
 msgstr "Seçili anahtarý imzala"
 
-#: src/keyring.c:1537
+#: src/keyring.c:1550
 msgid "sign key"
 msgstr "anahtarý imzala"
 
-#: src/keyring.c:1544
+#: src/keyring.c:1557
 msgid "Import"
 msgstr "Dýþarýdan Al"
 
-#: src/keyring.c:1545
+#: src/keyring.c:1558
 msgid "Import Keys"
 msgstr "Anahtarlarý Dýþarýdan Al"
 
-#: src/keyring.c:1545
+#: src/keyring.c:1558
 msgid "import keys"
 msgstr "anahtarlarý dýþarýdan al"
 
-#: src/keyring.c:1550
+#: src/keyring.c:1563
 msgid "Export"
 msgstr "Dýþarý Yaz"
 
-#: src/keyring.c:1551
+#: src/keyring.c:1564
 msgid "Export Keys"
 msgstr "Anahtarlarý Dýþarý Yaz"
 
-#: src/keyring.c:1551
+#: src/keyring.c:1564
 msgid "export keys"
 msgstr "anahtarlarý dýþarý yaz"
 
-#: src/keyring.c:1564
+#: src/keyring.c:1577
 msgid "Brief"
 msgstr "Özet"
 
-#: src/keyring.c:1564
+#: src/keyring.c:1577
 msgid "Show Brief Keylist"
 msgstr "Özet Anahtar Listesi Göster"
 
-#: src/keyring.c:1565
+#: src/keyring.c:1578
 msgid "brief"
 msgstr "özet"
 
-#: src/keyring.c:1576
+#: src/keyring.c:1589
 msgid "Detailed"
 msgstr "Detaylý"
 
-#: src/keyring.c:1576
+#: src/keyring.c:1589
 msgid "Show Key Details"
 msgstr "Anahtar Detaylarýný Göster"
 
-#: src/keyring.c:1577
+#: src/keyring.c:1590
 msgid "detailed"
 msgstr "detaylý"
 
-#: src/keyring.c:1610
+#: src/keyring.c:1623
 msgid "Refresh the keyring"
 msgstr ""
 
-#: src/keyring.c:1611
+#: src/keyring.c:1624
 msgid "refresh keyring"
 msgstr ""
 
-#: src/keyring.c:1618
+#: src/keyring.c:1631
 msgid "Files"
 msgstr "Dosyalar"
 
-#: src/keyring.c:1619
+#: src/keyring.c:1632
 msgid "Open the File Manager"
 msgstr "Dosya Yöneticisini Aç"
 
-#: src/keyring.c:1620
+#: src/keyring.c:1633
 msgid "file manager"
 msgstr "dosya yöneticisi"
 
-#: src/keyring.c:1643
+#: src/keyring.c:1656
 msgid "Selected Default Key:"
 msgstr "Seçili Varsayýlan Anahtar:"
 
-#: src/keyring.c:1789
+#: src/keyring.c:1802
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Gizlilik Asistaný - Anahtarlýk Düzenleyicisi"
 
-#: src/keyring.c:1820
+#: src/keyring.c:1833
 msgid "Keyring Editor"
 msgstr "Anahtarlýk Düzenleyicisi"
 
-#: src/keysigndlg.c:59
+#: src/keysigndlg.c:62
 msgid "Sign Key"
 msgstr "Anahtarý Ýmzala"
 
-#: src/keysigndlg.c:75
+#: src/keysigndlg.c:78
 msgid "Do you want to sign the following key?"
 msgstr "Bu anahtarý imzalamak istediðiniza emin misiniz?"
 
-#: src/keysigndlg.c:116
+#: src/keysigndlg.c:122
 msgid ""
 "Check the name and fingerprint carefully to be sure that it really is the "
 "key you want to sign."
@@ -1541,19 +1541,19 @@ msgstr ""
 "Bu anahtarýn gerçekten imzalamak istediðiniz anahtar olduðuna emin olmak "
 "için lütfen ismini ve parmakizini dikkatli kontrol edin."
 
-#: src/keysigndlg.c:124
+#: src/keysigndlg.c:130
 msgid "All user names in this key will be signed."
 msgstr "Bu anahtardaki bütün kullanýcý isimleri imzalanacaktýr."
 
-#: src/keysigndlg.c:130
+#: src/keysigndlg.c:136
 msgid "The key will be signed with your default private key."
 msgstr "Bu anahtar sizin varsayýlan özel anahtarýnýzla imzalanacaktýr."
 
-#: src/keysigndlg.c:137
+#: src/keysigndlg.c:143
 msgid "Sign only _locally"
 msgstr "Sadece _yerel olarak imzala"
 
-#: src/options.c:306
+#: src/options.c:308
 msgid ""
 "The private key you selected as default is no longer available.\n"
 "GPA will try to choose a new default key automatically."
@@ -1644,51 +1644,51 @@ msgstr ""
 msgid "Choose new passphrase"
 msgstr "Yeni þifre seçin"
 
-#: src/server_access.c:264
+#: src/server_access.c:268
 msgid "No error"
 msgstr "Hata yok"
 
-#: src/server_access.c:267
+#: src/server_access.c:271
 msgid "Internal error"
 msgstr "Dahili hata"
 
-#: src/server_access.c:270
+#: src/server_access.c:274
 msgid "Operation not supported"
 msgstr "Ýþlem desteklenmiyor"
 
-#: src/server_access.c:273
+#: src/server_access.c:277
 msgid "Version mismatch"
 msgstr "Sürüm tutmuyor"
 
-#: src/server_access.c:276
+#: src/server_access.c:280
 msgid "Internal keyserver error"
 msgstr "Dahili anahtar sunucusu hatasý"
 
-#: src/server_access.c:279
+#: src/server_access.c:283
 msgid "Out of memory"
 msgstr "Hafýza yetersiz"
 
-#: src/server_access.c:282
+#: src/server_access.c:286
 msgid "Key not found"
 msgstr "Anahtar bulunamadý"
 
-#: src/server_access.c:285
+#: src/server_access.c:289
 msgid "Key already exists on server"
 msgstr "Anahtar sunucuda zaten var"
 
-#: src/server_access.c:288
+#: src/server_access.c:292
 msgid "Key incomplete"
 msgstr "Eksik anahtar"
 
-#: src/server_access.c:291
+#: src/server_access.c:295
 msgid "Could not contact keyserver"
 msgstr "Anahtar sunucusuna baðlanýlamýyor"
 
-#: src/server_access.c:294
+#: src/server_access.c:298
 msgid "Unknown Error"
 msgstr "Bilinmeyen Hata"
 
-#: src/server_access.c:327
+#: src/server_access.c:334
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -1697,7 +1697,7 @@ msgstr ""
 "\"%s\" sunucusuna baðlanýlýyor.\n"
 "Lütfen bekleyin."
 
-#: src/server_access.c:350 src/server_access.c:370
+#: src/server_access.c:357 src/server_access.c:377
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -1708,7 +1708,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/server_access.c:433
+#: src/server_access.c:441
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
@@ -1716,7 +1716,7 @@ msgstr ""
 "Belirttiðiniz anahtar sunucusu protokolü için\n"
 "mevcut bir plugin bulunamadý."
 
-#: src/server_access.c:505 src/server_access.c:550
+#: src/server_access.c:513 src/server_access.c:558
 msgid "The keyserver you specified is not valid"
 msgstr "Belittiðiniz anahtar sunucusu geçersiz"
 
@@ -1752,29 +1752,29 @@ msgstr "Seviye"
 msgid "Local"
 msgstr "Yerel"
 
-#: src/verifydlg.c:115
+#: src/verifydlg.c:118
 msgid "Verify files"
 msgstr "Dosyalarý doðrula"
 
-#: src/verifydlg.c:231
+#: src/verifydlg.c:234
 msgid "Expired Key"
 msgstr "Sona ermiþ anatar"
 
-#: src/verifydlg.c:239
+#: src/verifydlg.c:242
 msgid "Key NOT valid"
 msgstr "Anahtar Geçersiz"
 
-#: src/verifydlg.c:358
+#: src/verifydlg.c:361
 #, c-format
 msgid "Verified data in file: %s"
 msgstr "%s dosyasýndaki veri doðrulandý"
 
-#: src/verifydlg.c:363
+#: src/verifydlg.c:366
 #, fuzzy, c-format
 msgid "Signature: %s"
 msgstr "Ýmzalar: %s"
 
-#: src/verifydlg.c:369
+#: src/verifydlg.c:372
 msgid "Signatures:"
 msgstr "Ýmzalar:"
 

@@ -19,8 +19,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "gpa.h"
 #include <config.h>
+
+#include "gpa.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -221,7 +222,8 @@ help_about (void)
       gtk_container_add (GTK_CONTAINER (frame), pixmap);
       gtk_widget_show (pixmap);
 
-      label = gtk_label_new ("GNU Privacy Assistant v" VERSION);
+      label = gtk_label_new ("GNU Privacy Assistant v" VERSION
+                             "  (rev. " BUILD_REVISION ")");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 

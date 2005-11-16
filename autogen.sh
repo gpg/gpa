@@ -5,7 +5,6 @@
 #
 
 PGM=GPA
-lib_config_files="gtk-config"
 autoconf_vers=2.52
 automake_vers=1.6
 aclocal_vers=1.6
@@ -13,50 +12,57 @@ libtool_vers=1.4
 
 DIE=no
 if test "$1" = "--build-w32"; then
+    tmp=`dirname $0`
+    tsdir=`cd "$tmp"; pwd`
     shift
-    target=i386--mingw32
-    if [ ! -f ./config.guess ]; then
-        echo "config.guess not found" >&2
+    if [ ! -f $tsdir/config.guess ]; then
+        echo "$tsdir/config.guess not found" >&2
         exit 1
     fi
-    host=`./config.guess`
-        
-    if ! mingw32 --version >/dev/null; then
-        echo "We need at least version 0.3 of MingW32/CPD" >&2
-        exit 1
-    fi
+    build=`$tsdir/config.guess`
 
-    if [ -f config.h ]; then
-        if grep HAVE_DOSISH_SYSTEM config.h | grep undef >/dev/null; then
+    [ -z "$w32root" ] && w32root="$HOME/w32root"
+    export w32root
+    echo "Using $w32root as standard install directory" >&2
+    
+    # See whether we have the Debian cross compiler package or the
+    # old mingw32/cpd system
+    if i586-mingw32msvc-gcc --version >/dev/null 2>&1 ; then
+       host=i586-mingw32msvc
+       crossbindir=/usr/$host/bin
+       conf_CC="CC=${host}-gcc"
+    else
+       host=i386--mingw32
+       if ! mingw32 --version >/dev/null; then
+          echo "We need at least version 0.3 of MingW32/CPD" >&2
+          exit 1
+       fi
+       crossbindir=`mingw32 --install-dir`/bin
+       # Old autoconf version required us to setup the environment
+       # with the proper tool names.
+       CC=`mingw32 --get-path gcc`
+       CPP=`mingw32 --get-path cpp`
+       AR=`mingw32 --get-path ar`
+       RANLIB=`mingw32 --get-path ranlib`
+       export CC CPP AR RANLIB 
+       conf_CC=""
+    fi
+   
+    if [ -f "$tsdir/config.log" ]; then
+        if ! head $tsdir/config.log | grep "$host" >/dev/null; then
             echo "Pease run a 'make distclean' first" >&2
             exit 1
         fi
     fi
 
-    crossbindir=`mingw32 --install-dir`/bin
-    CC=`mingw32 --get-path gcc`
-    CPP=`mingw32 --get-path cpp`
-    AR=`mingw32 --get-path ar`
-    RANLIB=`mingw32 --get-path ranlib`
-    export CC CPP AR RANLIB 
-
-    disable_foo_tests=""
-    for i in $lib_config_files; do
-        j=`echo $i | tr '[a-z-]' '[A-Z_]'`
-        eval "$j=${crossbindir}/$i"
-        export $j
-        disable_foo_tests="$disable_foo_tests --disable-`echo $i| \
-                           sed 's,-config$,,'`-test"
-        if [ ! -f "${crossbindir}/$i" ]; then                   
-            echo "$i not installed for MingW32" >&2
-            DIE=yes
-        fi
-    done
-
-    [ $DIE = yes ] && exit 1
-
-    ./configure --host=${host} --target=${target} \
-                ${disable_foo_tests} $*
+    $tsdir/configure ${conf_CC} --build=${build} --host=${host} \
+            --prefix=${w32root} \
+            --with-zlib=${w32root} \
+            --with-gpg-error-prefix=${w32root} \
+	    --with-gpgme-prefix=${w32root} \
+            --with-lib-prefix=${w32root} \
+            --with-libiconv-prefix=${w32root} \
+            PKG_CONFIG_LIBDIR="$w32root/lib/pkgconfig"
     exit $?
 fi
 

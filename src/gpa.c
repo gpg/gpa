@@ -159,32 +159,26 @@ w32_shgetfolderpath (HWND a, int b, HANDLE c, DWORD d, LPSTR e)
 }
 #endif
 
-/* Search for a configuration file.
- * It uses a different search order for Windows and Unix.
- *
- * On Unix:
- *  1. in the GnuPG home directory
- *  2. in GPA_DATADIR
- * If the file is not found, return a filename that will create it
- * in the GnuPG home directory.
- *
- * On Windows:
- *  0. The gnupg home directory.
- *  1. in the directory where `gpa.exe' resides,
- *  2. in GPA_DATADIR
- *  3. in the GnuPG home directory.
- * If the file is not found, return a filename that will create it
- * in the directory where `gpa.exe' resides.
- */
+
 static gchar *
-search_config_file (const gchar *filename)
+default_homedir (void)
 {
-#ifdef G_OS_WIN32
   char *dir;
 
   dir = getenv("GNUPGHOME");
+  if (dir)
+    dir = g_strdup (dir);
+#ifdef G_OS_WIN32
   if (!dir || !*dir)
-    dir = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "HomeDir");
+    {
+      char *tmp = read_w32_registry_string (NULL,
+                                            "Software\\GNU\\GnuPG", "HomeDir");
+      if (tmp)
+        {
+          dir = g_strdup (tmp);
+          free (tmp);
+        }
+    }
   if (!dir || !*dir)
     {
       char path[MAX_PATH];
@@ -207,38 +201,21 @@ search_config_file (const gchar *filename)
             CreateDirectory (dir, NULL);
         }
     }
-  if (dir)
+#endif /* W32 */
+  if (!dir || !*dir)
     {
-      char *tmp = g_build_filename (dir, filename, NULL);
-      g_free (dir);
-      return tmp;
+#ifdef G_OS_WIN32
+      dir = g_strdup ("c:\\gnupg");
+#else
+      dir = g_build_filename (getenv("HOME")?getenv("HOME"):"/",
+                              ".gnupg", NULL);
+#endif
     }
-  /* Fall-through.  */
-#endif
-
-  {
-    gchar *candidate = NULL;
-    gint i;
-    /* The search order for each OS, a NULL terminated array */
-#ifdef G_OS_UNIX
-    gchar *dirs[] = {gnupg_homedir, GPA_DATADIR, NULL};
-#elif defined(G_OS_WIN32)
-    gchar *dirs[] = {gpa_exec_dir, GPA_DATADIR, gnupg_homedir, NULL};
-#endif
-    for(i = 0; dirs[i]; i++)
-      {
-	candidate = g_build_filename (dirs[i], filename, NULL);
-	if (g_file_test (candidate,
-			 G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
-	  return candidate;
-	else
-	  g_free (candidate);
-      }
-
-    /* If no file exists, return the first option to be created */
-    return g_build_filename (dirs[0], filename, NULL);
-  }
+  return dir;
 }
+
+
+
 
 static void
 i18n_init (void)
@@ -489,22 +466,7 @@ main (int argc, char **argv)
   if (err)
     g_error_free (err);
 
-  /* Try to find the GnuPG homedir (~/.gnupg) dinamically */
-#ifdef G_OS_WIN32
-  gnupg_homedir = read_w32_registry_string (NULL, "Software\\GNU\\GnuPG", "HomeDir");
-#else
-  gnupg_homedir = getenv ("GNUPGHOME");
-#endif
-
-  /* If the previous guess failed, resot to the default value */
-  if (!gnupg_homedir || !*gnupg_homedir)
-    {
-#ifdef G_OS_WIN32
-      gnupg_homedir = "c:/gnupg";
-#else
-      gnupg_homedir = g_build_filename (getenv("HOME"), ".gnupg", NULL);
-#endif
-    }
+  gnupg_homedir = default_homedir ();
 
 #ifdef IS_DEVELOPMENT_VERSION
   fprintf (stderr, "NOTE: this is a development version!\n");
@@ -525,19 +487,18 @@ main (int argc, char **argv)
    */
   if (!args.options_filename)
     {
-      configname = search_config_file ("gpa.conf");
+      configname = g_build_filename (gnupg_homedir, "gpa.conf", NULL);
     }
   else
     {
       configname = args.options_filename;
     }
-  gpa_options_set_file (gpa_options_get_instance (),
-			configname);
+  gpa_options_set_file (gpa_options_get_instance (), configname);
   g_free (configname);
 
   /* Locate the list of keyservers.
    */
-  keyservers_configname = search_config_file ("keyservers");
+  keyservers_configname = g_build_filename (gnupg_homedir, "keyservers", NULL);
   /* Read the list of available keyservers.
    */
   keyserver_read_list (keyservers_configname);

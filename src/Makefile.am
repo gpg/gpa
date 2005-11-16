@@ -39,7 +39,6 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpa_license.c gpa_license.h \
 	      keyserver.c keyserver.h \
               w32reg.c w32reg.h \
-              simple-gettext.c \
 	      hidewnd.c hidewnd.h \
 	      keytable.c keytable.h \
 	      gpgmetools.h gpgmetools.c \

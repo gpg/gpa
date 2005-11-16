@@ -1,3 +1,24 @@
+2005-11-16  Werner Koch  <wk@g10code.com>
+
+	* gpacontext.c (gpa_context_register_cb) [W32]: Translate file
+	descriptor.
+	(gpa_context_passphrase_cb) [W32]: Ditto.
+
+2005-11-15  Werner Koch  <wk@g10code.com>
+
+	* Makefile.am (gpa_SOURCES): Removed simple-gettext.c
+
+	* w32reg.c: Updated from GnuPG 1.4.
+
+	* gpa.c (default_homedir): New.
+	(main): Setup the homedir using the new function.  This matches
+	gnupg's way.
+	(search_config_file): Removed. This complicated lookup of the
+	configuration file is a maintenance nightmare.  We create the
+	filenames now directly using the standard gnupg hoemdirectory.
+
+	* helpmenu.c: Print revision number.
+
 2005-11-10  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpa.c [G_OS_WIN32]: Include <windows.h>.

@@ -20,6 +20,9 @@
 
 #include <glib.h>
 #include <gpgme.h>
+#ifdef G_OS_WIN32
+#include <io.h>
+#endif
 #include "gpgmetools.h"
 #include "gpacontext.h"
 
@@ -178,7 +181,7 @@ gpa_context_init (GpaContext *context)
       return;
     }
 
-  /* Set the appropiate callbacks */
+  /* Set the appropriate callbacks.  */
   gpgme_set_passphrase_cb (context->ctx, gpa_context_passphrase_cb, context);
   gpgme_set_progress_cb (context->ctx, gpa_context_progress_cb, context);
   /* Fill the CB structure */
@@ -336,6 +339,21 @@ gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
   GpaContext *context = data;
   struct gpa_io_cb_data *cb = g_malloc (sizeof (struct gpa_io_cb_data));
 
+#ifdef G_OS_WIN32
+  /* GPGME uses system file descriptors (those used with CreateFile
+     WriteFile, etc.) and not the C library ones.  glib requires a
+     C-lib one, so we have to open and associate a C library one. */ 
+  int tmp = _open_osfhandle ( fd, 0 );
+  if (tmp == -1)
+    {
+      g_warning (G_STRLOC ": _open_osfhandle (%d, 0) failed\n", fd );
+      return gpg_error (GPG_ERR_GENERAL);
+    }
+  g_print (G_STRLOC ": adding context CB at %p (fd=%d) (osf=%d)\n",
+           cb, tmp, fd);
+  fd = tmp;
+#endif
+
   cb->registered = FALSE;
   cb->fd = fd;
   cb->dir = dir;  
@@ -364,6 +382,10 @@ gpa_context_remove_cb (void *tag)
 {
   struct gpa_io_cb_data *cb = tag;
 
+#ifdef G_OS_WIN32
+  g_print (G_STRLOC ": removing context for CB at %p (fd=%d)\n",
+           cb, cb?cb->fd:-1);
+#endif
   if (cb->registered)
     {
       g_source_remove (cb->watch);
@@ -445,6 +467,19 @@ gpa_context_passphrase_cb (void *hook, const char *uid_hint,
 {
   GpaContext *context = hook;
   gpg_error_t err;
+
+#ifdef G_OS_WIN32
+  /* GPGME uses system file descriptors (those used with CreateFile
+     WriteFile, etc.) and not the C library ones.  glib requires a
+     C-lib one, so we have to open and associate a C library one. */ 
+  int tmp = _open_osfhandle ( fd, 1 );
+  if (tmp == -1)
+    {
+      g_warning (G_STRLOC ": _open_osfhandle (%d, 1) failed\n", fd );
+      return gpg_error (GPG_ERR_GENERAL);
+    }
+  fd = tmp;
+#endif
 
   unregister_all_callbacks (context);
   err = gpa_passphrase_cb (NULL, uid_hint, passphrase_info, prev_was_bad, fd);

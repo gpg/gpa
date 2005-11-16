@@ -28,6 +28,26 @@ AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version of this package])
 AC_DEFINE_UNQUOTED(PACKAGE_BUGREPORT, "$PACKAGE_BUGREPORT",
                                       [address for reporting bugs])
 
+
+# Generate extended version information
+changequote(,)dnl 
+BUILD_REVISION="`echo '$Revision$' | sed 's/[^0-9]//g'`"
+changequote([,])dnl
+test -z "$BUILD_REVISION" && BUILD_REVISION="0"
+if test "$have_w32_system" = yes; then
+   BUILD_TIMESTAMP=`date --iso-8601=minutes`
+   changequote(,)dnl 
+   BUILD_FILEVERSION=`echo "$VERSION" | sed 's/\([0-9.]*\).*/\1./;s/\./,/g'`
+   changequote([,])dnl
+   BUILD_FILEVERSION="${BUILD_FILEVERSION}${BUILD_REVISION}"
+fi
+AC_SUBST(BUILD_REVISION)
+AC_SUBST(BUILD_TIMESTAMP)
+AC_SUBST(BUILD_FILEVERSION)
+AC_DEFINE_UNQUOTED(BUILD_REVISION, "$BUILD_REVISION", 
+                   [Subversion revision used to build this package])
+
+
 AH_TOP([
 /* We need this, because some autoconf tests rely on this (e.g. stpcpy)
    and it should be used for new programs anyway */
@@ -64,6 +84,21 @@ if test "$development_version" = yes; then
     AC_DEFINE(IS_DEVELOPMENT_VERSION,1,
             [Defined if this is not a regular release])
 fi
+
+
+# Define HAVE_W32_SYSTEM as an alternative to the other macros which
+# might led the naive reader assume that W32 is actually a win.  Also
+# needed later to enable certain gcc options.
+have_w32_system=no
+case "${host}" in
+    *-mingw32*) have_w32_system=yes ;;
+esac
+if test "$have_w32_system" = yes; then
+   AC_DEFINE(HAVE_W32_SYSTEM,1, [Defined if we run on a W32 API based system])
+fi
+AM_CONDITIONAL(HAVE_W32_SYSTEM, test "$have_w32_system" = yes)
+
+
 
 dnl
 dnl Checks for programs
@@ -161,7 +196,11 @@ if test "$GCC" = yes; then
     else
         CFLAGS="$CFLAGS -Wall"
     fi
+    if test "$have_w32_system" = yes; then
+       CFLAGS="$CFLAGS -mms-bitfields"
+    fi
 fi
+
 
 AC_CONFIG_COMMANDS(gpadefs.h,[[
 cat >gpadefs.tmp <<GPAEOF
