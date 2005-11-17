@@ -59,6 +59,5 @@ src/qdchkpwd.c
 src/server_access.c
 src/settingsdlg.c
 src/siglist.c
-src/simple-gettext.c
 src/verifydlg.c
 src/w32reg.c
