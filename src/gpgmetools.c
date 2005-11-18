@@ -552,6 +552,8 @@ gpa_key_ownertrust_string (gpgme_key_t key)
 const gchar *
 gpa_key_validity_string (gpgme_key_t key)
 {
+  if (!key->uids)
+    return _("Unknown");
   switch (key->uids->validity) 
     {
     case GPGME_VALIDITY_UNKNOWN:
@@ -719,6 +721,9 @@ gchar *
 gpa_gpgme_key_get_userid (gpgme_user_id_t uid)
 {
   gchar *uid_utf8;
+
+  if (!uid)
+    return g_strdup (_("[None]"));
 
   uid_utf8 = string_to_utf8 (uid->uid);
 

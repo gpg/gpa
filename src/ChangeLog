@@ -1,5 +1,11 @@
 2005-11-16  Werner Koch  <wk@g10code.com>
 
+	* gpgmetools.c (gpa_key_validity_string): Handle case of missing UID.
+	(gpa_gpgme_key_get_userid): Ditto.
+	* keyring.c (keyring_details_page_fill_key): Ditto.
+	* keylist.c (gpa_keylist_next): Check for zero fingerprints.
+	(is_zero_fpr): New.
+
 	* gpacontext.c (gpa_context_register_cb) [W32]: Translate file
 	descriptor.
 	(gpa_context_passphrase_cb) [W32]: Ditto.

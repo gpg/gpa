@@ -1238,16 +1238,16 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
 
   /* One user ID on each line.  */
   text = gpa_gpgme_key_get_userid (key->uids);
-  uid = key->uids->next;
-  while (uid)
+  if (key->uids)
     {
-      gchar *uid_string = gpa_gpgme_key_get_userid (uid);
-      gchar *tmp = text;
-      text = g_strconcat (text, "\n", uid_string, NULL);
-      g_free (tmp);
-      g_free (uid_string);
-
-      uid = uid->next;
+      for (uid = key->uids->next; uid; uid = uid->next)
+        {
+          gchar *uid_string = gpa_gpgme_key_get_userid (uid);
+          gchar *tmp = text;
+          text = g_strconcat (text, "\n", uid_string, NULL);
+          g_free (tmp);
+          g_free (uid_string);
+        }
     }
   gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
   g_free (text);

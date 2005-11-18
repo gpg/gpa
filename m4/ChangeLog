@@ -1,3 +1,7 @@
+2005-11-18  Werner Koch  <wk@g10code.com>
+
+	* gpgme.m4: Updated.
+
 2005-10-21  Werner Koch  <wk@g10code.com>
 
 	* Makefile.am: Add check_zlib.m4 and gpgme.m4.

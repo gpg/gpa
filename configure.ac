@@ -159,9 +159,9 @@ AM_PATH_GTK_2_0(2.2.0,
             CFLAGS="$CFLAGS $GTK_CFLAGS"],
             AC_MSG_ERROR(Cannot find GTK+ 2.0))
 
-AM_PATH_GPGME(0.4.5,
-            [LIBS="$LIBS $GPGME_LIBS"
-            CFLAGS="$CFLAGS $GPGME_CFLAGS"],
+AM_PATH_GPGME_GLIB(1.2.0,
+            [LIBS="$LIBS $GPGME_GLIB_LIBS"
+            CFLAGS="$CFLAGS $GPGME_GLIB_CFLAGS"],
             AC_MSG_ERROR(Cannot find an up to date GPGME))
 
 dnl

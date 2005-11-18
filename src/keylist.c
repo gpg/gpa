@@ -529,6 +529,18 @@ static GtkWidget *gpa_keylist_elgamal_dialog (gpgme_key_t key)
   return window;
 }
 
+
+/* For keys, gpg can't cope with, the fingerprint is set to all
+   zero. This helper function returns true for such a FPR. */
+static int
+is_zero_fpr (const char *fpr)
+{
+  for (; *fpr; fpr++)
+    if (*fpr != '0')
+      return 0;
+  return 1;
+}
+
 static void gpa_keylist_next (gpgme_key_t key, gpointer data)
 {
   GpaKeyList *list = data;
@@ -550,11 +562,15 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
   ownertrust = gpa_key_ownertrust_string (key);
   validity = gpa_key_validity_string (key);
   userid = gpa_gpgme_key_get_userid (key->uids);
-  has_secret = (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
-					 key->subkeys->fpr) != NULL);
-  /* Check for ElGamal signing keys and warn the user.
-   * See http://lists.gnupg.org/pipermail/gnupg-announce/2003q4/000276.html
-   * for details.
+  has_secret = (!is_zero_fpr (key->subkeys->fpr)
+                && gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(),
+                                            key->subkeys->fpr));
+
+  /* Check for ElGamal signing keys and warn the user.  See
+   * http://lists.gnupg.org/pipermail/gnupg-announce/2003q4/000276.html
+   * for details. Fixme: We should remove this as current GnuPG
+   * versions dropped all support for theses keys and revoking a key
+   * is not possble anymore.
    */
   if (has_secret)
     {
@@ -585,8 +601,10 @@ static void gpa_keylist_next (gpgme_key_t key, gpointer data)
       val_value = GPGME_VALIDITY_UNKNOWN-2;
   else if (key->subkeys->expired)
       val_value = GPGME_VALIDITY_UNKNOWN-1;
-  else
+  else if (key->uids)
       val_value = key->uids->validity;
+  else
+      val_value = GPGME_VALIDITY_UNKNOWN;
 
   gtk_list_store_set (store, &iter,
 		      GPA_KEYLIST_COLUMN_IMAGE, get_key_pixbuf (key),
