@@ -1,3 +1,8 @@
+2005-11-29  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Add m4 hackery to append the revision number to
+	the version.
+
 2005-11-18  Werner Koch  <wk@g10code.com>
 
 	* configure.ac (AM_PATH_GPGME_GLIB): New; replaces AM_PATH_GPGME.

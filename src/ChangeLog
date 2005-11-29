@@ -1,3 +1,7 @@
+2005-11-29  Werner Koch  <wk@g10code.com>
+
+	* gpa.c (longopts): Made --keymanager an alias for --keyring.
+
 2005-11-16  Werner Koch  <wk@g10code.com>
 
 	* gpgmetools.c (gpa_key_validity_string): Handle case of missing UID.

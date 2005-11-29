@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-08 13:27+0100\n"
+"POT-Creation-Date: 2005-11-18 17:23+0100\n"
 "PO-Revision-Date: 2004-08-22 02:23+0200\n"
 "Last-Translator: Emilian Nowak <emil5@go2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -311,27 +311,27 @@ msgstr "_Kopia zapasowa do pliku:"
 msgid "B_rowse..."
 msgstr "P_rzeglądaj..."
 
-#: src/gpa.c:222
+#: src/gpa.c:344
 msgid "display this help and exit"
 msgstr "wyświetlenie tego opisu i zakończenie"
 
-#: src/gpa.c:223
+#: src/gpa.c:345
 msgid "output version information and exit"
 msgstr "wyświetlenie informacji o wersji i zakończenie"
 
-#: src/gpa.c:224
+#: src/gpa.c:346
 msgid "open keyring editor (default)"
 msgstr "otwiera edytor zbioru kluczy (domyślne)"
 
-#: src/gpa.c:225
+#: src/gpa.c:347
 msgid "open filemanager"
 msgstr "otwiera okno menedżera plików"
 
-#: src/gpa.c:226
+#: src/gpa.c:348
 msgid "read options from file"
 msgstr "odczytuje opcje z podanego pliku"
 
-#: src/gpa.c:250
+#: src/gpa.c:372
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -339,15 +339,15 @@ msgstr ""
 "Składnia: gpa [opcje]\n"
 "Nakładka graficzna na GnuPG\n"
 
-#: src/gpa.c:252
+#: src/gpa.c:374
 msgid "Options"
 msgstr "Opcje"
 
-#: src/gpa.c:258
+#: src/gpa.c:380
 msgid "Please report bugs to <"
 msgstr "Raporty o błędach wysyłaj do <"
 
-#: src/gpa.c:258
+#: src/gpa.c:380
 msgid ">.\n"
 msgstr ">.\n"
 
@@ -588,16 +588,16 @@ msgstr "Można szyfrować"
 msgid "Can authenticate"
 msgstr "Można autoryzować"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:563 src/gpgmetools.c:728
-#: src/gpgmetools.c:847
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:733
+#: src/gpgmetools.c:852
 msgid "Revoked"
 msgstr "Unieważniony"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:565 src/gpgmetools.c:843
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:848
 msgid "Expired"
 msgstr "Po terminie ważności"
 
-#: src/gpasubkeylist.c:143 src/gpgmetools.c:567
+#: src/gpasubkeylist.c:143 src/gpgmetools.c:569
 msgid "Disabled"
 msgstr "Wyłączone"
 
@@ -605,11 +605,11 @@ msgstr "Wyłączone"
 msgid "Unsigned"
 msgstr "Brak podpisów"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:834 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:839 src/verifydlg.c:214
 msgid "Valid"
 msgstr "Poprawny"
 
-#: src/gpawidgets.c:74 src/gpgmetools.c:605 src/gpgmetools.c:612
+#: src/gpawidgets.c:74 src/gpgmetools.c:607 src/gpgmetools.c:614
 #: src/keyring.c:1158 src/keysigndlg.c:106
 msgid "User Name:"
 msgstr "Nazwa użytkownika:"
@@ -618,7 +618,7 @@ msgstr "Nazwa użytkownika:"
 msgid "User Names:"
 msgstr "Nazwy użytkownika:"
 
-#: src/gpawidgets.c:80 src/gpgmetools.c:606 src/gpgmetools.c:613
+#: src/gpawidgets.c:80 src/gpgmetools.c:608 src/gpgmetools.c:615
 #: src/keyring.c:1160
 msgid "Key ID:"
 msgstr "ID klucza:"
@@ -718,8 +718,8 @@ msgstr "DSA (tylko do podpisywania)"
 msgid "RSA (sign only)"
 msgstr "RSA (tylko do podpisywania)"
 
-#: src/gpgmetools.c:533 src/gpgmetools.c:571 src/gpgmetools.c:839
-#: src/gpgmetools.c:872
+#: src/gpgmetools.c:533 src/gpgmetools.c:556 src/gpgmetools.c:573
+#: src/gpgmetools.c:844 src/gpgmetools.c:877
 msgid "Unknown"
 msgstr "Nieznany"
 
@@ -739,72 +739,76 @@ msgstr "Pełne"
 msgid "Ultimate"
 msgstr "Nieograniczone"
 
-#: src/gpgmetools.c:569
+#: src/gpgmetools.c:571
 msgid "Incomplete"
 msgstr "Niepełne"
 
-#: src/gpgmetools.c:575
+#: src/gpgmetools.c:577
 msgid "Fully Valid"
 msgstr "W pełni poprawny"
 
-#: src/gpgmetools.c:603
+#: src/gpgmetools.c:605
 msgid "Please enter the passphrase for the following key:"
 msgstr "Proszę podać hasło dla następującego klucza:"
 
-#: src/gpgmetools.c:611
+#: src/gpgmetools.c:613
 msgid "Wrong passphrase, please try again:"
 msgstr "Niewłaściwe hasło, proszę spróbować ponownie:"
 
-#: src/gpgmetools.c:636
+#: src/gpgmetools.c:638
 msgid "Enter Passphrase"
 msgstr "Wprowadź hasło"
 
-#: src/gpgmetools.c:811 src/verifydlg.c:271
+#: src/gpgmetools.c:726
+msgid "[None]"
+msgstr ""
+
+#: src/gpgmetools.c:816 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[Nieznany identyfikator użytkownika]"
 
-#: src/gpgmetools.c:837 src/verifydlg.c:219
+#: src/gpgmetools.c:842 src/verifydlg.c:219
 msgid "Bad"
 msgstr "Zły"
 
-#: src/gpgmetools.c:860
+#: src/gpgmetools.c:865
 msgid "Generic"
 msgstr "Ogólne"
 
-#: src/gpgmetools.c:863
+#: src/gpgmetools.c:868
 msgid "Persona"
 msgstr "Nie sprawdzone"
 
-#: src/gpgmetools.c:866
+#: src/gpgmetools.c:871
 msgid "Casual"
 msgstr "Pobieżny"
 
-#: src/gpgmetools.c:869
+#: src/gpgmetools.c:874
 msgid "Positive"
 msgstr "Dokładne"
 
-#: src/gpgmetools.c:887
+#: src/gpgmetools.c:892
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
 "Ten klucz może być użyty do wydawania certyfikatów, podpisywania i "
 "szyfrowania."
 
-#: src/gpgmetools.c:890
+#: src/gpgmetools.c:895
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Ten klucz może być użyty do wydawania certyfikatów i podpisywania, ale nie "
 "nadaje się do szyfrowania danych."
 
-#: src/gpgmetools.c:896
+#: src/gpgmetools.c:901
 msgid "The key can be used for certification and encryption."
 msgstr "Ten klucz może być użyty do wydawania certyfikatów i szyfrowania."
 
-#: src/gpgmetools.c:899
+#: src/gpgmetools.c:904
 msgid "The key can be used only for certification."
 msgstr "Ten klucz może być użyty tylko do certyfikatów."
 
-#: src/gpgmetools.c:907
+#: src/gpgmetools.c:912
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -812,15 +816,15 @@ msgstr ""
 "Ten klucz może być użyty do podpisywania i szyfrowania, ale nie nadaję się "
 "do wydawania certyfikatów."
 
-#: src/gpgmetools.c:910
+#: src/gpgmetools.c:915
 msgid "The key can be used only for signing."
 msgstr "Ten klucz może być użyty tylko do podpisywania."
 
-#: src/gpgmetools.c:915
+#: src/gpgmetools.c:920
 msgid "The key can be used only for encryption."
 msgstr "Ten klucz może być użyty tylko do szyfrowania."
 
-#: src/gpgmetools.c:918
+#: src/gpgmetools.c:923
 msgid "This key is useless."
 msgstr "Ten klucz jest bezużyteczny."
 
@@ -832,59 +836,59 @@ msgstr "Błąd GPA"
 msgid "GPA Message"
 msgstr "Komunikat GPA"
 
-#: src/helpmenu.c:183
+#: src/helpmenu.c:198
 msgid "About GPA"
 msgstr "Informacje o GPA"
 
-#: src/helpmenu.c:219
+#: src/helpmenu.c:243
 msgid "Brought to you by:"
 msgstr "Używasz tego programu dzięki:"
 
-#: src/helpmenu.c:255
+#: src/helpmenu.c:280
 msgid "GPA is free software under the"
 msgstr "GPA jest programem rozprowadzanym na"
 
-#: src/helpmenu.c:259
+#: src/helpmenu.c:284
 msgid "GNU General Public License."
 msgstr "Powszechniej Licencji Publicznej GNU."
 
-#: src/helpmenu.c:263
+#: src/helpmenu.c:288
 msgid "For news see:"
 msgstr "Aktualne wiadomości znajdują się na:"
 
-#: src/helpmenu.c:267
+#: src/helpmenu.c:292
 msgid "http://www.gnupg.org"
 msgstr "http://www.gnupg.org"
 
-#: src/helpmenu.c:344
+#: src/helpmenu.c:374
 msgid "GNU general public license"
 msgstr "Powszechna Licencja Publiczna GNU"
 
-#: src/helpmenu.c:371
+#: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "Powszechna Licencja Publiczna _GNU"
 
-#: src/helpmenu.c:384
+#: src/helpmenu.c:414
 msgid "_Close"
 msgstr "Z_amknij"
 
-#: src/helpmenu.c:398
+#: src/helpmenu.c:428
 msgid "Show Help Text\n"
 msgstr "Pokaż tekst pomocy\n"
 
-#: src/helpmenu.c:406
+#: src/helpmenu.c:436
 msgid "/_Help"
 msgstr "/_Pomoc"
 
-#: src/helpmenu.c:408
+#: src/helpmenu.c:438
 msgid "/Help/_Contents"
 msgstr "/Pomoc/_Zawartość"
 
-#: src/helpmenu.c:411
+#: src/helpmenu.c:441
 msgid "/Help/_License"
 msgstr "/Pomoc/_Licencja"
 
-#: src/helpmenu.c:412
+#: src/helpmenu.c:442
 msgid "/Help/_About"
 msgstr "/Pomoc/O _programie"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-08 13:27+0100\n"
+"POT-Creation-Date: 2005-11-18 17:23+0100\n"
 "PO-Revision-Date: 2003-01-29 16:34+0100\n"
 "Last-Translator: Mick Ohrberg <mick.ohrberg@umb.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -316,27 +316,27 @@ msgstr "_Säkerhetskopia till fil:"
 msgid "B_rowse..."
 msgstr "_Bläddra..."
 
-#: src/gpa.c:222
+#: src/gpa.c:344
 msgid "display this help and exit"
 msgstr "Visa denna hjälp och avsluta sedan"
 
-#: src/gpa.c:223
+#: src/gpa.c:345
 msgid "output version information and exit"
 msgstr "Visa version och avsluta sedan"
 
-#: src/gpa.c:224
+#: src/gpa.c:346
 msgid "open keyring editor (default)"
 msgstr "Starta nyckelringshanteraren"
 
-#: src/gpa.c:225
+#: src/gpa.c:347
 msgid "open filemanager"
 msgstr "Öppna filhanteraren"
 
-#: src/gpa.c:226
+#: src/gpa.c:348
 msgid "read options from file"
 msgstr "Läs konfigurationsfil"
 
-#: src/gpa.c:250
+#: src/gpa.c:372
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -344,15 +344,15 @@ msgstr ""
 "Syntax: gpa [val]\n"
 "Grafiskt användargränssnitt till GnuPG\n"
 
-#: src/gpa.c:252
+#: src/gpa.c:374
 msgid "Options"
 msgstr "_Val"
 
-#: src/gpa.c:258
+#: src/gpa.c:380
 msgid "Please report bugs to <"
 msgstr "Rapportera buggar till <"
 
-#: src/gpa.c:258
+#: src/gpa.c:380
 msgid ">.\n"
 msgstr ">.\n"
 
@@ -595,16 +595,16 @@ msgstr "Avkryptera"
 msgid "Can authenticate"
 msgstr ""
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:563 src/gpgmetools.c:728
-#: src/gpgmetools.c:847
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:733
+#: src/gpgmetools.c:852
 msgid "Revoked"
 msgstr "Ogiltigförklarat"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:565 src/gpgmetools.c:843
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:848
 msgid "Expired"
 msgstr "Giltighet upphört"
 
-#: src/gpasubkeylist.c:143 src/gpgmetools.c:567
+#: src/gpasubkeylist.c:143 src/gpgmetools.c:569
 msgid "Disabled"
 msgstr "Otillämpligt"
 
@@ -613,11 +613,11 @@ msgstr "Otillämpligt"
 msgid "Unsigned"
 msgstr "Signera nyckel"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:834 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:839 src/verifydlg.c:214
 msgid "Valid"
 msgstr "Giltig"
 
-#: src/gpawidgets.c:74 src/gpgmetools.c:605 src/gpgmetools.c:612
+#: src/gpawidgets.c:74 src/gpgmetools.c:607 src/gpgmetools.c:614
 #: src/keyring.c:1158 src/keysigndlg.c:106
 msgid "User Name:"
 msgstr "Användarnamn:"
@@ -626,7 +626,7 @@ msgstr "Användarnamn:"
 msgid "User Names:"
 msgstr "Användarnamn:"
 
-#: src/gpawidgets.c:80 src/gpgmetools.c:606 src/gpgmetools.c:613
+#: src/gpawidgets.c:80 src/gpgmetools.c:608 src/gpgmetools.c:615
 #: src/keyring.c:1160
 msgid "Key ID:"
 msgstr "Nyckelidentitet:"
@@ -718,8 +718,8 @@ msgstr "DSA (endast signering)"
 msgid "RSA (sign only)"
 msgstr "RSA (endast signering)"
 
-#: src/gpgmetools.c:533 src/gpgmetools.c:571 src/gpgmetools.c:839
-#: src/gpgmetools.c:872
+#: src/gpgmetools.c:533 src/gpgmetools.c:556 src/gpgmetools.c:573
+#: src/gpgmetools.c:844 src/gpgmetools.c:877
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -739,86 +739,90 @@ msgstr "Fullständig"
 msgid "Ultimate"
 msgstr "Ultimat"
 
-#: src/gpgmetools.c:569
+#: src/gpgmetools.c:571
 msgid "Incomplete"
 msgstr "Ej fullständigt"
 
-#: src/gpgmetools.c:575
+#: src/gpgmetools.c:577
 msgid "Fully Valid"
 msgstr "Fullt giltig"
 
-#: src/gpgmetools.c:603
+#: src/gpgmetools.c:605
 msgid "Please enter the passphrase for the following key:"
 msgstr "Ange lösen för följande nyckel:"
 
-#: src/gpgmetools.c:611
+#: src/gpgmetools.c:613
 msgid "Wrong passphrase, please try again:"
 msgstr "Felaktigt lösen - försök igen:"
 
-#: src/gpgmetools.c:636
+#: src/gpgmetools.c:638
 msgid "Enter Passphrase"
 msgstr "Ange lösen"
 
-#: src/gpgmetools.c:811 src/verifydlg.c:271
+#: src/gpgmetools.c:726
+msgid "[None]"
+msgstr ""
+
+#: src/gpgmetools.c:816 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[Okänd användaridentitet]"
 
-#: src/gpgmetools.c:837 src/verifydlg.c:219
+#: src/gpgmetools.c:842 src/verifydlg.c:219
 msgid "Bad"
 msgstr "Felaktigt"
 
-#: src/gpgmetools.c:860
+#: src/gpgmetools.c:865
 msgid "Generic"
 msgstr ""
 
-#: src/gpgmetools.c:863
+#: src/gpgmetools.c:868
 msgid "Persona"
 msgstr ""
 
-#: src/gpgmetools.c:866
+#: src/gpgmetools.c:871
 msgid "Casual"
 msgstr ""
 
-#: src/gpgmetools.c:869
+#: src/gpgmetools.c:874
 msgid "Positive"
 msgstr ""
 
-#: src/gpgmetools.c:887
+#: src/gpgmetools.c:892
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
 
-#: src/gpgmetools.c:890
+#: src/gpgmetools.c:895
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 
-#: src/gpgmetools.c:896
+#: src/gpgmetools.c:901
 #, fuzzy
 msgid "The key can be used for certification and encryption."
 msgstr "och kan ej användas för kryptering."
 
-#: src/gpgmetools.c:899
+#: src/gpgmetools.c:904
 #, fuzzy
 msgid "The key can be used only for certification."
 msgstr "och kan ej användas för kryptering."
 
-#: src/gpgmetools.c:907
+#: src/gpgmetools.c:912
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr ""
 
-#: src/gpgmetools.c:910
+#: src/gpgmetools.c:915
 #, fuzzy
 msgid "The key can be used only for signing."
 msgstr "Ingen signeringsnyckel markerad."
 
-#: src/gpgmetools.c:915
+#: src/gpgmetools.c:920
 #, fuzzy
 msgid "The key can be used only for encryption."
 msgstr "och kan ej användas för kryptering."
 
-#: src/gpgmetools.c:918
+#: src/gpgmetools.c:923
 msgid "This key is useless."
 msgstr ""
 
@@ -830,59 +834,59 @@ msgstr "GPA fel"
 msgid "GPA Message"
 msgstr "GPA Meddelande"
 
-#: src/helpmenu.c:183
+#: src/helpmenu.c:198
 msgid "About GPA"
 msgstr "Om GPA"
 
-#: src/helpmenu.c:219
+#: src/helpmenu.c:243
 msgid "Brought to you by:"
 msgstr "Skapat av:"
 
-#: src/helpmenu.c:255
+#: src/helpmenu.c:280
 msgid "GPA is free software under the"
 msgstr "GPA är fri mjukvara under"
 
-#: src/helpmenu.c:259
+#: src/helpmenu.c:284
 msgid "GNU General Public License."
 msgstr "GNU General Public License."
 
-#: src/helpmenu.c:263
+#: src/helpmenu.c:288
 msgid "For news see:"
 msgstr "För nyheter och info, se:"
 
-#: src/helpmenu.c:267
+#: src/helpmenu.c:292
 msgid "http://www.gnupg.org"
 msgstr "http://www.gnupg.org"
 
-#: src/helpmenu.c:344
+#: src/helpmenu.c:374
 msgid "GNU general public license"
 msgstr "GNU general public license"
 
-#: src/helpmenu.c:371
+#: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "_GNU general public license"
 
-#: src/helpmenu.c:384
+#: src/helpmenu.c:414
 msgid "_Close"
 msgstr "_Stäng"
 
-#: src/helpmenu.c:398
+#: src/helpmenu.c:428
 msgid "Show Help Text\n"
 msgstr "Visa hjälptext\n"
 
-#: src/helpmenu.c:406
+#: src/helpmenu.c:436
 msgid "/_Help"
 msgstr "/_Hjälp"
 
-#: src/helpmenu.c:408
+#: src/helpmenu.c:438
 msgid "/Help/_Contents"
 msgstr "/Hjälp/_Innehåll"
 
-#: src/helpmenu.c:411
+#: src/helpmenu.c:441
 msgid "/Help/_License"
 msgstr "/Hjälp/_Licens"
 
-#: src/helpmenu.c:412
+#: src/helpmenu.c:442
 msgid "/Help/_About"
 msgstr "/Hjälp/_Om"
 

@@ -2,18 +2,28 @@ dnl
 dnl Configure script source for GPA
 dnl
 dnl (Process this file with autoconf to produce a configure script.)
-AC_REVISION($Revision$)dnl
-AC_PREREQ(2.52)
+AC_PREREQ(2.59)
+min_automake_version="1.9.3"
 
 # The version number goes here. 
 #
 # The CVS version is usually the next intended release version with
 # the string "-cvs" appended.  The reason for this is that tests for a
 # specific feature can already be done under the assumption that the
-# CVS vesiuon is the most recent one in a branch.
-#
-AC_INIT(gpa, 0.7.1-cvs, [bug-gpa@gnupg.org])
+# CVS version is the most recent one in a branch.  To disable the CVS
+# version for the real release, just comment out the my_iscvs macro.
+# Note, that we are now using Subversion instead of CVS and append the
+# SVN revision number to the "cvs" suffix.  To make this most useful
+# for snapshot releases please do an "svn up" right before recreating
+# the configure script, so that a proper revision number for all files
+# is available when running a "make distcheck".
+m4_define(my_version, [0.7.1])
+m4_define(my_iscvs, yes)
 
+
+AC_INIT([gpa], my_version[]m4_ifdef([my_iscvs], [-cvs[]m4_translit(
+               [$Revision$],[Ra-z $:])]),
+               [bug-gpa@gnupg.org])
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_SRCDIR(src/gpa.c)
 AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)

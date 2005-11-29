@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-08 13:27+0100\n"
+"POT-Creation-Date: 2005-11-18 17:23+0100\n"
 "PO-Revision-Date: 2003-11-03 17:11+0100\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
@@ -310,27 +310,27 @@ msgstr "バックアップ先ファイル (_B):"
 msgid "B_rowse..."
 msgstr "ブラウズ... (_R)"
 
-#: src/gpa.c:222
+#: src/gpa.c:344
 msgid "display this help and exit"
 msgstr "このヘルプを表示して終了"
 
-#: src/gpa.c:223
+#: src/gpa.c:345
 msgid "output version information and exit"
 msgstr "バージョン情報を出力して終了"
 
-#: src/gpa.c:224
+#: src/gpa.c:346
 msgid "open keyring editor (default)"
 msgstr "鍵束エディタを開く (デフォルト)"
 
-#: src/gpa.c:225
+#: src/gpa.c:347
 msgid "open filemanager"
 msgstr "ファイルマネージャを開く"
 
-#: src/gpa.c:226
+#: src/gpa.c:348
 msgid "read options from file"
 msgstr "ファイルからオプション読込"
 
-#: src/gpa.c:250
+#: src/gpa.c:372
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -338,15 +338,15 @@ msgstr ""
 "構文: gpa [オプション]\n"
 "GnuPG のグラフィカルなフロントエンド\n"
 
-#: src/gpa.c:252
+#: src/gpa.c:374
 msgid "Options"
 msgstr "オプション"
 
-#: src/gpa.c:258
+#: src/gpa.c:380
 msgid "Please report bugs to <"
 msgstr "バグは <"
 
-#: src/gpa.c:258
+#: src/gpa.c:380
 msgid ">.\n"
 msgstr "> に報告してください。\n"
 
@@ -583,16 +583,16 @@ msgstr "暗号化可能"
 msgid "Can authenticate"
 msgstr "認証可能"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:563 src/gpgmetools.c:728
-#: src/gpgmetools.c:847
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:733
+#: src/gpgmetools.c:852
 msgid "Revoked"
 msgstr "破棄済み"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:565 src/gpgmetools.c:843
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:848
 msgid "Expired"
 msgstr "期限切れ"
 
-#: src/gpasubkeylist.c:143 src/gpgmetools.c:567
+#: src/gpasubkeylist.c:143 src/gpgmetools.c:569
 msgid "Disabled"
 msgstr "無効"
 
@@ -600,11 +600,11 @@ msgstr "無効"
 msgid "Unsigned"
 msgstr "署名なし"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:834 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:839 src/verifydlg.c:214
 msgid "Valid"
 msgstr "有効"
 
-#: src/gpawidgets.c:74 src/gpgmetools.c:605 src/gpgmetools.c:612
+#: src/gpawidgets.c:74 src/gpgmetools.c:607 src/gpgmetools.c:614
 #: src/keyring.c:1158 src/keysigndlg.c:106
 msgid "User Name:"
 msgstr "ユーザ名:"
@@ -613,7 +613,7 @@ msgstr "ユーザ名:"
 msgid "User Names:"
 msgstr "ユーザ名:"
 
-#: src/gpawidgets.c:80 src/gpgmetools.c:606 src/gpgmetools.c:613
+#: src/gpawidgets.c:80 src/gpgmetools.c:608 src/gpgmetools.c:615
 #: src/keyring.c:1160
 msgid "Key ID:"
 msgstr "鍵 ID:"
@@ -712,8 +712,8 @@ msgstr "DSA (署名のみ)"
 msgid "RSA (sign only)"
 msgstr "RSA (署名のみ)"
 
-#: src/gpgmetools.c:533 src/gpgmetools.c:571 src/gpgmetools.c:839
-#: src/gpgmetools.c:872
+#: src/gpgmetools.c:533 src/gpgmetools.c:556 src/gpgmetools.c:573
+#: src/gpgmetools.c:844 src/gpgmetools.c:877
 msgid "Unknown"
 msgstr "未確認"
 
@@ -733,82 +733,86 @@ msgstr "完全"
 msgid "Ultimate"
 msgstr "究極"
 
-#: src/gpgmetools.c:569
+#: src/gpgmetools.c:571
 msgid "Incomplete"
 msgstr "不完全"
 
-#: src/gpgmetools.c:575
+#: src/gpgmetools.c:577
 msgid "Fully Valid"
 msgstr "完全に有効"
 
-#: src/gpgmetools.c:603
+#: src/gpgmetools.c:605
 msgid "Please enter the passphrase for the following key:"
 msgstr "以下の鍵のパスワードを入力して下さい:"
 
-#: src/gpgmetools.c:611
+#: src/gpgmetools.c:613
 msgid "Wrong passphrase, please try again:"
 msgstr "パスフレーズが違います。もう一度お願いします:"
 
-#: src/gpgmetools.c:636
+#: src/gpgmetools.c:638
 msgid "Enter Passphrase"
 msgstr "パスフレーズを入力"
 
-#: src/gpgmetools.c:811 src/verifydlg.c:271
+#: src/gpgmetools.c:726
+msgid "[None]"
+msgstr ""
+
+#: src/gpgmetools.c:816 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[未確認ユーザ ID]"
 
-#: src/gpgmetools.c:837 src/verifydlg.c:219
+#: src/gpgmetools.c:842 src/verifydlg.c:219
 msgid "Bad"
 msgstr "不正"
 
-#: src/gpgmetools.c:860
+#: src/gpgmetools.c:865
 msgid "Generic"
 msgstr "一般"
 
-#: src/gpgmetools.c:863
+#: src/gpgmetools.c:868
 msgid "Persona"
 msgstr "個人"
 
-#: src/gpgmetools.c:866
+#: src/gpgmetools.c:871
 msgid "Casual"
 msgstr "カジュアル"
 
-#: src/gpgmetools.c:869
+#: src/gpgmetools.c:874
 msgid "Positive"
 msgstr "ポジティヴ"
 
-#: src/gpgmetools.c:887
+#: src/gpgmetools.c:892
 msgid "The key can be used for certification, signing and encryption."
 msgstr "証明、署名、暗号化に使える鍵です。"
 
-#: src/gpgmetools.c:890
+#: src/gpgmetools.c:895
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr "証明および署名に使えますが、暗号化には使えない鍵です。"
 
-#: src/gpgmetools.c:896
+#: src/gpgmetools.c:901
 msgid "The key can be used for certification and encryption."
 msgstr "証明と暗号化に使える鍵です。"
 
-#: src/gpgmetools.c:899
+#: src/gpgmetools.c:904
 msgid "The key can be used only for certification."
 msgstr "証明にのみ使える鍵です。"
 
-#: src/gpgmetools.c:907
+#: src/gpgmetools.c:912
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr "署名および暗号化に使えますが、証明には使えない鍵です。"
 
-#: src/gpgmetools.c:910
+#: src/gpgmetools.c:915
 msgid "The key can be used only for signing."
 msgstr "署名にのみ使える鍵です。"
 
-#: src/gpgmetools.c:915
+#: src/gpgmetools.c:920
 msgid "The key can be used only for encryption."
 msgstr "暗号化にのみ使える鍵です。"
 
-#: src/gpgmetools.c:918
+#: src/gpgmetools.c:923
 msgid "This key is useless."
 msgstr "この鍵は使えません。"
 
@@ -820,59 +824,59 @@ msgstr "GPA エラー"
 msgid "GPA Message"
 msgstr "GPA メッセージ"
 
-#: src/helpmenu.c:183
+#: src/helpmenu.c:198
 msgid "About GPA"
 msgstr "GPA について"
 
-#: src/helpmenu.c:219
+#: src/helpmenu.c:243
 msgid "Brought to you by:"
 msgstr "提供者:"
 
-#: src/helpmenu.c:255
+#: src/helpmenu.c:280
 msgid "GPA is free software under the"
 msgstr "GPA is free software under the"
 
-#: src/helpmenu.c:259
+#: src/helpmenu.c:284
 msgid "GNU General Public License."
 msgstr "GNU General Public License."
 
-#: src/helpmenu.c:263
+#: src/helpmenu.c:288
 msgid "For news see:"
 msgstr "最新情報はこちら:"
 
-#: src/helpmenu.c:267
+#: src/helpmenu.c:292
 msgid "http://www.gnupg.org"
 msgstr "http://www.gnupg.org"
 
-#: src/helpmenu.c:344
+#: src/helpmenu.c:374
 msgid "GNU general public license"
 msgstr "GNU 一般公有使用許諾書 (GPL)"
 
-#: src/helpmenu.c:371
+#: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "_GNU 一般公有使用許諾書 (GPL)"
 
-#: src/helpmenu.c:384
+#: src/helpmenu.c:414
 msgid "_Close"
 msgstr "閉じる (_C)"
 
-#: src/helpmenu.c:398
+#: src/helpmenu.c:428
 msgid "Show Help Text\n"
 msgstr "ヘルプを見る\n"
 
-#: src/helpmenu.c:406
+#: src/helpmenu.c:436
 msgid "/_Help"
 msgstr "/ヘルプ (_H)"
 
-#: src/helpmenu.c:408
+#: src/helpmenu.c:438
 msgid "/Help/_Contents"
 msgstr "/ヘルプ (H)/内容 (_C)"
 
-#: src/helpmenu.c:411
+#: src/helpmenu.c:441
 msgid "/Help/_License"
 msgstr "/ヘルプ (H)/ライセンス (_L)"
 
-#: src/helpmenu.c:412
+#: src/helpmenu.c:442
 msgid "/Help/_About"
 msgstr "/ヘルプ (H)/GPA について (_A)"
 

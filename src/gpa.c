@@ -329,6 +329,7 @@ struct option longopts[] =
   { "version", no_argument, NULL, 'v' },
   { "help", no_argument, NULL, 'h' },
   { "keyring", no_argument, NULL, 'k' },
+  { "keymanager", no_argument, NULL, 'k' },
   { "files", no_argument, NULL, 'f' },
   { "options", required_argument, NULL, 'o' },
   { NULL, 0, NULL, 0 }

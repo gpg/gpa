@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-08 13:27+0100\n"
+"POT-Creation-Date: 2005-11-18 17:23+0100\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -309,27 +309,27 @@ msgstr "輸出至檔案 (&B):"
 msgid "B_rowse..."
 msgstr "瀏覽 (&r)"
 
-#: src/gpa.c:222
+#: src/gpa.c:344
 msgid "display this help and exit"
 msgstr "顯示求助訊息及離開"
 
-#: src/gpa.c:223
+#: src/gpa.c:345
 msgid "output version information and exit"
 msgstr "顯示版本資料及離開"
 
-#: src/gpa.c:224
+#: src/gpa.c:346
 msgid "open keyring editor (default)"
 msgstr "開啟鑰圈編輯器 (預設)"
 
-#: src/gpa.c:225
+#: src/gpa.c:347
 msgid "open filemanager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:226
+#: src/gpa.c:348
 msgid "read options from file"
 msgstr "由檔案中讀取選項"
 
-#: src/gpa.c:250
+#: src/gpa.c:372
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -337,15 +337,15 @@ msgstr ""
 "語法: gpa [選項]\n"
 "GnuPG的圖像介面\n"
 
-#: src/gpa.c:252
+#: src/gpa.c:374
 msgid "Options"
 msgstr "選項"
 
-#: src/gpa.c:258
+#: src/gpa.c:380
 msgid "Please report bugs to <"
 msgstr "回報臭蟲至 <"
 
-#: src/gpa.c:258
+#: src/gpa.c:380
 msgid ">.\n"
 msgstr ">.\n"
 
@@ -582,16 +582,16 @@ msgstr "允許加密"
 msgid "Can authenticate"
 msgstr "允許發放"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:563 src/gpgmetools.c:728
-#: src/gpgmetools.c:847
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:733
+#: src/gpgmetools.c:852
 msgid "Revoked"
 msgstr "移除"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:565 src/gpgmetools.c:843
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:848
 msgid "Expired"
 msgstr "已經過時"
 
-#: src/gpasubkeylist.c:143 src/gpgmetools.c:567
+#: src/gpasubkeylist.c:143 src/gpgmetools.c:569
 msgid "Disabled"
 msgstr "已經失效"
 
@@ -599,11 +599,11 @@ msgstr "已經失效"
 msgid "Unsigned"
 msgstr "沒有簽署"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:834 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:839 src/verifydlg.c:214
 msgid "Valid"
 msgstr "正確"
 
-#: src/gpawidgets.c:74 src/gpgmetools.c:605 src/gpgmetools.c:612
+#: src/gpawidgets.c:74 src/gpgmetools.c:607 src/gpgmetools.c:614
 #: src/keyring.c:1158 src/keysigndlg.c:106
 msgid "User Name:"
 msgstr "用者名稱 :"
@@ -612,7 +612,7 @@ msgstr "用者名稱 :"
 msgid "User Names:"
 msgstr "用者名稱 :"
 
-#: src/gpawidgets.c:80 src/gpgmetools.c:606 src/gpgmetools.c:613
+#: src/gpawidgets.c:80 src/gpgmetools.c:608 src/gpgmetools.c:615
 #: src/keyring.c:1160
 msgid "Key ID:"
 msgstr "密鑰 ID:"
@@ -710,8 +710,8 @@ msgstr "只簽署的DSA"
 msgid "RSA (sign only)"
 msgstr "只簽署的 RSA"
 
-#: src/gpgmetools.c:533 src/gpgmetools.c:571 src/gpgmetools.c:839
-#: src/gpgmetools.c:872
+#: src/gpgmetools.c:533 src/gpgmetools.c:556 src/gpgmetools.c:573
+#: src/gpgmetools.c:844 src/gpgmetools.c:877
 msgid "Unknown"
 msgstr "不知名"
 
@@ -731,82 +731,86 @@ msgstr "完全信任"
 msgid "Ultimate"
 msgstr "永遠信任"
 
-#: src/gpgmetools.c:569
+#: src/gpgmetools.c:571
 msgid "Incomplete"
 msgstr "不完整的"
 
-#: src/gpgmetools.c:575
+#: src/gpgmetools.c:577
 msgid "Fully Valid"
 msgstr "完全合法的"
 
-#: src/gpgmetools.c:603
+#: src/gpgmetools.c:605
 msgid "Please enter the passphrase for the following key:"
 msgstr "輸入以下密鑰的密碼:"
 
-#: src/gpgmetools.c:611
+#: src/gpgmetools.c:613
 msgid "Wrong passphrase, please try again:"
 msgstr "密碼錯誤, 請再嘗試 :"
 
-#: src/gpgmetools.c:636
+#: src/gpgmetools.c:638
 msgid "Enter Passphrase"
 msgstr "輸入密碼"
 
-#: src/gpgmetools.c:811 src/verifydlg.c:271
+#: src/gpgmetools.c:726
+msgid "[None]"
+msgstr ""
+
+#: src/gpgmetools.c:816 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[不名用者ID]"
 
-#: src/gpgmetools.c:837 src/verifydlg.c:219
+#: src/gpgmetools.c:842 src/verifydlg.c:219
 msgid "Bad"
 msgstr "不合法的"
 
-#: src/gpgmetools.c:860
+#: src/gpgmetools.c:865
 msgid "Generic"
 msgstr "通用"
 
-#: src/gpgmetools.c:863
+#: src/gpgmetools.c:868
 msgid "Persona"
 msgstr "私用"
 
-#: src/gpgmetools.c:866
+#: src/gpgmetools.c:871
 msgid "Casual"
 msgstr "臨時"
 
-#: src/gpgmetools.c:869
+#: src/gpgmetools.c:874
 msgid "Positive"
 msgstr "確定"
 
-#: src/gpgmetools.c:887
+#: src/gpgmetools.c:892
 msgid "The key can be used for certification, signing and encryption."
 msgstr "密鑰可被用作驗證, 簽署及加密."
 
-#: src/gpgmetools.c:890
+#: src/gpgmetools.c:895
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr "密鑰可被用作驗證及簽署, 並不允許用在加密上."
 
-#: src/gpgmetools.c:896
+#: src/gpgmetools.c:901
 msgid "The key can be used for certification and encryption."
 msgstr "密鑰可用作驗證及加密."
 
-#: src/gpgmetools.c:899
+#: src/gpgmetools.c:904
 msgid "The key can be used only for certification."
 msgstr "密鑰只可用作驗證."
 
-#: src/gpgmetools.c:907
+#: src/gpgmetools.c:912
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr "密鑰只可以被用作簽署及加密.並不允許用在驗證用途."
 
-#: src/gpgmetools.c:910
+#: src/gpgmetools.c:915
 msgid "The key can be used only for signing."
 msgstr "密鑰只可用作簽署."
 
-#: src/gpgmetools.c:915
+#: src/gpgmetools.c:920
 msgid "The key can be used only for encryption."
 msgstr "密鑰只可用作加密."
 
-#: src/gpgmetools.c:918
+#: src/gpgmetools.c:923
 msgid "This key is useless."
 msgstr "密鑰是不可使用的."
 
@@ -818,59 +822,59 @@ msgstr "GPA 錯誤"
 msgid "GPA Message"
 msgstr "GPA 訊息"
 
-#: src/helpmenu.c:183
+#: src/helpmenu.c:198
 msgid "About GPA"
 msgstr "關於GPA"
 
-#: src/helpmenu.c:219
+#: src/helpmenu.c:243
 msgid "Brought to you by:"
 msgstr "由他們帶給您的是:"
 
-#: src/helpmenu.c:255
+#: src/helpmenu.c:280
 msgid "GPA is free software under the"
 msgstr "GPA 是自由軟件, 並以"
 
-#: src/helpmenu.c:259
+#: src/helpmenu.c:284
 msgid "GNU General Public License."
 msgstr "GNU 公眾許可証"
 
-#: src/helpmenu.c:263
+#: src/helpmenu.c:288
 msgid "For news see:"
 msgstr "新聞之用:"
 
-#: src/helpmenu.c:267
+#: src/helpmenu.c:292
 msgid "http://www.gnupg.org"
 msgstr "http://www.gnupg.org"
 
-#: src/helpmenu.c:344
+#: src/helpmenu.c:374
 msgid "GNU general public license"
 msgstr "GNU 公眾許可証"
 
-#: src/helpmenu.c:371
+#: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "GNU 公眾許可証 (&G)"
 
-#: src/helpmenu.c:384
+#: src/helpmenu.c:414
 msgid "_Close"
 msgstr "關閉 (&C)"
 
-#: src/helpmenu.c:398
+#: src/helpmenu.c:428
 msgid "Show Help Text\n"
 msgstr "顯示求助文字\n"
 
-#: src/helpmenu.c:406
+#: src/helpmenu.c:436
 msgid "/_Help"
 msgstr "/求助"
 
-#: src/helpmenu.c:408
+#: src/helpmenu.c:438
 msgid "/Help/_Contents"
 msgstr "/求助/內容 (&L)"
 
-#: src/helpmenu.c:411
+#: src/helpmenu.c:441
 msgid "/Help/_License"
 msgstr "/求助/許可証 (&L)"
 
-#: src/helpmenu.c:412
+#: src/helpmenu.c:442
 msgid "/Help/_About"
 msgstr "/求助/關於 (&A)"
 
