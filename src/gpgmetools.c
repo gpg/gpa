@@ -670,13 +670,30 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
   gtk_widget_destroy (dialog);
   if (response == GTK_RESPONSE_OK)
     {
+#ifdef G_OS_WIN32
+      DWORD res;
+      int passphrase_len = strlen (passphrase);
+
+      if (WriteFile ((HANDLE) _get_osfhandle (fd), passphrase,
+		     passphrase_len, &res, NULL) == 0
+	  || res < passphrase_len)
+	{	
+	  g_free (passphrase);
+	  return gpg_error (gpg_err_code_from_errno (EIO));
+	}
+      else
+	return gpg_error (GPG_ERR_NO_ERROR);
+#else
       int res;
       res = write (fd, passphrase, strlen (passphrase));
       g_free (passphrase);
       if (res == -1)
 	return gpg_error (gpg_err_code_from_errno (errno));
+      else if (res < passphrase_len)
+	return gpg_error (gpg_err_code_from_errno (EIO));
       else
 	return gpg_error (GPG_ERR_NO_ERROR);
+#endif
     }
   else
     {
