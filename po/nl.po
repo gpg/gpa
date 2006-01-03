@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-18 17:23+0100\n"
+"POT-Creation-Date: 2006-01-03 18:49+0100\n"
 "PO-Revision-Date: 2003-10-19 14:29+0200\n"
 "Last-Translator: Michael Anckaert <michael.anckaert@pi.be>\n"
 "Language-Team: DUTCH <nl@li.org>\n"
@@ -307,27 +307,27 @@ msgstr "_Backup naar bestand:"
 msgid "B_rowse..."
 msgstr "_Bladeren..."
 
-#: src/gpa.c:344
+#: src/gpa.c:345
 msgid "display this help and exit"
 msgstr "toon help en sluit"
 
-#: src/gpa.c:345
+#: src/gpa.c:346
 msgid "output version information and exit"
 msgstr "toon versie informatie en sluit"
 
-#: src/gpa.c:346
+#: src/gpa.c:347
 msgid "open keyring editor (default)"
 msgstr "open keyring editor (standaard)"
 
-#: src/gpa.c:347
+#: src/gpa.c:348
 msgid "open filemanager"
 msgstr "open bestandsbeheerder"
 
-#: src/gpa.c:348
+#: src/gpa.c:349
 msgid "read options from file"
 msgstr "lees opties van bestand"
 
-#: src/gpa.c:372
+#: src/gpa.c:373
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -335,15 +335,15 @@ msgstr ""
 "Syntax: gpa [opties]\n"
 "Grafische frontend voor GnuPG\n"
 
-#: src/gpa.c:374
+#: src/gpa.c:375
 msgid "Options"
 msgstr "/_Opties"
 
-#: src/gpa.c:380
+#: src/gpa.c:381
 msgid "Please report bugs to <"
 msgstr "Rapporteer fouten aub naar <"
 
-#: src/gpa.c:380
+#: src/gpa.c:381
 msgid ">.\n"
 msgstr ">.\n"
 
@@ -582,12 +582,12 @@ msgstr "Kan versleuteld worden"
 msgid "Can authenticate"
 msgstr "Kan geauthenticeerd worden"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:733
-#: src/gpgmetools.c:852
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:750
+#: src/gpgmetools.c:869
 msgid "Revoked"
 msgstr "Terugtrekken"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:848
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:865
 msgid "Expired"
 msgstr "Vervallen"
 
@@ -599,7 +599,7 @@ msgstr "Uitgeschakeld"
 msgid "Unsigned"
 msgstr "Niet ondertekend"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:839 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:856 src/verifydlg.c:214
 msgid "Valid"
 msgstr "Geldig"
 
@@ -711,7 +711,7 @@ msgid "RSA (sign only)"
 msgstr "DSA (alleen ondertekenen)"
 
 #: src/gpgmetools.c:533 src/gpgmetools.c:556 src/gpgmetools.c:573
-#: src/gpgmetools.c:844 src/gpgmetools.c:877
+#: src/gpgmetools.c:861 src/gpgmetools.c:894
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -751,56 +751,56 @@ msgstr "Verkeerd wachtwoord, probeer aub opnieuw:"
 msgid "Enter Passphrase"
 msgstr "Wachtwoord ingeven"
 
-#: src/gpgmetools.c:726
+#: src/gpgmetools.c:743
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:816 src/verifydlg.c:271
+#: src/gpgmetools.c:833 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[Onbekende gebruiker ID]"
 
-#: src/gpgmetools.c:842 src/verifydlg.c:219
+#: src/gpgmetools.c:859 src/verifydlg.c:219
 msgid "Bad"
 msgstr "Slecht"
 
-#: src/gpgmetools.c:865
+#: src/gpgmetools.c:882
 msgid "Generic"
 msgstr "Algemeen"
 
-#: src/gpgmetools.c:868
+#: src/gpgmetools.c:885
 msgid "Persona"
 msgstr "Persoonlijk"
 
-#: src/gpgmetools.c:871
+#: src/gpgmetools.c:888
 msgid "Casual"
 msgstr "Gewoon"
 
-#: src/gpgmetools.c:874
+#: src/gpgmetools.c:891
 msgid "Positive"
 msgstr "Positief"
 
-#: src/gpgmetools.c:892
+#: src/gpgmetools.c:909
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
 "De sleutel kan gebruikt worden voor certificatie, onderteken en "
 "versleuteling."
 
-#: src/gpgmetools.c:895
+#: src/gpgmetools.c:912
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "De sleutel kan gebruikt worden voor certificatie en ondertekenen, maar niet "
 "voor versleuteling."
 
-#: src/gpgmetools.c:901
+#: src/gpgmetools.c:918
 msgid "The key can be used for certification and encryption."
 msgstr "De sleutel kan gebruikt worden voor certificatie en versleuteling."
 
-#: src/gpgmetools.c:904
+#: src/gpgmetools.c:921
 msgid "The key can be used only for certification."
 msgstr "De sleutel kan alleen gebruikt worden voor certificatie."
 
-#: src/gpgmetools.c:912
+#: src/gpgmetools.c:929
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -808,15 +808,15 @@ msgstr ""
 "De sleutel kan enkel gebruikt worden voor ondertekenen en encryptie, maar "
 "niet voor certificatie."
 
-#: src/gpgmetools.c:915
+#: src/gpgmetools.c:932
 msgid "The key can be used only for signing."
 msgstr "De sleutel kan alleen gebruikt worden voor ondertekenen."
 
-#: src/gpgmetools.c:920
+#: src/gpgmetools.c:937
 msgid "The key can be used only for encryption."
 msgstr "De sleutel kan alleen gebruikt worden voor versleuteling."
 
-#: src/gpgmetools.c:923
+#: src/gpgmetools.c:940
 msgid "This key is useless."
 msgstr "Deze sleutel is waardeloos."
 

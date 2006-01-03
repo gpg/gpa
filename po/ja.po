@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-18 17:23+0100\n"
+"POT-Creation-Date: 2006-01-03 18:49+0100\n"
 "PO-Revision-Date: 2003-11-03 17:11+0100\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
@@ -310,27 +310,27 @@ msgstr "バックアップ先ファイル (_B):"
 msgid "B_rowse..."
 msgstr "ブラウズ... (_R)"
 
-#: src/gpa.c:344
+#: src/gpa.c:345
 msgid "display this help and exit"
 msgstr "このヘルプを表示して終了"
 
-#: src/gpa.c:345
+#: src/gpa.c:346
 msgid "output version information and exit"
 msgstr "バージョン情報を出力して終了"
 
-#: src/gpa.c:346
+#: src/gpa.c:347
 msgid "open keyring editor (default)"
 msgstr "鍵束エディタを開く (デフォルト)"
 
-#: src/gpa.c:347
+#: src/gpa.c:348
 msgid "open filemanager"
 msgstr "ファイルマネージャを開く"
 
-#: src/gpa.c:348
+#: src/gpa.c:349
 msgid "read options from file"
 msgstr "ファイルからオプション読込"
 
-#: src/gpa.c:372
+#: src/gpa.c:373
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -338,15 +338,15 @@ msgstr ""
 "構文: gpa [オプション]\n"
 "GnuPG のグラフィカルなフロントエンド\n"
 
-#: src/gpa.c:374
+#: src/gpa.c:375
 msgid "Options"
 msgstr "オプション"
 
-#: src/gpa.c:380
+#: src/gpa.c:381
 msgid "Please report bugs to <"
 msgstr "バグは <"
 
-#: src/gpa.c:380
+#: src/gpa.c:381
 msgid ">.\n"
 msgstr "> に報告してください。\n"
 
@@ -583,12 +583,12 @@ msgstr "暗号化可能"
 msgid "Can authenticate"
 msgstr "認証可能"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:733
-#: src/gpgmetools.c:852
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:750
+#: src/gpgmetools.c:869
 msgid "Revoked"
 msgstr "破棄済み"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:848
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:865
 msgid "Expired"
 msgstr "期限切れ"
 
@@ -600,7 +600,7 @@ msgstr "無効"
 msgid "Unsigned"
 msgstr "署名なし"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:839 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:856 src/verifydlg.c:214
 msgid "Valid"
 msgstr "有効"
 
@@ -713,7 +713,7 @@ msgid "RSA (sign only)"
 msgstr "RSA (署名のみ)"
 
 #: src/gpgmetools.c:533 src/gpgmetools.c:556 src/gpgmetools.c:573
-#: src/gpgmetools.c:844 src/gpgmetools.c:877
+#: src/gpgmetools.c:861 src/gpgmetools.c:894
 msgid "Unknown"
 msgstr "未確認"
 
@@ -753,66 +753,66 @@ msgstr "パスフレーズが違います。もう一度お願いします:"
 msgid "Enter Passphrase"
 msgstr "パスフレーズを入力"
 
-#: src/gpgmetools.c:726
+#: src/gpgmetools.c:743
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:816 src/verifydlg.c:271
+#: src/gpgmetools.c:833 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[未確認ユーザ ID]"
 
-#: src/gpgmetools.c:842 src/verifydlg.c:219
+#: src/gpgmetools.c:859 src/verifydlg.c:219
 msgid "Bad"
 msgstr "不正"
 
-#: src/gpgmetools.c:865
+#: src/gpgmetools.c:882
 msgid "Generic"
 msgstr "一般"
 
-#: src/gpgmetools.c:868
+#: src/gpgmetools.c:885
 msgid "Persona"
 msgstr "個人"
 
-#: src/gpgmetools.c:871
+#: src/gpgmetools.c:888
 msgid "Casual"
 msgstr "カジュアル"
 
-#: src/gpgmetools.c:874
+#: src/gpgmetools.c:891
 msgid "Positive"
 msgstr "ポジティヴ"
 
-#: src/gpgmetools.c:892
+#: src/gpgmetools.c:909
 msgid "The key can be used for certification, signing and encryption."
 msgstr "証明、署名、暗号化に使える鍵です。"
 
-#: src/gpgmetools.c:895
+#: src/gpgmetools.c:912
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr "証明および署名に使えますが、暗号化には使えない鍵です。"
 
-#: src/gpgmetools.c:901
+#: src/gpgmetools.c:918
 msgid "The key can be used for certification and encryption."
 msgstr "証明と暗号化に使える鍵です。"
 
-#: src/gpgmetools.c:904
+#: src/gpgmetools.c:921
 msgid "The key can be used only for certification."
 msgstr "証明にのみ使える鍵です。"
 
-#: src/gpgmetools.c:912
+#: src/gpgmetools.c:929
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr "署名および暗号化に使えますが、証明には使えない鍵です。"
 
-#: src/gpgmetools.c:915
+#: src/gpgmetools.c:932
 msgid "The key can be used only for signing."
 msgstr "署名にのみ使える鍵です。"
 
-#: src/gpgmetools.c:920
+#: src/gpgmetools.c:937
 msgid "The key can be used only for encryption."
 msgstr "暗号化にのみ使える鍵です。"
 
-#: src/gpgmetools.c:923
+#: src/gpgmetools.c:940
 msgid "This key is useless."
 msgstr "この鍵は使えません。"
 

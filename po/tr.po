@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-18 17:23+0100\n"
+"POT-Creation-Date: 2006-01-03 18:49+0100\n"
 "PO-Revision-Date: 2004-06-20 14:42+0300\n"
 "Last-Translator: Mert Çetin <mertc@su.sabanciuniv.edu>\n"
 "Language-Team: xTc & Déjà Vu\n"
@@ -310,27 +310,27 @@ msgstr "Dosyaya _Yedekle"
 msgid "B_rowse..."
 msgstr "_Göz At"
 
-#: src/gpa.c:344
+#: src/gpa.c:345
 msgid "display this help and exit"
 msgstr "bu yardýmý görüntüle ve çýk"
 
-#: src/gpa.c:345
+#: src/gpa.c:346
 msgid "output version information and exit"
 msgstr "sürüm bilgisini göster ve çýk"
 
-#: src/gpa.c:346
+#: src/gpa.c:347
 msgid "open keyring editor (default)"
 msgstr "anahtarlýk düzenleyicisini aç (varsayýlan)"
 
-#: src/gpa.c:347
+#: src/gpa.c:348
 msgid "open filemanager"
 msgstr "dosya yöneticisini aç"
 
-#: src/gpa.c:348
+#: src/gpa.c:349
 msgid "read options from file"
 msgstr "seçenekleri dosyadan oku"
 
-#: src/gpa.c:372
+#: src/gpa.c:373
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -338,15 +338,15 @@ msgstr ""
 "Sentaks: gpa [seçenekler]\n"
 "GnuPG'ye grafiksel uçbirim\n"
 
-#: src/gpa.c:374
+#: src/gpa.c:375
 msgid "Options"
 msgstr "Seçenekler"
 
-#: src/gpa.c:380
+#: src/gpa.c:381
 msgid "Please report bugs to <"
 msgstr "Lütfen hatalarý <"
 
-#: src/gpa.c:380
+#: src/gpa.c:381
 msgid ">.\n"
 msgstr "> adresine bildirin.\n"
 
@@ -585,12 +585,12 @@ msgstr "Þifreleyebilir"
 msgid "Can authenticate"
 msgstr "Doðrulayabilir"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:733
-#: src/gpgmetools.c:852
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:750
+#: src/gpgmetools.c:869
 msgid "Revoked"
 msgstr "Feshedilmiþ"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:848
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:865
 msgid "Expired"
 msgstr "Sona Ermiþ"
 
@@ -602,7 +602,7 @@ msgstr "Geçersiz Kýlýnmýþ"
 msgid "Unsigned"
 msgstr "Ýmzalanmamýþ"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:839 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:856 src/verifydlg.c:214
 msgid "Valid"
 msgstr "Geçerli"
 
@@ -715,7 +715,7 @@ msgid "RSA (sign only)"
 msgstr "RSA (sadece imzalama)"
 
 #: src/gpgmetools.c:533 src/gpgmetools.c:556 src/gpgmetools.c:573
-#: src/gpgmetools.c:844 src/gpgmetools.c:877
+#: src/gpgmetools.c:861 src/gpgmetools.c:894
 msgid "Unknown"
 msgstr "Bilinmiyor"
 
@@ -755,54 +755,54 @@ msgstr "Hatalý þifre, lütfen tekrar deneyin:"
 msgid "Enter Passphrase"
 msgstr "Þifreyi Girin"
 
-#: src/gpgmetools.c:726
+#: src/gpgmetools.c:743
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:816 src/verifydlg.c:271
+#: src/gpgmetools.c:833 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[Bilinmeyen kullanýcý kimliði]"
 
-#: src/gpgmetools.c:842 src/verifydlg.c:219
+#: src/gpgmetools.c:859 src/verifydlg.c:219
 msgid "Bad"
 msgstr "Kötü"
 
-#: src/gpgmetools.c:865
+#: src/gpgmetools.c:882
 msgid "Generic"
 msgstr "Genel"
 
-#: src/gpgmetools.c:868
+#: src/gpgmetools.c:885
 msgid "Persona"
 msgstr "Kiþisel"
 
-#: src/gpgmetools.c:871
+#: src/gpgmetools.c:888
 msgid "Casual"
 msgstr "Hafif"
 
-#: src/gpgmetools.c:874
+#: src/gpgmetools.c:891
 msgid "Positive"
 msgstr "Olumlu"
 
-#: src/gpgmetools.c:892
+#: src/gpgmetools.c:909
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Anahtar onaylama, imzalama, ve þifreleme için kullanýlabilir."
 
-#: src/gpgmetools.c:895
+#: src/gpgmetools.c:912
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Anahtar onaylama ve imzalama için kullanýlabilir ama þifreleme için "
 "kullanýlamaz."
 
-#: src/gpgmetools.c:901
+#: src/gpgmetools.c:918
 msgid "The key can be used for certification and encryption."
 msgstr "Anahtar onaylama ve þifreleme için kullanýlabilir."
 
-#: src/gpgmetools.c:904
+#: src/gpgmetools.c:921
 msgid "The key can be used only for certification."
 msgstr "Anahtar sadece onaylama için kullanýlabilir."
 
-#: src/gpgmetools.c:912
+#: src/gpgmetools.c:929
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -810,15 +810,15 @@ msgstr ""
 "Anahtar sadece imzalama ve þifreleme için kullanýlabilir, ama onaylama için "
 "kullanýlamaz."
 
-#: src/gpgmetools.c:915
+#: src/gpgmetools.c:932
 msgid "The key can be used only for signing."
 msgstr "Anahtar sadece imzalama için kullanýlabilir."
 
-#: src/gpgmetools.c:920
+#: src/gpgmetools.c:937
 msgid "The key can be used only for encryption."
 msgstr "Anahtar sadece þifreleme için kullanýlabilir."
 
-#: src/gpgmetools.c:923
+#: src/gpgmetools.c:940
 msgid "This key is useless."
 msgstr "Bu anahtar iþe yaramaz."
 

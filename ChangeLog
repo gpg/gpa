@@ -1,3 +1,7 @@
+2006-01-03  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Require just gpgme 1.1.1 as 1.2.0 was unintentional.
+
 2005-11-29  Werner Koch  <wk@g10code.com>
 
 	* configure.ac: Add m4 hackery to append the revision number to
