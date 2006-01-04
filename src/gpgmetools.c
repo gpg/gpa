@@ -39,6 +39,9 @@
 #else
 #include <io.h>
 #endif
+#ifdef G_OS_WIN32
+#include <windows.h>
+#endif
 
 
 /* Report an unexpected error in GPGME and quit the application.  */
