@@ -215,21 +215,49 @@ default_homedir (void)
 }
 
 
+/* Return a malloced string with the locale dir.  Return NULL on
+   error. */
+static char *
+get_locale_dir (void)
+{
+#ifdef G_OS_WIN32
+  char name[530];
+  char *p;
+
+  if ( !GetModuleFileNameA (0, name, sizeof (name)-30) )
+    return NULL;
+  p = strrchr (name, '\\');
+  if (!p)
+    {
+      *name = '\\';
+      p = name;
+    }
+  p++;
+  strcpy (p, "\\share\\locale");
+  return strdup (name);
+#else
+  return strdup (GPA_LOCALEDIR);
+#endif
+}
+
 
 
 static void
 i18n_init (void)
 {
-#ifdef USE_SIMPLE_GETTEXT
-  gtk_set_locale ();
-  set_gettext_file (PACKAGE);
-#else
 #ifdef ENABLE_NLS
+  char *tmp;
+
   gtk_set_locale ();
   bind_textdomain_codeset (PACKAGE, "UTF-8");
-  bindtextdomain (PACKAGE, GPA_LOCALEDIR);
+
+  tmp = get_locale_dir ();
+  if (tmp)
+    {
+      bindtextdomain (PACKAGE, tmp);
+      free (tmp);
+    }
   textdomain (PACKAGE);
-#endif
 #endif
 }
 

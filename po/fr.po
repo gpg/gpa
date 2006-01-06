@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-03 18:49+0100\n"
+"POT-Creation-Date: 2006-01-06 18:27+0100\n"
 "PO-Revision-Date: 2003-01-01 21:11+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
@@ -278,7 +278,7 @@ msgstr "signer dans un fichier séparé"
 msgid "a_rmor"
 msgstr "a_rmure"
 
-#: src/gpabackupop.c:215 src/gpgmetools.c:127
+#: src/gpabackupop.c:215 src/gpgmetools.c:130
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -328,29 +328,29 @@ msgstr "E_xporter dans le fichier:"
 msgid "B_rowse..."
 msgstr "P_arcourir..."
 
-#: src/gpa.c:345
+#: src/gpa.c:373
 msgid "display this help and exit"
 msgstr "afficher cette aide et sortir"
 
-#: src/gpa.c:346
+#: src/gpa.c:374
 msgid "output version information and exit"
 msgstr "affichage de l'information de version et sortie"
 
-#: src/gpa.c:347
+#: src/gpa.c:375
 #, fuzzy
 msgid "open keyring editor (default)"
 msgstr "Editeur de trousseau de clefs secrètes"
 
-#: src/gpa.c:348
+#: src/gpa.c:376
 #, fuzzy
 msgid "open filemanager"
 msgstr "/Fenêtres/_Gestionnaire de fichier"
 
-#: src/gpa.c:349
+#: src/gpa.c:377
 msgid "read options from file"
 msgstr "lire les préférences depuis le fichier"
 
-#: src/gpa.c:373
+#: src/gpa.c:401
 msgid ""
 "Syntax: gpa [options]\n"
 "Graphical frontend to GnuPG\n"
@@ -358,17 +358,17 @@ msgstr ""
 "Syntaxe: gpa [options]\n"
 "Interface graphique pour GnuPG\n"
 
-#: src/gpa.c:375
+#: src/gpa.c:403
 #, fuzzy
 msgid "Options"
 msgstr "/_Préférences"
 
-#: src/gpa.c:381
+#: src/gpa.c:409
 #, fuzzy
 msgid "Please report bugs to <"
 msgstr "Veuillez rapporter les bugs à <gpa-bugs@gnu.org>.\n"
 
-#: src/gpa.c:381
+#: src/gpa.c:409
 msgid ">.\n"
 msgstr ">.\n"
 
@@ -621,18 +621,18 @@ msgstr "chifffré"
 msgid "Can authenticate"
 msgstr ""
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:565 src/gpgmetools.c:750
-#: src/gpgmetools.c:869
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:568 src/gpgmetools.c:753
+#: src/gpgmetools.c:872
 #, fuzzy
 msgid "Revoked"
 msgstr "Retirer"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:567 src/gpgmetools.c:865
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:570 src/gpgmetools.c:868
 #, fuzzy
 msgid "Expired"
 msgstr "_expire le"
 
-#: src/gpasubkeylist.c:143 src/gpgmetools.c:569
+#: src/gpasubkeylist.c:143 src/gpgmetools.c:572
 #, fuzzy
 msgid "Disabled"
 msgstr "détaillé"
@@ -642,12 +642,12 @@ msgstr "détaillé"
 msgid "Unsigned"
 msgstr "signé"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:856 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:859 src/verifydlg.c:214
 #, fuzzy
 msgid "Valid"
 msgstr "valide"
 
-#: src/gpawidgets.c:74 src/gpgmetools.c:607 src/gpgmetools.c:614
+#: src/gpawidgets.c:74 src/gpgmetools.c:610 src/gpgmetools.c:617
 #: src/keyring.c:1158 src/keysigndlg.c:106
 msgid "User Name:"
 msgstr "Nom d'utilisateur:"
@@ -657,7 +657,7 @@ msgstr "Nom d'utilisateur:"
 msgid "User Names:"
 msgstr "Nom d'utilisateur:"
 
-#: src/gpawidgets.c:80 src/gpgmetools.c:608 src/gpgmetools.c:615
+#: src/gpawidgets.c:80 src/gpgmetools.c:611 src/gpgmetools.c:618
 #: src/keyring.c:1160
 msgid "Key ID:"
 msgstr "ID de clef:"
@@ -687,7 +687,7 @@ msgstr ""
 "!ERREUR FATALE!\n"
 "Mode d'insertion invalide pour la date d'expiration."
 
-#: src/gpgmetools.c:48
+#: src/gpgmetools.c:51
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -704,7 +704,7 @@ msgstr ""
 "\n"
 "L'application va se terminer"
 
-#: src/gpgmetools.c:62
+#: src/gpgmetools.c:65
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -716,7 +716,7 @@ msgid ""
 "GPA will now try to recover from this error."
 msgstr ""
 
-#: src/gpgmetools.c:434
+#: src/gpgmetools.c:437
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -730,7 +730,7 @@ msgstr ""
 "************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:439
+#: src/gpgmetools.c:442
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -738,128 +738,128 @@ msgstr ""
 "La clef sauvegardée dans ce fichier est:\n"
 "\n"
 
-#: src/gpgmetools.c:498
+#: src/gpgmetools.c:501
 #, fuzzy
 msgid "DSA and ElGamal (default)"
 msgstr "DSA et ElGamal"
 
-#: src/gpgmetools.c:499
+#: src/gpgmetools.c:502
 msgid "DSA (sign only)"
 msgstr "DSA (signature seulement)"
 
-#: src/gpgmetools.c:500
+#: src/gpgmetools.c:503
 #, fuzzy
 msgid "RSA (sign only)"
 msgstr "DSA (signature seulement)"
 
-#: src/gpgmetools.c:533 src/gpgmetools.c:556 src/gpgmetools.c:573
-#: src/gpgmetools.c:861 src/gpgmetools.c:894
+#: src/gpgmetools.c:536 src/gpgmetools.c:559 src/gpgmetools.c:576
+#: src/gpgmetools.c:864 src/gpgmetools.c:897
 #, fuzzy
 msgid "Unknown"
 msgstr "inconnu"
 
-#: src/gpgmetools.c:536
+#: src/gpgmetools.c:539
 msgid "Never"
 msgstr "Jamais"
 
-#: src/gpgmetools.c:539
+#: src/gpgmetools.c:542
 msgid "Marginal"
 msgstr "Marginale"
 
-#: src/gpgmetools.c:542
+#: src/gpgmetools.c:545
 msgid "Full"
 msgstr "Complète"
 
-#: src/gpgmetools.c:545
+#: src/gpgmetools.c:548
 msgid "Ultimate"
 msgstr "Ultime"
 
-#: src/gpgmetools.c:571
+#: src/gpgmetools.c:574
 msgid "Incomplete"
 msgstr "Incomplet"
 
-#: src/gpgmetools.c:577
+#: src/gpgmetools.c:580
 msgid "Fully Valid"
 msgstr "Complètement valide"
 
-#: src/gpgmetools.c:605
+#: src/gpgmetools.c:608
 #, fuzzy
 msgid "Please enter the passphrase for the following key:"
 msgstr "Veuillez entrer le mot de passe pour la clef suivante:"
 
-#: src/gpgmetools.c:613
+#: src/gpgmetools.c:616
 msgid "Wrong passphrase, please try again:"
 msgstr "Mauvaise mot de passe, essayez encore:"
 
-#: src/gpgmetools.c:638
+#: src/gpgmetools.c:641
 #, fuzzy
 msgid "Enter Passphrase"
 msgstr "Entrer mot de passe"
 
-#: src/gpgmetools.c:743
+#: src/gpgmetools.c:746
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:833 src/verifydlg.c:271
+#: src/gpgmetools.c:836 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[ID d'utilisateur inconnue]"
 
-#: src/gpgmetools.c:859 src/verifydlg.c:219
+#: src/gpgmetools.c:862 src/verifydlg.c:219
 msgid "Bad"
 msgstr "Mauvais"
 
-#: src/gpgmetools.c:882
+#: src/gpgmetools.c:885
 msgid "Generic"
 msgstr ""
 
-#: src/gpgmetools.c:885
+#: src/gpgmetools.c:888
 msgid "Persona"
 msgstr ""
 
-#: src/gpgmetools.c:888
+#: src/gpgmetools.c:891
 msgid "Casual"
 msgstr ""
 
-#: src/gpgmetools.c:891
+#: src/gpgmetools.c:894
 msgid "Positive"
 msgstr ""
 
-#: src/gpgmetools.c:909
+#: src/gpgmetools.c:912
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
 
-#: src/gpgmetools.c:912
+#: src/gpgmetools.c:915
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 
-#: src/gpgmetools.c:918
+#: src/gpgmetools.c:921
 #, fuzzy
 msgid "The key can be used for certification and encryption."
 msgstr "Aucun fichier sélectionné pour le chiffrement"
 
-#: src/gpgmetools.c:921
+#: src/gpgmetools.c:924
 #, fuzzy
 msgid "The key can be used only for certification."
 msgstr "Aucun fichier sélectionné pour le chiffrement"
 
-#: src/gpgmetools.c:929
+#: src/gpgmetools.c:932
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr ""
 
-#: src/gpgmetools.c:932
+#: src/gpgmetools.c:935
 #, fuzzy
 msgid "The key can be used only for signing."
 msgstr "Aucune clef sélectionnée pour signer."
 
-#: src/gpgmetools.c:937
+#: src/gpgmetools.c:940
 #, fuzzy
 msgid "The key can be used only for encryption."
 msgstr "Aucun fichier sélectionné pour le chiffrement"
 
-#: src/gpgmetools.c:940
+#: src/gpgmetools.c:943
 msgid "This key is useless."
 msgstr ""
 
