@@ -17,7 +17,7 @@ min_automake_version="1.9.3"
 # for snapshot releases please do an "svn up" right before recreating
 # the configure script, so that a proper revision number for all files
 # is available when running a "make distcheck".
-m4_define(my_version, [0.7.2])
+m4_define(my_version, [0.7.1])
 #m4_define(my_iscvs, yes)
 
 
