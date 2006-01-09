@@ -1,21 +1,23 @@
-Noteworthy changes in version 0.7.1 (unreleased)
+Noteworthy changes in version 0.7.1 (2006-01-09)
 ------------------------------------------------
 
  * When verifying the signature on a file, GPA now tries to find
- detached signatures and asks the user whether to verify them.
+   detached signatures and asks the user whether to verify them.
 
  * A "refresh" command was added to the keyring. So, if the keyring is
- modified outside GPA (i.e. by reading emails with auto-key-retrieve
- on), you can see the new keys without restarting GPA.
+   modified outside GPA (i.e. by reading emails with auto-key-retrieve
+   on), you can see the new keys without restarting GPA.
 
  * A .desktop file for integration with the Gnome and KDE menus is now
- distributed with the tarball.
+   distributed with the tarball.
 
- * The GPA icon has been changed. The new icon is now used by all windows
- when minimized (and on the window title if supported by the window
- manager).
+ * The GPA icon has been changed. The new icon is now used by all
+   windows when minimized (and on the window title if supported by the
+   window manager).
 
- * It is again possible to do a build for Windows.
+ * It is again possible to do a build for Windows using the latest
+   glib version along with a glib patch as available in the gpg4win
+   package.
 
 
 Noteworthy changes in version 0.7.0 (2003-10-22)

@@ -17,8 +17,8 @@ min_automake_version="1.9.3"
 # for snapshot releases please do an "svn up" right before recreating
 # the configure script, so that a proper revision number for all files
 # is available when running a "make distcheck".
-m4_define(my_version, [0.7.1])
-m4_define(my_iscvs, yes)
+m4_define(my_version, [0.7.2])
+#m4_define(my_iscvs, yes)
 
 
 AC_INIT([gpa], my_version[]m4_ifdef([my_iscvs], [-cvs[]m4_translit(
@@ -169,10 +169,22 @@ AM_PATH_GTK_2_0(2.2.0,
             CFLAGS="$CFLAGS $GTK_CFLAGS"],
             AC_MSG_ERROR(Cannot find GTK+ 2.0))
 
-AM_PATH_GPGME_GLIB(1.1.1,
+#
+# Depending on the OS we need to test for different versions of gpgme.
+#
+_AM_PATH_GPGME_CONFIG
+if test "$have_w32_system" = yes; then
+  AM_PATH_GPGME_GLIB([1:1.1.1],
             [LIBS="$LIBS $GPGME_GLIB_LIBS"
             CFLAGS="$CFLAGS $GPGME_GLIB_CFLAGS"],
             AC_MSG_ERROR(Cannot find an up to date GPGME))
+else
+  AM_PATH_GPGME([1:1.1.1],
+            [LIBS="$LIBS $GPGME_LIBS"
+             CFLAGS="$CFLAGS $GPGME_CFLAGS"],
+            AC_MSG_ERROR(Cannot find an up to date GPGME))
+fi
+
 
 dnl
 dnl Checks for typedefs and structures
