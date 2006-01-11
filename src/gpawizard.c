@@ -254,32 +254,37 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
   gtk_button_box_set_layout (GTK_BUTTON_BOX (button_box), GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (button_box), 10);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
+  /*button = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);*/
+  button = gpa_button_new (accel_group, _("_Back"));
   wizard->prev_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (gpa_wizard_prev), (gpointer) wizard);
   
-  button = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+  /*button = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);*/
+  button = gpa_button_new (accel_group, _("_Forward"));
   wizard->next_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (gpa_wizard_next), (gpointer) vbox);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_APPLY);
+  /*button = gtk_button_new_from_stock (GTK_STOCK_APPLY);*/
+  button = gpa_button_new (accel_group, _("_Apply"));
   wizard->finish_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (gpa_wizard_next), (gpointer) vbox);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+  /*button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);*/
+  button = gpa_button_new (accel_group, _("_Close"));
   wizard->close_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 5);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", close_func, close_data);
   gtk_widget_add_accelerator (button, "clicked", accel_group, GDK_Escape,
 			      0, 0);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  /*button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);*/
+  button = gpa_button_new (accel_group, _("_Cancel"));
   wizard->cancel_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 5);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", close_func, close_data);

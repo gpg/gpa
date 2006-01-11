@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-06 18:27+0100\n"
+"POT-Creation-Date: 2006-01-11 10:08+0100\n"
 "PO-Revision-Date: 2003-01-29 16:34+0100\n"
 "Last-Translator: Mick Ohrberg <mick.ohrberg@umb.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -655,6 +655,27 @@ msgstr ""
 "!KATASTROFALT FEL!\n"
 "Ogiltigt införande av datum för upphörande av giltighet."
 
+#: src/gpawizard.c:258
+#, fuzzy
+msgid "_Back"
+msgstr "/Skapa säkerhets_kopia..."
+
+#: src/gpawizard.c:265
+msgid "_Forward"
+msgstr ""
+
+#: src/gpawizard.c:272
+msgid "_Apply"
+msgstr ""
+
+#: src/gpawizard.c:279 src/helpmenu.c:414
+msgid "_Close"
+msgstr "_Stäng"
+
+#: src/gpawizard.c:287
+msgid "_Cancel"
+msgstr "_Avbryt"
+
 #: src/gpgmetools.c:51
 #, c-format
 msgid ""
@@ -865,10 +886,6 @@ msgstr "GNU general public license"
 #: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "_GNU general public license"
-
-#: src/helpmenu.c:414
-msgid "_Close"
-msgstr "_Stäng"
 
 #: src/helpmenu.c:428
 msgid "Show Help Text\n"
@@ -1788,9 +1805,6 @@ msgstr "Signaturer:"
 
 #~ msgid "_Import"
 #~ msgstr "_Importera"
-
-#~ msgid "_Cancel"
-#~ msgstr "_Avbryt"
 
 #~ msgid "Export Key"
 #~ msgstr "Exportera nyckel"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-06 18:27+0100\n"
+"POT-Creation-Date: 2006-01-11 10:08+0100\n"
 "PO-Revision-Date: 2003-10-18 13:35+0200\n"
 "Last-Translator: Miguel Coca <mcoca@gnu.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -644,6 +644,27 @@ msgstr ""
 "¡ERROR FATAL!\n"
 "Modo de inserción no válido para la fecha de caducidad."
 
+#: src/gpawizard.c:258
+#, fuzzy
+msgid "_Back"
+msgstr "/_Copia de Seguridad..."
+
+#: src/gpawizard.c:265
+msgid "_Forward"
+msgstr ""
+
+#: src/gpawizard.c:272
+msgid "_Apply"
+msgstr ""
+
+#: src/gpawizard.c:279 src/helpmenu.c:414
+msgid "_Close"
+msgstr "_Cerrar"
+
+#: src/gpawizard.c:287
+msgid "_Cancel"
+msgstr "_Cancelar"
+
 #: src/gpgmetools.c:51
 #, c-format
 msgid ""
@@ -860,10 +881,6 @@ msgstr "GNU general public license"
 #: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "_GNU general public license"
-
-#: src/helpmenu.c:414
-msgid "_Close"
-msgstr "_Cerrar"
 
 #: src/helpmenu.c:428
 msgid "Show Help Text\n"
@@ -1793,9 +1810,6 @@ msgstr "Firmas:"
 
 #~ msgid "_Import"
 #~ msgstr "_Importar"
-
-#~ msgid "_Cancel"
-#~ msgstr "_Cancelar"
 
 #~ msgid "Export Key"
 #~ msgstr "Exportar Clave"

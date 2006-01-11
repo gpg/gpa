@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-06 18:27+0100\n"
+"POT-Creation-Date: 2006-01-11 10:08+0100\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -641,6 +641,27 @@ msgstr ""
 "!執行錯誤!\n"
 "有效期不法的插入模式."
 
+#: src/gpawizard.c:258
+#, fuzzy
+msgid "_Back"
+msgstr "/備份... (&B)"
+
+#: src/gpawizard.c:265
+msgid "_Forward"
+msgstr ""
+
+#: src/gpawizard.c:272
+msgid "_Apply"
+msgstr ""
+
+#: src/gpawizard.c:279 src/helpmenu.c:414
+msgid "_Close"
+msgstr "關閉 (&C)"
+
+#: src/gpawizard.c:287
+msgid "_Cancel"
+msgstr ""
+
 #: src/gpgmetools.c:51
 #, c-format
 msgid ""
@@ -853,10 +874,6 @@ msgstr "GNU 公眾許可証"
 #: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "GNU 公眾許可証 (&G)"
-
-#: src/helpmenu.c:414
-msgid "_Close"
-msgstr "關閉 (&C)"
 
 #: src/helpmenu.c:428
 msgid "Show Help Text\n"

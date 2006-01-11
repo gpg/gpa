@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-06 18:27+0100\n"
+"POT-Creation-Date: 2006-01-11 10:08+0100\n"
 "PO-Revision-Date: 2004-08-22 02:23+0200\n"
 "Last-Translator: Emilian Nowak <emil5@go2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -647,6 +647,27 @@ msgstr ""
 "!POWAŻNY BŁĄD!\n"
 "Wprowadzono niepoprwane dane określające datę końca ważności."
 
+#: src/gpawizard.c:258
+#, fuzzy
+msgid "_Back"
+msgstr "/_Kopia zapasowa..."
+
+#: src/gpawizard.c:265
+msgid "_Forward"
+msgstr ""
+
+#: src/gpawizard.c:272
+msgid "_Apply"
+msgstr ""
+
+#: src/gpawizard.c:279 src/helpmenu.c:414
+msgid "_Close"
+msgstr "Z_amknij"
+
+#: src/gpawizard.c:287
+msgid "_Cancel"
+msgstr ""
+
 #: src/gpgmetools.c:51
 #, c-format
 msgid ""
@@ -867,10 +888,6 @@ msgstr "Powszechna Licencja Publiczna GNU"
 #: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "Powszechna Licencja Publiczna _GNU"
-
-#: src/helpmenu.c:414
-msgid "_Close"
-msgstr "Z_amknij"
 
 #: src/helpmenu.c:428
 msgid "Show Help Text\n"

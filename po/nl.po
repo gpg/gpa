@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-06 18:27+0100\n"
+"POT-Creation-Date: 2006-01-11 10:08+0100\n"
 "PO-Revision-Date: 2003-10-19 14:29+0200\n"
 "Last-Translator: Michael Anckaert <michael.anckaert@pi.be>\n"
 "Language-Team: DUTCH <nl@li.org>\n"
@@ -641,6 +641,27 @@ msgstr ""
 "!FATALE FOUT!\n"
 "Ongeldige invoeg modus voor verval datum."
 
+#: src/gpawizard.c:258
+#, fuzzy
+msgid "_Back"
+msgstr "/_Backup...."
+
+#: src/gpawizard.c:265
+msgid "_Forward"
+msgstr ""
+
+#: src/gpawizard.c:272
+msgid "_Apply"
+msgstr ""
+
+#: src/gpawizard.c:279 src/helpmenu.c:414
+msgid "_Close"
+msgstr "_Sluiten"
+
+#: src/gpawizard.c:287
+msgid "_Cancel"
+msgstr "_Annuleer"
+
 #: src/gpgmetools.c:51
 #, c-format
 msgid ""
@@ -859,10 +880,6 @@ msgstr "GNU general public licentie"
 #: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "_GNU general public licentie"
-
-#: src/helpmenu.c:414
-msgid "_Close"
-msgstr "_Sluiten"
 
 #: src/helpmenu.c:428
 msgid "Show Help Text\n"
@@ -1790,9 +1807,6 @@ msgstr "Ondertekeningen:"
 
 #~ msgid "_Import"
 #~ msgstr "_Importeren"
-
-#~ msgid "_Cancel"
-#~ msgstr "_Annuleer"
 
 #~ msgid "Export Key"
 #~ msgstr "Exporteer Sleutel"

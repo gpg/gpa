@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-06 18:27+0100\n"
-"PO-Revision-Date: 2003-10-21 23:49+0200\n"
+"POT-Creation-Date: 2006-01-11 10:08+0100\n"
+"PO-Revision-Date: 2006-01-11 10:41+0100\n"
 "Last-Translator: Steffen Michalek <steffen@michalek.de>\n"
 "Language-Team: deutsch <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -68,9 +68,8 @@ msgid "/File/_Open"
 msgstr "/Datei/_Öffnen"
 
 #: src/fileman.c:468
-#, fuzzy
 msgid "/File/C_lear"
-msgstr "/Datei/_Fenster schließen"
+msgstr "/Datei/_Leeren"
 
 #: src/fileman.c:469
 msgid "/File/sep1"
@@ -456,11 +455,14 @@ msgstr "Prüfen ..."
 #: src/gpafileverifyop.c:169
 #, c-format
 msgid ""
-"GPA found a file that could be a signature of %s.Would you like to verify it "
+"GPA found a file that could be a signature of %s. Would you like to verify it "
 "instead?\n"
 "\n"
 "The file found is: %s"
 msgstr ""
+"GPA hat eine Datei gefunden, welche eine Signatur von %s sein kann.  Möchten Sie stattdessen diese überprüfen?\n"
+"\n"
+"Die gefundene Datei ist: %s"
 
 #: src/gpagenkeyadvop.c:78
 msgid "Generating Key..."
@@ -644,6 +646,26 @@ msgstr ""
 "!FATALER FEHLER!\n"
 "Ungültiger Eingabemodus für das Verfallsdatum."
 
+#: src/gpawizard.c:258
+msgid "_Back"
+msgstr "_Zurück"
+
+#: src/gpawizard.c:265
+msgid "_Forward"
+msgstr "_Weiter"
+
+#: src/gpawizard.c:272
+msgid "_Apply"
+msgstr "_Anwenden"
+
+#: src/gpawizard.c:279 src/helpmenu.c:414
+msgid "_Close"
+msgstr "_Fenster schließen"
+
+#: src/gpawizard.c:287
+msgid "_Cancel"
+msgstr "_Abbrechen"
+
 #: src/gpgmetools.c:51
 #, c-format
 msgid ""
@@ -662,7 +684,7 @@ msgstr ""
 "Die Anwendung wird abgebrochen."
 
 #: src/gpgmetools.c:65
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
 "error. The error was:\n"
@@ -758,7 +780,7 @@ msgstr "Passwortsatz eingeben"
 
 #: src/gpgmetools.c:746
 msgid "[None]"
-msgstr ""
+msgstr "[Keine]"
 
 #: src/gpgmetools.c:836 src/verifydlg.c:271
 msgid "[Unknown user ID]"
@@ -769,19 +791,16 @@ msgid "Bad"
 msgstr "Ungültig"
 
 #: src/gpgmetools.c:885
-#, fuzzy
 msgid "Generic"
-msgstr "Allgemein (?)"
+msgstr "Generisch"
 
 #: src/gpgmetools.c:888
-#, fuzzy
 msgid "Persona"
-msgstr "Person (?)"
+msgstr "Persona"
 
 #: src/gpgmetools.c:891
-#, fuzzy
 msgid "Casual"
-msgstr "Situationsabhängig (?)"
+msgstr "Beiläufig"
 
 #: src/gpgmetools.c:894
 msgid "Positive"
@@ -869,10 +888,6 @@ msgstr "GNU general public license"
 #: src/helpmenu.c:401
 msgid "_GNU general public license"
 msgstr "_GNU general public license"
-
-#: src/helpmenu.c:414
-msgid "_Close"
-msgstr "_Fenster schließen"
 
 #: src/helpmenu.c:428
 msgid "Show Help Text\n"
@@ -1162,7 +1177,7 @@ msgstr ""
 
 #: src/keylist.c:497
 msgid "GPA Warning"
-msgstr ""
+msgstr "GPA Warnung"
 
 #: src/keylist.c:515
 msgid ""
@@ -1221,12 +1236,11 @@ msgstr "/_Schlüssel"
 
 #: src/keyring.c:848
 msgid "/Keys/_Refresh"
-msgstr ""
+msgstr "/Schlüssel/Auf_frischen"
 
 #: src/keyring.c:850
-#, fuzzy
 msgid "/Keys/sep0"
-msgstr "/Schlüssel/sep1"
+msgstr "/Schlüssel/sep0"
 
 #: src/keyring.c:851
 msgid "/Keys/_New Key..."
@@ -1382,7 +1396,7 @@ msgstr "Benutzervertrauen:"
 
 #: src/keyring.c:1168
 msgid "Key Validity:"
-msgstr "Gültigkeit"
+msgstr "Gültigkeit:"
 
 #: src/keyring.c:1170
 msgid "Key Type:"
@@ -1508,14 +1522,12 @@ msgid "detailed"
 msgstr "detailliert"
 
 #: src/keyring.c:1623
-#, fuzzy
 msgid "Refresh the keyring"
-msgstr "_Geheimer Schlüsselbund"
+msgstr "Schlüsselbund auffrischen"
 
 #: src/keyring.c:1624
-#, fuzzy
 msgid "refresh keyring"
-msgstr "_Geheimer Schlüsselbund"
+msgstr "Schlüsselbund auffrischen"
 
 #: src/keyring.c:1631
 msgid "Files"
@@ -1790,9 +1802,9 @@ msgid "Verified data in file: %s"
 msgstr "Überprüfte Daten in Datei: %s"
 
 #: src/verifydlg.c:366
-#, fuzzy, c-format
+#, c-format
 msgid "Signature: %s"
-msgstr "Signaturen"
+msgstr "Signatur: %s"
 
 #: src/verifydlg.c:372
 msgid "Signatures:"
@@ -1811,9 +1823,6 @@ msgstr "Signaturen (Beglaubigungen)"
 
 #~ msgid "_Import"
 #~ msgstr "_Importieren"
-
-#~ msgid "_Cancel"
-#~ msgstr "_Abbrechen"
 
 #~ msgid "Export Key"
 #~ msgstr "Schlüssel exportieren"

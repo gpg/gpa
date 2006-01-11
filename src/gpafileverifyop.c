@@ -166,7 +166,7 @@ ask_use_detached_sig (const gchar *file, const gchar *sig, GtkWidget *parent)
   GtkWidget *dialog = gtk_message_dialog_new 
     (GTK_WINDOW(parent), GTK_DIALOG_MODAL,
      GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
-     _("GPA found a file that could be a signature of %s."
+     _("GPA found a file that could be a signature of %s. "
        "Would you like to verify it instead?\n\n"
        "The file found is: %s"), file, sig);
   gboolean result;
