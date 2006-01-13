@@ -23,6 +23,7 @@
 
 #include <unistd.h>
 
+
 /* The edit callback for all the edit operations is edit_fnc(). Each
  * operation is modelled as a sequential machine (a Moore machine, to be
  * precise). Therefore, for each operation you must write two functions.
@@ -35,6 +36,10 @@
  *
  * See the comments below for details.
  */
+
+/* Define this macro to 1 to enable debugging of the FSM. */
+#define DEBUG_FSM 0
+
 
 /* Prototype of the action function. Returns the error if there is one */
 typedef gpg_error_t (*EditAction) (int state, void *opaque,
@@ -90,6 +95,9 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       return parms->err;
     }
 
+#if DEBUG_FSM
+  g_debug ("edit_fnc: state=%d input=%d (%s)", parms->state, status, args);
+#endif
   /* Choose the next state based on the current one and the input */
   parms->state = parms->transit (parms->state, status, args, parms->opaque, 
 				 &parms->err);
@@ -98,6 +106,10 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       gpg_error_t err;
       /* Choose the action based on the state */
       err = parms->action (parms->state, parms->opaque, &result);
+#if DEBUG_FSM
+      g_debug ("edit_fnc: newstate=%d err=%s result=%s",
+               parms->state, gpg_strerror (err), result);
+#endif
       if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	{
 	  parms->err = err;
@@ -105,9 +117,17 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       /* Send the command, if any was provided */
       if (result)
 	{
-	  write (fd, result, strlen (result));
+          if (*result)
+            write (fd, result, strlen (result));
 	  write (fd, "\n", 1);
 	}
+    }
+  else
+    {
+#if DEBUG_FSM
+      g_debug ("edit_fnc: newstate=%d err=%s transit failed",
+               parms->state, gpg_strerror (parms->err));
+#endif
     }
   return parms->err;
 }
@@ -516,6 +536,11 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
                g_str_equal (args, "sign_uid.class"))
         {
           next_state = SIGN_SET_CHECK_LEVEL;
+        }
+      else if (status == GPGME_STATUS_GET_BOOL &&
+               g_str_equal (args, "sign_uid.okay"))
+        {
+          next_state = SIGN_CONFIRM;
         }
       else if (status == GPGME_STATUS_GET_LINE &&
           g_str_equal (args, "keyedit.prompt"))

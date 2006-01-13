@@ -1,3 +1,9 @@
+2006-01-13  Werner Koch  <wk@g10code.com>
+
+	* gpgmeedit.c (edit_fnc): Do not call write for empty strings.
+	 Add support for debugging.
+	(edit_sign_fnc_transit) <SIGN_UID>: Detect sign_uid.okay.
+
 2006-01-12  Werner Koch  <wk@g10code.com>
 
 	* server_access.c (helper_path): Add special version for W32.

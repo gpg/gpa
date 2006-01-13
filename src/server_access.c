@@ -233,7 +233,7 @@ protocol_version (const gchar *scheme)
   gchar *helper[] = {helper_path (scheme), "-V", NULL};
   gchar *output = NULL;
   gint version;
-  less ~/hage
+
   g_spawn_sync (NULL, helper, NULL, G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, 
 		&output, NULL, NULL, NULL);
   if (output && *output)
