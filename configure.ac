@@ -228,10 +228,12 @@ AC_CONFIG_COMMANDS(gpadefs.h,[[
 cat >gpadefs.tmp <<GPAEOF
 /* Generated automatically by configure */
 #ifdef HAVE_DRIVE_LETTERS
+  /* These W32 locations are fallbacks 
+     and not used with current gpg installations. */
   #define GPA_LOCALEDIR "c:/lib/gnupg/locale"
   #define GPA_DATADIR   "c:/lib/gnupg"
   #define GPG_PROGRAM   "c:/gnupg/gpg"
-  #define KEYSERVER_DIR "c:/gnupg"
+  #define GPA_KEYSERVER_HELPERS_DIR "c:/gnupg"
 #else
   #define GPA_LOCALEDIR "${prefix}/${DATADIRNAME}/locale"
   #define GPA_DATADIR   "${datadir}/gpa"

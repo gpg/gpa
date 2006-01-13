@@ -34,6 +34,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #else
+#include <windows.h>
 #include <io.h>
 #endif
 
@@ -202,11 +203,26 @@ helper_path (const gchar *scheme)
 {
   gchar *helper;
   gchar *path;
- 
+#ifdef G_OS_WIN32
+  char name[530];
+
+  if ( !GetModuleFileNameA (0, name, sizeof (name)-30) )
+    helper = GPA_KEYSERVER_HELPERS_DIR;
+  else
+    {
+      char *p = strrchr (name, '\\');
+      if (p)
+        *p = 0;
+      else
+        *name = 0;
+      helper = name;
+    }
+  path = g_strdup_printf ("%s\\gpgkeys_%s.exe", helper, scheme);
+#else
   helper = g_strdup_printf ("gpgkeys_%s", scheme);
   path = g_build_filename (GPA_KEYSERVER_HELPERS_DIR, helper, NULL);
   g_free (helper);
-  
+#endif  
   return path;
 }
 
@@ -217,7 +233,7 @@ protocol_version (const gchar *scheme)
   gchar *helper[] = {helper_path (scheme), "-V", NULL};
   gchar *output = NULL;
   gint version;
-  
+  less ~/hage
   g_spawn_sync (NULL, helper, NULL, G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, 
 		&output, NULL, NULL, NULL);
   if (output && *output)
@@ -428,7 +444,7 @@ do_spawn (const gchar *scheme, const gchar *command_filename,
   /* On Windows, use syncronous spawn */
   g_spawn_sync (NULL, helper_argv, NULL, 
 		G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, 
-		NULL, error_output, exit_status, error);
+		NULL, error_output, exit_status, &error);
 #endif
 
   /* Free the helper's filename */
@@ -497,8 +513,9 @@ invoke_helper (const gchar *server, const gchar *scheme,
 
 /* Public functions */
 
-gboolean server_send_keys (const gchar *server, const gchar *keyid,
-		       gpgme_data_t data, GtkWidget *parent)
+gboolean 
+server_send_keys (const gchar *server, const gchar *keyid,
+                  gpgme_data_t data, GtkWidget *parent)
 {
   gchar *keyserver = g_strdup (server);
   gchar *command_filename, *output_filename;
@@ -535,8 +552,9 @@ gboolean server_send_keys (const gchar *server, const gchar *keyid,
   return success;
 }
 
-gboolean server_get_key (const gchar *server, const gchar *keyid,
-                         gpgme_data_t *data, GtkWidget *parent)
+gboolean 
+server_get_key (const gchar *server, const gchar *keyid,
+                gpgme_data_t *data, GtkWidget *parent)
 {
   gchar *keyserver = g_strdup (server);
   gchar *command_filename, *output_filename;

@@ -1,7 +1,14 @@
+2006-01-12  Werner Koch  <wk@g10code.com>
+
+	* server_access.c (helper_path): Add special version for W32.
+	(do_spawn) [W32]: Don't pass ERROR by value.
+
+	* gpa.c (get_locale_dir): Fixed.
+
 2006-01-11  Werner Koch  <wk@g10code.com>
 
 	* gpawizard.c (gpa_wizard_new): Replace stock button labels by our
-	own for consistent labeling bewteen gpg4win installer and GPA.
+	own for consistent labeling between gpg4win installer and GPA.
 
 2006-01-05  Werner Koch  <wk@g10code.com>
 

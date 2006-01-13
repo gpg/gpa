@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-01-11 10:08+0100\n"
-"PO-Revision-Date: 2006-01-11 10:41+0100\n"
+"PO-Revision-Date: 2006-01-13 09:37+0100\n"
 "Last-Translator: Steffen Michalek <steffen@michalek.de>\n"
 "Language-Team: deutsch <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1189,6 +1189,13 @@ msgid ""
 "\n"
 "The affected key is:"
 msgstr ""
+"Einer Ihrer Schlüssel hat einen ElGamal Signaturschlüssel.  Durch\n"
+"einen Fehler in GnuPG sind alle diese Schlüssel - sofern jemals mit\n"
+"GnuPG ab 1.0.2 verwendet - als kompromitiert zu betrachten.\n"
+"\n"
+"Bitte widerrufen Sie diesen Schlüssel sobald wie möglich.\n"
+"\n"
+"Der betroffene Schlüssel ist:"
 
 #: src/keyring.c:437
 msgid "No keys selected for signing."
@@ -1766,7 +1773,7 @@ msgstr "Einstellungen für Fortgeschrittene verwenden:"
 
 #: src/settingsdlg.c:136
 msgid "_Yes"
-msgstr "/_Ja"
+msgstr "_Ja"
 
 #: src/settingsdlg.c:139
 msgid "_No"
