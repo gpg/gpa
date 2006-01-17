@@ -7,13 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 10:08+0100\n"
+"POT-Creation-Date: 2006-01-17 10:18+0100\n"
 "PO-Revision-Date: 2003-10-18 13:35+0200\n"
 "Last-Translator: Miguel Coca <mcoca@gnu.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/encryptdlg.c:134 src/expirydlg.c:115 src/filesigndlg.c:123
+#: src/gpabackupop.c:288 src/gpaprogressdlg.c:144 src/gparecvkeydlg.c:95
+#: src/gpawizard.c:287 src/gpgmetools.c:645 src/keygendlg.c:140
+#: src/ownertrustdlg.c:110 src/passwddlg.c:98
+msgid "_Cancel"
+msgstr "_Cancelar"
 
 #: src/encryptdlg.c:135
 msgid "Encrypt files"
@@ -272,6 +279,20 @@ msgstr ""
 "El archivo %s ya existe.\n"
 "¿Quiere sobreescribirlo?"
 
+#: src/gpabackupop.c:218 src/gpaexportserverop.c:132
+#: src/gpafileencryptop.c:297 src/gpafileverifyop.c:175 src/gpgmetools.c:133
+#: src/keydeletedlg.c:43 src/keydeletedlg.c:92 src/keysigndlg.c:64
+#: src/settingsdlg.c:136
+msgid "_Yes"
+msgstr "_Sí"
+
+#: src/gpabackupop.c:219 src/gpaexportserverop.c:133
+#: src/gpafileencryptop.c:298 src/gpafileverifyop.c:176 src/gpgmetools.c:134
+#: src/keydeletedlg.c:45 src/keydeletedlg.c:94 src/keysigndlg.c:66
+#: src/settingsdlg.c:139
+msgid "_No"
+msgstr "_No"
+
 #: src/gpabackupop.c:231
 #, c-format
 msgid ""
@@ -427,6 +448,13 @@ msgstr "¿Está <b>seguro</b> de que quiere usar esa clave?"
 msgid "Revoked Key"
 msgstr "Clave Revocada"
 
+#: src/gpafileencryptop.c:346 src/gpafileencryptop.c:386 src/gpawizard.c:279
+#: src/gtktools.c:315 src/gtktools.c:348 src/helpmenu.c:414
+#: src/keyeditdlg.c:150 src/keylist.c:499 src/settingsdlg.c:166
+#: src/verifydlg.c:117
+msgid "_Close"
+msgstr "_Cerrar"
+
 #: src/gpafileencryptop.c:359
 msgid "The following key has been revoked by it's owner:"
 msgstr "Esta clave ha sido revocada por su propietario:"
@@ -455,8 +483,8 @@ msgstr "Verificando..."
 #: src/gpafileverifyop.c:169
 #, c-format
 msgid ""
-"GPA found a file that could be a signature of %s.Would you like to verify it "
-"instead?\n"
+"GPA found a file that could be a signature of %s. Would you like to verify "
+"it instead?\n"
 "\n"
 "The file found is: %s"
 msgstr ""
@@ -656,14 +684,6 @@ msgstr ""
 #: src/gpawizard.c:272
 msgid "_Apply"
 msgstr ""
-
-#: src/gpawizard.c:279 src/helpmenu.c:414
-msgid "_Close"
-msgstr "_Cerrar"
-
-#: src/gpawizard.c:287
-msgid "_Cancel"
-msgstr "_Cancelar"
 
 #: src/gpgmetools.c:51
 #, c-format
@@ -1665,51 +1685,51 @@ msgstr ""
 msgid "Choose new passphrase"
 msgstr "Elegir nueva contraseña"
 
-#: src/server_access.c:268
+#: src/server_access.c:284
 msgid "No error"
 msgstr "No hay error"
 
-#: src/server_access.c:271
+#: src/server_access.c:287
 msgid "Internal error"
 msgstr "Error interno"
 
-#: src/server_access.c:274
+#: src/server_access.c:290
 msgid "Operation not supported"
 msgstr "Operación no soportada"
 
-#: src/server_access.c:277
+#: src/server_access.c:293
 msgid "Version mismatch"
 msgstr "Error de versión"
 
-#: src/server_access.c:280
+#: src/server_access.c:296
 msgid "Internal keyserver error"
 msgstr "Error interno del servidor de claves"
 
-#: src/server_access.c:283
+#: src/server_access.c:299
 msgid "Out of memory"
 msgstr "Falta memoria"
 
-#: src/server_access.c:286
+#: src/server_access.c:302
 msgid "Key not found"
 msgstr "Clave no encontrada"
 
-#: src/server_access.c:289
+#: src/server_access.c:305
 msgid "Key already exists on server"
 msgstr "La clave ya está en el servidor"
 
-#: src/server_access.c:292
+#: src/server_access.c:308
 msgid "Key incomplete"
 msgstr "Clave incompleta"
 
-#: src/server_access.c:295
+#: src/server_access.c:311
 msgid "Could not contact keyserver"
 msgstr "No se pudo contactar con el servidor"
 
-#: src/server_access.c:298
+#: src/server_access.c:314
 msgid "Unknown Error"
 msgstr "Error Desconocido"
 
-#: src/server_access.c:334
+#: src/server_access.c:350
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -1718,7 +1738,7 @@ msgstr ""
 "Conectando con el servidor \"%s\".\n"
 "Espere, por favor."
 
-#: src/server_access.c:357 src/server_access.c:377
+#: src/server_access.c:373 src/server_access.c:393
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -1729,7 +1749,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/server_access.c:441
+#: src/server_access.c:457
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
@@ -1737,7 +1757,7 @@ msgstr ""
 "No hay plugin disponible para el protocolo de servidor\n"
 "de claves que especificó."
 
-#: src/server_access.c:513 src/server_access.c:558
+#: src/server_access.c:530 src/server_access.c:576
 msgid "The keyserver you specified is not valid"
 msgstr "El servidor de claves que especificó no es válido"
 
@@ -1752,14 +1772,6 @@ msgstr "Servidor de _claves por defecto:"
 #: src/settingsdlg.c:130
 msgid "Use _advanced mode:"
 msgstr "Usar modo _avanzado:"
-
-#: src/settingsdlg.c:136
-msgid "_Yes"
-msgstr "_Sí"
-
-#: src/settingsdlg.c:139
-msgid "_No"
-msgstr "_No"
 
 #: src/settingsdlg.c:163
 msgid "Settings"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 10:08+0100\n"
+"POT-Creation-Date: 2006-01-17 10:18+0100\n"
 "PO-Revision-Date: 2003-01-29 16:34+0100\n"
 "Last-Translator: Mick Ohrberg <mick.ohrberg@umb.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -10,6 +10,13 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.6\n"
+
+#: src/encryptdlg.c:134 src/expirydlg.c:115 src/filesigndlg.c:123
+#: src/gpabackupop.c:288 src/gpaprogressdlg.c:144 src/gparecvkeydlg.c:95
+#: src/gpawizard.c:287 src/gpgmetools.c:645 src/keygendlg.c:140
+#: src/ownertrustdlg.c:110 src/passwddlg.c:98
+msgid "_Cancel"
+msgstr "_Avbryt"
 
 #: src/encryptdlg.c:135
 msgid "Encrypt files"
@@ -276,6 +283,20 @@ msgstr ""
 "Filen %s existerar redan.\n"
 "Vill du skriva över?"
 
+#: src/gpabackupop.c:218 src/gpaexportserverop.c:132
+#: src/gpafileencryptop.c:297 src/gpafileverifyop.c:175 src/gpgmetools.c:133
+#: src/keydeletedlg.c:43 src/keydeletedlg.c:92 src/keysigndlg.c:64
+#: src/settingsdlg.c:136
+msgid "_Yes"
+msgstr "_Ja"
+
+#: src/gpabackupop.c:219 src/gpaexportserverop.c:133
+#: src/gpafileencryptop.c:298 src/gpafileverifyop.c:176 src/gpgmetools.c:134
+#: src/keydeletedlg.c:45 src/keydeletedlg.c:94 src/keysigndlg.c:66
+#: src/settingsdlg.c:139
+msgid "_No"
+msgstr "_Nej"
+
 #: src/gpabackupop.c:231
 #, c-format
 msgid ""
@@ -432,6 +453,13 @@ msgstr "Vill du <b>verkligen</b> använda denna nyckel?"
 msgid "Revoked Key"
 msgstr "Ogiltigförklarad nyckel"
 
+#: src/gpafileencryptop.c:346 src/gpafileencryptop.c:386 src/gpawizard.c:279
+#: src/gtktools.c:315 src/gtktools.c:348 src/helpmenu.c:414
+#: src/keyeditdlg.c:150 src/keylist.c:499 src/settingsdlg.c:166
+#: src/verifydlg.c:117
+msgid "_Close"
+msgstr "_Stäng"
+
 #: src/gpafileencryptop.c:359
 msgid "The following key has been revoked by it's owner:"
 msgstr "Följande nyckel har ogiltigförklarats av sin ägare:"
@@ -462,8 +490,8 @@ msgstr "Verifiera"
 #: src/gpafileverifyop.c:169
 #, c-format
 msgid ""
-"GPA found a file that could be a signature of %s.Would you like to verify it "
-"instead?\n"
+"GPA found a file that could be a signature of %s. Would you like to verify "
+"it instead?\n"
 "\n"
 "The file found is: %s"
 msgstr ""
@@ -667,14 +695,6 @@ msgstr ""
 #: src/gpawizard.c:272
 msgid "_Apply"
 msgstr ""
-
-#: src/gpawizard.c:279 src/helpmenu.c:414
-msgid "_Close"
-msgstr "_Stäng"
-
-#: src/gpawizard.c:287
-msgid "_Cancel"
-msgstr "_Avbryt"
 
 #: src/gpgmetools.c:51
 #, c-format
@@ -1660,52 +1680,52 @@ msgstr ""
 msgid "Choose new passphrase"
 msgstr "Mata in _nytt lösen"
 
-#: src/server_access.c:268
+#: src/server_access.c:284
 msgid "No error"
 msgstr "Inget fel"
 
 # gpapa.c: Keyserver-Fehlermeldungen
-#: src/server_access.c:271
+#: src/server_access.c:287
 msgid "Internal error"
 msgstr "Intern fel"
 
-#: src/server_access.c:274
+#: src/server_access.c:290
 msgid "Operation not supported"
 msgstr "Felaktig operation"
 
-#: src/server_access.c:277
+#: src/server_access.c:293
 msgid "Version mismatch"
 msgstr "Felaktig version"
 
-#: src/server_access.c:280
+#: src/server_access.c:296
 msgid "Internal keyserver error"
 msgstr "Intern nyckelserverfel"
 
-#: src/server_access.c:283
+#: src/server_access.c:299
 msgid "Out of memory"
 msgstr "Slut på minne"
 
-#: src/server_access.c:286
+#: src/server_access.c:302
 msgid "Key not found"
 msgstr "Nyckel ej funnen"
 
-#: src/server_access.c:289
+#: src/server_access.c:305
 msgid "Key already exists on server"
 msgstr "Nyckel fanns redan på nyckelservern"
 
-#: src/server_access.c:292
+#: src/server_access.c:308
 msgid "Key incomplete"
 msgstr "Ofullständig nyckel"
 
-#: src/server_access.c:295
+#: src/server_access.c:311
 msgid "Could not contact keyserver"
 msgstr "Kunde inte koppla upp mot nyckelserver"
 
-#: src/server_access.c:298
+#: src/server_access.c:314
 msgid "Unknown Error"
 msgstr "Okänt fel"
 
-#: src/server_access.c:334
+#: src/server_access.c:350
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -1714,7 +1734,7 @@ msgstr ""
 "Kopplar upp till server \"%s\".\n"
 "Var god dröj..."
 
-#: src/server_access.c:357 src/server_access.c:377
+#: src/server_access.c:373 src/server_access.c:393
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -1725,13 +1745,13 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/server_access.c:441
+#: src/server_access.c:457
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
 msgstr "Det finns ingen plugin för nyckelserverprotokollet du specificerade."
 
-#: src/server_access.c:513 src/server_access.c:558
+#: src/server_access.c:530 src/server_access.c:576
 msgid "The keyserver you specified is not valid"
 msgstr "Ogiltig nyckelserver"
 
@@ -1746,14 +1766,6 @@ msgstr "_Standardnyckelserver:"
 #: src/settingsdlg.c:130
 msgid "Use _advanced mode:"
 msgstr "Gå till _avancerat läge:"
-
-#: src/settingsdlg.c:136
-msgid "_Yes"
-msgstr "_Ja"
-
-#: src/settingsdlg.c:139
-msgid "_No"
-msgstr "_Nej"
 
 #: src/settingsdlg.c:163
 msgid "Settings"

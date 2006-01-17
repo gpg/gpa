@@ -112,7 +112,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, gpgme_key_t key, GDate ** new_date)
                                         GTK_DIALOG_MODAL,
                                         GTK_STOCK_OK,
                                         GTK_RESPONSE_OK,
-                                        GTK_STOCK_CANCEL,
+                                        _("_Cancel"),
                                         GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);

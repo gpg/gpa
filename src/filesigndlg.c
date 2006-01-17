@@ -120,7 +120,7 @@ gpa_file_sign_dialog_constructor (GType type,
   /* Set up the dialog */
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  GTK_STOCK_OK, GTK_RESPONSE_OK,
-			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+			  _("_Cancel"), GTK_RESPONSE_CANCEL, NULL);
   gtk_window_set_title (GTK_WINDOW (dialog), _("Sign files"));
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);

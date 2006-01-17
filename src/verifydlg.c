@@ -114,7 +114,7 @@ gpa_file_verify_dialog_constructor (GType type,
   dialog->ctx = gpa_context_new ();
   /* Set up the dialog */
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-			  GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+			  _("_Close"), GTK_RESPONSE_CLOSE, NULL);
   gtk_window_set_title (GTK_WINDOW (dialog), _("Verify files"));
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);

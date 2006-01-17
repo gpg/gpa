@@ -130,8 +130,8 @@ check_overwriting (const char *filename, GtkWidget *parent)
 	 _("The file %s already exists.\n"
 	   "Do you want to overwrite it?"), filename);
       gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
-			      GTK_STOCK_YES, GTK_RESPONSE_YES,
-			      GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
+			      _("_Yes"), GTK_RESPONSE_YES,
+			      _("_No"), GTK_RESPONSE_NO, NULL);
       if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
 	{
 	  gtk_widget_destroy (msgbox);
@@ -642,7 +642,7 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
 					NULL, GTK_DIALOG_MODAL,
 					GTK_STOCK_OK,
 					GTK_RESPONSE_OK,
-                                            GTK_STOCK_CANCEL,
+                                        _("_Cancel"),
 					GTK_RESPONSE_CANCEL,
 					NULL);
   hbox = gtk_hbox_new (FALSE, 0);

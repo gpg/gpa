@@ -172,8 +172,8 @@ ask_use_detached_sig (const gchar *file, const gchar *sig, GtkWidget *parent)
   gboolean result;
   
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-			  GTK_STOCK_YES, GTK_RESPONSE_YES,
-			  GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
+			  _("_Yes"), GTK_RESPONSE_YES,
+			  _("_No"), GTK_RESPONSE_NO, NULL);
   result = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES);
   gtk_widget_destroy (dialog);
   

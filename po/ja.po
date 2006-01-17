@@ -7,13 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 10:08+0100\n"
+"POT-Creation-Date: 2006-01-17 10:18+0100\n"
 "PO-Revision-Date: 2003-11-03 17:11+0100\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=EUC-JP\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/encryptdlg.c:134 src/expirydlg.c:115 src/filesigndlg.c:123
+#: src/gpabackupop.c:288 src/gpaprogressdlg.c:144 src/gparecvkeydlg.c:95
+#: src/gpawizard.c:287 src/gpgmetools.c:645 src/keygendlg.c:140
+#: src/ownertrustdlg.c:110 src/passwddlg.c:98
+msgid "_Cancel"
+msgstr "キャンセル (_C)"
 
 #: src/encryptdlg.c:135
 msgid "Encrypt files"
@@ -272,6 +279,20 @@ msgstr ""
 "同じファイル %s があります\n"
 "上書きしますか?"
 
+#: src/gpabackupop.c:218 src/gpaexportserverop.c:132
+#: src/gpafileencryptop.c:297 src/gpafileverifyop.c:175 src/gpgmetools.c:133
+#: src/keydeletedlg.c:43 src/keydeletedlg.c:92 src/keysigndlg.c:64
+#: src/settingsdlg.c:136
+msgid "_Yes"
+msgstr "はい (_Y)"
+
+#: src/gpabackupop.c:219 src/gpaexportserverop.c:133
+#: src/gpafileencryptop.c:298 src/gpafileverifyop.c:176 src/gpgmetools.c:134
+#: src/keydeletedlg.c:45 src/keydeletedlg.c:94 src/keysigndlg.c:66
+#: src/settingsdlg.c:139
+msgid "_No"
+msgstr "いいえ (_N)"
+
 #: src/gpabackupop.c:231
 #, c-format
 msgid ""
@@ -426,6 +447,13 @@ msgstr "<b>本当に</b>この鍵を使いたいのですか?"
 msgid "Revoked Key"
 msgstr "破棄済みの鍵"
 
+#: src/gpafileencryptop.c:346 src/gpafileencryptop.c:386 src/gpawizard.c:279
+#: src/gtktools.c:315 src/gtktools.c:348 src/helpmenu.c:414
+#: src/keyeditdlg.c:150 src/keylist.c:499 src/settingsdlg.c:166
+#: src/verifydlg.c:117
+msgid "_Close"
+msgstr "閉じる (_C)"
+
 #: src/gpafileencryptop.c:359
 msgid "The following key has been revoked by it's owner:"
 msgstr "以下の鍵は所有者によって破棄されています:"
@@ -454,8 +482,8 @@ msgstr "検証中..."
 #: src/gpafileverifyop.c:169
 #, c-format
 msgid ""
-"GPA found a file that could be a signature of %s.Would you like to verify it "
-"instead?\n"
+"GPA found a file that could be a signature of %s. Would you like to verify "
+"it instead?\n"
 "\n"
 "The file found is: %s"
 msgstr ""
@@ -654,14 +682,6 @@ msgstr ""
 #: src/gpawizard.c:272
 msgid "_Apply"
 msgstr ""
-
-#: src/gpawizard.c:279 src/helpmenu.c:414
-msgid "_Close"
-msgstr "閉じる (_C)"
-
-#: src/gpawizard.c:287
-msgid "_Cancel"
-msgstr "キャンセル (_C)"
 
 #: src/gpgmetools.c:51
 #, c-format
@@ -1647,51 +1667,51 @@ msgstr ""
 msgid "Choose new passphrase"
 msgstr "新しいパスフレーズを選択"
 
-#: src/server_access.c:268
+#: src/server_access.c:284
 msgid "No error"
 msgstr "エラーなし"
 
-#: src/server_access.c:271
+#: src/server_access.c:287
 msgid "Internal error"
 msgstr "内部エラー"
 
-#: src/server_access.c:274
+#: src/server_access.c:290
 msgid "Operation not supported"
 msgstr "操作がサポートされていません"
 
-#: src/server_access.c:277
+#: src/server_access.c:293
 msgid "Version mismatch"
 msgstr "バージョンが合っていません"
 
-#: src/server_access.c:280
+#: src/server_access.c:296
 msgid "Internal keyserver error"
 msgstr "鍵サーバ関連の内部エラー"
 
-#: src/server_access.c:283
+#: src/server_access.c:299
 msgid "Out of memory"
 msgstr "メモリ不足"
 
-#: src/server_access.c:286
+#: src/server_access.c:302
 msgid "Key not found"
 msgstr "鍵が見付かりません"
 
-#: src/server_access.c:289
+#: src/server_access.c:305
 msgid "Key already exists on server"
 msgstr "サーバに既に鍵が存在します"
 
-#: src/server_access.c:292
+#: src/server_access.c:308
 msgid "Key incomplete"
 msgstr "鍵が不完全です"
 
-#: src/server_access.c:295
+#: src/server_access.c:311
 msgid "Could not contact keyserver"
 msgstr "鍵サーバーと連絡がとれません"
 
-#: src/server_access.c:298
+#: src/server_access.c:314
 msgid "Unknown Error"
 msgstr "未確認エラー"
 
-#: src/server_access.c:334
+#: src/server_access.c:350
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -1700,7 +1720,7 @@ msgstr ""
 "サーバ \"%s\" に接続中です。\n"
 "お待ちください。"
 
-#: src/server_access.c:357 src/server_access.c:377
+#: src/server_access.c:373 src/server_access.c:393
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -1711,7 +1731,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/server_access.c:441
+#: src/server_access.c:457
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
@@ -1719,7 +1739,7 @@ msgstr ""
 "指定されたプロトコルの鍵サーバに\n"
 "使えるプラグインはありません。"
 
-#: src/server_access.c:513 src/server_access.c:558
+#: src/server_access.c:530 src/server_access.c:576
 msgid "The keyserver you specified is not valid"
 msgstr "指定された鍵サーバは無効です"
 
@@ -1734,14 +1754,6 @@ msgstr "デフォルトの鍵サーバ (_S):"
 #: src/settingsdlg.c:130
 msgid "Use _advanced mode:"
 msgstr "上級者モードを使う (_A):"
-
-#: src/settingsdlg.c:136
-msgid "_Yes"
-msgstr "はい (_Y)"
-
-#: src/settingsdlg.c:139
-msgid "_No"
-msgstr "いいえ (_N)"
 
 #: src/settingsdlg.c:163
 msgid "Settings"

@@ -215,8 +215,8 @@ gpa_backup_operation_do_backup (GpaBackupOperation *op, gchar *filename)
 				_("The file %s already exists.\n"
 				  "Do you want to overwrite it?"), filename);
       gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
-                              GTK_STOCK_YES, GTK_RESPONSE_YES,
-                              GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
+                              _("_Yes"), GTK_RESPONSE_YES,
+                              _("_No"), GTK_RESPONSE_NO, NULL);
       if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
         {
           cancelled = TRUE;
@@ -285,7 +285,7 @@ gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id)
                                         GTK_DIALOG_MODAL,
                                         GTK_STOCK_OK,
                                         GTK_RESPONSE_OK,
-                                        GTK_STOCK_CANCEL,
+                                        _("_Cancel"),
                                         GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);

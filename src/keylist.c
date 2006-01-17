@@ -496,7 +496,7 @@ static GtkWidget *gpa_keylist_elgamal_dialog (gpgme_key_t key)
   
   window = gtk_dialog_new_with_buttons (_("GPA Warning"), NULL,
 					GTK_DIALOG_MODAL,
-					GTK_STOCK_CLOSE,
+					_("_Close"),
 					GTK_RESPONSE_CLOSE,
 					NULL);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);

@@ -312,7 +312,7 @@ gpa_window_error (const gchar *message, GtkWidget *messenger)
                                              (messenger ? 
                                              GTK_WINDOW(messenger) : NULL),
                                              GTK_DIALOG_MODAL,
-                                             GTK_STOCK_CLOSE,
+                                             _("_Close"),
                                              GTK_RESPONSE_CLOSE,
                                              NULL);
   gtk_container_set_border_width (GTK_CONTAINER (windowError), 5);
@@ -345,7 +345,7 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
 					(messenger ? 
 					 GTK_WINDOW(messenger) : NULL),
 					GTK_DIALOG_MODAL,
-					GTK_STOCK_CLOSE,
+					_("_Close"),
 					GTK_RESPONSE_CLOSE,
 					NULL);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);

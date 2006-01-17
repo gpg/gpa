@@ -129,8 +129,8 @@ confirm_send (GtkWidget * parent, const gchar *server)
 	   "Are you sure you want to distribute this key?"),
 	 server);
   gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
-			  GTK_STOCK_YES, GTK_RESPONSE_YES,
-			  GTK_STOCK_NO, GTK_RESPONSE_NO, NULL);
+			  _("_Yes"), GTK_RESPONSE_YES,
+			  _("_No"), GTK_RESPONSE_NO, NULL);
   if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
     {
       gtk_widget_destroy (msgbox);

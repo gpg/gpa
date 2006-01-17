@@ -107,7 +107,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
                                         GTK_DIALOG_MODAL,
                                         GTK_STOCK_OK,
                                         GTK_RESPONSE_OK,
-                                        GTK_STOCK_CANCEL,
+                                        _("_Cancel"),
                                         GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);

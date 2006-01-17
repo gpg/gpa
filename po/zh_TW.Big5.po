@@ -6,13 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 10:08+0100\n"
+"POT-Creation-Date: 2006-01-17 10:18+0100\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=big5\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/encryptdlg.c:134 src/expirydlg.c:115 src/filesigndlg.c:123
+#: src/gpabackupop.c:288 src/gpaprogressdlg.c:144 src/gparecvkeydlg.c:95
+#: src/gpawizard.c:287 src/gpgmetools.c:645 src/keygendlg.c:140
+#: src/ownertrustdlg.c:110 src/passwddlg.c:98
+msgid "_Cancel"
+msgstr ""
 
 #: src/encryptdlg.c:135
 msgid "Encrypt files"
@@ -271,6 +278,20 @@ msgstr ""
 "檔案 %s 已經存在.\n"
 "要進行覆寫嗎?"
 
+#: src/gpabackupop.c:218 src/gpaexportserverop.c:132
+#: src/gpafileencryptop.c:297 src/gpafileverifyop.c:175 src/gpgmetools.c:133
+#: src/keydeletedlg.c:43 src/keydeletedlg.c:92 src/keysigndlg.c:64
+#: src/settingsdlg.c:136
+msgid "_Yes"
+msgstr "是 (&Y)"
+
+#: src/gpabackupop.c:219 src/gpaexportserverop.c:133
+#: src/gpafileencryptop.c:298 src/gpafileverifyop.c:176 src/gpgmetools.c:134
+#: src/keydeletedlg.c:45 src/keydeletedlg.c:94 src/keysigndlg.c:66
+#: src/settingsdlg.c:139
+msgid "_No"
+msgstr "否 (&N)"
+
 #: src/gpabackupop.c:231
 #, c-format
 msgid ""
@@ -425,6 +446,13 @@ msgstr "您確定要使用這個密鑰 ?"
 msgid "Revoked Key"
 msgstr "移除密鑰"
 
+#: src/gpafileencryptop.c:346 src/gpafileencryptop.c:386 src/gpawizard.c:279
+#: src/gtktools.c:315 src/gtktools.c:348 src/helpmenu.c:414
+#: src/keyeditdlg.c:150 src/keylist.c:499 src/settingsdlg.c:166
+#: src/verifydlg.c:117
+msgid "_Close"
+msgstr "關閉 (&C)"
+
 #: src/gpafileencryptop.c:359
 msgid "The following key has been revoked by it's owner:"
 msgstr "這公鑰已被對方取消了:"
@@ -453,8 +481,8 @@ msgstr "驗證中..."
 #: src/gpafileverifyop.c:169
 #, c-format
 msgid ""
-"GPA found a file that could be a signature of %s.Would you like to verify it "
-"instead?\n"
+"GPA found a file that could be a signature of %s. Would you like to verify "
+"it instead?\n"
 "\n"
 "The file found is: %s"
 msgstr ""
@@ -652,14 +680,6 @@ msgstr ""
 
 #: src/gpawizard.c:272
 msgid "_Apply"
-msgstr ""
-
-#: src/gpawizard.c:279 src/helpmenu.c:414
-msgid "_Close"
-msgstr "關閉 (&C)"
-
-#: src/gpawizard.c:287
-msgid "_Cancel"
 msgstr ""
 
 #: src/gpgmetools.c:51
@@ -1631,51 +1651,51 @@ msgstr ""
 msgid "Choose new passphrase"
 msgstr "輸入新密碼"
 
-#: src/server_access.c:268
+#: src/server_access.c:284
 msgid "No error"
 msgstr "沒有錯誤"
 
-#: src/server_access.c:271
+#: src/server_access.c:287
 msgid "Internal error"
 msgstr "內部錯誤"
 
-#: src/server_access.c:274
+#: src/server_access.c:290
 msgid "Operation not supported"
 msgstr "操作不支援"
 
-#: src/server_access.c:277
+#: src/server_access.c:293
 msgid "Version mismatch"
 msgstr "版本不對"
 
-#: src/server_access.c:280
+#: src/server_access.c:296
 msgid "Internal keyserver error"
 msgstr "內部公鑰伺服器錯誤"
 
-#: src/server_access.c:283
+#: src/server_access.c:299
 msgid "Out of memory"
 msgstr "記憶體不足"
 
-#: src/server_access.c:286
+#: src/server_access.c:302
 msgid "Key not found"
 msgstr "找不到公鑰"
 
-#: src/server_access.c:289
+#: src/server_access.c:305
 msgid "Key already exists on server"
 msgstr "已經寄到伺服器."
 
-#: src/server_access.c:292
+#: src/server_access.c:308
 msgid "Key incomplete"
 msgstr "鑰對不完整"
 
-#: src/server_access.c:295
+#: src/server_access.c:311
 msgid "Could not contact keyserver"
 msgstr "找不到公鑰伺服器"
 
-#: src/server_access.c:298
+#: src/server_access.c:314
 msgid "Unknown Error"
 msgstr "不名的錯誤"
 
-#: src/server_access.c:334
+#: src/server_access.c:350
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -1684,7 +1704,7 @@ msgstr ""
 "正在聯絡伺服器 \"%s\" 中\n"
 "請等候..."
 
-#: src/server_access.c:357 src/server_access.c:377
+#: src/server_access.c:373 src/server_access.c:393
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -1695,7 +1715,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/server_access.c:441
+#: src/server_access.c:457
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
@@ -1703,7 +1723,7 @@ msgstr ""
 "沒有與伺服器通訊協定使用的\n"
 "外掛模組"
 
-#: src/server_access.c:513 src/server_access.c:558
+#: src/server_access.c:530 src/server_access.c:576
 msgid "The keyserver you specified is not valid"
 msgstr "伺服器並不正確"
 
@@ -1718,14 +1738,6 @@ msgstr "預設公鑰伺服器 :"
 #: src/settingsdlg.c:130
 msgid "Use _advanced mode:"
 msgstr "使用進階模式 (&A):"
-
-#: src/settingsdlg.c:136
-msgid "_Yes"
-msgstr "是 (&Y)"
-
-#: src/settingsdlg.c:139
-msgid "_No"
-msgstr "否 (&N)"
 
 #: src/settingsdlg.c:163
 msgid "Settings"

@@ -40,9 +40,9 @@ confirm_delete_secret (GtkWidget * parent)
   window = gtk_dialog_new_with_buttons (_("Removing Secret Key"),
                                         GTK_WINDOW(parent),
                                         GTK_DIALOG_MODAL,
-                                        GTK_STOCK_YES,
+                                        _("_Yes"),
                                         GTK_RESPONSE_YES,
-                                        GTK_STOCK_NO,
+                                        _("_No"),
                                         GTK_RESPONSE_NO,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_NO);
@@ -89,9 +89,9 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
 
   window = gtk_dialog_new_with_buttons (_("Remove Key"), GTK_WINDOW(parent),
                                         GTK_DIALOG_MODAL,
-                                        GTK_STOCK_YES,
+                                        _("_Yes"),
                                         GTK_RESPONSE_YES,
-                                        GTK_STOCK_NO,
+                                        _("_No"),
                                         GTK_RESPONSE_NO,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_YES);

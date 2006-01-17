@@ -92,7 +92,7 @@ gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  GTK_STOCK_OK,
 			  GTK_RESPONSE_OK,
-			  GTK_STOCK_CANCEL,
+			  _("_Cancel"),
 			  GTK_RESPONSE_CANCEL, NULL);
   gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),5);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);

@@ -163,7 +163,7 @@ gpa_settings_dialog_new (void)
   dialog = gtk_dialog_new_with_buttons (_("Settings"),
                                         NULL,
                                         0,
-                                        GTK_STOCK_CLOSE,
+                                        _("_Close"),
                                         GTK_RESPONSE_CLOSE, NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);

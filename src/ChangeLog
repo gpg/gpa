@@ -1,3 +1,8 @@
+2006-01-17  Werner Koch  <wk@g10code.com>
+
+	Replaced all stock buttons with plain texts for uniform
+	translations.
+
 2006-01-13  Werner Koch  <wk@g10code.com>
 
 	* gpgmeedit.c (edit_fnc): Do not call write for empty strings.

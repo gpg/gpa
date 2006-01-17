@@ -294,8 +294,8 @@ ignore_key_trust (gpgme_key_t key, GtkWidget *parent)
 
   dialog = gtk_dialog_new_with_buttons (_("Unknown Key"), GTK_WINDOW(parent),
 					GTK_DIALOG_MODAL, 
-					GTK_STOCK_YES, GTK_RESPONSE_YES,
-					GTK_STOCK_NO, GTK_RESPONSE_NO,
+					_("_Yes"), GTK_RESPONSE_YES,
+					_("_No"), GTK_RESPONSE_NO,
 					NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
@@ -343,7 +343,7 @@ revoked_key (gpgme_key_t key, GtkWidget *parent)
 
   dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent),
 					GTK_DIALOG_MODAL, 
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					_("_Close"), GTK_RESPONSE_CLOSE,
 					NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
@@ -383,7 +383,7 @@ expired_key (gpgme_key_t key, GtkWidget *parent)
 
   dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent),
 					GTK_DIALOG_MODAL, 
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					_("_Close"), GTK_RESPONSE_CLOSE,
 					NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);

@@ -19,6 +19,7 @@
  */
 
 #include "gpaprogressdlg.h"
+#include "i18n.h"  
 
 /* Internal functions */
 static void
@@ -140,7 +141,7 @@ gpa_progress_dialog_init (GpaProgressDialog *dialog)
 			       dialog->progress_bar);
   /* Set up the dialog */
   gtk_dialog_add_button (GTK_DIALOG (dialog),
-			 GTK_STOCK_CANCEL,
+			 _("_Cancel"),
 			 GTK_RESPONSE_CANCEL);
   /* FIXME: Cancelling is not supported yet by GPGME */
   gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL,

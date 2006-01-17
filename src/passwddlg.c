@@ -95,7 +95,7 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
                                         GTK_DIALOG_MODAL,
                                         GTK_STOCK_OK,
                                         GTK_RESPONSE_OK,
-                                        GTK_STOCK_CANCEL,
+                                        _("_Cancel"),
                                         GTK_RESPONSE_CANCEL, NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   vbox = GTK_DIALOG (dialog)->vbox;
