@@ -43,6 +43,12 @@
 #include <windows.h>
 #endif
 
+#ifndef O_BINARY
+#ifdef _O_BINARY
+#define O_BINARY	_O_BINARY
+#else
+#define O_BINARY	0
+#endif
 
 /* Report an unexpected error in GPGME and quit the application.  */
 void
@@ -176,7 +182,7 @@ gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
     {
       gpg_error_t err;
 
-      target = creat (filename, 0666);
+      target = open (filename, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
       if (target == -1)
 	{
 	  gchar *message;
@@ -202,7 +208,7 @@ gpa_open_input (const char *filename, gpgme_data_t *data, GtkWidget *parent)
   gpg_error_t err;
   int target = -1;
 
-  target = open (filename, O_RDONLY);
+  target = open (filename, O_RDONLY | O_BINARY);
   if (target == -1)
     {
       gchar *message;
