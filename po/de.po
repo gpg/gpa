@@ -307,7 +307,7 @@ msgstr ""
 "\n"
 "\t\"%s\"\n"
 "\n"
-"Dies ist sicherheitskritische Information und muss sicher gespeichert "
+"Dies ist eine sicherheitskritische Information und muss sicher gespeichert "
 "werden\n"
 "(z.B. auf einer Diskette, die an einem sicheren Ort verwahrt wird)."
 
