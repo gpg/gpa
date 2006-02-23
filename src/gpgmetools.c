@@ -49,6 +49,7 @@
 #else
 #define O_BINARY	0
 #endif
+#endif
 
 /* Report an unexpected error in GPGME and quit the application.  */
 void
