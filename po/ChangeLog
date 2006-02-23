@@ -1,3 +1,7 @@
+2006-02-23  Marcus Brinkmann  <marcus@g10code.de>
+
+	* de.po: Remove dangling '_' in toolbox item name.
+
 2006-02-21  Werner Koch  <wk@g10code.com>
 
 	* de.po: Wording fix.

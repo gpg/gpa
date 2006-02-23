@@ -208,7 +208,7 @@ msgstr "Datei verschlüsseln"
 
 #: src/fileman.c:589
 msgid "Decrypt"
-msgstr "_Entschlüsseln"
+msgstr "Entschlüsseln"
 
 #: src/fileman.c:590
 msgid "Decrypt the selected file"
