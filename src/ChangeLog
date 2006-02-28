@@ -1,5 +1,10 @@
 2006-02-28  Marcus Brinkmann  <marcus@g10code.de>
 
+	* keygenwizard.c: Remove comment_page.
+	(gpa_keygen_wizard_comment_page): Function removed.
+	(gpa_keygen_wizard_generate_action): Do not free params.comment.
+	(gpa_keygen_wizard_new): Do not add comment page.
+
 	* gpa.c (main): Create default config directory if it doesn't
 	exist.
 

@@ -66,7 +66,6 @@ typedef struct {
   GtkWidget * wizard;
   GtkWidget * name_page;
   GtkWidget * email_page;
-  GtkWidget * comment_page;
   GtkWidget * passwd_page;
   GtkWidget * wait_page;
   GtkWidget * final_page;
@@ -210,21 +209,6 @@ gpa_keygen_wizard_email_validate (gpointer data)
 
   g_free (email);
   return result;
-}
-
-
-static GtkWidget *
-gpa_keygen_wizard_comment_page (GPAKeyGenWizard * keygen_wizard)
-{
-  return gpa_keygen_wizard_simple_page
-    (keygen_wizard,
-     _("If you want you can supply a comment that further identifies"
-       " the key to other users."
-       " The comment is especially useful if you generate several keys"
-       " for the same email address."
-       " The comment is completely optional."
-       " Leave it empty if you don't have a use for it."),
-     _("Comment:"));
 }
 
 
@@ -447,8 +431,6 @@ gpa_keygen_wizard_generate_action (gpointer data)
   /* The User ID */
   params.userID = gpa_keygen_wizard_simple_get_text (keygen_wizard->name_page);
   params.email = gpa_keygen_wizard_simple_get_text (keygen_wizard->email_page);
-  params.comment = gpa_keygen_wizard_simple_get_text (keygen_wizard
-                                                      ->comment_page);
   params.password = gpa_keygen_wizard_password_get_password (keygen_wizard
                                                              ->passwd_page);
 
@@ -469,7 +451,6 @@ gpa_keygen_wizard_generate_action (gpointer data)
 
   g_free (params.userID);
   g_free (params.email);
-  g_free (params.comment);
 
   return FALSE;
 }
@@ -585,10 +566,6 @@ GtkWidget *gpa_keygen_wizard_new (GtkWidget * parent,
 			  FALSE,
 			  gpa_keygen_wizard_email_validate, keygen_wizard);
 
-  keygen_wizard->comment_page = gpa_keygen_wizard_comment_page (keygen_wizard);
-  gpa_wizard_append_page (wizard, keygen_wizard->comment_page,
-			  FALSE, NULL, NULL);
-			  
   keygen_wizard->passwd_page = gpa_keygen_wizard_password_page (keygen_wizard);
   gpa_wizard_append_page (wizard, keygen_wizard->passwd_page,
 			  FALSE, gpa_keygen_wizard_password_validate,
