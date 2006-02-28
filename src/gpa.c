@@ -516,6 +516,11 @@ main (int argc, char **argv)
    */
   if (!args.options_filename)
     {
+      /* This is on the cheesy side.  GnuPG can not create a key if
+	 its home directory is missing.  We give it a bit of a jump
+	 start here.  */
+      if (!g_file_test (gnupg_homedir, G_FILE_TEST_IS_DIR))
+	mkdir (gnupg_homedir, 0700);
       configname = g_build_filename (gnupg_homedir, "gpa.conf", NULL);
     }
   else

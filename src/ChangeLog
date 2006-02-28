@@ -1,3 +1,8 @@
+2006-02-28  Marcus Brinkmann  <marcus@g10code.de>
+
+	* gpa.c (main): Create default config directory if it doesn't
+	exist.
+
 2006-02-14  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpgmetools.c (O_BINARY): Define if it isn't defined by system
