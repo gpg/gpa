@@ -254,6 +254,10 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 	  return FALSE;
 	}
       op->plain = NULL;
+
+      /* Start the operation */
+      err = gpgme_op_verify_start (GPA_OPERATION (op)->context->ctx, op->sig,
+				   op->signed_text, op->plain);
     }
   else
     {
@@ -272,11 +276,13 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 	}
       op->signed_text_fd = -1;
       op->signed_text = NULL;
+
+      /* Start the operation */
+      err = gpgme_op_decrypt_verify_start (GPA_OPERATION (op)->context->ctx, op->sig,
+					   op->plain);
+
     }
 
-  /* Start the operation */
-  err = gpgme_op_verify_start (GPA_OPERATION (op)->context->ctx, op->sig,
-			       op->signed_text, op->plain);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_warning (err);

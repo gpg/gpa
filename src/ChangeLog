@@ -1,5 +1,9 @@
 2006-02-28  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpafileverifyop.c (gpa_file_verify_operation_start): Use
+	gpgme_op_decrypt_verify_start for non-detached signatures, so
+	decrypted and signed files can be verified.
+
 	* keygenwizard.c: Remove comment_page.
 	(gpa_keygen_wizard_comment_page): Function removed.
 	(gpa_keygen_wizard_generate_action): Do not free params.comment.
