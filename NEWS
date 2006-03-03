@@ -5,9 +5,6 @@ Noteworthy changes in version 0.7.2 (2006-03-03)
    This is an advanced feature available in the advanced GUI version
    of key generation.
 
- * The verify dialog now works on simultaneously encrypted and signed
-   files as well.
-
  * Bug fixes for the Windows target, in particular
    internationalization and binary mode file handling.
 
