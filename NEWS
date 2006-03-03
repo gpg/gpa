@@ -1,5 +1,15 @@
-Noteworthy changes in version 0.7.2
+Noteworthy changes in version 0.7.2 (2006-03-03)
 ------------------------------------------------
+
+ * The key generation wizard does not allow to set a comment anymore.
+   This is an advanced feature available in the advanced GUI version
+   of key generation.
+
+ * The verify dialog now works on simultaneously encrypted and signed
+   files as well.
+
+ * Bug fixes for the Windows target, in particular
+   internationalization and binary mode file handling.
 
 
 Noteworthy changes in version 0.7.1 (2006-01-09)
