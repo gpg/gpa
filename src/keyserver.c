@@ -169,7 +169,7 @@ keyserver_read_list (const char *confname)
       add_server (&serverlist, "hkp://random.sks.keyserver.penguin.de");
       add_server (&serverlist, "hkp://blackhole.pca.dfn.de"); 
       add_server (&serverlist, "hkp://pks.gpg.cz");
-      add_server (&serverlist, "hpk://pgp.cns.ualberta.ca");
+      add_server (&serverlist, "hkp://pgp.cns.ualberta.ca");
       add_server (&serverlist, "hkp://minsky.surfnet.nl");
       add_server (&serverlist, "hkp://keyserver.ubuntu.com");
       add_server (&serverlist, "hkp://keyserver.pramberger.at");

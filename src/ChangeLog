@@ -1,5 +1,9 @@
 2006-03-03  Marcus Brinkmann  <marcus@g10code.de>
 
+	* keyserver.c (keyserver_read_list): Fix typo in keyserver list.
+
+2006-03-03  Marcus Brinkmann  <marcus@g10code.de>
+
 	* gpafileverifyop.c: Revert last change, it broke verification of
 	non-encrypted files.  Instead, the decryption operation has to
 	show the signatures, but that is a bigger change.
