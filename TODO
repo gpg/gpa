@@ -14,6 +14,8 @@ In no particular order:
    file" radio button automatically, or disable the file entry unless it's
    checked.
 
+* The file decrypt operation should also show signatures, if available.
+
 * Context menus.
 
 * Add more options to the "Edit key" dialog.
