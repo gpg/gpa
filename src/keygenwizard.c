@@ -423,6 +423,8 @@ gpa_keygen_wizard_generate_action (gpointer data)
   gboolean do_backup;
   GtkWidget *radio;
 
+  memset (&params, 0, sizeof params);
+
   /* Shall we make backups? */
   radio = gtk_object_get_data (GTK_OBJECT (keygen_wizard->backup_page),
 			       "gpa_keygen_backup");

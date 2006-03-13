@@ -4,6 +4,8 @@ In no particular order:
 
 * Redo the key generation wizard stuff, as it is one ugly hack on top of
   another at this point.
+** It should also print a progress indicator as the expert mode does.
+
 
 * Dialogs should check user input and react to it.
 ** Don't allow the user to go on unless the input makes sense (particularly
