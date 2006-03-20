@@ -20,6 +20,7 @@
 
 /* This module is only used in this environment */
 #if defined(__MINGW32__) || defined(__CYGWIN__)
+#include <stdio.h>
 
 #include <windows.h>
 
@@ -28,18 +29,21 @@ static HWND console_window = NULL;
 static BOOL CALLBACK
 enum_parent_windows( HWND hwnd, LPARAM lparam )
 {
-	char wndclass[ 512 ];
-	char wndtext[ 512 ];
-
-	GetWindowText( hwnd, wndtext, sizeof( wndtext ) );
-	GetClassName( hwnd, wndclass, sizeof( wndclass ) );
-
-	if ( !strcmp( wndclass, "tty" ) && strstr( wndtext, "gpa" ) ) {
-		console_window = hwnd;
-		return FALSE;
-	}
-
-	return TRUE;
+  char wndclass[ 512 ];
+  char wndtext[ 512 ];
+  
+  GetWindowText( hwnd, wndtext, sizeof( wndtext ) );
+  GetClassName( hwnd, wndclass, sizeof( wndclass ) );
+  
+  if ( (!strcmp( wndclass, "tty" ) && strstr( wndtext, "gpa" ))
+       || (!strcmp ( wndclass, "ConsoleWindowClass" )
+           && (strstr (wndtext, "GPA") || strstr (wndtext, "gpa.exe"))))
+    {
+      console_window = hwnd;
+      return FALSE;
+    }
+  
+  return TRUE;
 }
 
 int
