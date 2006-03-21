@@ -1,3 +1,7 @@
+2006-03-21  Werner Koch  <wk@g10code.com>
+
+	Released 0.7.3.
+
 2006-03-09  Werner Koch  <wk@g10code.com>
 
 	* config.guess, config.sub:  Updated.

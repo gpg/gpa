@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-17 10:18+0100\n"
+"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"POT-Creation-Date: 2006-03-21 19:46+0100\n"
 "PO-Revision-Date: 2004-08-22 02:23+0200\n"
 "Last-Translator: Emilian Nowak <emil5@go2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: src/encryptdlg.c:134 src/expirydlg.c:115 src/filesigndlg.c:123
 #: src/gpabackupop.c:288 src/gpaprogressdlg.c:144 src/gparecvkeydlg.c:95
-#: src/gpawizard.c:287 src/gpgmetools.c:645 src/keygendlg.c:140
+#: src/gpawizard.c:287 src/gpgmetools.c:652 src/keygendlg.c:140
 #: src/ownertrustdlg.c:110 src/passwddlg.c:98
 msgid "_Cancel"
 msgstr ""
@@ -270,7 +270,7 @@ msgstr "podpis do _oddzielnego pliku"
 msgid "a_rmor"
 msgstr "opa_kowanie ASCII"
 
-#: src/gpabackupop.c:215 src/gpgmetools.c:130
+#: src/gpabackupop.c:215 src/gpgmetools.c:137
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -280,14 +280,14 @@ msgstr ""
 "Czy chcesz go nadpisać?"
 
 #: src/gpabackupop.c:218 src/gpaexportserverop.c:132
-#: src/gpafileencryptop.c:297 src/gpafileverifyop.c:175 src/gpgmetools.c:133
+#: src/gpafileencryptop.c:297 src/gpafileverifyop.c:175 src/gpgmetools.c:140
 #: src/keydeletedlg.c:43 src/keydeletedlg.c:92 src/keysigndlg.c:64
 #: src/settingsdlg.c:136
 msgid "_Yes"
 msgstr "_Tak"
 
 #: src/gpabackupop.c:219 src/gpaexportserverop.c:133
-#: src/gpafileencryptop.c:298 src/gpafileverifyop.c:176 src/gpgmetools.c:134
+#: src/gpafileencryptop.c:298 src/gpafileverifyop.c:176 src/gpgmetools.c:141
 #: src/keydeletedlg.c:45 src/keydeletedlg.c:94 src/keysigndlg.c:66
 #: src/settingsdlg.c:139
 msgid "_No"
@@ -616,16 +616,16 @@ msgstr "Można szyfrować"
 msgid "Can authenticate"
 msgstr "Można autoryzować"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:568 src/gpgmetools.c:753
-#: src/gpgmetools.c:872
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:575 src/gpgmetools.c:760
+#: src/gpgmetools.c:879
 msgid "Revoked"
 msgstr "Unieważniony"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:570 src/gpgmetools.c:868
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:577 src/gpgmetools.c:875
 msgid "Expired"
 msgstr "Po terminie ważności"
 
-#: src/gpasubkeylist.c:143 src/gpgmetools.c:572
+#: src/gpasubkeylist.c:143 src/gpgmetools.c:579
 msgid "Disabled"
 msgstr "Wyłączone"
 
@@ -633,11 +633,11 @@ msgstr "Wyłączone"
 msgid "Unsigned"
 msgstr "Brak podpisów"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:859 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:866 src/verifydlg.c:214
 msgid "Valid"
 msgstr "Poprawny"
 
-#: src/gpawidgets.c:74 src/gpgmetools.c:610 src/gpgmetools.c:617
+#: src/gpawidgets.c:74 src/gpgmetools.c:617 src/gpgmetools.c:624
 #: src/keyring.c:1158 src/keysigndlg.c:106
 msgid "User Name:"
 msgstr "Nazwa użytkownika:"
@@ -646,7 +646,7 @@ msgstr "Nazwa użytkownika:"
 msgid "User Names:"
 msgstr "Nazwy użytkownika:"
 
-#: src/gpawidgets.c:80 src/gpgmetools.c:611 src/gpgmetools.c:618
+#: src/gpawidgets.c:80 src/gpgmetools.c:618 src/gpgmetools.c:625
 #: src/keyring.c:1160
 msgid "Key ID:"
 msgstr "ID klucza:"
@@ -688,7 +688,7 @@ msgstr ""
 msgid "_Apply"
 msgstr ""
 
-#: src/gpgmetools.c:51
+#: src/gpgmetools.c:58
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -705,7 +705,7 @@ msgstr ""
 "\n"
 "Działanie aplikacji zostanie za chwilę przerwane"
 
-#: src/gpgmetools.c:65
+#: src/gpgmetools.c:72
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -725,7 +725,7 @@ msgstr ""
 "błędem w samym GPA.\n"
 "Nastąpi teraz próba powrotu do normalnego działania GPA."
 
-#: src/gpgmetools.c:437
+#: src/gpgmetools.c:444
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -739,7 +739,7 @@ msgstr ""
 "************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:442
+#: src/gpgmetools.c:449
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -747,109 +747,109 @@ msgstr ""
 "Kopia zapasowa tego klucza znajduje się w pliku: \n"
 "\n"
 
-#: src/gpgmetools.c:501
+#: src/gpgmetools.c:508
 msgid "DSA and ElGamal (default)"
 msgstr "DSA oraz ElGamal (domyślne)"
 
-#: src/gpgmetools.c:502
+#: src/gpgmetools.c:509
 msgid "DSA (sign only)"
 msgstr "DSA (tylko do podpisywania)"
 
-#: src/gpgmetools.c:503
+#: src/gpgmetools.c:510
 msgid "RSA (sign only)"
 msgstr "RSA (tylko do podpisywania)"
 
-#: src/gpgmetools.c:536 src/gpgmetools.c:559 src/gpgmetools.c:576
-#: src/gpgmetools.c:864 src/gpgmetools.c:897
+#: src/gpgmetools.c:543 src/gpgmetools.c:566 src/gpgmetools.c:583
+#: src/gpgmetools.c:871 src/gpgmetools.c:904
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: src/gpgmetools.c:539
+#: src/gpgmetools.c:546
 msgid "Never"
 msgstr "Nigdy"
 
-#: src/gpgmetools.c:542
+#: src/gpgmetools.c:549
 msgid "Marginal"
 msgstr "Marginalne"
 
-#: src/gpgmetools.c:545
+#: src/gpgmetools.c:552
 msgid "Full"
 msgstr "Pełne"
 
-#: src/gpgmetools.c:548
+#: src/gpgmetools.c:555
 msgid "Ultimate"
 msgstr "Nieograniczone"
 
-#: src/gpgmetools.c:574
+#: src/gpgmetools.c:581
 msgid "Incomplete"
 msgstr "Niepełne"
 
-#: src/gpgmetools.c:580
+#: src/gpgmetools.c:587
 msgid "Fully Valid"
 msgstr "W pełni poprawny"
 
-#: src/gpgmetools.c:608
+#: src/gpgmetools.c:615
 msgid "Please enter the passphrase for the following key:"
 msgstr "Proszę podać hasło dla następującego klucza:"
 
-#: src/gpgmetools.c:616
+#: src/gpgmetools.c:623
 msgid "Wrong passphrase, please try again:"
 msgstr "Niewłaściwe hasło, proszę spróbować ponownie:"
 
-#: src/gpgmetools.c:641
+#: src/gpgmetools.c:648
 msgid "Enter Passphrase"
 msgstr "Wprowadź hasło"
 
-#: src/gpgmetools.c:746
+#: src/gpgmetools.c:753
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:836 src/verifydlg.c:271
+#: src/gpgmetools.c:843 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[Nieznany identyfikator użytkownika]"
 
-#: src/gpgmetools.c:862 src/verifydlg.c:219
+#: src/gpgmetools.c:869 src/verifydlg.c:219
 msgid "Bad"
 msgstr "Zły"
 
-#: src/gpgmetools.c:885
+#: src/gpgmetools.c:892
 msgid "Generic"
 msgstr "Ogólne"
 
-#: src/gpgmetools.c:888
+#: src/gpgmetools.c:895
 msgid "Persona"
 msgstr "Nie sprawdzone"
 
-#: src/gpgmetools.c:891
+#: src/gpgmetools.c:898
 msgid "Casual"
 msgstr "Pobieżny"
 
-#: src/gpgmetools.c:894
+#: src/gpgmetools.c:901
 msgid "Positive"
 msgstr "Dokładne"
 
-#: src/gpgmetools.c:912
+#: src/gpgmetools.c:919
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
 "Ten klucz może być użyty do wydawania certyfikatów, podpisywania i "
 "szyfrowania."
 
-#: src/gpgmetools.c:915
+#: src/gpgmetools.c:922
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Ten klucz może być użyty do wydawania certyfikatów i podpisywania, ale nie "
 "nadaje się do szyfrowania danych."
 
-#: src/gpgmetools.c:921
+#: src/gpgmetools.c:928
 msgid "The key can be used for certification and encryption."
 msgstr "Ten klucz może być użyty do wydawania certyfikatów i szyfrowania."
 
-#: src/gpgmetools.c:924
+#: src/gpgmetools.c:931
 msgid "The key can be used only for certification."
 msgstr "Ten klucz może być użyty tylko do certyfikatów."
 
-#: src/gpgmetools.c:932
+#: src/gpgmetools.c:939
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -857,15 +857,15 @@ msgstr ""
 "Ten klucz może być użyty do podpisywania i szyfrowania, ale nie nadaję się "
 "do wydawania certyfikatów."
 
-#: src/gpgmetools.c:935
+#: src/gpgmetools.c:942
 msgid "The key can be used only for signing."
 msgstr "Ten klucz może być użyty tylko do podpisywania."
 
-#: src/gpgmetools.c:940
+#: src/gpgmetools.c:947
 msgid "The key can be used only for encryption."
 msgstr "Ten klucz może być użyty tylko do szyfrowania."
 
-#: src/gpgmetools.c:943
+#: src/gpgmetools.c:950
 msgid "This key is useless."
 msgstr "Ten klucz jest bezużyteczny."
 
@@ -988,7 +988,7 @@ msgstr "Zmień _hasło"
 msgid "Change _expiration"
 msgstr "Zmień datę utraty _ważności"
 
-#: src/keygendlg.c:54 src/keygenwizard.c:321 src/passwddlg.c:43
+#: src/keygendlg.c:54 src/keygenwizard.c:305 src/passwddlg.c:43
 msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
@@ -996,7 +996,7 @@ msgstr ""
 "W polu \"Hasło\" i \"Powtórz hasło\",\n"
 "należy wpisać te same dane."
 
-#: src/keygendlg.c:61 src/keygenwizard.c:328 src/passwddlg.c:50
+#: src/keygendlg.c:61 src/keygenwizard.c:312 src/passwddlg.c:50
 msgid ""
 "You did not enter a passphrase.\n"
 "It is needed to protect your private key."
@@ -1004,7 +1004,7 @@ msgstr ""
 "Nie podano hasła.\n"
 "Jest ono niezbędna do zabezpieczenia twojego klucza prywatnego."
 
-#: src/keygendlg.c:74 src/keygenwizard.c:342 src/passwddlg.c:63
+#: src/keygendlg.c:74 src/keygenwizard.c:326 src/passwddlg.c:63
 msgid ""
 "Warning: You have entered a passphrase\n"
 "that is obviously not secure.\n"
@@ -1016,15 +1016,15 @@ msgstr ""
 "\n"
 "Proszę wprowadzić nowe hasło."
 
-#: src/keygendlg.c:79 src/keygenwizard.c:347 src/passwddlg.c:68
+#: src/keygendlg.c:79 src/keygenwizard.c:331 src/passwddlg.c:68
 msgid "_Enter new passphrase"
 msgstr "_Wprowadź nowe hasło"
 
-#: src/keygendlg.c:80 src/keygenwizard.c:348 src/passwddlg.c:69
+#: src/keygendlg.c:80 src/keygenwizard.c:332 src/passwddlg.c:69
 msgid "Take this one _anyway"
 msgstr "Mimo wszystko użyj _tego"
 
-#: src/keygendlg.c:135 src/keygenwizard.c:556
+#: src/keygendlg.c:135 src/keygenwizard.c:539
 msgid "Generate key"
 msgstr "Wygeneruj klucz"
 
@@ -1068,7 +1068,7 @@ msgstr "_Hasło: "
 msgid "_Repeat passphrase: "
 msgstr "_Potwierdzenie hasła: "
 
-#: src/keygenwizard.c:151
+#: src/keygenwizard.c:150
 msgid ""
 "Please insert your full name.\n"
 "\n"
@@ -1080,15 +1080,15 @@ msgstr ""
 "Twoje dane personalne będą częścią nowego klucza, dzięki czemu łatwiej "
 "będzie innym osobom identyfikować do kogo należy dany klucz."
 
-#: src/keygenwizard.c:156
+#: src/keygenwizard.c:155
 msgid "Your Name:"
 msgstr "Twoje imię i nazwisko:"
 
-#: src/keygenwizard.c:169
+#: src/keygenwizard.c:168
 msgid "Please insert your name"
 msgstr "Proszę podać swoje imię i nazwisko"
 
-#: src/keygenwizard.c:182
+#: src/keygenwizard.c:181
 msgid ""
 "Please insert your email address.\n"
 "\n"
@@ -1102,43 +1102,27 @@ msgstr ""
 "innym osobom identyfikować do kogo należy dany klucz. Jeżeli posiadasz kilka "
 "adresów email, to będzie można dodać je później."
 
-#: src/keygenwizard.c:189
+#: src/keygenwizard.c:188
 msgid "Your Email Address:"
 msgstr "Twój adres email:"
 
-#: src/keygenwizard.c:204
+#: src/keygenwizard.c:203
 msgid "Please insert your email address"
 msgstr "Proszę wprowadzić swój adres email"
 
-#: src/keygenwizard.c:221
-msgid ""
-"If you want you can supply a comment that further identifies the key to "
-"other users. The comment is especially useful if you generate several keys "
-"for the same email address. The comment is completely optional. Leave it "
-"empty if you don't have a use for it."
-msgstr ""
-"Jeżeli chcesz możesz podać komentarz identyfikujący klucz. Komentarz jest "
-"szczególnie przydatny jeżeli zamierzasz wygenerować klika kluczy dla tego "
-"samego adresu email. Komentarz jest jak najbardziej opcjonalny i możesz "
-"pozostawić, to pole puste jeżeli nie zamierzasz go używać."
-
-#: src/keygenwizard.c:227
-msgid "Comment:"
-msgstr "Komentarz:"
-
-#: src/keygenwizard.c:253
+#: src/keygenwizard.c:237
 msgid "Please choose a passphrase for the new key."
 msgstr "Proszę wybrać hasło dla nowo utworzonego klucza."
 
-#: src/keygenwizard.c:262 src/passwddlg.c:106
+#: src/keygenwizard.c:246 src/passwddlg.c:106
 msgid "Passphrase: "
 msgstr "Hasło: "
 
-#: src/keygenwizard.c:275 src/passwddlg.c:115
+#: src/keygenwizard.c:259 src/passwddlg.c:115
 msgid "Repeat Passphrase: "
 msgstr "Powtórz hasło: "
 
-#: src/keygenwizard.c:372
+#: src/keygenwizard.c:356
 msgid ""
 "It is recommended that you create a backup copy of your new key, once it has "
 "been generated.\n"
@@ -1148,15 +1132,15 @@ msgstr ""
 "Zaleca się utworzenie kopii zapasowej klucza, zaraz po jego utworzeniu.\n"
 "Chcesz utworzyć kopię zapasową?"
 
-#: src/keygenwizard.c:381
+#: src/keygenwizard.c:365
 msgid "Create _backup copy"
 msgstr "Utwórz kopię _zapasową"
 
-#: src/keygenwizard.c:388 src/keyring.c:709 src/keyring.c:737
+#: src/keygenwizard.c:372 src/keyring.c:709 src/keyring.c:737
 msgid "Do it _later"
 msgstr "Zrób to _później"
 
-#: src/keygenwizard.c:416
+#: src/keygenwizard.c:400
 msgid ""
 "Your key is being generated.\n"
 "\n"
@@ -1167,7 +1151,7 @@ msgstr ""
 "Nawet na szybkich komputerach może, to trochę potrwać. Prosimy zachować "
 "cierpliwość."
 
-#: src/keygenwizard.c:425
+#: src/keygenwizard.c:409
 msgid ""
 "Congratulations!\n"
 "\n"
@@ -1822,6 +1806,20 @@ msgstr "Podpis: %s"
 #: src/verifydlg.c:372
 msgid "Signatures:"
 msgstr "Podpisy:"
+
+#~ msgid ""
+#~ "If you want you can supply a comment that further identifies the key to "
+#~ "other users. The comment is especially useful if you generate several "
+#~ "keys for the same email address. The comment is completely optional. "
+#~ "Leave it empty if you don't have a use for it."
+#~ msgstr ""
+#~ "Jeżeli chcesz możesz podać komentarz identyfikujący klucz. Komentarz jest "
+#~ "szczególnie przydatny jeżeli zamierzasz wygenerować klika kluczy dla tego "
+#~ "samego adresu email. Komentarz jest jak najbardziej opcjonalny i możesz "
+#~ "pozostawić, to pole puste jeżeli nie zamierzasz go używać."
+
+#~ msgid "Comment:"
+#~ msgstr "Komentarz:"
 
 #~ msgid "sign, do_n't compress"
 #~ msgstr "podpisz, bez używania kompresji"

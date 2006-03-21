@@ -1,7 +1,26 @@
-dnl
-dnl Configure script source for GPA
-dnl
-dnl (Process this file with autoconf to produce a configure script.)
+# configure.ac for GPA
+# Copyright (C) 2000, 2001  Werner Koch
+# Copyright (C) 2002, 2003, 2004  Miguel Coca
+# Copyright (C) 2005, 2006  g10 Code GmbH
+# 
+# This file is part of GPA.
+# 
+# GPA is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# GPA is distributed in the hope that it will be useful,g
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+# MA 02110-1301, USA
+# 
+# (Process this file with autoconf to produce a configure script.)
 AC_PREREQ(2.59)
 min_automake_version="1.9.3"
 
@@ -18,8 +37,7 @@ min_automake_version="1.9.3"
 # the configure script, so that a proper revision number for all files
 # is available when running a "make distcheck".
 m4_define(my_version, [0.7.3])
-m4_define(my_iscvs, yes)
-
+#m4_define(my_iscvs, yes)
 
 AC_INIT([gpa], my_version[]m4_ifdef([my_iscvs], [-cvs[]m4_translit(
                [$Revision$],[Ra-z $:])]),
