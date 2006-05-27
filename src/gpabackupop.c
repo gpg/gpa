@@ -241,6 +241,12 @@ gpa_backup_operation_do_backup (GpaBackupOperation *op, gchar *filename)
 	      gpa_options_set_backup_generated (gpa_options_get_instance (),
 						TRUE);
         }
+      else
+	{
+	  gchar *message = g_strdup_printf (_("An error ocurred during the "
+					      "backup operation."));
+	  gpa_window_error (message, GPA_OPERATION (op)->window);
+	}
     }
 }
 

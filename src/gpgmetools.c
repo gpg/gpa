@@ -459,6 +459,7 @@ gpa_backup_key (const gchar *fpr, const char *filename)
   if( !g_spawn_sync (NULL, pub_argv, NULL, 0, NULL, NULL, &pub_key,
 		     &err, &ret_code, NULL))
     {
+      fclose (file);
       return FALSE;
     }
   fputs (pub_key, file);
@@ -468,6 +469,7 @@ gpa_backup_key (const gchar *fpr, const char *filename)
   if( !g_spawn_sync (NULL, sec_argv, NULL, 0, NULL, NULL, &sec_key,
 		     &err, &ret_code, NULL))
     {
+      fclose (file);
       return FALSE;
     }
   fputs (sec_key, file);
