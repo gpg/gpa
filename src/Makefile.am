@@ -5,12 +5,28 @@ logo = gpa_logo.ppm
 
 pkgdata_DATA = $(tip_files) $(logo)
 
-EXTRA_DIST = $(tip_files) $(logo) gpa.ico
+EXTRA_DIST = $(tip_files) $(logo) gpa.ico gpa-resource.rc
+
+if HAVE_W32_SYSTEM
+%.o : %.rc
+	$(WINDRES) `echo $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) | \
+	sed -e 's/-I/--include-dir /g;s/-D/--define /g'` -i $< -o $@
+
+gpa_res_ldflag = -Wl,gpa-resource.o
+gpa_deps = gpa-resource.o
+else
+gpa_res_ldflag =
+gpa_deps =
+endif
+
 
 bin_PROGRAMS = gpa
 
 INCLUDES = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
 LDADD = @LIBINTL@
+
+gpa_LDFLAGS = $(gpa_res_ldflag)
+gpa_DEPENDENCIES = $(gpa_deps)
 
 gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
@@ -74,4 +90,4 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpagenkeysimpleop.h gpagenkeysimpleop.c \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
-	      options.c gpa.rc
+	      options.c
