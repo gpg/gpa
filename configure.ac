@@ -26,26 +26,22 @@ min_automake_version="1.9.3"
 
 # The version number goes here. 
 #
-# The CVS version is usually the next intended release version with
-# the string "-cvs" appended.  The reason for this is that tests for a
-# specific feature can already be done under the assumption that the
-# CVS version is the most recent one in a branch.  To disable the CVS
-# version for the real release, just comment out the my_iscvs macro.
-# Note, that we are now using Subversion instead of CVS and append the
-# SVN revision number to the "cvs" suffix.  To make this most useful
-# for snapshot releases please do an "svn up" right before recreating
-# the configure script, so that a proper revision number for all files
-# is available when running a "make distcheck".
-m4_define(my_version, [0.7.4-cvs])
-m4_define(my_iscvs, yes)
+# Remember to change the version number immediately *after* a release.
+# Set my_issvn to "yes" for non-released code.  Remember to run an
+# "svn up" and "autogen.sh" right before creating a distribution.
+m4_define(my_version, [0.7.4])
+m4_define(my_issvn, no)
 
-AC_INIT([gpa], my_version[]m4_ifdef([my_iscvs], [-cvs[]m4_translit(
-               [$Revision$],[Ra-z $:])]),
-               [bug-gpa@gnupg.org])
+m4_define([svn_revision], m4_esyscmd([echo -n $((svn info 2>/dev/null \
+          ||echo 'Revision: 0')|sed -n '/^Revision:/ s/[^0-9]//gp'|head -1)]))
+AC_INIT([gpa], my_version[]m4_if(my_issvn,[yes],[-svn[]svn_revision]),
+        [bug-gpa@gnupg.org])
+
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_SRCDIR(src/gpa.c)
 AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
 
+BUILD_REVISION=svn_revision
 PACKAGE=$PACKAGE_NAME
 VERSION=$PACKAGE_VERSION
 AC_SUBST(PACKAGE)
@@ -58,10 +54,6 @@ AC_DEFINE_UNQUOTED(PACKAGE_BUGREPORT, "$PACKAGE_BUGREPORT",
 
 
 # Generate extended version information
-changequote(,)dnl 
-BUILD_REVISION="`echo '$Revision$' | sed 's/[^0-9]//g'`"
-changequote([,])dnl
-test -z "$BUILD_REVISION" && BUILD_REVISION="0"
 if test "$have_w32_system" = yes; then
    BUILD_TIMESTAMP=`date --iso-8601=minutes`
    changequote(,)dnl 
