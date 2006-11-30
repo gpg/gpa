@@ -1,3 +1,8 @@
+2006-11-30  Marcus Brinkmann  <marcus@g10code.de>
+
+	* passwddlg.c (gpa_change_passphrase_dialog_run): Initialize
+	PASSWD.  Release PASSWD if set before overwriting it.
+
 2006-07-15  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpa.rc: Move to ...

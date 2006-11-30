@@ -88,7 +88,7 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
   GtkWidget *table;
   GtkWidget *label, *entry, *passwd_entry, *repeat_entry;
   GtkResponseType response;
-  gchar *passwd;
+  gchar *passwd = NULL;
   const gchar *repeat;
 
   dialog = gtk_dialog_new_with_buttons (_("Choose new passphrase"), NULL,
@@ -135,6 +135,8 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
       gtk_widget_grab_focus (passwd_entry);
       gtk_widget_show_all (dialog);
       response = gtk_dialog_run (GTK_DIALOG (dialog));
+      if (passwd)
+	g_free (passwd);
       passwd = g_strdup (gtk_entry_get_text (GTK_ENTRY (passwd_entry)));
       repeat = gtk_entry_get_text (GTK_ENTRY (repeat_entry));
     } 
