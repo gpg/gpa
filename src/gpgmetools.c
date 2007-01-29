@@ -601,6 +601,12 @@ passphrase_question_label (const char *uid_hint,
   gchar *text;
   gchar *keyid, *userid;
   gint i;
+
+  /* Just in case this is called without a user id hint we return a
+     simple text to avoid a crash.  */
+  if (!uid_hint)
+    return gtk_label_new ("Passphrase?");
+
   input = g_strdup (uid_hint);
   /* The first word in the hint is the key ID */
   keyid = input;

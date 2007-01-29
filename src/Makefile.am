@@ -22,8 +22,9 @@ endif
 
 bin_PROGRAMS = gpa
 
-INCLUDES = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
-LDADD = @LIBINTL@
+AM_CPPFLAGS = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
+AM_CFLAGS = $(GPGME_CFLAGS) $(GTK_CFLAGS)
+LDADD = $(GPGME_LIBS) $(GTK_LIBS) $(LIBINTL)
 
 gpa_LDFLAGS = $(gpa_res_ldflag)
 gpa_DEPENDENCIES = $(gpa_deps)

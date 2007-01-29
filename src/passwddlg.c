@@ -135,8 +135,7 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
       gtk_widget_grab_focus (passwd_entry);
       gtk_widget_show_all (dialog);
       response = gtk_dialog_run (GTK_DIALOG (dialog));
-      if (passwd)
-	g_free (passwd);
+      g_free (passwd);
       passwd = g_strdup (gtk_entry_get_text (GTK_ENTRY (passwd_entry)));
       repeat = gtk_entry_get_text (GTK_ENTRY (repeat_entry));
     } 

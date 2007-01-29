@@ -1,7 +1,36 @@
-2006-11-30  Marcus Brinkmann  <marcus@g10code.de>
+2007-01-29  Werner Koch  <wk@g10code.com>
 
-	* passwddlg.c (gpa_change_passphrase_dialog_run): Initialize
-	PASSWD.  Release PASSWD if set before overwriting it.
+	* gpgmeedit.c (struct edit_parms_s): New field
+	need_status_passphrase_sym.
+	(edit_fnc): Take care of it.
+	(PasswdState): New state PASSWD_ENTERNEW.
+	(struct passwd_parms_s): Remove REQUEST_COUNTER.
+	(edit_passwd_fnc_action): Handle PASSWD_ENTERNEW.
+	(edit_passwd_fnc_transit): Test for NEED_PASSPHRASE_SYM.
+	(passwd_passphrase_cb): Rewritten to take action directly on the
+	current state.
+	(gpa_gpgme_edit_passwd_start): Pass the edit parms and not the old
+	REQUEST_COUNTER.
+	* gpgmetools.c (passphrase_question_label): Take care of a missing
+	user-id hint.
+
+	* gpakeyexpireop.c (gpa_key_expire_operation_done_error_cb): Give
+	a more specific error message.
+	* gpgmeedit.c (edit_expire_fnc_transit): Return a more suitable
+	error code for invalid dates.  
+	(gpa_gpgme_edit_expire_parms_new): Do not use %F for strftime as
+	this is C99 and not supported on all systems (i.e. Windows).
+	
+2007-01-10  Werner Koch  <wk@g10code.com>
+
+	* Makefile.am (INCLUDES): Removed.
+	(AM_CFLAGS, AM_CPPFLAGS): New.
+	(LDADD): Add GPGME and GTK libs.
+
+2006-07-26  Werner Koch  <wk@g10code.com>
+
+	* passwddlg.c (gpa_change_passphrase_dialog_run): Release PASSWD
+	in case the dialog is repeated.  Reported by Timo Schulz.
 
 2006-07-15  Marcus Brinkmann  <marcus@g10code.de>
 

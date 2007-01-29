@@ -71,6 +71,10 @@ struct edit_parms_s
   gulong signal_id;
   /* Data to be passed to the previous functions */
   void *opaque;
+  /* The passwd dialog needs to see GPGME_STATUS_NEED_PASSPHRASE_SYM.
+     To make thinks easier it is only passed to the FSM if this flag
+     has been set. */
+  int need_status_passphrase_sym;
 };
 
 /* The edit callback proper */
@@ -82,15 +86,20 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
   char *result = NULL;
 
   /* Ignore these status lines, as they don't require any response */
-  if (status == GPGME_STATUS_EOF ||
-      status == GPGME_STATUS_GOT_IT ||
-      status == GPGME_STATUS_NEED_PASSPHRASE ||
-      status == GPGME_STATUS_NEED_PASSPHRASE_SYM ||
-      status == GPGME_STATUS_GOOD_PASSPHRASE ||
-      status == GPGME_STATUS_BAD_PASSPHRASE ||
-      status == GPGME_STATUS_USERID_HINT ||
-      status == GPGME_STATUS_SIGEXPIRED ||
-      status == GPGME_STATUS_KEYEXPIRED)
+  if (status == GPGME_STATUS_EOF 
+      || status == GPGME_STATUS_GOT_IT
+      || status == GPGME_STATUS_NEED_PASSPHRASE
+      || status == GPGME_STATUS_NEED_PASSPHRASE_SYM
+      || status == GPGME_STATUS_GOOD_PASSPHRASE
+      || status == GPGME_STATUS_BAD_PASSPHRASE
+      || status == GPGME_STATUS_USERID_HINT
+      || status == GPGME_STATUS_SIGEXPIRED
+      || status == GPGME_STATUS_KEYEXPIRED)
+    {
+      return parms->err;
+    }
+  else if (!parms->need_status_passphrase_sym
+           && status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
     {
       return parms->err;
     }
@@ -215,6 +224,12 @@ edit_expire_fnc_transit (int current_state, gpgme_status_code_t status,
           g_str_equal (args, "keyedit.prompt"))
         {
           next_state = EXPIRE_QUIT;
+        }
+      else if (status == GPGME_STATUS_GET_LINE &&
+               g_str_equal (args, "keygen.valid"))
+        {
+          next_state = EXPIRE_ERROR;
+          *err = gpg_error (GPG_ERR_INV_TIME);
         }
       else
         {
@@ -629,6 +644,7 @@ typedef enum
 {
   PASSWD_START,
   PASSWD_COMMAND,
+  PASSWD_ENTERNEW,
   PASSWD_QUIT,
   PASSWD_SAVE,
   PASSWD_ERROR
@@ -638,7 +654,6 @@ struct passwd_parms_s
 {
   gpgme_passphrase_cb_t func;
   void *opaque;
-  int request_count;
 };
 
 static gpg_error_t
@@ -646,23 +661,27 @@ edit_passwd_fnc_action (int state, void *opaque, char **result)
 {
   switch (state)
     {
-      /* Start the operation */
     case PASSWD_COMMAND:
+      /* Start the operation */
       *result = "passwd";
       break;
-      /* End the operation */
+    case PASSWD_ENTERNEW:
+      /* No action required.  This state is only used by the
+         passphrase callback.  */
+      break;
     case PASSWD_QUIT:
+      /* End the operation */
       *result = "quit";
       break;
-      /* Save */
     case PASSWD_SAVE:
+      /* Save */
       *result = "Y";
       break;
-      /* Special state: an error ocurred. Do nothing until we can quit */
     case PASSWD_ERROR:
+      /* Special state: an error ocurred. Do nothing until we can quit */
       break;
-      /* Can't happen */
     default:
+      /* Can't happen */
       return gpg_error (GPG_ERR_GENERAL);
     }
   return gpg_error (GPG_ERR_NO_ERROR);
@@ -689,10 +708,15 @@ edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case PASSWD_COMMAND:
+    case PASSWD_ENTERNEW:
       if (status == GPGME_STATUS_GET_LINE &&
           g_str_equal (args, "keyedit.prompt"))
         {
           next_state = PASSWD_QUIT;
+        }
+      else if (status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
+        {
+          next_state = PASSWD_ENTERNEW;
         }
       else
         {
@@ -830,7 +854,7 @@ gpa_gpgme_edit_expire_parms_new (GpaContext *ctx, GDate *date,
   /* The new expiration date */
   if (date)
     {
-      g_date_strftime (buf, buf_len, "%F", date);
+      g_date_strftime (buf, buf_len, "%Y-%m-%d", date);
     }
   else
     {
@@ -934,31 +958,32 @@ gpg_error_t gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
   return err;
 }
 
-/* Change the passphrase of the key.
+
+/*
+ * Change the passphrase of the key.
  */
 
 /* Special passphrase callback for use within the passwd command */
-gpg_error_t passwd_passphrase_cb (void *hook, const char *uid_hint,
-				  const char *passphrase_info, 
-				  int prev_was_bad, int fd)
+gpg_error_t 
+passwd_passphrase_cb (void *hook, const char *uid_hint,
+                      const char *passphrase_info, 
+                      int prev_was_bad, int fd)
 {
-  int *i = hook;
-
-  if (!prev_was_bad) /* It's the beginning of a passphrase question */
-    {
-      (*i)++;
-    }
+  struct edit_parms_s *parms = hook;
   
-  if (*i == 1)
+  if (parms->state == PASSWD_ENTERNEW)
     {
-      return gpa_passphrase_cb (hook, uid_hint, passphrase_info, 
-				prev_was_bad, fd);
-    }
-  else
-    {
+      /* Gpg is asking for the new passphrase.  Run the dialog to
+         enter and re-enter the new passphrase.  */
       return gpa_change_passphrase_dialog_run (hook, uid_hint, 
 					       passphrase_info, 
 					       prev_was_bad, fd);
+    }
+  else
+    {
+      /* Gpg is asking for the passphrase to unprotect the key.  */
+      return gpa_passphrase_cb (hook, uid_hint, passphrase_info, 
+				prev_was_bad, fd);
     }
 }
 
@@ -1003,7 +1028,6 @@ gpa_gpgme_edit_passwd_parms_new (GpaContext *ctx, gpgme_data_t out)
   edit_parms->signal_id = 0;
   edit_parms->out = out;
   edit_parms->opaque = passwd_parms;
-  passwd_parms->request_count = 0;
   gpgme_get_passphrase_cb (ctx->ctx, &passwd_parms->func,
 			   &passwd_parms->opaque);
 
@@ -1016,7 +1040,8 @@ gpa_gpgme_edit_passwd_parms_new (GpaContext *ctx, gpgme_data_t out)
   return edit_parms;
 }
 
-gpg_error_t gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
+gpg_error_t 
+gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
 {
   struct edit_parms_s *parms;
   gpg_error_t err;
@@ -1027,13 +1052,13 @@ gpg_error_t gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
     {
       return err;
     }
+
   parms = gpa_gpgme_edit_passwd_parms_new (ctx, out);
 
-  /* Use our own passphrase callback: the data is a pointer to an int
-   * that counts the passphrase requests received */
-  gpgme_set_passphrase_cb (ctx->ctx, passwd_passphrase_cb,
-			   &(((struct passwd_parms_s*) 
-			      parms->opaque)->request_count));
+  /* Use our own passphrase callback: The data are the actual edit
+     parms.  */
+  gpgme_set_passphrase_cb (ctx->ctx, passwd_passphrase_cb, parms);
+
   err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
 
   return err;

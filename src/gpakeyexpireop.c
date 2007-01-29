@@ -217,9 +217,10 @@ gpa_key_expire_operation_next (GpaKeyExpireOperation *op)
     }
 }
 
-static void gpa_key_expire_operation_done_error_cb (GpaContext *context, 
-						  gpg_error_t err,
-						  GpaKeyExpireOperation *op)
+static void 
+gpa_key_expire_operation_done_error_cb (GpaContext *context, 
+                                        gpg_error_t err,
+                                        GpaKeyExpireOperation *op)
 {
   switch (gpg_err_code (err))
     {
@@ -231,15 +232,22 @@ static void gpa_key_expire_operation_done_error_cb (GpaContext *context,
     case GPG_ERR_BAD_PASSPHRASE:
       gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
       break;
+    case GPG_ERR_INV_TIME:
+      gpa_window_error 
+        (_("Invalid time given.\n"
+           "(you may not set the expiration time to the past.)"),
+         GPA_OPERATION (op)->window);
+      break;
     default:
       gpa_gpgme_warning (err);
       break;
     }
 }
 
-static void gpa_key_expire_operation_done_cb (GpaContext *context,
-					      gpg_error_t err,
-					      GpaKeyExpireOperation *op)
+static void 
+gpa_key_expire_operation_done_cb (GpaContext *context,
+                                  gpg_error_t err,
+                                  GpaKeyExpireOperation *op)
 {
   if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
     {
