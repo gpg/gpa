@@ -54,6 +54,14 @@ static GObjectClass *parent_class = NULL;
 static void
 gpa_file_encrypt_operation_finalize (GObject *object)
 {  
+  GpaFileEncryptOperation *op = GPA_FILE_ENCRYPT_OPERATION (object);
+
+  /* FIXME: The use of RSET is messed up.  There is no clear concept
+     on who own the key.  This should be fixed by refing the keys
+     object.  I doubt that the keys are at all released. */
+  g_free (op->rset);
+  op->rset = NULL;
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -216,7 +224,7 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
   else
     {
       err = gpgme_op_encrypt_start (GPA_OPERATION (op)->context->ctx,
-				    op->rset,GPGME_ENCRYPT_ALWAYS_TRUST,
+				    op->rset, GPGME_ENCRYPT_ALWAYS_TRUST,
 				    op->plain, op->cipher);
     }
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
@@ -250,11 +258,15 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
 {
   /* Do clean up on the operation */
   gpgme_data_release (op->plain);
+  op->plain = NULL;
   close (op->plain_fd);
+  op->plain_fd = -1;
   gpgme_data_release (op->cipher);
+  op->cipher = NULL;
   close (op->cipher_fd);
+  op->cipher_fd = -1;
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
-  g_free (op->rset);
+
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR) 
     {
       /* If an error happened, (or the user canceled) delete the created file
@@ -262,6 +274,7 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
        */
       unlink (op->cipher_filename);
       g_free (op->cipher_filename);
+      op->cipher_filename = NULL;
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
     }
   else
@@ -270,6 +283,7 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
       g_signal_emit_by_name (GPA_OPERATION (op), "created_file",
 			     op->cipher_filename);
       g_free (op->cipher_filename);
+      op->cipher_filename = NULL;
       /* Go to the next file in the list and encrypt it */
       GPA_FILE_OPERATION (op)->current = g_list_next 
 	(GPA_FILE_OPERATION (op)->current);

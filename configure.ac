@@ -175,25 +175,20 @@ AC_CHECK_FUNC(getopt_long,
 	    AC_MSG_ERROR(Cannot find a getopt_long function))))
 
 dnl Where is the GTK+ toolkit
-AM_PATH_GTK_2_0(2.2.0,
-            [LIBS="$LIBS $GTK_LIBS"
-            CFLAGS="$CFLAGS $GTK_CFLAGS"],
-            AC_MSG_ERROR(Cannot find GTK+ 2.0))
+AM_PATH_GTK_2_0(2.2.0,, AC_MSG_ERROR(Cannot find GTK+ 2.0))
 
 #
 # Depending on the OS we need to test for different versions of gpgme.
 #
 _AM_PATH_GPGME_CONFIG
 if test "$have_w32_system" = yes; then
-  AM_PATH_GPGME_GLIB([1:1.1.1],
-            [LIBS="$LIBS $GPGME_GLIB_LIBS"
-            CFLAGS="$CFLAGS $GPGME_GLIB_CFLAGS"],
-            AC_MSG_ERROR(Cannot find an up to date GPGME))
+  AM_PATH_GPGME_GLIB([1:1.1.3],, AC_MSG_ERROR(Cannot find an up to date GPGME))
+  GPGME_LIBS="$GPGME_GLIB_LIBS"
+  GPGME_CFLAGS="GPGME_GLIB_CFLAGS"
+  AC_SUBST(GPGME_CFLAGS)
+  AC_SUBST(GPGME_LIBS)
 else
-  AM_PATH_GPGME([1:1.1.1],
-            [LIBS="$LIBS $GPGME_LIBS"
-             CFLAGS="$CFLAGS $GPGME_CFLAGS"],
-            AC_MSG_ERROR(Cannot find an up to date GPGME))
+  AM_PATH_GPGME([1:1.1.3],, AC_MSG_ERROR(Cannot find an up to date GPGME))
 fi
 
 

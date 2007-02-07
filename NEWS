@@ -1,6 +1,10 @@
 Noteworthy changes in version 0.7.5
 ------------------------------------------------
 
+ * Allow setting a password if it is empty.
+
+ * Fixed changing of expiration date for non-C-99 systems.
+
 
 Noteworthy changes in version 0.7.4 (2006-07-25)
 ------------------------------------------------

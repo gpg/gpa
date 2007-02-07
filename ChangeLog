@@ -1,3 +1,9 @@
+2007-01-10  Werner Koch  <wk@g10code.com>
+
+	* configure.ac (GPGME_CFLAGS, GPGME_LIBS): Use them and do not
+	append them to CFLAGS etc.
+	(AM_PATH_GTK_2_0): Likewise.
+
 2006-07-25  Werner Koch  <wk@g10code.com>
 
 	Released 0.7.4.

@@ -135,7 +135,8 @@ gpa_key_selector_get_type (void)
 
 /* API */
 
-GtkWidget *gpa_key_selector_new (gboolean secret)
+GtkWidget *
+gpa_key_selector_new (gboolean secret)
 {
   GtkWidget *sel = (GtkWidget*) g_object_new (GPA_KEY_SELECTOR_TYPE, NULL);
 
@@ -166,7 +167,8 @@ GtkWidget *gpa_key_selector_new (gboolean secret)
 
 /* Return a list of selected gpgme_key_t's. The caller must free the list.
  */
-GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
+GList *
+gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
 {
   GtkTreeSelection *selection = 
     gtk_tree_view_get_selection (GTK_TREE_VIEW (selector));
@@ -175,7 +177,7 @@ GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
   GList *keys = NULL;
   GList *cur;
 
-  for (cur = list; cur; cur = g_list_next (list))
+  for (cur = list; cur; cur = g_list_next (cur))
     {
       gpgme_key_t key;
       GtkTreeIter iter;
@@ -196,7 +198,8 @@ GList *gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
   return keys;
 }
 
-gboolean gpa_key_selector_has_selection (GpaKeySelector * selector)
+gboolean 
+gpa_key_selector_has_selection (GpaKeySelector * selector)
 {
   int selected =  gtk_tree_selection_count_selected_rows 
     (gtk_tree_view_get_selection (GTK_TREE_VIEW (selector)));
@@ -205,7 +208,8 @@ gboolean gpa_key_selector_has_selection (GpaKeySelector * selector)
 
 /* Internal */
 
-void gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
+void 
+gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
 {
   GpaKeySelector *selector = data;
   GtkListStore *store;
@@ -240,7 +244,8 @@ void gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
   g_free (userid);
 }
 
-void gpa_key_selector_done (gpointer data)
+void 
+gpa_key_selector_done (gpointer data)
 {
   GpaKeySelector *selector = data;
 
