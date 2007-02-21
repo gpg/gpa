@@ -97,4 +97,8 @@ void gpa_keylist_start_reload (GpaKeyList * keylist);
  */
 void gpa_keylist_new_key (GpaKeyList * keylist, const char *fpr);
 
+/* Let the keylist know that a new sceret key has been imported. */
+void gpa_keylist_imported_secret_key (GpaKeyList * keylist);
+
+
 #endif /* GPA_KEYLIST_H */

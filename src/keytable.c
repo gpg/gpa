@@ -107,7 +107,8 @@ gpa_keytable_finalize (GObject *object)
 
 /* Internal functions */
 
-static void reload_cache (GpaKeyTable *keytable, const char *fpr)
+static void 
+reload_cache (GpaKeyTable *keytable, const char *fpr)
 {
   gpg_error_t err;
   
@@ -125,7 +126,8 @@ static void reload_cache (GpaKeyTable *keytable, const char *fpr)
   keytable->tmp_list = NULL;
 }
 
-static void done_cb (GpaContext *context, gpg_error_t err,
+static void 
+done_cb (GpaContext *context, gpg_error_t err,
 		     GpaKeyTable *keytable)
 {
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
@@ -161,7 +163,8 @@ static void done_cb (GpaContext *context, gpg_error_t err,
     }
 }
 
-static void next_key_cb (GpaContext *context, gpgme_key_t key,
+static void 
+next_key_cb (GpaContext *context, gpgme_key_t key,
 			 GpaKeyTable *keytable)
 {
   keytable->tmp_list = g_list_prepend (keytable->tmp_list, key);
@@ -172,7 +175,8 @@ static void next_key_cb (GpaContext *context, gpgme_key_t key,
     }
 }
 
-static void list_cache (GpaKeyTable *keytable)
+static void 
+list_cache (GpaKeyTable *keytable)
 {
   GList *list = keytable->keys;
   

@@ -1,3 +1,13 @@
+2007-02-12  Werner Koch  <wk@g10code.com>
+
+	* gpaimportop.c (gpa_import_operation_class_init): New signal
+	imported_secret_keys.
+	(gpa_import_operation_done_cb): Emit new signal if a secret key
+	has been imported.
+	* keyring.c (gpa_keyring_editor_changed_wot_secret_cb): New.
+	(register_import_operation): Connect new signal.
+	* keylist.c (gpa_keylist_imported_secret_key): New.
+
 2007-02-07  Werner Koch  <wk@g10code.com>
 
 	* gpakeyselector.c (gpa_key_selector_get_selected_keys): Avoid

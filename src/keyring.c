@@ -297,12 +297,22 @@ gpa_keyring_editor_changed_wot_cb (gpointer data)
 }
 
 static void
+gpa_keyring_editor_changed_wot_secret_cb (gpointer data)
+{
+  GPAKeyringEditor *editor = data;
+
+  gpa_keylist_imported_secret_key (editor->keylist);
+  gpa_keylist_start_reload (editor->keylist);  
+}
+
+static void
 gpa_keyring_editor_key_modified (GpaKeyEditDialog *dialog, gpgme_key_t key,
 				 gpointer data)
 {
   GPAKeyringEditor *editor = data;
   gpa_keylist_start_reload (editor->keylist);  
 }
+
 
 static void
 gpa_keyring_editor_new_key_cb (gpointer data, const gchar *fpr)
@@ -330,9 +340,14 @@ register_import_operation (GPAKeyringEditor * editor, GpaImportOperation *op)
   g_signal_connect_swapped (G_OBJECT (op), "imported_keys",
 			    G_CALLBACK (gpa_keyring_editor_changed_wot_cb),
 			    editor);
+  g_signal_connect_swapped 
+    (G_OBJECT (op), "imported_secret_keys",
+     G_CALLBACK (gpa_keyring_editor_changed_wot_secret_cb),
+     editor);
   g_signal_connect (G_OBJECT (op), "completed",
 		    G_CALLBACK (g_object_unref), editor); 
 }
+
 
 static void
 register_generate_operation (GPAKeyringEditor * editor, GpaGenKeyOperation *op)

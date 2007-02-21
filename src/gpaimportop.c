@@ -30,6 +30,7 @@ static GObjectClass *parent_class = NULL;
 enum
 {
   IMPORTED_KEYS,
+  IMPORTED_SECRET_KEYS,
   LAST_SIGNAL
 };
 static guint signals [LAST_SIGNAL] = { 0 };
@@ -106,6 +107,14 @@ gpa_import_operation_class_init (GpaImportOperationClass *klass)
   klass->imported_keys = NULL;
   signals[IMPORTED_KEYS] =
     g_signal_new ("imported_keys",
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GpaImportOperationClass, imported_keys),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
+  signals[IMPORTED_SECRET_KEYS] =
+    g_signal_new ("imported_secret_keys",
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GpaImportOperationClass, imported_keys),
@@ -220,7 +229,11 @@ gpa_import_operation_done_cb (GpaContext *context, gpg_error_t err,
       GPA_IMPORT_OPERATION_GET_CLASS (op)->complete_import (op);
 
       res = gpgme_op_import_result (GPA_OPERATION (op)->context->ctx);
-      if (res->imported > 0)
+      if (res->imported > 0 && res->secret_imported )
+	{
+	  g_signal_emit_by_name (GPA_OPERATION (op), "imported_secret_keys");
+	}
+      else if (res->imported > 0)
 	{
 	  g_signal_emit_by_name (GPA_OPERATION (op), "imported_keys");
 	}

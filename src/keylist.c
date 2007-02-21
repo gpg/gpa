@@ -413,6 +413,19 @@ void gpa_keylist_new_key (GpaKeyList * keylist, const char *fpr)
 			 gpa_keylist_next, gpa_keylist_end, keylist);
 }
 
+/* Let the keylist know that a new sceret key has been imported. */
+void 
+gpa_keylist_imported_secret_key (GpaKeyList *keylist)
+{
+  /* KEYLIST is currently not used. */
+
+  gpa_keytable_load_new (gpa_keytable_get_secret_instance (), NULL,
+			 NULL, (GpaKeyTableEndFunc) gtk_main_quit, NULL);
+  /* Hack. Turn the asynchronous listing into a synchronous one */
+  gtk_main ();
+}
+
+
 /* Internal functions */
 
 static gboolean
