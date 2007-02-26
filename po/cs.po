@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
 "POT-Creation-Date: 2007-02-10 16:10+0100\n"
-"PO-Revision-Date: 2007-02-10 17:08+0100\n"
+"PO-Revision-Date: 2007-02-11 15:17+0100\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -87,7 +87,7 @@ msgstr "/Soubor/_Otevřít"
 
 #: src/fileman.c:468
 msgid "/File/C_lear"
-msgstr "/Soubor/Vyčistit"
+msgstr "/Soubor/Vymazat"
 
 #: src/fileman.c:469
 msgid "/File/sep1"
@@ -151,12 +151,12 @@ msgstr "/_Okna"
 #: src/fileman.c:487
 #: src/keyring.c:871
 msgid "/Windows/_Filemanager"
-msgstr "/Okna/_Správa souborů"
+msgstr "/Okna/_Správce souborů"
 
 #: src/fileman.c:488
 #: src/keyring.c:872
 msgid "/Windows/_Keyring Editor"
-msgstr "/Okna/_Editor keyringu"
+msgstr "/Okna/Správce _klíčů"
 
 #: src/fileman.c:507
 msgid "/File/Sign"
@@ -184,7 +184,7 @@ msgstr "otevřít soubor"
 
 #: src/fileman.c:553
 msgid "Close all files"
-msgstr "Uzavřít všechny soubory"
+msgstr "Vymazat všechny soubory"
 
 #: src/fileman.c:553
 msgid "close files"
@@ -257,7 +257,7 @@ msgstr "Nápověda"
 #: src/fileman.c:615
 #: src/keyring.c:1639
 msgid "Understanding the GNU Privacy Assistant"
-msgstr ""
+msgstr "Co je GNU Privacy Assistant"
 
 #: src/fileman.c:616
 #: src/keyring.c:1640
@@ -382,11 +382,11 @@ msgstr "vypsat verzi a skončit"
 
 #: src/gpa.c:375
 msgid "open keyring editor (default)"
-msgstr "otevřít editor keyringu (výchozí)"
+msgstr "otevřít Správce klíčů (výchozí)"
 
 #: src/gpa.c:376
 msgid "open filemanager"
-msgstr "otevřít správce souborů"
+msgstr "otevřít Správce souborů"
 
 #: src/gpa.c:377
 msgid "read options from file"
@@ -873,15 +873,15 @@ msgstr "Platný"
 
 #: src/gpgmetools.c:623
 msgid "Please enter the passphrase for the following key:"
-msgstr "Zadejte prosím passfrázi pro následující klíč:"
+msgstr "Zadejte prosím heslo pro následující klíč:"
 
 #: src/gpgmetools.c:631
 msgid "Wrong passphrase, please try again:"
-msgstr "Špatná passfráze, zkuste to prosím znovu:"
+msgstr "Špatné heslo, zkuste to prosím znovu:"
 
 #: src/gpgmetools.c:656
 msgid "Enter Passphrase"
-msgstr "Zadat passfrázi"
+msgstr "Zadat heslo"
 
 #: src/gpgmetools.c:761
 msgid "[None]"
@@ -1047,7 +1047,7 @@ msgstr "Upravit klíč"
 
 #: src/keyeditdlg.c:164
 msgid "Change _passphrase"
-msgstr "Změnit _passfrázi"
+msgstr "Změnit _heslo"
 
 #: src/keyeditdlg.c:184
 msgid "Change _expiration"
@@ -1060,7 +1060,7 @@ msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
 msgstr ""
-"Do pole \"Passfráze\" and \"Opakovat passfrázi\",\n"
+"Do pole \"Heslo\" and \"Opakovat heslo\",\n"
 "musíte zadat stejný řetězec."
 
 #: src/keygendlg.c:61
@@ -1070,8 +1070,8 @@ msgid ""
 "You did not enter a passphrase.\n"
 "It is needed to protect your private key."
 msgstr ""
-"Nezadali jste passfrázi.\n"
-"Ta je nutná pro ochranu vašeho soukromého klíče."
+"Nezadali jste heslo.\n"
+"To je nutná pro ochranu vašeho soukromého klíče."
 
 #: src/keygendlg.c:74
 #: src/keygenwizard.c:326
@@ -1082,16 +1082,16 @@ msgid ""
 "\n"
 "Please enter a new passphrase."
 msgstr ""
-"Pozor: zadali jste passfrázi\n"
-"která není bezpečná.\n"
+"Pozor: zadali jste heslo\n"
+"které není bezpečné.\n"
 "\n"
-"Zadejte prosím novou."
+"Zadejte prosím jiné."
 
 #: src/keygendlg.c:79
 #: src/keygenwizard.c:331
 #: src/passwddlg.c:68
 msgid "_Enter new passphrase"
-msgstr "_Zadat novou passfrázi"
+msgstr "_Zadat novou heslo"
 
 #: src/keygendlg.c:80
 #: src/keygenwizard.c:332
@@ -1138,11 +1138,11 @@ msgstr "_Komentář: "
 
 #: src/keygendlg.c:238
 msgid "_Passphrase: "
-msgstr "_Passfráze: "
+msgstr "_Heslo: "
 
 #: src/keygendlg.c:250
 msgid "_Repeat passphrase: "
-msgstr "_Opakovat passfrázi: "
+msgstr "_Opakovat heslo: "
 
 #: src/keygenwizard.c:150
 msgid ""
@@ -1182,17 +1182,17 @@ msgstr "Vložte prosím e-mailovou adresu"
 
 #: src/keygenwizard.c:237
 msgid "Please choose a passphrase for the new key."
-msgstr "Vyberte prosím passfrázi pro nový klíč."
+msgstr "Vyberte prosím heslo pro nový klíč."
 
 #: src/keygenwizard.c:246
 #: src/passwddlg.c:106
 msgid "Passphrase: "
-msgstr "Passfráze: "
+msgstr "Heslo: "
 
 #: src/keygenwizard.c:259
 #: src/passwddlg.c:115
 msgid "Repeat Passphrase: "
-msgstr "Opakovat passfrázi: "
+msgstr "Opakovat heslo: "
 
 #: src/keygenwizard.c:356
 msgid ""
@@ -1585,7 +1585,7 @@ msgstr "Podrobně"
 
 #: src/keyring.c:1589
 msgid "Show Key Details"
-msgstr "Zobrazit podrobnosti klíče"
+msgstr "Zobrazit podrobný seznam klíčů"
 
 #: src/keyring.c:1590
 msgid "detailed"
@@ -1605,11 +1605,11 @@ msgstr "Soubory"
 
 #: src/keyring.c:1632
 msgid "Open the File Manager"
-msgstr "Otevřít správce souborů"
+msgstr "Otevřít Správce souborů"
 
 #: src/keyring.c:1633
 msgid "file manager"
-msgstr "správce souborů"
+msgstr "Správce souborů"
 
 #: src/keyring.c:1656
 msgid "Selected Default Key:"
@@ -1617,11 +1617,11 @@ msgstr "Vybraný výchozí klíč:"
 
 #: src/keyring.c:1802
 msgid "GNU Privacy Assistant - Keyring Editor"
-msgstr "GNU Privacy Assistant - Editor keyringu"
+msgstr "GNU Privacy Assistant - Správce klíčů"
 
 #: src/keyring.c:1833
 msgid "Keyring Editor"
-msgstr "Editor keyringu"
+msgstr "Správce klíčů"
 
 #: src/keysigndlg.c:62
 msgid "Sign Key"
@@ -1665,7 +1665,7 @@ msgstr "Ne_známá"
 
 #: src/ownertrustdlg.c:134
 msgid "You don't know how much to trust this user to verify other people's keys.\n"
-msgstr ""
+msgstr "Nevím zda mohu věřit, že tento uživatel je schopen ověřit klíče jiných osob.\n"
 
 #: src/ownertrustdlg.c:144
 msgid "_Never"
@@ -1673,7 +1673,7 @@ msgstr "Žád_ná"
 
 #: src/ownertrustdlg.c:149
 msgid "You don't trust this user at all to verify the validity of other people's keys at all.\n"
-msgstr ""
+msgstr "Vůbec nevěřím, že tento uživatel je schopen správně ověřit validitu klíčů jiných osob.\n"
 
 #: src/ownertrustdlg.c:159
 msgid "_Marginal"
@@ -1683,7 +1683,7 @@ msgstr "Částečná"
 msgid ""
 "You don't trust this user's ability to verify the validity of other people's keys enough to consider keys valid based on his/her sole word.\n"
 "However, provided this user's key is valid, you will consider a key signed by this user valid if it is also signed by at least other two marginally trusted users with valid keys\n"
-msgstr ""
+msgstr "Nevěřím, že tento uživatel je schopen dostatečně ověřit validitu klíčů jiných osob, abych mohl považovat tyto klíče za důvěryhodné pouze na základě jeho prohlášení.\n"
 
 #: src/ownertrustdlg.c:181
 msgid "_Full"
@@ -1691,7 +1691,7 @@ msgstr "_Plná"
 
 #: src/ownertrustdlg.c:186
 msgid "You trust this user's ability to verify the validity of other people's keys so much, that you'll consider valid any key signed by him/her, provided this user's key is valid.\n"
-msgstr ""
+msgstr "Věřím, že tento uživatel je schopen dostatečně ověřit klíče jiných osob, abych mohl klíče jím podepsané považovat za důvěryhodné.\n"
 
 #: src/ownertrustdlg.c:199
 msgid "U_ltimate"
@@ -1703,13 +1703,13 @@ msgid ""
 "\n"
 "(Warning: This is intended to be used for keys you own. Don't use it with other people's keys unless you really know what you are doing)\n"
 msgstr ""
-"Považujete tento klíč za platný a důvěřujete uživateli natolik, že všechny klíče které podepsal považujete za platné.\n"
+"Považuji klíč za validní a důvěřuji tomuto uživateli natolik, že všechny klíče které podepsal považuji za naprosto důvěryhodné.\n"
 "\n"
-"(Pozor: tato úroveň je určena pro klíče, které vlastníte. Nepoužívejte ji pro klíče jiných osob pokud si nejste opravdu jistý co děláte.)\n"
+"(Pozor: tato úroveň je určena pro klíče, které vlastníte. Nepoužívejte ji pro klíče jiných osob pokud si nejste opravdu jistý/á co děláte.)\n"
 
 #: src/passwddlg.c:94
 msgid "Choose new passphrase"
-msgstr "Zvolte _novou pasfrázi"
+msgstr "Zvolte _nové heslo"
 
 #: src/server_access.c:284
 msgid "No error"

@@ -18,8 +18,6 @@ In no particular order:
 
 * The file decrypt operation should also show signatures, if available.
 
-* Context menus.
-
 * Add more options to the "Edit key" dialog.
 ** Manage UID's.
 ** Manage subkeys.
@@ -35,3 +33,7 @@ In no particular order:
 * [W32] Clipboard encryption
 
 * Support drag and drop in the file manager
+
+* There is no way to refresh selected keys from the keyserver.
+  We might also want to have a scheduled refresh mode.  But that might
+  be better implemented in gpg.
