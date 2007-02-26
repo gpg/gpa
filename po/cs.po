@@ -1,0 +1,2472 @@
+# translation of cs.po to czech
+# Written by Zdenek Hatas <zdenek.hatas@gmail.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cs\n"
+"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"POT-Creation-Date: 2007-02-10 16:10+0100\n"
+"PO-Revision-Date: 2007-02-10 17:08+0100\n"
+"Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
+"Language-Team: czech <cs@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0.2\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
+
+#: src/encryptdlg.c:134
+#: src/expirydlg.c:115
+#: src/filesigndlg.c:123
+#: src/gpabackupop.c:294
+#: src/gpaprogressdlg.c:144
+#: src/gparecvkeydlg.c:95
+#: src/gpawizard.c:287
+#: src/gpgmetools.c:660
+#: src/keygendlg.c:140
+#: src/ownertrustdlg.c:110
+#: src/passwddlg.c:98
+msgid "_Cancel"
+msgstr "_Zrušit"
+
+#: src/encryptdlg.c:135
+msgid "Encrypt files"
+msgstr "Zašifrovat soubor"
+
+#: src/encryptdlg.c:166
+msgid "_Public Keys"
+msgstr "_Veřejné klíče"
+
+#: src/encryptdlg.c:169
+msgid "_Sign"
+msgstr "Podep_sat"
+
+#: src/encryptdlg.c:190
+#: src/filesigndlg.c:180
+msgid "Sign _as "
+msgstr "Podeps_at jako"
+
+#: src/encryptdlg.c:193
+msgid "A_rmor"
+msgstr "ASCII-_zakódovat"
+
+#: src/expirydlg.c:63
+msgid "Please provide a correct date."
+msgstr "Zadejte prosím platné datum."
+
+#: src/expirydlg.c:110
+msgid "Change expiry date"
+msgstr "Změnit datum expirace"
+
+#: src/expirydlg.c:128
+msgid "_never expire"
+msgstr "_nikdy nevyprší"
+
+#: src/expirydlg.c:133
+msgid "_expire on:"
+msgstr "_vyprší:"
+
+#: src/fileman.c:235
+msgid "Open File"
+msgstr "Otevřít soubor"
+
+#: src/fileman.c:240
+#: src/fileman.c:745
+msgid "The file is already open."
+msgstr "Soubor je již otevřený"
+
+#: src/fileman.c:466
+#: src/keyring.c:829
+msgid "/_File"
+msgstr "/_Soubor"
+
+#: src/fileman.c:467
+msgid "/File/_Open"
+msgstr "/Soubor/_Otevřít"
+
+#: src/fileman.c:468
+msgid "/File/C_lear"
+msgstr "/Soubor/Vyčistit"
+
+#: src/fileman.c:469
+msgid "/File/sep1"
+msgstr "/Soubor/sep1"
+
+#: src/fileman.c:470
+msgid "/File/_Sign"
+msgstr "/Soubor/Podep_sat"
+
+#: src/fileman.c:471
+msgid "/File/_Verify"
+msgstr "/Soubor/O_věřit"
+
+#: src/fileman.c:472
+msgid "/File/_Encrypt"
+msgstr "/Soubor/Š_ifrovat"
+
+#: src/fileman.c:473
+msgid "/File/_Decrypt"
+msgstr "/Soubor/_Dešifrovat"
+
+#: src/fileman.c:474
+msgid "/File/sep2"
+msgstr "/Soubor/sep2"
+
+#: src/fileman.c:475
+#: src/keyring.c:830
+msgid "/File/_Close"
+msgstr "/Soubor/_Zavřít"
+
+#: src/fileman.c:476
+#: src/keyring.c:832
+msgid "/File/_Quit"
+msgstr "/Soubor/U_končit"
+
+#: src/fileman.c:479
+#: src/keyring.c:835
+msgid "/_Edit"
+msgstr "/_Upravit"
+
+#: src/fileman.c:480
+#: src/keyring.c:841
+msgid "/Edit/Select _All"
+msgstr "/Upravit/Vybrat vše"
+
+#: src/fileman.c:481
+#: src/keyring.c:842
+msgid "/Edit/sep2"
+msgstr "/Upravit/sep2"
+
+#: src/fileman.c:482
+#: src/keyring.c:843
+msgid "/Edit/Pr_eferences..."
+msgstr "/Upravit/Na_stavení"
+
+#: src/fileman.c:486
+#: src/keyring.c:870
+msgid "/_Windows"
+msgstr "/_Okna"
+
+#: src/fileman.c:487
+#: src/keyring.c:871
+msgid "/Windows/_Filemanager"
+msgstr "/Okna/_Správa souborů"
+
+#: src/fileman.c:488
+#: src/keyring.c:872
+msgid "/Windows/_Keyring Editor"
+msgstr "/Okna/_Editor keyringu"
+
+#: src/fileman.c:507
+msgid "/File/Sign"
+msgstr "/Soubor/Podepsat"
+
+#: src/fileman.c:514
+msgid "/File/Verify"
+msgstr "/Soubor/Ověřit"
+
+#: src/fileman.c:521
+msgid "/File/Encrypt"
+msgstr "/Soubor/Šifrovat"
+
+#: src/fileman.c:528
+msgid "/File/Decrypt"
+msgstr "/Soubor/Dešifrovat"
+
+#: src/fileman.c:549
+msgid "Open a file"
+msgstr "Otevřít soubor"
+
+#: src/fileman.c:549
+msgid "open file"
+msgstr "otevřít soubor"
+
+#: src/fileman.c:553
+msgid "Close all files"
+msgstr "Uzavřít všechny soubory"
+
+#: src/fileman.c:553
+msgid "close files"
+msgstr "Uzavřít soubory"
+
+#: src/fileman.c:559
+#: src/keyring.c:1549
+msgid "Sign"
+msgstr "Podepsat"
+
+#: src/fileman.c:560
+msgid "Sign the selected file"
+msgstr "Podepsat vybraný soubor"
+
+#: src/fileman.c:560
+msgid "sign file"
+msgstr "podepsat soubor"
+
+#: src/fileman.c:569
+msgid "Verify"
+msgstr "Ověřit"
+
+#: src/fileman.c:570
+msgid "Check signatures of selected file"
+msgstr "Zkontrolovat podpis vybraného souboru"
+
+#: src/fileman.c:571
+msgid "verify file"
+msgstr "ověřit soubor"
+
+#: src/fileman.c:579
+msgid "Encrypt"
+msgstr "Zašifrovat"
+
+#: src/fileman.c:580
+msgid "Encrypt the selected file"
+msgstr "Zašifrovat vybraný soubor"
+
+#: src/fileman.c:581
+msgid "encrypt file"
+msgstr "zašifrovat soubor"
+
+#: src/fileman.c:589
+msgid "Decrypt"
+msgstr "Dešifrovat"
+
+#: src/fileman.c:590
+msgid "Decrypt the selected file"
+msgstr "Dešifrovat vybraný soubor"
+
+#: src/fileman.c:591
+msgid "decrypt file"
+msgstr "dešifrovat soubor"
+
+#: src/fileman.c:605
+#: src/keyring.c:1614
+msgid "Open the Preferences dialog"
+msgstr "Otevřít dialog Nastavení"
+
+#: src/fileman.c:606
+#: src/keyring.c:1615
+msgid "preferences"
+msgstr "nastavení"
+
+#: src/fileman.c:614
+#: src/keyring.c:1638
+msgid "Help"
+msgstr "Nápověda"
+
+#: src/fileman.c:615
+#: src/keyring.c:1639
+msgid "Understanding the GNU Privacy Assistant"
+msgstr ""
+
+#: src/fileman.c:616
+#: src/keyring.c:1640
+msgid "help"
+msgstr "nápověda"
+
+#: src/fileman.c:634
+msgid "File"
+msgstr "Soubor"
+
+#: src/fileman.c:687
+msgid "GNU Privacy Assistant - File Manager"
+msgstr "GNU Privacy Assistant - Správce souborů"
+
+#: src/filesigndlg.c:124
+msgid "Sign files"
+msgstr "Podepsat soubory"
+
+#: src/filesigndlg.c:134
+msgid "Signing Mode"
+msgstr "Mód podpisu"
+
+#: src/filesigndlg.c:142
+msgid "si_gn and compress"
+msgstr "podep_sat a komprimovat"
+
+#: src/filesigndlg.c:148
+msgid "_cleartext signature"
+msgstr "podpis v čistém _textu"
+
+#: src/filesigndlg.c:155
+msgid "sign in separate _file"
+msgstr "podpis v _odděleném souboru"
+
+#: src/filesigndlg.c:159
+msgid "a_rmor"
+msgstr "ASCII-_zakódovat"
+
+#: src/gpabackupop.c:215
+#: src/gpgmetools.c:137
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Soubor %s již existuje.\n"
+"Chcete jej přepsat?"
+
+#: src/gpabackupop.c:218
+#: src/gpaexportserverop.c:132
+#: src/gpafileencryptop.c:311
+#: src/gpafileverifyop.c:175
+#: src/gpgmetools.c:140
+#: src/keydeletedlg.c:43
+#: src/keydeletedlg.c:92
+#: src/keysigndlg.c:64
+#: src/settingsdlg.c:136
+msgid "_Yes"
+msgstr "_Ano"
+
+#: src/gpabackupop.c:219
+#: src/gpaexportserverop.c:133
+#: src/gpafileencryptop.c:312
+#: src/gpafileverifyop.c:176
+#: src/gpgmetools.c:141
+#: src/keydeletedlg.c:45
+#: src/keydeletedlg.c:94
+#: src/keysigndlg.c:66
+#: src/settingsdlg.c:139
+msgid "_No"
+msgstr "_Ne"
+
+#: src/gpabackupop.c:231
+#, c-format
+msgid ""
+"A copy of your secret key has been made to the file:\n"
+"\n"
+"\t\"%s\"\n"
+"\n"
+"This is sensitive information, and should be stored carefully\n"
+"(for example, in a floppy disk kept in a safe place)."
+msgstr ""
+"Kopie vašeho soukromého klíče byla uložena v souboru:\n"
+"\n"
+"\t\"%s\"\n"
+"\n"
+"Toto je citlivá informace a měla by být bezpečně uložena\n"
+"(např. na disketě na bezpečném místě)."
+
+#: src/gpabackupop.c:246
+msgid "An error ocurred during the backup operation."
+msgstr "V průběhu zálohování došlo k chybě."
+
+#: src/gpabackupop.c:262
+msgid "Backup key to file"
+msgstr "Zálohovat klíč do souboru"
+
+#: src/gpabackupop.c:289
+msgid "Backup Keys"
+msgstr "Zálohovat klíče"
+
+#: src/gpabackupop.c:313
+#, c-format
+msgid "Generating backup of key: %s"
+msgstr "Vytvářím zálohu klíče: %s"
+
+#: src/gpabackupop.c:319
+msgid "_Backup to file:"
+msgstr "_Zálohovat do souboru:"
+
+#: src/gpabackupop.c:331
+msgid "B_rowse..."
+msgstr "_Procházet"
+
+#: src/gpa.c:373
+msgid "display this help and exit"
+msgstr "zobrazit tuto nápovědu a skončit"
+
+#: src/gpa.c:374
+msgid "output version information and exit"
+msgstr "vypsat verzi a skončit"
+
+#: src/gpa.c:375
+msgid "open keyring editor (default)"
+msgstr "otevřít editor keyringu (výchozí)"
+
+#: src/gpa.c:376
+msgid "open filemanager"
+msgstr "otevřít správce souborů"
+
+#: src/gpa.c:377
+msgid "read options from file"
+msgstr "číst možnosti ze souboru"
+
+#: src/gpa.c:401
+msgid ""
+"Syntax: gpa [options]\n"
+"Graphical frontend to GnuPG\n"
+msgstr ""
+"Syntaxe: gpa [možnosti]\n"
+"Grafické rozhraní pro GnuPG\n"
+
+#: src/gpa.c:403
+msgid "Options"
+msgstr "/_Možnosti"
+
+#: src/gpa.c:409
+msgid "Please report bugs to <"
+msgstr "Nahlaste prosím chybu <"
+
+#: src/gpaexportclipop.c:137
+msgid "The keys have been copied to the clipboard."
+msgstr "Klíče byly zkopírovány do schránky."
+
+#: src/gpaexportfileop.c:131
+msgid "Export public keys to file"
+msgstr "Exportovat veřejné klíče do souboru"
+
+#: src/gpaexportfileop.c:135
+msgid "_armor"
+msgstr "ASCII-z_akódovat"
+
+#: src/gpaexportfileop.c:169
+#, c-format
+msgid "The keys have been exported to %s."
+msgstr "Klíče byly exportovány do %s."
+
+#: src/gpaexportserverop.c:127
+#, c-format
+msgid ""
+"The selected key will be sent to a public key\n"
+"server (\"%s\").\n"
+"Are you sure you want to distribute this key?"
+msgstr ""
+"Vybraný klíč bude odeslán na server klíčů\n"
+"(\"%s\").\n"
+"Určitě chcete šířit tento klíč?"
+
+#: src/gpaexportserverop.c:185
+msgid "The keys have been sent to the server."
+msgstr "Klíče byly odeslány na server."
+
+#: src/gpafiledecryptop.c:89
+msgid "Decrypting..."
+msgstr "Dešifruji...."
+
+#: src/gpafiledecryptop.c:280
+#: src/gpafileverifyop.c:385
+#, c-format
+msgid "The file \"%s\" contained no OpenPGP data."
+msgstr "Soubor \"%s\" neobsahuje žádná OpenPGP data."
+
+#: src/gpafiledecryptop.c:288
+#, c-format
+msgid "The file \"%s\" contained no valid encrypted data."
+msgstr "Soubor \"%s\" neobsahuje platná šifrovaná data."
+
+#: src/gpafiledecryptop.c:296
+#: src/gpafileencryptop.c:579
+#: src/gpafilesignop.c:353
+#: src/gpafileverifyop.c:393
+#: src/gpakeyexpireop.c:233
+#: src/gpakeypasswdop.c:195
+#: src/gpakeysignop.c:227
+msgid "Wrong passphrase!"
+msgstr "Neplatné heslo!"
+
+#: src/gpafileencryptop.c:107
+msgid "Encrypting..."
+msgstr "Šifruji ..."
+
+#: src/gpafileencryptop.c:309
+#: src/verifydlg.c:224
+msgid "Unknown Key"
+msgstr "Neznámý klíč"
+
+#: src/gpafileencryptop.c:325
+msgid "You are going to encrypt a file using the following key:"
+msgstr "Hodláte zašifrovat soubor následujícím klíčem:"
+
+#: src/gpafileencryptop.c:331
+msgid "However, it is not certain that the key belongs to that person."
+msgstr "Nicméně není jisté, že klíč patří této osobě."
+
+#: src/gpafileencryptop.c:337
+msgid "Do you <b>really</b> want to use this key?"
+msgstr "<b>Určitě</b> chcete použít tento klíč?"
+
+#: src/gpafileencryptop.c:358
+#: src/gpafileencryptop.c:398
+#: src/verifydlg.c:229
+msgid "Revoked Key"
+msgstr "Zneplatněný klíč"
+
+#: src/gpafileencryptop.c:360
+#: src/gpafileencryptop.c:400
+#: src/gpawizard.c:279
+#: src/gtktools.c:315
+#: src/gtktools.c:348
+#: src/helpmenu.c:414
+#: src/keyeditdlg.c:150
+#: src/keylist.c:499
+#: src/settingsdlg.c:166
+#: src/verifydlg.c:117
+msgid "_Close"
+msgstr "_Zavřít"
+
+#: src/gpafileencryptop.c:373
+msgid "The following key has been revoked by it's owner:"
+msgstr "Následující klíč byl zneplatněn vlastníkem:"
+
+#: src/gpafileencryptop.c:378
+#: src/gpafileencryptop.c:421
+msgid "And can not be used for encryption."
+msgstr "A nemůže být použit pro šifrování."
+
+#: src/gpafileencryptop.c:413
+#, c-format
+msgid "The following key expired on %s:"
+msgstr "Následujícímu klíči vypršela platnost %s:"
+
+#: src/gpafileencryptop.c:497
+#: src/gpafilesignop.c:281
+msgid "You didn't select any key for signing"
+msgstr "Nevybrali jste žádný klíč pro podpis"
+
+#: src/gpafilesignop.c:97
+msgid "Signing..."
+msgstr "Podepisuji ..."
+
+#: src/gpafileverifyop.c:98
+msgid "Verifying..."
+msgstr "Ověřuji ..."
+
+#: src/gpafileverifyop.c:169
+#, c-format
+msgid ""
+"GPA found a file that could be a signature of %s. Would you like to verify it instead?\n"
+"\n"
+"The file found is: %s"
+msgstr ""
+"GPA nalezl soubor, který by mohl být podpisem %s. Chcete jej raději zkontrolovat?\n"
+"\n"
+"Nalezený soubor: %s"
+
+#: src/gpagenkeyadvop.c:78
+msgid "Generating Key..."
+msgstr "Vytvářím klíč ..."
+
+#: src/gpaimportfileop.c:129
+msgid "Import public keys from file"
+msgstr "Nahrát veřejné klíče ze souboru"
+
+#: src/gpaimportop.c:186
+msgid "No keys were found."
+msgstr "Nebyly nalezeny žádné klíče."
+
+#: src/gpaimportop.c:194
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i přečteno veřejných klíčů\n"
+"%i získáno veřejných klíčů\n"
+"%i nezměněných veřejných klíčů\n"
+"%i přečteno soukromých klíčů\n"
+"%i získáno soukromých klíčů\n"
+"%i nezměněných soukromých klíčů"
+
+#: src/gpakeyexpireop.c:237
+msgid ""
+"Invalid time given.\n"
+"(you may not set the expiration time to the past.)"
+msgstr "Neplatný čas.(nemůžete nastavit čas vypršení do minulosti.)"
+
+#: src/gpakeyselector.c:88
+#: src/keylist.c:224
+#: src/keylist.c:259
+#: src/siglist.c:92
+#: src/siglist.c:112
+#: src/verifydlg.c:326
+msgid "Key ID"
+msgstr "ID klíče"
+
+#: src/gpakeyselector.c:97
+#: src/keylist.c:233
+#: src/keylist.c:298
+#: src/siglist.c:98
+#: src/siglist.c:141
+#: src/verifydlg.c:338
+msgid "User Name"
+msgstr "Jméno uživatele"
+
+#: src/gpakeysignop.c:186
+msgid "No private key for signing."
+msgstr "Nebyl nalezen soukromý klíč pro podpis."
+
+#: src/gpakeysignop.c:231
+msgid "This key has expired! Unable to sign."
+msgstr "Klíči vypršela platnost! Podpis není možný."
+
+#: src/gpakeysignop.c:235
+msgid "This key has already been signed with your own!"
+msgstr "Tento klíč už jste sám podepsal!"
+
+#: src/gpakeysignop.c:240
+msgid "You haven't selected a default key to sign with!"
+msgstr "Nebyl vybrán výchozí klíč pro podepisování!"
+
+#: src/gpapastrings.c:31
+msgid "days"
+msgstr "dny"
+
+#: src/gpapastrings.c:32
+msgid "weeks"
+msgstr "týdny"
+
+#: src/gpapastrings.c:33
+msgid "months"
+msgstr "měsíce"
+
+#: src/gpapastrings.c:34
+msgid "years"
+msgstr "roky"
+
+#: src/gpapastrings.c:74
+msgid "never expires"
+msgstr "nikdy nevyprší"
+
+#: src/gpapastrings.c:92
+msgid "unknown"
+msgstr "neznámá"
+
+#: src/gparecvkeydlg.c:100
+msgid "Which key do you want to import? (The key must be specified by key ID)."
+msgstr "Který klíč chcete získat? (Musíte zadat ID klíče)."
+
+#: src/gparecvkeydlg.c:115
+msgid "Key _ID:"
+msgstr "_ID klíče:"
+
+#: src/gpasubkeylist.c:70
+msgid "Subkey ID"
+msgstr "ID podklíče"
+
+#: src/gpasubkeylist.c:76
+#: src/siglist.c:118
+#: src/verifydlg.c:332
+msgid "Status"
+msgstr "Stav"
+
+#: src/gpasubkeylist.c:82
+msgid "Algorithm"
+msgstr "Algoritmus"
+
+#: src/gpasubkeylist.c:89
+msgid "Size"
+msgstr "Velikost"
+
+#: src/gpasubkeylist.c:95
+#: src/keyeditdlg.c:170
+#: src/keylist.c:268
+msgid "Expiry Date"
+msgstr "Platnost do"
+
+#: src/gpasubkeylist.c:102
+msgid "Can sign"
+msgstr "Smí podepisovat"
+
+#: src/gpasubkeylist.c:108
+msgid "Can certify"
+msgstr "Smí certifikovat"
+
+#: src/gpasubkeylist.c:115
+msgid "Can encrypt"
+msgstr "Smí šifrovat"
+
+#: src/gpasubkeylist.c:122
+msgid "Can authenticate"
+msgstr "Smí autentizovat"
+
+#: src/gpasubkeylist.c:135
+#: src/gpgmetools.c:577
+#: src/gpgmetools.c:768
+#: src/gpgmetools.c:887
+msgid "Revoked"
+msgstr "Zneplatněn"
+
+#: src/gpasubkeylist.c:139
+#: src/gpgmetools.c:579
+#: src/gpgmetools.c:883
+msgid "Expired"
+msgstr "Vypršela platnost"
+
+#: src/gpasubkeylist.c:143
+#: src/gpgmetools.c:581
+msgid "Disabled"
+msgstr "Deaktivovaný"
+
+#: src/gpasubkeylist.c:147
+msgid "Unsigned"
+msgstr "Nepodepsaný"
+
+#: src/gpasubkeylist.c:151
+#: src/gpgmetools.c:874
+#: src/verifydlg.c:214
+msgid "Valid"
+msgstr "Platný"
+
+#: src/gpawidgets.c:74
+#: src/gpgmetools.c:625
+#: src/gpgmetools.c:632
+#: src/keyring.c:1158
+#: src/keysigndlg.c:106
+msgid "User Name:"
+msgstr "Jméno uživatele:"
+
+#: src/gpawidgets.c:74
+#: src/keysigndlg.c:106
+msgid "User Names:"
+msgstr "Jména uživatelů:"
+
+#: src/gpawidgets.c:80
+#: src/gpgmetools.c:626
+#: src/gpgmetools.c:633
+#: src/keyring.c:1160
+msgid "Key ID:"
+msgstr "ID klíče:"
+
+#: src/gpawidgets.c:196
+msgid "Expiration"
+msgstr "Platnost do"
+
+#: src/gpawidgets.c:203
+msgid "_indefinitely valid"
+msgstr "_trvale platný"
+
+#: src/gpawidgets.c:212
+msgid "expire _after"
+msgstr "vyprší za"
+
+#: src/gpawidgets.c:231
+msgid "expire o_n:"
+msgstr "_vyprší:"
+
+#: src/gpawidgets.c:304
+#: src/keygendlg.c:285
+msgid ""
+"!FATAL ERROR!\n"
+"Invalid insert mode for expiry date."
+msgstr ""
+"!KRITICKÁ CHYBA!\n"
+"Neplatný mód pro vkládání data vypršení."
+
+#: src/gpawizard.c:258
+msgid "_Back"
+msgstr "_Zpět"
+
+#: src/gpawizard.c:265
+msgid "_Forward"
+msgstr "_Vpřed"
+
+#: src/gpawizard.c:272
+msgid "_Apply"
+msgstr "_Potvrdit"
+
+#: src/gpgmetools.c:58
+#, c-format
+msgid ""
+"Fatal Error in GPGME library\n"
+"(invoked from file %s, line %i):\n"
+"\n"
+"\t%s\n"
+"\n"
+"The application will be terminated"
+msgstr ""
+"Kritická chyba v knihovně GPGME\n"
+"(volané souborem %s, řádek %i):\n"
+"\n"
+"\t%s\n"
+"\n"
+"Program bude ukončen"
+
+#: src/gpgmetools.c:72
+#, c-format
+msgid ""
+"The GPGME library returned an unexpected\n"
+"error. The error was:\n"
+"\n"
+"\t%s\n"
+"\n"
+"This is probably a bug in GPA.\n"
+"GPA will now try to recover from this error."
+msgstr ""
+"Knihovna GPGME vrátila neočekávanou\n"
+"chybu. Chyba je:\n"
+"\n"
+"\t%s\n"
+"\n"
+"Toto je zřejmě chyba v GPA.\n"
+"GPA se pokusí obnovit z chybového stavu."
+
+#: src/gpgmetools.c:444
+msgid ""
+"************************************************************************\n"
+"* WARNING: This file is a backup of your secret key. Please keep it in *\n"
+"* a safe place.                                                        *\n"
+"************************************************************************\n"
+"\n"
+msgstr ""
+"************************************************************************\n"
+"* POZOR: Toto je záloha vašeho soukromého klíče. Uschovejte ji prosím                  *\n"
+"* na bezpečném místě.                                                                                      *\n"
+"************************************************************************\n"
+"\n"
+
+#: src/gpgmetools.c:449
+msgid ""
+"The key backed up in this file is:\n"
+"\n"
+msgstr ""
+"V souboru je zálohován tento klíč:\n"
+"\n"
+
+#: src/gpgmetools.c:510
+msgid "DSA and ElGamal (default)"
+msgstr "DSA a ElGamal (výchozí)"
+
+#: src/gpgmetools.c:511
+msgid "DSA (sign only)"
+msgstr "DSA (jen podpis)"
+
+#: src/gpgmetools.c:512
+msgid "RSA (sign only)"
+msgstr "RSA (jen podpis)"
+
+#: src/gpgmetools.c:545
+#: src/gpgmetools.c:568
+#: src/gpgmetools.c:585
+#: src/gpgmetools.c:879
+#: src/gpgmetools.c:912
+msgid "Unknown"
+msgstr "Neznámá"
+
+#: src/gpgmetools.c:548
+msgid "Never"
+msgstr "Žádná"
+
+#: src/gpgmetools.c:551
+msgid "Marginal"
+msgstr "Částečná"
+
+#: src/gpgmetools.c:554
+msgid "Full"
+msgstr "Plná"
+
+#: src/gpgmetools.c:557
+msgid "Ultimate"
+msgstr "Absolutní"
+
+#: src/gpgmetools.c:583
+msgid "Incomplete"
+msgstr "Nekompletní"
+
+#: src/gpgmetools.c:589
+msgid "Fully Valid"
+msgstr "Platný"
+
+#: src/gpgmetools.c:623
+msgid "Please enter the passphrase for the following key:"
+msgstr "Zadejte prosím passfrázi pro následující klíč:"
+
+#: src/gpgmetools.c:631
+msgid "Wrong passphrase, please try again:"
+msgstr "Špatná passfráze, zkuste to prosím znovu:"
+
+#: src/gpgmetools.c:656
+msgid "Enter Passphrase"
+msgstr "Zadat passfrázi"
+
+#: src/gpgmetools.c:761
+msgid "[None]"
+msgstr "[Žádný]"
+
+#: src/gpgmetools.c:851
+#: src/verifydlg.c:271
+msgid "[Unknown user ID]"
+msgstr "[Neznámé ID uživatele]"
+
+#: src/gpgmetools.c:877
+#: src/verifydlg.c:219
+msgid "Bad"
+msgstr "Špatný"
+
+#: src/gpgmetools.c:900
+msgid "Generic"
+msgstr "Obecný"
+
+#: src/gpgmetools.c:903
+msgid "Persona"
+msgstr "Persona"
+
+#: src/gpgmetools.c:906
+msgid "Casual"
+msgstr "Přibližný"
+
+#: src/gpgmetools.c:909
+msgid "Positive"
+msgstr "Pozitivní"
+
+#: src/gpgmetools.c:927
+msgid "The key can be used for certification, signing and encryption."
+msgstr "Tento klíč smí být použit pro certifikaci, podpis a šifrování."
+
+#: src/gpgmetools.c:930
+msgid "The key can be used for certification and signing, but not for encryption."
+msgstr "Tento klíč smí být použit pro certifikaci a podpis, ne však pro šifrování."
+
+#: src/gpgmetools.c:936
+msgid "The key can be used for certification and encryption."
+msgstr "Tento klíč smí být použit pro certifikaci a šifrování."
+
+#: src/gpgmetools.c:939
+msgid "The key can be used only for certification."
+msgstr "Tento klíč smí být použit pouze pro certifikaci."
+
+#: src/gpgmetools.c:947
+msgid "The key can be used only for signing and encryption, but not for certification."
+msgstr "Tento klíč smí být použit pouze pro šifrování a podpis, ne však pro certifikaci."
+
+#: src/gpgmetools.c:950
+msgid "The key can be used only for signing."
+msgstr "Tento klíč smí být použit pouze pro podpis."
+
+#: src/gpgmetools.c:955
+msgid "The key can be used only for encryption."
+msgstr "Tento klíč smí být použit pouze pro šifrování."
+
+#: src/gpgmetools.c:958
+msgid "This key is useless."
+msgstr "Tento klíč je nepoužitelný."
+
+#: src/gtktools.c:311
+msgid "GPA Error"
+msgstr "Chyba GPA"
+
+#: src/gtktools.c:344
+msgid "GPA Message"
+msgstr "Zpráva GPA"
+
+#: src/helpmenu.c:198
+msgid "About GPA"
+msgstr "O GPA"
+
+#: src/helpmenu.c:243
+msgid "Brought to you by:"
+msgstr "Program vám přináší:"
+
+#: src/helpmenu.c:280
+msgid "GPA is free software under the"
+msgstr "GPA je otevřený program šířený"
+
+#: src/helpmenu.c:284
+msgid "GNU General Public License."
+msgstr "pod GNU General Public License."
+
+#: src/helpmenu.c:288
+msgid "For news see:"
+msgstr "Novinky na:"
+
+#: src/helpmenu.c:292
+msgid "http://www.gnupg.org"
+msgstr "http://www.gnupp.de"
+
+#: src/helpmenu.c:374
+msgid "GNU general public license"
+msgstr "GNU general public license"
+
+#: src/helpmenu.c:401
+msgid "_GNU general public license"
+msgstr "_GNU general public license"
+
+#: src/helpmenu.c:428
+msgid "Show Help Text\n"
+msgstr "Zobrazit test nápovědy\n"
+
+#: src/helpmenu.c:436
+msgid "/_Help"
+msgstr "/_Nápověda"
+
+#: src/helpmenu.c:438
+msgid "/Help/_Contents"
+msgstr "/Nápověda/_Obsah"
+
+#: src/helpmenu.c:441
+msgid "/Help/_License"
+msgstr "/Nápověda/_Licence"
+
+#: src/helpmenu.c:442
+msgid "/Help/_About"
+msgstr "/Nápověda/O _programu"
+
+#: src/keydeletedlg.c:40
+msgid "Removing Secret Key"
+msgstr "Odstraňuji soukromý klíč"
+
+#: src/keydeletedlg.c:54
+msgid ""
+"If you delete this key, you won't be able to\n"
+"read messages encrypted with it.\n"
+"\n"
+"Are you really sure you want to delete it?"
+msgstr ""
+"Pokud tento klíč vymažete, nebudete schopni\n"
+"číst zprávy, které jsou jím zašifrovány.\n"
+"\n"
+"Opravdu jej chcete vymazat?"
+
+#: src/keydeletedlg.c:90
+msgid "Remove Key"
+msgstr "Odstranit klíč"
+
+#: src/keydeletedlg.c:103
+msgid "You have selected the following key for removal:"
+msgstr "Vybrali jste následující klíč pro odstranění:"
+
+#: src/keydeletedlg.c:113
+msgid "This key has a secret key. Deleting this key cannot be undone, unless you have a backup copy."
+msgstr "Toto je soukromý klíč.  Pokud nemáte jeho záložní kopii, operace nemůže být odvolána."
+
+#: src/keydeletedlg.c:122
+msgid "This key is a public key. Deleting this key cannot be undone easily, although you may be able to get a new copy  from the owner or from a key server."
+msgstr "Toto je veřejný klíč. Smazání nemůže být jednoduše vráceno, nicméně je možnost získat jeho novou kopii od vlastníka nebo ze serveru klíčů."
+
+#: src/keydeletedlg.c:131
+msgid "Are you sure you want to delete this key?"
+msgstr "Jste si jistý, že chcete smazat tento klíč?"
+
+#: src/keyeditdlg.c:148
+msgid "Edit Key"
+msgstr "Upravit klíč"
+
+#: src/keyeditdlg.c:164
+msgid "Change _passphrase"
+msgstr "Změnit _passfrázi"
+
+#: src/keyeditdlg.c:184
+msgid "Change _expiration"
+msgstr "Změnit _dobu platnosti"
+
+#: src/keygendlg.c:54
+#: src/keygenwizard.c:305
+#: src/passwddlg.c:43
+msgid ""
+"In \"Passphrase\" and \"Repeat passphrase\",\n"
+"you must enter the same passphrase."
+msgstr ""
+"Do pole \"Passfráze\" and \"Opakovat passfrázi\",\n"
+"musíte zadat stejný řetězec."
+
+#: src/keygendlg.c:61
+#: src/keygenwizard.c:312
+#: src/passwddlg.c:50
+msgid ""
+"You did not enter a passphrase.\n"
+"It is needed to protect your private key."
+msgstr ""
+"Nezadali jste passfrázi.\n"
+"Ta je nutná pro ochranu vašeho soukromého klíče."
+
+#: src/keygendlg.c:74
+#: src/keygenwizard.c:326
+#: src/passwddlg.c:63
+msgid ""
+"Warning: You have entered a passphrase\n"
+"that is obviously not secure.\n"
+"\n"
+"Please enter a new passphrase."
+msgstr ""
+"Pozor: zadali jste passfrázi\n"
+"která není bezpečná.\n"
+"\n"
+"Zadejte prosím novou."
+
+#: src/keygendlg.c:79
+#: src/keygenwizard.c:331
+#: src/passwddlg.c:68
+msgid "_Enter new passphrase"
+msgstr "_Zadat novou passfrázi"
+
+#: src/keygendlg.c:80
+#: src/keygenwizard.c:332
+#: src/passwddlg.c:69
+msgid "Take this one _anyway"
+msgstr "Použít tuto"
+
+#: src/keygendlg.c:135
+#: src/keygenwizard.c:539
+msgid "Generate key"
+msgstr "Vytvořit klíč"
+
+#: src/keygendlg.c:176
+msgid "_Algorithm: "
+msgstr "_Algoritmus: "
+
+#: src/keygendlg.c:188
+msgid "_Key size (bits): "
+msgstr "Délka _klíče (v bitech): "
+
+#: src/keygendlg.c:189
+msgid "768"
+msgstr "768"
+
+#: src/keygendlg.c:190
+msgid "1024"
+msgstr "1024"
+
+#: src/keygendlg.c:191
+msgid "2048"
+msgstr "2048"
+
+#: src/keygendlg.c:206
+msgid "_User ID: "
+msgstr "ID _uživatele:"
+
+#: src/keygendlg.c:216
+msgid "_Email: "
+msgstr "_E-Mail: "
+
+#: src/keygendlg.c:226
+msgid "_Comment: "
+msgstr "_Komentář: "
+
+#: src/keygendlg.c:238
+msgid "_Passphrase: "
+msgstr "_Passfráze: "
+
+#: src/keygendlg.c:250
+msgid "_Repeat passphrase: "
+msgstr "_Opakovat passfrázi: "
+
+#: src/keygenwizard.c:150
+msgid ""
+"Please insert your full name.\n"
+"\n"
+"Your name will be part of the new key to make it easier for others to identify keys."
+msgstr ""
+"Vložte prosím celé jméno\n"
+"\n"
+"Vaše jméno bude částí nového klíče.Umožní snazší identifikaci klíčů pro ostatní."
+
+#: src/keygenwizard.c:155
+msgid "Your Name:"
+msgstr "Vaše jméno:"
+
+#: src/keygenwizard.c:168
+msgid "Please insert your name"
+msgstr "Vložte prosím své jméno."
+
+#: src/keygenwizard.c:181
+msgid ""
+"Please insert your email address.\n"
+"\n"
+" Your email address will be part of the new key to make it easier for others to identify keys. If you have several email addresses, you can add further email adresses later."
+msgstr ""
+"Vložte prosím svoji e-mailovou adresu.\n"
+"\n"
+"Ta bude součástí nového klíče. Umožní snazší identifikaci klíčů pro ostatní. Pokud používáte více adres,můžete je přidat později."
+
+#: src/keygenwizard.c:188
+msgid "Your Email Address:"
+msgstr "Vaše E-Mail adresa:"
+
+#: src/keygenwizard.c:203
+msgid "Please insert your email address"
+msgstr "Vložte prosím e-mailovou adresu"
+
+#: src/keygenwizard.c:237
+msgid "Please choose a passphrase for the new key."
+msgstr "Vyberte prosím passfrázi pro nový klíč."
+
+#: src/keygenwizard.c:246
+#: src/passwddlg.c:106
+msgid "Passphrase: "
+msgstr "Passfráze: "
+
+#: src/keygenwizard.c:259
+#: src/passwddlg.c:115
+msgid "Repeat Passphrase: "
+msgstr "Opakovat passfrázi: "
+
+#: src/keygenwizard.c:356
+msgid ""
+"It is recommended that you create a backup copy of your new key, once it has been generated.\n"
+"\n"
+"Do you want to create a backup copy?"
+msgstr ""
+"Doporučujeme vám vytvořit si záložní kopii nově vytvořeného klíče.\n"
+"Chcete vytvořit tuto zálohu?"
+
+#: src/keygenwizard.c:365
+msgid "Create _backup copy"
+msgstr "Vytvořit _záložní kopii"
+
+#: src/keygenwizard.c:372
+#: src/keyring.c:709
+#: src/keyring.c:737
+msgid "Do it _later"
+msgstr "_Později"
+
+#: src/keygenwizard.c:400
+msgid ""
+"Your key is being generated.\n"
+"\n"
+"Even on fast computers this may take a while. Please be patient."
+msgstr ""
+"Vytvářím váš klíč.\n"
+"\n"
+"I na výkonném počítači může tato operace chvíli trvat. Prosím vyčkejte."
+
+#: src/keygenwizard.c:409
+msgid ""
+"Congratulations!\n"
+"\n"
+"You have successfully generated a key. The key is indefinitely valid and has a length of 1024 bits."
+msgstr ""
+"Gratuluji!\n"
+"\n"
+"Právě jste vytvořili klíč. Klíč je trvale platný a jeho délka je 1024 bitů."
+
+#: src/keylist.c:278
+#: src/ownertrustdlg.c:121
+msgid "Owner Trust"
+msgstr "Důvěra ve vlastníka"
+
+#: src/keylist.c:288
+msgid "Key Validity"
+msgstr "Platnost klíče"
+
+#: src/keylist.c:439
+msgid ""
+"GnuPG is rebuilding the trust database.\n"
+"This might take a few seconds."
+msgstr ""
+"GnuPG rekonstruuje databázi důvěry.\n"
+"Toto může pár sekund trvat."
+
+#: src/keylist.c:497
+msgid "GPA Warning"
+msgstr "Varování GPA"
+
+#: src/keylist.c:515
+msgid ""
+"One of your secret keys contains an ElGamal signing key. Due to a bug in GnuPG, all ElGamal keys used with GnuPG 1.0.2 and later must be considered compromised.\n"
+"\n"
+"Please revoke your key as soon as possible.\n"
+"\n"
+"The affected key is:"
+msgstr ""
+"Jeden z vašich soukromých klíčů obsahuje podpisových klíčů s algoritmem ElGamal. Díky chybě v GnuPG, musí být všechny ElGamal klíče používané s GnuPG verze 1.0.2 a novější považovány za kompromitované.\n"
+"\n"
+"Zneplatněte tento klíč nejdříve jak to bude možné.\n"
+"\n"
+"Dotčený klíč:"
+
+#: src/keyring.c:437
+msgid "No keys selected for signing."
+msgstr "Nebyl vybrán klíč pro podpis."
+
+#: src/keyring.c:704
+msgid "You do not have a private key yet. Do you want to generate one now (recommended) or do it later?"
+msgstr "Ještě nemáte žádný soukromý klíč. Chcete jej vytvořit nyní (doporučeno), nebo později?"
+
+#: src/keyring.c:708
+msgid "_Generate key now"
+msgstr "_Vytvořit klíč nyní"
+
+#: src/keyring.c:731
+msgid "You do not have a backup copy of your private key yet. Do you want to backup your key now (recommended) or do it later?"
+msgstr "Nemáte záložní kopii soukromého klíče. Chcete ji vytvořit nyní (doporučeno), nebo později?"
+
+#: src/keyring.c:736
+msgid "_Backup key now"
+msgstr "_Zálohovat klíč nyní"
+
+#: src/keyring.c:836
+msgid "/Edit/_Copy"
+msgstr "/Upravit/Kopírovat"
+
+#: src/keyring.c:838
+msgid "/Edit/_Paste"
+msgstr "/Upravit/Vložit"
+
+#: src/keyring.c:840
+msgid "/Edit/sep1"
+msgstr "/Upravit/sep1"
+
+#: src/keyring.c:847
+msgid "/_Keys"
+msgstr "/_Klíče"
+
+#: src/keyring.c:848
+msgid "/Keys/_Refresh"
+msgstr "/Klíče/_Aktualizovat"
+
+#: src/keyring.c:850
+msgid "/Keys/sep0"
+msgstr "/Klíče/sep0"
+
+#: src/keyring.c:851
+msgid "/Keys/_New Key..."
+msgstr "/Klíče/_Nový klíč..."
+
+#: src/keyring.c:853
+msgid "/Keys/_Delete Keys..."
+msgstr "/Klíče/O_dstranit klíče..."
+
+#: src/keyring.c:855
+msgid "/Keys/sep1"
+msgstr "/Klíče/sep1"
+
+#: src/keyring.c:856
+msgid "/Keys/_Sign Keys..."
+msgstr "/Klíče/Podep_sat klíče..."
+
+#: src/keyring.c:857
+msgid "/Keys/Set _Owner Trust..."
+msgstr "/Klíče/Nastavit úroveň dů_věry..."
+
+#: src/keyring.c:858
+msgid "/Keys/_Edit Private Key..."
+msgstr "/Klíče/Upravit soukromý klíč..."
+
+#: src/keyring.c:859
+msgid "/Keys/sep2"
+msgstr "/Klíče/sep2"
+
+#: src/keyring.c:860
+msgid "/Keys/_Import Keys..."
+msgstr "/Klíče/_Nahrát klíče..."
+
+#: src/keyring.c:861
+msgid "/Keys/E_xport Keys..."
+msgstr "/Klíče/E_xportovat klíče..."
+
+#: src/keyring.c:862
+msgid "/Keys/_Backup..."
+msgstr "/Klíče/Zálohovat..."
+
+#: src/keyring.c:865
+msgid "/_Server"
+msgstr "/_Server"
+
+#: src/keyring.c:866
+msgid "/Server/_Retrieve Keys..."
+msgstr "/Server/_Získat klíče..."
+
+#: src/keyring.c:867
+msgid "/Server/_Send Keys..."
+msgstr "/Server/_Odeslat klíče..."
+
+#: src/keyring.c:901
+msgid "/Keys/Export Keys..."
+msgstr "/Klíče/Exportovat klíče..."
+
+#: src/keyring.c:908
+msgid "/Keys/Delete Keys..."
+msgstr "/Klíče/Odstranit klíče..."
+
+#: src/keyring.c:915
+msgid "/Edit/Copy"
+msgstr "/Upravit/Kopírovat"
+
+#: src/keyring.c:922
+msgid "/Server/Send Keys..."
+msgstr "/Server/Odeslat klíče..."
+
+#: src/keyring.c:931
+msgid "/Keys/Set Owner Trust..."
+msgstr "/Klíče/Nastavit úroveň důvěry..."
+
+#: src/keyring.c:939
+msgid "/Keys/Sign Keys..."
+msgstr "/Klíče/Podepsat klíče..."
+
+#: src/keyring.c:947
+msgid "/Keys/Edit Private Key..."
+msgstr "/Klíče/Upravit soukromý klíč..."
+
+#: src/keyring.c:954
+msgid "/Keys/Backup..."
+msgstr "/Klíče/Zálohovat..."
+
+#: src/keyring.c:971
+msgid "/_Copy"
+msgstr "/Kopírovat"
+
+#: src/keyring.c:973
+msgid "/_Paste"
+msgstr "/Vložit"
+
+#: src/keyring.c:975
+msgid "/_Delete Keys..."
+msgstr "/O_dstranit klíče..."
+
+#: src/keyring.c:978
+msgid "/_Sign Keys..."
+msgstr "/Podep_sat klíče..."
+
+#: src/keyring.c:979
+msgid "/Set _Owner Trust..."
+msgstr "/Nastavit úroveň důvěry..."
+
+#: src/keyring.c:980
+msgid "/_Edit Private Key..."
+msgstr "/Upravit soukromý klíč..."
+
+#: src/keyring.c:982
+msgid "/E_xport Keys..."
+msgstr "/E_xportovat klíče..."
+
+#: src/keyring.c:983
+msgid "/Se_nd Keys to Server..."
+msgstr "/Odeslat klíče na _server..."
+
+#: src/keyring.c:984
+msgid "/_Backup..."
+msgstr "/_Zálohovat..."
+
+#: src/keyring.c:995
+msgid "/Set Owner Trust..."
+msgstr "/Nastavit úroveň důvěry..."
+
+#: src/keyring.c:1003
+msgid "/Sign Keys..."
+msgstr "/Podepsat klíče..."
+
+#: src/keyring.c:1011
+msgid "/Edit Private Key..."
+msgstr "/Upravit soukromý klíč..."
+
+#: src/keyring.c:1018
+msgid "/Backup..."
+msgstr "/Zálohovat..."
+
+#: src/keyring.c:1091
+msgid "Subkeys"
+msgstr "Podklíče"
+
+#: src/keyring.c:1162
+#: src/keysigndlg.c:112
+msgid "Fingerprint:"
+msgstr "Otisk:"
+
+#: src/keyring.c:1164
+msgid "Expires at:"
+msgstr "Vyprší:"
+
+#: src/keyring.c:1166
+msgid "Owner Trust:"
+msgstr "Důvěra ve vlastníka:"
+
+#: src/keyring.c:1168
+msgid "Key Validity:"
+msgstr "Platnost klíče:"
+
+#: src/keyring.c:1170
+msgid "Key Type:"
+msgstr "Typ klíče:"
+
+#: src/keyring.c:1172
+msgid "Created at:"
+msgstr "Vytvořen:"
+
+#: src/keyring.c:1175
+msgid "Details"
+msgstr "Podrobnosti"
+
+#: src/keyring.c:1183
+msgid "Show signatures on user name:"
+msgstr "Zobrazit podpisy u jména uživatele:"
+
+#: src/keyring.c:1204
+msgid "Signatures"
+msgstr "Podpisy"
+
+#: src/keyring.c:1229
+msgid "The key has both a private and a public part"
+msgstr "Klíč má soukromou i veřejnou část"
+
+#: src/keyring.c:1234
+msgid "The key has only a public part"
+msgstr "Klíč má pouze veřejnou část"
+
+#: src/keyring.c:1268
+#, c-format
+msgid "%s %u bits"
+msgstr "%s %u bitů"
+
+#: src/keyring.c:1294
+msgid "No keys selected"
+msgstr "Žádný klíč nevybrán"
+
+#: src/keyring.c:1298
+#, c-format
+msgid "%d keys selected"
+msgstr "%d klíčů vybráno"
+
+#: src/keyring.c:1327
+msgid "All signatures"
+msgstr "Všechny podpisy"
+
+#: src/keyring.c:1531
+msgid "Edit"
+msgstr "Upravit"
+
+#: src/keyring.c:1532
+msgid "Edit the selected private key"
+msgstr "Upravit vybraný soukromý klíč"
+
+#: src/keyring.c:1533
+msgid "edit key"
+msgstr "Upravit klíč"
+
+#: src/keyring.c:1541
+msgid "Remove the selected key"
+msgstr "Odstranit vybraný klíč"
+
+#: src/keyring.c:1542
+msgid "remove key"
+msgstr "odstranit klíč"
+
+#: src/keyring.c:1550
+msgid "Sign the selected key"
+msgstr "Podepsat vybraný klíč"
+
+#: src/keyring.c:1550
+msgid "sign key"
+msgstr "podepsat klíč"
+
+#: src/keyring.c:1557
+msgid "Import"
+msgstr "Importovat"
+
+#: src/keyring.c:1558
+msgid "Import Keys"
+msgstr "Importovat klíče"
+
+#: src/keyring.c:1558
+msgid "import keys"
+msgstr "získat klíče"
+
+#: src/keyring.c:1563
+msgid "Export"
+msgstr "Exportovat"
+
+#: src/keyring.c:1564
+msgid "Export Keys"
+msgstr "Exportovat klíče"
+
+#: src/keyring.c:1564
+msgid "export keys"
+msgstr "exportovat klíče"
+
+#: src/keyring.c:1577
+msgid "Brief"
+msgstr "Stručně"
+
+#: src/keyring.c:1577
+msgid "Show Brief Keylist"
+msgstr "Zobrazit stručný seznam klíčů"
+
+#: src/keyring.c:1578
+msgid "brief"
+msgstr "stručně"
+
+#: src/keyring.c:1589
+msgid "Detailed"
+msgstr "Podrobně"
+
+#: src/keyring.c:1589
+msgid "Show Key Details"
+msgstr "Zobrazit podrobnosti klíče"
+
+#: src/keyring.c:1590
+msgid "detailed"
+msgstr "podrobně"
+
+#: src/keyring.c:1623
+msgid "Refresh the keyring"
+msgstr "Aktualizovat keyring"
+
+#: src/keyring.c:1624
+msgid "refresh keyring"
+msgstr "aktualizovat keyring"
+
+#: src/keyring.c:1631
+msgid "Files"
+msgstr "Soubory"
+
+#: src/keyring.c:1632
+msgid "Open the File Manager"
+msgstr "Otevřít správce souborů"
+
+#: src/keyring.c:1633
+msgid "file manager"
+msgstr "správce souborů"
+
+#: src/keyring.c:1656
+msgid "Selected Default Key:"
+msgstr "Vybraný výchozí klíč:"
+
+#: src/keyring.c:1802
+msgid "GNU Privacy Assistant - Keyring Editor"
+msgstr "GNU Privacy Assistant - Editor keyringu"
+
+#: src/keyring.c:1833
+msgid "Keyring Editor"
+msgstr "Editor keyringu"
+
+#: src/keysigndlg.c:62
+msgid "Sign Key"
+msgstr "Podepsat klíč"
+
+#: src/keysigndlg.c:78
+msgid "Do you want to sign the following key?"
+msgstr "Chcete podepsat tento klíč?"
+
+#: src/keysigndlg.c:122
+msgid "Check the name and fingerprint carefully to be sure that it really is the key you want to sign."
+msgstr "Zkontrolujte pečlivě jméno a otisk klíče abyste se ujistili, že je to opravdu klíč který chcete podepsat."
+
+#: src/keysigndlg.c:130
+msgid "All user names in this key will be signed."
+msgstr "Všechna jména uživatele v tomto klíči budou podepsána."
+
+#: src/keysigndlg.c:136
+msgid "The key will be signed with your default private key."
+msgstr "Klíč bude podepsán vašim výchozím soukromým klíčem."
+
+#: src/keysigndlg.c:143
+msgid "Sign only _locally"
+msgstr "Podepsat pouze _lokálně"
+
+#: src/options.c:308
+msgid ""
+"The private key you selected as default is no longer available.\n"
+"GPA will try to choose a new default key automatically."
+msgstr ""
+"Zvolený výchozí soukromý klíč již není dostupný.\n"
+"GPA se pokusí automaticky zvolit nový výchozí klíč."
+
+#: src/ownertrustdlg.c:105
+msgid "Change key ownertrust"
+msgstr "Změnit úroveň důvěry ve vlastníka klíče"
+
+#: src/ownertrustdlg.c:129
+msgid "_Unknown"
+msgstr "Ne_známá"
+
+#: src/ownertrustdlg.c:134
+msgid "You don't know how much to trust this user to verify other people's keys.\n"
+msgstr ""
+
+#: src/ownertrustdlg.c:144
+msgid "_Never"
+msgstr "Žád_ná"
+
+#: src/ownertrustdlg.c:149
+msgid "You don't trust this user at all to verify the validity of other people's keys at all.\n"
+msgstr ""
+
+#: src/ownertrustdlg.c:159
+msgid "_Marginal"
+msgstr "Částečná"
+
+#: src/ownertrustdlg.c:164
+msgid ""
+"You don't trust this user's ability to verify the validity of other people's keys enough to consider keys valid based on his/her sole word.\n"
+"However, provided this user's key is valid, you will consider a key signed by this user valid if it is also signed by at least other two marginally trusted users with valid keys\n"
+msgstr ""
+
+#: src/ownertrustdlg.c:181
+msgid "_Full"
+msgstr "_Plná"
+
+#: src/ownertrustdlg.c:186
+msgid "You trust this user's ability to verify the validity of other people's keys so much, that you'll consider valid any key signed by him/her, provided this user's key is valid.\n"
+msgstr ""
+
+#: src/ownertrustdlg.c:199
+msgid "U_ltimate"
+msgstr "Absolutní"
+
+#: src/ownertrustdlg.c:204
+msgid ""
+"You consider this key valid, and trust the user so much that you will consider any key signed by him/her fully valid.\n"
+"\n"
+"(Warning: This is intended to be used for keys you own. Don't use it with other people's keys unless you really know what you are doing)\n"
+msgstr ""
+"Považujete tento klíč za platný a důvěřujete uživateli natolik, že všechny klíče které podepsal považujete za platné.\n"
+"\n"
+"(Pozor: tato úroveň je určena pro klíče, které vlastníte. Nepoužívejte ji pro klíče jiných osob pokud si nejste opravdu jistý co děláte.)\n"
+
+#: src/passwddlg.c:94
+msgid "Choose new passphrase"
+msgstr "Zvolte _novou pasfrázi"
+
+#: src/server_access.c:284
+msgid "No error"
+msgstr "Bez chyb"
+
+# gpapa.c: Keyserver-Fehlermeldungen
+#: src/server_access.c:287
+msgid "Internal error"
+msgstr "Interní chyba"
+
+#: src/server_access.c:290
+msgid "Operation not supported"
+msgstr "Operace není podporována"
+
+#: src/server_access.c:293
+msgid "Version mismatch"
+msgstr "Neodpovídá verze"
+
+#: src/server_access.c:296
+msgid "Internal keyserver error"
+msgstr "Interní chyba serveru klíčů"
+
+#: src/server_access.c:299
+msgid "Out of memory"
+msgstr "Došla paměť"
+
+#: src/server_access.c:302
+msgid "Key not found"
+msgstr "Klíč nebyl nalezen"
+
+#: src/server_access.c:305
+msgid "Key already exists on server"
+msgstr "Klíč už na serveru existuje"
+
+#: src/server_access.c:308
+msgid "Key incomplete"
+msgstr "Nekompletní klíč"
+
+#: src/server_access.c:311
+msgid "Could not contact keyserver"
+msgstr "Nemohu kontaktovat server klíčů"
+
+#: src/server_access.c:314
+msgid "Unknown Error"
+msgstr "Neznámá chyba"
+
+#: src/server_access.c:350
+#, c-format
+msgid ""
+"Connecting to server \"%s\".\n"
+"Please wait."
+msgstr ""
+"Připojuji se k serveru \"%s\".\n"
+"Čekejte prosím."
+
+#: src/server_access.c:373
+#: src/server_access.c:393
+#, c-format
+msgid ""
+"An error ocurred while contacting the server:\n"
+"\n"
+"%s"
+msgstr ""
+"Došlo k chybě při pokusu o připojení k serveru:\n"
+"\n"
+"%s"
+
+#: src/server_access.c:457
+msgid ""
+"There is no plugin available for the keyserver\n"
+"protocol you specified."
+msgstr ""
+"Není dostupný zásuvný modul protokolu\n"
+"pro komunikaci se serverem klíčů."
+
+#: src/server_access.c:530
+#: src/server_access.c:576
+msgid "The keyserver you specified is not valid"
+msgstr "Zadali jste neplatný server klíčů"
+
+#: src/settingsdlg.c:45
+msgid "Default _key:"
+msgstr "Výchozí _klíč:"
+
+#: src/settingsdlg.c:86
+msgid "Default key_server: "
+msgstr "Výchozí key_server:"
+
+#: src/settingsdlg.c:130
+msgid "Use _advanced mode:"
+msgstr "Použít rozšířený mód:"
+
+#: src/settingsdlg.c:163
+msgid "Settings"
+msgstr "Nastavení"
+
+#: src/siglist.c:126
+msgid "Level"
+msgstr "Úroveň"
+
+#: src/siglist.c:133
+msgid "Local"
+msgstr "Lokální"
+
+#: src/verifydlg.c:118
+msgid "Verify files"
+msgstr "Ověřit soubory"
+
+#: src/verifydlg.c:234
+msgid "Expired Key"
+msgstr "Klíči vypršela platnost"
+
+#: src/verifydlg.c:242
+msgid "Key NOT valid"
+msgstr "Klíč není platný"
+
+#: src/verifydlg.c:361
+#, c-format
+msgid "Verified data in file: %s"
+msgstr "Ověřena data v souboru: %s"
+
+#: src/verifydlg.c:366
+#, c-format
+msgid "Signature: %s"
+msgstr "Podpis: %s"
+
+#: src/verifydlg.c:372
+msgid "Signatures:"
+msgstr "Podpisy:"
+
+#~ msgid ">.\n"
+#~ msgstr ">.\n"
+#~ msgid ""
+#~ "If you want you can supply a comment that further identifies the key to "
+#~ "other users. The comment is especially useful if you generate several "
+#~ "keys for the same email address. The comment is completely optional. "
+#~ "Leave it empty if you don't have a use for it."
+#~ msgstr ""
+#~ "Wenn Sie möchten, können Sie einen Kommentar hinzufügen, der den "
+#~ "Schlüssel genauer beschreibt. Ein Kommentar ist vor allem dann sinnvoll, "
+#~ "wenn Sie mehrere Schlüssel für die gleiche E-Mail-Adresse erstellen. Wenn "
+#~ "Sie keine Verwendung dafür haben, können Sie den Kommentar auch einfach "
+#~ "leer lassen."
+#~ msgid "Comment:"
+#~ msgstr "Bemerkung:"
+#~ msgid "sign, do_n't compress"
+#~ msgstr "signieren, _nicht komprimieren"
+#~ msgid "Keyserver did not return any matching keys."
+#~ msgstr ""
+#~ "Der Key-Server hat keine passenden\n"
+#~ "Schlüssel zurückgeliefert."
+#~ msgid "Select keys to import"
+#~ msgstr "Schlüssel zum Importieren auswählen"
+#~ msgid "_Import"
+#~ msgstr "_Importieren"
+#~ msgid "Export Key"
+#~ msgstr "Schlüssel exportieren"
+#~ msgid "E_xport to file:"
+#~ msgstr "E_xportieren in Datei: "
+#~ msgid "_Key server:"
+#~ msgstr "An _Key-Server senden: "
+#~ msgid "Import Key"
+#~ msgstr "Schlüssel importieren"
+#~ msgid "I_mport from file:"
+#~ msgstr "_Importieren aus Datei:"
+#~ msgid "Receive from _server:"
+#~ msgstr "Schlüssel vom Key-Server _empfangen:"
+#~ msgid ""
+#~ "You have a secret key without the\n"
+#~ "corresponding public key in your\n"
+#~ "key ring. In order to use this key\n"
+#~ "you will need to import the public\n"
+#~ "key, too."
+#~ msgstr ""
+#~ "Sie haben einen geheimen Schlüssel ohne den\n"
+#~ "zugehörigen öffentlichen Schlüssel in Ihrem\n"
+#~ "Schlüsselbund. Um diesen Schlüssel nutzen zu\n"
+#~ "können, müssen Sie den öffentlichen Schlüssel\n"
+#~ "ebenfalls importieren."
+#~ msgid "No keys selected to export."
+#~ msgstr "Keine Schlüssel zum Exportieren ausgewählt."
+#~ msgid "No private key to backup."
+#~ msgstr "Kein privater Schlüssel vorhanden."
+#~ msgid "GPA: Loading keyring"
+#~ msgstr "GPA: Schlüsselbund einlesen"
+#~ msgid "Loading secret keys"
+#~ msgstr "Geheime Schlüssel einlesen"
+#~ msgid "Loading public keys"
+#~ msgstr "Öffentliche Schlüssel einlesen"
+#~ msgid "The key you selected is not available for encryption"
+#~ msgstr "Der ausgewählte Schlüssel ist nicht zum Verschlüsseln verfügbar."
+#~ msgid "The key you selected is not available for signing"
+#~ msgstr "Der ausgewählte Schlüssel steht nicht zum Signieren zur Verfügung."
+#~ msgid ""
+#~ "No public keys available.\n"
+#~ "Currently, there is nobody who could read a\n"
+#~ "file encrypted by you."
+#~ msgstr ""
+#~ "Kein öffentlicher Schlüssel verfügbar.\n"
+#~ "Derzeit kann niemand eine Datei lesen,\n"
+#~ "die von Ihnen verschlüsselt wurde."
+#~ msgid "No secret keys available."
+#~ msgstr "Kein geheimer Schlüssel vorhanden."
+#~ msgid "Files in work"
+#~ msgstr "Ausgewählte Dateien"
+#~ msgid ""
+#~ "Internal error:\n"
+#~ "Invalid sign mode"
+#~ msgstr ""
+#~ "Interner Fehler:\n"
+#~ "ungültige Signaturkennung"
+#~ msgid "No key selected!"
+#~ msgstr "Kein Schlüssel ausgewählt!"
+#~ msgid ""
+#~ "No secret keys available for signing.\n"
+#~ "Please generate or import a secret key first."
+#~ msgstr ""
+#~ "Kein geheimer Schlüssel zum Signieren vorhanden.\n"
+#~ "Bitte zuerst einen geheimen Schlüssel erzeugen oder importieren."
+#~ msgid "Sign Files"
+#~ msgstr "Dateien signieren"
+
+# ~ msgid "Show Warranty Information\n"
+# ~ msgstr "Gewährleistung\n"
+#~ msgid "Filename"
+#~ msgstr "Dateiname"
+#~ msgid "The currently selected filename."
+#~ msgstr "Der momentan ausgewählte Dateiname."
+#, fuzzy
+#~ msgid "Show file operations"
+#~ msgstr "Dateiaktionen anzeigen"
+#~ msgid "Whether buttons for creating/manipulating files should be displayed."
+#~ msgstr ""
+#~ "Sollen Knöpfe zum Erstellen bzw. Verwalten von Dateien angezeigt werden?"
+#~ msgid "Directories"
+#~ msgstr "Verzeichnisse"
+#~ msgid "_OK"
+#~ msgstr "_OK"
+#~ msgid "OK"
+#~ msgstr "OK"
+#~ msgid "Cancel"
+#~ msgstr "Abbrechen"
+#~ msgid "Directory unreadable: %s"
+#~ msgstr "Verzeichnis nicht lesbar: %s"
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "Die Datei \"%s\" befindet sich auf einer anderen Maschine (%s)\n"
+#~ "und ist möglicherweise für dieses Programm nicht erreichbar.\n"
+#~ "Sind Sie sicher, dass Sie diese Datei auswählen möchten?"
+#~ msgid "Create Dir"
+#~ msgstr "Verzeichnis erstellen"
+#~ msgid "Delete File"
+#~ msgstr "Datei löschen"
+#~ msgid "Rename File"
+#~ msgstr "Datei umbenennen"
+#~ msgid "Error"
+#~ msgstr "Fehler"
+#~ msgid "Close"
+#~ msgstr "Schließen"
+
+#, fuzzy
+#~ msgid ""
+#~ "The directory name \"%s\" contains symbols that are not allowed in "
+#~ "filenames"
+#~ msgstr ""
+#~ "Der Verzeichnisname \"%s\" enthält Symbole, die nicht in Dateinamen "
+#~ "vorkommen dürfen."
+#~ msgid ""
+#~ "Error creating directory \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Fehler beim Erstellen des Verzeichnisses \"%s\": %s\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "You probably used symbols not allowed in filenames."
+#~ msgstr ""
+#~ "Sie haben wahrscheinlich Symbole benutzt, die nicht in Dateinamen "
+#~ "vorkommen dürfen."
+#~ msgid "Error creating directory \"%s\": %s\n"
+#~ msgstr "Fehler beim Erstellen des Verzeichnisses \"%s\": %s\n"
+#~ msgid "Create Directory"
+#~ msgstr "Verzeichnis erstellen"
+#~ msgid "_Directory name:"
+#~ msgstr "_Verzeichnisname:"
+#~ msgid "Directory name:"
+#~ msgstr "Verzeichnisname:"
+#~ msgid "C_reate"
+#~ msgstr "_Erstellen"
+#~ msgid "Create"
+#~ msgstr "Erstellen"
+
+#, fuzzy
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Der Dateiname \"%s\" enthält Symbole, die nicht in Dateinamen vorkommen "
+#~ "dürfen."
+#~ msgid ""
+#~ "Error deleting file \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Fehler beim Löschen der Datei \"%s\": %s\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "It probably contains symbols not allowed in filenames."
+#~ msgstr ""
+#~ "Sie enthält wahrscheinlich Symbole, die nicht in Dateinamen vorkommen "
+#~ "dürfen."
+#~ msgid "Error deleting file \"%s\": %s"
+#~ msgstr "Fehler beim Löschen der Datei \"%s\": %s"
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "Datei \"%s\" wirklich löschen?"
+#~ msgid "_Delete"
+#~ msgstr "_Löschen"
+#~ msgid "Delete"
+#~ msgstr "Löschen"
+
+#, fuzzy
+#~ msgid ""
+#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Der Dateiname \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt "
+#~ "sind."
+#~ msgid ""
+#~ "Error renaming file to \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Fehler beim Umbenennen der Datei in \"%s\": %s\n"
+#~ "%s"
+#~ msgid ""
+#~ "Error renaming file \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Fehler beim Umbenennen der Datei \"%s\": %s\n"
+#~ "%s"
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Fehler beim Umbenennen der Datei \"%s\" in \"%s\": %s"
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Neuer Name für Datei \"%s\":"
+#~ msgid "_Rename"
+#~ msgstr "_Umbenennen"
+#~ msgid "Rename"
+#~ msgstr "Umbenennen"
+#~ msgid "Selection: "
+#~ msgstr "Auswahl:"
+#~ msgid ""
+#~ "The filename %s couldn't be converted to UTF-8. Try setting the "
+#~ "environment variable G_BROKEN_FILENAMES."
+#~ msgstr ""
+#~ "Der Dateiname %s konnte nicht in UTF-8 umgewandelt werden. Versuchen Sie, "
+#~ "die Umgebungsvariable G_BROKEN_FILENAMES zu belegen."
+#~ msgid "Name too long"
+#~ msgstr "Diese Name ist zu lang."
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Der Dateiname konnte nicht umgewandelt werden."
+#~ msgid "01.01.2000"
+#~ msgstr "01.01.2000"
+#~ msgid "expire a_t"
+#~ msgstr "verfä_llt am"
+#~ msgid "_Prev"
+#~ msgstr "_Zurück"
+#~ msgid "_Next"
+#~ msgstr "_Weiter"
+#~ msgid ""
+#~ "In \"Passphrase\" and \"Repeat passphrase\"\n"
+#~ "you must enter the same passphrase."
+#~ msgstr ""
+#~ "Bitte achten Sie darauf, daß Sie unter\n"
+#~ "\"Passwortsatz\" und \"Passwortsatz wiederholen\"\n"
+#~ "genau denselben Passwortsatz eingeben."
+#~ msgid "generate re_vocation certificate"
+#~ msgstr "_Rückrufurkunde erzeugen"
+#~ msgid "_send to key server"
+#~ msgstr "_Zum Key-Server schicken"
+#~ msgid "_Generate key"
+#~ msgstr "Schlüssel _erzeugen"
+#~ msgid "F_inish"
+#~ msgstr "F_ertig"
+#~ msgid "User Identity/Role"
+#~ msgstr "Benutzerkennung"
+#~ msgid " Decrypt "
+#~ msgstr " Entschlüsseln "
+#~ msgid "Invalid Date"
+#~ msgstr "Ungültiges Datum"
+#~ msgid "/File/C_heck"
+#~ msgstr "/Datei/_Prüfen"
+#~ msgid "Open"
+#~ msgstr "öffnen"
+#~ msgid "NOTE: no default option file `%s'\n"
+#~ msgstr "HINWEIS: Keine Standard-Konfigurationsdatei `%s'\n"
+#~ msgid "option file `%s': %s\n"
+#~ msgstr "Konfigurationsdatei `%s': %s\n"
+#~ msgid "reading options from `%s'\n"
+#~ msgstr "Lese Konfiguration aus `%s'\n"
+#~ msgid "Insert passphrase"
+#~ msgstr "Passwortsatz eingeben"
+
+#, fuzzy
+#~ msgid "/Help/_Help"
+#~ msgstr "/Info/_Hilfe"
+#~ msgid "To _clipboard"
+#~ msgstr "Zur _Zwischenablage exportieren"
+#~ msgid "Weak passphrase"
+#~ msgstr "Unsicherer Passwortsatz"
+#~ msgid "Import from _clipboard:"
+#~ msgstr "Aus _Zwischenablage importieren"
+#~ msgid "Missing public key"
+#~ msgstr "Öffentlicher Schlüssel fehlt"
+
+#, fuzzy
+#~ msgid ""
+#~ "An error occured while receiving\n"
+#~ "the requested key from the keyserver."
+#~ msgstr ""
+#~ "Fehler beim Exportieren\n"
+#~ "geheimer Schlüssel."
+
+#, fuzzy
+#~ msgid "Receive key from server"
+#~ msgstr "Schlüssel vom Key-Server _empfangen:"
+
+#, fuzzy
+#~ msgid "_Key ID: "
+#~ msgstr "Schlüsselkennung:"
+
+#, fuzzy
+#~ msgid "_Receive"
+#~ msgstr "_Empfänger"
+#~ msgid "Remove"
+#~ msgstr "Löschen"
+#~ msgid "Set key server"
+#~ msgstr "Key-Server festlegen"
+#~ msgid "_Key server: "
+#~ msgstr "_Key-Server: "
+#~ msgid "_Set"
+#~ msgstr "Über_nehmen"
+
+#, fuzzy
+#~ msgid "Fingerprint"
+#~ msgstr "Fingerabdruck:"
+#~ msgid "User identity / role"
+#~ msgstr "Benutzerkennung"
+#~ msgid ""
+#~ "No secret keys available to\n"
+#~ "select a default key from."
+#~ msgstr ""
+#~ "Keine geheimen Schlüssel für die Auswahl\n"
+#~ "eines Standard-Schlüssels vorhanden."
+#~ msgid "Set default key"
+#~ msgstr "Standard-Schlüssel festlegen"
+#~ msgid "/Options/_Keyserver"
+#~ msgstr "/Optionen/_Key-Server"
+#~ msgid "/Options/_Default Key"
+#~ msgstr "/Optionen/_Standard-Schlüssel"
+#~ msgid "Validity"
+#~ msgstr "Gültigkeit"
+#~ msgid "Signature"
+#~ msgstr "Signatur"
+#~ msgid "The keyserver returned an error message."
+#~ msgstr "Der Server antwortete mit einer Fehlermeldung."
+#~ msgid "Keyserver timeout"
+#~ msgstr "Server-Zeitüberschreitung"
+#~ msgid "Error initializing network"
+#~ msgstr "Fehler beim Initialisieren des Netzwerks"
+#~ msgid "Error resolving host name"
+#~ msgstr "Fehler bei der Namensauflösung"
+#~ msgid "Error while connecting to keyserver"
+#~ msgstr "Fehler beim Verbindungsaufbau zum Server"
+#~ msgid "No recipients chosen to encrypt for."
+#~ msgstr "Es sind keine Empfänger ausgewählt."
+#~ msgid "No file selected for verifying signature."
+#~ msgstr "Keine Datei zum Prüfen der Signatur ausgewählt."
+#~ msgid "Verifying file signature"
+#~ msgstr "Dateisignatur prüfen"
+#~ msgid "Filename: "
+#~ msgstr "Dateiname: "
+#~ msgid "Status:"
+#~ msgstr "Status:"
+#~ msgid "_Signatures"
+#~ msgstr "_Signaturen"
+#~ msgid "Sigs total"
+#~ msgstr "Sign. gesamt"
+#~ msgid "Valid Sigs"
+#~ msgstr "Gültige Sign."
+#~ msgid "Invalid Sigs"
+#~ msgstr "Ungültige Sign."
+#~ msgid "Info"
+#~ msgstr "Info"
+#~ msgid "clear"
+#~ msgstr "Klartext"
+#~ msgid "protected"
+#~ msgstr "geschützt"
+#~ msgid "clearsigned"
+#~ msgstr "Klartext-Signatur"
+#~ msgid "detach-signed"
+#~ msgstr "separate Signatur"
+#~ msgid "No key selected for detail view."
+#~ msgstr "Kein Schlüssel für Detailansicht ausgewählt."
+#~ msgid "Show public key detail"
+#~ msgstr "Detailansicht öffentlicher Schlüssel"
+#~ msgid "Fingerprint: "
+#~ msgstr "Fingerabdruck: "
+#~ msgid "Key owner"
+#~ msgstr "Schlüsseleigentümer"
+#~ msgid "Add _default recipients:"
+#~ msgstr "_Empfänger hinzufügen"
+#~ msgid "Rec_ipients"
+#~ msgstr "_Empfänger"
+#~ msgid "Remo_ve keys from recipients"
+#~ msgstr "Schlüssel von Empfängern _entfernen"
+#~ msgid "Add _keys to recipients"
+#~ msgstr "_Schlüssel zu Empfängern hinzufügen"
+#~ msgid "S_how detail"
+#~ msgstr "Detail _zeigen"
+#~ msgid "Save encrypted file _as: "
+#~ msgstr "Verschlüsselte Datei speichern als: "
+#~ msgid "   _Browse   "
+#~ msgstr "   _Durchsuchen   "
+#~ msgid "Save encrypted file as"
+#~ msgstr "Verschlüsselte Datei speichern als"
+#~ msgid "_Encrypt"
+#~ msgstr "_Verschlüsseln"
+#~ msgid "No files selected to protect."
+#~ msgstr "Keine zu schützenden Dateien ausgewählt."
+#~ msgid "Protect files by Password"
+#~ msgstr "Dateien mit Passwort schützen"
+#~ msgid "Save protected _file as: "
+#~ msgstr "Geschützte _Datei speichern unter: "
+#~ msgid "Save protected file as"
+#~ msgstr "Geschützte Datei speichern unter"
+#~ msgid "P_assword: "
+#~ msgstr "P_asswort: "
+#~ msgid "Repeat Pa_ssword: "
+#~ msgstr "Pa_sswort wiederholen: "
+#~ msgid "_Protect"
+#~ msgstr "_Schützen"
+#~ msgid "No files selected to decrypt."
+#~ msgstr "Keine Dateien zum Entschlüsseln ausgewählt."
+#~ msgid "Save file _as: "
+#~ msgstr "Datei _speichern unter: "
+#~ msgid "Save decrypted file as"
+#~ msgstr "Entschlüsselte Datei speichern unter"
+#~ msgid "No keys selected to remove from recipients list"
+#~ msgstr "Keine Schlüssel aus Empfängerliste ausgewählt"
+#~ msgid "No keys selected to add to recipients list."
+#~ msgstr "Keine Schlüssel ausgewählt"
+#~ msgid "don't trust"
+#~ msgstr "kein Vertrauen"
+#~ msgid "trust marginally"
+#~ msgstr "teilweises Vertrauen"
+#~ msgid "trust fully"
+#~ msgstr "volles Vertrauen"
+#~ msgid "trust ultimately"
+#~ msgstr "vollständiges Vertrauen"
+#~ msgid "invalid"
+#~ msgstr "ungültig"
+#~ msgid "ElGamal (sign and encrypt)"
+#~ msgstr "ElGamal (signieren und verschlüsseln)"
+#~ msgid "ElGamal (encrypt only)"
+#~ msgstr "ElGamal (nur verschlüsseln)"
+#~ msgid "!INVALID!"
+#~ msgstr "!UNGÜLTIG!"
+#~ msgid "/_Info"
+#~ msgstr "/_Info"
+#~ msgid "/Info/_Warranty"
+#~ msgstr "/Info/_Gewährleistung"
+#~ msgid "Change _trust"
+#~ msgstr "_Benutzervertrauen ändern"
+#~ msgid "Export keys"
+#~ msgstr "Schlüssel exportieren"
+#~ msgid "Directory does not exist"
+#~ msgstr "Verzeichnis existiert nicht"
+#~ msgid ""
+#~ "Directory %s does not exist.\n"
+#~ "Do you want to create it now?"
+#~ msgstr ""
+#~ "Verzeichnis %s existiert nicht.\n"
+#~ "Möchten Sie es jetzt erstellen?"
+#~ msgid "Error creating directory"
+#~ msgstr "Fehler beim Erstellen des Verzeichnisses"
+#~ msgid "Backup Directory"
+#~ msgstr "Verzeichnis für Sicherheitskopie"
+#~ msgid ""
+#~ "Please enter a directory where your backup keys should be saved.\n"
+#~ "\n"
+#~ "GPA will create two files in that directory: pub_key.asc and sec_key.asc"
+#~ msgstr ""
+#~ "Bitte geben Sie ein Verzeichnis zur Speicherung der Sicherheitskopie "
+#~ "Ihres neuen Schlüssels an. Wir empfehlen die Sicherung auf einer Diskette "
+#~ "(Laufwerk A:\\).\n"
+#~ "GPA wird dort die beiden Dateien pub_key.asc und sec_key.asc speichern."
+#~ msgid "Directory:"
+#~ msgstr "Verzeichnis:"
+#~ msgid "_Overwrite"
+#~ msgstr "_Überschreiben"
+#~ msgid "File exists"
+#~ msgstr "Datei existiert"
+#~ msgid "Please enter a valid directory"
+#~ msgstr "Bitte geben Sie ein gültiges Verzeichnis an"
+#~ msgid "Key Trust"
+#~ msgstr "Schlüsselvertrauen"
+#~ msgid "No key defined"
+#~ msgstr "Kein Schlüssel"
+#~ msgid "No key backup"
+#~ msgstr "Keine Sicherheitskopie"
+#~ msgid "Key Trust:"
+#~ msgstr "Schlüsselvertrauen:"
+#~ msgid "User ID:"
+#~ msgstr "Benutzerkennung:"
+#~ msgid "1"
+#~ msgstr "1"
+#~ msgid "Keys exported."
+#~ msgstr "Schlüssel exportiert."
+#~ msgid "Export to _file: "
+#~ msgstr "Exportieren in _Datei: "
+#~ msgid "E_xport"
+#~ msgstr "E_xportieren"
+#~ msgid "Export ownertrust to file"
+#~ msgstr "Benutzervertrauen in Datei exportieren"
+#~ msgid "No keys selected to delete."
+#~ msgstr "Keine Schlüssel zum Löschen ausgewählt."
+#~ msgid "!FATAL ERROR: Invalid key selection info!\n"
+#~ msgstr "!FATAL ERROR: Invalid key selection info!\n"
+#~ msgid "Revocation certificate created."
+#~ msgstr "Rückrufurkunde erzeugt."
+#~ msgid "No key selected for editing."
+#~ msgstr "Kein Schlüssel zum Bearbeiten ausgewählt."
+#~ msgid "Secret key editor"
+#~ msgstr "Schlüsseleditor für geheimen Schlüssel"
+#~ msgid "Create Re_vocation"
+#~ msgstr "_Rückrufurkunde erzeugen"
+#~ msgid "E_xport key"
+#~ msgstr "Schlüssel e_xportieren"
+#~ msgid "_Save and exit"
+#~ msgstr "_Speichern und Schließen"
+#~ msgid "E_xport keys"
+#~ msgstr "Schlüssel e_xportieren"
+#~ msgid "_Delete keys"
+#~ msgstr "Schlüssel _löschen"
+#~ msgid "_Edit key"
+#~ msgstr "Schlüssel _bearbeiten"
+#~ msgid "No keys selected to create revocation certificate for."
+#~ msgstr "Keine Schlüssel ausgewählt."
+#~ msgid "Generate revocation certificate"
+#~ msgstr "Rückrufurkunde erzeugen"
+#~ msgid "_Secret keys"
+#~ msgstr "Geheime _Schlüssel"
+#~ msgid "Import keys"
+#~ msgstr "Schlüssel importieren"
+#~ msgid "Import ownertrust"
+#~ msgstr "Benutzervertrauen importieren"
+#~ msgid "Trust database updated."
+#~ msgstr "Vertrauensdatenbank aktualisiert."
+#~ msgid ""
+#~ "No public keys available to denote\n"
+#~ "as default recipients."
+#~ msgstr ""
+#~ "Keine öffentlichen Schlüssel für die\n"
+#~ "Auswahl der Empfänger vorhanden."
+#~ msgid "Set default recipients"
+#~ msgstr "Empfängerliste festlegen"
+#~ msgid "_Remove from recipients"
+#~ msgstr "Aus Empfängerliste ent_fernen"
+#~ msgid "_Add to recipients"
+#~ msgstr "Zu Empfängerliste _hinzufügen"
+#~ msgid "/Options/Default _Recipients"
+#~ msgstr "/Optionen/_Empfängerliste"
+#~ msgid "Invalid ownertrust level."
+#~ msgstr "Ungültige Benutzervertrauen-Stufe."
+#~ msgid "_Ownertrust level: "
+#~ msgstr "_Benutzervertrauen-Stufe: "
+#~ msgid "_Accept"
+#~ msgstr "_Übernehmen"
+#~ msgid "_Open"
+#~ msgstr "_Öffnen"
+#~ msgid ""
+#~ "The keyserver returned an error message:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Der Key-Server antwortete mit einer Fehlermeldung:\n"
+#~ "\n"
+#~ "%s"
+#~ msgid "Invalid number of fields in GnuPG colon output"
+#~ msgstr "Fehlerhafte Anzahl von Feldern im GnuPG-Ausgabetext"
+#~ msgid "Target file not specified"
+#~ msgstr "Ausgabedatei nicht angegeben"
+#~ msgid "Source file not specified"
+#~ msgstr "Eingabedatei nicht angegeben"
+#~ msgid "Error accessing file"
+#~ msgstr "Auf die Datei kann nicht zugegriffen werden"
+#~ msgid "Not a regular file"
+#~ msgstr "Keine reguläre Datei"
+#~ msgid "Missing file name"
+#~ msgstr "Dateiname fehlt"
+#~ msgid "Missing private key ID for signing"
+#~ msgstr ""
+#~ "Es wurde kein geheimer Schlüssel angegeben,\n"
+#~ "mit dem die Unterschrift ausgeführt werden kann."
+#~ msgid "Invalid signature type"
+#~ msgstr "Ungültiger Signaturtyp"
+#~ msgid "Missing public key ID(s) for encrypting"
+#~ msgstr ""
+#~ "Es wurde kein öffentlicher Schlüssel angegeben,\n"
+#~ "für den verschlüsselt werden soll."
+#~ msgid "Missing passphrase for symmetric encrypting"
+#~ msgstr "Passwortsatz für symmetrische Verschlüsselung fehlt"
+#~ msgid "Missing passphrase for decrypting"
+#~ msgstr "Passwortsatz für Entschlüsselung fehlt"
+#~ msgid "GnuPG execution aborted"
+#~ msgstr "Die Ausführung von GnuPG wurde abgebrochen."
+#~ msgid "Invalid file: bad armor"
+#~ msgstr "Fehlerhafte Datei: ungültige ASCII-Verpackung"
+#~ msgid "Invalid file: bad MDC"
+#~ msgstr "Fehlerhafte Datei: ungültige MDC"
+#~ msgid "Decryption failed"
+#~ msgstr "Entschlüsselung fehlgeschlagen"
+#~ msgid "Delete problem"
+#~ msgstr "Problem beim Löschen"
+#~ msgid "Error in MDC"
+#~ msgstr "Fehler in MDC"
+#~ msgid "Error in signature"
+#~ msgstr "Fehlerhafte Signatur"
+#~ msgid "File error"
+#~ msgstr "Fehlerhafte Datei"
+#~ msgid "Missing passphrase"
+#~ msgstr "Passwortsatz fehlt"
+#~ msgid "No valid OpenPGP data found"
+#~ msgstr "Keine gültigen OpenPGP-Daten gefunden"
+#~ msgid ""
+#~ "GnuPG execution failed:\n"
+#~ "internal error while setting\n"
+#~ "command handler"
+#~ msgstr ""
+#~ "GnuPG-Ausführung fehlgeschlagen:\n"
+#~ "Interner Fehler beim Setzen des\n"
+#~ "\"command handler\""
+#~ msgid ""
+#~ "GnuPG execution failed:\n"
+#~ "could not spawn external program"
+#~ msgstr ""
+#~ "GnuPG-Ausführung fehlgeschlagen:\n"
+#~ "Externes Programm kann nicht aufgerufen werden"
+#~ msgid "GnuPG execution terminated"
+#~ msgstr "GnuPG-Aufruf beendet"
+#~ msgid "Invalid number of fields in output of `gpg --check-sigs'"
+#~ msgstr ""
+#~ "Fehlerhafte Anzahl von Feldern in der Ausgabe von `gpg --check-sigs'"
+#~ msgid "No valid public key specified"
+#~ msgstr "Kein gültiger öffentlicher Schlüssel angegeben"
+#~ msgid "No valid secret key specified"
+#~ msgstr "Kein gültiger geheimer Schlüssel angegeben"
+#~ msgid "No valid passphrase specified"
+#~ msgstr "Kein gültiger Passwortsatz angegeben"
+
