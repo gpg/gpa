@@ -1,9 +1,13 @@
-Noteworthy changes in version 0.7.5
+Noteworthy changes in version 0.7.5 (2007-02-26)
 ------------------------------------------------
 
- * Allow setting a password if it is empty.
+ * Allow setting a password if it was empty.
 
  * Fixed changing of expiration date for non-C-99 systems.
+
+ * Fixed a crash while encrypting several files.
+
+ * Fixed a bug while encrypting to several keys.
 
 
 Noteworthy changes in version 0.7.4 (2006-07-25)

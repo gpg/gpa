@@ -11,6 +11,13 @@ aclocal_vers=1.6
 libtool_vers=1.4
 
 DIE=no
+FORCE=
+if test "$1" == "--force"; then
+  FORCE=" --force"
+  shift
+fi
+
+
 if test "$1" = "--build-w32"; then
     tmp=`dirname $0`
     tsdir=`cd "$tmp"; pwd`
@@ -152,7 +159,7 @@ echo "Running autoheader..."
 autoheader
 echo "Running automake --add-missing --gnu ..."
 automake --add-missing --gnu
-echo "Running autoconf..."
-autoconf
+echo "Running autoconf${FORCE} ..."
+autoconf${FORCE}
 
 echo "You may now run \"./configure --enable-maintainer-mode\" and then \"make\"."

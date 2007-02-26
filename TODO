@@ -31,3 +31,7 @@ In no particular order:
 
 * Support a "File Status" (encrypted, signed, etc..) column in the
   filemanager, if GPGME allows it.
+
+* [W32] Clipboard encryption
+
+* Support drag and drop in the file manager

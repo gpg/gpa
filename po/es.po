@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2006-07-25 08:34+0200\n"
+"POT-Creation-Date: 2007-02-21 14:59+0100\n"
 "PO-Revision-Date: 2003-10-18 13:35+0200\n"
 "Last-Translator: Miguel Coca <mcoca@gnu.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: src/encryptdlg.c:134 src/expirydlg.c:115 src/filesigndlg.c:123
 #: src/gpabackupop.c:294 src/gpaprogressdlg.c:144 src/gparecvkeydlg.c:95
-#: src/gpawizard.c:287 src/gpgmetools.c:654 src/keygendlg.c:140
+#: src/gpawizard.c:287 src/gpgmetools.c:660 src/keygendlg.c:140
 #: src/ownertrustdlg.c:110 src/passwddlg.c:98
 msgid "_Cancel"
 msgstr "_Cancelar"
@@ -66,7 +66,7 @@ msgstr "Abrir Archivo"
 msgid "The file is already open."
 msgstr "El archivo ya está abierto."
 
-#: src/fileman.c:466 src/keyring.c:829
+#: src/fileman.c:466 src/keyring.c:844
 msgid "/_File"
 msgstr "/_Archivo"
 
@@ -102,39 +102,39 @@ msgstr "/Archivo/_Descifrar"
 msgid "/File/sep2"
 msgstr "/Archivo/sep2"
 
-#: src/fileman.c:475 src/keyring.c:830
+#: src/fileman.c:475 src/keyring.c:845
 msgid "/File/_Close"
 msgstr "/Archivo/C_errar"
 
-#: src/fileman.c:476 src/keyring.c:832
+#: src/fileman.c:476 src/keyring.c:847
 msgid "/File/_Quit"
 msgstr "/Archivo/_Salir"
 
-#: src/fileman.c:479 src/keyring.c:835
+#: src/fileman.c:479 src/keyring.c:850
 msgid "/_Edit"
 msgstr "/_Editar"
 
-#: src/fileman.c:480 src/keyring.c:841
+#: src/fileman.c:480 src/keyring.c:856
 msgid "/Edit/Select _All"
 msgstr "/Editar/Seleccionar _Todo"
 
-#: src/fileman.c:481 src/keyring.c:842
+#: src/fileman.c:481 src/keyring.c:857
 msgid "/Edit/sep2"
 msgstr "/Editar/sep2"
 
-#: src/fileman.c:482 src/keyring.c:843
+#: src/fileman.c:482 src/keyring.c:858
 msgid "/Edit/Pr_eferences..."
 msgstr "/Editar/Pr_eferencias..."
 
-#: src/fileman.c:486 src/keyring.c:870
+#: src/fileman.c:486 src/keyring.c:885
 msgid "/_Windows"
 msgstr "/_Ventanas"
 
-#: src/fileman.c:487 src/keyring.c:871
+#: src/fileman.c:487 src/keyring.c:886
 msgid "/Windows/_Filemanager"
 msgstr "/Ventanas/Gestor de _Archivos"
 
-#: src/fileman.c:488 src/keyring.c:872
+#: src/fileman.c:488 src/keyring.c:887
 msgid "/Windows/_Keyring Editor"
 msgstr "/Ventanas/_Editor del anillo"
 
@@ -170,7 +170,7 @@ msgstr "Cerrar todos los archivos"
 msgid "close files"
 msgstr "cerrar archivos"
 
-#: src/fileman.c:559 src/keyring.c:1549
+#: src/fileman.c:559 src/keyring.c:1564
 msgid "Sign"
 msgstr "Firmar"
 
@@ -218,23 +218,23 @@ msgstr "Descifrar el archivo seleccionado"
 msgid "decrypt file"
 msgstr "descifrar archivo"
 
-#: src/fileman.c:605 src/keyring.c:1614
+#: src/fileman.c:605 src/keyring.c:1629
 msgid "Open the Preferences dialog"
 msgstr "Abrir la ventana de Preferencias"
 
-#: src/fileman.c:606 src/keyring.c:1615
+#: src/fileman.c:606 src/keyring.c:1630
 msgid "preferences"
 msgstr "preferencias"
 
-#: src/fileman.c:614 src/keyring.c:1638
+#: src/fileman.c:614 src/keyring.c:1653
 msgid "Help"
 msgstr "Ayuda"
 
-#: src/fileman.c:615 src/keyring.c:1639
+#: src/fileman.c:615 src/keyring.c:1654
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "Comprendiendo el GNU Privacy Assistant"
 
-#: src/fileman.c:616 src/keyring.c:1640
+#: src/fileman.c:616 src/keyring.c:1655
 msgid "help"
 msgstr "ayuda"
 
@@ -280,14 +280,14 @@ msgstr ""
 "¿Quiere sobreescribirlo?"
 
 #: src/gpabackupop.c:218 src/gpaexportserverop.c:132
-#: src/gpafileencryptop.c:297 src/gpafileverifyop.c:175 src/gpgmetools.c:140
+#: src/gpafileencryptop.c:311 src/gpafileverifyop.c:175 src/gpgmetools.c:140
 #: src/keydeletedlg.c:43 src/keydeletedlg.c:92 src/keysigndlg.c:64
 #: src/settingsdlg.c:136
 msgid "_Yes"
 msgstr "_Sí"
 
 #: src/gpabackupop.c:219 src/gpaexportserverop.c:133
-#: src/gpafileencryptop.c:298 src/gpafileverifyop.c:176 src/gpgmetools.c:141
+#: src/gpafileencryptop.c:312 src/gpafileverifyop.c:176 src/gpgmetools.c:141
 #: src/keydeletedlg.c:45 src/keydeletedlg.c:94 src/keysigndlg.c:66
 #: src/settingsdlg.c:139
 msgid "_No"
@@ -371,10 +371,6 @@ msgstr "Opciones"
 msgid "Please report bugs to <"
 msgstr "Por favor, envíe informes de error a <"
 
-#: src/gpa.c:409
-msgid ">.\n"
-msgstr ">.\n"
-
 #: src/gpaexportclipop.c:137
 msgid "The keys have been copied to the clipboard."
 msgstr "Las claves se han copiado al portapapeles."
@@ -421,58 +417,58 @@ msgstr "El archivo \"%s\" no contiene datos OpenPGP válidos."
 msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "El archivo \"%s\" no contiene datos cifrados válidos."
 
-#: src/gpafiledecryptop.c:296 src/gpafileencryptop.c:565
-#: src/gpafilesignop.c:353 src/gpafileverifyop.c:393 src/gpakeyexpireop.c:232
+#: src/gpafiledecryptop.c:296 src/gpafileencryptop.c:579
+#: src/gpafilesignop.c:353 src/gpafileverifyop.c:393 src/gpakeyexpireop.c:233
 #: src/gpakeypasswdop.c:195 src/gpakeysignop.c:227
 msgid "Wrong passphrase!"
 msgstr "¡Contraseña incorrecta!"
 
-#: src/gpafileencryptop.c:99
+#: src/gpafileencryptop.c:107
 msgid "Encrypting..."
 msgstr "Cifrando..."
 
-#: src/gpafileencryptop.c:295 src/verifydlg.c:224
+#: src/gpafileencryptop.c:309 src/verifydlg.c:224
 msgid "Unknown Key"
 msgstr "Clave Desconocida"
 
-#: src/gpafileencryptop.c:311
+#: src/gpafileencryptop.c:325
 msgid "You are going to encrypt a file using the following key:"
 msgstr "Va a cifrar un archivo usando la clave:"
 
-#: src/gpafileencryptop.c:317
+#: src/gpafileencryptop.c:331
 msgid "However, it is not certain that the key belongs to that person."
 msgstr ""
 "Sin embargo, no existe seguridad de que la clave pertenezca a esa persona"
 
-#: src/gpafileencryptop.c:323
+#: src/gpafileencryptop.c:337
 msgid "Do you <b>really</b> want to use this key?"
 msgstr "¿Está <b>seguro</b> de que quiere usar esa clave?"
 
-#: src/gpafileencryptop.c:344 src/gpafileencryptop.c:384 src/verifydlg.c:229
+#: src/gpafileencryptop.c:358 src/gpafileencryptop.c:398 src/verifydlg.c:229
 msgid "Revoked Key"
 msgstr "Clave Revocada"
 
-#: src/gpafileencryptop.c:346 src/gpafileencryptop.c:386 src/gpawizard.c:279
+#: src/gpafileencryptop.c:360 src/gpafileencryptop.c:400 src/gpawizard.c:279
 #: src/gtktools.c:315 src/gtktools.c:348 src/helpmenu.c:414
-#: src/keyeditdlg.c:150 src/keylist.c:499 src/settingsdlg.c:166
+#: src/keyeditdlg.c:150 src/keylist.c:512 src/settingsdlg.c:166
 #: src/verifydlg.c:117
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: src/gpafileencryptop.c:359
+#: src/gpafileencryptop.c:373
 msgid "The following key has been revoked by it's owner:"
 msgstr "Esta clave ha sido revocada por su propietario:"
 
-#: src/gpafileencryptop.c:364 src/gpafileencryptop.c:407
+#: src/gpafileencryptop.c:378 src/gpafileencryptop.c:421
 msgid "And can not be used for encryption."
 msgstr "Y no se puede usar para cifrado."
 
-#: src/gpafileencryptop.c:399
+#: src/gpafileencryptop.c:413
 #, c-format
 msgid "The following key expired on %s:"
 msgstr "Esta clave caducó el %s:"
 
-#: src/gpafileencryptop.c:483 src/gpafilesignop.c:281
+#: src/gpafileencryptop.c:497 src/gpafilesignop.c:281
 msgid "You didn't select any key for signing"
 msgstr "No se seleccionó ninguna clave con la que firmar"
 
@@ -501,11 +497,11 @@ msgstr "Generando Clave..."
 msgid "Import public keys from file"
 msgstr "Importar claves públicas de fichero"
 
-#: src/gpaimportop.c:186
+#: src/gpaimportop.c:195
 msgid "No keys were found."
 msgstr "No se encontró ninguna clave."
 
-#: src/gpaimportop.c:194
+#: src/gpaimportop.c:203
 #, c-format
 msgid ""
 "%i public keys read\n"
@@ -521,6 +517,12 @@ msgstr ""
 "%i claves secretas leídas\n"
 "%i claves secretas importadas\n"
 "%i claves secretas sin cambios"
+
+#: src/gpakeyexpireop.c:237
+msgid ""
+"Invalid time given.\n"
+"(you may not set the expiration time to the past.)"
+msgstr ""
 
 #: src/gpakeyselector.c:88 src/keylist.c:224 src/keylist.c:259
 #: src/siglist.c:92 src/siglist.c:112 src/verifydlg.c:326
@@ -617,12 +619,12 @@ msgstr "Puede cifrar"
 msgid "Can authenticate"
 msgstr "Puede autenticar"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:577 src/gpgmetools.c:762
-#: src/gpgmetools.c:881
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:577 src/gpgmetools.c:768
+#: src/gpgmetools.c:887
 msgid "Revoked"
 msgstr "Revocada"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:579 src/gpgmetools.c:877
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:579 src/gpgmetools.c:883
 msgid "Expired"
 msgstr "Caducada"
 
@@ -634,12 +636,12 @@ msgstr "Desactivada"
 msgid "Unsigned"
 msgstr "Sin firmar"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:868 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:874 src/verifydlg.c:214
 msgid "Valid"
 msgstr "Válida"
 
-#: src/gpawidgets.c:74 src/gpgmetools.c:619 src/gpgmetools.c:626
-#: src/keyring.c:1158 src/keysigndlg.c:106
+#: src/gpawidgets.c:74 src/gpgmetools.c:625 src/gpgmetools.c:632
+#: src/keyring.c:1173 src/keysigndlg.c:106
 msgid "User Name:"
 msgstr "Nombre de Usuario:"
 
@@ -647,8 +649,8 @@ msgstr "Nombre de Usuario:"
 msgid "User Names:"
 msgstr "Nombres de Usuario:"
 
-#: src/gpawidgets.c:80 src/gpgmetools.c:620 src/gpgmetools.c:627
-#: src/keyring.c:1160
+#: src/gpawidgets.c:80 src/gpgmetools.c:626 src/gpgmetools.c:633
+#: src/keyring.c:1175
 msgid "Key ID:"
 msgstr "ID de Clave:"
 
@@ -760,7 +762,7 @@ msgid "RSA (sign only)"
 msgstr "RSA (solo firma)"
 
 #: src/gpgmetools.c:545 src/gpgmetools.c:568 src/gpgmetools.c:585
-#: src/gpgmetools.c:873 src/gpgmetools.c:906
+#: src/gpgmetools.c:879 src/gpgmetools.c:912
 msgid "Unknown"
 msgstr "Desconocida"
 
@@ -788,65 +790,65 @@ msgstr "Incompleta"
 msgid "Fully Valid"
 msgstr "Totalmente Válida"
 
-#: src/gpgmetools.c:617
+#: src/gpgmetools.c:623
 msgid "Please enter the passphrase for the following key:"
 msgstr "Por favor introduzca la contraseña para la siguiente clave:"
 
-#: src/gpgmetools.c:625
+#: src/gpgmetools.c:631
 msgid "Wrong passphrase, please try again:"
 msgstr "Contraseña incorrecta, por favor vuelva a intentarlo:"
 
-#: src/gpgmetools.c:650
+#: src/gpgmetools.c:656
 msgid "Enter Passphrase"
 msgstr "Introduzca Contraseña"
 
-#: src/gpgmetools.c:755
+#: src/gpgmetools.c:761
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:845 src/verifydlg.c:271
+#: src/gpgmetools.c:851 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[Usuario desconocido]"
 
-#: src/gpgmetools.c:871 src/verifydlg.c:219
+#: src/gpgmetools.c:877 src/verifydlg.c:219
 msgid "Bad"
 msgstr "Incorrecta"
 
-#: src/gpgmetools.c:894
+#: src/gpgmetools.c:900
 msgid "Generic"
 msgstr "Genérica"
 
-#: src/gpgmetools.c:897
+#: src/gpgmetools.c:903
 msgid "Persona"
 msgstr "Persona"
 
-#: src/gpgmetools.c:900
+#: src/gpgmetools.c:906
 msgid "Casual"
 msgstr "Casual"
 
-#: src/gpgmetools.c:903
+#: src/gpgmetools.c:909
 msgid "Positive"
 msgstr "Positiva"
 
-#: src/gpgmetools.c:921
+#: src/gpgmetools.c:927
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Esta clave puede utilizarse para certificación, firma y cifrado."
 
-#: src/gpgmetools.c:924
+#: src/gpgmetools.c:930
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Esta clave puede utilizarse para certificación y firma, pero no para cifrado."
 
-#: src/gpgmetools.c:930
+#: src/gpgmetools.c:936
 msgid "The key can be used for certification and encryption."
 msgstr "Esta clave puede utilizarse para certificación y cifrado."
 
-#: src/gpgmetools.c:933
+#: src/gpgmetools.c:939
 msgid "The key can be used only for certification."
 msgstr "Esta clave puede utilizarse solo para certificación."
 
-#: src/gpgmetools.c:941
+#: src/gpgmetools.c:947
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -854,15 +856,15 @@ msgstr ""
 "Esta clave puede utilizarse solo para firma y cifrado, pero no para\n"
 "certificación."
 
-#: src/gpgmetools.c:944
+#: src/gpgmetools.c:950
 msgid "The key can be used only for signing."
 msgstr "Esta clave puede utilizarse tan solo para firma."
 
-#: src/gpgmetools.c:949
+#: src/gpgmetools.c:955
 msgid "The key can be used only for encryption."
 msgstr "Esta clave puede utilizarse tan solo para cifrado."
 
-#: src/gpgmetools.c:952
+#: src/gpgmetools.c:958
 msgid "This key is useless."
 msgstr "Esta clave no vale para nada."
 
@@ -1134,7 +1136,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "Crear copia de _seguridad"
 
-#: src/keygenwizard.c:372 src/keyring.c:709 src/keyring.c:737
+#: src/keygenwizard.c:372 src/keyring.c:724 src/keyring.c:752
 msgid "Do it _later"
 msgstr "Hacerlo más _tarde"
 
@@ -1169,7 +1171,7 @@ msgstr "Confianza en el Usuario"
 msgid "Key Validity"
 msgstr "Validez de la Clave"
 
-#: src/keylist.c:439
+#: src/keylist.c:452
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1177,11 +1179,11 @@ msgstr ""
 "GnuPG está reconstruyendo la base de datos de confianza\n"
 "Esto podría llevar unos segundos."
 
-#: src/keylist.c:497
+#: src/keylist.c:510
 msgid "GPA Warning"
 msgstr ""
 
-#: src/keylist.c:515
+#: src/keylist.c:528
 msgid ""
 "One of your secret keys contains an ElGamal signing key. Due to a bug in "
 "GnuPG, all ElGamal keys used with GnuPG 1.0.2 and later must be considered "
@@ -1192,11 +1194,11 @@ msgid ""
 "The affected key is:"
 msgstr ""
 
-#: src/keyring.c:437
+#: src/keyring.c:452
 msgid "No keys selected for signing."
 msgstr "No hay ninguna clave seleccionada para firmar."
 
-#: src/keyring.c:704
+#: src/keyring.c:719
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1204,11 +1206,11 @@ msgstr ""
 "Aún no tiene una clave privada. ¿Quiere generar una ahora (recomendado) o "
 "hacerlo más tarde?"
 
-#: src/keyring.c:708
+#: src/keyring.c:723
 msgid "_Generate key now"
 msgstr "_Generar clave ahora"
 
-#: src/keyring.c:731
+#: src/keyring.c:746
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1216,342 +1218,342 @@ msgstr ""
 "No ha hecho aún una copia de seguridad de su clave privada. ¿Desea hacer una "
 "copia de seguridad ahora (recomendado), o más tarde?"
 
-#: src/keyring.c:736
+#: src/keyring.c:751
 msgid "_Backup key now"
 msgstr "Hacer _copia de seguridad ahora"
 
-#: src/keyring.c:836
+#: src/keyring.c:851
 msgid "/Edit/_Copy"
 msgstr "/Editar/_Copiar"
 
-#: src/keyring.c:838
+#: src/keyring.c:853
 msgid "/Edit/_Paste"
 msgstr "/Editar/_Pegar"
 
-#: src/keyring.c:840
+#: src/keyring.c:855
 msgid "/Edit/sep1"
 msgstr "/Editar/sep1"
 
-#: src/keyring.c:847
+#: src/keyring.c:862
 msgid "/_Keys"
 msgstr "/_Claves"
 
-#: src/keyring.c:848
+#: src/keyring.c:863
 msgid "/Keys/_Refresh"
 msgstr ""
 
-#: src/keyring.c:850
+#: src/keyring.c:865
 #, fuzzy
 msgid "/Keys/sep0"
 msgstr "/Claves/sep1"
 
-#: src/keyring.c:851
+#: src/keyring.c:866
 msgid "/Keys/_New Key..."
 msgstr "/Claves/_Nueva Clave..."
 
-#: src/keyring.c:853
+#: src/keyring.c:868
 msgid "/Keys/_Delete Keys..."
 msgstr "/Claves/_Borrar Claves..."
 
-#: src/keyring.c:855
+#: src/keyring.c:870
 msgid "/Keys/sep1"
 msgstr "/Claves/sep1"
 
-#: src/keyring.c:856
+#: src/keyring.c:871
 msgid "/Keys/_Sign Keys..."
 msgstr "/Claves/_Firmar Claves..."
 
-#: src/keyring.c:857
+#: src/keyring.c:872
 msgid "/Keys/Set _Owner Trust..."
 msgstr "/Claves/Establecer _Confianza en el Usuario..."
 
-#: src/keyring.c:858
+#: src/keyring.c:873
 msgid "/Keys/_Edit Private Key..."
 msgstr "/Claves/_Editar Clave Privada..."
 
-#: src/keyring.c:859
+#: src/keyring.c:874
 msgid "/Keys/sep2"
 msgstr "/Claves/sep2"
 
-#: src/keyring.c:860
+#: src/keyring.c:875
 msgid "/Keys/_Import Keys..."
 msgstr "/Claves/_Importar Claves..."
 
-#: src/keyring.c:861
+#: src/keyring.c:876
 msgid "/Keys/E_xport Keys..."
 msgstr "/Claves/E_xportar Claves..."
 
-#: src/keyring.c:862
+#: src/keyring.c:877
 msgid "/Keys/_Backup..."
 msgstr "/Claves/_Copia de Seguridad..."
 
-#: src/keyring.c:865
+#: src/keyring.c:880
 msgid "/_Server"
 msgstr "/_Servidor"
 
-#: src/keyring.c:866
+#: src/keyring.c:881
 msgid "/Server/_Retrieve Keys..."
 msgstr "/Servidor/_Descargar Claves..."
 
-#: src/keyring.c:867
+#: src/keyring.c:882
 msgid "/Server/_Send Keys..."
 msgstr "/Servidor/_Enviar Claves..."
 
-#: src/keyring.c:901
+#: src/keyring.c:916
 msgid "/Keys/Export Keys..."
 msgstr "/Claves/Exportar Claves..."
 
-#: src/keyring.c:908
+#: src/keyring.c:923
 msgid "/Keys/Delete Keys..."
 msgstr "/Claves/Borrar Claves..."
 
-#: src/keyring.c:915
+#: src/keyring.c:930
 msgid "/Edit/Copy"
 msgstr "/Editar/Copiar"
 
-#: src/keyring.c:922
+#: src/keyring.c:937
 msgid "/Server/Send Keys..."
 msgstr "/Servidor/Enviar Claves..."
 
-#: src/keyring.c:931
+#: src/keyring.c:946
 msgid "/Keys/Set Owner Trust..."
 msgstr "/Claves/Establecer Confianza en el Usuario..."
 
-#: src/keyring.c:939
+#: src/keyring.c:954
 msgid "/Keys/Sign Keys..."
 msgstr "/Claves/Firmar Claves..."
 
-#: src/keyring.c:947
+#: src/keyring.c:962
 msgid "/Keys/Edit Private Key..."
 msgstr "/Claves/Editar Clave Privada..."
 
-#: src/keyring.c:954
+#: src/keyring.c:969
 msgid "/Keys/Backup..."
 msgstr "/Claves/Copia de Seguridad..."
 
-#: src/keyring.c:971
+#: src/keyring.c:986
 msgid "/_Copy"
 msgstr "/_Copiar"
 
-#: src/keyring.c:973
+#: src/keyring.c:988
 msgid "/_Paste"
 msgstr "/_Pegar"
 
-#: src/keyring.c:975
+#: src/keyring.c:990
 msgid "/_Delete Keys..."
 msgstr "/_Borrar Claves..."
 
-#: src/keyring.c:978
+#: src/keyring.c:993
 msgid "/_Sign Keys..."
 msgstr "/_Firmar Claves..."
 
-#: src/keyring.c:979
+#: src/keyring.c:994
 msgid "/Set _Owner Trust..."
 msgstr "/Establecer _Confianza en el Usuario..."
 
-#: src/keyring.c:980
+#: src/keyring.c:995
 msgid "/_Edit Private Key..."
 msgstr "/_Editar Clave Privada..."
 
-#: src/keyring.c:982
+#: src/keyring.c:997
 msgid "/E_xport Keys..."
 msgstr "/E_xportar Claves..."
 
-#: src/keyring.c:983
+#: src/keyring.c:998
 msgid "/Se_nd Keys to Server..."
 msgstr "E_nviar claves al servidor"
 
-#: src/keyring.c:984
+#: src/keyring.c:999
 msgid "/_Backup..."
 msgstr "/_Copia de Seguridad..."
 
-#: src/keyring.c:995
+#: src/keyring.c:1010
 msgid "/Set Owner Trust..."
 msgstr "/Establecer Confianza en el Usuario..."
 
-#: src/keyring.c:1003
+#: src/keyring.c:1018
 msgid "/Sign Keys..."
 msgstr "/Firmar Claves..."
 
-#: src/keyring.c:1011
+#: src/keyring.c:1026
 msgid "/Edit Private Key..."
 msgstr "/Editar Clave Privada..."
 
-#: src/keyring.c:1018
+#: src/keyring.c:1033
 msgid "/Backup..."
 msgstr "/Copia de Seguridad..."
 
-#: src/keyring.c:1091
+#: src/keyring.c:1106
 msgid "Subkeys"
 msgstr "Subclaves"
 
-#: src/keyring.c:1162 src/keysigndlg.c:112
+#: src/keyring.c:1177 src/keysigndlg.c:112
 msgid "Fingerprint:"
 msgstr "Huella dactilar:"
 
-#: src/keyring.c:1164
+#: src/keyring.c:1179
 msgid "Expires at:"
 msgstr "Caduca el:"
 
-#: src/keyring.c:1166
+#: src/keyring.c:1181
 msgid "Owner Trust:"
 msgstr "Confianza en el usuario:"
 
-#: src/keyring.c:1168
+#: src/keyring.c:1183
 msgid "Key Validity:"
 msgstr "Validez de la Clave:"
 
-#: src/keyring.c:1170
+#: src/keyring.c:1185
 msgid "Key Type:"
 msgstr "Tipo de Clave:"
 
-#: src/keyring.c:1172
+#: src/keyring.c:1187
 msgid "Created at:"
 msgstr "Creada el:"
 
-#: src/keyring.c:1175
+#: src/keyring.c:1190
 msgid "Details"
 msgstr "Detalles"
 
-#: src/keyring.c:1183
+#: src/keyring.c:1198
 msgid "Show signatures on user name:"
 msgstr "Mostrar firmas en el nombre de usuario:"
 
-#: src/keyring.c:1204
+#: src/keyring.c:1219
 msgid "Signatures"
 msgstr "Firmas"
 
-#: src/keyring.c:1229
+#: src/keyring.c:1244
 msgid "The key has both a private and a public part"
 msgstr "Esta clave tiene tanto una parte secreta como una pública"
 
-#: src/keyring.c:1234
+#: src/keyring.c:1249
 msgid "The key has only a public part"
 msgstr "Esta clave solo tiene una parte pública"
 
-#: src/keyring.c:1268
+#: src/keyring.c:1283
 #, c-format
 msgid "%s %u bits"
 msgstr "%s %u bits"
 
-#: src/keyring.c:1294
+#: src/keyring.c:1309
 msgid "No keys selected"
 msgstr "No hay claves seleccionadas"
 
-#: src/keyring.c:1298
+#: src/keyring.c:1313
 #, c-format
 msgid "%d keys selected"
 msgstr "%d claves seleccionadas"
 
-#: src/keyring.c:1327
+#: src/keyring.c:1342
 msgid "All signatures"
 msgstr "Todas las firmas"
 
-#: src/keyring.c:1531
+#: src/keyring.c:1546
 msgid "Edit"
 msgstr "Editar"
 
-#: src/keyring.c:1532
+#: src/keyring.c:1547
 msgid "Edit the selected private key"
 msgstr "Editar la clave privada seleccionada"
 
-#: src/keyring.c:1533
+#: src/keyring.c:1548
 msgid "edit key"
 msgstr "editar clave"
 
-#: src/keyring.c:1541
+#: src/keyring.c:1556
 msgid "Remove the selected key"
 msgstr "Borrar la clave seleccionada"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1557
 msgid "remove key"
 msgstr "borrar clave"
 
-#: src/keyring.c:1550
+#: src/keyring.c:1565
 msgid "Sign the selected key"
 msgstr "Firmar la clave seleccionada"
 
-#: src/keyring.c:1550
+#: src/keyring.c:1565
 msgid "sign key"
 msgstr "firmar clave"
 
-#: src/keyring.c:1557
+#: src/keyring.c:1572
 msgid "Import"
 msgstr "Importar"
 
-#: src/keyring.c:1558
+#: src/keyring.c:1573
 msgid "Import Keys"
 msgstr "Importar Claves"
 
-#: src/keyring.c:1558
+#: src/keyring.c:1573
 msgid "import keys"
 msgstr "importar claves"
 
-#: src/keyring.c:1563
+#: src/keyring.c:1578
 msgid "Export"
 msgstr "Exportar"
 
-#: src/keyring.c:1564
+#: src/keyring.c:1579
 msgid "Export Keys"
 msgstr "Exportar Claves"
 
-#: src/keyring.c:1564
+#: src/keyring.c:1579
 msgid "export keys"
 msgstr "exportar claves"
 
-#: src/keyring.c:1577
+#: src/keyring.c:1592
 msgid "Brief"
 msgstr "Breve"
 
-#: src/keyring.c:1577
+#: src/keyring.c:1592
 msgid "Show Brief Keylist"
 msgstr "Mostrar Lista de Claves Breve"
 
-#: src/keyring.c:1578
+#: src/keyring.c:1593
 msgid "brief"
 msgstr "breve"
 
-#: src/keyring.c:1589
+#: src/keyring.c:1604
 msgid "Detailed"
 msgstr "Detallada"
 
-#: src/keyring.c:1589
+#: src/keyring.c:1604
 msgid "Show Key Details"
 msgstr "Mostrar detalles de las claves"
 
-#: src/keyring.c:1590
+#: src/keyring.c:1605
 msgid "detailed"
 msgstr "detallada"
 
-#: src/keyring.c:1623
+#: src/keyring.c:1638
 msgid "Refresh the keyring"
 msgstr ""
 
-#: src/keyring.c:1624
+#: src/keyring.c:1639
 msgid "refresh keyring"
 msgstr ""
 
-#: src/keyring.c:1631
+#: src/keyring.c:1646
 msgid "Files"
 msgstr "Archivos"
 
-#: src/keyring.c:1632
+#: src/keyring.c:1647
 msgid "Open the File Manager"
 msgstr "Abrir el Gestor de Archivos"
 
-#: src/keyring.c:1633
+#: src/keyring.c:1648
 msgid "file manager"
 msgstr "gestor de archivos"
 
-#: src/keyring.c:1656
+#: src/keyring.c:1671
 msgid "Selected Default Key:"
 msgstr "Clave por Defecto Seleccionada:"
 
-#: src/keyring.c:1802
+#: src/keyring.c:1817
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - Editor del Anillo"
 
-#: src/keyring.c:1833
+#: src/keyring.c:1848
 msgid "Keyring Editor"
 msgstr "Editor del Anillo"
 
@@ -1798,6 +1800,9 @@ msgstr "Firmas"
 #: src/verifydlg.c:372
 msgid "Signatures:"
 msgstr "Firmas:"
+
+#~ msgid ">.\n"
+#~ msgstr ">.\n"
 
 #~ msgid ""
 #~ "If you want you can supply a comment that further identifies the key to "
