@@ -1310,7 +1310,10 @@ keyring_details_page_fill_num_keys (GPAKeyringEditor * editor, gint num_key)
     }
   else
     {
-      gchar * text = g_strdup_printf (_("%d keys selected"), num_key);
+      char *text = g_strdup_printf (ngettext("%d key selected",
+                                             "%d keys selected",
+                                             num_key), num_key); 
+
       gtk_label_set_text (GTK_LABEL (editor->details_num_label), text);
       g_free (text);
     }

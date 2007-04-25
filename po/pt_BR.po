@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2007-02-21 14:59+0100\n"
+"POT-Creation-Date: 2007-04-25 15:07+0200\n"
 "PO-Revision-Date: 2003-01-20 18:39+0100\n"
 "Last-Translator: Renato Martini <rmartini@cipsga.org.br>\n"
 "Language-Team: PORTUGUES <rmartini@cipsga.org.br>\n"
@@ -176,7 +176,7 @@ msgstr "Abrir um arquivo"
 msgid "close files"
 msgstr "abrir um arquivo"
 
-#: src/fileman.c:559 src/keyring.c:1564
+#: src/fileman.c:559 src/keyring.c:1567
 msgid "Sign"
 msgstr "Assinar"
 
@@ -224,23 +224,23 @@ msgstr "Desencriptar o arquivo selecionado"
 msgid "decrypt file"
 msgstr "desencriptar arquivo"
 
-#: src/fileman.c:605 src/keyring.c:1629
+#: src/fileman.c:605 src/keyring.c:1632
 msgid "Open the Preferences dialog"
 msgstr "Abrir caixa de diálogo das Preferências"
 
-#: src/fileman.c:606 src/keyring.c:1630
+#: src/fileman.c:606 src/keyring.c:1633
 msgid "preferences"
 msgstr "preferências"
 
-#: src/fileman.c:614 src/keyring.c:1653
+#: src/fileman.c:614 src/keyring.c:1656
 msgid "Help"
 msgstr "Ajuda"
 
-#: src/fileman.c:615 src/keyring.c:1654
+#: src/fileman.c:615 src/keyring.c:1657
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "Compreendendo o GNU Privacy Assistant"
 
-#: src/fileman.c:616 src/keyring.c:1655
+#: src/fileman.c:616 src/keyring.c:1658
 msgid "help"
 msgstr "ajuda"
 
@@ -1451,121 +1451,123 @@ msgid "No keys selected"
 msgstr "Nenhuma chave selecionada"
 
 #: src/keyring.c:1313
-#, c-format
-msgid "%d keys selected"
-msgstr "%d chaves selecionadas"
+#, fuzzy, c-format
+msgid "%d key selected"
+msgid_plural "%d keys selected"
+msgstr[0] "%d chaves selecionadas"
+msgstr[1] "%d chaves selecionadas"
 
-#: src/keyring.c:1342
+#: src/keyring.c:1345
 msgid "All signatures"
 msgstr "Todas as assinaturas"
 
-#: src/keyring.c:1546
+#: src/keyring.c:1549
 msgid "Edit"
 msgstr "Editar"
 
-#: src/keyring.c:1547
+#: src/keyring.c:1550
 msgid "Edit the selected private key"
 msgstr "Editar a chave privada selecionada"
 
-#: src/keyring.c:1548
+#: src/keyring.c:1551
 msgid "edit key"
 msgstr "editar chave"
 
-#: src/keyring.c:1556
+#: src/keyring.c:1559
 msgid "Remove the selected key"
 msgstr "Remover a chave selecionada"
 
-#: src/keyring.c:1557
+#: src/keyring.c:1560
 msgid "remove key"
 msgstr "remover a chave"
 
-#: src/keyring.c:1565
+#: src/keyring.c:1568
 msgid "Sign the selected key"
 msgstr "Assinar a chave selecionada"
 
-#: src/keyring.c:1565
+#: src/keyring.c:1568
 msgid "sign key"
 msgstr "assinar chave"
 
-#: src/keyring.c:1572
+#: src/keyring.c:1575
 msgid "Import"
 msgstr "Importar"
 
-#: src/keyring.c:1573
+#: src/keyring.c:1576
 msgid "Import Keys"
 msgstr "Importar chaves"
 
-#: src/keyring.c:1573
+#: src/keyring.c:1576
 msgid "import keys"
 msgstr "importar chaves"
 
-#: src/keyring.c:1578
+#: src/keyring.c:1581
 msgid "Export"
 msgstr "Exportar"
 
-#: src/keyring.c:1579
+#: src/keyring.c:1582
 msgid "Export Keys"
 msgstr "Exportar Chaves"
 
-#: src/keyring.c:1579
+#: src/keyring.c:1582
 msgid "export keys"
 msgstr "exportar chaves"
 
-#: src/keyring.c:1592
+#: src/keyring.c:1595
 msgid "Brief"
 msgstr "Resumido"
 
-#: src/keyring.c:1592
+#: src/keyring.c:1595
 msgid "Show Brief Keylist"
 msgstr "Mostrar resumo da lista de chaves"
 
-#: src/keyring.c:1593
+#: src/keyring.c:1596
 msgid "brief"
 msgstr "resumido"
 
-#: src/keyring.c:1604
+#: src/keyring.c:1607
 msgid "Detailed"
 msgstr "Detalhado"
 
-#: src/keyring.c:1604
+#: src/keyring.c:1607
 msgid "Show Key Details"
 msgstr "Mostrar detalhes da chave"
 
-#: src/keyring.c:1605
+#: src/keyring.c:1608
 msgid "detailed"
 msgstr "detalhado"
 
-#: src/keyring.c:1638
+#: src/keyring.c:1641
 #, fuzzy
 msgid "Refresh the keyring"
 msgstr "_Chaveiro de chaves secretas"
 
-#: src/keyring.c:1639
+#: src/keyring.c:1642
 #, fuzzy
 msgid "refresh keyring"
 msgstr "_Chaveiro de chaves secretas"
 
-#: src/keyring.c:1646
+#: src/keyring.c:1649
 msgid "Files"
 msgstr "Arquivos"
 
-#: src/keyring.c:1647
+#: src/keyring.c:1650
 msgid "Open the File Manager"
 msgstr "Abrir Gerenciador de arquivos"
 
-#: src/keyring.c:1648
+#: src/keyring.c:1651
 msgid "file manager"
 msgstr "gerenciador de arquivos"
 
-#: src/keyring.c:1671
+#: src/keyring.c:1674
 msgid "Selected Default Key:"
 msgstr "Chave default selecionada:"
 
-#: src/keyring.c:1817
+#: src/keyring.c:1820
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - Editor do chaveiro digital"
 
-#: src/keyring.c:1848
+#: src/keyring.c:1851
 msgid "Keyring Editor"
 msgstr "Editor do chaveiro digital"
 

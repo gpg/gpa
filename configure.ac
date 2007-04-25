@@ -165,8 +165,7 @@ dnl Checks for libraries
 dnl
 
 AM_GNU_GETTEXT_VERSION(0.12.1)
-
-AM_GNU_GETTEXT
+AM_GNU_GETTEXT(,[need-ngettext])
 
 AC_CHECK_FUNC(getopt_long,
     AC_MSG_RESULT(using libc's getopt_long),

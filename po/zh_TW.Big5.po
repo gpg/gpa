@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2007-02-21 14:59+0100\n"
+"POT-Creation-Date: 2007-04-25 15:07+0200\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -169,7 +169,7 @@ msgstr "關閉所有檔案"
 msgid "close files"
 msgstr "關閉檔案"
 
-#: src/fileman.c:559 src/keyring.c:1564
+#: src/fileman.c:559 src/keyring.c:1567
 msgid "Sign"
 msgstr "簽署"
 
@@ -217,23 +217,23 @@ msgstr "解密已選擇檔案"
 msgid "decrypt file"
 msgstr "解密檔案"
 
-#: src/fileman.c:605 src/keyring.c:1629
+#: src/fileman.c:605 src/keyring.c:1632
 msgid "Open the Preferences dialog"
 msgstr "開啟設定視窗"
 
-#: src/fileman.c:606 src/keyring.c:1630
+#: src/fileman.c:606 src/keyring.c:1633
 msgid "preferences"
 msgstr "設定"
 
-#: src/fileman.c:614 src/keyring.c:1653
+#: src/fileman.c:614 src/keyring.c:1656
 msgid "Help"
 msgstr "求助"
 
-#: src/fileman.c:615 src/keyring.c:1654
+#: src/fileman.c:615 src/keyring.c:1657
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "了解GNU Privacy Assistant"
 
-#: src/fileman.c:616 src/keyring.c:1655
+#: src/fileman.c:616 src/keyring.c:1658
 msgid "help"
 msgstr "求助"
 
@@ -1421,119 +1421,121 @@ msgid "No keys selected"
 msgstr "沒有選擇密鑰"
 
 #: src/keyring.c:1313
-#, c-format
-msgid "%d keys selected"
-msgstr "%d 密鑰被選擇"
+#, fuzzy, c-format
+msgid "%d key selected"
+msgid_plural "%d keys selected"
+msgstr[0] "%d 密鑰被選擇"
+msgstr[1] "%d 密鑰被選擇"
 
-#: src/keyring.c:1342
+#: src/keyring.c:1345
 msgid "All signatures"
 msgstr "所有簽署"
 
-#: src/keyring.c:1546
+#: src/keyring.c:1549
 msgid "Edit"
 msgstr "修改"
 
-#: src/keyring.c:1547
+#: src/keyring.c:1550
 msgid "Edit the selected private key"
 msgstr "修改已選擇的密鑰"
 
-#: src/keyring.c:1548
+#: src/keyring.c:1551
 msgid "edit key"
 msgstr "修改密鑰"
 
-#: src/keyring.c:1556
+#: src/keyring.c:1559
 msgid "Remove the selected key"
 msgstr "移除已選擇的密鑰"
 
-#: src/keyring.c:1557
+#: src/keyring.c:1560
 msgid "remove key"
 msgstr "移除密鑰"
 
-#: src/keyring.c:1565
+#: src/keyring.c:1568
 msgid "Sign the selected key"
 msgstr "簽署已選擇的密鑰"
 
-#: src/keyring.c:1565
+#: src/keyring.c:1568
 msgid "sign key"
 msgstr "簽署密鑰"
 
-#: src/keyring.c:1572
+#: src/keyring.c:1575
 msgid "Import"
 msgstr "匯入"
 
-#: src/keyring.c:1573
+#: src/keyring.c:1576
 msgid "Import Keys"
 msgstr "匯入密鑰"
 
-#: src/keyring.c:1573
+#: src/keyring.c:1576
 msgid "import keys"
 msgstr "匯入密鑰"
 
-#: src/keyring.c:1578
+#: src/keyring.c:1581
 msgid "Export"
 msgstr "輸出"
 
-#: src/keyring.c:1579
+#: src/keyring.c:1582
 msgid "Export Keys"
 msgstr "輸出密鑰"
 
-#: src/keyring.c:1579
+#: src/keyring.c:1582
 msgid "export keys"
 msgstr "輸出密鑰"
 
-#: src/keyring.c:1592
+#: src/keyring.c:1595
 msgid "Brief"
 msgstr "摘要"
 
-#: src/keyring.c:1592
+#: src/keyring.c:1595
 msgid "Show Brief Keylist"
 msgstr "顯示密鑰清單摘要"
 
-#: src/keyring.c:1593
+#: src/keyring.c:1596
 msgid "brief"
 msgstr "摘要"
 
-#: src/keyring.c:1604
+#: src/keyring.c:1607
 msgid "Detailed"
 msgstr "詳情"
 
-#: src/keyring.c:1604
+#: src/keyring.c:1607
 msgid "Show Key Details"
 msgstr "顯示密鑰詳情"
 
-#: src/keyring.c:1605
+#: src/keyring.c:1608
 msgid "detailed"
 msgstr "詳情"
 
-#: src/keyring.c:1638
+#: src/keyring.c:1641
 msgid "Refresh the keyring"
 msgstr ""
 
-#: src/keyring.c:1639
+#: src/keyring.c:1642
 msgid "refresh keyring"
 msgstr ""
 
-#: src/keyring.c:1646
+#: src/keyring.c:1649
 msgid "Files"
 msgstr "檔案"
 
-#: src/keyring.c:1647
+#: src/keyring.c:1650
 msgid "Open the File Manager"
 msgstr "開啟檔案管理員"
 
-#: src/keyring.c:1648
+#: src/keyring.c:1651
 msgid "file manager"
 msgstr "檔案管理員"
 
-#: src/keyring.c:1671
+#: src/keyring.c:1674
 msgid "Selected Default Key:"
 msgstr "選擇預設密鑰:"
 
-#: src/keyring.c:1817
+#: src/keyring.c:1820
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistant - 鑰圈編輯器"
 
-#: src/keyring.c:1848
+#: src/keyring.c:1851
 msgid "Keyring Editor"
 msgstr "鑰圈編輯器"
 

@@ -22,29 +22,32 @@
 #define I18N_H
 
 #ifdef USE_SIMPLE_GETTEXT
-  int set_gettext_file (const char *filename);
-  char *gettext (const char *msgid);
+   int set_gettext_file (const char *filename);
+   char *gettext (const char *msgid);
+   char *ngettext (const char *msgid1, const char *msgid2,
+                   unsigned long int n);
 
-  #define _(a) gettext (a)
-  #define N_(a) (a)
+#  define _(a) gettext (a)
+#  define N_(a) (a)
 
-#else
-#ifdef HAVE_LOCALE_H
-  #include <locale.h>
-#endif
+#else /* !USE_SIMPLE_GETTEXT */
+#  ifdef HAVE_LOCALE_H
+#    include <locale.h>
+#  endif
 
-#ifdef ENABLE_NLS
-  #include <libintl.h>
-  #define _(a) gettext (a)
-  #ifdef gettext_noop
-    #define N_(a) gettext_noop (a)
-  #else
-    #define N_(a) (a)
-  #endif
-#else
-  #define _(a) (a)
-  #define N_(a) (a)
-#endif
+#  ifdef ENABLE_NLS
+#    include <libintl.h>
+#    define _(a) gettext (a)
+#    ifdef gettext_noop
+#      define N_(a) gettext_noop (a)
+#    else
+#      define N_(a) (a)
+#    endif
+#  else
+#    define _(a) (a)
+#    define N_(a) (a)
+#    define ngettext(a,b,c) ((c)==1? (a):(b))
+#  endif
 #endif /* !USE_SIMPLE_GETTEXT */
 
 

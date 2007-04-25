@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2007-02-21 14:59+0100\n"
+"POT-Creation-Date: 2007-04-25 15:07+0200\n"
 "PO-Revision-Date: 2003-10-19 14:29+0200\n"
 "Last-Translator: Michael Anckaert <michael.anckaert@pi.be>\n"
 "Language-Team: DUTCH <nl@li.org>\n"
@@ -167,7 +167,7 @@ msgstr "Alle bestanden sluiten"
 msgid "close files"
 msgstr "sluit bestand"
 
-#: src/fileman.c:559 src/keyring.c:1564
+#: src/fileman.c:559 src/keyring.c:1567
 msgid "Sign"
 msgstr "Ondertekenen"
 
@@ -215,23 +215,23 @@ msgstr "Ontsleutel het geselecteerde bestand"
 msgid "decrypt file"
 msgstr "ontsleutel bestand"
 
-#: src/fileman.c:605 src/keyring.c:1629
+#: src/fileman.c:605 src/keyring.c:1632
 msgid "Open the Preferences dialog"
 msgstr "Open de voorkeuren dialoog"
 
-#: src/fileman.c:606 src/keyring.c:1630
+#: src/fileman.c:606 src/keyring.c:1633
 msgid "preferences"
 msgstr "voorkeuren"
 
-#: src/fileman.c:614 src/keyring.c:1653
+#: src/fileman.c:614 src/keyring.c:1656
 msgid "Help"
 msgstr "Help"
 
-#: src/fileman.c:615 src/keyring.c:1654
+#: src/fileman.c:615 src/keyring.c:1657
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "De GNU Privacy Assistent verstaan"
 
-#: src/fileman.c:616 src/keyring.c:1655
+#: src/fileman.c:616 src/keyring.c:1658
 msgid "help"
 msgstr "help"
 
@@ -1436,119 +1436,121 @@ msgid "No keys selected"
 msgstr "Geen sleutels geselecteerd"
 
 #: src/keyring.c:1313
-#, c-format
-msgid "%d keys selected"
-msgstr "%d sleutels geselecteerd"
+#, fuzzy, c-format
+msgid "%d key selected"
+msgid_plural "%d keys selected"
+msgstr[0] "%d sleutels geselecteerd"
+msgstr[1] "%d sleutels geselecteerd"
 
-#: src/keyring.c:1342
+#: src/keyring.c:1345
 msgid "All signatures"
 msgstr "Ondertekeningen"
 
-#: src/keyring.c:1546
+#: src/keyring.c:1549
 msgid "Edit"
 msgstr "Bewerk"
 
-#: src/keyring.c:1547
+#: src/keyring.c:1550
 msgid "Edit the selected private key"
 msgstr "Bewerk de geselecteerde sleutel"
 
-#: src/keyring.c:1548
+#: src/keyring.c:1551
 msgid "edit key"
 msgstr "bewerk sleutel"
 
-#: src/keyring.c:1556
+#: src/keyring.c:1559
 msgid "Remove the selected key"
 msgstr "Verwijder de geselecteerde sleutel"
 
-#: src/keyring.c:1557
+#: src/keyring.c:1560
 msgid "remove key"
 msgstr "verwijder sleutel"
 
-#: src/keyring.c:1565
+#: src/keyring.c:1568
 msgid "Sign the selected key"
 msgstr "Onderteken de geselecteerde sleutel"
 
-#: src/keyring.c:1565
+#: src/keyring.c:1568
 msgid "sign key"
 msgstr "onderteken sleutel"
 
-#: src/keyring.c:1572
+#: src/keyring.c:1575
 msgid "Import"
 msgstr "Importeer"
 
-#: src/keyring.c:1573
+#: src/keyring.c:1576
 msgid "Import Keys"
 msgstr "Importeer sleutels"
 
-#: src/keyring.c:1573
+#: src/keyring.c:1576
 msgid "import keys"
 msgstr "importeer sleutels"
 
-#: src/keyring.c:1578
+#: src/keyring.c:1581
 msgid "Export"
 msgstr "Exporteer"
 
-#: src/keyring.c:1579
+#: src/keyring.c:1582
 msgid "Export Keys"
 msgstr "Exporteer Sleutels"
 
-#: src/keyring.c:1579
+#: src/keyring.c:1582
 msgid "export keys"
 msgstr "exporteer sleutels"
 
-#: src/keyring.c:1592
+#: src/keyring.c:1595
 msgid "Brief"
 msgstr "Beperkt"
 
-#: src/keyring.c:1592
+#: src/keyring.c:1595
 msgid "Show Brief Keylist"
 msgstr "Toon beperkte sleutellijst"
 
-#: src/keyring.c:1593
+#: src/keyring.c:1596
 msgid "brief"
 msgstr "beperkt"
 
-#: src/keyring.c:1604
+#: src/keyring.c:1607
 msgid "Detailed"
 msgstr "Details"
 
-#: src/keyring.c:1604
+#: src/keyring.c:1607
 msgid "Show Key Details"
 msgstr "Toon Sleutel Details"
 
-#: src/keyring.c:1605
+#: src/keyring.c:1608
 msgid "detailed"
 msgstr "gedetailleerd"
 
-#: src/keyring.c:1638
+#: src/keyring.c:1641
 msgid "Refresh the keyring"
 msgstr ""
 
-#: src/keyring.c:1639
+#: src/keyring.c:1642
 msgid "refresh keyring"
 msgstr ""
 
-#: src/keyring.c:1646
+#: src/keyring.c:1649
 msgid "Files"
 msgstr "Bestanden"
 
-#: src/keyring.c:1647
+#: src/keyring.c:1650
 msgid "Open the File Manager"
 msgstr "Open de bestandsbeheerder"
 
-#: src/keyring.c:1648
+#: src/keyring.c:1651
 msgid "file manager"
 msgstr "bestandsbeheerder"
 
-#: src/keyring.c:1671
+#: src/keyring.c:1674
 msgid "Selected Default Key:"
 msgstr "Selecteer Standaard Sleutel:"
 
-#: src/keyring.c:1817
+#: src/keyring.c:1820
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "GNU Privacy Assistent - Keyring Editor"
 
-#: src/keyring.c:1848
+#: src/keyring.c:1851
 msgid "Keyring Editor"
 msgstr "Keyring Editor"
 
