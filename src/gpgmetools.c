@@ -729,24 +729,41 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
 static gchar *
 string_to_utf8 (const gchar *string)
 {
-  const gchar *s;
-
+  const char *s;
+  
   if (!string)
-    {
-      return NULL;
-    }
-  /* Make sure the encoding is UTF-8.  Test structure suggested by
-     Werner Koch.  */
+    return NULL;
+  
+  /* Due to a bug in old and not so old PGP versions user IDs have
+     been copied verbatim into the key.  Thus many users with Umlauts
+     et al. in their name will see their names garbled.  Although this
+     is not an issue for me (;-)), I have a couple of friends with
+     Umlauts in their name, so let's try to make their life easier by
+     detecting invalid encodings and convert that to Latin-1. */
   for (s = string; *s && !(*s & 0x80); s++)
     ;
-  if (*s && !strchr (string, 0xc3))
+  if (*s && ((s[1] & 0xc0) == 0x80) && ( ((*s & 0xe0) == 0xc0)
+                                         || ((*s & 0xf0) == 0xe0)
+                                         || ((*s & 0xf8) == 0xf0)
+                                         || ((*s & 0xfc) == 0xf8)
+                                         || ((*s & 0xfe) == 0xfc)) )
+    {  
+      /* Possible utf-8 character followed by continuation byte.
+         Although this might still be Latin-1 we better assume that it
+         is valid utf-8. */
+      return g_strdup (string);
+     }
+  else if (*s && !strchr (string, 0xc3))
     {
-      /* The string is Latin-1.  */
-      return  g_convert (string, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+      /* No 0xC3 character in the string; assume that it is Latin-1.  */
+      return g_convert (string, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
     }
   else
     {
-      /* The string is already in UTF-8.  */
+      /* Everything else is assumed to be UTF-8.  We do this even that
+         we know the encoding is not valid.  However as we only test
+         the first non-ascii character, valid encodings might
+         follow.  */
       return g_strdup (string);
     }
 }

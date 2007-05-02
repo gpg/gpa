@@ -1,3 +1,7 @@
+2007-05-02  Werner Koch  <wk@g10code.com>
+
+	* gpgmetools.c (string_to_utf8): Rewritten.
+
 2007-04-25  Werner Koch  <wk@g10code.com>
 
 	* keyring.c (keyring_details_page_fill_num_keys): Use ngettext.
