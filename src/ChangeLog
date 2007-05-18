@@ -1,3 +1,17 @@
+2007-05-18  Werner Koch  <wk@g10code.com>
+
+	* fileman.h (_GpaFileManager, _GpaFileManagerClass): Move
+	definitions to ..
+	* fileman.c: .. implementation file.  Documentaion cleanups and
+	moved some functions for clarity.
+	(dnd_drop_handler, dnd_data_received_handler): New.
+	(gpa_file_manager_constructor): Connect DnD handler.
+
+2007-05-16  Werner Koch  <wk@g10code.com>
+
+	* helpmenu.c (help_about) [W32]: Point user to www.gpg4win.org.
+	(help_license): Capitalize a proper name.
+
 2007-05-02  Werner Koch  <wk@g10code.com>
 
 	* gpgmetools.c (string_to_utf8): Rewritten.

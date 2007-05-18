@@ -1,5 +1,6 @@
 /* fileman.h  -  The GNU Privacy Assistant
  *	Copyright (C) 2000 G-N-U GmbH.
+ *      Copyright (C) 2007 g10 Code GmbH
  *
  * This file is part of GPA
  *
@@ -15,7 +16,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
  */
 
 #ifndef FILEMAN_H
@@ -23,39 +25,41 @@
 
 #include <gtk/gtk.h>
 
-/* GObject stuff */
-#define GPA_FILE_MANAGER_TYPE	  (gpa_file_manager_get_type ())
-#define GPA_FILE_MANAGER(obj)	  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GPA_FILE_MANAGER_TYPE, GpaFileManager))
-#define GPA_FILE_MANAGER_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GPA_FILE_MANAGER_TYPE, GpaFileManagerClass))
-#define GPA_IS_FILE_MANAGER(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_FILE_MANAGER_TYPE))
-#define GPA_IS_FILE_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_FILE_MANAGER_TYPE))
-#define GPA_FILE_MANAGER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GPA_FILE_MANAGER_TYPE, GpaFileManagerClass))
-
+/* Declare the Object. */
 typedef struct _GpaFileManager GpaFileManager;
 typedef struct _GpaFileManagerClass GpaFileManagerClass;
 
-struct _GpaFileManager {
-  GtkWindow parent;
-
-  GtkWidget *window;
-  GtkWidget *list_files;
-  GList *selection_sensitive_widgets;
-};
-
-struct _GpaFileManagerClass {
-  GtkWindowClass parent_class;
-};
-
 GType gpa_file_manager_get_type (void) G_GNUC_CONST;
 
-/* API */
+#define GPA_FILE_MANAGER_TYPE	  (gpa_file_manager_get_type ())
 
-GtkWidget * gpa_file_manager_get_instance (void);
+#define GPA_FILE_MANAGER(obj) \
+  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GPA_FILE_MANAGER_TYPE, GpaFileManager))
+
+#define GPA_FILE_MANAGER_CLASS(klass) \
+  (G_TYPE_CHECK_CLASS_CAST ((klass),  \
+                            GPA_FILE_MANAGER_TYPE, GpaFileManagerClass))
+
+#define GPA_IS_FILE_MANAGER(obj) \
+  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_FILE_MANAGER_TYPE))
+
+#define GPA_IS_FILE_MANAGER_CLASS(klass) \
+  (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_FILE_MANAGER_TYPE))
+
+#define GPA_FILE_MANAGER_GET_CLASS(obj) \
+  (G_TYPE_INSTANCE_GET_CLASS ((obj),    \
+                              GPA_FILE_MANAGER_TYPE, GpaFileManagerClass))
+
+
+
+/*  Our own API.  */
+
+GtkWidget *gpa_file_manager_get_instance (void);
 
 gboolean gpa_file_manager_is_open (void);
 
 void gpa_file_manager_open_file (GpaFileManager *fileman,
-				 const gchar *filename);
+				 const char *filename);
 
 
-#endif /* FILEMAN_H */
+#endif /*FILEMAN_H*/

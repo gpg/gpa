@@ -21,6 +21,7 @@ endif
 
 
 bin_PROGRAMS = gpa
+noinst_PROGRAMS = dndtest
 
 AM_CPPFLAGS = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
 AM_CFLAGS = $(GPGME_CFLAGS) $(GTK_CFLAGS)
@@ -92,3 +93,15 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
 	      options.c
+
+
+dndtest_SOURCES = dndtest.c
+
+
+
+
+
+
+
+
+

@@ -277,7 +277,7 @@ help_about (void)
       gtk_widget_show (scroll_area);
 #endif
 
-      label = gtk_label_new (_("GPA is free software under the"));
+      label = gtk_label_new (_("GPA is Free Software under the"));
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
@@ -289,7 +289,11 @@ help_about (void)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
+#ifdef HAVE_W32_SYSTEM
+      label = gtk_label_new (_("http://www.gpg4win.org"));
+#else
       label = gtk_label_new (_("http://www.gnupg.org"));
+#endif
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
       gtk_widget_show (label);
 
@@ -371,7 +375,7 @@ help_license (gpointer param)
   windowLicense = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gpa_windowKeeper_set_window (keeper, windowLicense);
   gtk_window_set_title (GTK_WINDOW (windowLicense),
-			_("GNU general public license"));
+			_("GNU General Public License"));
   accelGroup = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (windowLicense), accelGroup);
   gtk_signal_connect (GTK_OBJECT (windowLicense), "destroy",
@@ -398,7 +402,7 @@ help_license (gpointer param)
   gtk_adjustment_set_value (gtk_scrolled_window_get_vadjustment
 			    (GTK_SCROLLED_WINDOW (licenseScrolled)), 0.0);
   gpa_connect_by_accelerator (GTK_LABEL (labelGPL), textGPL, accelGroup,
-			      _("_GNU general public license"));
+			      _("_GNU General Public License"));
   gtk_box_pack_start (GTK_BOX (hboxGPL), licenseScrolled, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxGPL), hboxGPL, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vboxLicense), vboxGPL, TRUE, TRUE, 0);
