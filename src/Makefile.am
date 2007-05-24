@@ -8,9 +8,9 @@ pkgdata_DATA = $(tip_files) $(logo)
 EXTRA_DIST = $(tip_files) $(logo) gpa.ico gpa-resource.rc
 
 if HAVE_W32_SYSTEM
-%.o : %.rc
+.rc.o:
 	$(WINDRES) `echo $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) | \
-	sed -e 's/-I/--include-dir /g;s/-D/--define /g'` -i $< -o $@
+	 sed -e 's/-I/--include-dir /g;s/-D/--define /g'` -i $< -o $@
 
 gpa_res_ldflag = -Wl,gpa-resource.o
 gpa_deps = gpa-resource.o

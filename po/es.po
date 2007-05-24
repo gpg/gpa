@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2007-04-25 15:07+0200\n"
+"POT-Creation-Date: 2007-05-24 14:59+0200\n"
 "PO-Revision-Date: 2003-10-18 13:35+0200\n"
 "Last-Translator: Miguel Coca <mcoca@gnu.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -58,191 +58,191 @@ msgstr "_nunca caduca"
 msgid "_expire on:"
 msgstr "_caduca el:"
 
-#: src/fileman.c:235
+#: src/fileman.c:345
 msgid "Open File"
 msgstr "Abrir Archivo"
 
-#: src/fileman.c:240 src/fileman.c:745
+#: src/fileman.c:350 src/fileman.c:899
 msgid "The file is already open."
 msgstr "El archivo ya está abierto."
 
-#: src/fileman.c:466 src/keyring.c:844
+#: src/fileman.c:467 src/keyring.c:844
 msgid "/_File"
 msgstr "/_Archivo"
 
-#: src/fileman.c:467
+#: src/fileman.c:468
 msgid "/File/_Open"
 msgstr "/Archivo/_Abrir"
 
-#: src/fileman.c:468
+#: src/fileman.c:469
 msgid "/File/C_lear"
 msgstr "/Archivo/Li_mpiar"
 
-#: src/fileman.c:469
+#: src/fileman.c:470
 msgid "/File/sep1"
 msgstr "/Archivo/sep1"
 
-#: src/fileman.c:470
+#: src/fileman.c:471
 msgid "/File/_Sign"
 msgstr "/Archivo/_Firmar"
 
-#: src/fileman.c:471
+#: src/fileman.c:472
 msgid "/File/_Verify"
 msgstr "/Archivo/_Verificar"
 
-#: src/fileman.c:472
+#: src/fileman.c:473
 msgid "/File/_Encrypt"
 msgstr "/Archivo/_Cifrar"
 
-#: src/fileman.c:473
+#: src/fileman.c:474
 msgid "/File/_Decrypt"
 msgstr "/Archivo/_Descifrar"
 
-#: src/fileman.c:474
+#: src/fileman.c:475
 msgid "/File/sep2"
 msgstr "/Archivo/sep2"
 
-#: src/fileman.c:475 src/keyring.c:845
+#: src/fileman.c:476 src/keyring.c:845
 msgid "/File/_Close"
 msgstr "/Archivo/C_errar"
 
-#: src/fileman.c:476 src/keyring.c:847
+#: src/fileman.c:477 src/keyring.c:847
 msgid "/File/_Quit"
 msgstr "/Archivo/_Salir"
 
-#: src/fileman.c:479 src/keyring.c:850
+#: src/fileman.c:480 src/keyring.c:850
 msgid "/_Edit"
 msgstr "/_Editar"
 
-#: src/fileman.c:480 src/keyring.c:856
+#: src/fileman.c:481 src/keyring.c:856
 msgid "/Edit/Select _All"
 msgstr "/Editar/Seleccionar _Todo"
 
-#: src/fileman.c:481 src/keyring.c:857
+#: src/fileman.c:482 src/keyring.c:857
 msgid "/Edit/sep2"
 msgstr "/Editar/sep2"
 
-#: src/fileman.c:482 src/keyring.c:858
+#: src/fileman.c:483 src/keyring.c:858
 msgid "/Edit/Pr_eferences..."
 msgstr "/Editar/Pr_eferencias..."
 
-#: src/fileman.c:486 src/keyring.c:885
+#: src/fileman.c:487 src/keyring.c:885
 msgid "/_Windows"
 msgstr "/_Ventanas"
 
-#: src/fileman.c:487 src/keyring.c:886
+#: src/fileman.c:488 src/keyring.c:886
 msgid "/Windows/_Filemanager"
 msgstr "/Ventanas/Gestor de _Archivos"
 
-#: src/fileman.c:488 src/keyring.c:887
+#: src/fileman.c:489 src/keyring.c:887
 msgid "/Windows/_Keyring Editor"
 msgstr "/Ventanas/_Editor del anillo"
 
-#: src/fileman.c:507
+#: src/fileman.c:508
 msgid "/File/Sign"
 msgstr "/Archivo/Firmar"
 
-#: src/fileman.c:514
+#: src/fileman.c:513
 msgid "/File/Verify"
 msgstr "/Archivo/Verificar"
 
-#: src/fileman.c:521
+#: src/fileman.c:518
 msgid "/File/Encrypt"
 msgstr "/Archivo/Cifrar"
 
-#: src/fileman.c:528
+#: src/fileman.c:523
 msgid "/File/Decrypt"
 msgstr "/Archivo/Descifrar"
 
-#: src/fileman.c:549
+#: src/fileman.c:594
 msgid "Open a file"
 msgstr "Abrir un archivo"
 
-#: src/fileman.c:549
+#: src/fileman.c:594
 msgid "open file"
 msgstr "abrir archivo"
 
-#: src/fileman.c:553
+#: src/fileman.c:598
 msgid "Close all files"
 msgstr "Cerrar todos los archivos"
 
-#: src/fileman.c:553
+#: src/fileman.c:598
 msgid "close files"
 msgstr "cerrar archivos"
 
-#: src/fileman.c:559 src/keyring.c:1567
+#: src/fileman.c:604 src/keyring.c:1567
 msgid "Sign"
 msgstr "Firmar"
 
-#: src/fileman.c:560
+#: src/fileman.c:605
 msgid "Sign the selected file"
 msgstr "Firmar archivo seleccionado"
 
-#: src/fileman.c:560
+#: src/fileman.c:606
 msgid "sign file"
 msgstr "firmar archivo"
 
-#: src/fileman.c:569
+#: src/fileman.c:615
 msgid "Verify"
 msgstr "Verificar"
 
-#: src/fileman.c:570
+#: src/fileman.c:616
 msgid "Check signatures of selected file"
 msgstr "Comprobar las firmas en el archivo seleccionado"
 
-#: src/fileman.c:571
+#: src/fileman.c:617
 msgid "verify file"
 msgstr "verificar archivo"
 
-#: src/fileman.c:579
+#: src/fileman.c:626
 msgid "Encrypt"
 msgstr "Cifrar"
 
-#: src/fileman.c:580
+#: src/fileman.c:627
 msgid "Encrypt the selected file"
 msgstr "Cifrar el archivo seleccionado"
 
-#: src/fileman.c:581
+#: src/fileman.c:628
 msgid "encrypt file"
 msgstr "cifrar archivo"
 
-#: src/fileman.c:589
+#: src/fileman.c:637
 msgid "Decrypt"
 msgstr "Descifrar"
 
-#: src/fileman.c:590
+#: src/fileman.c:638
 msgid "Decrypt the selected file"
 msgstr "Descifrar el archivo seleccionado"
 
-#: src/fileman.c:591
+#: src/fileman.c:639
 msgid "decrypt file"
 msgstr "descifrar archivo"
 
-#: src/fileman.c:605 src/keyring.c:1632
+#: src/fileman.c:654 src/keyring.c:1632
 msgid "Open the Preferences dialog"
 msgstr "Abrir la ventana de Preferencias"
 
-#: src/fileman.c:606 src/keyring.c:1633
+#: src/fileman.c:655 src/keyring.c:1633
 msgid "preferences"
 msgstr "preferencias"
 
-#: src/fileman.c:614 src/keyring.c:1656
+#: src/fileman.c:663 src/keyring.c:1656
 msgid "Help"
 msgstr "Ayuda"
 
-#: src/fileman.c:615 src/keyring.c:1657
+#: src/fileman.c:664 src/keyring.c:1657
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "Comprendiendo el GNU Privacy Assistant"
 
-#: src/fileman.c:616 src/keyring.c:1658
+#: src/fileman.c:665 src/keyring.c:1658
 msgid "help"
 msgstr "ayuda"
 
-#: src/fileman.c:634
+#: src/fileman.c:764
 msgid "File"
 msgstr "Archivo"
 
-#: src/fileman.c:687
+#: src/fileman.c:821
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - Gestor de Archivos"
 
@@ -449,7 +449,7 @@ msgid "Revoked Key"
 msgstr "Clave Revocada"
 
 #: src/gpafileencryptop.c:360 src/gpafileencryptop.c:400 src/gpawizard.c:279
-#: src/gtktools.c:315 src/gtktools.c:348 src/helpmenu.c:414
+#: src/gtktools.c:315 src/gtktools.c:348 src/helpmenu.c:418
 #: src/keyeditdlg.c:150 src/keylist.c:512 src/settingsdlg.c:166
 #: src/verifydlg.c:117
 msgid "_Close"
@@ -619,12 +619,12 @@ msgstr "Puede cifrar"
 msgid "Can authenticate"
 msgstr "Puede autenticar"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:577 src/gpgmetools.c:768
-#: src/gpgmetools.c:887
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:577 src/gpgmetools.c:785
+#: src/gpgmetools.c:904
 msgid "Revoked"
 msgstr "Revocada"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:579 src/gpgmetools.c:883
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:579 src/gpgmetools.c:900
 msgid "Expired"
 msgstr "Caducada"
 
@@ -636,7 +636,7 @@ msgstr "Desactivada"
 msgid "Unsigned"
 msgstr "Sin firmar"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:874 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:891 src/verifydlg.c:214
 msgid "Valid"
 msgstr "Válida"
 
@@ -762,7 +762,7 @@ msgid "RSA (sign only)"
 msgstr "RSA (solo firma)"
 
 #: src/gpgmetools.c:545 src/gpgmetools.c:568 src/gpgmetools.c:585
-#: src/gpgmetools.c:879 src/gpgmetools.c:912
+#: src/gpgmetools.c:896 src/gpgmetools.c:929
 msgid "Unknown"
 msgstr "Desconocida"
 
@@ -802,53 +802,53 @@ msgstr "Contraseña incorrecta, por favor vuelva a intentarlo:"
 msgid "Enter Passphrase"
 msgstr "Introduzca Contraseña"
 
-#: src/gpgmetools.c:761
+#: src/gpgmetools.c:778
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:851 src/verifydlg.c:271
+#: src/gpgmetools.c:868 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[Usuario desconocido]"
 
-#: src/gpgmetools.c:877 src/verifydlg.c:219
+#: src/gpgmetools.c:894 src/verifydlg.c:219
 msgid "Bad"
 msgstr "Incorrecta"
 
-#: src/gpgmetools.c:900
+#: src/gpgmetools.c:917
 msgid "Generic"
 msgstr "Genérica"
 
-#: src/gpgmetools.c:903
+#: src/gpgmetools.c:920
 msgid "Persona"
 msgstr "Persona"
 
-#: src/gpgmetools.c:906
+#: src/gpgmetools.c:923
 msgid "Casual"
 msgstr "Casual"
 
-#: src/gpgmetools.c:909
+#: src/gpgmetools.c:926
 msgid "Positive"
 msgstr "Positiva"
 
-#: src/gpgmetools.c:927
+#: src/gpgmetools.c:944
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Esta clave puede utilizarse para certificación, firma y cifrado."
 
-#: src/gpgmetools.c:930
+#: src/gpgmetools.c:947
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Esta clave puede utilizarse para certificación y firma, pero no para cifrado."
 
-#: src/gpgmetools.c:936
+#: src/gpgmetools.c:953
 msgid "The key can be used for certification and encryption."
 msgstr "Esta clave puede utilizarse para certificación y cifrado."
 
-#: src/gpgmetools.c:939
+#: src/gpgmetools.c:956
 msgid "The key can be used only for certification."
 msgstr "Esta clave puede utilizarse solo para certificación."
 
-#: src/gpgmetools.c:947
+#: src/gpgmetools.c:964
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -856,15 +856,15 @@ msgstr ""
 "Esta clave puede utilizarse solo para firma y cifrado, pero no para\n"
 "certificación."
 
-#: src/gpgmetools.c:950
+#: src/gpgmetools.c:967
 msgid "The key can be used only for signing."
 msgstr "Esta clave puede utilizarse tan solo para firma."
 
-#: src/gpgmetools.c:955
+#: src/gpgmetools.c:972
 msgid "The key can be used only for encryption."
 msgstr "Esta clave puede utilizarse tan solo para cifrado."
 
-#: src/gpgmetools.c:958
+#: src/gpgmetools.c:975
 msgid "This key is useless."
 msgstr "Esta clave no vale para nada."
 
@@ -885,7 +885,8 @@ msgid "Brought to you by:"
 msgstr "De mano de:"
 
 #: src/helpmenu.c:280
-msgid "GPA is free software under the"
+#, fuzzy
+msgid "GPA is Free Software under the"
 msgstr "GPA es software libre bajo la"
 
 #: src/helpmenu.c:284
@@ -896,35 +897,42 @@ msgstr "GNU General Public License,"
 msgid "For news see:"
 msgstr "Noticias en:"
 
-#: src/helpmenu.c:292
+#: src/helpmenu.c:293
+#, fuzzy
+msgid "http://www.gpg4win.org"
+msgstr "http://www.gnupg.org"
+
+#: src/helpmenu.c:295
 msgid "http://www.gnupg.org"
 msgstr "http://www.gnupg.org"
 
-#: src/helpmenu.c:374
-msgid "GNU general public license"
-msgstr "GNU general public license"
+#: src/helpmenu.c:378
+#, fuzzy
+msgid "GNU General Public License"
+msgstr "GNU General Public License,"
 
-#: src/helpmenu.c:401
-msgid "_GNU general public license"
-msgstr "_GNU general public license"
+#: src/helpmenu.c:405
+#, fuzzy
+msgid "_GNU General Public License"
+msgstr "GNU General Public License,"
 
-#: src/helpmenu.c:428
+#: src/helpmenu.c:432
 msgid "Show Help Text\n"
 msgstr "Mostrar Text de Ayuda\n"
 
-#: src/helpmenu.c:436
+#: src/helpmenu.c:440
 msgid "/_Help"
 msgstr "/A_yuda"
 
-#: src/helpmenu.c:438
+#: src/helpmenu.c:442
 msgid "/Help/_Contents"
 msgstr "/Ayuda/_Contenidos"
 
-#: src/helpmenu.c:441
+#: src/helpmenu.c:445
 msgid "/Help/_License"
 msgstr "/Ayuda/_Licencia"
 
-#: src/helpmenu.c:442
+#: src/helpmenu.c:446
 msgid "/Help/_About"
 msgstr "/Ayuda/Acerca de..."
 
@@ -1802,6 +1810,12 @@ msgstr "Firmas"
 #: src/verifydlg.c:372
 msgid "Signatures:"
 msgstr "Firmas:"
+
+#~ msgid "GNU general public license"
+#~ msgstr "GNU general public license"
+
+#~ msgid "_GNU general public license"
+#~ msgstr "_GNU general public license"
 
 #~ msgid ">.\n"
 #~ msgstr ">.\n"

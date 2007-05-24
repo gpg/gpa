@@ -1,9 +1,11 @@
-Noteworthy changes in version 0.7.6 (unreleased)
+Noteworthy changes in version 0.7.6 (2007-05-24)
 ------------------------------------------------
 
  * Czech translation by Zdenek Hatas.
 
  * Russian translation by Maxim Britov.
+
+ * Files may now be dropped onto the file manager window.
 
 
 Noteworthy changes in version 0.7.5 (2007-02-26)

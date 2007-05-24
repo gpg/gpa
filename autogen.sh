@@ -4,11 +4,32 @@
 # Use --build-w32 to prepare the cross compiling build for Windoze
 #
 
-PGM=GPA
-autoconf_vers=2.52
-automake_vers=1.6
-aclocal_vers=1.6
-libtool_vers=1.4
+configure_ac="configure.ac"
+
+cvtver () {
+  awk 'NR==1 {split($NF,A,".");X=1000000*A[1]+1000*A[2]+A[3];print X;exit 0}'
+}
+
+check_version () {
+    if [ `("$1" --version || echo "0") | cvtver` -ge "$2" ]; then
+       return 0
+    fi
+    echo "**Error**: "\`$1\'" not installed or too old." >&2
+    echo '           Version '$3' or newer is required.' >&2
+    [ -n "$4" ] && echo '           Note that this is part of '\`$4\''.' >&2
+    DIE="yes"
+    return 1
+}
+
+# Allow to override the default tool names
+AUTOCONF=${AUTOCONF_PREFIX}${AUTOCONF:-autoconf}${AUTOCONF_SUFFIX}
+AUTOHEADER=${AUTOCONF_PREFIX}${AUTOHEADER:-autoheader}${AUTOCONF_SUFFIX}
+
+AUTOMAKE=${AUTOMAKE_PREFIX}${AUTOMAKE:-automake}${AUTOMAKE_SUFFIX}
+ACLOCAL=${AUTOMAKE_PREFIX}${ACLOCAL:-aclocal}${AUTOMAKE_SUFFIX}
+
+GETTEXT=${GETTEXT_PREFIX}${GETTEXT:-gettext}${GETTEXT_SUFFIX}
+MSGMERGE=${GETTEXT_PREFIX}${MSGMERGE:-msgmerge}${GETTEXT_SUFFIX}
 
 DIE=no
 FORCE=
@@ -18,6 +39,8 @@ if test "$1" == "--force"; then
 fi
 
 
+# ***** W32 build script *******
+# Used to cross-compile for Windows.
 if test "$1" = "--build-w32"; then
     tmp=`dirname $0`
     tsdir=`cd "$tmp"; pwd`
@@ -29,35 +52,28 @@ if test "$1" = "--build-w32"; then
     build=`$tsdir/config.guess`
 
     [ -z "$w32root" ] && w32root="$HOME/w32root"
-    export w32root
     echo "Using $w32root as standard install directory" >&2
     
-    # See whether we have the Debian cross compiler package or the
-    # old mingw32/cpd system
-    if i586-mingw32msvc-gcc --version >/dev/null 2>&1 ; then
-       host=i586-mingw32msvc
-       crossbindir=/usr/$host/bin
-       conf_CC="CC=${host}-gcc"
-    else
-       host=i386--mingw32
-       if ! mingw32 --version >/dev/null; then
-          echo "We need at least version 0.3 of MingW32/CPD" >&2
-          exit 1
-       fi
-       crossbindir=`mingw32 --install-dir`/bin
-       # Old autoconf version required us to setup the environment
-       # with the proper tool names.
-       CC=`mingw32 --get-path gcc`
-       CPP=`mingw32 --get-path cpp`
-       AR=`mingw32 --get-path ar`
-       RANLIB=`mingw32 --get-path ranlib`
-       export CC CPP AR RANLIB 
-       conf_CC=""
+    # Locate the cross compiler
+    crossbindir=
+    for host in i586-mingw32msvc i386-mingw32msvc mingw32; do
+        if ${host}-gcc --version >/dev/null 2>&1 ; then
+            crossbindir=/usr/${host}/bin
+            conf_CC="CC=${host}-gcc"
+            break;
+        fi
+    done
+    if [ -z "$crossbindir" ]; then
+        echo "Cross compiler kit not installed" >&2
+        echo "Under Debian GNU/Linux, you may install it using" >&2
+        echo "  apt-get install mingw32 mingw32-runtime mingw32-binutils" >&2 
+        echo "Stop." >&2
+        exit 1
     fi
    
     if [ -f "$tsdir/config.log" ]; then
         if ! head $tsdir/config.log | grep "$host" >/dev/null; then
-            echo "Pease run a 'make distclean' first" >&2
+            echo "Please run a 'make distclean' first" >&2
             exit 1
         fi
     fi
@@ -70,96 +86,68 @@ if test "$1" = "--build-w32"; then
             --with-lib-prefix=${w32root} \
             --with-libiconv-prefix=${w32root} \
             PKG_CONFIG_LIBDIR="$w32root/lib/pkgconfig"
-    exit $?
+    rc=$?
+    exit $rc
+fi
+# ***** end W32 build script *******
+
+
+# Grep the required versions from configure.ac
+autoconf_vers=`sed -n '/^AC_PREREQ(/ { 
+s/^.*(\(.*\))/\1/p
+q
+}' ${configure_ac}`
+autoconf_vers_num=`echo "$autoconf_vers" | cvtver`
+
+automake_vers=`sed -n '/^min_automake_version=/ { 
+s/^.*="\(.*\)"/\1/p
+q
+}' ${configure_ac}`
+automake_vers_num=`echo "$automake_vers" | cvtver`
+
+gettext_vers=`sed -n '/^AM_GNU_GETTEXT_VERSION(/ { 
+s/^.*(\(.*\))/\1/p
+q
+}' ${configure_ac}`
+gettext_vers_num=`echo "$gettext_vers" | cvtver`
+
+
+if [ -z "$autoconf_vers" -o -z "$automake_vers" -o -z "$gettext_vers" ]
+then
+  echo "**Error**: version information not found in "\`${configure_ac}\'"." >&2
+  exit 1
 fi
 
 
-
-if (autoconf --version) < /dev/null > /dev/null 2>&1 ; then
-    if (autoconf --version | awk 'NR==1 { if( $3 >= '$autoconf_vers') \
-			       exit 1; exit 0; }');
-    then
-       echo "**Error**: "\`autoconf\'" is too old."
-       echo '           (version ' $autoconf_vers ' or newer is required)'
-       DIE="yes"
-    fi
-else
-    echo
-    echo "**Error**: You must have "\`autoconf\'" installed to compile $PGM."
-    echo '           (version ' $autoconf_vers ' or newer is required)'
-    DIE="yes"
+if check_version $AUTOCONF $autoconf_vers_num $autoconf_vers ; then
+    check_version $AUTOHEADER $autoconf_vers_num $autoconf_vers autoconf
 fi
-
-if (automake --version) < /dev/null > /dev/null 2>&1 ; then
-  if (automake --version | awk 'NR==1 { if( $4 >= '$automake_vers') \
-			     exit 1; exit 0; }');
-     then
-     echo "**Error**: "\`automake\'" is too old."
-     echo '           (version ' $automake_vers ' or newer is required)'
-     DIE="yes"
-  fi
-  if (aclocal --version) < /dev/null > /dev/null 2>&1; then
-    if (aclocal --version | awk 'NR==1 { if( $4 >= '$aclocal_vers' ) \
-						exit 1; exit 0; }' );
-    then
-      echo "**Error**: "\`aclocal\'" is too old."
-      echo '           (version ' $aclocal_vers ' or newer is required)'
-      DIE="yes"
-    fi
-  else
-    echo
-    echo "**Error**: Missing "\`aclocal\'".  The version of "\`automake\'
-    echo "           installed doesn't appear recent enough."
-    DIE="yes"
-  fi
-else
-    echo
-    echo "**Error**: You must have "\`automake\'" installed to compile $PGM."
-    echo '           (version ' $automake_vers ' or newer is required)'
-    DIE="yes"
+if check_version $AUTOMAKE $automake_vers_num $automake_vers; then
+  check_version $ACLOCAL $automake_vers_num $autoconf_vers automake
 fi
-
-
-if (gettext --version </dev/null 2>/dev/null | awk 'NR==1 { split($4,A,"."); \
-    X=10000*A[1]+100*A[2]+A[3]; echo X; if( X >= 1201 ) exit 1; exit 0}')
-    then
-    echo "**Error**: You must have "\`gettext\'" installed to compile $PGM."
-    echo '           (version 0.12.1 or newer is required; get'
-    echo '            ftp://alpha.gnu.org/gnu/gettext-0.12.1.tar.gz'
-    echo '            or install the latest Debian package)'
-    DIE="yes"
+if check_version $GETTEXT $gettext_vers_num $gettext_vers; then
+  check_version $MSGMERGE $gettext_vers_num $gettext_vers gettext
 fi
-
-
-#if (libtool --version) < /dev/null > /dev/null 2>&1 ; then
-#    if (libtool --version | awk 'NR==1 { if( $4 >= '$libtool_vers') \
-#			       exit 1; exit 0; }');
-#    then
-#       echo "**Error**: "\`libtool\'" is too old."
-#       echo '           (version ' $libtool_vers ' or newer is required)'
-#       DIE="yes"
-#    fi
-#else
-#    echo
-#    echo "**Error**: You must have "\`libtool\'" installed to compile $PGM."
-#    echo '           (version ' $libtool_vers ' or newer is required)'
-#    DIE="yes"
-#fi
-
 
 if test "$DIE" = "yes"; then
+    cat <<EOF
+
+Note that you may use alternative versions of the tools by setting 
+the corresponding environment variables; see README.CVS for details.
+                   
+EOF
     exit 1
 fi
 
-echo "Running autopoint"
-autopoint
-echo "Running aclocal..."
-aclocal -I m4
+
+echo "Running aclocal -I m4 ${ACLOCAL_FLAGS:+$ACLOCAL_FLAGS }..."
+$ACLOCAL -I m4  $ACLOCAL_FLAGS
 echo "Running autoheader..."
-autoheader
-echo "Running automake --add-missing --gnu ..."
-automake --add-missing --gnu
+$AUTOHEADER
+echo "Running automake --gnu ..."
+$AUTOMAKE --gnu;
 echo "Running autoconf${FORCE} ..."
-autoconf${FORCE}
+$AUTOCONF${FORCE}
+
 
 echo "You may now run \"./configure --enable-maintainer-mode\" and then \"make\"."

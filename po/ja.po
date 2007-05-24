@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2007-04-25 15:07+0200\n"
+"POT-Creation-Date: 2007-05-24 14:59+0200\n"
 "PO-Revision-Date: 2003-11-03 17:11+0100\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
@@ -58,191 +58,191 @@ msgstr "無期限有効 (_N)"
 msgid "_expire on:"
 msgstr "有効期限の指定 (_E):"
 
-#: src/fileman.c:235
+#: src/fileman.c:345
 msgid "Open File"
 msgstr "ファイルを開く"
 
-#: src/fileman.c:240 src/fileman.c:745
+#: src/fileman.c:350 src/fileman.c:899
 msgid "The file is already open."
 msgstr "ファイルは開かれています"
 
-#: src/fileman.c:466 src/keyring.c:844
+#: src/fileman.c:467 src/keyring.c:844
 msgid "/_File"
 msgstr "/ファイル (_F)"
 
-#: src/fileman.c:467
+#: src/fileman.c:468
 msgid "/File/_Open"
 msgstr "/ファイル (F)/開く (_O)"
 
-#: src/fileman.c:468
+#: src/fileman.c:469
 msgid "/File/C_lear"
 msgstr "/ファイル (F)/クリア (_L)"
 
-#: src/fileman.c:469
+#: src/fileman.c:470
 msgid "/File/sep1"
 msgstr "/ファイル (F)/sep1"
 
-#: src/fileman.c:470
+#: src/fileman.c:471
 msgid "/File/_Sign"
 msgstr "/ファイル (F)/署名する (_S)"
 
-#: src/fileman.c:471
+#: src/fileman.c:472
 msgid "/File/_Verify"
 msgstr "/ファイル (F)/検証 (_V)"
 
-#: src/fileman.c:472
+#: src/fileman.c:473
 msgid "/File/_Encrypt"
 msgstr "/ファイル (F)/暗号化 (_E)"
 
-#: src/fileman.c:473
+#: src/fileman.c:474
 msgid "/File/_Decrypt"
 msgstr "/ファイル (F)/復号化 (_D)"
 
-#: src/fileman.c:474
+#: src/fileman.c:475
 msgid "/File/sep2"
 msgstr "/ファイル (F)/sep2"
 
-#: src/fileman.c:475 src/keyring.c:845
+#: src/fileman.c:476 src/keyring.c:845
 msgid "/File/_Close"
 msgstr "/ファイル (F)/閉じる (_C)"
 
-#: src/fileman.c:476 src/keyring.c:847
+#: src/fileman.c:477 src/keyring.c:847
 msgid "/File/_Quit"
 msgstr "/ファイル (F)/終了 (_Q)"
 
-#: src/fileman.c:479 src/keyring.c:850
+#: src/fileman.c:480 src/keyring.c:850
 msgid "/_Edit"
 msgstr "/編集 (_E)"
 
-#: src/fileman.c:480 src/keyring.c:856
+#: src/fileman.c:481 src/keyring.c:856
 msgid "/Edit/Select _All"
 msgstr "/編集 (E)/すべて選択 (_A)"
 
-#: src/fileman.c:481 src/keyring.c:857
+#: src/fileman.c:482 src/keyring.c:857
 msgid "/Edit/sep2"
 msgstr "/編集 (E)/sep2"
 
-#: src/fileman.c:482 src/keyring.c:858
+#: src/fileman.c:483 src/keyring.c:858
 msgid "/Edit/Pr_eferences..."
 msgstr "/編集 (E)/設定 (_E)"
 
-#: src/fileman.c:486 src/keyring.c:885
+#: src/fileman.c:487 src/keyring.c:885
 msgid "/_Windows"
 msgstr "/ウィンドウ (_W)"
 
-#: src/fileman.c:487 src/keyring.c:886
+#: src/fileman.c:488 src/keyring.c:886
 msgid "/Windows/_Filemanager"
 msgstr "/ウィンドウ (W)/ファイルマネージャ (_F)"
 
-#: src/fileman.c:488 src/keyring.c:887
+#: src/fileman.c:489 src/keyring.c:887
 msgid "/Windows/_Keyring Editor"
 msgstr "/ウィンドウ (W)/鍵束エディタ (_K)"
 
-#: src/fileman.c:507
+#: src/fileman.c:508
 msgid "/File/Sign"
 msgstr "/ファイル (F)/署名する (S)"
 
-#: src/fileman.c:514
+#: src/fileman.c:513
 msgid "/File/Verify"
 msgstr "/ファイル (F)/検証 (V)"
 
-#: src/fileman.c:521
+#: src/fileman.c:518
 msgid "/File/Encrypt"
 msgstr "/ファイル (F)/暗号化 (E)"
 
-#: src/fileman.c:528
+#: src/fileman.c:523
 msgid "/File/Decrypt"
 msgstr "/ファイル (F)/復号化 (D)"
 
-#: src/fileman.c:549
+#: src/fileman.c:594
 msgid "Open a file"
 msgstr "ファイルを開く"
 
-#: src/fileman.c:549
+#: src/fileman.c:594
 msgid "open file"
 msgstr "ファイル開く"
 
-#: src/fileman.c:553
+#: src/fileman.c:598
 msgid "Close all files"
 msgstr "ファイルをすべて閉じる"
 
-#: src/fileman.c:553
+#: src/fileman.c:598
 msgid "close files"
 msgstr "ファイル閉じる"
 
-#: src/fileman.c:559 src/keyring.c:1567
+#: src/fileman.c:604 src/keyring.c:1567
 msgid "Sign"
 msgstr "署名する"
 
-#: src/fileman.c:560
+#: src/fileman.c:605
 msgid "Sign the selected file"
 msgstr "選択ファイルに署名する"
 
-#: src/fileman.c:560
+#: src/fileman.c:606
 msgid "sign file"
 msgstr "ファイルに署名"
 
-#: src/fileman.c:569
+#: src/fileman.c:615
 msgid "Verify"
 msgstr "検証"
 
-#: src/fileman.c:570
+#: src/fileman.c:616
 msgid "Check signatures of selected file"
 msgstr "選択ファイルの署名をチェック"
 
-#: src/fileman.c:571
+#: src/fileman.c:617
 msgid "verify file"
 msgstr "ファイル検証"
 
-#: src/fileman.c:579
+#: src/fileman.c:626
 msgid "Encrypt"
 msgstr "暗号化"
 
-#: src/fileman.c:580
+#: src/fileman.c:627
 msgid "Encrypt the selected file"
 msgstr "選択ファイルを暗号化する"
 
-#: src/fileman.c:581
+#: src/fileman.c:628
 msgid "encrypt file"
 msgstr "ファイル暗号化"
 
-#: src/fileman.c:589
+#: src/fileman.c:637
 msgid "Decrypt"
 msgstr "復号化"
 
-#: src/fileman.c:590
+#: src/fileman.c:638
 msgid "Decrypt the selected file"
 msgstr "選択ファイルを復号化する"
 
-#: src/fileman.c:591
+#: src/fileman.c:639
 msgid "decrypt file"
 msgstr "ファイル復号化"
 
-#: src/fileman.c:605 src/keyring.c:1632
+#: src/fileman.c:654 src/keyring.c:1632
 msgid "Open the Preferences dialog"
 msgstr "設定ダイアログを開く"
 
-#: src/fileman.c:606 src/keyring.c:1633
+#: src/fileman.c:655 src/keyring.c:1633
 msgid "preferences"
 msgstr "設定"
 
-#: src/fileman.c:614 src/keyring.c:1656
+#: src/fileman.c:663 src/keyring.c:1656
 msgid "Help"
 msgstr "ヘルプ"
 
-#: src/fileman.c:615 src/keyring.c:1657
+#: src/fileman.c:664 src/keyring.c:1657
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "GNU Privacy Assistant について理解する"
 
-#: src/fileman.c:616 src/keyring.c:1658
+#: src/fileman.c:665 src/keyring.c:1658
 msgid "help"
 msgstr "ヘルプ"
 
-#: src/fileman.c:634
+#: src/fileman.c:764
 msgid "File"
 msgstr "ファイル"
 
-#: src/fileman.c:687
+#: src/fileman.c:821
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - ファイルマネージャ"
 
@@ -448,7 +448,7 @@ msgid "Revoked Key"
 msgstr "破棄済みの鍵"
 
 #: src/gpafileencryptop.c:360 src/gpafileencryptop.c:400 src/gpawizard.c:279
-#: src/gtktools.c:315 src/gtktools.c:348 src/helpmenu.c:414
+#: src/gtktools.c:315 src/gtktools.c:348 src/helpmenu.c:418
 #: src/keyeditdlg.c:150 src/keylist.c:512 src/settingsdlg.c:166
 #: src/verifydlg.c:117
 msgid "_Close"
@@ -617,12 +617,12 @@ msgstr "暗号化可能"
 msgid "Can authenticate"
 msgstr "認証可能"
 
-#: src/gpasubkeylist.c:135 src/gpgmetools.c:577 src/gpgmetools.c:768
-#: src/gpgmetools.c:887
+#: src/gpasubkeylist.c:135 src/gpgmetools.c:577 src/gpgmetools.c:785
+#: src/gpgmetools.c:904
 msgid "Revoked"
 msgstr "破棄済み"
 
-#: src/gpasubkeylist.c:139 src/gpgmetools.c:579 src/gpgmetools.c:883
+#: src/gpasubkeylist.c:139 src/gpgmetools.c:579 src/gpgmetools.c:900
 msgid "Expired"
 msgstr "期限切れ"
 
@@ -634,7 +634,7 @@ msgstr "無効"
 msgid "Unsigned"
 msgstr "署名なし"
 
-#: src/gpasubkeylist.c:151 src/gpgmetools.c:874 src/verifydlg.c:214
+#: src/gpasubkeylist.c:151 src/gpgmetools.c:891 src/verifydlg.c:214
 msgid "Valid"
 msgstr "有効"
 
@@ -760,7 +760,7 @@ msgid "RSA (sign only)"
 msgstr "RSA (署名のみ)"
 
 #: src/gpgmetools.c:545 src/gpgmetools.c:568 src/gpgmetools.c:585
-#: src/gpgmetools.c:879 src/gpgmetools.c:912
+#: src/gpgmetools.c:896 src/gpgmetools.c:929
 msgid "Unknown"
 msgstr "未確認"
 
@@ -800,66 +800,66 @@ msgstr "パスフレーズが違います。もう一度お願いします:"
 msgid "Enter Passphrase"
 msgstr "パスフレーズを入力"
 
-#: src/gpgmetools.c:761
+#: src/gpgmetools.c:778
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:851 src/verifydlg.c:271
+#: src/gpgmetools.c:868 src/verifydlg.c:271
 msgid "[Unknown user ID]"
 msgstr "[未確認ユーザ ID]"
 
-#: src/gpgmetools.c:877 src/verifydlg.c:219
+#: src/gpgmetools.c:894 src/verifydlg.c:219
 msgid "Bad"
 msgstr "不正"
 
-#: src/gpgmetools.c:900
+#: src/gpgmetools.c:917
 msgid "Generic"
 msgstr "一般"
 
-#: src/gpgmetools.c:903
+#: src/gpgmetools.c:920
 msgid "Persona"
 msgstr "個人"
 
-#: src/gpgmetools.c:906
+#: src/gpgmetools.c:923
 msgid "Casual"
 msgstr "カジュアル"
 
-#: src/gpgmetools.c:909
+#: src/gpgmetools.c:926
 msgid "Positive"
 msgstr "ポジティヴ"
 
-#: src/gpgmetools.c:927
+#: src/gpgmetools.c:944
 msgid "The key can be used for certification, signing and encryption."
 msgstr "証明、署名、暗号化に使える鍵です。"
 
-#: src/gpgmetools.c:930
+#: src/gpgmetools.c:947
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr "証明および署名に使えますが、暗号化には使えない鍵です。"
 
-#: src/gpgmetools.c:936
+#: src/gpgmetools.c:953
 msgid "The key can be used for certification and encryption."
 msgstr "証明と暗号化に使える鍵です。"
 
-#: src/gpgmetools.c:939
+#: src/gpgmetools.c:956
 msgid "The key can be used only for certification."
 msgstr "証明にのみ使える鍵です。"
 
-#: src/gpgmetools.c:947
+#: src/gpgmetools.c:964
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr "署名および暗号化に使えますが、証明には使えない鍵です。"
 
-#: src/gpgmetools.c:950
+#: src/gpgmetools.c:967
 msgid "The key can be used only for signing."
 msgstr "署名にのみ使える鍵です。"
 
-#: src/gpgmetools.c:955
+#: src/gpgmetools.c:972
 msgid "The key can be used only for encryption."
 msgstr "暗号化にのみ使える鍵です。"
 
-#: src/gpgmetools.c:958
+#: src/gpgmetools.c:975
 msgid "This key is useless."
 msgstr "この鍵は使えません。"
 
@@ -880,7 +880,8 @@ msgid "Brought to you by:"
 msgstr "提供者:"
 
 #: src/helpmenu.c:280
-msgid "GPA is free software under the"
+#, fuzzy
+msgid "GPA is Free Software under the"
 msgstr "GPA is free software under the"
 
 #: src/helpmenu.c:284
@@ -891,35 +892,42 @@ msgstr "GNU General Public License."
 msgid "For news see:"
 msgstr "最新情報はこちら:"
 
-#: src/helpmenu.c:292
+#: src/helpmenu.c:293
+#, fuzzy
+msgid "http://www.gpg4win.org"
+msgstr "http://www.gnupg.org"
+
+#: src/helpmenu.c:295
 msgid "http://www.gnupg.org"
 msgstr "http://www.gnupg.org"
 
-#: src/helpmenu.c:374
-msgid "GNU general public license"
-msgstr "GNU 一般公有使用許諾書 (GPL)"
+#: src/helpmenu.c:378
+#, fuzzy
+msgid "GNU General Public License"
+msgstr "GNU General Public License."
 
-#: src/helpmenu.c:401
-msgid "_GNU general public license"
-msgstr "_GNU 一般公有使用許諾書 (GPL)"
+#: src/helpmenu.c:405
+#, fuzzy
+msgid "_GNU General Public License"
+msgstr "GNU General Public License."
 
-#: src/helpmenu.c:428
+#: src/helpmenu.c:432
 msgid "Show Help Text\n"
 msgstr "ヘルプを見る\n"
 
-#: src/helpmenu.c:436
+#: src/helpmenu.c:440
 msgid "/_Help"
 msgstr "/ヘルプ (_H)"
 
-#: src/helpmenu.c:438
+#: src/helpmenu.c:442
 msgid "/Help/_Contents"
 msgstr "/ヘルプ (H)/内容 (_C)"
 
-#: src/helpmenu.c:441
+#: src/helpmenu.c:445
 msgid "/Help/_License"
 msgstr "/ヘルプ (H)/ライセンス (_L)"
 
-#: src/helpmenu.c:442
+#: src/helpmenu.c:446
 msgid "/Help/_About"
 msgstr "/ヘルプ (H)/GPA について (_A)"
 
@@ -1784,6 +1792,12 @@ msgstr "署名"
 #: src/verifydlg.c:372
 msgid "Signatures:"
 msgstr "署名:"
+
+#~ msgid "GNU general public license"
+#~ msgstr "GNU 一般公有使用許諾書 (GPL)"
+
+#~ msgid "_GNU general public license"
+#~ msgstr "_GNU 一般公有使用許諾書 (GPL)"
 
 #~ msgid ">.\n"
 #~ msgstr "> に報告してください。\n"
