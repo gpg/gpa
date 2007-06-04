@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Run this to generate all the initial makefiles, etc.
 #
 # Use --build-w32 to prepare the cross compiling build for Windoze

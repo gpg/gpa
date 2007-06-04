@@ -68,11 +68,7 @@ AC_DEFINE_UNQUOTED(BUILD_REVISION, "$BUILD_REVISION",
                    [Subversion revision used to build this package])
 
 
-AH_TOP([
-/* We need this, because some autoconf tests rely on this (e.g. stpcpy)
-   and it should be used for new programs anyway */
-#define _GNU_SOURCE  1
-])
+AC_GNU_SOURCE
 
 AH_BOTTOM([
 #include "gpadefs.h"
