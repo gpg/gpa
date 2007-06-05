@@ -1,3 +1,7 @@
+2007-06-05  Marcus Brinkmann  <marcus@g10code.de>
+
+	* remove-potcdate.sed: Add missing file.
+
 2007-05-24  Werner Koch  <wk@g10code.com>
 
 	* cs.po: Add Plural-Forms header.
