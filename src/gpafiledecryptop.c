@@ -63,10 +63,12 @@ gpa_file_decrypt_operation_init (GpaFileDecryptOperation *op)
   op->plain_filename = NULL;
 }
 
+
 static GObject*
-gpa_file_decrypt_operation_constructor (GType type,
-					guint n_construct_properties,
-					GObjectConstructParam *construct_properties)
+gpa_file_decrypt_operation_constructor 
+(GType type, 
+ guint n_construct_properties,
+ GObjectConstructParam *construct_properties)
 {
   GObject *object;
   GpaFileDecryptOperation *op;
@@ -212,9 +214,9 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 static void
 gpa_file_decrypt_operation_next (GpaFileDecryptOperation *op)
 {
-  if (!GPA_FILE_OPERATION (op)->current ||
-      !gpa_file_decrypt_operation_start (op, GPA_FILE_OPERATION (op)
-					 ->current->data))
+  if (!GPA_FILE_OPERATION (op)->current 
+      || !(gpa_file_decrypt_operation_start
+           (op, GPA_FILE_OPERATION (op)->current->data)))
     {
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
     }
