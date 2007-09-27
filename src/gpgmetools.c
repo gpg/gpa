@@ -90,6 +90,7 @@ gpa_gpgme_new (void)
     {
       gpa_gpgme_error (err);
     }
+  gpgme_set_protocol (ctx, GPGME_PROTOCOL_CMS);
   gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
   
   return ctx;

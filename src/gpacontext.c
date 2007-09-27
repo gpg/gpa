@@ -179,6 +179,7 @@ gpa_context_init (GpaContext *context)
       gpa_gpgme_warning (err);
       return;
     }
+  gpgme_set_protocol (context->ctx, GPGME_PROTOCOL_CMS);
 
   /* Set the appropriate callbacks.  */
   gpgme_set_passphrase_cb (context->ctx, gpa_context_passphrase_cb, context);
@@ -401,20 +402,25 @@ gpa_context_event_cb (void *data, gpgme_event_io_t type, void *type_data)
   switch (type)
     {
     case GPGME_EVENT_START:
+      g_debug ("gpgme event START");
       g_signal_emit (context, signals[START], 0);
       break;
     case GPGME_EVENT_DONE:
       err = type_data;
+      g_debug ("gpgme event DONE");
       g_signal_emit (context, signals[DONE], 0, *err);
       break;
     case GPGME_EVENT_NEXT_KEY:
+      g_debug ("gpgme event NEXT_KEY");
       g_signal_emit (context, signals[NEXT_KEY], 0, type_data);
       break;
     case GPGME_EVENT_NEXT_TRUSTITEM:
+      g_debug ("gpgme event TRUSTITEM");
       g_signal_emit (context, signals[NEXT_TRUST_ITEM], 0,
                      type_data);
       break;
     default:
+      g_debug ("gpgme event no=%d", type);
       /* Ignore unsupported event types */
       break;
     }
