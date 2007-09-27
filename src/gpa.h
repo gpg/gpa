@@ -27,7 +27,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "config.h"
+#include <assuan.h>
+
 #include "gpadefs.h"
 #include "gpgmetools.h"
 #include "options.h"
@@ -49,6 +50,7 @@
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
 extern GList *global_defaultRecipients;
+extern gchar *gnupg_homedir;
 
 void gpa_open_keyring_editor (void);
 void gpa_open_filemanager (void);
@@ -58,6 +60,46 @@ GtkWidget * gpa_get_settings_dialog (void);
 
 typedef void (*GPADefaultKeyChanged) (gpointer user_data);
 
+void gpa_run_server_continuation (assuan_context_t ctx, gpg_error_t err);
+void gpa_start_server (void);
+
+
+void gpa_show_backend_config (void);
+
+
+/*-- Convenience macros. -- */
+#define DIM(v)		     (sizeof(v)/sizeof((v)[0]))
+#define DIMof(type,member)   DIM(((type *)0)->member)
+
+/*-- Macros to replace ctype ones to avoid locale problems. --*/
+#define spacep(p)   (*(p) == ' ' || *(p) == '\t')
+#define digitp(p)   (*(p) >= '0' && *(p) <= '9')
+#define hexdigitp(a) (digitp (a)                     \
+                      || (*(a) >= 'A' && *(a) <= 'F')  \
+                      || (*(a) >= 'a' && *(a) <= 'f'))
+  /* Note this isn't identical to a C locale isspace() without \f and
+     \v, but works for the purposes used here. */
+#define ascii_isspace(a) ((a)==' ' || (a)=='\n' || (a)=='\r' || (a)=='\t')
+
+/* The atoi macros assume that the buffer has only valid digits. */
+#define atoi_1(p)   (*(p) - '0' )
+#define atoi_2(p)   ((atoi_1(p) * 10) + atoi_1((p)+1))
+#define atoi_4(p)   ((atoi_2(p) * 100) + atoi_2((p)+2))
+#define xtoi_1(p)   (*(p) <= '9'? (*(p)- '0'): \
+                     *(p) <= 'F'? (*(p)-'A'+10):(*(p)-'a'+10))
+#define xtoi_2(p)   ((xtoi_1(p) * 16) + xtoi_1((p)+1))
+#define xtoi_4(p)   ((xtoi_2(p) * 256) + xtoi_2((p)+2))
+
+#define tohex(n) ((n) < 10 ? ((n) + '0') : (((n) - 10) + 'A'))
+
+
+/*--  Error codes not yet available --*/
+#ifndef GPG_ERR_UNFINISHED
+#define GPG_ERR_UNFINISHED 199
+#endif
+#ifndef GPA_ERR_SOURCE_GPA
+#define GPA_ERR_SOURCE_GPA 12
+#endif
 
 #endif /*GPA_H */
 

@@ -22,6 +22,8 @@
  * A simple general purpose Wizard implementation
  */
 
+#include <config.h>
+
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include "gpa.h"

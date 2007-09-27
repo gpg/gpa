@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+
 #include <gpgme.h>
 #include <gtk/gtk.h>
 #include "gpa.h"

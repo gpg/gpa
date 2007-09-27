@@ -18,6 +18,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <config.h>
+
 /* This module is only used in this environment */
 #if defined(__MINGW32__) || defined(__CYGWIN__)
 #include <stdio.h>

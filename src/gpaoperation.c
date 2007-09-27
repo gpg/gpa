@@ -18,11 +18,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <config.h>
+
 #include "gpaoperation.h"
 #include <gtk/gtk.h>
 #include "gtktools.h"
 #include "gpgmetools.h"
 #include "i18n.h"
+
+#ifndef G_PARAM_STATIC_STRINGS
+#define G_PARAM_STATIC_STRINGS (G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK \
+                                | G_PARAM_STATIC_BLURB)
+#endif
 
 /* Signals */
 enum
@@ -36,6 +43,7 @@ enum
 {
   PROP_0,
   PROP_WINDOW,
+  PROP_SERVER_CTX
 };
 
 static GObjectClass *parent_class = NULL;
@@ -53,6 +61,9 @@ gpa_operation_get_property (GObject     *object,
     {
     case PROP_WINDOW:
       g_value_set_object (value, op->window);
+      break;
+    case PROP_SERVER_CTX:
+      g_value_set_pointer (value, op->server_ctx);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -72,6 +83,9 @@ gpa_operation_set_property (GObject     *object,
     {
     case PROP_WINDOW:
       op->window = (GtkWidget*) g_value_get_object (value);
+      break;
+    case PROP_SERVER_CTX:
+      op->server_ctx = g_value_get_pointer (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -94,6 +108,7 @@ gpa_operation_init (GpaOperation *op)
 {
   op->window = NULL;
   op->context = NULL;
+  op->server_ctx = NULL;
 }
 
 static GObject*
@@ -139,13 +154,19 @@ gpa_operation_class_init (GpaOperationClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   /* Properties */
-  g_object_class_install_property (object_class,
-				   PROP_WINDOW,
-				   g_param_spec_object 
-				   ("window", "Parent window",
-				    "Parent window", GTK_TYPE_WIDGET,
-				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property 
+    (object_class, PROP_WINDOW,
+     g_param_spec_object ("window", "Parent window",
+                          "Parent window",
+                          GTK_TYPE_WIDGET,
+                          G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property 
+    (object_class, PROP_SERVER_CTX,
+     g_param_spec_pointer ("server-ctx", "Server Context",
+                           "The Assuan context of the connection",
+                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS));
 }
+
 
 GType
 gpa_operation_get_type (void)
@@ -186,4 +207,21 @@ gpa_operation_busy (GpaOperation *op)
   g_return_val_if_fail (GPA_IS_OPERATION (op), FALSE);
 
   return gpa_context_busy (op->context);
+}
+
+
+/* Tell the UI-server that the current operation has finished with
+   error code ERR.  Note that the server context will be disabled
+   after this operation.  */
+void
+gpa_operation_server_finish (GpaOperation *op, gpg_error_t err)
+{
+  g_return_if_fail (op);
+  g_return_if_fail (GPA_IS_OPERATION (op));
+  if (op->server_ctx)
+    {
+      assuan_context_t ctx = op->server_ctx;
+      op->server_ctx = NULL;
+      gpa_run_server_continuation (ctx, err);
+    }
 }

@@ -26,19 +26,35 @@
 #include "gpafileop.h"
 
 /* GObject stuff */
-#define GPA_FILE_ENCRYPT_OPERATION_TYPE	  (gpa_file_encrypt_operation_get_type ())
-#define GPA_FILE_ENCRYPT_OPERATION(obj)	  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GPA_FILE_ENCRYPT_OPERATION_TYPE, GpaFileEncryptOperation))
-#define GPA_FILE_ENCRYPT_OPERATION_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GPA_FILE_ENCRYPT_OPERATION_TYPE, GpaFileEncryptOperationClass))
-#define GPA_IS_FILE_ENCRYPT_OPERATION(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_FILE_ENCRYPT_OPERATION_TYPE))
-#define GPA_IS_FILE_ENCRYPT_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_FILE_ENCRYPT_OPERATION_TYPE))
-#define GPA_FILE_ENCRYPT_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GPA_FILE_ENCRYPT_OPERATION_TYPE, GpaFileEncryptOperationClass))
+#define GPA_FILE_ENCRYPT_OPERATION_TYPE	\
+          (gpa_file_encrypt_operation_get_type ())
+
+#define GPA_FILE_ENCRYPT_OPERATION(obj)	\
+          (G_TYPE_CHECK_INSTANCE_CAST   \
+            ((obj), GPA_FILE_ENCRYPT_OPERATION_TYPE, GpaFileEncryptOperation))
+
+#define GPA_FILE_ENCRYPT_OPERATION_CLASS(klass) \
+          (G_TYPE_CHECK_CLASS_CAST ((klass), GPA_FILE_ENCRYPT_OPERATION_TYPE, \
+                                    GpaFileEncryptOperationClass))
+
+#define GPA_IS_FILE_ENCRYPT_OPERATION(obj) \
+          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPA_FILE_ENCRYPT_OPERATION_TYPE))
+
+#define GPA_IS_FILE_ENCRYPT_OPERATION_CLASS(klass) \
+          (G_TYPE_CHECK_CLASS_TYPE ((klass), GPA_FILE_ENCRYPT_OPERATION_TYPE))
+
+#define GPA_FILE_ENCRYPT_OPERATION_GET_CLASS(obj) \
+          (G_TYPE_INSTANCE_GET_CLASS ((obj), GPA_FILE_ENCRYPT_OPERATION_TYPE, \
+                                      GpaFileEncryptOperationClass))
 
 typedef struct _GpaFileEncryptOperation GpaFileEncryptOperation;
 typedef struct _GpaFileEncryptOperationClass GpaFileEncryptOperationClass;
 
-struct _GpaFileEncryptOperation {
-  GpaFileOperation parent;
 
+struct _GpaFileEncryptOperation 
+{
+  GpaFileOperation parent;
+  
   GtkWidget *encrypt_dialog;
   gpgme_key_t *rset;
   int cipher_fd, plain_fd;
@@ -46,18 +62,23 @@ struct _GpaFileEncryptOperation {
   gchar *cipher_filename;
 };
 
-struct _GpaFileEncryptOperationClass {
+
+struct _GpaFileEncryptOperationClass 
+{
   GpaFileOperationClass parent_class;
 };
+
 
 GType gpa_file_encrypt_operation_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-/* Creates a new encryption operation.
- */
+/* Creates a new encryption operation. */
+GpaFileEncryptOperation *
+gpa_file_encrypt_operation_new (GtkWidget *window, GList *files);
+
+/* Create a new encryption operaion for the UI server.  */
 GpaFileEncryptOperation*
-gpa_file_encrypt_operation_new (GtkWidget *window,
-				GList *files);
+gpa_file_encrypt_operation_new_for_server (GList *files, void *server_ctx);
 
 #endif

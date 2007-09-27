@@ -21,9 +21,7 @@
 
 /* A set of auxiliary functions for common tasks related to GPGME */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #include <errno.h>
 #include "gpa.h"

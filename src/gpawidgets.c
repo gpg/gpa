@@ -21,9 +21,7 @@
 /* Functions to construct a number of commonly used but GPA specific
    widgets.  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #include "gpa.h"
 #include <time.h>

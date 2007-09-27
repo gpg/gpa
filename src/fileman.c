@@ -24,7 +24,6 @@
  *	The file encryption/decryption/sign window
  */
 
-#include "gpa.h"    /* Fixme - this does not belong here! */
 #include <config.h>
 
 #include <stdio.h>
@@ -38,6 +37,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include "gpa.h"   
 #include "gpapastrings.h"
 
 #include "gtktools.h"

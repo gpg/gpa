@@ -18,17 +18,15 @@
    along with GPA; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
 
-#if HAVE_CONFIG_H
 #include <config.h>
-#endif
 
-#include "gpa.h"
 #include <gpgme.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include "gpa.h"
 #include "gtktools.h"
 #include "icons.h"
 #include "helpmenu.h"

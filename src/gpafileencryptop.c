@@ -18,6 +18,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <config.h>
+
 #include <glib.h>
 
 #ifdef G_OS_UNIX
@@ -57,7 +59,7 @@ gpa_file_encrypt_operation_finalize (GObject *object)
   GpaFileEncryptOperation *op = GPA_FILE_ENCRYPT_OPERATION (object);
 
   /* FIXME: The use of RSET is messed up.  There is no clear concept
-     on who own the key.  This should be fixed by refing the keys
+     on who owns the key.  This should be fixed by refing the keys
      object.  I doubt that the keys are at all released. */
   g_free (op->rset);
   op->rset = NULL;
@@ -79,9 +81,10 @@ gpa_file_encrypt_operation_init (GpaFileEncryptOperation *op)
 }
 
 static GObject*
-gpa_file_encrypt_operation_constructor (GType type,
-					guint n_construct_properties,
-					GObjectConstructParam *construct_properties)
+gpa_file_encrypt_operation_constructor 
+	(GType type,
+         guint n_construct_properties,
+         GObjectConstructParam *construct_properties)
 {
   GObject *object;
   GpaFileEncryptOperation *op;
@@ -166,6 +169,21 @@ gpa_file_encrypt_operation_new (GtkWidget *window,
   return op;
 }
 
+
+GpaFileEncryptOperation*
+gpa_file_encrypt_operation_new_for_server (GList *files, void *server_ctx)
+{
+  GpaFileEncryptOperation *op;
+  
+  op = g_object_new (GPA_FILE_ENCRYPT_OPERATION_TYPE,
+		     "input_files", files,
+                     "server-ctx", server_ctx,
+		     NULL);
+
+  return op;
+}
+
+
 /* Internal */
 
 static gchar*
@@ -247,6 +265,7 @@ gpa_file_encrypt_operation_next (GpaFileEncryptOperation *op)
       !gpa_file_encrypt_operation_start (op, GPA_FILE_OPERATION (op)
 					 ->current->data))
     {
+      gpa_operation_server_finish (GPA_OPERATION (op), 0);
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
     }
 }
@@ -275,6 +294,7 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
       unlink (op->cipher_filename);
       g_free (op->cipher_filename);
       op->cipher_filename = NULL;
+      gpa_operation_server_finish (GPA_OPERATION (op), err);
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
     }
   else
@@ -551,6 +571,8 @@ static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
 	}
       else
 	{
+          gpa_operation_server_finish (GPA_OPERATION (op), 
+                                       gpg_error (GPG_ERR_GENERAL));
 	  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
 	}
 
@@ -561,6 +583,8 @@ static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
     {
       /* The dialog was canceled, so we do nothing and complete the
        * operation */
+      gpa_operation_server_finish (GPA_OPERATION (op), 
+                                   gpg_error (GPG_ERR_CANCELED));
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
     }
 }

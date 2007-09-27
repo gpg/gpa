@@ -18,9 +18,7 @@
    along with GPA; if not, write to the Free Software Foundation, Inc.,
    59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 
-#if HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #include <gtk/gtk.h>
 
@@ -349,6 +347,7 @@ typedef struct
 {
   gboolean start_keyring_editor;
   gboolean start_file_manager;
+  gboolean start_only_server;
   gchar *options_filename;
 } GpaCommandLineArgs;
 
@@ -358,6 +357,7 @@ struct option longopts[] =
   { "help", no_argument, NULL, 'h' },
   { "keyring", no_argument, NULL, 'k' },
   { "keymanager", no_argument, NULL, 'k' },
+  { "server", no_argument, NULL, 's' },
   { "files", no_argument, NULL, 'f' },
   { "options", required_argument, NULL, 'o' },
   { NULL, 0, NULL, 0 }
@@ -374,6 +374,7 @@ struct
   {'v', "version", N_("output version information and exit")},
   {'k', "keyring", N_("open keyring editor (default)")},
   {'f', "files", N_("open filemanager")},
+  {'s', "server", N_("start only the UI server")},
   {'o', "options", N_("read options from file")},
   {0, NULL, NULL}
 };
@@ -438,6 +439,9 @@ parse_command_line (int argc, char **argv, GpaCommandLineArgs *args)
         case 'f':
           args->start_file_manager = TRUE;
           break;
+        case 's':
+          args->start_only_server = TRUE;
+          break;
         default:
           exit (EXIT_FAILURE);
         }
@@ -457,7 +461,7 @@ int
 main (int argc, char **argv)
 {
   char *configname = NULL, *keyservers_configname = NULL;
-  GpaCommandLineArgs args = {FALSE, FALSE, NULL};
+  GpaCommandLineArgs args = {FALSE, FALSE, FALSE, NULL};
   int i;
   GError *err = NULL;
 
@@ -466,6 +470,7 @@ main (int argc, char **argv)
 #endif
 
   parse_command_line (argc, argv, &args);
+
 
   /* Disable logging to prevent MS Windows NT from opening a console.
    */
@@ -554,25 +559,31 @@ main (int argc, char **argv)
   putenv ("OUTPUT_CHARSET=utf8");
 #endif
 
-  /* Don't open the keyring editor if any files are given on the command
-   * line */
-  if (args.start_keyring_editor && (optind >= argc))
-    {
-      gpa_open_keyring_editor ();
-    }
-  
-  if (args.start_file_manager || (optind < argc))
-    {
-      gpa_open_filemanager ();
-    }
+  /* Fire up the server.  */
+  gpa_start_server ();
 
-  /* If there are any command line arguments that are not options, try
-   * to open them as files in the filemanager */
-  for (i = optind; i < argc; i++)
+  if (!args.start_only_server)
     {
-      gpa_file_manager_open_file (GPA_FILE_MANAGER
-				  (gpa_file_manager_get_instance ()),
-				  argv[i]);
+      /* Don't open the keyring editor if any files are given on the
+       * command line */
+      if (args.start_keyring_editor && (optind >= argc))
+        {
+          gpa_open_keyring_editor ();
+        }
+  
+      if (args.start_file_manager || (optind < argc))
+        {
+          gpa_open_filemanager ();
+        }
+
+      /* If there are any command line arguments that are not options, try
+       * to open them as files in the filemanager */
+      for (i = optind; i < argc; i++)
+        {
+          gpa_file_manager_open_file (GPA_FILE_MANAGER
+                                      (gpa_file_manager_get_instance ()),
+                                      argv[i]);
+        }
     }
 
   gtk_main ();

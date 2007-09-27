@@ -18,7 +18,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <config.h>
+#ifndef GPAWINDOWKEEPER_H
+#define GPAWINDOWKEEPER_H
+
 #include <glib.h>
 #include <gtk/gtk.h>
 
@@ -35,3 +37,5 @@ extern void gpa_windowKeeper_set_window (GpaWindowKeeper * keeper,
 extern void gpa_windowKeeper_add_param (GpaWindowKeeper * keeper,
 					gpointer param);
 extern void gpa_windowKeeper_release (GpaWindowKeeper * keeper);
+
+#endif /*GPAWINDOWKEEPER*/

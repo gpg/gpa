@@ -14,19 +14,22 @@ if HAVE_W32_SYSTEM
 
 gpa_res_ldflag = -Wl,gpa-resource.o
 gpa_deps = gpa-resource.o
+gpa_w32_sources = w32-afunix.c w32-afunix.h
 else
 gpa_res_ldflag =
 gpa_deps =
+gpa_w32_sources =
 endif
 
 
 bin_PROGRAMS = gpa
-noinst_PROGRAMS = dndtest
+noinst_PROGRAMS = dndtest confdialog
 
 AM_CPPFLAGS = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
-AM_CFLAGS = $(GPGME_CFLAGS) $(GTK_CFLAGS)
-LDADD = $(GPGME_LIBS) $(GTK_LIBS) $(LIBINTL)
-
+AM_CFLAGS = $(GPGME_CFLAGS) $(LIBASSUAN_CFLAGS) $(GPG_ERROR_CFLAGS) \
+	    $(GTK_CFLAGS)
+LDADD = $(GPGME_LIBS) $(LIBASSUAN_LIBS) $(GPG_ERROR_LIBS) \
+        $(GTK_LIBS) $(LIBINTL) $(NETLIBS)
 gpa_LDFLAGS = $(gpa_res_ldflag)
 gpa_DEPENDENCIES = $(gpa_deps)
 
@@ -92,11 +95,13 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpagenkeysimpleop.h gpagenkeysimpleop.c \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
-	      options.c
+	      server.c \
+	      options.c $(gpa_w32_sources)
 
 
 dndtest_SOURCES = dndtest.c
 
+confdialog_SOURCES = confdialog.c
 
 
 

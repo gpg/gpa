@@ -19,6 +19,8 @@
 
 /* Define MAIN if you want to generate a program instead of a library. */
 
+#include <config.h>
+
 #ifdef MAIN
 #include <stdio.h>
 #endif
