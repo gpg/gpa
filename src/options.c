@@ -262,7 +262,9 @@ determine_default_key (void)
 {
   gpgme_key_t key = NULL;
   gpg_error_t err;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
+  gpgme_ctx_t ctx/* = gpa_gpgme_new ()*/;
+
+  return NULL;
 
   err = gpgme_op_keylist_start (ctx, NULL, 1);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
@@ -298,7 +300,9 @@ gpa_options_update_default_key (GpaOptions *options)
 {
   gboolean update = FALSE;
   gpgme_key_t key = NULL;
-  gpgme_ctx_t ctx = gpa_gpgme_new ();
+  gpgme_ctx_t ctx /*= gpa_gpgme_new ()*/;
+
+  return;
 
   if (!options->default_key_fpr)
     {

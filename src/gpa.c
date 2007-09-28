@@ -544,13 +544,13 @@ main (int argc, char **argv)
 
   /* Now, make sure there are reasonable defaults for the default key and
    * keyserver */
-  gpa_options_update_default_key (gpa_options_get_instance ());
-  if (!gpa_options_get_default_keyserver (gpa_options_get_instance ()))
-    {
-      GList *keyservers = keyserver_get_as_glist ();
-      gpa_options_set_default_keyserver (gpa_options_get_instance (),
-					 keyservers->data);
-    }
+/*   gpa_options_update_default_key (gpa_options_get_instance ()); */
+/*   if (!gpa_options_get_default_keyserver (gpa_options_get_instance ())) */
+/*     { */
+/*       GList *keyservers = keyserver_get_as_glist (); */
+/*       gpa_options_set_default_keyserver (gpa_options_get_instance (), */
+/* 					 keyservers->data); */
+/*     } */
 
 #ifndef G_OS_WIN32
   /* Internationalisation with gtk+-2.0 wants UTF8 instead of the

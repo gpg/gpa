@@ -167,6 +167,7 @@ gpa_context_init (GpaContext *context)
 {
   gpg_error_t err;
 
+  g_debug ("gpa_context_init: enter");
   context->busy = FALSE;
 
   /* The callback queue */
@@ -179,8 +180,6 @@ gpa_context_init (GpaContext *context)
       gpa_gpgme_warning (err);
       return;
     }
-  gpgme_set_protocol (context->ctx, GPGME_PROTOCOL_CMS);
-
   /* Set the appropriate callbacks.  */
   gpgme_set_passphrase_cb (context->ctx, gpa_context_passphrase_cb, context);
   gpgme_set_progress_cb (context->ctx, gpa_context_progress_cb, context);
@@ -193,6 +192,8 @@ gpa_context_init (GpaContext *context)
   context->io_cbs->event_priv = context;
   /* Set the callbacks */
   gpgme_set_io_cbs (context->ctx, context->io_cbs);
+
+  gpgme_set_protocol (context->ctx, GPGME_PROTOCOL_CMS);
 }
 
 static void
@@ -279,6 +280,7 @@ register_callback (struct gpa_io_cb_data *cb)
 #ifdef G_OS_WIN32
   /* We have to ask GPGME for the GIOChannel to use.  The "file
      descriptor" may not be a system file descriptor.  */
+  g_debug ("calling gpgme_get_fdptr (%d)", cb->fd);
   channel = gpgme_get_giochannel (cb->fd);
   g_assert (channel);
 #else
@@ -307,8 +309,8 @@ add_callback (GpaContext *context, struct gpa_io_cb_data *cb)
   context->cbs = g_list_append (context->cbs, cb);
 }
 
-/* Register with GLib all previously unregistered callbacks.
- */
+
+/* Register with GLib all previously unregistered callbacks.  */
 static void
 register_all_callbacks (GpaContext *context)
 {
@@ -342,10 +344,11 @@ unregister_all_callbacks (GpaContext *context)
     }
 }
 
+
 /* The real GPGME callbacks */
 
-/* Register a callback.
- */
+/* Register a callback.  This is called by GPGME when a crypto
+   operation is initiated in this context.  */ 
 static gpg_error_t
 gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
                          void *fnc_data, void **tag)
@@ -354,6 +357,7 @@ gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
   struct gpa_io_cb_data *cb = g_malloc (sizeof (struct gpa_io_cb_data));
 
 
+  g_debug ("gpa_context_register callback allocated tag %p", cb);
   cb->registered = FALSE;
   cb->fd = fd;
   cb->dir = dir;  
@@ -361,38 +365,41 @@ gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
   cb->fnc_data = fnc_data;
   cb->context = context;
   /* If the context is busy, we already have a START event, and can
-   * register GLib callbacks freely.
-   */
+   * register GLib callbacks immediately.  */
   if (context->busy)
     {
       register_callback (cb);
     }
-  /* In any case, we add it to the list.
-   */
+  /* In any case, we add it to the list.   */
   add_callback (context, cb);
   *tag = cb;
 
   return gpg_error (GPG_ERR_NO_ERROR);
 }
 
-/* Remove a callback.
- */
+
+/* Remove a callback.  This is called by GPGME if a context is to be
+   destroyed.  */
 static void
 gpa_context_remove_cb (void *tag)
 {
   struct gpa_io_cb_data *cb = tag;
 
+  g_debug ("gpa_context_remove callback for tag %p called", cb);
   if (cb->registered)
     {
+      g_debug ("   really removed");
       g_source_remove (cb->watch);
     }
   cb->context->cbs = g_list_remove (cb->context->cbs, cb);
   g_free (cb);
 }
 
-/* The event callback. This just emits signals for the GpaContext. The signal
- * handlers do the real job.
- */
+
+/* The event callback.  It is called by GPGME to signal an event for
+   an operation running in this context.  This fucntion merely mits
+   signals for GpaContext; the Glib signal handlers do the real
+   job.  */
 static void
 gpa_context_event_cb (void *data, gpgme_event_io_t type, void *type_data)
 {
@@ -431,15 +438,18 @@ gpa_context_event_cb (void *data, gpgme_event_io_t type, void *type_data)
 static void
 gpa_context_start (GpaContext *context)
 {
+  g_debug ("gpgme event START enter");
   context->busy = TRUE;
   /* We have START, register all queued callbacks */
   register_all_callbacks (context);
+  g_debug ("gpgme event START leave");
 }
 
 static void
 gpa_context_done (GpaContext *context, gpg_error_t err)
 {
   context->busy = FALSE;
+  g_debug ("gpgme event DONE ready");
 }
 
 static void

@@ -228,16 +228,21 @@ gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
 		      GPA_KEY_SELECTOR_COLUMN_USERID, userid,
 		      GPA_KEY_SELECTOR_COLUMN_KEY, key, -1);
   /* If this is a secret key selector, select the default key */
-  if (selector->secret) {
-    const gchar *key_fpr = key->subkeys->fpr;
-    const gchar *default_key = gpa_options_get_default_key 
-      (gpa_options_get_instance())->subkeys[0].fpr;
+  if (selector->secret)
+    {
+      const char *key_fpr = key->subkeys->fpr;
+      gpgme_key_t akey;
+      const char *default_key;
+      
+      akey = gpa_options_get_default_key (gpa_options_get_instance());
+      default_key = akey? akey->subkeys->fpr : NULL;
 
-    if (g_str_equal (key_fpr, default_key)) {
-      gtk_tree_selection_select_iter 
-	(gtk_tree_view_get_selection (GTK_TREE_VIEW (selector)),&iter);
+      if (default_key && g_str_equal (key_fpr, default_key)) 
+        {
+          gtk_tree_selection_select_iter 
+            (gtk_tree_view_get_selection (GTK_TREE_VIEW (selector)),&iter);
+        }
     }
-  }
   /* Clean up */
   g_free (userid);
 }

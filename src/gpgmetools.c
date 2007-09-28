@@ -84,13 +84,13 @@ gpa_gpgme_new (void)
 {
   gpgme_ctx_t ctx;
   gpg_error_t err;
-  
+
+  g_assert (!"using gpa_gpgme_new");
   err = gpgme_new (&ctx);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_error (err);
     }
-  gpgme_set_protocol (ctx, GPGME_PROTOCOL_CMS);
   gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
   
   return ctx;

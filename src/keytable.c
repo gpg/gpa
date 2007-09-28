@@ -86,7 +86,6 @@ gpa_keytable_init (GpaKeyTable *keytable)
   keytable->end = NULL;
   keytable->data = NULL;
   keytable->context = gpa_context_new ();
-  gpgme_set_protocol (keytable->context->ctx, GPGME_PROTOCOL_CMS);
   keytable->keys = NULL;
   keytable->secret = FALSE;
   keytable->initialized = FALSE;

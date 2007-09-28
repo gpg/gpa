@@ -445,6 +445,7 @@ gpa_start_server (void)
       g_free (socket_name);
       return;
     }
+  g_debug ("using server socket `%s'", socket_name);
     
 #ifdef HAVE_W32_SYSTEM
   fd = _w32_sock_new (AF_UNIX, SOCK_STREAM, 0);
