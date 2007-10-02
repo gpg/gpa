@@ -71,6 +71,8 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpaprogressdlg.h gpaprogressdlg.c \
 	      gparecvkeydlg.h gparecvkeydlg.c \
 	      gpaoperation.h gpaoperation.c \
+	      gpastreamop.h gpastreamop.c  \
+	      gpastreamencryptop.h gpastreamencryptop.c  \
 	      gpafileop.h gpafileop.c \
 	      gpafiledecryptop.h gpafiledecryptop.c \
 	      gpafileencryptop.h gpafileencryptop.c \
@@ -96,7 +98,8 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
 	      server.c \
-	      options.c $(gpa_w32_sources)
+	      options.c \
+	      utils.c $(gpa_w32_sources)
 
 
 dndtest_SOURCES = dndtest.c

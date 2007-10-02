@@ -53,6 +53,7 @@
 /* Global variables */
 gchar *gpa_exec_dir;
 gchar *gnupg_homedir;
+int cms_hack;
 
 #ifdef G_OS_WIN32
 #include <windows.h> 
@@ -360,6 +361,7 @@ struct option longopts[] =
   { "server", no_argument, NULL, 's' },
   { "files", no_argument, NULL, 'f' },
   { "options", required_argument, NULL, 'o' },
+  { "cms", no_argument, NULL, 'x' },
   { NULL, 0, NULL, 0 }
 };
 
@@ -376,6 +378,7 @@ struct
   {'f', "files", N_("open filemanager")},
   {'s', "server", N_("start only the UI server")},
   {'o', "options", N_("read options from file")},
+  {'x', "cms", "enable CMS hack"},
   {0, NULL, NULL}
 };
 
@@ -441,6 +444,9 @@ parse_command_line (int argc, char **argv, GpaCommandLineArgs *args)
           break;
         case 's':
           args->start_only_server = TRUE;
+          break;
+        case 'x':
+          cms_hack = 1;
           break;
         default:
           exit (EXIT_FAILURE);

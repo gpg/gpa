@@ -69,6 +69,7 @@ gpa_file_encrypt_dialog_get_property (GObject     *object,
     }
 }
 
+
 static void
 gpa_file_encrypt_dialog_set_property (GObject     *object,
 				      guint        prop_id,
@@ -89,11 +90,13 @@ gpa_file_encrypt_dialog_set_property (GObject     *object,
     }
 }
 
+
 static void
 gpa_file_encrypt_dialog_finalize (GObject *object)
 {  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
+
 
 static void
 gpa_file_encrypt_dialog_class_init (GpaFileEncryptDialogClass *klass)
@@ -114,6 +117,7 @@ gpa_file_encrypt_dialog_class_init (GpaFileEncryptDialogClass *klass)
 				    "Parent window", GTK_TYPE_WIDGET,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
+
 
 static void
 gpa_file_encrypt_dialog_init (GpaFileEncryptDialog *dialog)
@@ -196,6 +200,7 @@ gpa_file_encrypt_dialog_init (GpaFileEncryptDialog *dialog)
   dialog->check_armor = checkerArmor;
 
 }
+
 
 GType
 gpa_file_encrypt_dialog_get_type (void)

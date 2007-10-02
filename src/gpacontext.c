@@ -22,6 +22,7 @@
 
 #include <glib.h>
 #include <gpgme.h>
+#include "gpa.h"
 #include "gpgmetools.h"
 #include "gpacontext.h"
 
@@ -167,7 +168,6 @@ gpa_context_init (GpaContext *context)
 {
   gpg_error_t err;
 
-  g_debug ("gpa_context_init: enter");
   context->busy = FALSE;
 
   /* The callback queue */
@@ -193,7 +193,8 @@ gpa_context_init (GpaContext *context)
   /* Set the callbacks */
   gpgme_set_io_cbs (context->ctx, context->io_cbs);
 
-  gpgme_set_protocol (context->ctx, GPGME_PROTOCOL_CMS);
+  if (cms_hack)
+    gpgme_set_protocol (context->ctx, GPGME_PROTOCOL_CMS);
 }
 
 static void
@@ -280,7 +281,6 @@ register_callback (struct gpa_io_cb_data *cb)
 #ifdef G_OS_WIN32
   /* We have to ask GPGME for the GIOChannel to use.  The "file
      descriptor" may not be a system file descriptor.  */
-  g_debug ("calling gpgme_get_fdptr (%d)", cb->fd);
   channel = gpgme_get_giochannel (cb->fd);
   g_assert (channel);
 #else
@@ -357,7 +357,6 @@ gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
   struct gpa_io_cb_data *cb = g_malloc (sizeof (struct gpa_io_cb_data));
 
 
-  g_debug ("gpa_context_register callback allocated tag %p", cb);
   cb->registered = FALSE;
   cb->fd = fd;
   cb->dir = dir;  
@@ -385,10 +384,8 @@ gpa_context_remove_cb (void *tag)
 {
   struct gpa_io_cb_data *cb = tag;
 
-  g_debug ("gpa_context_remove callback for tag %p called", cb);
   if (cb->registered)
     {
-      g_debug ("   really removed");
       g_source_remove (cb->watch);
     }
   cb->context->cbs = g_list_remove (cb->context->cbs, cb);
@@ -409,25 +406,20 @@ gpa_context_event_cb (void *data, gpgme_event_io_t type, void *type_data)
   switch (type)
     {
     case GPGME_EVENT_START:
-      g_debug ("gpgme event START");
       g_signal_emit (context, signals[START], 0);
       break;
     case GPGME_EVENT_DONE:
       err = type_data;
-      g_debug ("gpgme event DONE");
       g_signal_emit (context, signals[DONE], 0, *err);
       break;
     case GPGME_EVENT_NEXT_KEY:
-      g_debug ("gpgme event NEXT_KEY");
       g_signal_emit (context, signals[NEXT_KEY], 0, type_data);
       break;
     case GPGME_EVENT_NEXT_TRUSTITEM:
-      g_debug ("gpgme event TRUSTITEM");
       g_signal_emit (context, signals[NEXT_TRUST_ITEM], 0,
                      type_data);
       break;
     default:
-      g_debug ("gpgme event no=%d", type);
       /* Ignore unsupported event types */
       break;
     }

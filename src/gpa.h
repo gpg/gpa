@@ -51,6 +51,7 @@ extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
 extern GList *global_defaultRecipients;
 extern gchar *gnupg_homedir;
+extern int cms_hack;
 
 void gpa_open_keyring_editor (void);
 void gpa_open_filemanager (void);
@@ -65,6 +66,15 @@ void gpa_start_server (void);
 
 
 void gpa_show_backend_config (void);
+
+/*-- utils.c --*/
+/* We are so used to these function thus provide them.  */
+void *xmalloc (size_t n);
+void *xcalloc (size_t n, size_t m);
+char *xstrdup (const char *str);
+#define xfree(a) g_free ((a))
+
+int translate_sys2libc_fd (assuan_fd_t fd, int for_write);
 
 
 /*-- Convenience macros. -- */

@@ -29,23 +29,11 @@
 #include <glib.h>
 #include <assuan.h>
 
-#ifdef HAVE_W32_SYSTEM
-# include "w32-afunix.h"
-#else
-# include <sys/socket.h>
-# include <sys/un.h>
-#endif
-
 #include "gpa.h"
 #include "i18n.h"
-#include "gpafileencryptop.h"
+#include "gpastreamencryptop.h"
 
 
-#ifdef HAVE_W32_SYSTEM
-#define myclosesock(a)  _w32_close ((a))
-#else
-#define myclosesock(a)  close ((a))
-#endif
 
 #define set_error(e,t) assuan_set_error (ctx, gpg_error (e), (t))
 
@@ -55,9 +43,29 @@ struct conn_ctrl_s;
 typedef struct conn_ctrl_s *conn_ctrl_t;
 struct conn_ctrl_s
 {
-  /* NULL or continuation function or a command.  */
+  /* True if we are currently processing a command.  */
+  int in_command;
+
+  /* NULL or continuation function for a command.  */
   void (*cont_cmd) (assuan_context_t, gpg_error_t);
+
+  /* File descriptors used by the gpgme callbacks.  */
+  int input_fd;
+  int output_fd;
+
+  /* Channels used with the gpgme callbacks.  */
+  GIOChannel *input_channel;
+  GIOChannel *output_channel;
+
+  /* Gpgme Data objects.  */
+  gpgme_data_t input_data;
+  gpgme_data_t output_data;
+
 };
+
+
+
+static assuan_sock_nonce_t socket_nonce;
 
 
 
@@ -109,6 +117,74 @@ skip_options (char *line)
 
 
 
+static ssize_t
+my_gpgme_read_cb (void *opaque, void *buffer, size_t size)
+{
+  conn_ctrl_t ctrl = opaque;
+  GIOStatus  status;
+  size_t nread;
+  int retval;
+
+  status = g_io_channel_read_chars (ctrl->input_channel, buffer, size,
+                                    &nread, NULL);
+  if (status == G_IO_STATUS_AGAIN
+      || (status == G_IO_STATUS_NORMAL && !nread))
+    {
+      errno = EAGAIN;
+      retval = -1;
+    }
+  else if (status == G_IO_STATUS_NORMAL)
+    retval = (int)nread;
+  else if (status == G_IO_STATUS_EOF)
+    retval = 0;
+  else
+    {
+      errno = EIO;
+      retval = 1;
+    }
+
+  return retval;
+}
+
+
+static ssize_t
+my_gpgme_write_cb (void *opaque, const void *buffer, size_t size)
+{
+  conn_ctrl_t ctrl = opaque;
+  GIOStatus  status;
+  size_t nwritten;
+  int retval;
+
+  status = g_io_channel_write_chars (ctrl->output_channel, buffer, size,
+                                     &nwritten, NULL);
+  if (status == G_IO_STATUS_AGAIN)
+    {
+      errno = EAGAIN;
+      retval = -1;
+    }
+  else if (status == G_IO_STATUS_NORMAL)
+    retval = (int)nwritten;
+  else
+    {
+      errno = EIO;
+      retval = 1;
+    }
+
+  return retval;
+}
+
+
+static struct gpgme_data_cbs my_gpgme_data_cbs =
+  { 
+    my_gpgme_read_cb,
+    my_gpgme_write_cb,
+    NULL,
+    NULL
+  };
+
+
+
+
 
 
 /* Continuation for cmd_encrypt.  */
@@ -120,6 +196,18 @@ cont_encrypt (assuan_context_t ctx, gpg_error_t err)
   g_debug ("cont_encrypt called with with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
+  gpgme_data_release (ctrl->input_data); ctrl->input_data = NULL;
+  gpgme_data_release (ctrl->output_data); ctrl->output_data = NULL;
+  if (ctrl->input_channel)
+    {
+      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
+      ctrl->input_channel = NULL;
+    }
+  if (ctrl->output_channel)
+    {
+      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
+      ctrl->output_channel = NULL;
+    }
   assuan_process_done (ctx, err);
 }
 
@@ -134,7 +222,8 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
   gpg_error_t err;
   gpgme_protocol_t protocol = GPGME_PROTOCOL_OpenPGP;
-  int inp_fd, out_fd;
+  GpaStreamEncryptOperation *op;
+
 
   if (has_option (line, "--protocol=OpenPGP"))
     ; /* This is the default.  */
@@ -153,31 +242,75 @@ cmd_encrypt (assuan_context_t ctx, char *line)
       goto leave;
     }
 
-/*   inp_fd = translate_sys2libc_fd (assuan_get_input_fd (ctx), 0); */
-/*   if (inp_fd == -1) */
-/*     { */
-/*       err = set_error (GPG_ERR_ASS_NO_INPUT, NULL); */
-/*       goto leave; */
-/*     } */
-/*   out_fd = translate_sys2libc_fd (assuan_get_output_fd (ctx), 1); */
-/*   if (out_fd == -1) */
-/*     { */
-/*       err = set_error (GPG_ERR_ASS_NO_OUTPUT, NULL); */
-/*       goto leave; */
-/*     } */
+  ctrl->input_fd = translate_sys2libc_fd (assuan_get_input_fd (ctx), 0);
+  if (ctrl->input_fd == -1)
+    {
+      err = set_error (GPG_ERR_ASS_NO_INPUT, NULL);
+      goto leave;
+    }
+  ctrl->output_fd = translate_sys2libc_fd (assuan_get_output_fd (ctx), 1);
+  if (ctrl->output_fd == -1)
+    {
+      err = set_error (GPG_ERR_ASS_NO_OUTPUT, NULL);
+      goto leave;
+    }
+
+#ifdef HAVE_W32_SYSTEM
+  ctrl->input_channel = g_io_channel_win32_new_socket (ctrl->input_fd);
+#else
+  ctrl->input_channel = g_io_channel_unix_new (ctrl->input_fd);
+#endif
+  if (!ctrl->input_channel)
+    {
+      g_debug ("error creating input channel");
+      err = GPG_ERR_EIO;
+      goto leave;
+    }
+  g_io_channel_set_encoding (ctrl->input_channel, NULL, NULL);
+  g_io_channel_set_buffered (ctrl->input_channel, FALSE);
+
+#ifdef HAVE_W32_SYSTEM
+  ctrl->output_channel = g_io_channel_win32_new_socket (ctrl->output_fd);
+#else
+  ctrl->output_channel = g_io_channel_unix_new (ctrl->output_fd);
+#endif
+  if (!ctrl->output_channel)
+    {
+      g_debug ("error creating output channel");
+      err = GPG_ERR_EIO;
+      goto leave;
+    }
+  g_io_channel_set_encoding (ctrl->output_channel, NULL, NULL);
+  g_io_channel_set_buffered (ctrl->output_channel, FALSE);
+
+
+  err = gpgme_data_new_from_cbs (&ctrl->input_data, &my_gpgme_data_cbs, ctrl);
+  if (err)
+    goto leave;
+  err = gpgme_data_new_from_cbs (&ctrl->output_data, &my_gpgme_data_cbs, ctrl);
+  if (err)
+    goto leave;
 
   ctrl->cont_cmd = cont_encrypt;
-  {
-    GList *files = g_list_append (NULL, g_strdup ("test.txt"));
-    GpaFileEncryptOperation *op;
-
-    op = gpa_file_encrypt_operation_new_for_server (files, ctx);
-    g_signal_connect (G_OBJECT (op), "completed",
-                      G_CALLBACK (g_object_unref), NULL);
-  }
+  op = gpa_stream_encrypt_operation_new (NULL, ctrl->input_data, 
+                                         ctrl->output_data, ctx);
+  g_signal_connect (G_OBJECT (op), "completed",
+                    G_CALLBACK (g_object_unref), NULL);
   return gpg_error (GPG_ERR_UNFINISHED);
 
  leave:
+  gpgme_data_release (ctrl->input_data); ctrl->input_data = NULL;
+  gpgme_data_release (ctrl->output_data); ctrl->output_data = NULL;
+  if (ctrl->input_channel)
+    {
+      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
+      ctrl->input_channel = NULL;
+    }
+  if (ctrl->output_channel)
+    {
+      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
+      ctrl->output_channel = NULL;
+    }
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
   return assuan_process_done (ctx, err);
@@ -192,6 +325,7 @@ cmd_encrypt (assuan_context_t ctx, char *line)
    Supported values for WHAT are:
 
      version     - Return the version of the program.
+     pid         - Return the process id of the server.
  */
 static int
 cmd_getinfo (assuan_context_t ctx, char *line)
@@ -202,6 +336,13 @@ cmd_getinfo (assuan_context_t ctx, char *line)
     {
       const char *s = PACKAGE_NAME " " PACKAGE_VERSION;
       err = assuan_send_data (ctx, s, strlen (s));
+    }
+  else if (!strcmp (line, "pid"))
+    {
+      char numbuf[50];
+
+      snprintf (numbuf, sizeof numbuf, "%lu", (unsigned long)getpid ());
+      err = assuan_send_data (ctx, numbuf, strlen (numbuf));
     }
   else
     err = set_error (GPG_ERR_ASS_PARAMETER, "unknown value for WHAT");
@@ -220,8 +361,10 @@ register_commands (assuan_context_t ctx)
     const char *name;
     int (*handler)(assuan_context_t, char *line);
   } table[] = {
-    { "ENCRYPT",        cmd_encrypt },
-    { "GETINFO",        cmd_getinfo },
+    { "INPUT",   NULL },
+    { "OUTPUT",   NULL },
+    { "ENCRYPT", cmd_encrypt },
+    { "GETINFO", cmd_getinfo },
     { NULL }
   };
   int i, rc;
@@ -247,7 +390,7 @@ connection_startup (int fd)
 
   /* Get an assuan context for the already accepted file descriptor
      FD.  */
-  err = assuan_init_socket_server_ext (&ctx, fd, 2);
+  err = assuan_init_socket_server_ext (&ctx, ASSUAN_INT2FD(fd), 2);
   if (err)
     {
       g_debug ("failed to initialize the new connection: %s",
@@ -279,7 +422,19 @@ connection_finish (assuan_context_t ctx)
   if (ctx)
     {
       conn_ctrl_t ctrl = assuan_get_pointer (ctx);
-      
+
+      gpgme_data_release (ctrl->input_data);
+      gpgme_data_release (ctrl->output_data);
+      if (ctrl->input_channel)
+        {
+          g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
+          ctrl->input_channel = NULL;
+        }
+      if (ctrl->output_channel)
+        {
+          g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
+          ctrl->output_channel = NULL;
+        }
       assuan_deinit_server (ctx);
       g_free (ctrl);
     }
@@ -330,9 +485,16 @@ receive_cb (GIOChannel *channel, GIOCondition condition, void *data)
           g_debug ("  input received while waiting for continuation");
           g_usleep (2000000);
         }
+      else if (ctrl->in_command)
+        {
+          g_debug ("  input received while still processing command");
+          g_usleep (2000000);
+        }
       else
         {
+          ctrl->in_command++;
           err = assuan_process_next (ctx);
+          ctrl->in_command--;
           g_debug ("assuan_process_next returned: %s",
                    err == -1? "EOF": gpg_strerror (err));
           if (gpg_err_code (err) == GPG_ERR_EOF || err == -1)
@@ -341,14 +503,19 @@ receive_cb (GIOChannel *channel, GIOCondition condition, void *data)
               /* FIXME: what about the socket? */
               return FALSE; /* Remove from the watch.  */
             }
-          else if (gpg_err_code (err) == GPG_ERR_UNFINISHED
-                   && !ctrl->cont_cmd)
+          else if (gpg_err_code (err) == GPG_ERR_UNFINISHED)
             {
-              /* It is quite possible that some other subsystem
-                 retruns that erro code.  Note the user about this
-                 curiosity.  */
-              g_debug ("note: Unfinished error code not emitted by us");
+              if ( !ctrl->cont_cmd)
+                {
+                  /* It is quite possible that some other subsystem
+                     returns that error code.  Tell the user about
+                     this curiosity and finish the command.  */
+                  g_debug ("note: Unfinished error code not emitted by us");
+                  assuan_process_done (ctx, err);
+                }
             }
+          else 
+            assuan_process_done (ctx, err);
         }
     }
   return TRUE;
@@ -380,6 +547,11 @@ accept_connection_cb (GIOChannel *listen_channel,
   if (fd == -1)
     {
       g_debug ("error accepting connection: %s", strerror (errno));
+      goto leave;
+    }
+  if (assuan_sock_check_nonce (ASSUAN_INT2FD(fd), &socket_nonce))
+    {
+      g_debug ("new connection at fd %d refused", fd); 
       goto leave;
     }
 
@@ -420,7 +592,7 @@ accept_connection_cb (GIOChannel *listen_channel,
 
  leave:
   if (fd != -1)
-    myclosesock (fd);
+    assuan_sock_close (ASSUAN_INT2FD (fd));
   return TRUE; /* Keep the listen_fd in the event loop.  */
 }
 
@@ -432,7 +604,7 @@ gpa_start_server (void)
 {
   char *socket_name;
   int rc;
-  int fd;
+  assuan_fd_t fd;
   struct sockaddr_un serv_addr;
   socklen_t serv_addr_len = sizeof serv_addr;
   GIOChannel *channel;
@@ -447,12 +619,8 @@ gpa_start_server (void)
     }
   g_debug ("using server socket `%s'", socket_name);
     
-#ifdef HAVE_W32_SYSTEM
-  fd = _w32_sock_new (AF_UNIX, SOCK_STREAM, 0);
-#else
-  fd = socket (AF_UNIX, SOCK_STREAM, 0);
-#endif
-  if (fd == -1)
+  fd = assuan_sock_new (AF_UNIX, SOCK_STREAM, 0);
+  if (fd == ASSUAN_INVALID_FD)
     {
       g_debug ("can't create socket: %s\n", strerror(errno));
       g_free (socket_name);
@@ -465,48 +633,42 @@ gpa_start_server (void)
   serv_addr_len = (offsetof (struct sockaddr_un, sun_path)
                    + strlen(serv_addr.sun_path) + 1);
 
-#ifdef HAVE_W32_SYSTEM
-  rc = _w32_sock_bind (fd, (struct sockaddr*) &serv_addr, serv_addr_len);
-  if (rc == -1 && errno == WSAEADDRINUSE)
-    {
-      remove (socket_name);
-      rc = _w32_sock_bind (fd, (struct sockaddr*) &serv_addr, serv_addr_len);
-    }
-#else
-  rc = bind (fd, (struct sockaddr*)&serv_addr, serv_addr_len);
+  rc = assuan_sock_bind (fd, (struct sockaddr*) &serv_addr, serv_addr_len);
   if (rc == -1 && errno == EADDRINUSE)
     {
       remove (socket_name);
-      rc = bind (fd, (struct sockaddr*)&serv_addr, serv_addr_len);
+      rc = assuan_sock_bind (fd, (struct sockaddr*) &serv_addr, serv_addr_len);
     }
-#endif
+  if (rc != -1 && (rc=assuan_sock_get_nonce ((struct sockaddr*) &serv_addr,
+                                             serv_addr_len, &socket_nonce)))
+    g_debug ("error getting nonce for the socket");
   if (rc == -1)
     {
       g_debug ("error binding socket to `%s': %s\n",
                serv_addr.sun_path, strerror (errno) );
-      myclosesock (fd);
+      assuan_sock_close (fd);
       g_free (socket_name);
       return;
     }
   g_free (socket_name);
   socket_name = NULL;
 
-  if (listen (fd, 5) == -1)
+  if (listen (ASSUAN_FD2INT (fd), 5) == -1)
     {
       g_debug ("listen() failed: %s\n", strerror (errno));
-      myclosesock (fd);
+      assuan_sock_close (fd);
       return;
     }
 
 #ifdef HAVE_W32_SYSTEM
-  channel = g_io_channel_win32_new_socket (fd);
+  channel = g_io_channel_win32_new_socket (ASSUAN_FD2INT(fd));
 #else
   channel = g_io_channel_unix_new (fd);
 #endif
   if (!channel)
     {
       g_debug ("error creating a new listening channel\n");
-      myclosesock (fd);
+      assuan_sock_close (fd);
       return;
     }
   g_io_channel_set_encoding (channel, NULL, NULL);
@@ -517,7 +679,7 @@ gpa_start_server (void)
     {
       g_debug ("error creating watch for listening channel\n");
       g_io_channel_shutdown (channel, 0, NULL);
-      myclosesock (fd);
+      assuan_sock_close (fd);
       return;
     }
 

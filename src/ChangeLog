@@ -1,3 +1,11 @@
+2007-10-02  Werner Koch  <wk@g10code.com>
+
+	* utils.c (translate_sys2libc_fd): New.
+
+2007-10-01  Werner Koch  <wk@g10code.com>
+
+	* utils.c: New to implement xmalloc and xcalloc. 
+
 2007-09-28  Werner Koch  <wk@g10code.com>
 
 	* gpakeyselector.c (gpa_key_selector_next_key): Don't segv is not
