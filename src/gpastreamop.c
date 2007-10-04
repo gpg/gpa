@@ -69,10 +69,10 @@ gpa_stream_operation_get_property (GObject     *object,
 
 
 static void
-gpa_stream_operation_set_property (GObject     *object,
-				 guint        prop_id,
-				 const GValue      *value,
-				 GParamSpec  *pspec)
+gpa_stream_operation_set_property (GObject      *object,
+                                   guint        prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
 {
   GpaStreamOperation *op = GPA_STREAM_OPERATION (object);
 
@@ -101,7 +101,7 @@ gpa_stream_operation_finalize (GObject *object)
 
   gpgme_data_release (op->input_stream);
   gpgme_data_release (op->output_stream);
-  gpgme_data_release (op->output_stream);
+  gpgme_data_release (op->message_stream);
   gtk_widget_destroy (op->progress_dialog);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -166,7 +166,7 @@ gpa_stream_operation_class_init (GpaStreamOperationClass *klass)
 				    "Data written by gpg/gpgsm",
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
-				   PROP_INPUT_STREAM,
+				   PROP_MESSAGE_STREAM,
 				   g_param_spec_pointer 
 				   ("message_stream", "Message Stream",
 				    "Message data read by gpg/gpgsm",

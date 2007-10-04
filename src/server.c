@@ -24,7 +24,10 @@
 #include <assert.h>
 #include <string.h>
 #include <errno.h>
-
+#ifndef HAVE_W32_SYSTEM
+# include <sys/socket.h>
+# include <sys/un.h>
+#endif /*HAVE_W32_SYSTEM*/
 #include <gpgme.h>
 #include <glib.h>
 #include <assuan.h>
@@ -56,10 +59,6 @@ struct conn_ctrl_s
   /* Channels used with the gpgme callbacks.  */
   GIOChannel *input_channel;
   GIOChannel *output_channel;
-
-  /* Gpgme Data objects.  */
-  gpgme_data_t input_data;
-  gpgme_data_t output_data;
 
 };
 
@@ -125,6 +124,7 @@ my_gpgme_read_cb (void *opaque, void *buffer, size_t size)
   size_t nread;
   int retval;
 
+  g_debug ("my_gpgme_read_cb: requesting %d bytes\n", (int)size);
   status = g_io_channel_read_chars (ctrl->input_channel, buffer, size,
                                     &nread, NULL);
   if (status == G_IO_STATUS_AGAIN
@@ -140,8 +140,10 @@ my_gpgme_read_cb (void *opaque, void *buffer, size_t size)
   else
     {
       errno = EIO;
-      retval = 1;
+      retval = -1;
     }
+  g_debug ("my_gpgme_read_cb: got status=%x, %d bytes, retval=%d\n", 
+           status, (int)size, retval);
 
   return retval;
 }
@@ -196,8 +198,6 @@ cont_encrypt (assuan_context_t ctx, gpg_error_t err)
   g_debug ("cont_encrypt called with with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
-  gpgme_data_release (ctrl->input_data); ctrl->input_data = NULL;
-  gpgme_data_release (ctrl->output_data); ctrl->output_data = NULL;
   if (ctrl->input_channel)
     {
       g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
@@ -223,6 +223,8 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   gpg_error_t err;
   gpgme_protocol_t protocol = GPGME_PROTOCOL_OpenPGP;
   GpaStreamEncryptOperation *op;
+  gpgme_data_t input_data = NULL;
+  gpgme_data_t output_data = NULL;
 
 
   if (has_option (line, "--protocol=OpenPGP"))
@@ -256,7 +258,7 @@ cmd_encrypt (assuan_context_t ctx, char *line)
     }
 
 #ifdef HAVE_W32_SYSTEM
-  ctrl->input_channel = g_io_channel_win32_new_socket (ctrl->input_fd);
+  ctrl->input_channel = g_io_channel_win32_new_fd (ctrl->input_fd);
 #else
   ctrl->input_channel = g_io_channel_unix_new (ctrl->input_fd);
 #endif
@@ -270,7 +272,7 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   g_io_channel_set_buffered (ctrl->input_channel, FALSE);
 
 #ifdef HAVE_W32_SYSTEM
-  ctrl->output_channel = g_io_channel_win32_new_socket (ctrl->output_fd);
+  ctrl->output_channel = g_io_channel_win32_new_fd (ctrl->output_fd);
 #else
   ctrl->output_channel = g_io_channel_unix_new (ctrl->output_fd);
 #endif
@@ -284,23 +286,23 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   g_io_channel_set_buffered (ctrl->output_channel, FALSE);
 
 
-  err = gpgme_data_new_from_cbs (&ctrl->input_data, &my_gpgme_data_cbs, ctrl);
+  err = gpgme_data_new_from_cbs (&input_data, &my_gpgme_data_cbs, ctrl);
   if (err)
     goto leave;
-  err = gpgme_data_new_from_cbs (&ctrl->output_data, &my_gpgme_data_cbs, ctrl);
+  err = gpgme_data_new_from_cbs (&output_data, &my_gpgme_data_cbs, ctrl);
   if (err)
     goto leave;
 
   ctrl->cont_cmd = cont_encrypt;
-  op = gpa_stream_encrypt_operation_new (NULL, ctrl->input_data, 
-                                         ctrl->output_data, ctx);
+  op = gpa_stream_encrypt_operation_new (NULL, input_data, output_data, ctx);
+  input_data = output_data = NULL;
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
   return gpg_error (GPG_ERR_UNFINISHED);
 
  leave:
-  gpgme_data_release (ctrl->input_data); ctrl->input_data = NULL;
-  gpgme_data_release (ctrl->output_data); ctrl->output_data = NULL;
+  gpgme_data_release (input_data); 
+  gpgme_data_release (output_data);
   if (ctrl->input_channel)
     {
       g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
@@ -388,9 +390,9 @@ connection_startup (int fd)
   assuan_context_t ctx;
   conn_ctrl_t ctrl;
 
-  /* Get an assuan context for the already accepted file descriptor
-     FD.  */
-  err = assuan_init_socket_server_ext (&ctx, ASSUAN_INT2FD(fd), 2);
+  /* Get an Assuan context for the already accepted file descriptor
+     FD.  Allow descriptor passing.  */
+  err = assuan_init_socket_server_ext (&ctx, ASSUAN_INT2FD(fd), 1|2);
   if (err)
     {
       g_debug ("failed to initialize the new connection: %s",
@@ -423,8 +425,6 @@ connection_finish (assuan_context_t ctx)
     {
       conn_ctrl_t ctrl = assuan_get_pointer (ctx);
 
-      gpgme_data_release (ctrl->input_data);
-      gpgme_data_release (ctrl->output_data);
       if (ctrl->input_channel)
         {
           g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
