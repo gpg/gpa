@@ -107,9 +107,6 @@ int translate_sys2libc_fd (assuan_fd_t fd, int for_write);
 #ifndef GPG_ERR_UNFINISHED
 #define GPG_ERR_UNFINISHED 199
 #endif
-#ifndef GPA_ERR_SOURCE_GPA
-#define GPA_ERR_SOURCE_GPA 12
-#endif
 
 #endif /*GPA_H */
 

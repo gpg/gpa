@@ -60,6 +60,8 @@ struct conn_ctrl_s
   GIOChannel *input_channel;
   GIOChannel *output_channel;
 
+  /* List of collected recipients.  */
+  GSList *recipients;
 };
 
 
@@ -114,6 +116,13 @@ skip_options (char *line)
   return line;
 }
 
+/* Helper to be used as a GFunc for free. */
+static void
+free_func (void *p, void *dummy)
+{
+  (void)dummy;
+  g_free (p);
+}
 
 
 static ssize_t
@@ -124,7 +133,7 @@ my_gpgme_read_cb (void *opaque, void *buffer, size_t size)
   size_t nread;
   int retval;
 
-  g_debug ("my_gpgme_read_cb: requesting %d bytes\n", (int)size);
+/*   g_debug ("my_gpgme_read_cb: requesting %d bytes\n", (int)size); */
   status = g_io_channel_read_chars (ctrl->input_channel, buffer, size,
                                     &nread, NULL);
   if (status == G_IO_STATUS_AGAIN
@@ -142,8 +151,8 @@ my_gpgme_read_cb (void *opaque, void *buffer, size_t size)
       errno = EIO;
       retval = -1;
     }
-  g_debug ("my_gpgme_read_cb: got status=%x, %d bytes, retval=%d\n", 
-           status, (int)size, retval);
+/*   g_debug ("my_gpgme_read_cb: got status=%x, %d bytes, retval=%d\n",  */
+/*            status, (int)size, retval); */
 
   return retval;
 }
@@ -184,7 +193,54 @@ static struct gpgme_data_cbs my_gpgme_data_cbs =
     NULL
   };
 
+
+/* Release the recipients stored in the connection context. */
+static void
+release_recipients (conn_ctrl_t ctrl)
+{
+  if (ctrl->recipients)
+    {
+      g_slist_foreach (ctrl->recipients, free_func, NULL);
+      g_slist_free (ctrl->recipients);
+      ctrl->recipients = NULL;
+    }
+}
 
+/* Return a deep copy of the recipients list.  */
+static GSList *
+copy_recipients (conn_ctrl_t ctrl)
+{
+  GSList *recp, *newlist;
+  
+  newlist= NULL;
+  for (recp = ctrl->recipients; recp; recp = g_slist_next (recp))
+    newlist = g_slist_append (newlist, recp->data);
+
+  return newlist;
+}
+
+
+
+
+/*  RECIPIENT <recipient>
+
+  Set the recipient for the encryption.  <recipient> is an RFC2822
+  recipient name.  This command may or may not check the recipient for
+  validity right away; if it does not (as implemented in GPA) all
+  recipients are checked at the time of the ENCRYPT command.  All
+  RECIPIENT commands are cumulative until a RESET or an successful
+  ENCRYPT command.  */
+static int
+cmd_recipient (assuan_context_t ctx, char *line)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  gpg_error_t err = 0;
+
+  if (*line)
+    ctrl->recipients = g_slist_append (ctrl->recipients, xstrdup (line));
+
+  return assuan_process_done (ctx, err);
+}
 
 
 
@@ -208,6 +264,8 @@ cont_encrypt (assuan_context_t ctx, gpg_error_t err)
       g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
       ctrl->output_channel = NULL;
     }
+  if (!err)
+    release_recipients (ctrl);
   assuan_process_done (ctx, err);
 }
 
@@ -294,7 +352,8 @@ cmd_encrypt (assuan_context_t ctx, char *line)
     goto leave;
 
   ctrl->cont_cmd = cont_encrypt;
-  op = gpa_stream_encrypt_operation_new (NULL, input_data, output_data, ctx);
+  op = gpa_stream_encrypt_operation_new (NULL, input_data, output_data,
+                                         copy_recipients (ctrl), ctx);
   input_data = output_data = NULL;
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
@@ -353,6 +412,27 @@ cmd_getinfo (assuan_context_t ctx, char *line)
 }
 
 
+static void
+reset_notify (assuan_context_t ctx)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+
+  release_recipients (ctrl);
+  if (ctrl->input_channel)
+    {
+      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
+      ctrl->input_channel = NULL;
+    }
+  if (ctrl->output_channel)
+    {
+      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
+      ctrl->output_channel = NULL;
+    }
+  assuan_close_input_fd (ctx);
+  assuan_close_output_fd (ctx);
+}
+
+
 
 
 /* Tell the assuan library about our commands.   */
@@ -363,10 +443,11 @@ register_commands (assuan_context_t ctx)
     const char *name;
     int (*handler)(assuan_context_t, char *line);
   } table[] = {
-    { "INPUT",   NULL },
-    { "OUTPUT",   NULL },
-    { "ENCRYPT", cmd_encrypt },
-    { "GETINFO", cmd_getinfo },
+    { "RECIPIENT", cmd_recipient },
+    { "INPUT",     NULL },
+    { "OUTPUT",    NULL },
+    { "ENCRYPT",   cmd_encrypt },
+    { "GETINFO",   cmd_getinfo },
     { NULL }
   };
   int i, rc;
@@ -411,6 +492,7 @@ connection_startup (int fd)
   ctrl = g_malloc0 (sizeof *ctrl);
   assuan_set_pointer (ctx, ctrl);
   assuan_set_log_stream (ctx, stderr);
+  assuan_register_reset_notify (ctx, reset_notify);
 
   return ctx;
 }
@@ -425,16 +507,7 @@ connection_finish (assuan_context_t ctx)
     {
       conn_ctrl_t ctrl = assuan_get_pointer (ctx);
 
-      if (ctrl->input_channel)
-        {
-          g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
-          ctrl->input_channel = NULL;
-        }
-      if (ctrl->output_channel)
-        {
-          g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
-          ctrl->output_channel = NULL;
-        }
+      reset_notify (ctx);
       assuan_deinit_server (ctx);
       g_free (ctrl);
     }
@@ -497,7 +570,9 @@ receive_cb (GIOChannel *channel, GIOCondition condition, void *data)
           ctrl->in_command--;
           g_debug ("assuan_process_next returned: %s",
                    err == -1? "EOF": gpg_strerror (err));
-          if (gpg_err_code (err) == GPG_ERR_EOF || err == -1)
+          if (gpg_err_code (err) == GPG_ERR_EAGAIN)
+            ; /* Ignore.  */
+          else if (gpg_err_code (err) == GPG_ERR_EOF || err == -1)
             {
               connection_finish (ctx);
               /* FIXME: what about the socket? */
@@ -609,6 +684,8 @@ gpa_start_server (void)
   socklen_t serv_addr_len = sizeof serv_addr;
   GIOChannel *channel;
   unsigned int source_id;
+
+  assuan_set_assuan_err_source (GPG_ERR_SOURCE_DEFAULT);
   
   socket_name = g_build_filename (gnupg_homedir, "S.uiserver", NULL);
   if (strlen (socket_name)+1 >= sizeof serv_addr.sun_path ) 

@@ -52,8 +52,13 @@ free_func (void *p, void *dummy)
 static void
 gpa_stream_encrypt_operation_finalize (GObject *object)
 {  
-/*   GpaStreamEncryptOperation *op = GPA_STREAM_ENCRYPT_OPERATION (object); */
+  GpaStreamEncryptOperation *op = GPA_STREAM_ENCRYPT_OPERATION (object);
 
+  if (op->recipients)
+    {
+      g_slist_foreach (op->recipients, free_func, NULL);
+      g_slist_free (op->recipients);
+    }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -510,6 +515,7 @@ GpaStreamEncryptOperation*
 gpa_stream_encrypt_operation_new (GtkWidget *window,
                                   gpgme_data_t input_stream,
                                   gpgme_data_t output_stream,
+                                  GSList *recipients,
                                   void *server_ctx)
 {
   GpaStreamEncryptOperation *op;
@@ -520,6 +526,8 @@ gpa_stream_encrypt_operation_new (GtkWidget *window,
 		     "output_stream", output_stream,
                      "server-ctx", server_ctx,
 		     NULL);
+  if (op)
+    op->recipients = recipients;
 
   return op;
 }
