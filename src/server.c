@@ -214,7 +214,7 @@ copy_recipients (conn_ctrl_t ctrl)
   
   newlist= NULL;
   for (recp = ctrl->recipients; recp; recp = g_slist_next (recp))
-    newlist = g_slist_append (newlist, recp->data);
+    newlist = g_slist_append (newlist, xstrdup (recp->data));
 
   return newlist;
 }
@@ -279,22 +279,27 @@ cmd_encrypt (assuan_context_t ctx, char *line)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
   gpg_error_t err;
-  gpgme_protocol_t protocol = GPGME_PROTOCOL_OpenPGP;
+  gpgme_protocol_t protocol = 0;
   GpaStreamEncryptOperation *op;
   gpgme_data_t input_data = NULL;
   gpgme_data_t output_data = NULL;
 
 
   if (has_option (line, "--protocol=OpenPGP"))
-    ; /* This is the default.  */
+    protocol = GPGME_PROTOCOL_OpenPGP;
   else if (has_option (line, "--protocol=CMS"))
     protocol = GPGME_PROTOCOL_CMS;
-  else  if (has_option_name (line, "--protocol"))
+  else if (has_option_name (line, "--protocol"))
     {
       err = set_error (GPG_ERR_ASS_PARAMETER, "invalid protocol");
       goto leave;
     }
-  
+  else 
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "no protocol specified");
+      goto leave;
+    }
+
   line = skip_options (line);
   if (*line)
     {
@@ -353,7 +358,7 @@ cmd_encrypt (assuan_context_t ctx, char *line)
 
   ctrl->cont_cmd = cont_encrypt;
   op = gpa_stream_encrypt_operation_new (NULL, input_data, output_data,
-                                         copy_recipients (ctrl), ctx);
+                                         copy_recipients (ctrl), 0, ctx);
   input_data = output_data = NULL;
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
@@ -376,6 +381,60 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   assuan_close_output_fd (ctx);
   return assuan_process_done (ctx, err);
 }
+
+
+
+/* Continuation for cmd_prep_encrypt.  */
+void
+cont_prep_encrypt (assuan_context_t ctx, gpg_error_t err)
+{
+  g_debug ("cont_prep_encrypt called with with ERR=%s <%s>",
+           gpg_strerror (err), gpg_strsource (err));
+
+  assuan_process_done (ctx, err);
+}
+
+
+/* PREP_ENCRYPT [--protocol=OPENPGP|CMS]
+
+   Dummy encryption command used to check whether the given recipients
+   are all valid and to tell the cleint the preferred protocol.  */
+static int 
+cmd_prep_encrypt (assuan_context_t ctx, char *line)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  gpg_error_t err;
+  gpgme_protocol_t protocol = GPGME_PROTOCOL_OpenPGP;
+  GpaStreamEncryptOperation *op;
+
+  if (has_option (line, "--protocol=OpenPGP"))
+    ; /* This is the default.  */
+  else if (has_option (line, "--protocol=CMS"))
+    protocol = GPGME_PROTOCOL_CMS;
+  else if (has_option_name (line, "--protocol"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "invalid protocol");
+      goto leave;
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      goto leave;
+    }
+
+  ctrl->cont_cmd = cont_prep_encrypt;
+  op = gpa_stream_encrypt_operation_new (NULL, NULL, NULL,
+                                         copy_recipients (ctrl), 0, ctx);
+  g_signal_connect (G_OBJECT (op), "completed",
+                    G_CALLBACK (g_object_unref), NULL);
+  return gpg_error (GPG_ERR_UNFINISHED);
+
+ leave:
+  return assuan_process_done (ctx, err);
+}
+
 
 
 
@@ -447,6 +506,7 @@ register_commands (assuan_context_t ctx)
     { "INPUT",     NULL },
     { "OUTPUT",    NULL },
     { "ENCRYPT",   cmd_encrypt },
+    { "PREP_ENCRYPT", cmd_prep_encrypt },
     { "GETINFO",   cmd_getinfo },
     { NULL }
   };

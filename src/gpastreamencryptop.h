@@ -80,6 +80,7 @@ gpa_stream_encrypt_operation_new (GtkWidget *window,
                                   gpgme_data_t input_stream,
                                   gpgme_data_t output_stream,
                                   GSList *recipients,
+                                  int silent,
                                   void *server_ctx);
 
 

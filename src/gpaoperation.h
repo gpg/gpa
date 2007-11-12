@@ -65,5 +65,10 @@ gboolean gpa_operation_busy (GpaOperation *op);
    after this operation. */
 void gpa_operation_server_finish (GpaOperation *op, gpg_error_t err);
 
+/* If running in server mode, write a status line names STATUSNAME
+   plus space delimited arguments.  */
+gpg_error_t gpa_operation_write_status (GpaOperation *op, 
+                                        const char *statusname, ...);
+
 
 #endif

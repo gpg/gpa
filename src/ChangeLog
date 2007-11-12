@@ -1,3 +1,13 @@
+2007-11-12  Werner Koch  <wk@g10code.com>
+
+	* server.c (cmd_prep_encrypt, cont_prep_encrypt): New.
+	(register_commands): Register PREP_ENCRYPT command.
+	(copy_recipients): Take a copy of each string.
+	* gpaoperation.c (gpa_operation_write_status): New.
+	* gpastreamencryptop.c (gpa_stream_encrypt_operation_new): Add arg
+	SILENT and change all callers.
+	(parse_recipients): Write a status line.
+
 2007-10-02  Werner Koch  <wk@g10code.com>
 
 	* utils.c (translate_sys2libc_fd): New.

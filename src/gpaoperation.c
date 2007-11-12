@@ -26,6 +26,7 @@
 #include "gpgmetools.h"
 #include "i18n.h"
 
+
 #ifndef G_PARAM_STATIC_STRINGS
 #define G_PARAM_STATIC_STRINGS (G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK \
                                 | G_PARAM_STATIC_BLURB)
@@ -224,4 +225,44 @@ gpa_operation_server_finish (GpaOperation *op, gpg_error_t err)
       op->server_ctx = NULL;
       gpa_run_server_continuation (ctx, err);
     }
+}
+
+
+/* If running in server mode, write a status line names STATUSNAME
+   plus space delimited arguments.  */
+gpg_error_t
+gpa_operation_write_status (GpaOperation *op, const char *statusname, ...)
+{
+  gpg_error_t err = 0;
+
+  g_return_val_if_fail (op, gpg_error (GPG_ERR_BUG));
+  g_return_val_if_fail (GPA_IS_OPERATION (op), gpg_error (GPG_ERR_BUG));
+  if (op->server_ctx)
+    {
+      assuan_context_t ctx = op->server_ctx;
+      va_list arg_ptr;
+      char buf[950], *p;
+      const char *text;
+      size_t n;
+
+      va_start (arg_ptr, statusname);
+      
+      p = buf; 
+      n = 0;
+      while ( (text = va_arg (arg_ptr, const char *)) )
+        {
+          if (n)
+            {
+              *p++ = ' ';
+              n++;
+            }
+          for ( ; *text && n < DIM (buf)-2; n++)
+            *p++ = *text++;
+        }
+      *p = 0;
+      err = assuan_write_status (ctx, statusname, buf);
+      va_end (arg_ptr);
+    }
+
+  return err;
 }

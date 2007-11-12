@@ -58,6 +58,7 @@ gpa_stream_encrypt_operation_finalize (GObject *object)
     {
       g_slist_foreach (op->recipients, free_func, NULL);
       g_slist_free (op->recipients);
+      op->recipients = NULL;
     }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -350,6 +351,7 @@ parse_recipients (GpaStreamEncryptOperation *op, GSList *recipients,
   int found_idx;
   gpgme_key_t key, key2;
   const char *name;
+  gpgme_protocol_t used_proto = GPGME_PROTOCOL_UNKNOWN;
 
   *r_found = NULL;
   *r_unknown = NULL;
@@ -389,6 +391,8 @@ parse_recipients (GpaStreamEncryptOperation *op, GSList *recipients,
         {
           gpgme_key_ref (key);
           found[found_idx++] = key;
+          if (used_proto == GPGME_PROTOCOL_UNKNOWN)
+            used_proto = key->protocol;
         }
       else if (key)
 	{
@@ -408,9 +412,20 @@ parse_recipients (GpaStreamEncryptOperation *op, GSList *recipients,
     }
   gpgme_release (ctx);
 
+  if (err)
+    ;
+  else if (used_proto == GPGME_PROTOCOL_OpenPGP)
+    err = gpa_operation_write_status (GPA_OPERATION (op), "PROTOCOL",
+                                      "OpenPGP", NULL);
+  else if (used_proto == GPGME_PROTOCOL_CMS)
+    err = gpa_operation_write_status (GPA_OPERATION (op), "PROTOCOL",
+                                      "CMS", NULL);
+  else 
+    err = 0;
+
   *r_found = found;
   *r_unknown = unknown;
-  return 0;
+  return err;
 }
 
 
@@ -425,6 +440,7 @@ response_cb (GtkDialog *dialog, int response, void *user_data)
   GpaStreamEncryptOperation *op = user_data;
   gpgme_key_t *keys;
   GSList *unknown_recp;
+  int prep_only = 0;
 
   gtk_widget_hide (GTK_WIDGET (dialog));
   
@@ -447,10 +463,18 @@ response_cb (GtkDialog *dialog, int response, void *user_data)
   if (err)
     goto leave;
 
-
   /* Our streams work all in ascii armored mode (Either PGP or PEM) */
-  gpgme_set_armor (GPA_OPERATION (op)->context->ctx, 1);
-  err = start_encryption (op, keys);
+  if (GPA_STREAM_OPERATION (op)->input_stream)
+    {
+      gpgme_set_armor (GPA_OPERATION (op)->context->ctx, 1);
+      err = start_encryption (op, keys);
+    }
+  else
+    {
+      /* We are just preparing an encryption. */
+      prep_only = 1;
+      err = 0;
+    }
 
  leave:
   if (keys)
@@ -465,7 +489,7 @@ response_cb (GtkDialog *dialog, int response, void *user_data)
   g_slist_free (unknown_recp);
   g_slist_foreach (recipients, free_func, NULL);
   g_slist_free (recipients);
-  if (err)
+  if (err || prep_only)
     {
       gpa_operation_server_finish (GPA_OPERATION (op), err);
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
@@ -511,11 +535,23 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamEncryptOperation *op)
 
 /* API */
 
+/* Start encrypting INPUT_STREAM to OUTPUT_STREAM using SERVER_CTX and
+   WINDOW.  RECIPIENTS gives a list of recipients and the function
+   matches them with existing keys and selects appropriate keys.  If
+   it is not possible to unambigiously select keys and SILENT is not
+   given, a key selection dialog offers the user a way to manually
+   input keys.  INPUT_STREAM and OUTPUT_STREAM may be given as NULL in
+   which case the function skips the actual encryption step and just
+   verifies the recipients.  */
+/* FIXME: We need to offer a way to return the actual selected list of
+   recipients so that repeating this command with that list instantly
+   starts the decryption.  */
 GpaStreamEncryptOperation*
 gpa_stream_encrypt_operation_new (GtkWidget *window,
                                   gpgme_data_t input_stream,
                                   gpgme_data_t output_stream,
                                   GSList *recipients,
+                                  int silent,
                                   void *server_ctx)
 {
   GpaStreamEncryptOperation *op;

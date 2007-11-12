@@ -197,7 +197,7 @@ AM_PATH_GTK_2_0(2.2.0,, AC_MSG_ERROR(Cannot find GTK+ 2.0))
 #
 AM_PATH_GPG_ERROR("$NEED_GPG_ERROR_VERSION",
                   have_gpg_error=yes,have_gpg_error=no)
-AC_DEFINE(GPG_ERR_SOURCE_DEFAULT, GPG_ERR_SOURCE_USER_4,
+AC_DEFINE(GPG_ERR_SOURCE_DEFAULT, 12,
           [The default error source for GPA.])
 
 #
