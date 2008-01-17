@@ -1,5 +1,7 @@
 2008-01-17  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpa.c (create_dialog): Switch "apply" and "reset" button.
+
 	* Makefile.am (noinst_PROGRAMS): Remove confdialog.
 	(confdialog_SOURCES): Remove variable.
 	(gpa_SOURCES): Add confdialog.h and confdialog.c.

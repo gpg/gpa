@@ -1196,9 +1196,9 @@ create_dialog (void)
   gtk_dialog_add_button (GTK_DIALOG (dialog),
 			 GTK_STOCK_OK, GTK_RESPONSE_ACCEPT); 
   gtk_dialog_add_button (GTK_DIALOG (dialog),
- 			 _("Reset"), CUSTOM_RESPONSE_RESET);
-  gtk_dialog_add_button (GTK_DIALOG (dialog),
 			 GTK_STOCK_APPLY, GTK_RESPONSE_APPLY);
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+ 			 _("Reset"), CUSTOM_RESPONSE_RESET);
   gtk_dialog_add_button (GTK_DIALOG (dialog),
 			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
