@@ -482,6 +482,8 @@ fileman_menu_new (GpaFileManager *fileman)
     {_("/Edit/sep2"), NULL, NULL, 0, "<Separator>"},
     {_("/Edit/Pr_eferences..."), NULL, gpa_open_settings_dialog, 0,
      "<StockItem>", GTK_STOCK_PREFERENCES},
+    {_("/Edit/_Backend Preferences..."), NULL,
+     gpa_open_backend_config_dialog, 0, "<StockItem>", GTK_STOCK_PREFERENCES},
   };
   GtkItemFactoryEntry windows_menu[] = {
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},

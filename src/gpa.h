@@ -1,5 +1,6 @@
 /* gpa.h  -  main header
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
+ * Copyright (C) 2000, 2001 G-N-U GmbH.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -56,6 +57,7 @@ extern int cms_hack;
 void gpa_open_keyring_editor (void);
 void gpa_open_filemanager (void);
 void gpa_open_settings_dialog (void);
+void gpa_open_backend_config_dialog (void);
 GtkWidget * gpa_get_keyring_editor (void);
 GtkWidget * gpa_get_settings_dialog (void);
 
@@ -63,9 +65,6 @@ typedef void (*GPADefaultKeyChanged) (gpointer user_data);
 
 void gpa_run_server_continuation (assuan_context_t ctx, gpg_error_t err);
 void gpa_start_server (void);
-
-
-void gpa_show_backend_config (void);
 
 /*-- utils.c --*/
 /* We are so used to these function thus provide them.  */

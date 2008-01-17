@@ -855,6 +855,8 @@ keyring_editor_menubar_new (GtkWidget * window,
     {_("/Edit/sep2"), NULL, NULL, 0, "<Separator>"},
     {_("/Edit/Pr_eferences..."), NULL, gpa_open_settings_dialog, 0,
      "<StockItem>", GTK_STOCK_PREFERENCES},
+    {_("/Edit/_Backend Preferences..."), NULL,
+     gpa_open_backend_config_dialog, 0, "<StockItem>", GTK_STOCK_PREFERENCES},
   };
   GtkItemFactoryEntry keys_menu[] = {
     {_("/_Keys"), NULL, NULL, 0, "<Branch>"},

@@ -41,6 +41,7 @@
 #include "keyserver.h"
 #include "keytable.h"
 #include "settingsdlg.h"
+#include "confdialog.h"
 
 #ifdef __MINGW32__
 #include "w32reg.h"
@@ -267,6 +268,7 @@ i18n_init (void)
 
 static GtkWidget *keyringeditor = NULL;
 static GtkWidget *settings_dialog = NULL;
+static GtkWidget *backend_config_dialog = NULL;
 
 static void
 quit_if_no_window (void)
@@ -311,6 +313,7 @@ gpa_open_filemanager (void)
   gdk_window_raise (gpa_file_manager_get_instance ()->window);
 }
 
+
 void
 gpa_open_settings_dialog (void)
 {
@@ -324,6 +327,22 @@ gpa_open_settings_dialog (void)
     }
   gdk_window_raise (settings_dialog->window);
 }
+
+
+void
+gpa_open_backend_config_dialog (void)
+{
+  if (!backend_config_dialog)
+    {
+      backend_config_dialog = gpa_backend_config_dialog_new ();
+      gtk_signal_connect (GTK_OBJECT (backend_config_dialog), "destroy",
+			  GTK_SIGNAL_FUNC (close_main_window),
+                          &backend_config_dialog);
+      gtk_widget_show_all (backend_config_dialog);
+    }
+  gdk_window_raise (backend_config_dialog->window);
+}
+
 
 GtkWidget *
 gpa_get_keyring_editor (void)

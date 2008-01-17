@@ -23,7 +23,7 @@ endif
 
 
 bin_PROGRAMS = gpa
-noinst_PROGRAMS = dndtest confdialog
+noinst_PROGRAMS = dndtest
 
 AM_CPPFLAGS = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
 AM_CFLAGS = $(GPGME_CFLAGS) $(LIBASSUAN_CFLAGS) $(GPG_ERROR_CFLAGS) \
@@ -99,17 +99,8 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpakeyselector.h gpakeyselector.c \
 	      server.c \
 	      options.c \
+	      confdialog.h confdialog.c \
 	      utils.c $(gpa_w32_sources)
 
 
 dndtest_SOURCES = dndtest.c
-
-confdialog_SOURCES = confdialog.c
-
-
-
-
-
-
-
-

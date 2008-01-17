@@ -1,3 +1,18 @@
+2008-01-17  Marcus Brinkmann  <marcus@g10code.de>
+
+	* Makefile.am (noinst_PROGRAMS): Remove confdialog.
+	(confdialog_SOURCES): Remove variable.
+	(gpa_SOURCES): Add confdialog.h and confdialog.c.
+	* confdialog.h: New file.
+	* confdialog.c: Rewritten.
+	* gpa.h (gpa_open_backend_config_dialog): New prototype.
+	(gpa_show_backend_config): Prototype removed.
+	* gpa.c: Include "confdialog.h".
+	(backend_config_dialog): New variable.
+	(gpa_open_backend_config_dialog): New function.
+	* fileman.c (fileman_menu_new): Add entry for backend config.
+	* keyring.c (keyring_editor_menubar_new): Likewise.
+
 2007-11-12  Werner Koch  <wk@g10code.com>
 
 	* server.c (cmd_prep_encrypt, cont_prep_encrypt): New.
