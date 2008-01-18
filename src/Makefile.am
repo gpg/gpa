@@ -14,7 +14,8 @@ if HAVE_W32_SYSTEM
 
 gpa_res_ldflag = -Wl,gpa-resource.o
 gpa_deps = gpa-resource.o
-gpa_w32_sources = w32-afunix.c w32-afunix.h
+gpa_w32_sources = w32reg.h w32reg.c w32-afunix.h w32-afunix.c
+
 else
 gpa_res_ldflag =
 gpa_deps =
@@ -33,7 +34,8 @@ LDADD = $(GPGME_LIBS) $(LIBASSUAN_LIBS) $(GPG_ERROR_LIBS) \
 gpa_LDFLAGS = $(gpa_res_ldflag)
 gpa_DEPENDENCIES = $(gpa_deps)
 
-gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
+gpa_SOURCES = get-path.h get-path.c \
+	      gpa.c gpa.h i18n.h options.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
 	      gtktools.c gtktools.h  \
 	      helpmenu.c helpmenu.h	  \
@@ -59,7 +61,6 @@ gpa_SOURCES = gpa.c gpa.h i18n.h options.h \
 	      gpapastrings.c gpapastrings.h\
 	      gpa_license.c gpa_license.h \
 	      keyserver.c keyserver.h \
-              w32reg.c w32reg.h \
 	      hidewnd.c hidewnd.h \
 	      keytable.c keytable.h \
 	      gpgmetools.h gpgmetools.c \

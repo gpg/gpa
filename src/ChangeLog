@@ -1,3 +1,19 @@
+2008-01-18  Marcus Brinkmann  <marcus@g10code.de>
+
+	* Makefile.am (gpa_SOURCES): Add get-path.h and get-path.c.  Move
+	w32reg.h and w32reg.c to ...
+	(gpa_w32_sources): ... here.
+	* get-path.h, get-path.c: New files.
+	* w32reg.h, w32reg.c: Beautify.  Use g_malloc instead of malloc.
+	* gpa.c: Don't include <time.h> or "w32reg.h".  Include
+	<glib/gstdio.h> and "get-path.h".  Move the home dir stuff to
+	get-path.c.  Beautify a bit.
+	(gpa_exec_dir): Remove global variable.
+	(copyright): Add g10 Code GmbH.
+	(main): Don't initialize gpa_exec_dir.  Use g_mkdir instead of
+	mkdir.  Move call to srand to ...
+	* helpmenu.c (help_about): ... here.  Include <time.h>.
+
 2008-01-17  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpa.c (create_dialog): Switch "apply" and "reset" button.

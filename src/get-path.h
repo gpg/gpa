@@ -1,5 +1,4 @@
-/* w32reg.h - MS-Windows Registry access
-   Copyright (C) 1998 Free Software Foundation, Inc.
+/* get-path.h - Find a system path.
    Copyright (C) 2008 g10 Code GmbH.
 
    This file is part of GPA.
@@ -18,19 +17,11 @@
    with this program; if not, write to the Free Software Foundation, Inc.,
    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  */
 
-#ifndef W32REG_H
-#define W32REG_H
+#ifndef GET_PATH_H
+#define GET_PATH_H
 
-/* Return a string from the Win32 Registry or NULL in case of error.
-   Caller must release the return value with g_free ().  A NULL for
-   root is an alias for HKEY_CURRENT_USER with a fallback for
-   HKEY_LOCAL_MACHINE.  */
-char *read_w32_registry_string (const char *root,
-				const char *dir, const char *name);
+/* Get the path to the default home directory.  */
+gchar *default_homedir (void);
 
-/* Write string VALUE into the W32 Registry ROOT, DIR and NAME.  If
-   NAME does not exist, it is created.  */
-int write_w32_registry_string (const char *root, const char *dir, 
-			       const char *name, const char *value);
+#endif	/* GET_PATH_H */
 
-#endif	/* W32REG_H */

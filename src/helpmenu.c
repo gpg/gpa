@@ -24,6 +24,7 @@
 #include "gpa.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <string.h>
 #include <gtk/gtk.h>
 #include "gpawindowkeeper.h"
@@ -193,6 +194,8 @@ help_about (void)
       int max_width;
       int i;
 #endif
+
+      srand (time (NULL)); /* the about dialog uses rand() */
 
       about_dialog = gtk_dialog_new ();
       gtk_window_set_title (GTK_WINDOW (about_dialog), _("About GPA"));
