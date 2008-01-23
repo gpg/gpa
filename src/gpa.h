@@ -54,12 +54,19 @@ extern GList *global_defaultRecipients;
 extern gchar *gnupg_homedir;
 extern gboolean cms_hack;
 
+
+/* Show the keyring editor dialog.  */
 void gpa_open_keyring_editor (void);
+
+/* Show the filemanager dialog.  */
 void gpa_open_filemanager (void);
+
+/* Show the settings dialog.  */
 void gpa_open_settings_dialog (void);
+
+/* Show the backend configuration dialog.  */
 void gpa_open_backend_config_dialog (void);
-GtkWidget * gpa_get_keyring_editor (void);
-GtkWidget * gpa_get_settings_dialog (void);
+
 
 typedef void (*GPADefaultKeyChanged) (gpointer user_data);
 

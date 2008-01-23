@@ -1,3 +1,15 @@
+2008-01-24  Marcus Brinkmann  <marcus@g10code.de>
+
+	* gpa.h (gpa_get_keyring_editor, gpa_get_settings_dialog): Removed.
+	* gpa.c: Do not include gpapastrings.h, gpawindowkeeper.h,
+	gtktools.h, helpmenu.h, keytable.h, icons.h, errno.h, assert.h or
+	getopt.h.
+	(main): Create gnupg home dir if it doesn't exist even if option
+	file argument is given.
+	(gpa_get_keyring_editor, gpa_get_settings_dialog): Removed.
+	(GpaCommandLineArgs): Renamed to gpa_args_t.  Also changed user.
+	(copyright): Made static.
+
 2008-01-23  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpa.h (cms_hack): Changed type in prototype to gboolean.

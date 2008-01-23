@@ -22,28 +22,19 @@
 # include <config.h>
 #endif
 
-#include <gtk/gtk.h>
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
-#include <assert.h>
-
-#include <gpgme.h>
-#include <getopt.h>
 
 #include <glib/gstdio.h>
+#include <gtk/gtk.h>
+
+#include <gpgme.h>
 
 #include "get-path.h"
-#include "gpapastrings.h"
 #include "gpa.h"
-#include "gpawindowkeeper.h"
-#include "gtktools.h"
-#include "helpmenu.h"
 #include "keyring.h"
 #include "fileman.h"
 #include "keyserver.h"
-#include "keytable.h"
 #include "settingsdlg.h"
 #include "confdialog.h"
 
@@ -51,14 +42,16 @@
 #include "hidewnd.h"
 #endif
 
-/* icons for toolbars */
-#include "icons.h"
-
+
 /* Global variables */
+
+/* The home directory of GnuPG.  */
 gchar *gnupg_homedir;
+
+/* True if CMS hack mode is enabled.  */
 gboolean cms_hack;
 
-
+
 /* Return a malloced string with the locale dir.  Return NULL on
    error. */
 static char *
@@ -68,7 +61,7 @@ get_locale_dir (void)
   char name[530];
   char *p;
 
-  if ( !GetModuleFileNameA (0, name, sizeof (name)-30) )
+  if (! GetModuleFileNameA (0, name, sizeof (name) - 30))
     return NULL;
   p = strrchr (name, '\\');
   if (!p)
@@ -104,12 +97,13 @@ i18n_init (void)
 #endif
 }
 
-
+
 /* Manage the two main windows and the settings dialog.  */
 
 static GtkWidget *keyringeditor = NULL;
 static GtkWidget *settings_dialog = NULL;
 static GtkWidget *backend_config_dialog = NULL;
+
 
 static void
 quit_if_no_window (void)
@@ -131,12 +125,13 @@ close_main_window (GtkWidget *widget, gpointer param)
 }
 
 
+/* Show the keyring editor dialog.  */
 void
 gpa_open_keyring_editor (void)
 {
   if (!keyringeditor)
     {
-      keyringeditor = keyring_editor_new();
+      keyringeditor = keyring_editor_new ();
       gtk_signal_connect (GTK_OBJECT (keyringeditor), "destroy",
 			  GTK_SIGNAL_FUNC (close_main_window), &keyringeditor);
       gtk_widget_show_all (keyringeditor);
@@ -145,6 +140,7 @@ gpa_open_keyring_editor (void)
 }
 
 
+/* Show the filemanager dialog.  */
 void
 gpa_open_filemanager (void)
 {
@@ -155,6 +151,7 @@ gpa_open_filemanager (void)
 }
 
 
+/* Show the settings dialog.  */
 void
 gpa_open_settings_dialog (void)
 {
@@ -170,6 +167,7 @@ gpa_open_settings_dialog (void)
 }
 
 
+/* Show the backend configuration dialog.  */
 void
 gpa_open_backend_config_dialog (void)
 {
@@ -184,38 +182,30 @@ gpa_open_backend_config_dialog (void)
   gdk_window_raise (backend_config_dialog->window);
 }
 
-
-GtkWidget *
-gpa_get_keyring_editor (void)
-{
-  return keyringeditor;
-}
-
-
-GtkWidget *
-gpa_get_settings_dialog (void)
-{
-  return settings_dialog;
-}
-
 
+/* Command line options.  */
+
 typedef struct
 {
   gboolean start_keyring_editor;
   gboolean start_file_manager;
   gboolean start_only_server;
   gchar *options_filename;
-} GpaCommandLineArgs;
+} gpa_args_t;
+
+static gpa_args_t args = { FALSE, FALSE, FALSE, NULL };
 
 
 /* The copyright notice.  */
-const char *copyright = 
+static const char *copyright = 
 "Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
 "Copyright (C) 2008 g10 Code GmbH.\n"
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "This is free software, and you are welcome to redistribute it\n"
 "under certain conditions.  See the file COPYING for details.\n";
 
+
+/* Print version information and exit.  */
 static void
 print_version (void)
 {
@@ -224,9 +214,7 @@ print_version (void)
 }
 
 
-static GpaCommandLineArgs args = { FALSE, FALSE, FALSE, NULL };
-
-
+/* All command line options of the main application.  */
 static GOptionEntry option_entries[] =
   {
     { "version", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
@@ -257,11 +245,11 @@ dummy_log_func (const gchar *log_domain, GLogLevelFlags log_level,
 int
 main (int argc, char *argv[])
 {
+  GError *err = NULL;
+  GOptionContext *context;
   char *configname = NULL;
   char *keyservers_configname = NULL;
   int i;
-  GError *err = NULL;
-  GOptionContext *context;
 
 #ifdef __MINGW32__
   hide_gpa_console_window();
@@ -284,10 +272,6 @@ main (int argc, char *argv[])
       g_print ("option parsing failed: %s\n", err->message);
       exit (1);
     }
-
-  /* Start the keyring editor by default.  */
-  if (!args.start_keyring_editor && !args.start_file_manager)
-    args.start_keyring_editor = TRUE;
 
 
   /* Disable logging to prevent MS Windows NT from opening a
@@ -314,8 +298,6 @@ main (int argc, char *argv[])
   if (err)
     g_error_free (err);
 
-  gnupg_homedir = default_homedir ();
-
 #ifdef IS_DEVELOPMENT_VERSION
   fprintf (stderr, "NOTE: This is a development version!\n");
 #endif
@@ -331,20 +313,33 @@ main (int argc, char *argv[])
 #endif
 #endif
 
+#ifndef G_OS_WIN32
+  /* Internationalisation with gtk+-2.0 wants UTF-8 instead of the
+     character set determined by locale.  */
+  putenv ("OUTPUT_CHARSET=utf8");
+#endif
+
+
+  /* Handle command line options.  */
+
+  /* Start the keyring editor by default.  */
+  if (!args.start_keyring_editor && !args.start_file_manager)
+    args.start_keyring_editor = TRUE;
+
+  /* Note: We can not use GPGME's engine info, as that returns NULL
+     (default) for home_dir.  Consider improving GPGME to get it from
+     there, or using gpgconf (via GPGME).  */
+  gnupg_homedir = default_homedir ();
+  /* FIXME: GnuPG can not create a key if its home directory is
+     missing.  We help it out here.  Should be fixed in GnuPG.  */
+  if (! g_file_test (gnupg_homedir, G_FILE_TEST_IS_DIR))
+    g_mkdir (gnupg_homedir, 0700);
+
   /* Locate GPA's configuration file.  */
   if (! args.options_filename)
-    {
-      /* This is on the cheesy side.  GnuPG can not create a key if
-	 its home directory is missing.  We give it a bit of a jump
-	 start here.  */
-      if (! g_file_test (gnupg_homedir, G_FILE_TEST_IS_DIR))
-	g_mkdir (gnupg_homedir, 0700);
-      configname = g_build_filename (gnupg_homedir, "gpa.conf", NULL);
-    }
+    configname = g_build_filename (gnupg_homedir, "gpa.conf", NULL);
   else
-    {
-      configname = args.options_filename;
-    }
+    configname = args.options_filename;
   gpa_options_set_file (gpa_options_get_instance (), configname);
   g_free (configname);
 
@@ -364,12 +359,6 @@ main (int argc, char *argv[])
       gpa_options_set_default_keyserver (gpa_options_get_instance (),
 					 keyservers->data);
     }
-#endif
-
-#ifndef G_OS_WIN32
-  /* Internationalisation with gtk+-2.0 wants UTF-8 instead of the
-     character set determined by `locale'.  */
-  putenv ("OUTPUT_CHARSET=utf8");
 #endif
 
   /* Fire up the server.  */
