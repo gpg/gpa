@@ -52,7 +52,7 @@ extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
 extern GList *global_defaultRecipients;
 extern gchar *gnupg_homedir;
-extern int cms_hack;
+extern gboolean cms_hack;
 
 void gpa_open_keyring_editor (void);
 void gpa_open_filemanager (void);

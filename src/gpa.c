@@ -56,7 +56,7 @@
 
 /* Global variables */
 gchar *gnupg_homedir;
-int cms_hack;
+gboolean cms_hack;
 
 
 /* Return a malloced string with the locale dir.  Return NULL on
@@ -208,38 +208,6 @@ typedef struct
 } GpaCommandLineArgs;
 
 
-struct option longopts[] =
-{
-  { "version", no_argument, NULL, 'v' },
-  { "help", no_argument, NULL, 'h' },
-  { "keyring", no_argument, NULL, 'k' },
-  { "keymanager", no_argument, NULL, 'k' },
-  { "server", no_argument, NULL, 's' },
-  { "files", no_argument, NULL, 'f' },
-  { "options", required_argument, NULL, 'o' },
-  { "cms", no_argument, NULL, 'x' },
-  { NULL, 0, NULL, 0 }
-};
-
-
-struct
-{
-  char short_opt;
-  char *long_opt;
-  char *description;
-} option_desc[] = 
-{
-  { 'h', "help", N_("display this help and exit") },
-  { 'v', "version", N_("output version information and exit") },
-  { 'k', "keyring", N_("open keyring editor (default)") },
-  { 'f', "files", N_("open filemanager") },
-  { 's', "server", N_("start only the UI server") },
-  { 'o', "options", N_("read options from file") },
-  { 'x', "cms", "enable CMS hack" },
-  { 0, NULL, NULL }
-};
-
-
 /* The copyright notice.  */
 const char *copyright = 
 "Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
@@ -249,80 +217,33 @@ const char *copyright =
 "under certain conditions.  See the file COPYING for details.\n";
 
 static void
-print_copyright (void)
+print_version (void)
 {
   printf ("%s %s\n%s", PACKAGE, VERSION, copyright);
+  exit (0);
 }
 
 
-/* Print usage information.  */
-static void
-usage (void)
-{
-  int i;
-  
-  print_copyright ();
-
-  printf ("%s\n", _("Syntax: gpa [OPTION...] [FILE...]\n"
-                    "Graphical frontend to GnuPG\n"));
-  printf ("%s:\n\n", _("Options"));
-
-  for (i = 0; option_desc[i].long_opt; i++)
-    {
-      printf (" -%c, --%s\t\t%s\n", option_desc[i].short_opt,
-              option_desc[i].long_opt, _(option_desc[i].description));
-    }
-
-  printf ("\n%s", _("Please report bugs to <" PACKAGE_BUGREPORT ">.\n"));
-}
+static GpaCommandLineArgs args = { FALSE, FALSE, FALSE, NULL };
 
 
-/* Parse the command line.  */
-static void
-parse_command_line (int argc, char **argv, GpaCommandLineArgs *args)
-{
-  int optc;
-
-  opterr = 1;
-  
-  while ((optc = getopt_long (argc, argv, "hvo:kf", longopts, (int *) 0))
-         != EOF)
-    {
-      switch (optc)
-        {
-        case 'h':
-          usage ();
-          exit (EXIT_SUCCESS);
-        case 'v':
-          print_copyright ();
-          exit (EXIT_SUCCESS);
-          break;
-        case 'o':
-          args->options_filename = g_strdup (optarg);
-          break;
-        case 'k':
-          args->start_keyring_editor = TRUE;
-          break;
-        case 'f':
-          args->start_file_manager = TRUE;
-          break;
-        case 's':
-          args->start_only_server = TRUE;
-          break;
-        case 'x':
-          cms_hack = 1;
-          break;
-        default:
-          exit (EXIT_FAILURE);
-        }
-    }
-
-  /* Start the keyring editor by default. */
-  if (!args->start_keyring_editor && !args->start_file_manager)
-    {
-      args->start_keyring_editor = TRUE;
-    }
-}
+static GOptionEntry option_entries[] =
+  {
+    { "version", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
+      (gpointer) &print_version,
+      N_("Output version information and exit"), NULL, },
+    { "keyring", 'k', 0, G_OPTION_ARG_NONE, &args.start_keyring_editor,
+      N_("Open keyring editor (default)"), NULL },
+    { "files", 'f', 0, G_OPTION_ARG_NONE, &args.start_file_manager,
+      N_("Open filemanager"), NULL },
+    { "server", 's', 0, G_OPTION_ARG_NONE, &args.start_only_server,
+      N_("Start only the UI server"), NULL },
+    { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
+      N_("Read options from file"), "FILE" },
+    { "cms", 'x', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &cms_hack,
+      "Enable CMS hack", NULL },
+    { NULL }
+  };
 
 
 static void
@@ -338,15 +259,35 @@ main (int argc, char *argv[])
 {
   char *configname = NULL;
   char *keyservers_configname = NULL;
-  GpaCommandLineArgs args = { FALSE, FALSE, FALSE, NULL };
   int i;
   GError *err = NULL;
+  GOptionContext *context;
 
 #ifdef __MINGW32__
   hide_gpa_console_window();
 #endif
 
-  parse_command_line (argc, argv, &args);
+  /* Set locale before option parsing for UTF-8 conversion.  */
+  i18n_init ();
+
+  /* Parse command line options.  */
+  context = g_option_context_new (N_("[FILE...]"));
+  g_option_context_set_summary (context, N_("Graphical frontend to GnuPG"));
+  g_option_context_set_description (context, N_("Please report bugs to <"
+						PACKAGE_BUGREPORT ">."));
+  g_option_context_set_translation_domain (context, PACKAGE);
+  g_option_context_add_main_entries (context, option_entries, PACKAGE);
+  g_option_context_add_group (context, gtk_get_option_group (TRUE));
+
+  if (! g_option_context_parse (context, &argc, &argv, &err))
+    {
+      g_print ("option parsing failed: %s\n", err->message);
+      exit (1);
+    }
+
+  /* Start the keyring editor by default.  */
+  if (!args.start_keyring_editor && !args.start_file_manager)
+    args.start_keyring_editor = TRUE;
 
 
   /* Disable logging to prevent MS Windows NT from opening a
@@ -367,7 +308,7 @@ main (int argc, char *argv[])
                             | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
 
   gtk_init (&argc, &argv);
-  i18n_init ();
+
   /* Default icon for all windows */
   gtk_window_set_default_icon_from_file (GPA_DATADIR "/gpa.png", &err);
   if (err)

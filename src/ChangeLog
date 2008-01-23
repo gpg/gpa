@@ -1,3 +1,14 @@
+2008-01-23  Marcus Brinkmann  <marcus@g10code.de>
+
+	* gpa.h (cms_hack): Changed type in prototype to gboolean.
+	* gpa.c (main): Move i18n_init() invocation before rewritten
+	option parsing.  Move variable args file scope.
+	(usage, longopts, option_desc, parse_command_line): Removed.
+	(print_copyright): Renamed to ...
+	(print_version): ... this and exit.
+	(longopts): Removed
+	(cms_hack): Changed type to gboolean.
+
 2008-01-18  Marcus Brinkmann  <marcus@g10code.de>
 
 	* Makefile.am (gpa_SOURCES): Add get-path.h and get-path.c.  Move
