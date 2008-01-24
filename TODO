@@ -37,3 +37,10 @@ In no particular order:
 * There is no way to refresh selected keys from the keyserver.
   We might also want to have a scheduled refresh mode.  But that might
   be better implemented in gpg.
+
+* MB:
+** Add a beauty bar to filemanager (requires an icon corresponding to
+   keyring.xpm).
+** Support receiving keys from keyservers for unknown certificates, by
+   right click in "Signatures" tab of keyring manager and for all unknown
+   keys in that list at once.

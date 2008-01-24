@@ -1,31 +1,36 @@
 /* keyring.c - The GNU Privacy Assistant keyring.
    Copyright (C) 2000, 2001 G-N-U GmbH.
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2008 g10 Code GmbH.
 
-   This file is part of GPA
+   This file is part of GPA.
 
-   GPA is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
    (at your option) any later version.
 
-   GPA is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GPA is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
    GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with GPA; if not, write to the Free Software Foundation,
-   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc.,
+   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
-#include <gpgme.h>
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+
+#include <gpgme.h>
+
 #include "gpa.h"
 #include "gtktools.h"
 #include "icons.h"
@@ -122,6 +127,7 @@ struct _GPAKeyringEditor {
   GtkWidget *subkeys_page;
   
   /* Labels in the status bar */
+  GtkWidget *status_label;
   GtkWidget *status_key_user;
   GtkWidget *status_key_id;
 
@@ -1517,13 +1523,13 @@ toolbar_import_keys (GtkWidget *widget, gpointer param)
   keyring_editor_import (param);
 }
 
-#if 0
+
 static void
 toolbar_preferences (GtkWidget *widget, gpointer param)
 {
   gpa_open_settings_dialog ();
 }
-#endif
+
 
 static void
 toolbar_refresh (GtkWidget *widget, gpointer param)
@@ -1621,10 +1627,6 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), TRUE);
    gtk_signal_handler_unblock_by_data (GTK_OBJECT (item), editor);
  
-#if 0
-  /* Disabled for now. The long label causes the toolbar to grow too much.
-   * See http://bugzilla.gnome.org/show_bug.cgi?id=75086
-   */
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
   item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), 
@@ -1633,7 +1635,6 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
                                    _("preferences"),
                                    GTK_SIGNAL_FUNC (toolbar_preferences),
                                    editor, -1);
-#endif
 
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
@@ -1648,7 +1649,8 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   icon = gpa_create_icon_widget (window, "openfile");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Files"),
                                   _("Open the File Manager"),
-                                  _("file manager"), icon, GTK_SIGNAL_FUNC (gpa_open_filemanager),
+                                  _("file manager"), icon,
+				  GTK_SIGNAL_FUNC (gpa_open_filemanager),
                                   NULL);
 
 #if 0  /* Help is not available yet. :-( */
@@ -1660,9 +1662,11 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 #endif
 
   return toolbar;
-} /* keyring_toolbar_new */
+}
 
 
+
+/* Status bar handling.  */
 static GtkWidget *
 keyring_statusbar_new (GPAKeyringEditor *editor)
 {
@@ -1671,31 +1675,35 @@ keyring_statusbar_new (GPAKeyringEditor *editor)
 
   hbox = gtk_hbox_new (FALSE, 0);
 
-  label = gtk_label_new (_("Selected Default Key:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+  label = gtk_label_new ("");
+  editor->status_label = label;
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new ("");
+  editor->status_key_id = label;
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 5);
 
   label = gtk_label_new ("");
   editor->status_key_user = label;
-  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
   
-  label = gtk_label_new ("");
-  editor->status_key_id = label;
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-
   return hbox;
-} /* keyring_statusbar_new */
+}
 
 
-/* Update the status bar */
+/* Update the status bar.  */
 static void
-keyring_update_status_bar (GPAKeyringEditor * editor)
+keyring_update_status_bar (GPAKeyringEditor *editor)
 {
   gpgme_key_t key = gpa_options_get_default_key (gpa_options_get_instance ());
 
   if (key)
     {
-      gchar *string = gpa_gpgme_key_get_userid (key->uids);
+      gchar *string;
 
+      gtk_label_set_text (GTK_LABEL (editor->status_label),
+			  _("Selected default key:"));
+      string = gpa_gpgme_key_get_userid (key->uids);
       gtk_label_set_text (GTK_LABEL (editor->status_key_user), string);
       g_free (string);
       gtk_label_set_text (GTK_LABEL (editor->status_key_id),
@@ -1703,11 +1711,14 @@ keyring_update_status_bar (GPAKeyringEditor * editor)
     }
   else
     {
+      gtk_label_set_text (GTK_LABEL (editor->status_label),
+			  _("No default key selected in the preferences."));
       gtk_label_set_text (GTK_LABEL (editor->status_key_user), "");
       gtk_label_set_text (GTK_LABEL (editor->status_key_id), "");
     }     
 }
 
+
 static gint
 display_popup_menu (GPAKeyringEditor *editor, GdkEvent *event, 
 		    GpaKeyList *list)
@@ -1718,9 +1729,8 @@ display_popup_menu (GPAKeyringEditor *editor, GdkEvent *event,
   g_return_val_if_fail (editor != NULL, FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
-  /* The "widget" is the menu that was supplied when 
-   * g_signal_connect_swapped() was called.
-   */
+  /* The "widget" is the menu that was supplied when
+     g_signal_connect_swapped() was called.  */
   menu = GTK_MENU (editor->popup_menu);
   
   if (event->type == GDK_BUTTON_PRESS)
@@ -1732,7 +1742,7 @@ display_popup_menu (GPAKeyringEditor *editor, GdkEvent *event,
 	    gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
 	  GtkTreePath *path;
 	  GtkTreeIter iter;
-          /* Make sure the clicked key is selected */
+          /* Make sure the clicked key is selected.  */
 	  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (list), 
 					     event_button->x,
 					     event_button->y, 
@@ -1741,9 +1751,9 @@ display_popup_menu (GPAKeyringEditor *editor, GdkEvent *event,
 	    {
 	      gtk_tree_model_get_iter (gtk_tree_view_get_model 
 				       (GTK_TREE_VIEW(list)), &iter, path);
-	      if (!gtk_tree_selection_iter_is_selected (selection, &iter))
+	      if (! gtk_tree_selection_iter_is_selected (selection, &iter))
 		{
-		  /* Block selection updates */
+		  /* Block selection updates.  */
 		  editor->freeze_selection++;
 		  gtk_tree_selection_unselect_all (selection);
 		  editor->freeze_selection--;
@@ -1759,38 +1769,37 @@ display_popup_menu (GPAKeyringEditor *editor, GdkEvent *event,
   return FALSE;
 }
 
-/* signal handler for the "changed_default_key" signal. Update the
- * status bar and the selection sensitive widgets because some depend on
- * the default key */
+
+/* Signal handler for the "changed_default_key" signal.  */
 static void
 keyring_default_key_changed (GpaOptions *options, gpointer param)
 {
   GPAKeyringEditor * editor = param;
 
   keyring_update_status_bar (editor);  
+
+  /* Update the status bar and the selection sensitive widgets because
+   some depend on the default key.  */
   update_selection_sensitive_widgets (editor);
 }
 
-/* signal handler for the "changed_ui_mode" signal. Disable the subkeys
- * page in the details notebook.
- */
+
+/* Signal handler for the "changed_ui_mode" signal.  */
 static void
 keyring_ui_mode_changed (GpaOptions *options, gpointer param)
 {
   GPAKeyringEditor * editor = param;
 
-  if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-    {
-      keyring_editor_add_subkeys_page (editor);
-    }
+  /* Toggles the subkeys page in the details notebook.  */
+  if (! gpa_options_get_simplified_ui (gpa_options_get_instance ()))
+    keyring_editor_add_subkeys_page (editor);
   else
-    {
-      keyring_editor_remove_subkeys_page (editor);
-    }
+    keyring_editor_remove_subkeys_page (editor);
 }
 
 
-/* Create and return a new key ring editor window */
+/* Create and return a new keyring editor dialog.  The dialog is
+   hidden by default.  */
 GtkWidget *
 keyring_editor_new (void)
 {
@@ -1811,7 +1820,7 @@ keyring_editor_new (void)
 
   gchar *markup;
 
-  editor = g_malloc(sizeof(GPAKeyringEditor));
+  editor = g_malloc (sizeof (GPAKeyringEditor));
   editor->selection_sensitive_widgets = NULL;
   editor->details_idle_id = 0;
 
@@ -1825,8 +1834,8 @@ keyring_editor_new (void)
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   gtk_signal_connect_object (GTK_OBJECT (window), "map",
                              GTK_SIGNAL_FUNC (keyring_editor_mapped),
-                             (gpointer)editor);
-  /* Realize the window so that we can create pixmaps without warnings */
+                             (gpointer) editor);
+  /* Realize the window so that we can create pixmaps without warnings.  */
   gtk_widget_realize (window);
 
   vbox = gtk_vbox_new (FALSE, 0);
@@ -1836,10 +1845,11 @@ keyring_editor_new (void)
                       keyring_editor_menubar_new (window, editor),
                       FALSE, TRUE, 0);
 
-  toolbar = keyring_toolbar_new(window, editor);
+  toolbar = keyring_toolbar_new (window, editor);
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
 
 
+  /* Add a fancy label that tells us: This is the keyring editor.  */
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
   
@@ -1864,17 +1874,15 @@ keyring_editor_new (void)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
-
+  /* FIXME: Which shadow type?  */
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
+				       GTK_SHADOW_IN);
   keylist = gpa_keylist_new (window);
   editor->keylist = GPA_KEYLIST (keylist);
   if (gpa_options_get_detailed_view (gpa_options_get_instance()))
-    {
-      gpa_keylist_set_detailed (editor->keylist);
-    }
+    gpa_keylist_set_detailed (editor->keylist);
   else
-    {
-      gpa_keylist_set_brief (editor->keylist);
-    }
+    gpa_keylist_set_brief (editor->keylist);
 
   gtk_container_add (GTK_CONTAINER (scrolled), keylist);
 
@@ -1895,10 +1903,10 @@ keyring_editor_new (void)
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
 		    "changed_default_key",
-                    (GCallback)keyring_default_key_changed, editor);
+                    (GCallback) keyring_default_key_changed, editor);
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
 		    "changed_ui_mode",
-                    (GCallback)keyring_ui_mode_changed, editor);
+                    (GCallback) keyring_ui_mode_changed, editor);
 
   keyring_update_status_bar (editor);
   update_selection_sensitive_widgets (editor);
@@ -1912,5 +1920,4 @@ keyring_editor_new (void)
 		    G_CALLBACK (keyring_editor_key_listed), editor);
 
   return window;
-} /* keyring_editor_new */
-
+}

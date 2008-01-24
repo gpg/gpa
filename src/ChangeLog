@@ -1,5 +1,21 @@
 2008-01-24  Marcus Brinkmann  <marcus@g10code.de>
 
+	* keyring.h: Add comment.
+	* keyring.c (keyring_editor_new): Put a shadow around the scrolled
+	window.
+	(struct _GPAKeyringEditor): Add status_label.
+	(keyring_statusbar_new): Set expand to false for all, and add 5
+	pixel padding around key ID, which is moved before the user
+	string.  Initialize status_label to empty string here.
+	(keyring_update_status_bar): Set status_label.
+	(toolbar_preferences): Bring back to life.
+	(keyring_toolbar_new): Reenable preferences.
+	* fileman.c (toolbar_preferences): Bring back to life.
+	(fileman_toolbar_new): Reenable preferences.  Add keyring to
+	toolbar.
+	* icons.c: Include keyringeditor.xpm.
+	(xpms): Add keyringeditor.
+
 	* gpa.h (gpa_get_keyring_editor, gpa_get_settings_dialog): Removed.
 	* gpa.c: Do not include gpapastrings.h, gpawindowkeeper.h,
 	gtktools.h, helpmenu.h, keytable.h, icons.h, errno.h, assert.h or
