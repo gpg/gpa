@@ -1,3 +1,14 @@
+2008-01-27  Marcus Brinkmann  <marcus@g10code.de>
+
+	* confdialog.c (create_dialog_tabs_2): Set expansion policy to
+	TRUE/TRUE for the entry widget.
+
+2008-01-25  Marcus Brinkmann  <marcus@g10code.de>
+
+	* fileman.c (file_list_new): Put a shadow around the scrolled
+	window.
+	(file_list_new): Use FILE_N_COLUMNS instead of hard-coded constant.
+
 2008-01-24  Marcus Brinkmann  <marcus@g10code.de>
 
 	* keyring.h: Add comment.

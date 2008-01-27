@@ -1063,7 +1063,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 		  opt->combo = widget;
 
 		  entry = gtk_entry_new ();
-		  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
+		  gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 		  
 		  opt->widget = entry;
 
