@@ -1,3 +1,8 @@
+2008-01-29  Marcus Brinkmann  <marcus@g10code.de>
+
+	* keyring.c (keyring_toolbar_new): Use stock icon for file manager
+	button in toolbar.
+
 2008-01-27  Marcus Brinkmann  <marcus@g10code.de>
 
 	* confdialog.c (create_dialog_tabs_2): Set expansion policy to

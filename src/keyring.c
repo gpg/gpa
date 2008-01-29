@@ -1646,12 +1646,13 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
 
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
-  icon = gpa_create_icon_widget (window, "openfile");
+  icon = gtk_image_new_from_stock ("gtk-directory",
+				   GTK_ICON_SIZE_SMALL_TOOLBAR);
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Files"),
-                                  _("Open the File Manager"),
-                                  _("file manager"), icon,
+				  _("Open the File Manager"),
+				  _("file manager"), icon,
 				  GTK_SIGNAL_FUNC (gpa_open_filemanager),
-                                  NULL);
+				  NULL);
 
 #if 0  /* Help is not available yet. :-( */
   icon = gpa_create_icon_widget (window, "help");
