@@ -129,14 +129,15 @@ close_main_window (GtkWidget *widget, gpointer param)
 void
 gpa_open_keyring_editor (void)
 {
-  if (!keyringeditor)
+  if (! keyringeditor)
     {
       keyringeditor = keyring_editor_new ();
       gtk_signal_connect (GTK_OBJECT (keyringeditor), "destroy",
 			  GTK_SIGNAL_FUNC (close_main_window), &keyringeditor);
       gtk_widget_show_all (keyringeditor);
     }
-  gdk_window_raise (keyringeditor->window);
+
+  gtk_window_present (GTK_WINDOW (keyringeditor));
 }
 
 
@@ -144,10 +145,13 @@ gpa_open_keyring_editor (void)
 void
 gpa_open_filemanager (void)
 {
+  /* FIXME: Shouldn't this connect only happen if the instance is
+     created the first time?  Looks like a memory leak to me.  */
   gtk_signal_connect (GTK_OBJECT (gpa_file_manager_get_instance ()), "destroy",
 		      GTK_SIGNAL_FUNC (quit_if_no_window), NULL);
   gtk_widget_show_all (gpa_file_manager_get_instance ());
-  gdk_window_raise (gpa_file_manager_get_instance ()->window);
+
+  gtk_window_present (GTK_WINDOW (gpa_file_manager_get_instance ()));
 }
 
 
@@ -155,7 +159,7 @@ gpa_open_filemanager (void)
 void
 gpa_open_settings_dialog (void)
 {
-  if (!settings_dialog)
+  if (! settings_dialog)
     {
       settings_dialog = gpa_settings_dialog_new ();
       gtk_signal_connect (GTK_OBJECT (settings_dialog), "destroy",
@@ -163,7 +167,7 @@ gpa_open_settings_dialog (void)
                           &settings_dialog);
       gtk_widget_show_all (settings_dialog);
     }
-  gdk_window_raise (settings_dialog->window);
+  gtk_window_present (GTK_WINDOW (settings_dialog));
 }
 
 
@@ -179,7 +183,8 @@ gpa_open_backend_config_dialog (void)
                           &backend_config_dialog);
       gtk_widget_show_all (backend_config_dialog);
     }
-  gdk_window_raise (backend_config_dialog->window);
+
+  gtk_window_present (GTK_WINDOW (backend_config_dialog));
 }
 
 

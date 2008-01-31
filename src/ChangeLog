@@ -1,3 +1,10 @@
+2008-01-31  Marcus Brinkmann  <marcus@g10code.de>
+
+	* gpa.c (gpa_open_keyring_editor): Use gtk_window_present instead
+	of gdk_window_raise.
+	(gpa_open_filemanager, gpa_open_settings_dialog,
+	(gpa_open_backend_config_dialog): Likewise.
+
 2008-01-29  Marcus Brinkmann  <marcus@g10code.de>
 
 	* keyring.c (keyring_toolbar_new): Use stock icon for file manager
