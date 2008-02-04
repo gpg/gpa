@@ -31,6 +31,7 @@
 
 #include "i18n.h"
 #include "gpgmetools.h"
+#include "options.h"
 
 /* Violation of GNOME standards: Cancel does not revert previous
    apply.  We do not auto-apply or syntax check after focus
@@ -47,7 +48,7 @@ static void hide_backend_config (void);
 #define CUSTOM_RESPONSE_RESET 1
 
 
-/* The apply button of the configuration dialog.  */
+/* The configuration dialog.  */
 static GtkWidget *dialog;
 
 /* The notebook with one page for each component.  */
@@ -61,6 +62,9 @@ static gpgme_conf_comp_t dialog_conf;
 
 /* If we modified something in the current tab.  */
 static int dialog_tab_modified;
+
+/* The expert level.  */
+static gpgme_conf_level_t dialog_level;
 
 
 /* We define the following behaviour for options:
@@ -745,7 +749,8 @@ dialog_response_reset (GtkDialog *dialog)
   /* Allow to use the reset button also as a refresh button.  Note:
      This is kind of awkward, because the reset button is only
      sensitive if local modifications exist.  Currently, we require a
-     dialog cancel/reopen cycle for a "hard" reset.  */
+     dialog cancel/reopen cycle or an expert level change for a "hard"
+     reset.  */
   create_dialog_tabs ();
 #else
   /* Soft reset, using last loaded configuration.  Much faster, and
@@ -827,6 +832,61 @@ remove_from_container (GtkWidget *widget, gpointer data)
 }
 
 
+/* Return true iff the component COMP has any displayed options.  */
+static gboolean
+comp_has_options (gpgme_conf_comp_t comp)
+{
+  gpgme_conf_opt_t option;
+  gboolean has_options;
+
+  /* Skip over all components that do not have any options.  This can
+     happen for example with old installed versions of components, or
+     if there are only options with a higher expert level.  */
+  has_options = FALSE;
+  option = comp->options;
+  while (option)
+    {
+      if (option->level <= dialog_level)
+	{
+	  has_options = TRUE;
+	  break;
+	}
+      option = option->next;
+    }
+
+  return has_options;
+}
+
+
+/* Return true iff the group GROUP has any displayed options.  If the
+   result is FALSE, also set NEXT_GROUP to the start of the next
+   group, or NULL if there is no more group.  */
+static gboolean
+group_has_options (gpgme_conf_opt_t option, gpgme_conf_opt_t *next_group)
+{
+  gboolean has_options;
+
+  /* Skip the group header.  */
+  option = option->next;
+
+  has_options = FALSE;
+  while (option && ! (option->flags & GPGME_CONF_GROUP))
+    {
+      if (option->level <= dialog_level)
+	{
+	  has_options = TRUE;
+	  break;
+	}
+      option = option->next;
+    }
+
+  if (! has_options && next_group)
+    *next_group = option;
+  
+  return has_options;
+}
+
+
 static void
 create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 {
@@ -857,8 +917,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	 options below).  */
 
       if (strcmp (comp->description, comp_alt->description)
-	  || (comp->options == NULL && comp_alt != NULL)
-	  || (comp->options != NULL && comp_alt == NULL))
+	  || comp_has_options (comp) != comp_has_options (comp_alt))
 	break;
 
       comp = comp->next;
@@ -891,8 +950,9 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 
       /* Skip over all components that do not have any options.  This
 	 can happen for example with old installed versions of
-	 components.  */
-      if (comp->options == NULL)
+	 components, or if there are only options with a higher expert
+	 level.  */
+      if (! comp_has_options (comp))
 	{
 	  comp = comp->next;
 	  continue;
@@ -900,6 +960,8 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 
       if (reset)
 	{
+	  /* FIXME: Might need to put pages into scrolled panes if
+	     there are too many.  */
 	  page = gtk_vbox_new (FALSE, 0);
 	  gtk_container_add (GTK_CONTAINER (dialog_notebook), page);
 
@@ -942,6 +1004,9 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	    {
 	      char name[80];
 
+	      if (! group_has_options (option, &option))
+		continue;
+
 	      frame = gtk_frame_new (NULL);
 	      gtk_box_pack_start (GTK_BOX (page), frame, FALSE, FALSE, 0);
 	      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
@@ -957,7 +1022,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	      frame_vbox = gtk_vbox_new (FALSE, 0);
 	      gtk_container_add (GTK_CONTAINER (frame), frame_vbox);
 	    }
-	  else
+	  else if (option->level <= dialog_level)
 	    {
 	      GtkWidget *vbox;
 	      GtkWidget *hbox;
@@ -1177,12 +1242,78 @@ create_dialog_tabs (void)
 }
 
 
+static void
+dialog_level_chooser_cb (GtkComboBox *level_chooser, gpointer *data)
+{
+  gpgme_conf_level_t level;
+
+  level = gtk_combo_box_get_active (GTK_COMBO_BOX (level_chooser));
+  
+  if (level == dialog_level)
+    return;
+
+  if (dialog_tab_modified)
+    {
+      GtkWidget *window;
+      GtkWidget *hbox;
+      GtkWidget *labelMessage;
+      GtkWidget *pixmap;
+      gint result;
+
+      window = gtk_dialog_new_with_buttons
+	(_("GPA Message"), (GtkWindow *) dialog, GTK_DIALOG_MODAL,
+	 GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
+	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL); 
+
+      gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+      gtk_dialog_set_default_response (GTK_DIALOG (window),
+				       GTK_RESPONSE_CANCEL);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+      gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), hbox);
+      pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
+					 GTK_ICON_SIZE_DIALOG);
+      gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
+      labelMessage = gtk_label_new (_("There are unapplied changes by you. "
+				      "Changing the expert setting will apply "
+				      "those changes.  Do you want to "
+				      "continue?"));
+      gtk_label_set_line_wrap (GTK_LABEL (labelMessage), TRUE);
+      gtk_box_pack_start (GTK_BOX (hbox), labelMessage, TRUE, FALSE, 10);
+      
+      gtk_widget_show_all (window);
+      result = gtk_dialog_run (GTK_DIALOG (window));
+      gtk_widget_destroy (window);
+
+      if (result != GTK_RESPONSE_APPLY)
+	{
+	  gtk_combo_box_set_active (GTK_COMBO_BOX (level_chooser),
+				    dialog_level);
+	  return;
+	}
+    }
+
+  save_all_options ();
+
+  /* Note: We know intimately that this matches GPGME_CONF_BASIC,
+     GPGME_CONF_ADVANCED and GPGME_CONF_BEGINNER.  */
+  dialog_level = level;
+  create_dialog_tabs ();
+}
+
+
 /* Return a new dialog widget.  */
 static GtkDialog *
 create_dialog (void)
 {
   gpgme_error_t err;
   GtkWidget *dialog_vbox;
+  GtkWidget *hbox;
+  GtkWidget *level_chooser;
+  GtkWidget *label;
+  gint xpad;
+  gint ypad;
 
   /* Check error.  */
   err = gpgme_new (&dialog_ctx);
@@ -1206,8 +1337,40 @@ create_dialog (void)
 		    G_CALLBACK (dialog_response), NULL);
   
   dialog_vbox = GTK_DIALOG (dialog)->vbox;
+  //  gtk_box_set_spacing (GTK_CONTAINER (dialog_vbox), 5);
+
+  hbox = gtk_hbox_new (FALSE, 0);
+
+  label = gtk_label_new (_("Configure the tools of the GnuPG system."));
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+
+  label = gtk_label_new (_("Level:"));
+  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+  xpad += 5;
+  gtk_misc_set_padding (GTK_MISC (label), xpad, ypad);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  level_chooser = gtk_combo_box_new_text ();
+  /* Note: We know intimately that this matches GPGME_CONF_BASIC,
+     GPGME_CONF_ADVANCED and GPGME_CONF_BEGINNER.  */
+  gtk_combo_box_append_text (GTK_COMBO_BOX (level_chooser), _("Basic"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (level_chooser), _("Advanced"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (level_chooser), _("Expert"));
+  g_signal_connect ((gpointer) level_chooser, "changed",
+		    G_CALLBACK (dialog_level_chooser_cb), NULL);
+
+  gtk_box_pack_start (GTK_BOX (hbox), level_chooser, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox), hbox, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+  if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
+    dialog_level = GPGME_CONF_BASIC;
+  else
+    dialog_level = GPGME_CONF_ADVANCED;
+  gtk_combo_box_set_active (GTK_COMBO_BOX (level_chooser), dialog_level);
 
   dialog_notebook = gtk_notebook_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (dialog_notebook), 5);
   gtk_box_pack_start (GTK_BOX (dialog_vbox), dialog_notebook, TRUE, TRUE, 0);
 
   /* This should also be run on show after hide.  */

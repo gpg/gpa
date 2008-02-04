@@ -1,3 +1,13 @@
+2008-02-04  Marcus Brinkmann  <marcus@g10code.de>
+
+	* confdialog.c (dialog_level): New global variable.
+	(comp_has_options, group_has_options): New functions.
+	(create_dialog_tabs_2): Skip groups with no displayable options.
+	Honor expert level.
+	(dialog_level_chooser_cb): New function.
+	(create_dialog): Add some padding, a label and combo box for
+	choosing the current expert level.
+
 2008-01-31  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpa.c (gpa_open_keyring_editor): Use gtk_window_present instead
