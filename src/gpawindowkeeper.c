@@ -49,7 +49,7 @@ gpa_windowKeeper_set_window (GpaWindowKeeper * keeper, GtkWidget * window)
 void
 gpa_windowKeeper_add_param (GpaWindowKeeper * keeper, gpointer param)
 {
-  g_list_append (keeper->listParam, param);
+  keeper->listParam = g_list_append (keeper->listParam, param);
 }				/* gpa_windowKeeper_add_param */
 
 void

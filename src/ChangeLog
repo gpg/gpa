@@ -1,5 +1,8 @@
 2008-02-04  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpawindowkeeper.c (gpa_windowKeeper_add_param): Store result of
+	g_list_append.
+
 	* Makefile.am (gpa_SOURCES): Add clipboard.h and clipboard.c.
 	* clipboard.h, clipboard.c: New files.
 	* gpa.h (gpa_open_clipboard): New prototype.
