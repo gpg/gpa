@@ -61,6 +61,9 @@ void gpa_open_keyring_editor (void);
 /* Show the filemanager dialog.  */
 void gpa_open_filemanager (void);
 
+/* Show the filemanager dialog.  */
+void gpa_open_clipboard (void);
+
 /* Show the settings dialog.  */
 void gpa_open_settings_dialog (void);
 

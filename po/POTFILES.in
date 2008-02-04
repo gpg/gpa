@@ -1,3 +1,5 @@
+src/clipboard.h
+src/clipboard.c
 src/confdialog.c
 src/encryptdlg.c
 src/expirydlg.c

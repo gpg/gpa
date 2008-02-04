@@ -1,6 +1,6 @@
 /* gpawidgets.c  -  The GNU Privacy Assistant
    Copyright (C) 2000, 2001 G-N-U GmbH.
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2008 g10 Code GmbH.
 
    This file is part of GPA.
 
@@ -212,7 +212,7 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   gtk_box_pack_start (GTK_BOX (hboxAfter), radioAfter, FALSE, FALSE, 0);
   entryAfter = gtk_entry_new ();
   frame->entryAfter = entryAfter;
-  gtk_widget_set_usize (entryAfter,
+  gtk_widget_set_size_request (entryAfter,
     gdk_string_width (gtk_style_get_font (entryAfter->style), " 00000 "), 0);
   gtk_box_pack_start (GTK_BOX (hboxAfter), entryAfter, FALSE, FALSE, 0);
 

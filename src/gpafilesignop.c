@@ -1,5 +1,6 @@
 /* gpafiledecryptop.c - The GpaOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2003 Miguel Coca.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -53,11 +54,55 @@ static void gpa_file_sign_operation_response_cb (GtkDialog *dialog,
 
 static GObjectClass *parent_class = NULL;
 
+/* Properties */
+enum
+{
+  PROP_0,
+  PROP_FORCE_ARMOR
+};
+
+
+static void
+gpa_file_sign_operation_get_property (GObject *object, guint prop_id,
+				      GValue *value, GParamSpec *pspec)
+{
+  GpaFileSignOperation *op = GPA_FILE_SIGN_OPERATION (object);
+  
+  switch (prop_id)
+    {
+    case PROP_FORCE_ARMOR:
+      g_value_set_boolean (value, op->force_armor);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gpa_file_sign_operation_set_property (GObject *object, guint prop_id,
+				      const GValue *value, GParamSpec *pspec)
+{
+  GpaFileSignOperation *op = GPA_FILE_SIGN_OPERATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_FORCE_ARMOR:
+      op->force_armor = g_value_get_boolean (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+
 static void
 gpa_file_sign_operation_finalize (GObject *object)
 {  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
+
 
 static void
 gpa_file_sign_operation_init (GpaFileSignOperation *op)
@@ -69,7 +114,9 @@ gpa_file_sign_operation_init (GpaFileSignOperation *op)
   op->sig = NULL;
   op->plain = NULL;
   op->sig_filename = NULL;
+  op->force_armor = FALSE;
 }
+
 
 static GObject*
 gpa_file_sign_operation_constructor (GType type,
@@ -86,7 +133,8 @@ gpa_file_sign_operation_constructor (GType type,
   op = GPA_FILE_SIGN_OPERATION (object);
   /* Initialize */
   /* Create the "Sign" dialog */
-  op->sign_dialog = gpa_file_sign_dialog_new (GPA_OPERATION (op)->window);
+  op->sign_dialog = gpa_file_sign_dialog_new (GPA_OPERATION (op)->window,
+					      op->force_armor);
   g_signal_connect (G_OBJECT (op->sign_dialog), "response",
 		    G_CALLBACK (gpa_file_sign_operation_response_cb), op);
   /* Connect to the "done" signal */
@@ -103,6 +151,7 @@ gpa_file_sign_operation_constructor (GType type,
   return object;
 }
 
+
 static void
 gpa_file_sign_operation_class_init (GpaFileSignOperationClass *klass)
 {
@@ -112,7 +161,18 @@ gpa_file_sign_operation_class_init (GpaFileSignOperationClass *klass)
 
   object_class->constructor = gpa_file_sign_operation_constructor;
   object_class->finalize = gpa_file_sign_operation_finalize;
+  object_class->set_property = gpa_file_sign_operation_set_property;
+  object_class->get_property = gpa_file_sign_operation_get_property;
+
+  /* Properties */
+  g_object_class_install_property (object_class,
+				   PROP_FORCE_ARMOR,
+				   g_param_spec_boolean
+				   ("force-armor", "Force armor",
+				    "Force armor mode", FALSE,
+				    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 }
+
 
 GType
 gpa_file_sign_operation_get_type (void)
@@ -145,13 +205,15 @@ gpa_file_sign_operation_get_type (void)
 /* API */
 
 GpaFileSignOperation*
-gpa_file_sign_operation_new (GtkWidget *window, GList *files)
+gpa_file_sign_operation_new (GtkWidget *window, GList *files,
+			     gboolean force_armor)
 {
   GpaFileSignOperation *op;
   
   op = g_object_new (GPA_FILE_SIGN_OPERATION_TYPE,
 		     "window", window,
 		     "input_files", files,
+		     "force-armor", force_armor,
 		     NULL);
 
   return op;
@@ -185,28 +247,57 @@ destination_filename (const gchar *filename, gboolean armor,
 
 static gboolean
 gpa_file_sign_operation_start (GpaFileSignOperation *op,
-			       const gchar *plain_filename)
+			       gpa_file_item_t file_item)
 {
   gpg_error_t err;
+
+  if (file_item->direct_in)
+    {
+      gpgme_error_t err;
+
+      /* No copy is made.  */
+      err = gpgme_data_new_from_mem (&op->plain, file_item->direct_in,
+				     file_item->direct_in_len, 0);
+      if (err)
+	{
+	  gpa_gpgme_warning (err);
+	  return FALSE;
+	}
+      
+      err = gpgme_data_new (&op->sig);
+      if (err)
+	{
+	  gpa_gpgme_warning (err);
+	  gpgme_data_release (op->plain);
+	  op->plain = NULL;
+	  return FALSE;
+	}
+    }
+  else
+    {
+      gchar *plain_filename = file_item->filename_in;
+
+      file_item->filename_out = destination_filename 
+	(plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx),
+	 op->sign_type);
+
+      /* Open the files */
+      op->plain_fd = gpa_open_input (plain_filename, &op->plain, 
+				     GPA_OPERATION (op)->window);
+      if (op->plain_fd == -1)
+	{
+	  return FALSE;
+	}
+      op->sig_fd = gpa_open_output (file_item->filename_out, &op->sig,
+				    GPA_OPERATION (op)->window);
+      if (op->sig_fd == -1)
+	{
+	  gpgme_data_release (op->plain);
+	  close (op->plain_fd);
+	  return FALSE;
+	}
+    }
   
-  op->sig_filename = destination_filename 
-    (plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx),
-     op->sign_type);
-  /* Open the files */
-  op->plain_fd = gpa_open_input (plain_filename, &op->plain, 
-				 GPA_OPERATION (op)->window);
-  if (op->plain_fd == -1)
-    {
-      return FALSE;
-    }
-  op->sig_fd = gpa_open_output (op->sig_filename, &op->sig,
-				GPA_OPERATION (op)->window);
-  if (op->sig_fd == -1)
-    {
-      gpgme_data_release (op->plain);
-      close (op->plain_fd);
-      return FALSE;
-    }
   /* Start the operation */
   err = gpgme_op_sign_start (GPA_OPERATION (op)->context->ctx, op->plain,
 			     op->sig, op->sign_type);
@@ -219,7 +310,10 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
   gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG 
 				 (GPA_FILE_OPERATION (op)->progress_dialog),
-				 op->sig_filename);
+				 file_item->direct_name
+				 ? file_item->direct_name
+				 : file_item->filename_in);
+
   return TRUE;
 }
 
@@ -236,30 +330,62 @@ gpa_file_sign_operation_next (GpaFileSignOperation *op)
 
 static void
 gpa_file_sign_operation_done_cb (GpaContext *context, 
-				    gpg_error_t err,
-				    GpaFileSignOperation *op)
+				 gpg_error_t err,
+				 GpaFileSignOperation *op)
 {
+  gpa_file_item_t file_item = GPA_FILE_OPERATION (op)->current->data;
+
+  if (file_item->direct_in)
+    {
+      size_t len;
+      char *sig_gpgme = gpgme_data_release_and_get_mem (op->sig, &len);
+      op->sig = NULL;
+      /* Do the memory allocation dance.  */
+
+      if (sig_gpgme)
+	{
+	  /* Conveniently make ASCII stuff into a string.  */
+	  file_item->direct_out = g_malloc (len + 1);
+	  memcpy (file_item->direct_out, sig_gpgme, len);
+	  gpgme_free (sig_gpgme);
+	  file_item->direct_out[len] = '\0';
+	  /* Yep, excluding the trailing zero.  */
+	  file_item->direct_out_len = len;
+	}
+      else
+	{
+	  file_item->direct_out = NULL;
+	  file_item->direct_out_len = 0;
+	}
+    }
+
   /* Do clean up on the operation */
   gpgme_data_release (op->plain);
+  op->plain = NULL;
   close (op->plain_fd);
+  op->plain_fd = -1;
   gpgme_data_release (op->sig);
+  op->sig = NULL;
   close (op->sig_fd);
+  op->sig_fd = -1;
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
+
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
-      /* If an error happened, (or the user canceled) delete the created file
-       * and abort further signions
-       */
-      unlink (op->sig_filename);
-      g_free (op->sig_filename);
+      if (! file_item->direct_in)
+	{
+	  /* If an error happened, (or the user canceled) delete the
+	     created file and abort further signions.  */
+	  unlink (op->sig_filename);
+	  g_free (op->sig_filename);
+	}
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
     }
   else
     {
       /* We've just created a file */
       g_signal_emit_by_name (GPA_OPERATION (op), "created_file",
-			     op->sig_filename);
-      g_free (op->sig_filename);
+			     file_item);
       /* Go to the next file in the list and sign it */
       GPA_FILE_OPERATION (op)->current = g_list_next 
 	(GPA_FILE_OPERATION (op)->current);

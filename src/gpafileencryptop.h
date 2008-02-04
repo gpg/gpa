@@ -59,7 +59,8 @@ struct _GpaFileEncryptOperation
   gpgme_key_t *rset;
   int cipher_fd, plain_fd;
   gpgme_data_t cipher, plain;
-  gchar *cipher_filename;
+
+  gboolean force_armor;
 };
 
 
@@ -75,7 +76,8 @@ GType gpa_file_encrypt_operation_get_type (void) G_GNUC_CONST;
 
 /* Creates a new encryption operation. */
 GpaFileEncryptOperation *
-gpa_file_encrypt_operation_new (GtkWidget *window, GList *files);
+gpa_file_encrypt_operation_new (GtkWidget *window, GList *files,
+				gboolean force_armor);
 
 /* Create a new encryption operaion for the UI server.  */
 GpaFileEncryptOperation*

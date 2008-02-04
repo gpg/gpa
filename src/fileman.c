@@ -1,6 +1,6 @@
 /* fileman.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
- *      Copyright (C) 2007 g10 Code GmbH
+ * Copyright (C) 2000, 2001 G-N-U GmbH.
+ * Copyright (C) 2007, 2008 g10 Code GmbH
  *
  * This file is part of GPA
  *
@@ -59,6 +59,7 @@
 #endif
 
 
+
 /* Object and class definition.  */
 struct _GpaFileManager
 {
@@ -189,13 +190,17 @@ get_selected_files (GtkWidget *list)
 
   while (selection)
     {
+      gpa_file_item_t file_item;
       gchar *filename;
       GtkTreeIter iter;
 
       gtk_tree_model_get_iter (model, &iter, (GtkTreePath*) selection->data);
       gtk_tree_model_get (model, &iter, FILE_NAME_COLUMN, &filename, -1);
 
-      files = g_list_append (files, filename);
+      file_item = g_malloc0 (sizeof (*file_item));
+      file_item->filename_in = filename;
+
+      files = g_list_append (files, file_item);
       selection = g_list_next (selection);
     }
 
@@ -255,11 +260,11 @@ add_file (GpaFileManager *fileman, const char *filename)
 
 /* Add a file created by an operation to the list */
 static void
-file_created_cb (GpaFileOperation *op, const gchar *filename, gpointer data)
+file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
 {
   GpaFileManager *fileman = data;
   
-  add_file (fileman, filename);  
+  add_file (fileman, item->filename_out);
 }
 
 
@@ -395,7 +400,7 @@ sign_files (gpointer param)
   if (!files)
     return;
 
-  op = gpa_file_sign_operation_new (GTK_WIDGET (fileman), files);
+  op = gpa_file_sign_operation_new (GTK_WIDGET (fileman), files, FALSE);
 
   register_operation (fileman, GPA_FILE_OPERATION (op));
 }
@@ -413,7 +418,7 @@ encrypt_files (gpointer param)
   if (!files)
     return;
 
-  op = gpa_file_encrypt_operation_new (GTK_WIDGET (fileman), files);
+  op = gpa_file_encrypt_operation_new (GTK_WIDGET (fileman), files, FALSE);
 
   register_operation (fileman, GPA_FILE_OPERATION (op));
 }
@@ -487,8 +492,9 @@ fileman_menu_new (GpaFileManager *fileman)
   };
   GtkItemFactoryEntry windows_menu[] = {
     {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
-    {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
     {_("/Windows/_Keyring Editor"), NULL, gpa_open_keyring_editor, 0, NULL},
+    {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
+    {_("/Windows/_Clipboard"), NULL, gpa_open_clipboard, 0, NULL},
   };
   GtkAccelGroup *accel_group;
   GtkWidget *item;
@@ -663,6 +669,15 @@ fileman_toolbar_new (GpaFileManager *fileman)
 				  GTK_SIGNAL_FUNC (gpa_open_keyring_editor),
                                   NULL);
 
+  /* FIXME: Should be just the clipboard.  */
+  icon = gtk_image_new_from_stock ("gtk-paste",
+				   GTK_ICON_SIZE_SMALL_TOOLBAR);
+  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Clipboard"),
+				  _("Open the clipboard"),
+				  _("clipboard"), icon,
+				  GTK_SIGNAL_FUNC (gpa_open_clipboard),
+				  NULL);
+
 #if 0  /* FIXME: Help is not available yet. :-( */
   /* Help */
   if ((icon = gpa_create_icon_widget (GTK_WIDGET (fileman), "help")))
@@ -825,7 +840,7 @@ gpa_file_manager_constructor (GType type,
   /* Initialize.  */
   gtk_window_set_title (GTK_WINDOW (fileman),
 			_("GNU Privacy Assistant - File Manager"));
-  gtk_widget_set_usize (GTK_WIDGET (fileman), 640, 480);
+  gtk_window_set_default_size (GTK_WINDOW (fileman), 640, 480);
   /* Realize the window so that we can create pixmaps without warnings.  */
   gtk_widget_realize (GTK_WIDGET (fileman));
 
@@ -904,4 +919,5 @@ void gpa_file_manager_open_file (GpaFileManager *fileman,
   if (!add_file (fileman, filename))
     gpa_window_error (_("The file is already open."),
 		      GTK_WIDGET (fileman));
+  /* FIXME: Release filename?  */
 }

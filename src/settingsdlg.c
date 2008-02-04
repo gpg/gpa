@@ -1,5 +1,6 @@
 /* settingsdlg.c - The GNU Privacy Assistant
- *	Copyright (C) 2002, Miguel Coca
+ * Copyright (C) 2002, Miguel Coca
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -54,7 +55,7 @@ default_key_frame (void)
   gtk_scrolled_window_set_policy  (GTK_SCROLLED_WINDOW (scroller),
 				   GTK_POLICY_AUTOMATIC,
 				   GTK_POLICY_AUTOMATIC);
-  gtk_widget_set_usize (scroller, 320, 120);
+  gtk_widget_set_size_request (scroller, 320, 120);
   gtk_container_set_border_width (GTK_CONTAINER (scroller), 5);
   gtk_container_add (GTK_CONTAINER (scroller), list);
   gtk_container_add (GTK_CONTAINER (frame), scroller);

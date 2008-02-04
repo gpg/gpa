@@ -1,5 +1,6 @@
 /* gpafileop.c - The GpaFileOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -80,12 +81,29 @@ gpa_file_operation_set_property (GObject     *object,
     }
 }
 
+
+static void
+free_file_item (gpa_file_item_t item)
+{
+  if (item->filename_in)
+    g_free (item->filename_in);
+  if (item->filename_out)
+    g_free (item->filename_out);
+  if (item->direct_name)
+    g_free (item->direct_name);
+  if (item->direct_in)
+    g_free (item->direct_in);
+  if (item->direct_out)
+    g_free (item->direct_out);
+}
+
+
 static void
 gpa_file_operation_finalize (GObject *object)
 {
   GpaFileOperation *op = GPA_FILE_OPERATION (object);
 
-  g_list_foreach (op->input_files, (GFunc) g_free, NULL);
+  g_list_foreach (op->input_files, (GFunc) free_file_item, NULL);
   g_list_free (op->input_files);
   gtk_widget_destroy (op->progress_dialog);
   
@@ -141,9 +159,9 @@ gpa_file_operation_class_init (GpaFileOperationClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GpaFileOperationClass, created_file),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__STRING,
+		  g_cclosure_marshal_VOID__POINTER,
 		  G_TYPE_NONE, 1,
-		  G_TYPE_STRING);
+		  G_TYPE_POINTER);
   /* Properties */
   g_object_class_install_property (object_class,
 				   PROP_INPUT_FILES,
@@ -181,10 +199,10 @@ gpa_file_operation_get_type (void)
   return file_operation_type;
 }
 
+
 /* API */
 
-/* Returns the list of files on which the operation has been called. 
- */
+/* Returns the list of files on which the operation has been called.  */
 GList*
 gpa_file_operation_input_files (GpaFileOperation *op)
 {
@@ -194,8 +212,8 @@ gpa_file_operation_input_files (GpaFileOperation *op)
   return op->input_files;
 }
 
-/* Returns the file the operation is currently being applied to.
- */
+
+/* Returns the file the operation is currently being applied to.  */
 const gchar *
 gpa_file_operation_current_file (GpaFileOperation *op)
 {
@@ -204,10 +222,11 @@ gpa_file_operation_current_file (GpaFileOperation *op)
 
   if (op->current)
     {
-      return op->current->data;
+      gpa_file_item_t file_item;
+
+      file_item = op->current->data; 
+      return file_item->filename_in;
     }
   else
-    {
-      return NULL;
-    }
+    return NULL;
 }

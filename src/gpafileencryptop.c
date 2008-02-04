@@ -1,5 +1,6 @@
 /* gpafiledecryptop.c - The GpaOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2003 Miguel Coca.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -53,6 +54,49 @@ static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
 
 static GObjectClass *parent_class = NULL;
 
+/* Properties */
+enum
+{
+  PROP_0,
+  PROP_FORCE_ARMOR
+};
+
+
+static void
+gpa_file_encrypt_operation_get_property (GObject *object, guint prop_id,
+					 GValue *value, GParamSpec *pspec)
+{
+  GpaFileEncryptOperation *op = GPA_FILE_ENCRYPT_OPERATION (object);
+  
+  switch (prop_id)
+    {
+    case PROP_FORCE_ARMOR:
+      g_value_set_boolean (value, op->force_armor);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gpa_file_encrypt_operation_set_property (GObject *object, guint prop_id,
+				      const GValue *value, GParamSpec *pspec)
+{
+  GpaFileEncryptOperation *op = GPA_FILE_ENCRYPT_OPERATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_FORCE_ARMOR:
+      op->force_armor = g_value_get_boolean (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+
 static void
 gpa_file_encrypt_operation_finalize (GObject *object)
 {  
@@ -76,8 +120,8 @@ gpa_file_encrypt_operation_init (GpaFileEncryptOperation *op)
   op->plain_fd = -1;
   op->cipher = NULL;
   op->plain = NULL;
-  op->cipher_filename = NULL;
   op->encrypt_dialog = NULL;
+  op->force_armor = FALSE;
 }
 
 static GObject*
@@ -97,7 +141,7 @@ gpa_file_encrypt_operation_constructor
   /* Initialize */
   /* Create the "Encrypt" dialog */
   op->encrypt_dialog = gpa_file_encrypt_dialog_new
-    (GPA_OPERATION (op)->window);
+    (GPA_OPERATION (op)->window, op->force_armor);
   g_signal_connect (G_OBJECT (op->encrypt_dialog), "response",
 		    G_CALLBACK (gpa_file_encrypt_operation_response_cb), op);
   /* Connect to the "done" signal */
@@ -123,7 +167,17 @@ gpa_file_encrypt_operation_class_init (GpaFileEncryptOperationClass *klass)
 
   object_class->constructor = gpa_file_encrypt_operation_constructor;
   object_class->finalize = gpa_file_encrypt_operation_finalize;
+  object_class->set_property = gpa_file_encrypt_operation_set_property;
+  object_class->get_property = gpa_file_encrypt_operation_get_property;
+
+  g_object_class_install_property (object_class,
+				   PROP_FORCE_ARMOR,
+				   g_param_spec_boolean
+				   ("force-armor", "Force armor",
+				    "Force armor mode", FALSE,
+				    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 }
+
 
 GType
 gpa_file_encrypt_operation_get_type (void)
@@ -156,14 +210,15 @@ gpa_file_encrypt_operation_get_type (void)
 /* API */
 
 GpaFileEncryptOperation*
-gpa_file_encrypt_operation_new (GtkWidget *window,
-				GList *files)
+gpa_file_encrypt_operation_new (GtkWidget *window, GList *files,
+				gboolean force_armor)
 {
   GpaFileEncryptOperation *op;
   
   op = g_object_new (GPA_FILE_ENCRYPT_OPERATION_TYPE,
 		     "window", window,
 		     "input_files", files,
+		     "force-armor", force_armor,
 		     NULL);
 
   return op;
@@ -207,27 +262,56 @@ destination_filename (const gchar *filename, gboolean armor)
 
 static gboolean
 gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
-				  const gchar *plain_filename)
+				  gpa_file_item_t file_item)
 {
   gpg_error_t err;
+
+  if (file_item->direct_in)
+    {
+      gpgme_error_t err;
+
+      /* No copy is made.  */
+      err = gpgme_data_new_from_mem (&op->plain, file_item->direct_in,
+				     file_item->direct_in_len, 0);
+      if (err)
+	{
+	  gpa_gpgme_warning (err);
+	  return FALSE;
+	}
+      
+      err = gpgme_data_new (&op->cipher);
+      if (err)
+	{
+	  gpa_gpgme_warning (err);
+	  gpgme_data_release (op->plain);
+	  op->plain = NULL;
+	  return FALSE;
+	}
+    }
+  else
+    {
+      gchar *plain_filename = file_item->filename_in;
   
-  op->cipher_filename = destination_filename 
-    (plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx));
-  /* Open the files */
-  op->plain_fd = gpa_open_input (plain_filename, &op->plain, 
-				 GPA_OPERATION (op)->window);
-  if (op->plain_fd == -1)
-    {
-      return FALSE;
+      file_item->filename_out = destination_filename 
+	(plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx));
+      /* Open the files */
+      op->plain_fd = gpa_open_input (plain_filename, &op->plain, 
+				     GPA_OPERATION (op)->window);
+      if (op->plain_fd == -1)
+	{
+	  return FALSE;
+	}
+      op->cipher_fd = gpa_open_output (file_item->filename_out, &op->cipher,
+				       GPA_OPERATION (op)->window);
+      if (op->cipher_fd == -1)
+	{
+	  gpgme_data_release (op->plain);
+	  close (op->plain_fd);
+	  op->plain_fd = -1;
+	  return FALSE;
+	}
     }
-  op->cipher_fd = gpa_open_output (op->cipher_filename, &op->cipher,
-				   GPA_OPERATION (op)->window);
-  if (op->cipher_fd == -1)
-    {
-      gpgme_data_release (op->plain);
-      close (op->plain_fd);
-      return FALSE;
-    }
+
   /* Start the operation */
   /* Always trust keys, because any untrusted keys were already confirmed
    * by the user.
@@ -248,13 +332,25 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_warning (err);
+
+      gpgme_data_release (op->plain);
+      op->plain = NULL;
+      close (op->plain_fd);
+      op->plain_fd = -1;
+      gpgme_data_release (op->cipher);
+      op->cipher = NULL;
+      close (op->cipher_fd);
+      op->cipher_fd = -1;
+
       return FALSE;
     }
   /* Show and update the progress dialog */
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
   gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG 
 				 (GPA_FILE_OPERATION (op)->progress_dialog),
-				 op->cipher_filename);
+				 file_item->direct_name
+				 ? file_item->direct_name
+				 : file_item->filename_in);
   return TRUE;
 }
 
@@ -275,6 +371,33 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
 				    gpg_error_t err,
 				    GpaFileEncryptOperation *op)
 {
+  gpa_file_item_t file_item = GPA_FILE_OPERATION (op)->current->data;
+
+  if (file_item->direct_in)
+    {
+      size_t len;
+      char *cipher_gpgme = gpgme_data_release_and_get_mem (op->cipher,
+							   &len);
+      op->cipher = NULL;
+      /* Do the memory allocation dance.  */
+
+      if (cipher_gpgme)
+	{
+	  /* Conveniently make ASCII stuff into a string.  */
+	  file_item->direct_out = g_malloc (len + 1);
+	  memcpy (file_item->direct_out, cipher_gpgme, len);
+	  gpgme_free (cipher_gpgme);
+	  file_item->direct_out[len] = '\0';
+	  /* Yep, excluding the trailing zero.  */
+	  file_item->direct_out_len = len;
+	}
+      else
+	{
+	  file_item->direct_out = NULL;
+	  file_item->direct_out_len = 0;
+	}
+    }
+
   /* Do clean up on the operation */
   gpgme_data_release (op->plain);
   op->plain = NULL;
@@ -288,22 +411,22 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
 
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR) 
     {
-      /* If an error happened, (or the user canceled) delete the created file
-       * and abort further encryptions
-       */
-      unlink (op->cipher_filename);
-      g_free (op->cipher_filename);
-      op->cipher_filename = NULL;
+      if (! file_item->direct_in)
+	{
+	  /* If an error happened, (or the user canceled) delete the
+	    created file and abort further encryptions.  */
+	  unlink (file_item->filename_out);
+	  g_free (file_item->filename_out);
+	  file_item->filename_out = NULL;
+	}
       gpa_operation_server_finish (GPA_OPERATION (op), err);
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
     }
   else
     {
       /* We've just created a file */
-      g_signal_emit_by_name (GPA_OPERATION (op), "created_file",
-			     op->cipher_filename);
-      g_free (op->cipher_filename);
-      op->cipher_filename = NULL;
+      g_signal_emit_by_name (GPA_OPERATION (op), "created_file", file_item);
+
       /* Go to the next file in the list and encrypt it */
       GPA_FILE_OPERATION (op)->current = g_list_next 
 	(GPA_FILE_OPERATION (op)->current);

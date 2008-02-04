@@ -1,5 +1,6 @@
 /* encryptdlg.h  -  The GNU Privacy Assistant
- *	Copyright (C) 2000 G-N-U GmbH.
+ * Copyright (C) 2000 G-N-U GmbH.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -41,6 +42,10 @@ struct _GpaFileEncryptDialog {
   GtkWidget *check_sign;
   GtkWidget *check_armor;
   GtkWidget *clist_who;
+  /* FIXME: See comment in encryptdlg.h.  */
+  GtkWidget *scroller_who;
+
+  gboolean force_armor;
 };
 
 struct _GpaFileEncryptDialogClass {
@@ -51,7 +56,8 @@ GType gpa_file_encrypt_dialog_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent);
+GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent,
+					gboolean force_armor);
 
 GList *gpa_file_encrypt_dialog_recipients (GpaFileEncryptDialog *dialog);
 
@@ -60,5 +66,6 @@ gboolean gpa_file_encrypt_dialog_sign (GpaFileEncryptDialog *dialog);
 GList *gpa_file_encrypt_dialog_signers (GpaFileEncryptDialog *dialog);
 
 gboolean gpa_file_encrypt_dialog_get_armor (GpaFileEncryptDialog *dialog);
+
 
 #endif /* ENCRYPTDLG_H */

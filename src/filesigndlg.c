@@ -1,5 +1,6 @@
 /* filesigndlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
+ * Copyright (C) 2000, 2001 G-N-U GmbH.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -34,15 +35,16 @@ enum
 {
   PROP_0,
   PROP_WINDOW,
+  PROP_FORCE_ARMOR
 };
 
 static GObjectClass *parent_class = NULL;
 
 static void
 gpa_file_sign_dialog_get_property (GObject     *object,
-				      guint        prop_id,
-				      GValue      *value,
-				      GParamSpec  *pspec)
+				   guint        prop_id,
+				   GValue      *value,
+				   GParamSpec  *pspec)
 {
   GpaFileSignDialog *dialog = GPA_FILE_SIGN_DIALOG (object);
   
@@ -51,6 +53,9 @@ gpa_file_sign_dialog_get_property (GObject     *object,
     case PROP_WINDOW:
       g_value_set_object (value,
 			  gtk_window_get_transient_for (GTK_WINDOW (dialog)));
+      break;
+    case PROP_FORCE_ARMOR:
+      g_value_set_boolean (value, dialog->force_armor);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -72,11 +77,15 @@ gpa_file_sign_dialog_set_property (GObject     *object,
       gtk_window_set_transient_for (GTK_WINDOW (dialog),
 				    g_value_get_object (value));
       break;
+    case PROP_FORCE_ARMOR:
+      dialog->force_armor = g_value_get_boolean (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
+
 
 static void
 gpa_file_sign_dialog_finalize (GObject *object)
@@ -89,6 +98,7 @@ static void
 gpa_file_sign_dialog_init (GpaFileSignDialog *dialog)
 {
 }
+
 
 static GObject*
 gpa_file_sign_dialog_constructor (GType type,
@@ -156,11 +166,6 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
   dialog->radio_sep = radio_sign_sep;
 
-  checkerArmor = gpa_check_button_new (accelGroup, _("a_rmor"));
-  gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);
-  gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
-  dialog->check_armor = checkerArmor;
-    
   vboxWho = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxWho), 5);
   gtk_box_pack_start (GTK_BOX (vboxSign), vboxWho, TRUE, TRUE, 0);
@@ -170,7 +175,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (vboxWho), labelWho, FALSE, TRUE, 0);
 
   scrollerWho = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_usize (scrollerWho, 260, 75);
+  gtk_widget_set_size_request (scrollerWho, 400, 200);
   gtk_box_pack_start (GTK_BOX (vboxWho), scrollerWho, TRUE, TRUE, 0);
 
   clistWho = gpa_key_selector_new (TRUE);
@@ -179,6 +184,18 @@ gpa_file_sign_dialog_constructor (GType type,
   gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
 			      _("Sign _as "));
 
+  checkerArmor = gpa_check_button_new (accelGroup, _("A_rmor"));
+  gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);
+  gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
+  dialog->check_armor = checkerArmor;
+  if (dialog->force_armor)
+    {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->check_armor),
+				    TRUE);
+      gtk_widget_set_sensitive (dialog->check_armor, FALSE);
+    }
+
+  /* FIXME: Doesn't even work, as caller uses gtk_widget_show_all.  */
   if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
       gtk_widget_hide (dialog->radio_comp);
@@ -212,6 +229,12 @@ gpa_file_sign_dialog_class_init (GpaFileSignDialogClass *klass)
 				   ("window", "Parent window",
 				    "Parent window", GTK_TYPE_WIDGET,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_FORCE_ARMOR,
+				   g_param_spec_boolean
+				   ("force-armor", "Force armor",
+				    "Force armor mode", FALSE,
+				    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 GType
@@ -244,12 +267,14 @@ gpa_file_sign_dialog_get_type (void)
 
 /* API */
 
-GtkWidget *gpa_file_sign_dialog_new (GtkWidget *parent)
+GtkWidget *
+gpa_file_sign_dialog_new (GtkWidget *parent, gboolean force_armor)
 {
   GpaFileSignDialog *dialog;
   
   dialog = g_object_new (GPA_FILE_SIGN_DIALOG_TYPE,
 			 "window", parent,
+			 "force-armor", force_armor,
 			 NULL);
 
   return GTK_WIDGET(dialog);

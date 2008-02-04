@@ -1,5 +1,108 @@
 2008-02-04  Marcus Brinkmann  <marcus@g10code.de>
 
+	* Makefile.am (gpa_SOURCES): Add clipboard.h and clipboard.c.
+	* clipboard.h, clipboard.c: New files.
+	* gpa.h (gpa_open_clipboard): New prototype.
+	* gpa.c: Include "clipboard.h".
+	(quit_if_no_window): Also check for clipboard window).
+	(gpa_open_clipboard): New window.
+	* keyring.c (win_menu): Add clipboard window.
+	(keyring_toolbar_new): Add clipboard window.
+	* fileman.c (get_selected_files): Use file_item.
+	(file_created_cb): Change type of second argument to gpa_file_item_t.
+	(sign_files): Add new argument to gpa_file_sign_operation_new.
+	(encrypt_files): Add new argument to gpa_file_encrypt_operation_new.
+	(windows_menu): Add clipboard window.
+	(fileman_toolbar_new): Add clipboard window.
+	(gpa_file_manager_constructor): Use gtk_window_set_default_size
+	rather than gtk_widget_set_usize.
+	* encryptdlg.h (struct _GpaFileEncryptDialog): New members
+	scroller_who and force_armor.
+	(gpa_file_encrypt_dialog_new): Add new argument force_armor to
+	prototype.
+	* encryptdlg.c: Add property PROP_FORCE_ARMOR to property enum.
+	(gpa_file_encrypt_dialog_get_property)
+	(gpa_file_encrypt_dialog_set_property): Support it.
+	(gpa_file_encrypt_dialog_init): Move bunch of it to ...
+	(gpa_file_encrypt_dialog_constructor): ... this new function.  Use
+	gtk_window_set_default_size rather than gtk_widget_set_usize.
+	Support force_armor.  Desensitize scrolled window instead of
+	keylisting to fix a bug.
+	(changed_select_row_cb): Likewise.
+	(gpa_file_encrypt_dialog_class_init): Install new property.
+	(gpa_file_encrypt_dialog_new): New argument force_armor, use it.
+	* filesigndlg.h (struct _GpaFileSignDialog): New members
+	scroller_who and force_armor.
+	(gpa_file_sign_dialog_new): Add new argument force_armor to
+	prototype.
+	* filesigndlg.c: Add property PROP_FORCE_ARMOR to property enum.
+	(gpa_file_sign_dialog_get_property)
+	(gpa_file_sign_dialog_set_property): Support it.
+	(gpa_file_sign_dialog_constructor): Use	gtk_window_set_default_size
+	rather than gtk_widget_set_usize.  Support force_armor.
+	(gpa_file_sign_dialog_class_init): Install new property.
+	(gpa_file_sign_dialog_new): New argument force_armor, use it.
+	* gpafileop.h (struct gpa_file_item_s): New structure.
+	(gpa_file_item_t): New type.
+	* gpafileop.c (free_file_item): New function
+	(gpa_file_operation_finalize): Use it instead of g_free.
+	(gpa_file_operation_class_init): Change argument type of callback
+	to pointer.
+	(gpa_file_operation_current_file): Use file_item.
+	* gpafileverifyop.c (gpa_file_verify_operation_start): Change
+	second argument to type file_item.  Use it to support direct memory.
+	(gpa_file_verify_operation_done_cb): Use file_item.
+	(gpa_file_verify_operation_done_error_cb): Use file_item.
+	* gpafiledecryptop.h (_GpaFileDecryptOperation): Remove member
+	plain_filename.
+	* gpafiledecryptop.c (gpa_file_decrypt_operation_init): Do not
+	reset OP->plain_filename.
+	(gpa_file_decrypt_operation_start): Change second argument to type
+	file_item.  Use it to support direct mode.
+	(gpa_file_decrypt_operation_done_cb): Use file_item.
+	(gpa_file_decrypt_operation_done_error_cb): Use file_item.
+	* gpafilesignop.h (_GpaFileSignOperation): Add member force_armor.
+	(gpa_file_sign_operation_new): Add new argument force_armor to
+	prototype.
+	* gpafilesignop.c: New properties enum.
+	(gpa_file_sign_operation_get_property)
+	(gpa_file_sign_operation_set_property): New functions.
+	(gpa_file_sign_operation_init): Initialize OP->force_armor.
+	(gpa_file_sign_operation_new): Add new argument force_armor, use it.
+	(gpa_file_sign_operation_constructor): Add new argument to
+	gpa_file_sign_dialog_new invocation.
+	(gpa_file_sign_operation_class_init): Set class properties.
+	(gpa_file_sign_operation_start): Change second argument to type
+	gpa_file_item_t.  Support direct memory use.
+	(gpa_file_sign_operation_done_cb): Use file_item.
+	(gpa_file_sign_operation_done_error_cb): Use file_item.
+	* gpafileencryptop.h (_GpaFileEncryptOperation): Add member force_armor,
+	and remove member cipher_filename.
+	(gpa_file_encrypt_operation_new): Add new argument force_armor to
+	prototype.
+	* gpafileencryptop.c: New properties enum.
+	(gpa_file_encrypt_operation_get_property)
+	(gpa_file_encrypt_operation_set_property): New functions.
+	(gpa_file_encrypt_operation_init): Initialize OP->force_armor, do
+	not initialize OP->cipher_filename.
+	(gpa_file_encrypt_operation_new): Add new argument force_armor,	use it.
+	(gpa_file_encrypt_operation_constructor): Add new argument to
+	gpa_file_encrypt_dialog_new invocation.
+	(gpa_file_encrypt_operation_class_init): Set class properties.
+	(gpa_file_encrypt_operation_start): Change second argument to type
+	gpa_file_item_t.  Support direct memory use.
+	(gpa_file_encrypt_operation_done_cb): Use file_item.
+	(gpa_file_encrypt_operation_done_error_cb): Use file_item.
+	* gpastreamencryptop.c (gpa_stream_encrypt_operation_constructor):
+	Add new argument to gpa_file_encrypt_dialog_new.
+	* keyimpseldlg.c (gpa_key_import_selection_dialog_run): Use
+	gtk_widget_set_size_request instead of gtk_widget_set_usize.
+	* gpawidgets.c (gpa_expiry_frame_new): Likewise.
+	* helpmenu.c (help_license): Likewise.
+	* helpmenu.c (gpa_help_menu_add_to_factory): Use stock item for
+	about menu.
+	* settingsdlg.c (default_key_frame): Likewise.
+
 	* confdialog.c (dialog_level): New global variable.
 	(comp_has_options, group_has_options): New functions.
 	(create_dialog_tabs_2): Skip groups with no displayable options.

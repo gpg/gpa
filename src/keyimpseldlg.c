@@ -1,5 +1,6 @@
 /* keyimpseldlg.c - The GNU Privacy Assistant - Key import selection dialog
  * Copyright (C) 2002 G-N-U GmbH
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA.
  *
@@ -134,7 +135,7 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
   gtk_box_pack_start (GTK_BOX (vboxWhich), labelWhich, FALSE, TRUE, 0);
 
   scrollerWhich = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_usize (scrollerWhich, 260, 75);
+  gtk_widget_set_size_request (scrollerWhich, 260, 75);
   gtk_box_pack_start (GTK_BOX (vboxWhich), scrollerWhich, TRUE, TRUE, 0);
 
   clistWhich = gpa_key_list_new_from_glist (parent, dialog.keys);

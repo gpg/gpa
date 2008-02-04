@@ -1,5 +1,5 @@
 /* gpastreamdecryptop.c - The GpaOperation object.
- *	Copyright (C) 2007 g10 Code GmbH
+ * Copyright (C) 2007, 2008 g10 Code GmbH
  *
  * This file is part of GPA.
  *
@@ -88,7 +88,7 @@ gpa_stream_encrypt_operation_constructor
 
   /* Create the "Encrypt" dialog */
   op->encrypt_dialog = gpa_file_encrypt_dialog_new
-    (GPA_OPERATION (op)->window);
+    (GPA_OPERATION (op)->window, FALSE);
 
   g_signal_connect (G_OBJECT (op->encrypt_dialog), "response",
 		    G_CALLBACK (response_cb), op);

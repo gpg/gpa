@@ -1,6 +1,7 @@
 /* helpmenu.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
- *	Copyright (C) 1995 Spencer Kimball and Peter Mattis
+ * Copyright (C) 1995 Spencer Kimball and Peter Mattis
+ * Copyright (C) 2000, 2001 G-N-U GmbH.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -396,7 +397,7 @@ help_license (gpointer param)
   gtk_text_view_set_editable (GTK_TEXT_VIEW (textGPL), FALSE);
   gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (textGPL)),
 			    gpa_license_text, -1);
-  gtk_widget_set_usize (textGPL, 500, 300);
+  gtk_widget_set_size_request (textGPL, 500, 300);
   licenseScrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (licenseScrolled),
 				  GTK_POLICY_AUTOMATIC,
@@ -446,7 +447,8 @@ gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget * window)
      "<StockItem>", GTK_STOCK_HELP}
 #endif
     {_("/Help/_License"), NULL, (GtkItemFactoryCallback)help_license, 0, NULL},
-    {_("/Help/_About"), NULL, (GtkItemFactoryCallback)help_about, 0, NULL}
+    {_("/Help/_About"), NULL, (GtkItemFactoryCallback)help_about, 0,
+     "<StockItem>", GTK_STOCK_ABOUT }
   };
 
   gtk_item_factory_create_items (factory, sizeof (menu) / sizeof (menu[0]),

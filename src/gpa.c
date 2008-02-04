@@ -34,6 +34,7 @@
 #include "gpa.h"
 #include "keyring.h"
 #include "fileman.h"
+#include "clipboard.h"
 #include "keyserver.h"
 #include "settingsdlg.h"
 #include "confdialog.h"
@@ -108,10 +109,9 @@ static GtkWidget *backend_config_dialog = NULL;
 static void
 quit_if_no_window (void)
 {
-  if (!keyringeditor && !gpa_file_manager_is_open ())
-    {
-      gtk_main_quit ();
-    }
+  if (! keyringeditor && ! gpa_file_manager_is_open ()
+      && ! gpa_clipboard_is_open ())
+    gtk_main_quit ();
 }
 
 
@@ -138,6 +138,20 @@ gpa_open_keyring_editor (void)
     }
 
   gtk_window_present (GTK_WINDOW (keyringeditor));
+}
+
+
+/* Show the clipboard dialog.  */
+void
+gpa_open_clipboard (void)
+{
+  /* FIXME: Shouldn't this connect only happen if the instance is
+     created the first time?  Looks like a memory leak to me.  */
+  gtk_signal_connect (GTK_OBJECT (gpa_clipboard_get_instance ()), "destroy",
+		      GTK_SIGNAL_FUNC (quit_if_no_window), NULL);
+  gtk_widget_show_all (gpa_clipboard_get_instance ());
+
+  gtk_window_present (GTK_WINDOW (gpa_clipboard_get_instance ()));
 }
 
 

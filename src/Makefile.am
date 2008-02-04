@@ -42,6 +42,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      icons.c icons.h \
 	      gpawidgets.c gpawidgets.h \
 	      fileman.c fileman.h \
+	      clipboard.h clipboard.c \
 	      filesigndlg.c filesigndlg.h \
 	      encryptdlg.c encryptdlg.h \
 	      verifydlg.c verifydlg.h \

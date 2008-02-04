@@ -46,6 +46,8 @@ struct _GpaFileSignDialog {
   GtkWidget *radio_sep;
   GtkWidget *check_armor;
   GtkWidget *clist_who;
+
+  gboolean force_armor;
 };
 
 struct _GpaFileSignDialogClass {
@@ -56,7 +58,7 @@ GType gpa_file_sign_dialog_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-GtkWidget *gpa_file_sign_dialog_new (GtkWidget *parent);
+GtkWidget *gpa_file_sign_dialog_new (GtkWidget *parent, gboolean force_armor);
 
 GList *gpa_file_sign_dialog_signers (GpaFileSignDialog *dialog);
 

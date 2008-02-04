@@ -44,6 +44,7 @@ struct _GpaFileSignOperation {
   int sig_fd, plain_fd;
   gpgme_data_t sig, plain;
   gchar *sig_filename;
+  gboolean force_armor;
 };
 
 struct _GpaFileSignOperationClass {
@@ -58,6 +59,6 @@ GType gpa_file_sign_operation_get_type (void) G_GNUC_CONST;
  */
 GpaFileSignOperation*
 gpa_file_sign_operation_new (GtkWidget *window,
-			     GList *files);
+			     GList *files, gboolean force_armor);
 
 #endif

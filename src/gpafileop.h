@@ -1,5 +1,6 @@
 /* gpafileop.h - The GpaFileOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -37,6 +38,24 @@
 
 typedef struct _GpaFileOperation GpaFileOperation;
 typedef struct _GpaFileOperationClass GpaFileOperationClass;
+
+struct gpa_file_item_s
+{
+  /* If not NULL, the text to operate on.  */
+  gchar *direct_in;
+  gsize direct_in_len;
+  gchar *direct_out;
+  /* Length of DIRECT_OUT (minus trailing zero).  */
+  gsize direct_out_len;
+  /* A displayable string identifying the text.  */
+  gchar *direct_name;
+
+  /* The filename to operate on (if DIRECT_IN is NULL).  */
+  gchar *filename_in;
+  gchar *filename_out;
+};
+typedef struct gpa_file_item_s *gpa_file_item_t; 
+
 
 struct _GpaFileOperation {
   GpaOperation parent;

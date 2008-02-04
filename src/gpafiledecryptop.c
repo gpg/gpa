@@ -1,5 +1,6 @@
 /* gpafiledecryptop.c - The GpaOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2003 Miguel Coca.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -62,7 +63,6 @@ gpa_file_decrypt_operation_init (GpaFileDecryptOperation *op)
   op->plain_fd = -1;
   op->cipher = NULL;
   op->plain = NULL;
-  op->plain_filename = NULL;
 }
 
 
@@ -177,39 +177,77 @@ destination_filename (const gchar *filename)
 
 static gboolean
 gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
-				  const gchar *cipher_filename)
+				  gpa_file_item_t file_item)
 {
   gpg_error_t err;
-  
-  op->plain_filename = destination_filename (cipher_filename);
-  /* Open the files */
-  op->cipher_fd = gpa_open_input (cipher_filename, &op->cipher, 
-				  GPA_OPERATION (op)->window);
-  if (op->cipher_fd == -1)
+
+  if (file_item->direct_in)
     {
-      return FALSE;
+      /* No copy is made.  */
+      err = gpgme_data_new_from_mem (&op->cipher, file_item->direct_in,
+				     file_item->direct_in_len, 0);
+      if (err)
+	{
+	  gpa_gpgme_warning (err);
+	  return FALSE;
+	}
+      
+      err = gpgme_data_new (&op->plain);
+      if (err)
+	{
+	  gpa_gpgme_warning (err);
+	  gpgme_data_release (op->cipher);
+	  op->plain = NULL;
+	  return FALSE;
+	}
     }
-  op->plain_fd = gpa_open_output (op->plain_filename, &op->plain,
-				  GPA_OPERATION (op)->window);
-  if (op->plain_fd == -1)
+  else
     {
-      gpgme_data_release (op->cipher);
-      close (op->cipher_fd);
-      return FALSE;
+      gchar *cipher_filename = file_item->filename_in;
+
+      file_item->filename_out = destination_filename (cipher_filename);
+      /* Open the files */
+      op->cipher_fd = gpa_open_input (cipher_filename, &op->cipher, 
+				  GPA_OPERATION (op)->window);
+      if (op->cipher_fd == -1)
+	{
+	  return FALSE;
+	}
+      op->plain_fd = gpa_open_output (file_item->filename_out, &op->plain,
+				      GPA_OPERATION (op)->window);
+      if (op->plain_fd == -1)
+	{
+	  gpgme_data_release (op->cipher);
+	  close (op->cipher_fd);
+	  return FALSE;
+	}
     }
+
   /* Start the operation */
   err = gpgme_op_decrypt_start (GPA_OPERATION (op)->context->ctx, op->cipher, 
 				op->plain);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       gpa_gpgme_warning (err);
+
+      gpgme_data_release (op->plain);
+      op->plain = NULL;
+      close (op->plain_fd);
+      op->plain_fd = -1;
+      gpgme_data_release (op->cipher);
+      op->cipher = NULL;
+      close (op->cipher_fd);
+      op->cipher_fd = -1;
+
       return FALSE;
     }
   /* Show and update the progress dialog */
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
   gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG 
 				 (GPA_FILE_OPERATION (op)->progress_dialog),
-				 op->plain_filename);
+				 file_item->direct_name
+				 ? file_item->direct_name
+				 : file_item->filename_in);
   return TRUE;
 }
 
@@ -229,28 +267,61 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
 				    gpg_error_t err,
 				    GpaFileDecryptOperation *op)
 {
+  gpa_file_item_t file_item = GPA_FILE_OPERATION (op)->current->data;
+
+  if (file_item->direct_in)
+    {
+      size_t len;
+      char *plain_gpgme = gpgme_data_release_and_get_mem (op->plain, &len);
+      op->plain = NULL;
+      /* Do the memory allocation dance.  */
+
+      if (plain_gpgme)
+	{
+	  /* Conveniently make ASCII stuff into a string.  */
+	  file_item->direct_out = g_malloc (len + 1);
+	  memcpy (file_item->direct_out, plain_gpgme, len);
+	  gpgme_free (plain_gpgme);
+	  file_item->direct_out[len] = '\0';
+	  /* Yep, excluding the trailing zero.  */
+	  file_item->direct_out_len = len;
+	}
+      else
+	{
+	  file_item->direct_out = NULL;
+	  file_item->direct_out_len = 0;
+	}
+    }
+
   /* Do clean up on the operation */
   gpgme_data_release (op->plain);
+  op->plain = NULL;
   close (op->plain_fd);
+  op->plain_fd = -1;
   gpgme_data_release (op->cipher);
+  op->cipher = NULL;
   close (op->cipher_fd);
+  op->cipher_fd = -1;
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
   /* Check for error */
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
-      /* If an error happened, (or the user canceled) delete the created file
-       * and abort further decryptions
-       */
-      unlink (op->plain_filename);
-      g_free (op->plain_filename);
+      if (! file_item->direct_in)
+	{
+	  /* If an error happened, (or the user canceled) delete the
+	     created file and abort further decryptions.  */
+	  unlink (file_item->filename_out);
+	  g_free (file_item->filename_out);
+	  file_item->filename_out = NULL;
+	}
+      /* FIXME:CLIPBOARD: Server finish?  */
       g_signal_emit_by_name (GPA_OPERATION (op), "completed"); 
     }
   else
     {
       /* We've just created a file */
-      g_signal_emit_by_name (GPA_OPERATION (op), "created_file",
-			     op->plain_filename);
-      g_free (op->plain_filename);
+      g_signal_emit_by_name (GPA_OPERATION (op), "created_file", file_item);
+
       /* Go to the next file in the list and decrypt it */
       GPA_FILE_OPERATION (op)->current = g_list_next 
 	(GPA_FILE_OPERATION (op)->current);
@@ -272,6 +343,7 @@ static void
 gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 					  GpaFileDecryptOperation *op)
 {
+  gpa_file_item_t file_item = GPA_FILE_OPERATION (op)->current->data;
   gchar *message;
 
   switch (gpg_err_code (err))
@@ -281,18 +353,25 @@ gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
       /* Ignore these */
       break;
     case GPG_ERR_NO_DATA:
-      message = g_strdup_printf (_("The file \"%s\" contained no OpenPGP "
-				   "data."),
-				 gpa_file_operation_current_file 
-				 (GPA_FILE_OPERATION(op)));
+      message = g_strdup_printf (file_item->direct_name
+				 ? _("\"%s\" contained no OpenPGP data.")
+				 : _("The file \"%s\" contained no OpenPGP"
+				     "data."),
+				 file_item->direct_name
+				 ? file_item->direct_name
+				 : file_item->filename_in);
       gpa_window_error (message, GPA_OPERATION (op)->window);
       g_free (message);
       break;
     case GPG_ERR_DECRYPT_FAILED:
-      message = g_strdup_printf (_("The file \"%s\" contained no "
-				   "valid encrypted data."),
-				 gpa_file_operation_current_file
-				 (GPA_FILE_OPERATION(op)));
+      message = g_strdup_printf (file_item->direct_name
+				 ? _("\"%s\" contained no valid "
+				     "encrypted data.")
+				 : _("The file \"%s\" contained no valid"
+				     "encrypted data."),
+				 file_item->direct_name
+				 ? file_item->direct_name
+				 : file_item->filename_in);
       gpa_window_error (message, GPA_OPERATION (op)->window);
       g_free (message);
       break;

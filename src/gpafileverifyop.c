@@ -1,5 +1,6 @@
 /* gpafileverifyop.c - The GpaOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2003 Miguel Coca.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -233,47 +234,73 @@ is_detached_sig (const gchar *filename, gchar **signature_file,
 
 static gboolean
 gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
-				 const gchar *sig_filename)
+				 gpa_file_item_t file_item)
 {
-  gpg_error_t err;
+  gpgme_error_t err;
 
-  if (is_detached_sig (sig_filename, &op->signature_file, &op->signed_file,
-		       GPA_OPERATION (op)->window))
+  if (file_item->direct_in)
     {
-      /* Allocate data objects for a detached signature */
-      op->sig_fd = gpa_open_input (op->signature_file, &op->sig, 
-				   GPA_OPERATION (op)->window);
-      if (op->sig_fd == -1)
+      /* No copy is made.  */
+      err = gpgme_data_new_from_mem (&op->sig, file_item->direct_in,
+				     file_item->direct_in_len, 0);
+      if (err)
 	{
+	  gpa_gpgme_warning (err);
 	  return FALSE;
 	}
-      op->signed_text_fd = gpa_open_input (op->signed_file, &op->signed_text,
-					   GPA_OPERATION (op)->window);
-      if (op->signed_text_fd == -1)
+      
+      err = gpgme_data_new (&op->plain);
+      if (err)
 	{
+	  gpa_gpgme_warning (err);
 	  gpgme_data_release (op->sig);
-	  close (op->sig_fd);
+	  op->sig = NULL;
 	  return FALSE;
 	}
-      op->plain = NULL;
     }
   else
     {
-      /* Allocate data object for non-detached signatures */
-      op->sig_fd = gpa_open_input (sig_filename, &op->sig, 
-				   GPA_OPERATION (op)->window);
-      if (op->sig_fd == -1)
+      const gchar *sig_filename = file_item->filename_in;
+      
+      if (is_detached_sig (sig_filename, &op->signature_file, &op->signed_file,
+			   GPA_OPERATION (op)->window))
 	{
-	  return FALSE;
+	  /* Allocate data objects for a detached signature */
+	  op->sig_fd = gpa_open_input (op->signature_file, &op->sig, 
+				       GPA_OPERATION (op)->window);
+	  if (op->sig_fd == -1)
+	    {
+	      return FALSE;
+	    }
+	  op->signed_text_fd = gpa_open_input (op->signed_file, &op->signed_text,
+					       GPA_OPERATION (op)->window);
+	  if (op->signed_text_fd == -1)
+	    {
+	      gpgme_data_release (op->sig);
+	      close (op->sig_fd);
+	      return FALSE;
+	    }
+	  op->plain = NULL;
 	}
-      if (gpg_err_code (gpgme_data_new (&op->plain)) != GPG_ERR_NO_ERROR)
+      else
 	{
-	  gpgme_data_release (op->sig);
-	  close (op->sig_fd);
-	  return FALSE;
+	  /* Allocate data object for non-detached signatures */
+	  op->sig_fd = gpa_open_input (sig_filename, &op->sig, 
+				       GPA_OPERATION (op)->window);
+	  if (op->sig_fd == -1)
+	    {
+	      return FALSE;
+	    }
+	  err = gpgme_data_new (&op->plain);
+	  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+	    {
+	      gpgme_data_release (op->sig);
+	      close (op->sig_fd);
+	      return FALSE;
+	    }
+	  op->signed_text_fd = -1;
+	  op->signed_text = NULL;
 	}
-      op->signed_text_fd = -1;
-      op->signed_text = NULL;
     }
 
   /* Start the operation */
@@ -288,7 +315,10 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
   gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG 
 				 (GPA_FILE_OPERATION (op)->progress_dialog),
-				 sig_filename);
+				 file_item->direct_name
+				 ? file_item->direct_name
+				 : file_item->filename_in);
+
   return TRUE;
 }
 
@@ -309,18 +339,45 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
 				    gpg_error_t err,
 				    GpaFileVerifyOperation *op)
 {
+  gpa_file_item_t file_item = GPA_FILE_OPERATION (op)->current->data;
+
+  if (file_item->direct_in)
+    {
+      size_t len;
+      char *plain_gpgme = gpgme_data_release_and_get_mem (op->plain,
+							   &len);
+      op->plain = NULL;
+      /* Do the memory allocation dance.  */
+
+      if (plain_gpgme)
+	{
+	  /* Conveniently make ASCII stuff into a string.  */
+	  file_item->direct_out = g_malloc (len + 1);
+	  memcpy (file_item->direct_out, plain_gpgme, len);
+	  gpgme_free (plain_gpgme);
+	  file_item->direct_out[len] = '\0';
+	  /* Yep, excluding the trailing zero.  */
+	  file_item->direct_out_len = len;
+	}
+      else
+	{
+	  file_item->direct_out = NULL;
+	  file_item->direct_out_len = 0;
+	}
+    }
+
   /* Do clean up on the operation */
-  if (op->plain) 
-    {
-      gpgme_data_release (op->plain);
-    }
-  if (op->signed_text)
-    {
-      gpgme_data_release (op->signed_text);
-      close (op->signed_text_fd);
-    }
+  gpgme_data_release (op->plain);
+  op->plain = NULL;
+  gpgme_data_release (op->signed_text);
+  op->signed_text = NULL;
+  close (op->signed_text_fd);
+  op->signed_text_fd = -1;
   gpgme_data_release (op->sig);
+  op->sig = NULL;
   close (op->sig_fd);
+  op->sig_fd = -1;
+
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
   /* Check for error */
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
@@ -334,7 +391,9 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
       result = gpgme_op_verify_result (GPA_OPERATION (op)->context->ctx);
       /* Add the file to the result dialog */
       gpa_file_verify_dialog_add_file (GPA_FILE_VERIFY_DIALOG (op->dialog),
-				       GPA_FILE_OPERATION (op)->current->data,
+				       file_item->direct_name
+				       ? file_item->direct_name
+				       : file_item->filename_out,
 				       op->signed_file, op->signature_file,
 				       result->signatures);
       /* If this was a dettached sig, reset the signed file */
@@ -375,6 +434,7 @@ static void
 gpa_file_verify_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 					 GpaFileVerifyOperation *op)
 {
+  gpa_file_item_t file_item = GPA_FILE_OPERATION (op)->current->data;
   gchar *message;
 
   switch (gpg_err_code (err))
@@ -384,10 +444,14 @@ gpa_file_verify_operation_done_error_cb (GpaContext *context, gpg_error_t err,
       /* Ignore these */
       break;
     case GPG_ERR_NO_DATA:
-      message = g_strdup_printf (_("The file \"%s\" contained no OpenPGP "
-				   "data."),
-				 gpa_file_operation_current_file 
-				 (GPA_FILE_OPERATION(op)));
+      message = g_strdup_printf (file_item->direct_name
+				 ? _("\"%s\" contained no OpenPGP data.")
+				 : _("The file \"%s\" contained no OpenPGP"
+				     "data."),
+				 file_item->direct_name
+				 ? file_item->direct_name
+				 : file_item->filename_in);
+
       gpa_window_error (message, GPA_OPERATION (op)->window);
       g_free (message);
       break;

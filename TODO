@@ -41,6 +41,18 @@ In no particular order:
 * MB:
 ** Add a beauty bar to filemanager (requires an icon corresponding to
    keyring.xpm).
+** Add frame around filemanager list.
 ** Support receiving keys from keyservers for unknown certificates, by
    right click in "Signatures" tab of keyring manager and for all unknown
    keys in that list at once.
+** Support getting plaintext from verify operation (should emit "created file"
+   then).  NEEDED FOR CLIPBOARD of non clear text.
+** Make signer selection list a bit larger than one row.
+** clipboard: handle sensitivity of menu and toolbar items.
+   Force armor.
+** Change gpa_window_error to use gtk_label_set_line_wrap and remove
+   all those newlines. 
+** The sign, encrypt dialog and progress bar is not centered over the
+   parent.  Maybe it is realized too early due to init vs constructor?
+   It does get the right parent window parameter (checked that).
+** Use GtkAction instead of manual GLists for update sensitivity and stuff.

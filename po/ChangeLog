@@ -1,5 +1,7 @@
 2008-02-04  Marcus Brinkmann  <marcus@g10code.de>
 
+	* POTFILES.in: Add clipboard.h and clipboard.c.
+
 	* POTFILES.in: Add confdialog.c.
 
 2007-06-05  Marcus Brinkmann  <marcus@g10code.de>

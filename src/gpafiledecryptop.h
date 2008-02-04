@@ -1,5 +1,6 @@
 /* gpafiledecryptop.h - The GpaFileDecryptOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2003 Miguel Coca.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -41,7 +42,6 @@ struct _GpaFileDecryptOperation {
 
   int cipher_fd, plain_fd;
   gpgme_data_t cipher, plain;
-  gchar *plain_filename;
 };
 
 struct _GpaFileDecryptOperationClass {
