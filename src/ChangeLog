@@ -1,5 +1,7 @@
 2008-02-04  Marcus Brinkmann  <marcus@g10code.de>
 
+	* clipboard.c (file_verify): Remove debug output.
+
 	* gpawindowkeeper.c (gpa_windowKeeper_add_param): Store result of
 	g_list_append.
 

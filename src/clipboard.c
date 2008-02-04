@@ -481,10 +481,6 @@ file_verify (gpointer param)
   /* FIXME: One would think there exists a function to get the number
      of bytes between two GtkTextIter, but no, that's too obvious.  */
   file_item->direct_in_len = strlen (file_item->direct_in);
-  printf ("Region: %i  %i %i %i\n", file_item->direct_in_len,
-	  gtk_text_iter_get_offset (&begin),
-	  gtk_text_iter_get_offset (&end),
-	  gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin));
 
   files = g_list_append (files, file_item);
   
