@@ -308,7 +308,7 @@ if test "$have_gpg_error" = "no"; then
 ***  
 *** You need libgpg-error to build this program.
 **  This library is for example available at
-***   ftp://ftp.gnupg.org/pub/gcrypt/libgpg-error
+***   ftp://ftp.gnupg.org/gcrypt/libgpg-error
 *** (at least version $NEED_GPG_ERROR_VERSION is required.)
 ***]])
 fi
@@ -328,7 +328,7 @@ if test "$have_libassuan" = "no"; then
 ***
 *** You need libassuan to build this program.
 *** This library is for example available at
-***   ftp://ftp.gnupg.org/pub/gcrypt/libassuan/
+***   ftp://ftp.gnupg.org/gcrypt/libassuan/
 *** (at least version $NEED_LIBASSUAN_VERSION is required).
 ***]])
 fi
