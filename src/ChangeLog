@@ -1,5 +1,8 @@
 2008-02-06  Marcus Brinkmann  <marcus@g10code.de>
 
+	* confdialog.c (create_dialog_tabs_2) [!GTK_CHECK_VERSION(2,12,0)]:
+	Do not add tooltips.
+
 	* clipboard.c (gtk_text_buffer_get_has_selection)
 	(gdk_atom_intern_static_string)
 	(MY_GTK_TEXT_BUFFER_NO_HAS_SELECTION) [!GTK_CHECK_VERSION(2,10,0)]:

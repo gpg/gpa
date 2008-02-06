@@ -1172,9 +1172,11 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	      if (option->flags & GPGME_CONF_NO_CHANGE)
 		gtk_widget_set_sensitive (vbox, FALSE);
 
+#if GTK_CHECK_VERSION (2, 12, 0)
 	      /* Add a tooltip description.  */
 	      if (option->description)
 		gtk_widget_set_tooltip_text (vbox, option->description);
+#endif
 	    }
 	  option = option->next;
 	}
