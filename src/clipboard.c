@@ -886,8 +886,8 @@ clipboard_toolbar_new (GpaClipboard *clipboard)
   if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "sign")))
     {
       item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Sign"),
-				      _("Sign the selected file"),
-                                      _("sign file"),
+				      _("Sign the selected text"),
+                                      _("sign text"),
 				      icon,
 				      GTK_SIGNAL_FUNC (toolbar_file_sign),
 				      clipboard);
@@ -896,8 +896,8 @@ clipboard_toolbar_new (GpaClipboard *clipboard)
   if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "verify")))
     {
       item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Verify"),
-				      _("Check signatures of selected file"), 
-				      _("verify file"),
+				      _("Check signatures of selected text"), 
+				      _("verify text"),
                                       icon,
 				      GTK_SIGNAL_FUNC (toolbar_file_verify), 
 				      clipboard);
@@ -906,8 +906,8 @@ clipboard_toolbar_new (GpaClipboard *clipboard)
   if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "encrypt")))
     {
       item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Encrypt"),
-				      _("Encrypt the selected file"),
-				      _("encrypt file"),
+				      _("Encrypt the selected text"),
+				      _("encrypt text"),
 				      icon,
                                       GTK_SIGNAL_FUNC (toolbar_file_encrypt),
 				      clipboard);
@@ -916,8 +916,8 @@ clipboard_toolbar_new (GpaClipboard *clipboard)
   if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "decrypt")))
     {
       item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Decrypt"),
-				      _("Decrypt the selected file"),
-				      _("decrypt file"),
+				      _("Decrypt the selected text"),
+				      _("decrypt text"),
 				      icon, 
                                       GTK_SIGNAL_FUNC (toolbar_file_decrypt),
 				      clipboard);

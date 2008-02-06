@@ -1,5 +1,8 @@
 2008-02-06  Marcus Brinkmann  <marcus@g10code.de>
 
+	* clipboard.c (clipboard_toolbar_new): Replace "file" by "text" in
+	several tooltips.
+
 	* fileman.c (gpa_file_manager_constructor): Add alignment.
 
 	* clipboard.c (clipboard_toolbar_new): Adjust spelling in tooltips.

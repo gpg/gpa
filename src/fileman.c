@@ -888,7 +888,6 @@ gpa_file_manager_constructor (GType type,
 			     pl + 5, pr + 5);
   gtk_box_pack_start (GTK_BOX (vbox), align, TRUE, TRUE, 0);
 
-
   file_box = gtk_hbox_new (TRUE, 0);
   file_frame = file_list_new (fileman);
   gtk_box_pack_start (GTK_BOX (file_box), file_frame, TRUE, TRUE, 0);
