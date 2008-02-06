@@ -1,3 +1,12 @@
+2008-02-06  Marcus Brinkmann  <marcus@g10code.de>
+
+	* clipboard.c (gtk_text_buffer_get_has_selection)
+	(gdk_atom_intern_static_string)
+	(MY_GTK_TEXT_BUFFER_NO_HAS_SELECTION) [!GTK_CHECK_VERSION(2,10,0)]:
+	New macros.
+	(clipboard_text_new) [MY_GTK_TEXT_BUFFER_NO_HAS_SELECTION]:
+	Connect to signals mark-set and changed of text buffer.
+
 2008-02-04  Marcus Brinkmann  <marcus@g10code.de>
 
 	* clipboard.c (file_verify): Remove debug output.

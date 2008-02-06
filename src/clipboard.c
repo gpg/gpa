@@ -53,7 +53,17 @@
 #include "gpafilesignop.h"
 #include "gpafileverifyop.h"
 
+
+/* Support for Gtk 2.8.  */
 
+#if ! GTK_CHECK_VERSION (2, 10, 0)
+#define gtk_text_buffer_get_has_selection(textbuf) \
+  gtk_text_buffer_get_selection_bounds (textbuf, NULL, NULL);
+#define gdk_atom_intern_static_string(str) gdk_atom_intern (str, FALSE)
+#define MY_GTK_TEXT_BUFFER_NO_HAS_SELECTION
+#endif
+
+
 /* FIXME:  Move to a global file.  */
 #ifndef DIM
 #define DIM(array) (sizeof (array) / sizeof (*array))
@@ -881,7 +891,6 @@ clipboard_toolbar_new (GpaClipboard *clipboard)
 				      icon,
 				      GTK_SIGNAL_FUNC (toolbar_file_sign),
 				      clipboard);
-      //      add_selection_sensitive_widget (clipboard, item, has_selection);
     }
   /* Build the "Verify" button.  */
   if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "verify")))
@@ -892,7 +901,6 @@ clipboard_toolbar_new (GpaClipboard *clipboard)
                                       icon,
 				      GTK_SIGNAL_FUNC (toolbar_file_verify), 
 				      clipboard);
-      //      add_selection_sensitive_widget (clipboard, item, has_selection);
     }
   /* Build the "Encrypt" button.  */
   if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "encrypt")))
@@ -913,7 +921,6 @@ clipboard_toolbar_new (GpaClipboard *clipboard)
 				      icon, 
                                       GTK_SIGNAL_FUNC (toolbar_file_decrypt),
 				      clipboard);
-      //      add_selection_sensitive_widget (clipboard, item, has_selection);
     }
 
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
@@ -980,13 +987,22 @@ clipboard_text_new (GpaClipboard *clipboard)
   clipboard->text_buffer
     = gtk_text_view_get_buffer (GTK_TEXT_VIEW (clipboard->text_view));
 
+#ifndef MY_GTK_TEXT_BUFFER_NO_HAS_SELECTION
   /* A change in selection status causes a property change, which we
      can listen in on.  */
   g_signal_connect_swapped (clipboard->text_buffer, "notify::has-selection",
 			    G_CALLBACK (update_selection_sensitive_widgets),
 			    clipboard);
-
-  /* Connect a bunch of signals for selection.  */
+#else
+  /* Runs very often.  The changed signal is necessary for backspace
+     actions.  */
+  g_signal_connect_swapped (clipboard->text_buffer, "mark-set",
+			    G_CALLBACK (update_selection_sensitive_widgets),
+			    clipboard);
+  g_signal_connect_after (clipboard->text_buffer, "backspace",
+			    G_CALLBACK (update_selection_sensitive_widgets2),
+			    clipboard);
+#endif
 
   scroller = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy  (GTK_SCROLLED_WINDOW (scroller),
