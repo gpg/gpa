@@ -655,7 +655,7 @@ fileman_toolbar_new (GpaFileManager *fileman)
   
   gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), 
                             GTK_STOCK_PREFERENCES,
-                            _("Open the Preferences dialog"),
+                            _("Open the preferences dialog"),
                             _("preferences"),
                             GTK_SIGNAL_FUNC (toolbar_preferences),
                             fileman, -1);
@@ -664,7 +664,7 @@ fileman_toolbar_new (GpaFileManager *fileman)
 
   icon = gpa_create_icon_widget (GTK_WIDGET (fileman), "keyringeditor");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Keyring"),
-                                  _("Open the Keyring Editor"),
+                                  _("Open the keyring editor"),
                                   _("keyring editor"), icon,
 				  GTK_SIGNAL_FUNC (gpa_open_keyring_editor),
                                   NULL);

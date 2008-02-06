@@ -1,7 +1,12 @@
 2008-02-06  Marcus Brinkmann  <marcus@g10code.de>
 
+	* clipboard.c (clipboard_toolbar_new): Adjust spelling in tooltips.
+	* keyring.c (keyring_toolbar_new): Likewise.
+	* fileman.c (fileman_toolbar_new): Likewise.
+
 	* clipboard.c (gpa_clipboard_constructor): Add a fancy label after
 	the toolbar.
+
 	* fileman.c (gpa_file_manager_constructor): Add a fancy label
 	after the toolbar.
 	(file_list_new): Put a shadow around the scrollerFile.
