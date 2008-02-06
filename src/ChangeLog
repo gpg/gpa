@@ -1,5 +1,11 @@
 2008-02-06  Marcus Brinkmann  <marcus@g10code.de>
 
+	* clipboard.c (gpa_clipboard_constructor): Add a fancy label after
+	the toolbar.
+	* fileman.c (gpa_file_manager_constructor): Add a fancy label
+	after the toolbar.
+	(file_list_new): Put a shadow around the scrollerFile.
+
 	* confdialog.c (create_dialog_tabs_2) [!GTK_CHECK_VERSION(2,12,0)]:
 	Do not add tooltips.
 

@@ -1025,10 +1025,16 @@ gpa_clipboard_constructor (GType type,
   GObject *object;
   GpaClipboard *clipboard;
   GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *icon;
+  GtkWidget *label;
+  gchar *markup;
   GtkWidget *menubar;
   GtkWidget *text_box;
   GtkWidget *text_frame;
   GtkWidget *toolbar;
+  GtkWidget *align;
+  guint pt, pb, pl, pr;
 
   /* Invoke parent's constructor.  */
   object = parent_class->constructor (type,
@@ -1056,12 +1062,38 @@ gpa_clipboard_constructor (GType type,
   toolbar = clipboard_toolbar_new (clipboard);
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
 
+
+  /* Add a fancy label that tells us: This is the clipboard.  */
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+  
+  /* FIXME: Need better icon.  */
+  icon = gtk_image_new_from_stock ("gtk-paste", GTK_ICON_SIZE_DND);
+  gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
+
+  label = gtk_label_new (NULL);
+  markup = g_strdup_printf ("<span font_desc=\"16\">%s</span>",
+                            _("Clipboard"));
+  gtk_label_set_markup (GTK_LABEL (label), markup);
+  g_free (markup);
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+
+
   /* Third a text entry.  */
   text_box = gtk_hbox_new (TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (text_box), 5);
+  align = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_alignment_get_padding (GTK_ALIGNMENT (align),
+			     &pt, &pb, &pl, &pr);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (align), pt, pb + 5,
+			     pl + 5, pr + 5);
+  gtk_box_pack_start (GTK_BOX (vbox), align, TRUE, TRUE, 0);
+
   text_frame = clipboard_text_new (clipboard);
   gtk_box_pack_start (GTK_BOX (text_box), text_frame, TRUE, TRUE, 0);
-  gtk_box_pack_end (GTK_BOX (vbox), text_box, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (align), text_box);
+  gtk_box_pack_end (GTK_BOX (vbox), align, TRUE, TRUE, 0);
+
   gtk_container_add (GTK_CONTAINER (clipboard), vbox);
 
   g_signal_connect (object, "destroy",

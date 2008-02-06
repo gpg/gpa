@@ -800,6 +800,8 @@ file_list_new (GpaFileManager * fileman)
   gtk_scrolled_window_set_policy  (GTK_SCROLLED_WINDOW (scrollerFile),
 				   GTK_POLICY_AUTOMATIC,
 				   GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollerFile),
+				       GTK_SHADOW_IN);
 
   fileman->list_files = list;
   gtk_widget_grab_focus (list);
@@ -826,6 +828,10 @@ gpa_file_manager_constructor (GType type,
   GObject *object;
   GpaFileManager *fileman;
   GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *icon;
+  gchar *markup;
   GtkWidget *menubar;
   GtkWidget *file_box;
   GtkWidget *file_frame;
@@ -854,6 +860,23 @@ gpa_file_manager_constructor (GType type,
   /* Second the toolbar.  */
   toolbar = fileman_toolbar_new(fileman);
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
+
+
+  /* Add a fancy label that tells us: This is the file manager.  */
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+  
+  icon = gtk_image_new_from_stock ("gtk-directory", GTK_ICON_SIZE_DND);
+  gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
+
+  label = gtk_label_new (NULL);
+  markup = g_strdup_printf ("<span font_desc=\"16\">%s</span>",
+                            _("File Manager"));
+  gtk_label_set_markup (GTK_LABEL (label), markup);
+  g_free (markup);
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+
 
   /* Third a hbox with the file list.  */
   file_box = gtk_hbox_new (TRUE, 0);
