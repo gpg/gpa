@@ -836,6 +836,8 @@ gpa_file_manager_constructor (GType type,
   GtkWidget *file_box;
   GtkWidget *file_frame;
   GtkWidget *toolbar;
+  GtkWidget *align;
+  guint pt, pb, pl, pr;
 
   /* Invoke parent's constructor.  */
   object = parent_class->constructor (type,
@@ -879,11 +881,20 @@ gpa_file_manager_constructor (GType type,
 
 
   /* Third a hbox with the file list.  */
+  align = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_alignment_get_padding (GTK_ALIGNMENT (align),
+			     &pt, &pb, &pl, &pr);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (align), pt, pb + 5,
+			     pl + 5, pr + 5);
+  gtk_box_pack_start (GTK_BOX (vbox), align, TRUE, TRUE, 0);
+
+
   file_box = gtk_hbox_new (TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (file_box), 5);
   file_frame = file_list_new (fileman);
   gtk_box_pack_start (GTK_BOX (file_box), file_frame, TRUE, TRUE, 0);
-  gtk_box_pack_end (GTK_BOX (vbox), file_box, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (align), file_box);
+  gtk_box_pack_end (GTK_BOX (vbox), align, TRUE, TRUE, 0);
+
   gtk_container_add (GTK_CONTAINER (fileman), vbox);
 
   g_signal_connect (object, "destroy",

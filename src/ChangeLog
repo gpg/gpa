@@ -1,5 +1,7 @@
 2008-02-06  Marcus Brinkmann  <marcus@g10code.de>
 
+	* fileman.c (gpa_file_manager_constructor): Add alignment.
+
 	* clipboard.c (clipboard_toolbar_new): Adjust spelling in tooltips.
 	* keyring.c (keyring_toolbar_new): Likewise.
 	* fileman.c (fileman_toolbar_new): Likewise.
