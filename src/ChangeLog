@@ -1,5 +1,7 @@
 2008-02-07  Marcus Brinkmann  <marcus@g10code.de>
 
+	* clipboard.c (file_created_cb): Convert \r\n to \n.
+
 	* clipboard.c (GTK_STOCK_SELECT_ALL) [!GTK_CHECK_VERSION(2,10,0):
 	New macro.
 	(clipboard_text_new): Fix last change.
