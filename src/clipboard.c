@@ -60,6 +60,7 @@
 #define gtk_text_buffer_get_has_selection(textbuf) \
   gtk_text_buffer_get_selection_bounds (textbuf, NULL, NULL);
 #define gdk_atom_intern_static_string(str) gdk_atom_intern (str, FALSE)
+#define GTK_STOCK_SELECT_ALL "gtk-select-all"
 #define MY_GTK_TEXT_BUFFER_NO_HAS_SELECTION
 #endif
 
@@ -1000,7 +1001,7 @@ clipboard_text_new (GpaClipboard *clipboard)
 			    G_CALLBACK (update_selection_sensitive_widgets),
 			    clipboard);
   g_signal_connect_after (clipboard->text_buffer, "backspace",
-			    G_CALLBACK (update_selection_sensitive_widgets2),
+			    G_CALLBACK (update_selection_sensitive_widgets),
 			    clipboard);
 #endif
 
