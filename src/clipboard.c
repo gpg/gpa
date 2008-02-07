@@ -292,6 +292,7 @@ dos_to_unix (gchar *str, gsize *len)
   *dst = '\0';
   *len = dst - str;
 }
+#endif
 
 
 /* Add a file created by an operation to the list */
