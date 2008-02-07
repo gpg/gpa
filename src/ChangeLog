@@ -1,5 +1,9 @@
 2008-02-07  Marcus Brinkmann  <marcus@g10code.de>
 
+	* clipboard.c (dos_to_unix) [G_OS_WIN32]: New function.
+	(file_created_cb) [G_OS_WIN32]: Use it.
+	(file_open) [G_OS_WIN32]: Use it.
+
 	* clipboard.c (file_created_cb): Convert \r\n to \n.
 
 	* clipboard.c (GTK_STOCK_SELECT_ALL) [!GTK_CHECK_VERSION(2,10,0):

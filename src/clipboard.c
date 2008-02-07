@@ -271,6 +271,29 @@ clipboard_owner_change_cb (GtkClipboard *clip, GdkEventOwnerChange *event,
 }
 
 
+#ifdef G_OS_WIN32
+void
+dos_to_unix (gchar *str, gsize *len)
+{
+  /* On Windows 2000, we need to convert \r\n to \n in the output for
+     cut & paste to work properly (otherwise, extra newlines will be
+     inserted).  */
+  gchar *src;
+  gchar *dst;
+  
+  src = str;
+  dst = str;
+  while (*src)
+    {
+      if (src[0] == '\r' && src[1] == '\n')
+	src++;
+      *(dst++) = *(src++);
+    }
+  *dst = '\0';
+  *len = dst - str;
+}
+
+
 /* Add a file created by an operation to the list */
 static void
 file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
@@ -292,23 +315,7 @@ file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
     }
 
 #ifdef G_OS_WIN32
-  {
-    /* On Windows 2000, we need to convert \r\n to \n in the output for
-       cut & paste to work properly (otherwise, extra newlines will be
-       inserted).  */
-    gchar *src;
-    gchar *dst;
-
-    src = item->direct_out;
-    dst = item->direct_out;
-    while (*src)
-      {
-	if (src[0] == '\r' && src[1] == '\n')
-	  src++;
-	*(dst++) = *(src++);
-      }
-    *dst = '\0';
-  }
+  dos_to_unix (item->direct_out, &item->direct_out_len);
 #endif
 
   gtk_text_buffer_set_text (clipboard->text_buffer,
@@ -444,7 +451,11 @@ file_open (gpointer param)
       g_free (filename);
       return;
     }
-  
+
+#ifdef G_OS_WIN32
+  dos_to_unix (contents, &length);
+#endif
+
   gtk_text_buffer_set_text (clipboard->text_buffer, contents, length);
   g_free (contents);
 }
