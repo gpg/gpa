@@ -91,7 +91,6 @@ gpa_file_encrypt_dialog_set_property (GObject     *object,
       break;
     case PROP_FORCE_ARMOR:
       dialog->force_armor = g_value_get_boolean (value);
-      g_print ("YYY: set to %i\n", dialog->force_armor);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
