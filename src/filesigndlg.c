@@ -131,7 +131,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  GTK_STOCK_OK, GTK_RESPONSE_OK,
 			  _("_Cancel"), GTK_RESPONSE_CANCEL, NULL);
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Sign files"));
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Sign documents"));
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
@@ -162,7 +162,7 @@ gpa_file_sign_dialog_constructor (GType type,
   radio_sign_sep =
     gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
 				      accelGroup,
-				      _("sign in separate _file"));
+				      _("_detached signature"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
   dialog->radio_sep = radio_sign_sep;
 

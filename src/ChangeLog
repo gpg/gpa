@@ -1,3 +1,13 @@
+2008-02-12  Marcus Brinkmann  <marcus@g10code.de>
+
+	* encryptdlg.c (gpa_file_encrypt_dialog_constructor): Use
+	"documents" instead of "files" in windows title.
+	* gpafileencryptop.c (ignore_key_trust): Likewise.
+	* verifydlg.c (gpa_file_verify_dialog_constructor): Likewise.
+	* filesigndlg.c (gpa_file_sign_dialog_constructor): Likewise.
+	(gpa_file_sign_dialog_constructor): Say "detached signature"
+	instead of "Sign in separate file".
+
 2008-02-07  Marcus Brinkmann  <marcus@g10code.de>
 
 	* clipboard.c (dos_to_unix) [G_OS_WIN32]: New function.

@@ -465,7 +465,7 @@ ignore_key_trust (gpgme_key_t key, GtkWidget *parent)
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
 
-  label = gtk_label_new (_("You are going to encrypt a file using "
+  label = gtk_label_new (_("You are going to encrypt a document using "
 			   "the following key:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
