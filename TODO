@@ -39,17 +39,22 @@ In no particular order:
   be better implemented in gpg.
 
 * MB:
-** Add a beauty bar to filemanager (requires an icon corresponding to
-   keyring.xpm).
-** Add frame around filemanager list.
+** Support getting plaintext from verify operation (should emit "created file"
+   then).  NEEDED FOR CLIPBOARD of non clear text.
+** Fix gpgconf support in windows (gpgme bug?).
+
+** Convert the windows registry strings for the home dir to the glib filename
+   encoding, or rather to utf8 and from there to the glib filename encoding.
+   Use the wide character interfaces for that.
+** We need to make sure the server code works with the socket path containing
+   non-7bit ASCII characters under Windows!
+** We also need to make sure that under Unix with filename encoding being
+   different from UTF-8, everything works as expected.  All displayed
+   filenames should be converted with g_filename_to_utf8!
 ** Support receiving keys from keyservers for unknown certificates, by
    right click in "Signatures" tab of keyring manager and for all unknown
    keys in that list at once.
-** Support getting plaintext from verify operation (should emit "created file"
-   then).  NEEDED FOR CLIPBOARD of non clear text.
 ** Make signer selection list a bit larger than one row.
-** clipboard: handle sensitivity of menu and toolbar items.
-   Force armor.
 ** Change gpa_window_error to use gtk_label_set_line_wrap and remove
    all those newlines. 
 ** The sign, encrypt dialog and progress bar is not centered over the
