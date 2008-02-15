@@ -3,6 +3,11 @@ Noteworthy changes in version 0.7.7
 
  * Add basic UI server mode and option --server.
 
+ * GPA now supports direct crypto operations to and from the
+   clipboard, and features a simple text edit area as well.
+
+ * GPA supports manipulating the backend configuration through
+   gpg-conf.
 
 Noteworthy changes in version 0.7.6 (2007-05-24)
 ------------------------------------------------
