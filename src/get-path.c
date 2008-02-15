@@ -150,6 +150,7 @@ default_homedir (void)
 {
   gchar *dir;
 
+  /* g_getenv returns string in filename encoding.  */
   dir = (gchar *) g_getenv ("GNUPGHOME");
   if (dir && dir[0])
     dir = g_strdup (dir);

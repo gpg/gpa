@@ -20,6 +20,8 @@
 
 #include <config.h>
 
+#include <glib/gstdio.h>
+
 #include "gpa.h"
 #include "keylist.h"
 #include "gpapastrings.h"

@@ -1,5 +1,25 @@
 2008-02-15  Marcus Brinkmann  <marcus@g10code.de>
 
+	* options.c: Include <glib/gstdio.h>.
+	(gpa_options_save_settings): Use g_fopen instead of open.
+	(gpa_options_read_settings): Likewise.
+	* keyserver.c: Include <glib/gstdio.h>.
+	(read_list): Use g_fopen instead of fopen.  Change argument type
+	to gchar.
+	(keyserver_read_list): Change argument type to gchar.
+	* keyserver.h: Likewise in prototype.
+	* gpgmetools.c: Include <glib/gstdio.h>.
+	(gpa_fopen): Use g_fopen instead of fopen.
+	(gpa_backup_key): Likewise.
+	(gpa_open_output): Use g_open instead of open.
+	(gpa_open_input): Likewise.
+	* gpafileencryptop.c: Include <glib/gstdio.h>.
+	(gpa_file_encrypt_operation_done_cb): Use g_unlink instead of unlink.
+	* gpafiledecryptop.c: Include <glib/gstdio.h>.
+	(gpa_file_decrypt_operation_done_cb): Use g_unlink instead of unlink.
+	* gpafilesignop.c: Include <glib/gstdio.h>.
+	(gpa_file_sign_operation_done_cb): Use g_unlink instead of unlink.
+
 	* keygendlg.c (struct _GPAKeyGenDialog): New member entryUserID.
 	(gpa_key_gen_run_dialog): Initialize it.
 	(response_cb): Complain if there is no user ID.

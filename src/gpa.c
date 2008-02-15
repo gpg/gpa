@@ -338,7 +338,6 @@ main (int argc, char *argv[])
   putenv ("OUTPUT_CHARSET=utf8");
 #endif
 
-
   /* Handle command line options.  */
 
   /* Start the keyring editor by default.  */

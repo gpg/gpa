@@ -24,7 +24,7 @@
 #include <glib.h>
 
 
-int keyserver_read_list (const char *filename);
+int keyserver_read_list (const gchar *filename);
 GList *keyserver_get_as_glist (void);
 
 

@@ -22,6 +22,7 @@
 #include <config.h>
 
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #ifdef G_OS_UNIX
 #include <unistd.h>
@@ -376,7 +377,7 @@ gpa_file_sign_operation_done_cb (GpaContext *context,
 	{
 	  /* If an error happened, (or the user canceled) delete the
 	     created file and abort further signions.  */
-	  unlink (op->sig_filename);
+	  g_unlink (op->sig_filename);
 	  g_free (op->sig_filename);
 	}
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");

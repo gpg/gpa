@@ -88,7 +88,7 @@ release_server_list (ServerName list)
 
 
 static int
-read_list (const char *fname)
+read_list (const gchar *fname)
 {
   FILE *fp;
   char line[256], *p;
@@ -99,7 +99,7 @@ read_list (const char *fname)
   if (!fname)
     return -1;
 
-  fp = fopen (fname, "r");
+  fp = g_fopen (fname, "r");
   if (!fp)       
     {
 /*
@@ -159,7 +159,7 @@ read_list (const char *fname)
  * Returns: 0 = okay.
  */
 int
-keyserver_read_list (const char *confname)
+keyserver_read_list (const gchar *confname)
 {
   int rc;
 

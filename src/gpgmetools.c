@@ -41,6 +41,8 @@
 #include <windows.h>
 #endif
 
+#include <glib/gstdio.h>
+
 #ifndef O_BINARY
 #ifdef _O_BINARY
 #define O_BINARY	_O_BINARY
@@ -160,7 +162,7 @@ gpa_fopen (const char *filename, GtkWidget *parent)
   
   if (!check_overwriting (filename, parent))
     return NULL;
-  target = fopen (filename, "w");
+  target = g_fopen (filename, "w");
   if (!target)
     {
       gchar *message;
@@ -182,7 +184,8 @@ gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
     {
       gpg_error_t err;
 
-      target = open (filename, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
+      target = g_open (filename,
+		       O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
       if (target == -1)
 	{
 	  gchar *message;
@@ -208,7 +211,7 @@ gpa_open_input (const char *filename, gpgme_data_t *data, GtkWidget *parent)
   gpg_error_t err;
   int target = -1;
 
-  target = open (filename, O_RDONLY | O_BINARY);
+  target = g_open (filename, O_RDONLY | O_BINARY, 0);
   if (target == -1)
     {
       gchar *message;
@@ -429,7 +432,7 @@ gpa_backup_key (const gchar *fpr, const char *filename)
   sec_argv[0] = (gchar*) path;
   /* Open the file */
   mask = umask (0077);
-  file = fopen (filename, "w");
+  file = g_fopen (filename, "w");
   umask (mask);
   if (!file)
     {

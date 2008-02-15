@@ -21,6 +21,8 @@
 #include <config.h>
 
 #include <glib.h>
+#include <glib/gstdio.h>
+
 #include "options.h"
 #include "gpa.h"
 #include "gtktools.h"
@@ -397,7 +399,7 @@ gpa_options_save_settings (GpaOptions *options)
   FILE *options_file;
   
   g_assert(options->options_file != NULL);
-  options_file =  fopen (options->options_file, "w");
+  options_file = g_fopen (options->options_file, "w");
   if (!options_file)
     {
       g_warning("%s: %s", options->options_file, strerror (errno));
@@ -473,7 +475,7 @@ gpa_options_read_settings (GpaOptions *options)
   FILE *options_file;
   
   g_assert(options->options_file != NULL);
-  options_file =  fopen (options->options_file, "r");
+  options_file = g_fopen (options->options_file, "r");
   if (!options_file)
     {
       /* If the config file just doesn't exist, it's not an error */

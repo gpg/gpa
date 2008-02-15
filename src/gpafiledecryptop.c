@@ -22,6 +22,7 @@
 #include <config.h>
 
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #ifdef G_OS_UNIX
 #include <unistd.h>
@@ -310,7 +311,7 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
 	{
 	  /* If an error happened, (or the user canceled) delete the
 	     created file and abort further decryptions.  */
-	  unlink (file_item->filename_out);
+	  g_unlink (file_item->filename_out);
 	  g_free (file_item->filename_out);
 	  file_item->filename_out = NULL;
 	}
