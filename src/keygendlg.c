@@ -32,6 +32,7 @@
 
 struct _GPAKeyGenDialog {
   GtkWidget * window;
+  GtkWidget * entryUserID;
   GtkWidget * entryPasswd;
   GtkWidget * entryRepeat;
   GtkWidget * frameExpire;
@@ -46,12 +47,18 @@ response_cb(GtkDialog *dlg, gint response, gpointer param)
 {
   GPAKeyGenDialog * dialog = param;
   gchar * expiry_error;
+  const gchar *userid = gtk_entry_get_text (GTK_ENTRY (dialog->entryUserID));
   const gchar *passwd = gtk_entry_get_text (GTK_ENTRY (dialog->entryPasswd));
   const gchar *repeat = gtk_entry_get_text (GTK_ENTRY (dialog->entryRepeat));
 
   if (response == GTK_RESPONSE_OK)
-    {
-      if (!g_str_equal (passwd, repeat))
+    { 
+      if (! *userid)
+        {
+          gpa_window_error (_("You must enter a User ID."), dialog->window);
+          g_signal_stop_emission_by_name (dlg, "response");
+        }
+      else if (!g_str_equal (passwd, repeat))
         {
           gpa_window_error (_("In \"Passphrase\" and \"Repeat passphrase\",\n"
                               "you must enter the same passphrase."),
@@ -204,6 +211,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   gtk_table_attach (GTK_TABLE (table), labelUserID, 0, 1, 2, 3,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entryUserID = gtk_entry_new ();
+  dialog.entryUserID = entryUserID;
   gpa_connect_by_accelerator (GTK_LABEL (labelUserID), entryUserID,
 			      accelGroup, _("_User ID: "));
   gtk_table_attach (GTK_TABLE (table), entryUserID, 1, 2, 2, 3, GTK_FILL,

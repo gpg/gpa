@@ -1,3 +1,9 @@
+2008-02-15  Marcus Brinkmann  <marcus@g10code.de>
+
+	* keygendlg.c (struct _GPAKeyGenDialog): New member entryUserID.
+	(gpa_key_gen_run_dialog): Initialize it.
+	(response_cb): Complain if there is no user ID.
+
 2008-02-12  Marcus Brinkmann  <marcus@g10code.de>
 
 	* encryptdlg.c (gpa_file_encrypt_dialog_constructor): Use
