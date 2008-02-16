@@ -1,7 +1,7 @@
 # configure.ac for GPA
 # Copyright (C) 2000, 2001  Werner Koch
 # Copyright (C) 2002, 2003, 2004  Miguel Coca
-# Copyright (C) 2005, 2006, 2007  g10 Code GmbH
+# Copyright (C) 2005, 2006, 2007, 2008  g10 Code GmbH
 # 
 # This file is part of GPA.
 # 
@@ -32,8 +32,8 @@ min_automake_version="1.9.3"
 m4_define(my_version, [0.7.7])
 m4_define(my_issvn, yes)
 
-m4_define([svn_revision], m4_esyscmd([echo -n $((svn info 2>/dev/null \
-          ||echo 'Revision: 0')|sed -n '/^Revision:/ s/[^0-9]//gp'|head -1)]))
+m4_define([svn_revision], m4_esyscmd([echo -n $( (svn info 2>/dev/null \
+            || echo 'Revision: 0')|sed -n '/^Revision:/ {s/[^0-9]//gp;q;}')]))
 AC_INIT([gpa], my_version[]m4_if(my_issvn,[yes],[-svn[]svn_revision]),
         [bug-gpa@gnupg.org])
 
