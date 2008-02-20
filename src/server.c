@@ -1,5 +1,5 @@
 /* server.c -  The UI server part of GPA.
- * Copyright (C) 2007 g10 Code GmbH
+ * Copyright (C) 2007, 2008 g10 Code GmbH
  *
  * This file is part of GPA
  *
@@ -62,6 +62,9 @@ struct conn_ctrl_s
 
   /* List of collected recipients.  */
   GSList *recipients;
+
+  /* The current sender address (malloced). */
+  char *sender;
 };
 
 
@@ -246,7 +249,7 @@ cmd_recipient (assuan_context_t ctx, char *line)
 
 
 /* Continuation for cmd_encrypt.  */
-void
+static void
 cont_encrypt (assuan_context_t ctx, gpg_error_t err)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
@@ -270,7 +273,7 @@ cont_encrypt (assuan_context_t ctx, gpg_error_t err)
 }
 
 
-/* ENCRYPT --protocol=OPENPGP|CMS
+/* ENCRYPT --protocol=OpenPGP|CMS
 
    Encrypt the data received on INPUT to OUTPUT.
 */
@@ -384,18 +387,7 @@ cmd_encrypt (assuan_context_t ctx, char *line)
 
 
 
-/* Continuation for cmd_prep_encrypt.  */
-void
-cont_prep_encrypt (assuan_context_t ctx, gpg_error_t err)
-{
-  g_debug ("cont_prep_encrypt called with with ERR=%s <%s>",
-           gpg_strerror (err), gpg_strsource (err));
-
-  assuan_process_done (ctx, err);
-}
-
-
-/* PREP_ENCRYPT [--protocol=OPENPGP|CMS]
+/* PREP_ENCRYPT [--protocol=OpenPGP|CMS]
 
    Dummy encryption command used to check whether the given recipients
    are all valid and to tell the cleint the preferred protocol.  */
@@ -424,7 +416,7 @@ cmd_prep_encrypt (assuan_context_t ctx, char *line)
       goto leave;
     }
 
-  ctrl->cont_cmd = cont_prep_encrypt;
+  ctrl->cont_cmd = NULL;
   op = gpa_stream_encrypt_operation_new (NULL, NULL, NULL,
                                          copy_recipients (ctrl), 0, ctx);
   g_signal_connect (G_OBJECT (op), "completed",
@@ -435,6 +427,190 @@ cmd_prep_encrypt (assuan_context_t ctx, char *line)
   return assuan_process_done (ctx, err);
 }
 
+
+
+/*  SENDER <email>
+
+    EMAIL is the plain ASCII encoded address ("addr-spec" as per
+    RFC-2822) enclosed in angle brackets.  The address set by this
+    command is valid until a successful @code{SIGN} command or until a
+    @code{RESET} command.  A second command overrides the effect of
+    the first one; if EMAIL is not given the server shall use the
+    default signing key.  */
+static int
+cmd_sender (assuan_context_t ctx, char *line)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  gpg_error_t err = 0;
+
+  xfree (ctrl->sender);
+  ctrl->sender = NULL;
+  if (*line)
+    ctrl->sender = xstrdup (line);
+
+  return assuan_process_done (ctx, err);
+}
+
+
+
+/* Continuation for cmd_sign.  */
+static void
+cont_sign (assuan_context_t ctx, gpg_error_t err)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+
+  g_debug ("cont_sign called with with ERR=%s <%s>",
+           gpg_strerror (err), gpg_strsource (err));
+
+  if (ctrl->input_channel)
+    {
+      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
+      ctrl->input_channel = NULL;
+    }
+  if (ctrl->output_channel)
+    {
+      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
+      ctrl->output_channel = NULL;
+    }
+  if (!err)
+    {
+      xfree (ctrl->sender);
+      ctrl->sender = NULL;
+    }
+  assuan_process_done (ctx, err);
+}
+
+
+/* SIGN --protocol=OpenPGP|CMS [--detached]
+
+   Sign the data received on INPUT to OUTPUT.
+*/
+static int 
+cmd_sign (assuan_context_t ctx, char *line)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  gpg_error_t err;
+  gpgme_protocol_t protocol = 0;
+  int detached;
+  GpaStreamEncryptOperation *op;
+  gpgme_data_t input_data = NULL;
+  gpgme_data_t output_data = NULL;
+
+  if (has_option (line, "--protocol=OpenPGP"))
+    protocol = GPGME_PROTOCOL_OpenPGP;
+  else if (has_option (line, "--protocol=CMS"))
+    protocol = GPGME_PROTOCOL_CMS;
+  else if (has_option_name (line, "--protocol"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "invalid protocol");
+      goto leave;
+    }
+  else 
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "no protocol specified");
+      goto leave;
+    }
+
+  detached = has_option (line, "--detached");
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      goto leave;
+    }
+
+  ctrl->input_fd = translate_sys2libc_fd (assuan_get_input_fd (ctx), 0);
+  if (ctrl->input_fd == -1)
+    {
+      err = set_error (GPG_ERR_ASS_NO_INPUT, NULL);
+      goto leave;
+    }
+  ctrl->output_fd = translate_sys2libc_fd (assuan_get_output_fd (ctx), 1);
+  if (ctrl->output_fd == -1)
+    {
+      err = set_error (GPG_ERR_ASS_NO_OUTPUT, NULL);
+      goto leave;
+    }
+
+#ifdef HAVE_W32_SYSTEM
+  ctrl->input_channel = g_io_channel_win32_new_fd (ctrl->input_fd);
+#else
+  ctrl->input_channel = g_io_channel_unix_new (ctrl->input_fd);
+#endif
+  if (!ctrl->input_channel)
+    {
+      g_debug ("error creating input channel");
+      err = GPG_ERR_EIO;
+      goto leave;
+    }
+  g_io_channel_set_encoding (ctrl->input_channel, NULL, NULL);
+  g_io_channel_set_buffered (ctrl->input_channel, FALSE);
+
+#ifdef HAVE_W32_SYSTEM
+  ctrl->output_channel = g_io_channel_win32_new_fd (ctrl->output_fd);
+#else
+  ctrl->output_channel = g_io_channel_unix_new (ctrl->output_fd);
+#endif
+  if (!ctrl->output_channel)
+    {
+      g_debug ("error creating output channel");
+      err = GPG_ERR_EIO;
+      goto leave;
+    }
+  g_io_channel_set_encoding (ctrl->output_channel, NULL, NULL);
+  g_io_channel_set_buffered (ctrl->output_channel, FALSE);
+
+
+  err = gpgme_data_new_from_cbs (&input_data, &my_gpgme_data_cbs, ctrl);
+  if (err)
+    goto leave;
+  err = gpgme_data_new_from_cbs (&output_data, &my_gpgme_data_cbs, ctrl);
+  if (err)
+    goto leave;
+
+  return gpg_error (GPG_ERR_NOT_IMPLEMENTED);
+/*   ctrl->cont_cmd = cont_sign; */
+/*   op = gpa_stream_sign_operation_new (NULL, input_data, output_data, */
+/*                                       ctrl->sender, detached, 0, ctx); */
+/*   input_data = output_data = NULL; */
+/*   g_signal_connect (G_OBJECT (op), "completed", */
+/*                     G_CALLBACK (g_object_unref), NULL); */
+/*   return gpg_error (GPG_ERR_UNFINISHED); */
+
+ leave:
+  gpgme_data_release (input_data); 
+  gpgme_data_release (output_data);
+  if (ctrl->input_channel)
+    {
+      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
+      ctrl->input_channel = NULL;
+    }
+  if (ctrl->output_channel)
+    {
+      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
+      ctrl->output_channel = NULL;
+    }
+  assuan_close_input_fd (ctx);
+  assuan_close_output_fd (ctx);
+  return assuan_process_done (ctx, err);
+}
+
+
+
+/* START_KEYMANAGER
+
+   Pop up the key manager window.  The client expects that the key
+   manager is brought into the foregound and that this command
+   immediatley returns.
+*/
+static int
+cmd_start_keymanager (assuan_context_t ctx, char *line)
+{
+  gpa_open_keyring_editor ();
+
+  return assuan_process_done (ctx, 0);
+}
 
 
 
@@ -477,6 +653,8 @@ reset_notify (assuan_context_t ctx)
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
 
   release_recipients (ctrl);
+  xfree (ctrl->sender);
+  ctrl->sender = NULL;
   if (ctrl->input_channel)
     {
       g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
@@ -507,6 +685,9 @@ register_commands (assuan_context_t ctx)
     { "OUTPUT",    NULL },
     { "ENCRYPT",   cmd_encrypt },
     { "PREP_ENCRYPT", cmd_prep_encrypt },
+    { "SENDER",    cmd_sender },
+    { "SIGN",      cmd_sign   },
+    { "START_KEYMANAGER", cmd_start_keymanager },
     { "GETINFO",   cmd_getinfo },
     { NULL }
   };
@@ -587,15 +768,18 @@ gpa_run_server_continuation (assuan_context_t ctx, gpg_error_t err)
       g_debug ("no context in gpa_run_server_continuation");
       return;
     }
+  g_debug ("calling gpa_run_server_continuation (%s)", gpg_strerror (err));
   if (!ctrl->cont_cmd)
     {
-      g_debug ("no continuation in gpa_run_server_continuation");
-      return;
+      g_debug ("no continuation defined; using default");
+      assuan_process_done (ctx, err);
     }
-  cont_cmd = ctrl->cont_cmd;
-  ctrl->cont_cmd = NULL;
-  g_debug ("calling gpa_run_server_continuation (%s)", gpg_strerror (err));
-  cont_cmd (ctx, err);
+  else
+    {
+      cont_cmd = ctrl->cont_cmd;
+      ctrl->cont_cmd = NULL;
+      cont_cmd (ctx, err);
+    }
   g_debug ("leaving gpa_run_server_continuation");
 }
 
