@@ -1,3 +1,7 @@
+2008-02-28  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Invoke AC_SYS_LARGEFILE.
+
 2008-02-16  Marcus Brinkmann  <marcus@g10code.de>
 
 	* configure.ac: Update macro svn_revision.

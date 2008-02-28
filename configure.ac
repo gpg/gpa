@@ -222,6 +222,8 @@ else
                 have_gpgme=yes,have_gpgme=no)
 fi
 
+# We need this for GPGME
+AC_SYS_LARGEFILE
 
 dnl
 dnl Checks for typedefs and structures
