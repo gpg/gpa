@@ -1,3 +1,8 @@
+2008-02-28  Marcus Brinkmann  <marcus@g10code.de>
+
+	* clipboard.c (gpa_clipboard_constructor): Call
+	update_selection_sensitive_widgets.
+
 2008-02-28  Werner Koch  <wk@g10code.com>
 
 	* server.c (struct conn_ctrl_s): Add fields is_unfinished and

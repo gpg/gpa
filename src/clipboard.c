@@ -1144,6 +1144,9 @@ gpa_clipboard_constructor (GType type,
     set_paste_sensitivity (clipboard, clip);
   }
 
+  /* Update the sensitivity of selection items.  */
+  update_selection_sensitive_widgets (clipboard);
+
   return object;
 }
 
@@ -1155,7 +1158,6 @@ gpa_clipboard_new ()
   GpaClipboard *clipboard;
 
   clipboard = g_object_new (GPA_CLIPBOARD_TYPE, NULL);  
-  // FIXME  update_selection_sensitive_widgets (clipboard);
 
   return clipboard;
 }
@@ -1166,10 +1168,9 @@ gpa_clipboard_new ()
 GtkWidget *
 gpa_clipboard_get_instance (void)
 {
-  if (!instance)
-    {
-      instance = gpa_clipboard_new ();
-    }
+  if (! instance)
+    instance = gpa_clipboard_new ();
+
   return GTK_WIDGET (instance);
 }
 
