@@ -22,10 +22,20 @@
 #include <glib.h>
 
 #include "gpgmetools.h"
-#include "encryptdlg.h"
+#include "recipientdlg.h"
 #include "gpawidgets.h"
 #include "gpapastrings.h"
 #include "gpastreamencryptop.h"
+
+
+/* Indentifiers for our properties. */
+enum 
+  {
+    PROP_0,
+    PROP_RECIPIENTS
+  };
+
+
 
 static void response_cb (GtkDialog *dialog,
                          gint response,
@@ -48,6 +58,42 @@ free_func (void *p, void *dummy)
 
 
 
+static void
+gpa_stream_encrypt_operation_get_property (GObject *object, guint prop_id,
+                                           GValue *value, GParamSpec *pspec)
+{
+  GpaStreamEncryptOperation *op = GPA_STREAM_ENCRYPT_OPERATION (object);
+  
+  switch (prop_id)
+    {
+    case PROP_RECIPIENTS:
+      g_value_set_pointer (value, op->recipients);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+
+static void
+gpa_stream_encrypt_operation_set_property (GObject *object, guint prop_id,
+                                           const GValue *value,
+                                           GParamSpec *pspec)
+{
+  GpaStreamEncryptOperation *op = GPA_STREAM_ENCRYPT_OPERATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_RECIPIENTS:
+      op->recipients = (GSList*)g_value_get_pointer (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 
 static void
 gpa_stream_encrypt_operation_finalize (GObject *object)
@@ -69,6 +115,8 @@ static void
 gpa_stream_encrypt_operation_init (GpaStreamEncryptOperation *op)
 {
   op->encrypt_dialog = NULL;
+  op->recipients = NULL;
+  op->selected_protocol = GPGME_PROTOCOL_UNKNOWN;
 }
 
 
@@ -87,8 +135,9 @@ gpa_stream_encrypt_operation_constructor
   op = GPA_STREAM_ENCRYPT_OPERATION (object);
 
   /* Create the "Encrypt" dialog */
-  op->encrypt_dialog = gpa_file_encrypt_dialog_new
-    (GPA_OPERATION (op)->window, FALSE);
+  op->encrypt_dialog = recipient_dlg_new (GPA_OPERATION (op)->window);
+
+  recipient_dlg_set_recipients (op->encrypt_dialog, op->recipients);
 
   g_signal_connect (G_OBJECT (op->encrypt_dialog), "response",
 		    G_CALLBACK (response_cb), op);
@@ -118,6 +167,16 @@ gpa_stream_encrypt_operation_class_init (GpaStreamEncryptOperationClass *klass)
 
   object_class->constructor = gpa_stream_encrypt_operation_constructor;
   object_class->finalize = gpa_stream_encrypt_operation_finalize;
+  object_class->set_property = gpa_stream_encrypt_operation_set_property;
+  object_class->get_property = gpa_stream_encrypt_operation_get_property;
+
+  g_object_class_install_property 
+    (object_class, PROP_RECIPIENTS,
+     g_param_spec_pointer 
+     ("recipients", "Recipients",
+      "A list of recipients in rfc-822 mailbox format.",
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
 }
 
 
@@ -191,152 +250,14 @@ start_encryption (GpaStreamEncryptOperation *op, gpgme_key_t *keys)
 
 
 
-/*
- * Setting the recipients for the context.
- */
-
-/* static GtkResponseType */
-/* ignore_key_trust (gpgme_key_t key, GtkWidget *parent) */
-/* { */
-/*   GtkWidget *dialog; */
-/*   GtkWidget *key_info; */
-/*   GtkWidget *vbox; */
-/*   GtkWidget *hbox; */
-/*   GtkWidget *label; */
-/*   GtkWidget *image; */
-/*   GtkResponseType response; */
-
-/*   dialog = gtk_dialog_new_with_buttons (_("Unknown Key"), GTK_WINDOW(parent), */
-/* 					GTK_DIALOG_MODAL,  */
-/* 					_("_Yes"), GTK_RESPONSE_YES, */
-/* 					_("_No"), GTK_RESPONSE_NO, */
-/* 					NULL); */
-/*   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES); */
-/*   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5); */
-
-/*   hbox = gtk_hbox_new (FALSE, 6); */
-/*   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, */
-/* 				    GTK_ICON_SIZE_DIALOG); */
-/*   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0); */
-/*   vbox = gtk_vbox_new (FALSE, 6); */
-/*   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0); */
-/*   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox); */
-
-/*   label = gtk_label_new (_("You are going to encrypt a stream using " */
-/* 			   "the following key:")); */
-/*   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5); */
-/*   key_info = gpa_key_info_new (key); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5); */
-/*   label = gtk_label_new (_("However, it is not certain that the key belongs " */
-/* 			   "to that person.")); */
-/*   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5); */
-/*   label = gtk_label_new (NULL); */
-/*   gtk_label_set_markup (GTK_LABEL (label),  */
-/* 			_("Do you <b>really</b> want to use this key?")); */
-/*   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5); */
-
-/*   gtk_widget_show_all (dialog); */
-/*   response = gtk_dialog_run (GTK_DIALOG (dialog)); */
-
-/*   gtk_widget_destroy (dialog); */
-/*   return response; */
-/* } */
-
-/* static void */
-/* revoked_key (gpgme_key_t key, GtkWidget *parent) */
-/* { */
-/*   GtkWidget *dialog; */
-/*   GtkWidget *key_info; */
-/*   GtkWidget *vbox; */
-/*   GtkWidget *hbox; */
-/*   GtkWidget *label; */
-/*   GtkWidget *image; */
-
-/*   dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent), */
-/* 					GTK_DIALOG_MODAL,  */
-/* 					_("_Close"), GTK_RESPONSE_CLOSE, */
-/* 					NULL); */
-/*   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE); */
-/*   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5); */
-
-/*   hbox = gtk_hbox_new (FALSE, 6); */
-/*   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR, */
-/* 				    GTK_ICON_SIZE_DIALOG); */
-/*   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0); */
-/*   vbox = gtk_vbox_new (FALSE, 6); */
-/*   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0); */
-/*   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox); */
-
-/*   label = gtk_label_new (_("The following key has been revoked by it's owner:")); */
-/*   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5); */
-/*   key_info = gpa_key_info_new (key); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5); */
-/*   label = gtk_label_new (_("And can not be used for encryption.")); */
-/*   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5); */
-
-/*   gtk_widget_show_all (dialog); */
-/*   gtk_dialog_run (GTK_DIALOG (dialog)); */
-/*   gtk_widget_destroy (dialog); */
-/* } */
-
-/* static void */
-/* expired_key (gpgme_key_t key, GtkWidget *parent) */
-/* { */
-/*   GtkWidget *dialog; */
-/*   GtkWidget *key_info; */
-/*   GtkWidget *vbox; */
-/*   GtkWidget *hbox; */
-/*   GtkWidget *label; */
-/*   GtkWidget *image; */
-/*   gchar *message; */
-
-/*   dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent), */
-/* 					GTK_DIALOG_MODAL,  */
-/* 					_("_Close"), GTK_RESPONSE_CLOSE, */
-/* 					NULL); */
-/*   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE); */
-/*   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5); */
-
-/*   hbox = gtk_hbox_new (FALSE, 6); */
-/*   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR, */
-/* 				    GTK_ICON_SIZE_DIALOG); */
-/*   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0); */
-/*   vbox = gtk_vbox_new (FALSE, 6); */
-/*   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0); */
-/*   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox); */
-
-/*   message = g_strdup_printf (_("The following key expired on %s:"), */
-/*                              gpa_expiry_date_string  */
-/*                              (key->subkeys->expires)); */
-/*   label = gtk_label_new (message); */
-/*   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5); */
-/*   key_info = gpa_key_info_new (key); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5); */
-/*   label = gtk_label_new (_("And can not be used for encryption.")); */
-/*   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5); */
-/*   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5); */
-
-/*   gtk_widget_show_all (dialog); */
-/*   gtk_dialog_run (GTK_DIALOG (dialog)); */
-/*   gtk_widget_destroy (dialog); */
-/* } */
-
-
-/* Given a list of strings, each describing one recipient parse them
+/* Given a list of strings, each describing one recipient, parse them
    to detect duplicates, check the validity of each key and ask the
    user whether he wants to use an invalid key. 
 
-   Try to find a key for each item in array NAMES. Items not found are
-   stored as malloced strings in the newly allocated array UNKNOWN.
-   Found keys are stored in the newly allocated array FOUND.  Both
-   arrays are terminated by a NULL entry.  Caller needs to release
-   FOUND and UNKNOWN.
+   Try to find a key for each item in RECIPIENT.  Items not found are
+   stored in the newly allocated list R_UNKNOWN.  Found keys are
+   stored in the newly allocated and NULL terminated gpgme_key_t array
+   R_FOUND.  Caller needs to release R_FOUND and R_UNKNOWN.
  */
 static gpg_error_t
 parse_recipients (GpaStreamEncryptOperation *op, GSList *recipients,
@@ -359,6 +280,8 @@ parse_recipients (GpaStreamEncryptOperation *op, GSList *recipients,
   err = gpgme_new (&ctx);
   if (err)
     return err; 
+
+  /* Fixme: Add rfc-822 mailbox parsing.  */
 
   for (n=0, recp = recipients; recp; recp = g_slist_next (recp))
     n++;
@@ -386,8 +309,25 @@ parse_recipients (GpaStreamEncryptOperation *op, GSList *recipients,
       gpgme_op_keylist_end (ctx);
 
       /* If a usable key has been found, put it into the list of good
-         keys.  All other keys end up in the list of unknown key.  */
-      if (key && !key->revoked && !key->disabled && !key->expired)
+         keys.  All other keys end up in the list of unknown keys.  We
+         select the protocol to use from the frist found key.  Fixme:
+         We might want to have a different logic to select the
+         protocol.  */
+      if (key 
+          && used_proto != GPGME_PROTOCOL_UNKNOWN
+          && used_proto != key->protocol)
+        {
+          /* We can't use this key becuase it does not match the
+             selected protocol.  */
+	  char *p;
+          const char *warn = _("wrong protocol");
+
+	  n = strlen (name) + 3 + strlen (warn);
+          p = xmalloc (n+1);
+	  snprintf (p, n, "%s (%s)", name, warn);
+          unknown = g_slist_append (unknown, p);
+        }
+      else if (key && !key->revoked && !key->disabled && !key->expired)
         {
           gpgme_key_ref (key);
           found[found_idx++] = key;
@@ -415,11 +355,17 @@ parse_recipients (GpaStreamEncryptOperation *op, GSList *recipients,
   if (err)
     ;
   else if (used_proto == GPGME_PROTOCOL_OpenPGP)
-    err = gpa_operation_write_status (GPA_OPERATION (op), "PROTOCOL",
-                                      "OpenPGP", NULL);
+    {
+      op->selected_protocol = used_proto;
+      err = gpa_operation_write_status (GPA_OPERATION (op), "PROTOCOL",
+                                        "OpenPGP", NULL);
+    }
   else if (used_proto == GPGME_PROTOCOL_CMS)
-    err = gpa_operation_write_status (GPA_OPERATION (op), "PROTOCOL",
-                                      "CMS", NULL);
+    {
+      op->selected_protocol = used_proto;
+      err = gpa_operation_write_status (GPA_OPERATION (op), "PROTOCOL",
+                                        "CMS", NULL);
+    }
   else 
     err = 0;
 
@@ -447,7 +393,7 @@ response_cb (GtkDialog *dialog, int response, void *user_data)
   if (response != GTK_RESPONSE_OK)
     {
       /* The dialog was canceled, so we do nothing and complete the
-       * operation */
+       * operation.  */
       gpa_operation_server_finish (GPA_OPERATION (op), 
                                    gpg_error (GPG_ERR_CANCELED));
       g_signal_emit_by_name (GPA_OPERATION (op), "completed");
@@ -463,10 +409,19 @@ response_cb (GtkDialog *dialog, int response, void *user_data)
   if (err)
     goto leave;
 
-  /* Our streams work all in ascii armored mode (Either PGP or PEM) */
-  if (GPA_STREAM_OPERATION (op)->input_stream)
+  /* Set the output encoding.  */
+  if (GPA_STREAM_OPERATION (op)->input_stream 
+      && GPA_STREAM_OPERATION (op)->output_stream)
     {
-      gpgme_set_armor (GPA_OPERATION (op)->context->ctx, 1);
+      if (op->selected_protocol == GPGME_PROTOCOL_CMS)
+        {
+          gpgme_data_set_encoding (GPA_STREAM_OPERATION (op)->output_stream,
+                                   GPGME_DATA_ENCODING_BASE64);
+        }
+      else
+        {
+          gpgme_set_armor (GPA_OPERATION (op)->context->ctx, 1);
+        }
       err = start_encryption (op, keys);
     }
   else
@@ -537,12 +492,13 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamEncryptOperation *op)
 
 /* Start encrypting INPUT_STREAM to OUTPUT_STREAM using SERVER_CTX and
    WINDOW.  RECIPIENTS gives a list of recipients and the function
-   matches them with existing keys and selects appropriate keys.  If
-   it is not possible to unambigiously select keys and SILENT is not
-   given, a key selection dialog offers the user a way to manually
-   input keys.  INPUT_STREAM and OUTPUT_STREAM may be given as NULL in
-   which case the function skips the actual encryption step and just
-   verifies the recipients.  */
+   matches them with existing keys and selects appropriate keys.  The
+   ownership of RECIPIENTS is taken by this function.  If it is not
+   possible to unambigiously select keys and SILENT is not given, a
+   key selection dialog offers the user a way to manually select keys.
+   INPUT_STREAM and OUTPUT_STREAM may be given as NULL in which case
+   the function skips the actual encryption step and just verifies the
+   recipients.  */
 /* FIXME: We need to offer a way to return the actual selected list of
    recipients so that repeating this command with that list instantly
    starts the decryption.  */
@@ -560,10 +516,14 @@ gpa_stream_encrypt_operation_new (GtkWidget *window,
 		     "window", window,
 		     "input_stream", input_stream,
 		     "output_stream", output_stream,
+                     "recipients", recipients,
                      "server-ctx", server_ctx,
 		     NULL);
-  if (op)
-    op->recipients = recipients;
+  if (!op)
+    {
+      g_slist_foreach (recipients, free_func, NULL);
+      g_slist_free (recipients);
+    }
 
   return op;
 }

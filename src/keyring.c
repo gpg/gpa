@@ -1237,7 +1237,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
 }
 
 /* Fill the details page of the details notebook with the properties
-   of the publix key key */
+   of the public key.  */
 static void
 keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
 {

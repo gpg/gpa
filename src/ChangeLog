@@ -1,3 +1,14 @@
+2008-02-28  Werner Koch  <wk@g10code.com>
+
+	* server.c (struct conn_ctrl_s): Add fields is_unfinished and
+	client_died.
+	(not_finished): New. Use that instead of GPG_ERR_UNFINISHED.
+	(gpa_run_server_continuation, receive_cb): Handle dead client with
+	pending continuation.
+
+	* gpastreamencryptop.c: Add recipients property.
+	* recipientdlg.c, recipientdlg.h: New.
+
 2008-02-20  Werner Koch  <wk@g10code.com>
 
 	* server.c (cmd_start_keymanager): New.

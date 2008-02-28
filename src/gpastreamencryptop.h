@@ -61,6 +61,7 @@ struct _GpaStreamEncryptOperation
   
   GtkWidget *encrypt_dialog;
   GSList *recipients;
+  gpgme_protocol_t selected_protocol;
 };
 
 

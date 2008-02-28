@@ -40,7 +40,6 @@
 
 #define set_error(e,t) assuan_set_error (ctx, gpg_error (e), (t))
 
-
 /* The object used to keep track of the a connection's state.  */
 struct conn_ctrl_s;
 typedef struct conn_ctrl_s *conn_ctrl_t;
@@ -51,6 +50,14 @@ struct conn_ctrl_s
 
   /* NULL or continuation function for a command.  */
   void (*cont_cmd) (assuan_context_t, gpg_error_t);
+
+  /* Flag indicating that the client died while a continuation was
+     still registyered.  */
+  int client_died;
+
+  /* This is a helper to detect that the unfinished erroe code actually
+     comes from our command handler.  */
+  int is_unfinished;
 
   /* File descriptors used by the gpgme callbacks.  */
   int input_fd;
@@ -68,12 +75,23 @@ struct conn_ctrl_s
 };
 
 
-
+/* The nonce used by the server connection.  This nonce is required
+   uner Windows to emulate Unix Domain Sockets.  This is managed by
+   libassuan but we need to store the nonce in the application.  Under
+   Unix this is just a stub.  */
 static assuan_sock_nonce_t socket_nonce;
 
 
 
 
+static int
+not_finished (conn_ctrl_t ctrl)
+{
+  ctrl->is_unfinished = 1;
+  return gpg_error (GPG_ERR_UNFINISHED);
+}
+
+
 /* Test whether LINE contains thye option NAME.  An optional argument
    of the option is ignored.  For example with NAME being "--protocol"
    this function returns true for "--protocol" as well as for
@@ -229,10 +247,9 @@ copy_recipients (conn_ctrl_t ctrl)
 
   Set the recipient for the encryption.  <recipient> is an RFC2822
   recipient name.  This command may or may not check the recipient for
-  validity right away; if it does not (as implemented in GPA) all
-  recipients are checked at the time of the ENCRYPT command.  All
-  RECIPIENT commands are cumulative until a RESET or an successful
-  ENCRYPT command.  */
+  validity right away; if it does not (as here) all recipients are
+  checked at the time of the ENCRYPT command.  All RECIPIENT commands
+  are cumulative until a RESET or an successful ENCRYPT command.  */
 static int
 cmd_recipient (assuan_context_t ctx, char *line)
 {
@@ -365,7 +382,8 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   input_data = output_data = NULL;
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
-  return gpg_error (GPG_ERR_UNFINISHED);
+
+  return not_finished (ctrl);
 
  leave:
   gpgme_data_release (input_data); 
@@ -390,7 +408,7 @@ cmd_encrypt (assuan_context_t ctx, char *line)
 /* PREP_ENCRYPT [--protocol=OpenPGP|CMS]
 
    Dummy encryption command used to check whether the given recipients
-   are all valid and to tell the cleint the preferred protocol.  */
+   are all valid and to tell the client the preferred protocol.  */
 static int 
 cmd_prep_encrypt (assuan_context_t ctx, char *line)
 {
@@ -421,7 +439,7 @@ cmd_prep_encrypt (assuan_context_t ctx, char *line)
                                          copy_recipients (ctrl), 0, ctx);
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
-  return gpg_error (GPG_ERR_UNFINISHED);
+  return not_finished (ctrl);
 
  leave:
   return assuan_process_done (ctx, err);
@@ -576,7 +594,7 @@ cmd_sign (assuan_context_t ctx, char *line)
 /*   input_data = output_data = NULL; */
 /*   g_signal_connect (G_OBJECT (op), "completed", */
 /*                     G_CALLBACK (g_object_unref), NULL); */
-/*   return gpg_error (GPG_ERR_UNFINISHED); */
+/*   return not_finished (ctrl); */
 
  leave:
   gpgme_data_release (input_data); 
@@ -774,6 +792,11 @@ gpa_run_server_continuation (assuan_context_t ctx, gpg_error_t err)
       g_debug ("no continuation defined; using default");
       assuan_process_done (ctx, err);
     }
+  else if (!ctrl->client_died)
+    {
+      g_debug ("not running continuation as client has disconnected");
+      connection_finish (ctx);
+    }
   else
     {
       cont_cmd = ctrl->cont_cmd;
@@ -818,18 +841,22 @@ receive_cb (GIOChannel *channel, GIOCondition condition, void *data)
             ; /* Ignore.  */
           else if (gpg_err_code (err) == GPG_ERR_EOF || err == -1)
             {
-              connection_finish (ctx);
-              /* FIXME: what about the socket? */
+              if (ctrl->cont_cmd)
+                ctrl->client_died = 1; /* Need to delay the cleanup.  */
+              else
+                connection_finish (ctx);
               return FALSE; /* Remove from the watch.  */
             }
           else if (gpg_err_code (err) == GPG_ERR_UNFINISHED)
             {
-              if ( !ctrl->cont_cmd)
+              if (!ctrl->is_unfinished)
                 {
                   /* It is quite possible that some other subsystem
                      returns that error code.  Tell the user about
                      this curiosity and finish the command.  */
                   g_debug ("note: Unfinished error code not emitted by us");
+                  if (ctrl->cont_cmd)
+                    g_debug ("OOPS: pending continuation!");
                   assuan_process_done (ctx, err);
                 }
             }
