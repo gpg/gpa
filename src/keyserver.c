@@ -21,6 +21,9 @@
 #include <config.h>
 
 #include <glib.h>
+#if GLIB_CHECK_VERSION (2, 6, 0)
+#include <glib/gstdio.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -99,7 +102,11 @@ read_list (const gchar *fname)
   if (!fname)
     return -1;
 
+#if GLIB_CHECK_VERSION (2, 6, 0)
   fp = g_fopen (fname, "r");
+#else
+  fp = fopen (fname, "r");
+#endif
   if (!fp)       
     {
 /*

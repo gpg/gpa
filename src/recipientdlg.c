@@ -32,10 +32,6 @@ struct _RecipientDlg
   GtkDialog parent;
   
   GtkWidget *clist_keys;
-  GtkWidget *check_sign;
-  GtkWidget *check_armor;
-  GtkWidget *clist_who;
-  GtkWidget *scroller_who;
 };
 
 
@@ -73,6 +69,30 @@ enum
 
 
 
+static void
+add_tooltip (GtkWidget *widget, const char *text)
+{
+#if GTK_CHECK_VERSION (2, 12, 0)
+  if (widget && text && *text)
+    gtk_widget_set_tooltip_text (widget, text);
+#endif
+}
+
+static void
+set_column_title (GtkTreeViewColumn *column,
+                  const char *title, const char *tooltip)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (title);
+  /* We need to show the label before setting the widget.  */
+  gtk_widget_show (label);
+  gtk_tree_view_column_set_widget (column, label);
+  add_tooltip (gtk_tree_view_column_get_widget (column), tooltip);
+}
+
+
+
 /* Create the main list of this dialog.  */
 static GtkWidget *
 recplist_window_new (void)
@@ -81,7 +101,7 @@ recplist_window_new (void)
   GtkWidget *list;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
-  
+
   /* Create a model and associate a view.  */
   store = gtk_list_store_new (RECPLIST_N_COLUMNS,
 			      G_TYPE_STRING,
@@ -95,21 +115,31 @@ recplist_window_new (void)
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes 
     (_("Recipient"), renderer, "text", RECPLIST_MAILBOX, NULL);
+  set_column_title (column, _("Recipient"),
+                    _("Shows the recipients of the message."
+                      " A key needs to be assigned to each recipient."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
-    (_("PGP"), renderer, "active", RECPLIST_HAS_PGP, NULL);
+    (NULL, renderer, "active", RECPLIST_HAS_PGP, NULL);
+  set_column_title (column, "P", _("Checked if at least one matching"
+                                   " OpenPGP certificate has been found.")); 
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
-    (_("X.509"), renderer, "active", RECPLIST_HAS_X509, NULL);
+    (NULL, renderer, "active", RECPLIST_HAS_X509, NULL);
+  set_column_title (column, "X", _("Checked if at least one matching"
+                                   " X.509 certificate has been found.")); 
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes 
-    (_("Key ID"), renderer, "text", RECPLIST_KEYID, NULL);
+    (NULL, renderer, "text", RECPLIST_KEYID, NULL);
+  set_column_title (column, _("Key ID"),
+                    _("Shows the key ID of the selected key or an indication"
+                      " that a key needs to be selected."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
 
@@ -117,26 +147,152 @@ recplist_window_new (void)
 }
 
 
-
-
+/* Parse one recipient, this is the working horse of parse_recipeints. */
 static void
-changed_select_row_cb (GtkTreeSelection *treeselection, gpointer user_data)
+parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
+                     const char *mailbox)
 {
-/*   RecipientDlg *dialog = user_data; */
+  gpgme_key_t key, key2;
+  int any_pgp = 0, any_x509 = 0, any_ambiguous = 0, any_unusable = 0;
+  char *infostr = NULL;
+
+  key = NULL;
+
+  gpgme_set_protocol (ctx, GPGME_PROTOCOL_OpenPGP);
+  if (!gpgme_op_keylist_start (ctx, mailbox, 0))
+    {
+      if (!gpgme_op_keylist_next (ctx, &key))
+        {
+          any_pgp++;
+          if (!gpgme_op_keylist_next (ctx, &key2))
+            {
+              any_ambiguous++;
+              gpgme_key_unref (key);
+              gpgme_key_unref (key2);
+              key = key2 = NULL;
+            }
+        }
+    }
+  gpgme_op_keylist_end (ctx);
+  if (key)
+    {
+      /* fixme: We should put the key into a list.  It would be best
+         to use a hidden columnin the store.  Need to figure out how
+         to do that.  */
+      if (key->revoked || key->disabled || key->expired)
+        any_unusable++;
+      else if (!infostr)
+        infostr = gpa_gpgme_key_get_userid (key->uids);
+    }
+  gpgme_key_unref (key);
+  key = NULL;
+
+  gpgme_set_protocol (ctx, GPGME_PROTOCOL_CMS);
+  if (!gpgme_op_keylist_start (ctx, mailbox, 0))
+    {
+      if (!gpgme_op_keylist_next (ctx, &key))
+        {
+          any_x509++;
+          if (!gpgme_op_keylist_next (ctx, &key2))
+            {
+              any_ambiguous++;
+              gpgme_key_unref (key);
+              gpgme_key_unref (key2);
+              key = key2 = NULL;
+            }
+        }
+    }
+  gpgme_op_keylist_end (ctx);
+  if (key)
+    {
+      /* fixme: We should put the key into a list.  It would be best
+         to use a hidden column in the store.  Need to figure out how
+         to do that.  */
+      if (key->revoked || key->disabled || key->expired)
+        any_unusable++;
+      else if (!infostr)
+        infostr = gpa_gpgme_key_get_userid (key->uids);
+    }
+  gpgme_key_unref (key);
   
-/*   if (gpa_key_selector_has_selection (GPA_KEY_SELECTOR (dialog->clist_keys))) */
-/*     { */
-/*       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), */
-/* 					 GTK_RESPONSE_OK, TRUE); */
-/*     } */
-/*   else */
-/*     { */
-/*       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), */
-/* 					 GTK_RESPONSE_OK, FALSE); */
-/*     } */
+  if (!infostr)
+    infostr = g_strdup (any_ambiguous? 
+                        _("[ambiguous key - click to select]"):
+                        any_unusable?
+                        _("[unusable key - click to select another one]"):
+                        _("[click to select]"));
+  
+  g_print ("   pgp=%d x509=%d infostr=`%s'\n", any_pgp, any_x509, infostr);
+  gtk_list_store_set (store, iter,
+                      RECPLIST_HAS_PGP, any_pgp,
+                      RECPLIST_HAS_X509, any_x509,
+                      RECPLIST_KEYID, infostr,
+                      -1);
+  g_free (infostr);
 }
 
 
+/* Parse the list of recipeints, find possible keys and update the
+   store.  */
+static void
+parse_recipients (GtkListStore *store)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gpg_error_t err;
+  gpgme_ctx_t ctx;
+
+  err = gpgme_new (&ctx);
+  if (err)
+    gpa_gpgme_error (err);
+
+
+  model = GTK_TREE_MODEL (store);
+  /* Walk through the list, reading each row. */
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    do
+      {
+        char *mailbox;
+        
+        gtk_tree_model_get (model, &iter, 
+                            RECPLIST_MAILBOX, &mailbox,
+                            -1);
+        
+        /* Do something with the data */
+        g_print ("mailbox `%s'\n", mailbox);
+        parse_one_recipient (ctx, store, &iter, mailbox);
+        g_free (mailbox);
+      }
+    while (gtk_tree_model_iter_next (model, &iter));
+  
+  gpgme_release (ctx);
+}
+
+
+
+static void
+recplist_row_activated_cb (GtkTreeView       *tree_view,
+                           GtkTreePath       *path,
+                           GtkTreeViewColumn *column,
+                           gpointer           user_data)    
+{
+  RecipientDlg *dialog = user_data;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  char *mailbox;
+
+  g_print ("tree view row-activated received\n");
+  model = gtk_tree_view_get_model (tree_view);
+  if (!gtk_tree_model_get_iter (model, &iter, path))
+    return; 
+        
+  gtk_tree_model_get (model, &iter, 
+                      RECPLIST_MAILBOX, &mailbox,
+                      -1);
+        
+  g_print ("  mailbox is `%s'\n", mailbox);
+  g_free (mailbox);
+}
 
 
 
@@ -242,10 +398,9 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
   gtk_widget_set_size_request (scrollerKeys, 400, 200);
 
   clistKeys = recplist_window_new ();
-  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
-			      (GTK_TREE_VIEW (clistKeys))),
-		    "changed", G_CALLBACK (changed_select_row_cb),
-		    dialog);
+  g_signal_connect (G_OBJECT (GTK_TREE_VIEW (clistKeys)),
+                    "row-activated",
+                    G_CALLBACK (recplist_row_activated_cb), dialog);
   dialog->clist_keys = clistKeys;
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
   gpa_connect_by_accelerator (GTK_LABEL (labelKeys), clistKeys, accelGroup,
@@ -354,11 +509,12 @@ recipient_dlg_set_recipients (GtkWidget *object, GSList *recipients)
           gtk_list_store_set (store, &iter,
                               RECPLIST_MAILBOX, name,
                               RECPLIST_HAS_PGP, FALSE,
-                              RECPLIST_HAS_X509, (*name == 'f'),
-                              RECPLIST_KEYID,  "[click to select]",
+                              RECPLIST_HAS_X509, FALSE,
+                              RECPLIST_KEYID,  "",
                               -1);
         }    
     }
+  parse_recipients (store);
 }
 
 
