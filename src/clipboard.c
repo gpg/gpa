@@ -407,6 +407,8 @@ file_open (gpointer param)
 					 GTK_ICON_SIZE_DIALOG);
       gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
 
+      /* TRANSLATORS: The arguments are the filename, the integer size
+	 and the unit (such as KB or MB).  */
       str = g_strdup_printf (_("The file %s is %li%s large.  Do you really "
 			       " want to open it?"), filename, 
 			       buf.st_size / 1024 / 1024, "MB");
