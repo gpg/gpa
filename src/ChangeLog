@@ -1,3 +1,17 @@
+2008-03-04  Marcus Brinkmann  <marcus@g10code.de>
+
+	* keyring.c: Beautify source code.
+	(keyring_details_notebook): Add border around details
+	page.  Shrink border around signature and subkeys page.
+	(keyring_editor_add_subkeys_page): Set shadow type.
+	(struct _GPAKeyringEditor): Rename signatures_label to
+	signatures_hbox.
+	(keyring_details_notebook): Initialize signatures_hbox instead
+	signatures_label.
+	(keyring_signatures_page_fill_key): Show/hide signatures_hbox
+	instead of signatures_label and signatures_uids.
+	* clipboard.c (file_open): Use long long for size format.
+
 2008-03-03  Marcus Brinkmann  <marcus@g10code.de>
 
 	* clipboard.c (file_open): Add note for translators.

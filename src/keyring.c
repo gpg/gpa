@@ -71,39 +71,39 @@
 #include "gpagenkeyadvop.h"
 #include "gpagenkeysimpleop.h"
 
-/*
- *      The public keyring editor
- */
+
+/* The public keyring editor.  */
 
-/* Constants for the pages in the details notebook.
- */
-enum {
-  GPA_KEYRING_EDITOR_DETAILS,
-  GPA_KEYRING_EDITOR_SIGNATURES,
-  GPA_KEYRING_EDITOR_SUBKEYS,
-};
+/* Constants for the pages in the details notebook.  */
+enum
+  {
+    GPA_KEYRING_EDITOR_DETAILS,
+    GPA_KEYRING_EDITOR_SIGNATURES,
+    GPA_KEYRING_EDITOR_SUBKEYS,
+  };
+
 
 /* Struct passed to all signal handlers of the keyring editor as user
- * data */
-struct _GPAKeyringEditor {
-
-  /* The toplevel window of the editor */
+   data.  */
+struct _GPAKeyringEditor
+{
+  /* The toplevel window of the editor.  */
   GtkWidget *window;
 
-  /* The central list of keys */
+  /* The central list of keys.  */
   GpaKeyList *keylist;
 
-  /* The "Show Ownertrust" toggle button */
+  /* The "Show Ownertrust" toggle button.  */
   GtkWidget *toggle_show;
 
-  /* The details notebook */
+  /* The details notebook.  */
   GtkWidget *notebook_details;
 
-  /* idle handler id for updates of the notebook. Will be nonzero
-   * whenever a handler is currently set and zero otherwise */
+  /* Idle handler id for updates of the notebook.  Will be nonzero
+     whenever a handler is currently set and zero otherwise.  */
   guint details_idle_id;
 
-  /* Widgets in the details notebook page */
+  /* Widgets in the details notebook page.  */
   GtkWidget *details_num_label;
   GtkWidget *details_table;
   GtkWidget *detail_public_private;
@@ -117,43 +117,43 @@ struct _GPAKeyringEditor {
   GtkWidget *detail_key_type;
   GtkWidget *detail_creation;
 
-  /* The signatures list in the notebook */
+  /* The signatures list in the notebook.  */
   GtkWidget *signatures_list;
   GtkWidget *signatures_uids;
-  GtkWidget *signatures_label;
+  GtkWidget *signatures_hbox;
 
-  /* The subkeys list in the notebook */
+  /* The subkeys list in the notebook.  */
   GtkWidget *subkeys_list;
   GtkWidget *subkeys_page;
   
-  /* Labels in the status bar */
+  /* Labels in the status bar.  */
   GtkWidget *status_label;
   GtkWidget *status_key_user;
   GtkWidget *status_key_id;
 
-  /* The popup menu */
+  /* The popup menu.  */
   GtkWidget *popup_menu;
 
-  /* List of sensitive widgets. See below */
+  /* List of sensitive widgets.  See below.  */
   GList * selection_sensitive_widgets;
 
-  /* The currently selected key */
+  /* The currently selected key.  */
   gpgme_key_t current_key;
 
-  /* Context used for retrieving the current key */
+  /* Context used for retrieving the current key.  */
   GpaContext *ctx;
 
-  /* Hack: warn the selection callback to ignore changes. Don't, ever, asign
-   * a value directly. Raise and lower it with increments. */
+  /* Hack: warn the selection callback to ignore changes. Don't, ever,
+     assign a value directly.  Raise and lower it with increments.  */
   int freeze_selection;
 };
+
 typedef struct _GPAKeyringEditor GPAKeyringEditor;
 
+
+/* Internal API.  */
 
-/*
- *      Internal API
- */
-
+/* Forward declarations.  */
 static int idle_update_details (gpointer param);
 
 static gboolean keyring_editor_has_selection (gpointer param);
@@ -176,48 +176,45 @@ static void keyring_editor_retrieve (gpointer param);
 static void keyring_editor_send (gpointer param);
 static void keyring_editor_backup (gpointer param);
 
-/*
- * A simple sensitivity callback mechanism
- *
- * The basic idea is that buttons (and other widgets like menu items as
- * well) should know when they should be sensitive or not. The
- * implementation here is very simple and quite specific for the keyring
- * editor's needs.
- *
- * We maintain a list of sensitive widgets each of which has a
- * sensitivity callback associated with them as the "gpa_sensitivity"
- * data. The callback returns TRUE when the widget should be sensitive
- * and FALSE otherwise.
- *
- * Whenever the selection in the key list widget changes we call
- * update_selection_sensitive_widgets which iterates through the widgets
- * in the list, calls the sensitivity callback and changes the widget's
- * sensitivity accordingly.
- */
 
-/* Prototype of a sensitivity callback. Return TRUE if the widget should
- * be senstitive, FALSE otherwise. The parameter is a pointer to the
- * GPAKeyringEditor struct.
- */
+/* A simple sensitivity callback mechanism.
+
+   The basic idea is that buttons (and other widgets like menu items
+   as well) should know when they should be sensitive or not.  The
+   implementation here is very simple and quite specific for the
+   keyring editor's needs.
+  
+   We maintain a list of sensitive widgets each of which has a
+   sensitivity callback associated with them as the "gpa_sensitivity"
+   data.  The callback returns TRUE when the widget should be
+   sensitive and FALSE otherwise.
+  
+   Whenever the selection in the key list widget changes we call
+   update_selection_sensitive_widgets which iterates through the
+   widgets in the list, calls the sensitivity callback and changes the
+   widget's sensitivity accordingly.  */
+
+/* Prototype of a sensitivity callback.  Return TRUE if the widget
+   should be senstitive, FALSE otherwise.  The parameter is a pointer
+   to the GPAKeyringEditor struct.  */
 typedef gboolean (*SensitivityFunc)(gpointer);
 
 
-/* Add widget to the list of sensitive widgets of editor
- */
+/* Add widget to the list of sensitive widgets of editor.  */
 static void
 add_selection_sensitive_widget (GPAKeyringEditor *editor,
                                 GtkWidget *widget,
                                 SensitivityFunc callback)
 {
   gtk_object_set_data (GTK_OBJECT (widget), "gpa_sensitivity", callback);
-  editor->selection_sensitive_widgets \
-    = g_list_append(editor->selection_sensitive_widgets, widget);
+  editor->selection_sensitive_widgets
+    = g_list_append (editor->selection_sensitive_widgets, widget);
 }
 
 
 /* Update the sensitivity of the widget data and pass param through to
- * the sensitivity callback. Usable as iterator function in
- * g_list_foreach */
+   the sensitivity callback.  Usable as iterator function in
+   g_list_foreach.  */
 static void
 update_selection_sensitive_widget (gpointer data, gpointer param)
 {
@@ -228,9 +225,9 @@ update_selection_sensitive_widget (gpointer data, gpointer param)
 }
 
 
-/* Call update_selection_sensitive_widget for all widgets in the list of
- * sensitive widgets and pass editor through as the user data parameter
- */
+/* Call update_selection_sensitive_widget for all widgets in the list
+   of sensitive widgets and pass editor through as the user data
+   parameter.  */
 static void
 update_selection_sensitive_widgets (GPAKeyringEditor * editor)
 {
@@ -240,58 +237,56 @@ update_selection_sensitive_widgets (GPAKeyringEditor * editor)
 }
 
 /* Disable all the widgets in the list of sensitive widgets. To be used while
- * the selection changes.
- */
+   the selection changes.  */
 static void
 disable_selection_sensitive_widgets (GPAKeyringEditor * editor)
 {
   GList *cur;
   
-  for (cur = editor->selection_sensitive_widgets; cur; cur = g_list_next (cur))
+  cur = editor->selection_sensitive_widgets;
+  while (cur)
     {
       gtk_widget_set_sensitive (GTK_WIDGET (cur->data), FALSE);
+      cur = g_list_next (cur);
     }
 }
 
-/* Return TRUE if the key list widget of the keyring editor has at least
- * one selected item. Usable as a sensitivity callback.
- */
+
+/* Return TRUE if the key list widget of the keyring editor has at
+   least one selected item.  Usable as a sensitivity callback.  */
 static gboolean
 keyring_editor_has_selection (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   return gpa_keylist_has_selection (editor->keylist);
 }
 
 
-/* Return TRUE if the key list widget of the keyring editor has exactly
- * one selected item.  Usable as a sensitivity callback.
- */
+/* Return TRUE if the key list widget of the keyring editor has
+   exactly one selected item.  Usable as a sensitivity callback.  */
 static gboolean
 keyring_editor_has_single_selection (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   return gpa_keylist_has_single_selection (editor->keylist);
 }
 
-/* Return TRUE if the key list widget of the keyring editor has exactly
- * one selected item and it's a private key.  Usable as a sensitivity
- * callback.
- */
+/* Return TRUE if the key list widget of the keyring editor has
+   exactly one selected item and it is a private key.  Usable as a
+   sensitivity callback.  */
 static gboolean
 keyring_editor_has_private_selected (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   return gpa_keylist_has_single_secret_selection 
     (GPA_KEYLIST(editor->keylist));
 }
 
-/*
- * Operations
- */
+
+/* Operations.  */
 
 static void
 gpa_keyring_editor_changed_wot_cb (gpointer data)
@@ -299,6 +294,7 @@ gpa_keyring_editor_changed_wot_cb (gpointer data)
   GPAKeyringEditor *editor = data;
   gpa_keylist_start_reload (editor->keylist);  
 }
+
 
 static void
 gpa_keyring_editor_changed_wot_secret_cb (gpointer data)
@@ -328,8 +324,9 @@ gpa_keyring_editor_new_key_cb (gpointer data, const gchar *fpr)
   gpa_options_update_default_key (gpa_options_get_instance ());
 }
 
+
 static void
-register_key_operation (GPAKeyringEditor * editor, GpaKeyOperation *op)
+register_key_operation (GPAKeyringEditor *editor, GpaKeyOperation *op)
 {
   g_signal_connect_swapped (G_OBJECT (op), "changed_wot",
 			    G_CALLBACK (gpa_keyring_editor_changed_wot_cb),
@@ -338,8 +335,9 @@ register_key_operation (GPAKeyringEditor * editor, GpaKeyOperation *op)
 		    G_CALLBACK (g_object_unref), editor); 
 }
 
+
 static void
-register_import_operation (GPAKeyringEditor * editor, GpaImportOperation *op)
+register_import_operation (GPAKeyringEditor *editor, GpaImportOperation *op)
 {
   g_signal_connect_swapped (G_OBJECT (op), "imported_keys",
 			    G_CALLBACK (gpa_keyring_editor_changed_wot_cb),
@@ -354,7 +352,7 @@ register_import_operation (GPAKeyringEditor * editor, GpaImportOperation *op)
 
 
 static void
-register_generate_operation (GPAKeyringEditor * editor, GpaGenKeyOperation *op)
+register_generate_operation (GPAKeyringEditor *editor, GpaGenKeyOperation *op)
 {
   g_signal_connect_swapped (G_OBJECT (op), "generated_key",
 			    G_CALLBACK (gpa_keyring_editor_new_key_cb),
@@ -363,8 +361,9 @@ register_generate_operation (GPAKeyringEditor * editor, GpaGenKeyOperation *op)
 		    G_CALLBACK (g_object_unref), editor); 
 }
 
+
 static void
-register_operation (GPAKeyringEditor * editor, GpaOperation *op)
+register_operation (GPAKeyringEditor *editor, GpaOperation *op)
 {
   g_signal_connect (G_OBJECT (op), "completed",
 		    G_CALLBACK (g_object_unref), editor); 
@@ -373,7 +372,7 @@ register_operation (GPAKeyringEditor * editor, GpaOperation *op)
 
 /* delete the selected keys */
 static void
-keyring_editor_delete (GPAKeyringEditor * editor)
+keyring_editor_delete (GPAKeyringEditor *editor)
 {
   GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
   GpaKeyDeleteOperation *op = gpa_key_delete_operation_new (editor->window,
@@ -382,9 +381,8 @@ keyring_editor_delete (GPAKeyringEditor * editor)
 }
 
 
-/* Return true, if the public key key has been signed by the key with
- * the id key_id, otherwise return FALSE. The window parameter is needed
- * for error reporting */
+/* Return true if the public key key has been signed by the key with
+   the id key_id, otherwise return FALSE.  */
 static gboolean
 key_has_been_signed (const gpgme_key_t key, 
 		     const gpgme_key_t signer_key)
@@ -395,51 +393,44 @@ key_has_been_signed (const gpgme_key_t key,
   gpgme_user_id_t uid;
 
   signer_id = signer_key->subkeys->keyid;
-  /* We consider the key signed if all user ID's have been signed */
+  /* We consider the key signed if all user IDs have been signed.  */
   key_signed = TRUE;
   for (uid = key->uids; key_signed && uid; uid = uid->next)
     {
       uid_signed = FALSE;
       for (sig = uid->signatures; !uid_signed && sig; sig = sig->next)
-        {
-          if (g_str_equal (signer_id, sig->keyid))
-            {
-              uid_signed = TRUE;
-            }
-        }
+	if (g_str_equal (signer_id, sig->keyid))
+	  uid_signed = TRUE;
       key_signed = key_signed && uid_signed;
     }
   
   return key_signed;
 }
 
+
 /* Return true if the key sign button should be sensitive, i.e. if
- * there's at least one selected key and there is a default key.
- */
+   there is at least one selected key and there is a default key.  */
 static gboolean
 keyring_editor_can_sign (gpointer param)
 {
-  const gpgme_key_t default_key = gpa_options_get_default_key
-    (gpa_options_get_instance ());
   gboolean result = FALSE;
+  gpgme_key_t default_key;
+
+  default_key = gpa_options_get_default_key (gpa_options_get_instance ());
 
   if (default_key && keyring_editor_has_single_selection (param))
     {
-      /* the most important requirements have been met, now find out
-       * whether the selected key was already signed with the default
-       * key */
-      GPAKeyringEditor * editor = param;
+      /* The most important requirements have been met, now check if
+	 the selected key was already signed with the default key.  */
+      GPAKeyringEditor *editor = param;
       gpgme_key_t key = keyring_editor_current_key (editor);
-      result = !key_has_been_signed (key, default_key);
+      result = ! key_has_been_signed (key, default_key);
     }
   else if (default_key && keyring_editor_has_selection (param))
-    {
-      /* Always allow signing many keys at once.
-       */
-      result = TRUE;
-    }
+    /* Always allow signing many keys at once.  */
+    result = TRUE;
   return result;
-} /* keyring_editor_can_sign */
+}
 
 
 /* sign the selected keys */
@@ -447,155 +438,166 @@ static void
 keyring_editor_sign (gpointer param)
 {
   GPAKeyringEditor *editor = param;
+  GList *selection;
+  GpaKeySignOperation *op;
 
-  if (!gpa_keylist_has_selection (editor->keylist))
+  if (! gpa_keylist_has_selection (editor->keylist))
     {
-      /* this shouldn't happen because the button should be grayed out
-       * in this case
-       */
+      /* This shouldn't happen because the button should be grayed out
+	 in this case.  */
       gpa_window_error (_("No keys selected for signing."), editor->window);
       return;
     }
-  else
-    {
-      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
-      GpaKeySignOperation *op = gpa_key_sign_operation_new (editor->window,
-							    selection);
-      register_key_operation (editor, GPA_KEY_OPERATION (op));
-    }
+
+  selection = gpa_keylist_get_selected_keys (editor->keylist);
+  op = gpa_key_sign_operation_new (editor->window, selection);
+  register_key_operation (editor, GPA_KEY_OPERATION (op));
 }
 
-/* Invoke the "edit key" dialog */
+/* Invoke the "edit key" dialog.  */
 static void
 keyring_editor_edit (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  gpgme_key_t key = keyring_editor_current_key (editor);
+  GPAKeyringEditor *editor = param;
+  gpgme_key_t key;
+  GtkWidget *dialog;
 
-  if (key)
-    {
-      GtkWidget *dialog = gpa_key_edit_dialog_new (editor->window, key);
+  key = keyring_editor_current_key (editor);
+  if (! key)
+    return;
+
+  dialog = gpa_key_edit_dialog_new (editor->window, key);
+  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
       
-      gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
-      
-      g_signal_connect (G_OBJECT (dialog), "key_modified",
-			G_CALLBACK (gpa_keyring_editor_key_modified), editor);
-      
-      gtk_widget_show_all (dialog);
-    }
+  g_signal_connect (G_OBJECT (dialog), "key_modified",
+		    G_CALLBACK (gpa_keyring_editor_key_modified), editor);
+  gtk_widget_show_all (dialog);
 }
+
 
 static void
 keyring_editor_trust (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  gpgme_key_t key = keyring_editor_current_key (editor);
+  GPAKeyringEditor *editor = param;
+  gpgme_key_t key;
+  GList *selection;
+  GpaKeyTrustOperation *op;
 
-  if (key)
-    {
-      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
-      GpaKeyTrustOperation *op = gpa_key_trust_operation_new (editor->window, 
-							      selection);
-      register_key_operation (editor, GPA_KEY_OPERATION (op));
-    }
+  key = keyring_editor_current_key (editor);
+  if (! key)
+    return;
+
+  selection = gpa_keylist_get_selected_keys (editor->keylist);
+  op = gpa_key_trust_operation_new (editor->window, selection);
+  register_key_operation (editor, GPA_KEY_OPERATION (op));
 }
 
+
+/* Import keys.  */
 static void
 keyring_editor_import (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  
-  GpaImportFileOperation *op = gpa_import_file_operation_new 
-    (editor->window);
+  GPAKeyringEditor *editor = param;
+  GpaImportFileOperation *op;
+
+  op = gpa_import_file_operation_new (editor->window);
   register_import_operation (editor, GPA_IMPORT_OPERATION (op));
 }
 
-/* export the selected keys to a file
- */
+
+/* Export the selected keys to a file.  */
 static void
 keyring_editor_export (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  gpgme_key_t key = keyring_editor_current_key (editor);
+  GPAKeyringEditor *editor = param;
+  gpgme_key_t key;
+  GList *selection;
+  GpaExportFileOperation *op;
 
-  if (key)
-    {
-      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
-      GpaExportFileOperation *op = gpa_export_file_operation_new 
-	(editor->window, selection);
-      register_operation (editor, GPA_OPERATION (op));
-    }
+  key = keyring_editor_current_key (editor);
+  if (! key)
+    return;
+
+  selection = gpa_keylist_get_selected_keys (editor->keylist);
+  op = gpa_export_file_operation_new (editor->window, selection);
+  register_operation (editor, GPA_OPERATION (op));
 }
 
+
+/* Import a key from the keyserver.  */
 static void
 keyring_editor_retrieve (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  
-  GpaImportServerOperation *op = gpa_import_server_operation_new 
-    (editor->window);
+  GPAKeyringEditor *editor = param;
+  GpaImportServerOperation *op;
+
+  op = gpa_import_server_operation_new (editor->window);
   register_import_operation (editor, GPA_IMPORT_OPERATION (op));
 }
 
+
+/* Send a key to the keyserver.  */
 static void
 keyring_editor_send (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  gpgme_key_t key = keyring_editor_current_key (editor);
+  GPAKeyringEditor *editor = param;
+  gpgme_key_t key;
+  GList *selection;
+  GpaExportServerOperation *op;
 
-  if (key)
-    {
-      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
-      GpaExportServerOperation *op = gpa_export_server_operation_new 
-	(editor->window, selection);
-      register_operation (editor, GPA_OPERATION (op));
-    }
+  key = keyring_editor_current_key (editor);
+  if (! key)
+    return;
+
+  selection = gpa_keylist_get_selected_keys (editor->keylist);
+  op = gpa_export_server_operation_new (editor->window, selection);
+  register_operation (editor, GPA_OPERATION (op));
 }
 
-/* backup the default keys */
+
+/* Backup the default keys.  */
 static void
 keyring_editor_backup (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  gpgme_key_t key = keyring_editor_current_key (editor);
+  GPAKeyringEditor *editor = param;
+  gpgme_key_t key;
+  GpaBackupOperation *op;
 
-  if (key)
-    {
-      GpaBackupOperation *op = gpa_backup_operation_new 
-	(editor->window, key);
-      register_operation (editor, GPA_OPERATION (op));
-    }
+  key = keyring_editor_current_key (editor);
+  if (! key)
+    return;
+
+  op = gpa_backup_operation_new (editor->window, key);
+  register_operation (editor, GPA_OPERATION (op));
 }
 
+
 /* Run the advanced key generation dialog and if the user clicked OK,
- * generate a new key pair and updat the key list
- */
+   generate a new key pair and update the key list.  */
 static void
 keyring_editor_generate_key_advanced (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
+  GpaGenKeyAdvancedOperation *op;
 
-  GpaGenKeyAdvancedOperation *op = gpa_gen_key_advanced_operation_new
-    (editor->window);
+  op = gpa_gen_key_advanced_operation_new (editor->window);
   register_generate_operation (editor, GPA_GEN_KEY_OPERATION (op));
 }
+
 
 /* Call the key generation wizard and update the key list if necessary */
 static void
 keyring_editor_generate_key_simple (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
+  GpaGenKeySimpleOperation *op;
 
-  GpaGenKeySimpleOperation *op = gpa_gen_key_simple_operation_new
-    (editor->window);
+  op = gpa_gen_key_simple_operation_new (editor->window);
   register_generate_operation (editor, GPA_GEN_KEY_OPERATION (op));
 }
 
 
-/* Depending on the simple_ui flag call either
- * keyring_editor_generate_key_advanced or
- * keyring_editor_generate_key_simple
- */
+/* Generate a key.  */
 static void
 keyring_editor_generate_key (gpointer param)
 {
@@ -603,33 +605,34 @@ keyring_editor_generate_key (gpointer param)
     keyring_editor_generate_key_simple (param);
   else
     keyring_editor_generate_key_advanced (param);
-} /* keyring_editor_generate_key */
+}
 
 
-
-/* Return the the currently selected key. NULL if no key is selected */
+/* Return the the currently selected key. NULL if no key is selected.  */
 static gpgme_key_t
 keyring_editor_current_key (GPAKeyringEditor *editor)
 {
   return editor->current_key;
 }
 
+
 /* Update everything that has to be updated when the selection in the
- * key list changes.
- */
+   key list changes.  */
 static void
-keyring_selection_update_widgets (GPAKeyringEditor * editor)
+keyring_selection_update_widgets (GPAKeyringEditor *editor)
 {
   update_selection_sensitive_widgets (editor);
   keyring_update_details_notebook (editor);
 }  
 
-/* Callback for key listings. Used to receive and set the new current key.
- */
+
+/* Callback for key listings. Used to receive and set the new current
+   key.  */
 static void
 keyring_editor_key_listed (GpaContext *ctx, gpgme_key_t key, gpointer param)
 {
   GPAKeyringEditor *editor = param;
+
   if (editor->current_key)
     gpgme_key_unref (editor->current_key);
   editor->current_key = key;
@@ -637,52 +640,55 @@ keyring_editor_key_listed (GpaContext *ctx, gpgme_key_t key, gpointer param)
   keyring_selection_update_widgets (editor);
 }
 
-/* Signal handler for selection changes.
- */
+
+/* Signal handler for selection changes.  */
 static void
 keyring_editor_selection_changed (GtkTreeSelection *treeselection, 
 				  gpointer param)
 {
   GPAKeyringEditor *editor = param;
   
-  /* Some other piece of the keyring wants us to ignore this signal */
+  /* Some other piece of the keyring wants us to ignore this signal.  */
   if (editor->freeze_selection)
-    {
-      return;
-    }
-  /* Update the current key */
+    return;
+
+  /* Update the current key.  */
   if (editor->current_key)
     {
-      /* Remove the previous one */
+      /* Remove the previous one.  */
       gpgme_key_unref (editor->current_key);
       editor->current_key = NULL;
     }
-  /* Abort retrieval of the current key */
+
+  /* Abort retrieval of the current key.  */
   if (gpa_context_busy (editor->ctx))
-    {
-      gpgme_op_keylist_end (editor->ctx->ctx);
-    }
-  /* Load the new one */
+    gpgme_op_keylist_end (editor->ctx->ctx);
+
+  /* Load the new one.  */
   if (gpa_keylist_has_single_selection (editor->keylist)) 
     {
       gpg_error_t err;
-      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
-      gpgme_key_t key = (gpgme_key_t) selection->data;
+      GList *selection;
+      gpgme_key_t key;
+      int old_mode;
 
-      int old_mode = gpgme_get_keylist_mode (editor->ctx->ctx);
-      /* With all the signatures */
+      selection = gpa_keylist_get_selected_keys (editor->keylist);
+      key = (gpgme_key_t) selection->data;
+      old_mode = gpgme_get_keylist_mode (editor->ctx->ctx);
+
+      /* With all the signatures.  */
       gpgme_set_keylist_mode (editor->ctx->ctx, 
 			      old_mode | GPGME_KEYLIST_MODE_SIGS);
       err = gpgme_op_keylist_start (editor->ctx->ctx, key->subkeys->fpr, 
 				    FALSE);
       if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  gpa_gpgme_warning (err);
-	}
+	gpa_gpgme_warning (err);
+
       gpgme_set_keylist_mode (editor->ctx->ctx, old_mode);
       g_list_free (selection);
 
-      /* Make sure the actions that depend on a current key are disabled */
+      /* Make sure the actions that depend on a current key are
+	 disabled.  */
       disable_selection_sensitive_widgets (editor);
     }
   else
@@ -691,27 +697,25 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
     }
 }
 
-/* Signal handler for the map signal. If the simplified_ui flag is set
- * and there's no private key in the key ring, ask the user whether he
- * wants to generate a key. If so, call keyring_editor_generate_key()
- * which runs the appropriate dialog.
- * Also, if the simplified_ui flag is set, remind the user if he has
- * not yet created a backup copy of his private key.
- */
+/* Signal handler for the map signal.  If the simplified_ui flag is
+   set and there's no private key in the key ring, ask the user
+   whether he wants to generate a key.  If so, call
+   keyring_editor_generate_key which runs the appropriate dialog.
+   Also, if the simplified_ui flag is set, remind the user if he has
+   not yet created a backup copy of his private key.  */
 static void
 keyring_editor_mapped (gpointer param)
 {
   static gboolean asked_about_key_generation = FALSE;
   static gboolean asked_about_key_backup = FALSE;
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
-      /* We assume that the only reason a user might not have a default key
-       * is because he has no private keys.
-       */
-      if (!asked_about_key_generation
-          && !gpa_options_get_default_key (gpa_options_get_instance()))
+      /* FIXME: We assume that the only reason a user might not have a
+         default key is because he has no private keys.  */
+      if (! asked_about_key_generation
+          && ! gpa_options_get_default_key (gpa_options_get_instance()))
         {
 	  GtkWidget *dialog;
 	  GtkResponseType response;
@@ -767,80 +771,86 @@ keyring_editor_mapped (gpointer param)
           asked_about_key_backup = TRUE;
         }
     }
-} /* keyring_editor_mapped */
+}
 
 
-/* close the keyring editor */
+/* Close the keyring editor.  */
 static void
 keyring_editor_close (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   gtk_widget_destroy (editor->window);
-} /* keyring_editor_close */
+}
 
 
-/* free the data structures associated with the keyring editor */
+/* Free the data structures associated with the keyring editor.  */
 static void
 keyring_editor_destroy (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   g_list_free (editor->selection_sensitive_widgets);
   g_free (editor);
-} /* keyring_editor_destroy */
+}
+
 
 /* select all keys in the keyring */
 static void
 keyring_editor_select_all (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  GtkTreeSelection *selection = 
-    gtk_tree_view_get_selection (GTK_TREE_VIEW (editor->keylist));
+  GPAKeyringEditor *editor = param;
+  GtkTreeSelection *selection;
 
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (editor->keylist));
   gtk_tree_selection_select_all (selection);
 }
 
-/* Paste the clipboard into the keyring */
+
+/* Paste the clipboard into the keyring.  */
 static void
 keyring_editor_paste (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  
-  GpaImportClipboardOperation *op = gpa_import_clipboard_operation_new 
-    (editor->window);
+  GPAKeyringEditor *editor = param;
+  GpaImportClipboardOperation *op;
+
+  op = gpa_import_clipboard_operation_new (editor->window);
   register_import_operation (editor, GPA_IMPORT_OPERATION (op));
 }
 
-/* Copy the keys into the clipboard */
+
+/* Copy the keys into the clipboard.  */
 static void
 keyring_editor_copy (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-  gpgme_key_t key = keyring_editor_current_key (editor);
+  GPAKeyringEditor *editor = param;
+  gpgme_key_t key;
+  GList *selection;
+  GpaExportClipboardOperation *op;
 
-  if (key)
-    {
-      GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
-      GpaExportClipboardOperation *op = gpa_export_clipboard_operation_new 
-	(editor->window, selection);
-      register_operation (editor, GPA_OPERATION (op));
-    }
+  key = keyring_editor_current_key (editor);
+  if (! key)
+    return;
+
+  selection = gpa_keylist_get_selected_keys (editor->keylist);
+  op = gpa_export_clipboard_operation_new (editor->window, selection);
+  register_operation (editor, GPA_OPERATION (op));
 }
 
-/* Reload the key list */
+
+/* Reload the key list.  */
 static void
 keyring_editor_refresh (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-
+  GPAKeyringEditor *editor = param;
+  
   gpa_keylist_start_reload (editor->keylist);
 }
 
-/* Create and return the menu bar for the key ring editor */
+
+/* Create and return the menu bar for the key ring editor.  */
 static GtkWidget *
-keyring_editor_menubar_new (GtkWidget * window,
-                            GPAKeyringEditor * editor)
+keyring_editor_menubar_new (GtkWidget *window, GPAKeyringEditor *editor)
 {
   GtkAccelGroup *accel_group;
   GtkItemFactory *factory;
@@ -916,95 +926,80 @@ keyring_editor_menubar_new (GtkWidget * window,
   gpa_help_menu_add_to_factory (factory, window);
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
-  /* The menu paths given here MUST NOT contain underscores. Tough luck for
-   * translators :-( */
-  /* Items that must only be available if a key is selected */
+  /* The menu paths given here MUST NOT contain underscores.  Tough
+     luck for translators :-(  */
+
+  /* Items that must only be available if a key is selected.  */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Export Keys..."));
   if (item)
-    {
       add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_selection);
-    }
+				      keyring_editor_has_selection);
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Delete Keys..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_selection);
-    }
+    add_selection_sensitive_widget (editor, item, keyring_editor_has_selection);
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Edit/Copy"));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_selection);
-    }
+    add_selection_sensitive_widget (editor, item, keyring_editor_has_selection);
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Server/Send Keys..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_selection);
-    }
+    add_selection_sensitive_widget (editor, item, keyring_editor_has_selection);
 
-  /* Only if there is only ONE key selected */
+  /* Only if there is only ONE key selected. */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Set Owner Trust..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_single_selection);
-    }
-  /* If the keys can be signed... */
+    add_selection_sensitive_widget (editor, item,
+				    keyring_editor_has_single_selection);
+
+  /* If the keys can be signed.  */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Sign Keys..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_can_sign);
-    }
-  /* If the selected key has a private key */
+    add_selection_sensitive_widget (editor, item, keyring_editor_can_sign);
+
+  /* If the selected key has a private key.  */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Edit Private Key..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_private_selected);
-    }
+    add_selection_sensitive_widget (editor, item,
+				    keyring_editor_has_private_selected);
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Backup..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_private_selected);
-    }
+    add_selection_sensitive_widget (editor, item,
+				    keyring_editor_has_private_selected);
 
   return gtk_item_factory_get_widget (factory, "<main>");
 }
 
-/* Create the popup menu for the key list */
+
+/* Create the popup menu for the key list.  */
 static GtkWidget *
-keyring_editor_popup_menu_new (GtkWidget * window,
-                               GPAKeyringEditor * editor)
+keyring_editor_popup_menu_new (GtkWidget *window,
+                               GPAKeyringEditor *editor)
 {
   GtkItemFactory *factory;
-  GtkItemFactoryEntry popup_menu[] = {
-    {_("/_Copy"), NULL, keyring_editor_copy, 0, "<StockItem>",
-     GTK_STOCK_COPY},
-    {_("/_Paste"), NULL, keyring_editor_paste, 0, "<StockItem>",
-     GTK_STOCK_PASTE},
-    {_("/_Delete Keys..."), NULL, keyring_editor_delete, 0,
-     "<StockItem>", GTK_STOCK_DELETE},
-    {"/sep1", NULL, NULL, 0, "<Separator>"},
-    {_("/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
-    {_("/Set _Owner Trust..."), NULL, keyring_editor_trust, 0, NULL},
-    {_("/_Edit Private Key..."), NULL, keyring_editor_edit, 0, NULL},
-    {"/sep2", NULL, NULL, 0, "<Separator>"},
-    {_("/E_xport Keys..."), NULL, keyring_editor_export, 0, NULL},
-    {_("/Se_nd Keys to Server..."), NULL, keyring_editor_send, 0, NULL},
-    {_("/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
-  };
+  GtkItemFactoryEntry popup_menu[] =
+    {
+      {_("/_Copy"), NULL, keyring_editor_copy, 0, "<StockItem>",
+       GTK_STOCK_COPY},
+      {_("/_Paste"), NULL, keyring_editor_paste, 0, "<StockItem>",
+       GTK_STOCK_PASTE},
+      {_("/_Delete Keys..."), NULL, keyring_editor_delete, 0,
+       "<StockItem>", GTK_STOCK_DELETE},
+      {"/sep1", NULL, NULL, 0, "<Separator>"},
+      {_("/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
+      {_("/Set _Owner Trust..."), NULL, keyring_editor_trust, 0, NULL},
+      {_("/_Edit Private Key..."), NULL, keyring_editor_edit, 0, NULL},
+      {"/sep2", NULL, NULL, 0, "<Separator>"},
+      {_("/E_xport Keys..."), NULL, keyring_editor_export, 0, NULL},
+      {_("/Se_nd Keys to Server..."), NULL, keyring_editor_send, 0, NULL},
+      {_("/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
+    };
   GtkWidget *item;
 
   factory = gtk_item_factory_new (GTK_TYPE_MENU, "<main>", NULL);
@@ -1012,51 +1007,43 @@ keyring_editor_popup_menu_new (GtkWidget * window,
                                  sizeof (popup_menu) / sizeof (popup_menu[0]),
                                  popup_menu, editor);
 
-  /* Only if there is only ONE key selected */
+  /* Only if there is only ONE key selected.  */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Set Owner Trust..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_single_selection);
-    }
-  /* If the keys can be signed... */
+    add_selection_sensitive_widget (editor, item,
+				    keyring_editor_has_single_selection);
+
+  /* If the keys can be signed.  */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Sign Keys..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_can_sign);
-    }
-  /* If the selected key has a private key */
+    add_selection_sensitive_widget (editor, item, keyring_editor_can_sign);
+
+  /* If the selected key has a private key.  */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Edit Private Key..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_private_selected);
-    }
+    add_selection_sensitive_widget (editor, item,
+				    keyring_editor_has_private_selected);
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Backup..."));
   if (item)
-    {
-      add_selection_sensitive_widget (editor, item,
-                                      keyring_editor_has_private_selected);
-    }
+    add_selection_sensitive_widget (editor, item,
+				    keyring_editor_has_private_selected);
 
   return gtk_item_factory_get_widget (factory, "<main>");
 }
 
-/*
- *      The details notebook
- */ 
+
+/* The details notebook.  */ 
 
-/* add a single row to the details table */
+/* Add a single row to the details table.  */
 static GtkWidget *
-add_details_row (GtkWidget * table, gint row, gchar *text,
+add_details_row (GtkWidget *table, gint row, gchar *text,
                  gboolean selectable)
 {
-  GtkWidget * widget;
+  GtkWidget *widget;
 
   widget = gtk_label_new (text);
   gtk_table_attach (GTK_TABLE (table), widget, 0, 1, row, row + 1,
@@ -1073,7 +1060,7 @@ add_details_row (GtkWidget * table, gint row, gchar *text,
   return widget;
 }
 
-/* Callback for the popdown menu on the signatures page */
+/* Callback for the popdown menu on the signatures page.  */
 static void
 signatures_uid_selected (GtkOptionMenu *optionmenu, gpointer user_data)
 {
@@ -1082,24 +1069,24 @@ signatures_uid_selected (GtkOptionMenu *optionmenu, gpointer user_data)
 
   gpa_siglist_set_signatures (editor->signatures_list, key, 
                               gtk_option_menu_get_history 
-                              (GTK_OPTION_MENU (editor->signatures_uids))-1);
+                              (GTK_OPTION_MENU (editor->signatures_uids)) - 1);
 }
 
-/* Add and remove the subkeys page from the notebook.
- */
-
+/* Add the subkeys page from the notebook.  */
 static void
-keyring_editor_add_subkeys_page (GPAKeyringEditor * editor)
+keyring_editor_add_subkeys_page (GPAKeyringEditor *editor)
 {
   if (!editor->subkeys_page)
     {
-      GtkWidget * vbox;
-      GtkWidget * scrolled;
-      GtkWidget * subkeylist;
+      GtkWidget *vbox;
+      GtkWidget *scrolled;
+      GtkWidget *subkeylist;
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
       scrolled = gtk_scrolled_window_new (NULL, NULL);
+      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
+					   GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
       subkeylist = gpa_subkey_list_new ();
       gtk_container_add (GTK_CONTAINER (scrolled), subkeylist);
@@ -1117,8 +1104,10 @@ keyring_editor_add_subkeys_page (GPAKeyringEditor * editor)
     }
 }
 
+
+/* Remove the subkeys page from the notebook.  */
 static void
-keyring_editor_remove_subkeys_page (GPAKeyringEditor * editor)
+keyring_editor_remove_subkeys_page (GPAKeyringEditor *editor)
 {
   if (editor->subkeys_page)
     {
@@ -1129,20 +1118,20 @@ keyring_editor_remove_subkeys_page (GPAKeyringEditor * editor)
     }
 }
 
-/* Create and return the Details/Signatures notebook
- */
+
+/* Create and return the Details/Signatures notebook.  */
 static GtkWidget *
 keyring_details_notebook (GPAKeyringEditor *editor)
 {
-  GtkWidget * notebook;
-  GtkWidget * table;
-  GtkWidget * label;
-  GtkWidget * vbox;
-  GtkWidget * scrolled;
-  GtkWidget * viewport;
-  GtkWidget * siglist;
-  GtkWidget * options;
-  GtkWidget * hbox;
+  GtkWidget *notebook;
+  GtkWidget *table;
+  GtkWidget *label;
+  GtkWidget *vbox;
+  GtkWidget *scrolled;
+  GtkWidget *viewport;
+  GtkWidget *siglist;
+  GtkWidget *options;
+  GtkWidget *hbox;
   gint table_row;
 
   notebook = gtk_notebook_new ();
@@ -1158,6 +1147,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   viewport = gtk_viewport_new (NULL, NULL);
   gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
   vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
   gtk_container_add (GTK_CONTAINER (viewport), vbox);
   gtk_container_add (GTK_CONTAINER (scrolled), viewport);
 
@@ -1196,11 +1186,11 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), scrolled,
                             gtk_label_new (_("Details")));
 
-  /* Signatures Page */
+  /* Signatures Page.  */
   vbox = gtk_vbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
-  /* UID menu and label */
+  /* UID menu and label.  */
   hbox = gtk_hbox_new (FALSE, 5);
   label = gtk_label_new (_("Show signatures on user name:"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -1208,12 +1198,15 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   gtk_box_pack_start (GTK_BOX (hbox), options, TRUE, TRUE, 0);
   gtk_widget_set_sensitive (options, FALSE);
   editor->signatures_uids = options;
-  editor->signatures_label = label;
+  editor->signatures_hbox = hbox;
   g_signal_connect (G_OBJECT (options), "changed",
                     G_CALLBACK (signatures_uid_selected), editor);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-  /* Signature list */
+
+  /* Signature list.  */
   scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
+				       GTK_SHADOW_IN);
   gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
   siglist = gpa_siglist_new ();
   editor->signatures_list = siglist;
@@ -1225,36 +1218,33 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), vbox,
                             gtk_label_new (_("Signatures")));
 
-  /* Subkeys page */
+  /* Subkeys page.  */
   editor->subkeys_list = NULL;
   editor->subkeys_page = NULL;
 
-  if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-    {
-      keyring_editor_add_subkeys_page (editor);
-    }
+  if (! gpa_options_get_simplified_ui (gpa_options_get_instance ()))
+    keyring_editor_add_subkeys_page (editor);
+
   return notebook;
 }
+
 
 /* Fill the details page of the details notebook with the properties
    of the public key.  */
 static void
-keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
+keyring_details_page_fill_key (GPAKeyringEditor *editor, gpgme_key_t key)
 {
   gpgme_user_id_t uid;
   gchar *text;
 
   if (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
 			       key->subkeys->fpr) != NULL)
-    {
-      gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
-                          _("The key has both a private and a public part"));
-    }
+    gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
+			_("The key has both a private and a public part"));
   else
-    {
-      gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
-                          _("The key has only a public part"));
-    }
+    gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
+			_("The key has only a public part"));
+
   gtk_label_set_text (GTK_LABEL (editor->detail_capabilities),
 		      gpa_get_key_capabilities_text (key));
 
@@ -1266,6 +1256,7 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
         {
           gchar *uid_string = gpa_gpgme_key_get_userid (uid);
           gchar *tmp = text;
+
           text = g_strconcat (text, "\n", uid_string, NULL);
           g_free (tmp);
           g_free (uid_string);
@@ -1302,19 +1293,17 @@ keyring_details_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
 
   gtk_widget_hide (editor->details_num_label);
   gtk_widget_show (editor->details_table);
-} /* keyring_details_page_fill_key */
+}
 
 
 /* Show the number of keys num_key in the details page of the details
- * notebook and make sure that that page is in front */
+   notebook and make sure that that page is in front.  */
 static void
-keyring_details_page_fill_num_keys (GPAKeyringEditor * editor, gint num_key)
+keyring_details_page_fill_num_keys (GPAKeyringEditor *editor, gint num_key)
 {
-  if (!num_key)
-    {
-      gtk_label_set_text (GTK_LABEL (editor->details_num_label),
-                          _("No keys selected"));
-    }
+  if (! num_key)
+    gtk_label_set_text (GTK_LABEL (editor->details_num_label),
+			_("No keys selected"));
   else
     {
       char *text = g_strdup_printf (ngettext("%d key selected",
@@ -1328,16 +1317,16 @@ keyring_details_page_fill_num_keys (GPAKeyringEditor * editor, gint num_key)
   gtk_widget_show (editor->details_num_label);
   gtk_widget_hide (editor->details_table);
 
-  /* Assume that the 0th page is the details page. This should be done
-   * better */
+  /* FIXME: Assumes that the 0th page is the details page.  This
+     should be done better.  */
   gtk_notebook_set_page (GTK_NOTEBOOK (editor->notebook_details), 0);
-} /* keyring_details_page_fill_num_keys */
+}
 
 
 /* Fill the signatures page of the details notebook with the signatures
- * of the public key key */
+   of the public key key.  */
 static void
-keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
+keyring_signatures_page_fill_key (GPAKeyringEditor *editor, gpgme_key_t key)
 {
   GtkWidget *menu;
   GtkWidget *label;
@@ -1366,70 +1355,67 @@ keyring_signatures_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
       gtk_option_menu_set_menu (GTK_OPTION_MENU (editor->signatures_uids), 
 				menu);
       gtk_widget_show_all (menu);
-      gtk_widget_show (editor->signatures_uids);
-      gtk_widget_show (editor->signatures_label);
+      gtk_widget_show (editor->signatures_hbox);
       gtk_widget_set_sensitive (editor->signatures_uids, TRUE);
-      /* Add the signatures */
+      /* Add the signatures.  */
       gpa_siglist_set_signatures (editor->signatures_list, key, -1);
     }
   else
     {
       /* If there is just one uid, display its signatures explicitly,
-       * and don't show the list of uids */
-      gtk_widget_hide (editor->signatures_uids);
-      gtk_widget_hide (editor->signatures_label);
+         and do not show the list of uids.  */
+      gtk_widget_hide (editor->signatures_hbox);
       gpa_siglist_set_signatures (editor->signatures_list, key, 0);
-    } 
-} /* keyring_signatures_page_fill_key */
-  
+    }
+}
 
-/* Empty the list of signatures in the details notebook */
+
+/* Empty the list of signatures in the details notebook.  */
 static void
-keyring_signatures_page_empty (GPAKeyringEditor * editor)
+keyring_signatures_page_empty (GPAKeyringEditor *editor)
 {
   gtk_widget_set_sensitive (editor->signatures_uids, FALSE);
   gtk_option_menu_remove_menu (GTK_OPTION_MENU (editor->signatures_uids));
   gpa_siglist_set_signatures (editor->signatures_list, NULL, 0);
-} /* keyring_signatures_page_empty */
-
-/* Fill the subkeys page */
-static void
-keyring_subkeys_page_fill_key (GPAKeyringEditor * editor, gpgme_key_t key)
-{
-  if (editor->subkeys_page)
-    {
-      gpa_subkey_list_set_key (editor->subkeys_list, key);
-    }
 }
 
-/* Empty the list of subkeys */
+
+/* Fill the subkeys page.  */
 static void
-keyring_subkeys_page_empty (GPAKeyringEditor * editor)
+keyring_subkeys_page_fill_key (GPAKeyringEditor *editor, gpgme_key_t key)
 {
   if (editor->subkeys_page)
-    {
-      gpa_subkey_list_set_key (editor->subkeys_list, NULL);
-    }
+    gpa_subkey_list_set_key (editor->subkeys_list, key);
 }
 
-/* Update the details notebook according to the current selection. This
- * means that if there's exactly one key selected, display it's
- * properties in the pages, otherwise show the number of currently
- * selected keys */
+
+/* Empty the list of subkeys.  */
+static void
+keyring_subkeys_page_empty (GPAKeyringEditor *editor)
+{
+  if (editor->subkeys_page)
+    gpa_subkey_list_set_key (editor->subkeys_list, NULL);
+}
+
+
+/* Update the details notebook according to the current selection.
+   This means that if there is exactly one key selected, display its
+   properties in the pages, otherwise show the number of currently
+   selected keys.  */
 static int
 idle_update_details (gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   if (gpa_keylist_has_single_selection (editor->keylist))
     {
       gpgme_key_t key = keyring_editor_current_key (editor);
-      if (!key)
+      if (! key)
 	{
-	  /* There is a single key selected, but the current key is NULL.
-	   * This means the key has not been returned yet, so we exit the
-	   * function asking GTK to run it again when there is time.
-	   */
+	  /* There is a single key selected, but the current key is
+	     NULL.  This means the key has not been returned yet, so
+	     we exit the function asking GTK to run it again when
+	     there is time.  */
 	  return TRUE;
 	}
       keyring_details_page_fill_key (editor, key);
@@ -1445,31 +1431,31 @@ idle_update_details (gpointer param)
       g_list_free (selection);
     }
 
-  /* Set the idle id to NULL to indicate that the idle handler has been
-   * run */
+  /* Set the idle id to NULL to indicate that the idle handler has
+     been run.  */
   editor->details_idle_id = 0;
   
   /* Return 0 to indicate that this function shouldn't be called again
-   * by GTK, only when we expicitly add it again */
+     by GTK, only when we expicitly add it again */
   return 0;
 }
 
+
 /* Add an idle handler to update the details notebook, but only when
- * none has been set yet */
+   none has been set yet.  */
 static void
-keyring_update_details_notebook (GPAKeyringEditor * editor)
+keyring_update_details_notebook (GPAKeyringEditor *editor)
 {
-  if (!editor->details_idle_id)
-    {
-      editor->details_idle_id = gtk_idle_add (idle_update_details, editor);
-    }
+  if (! editor->details_idle_id)
+    editor->details_idle_id = gtk_idle_add (idle_update_details, editor);
 }
 
-/* Change the keylist to brief listing */
+
+/* Change the keylist to brief listing.  */
 static void
 keyring_set_brief_listing (GtkWidget *widget, gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
     {
@@ -1479,11 +1465,11 @@ keyring_set_brief_listing (GtkWidget *widget, gpointer param)
 }
 
 
-/* Change the keylist to detailed listing */
+/* Change the keylist to detailed listing.  */
 static void
 keyring_set_detailed_listing (GtkWidget *widget, gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
     {
@@ -1499,11 +1485,13 @@ toolbar_edit_key (GtkWidget *widget, gpointer param)
   keyring_editor_edit (param);
 }
 
+
 static void
 toolbar_remove_key (GtkWidget *widget, gpointer param)
 {
   keyring_editor_delete (param);
 }
+
 
 static void
 toolbar_sign_key (GtkWidget *widget, gpointer param)
@@ -1538,8 +1526,9 @@ toolbar_refresh (GtkWidget *widget, gpointer param)
   keyring_editor_refresh (param);
 }
 
+
 static GtkWidget *
-keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
+keyring_toolbar_new (GtkWidget *window, GPAKeyringEditor *editor)
 {
   GtkWidget *toolbar;
   GtkWidget *icon;
@@ -1675,14 +1664,13 @@ keyring_toolbar_new (GtkWidget * window, GPAKeyringEditor *editor)
   return toolbar;
 }
 
-
 
 /* Status bar handling.  */
 static GtkWidget *
 keyring_statusbar_new (GPAKeyringEditor *editor)
 {
-  GtkWidget * hbox;
-  GtkWidget * label;
+  GtkWidget *hbox;
+  GtkWidget *label;
 
   hbox = gtk_hbox_new (FALSE, 0);
 
@@ -1730,6 +1718,7 @@ keyring_update_status_bar (GPAKeyringEditor *editor)
 }
 
 
+/* The context menu of the keyring list.  */
 static gint
 display_popup_menu (GPAKeyringEditor *editor, GdkEvent *event, 
 		    GpaKeyList *list)
@@ -1740,8 +1729,6 @@ display_popup_menu (GPAKeyringEditor *editor, GdkEvent *event,
   g_return_val_if_fail (editor != NULL, FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
-  /* The "widget" is the menu that was supplied when
-     g_signal_connect_swapped() was called.  */
   menu = GTK_MENU (editor->popup_menu);
   
   if (event->type == GDK_BUTTON_PRESS)
@@ -1785,12 +1772,11 @@ display_popup_menu (GPAKeyringEditor *editor, GdkEvent *event,
 static void
 keyring_default_key_changed (GpaOptions *options, gpointer param)
 {
-  GPAKeyringEditor * editor = param;
-
-  keyring_update_status_bar (editor);  
+  GPAKeyringEditor *editor = param;
 
   /* Update the status bar and the selection sensitive widgets because
-   some depend on the default key.  */
+     some depend on the default key.  */
+  keyring_update_status_bar (editor);
   update_selection_sensitive_widgets (editor);
 }
 
@@ -1799,7 +1785,7 @@ keyring_default_key_changed (GpaOptions *options, gpointer param)
 static void
 keyring_ui_mode_changed (GpaOptions *options, gpointer param)
 {
-  GPAKeyringEditor * editor = param;
+  GPAKeyringEditor *editor = param;
 
   /* Toggles the subkeys page in the details notebook.  */
   if (! gpa_options_get_simplified_ui (gpa_options_get_instance ()))

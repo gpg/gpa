@@ -409,7 +409,7 @@ file_open (gpointer param)
 
       /* TRANSLATORS: The arguments are the filename, the integer size
 	 and the unit (such as KB or MB).  */
-      str = g_strdup_printf (_("The file %s is %li%s large.  Do you really "
+      str = g_strdup_printf (_("The file %s is %lli%s large.  Do you really "
 			       " want to open it?"), filename, 
 			       buf.st_size / 1024 / 1024, "MB");
       labelMessage = gtk_label_new (str);
