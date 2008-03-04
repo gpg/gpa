@@ -1,5 +1,21 @@
 2008-03-04  Marcus Brinkmann  <marcus@g10code.de>
 
+	* keyring.c: Remove most forward declarations.
+	(keyring_editor_export): Do not chicken out if there are more keys
+	selected than one.
+	(keyring_editor_copy): Likewise.
+	(toolbar_export_key): Rename to ...
+	(toolbar_export_keys): ... this.
+	(keyring_toolbar_new): Use new name here.
+	(keyring_editor_edit): Make sure a single private key is selected.
+	(keyring_editor_backup): Likewise.
+	(keyring_editor_trust): Check for single selection.
+	(keyring_editor_menubar_new): Make "Send keys..." sensitive only
+	if there is a single selection.
+	(keyring_editor_send): Check for single selection.
+	(keyring_editor_can_sign): Access editor->current_key directly.
+	Protect against it being NULL.
+
 	* keyring.c: Beautify source code.
 	(keyring_details_notebook): Add border around details
 	page.  Shrink border around signature and subkeys page.

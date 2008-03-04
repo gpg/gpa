@@ -155,26 +155,7 @@ typedef struct _GPAKeyringEditor GPAKeyringEditor;
 
 /* Forward declarations.  */
 static int idle_update_details (gpointer param);
-
-static gboolean keyring_editor_has_selection (gpointer param);
-static gboolean keyring_editor_has_single_selection (gpointer param);
-static gpgme_key_t keyring_editor_current_key (GPAKeyringEditor * editor);
-
 static void keyring_update_details_notebook (GPAKeyringEditor *editor);
-
-static void toolbar_edit_key (GtkWidget *widget, gpointer param);
-static void toolbar_remove_key (GtkWidget *widget, gpointer param);
-static void toolbar_sign_key (GtkWidget *widget, gpointer param);
-static void toolbar_export_key (GtkWidget *widget, gpointer param);
-static void toolbar_import_keys (GtkWidget *widget, gpointer param);
-static void keyring_editor_sign (gpointer param);
-static void keyring_editor_edit (gpointer param);
-static void keyring_editor_trust (gpointer param);
-static void keyring_editor_import (gpointer param);
-static void keyring_editor_export (gpointer param);
-static void keyring_editor_retrieve (gpointer param);
-static void keyring_editor_send (gpointer param);
-static void keyring_editor_backup (gpointer param);
 
 
 /* A simple sensitivity callback mechanism.
@@ -283,6 +264,14 @@ keyring_editor_has_private_selected (gpointer param)
 
   return gpa_keylist_has_single_secret_selection 
     (GPA_KEYLIST(editor->keylist));
+}
+
+
+/* Return the the currently selected key. NULL if no key is selected.  */
+static gpgme_key_t
+keyring_editor_current_key (GPAKeyringEditor *editor)
+{
+  return editor->current_key;
 }
 
 
@@ -462,6 +451,8 @@ keyring_editor_edit (gpointer param)
   gpgme_key_t key;
   GtkWidget *dialog;
 
+  if (! keyring_editor_has_private_selected (editor))
+    return;
   key = keyring_editor_current_key (editor);
   if (! key)
     return;
@@ -479,12 +470,12 @@ static void
 keyring_editor_trust (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  gpgme_key_t key;
   GList *selection;
   GpaKeyTrustOperation *op;
 
-  key = keyring_editor_current_key (editor);
-  if (! key)
+  /* FIXME: Key trust operation currently does not support more than
+     one key at a time.  */
+  if (! keyring_editor_has_single_selection (editor))
     return;
 
   selection = gpa_keylist_get_selected_keys (editor->keylist);
@@ -510,15 +501,13 @@ static void
 keyring_editor_export (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  gpgme_key_t key;
   GList *selection;
   GpaExportFileOperation *op;
 
-  key = keyring_editor_current_key (editor);
-  if (! key)
+  selection = gpa_keylist_get_selected_keys (editor->keylist);
+  if (! selection)
     return;
 
-  selection = gpa_keylist_get_selected_keys (editor->keylist);
   op = gpa_export_file_operation_new (editor->window, selection);
   register_operation (editor, GPA_OPERATION (op));
 }
@@ -541,12 +530,12 @@ static void
 keyring_editor_send (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  gpgme_key_t key;
   GList *selection;
   GpaExportServerOperation *op;
 
-  key = keyring_editor_current_key (editor);
-  if (! key)
+  /* FIXME: The export-to-server operation currently only supports
+     exporting one key at a time.  */
+  if (! keyring_editor_has_single_selection (editor))
     return;
 
   selection = gpa_keylist_get_selected_keys (editor->keylist);
@@ -563,6 +552,8 @@ keyring_editor_backup (gpointer param)
   gpgme_key_t key;
   GpaBackupOperation *op;
 
+  if (! keyring_editor_has_private_selected (editor))
+    return;
   key = keyring_editor_current_key (editor);
   if (! key)
     return;
@@ -608,14 +599,6 @@ keyring_editor_generate_key (gpointer param)
 }
 
 
-/* Return the the currently selected key. NULL if no key is selected.  */
-static gpgme_key_t
-keyring_editor_current_key (GPAKeyringEditor *editor)
-{
-  return editor->current_key;
-}
-
-
 /* Update everything that has to be updated when the selection in the
    key list changes.  */
 static void
@@ -626,7 +609,7 @@ keyring_selection_update_widgets (GPAKeyringEditor *editor)
 }  
 
 
-/* Callback for key listings. Used to receive and set the new current
+/* Callback for key listings.  Used to receive and set the new current
    key.  */
 static void
 keyring_editor_key_listed (GpaContext *ctx, gpgme_key_t key, gpointer param)
@@ -824,15 +807,13 @@ static void
 keyring_editor_copy (gpointer param)
 {
   GPAKeyringEditor *editor = param;
-  gpgme_key_t key;
   GList *selection;
   GpaExportClipboardOperation *op;
 
-  key = keyring_editor_current_key (editor);
-  if (! key)
+  selection = gpa_keylist_get_selected_keys (editor->keylist);
+  if (! selection)
     return;
 
-  selection = gpa_keylist_get_selected_keys (editor->keylist);
   op = gpa_export_clipboard_operation_new (editor->window, selection);
   register_operation (editor, GPA_OPERATION (op));
 }
@@ -946,7 +927,8 @@ keyring_editor_menubar_new (GtkWidget *window, GPAKeyringEditor *editor)
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Server/Send Keys..."));
   if (item)
-    add_selection_sensitive_widget (editor, item, keyring_editor_has_selection);
+    add_selection_sensitive_widget (editor, item,
+				    keyring_editor_has_single_selection);
 
   /* Only if there is only ONE key selected. */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
@@ -1501,10 +1483,11 @@ toolbar_sign_key (GtkWidget *widget, gpointer param)
 
 
 static void
-toolbar_export_key (GtkWidget *widget, gpointer param)
+toolbar_export_keys (GtkWidget *widget, gpointer param)
 {
   keyring_editor_export (param);
 }
+
 
 static void
 toolbar_import_keys (GtkWidget *widget, gpointer param)
@@ -1576,7 +1559,7 @@ keyring_toolbar_new (GtkWidget *window, GPAKeyringEditor *editor)
   icon = gpa_create_icon_widget (window, "export");
   item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Export"),
                                   _("Export Keys"), _("export keys"),
-                                  icon, GTK_SIGNAL_FUNC (toolbar_export_key),
+                                  icon, GTK_SIGNAL_FUNC (toolbar_export_keys),
                                   editor);
   add_selection_sensitive_widget (editor, item,
                                   keyring_editor_has_selection);
