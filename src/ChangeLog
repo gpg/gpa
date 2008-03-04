@@ -1,5 +1,8 @@
 2008-03-04  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpafileverifyop.c (gpa_file_verify_operation_done_cb): Use
+	filename_in, not filename_out.
+
 	* keyring.c: Remove most forward declarations.
 	(keyring_editor_export): Do not chicken out if there are more keys
 	selected than one.

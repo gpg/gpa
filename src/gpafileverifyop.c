@@ -389,11 +389,12 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
       gpgme_verify_result_t result;
       
       result = gpgme_op_verify_result (GPA_OPERATION (op)->context->ctx);
-      /* Add the file to the result dialog */
+      /* Add the file to the result dialog.  FIXME: Maybe we should
+	 use the filename without the directory.  */
       gpa_file_verify_dialog_add_file (GPA_FILE_VERIFY_DIALOG (op->dialog),
 				       file_item->direct_name
 				       ? file_item->direct_name
-				       : file_item->filename_out,
+				       : file_item->filename_in,
 				       op->signed_file, op->signature_file,
 				       result->signatures);
       /* If this was a dettached sig, reset the signed file */
