@@ -55,25 +55,11 @@ typedef struct _GpaStreamEncryptOperation GpaStreamEncryptOperation;
 typedef struct _GpaStreamEncryptOperationClass GpaStreamEncryptOperationClass;
 
 
-struct _GpaStreamEncryptOperation 
-{
-  GpaStreamOperation parent;
-  
-  GtkWidget *encrypt_dialog;
-  GSList *recipients;
-  gpgme_protocol_t selected_protocol;
-};
-
-
-struct _GpaStreamEncryptOperationClass 
-{
-  GpaStreamOperationClass parent_class;
-};
-
-
 GType gpa_stream_encrypt_operation_get_type (void) G_GNUC_CONST;
 
-/* API */
+/************************************
+ ************ Public API ************
+ ************************************/
 
 /* Creates a new encryption operation. */
 GpaStreamEncryptOperation *
@@ -81,8 +67,13 @@ gpa_stream_encrypt_operation_new (GtkWidget *window,
                                   gpgme_data_t input_stream,
                                   gpgme_data_t output_stream,
                                   GSList *recipients,
+                                  gpgme_key_t *recp_keys,
+                                  gpgme_protocol_t protocol,
                                   int silent,
                                   void *server_ctx);
+
+gpgme_key_t *gpa_stream_encrypt_operation_get_keys 
+(GpaStreamEncryptOperation *op, gpgme_protocol_t *r_protocol);
 
 
 

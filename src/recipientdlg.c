@@ -32,6 +32,21 @@ struct _RecipientDlg
   GtkDialog parent;
   
   GtkWidget *clist_keys;
+  GtkWidget *statushint;
+  GtkWidget *radio_pgp;
+  GtkWidget *radio_x509;
+  GtkWidget *radio_auto;
+
+  /* Flag to disable updates of the status hint.  This is actual a
+     counter with updates allowed if it is zero. */
+  int  disable_update_statushint;
+
+  /* Set if this dialog has usable key to be passed back to the
+     caller.  You need to call update_statushint to set it.  */
+  int usable;
+
+  /* The selected protocol.  This is also set by update_statushint.  */
+  gpgme_protocol_t selected_protocol;
 };
 
 
@@ -55,6 +70,43 @@ enum
   };
 
 
+/* For performance reasons we truncate the listing of ambiguous keys
+   at a reasonable value.  */
+#define TRUNCATE_KEYSEARCH_AT 40
+
+
+/* Na object to keep information about keys.  */
+struct keyinfo_s 
+{
+  /* An array with associated key(s) or NULL if none found/selected.  */
+  gpgme_key_t *keys;
+  
+  /* The allocated size of the KEYS array.  This included the
+     terminating NULL entry.  */
+  unsigned int dimof_keys;
+  
+  /* If set, indicates that the KEYS array has been truncated.  */
+  int truncated:1;
+};
+
+
+/* Management information for each recipient.  This data is used per
+   recipient.  */
+struct userdata_s
+{
+  /* Information about PGP keys.  */
+  struct keyinfo_s pgp;
+
+  /* Information about X.509 keys.  */
+  struct keyinfo_s x509;
+
+  /* If the user has set this field, no encryption key will be
+     required for the recipient.  */
+  int ignore_recipient;
+  
+};
+
+
 /* Identifiers for the columns of the RECPLIST.  */
 enum
   {
@@ -63,6 +115,9 @@ enum
     RECPLIST_HAS_PGP,   /* A PGP certificate is available.  */
     RECPLIST_HAS_X509,  /* An X.509 certificate is available.  */
     RECPLIST_KEYID,     /* The key ID of the associated key. */
+
+    RECPLIST_USERDATA,  /* Pointer to management information (struct
+                           userdata_s *).  */
 
     RECPLIST_N_COLUMNS
   };
@@ -107,7 +162,9 @@ recplist_window_new (void)
 			      G_TYPE_STRING,
                               G_TYPE_BOOLEAN,
                               G_TYPE_BOOLEAN,
-			      G_TYPE_STRING);
+			      G_TYPE_STRING,
+                              G_TYPE_POINTER);
+
   list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
 
@@ -123,15 +180,16 @@ recplist_window_new (void)
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", RECPLIST_HAS_PGP, NULL);
-  set_column_title (column, "P", _("Checked if at least one matching"
-                                   " OpenPGP certificate has been found.")); 
+  set_column_title (column, "PGP", _("Checked if at least one matching"
+                                     " OpenPGP certificate has been found.")); 
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", RECPLIST_HAS_X509, NULL);
-  set_column_title (column, "X", _("Checked if at least one matching"
-                                   " X.509 certificate has been found.")); 
+  set_column_title (column, "X.509", _("Checked if at least one matching"
+                                       " X.509 certificate for use with S/MIME"
+                                       " has been found.")); 
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_text_new ();
@@ -147,86 +205,248 @@ recplist_window_new (void)
 }
 
 
+/* Compute and display a new help text for the statushint.  */
+static void
+update_statushint (RecipientDlg *dialog)
+{
+  gpgme_protocol_t req_protocol, sel_protocol;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  int missing_keys = 0;
+  int ambiguous_pgp_keys = 0;
+  int ambiguous_x509_keys = 0;
+  int n_pgp_keys = 0;
+  int n_x509_keys = 0;
+  int n_keys = 0;
+  const char *hint;
+  int okay = 0;
+
+  if (dialog->disable_update_statushint)
+    return;
+
+  g_debug ("update_statushint called");
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->clist_keys));
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_pgp)))
+    req_protocol = GPGME_PROTOCOL_OpenPGP;
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON 
+                                         (dialog->radio_x509)))
+    req_protocol = GPGME_PROTOCOL_CMS;
+  else
+    req_protocol = GPGME_PROTOCOL_UNKNOWN;
+  
+  sel_protocol = GPGME_PROTOCOL_UNKNOWN;
+
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+      do
+        {
+          gboolean has_pgp, has_x509;
+          struct userdata_s *info;
+
+          gtk_tree_model_get (model, &iter, 
+                              RECPLIST_HAS_PGP, &has_pgp,
+                              RECPLIST_HAS_X509, &has_x509,
+                              RECPLIST_USERDATA, &info,
+                              -1);
+          if (!info)
+            missing_keys++;  /* Oops */
+          else if (info->ignore_recipient)
+            ;
+          else if (!info->pgp.keys && !info->x509.keys)
+            missing_keys++;
+          else if ((req_protocol == GPGME_PROTOCOL_OpenPGP && !has_pgp)
+                   ||(req_protocol == GPGME_PROTOCOL_CMS && !has_x509))
+            ; /* Not of the requested protocol.  */
+          else 
+            {
+              n_keys++;
+              if (info->pgp.keys && info->pgp.keys[0])
+                {
+                  n_pgp_keys++;
+                  if (info->pgp.keys[1])
+                    ambiguous_pgp_keys++;
+                }
+              if (info->x509.keys && info->x509.keys[0])
+                {
+                  n_x509_keys++;
+                  if (info->x509.keys[1])
+                    ambiguous_x509_keys++;
+                }
+            }
+        }
+      while (gtk_tree_model_iter_next (model, &iter));
+    }
+
+  if (req_protocol == GPGME_PROTOCOL_UNKNOWN)
+    {
+      /* We select the protocol with the most available keys,
+         preferring PGP.  */
+      if (n_pgp_keys >= n_x509_keys)
+        sel_protocol = GPGME_PROTOCOL_OpenPGP;
+      else if (n_x509_keys)
+        sel_protocol = GPGME_PROTOCOL_CMS;
+    }
+  else 
+    sel_protocol = req_protocol;
+
+
+  if (missing_keys)
+    hint = _("You need to select a key for each recipient.\n"
+             "To select a key you click on the respective line.");
+  else if ((sel_protocol == GPGME_PROTOCOL_OpenPGP
+            && ambiguous_pgp_keys)
+           || (sel_protocol == GPGME_PROTOCOL_CMS
+               && ambiguous_x509_keys)
+           || (sel_protocol == GPGME_PROTOCOL_UNKNOWN
+               && (ambiguous_pgp_keys || ambiguous_x509_keys )))
+    hint = _("You need to select exactly one key for each recipient.\n"
+             "To select a key you click on the respective line.");
+  else if ((sel_protocol == GPGME_PROTOCOL_OpenPGP
+            && n_keys != n_pgp_keys)
+           || (sel_protocol == GPGME_PROTOCOL_CMS
+               && n_keys != n_x509_keys)
+           || (sel_protocol == GPGME_PROTOCOL_UNKNOWN))
+    hint = _("Although you selected keys for all recipients "
+             "a common encryption protocol can't be used. "
+             "Please decide on one protocol by clicking one "
+             "of the above radio buttons.");
+  else if (sel_protocol == GPGME_PROTOCOL_OpenPGP)
+    {
+      hint = _("Using OpenPGP for encryption.");
+      okay = 1;
+    }
+  else if (sel_protocol == GPGME_PROTOCOL_CMS)
+    {
+      hint = _("Using S/MIME for encryption.");
+      okay = 1;
+    }
+  else
+    hint = _("No recipients - encryption is not possible");
+
+  gtk_label_set_text (GTK_LABEL (dialog->statushint), hint);
+  gtk_label_set_line_wrap (GTK_LABEL (dialog->statushint), TRUE);
+
+  dialog->usable = okay;
+  dialog->selected_protocol = sel_protocol;
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, 
+				     okay);
+}
+
+
+/* Add KEY to the keyarray of KEYINFO.  Owvership of KEY is moved to
+   KEYARRAY.  Returns the number of keys in KEYINFO.  */
+static unsigned int
+append_key_to_keyinfo (struct keyinfo_s *keyinfo, gpgme_key_t key)
+{
+  unsigned int nkeys;
+
+  if (!keyinfo->keys)
+    {
+      keyinfo->dimof_keys = 5; /* Space for 4 keys.  */
+      keyinfo->keys = g_new (gpgme_key_t, keyinfo->dimof_keys);
+      keyinfo->keys[0] = NULL;
+    }
+  for (nkeys=0; keyinfo->keys[nkeys]; nkeys++)
+    ;
+  /* Note that we silently skip KEY of NULL becuase we can't store
+     them in the array.  */
+  if (key)
+    {
+      if (nkeys+1 >= keyinfo->dimof_keys)
+        {
+          keyinfo->dimof_keys += 10;
+          keyinfo->keys = g_renew (gpgme_key_t, keyinfo->keys, 
+                                   keyinfo->dimof_keys);
+        }
+      keyinfo->keys[nkeys++] = key;
+      keyinfo->keys[nkeys] = NULL;
+    }
+  return nkeys;
+}
+
+
 /* Parse one recipient, this is the working horse of parse_recipeints. */
 static void
 parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
                      const char *mailbox)
 {
-  gpgme_key_t key, key2;
-  int any_pgp = 0, any_x509 = 0, any_ambiguous = 0, any_unusable = 0;
+  gpgme_key_t key;
+  int any_pgp = 0, any_x509 = 0;
   char *infostr = NULL;
+  struct userdata_s *info;
 
   key = NULL;
+  info = g_malloc0 (sizeof *info);
 
   gpgme_set_protocol (ctx, GPGME_PROTOCOL_OpenPGP);
   if (!gpgme_op_keylist_start (ctx, mailbox, 0))
     {
-      if (!gpgme_op_keylist_next (ctx, &key))
+      while (!gpgme_op_keylist_next (ctx, &key))
         {
-          any_pgp++;
-          if (!gpgme_op_keylist_next (ctx, &key2))
+          if (key->revoked || key->disabled || key->expired)
+            gpgme_key_unref (key);
+          else if (append_key_to_keyinfo (&info->pgp, key)
+                   >= TRUNCATE_KEYSEARCH_AT)
             {
-              any_ambiguous++;
-              gpgme_key_unref (key);
-              gpgme_key_unref (key2);
-              key = key2 = NULL;
+              /* Note that the truncation flag is not 100 correct.  In
+                 case the next iteration would not yield a new key we
+                 have not actually truncated the search.  */ 
+              info->pgp.truncated = 1;
+              break;
             }
         }
     }
   gpgme_op_keylist_end (ctx);
-  if (key)
-    {
-      /* fixme: We should put the key into a list.  It would be best
-         to use a hidden columnin the store.  Need to figure out how
-         to do that.  */
-      if (key->revoked || key->disabled || key->expired)
-        any_unusable++;
-      else if (!infostr)
-        infostr = gpa_gpgme_key_get_userid (key->uids);
-    }
-  gpgme_key_unref (key);
-  key = NULL;
-
   gpgme_set_protocol (ctx, GPGME_PROTOCOL_CMS);
   if (!gpgme_op_keylist_start (ctx, mailbox, 0))
     {
-      if (!gpgme_op_keylist_next (ctx, &key))
+      while (!gpgme_op_keylist_next (ctx, &key))
         {
-          any_x509++;
-          if (!gpgme_op_keylist_next (ctx, &key2))
+          if (key->revoked || key->disabled || key->expired)
+            gpgme_key_unref (key);
+          else if (append_key_to_keyinfo (&info->x509,key) 
+                   >= TRUNCATE_KEYSEARCH_AT)
             {
-              any_ambiguous++;
-              gpgme_key_unref (key);
-              gpgme_key_unref (key2);
-              key = key2 = NULL;
+              info->x509.truncated = 1;
+              break;
             }
         }
     }
   gpgme_op_keylist_end (ctx);
-  if (key)
+
+
+  if (info->pgp.keys && info->pgp.keys[0])
+    any_pgp = 1;
+  if (info->x509.keys && info->x509.keys[0])
+    any_x509 = 1;
+
+  if (any_pgp && any_x509 && info->pgp.keys[1] && info->x509.keys[1])
+    infostr = g_strdup (_("[ambiguous keys - click to select]"));
+  else if (any_pgp && info->pgp.keys[1])
+    infostr = g_strdup (_("[ambiguous PGP key - click to select]"));
+  else if (any_x509 && info->x509.keys[1])
+    infostr = g_strdup (_("[ambiguous X.509 key - click to select]"));
+  else if (any_pgp && !info->pgp.keys[1])
     {
-      /* fixme: We should put the key into a list.  It would be best
-         to use a hidden column in the store.  Need to figure out how
-         to do that.  */
-      if (key->revoked || key->disabled || key->expired)
-        any_unusable++;
-      else if (!infostr)
-        infostr = gpa_gpgme_key_get_userid (key->uids);
+      /* Exactly one key found.  */
+      key = info->pgp.keys[0];
+      infostr = gpa_gpgme_key_get_userid (key->uids);
     }
-  gpgme_key_unref (key);
-  
-  if (!infostr)
-    infostr = g_strdup (any_ambiguous? 
-                        _("[ambiguous key - click to select]"):
-                        any_unusable?
-                        _("[unusable key - click to select another one]"):
-                        _("[click to select]"));
+  else if (any_x509 && !info->x509.keys[1])
+    {
+      key = info->x509.keys[0];
+      infostr = gpa_gpgme_key_get_userid (key->uids);
+    }
+  else
+    infostr = g_strdup (_("[click to select]"));
   
   g_print ("   pgp=%d x509=%d infostr=`%s'\n", any_pgp, any_x509, infostr);
   gtk_list_store_set (store, iter,
                       RECPLIST_HAS_PGP, any_pgp,
                       RECPLIST_HAS_X509, any_x509,
                       RECPLIST_KEYID, infostr,
+                      RECPLIST_USERDATA, info,
                       -1);
   g_free (infostr);
 }
@@ -246,9 +466,10 @@ parse_recipients (GtkListStore *store)
   if (err)
     gpa_gpgme_error (err);
 
-
+  
   model = GTK_TREE_MODEL (store);
   /* Walk through the list, reading each row. */
+  
   if (gtk_tree_model_get_iter_first (model, &iter))
     do
       {
@@ -259,7 +480,7 @@ parse_recipients (GtkListStore *store)
                             -1);
         
         /* Do something with the data */
-        g_print ("mailbox `%s'\n", mailbox);
+        g_print ("parsing mailbox `%s'\n", mailbox);
         parse_one_recipient (ctx, store, &iter, mailbox);
         g_free (mailbox);
       }
@@ -268,15 +489,13 @@ parse_recipients (GtkListStore *store)
   gpgme_release (ctx);
 }
 
-
-
 static void
 recplist_row_activated_cb (GtkTreeView       *tree_view,
                            GtkTreePath       *path,
                            GtkTreeViewColumn *column,
                            gpointer           user_data)    
 {
-  RecipientDlg *dialog = user_data;
+  /*RecipientDlg *dialog = user_data;*/
   GtkTreeIter iter;
   GtkTreeModel *model;
   char *mailbox;
@@ -289,10 +508,55 @@ recplist_row_activated_cb (GtkTreeView       *tree_view,
   gtk_tree_model_get (model, &iter, 
                       RECPLIST_MAILBOX, &mailbox,
                       -1);
-        
   g_print ("  mailbox is `%s'\n", mailbox);
   g_free (mailbox);
 }
+
+
+static void
+recplist_row_changed_cb (GtkTreeModel *model, GtkTreePath *path,
+                         GtkTreeIter *changediter, gpointer user_data)
+{
+  RecipientDlg *dialog = user_data;
+
+  g_print ("row changed signal received\n");
+  g_return_if_fail (dialog);
+  update_statushint (dialog);
+}
+
+
+static void
+rbutton_toggled_cb (GtkToggleButton *button, gpointer user_data)
+{
+  RecipientDlg *dialog = user_data;
+  GtkTreeViewColumn *column;
+  int pgp = FALSE;
+  int x509 = FALSE;
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_pgp)))
+    {
+      pgp = TRUE;
+    }
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON 
+                                         (dialog->radio_x509)))
+    {
+      x509 = TRUE;
+    }
+  else
+    {
+      pgp = TRUE;
+      x509 = TRUE;
+    }
+
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (dialog->clist_keys),
+                                     RECPLIST_HAS_PGP);
+  gtk_tree_view_column_set_visible (column, pgp);
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (dialog->clist_keys),
+                                     RECPLIST_HAS_X509);
+  gtk_tree_view_column_set_visible (column, x509);
+  update_statushint (dialog);
+}
+
 
 
 
@@ -348,7 +612,7 @@ recipient_dlg_finalize (GObject *object)
 static void
 recipient_dlg_init (RecipientDlg *dialog)
 {
-
+  dialog->disable_update_statushint = 0;
 }
 
 
@@ -358,8 +622,10 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
 {
   GObject *object;
   RecipientDlg *dialog;
-  GtkAccelGroup *accelGroup;
-  GtkWidget *vboxEncrypt;
+  GtkAccelGroup *accel_group;
+  GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *widget;
   GtkWidget *labelKeys;
   GtkWidget *scrollerKeys;
   GtkWidget *clistKeys;
@@ -380,33 +646,72 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
 				     FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (dialog), accelGroup);
+  accel_group = gtk_accel_group_new ();
+  gtk_window_add_accel_group (GTK_WINDOW (dialog), accel_group);
 
-  vboxEncrypt = GTK_DIALOG (dialog)->vbox;
-  gtk_container_set_border_width (GTK_CONTAINER (vboxEncrypt), 5);
+  vbox = GTK_DIALOG (dialog)->vbox;
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
   labelKeys = gtk_label_new ("");
   gtk_misc_set_alignment (GTK_MISC (labelKeys), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vboxEncrypt), labelKeys, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), labelKeys, FALSE, FALSE, 0);
 
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy  (GTK_SCROLLED_WINDOW (scrollerKeys),
 				   GTK_POLICY_AUTOMATIC,
 				   GTK_POLICY_AUTOMATIC);
-  gtk_box_pack_start (GTK_BOX (vboxEncrypt), scrollerKeys, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scrollerKeys, TRUE, TRUE, 0);
   gtk_widget_set_size_request (scrollerKeys, 400, 200);
 
   clistKeys = recplist_window_new ();
-  g_signal_connect (G_OBJECT (GTK_TREE_VIEW (clistKeys)),
-                    "row-activated",
-                    G_CALLBACK (recplist_row_activated_cb), dialog);
   dialog->clist_keys = clistKeys;
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
-  gpa_connect_by_accelerator (GTK_LABEL (labelKeys), clistKeys, accelGroup,
+  gpa_connect_by_accelerator (GTK_LABEL (labelKeys), clistKeys, accel_group,
 			      _("_Recipient list"));
 
+  dialog->radio_pgp  = gtk_radio_button_new_with_mnemonic
+    (NULL, _("Use _PGP"));
+  dialog->radio_x509 = gtk_radio_button_new_with_mnemonic 
+    (gtk_radio_button_get_group (GTK_RADIO_BUTTON (dialog->radio_pgp)),
+     _("Use _X.509"));
+  dialog->radio_auto = gtk_radio_button_new_with_mnemonic 
+    (gtk_radio_button_get_group (GTK_RADIO_BUTTON (dialog->radio_pgp)),
+     _("_Auto selection"));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->radio_auto), TRUE);
+
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), dialog->radio_pgp,  FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), dialog->radio_x509, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), dialog->radio_auto, FALSE, FALSE, 0);
+
+  widget = gtk_hseparator_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+
+  dialog->statushint = gtk_label_new (NULL);
+  gtk_box_pack_start (GTK_BOX (vbox), dialog->statushint, FALSE, FALSE, 0);
+
+
+  g_signal_connect (G_OBJECT (GTK_TREE_VIEW (dialog->clist_keys)),
+                    "row-activated",
+                    G_CALLBACK (recplist_row_activated_cb), dialog);
  
+  g_signal_connect (G_OBJECT (gtk_tree_view_get_model 
+                              (GTK_TREE_VIEW (dialog->clist_keys))),
+                    "row-changed",
+                    G_CALLBACK (recplist_row_changed_cb), dialog);
+
+  g_signal_connect (G_OBJECT (dialog->radio_pgp),
+                    "toggled",
+                    G_CALLBACK (rbutton_toggled_cb), dialog);
+  g_signal_connect (G_OBJECT (dialog->radio_x509),
+                    "toggled",
+                    G_CALLBACK (rbutton_toggled_cb), dialog);
+  g_signal_connect (G_OBJECT (dialog->radio_auto),
+                    "toggled",
+                    G_CALLBACK (rbutton_toggled_cb), dialog);
+
 
   return object;
 }
@@ -470,7 +775,7 @@ recipient_dlg_get_type (void)
  **********************  Public API  ************************
  ************************************************************/
 
-GtkWidget *
+RecipientDlg *
 recipient_dlg_new (GtkWidget *parent)
 {
   RecipientDlg *dialog;
@@ -479,23 +784,40 @@ recipient_dlg_new (GtkWidget *parent)
 			 "window", parent,
 			 NULL);
 
-  return GTK_WIDGET(dialog);
+  return dialog;
 }
 
 
-/* Put the recipients into the list.  */
+/* Put RECIPIENTS into the list.  PROTOCOL select the defualt protocol. */
 void 
-recipient_dlg_set_recipients (GtkWidget *object, GSList *recipients)
+recipient_dlg_set_recipients (RecipientDlg *dialog, GSList *recipients,
+                              gpgme_protocol_t protocol)
 {
-  RecipientDlg *dialog;
   GtkListStore *store;
   GSList *recp;
   GtkTreeIter iter;
   const char *name;
+  GtkWidget *widget;
 
-  g_return_if_fail (object);
-  dialog = RECIPIENT_DLG (object);
+  g_return_if_fail (dialog);
 
+  dialog->disable_update_statushint++;
+
+  if (protocol == GPGME_PROTOCOL_OpenPGP)
+    widget = dialog->radio_pgp;
+  else if (protocol == GPGME_PROTOCOL_CMS)
+    widget = dialog->radio_x509;
+  else
+    widget = dialog->radio_auto;
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+  if (widget != dialog->radio_auto)
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_pgp), FALSE);  
+      gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_x509), FALSE);  
+      gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_auto), FALSE);  
+    }
+  
   store = GTK_LIST_STORE (gtk_tree_view_get_model
                           (GTK_TREE_VIEW (dialog->clist_keys)));
 
@@ -511,10 +833,88 @@ recipient_dlg_set_recipients (GtkWidget *object, GSList *recipients)
                               RECPLIST_HAS_PGP, FALSE,
                               RECPLIST_HAS_X509, FALSE,
                               RECPLIST_KEYID,  "",
+                              RECPLIST_USERDATA, NULL,
                               -1);
         }    
     }
+
   parse_recipients (store);
+  dialog->disable_update_statushint--;
+  update_statushint (dialog);
+}
+
+
+/* Return the selected keys as well as the selected protocol.  */
+gpgme_key_t *
+recipient_dlg_get_keys (RecipientDlg *dialog, gpgme_protocol_t *r_protocol)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  size_t idx, nkeys;
+  gpgme_key_t key, *keyarray;
+  gpgme_protocol_t protocol;
+  
+  g_return_val_if_fail (dialog, NULL);
+
+  if (!dialog->usable)
+    return NULL;  /* No valid keys available.  */
+  protocol = dialog->selected_protocol;
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->clist_keys));
+
+  /* Count the number of possible keys.  */
+  nkeys = 0;
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+      do
+        nkeys++;
+      while (gtk_tree_model_iter_next (model, &iter));
+    }
+  keyarray = g_new (gpgme_key_t, nkeys+1); 
+  idx = 0;
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+      do
+        {
+          char *mailbox;
+          struct userdata_s *info;
+
+          if (idx >= nkeys)
+            {
+              g_debug ("key list grew unexpectedly\n");
+              break;
+            }
+          
+          gtk_tree_model_get (model, &iter, 
+                              RECPLIST_MAILBOX, &mailbox,
+                              RECPLIST_USERDATA, &info,
+                              -1);
+          if (info && !info->ignore_recipient)
+            {
+              if (protocol == GPGME_PROTOCOL_OpenPGP && info->pgp.keys)
+                key = info->pgp.keys[0];
+              else if (protocol == GPGME_PROTOCOL_CMS && info->x509.keys)
+                key = info->x509.keys[0];
+              else
+                key = NULL;
+              if (key)
+                {
+                  g_print ("returning key for recipient '%s'\n", mailbox);
+                  gpgme_key_ref (key);
+                  keyarray[idx++] = key;
+                }
+            }
+          g_free (mailbox);
+        }
+      while (gtk_tree_model_iter_next (model, &iter));
+    }
+  g_assert (idx < nkeys+1);
+  keyarray[idx] = NULL;
+
+  if (r_protocol)
+    *r_protocol = protocol;
+
+  return keyarray;
 }
 
 

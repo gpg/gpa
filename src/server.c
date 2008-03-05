@@ -59,6 +59,9 @@ struct conn_ctrl_s
      comes from our command handler.  */
   int is_unfinished;
 
+  /* An GPAOperation object.  */
+  GpaOperation *gpa_op;
+
   /* File descriptors used by the gpgme callbacks.  */
   int input_fd;
   int output_fd;
@@ -69,6 +72,12 @@ struct conn_ctrl_s
 
   /* List of collected recipients.  */
   GSList *recipients;
+
+  /* Array of keys already prepared for RECIPIENTS.  */
+  gpgme_key_t *recipient_keys;
+
+  /* The protocol as selected by the user.  */
+  gpgme_protocol_t selected_protocol;
 
   /* The current sender address (malloced). */
   char *sender;
@@ -227,19 +236,28 @@ release_recipients (conn_ctrl_t ctrl)
     }
 }
 
-/* Return a deep copy of the recipients list.  */
-static GSList *
-copy_recipients (conn_ctrl_t ctrl)
+static void
+release_keys (gpgme_key_t *keys)
 {
-  GSList *recp, *newlist;
-  
-  newlist= NULL;
-  for (recp = ctrl->recipients; recp; recp = g_slist_next (recp))
-    newlist = g_slist_append (newlist, xstrdup (recp->data));
-
-  return newlist;
+  if (keys)
+    {
+      int idx;
+      
+      for (idx=0; keys[idx]; idx++)
+        gpgme_key_unref (keys[idx]);
+      g_free (keys);
+    }
 }
 
+
+/* Reset already prepared keys.  */
+static void
+reset_prepared_keys (conn_ctrl_t ctrl)
+{
+  release_keys (ctrl->recipient_keys);
+  ctrl->recipient_keys = NULL;
+  ctrl->selected_protocol = GPGME_PROTOCOL_UNKNOWN;
+}
 
 
 
@@ -255,6 +273,8 @@ cmd_recipient (assuan_context_t ctx, char *line)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
   gpg_error_t err = 0;
+
+  reset_prepared_keys (ctrl);
 
   if (*line)
     ctrl->recipients = g_slist_append (ctrl->recipients, xstrdup (line));
@@ -320,6 +340,13 @@ cmd_encrypt (assuan_context_t ctx, char *line)
       goto leave;
     }
 
+  if (protocol != ctrl->selected_protocol)
+    {
+      if (ctrl->selected_protocol != GPGME_PROTOCOL_UNKNOWN)
+        g_debug ("note: protocol does not macth the one from PREP_ENCRYPT");
+      reset_prepared_keys (ctrl);
+    }
+
   line = skip_options (line);
   if (*line)
     {
@@ -378,7 +405,10 @@ cmd_encrypt (assuan_context_t ctx, char *line)
 
   ctrl->cont_cmd = cont_encrypt;
   op = gpa_stream_encrypt_operation_new (NULL, input_data, output_data,
-                                         copy_recipients (ctrl), 0, ctx);
+                                         ctrl->recipients, 
+                                         ctrl->recipient_keys,
+                                         protocol,
+                                         0, ctx);
   input_data = output_data = NULL;
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
@@ -405,6 +435,36 @@ cmd_encrypt (assuan_context_t ctx, char *line)
 
 
 
+/* Continuation for cmd_prep_encrypt.  */
+static void
+cont_prep_encrypt (assuan_context_t ctx, gpg_error_t err)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+
+  g_debug ("cont_prep_encrypt called with with ERR=%s <%s>",
+           gpg_strerror (err), gpg_strsource (err));
+
+  if (!err)
+    {
+      release_keys (ctrl->recipient_keys);
+      ctrl->recipient_keys = gpa_stream_encrypt_operation_get_keys
+        (GPA_STREAM_ENCRYPT_OPERATION (ctrl->gpa_op),
+         &ctrl->selected_protocol);
+
+      if (ctrl->recipient_keys)
+        g_print ("received some keys\n");
+      else
+        g_print ("received no keys\n");
+    }
+
+  if (ctrl->gpa_op)
+    {
+      g_object_unref (ctrl->gpa_op);
+      ctrl->gpa_op = NULL;
+    }
+  assuan_process_done (ctx, err);
+}
+
 /* PREP_ENCRYPT [--protocol=OpenPGP|CMS]
 
    Dummy encryption command used to check whether the given recipients
@@ -414,11 +474,11 @@ cmd_prep_encrypt (assuan_context_t ctx, char *line)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
   gpg_error_t err;
-  gpgme_protocol_t protocol = GPGME_PROTOCOL_OpenPGP;
+  gpgme_protocol_t protocol = GPGME_PROTOCOL_UNKNOWN;
   GpaStreamEncryptOperation *op;
 
   if (has_option (line, "--protocol=OpenPGP"))
-    ; /* This is the default.  */
+    protocol = GPGME_PROTOCOL_OpenPGP;
   else if (has_option (line, "--protocol=CMS"))
     protocol = GPGME_PROTOCOL_CMS;
   else if (has_option_name (line, "--protocol"))
@@ -434,11 +494,27 @@ cmd_prep_encrypt (assuan_context_t ctx, char *line)
       goto leave;
     }
 
-  ctrl->cont_cmd = NULL;
+  reset_prepared_keys (ctrl);
+
+  if (ctrl->gpa_op)
+    {
+      g_debug ("Oops: there is still an GPA_OP active\n");
+      g_object_unref (ctrl->gpa_op);
+      ctrl->gpa_op = NULL;
+    }
+  ctrl->cont_cmd = cont_prep_encrypt;
   op = gpa_stream_encrypt_operation_new (NULL, NULL, NULL,
-                                         copy_recipients (ctrl), 0, ctx);
+                                         ctrl->recipients,
+                                         ctrl->recipient_keys,
+                                         protocol,
+                                         0, ctx);
+  /* Store that instance for later use but also install a signal
+     handler to unref it.  */
+  g_object_ref (op);
+  ctrl->gpa_op = GPA_OPERATION (op);
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
+
   return not_finished (ctrl);
 
  leave:
@@ -670,6 +746,7 @@ reset_notify (assuan_context_t ctx)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
 
+  reset_prepared_keys (ctrl);
   release_recipients (ctrl);
   xfree (ctrl->sender);
   ctrl->sender = NULL;
@@ -685,6 +762,11 @@ reset_notify (assuan_context_t ctx)
     }
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
+  if (ctrl->gpa_op)
+    {
+      g_object_unref (ctrl->gpa_op);
+      ctrl->gpa_op = NULL;
+    }
 }
 
 
@@ -792,7 +874,7 @@ gpa_run_server_continuation (assuan_context_t ctx, gpg_error_t err)
       g_debug ("no continuation defined; using default");
       assuan_process_done (ctx, err);
     }
-  else if (!ctrl->client_died)
+  else if (ctrl->client_died)
     {
       g_debug ("not running continuation as client has disconnected");
       connection_finish (ctx);

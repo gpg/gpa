@@ -59,9 +59,11 @@ GType recipient_dlg_get_type (void) G_GNUC_CONST;
  ************ Public API ************
  ************************************/
 
-GtkWidget *recipient_dlg_new (GtkWidget *parent);
-void recipient_dlg_set_recipients (GtkWidget *list, GSList *recipients);
-
+RecipientDlg *recipient_dlg_new (GtkWidget *parent);
+void recipient_dlg_set_recipients (RecipientDlg *dialog, GSList *recipients,
+                                   gpgme_protocol_t protocol);
+gpgme_key_t *recipient_dlg_get_keys (RecipientDlg *dialog,
+                                     gpgme_protocol_t *r_protocol);
 
 
 
