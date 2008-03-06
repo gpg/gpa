@@ -40,8 +40,8 @@ In no particular order:
 
 * MB:
 ** Support getting plaintext from verify operation (should emit "created file"
-   then).  NEEDED FOR CLIPBOARD of non clear text.
-** Fix gpgconf support in windows (gpgme bug?).
+   then).  NEEDED FOR CLIPBOARD of non clear text.  And also needed
+   for normal file ops.
 
 ** Convert the windows registry strings for the home dir to the glib filename
    encoding, or rather to utf8 and from there to the glib filename encoding.
@@ -61,3 +61,11 @@ In no particular order:
    parent.  Maybe it is realized too early due to init vs constructor?
    It does get the right parent window parameter (checked that).
 ** Use GtkAction instead of manual GLists for update sensitivity and stuff.
+** Not all users know about ctrl+click to select multiple items from a list.
+   Use check boxes, or add instructions, or otherwise make this
+   easier.
+** The keyring editor has a pop up if there is no default key that says
+   that the user has no private key.  But the user can have a private key.
+   Either fix the message or the check.
+** The keyserver setting should remember the strings entered by the user.
+

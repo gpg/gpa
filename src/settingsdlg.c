@@ -98,8 +98,8 @@ default_keyserver_frame (void)
   gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
                       gpa_options_get_default_keyserver 
 		      (gpa_options_get_instance ()));
-  /* Connect signals */
-  g_signal_connect (G_OBJECT (GTK_COMBO (combo)->entry), "activate",
+  /* Connect signals.  Try to follow instant-apply principle.  */
+  g_signal_connect (G_OBJECT (GTK_COMBO (combo)->entry), "focus-out-event",
                     G_CALLBACK (keyserver_selected_cb), NULL);
   g_signal_connect (G_OBJECT (GTK_COMBO (combo)->list), "select-child",
                     G_CALLBACK (selected_from_list_cb),
