@@ -15,6 +15,9 @@
 	(gpa_keylist_init): Make a dummy fucntion and move all stuff to ..
 	(gpa_keylist_constructor): .. New.
 	(gpa_keylist_class_init): Register constructor.
+	(gpa_keylist_set_detailed, gpa_keylist_set_brief): Merged into ..
+	(setup_columns): .. new.  Add toolstips.
+	(add_tooltip, set_column_title): New.
 	* keylist.h (_GpaKeyList): Add field public_only.
 
 	* selectkeydlg.h, selectkeydlg.c: New.

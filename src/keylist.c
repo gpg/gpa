@@ -420,6 +420,113 @@ gpa_keylist_clear_columns (GpaKeyList *keylist)
     }
 }
 
+static void
+add_tooltip (GtkWidget *widget, const char *text)
+{
+#if GTK_CHECK_VERSION (2, 12, 0)
+  if (widget && text && *text)
+    gtk_widget_set_tooltip_text (widget, text);
+#endif
+}
+
+static void
+set_column_title (GtkTreeViewColumn *column,
+                  const char *title, const char *tooltip)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (title);
+  /* We need to show the label before setting the widget.  */
+  gtk_widget_show (label);
+  gtk_tree_view_column_set_widget (column, label);
+  add_tooltip (gtk_tree_view_column_get_widget (column), tooltip);
+}
+
+
+static void 
+setup_columns (GpaKeyList *keylist, gboolean detailed)
+{
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+
+  gpa_keylist_clear_columns (keylist);
+
+  if (!keylist->public_only)
+    {
+      renderer = gtk_cell_renderer_pixbuf_new ();
+      column = gtk_tree_view_column_new_with_attributes 
+        ("", renderer,
+         "pixbuf",
+         GPA_KEYLIST_COLUMN_IMAGE,
+         NULL);
+      gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+      gtk_tree_view_column_set_sort_column_id 
+        (column, GPA_KEYLIST_COLUMN_HAS_SECRET);
+      gtk_tree_view_column_set_sort_indicator (column, TRUE);
+    }
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes 
+    (NULL, renderer, "text", GPA_KEYLIST_COLUMN_KEYID, NULL);
+  set_column_title 
+    (column, _("Key ID"),
+     _("The key ID is a short number to identify a certificate."));
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_KEYID);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
+
+  if (detailed)
+    {
+      renderer = gtk_cell_renderer_text_new ();
+      column = gtk_tree_view_column_new_with_attributes
+        (NULL, renderer, "text", GPA_KEYLIST_COLUMN_EXPIRY, NULL);
+      set_column_title 
+        (column, _("Expiry Date"),
+         _("The Expiry Date is the date until the certificate is valid."));
+      gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+      gtk_tree_view_column_set_sort_column_id
+        (column, GPA_KEYLIST_COLUMN_EXPIRY_TS);
+      gtk_tree_view_column_set_sort_indicator (column, TRUE);
+
+      renderer = gtk_cell_renderer_text_new ();
+      column = gtk_tree_view_column_new_with_attributes 
+        (NULL, renderer, "text", GPA_KEYLIST_COLUMN_OWNERTRUST, NULL);
+      set_column_title 
+        (column, _("Owner Trust"),
+         _("The Owner Trust has been set by you and describes how far you"
+           " trust the holder of the certificate to correctly sign (certify)"
+           " other certificates.  It is only meaningful for OpenPGP."));
+      gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+      gtk_tree_view_column_set_sort_column_id 
+        (column, GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE);
+      gtk_tree_view_column_set_sort_indicator (column, TRUE);
+
+      renderer = gtk_cell_renderer_text_new ();
+      column = gtk_tree_view_column_new_with_attributes
+        (NULL, renderer, "text", GPA_KEYLIST_COLUMN_VALIDITY, NULL);
+      set_column_title 
+        (column, _("Validity"), 
+         _("The Validity describes the trust level the system has"
+           " in this certificate.  That is how sure it is that the named"
+           " user is actually that user."));
+      gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+      gtk_tree_view_column_set_sort_column_id 
+        (column, GPA_KEYLIST_COLUMN_VALIDITY_VALUE);
+      gtk_tree_view_column_set_sort_indicator (column, TRUE);
+    }
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes 
+    (NULL, renderer, "text", GPA_KEYLIST_COLUMN_USERID, NULL);
+  set_column_title 
+    (column, _("User Name"),
+     _("The User Name is the name and often also the email address "
+       " of the certificate."));
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_USERID);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
+}
+
 
 
 /************************************************************ 
@@ -455,39 +562,7 @@ gpa_keylist_new_public_only (GtkWidget *window)
 void 
 gpa_keylist_set_brief (GpaKeyList *keylist)
 {
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-
-  gpa_keylist_clear_columns (keylist);
-
-  if (!keylist->public_only)
-    {
-      renderer = gtk_cell_renderer_pixbuf_new ();
-      column = gtk_tree_view_column_new_with_attributes 
-        ("", renderer, "pixbuf", GPA_KEYLIST_COLUMN_IMAGE, NULL);
-      gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-      gtk_tree_view_column_set_sort_column_id (column, 
-                                               GPA_KEYLIST_COLUMN_HAS_SECRET);
-      gtk_tree_view_column_set_sort_indicator (column, TRUE);
-    }
-
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
-						     "text",
-						     GPA_KEYLIST_COLUMN_KEYID,
-						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_KEYID);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
-
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
-						     "text",
-						     GPA_KEYLIST_COLUMN_USERID,
-						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_USERID);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
+  setup_columns (keylist, FALSE);
 }
 
 
@@ -495,72 +570,7 @@ gpa_keylist_set_brief (GpaKeyList *keylist)
 void 
 gpa_keylist_set_detailed (GpaKeyList * keylist)
 {
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-
-  gpa_keylist_clear_columns (keylist);
-
-  if (!keylist->public_only)
-    {
-      renderer = gtk_cell_renderer_pixbuf_new ();
-      column = gtk_tree_view_column_new_with_attributes 
-        ("", renderer,
-         "pixbuf",
-         GPA_KEYLIST_COLUMN_IMAGE,
-         NULL);
-      gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-      gtk_tree_view_column_set_sort_column_id 
-        (column, GPA_KEYLIST_COLUMN_HAS_SECRET);
-      gtk_tree_view_column_set_sort_indicator (column, TRUE);
-    }
-
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
-						     "text",
-						     GPA_KEYLIST_COLUMN_KEYID,
-						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_KEYID);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
-
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Expiry Date"), 
-						     renderer,
-						     "text",
-						     GPA_KEYLIST_COLUMN_EXPIRY,
-						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_EXPIRY_TS);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
-
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Owner Trust"), 
-						     renderer,
-						     "text",
-						     GPA_KEYLIST_COLUMN_OWNERTRUST,
-						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
-
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Key Validity"),
-						     renderer,
-						     "text",
-						     GPA_KEYLIST_COLUMN_VALIDITY,
-						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_VALIDITY_VALUE);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
-
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
-						     "text",
-						     GPA_KEYLIST_COLUMN_USERID,
-						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);  
-  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_USERID);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
+  setup_columns (keylist, TRUE);
 }
 
 

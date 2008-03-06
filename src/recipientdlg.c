@@ -180,7 +180,7 @@ recplist_window_new (void)
   /* Define the columns.  */
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes 
-    (_("Recipient"), renderer, "markup", RECPLIST_MAILBOX, NULL);
+    (NULL, renderer, "markup", RECPLIST_MAILBOX, NULL);
   set_column_title (column, _("Recipient"),
                     _("Shows the recipients of the message."
                       " A key needs to be assigned to each recipient."));
