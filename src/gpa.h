@@ -75,6 +75,7 @@ typedef void (*GPADefaultKeyChanged) (gpointer user_data);
 
 void gpa_run_server_continuation (assuan_context_t ctx, gpg_error_t err);
 void gpa_start_server (void);
+void gpa_stop_server (void);
 
 /*-- utils.c --*/
 /* We are so used to these function thus provide them.  */

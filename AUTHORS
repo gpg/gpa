@@ -1,5 +1,8 @@
-Program: GPA, GPAPA
+Program: GPA
 Maintainer: Miguel Coca <mcoca@gnu.org>
+Bug reports: <bug-gpa@gnupg.org>
+Security related bug reports: <security@gnupg.org>
+License: GPLv3+
 
 
 Authors
@@ -64,21 +67,26 @@ Andy Ruddock <andy.ruddock@minnesund.net>
 Ling Li <ling@caltech.edu>
         See ChangeLogs.
 
-Josué Burgos <jobugar@arrakis.es>
+JosuÃ© Burgos <jobugar@arrakis.es>
         Designed the gpa.png icon.
 
-Can Berk Güder <cbguder@su.sabanciuniv.edu>
+Can Berk GÃ¼der <cbguder@su.sabanciuniv.edu>
         Turkish translation.
 
 Emilian Nowak <emil5@go2.pl>
         Polish translation.
-
+        
 Daniel Nylander <po@danielnylander.se>
-       Swedish translation.
-
+        Swedish translation.
+        
 Zdenek Hatas <zdenek.hatas@gmail.com>
-       Czech translation. 
+        Czech translation. 
 
 Maxim Britov <maxim.britov@gmail.com>
-       Russian translation.
+        Russian translation.
 
+Marcus Brinkmann  <marcus@g10code.de>
+        Clipboard code, cleanups, bug fixes.
+        
+
+        

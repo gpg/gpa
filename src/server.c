@@ -84,6 +84,13 @@ struct conn_ctrl_s
 };
 
 
+/* The number of active connections.  */
+static int connection_counter;
+
+/* A flag requesting a shutdown.  */
+static gboolean shutdown_pending;
+
+
 /* The nonce used by the server connection.  This nonce is required
    uner Windows to emulate Unix Domain Sockets.  This is managed by
    libassuan but we need to store the nonce in the application.  Under
@@ -835,6 +842,7 @@ connection_startup (int fd)
   assuan_set_log_stream (ctx, stderr);
   assuan_register_reset_notify (ctx, reset_notify);
 
+  connection_counter++;
   return ctx;
 }
 
@@ -851,6 +859,9 @@ connection_finish (assuan_context_t ctx)
       reset_notify (ctx);
       assuan_deinit_server (ctx);
       g_free (ctrl);
+      connection_counter--;
+      if (!connection_counter && shutdown_pending)
+        gtk_main_quit ();
     }
 }
 
@@ -1089,7 +1100,6 @@ gpa_start_server (void)
       assuan_sock_close (fd);
       return;
     }
-
 #ifdef HAVE_W32_SYSTEM
   channel = g_io_channel_win32_new_socket (ASSUAN_FD2INT(fd));
 #else
@@ -1113,4 +1123,13 @@ gpa_start_server (void)
       return;
     }
 
+}
+
+/* Set a flag to shutdown the server in a friendly way.  */
+void
+gpa_stop_server (void)
+{
+  shutdown_pending = TRUE;
+  if (!connection_counter)
+    gtk_main_quit ();
 }

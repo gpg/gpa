@@ -1,21 +1,21 @@
 /* keylist.h  -  The GNU Privacy Assistant
  *      Copyright (C) 2000, 2001 G-N-U GmbH.
+ *      Copyright (C) 2008 g10 Code GmbH,
  *
  * This file is part of GPA
  *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * GPA is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GPA is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+ * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef GPA_KEYLIST_H
@@ -46,6 +46,10 @@ struct _GpaKeyList {
   GtkWidget *dialog;
   /* ID of the timeout that displays the dialog */
   guint timeout_id;
+
+  /* Private: Do not use!  FIXME: We should hide all instance
+     variables.  */
+  gboolean public_only;
 };
 
 struct _GpaKeyListClass {
@@ -59,45 +63,43 @@ GType gpa_keylist_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-/* Create a new key list widget.
- */
+/* Create a new key list widget.  */
 GtkWidget *gpa_keylist_new (GtkWidget * window);
 
-/* Set the key list in "brief" mode.
- */
+/* Create a new key list widget in public only mode.  */
+GpaKeyList *gpa_keylist_new_public_only (GtkWidget *window);
+
+/* Set the key list in "brief" mode.  */
 void gpa_keylist_set_brief (GpaKeyList * keylist);
 
-/* Set the key list in "detailed" mode
- */
+/* Set the key list in "detailed" mode.  */
 void gpa_keylist_set_detailed (GpaKeyList * keylist);
 
-/* Return true if any key is selected in the list.
- */
+/* Return true if any key is selected in the list.  */
 gboolean gpa_keylist_has_selection (GpaKeyList * keylist);
 
-/* Return true if one, and only one, key is selected in the list.
- */
+/* Return true if one, and only one, key is selected in the list.  */
 gboolean gpa_keylist_has_single_selection (GpaKeyList * keylist);
 
-/* Return true if one, and only one, secret key is selected in the list.
- */
+/* Return true if one, and only one, secret key is selected in the list.  */
 gboolean gpa_keylist_has_single_secret_selection (GpaKeyList * keylist);
 
-/* Return a GList of selected keys. The caller must not dereference the keys
- * as they belong to the caller.
- */
+/* Return a GList of selected keys. The caller must not dereference
+   the keys as they belong to the caller.  */
 GList *gpa_keylist_get_selected_keys (GpaKeyList * keylist);
 
-/* Begin a reload of the keyring.
- */
+/* Return the selected key.  This function returns NULL if no or more
+   than one key has been selected.  */
+gpgme_key_t gpa_keylist_get_selected_key (GpaKeyList *keylist);
+
+/* Begin a reload of the keyring. */
 void gpa_keylist_start_reload (GpaKeyList * keylist);
 
 /* Let the keylist know that a new key with the given fingerprint is
- * available.
- */
+   available. */
 void gpa_keylist_new_key (GpaKeyList * keylist, const char *fpr);
 
-/* Let the keylist know that a new sceret key has been imported. */
+/* Let the keylist know that a new sceret key has been imported.  */
 void gpa_keylist_imported_secret_key (GpaKeyList * keylist);
 
 

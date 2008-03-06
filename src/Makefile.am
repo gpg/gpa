@@ -47,6 +47,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      encryptdlg.c encryptdlg.h \
 	      verifydlg.c verifydlg.h \
               recipientdlg.c recipientdlg.h \
+              selectkeydlg.c selectkeydlg.h \
 	      keyring.c keyring.h \
 	      ownertrustdlg.c ownertrustdlg.h \
 	      keysigndlg.c keysigndlg.h \

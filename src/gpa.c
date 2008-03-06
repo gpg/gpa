@@ -44,13 +44,65 @@
 #endif
 
 
-/* Global variables */
+/* Global variables. */
 
 /* The home directory of GnuPG.  */
 gchar *gnupg_homedir;
 
 /* True if CMS hack mode is enabled.  */
 gboolean cms_hack;
+
+
+/* Local variables.  */
+typedef struct
+{
+  gboolean start_keyring_editor;
+  gboolean start_file_manager;
+  gboolean start_only_server;
+  gchar *options_filename;
+} gpa_args_t;
+
+static gpa_args_t args = { FALSE, FALSE, FALSE, NULL };
+
+
+/* The copyright notice.  */
+static const char *copyright = 
+"Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
+"Copyright (C) 2008 g10 Code GmbH.\n"
+"This program comes with ABSOLUTELY NO WARRANTY.\n"
+"This is free software, and you are welcome to redistribute it\n"
+"under certain conditions.  See the file COPYING for details.\n";
+
+
+static GtkWidget *keyringeditor = NULL;
+static GtkWidget *settings_dialog = NULL;
+static GtkWidget *backend_config_dialog = NULL;
+
+
+static void print_version (void);
+
+
+/* All command line options of the main application.  */
+static GOptionEntry option_entries[] =
+  {
+    { "version", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
+      (gpointer) &print_version,
+      N_("Output version information and exit"), NULL, },
+    { "keyring", 'k', 0, G_OPTION_ARG_NONE, &args.start_keyring_editor,
+      N_("Open keyring editor (default)"), NULL },
+    { "files", 'f', 0, G_OPTION_ARG_NONE, &args.start_file_manager,
+      N_("Open filemanager"), NULL },
+    { "server", 's', 0, G_OPTION_ARG_NONE, &args.start_only_server,
+      N_("Start only the UI server"), NULL },
+    { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
+      N_("Read options from file"), "FILE" },
+    { "cms", 'x', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &cms_hack,
+      "Enable CMS hack", NULL },
+    { NULL }
+  };
+
+
+
 
 
 /* Return a malloced string with the locale dir.  Return NULL on
@@ -100,18 +152,12 @@ i18n_init (void)
 
 
 /* Manage the two main windows and the settings dialog.  */
-
-static GtkWidget *keyringeditor = NULL;
-static GtkWidget *settings_dialog = NULL;
-static GtkWidget *backend_config_dialog = NULL;
-
-
 static void
 quit_if_no_window (void)
 {
   if (! keyringeditor && ! gpa_file_manager_is_open ()
-      && ! gpa_clipboard_is_open ())
-    gtk_main_quit ();
+      && ! gpa_clipboard_is_open () && !args.start_only_server )
+    gpa_stop_server ();
 }
 
 
@@ -204,26 +250,6 @@ gpa_open_backend_config_dialog (void)
 
 /* Command line options.  */
 
-typedef struct
-{
-  gboolean start_keyring_editor;
-  gboolean start_file_manager;
-  gboolean start_only_server;
-  gchar *options_filename;
-} gpa_args_t;
-
-static gpa_args_t args = { FALSE, FALSE, FALSE, NULL };
-
-
-/* The copyright notice.  */
-static const char *copyright = 
-"Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
-"Copyright (C) 2008 g10 Code GmbH.\n"
-"This program comes with ABSOLUTELY NO WARRANTY.\n"
-"This is free software, and you are welcome to redistribute it\n"
-"under certain conditions.  See the file COPYING for details.\n";
-
-
 /* Print version information and exit.  */
 static void
 print_version (void)
@@ -233,33 +259,15 @@ print_version (void)
 }
 
 
-/* All command line options of the main application.  */
-static GOptionEntry option_entries[] =
-  {
-    { "version", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
-      (gpointer) &print_version,
-      N_("Output version information and exit"), NULL, },
-    { "keyring", 'k', 0, G_OPTION_ARG_NONE, &args.start_keyring_editor,
-      N_("Open keyring editor (default)"), NULL },
-    { "files", 'f', 0, G_OPTION_ARG_NONE, &args.start_file_manager,
-      N_("Open filemanager"), NULL },
-    { "server", 's', 0, G_OPTION_ARG_NONE, &args.start_only_server,
-      N_("Start only the UI server"), NULL },
-    { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
-      N_("Read options from file"), "FILE" },
-    { "cms", 'x', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &cms_hack,
-      "Enable CMS hack", NULL },
-    { NULL }
-  };
-
 
+#ifdef G_OS_WIN32
 static void
 dummy_log_func (const gchar *log_domain, GLogLevelFlags log_level,
                 const gchar *message, gpointer user_data)
 {
   /* Nothing to be done.  */
 }
-
+#endif /*G_OS_WIN32*/
 
 int
 main (int argc, char *argv[])
@@ -295,6 +303,8 @@ main (int argc, char *argv[])
 
   /* Disable logging to prevent MS Windows NT from opening a
      console.  */
+
+#ifdef G_OS_WIN32
   g_log_set_handler ("Glib", G_LOG_LEVEL_CRITICAL
                              | G_LOG_LEVEL_WARNING
                              | G_LOG_LEVEL_MESSAGE
@@ -309,6 +319,7 @@ main (int argc, char *argv[])
                             | G_LOG_LEVEL_WARNING
                             | G_LOG_LEVEL_MESSAGE
                             | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
+#endif /*G_OS_WIN32*/
 
   gtk_init (&argc, &argv);
 

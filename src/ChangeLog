@@ -1,3 +1,31 @@
+2008-03-06  Werner Koch  <wk@g10code.com>
+
+	* keylist.c: Change license to GPLv3+.  Cosmetic changes.
+	(gpa_keylist_get_selected_key): New.
+	(gpa_keylist_elgamal_dialog): Remove.
+	(gpa_keylist_next): Remove detection of Elgamal signatures.  It is
+	pointless as gpg has no more support for those keys.
+	(gpa_keylist_new_public_only): New.
+	(gpa_keylist_class_init, gpa_keylist_get_property)
+	(gpa_keylist_set_property): Add property.
+	(gpa_keylist_set_brief, gpa_keylist_set_detailed) 
+	(gpa_keylist_next): Do not display the image in public_only mode.
+	(gpa_keylist_has_single_secret_selection, gpa_keylist_next):
+	Implement public_only.
+	(gpa_keylist_init): Make a dummy fucntion and move all stuff to ..
+	(gpa_keylist_constructor): .. New.
+	(gpa_keylist_class_init): Register constructor.
+	* keylist.h (_GpaKeyList): Add field public_only.
+
+	* selectkeydlg.h, selectkeydlg.c: New.
+
+	* gpa.c: Move variables definitions to the top.
+	(quit_if_no_window): Do not quit if only the server has been
+	started.
+	(dummy_log_func): Use only for G_OS_WIN32.
+	* server.c (gpa_stop_server): New.
+	(connection_startup, connection_finish): Add shutdown logic.
+
 2008-03-06  Marcus Brinkmann  <marcus@g10code.de>
 
 	* settingsdlg.c (default_keyserver_frame): Invoke
@@ -4909,80 +4937,84 @@
 
 2000-07-25 09:02:34  Werner Koch  (wk@habibti.openit.de)
 
-  * gpa.c (gpa_windowTips_show): Moved from here to ...
-  * help.c: ... here.  Complete rewrote to read the tips rom a file.
-  (get_language): New.
-  (gpa_tips.en, gpa_tips.de): New.
+	* gpa.c (gpa_windowTips_show): Moved from here to ...
+	* help.c: ... here.  Complete rewrote to read the tips rom a file.
+	(get_language): New.
+	(gpa_tips.en, gpa_tips.de): New.
 
 2000-06-28 17:23:03  Werner Koch  (wk@habibti.openit.de)
 
-  * gpa.c:  Removed the --tooltip-kludge option, becuase the bug as
-  been fixed meanwhile.
-  * gtktools.c (gpa_widget_show): Removed it here too.
+	* gpa.c:  Removed the --tooltip-kludge option, becuase the bug as
+	been fixed meanwhile.
+	* gtktools.c (gpa_widget_show): Removed it here too.
 
 2000-06-28 15:32:07  Jan-Oliver Wagner (jan@intevation.de)
 
-  * gtktools.c (gpa_widget_set_centered): fixed minimization bug
-  * icons.xpm: replaced temporary icons and added ownertrust icons
-  * keysmenu.c: added icon to button 'sign' in public keyring editor dialog,
-  added ownertrust icons in keylist of public keyring editor dialog
+	* gtktools.c (gpa_widget_set_centered): fixed minimization bug
+	* icons.xpm: replaced temporary icons and added ownertrust icons
+	* keysmenu.c: added icon to button 'sign' in public keyring editor
+	dialog, added ownertrust icons in keylist of public keyring editor
+	dialog
 
 2000-06-23 16:05:04  Jan-Oliver Wagner (jan@intevation.de)
 
-  * keysmenu.c: added icon to the delete button in the
-  public keyring editor dialog
+	* keysmenu.c: added icon to the delete button in the
+	public keyring editor dialog
 
 2000-06-23 16:00:53  Jan-Oliver Wagner (jan@intevation.de)
 
-  * icons.xpm: added a trashcan (taken from KDE)
+	* icons.xpm: added a trashcan (taken from KDE)
 
 2000-06-23 10:11:02  Jan-Oliver Wagner (jan@intevation.de)
 
-  * icons.xpm: test icons for tool bar added
+	* icons.xpm: test icons for tool bar added
 
 2000-06-23 10:10:44  Jan-Oliver Wagner (jan@intevation.de)
 
-  * gpa.c: test icons for tool bar added, seldom actions removed from toolbar
+	* gpa.c: test icons for tool bar added, seldom actions removed
+	from toolbar
 
 2000-06-22 13:27:35  Jan-Oliver Wagner (jan@intevation.de)
 
-  * icons.xpm: new file, contains icon xpm's. Just tempory until
-  icons are treated in a more convenient way.
+	* icons.xpm: new file, contains icon xpm's. Just tempory until
+	icons are treated in a more convenient way.
 
 2000-06-20 16:45:31  Jan-Oliver Wagner (jan@intevation.de)
 
-  * gpa.c: added toolbar for main window - experimental stage, but functioning
+	* gpa.c: added toolbar for main window - experimental stage, but
+	functioning
 
 2000-05-25 17:54:29  Werner Koch  (wk@habibti.openit.de)
 
-  * gpa.c (main): Add a call to gpapa_init
+	* gpa.c (main): Add a call to gpapa_init
 
-  New option --gpg-program.
+	New option --gpg-program.
 
 2000-05-24 10:01:06  Werner Koch  (wk@habibti.openit.de)
 
-  * gpa.c (gpa_menubar_new): Reformated menu list.
-  * helpmenu.c (help_version): renamed to ...
-  (help_about): .. this and implemented.
+	* gpa.c (gpa_menubar_new): Reformated menu list.
+	* helpmenu.c (help_version): renamed to ...
+	(help_about): .. this and implemented.
 
-  * gpa.c, gpa.h (namesKeyservers): Replaced by ..
-  (main): ... opt.keyserver_names and malloced array.
-  * optionsmenu.c (options_keyserver): Put all keyservers into the list.
+	* gpa.c, gpa.h (namesKeyservers): Replaced by ..
+	(main): ... opt.keyserver_names and malloced array.
+	* optionsmenu.c (options_keyserver): Put all keyservers into the list.
 
-  * gtktools.c (gpa_widget_show): Kludge for Sawmill and Windowmaker.
+	* gtktools.c (gpa_widget_show): Kludge for Sawmill and Windowmaker.
 
 2000-05-16 19:57:28  Werner Koch  (wk@habibti.openit.de)
 
-  Ran "indent -gnu -sc" on all source files.
+	Ran "indent -gnu -sc" on all source files.
 
 2000-05-04 18:40:08  Werner Koch  (wk@habibti.openit.de)
 
-  * *.c: Moved all gpa_widget_set_centered() before the
-  gtk_widget_show_all(), so that the windows are displayed correctly.
+	* *.c: Moved all gpa_widget_set_centered() before the
+	gtk_widget_show_all(), so that the windows are displayed
+	correctly.
 
 2000-05-02 19:57:29  Werner Koch  (wk@habibti.openit.de)
 
-  * gpa.c, keymenu.c, filemenu.c: Removed libiberty header.
-  * gpa.h: Included xmalloc header.
+	* gpa.c, keymenu.c, filemenu.c: Removed libiberty header.
+	* gpa.h: Included xmalloc header.
 
 
