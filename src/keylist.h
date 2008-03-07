@@ -50,6 +50,9 @@ struct _GpaKeyList {
   /* Private: Do not use!  FIXME: We should hide all instance
      variables.  */
   gboolean public_only;
+  gpgme_protocol_t protocol;
+  gpgme_key_t *initial_keys;
+  const char *initial_pattern;
 };
 
 struct _GpaKeyListClass {
@@ -66,8 +69,12 @@ GType gpa_keylist_get_type (void) G_GNUC_CONST;
 /* Create a new key list widget.  */
 GtkWidget *gpa_keylist_new (GtkWidget * window);
 
-/* Create a new key list widget in public only mode.  */
-GpaKeyList *gpa_keylist_new_public_only (GtkWidget *window);
+/* Create a new key list widget with optional arguments.  */
+GpaKeyList *gpa_keylist_new_with_keys (GtkWidget *window,
+                                       gboolean public_only,
+                                       gpgme_protocol_t protocol,
+                                       gpgme_key_t *keys,
+                                       const char *pattern);
 
 /* Set the key list in "brief" mode.  */
 void gpa_keylist_set_brief (GpaKeyList * keylist);

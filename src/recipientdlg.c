@@ -705,12 +705,19 @@ do_select_key (RecipientDlg *dialog, gpgme_protocol_t protocol)
       gtk_tree_model_get (model, &iter, RECPLIST_USERDATA, &info, -1);
       if (info)
         {
-          seldlg = select_key_dlg_new (GTK_WIDGET (dialog));
+          gpgme_key_t *keys;
+
           if (protocol == GPGME_PROTOCOL_OpenPGP)
-            select_key_dlg_set_keys (seldlg, info->pgp.keys, protocol);
+            keys = info->pgp.keys;
           else if (protocol == GPGME_PROTOCOL_CMS)
-            select_key_dlg_set_keys (seldlg, info->x509.keys, protocol);
-          
+            keys = info->x509.keys;
+          else
+            keys = NULL;
+
+          seldlg = select_key_dlg_new_with_keys (GTK_WIDGET (dialog),
+                                                 protocol,
+                                                 keys,
+                                                 info->mailbox);
           g_signal_connect (G_OBJECT (seldlg), "response",
                             G_CALLBACK (select_key_response_cb), dialog);
           gtk_widget_show_all (GTK_WIDGET (seldlg));
@@ -820,7 +827,7 @@ recplist_popup_menu_new (GtkWidget *window, RecipientDlg *dialog)
     {
       {_("/Select _PGP key..."), NULL, recplist_popup_pgp, 0, NULL},
       {_("/Select _S\\/MIME key..."), NULL, recplist_popup_x509, 0, NULL},
-      {_("/_Ignore this key"), NULL, recplist_popup_ignore, 0, NULL},
+      {_("/Toggle _Ignore flag"), NULL, recplist_popup_ignore, 0, NULL},
     };
   //  GtkWidget *item;
 

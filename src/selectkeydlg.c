@@ -32,6 +32,10 @@ struct _SelectKeyDlg
   GtkDialog parent;
   
   GpaKeyList *keylist;
+
+  gpgme_protocol_t protocol;
+  gpgme_key_t *initial_keys;
+  const char *initial_pattern;
 };
 
 
@@ -51,16 +55,15 @@ enum
   {
     PROP_0,
     PROP_WINDOW,
-    PROP_FORCE_ARMOR
+    PROP_PROTOCOL,
+    PROP_INITIAL_KEYS,
+    PROP_INITIAL_PATTERN
   };
 
 
 
+
 
-
-
-
-
 /* Signal handler for selection changes of the keylist.  */
 static void
 keylist_selection_changed_cb (GtkTreeSelection *treeselection, 
@@ -95,6 +98,15 @@ select_key_dlg_get_property (GObject *object, guint prop_id,
       g_value_set_object (value,
 			  gtk_window_get_transient_for (GTK_WINDOW (dialog)));
       break;
+    case PROP_PROTOCOL:
+      g_value_set_int (value, dialog->protocol);
+      break;
+    case PROP_INITIAL_KEYS:
+      g_value_set_pointer (value, dialog->initial_keys);
+      break;
+    case PROP_INITIAL_PATTERN:
+      g_value_set_string (value, dialog->initial_pattern);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -114,6 +126,15 @@ select_key_dlg_set_property (GObject *object, guint prop_id,
       gtk_window_set_transient_for (GTK_WINDOW (dialog),
 				    g_value_get_object (value));
       break;
+    case PROP_PROTOCOL:
+      dialog->protocol = g_value_get_int (value);
+      break;
+    case PROP_INITIAL_KEYS:
+      dialog->initial_keys = (gpgme_key_t*)g_value_get_pointer (value);
+      break;
+    case PROP_INITIAL_PATTERN:
+      dialog->initial_pattern = g_value_get_string (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -124,7 +145,13 @@ select_key_dlg_set_property (GObject *object, guint prop_id,
 static void
 select_key_dlg_finalize (GObject *object)
 {  
+  SelectKeyDlg *dialog = SELECT_KEY_DLG (object);
+
+  gpa_gpgme_release_keyarray (dialog->initial_keys);
+
   /* Fixme:  Release the store.  */
+
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -174,8 +201,18 @@ select_key_dlg_constructor (GType type, guint n_construct_properties,
   gtk_box_pack_start (GTK_BOX (vbox), scroller, TRUE, TRUE, 0);
   gtk_widget_set_size_request (scroller, 400, 200);
 
-  dialog->keylist = gpa_keylist_new_public_only (GTK_WIDGET (dialog));
+  /* Create the keylist and initialize if with our initial keys.
+     Because we don't need them then anymore, release our own copy of
+     the keys.  */
+  dialog->keylist = gpa_keylist_new_with_keys (GTK_WIDGET (dialog),
+                                               TRUE,
+                                               dialog->protocol,
+                                               dialog->initial_keys,
+                                               dialog->initial_pattern);
+  gpa_gpgme_release_keyarray (dialog->initial_keys);
+  dialog->initial_keys = NULL;
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET(dialog->keylist));
+
 
   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
 			      (GTK_TREE_VIEW (dialog->keylist))),
@@ -207,6 +244,28 @@ select_key_dlg_class_init (SelectKeyDlgClass *klass)
       "Parent window", GTK_TYPE_WIDGET,
       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
+  g_object_class_install_property 
+    (object_class, PROP_PROTOCOL,
+     g_param_spec_int 
+     ("protocol", "Protocol",
+      "The gpgme protocol used to restruct the key listing.",
+      GPGME_PROTOCOL_OpenPGP, GPGME_PROTOCOL_UNKNOWN, GPGME_PROTOCOL_UNKNOWN,
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property 
+    (object_class, PROP_INITIAL_KEYS,
+     g_param_spec_pointer 
+     ("initial-keys", "Initial-keys",
+      "An array of gpgme_key_t with the initial set of keys or NULL.",
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property 
+    (object_class, PROP_INITIAL_PATTERN,
+     g_param_spec_string 
+     ("initial-pattern", "Initial-pattern",
+      "A string with pattern to be used for the search boxor NULL.",
+      NULL,
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
 
 
@@ -258,62 +317,25 @@ select_key_dlg_new (GtkWidget *parent)
 }
 
 
-/* Fill the list with KEYS.  PROTOCOL may be used to retsitc the
-   search to one type of keys.  To allow all keys, use
-   GPGME_PROTOCOL_UNKNOWN.  */
-void 
-select_key_dlg_set_keys (SelectKeyDlg *dialog, gpgme_key_t *keys,
-                         gpgme_protocol_t protocol)
+/* Same as select_key_dlg_new but with the options to select the
+   protocol and to set initial keys and a search string.  */
+SelectKeyDlg *
+select_key_dlg_new_with_keys (GtkWidget *parent,
+                              gpgme_protocol_t protocol,
+                              gpgme_key_t *keys, const char *pattern)
 {
-/*   GtkListStore *store; */
-/*   GSList *recp; */
-/*   GtkTreeIter iter; */
-/*   const char *name; */
-/*   GtkWidget *widget; */
+  SelectKeyDlg *dialog;
 
-/*   g_return_if_fail (dialog); */
+  dialog = g_object_new (SELECT_KEY_DLG_TYPE,
+                         "window", parent,
+                         "protocol", (int)protocol,
+                         "initial-keys", gpa_gpgme_copy_keyarray (keys),
+                         "initial-pattern", pattern,
+                         NULL);
 
-/*   if (protocol == GPGME_PROTOCOL_OpenPGP) */
-/*     widget = dialog->radio_pgp; */
-/*   else if (protocol == GPGME_PROTOCOL_CMS) */
-/*     widget = dialog->radio_x509; */
-/*   else */
-/*     widget = NULL; */
-/*   if (widget) */
-/*     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE); */
-
-/*   if (widget != dialog->radio_auto) */
-/*     { */
-/*       gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_pgp), FALSE);   */
-/*       gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_x509), FALSE);   */
-/*     } */
-  
-/*   store = GTK_LIST_STORE (gtk_tree_view_get_model */
-/*                           (GTK_TREE_VIEW (dialog->clist_keys))); */
-
-/*   gtk_list_store_clear (store); */
-/*   for (recp = recipients; recp; recp = g_slist_next (recp)) */
-/*     { */
-/*       name = recp->data; */
-/*       if (name && *name) */
-/*         { */
-/*           struct userdata_s *info = g_malloc0 (sizeof *info); */
-          
-/*           gtk_list_store_append (store, &iter); */
-/*           gtk_list_store_set (store, &iter, */
-/*                               RECPLIST_MAILBOX, name, */
-/*                               RECPLIST_HAS_PGP, FALSE, */
-/*                               RECPLIST_HAS_X509, FALSE, */
-/*                               RECPLIST_KEYID,  g_strdup (""), */
-/*                               RECPLIST_USERDATA, info, */
-/*                               -1); */
-/*         }     */
-/*     } */
-
-/*   parse_recipients (store); */
-/*   dialog->disable_update_statushint--; */
-/*   update_statushint (dialog); */
+  return dialog;
 }
+
 
 
 /* Return the selected key.  */

@@ -103,9 +103,11 @@ GType select_key_dlg_get_type (void) G_GNUC_CONST;
  ************************************/
 
 SelectKeyDlg *select_key_dlg_new (GtkWidget *parent);
-void select_key_dlg_set_keys (SelectKeyDlg *dialog,
-                              gpgme_key_t *keys,
-                              gpgme_protocol_t protocol);
+SelectKeyDlg *select_key_dlg_new_with_keys (GtkWidget *parent,
+                                            gpgme_protocol_t protocol,
+                                            gpgme_key_t *keys,
+                                            const char *pattern);
+
 gpgme_key_t select_key_dlg_get_key (SelectKeyDlg *dialog);
 
 

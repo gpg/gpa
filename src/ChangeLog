@@ -1,3 +1,19 @@
+2008-03-07  Werner Koch  <wk@g10code.com>
+
+	* selectkeydlg.c (select_key_dlg_new_with_keys): New.
+
+	* keylist.c (gpa_keylist_new_public_only): Rename to ...
+	(gpa_keylist_new_with_keys): .. this and add more parameters.
+	(gpa_keylist_class_init): Add properties PROP_PROTOCOL,
+	PROP_INITIAL_KEYS, PROP_INITIAL_PATTERN.
+	(gpa_keylist_finalize): Release initial_keys.
+	(gpa_keylist_constructor): Fill the list with provided keys.
+
+	* gpgmetools.c (gpa_gpgme_copy_keyarray) 
+	(gpa_gpgme_release_keyarray): New.
+	* gpastreamencryptop.c (release_keys, copy_keys): Remove and
+	replace all callers by the new functions.
+
 2008-03-06  Werner Koch  <wk@g10code.com>
 
 	* keylist.c: Change license to GPLv3+.  Cosmetic changes.

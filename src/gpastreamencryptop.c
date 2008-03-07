@@ -106,46 +106,6 @@ copy_recipients (GSList *recipients)
 
 
 static void
-release_keys (gpgme_key_t *keys)
-{
-  if (keys)
-    {
-      int idx;
-      
-      for (idx=0; keys[idx]; idx++)
-        gpgme_key_unref (keys[idx]);
-      g_free (keys);
-    }
-}
-
-
-/* Return a copy of the key array.  */
-static gpgme_key_t *
-copy_keys (gpgme_key_t *keys)
-{
-  gpgme_key_t *newarray;
-  int idx;
-
-  if (!keys)
-    return NULL;
-
-  for (idx=0; keys[idx]; idx++)
-    ;
-  idx++;
-  newarray = g_new (gpgme_key_t, idx); 
-  for (idx=0; keys[idx]; idx++)
-    {
-      gpgme_key_ref (keys[idx]);
-      newarray[idx] = keys[idx];
-    }
-  newarray[idx] = NULL;
-
-  return newarray;
-}
-
-
-
-static void
 gpa_stream_encrypt_operation_get_property (GObject *object, guint prop_id,
                                            GValue *value, GParamSpec *pspec)
 {
@@ -201,7 +161,7 @@ gpa_stream_encrypt_operation_finalize (GObject *object)
 
   release_recipients (op->recipients);
   op->recipients = NULL;
-  release_keys(op->keys);
+  gpa_gpgme_release_keyarray (op->keys);
   op->keys = NULL;
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -443,7 +403,7 @@ response_cb (GtkDialog *dialog, int response, void *user_data)
     }
 
   /* Get the keys.  */
-  release_keys (op->keys);
+  gpa_gpgme_release_keyarray (op->keys);
   op->keys = NULL;
   op->keys = recipient_dlg_get_keys (op->recp_dialog, &op->selected_protocol);
 
@@ -533,7 +493,7 @@ gpa_stream_encrypt_operation_new (GtkWidget *window,
 		     "input_stream", input_stream,
 		     "output_stream", output_stream,
                      "recipients", copy_recipients (recipients),
-                     "recipient-keys", copy_keys (recp_keys),
+                     "recipient-keys", gpa_gpgme_copy_keyarray (recp_keys),
                      "protocol", (int)protocol,
                      "server-ctx", server_ctx,
 		     NULL);
@@ -552,5 +512,5 @@ gpa_stream_encrypt_operation_get_keys (GpaStreamEncryptOperation *op,
   
   if (r_protocol)
     *r_protocol = op->selected_protocol;
-  return copy_keys (op->keys);
+  return gpa_gpgme_copy_keyarray (op->keys);
 }

@@ -35,7 +35,10 @@ enum
 {
   PROP_0,
   PROP_WINDOW,
-  PROP_PUBLIC_ONLY
+  PROP_PUBLIC_ONLY,
+  PROP_PROTOCOL,
+  PROP_INITIAL_KEYS,
+  PROP_INITIAL_PATTERN
 };
 
 /* GObject */
@@ -90,6 +93,15 @@ gpa_keylist_get_property (GObject     *object,
     case PROP_PUBLIC_ONLY:
       g_value_set_boolean (value, list->public_only);
       break;
+    case PROP_PROTOCOL:
+      g_value_set_int (value, list->protocol);
+      break;
+    case PROP_INITIAL_KEYS:
+      g_value_set_pointer (value, list->initial_keys);
+      break;
+    case PROP_INITIAL_PATTERN:
+      g_value_set_string (value, list->initial_pattern);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -112,6 +124,15 @@ gpa_keylist_set_property (GObject     *object,
     case PROP_PUBLIC_ONLY:
       list->public_only = g_value_get_boolean (value);
       break;
+    case PROP_PROTOCOL:
+      list->protocol = g_value_get_int (value);
+      break;
+    case PROP_INITIAL_KEYS:
+      list->initial_keys = (gpgme_key_t*)g_value_get_pointer (value);
+      break;
+    case PROP_INITIAL_PATTERN:
+      list->initial_pattern = g_value_get_string (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -126,6 +147,7 @@ gpa_keylist_finalize (GObject *object)
   /* Dereference all keys in the list */
   g_list_foreach (list->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (list->keys);
+  gpa_gpgme_release_keyarray (list->initial_keys);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -175,9 +197,25 @@ gpa_keylist_constructor (GType type,
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
   /* Load the keyring */
   add_trustdb_dialog (list);
-  gpa_keytable_list_keys (gpa_keytable_get_public_instance(),
-			  gpa_keylist_next, gpa_keylist_end, list);
+  if (list->initial_keys)
+    {
+      /* Initialize from the provided list.  */
+      int idx;
+      gpgme_key_t key;
 
+      for (idx=0; (key = list->initial_keys[idx]); idx++)
+        {
+          gpgme_key_ref (key);
+          gpa_keylist_next (key, list);
+        }
+      gpa_keylist_end (list);
+    }
+  else
+    {
+      /* Initialize from the global keytable.  */
+      gpa_keytable_list_keys (gpa_keytable_get_public_instance(),
+                              gpa_keylist_next, gpa_keylist_end, list);
+    }
   return object;
 }
 
@@ -202,6 +240,28 @@ gpa_keylist_class_init (GpaKeyListClass *klass)
       FALSE,
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 
+  g_object_class_install_property 
+    (object_class, PROP_PROTOCOL,
+     g_param_spec_int 
+     ("protocol", "Protocol",
+      "The gpgme protocol used to restruct the key listing.",
+      GPGME_PROTOCOL_OpenPGP, GPGME_PROTOCOL_UNKNOWN, GPGME_PROTOCOL_UNKNOWN,
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property 
+    (object_class, PROP_INITIAL_KEYS,
+     g_param_spec_pointer 
+     ("initial-keys", "Initial-keys",
+      "An array of gpgme_key_t with the initial set of keys or NULL.",
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property 
+    (object_class, PROP_INITIAL_PATTERN,
+     g_param_spec_string 
+     ("initial-pattern", "Initial-pattern",
+      "A string with pattern to be used for a key search or NULL.",
+      NULL,
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
 
 
@@ -327,6 +387,7 @@ is_zero_fpr (const char *fpr)
 }
 
 
+/* Note that this function takes ownership of KEY.  */
 static void 
 gpa_keylist_next (gpgme_key_t key, gpointer data)
 {
@@ -543,14 +604,24 @@ gpa_keylist_new (GtkWidget *window)
 }
 
 
-/* Create a new key list widget in public_only mode. */
+/* Create a new key list widget.  If PUBLIC_ONLY is set the keylist
+   will be created in public_only mode.  PROTOCOL may be used to
+   resctrict the list to keys of a certain protocol. If KEYS is not
+   NULL, those keys will be displayed instead of listing all.  If
+   PATTERN is not NULL, the serach box will be filled with that
+   pattern */
 GpaKeyList *
-gpa_keylist_new_public_only (GtkWidget *window)
+gpa_keylist_new_with_keys (GtkWidget *window, gboolean public_only,
+                           gpgme_protocol_t protocol,
+                           gpgme_key_t *keys, const char *pattern)
 {
   GpaKeyList *list;
 
   list = g_object_new (GPA_KEYLIST_TYPE,
-                       "public-only", TRUE,
+                       "public-only", public_only,
+                       "protocol", (int)protocol,
+                       "initial-keys", gpa_gpgme_copy_keyarray (keys),
+                       "initial-pattern", pattern,
                        NULL);
 
   return list;

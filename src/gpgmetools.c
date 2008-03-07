@@ -1,22 +1,22 @@
-/* gpgmetools.h - additional gpgme support functions for GPA.
+/* gpgmetools.h - Additional gpgme support functions for GPA.
    Copyright (C) 2002 Miguel Coca.
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2008 g10 Code GmbH.
 
-   This file is part of GPA.
+   This file is part of GPA
 
-   GPA is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
 
-   GPA is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with GPA; if not, write to the Free Software Foundation,
-   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
 
 
 /* A set of auxiliary functions for common tasks related to GPGME */
@@ -978,3 +978,44 @@ gpa_get_key_capabilities_text (gpgme_key_t key)
 	}
     }
 }
+
+
+/* Return a copy of the key array.  */
+gpgme_key_t *
+gpa_gpgme_copy_keyarray (gpgme_key_t *keys)
+{
+  gpgme_key_t *newarray;
+  int idx;
+
+  if (!keys)
+    return NULL;
+
+  for (idx=0; keys[idx]; idx++)
+    ;
+  idx++;
+  newarray = g_new (gpgme_key_t, idx); 
+  for (idx=0; keys[idx]; idx++)
+    {
+      gpgme_key_ref (keys[idx]);
+      newarray[idx] = keys[idx];
+    }
+  newarray[idx] = NULL;
+
+  return newarray;
+}
+
+
+/* Release all keys in the array KEYS as weel as ARRY itself.  */
+void
+gpa_gpgme_release_keyarray (gpgme_key_t *keys)
+{
+  if (keys)
+    {
+      int idx;
+      
+      for (idx=0; keys[idx]; idx++)
+        gpgme_key_unref (keys[idx]);
+      g_free (keys);
+    }
+}
+
