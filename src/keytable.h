@@ -1,22 +1,21 @@
 /* keytable.h - The GNU Privacy Assistant key table.
    Copyright (C) 2002 Miguel Coca
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2008 g10 Code GmbH.
 
    This file is part of GPA
 
-   GPA is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
 
-   GPA is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with GPA; if not, write to the Free Software Foundation,
-   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
 
 /* Table of all the keys in the keyring.  Singleton object.  Acts as a
    key cache for key listing.  */
@@ -55,6 +54,9 @@ struct _GpaKeyTable {
   GpaKeyTableNextFunc next;
   GpaKeyTableEndFunc end;
   gpointer data;
+  const char *fpr;
+  int did_first_half;
+  gpg_error_t first_half_err;
 
   GList *keys, *tmp_list;
 };

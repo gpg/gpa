@@ -1,5 +1,21 @@
 2008-03-07  Werner Koch  <wk@g10code.com>
 
+	* keytable.h (_GpaKeyTable): Add new fields FPR, DID_FIRST_HALF
+	and FIRST_HALF_ERR.
+	* keytable.c (first_half_done_cb): New.
+	(gpa_keytable_init): Connect "done" to that.
+	(reload_cache): Save the fingerprint.
+	(done_cb): Show error from both halfs.
+	* gpa.c: Include signal.h. Enable --cms with --server.
+	(main) [!G_OS_WIN32]: Ignore SIGPIPE.
+
+	* recipientdlg.c (set_column_title, add_tooltip): Remove and
+	factor code out to ..
+	* gtktools.c (gpa_add_tooltip, gpa_set_column_title): .. New.
+	* keylist.c (add_tooltip, set_column_title): Replace be new functions.
+
+	* gpa.c (main) [GLIB < 2.12]:  Do not use the new g_context stuff.
+
 	* selectkeydlg.c (select_key_dlg_new_with_keys): New.
 
 	* keylist.c (gpa_keylist_new_public_only): Rename to ...

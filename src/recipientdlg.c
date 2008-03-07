@@ -133,28 +133,6 @@ enum
 
 
 
-static void
-add_tooltip (GtkWidget *widget, const char *text)
-{
-#if GTK_CHECK_VERSION (2, 12, 0)
-  if (widget && text && *text)
-    gtk_widget_set_tooltip_text (widget, text);
-#endif
-}
-
-static void
-set_column_title (GtkTreeViewColumn *column,
-                  const char *title, const char *tooltip)
-{
-  GtkWidget *label;
-
-  label = gtk_label_new (title);
-  /* We need to show the label before setting the widget.  */
-  gtk_widget_show (label);
-  gtk_tree_view_column_set_widget (column, label);
-  add_tooltip (gtk_tree_view_column_get_widget (column), tooltip);
-}
-
 
 
 /* Create the main list of this dialog.  */
@@ -181,32 +159,35 @@ recplist_window_new (void)
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes 
     (NULL, renderer, "markup", RECPLIST_MAILBOX, NULL);
-  set_column_title (column, _("Recipient"),
-                    _("Shows the recipients of the message."
-                      " A key needs to be assigned to each recipient."));
+  gpa_set_column_title (column, _("Recipient"),
+                        _("Shows the recipients of the message."
+                          " A key needs to be assigned to each recipient."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", RECPLIST_HAS_PGP, NULL);
-  set_column_title (column, "PGP", _("Checked if at least one matching"
-                                     " OpenPGP certificate has been found.")); 
+  gpa_set_column_title (column, "PGP",
+                        _("Checked if at least one matching"
+                          " OpenPGP certificate has been found.")); 
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", RECPLIST_HAS_X509, NULL);
-  set_column_title (column, "X.509", _("Checked if at least one matching"
-                                       " X.509 certificate for use with S/MIME"
-                                       " has been found.")); 
+  gpa_set_column_title (column, "X.509",
+                        _("Checked if at least one matching"
+                          " X.509 certificate for use with S/MIME"
+                          " has been found.")); 
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes 
     (NULL, renderer, "text", RECPLIST_KEYID, NULL);
-  set_column_title (column, _("Key ID"),
-                    _("Shows the key ID of the selected key or an indication"
-                      " that a key needs to be selected."));
+  gpa_set_column_title (column,
+                        _("Key ID"),
+                        _("Shows the key ID of the selected key or"
+                          " an indication that a key needs to be selected."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
 
@@ -321,7 +302,7 @@ update_statushint (RecipientDlg *dialog)
 
   if (missing_keys)
     hint = _("You need to select a key for each recipient.\n"
-             "To select a key you click on the respective line.");
+             "To select a key right-click on the respective line.");
   else if ((sel_protocol == GPGME_PROTOCOL_OpenPGP
             && ambiguous_pgp_keys)
            || (sel_protocol == GPGME_PROTOCOL_CMS
@@ -329,7 +310,7 @@ update_statushint (RecipientDlg *dialog)
            || (sel_protocol == GPGME_PROTOCOL_UNKNOWN
                && (ambiguous_pgp_keys || ambiguous_x509_keys )))
     hint = _("You need to select exactly one key for each recipient.\n"
-             "To select a key you click on the respective line.");
+             "To select a key right-click on the respective line.");
   else if ((sel_protocol == GPGME_PROTOCOL_OpenPGP
             && n_keys != n_pgp_keys)
            || (sel_protocol == GPGME_PROTOCOL_CMS
@@ -435,11 +416,11 @@ update_recplist_row (GtkListStore *store, GtkTreeIter *iter,
   if (info->ignore_recipient)
     infostr = NULL;
   else if (any_pgp && any_x509 && info->pgp.keys[1] && info->x509.keys[1])
-    infostr = g_strdup (_("[ambiguous keys - click to select]"));
+    infostr = g_strdup (_("[Ambiguous keys. Right-click to select]"));
   else if (any_pgp && info->pgp.keys[1])
-    infostr = g_strdup (_("[ambiguous PGP key - click to select]"));
+    infostr = g_strdup (_("[Ambiguous PGP key.  Right-click to select]"));
   else if (any_x509 && info->x509.keys[1])
-    infostr = g_strdup (_("[ambiguous X.509 key - click to select]"));
+    infostr = g_strdup (_("[Ambiguous X.509 key. Right-click to select]"));
   else if (any_pgp && !info->pgp.keys[1])
     {
       /* Exactly one key found.  */
@@ -452,7 +433,7 @@ update_recplist_row (GtkListStore *store, GtkTreeIter *iter,
       infostr = gpa_gpgme_key_get_userid (key->uids);
     }
   else
-    infostr = g_strdup (_("[click to select]"));
+    infostr = g_strdup (_("[Right-click to select]"));
 
 
   mailbox = g_markup_printf_escaped ("<span strikethrough='%s'>%s</span>",

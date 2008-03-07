@@ -1,22 +1,21 @@
 /* keytable.c - The GNU Privacy Assistant key table.
    Copyright (C) 2002 Miguel Coca
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2008 g10 Code GmbH.
 
    This file is part of GPA
 
-   GPA is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
 
-   GPA is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with GPA; if not, write to the Free Software Foundation,
-   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 
@@ -28,8 +27,8 @@
 #include "gtktools.h"
 
 /* Internal */
-static void done_cb (GpaContext *context, gpg_error_t err,
-		     GpaKeyTable *keytable);
+static void first_half_done_cb (GpaContext *context, gpg_error_t err,
+                                GpaKeyTable *keytable);
 static void next_key_cb (GpaContext *context, gpgme_key_t key,
 			 GpaKeyTable *keytable);
 
@@ -82,19 +81,25 @@ gpa_keytable_class_init (GpaKeyTableClass *klass)
 static void
 gpa_keytable_init (GpaKeyTable *keytable)
 {
+  /* Fixme: Why at all are we zeroing out variables already set to
+     zero at object creation? */
   keytable->next = NULL;
   keytable->end = NULL;
   keytable->data = NULL;
+  keytable->did_first_half = 0;
+  keytable->first_half_err = 0;
   keytable->context = gpa_context_new ();
   keytable->keys = NULL;
   keytable->secret = FALSE;
   keytable->initialized = FALSE;
   keytable->new_key = FALSE;
   keytable->tmp_list = NULL;
+  /* Note, that the next_key and done signals are emitted by means of
+     gpgme events with the help of gpacontext.c:gpa_context_event_cb.  */
   g_signal_connect (G_OBJECT (keytable->context), "next_key",
 		    G_CALLBACK (next_key_cb), keytable);
   g_signal_connect (G_OBJECT (keytable->context), "done",
-		    G_CALLBACK (done_cb), keytable);
+		    G_CALLBACK (first_half_done_cb), keytable);
 }
 
 static void
@@ -114,6 +119,10 @@ reload_cache (GpaKeyTable *keytable, const char *fpr)
 {
   gpg_error_t err;
   
+  /* We select the Open PGP protocol here and later the
+     first_half_done_cb will do another keylist_start for X,509.  */
+  keytable->fpr = fpr;
+  gpgme_set_protocol (keytable->context->ctx, GPGME_PROTOCOL_OpenPGP);
   err = gpgme_op_keylist_start (keytable->context->ctx, fpr,
 				keytable->secret);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
@@ -129,12 +138,14 @@ reload_cache (GpaKeyTable *keytable, const char *fpr)
 }
 
 static void 
-done_cb (GpaContext *context, gpg_error_t err,
-		     GpaKeyTable *keytable)
+done_cb (GpaContext *context, gpg_error_t err, GpaKeyTable *keytable)
 {
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err || keytable->first_half_err)
     {
-      gpa_gpgme_warning (err);
+      if (keytable->first_half_err)
+        gpa_gpgme_warning (keytable->first_half_err);
+      if (err)
+        gpa_gpgme_warning (err);
       return;
     }
   /* Reverse the list to have the keys come up in the same order they
@@ -165,9 +176,48 @@ done_cb (GpaContext *context, gpg_error_t err,
     }
 }
 
+
 static void 
-next_key_cb (GpaContext *context, gpgme_key_t key,
-			 GpaKeyTable *keytable)
+first_half_done_cb (GpaContext *context, gpg_error_t err,
+                    GpaKeyTable *keytable)
+{
+  if (keytable->did_first_half || !cms_hack)
+    {
+      /* We are here for the second time and thus we continue with the
+         real done handler.  We do this also if the CMS_HACK has not
+         been enabled.  We reset the protocol to OpenPGP because some
+         old code might assume that it is in OpenPGP mode.  */
+      keytable->fpr = NULL; /* Not needed anymore.  */
+      gpgme_set_protocol (keytable->context->ctx, GPGME_PROTOCOL_OpenPGP);
+      done_cb (context, err, keytable);
+      return;
+    }
+  
+  /* Now continue with a key listing for X.509 keys put save the error
+     of the the PGP key listing.  */
+  keytable->first_half_err = err;
+  keytable->did_first_half = 1;
+
+  gpgme_set_protocol (context->ctx, GPGME_PROTOCOL_CMS);
+  err = gpgme_op_keylist_start (keytable->context->ctx, 
+                                keytable->fpr,
+				keytable->secret);
+  keytable->fpr = NULL; /* Not needed anymore.  */
+  if (err)
+    {
+      if (keytable->first_half_err)
+        gpa_gpgme_warning (keytable->first_half_err);
+      gpa_gpgme_warning (err);
+      if (keytable->end)
+	{
+	  keytable->end (keytable->data);
+	}
+    }
+}
+
+
+static void 
+next_key_cb (GpaContext *context, gpgme_key_t key, GpaKeyTable *keytable)
 {
   keytable->tmp_list = g_list_prepend (keytable->tmp_list, key);
   gpgme_key_ref (key);

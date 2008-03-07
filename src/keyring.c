@@ -654,6 +654,7 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
       GList *selection;
       gpgme_key_t key;
       int old_mode;
+      gpgme_protocol_t oldproto; /* Just to be save.  */
 
       selection = gpa_keylist_get_selected_keys (editor->keylist);
       key = (gpgme_key_t) selection->data;
@@ -662,8 +663,11 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
       /* With all the signatures.  */
       gpgme_set_keylist_mode (editor->ctx->ctx, 
 			      old_mode | GPGME_KEYLIST_MODE_SIGS);
+      oldproto = gpgme_get_protocol (editor->ctx->ctx);
+      gpgme_set_protocol (editor->ctx->ctx, key->protocol);
       err = gpgme_op_keylist_start (editor->ctx->ctx, key->subkeys->fpr, 
 				    FALSE);
+      gpgme_set_protocol (editor->ctx->ctx, oldproto);
       if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	gpa_gpgme_warning (err);
 

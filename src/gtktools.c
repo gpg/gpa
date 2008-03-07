@@ -1,22 +1,26 @@
 /* gtktools.c  -  The GNU Privacy Assistant
  *	Copyright (C) 2000, 2001 G-N-U GmbH.
+ *      Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * GPA is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GPA is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+ * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
+
+/* NOTE: Here are a lot of old GTK+ functions and wrappers.  They
+   should be replaced by modern GTK+ code and some of the wrappers are
+   not needed anymore. */
 
 #include <config.h>
 
@@ -28,6 +32,9 @@
 #include "gtktools.h"
 #include "gpawindowkeeper.h"
 #include "icons.h"
+
+
+/* BEGIN of old unchecked code (wk 2008-03-07) */
 
 
 /* Show all children of the GtkWindow widget, realize it, set its
@@ -444,3 +451,37 @@ gpa_get_load_file_name (GtkWidget * parent, const gchar * title,
 {
   return gpa_get_save_file_name (parent, title, directory);
 }
+
+
+/* END of old unchecked code (wk 2008-03-07) */
+
+
+
+
+/* Set a tooltip TEXT to WIDGET.  TEXT and WIDGET may both be NULL.
+   This function is useful so that GPA can be build with older GTK+
+   versions.  */ 
+void
+gpa_add_tooltip (GtkWidget *widget, const char *text)
+{
+#if GTK_CHECK_VERSION (2, 12, 0)
+  if (widget && text && *text)
+    gtk_widget_set_tooltip_text (widget, text);
+#endif
+}
+
+/* Set the title of COLUMN to TITLE and also set TOOLTIP. */
+void
+gpa_set_column_title (GtkTreeViewColumn *column,
+                      const char *title, const char *tooltip)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (title);
+  /* We need to show the label before setting the widget.  */
+  gtk_widget_show (label);
+  gtk_tree_view_column_set_widget (column, label);
+  if (tooltip)
+    gpa_add_tooltip (gtk_tree_view_column_get_widget (column), tooltip);
+}
+

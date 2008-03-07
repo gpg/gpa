@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -93,11 +94,11 @@ static GOptionEntry option_entries[] =
     { "files", 'f', 0, G_OPTION_ARG_NONE, &args.start_file_manager,
       N_("Open filemanager"), NULL },
     { "server", 's', 0, G_OPTION_ARG_NONE, &args.start_only_server,
-      N_("Start only the UI server"), NULL },
+      N_("Start only the UI server (implies --cms)"), NULL },
     { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
       N_("Read options from file"), "FILE" },
-    { "cms", 'x', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &cms_hack,
-      "Enable CMS hack", NULL },
+    { "cms", 'x', 0, G_OPTION_ARG_NONE, &cms_hack,
+      "Enable CMS/X.509 support", NULL },
     { NULL }
   };
 
@@ -287,10 +288,12 @@ main (int argc, char *argv[])
 
   /* Parse command line options.  */
   context = g_option_context_new (N_("[FILE...]"));
+#if GLIB_CHECK_VERSION (2, 12, 0)
   g_option_context_set_summary (context, N_("Graphical frontend to GnuPG"));
   g_option_context_set_description (context, N_("Please report bugs to <"
 						PACKAGE_BUGREPORT ">."));
   g_option_context_set_translation_domain (context, PACKAGE);
+#endif 
   g_option_context_add_main_entries (context, option_entries, PACKAGE);
   g_option_context_add_group (context, gtk_get_option_group (TRUE));
 
@@ -347,9 +350,24 @@ main (int argc, char *argv[])
   /* Internationalisation with gtk+-2.0 wants UTF-8 instead of the
      character set determined by locale.  */
   putenv ("OUTPUT_CHARSET=utf8");
+
+  /* We don't want the SIGPIPE.  I wonder why gtk_init does not set it
+     to ignore.  Nobody wants this signal.  */
+  {
+    struct sigaction sa;
+    
+    sa.sa_handler = SIG_IGN;
+    sigemptyset (&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction (SIGPIPE, &sa, NULL);
+  }
 #endif
 
+
   /* Handle command line options.  */
+
+  if (args.start_only_server)
+    cms_hack = 1; 
 
   /* Start the keyring editor by default.  */
   if (!args.start_keyring_editor && !args.start_file_manager)

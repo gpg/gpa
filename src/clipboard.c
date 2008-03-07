@@ -793,19 +793,22 @@ toolbar_file_clear (GtkWidget *widget, gpointer param)
 }
 
 
+#if 0 /* Disabled, see caller for details.  */
 static void
 toolbar_file_open (GtkWidget *widget, gpointer param)
 {
   file_open (param);
 }
+#endif /*0*/
 
 
+#if 0 /* Disabled, see caller for details.  */
 static void
 toolbar_file_save_as (GtkWidget *widget, gpointer param)
 {
   file_save_as (param);
 }
-
+#endif /*0*/
 
 static void
 toolbar_file_sign (GtkWidget *widget, gpointer param)

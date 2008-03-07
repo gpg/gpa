@@ -26,6 +26,7 @@
 #include "keylist.h"
 #include "gpapastrings.h"
 #include "gpawidgets.h"
+#include "gtktools.h"
 #include "keytable.h"
 #include "icons.h"
 
@@ -481,28 +482,6 @@ gpa_keylist_clear_columns (GpaKeyList *keylist)
     }
 }
 
-static void
-add_tooltip (GtkWidget *widget, const char *text)
-{
-#if GTK_CHECK_VERSION (2, 12, 0)
-  if (widget && text && *text)
-    gtk_widget_set_tooltip_text (widget, text);
-#endif
-}
-
-static void
-set_column_title (GtkTreeViewColumn *column,
-                  const char *title, const char *tooltip)
-{
-  GtkWidget *label;
-
-  label = gtk_label_new (title);
-  /* We need to show the label before setting the widget.  */
-  gtk_widget_show (label);
-  gtk_tree_view_column_set_widget (column, label);
-  add_tooltip (gtk_tree_view_column_get_widget (column), tooltip);
-}
-
 
 static void 
 setup_columns (GpaKeyList *keylist, gboolean detailed)
@@ -529,7 +508,7 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes 
     (NULL, renderer, "text", GPA_KEYLIST_COLUMN_KEYID, NULL);
-  set_column_title 
+  gpa_set_column_title 
     (column, _("Key ID"),
      _("The key ID is a short number to identify a certificate."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
@@ -541,7 +520,7 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes
         (NULL, renderer, "text", GPA_KEYLIST_COLUMN_EXPIRY, NULL);
-      set_column_title 
+      gpa_set_column_title 
         (column, _("Expiry Date"),
          _("The Expiry Date is the date until the certificate is valid."));
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
@@ -552,7 +531,7 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes 
         (NULL, renderer, "text", GPA_KEYLIST_COLUMN_OWNERTRUST, NULL);
-      set_column_title 
+      gpa_set_column_title 
         (column, _("Owner Trust"),
          _("The Owner Trust has been set by you and describes how far you"
            " trust the holder of the certificate to correctly sign (certify)"
@@ -565,7 +544,7 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes
         (NULL, renderer, "text", GPA_KEYLIST_COLUMN_VALIDITY, NULL);
-      set_column_title 
+      gpa_set_column_title 
         (column, _("Validity"), 
          _("The Validity describes the trust level the system has"
            " in this certificate.  That is how sure it is that the named"
@@ -579,7 +558,7 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes 
     (NULL, renderer, "text", GPA_KEYLIST_COLUMN_USERID, NULL);
-  set_column_title 
+  gpa_set_column_title 
     (column, _("User Name"),
      _("The User Name is the name and often also the email address "
        " of the certificate."));

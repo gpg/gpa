@@ -192,9 +192,6 @@ gpa_context_init (GpaContext *context)
   context->io_cbs->event_priv = context;
   /* Set the callbacks */
   gpgme_set_io_cbs (context->ctx, context->io_cbs);
-
-  if (cms_hack)
-    gpgme_set_protocol (context->ctx, GPGME_PROTOCOL_CMS);
 }
 
 static void
@@ -394,7 +391,7 @@ gpa_context_remove_cb (void *tag)
 
 
 /* The event callback.  It is called by GPGME to signal an event for
-   an operation running in this context.  This fucntion merely mits
+   an operation running in this context.  This fucntion merely emits
    signals for GpaContext; the Glib signal handlers do the real
    job.  */
 static void

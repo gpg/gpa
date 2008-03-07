@@ -59,4 +59,17 @@ gchar * gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
 				const gchar * directory);
 gchar * gpa_get_load_file_name (GtkWidget * parent, const gchar * title,
 				const gchar * directory);
+
+
+
+/* Set a tooltip TEXT to WIDGET.  TEXT and WIDGET may both be NULL.
+   This function is useful so that GPA can be build with older GTK+
+   versions.  */ 
+void gpa_add_tooltip (GtkWidget *widget, const char *text);
+
+/* Set the title of COLUMN to TITLE and also set TOOLTIP. */
+void gpa_set_column_title (GtkTreeViewColumn *column,
+                           const char *title, const char *tooltip);
+
+
 #endif /* GTK_TOOLS_H_ */
