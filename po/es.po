@@ -10,12 +10,13 @@ msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
 "POT-Creation-Date: 2008-03-10 15:34+0100\n"
-"PO-Revision-Date: 2008-03-10 16:02+0100\n"
-"Last-Translator: Diego Escalante Urrelo <diegoe@gnome.org>\n"
+"PO-Revision-Date: 2008-03-11 09:35+0100\n"
+"Last-Translator: \n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/clipboard.c:367 src/fileman.c:350
 msgid "Open File"
@@ -28,9 +29,11 @@ msgstr "Mensaje de GPA"
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
 #: src/clipboard.c:412
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s is %lli%s large.  Do you really  want to open it?"
 msgstr ""
+"El fichero %s tiene un tamaño de %lli%s. ¿Estas seguro de que quieres "
+"abrirlo?"
 
 #: src/clipboard.c:481
 msgid "Save As..."
@@ -599,9 +602,8 @@ msgid "Open filemanager"
 msgstr "Abrir gestor de archivos"
 
 #: src/gpa.c:97
-#, fuzzy
 msgid "Start only the UI server (implies --cms)"
-msgstr "Iniciar solo el servicio de interface de usuario"
+msgstr "Iniciar solo el servicio de interface de usuario (implica --cms)"
 
 #: src/gpa.c:99
 msgid "Read options from file"
@@ -1249,7 +1251,7 @@ msgstr "Cambiar ca_ducidad"
 
 #: src/keygendlg.c:58
 msgid "You must enter a User ID."
-msgstr ""
+msgstr "Tienes que introducir un Identificador de Usuario (User ID)"
 
 #: src/keygendlg.c:63 src/keygenwizard.c:307 src/passwddlg.c:45
 msgid ""
@@ -1437,13 +1439,15 @@ msgstr ""
 "Esto podría llevar unos segundos."
 
 #: src/keylist.c:513
-#, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr ""
+"El identificador de clave (key ID) es un número corto para identificar el "
+"certificado."
 
 #: src/keylist.c:525
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
+"La Fecha de Caducidad es la fecha hasta la cual el certificado es válido."
 
 #: src/keylist.c:535 src/ownertrustdlg.c:122
 msgid "Owner Trust"
@@ -1455,23 +1459,30 @@ msgid ""
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
+"Has configurado el nivel de confianza del dueño del certificado, este nivel "
+"describe si confias en dueño del certificado para firmar otros certificados. "
+"Esta opción solo tiene funcionalidad para OpenPGP."
 
 #: src/keylist.c:548
-#, fuzzy
 msgid "Validity"
-msgstr "Validez de la Clave"
+msgstr "Validez"
 
 #: src/keylist.c:549
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
+"La Valided describe el nivel de confianza que tiene el sistema en este "
+"certificado. La Valided permite medir la certeza de que el nombre de usuario "
+"es realmente el usuario."
 
 #: src/keylist.c:563
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr ""
+"El Nombre de Usuario es el nombre y a menudo también el correo electrónico "
+"del certificado."
 
 #: src/keyring.c:437
 msgid "No keys selected for signing."
@@ -1707,11 +1718,11 @@ msgid "No keys selected"
 msgstr "No hay claves seleccionadas"
 
 #: src/keyring.c:1295
-#, fuzzy, c-format
+#, c-format
 msgid "%d key selected"
 msgid_plural "%d keys selected"
 msgstr[0] "%d clave seleccionada"
-msgstr[1] "%d clave seleccionada"
+msgstr[1] "%d claves seleccionadas"
 
 #: src/keyring.c:1327
 msgid "All signatures"
@@ -2062,343 +2073,3 @@ msgstr "Firmas: %s"
 #: src/verifydlg.c:370
 msgid "Signatures:"
 msgstr "Firmas:"
-
-#~ msgid "GPA Warning"
-#~ msgstr "Advertencia de GPA"
-
-#~ msgid ""
-#~ "One of your secret keys contains an ElGamal signing key. Due to a bug in "
-#~ "GnuPG, all ElGamal keys used with GnuPG 1.0.2 and later must be "
-#~ "considered compromised.\n"
-#~ "\n"
-#~ "Please revoke your key as soon as possible.\n"
-#~ "\n"
-#~ "The affected key is:"
-#~ msgstr ""
-#~ "Una de sus claves secretas contiene una clave de tipo ElGamal. Debido a "
-#~ "un error en GnuPG, todas las claves ElGamal usadas con GnuPG 1.0.2 y "
-#~ "posteriores deben considerarse comprometidas.\n"
-#~ "\n"
-#~ "Por favor revoque la clave tan pronto como sea posible.\n"
-#~ "\n"
-#~ "La clave afectada es:"
-
-#~ msgid "Sign files"
-#~ msgstr "Firmar archivos"
-
-#~ msgid "sign in separate _file"
-#~ msgstr "firma en otro _archivo"
-
-#~ msgid "a_rmor"
-#~ msgstr "a_rmadura"
-
-#~ msgid "display this help and exit"
-#~ msgstr "mostrar este texto y terminar"
-
-#~ msgid "Options"
-#~ msgstr "Opciones"
-
-#~ msgid "GNU general public license"
-#~ msgstr "GNU general public license"
-
-#~ msgid "_GNU general public license"
-#~ msgstr "_GNU general public license"
-
-#~ msgid ">.\n"
-#~ msgstr ">.\n"
-
-#~ msgid ""
-#~ "If you want you can supply a comment that further identifies the key to "
-#~ "other users. The comment is especially useful if you generate several "
-#~ "keys for the same email address. The comment is completely optional. "
-#~ "Leave it empty if you don't have a use for it."
-#~ msgstr ""
-#~ "Si lo desea, puede proporcioar un comentario que identifique la clave a "
-#~ "otros usuarios. El comentario es especialmente útil si genera varias "
-#~ "claves para la misma dirección de correo. Este comentario es "
-#~ "completamente opcional, y puede dejarlo en blanco si no lo necesita."
-
-#~ msgid "Comment:"
-#~ msgstr "Comentario:"
-
-#~ msgid "sign, do_n't compress"
-#~ msgstr "firmar sin _comprimir"
-
-#~ msgid "Keyserver did not return any matching keys."
-#~ msgstr "El servidor de claves no encontro ninguna coincidencia."
-
-#~ msgid "Select keys to import"
-#~ msgstr "Seleccione claves para importar"
-
-#~ msgid "_Import"
-#~ msgstr "_Importar"
-
-#~ msgid "Export Key"
-#~ msgstr "Exportar Clave"
-
-#~ msgid "E_xport to file:"
-#~ msgstr "E_xportar al archivo:"
-
-#~ msgid "_Key server:"
-#~ msgstr "_Servidor de claves:"
-
-#~ msgid "Import Key"
-#~ msgstr "Importar Clave"
-
-#~ msgid "I_mport from file:"
-#~ msgstr "I_mportar desde el archivo:"
-
-#~ msgid "Receive from _server:"
-#~ msgstr "Recibir desde el _servidor:"
-
-#~ msgid ""
-#~ "You have a secret key without the\n"
-#~ "corresponding public key in your\n"
-#~ "key ring. In order to use this key\n"
-#~ "you will need to import the public\n"
-#~ "key, too."
-#~ msgstr ""
-#~ "Tiene una clave secreta sin la clave\n"
-#~ "pública correspondiente en su anillo.\n"
-#~ "Para usar esa clave tendrá que importar\n"
-#~ "también la clave pública."
-
-#~ msgid "No private key to backup."
-#~ msgstr "No hay clave privada de la que hacer copia de seguridad."
-
-#~ msgid "GPA: Loading keyring"
-#~ msgstr "GPA: Cargando anillo"
-
-#~ msgid "Loading secret keys"
-#~ msgstr "Cargando claves secretas "
-
-#~ msgid "Loading public keys"
-#~ msgstr "Cargando claves públicas "
-
-#~ msgid "The key you selected is not available for encryption"
-#~ msgstr "La clave seleccionada no puede usarse para cifrar"
-
-#~ msgid "The key you selected is not available for signing"
-#~ msgstr "La clave seleccionada no puede usarse para firmar"
-
-#~ msgid ""
-#~ "No public keys available.\n"
-#~ "Currently, there is nobody who could read a\n"
-#~ "file encrypted by you."
-#~ msgstr ""
-#~ "No hay claves públicas.\n"
-#~ "Ahora mismo nadie podría leer un archivo\n"
-#~ "cifrado por usted."
-
-#~ msgid "No secret keys available."
-#~ msgstr "No hay claves secretas."
-
-#~ msgid "Files in work"
-#~ msgstr "Archivos abiertos"
-
-#~ msgid ""
-#~ "Internal error:\n"
-#~ "Invalid sign mode"
-#~ msgstr ""
-#~ "Error interno:\n"
-#~ "Modo de firma no válido"
-
-#~ msgid "No key selected!"
-#~ msgstr "¡Ninguna clave seleccionada!"
-
-#~ msgid ""
-#~ "No secret keys available for signing.\n"
-#~ "Please generate or import a secret key first."
-#~ msgstr ""
-#~ "No hay claves secretas disponibles con las que firmar.\n"
-#~ "Por favor, genere o importe una clave secreta antes."
-
-#~ msgid "Filename"
-#~ msgstr "Nombre de Archivo"
-
-#~ msgid "The currently selected filename."
-#~ msgstr "El nombre de archivo seleccionado actualmente."
-
-#~ msgid "Show file operations"
-#~ msgstr "Mostrar operaciones de archivos"
-
-#~ msgid "Whether buttons for creating/manipulating files should be displayed."
-#~ msgstr "Si se muestran los botones para crear/manipular archivos"
-
-#~ msgid "Directories"
-#~ msgstr "Directorios"
-
-#~ msgid "_OK"
-#~ msgstr "_OK"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancel"
-
-#~ msgid "Directory unreadable: %s"
-#~ msgstr "Directorio lo legible: %s"
-
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "El archivo \"%s\" reside en otra máquiena (llamada %s) y podría no estar "
-#~ "disponible para este programa.\n"
-#~ "¿Está seguro de que quiere seleccionarlo?"
-
-#~ msgid "Create Dir"
-#~ msgstr "Crear Dir"
-
-#~ msgid "Delete File"
-#~ msgstr "Borrar Archivo"
-
-#~ msgid "Rename File"
-#~ msgstr "Renombrar Archivo"
-
-#~ msgid "Error"
-#~ msgstr "Error"
-
-#~ msgid "Close"
-#~ msgstr "Cerrar"
-
-#~ msgid ""
-#~ "The directory name \"%s\" contains symbols that are not allowed in "
-#~ "filenames"
-#~ msgstr ""
-#~ "El nombre de directorio \"%s\" contiene símbolos que no están permitidos "
-#~ "en nombres de archivo."
-
-#~ msgid ""
-#~ "Error creating directory \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Error creando directorio \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr "Probablemente usó símbolos no permitidos en nombres de archivos."
-
-#~ msgid "Error creating directory \"%s\": %s\n"
-#~ msgstr "Error creando directorio \"%s\": %s\n"
-
-#~ msgid "Create Directory"
-#~ msgstr "Crear Directorio"
-
-#~ msgid "_Directory name:"
-#~ msgstr "Nombre de _Directorio:"
-
-#~ msgid "Directory name:"
-#~ msgstr "Nombre de Directorio:"
-
-#~ msgid "C_reate"
-#~ msgstr "C_rear"
-
-#~ msgid "Create"
-#~ msgstr "Crear"
-
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "El nombre de archivo \"%s\" contiene símbolos no permitidos"
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Error borrando archivo \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr ""
-#~ "Probablemente contiene símbolos no permitidos en nombres de archivo."
-
-#~ msgid "Error deleting file \"%s\": %s"
-#~ msgstr "Error borrando archivo \"%s\": %s"
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "¿Realmente quiere borrar el archivo \"%s\"?"
-
-#~ msgid "_Delete"
-#~ msgstr "_Borrar"
-
-#~ msgid "Delete"
-#~ msgstr "Borrar"
-
-#~ msgid ""
-#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "El nombre de archivo \"%s\" contiene símbolos no permitidos"
-
-#~ msgid ""
-#~ "Error renaming file to \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Error renombrando archio a \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "Error renaming file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Error renombrando archivo \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "Error renombrando archivo \"%s\" a \"%s\": %s"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "Renombrar archivo \"%s\" a:"
-
-#~ msgid "_Rename"
-#~ msgstr "_Renombrar"
-
-#~ msgid "Rename"
-#~ msgstr "Renombrar"
-
-#~ msgid "Selection: "
-#~ msgstr "Selección: "
-
-#~ msgid ""
-#~ "The filename %s couldn't be converted to UTF-8. Try setting the "
-#~ "environment variable G_BROKEN_FILENAMES."
-#~ msgstr ""
-#~ "El nombre de archivo %s no se pudo convertir a UTF-8. Pruebe a establecer "
-#~ "la variable de entorno G_BROKEN_FILENAMES."
-
-#~ msgid "Name too long"
-#~ msgstr "Nombre demasiado largo"
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "No se pudo convertir el nombre de archivo"
-
-#~ msgid "01.01.2000"
-#~ msgstr "01-01-2000"
-
-#~ msgid "expire a_t"
-#~ msgstr "caduca _el"
-
-#~ msgid "_Prev"
-#~ msgstr "_Anterior"
-
-#~ msgid "_Next"
-#~ msgstr "_Siguiente"
-
-#~ msgid ""
-#~ "In \"Passphrase\" and \"Repeat passphrase\"\n"
-#~ "you must enter the same passphrase."
-#~ msgstr ""
-#~ "En \"Contraseña\" y \"Repetir contraseña\"\n"
-#~ "debe introducir la misma contraseña."
-
-#~ msgid "generate re_vocation certificate"
-#~ msgstr "generar cerificado de re_vocación"
-
-#~ msgid "_send to key server"
-#~ msgstr "enviar a ser_vidor de claves"
-
-#~ msgid "_Generate key"
-#~ msgstr "_Generar clave"
-
-#~ msgid "F_inish"
-#~ msgstr "_Terminar"
