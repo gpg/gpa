@@ -249,7 +249,33 @@ gpa_gpgme_data_new_from_file (gpgme_data_t *data,
   return err;
 }
 
-/* Write the contents of the gpgme_data_t into the clipboard.  */
+
+#ifdef G_OS_WIN32
+void
+dos_to_unix (gchar *str, gsize *len)
+{
+  /* On Windows 2000, we need to convert \r\n to \n in the output for
+     cut & paste to work properly (otherwise, extra newlines will be
+     inserted).  */
+  gchar *src;
+  gchar *dst;
+  
+  src = str;
+  dst = str;
+  while (*src)
+    {
+      if (src[0] == '\r' && src[1] == '\n')
+	src++;
+      *(dst++) = *(src++);
+    }
+  *dst = '\0';
+  *len = dst - str;
+}
+#endif
+
+
+/* Write the contents of the gpgme_data_t into the clipboard.  Assumes
+   that the data is ASCII.  */
 void
 dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard)
 {
@@ -275,6 +301,11 @@ dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard)
       gpa_window_error (strerror (errno), NULL);
       exit (EXIT_FAILURE);
     }
+
+#ifdef G_OS_WIN32
+  dos_to_unix (text, &len);
+#endif
+
   gtk_clipboard_set_text (clipboard, text, len);
   g_free (text);
   return;

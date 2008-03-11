@@ -1,3 +1,8 @@
+2008-03-11  Marcus Brinkmann  <marcus@g10code.de>
+
+	* gpgmetools.c (dos_to_unix) [G_OS_WIN32]: New function.
+	(dump_data_to_clipboard) [G_OS_WIN32]: Convert newlines.
+
 2008-03-11  Werner Koch  <wk@g10code.com>
 
 	* selectkeydlg.c (select_key_dlg_constructor): List only encrypt keys.
