@@ -39,7 +39,8 @@ enum
   PROP_PUBLIC_ONLY,
   PROP_PROTOCOL,
   PROP_INITIAL_KEYS,
-  PROP_INITIAL_PATTERN
+  PROP_INITIAL_PATTERN,
+  PROP_REQUESTED_USAGE
 };
 
 /* GObject */
@@ -51,6 +52,7 @@ typedef enum
 {
   /* These are the displayed columns */
   GPA_KEYLIST_COLUMN_IMAGE, 
+  GPA_KEYLIST_COLUMN_KEYTYPE,
   GPA_KEYLIST_COLUMN_KEYID,
   GPA_KEYLIST_COLUMN_EXPIRY,
   GPA_KEYLIST_COLUMN_OWNERTRUST,
@@ -103,6 +105,9 @@ gpa_keylist_get_property (GObject     *object,
     case PROP_INITIAL_PATTERN:
       g_value_set_string (value, list->initial_pattern);
       break;
+    case PROP_REQUESTED_USAGE:
+      g_value_set_int (value, list->requested_usage);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -133,6 +138,9 @@ gpa_keylist_set_property (GObject     *object,
       break;
     case PROP_INITIAL_PATTERN:
       list->initial_pattern = g_value_get_string (value);
+      break;
+    case PROP_REQUESTED_USAGE:
+      list->requested_usage = g_value_get_int (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -179,6 +187,7 @@ gpa_keylist_constructor (GType type,
    /* Init the model */
   store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
 			      GDK_TYPE_PIXBUF,
+			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
@@ -263,6 +272,15 @@ gpa_keylist_class_init (GpaKeyListClass *klass)
       "A string with pattern to be used for a key search or NULL.",
       NULL,
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property 
+    (object_class, PROP_REQUESTED_USAGE,
+     g_param_spec_int 
+     ("requested-usage", "Requested-Key-Usage",
+      "A bit vector describing the requested key usage (capabilities).",
+      0, 65535, 0, 
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
 }
 
 
@@ -399,14 +417,41 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
   gchar *userid, *expiry;
   gboolean has_secret;
   long int val_value;
+  const char *keytype;
 
   /* Remove the dialog if it is being displayed */
   remove_trustdb_dialog (list);
-  
+
+  /* Filter out keys we don't want.  */
+  if (key && list->protocol != GPGME_PROTOCOL_UNKNOWN
+      && key->protocol != list->protocol)
+    {
+      gpgme_key_unref (key);
+      return;
+    }
+
+  if (key && list->requested_usage)
+    {
+      if ((key->can_sign && list->requested_usage & KEY_USAGE_SIGN))
+        ;
+      else if ((key->can_encrypt && list->requested_usage & KEY_USAGE_ENCR))
+        ;
+      else if ((key->can_certify && list->requested_usage & KEY_USAGE_CERT))
+        ;
+      else
+        {
+          gpgme_key_unref (key);
+          return;
+        }
+    }
+
+  /* Append the key to the list.  */
   list->keys = g_list_append (list->keys, key);
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (list)));
   /* Get the column values */
   keyid = gpa_gpgme_key_get_short_keyid (key);
+  keytype = (key->protocol == GPGME_PROTOCOL_OpenPGP? "P" :
+             key->protocol == GPGME_PROTOCOL_CMS? "X" : "?");
   expiry = gpa_expiry_date_string (key->subkeys->expires);
   ownertrust = gpa_key_ownertrust_string (key);
   validity = gpa_key_validity_string (key);
@@ -434,6 +479,7 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
       val_value = GPGME_VALIDITY_UNKNOWN;
 
   gtk_list_store_set (store, &iter,
+		      GPA_KEYLIST_COLUMN_KEYTYPE, keytype, 
 		      GPA_KEYLIST_COLUMN_KEYID, keyid, 
 		      GPA_KEYLIST_COLUMN_EXPIRY, expiry,
 		      GPA_KEYLIST_COLUMN_OWNERTRUST, ownertrust,
@@ -507,6 +553,15 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes 
+    (NULL, renderer, "text", GPA_KEYLIST_COLUMN_KEYTYPE, NULL);
+  gpa_set_column_title 
+    (column, " ",
+     _("This columns lists the type of the certificate."
+       "  A 'P' denotes OpenPGP and a 'X' denotes X.509 (S/MIME)."));
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+    
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes 
     (NULL, renderer, "text", GPA_KEYLIST_COLUMN_KEYID, NULL);
   gpa_set_column_title 
     (column, _("Key ID"),
@@ -514,6 +569,7 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
   gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_KEYID);
   gtk_tree_view_column_set_sort_indicator (column, TRUE);
+
 
   if (detailed)
     {
@@ -587,12 +643,14 @@ gpa_keylist_new (GtkWidget *window)
    will be created in public_only mode.  PROTOCOL may be used to
    resctrict the list to keys of a certain protocol. If KEYS is not
    NULL, those keys will be displayed instead of listing all.  If
-   PATTERN is not NULL, the serach box will be filled with that
-   pattern */
+   PATTERN is not NULL, the search box will be filled with that
+   pattern.  If REQUESTED_USAGE is not 0 only keys with the given
+   usages are listed.  */
 GpaKeyList *
 gpa_keylist_new_with_keys (GtkWidget *window, gboolean public_only,
                            gpgme_protocol_t protocol,
-                           gpgme_key_t *keys, const char *pattern)
+                           gpgme_key_t *keys, const char *pattern,
+                           int requested_usage)
 {
   GpaKeyList *list;
 
@@ -601,6 +659,7 @@ gpa_keylist_new_with_keys (GtkWidget *window, gboolean public_only,
                        "protocol", (int)protocol,
                        "initial-keys", gpa_gpgme_copy_keyarray (keys),
                        "initial-pattern", pattern,
+                       "requested-usage", requested_usage,
                        NULL);
 
   return list;

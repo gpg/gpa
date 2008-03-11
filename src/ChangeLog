@@ -1,3 +1,27 @@
+2008-03-11  Werner Koch  <wk@g10code.com>
+
+	* selectkeydlg.c (select_key_dlg_constructor): List only encrypt keys.
+	* keylist.h (KEY_USAGE_SIGN): Add key usage flags.
+	(_GpaKeyList): Add field REQUESTED_USAGE.
+	* keylist.c (gpa_keylist_new_with_keys): Add arg REQUESTED_USAGE.
+	(PROP_REQUESTED_USAGE): New.
+	(gpa_keylist_get_property, gpa_keylist_set_property) 
+	(gpa_keylist_class_init): Install property.
+	(gpa_keylist_next): Filetr on usage and account.
+	* recipientdlg.c (parse_one_recipient): List only keys with
+	encrypt capability.
+
+	* keylist.c (gpa_keylist_constructor): Add a new column.
+	(GpaKeyListColumn): Add GPA_KEYLIST_COLUMN_KEYTYPE.
+	(gpa_keylist_next, setup_columns): Fill this column.
+
+	* gpgmetools.c (gpa_key_ownertrust_string): No ownertrust for X.509.
+	* keyring.c (keyring_editor_selection_changed): Set the protocol
+	before doing a key list.
+	(keyring_editor_has_single_selection_OpenPGP): New.
+	(keyring_editor_menubar_new): Use it for ownertrust.
+	(keyring_editor_popup_menu_new): Ditto.
+
 2008-03-11  Marcus Brinkmann  <marcus@g10code.de>
 
 	* settingsdlg.c: Include settingsdlg.h.  Beautify code.
@@ -4973,7 +4997,7 @@
 	* gpa.c (gpa_file_toolbar_new): Use this new function here.
 	* gtktools.c (gpa_xpm_label_box): Ditto
 	* keysmenu.c (getIconNameForOwnertrust): Replaces
-	getIconForOwnertrust.  Chnaged all callers to provide a string now.
+	getIconForOwnertrust.  Changed all callers to provide a string now.
 	
 2000-08-17  Werner Koch  <wk@gnupg.org>
 

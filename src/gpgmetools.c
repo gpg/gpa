@@ -539,6 +539,9 @@ gpa_algorithm_from_string (const gchar * string)
 const gchar *
 gpa_key_ownertrust_string (gpgme_key_t key)
 {
+  if (key->protocol == GPGME_PROTOCOL_CMS)
+    return "";
+
   switch (key->owner_trust) 
     {
     case GPGME_VALIDITY_UNKNOWN:

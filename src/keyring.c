@@ -255,6 +255,26 @@ keyring_editor_has_single_selection (gpointer param)
 }
 
 /* Return TRUE if the key list widget of the keyring editor has
+   exactly one selected OpenPGP item.  Usable as a sensitivity
+   callback.  */
+static gboolean
+keyring_editor_has_single_selection_OpenPGP (gpointer param)
+{
+  GPAKeyringEditor *editor = param;
+  int result = 0;
+
+  if (gpa_keylist_has_single_selection (editor->keylist))
+    {
+      gpgme_key_t key = gpa_keylist_get_selected_key (editor->keylist);
+      if (key && key->protocol == GPGME_PROTOCOL_OpenPGP)
+        result = 1;
+      gpgme_key_unref (key);
+    }
+
+  return result;
+}
+
+/* Return TRUE if the key list widget of the keyring editor has
    exactly one selected item and it is a private key.  Usable as a
    sensitivity callback.  */
 static gboolean
@@ -654,20 +674,20 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
       GList *selection;
       gpgme_key_t key;
       int old_mode;
-      gpgme_protocol_t oldproto; /* Just to be save.  */
 
       selection = gpa_keylist_get_selected_keys (editor->keylist);
       key = (gpgme_key_t) selection->data;
       old_mode = gpgme_get_keylist_mode (editor->ctx->ctx);
 
-      /* With all the signatures.  */
+      /* With all the signatures.  Note that we should not save and
+         restore the old protocol because the protocol should not be
+         changed before the gpgme_op_keylist_end.  Saving and
+         restoring the keylist mode is okay. */
       gpgme_set_keylist_mode (editor->ctx->ctx, 
 			      old_mode | GPGME_KEYLIST_MODE_SIGS);
-      oldproto = gpgme_get_protocol (editor->ctx->ctx);
       gpgme_set_protocol (editor->ctx->ctx, key->protocol);
       err = gpgme_op_keylist_start (editor->ctx->ctx, key->subkeys->fpr, 
 				    FALSE);
-      gpgme_set_protocol (editor->ctx->ctx, oldproto);
       if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	gpa_gpgme_warning (err);
 
@@ -938,8 +958,8 @@ keyring_editor_menubar_new (GtkWidget *window, GPAKeyringEditor *editor)
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Keys/Set Owner Trust..."));
   if (item)
-    add_selection_sensitive_widget (editor, item,
-				    keyring_editor_has_single_selection);
+    add_selection_sensitive_widget 
+      (editor, item, keyring_editor_has_single_selection_OpenPGP);
 
   /* If the keys can be signed.  */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
@@ -997,8 +1017,8 @@ keyring_editor_popup_menu_new (GtkWidget *window,
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
                                       _("/Set Owner Trust..."));
   if (item)
-    add_selection_sensitive_widget (editor, item,
-				    keyring_editor_has_single_selection);
+    add_selection_sensitive_widget 
+      (editor, item, keyring_editor_has_single_selection_OpenPGP);
 
   /* If the keys can be signed.  */
   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),

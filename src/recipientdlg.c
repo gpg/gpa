@@ -473,7 +473,8 @@ parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
     {
       while (!gpgme_op_keylist_next (ctx, &key))
         {
-          if (key->revoked || key->disabled || key->expired)
+          if (key->revoked || key->disabled || key->expired
+              || !key->can_encrypt)
             gpgme_key_unref (key);
           else if (append_key_to_keyinfo (&info->pgp, key)
                    >= TRUNCATE_KEYSEARCH_AT)
@@ -494,7 +495,8 @@ parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
     {
       while (!gpgme_op_keylist_next (ctx, &key))
         {
-          if (key->revoked || key->disabled || key->expired)
+          if (key->revoked || key->disabled || key->expired
+              || !key->can_encrypt)
             gpgme_key_unref (key);
           else if (append_key_to_keyinfo (&info->x509,key) 
                    >= TRUNCATE_KEYSEARCH_AT)

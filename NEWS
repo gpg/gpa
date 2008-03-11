@@ -9,6 +9,10 @@ Noteworthy changes in version 0.7.7
  * GPA supports manipulating the backend configuration through
    gpg-conf.
 
+ * GPA has now basic support for X.509; use the command line switch
+   --cms to enable this.
+
+
 Noteworthy changes in version 0.7.6 (2007-05-24)
 ------------------------------------------------
 

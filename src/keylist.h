@@ -53,6 +53,7 @@ struct _GpaKeyList {
   gpgme_protocol_t protocol;
   gpgme_key_t *initial_keys;
   const char *initial_pattern;
+  int requested_usage;
 };
 
 struct _GpaKeyListClass {
@@ -66,6 +67,14 @@ GType gpa_keylist_get_type (void) G_GNUC_CONST;
 
 /* API */
 
+
+/* Usage flags.  */
+#define KEY_USAGE_SIGN 1   /* Good for signatures. */            
+#define KEY_USAGE_ENCR 2   /* Good for encryption. */            
+#define KEY_USAGE_CERT 4   /* Good to certify other keys. */
+#define KEY_USAGE_AUTH 8   /* Good for authentication. */        
+
+
 /* Create a new key list widget.  */
 GtkWidget *gpa_keylist_new (GtkWidget * window);
 
@@ -74,7 +83,8 @@ GpaKeyList *gpa_keylist_new_with_keys (GtkWidget *window,
                                        gboolean public_only,
                                        gpgme_protocol_t protocol,
                                        gpgme_key_t *keys,
-                                       const char *pattern);
+                                       const char *pattern,
+                                       int requested_usage);
 
 /* Set the key list in "brief" mode.  */
 void gpa_keylist_set_brief (GpaKeyList * keylist);
