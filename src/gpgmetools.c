@@ -93,7 +93,8 @@ gpa_gpgme_new (void)
     {
       gpa_gpgme_error (err);
     }
-  gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
+  if (!cms_hack)
+    gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
   
   return ctx;
 }

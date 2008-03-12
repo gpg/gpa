@@ -2,21 +2,21 @@
    Copyright (C) 2000-2002 G-N-U GmbH.
    Copyright (C) 2005, 2008 g10 Code GmbH.
 
-   This file is part of GPA.
+   This file is part of GPA
 
    GPA is free software; you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
+   the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
 
-   GPA is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-   GNU General Public License for more details.
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
 
-   You should have received a copy of the GNU General Public License along
-   with this program; if not, write to the Free Software Foundation, Inc.,
-   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  */
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -59,11 +59,12 @@ typedef struct
 {
   gboolean start_keyring_editor;
   gboolean start_file_manager;
+  gboolean start_clipboard;
   gboolean start_only_server;
   gchar *options_filename;
 } gpa_args_t;
 
-static gpa_args_t args = { FALSE, FALSE, FALSE, NULL };
+static gpa_args_t args;
 
 
 /* The copyright notice.  */
@@ -92,7 +93,9 @@ static GOptionEntry option_entries[] =
     { "keyring", 'k', 0, G_OPTION_ARG_NONE, &args.start_keyring_editor,
       N_("Open keyring editor (default)"), NULL },
     { "files", 'f', 0, G_OPTION_ARG_NONE, &args.start_file_manager,
-      N_("Open filemanager"), NULL },
+      N_("Open file manager"), NULL },
+    { "clipboard", 'c', 0, G_OPTION_ARG_NONE, &args.start_clipboard,
+      N_("Open clipboard"), NULL },
     { "server", 's', 0, G_OPTION_ARG_NONE, &args.start_only_server,
       N_("Start only the UI server (implies --cms)"), NULL },
     { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
@@ -370,7 +373,8 @@ main (int argc, char *argv[])
     cms_hack = 1; 
 
   /* Start the keyring editor by default.  */
-  if (!args.start_keyring_editor && !args.start_file_manager)
+  if (!args.start_keyring_editor && !args.start_file_manager
+      && !args.start_clipboard)
     args.start_keyring_editor = TRUE;
 
   /* Note: We can not use GPGME's engine info, as that returns NULL
@@ -414,9 +418,12 @@ main (int argc, char *argv[])
   if (! args.start_only_server)
     {
       /* Don't open the keyring editor if any files are given on the
-         command line */
+         command line.  Dito for the clipboard.   */
       if (args.start_keyring_editor && (optind >= argc))
 	gpa_open_keyring_editor ();
+
+      if (args.start_clipboard && (optind >= argc))
+	gpa_open_clipboard ();
   
       if (args.start_file_manager || (optind < argc))
 	gpa_open_filemanager ();

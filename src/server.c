@@ -670,14 +670,13 @@ cmd_sign (assuan_context_t ctx, char *line)
   if (err)
     goto leave;
 
-  return gpg_error (GPG_ERR_NOT_IMPLEMENTED);
-/*   ctrl->cont_cmd = cont_sign; */
-/*   op = gpa_stream_sign_operation_new (NULL, input_data, output_data, */
-/*                                       ctrl->sender, detached, 0, ctx); */
-/*   input_data = output_data = NULL; */
-/*   g_signal_connect (G_OBJECT (op), "completed", */
-/*                     G_CALLBACK (g_object_unref), NULL); */
-/*   return not_finished (ctrl); */
+  ctrl->cont_cmd = cont_sign;
+  op = gpa_stream_sign_operation_new (NULL, input_data, output_data,
+                                      ctrl->sender, protocol, detached, ctx);
+  input_data = output_data = NULL;
+  g_signal_connect (G_OBJECT (op), "completed",
+                    G_CALLBACK (g_object_unref), NULL);
+  return not_finished (ctrl);
 
  leave:
   gpgme_data_release (input_data); 

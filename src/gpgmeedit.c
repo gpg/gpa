@@ -1002,7 +1002,9 @@ gpa_gpgme_edit_passwd_parms_release (GpaContext *ctx, gpg_error_t err,
   gpgme_data_release (parms->out);
 
   /* Make sure the normal passphrase callback is used */
-  gpgme_set_passphrase_cb (ctx->ctx, passwd_parms->func, passwd_parms->opaque);
+  if (!cms_hack)
+    gpgme_set_passphrase_cb (ctx->ctx,
+                             passwd_parms->func, passwd_parms->opaque);
 
   if (parms->signal_id != 0)
     {
@@ -1059,7 +1061,8 @@ gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
 
   /* Use our own passphrase callback: The data are the actual edit
      parms.  */
-  gpgme_set_passphrase_cb (ctx->ctx, passwd_passphrase_cb, parms);
+  if (!cms_hack)
+    gpgme_set_passphrase_cb (ctx->ctx, passwd_passphrase_cb, parms);
 
   err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
 

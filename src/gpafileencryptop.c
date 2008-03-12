@@ -576,9 +576,33 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
 {
   GList *cur;
   int i;
+  gpgme_protocol_t protocol = GPGME_PROTOCOL_UNKNOWN;
 
+  g_free (op->rset);
   op->rset = g_malloc0 (sizeof(gpgme_key_t)*(g_list_length(recipients)+1));
 
+  /* Figure out the the protocol to use.  */
+  for (cur = recipients, i = 0; cur; cur = g_list_next (cur), i++)
+    {
+      gpgme_key_t key = cur->data;
+
+      if (protocol == GPGME_PROTOCOL_UNKNOWN)
+        protocol = key->protocol;
+      else if (key->protocol != protocol)
+        {
+          /* Should not happen either because the selection dialog
+             should have not allowed to select differet keys.  */
+          gpa_window_error 
+            (_("The selected certificates are not all of the same type."
+               " That is, you mixed OpenPGP and X.509 certificates."
+               " Please make sure to select only certificates of the"
+               " same type."), 
+             GPA_OPERATION (op)->window);
+          return FALSE;
+        }
+    }
+
+  /* Perform validity checks.  */
   for (cur = recipients, i = 0; cur; cur = g_list_next (cur), i++)
     {
       /* Check that all recipients are valid */
@@ -597,9 +621,13 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
           expired_key (key, GPA_OPERATION (op)->window);
           return FALSE;
         }
-      /* Now, check it's validity */
-      else if (valid == GPGME_VALIDITY_FULL || 
-               valid == GPGME_VALIDITY_ULTIMATE)
+      /* Now, check it's validity.  X.509 keys are always considered
+         valid becuase the backend will chekc this.  FIXME: It would
+         be better to ask the backend to check the validity of the key
+         instead of letting it fail later. */
+      else if (valid == GPGME_VALIDITY_FULL 
+               || valid == GPGME_VALIDITY_ULTIMATE
+               || key->protocol == GPGME_PROTOCOL_CMS)
 	{
 	  op->rset[i] = key;
 	}
@@ -622,6 +650,8 @@ set_recipients (GpaFileEncryptOperation *op, GList *recipients)
 	    }
 	}
     }
+
+  gpgme_set_protocol (GPA_OPERATION (op)->context->ctx, protocol);
   return TRUE;
 }
 

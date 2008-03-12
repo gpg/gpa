@@ -62,7 +62,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpasubkeylist.c gpasubkeylist.h \
 	      gpawizard.c gpawizard.h \
 	      gpapastrings.c gpapastrings.h\
-	      gpa_license.c gpa_license.h \
+	      gpl-text.c gpl-text.h \
 	      keyserver.c keyserver.h \
 	      hidewnd.c hidewnd.h \
 	      keytable.c keytable.h \
@@ -77,6 +77,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpaoperation.h gpaoperation.c \
 	      gpastreamop.h gpastreamop.c  \
 	      gpastreamencryptop.h gpastreamencryptop.c  \
+	      gpastreamsignop.h gpastreamsignop.c  \
 	      gpafileop.h gpafileop.c \
 	      gpafiledecryptop.h gpafiledecryptop.c \
 	      gpafileencryptop.h gpafileencryptop.c \

@@ -119,8 +119,10 @@ reload_cache (GpaKeyTable *keytable, const char *fpr)
 {
   gpg_error_t err;
   
-  /* We select the Open PGP protocol here and later the
+  /* We select the Open PGP protocol here.  At the end
      first_half_done_cb will do another keylist_start for X,509.  */
+  keytable->did_first_half = 0;
+  keytable->first_half_err = 0;
   keytable->fpr = fpr;
   gpgme_set_protocol (keytable->context->ctx, GPGME_PROTOCOL_OpenPGP);
   err = gpgme_op_keylist_start (keytable->context->ctx, fpr,

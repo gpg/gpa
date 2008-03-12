@@ -224,23 +224,24 @@ gpa_file_sign_operation_new (GtkWidget *window, GList *files,
 
 static gchar*
 destination_filename (const gchar *filename, gboolean armor, 
+                      gpgme_protocol_t protocol,
 		      gpgme_sig_mode_t sign_type)
 {
   const gchar *extension;
   gchar *signature_filename;
 
-  if (sign_type == GPGME_SIG_MODE_DETACH)
-    {
-      extension = ".sig";
-    }
+  if (protocol == GPGME_PROTOCOL_CMS && armor 
+      && sign_type != GPGME_SIG_MODE_DETACH)
+    extension = ".pem";
+  else if (protocol == GPGME_PROTOCOL_CMS)
+    extension = ".p7s";
+  else if (sign_type == GPGME_SIG_MODE_DETACH)
+    extension = ".sig";
   else if (sign_type == GPGME_SIG_MODE_CLEAR)
-    {
-      extension = ".asc";
-    }
+    extension = ".asc";
   else
-    {
-      extension = ".gpg";
-    }
+    extension = ".gpg";
+
   signature_filename = g_strconcat (filename, extension, NULL);
 
   return signature_filename;
@@ -280,7 +281,7 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
 
       file_item->filename_out = destination_filename 
 	(plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx),
-	 op->sign_type);
+	 gpgme_get_protocol (GPA_OPERATION (op)->context->ctx), op->sign_type);
 
       /* Open the files */
       op->plain_fd = gpa_open_input (plain_filename, &op->plain, 
@@ -394,14 +395,18 @@ gpa_file_sign_operation_done_cb (GpaContext *context,
     }
 }
 
+
 /*
- * Setting the signers for the context.
+ * Setting the signers and the protocol for the context. The protocol
+ * to use is derived from the keys.  An errro will be displayed if the
+ * selected keys are not all of one protocol.
  */
 static gboolean
 set_signers (GpaFileSignOperation *op, GList *signers)
 {
   GList *cur;
   gpg_error_t err;
+  gpgme_protocol_t protocol = GPGME_PROTOCOL_UNKNOWN;
 
   gpgme_signers_clear (GPA_OPERATION (op)->context->ctx);
   if (!signers)
@@ -414,21 +419,45 @@ set_signers (GpaFileSignOperation *op, GList *signers)
   for (cur = signers; cur; cur = g_list_next (cur))
     {
       gpgme_key_t key = cur->data;
+      if (protocol == GPGME_PROTOCOL_UNKNOWN)
+        protocol = key->protocol;
+      else if (key->protocol != protocol)
+        {
+          /* Should not happen because the selection dialog should
+             have not allowed to select different key types.  */
+          gpa_window_error 
+            (_("The selected certificates are not all of the same type."
+               " That is, you mixed OpenPGP and X.509 certificates."
+               " Please make sure to select only certificates of the"
+               " same type."), 
+             GPA_OPERATION (op)->window);
+          return FALSE;
+        }
+    }
+
+  gpgme_set_protocol (GPA_OPERATION (op)->context->ctx, protocol);
+
+  for (cur = signers; cur; cur = g_list_next (cur))
+    {
+      gpgme_key_t key = cur->data;
       err = gpgme_signers_add (GPA_OPERATION (op)->context->ctx, key);
       if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	{
 	  gpa_gpgme_error (err);
 	}
     }
+
   return TRUE;
 }
+
 
 /*
  * The key selection dialog has returned.
  */
-static void gpa_file_sign_operation_response_cb (GtkDialog *dialog,
-						    gint response,
-						    gpointer user_data)
+static void 
+gpa_file_sign_operation_response_cb (GtkDialog *dialog,
+                                     gint response,
+                                     gpointer user_data)
 {
   GpaFileSignOperation *op = user_data;
 

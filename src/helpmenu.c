@@ -31,7 +31,7 @@
 #include "gpawindowkeeper.h"
 #include "gtktools.h"
 #include "icons.h"
-#include "gpa_license.h"
+#include "gpl-text.h"
 
 /* W32 target is broken with regards to GdkFont functions.  */
 #ifndef G_OS_WIN32
@@ -43,18 +43,32 @@ static GtkWidget *about_dialog = NULL;
 #ifdef SCROLLING
 static char *scroll_text[] =
 {
-  "Bernhard Herzog",
+  "Markus Gerwinski",
   "Peter Gerwinski",
+  "Peter Neuhaus",
   "Werner Koch",
   "Jan-Oliver Wagner",
-  "Bernhard Reiter",
-  "Thomas Köster",
-  "Peter Neuhaus",
-  "Markus Gerwinski",
   "Beate Esser",
+  "Bernhard Herzog",
+  "Shell Hung",
+  "Peter Hanecak",
+  "Michael Fischer v. Mollard",
+  "Michael Mauch",
   "Benedikt Wildenhain",
-  "Timo Schulz",
-  "Miguel Coca"
+  "Miguel Coca",
+  "Renato Martini",
+  "Yasunari Imado",
+  "Michael Anckaert",
+  "Mick Ohrberg",
+  "Andy Ruddock",
+  "Ling Li",
+  "Josué Burgos",
+  "Can Berk Güder",
+  "Emilian Nowak",
+  "Daniel Nylander",
+  "Zdenek Hatas",
+  "Maxim Britov",
+  "Marcus Brinkmann"
 };
 #define DIM(v)		     (sizeof(v)/sizeof((v)[0]))
 static int shuffle_array[ DIM(scroll_text) ];
@@ -396,7 +410,7 @@ help_license (gpointer param)
   textGPL = gtk_text_view_new ();
   gtk_text_view_set_editable (GTK_TEXT_VIEW (textGPL), FALSE);
   gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (textGPL)),
-			    gpa_license_text, -1);
+			    get_gpl_text (), -1);
   gtk_widget_set_size_request (textGPL, 500, 300);
   licenseScrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (licenseScrolled),

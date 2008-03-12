@@ -1,3 +1,31 @@
+2008-03-12  Werner Koch  <wk@g10code.com>
+
+	* gpastreamsignop.c, gpastreamsignop.h: New.
+
+	* gpafileencryptop.c (set_recipients): Free RSET before malloc.
+	(set_recipients): Set the protocol to use. 
+
+	* keytable.c (reload_cache): Reset FIRST_HALF_DONE.
+
+	* gpacontext.c (gpa_context_init): Do not set the passphrse
+	callback in CMS mode.
+	* gpgmeedit.c (gpa_gpgme_edit_passwd_parms_release) 
+	(gpa_gpgme_edit_passwd_start): Ditto.
+	* gpgmetools.c (gpa_gpgme_new): Ditto.
+	* gpafilesignop.c (set_signers): Set protocol from the keys.
+	(destination_filename): Add arg protocol and pass it from the caller.
+
+	* gpa.c (option_entries): Add option --clipboard.  Fix spelling of
+	file manager.
+	(gpa_args_t): Add field START_CLIPBOARD.
+	(main): Implement option.
+	(args): Remove explicit initialization to put it into BSS.
+	
+	* gpa_license.c, gpa_license.h: Remove.
+	* gpl-text.c, gpl-text.h: New.
+	* helpmenu.c (help_license): Use the new get_gpl_text.
+	(scroll_text): Add all names from AUTHORS.
+
 2008-03-12  Marcus Brinkmann  <marcus@g10code.de>
 
 	* clipboard.c (dos_to_unix): Removed.

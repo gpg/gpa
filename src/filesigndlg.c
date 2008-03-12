@@ -280,17 +280,21 @@ gpa_file_sign_dialog_new (GtkWidget *parent, gboolean force_armor)
   return GTK_WIDGET(dialog);
 }
 
-GList *gpa_file_sign_dialog_signers (GpaFileSignDialog *dialog)
+GList *
+gpa_file_sign_dialog_signers (GpaFileSignDialog *dialog)
 {
-  return gpa_key_selector_get_selected_keys (GPA_KEY_SELECTOR(dialog->clist_who));
+  return gpa_key_selector_get_selected_keys
+    (GPA_KEY_SELECTOR(dialog->clist_who));
 }
 
-gboolean gpa_file_sign_dialog_get_armor (GpaFileSignDialog *dialog)
+gboolean 
+gpa_file_sign_dialog_get_armor (GpaFileSignDialog *dialog)
 {
   return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_armor));
 }
 
-gpgme_sig_mode_t gpa_file_sign_dialog_get_sign_type (GpaFileSignDialog *dialog)
+gpgme_sig_mode_t 
+gpa_file_sign_dialog_get_sign_type (GpaFileSignDialog *dialog)
 {
   gpgme_sig_mode_t sign_type = GPGME_SIG_MODE_NORMAL;
   

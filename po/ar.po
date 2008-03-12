@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-03-10 15:34+0100\n"
-"PO-Revision-Date: 2008-03-10 16:01+0100\n"
+"POT-Creation-Date: 2008-03-12 12:29+0100\n"
+"PO-Revision-Date: 2008-03-12 12:33+0100\n"
 "Last-Translator: Ahmad Gharbeia أحمد غربية <gharbeia@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -39,11 +39,11 @@ msgstr "احفظ باسم..."
 
 #: src/clipboard.c:522 src/clipboard.c:552 src/clipboard.c:582
 #: src/clipboard.c:612 src/clipboard.c:1113 src/fileman.c:675
-#: src/keyring.c:1637
+#: src/keyring.c:1657
 msgid "Clipboard"
 msgstr "الحافظة"
 
-#: src/clipboard.c:692 src/fileman.c:472 src/keyring.c:843
+#: src/clipboard.c:692 src/fileman.c:472 src/keyring.c:863
 msgid "/_File"
 msgstr "/_ملف"
 
@@ -83,15 +83,15 @@ msgstr "/ملف/_ظهِّر"
 msgid "/File/sep2"
 msgstr "/ملف/sep2"
 
-#: src/clipboard.c:703 src/fileman.c:481 src/keyring.c:844
+#: src/clipboard.c:703 src/fileman.c:481 src/keyring.c:864
 msgid "/File/_Close"
 msgstr "/ملف/أ_غلق"
 
-#: src/clipboard.c:704 src/fileman.c:482 src/keyring.c:846
+#: src/clipboard.c:704 src/fileman.c:482 src/keyring.c:866
 msgid "/File/_Quit"
 msgstr "/ملف/ا_خرج"
 
-#: src/clipboard.c:707 src/fileman.c:485 src/keyring.c:849
+#: src/clipboard.c:707 src/fileman.c:485 src/keyring.c:869
 msgid "/_Edit"
 msgstr "/_تحرير"
 
@@ -111,11 +111,11 @@ msgstr "/تحرير/sep0"
 msgid "/Edit/Cut"
 msgstr "/تحرير/قص"
 
-#: src/clipboard.c:715 src/keyring.c:850
+#: src/clipboard.c:715 src/keyring.c:870
 msgid "/Edit/_Copy"
 msgstr "/تحرير/ا_نسخ"
 
-#: src/clipboard.c:716 src/keyring.c:852
+#: src/clipboard.c:716 src/keyring.c:872
 msgid "/Edit/_Paste"
 msgstr "/تحرير/ا_لصق"
 
@@ -123,31 +123,31 @@ msgstr "/تحرير/ا_لصق"
 msgid "/Edit/_Delete"
 msgstr "/تحرير/ا_حذف"
 
-#: src/clipboard.c:718 src/keyring.c:854
+#: src/clipboard.c:718 src/keyring.c:874
 msgid "/Edit/sep1"
 msgstr "/تحرير/sep1"
 
-#: src/clipboard.c:719 src/fileman.c:486 src/keyring.c:855
+#: src/clipboard.c:719 src/fileman.c:486 src/keyring.c:875
 msgid "/Edit/Select _All"
 msgstr "/تحرير/ا_ختر الكل"
 
-#: src/clipboard.c:721 src/fileman.c:487 src/keyring.c:856
+#: src/clipboard.c:721 src/fileman.c:487 src/keyring.c:876
 msgid "/Edit/sep2"
 msgstr "/تحرير/sep2"
 
-#: src/clipboard.c:722 src/fileman.c:488 src/keyring.c:857
+#: src/clipboard.c:722 src/fileman.c:488 src/keyring.c:877
 msgid "/Edit/Pr_eferences..."
 msgstr "/تحرير/ال_تفضيلات..."
 
-#: src/clipboard.c:724 src/fileman.c:490 src/keyring.c:859
+#: src/clipboard.c:724 src/fileman.c:490 src/keyring.c:879
 msgid "/Edit/_Backend Preferences..."
 msgstr "/تحرير/تفضيلات ال_خلفية..."
 
-#: src/clipboard.c:728 src/fileman.c:494 src/keyring.c:886
+#: src/clipboard.c:728 src/fileman.c:494 src/keyring.c:906
 msgid "/_Windows"
 msgstr "/_نوافذ"
 
-#: src/clipboard.c:729 src/fileman.c:495 src/keyring.c:887
+#: src/clipboard.c:729 src/fileman.c:495 src/keyring.c:907
 msgid "/Windows/_Keyring Editor"
 msgstr "/نوافذ/_محرر حلقة المفاتيح"
 
@@ -155,11 +155,11 @@ msgstr "/نوافذ/_محرر حلقة المفاتيح"
 msgid "/Windows/_Filemanager"
 msgstr "/نوافذ/_مدير الملفات"
 
-#: src/clipboard.c:731 src/fileman.c:497 src/keyring.c:889
+#: src/clipboard.c:731 src/fileman.c:497 src/keyring.c:909
 msgid "/Windows/_Clipboard"
 msgstr "/نوافذ/ال_حافظة"
 
-#: src/clipboard.c:758 src/keyring.c:928
+#: src/clipboard.c:758 src/keyring.c:948
 msgid "/Edit/Copy"
 msgstr "/تحرير/انسخ"
 
@@ -219,7 +219,7 @@ msgstr "يلصق ما في الحافظة"
 msgid "paste the clipboard"
 msgstr "ألصق الحافظة"
 
-#: src/clipboard.c:925 src/fileman.c:612 src/keyring.c:1550
+#: src/clipboard.c:925 src/fileman.c:612 src/keyring.c:1570
 msgid "Sign"
 msgstr "وقّع"
 
@@ -267,11 +267,11 @@ msgstr "يظهِّر النصّ المحدد"
 msgid "decrypt text"
 msgstr "ظهِّر النصّ"
 
-#: src/clipboard.c:967 src/fileman.c:658 src/keyring.c:1611
+#: src/clipboard.c:967 src/fileman.c:658 src/keyring.c:1631
 msgid "Open the preferences dialog"
 msgstr "يفتح حوار التفضيلات"
 
-#: src/clipboard.c:968 src/fileman.c:659 src/keyring.c:1612
+#: src/clipboard.c:968 src/fileman.c:659 src/keyring.c:1632
 msgid "preferences"
 msgstr "التفضيلات"
 
@@ -287,27 +287,27 @@ msgstr "يفتح محرر حلقة المفاتيح"
 msgid "keyring editor"
 msgstr "محرر حلقة المفاتيح"
 
-#: src/clipboard.c:983 src/keyring.c:1628
+#: src/clipboard.c:983 src/keyring.c:1648
 msgid "Files"
 msgstr "ملفات"
 
-#: src/clipboard.c:984 src/keyring.c:1629
+#: src/clipboard.c:984 src/keyring.c:1649
 msgid "Open the file manager"
 msgstr "يفتح مدير الملفات"
 
-#: src/clipboard.c:985 src/keyring.c:1630
+#: src/clipboard.c:985 src/keyring.c:1650
 msgid "file manager"
 msgstr "مدير الملفات"
 
-#: src/clipboard.c:992 src/fileman.c:684 src/keyring.c:1645
+#: src/clipboard.c:992 src/fileman.c:684 src/keyring.c:1665
 msgid "Help"
 msgstr "مساعدة"
 
-#: src/clipboard.c:993 src/fileman.c:685 src/keyring.c:1646
+#: src/clipboard.c:993 src/fileman.c:685 src/keyring.c:1666
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "شرح مساعد خصوصية جنو"
 
-#: src/clipboard.c:994 src/fileman.c:686 src/keyring.c:1647
+#: src/clipboard.c:994 src/fileman.c:686 src/keyring.c:1667
 msgid "help"
 msgstr "مساعدة"
 
@@ -381,7 +381,7 @@ msgstr "خبير"
 
 #: src/encryptdlg.c:142 src/expirydlg.c:116 src/filesigndlg.c:133
 #: src/gpabackupop.c:292 src/gpaprogressdlg.c:146 src/gparecvkeydlg.c:96
-#: src/gpawizard.c:289 src/gpgmetools.c:662 src/keygendlg.c:149
+#: src/gpawizard.c:289 src/gpgmetools.c:696 src/keygendlg.c:149
 #: src/ownertrustdlg.c:111 src/passwddlg.c:100
 msgid "_Cancel"
 msgstr "أ_لغِ"
@@ -482,11 +482,11 @@ msgstr "يظهِّر الملف المحدد"
 msgid "decrypt file"
 msgstr "استخرج الملفّ"
 
-#: src/fileman.c:676 src/keyring.c:1638
+#: src/fileman.c:676 src/keyring.c:1658
 msgid "Open the clipboard"
 msgstr "يفتح الحافظة"
 
-#: src/fileman.c:677 src/keyring.c:1639
+#: src/fileman.c:677 src/keyring.c:1659
 msgid "clipboard"
 msgstr "الحافظة"
 
@@ -534,14 +534,14 @@ msgstr ""
 #: src/gpabackupop.c:216 src/gpaexportserverop.c:134
 #: src/gpafileencryptop.c:455 src/gpafileverifyop.c:178 src/gpgmetools.c:141
 #: src/keydeletedlg.c:44 src/keydeletedlg.c:93 src/keysigndlg.c:62
-#: src/settingsdlg.c:153
+#: src/settingsdlg.c:165
 msgid "_Yes"
 msgstr "_نعم"
 
 #: src/gpabackupop.c:217 src/gpaexportserverop.c:135
 #: src/gpafileencryptop.c:456 src/gpafileverifyop.c:179 src/gpgmetools.c:142
 #: src/keydeletedlg.c:46 src/keydeletedlg.c:95 src/keysigndlg.c:64
-#: src/settingsdlg.c:156
+#: src/settingsdlg.c:168
 msgid "_No"
 msgstr "_لا"
 
@@ -587,36 +587,39 @@ msgstr "ا_حفظ احتياطيا في ملفّ:"
 msgid "B_rowse..."
 msgstr "_تصفّح..."
 
-#: src/gpa.c:91
+#: src/gpa.c:92
 msgid "Output version information and exit"
 msgstr "اعرض معلومات الإصدارة واخرج"
 
-#: src/gpa.c:93
+#: src/gpa.c:94
 msgid "Open keyring editor (default)"
 msgstr "افتح محرر حلقة المفاتيح (البدئي)"
 
-#: src/gpa.c:95
-msgid "Open filemanager"
+#: src/gpa.c:96
+msgid "Open file manager"
 msgstr "افتح مدير الملفات"
 
-#: src/gpa.c:97
-#, fuzzy
+#: src/gpa.c:98
+msgid "Open clipboard"
+msgstr "يفتح الحافظة"
+
+#: src/gpa.c:100
 msgid "Start only the UI server (implies --cms)"
 msgstr "ابدأ فقط خادوم واجهة المستخدم"
 
-#: src/gpa.c:99
+#: src/gpa.c:102
 msgid "Read options from file"
 msgstr "اقرأ الخيارات من ملفّ"
 
-#: src/gpa.c:290
+#: src/gpa.c:293
 msgid "[FILE...]"
 msgstr "[ملف...]"
 
-#: src/gpa.c:292
+#: src/gpa.c:295
 msgid "Graphical frontend to GnuPG"
 msgstr "واجهة رسومية لأجل GnuPG"
 
-#: src/gpa.c:293
+#: src/gpa.c:296
 msgid "Please report bugs to <"
 msgstr "من فضلك أبلغ عن العلات في <"
 
@@ -677,7 +680,7 @@ msgid "The file \"%s\" contained no validencrypted data."
 msgstr "لا يحوي الملفّ \"%s\" بيانات معماة صالحة."
 
 #: src/gpafiledecryptop.c:380 src/gpafileencryptop.c:727
-#: src/gpafilesignop.c:482 src/gpafileverifyop.c:460 src/gpakeyexpireop.c:235
+#: src/gpafilesignop.c:510 src/gpafileverifyop.c:460 src/gpakeyexpireop.c:235
 #: src/gpakeypasswdop.c:197 src/gpakeysignop.c:229
 msgid "Wrong passphrase!"
 msgstr "عبارة السر خطأ."
@@ -708,7 +711,7 @@ msgstr "مفتاح منقوض"
 
 #: src/gpafileencryptop.c:504 src/gpafileencryptop.c:544 src/gpawizard.c:281
 #: src/gtktools.c:324 src/gtktools.c:357 src/helpmenu.c:422
-#: src/keyeditdlg.c:151 src/settingsdlg.c:184 src/verifydlg.c:115
+#: src/keyeditdlg.c:151 src/settingsdlg.c:194 src/verifydlg.c:115
 msgid "_Close"
 msgstr "أ_غلق"
 
@@ -725,13 +728,20 @@ msgstr "ولا يمكن استخدامه للتعمية."
 msgid "The following key expired on %s:"
 msgstr "انتهت صلاحية هذا المفتاح في %s:"
 
-#: src/gpafileencryptop.c:641 src/gpafilesignop.c:410
+#: src/gpafileencryptop.c:641 src/gpafilesignop.c:414
 msgid "You didn't select any key for signing"
 msgstr "لم تحدد مفتاحا للتوقيع"
 
 #: src/gpafilesignop.c:148
 msgid "Signing..."
 msgstr "يجري التوقيع..."
+
+#: src/gpafilesignop.c:428
+msgid ""
+"The selected certificates are not all of the same type. That is, you mixed "
+"OpenPGP and X.509 certificates. Please make sure to select only certificates "
+"of the same type."
+msgstr ""
 
 #: src/gpafileverifyop.c:101
 msgid "Verifying..."
@@ -786,12 +796,12 @@ msgstr ""
 "أُدخلت وقتا غير صحيح.\n"
 "(لا يمكن أن يكون تاريخ انتهاء الصلاحية في الماضي.)"
 
-#: src/gpakeyselector.c:86 src/keylist.c:512 src/siglist.c:94
+#: src/gpakeyselector.c:86 src/keylist.c:567 src/siglist.c:94
 #: src/siglist.c:114 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "معرِّف المفتاح"
 
-#: src/gpakeyselector.c:95 src/keylist.c:562 src/siglist.c:100
+#: src/gpakeyselector.c:95 src/keylist.c:618 src/siglist.c:100
 #: src/siglist.c:143 src/verifydlg.c:336
 msgid "User Name"
 msgstr "اسم المستخدم"
@@ -860,7 +870,7 @@ msgstr "الخوارزمية"
 msgid "Size"
 msgstr "الطول"
 
-#: src/gpasubkeylist.c:97 src/keyeditdlg.c:171 src/keylist.c:524
+#: src/gpasubkeylist.c:97 src/keyeditdlg.c:171 src/keylist.c:580
 msgid "Expiry Date"
 msgstr "تاريخ الانتهاء"
 
@@ -880,16 +890,16 @@ msgstr "يمكن التعمية به"
 msgid "Can authenticate"
 msgstr "يمكن الاستيثاق به"
 
-#: src/gpasubkeylist.c:137 src/gpgmetools.c:579 src/gpgmetools.c:787
-#: src/gpgmetools.c:906
+#: src/gpasubkeylist.c:137 src/gpgmetools.c:613 src/gpgmetools.c:821
+#: src/gpgmetools.c:940
 msgid "Revoked"
 msgstr "منقوض"
 
-#: src/gpasubkeylist.c:141 src/gpgmetools.c:581 src/gpgmetools.c:902
+#: src/gpasubkeylist.c:141 src/gpgmetools.c:615 src/gpgmetools.c:936
 msgid "Expired"
 msgstr "منتهية صلاحيته"
 
-#: src/gpasubkeylist.c:145 src/gpgmetools.c:583
+#: src/gpasubkeylist.c:145 src/gpgmetools.c:617
 msgid "Disabled"
 msgstr "معطل"
 
@@ -897,12 +907,12 @@ msgstr "معطل"
 msgid "Unsigned"
 msgstr "غير موقّع"
 
-#: src/gpasubkeylist.c:153 src/gpgmetools.c:893 src/verifydlg.c:212
+#: src/gpasubkeylist.c:153 src/gpgmetools.c:927 src/verifydlg.c:212
 msgid "Valid"
 msgstr "صالح"
 
-#: src/gpawidgets.c:72 src/gpgmetools.c:627 src/gpgmetools.c:634
-#: src/keyring.c:1156 src/keysigndlg.c:104
+#: src/gpawidgets.c:72 src/gpgmetools.c:661 src/gpgmetools.c:668
+#: src/keyring.c:1176 src/keysigndlg.c:104
 msgid "User Name:"
 msgstr "اسم المستخدم:"
 
@@ -910,8 +920,8 @@ msgstr "اسم المستخدم:"
 msgid "User Names:"
 msgstr "أسماء المستخدم:"
 
-#: src/gpawidgets.c:78 src/gpgmetools.c:628 src/gpgmetools.c:635
-#: src/keyring.c:1158
+#: src/gpawidgets.c:78 src/gpgmetools.c:662 src/gpgmetools.c:669
+#: src/keyring.c:1178
 msgid "Key ID:"
 msgstr "معرِّف المفتاح:"
 
@@ -986,7 +996,7 @@ msgstr ""
 "في الأغلب هذه علّة في GPA.\n"
 "سيُحاول GPA التعافي من هذا العطل."
 
-#: src/gpgmetools.c:446
+#: src/gpgmetools.c:477
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -1000,7 +1010,7 @@ msgstr ""
 "************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:451
+#: src/gpgmetools.c:482
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -1008,119 +1018,119 @@ msgstr ""
 "المفتاح المحفوظ احتياطيا في هذا الملف هو:\n"
 "\n"
 
-#: src/gpgmetools.c:512
+#: src/gpgmetools.c:543
 msgid "DSA and ElGamal (default)"
 msgstr "‏DSA و الجمل (البدئي)"
 
-#: src/gpgmetools.c:513
+#: src/gpgmetools.c:544
 msgid "DSA (sign only)"
 msgstr "‏DSA (للتوقيع فقط)"
 
-#: src/gpgmetools.c:514
+#: src/gpgmetools.c:545
 msgid "RSA (sign only)"
 msgstr "‏RSA (للتوقيع فقط)"
 
-#: src/gpgmetools.c:547 src/gpgmetools.c:570 src/gpgmetools.c:587
-#: src/gpgmetools.c:898 src/gpgmetools.c:931
+#: src/gpgmetools.c:581 src/gpgmetools.c:604 src/gpgmetools.c:621
+#: src/gpgmetools.c:932 src/gpgmetools.c:965
 msgid "Unknown"
 msgstr "مجهول"
 
-#: src/gpgmetools.c:550
+#: src/gpgmetools.c:584
 msgid "Never"
 msgstr "أبدًا"
 
-#: src/gpgmetools.c:553
+#: src/gpgmetools.c:587
 msgid "Marginal"
 msgstr "هامشية"
 
-#: src/gpgmetools.c:556
+#: src/gpgmetools.c:590
 msgid "Full"
 msgstr "كاملة"
 
-#: src/gpgmetools.c:559
+#: src/gpgmetools.c:593
 msgid "Ultimate"
 msgstr "مطلقة"
 
-#: src/gpgmetools.c:585
+#: src/gpgmetools.c:619
 msgid "Incomplete"
 msgstr "ناقص"
 
-#: src/gpgmetools.c:591
+#: src/gpgmetools.c:625
 msgid "Fully Valid"
 msgstr "صالح تماما"
 
-#: src/gpgmetools.c:625
+#: src/gpgmetools.c:659
 msgid "Please enter the passphrase for the following key:"
 msgstr "من فضلك أدخل عبارة سر المفتاح التالي:"
 
-#: src/gpgmetools.c:633
+#: src/gpgmetools.c:667
 msgid "Wrong passphrase, please try again:"
 msgstr "عبارة سر خاطئة؛ أعِد المحاولة:"
 
-#: src/gpgmetools.c:658
+#: src/gpgmetools.c:692
 msgid "Enter Passphrase"
 msgstr "أدخل عبارة السر"
 
-#: src/gpgmetools.c:780
+#: src/gpgmetools.c:814
 msgid "[None]"
 msgstr "[لاشيئ]"
 
-#: src/gpgmetools.c:870 src/verifydlg.c:269
+#: src/gpgmetools.c:904 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[هوية مستخدم مجهولة]"
 
-#: src/gpgmetools.c:896 src/verifydlg.c:217
+#: src/gpgmetools.c:930 src/verifydlg.c:217
 msgid "Bad"
 msgstr "سيئ"
 
-#: src/gpgmetools.c:919
+#: src/gpgmetools.c:953
 msgid "Generic"
 msgstr "عام"
 
-#: src/gpgmetools.c:922
+#: src/gpgmetools.c:956
 msgid "Persona"
 msgstr "شخصي"
 
-#: src/gpgmetools.c:925
+#: src/gpgmetools.c:959
 msgid "Casual"
 msgstr "عادي"
 
-#: src/gpgmetools.c:928
+#: src/gpgmetools.c:962
 msgid "Positive"
 msgstr "إيجابي"
 
-#: src/gpgmetools.c:946
+#: src/gpgmetools.c:980
 msgid "The key can be used for certification, signing and encryption."
 msgstr "يمكن استخدام المفتاح في الشهادة و التوقيع و التعمية."
 
-#: src/gpgmetools.c:949
+#: src/gpgmetools.c:983
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr "يمكن استخدام المفتاح في الشهادة و التوقيع لكن ليس في التعمية."
 
-#: src/gpgmetools.c:955
+#: src/gpgmetools.c:989
 msgid "The key can be used for certification and encryption."
 msgstr "يمكن استخدام المفتاح في الشهادة و التعمية."
 
-#: src/gpgmetools.c:958
+#: src/gpgmetools.c:992
 msgid "The key can be used only for certification."
 msgstr "يمكن استخدام المفتاح في الشهادة فقط."
 
-#: src/gpgmetools.c:966
+#: src/gpgmetools.c:1000
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr "يمكن استخدام المفتاح في التوقيع و التعمية لكن ليس في الشهادة."
 
-#: src/gpgmetools.c:969
+#: src/gpgmetools.c:1003
 msgid "The key can be used only for signing."
 msgstr "يمكن استخدام المفتاح في التوقيع فقط."
 
-#: src/gpgmetools.c:974
+#: src/gpgmetools.c:1008
 msgid "The key can be used only for encryption."
 msgstr "يمكن استخدام المفتاح في التعمية فقط."
 
-#: src/gpgmetools.c:977
+#: src/gpgmetools.c:1011
 msgid "This key is useless."
 msgstr "لا فائدة لهذا المفتاح."
 
@@ -1391,7 +1401,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "خُذ _نسخة احتياطية"
 
-#: src/keygenwizard.c:374 src/keyring.c:719 src/keyring.c:747
+#: src/keygenwizard.c:374 src/keyring.c:739 src/keyring.c:767
 msgid "Do it _later"
 msgstr "_لاحقا"
 
@@ -1416,7 +1426,7 @@ msgstr ""
 "\n"
 "تم توليد مفتاحك بنجاح. المفتاح صالح بلا أمد محدد وطوله 1024 بتّة."
 
-#: src/keylist.c:324
+#: src/keylist.c:342
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1424,57 +1434,63 @@ msgstr ""
 "يُعيد GnuPG بناء قاعدة بيانات الثقة.\n"
 "قد يستغرق هذا بضع دقائق."
 
-#: src/keylist.c:513
+#: src/keylist.c:559
+msgid ""
+"This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
+"'X' denotes X.509 (S/MIME)."
+msgstr ""
+
+#: src/keylist.c:568
 msgid "The key ID is a short number to identify a certificate."
 msgstr ""
 
-#: src/keylist.c:525
+#: src/keylist.c:581
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
-#: src/keylist.c:535 src/ownertrustdlg.c:122
+#: src/keylist.c:591 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "الثقة في المالك"
 
-#: src/keylist.c:536
+#: src/keylist.c:592
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
 
-#: src/keylist.c:548
+#: src/keylist.c:604
 #, fuzzy
 msgid "Validity"
 msgstr "صلاحية المفتاح"
 
-#: src/keylist.c:549
+#: src/keylist.c:605
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
 
-#: src/keylist.c:563
+#: src/keylist.c:619
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr ""
 
-#: src/keyring.c:437
+#: src/keyring.c:457
 msgid "No keys selected for signing."
 msgstr "لم تُحدد أي مفاتيح للتعمية."
 
-#: src/keyring.c:714
+#: src/keyring.c:734
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
 msgstr "ليس لديك مفتاح سري. أتريد توليد واحد الآن (محبذ) أم القيام بهذا لاحقا؟"
 
-#: src/keyring.c:718
+#: src/keyring.c:738
 msgid "_Generate key now"
 msgstr "_ولِّد المفتاح الآن"
 
-#: src/keyring.c:741
+#: src/keyring.c:761
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1482,216 +1498,216 @@ msgstr ""
 "لم تتخذ نسخة احتياطية من مفتاحك السري بعد. أتريد أخذ نسخة احتياطية الآن "
 "(محبذ) أم القيام بهذا لاحقا؟"
 
-#: src/keyring.c:746
+#: src/keyring.c:766
 msgid "_Backup key now"
 msgstr "ا_حفظ المفتاح احتياطيا الآن"
 
-#: src/keyring.c:863
+#: src/keyring.c:883
 msgid "/_Keys"
 msgstr "/ال_مفاتيح"
 
-#: src/keyring.c:864
+#: src/keyring.c:884
 msgid "/Keys/_Refresh"
 msgstr "/المفاتيح/_حدّث"
 
-#: src/keyring.c:866
+#: src/keyring.c:886
 msgid "/Keys/sep0"
 msgstr "/المفاتيح/sep0"
 
-#: src/keyring.c:867
+#: src/keyring.c:887
 msgid "/Keys/_New Key..."
 msgstr "/المفاتيح/مفتاح _جديد"
 
-#: src/keyring.c:869
+#: src/keyring.c:889
 msgid "/Keys/_Delete Keys..."
 msgstr "/المفاتيح/ا_حذف المفاتيح..."
 
-#: src/keyring.c:871
+#: src/keyring.c:891
 msgid "/Keys/sep1"
 msgstr "/المفاتيح/sep1"
 
-#: src/keyring.c:872
+#: src/keyring.c:892
 msgid "/Keys/_Sign Keys..."
 msgstr "/المفاتيح/_وقّع المفاتيح..."
 
-#: src/keyring.c:873
+#: src/keyring.c:893
 msgid "/Keys/Set _Owner Trust..."
 msgstr "/المفاتيح/حدد ال_ثقة في المالك..."
 
-#: src/keyring.c:874
+#: src/keyring.c:894
 msgid "/Keys/_Edit Private Key..."
 msgstr "/المفاتيح/حرّ_ر المفتاح السرّي..."
 
-#: src/keyring.c:875
+#: src/keyring.c:895
 msgid "/Keys/sep2"
 msgstr "/المفاتيح/sep2"
 
-#: src/keyring.c:876
+#: src/keyring.c:896
 msgid "/Keys/_Import Keys..."
 msgstr "/المفاتيح/ا_ستورد المفاتيح..."
 
-#: src/keyring.c:877
+#: src/keyring.c:897
 msgid "/Keys/E_xport Keys..."
 msgstr "/المفاتيح/_صدّر المفاتيح..."
 
-#: src/keyring.c:878
+#: src/keyring.c:898
 msgid "/Keys/_Backup..."
 msgstr "/المفاتيح/ا_حفظ احتياطيا..."
 
-#: src/keyring.c:881
+#: src/keyring.c:901
 msgid "/_Server"
 msgstr "/ال_خادوم"
 
-#: src/keyring.c:882
+#: src/keyring.c:902
 msgid "/Server/_Retrieve Keys..."
 msgstr "/الخادوم/المفاتيح ال_سرّية..."
 
-#: src/keyring.c:883
+#: src/keyring.c:903
 msgid "/Server/_Send Keys..."
 msgstr "/الخادوم/أ_رسِل المفاتيح..."
 
-#: src/keyring.c:888
+#: src/keyring.c:908
 msgid "/Windows/_File Manager"
 msgstr "/نوافذ/_مدير الملفات"
 
-#: src/keyring.c:919
+#: src/keyring.c:939
 msgid "/Keys/Export Keys..."
 msgstr "/المفاتيح/صدّر المفاتيح..."
 
-#: src/keyring.c:924
+#: src/keyring.c:944
 msgid "/Keys/Delete Keys..."
 msgstr "/المفاتيح/احذف المفاتيح..."
 
-#: src/keyring.c:932
+#: src/keyring.c:952
 msgid "/Server/Send Keys..."
 msgstr "/المفاتيح/أرسِل المفاتيح..."
 
-#: src/keyring.c:939
+#: src/keyring.c:959
 msgid "/Keys/Set Owner Trust..."
 msgstr "/المفاتيح/حدّد الثقة في المالك..."
 
-#: src/keyring.c:946
+#: src/keyring.c:966
 msgid "/Keys/Sign Keys..."
 msgstr "/المفاتيح/وقّع المفاتيح..."
 
-#: src/keyring.c:952
+#: src/keyring.c:972
 msgid "/Keys/Edit Private Key..."
 msgstr "/المفاتيح/حرّر المفتاح السري..."
 
-#: src/keyring.c:957
+#: src/keyring.c:977
 msgid "/Keys/Backup..."
 msgstr "/المفاتيح/احفظ احتياطيا..."
 
-#: src/keyring.c:974
+#: src/keyring.c:994
 msgid "/_Copy"
 msgstr "/ا_نسخ"
 
-#: src/keyring.c:976
+#: src/keyring.c:996
 msgid "/_Paste"
 msgstr "/أ_لصق"
 
-#: src/keyring.c:978
+#: src/keyring.c:998
 msgid "/_Delete Keys..."
 msgstr "/ا_حذف المفاتيح..."
 
-#: src/keyring.c:981
+#: src/keyring.c:1001
 msgid "/_Sign Keys..."
 msgstr "/و_قّع المفاتيح..."
 
-#: src/keyring.c:982
+#: src/keyring.c:1002
 msgid "/Set _Owner Trust..."
 msgstr "/حدّد ال_ثقة في المالك..."
 
-#: src/keyring.c:983
+#: src/keyring.c:1003
 msgid "/_Edit Private Key..."
 msgstr "/حرّ_ر المفتاح السرّي..."
 
-#: src/keyring.c:985
+#: src/keyring.c:1005
 msgid "/E_xport Keys..."
 msgstr "/_صدّر المفاتيح..."
 
-#: src/keyring.c:986
+#: src/keyring.c:1006
 msgid "/Se_nd Keys to Server..."
 msgstr "/أر_سِل المفاتيح للخادوم..."
 
-#: src/keyring.c:987
+#: src/keyring.c:1007
 msgid "/_Backup..."
 msgstr "/احفظ ا_حتياطيا..."
 
-#: src/keyring.c:998
+#: src/keyring.c:1018
 msgid "/Set Owner Trust..."
 msgstr "/حدد الثقة في المالك..."
 
-#: src/keyring.c:1005
+#: src/keyring.c:1025
 msgid "/Sign Keys..."
 msgstr "/وقّع الملفات..."
 
-#: src/keyring.c:1011
+#: src/keyring.c:1031
 msgid "/Edit Private Key..."
 msgstr "/حرر المفتاح السري..."
 
-#: src/keyring.c:1016
+#: src/keyring.c:1036
 msgid "/Backup..."
 msgstr "/احفظ احتياطيا..."
 
-#: src/keyring.c:1086
+#: src/keyring.c:1106
 msgid "Subkeys"
 msgstr "المفاتيح الفرعية"
 
-#: src/keyring.c:1160 src/keysigndlg.c:110
+#: src/keyring.c:1180 src/keysigndlg.c:110
 msgid "Fingerprint:"
 msgstr "البصمة:"
 
-#: src/keyring.c:1162
+#: src/keyring.c:1182
 msgid "Expires at:"
 msgstr "ينتهي في:"
 
-#: src/keyring.c:1164
+#: src/keyring.c:1184
 msgid "Owner Trust:"
 msgstr "الثقة في المالك:"
 
-#: src/keyring.c:1166
+#: src/keyring.c:1186
 msgid "Key Validity:"
 msgstr "صلاحية المفتاح:"
 
-#: src/keyring.c:1168
+#: src/keyring.c:1188
 msgid "Key Type:"
 msgstr "نوع المفتاح:"
 
-#: src/keyring.c:1170
+#: src/keyring.c:1190
 msgid "Created at:"
 msgstr "أُنشئ في:"
 
-#: src/keyring.c:1173
+#: src/keyring.c:1193
 msgid "Details"
 msgstr "التفاصيل"
 
-#: src/keyring.c:1181
+#: src/keyring.c:1201
 msgid "Show signatures on user name:"
 msgstr "اعرض التوقيعات على اسم المستخدم:"
 
-#: src/keyring.c:1205
+#: src/keyring.c:1225
 msgid "Signatures"
 msgstr "التوقيعات"
 
-#: src/keyring.c:1229
+#: src/keyring.c:1249
 msgid "The key has both a private and a public part"
 msgstr "للمفتاح جزئين سرّي وعلني"
 
-#: src/keyring.c:1232
+#: src/keyring.c:1252
 msgid "The key has only a public part"
 msgstr "لهذا المفتاح جزء علني فقط"
 
-#: src/keyring.c:1267
+#: src/keyring.c:1287
 #, c-format
 msgid "%s %u bits"
 msgstr "%s %u بتّة"
 
-#: src/keyring.c:1292
+#: src/keyring.c:1312
 msgid "No keys selected"
 msgstr "لم تُحدد أي مفاتيح"
 
-#: src/keyring.c:1295
+#: src/keyring.c:1315
 #, c-format
 msgid "%d key selected"
 msgid_plural "%d keys selected"
@@ -1702,107 +1718,107 @@ msgstr[3] "حُدِّدت %d مفاتيح"
 msgstr[4] "حُدِّد %d مفتاحًا"
 msgstr[5] "حُدِّد %d مفتاح"
 
-#: src/keyring.c:1327
+#: src/keyring.c:1347
 msgid "All signatures"
 msgstr "كل التوقيعات"
 
-#: src/keyring.c:1532
+#: src/keyring.c:1552
 msgid "Edit"
 msgstr "حرّر"
 
-#: src/keyring.c:1533
+#: src/keyring.c:1553
 msgid "Edit the selected private key"
 msgstr "حرّر المفتاح السري المحدد"
 
-#: src/keyring.c:1534
+#: src/keyring.c:1554
 msgid "edit key"
 msgstr "حرّر المفتاح"
 
-#: src/keyring.c:1542
+#: src/keyring.c:1562
 msgid "Remove the selected key"
 msgstr "احذف المفتاح المحدد"
 
-#: src/keyring.c:1543
+#: src/keyring.c:1563
 msgid "remove key"
 msgstr "احذف المفتاح"
 
-#: src/keyring.c:1551
+#: src/keyring.c:1571
 msgid "Sign the selected key"
 msgstr "وقّع المفتاح المحدد"
 
-#: src/keyring.c:1551
+#: src/keyring.c:1571
 msgid "sign key"
 msgstr "وقّع المفتاح"
 
-#: src/keyring.c:1558
+#: src/keyring.c:1578
 msgid "Import"
 msgstr "استورد"
 
-#: src/keyring.c:1559
+#: src/keyring.c:1579
 msgid "Import Keys"
 msgstr "استورِد المفاتيح"
 
-#: src/keyring.c:1559
+#: src/keyring.c:1579
 msgid "import keys"
 msgstr "استورِد المفاتيح"
 
-#: src/keyring.c:1564
+#: src/keyring.c:1584
 msgid "Export"
 msgstr "صدّر"
 
-#: src/keyring.c:1565
+#: src/keyring.c:1585
 msgid "Export Keys"
 msgstr "صدّر المفاتيح"
 
-#: src/keyring.c:1565
+#: src/keyring.c:1585
 msgid "export keys"
 msgstr "صدّر المفاتيح"
 
-#: src/keyring.c:1578
+#: src/keyring.c:1598
 msgid "Brief"
 msgstr "موجزة"
 
-#: src/keyring.c:1578
+#: src/keyring.c:1598
 msgid "Show Brief Keylist"
 msgstr "يعرض قائمة مفاتيح موجزة"
 
-#: src/keyring.c:1579
+#: src/keyring.c:1599
 msgid "brief"
 msgstr "موجزة"
 
-#: src/keyring.c:1590
+#: src/keyring.c:1610
 msgid "Detailed"
 msgstr "مفصَّلة"
 
-#: src/keyring.c:1590
+#: src/keyring.c:1610
 msgid "Show Key Details"
 msgstr "يعرض تفاصيل المفاتيح"
 
-#: src/keyring.c:1591
+#: src/keyring.c:1611
 msgid "detailed"
 msgstr "مُفصَّلة"
 
-#: src/keyring.c:1619
+#: src/keyring.c:1639
 msgid "Refresh the keyring"
 msgstr "ينعش حلقة المفاتيح"
 
-#: src/keyring.c:1620
+#: src/keyring.c:1640
 msgid "refresh keyring"
 msgstr "أنعش حلقة المفاتيح"
 
-#: src/keyring.c:1691
+#: src/keyring.c:1711
 msgid "Selected default key:"
 msgstr "المفتاح المحدد بدئيا:"
 
-#: src/keyring.c:1701
+#: src/keyring.c:1721
 msgid "No default key selected in the preferences."
 msgstr "لم يحدد أي مفتاح بدئيا في التفضيلات."
 
-#: src/keyring.c:1813
+#: src/keyring.c:1833
 msgid "GNU Privacy Assistant - Keyring Editor"
 msgstr "مساعد خصوصية جنو - محرر حلقة المفاتيح"
 
-#: src/keyring.c:1845
+#: src/keyring.c:1865
 msgid "Keyring Editor"
 msgstr "محرر حلقة المفاتيح"
 
@@ -1990,19 +2006,22 @@ msgstr "لا توجد ملحقة لبروتوكول خادوم المفاتيح 
 msgid "The keyserver you specified is not valid"
 msgstr "خادوم المفاتيح الذي حددته غير صالح"
 
-#: src/settingsdlg.c:54
-msgid "Default _key:"
+#: src/settingsdlg.c:59
+#, fuzzy
+msgid "<b>Default _key</b>"
 msgstr "ال_مفتاح البدئي:"
 
-#: src/settingsdlg.c:99
-msgid "Default key_server: "
+#: src/settingsdlg.c:111
+#, fuzzy
+msgid "<b>Default key_server</b>"
 msgstr "_خادوم المفاتيح البدئي:"
 
-#: src/settingsdlg.c:147
-msgid "Use _advanced mode:"
+#: src/settingsdlg.c:158
+#, fuzzy
+msgid "<b>Use _advanced mode</b>"
 msgstr "استخدم الطَّور ال_متقدّم:"
 
-#: src/settingsdlg.c:183
+#: src/settingsdlg.c:193
 msgid "Settings"
 msgstr "التضبيطات"
 
