@@ -42,6 +42,7 @@
 #include "gpapastrings.h"
 
 #include "gtktools.h"
+#include "gpgmetools.h"
 #include "gpawidgets.h"
 #include "siglist.h"
 #include "helpmenu.h"
@@ -271,30 +272,6 @@ clipboard_owner_change_cb (GtkClipboard *clip, GdkEventOwnerChange *event,
 }
 
 
-#ifdef G_OS_WIN32
-void
-dos_to_unix (gchar *str, gsize *len)
-{
-  /* On Windows 2000, we need to convert \r\n to \n in the output for
-     cut & paste to work properly (otherwise, extra newlines will be
-     inserted).  */
-  gchar *src;
-  gchar *dst;
-  
-  src = str;
-  dst = str;
-  while (*src)
-    {
-      if (src[0] == '\r' && src[1] == '\n')
-	src++;
-      *(dst++) = *(src++);
-    }
-  *dst = '\0';
-  *len = dst - str;
-}
-#endif
-
-
 /* Add a file created by an operation to the list */
 static void
 file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)

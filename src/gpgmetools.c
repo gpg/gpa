@@ -251,6 +251,7 @@ gpa_gpgme_data_new_from_file (gpgme_data_t *data,
 
 
 #ifdef G_OS_WIN32
+/* Convert newlines.  */
 void
 dos_to_unix (gchar *str, gsize *len)
 {

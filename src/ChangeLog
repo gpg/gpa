@@ -1,3 +1,9 @@
+2008-03-12  Marcus Brinkmann  <marcus@g10code.de>
+
+	* clipboard.c (dos_to_unix): Removed.
+	* gpgmetools.h (dos_to_unix): New prototype.
+	* gpgmetools.c (dos_to_unix): Add comment.
+
 2008-03-11  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpgmetools.c (dos_to_unix) [G_OS_WIN32]: New function.
