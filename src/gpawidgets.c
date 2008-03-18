@@ -173,9 +173,7 @@ expire_date_toggled_cb (GtkToggleButton *togglebutton, gpointer user_data)
 GtkWidget *
 gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
 {
-  GList *contentsAfter = NULL;
   gint i;
-
   GtkWidget *expiry_frame;
   GtkWidget *vboxExpire;
   GtkWidget *radioDont;
@@ -215,13 +213,12 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   gtk_entry_set_width_chars (GTK_ENTRY (entryAfter), strlen (" 00000 "));
   gtk_box_pack_start (GTK_BOX (hboxAfter), entryAfter, FALSE, FALSE, 0);
 
-  comboAfter = gtk_combo_new ();
+  comboAfter = gtk_combo_box_new_text ();
   frame->comboAfter = comboAfter;
-  gtk_combo_set_value_in_list (GTK_COMBO (comboAfter), TRUE, FALSE);
-  for (i = 0; i < 4; i++)
-    contentsAfter = g_list_append (contentsAfter,
-				   gpa_unit_expiry_time_string(i));
-  gtk_combo_set_popdown_strings (GTK_COMBO (comboAfter), contentsAfter);
+  for (i = 3; i >= 0; i--)
+    gtk_combo_box_prepend_text (GTK_COMBO_BOX (comboAfter), 
+				gpa_unit_expiry_time_string (i));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (comboAfter), 0);
   gtk_box_pack_start (GTK_BOX (hboxAfter), comboAfter, FALSE, FALSE, 0);
 
   radioAt = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radioDont),

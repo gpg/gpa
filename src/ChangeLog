@@ -1,5 +1,8 @@
 2008-03-18  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpawidgets.c (gpa_expiry_frame_new): Replace editable GtkCombo
+	by uneditable GtkComboBox.
+
 	* gpawidgets.c (gpa_expiry_frame_new): Use
 	gtk_entry_set_width_chars instead of gtk_widget_set_size_request.
 
