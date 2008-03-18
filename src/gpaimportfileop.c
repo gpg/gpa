@@ -1,5 +1,6 @@
 /* gpaimportfileop.c - The GpaImportFileOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -44,13 +45,9 @@ gpa_import_file_operation_finalize (GObject *object)
 
   /* Cleanup */
   if (op->fd != -1)
-    {
-      close (op->fd);
-    }
+    close (op->fd);
   if (op->file)
-    {
-      g_free (op->file);
-    }
+    g_free (op->file);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -128,24 +125,28 @@ gpa_import_file_operation_get_source (GpaImportOperation *operation,
 				      gpgme_data_t *source)
 {
   GpaImportFileOperation *op = GPA_IMPORT_FILE_OPERATION (operation);
-  GtkWidget *dialog = gtk_file_selection_new (_("Import public keys from file"));
+  GtkWidget *dialog;
   GtkResponseType response;
 
-  /* Run the dialog until there is a valid response */
+  dialog = gtk_file_chooser_dialog_new
+    (_("Import public keys from file"),
+     GTK_WINDOW (GPA_OPERATION (op)->window),
+     GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+     GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+
+  /* Run the dialog until there is a valid response.  */
   do 
     {
       response = gtk_dialog_run (GTK_DIALOG (dialog));
-      /* Save the selected file, free'ing the previous value if required */
+      /* Save the selected file, free'ing the previous value if required.  */
       if (op->file)
-	{
-	  g_free (op->file);
-	}
-      op->file = g_strdup (gtk_file_selection_get_filename 
-			   (GTK_FILE_SELECTION (dialog)));
+	g_free (op->file);
+      op->file = g_strdup (gtk_file_chooser_get_filename 
+			   (GTK_FILE_CHOOSER (dialog)));
     }
-  while (response != GTK_RESPONSE_CANCEL && 
-	 (op->fd = gpa_open_input 
-	  (op->file, source, GPA_OPERATION (op)->window)) == -1);
+  while (response == GTK_RESPONSE_OK
+	 && (op->fd = gpa_open_input 
+	     (op->file, source, GPA_OPERATION (op)->window)) == -1);
   gtk_widget_destroy (dialog);
 
   return (response == GTK_RESPONSE_OK);

@@ -1,5 +1,14 @@
 2008-03-18  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpgmetools.h (gpa_open_output_direct): New prototype.
+	* gpgmetools.c (gpa_open_output_direct): New function.
+	* gpaimportfileop.c (gpa_import_file_operation_get_source): Use
+	the GtkFileChooserDialog widget instead of GtkFileSelection.  Fix
+	loop logic.
+	* gpaexportfileop.c (gpa_export_file_operation_get_destination):
+	Likewise.  Use gpa_open_output_direct instead of
+	gpa_open_output.
+
 	* gpawidgets.c (gpa_expiry_frame_new): Replace editable GtkCombo
 	by uneditable GtkComboBox.
 	(gpa_expiry_frame_dont): Don't change the "after" widgets, just

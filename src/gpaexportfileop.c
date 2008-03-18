@@ -1,5 +1,6 @@
 /* gpaexportfileop.c - The GpaExportFileOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2003, Miguel Coca.
+ * Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -130,35 +131,44 @@ gpa_export_file_operation_get_destination (GpaExportOperation *operation,
 					   gboolean *armor)
 {
   GpaExportFileOperation *op = GPA_EXPORT_FILE_OPERATION (operation);
-  GtkWidget *dialog = gtk_file_selection_new (_("Export public keys to file"));
+  GtkWidget *dialog;
   GtkResponseType response;
+  GtkWidget *armor_check = NULL;
 
-  /* Customize the dialog, adding the "armor" option */
-  GtkWidget *armor_check = gtk_check_button_new_with_mnemonic (_("_armor"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (armor_check), *armor);
-  if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
+  dialog = gtk_file_chooser_dialog_new
+    (_("Export public keys to file"), GTK_WINDOW (GPA_OPERATION (op)->window),
+     GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+     GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog),
+						  TRUE);
+
+  /* Customize the dialog, adding the "armor" option.  */
+  if (! gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
-      GtkWidget *vbox = GTK_DIALOG (dialog)->vbox;
-      gtk_box_pack_start (GTK_BOX (vbox), armor_check, FALSE, FALSE, 0);
+      GtkWidget *armor_check;
+
+      armor_check = gtk_check_button_new_with_mnemonic (_("_armor"));
       gtk_widget_show_all (armor_check);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (armor_check), *armor);
+      gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog),
+					 armor_check);
     }
 
-  /* Run the dialog until there is a valid response */
+  /* Run the dialog until there is a valid response.  */
   do 
     {
       response = gtk_dialog_run (GTK_DIALOG (dialog));
-      /* Save the selected file, free'ing the previous value if required */
+      /* Save the selected file, free'ing the previous value if required.  */
       if (op->file)
-	{
-	  g_free (op->file);
-	}
-      op->file = g_strdup (gtk_file_selection_get_filename 
-			   (GTK_FILE_SELECTION (dialog)));
-      *armor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (armor_check));
+	g_free (op->file);
+      op->file = g_strdup (gtk_file_chooser_get_filename 
+			   (GTK_FILE_CHOOSER (dialog)));
+      *armor = (armor_check == NULL) ? TRUE
+	: gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (armor_check));
     }
-  while (response != GTK_RESPONSE_CANCEL && 
-	 (op->fd = gpa_open_output 
-	  (op->file, dest, GPA_OPERATION (op)->window)) == -1);
+  while (response == GTK_RESPONSE_OK
+	 && (op->fd = gpa_open_output_direct
+	     (op->file, dest, GPA_OPERATION (op)->window)) == -1);
   gtk_widget_destroy (dialog);
 
   return (response == GTK_RESPONSE_OK);

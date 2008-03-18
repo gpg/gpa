@@ -92,7 +92,9 @@ gpg_error_t gpa_gpgme_data_new_from_file (gpgme_data_t *data,
 
 /* Create a new gpgme_data_t from a file for writing, and return the
    file descriptor for the file.  Always reports all errors to the
-   user.  */
+   user.  The _direct variant does not check for overwriting.  */
+int gpa_open_output_direct (const char *filename, gpgme_data_t *data,
+			    GtkWidget *parent);
 int gpa_open_output (const char *filename, gpgme_data_t *data,
 		     GtkWidget *parent);
 

@@ -177,32 +177,39 @@ gpa_fopen (const char *filename, GtkWidget *parent)
 
 
 int
-gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
+gpa_open_output_direct (const char *filename, gpgme_data_t *data,
+			GtkWidget *parent)
 {
   int target = -1;
-  
-  if (check_overwriting (filename, parent))
-    {
-      gpg_error_t err;
+  gpg_error_t err;
 
-      target = g_open (filename,
-		       O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
-      if (target == -1)
-	{
-	  gchar *message;
-	  message = g_strdup_printf ("%s: %s", filename, strerror(errno));
-	  gpa_window_error (message, parent);
-	  g_free (message);
-	}
-      err = gpgme_data_new_from_fd (data, target);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  close (target);
-	  target = -1;
-	}
+  target = g_open (filename,
+		   O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
+  if (target == -1)
+    {
+      gchar *message;
+      message = g_strdup_printf ("%s: %s", filename, strerror(errno));
+      gpa_window_error (message, parent);
+      g_free (message);
+    }
+  err = gpgme_data_new_from_fd (data, target);
+  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+    {
+      close (target);
+      target = -1;
     }
 
   return target;
+}
+
+
+int
+gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
+{
+  if (! check_overwriting (filename, parent))
+    return -1;
+
+  return gpa_open_output_direct (filename, data, parent);
 }
 
 
