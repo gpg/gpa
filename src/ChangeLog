@@ -2,6 +2,10 @@
 
 	* gpawidgets.c (gpa_expiry_frame_new): Replace editable GtkCombo
 	by uneditable GtkComboBox.
+	(gpa_expiry_frame_dont): Don't change the "after" widgets, just
+	make them desensitive.
+	(gpa_expiry_frame_at): Likewise.
+	(gpa_expiry_frame_after): Likewise (except make them sensitive).
 
 	* gpawidgets.c (gpa_expiry_frame_new): Use
 	gtk_entry_set_width_chars instead of gtk_widget_set_size_request.

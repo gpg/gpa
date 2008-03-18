@@ -115,11 +115,11 @@ gpa_expiry_frame_dont (GtkToggleButton * radioDont, gpointer param)
 {
   GPAExpiryFrame * frame = (GPAExpiryFrame*)param;
 
-  if (!gtk_toggle_button_get_active (radioDont))
+  if (! gtk_toggle_button_get_active (radioDont))
     return;
-  gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "");
-  gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
-		      "days");
+
+  gtk_widget_set_sensitive (frame->entryAfter, FALSE);
+  gtk_widget_set_sensitive (frame->comboAfter, FALSE);
 }
 
 static void
@@ -129,15 +129,11 @@ gpa_expiry_frame_after (GtkToggleButton * radioAfter, gpointer param)
 
   if (!gtk_toggle_button_get_active (radioAfter))
     return;
-  if (frame->expiryDate)
-    {
-      gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "1"); /*!!! */
-      gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
-			  "days");
-    }
-  else
-    gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "1");
-  gtk_widget_grab_focus (frame->entryAfter);
+
+  gtk_widget_set_sensitive (frame->entryAfter, TRUE);
+  gtk_widget_set_sensitive (frame->comboAfter, TRUE);
+
+  gtk_widget_grab_focus (frame->entryAfter);  
 }
 
 
@@ -145,20 +141,12 @@ static void
 gpa_expiry_frame_at (GtkToggleButton * radioAt, gpointer param)
 {
   GPAExpiryFrame * frame = (GPAExpiryFrame*)param;
-  gchar *dateBuffer;
 
-  if (!gtk_toggle_button_get_active (radioAt))
+  if (! gtk_toggle_button_get_active (radioAt))
     return;
-  gtk_entry_set_text (GTK_ENTRY (frame->entryAfter), "");
-  if (frame->expiryDate)
-    {
-      struct tm tm;
-      g_date_to_struct_tm (frame->expiryDate, &tm);
-      dateBuffer = gpa_expiry_date_string (mktime (&tm));
-      gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (frame->comboAfter)->entry),
-			  "days");
-      g_free (dateBuffer);
-    }
+
+  gtk_widget_set_sensitive (frame->entryAfter, FALSE);
+  gtk_widget_set_sensitive (frame->comboAfter, FALSE);
 }
 
 static void
@@ -220,6 +208,9 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
 				gpa_unit_expiry_time_string (i));
   gtk_combo_box_set_active (GTK_COMBO_BOX (comboAfter), 0);
   gtk_box_pack_start (GTK_BOX (hboxAfter), comboAfter, FALSE, FALSE, 0);
+  gtk_widget_set_sensitive (entryAfter, FALSE);
+  gtk_widget_set_sensitive (comboAfter, FALSE);
+  /* FIXME: Set according to expiry date.  */
 
   radioAt = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radioDont),
 					      accelGroup, _("expire o_n:"));
@@ -234,7 +225,7 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   if (expiryDate)
     {
       gtk_calendar_select_month (GTK_CALENDAR (calendar),
-                                 g_date_get_month (expiryDate)-1,
+                                 g_date_get_month (expiryDate) - 1,
                                  g_date_get_year (expiryDate));
       gtk_calendar_select_day (GTK_CALENDAR (calendar),
                                g_date_get_day (expiryDate));
@@ -243,7 +234,10 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
     }
 
   if (expiryDate)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radioAt), TRUE);
+    {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radioAt), TRUE);
+      gtk_widget_set_sensitive (calendar, TRUE);
+    }
   else
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radioDont), TRUE);
   gtk_signal_connect (GTK_OBJECT (radioDont), "toggled",
@@ -279,7 +273,7 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(frame->radioAfter)))
     {
       *interval = atoi (gtk_entry_get_text (GTK_ENTRY(frame->entryAfter)));
-      temp = (gchar *) gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(frame->comboAfter)->entry));
+      temp = gtk_combo_box_get_active_text (GTK_COMBO_BOX (frame->comboAfter));
       *unit = gpa_time_unit_from_string (temp);
       *date = NULL;
       result = TRUE;
