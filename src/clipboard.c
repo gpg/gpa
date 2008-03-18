@@ -1,30 +1,25 @@
 /* clipboard.c  -  The GNU Privacy Assistant
- * Copyright (C) 2000, 2001 G-N-U GmbH.
- * Copyright (C) 2007, 2008 g10 Code GmbH
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
+   Copyright (C) 2000, 2001 G-N-U GmbH.
+   Copyright (C) 2007, 2008 g10 Code GmbH
 
-/*
- *	The file encryption/decryption/sign window
- */
+   This file is part of GPA
 
-#include <config.h>
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -109,9 +104,7 @@ static GObject *gpa_clipboard_constructor
                           GObjectConstructParam *construct_properties);
 
 
-/*
- * GtkWidget boilerplate.
- */
+/* GtkWidget boilerplate.  */
 static void
 gpa_clipboard_finalize (GObject *object)
 {  
@@ -189,8 +182,7 @@ has_selection (gpointer param)
 {
   GpaClipboard *clipboard = param;
 
-  return gtk_text_buffer_get_has_selection
-    (GTK_TEXT_BUFFER (clipboard->text_buffer));
+  return gtk_text_buffer_get_has_selection (clipboard->text_buffer);
 }
 
 
@@ -1000,6 +992,7 @@ clipboard_text_new (GpaClipboard *clipboard)
 
   clipboard->text_buffer
     = gtk_text_view_get_buffer (GTK_TEXT_VIEW (clipboard->text_view));
+  g_print ("text buffer: %p\n", clipboard->text_buffer);
 
 #ifndef MY_GTK_TEXT_BUFFER_NO_HAS_SELECTION
   /* A change in selection status causes a property change, which we
@@ -1068,6 +1061,11 @@ gpa_clipboard_constructor (GType type,
   /* Use a vbox to show the menu, toolbar and the text container.  */
   vbox = gtk_vbox_new (FALSE, 0);
 
+  /* We need to create the text_buffer before we create the menus and
+     the toolbar, because of widget sensitivity issues, which depend
+     on the selection status of the text_buffer.  */
+  text_frame = clipboard_text_new (clipboard);
+
   /* First comes the menu.  */
   menubar = clipboard_menu_new (clipboard);
   gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, TRUE, 0);
@@ -1103,10 +1101,8 @@ gpa_clipboard_constructor (GType type,
 			     pl + 5, pr + 5);
   gtk_box_pack_start (GTK_BOX (vbox), align, TRUE, TRUE, 0);
 
-  text_frame = clipboard_text_new (clipboard);
   gtk_box_pack_start (GTK_BOX (text_box), text_frame, TRUE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (align), text_box);
-  gtk_box_pack_end (GTK_BOX (vbox), align, TRUE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (clipboard), vbox);
 

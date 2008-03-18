@@ -1,3 +1,15 @@
+2008-03-19  Marcus Brinkmann  <marcus@g10code.de>
+
+	* clipboard.c (gpa_clipboard_constructor): Create text_frame
+	early.
+	(gpa_clipboard_constructor): Don't pack ALIGN twice.
+	(has_selection): Remove superfluous cast.
+	* gtktools.c (struct _GPASaveFileNameDialog): Removed.
+	(GPASaveFileNameDialog): Removed.
+	(file_dialog_ok, file_dialog_cancel, file_dialog_destroy):
+	Removed.
+	(gpa_get_save_file_name, gpa_get_load_file_name): Reimplemented.
+
 2008-03-18  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpgmetools.h (gpa_open_output_direct): New prototype.

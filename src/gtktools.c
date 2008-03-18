@@ -376,80 +376,59 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
 }				/* gpa_window_message */
 
 
-/*
- * Modal file dialog
- */
-
-struct _GPASaveFileNameDialog {
-  GtkWidget * window;
-  gchar * filename;
-};
-typedef struct _GPASaveFileNameDialog GPASaveFileNameDialog;
-
-static void
-file_dialog_ok (gpointer param)
-{
-  GPASaveFileNameDialog *dialog = param;
-
-  dialog->filename 
-      = (gchar *) gtk_file_selection_get_filename (GTK_FILE_SELECTION (dialog->window));
-  if( dialog->filename != NULL )
-	  dialog->filename = g_strdup (dialog->filename);
-
-  gtk_widget_destroy (dialog->window);
-}
-
-static void
-file_dialog_cancel (gpointer param)
-{
-  GPASaveFileNameDialog * dialog = param;
-  dialog->filename = NULL;
-  gtk_widget_destroy (dialog->window);
-}
-
-static void
-file_dialog_destroy (GtkWidget * widget, gpointer param)
-{
-  gtk_main_quit ();
-}
-
 /* Run the modal file selection dialog and return a new copy of the
- * filename if the user pressed OK and NULL otherwise
- */
+  filename if the user pressed OK and NULL otherwise.  */
 gchar *
-gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
-			const gchar * directory)
+gpa_get_save_file_name (GtkWidget *parent, const gchar *title,
+			const gchar *directory)
 {
-  GPASaveFileNameDialog dialog;
-  GtkWidget * window = gtk_file_selection_new (title);
+  GtkWidget *dialog;
+  GtkResponseType response;
+  gchar *filename = NULL;
 
-  dialog.window = window;
-  dialog.filename = NULL;
+  dialog = gtk_file_chooser_dialog_new
+    (title, parent, GTK_FILE_CHOOSER_ACTION_SAVE,
+     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+     GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+  
+  /* Run the dialog until there is a valid response.  */
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response == GTK_RESPONSE_OK)
+    {
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      if (filename)
+	filename = g_strdup (filename);
+    }
 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (file_dialog_destroy), NULL);
-
-  gtk_signal_connect_object (GTK_OBJECT(GTK_FILE_SELECTION(window)->ok_button),
-			     "clicked", GTK_SIGNAL_FUNC (file_dialog_ok),
-			     (gpointer) &dialog);
-  gtk_signal_connect_object (
-		      GTK_OBJECT (GTK_FILE_SELECTION (window)->cancel_button),
-		      "clicked", GTK_SIGNAL_FUNC (file_dialog_cancel),
-		      (gpointer) &dialog);
-
-  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-  gpa_window_show_centered (window, parent);
-
-  gtk_main ();
-
-  return dialog.filename;
+  gtk_widget_destroy (dialog);
+  return filename;
 }
 
+
 gchar *
-gpa_get_load_file_name (GtkWidget * parent, const gchar * title,
-			const gchar * directory)
+gpa_get_load_file_name (GtkWidget *parent, const gchar *title,
+			const gchar *directory)
 {
-  return gpa_get_save_file_name (parent, title, directory);
+  GtkWidget *dialog;
+  GtkResponseType response;
+  gchar *filename = NULL;
+
+  dialog = gtk_file_chooser_dialog_new
+    (title, parent, GTK_FILE_CHOOSER_ACTION_OPEN,
+     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+     GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+  
+  /* Run the dialog until there is a valid response.  */
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response == GTK_RESPONSE_OK)
+    {
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      if (filename)
+	filename = g_strdup (filename);
+    }
+
+  gtk_widget_destroy (dialog);
+  return filename;
 }
 
 
