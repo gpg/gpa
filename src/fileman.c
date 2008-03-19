@@ -1,30 +1,27 @@
 /* fileman.c  -  The GNU Privacy Assistant
- * Copyright (C) 2000, 2001 G-N-U GmbH.
- * Copyright (C) 2007, 2008 g10 Code GmbH
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
+   Copyright (C) 2000, 2001 G-N-U GmbH.
+   Copyright (C) 2007, 2008 g10 Code GmbH
 
-/*
- *	The file encryption/decryption/sign window
- */
+   This file is part of GPA.
 
-#include <config.h>
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+/* The file encryption/decryption/sign window.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -333,10 +330,41 @@ update_selection_sensitive_widgets (GpaFileManager *fileman)
 
 
 
-/* 
-   Actions as called by the menu items. 
+/* Actions as called by the menu items.  */
 
-*/
+
+static gchar *
+get_load_file_name (GtkWidget *parent, const gchar *title,
+		    const gchar *directory)
+{
+  static GtkWidget *dialog;
+  GtkResponseType response;
+  gchar *filename = NULL;
+
+  if (! dialog)
+    {
+      dialog = gtk_file_chooser_dialog_new
+	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_OPEN,
+	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+	 GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+    }
+  if (directory)
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), directory);
+  gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
+  
+  /* Run the dialog until there is a valid response.  */
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response == GTK_RESPONSE_OK)
+    {
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      if (filename)
+	filename = g_strdup (filename);
+    }
+
+  gtk_widget_hide (dialog);
+
+  return filename;
+}
 
 
 /* Handle menu item "File/Open".  */
@@ -346,17 +374,16 @@ open_file (gpointer param)
   GpaFileManager * fileman = param;
   gchar * filename;
 
-  filename = gpa_get_load_file_name (GTK_WIDGET (fileman),
-                                     _("Open File"), NULL);
-  if (filename)
-    {
+  filename = get_load_file_name (GTK_WIDGET (fileman), _("Open File"), NULL);
+  if (! filename)
+    return;
 
-      if (!add_file (fileman, filename))
-        gpa_window_error (_("The file is already open."),
-			    GTK_WIDGET (fileman));
-      g_free (filename);
-    }
+  if (! add_file (fileman, filename))
+    gpa_window_error (_("The file is already open."),
+		      GTK_WIDGET (fileman));
+  g_free (filename);
 }
+
 
 /* Handle menu item "File/Clear".  */
 static void
@@ -739,7 +766,7 @@ dnd_data_received_handler (GtkWidget *widget, GdkDragContext *context,
       /* Check that we got a format we can use.  */
       if (target_type == DND_TARGET_URI_LIST)
         {
-          char *p = selection_data->data;
+          char *p = (char *) selection_data->data;
           char **list;
           int i;
 
@@ -892,7 +919,6 @@ gpa_file_manager_constructor (GType type,
   file_frame = file_list_new (fileman);
   gtk_box_pack_start (GTK_BOX (file_box), file_frame, TRUE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (align), file_box);
-  gtk_box_pack_end (GTK_BOX (vbox), align, TRUE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (fileman), vbox);
 

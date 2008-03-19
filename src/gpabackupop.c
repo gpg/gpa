@@ -1,6 +1,6 @@
 /* gpabackupop.c - The GpaBackupOperation object.
    Copyright (C) 2003 Miguel Coca.
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2008 g10 Code GmbH.
 
    This file is part of GPA.
 
@@ -248,102 +248,53 @@ gpa_backup_operation_do_backup (GpaBackupOperation *op, gchar *filename)
     }
 }
 
-/* Handler for the browse button. Run a modal file dialog and set the
- * text of the file entry widget accordingly.
- */
-static void
-export_browse (gpointer param)
-{
-  GtkWidget *entry = param;
-  gchar *filename;
 
-  filename = gpa_get_save_file_name (entry, _("Backup key to file"), NULL);
-  if (filename)
-    {
-      gchar *utf8_filename = g_filename_to_utf8 (filename, -1, NULL, NULL, 
-						 NULL);
-      gtk_entry_set_text (GTK_ENTRY (entry),
-			  utf8_filename);
-      g_free (utf8_filename);
-      g_free (filename);
-    }
-} /* export_browse */
-
+/* Return the filename in filename encoding.  */
 static gchar*
 gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id)
 {
-  GtkAccelGroup *accel_group;
-
-  GtkWidget *window;
-  GtkWidget *vbox;
-  GtkWidget *table;
+  GtkWidget *dialog;
+  GtkResponseType response;
+  gchar *default_comp;
+  gchar *default_file;
+  gchar *id_text;
   GtkWidget *id_label;
-  GtkWidget *label;
-  GtkWidget *entry;
-  GtkWidget *button;
+  gchar *filename = NULL;
 
-  gchar *id_text, *default_file;
+  dialog = gtk_file_chooser_dialog_new
+    (_("Backup key to file"), GTK_WINDOW (parent),
+     GTK_FILE_CHOOSER_ACTION_SAVE,  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+     GTK_STOCK_SAVE, GTK_RESPONSE_OK, NULL);
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog),
+						  TRUE);
 
-  window = gtk_dialog_new_with_buttons (_("Backup Keys"),
-                                        GTK_WINDOW (parent),
-                                        GTK_DIALOG_MODAL,
-                                        GTK_STOCK_OK,
-                                        GTK_RESPONSE_OK,
-                                        _("_Cancel"),
-                                        GTK_RESPONSE_CANCEL,
-                                        NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_OK);
-  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  accel_group = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);  
+  /* Set the default file name.  */
+  default_comp = g_strdup_printf ("secret-key-%s.asc", key_id);
+  default_file = g_build_filename (g_get_home_dir (), default_comp, NULL);
+  g_free (default_comp);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
+				       g_get_home_dir ());
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), default_file);
+  g_free (default_file);
 
-  vbox = GTK_DIALOG (window)->vbox;
-  gtk_container_add (GTK_CONTAINER (window), vbox);
-
-  table = gtk_table_new (3, 2, FALSE);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 5);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 1, 2);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 2, 2);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
-
-  /* Show the ID */
+  /* Set the label with more explanations.  */
   id_text = g_strdup_printf (_("Generating backup of key: %s"), key_id);
   id_label = gtk_label_new (id_text);
-  gtk_table_attach (GTK_TABLE (table), id_label, 0, 3, 0, 1, GTK_FILL, 0, 0, 0);
   g_free (id_text);
+  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), id_label);
 
-  /* File name entry */
-  label = gtk_label_new_with_mnemonic (_("_Backup to file:"));
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
-
-  entry = gtk_entry_new ();
-  gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, 
-		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  default_file = g_build_filename (g_get_home_dir (), "sec_key.asc", NULL);
-  gtk_entry_set_text (GTK_ENTRY (entry), default_file);
-  g_free (default_file);
-  gtk_widget_grab_focus (entry);
-
-  button = gpa_button_new (accel_group, _("B_rowse..."));
-  gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2, GTK_FILL, 0, 0, 0);
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC (export_browse),
-			     (gpointer) entry);
-
-  gtk_widget_show_all (window);
-  if (gtk_dialog_run (GTK_DIALOG (window)) == GTK_RESPONSE_OK)
+  /* Run the dialog until there is a valid response.  */
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response == GTK_RESPONSE_OK)
     {
-      gchar *filename = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
-      gtk_widget_destroy (window);
-      return filename;
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      if (filename)
+	g_strdup (filename);
     }
-  else
-    {
-      gtk_widget_destroy (window);
-      return NULL;
-    }
+
+  gtk_widget_destroy (dialog);
+
+  return filename;
 }
 
 static gboolean

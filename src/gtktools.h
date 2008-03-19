@@ -55,11 +55,6 @@ void gpa_button_set_text (GtkWidget * button, gchar * text, GtkAccelGroup *);
 extern void gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent);
 extern void gpa_window_error (const gchar * message, GtkWidget * messenger);
 extern void gpa_window_message (gchar * message, GtkWidget * messenger);
-gchar * gpa_get_save_file_name (GtkWidget * parent, const gchar * title,
-				const gchar * directory);
-gchar * gpa_get_load_file_name (GtkWidget * parent, const gchar * title,
-				const gchar * directory);
-
 
 
 /* Set a tooltip TEXT to WIDGET.  TEXT and WIDGET may both be NULL.

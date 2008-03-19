@@ -318,6 +318,51 @@ file_clear (gpointer param)
 }
 
 
+/* The directory last visited by load or save operations.  */
+static gchar *last_directory;
+
+
+static gchar *
+get_load_file_name (GtkWidget *parent, const gchar *title)
+{
+  static GtkWidget *dialog;
+  GtkResponseType response;
+  gchar *filename = NULL;
+
+  if (! dialog)
+    {
+      dialog = gtk_file_chooser_dialog_new
+	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_OPEN,
+	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+	 GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+    }
+  if (last_directory)
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
+					 last_directory);
+  gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
+  
+  /* Run the dialog until there is a valid response.  */
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response == GTK_RESPONSE_OK)
+    {
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      if (filename)
+	filename = g_strdup (filename);
+    }
+
+  if (last_directory)
+    g_free (last_directory);
+  last_directory
+    = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
+  if (last_directory)
+    last_directory = g_strdup (last_directory);
+
+  gtk_widget_hide (dialog);
+
+  return filename;
+}
+
+
 /* Handle menu item "File/Open".  */
 static void
 file_open (gpointer param)
@@ -332,8 +377,7 @@ file_open (gpointer param)
   GError *err = NULL;
   const gchar *end;
 
-  filename = gpa_get_load_file_name (GTK_WIDGET (clipboard),
-                                     _("Open File"), NULL);
+  filename = get_load_file_name (GTK_WIDGET (clipboard), _("Open File"));
   if (! filename)
     return;
 
@@ -433,6 +477,58 @@ file_open (gpointer param)
 }
 
 
+/* Run the modal file selection dialog and return a new copy of the
+   filename if the user pressed OK and NULL otherwise.  */
+static gchar *
+get_save_file_name (GtkWidget *parent, const gchar *title)
+{
+  static GtkWidget *dialog;
+  GtkResponseType response;
+  gchar *filename = NULL;
+
+  if (! dialog)
+    {
+      dialog = gtk_file_chooser_dialog_new
+	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_SAVE,
+	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+	 GTK_STOCK_SAVE, GTK_RESPONSE_OK, NULL);
+      gtk_file_chooser_set_do_overwrite_confirmation
+	(GTK_FILE_CHOOSER (dialog), TRUE);
+    }
+  if (last_directory)
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
+					 last_directory);
+  gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
+  
+  /* Run the dialog until there is a valid response.  */
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response == GTK_RESPONSE_OK)
+    {
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      if (filename)
+	filename = g_strdup (filename);
+    }
+
+  if (last_directory)
+    g_free (last_directory);
+  last_directory
+    = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
+  if (last_directory)
+    last_directory = g_strdup (last_directory);
+
+  if (last_directory)
+    g_free (last_directory);
+  last_directory
+    = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
+  if (last_directory)
+    last_directory = g_strdup (last_directory);
+
+  gtk_widget_hide (dialog);
+
+  return filename;
+}
+
+
 /* Handle menu item "File/Save As...".  */
 static void
 file_save_as (gpointer param)
@@ -446,8 +542,7 @@ file_save_as (gpointer param)
   GtkTextIter begin;
   GtkTextIter end;
 
-  filename = gpa_get_save_file_name (GTK_WIDGET (clipboard),
-				     _("Save As..."), NULL);
+  filename = get_save_file_name (GTK_WIDGET (clipboard), _("Save As..."));
   if (! filename)
     return;
 
@@ -992,7 +1087,6 @@ clipboard_text_new (GpaClipboard *clipboard)
 
   clipboard->text_buffer
     = gtk_text_view_get_buffer (GTK_TEXT_VIEW (clipboard->text_view));
-  g_print ("text buffer: %p\n", clipboard->text_buffer);
 
 #ifndef MY_GTK_TEXT_BUFFER_NO_HAS_SELECTION
   /* A change in selection status causes a property change, which we

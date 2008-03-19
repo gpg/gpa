@@ -376,62 +376,6 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
 }				/* gpa_window_message */
 
 
-/* Run the modal file selection dialog and return a new copy of the
-  filename if the user pressed OK and NULL otherwise.  */
-gchar *
-gpa_get_save_file_name (GtkWidget *parent, const gchar *title,
-			const gchar *directory)
-{
-  GtkWidget *dialog;
-  GtkResponseType response;
-  gchar *filename = NULL;
-
-  dialog = gtk_file_chooser_dialog_new
-    (title, parent, GTK_FILE_CHOOSER_ACTION_SAVE,
-     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-     GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
-  
-  /* Run the dialog until there is a valid response.  */
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (response == GTK_RESPONSE_OK)
-    {
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      if (filename)
-	filename = g_strdup (filename);
-    }
-
-  gtk_widget_destroy (dialog);
-  return filename;
-}
-
-
-gchar *
-gpa_get_load_file_name (GtkWidget *parent, const gchar *title,
-			const gchar *directory)
-{
-  GtkWidget *dialog;
-  GtkResponseType response;
-  gchar *filename = NULL;
-
-  dialog = gtk_file_chooser_dialog_new
-    (title, parent, GTK_FILE_CHOOSER_ACTION_OPEN,
-     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-     GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
-  
-  /* Run the dialog until there is a valid response.  */
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (response == GTK_RESPONSE_OK)
-    {
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      if (filename)
-	filename = g_strdup (filename);
-    }
-
-  gtk_widget_destroy (dialog);
-  return filename;
-}
-
-
 /* END of old unchecked code (wk 2008-03-07) */
 
 

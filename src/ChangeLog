@@ -1,5 +1,22 @@
 2008-03-19  Marcus Brinkmann  <marcus@g10code.de>
 
+	* fileman.c (dnd_data_received_handler): Silence gcc warning.
+	* gpaexportfileop.c (gpa_export_file_operation_get_destination):
+	Use save button instead load button.
+	* gpabackupop.c (export_browse): Removed.
+	(gpa_backup_operation_dialog_run): Rewritten.
+	* fileman.c (get_load_file_name): New function.
+	(open_file): Use it.
+	(gpa_file_manager_constructor): Don't pack ALIGN twice.
+	* clipboard.c (get_load_file_name): New function.
+	(file_open): Use it.
+	(get_save_file_name): New function.
+	(file_save_as): Use it.
+	* gtktools.h (gpa_get_save_file_name, gpa_get_load_file_name):
+	Removed prototypes.
+	* gtktools.c (gpa_get_save_file_name, gpa_get_load_file_name):
+	Removed.
+
 	* clipboard.c (gpa_clipboard_constructor): Create text_frame
 	early.
 	(gpa_clipboard_constructor): Don't pack ALIGN twice.
