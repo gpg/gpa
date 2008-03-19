@@ -1,5 +1,10 @@
 2008-03-19  Marcus Brinkmann  <marcus@g10code.de>
 
+	Reenable default key and keyserver handling:
+	* options.c (gpa_options_update_default_key): Remove work-around.
+	* gpgmetools.c (gpa_gpgme_new): Remove work-around
+	* gpa.c (main): Remove work-around.
+
 	* fileman.c (open_file): Support opening more than one file.
 	(get_load_file_name): Likewise.
 	(add_file): Convert filenames to UTF-8 before comparison, fix tree

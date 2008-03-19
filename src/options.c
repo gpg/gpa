@@ -302,14 +302,10 @@ gpa_options_update_default_key (GpaOptions *options)
 {
   gboolean update = FALSE;
   gpgme_key_t key = NULL;
-  gpgme_ctx_t ctx /*= gpa_gpgme_new ()*/;
+  gpgme_ctx_t ctx = gpa_gpgme_new ();
 
-  return;
-
-  if (!options->default_key_fpr)
-    {
-      update = TRUE;
-    }
+  if (! options->default_key_fpr)
+    update = TRUE;
   else if (gpg_err_code (gpgme_get_key (ctx, options->default_key_fpr, 
 					&key, TRUE)) == GPG_ERR_EOF)
     {
@@ -324,13 +320,9 @@ gpa_options_update_default_key (GpaOptions *options)
       /* Use the listed key if there is no previous one (at initialization).
        */
       if (!options->default_key)
-	{
-	  options->default_key = key;
-	}
+	options->default_key = key;
       else
-	{
-	  gpgme_key_unref (key);
-	}
+	gpgme_key_unref (key);
     }
 
   if (update)
@@ -338,9 +330,7 @@ gpa_options_update_default_key (GpaOptions *options)
       key = determine_default_key ();
       gpa_options_set_default_key (options, key);
       if (key)
-	{
-	  gpgme_key_unref (key);
-	}
+	gpgme_key_unref (key);
     }
 
   gpgme_release (ctx);

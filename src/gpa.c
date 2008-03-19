@@ -400,17 +400,15 @@ main (int argc, char *argv[])
   /* Read the list of available keyservers.  */
   keyserver_read_list (keyservers_configname);
 
-#if 0
+  gpa_options_update_default_key (gpa_options_get_instance ());
   /* Now, make sure there are reasonable defaults for the default key
     and keyserver.  */
-  gpa_options_update_default_key (gpa_options_get_instance ());
   if (!gpa_options_get_default_keyserver (gpa_options_get_instance ()))
     {
       GList *keyservers = keyserver_get_as_glist ();
       gpa_options_set_default_keyserver (gpa_options_get_instance (),
 					 keyservers->data);
     }
-#endif
 
   /* Fire up the server.  */
   gpa_start_server ();
