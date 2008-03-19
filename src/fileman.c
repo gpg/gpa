@@ -211,44 +211,50 @@ get_selected_files (GtkWidget *list)
 
 /* Add file FILENAME to the file list of FILEMAN and select it */
 static gboolean
-add_file (GpaFileManager *fileman, const char *filename)
+add_file (GpaFileManager *fileman, const gchar *filename)
 {
   GtkListStore *store;
   GtkTreeIter iter;
   GtkTreePath *path;
   GtkTreeSelection *select;
+  gchar *filename_utf8;
+
+  /* The tree contains filenames in the UTF-8 encoding.  */
+  filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL),
 
   store = GTK_LIST_STORE (gtk_tree_view_get_model
                           (GTK_TREE_VIEW (fileman->list_files)));
-  select = gtk_tree_view_get_selection (GTK_TREE_VIEW (fileman->list_files));
 
   /* Check for duplicates. */
   path = gtk_tree_path_new_first ();
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
-  while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter))
-    {
-      gchar *tmp;
-      gboolean exists;
-
-      gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, FILE_NAME_COLUMN,
-			  &tmp, -1);
-      exists = g_str_equal (filename, tmp);
-      g_free (tmp);
-      if (exists)
-        return FALSE; /* This file is already in our list.  */
-    }
+  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path))
+    do
+      {
+	gchar *tmp;
+	gboolean exists;
+	
+	gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, FILE_NAME_COLUMN,
+			    &tmp, -1);
+	exists = g_str_equal (filename_utf8, tmp);
+	g_free (tmp);
+	if (exists)
+	  {
+	    g_free (filename_utf8);
+	    gtk_tree_path_free (path);
+	    return FALSE; /* This file is already in our list.  */
+	  }
+      }
+    while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
   gtk_tree_path_free (path);
 
   /* Append it to our list.  */
   gtk_list_store_append (store, &iter);
 
   /* FIXME: Add the file status when/if gpgme supports it */
-  gtk_list_store_set (store, &iter,
-                      FILE_NAME_COLUMN,
-		      g_filename_to_utf8 (filename, -1, NULL, NULL, NULL),
-		      -1);
+  gtk_list_store_set (store, &iter, FILE_NAME_COLUMN, filename_utf8, -1);
   
   /* Select the row */
+  select = gtk_tree_view_get_selection (GTK_TREE_VIEW (fileman->list_files));
   gtk_tree_selection_select_iter (select, &iter);
 
   return TRUE;
@@ -333,13 +339,13 @@ update_selection_sensitive_widgets (GpaFileManager *fileman)
 /* Actions as called by the menu items.  */
 
 
-static gchar *
+static GSList *
 get_load_file_name (GtkWidget *parent, const gchar *title,
 		    const gchar *directory)
 {
   static GtkWidget *dialog;
   GtkResponseType response;
-  gchar *filename = NULL;
+  GSList *filenames = NULL;
 
   if (! dialog)
     {
@@ -347,6 +353,7 @@ get_load_file_name (GtkWidget *parent, const gchar *title,
 	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_OPEN,
 	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 	 GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+      gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (dialog), TRUE);
     }
   if (directory)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), directory);
@@ -355,33 +362,39 @@ get_load_file_name (GtkWidget *parent, const gchar *title,
   /* Run the dialog until there is a valid response.  */
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   if (response == GTK_RESPONSE_OK)
-    {
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      if (filename)
-	filename = g_strdup (filename);
-    }
+    filenames = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (dialog));
 
   gtk_widget_hide (dialog);
 
-  return filename;
+  return filenames;
 }
 
 
 /* Handle menu item "File/Open".  */
+
+void
+open_file_one (gpointer data, gpointer user_data)
+{
+  GpaFileManager *fileman = user_data;
+  gchar *filename = (gchar *) data;
+
+  /* FIXME: We are ignoring errors here.  */
+  add_file (fileman, filename);
+  g_free (filename);
+}
+
 static void
 open_file (gpointer param)
 {
-  GpaFileManager * fileman = param;
-  gchar * filename;
+  GpaFileManager *fileman = param;
+  GSList *filenames;
 
-  filename = get_load_file_name (GTK_WIDGET (fileman), _("Open File"), NULL);
-  if (! filename)
+  filenames = get_load_file_name (GTK_WIDGET (fileman), _("Open File"), NULL);
+  if (! filenames)
     return;
 
-  if (! add_file (fileman, filename))
-    gpa_window_error (_("The file is already open."),
-		      GTK_WIDGET (fileman));
-  g_free (filename);
+  g_slist_foreach (filenames, open_file_one, fileman);
+  g_slist_free (filenames);
 }
 
 

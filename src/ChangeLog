@@ -1,5 +1,10 @@
 2008-03-19  Marcus Brinkmann  <marcus@g10code.de>
 
+	* fileman.c (open_file): Support opening more than one file.
+	(get_load_file_name): Likewise.
+	(add_file): Convert filenames to UTF-8 before comparison, fix tree
+	iteration.
+
 	* fileman.c (dnd_data_received_handler): Silence gcc warning.
 	* gpaexportfileop.c (gpa_export_file_operation_get_destination):
 	Use save button instead load button.
