@@ -68,4 +68,15 @@ In no particular order:
    that the user has no private key.  But the user can have a private key.
    Either fix the message or the check.
 ** The keyserver setting should remember the strings entered by the user.
-
+** In the expiration widget, the expire after and the calender widgets should
+   be synchronized.
+** Confirm generation of key pair by popping up a dialog, or convert
+   the progress meter to a dialog that needs to be OK'ed.
+** When doing signing etc operations, gpa keylist should filter out expired
+   and otherwise unusable keys.  When an operation fails (due to bad
+   key, for example), GPA creates a signature of zero bytes and shows
+   a window with a hung progress bar and a greyed cancel button that
+   is not sensitive.
+** When a file in the file manager is deleted, and one tries to encrypt it,
+   GPA gives an untranslated error (mingw C lib syserr) and then shows
+   an empty window with just a close button (Urgs!).
