@@ -335,6 +335,7 @@ get_load_file_name (GtkWidget *parent, const gchar *title)
 	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_OPEN,
 	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 	 GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     }
   if (last_directory)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
@@ -492,6 +493,7 @@ get_save_file_name (GtkWidget *parent, const gchar *title)
 	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_SAVE,
 	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 	 GTK_STOCK_SAVE, GTK_RESPONSE_OK, NULL);
+      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
       gtk_file_chooser_set_do_overwrite_confirmation
 	(GTK_FILE_CHOOSER (dialog), TRUE);
     }

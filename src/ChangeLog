@@ -1,5 +1,13 @@
 2008-03-19  Marcus Brinkmann  <marcus@g10code.de>
 
+	* fileman.c (get_load_file_name): Set default response.
+	* clipboard.c (get_save_file_name, get_load_file_name): Set
+	default response.
+	* gpabackupop.c (gpa_backup_operation_dialog_run): Remember last
+	dialog window settings.  Set default response.
+	(gpa_backup_operation_do_backup): Remove overwrite check (done by
+	caller).
+
 	Reenable default key and keyserver handling:
 	* options.c (gpa_options_update_default_key): Remove work-around.
 	* gpgmetools.c (gpa_gpgme_new): Remove work-around

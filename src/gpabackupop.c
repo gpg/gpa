@@ -202,49 +202,27 @@ gpa_backup_operation_get_type (void)
 static void
 gpa_backup_operation_do_backup (GpaBackupOperation *op, gchar *filename)
 {
-  gboolean cancelled = FALSE;
-  
-  if (g_file_test (filename, (G_FILE_TEST_EXISTS)))
+  if (gpa_backup_key (op->fpr, filename))
     {
-      GtkWidget *msgbox = 
-	gtk_message_dialog_new (GTK_WINDOW (GPA_OPERATION (op)->window), 
-				GTK_DIALOG_MODAL,
-				GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
-				_("The file %s already exists.\n"
-				  "Do you want to overwrite it?"), filename);
-      gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
-                              _("_Yes"), GTK_RESPONSE_YES,
-                              _("_No"), GTK_RESPONSE_NO, NULL);
-      if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
-        {
-          cancelled = TRUE;
-        }
-      gtk_widget_destroy (msgbox);
+      gchar *message;
+      message = g_strdup_printf (_("A copy of your secret key has "
+				   "been made to the file:\n\n"
+				   "\t\"%s\"\n\n"
+				   "This is sensitive information, "
+				   "and should be stored carefully\n"
+				   "(for example, in a floppy disk "
+				   "kept in a safe place)."),
+				 filename);
+      gpa_window_message (message, GPA_OPERATION (op)->window);
+      g_free (message);
+      gpa_options_set_backup_generated (gpa_options_get_instance (),
+					TRUE);
     }
-  if (!cancelled)
+  else
     {
-      if (gpa_backup_key (op->fpr, filename))
-        {
-          gchar *message;
-	      message = g_strdup_printf (_("A copy of your secret key has "
-					   "been made to the file:\n\n"
-					   "\t\"%s\"\n\n"
-					   "This is sensitive information, "
-					   "and should be stored carefully\n"
-					   "(for example, in a floppy disk "
-					   "kept in a safe place)."),
-					 filename);
-	      gpa_window_message (message, GPA_OPERATION (op)->window);
-	      g_free (message);
-	      gpa_options_set_backup_generated (gpa_options_get_instance (),
-						TRUE);
-        }
-      else
-	{
-	  gchar *message = g_strdup_printf (_("An error ocurred during the "
-					      "backup operation."));
-	  gpa_window_error (message, GPA_OPERATION (op)->window);
-	}
+      gchar *message = g_strdup_printf (_("An error ocurred during the "
+					  "backup operation."));
+      gpa_window_error (message, GPA_OPERATION (op)->window);
     }
 }
 
@@ -253,37 +231,38 @@ gpa_backup_operation_do_backup (GpaBackupOperation *op, gchar *filename)
 static gchar*
 gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id)
 {
-  GtkWidget *dialog;
+  static GtkWidget *dialog;
   GtkResponseType response;
   gchar *default_comp;
-  gchar *default_file;
-  gchar *id_text;
-  GtkWidget *id_label;
   gchar *filename = NULL;
 
-  dialog = gtk_file_chooser_dialog_new
-    (_("Backup key to file"), GTK_WINDOW (parent),
-     GTK_FILE_CHOOSER_ACTION_SAVE,  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-     GTK_STOCK_SAVE, GTK_RESPONSE_OK, NULL);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog),
-						  TRUE);
+  if (! dialog)
+    {
+      gchar *id_text;
+      GtkWidget *id_label;
+
+      dialog = gtk_file_chooser_dialog_new
+	(_("Backup key to file"), GTK_WINDOW (parent),
+	 GTK_FILE_CHOOSER_ACTION_SAVE,  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+	 GTK_STOCK_SAVE, GTK_RESPONSE_OK, NULL);
+      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+      gtk_file_chooser_set_do_overwrite_confirmation
+	(GTK_FILE_CHOOSER (dialog), TRUE);
+      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
+					   g_get_home_dir ());
+
+      /* Set the label with more explanations.  */
+      id_text = g_strdup_printf (_("Generating backup of key: %s"), key_id);
+      id_label = gtk_label_new (id_text);
+      g_free (id_text);
+      gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), id_label);
+    }
 
   /* Set the default file name.  */
   default_comp = g_strdup_printf ("secret-key-%s.asc", key_id);
-  default_file = g_build_filename (g_get_home_dir (), default_comp, NULL);
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), default_comp);
   g_free (default_comp);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
-				       g_get_home_dir ());
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), default_file);
-  g_free (default_file);
 
-  /* Set the label with more explanations.  */
-  id_text = g_strdup_printf (_("Generating backup of key: %s"), key_id);
-  id_label = gtk_label_new (id_text);
-  g_free (id_text);
-  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), id_label);
-
-  /* Run the dialog until there is a valid response.  */
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   if (response == GTK_RESPONSE_OK)
     {
@@ -292,7 +271,7 @@ gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id)
 	g_strdup (filename);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_widget_hide (dialog);
 
   return filename;
 }
@@ -305,9 +284,7 @@ gpa_backup_operation_idle_cb (gpointer data)
 
   if ((file = gpa_backup_operation_dialog_run (GPA_OPERATION (op)->window,
 					       op->key_id)))
-    {
-      gpa_backup_operation_do_backup (op, file);
-    }
+    gpa_backup_operation_do_backup (op, file);
   
   g_signal_emit_by_name (GPA_OPERATION (op), "completed");
 

@@ -353,6 +353,7 @@ get_load_file_name (GtkWidget *parent, const gchar *title,
 	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_OPEN,
 	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 	 GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
       gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (dialog), TRUE);
     }
   if (directory)
