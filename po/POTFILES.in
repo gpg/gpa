@@ -31,7 +31,6 @@ src/gpakeypasswdop.c
 src/gpakeyselector.c
 src/gpakeysignop.c
 src/gpakeytrustop.c
-src/gpa_license.c
 src/gpaoperation.c
 src/gpapastrings.c
 src/gpaprogressdlg.c

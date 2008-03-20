@@ -1,3 +1,9 @@
+2008-03-20  Marcus Brinkmann  <marcus@g10code.de>
+
+	* ar.po, es.po, fr.po, ru.po: Updates from Alberto
+	Escudero-Pascual.
+	* POTFILES.in: Remove src/gpa_license.c.
+
 2008-03-12  Werner Koch  <wk@g10code.com>
 
 	* ru.po, fr.po, ar.po, es.po: Fixed fuzzies for command line options.

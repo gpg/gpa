@@ -6,310 +6,312 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.8\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-03-12 12:29+0100\n"
-"PO-Revision-Date: 2008-03-12 12:34+0100\n"
-"Last-Translator: CJ <cj@neocaching.ru>\n"
+"POT-Creation-Date: 2008-03-20 22:28+0100\n"
+"PO-Revision-Date: 2008-03-18 20:12+0300\n"
+"Last-Translator: Sergei Smirnov <moscow@hro.org>\n"
 "Language-Team: Russian <moscow@hro.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
 
-#: src/clipboard.c:367 src/fileman.c:350
+#: src/clipboard.c:381 src/fileman.c:393
 msgid "Open File"
 msgstr "Открыть файл"
 
-#: src/clipboard.c:395 src/confdialog.c:1266 src/gtktools.c:353
+#: src/clipboard.c:409 src/confdialog.c:1266 src/gtktools.c:353
 msgid "GPA Message"
 msgstr "Сообщение GPA"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#: src/clipboard.c:412
-#, fuzzy, c-format
+#: src/clipboard.c:426
+#, c-format
 msgid "The file %s is %lli%s large.  Do you really  want to open it?"
-msgstr "Файл %s %lli%s большой. Действительно хотите его открыть?"
+msgstr "Файл %s очень (%lli%s) велик. Действительно хотите его открыть?"
 
-#: src/clipboard.c:481
+#: src/clipboard.c:547
 msgid "Save As..."
 msgstr "Сохранить как..."
 
-#: src/clipboard.c:522 src/clipboard.c:552 src/clipboard.c:582
-#: src/clipboard.c:612 src/clipboard.c:1113 src/fileman.c:675
+#: src/clipboard.c:588 src/clipboard.c:618 src/clipboard.c:648
+#: src/clipboard.c:678 src/clipboard.c:1184 src/fileman.c:716
 #: src/keyring.c:1657
 msgid "Clipboard"
 msgstr "Буфер"
 
-#: src/clipboard.c:692 src/fileman.c:472 src/keyring.c:863
+#: src/clipboard.c:758 src/fileman.c:513 src/keyring.c:863
 msgid "/_File"
 msgstr "/_Файл"
 
-#: src/clipboard.c:693 src/fileman.c:474
+#: src/clipboard.c:759 src/fileman.c:515
 msgid "/File/C_lear"
 msgstr "/Файл/О_чистить"
 
-#: src/clipboard.c:694 src/fileman.c:473
+#: src/clipboard.c:760 src/fileman.c:514
 msgid "/File/_Open"
 msgstr "/Файл/_Открыть"
 
-#: src/clipboard.c:695
+#: src/clipboard.c:761
 msgid "/File/Save _As"
 msgstr "/Файл/Со_хранить как"
 
-#: src/clipboard.c:697 src/fileman.c:475
+#: src/clipboard.c:763 src/fileman.c:516
 msgid "/File/sep1"
 msgstr "/Файл/sep1"
 
-#: src/clipboard.c:698 src/fileman.c:476
+#: src/clipboard.c:764 src/fileman.c:517
 msgid "/File/_Sign"
 msgstr "/Файл/_Подписать"
 
-#: src/clipboard.c:699 src/fileman.c:477
+#: src/clipboard.c:765 src/fileman.c:518
 msgid "/File/_Verify"
 msgstr "/Файл/Пров_ерить"
 
-#: src/clipboard.c:700 src/fileman.c:478
+#: src/clipboard.c:766 src/fileman.c:519
 msgid "/File/_Encrypt"
 msgstr "/Файл/_Зашифровать"
 
-#: src/clipboard.c:701 src/fileman.c:479
+#: src/clipboard.c:767 src/fileman.c:520
 msgid "/File/_Decrypt"
 msgstr "/Файл/_Расшифровать"
 
-#: src/clipboard.c:702 src/fileman.c:480
+#: src/clipboard.c:768 src/fileman.c:521
 msgid "/File/sep2"
 msgstr "/Файл/sep2"
 
-#: src/clipboard.c:703 src/fileman.c:481 src/keyring.c:864
+#: src/clipboard.c:769 src/fileman.c:522 src/keyring.c:864
 msgid "/File/_Close"
 msgstr "/Файл/За_крыть"
 
-#: src/clipboard.c:704 src/fileman.c:482 src/keyring.c:866
+#: src/clipboard.c:770 src/fileman.c:523 src/keyring.c:866
 msgid "/File/_Quit"
 msgstr "/Файл/_Выйти"
 
-#: src/clipboard.c:707 src/fileman.c:485 src/keyring.c:869
+#: src/clipboard.c:773 src/fileman.c:526 src/keyring.c:869
 msgid "/_Edit"
 msgstr "/_Правка"
 
-#: src/clipboard.c:710
+#: src/clipboard.c:776
 msgid "/Edit/_Undo"
 msgstr "/Правка/_Отменить"
 
-#: src/clipboard.c:711
+#: src/clipboard.c:777
 msgid "/Edit/_Redo"
 msgstr "/Правка/В_ернуть"
 
-#: src/clipboard.c:712
+#: src/clipboard.c:778
 msgid "/Edit/sep0"
 msgstr "/Edit/sep0"
 
-#: src/clipboard.c:714 src/clipboard.c:750
+#: src/clipboard.c:780 src/clipboard.c:816
 msgid "/Edit/Cut"
 msgstr "/Правка/Вырезать"
 
-#: src/clipboard.c:715 src/keyring.c:870
+#: src/clipboard.c:781 src/keyring.c:870
 msgid "/Edit/_Copy"
 msgstr "/Правка/_Копировать"
 
-#: src/clipboard.c:716 src/keyring.c:872
+#: src/clipboard.c:782 src/keyring.c:872
 msgid "/Edit/_Paste"
 msgstr "/Правка/_Вставить"
 
-#: src/clipboard.c:717
+#: src/clipboard.c:783
 msgid "/Edit/_Delete"
 msgstr "/Правка/_Удалить"
 
-#: src/clipboard.c:718 src/keyring.c:874
+#: src/clipboard.c:784 src/keyring.c:874
 msgid "/Edit/sep1"
 msgstr "/Правка/sep1"
 
-#: src/clipboard.c:719 src/fileman.c:486 src/keyring.c:875
+#: src/clipboard.c:785 src/fileman.c:527 src/keyring.c:875
 msgid "/Edit/Select _All"
 msgstr "/Правка/Вы_брать все"
 
-#: src/clipboard.c:721 src/fileman.c:487 src/keyring.c:876
+#: src/clipboard.c:787 src/fileman.c:528 src/keyring.c:876
 msgid "/Edit/sep2"
 msgstr "/Правка/sep2"
 
-#: src/clipboard.c:722 src/fileman.c:488 src/keyring.c:877
+#: src/clipboard.c:788 src/fileman.c:529 src/keyring.c:877
 msgid "/Edit/Pr_eferences..."
 msgstr "/Правка/_Настройки..."
 
-#: src/clipboard.c:724 src/fileman.c:490 src/keyring.c:879
+#: src/clipboard.c:790 src/fileman.c:531 src/keyring.c:879
 msgid "/Edit/_Backend Preferences..."
 msgstr "/Правка/Настройки _шифр. программы..."
 
-#: src/clipboard.c:728 src/fileman.c:494 src/keyring.c:906
+#: src/clipboard.c:794 src/fileman.c:535 src/keyring.c:906
 msgid "/_Windows"
 msgstr "/_Окно"
 
-#: src/clipboard.c:729 src/fileman.c:495 src/keyring.c:907
+#: src/clipboard.c:795 src/fileman.c:536 src/keyring.c:907
 msgid "/Windows/_Keyring Editor"
 msgstr "/Окно/Менеджер _ключей"
 
-#: src/clipboard.c:730 src/fileman.c:496
+#: src/clipboard.c:796 src/fileman.c:537
 msgid "/Windows/_Filemanager"
 msgstr "/Окно/Менеджер _файлов"
 
-#: src/clipboard.c:731 src/fileman.c:497 src/keyring.c:909
+#: src/clipboard.c:797 src/fileman.c:538 src/keyring.c:909
 msgid "/Windows/_Clipboard"
 msgstr "/Окно/_Буфер"
 
-#: src/clipboard.c:758 src/keyring.c:948
+#: src/clipboard.c:824 src/keyring.c:948
 msgid "/Edit/Copy"
 msgstr "/Правка/_Копировать"
 
-#: src/clipboard.c:766
+#: src/clipboard.c:832
 msgid "/Edit/Delete"
 msgstr "/Правка/_Удалить"
 
-#: src/clipboard.c:774
+#: src/clipboard.c:840
 msgid "/Edit/Paste"
 msgstr "/Правка/_Вставить"
 
-#: src/clipboard.c:879
+#: src/clipboard.c:945
 msgid "Clear buffer"
 msgstr "Очистить буфер"
 
-#: src/clipboard.c:879
+#: src/clipboard.c:945
 msgid "clear buffer"
 msgstr "очистить буфер"
 
-#: src/clipboard.c:887 src/fileman.c:602
+#: src/clipboard.c:953 src/fileman.c:643
 msgid "Open a file"
 msgstr "Открыть файл"
 
-#: src/clipboard.c:887 src/fileman.c:602
+#: src/clipboard.c:953 src/fileman.c:643
 msgid "open file"
 msgstr "открыть файл"
 
-#: src/clipboard.c:892
+#: src/clipboard.c:958
 msgid "Save to a file"
 msgstr "Сохранить в файле"
 
-#: src/clipboard.c:892
+#: src/clipboard.c:958
 msgid "save file as"
 msgstr "сохранить файл как"
 
-#: src/clipboard.c:900
+#: src/clipboard.c:966
 msgid "Cut the selection"
 msgstr "Вырезать выделенное в буфер"
 
-#: src/clipboard.c:901
+#: src/clipboard.c:967
 msgid "cut the selection"
 msgstr "вырезать выделенное в буфер"
 
-#: src/clipboard.c:907
+#: src/clipboard.c:973
 msgid "Copy the selection"
 msgstr "Копировать выделенное в буфер"
 
-#: src/clipboard.c:908
+#: src/clipboard.c:974
 msgid "copy the selection"
 msgstr "копировать выделенное в буфер"
 
-#: src/clipboard.c:914
+#: src/clipboard.c:980
 msgid "Paste the clipboard"
 msgstr "Вставить из буфера"
 
-#: src/clipboard.c:915
+#: src/clipboard.c:981
 msgid "paste the clipboard"
 msgstr "вставить из буфера"
 
-#: src/clipboard.c:925 src/fileman.c:612 src/keyring.c:1570
+#: src/clipboard.c:991 src/fileman.c:653 src/keyring.c:1570
 msgid "Sign"
 msgstr "Подписать"
 
-#: src/clipboard.c:926
+#: src/clipboard.c:992
 msgid "Sign the selected text"
 msgstr "Подписать выбранный текст"
 
-#: src/clipboard.c:927
+#: src/clipboard.c:993
 msgid "sign text"
 msgstr "подписать текст"
 
-#: src/clipboard.c:935 src/fileman.c:623
+#: src/clipboard.c:1001 src/fileman.c:664
 msgid "Verify"
 msgstr "Проверить"
 
-#: src/clipboard.c:936
+#: src/clipboard.c:1002
 msgid "Check signatures of selected text"
 msgstr "Проверить подпись выбранного текста"
 
-#: src/clipboard.c:937
+#: src/clipboard.c:1003
 msgid "verify text"
 msgstr "проверить текст"
 
-#: src/clipboard.c:945 src/fileman.c:634
+#: src/clipboard.c:1011 src/fileman.c:675
 msgid "Encrypt"
 msgstr "Зашифровать"
 
-#: src/clipboard.c:946
+#: src/clipboard.c:1012
 msgid "Encrypt the selected text"
 msgstr "Зашифровать выбранный текст"
 
-#: src/clipboard.c:947
+#: src/clipboard.c:1013
 msgid "encrypt text"
 msgstr "зашифровать текст"
 
-#: src/clipboard.c:955 src/fileman.c:645
+#: src/clipboard.c:1021 src/fileman.c:686
 msgid "Decrypt"
 msgstr "Расшифровать"
 
-#: src/clipboard.c:956
+#: src/clipboard.c:1022
 msgid "Decrypt the selected text"
 msgstr "Расшифровать выбранный текст"
 
-#: src/clipboard.c:957
+#: src/clipboard.c:1023
 msgid "decrypt text"
 msgstr "расшифровать текст"
 
-#: src/clipboard.c:967 src/fileman.c:658 src/keyring.c:1631
+#: src/clipboard.c:1033 src/fileman.c:699 src/keyring.c:1631
 msgid "Open the preferences dialog"
 msgstr "Открыть окно настроек"
 
-#: src/clipboard.c:968 src/fileman.c:659 src/keyring.c:1632
+#: src/clipboard.c:1034 src/fileman.c:700 src/keyring.c:1632
 msgid "preferences"
 msgstr "предпочтения"
 
-#: src/clipboard.c:975 src/fileman.c:666
+#: src/clipboard.c:1041 src/fileman.c:707
 msgid "Keyring"
-msgstr "Связка ключей"
+msgstr "Ключи"
 
-#: src/clipboard.c:976 src/fileman.c:667
+#: src/clipboard.c:1042 src/fileman.c:708
 msgid "Open the keyring editor"
 msgstr "Открыть менеджер ключей"
 
-#: src/clipboard.c:977 src/fileman.c:668
+#: src/clipboard.c:1043 src/fileman.c:709
 msgid "keyring editor"
 msgstr "менеджер ключей"
 
-#: src/clipboard.c:983 src/keyring.c:1648
+#: src/clipboard.c:1049 src/keyring.c:1648
 msgid "Files"
 msgstr "Файлы"
 
-#: src/clipboard.c:984 src/keyring.c:1649
+#: src/clipboard.c:1050 src/keyring.c:1649
 msgid "Open the file manager"
 msgstr "Открыть менеджер файлов"
 
-#: src/clipboard.c:985 src/keyring.c:1650
+#: src/clipboard.c:1051 src/keyring.c:1650
 msgid "file manager"
 msgstr "менеджер файлов"
 
-#: src/clipboard.c:992 src/fileman.c:684 src/keyring.c:1665
+#: src/clipboard.c:1058 src/fileman.c:725 src/keyring.c:1665
 msgid "Help"
 msgstr "Справка"
 
-#: src/clipboard.c:993 src/fileman.c:685 src/keyring.c:1666
+#: src/clipboard.c:1059 src/fileman.c:726 src/keyring.c:1666
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "Как работает GNU Privacy Assistant"
 
-#: src/clipboard.c:994 src/fileman.c:686 src/keyring.c:1667
+#: src/clipboard.c:1060 src/fileman.c:727 src/keyring.c:1667
 msgid "help"
 msgstr "справка"
 
-#: src/clipboard.c:1084
+#: src/clipboard.c:1150
 msgid "GNU Privacy Assistant - Clipboard"
 msgstr "GNU Privacy Assistant - Буфер"
 
@@ -378,9 +380,9 @@ msgid "Expert"
 msgstr "Экспертный"
 
 #: src/encryptdlg.c:142 src/expirydlg.c:116 src/filesigndlg.c:133
-#: src/gpabackupop.c:292 src/gpaprogressdlg.c:146 src/gparecvkeydlg.c:96
-#: src/gpawizard.c:289 src/gpgmetools.c:696 src/keygendlg.c:149
-#: src/ownertrustdlg.c:111 src/passwddlg.c:100
+#: src/gpaprogressdlg.c:146 src/gparecvkeydlg.c:96 src/gpawizard.c:289
+#: src/gpgmetools.c:705 src/keygendlg.c:149 src/ownertrustdlg.c:111
+#: src/passwddlg.c:100
 msgid "_Cancel"
 msgstr "От_мена"
 
@@ -420,85 +422,85 @@ msgstr "_неогранич."
 msgid "_expire on:"
 msgstr "_годен до:"
 
-#: src/fileman.c:355 src/fileman.c:953
-msgid "The file is already open."
-msgstr "Файл уже открыт."
-
-#: src/fileman.c:516
+#: src/fileman.c:557
 msgid "/File/Sign"
 msgstr "/Файл/Подписать"
 
-#: src/fileman.c:521
+#: src/fileman.c:562
 msgid "/File/Verify"
 msgstr "/Файл/Проверить"
 
-#: src/fileman.c:526
+#: src/fileman.c:567
 msgid "/File/Encrypt"
 msgstr "/Файл/Зашифровать"
 
-#: src/fileman.c:531
+#: src/fileman.c:572
 msgid "/File/Decrypt"
 msgstr "/Файл/Расшифровать"
 
-#: src/fileman.c:606
+#: src/fileman.c:647
 msgid "Close all files"
 msgstr "Закрыть все файлы"
 
-#: src/fileman.c:606
+#: src/fileman.c:647
 msgid "close files"
 msgstr "закрыть файлы"
 
-#: src/fileman.c:613
+#: src/fileman.c:654
 msgid "Sign the selected file"
 msgstr "Подписать выбранный файл"
 
-#: src/fileman.c:614
+#: src/fileman.c:655
 msgid "sign file"
 msgstr "подписать файл"
 
-#: src/fileman.c:624
+#: src/fileman.c:665
 msgid "Check signatures of selected file"
 msgstr "Проверить подписи выбранного файла"
 
-#: src/fileman.c:625
+#: src/fileman.c:666
 msgid "verify file"
 msgstr "проверить файл"
 
-#: src/fileman.c:635
+#: src/fileman.c:676
 msgid "Encrypt the selected file"
 msgstr "Зашифровать выбранный файл"
 
-#: src/fileman.c:636
+#: src/fileman.c:677
 msgid "encrypt file"
 msgstr "зашифровать файл"
 
-#: src/fileman.c:646
+#: src/fileman.c:687
 msgid "Decrypt the selected file"
 msgstr "Расшифровать выбранный файл"
 
-#: src/fileman.c:647
+#: src/fileman.c:688
 msgid "decrypt file"
 msgstr "расшифровать файл"
 
-#: src/fileman.c:676 src/keyring.c:1658
+#: src/fileman.c:717 src/keyring.c:1658
 msgid "Open the clipboard"
 msgstr "Открыть буфер"
 
-#: src/fileman.c:677 src/keyring.c:1659
+#: src/fileman.c:718 src/keyring.c:1659
 msgid "clipboard"
 msgstr "буфер"
 
-#: src/fileman.c:785
+#: src/fileman.c:826
 msgid "File"
 msgstr "Файл"
 
-#: src/fileman.c:850
+#: src/fileman.c:891
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - Менеджер файлов"
 
-#: src/fileman.c:876
+#: src/fileman.c:917
 msgid "File Manager"
-msgstr "Менеджер файлов"
+msgstr "Менеджер _файлов"
+
+#: src/fileman.c:993
+msgid "The file is already open."
+msgstr "Файл уже открыт."
 
 #: src/filesigndlg.c:134
 msgid "Sign documents"
@@ -520,30 +522,7 @@ msgstr "_текстовая подпись"
 msgid "_detached signature"
 msgstr "_отделяемая подпись"
 
-#: src/gpabackupop.c:213 src/gpgmetools.c:138
-#, c-format
-msgid ""
-"The file %s already exists.\n"
-"Do you want to overwrite it?"
-msgstr ""
-"Файл %s уже существует.\n"
-"Перезаписать?"
-
-#: src/gpabackupop.c:216 src/gpaexportserverop.c:134
-#: src/gpafileencryptop.c:455 src/gpafileverifyop.c:178 src/gpgmetools.c:141
-#: src/keydeletedlg.c:44 src/keydeletedlg.c:93 src/keysigndlg.c:62
-#: src/settingsdlg.c:165
-msgid "_Yes"
-msgstr "Да"
-
-#: src/gpabackupop.c:217 src/gpaexportserverop.c:135
-#: src/gpafileencryptop.c:456 src/gpafileverifyop.c:179 src/gpgmetools.c:142
-#: src/keydeletedlg.c:46 src/keydeletedlg.c:95 src/keysigndlg.c:64
-#: src/settingsdlg.c:168
-msgid "_No"
-msgstr "Нет"
-
-#: src/gpabackupop.c:229
+#: src/gpabackupop.c:208
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -560,30 +539,18 @@ msgstr ""
 "Это деликатная иформация, ее следует тщательно оберегать\n"
 "(храните на сменном носителе CD/DVD/Flash в надежном и безопасном месте)."
 
-#: src/gpabackupop.c:244
+#: src/gpabackupop.c:223
 msgid "An error ocurred during the backup operation."
 msgstr "Ошибка создания резервной копии."
 
-#: src/gpabackupop.c:260
+#: src/gpabackupop.c:245
 msgid "Backup key to file"
 msgstr "Резервная копия ключа в файл"
 
-#: src/gpabackupop.c:287
-msgid "Backup Keys"
-msgstr "Создать резервную копию ключей"
-
-#: src/gpabackupop.c:311
+#: src/gpabackupop.c:255
 #, c-format
 msgid "Generating backup of key: %s"
 msgstr "Создание резервной копии ключа: %s"
-
-#: src/gpabackupop.c:317
-msgid "_Backup to file:"
-msgstr "_Сохранить в:"
-
-#: src/gpabackupop.c:329
-msgid "B_rowse..."
-msgstr "Об_зор..."
 
 #: src/gpa.c:92
 msgid "Output version information and exit"
@@ -625,15 +592,15 @@ msgstr "Об ошибках сообщайте <"
 msgid "The keys have been copied to the clipboard."
 msgstr "Ключи скопированы в буфер."
 
-#: src/gpaexportfileop.c:133
+#: src/gpaexportfileop.c:139
 msgid "Export public keys to file"
 msgstr "Экспорт открытого ключа в файл"
 
-#: src/gpaexportfileop.c:137
+#: src/gpaexportfileop.c:150
 msgid "_armor"
 msgstr "_защитить"
 
-#: src/gpaexportfileop.c:171
+#: src/gpaexportfileop.c:182
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "Ключи экспортированы в %s."
@@ -648,6 +615,18 @@ msgstr ""
 "Выбранный ключ будет отправлен на открытый сервер открытых ключей\n"
 "(\"%s\").\n"
 "Действительно хотите распространить данный ключ?"
+
+#: src/gpaexportserverop.c:134 src/gpafileencryptop.c:455
+#: src/gpafileverifyop.c:178 src/gpgmetools.c:142 src/keydeletedlg.c:44
+#: src/keydeletedlg.c:93 src/keysigndlg.c:62 src/settingsdlg.c:165
+msgid "_Yes"
+msgstr "Да"
+
+#: src/gpaexportserverop.c:135 src/gpafileencryptop.c:456
+#: src/gpafileverifyop.c:179 src/gpgmetools.c:143 src/keydeletedlg.c:46
+#: src/keydeletedlg.c:95 src/keysigndlg.c:64 src/settingsdlg.c:168
+msgid "_No"
+msgstr "Нет"
 
 #: src/gpaexportserverop.c:187
 msgid "The keys have been sent to the server."
@@ -677,8 +656,8 @@ msgstr "\"%s\" не содержит зашифрованных данных."
 msgid "The file \"%s\" contained no validencrypted data."
 msgstr "Файл \"%s\" не содержит зашифрованных данных."
 
-#: src/gpafiledecryptop.c:380 src/gpafileencryptop.c:727
-#: src/gpafilesignop.c:510 src/gpafileverifyop.c:460 src/gpakeyexpireop.c:235
+#: src/gpafiledecryptop.c:380 src/gpafileencryptop.c:757
+#: src/gpafilesignop.c:511 src/gpafileverifyop.c:460 src/gpakeyexpireop.c:235
 #: src/gpakeypasswdop.c:197 src/gpakeysignop.c:229
 msgid "Wrong passphrase!"
 msgstr "Неверный пароль!"
@@ -708,7 +687,7 @@ msgid "Revoked Key"
 msgstr "Отзыв ключа"
 
 #: src/gpafileencryptop.c:504 src/gpafileencryptop.c:544 src/gpawizard.c:281
-#: src/gtktools.c:324 src/gtktools.c:357 src/helpmenu.c:422
+#: src/gtktools.c:324 src/gtktools.c:357 src/helpmenu.c:436
 #: src/keyeditdlg.c:151 src/settingsdlg.c:194 src/verifydlg.c:115
 msgid "_Close"
 msgstr "_Закрыть"
@@ -726,20 +705,20 @@ msgstr "Он не может использоваться для шифрова�
 msgid "The following key expired on %s:"
 msgstr "Срок годности ключа истек %s:"
 
-#: src/gpafileencryptop.c:641 src/gpafilesignop.c:414
+#: src/gpafileencryptop.c:596 src/gpafilesignop.c:429
+msgid ""
+"The selected certificates are not all of the same type. That is, you mixed "
+"OpenPGP and X.509 certificates. Please make sure to select only certificates "
+"of the same type."
+msgstr ""
+
+#: src/gpafileencryptop.c:671 src/gpafilesignop.c:415
 msgid "You didn't select any key for signing"
 msgstr "Не выбран ключ для подписи"
 
 #: src/gpafilesignop.c:148
 msgid "Signing..."
 msgstr "Подпись..."
-
-#: src/gpafilesignop.c:428
-msgid ""
-"The selected certificates are not all of the same type. That is, you mixed "
-"OpenPGP and X.509 certificates. Please make sure to select only certificates "
-"of the same type."
-msgstr ""
 
 #: src/gpafileverifyop.c:101
 msgid "Verifying..."
@@ -762,7 +741,7 @@ msgstr ""
 msgid "Generating Key..."
 msgstr "Создание ключа..."
 
-#: src/gpaimportfileop.c:131
+#: src/gpaimportfileop.c:132
 msgid "Import public keys from file"
 msgstr "Импорт открытого ключа из файла"
 
@@ -847,7 +826,7 @@ msgstr "неизвестно"
 
 #: src/gparecvkeydlg.c:101
 msgid "Which key do you want to import? (The key must be specified by key ID)."
-msgstr "Какой ключ импортировать? (Нужно указать ID ключа)."
+msgstr "Какой ключ импортировать (ID ключа)?"
 
 #: src/gparecvkeydlg.c:116
 msgid "Key _ID:"
@@ -889,16 +868,16 @@ msgstr "Может шифр."
 msgid "Can authenticate"
 msgstr "Может авториз."
 
-#: src/gpasubkeylist.c:137 src/gpgmetools.c:613 src/gpgmetools.c:821
-#: src/gpgmetools.c:940
+#: src/gpasubkeylist.c:137 src/gpgmetools.c:622 src/gpgmetools.c:830
+#: src/gpgmetools.c:949
 msgid "Revoked"
 msgstr "Отозван"
 
-#: src/gpasubkeylist.c:141 src/gpgmetools.c:615 src/gpgmetools.c:936
+#: src/gpasubkeylist.c:141 src/gpgmetools.c:624 src/gpgmetools.c:945
 msgid "Expired"
 msgstr "Истек"
 
-#: src/gpasubkeylist.c:145 src/gpgmetools.c:617
+#: src/gpasubkeylist.c:145 src/gpgmetools.c:626
 msgid "Disabled"
 msgstr "Отключен"
 
@@ -906,11 +885,11 @@ msgstr "Отключен"
 msgid "Unsigned"
 msgstr "Неподписан"
 
-#: src/gpasubkeylist.c:153 src/gpgmetools.c:927 src/verifydlg.c:212
+#: src/gpasubkeylist.c:153 src/gpgmetools.c:936 src/verifydlg.c:212
 msgid "Valid"
 msgstr "Достоверно"
 
-#: src/gpawidgets.c:72 src/gpgmetools.c:661 src/gpgmetools.c:668
+#: src/gpawidgets.c:72 src/gpgmetools.c:670 src/gpgmetools.c:677
 #: src/keyring.c:1176 src/keysigndlg.c:104
 msgid "User Name:"
 msgstr "Имя:"
@@ -919,28 +898,28 @@ msgstr "Имя:"
 msgid "User Names:"
 msgstr "Имена:"
 
-#: src/gpawidgets.c:78 src/gpgmetools.c:662 src/gpgmetools.c:669
+#: src/gpawidgets.c:78 src/gpgmetools.c:671 src/gpgmetools.c:678
 #: src/keyring.c:1178
 msgid "Key ID:"
 msgstr "ID ключа:"
 
-#: src/gpawidgets.c:194
+#: src/gpawidgets.c:180
 msgid "Expiration"
 msgstr "Срок годности"
 
-#: src/gpawidgets.c:201
+#: src/gpawidgets.c:187
 msgid "_indefinitely valid"
 msgstr "_не вполне достоверен"
 
-#: src/gpawidgets.c:210
+#: src/gpawidgets.c:196
 msgid "expire _after"
 msgstr "недействителен после"
 
-#: src/gpawidgets.c:229
+#: src/gpawidgets.c:216
 msgid "expire o_n:"
 msgstr "недействителен с:"
 
-#: src/gpawidgets.c:302 src/keygendlg.c:295
+#: src/gpawidgets.c:292 src/keygendlg.c:295
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -996,7 +975,16 @@ msgstr ""
 "Возможно, ошибка в программе GPA.\n"
 "GPA попытатется возобновить свою работоспособность."
 
-#: src/gpgmetools.c:477
+#: src/gpgmetools.c:139
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Файл %s уже существует.\n"
+"Перезаписать?"
+
+#: src/gpgmetools.c:486
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -1010,116 +998,116 @@ msgstr ""
 "****************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:482
+#: src/gpgmetools.c:491
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
 msgstr ""
-"Резервная копия сохранена в файл:\n"
+"Резервная копия сохранена в файле:\n"
 "\n"
 
-#: src/gpgmetools.c:543
+#: src/gpgmetools.c:552
 msgid "DSA and ElGamal (default)"
 msgstr "DSA и ElGamal (по умолчанию)"
 
-#: src/gpgmetools.c:544
+#: src/gpgmetools.c:553
 msgid "DSA (sign only)"
 msgstr "DSA (только подпись)"
 
-#: src/gpgmetools.c:545
+#: src/gpgmetools.c:554
 msgid "RSA (sign only)"
 msgstr "RSA (только шифрование)"
 
-#: src/gpgmetools.c:581 src/gpgmetools.c:604 src/gpgmetools.c:621
-#: src/gpgmetools.c:932 src/gpgmetools.c:965
+#: src/gpgmetools.c:590 src/gpgmetools.c:613 src/gpgmetools.c:630
+#: src/gpgmetools.c:941 src/gpgmetools.c:974
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: src/gpgmetools.c:584
+#: src/gpgmetools.c:593
 msgid "Never"
 msgstr "Никогда"
 
-#: src/gpgmetools.c:587
+#: src/gpgmetools.c:596
 msgid "Marginal"
 msgstr "Ограниченное"
 
-#: src/gpgmetools.c:590
+#: src/gpgmetools.c:599
 msgid "Full"
 msgstr "Полное"
 
-#: src/gpgmetools.c:593
+#: src/gpgmetools.c:602
 msgid "Ultimate"
 msgstr "Абсолютное"
 
-#: src/gpgmetools.c:619
+#: src/gpgmetools.c:628
 msgid "Incomplete"
 msgstr "Не полностью"
 
-#: src/gpgmetools.c:625
+#: src/gpgmetools.c:634
 msgid "Fully Valid"
 msgstr "Полностью достоверен"
 
-#: src/gpgmetools.c:659
+#: src/gpgmetools.c:668
 msgid "Please enter the passphrase for the following key:"
-msgstr "Введите пароль доступа к ключу:"
+msgstr "Введите пароль для доступа к ключу:"
 
-#: src/gpgmetools.c:667
+#: src/gpgmetools.c:676
 msgid "Wrong passphrase, please try again:"
 msgstr "Неверный пароль, пожалуйста, еще раз:"
 
-#: src/gpgmetools.c:692
+#: src/gpgmetools.c:701
 msgid "Enter Passphrase"
 msgstr "Введите пароль"
 
-#: src/gpgmetools.c:814
+#: src/gpgmetools.c:823
 msgid "[None]"
 msgstr "[Нет]"
 
-#: src/gpgmetools.c:904 src/verifydlg.c:269
+#: src/gpgmetools.c:913 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[Неизвестный ID пользователя]"
 
-#: src/gpgmetools.c:930 src/verifydlg.c:217
+#: src/gpgmetools.c:939 src/verifydlg.c:217
 msgid "Bad"
 msgstr "Плохой"
 
-#: src/gpgmetools.c:953
+#: src/gpgmetools.c:962
 msgid "Generic"
 msgstr "Общий"
 
-#: src/gpgmetools.c:956
+#: src/gpgmetools.c:965
 msgid "Persona"
 msgstr "Персон."
 
-#: src/gpgmetools.c:959
+#: src/gpgmetools.c:968
 msgid "Casual"
 msgstr "Случайн."
 
-#: src/gpgmetools.c:962
+#: src/gpgmetools.c:971
 msgid "Positive"
 msgstr "Позитив."
 
-#: src/gpgmetools.c:980
+#: src/gpgmetools.c:989
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
 "Ключ может быть использован для сертифицирования, подписи и шифрования."
 
-#: src/gpgmetools.c:983
+#: src/gpgmetools.c:992
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Ключ может быть использован для сертифицирования и подписи, но не для "
 "шифрования."
 
-#: src/gpgmetools.c:989
+#: src/gpgmetools.c:998
 msgid "The key can be used for certification and encryption."
 msgstr "Ключ может быть использован для сертифицирования и шифрования."
 
-#: src/gpgmetools.c:992
+#: src/gpgmetools.c:1001
 msgid "The key can be used only for certification."
 msgstr "Ключ может быть использован только для сертифицирования."
 
-#: src/gpgmetools.c:1000
+#: src/gpgmetools.c:1009
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -1127,15 +1115,15 @@ msgstr ""
 "Ключ может быть использован для подписи и шифрования, но не для "
 "сертифицирования."
 
-#: src/gpgmetools.c:1003
+#: src/gpgmetools.c:1012
 msgid "The key can be used only for signing."
 msgstr "Ключ может быть использован только для подписи."
 
-#: src/gpgmetools.c:1008
+#: src/gpgmetools.c:1017
 msgid "The key can be used only for encryption."
 msgstr "Ключ может быть использован только для шифрования."
 
-#: src/gpgmetools.c:1011
+#: src/gpgmetools.c:1020
 msgid "This key is useless."
 msgstr "Данный ключ бесполезен/неприменим."
 
@@ -1143,59 +1131,59 @@ msgstr "Данный ключ бесполезен/неприменим."
 msgid "GPA Error"
 msgstr "Ошибка GPA"
 
-#: src/helpmenu.c:202
+#: src/helpmenu.c:216
 msgid "About GPA"
 msgstr "О программе GPA"
 
-#: src/helpmenu.c:247
+#: src/helpmenu.c:261
 msgid "Brought to you by:"
 msgstr "Предоставлен:"
 
-#: src/helpmenu.c:284
+#: src/helpmenu.c:298
 msgid "GPA is Free Software under the"
 msgstr "GPA - бесплатная программа по лицензии"
 
-#: src/helpmenu.c:288
+#: src/helpmenu.c:302
 msgid "GNU General Public License."
 msgstr "GNU General Public License."
 
-#: src/helpmenu.c:292
+#: src/helpmenu.c:306
 msgid "For news see:"
 msgstr "Обновления:"
 
-#: src/helpmenu.c:297
+#: src/helpmenu.c:311
 msgid "http://www.gpg4win.org"
 msgstr "http://www.gpg4win.org"
 
-#: src/helpmenu.c:299
+#: src/helpmenu.c:313
 msgid "http://www.gnupg.org"
 msgstr "http://www.gnupg.org"
 
-#: src/helpmenu.c:382
+#: src/helpmenu.c:396
 msgid "GNU General Public License"
 msgstr "GNU General Public License"
 
-#: src/helpmenu.c:409
+#: src/helpmenu.c:423
 msgid "_GNU General Public License"
 msgstr "_GNU General Public License"
 
-#: src/helpmenu.c:436
+#: src/helpmenu.c:450
 msgid "Show Help Text\n"
 msgstr "Показать подсказки\n"
 
-#: src/helpmenu.c:444
+#: src/helpmenu.c:458
 msgid "/_Help"
 msgstr "/Сп_равка"
 
-#: src/helpmenu.c:446
+#: src/helpmenu.c:460
 msgid "/Help/_Contents"
 msgstr "/Справка/_Содержание"
 
-#: src/helpmenu.c:449
+#: src/helpmenu.c:463
 msgid "/Help/_License"
 msgstr "/Справка/_Лицензия"
 
-#: src/helpmenu.c:450
+#: src/helpmenu.c:464
 msgid "/Help/_About"
 msgstr "/Справка/_О программе"
 
@@ -1228,8 +1216,8 @@ msgid ""
 "This key has a secret key. Deleting this key cannot be undone, unless you "
 "have a backup copy."
 msgstr ""
-"Это закрытый ключ. Восстановить закрытый ключ можно только из резервной "
-"копии (если она есть)."
+"Присутствует закрытый ключ. Восстановить его можно только из резервной копии "
+"(если она есть)."
 
 #: src/keydeletedlg.c:123
 msgid ""
@@ -1258,7 +1246,7 @@ msgstr "Изменить срок годности"
 
 #: src/keygendlg.c:58
 msgid "You must enter a User ID."
-msgstr ""
+msgstr "Введите ID пользователя."
 
 #: src/keygendlg.c:63 src/keygenwizard.c:307 src/passwddlg.c:45
 msgid ""
@@ -1322,7 +1310,7 @@ msgstr "2048"
 
 #: src/keygendlg.c:216
 msgid "_User ID: "
-msgstr "ID _пользователя"
+msgstr "Имя пользователя"
 
 #: src/keygendlg.c:226
 msgid "_Email: "
@@ -1452,11 +1440,11 @@ msgstr ""
 
 #: src/keylist.c:568
 msgid "The key ID is a short number to identify a certificate."
-msgstr ""
+msgstr "ID ключа - короткий номер для идентификации сертификата."
 
 #: src/keylist.c:581
 msgid "The Expiry Date is the date until the certificate is valid."
-msgstr ""
+msgstr "Срок годности определяет продолжительность действия сертификата."
 
 #: src/keylist.c:591 src/ownertrustdlg.c:122
 msgid "Owner Trust"
@@ -1468,23 +1456,27 @@ msgid ""
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
+"Доверие владельцу - значение, устанавливаемое вами. Вы определяете, "
+"насколько доверяете владельцу сертификата подписывать другие сертификаты. "
+"(Актуально только для OpenPGP)."
 
 #: src/keylist.c:604
-#, fuzzy
 msgid "Validity"
-msgstr "Достоверность ключа"
+msgstr "Достоверность"
 
 #: src/keylist.c:605
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
+"Достоверность - уровень доверия к данному сертификату (насколько можно быть "
+"уверенным, что сертификат действительно принадлежит данному лицу)."
 
 #: src/keylist.c:619
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
-msgstr ""
+msgstr "Имя владельца сертификата и (часто) его электронный адрес."
 
 #: src/keyring.c:457
 msgid "No keys selected for signing."
@@ -1859,7 +1851,7 @@ msgstr "Ключ будет подписан вашим закрытым клю�
 msgid "Sign only _locally"
 msgstr "Подписать только локально"
 
-#: src/options.c:316
+#: src/options.c:312
 msgid ""
 "The private key you selected as default is no longer available.\n"
 "GPA will try to choose a new default key automatically."
@@ -1884,7 +1876,7 @@ msgstr ""
 
 #: src/ownertrustdlg.c:145
 msgid "_Never"
-msgstr "Никогда"
+msgstr "Нет"
 
 #: src/ownertrustdlg.c:150
 msgid ""
@@ -1894,7 +1886,7 @@ msgstr "Никакого доверия этому пользователю.\n"
 
 #: src/ownertrustdlg.c:160
 msgid "_Marginal"
-msgstr "Ограниченно"
+msgstr "Ограниченное"
 
 #: src/ownertrustdlg.c:165
 msgid ""
@@ -1937,8 +1929,8 @@ msgstr ""
 "Пользователь обладает абсолютным доверием. Подписанные им чужие ключи можно "
 "считать полностью достоверными.\n"
 "\n"
-"(Внимание: этот уровень доверия- для ваших ключей. Не используйте его для "
-"других ключей, если не доверяете этим ключам и их владельцам на 100%)\n"
+"(Абсолютное доверие - для ваших ключей. Не используйте его для других "
+"ключей, если не доверяете этим ключам и их владельцам на 100%)\n"
 
 #: src/passwddlg.c:96
 msgid "Choose new passphrase"
@@ -2021,23 +2013,20 @@ msgid "The keyserver you specified is not valid"
 msgstr "Некорректно задан сервер ключей"
 
 #: src/settingsdlg.c:59
-#, fuzzy
 msgid "<b>Default _key</b>"
-msgstr "_Ключ по умолчанию:"
+msgstr "<b>_Ключ по умолчанию</b>"
 
 #: src/settingsdlg.c:111
-#, fuzzy
 msgid "<b>Default key_server</b>"
-msgstr "_Сервер ключей по умолчанию:"
+msgstr "<b>_Сервер ключей по умолчанию</b>"
 
 #: src/settingsdlg.c:158
-#, fuzzy
 msgid "<b>Use _advanced mode</b>"
-msgstr "Рас_ширенный режим:"
+msgstr "<b>Рас_ширенный режим</b>"
 
 #: src/settingsdlg.c:193
 msgid "Settings"
-msgstr "Параметры"
+msgstr "Настройки"
 
 #: src/siglist.c:128
 msgid "Level"
@@ -2045,7 +2034,7 @@ msgstr "Уровень"
 
 #: src/siglist.c:135
 msgid "Local"
-msgstr "Локальная"
+msgstr "Локал."
 
 #: src/verifydlg.c:116
 msgid "Verify documents"
@@ -2073,22 +2062,3 @@ msgstr "Подпись: %s"
 msgid "Signatures:"
 msgstr "Подписи:"
 
-#~ msgid "GPA Warning"
-#~ msgstr "Предупреждение GPA"
-
-#~ msgid ""
-#~ "One of your secret keys contains an ElGamal signing key. Due to a bug in "
-#~ "GnuPG, all ElGamal keys used with GnuPG 1.0.2 and later must be "
-#~ "considered compromised.\n"
-#~ "\n"
-#~ "Please revoke your key as soon as possible.\n"
-#~ "\n"
-#~ "The affected key is:"
-#~ msgstr ""
-#~ "Один из ваших закрытых ключей подписан ключом ElGamal. Из-за ошибки в "
-#~ "GnuPG все ключи ElGamal версии GnuPG 1.0.2 и более новых версий следует "
-#~ "считать скомпрометированными.\n"
-#~ "\n"
-#~ "Следует отозвать такой ключ как можно скорее.\n"
-#~ "\n"
-#~ "Соответствующие ключи:"

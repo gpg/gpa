@@ -1,317 +1,316 @@
 # translation of GPA to Arabic
 # This file is put in the public domain.
 #
-# Khaled Hosny <khaledhosny@eglug.org>, 2008
-# Ahmad Gharbeia <gharbeia@gmail.com>, 2008
+# Khaled Hosny <khaledhosny@eglug.org>, 2008.
+# Ahmad Gharbeia <gharbeia@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-03-12 12:29+0100\n"
-"PO-Revision-Date: 2008-03-12 12:33+0100\n"
-"Last-Translator: Ahmad Gharbeia أحمد غربية <gharbeia@gmail.com>\n"
+"POT-Creation-Date: 2008-03-20 22:28+0100\n"
+"PO-Revision-Date: 2008-03-17 13:05+0100\n"
+"Last-Translator: \n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 && "
 "n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5;\n"
-"X-Generator: KBabel 1.11.4\n"
 
-#: src/clipboard.c:367 src/fileman.c:350
+#: src/clipboard.c:381 src/fileman.c:393
 msgid "Open File"
 msgstr "افتح ملفا"
 
-#: src/clipboard.c:395 src/confdialog.c:1266 src/gtktools.c:353
+#: src/clipboard.c:409 src/confdialog.c:1266 src/gtktools.c:353
 msgid "GPA Message"
 msgstr "رسالة GPA"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#: src/clipboard.c:412
+#: src/clipboard.c:426
 #, c-format
 msgid "The file %s is %lli%s large.  Do you really  want to open it?"
 msgstr "الملف %s حجمه %lli%s.  أتريد حقا فتحه؟"
 
-#: src/clipboard.c:481
+#: src/clipboard.c:547
 msgid "Save As..."
 msgstr "احفظ باسم..."
 
-#: src/clipboard.c:522 src/clipboard.c:552 src/clipboard.c:582
-#: src/clipboard.c:612 src/clipboard.c:1113 src/fileman.c:675
+#: src/clipboard.c:588 src/clipboard.c:618 src/clipboard.c:648
+#: src/clipboard.c:678 src/clipboard.c:1184 src/fileman.c:716
 #: src/keyring.c:1657
 msgid "Clipboard"
 msgstr "الحافظة"
 
-#: src/clipboard.c:692 src/fileman.c:472 src/keyring.c:863
+#: src/clipboard.c:758 src/fileman.c:513 src/keyring.c:863
 msgid "/_File"
 msgstr "/_ملف"
 
-#: src/clipboard.c:693 src/fileman.c:474
+#: src/clipboard.c:759 src/fileman.c:515
 msgid "/File/C_lear"
 msgstr "/ملف/ا_مسح"
 
-#: src/clipboard.c:694 src/fileman.c:473
+#: src/clipboard.c:760 src/fileman.c:514
 msgid "/File/_Open"
 msgstr "/ملف/_افتح"
 
-#: src/clipboard.c:695
+#: src/clipboard.c:761
 msgid "/File/Save _As"
 msgstr "/ملف/احفظ _باسم"
 
-#: src/clipboard.c:697 src/fileman.c:475
+#: src/clipboard.c:763 src/fileman.c:516
 msgid "/File/sep1"
 msgstr "/ملف/sep1"
 
-#: src/clipboard.c:698 src/fileman.c:476
+#: src/clipboard.c:764 src/fileman.c:517
 msgid "/File/_Sign"
 msgstr "/ملف/_وقّع"
 
-#: src/clipboard.c:699 src/fileman.c:477
+#: src/clipboard.c:765 src/fileman.c:518
 msgid "/File/_Verify"
 msgstr "/ملف/_تحقق"
 
-#: src/clipboard.c:700 src/fileman.c:478
+#: src/clipboard.c:766 src/fileman.c:519
 msgid "/File/_Encrypt"
 msgstr "/ملف/_عمّ"
 
-#: src/clipboard.c:701 src/fileman.c:479
+#: src/clipboard.c:767 src/fileman.c:520
 msgid "/File/_Decrypt"
 msgstr "/ملف/_ظهِّر"
 
-#: src/clipboard.c:702 src/fileman.c:480
+#: src/clipboard.c:768 src/fileman.c:521
 msgid "/File/sep2"
 msgstr "/ملف/sep2"
 
-#: src/clipboard.c:703 src/fileman.c:481 src/keyring.c:864
+#: src/clipboard.c:769 src/fileman.c:522 src/keyring.c:864
 msgid "/File/_Close"
 msgstr "/ملف/أ_غلق"
 
-#: src/clipboard.c:704 src/fileman.c:482 src/keyring.c:866
+#: src/clipboard.c:770 src/fileman.c:523 src/keyring.c:866
 msgid "/File/_Quit"
 msgstr "/ملف/ا_خرج"
 
-#: src/clipboard.c:707 src/fileman.c:485 src/keyring.c:869
+#: src/clipboard.c:773 src/fileman.c:526 src/keyring.c:869
 msgid "/_Edit"
 msgstr "/_تحرير"
 
-#: src/clipboard.c:710
+#: src/clipboard.c:776
 msgid "/Edit/_Undo"
 msgstr "/تحرير/_تراجع"
 
-#: src/clipboard.c:711
+#: src/clipboard.c:777
 msgid "/Edit/_Redo"
 msgstr "/تحرير/أ_عِد"
 
-#: src/clipboard.c:712
+#: src/clipboard.c:778
 msgid "/Edit/sep0"
 msgstr "/تحرير/sep0"
 
-#: src/clipboard.c:714 src/clipboard.c:750
+#: src/clipboard.c:780 src/clipboard.c:816
 msgid "/Edit/Cut"
 msgstr "/تحرير/قص"
 
-#: src/clipboard.c:715 src/keyring.c:870
+#: src/clipboard.c:781 src/keyring.c:870
 msgid "/Edit/_Copy"
 msgstr "/تحرير/ا_نسخ"
 
-#: src/clipboard.c:716 src/keyring.c:872
+#: src/clipboard.c:782 src/keyring.c:872
 msgid "/Edit/_Paste"
 msgstr "/تحرير/ا_لصق"
 
-#: src/clipboard.c:717
+#: src/clipboard.c:783
 msgid "/Edit/_Delete"
 msgstr "/تحرير/ا_حذف"
 
-#: src/clipboard.c:718 src/keyring.c:874
+#: src/clipboard.c:784 src/keyring.c:874
 msgid "/Edit/sep1"
 msgstr "/تحرير/sep1"
 
-#: src/clipboard.c:719 src/fileman.c:486 src/keyring.c:875
+#: src/clipboard.c:785 src/fileman.c:527 src/keyring.c:875
 msgid "/Edit/Select _All"
 msgstr "/تحرير/ا_ختر الكل"
 
-#: src/clipboard.c:721 src/fileman.c:487 src/keyring.c:876
+#: src/clipboard.c:787 src/fileman.c:528 src/keyring.c:876
 msgid "/Edit/sep2"
 msgstr "/تحرير/sep2"
 
-#: src/clipboard.c:722 src/fileman.c:488 src/keyring.c:877
+#: src/clipboard.c:788 src/fileman.c:529 src/keyring.c:877
 msgid "/Edit/Pr_eferences..."
 msgstr "/تحرير/ال_تفضيلات..."
 
-#: src/clipboard.c:724 src/fileman.c:490 src/keyring.c:879
+#: src/clipboard.c:790 src/fileman.c:531 src/keyring.c:879
 msgid "/Edit/_Backend Preferences..."
 msgstr "/تحرير/تفضيلات ال_خلفية..."
 
-#: src/clipboard.c:728 src/fileman.c:494 src/keyring.c:906
+#: src/clipboard.c:794 src/fileman.c:535 src/keyring.c:906
 msgid "/_Windows"
 msgstr "/_نوافذ"
 
-#: src/clipboard.c:729 src/fileman.c:495 src/keyring.c:907
+#: src/clipboard.c:795 src/fileman.c:536 src/keyring.c:907
 msgid "/Windows/_Keyring Editor"
 msgstr "/نوافذ/_محرر حلقة المفاتيح"
 
-#: src/clipboard.c:730 src/fileman.c:496
+#: src/clipboard.c:796 src/fileman.c:537
 msgid "/Windows/_Filemanager"
 msgstr "/نوافذ/_مدير الملفات"
 
-#: src/clipboard.c:731 src/fileman.c:497 src/keyring.c:909
+#: src/clipboard.c:797 src/fileman.c:538 src/keyring.c:909
 msgid "/Windows/_Clipboard"
 msgstr "/نوافذ/ال_حافظة"
 
-#: src/clipboard.c:758 src/keyring.c:948
+#: src/clipboard.c:824 src/keyring.c:948
 msgid "/Edit/Copy"
 msgstr "/تحرير/انسخ"
 
-#: src/clipboard.c:766
+#: src/clipboard.c:832
 msgid "/Edit/Delete"
 msgstr "/تحرير/احذف"
 
-#: src/clipboard.c:774
+#: src/clipboard.c:840
 msgid "/Edit/Paste"
-msgstr "/تحرير/الصق"
+msgstr "/تحرير/ألصق"
 
-#: src/clipboard.c:879
+#: src/clipboard.c:945
 msgid "Clear buffer"
 msgstr "يخلي البراح"
 
-#: src/clipboard.c:879
+#: src/clipboard.c:945
 msgid "clear buffer"
 msgstr "أخل البراح"
 
-#: src/clipboard.c:887 src/fileman.c:602
+#: src/clipboard.c:953 src/fileman.c:643
 msgid "Open a file"
 msgstr "يفتح ملفا"
 
-#: src/clipboard.c:887 src/fileman.c:602
+#: src/clipboard.c:953 src/fileman.c:643
 msgid "open file"
 msgstr "افتح ملفا"
 
-#: src/clipboard.c:892
+#: src/clipboard.c:958
 msgid "Save to a file"
 msgstr "يحفظ في ملف"
 
-#: src/clipboard.c:892
+#: src/clipboard.c:958
 msgid "save file as"
 msgstr "احفظ الملف باسم"
 
-#: src/clipboard.c:900
+#: src/clipboard.c:966
 msgid "Cut the selection"
 msgstr "يقص المحدد إلى الحافظة"
 
-#: src/clipboard.c:901
+#: src/clipboard.c:967
 msgid "cut the selection"
 msgstr "قص المحدد"
 
-#: src/clipboard.c:907
+#: src/clipboard.c:973
 msgid "Copy the selection"
 msgstr "ينسخ المحدد"
 
-#: src/clipboard.c:908
+#: src/clipboard.c:974
 msgid "copy the selection"
 msgstr "انسخ المحدد"
 
-#: src/clipboard.c:914
+#: src/clipboard.c:980
 msgid "Paste the clipboard"
 msgstr "يلصق ما في الحافظة"
 
-#: src/clipboard.c:915
+#: src/clipboard.c:981
 msgid "paste the clipboard"
 msgstr "ألصق الحافظة"
 
-#: src/clipboard.c:925 src/fileman.c:612 src/keyring.c:1570
+#: src/clipboard.c:991 src/fileman.c:653 src/keyring.c:1570
 msgid "Sign"
 msgstr "وقّع"
 
-#: src/clipboard.c:926
+#: src/clipboard.c:992
 msgid "Sign the selected text"
 msgstr "يوقّع النصَ المحدد"
 
-#: src/clipboard.c:927
+#: src/clipboard.c:993
 msgid "sign text"
 msgstr "وقّع النصّ"
 
-#: src/clipboard.c:935 src/fileman.c:623
+#: src/clipboard.c:1001 src/fileman.c:664
 msgid "Verify"
 msgstr "تحقق"
 
-#: src/clipboard.c:936
+#: src/clipboard.c:1002
 msgid "Check signatures of selected text"
 msgstr "يتحقَّق من توقيعات النصّ المحدد"
 
-#: src/clipboard.c:937
+#: src/clipboard.c:1003
 msgid "verify text"
 msgstr "تحقق من النصّ"
 
-#: src/clipboard.c:945 src/fileman.c:634
+#: src/clipboard.c:1011 src/fileman.c:675
 msgid "Encrypt"
 msgstr "عمّ"
 
-#: src/clipboard.c:946
+#: src/clipboard.c:1012
 msgid "Encrypt the selected text"
 msgstr "يعمّي النصّ المحدد"
 
-#: src/clipboard.c:947
+#: src/clipboard.c:1013
 msgid "encrypt text"
 msgstr "عمّ النصّ"
 
-#: src/clipboard.c:955 src/fileman.c:645
+#: src/clipboard.c:1021 src/fileman.c:686
 msgid "Decrypt"
 msgstr "ظهِّر"
 
-#: src/clipboard.c:956
+#: src/clipboard.c:1022
 msgid "Decrypt the selected text"
 msgstr "يظهِّر النصّ المحدد"
 
-#: src/clipboard.c:957
+#: src/clipboard.c:1023
 msgid "decrypt text"
 msgstr "ظهِّر النصّ"
 
-#: src/clipboard.c:967 src/fileman.c:658 src/keyring.c:1631
+#: src/clipboard.c:1033 src/fileman.c:699 src/keyring.c:1631
 msgid "Open the preferences dialog"
 msgstr "يفتح حوار التفضيلات"
 
-#: src/clipboard.c:968 src/fileman.c:659 src/keyring.c:1632
+#: src/clipboard.c:1034 src/fileman.c:700 src/keyring.c:1632
 msgid "preferences"
 msgstr "التفضيلات"
 
-#: src/clipboard.c:975 src/fileman.c:666
+#: src/clipboard.c:1041 src/fileman.c:707
 msgid "Keyring"
 msgstr "حلقة مفاتيح"
 
-#: src/clipboard.c:976 src/fileman.c:667
+#: src/clipboard.c:1042 src/fileman.c:708
 msgid "Open the keyring editor"
 msgstr "يفتح محرر حلقة المفاتيح"
 
-#: src/clipboard.c:977 src/fileman.c:668
+#: src/clipboard.c:1043 src/fileman.c:709
 msgid "keyring editor"
 msgstr "محرر حلقة المفاتيح"
 
-#: src/clipboard.c:983 src/keyring.c:1648
+#: src/clipboard.c:1049 src/keyring.c:1648
 msgid "Files"
 msgstr "ملفات"
 
-#: src/clipboard.c:984 src/keyring.c:1649
+#: src/clipboard.c:1050 src/keyring.c:1649
 msgid "Open the file manager"
 msgstr "يفتح مدير الملفات"
 
-#: src/clipboard.c:985 src/keyring.c:1650
+#: src/clipboard.c:1051 src/keyring.c:1650
 msgid "file manager"
 msgstr "مدير الملفات"
 
-#: src/clipboard.c:992 src/fileman.c:684 src/keyring.c:1665
+#: src/clipboard.c:1058 src/fileman.c:725 src/keyring.c:1665
 msgid "Help"
 msgstr "مساعدة"
 
-#: src/clipboard.c:993 src/fileman.c:685 src/keyring.c:1666
+#: src/clipboard.c:1059 src/fileman.c:726 src/keyring.c:1666
 msgid "Understanding the GNU Privacy Assistant"
 msgstr "شرح مساعد خصوصية جنو"
 
-#: src/clipboard.c:994 src/fileman.c:686 src/keyring.c:1667
+#: src/clipboard.c:1060 src/fileman.c:727 src/keyring.c:1667
 msgid "help"
 msgstr "مساعدة"
 
-#: src/clipboard.c:1084
+#: src/clipboard.c:1150
 msgid "GNU Privacy Assistant - Clipboard"
 msgstr "مساعد خصوصية جنو - الحافظة"
 
@@ -380,15 +379,15 @@ msgid "Expert"
 msgstr "خبير"
 
 #: src/encryptdlg.c:142 src/expirydlg.c:116 src/filesigndlg.c:133
-#: src/gpabackupop.c:292 src/gpaprogressdlg.c:146 src/gparecvkeydlg.c:96
-#: src/gpawizard.c:289 src/gpgmetools.c:696 src/keygendlg.c:149
-#: src/ownertrustdlg.c:111 src/passwddlg.c:100
+#: src/gpaprogressdlg.c:146 src/gparecvkeydlg.c:96 src/gpawizard.c:289
+#: src/gpgmetools.c:705 src/keygendlg.c:149 src/ownertrustdlg.c:111
+#: src/passwddlg.c:100
 msgid "_Cancel"
 msgstr "أ_لغِ"
 
 #: src/encryptdlg.c:143
 msgid "Encrypt documents"
-msgstr "عمّ الوثايقة"
+msgstr "عمّ الوثيقة"
 
 #: src/encryptdlg.c:174
 msgid "_Public Keys"
@@ -422,85 +421,85 @@ msgstr "_لا تنتهي الصلاحية أبدا"
 msgid "_expire on:"
 msgstr "ت_نتهي في:"
 
-#: src/fileman.c:355 src/fileman.c:953
-msgid "The file is already open."
-msgstr "الملفّ مفتوح بالفعل."
-
-#: src/fileman.c:516
+#: src/fileman.c:557
 msgid "/File/Sign"
 msgstr "/ملف/وقّع"
 
-#: src/fileman.c:521
+#: src/fileman.c:562
 msgid "/File/Verify"
 msgstr "/ملف/تحقق"
 
-#: src/fileman.c:526
+#: src/fileman.c:567
 msgid "/File/Encrypt"
 msgstr "/ملف/عمّ"
 
-#: src/fileman.c:531
+#: src/fileman.c:572
 msgid "/File/Decrypt"
 msgstr "/ملف/استخرج"
 
-#: src/fileman.c:606
+#: src/fileman.c:647
 msgid "Close all files"
 msgstr "أغلق كل الملفات"
 
-#: src/fileman.c:606
+#: src/fileman.c:647
 msgid "close files"
 msgstr "أغلق الملفات"
 
-#: src/fileman.c:613
+#: src/fileman.c:654
 msgid "Sign the selected file"
 msgstr "يوقّع الملف المُحدد"
 
-#: src/fileman.c:614
+#: src/fileman.c:655
 msgid "sign file"
 msgstr "وقع ملفّا"
 
-#: src/fileman.c:624
+#: src/fileman.c:665
 msgid "Check signatures of selected file"
 msgstr "يتحقّق من توقيعات الملف المحدد"
 
-#: src/fileman.c:625
+#: src/fileman.c:666
 msgid "verify file"
 msgstr "تحقق من الملفّ"
 
-#: src/fileman.c:635
+#: src/fileman.c:676
 msgid "Encrypt the selected file"
 msgstr "يعمّي الملف المحدد"
 
-#: src/fileman.c:636
+#: src/fileman.c:677
 msgid "encrypt file"
 msgstr "عمّ الملفّ"
 
-#: src/fileman.c:646
+#: src/fileman.c:687
 msgid "Decrypt the selected file"
 msgstr "يظهِّر الملف المحدد"
 
-#: src/fileman.c:647
+#: src/fileman.c:688
 msgid "decrypt file"
 msgstr "استخرج الملفّ"
 
-#: src/fileman.c:676 src/keyring.c:1658
+#: src/fileman.c:717 src/keyring.c:1658
 msgid "Open the clipboard"
 msgstr "يفتح الحافظة"
 
-#: src/fileman.c:677 src/keyring.c:1659
+#: src/fileman.c:718 src/keyring.c:1659
 msgid "clipboard"
 msgstr "الحافظة"
 
-#: src/fileman.c:785
+#: src/fileman.c:826
 msgid "File"
 msgstr "ملف"
 
-#: src/fileman.c:850
+#: src/fileman.c:891
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "مساعد خصوصية جنو - مدير الملفات"
 
-#: src/fileman.c:876
+#: src/fileman.c:917
 msgid "File Manager"
 msgstr "مدير الملفات"
+
+#: src/fileman.c:993
+msgid "The file is already open."
+msgstr "الملفّ مفتوح بالفعل."
 
 #: src/filesigndlg.c:134
 msgid "Sign documents"
@@ -522,30 +521,7 @@ msgstr "توقيع نص _صريح"
 msgid "_detached signature"
 msgstr "توقيع  _منفصِل"
 
-#: src/gpabackupop.c:213 src/gpgmetools.c:138
-#, c-format
-msgid ""
-"The file %s already exists.\n"
-"Do you want to overwrite it?"
-msgstr ""
-"الملفّ %s موجود بالفعل.\n"
-"أتريد استبداله؟"
-
-#: src/gpabackupop.c:216 src/gpaexportserverop.c:134
-#: src/gpafileencryptop.c:455 src/gpafileverifyop.c:178 src/gpgmetools.c:141
-#: src/keydeletedlg.c:44 src/keydeletedlg.c:93 src/keysigndlg.c:62
-#: src/settingsdlg.c:165
-msgid "_Yes"
-msgstr "_نعم"
-
-#: src/gpabackupop.c:217 src/gpaexportserverop.c:135
-#: src/gpafileencryptop.c:456 src/gpafileverifyop.c:179 src/gpgmetools.c:142
-#: src/keydeletedlg.c:46 src/keydeletedlg.c:95 src/keysigndlg.c:64
-#: src/settingsdlg.c:168
-msgid "_No"
-msgstr "_لا"
-
-#: src/gpabackupop.c:229
+#: src/gpabackupop.c:208
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -562,30 +538,18 @@ msgstr ""
 "هذه معلومات حسّاسة و يجب الحفاظ عليها بعناية\n"
 "(كمثال: في قرص مرِن محفوظ في مكان آمن)."
 
-#: src/gpabackupop.c:244
+#: src/gpabackupop.c:223
 msgid "An error ocurred during the backup operation."
 msgstr "حدث عطل أثناء الحفظ الاحتياطي."
 
-#: src/gpabackupop.c:260
+#: src/gpabackupop.c:245
 msgid "Backup key to file"
 msgstr "يحفظ نسخة احتياطية من المفتاح في ملفّ"
 
-#: src/gpabackupop.c:287
-msgid "Backup Keys"
-msgstr "احفظ نسخة من المفاتيح"
-
-#: src/gpabackupop.c:311
+#: src/gpabackupop.c:255
 #, c-format
 msgid "Generating backup of key: %s"
 msgstr "يجري حفظ المفتاح: %s"
-
-#: src/gpabackupop.c:317
-msgid "_Backup to file:"
-msgstr "ا_حفظ احتياطيا في ملفّ:"
-
-#: src/gpabackupop.c:329
-msgid "B_rowse..."
-msgstr "_تصفّح..."
 
 #: src/gpa.c:92
 msgid "Output version information and exit"
@@ -605,7 +569,7 @@ msgstr "يفتح الحافظة"
 
 #: src/gpa.c:100
 msgid "Start only the UI server (implies --cms)"
-msgstr "ابدأ فقط خادوم واجهة المستخدم"
+msgstr "ابدأ فقط خادوم واجهة المستخدم (يفترض ‪--cmss‬ أيضا)"
 
 #: src/gpa.c:102
 msgid "Read options from file"
@@ -627,15 +591,15 @@ msgstr "من فضلك أبلغ عن العلات في <"
 msgid "The keys have been copied to the clipboard."
 msgstr "تم نسخ المفاتيح إلى الحافظة."
 
-#: src/gpaexportfileop.c:133
+#: src/gpaexportfileop.c:139
 msgid "Export public keys to file"
 msgstr "يصدِّر المفاتيح العلنية إلى ملفّ"
 
-#: src/gpaexportfileop.c:137
+#: src/gpaexportfileop.c:150
 msgid "_armor"
 msgstr "_درّْع"
 
-#: src/gpaexportfileop.c:171
+#: src/gpaexportfileop.c:182
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "تم تصدير المفاتيح إلى %s."
@@ -650,6 +614,18 @@ msgstr ""
 "ستُرسَل المفتاح المحدد إلى\n"
 "خادوم مفاتيح علني (\"%s\").\n"
 "أمتأكد أنك تريد توزيع هذا المفتاح؟"
+
+#: src/gpaexportserverop.c:134 src/gpafileencryptop.c:455
+#: src/gpafileverifyop.c:178 src/gpgmetools.c:142 src/keydeletedlg.c:44
+#: src/keydeletedlg.c:93 src/keysigndlg.c:62 src/settingsdlg.c:165
+msgid "_Yes"
+msgstr "_نعم"
+
+#: src/gpaexportserverop.c:135 src/gpafileencryptop.c:456
+#: src/gpafileverifyop.c:179 src/gpgmetools.c:143 src/keydeletedlg.c:46
+#: src/keydeletedlg.c:95 src/keysigndlg.c:64 src/settingsdlg.c:168
+msgid "_No"
+msgstr "_لا"
 
 #: src/gpaexportserverop.c:187
 msgid "The keys have been sent to the server."
@@ -679,8 +655,8 @@ msgstr "لا يحوي \"%s\" بيانات معماة صالحة."
 msgid "The file \"%s\" contained no validencrypted data."
 msgstr "لا يحوي الملفّ \"%s\" بيانات معماة صالحة."
 
-#: src/gpafiledecryptop.c:380 src/gpafileencryptop.c:727
-#: src/gpafilesignop.c:510 src/gpafileverifyop.c:460 src/gpakeyexpireop.c:235
+#: src/gpafiledecryptop.c:380 src/gpafileencryptop.c:757
+#: src/gpafilesignop.c:511 src/gpafileverifyop.c:460 src/gpakeyexpireop.c:235
 #: src/gpakeypasswdop.c:197 src/gpakeysignop.c:229
 msgid "Wrong passphrase!"
 msgstr "عبارة السر خطأ."
@@ -710,7 +686,7 @@ msgid "Revoked Key"
 msgstr "مفتاح منقوض"
 
 #: src/gpafileencryptop.c:504 src/gpafileencryptop.c:544 src/gpawizard.c:281
-#: src/gtktools.c:324 src/gtktools.c:357 src/helpmenu.c:422
+#: src/gtktools.c:324 src/gtktools.c:357 src/helpmenu.c:436
 #: src/keyeditdlg.c:151 src/settingsdlg.c:194 src/verifydlg.c:115
 msgid "_Close"
 msgstr "أ_غلق"
@@ -728,20 +704,20 @@ msgstr "ولا يمكن استخدامه للتعمية."
 msgid "The following key expired on %s:"
 msgstr "انتهت صلاحية هذا المفتاح في %s:"
 
-#: src/gpafileencryptop.c:641 src/gpafilesignop.c:414
+#: src/gpafileencryptop.c:596 src/gpafilesignop.c:429
+msgid ""
+"The selected certificates are not all of the same type. That is, you mixed "
+"OpenPGP and X.509 certificates. Please make sure to select only certificates "
+"of the same type."
+msgstr ""
+
+#: src/gpafileencryptop.c:671 src/gpafilesignop.c:415
 msgid "You didn't select any key for signing"
 msgstr "لم تحدد مفتاحا للتوقيع"
 
 #: src/gpafilesignop.c:148
 msgid "Signing..."
 msgstr "يجري التوقيع..."
-
-#: src/gpafilesignop.c:428
-msgid ""
-"The selected certificates are not all of the same type. That is, you mixed "
-"OpenPGP and X.509 certificates. Please make sure to select only certificates "
-"of the same type."
-msgstr ""
 
 #: src/gpafileverifyop.c:101
 msgid "Verifying..."
@@ -763,7 +739,7 @@ msgstr ""
 msgid "Generating Key..."
 msgstr "يجري توليد المفتاح..."
 
-#: src/gpaimportfileop.c:131
+#: src/gpaimportfileop.c:132
 msgid "Import public keys from file"
 msgstr "استورد المفاتيح العلنية من ملفّ"
 
@@ -890,16 +866,16 @@ msgstr "يمكن التعمية به"
 msgid "Can authenticate"
 msgstr "يمكن الاستيثاق به"
 
-#: src/gpasubkeylist.c:137 src/gpgmetools.c:613 src/gpgmetools.c:821
-#: src/gpgmetools.c:940
+#: src/gpasubkeylist.c:137 src/gpgmetools.c:622 src/gpgmetools.c:830
+#: src/gpgmetools.c:949
 msgid "Revoked"
 msgstr "منقوض"
 
-#: src/gpasubkeylist.c:141 src/gpgmetools.c:615 src/gpgmetools.c:936
+#: src/gpasubkeylist.c:141 src/gpgmetools.c:624 src/gpgmetools.c:945
 msgid "Expired"
 msgstr "منتهية صلاحيته"
 
-#: src/gpasubkeylist.c:145 src/gpgmetools.c:617
+#: src/gpasubkeylist.c:145 src/gpgmetools.c:626
 msgid "Disabled"
 msgstr "معطل"
 
@@ -907,11 +883,11 @@ msgstr "معطل"
 msgid "Unsigned"
 msgstr "غير موقّع"
 
-#: src/gpasubkeylist.c:153 src/gpgmetools.c:927 src/verifydlg.c:212
+#: src/gpasubkeylist.c:153 src/gpgmetools.c:936 src/verifydlg.c:212
 msgid "Valid"
 msgstr "صالح"
 
-#: src/gpawidgets.c:72 src/gpgmetools.c:661 src/gpgmetools.c:668
+#: src/gpawidgets.c:72 src/gpgmetools.c:670 src/gpgmetools.c:677
 #: src/keyring.c:1176 src/keysigndlg.c:104
 msgid "User Name:"
 msgstr "اسم المستخدم:"
@@ -920,28 +896,28 @@ msgstr "اسم المستخدم:"
 msgid "User Names:"
 msgstr "أسماء المستخدم:"
 
-#: src/gpawidgets.c:78 src/gpgmetools.c:662 src/gpgmetools.c:669
+#: src/gpawidgets.c:78 src/gpgmetools.c:671 src/gpgmetools.c:678
 #: src/keyring.c:1178
 msgid "Key ID:"
 msgstr "معرِّف المفتاح:"
 
-#: src/gpawidgets.c:194
+#: src/gpawidgets.c:180
 msgid "Expiration"
 msgstr "انتهاء الصلاحية"
 
-#: src/gpawidgets.c:201
+#: src/gpawidgets.c:187
 msgid "_indefinitely valid"
-msgstr "_صالح بلا تحديد"
+msgstr "_صالح بلا نهاية"
 
-#: src/gpawidgets.c:210
+#: src/gpawidgets.c:196
 msgid "expire _after"
 msgstr "ينتهي _بعد"
 
-#: src/gpawidgets.c:229
+#: src/gpawidgets.c:216
 msgid "expire o_n:"
 msgstr "ينتهي _في:"
 
-#: src/gpawidgets.c:302 src/keygendlg.c:295
+#: src/gpawidgets.c:292 src/keygendlg.c:295
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -996,7 +972,16 @@ msgstr ""
 "في الأغلب هذه علّة في GPA.\n"
 "سيُحاول GPA التعافي من هذا العطل."
 
-#: src/gpgmetools.c:477
+#: src/gpgmetools.c:139
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"الملفّ %s موجود بالفعل.\n"
+"أتريد استبداله؟"
+
+#: src/gpgmetools.c:486
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -1010,7 +995,7 @@ msgstr ""
 "************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:482
+#: src/gpgmetools.c:491
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -1018,119 +1003,119 @@ msgstr ""
 "المفتاح المحفوظ احتياطيا في هذا الملف هو:\n"
 "\n"
 
-#: src/gpgmetools.c:543
+#: src/gpgmetools.c:552
 msgid "DSA and ElGamal (default)"
 msgstr "‏DSA و الجمل (البدئي)"
 
-#: src/gpgmetools.c:544
+#: src/gpgmetools.c:553
 msgid "DSA (sign only)"
 msgstr "‏DSA (للتوقيع فقط)"
 
-#: src/gpgmetools.c:545
+#: src/gpgmetools.c:554
 msgid "RSA (sign only)"
 msgstr "‏RSA (للتوقيع فقط)"
 
-#: src/gpgmetools.c:581 src/gpgmetools.c:604 src/gpgmetools.c:621
-#: src/gpgmetools.c:932 src/gpgmetools.c:965
+#: src/gpgmetools.c:590 src/gpgmetools.c:613 src/gpgmetools.c:630
+#: src/gpgmetools.c:941 src/gpgmetools.c:974
 msgid "Unknown"
 msgstr "مجهول"
 
-#: src/gpgmetools.c:584
+#: src/gpgmetools.c:593
 msgid "Never"
 msgstr "أبدًا"
 
-#: src/gpgmetools.c:587
+#: src/gpgmetools.c:596
 msgid "Marginal"
 msgstr "هامشية"
 
-#: src/gpgmetools.c:590
+#: src/gpgmetools.c:599
 msgid "Full"
 msgstr "كاملة"
 
-#: src/gpgmetools.c:593
+#: src/gpgmetools.c:602
 msgid "Ultimate"
 msgstr "مطلقة"
 
-#: src/gpgmetools.c:619
+#: src/gpgmetools.c:628
 msgid "Incomplete"
 msgstr "ناقص"
 
-#: src/gpgmetools.c:625
+#: src/gpgmetools.c:634
 msgid "Fully Valid"
 msgstr "صالح تماما"
 
-#: src/gpgmetools.c:659
+#: src/gpgmetools.c:668
 msgid "Please enter the passphrase for the following key:"
 msgstr "من فضلك أدخل عبارة سر المفتاح التالي:"
 
-#: src/gpgmetools.c:667
+#: src/gpgmetools.c:676
 msgid "Wrong passphrase, please try again:"
 msgstr "عبارة سر خاطئة؛ أعِد المحاولة:"
 
-#: src/gpgmetools.c:692
+#: src/gpgmetools.c:701
 msgid "Enter Passphrase"
 msgstr "أدخل عبارة السر"
 
-#: src/gpgmetools.c:814
+#: src/gpgmetools.c:823
 msgid "[None]"
-msgstr "[لاشيئ]"
+msgstr "[لاشيء]"
 
-#: src/gpgmetools.c:904 src/verifydlg.c:269
+#: src/gpgmetools.c:913 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[هوية مستخدم مجهولة]"
 
-#: src/gpgmetools.c:930 src/verifydlg.c:217
+#: src/gpgmetools.c:939 src/verifydlg.c:217
 msgid "Bad"
 msgstr "سيئ"
 
-#: src/gpgmetools.c:953
+#: src/gpgmetools.c:962
 msgid "Generic"
 msgstr "عام"
 
-#: src/gpgmetools.c:956
+#: src/gpgmetools.c:965
 msgid "Persona"
 msgstr "شخصي"
 
-#: src/gpgmetools.c:959
+#: src/gpgmetools.c:968
 msgid "Casual"
 msgstr "عادي"
 
-#: src/gpgmetools.c:962
+#: src/gpgmetools.c:971
 msgid "Positive"
 msgstr "إيجابي"
 
-#: src/gpgmetools.c:980
+#: src/gpgmetools.c:989
 msgid "The key can be used for certification, signing and encryption."
 msgstr "يمكن استخدام المفتاح في الشهادة و التوقيع و التعمية."
 
-#: src/gpgmetools.c:983
+#: src/gpgmetools.c:992
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr "يمكن استخدام المفتاح في الشهادة و التوقيع لكن ليس في التعمية."
 
-#: src/gpgmetools.c:989
+#: src/gpgmetools.c:998
 msgid "The key can be used for certification and encryption."
 msgstr "يمكن استخدام المفتاح في الشهادة و التعمية."
 
-#: src/gpgmetools.c:992
+#: src/gpgmetools.c:1001
 msgid "The key can be used only for certification."
 msgstr "يمكن استخدام المفتاح في الشهادة فقط."
 
-#: src/gpgmetools.c:1000
+#: src/gpgmetools.c:1009
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr "يمكن استخدام المفتاح في التوقيع و التعمية لكن ليس في الشهادة."
 
-#: src/gpgmetools.c:1003
+#: src/gpgmetools.c:1012
 msgid "The key can be used only for signing."
 msgstr "يمكن استخدام المفتاح في التوقيع فقط."
 
-#: src/gpgmetools.c:1008
+#: src/gpgmetools.c:1017
 msgid "The key can be used only for encryption."
 msgstr "يمكن استخدام المفتاح في التعمية فقط."
 
-#: src/gpgmetools.c:1011
+#: src/gpgmetools.c:1020
 msgid "This key is useless."
 msgstr "لا فائدة لهذا المفتاح."
 
@@ -1138,59 +1123,59 @@ msgstr "لا فائدة لهذا المفتاح."
 msgid "GPA Error"
 msgstr "عطل في GPA"
 
-#: src/helpmenu.c:202
+#: src/helpmenu.c:216
 msgid "About GPA"
 msgstr "عنْ GPA"
 
-#: src/helpmenu.c:247
+#: src/helpmenu.c:261
 msgid "Brought to you by:"
 msgstr "قدّمه لك:"
 
-#: src/helpmenu.c:284
+#: src/helpmenu.c:298
 msgid "GPA is Free Software under the"
 msgstr "‏GPA برمجية حرّة تحت"
 
-#: src/helpmenu.c:288
+#: src/helpmenu.c:302
 msgid "GNU General Public License."
 msgstr "رخصة جنو العمومية العامة."
 
-#: src/helpmenu.c:292
+#: src/helpmenu.c:306
 msgid "For news see:"
 msgstr "للأخبار راجع:"
 
-#: src/helpmenu.c:297
+#: src/helpmenu.c:311
 msgid "http://www.gpg4win.org"
 msgstr "http://www.gpg4win.org"
 
-#: src/helpmenu.c:299
+#: src/helpmenu.c:313
 msgid "http://www.gnupg.org"
 msgstr "http://www.gnupg.org"
 
-#: src/helpmenu.c:382
+#: src/helpmenu.c:396
 msgid "GNU General Public License"
 msgstr "رخصة جنو العمومية العامة"
 
-#: src/helpmenu.c:409
+#: src/helpmenu.c:423
 msgid "_GNU General Public License"
 msgstr "رخصة _جنو العمومية العامة"
 
-#: src/helpmenu.c:436
+#: src/helpmenu.c:450
 msgid "Show Help Text\n"
 msgstr "اعرض نص المساعدة\n"
 
-#: src/helpmenu.c:444
+#: src/helpmenu.c:458
 msgid "/_Help"
 msgstr "/_مساعدة"
 
-#: src/helpmenu.c:446
+#: src/helpmenu.c:460
 msgid "/Help/_Contents"
 msgstr "/مساعدة/ال_محتويات"
 
-#: src/helpmenu.c:449
+#: src/helpmenu.c:463
 msgid "/Help/_License"
 msgstr "/مساعدة/ال_رخصة"
 
-#: src/helpmenu.c:450
+#: src/helpmenu.c:464
 msgid "/Help/_About"
 msgstr "/مساعدة/_عنْ"
 
@@ -1232,8 +1217,8 @@ msgid ""
 "although you may be able to get a new copy  from the owner or from a key "
 "server."
 msgstr ""
-"هذا مفتاح علني. لا يمكن التراجع عن حذف هذا المفتاح بسهولة، بالرغم من أنه "
-"بوسعك الحصول على نسخة جديدة من المالك أو من خادوم مفاتيح."
+"هذا مفتاح علني. لا يمكن التراجع عن حذف هذا المفتاح بسهولة، إلا أنك بوسعك "
+"الحصول على نسخة جديدة من المالك أو من خادوم مفاتيح."
 
 #: src/keydeletedlg.c:132
 msgid "Are you sure you want to delete this key?"
@@ -1253,7 +1238,7 @@ msgstr "غيّر _تاريخ انتهاء الصلاحية"
 
 #: src/keygendlg.c:58
 msgid "You must enter a User ID."
-msgstr ""
+msgstr "يجب أن تُدخِل هوية مُستخدم."
 
 #: src/keygendlg.c:63 src/keygenwizard.c:307 src/passwddlg.c:45
 msgid ""
@@ -1442,11 +1427,11 @@ msgstr ""
 
 #: src/keylist.c:568
 msgid "The key ID is a short number to identify a certificate."
-msgstr ""
+msgstr "مُعرّف المفتاح هو رقم صغير لتعريف الشهادة."
 
 #: src/keylist.c:581
 msgid "The Expiry Date is the date until the certificate is valid."
-msgstr ""
+msgstr "تاريخ الانتهاء هو التاريخ الذي تنتهي عنده صلاحية الشهادة."
 
 #: src/keylist.c:591 src/ownertrustdlg.c:122
 msgid "Owner Trust"
@@ -1458,23 +1443,26 @@ msgid ""
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
+"لقد وُضِعت الثقة في المالك من قِبلك وتوضّح إلى أي مدى تثق في حامل الشهادة ليوقّع "
+"(يُجيز) الشهادات الأخرى.  لهذا معنى بالنسبة إلى OpenGPG فقط."
 
 #: src/keylist.c:604
-#, fuzzy
 msgid "Validity"
-msgstr "صلاحية المفتاح"
+msgstr "الصلاحية"
 
 #: src/keylist.c:605
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
+"تصف الصلاحية مستوى ثقة النظام في هذه الشهادة.  هذا هو مدى الثقة في أن "
+"المستخدم المذكور هو من يكون."
 
 #: src/keylist.c:619
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
-msgstr ""
+msgstr "اسم المستخدم هو اسم وفي أحان كثيرة عنوان بريد الشهادة."
 
 #: src/keyring.c:457
 msgid "No keys selected for signing."
@@ -1692,7 +1680,7 @@ msgstr "التوقيعات"
 
 #: src/keyring.c:1249
 msgid "The key has both a private and a public part"
-msgstr "للمفتاح جزئين سرّي وعلني"
+msgstr "للمفتاح جزءان؛ سرّي وعلني"
 
 #: src/keyring.c:1252
 msgid "The key has only a public part"
@@ -1848,7 +1836,7 @@ msgstr "سيُوقّع المفتاح بمفتاحك السرّي البدئي."
 msgid "Sign only _locally"
 msgstr "وقّع _محليّا فقط"
 
-#: src/options.c:316
+#: src/options.c:312
 msgid ""
 "The private key you selected as default is no longer available.\n"
 "GPA will try to choose a new default key automatically."
@@ -2007,19 +1995,16 @@ msgid "The keyserver you specified is not valid"
 msgstr "خادوم المفاتيح الذي حددته غير صالح"
 
 #: src/settingsdlg.c:59
-#, fuzzy
 msgid "<b>Default _key</b>"
-msgstr "ال_مفتاح البدئي:"
+msgstr "<b>ال_مفتاح البدئي</b>"
 
 #: src/settingsdlg.c:111
-#, fuzzy
 msgid "<b>Default key_server</b>"
-msgstr "_خادوم المفاتيح البدئي:"
+msgstr "<b>_خادوم المفاتيح البدئي</b>"
 
 #: src/settingsdlg.c:158
-#, fuzzy
 msgid "<b>Use _advanced mode</b>"
-msgstr "استخدم الطَّور ال_متقدّم:"
+msgstr "<b>استخدم الطَّور ال_متقدّم:</b>"
 
 #: src/settingsdlg.c:193
 msgid "Settings"
@@ -2058,28 +2043,3 @@ msgstr "التوقيع: %s"
 #: src/verifydlg.c:370
 msgid "Signatures:"
 msgstr "التوقيعات:"
-
-#~ msgid "GPA Warning"
-#~ msgstr "تحذير GPA"
-
-#~ msgid ""
-#~ "One of your secret keys contains an ElGamal signing key. Due to a bug in "
-#~ "GnuPG, all ElGamal keys used with GnuPG 1.0.2 and later must be "
-#~ "considered compromised.\n"
-#~ "\n"
-#~ "Please revoke your key as soon as possible.\n"
-#~ "\n"
-#~ "The affected key is:"
-#~ msgstr ""
-#~ "يحوي أحد مفاتيحك السرية مفتاح توقيع \"الجمل\". بسبب علّة في GnuPG، كل "
-#~ "مفاتيح الجمل المستخدمة مع GnuPG 1.0.2 أو أحدث يجب اعتبارها مهددة.\n"
-#~ "\n"
-#~ "من فضلك انقض مفتاحك بأسرع ما يمكن.\n"
-#~ "\n"
-#~ "المفتاح المتأثر:"
-
-#~ msgid "Sign files"
-#~ msgstr "وقّع الملفات"
-
-#~ msgid "sign in separate _file"
-#~ msgstr "وقع في _ملف خاص"
