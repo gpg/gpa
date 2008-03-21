@@ -2004,7 +2004,7 @@ msgstr "<b>_خادوم المفاتيح البدئي</b>"
 
 #: src/settingsdlg.c:158
 msgid "<b>Use _advanced mode</b>"
-msgstr "<b>استخدم الطَّور ال_متقدّم:</b>"
+msgstr "<b>استخدم الطَّور ال_متقدّم:</>"
 
 #: src/settingsdlg.c:193
 msgid "Settings"
