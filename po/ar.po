@@ -569,7 +569,7 @@ msgstr "يفتح الحافظة"
 
 #: src/gpa.c:100
 msgid "Start only the UI server (implies --cms)"
-msgstr "ابدأ فقط خادوم واجهة المستخدم (يفترض ‪--cmss‬ أيضا)"
+msgstr "ابدأ فقط خادوم واجهة المستخدم (يفترض ‪--cms‬ أيضا)"
 
 #: src/gpa.c:102
 msgid "Read options from file"
