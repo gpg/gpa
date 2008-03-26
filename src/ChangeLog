@@ -1,3 +1,12 @@
+2008-03-26  Werner Koch  <wk@g10code.com>
+
+	* gpa.c: Change option --server to --daemon.
+
+2008-03-25  Werner Koch  <wk@g10code.com>
+
+	* keyserver.c (keyserver_read_list): Replace subkeys.pgp.net by
+	keys.gnupg.net.
+
 2008-03-19  Marcus Brinkmann  <marcus@g10code.de>
 
 	* fileman.c (get_load_file_name): Set default response.

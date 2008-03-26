@@ -174,19 +174,16 @@ keyserver_read_list (const gchar *confname)
 
   if (!serverlist)
     { /* no entries in list - use default values */
-      add_server (&serverlist, "hkp://random.sks.keyserver.penguin.de");
+      add_server (&serverlist, "hkp://keys.gnupg.net");
       add_server (&serverlist, "hkp://blackhole.pca.dfn.de"); 
+      add_server (&serverlist, "hkp://minsky.surfnet.nl"); 
       add_server (&serverlist, "hkp://pks.gpg.cz");
       add_server (&serverlist, "hkp://pgp.cns.ualberta.ca");
-      add_server (&serverlist, "hkp://minsky.surfnet.nl");
       add_server (&serverlist, "hkp://keyserver.ubuntu.com");
       add_server (&serverlist, "hkp://keyserver.pramberger.at");
 
       add_server (&serverlist, "http://gpg-keyserver.de");
       add_server (&serverlist, "http://keyserver.pramberger.at");
-   
-      add_server (&serverlist, "hkp://subkeys.pgp.net"); 
-      add_server (&serverlist, "ldap://keyserver.pgp.com");
     }
 
   return rc;

@@ -96,7 +96,7 @@ static GOptionEntry option_entries[] =
       N_("Open file manager"), NULL },
     { "clipboard", 'c', 0, G_OPTION_ARG_NONE, &args.start_clipboard,
       N_("Open clipboard"), NULL },
-    { "server", 's', 0, G_OPTION_ARG_NONE, &args.start_only_server,
+    { "daemon", 'd', 0, G_OPTION_ARG_NONE, &args.start_only_server,
       N_("Start only the UI server (implies --cms)"), NULL },
     { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
       N_("Read options from file"), "FILE" },
