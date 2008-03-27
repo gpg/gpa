@@ -1,11 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
-tip_files = gpa_tips.en gpa_tips.de
 logo = gpa_logo.ppm 
 
-pkgdata_DATA = $(tip_files) $(logo)
+pkgdata_DATA = $(logo)
 
-EXTRA_DIST = $(tip_files) $(logo) gpa.ico gpa-resource.rc
+EXTRA_DIST = $(logo) gpa.ico gpa-resource.rc
 
 if HAVE_W32_SYSTEM
 .rc.o:

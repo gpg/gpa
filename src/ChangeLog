@@ -1,5 +1,10 @@
 2008-03-27  Marcus Brinkmann  <marcus@g10code.de>
 
+	* Makefile.am (tip_files): Removed variable.
+	(pkgdata_DATA): Remove $(tip_files).
+	(EXTRA_DIST): Remove $(tip_files).
+	* gpa_tips.de, gpa_tips.en: Removed file.
+
 	* helpmenu.c: Convert file encoding to UTF-8.
 	(help_about): Rewritten to use stock gtk about dialog.
 	(about_dialog, scroll_text, SCROLLING, DIM, shuffle_array)
