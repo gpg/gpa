@@ -1,28 +1,29 @@
 /* keygendlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2001 G-N-U GmbH.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2001 G-N-U GmbH.
+   Copyright (C) 2008 g10 Code GmbH.
+   This file is part of GPA
+
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 
 /*
  * A simple general purpose Wizard implementation
  */
-
-#include <config.h>
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -211,7 +212,7 @@ gpa_wizard_notebook_destroy (GtkWidget * widget, gpointer param)
 }
 
 
-/* Create a new GPA Wizard */
+/* Create a new GPA Wizard.  */
 GtkWidget *
 gpa_wizard_new (GtkAccelGroup * accel_group,
 		GtkSignalFunc close_func, gpointer close_data)
@@ -256,37 +257,32 @@ gpa_wizard_new (GtkAccelGroup * accel_group,
   gtk_button_box_set_layout (GTK_BUTTON_BOX (button_box), GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (button_box), 10);
 
-  /*button = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);*/
-  button = gpa_button_new (accel_group, _("_Back"));
+  button = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
   wizard->prev_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (gpa_wizard_prev), (gpointer) wizard);
   
-  /*button = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);*/
-  button = gpa_button_new (accel_group, _("_Forward"));
+  button = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
   wizard->next_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (gpa_wizard_next), (gpointer) vbox);
 
-  /*button = gtk_button_new_from_stock (GTK_STOCK_APPLY);*/
-  button = gpa_button_new (accel_group, _("_Apply"));
+  button = gtk_button_new_from_stock (GTK_STOCK_APPLY);
   wizard->finish_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (gpa_wizard_next), (gpointer) vbox);
 
-  /*button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);*/
-  button = gpa_button_new (accel_group, _("_Close"));
+  button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
   wizard->close_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 5);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", close_func, close_data);
   gtk_widget_add_accelerator (button, "clicked", accel_group, GDK_Escape,
 			      0, 0);
 
-  /*button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);*/
-  button = gpa_button_new (accel_group, _("_Cancel"));
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   wizard->cancel_button = button;
   gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 5);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", close_func, close_data);

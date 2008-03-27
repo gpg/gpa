@@ -1,6 +1,6 @@
 /* keysigndlg.c  -  The GNU Privacy Assistant
    Copyright (C) 2000, 2001 G-N-U GmbH.
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2008 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -46,7 +46,6 @@ gboolean
 gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
                          gboolean * sign_locally)
 {
-  GtkAccelGroup *accelGroup;
   GtkWidget *window;
   GtkWidget *vboxSign;
   GtkWidget *check = NULL;
@@ -66,9 +65,6 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_YES);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (window), accelGroup);
 
   vboxSign = GTK_DIALOG (window)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vboxSign), 5);
@@ -136,9 +132,9 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 5);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
-  if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
+  if (! gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
-      check = gpa_check_button_new (accelGroup, _("Sign only _locally"));
+      check = gtk_check_button_new_with_mnemonic (_("Sign only _locally"));
       gtk_box_pack_start (GTK_BOX (vboxSign), check, FALSE, FALSE, 0);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), *sign_locally);
     }

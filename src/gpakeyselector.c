@@ -1,8 +1,8 @@
 /* gpakeyselector.c - The GNU Privacy Assistant key selector.
    Copyright (C) 2003 Miguel Coca.
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2008 g10 Code GmbH.
 
-   This file is part of GPA
+   This file is part of GPA.
 
    GPA is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

@@ -1,24 +1,25 @@
 /* keygendlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2000, 2001 G-N-U GmbH.
+   Copyright (C) 2008 g10 Code GmbH.
 
-#include <config.h>
+   This file is part of GPA
+
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include <sys/stat.h>
 #include <gtk/gtk.h>
@@ -363,15 +364,13 @@ gpa_keygen_wizard_backup_page (GPAKeyGenWizard * keygen_wizard)
   gtk_label_set_line_wrap (GTK_LABEL (description), TRUE);
   gtk_label_set_justify (GTK_LABEL (description), GTK_JUSTIFY_LEFT);
 
-  radio = gpa_radio_button_new (keygen_wizard->accel_group,
-				_("Create _backup copy"));
+  radio = gtk_radio_button_new_with_mnemonic (NULL, _("Create _backup copy"));
   gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, TRUE, 5);
   gtk_object_set_data (GTK_OBJECT (vbox), "gpa_keygen_backup",
 		       (gpointer)radio);
   
-  radio = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio),
-					    keygen_wizard->accel_group,
-					    _("Do it _later"));
+  radio = gtk_radio_button_new_with_mnemonic_from_widget
+    (GTK_RADIO_BUTTON (radio), _("Do it _later"));
   gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, TRUE, 5);
 
   return vbox;

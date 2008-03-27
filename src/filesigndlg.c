@@ -149,20 +149,19 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_container_set_border_width (GTK_CONTAINER (vboxMode), 5);
   gtk_container_add (GTK_CONTAINER (frameMode), vboxMode);
 
-  radio_sign_comp = gpa_radio_button_new (accelGroup, _("si_gn and compress"));
+  radio_sign_comp = gtk_radio_button_new_with_mnemonic (NULL, _("si_gn and compress"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_comp, FALSE, FALSE, 0);
   dialog->radio_comp = radio_sign_comp;
 
   radio_sign =
-    gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
-				      accelGroup, _("_cleartext signature"));
+    gtk_radio_button_new_with_mnemonic_from_widget
+    (GTK_RADIO_BUTTON (radio_sign_comp), _("_cleartext signature"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
   dialog->radio_sign = radio_sign;
 
   radio_sign_sep =
-    gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radio_sign_comp),
-				      accelGroup,
-				      _("_detached signature"));
+    gtk_radio_button_new_with_mnemonic_from_widget
+    (GTK_RADIO_BUTTON (radio_sign_comp), _("_detached signature"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
   dialog->radio_sep = radio_sign_sep;
 
@@ -177,6 +176,8 @@ gpa_file_sign_dialog_constructor (GType type,
   scrollerWho = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_size_request (scrollerWho, 400, 200);
   gtk_box_pack_start (GTK_BOX (vboxWho), scrollerWho, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollerWho),
+				       GTK_SHADOW_IN);
 
   clistWho = gpa_key_selector_new (TRUE);
   dialog->clist_who = clistWho;
@@ -184,7 +185,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
 			      _("Sign _as "));
 
-  checkerArmor = gpa_check_button_new (accelGroup, _("A_rmor"));
+  checkerArmor = gtk_check_button_new_with_mnemonic (_("A_rmor"));
   gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);
   gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
   dialog->check_armor = checkerArmor;

@@ -1,25 +1,26 @@
 /* keyeditdlg.c  -  The GNU Privacy Assistant
- *      Copyright (C) 2000, 2001 G-N-U GmbH.
- *	Copyright (C) 2003, Miguel Coca.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2000, 2001 G-N-U GmbH.
+   Copyright (C) 2003 Miguel Coca.
+   Copyright (C) 2008 g10 Code GmbH.
 
-#include <config.h>
+   This file is part of GPA
+
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -133,7 +134,6 @@ gpa_key_edit_dialog_constructor (GType                  type,
   GtkWidget *label;
   GtkWidget *button;
   GtkWidget *table;
-  GtkAccelGroup *accel_group;
 
   gchar *date_string;
 
@@ -144,15 +144,12 @@ gpa_key_edit_dialog_constructor (GType                  type,
   dialog = GPA_KEY_EDIT_DIALOG (object);
 
   /* Initialize */
-  accel_group = gtk_accel_group_new ();
-
   gtk_window_set_title (GTK_WINDOW (dialog), _("Edit Key"));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  _("_Close"),
 			  GTK_RESPONSE_CLOSE,
 			  NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
-  gtk_window_add_accel_group (GTK_WINDOW (dialog), accel_group);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
   vbox = GTK_DIALOG (dialog)->vbox;
@@ -162,7 +159,7 @@ gpa_key_edit_dialog_constructor (GType                  type,
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
 
   /* change passphrase */
-  button = gpa_button_new (accel_group, _("Change _passphrase"));
+  button = gtk_button_new_with_mnemonic (_("Change _passphrase"));
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, TRUE, 5);
   g_signal_connect (G_OBJECT (button), "clicked",
                     G_CALLBACK (gpa_key_edit_change_passphrase), dialog);
@@ -182,7 +179,7 @@ gpa_key_edit_dialog_constructor (GType                  type,
   dialog->expiry = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
-  button = gpa_button_new (accel_group, _("Change _expiration"));
+  button = gtk_button_new_with_mnemonic (_("Change _expiration"));
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   gtk_widget_set_sensitive (button,(gpa_keytable_lookup_key 
 			     (gpa_keytable_get_secret_instance(), 

@@ -1,5 +1,39 @@
 2008-03-27  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gtktools.h (gpa_window_destroy, gpa_buttonCancel_new)
+	(gpa_button_set_text, gpa_check_button_new, gpa_radio_button_new)
+	(gpa_button_new, gpa_toggle_button_new, gpa_space_new)
+	(gpa_widget_hjustified_new, gpa_radio_button_new_from_widget):
+	(gpa_xpm_label_box, gpa_button_cancel_new): Removed prototype.
+	* gtktools.c (gpa_window_destroy, gpa_buttonCancel_new)
+	(gpa_button_set_text, gpa_check_button_new, gpa_radio_button_new)
+	(gpa_button_new, gpa_toggle_button_new, gpa_space_new)
+	(gpa_widget_hjustified_new, gpa_radio_button_new_from_widget)
+	(gpa_xpm_label_box, gpa_button_cancel_new): Removed function.
+	* keyimpseldlg.c (gpa_key_import_selection_dialog_run): Replace
+	gpa_button_new and gpa_button_cancel_new by stock button.
+	* keyeditdlg.c (gpa_key_edit_dialog_constructor): Use
+	gtk_button_new_with_mnemonic instead of gpa_button_new.  Remove
+	accelerator group.
+	* gpawizard.c (gpa_wizard_new): Use stock buttons.
+	* encryptdlg.c (gpa_file_encrypt_dialog_constructor): Use
+	gtk_check_button_new_with_mnemonic instead of
+	gpa_check_button_new.
+	* filesigndlg.c (gpa_file_sign_dialog_constructor): Likewise.
+	* keysigndlg.c (gpa_key_sign_run_dialog): Likewise.  Remove accelerator group.
+	* gpawidgets.h (gpa_expiry_frame_new): Remove argument accelGroup from prototype.
+	* keygendlg.c (gpa_key_gen_run_dialog): Change caller of gpa_expiry_frame_new.
+	* filesigndlg.c (gpa_file_sign_dialog_constructor): Use
+	gtk_radio_button_new_with_mnemonic instead of gpa_radio_button_new
+	and gtk_radio_button_new_with_mnemonic_from_widget instead fo
+	gpa_radio_button_new_from_widget.
+	* expirydlg.c (gpa_expiry_dialog_run): Likewise.
+	* gpawidgets.c (gpa_expiry_frame_new): Likewise. Remove argument
+	accelGroup.
+	* encryptdlg.c (gpa_file_encrypt_dialog_constructor): Set shadow around keylist.
+	* filesigndlg.c (gpa_file_sign_dialog_constructor): Set shadow
+	type around keylist.
+
 	* Makefile.am (tip_files): Removed variable.
 	(pkgdata_DATA): Remove $(tip_files).
 	(EXTRA_DIST): Remove $(tip_files).

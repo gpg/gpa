@@ -25,8 +25,7 @@
 
 extern GtkWidget *gpa_key_info_new (gpgme_key_t key);
 
-extern GtkWidget *gpa_expiry_frame_new (GtkAccelGroup *accelGroup,
-				        GDate *expiryDate);
+extern GtkWidget *gpa_expiry_frame_new (GDate *expiryDate);
 extern gchar *gpa_expiry_frame_validate (GtkWidget *expiry_frame);
 extern gboolean gpa_expiry_frame_get_expiration(GtkWidget *expiry_frame,
 					        GDate **date,

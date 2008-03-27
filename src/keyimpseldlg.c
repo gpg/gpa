@@ -1,25 +1,25 @@
 /* keyimpseldlg.c - The GNU Privacy Assistant - Key import selection dialog
- * Copyright (C) 2002 G-N-U GmbH
- * Copyright (C) 2008 g10 Code GmbH.
- *
- * This file is part of GPA.
- *
- * GPA is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY - without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with GPA. If not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- */
+   Copyright (C) 2002 G-N-U GmbH
+   Copyright (C) 2008 g10 Code GmbH.
 
-#include <config.h>
+   This file is part of GPA
+
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -150,15 +150,21 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
 			     GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxSelect), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxSelect), 5);
-  buttonSelect = gpa_button_new (accelGroup, "_OK");
+
+  buttonSelect = gtk_button_new_from_stock (GTK_STOCK_OK);
   gtk_signal_connect_object (GTK_OBJECT (buttonSelect), "clicked",
 			     GTK_SIGNAL_FUNC (key_import_selection_ok),
 			     (gpointer) &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSelect), buttonSelect);
 
-  buttonCancel = gpa_button_cancel_new (accelGroup, _("_Cancel"),
-					(GtkSignalFunc) key_import_selection_cancel, (gpointer) &dialog);
+
+  buttonCancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      key_import_selection_cancel, &dialog);
+  gtk_widget_add_accelerator (buttonCancel, "clicked", accelGroup, GDK_Escape,
+                              0, 0);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSelect), buttonCancel);
+
   gtk_container_add (GTK_CONTAINER (windowSelect), vboxSelect);
   gpa_window_show_centered (windowSelect, parent);
   gtk_window_set_modal (GTK_WINDOW (windowSelect), TRUE);

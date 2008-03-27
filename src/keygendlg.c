@@ -261,7 +261,7 @@ gpa_key_gen_run_dialog (GtkWidget * parent)
   gtk_table_attach (GTK_TABLE (table), entryRepeat, 1, 2, 6, 7,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
 
-  frameExpire = gpa_expiry_frame_new (accelGroup, NULL);
+  frameExpire = gpa_expiry_frame_new (NULL);
   dialog.frameExpire = frameExpire;
   gtk_container_set_border_width (GTK_CONTAINER (frameExpire), 5);
   gtk_box_pack_start (GTK_BOX (vboxGenerate), frameExpire, FALSE, FALSE, 0);

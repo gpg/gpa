@@ -159,7 +159,7 @@ expire_date_toggled_cb (GtkToggleButton *togglebutton, gpointer user_data)
 }
 
 GtkWidget *
-gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
+gpa_expiry_frame_new (GDate * expiryDate)
 {
   gint i;
   GtkWidget *expiry_frame;
@@ -184,16 +184,15 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   gtk_container_add (GTK_CONTAINER (expiry_frame), vboxExpire);
   gtk_container_set_border_width (GTK_CONTAINER (vboxExpire), 5);
 
-  radioDont = gpa_radio_button_new (accelGroup, _("_indefinitely valid"));
+  radioDont = gtk_radio_button_new_with_mnemonic (NULL, _("_indefinitely valid"));
   frame->radioDont = radioDont;
   gtk_box_pack_start (GTK_BOX (vboxExpire), radioDont, FALSE, FALSE, 0);
 
   hboxAfter = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vboxExpire), hboxAfter, FALSE, FALSE, 0);
 
-  radioAfter = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radioDont),
-						 accelGroup,
-						 _("expire _after"));
+  radioAfter = gtk_radio_button_new_with_mnemonic_from_widget
+    (GTK_RADIO_BUTTON (radioDont), _("expire _after"));
   frame->radioAfter = radioAfter;
   gtk_box_pack_start (GTK_BOX (hboxAfter), radioAfter, FALSE, FALSE, 0);
   entryAfter = gtk_entry_new ();
@@ -212,8 +211,8 @@ gpa_expiry_frame_new (GtkAccelGroup * accelGroup, GDate * expiryDate)
   gtk_widget_set_sensitive (comboAfter, FALSE);
   /* FIXME: Set according to expiry date.  */
 
-  radioAt = gpa_radio_button_new_from_widget (GTK_RADIO_BUTTON (radioDont),
-					      accelGroup, _("expire o_n:"));
+  radioAt = gtk_radio_button_new_with_mnemonic_from_widget
+    (GTK_RADIO_BUTTON (radioDont), _("expire o_n:"));
   frame->radioAt = radioAt;
   gtk_box_pack_start (GTK_BOX (vboxExpire), radioAt, FALSE, FALSE, 0);
   calendar = gtk_calendar_new ();

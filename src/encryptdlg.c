@@ -162,6 +162,8 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
 				   GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), scrollerKeys, TRUE, TRUE, 0);
   gtk_widget_set_size_request (scrollerKeys, 400, 200);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollerKeys),
+				       GTK_SHADOW_IN);
 
   clistKeys = gpa_key_selector_new (FALSE);
   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
@@ -174,8 +176,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
 			      _("_Public Keys"));
 
  
-  checkerSign = gpa_check_button_new (accelGroup, _("_Sign"));
-
+  checkerSign = gtk_check_button_new_with_mnemonic (_("_Sign"));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), checkerSign, FALSE, FALSE, 0);
   dialog->check_sign = checkerSign;
   gtk_signal_connect (GTK_OBJECT (checkerSign), "toggled",
@@ -212,7 +213,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
   gtk_widget_set_sensitive (scrollerWho, FALSE);
 #endif
 
-  checkerArmor = gpa_check_button_new (accelGroup, _("A_rmor"));
+  checkerArmor = gtk_check_button_new_with_mnemonic (_("A_rmor"));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), checkerArmor, FALSE, FALSE, 0);
   dialog->check_armor = checkerArmor;
 
