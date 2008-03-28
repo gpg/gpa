@@ -64,7 +64,7 @@ struct _GpaFileManager
 
   GtkWidget *window;
   GtkWidget *list_files;
-  GList *selection_sensitive_widgets;
+  GList *selection_sensitive_actions;
 };
 
 struct _GpaFileManagerClass 
@@ -125,7 +125,7 @@ gpa_file_manager_finalize (GObject *object)
 static void
 gpa_file_manager_init (GpaFileManager *fileman)
 {
-  fileman->selection_sensitive_widgets = NULL;
+  fileman->selection_sensitive_actions = NULL;
 }
 
 static void
@@ -283,9 +283,7 @@ register_operation (GpaFileManager *fileman, GpaFileOperation *op)
 
 
 
-/*
- * Management of the selection sensitive widgets;
- */
+/* Management of the selection sensitive actions.  */
 
 /* Return true if a selection is active.  */
 static gboolean
@@ -299,38 +297,38 @@ has_selection (gpointer param)
   return (gtk_tree_selection_count_selected_rows (select) > 0);
 }
 
-/* Add WIDGET to the list of sensitive widgets of FILEMAN.  */
+/* Add WIDGET to the list of sensitive actions of FILEMAN.  */
 static void
-add_selection_sensitive_widget (GpaFileManager *fileman,
-                                GtkWidget *widget,
-                                sensitivity_func_t callback)
+add_selection_sensitive_action (GpaFileManager *fileman,
+				 GtkAction *action,
+				 sensitivity_func_t callback)
 {
-  gtk_object_set_data (GTK_OBJECT (widget), "gpa_sensitivity", callback);
-  fileman->selection_sensitive_widgets \
-    = g_list_append(fileman->selection_sensitive_widgets, widget);
+  g_object_set_data (G_OBJECT (action), "gpa_sensitivity", callback);
+  fileman->selection_sensitive_actions
+    = g_list_append (fileman->selection_sensitive_actions, action);
 }
 
 /* Update the sensitivity of the widget DATA and pass PARAM through to
-   the sensitivity callback. Usable as an iterator function in
-   g_list_foreach. */
+   the sensitivity callback.  Usable as an iterator function in
+   g_list_foreach.  */
 static void
-update_selection_sensitive_widget (gpointer data, gpointer param)
+update_selection_sensitive_action (gpointer data, gpointer param)
 {
   sensitivity_func_t func;
 
-  func = gtk_object_get_data (GTK_OBJECT (data), "gpa_sensitivity");
-  gtk_widget_set_sensitive (GTK_WIDGET (data), func (param));
+  func = g_object_get_data (G_OBJECT (data), "gpa_sensitivity");
+  gtk_action_set_sensitive (GTK_ACTION (data), func (param));
 }
 
 
-/* Call update_selection_sensitive_widget for all widgets in the list
-   of sensitive widgets and pass FILEMAN through as the user data
+/* Call update_selection_sensitive_action for all widgets in the list
+   of sensitive actions and pass FILEMAN through as the user data
    parameter.  */
 static void
-update_selection_sensitive_widgets (GpaFileManager *fileman)
+update_selection_sensitive_actions (GpaFileManager *fileman)
 {
-  g_list_foreach (fileman->selection_sensitive_widgets,
-                  update_selection_sensitive_widget,
+  g_list_foreach (fileman->selection_sensitive_actions,
+                  update_selection_sensitive_action,
                   (gpointer) fileman);
 }
 
@@ -384,8 +382,9 @@ open_file_one (gpointer data, gpointer user_data)
   g_free (filename);
 }
 
+
 static void
-open_file (gpointer param)
+file_open (GtkAction *action, gpointer param)
 {
   GpaFileManager *fileman = param;
   GSList *filenames;
@@ -401,7 +400,7 @@ open_file (gpointer param)
 
 /* Handle menu item "File/Clear".  */
 static void
-close_all_files (gpointer param)
+file_clear (GtkAction *action, gpointer param)
 {
   GpaFileManager *fileman = param;
   GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
@@ -413,10 +412,10 @@ close_all_files (gpointer param)
 
 /* Handle menu item "File/Verify".  */
 static void
-verify_files (gpointer param)
+file_verify (GtkAction *action, gpointer param)
 {
   GpaFileManager *fileman = param;
-  GList * files;
+  GList *files;
   GpaFileVerifyOperation *op;
 
   files = get_selected_files (fileman->list_files);
@@ -431,7 +430,7 @@ verify_files (gpointer param)
 
 /* Handle menu item "File/Sign".  */
 static void
-sign_files (gpointer param)
+file_sign (GtkAction *action, gpointer param)
 {
   GpaFileManager *fileman = param;
   GList * files;
@@ -449,10 +448,10 @@ sign_files (gpointer param)
 
 /* Handle menu item "File/Encrypt".  */
 static void
-encrypt_files (gpointer param)
+file_encrypt (GtkAction *action, gpointer param)
 {
   GpaFileManager *fileman = param;
-  GList * files;
+  GList *files;
   GpaFileEncryptOperation *op;
 
   files = get_selected_files (fileman->list_files);
@@ -467,10 +466,10 @@ encrypt_files (gpointer param)
 
 /* Handle menu item "File/Decrypt".  */
 static void
-decrypt_files (gpointer param)
+file_decrypt (GtkAction *action, gpointer param)
 {
   GpaFileManager *fileman = param;
-  GList * files;
+  GList *files;
   GpaFileDecryptOperation *op;
 
   files = get_selected_files (fileman->list_files);
@@ -485,7 +484,7 @@ decrypt_files (gpointer param)
 
 /* Handle menu item "File/Close".  */
 static void
-close_window (gpointer param)
+file_close (GtkAction *action, gpointer param)
 {
   GpaFileManager *fileman = param;
   gtk_widget_destroy (GTK_WIDGET (fileman));
@@ -494,7 +493,7 @@ close_window (gpointer param)
 
 /* Handle menu item "Edit/Select All".  */
 static void
-fileman_select_all (gpointer param)
+edit_select_all (GtkAction *action, gpointer param)
 {
   GpaFileManager *fileman = param;
   
@@ -504,238 +503,144 @@ fileman_select_all (gpointer param)
 
 
 
-/* Construct the file manager menu window and return that object. */
-static GtkWidget *
-fileman_menu_new (GpaFileManager *fileman)
-{
-  GtkItemFactory *factory;
-  GtkItemFactoryEntry file_menu[] = {
-    {_("/_File"), NULL, NULL, 0, "<Branch>"},
-    {_("/File/_Open"), NULL, open_file, 0, "<StockItem>", GTK_STOCK_OPEN},
-    {_("/File/C_lear"), NULL, close_all_files, 0, "<StockItem>", GTK_STOCK_CLEAR},
-    {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Sign"), NULL, sign_files, 0, NULL},
-    {_("/File/_Verify"), "<control>P", verify_files, 0, NULL},
-    {_("/File/_Encrypt"), NULL, encrypt_files, 0, NULL},
-    {_("/File/_Decrypt"), NULL, decrypt_files, 0, NULL},
-    {_("/File/sep2"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Close"), NULL, close_window, 0, "<StockItem>", GTK_STOCK_CLOSE},
-    {_("/File/_Quit"), NULL, gtk_main_quit, 0, "<StockItem>", GTK_STOCK_QUIT},
-  };
-  GtkItemFactoryEntry edit_menu[] = {
-    {_("/_Edit"), NULL, NULL, 0, "<Branch>"},
-    {_("/Edit/Select _All"), "<control>A", fileman_select_all, 0, NULL},
-    {_("/Edit/sep2"), NULL, NULL, 0, "<Separator>"},
-    {_("/Edit/Pr_eferences..."), NULL, gpa_open_settings_dialog, 0,
-     "<StockItem>", GTK_STOCK_PREFERENCES},
-    {_("/Edit/_Backend Preferences..."), NULL,
-     gpa_open_backend_config_dialog, 0, "<StockItem>", GTK_STOCK_PREFERENCES},
-  };
-  GtkItemFactoryEntry windows_menu[] = {
-    {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
-    {_("/Windows/_Keyring Editor"), NULL, gpa_open_keyring_editor, 0, NULL},
-    {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
-    {_("/Windows/_Clipboard"), NULL, gpa_open_clipboard, 0, NULL},
-  };
-  GtkAccelGroup *accel_group;
-  GtkWidget *item;
-
-  accel_group = gtk_accel_group_new ();
-  factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-  gtk_item_factory_create_items (factory,
-				 sizeof (file_menu) / sizeof (file_menu[0]),
-				 file_menu, fileman);
-  gtk_item_factory_create_items (factory,
-				 sizeof (edit_menu) / sizeof (edit_menu[0]),
-				 edit_menu, fileman);
-  gtk_item_factory_create_items (factory,
-				 sizeof(windows_menu) /sizeof(windows_menu[0]),
-				 windows_menu, fileman);
-
-  /* Disable buttons when no file is selected.   */
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/File/Sign"));
-  if (item)
-    add_selection_sensitive_widget (fileman, item, has_selection);
-
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/File/Verify"));
-  if (item)
-    add_selection_sensitive_widget (fileman, item, has_selection);
-
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/File/Encrypt"));
-  if (item)
-    add_selection_sensitive_widget (fileman, item, has_selection);
-
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/File/Decrypt"));
-  if (item)
-    add_selection_sensitive_widget (fileman, item, has_selection);
-
-  gpa_help_menu_add_to_factory (factory, GTK_WIDGET (fileman));
-  gtk_window_add_accel_group (GTK_WINDOW (fileman), accel_group);
-
-  return gtk_item_factory_get_widget (factory, "<main>");
-}
-
-
-
-/*
- * Toolbar actions.
- */
-
+/* Construct the file manager menu and toolbar widgets and return
+   them. */
 static void
-toolbar_file_open (GtkWidget *widget, gpointer param)
+fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
+		    GtkWidget **toolbar)
 {
-  open_file (param);
-}
-
-static void
-toolbar_close_all (GtkWidget *widget, gpointer param)
-{
-  close_all_files (param);
-}
-
-static void
-toolbar_file_sign (GtkWidget *widget, gpointer param)
-{
-  sign_files (param);
-}
-
-static void
-toolbar_file_verify (GtkWidget *widget, gpointer param)
-{
-  verify_files (param);
-}
-
-static void
-toolbar_file_encrypt (GtkWidget *widget, gpointer param)
-{
-  encrypt_files (param);
-}
-
-static void
-toolbar_file_decrypt (GtkWidget *widget, gpointer param)
-{
-  decrypt_files (param);
-}
-
-
-static void
-toolbar_preferences (GtkWidget *widget, gpointer param)
-{
-  gpa_open_settings_dialog ();
-}
-
-
-/* Construct the new toolbar object and return it.  Takes the file
-   manage object.  */
-static GtkWidget *
-fileman_toolbar_new (GpaFileManager *fileman)
-{
-  GtkWidget *toolbar, *icon, *item;
-
-  toolbar = gtk_toolbar_new ();
-  
-  /* Build the "Open" button.  */
-  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_OPEN,
-                            _("Open a file"), _("open file"),
-                            GTK_SIGNAL_FUNC (toolbar_file_open),
-                            fileman, -1);
-  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_CLEAR,
-                            _("Close all files"), _("close files"),
-                            GTK_SIGNAL_FUNC (toolbar_close_all),
-                            fileman, -1);
-  /* Build the "Sign" button.  */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (fileman), "sign")))
+  static const GtkActionEntry entries[] =
     {
-      item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Sign"),
-				      _("Sign the selected file"),
-                                      _("sign file"),
-				      icon,
-				      GTK_SIGNAL_FUNC (toolbar_file_sign),
-				      fileman);
-      add_selection_sensitive_widget (fileman, item, has_selection);
-    }
-  /* Build the "Verify" button.  */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (fileman), "verify")))
-    {
-      item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Verify"),
-				      _("Check signatures of selected file"), 
-				      _("verify file"),
-                                      icon,
-				      GTK_SIGNAL_FUNC (toolbar_file_verify), 
-				      fileman);
-      add_selection_sensitive_widget (fileman, item, has_selection);
-    }
-  /* Build the "Encrypt" button.  */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (fileman), "encrypt")))
-    {
-      item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Encrypt"),
-				      _("Encrypt the selected file"),
-				      _("encrypt file"),
-				      icon,
-                                      GTK_SIGNAL_FUNC (toolbar_file_encrypt),
-				      fileman);
-      add_selection_sensitive_widget (fileman, item, has_selection);
-    }
-  /* Build the "Decrypt" button.  */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (fileman), "decrypt")))
-    {
-      item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Decrypt"),
-				      _("Decrypt the selected file"),
-				      _("decrypt file"),
-				      icon, 
-                                      GTK_SIGNAL_FUNC (toolbar_file_decrypt),
-				      fileman);
-      add_selection_sensitive_widget (fileman, item, has_selection);
-    }
+      /* Toplevel.  */
+      { "File", NULL, N_("_File"), NULL },
+      { "Edit", NULL, N_("_Edit"), NULL },
 
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-  
-  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), 
-                            GTK_STOCK_PREFERENCES,
-                            _("Open the preferences dialog"),
-                            _("preferences"),
-                            GTK_SIGNAL_FUNC (toolbar_preferences),
-                            fileman, -1);
+      /* File menu.  */
+      { "FileOpen", GTK_STOCK_OPEN, NULL, NULL,
+	N_("Open a file"), G_CALLBACK (file_open) },
+      { "FileClear", GTK_STOCK_CLEAR, NULL, NULL,
+	N_("Close all files"), G_CALLBACK (file_clear) },
+      { "FileSign", GPA_STOCK_SIGN, NULL, NULL,
+	N_("Sign the selected file"), G_CALLBACK (file_sign) },
+      { "FileVerify", GPA_STOCK_VERIFY, NULL, NULL,
+	N_("Check signatures of selected file"), G_CALLBACK (file_verify) },
+      { "FileEncrypt", GPA_STOCK_ENCRYPT, NULL, NULL,
+	N_("Encrypt the selected file"), G_CALLBACK (file_encrypt) },
+      { "FileDecrypt", GPA_STOCK_DECRYPT, NULL, NULL,
+	N_("Decrypt the selected file"), G_CALLBACK (file_decrypt) },
+      { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
+	N_("Close the window"), G_CALLBACK (file_close) },
+      { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
+	N_("Quit the program"), G_CALLBACK (gtk_main_quit) },
 
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+      /* Edit menu.  */
+      { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",
+	N_("Select all files"), G_CALLBACK (edit_select_all) }
+    };
 
-  icon = gpa_create_icon_widget (GTK_WIDGET (fileman), "keyringeditor");
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Keyring"),
-                                  _("Open the keyring editor"),
-                                  _("keyring editor"), icon,
-				  GTK_SIGNAL_FUNC (gpa_open_keyring_editor),
-                                  NULL);
-
-  /* FIXME: Should be just the clipboard.  */
-  icon = gtk_image_new_from_stock ("gtk-paste",
-				   GTK_ICON_SIZE_SMALL_TOOLBAR);
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Clipboard"),
-				  _("Open the clipboard"),
-				  _("clipboard"), icon,
-				  GTK_SIGNAL_FUNC (gpa_open_clipboard),
-				  NULL);
-
-#if 0  /* FIXME: Help is not available yet. :-( */
-  /* Help */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (fileman), "help")))
-    gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
-			     _("Understanding the GNU Privacy Assistant"),
-			     _("help"), icon,
-			     GTK_SIGNAL_FUNC (help_help), NULL);
+  static const char *ui_description =
+    "<ui>"
+    "  <menubar name='MainMenu'>"
+    "    <menu action='File'>"
+    "      <menuitem action='FileOpen'/>"
+    "      <menuitem action='FileClear'/>"
+    "      <separator/>"
+    "      <menuitem action='FileSign'/>"
+    "      <menuitem action='FileVerify'/>"
+    "      <menuitem action='FileEncrypt'/>"
+    "      <menuitem action='FileDecrypt'/>"
+    "      <separator/>"
+    "      <menuitem action='FileClose'/>"
+    "      <menuitem action='FileQuit'/>"
+    "    </menu>"
+    "    <menu action='Edit'>"
+    "      <menuitem action='EditSelectAll'/>"
+    "      <separator/>"
+    "      <menuitem action='EditPreferences'/>"
+    "      <menuitem action='EditBackendPreferences'/>"
+    "    </menu>"
+    "    <menu action='Windows'>"
+    "      <menuitem action='WindowsKeyringEditor'/>"
+    "      <menuitem action='WindowsFileManager'/>"
+    "      <menuitem action='WindowsClipboard'/>"
+    "    </menu>"
+    "    <menu action='Help'>"
+#if 0
+    "      <menuitem action='HelpContents'/>"
 #endif
+    "      <menuitem action='HelpAbout'/>"
+    "    </menu>"
+    "  </menubar>"
+    "  <toolbar name='ToolBar'>"
+    "    <toolitem action='FileOpen'/>"
+    "    <toolitem action='FileClear'/>"
+    "    <separator/>"
+    "    <toolitem action='FileSign'/>"
+    "    <toolitem action='FileVerify'/>"
+    "    <toolitem action='FileEncrypt'/>"
+    "    <toolitem action='FileDecrypt'/>"
+    "    <separator/>"
+    "    <toolitem action='EditPreferences'/>"
+    "    <separator/>"
+    "    <toolitem action='WindowsKeyringEditor'/>"
+    "    <toolitem action='WindowsClipboard'/>"
+#if 0
+    "    <toolitem action='HelpContents'/>"
+#endif
+    "  </toolbar>"
+    "</ui>";
 
-  return toolbar;
+  GtkAccelGroup *accel_group;
+  GtkActionGroup *action_group;
+  GtkAction *action;
+  GtkUIManager *ui_manager;
+  GError *error;
+
+  action_group = gtk_action_group_new ("MenuActions");
+  gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries),
+				fileman);
+  gtk_action_group_add_actions (action_group, gpa_help_menu_action_entries,
+				G_N_ELEMENTS (gpa_help_menu_action_entries),
+				fileman);
+  gtk_action_group_add_actions (action_group, gpa_windows_menu_action_entries,
+				G_N_ELEMENTS (gpa_windows_menu_action_entries),
+				fileman);
+  gtk_action_group_add_actions
+    (action_group, gpa_preferences_menu_action_entries,
+     G_N_ELEMENTS (gpa_preferences_menu_action_entries), fileman);
+  ui_manager = gtk_ui_manager_new ();
+  gtk_ui_manager_insert_action_group (ui_manager, action_group, 0);
+  accel_group = gtk_ui_manager_get_accel_group (ui_manager);
+  gtk_window_add_accel_group (GTK_WINDOW (fileman), accel_group);
+  if (! gtk_ui_manager_add_ui_from_string (ui_manager, ui_description,
+					   -1, &error))
+    {
+      g_message ("building fileman menus failed: %s", error->message);
+      g_error_free (error);
+      exit (EXIT_FAILURE);
+    }
+
+  /* Fixup the icon theme labels which are too long for the toolbar.  */
+  action = gtk_action_group_get_action (action_group, "WindowsKeyringEditor");
+  g_object_set (action, "short_label", _("Keyring"), NULL);
+
+  /* Take care of sensitiveness of widgets.  */
+  action = gtk_action_group_get_action (action_group, "FileSign");
+  add_selection_sensitive_action (fileman, action, has_selection);
+  action = gtk_action_group_get_action (action_group, "FileVerify");
+  add_selection_sensitive_action (fileman, action, has_selection);
+  action = gtk_action_group_get_action (action_group, "FileEncrypt");
+  add_selection_sensitive_action (fileman, action, has_selection);
+  action = gtk_action_group_get_action (action_group, "FileDecrypt");
+  add_selection_sensitive_action (fileman, action, has_selection);
+
+  *menubar = gtk_ui_manager_get_widget (ui_manager, "/MainMenu");
+  *toolbar = gtk_ui_manager_get_widget (ui_manager, "/ToolBar");
+  gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
 }
 
-
 
-/* 
-     Drag and Drop handler
- */
+/* Drag and Drop handler.  */
 
 
 /* Handler for "drag-drop".  This signal is emitted when the user
@@ -832,7 +737,7 @@ file_list_new (GpaFileManager * fileman)
   select = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
   gtk_tree_selection_set_mode (select, GTK_SELECTION_MULTIPLE);
   g_signal_connect_swapped (select, "changed",
-			    G_CALLBACK (update_selection_sensitive_widgets),
+			    G_CALLBACK (update_selection_sensitive_actions),
 			    fileman);
 
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
@@ -896,12 +801,9 @@ gpa_file_manager_constructor (GType type,
   /* Use a vbox to show the menu, toolbar and the file container.  */
   vbox = gtk_vbox_new (FALSE, 0);
 
-  /* First comes the menu.  */
-  menubar = fileman_menu_new (fileman);
+  /* Get the menu and the toolbar.  */
+  fileman_action_new (fileman, &menubar, &toolbar);
   gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, TRUE, 0);
-
-  /* Second the toolbar.  */
-  toolbar = fileman_toolbar_new(fileman);
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
 
 
@@ -963,7 +865,7 @@ gpa_fileman_new ()
   GpaFileManager *fileman;
 
   fileman = g_object_new (GPA_FILE_MANAGER_TYPE, NULL);  
-  update_selection_sensitive_widgets (fileman);
+  update_selection_sensitive_actions (fileman);
 
   return fileman;
 }

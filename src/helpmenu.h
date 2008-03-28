@@ -19,6 +19,20 @@
 #ifndef HELPMENU_H__
 #define HELPMENU_H__
 
-void gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget *window);
+#include <gtk/gtk.h>
+
+/* Display the about dialog.  */
+void gpa_help_about (GtkAction *action, GtkWindow *window);
+
+static const GtkActionEntry gpa_help_menu_action_entries[] =
+  {
+    { "Help", NULL, N_("_Help"), NULL },
+#if 0
+    { "HelpContents", GTK_STOCK_HELP, NULL, NULL,
+      N_("Open the GPA manual"), G_CALLBACK (gpa_help_contents) },
+#endif
+    { "HelpAbout", GTK_STOCK_ABOUT, NULL, NULL,
+      N_("About this application"), G_CALLBACK (gpa_help_about) }
+  };
 
 #endif /* HELPMENU_H__ */

@@ -2,7 +2,7 @@
    Copyright (C) 2000, 2001 G-N-U GmbH.
    Copyright (C) 2007, 2008 g10 Code GmbH
 
-   This file is part of GPA
+   This file is part of GPA.
 
    GPA is free software; you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published by
@@ -77,8 +77,8 @@ struct _GpaClipboard
   GtkTextBuffer *text_buffer;
 
   /* List of sensitive widgets. See below */
-  GList *selection_sensitive_widgets;
-  GList *paste_sensitive_widgets;
+  GList *selection_sensitive_actions;
+  GList *paste_sensitive_actions;
   gboolean paste_p;
 };
 
@@ -115,8 +115,8 @@ gpa_clipboard_finalize (GObject *object)
 static void
 gpa_clipboard_init (GpaClipboard *clipboard)
 {
-  clipboard->selection_sensitive_widgets = NULL;
-  clipboard->paste_sensitive_widgets = NULL;
+  clipboard->selection_sensitive_actions = NULL;
+  clipboard->paste_sensitive_actions = NULL;
 }
 
 static void
@@ -166,13 +166,11 @@ typedef gboolean (*sensitivity_func_t)(gpointer);
 
 /* Add widget to the list of sensitive widgets of editor.  */
 static void
-add_selection_sensitive_widget (GpaClipboard *clipboard,
-                                GtkWidget *widget,
-                                sensitivity_func_t callback)
+add_selection_sensitive_action (GpaClipboard *clipboard,
+                                GtkAction *action)
 {
-  gtk_object_set_data (GTK_OBJECT (widget), "gpa_sensitivity", callback);
-  clipboard->selection_sensitive_widgets
-    = g_list_append (clipboard->selection_sensitive_widgets, widget);
+  clipboard->selection_sensitive_actions
+    = g_list_append (clipboard->selection_sensitive_actions, action);
 }
 
 
@@ -190,12 +188,9 @@ has_selection (gpointer param)
    the sensitivity callback. Usable as an iterator function in
    g_list_foreach. */
 static void
-update_selection_sensitive_widget (gpointer data, gpointer param)
+update_selection_sensitive_action (gpointer data, gpointer param)
 {
-  sensitivity_func_t func;
-
-  func = gtk_object_get_data (GTK_OBJECT (data), "gpa_sensitivity");
-  gtk_widget_set_sensitive (GTK_WIDGET (data), func (param));
+  gtk_action_set_sensitive (GTK_ACTION (data), has_selection (param));
 }
 
 
@@ -203,41 +198,41 @@ update_selection_sensitive_widget (gpointer data, gpointer param)
    of sensitive widgets and pass CLIPBOARD through as the user data
    parameter.  */
 static void
-update_selection_sensitive_widgets (GpaClipboard *clipboard)
+update_selection_sensitive_actions (GpaClipboard *clipboard)
 {
-  g_list_foreach (clipboard->selection_sensitive_widgets,
-                  update_selection_sensitive_widget,
+  g_list_foreach (clipboard->selection_sensitive_actions,
+                  update_selection_sensitive_action,
                   (gpointer) clipboard);
 }
 
 
-/* Add widget to the list of sensitive widgets of editor.  */
+/* Add ACTION to the list of sensitive actions of CLIPBOARD.  */
 static void
-add_paste_sensitive_widget (GpaClipboard *clipboard, GtkWidget *widget)
+add_paste_sensitive_action (GpaClipboard *clipboard, GtkAction *action)
 {
-  clipboard->paste_sensitive_widgets
-    = g_list_append (clipboard->paste_sensitive_widgets, widget);
+  clipboard->paste_sensitive_actions
+    = g_list_append (clipboard->paste_sensitive_actions, action);
 }
 
 
 static void
-update_paste_sensitive_widget (gpointer data, gpointer param)
+update_paste_sensitive_action (gpointer data, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
-  gtk_widget_set_sensitive (GTK_WIDGET (data), clipboard->paste_p);
+  gtk_action_set_sensitive (GTK_ACTION (data), clipboard->paste_p);
 }
 
 
 static void
-update_paste_sensitive_widgets (GtkClipboard *clip,
+update_paste_sensitive_actions (GtkClipboard *clip,
 				GtkSelectionData *selection_data,
 				GpaClipboard *clipboard)
 {
   clipboard->paste_p = gtk_selection_data_targets_include_text (selection_data);
 
-  g_list_foreach (clipboard->paste_sensitive_widgets,
-                  update_paste_sensitive_widget, (gpointer) clipboard);
+  g_list_foreach (clipboard->paste_sensitive_actions,
+                  update_paste_sensitive_action, (gpointer) clipboard);
 }
 
 
@@ -251,7 +246,7 @@ set_paste_sensitivity (GpaClipboard *clipboard, GtkClipboard *clip)
   if (gdk_display_supports_selection_notification (display))
     gtk_clipboard_request_contents
       (clip, gdk_atom_intern_static_string ("TARGETS"),
-       (GtkClipboardReceivedFunc) update_paste_sensitive_widgets,
+       (GtkClipboardReceivedFunc) update_paste_sensitive_actions,
        clipboard);
 }
 
@@ -310,7 +305,7 @@ register_operation (GpaClipboard *clipboard, GpaFileOperation *op)
 
 /* Handle menu item "File/Clear".  */
 static void
-file_clear (gpointer param)
+file_clear (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -366,7 +361,7 @@ get_load_file_name (GtkWidget *parent, const gchar *title)
 
 /* Handle menu item "File/Open".  */
 static void
-file_open (gpointer param)
+file_open (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = param;
   gchar *filename;
@@ -533,7 +528,7 @@ get_save_file_name (GtkWidget *parent, const gchar *title)
 
 /* Handle menu item "File/Save As...".  */
 static void
-file_save_as (gpointer param)
+file_save_as (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = param;
   gchar *filename;
@@ -573,7 +568,7 @@ file_save_as (gpointer param)
 
 /* Handle menu item "File/Verify".  */
 static void
-file_verify (gpointer param)
+file_verify (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = (GpaClipboard *) param;
   GpaFileVerifyOperation *op;
@@ -603,7 +598,7 @@ file_verify (gpointer param)
 
 /* Handle menu item "File/Sign".  */
 static void
-file_sign (gpointer param)
+file_sign (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = (GpaClipboard *) param;
   GpaFileSignOperation *op;
@@ -633,7 +628,7 @@ file_sign (gpointer param)
 
 /* Handle menu item "File/Encrypt".  */
 static void
-file_encrypt (gpointer param)
+file_encrypt (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = (GpaClipboard *) param;
   GpaFileEncryptOperation *op;
@@ -663,7 +658,7 @@ file_encrypt (gpointer param)
 
 /* Handle menu item "File/Decrypt".  */
 static void
-file_decrypt (gpointer param)
+file_decrypt (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = (GpaClipboard *) param;
   GpaFileDecryptOperation *op;
@@ -693,7 +688,7 @@ file_decrypt (gpointer param)
 
 /* Handle menu item "File/Close".  */
 static void
-file_close (gpointer param)
+file_close (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = param;
   gtk_widget_destroy (GTK_WIDGET (clipboard));
@@ -701,7 +696,7 @@ file_close (gpointer param)
 
 
 static void
-edit_cut (gpointer param)
+edit_cut (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -711,7 +706,7 @@ edit_cut (gpointer param)
 
 
 static void
-edit_copy (gpointer param)
+edit_copy (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -721,7 +716,7 @@ edit_copy (gpointer param)
 
 
 static void
-edit_paste (gpointer param)
+edit_paste (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -731,7 +726,7 @@ edit_paste (gpointer param)
 
 
 static void
-edit_delete (gpointer param)
+edit_delete (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -741,7 +736,7 @@ edit_delete (gpointer param)
 
 /* Handle menu item "Edit/Select All".  */
 static void
-edit_select_all (gpointer param)
+edit_select_all (GtkAction *action, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -750,320 +745,179 @@ edit_select_all (gpointer param)
 
 
 /* Construct the file manager menu window and return that object. */
-static GtkWidget *
-clipboard_menu_new (GpaClipboard *clipboard)
+static void
+clipboard_action_new (GpaClipboard *clipboard,
+		      GtkWidget **menu, GtkWidget **toolbar)
 {
-  GtkItemFactory *factory;
-  GtkItemFactoryEntry file_menu[] = {
-    {_("/_File"), NULL, NULL, 0, "<Branch>"},
-    {_("/File/C_lear"), NULL, file_clear, 0, "<StockItem>", GTK_STOCK_CLEAR},
-    {_("/File/_Open"), NULL, file_open, 0, "<StockItem>", GTK_STOCK_OPEN},
-    {_("/File/Save _As"), NULL, file_save_as, 0, "<StockItem>",
-     GTK_STOCK_SAVE_AS},
-    {_("/File/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Sign"), NULL, file_sign, 0, NULL},
-    {_("/File/_Verify"), "<control>P", file_verify, 0, NULL},
-    {_("/File/_Encrypt"), NULL, file_encrypt, 0, NULL},
-    {_("/File/_Decrypt"), NULL, file_decrypt, 0, NULL},
-    {_("/File/sep2"), NULL, NULL, 0, "<Separator>"},
-    {_("/File/_Close"), NULL, file_close, 0, "<StockItem>", GTK_STOCK_CLOSE},
-    {_("/File/_Quit"), NULL, gtk_main_quit, 0, "<StockItem>", GTK_STOCK_QUIT},
-  };
-  GtkItemFactoryEntry edit_menu[] = {
-    {_("/_Edit"), NULL, NULL, 0, "<Branch>"},
+  static const GtkActionEntry entries[] =
+    {
+      /* Toplevel.  */
+      { "File", NULL, N_("_File"), NULL },
+      { "Edit", NULL, N_("_Edit"), NULL },
+
+      /* File menu.  */
+      { "FileClear", GTK_STOCK_CLEAR, NULL, NULL,
+	N_("Clear buffer"), G_CALLBACK (file_clear) },
+      { "FileOpen", GTK_STOCK_OPEN, NULL, NULL,
+	N_("Open a file"), G_CALLBACK (file_open) },
+      { "FileSaveAs", GTK_STOCK_SAVE_AS, NULL, NULL,
+	N_("Save to a file"), G_CALLBACK (file_save_as) },
+      { "FileSign", GPA_STOCK_SIGN, NULL, NULL,
+	N_("Sign buffer text"), G_CALLBACK (file_sign) },
+      { "FileVerify", GPA_STOCK_VERIFY, NULL, NULL,
+	N_("Check signatures of buffer text"), G_CALLBACK (file_verify) },
+      { "FileEncrypt", GPA_STOCK_ENCRYPT, NULL, NULL,
+	N_("Encrypt the buffer text"), G_CALLBACK (file_encrypt) },
+      { "FileDecrypt", GPA_STOCK_DECRYPT, NULL, NULL,
+	N_("Decrypt the buffer text"), G_CALLBACK (file_decrypt) },
+      { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
+	N_("Close the buffer"), G_CALLBACK (file_close) },
+      { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
+	N_("Quit the program"), G_CALLBACK (gtk_main_quit) },
+
+      /* Edit menu.  */
+#if 0
+      /* FIXME: Not implemented yet.  */
+      { "EditUndo", GTK_STOCK_UNDO, NULL, NULL,
+	N_("Undo the last action"), G_CALLBACK (edit_undo) },
+      { "EditRedo", GTK_STOCK_REDO, NULL, NULL,
+	N_("Redo the last undone action"), G_CALLBACK (edit_redo) },
+#endif
+      { "EditCut", GTK_STOCK_CUT, NULL, NULL,
+	N_("Cut the selection"), G_CALLBACK (edit_cut) },
+      { "EditCopy", GTK_STOCK_COPY, NULL, NULL,
+	N_("Copy the selection"), G_CALLBACK (edit_copy) },
+      { "EditPaste", GTK_STOCK_PASTE, NULL, NULL,
+	N_("Paste the clipboard"), G_CALLBACK (edit_paste) },
+      { "EditDelete", GTK_STOCK_DELETE, NULL, NULL,
+	N_("Delete the selected text"), G_CALLBACK (edit_delete) },
+      { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",
+	N_("Select the entire document"), G_CALLBACK (edit_select_all) }
+    };
+
+  static const char *ui_description =
+    "<ui>"
+    "  <menubar name='MainMenu'>"
+    "    <menu action='File'>"
+    "      <menuitem action='FileClear'/>"
+    "      <menuitem action='FileOpen'/>"
+    "      <separator/>"
+    "      <menuitem action='FileSign'/>"
+    "      <menuitem action='FileVerify'/>"
+    "      <menuitem action='FileEncrypt'/>"
+    "      <menuitem action='FileDecrypt'/>"
+    "      <separator/>"
+    "      <menuitem action='FileClose'/>"
+    "      <menuitem action='FileQuit'/>"
+    "    </menu>"
+    "    <menu action='Edit'>"
 #if 0
     /* Not implemented yet.  */
-    {_("/Edit/_Undo"), NULL, edit_undo, 0, "<StockItem>", GTK_STOCK_UNDO },
-    {_("/Edit/_Redo"), NULL, edit_redo, 0, "<StockItem>", GTK_STOCK_REDO },
-    {_("/Edit/sep0"), NULL, NULL, 0, "<Separator>"},
+    "      <menuitem action='EditUndo'/>"
+    "      <menuitem action='EditRedo'/>"
+    "      <separator/>"
 #endif
-    {_("/Edit/Cut"), NULL, edit_cut, 0, "<StockItem>", GTK_STOCK_CUT },
-    {_("/Edit/_Copy"), NULL, edit_copy, 0, "<StockItem>", GTK_STOCK_COPY},
-    {_("/Edit/_Paste"), NULL, edit_paste, 0, "<StockItem>", GTK_STOCK_PASTE},
-    {_("/Edit/_Delete"), NULL, edit_delete, 0, "<StockItem>", GTK_STOCK_DELETE},
-    {_("/Edit/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/Edit/Select _All"), "<control>A", edit_select_all, 0,
-     "<StockItem>", GTK_STOCK_SELECT_ALL },
-    {_("/Edit/sep2"), NULL, NULL, 0, "<Separator>"},
-    {_("/Edit/Pr_eferences..."), NULL, gpa_open_settings_dialog, 0,
-     "<StockItem>", GTK_STOCK_PREFERENCES},
-    {_("/Edit/_Backend Preferences..."), NULL,
-     gpa_open_backend_config_dialog, 0, "<StockItem>", GTK_STOCK_PREFERENCES},
-  };
-  GtkItemFactoryEntry windows_menu[] = {
-    {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
-    {_("/Windows/_Keyring Editor"), NULL, gpa_open_keyring_editor, 0, NULL},
-    {_("/Windows/_Filemanager"), NULL, gpa_open_filemanager, 0, NULL},
-    {_("/Windows/_Clipboard"), NULL, gpa_open_clipboard, 0, NULL},
-  };
-  GtkAccelGroup *accel_group;
-  GtkWidget *item;
-
-  accel_group = gtk_accel_group_new ();
-  factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-  gtk_item_factory_create_items (factory,
-				 sizeof (file_menu) / sizeof (file_menu[0]),
-				 file_menu, clipboard);
-  gtk_item_factory_create_items (factory,
-				 sizeof (edit_menu) / sizeof (edit_menu[0]),
-				 edit_menu, clipboard);
-  gtk_item_factory_create_items (factory,
-				 sizeof(windows_menu) /sizeof(windows_menu[0]),
-				 windows_menu, clipboard);
-
-  /* Disable buttons when no file is selected.   */
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Edit/Cut"));
-  if (item)
-    {
-      gtk_widget_set_sensitive (item, has_selection (clipboard));
-      add_selection_sensitive_widget (clipboard, item, has_selection);
-    }
-
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Edit/Copy"));
-  if (item)
-    {
-      gtk_widget_set_sensitive (item, has_selection (clipboard));
-      add_selection_sensitive_widget (clipboard, item, has_selection);
-    }
-  
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Edit/Delete"));
-  if (item)
-    {
-      gtk_widget_set_sensitive (item, has_selection (clipboard));
-      add_selection_sensitive_widget (clipboard, item, has_selection);
-    }
-
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY (factory),
-                                      _("/Edit/Paste"));
-  if (item)
-    /* Initialized later.  */
-    add_paste_sensitive_widget (clipboard, item);
-
-  gpa_help_menu_add_to_factory (factory, GTK_WIDGET (clipboard));
-  gtk_window_add_accel_group (GTK_WINDOW (clipboard), accel_group);
-
-  return gtk_item_factory_get_widget (factory, "<main>");
-}
-
-
-
-/* Toolbar actions.  */
-
-static void
-toolbar_file_clear (GtkWidget *widget, gpointer param)
-{
-  file_clear (param);
-}
-
-
-#if 0 /* Disabled, see caller for details.  */
-static void
-toolbar_file_open (GtkWidget *widget, gpointer param)
-{
-  file_open (param);
-}
-#endif /*0*/
-
-
-#if 0 /* Disabled, see caller for details.  */
-static void
-toolbar_file_save_as (GtkWidget *widget, gpointer param)
-{
-  file_save_as (param);
-}
-#endif /*0*/
-
-static void
-toolbar_file_sign (GtkWidget *widget, gpointer param)
-{
-  file_sign (param);
-}
-
-
-static void
-toolbar_file_verify (GtkWidget *widget, gpointer param)
-{
-  file_verify (param);
-}
-
-
-static void
-toolbar_file_encrypt (GtkWidget *widget, gpointer param)
-{
-  file_encrypt (param);
-}
-
-
-static void
-toolbar_file_decrypt (GtkWidget *widget, gpointer param)
-{
-  file_decrypt (param);
-}
-
-
-static void
-toolbar_edit_cut (GtkWidget *widget, gpointer param)
-{
-  edit_cut (param);
-}
-
-
-static void
-toolbar_edit_copy (GtkWidget *widget, gpointer param)
-{
-  edit_copy (param);
-}
-
-
-static void
-toolbar_edit_paste (GtkWidget *widget, gpointer param)
-{
-  edit_paste (param);
-}
-
-
-static void
-toolbar_edit_preferences (GtkWidget *widget, gpointer param)
-{
-  gpa_open_settings_dialog ();
-}
-
-
-/* Construct the new toolbar object and return it.  Takes the file
-   manage object.  */
-static GtkWidget *
-clipboard_toolbar_new (GpaClipboard *clipboard)
-{
-  GtkWidget *toolbar, *icon, *item;
-
-  toolbar = gtk_toolbar_new ();
-
-  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_CLEAR,
-                            _("Clear buffer"), _("clear buffer"),
-                            GTK_SIGNAL_FUNC (toolbar_file_clear),
-                            clipboard, -1);
-
-  /* Disabled because the toolbar arrow mode doesn't work, and the
-     toolbar takes up too much space otherwise.  */
+    "      <menuitem action='EditCut'/>"
+    "      <menuitem action='EditCopy'/>"
+    "      <menuitem action='EditPaste'/>"
+    "      <menuitem action='EditDelete'/>"
+    "      <separator/>"
+    "      <menuitem action='EditSelectAll'/>"
+    "      <separator/>"
+    "      <menuitem action='EditPreferences'/>"
+    "      <menuitem action='EditBackendPreferences'/>"
+    "    </menu>"
+    "    <menu action='Windows'>"
+    "      <menuitem action='WindowsKeyringEditor'/>"
+    "      <menuitem action='WindowsFileManager'/>"
+    "      <menuitem action='WindowsClipboard'/>"
+    "    </menu>"
+    "    <menu action='Help'>"
 #if 0
-  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_OPEN,
-                            _("Open a file"), _("open file"),
-                            GTK_SIGNAL_FUNC (toolbar_file_open),
-                            clipboard, -1);
-
-  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_SAVE_AS,
-                            _("Save to a file"), _("save file as"),
-                            GTK_SIGNAL_FUNC (toolbar_file_save_as),
-                            clipboard, -1);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+    "      <menuitem action='HelpContents'/>"
 #endif
-
-  item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_CUT,
-				   _("Cut the selection"),
-				   _("cut the selection"),
-				   GTK_SIGNAL_FUNC (toolbar_edit_cut),
-				   clipboard, -1);
-  add_selection_sensitive_widget (clipboard, item, has_selection);
-
-  item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_COPY,
-				   _("Copy the selection"),
-				   _("copy the selection"),
-				   GTK_SIGNAL_FUNC (toolbar_edit_copy),
-				   clipboard, -1);
-  add_selection_sensitive_widget (clipboard, item, has_selection);
-
-  item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_PASTE,
-				   _("Paste the clipboard"),
-				   _("paste the clipboard"),
-				   GTK_SIGNAL_FUNC (toolbar_edit_paste),
-				   clipboard, -1);
-  add_paste_sensitive_widget (clipboard, item);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-  /* Build the "Sign" button.  */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "sign")))
-    {
-      item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Sign"),
-				      _("Sign the selected text"),
-                                      _("sign text"),
-				      icon,
-				      GTK_SIGNAL_FUNC (toolbar_file_sign),
-				      clipboard);
-    }
-  /* Build the "Verify" button.  */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "verify")))
-    {
-      item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Verify"),
-				      _("Check signatures of selected text"), 
-				      _("verify text"),
-                                      icon,
-				      GTK_SIGNAL_FUNC (toolbar_file_verify), 
-				      clipboard);
-    }
-  /* Build the "Encrypt" button.  */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "encrypt")))
-    {
-      item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Encrypt"),
-				      _("Encrypt the selected text"),
-				      _("encrypt text"),
-				      icon,
-                                      GTK_SIGNAL_FUNC (toolbar_file_encrypt),
-				      clipboard);
-    }
-  /* Build the "Decrypt" button.  */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "decrypt")))
-    {
-      item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Decrypt"),
-				      _("Decrypt the selected text"),
-				      _("decrypt text"),
-				      icon, 
-                                      GTK_SIGNAL_FUNC (toolbar_file_decrypt),
-				      clipboard);
-    }
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-  
-  gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), 
-                            GTK_STOCK_PREFERENCES,
-                            _("Open the preferences dialog"),
-                            _("preferences"),
-                            GTK_SIGNAL_FUNC (toolbar_edit_preferences),
-                            clipboard, -1);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-  icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "keyringeditor");
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Keyring"),
-                                  _("Open the keyring editor"),
-                                  _("keyring editor"), icon,
-				  GTK_SIGNAL_FUNC (gpa_open_keyring_editor),
-                                  NULL);
-
-  icon = gtk_image_new_from_stock ("gtk-directory",
-				   GTK_ICON_SIZE_SMALL_TOOLBAR);
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Files"),
-				  _("Open the file manager"),
-				  _("file manager"), icon,
-				  GTK_SIGNAL_FUNC (gpa_open_filemanager),
-				  NULL);
-
-#if 0  /* FIXME: Help is not available yet. :-( */
-  /* Help */
-  if ((icon = gpa_create_icon_widget (GTK_WIDGET (clipboard), "help")))
-    gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
-			     _("Understanding the GNU Privacy Assistant"),
-			     _("help"), icon,
-			     GTK_SIGNAL_FUNC (help_help), NULL);
+    "      <menuitem action='HelpAbout'/>"
+    "    </menu>"
+    "  </menubar>"
+    "  <toolbar name='ToolBar'>"
+    "    <toolitem action='FileClear'/>"
+#if 0
+    /* Disabled because the toolbar arrow mode doesn't work, and the
+       toolbar takes up too much space otherwise.  */
+    "    <toolitem action='FileOpen'/>"
+    "    <toolitem action='FileSaveAs'/>"
 #endif
+    "    <separator/>"
+    "    <toolitem action='EditCut'/>"
+    "    <toolitem action='EditCopy'/>"
+    "    <toolitem action='EditPaste'/>"
+    "    <separator/>"
+    "    <toolitem action='FileSign'/>"
+    "    <toolitem action='FileVerify'/>"
+    "    <toolitem action='FileEncrypt'/>"
+    "    <toolitem action='FileDecrypt'/>"
+    "    <separator/>"
+    "    <toolitem action='EditPreferences'/>"
+    "    <separator/>"
+    "    <toolitem action='WindowsKeyringEditor'/>"
+    "    <toolitem action='WindowsFileManager'/>"
+#if 0
+    "    <toolitem action='HelpContents'/>"
+#endif
+    "  </toolbar>"
+    "</ui>";
 
-  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), TRUE);
+  GtkAccelGroup *accel_group;
+  GtkActionGroup *action_group;
+  GtkAction *action;
+  GtkUIManager *ui_manager;
+  GError *error;
 
-  return toolbar;
+  action_group = gtk_action_group_new ("MenuActions");
+  gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries),
+				clipboard);
+  gtk_action_group_add_actions (action_group, gpa_help_menu_action_entries,
+				G_N_ELEMENTS (gpa_help_menu_action_entries),
+				clipboard);
+  gtk_action_group_add_actions (action_group, gpa_windows_menu_action_entries,
+				G_N_ELEMENTS (gpa_windows_menu_action_entries),
+				clipboard);
+  gtk_action_group_add_actions
+    (action_group, gpa_preferences_menu_action_entries,
+     G_N_ELEMENTS (gpa_preferences_menu_action_entries), clipboard);
+  ui_manager = gtk_ui_manager_new ();
+  gtk_ui_manager_insert_action_group (ui_manager, action_group, 0);
+  accel_group = gtk_ui_manager_get_accel_group (ui_manager);
+  gtk_window_add_accel_group (GTK_WINDOW (clipboard), accel_group);
+  if (! gtk_ui_manager_add_ui_from_string (ui_manager, ui_description,
+					   -1, &error))
+    {
+      g_message ("building clipboard menus failed: %s", error->message);
+      g_error_free (error);
+      exit (EXIT_FAILURE);
+    }
+
+  /* Fixup the icon theme labels which are too long for the toolbar.  */
+  action = gtk_action_group_get_action (action_group, "WindowsKeyringEditor");
+  g_object_set (action, "short_label", _("Keyring"), NULL);
+  action = gtk_action_group_get_action (action_group, "WindowsFileManager");
+  g_object_set (action, "short_label", _("Files"), NULL);
+
+  /* Take care of sensitiveness of widgets.  */
+  action = gtk_action_group_get_action (action_group, "EditCut");
+  add_selection_sensitive_action (clipboard, action);
+  action = gtk_action_group_get_action (action_group, "EditCopy");
+  add_selection_sensitive_action (clipboard, action);
+  action = gtk_action_group_get_action (action_group, "EditDelete");
+  add_selection_sensitive_action (clipboard, action);
+
+  action = gtk_action_group_get_action (action_group, "EditPaste");
+  /* Initialized later.  */
+  add_paste_sensitive_action (clipboard, action);
+
+  *menu = gtk_ui_manager_get_widget (ui_manager, "/MainMenu");
+  *toolbar = gtk_ui_manager_get_widget (ui_manager, "/ToolBar");
+  gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
 }
 
 
@@ -1094,16 +948,16 @@ clipboard_text_new (GpaClipboard *clipboard)
   /* A change in selection status causes a property change, which we
      can listen in on.  */
   g_signal_connect_swapped (clipboard->text_buffer, "notify::has-selection",
-			    G_CALLBACK (update_selection_sensitive_widgets),
+			    G_CALLBACK (update_selection_sensitive_actions),
 			    clipboard);
 #else
   /* Runs very often.  The changed signal is necessary for backspace
      actions.  */
   g_signal_connect_swapped (clipboard->text_buffer, "mark-set",
-			    G_CALLBACK (update_selection_sensitive_widgets),
+			    G_CALLBACK (update_selection_sensitive_actions),
 			    clipboard);
   g_signal_connect_after (clipboard->text_buffer, "backspace",
-			    G_CALLBACK (update_selection_sensitive_widgets),
+			    G_CALLBACK (update_selection_sensitive_actions),
 			    clipboard);
 #endif
 
@@ -1120,7 +974,7 @@ clipboard_text_new (GpaClipboard *clipboard)
 
 
 /* Construct a new class object of GpaClipboard.  */
-static GObject*
+static GObject *
 gpa_clipboard_constructor (GType type,
 			   guint n_construct_properties,
 			   GObjectConstructParam *construct_properties)
@@ -1162,21 +1016,17 @@ gpa_clipboard_constructor (GType type,
      on the selection status of the text_buffer.  */
   text_frame = clipboard_text_new (clipboard);
 
-  /* First comes the menu.  */
-  menubar = clipboard_menu_new (clipboard);
+  /* Get the menu and the toolbar.  */
+  clipboard_action_new (clipboard, &menubar, &toolbar);
   gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, TRUE, 0);
-
-  /* Second the toolbar.  */
-  toolbar = clipboard_toolbar_new (clipboard);
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
-
 
   /* Add a fancy label that tells us: This is the clipboard.  */
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   
   /* FIXME: Need better icon.  */
-  icon = gtk_image_new_from_stock ("gtk-paste", GTK_ICON_SIZE_DND);
+  icon = gtk_image_new_from_stock (GTK_STOCK_PASTE, GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);
@@ -1219,7 +1069,7 @@ gpa_clipboard_constructor (GType type,
   }
 
   /* Update the sensitivity of selection items.  */
-  update_selection_sensitive_widgets (clipboard);
+  update_selection_sensitive_actions (clipboard);
 
   return object;
 }

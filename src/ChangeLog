@@ -1,3 +1,44 @@
+2008-03-28  Marcus Brinkmann  <marcus@g10code.de>
+
+	* keyring.c, fileman.c, clipboard.c: Many, many changes to use the
+	current Gtk interfaces for menubar and toolbar construction,
+	namely GtkUIManager and GtkAction, instead of the deprecated
+	GtkItemFactory.  Also use the new GPA stock items consistently.
+	Change the sensitive widget code to use GtkAction instead of GtkWidget.
+	* gpa.h: Include "icons.h".
+	(gpa_open_keyring_editor, gpa_open_clipboard)
+	(gpa_open_filemanager, gpa_open_settings_dialog)
+	(gpa_open_backend_config_dialog): Add callback arguments to
+	prototypes.
+	(gpa_windows_menu_action_entries)
+	(gpa_preferences_menu_action_entries): New data.
+	* gpa.c: Include "icons.h".
+	(gpa_open_keyring_editor, gpa_open_clipboard)
+	(gpa_open_filemanager, gpa_open_settings_dialog)
+	(gpa_open_backend_config_dialog): Add callback arguments.  Also to
+	caller.
+	(main): Invoke gpa_register_stock_items.
+	* icons.h (gpa_register_stock_items): New prototype.
+	(GPA_STOCK_SIGN, GPA_STOCK_VERIFY, GPA_STOCK_ENCRYPT)
+	(GPA_STOCK_DECRYPT, GPA_STOCK_KEYRING, GPA_STOCK_FILEMAN)
+	(GPA_STOCK_CLIPBOARD, GPA_STOCK_BRIEF, GPA_STOCK_DETAILED)
+	(GPA_STOCK_EDIT, GPA_STOCK_IMPORT, GPA_STOCK_EXPORT)
+	(GPA_STOCK_BACKUP): New macros.
+	* icons.c (gpa_register_stock_items): New function.
+	(xpms): Remove some obsolete entries (and don't include those xpm
+	files).
+	* helpmenu.h: Include <gtk/gtk.h>.
+	(gpa_help_about): New prototype.
+	(gpa_help_menu_add_to_factory): Removed prototype.
+	(gpa_help_menu_action_entries): New data.
+	* helpmenu.c (help_about): Rename to ...
+	(gpa_help_about): ... this.  Make non-static.
+	(gpa_help_menu_add_to_factory): Removed function.
+	(help_help): Likewise.
+	* gtktools.h (gpa_toolbar_set_homogeneous): New prototype.
+	* gtktools.c (set_homogeneous, gpa_toolbar_set_homogeneous): New
+	functions.
+
 2008-03-27  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gtktools.h (gpa_window_destroy, gpa_buttonCancel_new)

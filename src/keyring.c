@@ -135,7 +135,7 @@ struct _GPAKeyringEditor
   GtkWidget *popup_menu;
 
   /* List of sensitive widgets.  See below.  */
-  GList * selection_sensitive_widgets;
+  GList *selection_sensitive_actions;
 
   /* The currently selected key.  */
   gpgme_key_t current_key;
@@ -171,7 +171,7 @@ static void keyring_update_details_notebook (GPAKeyringEditor *editor);
    sensitive and FALSE otherwise.
   
    Whenever the selection in the key list widget changes we call
-   update_selection_sensitive_widgets which iterates through the
+   update_selection_sensitive_actions which iterates through the
    widgets in the list, calls the sensitivity callback and changes the
    widget's sensitivity accordingly.  */
 
@@ -183,13 +183,13 @@ typedef gboolean (*SensitivityFunc)(gpointer);
 
 /* Add widget to the list of sensitive widgets of editor.  */
 static void
-add_selection_sensitive_widget (GPAKeyringEditor *editor,
-                                GtkWidget *widget,
+add_selection_sensitive_action (GPAKeyringEditor *editor,
+                                GtkAction *action,
                                 SensitivityFunc callback)
 {
-  gtk_object_set_data (GTK_OBJECT (widget), "gpa_sensitivity", callback);
-  editor->selection_sensitive_widgets
-    = g_list_append (editor->selection_sensitive_widgets, widget);
+  g_object_set_data (G_OBJECT (action), "gpa_sensitivity", callback);
+  editor->selection_sensitive_actions
+    = g_list_append (editor->selection_sensitive_actions, action);
 }
 
 
@@ -197,12 +197,12 @@ add_selection_sensitive_widget (GPAKeyringEditor *editor,
    the sensitivity callback.  Usable as iterator function in
    g_list_foreach.  */
 static void
-update_selection_sensitive_widget (gpointer data, gpointer param)
+update_selection_sensitive_action (gpointer data, gpointer param)
 {
   SensitivityFunc func;
 
-  func = gtk_object_get_data (GTK_OBJECT (data), "gpa_sensitivity");
-  gtk_widget_set_sensitive (GTK_WIDGET (data), func (param));
+  func = g_object_get_data (G_OBJECT (data), "gpa_sensitivity");
+  gtk_action_set_sensitive (GTK_ACTION (data), func (param));
 }
 
 
@@ -210,24 +210,24 @@ update_selection_sensitive_widget (gpointer data, gpointer param)
    of sensitive widgets and pass editor through as the user data
    parameter.  */
 static void
-update_selection_sensitive_widgets (GPAKeyringEditor * editor)
+update_selection_sensitive_actions (GPAKeyringEditor *editor)
 {
-  g_list_foreach (editor->selection_sensitive_widgets,
-                  update_selection_sensitive_widget,
+  g_list_foreach (editor->selection_sensitive_actions,
+                  update_selection_sensitive_action,
                   (gpointer) editor);
 }
 
-/* Disable all the widgets in the list of sensitive widgets. To be used while
+/* Disable all the widgets in the list of sensitive widgets.  To be used while
    the selection changes.  */
 static void
-disable_selection_sensitive_widgets (GPAKeyringEditor * editor)
+disable_selection_sensitive_actions (GPAKeyringEditor *editor)
 {
   GList *cur;
   
-  cur = editor->selection_sensitive_widgets;
+  cur = editor->selection_sensitive_actions;
   while (cur)
     {
-      gtk_widget_set_sensitive (GTK_WIDGET (cur->data), FALSE);
+      gtk_action_set_sensitive (GTK_ACTION (cur->data), FALSE);
       cur = g_list_next (cur);
     }
 }
@@ -381,7 +381,7 @@ register_operation (GPAKeyringEditor *editor, GpaOperation *op)
 
 /* delete the selected keys */
 static void
-keyring_editor_delete (GPAKeyringEditor *editor)
+keyring_editor_delete (GtkAction *action, GPAKeyringEditor *editor)
 {
   GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
   GpaKeyDeleteOperation *op = gpa_key_delete_operation_new (editor->window,
@@ -444,7 +444,7 @@ keyring_editor_can_sign (gpointer param)
 
 /* sign the selected keys */
 static void
-keyring_editor_sign (gpointer param)
+keyring_editor_sign (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   GList *selection;
@@ -465,7 +465,7 @@ keyring_editor_sign (gpointer param)
 
 /* Invoke the "edit key" dialog.  */
 static void
-keyring_editor_edit (gpointer param)
+keyring_editor_edit (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   gpgme_key_t key;
@@ -487,7 +487,7 @@ keyring_editor_edit (gpointer param)
 
 
 static void
-keyring_editor_trust (gpointer param)
+keyring_editor_trust (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   GList *selection;
@@ -506,7 +506,7 @@ keyring_editor_trust (gpointer param)
 
 /* Import keys.  */
 static void
-keyring_editor_import (gpointer param)
+keyring_editor_import (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   GpaImportFileOperation *op;
@@ -518,7 +518,7 @@ keyring_editor_import (gpointer param)
 
 /* Export the selected keys to a file.  */
 static void
-keyring_editor_export (gpointer param)
+keyring_editor_export (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   GList *selection;
@@ -535,7 +535,7 @@ keyring_editor_export (gpointer param)
 
 /* Import a key from the keyserver.  */
 static void
-keyring_editor_retrieve (gpointer param)
+keyring_editor_retrieve (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   GpaImportServerOperation *op;
@@ -547,7 +547,7 @@ keyring_editor_retrieve (gpointer param)
 
 /* Send a key to the keyserver.  */
 static void
-keyring_editor_send (gpointer param)
+keyring_editor_send (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   GList *selection;
@@ -566,7 +566,7 @@ keyring_editor_send (gpointer param)
 
 /* Backup the default keys.  */
 static void
-keyring_editor_backup (gpointer param)
+keyring_editor_backup (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   gpgme_key_t key;
@@ -610,7 +610,7 @@ keyring_editor_generate_key_simple (gpointer param)
 
 /* Generate a key.  */
 static void
-keyring_editor_generate_key (gpointer param)
+keyring_editor_generate_key (GtkAction *action, gpointer param)
 {
   if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     keyring_editor_generate_key_simple (param);
@@ -622,9 +622,9 @@ keyring_editor_generate_key (gpointer param)
 /* Update everything that has to be updated when the selection in the
    key list changes.  */
 static void
-keyring_selection_update_widgets (GPAKeyringEditor *editor)
+keyring_selection_update_actions (GPAKeyringEditor *editor)
 {
-  update_selection_sensitive_widgets (editor);
+  update_selection_sensitive_actions (editor);
   keyring_update_details_notebook (editor);
 }  
 
@@ -640,7 +640,7 @@ keyring_editor_key_listed (GpaContext *ctx, gpgme_key_t key, gpointer param)
     gpgme_key_unref (editor->current_key);
   editor->current_key = key;
 
-  keyring_selection_update_widgets (editor);
+  keyring_selection_update_actions (editor);
 }
 
 
@@ -696,12 +696,10 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
 
       /* Make sure the actions that depend on a current key are
 	 disabled.  */
-      disable_selection_sensitive_widgets (editor);
+      disable_selection_sensitive_actions (editor);
     }
   else
-    {
-      keyring_selection_update_widgets (editor);
-    }
+    keyring_selection_update_actions (editor);
 }
 
 /* Signal handler for the map signal.  If the simplified_ui flag is
@@ -741,9 +739,7 @@ keyring_editor_mapped (gpointer param)
 	  response = gtk_dialog_run (GTK_DIALOG (dialog));
 	  gtk_widget_destroy (dialog);
           if (response == GTK_RESPONSE_OK)
-	    {
-	      keyring_editor_generate_key (param);
-	    }
+	    keyring_editor_generate_key (NULL, param);
 	  asked_about_key_generation = TRUE;
         }
       else if (!asked_about_key_backup
@@ -783,7 +779,7 @@ keyring_editor_mapped (gpointer param)
 
 /* Close the keyring editor.  */
 static void
-keyring_editor_close (gpointer param)
+keyring_editor_close (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
 
@@ -797,14 +793,14 @@ keyring_editor_destroy (gpointer param)
 {
   GPAKeyringEditor *editor = param;
 
-  g_list_free (editor->selection_sensitive_widgets);
+  g_list_free (editor->selection_sensitive_actions);
   g_free (editor);
 }
 
 
 /* select all keys in the keyring */
 static void
-keyring_editor_select_all (gpointer param)
+keyring_editor_select_all (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   GtkTreeSelection *selection;
@@ -816,7 +812,7 @@ keyring_editor_select_all (gpointer param)
 
 /* Paste the clipboard into the keyring.  */
 static void
-keyring_editor_paste (gpointer param)
+keyring_editor_paste (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   GpaImportClipboardOperation *op;
@@ -828,7 +824,7 @@ keyring_editor_paste (gpointer param)
 
 /* Copy the keys into the clipboard.  */
 static void
-keyring_editor_copy (gpointer param)
+keyring_editor_copy (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   GList *selection;
@@ -845,7 +841,7 @@ keyring_editor_copy (gpointer param)
 
 /* Reload the key list.  */
 static void
-keyring_editor_refresh (gpointer param)
+keyring_editor_refresh (GtkAction *action, gpointer param)
 {
   GPAKeyringEditor *editor = param;
   
@@ -853,192 +849,264 @@ keyring_editor_refresh (gpointer param)
 }
 
 
-/* Create and return the menu bar for the key ring editor.  */
-static GtkWidget *
-keyring_editor_menubar_new (GtkWidget *window, GPAKeyringEditor *editor)
+static void
+keyring_set_listing_cb (GtkAction *action,
+			GtkRadioAction *current_action, gpointer param)
 {
-  GtkAccelGroup *accel_group;
-  GtkItemFactory *factory;
-  GtkItemFactoryEntry file_menu[] = {
-    {_("/_File"), NULL, NULL, 0, "<Branch>"},
-    {_("/File/_Close"), NULL, keyring_editor_close, 0, "<StockItem>",
-     GTK_STOCK_CLOSE},
-    {_("/File/_Quit"), NULL, gtk_main_quit, 0, "<StockItem>", GTK_STOCK_QUIT},
-  };
-  GtkItemFactoryEntry edit_menu[] = {
-    {_("/_Edit"), NULL, NULL, 0, "<Branch>"},
-    {_("/Edit/_Copy"), NULL, keyring_editor_copy, 0, "<StockItem>",
-     GTK_STOCK_COPY},
-    {_("/Edit/_Paste"), NULL, keyring_editor_paste, 0, "<StockItem>",
-     GTK_STOCK_PASTE},
-    {_("/Edit/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/Edit/Select _All"), "<control>A", keyring_editor_select_all, 0, NULL},
-    {_("/Edit/sep2"), NULL, NULL, 0, "<Separator>"},
-    {_("/Edit/Pr_eferences..."), NULL, gpa_open_settings_dialog, 0,
-     "<StockItem>", GTK_STOCK_PREFERENCES},
-    {_("/Edit/_Backend Preferences..."), NULL,
-     gpa_open_backend_config_dialog, 0, "<StockItem>", GTK_STOCK_PREFERENCES},
-  };
-  GtkItemFactoryEntry keys_menu[] = {
-    {_("/_Keys"), NULL, NULL, 0, "<Branch>"},
-    {_("/Keys/_Refresh"), NULL, keyring_editor_refresh, 0,
-     "<StockItem>", GTK_STOCK_REFRESH},
-    {_("/Keys/sep0"), NULL, NULL, 0, "<Separator>"},
-    {_("/Keys/_New Key..."), NULL, keyring_editor_generate_key, 0,
-     "<StockItem>", GTK_STOCK_NEW},
-    {_("/Keys/_Delete Keys..."), NULL, keyring_editor_delete, 0,
-     "<StockItem>", GTK_STOCK_DELETE},
-    {_("/Keys/sep1"), NULL, NULL, 0, "<Separator>"},
-    {_("/Keys/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
-    {_("/Keys/Set _Owner Trust..."), NULL, keyring_editor_trust, 0, NULL},
-    {_("/Keys/_Edit Private Key..."), NULL, keyring_editor_edit, 0, NULL},
-    {_("/Keys/sep2"), NULL, NULL, 0, "<Separator>"},    
-    {_("/Keys/_Import Keys..."), NULL, keyring_editor_import, 0, NULL},
-    {_("/Keys/E_xport Keys..."), NULL, keyring_editor_export, 0, NULL},
-    {_("/Keys/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
-  };
-  GtkItemFactoryEntry keyserver_menu[] = {
-    {_("/_Server"), NULL, NULL, 0, "<Branch>"},
-    {_("/Server/_Retrieve Keys..."), NULL, keyring_editor_retrieve, 0, NULL},
-    {_("/Server/_Send Keys..."), NULL, keyring_editor_send, 0, NULL},      
-  };
-  GtkItemFactoryEntry win_menu[] = {
-    {_("/_Windows"), NULL, NULL, 0, "<Branch>"},
-    {_("/Windows/_Keyring Editor"), NULL, gpa_open_keyring_editor, 0, NULL},
-    {_("/Windows/_File Manager"), NULL, gpa_open_filemanager, 0, NULL},
-    {_("/Windows/_Clipboard"), NULL, gpa_open_clipboard, 0, NULL},
-  };
-  GtkWidget *item;
+  GPAKeyringEditor *editor = param;
+  gint detailed;
 
-  accel_group = gtk_accel_group_new ();
-  factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-  gtk_item_factory_create_items (factory,
-                                 sizeof (file_menu) / sizeof (file_menu[0]),
-                                 file_menu, editor);
-  gtk_item_factory_create_items (factory,
-                                 sizeof (edit_menu) / sizeof (edit_menu[0]),
-                                 edit_menu, editor);
-  gtk_item_factory_create_items (factory,
-                                 sizeof (keys_menu) / sizeof (keys_menu[0]),
-                                 keys_menu, editor);
-  gtk_item_factory_create_items (factory,
-                                 sizeof (keyserver_menu) / 
-				 sizeof (keyserver_menu[0]),
-                                 keyserver_menu, editor);
-  gtk_item_factory_create_items (factory,
-                                 sizeof (win_menu) / sizeof (win_menu[0]),
-                                 win_menu, editor);
-  gpa_help_menu_add_to_factory (factory, window);
-  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+  detailed = gtk_radio_action_get_current_value
+    (GTK_RADIO_ACTION (current_action));
 
-  /* The menu paths given here MUST NOT contain underscores.  Tough
-     luck for translators :-(  */
-
-  /* Items that must only be available if a key is selected.  */
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Keys/Export Keys..."));
-  if (item)
-      add_selection_sensitive_widget (editor, item,
-				      keyring_editor_has_selection);
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Keys/Delete Keys..."));
-  if (item)
-    add_selection_sensitive_widget (editor, item, keyring_editor_has_selection);
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Edit/Copy"));
-  if (item)
-    add_selection_sensitive_widget (editor, item, keyring_editor_has_selection);
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Server/Send Keys..."));
-  if (item)
-    add_selection_sensitive_widget (editor, item,
-				    keyring_editor_has_single_selection);
-
-  /* Only if there is only ONE key selected. */
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Keys/Set Owner Trust..."));
-  if (item)
-    add_selection_sensitive_widget 
-      (editor, item, keyring_editor_has_single_selection_OpenPGP);
-
-  /* If the keys can be signed.  */
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Keys/Sign Keys..."));
-  if (item)
-    add_selection_sensitive_widget (editor, item, keyring_editor_can_sign);
-
-  /* If the selected key has a private key.  */
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Keys/Edit Private Key..."));
-  if (item)
-    add_selection_sensitive_widget (editor, item,
-				    keyring_editor_has_private_selected);
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Keys/Backup..."));
-  if (item)
-    add_selection_sensitive_widget (editor, item,
-				    keyring_editor_has_private_selected);
-
-  return gtk_item_factory_get_widget (factory, "<main>");
+  if (detailed)
+    {
+      gpa_keylist_set_detailed (editor->keylist);
+      gpa_options_set_detailed_view (gpa_options_get_instance (), TRUE);
+    }
+  else
+    {
+      gpa_keylist_set_brief (editor->keylist);
+      gpa_options_set_detailed_view (gpa_options_get_instance (), FALSE);
+    }
 }
 
 
-/* Create the popup menu for the key list.  */
-static GtkWidget *
-keyring_editor_popup_menu_new (GtkWidget *window,
-                               GPAKeyringEditor *editor)
+/* Create and return the menu bar for the key ring editor.  */
+static void
+keyring_editor_action_new (GPAKeyringEditor *editor,
+			   GtkWidget **menu, GtkWidget **toolbar,
+			   GtkWidget **popup)
 {
-  GtkItemFactory *factory;
-  GtkItemFactoryEntry popup_menu[] =
+  static const GtkActionEntry entries[] =
     {
-      {_("/_Copy"), NULL, keyring_editor_copy, 0, "<StockItem>",
-       GTK_STOCK_COPY},
-      {_("/_Paste"), NULL, keyring_editor_paste, 0, "<StockItem>",
-       GTK_STOCK_PASTE},
-      {_("/_Delete Keys..."), NULL, keyring_editor_delete, 0,
-       "<StockItem>", GTK_STOCK_DELETE},
-      {"/sep1", NULL, NULL, 0, "<Separator>"},
-      {_("/_Sign Keys..."), NULL, keyring_editor_sign, 0, NULL},
-      {_("/Set _Owner Trust..."), NULL, keyring_editor_trust, 0, NULL},
-      {_("/_Edit Private Key..."), NULL, keyring_editor_edit, 0, NULL},
-      {"/sep2", NULL, NULL, 0, "<Separator>"},
-      {_("/E_xport Keys..."), NULL, keyring_editor_export, 0, NULL},
-      {_("/Se_nd Keys to Server..."), NULL, keyring_editor_send, 0, NULL},
-      {_("/_Backup..."), NULL, keyring_editor_backup, 0, NULL},
+      /* Toplevel.  */
+      { "File", NULL, N_("_File"), NULL },
+      { "Edit", NULL, N_("_Edit"), NULL },
+      { "Keys", NULL, N_("_Keys"), NULL },
+      { "Server", NULL, N_("_Server"), NULL },
+
+      /* File menu.  */
+      { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
+	N_("FIXME"), G_CALLBACK (keyring_editor_close) },
+      { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
+	N_("Quit the program"), G_CALLBACK (gtk_main_quit) },
+
+      /* Edit menu.  */
+      { "EditCopy", GTK_STOCK_COPY, NULL, NULL,
+	N_("Copy the selection"), G_CALLBACK (keyring_editor_copy) },
+      { "EditPaste", GTK_STOCK_PASTE, NULL, NULL,
+	N_("Paste the clipboard"), G_CALLBACK (keyring_editor_paste) },
+      { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",
+	N_("Select all certificates"),
+	G_CALLBACK (keyring_editor_select_all) },
+
+      /* Keys menu.  */
+      { "KeysRefresh", GTK_STOCK_REFRESH, NULL, NULL,
+	N_("Refresh the keyring"), G_CALLBACK (keyring_editor_refresh) },
+      { "KeysNew", GTK_STOCK_NEW, N_("_New key..."), NULL,
+	N_("Generate a new key"), G_CALLBACK (keyring_editor_generate_key) },
+      { "KeysDelete", GTK_STOCK_DELETE, N_("_Delete keys"), NULL,
+	N_("Remove the selected key"), G_CALLBACK (keyring_editor_delete) },
+      { "KeysSign", GPA_STOCK_SIGN, N_("_Sign Keys..."), NULL,
+	N_("Sign the selected key"), G_CALLBACK (keyring_editor_sign) },
+      { "KeysSetOwnerTrust", NULL, N_("Set _Owner Trust..."), NULL,
+	N_("Set owner trust of the selected key"),
+	G_CALLBACK (keyring_editor_trust) },
+      { "KeysEditPrivateKey", GPA_STOCK_EDIT, N_("_Edit Private Key..."), NULL,
+	N_("Edit the selected private key"),
+	G_CALLBACK (keyring_editor_edit) },
+      { "KeysImport", GPA_STOCK_IMPORT, N_("_Import Keys..."), NULL,
+	N_("Import Keys"), G_CALLBACK (keyring_editor_import) },
+      { "KeysExport", GPA_STOCK_EXPORT, N_("E_xport Keys..."), NULL,
+	N_("Export Keys"), G_CALLBACK (keyring_editor_export) },
+      { "KeysBackup", NULL, N_("_Backup..."), NULL,
+	N_("Backup key"), G_CALLBACK (keyring_editor_backup) },
+
+      /* Server menu.  */
+      { "ServerRetrieve", NULL, N_("_Retrieve Keys..."), NULL,
+	N_("Retrieve keys from server"),
+	G_CALLBACK (keyring_editor_retrieve) },
+      { "ServerSend", NULL, N_("_Send Keys..."), NULL,
+	N_("Send keys to server"), G_CALLBACK (keyring_editor_send) }
     };
-  GtkWidget *item;
 
-  factory = gtk_item_factory_new (GTK_TYPE_MENU, "<main>", NULL);
-  gtk_item_factory_create_items (factory,
-                                 sizeof (popup_menu) / sizeof (popup_menu[0]),
-                                 popup_menu, editor);
+  static const GtkRadioActionEntry radio_entries[] =
+    {
+      { "DetailsBrief", GPA_STOCK_BRIEF, NULL, NULL,
+	N_("Show Brief Keylist"), 0 },
+      { "DetailsDetailed", GPA_STOCK_DETAILED, NULL, NULL,
+	N_("Show Key Details"), 1 }
+    };
 
-  /* Only if there is only ONE key selected.  */
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Set Owner Trust..."));
-  if (item)
-    add_selection_sensitive_widget 
-      (editor, item, keyring_editor_has_single_selection_OpenPGP);
+  static const char *ui_description =
+    "<ui>"
+    "  <menubar name='MainMenu'>"
+    "    <menu action='File'>"
+    "      <menuitem action='FileClose'/>"
+    "      <menuitem action='FileQuit'/>"
+    "    </menu>"
+    "    <menu action='Edit'>"
+    "      <menuitem action='EditCopy'/>"
+    "      <menuitem action='EditPaste'/>"
+    "      <separator/>"
+    "      <menuitem action='EditSelectAll'/>"
+    "      <separator/>"
+    "      <menuitem action='EditPreferences'/>"
+    "      <menuitem action='EditBackendPreferences'/>"
+    "    </menu>"
+    "    <menu action='Keys'>"
+    "      <menuitem action='KeysRefresh'/>"
+    "      <separator/>"
+    "      <menuitem action='KeysNew'/>"
+    "      <menuitem action='KeysDelete'/>"
+    "      <separator/>"
+    "      <menuitem action='KeysSign'/>"
+    "      <menuitem action='KeysSetOwnerTrust'/>"
+    "      <menuitem action='KeysEditPrivateKey'/>"
+    "      <separator/>"
+    "      <menuitem action='KeysImport'/>"
+    "      <menuitem action='KeysExport'/>"
+    "      <menuitem action='KeysBackup'/>"
+    "    </menu>"
+    "    <menu action='Windows'>"
+    "      <menuitem action='WindowsKeyringEditor'/>"
+    "      <menuitem action='WindowsFileManager'/>"
+    "      <menuitem action='WindowsClipboard'/>"
+    "    </menu>"
+    "    <menu action='Server'>"
+    "      <menuitem action='ServerRetrieve'/>"
+    "      <menuitem action='ServerSend'/>"
+    "    </menu>"
+    "    <menu action='Help'>"
+#if 0
+    "      <menuitem action='HelpContents'/>"
+#endif
+    "      <menuitem action='HelpAbout'/>"
+    "    </menu>"
+    "  </menubar>"
+    "  <toolbar name='ToolBar'>"
+    "    <toolitem action='KeysEditPrivateKey'/>"
+    "    <toolitem action='KeysDelete'/>"
+    "    <toolitem action='KeysSign'/>"
+    "    <toolitem action='KeysImport'/>"
+    "    <toolitem action='KeysExport'/>"
+    "    <separator/>"
+    "    <toolitem action='DetailsBrief'/>"
+    "    <toolitem action='DetailsDetailed'/>"
+    "    <separator/>"
+    "    <toolitem action='EditPreferences'/>"
+    "    <separator/>"
+    "    <toolitem action='KeysRefresh'/>"
+    "    <separator/>"
+    "    <toolitem action='WindowsFileManager'/>"
+    "    <toolitem action='WindowsClipboard'/>"
+#if 0
+    "    <toolitem action='HelpContents'/>"
+#endif
+    "  </toolbar>"
+    "  <popup name='PopupMenu'>"
+    "    <menuitem action='EditCopy'/>"
+    "    <menuitem action='EditPaste'/>"
+    "    <menuitem action='KeysDelete'/>"
+    "    <separator/>"
+    "    <menuitem action='KeysSign'/>"
+    "    <menuitem action='KeysSetOwnerTrust'/>"
+    "    <menuitem action='KeysEditPrivateKey'/>"
+    "    <separator/>"
+    "    <menuitem action='KeysExport'/>"
+    "    <menuitem action='ServerSend'/>"
+    "    <menuitem action='KeysBackup'/>"
+    "  </popup>"
+    "</ui>";
 
-  /* If the keys can be signed.  */
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Sign Keys..."));
-  if (item)
-    add_selection_sensitive_widget (editor, item, keyring_editor_can_sign);
+  GtkAccelGroup *accel_group;
+  GtkActionGroup *action_group;
+  GtkAction *action;
+  GtkUIManager *ui_manager;
+  GError *error;
+  int detailed;
 
-  /* If the selected key has a private key.  */
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Edit Private Key..."));
-  if (item)
-    add_selection_sensitive_widget (editor, item,
-				    keyring_editor_has_private_selected);
-  item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory),
-                                      _("/Backup..."));
-  if (item)
-    add_selection_sensitive_widget (editor, item,
-				    keyring_editor_has_private_selected);
+  detailed = gpa_options_get_detailed_view (gpa_options_get_instance());
 
-  return gtk_item_factory_get_widget (factory, "<main>");
+  action_group = gtk_action_group_new ("MenuActions");
+  gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries),
+				editor);
+  gtk_action_group_add_radio_actions (action_group, radio_entries,
+				      G_N_ELEMENTS (radio_entries),
+				      detailed ? 1 : 0,
+				      G_CALLBACK (keyring_set_listing_cb),
+				      (gpointer) editor);
+  gtk_action_group_add_actions (action_group, gpa_help_menu_action_entries,
+				G_N_ELEMENTS (gpa_help_menu_action_entries),
+				editor->window);
+  gtk_action_group_add_actions (action_group, gpa_windows_menu_action_entries,
+				G_N_ELEMENTS (gpa_windows_menu_action_entries),
+				editor->window);
+  gtk_action_group_add_actions
+    (action_group, gpa_preferences_menu_action_entries,
+     G_N_ELEMENTS (gpa_preferences_menu_action_entries), editor->window);
+  ui_manager = gtk_ui_manager_new ();
+  gtk_ui_manager_insert_action_group (ui_manager, action_group, 0);
+  accel_group = gtk_ui_manager_get_accel_group (ui_manager);
+  gtk_window_add_accel_group (GTK_WINDOW (editor->window), accel_group);
+  if (! gtk_ui_manager_add_ui_from_string (ui_manager, ui_description,
+					   -1, &error))
+    {
+      g_message ("building keyring menus failed: %s", error->message);
+      g_error_free (error);
+      exit (EXIT_FAILURE);
+    }
+
+  /* Fixup the icon theme labels which are too long for the toolbar.  */
+  action = gtk_action_group_get_action (action_group, "KeysEditPrivateKey");
+  g_object_set (action, "short_label", _("Edit"), NULL);
+  action = gtk_action_group_get_action (action_group, "KeysDelete");
+  g_object_set (action, "short_label", _("Delete"), NULL);
+  action = gtk_action_group_get_action (action_group, "KeysSign");
+  g_object_set (action, "short_label", _("Sign"), NULL);
+  action = gtk_action_group_get_action (action_group, "KeysExport");
+  g_object_set (action, "short_label", _("Export"), NULL);
+  action = gtk_action_group_get_action (action_group, "KeysImport");
+  g_object_set (action, "short_label", _("Import"), NULL);
+  action = gtk_action_group_get_action (action_group, "WindowsFileManager");
+  g_object_set (action, "short_label", _("Files"), NULL);
+
+  /* Take care of sensitiveness of widgets.  */
+  action = gtk_action_group_get_action (action_group, "EditCopy");
+  add_selection_sensitive_action (editor, action,
+                                  keyring_editor_has_selection);
+  action = gtk_action_group_get_action (action_group, "KeysDelete");
+  add_selection_sensitive_action (editor, action,
+                                  keyring_editor_has_selection);
+  action = gtk_action_group_get_action (action_group, "KeysExport");
+  add_selection_sensitive_action (editor, action,
+                                  keyring_editor_has_selection);
+
+  action = gtk_action_group_get_action (action_group, "ServerSend");
+  add_selection_sensitive_action (editor, action,
+				  keyring_editor_has_single_selection);
+
+  action = gtk_action_group_get_action (action_group, "KeysSetOwnerTrust");
+  add_selection_sensitive_action (editor, action,
+				  keyring_editor_has_single_selection_OpenPGP);
+
+  action = gtk_action_group_get_action (action_group, "KeysSign");
+  add_selection_sensitive_action (editor, action,
+				  keyring_editor_can_sign);
+
+  action = gtk_action_group_get_action (action_group, "KeysEditPrivateKey");
+  add_selection_sensitive_action (editor, action,
+                                  keyring_editor_has_private_selected);
+  action = gtk_action_group_get_action (action_group, "KeysBackup");
+  add_selection_sensitive_action (editor, action,
+                                  keyring_editor_has_private_selected);
+
+  *menu = gtk_ui_manager_get_widget (ui_manager, "/MainMenu");
+  *toolbar = gtk_ui_manager_get_widget (ui_manager, "/ToolBar");
+  gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
+
+  *popup = gtk_ui_manager_get_widget (ui_manager, "/PopupMenu");
 }
 
 
@@ -1457,220 +1525,6 @@ keyring_update_details_notebook (GPAKeyringEditor *editor)
 }
 
 
-/* Change the keylist to brief listing.  */
-static void
-keyring_set_brief_listing (GtkWidget *widget, gpointer param)
-{
-  GPAKeyringEditor *editor = param;
-
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-    {
-      gpa_keylist_set_brief (editor->keylist);
-      gpa_options_set_detailed_view (gpa_options_get_instance (), FALSE);
-    }
-}
-
-
-/* Change the keylist to detailed listing.  */
-static void
-keyring_set_detailed_listing (GtkWidget *widget, gpointer param)
-{
-  GPAKeyringEditor *editor = param;
-
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-    {
-      gpa_keylist_set_detailed (editor->keylist);
-      gpa_options_set_detailed_view (gpa_options_get_instance (), TRUE);
-    }
-}
-
-
-static void
-toolbar_edit_key (GtkWidget *widget, gpointer param)
-{
-  keyring_editor_edit (param);
-}
-
-
-static void
-toolbar_remove_key (GtkWidget *widget, gpointer param)
-{
-  keyring_editor_delete (param);
-}
-
-
-static void
-toolbar_sign_key (GtkWidget *widget, gpointer param)
-{
-  keyring_editor_sign (param);
-}
-
-
-static void
-toolbar_export_keys (GtkWidget *widget, gpointer param)
-{
-  keyring_editor_export (param);
-}
-
-
-static void
-toolbar_import_keys (GtkWidget *widget, gpointer param)
-{
-  keyring_editor_import (param);
-}
-
-
-static void
-toolbar_preferences (GtkWidget *widget, gpointer param)
-{
-  gpa_open_settings_dialog ();
-}
-
-
-static void
-toolbar_refresh (GtkWidget *widget, gpointer param)
-{
-  keyring_editor_refresh (param);
-}
-
-
-static GtkWidget *
-keyring_toolbar_new (GtkWidget *window, GPAKeyringEditor *editor)
-{
-  GtkWidget *toolbar;
-  GtkWidget *icon;
-  GtkWidget *item;
-  GtkWidget *button;
-  GtkWidget *view_b;
-  GtkWidget *view_d;
-
-  toolbar = gtk_toolbar_new ();
-  gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar),
-                             GTK_ICON_SIZE_LARGE_TOOLBAR);
-  
-  icon = gpa_create_icon_widget (window, "edit");
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Edit"),
-                                  _("Edit the selected private key"),
-                                  _("edit key"), icon,
-                                  GTK_SIGNAL_FUNC (toolbar_edit_key),
-                                  editor);
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_private_selected);
-
-  
-  item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_DELETE,
-                                   _("Remove the selected key"),
-                                   _("remove key"),
-                                   GTK_SIGNAL_FUNC (toolbar_remove_key),
-                                   editor, -1);
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_selection);
-
-  icon = gpa_create_icon_widget (window, "sign");
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Sign"),
-                                  _("Sign the selected key"), _("sign key"),
-                                  icon, GTK_SIGNAL_FUNC (toolbar_sign_key),
-                                  editor);
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_can_sign);
-  
-  icon = gpa_create_icon_widget (window, "import");
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Import"),
-                                  _("Import Keys"), _("import keys"),
-                                  icon, GTK_SIGNAL_FUNC (toolbar_import_keys),
-                                  editor);
-
-  icon = gpa_create_icon_widget (window, "export");
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Export"),
-                                  _("Export Keys"), _("export keys"),
-                                  icon, GTK_SIGNAL_FUNC (toolbar_export_keys),
-                                  editor);
-  add_selection_sensitive_widget (editor, item,
-                                  keyring_editor_has_selection);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-
-  button = gtk_radio_button_new (NULL);
-  icon = gpa_create_icon_widget (window, "brief");
-  view_b = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
-                                       GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
-                                       _("Brief"), _("Show Brief Keylist"),
-                                       _("brief"), icon,
-                                       GTK_SIGNAL_FUNC (keyring_set_brief_listing),
-                                       editor);
-  /*gtk_signal_handler_block_by_data (GTK_OBJECT (item), editor);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), TRUE);
-  gtk_signal_handler_unblock_by_data (GTK_OBJECT (item), editor);*/
-
-  button = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON (button));
-  icon = gpa_create_icon_widget (window, "detailed");
-  view_d = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar),
-                                       GTK_TOOLBAR_CHILD_RADIOBUTTON, button,
-                                       _("Detailed"), _("Show Key Details"),
-                                       _("detailed"), icon,
-                                       GTK_SIGNAL_FUNC (keyring_set_detailed_listing),
-                                       editor);
-   /* Set brief or detailed button active according to option */
-   if (gpa_options_get_detailed_view (gpa_options_get_instance()) )
-     {
-       item = view_d;
-     }
-   else
-     {
-       item = view_b;
-     }
-   gtk_signal_handler_block_by_data (GTK_OBJECT (item), editor);
-   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), TRUE);
-   gtk_signal_handler_unblock_by_data (GTK_OBJECT (item), editor);
- 
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-  item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), 
-                                   GTK_STOCK_PREFERENCES,
-                                   _("Open the preferences dialog"),
-                                   _("preferences"),
-                                   GTK_SIGNAL_FUNC (toolbar_preferences),
-                                   editor, -1);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-  item = gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar), GTK_STOCK_REFRESH,
-                                   _("Refresh the keyring"),
-                                   _("refresh keyring"),
-                                   GTK_SIGNAL_FUNC (toolbar_refresh),
-                                   editor, -1);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-  icon = gtk_image_new_from_stock ("gtk-directory",
-				   GTK_ICON_SIZE_SMALL_TOOLBAR);
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Files"),
-				  _("Open the file manager"),
-				  _("file manager"), icon,
-				  GTK_SIGNAL_FUNC (gpa_open_filemanager),
-				  NULL);
-
-  /* FIXME: Should be just the clipboard icon.  */
-  icon = gtk_image_new_from_stock ("gtk-paste",
-				   GTK_ICON_SIZE_SMALL_TOOLBAR);
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Clipboard"),
-				  _("Open the clipboard"),
-				  _("clipboard"), icon,
-				  GTK_SIGNAL_FUNC (gpa_open_clipboard),
-				  NULL);
-
-#if 0  /* Help is not available yet. :-( */
-  icon = gpa_create_icon_widget (window, "help");
-  item = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), _("Help"),
-                                  _("Understanding the GNU Privacy Assistant"),
-                                  _("help"), icon, GTK_SIGNAL_FUNC (help_help),
-                                  NULL);
-#endif
-
-  return toolbar;
-}
-
 
 /* Status bar handling.  */
 static GtkWidget *
@@ -1784,7 +1638,7 @@ keyring_default_key_changed (GpaOptions *options, gpointer param)
   /* Update the status bar and the selection sensitive widgets because
      some depend on the default key.  */
   keyring_update_status_bar (editor);
-  update_selection_sensitive_widgets (editor);
+  update_selection_sensitive_actions (editor);
 }
 
 
@@ -1816,6 +1670,7 @@ keyring_editor_new (void)
   GtkWidget *scrolled;
   GtkWidget *keylist;
   GtkWidget *notebook;
+  GtkWidget *menubar;
   GtkWidget *toolbar;
   GtkWidget *hbox;
   GtkWidget *icon;
@@ -1825,7 +1680,7 @@ keyring_editor_new (void)
   gchar *markup;
 
   editor = g_malloc (sizeof (GPAKeyringEditor));
-  editor->selection_sensitive_widgets = NULL;
+  editor->selection_sensitive_actions = NULL;
   editor->details_idle_id = 0;
 
   window = editor->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -1833,7 +1688,7 @@ keyring_editor_new (void)
                         _("GNU Privacy Assistant - Keyring Editor"));
   gtk_object_set_data_full (GTK_OBJECT (window), "user_data", editor,
                             keyring_editor_destroy);
-  gtk_window_set_default_size (GTK_WINDOW (window), 600, 600);
+  gtk_window_set_default_size (GTK_WINDOW (window), 680, 600);
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   gtk_signal_connect_object (GTK_OBJECT (window), "map",
@@ -1845,13 +1700,10 @@ keyring_editor_new (void)
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
-  gtk_box_pack_start (GTK_BOX (vbox),
-                      keyring_editor_menubar_new (window, editor),
-                      FALSE, TRUE, 0);
-
-  toolbar = keyring_toolbar_new (window, editor);
+  keyring_editor_action_new (editor, &menubar, &toolbar,
+			     &editor->popup_menu);
+  gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
-
 
   /* Add a fancy label that tells us: This is the keyring editor.  */
   hbox = gtk_hbox_new (FALSE, 0);
@@ -1895,7 +1747,6 @@ keyring_editor_new (void)
 		    "changed", G_CALLBACK (keyring_editor_selection_changed),
 		    (gpointer) editor);
 
-  editor->popup_menu = keyring_editor_popup_menu_new (window, editor);
   g_signal_connect_swapped (GTK_OBJECT (keylist), "button_press_event",
                             G_CALLBACK (display_popup_menu), editor);
 
@@ -1913,7 +1764,7 @@ keyring_editor_new (void)
                     (GCallback) keyring_ui_mode_changed, editor);
 
   keyring_update_status_bar (editor);
-  update_selection_sensitive_widgets (editor);
+  update_selection_sensitive_actions (editor);
   keyring_update_details_notebook (editor);
 
   editor->current_key = NULL;

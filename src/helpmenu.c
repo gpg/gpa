@@ -31,8 +31,8 @@
 
 
 /* Display the about dialog.  */
-static void
-help_about (GtkWindow *window)
+void
+gpa_help_about (GtkAction *action, GtkWindow *window)
 {
   static const gchar *authors[] =
     {
@@ -93,28 +93,4 @@ help_about (GtkWindow *window)
 			 NULL);
   if (logo)
     g_object_unref (logo);
-}
-
-void
-help_help (GtkWindow *window)
-{
-  g_print (_("Show Help Text\n"));
-}
-
-
-void
-gpa_help_menu_add_to_factory (GtkItemFactory *factory, GtkWidget * window)
-{
-  GtkItemFactoryEntry menu[] = {
-    { _("/_Help"), NULL, NULL, 0, "<Branch>" },
-#if 0
-    /* FIXME: Help is not available yet.  */
-    { _("/Help/_Contents"), NULL, (GtkItemFactoryCallback) help_help, 0,
-      "<StockItem>", GTK_STOCK_HELP },
-#endif
-    { _("/Help/_About"), NULL, (GtkItemFactoryCallback) help_about, 0,
-      "<StockItem>", GTK_STOCK_ABOUT }
-  };
-  gtk_item_factory_create_items (factory, sizeof (menu) / sizeof (menu[0]),
-				 menu, window);
 }

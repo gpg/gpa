@@ -707,7 +707,7 @@ cmd_sign (assuan_context_t ctx, char *line)
 static int
 cmd_start_keymanager (assuan_context_t ctx, char *line)
 {
-  gpa_open_keyring_editor ();
+  gpa_open_keyring_editor (NULL, NULL);
 
   return assuan_process_done (ctx, 0);
 }

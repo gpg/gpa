@@ -177,3 +177,21 @@ gpa_set_column_title (GtkTreeViewColumn *column,
     gpa_add_tooltip (gtk_tree_view_column_get_widget (column), tooltip);
 }
 
+
+static void
+set_homogeneous (GtkWidget *widget, gpointer data)
+{
+  gboolean *is_hom_p = data;
+
+  gtk_tool_item_set_homogeneous (GTK_TOOL_ITEM (widget), *is_hom_p);
+}
+
+
+/* Set the homogeneous property for all children of TOOLBAR to IS_HOM.  */
+void
+gpa_toolbar_set_homogeneous (GtkToolbar *toolbar, gboolean is_hom)
+{
+  gtk_container_foreach (GTK_CONTAINER (toolbar),
+			 (GtkCallback) set_homogeneous, &is_hom);
+}
+

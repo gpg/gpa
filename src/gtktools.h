@@ -2,8 +2,7 @@
    Copyright (C) 2000, 2001 G-N-U GmbH.
    Copyright (C) 2008 g10 Code GmbH.
 
-
-   This file is part of GPA
+   This file is part of GPA.
 
    GPA is free software; you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published by
@@ -40,6 +39,10 @@ void gpa_add_tooltip (GtkWidget *widget, const char *text);
 /* Set the title of COLUMN to TITLE and also set TOOLTIP. */
 void gpa_set_column_title (GtkTreeViewColumn *column,
                            const char *title, const char *tooltip);
+
+/* Set the homogeneous property for all children of TOOLBAR to IS_HOM.  */
+void gpa_toolbar_set_homogeneous (GtkToolbar *toolbar, gboolean is_hom);
+
 
 
 #endif /* GTK_TOOLS_H_ */

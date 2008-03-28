@@ -39,6 +39,7 @@
 #include "keyserver.h"
 #include "settingsdlg.h"
 #include "confdialog.h"
+#include "icons.h"
 
 #ifdef __MINGW32__
 #include "hidewnd.h"
@@ -177,7 +178,7 @@ close_main_window (GtkWidget *widget, gpointer param)
 
 /* Show the keyring editor dialog.  */
 void
-gpa_open_keyring_editor (void)
+gpa_open_keyring_editor (GtkAction *action, void *data)
 {
   if (! keyringeditor)
     {
@@ -193,7 +194,7 @@ gpa_open_keyring_editor (void)
 
 /* Show the clipboard dialog.  */
 void
-gpa_open_clipboard (void)
+gpa_open_clipboard (GtkAction *action, void *data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  */
@@ -207,7 +208,7 @@ gpa_open_clipboard (void)
 
 /* Show the filemanager dialog.  */
 void
-gpa_open_filemanager (void)
+gpa_open_filemanager (GtkAction *action, void *data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  */
@@ -221,7 +222,7 @@ gpa_open_filemanager (void)
 
 /* Show the settings dialog.  */
 void
-gpa_open_settings_dialog (void)
+gpa_open_settings_dialog (GtkAction *action, void *data)
 {
   if (! settings_dialog)
     {
@@ -237,7 +238,7 @@ gpa_open_settings_dialog (void)
 
 /* Show the backend configuration dialog.  */
 void
-gpa_open_backend_config_dialog (void)
+gpa_open_backend_config_dialog (GtkAction *action, void *data)
 {
   if (!backend_config_dialog)
     {
@@ -329,10 +330,12 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  /* Default icon for all windows */
+  /* Default icon for all windows.  */
   gtk_window_set_default_icon_from_file (GPA_DATADIR "/gpa.png", &err);
   if (err)
     g_error_free (err);
+
+  gpa_register_stock_items ();
 
 #ifdef IS_DEVELOPMENT_VERSION
   fprintf (stderr, "NOTE: This is a development version!\n");
@@ -418,13 +421,13 @@ main (int argc, char *argv[])
       /* Don't open the keyring editor if any files are given on the
          command line.  Dito for the clipboard.   */
       if (args.start_keyring_editor && (optind >= argc))
-	gpa_open_keyring_editor ();
+	gpa_open_keyring_editor (NULL, NULL);
 
       if (args.start_clipboard && (optind >= argc))
-	gpa_open_clipboard ();
+	gpa_open_clipboard (NULL, NULL);
   
       if (args.start_file_manager || (optind < argc))
-	gpa_open_filemanager ();
+	gpa_open_filemanager (NULL, NULL);
 
       /* If there are any command line arguments that are not options,
 	 try to open them as files in the filemanager */
