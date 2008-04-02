@@ -1,25 +1,25 @@
 /* gpafileverifyop.c - The GpaOperation object.
- * Copyright (C) 2003 Miguel Coca.
- * Copyright (C) 2008 g10 Code GmbH.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2003 Miguel Coca.
+   Copyright (C) 2008 g10 Code GmbH.
+  
+   This file is part of GPA.
 
-#include <config.h>
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include <glib.h>
 
@@ -240,6 +240,8 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 
   if (file_item->direct_in)
     {
+      /* Direct input is always an inline signature.  */
+
       /* No copy is made.  */
       err = gpgme_data_new_from_mem (&op->sig, file_item->direct_in,
 				     file_item->direct_in_len, 0);
@@ -405,6 +407,14 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
 	  g_free (op->signature_file);
 	  op->signature_file = NULL;
 	}
+      else
+	{
+	  /* Otherwise, we created a "file" in direct mode.  */
+	  if (file_item->direct_in)
+	    g_signal_emit_by_name (GPA_OPERATION (op), "created_file",
+				   file_item);
+	}
+
       /* Go to the next file in the list and verify it */
       GPA_FILE_OPERATION (op)->current = g_list_next 
 	(GPA_FILE_OPERATION (op)->current);
