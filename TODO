@@ -40,8 +40,7 @@ In no particular order:
 
 * MB:
 ** Support getting plaintext from verify operation (should emit "created file"
-   then).  NEEDED FOR CLIPBOARD of non clear text.  And also needed
-   for normal file ops.
+   then).  Done for clipboard.  Also needed for normal file ops and server.
 
 ** Convert the windows registry strings for the home dir to the glib filename
    encoding, or rather to utf8 and from there to the glib filename encoding.
