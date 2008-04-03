@@ -1,34 +1,38 @@
 /* gparecvkeydlg.c  -  The GNU Privacy Assistant
- *	Copyright (C) 2000, 2001 G-N-U GmbH.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2000, 2001 G-N-U GmbH.
+   Copyright (C) 2008 g10 Code GmbH
 
-#include <config.h>
+   This file is part of GPA.
+
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#include <string.h>
+#include <errno.h>
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
-#include <string.h>
-#include <errno.h>
+
 #include "gpa.h"
 #include "gparecvkeydlg.h"
 #include "gtktools.h"
 
-/* Properties */
+
+/* Properties.  */
 enum
 {
   PROP_0,
@@ -38,10 +42,8 @@ enum
 static GObjectClass *parent_class = NULL;
 
 static void
-gpa_receive_key_dialog_get_property (GObject     *object,
-				      guint        prop_id,
-				      GValue      *value,
-				      GParamSpec  *pspec)
+gpa_receive_key_dialog_get_property (GObject *object, guint prop_id,
+				     GValue *value, GParamSpec *pspec)
 {
   GpaReceiveKeyDialog *dialog = GPA_RECEIVE_KEY_DIALOG (object);
   
@@ -57,11 +59,10 @@ gpa_receive_key_dialog_get_property (GObject     *object,
     }
 }
 
+
 static void
-gpa_receive_key_dialog_set_property (GObject     *object,
-				   guint        prop_id,
-				   const GValue      *value,
-				   GParamSpec  *pspec)
+gpa_receive_key_dialog_set_property (GObject *object, guint prop_id,
+				     const GValue *value, GParamSpec *pspec)
 {
   GpaReceiveKeyDialog *dialog = GPA_RECEIVE_KEY_DIALOG (object);
 
@@ -77,6 +78,7 @@ gpa_receive_key_dialog_set_property (GObject     *object,
     }
 }
 
+
 static void
 gpa_receive_key_dialog_finalize (GObject *object)
 {
@@ -87,8 +89,8 @@ gpa_receive_key_dialog_finalize (GObject *object)
 static void
 gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
 {
-  GtkWidget *label, *hbox;
-  GtkAccelGroup *accel_group;
+  GtkWidget *label;
+  GtkWidget *hbox;
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  GTK_STOCK_OK,
@@ -104,19 +106,17 @@ gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE,
 		      TRUE, 5);
 
-  accel_group = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (dialog), accel_group);
-
   dialog->entry = gtk_entry_new ();
   hbox = gtk_hbox_new (0, FALSE);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, FALSE, 
 		      TRUE, 5);
-  label = gtk_label_new ("");
-  gpa_connect_by_accelerator (GTK_LABEL (label), dialog->entry, accel_group,
-			      _("Key _ID:"));
+  label = gtk_label_new_with_mnemonic (_("Key _ID:"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), dialog->entry);
+
   gtk_box_pack_start_defaults (GTK_BOX (hbox), label);
   gtk_box_pack_start_defaults (GTK_BOX (hbox), dialog->entry);
 }
+
 
 static void
 gpa_receive_key_dialog_class_init (GpaReceiveKeyDialogClass *klass)
@@ -137,6 +137,7 @@ gpa_receive_key_dialog_class_init (GpaReceiveKeyDialogClass *klass)
 				    "Parent window", GTK_TYPE_WIDGET,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
+
 
 GType
 gpa_receive_key_dialog_get_type (void)
@@ -168,8 +169,7 @@ gpa_receive_key_dialog_get_type (void)
 
 /* API */
 
-/* Create a new receive key dialog.
- */
+/* Create a new receive key dialog.  */
 GtkWidget*
 gpa_receive_key_dialog_new (GtkWidget *parent)
 {
@@ -181,8 +181,7 @@ gpa_receive_key_dialog_new (GtkWidget *parent)
   return GTK_WIDGET(dialog);
 }
 
-/* Retrieve the selected key ID.
- */
+/* Retrieve the selected key ID.  */
 const gchar*
 gpa_receive_key_dialog_get_id (GpaReceiveKeyDialog *dialog)
 {

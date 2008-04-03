@@ -107,7 +107,6 @@ gpa_file_sign_dialog_constructor (GType type,
 {
   GObject *object;
   GpaFileSignDialog *dialog;
-  GtkAccelGroup *accelGroup;
   GtkWidget *vboxSign;
   GtkWidget *frameMode;
   GtkWidget *vboxMode;
@@ -134,9 +133,6 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_window_set_title (GTK_WINDOW (dialog), _("Sign documents"));
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (dialog), accelGroup);
 
   vboxSign = GTK_DIALOG (dialog)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vboxSign), 5);
@@ -169,7 +165,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_container_set_border_width (GTK_CONTAINER (vboxWho), 5);
   gtk_box_pack_start (GTK_BOX (vboxSign), vboxWho, TRUE, TRUE, 0);
 
-  labelWho = gtk_label_new ("");
+  labelWho = gtk_label_new_with_mnemonic (_("Sign _as "));
   gtk_misc_set_alignment (GTK_MISC (labelWho), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (vboxWho), labelWho, FALSE, TRUE, 0);
 
@@ -182,8 +178,8 @@ gpa_file_sign_dialog_constructor (GType type,
   clistWho = gpa_key_selector_new (TRUE);
   dialog->clist_who = clistWho;
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
-  gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
-			      _("Sign _as "));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (labelWho), clistWho);
+			      
 
   checkerArmor = gtk_check_button_new_with_mnemonic (_("A_rmor"));
   gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);

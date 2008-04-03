@@ -23,9 +23,6 @@
 
 #include <gtk/gtk.h>
 
-extern void gpa_connect_by_accelerator (GtkLabel * label, GtkWidget * widget,
-					GtkAccelGroup * accelGroup,
-					gchar * labelText);
 extern void gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent);
 extern void gpa_window_error (const gchar * message, GtkWidget * messenger);
 extern void gpa_window_message (gchar * message, GtkWidget * messenger);

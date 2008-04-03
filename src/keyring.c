@@ -1662,8 +1662,6 @@ GtkWidget *
 keyring_editor_new (void)
 {
   GPAKeyringEditor *editor;
-  GtkAccelGroup *accel_group;
-
   GtkWidget *window;
   GtkWidget *vbox;
   GtkWidget *label;
@@ -1689,8 +1687,6 @@ keyring_editor_new (void)
   gtk_object_set_data_full (GTK_OBJECT (window), "user_data", editor,
                             keyring_editor_destroy);
   gtk_window_set_default_size (GTK_WINDOW (window), 680, 600);
-  accel_group = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   gtk_signal_connect_object (GTK_OBJECT (window), "map",
                              GTK_SIGNAL_FUNC (keyring_editor_mapped),
                              (gpointer) editor);

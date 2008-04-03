@@ -118,7 +118,6 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
 {
   GObject *object;
   GpaFileEncryptDialog *dialog;
-  GtkAccelGroup *accelGroup;
   GtkWidget *vboxEncrypt;
   GtkWidget *labelKeys;
   GtkWidget *scrollerKeys;
@@ -146,13 +145,10 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
 				     FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (dialog), accelGroup);
-
   vboxEncrypt = GTK_DIALOG (dialog)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vboxEncrypt), 5);
 
-  labelKeys = gtk_label_new ("");
+  labelKeys = gtk_label_new_with_mnemonic (_("_Public Keys"));
   gtk_misc_set_alignment (GTK_MISC (labelKeys), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), labelKeys, FALSE, FALSE, 0);
 
@@ -172,8 +168,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
 		    dialog);
   dialog->clist_keys = clistKeys;
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
-  gpa_connect_by_accelerator (GTK_LABEL (labelKeys), clistKeys, accelGroup,
-			      _("_Public Keys"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (labelKeys), clistKeys);
 
  
   checkerSign = gtk_check_button_new_with_mnemonic (_("_Sign"));
@@ -182,8 +177,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
   gtk_signal_connect (GTK_OBJECT (checkerSign), "toggled",
 		      GTK_SIGNAL_FUNC (toggle_sign_cb), dialog);
 
-  labelWho = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (labelWho), 0.0, 0.5);
+  labelWho = gtk_label_new_with_mnemonic (_("Sign _as "));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), labelWho, FALSE, TRUE, 0);
 
   scrollerWho = gtk_scrolled_window_new (NULL, NULL);
@@ -198,8 +192,8 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
   clistWho = gpa_key_selector_new (TRUE);
   dialog->clist_who = clistWho;
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
-  gpa_connect_by_accelerator (GTK_LABEL (labelWho), clistWho, accelGroup,
-			      _("Sign _as "));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (labelWho), clistWho);
+
   /* FIXME: We can't make the key selector insensitive, as it will
      make itself sensitive again automatically after the keyloading.
      So we make the whole scroller insensitive.  This is a bit

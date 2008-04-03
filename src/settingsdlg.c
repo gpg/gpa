@@ -85,26 +85,42 @@ default_key_frame (void)
 
 /* Default keyserver section.  */
 static void
-keyserver_selected_cb (GtkWidget *entry, gpointer user_data)
+keyserver_selected_cb (GtkWidget *combo, gpointer user_data)
 {
-  gpa_options_set_default_keyserver (gpa_options_get_instance (),
-                                     gtk_entry_get_text (GTK_ENTRY (entry)));
+  gchar *text = gtk_combo_box_get_active_text (GTK_COMBO_BOX (combo));
+
+  if (text != NULL && *text != '\0')
+    gpa_options_set_default_keyserver (gpa_options_get_instance (), text);
 }
 
 
 static void
-selected_from_list_cb (GtkList *list, GtkWidget *widget, GtkWidget *entry)
+selected_from_list_cb (GtkComboBox *combo, gpointer user_data)
 {
   /* Consider the text entry activated.  */
-  keyserver_selected_cb (entry, NULL);
+  if (gtk_combo_box_get_active (combo) != -1)
+    keyserver_selected_cb (GTK_WIDGET (combo), NULL);
+}
+
+
+static void
+append_to_combo (gpointer item, gpointer data)
+{
+  GtkWidget *combo = data;
+  gchar *text = item;
+
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), text);
 }
 
 
 static GtkWidget *
 default_keyserver_frame (void)
 {
-  GtkWidget *frame, *label, *combo;
-  
+  GtkWidget *frame;
+  GtkWidget *label;
+  GtkWidget *combo;
+  GList *servers;
+
   /* Build UI */
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
@@ -112,21 +128,22 @@ default_keyserver_frame (void)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 
-  combo = gtk_combo_new ();
-  gtk_combo_set_value_in_list (GTK_COMBO (combo), FALSE, FALSE);
+  combo = gtk_combo_box_entry_new_text ();
   gtk_container_set_border_width (GTK_CONTAINER (combo), 5);
   gtk_container_add (GTK_CONTAINER (frame), combo);
-  /* Set current value */
-  gtk_combo_set_popdown_strings (GTK_COMBO (combo), keyserver_get_as_glist ());
-  gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry),
-                      gpa_options_get_default_keyserver 
+  /* Set current value.  */
+  servers = keyserver_get_as_glist ();
+  g_list_foreach (servers, append_to_combo, combo);
+  g_list_free (servers);
+  gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo))),
+                      gpa_options_get_default_keyserver
 		      (gpa_options_get_instance ()));
   /* Connect signals.  Try to follow instant-apply principle.  */
-  g_signal_connect (G_OBJECT (GTK_COMBO (combo)->entry), "focus-out-event",
-                    G_CALLBACK (keyserver_selected_cb), NULL);
-  g_signal_connect (G_OBJECT (GTK_COMBO (combo)->list), "select-child",
-                    G_CALLBACK (selected_from_list_cb),
-                    GTK_COMBO (combo)->entry);
+  g_signal_connect_swapped (G_OBJECT (gtk_bin_get_child (GTK_BIN (combo))),
+			    "focus-out-event",
+			    G_CALLBACK (keyserver_selected_cb), combo);
+  g_signal_connect (G_OBJECT (combo),
+		    "changed", G_CALLBACK (selected_from_list_cb), NULL);
 
 
   return frame;

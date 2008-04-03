@@ -67,18 +67,6 @@ gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent)
 
 
 void
-gpa_connect_by_accelerator (GtkLabel * label, GtkWidget * widget,
-			    GtkAccelGroup * accelGroup, gchar * labelText)
-{
-  guint accelKey;
-
-  accelKey = gtk_label_parse_uline (label, labelText);
-  gtk_widget_add_accelerator (widget, "grab_focus", accelGroup, accelKey,
-			      GDK_MOD1_MASK, 0);
-}
-
-
-void
 gpa_window_error (const gchar *message, GtkWidget *messenger)
 {
   GtkWidget *windowError;

@@ -168,7 +168,6 @@ select_key_dlg_constructor (GType type, guint n_construct_properties,
 {
   GObject *object;
   SelectKeyDlg *dialog;
-  GtkAccelGroup *accel_group;
   GtkWidget *vbox;
   GtkWidget *scroller;
 
@@ -187,9 +186,6 @@ select_key_dlg_constructor (GType type, guint n_construct_properties,
   gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, 
 				     FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-
-  accel_group = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (dialog), accel_group);
 
   vbox = GTK_DIALOG (dialog)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);

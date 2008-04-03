@@ -1,23 +1,26 @@
 /* recipientdlg.c - A dialog to select a mail recipient.
- * Copyright (C) 2008 g10 Code GmbH.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
- * License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- */
+   Copyright (C) 2008 g10 Code GmbH.
 
-#include <config.h>
+   This file is part of GPA
+  
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+  
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#include <gtk/gtk.h>
 
 #include "gpa.h"
 #include "i18n.h"
@@ -40,11 +43,11 @@ struct _RecipientDlg
   GtkWidget *popup_menu;
 
   /* Flag to disable updates of the status hint.  This is actual a
-     counter with updates only allowed if it is zero. */
+     counter with updates only allowed if it is zero.  */
   int freeze_update_statushint;
 
   /* Flag to disable any key selection.  This is used while a key
-     selection is active.  Implemented as a counter. */
+     selection is active.  Implemented as a counter.  */
   int freeze_key_selection;
 
   /* Set if this dialog has usable key to be passed back to the
@@ -893,7 +896,6 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
 {
   GObject *object;
   RecipientDlg *dialog;
-  GtkAccelGroup *accel_group;
   GtkWidget *vbox;
   GtkWidget *hbox;
   GtkWidget *widget;
@@ -917,13 +919,10 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
 				     FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  accel_group = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (dialog), accel_group);
-
   vbox = GTK_DIALOG (dialog)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
-  labelKeys = gtk_label_new ("");
+  labelKeys = gtk_label_new_with_mnemonic (_("_Recipient list"));
   gtk_misc_set_alignment (GTK_MISC (labelKeys), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), labelKeys, FALSE, FALSE, 0);
 
@@ -937,8 +936,8 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
   clistKeys = recplist_window_new ();
   dialog->clist_keys = clistKeys;
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
-  gpa_connect_by_accelerator (GTK_LABEL (labelKeys), clistKeys, accel_group,
-			      _("_Recipient list"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (labelKeys), clistKeys);
+			      
 
   dialog->popup_menu = recplist_popup_menu_new (dialog->clist_keys, dialog);
   g_signal_connect_swapped (GTK_OBJECT (dialog->clist_keys),

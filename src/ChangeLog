@@ -1,3 +1,26 @@
+2008-04-03  Marcus Brinkmann  <marcus@g10code.de>
+
+	* gtktools.h (gpa_connect_by_accelerator): Remove prototype.
+	* gtktools.c (gpa_connect_by_accelerator): Remove obsolete interface.
+	* selectkeydlg.c (select_key_dlg_constructor): Remove accel_group.
+	* keyring.c (keyring_editor_new): Likewise.
+	* keyimpseldlg.c (gpa_key_import_selection_dialog_run): Likewise.
+	* encryptdlg.c (gpa_file_encrypt_dialog_constructor): Remove
+	accelGroup variable.  Use gtk_label_set_mnemonic_widget instead of
+	gpa_connect_by_accelerator.
+	* filesigndlg.c (gpa_file_sign_dialog_constructor): Likewise.
+	* gparecvkeydlg.c (gpa_receive_key_dialog_init): Likewise.
+	* recipientdlg.c (recipient_dlg_constructor): Likewise.
+	* keyimpseldlg.c (gpa_key_import_selection_dialog_run): Likewise.
+	* keygendlg.c (gpa_key_gen_run_dialog): Likewise.
+	Also clean up use of combo boxes and ESC key handling.
+	(struct _GPAKeyGenDialog): New member comboKeysize.
+	(response_cb): Check keysize parameter.
+	* settingsdlg.c (keyserver_selected_cb): Adjust to new combo box method.
+	(selected_from_list_cb): Likewise.
+	(append_to_combo): New function.
+	(default_keyserver_frame): Use new combo box interface.
+
 2008-04-02  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpafileverifyop.c (gpa_file_verify_operation_done_cb): Emit

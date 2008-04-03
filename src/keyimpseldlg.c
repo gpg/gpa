@@ -84,15 +84,14 @@ key_import_selection_destroy (GtkWidget *widget, gpointer param)
   gtk_main_quit ();
 }
 
+
 /* Run the key import selection dialog and import the selected keys
- * from the given keyserver.
- */
+   from the given keyserver.  */
 void
 gpa_key_import_selection_dialog_run (GtkWidget *parent,
                                      GList *keys, const gchar *keyserver)
 {
   GPAKeyImportSelectionDialog dialog;
-  GtkAccelGroup *accelGroup;
   GtkWidget *windowSelect;
   GtkWidget *vboxSelect;
   GtkWidget *vboxWhich;
@@ -120,9 +119,6 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
   gtk_signal_connect (GTK_OBJECT (windowSelect), "destroy",
 		      GTK_SIGNAL_FUNC (key_import_selection_destroy), NULL);
 
-  accelGroup = gtk_accel_group_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (windowSelect), accelGroup);
-
   vboxSelect = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxSelect), 5);
 
@@ -130,7 +126,7 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
   gtk_container_set_border_width (GTK_CONTAINER (vboxWhich), 5);
   gtk_box_pack_start (GTK_BOX (vboxSelect), vboxWhich, TRUE, TRUE, 0);
 
-  labelWhich = gtk_label_new ("");
+  labelWhich = gtk_label_new_with_mnemonic (_("_Import"));
   gtk_misc_set_alignment (GTK_MISC (labelWhich), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (vboxWhich), labelWhich, FALSE, TRUE, 0);
 
@@ -141,8 +137,7 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
   clistWhich = gpa_key_list_new_from_glist (parent, dialog.keys);
   dialog.clist_which = GTK_CLIST (clistWhich);
   gtk_container_add (GTK_CONTAINER (scrollerWhich), clistWhich);
-  gpa_connect_by_accelerator (GTK_LABEL (labelWhich), clistWhich, accelGroup,
-			      _("_Import"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (labelWhich), clistWhich);
 
   hButtonBoxSelect = gtk_hbutton_box_new ();
   gtk_box_pack_start (GTK_BOX (vboxSelect), hButtonBoxSelect, FALSE, FALSE, 0);
@@ -161,8 +156,6 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
   buttonCancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      key_import_selection_cancel, &dialog);
-  gtk_widget_add_accelerator (buttonCancel, "clicked", accelGroup, GDK_Escape,
-                              0, 0);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSelect), buttonCancel);
 
   gtk_container_add (GTK_CONTAINER (windowSelect), vboxSelect);
