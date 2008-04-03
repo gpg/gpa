@@ -70,11 +70,9 @@ static const GtkActionEntry gpa_windows_menu_action_entries[] =
 
       { "WindowsKeyringEditor", GPA_STOCK_KEYRING, NULL, NULL,
 	N_("Open the keyring editor"), G_CALLBACK (gpa_open_keyring_editor) },
-      { "WindowsFileManager", GPA_STOCK_FILEMAN,
-	N_("_File Manager") /* FIXME: Use stock item.  */, NULL,
+      { "WindowsFileManager", GPA_STOCK_FILEMAN, NULL, NULL,
 	N_("Open the file manager"), G_CALLBACK (gpa_open_filemanager) },
-      { "WindowsClipboard", GPA_STOCK_CLIPBOARD,
-	N_("_Clipboard") /* FIXME: Use stock item.  */, NULL,
+      { "WindowsClipboard", GPA_STOCK_CLIPBOARD, NULL, NULL,
 	N_("Open the clipboard"), G_CALLBACK (gpa_open_clipboard) }
   };
 

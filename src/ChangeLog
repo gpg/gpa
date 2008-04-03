@@ -1,5 +1,13 @@
 2008-04-03  Marcus Brinkmann  <marcus@g10code.de>
 
+	* gpa.h (gpa_windows_menu_action_entries): Use stock items for
+	file manager and clipboard windows.
+	* icons.c (register_stock_icons): Add fake stock icons for file
+	manager and clipboard windows.
+	(xpms): Use stock item macros.
+	(gpa_register_stock_items): Add stock items for clipboard and
+	fileman.
+
 	* confdialog.c (update_option): Use gtk_editable_set_editable
 	instead of gtk_entry_set_editable.
 	* gpawizard.c: Use g_object_set_data and g_object_get_data instead

@@ -32,12 +32,15 @@ void gpa_register_stock_items (void);
 #define GPA_STOCK_VERIFY "gpa-verify"
 #define GPA_STOCK_ENCRYPT "gpa-encrypt"
 #define GPA_STOCK_DECRYPT "gpa-decrypt"
-#define GPA_STOCK_KEYRING "gpa-keyringeditor"
+
+/* Windows items.  */
 #define GPA_STOCK_KEYRING_EDITOR "gpa-keyring"
-/* FIXME: Add GPA_STOCK_FILEMAN and GPA_STOCK_CLIPBOARD stock items.
-   Need to figure out how to clone a stock icon though.  */
-#define GPA_STOCK_FILEMAN GTK_STOCK_DIRECTORY
-#define GPA_STOCK_CLIPBOARD GTK_STOCK_PASTE
+/* Simplified version of GPA_STOCK_KEYRING_EDITOR.  */
+#define GPA_STOCK_KEYRING "gpa-keyringeditor"
+#define GPA_STOCK_FILEMAN "gpa-fileman"
+#define GPA_STOCK_CLIPBOARD "gpa-clipboard"
+
+/* Toolbar in keyring editor.  */
 #define GPA_STOCK_BRIEF "gpa-brief"
 #define GPA_STOCK_DETAILED "gpa-detailed"
 #define GPA_STOCK_EDIT "gpa-edit"

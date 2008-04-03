@@ -57,17 +57,17 @@ struct {
   char **xpm;
 } xpms[] = {
   { "gpa_logo",	gpa_logo_xpm},
-  { "gpa-encrypt", encrypt_xpm },
-  { "gpa-decrypt", decrypt_xpm },
-  { "gpa-sign", sign_xpm },
-  { "gpa-verify", verify_xpm },
-  { "gpa-keyringeditor", keyringeditor_xpm },
-  { "gpa-export", export_xpm },
-  { "gpa-import", import_xpm },
-  { "gpa-brief", brief_xpm },
-  { "gpa-detailed", detailed_xpm },
-  { "gpa-edit", edit_xpm },
-  { "gpa-keyring", keyring_xpm },
+  { GPA_STOCK_ENCRYPT, encrypt_xpm },
+  { GPA_STOCK_DECRYPT, decrypt_xpm },
+  { GPA_STOCK_SIGN, sign_xpm },
+  { GPA_STOCK_VERIFY, verify_xpm },
+  { GPA_STOCK_KEYRING, keyringeditor_xpm },
+  { GPA_STOCK_EXPORT, export_xpm },
+  { GPA_STOCK_IMPORT, import_xpm },
+  { GPA_STOCK_BRIEF, brief_xpm },
+  { GPA_STOCK_DETAILED, detailed_xpm },
+  { GPA_STOCK_EDIT, edit_xpm },
+  { GPA_STOCK_KEYRING_EDITOR, keyring_xpm },
   { "gpa_blue_key", gpa_blue_key_xpm },
   { "gpa_yellow_key", gpa_yellow_key_xpm },
   { "blue_key",	blue_key_xpm },
@@ -165,6 +165,16 @@ register_stock_icons (void)
       gtk_icon_set_unref (icon_set);
     }
 
+  /* Add a fake stock icon for the clipboard window.  */
+  icon_set = gtk_icon_factory_lookup_default (GTK_STOCK_PASTE);
+  icon_set = gtk_icon_set_copy (icon_set);
+  gtk_icon_factory_add (icon_factory, GPA_STOCK_CLIPBOARD, icon_set);
+
+  /* Add a fake stock icon for the file manager window.  */
+  icon_set = gtk_icon_factory_lookup_default (GTK_STOCK_DIRECTORY);
+  icon_set = gtk_icon_set_copy (icon_set);
+  gtk_icon_factory_add (icon_factory, GPA_STOCK_FILEMAN, icon_set);
+
   gtk_icon_factory_add_default (icon_factory); 
 
   g_object_unref (icon_factory);
@@ -180,9 +190,11 @@ gpa_register_stock_items (void)
       { GPA_STOCK_VERIFY, N_("_Verify"), 0, 0, PACKAGE },
       { GPA_STOCK_ENCRYPT, N_("_Encrypt"), 0, 0, PACKAGE },
       { GPA_STOCK_DECRYPT, N_("_Decrypt"), 0, 0, PACKAGE },
-      { GPA_STOCK_KEYRING, N_("_Keyring Editor"), 0, 0, PACKAGE },
       { GPA_STOCK_BRIEF, N_("_Brief"), 0, 0, PACKAGE },
-      { GPA_STOCK_DETAILED, N_("_Detailed"), 0, 0, PACKAGE }
+      { GPA_STOCK_DETAILED, N_("_Detailed"), 0, 0, PACKAGE },
+      { GPA_STOCK_KEYRING, N_("_Keyring Editor"), 0, 0, PACKAGE },
+      { GPA_STOCK_CLIPBOARD, N_("_Clipboard"), 0, 0, PACKAGE },
+      { GPA_STOCK_FILEMAN, N_("_File Manager"), 0, 0, PACKAGE }
     };
 
   register_stock_icons ();
