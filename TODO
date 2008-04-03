@@ -89,6 +89,6 @@ In no particular order:
    line).
 ** Make the build clean with the flags:
    -DG_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED
-   -DGDK_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED
+   -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED
    -DGDK_MULTIHEAD_SAFE -DGTK_MULTIHEAD_SAFE
    This is mostly done, except for multi-head safeness and gtk marshalling.
