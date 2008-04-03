@@ -65,19 +65,19 @@ string_strip_dup (gchar * string)
 
 
 typedef struct {
-  GtkWidget * window;
-  GtkWidget * wizard;
-  GtkWidget * name_page;
-  GtkWidget * email_page;
-  GtkWidget * passwd_page;
-  GtkWidget * wait_page;
-  GtkWidget * final_page;
-  GtkWidget * backup_page;
-  GtkWidget * backup_dir_page;
-  GtkWidget * pixmap_widget;
-  GtkAccelGroup * accel_group;
-  GdkPixmap * genkey_pixmap;
-  GdkPixmap * backup_pixmap;
+  GtkWidget *window;
+  GtkWidget *wizard;
+  GtkWidget *name_page;
+  GtkWidget *email_page;
+  GtkWidget *passwd_page;
+  GtkWidget *wait_page;
+  GtkWidget *final_page;
+  GtkWidget *backup_page;
+  GtkWidget *backup_dir_page;
+  GtkWidget *image_widget;
+  GtkAccelGroup *accel_group;
+  GdkPixmap *genkey_pixmap;
+  GdkPixmap *backup_pixmap;
 
   GpaKeyGenWizardGenerateCb generate;
   gpointer generate_data;
@@ -127,11 +127,11 @@ gpa_keygen_wizard_simple_page (GPAKeyGenWizard * keygen_wizard,
 
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 5);
-  gtk_signal_connect (GTK_OBJECT (entry), "activate",
-		      GTK_SIGNAL_FUNC (switch_to_next_page), keygen_wizard);
+  g_signal_connect (G_OBJECT (entry), "activate",
+		    G_CALLBACK (switch_to_next_page), keygen_wizard);
 
-  gtk_object_set_data (GTK_OBJECT (vbox), "gpa_keygen_entry", entry);
-  gtk_object_set_data (GTK_OBJECT (vbox), "gpa_wizard_focus_child", entry);
+  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_entry", entry);
+  g_object_set_data (G_OBJECT (vbox), "gpa_wizard_focus_child", entry);
   return vbox;
 }
 
@@ -140,7 +140,7 @@ gpa_keygen_wizard_simple_get_text (GtkWidget * vbox)
 {
   GtkWidget * entry;
 
-  entry = gtk_object_get_data (GTK_OBJECT (vbox), "gpa_keygen_entry");
+  entry = g_object_get_data (G_OBJECT (vbox), "gpa_keygen_entry");
   return string_strip_dup ((gchar *) gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
@@ -254,10 +254,8 @@ gpa_keygen_wizard_password_page (GPAKeyGenWizard * keygen_wizard)
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
-  gtk_object_set_data (GTK_OBJECT (vbox), "gpa_keygen_passwd",
-		       (gpointer)entry);
-  gtk_object_set_data (GTK_OBJECT (vbox), "gpa_wizard_focus_child",
-		       (gpointer)entry);
+  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_passwd", entry);
+  g_object_set_data (G_OBJECT (vbox), "gpa_wizard_focus_child", entry);
 
   label = gtk_label_new (_("Repeat Passphrase: "));
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
@@ -267,12 +265,11 @@ gpa_keygen_wizard_password_page (GPAKeyGenWizard * keygen_wizard)
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
-  gtk_object_set_data (GTK_OBJECT (vbox), "gpa_keygen_passwd_repeat",
-		       (gpointer)entry);
-  gtk_signal_connect (GTK_OBJECT (entry), "activate",
-		      GTK_SIGNAL_FUNC (switch_to_next_page), keygen_wizard);
-  gtk_signal_connect (GTK_OBJECT (passwd_entry), "activate",
-		      GTK_SIGNAL_FUNC (focus_repeat_passphrase), entry);
+  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_passwd_repeat", entry);
+  g_signal_connect (G_OBJECT (entry), "activate",
+		    G_CALLBACK (switch_to_next_page), keygen_wizard);
+  g_signal_connect (G_OBJECT (passwd_entry), "activate",
+		    G_CALLBACK (focus_repeat_passphrase), entry);
 
   return vbox;
 }
@@ -280,8 +277,7 @@ gpa_keygen_wizard_password_page (GPAKeyGenWizard * keygen_wizard)
 static gchar *
 gpa_keygen_wizard_password_get_password (GtkWidget * vbox)
 {
-  GtkWidget * entry = gtk_object_get_data (GTK_OBJECT (vbox),
-					   "gpa_keygen_passwd");
+  GtkWidget *entry = g_object_get_data (G_OBJECT (vbox), "gpa_keygen_passwd");
   return (gchar *) gtk_entry_get_text (GTK_ENTRY (entry));
 }
 
@@ -294,13 +290,13 @@ gpa_keygen_wizard_password_get_password (GtkWidget * vbox)
 static gboolean
 gpa_keygen_wizard_password_validate (gpointer data)
 {
-  GPAKeyGenWizard * keygen_wizard = data;
+  GPAKeyGenWizard *keygen_wizard = data;
   gboolean result = TRUE;
-  GtkWidget * vbox = keygen_wizard->passwd_page;
-  GtkWidget * entry_passwd = gtk_object_get_data (GTK_OBJECT (vbox),
-						  "gpa_keygen_passwd");
-  GtkWidget * entry_repeat = gtk_object_get_data (GTK_OBJECT (vbox),
-						  "gpa_keygen_passwd_repeat");
+  GtkWidget *vbox = keygen_wizard->passwd_page;
+  GtkWidget *entry_passwd = g_object_get_data (G_OBJECT (vbox),
+					       "gpa_keygen_passwd");
+  GtkWidget *entry_repeat = g_object_get_data (G_OBJECT (vbox),
+					       "gpa_keygen_passwd_repeat");
 
   if (strcmp (gtk_entry_get_text (GTK_ENTRY (entry_passwd)),
 	      gtk_entry_get_text (GTK_ENTRY (entry_repeat))) != 0)
@@ -366,8 +362,7 @@ gpa_keygen_wizard_backup_page (GPAKeyGenWizard * keygen_wizard)
 
   radio = gtk_radio_button_new_with_mnemonic (NULL, _("Create _backup copy"));
   gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, TRUE, 5);
-  gtk_object_set_data (GTK_OBJECT (vbox), "gpa_keygen_backup",
-		       (gpointer)radio);
+  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_backup", radio);
   
   radio = gtk_radio_button_new_with_mnemonic_from_widget
     (GTK_RADIO_BUTTON (radio), _("Do it _later"));
@@ -427,8 +422,8 @@ gpa_keygen_wizard_generate_action (gpointer data)
   memset (&params, 0, sizeof params);
 
   /* Shall we make backups? */
-  radio = gtk_object_get_data (GTK_OBJECT (keygen_wizard->backup_page),
-			       "gpa_keygen_backup");
+  radio = g_object_get_data (G_OBJECT (keygen_wizard->backup_page),
+			     "gpa_keygen_backup");
   do_backup = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio));
 
   /* The User ID */
@@ -482,8 +477,8 @@ free_keygen_wizard (gpointer data)
 {
   GPAKeyGenWizard * keygen_wizard = data;
 
-  gdk_pixmap_unref (keygen_wizard->genkey_pixmap);
-  gdk_pixmap_unref (keygen_wizard->backup_pixmap);
+  g_object_unref (keygen_wizard->genkey_pixmap);
+  g_object_unref (keygen_wizard->backup_pixmap);
   g_free (keygen_wizard);
 }
 
@@ -504,21 +499,22 @@ page_switched (GtkWidget * page, gpointer data)
       pixmap = keygen_wizard->genkey_pixmap;
     }
 
-  gtk_pixmap_set (GTK_PIXMAP (keygen_wizard->pixmap_widget), pixmap, NULL);
+  gtk_image_set_from_pixmap (GTK_IMAGE (keygen_wizard->image_widget),
+			     pixmap, NULL);
 }
 
-GtkWidget *gpa_keygen_wizard_new (GtkWidget * parent, 
-				  GpaKeyGenWizardGenerateCb generate_action,
-				  gpointer data)
+
+GtkWidget *
+gpa_keygen_wizard_new (GtkWidget *parent, 
+		       GpaKeyGenWizardGenerateCb generate_action,
+		       gpointer data)
 {
-  GtkWidget * window;
-  GtkWidget * wizard;
-  GtkWidget * hbox;
-  GtkWidget * pixmap_widget;
-  GtkAccelGroup * accel_group;
-  GPAKeyGenWizard * keygen_wizard;
-
-
+  GtkWidget *window;
+  GtkWidget *wizard;
+  GtkWidget *hbox;
+  GtkWidget *image_widget;
+  GtkAccelGroup *accel_group;
+  GPAKeyGenWizard *keygen_wizard;
 
   keygen_wizard = g_malloc (sizeof (*keygen_wizard));
   keygen_wizard->genkey_pixmap = gpa_create_icon_pixmap (parent,
@@ -539,18 +535,19 @@ GtkWidget *gpa_keygen_wizard_new (GtkWidget * parent,
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   gtk_window_set_title (GTK_WINDOW (window), _("Generate key"));
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  gtk_object_set_data_full (GTK_OBJECT (window), "user_data",
-			    (gpointer) keygen_wizard, free_keygen_wizard);
-  gtk_signal_connect_object (GTK_OBJECT (window), "destroy",
-			     GTK_SIGNAL_FUNC (gpa_keygen_wizard_destroy),
-			     (gpointer)keygen_wizard);
+  g_object_set_data_full (G_OBJECT (window), "user_data",
+			  keygen_wizard, free_keygen_wizard);
+  g_signal_connect_swapped (G_OBJECT (window), "destroy",
+			    G_CALLBACK (gpa_keygen_wizard_destroy),
+			    keygen_wizard);
 
   hbox = gtk_hbox_new (FALSE, 5);
   gtk_container_add (GTK_CONTAINER (window), hbox);
 
-  pixmap_widget = gtk_pixmap_new (keygen_wizard->genkey_pixmap, NULL);
-  keygen_wizard->pixmap_widget = pixmap_widget;
-  gtk_box_pack_start (GTK_BOX (hbox), pixmap_widget, FALSE, TRUE, 0);
+  image_widget = gtk_image_new_from_pixmap
+    (keygen_wizard->genkey_pixmap, NULL);
+  keygen_wizard->image_widget = image_widget;
+  gtk_box_pack_start (GTK_BOX (hbox), image_widget, FALSE, TRUE, 0);
   
   wizard = gpa_wizard_new (accel_group,
                            (GtkSignalFunc) gpa_keygen_wizard_close,
@@ -591,7 +588,9 @@ GtkWidget *gpa_keygen_wizard_new (GtkWidget * parent,
 			  TRUE, NULL, NULL);
 
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-  gpa_window_show_centered (window, parent);
+  gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (parent));
+  gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_CENTER_ON_PARENT);
+
   /* FIXME: This is a kludge to make sure that the proper buttons are shown
    * (must be done after the show_all). All this should be fixed properly
    * some day */

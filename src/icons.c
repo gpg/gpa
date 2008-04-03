@@ -67,7 +67,7 @@ struct {
   { "gpa-brief", brief_xpm },
   { "gpa-detailed", detailed_xpm },
   { "gpa-edit", edit_xpm },
-  { "keyring", keyring_xpm },
+  { "gpa-keyring", keyring_xpm },
   { "gpa_blue_key", gpa_blue_key_xpm },
   { "gpa_yellow_key", gpa_yellow_key_xpm },
   { "blue_key",	blue_key_xpm },
@@ -106,20 +106,6 @@ pixmap_for_icon (GtkWidget *window, const char *name, GdkBitmap **r_mask)
                                         &style->bg[GTK_STATE_NORMAL],
                                         xpm);
     return pix;
-}
-
-
-GtkWidget *
-gpa_create_icon_widget (GtkWidget *window, const char *name)
-{
-    GdkBitmap *mask;
-    GtkWidget *icon = NULL;
-    GdkPixmap *pix;
-
-    pix = pixmap_for_icon (window, name, &mask);
-    if (pix)
-      icon = gtk_pixmap_new (pix, mask);
-    return icon;
 }
 
 

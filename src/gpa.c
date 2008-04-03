@@ -183,8 +183,8 @@ gpa_open_keyring_editor (GtkAction *action, void *data)
   if (! keyringeditor)
     {
       keyringeditor = keyring_editor_new ();
-      gtk_signal_connect (GTK_OBJECT (keyringeditor), "destroy",
-			  GTK_SIGNAL_FUNC (close_main_window), &keyringeditor);
+      g_signal_connect (G_OBJECT (keyringeditor), "destroy",
+			G_CALLBACK (close_main_window), &keyringeditor);
       gtk_widget_show_all (keyringeditor);
     }
 
@@ -198,8 +198,8 @@ gpa_open_clipboard (GtkAction *action, void *data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  */
-  gtk_signal_connect (GTK_OBJECT (gpa_clipboard_get_instance ()), "destroy",
-		      GTK_SIGNAL_FUNC (quit_if_no_window), NULL);
+  g_signal_connect (G_OBJECT (gpa_clipboard_get_instance ()), "destroy",
+		    G_CALLBACK (quit_if_no_window), NULL);
   gtk_widget_show_all (gpa_clipboard_get_instance ());
 
   gtk_window_present (GTK_WINDOW (gpa_clipboard_get_instance ()));
@@ -212,8 +212,8 @@ gpa_open_filemanager (GtkAction *action, void *data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  */
-  gtk_signal_connect (GTK_OBJECT (gpa_file_manager_get_instance ()), "destroy",
-		      GTK_SIGNAL_FUNC (quit_if_no_window), NULL);
+  g_signal_connect (G_OBJECT (gpa_file_manager_get_instance ()), "destroy",
+		    G_CALLBACK (quit_if_no_window), NULL);
   gtk_widget_show_all (gpa_file_manager_get_instance ());
 
   gtk_window_present (GTK_WINDOW (gpa_file_manager_get_instance ()));
@@ -227,9 +227,8 @@ gpa_open_settings_dialog (GtkAction *action, void *data)
   if (! settings_dialog)
     {
       settings_dialog = gpa_settings_dialog_new ();
-      gtk_signal_connect (GTK_OBJECT (settings_dialog), "destroy",
-			  GTK_SIGNAL_FUNC (close_main_window),
-                          &settings_dialog);
+      g_signal_connect (G_OBJECT (settings_dialog), "destroy",
+			G_CALLBACK (close_main_window), &settings_dialog);
       gtk_widget_show_all (settings_dialog);
     }
   gtk_window_present (GTK_WINDOW (settings_dialog));
@@ -243,9 +242,8 @@ gpa_open_backend_config_dialog (GtkAction *action, void *data)
   if (!backend_config_dialog)
     {
       backend_config_dialog = gpa_backend_config_dialog_new ();
-      gtk_signal_connect (GTK_OBJECT (backend_config_dialog), "destroy",
-			  GTK_SIGNAL_FUNC (close_main_window),
-                          &backend_config_dialog);
+      g_signal_connect (G_OBJECT (backend_config_dialog), "destroy",
+			G_CALLBACK (close_main_window), &backend_config_dialog);
       gtk_widget_show_all (backend_config_dialog);
     }
 

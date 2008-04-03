@@ -220,7 +220,7 @@ gpa_expiry_frame_new (GDate * expiryDate)
   gtk_widget_set_sensitive (calendar, FALSE);
   gtk_box_pack_start (GTK_BOX (vboxExpire), calendar, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (frame->radioAt), "toggled",
-                    (GCallback) expire_date_toggled_cb, calendar);
+                    G_CALLBACK (expire_date_toggled_cb), calendar);
   if (expiryDate)
     {
       gtk_calendar_select_month (GTK_CALENDAR (calendar),
@@ -239,17 +239,15 @@ gpa_expiry_frame_new (GDate * expiryDate)
     }
   else
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radioDont), TRUE);
-  gtk_signal_connect (GTK_OBJECT (radioDont), "toggled",
-		      GTK_SIGNAL_FUNC (gpa_expiry_frame_dont),
-		      (gpointer) frame);
-  gtk_signal_connect (GTK_OBJECT (radioAfter), "toggled",
-		      GTK_SIGNAL_FUNC (gpa_expiry_frame_after),
-		      (gpointer) frame);
-  gtk_signal_connect (GTK_OBJECT (radioAt), "toggled",
-		      GTK_SIGNAL_FUNC (gpa_expiry_frame_at), (gpointer) frame);
+  g_signal_connect (G_OBJECT (radioDont), "toggled",
+		    G_CALLBACK (gpa_expiry_frame_dont), frame);
+  g_signal_connect (G_OBJECT (radioAfter), "toggled",
+		    G_CALLBACK (gpa_expiry_frame_after), frame);
+  g_signal_connect (G_OBJECT (radioAt), "toggled",
+		    G_CALLBACK (gpa_expiry_frame_at), frame);
 
-  gtk_object_set_data_full (GTK_OBJECT (expiry_frame), "user_data",
-			    (gpointer) frame, gpa_expiry_frame_free);
+  g_object_set_data_full (G_OBJECT (expiry_frame), "user_data",
+			  frame, gpa_expiry_frame_free);
   return expiry_frame;
 }
 
@@ -258,8 +256,8 @@ gboolean
 gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
 				int * interval, gchar * unit)
 {
-  GPAExpiryFrame * frame = gtk_object_get_data (GTK_OBJECT (expiry_frame),
-						"user_data");
+  GPAExpiryFrame * frame = g_object_get_data (G_OBJECT (expiry_frame),
+					      "user_data");
   gchar *temp;
   gboolean result = FALSE;
 
@@ -306,8 +304,8 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
 gchar *
 gpa_expiry_frame_validate(GtkWidget * expiry_frame)
 {
-  GPAExpiryFrame * frame = gtk_object_get_data (GTK_OBJECT (expiry_frame),
-						"user_data");
+  GPAExpiryFrame * frame = g_object_get_data (G_OBJECT (expiry_frame),
+					      "user_data");
   gchar * result = NULL;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (frame->radioDont)))

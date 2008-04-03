@@ -1,23 +1,24 @@
 /* confdialog.c - GPGME based configuration dialog for GPA.
- * Copyright (C) 2007, 2008 g10 Code GmbH
- *
- * This file is part of GPA.
- *
- * GPA is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
- * License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- */
+   Copyright (C) 2007, 2008 g10 Code GmbH
 
-#include <config.h>
+   This file is part of GPA.
+  
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+  
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -568,7 +569,7 @@ update_option (option_widget_t opt)
 	  else
 	    gtk_entry_set_text (GTK_ENTRY (entry), "");
 
-	  gtk_entry_set_editable (GTK_ENTRY (entry), FALSE);
+	  gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
 	  gtk_widget_set_sensitive (entry, FALSE);
 	}
       else if (combo == COMBO_NO_ARG)
@@ -583,7 +584,7 @@ update_option (option_widget_t opt)
 	  else
 	    gtk_entry_set_text (GTK_ENTRY (entry), "");
 
-	  gtk_entry_set_editable (GTK_ENTRY (entry), FALSE);
+	  gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
 	  gtk_widget_set_sensitive (entry, FALSE);
 	  /* FIXME: Change focus.  */
 	}
@@ -607,7 +608,7 @@ update_option (option_widget_t opt)
 	  else
 	    gtk_entry_set_text (GTK_ENTRY (entry), "");
 
-	  gtk_entry_set_editable (GTK_ENTRY (entry), TRUE);
+	  gtk_editable_set_editable (GTK_EDITABLE (entry), TRUE);
 	  gtk_widget_set_sensitive (entry, TRUE);
 	  /* FIXME: Change focus.  */
 	}

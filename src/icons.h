@@ -21,8 +21,6 @@
 #ifndef ICONS_H
 #define ICONS_H
 
-GtkWidget *gpa_create_icon_widget (GtkWidget *window, const char *name);
-
 GdkPixmap *gpa_create_icon_pixmap (GtkWidget *window, const char *name,
                                    GdkBitmap **mask);
 
@@ -35,6 +33,7 @@ void gpa_register_stock_items (void);
 #define GPA_STOCK_ENCRYPT "gpa-encrypt"
 #define GPA_STOCK_DECRYPT "gpa-decrypt"
 #define GPA_STOCK_KEYRING "gpa-keyringeditor"
+#define GPA_STOCK_KEYRING_EDITOR "gpa-keyring"
 /* FIXME: Add GPA_STOCK_FILEMAN and GPA_STOCK_CLIPBOARD stock items.
    Need to figure out how to clone a stock icon though.  */
 #define GPA_STOCK_FILEMAN GTK_STOCK_DIRECTORY

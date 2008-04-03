@@ -1,5 +1,51 @@
 2008-04-03  Marcus Brinkmann  <marcus@g10code.de>
 
+	* confdialog.c (update_option): Use gtk_editable_set_editable
+	instead of gtk_entry_set_editable.
+	* gpawizard.c: Use g_object_set_data and g_object_get_data instead
+	of gtk_object_set_data and gtk_object_get_data.
+	(gpa_wizard_new): Use gtk_box_set_spacing instead of
+	gtk_button_box_set_spacing.
+	* keygenwizard.c: Use GtkImage instead of GtkPixmap.
+	* keyring.c: Use combo box instead of option menu for signature
+	user names.
+	(keyring_details_page_fill_num_keys): Use
+	gtk_notebook_set_current_page instead of gtk_notebook_set_page.
+	(keyring_update_details_notebook): Use g_idle_add instead of
+	gtk_idle_add.
+	(keyring_editor_new): Use g_object_set_data_full instead of
+	gtk_object_set_data_full.
+	* gpawidgets.c (gpa_expiry_frame_new): Likewise.
+	(gpa_expiry_frame_get_expiration, gpa_expiry_frame_validate): Use
+	g_object_get_data instead of gtk_object_get_data.
+	* icons.c (gpa_create_icon_widget): Remove obsolete function.
+	(xpms): Change name of "keyring" icon to "gpa-keyring".
+	* icons.h (gpa_create_icon_widget): Remove prototype.
+	(GPA_STOCK_KEYRING_EDITOR): New macro.
+	* keyring.c (keyring_editor_new): Use custom stock icon instead of
+	gpa_create_icon_widget.
+	* gtktools.c (gpa_window_show_centered): Remove obsolete function.
+	* gtktools.h (gpa_window_show_centered): Remove prototype.
+	* expirydlg.c (gpa_expiry_dialog_run): Change type of EXPIRY_DATE
+	to time_t.  Use g_date_set_time_t instead of g_date_set_time.
+	* gpapastrings.c (gpa_expiry_date_string): Use g_date_set_time_t
+	instead of g_date_set_time.
+	(gpa_creation_date_string): Likewise.
+	* keygenwizard.c (free_keygen_wizard): Use g_object_unref instead
+	of gdk_pixmap_unref.
+	(gpa_keygen_wizard_new): Use gtk_window_set_transient_for and
+	gtk_window_set_position instead of gpa_window_show_centered.
+	(gpa_keygen_wizard_password_page): Use g_object_set_data instead
+	of gtk_object_set_data.
+	* keyimpseldlg.c (gpa_key_import_selection_dialog_run): Likewise.
+	* gpagenkeysimpleop.c (gpa_gen_key_simple_operation_constructor):
+	Show keygen wizard.
+	* gpa.c, gpawidgets.c, encryptdlg.c, gpawizard.c, keyeditdlg.c,
+	keyring.c, keyimpseldlg.c, keygenwizard.c, keygendlg.c: Use
+	g_signal_connect instead of gtk_signal_connect.
+	* gtktools.c (gpa_window_show_centered): Use gdk_drawable_get_size
+	instead of gdk_window_get_size.
+
 	* gtktools.h (gpa_connect_by_accelerator): Remove prototype.
 	* gtktools.c (gpa_connect_by_accelerator): Remove obsolete interface.
 	* selectkeydlg.c (select_key_dlg_constructor): Remove accel_group.

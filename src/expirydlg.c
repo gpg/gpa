@@ -101,7 +101,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, gpgme_key_t key, GDate ** new_date)
   GtkWidget * vbox;
   GtkWidget * radio;
   GtkWidget * calendar;
-  unsigned long expiry_date;
+  time_t expiry_date;
 
   GPAExpiryDialog dialog;
 
@@ -137,14 +137,14 @@ gpa_expiry_dialog_run (GtkWidget * parent, gpgme_key_t key, GDate ** new_date)
   gtk_box_pack_start (GTK_BOX (vbox), calendar, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (dialog.radio_date), "toggled",
-                    (GCallback) expire_date_toggled_cb, calendar);
+                    G_CALLBACK (expire_date_toggled_cb), calendar);
 
-  expiry_date = key->subkeys->expires;
+  expiry_date = (time_t) key->subkeys->expires;
   
   if (expiry_date > 0)
     {
       GDate tmp;
-      g_date_set_time (&tmp, expiry_date);
+      g_date_set_time_t (&tmp, expiry_date);
       gtk_calendar_select_month (GTK_CALENDAR (calendar),
                                  g_date_get_month (&tmp)-1,
                                  g_date_get_year (&tmp));

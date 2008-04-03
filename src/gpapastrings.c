@@ -68,7 +68,7 @@ gpa_expiry_date_string (unsigned long expiry_time)
 
   if( expiry_time > 0 )
     {
-      g_date_set_time (&expiry_date, expiry_time);
+      g_date_set_time_t (&expiry_date, (time_t) expiry_time);
       g_date_strftime (date_buffer, 256, "%x", &expiry_date);
       result = g_strdup (date_buffer);
     }
@@ -86,7 +86,7 @@ gpa_creation_date_string (unsigned long creation_time)
 
   if( creation_time > 0 )
     {
-      g_date_set_time (&creation_date, creation_time);
+      g_date_set_time_t (&creation_date, (time_t) creation_time);
       g_date_strftime (date_buffer, 256, "%x", &creation_date);
       result = g_strdup (date_buffer);
     }

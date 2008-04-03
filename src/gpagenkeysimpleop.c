@@ -79,6 +79,7 @@ gpa_gen_key_simple_operation_constructor (GType type,
   op->wizard = gpa_keygen_wizard_new (GPA_OPERATION (op)->window,
 				      gpa_gen_key_simple_operation_generate,
 				      op);
+  gtk_widget_show_all (op->wizard);
 
   /* Connect to the "done" signal */
   g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",

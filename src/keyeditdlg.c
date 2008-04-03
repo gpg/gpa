@@ -184,8 +184,8 @@ gpa_key_edit_dialog_constructor (GType                  type,
   gtk_widget_set_sensitive (button,(gpa_keytable_lookup_key 
 			     (gpa_keytable_get_secret_instance(), 
 			      dialog->key->subkeys->fpr) != NULL));
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc)gpa_key_edit_change_expiry, dialog);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (gpa_key_edit_change_expiry), dialog);
 
   /* Close the dialog in response */
   g_signal_connect (G_OBJECT (dialog), "response", 

@@ -37,35 +37,6 @@
 
 /* BEGIN of old unchecked code (wk 2008-03-07) */
 
-
-/* Show all children of the GtkWindow widget, realize it, set its
-   position so that it's in the center of the parent and show the
-   window itself.  */
-void
-gpa_window_show_centered (GtkWidget * widget, GtkWidget * parent)
-{
-  int parent_x, parent_y, parent_width, parent_height;
-  int center_x, center_y;
-  int width, height;
-  GtkWidget * child = GTK_BIN (widget)->child;
-
-  gtk_widget_show_all (child);
-  gtk_widget_realize (child);
-
-  gdk_window_get_size (widget->window, &width, &height);
-  gdk_window_get_origin (parent->window, &parent_x, &parent_y);
-  gdk_window_get_size (parent->window, &parent_width, &parent_height);
-
-  center_x = parent_x + (parent_width - width) / 2;
-  center_y = parent_y + (parent_height - height) / 2;
-
-  gtk_window_set_position (GTK_WINDOW(widget), GTK_WIN_POS_NONE);
-  gtk_widget_set_uposition (widget, center_x, center_y);
-  gtk_window_set_transient_for(GTK_WINDOW(widget), GTK_WINDOW(parent));
-  gtk_widget_show_all (widget);
-}
-
-
 void
 gpa_window_error (const gchar *message, GtkWidget *messenger)
 {

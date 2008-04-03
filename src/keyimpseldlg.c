@@ -116,8 +116,8 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
   windowSelect = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (windowSelect), _("Select keys to import"));
   dialog.window = windowSelect;
-  gtk_signal_connect (GTK_OBJECT (windowSelect), "destroy",
-		      GTK_SIGNAL_FUNC (key_import_selection_destroy), NULL);
+  g_signal_connect (G_OBJECT (windowSelect), "destroy",
+		    G_CALLBACK (key_import_selection_destroy), NULL);
 
   vboxSelect = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxSelect), 5);
@@ -147,20 +147,22 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxSelect), 5);
 
   buttonSelect = gtk_button_new_from_stock (GTK_STOCK_OK);
-  gtk_signal_connect_object (GTK_OBJECT (buttonSelect), "clicked",
-			     GTK_SIGNAL_FUNC (key_import_selection_ok),
-			     (gpointer) &dialog);
+  g_signal_connect_swapped (G_OBJECT (buttonSelect), "clicked",
+			    G_CALLBACK (key_import_selection_ok), &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSelect), buttonSelect);
 
 
   buttonCancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      key_import_selection_cancel, &dialog);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (key_import_selection_cancel), &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSelect), buttonCancel);
 
   gtk_container_add (GTK_CONTAINER (windowSelect), vboxSelect);
-  gpa_window_show_centered (windowSelect, parent);
+
   gtk_window_set_modal (GTK_WINDOW (windowSelect), TRUE);
+  gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (parent));
+  gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_CENTER_ON_PARENT);
+  gtk_widget_show_all (window);
 
   gtk_main ();
 }

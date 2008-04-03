@@ -158,7 +158,7 @@ gpa_key_gen_run_dialog (GtkWidget *parent)
                                    GTK_RESPONSE_OK);
   dialog.window = windowGenerate;
 
-  /* Use gtk_signal_connect_object here to make the dialog pointer the
+  /* Use g_signal_connect_object here to make the dialog pointer the
      first parameter of the handler.  */
   //  g_signal_connect (G_OBJECT (windowGenerate), "delete-event",
   //  		    G_CALLBACK (gtk_widget_destroy), dialog.window);

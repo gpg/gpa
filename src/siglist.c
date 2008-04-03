@@ -64,7 +64,7 @@ gpa_siglist_new (void)
 
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
 		    "changed_ui_mode",
-                    (GCallback)gpa_siglist_ui_mode_changed_cb, list);
+                    G_CALLBACK (gpa_siglist_ui_mode_changed_cb), list);
 
   return list;
 }

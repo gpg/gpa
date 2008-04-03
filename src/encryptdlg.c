@@ -174,8 +174,8 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
   checkerSign = gtk_check_button_new_with_mnemonic (_("_Sign"));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), checkerSign, FALSE, FALSE, 0);
   dialog->check_sign = checkerSign;
-  gtk_signal_connect (GTK_OBJECT (checkerSign), "toggled",
-		      GTK_SIGNAL_FUNC (toggle_sign_cb), dialog);
+  g_signal_connect (G_OBJECT (checkerSign), "toggled",
+		    G_CALLBACK (toggle_sign_cb), dialog);
 
   labelWho = gtk_label_new_with_mnemonic (_("Sign _as "));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), labelWho, FALSE, TRUE, 0);

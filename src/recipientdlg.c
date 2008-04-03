@@ -714,19 +714,19 @@ do_select_key (RecipientDlg *dialog, gpgme_protocol_t protocol)
 }
 
 static void
-recplist_popup_pgp (RecipientDlg *dialog)
+recplist_popup_pgp (GtkAction *action, RecipientDlg *dialog)
 {
   do_select_key (dialog, GPGME_PROTOCOL_OpenPGP);
 }
 
 static void
-recplist_popup_x509 (RecipientDlg *dialog)
+recplist_popup_x509 (GtkAction *action, RecipientDlg *dialog)
 {
   do_select_key (dialog, GPGME_PROTOCOL_CMS);
 }
 
 static void
-recplist_popup_ignore (RecipientDlg *dialog)
+recplist_popup_ignore (GtkAction *action, RecipientDlg *dialog)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
@@ -808,28 +808,47 @@ recplist_display_popup_menu (RecipientDlg *dialog, GdkEvent *event,
 static GtkWidget *
 recplist_popup_menu_new (GtkWidget *window, RecipientDlg *dialog)
 {
-  GtkItemFactory *factory;
-  GtkItemFactoryEntry popup_menu[] =
+  static const GtkActionEntry entries[] =
     {
-      {_("/Select _PGP key..."), NULL, recplist_popup_pgp, 0, NULL},
-      {_("/Select _S\\/MIME key..."), NULL, recplist_popup_x509, 0, NULL},
-      {_("/Toggle _Ignore flag"), NULL, recplist_popup_ignore, 0, NULL},
+      /* Toplevel.  */
+      { "SelectPGPKey", NULL, N_("Select _PGP key..."), NULL,
+	NULL, G_CALLBACK (recplist_popup_pgp) },
+      { "SelectCMSKey", NULL, N_("Select _S\\/MIME key..."), NULL,
+	NULL, G_CALLBACK (recplist_popup_x509) },
+      { "ToggleIgnoreFlag", NULL, N_("Toggle _Ignore flag"), NULL,
+	NULL, G_CALLBACK (recplist_popup_ignore) }
     };
-  //  GtkWidget *item;
 
-  factory = gtk_item_factory_new (GTK_TYPE_MENU, "<main>", NULL);
-  gtk_item_factory_create_items (factory,
-                                 sizeof (popup_menu) / sizeof (popup_menu[0]),
-                                 popup_menu, dialog);
+  static const char *ui_description =
+    "<ui>"
+    "  <popup name='PopupMenu'>"
+    "    <menuitem action='SelectPGPKey'/>"
+    "    <menuitem action='SelectCMSKey'/>"
+    "    <menuitem action='ToggleIgnoreFlag'/>"
+    "  </popup>"
+    "</ui>";
 
-  /* Only if there is only ONE key selected.  */
-/*   item = gtk_item_factory_get_widget (GTK_ITEM_FACTORY(factory), */
-/*                                       _("/Set Owner Trust...")); */
-/*   if (item) */
-/*     add_selection_sensitive_widget (editor, item, */
-/* 				    keyring_editor_has_single_selection); */
+  GtkAccelGroup *accel_group;
+  GtkActionGroup *action_group;
+  GtkUIManager *ui_manager;
+  GError *error;
 
-  return gtk_item_factory_get_widget (factory, "<main>");
+  action_group = gtk_action_group_new ("MenuActions");
+  gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries),
+				dialog);
+  ui_manager = gtk_ui_manager_new ();
+  gtk_ui_manager_insert_action_group (ui_manager, action_group, 0);
+  accel_group = gtk_ui_manager_get_accel_group (ui_manager);
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+  if (! gtk_ui_manager_add_ui_from_string (ui_manager, ui_description,
+					   -1, &error))
+    {
+      g_message ("building clipboard menus failed: %s", error->message);
+      g_error_free (error);
+      exit (EXIT_FAILURE);
+    }
+
+  return gtk_ui_manager_get_widget (ui_manager, "/PopupMenu");
 }
 
 

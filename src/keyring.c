@@ -120,6 +120,7 @@ struct _GPAKeyringEditor
   /* The signatures list in the notebook.  */
   GtkWidget *signatures_list;
   GtkWidget *signatures_uids;
+  gint signatures_count;
   GtkWidget *signatures_hbox;
 
   /* The subkeys list in the notebook.  */
@@ -178,7 +179,7 @@ static void keyring_update_details_notebook (GPAKeyringEditor *editor);
 /* Prototype of a sensitivity callback.  Return TRUE if the widget
    should be senstitive, FALSE otherwise.  The parameter is a pointer
    to the GPAKeyringEditor struct.  */
-typedef gboolean (*SensitivityFunc)(gpointer);
+typedef gboolean (*SensitivityFunc) (gpointer);
 
 
 /* Add widget to the list of sensitive widgets of editor.  */
@@ -213,8 +214,7 @@ static void
 update_selection_sensitive_actions (GPAKeyringEditor *editor)
 {
   g_list_foreach (editor->selection_sensitive_actions,
-                  update_selection_sensitive_action,
-                  (gpointer) editor);
+                  update_selection_sensitive_action, editor);
 }
 
 /* Disable all the widgets in the list of sensitive widgets.  To be used while
@@ -1036,7 +1036,7 @@ keyring_editor_action_new (GPAKeyringEditor *editor,
 				      G_N_ELEMENTS (radio_entries),
 				      detailed ? 1 : 0,
 				      G_CALLBACK (keyring_set_listing_cb),
-				      (gpointer) editor);
+				      editor);
   gtk_action_group_add_actions (action_group, gpa_help_menu_action_entries,
 				G_N_ELEMENTS (gpa_help_menu_action_entries),
 				editor->window);
@@ -1134,17 +1134,21 @@ add_details_row (GtkWidget *table, gint row, gchar *text,
   return widget;
 }
 
+
 /* Callback for the popdown menu on the signatures page.  */
 static void
-signatures_uid_selected (GtkOptionMenu *optionmenu, gpointer user_data)
+signatures_uid_selected (GtkComboBox *combo, gpointer user_data)
 {
   GPAKeyringEditor *editor = user_data;
   gpgme_key_t key = keyring_editor_current_key (editor);
 
-  gpa_siglist_set_signatures (editor->signatures_list, key, 
-                              gtk_option_menu_get_history 
-                              (GTK_OPTION_MENU (editor->signatures_uids)) - 1);
+  /* We subtract one, as the first entry with index 0 means "all user
+     names".  */
+  gpa_siglist_set_signatures
+    (editor->signatures_list, key,
+     gtk_combo_box_get_active (GTK_COMBO_BOX (combo)) - 1);
 }
+
 
 /* Add the subkeys page from the notebook.  */
 static void
@@ -1204,7 +1208,7 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   GtkWidget *scrolled;
   GtkWidget *viewport;
   GtkWidget *siglist;
-  GtkWidget *options;
+  GtkWidget *combo;
   GtkWidget *hbox;
   gint table_row;
 
@@ -1268,12 +1272,13 @@ keyring_details_notebook (GPAKeyringEditor *editor)
   hbox = gtk_hbox_new (FALSE, 5);
   label = gtk_label_new (_("Show signatures on user name:"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-  options = gtk_option_menu_new ();
-  gtk_box_pack_start (GTK_BOX (hbox), options, TRUE, TRUE, 0);
-  gtk_widget_set_sensitive (options, FALSE);
-  editor->signatures_uids = options;
+  combo = gtk_combo_box_new_text ();
+  gtk_box_pack_start (GTK_BOX (hbox), combo, TRUE, TRUE, 0);
+  gtk_widget_set_sensitive (combo, FALSE);
+  editor->signatures_uids = combo;
+  editor->signatures_count = 0;
   editor->signatures_hbox = hbox;
-  g_signal_connect (G_OBJECT (options), "changed",
+  g_signal_connect (G_OBJECT (combo), "changed",
                     G_CALLBACK (signatures_uid_selected), editor);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
@@ -1393,7 +1398,7 @@ keyring_details_page_fill_num_keys (GPAKeyringEditor *editor, gint num_key)
 
   /* FIXME: Assumes that the 0th page is the details page.  This
      should be done better.  */
-  gtk_notebook_set_page (GTK_NOTEBOOK (editor->notebook_details), 0);
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (editor->notebook_details), 0);
 }
 
 
@@ -1402,33 +1407,34 @@ keyring_details_page_fill_num_keys (GPAKeyringEditor *editor, gint num_key)
 static void
 keyring_signatures_page_fill_key (GPAKeyringEditor *editor, gpgme_key_t key)
 {
-  GtkWidget *menu;
-  GtkWidget *label;
+  GtkComboBox *combo;
+  gint i;
 
-  /* Create the menu for the popdown UID list, if there is more than
-     one UID.  */
+  combo = GTK_COMBO_BOX (editor->signatures_uids);
+  for (i = editor->signatures_count - 1; i >= 0; i--)
+    gtk_combo_box_remove_text (combo, i);
+  editor->signatures_count = 0;
+
+  /* Create the popdown UID list if there is more than one UID.  */
   if (key->uids && key->uids->next)
     {
       gpgme_user_id_t uid;
 
-      menu = gtk_menu_new ();
-      label = gtk_menu_item_new_with_label (_("All signatures"));
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
+      gtk_combo_box_append_text (combo, _("All signatures"));
+      gtk_combo_box_set_active (combo, 0);
+      i = 1;
 
       uid = key->uids;
       while (uid)
 	{
 	  gchar *uid_string = gpa_gpgme_key_get_userid (uid);
-	  label = gtk_menu_item_new_with_label (uid_string);
-	  gtk_menu_shell_append (GTK_MENU_SHELL (menu), label);
+	  gtk_combo_box_append_text (combo, uid_string);
 	  g_free (uid_string);
-
 	  uid = uid->next;
+	  i++;
 	}
+      editor->signatures_count = i;
 
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (editor->signatures_uids), 
-				menu);
-      gtk_widget_show_all (menu);
       gtk_widget_show (editor->signatures_hbox);
       gtk_widget_set_sensitive (editor->signatures_uids, TRUE);
       /* Add the signatures.  */
@@ -1448,9 +1454,16 @@ keyring_signatures_page_fill_key (GPAKeyringEditor *editor, gpgme_key_t key)
 static void
 keyring_signatures_page_empty (GPAKeyringEditor *editor)
 {
-  gtk_widget_set_sensitive (editor->signatures_uids, FALSE);
-  gtk_option_menu_remove_menu (GTK_OPTION_MENU (editor->signatures_uids));
+  GtkComboBox *combo;
+  gint i;
+
   gpa_siglist_set_signatures (editor->signatures_list, NULL, 0);
+
+  combo = GTK_COMBO_BOX (editor->signatures_uids);
+  gtk_widget_set_sensitive (GTK_WIDGET (combo), FALSE);
+  for (i = editor->signatures_count - 1; i >= 0; i--)
+    gtk_combo_box_remove_text (combo, i);
+  editor->signatures_count = 0;
 }
 
 
@@ -1521,7 +1534,7 @@ static void
 keyring_update_details_notebook (GPAKeyringEditor *editor)
 {
   if (! editor->details_idle_id)
-    editor->details_idle_id = gtk_idle_add (idle_update_details, editor);
+    editor->details_idle_id = g_idle_add (idle_update_details, editor);
 }
 
 
@@ -1674,8 +1687,10 @@ keyring_editor_new (void)
   GtkWidget *icon;
   GtkWidget *paned;
   GtkWidget *statusbar;
-
+  GtkWidget *main_box;
+  GtkWidget *align;
   gchar *markup;
+  guint pt, pb, pl, pr;
 
   editor = g_malloc (sizeof (GPAKeyringEditor));
   editor->selection_sensitive_actions = NULL;
@@ -1684,12 +1699,12 @@ keyring_editor_new (void)
   window = editor->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window),
                         _("GNU Privacy Assistant - Keyring Editor"));
-  gtk_object_set_data_full (GTK_OBJECT (window), "user_data", editor,
-                            keyring_editor_destroy);
+  /* We use this for the destructor.  */
+  g_object_set_data_full (G_OBJECT (window), "user_data", editor,
+			  keyring_editor_destroy);
   gtk_window_set_default_size (GTK_WINDOW (window), 680, 600);
-  gtk_signal_connect_object (GTK_OBJECT (window), "map",
-                             GTK_SIGNAL_FUNC (keyring_editor_mapped),
-                             (gpointer) editor);
+  g_signal_connect_swapped (G_OBJECT (window), "map",
+			    G_CALLBACK (keyring_editor_mapped), editor);
   /* Realize the window so that we can create pixmaps without warnings.  */
   gtk_widget_realize (window);
 
@@ -1703,9 +1718,9 @@ keyring_editor_new (void)
 
   /* Add a fancy label that tells us: This is the keyring editor.  */
   hbox = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   
-  icon = gpa_create_icon_widget (window, "keyring");
+  icon = gtk_image_new_from_stock (GPA_STOCK_KEYRING_EDITOR, GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);
@@ -1716,10 +1731,17 @@ keyring_editor_new (void)
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
-
   paned = gtk_vpaned_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), paned, TRUE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (paned), 5);
+
+  main_box = gtk_hbox_new (TRUE, 0);
+  align = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_alignment_get_padding (GTK_ALIGNMENT (align),
+                             &pt, &pb, &pl, &pr);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (align), pt, pb + 5,
+                             pl + 5, pr + 5);
+  gtk_box_pack_start (GTK_BOX (vbox), align, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (main_box), paned, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (align), main_box);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_paned_pack1 (GTK_PANED (paned), scrolled, TRUE, TRUE);
@@ -1741,9 +1763,9 @@ keyring_editor_new (void)
   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
 			      (GTK_TREE_VIEW (keylist))),
 		    "changed", G_CALLBACK (keyring_editor_selection_changed),
-		    (gpointer) editor);
+		    editor);
 
-  g_signal_connect_swapped (GTK_OBJECT (keylist), "button_press_event",
+  g_signal_connect_swapped (G_OBJECT (keylist), "button_press_event",
                             G_CALLBACK (display_popup_menu), editor);
 
   notebook = keyring_details_notebook (editor);
@@ -1754,10 +1776,10 @@ keyring_editor_new (void)
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
 		    "changed_default_key",
-                    (GCallback) keyring_default_key_changed, editor);
+                    G_CALLBACK (keyring_default_key_changed), editor);
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
 		    "changed_ui_mode",
-                    (GCallback) keyring_ui_mode_changed, editor);
+                    G_CALLBACK (keyring_ui_mode_changed), editor);
 
   keyring_update_status_bar (editor);
   update_selection_sensitive_actions (editor);
