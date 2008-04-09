@@ -186,7 +186,7 @@ gpa_keylist_constructor (GType type,
 
    /* Init the model */
   store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
-			      GDK_TYPE_PIXBUF,
+			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
@@ -366,30 +366,14 @@ remove_trustdb_dialog (GpaKeyList * keylist)
 }
 
 
-static GdkPixbuf*
+static const gchar *
 get_key_pixbuf (gpgme_key_t key)
 {
-  static gboolean pixmaps_created = FALSE;
-  static GdkPixbuf *secret_pixbuf = NULL;
-  static GdkPixbuf *public_pixbuf = NULL;
-
-  if (!pixmaps_created)
-    {
-      secret_pixbuf = gpa_create_icon_pixbuf ("blue_yellow_key");
-      public_pixbuf = gpa_create_icon_pixbuf ("blue_key");
-      pixmaps_created = TRUE;
-    }
-
-  if (gpa_keytable_lookup_key 
-      (gpa_keytable_get_secret_instance(), 
-       key->subkeys->fpr) != NULL)
-    {
-      return secret_pixbuf;
-    }
+  if (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance (),
+			       key->subkeys->fpr) != NULL)
+    return GPA_STOCK_SECRET_KEY;
   else
-    {
-      return public_pixbuf;
-    }
+    return GPA_STOCK_PUBLIC_KEY;
 }
 
 
@@ -493,12 +477,12 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
 		      key->subkeys->expires : G_MAXULONG,
 		      GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE, 
 		      key->owner_trust,
-		      /* Set revoked and expired keys to "never trust" for 
-		       * sorting */
+		      /* Set revoked and expired keys to "never trust"
+		         for sorting.  */
 		      GPA_KEYLIST_COLUMN_VALIDITY_VALUE, val_value,
                       /* Store the image only if enabled.  */
-		      list->public_only? -1: GPA_KEYLIST_COLUMN_IMAGE,
-                      list->public_only? NULL:get_key_pixbuf (key),
+		      list->public_only ? -1 : GPA_KEYLIST_COLUMN_IMAGE,
+                      list->public_only ? NULL : get_key_pixbuf (key),
 		      -1);
   /* Clean up */
   g_free (userid);
@@ -540,9 +524,13 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
   if (!keylist->public_only)
     {
       renderer = gtk_cell_renderer_pixbuf_new ();
+      /* Large toolbar size is 24x24, which is large enough to
+	 accomodate the key icons.  Note that those are at fixed size
+	 and thus no scaling or padding is done (see icons.c).  */
+      g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+
       column = gtk_tree_view_column_new_with_attributes 
-        ("", renderer,
-         "pixbuf",
+        (NULL, renderer, "stock-id",
          GPA_KEYLIST_COLUMN_IMAGE,
          NULL);
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);

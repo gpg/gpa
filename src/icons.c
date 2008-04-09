@@ -70,13 +70,12 @@ struct {
   { GPA_STOCK_KEYRING_EDITOR, keyring_xpm },
   { "gpa_blue_key", gpa_blue_key_xpm },
   { "gpa_yellow_key", gpa_yellow_key_xpm },
-  { "blue_key",	blue_key_xpm },
-  { "blue_yellow_key", blue_yellow_key_xpm },
+  { GPA_STOCK_PUBLIC_KEY, blue_key_xpm },
+  { GPA_STOCK_SECRET_KEY, blue_yellow_key_xpm },
   { "wizard_genkey", wizard_genkey_xpm},
   { "wizard_backup", wizard_backup_xpm},
   { NULL, NULL }
 };
-
 
 
 static GdkPixmap *
@@ -158,7 +157,17 @@ register_stock_icons (void)
 
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) xpms[i].xpm);
       gtk_icon_source_set_pixbuf (icon_source, pixbuf);
-	
+      gtk_icon_source_set_direction_wildcarded (icon_source, TRUE);
+      gtk_icon_source_set_state_wildcarded (icon_source, TRUE);
+      if (! strcmp (xpms[i].name, GPA_STOCK_PUBLIC_KEY)
+	  || ! strcmp (xpms[i].name, GPA_STOCK_SECRET_KEY))
+	{
+	  /* FIXME: For the keylist icons, we disable scaling for now
+	     for best visual results.  */
+	  gtk_icon_source_set_size_wildcarded (icon_source, FALSE);
+	  gtk_icon_source_set_size (icon_source, GTK_ICON_SIZE_LARGE_TOOLBAR);
+	}
+
       gtk_icon_set_add_source (icon_set, icon_source);
       gtk_icon_source_free (icon_source);
       gtk_icon_factory_add (icon_factory, xpms[i].name, icon_set);

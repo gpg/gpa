@@ -1,3 +1,18 @@
+2008-04-09  Marcus Brinkmann  <marcus@g10code.de>
+
+	* keylist.c (setup_columns): Change attribute of
+	GPA_KEYLIST_COLUMN_IMAGE from "pixbuf" to "stock-id".
+	(get_key_pixbuf): Change return type to const gchar * and return
+	stock item IDs.
+	(gpa_keylist_constructor): Set type of first column to
+	G_TYPE_STRING.
+	(setup_columns): Set stock-size property of RENDERER, and use the
+	stock-id property for that tree view column renderer.
+	* icons.c (xpms): Use stock IDs for secret and public key.
+	(register_stock_icons): Set fixed sizes for the secret and public
+	key icons.
+	* icons.h (GPA_STOCK_PUBLIC_KEY, GPA_STOCK_SECRET_KEY): New.
+
 2008-04-03  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpa.h (gpa_windows_menu_action_entries): Use stock items for
