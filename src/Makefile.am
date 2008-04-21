@@ -72,6 +72,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      passwddlg.h passwddlg.c \
 	      gpacontext.h gpacontext.c \
 	      gpaprogressdlg.h gpaprogressdlg.c \
+	      gpaprogressbar.h gpaprogressbar.c \
 	      gparecvkeydlg.h gparecvkeydlg.c \
 	      gpaoperation.h gpaoperation.c \
 	      gpastreamop.h gpastreamop.c  \

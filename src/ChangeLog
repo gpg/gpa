@@ -1,3 +1,9 @@
+2008-04-21  Marcus Brinkmann  <marcus@g10code.de>
+
+	* Makefile.am (gpa_SOURCES): Add gpaprogressbar.h, gpaprogressbar.c.
+	* gpaprogressbar.h, gpaprogressbar.c: New files.
+	* gpaprogressdlg.h, gpaprogressdlg.c: Use GpaProgressBar.
+
 2008-04-09  Marcus Brinkmann  <marcus@g10code.de>
 
 	* keylist.c (setup_columns): Change attribute of

@@ -1,40 +1,32 @@
 /* gpaprogressdlg.h - The GpaProgressDialog object.
- *	Copyright (C) 2003, Miguel Coca.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2003 Miguel Coca.
+   Copyright (C) 2008 g10 Code GmbH.
 
-#include <config.h>
+   This file is part of GPA.
+
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc.,
+   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include "gpaprogressdlg.h"
 #include "i18n.h"  
 
-/* Internal functions */
-static void
-gpa_progress_dialog_start_cb (GpaContext *context,
-			      GpaProgressDialog *dialog);
-static void
-gpa_progress_dialog_done_cb (GpaContext *context, gpg_error_t err,
-			     GpaProgressDialog *dialog);
-static void
-gpa_progress_dialog_progress_cb (GpaContext *context, int current, int total,
-				 GpaProgressDialog *dialog);
 
-/* Properties */
+/* Properties.  */
 enum
 {
   PROP_0,
@@ -42,13 +34,15 @@ enum
   PROP_CONTEXT
 };
 
+
 static GObjectClass *parent_class = NULL;
 
+
 static void
-gpa_progress_dialog_get_property (GObject     *object,
-				  guint        prop_id,
-				  GValue      *value,
-				  GParamSpec  *pspec)
+gpa_progress_dialog_get_property (GObject *object,
+				  guint prop_id,
+				  GValue *value,
+				  GParamSpec *pspec)
 {
   GpaProgressDialog *dialog = GPA_PROGRESS_DIALOG (object);
 
@@ -59,13 +53,14 @@ gpa_progress_dialog_get_property (GObject     *object,
 			  gtk_window_get_transient_for (GTK_WINDOW (dialog)));
       break;
     case PROP_CONTEXT:
-      g_value_set_object (value, dialog->context);
+      g_value_set_object (value, gpa_progress_bar_get_context (dialog->pbar));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
+
 
 static void
 gpa_progress_dialog_set_property (GObject     *object,
@@ -82,14 +77,8 @@ gpa_progress_dialog_set_property (GObject     *object,
 				    g_value_get_object (value));
       break;
     case PROP_CONTEXT:
-      dialog->context = (GpaContext*) g_value_get_object (value);
-      /* Context signals */
-      g_signal_connect (G_OBJECT (dialog->context), "start",
-			G_CALLBACK (gpa_progress_dialog_start_cb), dialog);
-      g_signal_connect (G_OBJECT (dialog->context), "done",
-			G_CALLBACK (gpa_progress_dialog_done_cb), dialog);
-      g_signal_connect (G_OBJECT (dialog->context), "progress",
-			G_CALLBACK (gpa_progress_dialog_progress_cb), dialog);
+      gpa_progress_bar_set_context (dialog->pbar,
+				    (GpaContext *) g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -97,11 +86,13 @@ gpa_progress_dialog_set_property (GObject     *object,
     }
 }
 
+
 static void
 gpa_progress_dialog_finalize (GObject *object)
 {  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
+
 
 static void
 gpa_progress_dialog_class_init (GpaProgressDialogClass *klass)
@@ -114,7 +105,7 @@ gpa_progress_dialog_class_init (GpaProgressDialogClass *klass)
   object_class->set_property = gpa_progress_dialog_set_property;
   object_class->get_property = gpa_progress_dialog_get_property;
 
-  /* Properties */
+  /* Properties.  */
   g_object_class_install_property (object_class,
 				   PROP_WINDOW,
 				   g_param_spec_object 
@@ -129,33 +120,36 @@ gpa_progress_dialog_class_init (GpaProgressDialogClass *klass)
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
 
+
 static void
 gpa_progress_dialog_init (GpaProgressDialog *dialog)
 {
   gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
 				  5);
-  /* Elements */
+  /* Elements.  */
   dialog->label = gtk_label_new (NULL);
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			       dialog->label);
-  dialog->progress_bar = gtk_progress_bar_new ();
+  dialog->pbar = gpa_progress_bar_new ();
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-			       dialog->progress_bar);
-  /* Set up the dialog */
+			       GTK_WIDGET (dialog->pbar));
+  /* Set up the dialog.  */
   gtk_dialog_add_button (GTK_DIALOG (dialog),
 			 _("_Cancel"),
 			 GTK_RESPONSE_CANCEL);
-  /* FIXME: Cancelling is not supported yet by GPGME */
+
+  /* FIXME: Cancelling is not supported yet by GPGME.  */
   gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL,
 				     FALSE);
 }
+
 
 GType
 gpa_progress_dialog_get_type (void)
 {
   static GType progress_dialog_type = 0;
   
-  if (!progress_dialog_type)
+  if (! progress_dialog_type)
     {
       static const GTypeInfo progress_dialog_info =
       {
@@ -178,10 +172,10 @@ gpa_progress_dialog_get_type (void)
   return progress_dialog_type;
 }
 
+
 /* API */
 
-/* Create a new progress dialog for the given context.
- */
+/* Create a new progress dialog for the given context.  */
 GtkWidget*
 gpa_progress_dialog_new (GtkWidget *parent, 
 			 GpaContext *context)
@@ -196,40 +190,10 @@ gpa_progress_dialog_new (GtkWidget *parent,
   return GTK_WIDGET(dialog);
 }
 
-/* Set the dialog label.
- */
+
+/* Set the dialog label.  */
 void
 gpa_progress_dialog_set_label (GpaProgressDialog *dialog, const gchar *label)
 {
   gtk_label_set_text (GTK_LABEL (dialog->label), label);
 }
-
-/* Internal functions */
-
-static void
-gpa_progress_dialog_progress_cb (GpaContext *context, int current, int total,
-				 GpaProgressDialog *dialog)
-{
-  if (total > 0) 
-    {
-      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (dialog->progress_bar),
-				     (gdouble)current/(gdouble)total);
-    }
-  else
-    {
-      gtk_progress_bar_pulse (GTK_PROGRESS_BAR (dialog->progress_bar));
-    }
-}
-
-static void
-gpa_progress_dialog_start_cb (GpaContext *context,
-			      GpaProgressDialog *dialog)
-{
-}
-
-static void
-gpa_progress_dialog_done_cb (GpaContext *context, gpg_error_t err,
-			     GpaProgressDialog *dialog)
-{
-}
-
