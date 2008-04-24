@@ -59,7 +59,6 @@ gpa_SOURCES = get-path.h get-path.c \
 	      keylist.c keylist.h \
 	      siglist.c siglist.h \
 	      gpasubkeylist.c gpasubkeylist.h \
-	      gpawizard.c gpawizard.h \
 	      gpapastrings.c gpapastrings.h\
 	      gpl-text.c gpl-text.h \
 	      keyserver.c keyserver.h \

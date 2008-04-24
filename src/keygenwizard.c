@@ -22,49 +22,43 @@
 #endif
 
 #include <sys/stat.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 #include <errno.h>
 #include <gpgme.h>
+
 #include "gpa.h"
 #include "gpapastrings.h"
 #include "icons.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
-#include "gpawizard.h"
 #include "qdchkpwd.h"
 #include "gpgmetools.h"
 #include "keygenwizard.h"
 
-/*
- * The key generation wizard
- *
- * New users should not be overwhelmed by too many options most of which
- * are not easily explained and will only confuse them. To solve that
- * problem we use default values for the algorithm and size of the keys
- * and we use a wizard interface to present the necessary options like
- * user id and password in a step by step manner.
- */
-
-
-/*
- * Helper functions
- */
+/* The key generation wizard.
  
-/* Return a copy of string with leading and trailing whitespace stripped */
+   New users should not be overwhelmed by too many options most of which
+   are not easily explained and will only confuse them. To solve that
+   problem we use default values for the algorithm and size of the keys
+   and we use a wizard interface to present the necessary options like
+   user id and password in a step by step manner.  */
+
+/* Helper functions.  */
+ 
+/* Return a copy of string with leading and trailing whitespace
+   stripped.  */
 static gchar *
-string_strip_dup (gchar * string)
+string_strip_dup (gchar *string)
 {
   return g_strstrip (g_strdup (string));
 }
 
 
-/*
- * The wizard itself
- */
+/* The wizard itself.  */
 
-
-
-typedef struct {
+typedef struct
+{
   GtkWidget *window;
   GtkWidget *wizard;
   GtkWidget *name_page;
@@ -74,43 +68,38 @@ typedef struct {
   GtkWidget *final_page;
   GtkWidget *backup_page;
   GtkWidget *backup_dir_page;
-  GtkWidget *image_widget;
-  GtkAccelGroup *accel_group;
-  GdkPixmap *genkey_pixmap;
-  GdkPixmap *backup_pixmap;
-
+  
   GpaKeyGenWizardGenerateCb generate;
   gpointer generate_data;
 } GPAKeyGenWizard;
 
 
-/* Handler for the activate signals of several entry fields in the
- * wizard. Switch the wizard to the next page. */
-static void
-switch_to_next_page (GtkEditable *editable, gpointer user_data)
-{
-  gpa_wizard_next_page (((GPAKeyGenWizard*)user_data)->wizard);
-}
-
-/* internal API */
+/* Internal API.  */
 static gboolean gpa_keygen_wizard_generate_action (gpointer data);
 
-/*
- * The user ID pages
- */
+
+/* The user ID pages.  */
 
 static GtkWidget *
-gpa_keygen_wizard_simple_page (GPAKeyGenWizard * keygen_wizard,
-			       const gchar * description_text,
-			       const gchar * label_text)
+gpa_keygen_wizard_simple_page (GPAKeyGenWizard *keygen_wizard,
+			       const gchar *description_text,
+			       const gchar *label_text)
 {
-  GtkWidget * vbox;
-  GtkWidget * description;
-  GtkWidget * hbox;
-  GtkWidget * label;
-  GtkWidget * entry;
+  GtkWidget *align;
+  guint pt, pb, pl, pr;
+  GtkWidget *vbox;
+  GtkWidget *description;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *entry;
+
+  align = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_alignment_get_padding (GTK_ALIGNMENT (align), &pt, &pb, &pl, &pr);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (align),
+			     pt + 5, pb + 5, pl + 5, pr + 5);
 
   vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (align), vbox);
 
   description = gtk_label_new (description_text);
   gtk_box_pack_start (GTK_BOX (vbox), description, TRUE, TRUE, 0);
@@ -126,138 +115,247 @@ gpa_keygen_wizard_simple_page (GPAKeyGenWizard * keygen_wizard,
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
   entry = gtk_entry_new ();
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 5);
-  g_signal_connect (G_OBJECT (entry), "activate",
-		    G_CALLBACK (switch_to_next_page), keygen_wizard);
 
-  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_entry", entry);
-  g_object_set_data (G_OBJECT (vbox), "gpa_wizard_focus_child", entry);
-  return vbox;
+  g_object_set_data (G_OBJECT (align), "gpa_keygen_entry", entry);
+  g_object_set_data (G_OBJECT (align), "gpa_wizard_focus_child", entry);
+
+  return align;
 }
 
+
 static gchar *
-gpa_keygen_wizard_simple_get_text (GtkWidget * vbox)
+gpa_keygen_wizard_simple_get_text (GtkWidget *vbox)
 {
-  GtkWidget * entry;
+  GtkWidget *entry;
 
   entry = g_object_get_data (G_OBJECT (vbox), "gpa_keygen_entry");
   return string_strip_dup ((gchar *) gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
 
-static GtkWidget *
-gpa_keygen_wizard_name_page (GPAKeyGenWizard * keygen_wizard)
+static void
+gpa_keygen_wizard_simple_grab_focus (GtkWidget *vbox)
 {
-  return gpa_keygen_wizard_simple_page
-    (keygen_wizard,
-     _("Please insert your full name."
-       "\n\n"
-       "Your name will be part of the new key"
-       " to make it easier for others to identify"
-       " keys."),
+  GtkWidget *entry;
+
+  entry = g_object_get_data (G_OBJECT (vbox), "gpa_keygen_entry");
+  gtk_widget_grab_focus (entry);
+}
+
+
+static gboolean
+name_validate_cb (GtkWidget *widget, gpointer data)
+{
+  GPAKeyGenWizard *wizard = data;
+  const gchar *name;
+
+  name = gtk_entry_get_text (GTK_ENTRY (widget));
+  while (*name && g_unichar_isspace (g_utf8_get_char (name)))
+    name = g_utf8_next_char (name);
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (wizard->window),
+				   wizard->name_page, *name != '\0');
+
+  return FALSE;
+}
+
+
+static GtkWidget *
+keygen_wizard_name_page (GPAKeyGenWizard *wizard)
+{
+  GtkWidget *widget;
+  GtkWidget *entry;
+
+  widget = gpa_keygen_wizard_simple_page
+    (wizard,
+     _("Please insert your full name.\n\n"
+       "Your name will be part of the new key to make it easier for others"
+       " to identify keys."),
      _("Your Name:"));
+
+  entry = g_object_get_data (G_OBJECT (widget), "gpa_keygen_entry");
+  g_signal_connect (G_OBJECT (entry), "changed",
+		    G_CALLBACK (name_validate_cb), wizard);
+  return widget;
 }
+
 
 static gboolean
-gpa_keygen_wizard_name_validate (gpointer data)
+email_validate_cb (GtkWidget *widget, gpointer data)
 {
-  GPAKeyGenWizard * keygen_wizard = data;
-  gboolean result = TRUE;
-  gchar * name = gpa_keygen_wizard_simple_get_text (keygen_wizard->name_page);
+  GPAKeyGenWizard *wizard = data;
+  const gchar *email;
 
-  if (!*name)
-    {
-      /* The string is empty or consists entirely of whitespace */
-      gpa_window_error (_("Please insert your name"), keygen_wizard->window);
-      result = FALSE;
-    }
+  email = gtk_entry_get_text (GTK_ENTRY (widget));
+  while (*email && g_unichar_isspace (g_utf8_get_char (email)))
+    email = g_utf8_next_char (email);
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (wizard->window),
+				   wizard->email_page, *email != '\0');
 
-  g_free (name);
-  return result;
+  /* FIXME: we should do much more checking. Best would be exactly the
+     same checks gpg does in interactive mode with --gen-key.  */
+
+  return FALSE;
 }
+
 
 static GtkWidget *
-gpa_keygen_wizard_email_page (GPAKeyGenWizard * keygen_wizard)
+keygen_wizard_email_page (GPAKeyGenWizard *wizard)
 {
-  return gpa_keygen_wizard_simple_page
-    (keygen_wizard,
-     _("Please insert your email address."
-       "\n\n"
-       " Your email address will be part of the"
-       " new key to make it easier for others to"
-       " identify keys."
-       " If you have several email addresses, you can add further email"
-       " adresses later."),
+  GtkWidget *widget;
+  GtkWidget *entry;
+
+  widget = gpa_keygen_wizard_simple_page
+    (wizard,
+     _("Please insert your email address.\n\n"
+       "Your email address will be part of the new key to make it easier"
+       " for others to identify keys. If you have several email addresses,"
+       " you can add further email adresses later."),
      _("Your Email Address:"));
+
+  entry = g_object_get_data (G_OBJECT (widget), "gpa_keygen_entry");
+  g_signal_connect (G_OBJECT (entry), "changed",
+		    G_CALLBACK (email_validate_cb), wizard);
+  return widget;
 }
 
 
-static gboolean
-gpa_keygen_wizard_email_validate (gpointer data)
-{
-  GPAKeyGenWizard * keygen_wizard = data;
-  gboolean result = TRUE;
-  gchar * email;
-
-  email = gpa_keygen_wizard_simple_get_text (keygen_wizard->email_page); 
-  if (!*email)
-    {
-      /* The string is empty or consists entirely of whitespace */
-      gpa_window_error (_("Please insert your email address"),
-			keygen_wizard->window);
-      result = FALSE;
-    }
-  /* FIXME: we should do much more checking. Best would be exactly the
-   * same checks gpg does in interactive mode with --gen-key */
-
-  g_free (email);
-  return result;
-}
-
-
-/* Handler for the activate signal of the passphrase entry. Focus the
- * repeat passhrase entry. */
+/* Handler for the activate signal of the passphrase entry.  Focus the
+   repeat passhrase entry.  */
 static void
 focus_repeat_passphrase (GtkEditable *editable, gpointer user_data)
 {
-  gtk_widget_grab_focus ((GtkWidget*)user_data);
+  gtk_widget_grab_focus ((GtkWidget *) user_data);
 }
 
 
+static gboolean
+passwd_validate_cb (GtkWidget *widget, gpointer data)
+{
+  GPAKeyGenWizard *wizard = data;
+  gboolean result = TRUE;
+  GtkWidget *page;
+  const gchar *passwd;
+  const gchar *passwd_repeat;
+  GtkWidget *entry;
+  GtkWidget *status;
+  char textbuf[50];
+  double quality;
+
+  page = wizard->passwd_page;
+  entry = g_object_get_data (G_OBJECT (page), "gpa_keygen_passwd");
+  passwd = gtk_entry_get_text (GTK_ENTRY (entry));
+  entry = g_object_get_data (G_OBJECT (page), "gpa_keygen_passwd_repeat");
+  passwd_repeat = gtk_entry_get_text (GTK_ENTRY (entry));
+
+  if (*passwd == '\0' && *passwd_repeat == '\0')
+    {
+      status = g_object_get_data (G_OBJECT (page), "gpa_keygen_passwd_differ");
+      gtk_widget_hide (status);
+
+      status = g_object_get_data (G_OBJECT (page),
+				  "gpa_keygen_passwd_strength");
+      gtk_widget_hide (status);
+
+      result = FALSE;
+    }
+  else
+    {
+      status = g_object_get_data (G_OBJECT (page), "gpa_keygen_passwd_differ");
+      if (! strcmp (passwd, passwd_repeat))
+	gtk_widget_hide (status);
+      else
+	{
+	  gtk_widget_show (status);
+	  result = FALSE;
+	}
+    }
+
+  quality = 0;
+  if (*passwd != '\0')
+    quality = qdchkpwd (passwd);
+  if (quality > 1)
+    quality = 1;
+  status = g_object_get_data (G_OBJECT (page),
+			      "gpa_keygen_passwd_strength");
+  if (quality < 0.6)
+    {
+      snprintf (textbuf, sizeof textbuf, "(%d%%)", (int) (quality * 100));
+      gtk_widget_show (status);
+    }
+  else
+    {
+      snprintf (textbuf, sizeof textbuf, "%d%%", (int) (quality * 100));
+      gtk_widget_hide (status);
+    }
+
+  status = g_object_get_data (G_OBJECT (page), "gpa_keygen_quality");
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (status), quality);
+  gtk_progress_bar_set_text (GTK_PROGRESS_BAR (status), textbuf);
+
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (wizard->window),
+				   page, result);
+
+  return FALSE;
+}
+
 
 static GtkWidget *
-gpa_keygen_wizard_password_page (GPAKeyGenWizard * keygen_wizard)
+keygen_wizard_passwd_page (GPAKeyGenWizard *wizard)
 {
-  GtkWidget * vbox;
-  GtkWidget * description;
-  GtkWidget * table;
-  GtkWidget * label;
-  GtkWidget * entry, *passwd_entry;
+  GtkWidget *vbox;
+  GtkWidget *description;
+  GtkWidget *status;
+  GtkWidget *table;
+  GtkWidget *align;
+  GtkWidget *label;
+  GtkWidget *entry;
+  GtkWidget *passwd_entry;
 
   vbox = gtk_vbox_new (FALSE, 0);
 
   description = gtk_label_new
     (_("Please choose a passphrase for the new key."));
-  gtk_box_pack_start (GTK_BOX (vbox), description, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), description, FALSE, FALSE, 5);
   gtk_misc_set_alignment (GTK_MISC (description), 0.0, 0.0);
   gtk_label_set_line_wrap (GTK_LABEL (description), TRUE);
   gtk_label_set_justify (GTK_LABEL (description), GTK_JUSTIFY_LEFT);
 
-  table = gtk_table_new (2, 2, FALSE);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 5);
 
-  label = gtk_label_new (_("Passphrase: "));
+  status = gtk_label_new (_("In \"Passphrase\" and \"Repeat passphrase\","
+			    " you must enter the same passphrase."));
+  gtk_box_pack_start (GTK_BOX (vbox), status, FALSE, FALSE, 5);
+  gtk_misc_set_alignment (GTK_MISC (status), 0.0, 0.0);
+  gtk_label_set_line_wrap (GTK_LABEL (status), TRUE);
+  gtk_label_set_justify (GTK_LABEL (status), GTK_JUSTIFY_LEFT);
+  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_passwd_differ", status);
+
+
+  status = gtk_label_new (_("Warning: The passphrase you have entered is"
+			    " not very secure."));
+  gtk_box_pack_start (GTK_BOX (vbox), status, FALSE, FALSE, 5);
+  gtk_misc_set_alignment (GTK_MISC (status), 0.0, 0.0);
+  gtk_label_set_line_wrap (GTK_LABEL (status), TRUE);
+  gtk_label_set_justify (GTK_LABEL (status), GTK_JUSTIFY_LEFT);
+  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_passwd_strength", status);
+
+
+  align = gtk_alignment_new (0, 1, 1, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), align, TRUE, TRUE, 5);
+
+  table = gtk_table_new (2, 3, FALSE);
+  gtk_container_add (GTK_CONTAINER (align), table);
+
+  label = gtk_label_new (_("Quality: "));
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
-  entry = passwd_entry = gtk_entry_new ();
-  gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
-		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
-  gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
-  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_passwd", entry);
-  g_object_set_data (G_OBJECT (vbox), "gpa_wizard_focus_child", entry);
+  status = gtk_progress_bar_new ();
+  gtk_table_attach (GTK_TABLE (table), status, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
+  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_quality", status);
 
-  label = gtk_label_new (_("Repeat Passphrase: "));
+  label = gtk_label_new (_("Passphrase: "));
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
@@ -265,14 +363,32 @@ gpa_keygen_wizard_password_page (GPAKeyGenWizard * keygen_wizard)
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
+  g_object_set_data (G_OBJECT (vbox), "gpa_keygen_passwd", entry);
+  g_object_set_data (G_OBJECT (vbox), "gpa_wizard_focus_child", entry);
+  passwd_entry = entry;
+
+  label = gtk_label_new (_("Repeat Passphrase: "));
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+
+  entry = gtk_entry_new ();
+  gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3,
+		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+  gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   g_object_set_data (G_OBJECT (vbox), "gpa_keygen_passwd_repeat", entry);
-  g_signal_connect (G_OBJECT (entry), "activate",
-		    G_CALLBACK (switch_to_next_page), keygen_wizard);
+
   g_signal_connect (G_OBJECT (passwd_entry), "activate",
-		    G_CALLBACK (focus_repeat_passphrase), entry);
+  		    G_CALLBACK (focus_repeat_passphrase), entry);
+
+  g_signal_connect (G_OBJECT (passwd_entry), "changed",
+  		    G_CALLBACK (passwd_validate_cb), wizard);
+  g_signal_connect (G_OBJECT (entry), "changed",
+  		    G_CALLBACK (passwd_validate_cb), wizard);
 
   return vbox;
 }
+
 
 static gchar *
 gpa_keygen_wizard_password_get_password (GtkWidget * vbox)
@@ -281,73 +397,14 @@ gpa_keygen_wizard_password_get_password (GtkWidget * vbox)
   return (gchar *) gtk_entry_get_text (GTK_ENTRY (entry));
 }
 
-/* Validate the password in both entries and return TRUE if they're OK,
- * otherwise show a suitable message to the user and return FALSE.
- */
-/* FIXME: We should add some checks for whitespace because leading and
- * trailing whitespace is stripped somewhere in gpapa/gpg and whitespace
- * only passwords are not allowed */
-static gboolean
-gpa_keygen_wizard_password_validate (gpointer data)
-{
-  GPAKeyGenWizard *keygen_wizard = data;
-  gboolean result = TRUE;
-  GtkWidget *vbox = keygen_wizard->passwd_page;
-  GtkWidget *entry_passwd = g_object_get_data (G_OBJECT (vbox),
-					       "gpa_keygen_passwd");
-  GtkWidget *entry_repeat = g_object_get_data (G_OBJECT (vbox),
-					       "gpa_keygen_passwd_repeat");
 
-  if (strcmp (gtk_entry_get_text (GTK_ENTRY (entry_passwd)),
-	      gtk_entry_get_text (GTK_ENTRY (entry_repeat))) != 0)
-    {
-      gpa_window_error (_("In \"Passphrase\" and \"Repeat passphrase\",\n"
-                          "you must enter the same passphrase."),
-			  keygen_wizard->window);
-      result = FALSE;
-    }
-  else if (strlen (gtk_entry_get_text (GTK_ENTRY (entry_passwd))) == 0)
-    {
-      gpa_window_error (_("You did not enter a passphrase.\n"
-                          "It is needed to protect your private key."),
-			  keygen_wizard->window);
-      result = FALSE;
-    }
-  else if (strlen (gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 10
-           || qdchkpwd ((char*)gtk_entry_get_text (GTK_ENTRY (entry_passwd))) < 0.6)
-    {
-      GtkWidget *dialog;
-      
-      dialog = gtk_message_dialog_new (GTK_WINDOW (keygen_wizard->window),
-                                       GTK_DIALOG_MODAL,
-                                       GTK_MESSAGE_WARNING,
-                                       GTK_BUTTONS_NONE,
-                                       _("Warning: You have entered a "
-                                         "passphrase\n"
-                                         "that is obviously not secure.\n\n"
-                                         "Please enter a new passphrase."));
-      gtk_dialog_add_buttons (GTK_DIALOG (dialog), 
-                              _("_Enter new passphrase"), GTK_RESPONSE_CANCEL,
-                              _("Take this one _anyway"), GTK_RESPONSE_OK,
-                              NULL);
-      if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_CANCEL)
-        {
-          result = FALSE;
-        }
-      gtk_widget_destroy (dialog);
-    }
-
-  return result;
-}
-
-
-/* Backup copies and revocation certificate */
+/* Backup copies and revocation certificate.  */
 static GtkWidget *
-gpa_keygen_wizard_backup_page (GPAKeyGenWizard * keygen_wizard)
+gpa_keygen_wizard_backup_page (GPAKeyGenWizard *wizard)
 {
-  GtkWidget * vbox;
-  GtkWidget * description;
-  GtkWidget * radio;
+  GtkWidget *vbox;
+  GtkWidget *description;
+  GtkWidget *radio;
   
   vbox = gtk_vbox_new (FALSE, 0);
 
@@ -371,11 +428,12 @@ gpa_keygen_wizard_backup_page (GPAKeyGenWizard * keygen_wizard)
   return vbox;
 }
 
+
 static GtkWidget *
-gpa_keygen_wizard_message_page (const gchar * description_text)
+gpa_keygen_wizard_message_page (const gchar *description_text)
 {
-  GtkWidget * vbox;
-  GtkWidget * description;
+  GtkWidget *vbox;
+  GtkWidget *description;
 
   vbox = gtk_vbox_new (FALSE, 0);
 
@@ -390,7 +448,7 @@ gpa_keygen_wizard_message_page (const gchar * description_text)
 
 
 static GtkWidget *
-gpa_keygen_wizard_wait_page (void)
+gpa_keygen_wizard_wait_page (GPAKeyGenWizard *wizard)
 {
   return gpa_keygen_wizard_message_page
     (_("Your key is being generated.\n\n"
@@ -399,7 +457,7 @@ gpa_keygen_wizard_wait_page (void)
 
 
 static GtkWidget *
-gpa_keygen_wizard_final_page (void)
+gpa_keygen_wizard_final_page (GPAKeyGenWizard * keygen_wizard)
 {
   return gpa_keygen_wizard_message_page
     (_("Congratulations!\n\n"
@@ -409,43 +467,36 @@ gpa_keygen_wizard_final_page (void)
 
 
 /* Extract the values the user entered and call gpa_generate_key.
- * Return TRUE if the key was created successfully.
- */
+   Return TRUE if the key was created successfully.  */
 static gboolean
 gpa_keygen_wizard_generate_action (gpointer data)
+//GtkAssistant *assistant, GtkWidget *page, gpointer data)
 {
-  GPAKeyGenWizard *keygen_wizard = data;
+  GPAKeyGenWizard *wizard = data;
   GPAKeyGenParameters params;
   gboolean do_backup;
   GtkWidget *radio;
 
   memset (&params, 0, sizeof params);
 
-  /* Shall we make backups? */
-  radio = g_object_get_data (G_OBJECT (keygen_wizard->backup_page),
+  /* Shall we make backups?  */
+  radio = g_object_get_data (G_OBJECT (wizard->backup_page),
 			     "gpa_keygen_backup");
   do_backup = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio));
 
-  /* The User ID */
-  params.userID = gpa_keygen_wizard_simple_get_text (keygen_wizard->name_page);
-  params.email = gpa_keygen_wizard_simple_get_text (keygen_wizard->email_page);
-  params.password = gpa_keygen_wizard_password_get_password (keygen_wizard
-                                                             ->passwd_page);
+  /* The User ID.  */
+  params.userID = gpa_keygen_wizard_simple_get_text (wizard->name_page);
+  params.email = gpa_keygen_wizard_simple_get_text (wizard->email_page);
+  params.password
+    = gpa_keygen_wizard_password_get_password (wizard->passwd_page);
 
-  /* default values for newbie mode */
+  /* Default values for newbie mode.  */
   params.algo = GPA_KEYGEN_ALGO_DSA_ELGAMAL;
   params.keysize = 1024;
   params.expiryDate = NULL;
   params.interval = 0;
 
-  /* Switch to the next page showing the "wait" message. */
-  gpa_wizard_next_page_no_action (keygen_wizard->wizard);
-
-  /* Handle some events so that the page is correctly displayed */
-  while (gtk_events_pending())
-    gtk_main_iteration();
-
-  keygen_wizard->generate (&params, do_backup, keygen_wizard->generate_data);
+  wizard->generate (&params, do_backup, wizard->generate_data);
 
   g_free (params.userID);
   g_free (params.email);
@@ -457,50 +508,42 @@ gpa_keygen_wizard_generate_action (gpointer data)
 
 /* Handler for the close button. Destroy the main window */
 static void
-gpa_keygen_wizard_close (GtkWidget * widget, gpointer param)
+keygen_wizard_close (GtkWidget *widget, gpointer param)
 {
-  GPAKeyGenWizard * wizard = param;
+  GPAKeyGenWizard *wizard = param;
 
   gtk_widget_destroy (wizard->window);
-}
-
-
-/* handler for the destroy signal. */
-static void
-gpa_keygen_wizard_destroy (GtkWidget *widget, gpointer param)
-{
 }
 
 
 static void
 free_keygen_wizard (gpointer data)
 {
-  GPAKeyGenWizard * keygen_wizard = data;
+  GPAKeyGenWizard *keygen_wizard = data;
 
-  g_object_unref (keygen_wizard->genkey_pixmap);
-  g_object_unref (keygen_wizard->backup_pixmap);
   g_free (keygen_wizard);
 }
 
 
-static void
-page_switched (GtkWidget * page, gpointer data)
+void
+keygen_wizard_prepare_cb (GtkAssistant *assistant, GtkWidget *page,
+			  gpointer data)
 {
-  GPAKeyGenWizard * keygen_wizard = data;
-  GdkPixmap * pixmap;
+  GPAKeyGenWizard *wizard = data;
 
-  if (page == keygen_wizard->backup_page
-      || page == keygen_wizard->backup_dir_page)
+  if (page == wizard->name_page || page == wizard->email_page)
+    gpa_keygen_wizard_simple_grab_focus (page);
+  else if (page == wizard->passwd_page)
     {
-      pixmap = keygen_wizard->backup_pixmap;
-    }
-  else
-    {
-      pixmap = keygen_wizard->genkey_pixmap;
-    }
+      GtkWidget *entry;
+      entry = g_object_get_data (G_OBJECT (page), "gpa_keygen_passwd");
+      gtk_widget_grab_focus (entry);
 
-  gtk_image_set_from_pixmap (GTK_IMAGE (keygen_wizard->image_widget),
-			     pixmap, NULL);
+      /* FIXME: Update.  */
+      passwd_validate_cb (NULL, wizard);
+    }
+  else if (page == wizard->wait_page)
+    gpa_keygen_wizard_generate_action (wizard);
 }
 
 
@@ -509,94 +552,114 @@ gpa_keygen_wizard_new (GtkWidget *parent,
 		       GpaKeyGenWizardGenerateCb generate_action,
 		       gpointer data)
 {
+  GPAKeyGenWizard *wizard;
   GtkWidget *window;
-  GtkWidget *wizard;
-  GtkWidget *hbox;
-  GtkWidget *image_widget;
-  GtkAccelGroup *accel_group;
-  GPAKeyGenWizard *keygen_wizard;
-
-  keygen_wizard = g_malloc (sizeof (*keygen_wizard));
-  keygen_wizard->genkey_pixmap = gpa_create_icon_pixmap (parent,
-							 "wizard_genkey",
-							 NULL);
-  keygen_wizard->backup_pixmap = gpa_create_icon_pixmap (parent,
-							 "wizard_backup",
-							 NULL);
-
-  keygen_wizard->generate = generate_action;
-  keygen_wizard->generate_data = data;
-
-  accel_group = gtk_accel_group_new ();
-  keygen_wizard->accel_group = accel_group;
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  keygen_wizard->window = window;
-  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-  gtk_window_set_title (GTK_WINDOW (window), _("Generate key"));
-  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  g_object_set_data_full (G_OBJECT (window), "user_data",
-			  keygen_wizard, free_keygen_wizard);
-  g_signal_connect_swapped (G_OBJECT (window), "destroy",
-			    G_CALLBACK (gpa_keygen_wizard_destroy),
-			    keygen_wizard);
-
-  hbox = gtk_hbox_new (FALSE, 5);
-  gtk_container_add (GTK_CONTAINER (window), hbox);
-
-  image_widget = gtk_image_new_from_pixmap
-    (keygen_wizard->genkey_pixmap, NULL);
-  keygen_wizard->image_widget = image_widget;
-  gtk_box_pack_start (GTK_BOX (hbox), image_widget, FALSE, TRUE, 0);
+  GdkPixbuf *genkey_pixbuf;
+  GdkPixbuf *backup_pixbuf;
   
-  wizard = gpa_wizard_new (accel_group,
-                           (GtkSignalFunc) gpa_keygen_wizard_close,
-			   (GtkSignalFunc) keygen_wizard);
-  keygen_wizard->wizard = wizard;
-  gtk_box_pack_start (GTK_BOX (hbox), wizard, TRUE, TRUE, 0);
-  gpa_wizard_set_page_switched (wizard, page_switched, keygen_wizard);
 
-  keygen_wizard->name_page = gpa_keygen_wizard_name_page (keygen_wizard);
-  gpa_wizard_append_page (wizard, keygen_wizard->name_page,
-			  FALSE,
-			  gpa_keygen_wizard_name_validate, keygen_wizard);
+  wizard = g_malloc (sizeof (*wizard));
+  genkey_pixbuf = gpa_create_icon_pixbuf ("wizard_genkey");
+  backup_pixbuf = gpa_create_icon_pixbuf ("wizard_backup");
 
-  keygen_wizard->email_page = gpa_keygen_wizard_email_page (keygen_wizard);
-  gpa_wizard_append_page (wizard, keygen_wizard->email_page,
-			  FALSE,
-			  gpa_keygen_wizard_email_validate, keygen_wizard);
+  wizard->generate = generate_action;
+  wizard->generate_data = data;
 
-  keygen_wizard->passwd_page = gpa_keygen_wizard_password_page (keygen_wizard);
-  gpa_wizard_append_page (wizard, keygen_wizard->passwd_page,
-			  FALSE, gpa_keygen_wizard_password_validate,
-			  keygen_wizard);
 
-  keygen_wizard->backup_page = gpa_keygen_wizard_backup_page (keygen_wizard);
-  gpa_wizard_append_page (wizard, keygen_wizard->backup_page,
-			  TRUE,
-			  gpa_keygen_wizard_generate_action, keygen_wizard);
+  window = gtk_assistant_new ();
+  wizard->window = window;
+  gtk_window_set_title (GTK_WINDOW (window), _("Generate key"));
+  g_object_set_data_full (G_OBJECT (window), "user_data",
+			  wizard, free_keygen_wizard);
 
-  /* Don't use F as the accelerator in "Finish" because Meta-F is
-   * already bound in the entry widget */
+  /* Set the forward button to be the default.  */
+  GTK_WIDGET_SET_FLAGS (GTK_ASSISTANT (window)->forward, GTK_CAN_DEFAULT);
+  gtk_window_set_default (GTK_WINDOW (window), GTK_ASSISTANT (window)->forward);
 
-  keygen_wizard->wait_page = gpa_keygen_wizard_wait_page ();
-  gpa_wizard_append_page (wizard, keygen_wizard->wait_page,
-			  TRUE, NULL, NULL);
+  wizard->name_page = keygen_wizard_name_page (wizard);
+  gtk_assistant_append_page (GTK_ASSISTANT (window), wizard->name_page);
+  gtk_assistant_set_page_type (GTK_ASSISTANT (window), wizard->name_page,
+			       GTK_ASSISTANT_PAGE_CONTENT);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (window), wizard->name_page,
+				/* FIXME */ _("Generate key"));
+  gtk_assistant_set_page_side_image (GTK_ASSISTANT (window), wizard->name_page,
+				     genkey_pixbuf);
 
-  keygen_wizard->final_page = gpa_keygen_wizard_final_page ();
-  gpa_wizard_append_page (wizard, keygen_wizard->final_page,
-			  TRUE, NULL, NULL);
+
+  wizard->email_page = keygen_wizard_email_page (wizard);
+  gtk_assistant_append_page (GTK_ASSISTANT (window), wizard->email_page);
+  gtk_assistant_set_page_type (GTK_ASSISTANT (window), wizard->email_page,
+			       GTK_ASSISTANT_PAGE_CONTENT);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (window), wizard->email_page,
+				/* FIXME */ _("Generate key"));
+  gtk_assistant_set_page_side_image (GTK_ASSISTANT (window), wizard->email_page,
+				     genkey_pixbuf);
+
+
+  wizard->passwd_page = keygen_wizard_passwd_page (wizard);
+  gtk_assistant_append_page (GTK_ASSISTANT (window), wizard->passwd_page);
+  gtk_assistant_set_page_type (GTK_ASSISTANT (window), wizard->passwd_page,
+			       GTK_ASSISTANT_PAGE_CONTENT);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (window), wizard->passwd_page,
+				/* FIXME */ _("Generate key"));
+  gtk_assistant_set_page_side_image (GTK_ASSISTANT (window),
+				     wizard->passwd_page, genkey_pixbuf);
+
+
+  /* FIXME: A better GUI would have a "Generate backup" button on the
+     finish page after the key was generated.  */
+  wizard->backup_page = gpa_keygen_wizard_backup_page (wizard);
+  gtk_assistant_append_page (GTK_ASSISTANT (window), wizard->backup_page);
+  gtk_assistant_set_page_type (GTK_ASSISTANT (window), wizard->backup_page,
+			       GTK_ASSISTANT_PAGE_CONTENT);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (window), wizard->backup_page,
+				/* FIXME */ _("Generate key"));
+  gtk_assistant_set_page_side_image (GTK_ASSISTANT (window),
+				     wizard->backup_page,
+				     backup_pixbuf);
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (wizard->window),
+				   wizard->backup_page, TRUE);
+
+
+  /* FIXME: We need to integrate the progress bar for the operation
+     into the page.  Also, after the operation completes, the
+     assistant is destroyed, so the final page will never be
+     shown.  The whole thing is upside down, and should be redone.  */
+  wizard->wait_page = gpa_keygen_wizard_wait_page (wizard);
+  gtk_assistant_append_page (GTK_ASSISTANT (window), wizard->wait_page);
+  gtk_assistant_set_page_type (GTK_ASSISTANT (window), wizard->wait_page,
+			       GTK_ASSISTANT_PAGE_PROGRESS);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (window), wizard->wait_page,
+				/* FIXME */ _("Generate key"));
+  gtk_assistant_set_page_side_image (GTK_ASSISTANT (window), wizard->wait_page,
+				     genkey_pixbuf);
+
+  /* The final page does not contain information about the generated
+     key.  It should also offer a "generate backup" button, then the
+     backup page can be removed.  */
+  wizard->final_page = gpa_keygen_wizard_final_page (wizard);
+  gtk_assistant_append_page (GTK_ASSISTANT (window), wizard->final_page);
+  gtk_assistant_set_page_type (GTK_ASSISTANT (window), wizard->final_page,
+			       GTK_ASSISTANT_PAGE_SUMMARY);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (window), wizard->final_page,
+				/* FIXME */ _("Generate key"));
+  gtk_assistant_set_page_side_image (GTK_ASSISTANT (window), wizard->final_page,
+				     genkey_pixbuf);
+
+  g_signal_connect (G_OBJECT (window), "prepare",
+		    G_CALLBACK (keygen_wizard_prepare_cb), wizard);
+  g_signal_connect (G_OBJECT (window), "close",
+		    G_CALLBACK (keygen_wizard_close), wizard);
+  g_signal_connect (G_OBJECT (window), "cancel",
+		    G_CALLBACK (keygen_wizard_close), wizard);
+
 
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (parent));
   gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_CENTER_ON_PARENT);
 
-  /* FIXME: This is a kludge to make sure that the proper buttons are shown
-   * (must be done after the show_all). All this should be fixed properly
-   * some day */
-  gpa_wizard_update_buttons (wizard);
+  g_object_unref (genkey_pixbuf);
+  g_object_unref (backup_pixbuf);
 
   return window;
 }
-  
-
