@@ -84,13 +84,15 @@ default_key_frame (void)
 
 
 /* Default keyserver section.  */
-static void
-keyserver_selected_cb (GtkWidget *combo, gpointer user_data)
+static gboolean
+keyserver_selected_cb (GtkWidget *combo, GdkEvent *event, gpointer user_data)
 {
   gchar *text = gtk_combo_box_get_active_text (GTK_COMBO_BOX (combo));
 
   if (text != NULL && *text != '\0')
     gpa_options_set_default_keyserver (gpa_options_get_instance (), text);
+
+  return FALSE;
 }
 
 
@@ -99,7 +101,7 @@ selected_from_list_cb (GtkComboBox *combo, gpointer user_data)
 {
   /* Consider the text entry activated.  */
   if (gtk_combo_box_get_active (combo) != -1)
-    keyserver_selected_cb (GTK_WIDGET (combo), NULL);
+    keyserver_selected_cb (GTK_WIDGET (combo), NULL, NULL);
 }
 
 
