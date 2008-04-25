@@ -377,10 +377,7 @@ start_encryption (GpaStreamEncryptOperation *op)
 
  leave:
   if (err || prep_only)
-    {
-      gpa_operation_server_finish (GPA_OPERATION (op), err);
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
 
@@ -395,10 +392,9 @@ response_cb (GtkDialog *dialog, int response, void *user_data)
   if (response != GTK_RESPONSE_OK)
     {
       /* The dialog was canceled, so we do nothing and complete the
-       * operation.  */
-      gpa_operation_server_finish (GPA_OPERATION (op), 
+	 operation.  */
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed",
                                    gpg_error (GPG_ERR_CANCELED));
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
       return;
     }
 
@@ -450,24 +446,19 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamEncryptOperation *op)
 {
   gtk_widget_hide (GPA_STREAM_OPERATION (op)->progress_dialog);
 
-  /* Tell the server that we finished and delete ourself.  */
-  gpa_operation_server_finish (GPA_OPERATION (op), err);
-  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
 
 
 
-/************************************************************ 
- **********************  Public API  ************************
- ************************************************************/
+/* Public API.  */
 
-/* Start encrypting INPUT_STREAM to OUTPUT_STREAM using SERVER_CTX and
-   WINDOW.  RECIPIENTS gives a list of recipients and the function
-   matches them with existing keys and selects appropriate keys.
-   RECP_KEYS is either NULL or an array with gpgme keys which will
-   then immediatley be used and suppresses the recipient key selection
-   dialog.
+/* Start encrypting INPUT_STREAM to OUTPUT_STREAM using WINDOW.
+   RECIPIENTS gives a list of recipients and the function matches them
+   with existing keys and selects appropriate keys.  RECP_KEYS is
+   either NULL or an array with gpgme keys which will then immediatley
+   be used and suppresses the recipient key selection dialog.
 
    If it is not possible to unambigiously select keys and SILENT is
    not given, a key selection dialog offers the user a way to manually
@@ -481,8 +472,7 @@ gpa_stream_encrypt_operation_new (GtkWidget *window,
                                   GSList *recipients,
                                   gpgme_key_t *recp_keys,
                                   gpgme_protocol_t protocol,
-                                  int silent,
-                                  void *server_ctx)
+                                  int silent)
 {
   GpaStreamEncryptOperation *op;
 
@@ -495,7 +485,6 @@ gpa_stream_encrypt_operation_new (GtkWidget *window,
                      "recipients", copy_recipients (recipients),
                      "recipient-keys", gpa_gpgme_copy_keyarray (recp_keys),
                      "protocol", (int)protocol,
-                     "server-ctx", server_ctx,
 		     NULL);
 
   return op;

@@ -25,7 +25,7 @@
 #include "gtktools.h"
 #include "gpgmetools.h"
 #include "i18n.h"
-
+#include "gpa-marshal.h"
 
 #ifndef G_PARAM_STATIC_STRINGS
 #define G_PARAM_STATIC_STRINGS (G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK \
@@ -36,6 +36,7 @@
 enum
 {
   COMPLETED,
+  STATUS,
   LAST_SIGNAL
 };
 
@@ -44,7 +45,6 @@ enum
 {
   PROP_0,
   PROP_WINDOW,
-  PROP_SERVER_CTX
 };
 
 static GObjectClass *parent_class = NULL;
@@ -62,9 +62,6 @@ gpa_operation_get_property (GObject     *object,
     {
     case PROP_WINDOW:
       g_value_set_object (value, op->window);
-      break;
-    case PROP_SERVER_CTX:
-      g_value_set_pointer (value, op->server_ctx);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -84,9 +81,6 @@ gpa_operation_set_property (GObject     *object,
     {
     case PROP_WINDOW:
       op->window = (GtkWidget*) g_value_get_object (value);
-      break;
-    case PROP_SERVER_CTX:
-      op->server_ctx = g_value_get_pointer (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -109,7 +103,6 @@ gpa_operation_init (GpaOperation *op)
 {
   op->window = NULL;
   op->context = NULL;
-  op->server_ctx = NULL;
 }
 
 static GObject*
@@ -144,28 +137,35 @@ gpa_operation_class_init (GpaOperationClass *klass)
   object_class->get_property = gpa_operation_get_property;
 
   klass->completed = NULL;
+  klass->status = NULL;
 
-  /* Signals */
+  /* Signals.  */
   signals[COMPLETED] =
     g_signal_new ("completed",
 		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_FIRST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
 		  G_STRUCT_OFFSET (GpaOperationClass, completed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
-  /* Properties */
+		  g_cclosure_marshal_VOID__INT,
+		  G_TYPE_NONE, 1, G_TYPE_INT);
+
+  signals[STATUS] =
+    g_signal_new ("status",
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+		  G_STRUCT_OFFSET (GpaOperationClass, completed),
+		  NULL, NULL,
+		  gpa_marshal_INT__STRING_STRING,
+		  G_TYPE_INT, 1, G_TYPE_STRING, 1, G_TYPE_STRING);
+
+
+  /* Properties.  */
   g_object_class_install_property 
     (object_class, PROP_WINDOW,
      g_param_spec_object ("window", "Parent window",
                           "Parent window",
                           GTK_TYPE_WIDGET,
                           G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property 
-    (object_class, PROP_SERVER_CTX,
-     g_param_spec_pointer ("server-ctx", "Server Context",
-                           "The Assuan context of the connection",
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS));
 }
 
 
@@ -197,10 +197,10 @@ gpa_operation_get_type (void)
   return operation_type;
 }
 
+
 /* API */
 
-/* Whether the operation is currently busy (i.e. gpg is running).
- */
+/* Whether the operation is currently busy (i.e. gpg is running).  */
 gboolean
 gpa_operation_busy (GpaOperation *op)
 {
@@ -211,58 +211,41 @@ gpa_operation_busy (GpaOperation *op)
 }
 
 
-/* Tell the UI-server that the current operation has finished with
-   error code ERR.  Note that the server context will be disabled
-   after this operation.  */
-void
-gpa_operation_server_finish (GpaOperation *op, gpg_error_t err)
-{
-  g_return_if_fail (op);
-  g_return_if_fail (GPA_IS_OPERATION (op));
-  if (op->server_ctx)
-    {
-      assuan_context_t ctx = op->server_ctx;
-      op->server_ctx = NULL;
-      gpa_run_server_continuation (ctx, err);
-    }
-}
-
-
-/* If running in server mode, write a status line names STATUSNAME
-   plus space delimited arguments.  */
+/* Emit a status line names STATUSNAME plus space delimited
+   arguments.  */
 gpg_error_t
 gpa_operation_write_status (GpaOperation *op, const char *statusname, ...)
 {
   gpg_error_t err = 0;
+  va_list arg_ptr;
+  char buf[950], *p;
+  const char *text;
+  size_t n;
 
   g_return_val_if_fail (op, gpg_error (GPG_ERR_BUG));
   g_return_val_if_fail (GPA_IS_OPERATION (op), gpg_error (GPG_ERR_BUG));
-  if (op->server_ctx)
-    {
-      assuan_context_t ctx = op->server_ctx;
-      va_list arg_ptr;
-      char buf[950], *p;
-      const char *text;
-      size_t n;
 
-      va_start (arg_ptr, statusname);
-      
-      p = buf; 
-      n = 0;
-      while ( (text = va_arg (arg_ptr, const char *)) )
-        {
-          if (n)
-            {
-              *p++ = ' ';
-              n++;
-            }
-          for ( ; *text && n < DIM (buf)-2; n++)
-            *p++ = *text++;
-        }
-      *p = 0;
-      err = assuan_write_status (ctx, statusname, buf);
-      va_end (arg_ptr);
+  va_start (arg_ptr, statusname);
+
+  p = buf; 
+  n = 0;
+  while ((text = va_arg (arg_ptr, const char *)))
+    {
+      if (n)
+	{
+	  *p++ = ' ';
+	  n++;
+	}
+      for ( ; *text && n < DIM (buf)-2; n++)
+	*p++ = *text++;
     }
+  *p = 0;
+
+  /* FIXME: Get return value.  Might require an allocator to not only
+     get the last one.  */
+  g_signal_emit_by_name (GPA_OPERATION (op), "status", buf);
+  
+  va_end (arg_ptr);
 
   return err;
 }

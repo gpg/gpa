@@ -279,10 +279,8 @@ set_signers (GpaStreamSignOperation *op, GList *signers)
     {
       gpgme_key_t key = cur->data;
       err = gpgme_signers_add (GPA_OPERATION (op)->context->ctx, key);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  gpa_gpgme_error (err);
-	}
+      if (err)
+	gpa_gpgme_error (err);
     }
 
   return TRUE;
@@ -358,10 +356,7 @@ start_signing (GpaStreamSignOperation *op)
 
  leave:
   if (err || prep_only)
-    {
-      gpa_operation_server_finish (GPA_OPERATION (op), err);
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
 
@@ -376,10 +371,9 @@ response_cb (GtkDialog *dialog, int response, void *user_data)
   if (response != GTK_RESPONSE_OK)
     {
       /* The dialog was canceled, so we do nothing and complete the
-       * operation.  */
-      gpa_operation_server_finish (GPA_OPERATION (op), 
-                                   gpg_error (GPG_ERR_CANCELED));
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+	 operation.  */
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed",
+			     gpg_error (GPG_ERR_CANCELED));
       return;
     }
 
@@ -427,21 +421,17 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamSignOperation *op)
 {
   gtk_widget_hide (GPA_STREAM_OPERATION (op)->progress_dialog);
 
-  /* Tell the server that we finished and delete ourself.  */
-  gpa_operation_server_finish (GPA_OPERATION (op), err);
-  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
 
 
 
-/************************************************************ 
- **********************  Public API  ************************
- ************************************************************/
+/* Public API.  */
 
-/* Start signing INPUT_STREAM to OUTPUT_STREAM using SERVER_CTX and
-   WINDOW.  SENDER gives the name of the sender's role (usually a
-   mailbox) or is NULL for the default sender.
+/* Start signing INPUT_STREAM to OUTPUT_STREAM using WINDOW.  SENDER
+   gives the name of the sender's role (usually a mailbox) or is NULL
+   for the default sender.
 
    If it is not possible to unambigiously select a signing key a key
    selection dialog offers the user a way to manually select signing
@@ -452,10 +442,9 @@ GpaStreamSignOperation*
 gpa_stream_sign_operation_new (GtkWidget *window,
                                gpgme_data_t input_stream,
                                gpgme_data_t output_stream,
-                               const char *sender,
+                               const gchar *sender,
                                gpgme_protocol_t protocol,
-                               gboolean detached,
-                               void *server_ctx)
+                               gboolean detached)
 {
   GpaStreamSignOperation *op;
 
@@ -466,7 +455,6 @@ gpa_stream_sign_operation_new (GtkWidget *window,
                      "sender", sender,
                      "protocol", (int)protocol,
                      "detached", detached,
-                     "server-ctx", server_ctx,
 		     NULL);
 
   return op;

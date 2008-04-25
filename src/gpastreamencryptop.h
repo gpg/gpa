@@ -69,8 +69,7 @@ gpa_stream_encrypt_operation_new (GtkWidget *window,
                                   GSList *recipients,
                                   gpgme_key_t *recp_keys,
                                   gpgme_protocol_t protocol,
-                                  int silent,
-                                  void *server_ctx);
+                                  int silent);
 
 gpgme_key_t *gpa_stream_encrypt_operation_get_keys 
 (GpaStreamEncryptOperation *op, gpgme_protocol_t *r_protocol);

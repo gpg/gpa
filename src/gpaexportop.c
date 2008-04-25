@@ -214,19 +214,18 @@ gpa_export_operation_idle_cb (gpointer data)
       /* Export to the gpgme_data_t */
       err = gpgme_op_export_ext_start (GPA_OPERATION (op)->context->ctx, 
 				       patterns, 0, op->dest);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+      if (err)
 	{
 	  gpa_gpgme_warning (err);
-	  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+	  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 	}
       /* Clean up */
       g_free (patterns);      
     }
   else
-    {
-      /* Abort the operation */
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+    /* Abort the operation.  */
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed",
+			   gpg_error (GPG_ERR_CANCELED));
 
   return FALSE;
 }
@@ -235,11 +234,9 @@ static void
 gpa_export_operation_done_cb (GpaContext *context, gpg_error_t err,
 			      GpaExportOperation *op)
 {
-  if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
-    {
-      GPA_EXPORT_OPERATION_GET_CLASS (op)->complete_export (op);
-    }
-  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+  if (! err)
+    GPA_EXPORT_OPERATION_GET_CLASS (op)->complete_export (op);
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
 static void

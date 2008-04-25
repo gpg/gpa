@@ -285,8 +285,9 @@ gpa_backup_operation_idle_cb (gpointer data)
   if ((file = gpa_backup_operation_dialog_run (GPA_OPERATION (op)->window,
 					       op->key_id)))
     gpa_backup_operation_do_backup (op, file);
-  
-  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+
+  /* FIXME: Error handling.  */
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
 
   return FALSE;
 }

@@ -149,43 +149,38 @@ static gboolean
 gpa_gen_key_advanced_operation_idle_cb (gpointer data)
 {
   GpaGenKeyAdvancedOperation *op = data;
+  gpg_error_t err;
   GPAKeyGenParameters *parms;
   
-  if ((parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window)))
-    {
-      gpg_error_t err;
+  if (! (parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window)))
+    g_signal_emit_by_name (op, "completed", gpg_error (GPG_ERR_CANCELED));
 
-      err = gpa_generate_key_start (GPA_OPERATION (op)->context->ctx, parms);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  gpa_gpgme_warning (err);
-	  g_signal_emit_by_name (op, "completed");
-	}
-      else
-	{
-	  gtk_widget_show_all (op->progress_dialog);
-	}
+  err = gpa_generate_key_start (GPA_OPERATION (op)->context->ctx, parms);
+  if (err)
+    {
+      gpa_gpgme_warning (err);
+      g_signal_emit_by_name (op, "completed", err);
     }
   else
-    {
-      g_signal_emit_by_name (op, "completed");
-    }
+    gtk_widget_show_all (op->progress_dialog);
 
   return FALSE;
 }
+
 
 static void
 gpa_gen_key_advanced_operation_done_cb (GpaContext *context, 
 					gpg_error_t err,
 					GpaGenKeyAdvancedOperation *op)
 {
-  if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
+  if (! err)
     {
       gpgme_genkey_result_t result = gpgme_op_genkey_result (context->ctx);
       g_signal_emit_by_name (op, "generated_key", result->fpr);
     }
-  g_signal_emit_by_name (op, "completed");
+  g_signal_emit_by_name (op, "completed", err);
 }
+
 
 static void
 gpa_gen_key_advanced_operation_done_error_cb (GpaContext *context, 

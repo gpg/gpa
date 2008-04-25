@@ -144,44 +144,53 @@ gpa_key_passwd_operation_new (GtkWidget *window, GList *keys)
 
 /* Internal */
 
-static gboolean
+static gpg_error_t
 gpa_key_passwd_operation_start (GpaKeyPasswdOperation *op)
 { 
-  gpgme_key_t key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
   gpg_error_t err;
+  gpgme_key_t key;
+
+  key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
 
   err = gpa_gpgme_edit_passwd_start (GPA_OPERATION(op)->context, key);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       gpa_gpgme_warning (err);
-      return FALSE;
+      return err;
     }
 
-  return TRUE;
+  return 0;
 }
+
 
 static gboolean
 gpa_key_passwd_operation_idle_cb (gpointer data)
 {
   GpaKeyPasswdOperation *op = data;
+  gpg_error_t err;
 
-  if (!gpa_key_passwd_operation_start (op))
-    {
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+  err = gpa_key_passwd_operation_start (op);
+
+  if (err) 
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 
   return FALSE;
 }
 
+
 static void
 gpa_key_passwd_operation_next (GpaKeyPasswdOperation *op)
 {
-  if (!GPA_KEY_OPERATION (op)->current ||
-      !gpa_key_passwd_operation_start (op))
-    {
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+  gpg_error_t err;
+
+  if (! GPA_KEY_OPERATION (op)->current)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
+
+  err = gpa_key_passwd_operation_start (op);
+  if (err)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
+
 
 static void gpa_key_passwd_operation_done_error_cb (GpaContext *context, 
 						  gpg_error_t err,

@@ -4,7 +4,19 @@ logo = gpa_logo.ppm
 
 pkgdata_DATA = $(logo)
 
-EXTRA_DIST = $(logo) gpa.ico gpa-resource.rc
+EXTRA_DIST = $(logo) gpa.ico gpa-resource.rc gpa-marshal.list
+BUILT_SOURCES = gpa-marshal.h gpa-marshal.c
+MOSTLYCLEANFILES = gpa-marshal.h gpa-marshal.c
+
+GLIB_GENMARSHAL = glib-genmarshal
+
+gpa-marshal.h: gpa-marshal.list
+	$(GLIB_GENMARSHAL) --header --prefix=gpa_marshal $< > $@.tmp
+	mv $@.tmp $@
+
+gpa-marshal.c: gpa-marshal.list
+	$(GLIB_GENMARSHAL) --body --prefix=gpa_marshal $< > $@.tmp
+	mv $@.tmp $@
 
 if HAVE_W32_SYSTEM
 .rc.o:
@@ -104,6 +116,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      server.c \
 	      options.c \
 	      confdialog.h confdialog.c \
+	      gpa-marshal.c gpa-marshal.h \
 	      utils.c $(gpa_w32_sources)
 
 

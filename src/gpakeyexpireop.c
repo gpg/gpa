@@ -167,55 +167,58 @@ gpa_key_expire_operation_new (GtkWidget *window, GList *keys)
 
 /* Internal */
 
-static gboolean
+static gpg_error_t
 gpa_key_expire_operation_start (GpaKeyExpireOperation *op)
 { 
-  gpgme_key_t key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+  gpg_error_t err;
+  gpgme_key_t key;
   GDate *date;
 
-  if (gpa_expiry_dialog_run (GPA_OPERATION (op)->window, key, &date))
+  key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+
+  if (! gpa_expiry_dialog_run (GPA_OPERATION (op)->window, key, &date))
+    return gpg_error (GPG_ERR_CANCELED);
+
+  err = gpa_gpgme_edit_expire_start (GPA_OPERATION(op)->context, key, date);
+  op->date = date;
+  if (err)
     {
-      gpg_error_t err;
-      err = gpa_gpgme_edit_expire_start (GPA_OPERATION(op)->context, key,
-					 date);
-      op->date = date;
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  gpa_gpgme_warning (err);
-	  return FALSE;
-	}
+      gpa_gpgme_warning (err);
+      return err;
     }
-  else
-    {
-      return FALSE;
-    }
-  return TRUE;
+
+  return 0;
 }
+
 
 static gboolean
 gpa_key_expire_operation_idle_cb (gpointer data)
 {
   GpaKeyExpireOperation *op = data;
+  gpg_error_t err;
 
-  if (!gpa_key_expire_operation_start (op))
-    {
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+  err = gpa_key_expire_operation_start (op);
+  if (err)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 
   return FALSE;
 }
 
+
 static void
 gpa_key_expire_operation_next (GpaKeyExpireOperation *op)
 {
-  if (!GPA_KEY_OPERATION (op)->current ||
-      !gpa_key_expire_operation_start (op))
+  gpg_error_t err;
+
+  if (! GPA_KEY_OPERATION (op)->current)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
+
+  err = gpa_key_expire_operation_start (op);
+  if (err)
     {
       if (op->modified_keys > 0)
-	{
-	  g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
-	}
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+	g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
     }
 }
 
@@ -251,19 +254,18 @@ gpa_key_expire_operation_done_cb (GpaContext *context,
                                   gpg_error_t err,
                                   GpaKeyExpireOperation *op)
 {
-  if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
-    {
-      /* The expiration was changed */
-      g_signal_emit_by_name (op, "new_expiration", 
-			     GPA_KEY_OPERATION (op)->current->data, op->date);
-    }
-  /* Clean previous date */
+  if (! err)
+    /* The expiration was changed.  */
+    g_signal_emit_by_name (op, "new_expiration", 
+			   GPA_KEY_OPERATION (op)->current->data, op->date);
+
+  /* Clean previous date.  */
   if (op->date)
     {
       g_date_free (op->date);
       op->date = NULL;
     }
-  /* Go to the next key */
+  /* Go to the next key.  */
   GPA_KEY_OPERATION (op)->current = g_list_next
     (GPA_KEY_OPERATION (op)->current);
   gpa_key_expire_operation_next (op);

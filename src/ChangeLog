@@ -1,4 +1,43 @@
+2008-04-25  Marcus Brinkmann  <marcus@g10code.de>
+
+	* Makefile.am (EXTRA_DIST): Add gpa-marshal.list.
+	(BUILT_SOURCES): Add gpa-marshal.h and gpa-marshal.c.
+	(MOSTLYCLEANFILES): Add gpa-marshal.h and gpa-marshal.c.
+	(gpa_SOURCES): Add gpa-marshal.h and gpa-marshal.c.
+	* gpa-marshal.list: New file.
+	* gpaoperation.h (struct _GpaOperationClass): Add argument ERR to
+	member COMPLETED.  Add member STATUS.
+	(gpa_operation_server_finish): Remove prototype.
+	* gpaoperation.c: Remove SERVER_CTX property.
+	(gpa_operation_class_init): Change type of
+	completed signal to VOID__INT.
+	(gpa_operation_server_finish): Remove function.
+	(gpa_operation_class_init): Install STATUS signal.
+	* server.c: Include "gpastreamsignop.h".
+	(gpa_run_server_continuation): Rename to ...
+	(run_server_continuation): ... this, and make it static.
+	(cmd_encrypt, cmd_prep_encrypt, cmd_sign): Connect "completed"
+	signal to run_server_continuation.  Connect "status" signal to
+	assuan_write_status.
+	* gpabackup.c, gpaexportop.c, gpafiledecryptop.c,
+	gpafileencryptop.c, gpafilesignop.c, gpafileverifyop.c,
+	gpagenkeyadvop.c, gpagenkeysimpleop.c, gpaimportop.c,
+	gpakeydeleteop.c, gpakeyexpireop.c, gpakeypasswdop.c,
+	gpakeysignop.c, gpakeytrustop.c, gpastreamencryptop.c: Do not call
+	gpa_operation_server_finish, but pass error code to "completed"
+	signal.
+	* gpastreamencryptop.h (gpa_stream_encrypt_operation_new): Remove
+	server_ctx argument.
+	* gpastreamencryptop.c (gpa_stream_encrypt_operation_new): Likewise.
+	* gpastreamsignop.h (gpa_stream_sign_operation_new): Remove
+	server_ctx argument.
+	* gpastreamsignop.c (gpa_stream_sign_operation_new): Likewise.
+
 2008-04-24  Marcus Brinkmann  <marcus@g10code.de>
+
+	* Makefile.am (gpa_SOURCES): Remove gpawizard.h and gpawizard.c.
+	* gpawizard.h, gpawizard.c: Remove files.
+	* keygenwizard.c: Rewritten to use GtkAssistant.
 
 	* settingsdlg.c (keyserver_selected_cb): Add missing event
 	argument.

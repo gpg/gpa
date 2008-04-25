@@ -152,67 +152,73 @@ gpa_key_sign_operation_new (GtkWidget *window, GList *keys)
 
 /* Internal */
 
-static gboolean
+static gpg_error_t
 gpa_key_sign_operation_start (GpaKeySignOperation *op)
 { 
-  gpgme_key_t key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+  gpg_error_t err;
+  gpgme_key_t key;
   gboolean sign_locally = FALSE;
 
-  if (gpa_key_sign_run_dialog (GPA_OPERATION (op)->window, key, &sign_locally))
+  key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+  if (! gpa_key_sign_run_dialog (GPA_OPERATION (op)->window,
+				 key, &sign_locally))
+    return gpg_error (GPG_ERR_CANCELED);
+
+  err = gpa_gpgme_edit_sign_start  (GPA_OPERATION(op)->context, key,
+				    op->signer_key, sign_locally);
+  if (err)
     {
-      gpg_error_t err;
-      err = gpa_gpgme_edit_sign_start  (GPA_OPERATION(op)->context, key,
-					op->signer_key, sign_locally);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  gpa_gpgme_warning (err);
-	  return FALSE;
-	}
+      gpa_gpgme_warning (err);
+      return err;
     }
-  else
-    {
-      return FALSE;
-    }
-  return TRUE;
+
+  return 0;
 }
+
 
 static gboolean
 gpa_key_sign_operation_idle_cb (gpointer data)
 {
   GpaKeySignOperation *op = data;
+  gpg_error_t err;
 
   /* Get the signer key and abort if there isn't one */
   op->signer_key = gpa_options_get_default_key (gpa_options_get_instance ());
-  if (!op->signer_key)
+  if (! op->signer_key)
     {
       gpa_window_error (_("No private key for signing."),
 			GPA_OPERATION (op)->window);
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+      /* FIXME: Error code?  */
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
       return FALSE;
     }
   gpgme_key_ref (op->signer_key);
 
-  if (!gpa_key_sign_operation_start (op))
-    {
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+  err = gpa_key_sign_operation_start (op);
+  if (err)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 
   return FALSE;
 }
 
+
 static void
 gpa_key_sign_operation_next (GpaKeySignOperation *op)
 {
-  if (!GPA_KEY_OPERATION (op)->current ||
-      !gpa_key_sign_operation_start (op))
+  gpg_error_t err;
+
+  if (! GPA_KEY_OPERATION (op)->current)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
+
+  err = gpa_key_sign_operation_start (op);
+  if (err)
     {
       if (op->signed_keys > 0)
-	{
-	  g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
-	}
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+	g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
     }
 }
+
 
 static void gpa_key_sign_operation_done_error_cb (GpaContext *context, 
 						  gpg_error_t err,
@@ -249,8 +255,8 @@ static void gpa_key_sign_operation_done_error_cb (GpaContext *context,
 }
 
 static void gpa_key_sign_operation_done_cb (GpaContext *context, 
-					      gpg_error_t err,
-					      GpaKeySignOperation *op)
+					    gpg_error_t err,
+					    GpaKeySignOperation *op)
 {
   GPA_KEY_OPERATION (op)->current = g_list_next
     (GPA_KEY_OPERATION (op)->current);

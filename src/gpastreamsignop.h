@@ -66,10 +66,9 @@ GpaStreamSignOperation*
 gpa_stream_sign_operation_new (GtkWidget *window,
                                gpgme_data_t input_stream,
                                gpgme_data_t output_stream,
-                               const char *sender,
+                               const gchar *sender,
                                gpgme_protocol_t protocol,
-                               gboolean detached,
-                               void *server_ctx);
+                               gboolean detached);
 
 
 

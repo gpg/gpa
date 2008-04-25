@@ -175,7 +175,7 @@ gpa_context_init (GpaContext *context)
 
   /* The context itself */
   err = gpgme_new (&context->ctx);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       gpa_gpgme_warning (err);
       return;
@@ -371,14 +371,13 @@ gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
   /* If the context is busy, we already have a START event, and can
    * register GLib callbacks immediately.  */
   if (context->busy)
-    {
-      register_callback (cb);
-    }
+    register_callback (cb);
+
   /* In any case, we add it to the list.   */
   add_callback (context, cb);
   *tag = cb;
 
-  return gpg_error (GPG_ERR_NO_ERROR);
+  return 0;
 }
 
 

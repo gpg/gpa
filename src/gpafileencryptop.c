@@ -261,7 +261,8 @@ destination_filename (const gchar *filename, gboolean armor)
   return cipher_filename;
 }
 
-static gboolean
+
+static gpg_error_t
 gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
 				  gpa_file_item_t file_item)
 {
@@ -277,7 +278,7 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
       if (err)
 	{
 	  gpa_gpgme_warning (err);
-	  return FALSE;
+	  return err;
 	}
       
       err = gpgme_data_new (&op->cipher);
@@ -286,7 +287,7 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
 	  gpa_gpgme_warning (err);
 	  gpgme_data_release (op->plain);
 	  op->plain = NULL;
-	  return FALSE;
+	  return err;
 	}
     }
   else
@@ -299,9 +300,9 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
       op->plain_fd = gpa_open_input (plain_filename, &op->plain, 
 				     GPA_OPERATION (op)->window);
       if (op->plain_fd == -1)
-	{
-	  return FALSE;
-	}
+	/* FIXME: Error value.  */
+	return gpg_error (GPG_ERR_GENERAL);
+
       op->cipher_fd = gpa_open_output (file_item->filename_out, &op->cipher,
 				       GPA_OPERATION (op)->window);
       if (op->cipher_fd == -1)
@@ -309,28 +310,25 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
 	  gpgme_data_release (op->plain);
 	  close (op->plain_fd);
 	  op->plain_fd = -1;
-	  return FALSE;
+	  /* FIXME: Error value.  */
+	  return gpg_error (GPG_ERR_GENERAL);
 	}
     }
 
-  /* Start the operation */
-  /* Always trust keys, because any untrusted keys were already confirmed
-   * by the user.
-   */
+  /* Start the operation.  */
+  /* Always trust keys, because any untrusted keys were already
+     confirmed by the user.  */
   if (gpa_file_encrypt_dialog_sign 
       (GPA_FILE_ENCRYPT_DIALOG (op->encrypt_dialog)))
-    {
-      err = gpgme_op_encrypt_sign_start (GPA_OPERATION (op)->context->ctx,
-					 op->rset, GPGME_ENCRYPT_ALWAYS_TRUST,
-					 op->plain, op->cipher);
-    }
+    err = gpgme_op_encrypt_sign_start (GPA_OPERATION (op)->context->ctx,
+				       op->rset, GPGME_ENCRYPT_ALWAYS_TRUST,
+				       op->plain, op->cipher);
   else
-    {
-      err = gpgme_op_encrypt_start (GPA_OPERATION (op)->context->ctx,
-				    op->rset, GPGME_ENCRYPT_ALWAYS_TRUST,
-				    op->plain, op->cipher);
-    }
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+    err = gpgme_op_encrypt_start (GPA_OPERATION (op)->context->ctx,
+				  op->rset, GPGME_ENCRYPT_ALWAYS_TRUST,
+				  op->plain, op->cipher);
+
+  if (err)
     {
       gpa_gpgme_warning (err);
 
@@ -343,29 +341,36 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
       close (op->cipher_fd);
       op->cipher_fd = -1;
 
-      return FALSE;
+      return err;
     }
-  /* Show and update the progress dialog */
+
+  /* Show and update the progress dialog.  */
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
   gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG 
 				 (GPA_FILE_OPERATION (op)->progress_dialog),
 				 file_item->direct_name
 				 ? file_item->direct_name
 				 : file_item->filename_in);
-  return TRUE;
+  return 0;
 }
 
 static void
 gpa_file_encrypt_operation_next (GpaFileEncryptOperation *op)
 {
-  if (!GPA_FILE_OPERATION (op)->current ||
-      !gpa_file_encrypt_operation_start (op, GPA_FILE_OPERATION (op)
-					 ->current->data))
+  gpg_error_t err;
+
+  if (! GPA_FILE_OPERATION (op)->current)
     {
-      gpa_operation_server_finish (GPA_OPERATION (op), 0);
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
+      return;
     }
+
+  err = gpa_file_encrypt_operation_start
+    (op, GPA_FILE_OPERATION (op)->current->data);
+  if (err)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
+
 
 static void
 gpa_file_encrypt_operation_done_cb (GpaContext *context, 
@@ -410,7 +415,7 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
   op->cipher_fd = -1;
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
 
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR) 
+  if (err) 
     {
       if (! file_item->direct_in)
 	{
@@ -420,8 +425,7 @@ gpa_file_encrypt_operation_done_cb (GpaContext *context,
 	  g_free (file_item->filename_out);
 	  file_item->filename_out = NULL;
 	}
-      gpa_operation_server_finish (GPA_OPERATION (op), err);
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
     }
   else
     {
@@ -676,10 +680,8 @@ set_signers (GpaFileEncryptOperation *op, GList *signers)
     {
       gpgme_key_t key = cur->data;
       err = gpgme_signers_add (GPA_OPERATION (op)->context->ctx, key);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  gpa_gpgme_error (err);
-	}
+      if (err)
+	gpa_gpgme_error (err);
     }
   return TRUE;
 }
@@ -707,28 +709,21 @@ static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
       
       /* Set the armor value */
       gpgme_set_armor (GPA_OPERATION (op)->context->ctx, armor);
-      /* Set the signers for the context */
+      /* Set the signers for the context.  */
       if (gpa_file_encrypt_dialog_sign 
 	  (GPA_FILE_ENCRYPT_DIALOG (op->encrypt_dialog)))
-	{
-	  success = set_signers (op, signers);
-	}
-      /* Set the recipients for the context */
+	success = set_signers (op, signers);
+
+      /* Set the recipients for the context.  */
       if (success)
-	{
-	  success = set_recipients (op, recipients);
-	}
-      /* Actually run the operation or abort */
+	success = set_recipients (op, recipients);
+
+      /* Actually run the operation or abort.  */
       if (success)
-	{
-	  gpa_file_encrypt_operation_next (op);
-	}
+	gpa_file_encrypt_operation_next (op);
       else
-	{
-          gpa_operation_server_finish (GPA_OPERATION (op), 
-                                       gpg_error (GPG_ERR_GENERAL));
-	  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-	}
+	g_signal_emit_by_name (GPA_OPERATION (op), "completed",
+				 gpg_error (GPG_ERR_GENERAL));
 
       g_list_free (signers);
       g_list_free (recipients);
@@ -736,10 +731,9 @@ static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
   else
     {
       /* The dialog was canceled, so we do nothing and complete the
-       * operation */
-      gpa_operation_server_finish (GPA_OPERATION (op), 
-                                   gpg_error (GPG_ERR_CANCELED));
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+	 operation */
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed",
+			     gpg_error (GPG_ERR_CANCELED));
     }
 }
 

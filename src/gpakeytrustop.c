@@ -146,55 +146,60 @@ gpa_key_trust_operation_new (GtkWidget *window, GList *keys)
 
 /* Internal */
 
-static gboolean
+static gpg_error_t
 gpa_key_trust_operation_start (GpaKeyTrustOperation *op)
 { 
-  gpgme_key_t key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+  gpg_error_t err;
+  gpgme_key_t key;
   gpgme_validity_t trust;
 
-  if (gpa_ownertrust_run_dialog (key, GPA_OPERATION (op)->window, &trust))
+  key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+
+  if (! gpa_ownertrust_run_dialog (key, GPA_OPERATION (op)->window, &trust))
+    return gpg_error (GPG_ERR_CANCELED);
+
+  err = gpa_gpgme_edit_trust_start (GPA_OPERATION(op)->context, key,trust);
+  if (err)
     {
-      gpg_error_t err;
-      err = gpa_gpgme_edit_trust_start (GPA_OPERATION(op)->context, key,trust);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  gpa_gpgme_warning (err);
-	  return FALSE;
-	}
+      gpa_gpgme_warning (err);
+      return err;
     }
-  else
-    {
-      return FALSE;
-    }
-  return TRUE;
+
+  return 0;
 }
+
 
 static gboolean
 gpa_key_trust_operation_idle_cb (gpointer data)
 {
   GpaKeyTrustOperation *op = data;
+  gpg_error_t err;
 
-  if (!gpa_key_trust_operation_start (op))
-    {
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+  err = gpa_key_trust_operation_start (op);
+  if (err)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 
   return FALSE;
 }
 
+
 static void
 gpa_key_trust_operation_next (GpaKeyTrustOperation *op)
 {
-  if (!GPA_KEY_OPERATION (op)->current ||
-      !gpa_key_trust_operation_start (op))
-    {
-      if (op->modified_keys > 0)
-	{
-	  g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
-	}
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+  gpg_error_t err;
+
+  if (! GPA_KEY_OPERATION (op)->current)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
+
+  err = gpa_key_trust_operation_start (op);
+  if (err)
+   {
+     if (op->modified_keys > 0)
+       g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
+     g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
+   }
 }
+
 
 static void gpa_key_trust_operation_done_error_cb (GpaContext *context, 
 						  gpg_error_t err,

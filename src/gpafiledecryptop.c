@@ -176,7 +176,7 @@ destination_filename (const gchar *filename)
   return plain_filename;
 }
 
-static gboolean
+static gpg_error_t
 gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 				  gpa_file_item_t file_item)
 {
@@ -190,7 +190,7 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
       if (err)
 	{
 	  gpa_gpgme_warning (err);
-	  return FALSE;
+	  return err;
 	}
       
       err = gpgme_data_new (&op->plain);
@@ -199,7 +199,7 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 	  gpa_gpgme_warning (err);
 	  gpgme_data_release (op->cipher);
 	  op->plain = NULL;
-	  return FALSE;
+	  return err;
 	}
     }
   else
@@ -211,23 +211,24 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
       op->cipher_fd = gpa_open_input (cipher_filename, &op->cipher, 
 				  GPA_OPERATION (op)->window);
       if (op->cipher_fd == -1)
-	{
-	  return FALSE;
-	}
+	/* FIXME: Error value.  */
+	return gpg_error (GPG_ERR_GENERAL);
+
       op->plain_fd = gpa_open_output (file_item->filename_out, &op->plain,
 				      GPA_OPERATION (op)->window);
       if (op->plain_fd == -1)
 	{
 	  gpgme_data_release (op->cipher);
 	  close (op->cipher_fd);
-	  return FALSE;
+	  /* FIXME: Error value.  */
+	  return gpg_error (GPG_ERR_GENERAL);
 	}
     }
 
-  /* Start the operation */
+  /* Start the operation.  */
   err = gpgme_op_decrypt_start (GPA_OPERATION (op)->context->ctx, op->cipher, 
 				op->plain);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       gpa_gpgme_warning (err);
 
@@ -240,28 +241,37 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
       close (op->cipher_fd);
       op->cipher_fd = -1;
 
-      return FALSE;
+      return err;
     }
-  /* Show and update the progress dialog */
+
+  /* Show and update the progress dialog.  */
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
   gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG 
 				 (GPA_FILE_OPERATION (op)->progress_dialog),
 				 file_item->direct_name
 				 ? file_item->direct_name
 				 : file_item->filename_in);
-  return TRUE;
+  return 0;
 }
+
 
 static void
 gpa_file_decrypt_operation_next (GpaFileDecryptOperation *op)
 {
-  if (!GPA_FILE_OPERATION (op)->current 
-      || !(gpa_file_decrypt_operation_start
-           (op, GPA_FILE_OPERATION (op)->current->data)))
+  gpg_error_t err;
+
+  if (! GPA_FILE_OPERATION (op)->current)
     {
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
+      return;
     }
+
+  err = gpa_file_decrypt_operation_start
+    (op, GPA_FILE_OPERATION (op)->current->data);
+  if (err)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
+
 
 static void
 gpa_file_decrypt_operation_done_cb (GpaContext *context, 
@@ -304,8 +314,7 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
   close (op->cipher_fd);
   op->cipher_fd = -1;
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
-  /* Check for error */
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       if (! file_item->direct_in)
 	{
@@ -316,7 +325,7 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
 	  file_item->filename_out = NULL;
 	}
       /* FIXME:CLIPBOARD: Server finish?  */
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed"); 
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", err); 
     }
   else
     {

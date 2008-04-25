@@ -104,7 +104,7 @@ gpa_import_clipboard_operation_get_source (GpaImportOperation *operation,
       err = gpgme_data_new (source);
     }
 
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       gpa_gpgme_warning (err);
       return FALSE;

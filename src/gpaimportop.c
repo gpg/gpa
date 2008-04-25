@@ -167,17 +167,16 @@ gpa_import_operation_idle_cb (gpointer data)
       
       err = gpgme_op_import_start (GPA_OPERATION (op)->context->ctx,
 				   op->source);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+      if (err)
 	{
 	  gpa_gpgme_warning (err);
-	  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+	  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 	}
     }
   else
-    {
-      /* Abort the operation */
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+    /* Abort the operation.  */
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed",
+			   gpg_error (GPG_ERR_CANCELED));
 
   return FALSE;
 }
@@ -220,11 +219,12 @@ key_import_results_dialog_run (GtkWidget *parent,
   gtk_widget_destroy (dialog);
 }
 
+
 static void
 gpa_import_operation_done_cb (GpaContext *context, gpg_error_t err,
 			      GpaImportOperation *op)
 {
-  if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
+  if (! err)
     {
       gpgme_import_result_t res;
 
@@ -241,8 +241,9 @@ gpa_import_operation_done_cb (GpaContext *context, gpg_error_t err,
 	}
       key_import_results_dialog_run (GPA_OPERATION (op)->window, res);
     }
-  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
+
 
 static void
 gpa_import_operation_done_error_cb (GpaContext *context, gpg_error_t err,

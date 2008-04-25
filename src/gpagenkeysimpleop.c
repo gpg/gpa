@@ -154,10 +154,10 @@ gpa_gen_key_simple_operation_generate (GPAKeyGenParameters *params,
   op->do_backup = do_backup;
 
   err = gpa_generate_key_start (GPA_OPERATION (op)->context->ctx, params);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       gpa_gpgme_warning (err);
-      g_signal_emit_by_name (op, "completed");
+      g_signal_emit_by_name (op, "completed", err);
       return FALSE;
     }
   return TRUE;
@@ -174,7 +174,7 @@ gpa_gen_key_simple_operation_backup_complete (GpaBackupOperation *backup,
 
   g_object_unref (backup);
 
-  g_signal_emit_by_name (op, "completed");
+  g_signal_emit_by_name (op, "completed", 0);
 }
 
 static void
@@ -182,7 +182,7 @@ gpa_gen_key_simple_operation_done_cb (GpaContext *context,
 				      gpg_error_t err,
 				      GpaGenKeySimpleOperation *op)
 {
-  if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
+  if (! err)
     {
       gpgme_genkey_result_t result = gpgme_op_genkey_result (context->ctx);
 
@@ -198,13 +198,11 @@ gpa_gen_key_simple_operation_done_cb (GpaContext *context,
       else
 	{
 	  g_signal_emit_by_name (op, "generated_key", result->fpr);
-	  g_signal_emit_by_name (op, "completed");
+	  g_signal_emit_by_name (op, "completed", err);
 	}
     }
   else
-    {
-      g_signal_emit_by_name (op, "completed");
-    }
+    g_signal_emit_by_name (op, "completed", err);
 }
 
 static void

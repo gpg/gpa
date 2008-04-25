@@ -247,7 +247,8 @@ destination_filename (const gchar *filename, gboolean armor,
   return signature_filename;
 }
 
-static gboolean
+
+static gpg_error_t
 gpa_file_sign_operation_start (GpaFileSignOperation *op,
 			       gpa_file_item_t file_item)
 {
@@ -263,7 +264,7 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
       if (err)
 	{
 	  gpa_gpgme_warning (err);
-	  return FALSE;
+	  return err;
 	}
       
       err = gpgme_data_new (&op->sig);
@@ -272,7 +273,7 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
 	  gpa_gpgme_warning (err);
 	  gpgme_data_release (op->plain);
 	  op->plain = NULL;
-	  return FALSE;
+	  return err;
 	}
     }
   else
@@ -287,26 +288,27 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
       op->plain_fd = gpa_open_input (plain_filename, &op->plain, 
 				     GPA_OPERATION (op)->window);
       if (op->plain_fd == -1)
-	{
-	  return FALSE;
-	}
+	/* FIXME: Error value.  */
+	return gpg_error (GPG_ERR_GENERAL);
+
       op->sig_fd = gpa_open_output (file_item->filename_out, &op->sig,
 				    GPA_OPERATION (op)->window);
       if (op->sig_fd == -1)
 	{
 	  gpgme_data_release (op->plain);
 	  close (op->plain_fd);
-	  return FALSE;
+	  /* FIXME: Error value.  */
+	  return gpg_error (GPG_ERR_GENERAL);
 	}
     }
   
   /* Start the operation */
   err = gpgme_op_sign_start (GPA_OPERATION (op)->context->ctx, op->plain,
 			     op->sig, op->sign_type);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       gpa_gpgme_warning (err);
-      return FALSE;
+      return err;
     }
   /* Show and update the progress dialog */
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
@@ -316,19 +318,27 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
 				 ? file_item->direct_name
 				 : file_item->filename_in);
 
-  return TRUE;
+  return 0;
 }
+
 
 static void
 gpa_file_sign_operation_next (GpaFileSignOperation *op)
 {
-  if (!GPA_FILE_OPERATION (op)->current ||
-      !gpa_file_sign_operation_start (op, GPA_FILE_OPERATION (op)
-					 ->current->data))
+  gpg_error_t err;
+
+  if (! GPA_FILE_OPERATION (op)->current)
     {
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
+      return;
     }
+  
+  err = gpa_file_sign_operation_start (op,
+				       GPA_FILE_OPERATION (op)->current->data);
+  if (err)
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
+
 
 static void
 gpa_file_sign_operation_done_cb (GpaContext *context, 
@@ -372,7 +382,7 @@ gpa_file_sign_operation_done_cb (GpaContext *context,
   op->sig_fd = -1;
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
 
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       if (! file_item->direct_in)
 	{
@@ -381,7 +391,7 @@ gpa_file_sign_operation_done_cb (GpaContext *context,
 	  g_unlink (op->sig_filename);
 	  g_free (op->sig_filename);
 	}
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
     }
   else
     {
@@ -441,10 +451,8 @@ set_signers (GpaFileSignOperation *op, GList *signers)
     {
       gpgme_key_t key = cur->data;
       err = gpgme_signers_add (GPA_OPERATION (op)->context->ctx, key);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  gpa_gpgme_error (err);
-	}
+      if (err)
+	gpa_gpgme_error (err);
     }
 
   return TRUE;
@@ -477,25 +485,22 @@ gpa_file_sign_operation_response_cb (GtkDialog *dialog,
       gpgme_set_armor (GPA_OPERATION (op)->context->ctx, armor);
       /* Set the signers for the context */
       success = set_signers (op, signers);
-      /* Actually run the operation or abort */
+      /* Actually run the operation or abort.  */
       if (success)
-	{
-	  gpa_file_sign_operation_next (op);
-	}
+	gpa_file_sign_operation_next (op);
       else
-	{
-	  g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-	}
+	g_signal_emit_by_name (GPA_OPERATION (op), "completed",
+			       gpg_error (GPG_ERR_GENERAL));
 
       g_list_free (signers);
     }
   else
-    {
-      /* The dialog was canceled, so we do nothing and complete the
+    /* The dialog was canceled, so we do nothing and complete the
        * operation */
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed");
-    }
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed",
+			   gpg_error (GPG_ERR_CANCELED));
 }
+
 
 static void
 gpa_file_sign_operation_done_error_cb (GpaContext *context, gpg_error_t err,

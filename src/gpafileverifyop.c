@@ -294,7 +294,7 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 	      return FALSE;
 	    }
 	  err = gpgme_data_new (&op->plain);
-	  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+	  if (err)
 	    {
 	      gpgme_data_release (op->sig);
 	      close (op->sig_fd);
@@ -308,7 +308,7 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
   /* Start the operation */
   err = gpgme_op_verify_start (GPA_OPERATION (op)->context->ctx, op->sig,
 			       op->signed_text, op->plain);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       gpa_gpgme_warning (err);
       return FALSE;
@@ -324,17 +324,19 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
   return TRUE;
 }
 
+
 static void
 gpa_file_verify_operation_next (GpaFileVerifyOperation *op)
 {
-  if (!GPA_FILE_OPERATION (op)->current ||
-      !gpa_file_verify_operation_start (op, GPA_FILE_OPERATION (op)
+  if (! GPA_FILE_OPERATION (op)->current ||
+      ! gpa_file_verify_operation_start (op, GPA_FILE_OPERATION (op)
 					 ->current->data))
     {
       /* All files have been verified: show the results dialog */
       gtk_widget_show_all (op->dialog);
     }
 }
+
 
 static void
 gpa_file_verify_operation_done_cb (GpaContext *context, 
@@ -382,7 +384,7 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
 
   gtk_widget_hide (GPA_FILE_OPERATION (op)->progress_dialog);
   /* Check for error */
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       /* Abort further verifications */
     }
@@ -438,8 +440,11 @@ gpa_file_verify_operation_response_cb (GtkDialog *dialog,
 				       gpointer user_data)
 {
   GpaFileVerifyOperation *op = GPA_FILE_VERIFY_OPERATION (user_data);
-  g_signal_emit_by_name (GPA_OPERATION (op), "completed");  
+
+  /* FIXME: Error handling.  */
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
 }
+
 
 static void
 gpa_file_verify_operation_done_error_cb (GpaContext *context, gpg_error_t err,

@@ -35,6 +35,7 @@
 #include "gpa.h"
 #include "i18n.h"
 #include "gpastreamencryptop.h"
+#include "gpastreamsignop.h"
 
 
 
@@ -80,7 +81,7 @@ struct conn_ctrl_s
   gpgme_protocol_t selected_protocol;
 
   /* The current sender address (malloced). */
-  char *sender;
+  gchar *sender;
 };
 
 
@@ -266,8 +267,10 @@ reset_prepared_keys (conn_ctrl_t ctrl)
   ctrl->selected_protocol = GPGME_PROTOCOL_UNKNOWN;
 }
 
-
 
+/* Forward declaration.  */
+static void run_server_continuation (assuan_context_t ctx, gpg_error_t err);
+
 /*  RECIPIENT <recipient>
 
   Set the recipient for the encryption.  <recipient> is an RFC2822
@@ -414,11 +417,14 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   op = gpa_stream_encrypt_operation_new (NULL, input_data, output_data,
                                          ctrl->recipients, 
                                          ctrl->recipient_keys,
-                                         protocol,
-                                         0, ctx);
+                                         protocol, 0);
   input_data = output_data = NULL;
+  g_signal_connect_swapped (G_OBJECT (op), "completed",
+			    G_CALLBACK (run_server_continuation), ctx);
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
+  g_signal_connect_swapped (G_OBJECT (op), "status",
+			    G_CALLBACK (assuan_write_status), ctx);
 
   return not_finished (ctrl);
 
@@ -513,14 +519,17 @@ cmd_prep_encrypt (assuan_context_t ctx, char *line)
   op = gpa_stream_encrypt_operation_new (NULL, NULL, NULL,
                                          ctrl->recipients,
                                          ctrl->recipient_keys,
-                                         protocol,
-                                         0, ctx);
+                                         protocol, 0);
   /* Store that instance for later use but also install a signal
      handler to unref it.  */
   g_object_ref (op);
   ctrl->gpa_op = GPA_OPERATION (op);
+  g_signal_connect_swapped (G_OBJECT (op), "completed",
+			    G_CALLBACK (run_server_continuation), ctx);
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
+  g_signal_connect_swapped (G_OBJECT (op), "status",
+			    G_CALLBACK (assuan_write_status), ctx);
 
   return not_finished (ctrl);
 
@@ -592,8 +601,8 @@ cmd_sign (assuan_context_t ctx, char *line)
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
   gpg_error_t err;
   gpgme_protocol_t protocol = 0;
-  int detached;
-  GpaStreamEncryptOperation *op;
+  gboolean detached;
+  GpaStreamSignOperation *op;
   gpgme_data_t input_data = NULL;
   gpgme_data_t output_data = NULL;
 
@@ -672,10 +681,15 @@ cmd_sign (assuan_context_t ctx, char *line)
 
   ctrl->cont_cmd = cont_sign;
   op = gpa_stream_sign_operation_new (NULL, input_data, output_data,
-                                      ctrl->sender, protocol, detached, ctx);
+                                      ctrl->sender, protocol, detached);
   input_data = output_data = NULL;
+  g_signal_connect_swapped (G_OBJECT (op), "completed",
+			    G_CALLBACK (run_server_continuation), ctx);
   g_signal_connect (G_OBJECT (op), "completed",
                     G_CALLBACK (g_object_unref), NULL);
+  g_signal_connect_swapped (G_OBJECT (op), "status",
+			    G_CALLBACK (assuan_write_status), ctx);
+
   return not_finished (ctrl);
 
  leave:
@@ -867,8 +881,8 @@ connection_finish (assuan_context_t ctx)
 
 /* If the assuan context CTX has a registered continuation function,
    run it.  */
-void
-gpa_run_server_continuation (assuan_context_t ctx, gpg_error_t err)
+static void
+run_server_continuation (assuan_context_t ctx, gpg_error_t err)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
   void (*cont_cmd) (assuan_context_t, gpg_error_t);

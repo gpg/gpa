@@ -43,14 +43,14 @@ struct _GpaOperation {
 
   GtkWidget *window;
   GpaContext *context;
-  void *server_ctx;
 };
 
 struct _GpaOperationClass {
   GObjectClass parent_class;
 
   /* Signal handlers */
-  void (*completed) (GpaOperation *operation);
+  void (*completed) (GpaOperation *operation, gpg_error_t err);
+  void (*status) (GpaOperation *operation, gchar *status);
 };
 
 GType gpa_operation_get_type (void) G_GNUC_CONST;
@@ -60,10 +60,6 @@ GType gpa_operation_get_type (void) G_GNUC_CONST;
 /* Whether the operation is currently busy (i.e. gpg is running).  */
 gboolean gpa_operation_busy (GpaOperation *op);
 
-/* Tell the UI-server that the current operation has finished with
-   error code ERR.  Note that the server context will be disabled
-   after this operation. */
-void gpa_operation_server_finish (GpaOperation *op, gpg_error_t err);
 
 /* If running in server mode, write a status line names STATUSNAME
    plus space delimited arguments.  */

@@ -175,7 +175,6 @@ gpa_progress_bar_new_with_context (GpaContext *context)
 static void
 progress_cb (GpaContext *context, int current, int total, GpaProgressBar *pbar)
 {
-  g_print ("progress %i %i\n", current, total);
   if (total > 0) 
     gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (pbar),
 				   (gdouble) current / (gdouble) total);

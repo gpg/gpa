@@ -119,7 +119,7 @@ gpa_export_clipboard_operation_get_destination (GpaExportOperation *operation,
   gpg_error_t err;
   *armor = TRUE;
   err = gpgme_data_new (dest);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
       gpa_gpgme_warning (err);
       return FALSE;    
