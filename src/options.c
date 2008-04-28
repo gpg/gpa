@@ -32,6 +32,8 @@
 #include <errno.h>
 #include <ctype.h>
 
+#include "confdialog.h" /* gpa_read_configured_keyserver */
+
 /* Internal API */
 static void gpa_options_save_settings (GpaOptions *options);
 static void gpa_options_read_settings (GpaOptions *options);
@@ -210,7 +212,8 @@ gpa_options_set_file (GpaOptions *options, const gchar *filename)
   gpa_options_read_settings (options);
 }
 
-const gchar *gpa_options_get_file (GpaOptions *options)
+const gchar *
+gpa_options_get_file (GpaOptions *options)
 {
   return options->options_file;
 }
@@ -403,8 +406,9 @@ gpa_options_save_settings (GpaOptions *options)
         }
       if (options->default_keyserver)
         {
-          fprintf (options_file, "keyserver %s\n", 
-                   options->default_keyserver);
+          /* we do not write the keyserver anymore to gpg.conf.  */
+/*           fprintf (options_file, "keyserver %s\n",  */
+/*                    options->default_keyserver); */
         }
       if (options->backup_generated)
         {
@@ -420,7 +424,12 @@ gpa_options_save_settings (GpaOptions *options)
         }
       fclose (options_file);
     }
+
+  /* Write the keyserver to the backend.  */
+  if (options->default_keyserver)
+    gpa_store_configured_keyserver (options->default_keyserver);
 }
+
 
 static gboolean
 read_next_word (FILE *file, char *buffer, int size)
@@ -513,7 +522,8 @@ gpa_options_read_settings (GpaOptions *options)
               state = PARSE_OPTIONS_STATE_START;
               break;
             case PARSE_OPTIONS_STATE_HAVE_KEYSERVER:
-              options->default_keyserver = g_strdup (next_word);
+              /* We do not use the keyserver item from the gpa.conf anymore. */
+              /* options->default_keyserver = g_strdup (next_word); */
               state = PARSE_OPTIONS_STATE_START;
               break;
             default:
@@ -523,4 +533,8 @@ gpa_options_read_settings (GpaOptions *options)
         }
       fclose (options_file);
     }
+
+  /* Read the keyserver from the abckend.  */
+  g_free (options->default_keyserver);
+  options->default_keyserver = gpa_load_configured_keyserver ();
 }

@@ -1340,7 +1340,7 @@ create_dialog (void)
 		    G_CALLBACK (dialog_response), NULL);
   
   dialog_vbox = GTK_DIALOG (dialog)->vbox;
-  //  gtk_box_set_spacing (GTK_CONTAINER (dialog_vbox), 5);
+  /*  gtk_box_set_spacing (GTK_CONTAINER (dialog_vbox), 5); */
 
   hbox = gtk_hbox_new (FALSE, 0);
 
@@ -1408,3 +1408,119 @@ hide_backend_config (void)
   gpgme_release (dialog_ctx);
   dialog_ctx = NULL;
 }  
+
+
+
+/* Read the configured keyserver from the backend.  If none is
+   configured, return NULL.  Caller must g_free the returned value.  */
+char *
+gpa_load_configured_keyserver (void)
+{
+  gpg_error_t err;
+  gpgme_ctx_t ctx;
+  gpgme_conf_comp_t conf_list, conf;
+  gpgme_conf_opt_t opt;
+  char *retval = NULL;
+
+  err = gpgme_new (&ctx);
+  if (err)
+    {
+      gpa_gpgme_error (err);
+      return NULL;
+    }
+
+  err = gpgme_op_conf_load (ctx, &conf_list);
+  if (err)
+    {
+      gpa_gpgme_error (err);
+      gpgme_release (ctx);
+      return NULL;
+    }
+      
+  for (conf = conf_list; conf; conf = conf->next)
+    {
+      if ( !strcmp (conf->name, "gpg") )
+        {
+          for (opt = conf->options; opt; opt = opt->next)
+            if ( !(opt->flags & GPGME_CONF_GROUP)
+                 && !strcmp (opt->name, "keyserver"))
+              {
+                if (opt->value && opt->alt_type == GPGME_CONF_STRING)
+                  retval = g_strdup (opt->value->value.string);
+                break;
+              }
+          break;
+        }
+    }
+
+  gpgme_conf_release (conf_list);
+  gpgme_release (ctx);
+  return retval;
+}
+
+
+/* Save the configured keyserver from the backend.  If none is
+   configured, return NULL.  Caller must g_free the returned value.  */
+void
+gpa_store_configured_keyserver (const char *value)
+{
+  gpg_error_t err;
+  gpgme_ctx_t ctx;
+  gpgme_conf_comp_t conf_list, conf;
+  gpgme_conf_opt_t opt;
+  gpgme_conf_arg_t arg;
+
+  err = gpgme_conf_arg_new (&arg, GPGME_CONF_STRING, (char*)value);
+  if (err)
+    {
+      gpa_gpgme_error (err);
+      return;
+    }
+
+  err = gpgme_new (&ctx);
+  if (err)
+    {
+      gpa_gpgme_error (err);
+      return;
+    }
+
+  err = gpgme_op_conf_load (ctx, &conf_list);
+  if (err)
+    {
+      gpa_gpgme_error (err);
+      gpgme_release (ctx);
+      return;
+    }
+
+      
+  for (conf = conf_list; conf; conf = conf->next)
+    {
+      if ( !strcmp (conf->name, "gpg") )
+        {
+          for (opt = conf->options; opt; opt = opt->next)
+            if ( !(opt->flags & GPGME_CONF_GROUP)
+                 && !strcmp (opt->name, "keyserver"))
+              {
+                if (opt->alt_type == GPGME_CONF_STRING
+                    && !args_are_equal (arg, opt->value, opt->alt_type))
+                  {
+                    err = gpgme_conf_opt_change (opt, 0, arg);
+                    if (err)
+                      gpa_gpgme_error (err);
+                    else
+                      {
+                        err = gpgme_op_conf_save (ctx, conf);
+                        if (err)
+                          gpa_gpgme_error (err);
+                      }
+                  }
+                break;
+              }
+          break;
+        }
+    }
+
+  gpgme_conf_release (conf_list);
+  gpgme_release (ctx);
+}
+

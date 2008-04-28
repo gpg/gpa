@@ -1,3 +1,23 @@
+2008-04-28  Werner Koch  <wk@g10code.com>
+
+	* settingsdlg.c (gpa_settings_dialog_new): Put advanced UI
+	selection at top.  
+	(user_interface_mode_frame): Change to use a checkbox.
+	(advanced_mode_toggled): Simplified.
+	(ui_mode_changed_for_keyserver): New.
+	(default_keyserver_frame): Call and connect new chnage function.
+
+	* gpgmetools.h (gpa_gpgme_error): Remove surprise by enclosing in
+	do-while and remove all single statement blocks when calling it.
+
+	* options.c (gpa_options_read_settings): Load the default
+	keyserver value from the backend.
+	(gpa_options_save_settings): and store it.
+	* confdialog.c (gpa_load_configured_keyserver): New.
+	(gpa_save_configured_keyserver): New.
+
+	* Signals: New doc file.
+
 2008-04-25  Marcus Brinkmann  <marcus@g10code.de>
 
 	* Makefile.am (EXTRA_DIST): Add gpa-marshal.list.
@@ -42,6 +62,10 @@
 	* settingsdlg.c (keyserver_selected_cb): Add missing event
 	argument.
 	(selected_from_list_cb): Also to caller.
+
+2008-04-23  Werner Koch  <wk@g10code.com>
+
+	* gpa.c (main): Don't start the server unless --daemon is given
 
 2008-04-21  Marcus Brinkmann  <marcus@g10code.de>
 

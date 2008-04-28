@@ -63,7 +63,8 @@ typedef struct
 
 /* Report an unexpected error in GPGME and quit the application.
    Better to use the macro instead of the function.  */
-#define gpa_gpgme_error(err) _gpa_gpgme_error (err, __FILE__, __LINE__);
+#define gpa_gpgme_error(err) \
+         do { _gpa_gpgme_error (err, __FILE__, __LINE__); } while (0)
 void _gpa_gpgme_error (gpg_error_t err, const char *file, int line);
 
 /* The same as gpa_gpgme_error, without quitting.  */

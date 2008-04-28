@@ -1,7 +1,7 @@
 Noteworthy changes in version 0.7.7
 ------------------------------------------------
 
- * Add basic UI server mode and option --server.
+ * Add basic UI server mode and option --daemon.
 
  * GPA now supports direct crypto operations to and from the
    clipboard, and features a simple text edit area as well.
@@ -11,6 +11,9 @@ Noteworthy changes in version 0.7.7
 
  * GPA has now basic support for X.509; use the command line switch
    --cms to enable this.
+
+ * The default keyserver is now taken from gpg.conf and not from
+   gpa.conf.
 
 
 Noteworthy changes in version 0.7.6 (2007-05-24)

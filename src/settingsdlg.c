@@ -30,6 +30,7 @@
 
 #include "settingsdlg.h"
 
+
 
 /* Default key section.  */
 static void
@@ -83,6 +84,18 @@ default_key_frame (void)
 }
 
 
+/* Signal handler for the "changed_ui_mode" signal.  */
+static void
+ui_mode_changed_for_keyserver (GpaOptions *options, gpointer param)
+{
+  GtkWidget *keyserver_frame = param;
+
+  if (gpa_options_get_simplified_ui (options))
+    gtk_widget_hide_all (GTK_WIDGET(keyserver_frame));
+  else
+    gtk_widget_show_all (GTK_WIDGET(keyserver_frame));
+}
+
 /* Default keyserver section.  */
 static gboolean
 keyserver_selected_cb (GtkWidget *combo, GdkEvent *event, gpointer user_data)
@@ -140,6 +153,10 @@ default_keyserver_frame (void)
   gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo))),
                       gpa_options_get_default_keyserver
 		      (gpa_options_get_instance ()));
+
+  /* Set default visibility.  */
+  ui_mode_changed_for_keyserver (gpa_options_get_instance (), frame);
+
   /* Connect signals.  Try to follow instant-apply principle.  */
   g_signal_connect_swapped (G_OBJECT (gtk_bin_get_child (GTK_BIN (combo))),
 			    "focus-out-event",
@@ -147,6 +164,10 @@ default_keyserver_frame (void)
   g_signal_connect (G_OBJECT (combo),
 		    "changed", G_CALLBACK (selected_from_list_cb), NULL);
 
+  g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
+		    "changed_ui_mode",
+                    G_CALLBACK (ui_mode_changed_for_keyserver), frame);
+  
 
   return frame;
 }
@@ -154,12 +175,10 @@ default_keyserver_frame (void)
 
 /* User interface section.  */
 static void
-advanced_mode_toggled (GtkToggleButton *yes_button, gpointer user_data)
+advanced_mode_toggled (GtkToggleButton *button, gpointer user_data)
 {
-  if (gtk_toggle_button_get_active (yes_button))
-    gpa_options_set_simplified_ui (gpa_options_get_instance (), FALSE);
-  else
-    gpa_options_set_simplified_ui (gpa_options_get_instance (), TRUE);
+  gpa_options_set_simplified_ui (gpa_options_get_instance (), 
+                                 !gtk_toggle_button_get_active (button));
 }
 
 static GtkWidget *
@@ -168,34 +187,28 @@ user_interface_mode_frame (void)
   GtkWidget *frame;
   GtkWidget *label;
   GtkWidget *hbox;
-  GtkWidget *yes_button;
-  GtkWidget *no_button;
-  
+  GtkWidget *button;
+
   /* Build UI.  */
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
-  label = gtk_label_new_with_mnemonic (_("<b>Use _advanced mode</b>"));
+  label = gtk_label_new (_("<b>User interface</b>"));
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 
-  hbox = gtk_hbox_new (TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_container_add (GTK_CONTAINER (frame), hbox);
-  yes_button = gtk_radio_button_new_with_mnemonic (NULL, _("_Yes"));
-  gtk_box_pack_start_defaults (GTK_BOX (hbox), yes_button);
-  no_button = gtk_radio_button_new_with_mnemonic_from_widget
-    (GTK_RADIO_BUTTON (yes_button), _("_No"));
-  gtk_box_pack_start_defaults (GTK_BOX (hbox), no_button);
+  button = gtk_check_button_new_with_mnemonic (_("use _advanced mode"));
+  gtk_container_add (GTK_CONTAINER (frame), button);
+
 
   /* Select default value.  */
-  if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (no_button), TRUE);
-  else
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (yes_button), TRUE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
+                                !gpa_options_get_simplified_ui 
+                                (gpa_options_get_instance ()));
 
   /* Connect signals.  */
-  g_signal_connect (G_OBJECT (yes_button), "toggled",
+  g_signal_connect (G_OBJECT (button), "toggled",
                     G_CALLBACK (advanced_mode_toggled), NULL);
+
   
   return frame;
 }
@@ -207,7 +220,7 @@ GtkWidget *
 gpa_settings_dialog_new (void)
 {
   GtkWidget *dialog;
-  GtkWidget *frame;
+  GtkWidget *frame, *keyserver_frame;
 
   dialog = gtk_dialog_new_with_buttons (_("Settings"), NULL, 0,
                                         _("_Close"),
@@ -216,16 +229,16 @@ gpa_settings_dialog_new (void)
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 5);
 
+  /* The UI mode section.  */
+  frame = keyserver_frame = user_interface_mode_frame ();
+  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame);
+              
   /* The default key section.  */
   frame = default_key_frame ();
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame);
 
   /* The default keyserver section.  */
   frame = default_keyserver_frame ();
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame);
-
-  /* The UI mode section.  */
-  frame = user_interface_mode_frame ();
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame);
 
   /* Close the dialog when asked to.  */

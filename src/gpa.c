@@ -410,10 +410,13 @@ main (int argc, char *argv[])
 					 keyservers->data);
     }
 
-  /* Fire up the server.  */
-  gpa_start_server ();
-
-  if (! args.start_only_server)
+  if (args.start_only_server)
+    {
+      /* Fire up the server.  Note that the server allows to start the
+         other parts too.  */
+      gpa_start_server ();
+    }
+  else
     {
       /* Don't open the keyring editor if any files are given on the
          command line.  Dito for the clipboard.   */

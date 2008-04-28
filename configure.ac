@@ -34,7 +34,8 @@ m4_define(my_issvn, yes)
 
 m4_define([svn_revision], m4_esyscmd([echo -n $( (svn info 2>/dev/null \
             || echo 'Revision: 0')|sed -n '/^Revision:/ {s/[^0-9]//gp;q;}')]))
-AC_INIT([gpa], my_version[]m4_if(my_issvn,[yes],[-svn[]svn_revision]),
+AC_INIT([gpa], 
+        [my_version[]m4_if(my_issvn,[yes],[-svn[]svn_revision])],
         [bug-gpa@gnupg.org])
 
 NEED_GPG_ERROR_VERSION=1.4

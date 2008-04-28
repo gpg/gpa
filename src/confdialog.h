@@ -23,4 +23,8 @@
 
 GtkWidget *gpa_backend_config_dialog_new (void);
 
+char *gpa_load_configured_keyserver (void);
+void gpa_store_configured_keyserver (const char *value);
+
+
 #endif

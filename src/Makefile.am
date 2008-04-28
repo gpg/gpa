@@ -4,7 +4,7 @@ logo = gpa_logo.ppm
 
 pkgdata_DATA = $(logo)
 
-EXTRA_DIST = $(logo) gpa.ico gpa-resource.rc gpa-marshal.list
+EXTRA_DIST = $(logo) gpa.ico gpa-resource.rc gpa-marshal.list Signals
 BUILT_SOURCES = gpa-marshal.h gpa-marshal.c
 MOSTLYCLEANFILES = gpa-marshal.h gpa-marshal.c
 
