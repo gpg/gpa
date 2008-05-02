@@ -153,10 +153,10 @@ gpa_operation_class_init (GpaOperationClass *klass)
     g_signal_new ("status",
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-		  G_STRUCT_OFFSET (GpaOperationClass, completed),
+		  G_STRUCT_OFFSET (GpaOperationClass, status),
 		  NULL, NULL,
 		  gpa_marshal_INT__STRING_STRING,
-		  G_TYPE_INT, 1, G_TYPE_STRING, 1, G_TYPE_STRING);
+		  G_TYPE_INT, 2, G_TYPE_STRING, G_TYPE_STRING);
 
 
   /* Properties.  */
@@ -241,9 +241,10 @@ gpa_operation_write_status (GpaOperation *op, const char *statusname, ...)
     }
   *p = 0;
 
-  /* FIXME: Get return value.  Might require an allocator to not only
-     get the last one.  */
-  g_signal_emit_by_name (GPA_OPERATION (op), "status", buf);
+  /* FIXME: Return value might require an allocator to not only get
+     the last one.  */
+  g_signal_emit (GPA_OPERATION (op), signals[STATUS], NULL,
+		 statusname, buf, &err);
   
   va_end (arg_ptr);
 
