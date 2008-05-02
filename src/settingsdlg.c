@@ -58,7 +58,26 @@ struct _SettingsDlg
 {
   GtkDialog parent;
   
-  GtkWidget *foo;
+  /* Data for the user interface frame.  */
+  struct {
+    GtkWidget *frame;
+    GtkToggleButton *advanced_mode;
+    GtkToggleButton *show_advanced_options;
+  } ui;
+
+  /* Data for the keyserver frame.  */
+  struct {
+    GtkWidget *frame;
+    GtkWidget *combo;
+  } keyserver;
+
+  /* Data for the auto-key-locate frame.  */
+  struct {
+    GtkWidget *frame;
+    GtkWidget *addr_hbox;
+    GtkEntry  *addr_entry;
+    GtkComboBox *methods;
+  } akl;
 
 };
 
@@ -79,8 +98,7 @@ static SettingsDlg *the_settings_dialog;
 /* Identifiers for our properties. */
 enum 
   {
-    PROP_0,
-    PROP_WINDOW,
+    PROP_0
   };
 
 
@@ -112,6 +130,28 @@ static struct {
 /* 
    User interface section. 
  */
+
+/* Update what parts of the dialog are shown.  */
+void
+update_show_advanced_options (SettingsDlg *dialog)
+{
+  GpaOptions *options = gpa_options_get_instance ();
+
+  g_return_if_fail (IS_SETTINGS_DLG (dialog));
+  
+  if (gpa_options_get_show_advanced_options (options))
+    {
+      gtk_widget_show_all (dialog->keyserver.frame);
+      gtk_widget_show_all (dialog->akl.frame);
+    }
+  else
+    {
+      gtk_widget_hide_all (dialog->keyserver.frame);
+      gtk_widget_hide_all (dialog->akl.frame);
+    }
+}
+
+
 static void
 advanced_mode_toggled (GtkToggleButton *button, gpointer user_data)
 {
@@ -122,8 +162,11 @@ advanced_mode_toggled (GtkToggleButton *button, gpointer user_data)
 static void
 show_advanced_options_toggled (GtkToggleButton *button, gpointer user_data)
 {
+  SettingsDlg *dialog = user_data;
+
   gpa_options_set_show_advanced_options
     (gpa_options_get_instance (), gtk_toggle_button_get_active (button));
+  update_show_advanced_options (dialog);
 }
 
 
@@ -133,7 +176,7 @@ user_interface_mode_frame (SettingsDlg *dialog)
   GtkWidget *frame;
   GtkWidget *label;
   GtkWidget *frame_vbox;
-  GtkWidget *button, *button2;
+  GtkWidget *button;
 
   /* Build UI.  */
   frame = gtk_frame_new (NULL);
@@ -145,26 +188,17 @@ user_interface_mode_frame (SettingsDlg *dialog)
   frame_vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (frame), frame_vbox);
 
-  button = gtk_check_button_new_with_mnemonic (_("use _advanced mode"));
+  button = gtk_check_button_new_with_mnemonic (_("Use _advanced mode"));
   gtk_container_add (GTK_CONTAINER (frame_vbox), button);
-
-  button2 = gtk_check_button_new_with_mnemonic (_("show advanced _options"));
-  gtk_container_add (GTK_CONTAINER (frame_vbox), button2);
-
-
-  /* Select default value.  */
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), 
-                                !gpa_options_get_simplified_ui 
-                                (gpa_options_get_instance ()));
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button2), 
-                                !!gpa_options_get_show_advanced_options 
-                                (gpa_options_get_instance ()));
-
-  /* Connect signals.  */
+  dialog->ui.advanced_mode = GTK_TOGGLE_BUTTON (button);
   g_signal_connect (G_OBJECT (button), "toggled",
-                    G_CALLBACK (advanced_mode_toggled), NULL);
-  g_signal_connect (G_OBJECT (button2), "toggled",
-                    G_CALLBACK (show_advanced_options_toggled), NULL);
+                    G_CALLBACK (advanced_mode_toggled), dialog);
+
+  button = gtk_check_button_new_with_mnemonic (_("Show advanced _options"));
+  gtk_container_add (GTK_CONTAINER (frame_vbox), button);
+  dialog->ui.show_advanced_options = GTK_TOGGLE_BUTTON (button);
+  g_signal_connect (G_OBJECT (button), "toggled",
+                    G_CALLBACK (show_advanced_options_toggled), dialog);
 
   
   return frame;
@@ -173,7 +207,10 @@ user_interface_mode_frame (SettingsDlg *dialog)
 
 
 
-/* Default key section.  */
+/* 
+   Default key section. 
+ */
+#if 0
 static void
 key_selected_cb (GtkTreeSelection *treeselection, gpointer user_data)
 {
@@ -185,7 +222,7 @@ key_selected_cb (GtkTreeSelection *treeselection, gpointer user_data)
 			       (gpgme_key_t) selected->data);
   g_list_free (selected);
 }
-
+#endif /*0*/
 
 static GtkWidget *
 default_key_frame (SettingsDlg *dialog)
@@ -218,27 +255,19 @@ default_key_frame (SettingsDlg *dialog)
   gtk_container_add (GTK_CONTAINER (frame), scroller);
 
   /* Connect signals.  */
-  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection
-			      (GTK_TREE_VIEW (list))),
-		    "changed", G_CALLBACK (key_selected_cb), list);
+  /* Currently not used. */
+/*   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection */
+/* 			      (GTK_TREE_VIEW (list))), */
+/* 		    "changed", G_CALLBACK (key_selected_cb), list); */
+
   return frame;
 }
 
+
 
-/* Signal handler for the "changed_show_advanced_options" signal.  */
-static void
-show_advanced_options_changed_for_keyserver (GpaOptions *options,
-                                             gpointer param)
-{
-  GtkWidget *keyserver_frame = param;
-
-  if (gpa_options_get_show_advanced_options (options))
-    gtk_widget_show_all (GTK_WIDGET(keyserver_frame));
-  else
-    gtk_widget_hide_all (GTK_WIDGET(keyserver_frame));
-}
-
-
+/*
+   Default keyserver section.
+*/
 static void
 keyserver_selected_from_list_cb (GtkComboBox *combo, gpointer user_data)
 {
@@ -285,72 +314,53 @@ default_keyserver_frame (SettingsDlg *dialog)
   servers = keyserver_get_as_glist ();
   g_list_foreach (servers, append_to_combo, combo);
   g_list_free (servers);
-  gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo))),
-                      gpa_options_get_default_keyserver
-		      (gpa_options_get_instance ()));
+  dialog->keyserver.combo = combo;
 
-  /* Connect signals.  */
   g_signal_connect (G_OBJECT (combo),
 		    "changed",
                     G_CALLBACK (keyserver_selected_from_list_cb), NULL);
 
-  g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
-		    "changed_show_advanced_options",
-                    G_CALLBACK (show_advanced_options_changed_for_keyserver), 
-                    frame);
 
   return frame;
 }
 
 
-/* Auto Key Locate section.  */
-/* Signal handler for the "changed_show_advanced_options" signal.  */
-static void
-show_advanced_options_changed_for_akl (GpaOptions *options,
-                                       gpointer param)
-{
-  GtkWidget *akl_frame = param;
-
-  if (gpa_options_get_show_advanced_options (options))
-    gtk_widget_show_all (GTK_WIDGET(akl_frame));
-  else
-    gtk_widget_hide_all (GTK_WIDGET(akl_frame));
-}
-
+/*
+   Auto Key Locate section.  
+ */
 
 static void
 akl_method_changed_cb (GtkComboBox *combo, gpointer user_data)
 {
-  GtkWidget *label = user_data;
+  SettingsDlg *dialog = user_data;
   int idx;
 
-  idx =  gtk_combo_box_get_active (combo);
+  idx = gtk_combo_box_get_active (dialog->akl.methods);
   if (idx < 0 || idx > DIM(akl_table))
     return;
 
-  /* Enable the kdns Server entry if needed.  */
-  gtk_widget_set_sensitive (label, (akl_table[idx].list
-                                    && strchr (akl_table[idx].list, 'D')) );
-  
+  /* Enable the address entry if needed.  */
+  gtk_widget_set_sensitive (dialog->akl.addr_hbox,
+                            (akl_table[idx].list
+                             && strchr (akl_table[idx].list, 'D')) );
 }
 
 static void
-akl_kdnsaddr_changed_cb (GtkEntry *entry, gpointer user_data)
+akl_addr_changed_cb (GtkEntry *entry, gpointer user_data)
 {
+  SettingsDlg *dialog = user_data;
   const char *addr;
   struct in_addr binaddr;
 
-  (void)user_data;
-
-  if (!GTK_WIDGET_IS_SENSITIVE (entry))
+  if (!GTK_WIDGET_IS_SENSITIVE (dialog->akl.addr_entry))
     return;
   
-  addr = gtk_entry_get_text (entry);
+  addr = gtk_entry_get_text (dialog->akl.addr_entry);
   g_message ("IP-address is '%s'", addr? addr : "[none]");
   if (!addr || !*addr || !inet_aton (addr, &binaddr) )
     {
       gpa_window_error ("You need to enter a valid IPv4 address.",
-                        GTK_WIDGET (entry));
+                        GTK_WIDGET (dialog));
       return;
     }
 
@@ -361,21 +371,22 @@ akl_kdnsaddr_changed_cb (GtkEntry *entry, gpointer user_data)
 
 
 static void
-parse_akl (GtkWidget *combo, GtkWidget *kdns_addr, GtkWidget *label)
+parse_akl (SettingsDlg *dialog)
 {
   akl_t akllist, akl;
-  char *akloption = gpa_load_gpgconf_string ("gpg", "auto-key-locate");
+  char *akloption;
   char list[10];
   int listidx = 0;
   int idx;
-  
+
+  akloption = gpa_load_gpgconf_string ("gpg", "auto-key-locate");
   if (!akloption)
     {
       /* Select the first entry ("Local").  */
-      gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0); 
+      gtk_combo_box_set_active (dialog->akl.methods, 0); 
       /* Set kDNS server to empty.  */
-      gtk_entry_set_text (GTK_ENTRY (kdns_addr), "");
-      gtk_widget_set_sensitive (label, FALSE);
+      gtk_entry_set_text (dialog->akl.addr_entry, "");
+      gtk_widget_set_sensitive (dialog->akl.addr_hbox, FALSE);
       return;
     }
 
@@ -416,7 +427,7 @@ parse_akl (GtkWidget *combo, GtkWidget *kdns_addr, GtkWidget *label)
                && !k->opaque
                && !k->options)
             {
-              gtk_entry_set_text (GTK_ENTRY (kdns_addr), k->host);
+              gtk_entry_set_text (dialog->akl.addr_entry, k->host);
               list[listidx++] = 'D';
             }
           else
@@ -435,15 +446,15 @@ parse_akl (GtkWidget *combo, GtkWidget *kdns_addr, GtkWidget *label)
   for (idx=0; akl_table[idx].list; idx++)
     if (!strcmp (akl_table[idx].list, list))
       break;
-  /* (The last entry of tghe tale is the one used for no-match.) */
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), idx); 
+  /* (The last entry of the table is the one used for no-match.) */
+  gtk_combo_box_set_active (dialog->akl.methods, idx); 
   /* Enable the kdns Server entry if one is defined.  For ease of
      implementation we have already put the server address into the
-     entry field even if though there might be no match.  */
-  gtk_widget_set_sensitive (label, 
+     entry field even if there might be no match.  */
+  gtk_widget_set_sensitive (dialog->akl.addr_hbox, 
                             (akl_table[idx].list && strchr (list, 'D')));
-
 }
+
 
 
 static GtkWidget *
@@ -516,23 +527,48 @@ auto_key_locate_frame (SettingsDlg *dialog)
   gtk_entry_set_max_length (GTK_ENTRY(entry), 3+1+3+1+3+1+3);
   gtk_entry_set_width_chars (GTK_ENTRY(entry), 3+1+3+1+3+1+3);
   gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
-
-  parse_akl (combo, entry, hbox);
-  g_signal_connect (G_OBJECT (combo),
-		    "changed", G_CALLBACK (akl_method_changed_cb), hbox);
-  g_signal_connect (G_OBJECT (entry),
-		    "changed", G_CALLBACK (akl_kdnsaddr_changed_cb), NULL);
-
-
-  /* Connect signals.  */
-  g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
-		    "changed_show_advanced_options",
-                    G_CALLBACK (show_advanced_options_changed_for_akl), 
-                    frame);
-
   
+  dialog->akl.addr_hbox = hbox;
+  dialog->akl.addr_entry = GTK_ENTRY (entry);
+  dialog->akl.methods = GTK_COMBO_BOX (combo);
+
+  g_signal_connect (G_OBJECT (combo),
+		    "changed", G_CALLBACK (akl_method_changed_cb), dialog);
+  g_signal_connect (G_OBJECT (entry),
+		    "changed", G_CALLBACK (akl_addr_changed_cb), dialog);
+
   return frame;
 }
+
+
+static void
+load_settings (SettingsDlg *dialog)
+{
+  GpaOptions *options = gpa_options_get_instance ();
+
+  g_return_if_fail (IS_SETTINGS_DLG (dialog));
+
+  /* UI section.  */
+  gtk_toggle_button_set_active 
+    (dialog->ui.advanced_mode, !gpa_options_get_simplified_ui (options));
+  gtk_toggle_button_set_active 
+    (dialog->ui.show_advanced_options, 
+     !!gpa_options_get_show_advanced_options (options));
+
+  /* Default key section.  */
+  /* FIXME: use options_get_default_key to set it.  */
+
+  /* Default keyserver section.  */
+  gtk_entry_set_text (GTK_ENTRY 
+                      (gtk_bin_get_child (GTK_BIN (dialog->keyserver.combo))),
+                      gpa_options_get_default_keyserver (options));
+
+  /* AKL section. */
+  parse_akl (dialog);
+
+
+}
+
 
 /* Save all settings, return 0 on success.  */
 static int
@@ -559,7 +595,6 @@ dialog_response (GtkDialog *dialog, gint response)
       if (save_settings (dialog))
         return;
       /* Fixme: Reload configuration.  */
-      
       return; /* Do not close.  */
 
     default:
@@ -594,7 +629,7 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
 {
   GObject *object;
   SettingsDlg *dialog;
-  GtkWidget *frame, *keyserver_frame;
+  GtkWidget *frame;
 
   object = parent_class->constructor (type,
 				      n_construct_properties,
@@ -624,23 +659,28 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame);
 
   /* The default keyserver section.  */
-  frame = keyserver_frame = default_keyserver_frame (dialog);
+  frame = default_keyserver_frame (dialog);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
                       FALSE, FALSE, 0);
+  dialog->keyserver.frame = frame;
 
   /* The auto key locate section.  */
   frame = auto_key_locate_frame (dialog);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
                       FALSE, FALSE, 0);
+  dialog->akl.frame = frame;
 
   /* Connect the response signal.  */
   g_signal_connect (GTK_OBJECT (dialog), "response", 
                     G_CALLBACK (dialog_response), NULL);
 
+
+  /* Load values.  */
+  load_settings (dialog);
+
   /* Show all windows and hide those we don't want. */
   gtk_widget_show_all (GTK_WIDGET(dialog));
-  if (!gpa_options_get_show_advanced_options (gpa_options_get_instance ()))
-    gtk_widget_hide_all (GTK_WIDGET(keyserver_frame));
+  update_show_advanced_options (dialog);
 
   return object;
 }
@@ -698,7 +738,8 @@ settings_dlg_get_type (void)
 void
 settings_dlg_new (GtkWidget *parent)
 {
-  g_return_if_fail (GTK_IS_WINDOW (parent));
+  if (parent)
+    g_return_if_fail (GTK_IS_WINDOW (parent));
 
   if (!the_settings_dialog)
     {
@@ -710,11 +751,18 @@ settings_dlg_new (GtkWidget *parent)
 
     }
 
-  if (GTK_WINDOW (parent) 
-      != gtk_window_get_transient_for (GTK_WINDOW (the_settings_dialog)))
+  if (parent 
+      && (GTK_WINDOW (parent) 
+          != gtk_window_get_transient_for (GTK_WINDOW (the_settings_dialog))))
     gtk_window_set_transient_for (GTK_WINDOW (the_settings_dialog),
                                   GTK_WINDOW (parent));
   
   gtk_window_present (GTK_WINDOW (the_settings_dialog));
 }
 
+/* Tell whether the settings dialog is open.  */
+gboolean
+settings_is_open (void)
+{
+  return !!the_settings_dialog;
+}

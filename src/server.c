@@ -80,8 +80,10 @@ struct conn_ctrl_s
   /* The protocol as selected by the user.  */
   gpgme_protocol_t selected_protocol;
 
-  /* The current sender address (malloced). */
+  /* The current sender address (malloced) and a flag telleing whether
+     the sender ist just informational. */
   gchar *sender;
+  int sender_just_info;
 };
 
 
@@ -127,7 +129,7 @@ has_option_name (const char *line, const char *name)
           && (!s[n] || spacep (s+n) || s[n] == '=')) ? (s+n) : NULL;
 }
 
-/* Check whether LINE coontains the option NAME.  */
+/* Check whether LINE contains the option NAME.  */
 static int
 has_option (const char *line, const char *name)
 {
@@ -552,6 +554,9 @@ cmd_sender (assuan_context_t ctx, char *line)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
   gpg_error_t err = 0;
+
+  ctrl->sender_just_info = has_option (line, "--info");
+  line = skip_options (line);
 
   xfree (ctrl->sender);
   ctrl->sender = NULL;

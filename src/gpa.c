@@ -60,6 +60,7 @@ typedef struct
   gboolean start_keyring_editor;
   gboolean start_file_manager;
   gboolean start_clipboard;
+  gboolean start_settings;
   gboolean start_only_server;
   gchar *options_filename;
 } gpa_args_t;
@@ -95,8 +96,10 @@ static GOptionEntry option_entries[] =
       N_("Open file manager"), NULL },
     { "clipboard", 'c', 0, G_OPTION_ARG_NONE, &args.start_clipboard,
       N_("Open clipboard"), NULL },
+    { "settings", 's', 0, G_OPTION_ARG_NONE, &args.start_settings,
+      N_("Open the settings dialog"), NULL },
     { "daemon", 'd', 0, G_OPTION_ARG_NONE, &args.start_only_server,
-      N_("Start only the UI server (implies --cms)"), NULL },
+      N_("Enable the UI server (implies --cms)"), NULL },
     { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
       N_("Read options from file"), "FILE" },
     { "cms", 'x', 0, G_OPTION_ARG_NONE, &cms_hack,
@@ -154,7 +157,7 @@ i18n_init (void)
 }
 
 
-/* Manage the two main windows and the settings dialog.  */
+/* Manage the main windows and the settings dialog.  */
 static void
 quit_if_no_window (void)
 {
@@ -358,7 +361,7 @@ main (int argc, char *argv[])
   }
 #endif
 
-  /* Prefer gpg2 over gpg1.  Fixme: We need to test where gpg2 is
+  /* Prefer gpg2 over gpg1.  Fixme: We need to test whether gpg2 is
      actually properly installed.  */
   if (!access ("/usr/local/bin/gpg2", X_OK))
     gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, 
@@ -375,7 +378,7 @@ main (int argc, char *argv[])
 
   /* Start the keyring editor by default.  */
   if (!args.start_keyring_editor && !args.start_file_manager
-      && !args.start_clipboard)
+      && !args.start_clipboard && !args.start_settings)
     args.start_keyring_editor = TRUE;
 
   /* Note: We can not use GPGME's engine info, as that returns NULL
@@ -420,7 +423,7 @@ main (int argc, char *argv[])
   else
     {
       /* Don't open the keyring editor if any files are given on the
-         command line.  Dito for the clipboard.   */
+         command line.  Ditto for the clipboard.   */
       if (args.start_keyring_editor && (optind >= argc))
 	gpa_open_keyring_editor (NULL, NULL);
 
@@ -429,6 +432,9 @@ main (int argc, char *argv[])
   
       if (args.start_file_manager || (optind < argc))
 	gpa_open_filemanager (NULL, NULL);
+
+      if (args.start_settings)
+	gpa_open_settings_dialog (NULL, NULL);
 
       /* If there are any command line arguments that are not options,
 	 try to open them as files in the filemanager */
@@ -442,3 +448,4 @@ main (int argc, char *argv[])
 
   return 0;
 }
+

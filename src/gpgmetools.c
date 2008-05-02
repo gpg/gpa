@@ -699,11 +699,14 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
   
   dialog = gtk_dialog_new_with_buttons (_("Enter Passphrase"),
 					NULL, GTK_DIALOG_MODAL,
-					GTK_STOCK_OK,
-					GTK_RESPONSE_OK,
-                                        _("_Cancel"),
-					GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OK, GTK_RESPONSE_OK,
 					NULL);
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_OK,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
+
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, 
 		      TRUE, FALSE, 10);

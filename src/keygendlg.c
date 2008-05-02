@@ -146,14 +146,16 @@ gpa_key_gen_run_dialog (GtkWidget *parent)
 
   GPAKeyGenAlgo algo;
 
-  windowGenerate = gtk_dialog_new_with_buttons (_("Generate key"),
-                                                GTK_WINDOW (parent),
-                                                GTK_DIALOG_MODAL,
-                                                GTK_STOCK_OK,
-                                                GTK_RESPONSE_OK,
-                                                _("_Cancel"),
-                                                GTK_RESPONSE_CANCEL,
-                                                NULL);
+  windowGenerate = gtk_dialog_new_with_buttons
+    (_("Generate key"), GTK_WINDOW (parent),
+     GTK_DIALOG_MODAL,
+     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+     GTK_STOCK_OK, GTK_RESPONSE_OK,
+     NULL);
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (windowGenerate),
+                                           GTK_RESPONSE_OK,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
   gtk_dialog_set_default_response (GTK_DIALOG (windowGenerate),
                                    GTK_RESPONSE_OK);
   dialog.window = windowGenerate;

@@ -61,5 +61,8 @@ GType settings_dlg_get_type (void) G_GNUC_CONST;
 /* Create and show the settings dialog.  */
 void settings_dlg_new (GtkWidget *parent);
 
+/* Tell whether the settings dialog is open.  */
+gboolean settings_is_open (void);
+
 
 #endif /*SETTINGSDLG_H*/
