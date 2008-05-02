@@ -421,6 +421,39 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamSignOperation *op)
 {
   gtk_widget_hide (GPA_STREAM_OPERATION (op)->progress_dialog);
 
+  if (! err)
+    {
+      gpgme_protocol_t protocol;
+      gpgme_sign_result_t res;
+      gpgme_new_signature_t sig;
+
+      protocol = gpgme_get_protocol (GPA_OPERATION (op)->context->ctx);
+
+      res = gpgme_op_sign_result (GPA_OPERATION (op)->context->ctx);
+      if (res)
+	{
+	  sig = res->signatures;
+	  while (sig)
+	    {
+	      char *str;
+	      char *algo_name;
+	      
+	      str = g_strdup_printf
+		("%s%s", (protocol == GPGME_PROTOCOL_OpenPGP) ? "pgp-" : "",
+		 gpgme_hash_algo_name (sig->hash_algo));
+	      algo_name = g_ascii_strdown (str, -1);
+	      g_free (str);
+
+	      /* FIXME: Error handling.  */
+	      err = gpa_operation_write_status (GPA_OPERATION (op), "MICALG",
+						algo_name, NULL);
+
+	      g_free (algo_name);
+	      sig = sig->next;
+	    }
+	}
+    }
+
   g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
