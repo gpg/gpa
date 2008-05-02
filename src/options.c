@@ -1,22 +1,21 @@
 /* options.h - global option declarations.
    Copyright (C) 2002 Miguel Coca.
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2008 g10 Code GmbH.
 
-   This file is part of GPA.
+   This file is part of GPA
   
-   GPA is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
-
-   GPA is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
+  
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+  
    You should have received a copy of the GNU General Public License
-   along with GPA; if not, write to the Free Software Foundation,
-   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
+   along with this program; if not, see <http://www.gnu.org/licenses/>. */
 
 #include <config.h>
 
@@ -47,6 +46,7 @@ static void gpa_options_finalize (GObject *object);
 enum
 {
   CHANGED_UI_MODE,
+  CHANGED_SHOW_ADVANCED_OPTIONS,
   CHANGED_DEFAULT_KEY,
   CHANGED_DEFAULT_KEYSERVER,
   CHANGED_BACKUP_GENERATED,
@@ -85,6 +85,22 @@ gpa_options_get_type (void)
   return style_type;
 }
 
+
+static void
+make_signal (int signo, GObjectClass *object_class,
+             const char *signame, size_t func_off)
+{
+  g_assert (signo >= 0 && signo < LAST_SIGNAL);
+  signals[signo] = g_signal_new (signame,
+                                 G_TYPE_FROM_CLASS (object_class),
+                                 G_SIGNAL_RUN_FIRST,
+                                 func_off,
+                                 NULL, NULL,
+                                 g_cclosure_marshal_VOID__VOID,
+                                 G_TYPE_NONE, 0);
+}
+
+
 static void
 gpa_options_class_init (GpaOptionsClass *klass)
 {
@@ -95,55 +111,32 @@ gpa_options_class_init (GpaOptionsClass *klass)
   object_class->finalize = gpa_options_finalize;
 
   klass->changed_ui_mode = gpa_options_save_settings;
+  klass->changed_show_advanced_options = gpa_options_save_settings;
   klass->changed_default_key = gpa_options_save_settings;
   klass->changed_default_keyserver = gpa_options_save_settings;
   klass->changed_backup_generated = gpa_options_save_settings;
   klass->changed_view = gpa_options_save_settings;
 
   /* Signals */
-  signals[CHANGED_UI_MODE] =
-          g_signal_new ("changed_ui_mode",
-                        G_TYPE_FROM_CLASS (object_class),
-                        G_SIGNAL_RUN_FIRST,
-                        G_STRUCT_OFFSET (GpaOptionsClass, changed_ui_mode),
-                        NULL, NULL,
-                        g_cclosure_marshal_VOID__VOID,
-                        G_TYPE_NONE, 0);
-  signals[CHANGED_DEFAULT_KEY] =
-          g_signal_new ("changed_default_key",
-                        G_TYPE_FROM_CLASS (object_class),
-                        G_SIGNAL_RUN_FIRST,
-                        G_STRUCT_OFFSET (GpaOptionsClass, changed_default_key),
-                        NULL, NULL,
-                        g_cclosure_marshal_VOID__VOID,
-                        G_TYPE_NONE, 0);
-  signals[CHANGED_DEFAULT_KEYSERVER] =
-          g_signal_new ("changed_default_keyserver",
-                        G_TYPE_FROM_CLASS (object_class),
-                        G_SIGNAL_RUN_FIRST,
-                        G_STRUCT_OFFSET (GpaOptionsClass,
-                                         changed_default_keyserver),
-                        NULL, NULL,
-                        g_cclosure_marshal_VOID__VOID,
-                        G_TYPE_NONE, 0);
-  signals[CHANGED_VIEW] =
-          g_signal_new ("changed_view",
-                        G_TYPE_FROM_CLASS (object_class),
-                        G_SIGNAL_RUN_FIRST,
-                        G_STRUCT_OFFSET (GpaOptionsClass,
-                                         changed_view),
-                        NULL, NULL,
-                        g_cclosure_marshal_VOID__VOID,
-                        G_TYPE_NONE, 0);
-  signals[CHANGED_BACKUP_GENERATED] =
-          g_signal_new ("changed_backup_generated",
-                        G_TYPE_FROM_CLASS (object_class),
-                        G_SIGNAL_RUN_FIRST,
-                        G_STRUCT_OFFSET (GpaOptionsClass,
-                                         changed_backup_generated),
-                        NULL, NULL,
-                        g_cclosure_marshal_VOID__VOID,
-                        G_TYPE_NONE, 0);
+  make_signal (CHANGED_UI_MODE, object_class,
+               "changed_ui_mode",
+               G_STRUCT_OFFSET (GpaOptionsClass, changed_ui_mode));
+  make_signal (CHANGED_SHOW_ADVANCED_OPTIONS, object_class, 
+               "changed_show_advanced_options",
+               G_STRUCT_OFFSET (GpaOptionsClass,
+                                changed_show_advanced_options));
+  make_signal (CHANGED_DEFAULT_KEY, object_class,
+                "changed_default_key",
+                G_STRUCT_OFFSET (GpaOptionsClass, changed_default_key));
+  make_signal (CHANGED_DEFAULT_KEYSERVER, object_class,
+               "changed_default_keyserver",
+               G_STRUCT_OFFSET (GpaOptionsClass, changed_default_keyserver));
+  make_signal (CHANGED_VIEW, object_class,
+               "changed_view",
+               G_STRUCT_OFFSET (GpaOptionsClass, changed_view));
+  make_signal (CHANGED_BACKUP_GENERATED, object_class,
+               "changed_backup_generated",
+               G_STRUCT_OFFSET (GpaOptionsClass, changed_backup_generated));
 }
 
 static void
@@ -151,6 +144,7 @@ gpa_options_init (GpaOptions *options)
 {
   options->options_file = NULL;
   options->simplified_ui = TRUE;
+  options->show_advanced_options = FALSE;
   options->backup_generated = FALSE;
   options->default_key = NULL;
   options->default_key_fpr = NULL;
@@ -230,6 +224,20 @@ gboolean
 gpa_options_get_simplified_ui (GpaOptions *options)
 {
   return options->simplified_ui;
+}
+
+/* Set whether the preference dialog shows the advanced options. */
+void
+gpa_options_set_show_advanced_options (GpaOptions *options, gboolean value)
+{
+  options->show_advanced_options = value;
+  g_signal_emit (options, signals[CHANGED_SHOW_ADVANCED_OPTIONS], 0);
+}
+
+gboolean
+gpa_options_get_show_advanced_options (GpaOptions *options)
+{
+  return options->show_advanced_options;
 }
 
 /* Choose the default key */
@@ -418,6 +426,10 @@ gpa_options_save_settings (GpaOptions *options)
         {
           fprintf (options_file, "%s\n", "advanced-ui");
         }
+      if (options->show_advanced_options)
+        {
+          fprintf (options_file, "%s\n", "show-advanced-options");
+        }
       if (options->detailed_view)
         {
           fprintf (options_file, "%s\n", "detailed-view");
@@ -511,6 +523,10 @@ gpa_options_read_settings (GpaOptions *options)
               else if (g_str_equal (next_word, "advanced-ui"))
                 {
                   options->simplified_ui = FALSE;
+                }
+              else if (g_str_equal (next_word, "show-advanced-options"))
+                {
+                  options->show_advanced_options = TRUE;
                 }
               else if (g_str_equal (next_word, "detailed-view"))
                 {

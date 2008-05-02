@@ -42,6 +42,7 @@ struct _GpaOptions {
   gchar *options_file;
 
   gboolean simplified_ui;
+  gboolean show_advanced_options;
   gboolean backup_generated;
 
   gpgme_key_t default_key;
@@ -56,6 +57,7 @@ struct _GpaOptionsClass {
 
   /* Signal handlers */
   void (*changed_ui_mode) (GpaOptions *options);
+  void (*changed_show_advanced_options) (GpaOptions *options);
   void (*changed_default_key) (GpaOptions *options);
   void (*changed_default_keyserver) (GpaOptions *options);
   void (*changed_backup_generated) (GpaOptions *options);
@@ -78,6 +80,11 @@ const gchar *gpa_options_get_file (GpaOptions *options);
 /* Set whether the ui should be in simplified mode */
 void gpa_options_set_simplified_ui (GpaOptions *options, gboolean value);
 gboolean gpa_options_get_simplified_ui (GpaOptions *options);
+
+/* Set whether the preference dialog shows the advanced options. */
+void gpa_options_set_show_advanced_options (GpaOptions *options,
+                                            gboolean value);
+gboolean gpa_options_get_show_advanced_options (GpaOptions *options);
 
 /* Choose the default key */
 void gpa_options_set_default_key (GpaOptions *options, gpgme_key_t key);

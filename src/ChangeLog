@@ -1,7 +1,55 @@
+2008-05-02  Werner Koch  <wk@g10code.com>
+
+	* settingsdlg.c, settingsdlg.h: Start a rewrite.
+	* gpa.c (gpa_open_settings_dialog): Adjust for the rewrite.
+	(settings_dialog): Remove.
+	* utils.c (inet_aton) [W32]: Add replacement function.
+
+	* confdialog.c (create_dialog): Change button order and define an
+	alternative button order.
+	* encryptdlg.c (gpa_file_encrypt_dialog_constructor): Ditto.
+	* selectkeydlg.c (select_key_dlg_constructor): Ditto.
+	* recipientdlg.c (recipient_dlg_constructor): Ditto.
+	* passwddlg.c (gpa_change_passphrase_dialog_run): Ditto.
+	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Ditto.
+	* keygendlg.c (gpa_key_gen_run_dialog): Ditto.
+	* gpgmetools.c (gpa_passphrase_cb): Ditto.
+	* gparecvkeydlg.c (gpa_receive_key_dialog_init): Ditto.
+	* filesigndlg.c (gpa_file_sign_dialog_constructor): Ditto.
+
 2008-05-02  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpaoperation.c (gpa_operation_write_status): Fix signal emittance.
 	(gpa_operation_class_init): Fix signature of signal STATUS.
+
+2008-04-30  Werner Koch  <wk@g10code.com>
+
+	* gpa.c (main): Try to use gpg2.
+
+2008-04-29  Werner Koch  <wk@g10code.com>
+
+	* strlist.c, strlist.h: New.  Taken from gnupg/jnlib and modified
+	for use in gpa.
+	* gpg-stuff.c, gpg-stuff.h: New. Code taken from GnuPG.
+	
+	* confdialog.c (gpa_store_configured_keyserver): Factor code out
+	to ..
+	(gpa_store_gpgconf_string): .. new.
+	(gpa_load_configured_keyserver): Factor code out to ..
+	(gpa_load_gpgconf_string): .. new.
+
+	* options.c (CHANGED_SHOW_ADVANCED_OPTION): New.
+	(gpa_options_class_init): Create new signal
+	(gpa_options_set_simplified_ui): New. 
+	(gpa_options_get_simplified_ui): New.
+	(gpa_options_save_settings, gpa_options_read_settings): Store/Load
+	new option.
+	* settingsdlg.c (ui_mode_changed_for_keyserver): Rename to ..
+	(show_advanced_option_changed_for_keyserver): .. this. 
+	(user_interface_mode_frame): Add checkbox "show advanced options".
+
+	* options (gpa_options_class_init): Factor common code out to ..
+	(make_signal): .. new.
 
 2008-04-28  Werner Koch  <wk@g10code.com>
 

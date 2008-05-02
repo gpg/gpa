@@ -1327,14 +1327,18 @@ create_dialog (void)
 					NULL /* transient parent */,
 					0,
 					NULL);
-  gtk_dialog_add_button (GTK_DIALOG (dialog),
-			 GTK_STOCK_OK, GTK_RESPONSE_ACCEPT); 
-  gtk_dialog_add_button (GTK_DIALOG (dialog),
-			 GTK_STOCK_APPLY, GTK_RESPONSE_APPLY);
-  gtk_dialog_add_button (GTK_DIALOG (dialog),
- 			 _("Reset"), CUSTOM_RESPONSE_RESET);
-  gtk_dialog_add_button (GTK_DIALOG (dialog),
-			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
+                          _("Reset"), CUSTOM_RESPONSE_RESET,
+                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                          GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+                          NULL );
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_ACCEPT,
+                                           GTK_RESPONSE_CANCEL,
+                                           CUSTOM_RESPONSE_RESET,
+                                           GTK_RESPONSE_APPLY,
+                                           -1);
 
   g_signal_connect ((gpointer) dialog, "response",
 		    G_CALLBACK (dialog_response), NULL);
@@ -1411,10 +1415,11 @@ hide_backend_config (void)
 
 
 
-/* Read the configured keyserver from the backend.  If none is
-   configured, return NULL.  Caller must g_free the returned value.  */
+/* Load the value of option NAME of component CNAME from the backend.
+   If none is configured, return NULL.  Caller must g_free the
+   returned value.  */
 char *
-gpa_load_configured_keyserver (void)
+gpa_load_gpgconf_string (const char *cname, const char *name)
 {
   gpg_error_t err;
   gpgme_ctx_t ctx;
@@ -1439,11 +1444,11 @@ gpa_load_configured_keyserver (void)
       
   for (conf = conf_list; conf; conf = conf->next)
     {
-      if ( !strcmp (conf->name, "gpg") )
+      if ( !strcmp (conf->name, cname) )
         {
           for (opt = conf->options; opt; opt = opt->next)
             if ( !(opt->flags & GPGME_CONF_GROUP)
-                 && !strcmp (opt->name, "keyserver"))
+                 && !strcmp (opt->name, name))
               {
                 if (opt->value && opt->alt_type == GPGME_CONF_STRING)
                   retval = g_strdup (opt->value->value.string);
@@ -1459,10 +1464,11 @@ gpa_load_configured_keyserver (void)
 }
 
 
-/* Save the configured keyserver from the backend.  If none is
-   configured, return NULL.  Caller must g_free the returned value.  */
+/* Set the option NAME in component "CNAME" to VALUE.  The option
+   needs to be of type string. */
 void
-gpa_store_configured_keyserver (const char *value)
+gpa_store_gpgconf_string (const char *cname, 
+                          const char *name, const char *value)
 {
   gpg_error_t err;
   gpgme_ctx_t ctx;
@@ -1492,14 +1498,13 @@ gpa_store_configured_keyserver (const char *value)
       return;
     }
 
-      
   for (conf = conf_list; conf; conf = conf->next)
     {
-      if ( !strcmp (conf->name, "gpg") )
+      if ( !strcmp (conf->name, cname) )
         {
           for (opt = conf->options; opt; opt = opt->next)
             if ( !(opt->flags & GPGME_CONF_GROUP)
-                 && !strcmp (opt->name, "keyserver"))
+                 && !strcmp (opt->name, name))
               {
                 if (opt->alt_type == GPGME_CONF_STRING
                     && !args_are_equal (arg, opt->value, opt->alt_type))
@@ -1524,3 +1529,19 @@ gpa_store_configured_keyserver (const char *value)
   gpgme_release (ctx);
 }
 
+
+/* Read the configured keyserver from the backend.  If none is
+   configured, return NULL.  Caller must g_free the returned value.  */
+char *
+gpa_load_configured_keyserver (void)
+{
+  return gpa_load_gpgconf_string ("gpg", "keyserver");
+}
+
+/* Save the configured keyserver from the backend.  If none is
+   configured, return NULL.  Caller must g_free the returned value.  */
+void
+gpa_store_configured_keyserver (const char *value)
+{
+  gpa_store_gpgconf_string ("gpg", "keyserver", value);
+}

@@ -1,5 +1,4 @@
 /* settingsdlg.c - The GNU Privacy Assistant
-   Copyright (C) 2002, Miguel Coca
    Copyright (C) 2008 g10 Code GmbH.
 
    This file is part of GPA.
@@ -20,8 +19,47 @@
 #ifndef SETTINGSDLG_H
 #define SETTINGSDLG_H
 
-/* Create a new settings dialog and return it.  The dialog is shown
-   but not run.  */
-GtkWidget *gpa_settings_dialog_new (void);
 
-#endif
+/* Definitions to define the object.  */
+#define SETTINGS_DLG_TYPE \
+          (settings_dlg_get_type ())
+
+#define SETTINGS_DLG(obj) \
+          (G_TYPE_CHECK_INSTANCE_CAST \
+            ((obj), SETTINGS_DLG_TYPE,\
+              SettingsDlg))
+
+#define SETTINGS_DLG_CLASS(klass) \
+          (G_TYPE_CHECK_CLASS_CAST \
+            ((klass), SETTINGS_DLG_TYPE, \
+              SettingsDlgClass))
+
+#define IS_SETTINGS_DLG(obj) \
+          (G_TYPE_CHECK_INSTANCE_TYPE \
+            ((obj), SETTINGS_DLG_TYPE))
+
+#define IS_SETTINGS_DLG_CLASS(klass) \
+          (G_TYPE_CHECK_CLASS_TYPE \
+            ((klass), SETTINGS_DLG_TYPE))
+
+#define SETTINGS_DLG_GET_CLASS(obj) \
+          (G_TYPE_INSTANCE_GET_CLASS \
+            ((obj), SETTINGS_DLG_TYPE, \
+              SettingsDlgClass))
+
+typedef struct _SettingsDlg SettingsDlg;
+typedef struct _SettingsDlgClass SettingsDlgClass;
+
+
+GType settings_dlg_get_type (void) G_GNUC_CONST;
+
+
+/************************************
+ ************ Public API ************
+ ************************************/
+
+/* Create and show the settings dialog.  */
+void settings_dlg_new (GtkWidget *parent);
+
+
+#endif /*SETTINGSDLG_H*/

@@ -1,0 +1,32 @@
+                                                               -*- org -*-
+
+This file documents the use of Glib signals in GPA.
+
+** changed_ui_mode
+   Emitted if the preference setting is changed from simple to advanced
+   user interface mode and vice versa.
+*** Defined: 
+    file:options.c
+*** Connected:
+    file:keyring.c::keyring_ui_mode_changed 
+*** Emitted: 
+    file:options.c::gpa_options_set_simplified_ui
+
+** changed_show_advanced_option
+   Emitted if the preference setting for "show advanced options" is changed.
+   user interface mode and vice versa.
+*** Defined: 
+    file:options.c
+*** Connected:
+*** Emitted: 
+    file:options.c::gpa_options_set_show_advanced_options
+
+
+** changed_default_key
+
+** changed_default_keyserver
+
+** changed_view
+
+** changed_backup_generated
+

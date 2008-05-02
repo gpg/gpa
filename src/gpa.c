@@ -77,7 +77,6 @@ static const char *copyright =
 
 
 static GtkWidget *keyringeditor = NULL;
-static GtkWidget *settings_dialog = NULL;
 static GtkWidget *backend_config_dialog = NULL;
 
 
@@ -223,14 +222,7 @@ gpa_open_filemanager (GtkAction *action, void *data)
 void
 gpa_open_settings_dialog (GtkAction *action, void *data)
 {
-  if (! settings_dialog)
-    {
-      settings_dialog = gpa_settings_dialog_new ();
-      g_signal_connect (G_OBJECT (settings_dialog), "destroy",
-			G_CALLBACK (close_main_window), &settings_dialog);
-      gtk_widget_show_all (settings_dialog);
-    }
-  gtk_window_present (GTK_WINDOW (settings_dialog));
+  settings_dlg_new (data);
 }
 
 
@@ -365,6 +357,15 @@ main (int argc, char *argv[])
     sigaction (SIGPIPE, &sa, NULL);
   }
 #endif
+
+  /* Prefer gpg2 over gpg1.  Fixme: We need to test where gpg2 is
+     actually properly installed.  */
+  if (!access ("/usr/local/bin/gpg2", X_OK))
+    gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, 
+                           "/usr/local/bin/gpg2", NULL);
+  else if (!access ("/usr/bin/gpg2", X_OK))
+    gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, 
+                           "/usr/bin/gpg2", NULL);
 
 
   /* Handle command line options.  */

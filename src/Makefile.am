@@ -117,7 +117,10 @@ gpa_SOURCES = get-path.h get-path.c \
 	      options.c \
 	      confdialog.h confdialog.c \
 	      gpa-marshal.c gpa-marshal.h \
+	      strlist.h strlist.c \
+	      gpg-stuff.h gpg-stuff.c \
 	      utils.c $(gpa_w32_sources)
+
 
 
 dndtest_SOURCES = dndtest.c

@@ -1,5 +1,5 @@
-/* utilis.c -  Utility functions for GPA.
- * Copyright (C) 2007 g10 Code GmbH
+/* utils.c -  Utility functions for GPA.
+ * Copyright (C) 2008 g10 Code GmbH
  *
  * This file is part of GPA
  *
@@ -25,6 +25,9 @@
 #include <string.h>
 #include <errno.h>
 #include <glib.h>
+#ifdef HAVE_W32_SYSTEM
+# include <windows.h>
+#endif /*HAVE_W32_SYSTEM*/
 
 #include "gpa.h"
 
@@ -102,3 +105,28 @@ translate_sys2libc_fd (assuan_fd_t fd, int for_write)
   return fd;
 #endif
 }
+
+
+#ifdef HAVE_W32_SYSTEM
+int 
+inet_aton (const char *cp, struct in_addr *inp)
+{
+  if (!cp || !*cp || !inp)
+    {
+      errno = EINVAL;
+      return 0; 
+    }
+  
+  if (!strcmp(cp, "255.255.255.255"))
+    {
+      /*  Although this is a valid address, the old inet_addr function
+          is not able to handle it.  */
+        inp->s_addr = INADDR_NONE;
+        return 1;
+    }
+  
+  inp->s_addr = inet_addr (cp);
+  return (inp->s_addr != INADDR_NONE);
+}
+#endif /*HAVE_W32_SYSTEM*/
+

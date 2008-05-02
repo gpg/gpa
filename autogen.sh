@@ -85,6 +85,7 @@ if test "$1" = "--build-w32"; then
 	    --with-gpgme-prefix=${w32root} \
             --with-lib-prefix=${w32root} \
             --with-libiconv-prefix=${w32root} \
+            PKG_CONFIG="$w32root/bin/pkg-config" \
             PKG_CONFIG_LIBDIR="$w32root/lib/pkgconfig" "$@"
     rc=$?
     exit $rc
