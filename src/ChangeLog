@@ -1,3 +1,8 @@
+2008-05-06  Marcus Brinkmann  <marcus@g10code.de>
+
+	* filesigndlg.c (gpa_file_sign_dialog_constructor): Fix
+	suppression of cleartext and armor options in simplified UI mode.
+
 2008-05-02  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpastreamsignop.c (done_cb): Print MICALG status message for

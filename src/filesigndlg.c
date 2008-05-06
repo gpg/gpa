@@ -1,34 +1,39 @@
 /* filesigndlg.c  -  The GNU Privacy Assistant
- * Copyright (C) 2000, 2001 G-N-U GmbH.
- * Copyright (C) 2008 g10 Code GmbH.
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
+   Copyright (C) 2000, 2001 G-N-U GmbH.
+   Copyright (C) 2008 g10 Code GmbH.
+  
+   This file is part of GPA.
 
-#include <config.h>
-#include <gdk/gdkkeysyms.h>
-#include <gtk/gtk.h>
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #include <string.h>
 #include <errno.h>
+
+#include <gdk/gdkkeysyms.h>
+#include <gtk/gtk.h>
+
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
-#include "filesigndlg.h"
 #include "gpakeyselector.h"
+
+#include "filesigndlg.h"
+
 
 /* Properties */
 enum
@@ -150,19 +155,22 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_container_set_border_width (GTK_CONTAINER (vboxMode), 5);
   gtk_container_add (GTK_CONTAINER (frameMode), vboxMode);
 
-  radio_sign_comp = gtk_radio_button_new_with_mnemonic (NULL, _("si_gn and compress"));
+  radio_sign_comp = gtk_radio_button_new_with_mnemonic
+    (NULL, _("Si_gn and compress"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_comp, FALSE, FALSE, 0);
+
+  gtk_widget_set_no_show_all (radio_sign_comp, TRUE);
   dialog->radio_comp = radio_sign_comp;
 
   radio_sign =
     gtk_radio_button_new_with_mnemonic_from_widget
-    (GTK_RADIO_BUTTON (radio_sign_comp), _("_cleartext signature"));
+    (GTK_RADIO_BUTTON (radio_sign_comp), _("_Cleartext signature"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
   dialog->radio_sign = radio_sign;
 
   radio_sign_sep =
     gtk_radio_button_new_with_mnemonic_from_widget
-    (GTK_RADIO_BUTTON (radio_sign_comp), _("_detached signature"));
+    (GTK_RADIO_BUTTON (radio_sign_comp), _("_Detached signature"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
   dialog->radio_sep = radio_sign_sep;
 
@@ -189,6 +197,7 @@ gpa_file_sign_dialog_constructor (GType type,
   checkerArmor = gtk_check_button_new_with_mnemonic (_("A_rmor"));
   gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);
   gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
+  gtk_widget_set_no_show_all (checkerArmor, TRUE);
   dialog->check_armor = checkerArmor;
   if (dialog->force_armor)
     {
@@ -197,7 +206,6 @@ gpa_file_sign_dialog_constructor (GType type,
       gtk_widget_set_sensitive (dialog->check_armor, FALSE);
     }
 
-  /* FIXME: Doesn't even work, as caller uses gtk_widget_show_all.  */
   if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
       gtk_widget_hide (dialog->radio_comp);
