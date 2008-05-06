@@ -182,15 +182,15 @@ gpa_key_delete_operation_next (GpaKeyDeleteOperation *op)
 {
   gpg_error_t err;
 
-  if (! GPA_KEY_OPERATION (op)->current)
-    g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
-
-  err = gpa_key_delete_operation_start (op);
-  if (err)
+  if (GPA_KEY_OPERATION (op)->current)
     {
-      g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
+      err = gpa_key_delete_operation_start (op);
+      if (! err)
+	return;
     }
+
+  g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
 static void gpa_key_delete_operation_done_error_cb (GpaContext *context, 

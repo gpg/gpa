@@ -186,18 +186,18 @@ gpa_key_trust_operation_idle_cb (gpointer data)
 static void
 gpa_key_trust_operation_next (GpaKeyTrustOperation *op)
 {
-  gpg_error_t err;
+  gpg_error_t err = 0;
 
-  if (! GPA_KEY_OPERATION (op)->current)
-    g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
+  if (GPA_KEY_OPERATION (op)->current)
+    {
+      err = gpa_key_trust_operation_start (op);
+      if (! err)
+	return;
+    }
 
-  err = gpa_key_trust_operation_start (op);
-  if (err)
-   {
-     if (op->modified_keys > 0)
-       g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
-     g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
-   }
+  if (op->modified_keys > 0)
+    g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
 

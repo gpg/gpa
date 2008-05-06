@@ -1,3 +1,11 @@
+2008-05-06  Marcus Brinkmann  <marcus@ulysses.g10code.com>
+
+	* gpakeydeleteop.c (gpa_key_delete_operation_next), gpakeysignop.c
+	(gpa_key_sign_operation_next), gpakeypasswdop.c
+	(gpa_key_passwd_operation_next), gpakeyexpireop.c
+	(gpa_key_expire_operation_next), gpakeytrustop.c
+	(gpa_key_trust_operation_next): Fix last change.
+
 2008-05-06  Marcus Brinkmann  <marcus@g10code.de>
 
 	* filesigndlg.c (gpa_file_sign_dialog_constructor): Fix

@@ -205,18 +205,18 @@ gpa_key_sign_operation_idle_cb (gpointer data)
 static void
 gpa_key_sign_operation_next (GpaKeySignOperation *op)
 {
-  gpg_error_t err;
+  gpg_error_t err = 0;
 
-  if (! GPA_KEY_OPERATION (op)->current)
-    g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
-
-  err = gpa_key_sign_operation_start (op);
-  if (err)
+  if (GPA_KEY_OPERATION (op)->current)
     {
-      if (op->signed_keys > 0)
-	g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
+      err = gpa_key_sign_operation_start (op);
+      if (! err)
+	return;
     }
+
+  if (op->signed_keys > 0)
+    g_signal_emit_by_name (GPA_OPERATION (op), "changed_wot");
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
 
