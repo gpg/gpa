@@ -57,6 +57,8 @@
 struct _SettingsDlg 
 {
   GtkDialog parent;
+
+  gboolean modified;  /* True is tehre are unsaved changes.  */
   
   /* Data for the user interface frame.  */
   struct {
@@ -65,18 +67,32 @@ struct _SettingsDlg
     GtkToggleButton *show_advanced_options;
   } ui;
 
+  /* Data for the default key frame.  */
+  struct {
+    GtkWidget *frame;
+    GpaKeySelector *list;
+
+    gpgme_key_t key;  /* The selected key or NULL if none selected.  */
+  } default_key;
+
   /* Data for the keyserver frame.  */
   struct {
     GtkWidget *frame;
-    GtkWidget *combo;
+    GtkComboBox *combo;
+    char *url;         /* Malloced URL or NULL if none selected. */
   } keyserver;
 
   /* Data for the auto-key-locate frame.  */
   struct {
     GtkWidget *frame;
+    GtkComboBox *methods;
     GtkWidget *addr_hbox;
     GtkEntry  *addr_entry;
-    GtkComboBox *methods;
+
+    int require_addr; /* A valid addr is required.  */
+
+    int method_idx;   /* Selected method's index into the akl_table. */
+    char *ip_addr;    /* Malloced server address or NULL.  */
   } akl;
 
 };
@@ -123,6 +139,10 @@ static struct {
   { "nD",  N_("kDNS")},
   { NULL,  N_("Custom")},
 };
+
+
+
+static void update_modified (SettingsDlg *dialog, int is_modified);
 
 
 
@@ -210,19 +230,62 @@ user_interface_mode_frame (SettingsDlg *dialog)
 /* 
    Default key section. 
  */
-#if 0
 static void
-key_selected_cb (GtkTreeSelection *treeselection, gpointer user_data)
+key_selected_cb (SettingsDlg *dialog)
 {
-  GpaKeySelector *sel = user_data;
   GList *selected;
   
-  selected = gpa_key_selector_get_selected_keys (sel);
-  gpa_options_set_default_key (gpa_options_get_instance (),
-			       (gpgme_key_t) selected->data);
+  selected = gpa_key_selector_get_selected_keys (dialog->default_key.list);
+  gpgme_key_unref (dialog->default_key.key);
+  dialog->default_key.key = selected? selected->data : NULL;
+  if (dialog->default_key.key)
+    gpgme_key_ref (dialog->default_key.key);
+
   g_list_free (selected);
+  update_modified (dialog, 1);
 }
-#endif /*0*/
+
+/* Returns NULL is the default key is valid.  On error the erroneous
+   widget is returned.  */
+static GtkWidget *
+check_default_key (SettingsDlg *dialog)
+{
+  /* Make sure we have all required data.  */
+  key_selected_cb (dialog);
+
+  /* We require that a default key has been selected.  If not, we ask
+     the user whether to continue. */
+  if (!dialog->default_key.key)
+    {
+      GtkWidget *msg;
+      int resp;
+
+      msg = gtk_message_dialog_new (GTK_WINDOW(dialog),
+                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    GTK_MESSAGE_QUESTION,
+                                    GTK_BUTTONS_NONE, 
+                                    "%s",
+            _("No default key has been selected.  This may lead to problems "
+              "when signing or encrypting.  For example you might later not "
+              "be able to read a mail written by you and encrypted to "
+              "someone else.\n\n"
+              "Please consider creating your own key and select it then."));
+      gtk_dialog_add_buttons (GTK_DIALOG (msg),
+                              _("Continue without a default key"),
+                              GTK_RESPONSE_YES,
+                              _("Let me select a default key"),
+                              GTK_RESPONSE_NO,
+                              NULL);
+      gtk_dialog_set_default_response (GTK_DIALOG (msg), GTK_RESPONSE_NO);
+      resp = gtk_dialog_run (GTK_DIALOG (msg));
+      gtk_widget_destroy (msg);                       
+      if (resp != GTK_RESPONSE_YES)
+        return GTK_WIDGET (dialog->default_key.list);
+    }
+
+  return NULL;
+}
+
 
 static GtkWidget *
 default_key_frame (SettingsDlg *dialog)
@@ -240,6 +303,7 @@ default_key_frame (SettingsDlg *dialog)
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 
   list = gpa_key_selector_new (TRUE);
+  dialog->default_key.list = GPA_KEY_SELECTOR (list);
   gtk_tree_selection_set_mode (gtk_tree_view_get_selection 
 			       (GTK_TREE_VIEW (list)), GTK_SELECTION_SINGLE);
   scroller = gtk_scrolled_window_new (NULL, NULL);
@@ -255,10 +319,11 @@ default_key_frame (SettingsDlg *dialog)
   gtk_container_add (GTK_CONTAINER (frame), scroller);
 
   /* Connect signals.  */
-  /* Currently not used. */
-/*   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection */
-/* 			      (GTK_TREE_VIEW (list))), */
-/* 		    "changed", G_CALLBACK (key_selected_cb), list); */
+  g_signal_connect_swapped (G_OBJECT (gtk_tree_view_get_selection
+                                      (GTK_TREE_VIEW (list))),
+                            "changed", G_CALLBACK (key_selected_cb), dialog);
+
+  dialog->default_key.frame = frame;
 
   return frame;
 }
@@ -269,17 +334,47 @@ default_key_frame (SettingsDlg *dialog)
    Default keyserver section.
 */
 static void
-keyserver_selected_from_list_cb (GtkComboBox *combo, gpointer user_data)
+keyserver_selected_from_list_cb (SettingsDlg *dialog)
 {
-  /* Consider the text entry activated.  */
-  if (gtk_combo_box_get_active (combo) != -1)
-    {
-      /* FIXME: Update only on apply.  */
-      char *text = gtk_combo_box_get_active_text (combo);
-      if (text && *text)
-        gpa_options_set_default_keyserver (gpa_options_get_instance (), text);
-    }
+  char *text;
+
+  text = gtk_combo_box_get_active_text (dialog->keyserver.combo);
+  g_message ("got `%s'", text);
+  xfree (dialog->keyserver.url);
+  dialog->keyserver.url = (text && *text)? text : NULL;
+  update_modified (dialog, 1);
 }
+
+
+/* Return NULL if the default keyserver is valid.  */
+static GtkWidget *
+check_default_keyserver (SettingsDlg *dialog)
+{
+  keyserver_spec_t kspec;
+
+  keyserver_selected_from_list_cb (dialog);
+
+  if (!dialog->keyserver.url)
+    return NULL; /* No keyserver is just fine.  */
+
+  kspec = parse_keyserver_uri (dialog->keyserver.url, 0, NULL, 0);
+  if (!kspec)
+    return GTK_WIDGET (dialog->keyserver.combo);
+  if (!kspec->host
+      || (kspec->scheme && !(!strcmp (kspec->scheme, "hkp")
+                             || !strcmp (kspec->scheme, "http")
+                             || !strcmp (kspec->scheme, "ldap")
+                             || !strcmp (kspec->scheme, "finger")
+                             || !strcmp (kspec->scheme, "mailto"))))
+    {
+      free_keyserver_spec (kspec);
+      return GTK_WIDGET (dialog->keyserver.combo);
+    }
+
+  free_keyserver_spec (kspec);
+  return NULL;
+}
+
 
 
 static void
@@ -314,12 +409,14 @@ default_keyserver_frame (SettingsDlg *dialog)
   servers = keyserver_get_as_glist ();
   g_list_foreach (servers, append_to_combo, combo);
   g_list_free (servers);
-  dialog->keyserver.combo = combo;
+  dialog->keyserver.combo = GTK_COMBO_BOX (combo);
 
-  g_signal_connect (G_OBJECT (combo),
-		    "changed",
-                    G_CALLBACK (keyserver_selected_from_list_cb), NULL);
+  g_signal_connect_swapped (G_OBJECT (combo),
+                            "changed",
+                            G_CALLBACK (keyserver_selected_from_list_cb),
+                            dialog);
 
+  dialog->keyserver.frame = frame;
 
   return frame;
 }
@@ -330,43 +427,66 @@ default_keyserver_frame (SettingsDlg *dialog)
  */
 
 static void
-akl_method_changed_cb (GtkComboBox *combo, gpointer user_data)
+akl_method_changed_cb (SettingsDlg *dialog)
 {
-  SettingsDlg *dialog = user_data;
   int idx;
 
+  dialog->akl.require_addr = 0;
   idx = gtk_combo_box_get_active (dialog->akl.methods);
   if (idx < 0 || idx > DIM(akl_table))
-    return;
+    {
+      dialog->akl.method_idx = -1;
+      return;
+    }
+  dialog->akl.method_idx = idx;
 
-  /* Enable the address entry if needed.  */
-  gtk_widget_set_sensitive (dialog->akl.addr_hbox,
-                            (akl_table[idx].list
-                             && strchr (akl_table[idx].list, 'D')) );
+  if (akl_table[idx].list && strchr (akl_table[idx].list, 'D'))
+    dialog->akl.require_addr = 1;
+
+  update_modified (dialog, 1);
 }
 
 static void
-akl_addr_changed_cb (GtkEntry *entry, gpointer user_data)
+akl_addr_changed_cb (SettingsDlg *dialog)
 {
-  SettingsDlg *dialog = user_data;
   const char *addr;
   struct in_addr binaddr;
+
+  xfree (dialog->akl.ip_addr );
+  dialog->akl.ip_addr = NULL;
 
   if (!GTK_WIDGET_IS_SENSITIVE (dialog->akl.addr_entry))
     return;
   
   addr = gtk_entry_get_text (dialog->akl.addr_entry);
-  g_message ("IP-address is '%s'", addr? addr : "[none]");
   if (!addr || !*addr || !inet_aton (addr, &binaddr) )
     {
-      gpa_window_error ("You need to enter a valid IPv4 address.",
-                        GTK_WIDGET (dialog));
+      g_message ("IP-address is '%s' is NOT valid", addr? addr:"[none]");
       return;
     }
 
+  dialog->akl.ip_addr = xstrdup (addr);
   g_message ("IP-address is '%s' is valid", addr);
-  /* Fixme: Contruct the new --auto-key-locate option.  */
 
+  update_modified (dialog, 1);
+}
+
+
+/* Returns NULL is the AKL data is valid.  On error the erroneous
+   widget is returned.  */
+static GtkWidget *
+check_akl (SettingsDlg *dialog)
+{
+  /* Make sure we have all required data.  */
+  akl_method_changed_cb (dialog);
+  akl_addr_changed_cb (dialog);
+
+  if (dialog->akl.method_idx < 0)
+    return GTK_WIDGET (dialog->akl.methods);
+  if (dialog->akl.require_addr && !dialog->akl.ip_addr)
+    return GTK_WIDGET (dialog->akl.addr_entry);
+
+  return NULL;
 }
 
 
@@ -382,11 +502,12 @@ parse_akl (SettingsDlg *dialog)
   akloption = gpa_load_gpgconf_string ("gpg", "auto-key-locate");
   if (!akloption)
     {
+      dialog->akl.require_addr = 0;
+      dialog->akl.method_idx = 0;
       /* Select the first entry ("Local").  */
       gtk_combo_box_set_active (dialog->akl.methods, 0); 
       /* Set kDNS server to empty.  */
       gtk_entry_set_text (dialog->akl.addr_entry, "");
-      gtk_widget_set_sensitive (dialog->akl.addr_hbox, FALSE);
       return;
     }
 
@@ -448,11 +569,12 @@ parse_akl (SettingsDlg *dialog)
       break;
   /* (The last entry of the table is the one used for no-match.) */
   gtk_combo_box_set_active (dialog->akl.methods, idx); 
+  dialog->akl.method_idx = idx;
   /* Enable the kdns Server entry if one is defined.  For ease of
      implementation we have already put the server address into the
      entry field even if there might be no match.  */
-  gtk_widget_set_sensitive (dialog->akl.addr_hbox, 
-                            (akl_table[idx].list && strchr (list, 'D')));
+  if (akl_table[idx].list && strchr (akl_table[idx].list, 'D'))
+    dialog->akl.require_addr = 1;
 }
 
 
@@ -532,12 +654,30 @@ auto_key_locate_frame (SettingsDlg *dialog)
   dialog->akl.addr_entry = GTK_ENTRY (entry);
   dialog->akl.methods = GTK_COMBO_BOX (combo);
 
-  g_signal_connect (G_OBJECT (combo),
-		    "changed", G_CALLBACK (akl_method_changed_cb), dialog);
-  g_signal_connect (G_OBJECT (entry),
-		    "changed", G_CALLBACK (akl_addr_changed_cb), dialog);
+  g_signal_connect_swapped (G_OBJECT (combo),
+                            "changed", 
+                            G_CALLBACK (akl_method_changed_cb), dialog);
+  g_signal_connect_swapped (G_OBJECT (entry),
+                            "changed",
+                            G_CALLBACK (akl_addr_changed_cb), dialog);
+
+  dialog->akl.frame = frame;
 
   return frame;
+}
+
+/* Update the state of the action buttons.  */
+static void
+update_modified (SettingsDlg *dialog, int is_modified)
+{
+  int newstate = !!is_modified;
+
+  dialog->modified = newstate;
+
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                     GTK_RESPONSE_APPLY, newstate);
+
+  gtk_widget_set_sensitive (dialog->akl.addr_hbox, dialog->akl.require_addr);
 }
 
 
@@ -556,7 +696,9 @@ load_settings (SettingsDlg *dialog)
      !!gpa_options_get_show_advanced_options (options));
 
   /* Default key section.  */
-  /* FIXME: use options_get_default_key to set it.  */
+  //gpa_options_get_default_key (options);
+  /* FIXME: Need to select the one from the list. */
+
 
   /* Default keyserver section.  */
   gtk_entry_set_text (GTK_ENTRY 
@@ -567,16 +709,100 @@ load_settings (SettingsDlg *dialog)
   parse_akl (dialog);
 
 
+  update_modified (dialog, 0);
 }
 
 
 /* Save all settings, return 0 on success.  */
 static int
-save_settings (GtkDialog *dialog)
+save_settings (SettingsDlg *dialog)
 {
+  GtkWidget *errwdg;
+
+  if (!dialog->modified)
+    return 0;  /* No need to save anything.  */
+
+  if ((errwdg = check_default_key (dialog)))
+    {
+      gtk_widget_grab_focus (errwdg);
+      return -1;
+    }
+
+  if ((errwdg = check_default_keyserver (dialog)))
+    {
+      gpa_window_error 
+        (_("The URL given for the keyserver is not valid."),
+         GTK_WIDGET (dialog));
+      gtk_widget_grab_focus (errwdg);
+      return -1;
+    }
+                        
+  if ((errwdg = check_akl (dialog)))
+    {
+      gpa_window_error 
+        (_("The data given for \"Auto key locate\" is not valid."),
+         GTK_WIDGET (dialog));
+      gtk_widget_grab_focus (errwdg);
+      return -1;
+    }
+                        
+  gpa_options_set_default_key (gpa_options_get_instance (),
+ 			       dialog->default_key.key);
+
+  
+  gpa_options_set_default_keyserver (gpa_options_get_instance (), 
+                                     dialog->keyserver.url);
 
 
-  return FALSE;
+  if (dialog->akl.method_idx == -1)
+    ; /* oops: none selected.  */
+  else if (!akl_table[dialog->akl.method_idx].list)
+    {
+      /* Custom setting: Do nothing.  */
+    }
+  else
+    {
+      const char *methods = akl_table[dialog->akl.method_idx].list;
+      GString *newakl;
+
+      newakl = g_string_new ("");
+      for (; *methods; methods++)
+        {
+          if (newakl->len)
+            g_string_append_c (newakl, ',');
+          switch (*methods)
+            {
+            case 'n':
+              g_string_append (newakl, "nodefault");
+              break;
+            case 'l':
+              g_string_append (newakl, "local");
+              break;
+            case 'c':
+              g_string_append (newakl, "cert");
+              break;
+            case 'L':
+              g_string_append (newakl, "ldap");
+              break;
+            case 'k':
+              g_string_append (newakl, "keyserver");
+              break;
+            case 'D':
+              g_string_append_printf (newakl, 
+                                      "kdns://%s/?at=_kdnscert&usevc=1",
+                                      dialog->akl.ip_addr ? 
+                                      dialog->akl.ip_addr : "");
+              break;
+            default:
+              if (newakl->len)
+                g_string_truncate (newakl, newakl->len - 1);
+              break;
+            }
+        }
+      gpa_store_gpgconf_string ("gpg", "auto-key-locate", newakl->str);
+      g_string_free (newakl, TRUE);
+    }
+  return 0;
 }
 
 
@@ -587,14 +813,14 @@ dialog_response (GtkDialog *dialog, gint response)
   switch (response)
     {
     case GTK_RESPONSE_OK:
-      if (save_settings (dialog))
+      if (save_settings (SETTINGS_DLG (dialog)))
         return;
       break;
 
     case GTK_RESPONSE_APPLY:
-      if (save_settings (dialog))
+      if (save_settings (SETTINGS_DLG (dialog)))
         return;
-      /* Fixme: Reload configuration.  */
+      load_settings (SETTINGS_DLG (dialog));
       return; /* Do not close.  */
 
     default:
@@ -613,6 +839,18 @@ dialog_response (GtkDialog *dialog, gint response)
 static void
 settings_dlg_finalize (GObject *object)
 {  
+  SettingsDlg *dialog = SETTINGS_DLG (object);
+
+  gpgme_key_unref (dialog->default_key.key);
+  dialog->default_key.key = NULL;
+
+  xfree (dialog->keyserver.url);
+  dialog->keyserver.url = NULL;
+  
+  xfree (dialog->akl.ip_addr);
+  dialog->akl.ip_addr = NULL;
+
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -620,6 +858,8 @@ settings_dlg_finalize (GObject *object)
 static void
 settings_dlg_init (SettingsDlg *dialog)
 {
+  dialog->akl.method_idx = -1;
+
 }
 
 
@@ -662,13 +902,11 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
   frame = default_keyserver_frame (dialog);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
                       FALSE, FALSE, 0);
-  dialog->keyserver.frame = frame;
 
   /* The auto key locate section.  */
   frame = auto_key_locate_frame (dialog);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
                       FALSE, FALSE, 0);
-  dialog->akl.frame = frame;
 
   /* Connect the response signal.  */
   g_signal_connect (GTK_OBJECT (dialog), "response", 
