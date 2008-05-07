@@ -188,5 +188,8 @@ gpgme_key_t *gpa_gpgme_copy_keyarray (gpgme_key_t *keys);
 /* Release all keys in the array KEYS as weel as ARRY itself.  */
 void gpa_gpgme_release_keyarray (gpgme_key_t *keys);
 
+/* Return true if the gpg engine has at least version NEED_VERSION.  */
+int is_gpg_version_at_least (const char *need_version);
 
-#endif
+
+#endif /*GPGMETOOLS_H*/

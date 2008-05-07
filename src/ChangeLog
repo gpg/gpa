@@ -1,3 +1,25 @@
+2008-05-07  Werner Koch  <wk@g10code.com>
+
+	* gpakeydeleteop.c (gpa_key_delete_operation_next): Init ERR.
+
+	* gpgmetools.c (parse_version_number, parse_version_string)
+	(compare_version_strings): New.  Taken from gpgme.
+	(is_gpg_version_at_least): New.
+	* settingsdlg.c (settings_dlg_constructor): Use AKL only if
+	enabled.  Disabled all akl fucntion callers if not.
+
+	* server.c (cmd_session): New command; a stub for now.
+	(cmd_encrypt, cmd_prep_encrypt, cmd_sign): Factor protocol option
+	parsing out to ..
+	(parse_protocol_option): .. new.
+	(cmd_encrypt, cmd_sign): Factor common code out to ..
+	(finish_io_streams, prepare_io_streams): .. new.
+	(translate_io_streams): New.
+	(cmd_decrypt, cont_decrypt): New.
+	(cont_verify, cmd_verify): New.
+	(close_message_fd, cmd_message): New.
+	(my_gpgme_message_read_cb): New.
+
 2008-05-06  Marcus Brinkmann  <marcus@ulysses.g10code.com>
 
 	* gpakeydeleteop.c (gpa_key_delete_operation_next), gpakeysignop.c

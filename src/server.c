@@ -67,9 +67,13 @@ struct conn_ctrl_s
   int input_fd;
   int output_fd;
 
+  /* Fiel descriptor set with the MESSAGE command.  */
+  int message_fd;
+
   /* Channels used with the gpgme callbacks.  */
   GIOChannel *input_channel;
   GIOChannel *output_channel;
+  GIOChannel *message_channel;
 
   /* List of collected recipients.  */
   GSList *recipients;
@@ -99,6 +103,11 @@ static gboolean shutdown_pending;
    libassuan but we need to store the nonce in the application.  Under
    Unix this is just a stub.  */
 static assuan_sock_nonce_t socket_nonce;
+
+
+/* Forward declarations.  */
+static void run_server_continuation (assuan_context_t ctx, gpg_error_t err);
+
 
 
 
@@ -233,6 +242,44 @@ static struct gpgme_data_cbs my_gpgme_data_cbs =
     NULL
   };
 
+static ssize_t
+my_gpgme_message_read_cb (void *opaque, void *buffer, size_t size)
+{
+  conn_ctrl_t ctrl = opaque;
+  GIOStatus  status;
+  size_t nread;
+  int retval;
+
+  status = g_io_channel_read_chars (ctrl->message_channel, buffer, size,
+                                    &nread, NULL);
+  if (status == G_IO_STATUS_AGAIN
+      || (status == G_IO_STATUS_NORMAL && !nread))
+    {
+      errno = EAGAIN;
+      retval = -1;
+    }
+  else if (status == G_IO_STATUS_NORMAL)
+    retval = (int)nread;
+  else if (status == G_IO_STATUS_EOF)
+    retval = 0;
+  else
+    {
+      errno = EIO;
+      retval = -1;
+    }
+
+  return retval;
+}
+
+static struct gpgme_data_cbs my_gpgme_message_cbs =
+  { 
+    my_gpgme_message_read_cb,
+    NULL,
+    NULL,
+    NULL
+  };
+
+
 
 /* Release the recipients stored in the connection context. */
 static void
@@ -269,10 +316,209 @@ reset_prepared_keys (conn_ctrl_t ctrl)
   ctrl->selected_protocol = GPGME_PROTOCOL_UNKNOWN;
 }
 
-
-/* Forward declaration.  */
-static void run_server_continuation (assuan_context_t ctx, gpg_error_t err);
 
+/* Helper to parse an protocol option.  */
+static gpg_error_t
+parse_protocol_option (assuan_context_t ctx, char *line, int mandatory,
+                       gpgme_protocol_t *r_protocol)
+{
+  *r_protocol = GPGME_PROTOCOL_UNKNOWN;
+  if (has_option (line, "--protocol=OpenPGP"))
+    *r_protocol = GPGME_PROTOCOL_OpenPGP;
+  else if (has_option (line, "--protocol=CMS"))
+    *r_protocol = GPGME_PROTOCOL_CMS;
+  else if (has_option_name (line, "--protocol"))
+    return set_error (GPG_ERR_ASS_PARAMETER, "invalid protocol");
+  else if (mandatory)
+    return set_error (GPG_ERR_ASS_PARAMETER, "no protocol specified");
+
+  return 0;
+}
+
+
+static void 
+close_message_fd (conn_ctrl_t ctrl)
+{
+  if (ctrl->message_fd != -1)
+    {
+      close (ctrl->message_fd);
+      ctrl->message_fd = -1;
+    }
+}
+
+
+static void
+finish_io_streams (assuan_context_t ctx,
+                   gpgme_data_t *r_input_data, gpgme_data_t *r_output_data,
+                   gpgme_data_t *r_message_data)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+
+  if (r_input_data)
+    gpgme_data_release (*r_input_data); 
+  if (r_output_data)
+    gpgme_data_release (*r_output_data);
+  if (r_message_data)
+    gpgme_data_release (*r_message_data); 
+  if (ctrl->input_channel)
+    {
+      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
+      ctrl->input_channel = NULL;
+    }
+  if (ctrl->output_channel)
+    {
+      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
+      ctrl->output_channel = NULL;
+    }
+  if (ctrl->message_channel)
+    {
+      g_io_channel_shutdown (ctrl->message_channel, 0, NULL);
+      ctrl->message_channel = NULL;
+    }
+}
+
+
+/* Translate the input and output file descriptors and return an error
+   if they are not set.  */
+static gpg_error_t
+translate_io_streams (assuan_context_t ctx)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+
+  ctrl->input_fd = translate_sys2libc_fd (assuan_get_input_fd (ctx), 0);
+  if (ctrl->input_fd == -1)
+    return set_error (GPG_ERR_ASS_NO_INPUT, NULL);
+  ctrl->output_fd = translate_sys2libc_fd (assuan_get_output_fd (ctx), 1);
+  if (ctrl->output_fd == -1)
+    return set_error (GPG_ERR_ASS_NO_OUTPUT, NULL);
+  return 0;
+}
+
+
+static gpg_error_t
+prepare_io_streams (assuan_context_t ctx,
+                    gpgme_data_t *r_input_data, gpgme_data_t *r_output_data,
+                    gpgme_data_t *r_message_data)
+{
+  gpg_error_t err;
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+
+  if (r_input_data)
+    *r_input_data = NULL;
+  if (r_output_data)
+    *r_output_data = NULL;
+  if (r_message_data)
+    *r_message_data = NULL;
+
+  if (ctrl->input_fd != -1 && r_input_data)
+    {
+#ifdef HAVE_W32_SYSTEM
+      ctrl->input_channel = g_io_channel_win32_new_fd (ctrl->input_fd);
+#else
+      ctrl->input_channel = g_io_channel_unix_new (ctrl->input_fd);
+#endif
+      if (!ctrl->input_channel)
+        {
+          g_debug ("error creating input channel");
+          err = gpg_error (GPG_ERR_EIO);
+          goto leave;
+        }
+      g_io_channel_set_encoding (ctrl->input_channel, NULL, NULL);
+      g_io_channel_set_buffered (ctrl->input_channel, FALSE);
+    }
+
+  if (ctrl->output_fd != -1 && r_output_data)
+    {
+#ifdef HAVE_W32_SYSTEM
+      ctrl->output_channel = g_io_channel_win32_new_fd (ctrl->output_fd);
+#else
+      ctrl->output_channel = g_io_channel_unix_new (ctrl->output_fd);
+#endif
+      if (!ctrl->output_channel)
+        {
+          g_debug ("error creating output channel");
+          err = gpg_error (GPG_ERR_EIO);
+          goto leave;
+        }
+      g_io_channel_set_encoding (ctrl->output_channel, NULL, NULL);
+      g_io_channel_set_buffered (ctrl->output_channel, FALSE);
+    }
+
+  if (ctrl->message_fd != -1 && r_message_data)
+    {
+#ifdef HAVE_W32_SYSTEM
+      ctrl->message_channel = g_io_channel_win32_new_fd (ctrl->message_fd);
+#else
+      ctrl->message_channel = g_io_channel_unix_new (ctrl->message_fd);
+#endif
+      if (!ctrl->message_channel)
+        {
+          g_debug ("error creating message channel");
+          err = gpg_error (GPG_ERR_EIO);
+          goto leave;
+        }
+      g_io_channel_set_encoding (ctrl->message_channel, NULL, NULL);
+      g_io_channel_set_buffered (ctrl->message_channel, FALSE);
+    }
+
+  if (ctrl->input_fd != -1 && r_input_data)
+    {
+      err = gpgme_data_new_from_cbs (r_input_data, &my_gpgme_data_cbs, ctrl);
+      if (err)
+        goto leave;
+    }
+  if (ctrl->output_fd != -1 && r_output_data)
+    {
+      err = gpgme_data_new_from_cbs (r_output_data, &my_gpgme_data_cbs, ctrl);
+      if (err)
+        goto leave;
+    }
+  if (ctrl->message_fd != -1 && r_message_data)
+    {
+      err = gpgme_data_new_from_cbs (r_message_data,
+                                     &my_gpgme_message_cbs, ctrl);
+      if (err)
+        goto leave;
+    }
+
+ leave:
+  if (err)
+    finish_io_streams (ctx, r_input_data, r_output_data, r_message_data);
+  return err;
+}
+
+
+
+/* SESSION <number> [<string>]
+
+   The NUMBER is an arbitrary value, a server may use to associate
+   simultaneous running sessions.  It is a 32 bit unsigned integer
+   with 0 as a special value indicating that no session association
+   shall be done.
+
+   If STRING is given, the server may use this as the title of a
+   window or, in the case of an email operation, to extract the
+   sender's address. The string may contain spaces; thus no
+   plus-escaping is used.
+
+   This command may be used at any time and overrides the effect of
+   the last command.  A RESET command undoes the effect of this
+   command.
+*/
+static int
+cmd_session (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err = 0;
+
+  line = skip_options (line);
+
+  /* FIXME implement the command.  */
+
+  return assuan_process_done (ctx, err);
+}
+
+
+
 /*  RECIPIENT <recipient>
 
   Set the recipient for the encryption.  <recipient> is an RFC2822
@@ -295,6 +541,34 @@ cmd_recipient (assuan_context_t ctx, char *line)
 }
 
 
+
+/* MESSAGE FD=<n>
+
+   Set the file descriptor to read a message which is used with
+   detached signatures.
+ */
+static int 
+cmd_message (assuan_context_t ctx, char *line)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  gpg_error_t err;;
+  assuan_fd_t sysfd;
+  int fd;
+
+  err = assuan_command_parse_fd (ctx, line, &sysfd);
+  if (!err)
+    {
+      fd = translate_sys2libc_fd (sysfd, 0);
+      if (fd == -1)
+        err = set_error (GPG_ERR_ASS_NO_INPUT, NULL);
+      else
+        ctrl->message_fd = fd;
+    }
+  return assuan_process_done (ctx, err);
+}
+
+
+
 
 
 /* Continuation for cmd_encrypt.  */
@@ -306,16 +580,7 @@ cont_encrypt (assuan_context_t ctx, gpg_error_t err)
   g_debug ("cont_encrypt called with with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
-  if (ctrl->input_channel)
-    {
-      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
-      ctrl->input_channel = NULL;
-    }
-  if (ctrl->output_channel)
-    {
-      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
-      ctrl->output_channel = NULL;
-    }
+  finish_io_streams (ctx, NULL, NULL, NULL);
   if (!err)
     release_recipients (ctrl);
   assuan_process_done (ctx, err);
@@ -336,26 +601,14 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   gpgme_data_t input_data = NULL;
   gpgme_data_t output_data = NULL;
 
-
-  if (has_option (line, "--protocol=OpenPGP"))
-    protocol = GPGME_PROTOCOL_OpenPGP;
-  else if (has_option (line, "--protocol=CMS"))
-    protocol = GPGME_PROTOCOL_CMS;
-  else if (has_option_name (line, "--protocol"))
-    {
-      err = set_error (GPG_ERR_ASS_PARAMETER, "invalid protocol");
-      goto leave;
-    }
-  else 
-    {
-      err = set_error (GPG_ERR_ASS_PARAMETER, "no protocol specified");
-      goto leave;
-    }
+  err = parse_protocol_option (ctx, line, 1, &protocol);
+  if (err)
+    goto leave;
 
   if (protocol != ctrl->selected_protocol)
     {
       if (ctrl->selected_protocol != GPGME_PROTOCOL_UNKNOWN)
-        g_debug ("note: protocol does not macth the one from PREP_ENCRYPT");
+        g_debug ("note: protocol does not match the one from PREP_ENCRYPT");
       reset_prepared_keys (ctrl);
     }
 
@@ -366,52 +619,10 @@ cmd_encrypt (assuan_context_t ctx, char *line)
       goto leave;
     }
 
-  ctrl->input_fd = translate_sys2libc_fd (assuan_get_input_fd (ctx), 0);
-  if (ctrl->input_fd == -1)
-    {
-      err = set_error (GPG_ERR_ASS_NO_INPUT, NULL);
-      goto leave;
-    }
-  ctrl->output_fd = translate_sys2libc_fd (assuan_get_output_fd (ctx), 1);
-  if (ctrl->output_fd == -1)
-    {
-      err = set_error (GPG_ERR_ASS_NO_OUTPUT, NULL);
-      goto leave;
-    }
-
-#ifdef HAVE_W32_SYSTEM
-  ctrl->input_channel = g_io_channel_win32_new_fd (ctrl->input_fd);
-#else
-  ctrl->input_channel = g_io_channel_unix_new (ctrl->input_fd);
-#endif
-  if (!ctrl->input_channel)
-    {
-      g_debug ("error creating input channel");
-      err = GPG_ERR_EIO;
-      goto leave;
-    }
-  g_io_channel_set_encoding (ctrl->input_channel, NULL, NULL);
-  g_io_channel_set_buffered (ctrl->input_channel, FALSE);
-
-#ifdef HAVE_W32_SYSTEM
-  ctrl->output_channel = g_io_channel_win32_new_fd (ctrl->output_fd);
-#else
-  ctrl->output_channel = g_io_channel_unix_new (ctrl->output_fd);
-#endif
-  if (!ctrl->output_channel)
-    {
-      g_debug ("error creating output channel");
-      err = GPG_ERR_EIO;
-      goto leave;
-    }
-  g_io_channel_set_encoding (ctrl->output_channel, NULL, NULL);
-  g_io_channel_set_buffered (ctrl->output_channel, FALSE);
-
-
-  err = gpgme_data_new_from_cbs (&input_data, &my_gpgme_data_cbs, ctrl);
+  err = translate_io_streams (ctx);
   if (err)
     goto leave;
-  err = gpgme_data_new_from_cbs (&output_data, &my_gpgme_data_cbs, ctrl);
+  err = prepare_io_streams (ctx, &input_data, &output_data, NULL);
   if (err)
     goto leave;
 
@@ -431,18 +642,8 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   return not_finished (ctrl);
 
  leave:
-  gpgme_data_release (input_data); 
-  gpgme_data_release (output_data);
-  if (ctrl->input_channel)
-    {
-      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
-      ctrl->input_channel = NULL;
-    }
-  if (ctrl->output_channel)
-    {
-      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
-      ctrl->output_channel = NULL;
-    }
+  finish_io_streams (ctx, &input_data, &output_data, NULL);
+  close_message_fd (ctrl);
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
   return assuan_process_done (ctx, err);
@@ -489,18 +690,12 @@ cmd_prep_encrypt (assuan_context_t ctx, char *line)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
   gpg_error_t err;
-  gpgme_protocol_t protocol = GPGME_PROTOCOL_UNKNOWN;
+  gpgme_protocol_t protocol;
   GpaStreamEncryptOperation *op;
 
-  if (has_option (line, "--protocol=OpenPGP"))
-    protocol = GPGME_PROTOCOL_OpenPGP;
-  else if (has_option (line, "--protocol=CMS"))
-    protocol = GPGME_PROTOCOL_CMS;
-  else if (has_option_name (line, "--protocol"))
-    {
-      err = set_error (GPG_ERR_ASS_PARAMETER, "invalid protocol");
-      goto leave;
-    }
+  err = parse_protocol_option (ctx, line, 0, &protocol);
+  if (err)
+    goto leave;
 
   line = skip_options (line);
   if (*line)
@@ -577,16 +772,7 @@ cont_sign (assuan_context_t ctx, gpg_error_t err)
   g_debug ("cont_sign called with with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
-  if (ctrl->input_channel)
-    {
-      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
-      ctrl->input_channel = NULL;
-    }
-  if (ctrl->output_channel)
-    {
-      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
-      ctrl->output_channel = NULL;
-    }
+  finish_io_streams (ctx, NULL, NULL, NULL);
   if (!err)
     {
       xfree (ctrl->sender);
@@ -605,26 +791,15 @@ cmd_sign (assuan_context_t ctx, char *line)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
   gpg_error_t err;
-  gpgme_protocol_t protocol = 0;
+  gpgme_protocol_t protocol;
   gboolean detached;
   GpaStreamSignOperation *op;
   gpgme_data_t input_data = NULL;
   gpgme_data_t output_data = NULL;
 
-  if (has_option (line, "--protocol=OpenPGP"))
-    protocol = GPGME_PROTOCOL_OpenPGP;
-  else if (has_option (line, "--protocol=CMS"))
-    protocol = GPGME_PROTOCOL_CMS;
-  else if (has_option_name (line, "--protocol"))
-    {
-      err = set_error (GPG_ERR_ASS_PARAMETER, "invalid protocol");
-      goto leave;
-    }
-  else 
-    {
-      err = set_error (GPG_ERR_ASS_PARAMETER, "no protocol specified");
-      goto leave;
-    }
+  err = parse_protocol_option (ctx, line, 1, &protocol);
+  if (err)
+    goto leave;
 
   detached = has_option (line, "--detached");
 
@@ -635,52 +810,10 @@ cmd_sign (assuan_context_t ctx, char *line)
       goto leave;
     }
 
-  ctrl->input_fd = translate_sys2libc_fd (assuan_get_input_fd (ctx), 0);
-  if (ctrl->input_fd == -1)
-    {
-      err = set_error (GPG_ERR_ASS_NO_INPUT, NULL);
-      goto leave;
-    }
-  ctrl->output_fd = translate_sys2libc_fd (assuan_get_output_fd (ctx), 1);
-  if (ctrl->output_fd == -1)
-    {
-      err = set_error (GPG_ERR_ASS_NO_OUTPUT, NULL);
-      goto leave;
-    }
-
-#ifdef HAVE_W32_SYSTEM
-  ctrl->input_channel = g_io_channel_win32_new_fd (ctrl->input_fd);
-#else
-  ctrl->input_channel = g_io_channel_unix_new (ctrl->input_fd);
-#endif
-  if (!ctrl->input_channel)
-    {
-      g_debug ("error creating input channel");
-      err = GPG_ERR_EIO;
-      goto leave;
-    }
-  g_io_channel_set_encoding (ctrl->input_channel, NULL, NULL);
-  g_io_channel_set_buffered (ctrl->input_channel, FALSE);
-
-#ifdef HAVE_W32_SYSTEM
-  ctrl->output_channel = g_io_channel_win32_new_fd (ctrl->output_fd);
-#else
-  ctrl->output_channel = g_io_channel_unix_new (ctrl->output_fd);
-#endif
-  if (!ctrl->output_channel)
-    {
-      g_debug ("error creating output channel");
-      err = GPG_ERR_EIO;
-      goto leave;
-    }
-  g_io_channel_set_encoding (ctrl->output_channel, NULL, NULL);
-  g_io_channel_set_buffered (ctrl->output_channel, FALSE);
-
-
-  err = gpgme_data_new_from_cbs (&input_data, &my_gpgme_data_cbs, ctrl);
+  err = translate_io_streams (ctx);
   if (err)
     goto leave;
-  err = gpgme_data_new_from_cbs (&output_data, &my_gpgme_data_cbs, ctrl);
+  err = prepare_io_streams (ctx, &input_data, &output_data, NULL);
   if (err)
     goto leave;
 
@@ -698,18 +831,231 @@ cmd_sign (assuan_context_t ctx, char *line)
   return not_finished (ctrl);
 
  leave:
-  gpgme_data_release (input_data); 
-  gpgme_data_release (output_data);
-  if (ctrl->input_channel)
+  finish_io_streams (ctx, &input_data, &output_data, NULL);
+  close_message_fd (ctrl);
+  assuan_close_input_fd (ctx);
+  assuan_close_output_fd (ctx);
+  return assuan_process_done (ctx, err);
+}
+
+
+
+/* Continuation for cmd_decrypt.  */
+static void
+cont_decrypt (assuan_context_t ctx, gpg_error_t err)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+
+  g_debug ("cont_decrypt called with with ERR=%s <%s>",
+           gpg_strerror (err), gpg_strsource (err));
+
+  finish_io_streams (ctx, NULL, NULL, NULL);
+  if (!err)
     {
-      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
-      ctrl->input_channel = NULL;
+      xfree (ctrl->sender);
+      ctrl->sender = NULL;
     }
-  if (ctrl->output_channel)
+  assuan_process_done (ctx, err);
+}
+
+
+/* DECRYPT --protocol=OpenPGP|CMS [--no-verify]
+
+   Decrypt a message given by the source set with the INPUT command
+   and write the plaintext to the sink set with the OUTPUT command.
+
+   If the option --no-verify is given, the server should not try to
+   verify a signature, in case the input data is an OpenPGP combined
+   message.
+*/
+static int 
+cmd_decrypt (assuan_context_t ctx, char *line)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  gpg_error_t err;
+  gpgme_protocol_t protocol = 0;
+  int no_verify;
+  GpaStreamSignOperation *op;  /* Fixme: use GpaStreamDecryptOperatio!!!*/
+  gpgme_data_t input_data = NULL;
+  gpgme_data_t output_data = NULL;
+
+  err = parse_protocol_option (ctx, line, 1, &protocol);
+  if (err)
+    goto leave;
+
+  no_verify= has_option (line, "--no-verify");
+
+  line = skip_options (line);
+  if (*line)
     {
-      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
-      ctrl->output_channel = NULL;
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      goto leave;
     }
+
+  err = translate_io_streams (ctx);
+  if (err)
+    goto leave;
+  err = prepare_io_streams (ctx, &input_data, &output_data, NULL);
+  if (err)
+    goto leave;
+
+  ctrl->cont_cmd = cont_decrypt;
+
+#warning  FIXME:  Use decrypt.
+  op = gpa_stream_sign_operation_new (NULL, input_data, output_data,
+                                      ctrl->sender, protocol, 1);
+
+  input_data = output_data = NULL;
+  g_signal_connect_swapped (G_OBJECT (op), "completed",
+			    G_CALLBACK (run_server_continuation), ctx);
+  g_signal_connect (G_OBJECT (op), "completed",
+                    G_CALLBACK (g_object_unref), NULL);
+  g_signal_connect_swapped (G_OBJECT (op), "status",
+			    G_CALLBACK (assuan_write_status), ctx);
+
+  return not_finished (ctrl);
+
+ leave:
+  finish_io_streams (ctx, &input_data, &output_data, NULL);
+  close_message_fd (ctrl);
+  assuan_close_input_fd (ctx);
+  assuan_close_output_fd (ctx);
+  return assuan_process_done (ctx, err);
+}
+
+
+
+
+/* Continuation for cmd_verify.  */
+static void
+cont_verify (assuan_context_t ctx, gpg_error_t err)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+
+  g_debug ("cont_verify called with with ERR=%s <%s>",
+           gpg_strerror (err), gpg_strsource (err));
+
+  finish_io_streams (ctx, NULL, NULL, NULL);
+  if (!err)
+    {
+      xfree (ctrl->sender);
+      ctrl->sender = NULL;
+    }
+  assuan_process_done (ctx, err);
+}
+
+
+/* VERIFY --protocol=OpenPGP|CMS [--silent]
+
+   Verify a message.  Depending on the combination of the
+   sources/sinks set by the commands MESSAGE, INPUT and OUTPUT, the
+   verification mode is selected like this:
+
+   MESSAGE and INPUT
+     This indicates a detached signature.  Output data is not applicable.
+
+   INPUT 
+     This indicates an opaque signature.  As no output command has
+     been given, we are only required to check the signature.
+
+   INPUT and OUTPUT
+     This indicates an opaque signature.  We write the signed data to
+     the file descriptor set by the OUTPUT command.  This data is even
+     written if the signature can't be verified.
+
+   With the option --silent we won't display any dialog; this is for
+   example used by the client to get the content of an opaque signed
+   message.  Sending the follwoing status message is mandatory before
+   sending the OK response:
+
+      SIGSTATUS <flag> <displaystring>
+
+   Defines FLAGS are:
+
+      none
+        The message has a signature but it could not not be verified
+        due to a missing key.
+
+      green
+        The signature is fully valid.
+
+      yellow
+        The signature is valid but additional information was shown
+        regarding the validity of the key.
+
+      red
+        The signature is not valid. 
+
+   The DISPLAYSTRING is a percent-and-plus-encoded string with a short
+   human readable description of the status.
+*/
+static int 
+cmd_verify (assuan_context_t ctx, char *line)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  gpg_error_t err;
+  gpgme_protocol_t protocol = 0;
+  int silent;
+  GpaStreamSignOperation *op;  /* Fixme: use GpaStreamDecryptOperatio!!!*/
+  gpgme_data_t input_data = NULL;
+  gpgme_data_t output_data = NULL;
+  gpgme_data_t message_data = NULL;
+
+  err = parse_protocol_option (ctx, line, 1, &protocol);
+  if (err)
+    goto leave;
+
+  silent = has_option (line, "--silent");
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      goto leave;
+    }
+
+  /* Note: We can't use translate_io_streams becuase that returns an
+     error if one is not opened but that is not an error here.  */
+  ctrl->input_fd = translate_sys2libc_fd (assuan_get_input_fd (ctx), 0);
+  ctrl->output_fd = translate_sys2libc_fd (assuan_get_output_fd (ctx), 1);
+  if (ctrl->message_fd != -1 && ctrl->input_fd != -1 
+      && ctrl->output_fd == -1)
+    ; /* Mode = detached. */
+  else if (ctrl->message_fd == -1 && ctrl->input_fd != -1 
+           && ctrl->output_fd == -1)
+    ; /* Mode = opaque. */
+  else if (ctrl->message_fd == -1 && ctrl->input_fd != -1 
+           && ctrl->output_fd != -1)
+    ; /* Mode = opaque with output. */
+  else
+    {
+      err = set_error (GPG_ERR_CONFLICT, "invalid verify mode");
+      goto leave;
+    }
+  
+  err = prepare_io_streams (ctx, &input_data, &output_data, &message_data);
+  if (err)
+    goto leave;
+
+  ctrl->cont_cmd = cont_decrypt;
+
+#warning  FIXME:  Use verify.
+  op = gpa_stream_sign_operation_new (NULL, input_data, output_data,
+                                      ctrl->sender, protocol, 1);
+
+  input_data = output_data = message_data = NULL;
+  g_signal_connect_swapped (G_OBJECT (op), "completed",
+			    G_CALLBACK (run_server_continuation), ctx);
+  g_signal_connect (G_OBJECT (op), "completed",
+                    G_CALLBACK (g_object_unref), NULL);
+  g_signal_connect_swapped (G_OBJECT (op), "status",
+			    G_CALLBACK (assuan_write_status), ctx);
+
+  return not_finished (ctrl);
+
+ leave:
+  finish_io_streams (ctx, &input_data, &output_data, &message_data);
+  close_message_fd (ctrl);
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
   return assuan_process_done (ctx, err);
@@ -775,16 +1121,8 @@ reset_notify (assuan_context_t ctx)
   release_recipients (ctrl);
   xfree (ctrl->sender);
   ctrl->sender = NULL;
-  if (ctrl->input_channel)
-    {
-      g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
-      ctrl->input_channel = NULL;
-    }
-  if (ctrl->output_channel)
-    {
-      g_io_channel_shutdown (ctrl->output_channel, 0, NULL);
-      ctrl->output_channel = NULL;
-    }
+  finish_io_streams (ctx, NULL, NULL, NULL);
+  close_message_fd (ctrl);
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
   if (ctrl->gpa_op)
@@ -805,13 +1143,17 @@ register_commands (assuan_context_t ctx)
     const char *name;
     int (*handler)(assuan_context_t, char *line);
   } table[] = {
+    { "SESSION",   cmd_session },
     { "RECIPIENT", cmd_recipient },
     { "INPUT",     NULL },
     { "OUTPUT",    NULL },
+    { "MESSAGE",   cmd_message },
     { "ENCRYPT",   cmd_encrypt },
     { "PREP_ENCRYPT", cmd_prep_encrypt },
     { "SENDER",    cmd_sender },
     { "SIGN",      cmd_sign   },
+    { "DECRYPT",   cmd_decrypt },
+    { "VERIFY",    cmd_verify },
     { "START_KEYMANAGER", cmd_start_keymanager },
     { "GETINFO",   cmd_getinfo },
     { NULL }
@@ -859,6 +1201,7 @@ connection_startup (int fd)
   assuan_set_pointer (ctx, ctrl);
   assuan_set_log_stream (ctx, stderr);
   assuan_register_reset_notify (ctx, reset_notify);
+  ctrl->message_fd = -1;
 
   connection_counter++;
   return ctx;

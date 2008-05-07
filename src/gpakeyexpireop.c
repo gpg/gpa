@@ -175,6 +175,7 @@ gpa_key_expire_operation_start (GpaKeyExpireOperation *op)
   GDate *date;
 
   key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+  g_return_val_if_fail (key, gpg_error (GPG_ERR_CANCELED));
 
   if (! gpa_expiry_dialog_run (GPA_OPERATION (op)->window, key, &date))
     return gpg_error (GPG_ERR_CANCELED);

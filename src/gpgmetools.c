@@ -24,6 +24,7 @@
 #include <config.h>
 
 #include <errno.h>
+#include <ctype.h>
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpgmetools.h"
@@ -1062,5 +1063,112 @@ gpa_gpgme_release_keyarray (gpgme_key_t *keys)
         gpgme_key_unref (keys[idx]);
       g_free (keys);
     }
+}
+
+
+
+
+
+/* Read the next number in the version string STR and return it in
+   *NUMBER.  Return a pointer to the tail of STR after parsing, or
+   *NULL if the version string was invalid.  */
+static const char *
+parse_version_number (const char *str, int *number)
+{
+#define MAXVAL ((INT_MAX - 10) / 10)
+  int val = 0;
+
+  /* Leading zeros are not allowed.  */
+  if (*str == '0' && isascii (str[1]) && isdigit (str[1]))
+    return NULL;
+
+  while (isascii (*str) && isdigit (*str) && val <= MAXVAL)
+    {
+      val *= 10;
+      val += *(str++) - '0';
+    }
+  *number = val;
+  return val > MAXVAL ? NULL : str;
+#undef MAXVAL
+}
+
+
+/* Parse the version string STR in the format MAJOR.MINOR.MICRO (for
+   example, 9.3.2) and return the components in MAJOR, MINOR and MICRO
+   as integers.  The function returns the tail of the string that
+   follows the version number.  This might be te empty string if there
+   is nothing following the version number, or a patchlevel.  The
+   function returns NULL if the version string is not valid.  */
+static const char *
+parse_version_string (const char *str, int *major, int *minor, int *micro)
+{
+  str = parse_version_number (str, major);
+  if (!str || *str != '.')
+    return NULL;
+  str++;
+
+  str = parse_version_number (str, minor);
+  if (!str || *str != '.')
+    return NULL;
+  str++;
+
+  str = parse_version_number (str, micro);
+  if (!str)
+    return NULL;
+
+  /* A patchlevel might follow.  */
+  return str;
+}
+
+
+/* Return true if MY_VERSION is at least REQ_VERSION, and false
+   otherwise.  */
+static int
+compare_version_strings (const char *my_version,
+			 const char *rq_version)
+{
+  int my_major, my_minor, my_micro;
+  int rq_major, rq_minor, rq_micro;
+  const char *my_plvl, *rq_plvl;
+
+  if (!rq_version)
+    return 1;
+  if (!my_version)
+    return 0;
+
+  my_plvl = parse_version_string (my_version, &my_major, &my_minor, &my_micro);
+  if (!my_plvl)
+    return 0;
+
+  rq_plvl = parse_version_string (rq_version, &rq_major, &rq_minor, &rq_micro);
+  if (!rq_plvl)
+    return 0;
+
+  if (my_major > rq_major
+      || (my_major == rq_major && my_minor > rq_minor)
+      || (my_major == rq_major && my_minor == rq_minor 
+	  && my_micro > rq_micro)
+      || (my_major == rq_major && my_minor == rq_minor
+	  && my_micro == rq_micro && strcmp (my_plvl, rq_plvl) >= 0))
+    return 1;
+
+  return 0;
+}
+
+
+/* Return true if the gpg engine has at least version NEED_VERSION.  */
+int
+is_gpg_version_at_least (const char *need_version)
+{
+  gpgme_engine_info_t engine;
+  
+  gpgme_get_engine_info (&engine);
+  while (engine)
+    {
+      if (engine->protocol == GPGME_PROTOCOL_OpenPGP)
+        return compare_version_strings (engine->version, need_version);
+      engine = engine->next;
+    }
+  return 0; /* No gpg-engine available. */
 }
 

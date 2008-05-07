@@ -154,6 +154,7 @@ gpa_key_trust_operation_start (GpaKeyTrustOperation *op)
   gpgme_validity_t trust;
 
   key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+  g_return_val_if_fail (key, gpg_error (GPG_ERR_CANCELED));
 
   if (! gpa_ownertrust_run_dialog (key, GPA_OPERATION (op)->window, &trust))
     return gpg_error (GPG_ERR_CANCELED);

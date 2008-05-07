@@ -84,7 +84,9 @@ struct _SettingsDlg
 
   /* Data for the auto-key-locate frame.  */
   struct {
-    GtkWidget *frame;
+    int enabled;  /* True if the AKL feature is enabled.  */
+
+    GtkWidget *frame;   
     GtkComboBox *methods;
     GtkWidget *addr_hbox;
     GtkEntry  *addr_entry;
@@ -162,12 +164,14 @@ update_show_advanced_options (SettingsDlg *dialog)
   if (gpa_options_get_show_advanced_options (options))
     {
       gtk_widget_show_all (dialog->keyserver.frame);
-      gtk_widget_show_all (dialog->akl.frame);
+      if (dialog->akl.enabled)
+        gtk_widget_show_all (dialog->akl.frame);
     }
   else
     {
       gtk_widget_hide_all (dialog->keyserver.frame);
-      gtk_widget_hide_all (dialog->akl.frame);
+      if (dialog->akl.enabled)
+        gtk_widget_hide_all (dialog->akl.frame);
     }
 }
 
@@ -677,7 +681,8 @@ update_modified (SettingsDlg *dialog, int is_modified)
   gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
                                      GTK_RESPONSE_APPLY, newstate);
 
-  gtk_widget_set_sensitive (dialog->akl.addr_hbox, dialog->akl.require_addr);
+  if (dialog->akl.enabled)
+    gtk_widget_set_sensitive (dialog->akl.addr_hbox, dialog->akl.require_addr);
 }
 
 
@@ -706,7 +711,8 @@ load_settings (SettingsDlg *dialog)
                       gpa_options_get_default_keyserver (options));
 
   /* AKL section. */
-  parse_akl (dialog);
+  if (dialog->akl.enabled)
+    parse_akl (dialog);
 
 
   update_modified (dialog, 0);
@@ -737,7 +743,7 @@ save_settings (SettingsDlg *dialog)
       return -1;
     }
                         
-  if ((errwdg = check_akl (dialog)))
+  if ( dialog->akl.enabled && (errwdg = check_akl (dialog)))
     {
       gpa_window_error 
         (_("The data given for \"Auto key locate\" is not valid."),
@@ -753,8 +759,9 @@ save_settings (SettingsDlg *dialog)
   gpa_options_set_default_keyserver (gpa_options_get_instance (), 
                                      dialog->keyserver.url);
 
-
-  if (dialog->akl.method_idx == -1)
+  if (!dialog->akl.enabled)
+    ; 
+  else if (dialog->akl.method_idx == -1)
     ; /* oops: none selected.  */
   else if (!akl_table[dialog->akl.method_idx].list)
     {
@@ -904,9 +911,13 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
                       FALSE, FALSE, 0);
 
   /* The auto key locate section.  */
-  frame = auto_key_locate_frame (dialog);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
-                      FALSE, FALSE, 0);
+  dialog->akl.enabled = is_gpg_version_at_least ("2.0.10");
+  if (dialog->akl.enabled)
+    {
+      frame = auto_key_locate_frame (dialog);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
+                          FALSE, FALSE, 0);
+    }
 
   /* Connect the response signal.  */
   g_signal_connect (GTK_OBJECT (dialog), "response", 

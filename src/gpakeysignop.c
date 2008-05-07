@@ -160,6 +160,8 @@ gpa_key_sign_operation_start (GpaKeySignOperation *op)
   gboolean sign_locally = FALSE;
 
   key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+  g_return_val_if_fail (key, gpg_error (GPG_ERR_CANCELED));
+
   if (! gpa_key_sign_run_dialog (GPA_OPERATION (op)->window,
 				 key, &sign_locally))
     return gpg_error (GPG_ERR_CANCELED);

@@ -149,7 +149,8 @@ gpa_key_delete_operation_start (GpaKeyDeleteOperation *op)
   gpgme_key_t key;
 
   key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
-  
+  g_return_val_if_fail (key, gpg_error (GPG_ERR_CANCELED));
+
   if (! gpa_delete_dialog_run (GPA_OPERATION (op)->window, key))
     return gpg_error (GPG_ERR_CANCELED);
 
@@ -180,7 +181,7 @@ gpa_key_delete_operation_idle_cb (gpointer data)
 static void
 gpa_key_delete_operation_next (GpaKeyDeleteOperation *op)
 {
-  gpg_error_t err;
+  gpg_error_t err = 0;
 
   if (GPA_KEY_OPERATION (op)->current)
     {

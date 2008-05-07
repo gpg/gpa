@@ -151,6 +151,7 @@ gpa_key_passwd_operation_start (GpaKeyPasswdOperation *op)
   gpgme_key_t key;
 
   key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
+  g_return_val_if_fail (key, gpg_error (GPG_ERR_CANCELED));
 
   err = gpa_gpgme_edit_passwd_start (GPA_OPERATION(op)->context, key);
   if (err)
