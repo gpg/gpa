@@ -1156,7 +1156,8 @@ compare_version_strings (const char *my_version,
 }
 
 
-/* Return true if the gpg engine has at least version NEED_VERSION.  */
+/* Return 1 if the gpg engine has at least version NEED_VERSION,
+   otherwise 0.  */
 int
 is_gpg_version_at_least (const char *need_version)
 {
@@ -1166,7 +1167,7 @@ is_gpg_version_at_least (const char *need_version)
   while (engine)
     {
       if (engine->protocol == GPGME_PROTOCOL_OpenPGP)
-        return compare_version_strings (engine->version, need_version);
+        return !!compare_version_strings (engine->version, need_version);
       engine = engine->next;
     }
   return 0; /* No gpg-engine available. */

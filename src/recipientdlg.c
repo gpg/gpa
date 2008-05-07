@@ -466,12 +466,21 @@ static void
 parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
                      struct userdata_s *info)
 {
+  static int have_locate = -1;
   gpgme_key_t key = NULL;
+  gpgme_keylist_mode_t mode;
+
+  if (have_locate == -1)
+    have_locate = is_gpg_version_at_least ("2.0.10");
 
   g_return_if_fail (info);
 
   clear_keyinfo (&info->pgp);
   gpgme_set_protocol (ctx, GPGME_PROTOCOL_OpenPGP);
+  mode = gpgme_get_keylist_mode (ctx);
+  if (have_locate)
+    gpgme_set_keylist_mode (ctx, (mode | (GPGME_KEYLIST_MODE_LOCAL
+                                          | GPGME_KEYLIST_MODE_EXTERN)));
   if (!gpgme_op_keylist_start (ctx, info->mailbox, 0))
     {
       while (!gpgme_op_keylist_next (ctx, &key))
@@ -491,6 +500,7 @@ parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
         }
     }
   gpgme_op_keylist_end (ctx);
+  gpgme_set_keylist_mode (ctx, mode);
 
   clear_keyinfo (&info->x509);
   gpgme_set_protocol (ctx, GPGME_PROTOCOL_CMS);
