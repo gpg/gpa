@@ -888,7 +888,7 @@ keyring_editor_action_new (GPAKeyringEditor *editor,
 
       /* File menu.  */
       { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
-	N_("FIXME"), G_CALLBACK (keyring_editor_close) },
+	"FIXME", G_CALLBACK (keyring_editor_close) },
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
 	N_("Quit the program"), G_CALLBACK (gtk_main_quit) },
 

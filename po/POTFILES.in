@@ -38,7 +38,6 @@ src/gparecvkeydlg.c
 src/gpasubkeylist.c
 src/gpawidgets.c
 src/gpawindowkeeper.c
-src/gpawizard.c
 src/gpgmeedit.c
 src/gpgmetools.c
 src/gtktools.c
