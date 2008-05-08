@@ -361,14 +361,8 @@ main (int argc, char *argv[])
   }
 #endif
 
-  /* Prefer gpg2 over gpg1.  Fixme: We need to test whether gpg2 is
-     actually properly installed.  */
-  if (!access ("/usr/local/bin/gpg2", X_OK))
-    gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, 
-                           "/usr/local/bin/gpg2", NULL);
-  else if (!access ("/usr/bin/gpg2", X_OK))
-    gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, 
-                           "/usr/bin/gpg2", NULL);
+  /* Prefer gpg2 over gpg1.  */
+  gpa_switch_to_gpg2 ();
 
 
   /* Handle command line options.  */

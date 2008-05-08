@@ -188,6 +188,9 @@ gpgme_key_t *gpa_gpgme_copy_keyarray (gpgme_key_t *keys);
 /* Release all keys in the array KEYS as weel as ARRY itself.  */
 void gpa_gpgme_release_keyarray (gpgme_key_t *keys);
 
+/* Try switching to the gpg2 backend.  */
+void gpa_switch_to_gpg2 (void);
+
 /* Return true if the gpg engine has at least version NEED_VERSION.  */
 int is_gpg_version_at_least (const char *need_version);
 
