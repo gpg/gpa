@@ -148,8 +148,8 @@ gpa_stream_sign_operation_ctor (GType type, guint n_construct_properties,
 				      construct_properties);
   op = GPA_STREAM_SIGN_OPERATION (object);
 
-  op->sign_dialog = gpa_file_sign_dialog_new (GPA_OPERATION (op)->window,
-                                              0);
+  op->sign_dialog = gpa_file_sign_dialog_new (GPA_OPERATION (op)->window);
+  /* FIXME: MBSIGN */
   g_signal_connect (G_OBJECT (op->sign_dialog), "response",
                     G_CALLBACK (response_cb), op);
 

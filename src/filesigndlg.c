@@ -40,7 +40,10 @@ enum
 {
   PROP_0,
   PROP_WINDOW,
-  PROP_FORCE_ARMOR
+  PROP_FORCE_ARMOR,
+  PROP_ARMOR,
+  PROP_FORCE_SIG_MODE,
+  PROP_SIG_MODE
 };
 
 static GObjectClass *parent_class = NULL;
@@ -60,13 +63,25 @@ gpa_file_sign_dialog_get_property (GObject     *object,
 			  gtk_window_get_transient_for (GTK_WINDOW (dialog)));
       break;
     case PROP_FORCE_ARMOR:
-      g_value_set_boolean (value, dialog->force_armor);
+      g_value_set_boolean (value,
+			   gpa_file_sign_dialog_get_force_armor (dialog));
+      break;
+    case PROP_ARMOR:
+      g_value_set_boolean (value, gpa_file_sign_dialog_get_armor (dialog));
+      break;
+    case PROP_FORCE_SIG_MODE:
+      g_value_set_boolean (value,
+			   gpa_file_sign_dialog_get_force_sig_mode (dialog));
+      break;
+    case PROP_SIG_MODE:
+      g_value_set_int (value, gpa_file_sign_dialog_get_sig_mode (dialog));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
+
 
 static void
 gpa_file_sign_dialog_set_property (GObject     *object,
@@ -83,7 +98,18 @@ gpa_file_sign_dialog_set_property (GObject     *object,
 				    g_value_get_object (value));
       break;
     case PROP_FORCE_ARMOR:
-      dialog->force_armor = g_value_get_boolean (value);
+      gpa_file_sign_dialog_set_force_armor (dialog,
+					    g_value_get_boolean (value));
+      break;
+    case PROP_ARMOR:
+      gpa_file_sign_dialog_set_armor (dialog, g_value_get_boolean (value));
+      break;
+    case PROP_FORCE_SIG_MODE:
+      gpa_file_sign_dialog_set_force_sig_mode (dialog,
+					       g_value_get_boolean (value));
+      break;
+    case PROP_SIG_MODE:
+      gpa_file_sign_dialog_set_sig_mode (dialog, g_value_get_int (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -154,12 +180,11 @@ gpa_file_sign_dialog_constructor (GType type,
   vboxMode = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vboxMode), 5);
   gtk_container_add (GTK_CONTAINER (frameMode), vboxMode);
+  dialog->vbox_mode = vboxMode;
 
   radio_sign_comp = gtk_radio_button_new_with_mnemonic
     (NULL, _("Si_gn and compress"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_comp, FALSE, FALSE, 0);
-
-  gtk_widget_set_no_show_all (radio_sign_comp, TRUE);
   dialog->radio_comp = radio_sign_comp;
 
   radio_sign =
@@ -193,32 +218,22 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
   gtk_label_set_mnemonic_widget (GTK_LABEL (labelWho), clistWho);
 			      
-
   checkerArmor = gtk_check_button_new_with_mnemonic (_("A_rmor"));
   gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);
   gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
+  /* Take care of any child widgets there might be.  */
+  gtk_widget_show_all (checkerArmor);
   gtk_widget_set_no_show_all (checkerArmor, TRUE);
   dialog->check_armor = checkerArmor;
-  if (dialog->force_armor)
-    {
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->check_armor),
-				    TRUE);
-      gtk_widget_set_sensitive (dialog->check_armor, FALSE);
-    }
 
   if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-    {
-      gtk_widget_hide (dialog->radio_comp);
-      gtk_widget_hide (dialog->check_armor);
-    }
+    gtk_widget_hide (dialog->check_armor);
   else
-    {
-      gtk_widget_show (dialog->radio_comp);
-      gtk_widget_show (dialog->check_armor);
-    }
+    gtk_widget_show (dialog->check_armor);
 
   return object;
 }
+
 
 static void
 gpa_file_sign_dialog_class_init (GpaFileSignDialogClass *klass)
@@ -239,13 +254,37 @@ gpa_file_sign_dialog_class_init (GpaFileSignDialogClass *klass)
 				   ("window", "Parent window",
 				    "Parent window", GTK_TYPE_WIDGET,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
   g_object_class_install_property (object_class,
 				   PROP_FORCE_ARMOR,
 				   g_param_spec_boolean
 				   ("force-armor", "Force armor",
 				    "Force armor mode", FALSE,
-				    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+				    G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+				   PROP_ARMOR,
+				   g_param_spec_boolean
+				   ("armor", "Armor mode",
+				    "Armor mode", FALSE,
+				    G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+				   PROP_FORCE_SIG_MODE,
+				   g_param_spec_boolean
+				   ("force-sig-mode", "Force signature mode",
+				    "Force signature mode", FALSE,
+				    G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+				   PROP_SIG_MODE,
+				   g_param_spec_int
+				   ("sig-mode", "Signature mode",
+				    "Signature mode", GPGME_SIG_MODE_NORMAL,
+				    GPGME_SIG_MODE_CLEAR, GPGME_SIG_MODE_NORMAL,
+				    G_PARAM_WRITABLE));
 }
+
 
 GType
 gpa_file_sign_dialog_get_type (void)
@@ -275,20 +314,21 @@ gpa_file_sign_dialog_get_type (void)
   return sign_dialog_type;
 }
 
+
 /* API */
 
 GtkWidget *
-gpa_file_sign_dialog_new (GtkWidget *parent, gboolean force_armor)
+gpa_file_sign_dialog_new (GtkWidget *parent)
 {
   GpaFileSignDialog *dialog;
   
   dialog = g_object_new (GPA_FILE_SIGN_DIALOG_TYPE,
 			 "window", parent,
-			 "force-armor", force_armor,
 			 NULL);
 
   return GTK_WIDGET(dialog);
 }
+
 
 GList *
 gpa_file_sign_dialog_signers (GpaFileSignDialog *dialog)
@@ -297,23 +337,110 @@ gpa_file_sign_dialog_signers (GpaFileSignDialog *dialog)
     (GPA_KEY_SELECTOR(dialog->clist_who));
 }
 
+
 gboolean 
 gpa_file_sign_dialog_get_armor (GpaFileSignDialog *dialog)
 {
-  return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_armor));
+  g_return_val_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog), FALSE);
+  g_return_val_if_fail (dialog->check_armor != NULL, FALSE);
+
+  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->check_armor));
 }
 
-gpgme_sig_mode_t 
-gpa_file_sign_dialog_get_sign_type (GpaFileSignDialog *dialog)
-{
-  gpgme_sig_mode_t sign_type = GPGME_SIG_MODE_NORMAL;
-  
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_comp)))
-    sign_type = GPGME_SIG_MODE_NORMAL;
-  else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->radio_sign)))
-    sign_type = GPGME_SIG_MODE_CLEAR;
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(dialog->radio_sep)))
-    sign_type = GPGME_SIG_MODE_DETACH;
 
-  return sign_type;
+void
+gpa_file_sign_dialog_set_armor (GpaFileSignDialog *dialog, gboolean armor)
+{
+  g_return_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog));
+  g_return_if_fail (dialog->check_armor != NULL);
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->check_armor), armor);
+}
+
+
+gboolean
+gpa_file_sign_dialog_get_force_armor (GpaFileSignDialog *dialog)
+{
+  g_return_val_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog), FALSE);
+
+  return dialog->force_armor;
+}
+
+
+void
+gpa_file_sign_dialog_set_force_armor (GpaFileSignDialog *dialog,
+				      gboolean force_armor)
+{
+  g_return_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog));
+  g_return_if_fail (dialog->check_armor != NULL);
+
+  if (force_armor == dialog->force_armor)
+    return;
+
+  gtk_widget_set_sensitive (dialog->check_armor, ! force_armor);
+  dialog->force_armor = force_armor;
+}
+
+
+gboolean
+gpa_file_sign_dialog_get_force_sig_mode (GpaFileSignDialog *dialog)
+{
+  g_return_val_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog), FALSE);
+
+  return dialog->force_sig_mode;
+}
+
+
+void
+gpa_file_sign_dialog_set_force_sig_mode (GpaFileSignDialog *dialog,
+				      gboolean force_sig_mode)
+{
+  g_return_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog));
+  g_return_if_fail (dialog->vbox_mode != NULL);
+
+  if (force_sig_mode == dialog->force_sig_mode)
+    return;
+
+  gtk_widget_set_sensitive (dialog->vbox_mode, ! force_sig_mode);
+}
+
+
+gpgme_sig_mode_t 
+gpa_file_sign_dialog_get_sig_mode (GpaFileSignDialog *dialog)
+{
+  gpgme_sig_mode_t sig_mode = GPGME_SIG_MODE_NORMAL;
+
+  g_return_val_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog),
+			GPGME_SIG_MODE_NORMAL);
+  g_return_val_if_fail (dialog->vbox_mode != NULL, GPGME_SIG_MODE_NORMAL);
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_comp)))
+    sig_mode = GPGME_SIG_MODE_NORMAL;
+  else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->radio_sign)))
+    sig_mode = GPGME_SIG_MODE_CLEAR;
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(dialog->radio_sep)))
+    sig_mode = GPGME_SIG_MODE_DETACH;
+
+  return sig_mode;
+}
+
+
+void
+gpa_file_sign_dialog_set_sig_mode (GpaFileSignDialog *dialog,
+				   gpgme_sig_mode_t mode)
+{
+  GtkWidget *button = NULL;
+
+  g_return_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog));
+  g_return_if_fail (dialog->vbox_mode != NULL);
+
+  if (mode == GPGME_SIG_MODE_NORMAL)
+    button = dialog->radio_comp;
+  else if (mode == GPGME_SIG_MODE_CLEAR)
+    button = dialog->radio_sign;
+  else if (mode == GPGME_SIG_MODE_DETACH)
+    button = dialog->radio_sep;
+
+  if (button != NULL)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 }

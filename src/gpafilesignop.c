@@ -134,8 +134,17 @@ gpa_file_sign_operation_constructor (GType type,
   op = GPA_FILE_SIGN_OPERATION (object);
   /* Initialize */
   /* Create the "Sign" dialog */
-  op->sign_dialog = gpa_file_sign_dialog_new (GPA_OPERATION (op)->window,
-					      op->force_armor);
+  op->sign_dialog = gpa_file_sign_dialog_new (GPA_OPERATION (op)->window);
+  if (op->force_armor)
+    {
+      /* FIXME: Currently, force_armor means also force cleartext sig mode.  */
+      GpaFileSignDialog *dialog = GPA_FILE_SIGN_DIALOG (op->sign_dialog);
+      gpa_file_sign_dialog_set_armor (dialog, TRUE);
+      gpa_file_sign_dialog_set_force_armor (dialog, TRUE);
+      gpa_file_sign_dialog_set_sig_mode (dialog, GPGME_SIG_MODE_CLEAR);
+      gpa_file_sign_dialog_set_force_sig_mode (dialog, TRUE);
+    }
+
   g_signal_connect (G_OBJECT (op->sign_dialog), "response",
 		    G_CALLBACK (gpa_file_sign_operation_response_cb), op);
   /* Connect to the "done" signal */
@@ -478,7 +487,7 @@ gpa_file_sign_operation_response_cb (GtkDialog *dialog,
 	(GPA_FILE_SIGN_DIALOG (op->sign_dialog));
       GList *signers = gpa_file_sign_dialog_signers 
 	(GPA_FILE_SIGN_DIALOG (op->sign_dialog));
-      op->sign_type = gpa_file_sign_dialog_get_sign_type
+      op->sign_type = gpa_file_sign_dialog_get_sig_mode
 	(GPA_FILE_SIGN_DIALOG (op->sign_dialog));
       
       /* Set the armor value */

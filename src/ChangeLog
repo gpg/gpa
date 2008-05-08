@@ -1,3 +1,44 @@
+2008-05-08  Marcus Brinkmann  <marcus@g10code.de>
+
+
+	* filesigndlg.h (struct _GpaFileSignDialog): New members vbox_mode
+	and force_sig_mode.
+	(gpa_file_sign_dialog_new): Remove force_armor argument from
+	prototype.
+	(gpa_file_sign_dialog_set_armor)
+	(gpa_file_sign_dialog_get_force_armor)
+	(gpa_file_sign_dialog_set_force_armor)
+	(gpa_file_sign_dialog_get_sig_mode)
+	(gpa_file_sign_dialog_set_sig_mode)
+	(gpa_file_sign_dialog_get_force_sig_mode)
+	(gpa_file_sign_dialog_set_force_sig_mode): New prototypes.
+	* gpastreamsignop.c (gpa_stream_sign_operation_ctor): Remove
+	obsolete argument from gpa_file_sign_dialog_new.
+	* gpafilesignop.c (gpa_file_sign_operation_constructor): Likewise.
+	If OP->force_armor, set a couple of of properties on
+	OP->sign_dialog.
+	* filesigndlg.c: New properties PROP_ARMOR, PROP_SIG_MODE,
+	PROP_FORCE_SIG_MODE.
+	(gpa_file_sign_dialog_constructor): Call gtk_widget_show_all
+	before gtk_widget_set_no_show_all.
+	(gpa_file_sign_dialog_get_property): Handle new properties.
+	(gpa_file_sign_dialog_set_property): Likewise.
+	(gpa_file_sign_dialog_class_init): Likewise.
+	(gpa_file_sign_dialog_constructor): Save vbox_mode for sig mode.
+	Set no-show-all attribute on armor button.  Do not remove normal
+	signing mode in simplified UI mode.
+	(gpa_file_sign_dialog_new): Remove force_armor argument.
+	(gpa_file_sign_dialog_get_sign_type): Rename to ...
+	(gpa_file_sign_dialog_get_sig_mode): ... this.  Change callers as
+	well.
+	(gpa_file_sign_dialog_set_armor)
+	(gpa_file_sign_dialog_get_force_armor)
+	(gpa_file_sign_dialog_set_force_armor)
+	(gpa_file_sign_dialog_get_sig_mode)
+	(gpa_file_sign_dialog_set_sig_mode)
+	(gpa_file_sign_dialog_get_force_sig_mode)
+	(gpa_file_sign_dialog_set_force_sig_mode): New functions.
+
 2008-05-07  Werner Koch  <wk@g10code.com>
 
 	* gpakeydeleteop.c (gpa_key_delete_operation_next): Init ERR.

@@ -40,13 +40,16 @@ struct _GpaFileSignDialog
 {
   GtkDialog parent;
 
+  GtkWidget *vbox_mode;
   GtkWidget *radio_comp;
   GtkWidget *radio_sign;
   GtkWidget *radio_sep;
+
   GtkWidget *check_armor;
   GtkWidget *clist_who;
 
   gboolean force_armor;
+  gboolean force_sig_mode;
 };
 
 struct _GpaFileSignDialogClass
@@ -58,12 +61,25 @@ GType gpa_file_sign_dialog_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-GtkWidget *gpa_file_sign_dialog_new (GtkWidget *parent, gboolean force_armor);
+GtkWidget *gpa_file_sign_dialog_new (GtkWidget *parent);
 
 GList *gpa_file_sign_dialog_signers (GpaFileSignDialog *dialog);
 
-gboolean gpa_file_sign_dialog_get_armor (GpaFileSignDialog *dialog);
+gboolean gpa_file_sign_dialog_get_force_armor (GpaFileSignDialog *dialog);
+void gpa_file_sign_dialog_set_force_armor (GpaFileSignDialog *dialog,
+					   gboolean force_armor);
 
-gpgme_sig_mode_t gpa_file_sign_dialog_get_sign_type (GpaFileSignDialog *dialog);
+gboolean gpa_file_sign_dialog_get_armor (GpaFileSignDialog *dialog);
+void gpa_file_sign_dialog_set_armor (GpaFileSignDialog *dialog,
+				     gboolean armor);
+
+gboolean gpa_file_sign_dialog_get_force_sig_mode (GpaFileSignDialog *dialog);
+void gpa_file_sign_dialog_set_force_sig_mode (GpaFileSignDialog *dialog,
+					   gboolean force_sig_mode);
+
+gpgme_sig_mode_t gpa_file_sign_dialog_get_sig_mode (GpaFileSignDialog *dialog);
+void gpa_file_sign_dialog_set_sig_mode (GpaFileSignDialog *dialog,
+					gpgme_sig_mode_t mode);
+
 
 #endif /* FILESIGNDLG_H */
