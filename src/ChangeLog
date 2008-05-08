@@ -1,5 +1,12 @@
 2008-05-08  Marcus Brinkmann  <marcus@g10code.de>
 
+	* filesigndlg.c (gpa_file_sign_dialog_set_force_sig_mode): Forcing
+	affects visibility now instead of sensitivity.
+	(gpa_file_sign_dialog_set_force_armor): Likewise.
+	(gpa_file_sign_dialog_constructor): Allow sig mode frame to be
+	hidden.  Don't hide armor based on UI expert level.  Never show
+	the cleartext sig mode option.
+
 	* filesigndlg.c (gpa_file_sign_dialog_constructor): Move signer
 	list before everything else, don't use borders with frames, fix
 	mnemonic conflict, replace vbox_mode with frame_mode.

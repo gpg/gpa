@@ -217,12 +217,26 @@ gpa_file_sign_dialog_constructor (GType type,
     (GTK_RADIO_BUTTON (radio_sign_comp), _("Clear_text signature"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
   dialog->radio_sign = radio_sign;
+  /* FIXME: We hide the radio button here.  It still can be activated
+     invisibly by setting the "sig-mode" property.  This is used by
+     the clipboard code, which also hides the whole sig mode selection
+     frame, so no harm done.  For the file sign mode, hiding the
+     cleartext option is the right thing to do.  But eventually, all
+     this should be freely configurable by the caller, instead of
+     relying on such knowledge.  */
+  gtk_widget_set_no_show_all (radio_sign, TRUE);
+  gtk_widget_hide (radio_sign);
 
   radio_sign_sep =
     gtk_radio_button_new_with_mnemonic_from_widget
     (GTK_RADIO_BUTTON (radio_sign_comp), _("_Detached signature"));
   gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
   dialog->radio_sep = radio_sign_sep;
+
+  /* Allow for the frameMode to be hidden despite what show_all
+     does.  */
+  gtk_widget_show_all (frameMode);
+  gtk_widget_set_no_show_all (frameMode, TRUE);
 			      
   checkerArmor = gtk_check_button_new_with_mnemonic (_("A_rmor"));
   gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
@@ -230,11 +244,6 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_widget_show_all (checkerArmor);
   gtk_widget_set_no_show_all (checkerArmor, TRUE);
   dialog->check_armor = checkerArmor;
-
-  if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-    gtk_widget_hide (dialog->check_armor);
-  else
-    gtk_widget_show (dialog->check_armor);
 
   return object;
 }
@@ -382,31 +391,12 @@ gpa_file_sign_dialog_set_force_armor (GpaFileSignDialog *dialog,
   if (force_armor == dialog->force_armor)
     return;
 
-  gtk_widget_set_sensitive (dialog->check_armor, ! force_armor);
+  if (force_armor)
+    gtk_widget_hide (dialog->check_armor);
+  else
+    gtk_widget_show (dialog->check_armor);
+
   dialog->force_armor = force_armor;
-}
-
-
-gboolean
-gpa_file_sign_dialog_get_force_sig_mode (GpaFileSignDialog *dialog)
-{
-  g_return_val_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog), FALSE);
-
-  return dialog->force_sig_mode;
-}
-
-
-void
-gpa_file_sign_dialog_set_force_sig_mode (GpaFileSignDialog *dialog,
-				      gboolean force_sig_mode)
-{
-  g_return_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog));
-  g_return_if_fail (dialog->frame_mode != NULL);
-
-  if (force_sig_mode == dialog->force_sig_mode)
-    return;
-
-  gtk_widget_set_sensitive (dialog->frame_mode, ! force_sig_mode);
 }
 
 
@@ -448,4 +438,30 @@ gpa_file_sign_dialog_set_sig_mode (GpaFileSignDialog *dialog,
 
   if (button != NULL)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+}
+
+
+gboolean
+gpa_file_sign_dialog_get_force_sig_mode (GpaFileSignDialog *dialog)
+{
+  g_return_val_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog), FALSE);
+
+  return dialog->force_sig_mode;
+}
+
+
+void
+gpa_file_sign_dialog_set_force_sig_mode (GpaFileSignDialog *dialog,
+				      gboolean force_sig_mode)
+{
+  g_return_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog));
+  g_return_if_fail (dialog->frame_mode != NULL);
+
+  if (force_sig_mode == dialog->force_sig_mode)
+    return;
+
+  if (force_sig_mode)
+    gtk_widget_hide (dialog->frame_mode);
+  else
+    gtk_widget_show (dialog->frame_mode);
 }
