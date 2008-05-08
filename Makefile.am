@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = dist-bzip2
 
-SUBDIRS = m4  intl src po pixmaps
+SUBDIRS = m4 src po pixmaps
 EXTRA_DIST = config.rpath  TODO README-alpha to-utf8 autogen.sh gpa.spec gpa.desktop gpa.png
 DISTCLEANFILES = gpadefs.h 
 

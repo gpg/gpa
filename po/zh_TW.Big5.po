@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -219,7 +219,7 @@ msgstr "Ã±¸p (&S)"
 msgid "Sign _as "
 msgstr "Ã±¸p¬° (&a)"
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "¯Â¤å¦r (&r)"
 
@@ -313,7 +313,7 @@ msgstr "Ã±¸p¤ÎÀ£ÁY (&g)"
 msgid "Clear_text signature"
 msgstr "¯Â¤å¦rÃ±¸p (&C)"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "¯Â¤å¦rÃ±¸p (&C)"

@@ -1,3 +1,8 @@
+2008-05-08  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Require external gettext.
+	* Makefile.am (SUBDIRS): Remove intl.
+
 2008-04-01  Werner Koch  <wk@g10code.com>
 
 	* configure.ac (AC_INIT): Fix quoting.

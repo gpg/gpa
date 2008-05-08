@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2003-11-03 17:11+0100\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
@@ -225,7 +225,7 @@ msgstr "署名する (_S)"
 msgid "Sign _as "
 msgstr "署名選択 (_A)"
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "アーマの形成 (_R)"
 
@@ -319,7 +319,7 @@ msgstr "圧縮ありで署名する (_G)"
 msgid "Clear_text signature"
 msgstr "平文署名 (_C)"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "平文署名 (_C)"

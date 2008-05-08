@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2008-03-17 13:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -214,7 +214,7 @@ msgstr "_وقِّع"
 msgid "Sign _as "
 msgstr "وقّع _باسم"
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "مُ_حصّن"
 
@@ -307,7 +307,7 @@ msgstr "و_قّع واضغط"
 msgid "Clear_text signature"
 msgstr "توقيع نص _صريح"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "توقيع  _منفصِل"

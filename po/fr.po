@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2008-03-11 20:06-0500\n"
 "Last-Translator: Fabian Rodriguez <fabian@legoutdulibre.com>\n"
 "Language-Team:  <fr@li.org>\n"
@@ -213,7 +213,7 @@ msgstr "_Signer"
 msgid "Sign _as "
 msgstr "Signer _comme"
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "A_rmure"
 
@@ -306,7 +306,7 @@ msgstr "si_gner et compresser"
 msgid "Clear_text signature"
 msgstr "signature en _clair"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "signature _détachée"

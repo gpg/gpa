@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2007-05-24 15:04+0200\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: czech <cs@li.org>\n"
@@ -228,7 +228,7 @@ msgstr "Podep_sat"
 msgid "Sign _as "
 msgstr "Podeps_at jako"
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "ASCII-_zakódovat"
 
@@ -322,7 +322,7 @@ msgstr "podep_sat a komprimovat"
 msgid "Clear_text signature"
 msgstr "podpis v čistém _textu"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "podpis v čistém _textu"

@@ -180,8 +180,10 @@ fi
 AC_SUBST(NETLIBS)
 
 
-AM_GNU_GETTEXT_VERSION(0.12.1)
-AM_GNU_GETTEXT(,[need-ngettext])
+AM_PO_SUBDIRS
+AM_GNU_GETTEXT_VERSION(0.12)
+AM_GNU_GETTEXT([external],[need-ngettext])
+
 
 AC_CHECK_FUNC(getopt_long,
     AC_MSG_RESULT(using libc's getopt_long),
@@ -346,7 +348,6 @@ fi
 
 AC_CONFIG_FILES([ m4/Makefile 
 Makefile
-intl/Makefile
 po/Makefile.in
 src/Makefile
 pixmaps/Makefile

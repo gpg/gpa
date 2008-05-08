@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2007-02-17 12:50+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -222,7 +222,7 @@ msgstr "_Signera"
 msgid "Sign _as "
 msgstr "Signera s_om"
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "ASCII-s_kal"
 
@@ -316,7 +316,7 @@ msgstr "signera och _komprimera"
 msgid "Clear_text signature"
 msgstr "signatur i klar_text"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "signatur i klar_text"

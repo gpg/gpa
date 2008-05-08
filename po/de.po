@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2008-05-08 14:49+0200\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: deutsch <de@li.org>\n"
@@ -204,7 +204,7 @@ msgstr "Si_gnieren"
 msgid "Sign _as "
 msgstr "_Signieren als"
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "ASCII-_Verpackung"
 
@@ -292,7 +292,7 @@ msgstr "si_gnieren und komprimieren"
 msgid "Clear_text signature"
 msgstr "_Klartextsignatur"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 msgid "_Detached signature"
 msgstr "_Abgetrennte Signature"
 

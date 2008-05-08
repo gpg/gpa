@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2003-10-19 14:29+0200\n"
 "Last-Translator: Michael Anckaert <michael.anckaert@pi.be>\n"
 "Language-Team: DUTCH <nl@li.org>\n"
@@ -222,7 +222,7 @@ msgstr "_Ondertekenen"
 msgid "Sign _as "
 msgstr "Ondertekenen_als"
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "ASCII-_Armor"
 
@@ -316,7 +316,7 @@ msgstr "onder_teken en comprimeer"
 msgid "Clear_text signature"
 msgstr "_platte text ondertekening"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "_platte text ondertekening"

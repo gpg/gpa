@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.8\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2008-03-18 20:12+0300\n"
 "Last-Translator: Sergei Smirnov <moscow@hro.org>\n"
 "Language-Team: Russian <moscow@hro.org>\n"
@@ -215,7 +215,7 @@ msgstr "_Подписать"
 msgid "Sign _as "
 msgstr "Подписать _как"
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "_Защитить"
 
@@ -308,7 +308,7 @@ msgstr "_подпись и сжатие"
 msgid "Clear_text signature"
 msgstr "_текстовая подпись"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "_отделяемая подпись"

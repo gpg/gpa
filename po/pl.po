@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:51+0200\n"
+"POT-Creation-Date: 2008-05-08 14:53+0200\n"
 "PO-Revision-Date: 2004-08-22 02:23+0200\n"
 "Last-Translator: Emilian Nowak <emil5@go2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -220,7 +220,7 @@ msgstr "_Podpisz"
 msgid "Sign _as "
 msgstr "Podpisz _jako "
 
-#: src/encryptdlg.c:215 src/filesigndlg.c:227
+#: src/encryptdlg.c:215 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "Opa_kowanie ASCII"
 
@@ -314,7 +314,7 @@ msgstr "po_dpisz i skompresuj"
 msgid "Clear_text signature"
 msgstr "podpisz _czystym tekstem"
 
-#: src/filesigndlg.c:223
+#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "podpisz _czystym tekstem"
