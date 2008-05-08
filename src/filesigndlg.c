@@ -139,12 +139,14 @@ gpa_file_sign_dialog_constructor (GType type,
   GObject *object;
   GpaFileSignDialog *dialog;
   GtkWidget *vboxSign;
+  GtkWidget *label;
   GtkWidget *frameMode;
   GtkWidget *vboxMode;
   GtkWidget *radio_sign_comp;
   GtkWidget *radio_sign;
   GtkWidget *radio_sign_sep;
   GtkWidget *checkerArmor;
+  GtkWidget *frameWho;
   GtkWidget *vboxWho;
   GtkWidget *labelWho;
   GtkWidget *scrollerWho;
@@ -170,42 +172,18 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  vboxSign = GTK_DIALOG (dialog)->vbox;
-  gtk_container_set_border_width (GTK_CONTAINER (vboxSign), 5);
+  vboxSign = gtk_vbox_new (FALSE, 5);
+  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), vboxSign);
 
-  frameMode = gtk_frame_new (_("Signing Mode"));
-  gtk_container_set_border_width (GTK_CONTAINER (frameMode), 5);
-  gtk_box_pack_start (GTK_BOX (vboxSign), frameMode, FALSE, FALSE, 0);
-
-  vboxMode = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxMode), 5);
-  gtk_container_add (GTK_CONTAINER (frameMode), vboxMode);
-  dialog->vbox_mode = vboxMode;
-
-  radio_sign_comp = gtk_radio_button_new_with_mnemonic
-    (NULL, _("Si_gn and compress"));
-  gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_comp, FALSE, FALSE, 0);
-  dialog->radio_comp = radio_sign_comp;
-
-  radio_sign =
-    gtk_radio_button_new_with_mnemonic_from_widget
-    (GTK_RADIO_BUTTON (radio_sign_comp), _("_Cleartext signature"));
-  gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
-  dialog->radio_sign = radio_sign;
-
-  radio_sign_sep =
-    gtk_radio_button_new_with_mnemonic_from_widget
-    (GTK_RADIO_BUTTON (radio_sign_comp), _("_Detached signature"));
-  gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
-  dialog->radio_sep = radio_sign_sep;
+  frameWho = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (frameWho), GTK_SHADOW_NONE);
+  labelWho = gtk_label_new_with_mnemonic (_("<b>Sign _as</b>"));
+  gtk_label_set_use_markup (GTK_LABEL (labelWho), TRUE);
+  gtk_frame_set_label_widget (GTK_FRAME (frameWho), labelWho);
+  gtk_box_pack_start (GTK_BOX (vboxSign), frameWho, FALSE, FALSE, 0);
 
   vboxWho = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vboxWho), 5);
-  gtk_box_pack_start (GTK_BOX (vboxSign), vboxWho, TRUE, TRUE, 0);
-
-  labelWho = gtk_label_new_with_mnemonic (_("Sign _as "));
-  gtk_misc_set_alignment (GTK_MISC (labelWho), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vboxWho), labelWho, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (frameWho), vboxWho);
 
   scrollerWho = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_size_request (scrollerWho, 400, 200);
@@ -217,9 +195,36 @@ gpa_file_sign_dialog_constructor (GType type,
   dialog->clist_who = clistWho;
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
   gtk_label_set_mnemonic_widget (GTK_LABEL (labelWho), clistWho);
+
+  frameMode = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (frameMode), GTK_SHADOW_NONE);
+  label = gtk_label_new (_("<b>Signing Mode</b>"));
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_frame_set_label_widget (GTK_FRAME (frameMode), label);
+  gtk_box_pack_start (GTK_BOX (vboxSign), frameMode, FALSE, FALSE, 0);
+
+  vboxMode = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (frameMode), vboxMode);
+  dialog->frame_mode = frameMode;
+
+  radio_sign_comp = gtk_radio_button_new_with_mnemonic
+    (NULL, _("Si_gn and compress"));
+  gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_comp, FALSE, FALSE, 0);
+  dialog->radio_comp = radio_sign_comp;
+
+  radio_sign =
+    gtk_radio_button_new_with_mnemonic_from_widget
+    (GTK_RADIO_BUTTON (radio_sign_comp), _("Clear_text signature"));
+  gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign, FALSE, FALSE, 0);
+  dialog->radio_sign = radio_sign;
+
+  radio_sign_sep =
+    gtk_radio_button_new_with_mnemonic_from_widget
+    (GTK_RADIO_BUTTON (radio_sign_comp), _("_Detached signature"));
+  gtk_box_pack_start (GTK_BOX (vboxMode), radio_sign_sep, FALSE, FALSE, 0);
+  dialog->radio_sep = radio_sign_sep;
 			      
   checkerArmor = gtk_check_button_new_with_mnemonic (_("A_rmor"));
-  gtk_container_set_border_width (GTK_CONTAINER (checkerArmor), 5);
   gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
   /* Take care of any child widgets there might be.  */
   gtk_widget_show_all (checkerArmor);
@@ -396,12 +401,12 @@ gpa_file_sign_dialog_set_force_sig_mode (GpaFileSignDialog *dialog,
 				      gboolean force_sig_mode)
 {
   g_return_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog));
-  g_return_if_fail (dialog->vbox_mode != NULL);
+  g_return_if_fail (dialog->frame_mode != NULL);
 
   if (force_sig_mode == dialog->force_sig_mode)
     return;
 
-  gtk_widget_set_sensitive (dialog->vbox_mode, ! force_sig_mode);
+  gtk_widget_set_sensitive (dialog->frame_mode, ! force_sig_mode);
 }
 
 
@@ -412,7 +417,7 @@ gpa_file_sign_dialog_get_sig_mode (GpaFileSignDialog *dialog)
 
   g_return_val_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog),
 			GPGME_SIG_MODE_NORMAL);
-  g_return_val_if_fail (dialog->vbox_mode != NULL, GPGME_SIG_MODE_NORMAL);
+  g_return_val_if_fail (dialog->frame_mode != NULL, GPGME_SIG_MODE_NORMAL);
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_comp)))
     sig_mode = GPGME_SIG_MODE_NORMAL;
@@ -432,7 +437,7 @@ gpa_file_sign_dialog_set_sig_mode (GpaFileSignDialog *dialog,
   GtkWidget *button = NULL;
 
   g_return_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog));
-  g_return_if_fail (dialog->vbox_mode != NULL);
+  g_return_if_fail (dialog->frame_mode != NULL);
 
   if (mode == GPGME_SIG_MODE_NORMAL)
     button = dialog->radio_comp;

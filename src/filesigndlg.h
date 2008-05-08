@@ -40,7 +40,7 @@ struct _GpaFileSignDialog
 {
   GtkDialog parent;
 
-  GtkWidget *vbox_mode;
+  GtkWidget *frame_mode;
   GtkWidget *radio_comp;
   GtkWidget *radio_sign;
   GtkWidget *radio_sep;
