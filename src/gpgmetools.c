@@ -1170,7 +1170,7 @@ gpa_switch_to_gpg2 (void)
   g_return_if_fail (oldname && *oldname);
   newname = xmalloc (strlen (oldname) + 1 + 1);
   strcpy (newname, oldname);
-#if G_OS_WIN32
+#ifdef G_OS_WIN32
 # define OLD_NAME "gpg.exe"  
 # define NEW_NAME "gpg2.exe"  
   for (p=newname; *p; p++)
