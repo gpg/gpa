@@ -1,3 +1,7 @@
+2008-05-09  Werner Koch  <wk@g10code.com>
+
+	* confdialog.c (create_dialog_tabs_2): Use a localized group name.
+
 2008-05-09  Marcus Brinkmann  <marcus@g10code.de>
 
 	* Makefile.am (gpa_SOURCES): Add gpastreamverifyop.h,

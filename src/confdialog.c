@@ -1012,8 +1012,15 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	      gtk_box_pack_start (GTK_BOX (page), frame, FALSE, FALSE, 0);
 	      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
 
-	      /* FIXME: l10n? */
-	      snprintf (name, sizeof (name), "<b>%s</b>", option->name);
+	      /* For i18n reasons we use the description.  It might be
+                 better to add a new field to privide a localized
+                 version of the Group name.  Maybe the argname can be
+                 used for it.  AFAICS, we would only need to prefix
+                 the description with the group name and gpgconf would
+                 instantly privide that. */
+	      snprintf (name, sizeof (name), "<b>%s</b>", 
+                        (option->argname && *option->argname)?
+                         option->argname : option->description);
 	      name[sizeof (name) - 1] = '\0';
 	      label = gtk_label_new (name);
 
