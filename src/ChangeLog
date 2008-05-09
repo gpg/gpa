@@ -1,3 +1,17 @@
+2008-05-09  Marcus Brinkmann  <marcus@g10code.de>
+
+	* Makefile.am (gpa_SOURCES): Add gpastreamverifyop.h,
+	gpastreamverifyop.c, gpastreamdecryptop.h and gpastreamdecryptop.c.
+	* gpastreamverifyop.h, gpastreamverifyop.c: New files.
+	* gpastreamdecryptop.h, gpastreamdecryptop.c: New files.
+	* server.c: Include "gpastreamverifyop.h" and "gpastreamdecryptop.h".
+	(my_devnull_write_cb): New function.
+	(my_devnull_data_cbs): New struct.
+	(finish_io_streams, cmd_encrypt, cmd_sign, cmd_decrypt)
+	(cmd_verify,reset_notify): Reset CTRL->input_fd and CTRL->output_fd.
+	(cont_verify, cmd_verify): Finish implementation.
+	(cont_decrypt, cmd_decrypt): Finish implementation.
+
 2008-05-08  Werner Koch  <wk@g10code.com>
 
 	* gpgmetools.c (gpa_switch_to_gpg2): New.

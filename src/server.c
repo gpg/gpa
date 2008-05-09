@@ -1,23 +1,24 @@
 /* server.c -  The UI server part of GPA.
- * Copyright (C) 2007, 2008 g10 Code GmbH
- *
- * This file is part of GPA
- *
- * GPA is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * GPA is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
- * License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- */
+   Copyright (C) 2007, 2008 g10 Code GmbH
 
-#include <config.h>
+   This file is part of GPA
+
+   GPA is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+
+   GPA is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+   License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,6 +29,7 @@
 # include <sys/socket.h>
 # include <sys/un.h>
 #endif /*HAVE_W32_SYSTEM*/
+
 #include <gpgme.h>
 #include <glib.h>
 #include <assuan.h>
@@ -36,7 +38,8 @@
 #include "i18n.h"
 #include "gpastreamencryptop.h"
 #include "gpastreamsignop.h"
-
+#include "gpastreamdecryptop.h"
+#include "gpastreamverifyop.h"
 
 
 #define set_error(e,t) assuan_set_error (ctx, gpg_error (e), (t))
@@ -242,6 +245,7 @@ static struct gpgme_data_cbs my_gpgme_data_cbs =
     NULL
   };
 
+
 static ssize_t
 my_gpgme_message_read_cb (void *opaque, void *buffer, size_t size)
 {
@@ -279,6 +283,21 @@ static struct gpgme_data_cbs my_gpgme_message_cbs =
     NULL
   };
 
+
+static ssize_t
+my_devnull_write_cb (void *opaque, const void *buffer, size_t size)
+{
+  return size;
+}
+
+
+static struct gpgme_data_cbs my_devnull_data_cbs =
+  { 
+    NULL,
+    my_devnull_write_cb,
+    NULL,
+    NULL
+  };
 
 
 /* Release the recipients stored in the connection context. */
@@ -375,6 +394,12 @@ finish_io_streams (assuan_context_t ctx,
       g_io_channel_shutdown (ctrl->message_channel, 0, NULL);
       ctrl->message_channel = NULL;
     }
+
+  close_message_fd (ctrl);
+  assuan_close_input_fd (ctx);
+  assuan_close_output_fd (ctx);
+  ctrl->input_fd = -1;
+  ctrl->output_fd = -1;
 }
 
 
@@ -461,22 +486,22 @@ prepare_io_streams (assuan_context_t ctx,
       g_io_channel_set_buffered (ctrl->message_channel, FALSE);
     }
 
-  if (ctrl->input_fd != -1 && r_input_data)
+  if (ctrl->input_channel)
     {
       err = gpgme_data_new_from_cbs (r_input_data, &my_gpgme_data_cbs, ctrl);
       if (err)
         goto leave;
     }
-  if (ctrl->output_fd != -1 && r_output_data)
+  if (ctrl->output_channel)
     {
       err = gpgme_data_new_from_cbs (r_output_data, &my_gpgme_data_cbs, ctrl);
       if (err)
         goto leave;
     }
-  if (ctrl->message_fd != -1 && r_message_data)
+  if (ctrl->message_channel)
     {
       err = gpgme_data_new_from_cbs (r_message_data,
-                                     &my_gpgme_message_cbs, ctrl);
+				     &my_gpgme_message_cbs, ctrl);
       if (err)
         goto leave;
     }
@@ -646,6 +671,8 @@ cmd_encrypt (assuan_context_t ctx, char *line)
   close_message_fd (ctrl);
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
+  ctrl->input_fd = -1;
+  ctrl->output_fd = -1;
   return assuan_process_done (ctx, err);
 }
 
@@ -835,6 +862,8 @@ cmd_sign (assuan_context_t ctx, char *line)
   close_message_fd (ctrl);
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
+  ctrl->input_fd = -1;
+  ctrl->output_fd = -1;
   return assuan_process_done (ctx, err);
 }
 
@@ -850,11 +879,6 @@ cont_decrypt (assuan_context_t ctx, gpg_error_t err)
            gpg_strerror (err), gpg_strsource (err));
 
   finish_io_streams (ctx, NULL, NULL, NULL);
-  if (!err)
-    {
-      xfree (ctrl->sender);
-      ctrl->sender = NULL;
-    }
   assuan_process_done (ctx, err);
 }
 
@@ -866,8 +890,7 @@ cont_decrypt (assuan_context_t ctx, gpg_error_t err)
 
    If the option --no-verify is given, the server should not try to
    verify a signature, in case the input data is an OpenPGP combined
-   message.
-*/
+   message.  */
 static int 
 cmd_decrypt (assuan_context_t ctx, char *line)
 {
@@ -875,7 +898,7 @@ cmd_decrypt (assuan_context_t ctx, char *line)
   gpg_error_t err;
   gpgme_protocol_t protocol = 0;
   int no_verify;
-  GpaStreamSignOperation *op;  /* Fixme: use GpaStreamDecryptOperatio!!!*/
+  GpaStreamDecryptOperation *op;
   gpgme_data_t input_data = NULL;
   gpgme_data_t output_data = NULL;
 
@@ -883,7 +906,7 @@ cmd_decrypt (assuan_context_t ctx, char *line)
   if (err)
     goto leave;
 
-  no_verify= has_option (line, "--no-verify");
+  no_verify = has_option (line, "--no-verify");
 
   line = skip_options (line);
   if (*line)
@@ -901,9 +924,8 @@ cmd_decrypt (assuan_context_t ctx, char *line)
 
   ctrl->cont_cmd = cont_decrypt;
 
-#warning  FIXME:  Use decrypt.
-  op = gpa_stream_sign_operation_new (NULL, input_data, output_data,
-                                      ctrl->sender, protocol, 1);
+  op = gpa_stream_decrypt_operation_new (NULL, input_data, output_data,
+					 no_verify, protocol);
 
   input_data = output_data = NULL;
   g_signal_connect_swapped (G_OBJECT (op), "completed",
@@ -920,6 +942,8 @@ cmd_decrypt (assuan_context_t ctx, char *line)
   close_message_fd (ctrl);
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
+  ctrl->input_fd = -1;
+  ctrl->output_fd = -1;
   return assuan_process_done (ctx, err);
 }
 
@@ -936,11 +960,6 @@ cont_verify (assuan_context_t ctx, gpg_error_t err)
            gpg_strerror (err), gpg_strsource (err));
 
   finish_io_streams (ctx, NULL, NULL, NULL);
-  if (!err)
-    {
-      xfree (ctrl->sender);
-      ctrl->sender = NULL;
-    }
   assuan_process_done (ctx, err);
 }
 
@@ -987,8 +1006,7 @@ cont_verify (assuan_context_t ctx, gpg_error_t err)
         The signature is not valid. 
 
    The DISPLAYSTRING is a percent-and-plus-encoded string with a short
-   human readable description of the status.
-*/
+   human readable description of the status.  */
 static int 
 cmd_verify (assuan_context_t ctx, char *line)
 {
@@ -996,10 +1014,11 @@ cmd_verify (assuan_context_t ctx, char *line)
   gpg_error_t err;
   gpgme_protocol_t protocol = 0;
   int silent;
-  GpaStreamSignOperation *op;  /* Fixme: use GpaStreamDecryptOperatio!!!*/
+  GpaStreamVerifyOperation *op;
   gpgme_data_t input_data = NULL;
   gpgme_data_t output_data = NULL;
   gpgme_data_t message_data = NULL;
+  enum { VERIFY_DETACH, VERIFY_OPAQUE, VERIFY_OPAQUE_WITH_OUTPUT } op_mode;
 
   err = parse_protocol_option (ctx, line, 1, &protocol);
   if (err)
@@ -1014,19 +1033,19 @@ cmd_verify (assuan_context_t ctx, char *line)
       goto leave;
     }
 
-  /* Note: We can't use translate_io_streams becuase that returns an
+  /* Note: We can't use translate_io_streams because that returns an
      error if one is not opened but that is not an error here.  */
   ctrl->input_fd = translate_sys2libc_fd (assuan_get_input_fd (ctx), 0);
   ctrl->output_fd = translate_sys2libc_fd (assuan_get_output_fd (ctx), 1);
   if (ctrl->message_fd != -1 && ctrl->input_fd != -1 
       && ctrl->output_fd == -1)
-    ; /* Mode = detached. */
+    op_mode = VERIFY_DETACH;
   else if (ctrl->message_fd == -1 && ctrl->input_fd != -1 
            && ctrl->output_fd == -1)
-    ; /* Mode = opaque. */
+    op_mode = VERIFY_OPAQUE;
   else if (ctrl->message_fd == -1 && ctrl->input_fd != -1 
            && ctrl->output_fd != -1)
-    ; /* Mode = opaque with output. */
+    op_mode = VERIFY_OPAQUE_WITH_OUTPUT;
   else
     {
       err = set_error (GPG_ERR_CONFLICT, "invalid verify mode");
@@ -1034,14 +1053,15 @@ cmd_verify (assuan_context_t ctx, char *line)
     }
   
   err = prepare_io_streams (ctx, &input_data, &output_data, &message_data);
+  if (! err && op_mode == VERIFY_OPAQUE)
+    err = gpgme_data_new_from_cbs (&output_data, &my_devnull_data_cbs, ctrl);
   if (err)
     goto leave;
 
-  ctrl->cont_cmd = cont_decrypt;
+  ctrl->cont_cmd = cont_verify;
 
-#warning  FIXME:  Use verify.
-  op = gpa_stream_sign_operation_new (NULL, input_data, output_data,
-                                      ctrl->sender, protocol, 1);
+  op = gpa_stream_verify_operation_new (NULL, input_data, message_data,
+					output_data, silent, protocol);
 
   input_data = output_data = message_data = NULL;
   g_signal_connect_swapped (G_OBJECT (op), "completed",
@@ -1058,6 +1078,8 @@ cmd_verify (assuan_context_t ctx, char *line)
   close_message_fd (ctrl);
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
+  ctrl->input_fd = -1;
+  ctrl->output_fd = -1;
   return assuan_process_done (ctx, err);
 }
 
@@ -1125,6 +1147,8 @@ reset_notify (assuan_context_t ctx)
   close_message_fd (ctrl);
   assuan_close_input_fd (ctx);
   assuan_close_output_fd (ctx);
+  ctrl->input_fd = -1;
+  ctrl->output_fd = -1;
   if (ctrl->gpa_op)
     {
       g_object_unref (ctrl->gpa_op);

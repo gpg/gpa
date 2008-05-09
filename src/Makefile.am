@@ -89,6 +89,8 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpastreamop.h gpastreamop.c  \
 	      gpastreamencryptop.h gpastreamencryptop.c  \
 	      gpastreamsignop.h gpastreamsignop.c  \
+	      gpastreamverifyop.h gpastreamverifyop.c  \
+	      gpastreamdecryptop.h gpastreamdecryptop.c  \
 	      gpafileop.h gpafileop.c \
 	      gpafiledecryptop.h gpafiledecryptop.c \
 	      gpafileencryptop.h gpafileencryptop.c \
