@@ -149,7 +149,18 @@ gpa_stream_sign_operation_ctor (GType type, guint n_construct_properties,
   op = GPA_STREAM_SIGN_OPERATION (object);
 
   op->sign_dialog = gpa_file_sign_dialog_new (GPA_OPERATION (op)->window);
-  /* FIXME: MBSIGN */
+  {
+    GpaFileSignDialog *dialog = GPA_FILE_SIGN_DIALOG (op->sign_dialog);
+
+    /* Note: The information here is wrong.  The actual sig_mode and
+       armor settings are determined from the selected key (which
+       determines the protocol).  We set the values here to those for
+       OpenPGP, and force (==hide) the selection widgets.  */
+    gpa_file_sign_dialog_set_armor (dialog, TRUE);
+    gpa_file_sign_dialog_set_force_armor (dialog, TRUE);
+    gpa_file_sign_dialog_set_sig_mode (dialog, GPGME_SIG_MODE_NORMAL);
+    gpa_file_sign_dialog_set_force_sig_mode (dialog, TRUE);
+  }
   g_signal_connect (G_OBJECT (op->sign_dialog), "response",
                     G_CALLBACK (response_cb), op);
 
