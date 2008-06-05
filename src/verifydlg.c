@@ -390,6 +390,15 @@ GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent)
   return GTK_WIDGET(dialog);
 }
 
+void
+gpa_file_verify_dialog_set_title (GpaFileVerifyDialog *dialog, 
+                                  const char *title)
+{
+  if (dialog && title && *title)
+    gtk_window_set_title (GTK_WINDOW (dialog), title);
+}
+
+
 void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      const gchar *filename,
 				      const gchar *signed_file,

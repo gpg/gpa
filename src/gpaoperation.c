@@ -45,6 +45,7 @@ enum
 {
   PROP_0,
   PROP_WINDOW,
+  PROP_CLIENT_TITLE
 };
 
 static GObjectClass *parent_class = NULL;
@@ -63,6 +64,9 @@ gpa_operation_get_property (GObject     *object,
     case PROP_WINDOW:
       g_value_set_object (value, op->window);
       break;
+    case PROP_CLIENT_TITLE:
+      g_value_set_string (value, op->client_title);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -70,17 +74,21 @@ gpa_operation_get_property (GObject     *object,
 }
 
 static void
-gpa_operation_set_property (GObject     *object,
-			    guint        prop_id,
-			    const GValue      *value,
-			    GParamSpec  *pspec)
+gpa_operation_set_property (GObject      *object,
+			    guint         prop_id,
+			    const GValue *value,
+			    GParamSpec   *pspec)
 {
   GpaOperation *op = GPA_OPERATION (object);
-
+  
   switch (prop_id)
     {
     case PROP_WINDOW:
       op->window = (GtkWidget*) g_value_get_object (value);
+      break;
+    case PROP_CLIENT_TITLE:
+      g_free (op->client_title);
+      op->client_title = g_value_dup_string (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -92,8 +100,10 @@ static void
 gpa_operation_finalize (GObject *object)
 {
   GpaOperation *op = GPA_OPERATION (object);
-  
+
   g_object_unref (op->context);
+  g_free (op->client_title);
+  op->client_title = NULL;
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -103,6 +113,7 @@ gpa_operation_init (GpaOperation *op)
 {
   op->window = NULL;
   op->context = NULL;
+  op->client_title = NULL;
 }
 
 static GObject*
@@ -166,6 +177,13 @@ gpa_operation_class_init (GpaOperationClass *klass)
                           "Parent window",
                           GTK_TYPE_WIDGET,
                           G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property 
+    (object_class, PROP_CLIENT_TITLE,
+     g_param_spec_string 
+     ("client-title", "Client Title",
+      "The client suggested title for the operation or NULL.", 
+      NULL,
+      G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 }
 
 

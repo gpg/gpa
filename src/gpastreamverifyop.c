@@ -159,9 +159,15 @@ gpa_stream_verify_operation_ctor (GType type, guint n_construct_properties,
     gtk_widget_hide (GPA_STREAM_OPERATION (op)->progress_dialog);
   else
     {
+      char *strval;
+
       op->dialog = gpa_file_verify_dialog_new (GPA_OPERATION (op)->window);
       g_signal_connect (G_OBJECT (op->dialog), "response",
 			G_CALLBACK (response_cb), op);
+      g_object_get (G_OBJECT (op), "client-title", &strval, NULL);
+      gpa_file_verify_dialog_set_title (GPA_FILE_VERIFY_DIALOG (op->dialog),
+                                        strval);
+      g_free (strval);
     }
 
   return object;
@@ -330,7 +336,7 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamVerifyOperation *op)
 	  else
 	    sigsum = "red";
 
-	  sigstatus = gpg_strerror (sig->status);
+	  sigstatus = sig->status? gpg_strerror (sig->status) : "";
 
 	  if (sig->fpr)
 	    {
@@ -342,39 +348,64 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamVerifyOperation *op)
 	  
 	  if (sig->summary & GPGME_SIGSUM_RED)
 	    {
-	      if (keydesc)
+	      if (keydesc && *sigstatus)
 		sigdesc = g_strdup_printf (_("Bad signature by %s: %s"),
 					   keydesc, sigstatus);
-	      else if (sig->fpr)
+	      else if (keydesc)
+		sigdesc = g_strdup_printf (_("Bad signature by %s"),
+					   keydesc);
+	      else if (sig->fpr && *sigstatus)
 		sigdesc = g_strdup_printf (_("Bad signature by unknown key "
 					     "%s: %s"), sig->fpr, sigstatus);
-	      else
+	      else if (sig->fpr)
+		sigdesc = g_strdup_printf (_("Bad signature by unknown key "
+					     "%s"), sig->fpr);
+	      else if (*sigstatus)
 		sigdesc = g_strdup_printf (_("Bad signature by unknown key: "
 					     "%s"), sigstatus);
+	      else
+		sigdesc = g_strdup_printf (_("Bad signature by unknown key"));
 	    }
 	  else if (sig->summary & GPGME_SIGSUM_VALID)
 	    {
-	      if (keydesc)
+	      if (keydesc && *sigstatus)
 		sigdesc = g_strdup_printf (_("Good signature by %s: %s"),
 					   keydesc, sigstatus);
-	      else if (sig->fpr)
+	      else if (keydesc)
+		sigdesc = g_strdup_printf (_("Good signature by %s"),
+					   keydesc);
+	      else if (sig->fpr && *sigstatus)
 		sigdesc = g_strdup_printf (_("Good signature by unknown key "
 					     "%s: %s"), sig->fpr, sigstatus);
-	      else
+	      else if (sig->fpr)
+		sigdesc = g_strdup_printf (_("Good signature by unknown key "
+					     "%s"), sig->fpr);
+	      else if (*sigstatus)
 		sigdesc = g_strdup_printf (_("Good signature by unknown key: "
 					     "%s"), sigstatus);
+	      else
+		sigdesc = g_strdup_printf (_("Good signature by unknown key"));
 	    }
 	  else
 	    {
-	      if (keydesc)
+	      if (keydesc && *sigstatus)
 		sigdesc = g_strdup_printf (_("Invalid signature by %s: %s"),
 					   keydesc, sigstatus);
-	      else if (sig->fpr)
+	      else if (keydesc)
+		sigdesc = g_strdup_printf (_("Invalid signature by %s"),
+					   keydesc);
+	      else if (sig->fpr && *sigstatus)
 		sigdesc = g_strdup_printf (_("Invalid signature by unknown key "
 					     "%s: %s"), sig->fpr, sigstatus);
-	      else
+	      else if (sig->fpr)
+		sigdesc = g_strdup_printf (_("Invalid signature by unknown key "
+					     "%s"), sig->fpr);
+	      else if (*sigstatus)
 		sigdesc = g_strdup_printf (_("Invalid signature by unknown "
 					     "key: %s"), sigstatus);
+	      else
+		sigdesc = g_strdup_printf (_("Invalid signature by unknown "
+					     "key"));
 	    }
 	  
 	  sigdesc_esc = my_percent_escape (sigdesc);
@@ -402,7 +433,6 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamVerifyOperation *op)
       gpgme_verify_result_t result;
       
       result = gpgme_op_verify_result (GPA_OPERATION (op)->context->ctx);
-      /* Add the file to the result dialog.  */
       gpa_file_verify_dialog_add_file (GPA_FILE_VERIFY_DIALOG (op->dialog),
 				       _("Document"), NULL, NULL,
 				       result->signatures);
@@ -446,7 +476,8 @@ gpa_stream_verify_operation_new (GtkWidget *window,
 				 gpgme_data_t input_stream,
 				 gpgme_data_t message_stream,
 				 gpgme_data_t output_stream,
-				 gboolean silent, gpgme_protocol_t protocol)
+				 gboolean silent, gpgme_protocol_t protocol,
+                                 const char *title)
 {
   GpaStreamVerifyOperation *op;
 
@@ -457,6 +488,7 @@ gpa_stream_verify_operation_new (GtkWidget *window,
 		     "output_stream", output_stream,
                      "silent", silent,
                      "protocol", (int) protocol,
+                     "client-title", title,
 		     NULL);
 
   return op;

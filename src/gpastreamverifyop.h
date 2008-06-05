@@ -61,6 +61,7 @@ gpa_stream_verify_operation_new (GtkWidget *window,
 				 gpgme_data_t message_stream,
 				 gpgme_data_t output_stream,
 				 gboolean silent,
-				 gpgme_protocol_t protocol);
+				 gpgme_protocol_t protocol,
+                                 const char *title);
 
 #endif	/* GPA_STREAM_VERIFY_OP_H */

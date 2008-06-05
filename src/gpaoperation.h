@@ -43,6 +43,7 @@ struct _GpaOperation {
 
   GtkWidget *window;
   GpaContext *context;
+  char *client_title;
 };
 
 struct _GpaOperationClass {

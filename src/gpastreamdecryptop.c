@@ -441,9 +441,11 @@ idle_cb (gpointer data)
 /* FIXME: Doc.  */
 GpaStreamDecryptOperation *
 gpa_stream_decrypt_operation_new (GtkWidget *window,
-				 gpgme_data_t input_stream,
-				 gpgme_data_t output_stream,
-				 gboolean no_verify, gpgme_protocol_t protocol)
+                                  gpgme_data_t input_stream,
+                                  gpgme_data_t output_stream,
+                                  gboolean no_verify,
+                                  gpgme_protocol_t protocol,
+                                  const char *title)
 {
   GpaStreamDecryptOperation *op;
 
@@ -453,6 +455,7 @@ gpa_stream_decrypt_operation_new (GtkWidget *window,
 		     "output_stream", output_stream,
                      "no-verify", no_verify,
                      "protocol", (int) protocol,
+                     "title", title,
 		     NULL);
 
   return op;

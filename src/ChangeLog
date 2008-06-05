@@ -1,3 +1,27 @@
+2008-06-05  Werner Koch  <wk@g10code.com>
+
+	* gpastreamverifyop.c (done_cb): Take care not to write a SIGSTATUS
+	line ala "invalid signature foo: Success".
+	
+	* gpastreamdecryptop.c (gpa_stream_decrypt_operation_new): Ditto.
+	* server.c (cmd_decrypt, cmd_verify): Pass title arg.
+	* verifydlg.c (gpa_file_verify_dialog_set_title): New.
+	* gpastreamverifyop.c (gpa_stream_verify_operation_new): Add arg
+	TITLE.
+	(gpa_stream_verify_operation_ctor): Display title.
+	* gpaoperation.c (PROP_CLIENT_TITLE): New.
+	(gpa_operation_get_property, gpa_operation_set_property) 
+	(gpa_operation_class_init): Register this property.
+	* gpaoperation.h (_GpaOperation): Add field CLIENT_TITLE.
+
+	* server.c (struct conn_ctrl_s): Add fields session_number and
+	session_title.
+	(cmd_session): Implement.
+	(reset_notify): Release the new fields.
+
+	* server.c (cmd_start_confdialog): New.
+	(register_commands): Register new command.
+
 2008-05-27  Marcus Brinkmann  <marcus@ulysses.g10code.com>
 
 	* gpastreamsignop.c (gpa_stream_sign_operation_ctor): Force armor

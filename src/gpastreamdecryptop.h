@@ -57,9 +57,10 @@ GType gpa_stream_decrypt_operation_get_type (void) G_GNUC_CONST;
 /* Creates a new decrypt operation.  */
 GpaStreamDecryptOperation *
 gpa_stream_decrypt_operation_new (GtkWidget *window,
-				 gpgme_data_t input_stream,
-				 gpgme_data_t output_stream,
-				 gboolean no_verify,
-				 gpgme_protocol_t protocol);
+                                  gpgme_data_t input_stream,
+                                  gpgme_data_t output_stream,
+                                  gboolean no_verify,
+                                  gpgme_protocol_t protocol,
+                                  const char *title);
 
 #endif	/* GPA_STREAM_DECRYPT_OP_H */

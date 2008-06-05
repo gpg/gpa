@@ -55,6 +55,9 @@ GType gpa_file_verify_dialog_get_type (void) G_GNUC_CONST;
 
 GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent);
 
+void gpa_file_verify_dialog_set_title (GpaFileVerifyDialog *dialog, 
+                                       const char *title);
+
 void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      const gchar *filename,
 				      const gchar *signed_file,

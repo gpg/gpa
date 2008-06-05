@@ -70,7 +70,7 @@ struct conn_ctrl_s
   int input_fd;
   int output_fd;
 
-  /* Fiel descriptor set with the MESSAGE command.  */
+  /* File descriptor set with the MESSAGE command.  */
   int message_fd;
 
   /* Channels used with the gpgme callbacks.  */
@@ -91,6 +91,10 @@ struct conn_ctrl_s
      the sender ist just informational. */
   gchar *sender;
   int sender_just_info;
+
+  /* Session information:  A session number and a malloced title or NULL.  */
+  unsigned int session_number;
+  char *session_title;
 };
 
 
@@ -533,13 +537,18 @@ prepare_io_streams (assuan_context_t ctx,
 static int
 cmd_session (assuan_context_t ctx, char *line)
 {
-  gpg_error_t err = 0;
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  char *endp;
 
   line = skip_options (line);
 
-  /* FIXME implement the command.  */
+  ctrl->session_number = strtoul (line, &endp, 10);
+  for (line = endp; spacep (line); line++)
+    ;
+  xfree (ctrl->session_title);
+  ctrl->session_title = *line? xstrdup (line) : NULL;
 
-  return assuan_process_done (ctx, err);
+  return assuan_process_done (ctx, 0);
 }
 
 
@@ -873,8 +882,6 @@ cmd_sign (assuan_context_t ctx, char *line)
 static void
 cont_decrypt (assuan_context_t ctx, gpg_error_t err)
 {
-  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
-
   g_debug ("cont_decrypt called with with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
@@ -925,7 +932,8 @@ cmd_decrypt (assuan_context_t ctx, char *line)
   ctrl->cont_cmd = cont_decrypt;
 
   op = gpa_stream_decrypt_operation_new (NULL, input_data, output_data,
-					 no_verify, protocol);
+					 no_verify, protocol,
+                                         ctrl->session_title);
 
   input_data = output_data = NULL;
   g_signal_connect_swapped (G_OBJECT (op), "completed",
@@ -954,8 +962,6 @@ cmd_decrypt (assuan_context_t ctx, char *line)
 static void
 cont_verify (assuan_context_t ctx, gpg_error_t err)
 {
-  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
-
   g_debug ("cont_verify called with with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
@@ -1061,7 +1067,8 @@ cmd_verify (assuan_context_t ctx, char *line)
   ctrl->cont_cmd = cont_verify;
 
   op = gpa_stream_verify_operation_new (NULL, input_data, message_data,
-					output_data, silent, protocol);
+					output_data, silent, protocol,
+                                        ctrl->session_title);
 
   input_data = output_data = message_data = NULL;
   g_signal_connect_swapped (G_OBJECT (op), "completed",
@@ -1095,6 +1102,22 @@ static int
 cmd_start_keymanager (assuan_context_t ctx, char *line)
 {
   gpa_open_keyring_editor (NULL, NULL);
+
+  return assuan_process_done (ctx, 0);
+}
+
+
+
+/* START_CONFDIALOG
+
+   Pop up the configure dialog.  The client expects that the key
+   manager is brought into the foregound and that this command
+   immediatley returns.
+*/
+static int
+cmd_start_confdialog (assuan_context_t ctx, char *line)
+{
+  gpa_open_settings_dialog (NULL, NULL);
 
   return assuan_process_done (ctx, 0);
 }
@@ -1154,6 +1177,9 @@ reset_notify (assuan_context_t ctx)
       g_object_unref (ctrl->gpa_op);
       ctrl->gpa_op = NULL;
     }
+  ctrl->session_number = 0;
+  xfree (ctrl->session_title);
+  ctrl->session_title = NULL;
 }
 
 
@@ -1179,6 +1205,7 @@ register_commands (assuan_context_t ctx)
     { "DECRYPT",   cmd_decrypt },
     { "VERIFY",    cmd_verify },
     { "START_KEYMANAGER", cmd_start_keymanager },
+    { "START_CONFDIALOG", cmd_start_confdialog },
     { "GETINFO",   cmd_getinfo },
     { NULL }
   };
