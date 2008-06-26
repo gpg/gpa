@@ -152,18 +152,20 @@ gpa_gen_key_advanced_operation_idle_cb (gpointer data)
   gpg_error_t err;
   GPAKeyGenParameters *parms;
   
-  if (! (parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window)))
+  parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window);
+  if (!parms)
     g_signal_emit_by_name (op, "completed", gpg_error (GPG_ERR_CANCELED));
-
-  err = gpa_generate_key_start (GPA_OPERATION (op)->context->ctx, parms);
-  if (err)
-    {
-      gpa_gpgme_warning (err);
-      g_signal_emit_by_name (op, "completed", err);
-    }
   else
-    gtk_widget_show_all (op->progress_dialog);
-
+    {
+      err = gpa_generate_key_start (GPA_OPERATION (op)->context->ctx, parms);
+      if (err)
+        {
+          gpa_gpgme_warning (err);
+          g_signal_emit_by_name (op, "completed", err);
+        }
+      else
+        gtk_widget_show_all (op->progress_dialog);
+    }
   return FALSE;
 }
 
