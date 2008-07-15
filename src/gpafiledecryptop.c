@@ -36,6 +36,7 @@
 #include "gtktools.h"
 #include "gpgmetools.h"
 #include "gpafiledecryptop.h"
+#include "verifydlg.h"
 
 /* Internal functions */
 static gboolean gpa_file_decrypt_operation_idle_cb (gpointer data);
@@ -50,9 +51,58 @@ static void gpa_file_decrypt_operation_done_error_cb (GpaContext *context,
 
 static GObjectClass *parent_class = NULL;
 
+/* Properties */
+enum
+{
+  PROP_0,
+  PROP_VERIFY
+};
+
+
+static void
+gpa_file_decrypt_operation_get_property (GObject *object, guint prop_id,
+					 GValue *value, GParamSpec *pspec)
+{
+  GpaFileDecryptOperation *op = GPA_FILE_DECRYPT_OPERATION (object);
+  
+  switch (prop_id)
+    {
+    case PROP_VERIFY:
+      g_value_set_boolean (value, op->verify);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+
+static void
+gpa_file_decrypt_operation_set_property (GObject *object, guint prop_id,
+					 const GValue *value, GParamSpec *pspec)
+{
+  GpaFileDecryptOperation *op = GPA_FILE_DECRYPT_OPERATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_VERIFY:
+      op->verify = g_value_get_boolean (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+
 static void
 gpa_file_decrypt_operation_finalize (GObject *object)
 {  
+  GpaFileDecryptOperation *op = GPA_FILE_DECRYPT_OPERATION (object);
+
+  if (op->dialog)
+    gtk_widget_destroy (op->dialog);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -64,6 +114,16 @@ gpa_file_decrypt_operation_init (GpaFileDecryptOperation *op)
   op->plain_fd = -1;
   op->cipher = NULL;
   op->plain = NULL;
+}
+
+
+static void
+gpa_file_decrypt_operation_response_cb (GtkDialog *dialog,
+					gint response, gpointer user_data)
+{
+  GpaFileDecryptOperation *op = GPA_FILE_DECRYPT_OPERATION (user_data);
+
+  g_signal_emit_by_name (GPA_OPERATION (op), "completed", op->err);
 }
 
 
@@ -93,6 +153,15 @@ gpa_file_decrypt_operation_constructor
   gtk_window_set_title (GTK_WINDOW (GPA_FILE_OPERATION (op)->progress_dialog),
 			_("Decrypting..."));
 
+  if (op->verify)
+    {
+      /* Create the verification dialog */
+      op->dialog = gpa_file_verify_dialog_new (GPA_OPERATION (op)->window);
+      g_signal_connect (G_OBJECT (op->dialog), "response",
+			G_CALLBACK (gpa_file_decrypt_operation_response_cb),
+			op);
+    }
+
   return object;
 }
 
@@ -105,6 +174,16 @@ gpa_file_decrypt_operation_class_init (GpaFileDecryptOperationClass *klass)
 
   object_class->constructor = gpa_file_decrypt_operation_constructor;
   object_class->finalize = gpa_file_decrypt_operation_finalize;
+  object_class->set_property = gpa_file_decrypt_operation_set_property;
+  object_class->get_property = gpa_file_decrypt_operation_get_property;
+
+  /* Properties */
+  g_object_class_install_property (object_class,
+				   PROP_VERIFY,
+				   g_param_spec_boolean
+				   ("verify", "Verify",
+				    "Verify", FALSE,
+				    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 GType
@@ -150,6 +229,23 @@ gpa_file_decrypt_operation_new (GtkWidget *window,
 
   return op;
 }
+
+
+GpaFileDecryptOperation*
+gpa_file_decrypt_verify_operation_new (GtkWidget *window,
+				       GList *files)
+{
+  GpaFileDecryptOperation *op;
+  
+  op = g_object_new (GPA_FILE_DECRYPT_OPERATION_TYPE,
+		     "window", window,
+		     "input_files", files,
+		     "verify", TRUE,
+		     NULL);
+
+  return op;
+}
+
 
 /* Internal */
 
@@ -226,8 +322,8 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
     }
 
   /* Start the operation.  */
-  err = gpgme_op_decrypt_start (GPA_OPERATION (op)->context->ctx, op->cipher, 
-				op->plain);
+  err = gpgme_op_decrypt_verify_start (GPA_OPERATION (op)->context->ctx,
+				       op->cipher, op->plain);
   if (err)
     {
       gpa_gpgme_warning (err);
@@ -262,14 +358,29 @@ gpa_file_decrypt_operation_next (GpaFileDecryptOperation *op)
 
   if (! GPA_FILE_OPERATION (op)->current)
     {
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
+      if (op->verify && op->signed_files)
+	{
+	  op->err = 0;
+	  gtk_widget_show_all (op->dialog);
+	}
+      else
+	g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
       return;
     }
 
   err = gpa_file_decrypt_operation_start
     (op, GPA_FILE_OPERATION (op)->current->data);
   if (err)
-    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
+    {
+      if (op->verify && op->signed_files)
+	{
+	  /* All files have been verified: show the results dialog */
+	  op->err = err;
+	  gtk_widget_show_all (op->dialog);
+	}
+      else
+	g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
+    }
 }
 
 
@@ -332,12 +443,32 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
       /* We've just created a file */
       g_signal_emit_by_name (GPA_OPERATION (op), "created_file", file_item);
 
+      if (op->verify)
+	{
+	  gpgme_verify_result_t result;
+ 
+	  result = gpgme_op_verify_result (GPA_OPERATION (op)->context->ctx);
+	  if (result->signatures)
+	    {
+	      /* Add the file to the result dialog.  FIXME: Maybe we
+		 should use the filename without the directory.  */
+	      gpa_file_verify_dialog_add_file (GPA_FILE_VERIFY_DIALOG (op->dialog),
+					       file_item->direct_name
+					       ? file_item->direct_name
+					       : file_item->filename_in,
+					       NULL, NULL,
+					       result->signatures);
+	      op->signed_files++;
+	    }
+	}
+
       /* Go to the next file in the list and decrypt it */
       GPA_FILE_OPERATION (op)->current = g_list_next 
 	(GPA_FILE_OPERATION (op)->current);
       gpa_file_decrypt_operation_next (op);
     }
 }
+
 
 static gboolean
 gpa_file_decrypt_operation_idle_cb (gpointer data)
@@ -348,6 +479,7 @@ gpa_file_decrypt_operation_idle_cb (gpointer data)
 
   return FALSE;
 }
+
 
 static void
 gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,

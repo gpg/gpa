@@ -476,7 +476,7 @@ file_decrypt (GtkAction *action, gpointer param)
   if (!files)
     return;
 
-  op = gpa_file_decrypt_operation_new (GTK_WIDGET (fileman), files);
+  op = gpa_file_decrypt_verify_operation_new (GTK_WIDGET (fileman), files);
 
   register_operation (fileman, GPA_FILE_OPERATION (op));
 }

@@ -61,11 +61,14 @@ GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent,
 
 GList *gpa_file_encrypt_dialog_recipients (GpaFileEncryptDialog *dialog);
 
-gboolean gpa_file_encrypt_dialog_sign (GpaFileEncryptDialog *dialog);
+gboolean gpa_file_encrypt_dialog_get_sign (GpaFileEncryptDialog *dialog);
+void gpa_file_encrypt_dialog_set_sign (GpaFileEncryptDialog *dialog,
+				       gboolean sign);
 
 GList *gpa_file_encrypt_dialog_signers (GpaFileEncryptDialog *dialog);
 
 gboolean gpa_file_encrypt_dialog_get_armor (GpaFileEncryptDialog *dialog);
-
+void gpa_file_encrypt_dialog_set_armor (GpaFileEncryptDialog *dialog,
+					gboolean armor);
 
 #endif /* ENCRYPTDLG_H */

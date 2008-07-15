@@ -17,6 +17,10 @@ In no particular order:
    checked.
 
 * The file decrypt operation should also show signatures, if available.
+** Problem: If we do a file-based operation and the file list contains
+   mixed files like detached signatures and inline decrypted files,
+   should a Decrypt/Verify operation should do its best to do the
+   right thing for each file?
 
 * Add more options to the "Edit key" dialog.
 ** Manage UID's.
@@ -91,3 +95,7 @@ In no particular order:
    -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED
    -DGDK_MULTIHEAD_SAFE -DGTK_MULTIHEAD_SAFE
    This is mostly done, except for multi-head safeness and gtk marshalling.
+** multi-file operations and errors
+   When doing multi-file verify/decrypt, we may ignore more errors as
+   to make more progress.  This seems more useful than the current
+   behavior.

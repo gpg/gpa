@@ -75,9 +75,12 @@ GType gpa_file_encrypt_operation_get_type (void) G_GNUC_CONST;
 /* API */
 
 /* Creates a new encryption operation. */
-GpaFileEncryptOperation *
-gpa_file_encrypt_operation_new (GtkWidget *window, GList *files,
-				gboolean force_armor);
+GpaFileEncryptOperation *gpa_file_encrypt_operation_new (GtkWidget *window,
+							 GList *files,
+							 gboolean force_armor);
+
+GpaFileEncryptOperation *gpa_file_encrypt_sign_operation_new
+(GtkWidget *window, GList *files, gboolean force_armor);
 
 /* Create a new encryption operaion for the UI server.  */
 GpaFileEncryptOperation*

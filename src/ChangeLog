@@ -1,3 +1,58 @@
+2008-07-15  Marcus Brinkmann  <marcus@g10code.de>
+
+	* server.c: Include "gpafileop.h", "gpafileencryptop.h",
+	"gpafilesignop.h", "gpafiledecryptop.h" and "gpafileverifyop.h".
+	(struct conn_ctrl_s): New member FILES and FILES_FINISHED.
+	(free_file_item, release_files, hextobyte, decode_percent_string)
+	(cmd_file, impl_encrypt_sign_files, cmd_encrypt_files)
+	(cmd_sign_files, cmd_encrypt_sign_files)
+	(impl_decrypt_verify_files, cmd_decrypt_files, cmd_verify_files)
+	(cmd_decrypt_verify_files, cmd_import_files)
+	(cmd_checksum_create_files, cmd_checksum_verify_files): New static
+	functions.
+	(register_commands): Add commands FILE, ENCRYPT_FILES, SIGN_FILES<
+	ENCRYPT_SIGN_FILES, DECRYPT_FILES, VERIFY_FILES,
+	DECRYPT_VERIFY_FILES, IMPORT_FILES, CHECKSUM_CREATE_FILES,
+	CHECKSUM_VERIFY_FILES.
+	* fileman.c (file_decrypt): Use
+	gpa_file_decrypt_verify_operation_new instead of
+	gpa_file_decrypt_operation_new.
+	* encrpytdlg.h (gpa_file_encrypt_dialog_sign): Rename prototype to ...
+	(gpa_file_encrypt_dialog_get_sign): ... this.
+	(gpa_file_encrypt_dialog_set_armor)
+	(gpa_file_encrypt_dialog_set_sign): New prototypes.
+	* encryptdlg.c: New properties PROP_ARMOR, PROP_SIGN.
+	(gpa_file_encrypt_dialog_get_property)
+	(gpa_file_encrypt_dialog_set_property): Handle these.
+	(gpa_file_encrypt_dialog_class_init): Install these.
+	(gpa_file_encrypt_dialog_sign): Rename function to ...
+	(gpa_file_encrypt_dialog_get_sign): ... this.
+	(gpa_file_encrypt_dialog_set_armor)
+	(gpa_file_encrypt_dialog_set_sign): New functions.
+	* gpafileencryptop.h (gpa_file_encrypt_sign_operation_new): New
+	prototype.
+	* gpafileencryptop.c (gpa_file_encrypt_sign_operation_new): New
+	interface.
+	* gpafiledecryptop.h (struct _GpaFileDecryptOperation): New
+	members VERIFY, ERR, SIGNED_FILES, and DIALOG.
+	(gpa_file_decrypt_verify_operation_new): New prototype.
+	* gpafiledecryptop.c: Include "verifydlg.h".  New property
+	PROP_VERIFY.
+	(gpa_file_decrypt_operation_get_property)
+	(gpa_file_decrypt_operation_set_property)
+	(gpa_file_decrypt_operation_response_cb): New static functions.
+	(gpa_file_decrypt_operation_finalize): Destroy OP->dialog.
+	(gpa_file_decrypt_operation_constructor): Create verify dialog.
+	(gpa_file_decrypt_operation_class_init): Set property hooks and
+	install PROP_VERIFY property.
+	(gpa_file_decrypt_verify_operation_new): New interface.
+	(gpa_file_decrypt_operation_start): Use
+	gpgme_op_decrypt_verify_start instead of gpgme_op_decrypt_start.
+	(gpa_file_decrypt_operation_next): When completed and in verify
+	mode, pop up the verification status dialog.
+	(gpa_file_decrypt_operation_done_cb): Gather verification status
+	summary if needed.
+
 2008-06-26  Werner Koch  <wk@g10code.com>
 
 	* gpagenkeyadvop.c (gpa_gen_key_advanced_operation_idle_cb): Do
@@ -7,7 +62,7 @@
 
 	* gpastreamverifyop.c (done_cb): Take care not to write a SIGSTATUS
 	line ala "invalid signature foo: Success".
-	
+
 	* gpastreamdecryptop.c (gpa_stream_decrypt_operation_new): Ditto.
 	* server.c (cmd_decrypt, cmd_verify): Pass title arg.
 	* verifydlg.c (gpa_file_verify_dialog_set_title): New.

@@ -46,7 +46,9 @@ enum
 {
   PROP_0,
   PROP_WINDOW,
-  PROP_FORCE_ARMOR
+  PROP_FORCE_ARMOR,
+  PROP_ARMOR,
+  PROP_SIGN
 };
 
 static GObjectClass *parent_class = NULL;
@@ -67,6 +69,12 @@ gpa_file_encrypt_dialog_get_property (GObject     *object,
       break;
     case PROP_FORCE_ARMOR:
       g_value_set_boolean (value, dialog->force_armor);
+      break;
+    case PROP_ARMOR:
+      g_value_set_boolean (value, gpa_file_encrypt_dialog_get_armor (dialog));
+      break;
+    case PROP_SIGN:
+      g_value_set_boolean (value, gpa_file_encrypt_dialog_get_sign (dialog));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -91,6 +99,12 @@ gpa_file_encrypt_dialog_set_property (GObject     *object,
       break;
     case PROP_FORCE_ARMOR:
       dialog->force_armor = g_value_get_boolean (value);
+      break;
+    case PROP_ARMOR:
+      gpa_file_encrypt_dialog_set_armor (dialog, g_value_get_boolean (value));
+      break;
+    case PROP_SIGN:
+      gpa_file_encrypt_dialog_set_sign (dialog, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -253,6 +267,18 @@ gpa_file_encrypt_dialog_class_init (GpaFileEncryptDialogClass *klass)
 				   ("force-armor", "Force armor",
 				    "Force armor mode", FALSE,
 				    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property (object_class,
+				   PROP_ARMOR,
+				   g_param_spec_boolean
+				   ("armor", "Armor",
+				    "Armor mode", FALSE, G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+				   PROP_SIGN,
+				   g_param_spec_boolean
+				   ("sign", "Sign",
+				    "Sign", FALSE, G_PARAM_WRITABLE));
 }
 
 
@@ -286,7 +312,8 @@ gpa_file_encrypt_dialog_get_type (void)
 
 /* API */
 
-GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent, gboolean force_armor)
+GtkWidget *
+gpa_file_encrypt_dialog_new (GtkWidget *parent, gboolean force_armor)
 {
   GpaFileEncryptDialog *dialog;
   
@@ -298,25 +325,45 @@ GtkWidget *gpa_file_encrypt_dialog_new (GtkWidget *parent, gboolean force_armor)
   return GTK_WIDGET(dialog);
 }
 
-GList *gpa_file_encrypt_dialog_recipients (GpaFileEncryptDialog *dialog)
+GList *
+gpa_file_encrypt_dialog_recipients (GpaFileEncryptDialog *dialog)
 {
   return gpa_key_selector_get_selected_keys (GPA_KEY_SELECTOR (dialog->clist_keys));
 }
 
-gboolean gpa_file_encrypt_dialog_sign (GpaFileEncryptDialog *dialog)
-{
-  return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_sign));
-}
 
-GList *gpa_file_encrypt_dialog_signers (GpaFileEncryptDialog *dialog)
+GList *
+gpa_file_encrypt_dialog_signers (GpaFileEncryptDialog *dialog)
 {
   return gpa_key_selector_get_selected_keys (GPA_KEY_SELECTOR (dialog->clist_who));
 }
 
 
-gboolean gpa_file_encrypt_dialog_get_armor (GpaFileEncryptDialog *dialog)
+gboolean
+gpa_file_encrypt_dialog_get_armor (GpaFileEncryptDialog *dialog)
 {
-  return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dialog->check_armor));
+  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->check_armor));
+}
+
+
+void
+gpa_file_encrypt_dialog_set_armor (GpaFileEncryptDialog *dialog, gboolean armor)
+{
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->check_armor), armor);
+}
+
+
+gboolean
+gpa_file_encrypt_dialog_get_sign (GpaFileEncryptDialog *dialog)
+{
+  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->check_sign));
+}
+
+
+void
+gpa_file_encrypt_dialog_set_sign (GpaFileEncryptDialog *dialog, gboolean sign)
+{
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->check_sign), sign);
 }
 
 

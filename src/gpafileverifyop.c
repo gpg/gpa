@@ -76,9 +76,10 @@ gpa_file_verify_operation_init (GpaFileVerifyOperation *op)
 }
 
 static GObject*
-gpa_file_verify_operation_constructor (GType type,
-					guint n_construct_properties,
-					GObjectConstructParam *construct_properties)
+gpa_file_verify_operation_constructor
+(GType type,
+ guint n_construct_properties,
+ GObjectConstructParam *construct_properties)
 {
   GObject *object;
   GpaFileVerifyOperation *op;
@@ -99,6 +100,7 @@ gpa_file_verify_operation_constructor (GType type,
   /* Give a title to the progress dialog */
   gtk_window_set_title (GTK_WINDOW (GPA_FILE_OPERATION (op)->progress_dialog),
 			_("Verifying..."));
+
   /* Create the verification dialog */
   op->dialog = gpa_file_verify_dialog_new (GPA_OPERATION (op)->window);
   g_signal_connect (G_OBJECT (op->dialog), "response",
@@ -106,6 +108,7 @@ gpa_file_verify_operation_constructor (GType type,
   
   return object;
 }
+
 
 static void
 gpa_file_verify_operation_class_init (GpaFileVerifyOperationClass *klass)

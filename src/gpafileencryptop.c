@@ -227,6 +227,25 @@ gpa_file_encrypt_operation_new (GtkWidget *window, GList *files,
 
 
 GpaFileEncryptOperation*
+gpa_file_encrypt_sign_operation_new (GtkWidget *window, GList *files,
+				     gboolean force_armor)
+{
+  GpaFileEncryptOperation *op;
+  
+  op = g_object_new (GPA_FILE_ENCRYPT_OPERATION_TYPE,
+		     "window", window,
+		     "input_files", files,
+		     "force-armor", force_armor,
+		     NULL);
+
+  gpa_file_encrypt_dialog_set_sign
+    (GPA_FILE_ENCRYPT_DIALOG (op->encrypt_dialog), TRUE);
+
+  return op;
+}
+
+
+GpaFileEncryptOperation*
 gpa_file_encrypt_operation_new_for_server (GList *files, void *server_ctx)
 {
   GpaFileEncryptOperation *op;
@@ -318,7 +337,7 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
   /* Start the operation.  */
   /* Always trust keys, because any untrusted keys were already
      confirmed by the user.  */
-  if (gpa_file_encrypt_dialog_sign 
+  if (gpa_file_encrypt_dialog_get_sign 
       (GPA_FILE_ENCRYPT_DIALOG (op->encrypt_dialog)))
     err = gpgme_op_encrypt_sign_start (GPA_OPERATION (op)->context->ctx,
 				       op->rset, GPGME_ENCRYPT_ALWAYS_TRUST,
@@ -710,7 +729,7 @@ static void gpa_file_encrypt_operation_response_cb (GtkDialog *dialog,
       /* Set the armor value */
       gpgme_set_armor (GPA_OPERATION (op)->context->ctx, armor);
       /* Set the signers for the context.  */
-      if (gpa_file_encrypt_dialog_sign 
+      if (gpa_file_encrypt_dialog_get_sign
 	  (GPA_FILE_ENCRYPT_DIALOG (op->encrypt_dialog)))
 	success = set_signers (op, signers);
 

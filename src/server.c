@@ -40,6 +40,11 @@
 #include "gpastreamsignop.h"
 #include "gpastreamdecryptop.h"
 #include "gpastreamverifyop.h"
+#include "gpafileop.h"
+#include "gpafileencryptop.h"
+#include "gpafilesignop.h"
+#include "gpafiledecryptop.h"
+#include "gpafileverifyop.h"
 
 
 #define set_error(e,t) assuan_set_error (ctx, gpg_error (e), (t))
@@ -95,6 +100,10 @@ struct conn_ctrl_s
   /* Session information:  A session number and a malloced title or NULL.  */
   unsigned int session_number;
   char *session_title;
+
+  /* The list of all files to be processed.  */
+  GList *files;
+  gboolean files_finished;
 };
 
 
@@ -315,6 +324,30 @@ release_recipients (conn_ctrl_t ctrl)
       ctrl->recipients = NULL;
     }
 }
+
+
+static void
+free_file_item (gpa_file_item_t item)
+{
+  if (item->filename_in)
+    g_free (item->filename_in);
+  if (item->filename_out)
+    g_free (item->filename_out);
+}
+
+
+static void
+release_files (conn_ctrl_t ctrl)
+{
+  if (! ctrl->files)
+    return;
+
+  g_list_foreach (ctrl->files, (GFunc) free_file_item, NULL);
+  g_list_free (ctrl->files);
+  ctrl->files = NULL;
+  ctrl->files_finished = FALSE;
+}
+
 
 static void
 release_keys (gpgme_key_t *keys)
@@ -1156,7 +1189,406 @@ cmd_getinfo (assuan_context_t ctx, char *line)
   return assuan_process_done (ctx, err);
 }
 
+
 
+/* Convert two hexadecimal digits from STR to the value they
+   represent.  Returns -1 if one of the characters is not a
+   hexadecimal digit.  */
+static int
+hextobyte (const char *str)
+{
+  int val = 0;
+  int i;
+
+#define NROFHEXDIGITS 2
+  for (i = 0; i < NROFHEXDIGITS; i++)
+    {
+      if (*str >= '0' && *str <= '9')
+        val += *str - '0';
+      else if (*str >= 'A' && *str <= 'F')
+        val += 10 + *str - 'A';
+      else if (*str >= 'a' && *str <= 'f')
+        val += 10 + *str - 'a';
+      else
+        return -1;
+      if (i < NROFHEXDIGITS - 1)
+        val *= 16;
+      str++;
+    }
+  return val;
+}
+
+
+/* Decode the percent escaped string STR in place.  */
+static void
+decode_percent_string (char *str)
+{
+  char *src = str;
+  char *dest = str;
+
+  /* Convert the string.  */
+  while (*src)
+    {
+      if (*src != '%')
+        {
+          *(dest++) = *(src++);
+          continue;
+        }
+      else
+        {
+          int val = hextobyte (&src[1]);
+          
+          if (val == -1)
+            {
+              /* Should not happen.  */
+              *(dest++) = *(src++);
+              if (*src)
+                *(dest++) = *(src++);
+              if (*src)
+                *(dest++) = *(src++);
+            }
+          else
+            {
+              if (!val)
+                {
+                  /* A binary zero is not representable in a C
+                     string.  */
+                  *(dest++) = '\\';
+                  *(dest++) = '0'; 
+                }
+              else 
+                *((unsigned char *) dest++) = val;
+              src += 3;
+            }
+        }
+    }
+  *(dest++) = 0;
+}
+
+
+/* FILE <file> [--continued]
+
+   Set the files on which to operate.
+ */
+static int
+cmd_file (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err = 0;
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  gboolean continued;
+  gpa_file_item_t file_item;
+  char *tail;
+
+  continued = has_option (line, "--continued");
+
+  if (ctrl->files_finished)
+    release_files (ctrl);
+
+  tail = line;
+  while (*tail && ! spacep (tail))
+    tail++;
+  *tail = '\0';
+  decode_percent_string (line);
+
+  file_item = g_malloc0 (sizeof (*file_item));
+  file_item->filename_in = g_strdup (line);
+  ctrl->files = g_list_append (ctrl->files, file_item);
+
+  if (! continued)
+    ctrl->files_finished = TRUE;
+
+  return assuan_process_done (ctx, err);
+}
+
+
+static gpg_error_t
+impl_encrypt_sign_files (assuan_context_t ctx, int encrypt, int sign)
+{
+  gpg_error_t err = 0;
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  GpaFileOperation *op;
+
+  if (! ctrl->files)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, "no files specified");
+      return assuan_process_done (ctx, err);
+    }
+  else if (! ctrl->files_finished)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, "more files expected");
+      return assuan_process_done (ctx, err);
+    }
+
+  /* FIXME: Needs a root window.  Need to set "sign" default.  */
+  if (encrypt && sign)
+    op = (GpaFileOperation *)
+      gpa_file_encrypt_sign_operation_new (NULL, ctrl->files, FALSE);
+  if (encrypt)
+    op = (GpaFileOperation *)
+      gpa_file_encrypt_operation_new (NULL, ctrl->files, FALSE);
+  else
+    op = (GpaFileOperation *)
+      gpa_file_sign_operation_new (NULL, ctrl->files, FALSE);
+
+  /* Ownership of CTRL->files was passed to callee.  */
+  ctrl->files = NULL;
+  ctrl->files_finished = FALSE;
+  g_signal_connect (G_OBJECT (op), "completed",
+		    G_CALLBACK (g_object_unref), NULL);
+
+  return assuan_process_done (ctx, err);
+}
+
+
+/* ENCRYPT_FILES --nohup  */
+static int
+cmd_encrypt_files (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err;
+
+  if (! has_option (line, "--nohup"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "file ops require --nohup");
+      return assuan_process_done (ctx, err);
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      return assuan_process_done (ctx, err);
+    }
+
+  return impl_encrypt_sign_files (ctx, 1, 0);
+}
+
+
+/* SIGN_FILES --nohup  */
+static int
+cmd_sign_files (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err;
+
+  if (! has_option (line, "--nohup"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "file ops require --nohup");
+      return assuan_process_done (ctx, err);
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      return assuan_process_done (ctx, err);
+    }
+
+  return impl_encrypt_sign_files (ctx, 0, 1);
+}
+
+
+/* ENCRYPT_SIGN_FILES --nohup  */
+static int
+cmd_encrypt_sign_files (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err;
+
+  if (! has_option (line, "--nohup"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "file ops require --nohup");
+      return assuan_process_done (ctx, err);
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      return assuan_process_done (ctx, err);
+    }
+
+  return impl_encrypt_sign_files (ctx, 1, 1);
+}
+
+
+static gpg_error_t
+impl_decrypt_verify_files (assuan_context_t ctx, int decrypt, int verify)
+{
+  gpg_error_t err = 0;
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+  GpaFileOperation *op;
+
+  if (! ctrl->files)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, "no files specified");
+      return assuan_process_done (ctx, err);
+    }
+  else if (! ctrl->files_finished)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, "more files expected");
+      return assuan_process_done (ctx, err);
+    }
+
+  /* FIXME: Needs a root window.  Need to enable "verify".  */
+  if (decrypt && verify)
+    op = (GpaFileOperation *)
+      gpa_file_decrypt_verify_operation_new (NULL, ctrl->files);
+  else if (decrypt)
+    op = (GpaFileOperation *)
+      gpa_file_decrypt_operation_new (NULL, ctrl->files);
+  else
+    op = (GpaFileOperation *)
+      gpa_file_verify_operation_new (NULL, ctrl->files);
+
+  /* Ownership of CTRL->files was passed to callee.  */
+  ctrl->files = NULL;
+  ctrl->files_finished = FALSE;
+  g_signal_connect (G_OBJECT (op), "completed",
+		    G_CALLBACK (g_object_unref), NULL);
+
+  return assuan_process_done (ctx, err);
+}
+
+
+/* DECRYPT_FILES --nohup  */
+static int
+cmd_decrypt_files (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err;
+
+  if (! has_option (line, "--nohup"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "file ops require --nohup");
+      return assuan_process_done (ctx, err);
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      return assuan_process_done (ctx, err);
+    }
+
+  return impl_decrypt_verify_files (ctx, 1, 0);
+}
+
+
+/* VERIFY_FILES --nohup  */
+static int
+cmd_verify_files (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err;
+
+  if (! has_option (line, "--nohup"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "file ops require --nohup");
+      return assuan_process_done (ctx, err);
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      return assuan_process_done (ctx, err);
+    }
+
+  return impl_decrypt_verify_files (ctx, 0, 1);
+}
+
+
+/* DECRYPT_VERIFY_FILES --nohup  */
+static int
+cmd_decrypt_verify_files (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err;
+
+  if (! has_option (line, "--nohup"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "file ops require --nohup");
+      return assuan_process_done (ctx, err);
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      return assuan_process_done (ctx, err);
+    }
+
+  return impl_decrypt_verify_files (ctx, 1, 1);
+}
+
+
+/* IMPORT_FILES --nohup  */
+static int
+cmd_import_files (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err;
+
+  if (! has_option (line, "--nohup"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "file ops require --nohup");
+      return assuan_process_done (ctx, err);
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      return assuan_process_done (ctx, err);
+    }
+
+  err = set_error (GPG_ERR_NOT_IMPLEMENTED, "not implemented");
+  return assuan_process_done (ctx, err);
+}
+
+
+/* CHECKSUM_CREATE_FILES --nohup  */
+static int
+cmd_checksum_create_files (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err;
+
+  if (! has_option (line, "--nohup"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "file ops require --nohup");
+      return assuan_process_done (ctx, err);
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      return assuan_process_done (ctx, err);
+    }
+
+  err = set_error (GPG_ERR_NOT_IMPLEMENTED, "not implemented");
+  return assuan_process_done (ctx, err);
+}
+
+
+/* CHECKSUM_VERIFY_FILES --nohup  */
+static int
+cmd_checksum_verify_files (assuan_context_t ctx, char *line)
+{
+  gpg_error_t err;
+
+  if (! has_option (line, "--nohup"))
+    {
+      err = set_error (GPG_ERR_ASS_PARAMETER, "file ops require --nohup");
+      return assuan_process_done (ctx, err);
+    }
+
+  line = skip_options (line);
+  if (*line)
+    {
+      err = set_error (GPG_ERR_ASS_SYNTAX, NULL);
+      return assuan_process_done (ctx, err);
+    }
+
+  err = set_error (GPG_ERR_NOT_IMPLEMENTED, "not implemented");
+  return assuan_process_done (ctx, err);
+}
+
+
 static void
 reset_notify (assuan_context_t ctx)
 {
@@ -1164,6 +1596,7 @@ reset_notify (assuan_context_t ctx)
 
   reset_prepared_keys (ctrl);
   release_recipients (ctrl);
+  release_files (ctrl);
   xfree (ctrl->sender);
   ctrl->sender = NULL;
   finish_io_streams (ctx, NULL, NULL, NULL);
@@ -1182,8 +1615,6 @@ reset_notify (assuan_context_t ctx)
   ctrl->session_title = NULL;
 }
 
-
-
 
 /* Tell the assuan library about our commands.   */
 static int
@@ -1193,20 +1624,30 @@ register_commands (assuan_context_t ctx)
     const char *name;
     int (*handler)(assuan_context_t, char *line);
   } table[] = {
-    { "SESSION",   cmd_session },
+    { "SESSION", cmd_session },
     { "RECIPIENT", cmd_recipient },
-    { "INPUT",     NULL },
-    { "OUTPUT",    NULL },
-    { "MESSAGE",   cmd_message },
-    { "ENCRYPT",   cmd_encrypt },
+    { "INPUT", NULL },
+    { "OUTPUT", NULL },
+    { "MESSAGE", cmd_message },
+    { "ENCRYPT", cmd_encrypt },
     { "PREP_ENCRYPT", cmd_prep_encrypt },
-    { "SENDER",    cmd_sender },
-    { "SIGN",      cmd_sign   },
-    { "DECRYPT",   cmd_decrypt },
-    { "VERIFY",    cmd_verify },
+    { "SENDER", cmd_sender },
+    { "SIGN", cmd_sign   },
+    { "DECRYPT", cmd_decrypt },
+    { "VERIFY", cmd_verify },
     { "START_KEYMANAGER", cmd_start_keymanager },
     { "START_CONFDIALOG", cmd_start_confdialog },
-    { "GETINFO",   cmd_getinfo },
+    { "GETINFO", cmd_getinfo },
+    { "FILE", cmd_file },
+    { "ENCRYPT_FILES", cmd_encrypt_files },
+    { "SIGN_FILES", cmd_sign_files },
+    { "ENCRYPT_SIGN_FILES", cmd_encrypt_sign_files },
+    { "DECRYPT_FILES", cmd_decrypt_files },
+    { "VERIFY_FILES", cmd_verify_files },
+    { "DECRYPT_VERIFY_FILES", cmd_decrypt_verify_files },
+    { "IMPORT_FILES", cmd_import_files },
+    { "CHECKSUM_CREATE_FILES", cmd_checksum_create_files },
+    { "CHECKSUM_VERIFY_FILES", cmd_checksum_verify_files },
     { NULL }
   };
   int i, rc;

@@ -42,6 +42,11 @@ struct _GpaFileDecryptOperation {
 
   int cipher_fd, plain_fd;
   gpgme_data_t cipher, plain;
+ 
+  gboolean verify;
+  gpg_error_t err;
+  int signed_files;
+  GtkWidget *dialog;  
 };
 
 struct _GpaFileDecryptOperationClass {
@@ -54,8 +59,10 @@ GType gpa_file_decrypt_operation_get_type (void) G_GNUC_CONST;
 
 /* Creates a new decryption operation.
  */
-GpaFileDecryptOperation*
-gpa_file_decrypt_operation_new (GtkWidget *window,
-				GList *files);
+GpaFileDecryptOperation *gpa_file_decrypt_operation_new (GtkWidget *window,
+							 GList *files);
+
+GpaFileDecryptOperation *gpa_file_decrypt_verify_operation_new
+  (GtkWidget *window, GList *files);
 
 #endif
