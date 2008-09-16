@@ -1,12 +1,13 @@
-src/clipboard.h
 src/clipboard.c
+src/clipboard.h
 src/confdialog.c
 src/encryptdlg.c
 src/expirydlg.c
 src/fileman.c
 src/filesigndlg.c
-src/gpabackupop.c
 src/gpa.c
+src/gpa.h
+src/gpabackupop.c
 src/gpacontext.c
 src/gpaexportclipop.c
 src/gpaexportfileop.c
@@ -35,6 +36,10 @@ src/gpaoperation.c
 src/gpapastrings.c
 src/gpaprogressdlg.c
 src/gparecvkeydlg.c
+src/gpastreamdecryptop.c
+src/gpastreamencryptop.c
+src/gpastreamsignop.c
+src/gpastreamverifyop.c
 src/gpasubkeylist.c
 src/gpawidgets.c
 src/gpawindowkeeper.c
@@ -42,6 +47,7 @@ src/gpgmeedit.c
 src/gpgmetools.c
 src/gtktools.c
 src/helpmenu.c
+src/helpmenu.h
 src/hidewnd.c
 src/icons.c
 src/keydeletedlg.c
@@ -57,6 +63,8 @@ src/options.c
 src/ownertrustdlg.c
 src/passwddlg.c
 src/qdchkpwd.c
+src/recipientdlg.c
+src/selectkeydlg.c
 src/server_access.c
 src/settingsdlg.c
 src/siglist.c
