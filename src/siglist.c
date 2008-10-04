@@ -256,11 +256,16 @@ gpa_siglist_set_userid (GtkWidget * list, const gpgme_key_t key,
   gpa_siglist_clear_columns (list);
   gpa_siglist_uid_add_columns (list);
 
+  /* Clear the model */
+  gtk_list_store_clear (store);
+
+  if (!uid)
+    /* No user ID -> no signatures, do nothing here. */
+    return;
+
   /* Get the list of revoked signatures */
   revoked = revoked_signatures (key, uid);
 
-  /* Clear the model */
-  gtk_list_store_clear (store);
   /* Add the signatures to the model */
   for (sig = uid->signatures; sig; sig = sig->next)
     {
@@ -310,7 +315,7 @@ gpa_siglist_set_signatures (GtkWidget * list, gpgme_key_t key, int idx)
 	  for (i = 0, uid = key->uids; i < idx; i++, uid = uid->next)
 	    {
 	    }
-          gpa_siglist_set_userid (list, key, uid);
+	  gpa_siglist_set_userid (list, key, uid);
 	  g_object_set_data (G_OBJECT (list), "all_signatures", 
 			     GINT_TO_POINTER (FALSE));
         }

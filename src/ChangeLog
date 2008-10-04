@@ -1,3 +1,9 @@
+2008-09-19  Moritz  <moritz@gnu.org>
+
+	* siglist.c (gpa_siglist_set_userid): Call gtk_list_store_clear
+	before revoked_signatures is called; simply return in case uid is
+	NULL.
+
 2008-07-15  Marcus Brinkmann  <marcus@g10code.de>
 
 	* server.c: Include "gpafileop.h", "gpafileencryptop.h",

@@ -830,6 +830,10 @@ gpa_gpgme_key_get_userid (gpgme_user_id_t uid)
   /* Tag revoked UID's*/
   if (uid->revoked)
     {
+      /* FIXME: I think, this code should be simply disabled. Even if
+	 the uid U is revoked, it is "U", not "[Revoked] U". Side
+	 note: adding this prefix obviously breaks sorting by
+	 uid. -moritz */
       gchar *tmp = g_strdup_printf ("[%s] %s", _("Revoked"), uid_utf8);
       g_free (uid_utf8);
       uid_utf8 = tmp;
