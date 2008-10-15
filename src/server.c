@@ -96,6 +96,7 @@ struct conn_ctrl_s
      the sender ist just informational. */
   gchar *sender;
   int sender_just_info;
+  gpgme_protocol_t sender_protocol_hint;
 
   /* Session information:  A session number and a malloced title or NULL.  */
   unsigned int session_number;
@@ -817,15 +818,24 @@ static int
 cmd_sender (assuan_context_t ctx, char *line)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
-  gpg_error_t err = 0;
+  gpg_error_t err;
+  gpgme_protocol_t protocol;
+
+  err = parse_protocol_option (ctx, line, 0, &protocol);
+  if (err)
+    goto leave;
 
   ctrl->sender_just_info = has_option (line, "--info");
+
   line = skip_options (line);
 
   xfree (ctrl->sender);
   ctrl->sender = NULL;
   if (*line)
     ctrl->sender = xstrdup (line);
+  
+  if (!err)
+    ctrl->sender_protocol_hint = protocol;
 
   return assuan_process_done (ctx, err);
 }
@@ -846,6 +856,7 @@ cont_sign (assuan_context_t ctx, gpg_error_t err)
     {
       xfree (ctrl->sender);
       ctrl->sender = NULL;
+      ctrl->sender_protocol_hint = GPGME_PROTOCOL_UNKNOWN;
     }
   assuan_process_done (ctx, err);
 }
@@ -1599,6 +1610,7 @@ reset_notify (assuan_context_t ctx)
   release_files (ctrl);
   xfree (ctrl->sender);
   ctrl->sender = NULL;
+  ctrl->sender_protocol_hint = GPGME_PROTOCOL_UNKNOWN;
   finish_io_streams (ctx, NULL, NULL, NULL);
   close_message_fd (ctrl);
   assuan_close_input_fd (ctx);
