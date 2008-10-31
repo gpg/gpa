@@ -1,3 +1,8 @@
+2008-10-31  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* configure.ac (AM_GNU_GETTEXT_VERSION): Bump to 0.17.
+        * config.rpath, ABOUT-NLS: Update.
+
 2008-09-04  Marcus Brinkmann  <marcus@g10code.com>
 
 	Released 0.8.0.

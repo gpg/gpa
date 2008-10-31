@@ -1,3 +1,7 @@
+2008-10-31  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.in.in: Upgrade to gettext-0.17.
+
 2008-09-16  Marcus Brinkmann  <marcus@g10code.de>
 
 	* POTFILES.in: Update list of files.

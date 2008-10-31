@@ -181,7 +181,7 @@ AC_SUBST(NETLIBS)
 
 
 AM_PO_SUBDIRS
-AM_GNU_GETTEXT_VERSION(0.12)
+AM_GNU_GETTEXT_VERSION([0.17])
 AM_GNU_GETTEXT([external],[need-ngettext])
 
 
@@ -346,7 +346,7 @@ if test "$die" = "yes"; then
 fi
 
 
-AC_CONFIG_FILES([ m4/Makefile 
+AC_CONFIG_FILES([ m4/Makefile
 Makefile
 po/Makefile.in
 src/Makefile
