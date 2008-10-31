@@ -837,6 +837,7 @@ cmd_sender (assuan_context_t ctx, char *line)
   if (!err)
     ctrl->sender_protocol_hint = protocol;
 
+ leave:
   return assuan_process_done (ctx, err);
 }
 
