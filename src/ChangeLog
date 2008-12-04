@@ -1,3 +1,14 @@
+2008-12-04  Marcus Brinkmann  <marcus@g10code.com>
+
+	* helpmenu.c (gpa_help_about): Add translator-credits.
+	* recipientdlg.c (recplist_popup_menu_new),
+	fileman.c (fileman_action_new),
+	keyring.c (keyring_editor_action_new),
+	clipboard.c (clipboard_action_new): Initialize translation domain
+	for ACTION_GROUP.
+
+	Submitted by gozer@progrock.com
+
 2008-10-31  Marcus Brinkmann  <marcus@g10code.com>
 
 	* server.c (cmd_sender): Add missing label.

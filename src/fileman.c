@@ -597,6 +597,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
   GError *error;
 
   action_group = gtk_action_group_new ("MenuActions");
+  gtk_action_group_set_translation_domain (action_group, PACKAGE);
   gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries),
 				fileman);
   gtk_action_group_add_actions (action_group, gpa_help_menu_action_entries,

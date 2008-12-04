@@ -844,6 +844,7 @@ recplist_popup_menu_new (GtkWidget *window, RecipientDlg *dialog)
   GError *error;
 
   action_group = gtk_action_group_new ("MenuActions");
+  gtk_action_group_set_translation_domain (action_group, PACKAGE);
   gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries),
 				dialog);
   ui_manager = gtk_ui_manager_new ();

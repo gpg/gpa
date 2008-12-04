@@ -90,6 +90,9 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
 			 "authors", authors,
 			 "license", get_gpl_text (),
 			 "logo", logo,
+			 /* TRANSLATORS: The translation of this string should 
+			  be your name and mail */
+			 "translator-credits", _("translator-credits"),
 			 NULL);
   if (logo)
     g_object_unref (logo);
