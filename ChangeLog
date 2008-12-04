@@ -1,5 +1,7 @@
 2008-12-04  Marcus Brinkmann  <marcus@g10code.com>
 
+	* configure.ac: Require gtk 2.8.0.
+
 	* configure.ac (GPA_LOCALEDIR): Fix definition.
 	(gpadefs.h): Remove DATADIRNAME, add localedir.
 	Submitted by gozer@progrock.com.
