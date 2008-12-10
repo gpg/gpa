@@ -192,7 +192,7 @@ AC_CHECK_FUNC(getopt_long,
 	    AC_MSG_ERROR(Cannot find a getopt_long function))))
 
 dnl Where is the GTK+ toolkit
-AM_PATH_GTK_2_0(2.8.0,, AC_MSG_ERROR(Cannot find GTK+ 2.0))
+AM_PATH_GTK_2_0(2.10.0,, AC_MSG_ERROR(Cannot find GTK+ 2.0))
 
 
 #
