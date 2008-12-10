@@ -129,7 +129,7 @@ gpa_import_file_operation_get_source (GpaImportOperation *operation,
   GtkResponseType response;
 
   dialog = gtk_file_chooser_dialog_new
-    (_("Import public keys from file"),
+    (_("Import keys from file"),
      GTK_WINDOW (GPA_OPERATION (op)->window),
      GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
      GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);

@@ -1,3 +1,8 @@
+2008-12-10  Marcus Brinkmann  <marcus@g10code.de>
+
+	* gpaimportfileop.c (gpa_import_file_operation_get_source): Fix
+	window title string.
+
 2008-12-04  Marcus Brinkmann  <marcus@g10code.com>
 
 	* fileman.c (GTK_STOCK_SELECT_ALL) [! GTK_CHECK_VERSION (2,10,0)],
