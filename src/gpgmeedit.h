@@ -46,4 +46,14 @@ gpg_error_t gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
  */
 gpg_error_t gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key);
 
+/* Triggers card list operation through CTX. OUT is a valid GPGME data
+   handle which is filled during the operation with the list
+   output. */
+gpg_error_t gpa_gpgme_card_edit_list_start (GpaContext *ctx, gpgme_data_t out);
+
+#if 0
+gpg_error_t gpa_gpgme_card_edit_genkey_start (GpaContext *ctx, ...);
+gpg_error_t gpa_gpgme_card_edit_modify_start (GpaContext *ctx, const gchar *login);
+#endif
+
 #endif

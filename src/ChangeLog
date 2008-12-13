@@ -1,3 +1,59 @@
+2008-12-13  Moritz  <moritz@gnu.org>
+
+	* gpacardreloadop.c, gpacardreloadop.h, gpagenkeycardop.c,
+	gpagenkeycardop.h, cardman.c, cardman.h: New files.
+
+	* Makefile.am (gpa_SOURCES): Added: cardman.c, cardman.h,
+	gpacardreloadop.c, gpacardreloadop.h, gpagenkeycardop.c,
+	gpagenkeycardop.h.
+
+	* server.c (cmd_start_cardmanager): New function.
+	(register_commands): Register START_CARDMANAGER command.
+
+	* gpagenkeyadvop.c
+	(gpa_gen_key_advanced_operation_idle_cb): Pass new argument '0' to
+	gpa_key_gen_run_dialog.
+
+	* gpgmeedit.c: New enum: CardState.
+	(card_edit_list_fnc_action, card_edit_list_fnc_transit)
+	(gpa_gpgme_card_edit_list_parms_release)
+	(gpa_gpgme_card_edit_list_start): New functions. The rest of
+	included card related code is probably not working and therefore
+	disabled.
+	* gpgmeedit.h: Declare gpa_gpgme_card_edit_list_start.
+
+	* gpa.c: Include "cardman.h".
+	(gpa_args_t): Add member to struct: start_card_manager.
+	(option_entries): Add new entry for the card manager.
+	(quit_if_no_window): Call gpa_card_manager_is_open().
+	(gpa_open_cardmanager): New function.
+	(main): Check value of args.start_card_manager before preparing to
+	start keyring editor; if args.start_card_manager is true, call
+	gpa_open_cardmanager().
+	* gpa.h: Declare gpa_open_cardmanager().
+	(gpa_windows_menu_action_entries): Added entry for card manager.
+
+	* keygendlg.c (_GPAKeyGenDialog): New member in struct: forcard.
+	(response_cb): Only check validity of the given passphrases if we
+	are not generating a key on a smartcard.
+	(gpa_key_gen_run_dialog): New parameter: forcard; initialize
+	forcard member in dialog struct. Adjust GUI construction for the
+	forcard==TRUE case, which means that we are generating a key on a
+	smartcard. For comboKeysize use gtk_combo_box_new_text() instead
+	of gtk_combo_box_entry_new_text(), since it doesn't make much
+	sense in my opinion to be able to choose arbitrarty key sizes.
+	* keygendlg.h: Adjust to new gpa_key_gen_run_dialog API by adding
+	forcard parameter.
+
+	* icons.h: Define GPA_STOCK_CARDMAN.
+	* icons.c: Add new icon for card manager. At the moment this is a
+	placeholder (floppy) icon.
+
+	* keyring.c: Add menuitem/toolitem
+	actions for card manager.
+	* fileman.c: Likewise.
+	* clipboard.c: Likewise.
+
 2008-12-10  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpaimportfileop.c (gpa_import_file_operation_get_source): Fix

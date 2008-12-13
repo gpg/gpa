@@ -88,6 +88,7 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
   char *result = NULL;
 
   /* Ignore these status lines, as they don't require any response */
+  /* FIXME: should GPGME_STATUS_CARDCTRL be included here as well? -mo */
   if (status == GPGME_STATUS_EOF 
       || status == GPGME_STATUS_GOT_IT
       || status == GPGME_STATUS_NEED_PASSPHRASE
@@ -1068,3 +1069,205 @@ gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
 
   return err;
 }
+
+/*
+ * Card related code.
+ */
+
+typedef enum
+  {
+    CARD_START,
+    CARD_COMMAND,
+    CARD_ADMIN_COMMAND,
+    CARD_QUIT,
+    CARD_QUERY_LOGIN,
+    CARD_ERROR
+  } CardState;
+
+/* Implementation of the card-list operation. */
+
+/* Action function for card-list.  */
+static gpg_error_t
+card_edit_list_fnc_action (int state, void *opaque, char **result)
+{
+  switch (state)
+    {
+    case CARD_COMMAND:
+      *result = "list";
+      break;
+    case CARD_QUIT:
+      *result = "quit";
+      break;
+    default:
+      return gpg_error (GPG_ERR_GENERAL);
+    }
+  return 0;
+}
+
+/* Transit function for card-list.  */
+static int
+card_edit_list_fnc_transit (int current_state, gpgme_status_code_t status,
+			    const char *args, void *opaque, gpg_error_t *err)
+{
+  int next_state;
+
+  switch (current_state)
+    {
+    case CARD_START:
+      if (status == GPGME_STATUS_CARDCTRL)
+	/* Consume GPGME_STATUS_CARDCTRL and stay in CARD_START state. */
+	next_state = CARD_START;
+      else if (status == GPGME_STATUS_GET_LINE)
+	next_state = CARD_COMMAND;
+      break;
+    case CARD_COMMAND:
+      next_state = CARD_QUIT;
+      break;
+    default:
+      next_state = CARD_ERROR;
+      *err = gpg_error (GPG_ERR_GENERAL);
+    }
+
+  return next_state;
+}
+
+static void
+gpa_gpgme_card_edit_list_parms_release (GpaContext *ctx, gpg_error_t err,
+					struct edit_parms_s *parms)
+{
+  /* FIXME: is this correct? -mo */
+
+  if (parms->signal_id != 0)
+    g_signal_handler_disconnect (ctx, parms->signal_id);
+  g_free (parms);
+}
+
+/* Triggers card list operation through CTX. OUT is a valid GPGME data
+   handle which is filled during the operation with the list
+   output. */
+gpg_error_t
+gpa_gpgme_card_edit_list_start (GpaContext *ctx, gpgme_data_t out)
+{
+  struct edit_parms_s *parms = g_malloc (sizeof (struct edit_parms_s));
+  gpg_error_t err;
+
+  parms->state = CARD_START;
+  parms->err = 0;
+  parms->action = card_edit_list_fnc_action;
+  parms->transit = card_edit_list_fnc_transit;
+  parms->out = out;
+  parms->opaque = NULL;
+  parms->signal_id = g_signal_connect (G_OBJECT (ctx), "done",
+				       G_CALLBACK (gpa_gpgme_card_edit_list_parms_release),
+				       parms);
+
+  err = gpgme_op_card_edit_start (ctx->ctx, NULL, edit_fnc, parms, out);
+
+  return err;
+}
+
+#if 0				/* DISABLED */
+
+/* Modify. */
+
+static gpg_error_t
+card_edit_modify_fnc_action (int state, void *opaque, char **result)
+{
+  switch (state)
+    {
+    case CARD_START:
+      /* Nothing to do here. (?) */
+      break;
+    case CARD_COMMAND:
+      *result = "admin";
+      break;
+    case CARD_ADMIN_COMMAND:
+      *result = "login";
+      break;
+    case CARD_QUERY_LOGIN:
+      *result = (char *) opaque;
+      break;
+    case CARD_QUIT:
+      *result = "quit";
+      break;
+    default:
+      return gpg_error (GPG_ERR_GENERAL);
+    }
+  return 0;
+}
+
+static int
+card_edit_modify_fnc_transit (int current_state, gpgme_status_code_t status,
+			      const char *args, void *opaque, gpg_error_t *err)
+{
+  int next_state;
+
+  switch (current_state)
+    {
+    case CARD_START:
+      if (status == GPGME_STATUS_CARDCTRL)
+	/* Consume GPGME_STATUS_CARDCTRL and stay in CARD_START state. */
+	next_state = CARD_START;
+      else if (status == GPGME_STATUS_GET_LINE)
+	next_state = CARD_COMMAND;
+      break;
+    case CARD_COMMAND:
+      /* Dummy: */
+      next_state = CARD_ADMIN_COMMAND;
+      break;
+    case CARD_ADMIN_COMMAND:
+      fprintf (stderr, "[in CARD_ADMIN_COMMAND, status = %i\n", status);
+      /* FIXME! check status.  */
+      next_state = CARD_QUERY_LOGIN;
+      break;
+    case CARD_QUERY_LOGIN:
+      next_state = CARD_QUIT;
+      break;
+    default:
+      next_state = CARD_ERROR;
+      *err = gpg_error (GPG_ERR_GENERAL);
+    }
+
+  return next_state;
+}
+
+static void
+gpa_gpgme_card_edit_modify_parms_release (GpaContext *ctx, gpg_error_t err,
+					  struct edit_parms_s *parms)
+{
+  /* FIXME: i don't really understand this. -mo */
+  gpgme_data_release (parms->out);
+  if (parms->signal_id != 0)
+    g_signal_handler_disconnect (ctx, parms->signal_id);
+  g_free (parms->opaque);
+  g_free (parms);
+}
+
+gpg_error_t
+gpa_gpgme_card_edit_modify_start (GpaContext *ctx, const gchar *login)
+{
+  struct edit_parms_s *parms = g_malloc (sizeof (struct edit_parms_s));
+  gpg_error_t err;
+  gpgme_data_t out;
+  char *serialno = NULL;
+
+  err = gpgme_data_new (&out);
+  if (err)
+    return err;
+
+  parms->state = CARD_START;
+  parms->err = 0;
+  parms->action = card_edit_modify_fnc_action;
+  parms->transit = card_edit_modify_fnc_transit;
+  parms->out = out;
+  parms->opaque = g_strdup (login);
+  parms->signal_id = g_signal_connect (G_OBJECT (ctx), "done",
+				       G_CALLBACK (gpa_gpgme_card_edit_modify_parms_release),
+				       parms);
+
+  err = gpgme_op_card_edit_start (ctx->ctx, NULL, edit_fnc, parms, out);
+
+  return err;
+}
+
+#endif	/* DISABLED */

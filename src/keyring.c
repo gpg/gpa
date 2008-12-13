@@ -977,6 +977,7 @@ keyring_editor_action_new (GPAKeyringEditor *editor,
     "      <menuitem action='WindowsKeyringEditor'/>"
     "      <menuitem action='WindowsFileManager'/>"
     "      <menuitem action='WindowsClipboard'/>"
+    "      <menuitem action='WindowsCardManager'/>"
     "    </menu>"
     "    <menu action='Server'>"
     "      <menuitem action='ServerRetrieve'/>"
@@ -1005,6 +1006,7 @@ keyring_editor_action_new (GPAKeyringEditor *editor,
     "    <separator/>"
     "    <toolitem action='WindowsFileManager'/>"
     "    <toolitem action='WindowsClipboard'/>"
+    "    <toolitem action='WindowsCardManager'/>"
 #if 0
     "    <toolitem action='HelpContents'/>"
 #endif
@@ -1076,6 +1078,8 @@ keyring_editor_action_new (GPAKeyringEditor *editor,
   g_object_set (action, "short_label", _("Import"), NULL);
   action = gtk_action_group_get_action (action_group, "WindowsFileManager");
   g_object_set (action, "short_label", _("Files"), NULL);
+  action = gtk_action_group_get_action (action_group, "WindowsCardManager");
+  g_object_set (action, "short_label", _("Card"), NULL);
 
   /* Take care of sensitiveness of widgets.  */
   action = gtk_action_group_get_action (action_group, "EditCopy");

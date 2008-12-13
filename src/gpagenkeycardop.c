@@ -1,5 +1,6 @@
-/* gpagenkeyadvop.c - The GpaGenKeyAdvancedOperation object.
- *	Copyright (C) 2003, Miguel Coca.
+/* gpagenkeycardop.c - The GpaGenKeyCardOperation object.
+ *	Copyright (C) 2003 Miguel Coca.
+ *	Copyright (C) 2008 g10 Code GmbH
  *
  * This file is part of GPA
  *
@@ -24,34 +25,35 @@
 #include "gpa.h"
 #include "i18n.h"
 #include "gtktools.h"
-#include "gpagenkeyadvop.h"
+#include "gpagenkeycardop.h"
 #include "keygendlg.h"
 
 static GObjectClass *parent_class = NULL;
 
-static void gpa_gen_key_advanced_operation_done_cb (GpaContext *context, 
+static void gpa_gen_key_card_operation_done_cb (GpaContext *context, 
 						    gpg_error_t err,
-						    GpaGenKeyAdvancedOperation *op);
-static void gpa_gen_key_advanced_operation_done_error_cb (GpaContext *context, 
+						    GpaGenKeyCardOperation *op);
+
+static void gpa_gen_key_card_operation_done_error_cb (GpaContext *context, 
 							  gpg_error_t err,
-							  GpaGenKeyAdvancedOperation *op);
+							  GpaGenKeyCardOperation *op);
 
 
 static gboolean
-gpa_gen_key_advanced_operation_idle_cb (gpointer data);
+gpa_gen_key_card_operation_idle_cb (gpointer data);
 
 /* GObject boilerplate */
 
 static void
-gpa_gen_key_advanced_operation_init (GpaGenKeyAdvancedOperation *op)
+gpa_gen_key_card_operation_init (GpaGenKeyCardOperation *op)
 {
   op->progress_dialog = NULL;
 }
 
 static void
-gpa_gen_key_advanced_operation_finalize (GObject *object)
+gpa_gen_key_card_operation_finalize (GObject *object)
 {
-  GpaGenKeyAdvancedOperation *op = GPA_GEN_KEY_ADVANCED_OPERATION (object);
+  GpaGenKeyCardOperation *op = GPA_GEN_KEY_CARD_OPERATION (object);
 
   gtk_widget_destroy (op->progress_dialog);
 
@@ -59,19 +61,19 @@ gpa_gen_key_advanced_operation_finalize (GObject *object)
 }
 
 static GObject*
-gpa_gen_key_advanced_operation_constructor (GType type,
+gpa_gen_key_card_operation_constructor (GType type,
 					    guint n_construct_properties,
 					    GObjectConstructParam *
 					    construct_properties)
 {
   GObject *object;
-  GpaGenKeyAdvancedOperation *op;
+  GpaGenKeyCardOperation *op;
 
   /* Invoke parent's constructor */
   object = parent_class->constructor (type,
 				      n_construct_properties,
 				      construct_properties);
-  op = GPA_GEN_KEY_ADVANCED_OPERATION (object);
+  op = GPA_GEN_KEY_CARD_OPERATION (object);
 
   /* Create progress dialog */
   op->progress_dialog = gpa_progress_dialog_new (GPA_OPERATION (op)->window,
@@ -81,29 +83,29 @@ gpa_gen_key_advanced_operation_constructor (GType type,
 
   /* Connect to the "done" signal */
   g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
-		    G_CALLBACK (gpa_gen_key_advanced_operation_done_error_cb), op);
+		    G_CALLBACK (gpa_gen_key_card_operation_done_error_cb), op);
   g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
-		    G_CALLBACK (gpa_gen_key_advanced_operation_done_cb), op);
+		    G_CALLBACK (gpa_gen_key_card_operation_done_cb), op);
 
   /* Begin working when we are back into the main loop */
-  g_idle_add (gpa_gen_key_advanced_operation_idle_cb, op);
+  g_idle_add (gpa_gen_key_card_operation_idle_cb, op);
 
   return object;
 }
 
 static void
-gpa_gen_key_advanced_operation_class_init (GpaGenKeyAdvancedOperationClass *klass)
+gpa_gen_key_card_operation_class_init (GpaGenKeyCardOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
-  object_class->constructor = gpa_gen_key_advanced_operation_constructor;
-  object_class->finalize = gpa_gen_key_advanced_operation_finalize;
+  object_class->constructor = gpa_gen_key_card_operation_constructor;
+  object_class->finalize = gpa_gen_key_card_operation_finalize;
 }
 
 GType
-gpa_gen_key_advanced_operation_get_type (void)
+gpa_gen_key_card_operation_get_type (void)
 {
   static GType operation_type = 0;
   
@@ -111,19 +113,19 @@ gpa_gen_key_advanced_operation_get_type (void)
     {
       static const GTypeInfo operation_info =
       {
-        sizeof (GpaGenKeyAdvancedOperationClass),
+        sizeof (GpaGenKeyCardOperationClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gpa_gen_key_advanced_operation_class_init,
+        (GClassInitFunc) gpa_gen_key_card_operation_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
-        sizeof (GpaGenKeyAdvancedOperation),
+        sizeof (GpaGenKeyCardOperation),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gpa_gen_key_advanced_operation_init,
+        (GInstanceInitFunc) gpa_gen_key_card_operation_init,
       };
       
       operation_type = g_type_register_static (GPA_GEN_KEY_OPERATION_TYPE,
-					       "GpaGenKeyAdvancedOperation",
+					       "GpaGenKeyCardOperation",
 					       &operation_info, 0);
     }
   
@@ -132,12 +134,12 @@ gpa_gen_key_advanced_operation_get_type (void)
 
 /* API */
 
-GpaGenKeyAdvancedOperation* 
-gpa_gen_key_advanced_operation_new (GtkWidget *window)
+GpaGenKeyCardOperation* 
+gpa_gen_key_card_operation_new (GtkWidget *window)
 {
-  GpaGenKeyAdvancedOperation *op;
+  GpaGenKeyCardOperation *op;
   
-  op = g_object_new (GPA_GEN_KEY_ADVANCED_OPERATION_TYPE,
+  op = g_object_new (GPA_GEN_KEY_CARD_OPERATION_TYPE,
 		     "window", window, NULL);
 
   return op;
@@ -146,13 +148,14 @@ gpa_gen_key_advanced_operation_new (GtkWidget *window)
 /* Internal */
 
 static gboolean
-gpa_gen_key_advanced_operation_idle_cb (gpointer data)
+gpa_gen_key_card_operation_idle_cb (gpointer data)
 {
-  GpaGenKeyAdvancedOperation *op = data;
+  GpaGenKeyCardOperation *op = data;
   gpg_error_t err;
   GPAKeyGenParameters *parms;
   
-  parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window, 0);
+  parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window, 1);
+#if 0
   if (!parms)
     g_signal_emit_by_name (op, "completed", gpg_error (GPG_ERR_CANCELED));
   else
@@ -166,14 +169,18 @@ gpa_gen_key_advanced_operation_idle_cb (gpointer data)
       else
         gtk_widget_show_all (op->progress_dialog);
     }
+#else
+  g_signal_emit_by_name (op, "completed", gpg_error (GPG_ERR_CANCELED));
+#endif
+
   return FALSE;
 }
 
 
 static void
-gpa_gen_key_advanced_operation_done_cb (GpaContext *context, 
+gpa_gen_key_card_operation_done_cb (GpaContext *context, 
 					gpg_error_t err,
-					GpaGenKeyAdvancedOperation *op)
+					GpaGenKeyCardOperation *op)
 {
   if (! err)
     {
@@ -185,9 +192,9 @@ gpa_gen_key_advanced_operation_done_cb (GpaContext *context,
 
 
 static void
-gpa_gen_key_advanced_operation_done_error_cb (GpaContext *context, 
+gpa_gen_key_card_operation_done_error_cb (GpaContext *context, 
 					      gpg_error_t err,
-					      GpaGenKeyAdvancedOperation *op)
+					      GpaGenKeyCardOperation *op)
 {
   switch (gpg_err_code (err))
     {

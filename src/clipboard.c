@@ -831,6 +831,7 @@ clipboard_action_new (GpaClipboard *clipboard,
     "      <menuitem action='WindowsKeyringEditor'/>"
     "      <menuitem action='WindowsFileManager'/>"
     "      <menuitem action='WindowsClipboard'/>"
+    "      <menuitem action='WindowsCardManager'/>"
     "    </menu>"
     "    <menu action='Help'>"
 #if 0
@@ -861,6 +862,7 @@ clipboard_action_new (GpaClipboard *clipboard,
     "    <separator/>"
     "    <toolitem action='WindowsKeyringEditor'/>"
     "    <toolitem action='WindowsFileManager'/>"
+    "    <toolitem action='WindowsCardManager'/>"
 #if 0
     "    <toolitem action='HelpContents'/>"
 #endif
@@ -903,6 +905,8 @@ clipboard_action_new (GpaClipboard *clipboard,
   g_object_set (action, "short_label", _("Keyring"), NULL);
   action = gtk_action_group_get_action (action_group, "WindowsFileManager");
   g_object_set (action, "short_label", _("Files"), NULL);
+  action = gtk_action_group_get_action (action_group, "WindowsCardManager");
+  g_object_set (action, "short_label", _("Card"), NULL);
 
   /* Take care of sensitiveness of widgets.  */
   action = gtk_action_group_get_action (action_group, "EditCut");

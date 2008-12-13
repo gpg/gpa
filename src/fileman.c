@@ -566,6 +566,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
     "      <menuitem action='WindowsKeyringEditor'/>"
     "      <menuitem action='WindowsFileManager'/>"
     "      <menuitem action='WindowsClipboard'/>"
+    "      <menuitem action='WindowsCardManager'/>"
     "    </menu>"
     "    <menu action='Help'>"
 #if 0
@@ -587,6 +588,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
     "    <separator/>"
     "    <toolitem action='WindowsKeyringEditor'/>"
     "    <toolitem action='WindowsClipboard'/>"
+    "    <toolitem action='WindowsCardManager'/>"
 #if 0
     "    <toolitem action='HelpContents'/>"
 #endif
@@ -627,6 +629,8 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
   /* Fixup the icon theme labels which are too long for the toolbar.  */
   action = gtk_action_group_get_action (action_group, "WindowsKeyringEditor");
   g_object_set (action, "short_label", _("Keyring"), NULL);
+  action = gtk_action_group_get_action (action_group, "WindowsCardManager");
+  g_object_set (action, "short_label", _("Card"), NULL);
 
   /* Take care of sensitiveness of widgets.  */
   action = gtk_action_group_get_action (action_group, "FileSign");

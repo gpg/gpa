@@ -39,6 +39,7 @@ void gpa_register_stock_items (void);
 #define GPA_STOCK_KEYRING "gpa-keyringeditor"
 #define GPA_STOCK_FILEMAN "gpa-fileman"
 #define GPA_STOCK_CLIPBOARD "gpa-clipboard"
+#define GPA_STOCK_CARDMAN "gpa-cardman"
 
 /* Toolbar in keyring editor.  */
 #define GPA_STOCK_BRIEF "gpa-brief"

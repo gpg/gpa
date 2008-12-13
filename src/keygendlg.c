@@ -34,6 +34,8 @@
 
 struct _GPAKeyGenDialog
 {
+  gboolean forcard;		/* Specifies if this is a dialog for
+				   on-card key generation or not. */
   GtkWidget *window;
   GtkWidget *entryUserID;
   GtkWidget *entryPasswd;
@@ -72,21 +74,21 @@ response_cb (GtkDialog *dlg, gint response, gpointer param)
       gpa_window_error (_("You must enter a User ID."), dialog->window);
       g_signal_stop_emission_by_name (dlg, "response");
     }
-  else if (!g_str_equal (passwd, repeat))
+  else if ((!dialog->forcard) && (!g_str_equal (passwd, repeat)))
     {
       gpa_window_error (_("In \"Passphrase\" and \"Repeat passphrase\",\n"
 			  "you must enter the same passphrase."),
 			dialog->window);
       g_signal_stop_emission_by_name (dlg, "response");
     }
-  else if (strlen (passwd) == 0)
+  else if ((!dialog->forcard) && strlen (passwd) == 0)
     {
       gpa_window_error (_("You did not enter a passphrase.\n"
 			  "It is needed to protect your private key."),
 			dialog->window);
       g_signal_stop_emission_by_name (dlg, "response");
     }
-  else if (strlen (passwd) < 10 || qdchkpwd (passwd) < 0.6)
+  else if ((!dialog->forcard) && (strlen (passwd) < 10 || qdchkpwd (passwd) < 0.6))
     {
       GtkWidget *msgbox;
       
@@ -117,10 +119,12 @@ response_cb (GtkDialog *dlg, gint response, gpointer param)
 
 /* Run the "Generate Key" dialog and if the user presses OK, return
    the values from the dialog in a newly allocated GPAKeyGenParameters
-   struct.  If the user pressed "Cancel", return NULL.  The returned
-   struct has to be deleted with gpa_key_gen_free_parameters.  */
+   struct.  If FORCARD is true, display the dialog suitable for
+   generation keys on the OpenPGP smartcard. If the user pressed
+   "Cancel", return NULL.  The returned struct has to be deleted with
+   gpa_key_gen_free_parameters.  */
 GPAKeyGenParameters *
-gpa_key_gen_run_dialog (GtkWidget *parent)
+gpa_key_gen_run_dialog (GtkWidget *parent, gboolean forcard)
 {
   GtkWidget *windowGenerate;
   GtkWidget *vboxGenerate;
@@ -145,6 +149,8 @@ gpa_key_gen_run_dialog (GtkWidget *parent)
   GPAKeyGenParameters * params = NULL;
 
   GPAKeyGenAlgo algo;
+
+  dialog.forcard = forcard;
 
   windowGenerate = gtk_dialog_new_with_buttons
     (_("Generate key"), GTK_WINDOW (parent),
@@ -180,9 +186,16 @@ gpa_key_gen_run_dialog (GtkWidget *parent)
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   comboAlgorithm = gtk_combo_box_new_text ();
 
-  for (algo = GPA_KEYGEN_ALGO_FIRST; algo <= GPA_KEYGEN_ALGO_LAST; algo++)
-    gtk_combo_box_append_text (GTK_COMBO_BOX (comboAlgorithm), 
-				 gpa_algorithm_string (algo));
+  if (forcard)
+    /* The OpenPGP smartcard does only support RSA. */
+    gtk_combo_box_append_text (GTK_COMBO_BOX (comboAlgorithm),
+			       gpa_algorithm_string (GPA_KEYGEN_ALGO_RSA));
+  else
+    {
+      for (algo = GPA_KEYGEN_ALGO_FIRST; algo <= GPA_KEYGEN_ALGO_LAST; algo++)
+	gtk_combo_box_append_text (GTK_COMBO_BOX (comboAlgorithm), 
+				   gpa_algorithm_string (algo));
+    }
   gtk_combo_box_set_active (GTK_COMBO_BOX (comboAlgorithm), 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (labelAlgorithm), comboAlgorithm);
 			      
@@ -193,12 +206,23 @@ gpa_key_gen_run_dialog (GtkWidget *parent)
   gtk_misc_set_alignment (GTK_MISC (labelKeysize), 1.0, 0.5);
   gtk_table_attach (GTK_TABLE (table), labelKeysize, 0, 1, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
-  comboKeysize = gtk_combo_box_entry_new_text ();
+  comboKeysize = gtk_combo_box_new_text ();
   dialog.comboKeysize = comboKeysize;
-  gtk_combo_box_append_text (GTK_COMBO_BOX (comboKeysize), _("768"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (comboKeysize), _("1024"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (comboKeysize), _("2048"));
-  gtk_combo_box_set_active (GTK_COMBO_BOX (comboKeysize), 1 /* 1024 */);
+
+  if (forcard)
+    {
+      /* The OpenPGP smartcard does only support 1024bit RSA
+	 keys. FIXME: should we really hardcode this? -mo */
+      gtk_combo_box_append_text (GTK_COMBO_BOX (comboKeysize), _("1024"));
+      gtk_combo_box_set_active (GTK_COMBO_BOX (comboKeysize), 0);
+    }
+  else
+    {
+      gtk_combo_box_append_text (GTK_COMBO_BOX (comboKeysize), _("768"));
+      gtk_combo_box_append_text (GTK_COMBO_BOX (comboKeysize), _("1024"));
+      gtk_combo_box_append_text (GTK_COMBO_BOX (comboKeysize), _("2048"));
+      gtk_combo_box_set_active (GTK_COMBO_BOX (comboKeysize), 1 /* 1024 */);
+    }
   gtk_label_set_mnemonic_widget (GTK_LABEL (labelKeysize), comboKeysize);
   gtk_table_attach (GTK_TABLE (table), comboKeysize, 1, 2, 1, 2,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
@@ -232,28 +256,37 @@ gpa_key_gen_run_dialog (GtkWidget *parent)
   gtk_table_attach (GTK_TABLE (table), entryComment, 1, 2, 4, 5, GTK_FILL,
 		    GTK_SHRINK, 0, 0);
 
-  labelPasswd = gtk_label_new_with_mnemonic (_("_Passphrase: "));
-  gtk_misc_set_alignment (GTK_MISC (labelPasswd), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), labelPasswd, 0, 1, 5, 6,
-		    GTK_FILL, GTK_SHRINK, 0, 0);
-  entryPasswd = gtk_entry_new ();
-  dialog.entryPasswd = entryPasswd;
-  gtk_entry_set_visibility (GTK_ENTRY (entryPasswd), FALSE);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (labelPasswd), entryPasswd);
-  gtk_table_attach (GTK_TABLE (table), entryPasswd, 1, 2, 5, 6, GTK_FILL,
-		    GTK_SHRINK, 0, 0);
+  if (forcard)
+    {
+      /* This doesn't make sense for the smartcard. */
+      dialog.entryPasswd = NULL;
+      dialog.entryRepeat = NULL;
+    }
+  else
+    {
+      labelPasswd = gtk_label_new_with_mnemonic (_("_Passphrase: "));
+      gtk_misc_set_alignment (GTK_MISC (labelPasswd), 1.0, 0.5);
+      gtk_table_attach (GTK_TABLE (table), labelPasswd, 0, 1, 5, 6,
+			GTK_FILL, GTK_SHRINK, 0, 0);
+      entryPasswd = gtk_entry_new ();
+      dialog.entryPasswd = entryPasswd;
+      gtk_entry_set_visibility (GTK_ENTRY (entryPasswd), FALSE);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (labelPasswd), entryPasswd);
+      gtk_table_attach (GTK_TABLE (table), entryPasswd, 1, 2, 5, 6, GTK_FILL,
+			GTK_SHRINK, 0, 0);
 
-  labelRepeat = gtk_label_new_with_mnemonic (_("_Repeat passphrase: "));
-  gtk_misc_set_alignment (GTK_MISC (labelRepeat), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), labelRepeat, 0, 1, 6, 7,
-		    GTK_FILL, GTK_SHRINK, 0, 0);
-  entryRepeat = gtk_entry_new ();
-  dialog.entryRepeat = entryRepeat;
-  gtk_entry_set_visibility (GTK_ENTRY (entryRepeat), FALSE);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (labelRepeat), entryRepeat);
+      labelRepeat = gtk_label_new_with_mnemonic (_("_Repeat passphrase: "));
+      gtk_misc_set_alignment (GTK_MISC (labelRepeat), 1.0, 0.5);
+      gtk_table_attach (GTK_TABLE (table), labelRepeat, 0, 1, 6, 7,
+			GTK_FILL, GTK_SHRINK, 0, 0);
+      entryRepeat = gtk_entry_new ();
+      dialog.entryRepeat = entryRepeat;
+      gtk_entry_set_visibility (GTK_ENTRY (entryRepeat), FALSE);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (labelRepeat), entryRepeat);
 
-  gtk_table_attach (GTK_TABLE (table), entryRepeat, 1, 2, 6, 7,
-		    GTK_FILL, GTK_SHRINK, 0, 0);
+      gtk_table_attach (GTK_TABLE (table), entryRepeat, 1, 2, 6, 7,
+			GTK_FILL, GTK_SHRINK, 0, 0);
+    }
 
   frameExpire = gpa_expiry_frame_new (NULL);
   dialog.frameExpire = frameExpire;
@@ -274,8 +307,12 @@ gpa_key_gen_run_dialog (GtkWidget *parent)
 	= XSTRDUP_OR_NULL(gtk_entry_get_text (GTK_ENTRY (entryEmail)));
       params->comment
 	= XSTRDUP_OR_NULL (gtk_entry_get_text (GTK_ENTRY(entryComment)));
-      params->password
-	= XSTRDUP_OR_NULL (gtk_entry_get_text (GTK_ENTRY(entryPasswd)));
+
+      if (forcard)
+	params->password = NULL;
+      else
+	params->password
+	  = XSTRDUP_OR_NULL (gtk_entry_get_text (GTK_ENTRY(entryPasswd)));
 
       temp = gtk_combo_box_get_active_text (GTK_COMBO_BOX (comboAlgorithm));
       params->algo = gpa_algorithm_from_string (temp);

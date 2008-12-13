@@ -1,5 +1,6 @@
 /* keygendlg.h  -  The GNU Privacy Assistant
  *	Copyright (C) 2000, 2001 G-N-U GmbH.
+ *	Copyright (C) 2008 g10 Code GmbH
  *
  * This file is part of GPA
  *
@@ -24,7 +25,6 @@
 #include <gtk/gtk.h>
 #include "gpgmetools.h"
 
-GPAKeyGenParameters * gpa_key_gen_run_dialog (GtkWidget * parent);
-
+GPAKeyGenParameters * gpa_key_gen_run_dialog (GtkWidget * parent, gboolean forcard);
 
 #endif /* KEYSIGNDLG_H */

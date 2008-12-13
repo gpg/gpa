@@ -53,6 +53,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      icons.c icons.h \
 	      gpawidgets.c gpawidgets.h \
 	      fileman.c fileman.h \
+	      cardman.c cardman.h \
 	      clipboard.h clipboard.c \
 	      filesigndlg.c filesigndlg.h \
 	      encryptdlg.c encryptdlg.h \
@@ -113,6 +114,8 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpagenkeyop.h gpagenkeyop.c \
 	      gpagenkeyadvop.h gpagenkeyadvop.c \
 	      gpagenkeysimpleop.h gpagenkeysimpleop.c \
+	      gpacardreloadop.h gpacardreloadop.c \
+	      gpagenkeycardop.h gpagenkeycardop.c \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
 	      server.c \

@@ -60,6 +60,9 @@ void gpa_open_keyring_editor (GtkAction *action, void *data);
 /* Show the filemanager dialog.  */
 void gpa_open_filemanager (GtkAction *action, void *data);
 
+/* Show the cardmanager dialog.  */
+void gpa_open_cardmanager (GtkAction *action, void *data);
+
 /* Show the filemanager dialog.  */
 void gpa_open_clipboard (GtkAction *action, void *data);
 
@@ -73,7 +76,9 @@ static const GtkActionEntry gpa_windows_menu_action_entries[] =
       { "WindowsFileManager", GPA_STOCK_FILEMAN, NULL, NULL,
 	N_("Open the file manager"), G_CALLBACK (gpa_open_filemanager) },
       { "WindowsClipboard", GPA_STOCK_CLIPBOARD, NULL, NULL,
-	N_("Open the clipboard"), G_CALLBACK (gpa_open_clipboard) }
+	N_("Open the clipboard"), G_CALLBACK (gpa_open_clipboard) },
+      { "WindowsCardManager", GPA_STOCK_CARDMAN, NULL, NULL,
+	N_("Open the card manager"), G_CALLBACK (gpa_open_cardmanager) }
   };
 
 

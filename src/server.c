@@ -1151,6 +1151,19 @@ cmd_start_keymanager (assuan_context_t ctx, char *line)
   return assuan_process_done (ctx, 0);
 }
 
+/* START_CARDMANAGER
+
+   Pop up the card manager window.  The client expects that the key
+   manager is brought into the foregound and that this command
+   immediatley returns.
+*/
+static int
+cmd_start_cardmanager (assuan_context_t ctx, char *line)
+{
+  gpa_open_cardmanager (NULL, NULL);
+
+  return assuan_process_done (ctx, 0);
+}
 
 
 /* START_CONFDIALOG
@@ -1650,6 +1663,7 @@ register_commands (assuan_context_t ctx)
     { "VERIFY", cmd_verify },
     { "START_KEYMANAGER", cmd_start_keymanager },
     { "START_CONFDIALOG", cmd_start_confdialog },
+    { "START_CARDMANAGER", cmd_start_cardmanager },
     { "GETINFO", cmd_getinfo },
     { "FILE", cmd_file },
     { "ENCRYPT_FILES", cmd_encrypt_files },

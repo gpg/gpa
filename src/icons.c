@@ -184,6 +184,12 @@ register_stock_icons (void)
   icon_set = gtk_icon_set_copy (icon_set);
   gtk_icon_factory_add (icon_factory, GPA_STOCK_FILEMAN, icon_set);
 
+  /* Add a fake stock icon for the card manager window.  */
+  /* FIXME: this is a FLOPPY icon. We need a smartcard icon. -mo */
+  icon_set = gtk_icon_factory_lookup_default (GTK_STOCK_FLOPPY);
+  icon_set = gtk_icon_set_copy (icon_set);
+  gtk_icon_factory_add (icon_factory, GPA_STOCK_CARDMAN, icon_set);
+
   gtk_icon_factory_add_default (icon_factory); 
 
   g_object_unref (icon_factory);
@@ -203,7 +209,8 @@ gpa_register_stock_items (void)
       { GPA_STOCK_DETAILED, N_("_Detailed"), 0, 0, PACKAGE },
       { GPA_STOCK_KEYRING, N_("_Keyring Editor"), 0, 0, PACKAGE },
       { GPA_STOCK_CLIPBOARD, N_("_Clipboard"), 0, 0, PACKAGE },
-      { GPA_STOCK_FILEMAN, N_("_File Manager"), 0, 0, PACKAGE }
+      { GPA_STOCK_FILEMAN, N_("_File Manager"), 0, 0, PACKAGE },
+      { GPA_STOCK_CARDMAN, N_("_Card Manager"), 0, 0, PACKAGE }
     };
 
   register_stock_icons ();

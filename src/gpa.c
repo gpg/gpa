@@ -35,6 +35,7 @@
 #include "keyring.h"
 #include "fileman.h"
 #include "clipboard.h"
+#include "cardman.h"
 #include "keyserver.h"
 #include "settingsdlg.h"
 #include "confdialog.h"
@@ -61,6 +62,7 @@ typedef struct
   gboolean start_file_manager;
   gboolean start_clipboard;
   gboolean start_settings;
+  gboolean start_card_manager;
   gboolean start_only_server;
   gchar *options_filename;
 } gpa_args_t;
@@ -98,6 +100,8 @@ static GOptionEntry option_entries[] =
       N_("Open clipboard"), NULL },
     { "settings", 's', 0, G_OPTION_ARG_NONE, &args.start_settings,
       N_("Open the settings dialog"), NULL },
+    { "card", 'C', 0, G_OPTION_ARG_NONE, &args.start_card_manager,
+      N_("Open the card manager"), NULL },
     { "daemon", 'd', 0, G_OPTION_ARG_NONE, &args.start_only_server,
       N_("Enable the UI server (implies --cms)"), NULL },
     { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
@@ -161,8 +165,9 @@ i18n_init (void)
 static void
 quit_if_no_window (void)
 {
-  if (! keyringeditor && ! gpa_file_manager_is_open ()
-      && ! gpa_clipboard_is_open () && !args.start_only_server )
+  if (!keyringeditor && !gpa_file_manager_is_open ()
+      && !gpa_clipboard_is_open () && !args.start_only_server
+      && !gpa_card_manager_is_open ())
     gpa_stop_server ();
 }
 
@@ -220,6 +225,18 @@ gpa_open_filemanager (GtkAction *action, void *data)
   gtk_window_present (GTK_WINDOW (gpa_file_manager_get_instance ()));
 }
 
+/* Show the card manager.  */
+void
+gpa_open_cardmanager (GtkAction *action, void *data)
+{
+  /* FIXME: Shouldn't this connect only happen if the instance is
+     created the first time?  Looks like a memory leak to me.  */
+  g_signal_connect (G_OBJECT (gpa_card_manager_get_instance ()), "destroy",
+		    G_CALLBACK (quit_if_no_window), NULL);
+  gtk_widget_show_all (gpa_card_manager_get_instance ());
+
+  gtk_window_present (GTK_WINDOW (gpa_card_manager_get_instance ()));
+}
 
 /* Show the settings dialog.  */
 void
@@ -372,7 +389,8 @@ main (int argc, char *argv[])
 
   /* Start the keyring editor by default.  */
   if (!args.start_keyring_editor && !args.start_file_manager
-      && !args.start_clipboard && !args.start_settings)
+      && !args.start_clipboard && !args.start_settings
+      && !args.start_card_manager)
     args.start_keyring_editor = TRUE;
 
   /* Note: We can not use GPGME's engine info, as that returns NULL
@@ -426,6 +444,9 @@ main (int argc, char *argv[])
   
       if (args.start_file_manager || (optind < argc))
 	gpa_open_filemanager (NULL, NULL);
+
+      if (args.start_card_manager)
+	gpa_open_cardmanager (NULL, NULL);
 
       if (args.start_settings)
 	gpa_open_settings_dialog (NULL, NULL);
