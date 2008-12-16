@@ -215,11 +215,23 @@ helper_path (const gchar *scheme)
         *name = 0;
       helper = name;
     }
-  path = g_strdup_printf ("%s\\gpgkeys_%s.exe", helper, scheme);
+  path = g_strdup_printf ("%s\\gpg2keys_%s.exe", helper, scheme);
+  if (access (path, F_OK))
+    {
+      g_free (path)
+      path = g_strdup_printf ("%s\\gpgkeys_%s.exe", helper, scheme);
+    }
 #else
-  helper = g_strdup_printf ("gpgkeys_%s", scheme);
+  helper = g_strdup_printf ("gpg2keys_%s", scheme);
   path = g_build_filename (GPA_KEYSERVER_HELPERS_DIR, helper, NULL);
   g_free (helper);
+  if (access (path, F_OK))
+    {
+      g_free (path);
+      helper = g_strdup_printf ("gpgkeys_%s", scheme);
+      path = g_build_filename (GPA_KEYSERVER_HELPERS_DIR, helper, NULL);
+      g_free (helper);
+    }
 #endif  
   return path;
 }

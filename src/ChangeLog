@@ -1,9 +1,28 @@
+2008-12-16  Werner Koch  <wk@g10code.com>
+
+	* gpa.c (gpa_args_t): Add field start_card_manager.
+
+	* keygenwizard.c (string_strip_dup): Make arg const char and get
+	rid of the stupid "gchar".
+
+	* utils.c (decode_c_string, hextobyte): New.  Based on code taken
+	GPGME (conversion.c).
+
+	* gpacardreloadop.h: Remove include files. Re-indent macros.  
+	(_GpaCardReloadOperation) 
+	(_GpaCardReloadOperationClass): Move to gpacardreloadop.c.
+
+	* icons.c: Include smartcard.xpm.
+	(xpm): Add it to the list.
+	(register_stock_icons): Remove fake icon.
+	* cardman.c (gpa_card_manager_constructor): Use cardman icon.
+
 2008-12-13  Moritz  <moritz@gnu.org>
 
-	* gpacardreloadop.c, gpacardreloadop.h, gpagenkeycardop.c,
-	gpagenkeycardop.h, cardman.c, cardman.h: New files.
+	* gpacardreloadop.c, gpacardreloadop.h, gpagenkeycardop.c
+	* gpagenkeycardop.h, cardman.c, cardman.h: New files.
 
-	* Makefile.am (gpa_SOURCES): Added: cardman.c, cardman.h,
+	* Makefile.am (gpa_SOURCES): Add cardman.c, cardman.h,
 	gpacardreloadop.c, gpacardreloadop.h, gpagenkeycardop.c,
 	gpagenkeycardop.h.
 
@@ -77,6 +96,16 @@
 2008-10-31  Marcus Brinkmann  <marcus@g10code.com>
 
 	* server.c (cmd_sender): Add missing label.
+
+2008-10-30  Werner Koch  <wk@g10code.com>
+
+	* keyring.c (keyring_editor_selection_changed): Use validating
+	keylist mode.
+
+2008-10-24  Werner Koch  <wk@g10code.com>
+
+	* server_access.c (helper_path): Use gpg2keys_ with fallback to
+	gpgkeys_.
 
 2008-10-15  Werner Koch  <wk@g10code.com>
 

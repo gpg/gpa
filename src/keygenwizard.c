@@ -48,8 +48,8 @@
  
 /* Return a copy of string with leading and trailing whitespace
    stripped.  */
-static gchar *
-string_strip_dup (gchar *string)
+static char *
+string_strip_dup (const char *string)
 {
   return g_strstrip (g_strdup (string));
 }

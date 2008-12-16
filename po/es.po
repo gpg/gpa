@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:53+0200\n"
+"POT-Creation-Date: 2008-05-09 19:19+0200\n"
 "PO-Revision-Date: 2008-03-11 09:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Open File"
 msgstr "Abrir Archivo"
 
-#: src/clipboard.c:404 src/confdialog.c:1267 src/gtktools.c:82
+#: src/clipboard.c:404 src/confdialog.c:1274 src/gtktools.c:82
 msgid "GPA Message"
 msgstr "Mensaje de GPA"
 
@@ -141,31 +141,31 @@ msgstr "GNU Privacy Assistant - Portapapeles"
 msgid "<b>Main</b>"
 msgstr "<b>Principal</b>"
 
-#: src/confdialog.c:1144
+#: src/confdialog.c:1151
 msgid "Use default values"
 msgstr "Usar valores predeterminados"
 
-#: src/confdialog.c:1144
+#: src/confdialog.c:1151
 msgid "Use default value"
 msgstr "Usar valor predeterminado"
 
-#: src/confdialog.c:1147
+#: src/confdialog.c:1154
 msgid "Do not use option"
 msgstr "No usar la opción"
 
-#: src/confdialog.c:1152
+#: src/confdialog.c:1159
 msgid "Use custom values"
 msgstr "Usar valores personalizados"
 
-#: src/confdialog.c:1152
+#: src/confdialog.c:1159
 msgid "Use custom value"
 msgstr "Usar valor personalizado"
 
-#: src/confdialog.c:1156
+#: src/confdialog.c:1163
 msgid "Use default argument"
 msgstr "Usar argumentos predeterminados"
 
-#: src/confdialog.c:1281
+#: src/confdialog.c:1288
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
@@ -173,31 +173,31 @@ msgstr ""
 "Hay cambios que no han sido aplicados. Al cambiar la configuración experta "
 "estos cambios se aplicarán. ¿Desea continuar?"
 
-#: src/confdialog.c:1326
+#: src/confdialog.c:1333
 msgid "Crypto Backend Configuration"
 msgstr "Configuración del motor de cifrado"
 
-#: src/confdialog.c:1332
+#: src/confdialog.c:1339
 msgid "Reset"
 msgstr "Restablecer"
 
-#: src/confdialog.c:1351
+#: src/confdialog.c:1358
 msgid "Configure the tools of the GnuPG system."
 msgstr "Configurar las herramientas del sistema GnuPG."
 
-#: src/confdialog.c:1355
+#: src/confdialog.c:1362
 msgid "Level:"
 msgstr "Nivel:"
 
-#: src/confdialog.c:1364
+#: src/confdialog.c:1371
 msgid "Basic"
 msgstr "Básico"
 
-#: src/confdialog.c:1365
+#: src/confdialog.c:1372
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: src/confdialog.c:1366
+#: src/confdialog.c:1373
 msgid "Expert"
 msgstr "Experto"
 

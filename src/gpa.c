@@ -60,9 +60,9 @@ typedef struct
 {
   gboolean start_keyring_editor;
   gboolean start_file_manager;
+  gboolean start_card_manager;
   gboolean start_clipboard;
   gboolean start_settings;
-  gboolean start_card_manager;
   gboolean start_only_server;
   gchar *options_filename;
 } gpa_args_t;
@@ -96,12 +96,12 @@ static GOptionEntry option_entries[] =
       N_("Open keyring editor (default)"), NULL },
     { "files", 'f', 0, G_OPTION_ARG_NONE, &args.start_file_manager,
       N_("Open file manager"), NULL },
+    { "card", 'C', 0, G_OPTION_ARG_NONE, &args.start_card_manager,
+      N_("Open the card manager"), NULL },
     { "clipboard", 'c', 0, G_OPTION_ARG_NONE, &args.start_clipboard,
       N_("Open clipboard"), NULL },
     { "settings", 's', 0, G_OPTION_ARG_NONE, &args.start_settings,
       N_("Open the settings dialog"), NULL },
-    { "card", 'C', 0, G_OPTION_ARG_NONE, &args.start_card_manager,
-      N_("Open the card manager"), NULL },
     { "daemon", 'd', 0, G_OPTION_ARG_NONE, &args.start_only_server,
       N_("Enable the UI server (implies --cms)"), NULL },
     { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
@@ -165,8 +165,10 @@ i18n_init (void)
 static void
 quit_if_no_window (void)
 {
-  if (!keyringeditor && !gpa_file_manager_is_open ()
-      && !gpa_clipboard_is_open () && !args.start_only_server
+  if (!keyringeditor 
+      && !args.start_only_server
+      && !gpa_file_manager_is_open ()
+      && !gpa_clipboard_is_open ()
       && !gpa_card_manager_is_open ())
     gpa_stop_server ();
 }
@@ -388,8 +390,10 @@ main (int argc, char *argv[])
     cms_hack = 1; 
 
   /* Start the keyring editor by default.  */
-  if (!args.start_keyring_editor && !args.start_file_manager
-      && !args.start_clipboard && !args.start_settings
+  if (!args.start_keyring_editor 
+      && !args.start_file_manager
+      && !args.start_clipboard
+      && !args.start_settings
       && !args.start_card_manager)
     args.start_keyring_editor = TRUE;
 

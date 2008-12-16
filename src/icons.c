@@ -50,6 +50,7 @@
 #include "sign.xpm"
 #include "wizard_backup.xpm"
 #include "wizard_genkey.xpm"
+#include "smartcard.xpm"
 
 
 struct {
@@ -74,6 +75,7 @@ struct {
   { GPA_STOCK_SECRET_KEY, blue_yellow_key_xpm },
   { "wizard_genkey", wizard_genkey_xpm},
   { "wizard_backup", wizard_backup_xpm},
+  { GPA_STOCK_CARDMAN, smartcard_xpm },
   { NULL, NULL }
 };
 
@@ -183,12 +185,6 @@ register_stock_icons (void)
   icon_set = gtk_icon_factory_lookup_default (GTK_STOCK_DIRECTORY);
   icon_set = gtk_icon_set_copy (icon_set);
   gtk_icon_factory_add (icon_factory, GPA_STOCK_FILEMAN, icon_set);
-
-  /* Add a fake stock icon for the card manager window.  */
-  /* FIXME: this is a FLOPPY icon. We need a smartcard icon. -mo */
-  icon_set = gtk_icon_factory_lookup_default (GTK_STOCK_FLOPPY);
-  icon_set = gtk_icon_set_copy (icon_set);
-  gtk_icon_factory_add (icon_factory, GPA_STOCK_CARDMAN, icon_set);
 
   gtk_icon_factory_add_default (icon_factory); 
 

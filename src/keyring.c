@@ -683,12 +683,15 @@ keyring_editor_selection_changed (GtkTreeSelection *treeselection,
       key = (gpgme_key_t) selection->data;
       old_mode = gpgme_get_keylist_mode (editor->ctx->ctx);
 
-      /* With all the signatures.  Note that we should not save and
-         restore the old protocol because the protocol should not be
-         changed before the gpgme_op_keylist_end.  Saving and
-         restoring the keylist mode is okay. */
+      /* With all the signatures and validating for the sake of X.509.
+         Note that we should not save and restore the old protocol
+         because the protocol should not be changed before the
+         gpgme_op_keylist_end.  Saving and restoring the keylist mode
+         is okay. */
       gpgme_set_keylist_mode (editor->ctx->ctx, 
-			      old_mode | GPGME_KEYLIST_MODE_SIGS);
+			      (old_mode 
+                               | GPGME_KEYLIST_MODE_SIGS
+                               | GPGME_KEYLIST_MODE_VALIDATE));
       gpgme_set_protocol (editor->ctx->ctx, key->protocol);
       err = gpgme_op_keylist_start (editor->ctx->ctx, key->subkeys->fpr, 
 				    FALSE);

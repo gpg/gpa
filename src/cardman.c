@@ -1,6 +1,5 @@
 /* cardman.c  -  The GNU Privacy Assistant: card manager.
-   Copyright (C) 2000, 2001 G-N-U GmbH.
-   Copyright (C) 2007, 2008 g10 Code GmbH
+   Copyright (C) 2008 g10 Code GmbH
 
    This file is part of GPA.
 
@@ -181,7 +180,11 @@ card_reload_cb (void *opaque, const char *identifier, int idx, const void *value
   else if (strcmp (identifier, "lang") == 0 && idx == 0)
     gtk_entry_set_text (GTK_ENTRY (cardman->entryLanguage), string);
   else if (strcmp (identifier, "url") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryPubkeyUrl), string);
+    {
+      char *tmp = decode_c_string (string);
+      gtk_entry_set_text (GTK_ENTRY (cardman->entryPubkeyUrl), tmp);
+      xfree (tmp);
+    }
   else if (strcmp (identifier, "vendor") == 0 && idx == 1)
     gtk_entry_set_text (GTK_ENTRY (cardman->entryManufacturer), string);
   else if (strcmp (identifier, "version") == 0 && idx == 0)
@@ -362,8 +365,10 @@ construct_card_widget (GpaCardManager *cardman)
 #define ADD_TABLE_ROW(label, widget) \
   { \
     GtkWidget *tmp_label = gtk_label_new (_(label)); \
-    gtk_table_attach (GTK_TABLE (table), tmp_label, 0, 1, rowidx, rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); \
-    gtk_table_attach (GTK_TABLE (table), widget, 1, 2, rowidx, rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); \
+    gtk_table_attach (GTK_TABLE (table), tmp_label, 0, 1, \
+                      rowidx, rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); \
+    gtk_table_attach (GTK_TABLE (table), widget, 1, 2, \
+                      rowidx, rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); \
     rowidx++; \
   }
   
@@ -373,7 +378,7 @@ construct_card_widget (GpaCardManager *cardman)
 
   cardman->entryVersion = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryVersion), FALSE);
-  ADD_TABLE_ROW ("Version: ", cardman->entryVersion);
+  ADD_TABLE_ROW ("Card Version: ", cardman->entryVersion);
 
   cardman->entryManufacturer = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryManufacturer), FALSE);
@@ -402,7 +407,7 @@ construct_card_widget (GpaCardManager *cardman)
 
   cardman->entryLogin = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryLogin), FALSE);
-  ADD_TABLE_ROW ("Login data: ", cardman->entryLogin);
+  ADD_TABLE_ROW ("Login Data: ", cardman->entryLogin);
 
   cardman->entryPubkeyUrl = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryPubkeyUrl), FALSE);
@@ -479,11 +484,11 @@ gpa_card_manager_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
 
 
-  /* Add a fancy label that tells us: This is the file manager.  */
+  /* Add a fancy label that tells us: This is the card manager.  */
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   
-  icon = gtk_image_new_from_stock ("gtk-directory", GTK_ICON_SIZE_DND);
+  icon = gtk_image_new_from_stock (GPA_STOCK_CARDMAN, GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);

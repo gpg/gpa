@@ -130,3 +130,119 @@ inet_aton (const char *cp, struct in_addr *inp)
 }
 #endif /*HAVE_W32_SYSTEM*/
 
+
+/* Convert two hexadecimal digits from STR to the value they
+   represent.  Returns -1 if one of the characters is not a
+   hexadecimal digit.  */
+static int
+hextobyte (const char *str)
+{
+  int val = 0;
+  int i;
+
+#define NROFHEXDIGITS 2
+  for (i = 0; i < NROFHEXDIGITS; i++)
+    {
+      if (*str >= '0' && *str <= '9')
+	val += *str - '0';
+      else if (*str >= 'A' && *str <= 'F')
+	val += 10 + *str - 'A';
+      else if (*str >= 'a' && *str <= 'f')
+	val += 10 + *str - 'a';
+      else
+	return -1;
+      if (i < NROFHEXDIGITS - 1)
+	val *= 16;
+      str++;
+    }
+#undef NROFHEXDIGITS
+  return val;
+}
+
+
+/* Decode the C formatted string SRC and return the result in a newly
+   allocated buffer.  */
+char *
+decode_c_string (const char *src)
+{
+  char *buffer, *dest;
+
+  /* The converted string will never be larger than the original
+     string.  */
+  dest = buffer = xmalloc (strlen (src) + 1);
+
+  while (*src)
+    {
+      if (*src != '\\')
+	{
+	  *(dest++) = *(src++);
+	  continue;
+	}
+
+#define DECODE_ONE(match,result)	\
+	case match:			\
+	  src += 2;			\
+	  *(dest++) = result;		\
+	  break;
+
+      switch (src[1])
+	{
+
+	  DECODE_ONE ('\'', '\'');
+	  DECODE_ONE ('\"', '\"');
+	  DECODE_ONE ('\?', '\?');
+	  DECODE_ONE ('\\', '\\');
+	  DECODE_ONE ('a', '\a');
+	  DECODE_ONE ('b', '\b');
+	  DECODE_ONE ('f', '\f');
+	  DECODE_ONE ('n', '\n');
+	  DECODE_ONE ('r', '\r');
+	  DECODE_ONE ('t', '\t');
+	  DECODE_ONE ('v', '\v');
+
+	case 'x':
+	  {
+	    int val = hextobyte (&src[2]);
+
+	    if (val == -1)
+	      {
+		/* Should not happen.  */
+		*(dest++) = *(src++);
+		*(dest++) = *(src++);
+		if (*src)
+		  *(dest++) = *(src++);
+		if (*src)
+		  *(dest++) = *(src++);
+	      }
+	    else
+	      {
+		if (!val)
+		  {
+		    /* A binary zero is not representable in a C
+		       string thus we keep the C-escaping.  Note that
+		       this will also never be larger than the source
+		       string.  */
+		    *(dest++) = '\\';
+		    *(dest++) = '0'; 
+		  }
+		else 
+		  *((unsigned char *) dest++) = val;
+		src += 4;
+	      }
+	  }
+	  break;
+
+	default:
+	  {
+	    /* Should not happen.  */
+	    *(dest++) = *(src++);
+	    *(dest++) = *(src++);
+	  }
+        }
+#undef DECODE_ONE
+    }
+  *(dest++) = 0;
+
+  return buffer;
+}
+

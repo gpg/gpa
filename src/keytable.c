@@ -195,7 +195,7 @@ first_half_done_cb (GpaContext *context, gpg_error_t err,
       return;
     }
   
-  /* Now continue with a key listing for X.509 keys put save the error
+  /* Now continue with a key listing for X.509 keys but save the error
      of the the PGP key listing.  */
   keytable->first_half_err = err;
   keytable->did_first_half = 1;

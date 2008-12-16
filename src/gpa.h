@@ -115,6 +115,8 @@ char *xstrdup (const char *str);
 
 int translate_sys2libc_fd (assuan_fd_t fd, int for_write);
 
+char *decode_c_string (const char *src);
+
 
 /*-- Convenience macros. -- */
 #define DIM(v)		     (sizeof(v)/sizeof((v)[0]))

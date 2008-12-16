@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2008-05-08 14:53+0200\n"
+"POT-Creation-Date: 2008-05-09 19:19+0200\n"
 "PO-Revision-Date: 2007-05-24 15:04+0200\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: czech <cs@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Open File"
 msgstr "Otevřít soubor"
 
-#: src/clipboard.c:404 src/confdialog.c:1267 src/gtktools.c:82
+#: src/clipboard.c:404 src/confdialog.c:1274 src/gtktools.c:82
 msgid "GPA Message"
 msgstr "Zpráva GPA"
 
@@ -147,66 +147,66 @@ msgstr "GNU Privacy Assistant - Správce souborů"
 msgid "<b>Main</b>"
 msgstr ""
 
-#: src/confdialog.c:1144
+#: src/confdialog.c:1151
 #, fuzzy
 msgid "Use default values"
 msgstr "Standard-Schlüssel festlegen"
 
-#: src/confdialog.c:1144
+#: src/confdialog.c:1151
 #, fuzzy
 msgid "Use default value"
 msgstr "Standard-Schlüssel festlegen"
 
-#: src/confdialog.c:1147
+#: src/confdialog.c:1154
 msgid "Do not use option"
 msgstr ""
 
-#: src/confdialog.c:1152
+#: src/confdialog.c:1159
 msgid "Use custom values"
 msgstr ""
 
-#: src/confdialog.c:1152
+#: src/confdialog.c:1159
 msgid "Use custom value"
 msgstr ""
 
-#: src/confdialog.c:1156
+#: src/confdialog.c:1163
 #, fuzzy
 msgid "Use default argument"
 msgstr "Empfängerliste festlegen"
 
-#: src/confdialog.c:1281
+#: src/confdialog.c:1288
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
 msgstr ""
 
-#: src/confdialog.c:1326
+#: src/confdialog.c:1333
 msgid "Crypto Backend Configuration"
 msgstr ""
 
-#: src/confdialog.c:1332
+#: src/confdialog.c:1339
 msgid "Reset"
 msgstr ""
 
-#: src/confdialog.c:1351
+#: src/confdialog.c:1358
 msgid "Configure the tools of the GnuPG system."
 msgstr ""
 
-#: src/confdialog.c:1355
+#: src/confdialog.c:1362
 #, fuzzy
 msgid "Level:"
 msgstr "Úroveň"
 
-#: src/confdialog.c:1364
+#: src/confdialog.c:1371
 #, fuzzy
 msgid "Basic"
 msgstr "_Zpět"
 
-#: src/confdialog.c:1365
+#: src/confdialog.c:1372
 msgid "Advanced"
 msgstr ""
 
-#: src/confdialog.c:1366
+#: src/confdialog.c:1373
 #, fuzzy
 msgid "Expert"
 msgstr "Exportovat"
