@@ -1,6 +1,21 @@
 2008-12-16  Werner Koch  <wk@g10code.com>
 
+	* cardman.c (_GpaCardManager): Add fields CARD_WIDGET and HAVE_CARD.
+	(gpa_card_manager_constructor): Use it here.
+	(update_title, update_info_visibility): New.
+	(gpa_card_manager_constructor): Use them.
+	(watcher_cb): New.
+
+	* gpacardreloadop.c (process_line): Rewrite to handle empty fields.
+
+	* gpacontext.c (gpa_context_start, gpa_context_done): Remove
+	debug output.
+
+	* filewatch.c: New.
+	* gpa.c (main): Intialize the file watcher.
+
 	* cardman.c (card_reload_cb): Pretty print serial, version and URL.
+
 	* utils.c (decode_c_string, hextobyte): New.  Based on code taken
 	GPGME (conversion.c).
 

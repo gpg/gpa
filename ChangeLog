@@ -1,3 +1,8 @@
+2008-12-16  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Remove unused test for getopt_long.
+	(AC_CHECK_FUNCS): Check for inotify_init.
+
 2008-12-10  Marcus Brinkmann  <marcus@g10code.de>
 
 	* configure.ac: Require gtk 2.10.0.

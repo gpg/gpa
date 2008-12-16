@@ -434,18 +434,18 @@ gpa_context_event_cb (void *data, gpgme_event_io_t type, void *type_data)
 static void
 gpa_context_start (GpaContext *context)
 {
-  g_debug ("gpgme event START enter");
+/*   g_debug ("gpgme event START enter"); */
   context->busy = TRUE;
   /* We have START, register all queued callbacks */
   register_all_callbacks (context);
-  g_debug ("gpgme event START leave");
+/*   g_debug ("gpgme event START leave"); */
 }
 
 static void
 gpa_context_done (GpaContext *context, gpg_error_t err)
 {
   context->busy = FALSE;
-  g_debug ("gpgme event DONE ready");
+/*   g_debug ("gpgme event DONE ready"); */
 }
 
 static void

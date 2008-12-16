@@ -261,30 +261,24 @@ gpa_card_reload_operation_idle_cb (gpointer data)
 static void
 process_line (char *line, gpa_card_reload_cb_t cb, void *opaque)
 {
-  char *save_ptr = NULL;
-  char *identifier;
+  char *field[5];
+  int fields = 0;
   int idx;
 
-  idx = 0;
-  identifier = strtok_r (line, ":", &save_ptr);
-  if (!identifier)
-    /* FIXME: maybe an assert here? -mo */
-    return;
+  /* Note that !line indicates EOF but we have no use for it here.  */
 
-  while (1)
+  while (line && fields < DIM (field))
     {
-      char *token;
-
-      token = strtok_r (NULL, ":", &save_ptr);
-      if (token)
-	{
-	  (*cb) (opaque, identifier, idx, token);
-	  idx++;
-	}
-      else
-	break;
+      field[fields++] = line;
+      line = strchr (line, ':');
+      if (line)
+	*line++ = 0;
     }
+
+  for (idx=1; idx < fields; idx++)
+    (*cb) (opaque, field[0], idx-1, field[idx]);
 }
+
 
 /* Processes the GPGME output contained in OUT, calling the callback
    CB with it's opaque argument OPAQUE for each data item. */

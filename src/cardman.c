@@ -53,6 +53,11 @@ struct _GpaCardManager
   GtkWindow parent;
 
   GtkWidget *window;
+
+  GtkUIManager *ui_manager;
+
+  GtkWidget *card_widget;     /* The container of all the info widgets.  */
+
   GtkWidget *entrySerialno;
   GtkWidget *entryVersion;
   GtkWidget *entryManufacturer;
@@ -68,6 +73,10 @@ struct _GpaCardManager
   GtkWidget *comboSex;
   GList *selection_sensitive_actions; /* ? */
 #endif
+
+  int have_card;             /* True, if a supported card is in the reader.  */
+  gpa_filewatch_id_t watch;  /* For watching the reader status file.  */
+  int in_watcher_cb;         /* Sentinel for watcher_cb().  */
 };
 
 struct _GpaCardManagerClass 
@@ -90,9 +99,13 @@ typedef gboolean (*sensitivity_func_t)(gpointer);
 #endif
 
 /* Local prototypes */
-static GObject *gpa_card_manager_constructor (GType type,
-					      guint n_construct_properties,
-					      GObjectConstructParam *construct_properties);
+static void watcher_cb (void *opaque, 
+                        const char *filename, const char *reason);
+static void update_title (GpaCardManager *cardman);
+static void update_info_visibility (GpaCardManager *cardman);
+static GObject *gpa_card_manager_constructor
+                (GType type, guint n_construct_properties,
+                 GObjectConstructParam *construct_properties);
 
 
 
@@ -102,6 +115,8 @@ static GObject *gpa_card_manager_constructor (GType type,
 static void
 gpa_card_manager_finalize (GObject *object)
 {  
+  /* FIXME: Remove the watch object and all other resources.  */
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -109,6 +124,11 @@ gpa_card_manager_finalize (GObject *object)
 static void
 gpa_card_manager_init (GpaCardManager *cardman)
 {
+  char *fname;
+
+  fname = g_build_filename (gnupg_homedir, "reader_0.status", NULL);
+  cardman->watch = gpa_add_filewatch (fname, "c", watcher_cb, cardman);
+  xfree (fname);
 }
 
 static void
@@ -151,6 +171,20 @@ gpa_card_manager_get_type (void)
 }
 
 
+static void
+watcher_cb (void *opaque, const char *filename, const char *reason)
+{
+  GpaCardManager *cardman = opaque;
+
+  if (cardman && !cardman->in_watcher_cb && strchr (reason, 'c') )
+    {
+      cardman->in_watcher_cb++;
+      gtk_action_activate (gtk_ui_manager_get_action 
+                           (cardman->ui_manager, "/MainMenu/Card/CardReload"));
+      cardman->in_watcher_cb--;
+    }
+}
+
 
 static void
 register_reload_operation (GpaCardManager *cardman, GpaCardReloadOperation *op)
@@ -164,12 +198,22 @@ register_reload_operation (GpaCardManager *cardman, GpaCardReloadOperation *op)
    called for each data item during a reload operation and updates the
    according widgets. */
 static void
-card_reload_cb (void *opaque, const char *identifier, int idx, const void *value)
+card_reload_cb (void *opaque,
+                const char *identifier, int idx, const void *value)
 {
   GpaCardManager *cardman = opaque;
   const char *string = value;
 
-  if (strcmp (identifier, "serial") == 0 && idx == 0)
+  if (!strcmp (identifier, "AID"))
+    {
+      if (idx == 0)
+        {
+          cardman->have_card = !!*string;
+          update_info_visibility (cardman);
+          update_title (cardman);
+        }
+    }
+  else if (strcmp (identifier, "serial") == 0 && idx == 0)
     {
       while (*string == '0' && string[1])
         string++;
@@ -226,7 +270,8 @@ card_reload (GtkAction *action, gpointer param)
   GpaCardManager *cardman = param;
   GpaCardReloadOperation *op;
 
-  op = gpa_card_reload_operation_new (cardman->window, card_reload_cb, cardman);
+  op = gpa_card_reload_operation_new (cardman->window, 
+                                      card_reload_cb, cardman);
   register_reload_operation (cardman, GPA_CARD_RELOAD_OPERATION (op));
 }
 
@@ -326,7 +371,6 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
   GtkAccelGroup *accel_group;
   GtkActionGroup *action_group;
   GtkAction *action;
-  GtkUIManager *ui_manager;
   GError *error;
 
   action_group = gtk_action_group_new ("MenuActions");
@@ -341,11 +385,11 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
   gtk_action_group_add_actions
     (action_group, gpa_preferences_menu_action_entries,
      G_N_ELEMENTS (gpa_preferences_menu_action_entries), cardman);
-  ui_manager = gtk_ui_manager_new ();
-  gtk_ui_manager_insert_action_group (ui_manager, action_group, 0);
-  accel_group = gtk_ui_manager_get_accel_group (ui_manager);
+  cardman->ui_manager = gtk_ui_manager_new ();
+  gtk_ui_manager_insert_action_group (cardman->ui_manager, action_group, 0);
+  accel_group = gtk_ui_manager_get_accel_group (cardman->ui_manager);
   gtk_window_add_accel_group (GTK_WINDOW (cardman), accel_group);
-  if (! gtk_ui_manager_add_ui_from_string (ui_manager, ui_description,
+  if (! gtk_ui_manager_add_ui_from_string (cardman->ui_manager, ui_description,
 					   -1, &error))
     {
       g_message ("building cardman menus failed: %s", error->message);
@@ -359,8 +403,8 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
   action = gtk_action_group_get_action (action_group, "WindowsFileManager");
   g_object_set (action, "short_label", _("Files"), NULL);
 
-  *menubar = gtk_ui_manager_get_widget (ui_manager, "/MainMenu");
-  *toolbar = gtk_ui_manager_get_widget (ui_manager, "/ToolBar");
+  *menubar = gtk_ui_manager_get_widget (cardman->ui_manager, "/MainMenu");
+  *toolbar = gtk_ui_manager_get_widget (cardman->ui_manager, "/ToolBar");
   gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
 }
 
@@ -372,6 +416,34 @@ card_manager_closed (GtkWidget *widget, gpointer param)
 {
   instance = NULL;
 }
+
+
+static void
+update_title (GpaCardManager *cardman)
+{
+  const char *title = _("GNU Privacy Assistant - Card Manager");
+
+  if (cardman->have_card)
+    gtk_window_set_title (GTK_WINDOW (cardman), title);
+  else
+    {
+      char *tmp;
+      
+      tmp = g_strdup_printf ("%s (%s)", title, _("no card"));
+      gtk_window_set_title (GTK_WINDOW (cardman), tmp);
+      xfree (tmp);
+    }
+}
+
+static void
+update_info_visibility (GpaCardManager *cardman)
+{
+  if (cardman->have_card)
+    gtk_widget_show_all (cardman->card_widget);
+  else
+    gtk_widget_hide_all (cardman->card_widget);
+}
+
 
 /* This function constructs the container holding the card "form". It
    updates CARDMAN with new references to the entry widgets, etc.  */
@@ -467,7 +539,6 @@ gpa_card_manager_constructor (GType type,
   GtkWidget *icon;
   gchar *markup;
   GtkWidget *menubar;
-  GtkWidget *card_widget;
   GtkWidget *toolbar;
 
   /* Invoke parent's constructor.  */
@@ -475,6 +546,8 @@ gpa_card_manager_constructor (GType type,
 				      n_construct_properties,
 				      construct_properties);
   cardman = GPA_CARD_MANAGER (object);
+
+  cardman->have_card = 1;
 
   cardman->entryLogin = NULL;
 
@@ -490,9 +563,9 @@ gpa_card_manager_constructor (GType type,
   cardman->entryKeyEnc = NULL;
   cardman->entryKeyAuth = NULL;
 
+
   /* Initialize.  */
-  gtk_window_set_title (GTK_WINDOW (cardman),
-			_("GNU Privacy Assistant - Card Manager"));
+  update_title (cardman);
   gtk_window_set_default_size (GTK_WINDOW (cardman), 640, 480);
   /* Realize the window so that we can create pixmaps without warnings.  */
   gtk_widget_realize (GTK_WIDGET (cardman));
@@ -521,14 +594,16 @@ gpa_card_manager_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
-  card_widget = construct_card_widget (cardman);
-  gtk_box_pack_start (GTK_BOX (vbox), card_widget, TRUE, TRUE, 0);
+  cardman->card_widget = construct_card_widget (cardman);
+  gtk_box_pack_start (GTK_BOX (vbox), cardman->card_widget, TRUE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (cardman), vbox);
 
   g_signal_connect (object, "destroy",
                     G_CALLBACK (card_manager_closed), object);
 
+  gtk_widget_show_all (cardman->card_widget);
+  gtk_widget_hide_all (cardman->card_widget);
   return object;
 }
 
@@ -538,6 +613,8 @@ gpa_cardman_new (void)
   GpaCardManager *cardman;
 
   cardman = g_object_new (GPA_CARD_MANAGER_TYPE, NULL);  
+  gtk_action_activate (gtk_ui_manager_get_action 
+                       (cardman->ui_manager, "/MainMenu/Card/CardReload"));
 
 #if 0
   /* ? */

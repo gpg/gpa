@@ -95,8 +95,7 @@ AM_MAINTAINER_MODE
 dnl Check for libraries
 AC_CHECK_LIB(m, sin)
 CHECK_ZLIB
-AC_CHECK_FUNCS(strsep)
-AC_CHECK_FUNCS(stpcpy)
+AC_CHECK_FUNCS([strsep stpcpy])
 
 development_version=no
 # Allow users to append something to the version string (other than -cvs)
@@ -185,12 +184,6 @@ AM_GNU_GETTEXT_VERSION([0.17])
 AM_GNU_GETTEXT([external],[need-ngettext])
 
 
-AC_CHECK_FUNC(getopt_long,
-    AC_MSG_RESULT(using libc's getopt_long),
-    AC_CHECK_LIB(iberty, getopt_long,[LIBS="$LIBS -liberty"],
-	AC_CHECK_LIB(gnugetopt, getopt_long,[LIBS="$LIBS -lgnugetopt"],
-	    AC_MSG_ERROR(Cannot find a getopt_long function))))
-
 dnl Where is the GTK+ toolkit
 AM_PATH_GTK_2_0(2.10.0,, AC_MSG_ERROR(Cannot find GTK+ 2.0))
 
@@ -228,9 +221,10 @@ fi
 # We need this for GPGME
 AC_SYS_LARGEFILE
 
-dnl
-dnl Checks for typedefs and structures
-dnl
+
+#
+# Checks for typedefs and structures
+#
 
 GNUPG_CHECK_TYPEDEF(byte, HAVE_BYTE_TYPEDEF)
 GNUPG_CHECK_TYPEDEF(ushort, HAVE_USHORT_TYPEDEF)
@@ -238,6 +232,21 @@ GNUPG_CHECK_TYPEDEF(ulong, HAVE_ULONG_TYPEDEF)
 GNUPG_CHECK_TYPEDEF(u16, HAVE_U16_TYPEDEF)
 GNUPG_CHECK_TYPEDEF(u32, HAVE_U32_TYPEDEF)
 
+#
+# Check for library fucntions
+#
+
+# See whether libc supports the Linux inotify interface
+case "${host}" in
+    *-*-linux*)
+        AC_CHECK_FUNCS([inotify_init])
+        ;;
+esac
+
+
+#
+# Set extra compiler flags
+# 
 if test "$GCC" = yes; then
     if test "$USE_MAINTAINER_MODE" = "yes"; then
         # FIXME:

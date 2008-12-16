@@ -430,6 +430,10 @@ main (int argc, char *argv[])
 					 keyservers->data);
     }
 
+  /* Initialize the file watch facility.  */
+  gpa_init_filewatch ();
+
+  /* Startup whatever has been requested by the user.  */
   if (args.start_only_server)
     {
       /* Fire up the server.  Note that the server allows to start the

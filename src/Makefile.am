@@ -119,6 +119,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
 	      server.c \
+	      filewatch.c \
 	      options.c \
 	      confdialog.h confdialog.c \
 	      gpa-marshal.c gpa-marshal.h \

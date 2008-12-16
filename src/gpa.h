@@ -106,6 +106,17 @@ void gpa_run_server_continuation (assuan_context_t ctx, gpg_error_t err);
 void gpa_start_server (void);
 void gpa_stop_server (void);
 
+
+typedef struct gpa_filewatch_id_s *gpa_filewatch_id_t;
+typedef void (*gpa_filewatch_cb_t) 
+     (void *user_data, const char *filename, const char *reason);
+void gpa_init_filewatch (void);
+gpa_filewatch_id_t gpa_add_filewatch (const char *filename,
+                                      const char *maskstring,
+                                      gpa_filewatch_cb_t cb,
+                                      void *cb_data);
+
+
 /*-- utils.c --*/
 /* We are so used to these function thus provide them.  */
 void *xmalloc (size_t n);
