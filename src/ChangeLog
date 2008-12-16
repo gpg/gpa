@@ -1,12 +1,11 @@
 2008-12-16  Werner Koch  <wk@g10code.com>
 
-	* gpa.c (gpa_args_t): Add field start_card_manager.
+	* cardman.c (card_reload_cb): Pretty print serial, version and URL.
+	* utils.c (decode_c_string, hextobyte): New.  Based on code taken
+	GPGME (conversion.c).
 
 	* keygenwizard.c (string_strip_dup): Make arg const char and get
 	rid of the stupid "gchar".
-
-	* utils.c (decode_c_string, hextobyte): New.  Based on code taken
-	GPGME (conversion.c).
 
 	* gpacardreloadop.h: Remove include files. Re-indent macros.  
 	(_GpaCardReloadOperation) 
@@ -16,6 +15,7 @@
 	(xpm): Add it to the list.
 	(register_stock_icons): Remove fake icon.
 	* cardman.c (gpa_card_manager_constructor): Use cardman icon.
+	(card_reload_cb): Pretty print serial, version  and URL.
 
 2008-12-13  Moritz  <moritz@gnu.org>
 

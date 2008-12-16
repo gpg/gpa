@@ -170,7 +170,11 @@ card_reload_cb (void *opaque, const char *identifier, int idx, const void *value
   const char *string = value;
 
   if (strcmp (identifier, "serial") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entrySerialno), string);
+    {
+      while (*string == '0' && string[1])
+        string++;
+      gtk_entry_set_text (GTK_ENTRY (cardman->entrySerialno), string);
+    }
   else if (strcmp (identifier, "login") == 0 && idx == 0)
     gtk_entry_set_text (GTK_ENTRY (cardman->entryLogin), string);
   else if (strcmp (identifier, "name") == 0 && idx == 0)
@@ -188,7 +192,25 @@ card_reload_cb (void *opaque, const char *identifier, int idx, const void *value
   else if (strcmp (identifier, "vendor") == 0 && idx == 1)
     gtk_entry_set_text (GTK_ENTRY (cardman->entryManufacturer), string);
   else if (strcmp (identifier, "version") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), string);
+    {
+      char buffer[6];
+      char *p;
+
+      if (strlen (string) == 4)
+        {
+          /* Reformat the version number to be better human readable.  */
+          p = buffer;
+          if (string[0] != '0')
+            *p++ = string[0];
+          *p++ = string[1];
+          *p++ = '.';
+          if (string[2] != '0')
+            *p++ = string[2];
+          *p++ = string[3];
+          string = buffer;
+        }
+      gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), string);
+    }
   else if (strcmp (identifier, "fpr") == 0 && idx == 0)
     gtk_entry_set_text (GTK_ENTRY (cardman->entryKeySig), string);
   else if (strcmp (identifier, "fpr") == 0 && idx == 1)
