@@ -1,3 +1,7 @@
+2008-12-17  Marcus Brinkmann  <marcus@g10code.de>
+
+	* smartcard.xpm: Darken border.
+
 2008-12-16  Werner Koch  <wk@g10code.com>
 
 	* smartcard.xpm: New. Create simple smartcard icon.
