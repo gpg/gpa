@@ -1,24 +1,26 @@
 /* gpgmetools.c - The GNU Privacy Assistant
- *      Copyright (C) 2002, Miguel Coca.
+ *      Copyright (C) 2002 Miguel Coca.
+ *	Copyright (C) 2008 g10 Code GmbH.
  *
  * This file is part of GPA
  *
- * GPA is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * GPA is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
- * GPA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GPA is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+ * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include "gpgmeedit.h"
 #include "passwddlg.h"
@@ -44,12 +46,93 @@
 
 
 /* Prototype of the action function. Returns the error if there is one */
-typedef gpg_error_t (*EditAction) (int state, void *opaque,
-				     char **result);
+typedef gpg_error_t (*edit_action_t) (int state, void *opaque,
+                                      char **result);
 /* Prototype of the transit function. Returns the next state. If and error
  * is found changes *err. If there is no error it should NOT touch it */
-typedef int (*EditTransit) (int current_state, gpgme_status_code_t status, 
-			    const char *args, void *opaque, gpg_error_t *err);
+typedef int (*edit_transit_t) (int current_state, gpgme_status_code_t status, 
+                               const char *args, void *opaque,
+                               gpg_error_t *err);
+
+/* States for the edit expire command.  */
+enum
+  {
+    EXPIRE_START,
+    EXPIRE_COMMAND,
+    EXPIRE_DATE,
+    EXPIRE_QUIT,
+    EXPIRE_SAVE,
+    EXPIRE_ERROR
+  };
+
+
+/* States for the edit trust command.  */
+enum
+  {
+    TRUST_START,
+    TRUST_COMMAND,
+    TRUST_VALUE,
+    TRUST_REALLY_ULTIMATE,
+    TRUST_QUIT,
+    TRUST_SAVE,
+    TRUST_ERROR
+  };
+
+
+/* States for the sign command.  */
+enum
+  {
+    SIGN_START,
+    SIGN_COMMAND,
+    SIGN_UIDS,
+    SIGN_SET_EXPIRE,
+    SIGN_SET_CHECK_LEVEL,
+    SIGN_CONFIRM,
+    SIGN_QUIT,
+    SIGN_SAVE,
+    SIGN_ERROR
+  };
+
+/* Parameter for the sign command.  */
+struct sign_parms_s
+{
+  gchar *check_level;
+  gboolean local;
+};
+
+
+/* States for the passwd command.  */
+enum
+  {
+    PASSWD_START,
+    PASSWD_COMMAND,
+    PASSWD_ENTERNEW,
+    PASSWD_QUIT,
+    PASSWD_SAVE,
+    PASSWD_ERROR
+  };
+
+/* Parameter for the passwd command.  */
+struct passwd_parms_s 
+{
+  gpgme_passphrase_cb_t func;
+  void *opaque;
+};
+
+
+/* States for card related commands.  */
+enum
+  {
+    CARD_START,
+    CARD_COMMAND,
+    CARD_ADMIN_COMMAND,
+    CARD_QUIT,
+    CARD_QUERY_LOGIN,
+    CARD_ERROR
+  };
+
+
+
 
 /* Data to be passed to the edit callback. Must be filled by the caller of
  * gpgme_op_edit()  */
@@ -57,22 +140,29 @@ struct edit_parms_s
 {
   /* Current state */
   int state;
+
   /* Last error: The return code of gpgme_op_edit() is the return value of
    * the last invocation of the callback. But returning an error from the
    * callback does not abort the edit operation, so we must remember any
    * error. In other words, errors from action() or transit() are sticky.
    */
   gpg_error_t err;
+
   /* The action function */
-  EditAction action;
+  edit_action_t action;
+
   /* The transit function */
-  EditTransit transit;
+  edit_transit_t transit;
+
   /* The output data object */
   gpgme_data_t out;
+
   /* Signal attachment id */
   gulong signal_id;
+
   /* Data to be passed to the previous functions */
   void *opaque;
+
   /* The passwd dialog needs to see GPGME_STATUS_NEED_PASSPHRASE_SYM.
      To make thinks easier it is only passed to the FSM if this flag
      has been set. */
@@ -113,19 +203,19 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
   /* Choose the next state based on the current one and the input */
   parms->state = parms->transit (parms->state, status, args, parms->opaque, 
 				 &parms->err);
-  if (gpg_err_code (parms->err) == GPG_ERR_NO_ERROR)
+  if (!parms->err)
     {
       gpg_error_t err;
+
       /* Choose the action based on the state */
       err = parms->action (parms->state, parms->opaque, &result);
 #if DEBUG_FSM
       g_debug ("edit_fnc: newstate=%d err=%s result=%s",
                parms->state, gpg_strerror (err), result);
 #endif
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-	{
-	  parms->err = err;
-	}
+      if (err)
+        parms->err = err;
+
       /* Send the command, if any was provided */
       if (result)
 	{
@@ -145,22 +235,12 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
 }
 
 
-/* Change expiry time */
-
-typedef enum
-{
-  EXPIRE_START,
-  EXPIRE_COMMAND,
-  EXPIRE_DATE,
-  EXPIRE_QUIT,
-  EXPIRE_SAVE,
-  EXPIRE_ERROR
-} ExpireState;
-
+
+/* Change expiry time: action.  */
 static gpg_error_t
 edit_expire_fnc_action (int state, void *opaque, char **result)
 {
-  gchar *date = opaque;
+  char *date = opaque;
   
   switch (state)
     {
@@ -187,9 +267,11 @@ edit_expire_fnc_action (int state, void *opaque, char **result)
     default:
       return gpg_error (GPG_ERR_GENERAL);
     }
-  return gpg_error (GPG_ERR_NO_ERROR);
+  return 0;
 }
 
+
+/* Change expiry time: transit.  */
 static int
 edit_expire_fnc_transit (int current_state, gpgme_status_code_t status, 
 			 const char *args, void *opaque, gpg_error_t *err)
@@ -272,19 +354,8 @@ edit_expire_fnc_transit (int current_state, gpgme_status_code_t status,
 }
 
 
-/* Change the key ownertrust */
-
-typedef enum
-{
-  TRUST_START,
-  TRUST_COMMAND,
-  TRUST_VALUE,
-  TRUST_REALLY_ULTIMATE,
-  TRUST_QUIT,
-  TRUST_SAVE,
-  TRUST_ERROR
-} TrustState;
-
+
+/* Change the key ownertrust: action.  */
 static gpg_error_t
 edit_trust_fnc_action (int state, void *opaque, char **result)
 {
@@ -322,6 +393,7 @@ edit_trust_fnc_action (int state, void *opaque, char **result)
   return gpg_error (GPG_ERR_NO_ERROR);
 }
 
+/* Change the key ownertrust: transit.  */
 static int
 edit_trust_fnc_transit (int current_state, gpgme_status_code_t status, 
 			const char *args, void *opaque, gpg_error_t *err)
@@ -416,27 +488,9 @@ edit_trust_fnc_transit (int current_state, gpgme_status_code_t status,
 }
 
 
-/* Sign a key */
 
-typedef enum
-{
-  SIGN_START,
-  SIGN_COMMAND,
-  SIGN_UIDS,
-  SIGN_SET_EXPIRE,
-  SIGN_SET_CHECK_LEVEL,
-  SIGN_CONFIRM,
-  SIGN_QUIT,
-  SIGN_SAVE,
-  SIGN_ERROR
-} SignState;
-
-struct sign_parms_s
-{
-  gchar *check_level;
-  gboolean local;
-};
-
+
+/* Sign a key: action.  */
 static gpg_error_t
 edit_sign_fnc_action (int state, void *opaque, char **result)
 {
@@ -482,6 +536,8 @@ edit_sign_fnc_action (int state, void *opaque, char **result)
   return gpg_error (GPG_ERR_NO_ERROR);
 }
 
+
+/* Sign a key: transit.  */
 static int
 edit_sign_fnc_transit (int current_state, gpgme_status_code_t status, 
 		       const char *args, void *opaque, gpg_error_t *err)
@@ -641,24 +697,8 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
   return next_state;
 }
 
-/* Change passphrase */
-
-typedef enum
-{
-  PASSWD_START,
-  PASSWD_COMMAND,
-  PASSWD_ENTERNEW,
-  PASSWD_QUIT,
-  PASSWD_SAVE,
-  PASSWD_ERROR
-} PasswdState;
-
-struct passwd_parms_s 
-{
-  gpgme_passphrase_cb_t func;
-  void *opaque;
-};
-
+
+/* Change passphrase: action.  */
 static gpg_error_t
 edit_passwd_fnc_action (int state, void *opaque, char **result)
 {
@@ -690,6 +730,7 @@ edit_passwd_fnc_action (int state, void *opaque, char **result)
   return gpg_error (GPG_ERR_NO_ERROR);
 }
 
+/* Change passphrase: transit.  */
 static int
 edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status, 
 			 const char *args, void *opaque, gpg_error_t *err)
@@ -758,9 +799,9 @@ edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status,
   return next_state;
 }
 
-/* Release the edit parameters needed for setting owner trust. The prototype
- * is that of a GpaContext's "done" signal handler.
- */
+
+/* Release the edit parameters needed for setting owner trust. The
+   prototype is that of a GpaContext's "done" signal handler.  */
 static void
 gpa_gpgme_edit_trust_parms_release (GpaContext *ctx, gpg_error_t err,
 				   struct edit_parms_s* parms)
@@ -775,8 +816,8 @@ gpa_gpgme_edit_trust_parms_release (GpaContext *ctx, gpg_error_t err,
   g_free (parms);
 }
 
-/* Generate the edit parameters needed for setting owner trust.
- */
+
+/* Generate the edit parameters needed for setting owner trust.  */
 static struct edit_parms_s*
 gpa_gpgme_edit_trust_parms_new (GpaContext *ctx, const char *trust_string,
 				gpgme_data_t out)
@@ -800,9 +841,11 @@ gpa_gpgme_edit_trust_parms_new (GpaContext *ctx, const char *trust_string,
   return edit_parms;
 }
 
+
 /* Change the ownertrust of a key */
-gpg_error_t gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
-					gpgme_validity_t ownertrust)
+gpg_error_t 
+gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
+                            gpgme_validity_t ownertrust)
 {
   const gchar *trust_strings[] = {"1", "1", "2", "3", "4", "5"};
   struct edit_parms_s *parms = NULL;
@@ -819,9 +862,9 @@ gpg_error_t gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
   return err;
 }
 
+
 /* Release the edit parameters needed for changing the expiry date. The 
- * prototype is that of a GpaContext's "done" signal handler.
- */
+   prototype is that of a GpaContext's "done" signal handler.  */
 static void
 gpa_gpgme_edit_expire_parms_release (GpaContext *ctx, gpg_error_t err,
 				     struct edit_parms_s* parms)
@@ -836,8 +879,8 @@ gpa_gpgme_edit_expire_parms_release (GpaContext *ctx, gpg_error_t err,
   g_free (parms);
 }
 
-/* Generate the edit parameters needed for changing the expiry date.
- */
+
+/* Generate the edit parameters needed for changing the expiry date.  */
 static struct edit_parms_s*
 gpa_gpgme_edit_expire_parms_new (GpaContext *ctx, GDate *date,
 				 gpgme_data_t out)
@@ -873,9 +916,10 @@ gpa_gpgme_edit_expire_parms_new (GpaContext *ctx, GDate *date,
   return edit_parms;
 }
 
-/* Change the expire date of a key */
-gpg_error_t gpa_gpgme_edit_expire_start (GpaContext *ctx, gpgme_key_t key,
-					 GDate *date)
+
+/* Change the expire date of a key. */
+gpg_error_t 
+gpa_gpgme_edit_expire_start (GpaContext *ctx, gpgme_key_t key, GDate *date)
 {
   struct edit_parms_s *parms;
   gpg_error_t err;
@@ -892,9 +936,9 @@ gpg_error_t gpa_gpgme_edit_expire_start (GpaContext *ctx, gpgme_key_t key,
   return err;
 }
 
+
 /* Release the edit parameters needed for signing. The prototype is that of
- * a GpaContext's "done" signal handler.
- */
+   a GpaContext's "done" signal handler.  */
 static void
 gpa_gpgme_edit_sign_parms_release (GpaContext *ctx, gpg_error_t err,
 				   struct edit_parms_s* parms)
@@ -908,8 +952,8 @@ gpa_gpgme_edit_sign_parms_release (GpaContext *ctx, gpg_error_t err,
   g_free (parms);
 }
 
-/* Generate the edit parameters needed for signing 
- */
+
+/* Generate the edit parameters needed for signing.  */
 static struct edit_parms_s*
 gpa_gpgme_edit_sign_parms_new (GpaContext *ctx, char *check_level,
 			       gboolean local, gpgme_data_t out)
@@ -936,9 +980,11 @@ gpa_gpgme_edit_sign_parms_new (GpaContext *ctx, char *check_level,
   return edit_parms;
 }
 
-/* Sign this key with the given private key */
-gpg_error_t gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
-				       gpgme_key_t secret_key, gboolean local)
+
+/* Sign this key with the given private key.  */
+gpg_error_t 
+gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
+                           gpgme_key_t secret_key, gboolean local)
 {
   struct edit_parms_s *parms = NULL;
   gpg_error_t err = gpg_error (GPG_ERR_NO_ERROR);
@@ -1070,19 +1116,11 @@ gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
   return err;
 }
 
+
+
 /*
  * Card related code.
  */
-
-typedef enum
-  {
-    CARD_START,
-    CARD_COMMAND,
-    CARD_ADMIN_COMMAND,
-    CARD_QUIT,
-    CARD_QUERY_LOGIN,
-    CARD_ERROR
-  } CardState;
 
 /* Implementation of the card-list operation. */
 
@@ -1115,14 +1153,19 @@ card_edit_list_fnc_transit (int current_state, gpgme_status_code_t status,
     {
     case CARD_START:
       if (status == GPGME_STATUS_CARDCTRL)
-	/* Consume GPGME_STATUS_CARDCTRL and stay in CARD_START state. */
-	next_state = CARD_START;
+        {
+          /* Consume GPGME_STATUS_CARDCTRL and stay in CARD_START state. */
+          next_state = CARD_START;
+        }
       else if (status == GPGME_STATUS_GET_LINE)
 	next_state = CARD_COMMAND;
+      else
+        goto bailout;
       break;
     case CARD_COMMAND:
       next_state = CARD_QUIT;
       break;
+    bailout:
     default:
       next_state = CARD_ERROR;
       *err = gpg_error (GPG_ERR_GENERAL);
@@ -1132,8 +1175,8 @@ card_edit_list_fnc_transit (int current_state, gpgme_status_code_t status,
 }
 
 static void
-gpa_gpgme_card_edit_list_parms_release (GpaContext *ctx, gpg_error_t err,
-					struct edit_parms_s *parms)
+card_edit_list_parms_release (GpaContext *ctx, gpg_error_t err,
+                              struct edit_parms_s *parms)
 {
   /* FIXME: is this correct? -mo */
 
@@ -1157,14 +1200,16 @@ gpa_gpgme_card_edit_list_start (GpaContext *ctx, gpgme_data_t out)
   parms->transit = card_edit_list_fnc_transit;
   parms->out = out;
   parms->opaque = NULL;
-  parms->signal_id = g_signal_connect (G_OBJECT (ctx), "done",
-				       G_CALLBACK (gpa_gpgme_card_edit_list_parms_release),
-				       parms);
+  parms->signal_id = 
+    g_signal_connect (G_OBJECT (ctx), "done",
+                      G_CALLBACK (card_edit_list_parms_release),
+                      parms);
 
   err = gpgme_op_card_edit_start (ctx->ctx, NULL, edit_fnc, parms, out);
 
   return err;
 }
+
 
 #if 0				/* DISABLED */
 

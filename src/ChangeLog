@@ -1,3 +1,27 @@
+2008-12-17  Werner Koch  <wk@g10code.com>
+
+	* cardman.c: Change layout of file.
+	(card_reload): Rename to card_reload_action.  Change callers.
+	Factor code out to ...
+	(card_reload): New.
+	(card_genkey): Rename to card_reload_action. Change callers.
+	Factor code out to ...
+	(card_genkey): New.
+	(watcher_cb): Call card_reload direct.
+	(gpa_cardman_new): Remove.
+	(gpa_card_manager_get_instance): Create object directly.
+	(register_reload_operation): Remove and inline the code instead.
+
+	* gpgmeedit.c (EditAction): Rename to edit_action_t.
+	(EditTransit): Rename to edit_transit_t.
+	(edit_fnc): Remove superfluous use of gpg_err_code.
+	(ExpireState, TrustState, SignState, PasswdState, CardState): Make
+	them anonymous enums.
+	(gpa_gpgme_card_edit_list_parms_release): Rename to
+	card_edit_list_parms_release.
+
+	* gpacardreloadop.c: Change layout of file.
+
 2008-12-16  Werner Koch  <wk@g10code.com>
 
 	* cardman.c (_GpaCardManager): Add fields CARD_WIDGET and HAVE_CARD.

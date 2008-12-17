@@ -84,7 +84,7 @@ enum
 #define TRUNCATE_KEYSEARCH_AT 40
 
 
-/* Na object to keep information about keys.  */
+/* An object to keep information about keys.  */
 struct keyinfo_s 
 {
   /* An array with associated key(s) or NULL if none found/selected.  */

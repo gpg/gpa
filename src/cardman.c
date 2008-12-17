@@ -76,7 +76,7 @@ struct _GpaCardManager
 
   int have_card;             /* True, if a supported card is in the reader.  */
   gpa_filewatch_id_t watch;  /* For watching the reader status file.  */
-  int in_watcher_cb;         /* Sentinel for watcher_cb().  */
+  int in_card_reload;        /* Sentinel for card_reload.  */
 };
 
 struct _GpaCardManagerClass 
@@ -98,101 +98,41 @@ static GObjectClass *parent_class;
 typedef gboolean (*sensitivity_func_t)(gpointer);
 #endif
 
+
 /* Local prototypes */
-static void watcher_cb (void *opaque, 
-                        const char *filename, const char *reason);
-static void update_title (GpaCardManager *cardman);
-static void update_info_visibility (GpaCardManager *cardman);
-static GObject *gpa_card_manager_constructor
-                (GType type, guint n_construct_properties,
-                 GObjectConstructParam *construct_properties);
+
 
 
-
-/*
- * GtkWidget boilerplate.
- */
-static void
-gpa_card_manager_finalize (GObject *object)
-{  
-  /* FIXME: Remove the watch object and all other resources.  */
-
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
+/************************************************************ 
+ *******************   Implementation   *********************
+ ************************************************************/
 
 static void
-gpa_card_manager_init (GpaCardManager *cardman)
+update_title (GpaCardManager *cardman)
 {
-  char *fname;
+  const char *title = _("GNU Privacy Assistant - Card Manager");
 
-  fname = g_build_filename (gnupg_homedir, "reader_0.status", NULL);
-  cardman->watch = gpa_add_filewatch (fname, "c", watcher_cb, cardman);
-  xfree (fname);
-}
-
-static void
-gpa_card_manager_class_init (GpaCardManagerClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
-  parent_class = g_type_class_peek_parent (klass);
-  
-  object_class->constructor = gpa_card_manager_constructor;
-  object_class->finalize = gpa_card_manager_finalize;
-}
-
-GType
-gpa_card_manager_get_type (void)
-{
-  static GType cardman_type = 0;
-  
-  if (!cardman_type)
+  if (cardman->have_card)
+    gtk_window_set_title (GTK_WINDOW (cardman), title);
+  else
     {
-      static const GTypeInfo cardman_info =
-	{
-	  sizeof (GpaCardManagerClass),
-	  (GBaseInitFunc) NULL,
-	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gpa_card_manager_class_init,
-	  NULL,           /* class_finalize */
-	  NULL,           /* class_data */
-	  sizeof (GpaCardManager),
-	  0,              /* n_preallocs */
-	  (GInstanceInitFunc) gpa_card_manager_init,
-	};
+      char *tmp;
       
-      cardman_type = g_type_register_static (GTK_TYPE_WINDOW,
-					     "GpaCardManager",
-					     &cardman_info, 0);
-    }
-  
-  return cardman_type;
-}
-
-
-static void
-watcher_cb (void *opaque, const char *filename, const char *reason)
-{
-  GpaCardManager *cardman = opaque;
-
-  if (cardman && !cardman->in_watcher_cb && strchr (reason, 'c') )
-    {
-      cardman->in_watcher_cb++;
-      gtk_action_activate (gtk_ui_manager_get_action 
-                           (cardman->ui_manager, "/MainMenu/Card/CardReload"));
-      cardman->in_watcher_cb--;
+      tmp = g_strdup_printf ("%s (%s)", title, _("no card"));
+      gtk_window_set_title (GTK_WINDOW (cardman), tmp);
+      xfree (tmp);
     }
 }
 
-
 static void
-register_reload_operation (GpaCardManager *cardman, GpaCardReloadOperation *op)
+update_info_visibility (GpaCardManager *cardman)
 {
-  /* FIXME: is this correct? -mo */
-  g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (g_object_unref), cardman);
+  if (cardman->have_card)
+    gtk_widget_show_all (cardman->card_widget);
+  else
+    gtk_widget_hide_all (cardman->card_widget);
 }
+
 
 /* This is the callback used by the GpaCardReloadOp object. It's
    called for each data item during a reload operation and updates the
@@ -263,17 +203,40 @@ card_reload_cb (void *opaque,
     gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyAuth), string);
 }
 
-/* This function is called when the user triggers a card-reload. */
+
+/* This function is called to trigger a card-reload.  */
 static void
-card_reload (GtkAction *action, gpointer param)
+card_reload (GpaCardManager *cardman)
 {
-  GpaCardManager *cardman = param;
   GpaCardReloadOperation *op;
 
-  op = gpa_card_reload_operation_new (cardman->window, 
-                                      card_reload_cb, cardman);
-  register_reload_operation (cardman, GPA_CARD_RELOAD_OPERATION (op));
+  if (!cardman->in_card_reload)
+    {
+      cardman->in_card_reload++;
+      op = gpa_card_reload_operation_new (cardman->window, 
+                                          card_reload_cb, cardman);
+      g_signal_connect (G_OBJECT (op), "completed",
+                        G_CALLBACK (g_object_unref), cardman);
+
+      /* Fixme: We should decrement the sentinel only after finishing
+         the operation, so that we don't run them over and over if the
+         user clicks too often.  Note however that the primary reason
+         for this sentinel is to avoid concurrent reloads triggered by
+         the user and by the file watcher.  */
+      cardman->in_card_reload--;
+    }
 }
+
+
+/* This function is called when the user triggers a card-reload. */
+static void
+card_reload_action (GtkAction *action, gpointer param)
+{
+  GpaCardManager *cardman = param;
+
+  card_reload (cardman);
+}
+
 
 #if 0
 /* This function is called when the user triggers a card-reload. */
@@ -288,16 +251,37 @@ card_edit (GtkAction *action, gpointer param)
 }
 #endif
 
-/* This function is called when the user triggers a key-generation. */
+/* This function is called to triggers a key-generation.  */
 static void
-card_genkey (GtkAction *action, gpointer param)
+card_genkey (GpaCardManager *cardman)
 {
-  GpaCardManager *cardman = param;
   GpaGenKeyCardOperation *op;
 
   op = gpa_gen_key_card_operation_new (cardman->window);
-  register_reload_operation (cardman, GPA_GEN_KEY_OPERATION (op));
+  g_signal_connect (G_OBJECT (op), "completed",
+		    G_CALLBACK (g_object_unref), cardman);
 }
+
+
+/* This function is called when the user triggers a key-generation.  */
+static void
+card_genkey_action (GtkAction *action, gpointer param)
+{
+  GpaCardManager *cardman = param;
+
+  card_genkey (cardman);
+}
+
+
+static void
+watcher_cb (void *opaque, const char *filename, const char *reason)
+{
+  GpaCardManager *cardman = opaque;
+
+  if (cardman && strchr (reason, 'c') )
+    card_reload (cardman);
+}
+
 
 /* Construct the card manager menu and toolbar widgets and return
    them. */
@@ -317,14 +301,14 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
 
       /* Card menu.  */
       { "CardReload", GTK_STOCK_REFRESH, NULL, NULL,
-	N_("Reload card information"), G_CALLBACK (card_reload) },
+	N_("Reload card information"), G_CALLBACK (card_reload_action) },
 #if 0
       /* FIXME: not yet implemented. */
       { "CardEdit", GTK_STOCK_EDIT, NULL, NULL,
 	N_("Edit card information"), G_CALLBACK (card_edit) },
 #endif
       { "CardGenkey", GTK_STOCK_NEW, "Generate new key...", NULL,
-	N_("Generate new key on card"), G_CALLBACK (card_genkey) },
+	N_("Generate new key on card"), G_CALLBACK (card_genkey_action) },
     };
 
   static const char *ui_description =
@@ -408,40 +392,12 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
   gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
 }
 
-
 
 /* Callback for the destroy signal.  */
 static void
 card_manager_closed (GtkWidget *widget, gpointer param)
 {
   instance = NULL;
-}
-
-
-static void
-update_title (GpaCardManager *cardman)
-{
-  const char *title = _("GNU Privacy Assistant - Card Manager");
-
-  if (cardman->have_card)
-    gtk_window_set_title (GTK_WINDOW (cardman), title);
-  else
-    {
-      char *tmp;
-      
-      tmp = g_strdup_printf ("%s (%s)", title, _("no card"));
-      gtk_window_set_title (GTK_WINDOW (cardman), tmp);
-      xfree (tmp);
-    }
-}
-
-static void
-update_info_visibility (GpaCardManager *cardman)
-{
-  if (cardman->have_card)
-    gtk_widget_show_all (cardman->card_widget);
-  else
-    gtk_widget_hide_all (cardman->card_widget);
 }
 
 
@@ -523,6 +479,32 @@ construct_card_widget (GpaCardManager *cardman)
   ADD_TABLE_ROW ("Authentication Key: ", cardman->entryKeyAuth);
 
   return table;
+}
+
+
+
+
+/************************************************************ 
+ ******************   Object Management  ********************
+ ************************************************************/
+
+static void
+gpa_card_manager_finalize (GObject *object)
+{  
+  /* FIXME: Remove the watch object and all other resources.  */
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+
+static void
+gpa_card_manager_init (GpaCardManager *cardman)
+{
+  char *fname;
+
+  fname = g_build_filename (gnupg_homedir, "reader_0.status", NULL);
+  cardman->watch = gpa_add_filewatch (fname, "c", watcher_cb, cardman);
+  xfree (fname);
 }
 
 /* Construct a new class object of GpaCardManager.  */
@@ -607,36 +589,65 @@ gpa_card_manager_constructor (GType type,
   return object;
 }
 
-static GpaCardManager *
-gpa_cardman_new (void)
+
+static void
+gpa_card_manager_class_init (GpaCardManagerClass *klass)
 {
-  GpaCardManager *cardman;
-
-  cardman = g_object_new (GPA_CARD_MANAGER_TYPE, NULL);  
-  gtk_action_activate (gtk_ui_manager_get_action 
-                       (cardman->ui_manager, "/MainMenu/Card/CardReload"));
-
-#if 0
-  /* ? */
-  update_selection_sensitive_actions (cardman);
-#endif
-
-  return cardman;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
+  parent_class = g_type_class_peek_parent (klass);
+  
+  object_class->constructor = gpa_card_manager_constructor;
+  object_class->finalize = gpa_card_manager_finalize;
 }
 
-/* API */
 
+GType
+gpa_card_manager_get_type (void)
+{
+  static GType this_type = 0;
+  
+  if (!this_type)
+    {
+      static const GTypeInfo this_info =
+	{
+	  sizeof (GpaCardManagerClass),
+	  (GBaseInitFunc) NULL,
+	  (GBaseFinalizeFunc) NULL,
+	  (GClassInitFunc) gpa_card_manager_class_init,
+	  NULL, /* class_finalize */
+	  NULL, /* class_data */
+	  sizeof (GpaCardManager),
+	  0,    /* n_preallocs */
+	  (GInstanceInitFunc) gpa_card_manager_init,
+	};
+      
+      this_type = g_type_register_static (GTK_TYPE_WINDOW,
+                                          "GpaCardManager",
+                                          &this_info, 0);
+    }
+  
+  return this_type;
+}
+
+
+/************************************************************ 
+ **********************  Public API  ************************
+ ************************************************************/
 GtkWidget *
 gpa_card_manager_get_instance (void)
 {
   if (!instance)
-    instance = gpa_cardman_new ();
+    {
+      instance = g_object_new (GPA_CARD_MANAGER_TYPE, NULL);  
+      card_reload (instance);
+    }
   return GTK_WIDGET (instance);
 }
 
-gboolean gpa_card_manager_is_open (void)
+
+gboolean 
+gpa_card_manager_is_open (void)
 {
   return (instance != NULL);
 }
-
-/* EOF */
