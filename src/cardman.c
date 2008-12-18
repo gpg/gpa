@@ -278,7 +278,7 @@ watcher_cb (void *opaque, const char *filename, const char *reason)
 {
   GpaCardManager *cardman = opaque;
 
-  if (cardman && strchr (reason, 'c') )
+  if (cardman && strchr (reason, 'w') )
     card_reload (cardman);
 }
 
@@ -503,7 +503,7 @@ gpa_card_manager_init (GpaCardManager *cardman)
   char *fname;
 
   fname = g_build_filename (gnupg_homedir, "reader_0.status", NULL);
-  cardman->watch = gpa_add_filewatch (fname, "c", watcher_cb, cardman);
+  cardman->watch = gpa_add_filewatch (fname, "w", watcher_cb, cardman);
   xfree (fname);
 }
 

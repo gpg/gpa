@@ -94,9 +94,6 @@ filewatch_cb (GIOChannel *channel,
       while (nread >= sizeof *ev) 
         {
           ev = (void *)p;
-          g_debug ("event: wd=%d mask=%#x cookie=%#x len=%u name=`%.*s'",
-                   ev->wd, ev->mask, ev->cookie, ev->len, 
-                   (int)ev->len, ev->name);
 #define MAKEREASON(a,b) do { if ((ev->mask & (b))                   \
                                   && reasonidx < sizeof reason) \
                                 reason[reasonidx++] = (a);      \
