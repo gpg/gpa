@@ -191,6 +191,7 @@ card_reload_cb (void *opaque,
           if (string[2] != '0')
             *p++ = string[2];
           *p++ = string[3];
+	  *p++ = '\0';
           string = buffer;
         }
       gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), string);
