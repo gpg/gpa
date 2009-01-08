@@ -1,3 +1,13 @@
+2009-01-08  Marcus Brinkmann  <marcus@g10code.de>
+
+	* cardman.c (struct _GpaCardManager): New members status_label,
+	status_text.
+	(cardman_statusbar_new, cardman_statusbar_update): New functions.
+	(update_info_visibility): Call cardman_statusbar_update.
+	(cardman_action_new): Add edit menu, and preferences to toolbar.
+	(ADD_TABLE_ROW): Expand the second column.  Left-align the label.
+	(gpa_card_manager_constructor): Add status bar to main window.
+
 2009-01-07  Marcus Brinkmann  <marcus@g10code.de>
 
 	* cardman.c (card_reload_cb): Nul-terminate the version string.

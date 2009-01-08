@@ -69,6 +69,11 @@ struct _GpaCardManager
   GtkWidget *entryKeySig;
   GtkWidget *entryKeyEnc;
   GtkWidget *entryKeyAuth;
+
+  /* Labels in the status bar.  */
+  GtkWidget *status_label;
+  GtkWidget *status_text;
+
 #if 0
   GtkWidget *comboSex;
   GList *selection_sensitive_actions; /* ? */
@@ -107,6 +112,39 @@ typedef gboolean (*sensitivity_func_t)(gpointer);
  *******************   Implementation   *********************
  ************************************************************/
 
+/* Status bar handling.  */
+
+static GtkWidget *
+cardman_statusbar_new (GpaCardManager *cardman)
+{
+  GtkWidget *align;
+  GtkWidget *hbox;
+  GtkWidget *label;
+
+  hbox = gtk_hbox_new (FALSE, 0);
+ 
+  label = gtk_label_new (_("Status: "));
+  cardman->status_label = label;
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new ("");
+  cardman->status_text = label;
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 5);
+  
+  align = gtk_alignment_new (0, 1, 1, 0);
+  gtk_container_add (GTK_CONTAINER (align), hbox);
+
+  return align;
+}
+
+
+static void
+cardman_statusbar_update (GpaCardManager *cardman, const char *text)
+{
+  gtk_label_set_text (GTK_LABEL (cardman->status_text), text);
+}
+
+
 static void
 update_title (GpaCardManager *cardman)
 {
@@ -128,9 +166,15 @@ static void
 update_info_visibility (GpaCardManager *cardman)
 {
   if (cardman->have_card)
-    gtk_widget_show_all (cardman->card_widget);
+    {
+      cardman_statusbar_update (cardman, _("Smart card detected."));
+      gtk_widget_show_all (cardman->card_widget);
+    }
   else
-    gtk_widget_hide_all (cardman->card_widget);
+    {
+      cardman_statusbar_update (cardman, _("Checking for smart card..."));
+      gtk_widget_hide_all (cardman->card_widget);
+    }
 }
 
 
@@ -294,6 +338,7 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
     {
       /* Toplevel.  */
       { "File", NULL, N_("_File"), NULL },
+      { "Edit", NULL, N_("_Edit"), NULL },
       { "Card", NULL, N_("_Card"), NULL },
 
       /* File menu.  */
@@ -317,6 +362,10 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
     "  <menubar name='MainMenu'>"
     "    <menu action='File'>"
     "      <menuitem action='FileQuit'/>"
+    "    </menu>"
+    "    <menu action='Edit'>"
+    "      <menuitem action='EditPreferences'/>"
+    "      <menuitem action='EditBackendPreferences'/>"
     "    </menu>"
     "    <menu action='Card'>"
     "      <menuitem action='CardReload'/>"
@@ -343,6 +392,8 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
 #if 0
     "    <toolitem action='CardEdit'/>"
 #endif
+    "    <separator/>"
+    "    <toolitem action='EditPreferences'/>"
     "    <separator/>"
     "    <toolitem action='WindowsKeyringEditor'/>"
     "    <toolitem action='WindowsFileManager'/>"
@@ -412,15 +463,17 @@ construct_card_widget (GpaCardManager *cardman)
 
   table = gtk_table_new (4, 2, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-
-#define ADD_TABLE_ROW(label, widget) \
-  { \
-    GtkWidget *tmp_label = gtk_label_new (_(label)); \
-    gtk_table_attach (GTK_TABLE (table), tmp_label, 0, 1, \
+  
+#define ADD_TABLE_ROW(label, widget)				       \
+  {								       \
+    GtkWidget *tmp_label = gtk_label_new (_(label));		       \
+    gtk_misc_set_alignment (GTK_MISC (tmp_label), 0, 0.5);	       \
+    gtk_table_attach (GTK_TABLE (table), tmp_label, 0, 1,	       \
                       rowidx, rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); \
-    gtk_table_attach (GTK_TABLE (table), widget, 1, 2, \
-                      rowidx, rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); \
-    rowidx++; \
+    gtk_table_attach (GTK_TABLE (table), widget, 1, 2,		       \
+                      rowidx, rowidx + 1, GTK_FILL | GTK_EXPAND,       \
+		      GTK_SHRINK, 0, 0);			       \
+    rowidx++;							       \
   }
   
   cardman->entrySerialno = gtk_entry_new ();
@@ -483,7 +536,6 @@ construct_card_widget (GpaCardManager *cardman)
 }
 
 
-
 
 /************************************************************ 
  ******************   Object Management  ********************
@@ -523,6 +575,7 @@ gpa_card_manager_constructor (GType type,
   gchar *markup;
   GtkWidget *menubar;
   GtkWidget *toolbar;
+  GtkWidget *statusbar;
 
   /* Invoke parent's constructor.  */
   object = parent_class->constructor (type,
@@ -579,6 +632,9 @@ gpa_card_manager_constructor (GType type,
 
   cardman->card_widget = construct_card_widget (cardman);
   gtk_box_pack_start (GTK_BOX (vbox), cardman->card_widget, TRUE, TRUE, 0);
+
+  statusbar = cardman_statusbar_new (cardman);
+  gtk_box_pack_start (GTK_BOX (vbox), statusbar, TRUE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (cardman), vbox);
 
