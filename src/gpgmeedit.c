@@ -44,7 +44,7 @@
  */
 
 /* Define this macro to 1 to enable debugging of the FSM. */
-#define DEBUG_FSM 1
+#define DEBUG_FSM 0
 
 
 /* Prototype of the action function. Returns the error if there is one */
@@ -1404,7 +1404,10 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
           *err =  gpg_error (GPG_ERR_GENERAL);
         }
       break;
-      
+
+    default:
+      next_state = CARD_ERROR;
+      *err = gpg_error (GPG_ERR_GENERAL);
     }
 
   return next_state;

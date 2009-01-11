@@ -1,5 +1,24 @@
 2009-01-11  Moritz  <moritz@gnu.org>
 
+	* gpgmeedit.c (card_edit_genkey_fnc_transit): Add default-case in
+	switch.
+
+	* cardman.c (construct_card_widget): Modify ADD_TABLE_ROW macro to
+	enable the caller to pass in the GTK table and the rowidx counter.
+	New variables: general_frame, personal_frame, keys_frame,
+	general_table, personal_table, keys_table; removed variable:
+	table. Modified function to divide the GUI into three frames.
+
+	* keygendlg.c (gpa_key_gen_run_dialog): Use different window title
+	in case forcard is true.
+	(gpa_key_gen_run_dialog): If forcard is true: use hard-coded value
+	"RSA" for combo box and store numerical identifier for RSA in
+	params struct manually instead of looking it up through
+	gpa_algorithm_from_string.
+	Initialize entryPasswd to NULL to silence compiler warning.
+
+	* gpgmeedit.c (DEBUG_FSM): Reset to 0.
+
 	* gpagenkeycardop.c (gpa_gen_key_card_operation_done_cb): Do not
 	use gpgme_op_genkey_result to retrieve result information about
 	the generated key.

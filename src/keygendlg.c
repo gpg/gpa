@@ -153,7 +153,7 @@ gpa_key_gen_run_dialog (GtkWidget *parent, gboolean forcard)
   dialog.forcard = forcard;
 
   windowGenerate = gtk_dialog_new_with_buttons
-    (_("Generate key"), GTK_WINDOW (parent),
+    (forcard ? _("Generate new keys on card") : _("Generate key"), GTK_WINDOW (parent),
      GTK_DIALOG_MODAL,
      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
      GTK_STOCK_OK, GTK_RESPONSE_OK,
@@ -188,8 +188,7 @@ gpa_key_gen_run_dialog (GtkWidget *parent, gboolean forcard)
 
   if (forcard)
     /* The OpenPGP smartcard does only support RSA. */
-    gtk_combo_box_append_text (GTK_COMBO_BOX (comboAlgorithm),
-			       gpa_algorithm_string (GPA_KEYGEN_ALGO_RSA));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (comboAlgorithm), "RSA");
   else
     {
       for (algo = GPA_KEYGEN_ALGO_FIRST; algo <= GPA_KEYGEN_ALGO_LAST; algo++)
@@ -256,6 +255,8 @@ gpa_key_gen_run_dialog (GtkWidget *parent, gboolean forcard)
   gtk_table_attach (GTK_TABLE (table), entryComment, 1, 2, 4, 5, GTK_FILL,
 		    GTK_SHRINK, 0, 0);
 
+  entryPasswd = NULL;		/* Silence compiler warning. */
+
   if (forcard)
     {
       /* This doesn't make sense for the smartcard. */
@@ -314,8 +315,15 @@ gpa_key_gen_run_dialog (GtkWidget *parent, gboolean forcard)
 	params->password
 	  = XSTRDUP_OR_NULL (gtk_entry_get_text (GTK_ENTRY(entryPasswd)));
 
-      temp = gtk_combo_box_get_active_text (GTK_COMBO_BOX (comboAlgorithm));
-      params->algo = gpa_algorithm_from_string (temp);
+      if (forcard)
+	/* Although this values isn't used... */
+	params->algo = GPA_KEYGEN_ALGO_RSA;
+      else
+	{
+	  temp = gtk_combo_box_get_active_text (GTK_COMBO_BOX (comboAlgorithm));
+	  params->algo = gpa_algorithm_from_string (temp);
+	}
+
       temp = gtk_combo_box_get_active_text (GTK_COMBO_BOX (comboKeysize));
       params->keysize = atoi (temp);
 
