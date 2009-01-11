@@ -1,3 +1,20 @@
+2009-01-11  Moritz  <moritz@gnu.org>
+
+	* gpagenkeycardop.c (gpa_gen_key_card_operation_done_cb): Do not
+	use gpgme_op_genkey_result to retrieve result information about
+	the generated key.
+	(gpa_gen_key_card_operation_idle_cb): Call
+	gpa_gpgme_card_edit_genkey_start.
+	Include "gpgmeedit.h".
+
+	* gpgmeedit.h: Declare gpa_gpgme_card_genkey_start.
+	* gpgmeedit.c (struct genkey_parms_s): New struct.
+	(card_edit_genkey_fnc_action, card_edit_genkey_fnc_transit)
+	(card_edit_genkey_parms_release, calculate_expiration_day)
+	(card_edit_genkey_parms_new, gpa_gpgme_card_edit_genkey_start): New functions.
+	Include <assert.h>.
+	Added several new CARD_... symbols in enum.
+
 2009-01-08  Marcus Brinkmann  <marcus@g10code.de>
 
 	* cardman.c (struct _GpaCardManager): New members status_label,

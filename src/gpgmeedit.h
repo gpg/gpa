@@ -1,5 +1,6 @@
 /* gpgmeedit.h - The GNU Privacy Assistant
  *      Copyright (C) 2002, Miguel Coca.
+ *      Copyright (C) 2008, 2009 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -51,8 +52,9 @@ gpg_error_t gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key);
    output. */
 gpg_error_t gpa_gpgme_card_edit_list_start (GpaContext *ctx, gpgme_data_t out);
 
+gpg_error_t gpa_gpgme_card_edit_genkey_start (GpaContext *ctx, GPAKeyGenParameters *parms);
+
 #if 0
-gpg_error_t gpa_gpgme_card_edit_genkey_start (GpaContext *ctx, ...);
 gpg_error_t gpa_gpgme_card_edit_modify_start (GpaContext *ctx, const gchar *login);
 #endif
 

@@ -1,6 +1,6 @@
 /* gpagenkeycardop.c - The GpaGenKeyCardOperation object.
  *	Copyright (C) 2003 Miguel Coca.
- *	Copyright (C) 2008 g10 Code GmbH
+ *	Copyright (C) 2008, 2009 g10 Code GmbH
  *
  * This file is part of GPA
  *
@@ -27,6 +27,7 @@
 #include "gtktools.h"
 #include "gpagenkeycardop.h"
 #include "keygendlg.h"
+#include "gpgmeedit.h"
 
 static GObjectClass *parent_class = NULL;
 
@@ -155,12 +156,11 @@ gpa_gen_key_card_operation_idle_cb (gpointer data)
   GPAKeyGenParameters *parms;
   
   parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window, 1);
-#if 0
   if (!parms)
     g_signal_emit_by_name (op, "completed", gpg_error (GPG_ERR_CANCELED));
   else
     {
-      err = gpa_generate_key_start (GPA_OPERATION (op)->context->ctx, parms);
+      err = gpa_gpgme_card_edit_genkey_start (GPA_OPERATION (op)->context, parms);
       if (err)
         {
           gpa_gpgme_warning (err);
@@ -169,23 +169,21 @@ gpa_gen_key_card_operation_idle_cb (gpointer data)
       else
         gtk_widget_show_all (op->progress_dialog);
     }
-#else
-  g_signal_emit_by_name (op, "completed", gpg_error (GPG_ERR_CANCELED));
-#endif
-
   return FALSE;
 }
 
 
 static void
 gpa_gen_key_card_operation_done_cb (GpaContext *context, 
-					gpg_error_t err,
-					GpaGenKeyCardOperation *op)
+				    gpg_error_t err,
+				    GpaGenKeyCardOperation *op)
 {
   if (! err)
     {
-      gpgme_genkey_result_t result = gpgme_op_genkey_result (context->ctx);
-      g_signal_emit_by_name (op, "generated_key", result->fpr);
+      /* This is not a gpgme_op_genkey operation, thus we cannot use
+	 gpgme_op_genkey_result to retrieve result information about
+	 the generated key. */
+      g_signal_emit_by_name (op, "generated_key", NULL);
     }
   g_signal_emit_by_name (op, "completed", err);
 }
@@ -193,8 +191,8 @@ gpa_gen_key_card_operation_done_cb (GpaContext *context,
 
 static void
 gpa_gen_key_card_operation_done_error_cb (GpaContext *context, 
-					      gpg_error_t err,
-					      GpaGenKeyCardOperation *op)
+					  gpg_error_t err,
+					  GpaGenKeyCardOperation *op)
 {
   switch (gpg_err_code (err))
     {
