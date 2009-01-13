@@ -80,6 +80,9 @@ struct _GpaCardManager
 #endif
 
   int have_card;             /* True, if a supported card is in the reader.  */
+  const char *cardtype;      /* String with the card type.  */
+  int is_openpgp;            /* True if the card is an OpenPGP card.  */
+
   gpa_filewatch_id_t watch;  /* For watching the reader status file.  */
   int in_card_reload;        /* Sentinel for card_reload.  */
 };
@@ -115,7 +118,7 @@ typedef gboolean (*sensitivity_func_t)(gpointer);
 /* Status bar handling.  */
 
 static GtkWidget *
-cardman_statusbar_new (GpaCardManager *cardman)
+statusbar_new (GpaCardManager *cardman)
 {
   GtkWidget *align;
   GtkWidget *hbox;
@@ -139,7 +142,7 @@ cardman_statusbar_new (GpaCardManager *cardman)
 
 
 static void
-cardman_statusbar_update (GpaCardManager *cardman, const char *text)
+statusbar_update (GpaCardManager *cardman, const char *text)
 {
   gtk_label_set_text (GTK_LABEL (cardman->status_text), text);
 }
@@ -167,12 +170,18 @@ update_info_visibility (GpaCardManager *cardman)
 {
   if (cardman->have_card)
     {
-      cardman_statusbar_update (cardman, _("Smart card detected."));
-      gtk_widget_show_all (cardman->card_widget);
+      char *tmp = g_strdup_printf (_("%s card detected."), cardman->cardtype);
+      
+      statusbar_update (cardman, tmp);
+      xfree (tmp);
+      if (cardman->is_openpgp)
+        gtk_widget_show_all (cardman->card_widget);
+      else
+        gtk_widget_hide_all (cardman->card_widget);
     }
   else
     {
-      cardman_statusbar_update (cardman, _("Checking for smart card..."));
+      statusbar_update (cardman, _("Checking for card..."));
       gtk_widget_hide_all (cardman->card_widget);
     }
 }
@@ -193,6 +202,23 @@ card_reload_cb (void *opaque,
       if (idx == 0)
         {
           cardman->have_card = !!*string;
+          cardman->cardtype = "Unknown";
+          cardman->is_openpgp = 0;
+        }
+      else if (idx == 1)
+        {
+          if (!strcmp (string, "openpgp-card"))
+            {
+              cardman->cardtype = "OpenPGP";
+              cardman->is_openpgp = 1;
+            }
+          else if (!strcmp (string, "netkey-card"))
+            cardman->cardtype = "NetKey";
+          else if (!strcmp (string, "dinsig-card"))
+            cardman->cardtype = "DINSIG";
+          else if (!strcmp (string, "pkcs15-card"))
+            cardman->cardtype = "PKCS#15";
+
           update_info_visibility (cardman);
           update_title (cardman);
         }
@@ -616,7 +642,9 @@ gpa_card_manager_constructor (GType type,
 				      construct_properties);
   cardman = GPA_CARD_MANAGER (object);
 
-  cardman->have_card = 1;
+  cardman->have_card = 0;
+  cardman->cardtype = "Unknown";
+  cardman->is_openpgp = 0;
 
   cardman->entryLogin = NULL;
 
@@ -666,7 +694,7 @@ gpa_card_manager_constructor (GType type,
   cardman->card_widget = construct_card_widget (cardman);
   gtk_box_pack_start (GTK_BOX (vbox), cardman->card_widget, TRUE, TRUE, 0);
 
-  statusbar = cardman_statusbar_new (cardman);
+  statusbar = statusbar_new (cardman);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, TRUE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (cardman), vbox);

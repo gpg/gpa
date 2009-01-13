@@ -1,3 +1,11 @@
+2009-01-13  Werner Koch  <wk@g10code.com>
+
+	* cardman.c (_GpaCardManager): Add field CARDTYPE.
+	(card_reload_cb): Detect the card type.
+	(update_info_visibility): Put card type into the status line.
+	(cardman_statusbar_new): Rename to statusbar_new.
+	(cardman_statusbar_update): Rename to statusbar_update.
+
 2009-01-11  Moritz  <moritz@gnu.org>
 
 	* gpgmeedit.c (card_edit_genkey_fnc_transit): Add default-case in
