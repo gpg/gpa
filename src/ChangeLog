@@ -1,3 +1,8 @@
+2009-01-14  Marcus Brinkmann  <marcus@g10code.de>
+
+	* cardman.c (construct_card_widget): Make frame label bold and
+	remove the shadows.  Add border for personal_table and keys_table.
+
 2009-01-13  Werner Koch  <wk@g10code.com>
 
 	* cardman.c (_GpaCardManager): Add field CARDTYPE.

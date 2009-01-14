@@ -485,6 +485,7 @@ static GtkWidget *
 construct_card_widget (GpaCardManager *cardman)
 {
   GtkWidget *container;
+  GtkWidget *label;
   GtkWidget *general_frame;
   GtkWidget *general_table;
   GtkWidget *personal_frame;
@@ -495,15 +496,31 @@ construct_card_widget (GpaCardManager *cardman)
 
   container = gtk_vbox_new (FALSE, 0);
 
-  general_frame = gtk_frame_new ("General");
-  personal_frame = gtk_frame_new ("Personal");
-  keys_frame = gtk_frame_new ("Keys");
+  general_frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (general_frame), GTK_SHADOW_NONE);
+  label = gtk_label_new (_("<b>General</b>"));
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_frame_set_label_widget (GTK_FRAME (general_frame), label);
+
+  personal_frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (personal_frame), GTK_SHADOW_NONE);
+  label = gtk_label_new (_("<b>Personal</b>"));
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_frame_set_label_widget (GTK_FRAME (personal_frame), label);
+
+  keys_frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (keys_frame), GTK_SHADOW_NONE);
+  label = gtk_label_new (_("<b>Keys</b>"));
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_frame_set_label_widget (GTK_FRAME (keys_frame), label);
 
   general_table = gtk_table_new (4, 2, FALSE);
   personal_table = gtk_table_new (4, 2, FALSE);
   keys_table = gtk_table_new (4, 2, FALSE);
 
   gtk_container_set_border_width (GTK_CONTAINER (general_table), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (personal_table), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (keys_table), 5);
   
 #define ADD_TABLE_ROW(table, rowidx, label, widget)		       \
   {								       \
