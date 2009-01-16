@@ -34,11 +34,11 @@
 
 #include "gpa.h"
 #include "gtktools.h"
+#include "convert.h"
 #include "gpgmetools.h"
 #include "gpafileencryptop.h"
 #include "encryptdlg.h"
 #include "gpawidgets.h"
-#include "gpapastrings.h"
 
 /* Internal functions */
 static void gpa_file_encrypt_operation_done_error_cb (GpaContext *context, 

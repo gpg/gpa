@@ -75,7 +75,7 @@ gpa_gen_key_simple_operation_constructor (GType type,
 				      construct_properties);
   op = GPA_GEN_KEY_SIMPLE_OPERATION (object);
 
-  /* Create progress dialog */
+  /* Create wizard dialog.  */
   op->wizard = gpa_keygen_wizard_new (GPA_OPERATION (op)->window,
 				      gpa_gen_key_simple_operation_generate,
 				      op);

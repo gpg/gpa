@@ -28,7 +28,6 @@
 #include <gpgme.h>
 
 #include "gpa.h"
-#include "gpapastrings.h"
 #include "icons.h"
 #include "gtktools.h"
 #include "gpawidgets.h"

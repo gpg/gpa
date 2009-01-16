@@ -34,7 +34,6 @@
 #include <gtk/gtk.h>
 
 #include "gpa.h"   
-#include "gpapastrings.h"
 
 #include "gtktools.h"
 #include "gpawidgets.h"
@@ -545,6 +544,7 @@ construct_card_widget (GpaCardManager *cardman)
   ADD_TABLE_ROW (general_table, rowidx, "Card Version: ", cardman->entryVersion);
 
   cardman->entryManufacturer = gtk_entry_new ();
+  gtk_entry_set_has_frame (GTK_ENTRY(cardman->entryManufacturer), FALSE);
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryManufacturer), FALSE);
   ADD_TABLE_ROW (general_table, rowidx, "Manufacturer: ", cardman->entryManufacturer);
 

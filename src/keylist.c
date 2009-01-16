@@ -24,8 +24,8 @@
 
 #include "gpa.h"
 #include "keylist.h"
-#include "gpapastrings.h"
 #include "gpawidgets.h"
+#include "convert.h"
 #include "gtktools.h"
 #include "keytable.h"
 #include "icons.h"

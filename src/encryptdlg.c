@@ -32,7 +32,6 @@
 #include "gtktools.h"
 #include "gpawidgets.h"
 #include "gpakeyselector.h"
-#include "gpapastrings.h"
 #include "encryptdlg.h"
 
 /* Internal functions */

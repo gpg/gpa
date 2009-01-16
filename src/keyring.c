@@ -35,7 +35,6 @@
 #include "gtktools.h"
 #include "icons.h"
 #include "helpmenu.h"
-#include "gpapastrings.h"
 #include "gpawidgets.h"
 #include "ownertrustdlg.h"
 #include "keysigndlg.h"
@@ -51,6 +50,7 @@
 #include "keytable.h"
 #include "server_access.h"
 #include "options.h"
+#include "convert.h"
 
 #include "gpasubkeylist.h"
 

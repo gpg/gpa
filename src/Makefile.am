@@ -72,7 +72,6 @@ gpa_SOURCES = get-path.h get-path.c \
 	      keylist.c keylist.h \
 	      siglist.c siglist.h \
 	      gpasubkeylist.c gpasubkeylist.h \
-	      gpapastrings.c gpapastrings.h\
 	      gpl-text.c gpl-text.h \
 	      keyserver.c keyserver.h \
 	      hidewnd.c hidewnd.h \
@@ -118,6 +117,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpagenkeycardop.h gpagenkeycardop.c \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
+	      gpapinchange.h gpapinchange.c \
 	      server.c \
 	      filewatch.c \
 	      options.c \
@@ -125,6 +125,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpa-marshal.c gpa-marshal.h \
 	      strlist.h strlist.c \
 	      gpg-stuff.h gpg-stuff.c \
+	      convert.c convert.h \
 	      utils.c $(gpa_w32_sources)
 
 

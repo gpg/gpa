@@ -34,7 +34,6 @@
 #include <gtk/gtk.h>
 
 #include "gpa.h"   
-#include "gpapastrings.h"
 
 #include "gtktools.h"
 #include "gpgmetools.h"

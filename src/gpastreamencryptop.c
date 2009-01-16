@@ -24,7 +24,6 @@
 #include "gpgmetools.h"
 #include "recipientdlg.h"
 #include "gpawidgets.h"
-#include "gpapastrings.h"
 #include "gpastreamencryptop.h"
 
 

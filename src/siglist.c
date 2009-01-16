@@ -20,12 +20,11 @@
 
 #include <config.h>
 
-#include "gpa.h"
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include <config.h>
-#include "gpapastrings.h"
+
+#include "gpa.h"
 #include "siglist.h"
 
 /*

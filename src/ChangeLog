@@ -1,3 +1,18 @@
+2009-01-16  Werner Koch  <wk@g10code.com>
+
+	* gpapinchange.h, gpapinchange.c: New.
+	* Makefile.am (gpa_SOURCES): Add them
+
+	* convert.c (gpa_unit_expiry_time_string): Change retrun type to
+	const char.  Do bounds checks.
+	(gpa_time_unit_from_string): Take a const char * arg.  Make code
+	more robust.
+
+	* gpapastrings.c: Rename to convert.c.
+	* gpapastrings.h: Rename to convert.h.  Remove all includes.
+	* gpawidgets.c, keyring.c, gpafileencryptop.c, gpasubkeylist.c
+	* keyeditdlg.c:  Include convert.h.
+
 2009-01-14  Marcus Brinkmann  <marcus@g10code.de>
 
 	* cardman.c (construct_card_widget): Make frame label bold and

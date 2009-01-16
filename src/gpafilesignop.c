@@ -38,7 +38,6 @@
 #include "gpafilesignop.h"
 #include "filesigndlg.h"
 #include "gpawidgets.h"
-#include "gpapastrings.h"
 
 /* Internal functions */
 static void gpa_file_sign_operation_done_error_cb (GpaContext *context, 

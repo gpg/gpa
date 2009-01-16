@@ -25,11 +25,12 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <time.h>
+
 #include "gpa.h"
 #include "keyeditdlg.h"
 #include "gtktools.h"
 #include "gpawidgets.h"
-#include "gpapastrings.h"
+#include "convert.h"
 #include "keytable.h"
 #include "gpakeyexpireop.h"
 #include "gpakeypasswdop.h"

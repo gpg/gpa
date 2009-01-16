@@ -24,7 +24,6 @@
 #include <gtk/gtk.h>
 
 #include "gpa.h"
-#include "gpapastrings.h"
 #include "gpawidgets.h"
 #include "gtktools.h"
 #include "keygendlg.h"

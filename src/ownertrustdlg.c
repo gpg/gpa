@@ -26,7 +26,6 @@
 #include "gpa.h"
 #include "gpawidgets.h"
 #include "gtktools.h"
-#include "gpapastrings.h"
 #include "gpgmeedit.h"
 
 /*

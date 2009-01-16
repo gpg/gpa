@@ -21,8 +21,8 @@
 #include <config.h>
 
 #include "gpa.h"
+#include "convert.h"
 #include "gpasubkeylist.h"
-#include "gpapastrings.h"
 
 /*
  *  Implement a List showing the subkeys in a given key

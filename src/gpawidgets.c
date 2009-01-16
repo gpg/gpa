@@ -28,9 +28,8 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
-#include "gpapastrings.h"
 #include "gtktools.h"
-
+#include "convert.h"
 
 /* A table showing some basic information about the key, such as the
    key id and the user name.  */ 
