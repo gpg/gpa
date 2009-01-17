@@ -221,6 +221,11 @@ fi
 # We need this for GPGME
 AC_SYS_LARGEFILE
 
+#
+# Checks for header files.
+#
+AC_MSG_NOTICE([checking for header files])
+AC_CHECK_HEADERS([locale.h])
 
 #
 # Checks for typedefs and structures
