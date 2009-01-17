@@ -24,5 +24,6 @@ const char *gpa_unit_expiry_time_string (int idx);
 char gpa_time_unit_from_string (const char *string);
 char *gpa_expiry_date_string (unsigned long expiry_time);
 char *gpa_creation_date_string (unsigned long creation_time);
+const char *gpa_sex_char_to_string (char sex);
 
 #endif /*CONVERT_H*/

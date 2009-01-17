@@ -41,6 +41,7 @@
 #include "helpmenu.h"
 #include "icons.h"
 #include "cardman.h"
+#include "convert.h"
 
 #include "gpacardreloadop.h"
 #include "gpagenkeycardop.h"
@@ -65,6 +66,7 @@ struct _GpaCardManager
   GtkWidget *entryPubkeyUrl;
   GtkWidget *entryFirstName;
   GtkWidget *entryLastName;
+  GtkWidget *entrySex;
   GtkWidget *entryKeySig;
   GtkWidget *entryKeyEnc;
   GtkWidget *entryKeyAuth;
@@ -72,11 +74,6 @@ struct _GpaCardManager
   /* Labels in the status bar.  */
   GtkWidget *status_label;
   GtkWidget *status_text;
-
-#if 0
-  GtkWidget *comboSex;
-  GList *selection_sensitive_actions; /* ? */
-#endif
 
   int have_card;             /* True, if a supported card is in the reader.  */
   const char *cardtype;      /* String with the card type.  */
@@ -234,6 +231,9 @@ card_reload_cb (void *opaque,
     gtk_entry_set_text (GTK_ENTRY (cardman->entryFirstName), string);
   else if (strcmp (identifier, "name") == 0 && idx == 1)
     gtk_entry_set_text (GTK_ENTRY (cardman->entryLastName), string);
+  else if (strcmp (identifier, "sex") == 0 && idx == 0)
+    gtk_entry_set_text (GTK_ENTRY (cardman->entrySex),
+			gpa_sex_char_to_string (string[0]));
   else if (strcmp (identifier, "lang") == 0 && idx == 0)
     gtk_entry_set_text (GTK_ENTRY (cardman->entryLanguage), string);
   else if (strcmp (identifier, "url") == 0 && idx == 0)
@@ -561,22 +561,23 @@ construct_card_widget (GpaCardManager *cardman)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (keys_frame), label);
 
-  general_table = gtk_table_new (4, 2, FALSE);
-  personal_table = gtk_table_new (4, 2, FALSE);
-  keys_table = gtk_table_new (4, 2, FALSE);
+  general_table = gtk_table_new (3, 2, FALSE);
+  personal_table = gtk_table_new (6, 2, FALSE);
+  keys_table = gtk_table_new (3, 2, FALSE);
 
-  gtk_container_set_border_width (GTK_CONTAINER (general_table), 5);
-  gtk_container_set_border_width (GTK_CONTAINER (personal_table), 5);
-  gtk_container_set_border_width (GTK_CONTAINER (keys_table), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (general_table), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (personal_table), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (keys_table), 10);
   
 #define ADD_TABLE_ROW(table, rowidx, label, widget)		       \
   {								       \
     GtkWidget *tmp_label = gtk_label_new (_(label));		       \
+    gtk_label_set_width_chars  (GTK_LABEL (tmp_label), 20);            \
     gtk_misc_set_alignment (GTK_MISC (tmp_label), 0, 0.5);	       \
     gtk_table_attach (GTK_TABLE (table), tmp_label, 0, 1,	       \
                       rowidx, rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); \
     gtk_table_attach (GTK_TABLE (table), widget, 1, 2,		       \
-                      rowidx, rowidx + 1, GTK_FILL | GTK_EXPAND,       \
+                      rowidx, rowidx + 1, GTK_FILL ,       \
 		      GTK_SHRINK, 0, 0);			       \
     rowidx++;							       \
   }
@@ -585,15 +586,19 @@ construct_card_widget (GpaCardManager *cardman)
 
   cardman->entrySerialno = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entrySerialno), FALSE);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entrySerialno), FALSE);
+  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entrySerialno), 24);
   ADD_TABLE_ROW (general_table, rowidx, "Serial Number: ", cardman->entrySerialno);
 
   cardman->entryVersion = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryVersion), FALSE);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryVersion), FALSE);
   ADD_TABLE_ROW (general_table, rowidx, "Card Version: ", cardman->entryVersion);
 
   cardman->entryManufacturer = gtk_entry_new ();
   gtk_entry_set_has_frame (GTK_ENTRY(cardman->entryManufacturer), FALSE);
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryManufacturer), FALSE);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryManufacturer), FALSE);
   ADD_TABLE_ROW (general_table, rowidx, "Manufacturer: ", cardman->entryManufacturer);
 
   gtk_container_add (GTK_CONTAINER (general_frame), general_table);
@@ -603,31 +608,33 @@ construct_card_widget (GpaCardManager *cardman)
 
   cardman->entryFirstName = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryFirstName), FALSE);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryFirstName), FALSE);
+  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryFirstName), 48);
   ADD_TABLE_ROW (personal_table, rowidx, "First Name: ", cardman->entryFirstName);
 
   cardman->entryLastName = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryLastName), FALSE);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryLastName), FALSE);
   ADD_TABLE_ROW (personal_table, rowidx, "Last Name: ", cardman->entryLastName);
 
-#if 0
-  cardman->comboSex = gtk_combo_box_new_text ();
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cardman->comboSex), _("Unspecified"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cardman->comboSex), _("Female"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cardman->comboSex), _("Male"));
-  gtk_combo_box_set_active (GTK_COMBO_BOX (cardman->comboSex), 0);
-  ADD_TABLE_ROW ("Sex: ", cardman->comboSex);
-#endif
+  cardman->entrySex = gtk_entry_new ();
+  gtk_editable_set_editable (GTK_EDITABLE (cardman->entrySex), FALSE);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entrySex), FALSE);
+  ADD_TABLE_ROW (personal_table, rowidx, "Sex:", cardman->entrySex);
 
   cardman->entryLanguage = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryLanguage), FALSE);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryLanguage), FALSE);
   ADD_TABLE_ROW (personal_table, rowidx, "Language: ", cardman->entryLanguage);
 
   cardman->entryLogin = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryLogin), FALSE);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryLogin), FALSE);
   ADD_TABLE_ROW (personal_table, rowidx, "Login Data: ", cardman->entryLogin);
 
   cardman->entryPubkeyUrl = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryPubkeyUrl), FALSE);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryPubkeyUrl), FALSE);
   ADD_TABLE_ROW (personal_table, rowidx, "Public key URL: ", cardman->entryPubkeyUrl);
 
   gtk_container_add (GTK_CONTAINER (personal_frame), personal_table);
@@ -637,17 +644,18 @@ construct_card_widget (GpaCardManager *cardman)
 
   cardman->entryKeySig = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryKeySig), FALSE);
-  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryKeySig), 42);
+  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryKeySig), 48);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryKeySig), FALSE);
   ADD_TABLE_ROW (keys_table, rowidx, "Signature Key: ", cardman->entryKeySig);
 
   cardman->entryKeyEnc = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryKeyEnc), FALSE);
-  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryKeyEnc), 42);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryKeyEnc), FALSE);
   ADD_TABLE_ROW (keys_table, rowidx, "Encryption Key: ", cardman->entryKeyEnc);
 
   cardman->entryKeyAuth = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (cardman->entryKeyAuth), FALSE);
-  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryKeyAuth), 42);
+  gtk_entry_set_has_frame (GTK_ENTRY (cardman->entryKeyAuth), FALSE);
   ADD_TABLE_ROW (keys_table, rowidx, "Authentication Key: ", cardman->entryKeyAuth);
 
   gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);

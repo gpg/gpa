@@ -1,5 +1,17 @@
 2009-01-17  Moritz  <moritz@gnu.org>
 
+	* cardman.c: Include "convert.h".
+	(card_reload_cb): Handle sex.
+	(construct_card_widget): Display sex-widget.
+	(ADD_TABLE_ROW): Use gtk_label_set_width_chars to set a common
+	label width for all rows.
+	(construct_card_widget): Use gtk_entry_set_with_chars and
+	gtk_entry_set_has_frame to change appearance of GtkEntry widgets.
+	(struct _GpaCardManager): New member: entrySex.
+
+	* convert.h: Declare function gpa_sex_char_to_string.
+	* convert.c (gpa_sex_char_to_string): New function.
+
 	* cardman.c (reader_status_t): New (enum) type.
 	(reader_status_from_file): New function.
 	(watcher_cb): New local variable: reader_status; call

@@ -108,3 +108,15 @@ gpa_creation_date_string (unsigned long creation_time)
   return result;
 } 
 
+const char *
+gpa_sex_char_to_string (char sex)
+{
+  if (sex == 'm')
+    return _("male");
+  else if (sex == 'f')
+    return _("female");
+  else if (sex == 'u')
+    return _("unspecified");
+  else
+    return _("(unknown)");
+}
