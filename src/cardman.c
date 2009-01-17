@@ -342,6 +342,47 @@ card_genkey_action (GtkAction *action, gpointer param)
   card_genkey (cardman);
 }
 
+typedef enum
+  {
+    READER_STATUS_UNKNOWN,
+    READER_STATUS_NOCARD,
+    READER_STATUS_PRESENT,
+    READER_STATUS_USABLE
+  } reader_status_t;
+
+static reader_status_t
+reader_status_from_file (const char *filename)
+{
+  reader_status_t status = READER_STATUS_UNKNOWN;
+  char status_word[16];
+  FILE *fp;
+
+  fp = fopen (filename, "r");
+  if (fp)
+    {
+      if (fgets (status_word, sizeof (status_word), fp))
+	{
+	  /* Remove trailing newline from STATUS_WORD.  */
+	  char *nl = strchr (status_word, '\n');
+	  if (nl)
+	    *nl = '\0';
+
+	  /* Store enum value belonging to STATUS_WORD in STATUS. */
+	  if (strcmp (status_word, "NOCARD") == 0)
+	    status = READER_STATUS_NOCARD;
+	  else if (strcmp (status_word, "PRESENT") == 0)
+	    status = READER_STATUS_PRESENT;
+	  else if (strcmp (status_word, "USABLE") == 0)
+	    status = READER_STATUS_USABLE;
+	}
+      /* else: read error or EOF. */
+
+      fclose (fp);
+    }
+
+  return status;
+}
+
 
 static void
 watcher_cb (void *opaque, const char *filename, const char *reason)
@@ -349,7 +390,14 @@ watcher_cb (void *opaque, const char *filename, const char *reason)
   GpaCardManager *cardman = opaque;
 
   if (cardman && strchr (reason, 'w') )
-    card_reload (cardman);
+    {
+      reader_status_t reader_status;
+
+      reader_status = reader_status_from_file (filename);
+      if (reader_status == READER_STATUS_PRESENT)
+	statusbar_update (cardman, _("Reloading card data..."));
+      card_reload (cardman);
+    }
 }
 
 

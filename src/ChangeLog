@@ -1,3 +1,10 @@
+2009-01-17  Moritz  <moritz@gnu.org>
+
+	* cardman.c (reader_status_t): New (enum) type.
+	(reader_status_from_file): New function.
+	(watcher_cb): New local variable: reader_status; call
+	reader_status_from_file and statusbar_update.
+
 2009-01-16  Werner Koch  <wk@g10code.com>
 
 	* gpapinchange.h, gpapinchange.c: New.
