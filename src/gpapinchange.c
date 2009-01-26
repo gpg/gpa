@@ -88,7 +88,7 @@ gpa_pin_change_finalize (GObject *object)
 }
 
 
-/* Initialze an instance of the this class.  */
+/* Initialize an instance of the this class.  */
 static void
 gpa_pin_change_init (GpaPinChange *pinchange)
 {

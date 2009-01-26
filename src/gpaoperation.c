@@ -261,7 +261,7 @@ gpa_operation_write_status (GpaOperation *op, const char *statusname, ...)
 
   /* FIXME: Return value might require an allocator to not only get
      the last one.  */
-  g_signal_emit (GPA_OPERATION (op), signals[STATUS], NULL,
+  g_signal_emit (GPA_OPERATION (op), signals[STATUS], 0,
 		 statusname, buf, &err);
   
   va_end (arg_ptr);

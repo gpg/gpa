@@ -1,3 +1,15 @@
+2009-01-26  Werner Koch  <wk@g10code.com>
+
+	* cardman.c (ADD_TABLE_ROW): Replace macro by ..
+	(add_table_row): New function.
+	(struct _GpaCardManager): Add fields GENERAL_FRAME, PERSONAL_FRAME
+	and KEYS_FRAME.
+	(construct_card_widget): Initialize them and add new field for the
+	card type.
+	(card_reload_cb): Show the card type.
+	(update_info_visibility): Hide only the personal and keys frame.
+	(get_serial_direct, opass_status_cb): New.
+
 2009-01-17  Moritz  <moritz@gnu.org>
 
 	* cardman.c: Include "convert.h".
@@ -22,7 +34,7 @@
 	* gpapinchange.h, gpapinchange.c: New.
 	* Makefile.am (gpa_SOURCES): Add them
 
-	* convert.c (gpa_unit_expiry_time_string): Change retrun type to
+	* convert.c (gpa_unit_expiry_time_string): Change return type to
 	const char.  Do bounds checks.
 	(gpa_time_unit_from_string): Take a const char * arg.  Make code
 	more robust.

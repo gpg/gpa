@@ -202,6 +202,9 @@ AC_DEFINE(GPG_ERR_SOURCE_DEFAULT, 12,
 AM_PATH_LIBASSUAN("$NEED_LIBASSUAN_API:$NEED_LIBASSUAN_VERSION",
                   have_libassuan=yes,have_libassuan=no)
 
+# We need this for GPGME
+AC_SYS_LARGEFILE
+
 #
 # Depending on the OS we need to test for different versions of gpgme.
 #
@@ -217,9 +220,11 @@ else
   AM_PATH_GPGME("$NEED_GPGME_API:$NEED_GPGME_VERSION",
                 have_gpgme=yes,have_gpgme=no)
 fi
+_save_libs=$LIBS
+LIBS="$LIBS $GPGME_LIBS"
+AC_CHECK_FUNCS([gpgme_op_assuan_transact])
+LIBS=$_save_libs
 
-# We need this for GPGME
-AC_SYS_LARGEFILE
 
 #
 # Checks for header files.
