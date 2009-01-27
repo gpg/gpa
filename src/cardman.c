@@ -195,8 +195,13 @@ opass_status_cb (void *opaque, const char *status, const char *args)
 {
   GpaCardManager *cardman = opaque;
 
+  /* Just for experiments, we also print some info from the Geldkarte. */
   if (!strcmp (status, "SERIALNO"))
     gtk_entry_set_text (GTK_ENTRY (cardman->entrySerialno), args);
+  else if (!strcmp (status, "X-BANKINFO"))
+    gtk_entry_set_text (GTK_ENTRY (cardman->entryManufacturer), args);
+  else if (!strcmp (status, "X-BALANCE"))
+    gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), args);
 
   return 0;
 }     
@@ -204,7 +209,7 @@ opass_status_cb (void *opaque, const char *status, const char *args)
 
 
 static void
-get_serial_direct (GpaCardManager *cardman)
+get_serial_direct (GpaCardManager *cardman, int is_geldkarte)
 {
 #ifdef HAVE_GPGME_OP_ASSUAN_TRANSACT  
   gpg_error_t err;
@@ -221,8 +226,13 @@ get_serial_direct (GpaCardManager *cardman)
   if (!err)
     err = gpgme_op_assuan_result (ctx);
 
-  /* Nothing to do because the status cb takes care of updating the
-     serialno.  */
+  if (is_geldkarte)
+    err = gpgme_op_assuan_transact (ctx, "SCD LEARN --force",
+                                    NULL, NULL, NULL, NULL,
+                                    opass_status_cb, cardman);
+  if (!err)
+    err = gpgme_op_assuan_result (ctx);
+
 
  leave:
   gpgme_release (ctx);
@@ -268,6 +278,8 @@ card_reload_cb (void *opaque,
             cardman->cardtype = cardtype = "DINSIG";
           else if (!strcmp (string, "pkcs15-card"))
             cardman->cardtype = cardtype = "PKCS#15";
+          else if (!strcmp (string, "geldkarte-card"))
+            cardman->cardtype = cardtype = "Geldkarte";
           else
             cardtype = string;
 
@@ -278,7 +290,7 @@ card_reload_cb (void *opaque,
               gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), "");
               gtk_entry_set_text (GTK_ENTRY (cardman->entryManufacturer), "");
               /* Try to get the serial number directly from the card.  */
-              get_serial_direct (cardman);
+              get_serial_direct (cardman, !strcmp (string, "geldkarte-card"));
             }
 
           update_info_visibility (cardman);
