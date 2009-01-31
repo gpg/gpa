@@ -57,9 +57,12 @@ struct _GpaCardManager
   GtkUIManager *ui_manager;
 
   GtkWidget *card_widget;     /* The container of all the info widgets.  */
+  GtkWidget *big_label;
+
   GtkWidget *general_frame;
   GtkWidget *personal_frame;
   GtkWidget *keys_frame;
+  GtkWidget *pin_frame;
 
   GtkWidget *entryType;
   GtkWidget *entrySerialno;
@@ -74,6 +77,9 @@ struct _GpaCardManager
   GtkWidget *entryKeySig;
   GtkWidget *entryKeyEnc;
   GtkWidget *entryKeyAuth;
+  GtkWidget *entryPINRetryCounter;
+  GtkWidget *entryAdminPINRetryCounter;
+  GtkWidget *entrySigForcePIN;
 
   /* Labels in the status bar.  */
   GtkWidget *status_label;
@@ -182,6 +188,9 @@ clear_card_data (GpaCardManager *cardman)
   gtk_entry_set_text (GTK_ENTRY (cardman->entryKeySig), "");
   gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyEnc), "");
   gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyAuth), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryPINRetryCounter), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryAdminPINRetryCounter), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entrySigForcePIN), "");
 }
 
 static void
@@ -193,6 +202,7 @@ update_info_visibility (GpaCardManager *cardman)
       
       statusbar_update (cardman, tmp);
       xfree (tmp);
+      gtk_widget_hide_all (cardman->big_label);
       gtk_widget_show_all (cardman->card_widget);
       if (!cardman->is_openpgp)
         {
@@ -205,6 +215,7 @@ update_info_visibility (GpaCardManager *cardman)
       clear_card_data (cardman);
       statusbar_update (cardman, _("Checking for card..."));
       gtk_widget_hide_all (cardman->card_widget);
+      gtk_widget_show_all (cardman->big_label);
     }
 }
 
@@ -369,6 +380,13 @@ card_reload_cb (void *opaque,
     gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyEnc), string);
   else if (strcmp (identifier, "fpr") == 0 && idx == 2)
     gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyAuth), string);
+  else if (strcmp (identifier, "pinretry") == 0 && idx == 0)
+    gtk_entry_set_text (GTK_ENTRY (cardman->entryPINRetryCounter), string);
+  else if (strcmp (identifier, "pinretry") == 0 && idx == 2)
+    gtk_entry_set_text (GTK_ENTRY (cardman->entryAdminPINRetryCounter), string);
+  else if (strcmp (identifier, "forcepin") == 0 && idx == 0)
+    gtk_entry_set_text (GTK_ENTRY (cardman->entrySigForcePIN),
+			(*string == '1' ? _("Yes") : _("No")));
 }
 
 
@@ -753,7 +771,7 @@ add_table_row (GtkWidget *table, int *rowidx,
   GtkWidget *label;
 
   label = gtk_label_new (labelstr);
-  gtk_label_set_width_chars  (GTK_LABEL (label), 20);
+  gtk_label_set_width_chars  (GTK_LABEL (label), 22);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);	       
   gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
                     *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
@@ -781,6 +799,8 @@ construct_card_widget (GpaCardManager *cardman)
   GtkWidget *personal_table;
   GtkWidget *keys_frame;
   GtkWidget *keys_table;
+  GtkWidget *pin_frame;
+  GtkWidget *pin_table;
   int rowidx;
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
@@ -790,6 +810,7 @@ construct_card_widget (GpaCardManager *cardman)
   container = gtk_vbox_new (FALSE, 0);
 
   /* Create frames and tables. */
+
   general_frame = cardman->general_frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (general_frame), GTK_SHADOW_NONE);
   label = gtk_label_new (_("<b>General</b>"));
@@ -807,13 +828,20 @@ construct_card_widget (GpaCardManager *cardman)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_expander_set_label_widget (GTK_EXPANDER (keys_frame), label);
 
+  pin_frame = cardman->pin_frame = gtk_expander_new (NULL);
+  label = gtk_label_new (_("<b>PIN</b>"));
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_expander_set_label_widget (GTK_EXPANDER (pin_frame), label);
+
   general_table = gtk_table_new (4, 2, FALSE);
   personal_table = gtk_table_new (6, 2, FALSE);
   keys_table = gtk_table_new (3, 2, FALSE);
+  pin_table = gtk_table_new (3, 2, FALSE);
 
   gtk_container_set_border_width (GTK_CONTAINER (general_table), 10);
   gtk_container_set_border_width (GTK_CONTAINER (personal_table), 10);
   gtk_container_set_border_width (GTK_CONTAINER (keys_table), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (pin_table), 10);
   
   /* General frame.  */
   rowidx = 0;
@@ -885,10 +913,32 @@ construct_card_widget (GpaCardManager *cardman)
 
   gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
 
+
+  /* PIN frame.  */
+  rowidx = 0;
+
+  cardman->entryPINRetryCounter = gtk_entry_new ();
+  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryPINRetryCounter), 24);
+  add_table_row (pin_table, &rowidx, 
+                 "PIN Retry Counter: ", cardman->entryPINRetryCounter);
+
+  cardman->entryAdminPINRetryCounter = gtk_entry_new ();
+  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryAdminPINRetryCounter), 24);
+  add_table_row (pin_table, &rowidx, 
+                 "Admin PIN Retry Counter: ", cardman->entryAdminPINRetryCounter);
+
+  cardman->entrySigForcePIN = gtk_entry_new ();
+  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entrySigForcePIN), 24);
+  add_table_row (pin_table, &rowidx, 
+                 "Force Signature PIN: ", cardman->entrySigForcePIN);
+
+  gtk_container_add (GTK_CONTAINER (pin_frame), pin_table);
+
   /* Put all frames together.  */
   gtk_box_pack_start (GTK_BOX (container), general_frame, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (container), personal_frame, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (container), keys_frame, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (container), pin_frame, FALSE, TRUE, 0);
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled), container);
   
@@ -936,6 +986,7 @@ gpa_card_manager_constructor (GType type,
   GtkWidget *menubar;
   GtkWidget *toolbar;
   GtkWidget *statusbar;
+  GtkWidget *box;
 
   /* Invoke parent's constructor.  */
   object = parent_class->constructor (type,
@@ -960,6 +1011,9 @@ gpa_card_manager_constructor (GType type,
   cardman->entryKeySig = NULL;
   cardman->entryKeyEnc = NULL;
   cardman->entryKeyAuth = NULL;
+  cardman->entryPINRetryCounter = NULL;
+  cardman->entryAdminPINRetryCounter = NULL;
+  cardman->entrySigForcePIN = NULL;
 
 
   /* Initialize.  */
@@ -992,9 +1046,15 @@ gpa_card_manager_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
-  cardman->card_widget = construct_card_widget (cardman);
-  gtk_box_pack_start (GTK_BOX (vbox), cardman->card_widget, TRUE, TRUE, 0);
+  cardman->big_label = gtk_label_new (_("No smartcard found."));
+  gtk_box_pack_start (GTK_BOX (vbox), cardman->big_label, TRUE, TRUE, 0);
 
+  box = gtk_vbox_new (FALSE, 0);
+
+  cardman->card_widget = construct_card_widget (cardman);
+  gtk_box_pack_start (GTK_BOX (vbox), box, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), cardman->card_widget, TRUE, TRUE, 0);
+  
   statusbar = statusbar_new (cardman);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, FALSE, 0);
 
@@ -1003,8 +1063,13 @@ gpa_card_manager_constructor (GType type,
   g_signal_connect (object, "destroy",
                     G_CALLBACK (card_manager_closed), object);
 
-  gtk_widget_show_all (cardman->card_widget);
+#if 0
+  gtk_widget_show_all (cardman->card_widget); /* What is this for?  -mo */
+#endif
+
   gtk_widget_hide_all (cardman->card_widget);
+  gtk_widget_show_all (cardman->big_label);
+
   return object;
 }
 

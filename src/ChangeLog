@@ -1,5 +1,21 @@
 2009-01-31  Moritz  <moritz@gnu.org>
 
+	* cardman.c (struct _GpaCardManager): New member: big_label.
+	(update_info_visibility): Hide and show big_label depending on
+	card status.
+	(gpa_card_manager_constructor): Initialize, pack and show
+	big_label.
+	(struct _GpaCardManager): New members:
+	entryPINRetryCounter, entryAdminPINRetryCounter, entrySigForcePIN.
+	(clear_card_data): Clear them here.
+	(card_reload_cb): Fill them here.
+	(construct_card_widget): New variables: pin_table, pin_frame;
+	construct widgets for displaying PIN related info.
+	(gpa_card_manager_constructor): New variable: box; use
+	another box for proper layout.
+
+2009-01-31  Moritz  <moritz@gnu.org>
+
 	* cardman.c (card_contains_keys, check_conf_boolean): New
 	functions...
 	(card_genkey): call them here; new dialogs implemented.
