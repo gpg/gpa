@@ -165,6 +165,25 @@ update_title (GpaCardManager *cardman)
     }
 }
 
+/* Clears the info contained in the card widget. */
+static void
+clear_card_data (GpaCardManager *cardman)
+{
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryType), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entrySerialno), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryManufacturer), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryLogin), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryLanguage), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryPubkeyUrl), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryFirstName), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryLastName), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entrySex), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryKeySig), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyEnc), "");
+  gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyAuth), "");
+}
+
 static void
 update_info_visibility (GpaCardManager *cardman)
 {
@@ -183,6 +202,7 @@ update_info_visibility (GpaCardManager *cardman)
     }
   else
     {
+      clear_card_data (cardman);
       statusbar_update (cardman, _("Checking for card..."));
       gtk_widget_hide_all (cardman->card_widget);
     }
@@ -399,11 +419,132 @@ card_edit (GtkAction *action, gpointer param)
 }
 #endif
 
+/* Returns TRUE if the card widget contained in CARDMAN contains key
+   fingerprints, FALSE otherwise. */
+static gboolean
+card_contains_keys (GpaCardManager *cardman)
+{
+  const char *key_sig;
+  const char *key_enc;
+  const char *key_auth;
+
+  key_sig = gtk_entry_get_text (GTK_ENTRY (cardman->entryKeySig));
+  key_enc = gtk_entry_get_text (GTK_ENTRY (cardman->entryKeyEnc));
+  key_auth = gtk_entry_get_text (GTK_ENTRY (cardman->entryKeyAuth));
+
+  if ((key_sig && strcmp (key_sig, "") != 0)
+      || (key_enc && strcmp (key_enc, "") != 0)
+      || (key_auth && strcmp (key_auth, "") != 0))
+    return TRUE;
+
+  return FALSE;
+}
+
+/* Return TRUE if the boolean option named OPTION belonging to the
+   GnuPG component COMPONENT is activated, FALSE otherwise.  Return
+   FALSE in case of an error. */
+static gboolean
+check_conf_boolean (const char *component, const char *option)
+{
+  gpgme_ctx_t ctx;
+  gpgme_error_t err;
+  gpgme_conf_comp_t conf;
+  gpgme_conf_opt_t opt;
+  gboolean ret = FALSE;
+
+  ctx = NULL;
+  conf = NULL;
+
+  /* Load configuration through GPGME. */
+
+  err = gpgme_new (&ctx);
+  if (err)
+    goto out;
+  err = gpgme_op_conf_load (ctx, &conf);
+  if (err)
+    goto out;
+
+  /* Search for the component. */
+  while (conf)
+    {
+      if (strcmp (conf->name, component) == 0)
+	break;
+      conf = conf->next;
+    }
+
+  if (!conf)
+    goto out;
+
+  /* Search for the option. */
+  opt = conf->options;
+  while (opt)
+    {
+      if (strcmp (opt->name, option) == 0)
+	break;
+      opt = opt->next;
+    }
+
+  if (!opt)
+    goto out;
+
+  /* Check value.  */
+  if (opt->value && opt->value->value.int32)
+    ret = TRUE;
+
+ out:
+
+  /* Release. */
+  if (conf)
+    gpgme_conf_release (conf);
+  if (ctx)
+    gpgme_release (ctx);
+
+  return ret;
+}
+
 /* This function is called to triggers a key-generation.  */
 static void
 card_genkey (GpaCardManager *cardman)
 {
   GpaGenKeyCardOperation *op;
+
+  if (check_conf_boolean ("scdaemon", "allow-admin") == FALSE)
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (cardman->window),
+				       GTK_DIALOG_MODAL,
+				       GTK_MESSAGE_ERROR,
+				       GTK_BUTTONS_OK,
+				       "Adminn commands not allowed. Key generation disabled.");
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      return;
+    }
+
+  if (card_contains_keys (cardman))
+    {
+      GtkWidget *dialog;
+      gint dialog_response;
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (cardman->window),
+				       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				       GTK_MESSAGE_WARNING,
+				       GTK_BUTTONS_OK_CANCEL,
+				       "Keys are already stored on the card. "
+				       "Really replace existing keys?");
+
+      dialog_response = gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      switch (dialog_response)
+	{
+	case GTK_RESPONSE_OK:
+         break;
+
+	default:
+	  return;
+	}
+    }
 
   op = gpa_gen_key_card_operation_new (cardman->window);
   g_signal_connect (G_OBJECT (op), "completed",
@@ -631,6 +772,7 @@ add_table_row (GtkWidget *table, int *rowidx,
 static GtkWidget *
 construct_card_widget (GpaCardManager *cardman)
 {
+  GtkWidget *scrolled;
   GtkWidget *container;
   GtkWidget *label;
   GtkWidget *general_frame;
@@ -640,6 +782,10 @@ construct_card_widget (GpaCardManager *cardman)
   GtkWidget *keys_frame;
   GtkWidget *keys_table;
   int rowidx;
+
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   container = gtk_vbox_new (FALSE, 0);
 
@@ -656,11 +802,10 @@ construct_card_widget (GpaCardManager *cardman)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (personal_frame), label);
 
-  keys_frame = cardman->keys_frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (keys_frame), GTK_SHADOW_NONE);
+  keys_frame = cardman->keys_frame = gtk_expander_new (NULL);
   label = gtk_label_new (_("<b>Keys</b>"));
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_frame_set_label_widget (GTK_FRAME (keys_frame), label);
+  gtk_expander_set_label_widget (GTK_EXPANDER (keys_frame), label);
 
   general_table = gtk_table_new (4, 2, FALSE);
   personal_table = gtk_table_new (6, 2, FALSE);
@@ -669,7 +814,6 @@ construct_card_widget (GpaCardManager *cardman)
   gtk_container_set_border_width (GTK_CONTAINER (general_table), 10);
   gtk_container_set_border_width (GTK_CONTAINER (personal_table), 10);
   gtk_container_set_border_width (GTK_CONTAINER (keys_table), 10);
-
   
   /* General frame.  */
   rowidx = 0;
@@ -741,14 +885,14 @@ construct_card_widget (GpaCardManager *cardman)
 
   gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
 
-
   /* Put all frames together.  */
   gtk_box_pack_start (GTK_BOX (container), general_frame, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (container), personal_frame, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (container), keys_frame, FALSE, TRUE, 0);
 
-
-  return container;
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled), container);
+  
+  return scrolled;
 }
 
 
@@ -852,7 +996,7 @@ gpa_card_manager_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (vbox), cardman->card_widget, TRUE, TRUE, 0);
 
   statusbar = statusbar_new (cardman);
-  gtk_box_pack_start (GTK_BOX (vbox), statusbar, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, FALSE, 0);
 
   gtk_container_add (GTK_CONTAINER (cardman), vbox);
 

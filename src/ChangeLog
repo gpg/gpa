@@ -1,3 +1,16 @@
+2009-01-31  Moritz  <moritz@gnu.org>
+
+	* cardman.c (card_contains_keys, check_conf_boolean): New
+	functions...
+	(card_genkey): call them here; new dialogs implemented.
+	(construct_card_widget): New (GtkScrolledWindow) widget: scrolled;
+	use a GtkExpander instead of a GtkFrame for keys_frame.
+
+2009-01-27  Moritz  <moritz@gnu.org>
+
+	* cardman.c (clear_card_data): New function.
+	(update_info_visibility): Call it here.
+
 2009-01-27  Werner Koch  <wk@g10code.com>
 
 	* cardman.c (opass_status_cb, get_serial_direct): Hack to display
