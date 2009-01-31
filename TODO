@@ -6,14 +6,11 @@ In no particular order:
 ** lookup and display public key details associated to a smartcard
 ** display status during smartcard access, since it often takes longer
    than a second (idea: simply disable refresh button?)
-** display status messages like "card removed" and "please insert card"
 ** display messages "please attach reader" in case no smartcard reader is attached
-** display more helpful error message in case allow-admin is disabled
 ** mark readonly data objects on the card (maybe grey them out?)
 ** buttons for modifying writable data objects that open a modal dialog plus
    automatic refresh after write.
 ** generate-new-key-pair button if card contains no key.
-** display warning message in case user tries to replace existing keys.
 ** check if cardman releases the smartcard (reader) as it should. maybe we have
    to destroy the cardman instance instead of simply hiding it.
 
