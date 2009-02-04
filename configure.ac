@@ -221,9 +221,15 @@ else
                 have_gpgme=yes,have_gpgme=no)
 fi
 _save_libs=$LIBS
+_save_cflags=$CFLAGS
 LIBS="$LIBS $GPGME_LIBS"
+CFLAGS="$CFLAGS $GPGME_CFLAGS"
 AC_CHECK_FUNCS([gpgme_op_assuan_transact])
+# Fixme:  We should write a test based on gpgme_subkey_t 
+#         We might even want to put such a test into gpgme.m4.
+AC_CHECK_MEMBERS([struct _gpgme_subkey.card_number],,,[#include <gpgme.h>])
 LIBS=$_save_libs
+CFLAGS="$_save_CFLAGS"
 
 
 #
@@ -243,7 +249,7 @@ GNUPG_CHECK_TYPEDEF(u16, HAVE_U16_TYPEDEF)
 GNUPG_CHECK_TYPEDEF(u32, HAVE_U32_TYPEDEF)
 
 #
-# Check for library fucntions
+# Check for library functions
 #
 
 # See whether libc supports the Linux inotify interface

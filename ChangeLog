@@ -1,3 +1,7 @@
+2009-02-04  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Check for card_number member of gpgme_subkey_t.
+
 2009-01-26  Werner Koch  <wk@g10code.com>
 
 	* configure.ac: Check for gpgme_op_assuan_transact.

@@ -49,6 +49,7 @@ void gpa_register_stock_items (void);
 #define GPA_STOCK_EXPORT "gpa-export"
 #define GPA_STOCK_BACKUP "gpa-backup"
 
+#define GPA_STOCK_SECRET_CARDKEY "gpa-secret-cardkey"
 #define GPA_STOCK_SECRET_KEY "gpa-secret-key"
 #define GPA_STOCK_PUBLIC_KEY "gpa-public-key"
      

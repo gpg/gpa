@@ -1326,12 +1326,23 @@ static void
 keyring_details_page_fill_key (GPAKeyringEditor *editor, gpgme_key_t key)
 {
   gpgme_user_id_t uid;
-  gchar *text;
+  gpgme_key_t seckey;
+  char *text;
 
-  if (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
-			       key->subkeys->fpr) != NULL)
-    gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
-			_("The key has both a private and a public part"));
+  seckey = gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
+                                    key->subkeys->fpr);
+  if (seckey)
+    {
+#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
+      if (seckey->subkeys && seckey->subkeys->is_cardkey)
+        gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
+                            _("The key has both a smartcard based private part"
+                              " and a public part"));
+      else
+#endif
+        gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
+                            _("The key has both a private and a public part"));
+    }
   else
     gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
 			_("The key has only a public part"));

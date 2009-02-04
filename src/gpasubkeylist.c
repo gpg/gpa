@@ -1,5 +1,6 @@
 /* gpasubkeylist.c  -	 The GNU Privacy Assistant
- *	Copyright (C) 2003, Miguel Coca.
+ *	Copyright (C) 2003 Miguel Coca.
+ *      Copyright (C) 2009 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -14,14 +15,15 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <config.h>
 
 #include "gpa.h"
 #include "convert.h"
+#include "gtktools.h"
+#include "keytable.h"
 #include "gpasubkeylist.h"
 
 /*
@@ -38,13 +40,18 @@ typedef enum
   SUBKEY_CAN_CERTIFY,
   SUBKEY_CAN_ENCRYPT,
   SUBKEY_CAN_AUTHENTICATE,
+#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
+  SUBKEY_IS_CARDKEY,
+  SUBKEY_CARD_NUMBER,
+#endif /*HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER*/
   SUBKEY_STATUS,
   SUBKEY_N_COLUMNS
 } SubkeyListColumn;
 
-/* Create a new subkey list.
- */
-GtkWidget * gpa_subkey_list_new (void)
+
+/* Create a new subkey list.  */
+GtkWidget *
+gpa_subkey_list_new (void)
 {
   GtkListStore *store;
   GtkWidget *list;
@@ -61,6 +68,10 @@ GtkWidget * gpa_subkey_list_new (void)
 			      G_TYPE_BOOLEAN,
 			      G_TYPE_BOOLEAN,
 			      G_TYPE_BOOLEAN,
+#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_STRING,
+#endif /*HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER*/
 			      G_TYPE_STRING);
 
   /* The view */
@@ -101,36 +112,51 @@ GtkWidget * gpa_subkey_list_new (void)
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Can sign"), renderer,
-						     "active", SUBKEY_CAN_SIGN,
-						     NULL);
+  column = gtk_tree_view_column_new_with_attributes
+    (NULL, renderer, "active", SUBKEY_CAN_SIGN, NULL);
+  gpa_set_column_title (column, _("[S]"), _("Can sign"));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Can certify"), 
-						     renderer,
-						     "active", SUBKEY_CAN_CERTIFY,
-						     NULL);
+  column = gtk_tree_view_column_new_with_attributes 
+    (NULL, renderer, "active", SUBKEY_CAN_CERTIFY, NULL);
+  gpa_set_column_title (column, _("[C]"), _("Can certify"));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Can encrypt"),
-						     renderer,
-						     "active", SUBKEY_CAN_ENCRYPT,
-						     NULL);
+  column = gtk_tree_view_column_new_with_attributes
+    (NULL, renderer, "active", SUBKEY_CAN_ENCRYPT, NULL);
+  gpa_set_column_title (column, _("[E]"), _("Can encrypt"));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Can authenticate"),
-						     renderer,
-						     "active", SUBKEY_CAN_AUTHENTICATE,
-						     NULL);
+  column = gtk_tree_view_column_new_with_attributes
+    (NULL, renderer, "active", SUBKEY_CAN_AUTHENTICATE, NULL);
+  gpa_set_column_title (column, _("[A]"), _("Can authenticate"));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
+
+#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
+  renderer = gtk_cell_renderer_toggle_new ();
+  column = gtk_tree_view_column_new_with_attributes
+    (NULL, renderer, "active", SUBKEY_IS_CARDKEY, NULL);
+  gpa_set_column_title (column, _("[T]"), 
+                        _("Secret key stored on a smartcard."));
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes
+    (NULL, renderer, "text", SUBKEY_CARD_NUMBER, NULL);
+  gpa_set_column_title (column, _("Card S/N"), 
+                        _("Serial number of the smart card."));
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
+#endif /*HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER*/
 
   return list;
 }
 
-const gchar *subkey_status (gpgme_subkey_t subkey)
+
+const gchar *
+subkey_status (gpgme_subkey_t subkey)
 {
   if (subkey->revoked)
     {
@@ -154,13 +180,15 @@ const gchar *subkey_status (gpgme_subkey_t subkey)
     }
 }
 
-/* Set the key whose subkeys should be displayed.
- */
-void gpa_subkey_list_set_key (GtkWidget * list, gpgme_key_t key)
+
+/* Set the key whose subkeys should be displayed. */
+void
+gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
 {
   GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
                                         (GTK_TREE_VIEW (list)));
-  gpgme_subkey_t subkey;
+  gpgme_subkey_t subkey, secsubkey;
+  gpgme_key_t seckey;
   gchar *size;
 
   /* Empty the list */
@@ -168,27 +196,46 @@ void gpa_subkey_list_set_key (GtkWidget * list, gpgme_key_t key)
 
   if (key)
     {
+      seckey = gpa_keytable_lookup_key 
+        (gpa_keytable_get_secret_instance (), key->subkeys->fpr);
+      
       /* Add all the subkeys */
       for (subkey = key->subkeys; subkey; subkey = subkey->next)
 	{
 	  GtkTreeIter iter;
 
+          if (seckey)
+            {
+              for (secsubkey = seckey->subkeys; secsubkey;
+                   secsubkey = secsubkey->next)
+                if (subkey->fpr && secsubkey->fpr 
+                    && g_str_equal (subkey->fpr, secsubkey->fpr))
+                  break;
+            }
+          else
+            secsubkey = NULL;
+
 	  /* Append */
 	  gtk_list_store_append (store, &iter);
 	  size = g_strdup_printf ("%i bits", subkey->length);
-          gtk_list_store_set (store, &iter,
-			      SUBKEY_ID, subkey->keyid+8,
-			      SUBKEY_SIZE, size,
-			      SUBKEY_ALGO,
-			      gpgme_pubkey_algo_name (subkey->pubkey_algo),
-			      SUBKEY_EXPIRE, 
-			      gpa_expiry_date_string (subkey->expires),
-			      SUBKEY_CAN_SIGN, subkey->can_sign,
-			      SUBKEY_CAN_CERTIFY, subkey->can_certify,
-			      SUBKEY_CAN_ENCRYPT, subkey->can_encrypt,
-			      SUBKEY_CAN_AUTHENTICATE, subkey->can_authenticate,
-			      SUBKEY_STATUS, subkey_status (subkey),
-			      -1);
+          gtk_list_store_set 
+            (store, &iter,
+             SUBKEY_ID, subkey->keyid+8,
+             SUBKEY_SIZE, size,
+             SUBKEY_ALGO,
+             gpgme_pubkey_algo_name (subkey->pubkey_algo),
+             SUBKEY_EXPIRE, 
+             gpa_expiry_date_string (subkey->expires),
+             SUBKEY_CAN_SIGN, subkey->can_sign,
+             SUBKEY_CAN_CERTIFY, subkey->can_certify,
+             SUBKEY_CAN_ENCRYPT, subkey->can_encrypt,
+             SUBKEY_CAN_AUTHENTICATE, subkey->can_authenticate,
+#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
+             SUBKEY_IS_CARDKEY, secsubkey? secsubkey->is_cardkey :0,
+             SUBKEY_CARD_NUMBER, secsubkey? secsubkey->card_number:NULL,
+#endif /*HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER*/
+             SUBKEY_STATUS, subkey_status (subkey),
+             -1);
 	  g_free (size);
 	} 
     }    

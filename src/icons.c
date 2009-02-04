@@ -35,6 +35,7 @@
 #include "verify.xpm"
 #include "blue_key.xpm"
 #include "blue_yellow_key.xpm"
+#include "blue_yellow_cardkey.xpm"
 #include "brief.xpm"
 #include "decrypt.xpm"
 #include "detailed.xpm"
@@ -73,6 +74,7 @@ struct {
   { "gpa_yellow_key", gpa_yellow_key_xpm },
   { GPA_STOCK_PUBLIC_KEY, blue_key_xpm },
   { GPA_STOCK_SECRET_KEY, blue_yellow_key_xpm },
+  { GPA_STOCK_SECRET_CARDKEY, blue_yellow_cardkey_xpm },
   { "wizard_genkey", wizard_genkey_xpm},
   { "wizard_backup", wizard_backup_xpm},
   { GPA_STOCK_CARDMAN, smartcard_xpm },

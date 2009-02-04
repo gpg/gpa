@@ -1,3 +1,13 @@
+2009-02-03  Werner Koch  <wk@g10code.com>
+
+	* icons.h, icons.c (GPA_STOCK_SECRET_CARDKEY): New.
+	* keylist.c (get_key_pixbuf): Test for card key.
+	* keyring.c (keyring_details_page_fill_key): Ditto.
+	* gpasubkeylist.c (SUBKEY_IS_CARDKEY, SUBKEY_CARD_NUMBER): New.
+	(gpa_subkey_list_new): Create new fields.  Change column title and
+	implement tooltips.
+	(gpa_subkey_list_set_key): Set new fields.
+
 2009-01-31  Moritz  <moritz@gnu.org>
 
 	* cardman.c (struct _GpaCardManager): New member: big_label.

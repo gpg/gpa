@@ -369,9 +369,18 @@ remove_trustdb_dialog (GpaKeyList * keylist)
 static const gchar *
 get_key_pixbuf (gpgme_key_t key)
 {
-  if (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance (),
-			       key->subkeys->fpr) != NULL)
-    return GPA_STOCK_SECRET_KEY;
+  gpgme_key_t seckey;
+
+  seckey = gpa_keytable_lookup_key (gpa_keytable_get_secret_instance (),
+                                    key->subkeys->fpr);
+  if (seckey)
+    {
+#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
+      if (seckey->subkeys && seckey->subkeys->is_cardkey)
+        return GPA_STOCK_SECRET_CARDKEY;
+#endif        
+      return GPA_STOCK_SECRET_KEY;
+    }
   else
     return GPA_STOCK_PUBLIC_KEY;
 }
