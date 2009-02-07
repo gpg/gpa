@@ -1,3 +1,22 @@
+2009-02-07  Moritz  <moritz@gnu.org>
+
+	* cardman.c (card_genkey): Fix typo in message.
+	(card_genkey): Check for deny-admin being set, not for allow-admin
+	being unset.
+	(update_info_visibility): Disable no_show_all flag of card_widget,
+	if necessary.
+	(new_gtk_entry): New function.
+	(modify_name_cb): New function.
+	(construct_card_widget): Create tables with three columns instead
+	of two.
+	(add_table_row): Accept another optional widget, which is to be
+	stored in third table column.
+	(construct_card_widget): Pass another argument to add_table_row.
+	Create button for changing name and pass it to add_table_row.
+	(gpa_card_manager_constructor): Increment window size to 680x480.
+	Enable no-show-all flag of card_widget.  Remove calls to
+	gtk_widget_show_all and gtk_widget_hide_all.
+
 2009-02-03  Werner Koch  <wk@g10code.com>
 
 	* icons.h, icons.c (GPA_STOCK_SECRET_CARDKEY): New.

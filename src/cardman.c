@@ -203,6 +203,8 @@ update_info_visibility (GpaCardManager *cardman)
       statusbar_update (cardman, tmp);
       xfree (tmp);
       gtk_widget_hide_all (cardman->big_label);
+      if (gtk_widget_get_no_show_all (cardman->card_widget) == TRUE)
+	gtk_widget_set_no_show_all (cardman->card_widget, FALSE);
       gtk_widget_show_all (cardman->card_widget);
       if (!cardman->is_openpgp)
         {
@@ -526,7 +528,7 @@ card_genkey (GpaCardManager *cardman)
 {
   GpaGenKeyCardOperation *op;
 
-  if (check_conf_boolean ("scdaemon", "allow-admin") == FALSE)
+  if (check_conf_boolean ("scdaemon", "deny-admin") == TRUE)
     {
       GtkWidget *dialog;
 
@@ -534,7 +536,7 @@ card_genkey (GpaCardManager *cardman)
 				       GTK_DIALOG_MODAL,
 				       GTK_MESSAGE_ERROR,
 				       GTK_BUTTONS_OK,
-				       "Adminn commands not allowed. Key generation disabled.");
+				       "Admin commands not allowed. Key generation disabled.");
       gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy (dialog);
       return;
@@ -766,13 +768,13 @@ card_manager_closed (GtkWidget *widget, gpointer param)
 /* Helper for construct_card_widget.  */
 static void
 add_table_row (GtkWidget *table, int *rowidx,
-               const char *labelstr, GtkWidget *widget)
+               const char *labelstr, GtkWidget *widget, GtkWidget *widget2)
 {
   GtkWidget *label;
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);	       
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
                     *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
 
@@ -780,8 +782,101 @@ add_table_row (GtkWidget *table, int *rowidx,
   gtk_entry_set_has_frame (GTK_ENTRY (widget), FALSE);
 
   gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
-                    *rowidx, *rowidx + 1, GTK_FILL , GTK_SHRINK, 0, 0);
+                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
+  if (widget2)
+    gtk_table_attach (GTK_TABLE (table), widget2, 2, 3,
+		      *rowidx, *rowidx + 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
   ++*rowidx;
+}
+
+/* Return a new GtkEntry filled with TEXT, without frame and editable
+   flag set depending on READONLY.  */
+static GtkWidget *
+new_gtk_entry (const gchar *text, gboolean readonly)
+{
+  GtkWidget *entry;
+
+  entry = gtk_entry_new ();
+  if (text)
+    gtk_entry_set_text (GTK_ENTRY (entry), text);
+
+  if (readonly)
+    gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
+  
+  gtk_entry_set_has_frame (GTK_ENTRY (entry), FALSE);
+
+  return entry;
+}
+
+/* Action for "Change Name" button.  Display a new dialog through
+   which the user can change the name (firstname + lastname) stored on
+   the card. */
+static void
+modify_name_cb (GtkWidget *widget, gpointer data)
+{
+  GpaCardManager *cardman = data;
+  GtkWidget *dialog;
+  GtkWidget *content_area;
+  GtkWidget *table;
+  GtkWidget *entryFirstName;
+  GtkWidget *entryLastName;
+  gint result;
+  
+  dialog = gtk_dialog_new_with_buttons ("Change Name",
+					GTK_WINDOW (cardman),
+					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_STOCK_OK,
+					GTK_RESPONSE_ACCEPT,
+					GTK_STOCK_CANCEL,
+					GTK_RESPONSE_REJECT,
+					NULL);
+
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+
+  table = gtk_table_new (3, 3, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (table), 10);
+
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new ("Current Value:"), 0, 1, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new ("New Value:"), 0, 1,  2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
+
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new ("First Name"), 1,  2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new ("Last Name"), 2,  3, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new (gtk_entry_get_text (GTK_ENTRY (cardman->entryFirstName))),
+		    1, 2, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new (gtk_entry_get_text (GTK_ENTRY (cardman->entryLastName))),
+		    2, 3, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
+
+  entryFirstName = new_gtk_entry (NULL, FALSE);
+  entryLastName = new_gtk_entry (NULL, FALSE);
+
+  gtk_table_attach (GTK_TABLE (table), entryFirstName, 1, 2, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table), entryLastName, 2, 3, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
+
+  gtk_container_add (GTK_CONTAINER (content_area), table);
+  gtk_widget_show_all (dialog);
+
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+  switch (result)
+    {
+    case GTK_RESPONSE_ACCEPT:
+      fprintf (stderr, "NOT IMPLEMENTED YET, CHANGING NAME to \"%s\", \"%s\"...\n",
+	       gtk_entry_get_text (GTK_ENTRY (entryFirstName)), gtk_entry_get_text (GTK_ENTRY (entryLastName)));
+      break;
+
+    default:
+      break;
+    }
+
+  gtk_widget_destroy (entryFirstName);
+  gtk_widget_destroy (entryLastName);
+  gtk_widget_destroy (dialog);
 }
 
 
@@ -833,10 +928,10 @@ construct_card_widget (GpaCardManager *cardman)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_expander_set_label_widget (GTK_EXPANDER (pin_frame), label);
 
-  general_table = gtk_table_new (4, 2, FALSE);
-  personal_table = gtk_table_new (6, 2, FALSE);
-  keys_table = gtk_table_new (3, 2, FALSE);
-  pin_table = gtk_table_new (3, 2, FALSE);
+  general_table = gtk_table_new (4, 3, FALSE);
+  personal_table = gtk_table_new (6, 3, FALSE);
+  keys_table = gtk_table_new (3, 3, FALSE);
+  pin_table = gtk_table_new (3, 3, FALSE);
 
   gtk_container_set_border_width (GTK_CONTAINER (general_table), 10);
   gtk_container_set_border_width (GTK_CONTAINER (personal_table), 10);
@@ -849,19 +944,19 @@ construct_card_widget (GpaCardManager *cardman)
   cardman->entryType = gtk_entry_new ();
   gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryType), 24);
   add_table_row (general_table, &rowidx,
-                 "Card Type: ", cardman->entryType);
+                 "Card Type: ", cardman->entryType, NULL);
 
   cardman->entrySerialno = gtk_entry_new ();
   add_table_row (general_table, &rowidx, 
-                 "Serial Number: ", cardman->entrySerialno);
+                 "Serial Number: ", cardman->entrySerialno, NULL);
 
   cardman->entryVersion = gtk_entry_new ();
   add_table_row (general_table, &rowidx,
-                 "Card Version: ", cardman->entryVersion);
+                 "Card Version: ", cardman->entryVersion, NULL);
 
   cardman->entryManufacturer = gtk_entry_new ();
   add_table_row (general_table, &rowidx,
-                 "Manufacturer: ", cardman->entryManufacturer);
+                 "Manufacturer: ", cardman->entryManufacturer, NULL);
 
   gtk_container_add (GTK_CONTAINER (general_frame), general_table);
 
@@ -871,27 +966,35 @@ construct_card_widget (GpaCardManager *cardman)
   cardman->entryFirstName = gtk_entry_new ();
   gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryFirstName), 48);
   add_table_row (personal_table, &rowidx, 
-                 "First Name: ", cardman->entryFirstName);
+                 "First Name:", cardman->entryFirstName, NULL);
 
   cardman->entryLastName = gtk_entry_new ();
-  add_table_row (personal_table, &rowidx,
-                 "Last Name: ", cardman->entryLastName);
+  {
+    GtkWidget *modify_name_button;
+
+    modify_name_button = gtk_button_new_with_label ("Change");
+
+    g_signal_connect (G_OBJECT (modify_name_button), "clicked",
+		      G_CALLBACK (modify_name_cb), cardman);
+    add_table_row (personal_table, &rowidx,
+		   "Last Name:", cardman->entryLastName, modify_name_button);
+  }
 
   cardman->entrySex = gtk_entry_new ();
   add_table_row (personal_table, &rowidx,
-                 "Sex:", cardman->entrySex);
+                 "Sex:", cardman->entrySex, NULL);
 
   cardman->entryLanguage = gtk_entry_new ();
   add_table_row (personal_table, &rowidx,
-                 "Language: ", cardman->entryLanguage);
+                 "Language: ", cardman->entryLanguage, NULL);
 
   cardman->entryLogin = gtk_entry_new ();
   add_table_row (personal_table, &rowidx,
-                 "Login Data: ", cardman->entryLogin);
+                 "Login Data: ", cardman->entryLogin, NULL);
 
   cardman->entryPubkeyUrl = gtk_entry_new ();
   add_table_row (personal_table, &rowidx,
-                 "Public key URL: ", cardman->entryPubkeyUrl);
+                 "Public key URL: ", cardman->entryPubkeyUrl, NULL);
 
   gtk_container_add (GTK_CONTAINER (personal_frame), personal_table);
 
@@ -901,15 +1004,15 @@ construct_card_widget (GpaCardManager *cardman)
   cardman->entryKeySig = gtk_entry_new ();
   gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryKeySig), 48);
   add_table_row (keys_table, &rowidx, 
-                 "Signature Key: ", cardman->entryKeySig);
+                 "Signature Key: ", cardman->entryKeySig, NULL);
 
   cardman->entryKeyEnc = gtk_entry_new ();
   add_table_row (keys_table, &rowidx,
-                 "Encryption Key: ", cardman->entryKeyEnc);
+                 "Encryption Key: ", cardman->entryKeyEnc, NULL);
 
   cardman->entryKeyAuth = gtk_entry_new ();
   add_table_row (keys_table, &rowidx,
-                 "Authentication Key: ", cardman->entryKeyAuth);
+                 "Authentication Key: ", cardman->entryKeyAuth, NULL);
 
   gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
 
@@ -920,17 +1023,17 @@ construct_card_widget (GpaCardManager *cardman)
   cardman->entryPINRetryCounter = gtk_entry_new ();
   gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryPINRetryCounter), 24);
   add_table_row (pin_table, &rowidx, 
-                 "PIN Retry Counter: ", cardman->entryPINRetryCounter);
+                 "PIN Retry Counter: ", cardman->entryPINRetryCounter, NULL);
 
   cardman->entryAdminPINRetryCounter = gtk_entry_new ();
   gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryAdminPINRetryCounter), 24);
   add_table_row (pin_table, &rowidx, 
-                 "Admin PIN Retry Counter: ", cardman->entryAdminPINRetryCounter);
+                 "Admin PIN Retry Counter: ", cardman->entryAdminPINRetryCounter, NULL);
 
   cardman->entrySigForcePIN = gtk_entry_new ();
   gtk_entry_set_width_chars (GTK_ENTRY (cardman->entrySigForcePIN), 24);
   add_table_row (pin_table, &rowidx, 
-                 "Force Signature PIN: ", cardman->entrySigForcePIN);
+                 "Force Signature PIN: ", cardman->entrySigForcePIN, NULL);
 
   gtk_container_add (GTK_CONTAINER (pin_frame), pin_table);
 
@@ -1018,7 +1121,7 @@ gpa_card_manager_constructor (GType type,
 
   /* Initialize.  */
   update_title (cardman);
-  gtk_window_set_default_size (GTK_WINDOW (cardman), 640, 480);
+  gtk_window_set_default_size (GTK_WINDOW (cardman), 680, 480);
   /* Realize the window so that we can create pixmaps without warnings.  */
   gtk_widget_realize (GTK_WIDGET (cardman));
 
@@ -1054,7 +1157,14 @@ gpa_card_manager_constructor (GType type,
   cardman->card_widget = construct_card_widget (cardman);
   gtk_box_pack_start (GTK_BOX (vbox), box, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (box), cardman->card_widget, TRUE, TRUE, 0);
-  
+
+  /* We set the no-show-all flag here.  This makes sure that the
+     card_widget is not shown in the time window between start of the
+     card manager and the first call to card_reload (through the
+     filewatcher callback).  The flag gets disabled again in
+     update_info_visibility.  */
+  gtk_widget_set_no_show_all (cardman->card_widget, TRUE);
+
   statusbar = statusbar_new (cardman);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, FALSE, 0);
 
@@ -1062,13 +1172,6 @@ gpa_card_manager_constructor (GType type,
 
   g_signal_connect (object, "destroy",
                     G_CALLBACK (card_manager_closed), object);
-
-#if 0
-  gtk_widget_show_all (cardman->card_widget); /* What is this for?  -mo */
-#endif
-
-  gtk_widget_hide_all (cardman->card_widget);
-  gtk_widget_show_all (cardman->big_label);
 
   return object;
 }

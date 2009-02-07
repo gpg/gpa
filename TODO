@@ -13,6 +13,7 @@ In no particular order:
 ** generate-new-key-pair button if card contains no key.
 ** check if cardman releases the smartcard (reader) as it should. maybe we have
    to destroy the cardman instance instead of simply hiding it.
+** button for automatic retrival of key through url field?
 
 * Redo the key generation wizard stuff, as it is one ugly hack on top of
   another at this point.

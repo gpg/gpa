@@ -1,3 +1,7 @@
+2009-02-07  Moritz  <moritz@gnu.org>
+
+	* TODO: New item.
+
 2009-02-04  Werner Koch  <wk@g10code.com>
 
 	* configure.ac: Check for card_number member of gpgme_subkey_t.
