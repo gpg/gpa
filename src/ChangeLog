@@ -1,3 +1,8 @@
+2009-02-10  Werner Koch  <wk@g10code.com>
+
+	* cardman.c (modify_name_cb): Disabled due to the use of new gtk+
+	functions.
+
 2009-02-07  Moritz  <moritz@gnu.org>
 
 	* cardman.c (card_genkey): Fix typo in message.

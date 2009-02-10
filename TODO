@@ -80,6 +80,10 @@ In no particular order:
 ** Not all users know about ctrl+click to select multiple items from a list.
    Use check boxes, or add instructions, or otherwise make this
    easier.
+
+   - Or print a hint in the status bar the first time something is
+     selected.  Such hints helped me a lot to get acquainted with JOSM [wk].
+
 ** The keyring editor has a pop up if there is no default key that says
    that the user has no private key.  But the user can have a private key.
    Either fix the message or the check.

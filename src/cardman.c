@@ -811,6 +811,9 @@ new_gtk_entry (const gchar *text, gboolean readonly)
 /* Action for "Change Name" button.  Display a new dialog through
    which the user can change the name (firstname + lastname) stored on
    the card. */
+/* FIXME: gtl_dialog_get_content_area is a newer GTK feature.  We
+   can't use it.  Thus this function is disabled.  */
+#if 0
 static void
 modify_name_cb (GtkWidget *widget, gpointer data)
 {
@@ -822,6 +825,7 @@ modify_name_cb (GtkWidget *widget, gpointer data)
   GtkWidget *entryLastName;
   gint result;
   
+
   dialog = gtk_dialog_new_with_buttons ("Change Name",
 					GTK_WINDOW (cardman),
 					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -837,27 +841,35 @@ modify_name_cb (GtkWidget *widget, gpointer data)
   gtk_container_set_border_width (GTK_CONTAINER (table), 10);
 
   gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new ("Current Value:"), 0, 1, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
+		    gtk_label_new ("Current Value:"), 
+                    0, 1, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
   gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new ("New Value:"), 0, 1,  2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
+		    gtk_label_new ("New Value:"), 
+                    0, 1,  2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
 
   gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new ("First Name"), 1,  2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+		    gtk_label_new ("First Name"),
+                    1,  2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
   gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new ("Last Name"), 2,  3, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+		    gtk_label_new ("Last Name"),
+                    2,  3, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
   gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new (gtk_entry_get_text (GTK_ENTRY (cardman->entryFirstName))),
+		    gtk_label_new (gtk_entry_get_text 
+                                   (GTK_ENTRY (cardman->entryFirstName))),
 		    1, 2, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
   gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new (gtk_entry_get_text (GTK_ENTRY (cardman->entryLastName))),
+		    gtk_label_new (gtk_entry_get_text 
+                                   (GTK_ENTRY (cardman->entryLastName))),
 		    2, 3, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
 
   entryFirstName = new_gtk_entry (NULL, FALSE);
   entryLastName = new_gtk_entry (NULL, FALSE);
 
-  gtk_table_attach (GTK_TABLE (table), entryFirstName, 1, 2, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
-  gtk_table_attach (GTK_TABLE (table), entryLastName, 2, 3, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table), entryFirstName, 
+                    1, 2, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table), entryLastName,
+                    2, 3, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
 
   gtk_container_add (GTK_CONTAINER (content_area), table);
   gtk_widget_show_all (dialog);
@@ -866,8 +878,10 @@ modify_name_cb (GtkWidget *widget, gpointer data)
   switch (result)
     {
     case GTK_RESPONSE_ACCEPT:
-      fprintf (stderr, "NOT IMPLEMENTED YET, CHANGING NAME to \"%s\", \"%s\"...\n",
-	       gtk_entry_get_text (GTK_ENTRY (entryFirstName)), gtk_entry_get_text (GTK_ENTRY (entryLastName)));
+      fprintf (stderr, "NOT IMPLEMENTED YET, "
+               "CHANGING NAME to \"%s\", \"%s\"...\n",
+	       gtk_entry_get_text (GTK_ENTRY (entryFirstName)), 
+               gtk_entry_get_text (GTK_ENTRY (entryLastName)));
       break;
 
     default:
@@ -878,6 +892,7 @@ modify_name_cb (GtkWidget *widget, gpointer data)
   gtk_widget_destroy (entryLastName);
   gtk_widget_destroy (dialog);
 }
+#endif /* Disabled code.  */
 
 
 /* This function constructs the container holding the card "form". It
@@ -974,8 +989,9 @@ construct_card_widget (GpaCardManager *cardman)
 
     modify_name_button = gtk_button_new_with_label ("Change");
 
-    g_signal_connect (G_OBJECT (modify_name_button), "clicked",
-		      G_CALLBACK (modify_name_cb), cardman);
+    /* Disabled because we need to change modify_name_cb first.  */
+/*     g_signal_connect (G_OBJECT (modify_name_button), "clicked", */
+/* 		      G_CALLBACK (modify_name_cb), cardman); */
     add_table_row (personal_table, &rowidx,
 		   "Last Name:", cardman->entryLastName, modify_name_button);
   }
