@@ -1,4 +1,4 @@
-/* gpgmetools.c - The GNU Privacy Assistant
+/* gpgmeedit.c - The GNU Privacy Assistant's edit interactor.
  *      Copyright (C) 2002 Miguel Coca.
  *	Copyright (C) 2008, 2009 g10 Code GmbH.
  *
@@ -137,12 +137,25 @@ enum
     CARD_GENERATE_EMAIL,
     CARD_GENERATE_COMMENT,
     CARD_GENERATE_DONE,
-    CARD_ERROR
+    CARD_ERROR,
+    CARD_DEFAULT
   };
 
 
 
+/* Helper to print information about an unexpected state.  An erro
+   code is returned. */
+static gpg_error_t
+_unexpected_state (int line, int state)
+{
+  g_debug ("gpgmeedit.c:%d: unexpected state %d in " PACKAGE_STRING,
+           line, state);
+  return gpg_error (GPG_ERR_BUG);
+}
+#define unexpected_state(a)  _unexpected_state (__LINE__, (a))
 
+
+
 /* Data to be passed to the edit callback. Must be filled by the caller of
  * gpgme_op_edit()  */
 struct edit_parms_s
@@ -274,7 +287,7 @@ edit_expire_fnc_action (int state, void *opaque, char **result)
       break;
       /* Can't happen */
     default:
-      return gpg_error (GPG_ERR_GENERAL);
+      return unexpected_state (state);
     }
   return 0;
 }
@@ -397,7 +410,7 @@ edit_trust_fnc_action (int state, void *opaque, char **result)
       break;
       /* Can't happen */
     default:
-      return gpg_error (GPG_ERR_GENERAL);
+      return unexpected_state (state);
     }
   return gpg_error (GPG_ERR_NO_ERROR);
 }
@@ -540,7 +553,7 @@ edit_sign_fnc_action (int state, void *opaque, char **result)
       break;
       /* Can't happen */
     default:
-      return gpg_error (GPG_ERR_GENERAL);
+      return unexpected_state (state);
     }
   return gpg_error (GPG_ERR_NO_ERROR);
 }
@@ -734,7 +747,7 @@ edit_passwd_fnc_action (int state, void *opaque, char **result)
       break;
     default:
       /* Can't happen */
-      return gpg_error (GPG_ERR_GENERAL);
+      return unexpected_state (state);
     }
   return gpg_error (GPG_ERR_NO_ERROR);
 }
@@ -851,7 +864,7 @@ gpa_gpgme_edit_trust_parms_new (GpaContext *ctx, const char *trust_string,
 }
 
 
-/* Change the ownertrust of a key */
+/* Change the ownertrust of a key.  */
 gpg_error_t 
 gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
                             gpgme_validity_t ownertrust)
@@ -926,7 +939,7 @@ gpa_gpgme_edit_expire_parms_new (GpaContext *ctx, GDate *date,
 }
 
 
-/* Change the expire date of a key. */
+/* Change the expire date of a key.  */
 gpg_error_t 
 gpa_gpgme_edit_expire_start (GpaContext *ctx, gpgme_key_t key, GDate *date)
 {
@@ -1128,108 +1141,24 @@ gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
 
 
 /*
- * Card related code.
- */
-
-/* Implementation of the card-list operation. */
-
-/* Action function for card-list.  */
-static gpg_error_t
-card_edit_list_fnc_action (int state, void *opaque, char **result)
-{
-  switch (state)
-    {
-    case CARD_COMMAND:
-      *result = "list";
-      break;
-    case CARD_QUIT:
-      *result = "quit";
-      break;
-    default:
-      return gpg_error (GPG_ERR_GENERAL);
-    }
-  return 0;
-}
-
-/* Transit function for card-list.  */
-static int
-card_edit_list_fnc_transit (int current_state, gpgme_status_code_t status,
-			    const char *args, void *opaque, gpg_error_t *err)
-{
-  int next_state;
-
-  switch (current_state)
-    {
-    case CARD_START:
-      if (status == GPGME_STATUS_CARDCTRL)
-        {
-          /* Consume GPGME_STATUS_CARDCTRL and stay in CARD_START state. */
-          next_state = CARD_START;
-        }
-      else if (status == GPGME_STATUS_GET_LINE)
-	next_state = CARD_COMMAND;
-      else
-        goto bailout;
-      break;
-    case CARD_COMMAND:
-      next_state = CARD_QUIT;
-      break;
-    bailout:
-    default:
-      next_state = CARD_ERROR;
-      *err = gpg_error (GPG_ERR_GENERAL);
-    }
-
-  return next_state;
-}
-
-static void
-card_edit_list_parms_release (GpaContext *ctx, gpg_error_t err,
-                              struct edit_parms_s *parms)
-{
-  /* FIXME: is this correct? -mo */
-
-  if (parms->signal_id != 0)
-    g_signal_handler_disconnect (ctx, parms->signal_id);
-  g_free (parms);
-}
-
-/* Triggers card list operation through CTX. OUT is a valid GPGME data
-   handle which is filled during the operation with the list
-   output. */
-gpg_error_t
-gpa_gpgme_card_edit_list_start (GpaContext *ctx, gpgme_data_t out)
-{
-  struct edit_parms_s *parms = g_malloc (sizeof (struct edit_parms_s));
-  gpg_error_t err;
-
-  parms->state = CARD_START;
-  parms->err = 0;
-  parms->action = card_edit_list_fnc_action;
-  parms->transit = card_edit_list_fnc_transit;
-  parms->out = out;
-  parms->opaque = NULL;
-  parms->signal_id = 
-    g_signal_connect (G_OBJECT (ctx), "done",
-                      G_CALLBACK (card_edit_list_parms_release),
-                      parms);
-
-  err = gpgme_op_card_edit_start (ctx->ctx, NULL, edit_fnc, parms, out);
-
-  return err;
-}
-
-/*
- * GENKEY
+ * OpenPGP card key generation.  Although we do all other card
+ * operation directly via gpg-agent/scdaemon, we need to use an edit
+ * interactor for the key generation because that involves OpenPGP key
+ * management as well.
+ *
+ * Note that on-disk key generation is done using a parameter file and
+ * thus there is no edit function for that (cf. gpgmetools.c).
  */
 
 struct genkey_parms_s
 {
+  int  post_default_state;
   char expiration_day[11];	/* "YYYY-MM-DD". */
   char *name;
   char *email;
   char *comment;
 };
+
 
 static gpg_error_t
 card_edit_genkey_fnc_action (int state, void *opaque, char **result)
@@ -1238,6 +1167,11 @@ card_edit_genkey_fnc_action (int state, void *opaque, char **result)
 
   switch (state)
     {
+    case CARD_DEFAULT:
+      /* Return an empty line toindicate that the default is to be used.  */
+      *result = "";
+      break;
+
     case CARD_COMMAND:
       *result = "admin";
       break;
@@ -1280,155 +1214,184 @@ card_edit_genkey_fnc_action (int state, void *opaque, char **result)
     case CARD_QUIT:
       *result = "quit";
       break;
+
+    default: 
+      return unexpected_state (state);
     }
 
-  return 0;			/* FIXME? */
+  return 0;
 }
+
 
 static int
 card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
-			    const char *args, void *opaque, gpg_error_t *err)
+                              const char *args, void *opaque, gpg_error_t *err)
 {
+  struct genkey_parms_s *genkey_parms = opaque;
   int next_state;
+
+  if (current_state == CARD_DEFAULT)
+    current_state = genkey_parms->post_default_state;
 
   switch (current_state)
     {
     case CARD_START:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "cardedit.prompt"))
+      if (status == GPGME_STATUS_GET_LINE 
+          && !strcmp (args, "cardedit.prompt"))
 	next_state = CARD_COMMAND;
       else
-        {
-          next_state = CARD_ERROR;
-          *err = gpg_error (GPG_ERR_GENERAL);
-        }
+        goto bad_state;
       break;
 
     case CARD_COMMAND:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "cardedit.prompt"))
-	next_state = CARD_ADMIN_COMMAND;
+      if (status == GPGME_STATUS_GET_LINE
+          && !strcmp (args, "cardedit.prompt"))
+        next_state = CARD_ADMIN_COMMAND;
       else
-        {
-          next_state = CARD_ERROR;
-          *err =  gpg_error (GPG_ERR_GENERAL);
-        }
+        goto bad_state;
       break;
 
     case CARD_ADMIN_COMMAND:
-      if (status == GPGME_STATUS_GET_BOOL &&
-          g_str_equal (args, "cardedit.genkeys.backup_enc"))
-	next_state = CARD_GENERATE_BACKUP;
-      else
+      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
         {
-          next_state = CARD_ERROR;
-          *err =  gpg_error (GPG_ERR_GENERAL);
+          if (!strcmp (args, "cardedit.genkeys.backup_enc"))
+            next_state = CARD_GENERATE_BACKUP;
+          else if (!strcmp (args, "cardedit.prompt"))
+            goto unexpected_prompt;
+          else
+            {
+              genkey_parms->post_default_state = current_state;
+              next_state = CARD_DEFAULT;
+            }
         }
+      else
+        goto bad_state;
       break;
 
     case CARD_GENERATE_BACKUP:
-      if (status == GPGME_STATUS_GET_BOOL &&
-          g_str_equal (args, "cardedit.genkeys.replace_keys"))
-	next_state = CARD_GENERATE_REPLACE_KEYS;
-      else if (status == GPGME_STATUS_GET_LINE &&
-	       g_str_equal (args, "keygen.valid"))
-	next_state = CARD_GENERATE_VALIDITY;
-      else
+      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
         {
-          next_state = CARD_ERROR;
-          *err =  gpg_error (GPG_ERR_GENERAL);
+          if (!strcmp (args, "cardedit.genkeys.replace_keys"))
+            next_state = CARD_GENERATE_REPLACE_KEYS;
+          else if (!strcmp (args, "keygen.valid"))
+            next_state = CARD_GENERATE_VALIDITY;
+          else if (!strcmp (args, "cardedit.prompt"))
+            goto unexpected_prompt;
+          else
+            {
+              genkey_parms->post_default_state = current_state;
+              next_state = CARD_DEFAULT;
+            }
         }
+      else
+        goto bad_state;
       break;
 
     case CARD_GENERATE_REPLACE_KEYS:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keygen.valid"))
-	next_state = CARD_GENERATE_VALIDITY;
-      else
+      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
         {
-          next_state = CARD_ERROR;
-          *err =  gpg_error (GPG_ERR_GENERAL);
+          if (!strcmp (args, "keygen.valid"))
+            next_state = CARD_GENERATE_VALIDITY;
+          else if (!strcmp (args, "cardedit.prompt"))
+            goto unexpected_prompt;
+          else
+            {
+              genkey_parms->post_default_state = current_state;
+              next_state = CARD_DEFAULT;
+            }
         }
+      else
+        goto bad_state;
       break;
 
     case CARD_GENERATE_VALIDITY:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keygen.name"))
-	next_state = CARD_GENERATE_NAME;
-      else
+      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
         {
-          next_state = CARD_ERROR;
-          *err =  gpg_error (GPG_ERR_GENERAL);
+          if (!strcmp (args, "keygen.name"))
+            next_state = CARD_GENERATE_NAME;
+          else if (!strcmp (args, "cardedit.prompt"))
+            goto unexpected_prompt;
+          else
+            {
+              genkey_parms->post_default_state = current_state;
+              next_state = CARD_DEFAULT;
+            }
         }
+      else
+        goto bad_state;
       break;
 
     case CARD_GENERATE_NAME:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keygen.email"))
-	next_state = CARD_GENERATE_EMAIL;
-      else
+      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
         {
-          next_state = CARD_ERROR;
-          *err =  gpg_error (GPG_ERR_GENERAL);
+          if (!strcmp (args, "keygen.email"))
+            next_state = CARD_GENERATE_EMAIL;
+          else if (!strcmp (args, "cardedit.prompt"))
+            goto unexpected_prompt;
+          else
+            {
+              genkey_parms->post_default_state = current_state;
+              next_state = CARD_DEFAULT;
+            }
         }
+      else
+        goto bad_state;
       break;
 
     case CARD_GENERATE_EMAIL:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keygen.comment"))
-	next_state = CARD_GENERATE_COMMENT;
-      else
+      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
         {
-          next_state = CARD_ERROR;
-          *err =  gpg_error (GPG_ERR_GENERAL);
+          if (!strcmp (args, "keygen.comment"))
+            next_state = CARD_GENERATE_COMMENT;
+          else if (!strcmp (args, "cardedit.prompt"))
+            goto unexpected_prompt;
+          else
+            {
+              genkey_parms->post_default_state = current_state;
+              next_state = CARD_DEFAULT;
+            }
         }
+      else
+        goto bad_state;
       break;
 
     case CARD_GENERATE_COMMENT:
       if (status == GPGME_STATUS_KEY_CREATED)
 	next_state = CARD_GENERATE_DONE;
       else
-        {
-          next_state = CARD_ERROR;
-          *err =  gpg_error (GPG_ERR_GENERAL);
-        }
+        goto bad_state;
       break;
 
     case CARD_GENERATE_DONE:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "cardedit.prompt"))
-	next_state = CARD_QUIT;
-      else
+      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
         {
-          next_state = CARD_ERROR;
-          *err =  gpg_error (GPG_ERR_GENERAL);
+          if (!strcmp (args, "cardedit.prompt"))
+            next_state = CARD_QUIT;
+          else
+            {
+              genkey_parms->post_default_state = current_state;
+              next_state = CARD_DEFAULT;
+            }
         }
+      else
+        goto bad_state;
       break;
 
+    bad_state:
+    unexpected_prompt:
     default:
       next_state = CARD_ERROR;
       *err = gpg_error (GPG_ERR_GENERAL);
+      break;
     }
 
   return next_state;
 }
 
-static void
-card_edit_genkey_parms_release (GpaContext *ctx, gpg_error_t err,
-				struct edit_parms_s *parms)
-{
-  gpgme_data_release (parms->out);
-  if (parms->signal_id != 0)
-    {
-      /* Don't run this signal handler again if the context is reused */
-      g_signal_handler_disconnect (ctx, parms->signal_id);
-    }
-  g_free (parms->opaque);
-  g_free (parms);
-}
 
 static void
-calculate_expiration_day (GPAKeyGenParameters *parms, char *expiration_day, size_t length)
+calculate_expiration_day (GPAKeyGenParameters *parms,
+                          char *expiration_day, size_t length)
 {
   assert (length >= 11);
 
@@ -1466,18 +1429,36 @@ calculate_expiration_day (GPAKeyGenParameters *parms, char *expiration_day, size
     strcpy (expiration_day, "0");
 }
 
+
+static void
+card_edit_genkey_parms_release (GpaContext *ctx, gpg_error_t err,
+				struct edit_parms_s *parms)
+{
+  gpgme_data_release (parms->out);
+  if (parms->signal_id != 0)
+    {
+      /* Don't run this signal handler again if the context is reused */
+      g_signal_handler_disconnect (ctx, parms->signal_id);
+    }
+  g_free (parms->opaque);
+  g_free (parms);
+}
+
+
 /* Generate the edit parameters needed for setting owner trust.  */
 static struct edit_parms_s *
-card_edit_genkey_parms_new (GpaContext *ctx, GPAKeyGenParameters *parms, gpgme_data_t out)
+card_edit_genkey_parms_new (GpaContext *ctx,
+                            GPAKeyGenParameters *parms, gpgme_data_t out)
 {
-  struct edit_parms_s *edit_parms = g_malloc (sizeof (struct edit_parms_s));
-  struct genkey_parms_s *genkey_parms = g_malloc (sizeof (struct genkey_parms_s));
+  struct edit_parms_s *edit_parms;
+  struct genkey_parms_s *genkey_parms;
+
+  edit_parms = xcalloc (1, sizeof *edit_parms);
+  genkey_parms = xcalloc (1, sizeof *genkey_parms);
 
   edit_parms->state = CARD_START;
-  edit_parms->err = 0;
   edit_parms->action = card_edit_genkey_fnc_action;
   edit_parms->transit = card_edit_genkey_fnc_transit;
-  edit_parms->signal_id = 0;
   edit_parms->out = out;
   edit_parms->opaque = genkey_parms;
 
@@ -1496,18 +1477,18 @@ card_edit_genkey_parms_new (GpaContext *ctx, GPAKeyGenParameters *parms, gpgme_d
   return edit_parms;
 }
 
+
 gpg_error_t
-gpa_gpgme_card_edit_genkey_start (GpaContext *ctx, GPAKeyGenParameters *genkey_parms)
+gpa_gpgme_card_edit_genkey_start (GpaContext *ctx,
+                                  GPAKeyGenParameters *genkey_parms)
 {
   struct edit_parms_s *edit_parms;
   gpgme_data_t out = NULL;
   gpg_error_t err;
 
   err = gpgme_data_new (&out);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
-    {
-      return err;
-    }
+  if (err)
+    return err;
 
   edit_parms = card_edit_genkey_parms_new (ctx, genkey_parms, out);
   
@@ -1516,110 +1497,3 @@ gpa_gpgme_card_edit_genkey_start (GpaContext *ctx, GPAKeyGenParameters *genkey_p
   return err;
 }
 
-
-
-#if 0				/* DISABLED */
-
-/* Modify. */
-
-static gpg_error_t
-card_edit_modify_fnc_action (int state, void *opaque, char **result)
-{
-  switch (state)
-    {
-    case CARD_START:
-      /* Nothing to do here. (?) */
-      break;
-    case CARD_COMMAND:
-      *result = "admin";
-      break;
-    case CARD_ADMIN_COMMAND:
-      *result = "login";
-      break;
-    case CARD_QUERY_LOGIN:
-      *result = (char *) opaque;
-      break;
-    case CARD_QUIT:
-      *result = "quit";
-      break;
-    default:
-      return gpg_error (GPG_ERR_GENERAL);
-    }
-  return 0;
-}
-
-static int
-card_edit_modify_fnc_transit (int current_state, gpgme_status_code_t status,
-			      const char *args, void *opaque, gpg_error_t *err)
-{
-  int next_state;
-
-  switch (current_state)
-    {
-    case CARD_START:
-      if (status == GPGME_STATUS_CARDCTRL)
-	/* Consume GPGME_STATUS_CARDCTRL and stay in CARD_START state. */
-	next_state = CARD_START;
-      else if (status == GPGME_STATUS_GET_LINE)
-	next_state = CARD_COMMAND;
-      break;
-    case CARD_COMMAND:
-      /* Dummy: */
-      next_state = CARD_ADMIN_COMMAND;
-      break;
-    case CARD_ADMIN_COMMAND:
-      fprintf (stderr, "[in CARD_ADMIN_COMMAND, status = %i\n", status);
-      /* FIXME! check status.  */
-      next_state = CARD_QUERY_LOGIN;
-      break;
-    case CARD_QUERY_LOGIN:
-      next_state = CARD_QUIT;
-      break;
-    default:
-      next_state = CARD_ERROR;
-      *err = gpg_error (GPG_ERR_GENERAL);
-    }
-
-  return next_state;
-}
-
-static void
-gpa_gpgme_card_edit_modify_parms_release (GpaContext *ctx, gpg_error_t err,
-					  struct edit_parms_s *parms)
-{
-  /* FIXME: i don't really understand this. -mo */
-  gpgme_data_release (parms->out);
-  if (parms->signal_id != 0)
-    g_signal_handler_disconnect (ctx, parms->signal_id);
-  g_free (parms->opaque);
-  g_free (parms);
-}
-
-gpg_error_t
-gpa_gpgme_card_edit_modify_start (GpaContext *ctx, const gchar *login)
-{
-  struct edit_parms_s *parms = g_malloc (sizeof (struct edit_parms_s));
-  gpg_error_t err;
-  gpgme_data_t out;
-  char *serialno = NULL;
-
-  err = gpgme_data_new (&out);
-  if (err)
-    return err;
-
-  parms->state = CARD_START;
-  parms->err = 0;
-  parms->action = card_edit_modify_fnc_action;
-  parms->transit = card_edit_modify_fnc_transit;
-  parms->out = out;
-  parms->opaque = g_strdup (login);
-  parms->signal_id = g_signal_connect (G_OBJECT (ctx), "done",
-				       G_CALLBACK (gpa_gpgme_card_edit_modify_parms_release),
-				       parms);
-
-  err = gpgme_op_card_edit_start (ctx->ctx, NULL, edit_fnc, parms, out);
-
-  return err;
-}
-
-#endif	/* DISABLED */

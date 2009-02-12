@@ -1,5 +1,5 @@
 /* cardman.c  -  The GNU Privacy Assistant: card manager.
-   Copyright (C) 2008 g10 Code GmbH
+   Copyright (C) 2008, 2009 g10 Code GmbH
 
    This file is part of GPA.
 
@@ -39,7 +39,6 @@
 #include "cardman.h"
 #include "convert.h"
 
-#include "gpacardreloadop.h"
 #include "gpagenkeycardop.h"
 
 #include "cm-object.h"
@@ -315,6 +314,102 @@ card_reload_action (GtkAction *action, gpointer param)
 }
 
 
+/* Idle queue callback to do a reload.  */
+static gboolean
+card_reload_idle_cb (void *user_data)
+{
+  GpaCardManager *cardman = user_data;
+  
+  card_reload (cardman);
+  g_object_unref (cardman);
+
+  return FALSE;  /* Remove us from the idle queue. */
+}
+
+
+/* Signal handler for the completed signal of the key generation. */
+static void
+card_genkey_completed (GpaCardManager *cardman, gpg_error_t err)
+{
+  g_object_ref (cardman);
+  g_idle_add (card_reload_idle_cb, cardman);
+}
+
+
+/* This function is called to triggers a key-generation.  */
+static void
+card_genkey (GpaCardManager *cardman)
+{
+  GpaGenKeyCardOperation *op;
+
+  if (cardman->cardtype != GPA_CM_OPENPGP_TYPE)
+    return;  /* Not possible.  */
+
+  /* FIXME: I don't th8ink that the deny-admin check is really needed.
+     if at all we should implement a test via assuan to see whether it
+     is actually working - that is far easier than the checking the
+     configuration which might in some cases not reflect the scdaemon
+     currently in use. */
+/*   if (check_conf_boolean ("scdaemon", "deny-admin") == TRUE) */
+/*     { */
+/*       GtkWidget *dialog; */
+
+/*       dialog = gtk_message_dialog_new (GTK_WINDOW (cardman->window), */
+/* 				       GTK_DIALOG_MODAL, */
+/* 				       GTK_MESSAGE_ERROR, */
+/* 				       GTK_BUTTONS_OK, */
+/* 				       "Admin commands not allowed. Key generation disabled."); */
+/*       gtk_dialog_run (GTK_DIALOG (dialog)); */
+/*       gtk_widget_destroy (dialog); */
+/*       return; */
+/*     } */
+
+
+/* FIXME: Instead of doing this test on our own, I believe it belongs
+   into the edit interactor: gpg knows bets whether keys already
+   exists and we only need to process the corresponding prompt.  */
+/*   if (card_contains_keys (cardman)) */
+/*     { */
+/*       GtkWidget *dialog; */
+/*       gint dialog_response; */
+
+/*       dialog = gtk_message_dialog_new (GTK_WINDOW (cardman->window), */
+/* 				       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, */
+/* 				       GTK_MESSAGE_WARNING, */
+/* 				       GTK_BUTTONS_OK_CANCEL, */
+/* 				       "Keys are already stored on the card. " */
+/* 				       "Really replace existing keys?"); */
+
+/*       dialog_response = gtk_dialog_run (GTK_DIALOG (dialog)); */
+/*       gtk_widget_destroy (dialog); */
+/*       switch (dialog_response) */
+/* 	{ */
+/* 	case GTK_RESPONSE_OK: */
+/*          break; */
+
+/* 	default: */
+/* 	  return; */
+/* 	} */
+/*     } */
+
+  op = gpa_gen_key_card_operation_new (GTK_WIDGET (cardman));
+  g_debug ("card_genkey_completed connected (%p)", cardman);
+  g_signal_connect_swapped (G_OBJECT (op), "completed",
+                            G_CALLBACK (card_genkey_completed), cardman);
+  g_signal_connect (G_OBJECT (op), "completed",
+		    G_CALLBACK (g_object_unref), NULL);
+}
+
+
+/* This function is called when the user triggers a key-generation.  */
+static void
+card_genkey_action (GtkAction *action, gpointer param)
+{
+  GpaCardManager *cardman = param;
+
+  card_genkey (cardman);
+}
+
 
 static void
 watcher_cb (void *opaque, const char *filename, const char *reason)
@@ -353,13 +448,8 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
       /* Card menu.  */
       { "CardReload", GTK_STOCK_REFRESH, NULL, NULL,
 	N_("Reload card information"), G_CALLBACK (card_reload_action) },
-#if 0
-      /* FIXME: not yet implemented. */
-      { "CardEdit", GTK_STOCK_EDIT, NULL, NULL,
-	N_("Edit card information"), G_CALLBACK (card_edit) },
-#endif
-/*       { "CardGenkey", GTK_STOCK_NEW, "Generate new key...", NULL, */
-/* 	N_("Generate new key on card"), G_CALLBACK (card_genkey_action) }, */
+      { "CardGenkey", GTK_STOCK_NEW, "Generate new key...", NULL,
+	N_("Generate new key on card"), G_CALLBACK (card_genkey_action) },
     };
 
   static const char *ui_description =
@@ -374,9 +464,6 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
     "    </menu>"
     "    <menu action='Card'>"
     "      <menuitem action='CardReload'/>"
-#if 0
-    "      <menuitem action='CardEdit'/>"
-#endif
     "      <menuitem action='CardGenkey'/>"
     "    </menu>"
     "    <menu action='Windows'>"

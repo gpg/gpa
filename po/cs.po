@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-02-12 10:06+0100\n"
+"POT-Creation-Date: 2009-02-12 12:18+0100\n"
 "PO-Revision-Date: 2007-05-24 15:04+0200\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: czech <cs@li.org>\n"
@@ -45,12 +45,12 @@ msgstr ""
 msgid "Clipboard"
 msgstr "Zur _Zwischenablage exportieren"
 
-#: src/clipboard.c:754 src/fileman.c:517 src/keyring.c:891 src/cardman.c:338
+#: src/clipboard.c:754 src/fileman.c:517 src/keyring.c:891 src/cardman.c:345
 #, fuzzy
 msgid "_File"
 msgstr "/_Soubor"
 
-#: src/clipboard.c:755 src/fileman.c:518 src/keyring.c:892 src/cardman.c:339
+#: src/clipboard.c:755 src/fileman.c:518 src/keyring.c:892 src/cardman.c:346
 #, fuzzy
 msgid "_Edit"
 msgstr "/_Upravit"
@@ -92,7 +92,7 @@ msgstr "Dešifrovat vybraný soubor"
 msgid "Close the buffer"
 msgstr ""
 
-#: src/clipboard.c:775 src/fileman.c:536 src/keyring.c:900 src/cardman.c:344
+#: src/clipboard.c:775 src/fileman.c:536 src/keyring.c:900 src/cardman.c:351
 msgid "Quit the program"
 msgstr ""
 
@@ -129,12 +129,12 @@ msgstr "Dešifrovat vybraný soubor"
 msgid "Select the entire document"
 msgstr ""
 
-#: src/clipboard.c:908 src/fileman.c:634 src/cardman.c:436
+#: src/clipboard.c:908 src/fileman.c:634 src/cardman.c:443
 #, fuzzy
 msgid "Keyring"
 msgstr "Správce klíčů"
 
-#: src/clipboard.c:910 src/keyring.c:1087 src/cardman.c:438
+#: src/clipboard.c:910 src/keyring.c:1087 src/cardman.c:445
 msgid "Files"
 msgstr "Soubory"
 
@@ -2227,94 +2227,90 @@ msgstr "Podpis: %s"
 msgid "Signatures:"
 msgstr "Podpisy:"
 
-#: src/cardman.c:111
+#: src/cardman.c:114
 #, fuzzy
 msgid "Status: "
 msgstr "Status:"
 
-#: src/cardman.c:136
+#: src/cardman.c:139
 #, fuzzy
 msgid "GNU Privacy Assistant - Card Manager"
 msgstr "GNU Privacy Assistant - Správce souborů"
 
-#: src/cardman.c:144
-msgid "no card"
-msgstr ""
-
-#: src/cardman.c:157
+#: src/cardman.c:160
 #, c-format
 msgid "%s card detected."
 msgstr ""
 
-#: src/cardman.c:164
+#: src/cardman.c:167
 msgid "Checking for card..."
 msgstr ""
 
-#: src/cardman.c:260 src/cardman.c:284
+#: src/cardman.c:267 src/cardman.c:290
 #, fuzzy
 msgid "Error accessing card"
 msgstr "Auf die Datei kann nicht zugegriffen werden"
 
-#: src/cardman.c:279
+#: src/cardman.c:285
 msgid "No card"
 msgstr ""
 
-#: src/cardman.c:340
+#: src/cardman.c:347
 #, fuzzy
 msgid "_Card"
 msgstr "Zur _Zwischenablage exportieren"
 
-#: src/cardman.c:348
+#: src/cardman.c:355
 msgid "Reload card information"
 msgstr ""
 
-#: src/cardman.c:352
+#: src/cardman.c:359
 msgid "Edit card information"
 msgstr ""
 
-#: src/cardman.c:470
+#: src/cardman.c:487
 #, fuzzy
 msgid "No card found."
 msgstr "Nebyly nalezeny žádné klíče."
 
-#: src/cardman.c:515
+#: src/cardman.c:532
 #, fuzzy
 msgid "Card Manager"
 msgstr "Správce souborů"
 
-#: src/cardman.c:586
+#: src/cardman.c:600
 msgid "The GPGME library is too old to support smartcards."
 msgstr ""
 
-#: src/cm-openpgp.c:216
+#: src/cm-openpgp.c:215
 msgid "male"
 msgstr ""
 
-#: src/cm-openpgp.c:218
+#: src/cm-openpgp.c:217
 msgid "female"
 msgstr ""
 
-#: src/cm-openpgp.c:220
+#: src/cm-openpgp.c:219
 #, fuzzy
 msgid "unspecified"
 msgstr "Eingabedatei nicht angegeben"
 
-#: src/cm-openpgp.c:388
+#: src/cm-openpgp.c:387
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "Použít rozšířený mód:"
 
-#: src/cm-openpgp.c:394
+#: src/cm-openpgp.c:393
 #, fuzzy
 msgid "<b>Personal</b>"
 msgstr "Persona"
 
-#: src/cm-openpgp.c:399
+#: src/cm-openpgp.c:398
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "Podeps_at jako"
 
-#: src/cm-openpgp.c:405
+#: src/cm-openpgp.c:404
 msgid "<b>PIN</b>"
 msgstr ""
 

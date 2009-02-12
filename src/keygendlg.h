@@ -25,6 +25,8 @@
 #include <gtk/gtk.h>
 #include "gpgmetools.h"
 
-GPAKeyGenParameters * gpa_key_gen_run_dialog (GtkWidget * parent, gboolean forcard);
+GPAKeyGenParameters * gpa_key_gen_run_dialog (GtkWidget *parent, 
+                                              gboolean forcard);
+
 
 #endif /* KEYSIGNDLG_H */

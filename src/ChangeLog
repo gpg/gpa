@@ -1,5 +1,24 @@
 2009-02-12  Werner Koch  <wk@g10code.com>
 
+	* cardman.c (card_genkey): Enable with commented checks.
+	(card_genkey_action): New.
+	(card_reload_idle_cb, card_genkey_completed): New.
+
+	* gpgmeedit.c (_unexpected_state,unexpected_state): New.
+	(edit_expire_fnc_action, edit_trust_fnc_action)
+	(edit_sign_fnc_action, edit_passwd_fnc_action)
+	(card_edit_genkey_fnc_action): Use it.
+	(gpa_gpgme_card_edit_genkey_start): Remove ancient gpg-error.h bug
+	workaround.
+	(card_edit_genkey_parms_new): Use xcalloc to initialze the parms.
+	(card_edit_genkey_fnc_transit): Make more robust against changes
+	in gpg.
+
+	* gpgmeedit.c (gpa_gpgme_card_edit_list_start) 
+	(card_edit_list_parms_release, card_edit_list_fnc_transit) 
+	(card_edit_list_fnc_action): Remove.
+	* gpacardreloadop.h, gpacardreloadop.c: Remove.
+
 	* Makefile.am (gpa_cardman_sources): New to conditionally build
 	the cardman.
 	* gpa.c (gpa_open_cardmanager) [BUILD_CARD_MANAGER]: Build only

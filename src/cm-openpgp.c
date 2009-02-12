@@ -335,10 +335,7 @@ reload_data (GpaCMOpenpgp *card, gpgme_ctx_t gpgagent)
 
 
 
-
-
-
-
+
 /* Helper for construct_data_widget.  */
 static void
 add_table_row (GtkWidget *table, int *rowidx,

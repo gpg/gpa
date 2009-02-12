@@ -126,7 +126,6 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpagenkeyop.h gpagenkeyop.c \
 	      gpagenkeyadvop.h gpagenkeyadvop.c \
 	      gpagenkeysimpleop.h gpagenkeysimpleop.c \
-	      gpacardreloadop.h gpacardreloadop.c \
 	      gpagenkeycardop.h gpagenkeycardop.c \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
