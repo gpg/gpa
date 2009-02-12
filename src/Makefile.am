@@ -45,6 +45,20 @@ LDADD = $(GPGME_LIBS) $(LIBASSUAN_LIBS) $(GPG_ERROR_LIBS) \
 gpa_LDFLAGS = $(gpa_res_ldflag)
 gpa_DEPENDENCIES = $(gpa_deps)
 
+
+if BUILD_CARD_MANAGER
+gpa_cardman_sources = \
+                cardman.c cardman.h \
+                cm-object.c cm-object.h \
+                cm-openpgp.c cm-openpgp.h \
+		cm-geldkarte.c cm-geldkarte.h \
+		cm-netkey.c cm-netkey.h
+else
+gpa_cardman_sources =
+endif
+
+
+
 gpa_SOURCES = get-path.h get-path.c \
 	      gpa.c gpa.h i18n.h options.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
@@ -53,7 +67,6 @@ gpa_SOURCES = get-path.h get-path.c \
 	      icons.c icons.h \
 	      gpawidgets.c gpawidgets.h \
 	      fileman.c fileman.h \
-	      cardman.c cardman.h \
 	      clipboard.h clipboard.c \
 	      filesigndlg.c filesigndlg.h \
 	      encryptdlg.c encryptdlg.h \
@@ -126,8 +139,6 @@ gpa_SOURCES = get-path.h get-path.c \
 	      strlist.h strlist.c \
 	      gpg-stuff.h gpg-stuff.c \
 	      convert.c convert.h \
-	      utils.c $(gpa_w32_sources)
-
-
+	      utils.c $(gpa_w32_sources) $(gpa_cardman_sources)
 
 dndtest_SOURCES = dndtest.c

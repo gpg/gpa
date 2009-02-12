@@ -1,3 +1,26 @@
+2009-02-12  Werner Koch  <wk@g10code.com>
+
+	* Makefile.am (gpa_cardman_sources): New to conditionally build
+	the cardman.
+	* gpa.c (gpa_open_cardmanager) [BUILD_CARD_MANAGER]: Build only
+	id defined.
+	(quit_if_no_window) [BUILD_CARD_MANAGER]: Include cardman only if
+	defined.
+	* keyring.c (keyring_editor_action_new) [BUILD_CARD_MANAGER]:
+	Depend menu item on it.
+	* fileman.c (fileman_action_new) [BUILD_CARD_MANAGER]: Ditto
+	* clipboard.c (clipboard_action_new) [BUILD_CARD_MANAGER]: Ditto
+
+2009-02-11  Werner Koch  <wk@g10code.com>
+
+	* cardman.c: Major refactoring.  Move all openpgp card specific
+	code to ..
+	* cm-openpgp.c: New.
+	* cm-openpgp.h: New.
+	* cm-object.c, cm-object.h New.
+	* cm-geldkarte.c, cm-geldkarte.h: New.
+	* cm-netkey.c, cm-netkey.h: New.
+			
 2009-02-10  Werner Koch  <wk@g10code.com>
 
 	* cardman.c (modify_name_cb): Disabled due to the use of new gtk+

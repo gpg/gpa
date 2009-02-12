@@ -29,10 +29,6 @@
 #include <assert.h>
 #include <time.h>
 
-#include <gdk/gdkkeysyms.h>
-#include <glib.h>
-#include <gtk/gtk.h>
-
 #include "gpa.h"   
 
 #include "gtktools.h"
@@ -46,74 +42,57 @@
 #include "gpacardreloadop.h"
 #include "gpagenkeycardop.h"
 
+#include "cm-object.h"
+#include "cm-openpgp.h"
+#include "cm-geldkarte.h"
+#include "cm-netkey.h"
+
+
 
-/* Object and class definition.  */
-struct _GpaCardManager
-{
-  GtkWindow parent;
-
-  GtkWidget *window;
-
-  GtkUIManager *ui_manager;
-
-  GtkWidget *card_widget;     /* The container of all the info widgets.  */
-  GtkWidget *big_label;
-
-  GtkWidget *general_frame;
-  GtkWidget *personal_frame;
-  GtkWidget *keys_frame;
-  GtkWidget *pin_frame;
-
-  GtkWidget *entryType;
-  GtkWidget *entrySerialno;
-  GtkWidget *entryVersion;
-  GtkWidget *entryManufacturer;
-  GtkWidget *entryLogin;
-  GtkWidget *entryLanguage;
-  GtkWidget *entryPubkeyUrl;
-  GtkWidget *entryFirstName;
-  GtkWidget *entryLastName;
-  GtkWidget *entrySex;
-  GtkWidget *entryKeySig;
-  GtkWidget *entryKeyEnc;
-  GtkWidget *entryKeyAuth;
-  GtkWidget *entryPINRetryCounter;
-  GtkWidget *entryAdminPINRetryCounter;
-  GtkWidget *entrySigForcePIN;
-
-  /* Labels in the status bar.  */
-  GtkWidget *status_label;
-  GtkWidget *status_text;
-
-  int have_card;             /* True, if a supported card is in the reader.  */
-  const char *cardtype;      /* String with the card type.  */
-  int is_openpgp;            /* True if the card is an OpenPGP card.  */
-
-  gpa_filewatch_id_t watch;  /* For watching the reader status file.  */
-  int in_card_reload;        /* Sentinel for card_reload.  */
-};
-
+/* Object's class definition.  */
 struct _GpaCardManagerClass 
 {
   GtkWindowClass parent_class;
 };
 
+
+/* Object definition.  */
+struct _GpaCardManager
+{
+  GtkWindow parent_instance;
+
+  GtkUIManager *ui_manager;
+
+  
+  GtkWidget *card_container;  /* The container holding the card widget.  */
+  GtkWidget *card_widget;     /* The widget to display a card applciation.  */
+
+
+  /* Labels in the status bar.  */
+  GtkWidget *status_label;
+  GtkWidget *status_text;
+
+  const char *cardtypename;  /* String with the card type's name.  */
+  GType cardtype;            /* Widget type of a supported card.  */
+
+  gpa_filewatch_id_t watch;  /* For watching the reader status file.  */
+  int in_card_reload;        /* Sentinel for card_reload.  */
+
+
+  gpgme_ctx_t gpgagent;      /* Gpgme context for the assuan
+                                connection with the gpg-agent.  */
+
+};
+
 /* There is only one instance of the card manager class.  Use a global
    variable to keep track of it.  */
-static GpaCardManager *instance;
-
-/* We also need to save the parent class. */
-static GObjectClass *parent_class;
-
-#if 0
-/* FIXME: I guess we should use a more intelligent handling for widget
-   sensitivity similar to that in fileman.c. -mo */
-/* Definition of the sensitivity function type.  */
-typedef gboolean (*sensitivity_func_t)(gpointer);
-#endif
+static GpaCardManager *this_instance;
 
 
 /* Local prototypes */
+static void update_card_widget (GpaCardManager *cardman);
+
+static void gpa_card_manager_finalize (GObject *object);
 
 
 
@@ -159,253 +138,163 @@ update_title (GpaCardManager *cardman)
 {
   const char *title = _("GNU Privacy Assistant - Card Manager");
 
-  if (cardman->have_card)
+  if (cardman->cardtype == G_TYPE_NONE)
     gtk_window_set_title (GTK_WINDOW (cardman), title);
   else
     {
       char *tmp;
       
-      tmp = g_strdup_printf ("%s (%s)", title, _("no card"));
+      tmp = g_strdup_printf ("%s (%s)", title, cardman->cardtypename);
       gtk_window_set_title (GTK_WINDOW (cardman), tmp);
       xfree (tmp);
     }
 }
 
-/* Clears the info contained in the card widget. */
-static void
-clear_card_data (GpaCardManager *cardman)
-{
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryType), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entrySerialno), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryManufacturer), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryLogin), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryLanguage), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryPubkeyUrl), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryFirstName), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryLastName), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entrySex), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryKeySig), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyEnc), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyAuth), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryPINRetryCounter), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entryAdminPINRetryCounter), "");
-  gtk_entry_set_text (GTK_ENTRY (cardman->entrySigForcePIN), "");
-}
+
 
 static void
 update_info_visibility (GpaCardManager *cardman)
 {
-  if (cardman->have_card)
+  if (cardman->cardtype != G_TYPE_NONE)
     {
-      char *tmp = g_strdup_printf (_("%s card detected."), cardman->cardtype);
-      
+      char *tmp = g_strdup_printf (_("%s card detected."),
+                                   cardman->cardtypename);
       statusbar_update (cardman, tmp);
       xfree (tmp);
-      gtk_widget_hide_all (cardman->big_label);
-      if (gtk_widget_get_no_show_all (cardman->card_widget) == TRUE)
-	gtk_widget_set_no_show_all (cardman->card_widget, FALSE);
-      gtk_widget_show_all (cardman->card_widget);
-      if (!cardman->is_openpgp)
-        {
-          gtk_widget_hide_all (cardman->personal_frame);
-          gtk_widget_hide_all (cardman->keys_frame);
-        }
     }
   else
     {
-      clear_card_data (cardman);
       statusbar_update (cardman, _("Checking for card..."));
-      gtk_widget_hide_all (cardman->card_widget);
-      gtk_widget_show_all (cardman->big_label);
     }
 }
 
 
-#ifdef HAVE_GPGME_OP_ASSUAN_TRANSACT  
-static gpg_error_t
-opass_status_cb (void *opaque, const char *status, const char *args)
-{
-  GpaCardManager *cardman = opaque;
 
-  /* Just for experiments, we also print some info from the Geldkarte. */
-  if (!strcmp (status, "SERIALNO"))
-    gtk_entry_set_text (GTK_ENTRY (cardman->entrySerialno), args);
-  else if (!strcmp (status, "X-BANKINFO"))
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryManufacturer), args);
-  else if (!strcmp (status, "X-BALANCE"))
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), args);
+static gpg_error_t
+scd_data_cb (void *opaque, const void *data, size_t datalen)
+{
+/*   g_debug ("DATA_CB: datalen=%d", (int)datalen); */
+  return 0;
+}     
+
+
+static gpg_error_t
+scd_inq_cb (void *opaque, const char *name, const char *args,
+            gpgme_assuan_sendfnc_t sendfnc,
+            gpgme_assuan_sendfnc_ctx_t sendfnc_value)
+{
+/*   g_debug ("INQ_CB: name=`%s' args=`%s'", name, args); */
 
   return 0;
 }     
-#endif /*HAVE_GPGME_OP_ASSUAN_TRANSACT*/
 
 
-static void
-get_serial_direct (GpaCardManager *cardman, int is_geldkarte)
-{
-#ifdef HAVE_GPGME_OP_ASSUAN_TRANSACT  
-  gpg_error_t err;
-  gpgme_ctx_t ctx;
-
-  ctx = gpa_gpgme_new ();
-  err = gpgme_set_protocol (ctx, GPGME_PROTOCOL_ASSUAN);
-  if (err)
-    goto leave;
-      
-  err = gpgme_op_assuan_transact (ctx, "SCD SERIALNO",
-                                  NULL, NULL, NULL, NULL,
-                                  opass_status_cb, cardman);
-  if (!err)
-    err = gpgme_op_assuan_result (ctx);
-
-  if (is_geldkarte)
-    err = gpgme_op_assuan_transact (ctx, "SCD LEARN --force",
-                                    NULL, NULL, NULL, NULL,
-                                    opass_status_cb, cardman);
-  if (!err)
-    err = gpgme_op_assuan_result (ctx);
-
-
- leave:
-  gpgme_release (ctx);
-  if (err)
-    g_debug ("gpgme_op_assuan_transact failed: %s <%s>",
-             gpg_strerror (err), gpg_strsource (err));
-#endif /*HAVE_GPGME_OP_ASSUAN_TRANSACT*/
-}
-
-
-
-
-/* This is the callback used by the GpaCardReloadOp object. It's
-   called for each data item during a reload operation and updates the
-   according widgets. */
-static void
-card_reload_cb (void *opaque,
-                const char *identifier, int idx, const void *value)
+static gpg_error_t
+scd_status_cb (void *opaque, const char *status, const char *args)
 {
   GpaCardManager *cardman = opaque;
-  const char *string = value;
 
-  if (!strcmp (identifier, "AID"))
+/*   g_debug ("STATUS_CB: status=`%s'  args=`%s'", status, args); */
+
+  if (!strcmp (status, "APPTYPE"))
     {
-      if (idx == 0)
+      cardman->cardtype = G_TYPE_NONE;
+      if (!strcmp (args, "OPENPGP"))
         {
-          cardman->have_card = !!*string;
-          cardman->cardtype = "Unknown";
-          cardman->is_openpgp = 0;
+          cardman->cardtype = GPA_CM_OPENPGP_TYPE;
+          cardman->cardtypename = "OpenPGP";
         }
-      else if (idx == 1)
+      else if (!strcmp (args, "NKS"))
         {
-          const char *cardtype;
-
-          if (!strcmp (string, "openpgp-card"))
-            {
-              cardman->cardtype = cardtype = "OpenPGP";
-              cardman->is_openpgp = 1;
-            }
-          else if (!strcmp (string, "netkey-card"))
-            cardman->cardtype = cardtype = "NetKey";
-          else if (!strcmp (string, "dinsig-card"))
-            cardman->cardtype = cardtype = "DINSIG";
-          else if (!strcmp (string, "pkcs15-card"))
-            cardman->cardtype = cardtype = "PKCS#15";
-          else if (!strcmp (string, "geldkarte-card"))
-            cardman->cardtype = cardtype = "Geldkarte";
-          else
-            cardtype = string;
-
-          gtk_entry_set_text (GTK_ENTRY (cardman->entryType), cardtype);
-          if (!cardman->is_openpgp)
-            {
-              gtk_entry_set_text (GTK_ENTRY (cardman->entrySerialno), "");
-              gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), "");
-              gtk_entry_set_text (GTK_ENTRY (cardman->entryManufacturer), "");
-              /* Try to get the serial number directly from the card.  */
-              get_serial_direct (cardman, !strcmp (string, "geldkarte-card"));
-            }
-
-          update_info_visibility (cardman);
-          update_title (cardman);
+          cardman->cardtype = GPA_CM_NETKEY_TYPE;
+          cardman->cardtypename = "NetKey";
         }
-    }
-  else if (strcmp (identifier, "serial") == 0 && idx == 0)
-    {
-      while (*string == '0' && string[1])
-        string++;
-      gtk_entry_set_text (GTK_ENTRY (cardman->entrySerialno), string);
-    }
-  else if (strcmp (identifier, "login") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryLogin), string);
-  else if (strcmp (identifier, "name") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryFirstName), string);
-  else if (strcmp (identifier, "name") == 0 && idx == 1)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryLastName), string);
-  else if (strcmp (identifier, "sex") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entrySex),
-			gpa_sex_char_to_string (string[0]));
-  else if (strcmp (identifier, "lang") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryLanguage), string);
-  else if (strcmp (identifier, "url") == 0 && idx == 0)
-    {
-      char *tmp = decode_c_string (string);
-      gtk_entry_set_text (GTK_ENTRY (cardman->entryPubkeyUrl), tmp);
-      xfree (tmp);
-    }
-  else if (strcmp (identifier, "vendor") == 0 && idx == 1)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryManufacturer), string);
-  else if (strcmp (identifier, "version") == 0 && idx == 0)
-    {
-      char buffer[6];
-      char *p;
-
-      if (strlen (string) == 4)
+      else if (!strcmp (args, "DINSIG"))
+        cardman->cardtypename = "DINSIG";
+      else if (!strcmp (args, "P15"))
+        cardman->cardtypename = "PKCS#15";
+      else if (!strcmp (args, "GELDKARTE"))
         {
-          /* Reformat the version number to be better human readable.  */
-          p = buffer;
-          if (string[0] != '0')
-            *p++ = string[0];
-          *p++ = string[1];
-          *p++ = '.';
-          if (string[2] != '0')
-            *p++ = string[2];
-          *p++ = string[3];
-	  *p++ = '\0';
-          string = buffer;
+          cardman->cardtype = GPA_CM_GELDKARTE_TYPE;
+          cardman->cardtypename = "Geldkarte";
         }
-      gtk_entry_set_text (GTK_ENTRY (cardman->entryVersion), string);
+      else
+        cardman->cardtypename = "Unknown";
+
     }
-  else if (strcmp (identifier, "fpr") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryKeySig), string);
-  else if (strcmp (identifier, "fpr") == 0 && idx == 1)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyEnc), string);
-  else if (strcmp (identifier, "fpr") == 0 && idx == 2)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryKeyAuth), string);
-  else if (strcmp (identifier, "pinretry") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryPINRetryCounter), string);
-  else if (strcmp (identifier, "pinretry") == 0 && idx == 2)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entryAdminPINRetryCounter), string);
-  else if (strcmp (identifier, "forcepin") == 0 && idx == 0)
-    gtk_entry_set_text (GTK_ENTRY (cardman->entrySigForcePIN),
-			(*string == '1' ? _("Yes") : _("No")));
-}
+
+  return 0;
+}     
 
 
 /* This function is called to trigger a card-reload.  */
 static void
 card_reload (GpaCardManager *cardman)
 {
-  GpaCardReloadOperation *op;
+  gpg_error_t err;
+  const char *command;
 
+  if (!cardman->gpgagent)
+    return;  /* No support for GPGME_PROTOCOL_ASSUAN.  */
+    
   if (!cardman->in_card_reload)
     {
       cardman->in_card_reload++;
-      op = gpa_card_reload_operation_new (cardman->window, 
-                                          card_reload_cb, cardman);
-      g_signal_connect (G_OBJECT (op), "completed",
-                        G_CALLBACK (g_object_unref), cardman);
+      
+      update_info_visibility (cardman);
 
+      cardman->cardtype = G_TYPE_NONE;
+      cardman->cardtypename = "Unknown";
+
+      /* The first thing we need to do is to issue the SERIALNO
+         command; this makes sure that scdaemon initalizes the card if
+         that has not yet been done.  */
+      command = "SCD SERIALNO";
+      err = gpgme_op_assuan_transact (cardman->gpgagent,
+                                      command,
+                                      scd_data_cb, NULL,
+                                      scd_inq_cb, NULL,
+                                      scd_status_cb, cardman);
+      if (!err)
+        err = gpgme_op_assuan_result (cardman->gpgagent);
+
+      if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT)
+        ;
+      else if (err)
+        {
+          g_debug ("assuan command `%s' failed: %s <%s>\n", 
+                   command, gpg_strerror (err), gpg_strsource (err));
+          statusbar_update (cardman, _("Error accessing card"));
+        }
+
+ 
+      if (!err)
+        {
+          /* Now we need to get the APPTYPE of the card so that the
+             correct GpaCM* object can can act on the data.  */
+          command = "SCD GETATTR APPTYPE";
+          err = gpgme_op_assuan_transact (cardman->gpgagent,
+                                          command,
+                                          scd_data_cb, NULL,
+                                          scd_inq_cb, NULL,
+                                          scd_status_cb, cardman);
+          if (!err)
+            err = gpgme_op_assuan_result (cardman->gpgagent);
+
+          if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT)
+            statusbar_update (cardman, _("No card"));
+          else if (err)
+            {
+              g_debug ("assuan command `%s' failed: %s <%s>\n", 
+                       command, gpg_strerror (err), gpg_strsource (err));
+              statusbar_update (cardman, _("Error accessing card"));
+            }
+        }
+      
+      update_card_widget (cardman);
+      update_title (cardman);
+      
+      update_info_visibility (cardman);
       /* Fixme: We should decrement the sentinel only after finishing
          the operation, so that we don't run them over and over if the
          user clicks too often.  Note however that the primary reason
@@ -426,202 +315,6 @@ card_reload_action (GtkAction *action, gpointer param)
 }
 
 
-#if 0
-/* This function is called when the user triggers a card-reload. */
-static void
-card_edit (GtkAction *action, gpointer param)
-{
-  GpaCardManager *cardman = param;
-  gpg_error_t err;
-
-  fprintf (stderr, "CARD_EDIT\n");
-  //err = gpa_gpgme_card_edit_modify_start (CTX, "123");
-}
-#endif
-
-/* Returns TRUE if the card widget contained in CARDMAN contains key
-   fingerprints, FALSE otherwise. */
-static gboolean
-card_contains_keys (GpaCardManager *cardman)
-{
-  const char *key_sig;
-  const char *key_enc;
-  const char *key_auth;
-
-  key_sig = gtk_entry_get_text (GTK_ENTRY (cardman->entryKeySig));
-  key_enc = gtk_entry_get_text (GTK_ENTRY (cardman->entryKeyEnc));
-  key_auth = gtk_entry_get_text (GTK_ENTRY (cardman->entryKeyAuth));
-
-  if ((key_sig && strcmp (key_sig, "") != 0)
-      || (key_enc && strcmp (key_enc, "") != 0)
-      || (key_auth && strcmp (key_auth, "") != 0))
-    return TRUE;
-
-  return FALSE;
-}
-
-/* Return TRUE if the boolean option named OPTION belonging to the
-   GnuPG component COMPONENT is activated, FALSE otherwise.  Return
-   FALSE in case of an error. */
-static gboolean
-check_conf_boolean (const char *component, const char *option)
-{
-  gpgme_ctx_t ctx;
-  gpgme_error_t err;
-  gpgme_conf_comp_t conf;
-  gpgme_conf_opt_t opt;
-  gboolean ret = FALSE;
-
-  ctx = NULL;
-  conf = NULL;
-
-  /* Load configuration through GPGME. */
-
-  err = gpgme_new (&ctx);
-  if (err)
-    goto out;
-  err = gpgme_op_conf_load (ctx, &conf);
-  if (err)
-    goto out;
-
-  /* Search for the component. */
-  while (conf)
-    {
-      if (strcmp (conf->name, component) == 0)
-	break;
-      conf = conf->next;
-    }
-
-  if (!conf)
-    goto out;
-
-  /* Search for the option. */
-  opt = conf->options;
-  while (opt)
-    {
-      if (strcmp (opt->name, option) == 0)
-	break;
-      opt = opt->next;
-    }
-
-  if (!opt)
-    goto out;
-
-  /* Check value.  */
-  if (opt->value && opt->value->value.int32)
-    ret = TRUE;
-
- out:
-
-  /* Release. */
-  if (conf)
-    gpgme_conf_release (conf);
-  if (ctx)
-    gpgme_release (ctx);
-
-  return ret;
-}
-
-/* This function is called to triggers a key-generation.  */
-static void
-card_genkey (GpaCardManager *cardman)
-{
-  GpaGenKeyCardOperation *op;
-
-  if (check_conf_boolean ("scdaemon", "deny-admin") == TRUE)
-    {
-      GtkWidget *dialog;
-
-      dialog = gtk_message_dialog_new (GTK_WINDOW (cardman->window),
-				       GTK_DIALOG_MODAL,
-				       GTK_MESSAGE_ERROR,
-				       GTK_BUTTONS_OK,
-				       "Admin commands not allowed. Key generation disabled.");
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
-      return;
-    }
-
-  if (card_contains_keys (cardman))
-    {
-      GtkWidget *dialog;
-      gint dialog_response;
-
-      dialog = gtk_message_dialog_new (GTK_WINDOW (cardman->window),
-				       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-				       GTK_MESSAGE_WARNING,
-				       GTK_BUTTONS_OK_CANCEL,
-				       "Keys are already stored on the card. "
-				       "Really replace existing keys?");
-
-      dialog_response = gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
-      switch (dialog_response)
-	{
-	case GTK_RESPONSE_OK:
-         break;
-
-	default:
-	  return;
-	}
-    }
-
-  op = gpa_gen_key_card_operation_new (cardman->window);
-  g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (g_object_unref), cardman);
-}
-
-
-/* This function is called when the user triggers a key-generation.  */
-static void
-card_genkey_action (GtkAction *action, gpointer param)
-{
-  GpaCardManager *cardman = param;
-
-  card_genkey (cardman);
-}
-
-typedef enum
-  {
-    READER_STATUS_UNKNOWN,
-    READER_STATUS_NOCARD,
-    READER_STATUS_PRESENT,
-    READER_STATUS_USABLE
-  } reader_status_t;
-
-static reader_status_t
-reader_status_from_file (const char *filename)
-{
-  reader_status_t status = READER_STATUS_UNKNOWN;
-  char status_word[16];
-  FILE *fp;
-
-  fp = fopen (filename, "r");
-  if (fp)
-    {
-      if (fgets (status_word, sizeof (status_word), fp))
-	{
-	  /* Remove trailing newline from STATUS_WORD.  */
-	  char *nl = strchr (status_word, '\n');
-	  if (nl)
-	    *nl = '\0';
-
-	  /* Store enum value belonging to STATUS_WORD in STATUS. */
-	  if (strcmp (status_word, "NOCARD") == 0)
-	    status = READER_STATUS_NOCARD;
-	  else if (strcmp (status_word, "PRESENT") == 0)
-	    status = READER_STATUS_PRESENT;
-	  else if (strcmp (status_word, "USABLE") == 0)
-	    status = READER_STATUS_USABLE;
-	}
-      /* else: read error or EOF. */
-
-      fclose (fp);
-    }
-
-  return status;
-}
-
 
 static void
 watcher_cb (void *opaque, const char *filename, const char *reason)
@@ -630,11 +323,11 @@ watcher_cb (void *opaque, const char *filename, const char *reason)
 
   if (cardman && strchr (reason, 'w') )
     {
-      reader_status_t reader_status;
+/*       reader_status_t reader_status; */
 
-      reader_status = reader_status_from_file (filename);
-      if (reader_status == READER_STATUS_PRESENT)
-	statusbar_update (cardman, _("Reloading card data..."));
+/*       reader_status = reader_status_from_file (filename); */
+/*       if (reader_status == READER_STATUS_PRESENT) */
+/* 	statusbar_update (cardman, _("Reloading card data...")); */
       card_reload (cardman);
     }
 }
@@ -665,8 +358,8 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
       { "CardEdit", GTK_STOCK_EDIT, NULL, NULL,
 	N_("Edit card information"), G_CALLBACK (card_edit) },
 #endif
-      { "CardGenkey", GTK_STOCK_NEW, "Generate new key...", NULL,
-	N_("Generate new key on card"), G_CALLBACK (card_genkey_action) },
+/*       { "CardGenkey", GTK_STOCK_NEW, "Generate new key...", NULL, */
+/* 	N_("Generate new key on card"), G_CALLBACK (card_genkey_action) }, */
     };
 
   static const char *ui_description =
@@ -761,342 +454,49 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
 static void
 card_manager_closed (GtkWidget *widget, gpointer param)
 {
-  instance = NULL;
+  this_instance = NULL;
 }
 
 
-/* Helper for construct_card_widget.  */
 static void
-add_table_row (GtkWidget *table, int *rowidx,
-               const char *labelstr, GtkWidget *widget, GtkWidget *widget2)
+update_card_widget (GpaCardManager *cardman)
 {
-  GtkWidget *label;
-
-  label = gtk_label_new (labelstr);
-  gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
-
-  gtk_editable_set_editable (GTK_EDITABLE (widget), FALSE);
-  gtk_entry_set_has_frame (GTK_ENTRY (widget), FALSE);
-
-  gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
-  if (widget2)
-    gtk_table_attach (GTK_TABLE (table), widget2, 2, 3,
-		      *rowidx, *rowidx + 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
-  ++*rowidx;
-}
-
-/* Return a new GtkEntry filled with TEXT, without frame and editable
-   flag set depending on READONLY.  */
-static GtkWidget *
-new_gtk_entry (const gchar *text, gboolean readonly)
-{
-  GtkWidget *entry;
-
-  entry = gtk_entry_new ();
-  if (text)
-    gtk_entry_set_text (GTK_ENTRY (entry), text);
-
-  if (readonly)
-    gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
-  
-  gtk_entry_set_has_frame (GTK_ENTRY (entry), FALSE);
-
-  return entry;
-}
-
-/* Action for "Change Name" button.  Display a new dialog through
-   which the user can change the name (firstname + lastname) stored on
-   the card. */
-/* FIXME: gtl_dialog_get_content_area is a newer GTK feature.  We
-   can't use it.  Thus this function is disabled.  */
-#if 0
-static void
-modify_name_cb (GtkWidget *widget, gpointer data)
-{
-  GpaCardManager *cardman = data;
-  GtkWidget *dialog;
-  GtkWidget *content_area;
-  GtkWidget *table;
-  GtkWidget *entryFirstName;
-  GtkWidget *entryLastName;
-  gint result;
-  
-
-  dialog = gtk_dialog_new_with_buttons ("Change Name",
-					GTK_WINDOW (cardman),
-					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_OK,
-					GTK_RESPONSE_ACCEPT,
-					GTK_STOCK_CANCEL,
-					GTK_RESPONSE_REJECT,
-					NULL);
-
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-
-  table = gtk_table_new (3, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 10);
-
-  gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new ("Current Value:"), 
-                    0, 1, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
-  gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new ("New Value:"), 
-                    0, 1,  2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
-
-  gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new ("First Name"),
-                    1,  2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
-  gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new ("Last Name"),
-                    2,  3, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
-
-  gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new (gtk_entry_get_text 
-                                   (GTK_ENTRY (cardman->entryFirstName))),
-		    1, 2, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
-  gtk_table_attach (GTK_TABLE (table),
-		    gtk_label_new (gtk_entry_get_text 
-                                   (GTK_ENTRY (cardman->entryLastName))),
-		    2, 3, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
-
-  entryFirstName = new_gtk_entry (NULL, FALSE);
-  entryLastName = new_gtk_entry (NULL, FALSE);
-
-  gtk_table_attach (GTK_TABLE (table), entryFirstName, 
-                    1, 2, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
-  gtk_table_attach (GTK_TABLE (table), entryLastName,
-                    2, 3, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
-
-  gtk_container_add (GTK_CONTAINER (content_area), table);
-  gtk_widget_show_all (dialog);
-
-  result = gtk_dialog_run (GTK_DIALOG (dialog));
-  switch (result)
+  if (cardman->card_widget)
     {
-    case GTK_RESPONSE_ACCEPT:
-      fprintf (stderr, "NOT IMPLEMENTED YET, "
-               "CHANGING NAME to \"%s\", \"%s\"...\n",
-	       gtk_entry_get_text (GTK_ENTRY (entryFirstName)), 
-               gtk_entry_get_text (GTK_ENTRY (entryLastName)));
-      break;
-
-    default:
-      break;
+      gtk_widget_destroy (cardman->card_widget);
+      cardman->card_widget = NULL;
+    }
+  /* Fixme: We should use a signal to get and reload the card widget.  */
+  if (cardman->cardtype == GPA_CM_OPENPGP_TYPE)
+    {
+      cardman->card_widget = gpa_cm_openpgp_new ();
+      gpa_cm_openpgp_reload (cardman->card_widget, cardman->gpgagent);
+    }
+  else if (cardman->cardtype == GPA_CM_GELDKARTE_TYPE)
+    {
+      cardman->card_widget = gpa_cm_geldkarte_new ();
+      gpa_cm_geldkarte_reload (cardman->card_widget, cardman->gpgagent);
+    }
+  else if (cardman->cardtype == GPA_CM_NETKEY_TYPE)
+    {
+      cardman->card_widget = gpa_cm_netkey_new ();
+      gpa_cm_netkey_reload (cardman->card_widget, cardman->gpgagent);
+    }
+  else
+    {
+      cardman->card_widget = gtk_label_new (_("No card found."));
     }
 
-  gtk_widget_destroy (entryFirstName);
-  gtk_widget_destroy (entryLastName);
-  gtk_widget_destroy (dialog);
-}
-#endif /* Disabled code.  */
+  gtk_scrolled_window_add_with_viewport 
+    (GTK_SCROLLED_WINDOW (cardman->card_container), cardman->card_widget);
 
-
-/* This function constructs the container holding the card "form". It
-   updates CARDMAN with new references to the entry widgets, etc.  */
-static GtkWidget *
-construct_card_widget (GpaCardManager *cardman)
-{
-  GtkWidget *scrolled;
-  GtkWidget *container;
-  GtkWidget *label;
-  GtkWidget *general_frame;
-  GtkWidget *general_table;
-  GtkWidget *personal_frame;
-  GtkWidget *personal_table;
-  GtkWidget *keys_frame;
-  GtkWidget *keys_table;
-  GtkWidget *pin_frame;
-  GtkWidget *pin_table;
-  int rowidx;
-
-  scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-
-  container = gtk_vbox_new (FALSE, 0);
-
-  /* Create frames and tables. */
-
-  general_frame = cardman->general_frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (general_frame), GTK_SHADOW_NONE);
-  label = gtk_label_new (_("<b>General</b>"));
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_frame_set_label_widget (GTK_FRAME (general_frame), label);
-
-  personal_frame = cardman->personal_frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (personal_frame), GTK_SHADOW_NONE);
-  label = gtk_label_new (_("<b>Personal</b>"));
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_frame_set_label_widget (GTK_FRAME (personal_frame), label);
-
-  keys_frame = cardman->keys_frame = gtk_expander_new (NULL);
-  label = gtk_label_new (_("<b>Keys</b>"));
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_expander_set_label_widget (GTK_EXPANDER (keys_frame), label);
-
-  pin_frame = cardman->pin_frame = gtk_expander_new (NULL);
-  label = gtk_label_new (_("<b>PIN</b>"));
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_expander_set_label_widget (GTK_EXPANDER (pin_frame), label);
-
-  general_table = gtk_table_new (4, 3, FALSE);
-  personal_table = gtk_table_new (6, 3, FALSE);
-  keys_table = gtk_table_new (3, 3, FALSE);
-  pin_table = gtk_table_new (3, 3, FALSE);
-
-  gtk_container_set_border_width (GTK_CONTAINER (general_table), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (personal_table), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (keys_table), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (pin_table), 10);
-  
-  /* General frame.  */
-  rowidx = 0;
-
-  cardman->entryType = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryType), 24);
-  add_table_row (general_table, &rowidx,
-                 "Card Type: ", cardman->entryType, NULL);
-
-  cardman->entrySerialno = gtk_entry_new ();
-  add_table_row (general_table, &rowidx, 
-                 "Serial Number: ", cardman->entrySerialno, NULL);
-
-  cardman->entryVersion = gtk_entry_new ();
-  add_table_row (general_table, &rowidx,
-                 "Card Version: ", cardman->entryVersion, NULL);
-
-  cardman->entryManufacturer = gtk_entry_new ();
-  add_table_row (general_table, &rowidx,
-                 "Manufacturer: ", cardman->entryManufacturer, NULL);
-
-  gtk_container_add (GTK_CONTAINER (general_frame), general_table);
-
-  /* Personal frame.  */
-  rowidx = 0;
-
-  cardman->entryFirstName = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryFirstName), 48);
-  add_table_row (personal_table, &rowidx, 
-                 "First Name:", cardman->entryFirstName, NULL);
-
-  cardman->entryLastName = gtk_entry_new ();
-  {
-    GtkWidget *modify_name_button;
-
-    modify_name_button = gtk_button_new_with_label ("Change");
-
-    /* Disabled because we need to change modify_name_cb first.  */
-/*     g_signal_connect (G_OBJECT (modify_name_button), "clicked", */
-/* 		      G_CALLBACK (modify_name_cb), cardman); */
-    add_table_row (personal_table, &rowidx,
-		   "Last Name:", cardman->entryLastName, modify_name_button);
-  }
-
-  cardman->entrySex = gtk_entry_new ();
-  add_table_row (personal_table, &rowidx,
-                 "Sex:", cardman->entrySex, NULL);
-
-  cardman->entryLanguage = gtk_entry_new ();
-  add_table_row (personal_table, &rowidx,
-                 "Language: ", cardman->entryLanguage, NULL);
-
-  cardman->entryLogin = gtk_entry_new ();
-  add_table_row (personal_table, &rowidx,
-                 "Login Data: ", cardman->entryLogin, NULL);
-
-  cardman->entryPubkeyUrl = gtk_entry_new ();
-  add_table_row (personal_table, &rowidx,
-                 "Public key URL: ", cardman->entryPubkeyUrl, NULL);
-
-  gtk_container_add (GTK_CONTAINER (personal_frame), personal_table);
-
-  /* Keys frame.  */
-  rowidx = 0;
-
-  cardman->entryKeySig = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryKeySig), 48);
-  add_table_row (keys_table, &rowidx, 
-                 "Signature Key: ", cardman->entryKeySig, NULL);
-
-  cardman->entryKeyEnc = gtk_entry_new ();
-  add_table_row (keys_table, &rowidx,
-                 "Encryption Key: ", cardman->entryKeyEnc, NULL);
-
-  cardman->entryKeyAuth = gtk_entry_new ();
-  add_table_row (keys_table, &rowidx,
-                 "Authentication Key: ", cardman->entryKeyAuth, NULL);
-
-  gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
-
-
-  /* PIN frame.  */
-  rowidx = 0;
-
-  cardman->entryPINRetryCounter = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryPINRetryCounter), 24);
-  add_table_row (pin_table, &rowidx, 
-                 "PIN Retry Counter: ", cardman->entryPINRetryCounter, NULL);
-
-  cardman->entryAdminPINRetryCounter = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entryAdminPINRetryCounter), 24);
-  add_table_row (pin_table, &rowidx, 
-                 "Admin PIN Retry Counter: ", cardman->entryAdminPINRetryCounter, NULL);
-
-  cardman->entrySigForcePIN = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (cardman->entrySigForcePIN), 24);
-  add_table_row (pin_table, &rowidx, 
-                 "Force Signature PIN: ", cardman->entrySigForcePIN, NULL);
-
-  gtk_container_add (GTK_CONTAINER (pin_frame), pin_table);
-
-  /* Put all frames together.  */
-  gtk_box_pack_start (GTK_BOX (container), general_frame, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (container), personal_frame, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (container), keys_frame, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (container), pin_frame, FALSE, TRUE, 0);
-
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled), container);
-  
-  return scrolled;
-}
-
-
-
-/************************************************************ 
- ******************   Object Management  ********************
- ************************************************************/
-
-static void
-gpa_card_manager_finalize (GObject *object)
-{  
-  /* FIXME: Remove the watch object and all other resources.  */
-
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  gtk_widget_show_all (cardman->card_widget);
 }
 
 
 static void
-gpa_card_manager_init (GpaCardManager *cardman)
+construct_widgets (GpaCardManager *cardman)
 {
-  char *fname;
-
-  fname = g_build_filename (gnupg_homedir, "reader_0.status", NULL);
-  cardman->watch = gpa_add_filewatch (fname, "w", watcher_cb, cardman);
-  xfree (fname);
-}
-
-/* Construct a new class object of GpaCardManager.  */
-static GObject*
-gpa_card_manager_constructor (GType type,
-			      guint n_construct_properties,
-			      GObjectConstructParam *construct_properties)
-{
-  GObject *object;
-  GpaCardManager *cardman;
   GtkWidget *vbox;
   GtkWidget *hbox;
   GtkWidget *label;
@@ -1105,39 +505,10 @@ gpa_card_manager_constructor (GType type,
   GtkWidget *menubar;
   GtkWidget *toolbar;
   GtkWidget *statusbar;
-  GtkWidget *box;
 
-  /* Invoke parent's constructor.  */
-  object = parent_class->constructor (type,
-				      n_construct_properties,
-				      construct_properties);
-  cardman = GPA_CARD_MANAGER (object);
-
-  cardman->have_card = 0;
-  cardman->cardtype = "Unknown";
-  cardman->is_openpgp = 0;
-
-  cardman->entryLogin = NULL;
-
-  cardman->entrySerialno = NULL;
-  cardman->entryVersion = NULL;
-  cardman->entryManufacturer = NULL;
-  cardman->entryLogin = NULL;
-  cardman->entryLanguage = NULL;
-  cardman->entryPubkeyUrl = NULL;
-  cardman->entryFirstName = NULL;
-  cardman->entryLastName = NULL;
-  cardman->entryKeySig = NULL;
-  cardman->entryKeyEnc = NULL;
-  cardman->entryKeyAuth = NULL;
-  cardman->entryPINRetryCounter = NULL;
-  cardman->entryAdminPINRetryCounter = NULL;
-  cardman->entrySigForcePIN = NULL;
-
-
-  /* Initialize.  */
-  update_title (cardman);
+  /* Set a default size for the main window.  */
   gtk_window_set_default_size (GTK_WINDOW (cardman), 680, 480);
+
   /* Realize the window so that we can create pixmaps without warnings.  */
   gtk_widget_realize (GTK_WIDGET (cardman));
 
@@ -1148,7 +519,6 @@ gpa_card_manager_constructor (GType type,
   cardman_action_new (cardman, &menubar, &toolbar);
   gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
-
 
   /* Add a fancy label that tells us: This is the card manager.  */
   hbox = gtk_hbox_new (FALSE, 0);
@@ -1165,43 +535,90 @@ gpa_card_manager_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
-  cardman->big_label = gtk_label_new (_("No smartcard found."));
-  gtk_box_pack_start (GTK_BOX (vbox), cardman->big_label, TRUE, TRUE, 0);
+  /* Create a container (a scolled windows) which will take the actual
+     card widgte.  This container is required so that we can easily
+     change to a differet card widget. */
+  cardman->card_container = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy 
+    (GTK_SCROLLED_WINDOW (cardman->card_container),
+     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_box_pack_start (GTK_BOX (vbox), cardman->card_container, TRUE, TRUE, 0);
 
-  box = gtk_vbox_new (FALSE, 0);
-
-  cardman->card_widget = construct_card_widget (cardman);
-  gtk_box_pack_start (GTK_BOX (vbox), box, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (box), cardman->card_widget, TRUE, TRUE, 0);
-
-  /* We set the no-show-all flag here.  This makes sure that the
-     card_widget is not shown in the time window between start of the
-     card manager and the first call to card_reload (through the
-     filewatcher callback).  The flag gets disabled again in
-     update_info_visibility.  */
-  gtk_widget_set_no_show_all (cardman->card_widget, TRUE);
+  /* Update the container using the current card application.  */
+  update_card_widget (cardman);
 
   statusbar = statusbar_new (cardman);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, FALSE, 0);
 
   gtk_container_add (GTK_CONTAINER (cardman), vbox);
 
-  g_signal_connect (object, "destroy",
-                    G_CALLBACK (card_manager_closed), object);
+}
 
-  return object;
+
+/************************************************************ 
+ ******************   Object Management  ********************
+ ************************************************************/
+
+static void
+gpa_card_manager_class_init (void *class_ptr, void *class_data)
+{
+  GpaCardManagerClass *klass = class_ptr;
+
+  G_OBJECT_CLASS (klass)->finalize = gpa_card_manager_finalize;
 }
 
 
 static void
-gpa_card_manager_class_init (GpaCardManagerClass *klass)
+gpa_card_manager_init (GTypeInstance *instance, void *class_ptr)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
-  parent_class = g_type_class_peek_parent (klass);
-  
-  object_class->constructor = gpa_card_manager_constructor;
-  object_class->finalize = gpa_card_manager_finalize;
+  GpaCardManager *cardman = GPA_CARD_MANAGER (instance);
+  gpg_error_t err;
+  char *fname;
+
+  cardman->cardtype = G_TYPE_NONE;
+  cardman->cardtypename = "Unknown";
+  update_title (cardman);
+
+  construct_widgets (cardman);
+
+  g_signal_connect (cardman, "destroy",
+                    G_CALLBACK (card_manager_closed), cardman);
+
+
+  fname = g_build_filename (gnupg_homedir, "reader_0.status", NULL);
+  cardman->watch = gpa_add_filewatch (fname, "w", watcher_cb, cardman);
+  xfree (fname);
+
+  err = gpgme_new (&cardman->gpgagent);
+  if (err)
+    gpa_gpgme_error (err);
+
+  err = gpgme_set_protocol (cardman->gpgagent, GPGME_PROTOCOL_ASSUAN);
+  if (err)
+    {
+      if (gpg_err_code (err) == GPG_ERR_INV_VALUE)
+        gpa_window_error (_("The GPGME library is too old to "
+                            "support smartcards."), NULL);
+      else
+        gpa_gpgme_warning (err);
+      gpgme_release (cardman->gpgagent);
+      cardman->gpgagent = NULL;
+    }
+}
+
+
+static void
+gpa_card_manager_finalize (GObject *object)
+{  
+  GpaCardManager *cardman = GPA_CARD_MANAGER (object);
+
+  gpgme_release (cardman->gpgagent);
+  cardman->gpgagent = NULL;
+
+  /* FIXME: Remove the watch object and all other resources.  */
+
+  G_OBJECT_CLASS (g_type_class_peek_parent 
+                  (GPA_CM_OPENPGP_GET_CLASS (cardman)))->finalize (object);
 }
 
 
@@ -1217,12 +634,12 @@ gpa_card_manager_get_type (void)
 	  sizeof (GpaCardManagerClass),
 	  (GBaseInitFunc) NULL,
 	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gpa_card_manager_class_init,
+	  gpa_card_manager_class_init,
 	  NULL, /* class_finalize */
 	  NULL, /* class_data */
 	  sizeof (GpaCardManager),
 	  0,    /* n_preallocs */
-	  (GInstanceInitFunc) gpa_card_manager_init,
+	  gpa_card_manager_init,
 	};
       
       this_type = g_type_register_static (GTK_TYPE_WINDOW,
@@ -1240,17 +657,17 @@ gpa_card_manager_get_type (void)
 GtkWidget *
 gpa_card_manager_get_instance (void)
 {
-  if (!instance)
+  if (!this_instance)
     {
-      instance = g_object_new (GPA_CARD_MANAGER_TYPE, NULL);  
-      card_reload (instance);
+      this_instance = g_object_new (GPA_CARD_MANAGER_TYPE, NULL);  
+      card_reload (this_instance);
     }
-  return GTK_WIDGET (instance);
+  return GTK_WIDGET (this_instance);
 }
 
 
 gboolean 
 gpa_card_manager_is_open (void)
 {
-  return (instance != NULL);
+  return !!this_instance;
 }

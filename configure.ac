@@ -230,6 +230,13 @@ AC_CHECK_FUNCS([gpgme_op_assuan_transact])
 AC_CHECK_MEMBERS([struct _gpgme_subkey.card_number],,,[#include <gpgme.h>])
 LIBS=$_save_libs
 CFLAGS="$_save_CFLAGS"
+# We build the card manager only if we have a decent libgpgme.  */
+if test "x$ac_cv_func_gpgme_op_assuan_transact" = "xyes"; then
+    AC_DEFINE(BUILD_CARD_MANAGER, 1,
+              [Defined if the card manager shall be build.])
+fi
+AM_CONDITIONAL(BUILD_CARD_MANAGER, 
+               test "x$ac_cv_func_gpgme_op_assuan_transact" = "xyes")
 
 
 #

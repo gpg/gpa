@@ -33,7 +33,6 @@ src/gpakeyselector.c
 src/gpakeysignop.c
 src/gpakeytrustop.c
 src/gpaoperation.c
-src/gpapastrings.c
 src/gpaprogressdlg.c
 src/gparecvkeydlg.c
 src/gpastreamdecryptop.c
@@ -70,3 +69,6 @@ src/settingsdlg.c
 src/siglist.c
 src/verifydlg.c
 src/w32reg.c
+src/cardman.c
+src/cm-object.c
+src/cm-openpgp.c
