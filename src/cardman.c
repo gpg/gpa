@@ -341,28 +341,29 @@ static void
 card_genkey (GpaCardManager *cardman)
 {
   GpaGenKeyCardOperation *op;
+  gpg_error_t err;
 
   if (cardman->cardtype != GPA_CM_OPENPGP_TYPE)
     return;  /* Not possible.  */
+  if (!cardman->gpgagent)
+    {
+      g_debug ("Ooops: no assuan context");
+      return;
+    }
 
-  /* FIXME: I don't th8ink that the deny-admin check is really needed.
-     if at all we should implement a test via assuan to see whether it
-     is actually working - that is far easier than the checking the
-     configuration which might in some cases not reflect the scdaemon
-     currently in use. */
-/*   if (check_conf_boolean ("scdaemon", "deny-admin") == TRUE) */
-/*     { */
-/*       GtkWidget *dialog; */
-
-/*       dialog = gtk_message_dialog_new (GTK_WINDOW (cardman->window), */
-/* 				       GTK_DIALOG_MODAL, */
-/* 				       GTK_MESSAGE_ERROR, */
-/* 				       GTK_BUTTONS_OK, */
-/* 				       "Admin commands not allowed. Key generation disabled."); */
-/*       gtk_dialog_run (GTK_DIALOG (dialog)); */
-/*       gtk_widget_destroy (dialog); */
-/*       return; */
-/*     } */
+  /* Note: This test works only with GnuPG > 2.0.10 but that version
+     is anyway required for the card manager to work correctly.  */
+  err = gpgme_op_assuan_transact (cardman->gpgagent,
+                                  "SCD GETINFO deny_admin",
+                                  NULL, NULL, NULL, NULL, NULL, NULL);
+  if (!err)
+    err = gpgme_op_assuan_result (cardman->gpgagent);
+  if (!err)
+    {
+      gpa_window_error ("Admin commands are disabled in scdamon.\n"
+                        "Key generation is not possible.", NULL); 
+      return;
+    }
 
 
 /* FIXME: Instead of doing this test on our own, I believe it belongs
@@ -393,7 +394,6 @@ card_genkey (GpaCardManager *cardman)
 /*     } */
 
   op = gpa_gen_key_card_operation_new (GTK_WIDGET (cardman));
-  g_debug ("card_genkey_completed connected (%p)", cardman);
   g_signal_connect_swapped (G_OBJECT (op), "completed",
                             G_CALLBACK (card_genkey_completed), cardman);
   g_signal_connect (G_OBJECT (op), "completed",

@@ -53,14 +53,23 @@ response_cb (GtkDialog *dlg, gint response, gpointer param)
 {
   GPAKeyGenDialog *dialog = param;
   gchar *expiry_error;
-  const gchar *userid = gtk_entry_get_text (GTK_ENTRY (dialog->entryUserID));
-  const gchar *passwd = gtk_entry_get_text (GTK_ENTRY (dialog->entryPasswd));
-  const gchar *repeat = gtk_entry_get_text (GTK_ENTRY (dialog->entryRepeat));
-  const gchar *keysize
-    = gtk_combo_box_get_active_text (GTK_COMBO_BOX (dialog->comboKeysize));
+  const gchar *userid;
+  const gchar *passwd;
+  const gchar *repeat;
+  const gchar *keysize;
 
   if (response != GTK_RESPONSE_OK)
     return;
+
+  userid = gtk_entry_get_text (GTK_ENTRY (dialog->entryUserID));
+  passwd = (dialog->entryPasswd
+            ? gtk_entry_get_text (GTK_ENTRY (dialog->entryPasswd)) 
+            : NULL);
+  repeat = (dialog->entryRepeat
+            ? gtk_entry_get_text (GTK_ENTRY (dialog->entryRepeat))
+            : NULL);
+  keysize = gtk_combo_box_get_active_text (GTK_COMBO_BOX 
+                                           (dialog->comboKeysize));
 
   if (keysize == NULL || *keysize == '\0')
     {

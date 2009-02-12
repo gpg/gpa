@@ -1,8 +1,11 @@
 2009-02-12  Werner Koch  <wk@g10code.com>
 
+	* keygendlg.c (response_cb): Take care of unused password entries.
+
 	* cardman.c (card_genkey): Enable with commented checks.
 	(card_genkey_action): New.
 	(card_reload_idle_cb, card_genkey_completed): New.
+	(card_genkey): Check for deny_admin.
 
 	* gpgmeedit.c (_unexpected_state,unexpected_state): New.
 	(edit_expire_fnc_action, edit_trust_fnc_action)
