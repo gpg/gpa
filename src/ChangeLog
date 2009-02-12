@@ -16,6 +16,8 @@
 	(card_edit_genkey_parms_new): Use xcalloc to initialze the parms.
 	(card_edit_genkey_fnc_transit): Make more robust against changes
 	in gpg.
+	(card_edit_genkey_fnc_action): Pop up a dialog to ask for
+	overwriting existing keys.
 
 	* gpgmeedit.c (gpa_gpgme_card_edit_list_start) 
 	(card_edit_list_parms_release, card_edit_list_fnc_transit) 

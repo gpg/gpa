@@ -366,33 +366,6 @@ card_genkey (GpaCardManager *cardman)
     }
 
 
-/* FIXME: Instead of doing this test on our own, I believe it belongs
-   into the edit interactor: gpg knows bets whether keys already
-   exists and we only need to process the corresponding prompt.  */
-/*   if (card_contains_keys (cardman)) */
-/*     { */
-/*       GtkWidget *dialog; */
-/*       gint dialog_response; */
-
-/*       dialog = gtk_message_dialog_new (GTK_WINDOW (cardman->window), */
-/* 				       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, */
-/* 				       GTK_MESSAGE_WARNING, */
-/* 				       GTK_BUTTONS_OK_CANCEL, */
-/* 				       "Keys are already stored on the card. " */
-/* 				       "Really replace existing keys?"); */
-
-/*       dialog_response = gtk_dialog_run (GTK_DIALOG (dialog)); */
-/*       gtk_widget_destroy (dialog); */
-/*       switch (dialog_response) */
-/* 	{ */
-/* 	case GTK_RESPONSE_OK: */
-/*          break; */
-
-/* 	default: */
-/* 	  return; */
-/* 	} */
-/*     } */
-
   op = gpa_gen_key_card_operation_new (GTK_WIDGET (cardman));
   g_signal_connect_swapped (G_OBJECT (op), "completed",
                             G_CALLBACK (card_genkey_completed), cardman);

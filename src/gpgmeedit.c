@@ -1187,8 +1187,21 @@ card_edit_genkey_fnc_action (int state, void *opaque, char **result)
       break;
 
     case CARD_GENERATE_REPLACE_KEYS:
-      /* FIXME: simply replace existing keys for now. -mo  */
-      *result = "Y";
+      {
+        GtkWidget *dialog;
+
+        dialog = gtk_message_dialog_new 
+          (NULL, GTK_DIALOG_MODAL,
+           GTK_MESSAGE_WARNING,  GTK_BUTTONS_OK_CANCEL,
+           _("Keys are already stored on the card.\n"
+             "Really replace existing keys?"));
+
+        if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK )
+          *result = "Y";
+        else
+          *result = "N";
+        gtk_widget_destroy (dialog);
+      }
       break;
 
     case CARD_GENERATE_VALIDITY:
