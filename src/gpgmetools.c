@@ -52,6 +52,17 @@
 #endif
 #endif
 
+/* Helper to strip the path from a source file name.  This helps to
+   avoid showing long filenames in case of VPATH builds.  */
+static const char *
+strip_path (const char *file)
+{
+  const char *s = strrchr (file, '/');
+  return s? s+1:file;
+}
+
+
+
 /* Report an unexpected error in GPGME and quit the application.  */
 void
 _gpa_gpgme_error (gpg_error_t err, const char *file, int line)
@@ -60,7 +71,8 @@ _gpa_gpgme_error (gpg_error_t err, const char *file, int line)
                                       "(invoked from file %s, line %i):\n\n"
                                       "\t%s\n\n"
                                       "The application will be terminated"),
-                                    file, line, gpgme_strerror (err));
+                                    strip_path (file), line,
+                                    gpgme_strerror (err));
   gpa_window_error (message, NULL);
   g_free (message);
   exit (EXIT_FAILURE);
@@ -70,12 +82,13 @@ _gpa_gpgme_error (gpg_error_t err, const char *file, int line)
 void
 gpa_gpgme_warning (gpg_error_t err)
 {
-  gchar *message = g_strdup_printf (_("The GPGME library returned an unexpected\n"
-				      "error. The error was:\n\n"
-                                      "\t%s\n\n"
-                                      "This is probably a bug in GPA.\n"
-				      "GPA will now try to recover from this error."),
-                                    gpgme_strerror (err));
+  gchar *message = g_strdup_printf 
+    (_("The GPGME library returned an unexpected\n"
+       "error. The error was:\n\n"
+       "\t%s\n\n"
+       "This is probably a bug in GPA.\n"
+       "GPA will now try to recover from this error."),
+     gpgme_strerror (err));
   gpa_window_error (message, NULL);
   g_free (message);
 }

@@ -1,3 +1,13 @@
+2009-02-19  Werner Koch  <wk@g10code.com>
+
+	* cm-object.h (struct _GpaCMObject): Add field agent_ctx.
+	* cm-openpgp.c (gpa_cm_openpgp_reload): Set this field.
+	(reload_data): Remove gpg-agent arg and take it from the
+	GpaCMObject.
+
+	* gpgmetools.c (strip_path): New.
+	(_gpa_gpgme_error): Use it.
+
 2009-02-12  Werner Koch  <wk@g10code.com>
 
 	* keygendlg.c (response_cb): Take care of unused password entries.

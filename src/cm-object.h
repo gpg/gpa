@@ -59,6 +59,9 @@ struct _GpaCMObjectClass
 struct _GpaCMObject
 {
   GtkVBox  parent_instance;
+
+  /* Private.  Fixme:  Hide them.  */
+  gpgme_ctx_t agent_ctx;
 };
 
 

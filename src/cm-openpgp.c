@@ -278,7 +278,7 @@ scd_getattr_cb (void *opaque, const char *status, const char *args)
 
 /* Use the assuan machinery to load the bulk of the OpenPGP card data.  */
 static void
-reload_data (GpaCMOpenpgp *card, gpgme_ctx_t gpgagent)
+reload_data (GpaCMOpenpgp *card)
 {
   static struct {
     const char *name;
@@ -301,6 +301,11 @@ reload_data (GpaCMOpenpgp *card, gpgme_ctx_t gpgagent)
   gpg_error_t err;
   char command[100];
   struct scd_getattr_parm parm;
+  gpgme_ctx_t gpgagent;
+
+  gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
+  g_return_if_fail (gpgagent);
+
 
   parm.card = card;
   for (attridx=0; attrtbl[attridx].name; attridx++)
@@ -309,6 +314,7 @@ reload_data (GpaCMOpenpgp *card, gpgme_ctx_t gpgagent)
       parm.entry_id = attrtbl[attridx].entry_id;
       parm.updfnc   = attrtbl[attridx].updfnc;
       snprintf (command, sizeof command, "SCD GETATTR %s", parm.name);
+
       err = gpgme_op_assuan_transact (gpgagent,
                                       command,
                                       NULL, NULL,
@@ -333,6 +339,132 @@ reload_data (GpaCMOpenpgp *card, gpgme_ctx_t gpgagent)
     }
 }
 
+
+static GtkDialog *
+create_edit_dialog (GpaCMOpenpgp *card, const char *title)
+{
+  GtkDialog *dialog;
+
+  dialog = GTK_DIALOG (gtk_dialog_new_with_buttons
+                       (title,
+                        GTK_WINDOW (card),
+                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                        GTK_STOCK_OK, GTK_RESPONSE_OK,
+                        NULL));
+  gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_OK,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
+  return dialog;
+}
+
+
+/* Run the dialog and return true if the user affirmed the change.  */
+static int
+run_edit_dialog (GtkDialog *dialog)
+{
+  gtk_widget_show_all (GTK_WIDGET (dialog));
+  return (gtk_dialog_run (dialog) == GTK_RESPONSE_OK);
+}
+
+
+static void
+destroy_edit_dialog (GtkDialog *dialog)
+{
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+
+/* Action for the Edit Name button.  Display a new dialog through
+   which the user can change the name (firstname + lastname) stored on
+   the card.*/
+static void
+edit_name_cb (GtkWidget *widget, void *opaque)
+{
+  GpaCMOpenpgp *card = opaque;
+  GtkDialog *dialog;
+  GtkWidget *first_name, *last_name;
+  GtkWidget *content_area;
+  GtkWidget *table;
+  
+  dialog = create_edit_dialog (card, _("Change Name"));
+
+  content_area = GTK_DIALOG (dialog)->vbox;
+
+  table = gtk_table_new (3, 3, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (table), 10);
+
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new ("Current Value:"), 
+                    0, 1, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new ("New Value:"), 
+                    0, 1,  2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
+
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new ("First Name"),
+                    1,  2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new ("Last Name"),
+                    2,  3, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new 
+                    (gtk_entry_get_text 
+                     (GTK_ENTRY (card->entries[ENTRY_FIRST_NAME]))),
+		    1, 2, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table),
+		    gtk_label_new 
+                    (gtk_entry_get_text 
+                     (GTK_ENTRY (card->entries[ENTRY_LAST_NAME]))),
+		    2, 3, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
+
+  first_name = gtk_entry_new ();
+  last_name = gtk_entry_new ();
+
+  gtk_table_attach (GTK_TABLE (table), first_name,
+                    1, 2, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_table_attach (GTK_TABLE (table), last_name,
+                    2, 3, 2, 3, GTK_FILL, GTK_SHRINK, 0, 0);
+  
+  gtk_container_add (GTK_CONTAINER (content_area), table);
+
+
+  if (run_edit_dialog (dialog))
+    {
+
+
+
+    }
+
+  destroy_edit_dialog (dialog);
+}
+
+
+static void
+edit_sex_cb (GtkWidget *widget, void *opaque)
+{
+}
+
+
+static void
+edit_language_cb (GtkWidget *widget, void *opaque)
+{
+}
+
+
+static void
+edit_login_cb (GtkWidget *widget, void *opaque)
+{
+}
+
+
+static void
+edit_url_cb (GtkWidget *widget, void *opaque)
+{
+}
 
 
 
@@ -375,6 +507,7 @@ construct_data_widget (GpaCMOpenpgp *card)
   GtkWidget *keys_table;
   GtkWidget *pin_frame;
   GtkWidget *pin_table;
+  GtkWidget *button;
   int rowidx;
 
   /* Create frames and tables. */
@@ -416,11 +549,6 @@ construct_data_widget (GpaCMOpenpgp *card)
   /* General frame.  */
   rowidx = 0;
 
-/*   card->entries[ENTRY_TYPE] = gtk_entry_new (); */
-/*   gtk_entry_set_width_chars (GTK_ENTRY (card->entries[ENTRY_TYPE]), 24); */
-/*   add_table_row (general_table, &rowidx, */
-/*                  "Card Type: ", card->entries[ENTRY_TYPE], NULL); */
-
   card->entries[ENTRY_SERIALNO] = gtk_entry_new ();
   add_table_row (general_table, &rowidx, 
                  "Serial Number: ", card->entries[ENTRY_SERIALNO], NULL);
@@ -444,34 +572,45 @@ construct_data_widget (GpaCMOpenpgp *card)
                  "First Name:", card->entries[ENTRY_FIRST_NAME], NULL);
 
   card->entries[ENTRY_LAST_NAME] = gtk_entry_new ();
-  {
-    GtkWidget *modify_name_button;
+  add_table_row (personal_table, &rowidx,
+                 "Last Name:",
+                 card->entries[ENTRY_LAST_NAME], NULL);
 
-    modify_name_button = gtk_button_new_with_label ("Change");
+  button = gtk_button_new_from_stock (GTK_STOCK_EDIT);
+  gtk_table_attach (GTK_TABLE (personal_table), button,
+                    2, 3, rowidx-2, rowidx, 
+                    GTK_SHRINK, GTK_FILL, 0, 0);
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (edit_name_cb), card);
 
-    /* Disabled because we need to change modify_name_cb first.  */
-/*     g_signal_connect (G_OBJECT (modify_name_button), "clicked", */
-/* 		      G_CALLBACK (modify_name_cb), card); */
-    add_table_row (personal_table, &rowidx,
-		   "Last Name:",
-                   card->entries[ENTRY_LAST_NAME], modify_name_button);
-  }
 
   card->entries[ENTRY_SEX] = gtk_entry_new ();
+  button = gtk_button_new_from_stock (GTK_STOCK_EDIT);
   add_table_row (personal_table, &rowidx,
-                 "Sex:", card->entries[ENTRY_SEX], NULL);
+                 "Sex:", card->entries[ENTRY_SEX], button);
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (edit_sex_cb), card);
 
   card->entries[ENTRY_LANGUAGE] = gtk_entry_new ();
+  button = gtk_button_new_from_stock (GTK_STOCK_EDIT);
   add_table_row (personal_table, &rowidx,
-                 "Language: ", card->entries[ENTRY_LANGUAGE], NULL);
+                 "Language: ", card->entries[ENTRY_LANGUAGE], button);
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (edit_language_cb), card);
 
   card->entries[ENTRY_LOGIN] = gtk_entry_new ();
+  button = gtk_button_new_from_stock (GTK_STOCK_EDIT);
   add_table_row (personal_table, &rowidx,
-                 "Login Data: ", card->entries[ENTRY_LOGIN], NULL);
+                 "Login Data: ", card->entries[ENTRY_LOGIN], button);
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (edit_login_cb), card);
 
   card->entries[ENTRY_PUBKEY_URL] = gtk_entry_new ();
+  button = gtk_button_new_from_stock (GTK_STOCK_EDIT);
   add_table_row (personal_table, &rowidx,
-                 "Public key URL: ", card->entries[ENTRY_PUBKEY_URL], NULL);
+                 "Public key URL: ", card->entries[ENTRY_PUBKEY_URL], button);
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (edit_url_cb), card);
 
   gtk_container_add (GTK_CONTAINER (personal_frame), personal_table);
 
@@ -604,11 +743,17 @@ gpa_cm_openpgp_new ()
 }
 
 
-/* If WIDGET is of Type GpaCMOpenpgp do a data reload through the
-   assuan connection.  */
+/* If WIDGET is of type GpaCMOpenpgp do a data reload through the
+   Assuan connection identified by GPGAGENT.  This will keep a
+   reference to GPGAGENT for later processing.  Passing NULL for
+   GPGAGENT removes this reference. */
 void
 gpa_cm_openpgp_reload (GtkWidget *widget, gpgme_ctx_t gpgagent)
 {
   if (GPA_IS_CM_OPENPGP (widget))
-    reload_data (GPA_CM_OPENPGP (widget), gpgagent);
+    {
+      GPA_CM_OBJECT (widget)->agent_ctx = gpgagent;
+      if (gpgagent)
+        reload_data (GPA_CM_OPENPGP (widget));
+    }
 }
