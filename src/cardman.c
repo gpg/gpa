@@ -179,8 +179,7 @@ scd_data_cb (void *opaque, const void *data, size_t datalen)
 
 static gpg_error_t
 scd_inq_cb (void *opaque, const char *name, const char *args,
-            gpgme_assuan_sendfnc_t sendfnc,
-            gpgme_assuan_sendfnc_ctx_t sendfnc_value)
+            gpgme_data_t *r_data)
 {
 /*   g_debug ("INQ_CB: name=`%s' args=`%s'", name, args); */
 
@@ -255,7 +254,7 @@ card_reload (GpaCardManager *cardman)
                                       scd_inq_cb, NULL,
                                       scd_status_cb, cardman);
       if (!err)
-        err = gpgme_op_assuan_result (cardman->gpgagent);
+        err = gpgme_op_assuan_result (cardman->gpgagent)->err;
 
       if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT)
         ;
@@ -278,7 +277,7 @@ card_reload (GpaCardManager *cardman)
                                           scd_inq_cb, NULL,
                                           scd_status_cb, cardman);
           if (!err)
-            err = gpgme_op_assuan_result (cardman->gpgagent);
+            err = gpgme_op_assuan_result (cardman->gpgagent)->err;
 
           if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT)
             statusbar_update (cardman, _("No card"));
@@ -357,7 +356,7 @@ card_genkey (GpaCardManager *cardman)
                                   "SCD GETINFO deny_admin",
                                   NULL, NULL, NULL, NULL, NULL, NULL);
   if (!err)
-    err = gpgme_op_assuan_result (cardman->gpgagent);
+    err = gpgme_op_assuan_result (cardman->gpgagent)->err;
   if (!err)
     {
       gpa_window_error ("Admin commands are disabled in scdamon.\n"

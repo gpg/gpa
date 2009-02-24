@@ -1,3 +1,9 @@
+2009-02-24  Werner Koch  <wk@g10code.com>
+
+	* cardman.c (scd_inq_cb): Adjust for changed gpgme API.
+	(card_reload): Ditto.
+	* cm-openpgp.c (reload_data): Ditto.
+
 2009-02-20  Werner Koch  <wk@g10code.com>
 
 	* cm-openpgp.c: Implemented an entry edit framework.
