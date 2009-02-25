@@ -27,6 +27,7 @@
 #include <assert.h>
 
 #include "gpa.h"   
+#include "gtktools.h"
 #include "convert.h"
 
 #include "cm-object.h"
@@ -368,6 +369,44 @@ reload_data (GpaCMOpenpgp *card)
 }
 
 
+static void
+save_attr (GpaCMOpenpgp *card, const char *name, const char *value)
+{
+  gpg_error_t err;
+  char *command;
+  char *p;
+  gpgme_ctx_t gpgagent;
+
+  g_return_if_fail (*name && value);
+
+  gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
+  g_return_if_fail (gpgagent);
+
+  
+  p = percent_escape (value, NULL, 1);
+  command = g_strdup_printf ("SCD SETATTR %s %s", name, p);
+  xfree (p);
+
+  err = gpgme_op_assuan_transact (gpgagent,
+                                  command,
+                                  NULL, NULL,
+                                  NULL, NULL,
+                                  NULL, NULL);
+  if (!err)
+    err = gpgme_op_assuan_result (gpgagent)->err;
+
+  if (err)
+    {
+      char *message = g_strdup_printf 
+        (_("Error saving the changed values.\n"
+           "(%s <%s>)"), gpg_strerror (err), gpg_strsource (err));
+      gpa_window_error (message, NULL);
+      xfree (message);
+    }
+  xfree (command);
+}
+
+
 /* Check the constraints for NAME and return a string with an error
    description or NULL if the name is fine.  */
 static const char * 
@@ -397,12 +436,17 @@ save_entry_name (GpaCMOpenpgp *card)
 {
   const char *first, *last;
   const char *errstr;
+  int failed = ENTRY_FIRST_NAME;
 
   first = gtk_entry_get_text (GTK_ENTRY (card->entries[ENTRY_FIRST_NAME])); 
   last = gtk_entry_get_text (GTK_ENTRY (card->entries[ENTRY_LAST_NAME])); 
   errstr = check_one_name (first);
   if (!errstr)
-    errstr = check_one_name (last);
+    {
+      errstr = check_one_name (last);
+      if (errstr)
+        failed = ENTRY_LAST_NAME;
+    }
   if (!errstr)
     {
       char *buffer, *p;
@@ -415,17 +459,19 @@ save_entry_name (GpaCMOpenpgp *card)
         errstr = _("Total length of first and last name "
                    "may not be longer than 39 characters.");
       else
-        {
-          g_debug ("Saving name `%s'", buffer);
-        }
+        save_attr (card, "DISP-NAME", buffer);
       g_free (buffer);
     }
 
   if (errstr)
-    show_edit_error (card, errstr);
+    {
+      show_edit_error (card, errstr);
+      gtk_widget_grab_focus (GTK_WIDGET (card->entries[failed]));
+    }
 
   return !!errstr;
 }
+
 
 static gpg_error_t
 save_entry_sex (GpaCMOpenpgp *card)

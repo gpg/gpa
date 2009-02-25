@@ -32,6 +32,9 @@
 #include "gpa.h"
 
 
+#define tohex_lower(n) ((n) < 10 ? ((n) + '0') : (((n) - 10) + 'a'))
+
+
 /* We want our usual xmalloc function.  */
 void *
 xmalloc (size_t n)
@@ -242,6 +245,66 @@ decode_c_string (const char *src)
 #undef DECODE_ONE
     }
   *(dest++) = 0;
+
+  return buffer;
+}
+
+
+/* Percent-escape all characters from the set in DELIMITERS in STRING.
+   If SPACE2PLUS is true, spaces (0x20) are converted to plus signs
+   and PLUS signs are percent escaped.  If DELIMITERS is NULL all
+   characters less or equal than 0x20 are escaped.  However if
+   SPACE2PLUS istrue spaces are still converted to plus signs.
+   Returns a newly allocated string.  */
+char *
+percent_escape (const char *string, const char *delimiters, int space2plus)
+{
+  const unsigned char *s;
+  size_t needed;
+  char *buffer, *ptr;
+
+  if (!delimiters)
+    delimiters = ("\x20\x02\x03\x04\x05\x06\x07\x08"
+                  "\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10"
+                  "\x11\x12\x13\x14\x15\x16\x17\x18"
+                  "\x19\x1a\x1b\x1c\x1d\x1e\x1f\x01");
+
+  for (s=(const unsigned char*)string, needed=0; *s; s++, needed++)
+    if (*s == '%'
+        || (space2plus && *s == '+')
+        || strchr (delimiters, *s))
+      needed += 2;
+
+  buffer = g_malloc (needed + 1);
+
+  for (s=(const unsigned char *)string, ptr=buffer; *s; s++)
+    {
+      if (*s == '%')
+	{
+	  *ptr++ = '%';
+	  *ptr++ = '2';
+	  *ptr++ = '5';
+	}
+      else if (space2plus && *s == ' ')
+	{
+	  *ptr++ = '+';
+	}
+      else if (space2plus && *s == '+')
+	{
+	  *ptr++ = '%';
+	  *ptr++ = '2';
+	  *ptr++ = 'b';
+	}
+      else if (strchr (delimiters, *s))
+        {
+	  *ptr++ = '%';
+          *ptr++ = tohex_lower ((*s>>4)&15);
+          *ptr++ = tohex_lower (*s&15);
+        }
+      else
+	*ptr++ = *s;
+    }
+  *ptr = 0;
 
   return buffer;
 }

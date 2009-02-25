@@ -1,3 +1,9 @@
+2009-02-25  Werner Koch  <wk@g10code.com>
+
+	* cm-openpgp.c (save_attr): New.
+
+	* utils.c (percent_escape): New.
+
 2009-02-24  Werner Koch  <wk@g10code.com>
 
 	* cardman.c (scd_inq_cb): Adjust for changed gpgme API.
