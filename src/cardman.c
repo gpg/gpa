@@ -132,6 +132,14 @@ statusbar_update (GpaCardManager *cardman, const char *text)
 }
 
 
+/* Signal handler for GpaCMObject's "update-status".  */
+static void
+statusbar_update_cb (GpaCardManager *cardman, gchar *status)
+{
+  gtk_label_set_text (GTK_LABEL (cardman->status_text), status);
+}
+
+
 static void
 update_title (GpaCardManager *cardman)
 {
@@ -530,6 +538,9 @@ update_card_widget (GpaCardManager *cardman)
     {
       cardman->card_widget = gpa_cm_openpgp_new ();
       gpa_cm_openpgp_reload (cardman->card_widget, cardman->gpgagent);
+      g_signal_connect_swapped (G_OBJECT (cardman->card_widget),
+                                "update-status",
+                                G_CALLBACK (statusbar_update_cb), cardman);
     }
   else if (cardman->cardtype == GPA_CM_GELDKARTE_TYPE)
     {

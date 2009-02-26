@@ -152,7 +152,7 @@ reload_data (GpaCMNetkey *card, gpgme_ctx_t gpgagent)
                                       NULL, NULL,
                                       scd_getattr_cb, &parm);
       if (!err)
-        err = gpgme_op_assuan_result (gpgagent);
+        err = gpgme_op_assuan_result (gpgagent)->err;
 
       if (err)
         {

@@ -52,6 +52,9 @@ GType gpa_cm_object_get_type (void) G_GNUC_CONST;
 struct _GpaCMObjectClass 
 {
   GtkVBoxClass parent_class;
+
+  /* Signal handlers */
+  void (*update_status) (GpaCMObject *obj, gchar *status);
 };
 
 
@@ -69,6 +72,7 @@ struct _GpaCMObject
 
 /* The class specific API.  */
 
+void gpa_cm_object_update_status (GpaCMObject *obj, const char *text);
 
 
 

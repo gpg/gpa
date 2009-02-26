@@ -1,3 +1,15 @@
+2009-02-26  Werner Koch  <wk@g10code.com>
+
+	* cm-object.c (gpa_cm_object_class_init): Register "update-status"
+	signal.
+	(gpa_cm_object_update_status): New.
+	* cm-openpgp.c (show_edit_error): Call that function.
+	* cardman.c (update_card_widget): Connect new signal.
+
+	* cm-openpgp.c: Allow saving of all personal fields.
+
+	* utils.c (percent_unescape): New.
+
 2009-02-25  Werner Koch  <wk@g10code.com>
 
 	* cm-openpgp.c (save_attr): New.

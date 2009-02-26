@@ -309,3 +309,39 @@ percent_escape (const char *string, const char *delimiters, int space2plus)
   return buffer;
 }
 
+
+/* Remove percent escapes from STRING.  If PLUS2SPACE is true, also
+   convert '+' back to space.  Returns the length of the unescaped
+   string.  */
+size_t
+percent_unescape (char *string, int plus2space)
+{
+  unsigned char *p = (unsigned char *)string;
+  size_t n = 0;
+
+  while (*string)
+    {
+      if (*string == '%' && string[1] && string[2])
+        { 
+          string++;
+          *p++ = xtoi_2 (string);
+          n++;
+          string+= 2;
+        }
+      else if (*string == '+' && plus2space)
+        {
+          *p++ = ' ';
+          n++;
+          string++;
+        }
+      else
+        {
+          *p++ = *string++;
+          n++;
+        }
+    }
+
+  return n;
+}
+
+

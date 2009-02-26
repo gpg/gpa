@@ -130,6 +130,7 @@ char *decode_c_string (const char *src);
 
 char *percent_escape (const char *string,
                       const char *delimiters, int space2plus);
+size_t percent_unescape (char *string, int plus2space);
 
 
 /*-- Convenience macros. -- */

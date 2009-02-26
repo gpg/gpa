@@ -79,6 +79,8 @@ struct _GpaCMOpenpgp
 
   GtkWidget *entries[ENTRY_LAST];
   gboolean  changed[ENTRY_LAST];
+
+  int  reloading;
 };
 
 /* The parent class.  */
@@ -124,7 +126,10 @@ clear_card_data (GpaCMOpenpgp *card)
   int idx;
 
   for (idx=0; idx < ENTRY_LAST; idx++)
-    gtk_entry_set_text (GTK_ENTRY (card->entries[idx]), "");
+    if (idx == ENTRY_SEX)
+      gtk_combo_box_set_active (GTK_COMBO_BOX (card->entries[idx]), 2);
+    else
+      gtk_entry_set_text (GTK_ENTRY (card->entries[idx]), "");
 }
 
 
@@ -143,12 +148,11 @@ clear_changed_flags (GpaCMOpenpgp *card)
 static void
 show_edit_error (GpaCMOpenpgp *card, const char *text)
 {
-  /* FIXME: We need a mechnism to update the status bar of the card
-     manager.  A signal may be useful for this.  */
   if (text)
     g_debug ("Edit error: %s", text);
   else
     g_debug ("Clear edit error");
+  gpa_cm_object_update_status (GPA_CM_OBJECT(card), text);
 }
 
 
@@ -237,14 +241,16 @@ update_entry_name (GpaCMOpenpgp *card, int entry_id, const char *string)
 static void
 update_entry_sex (GpaCMOpenpgp *card, int entry_id, const char *string)
 {
-  if (*string == '1')
-    string = _("male");
-  else if (*string == '2')
-    string = _("female");
-  else if (*string == '9')
-    string = _("unspecified");
+  int idx;  
 
-  gtk_entry_set_text (GTK_ENTRY (card->entries[entry_id]), string);
+  if (*string == '1')
+    idx = 0;  /* 'm' */ 
+  else if (*string == '2')
+    idx = 1;  /* 'f' */
+  else 
+    idx = 2;  /* 'u' is the default.  */
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (card->entries[entry_id]), idx);
 }
 
 
@@ -289,11 +295,15 @@ scd_getattr_cb (void *opaque, const char *status, const char *args)
 
       if (entry_id < ENTRY_LAST)
         {
+          char *tmp = xstrdup (args);
+
+          percent_unescape (tmp, 1);
           if (parm->updfnc)
-            parm->updfnc (parm->card, entry_id, args);
+            parm->updfnc (parm->card, entry_id, tmp);
           else
             gtk_entry_set_text 
-              (GTK_ENTRY (parm->card->entries[entry_id]), args);
+              (GTK_ENTRY (parm->card->entries[entry_id]), tmp);
+          xfree (tmp);
         }
     }
 
@@ -334,7 +344,7 @@ reload_data (GpaCMOpenpgp *card)
   gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
   g_return_if_fail (gpgagent);
 
-
+  card->reloading++;
   parm.card = card;
   for (attridx=0; attrtbl[attridx].name; attridx++)
     {
@@ -366,10 +376,11 @@ reload_data (GpaCMOpenpgp *card)
 
     }
   clear_changed_flags (card);
+  card->reloading--;
 }
 
 
-static void
+static gpg_error_t
 save_attr (GpaCMOpenpgp *card, const char *name, const char *value)
 {
   gpg_error_t err;
@@ -377,10 +388,10 @@ save_attr (GpaCMOpenpgp *card, const char *name, const char *value)
   char *p;
   gpgme_ctx_t gpgagent;
 
-  g_return_if_fail (*name && value);
+  g_return_val_if_fail (*name && value, gpg_error (GPG_ERR_BUG));
 
   gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
-  g_return_if_fail (gpgagent);
+  g_return_val_if_fail (gpgagent,gpg_error (GPG_ERR_BUG));
 
   
   p = percent_escape (value, NULL, 1);
@@ -404,6 +415,7 @@ save_attr (GpaCMOpenpgp *card, const char *name, const char *value)
       xfree (message);
     }
   xfree (command);
+  return err;
 }
 
 
@@ -458,8 +470,8 @@ save_entry_name (GpaCMOpenpgp *card)
       if (strlen (buffer) > 39)
         errstr = _("Total length of first and last name "
                    "may not be longer than 39 characters.");
-      else
-        save_attr (card, "DISP-NAME", buffer);
+      else if (save_attr (card, "DISP-NAME", buffer))
+        errstr = _("Saving the field failed.");
       g_free (buffer);
     }
 
@@ -473,11 +485,115 @@ save_entry_name (GpaCMOpenpgp *card)
 }
 
 
+/* Save the language field.  Returns true on error.  */
+static gboolean
+save_entry_language (GpaCMOpenpgp *card)
+{
+  const char *errstr = NULL;
+  const char *value, *s;
+
+  value = gtk_entry_get_text (GTK_ENTRY (card->entries[ENTRY_LANGUAGE])); 
+  if (strlen (value) > 8 || (strlen (value) & 1))
+    {
+      errstr = _("Invalid length of the language preference.");
+      goto leave;
+    }
+
+  for (s=value; *s && *s >= 'a' && *s <= 'z'; s++)
+    ;
+  if (*s)
+    {
+      errstr = _("The language preference may only contain "
+                 "the letters 'a' through 'z'.");
+      goto leave;
+    }
+
+  if (save_attr (card, "DISP-LANG", value))
+    errstr = _("Saving the field failed.");
+
+leave:
+  if (errstr)
+    show_edit_error (card, errstr);
+
+  return !!errstr;
+}
+
+
+/* Save the sex field.  Returns true on error.  */
 static gpg_error_t
 save_entry_sex (GpaCMOpenpgp *card)
 {
-  return 0;
+  int idx;
+  const char *string;
+  const char *errstr = NULL;
+
+  idx = gtk_combo_box_get_active (GTK_COMBO_BOX (card->entries[ENTRY_SEX]));
+  if (!idx)
+    string = "1";
+  else if (idx == 1)
+    string = "2";
+  else
+    string = "9";
+
+  if (save_attr (card, "DISP-SEX", string))
+    errstr = _("Saving the field failed.");
+
+  if (errstr)
+    show_edit_error (card, errstr);
+
+  return !!errstr;
 }
+
+
+/* Save the pubkey url field.  Returns true on error.  */
+static gboolean
+save_entry_pubkey_url (GpaCMOpenpgp *card)
+{
+  const char *errstr = NULL;
+  const char *value;
+
+  value = gtk_entry_get_text (GTK_ENTRY (card->entries[ENTRY_PUBKEY_URL])); 
+  if (strlen (value) > 254)
+    {
+      errstr = _("The field may not be longer than 254 characters.");
+      goto leave;
+    }
+
+  if (save_attr (card, "PUBKEY-URL", value))
+    errstr = _("Saving the field failed.");
+
+leave:
+  if (errstr)
+    show_edit_error (card, errstr);
+
+  return !!errstr;
+}
+
+
+/* Save the login field.  Returns true on error.  */
+static gboolean
+save_entry_login (GpaCMOpenpgp *card)
+{
+  const char *errstr = NULL;
+  const char *value;
+
+  value = gtk_entry_get_text (GTK_ENTRY (card->entries[ENTRY_LOGIN])); 
+  if (strlen (value) > 254)
+    {
+      errstr = _("The field may not be longer than 254 characters.");
+      goto leave;
+    }
+
+  if (save_attr (card, "LOGIN-DATA", value))
+    errstr = _("Saving the field failed.");
+
+leave:
+  if (errstr)
+    show_edit_error (card, errstr);
+
+  return !!errstr;
+}
+
 
 
 /* Callback for the "changed" signal connected to entry fields.  We
@@ -490,7 +606,8 @@ edit_changed_cb (GtkEditable *editable, void *opaque)
   int idx;
 
   for (idx=0; idx < ENTRY_LAST; idx++)
-    if (GTK_EDITABLE (card->entries[idx]) == editable)
+    if (GTK_IS_EDITABLE (card->entries[idx])
+        && GTK_EDITABLE (card->entries[idx]) == editable)
       break;
   if (!(idx < ENTRY_LAST))
     return;
@@ -498,9 +615,49 @@ edit_changed_cb (GtkEditable *editable, void *opaque)
   if (!card->changed[idx])
     {
       card->changed[idx] = TRUE;
-      g_debug ("changed signal for entry %d", idx);
+/*       g_debug ("changed signal for entry %d", idx); */
     }
 }
+
+
+/* Callback for the "changed" signal connected to combo boxes.  We
+   figure out the entry field for which this signal has been emitted
+   and set a flag to know ehether we have unsaved data.  */
+static void
+edit_changed_combo_box_cb (GtkComboBox *cbox, void *opaque)
+{
+  GpaCMOpenpgp *card = opaque;
+  int idx;
+
+  for (idx=0; idx < ENTRY_LAST; idx++)
+    if (GTK_IS_COMBO_BOX (card->entries[idx])
+        && GTK_COMBO_BOX (card->entries[idx]) == cbox)
+      break;
+  if (!(idx < ENTRY_LAST))
+    return;
+  
+  if (!card->changed[idx])
+    {
+      int result;
+
+      card->changed[idx] = TRUE;
+/*       g_debug ("changed signal for combo box %d", idx); */
+      if (!card->reloading)
+        {
+          result = save_entry_sex (card);
+          /* Fixme: How should we handle errors? Trying it this way:
+                 Always clear the changed flag, so that we will receive one
+                  again and grab the focus on error. 
+             fails.  We may need to make use of the keynav-changed signal. */
+          card->changed[idx] = 0;
+          if (!result)
+            show_edit_error (card, NULL);
+          else
+            gtk_widget_grab_focus (GTK_WIDGET (cbox));
+        }
+    }
+}
+
 
 /* Callback for the "focus" signal connected to entry fields.  We
    figure out the entry field for which this signal has been emitted
@@ -520,9 +677,13 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
       break;
   if (!(idx < ENTRY_LAST))
     return FALSE;
+
+  /* FIXME: The next test does not work for combo boxes.  Any hints
+     on how to solve that?.  */
   if (gtk_widget_is_focus (widget))
     {
       /* Entry IDX is about to lose the focus.  */
+/*       g_debug ("entry %d is about to lose the focus", idx); */
       if (card->changed[idx])
         {
           switch (idx)
@@ -531,8 +692,19 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
             case ENTRY_LAST_NAME:
               result = save_entry_name (card);
               break;
+            case ENTRY_LANGUAGE:
+              result = save_entry_language (card);
+              break;
             case ENTRY_SEX:
-              result = save_entry_sex (card);
+              /* We never get to here due to the ComboBox.  Instead we
+                 use the changed signal directly.  */
+              /* result = save_entry_sex (card);*/
+              break;
+            case ENTRY_PUBKEY_URL:
+              result = save_entry_pubkey_url (card);
+              break;
+            case ENTRY_LOGIN:
+              result = save_entry_login (card);
               break;
             }
 
@@ -546,6 +718,7 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
   else
     {
       /* Entry IDX is about to receive the focus.  */
+/*       g_debug ("entry %d is about to receive the focus", idx); */
     } 
   return result;
 }
@@ -556,17 +729,25 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
 /* Helper for construct_data_widget.  */
 static void
 add_table_row (GtkWidget *table, int *rowidx,
-               const char *labelstr, GtkWidget *widget, GtkWidget *widget2)
+               const char *labelstr, GtkWidget *widget, GtkWidget *widget2,
+               int readonly)
 {
   GtkWidget *label;
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  //  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
                     *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
-
-  gtk_entry_set_has_frame (GTK_ENTRY (widget), FALSE);
+  
+  if (readonly)
+    {
+      if (GTK_IS_ENTRY (widget))
+        {
+          gtk_entry_set_has_frame (GTK_ENTRY (widget), FALSE);
+          gtk_entry_set_editable (GTK_ENTRY (widget), FALSE);
+        }
+    }
 
   gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
                     *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
@@ -593,6 +774,7 @@ construct_data_widget (GpaCMOpenpgp *card)
   GtkWidget *pin_table;
   int rowidx;
   int idx;
+/*   GtkWidget *hbox; */
 
   /* Create frames and tables. */
 
@@ -635,15 +817,15 @@ construct_data_widget (GpaCMOpenpgp *card)
 
   card->entries[ENTRY_SERIALNO] = gtk_entry_new ();
   add_table_row (general_table, &rowidx, 
-                 "Serial Number: ", card->entries[ENTRY_SERIALNO], NULL);
+                 "Serial number: ", card->entries[ENTRY_SERIALNO], NULL, 1);
 
   card->entries[ENTRY_VERSION] = gtk_entry_new ();
   add_table_row (general_table, &rowidx,
-                 "Card Version: ", card->entries[ENTRY_VERSION], NULL);
+                 "Card version: ", card->entries[ENTRY_VERSION], NULL, 1);
 
   card->entries[ENTRY_MANUFACTURER] = gtk_entry_new ();
   add_table_row (general_table, &rowidx,
-                 "Manufacturer: ", card->entries[ENTRY_MANUFACTURER], NULL);
+                 "Manufacturer: ", card->entries[ENTRY_MANUFACTURER], NULL, 1);
 
   gtk_container_add (GTK_CONTAINER (general_frame), general_table);
 
@@ -651,30 +833,55 @@ construct_data_widget (GpaCMOpenpgp *card)
   rowidx = 0;
 
   card->entries[ENTRY_FIRST_NAME] = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (card->entries[ENTRY_FIRST_NAME]), 48);
+  gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_FIRST_NAME]), 35);
   add_table_row (personal_table, &rowidx, 
-                 "First Name:", card->entries[ENTRY_FIRST_NAME], NULL);
+                 "First name:", card->entries[ENTRY_FIRST_NAME], NULL, 0);
 
   card->entries[ENTRY_LAST_NAME] = gtk_entry_new ();
+  gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LAST_NAME]), 35);
   add_table_row (personal_table, &rowidx,
-                 "Last Name:",
-                 card->entries[ENTRY_LAST_NAME], NULL);
+                 "Last name:",  card->entries[ENTRY_LAST_NAME], NULL, 0);
 
-  card->entries[ENTRY_SEX] = gtk_entry_new ();
+  card->entries[ENTRY_SEX] = gtk_combo_box_new_text ();
+  for (idx=0; "mfu"[idx]; idx++)
+    gtk_combo_box_append_text (GTK_COMBO_BOX (card->entries[ENTRY_SEX]),
+                               gpa_sex_char_to_string ("mfu"[idx]));
   add_table_row (personal_table, &rowidx,
-                 "Sex:", card->entries[ENTRY_SEX], NULL);
+                 "Sex:", card->entries[ENTRY_SEX], NULL, 0);
+
+/*   hbox = gtk_hbox_new (FALSE, 0); */
+/*   card->entries[ENTRY_SEX] = gtk_radio_button_new_with_label */
+/*     (NULL, gpa_sex_char_to_string ('m')); */
+/*   gtk_box_pack_start (GTK_BOX (hbox), card->entries[ENTRY_SEX],  */
+/*                       FALSE, FALSE, 5); */
+/*   gtk_box_pack_start (GTK_BOX (hbox),  */
+/*                       gtk_radio_button_new_with_label_from_widget  */
+/*                       (GTK_RADIO_BUTTON (card->entries[ENTRY_SEX]),  */
+/*                        gpa_sex_char_to_string ('f')), */
+/*                       FALSE, FALSE, 5); */
+/*   gtk_box_pack_start (GTK_BOX (hbox),  */
+/*                       gtk_radio_button_new_with_label_from_widget  */
+/*                       (GTK_RADIO_BUTTON (card->entries[ENTRY_SEX]),  */
+/*                        gpa_sex_char_to_string ('u')), */
+/*                       FALSE, FALSE, 5); */
+/*   add_table_row (personal_table, &rowidx, */
+/*                  "Sex:", hbox, NULL); */
+  
 
   card->entries[ENTRY_LANGUAGE] = gtk_entry_new ();
+  gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LANGUAGE]), 8);
   add_table_row (personal_table, &rowidx,
-                 "Language: ", card->entries[ENTRY_LANGUAGE], NULL);
+                 "Language: ", card->entries[ENTRY_LANGUAGE], NULL, 0);
 
   card->entries[ENTRY_LOGIN] = gtk_entry_new ();
+  gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LOGIN]), 254);
   add_table_row (personal_table, &rowidx,
-                 "Login Data: ", card->entries[ENTRY_LOGIN], NULL);
+                 "Login data: ", card->entries[ENTRY_LOGIN], NULL, 0);
 
   card->entries[ENTRY_PUBKEY_URL] = gtk_entry_new ();
+  gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_PUBKEY_URL]), 254);
   add_table_row (personal_table, &rowidx,
-                 "Public key URL: ", card->entries[ENTRY_PUBKEY_URL], NULL);
+                 "Public key URL: ", card->entries[ENTRY_PUBKEY_URL], NULL, 0);
 
   gtk_container_add (GTK_CONTAINER (personal_frame), personal_table);
 
@@ -684,15 +891,15 @@ construct_data_widget (GpaCMOpenpgp *card)
   card->entries[ENTRY_KEY_SIG] = gtk_entry_new ();
   gtk_entry_set_width_chars (GTK_ENTRY (card->entries[ENTRY_KEY_SIG]), 48);
   add_table_row (keys_table, &rowidx, 
-                 "Signature Key: ", card->entries[ENTRY_KEY_SIG], NULL);
+                 "Signature key: ", card->entries[ENTRY_KEY_SIG], NULL, 1);
 
   card->entries[ENTRY_KEY_ENC] = gtk_entry_new ();
   add_table_row (keys_table, &rowidx,
-                 "Encryption Key: ", card->entries[ENTRY_KEY_ENC], NULL);
+                 "Encryption key: ", card->entries[ENTRY_KEY_ENC], NULL, 1);
 
   card->entries[ENTRY_KEY_AUTH] = gtk_entry_new ();
   add_table_row (keys_table, &rowidx,
-                 "Authentication Key: ", card->entries[ENTRY_KEY_AUTH], NULL);
+                 "Authentication key: ",card->entries[ENTRY_KEY_AUTH], NULL, 1);
 
   gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
 
@@ -705,21 +912,21 @@ construct_data_widget (GpaCMOpenpgp *card)
     (GTK_ENTRY (card->entries[ENTRY_PIN_RETRYCOUNTER]), 24);
   add_table_row (pin_table, &rowidx, 
                  "PIN Retry Counter: ", 
-                 card->entries[ENTRY_PIN_RETRYCOUNTER], NULL);
+                 card->entries[ENTRY_PIN_RETRYCOUNTER], NULL, 1);
 
   card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER] = gtk_entry_new ();
   gtk_entry_set_width_chars 
     (GTK_ENTRY (card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER]), 24);
   add_table_row (pin_table, &rowidx, 
                  "Admin PIN Retry Counter: ",
-                 card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], NULL);
+                 card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], NULL, 1);
 
   card->entries[ENTRY_SIG_FORCE_PIN] = gtk_entry_new ();
   gtk_entry_set_width_chars 
     (GTK_ENTRY (card->entries[ENTRY_SIG_FORCE_PIN]), 24);
   add_table_row (pin_table, &rowidx, 
                  "Force Signature PIN: ",
-                 card->entries[ENTRY_SIG_FORCE_PIN], NULL);
+                 card->entries[ENTRY_SIG_FORCE_PIN], NULL, 1);
 
   gtk_container_add (GTK_CONTAINER (pin_frame), pin_table);
 
@@ -731,13 +938,26 @@ construct_data_widget (GpaCMOpenpgp *card)
 
   /* Setup signals */
   for (idx=0; idx < ENTRY_LAST; idx++)
-    if (card->entries[idx] && GTK_IS_EDITABLE (card->entries[idx]))
-      {
-        g_signal_connect (G_OBJECT (card->entries[idx]), "changed",
-                          G_CALLBACK (edit_changed_cb), card);
-        g_signal_connect (G_OBJECT (card->entries[idx]), "focus",
-                          G_CALLBACK (edit_focus_cb), card);
-      }
+    {
+      if (!card->entries[idx])
+        continue;
+      switch (idx)
+        {
+        case ENTRY_SEX:
+          g_signal_connect (G_OBJECT (card->entries[idx]), "changed",
+                            G_CALLBACK (edit_changed_combo_box_cb), card);
+          g_signal_connect (G_OBJECT (card->entries[idx]), "focus",
+                            G_CALLBACK (edit_focus_cb), card);
+          break;
+
+        default:
+          g_signal_connect (G_OBJECT (card->entries[idx]), "changed",
+                            G_CALLBACK (edit_changed_cb), card);
+          g_signal_connect (G_OBJECT (card->entries[idx]), "focus",
+                            G_CALLBACK (edit_focus_cb), card);
+          break;
+        }
+    }
 
 }
 

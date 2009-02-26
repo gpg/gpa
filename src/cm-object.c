@@ -31,10 +31,20 @@
 #include "cm-object.h"
 
 
+/* Signals */
+enum
+{
+  UPDATE_STATUS,
+  LAST_SIGNAL
+};
+
 
 
 /* The parent class.  */
 static GObjectClass *parent_class;
+
+/* The signal vector.  */
+static guint signals [LAST_SIGNAL];
 
 /* Local prototypes */
 static void gpa_cm_object_finalize (GObject *object);
@@ -60,6 +70,17 @@ gpa_cm_object_class_init (void *class_ptr, void *class_data)
   parent_class = g_type_class_peek_parent (klass);
 
   G_OBJECT_CLASS (klass)->finalize = gpa_cm_object_finalize;
+
+  signals[UPDATE_STATUS] =
+    g_signal_new ("update-status",
+		  G_TYPE_FROM_CLASS (klass),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+		  G_STRUCT_OFFSET (GpaCMObjectClass, update_status),
+		  NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+		  G_TYPE_NONE, 1, G_TYPE_STRING);
+
+
 }
 
 
@@ -114,3 +135,17 @@ gpa_cm_object_get_type (void)
 /************************************************************ 
  **********************  Public API  ************************
  ************************************************************/
+
+/* Emit a status line names STATUSNAME plus space delimited
+   arguments.  */
+void
+gpa_cm_object_update_status (GpaCMObject *obj, const char *text)
+{
+  g_return_if_fail (obj);
+  g_return_if_fail (GPA_CM_OBJECT (obj));
+  
+  if (!text)
+    text = "";
+
+  g_signal_emit (obj, signals[UPDATE_STATUS], 0, text);
+}
