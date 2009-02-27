@@ -81,7 +81,7 @@ filewatch_cb (GIOChannel *channel,
                status, err->message);
       g_error_free (err);
     }
-  g_debug ("new file watch event, nread=%u", (unsigned int)nread);
+/*   g_debug ("new file watch event, nread=%u", (unsigned int)nread); */
   
   if (status == G_IO_STATUS_NORMAL)
     {
@@ -116,9 +116,9 @@ filewatch_cb (GIOChannel *channel,
           MAKEREASON ('x', IN_IGNORED);
 #undef MAKEREASON
           reason[reasonidx] = 0;
-          g_debug ("event: wd=%d mask=%#x (%s) cookie=%#x len=%u name=`%.*s'",
-                   ev->wd, ev->mask, reason, ev->cookie, ev->len, 
-                   (int)ev->len, ev->name);
+/*           g_debug ("event: wd=%d mask=%#x (%s) cookie=%#x len=%u name=`%.*s'", */
+/*                    ev->wd, ev->mask, reason, ev->cookie, ev->len,  */
+/*                    (int)ev->len, ev->name); */
 
           walking_watch_list_p++;
           for (watch=watch_list; watch; watch = watch->next)

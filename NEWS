@@ -1,5 +1,7 @@
-Noteworthy changes in version 0.8.1
+Noteworthy changes in version 0.9.0
 ------------------------------------------------
+ 
+ * Add a basic smartcard manager and the option --card.
 
 
 Noteworthy changes in version 0.8.0 (2008-09-04)

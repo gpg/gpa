@@ -81,6 +81,15 @@ struct _GpaCardManager
   gpgme_ctx_t gpgagent;      /* Gpgme context for the assuan
                                 connection with the gpg-agent.  */
 
+
+  guint ticker_timeout_id;   /* Source Id of the timeout ticker or 0.  */
+
+
+  struct {
+    int card_any;           /* Any card event counter seen.  */
+    unsigned int card;      /* Last seen card event counter.  */      
+  } eventcounter;
+
 };
 
 /* There is only one instance of the card manager class.  Use a global
@@ -89,6 +98,7 @@ static GpaCardManager *this_instance;
 
 
 /* Local prototypes */
+static void start_ticker (GpaCardManager *cardman);
 static void update_card_widget (GpaCardManager *cardman);
 
 static void gpa_card_manager_finalize (GObject *object);
@@ -228,6 +238,16 @@ scd_status_cb (void *opaque, const char *status, const char *args)
         cardman->cardtypename = "Unknown";
 
     }
+  else if ( !strcmp (status, "EVENTCOUNTER") )
+    {
+      unsigned int count;
+
+      if (sscanf (args, "%*u %*u %u ", &count) == 1)
+        {
+          cardman->eventcounter.card_any = 1;
+          cardman->eventcounter.card = count;
+        }
+    }
 
   return 0;
 }     
@@ -242,6 +262,9 @@ card_reload (GpaCardManager *cardman)
 
   if (!cardman->gpgagent)
     return;  /* No support for GPGME_PROTOCOL_ASSUAN.  */
+
+  /* Start the ticker if not yet done.  */
+  start_ticker (cardman);
     
   if (!cardman->in_card_reload)
     {
@@ -276,6 +299,14 @@ card_reload (GpaCardManager *cardman)
  
       if (!err)
         {
+          /* Get the event counter to avoid a duplicate reload due to
+             the ticker.  */
+          gpgme_op_assuan_transact (cardman->gpgagent,
+                                    "GETEVENTCOUNTER",
+                                    NULL, NULL,
+                                    NULL, NULL,
+                                    scd_status_cb, cardman);
+
           /* Now we need to get the APPTYPE of the card so that the
              correct GpaCM* object can can act on the data.  */
           command = "SCD GETATTR APPTYPE";
@@ -296,6 +327,7 @@ card_reload (GpaCardManager *cardman)
               statusbar_update (cardman, _("Error accessing card"));
             }
         }
+
       
       update_card_widget (cardman);
       update_title (cardman);
@@ -331,6 +363,79 @@ card_reload_idle_cb (void *user_data)
   g_object_unref (cardman);
 
   return FALSE;  /* Remove us from the idle queue. */
+}
+
+
+static gpg_error_t
+geteventcounter_status_cb (void *opaque, const char *status, const char *args)
+{
+  GpaCardManager *cardman = opaque;
+
+  if ( !strcmp (status, "EVENTCOUNTER") )
+    {
+      unsigned int count;
+
+      /* We don't check while we are already reloading a card.  The
+         last action of the card reload code will also update the
+         event counter.  */
+      if (!cardman->in_card_reload
+          && sscanf (args, "%*u %*u %u ", &count) == 1)
+        {
+          if (cardman->eventcounter.card_any
+              && cardman->eventcounter.card != count)
+            {
+              /* Actually we should not do a reload based only on the
+                 eventcounter but check the actual card status first.
+                 However simply triggering a reload is not different
+                 from the user hitting the reload button.  */
+              g_object_ref (cardman);
+              g_idle_add (card_reload_idle_cb, cardman);
+            }
+          cardman->eventcounter.card_any = 1;
+          cardman->eventcounter.card = count;
+        }
+    }
+
+  return 0;
+}
+
+/* This fucntion is called by the timerout ticker started by
+   start_ticker.  It is used to poll scdaemon to detect a card status
+   change.  */
+static gboolean
+ticker_cb (gpointer user_data)
+{
+  GpaCardManager *cardman = user_data;
+
+  if (!cardman || !cardman->ticker_timeout_id || !cardman->gpgagent)
+    return TRUE;  /* Keep on ticking.  */
+  
+  /* Note that we are single threaded and thus there is no need to
+     lock the assuan context.  */
+
+  gpgme_op_assuan_transact (cardman->gpgagent,
+                            "GETEVENTCOUNTER",
+                            NULL, NULL,
+                            NULL, NULL,
+                            geteventcounter_status_cb, cardman);
+
+  return TRUE;  /* Keep on ticking.  */
+}
+
+
+/* If no ticker is active start one.  */
+static void
+start_ticker (GpaCardManager *cardman)
+{
+  if (!cardman->ticker_timeout_id)
+    {
+#if GTK_CHECK_VERSION (2, 14, 0)
+      cardman->ticker_timeout_id = g_timeout_add_seconds (1,
+                                                          ticker_cb, cardman); 
+#else
+      cardman->ticker_timeout_id = g_timeout_add (1000, ticker_cb, cardman); 
+#endif
+    }
 }
 
 
@@ -398,11 +503,6 @@ watcher_cb (void *opaque, const char *filename, const char *reason)
 
   if (cardman && strchr (reason, 'w') )
     {
-/*       reader_status_t reader_status; */
-
-/*       reader_status = reader_status_from_file (filename); */
-/*       if (reader_status == READER_STATUS_PRESENT) */
-/* 	statusbar_update (cardman, _("Reloading card data...")); */
       card_reload (cardman);
     }
 }
@@ -655,6 +755,9 @@ gpa_card_manager_init (GTypeInstance *instance, void *class_ptr)
                     G_CALLBACK (card_manager_closed), cardman);
 
 
+  /* We use the file watcher to speed up card change detection.  If it
+     does not work (i.e. on non Linux based systems) the ticker takes
+     care of it.  */
   fname = g_build_filename (gnupg_homedir, "reader_0.status", NULL);
   cardman->watch = gpa_add_filewatch (fname, "w", watcher_cb, cardman);
   xfree (fname);
@@ -684,6 +787,12 @@ gpa_card_manager_finalize (GObject *object)
 
   gpgme_release (cardman->gpgagent);
   cardman->gpgagent = NULL;
+  
+  if (cardman->ticker_timeout_id)
+    {
+      g_source_remove (cardman->ticker_timeout_id);
+      cardman->ticker_timeout_id = 0;
+    }
 
   /* FIXME: Remove the watch object and all other resources.  */
 

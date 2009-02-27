@@ -1,3 +1,13 @@
+2009-02-27  Werner Koch  <wk@g10code.com>
+
+	* filewatch.c: Remove debug output.
+
+	* cardman.c (struct _GpaCardManager): Add TICKER_TIMEOUT_ID and
+	EVENTCOUNTER.
+	(geteventcounter_status_cb, ticker_cb, start_ticker): New.
+	(gpa_card_manager_finalize): Remove the ticker.
+	(card_reload): Start the ticker and update the evntcounter.
+
 2009-02-26  Werner Koch  <wk@g10code.com>
 
 	* cm-object.c (gpa_cm_object_class_init): Register "update-status"
