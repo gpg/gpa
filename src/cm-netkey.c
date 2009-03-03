@@ -122,9 +122,59 @@ scd_getattr_cb (void *opaque, const char *status, const char *args)
 }     
 
 
+/* Data callback used by check_nullpin. */
+static gpg_error_t
+check_nullpin_data_cb (void *opaque, const void *data_arg, size_t datalen)
+{
+  const unsigned char *data = data_arg;
+
+  if (datalen >= 2)
+    {
+      unsigned int sw = ((data[datalen-2] << 8) | data[datalen-1]);
+
+      if (sw == 0x6985)
+        g_debug ("NullPIN activ for PIN0");
+      else if (sw == 0x6983)
+        g_debug ("PIN0 is blocked");
+      else if ((sw & 0xfff0) == 0x63C0)
+        g_debug ("PIN0 has %d tries left", (sw & 0x000f));
+      else
+        g_debug ("status for global PIN0 is %04x", sw);
+    }
+  return 0;
+}     
+
+
+/* Check whether the NullPIN is still active.  */
+static void
+check_nullpin (GpaCMNetkey *card)
+{
+  gpg_error_t err;
+  gpgme_ctx_t gpgagent;
+
+  gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
+  g_return_if_fail (gpgagent);
+
+  /* A TCOS card responds to a verify with empty data (i.e. without
+     the Lc byte) with the status of the PIN.  The PIN is given as
+     usual as P2. */
+  err = gpgme_op_assuan_transact (gpgagent,
+                                  "SCD APDU 00:20:00:00",
+                                  check_nullpin_data_cb, card,
+                                  NULL, NULL,
+                                  NULL, NULL);
+  if (!err)
+    err = gpgme_op_assuan_result (gpgagent)->err;
+  if (err)
+    g_debug ("assuan dummy verify command failed: %s <%s>\n", 
+             gpg_strerror (err), gpg_strsource (err));
+}
+
+
+
 /* Use the assuan machinery to load the bulk of the OpenPGP card data.  */
 static void
-reload_data (GpaCMNetkey *card, gpgme_ctx_t gpgagent)
+reload_data (GpaCMNetkey *card)
 {
   static struct {
     const char *name;
@@ -138,6 +188,12 @@ reload_data (GpaCMNetkey *card, gpgme_ctx_t gpgagent)
   gpg_error_t err;
   char command[100];
   struct scd_getattr_parm parm;
+  gpgme_ctx_t gpgagent;
+
+  gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
+  g_return_if_fail (gpgagent);
+
+  check_nullpin (card);
 
   parm.card = card;
   for (attridx=0; attrtbl[attridx].name; attridx++)
@@ -316,5 +372,9 @@ void
 gpa_cm_netkey_reload (GtkWidget *widget, gpgme_ctx_t gpgagent)
 {
   if (GPA_IS_CM_NETKEY (widget))
-    reload_data (GPA_CM_NETKEY (widget), gpgagent);
+    {
+      GPA_CM_OBJECT (widget)->agent_ctx = gpgagent;
+      if (gpgagent)
+        reload_data (GPA_CM_NETKEY (widget));
+    }
 }
