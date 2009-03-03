@@ -1,4 +1,4 @@
-/* server_access.h - The GNU Privacy Assistant
+/* server-access.h - The GNU Privacy Assistant
  *      Copyright (C) 2002, Miguel Coca.
  *
  * This file is part of GPA

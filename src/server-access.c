@@ -1,4 +1,4 @@
-/* server_access.c - The GNU Privacy Assistant keyserver access.
+/* server-access.c - The GNU Privacy Assistant keyserver access.
    Copyright (C) 2002 Miguel Coca.
    Copyright (C) 2005 g10 Code GmbH.
 
@@ -37,7 +37,7 @@
 #endif
 
 #include "gtktools.h"
-#include "server_access.h"
+#include "server-access.h"
 
 /* WARNING: Keep this up to date with gnupg's include/keyserver.h */
 #define KEYSERVER_OK               0 /* not an error */
@@ -218,7 +218,7 @@ helper_path (const gchar *scheme)
   path = g_strdup_printf ("%s\\gpg2keys_%s.exe", helper, scheme);
   if (access (path, F_OK))
     {
-      g_free (path)
+      g_free (path);
       path = g_strdup_printf ("%s\\gpgkeys_%s.exe", helper, scheme);
     }
 #else
@@ -412,12 +412,14 @@ check_errors (int exit_status, gchar *error_message, gchar *output_filename,
 
 /* This is a hack: when a SIGCHLD is received, close the dialog. We need a
  * global variable to pass the dialog to the signal handler. */
+#ifdef G_OS_UNIX
 GtkWidget *waiting_dlg;
 static void
 close_dialog (int sig)
 {
   gtk_dialog_response (GTK_DIALOG (waiting_dlg), GTK_RESPONSE_CLOSE);
 }
+#endif /*G_OS_UNIX*/
 
 /* Run the helper, and update the dialog if possible. Returns FALSE on error */
 static gboolean

@@ -48,7 +48,7 @@
 #include "gpgmetools.h"
 #include "gpgmeedit.h"
 #include "keytable.h"
-#include "server_access.h"
+#include "server-access.h"
 #include "options.h"
 #include "convert.h"
 

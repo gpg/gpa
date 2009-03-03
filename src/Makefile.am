@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-logo = gpa_logo.ppm 
+logo = gpa-logo.ppm 
 
 pkgdata_DATA = $(logo)
 
@@ -91,7 +91,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      keytable.c keytable.h \
 	      gpgmetools.h gpgmetools.c \
 	      gpgmeedit.h gpgmeedit.c \
-	      server_access.h server_access.c \
+	      server-access.h server-access.c \
 	      settingsdlg.h settingsdlg.c \
 	      passwddlg.h passwddlg.c \
 	      gpacontext.h gpacontext.c \

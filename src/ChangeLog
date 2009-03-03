@@ -1,4 +1,27 @@
+2009-03-03  Werner Koch  <wk@g10code.com>
+
+	* convert.c (gpa_sex_char_to_string): Make strings a salutation.
+
+	* cm-openpgp.c (add_table_row): Set the label alignment again.
+	(update_entry_fpr, update_entry_chv_status): New.
+	(reload_data): Use them.
+	(set_integer): New.
+	(construct_data_widget): Add new field for the PUK.  Reorder code.
+	(edit_toggled_cb): New.
+	(save_attr): Add arg IS_ESCAPED and change all callers.
+	(save_entry_sig_force_pin): new.
+
 2009-02-27  Werner Koch  <wk@g10code.com>
+
+	* server_access.c: Rename to server-access.c.
+	* server_access.h: Rename to server-access.h.
+	* gpa_logo.ppm: Rename to gpa-logo.ppm.
+	* Makefile.am: Adjust accordingly.  
+	* server-access.c, keyring.c, gpaimportserverop.c
+	* gpaexportserverop.c: Ditto.
+	
+	* server_access.c (helper_path) [G_OS_WIN32]: Fix syntax error.
+	(close_dialog): Build only for G_OS_UNIX.
 
 	* filewatch.c: Remove debug output.
 

@@ -112,11 +112,11 @@ const char *
 gpa_sex_char_to_string (char sex)
 {
   if (sex == 'm')
-    return _("male");
+    return _("Mr.");
   else if (sex == 'f')
-    return _("female");
+    return _("Ms.");
   else if (sex == 'u')
-    return _("unspecified");
+    return "";
   else
     return _("(unknown)");
 }

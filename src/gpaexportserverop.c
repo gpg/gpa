@@ -26,7 +26,7 @@
 #include "i18n.h"
 #include "gtktools.h"
 #include "gpgmetools.h"
-#include "server_access.h"
+#include "server-access.h"
 #include "gpaexportserverop.h"
 
 static GObjectClass *parent_class = NULL;

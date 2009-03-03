@@ -52,6 +52,7 @@ enum
     ENTRY_KEY_ENC,
     ENTRY_KEY_AUTH,
     ENTRY_PIN_RETRYCOUNTER,
+    ENTRY_PUK_RETRYCOUNTER,
     ENTRY_ADMIN_PIN_RETRYCOUNTER,
     ENTRY_SIG_FORCE_PIN,
 
@@ -79,6 +80,8 @@ struct _GpaCMOpenpgp
 
   GtkWidget *entries[ENTRY_LAST];
   gboolean  changed[ENTRY_LAST];
+
+  GtkLabel  *puk_label;  /* The label of the PUK field.  */
 
   int  reloading;
 };
@@ -148,10 +151,6 @@ clear_changed_flags (GpaCMOpenpgp *card)
 static void
 show_edit_error (GpaCMOpenpgp *card, const char *text)
 {
-  if (text)
-    g_debug ("Edit error: %s", text);
-  else
-    g_debug ("Clear edit error");
   gpa_cm_object_update_status (GPA_CM_OBJECT(card), text);
 }
 
@@ -202,6 +201,15 @@ update_entry_serialno (GpaCMOpenpgp *card, int entry_id, const char *string)
   gtk_entry_set_text (GTK_ENTRY (card->entries[ENTRY_SERIALNO]), serialno);
   gtk_entry_set_text (GTK_ENTRY (card->entries[ENTRY_MANUFACTURER]), vendor);
   gtk_entry_set_text (GTK_ENTRY (card->entries[ENTRY_VERSION]), version);
+
+  if ((*version == '1' || *version == '0') && version[1] == '.')
+    {
+      gtk_label_set_text (card->puk_label, _("CHV2 retry counter: "));
+    }
+  else /* Version 2 card.  */
+    {
+      gtk_label_set_text (card->puk_label, _("PUK retry counter: "));
+    }
 }
 
 
@@ -251,6 +259,73 @@ update_entry_sex (GpaCMOpenpgp *card, int entry_id, const char *string)
     idx = 2;  /* 'u' is the default.  */
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (card->entries[entry_id]), idx);
+}
+
+
+static void
+set_integer (GtkWidget *entry, int value)
+{
+  char numbuf[35];
+  
+  snprintf (numbuf, sizeof numbuf, "%d", value);
+  gtk_entry_set_text (GTK_ENTRY (entry), numbuf);
+}
+
+
+/* Update the CVH (PIN) status fields.  STRING is the space separated
+   list of the decimal encoded values from the DO 0xC4.  */
+static void
+update_entry_chv_status (GpaCMOpenpgp *card, int entry_id, const char *string)
+{
+  int force_pw1;
+  int pw_maxlen[3];
+  int pw_retry[3];
+  int i;
+
+  (void)entry_id; /* Not used.  */
+
+  while (spacep (string))
+    string++;
+  force_pw1 = atoi (string);
+  while (*string && !spacep (string))
+    string++;
+  while (spacep (string))
+    string++;
+  for (i=0; *string && i < DIM (pw_maxlen); i++)
+    {
+      pw_maxlen[i] = atoi (string);
+      while (*string && !spacep (string))
+        string++;
+      while (spacep (string))
+        string++;
+    }
+  for (i=0; *string && i < DIM (pw_retry); i++)
+    {
+      pw_retry[i] = atoi (string);
+      while (*string && !spacep (string))
+        string++;
+      while (spacep (string))
+        string++;
+    }
+
+  gtk_toggle_button_set_active 
+    (GTK_TOGGLE_BUTTON (card->entries[ENTRY_SIG_FORCE_PIN]), !!force_pw1);
+  set_integer (card->entries[ENTRY_PIN_RETRYCOUNTER], pw_retry[0]);
+  set_integer (card->entries[ENTRY_PUK_RETRYCOUNTER], pw_retry[1]);
+  set_integer (card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], pw_retry[2]);
+  
+}
+
+
+/* Format the raw hex fingerprint STRING and set it into ENTRY_ID.  */
+static void
+update_entry_fpr (GpaCMOpenpgp *card, int entry_id, const char *string)
+{
+  char *buf;
+
+  buf = gpa_gpgme_key_format_fingerprint (string);
+  gtk_entry_set_text (GTK_ENTRY (card->entries[entry_id]), buf);
+  xfree (buf);
 }
 
 
@@ -328,8 +403,8 @@ reload_data (GpaCMOpenpgp *card)
     { "PUBKEY-URL", ENTRY_PUBKEY_URL },
     { "LOGIN-DATA", ENTRY_LOGIN },
 /*     { "SIG-COUNTER",ENTRY_SIG_COUNTER }, */
-    { "CHV-STATUS", ENTRY_PIN_RETRYCOUNTER,  NULL/*fixme*/ },
-    { "KEY-FPR",    ENTRY_LAST },
+    { "CHV-STATUS", ENTRY_PIN_RETRYCOUNTER,  update_entry_chv_status },
+    { "KEY-FPR",    ENTRY_LAST, update_entry_fpr },
 /*     { "CA-FPR", }, */
     { NULL }
   };
@@ -381,11 +456,11 @@ reload_data (GpaCMOpenpgp *card)
 
 
 static gpg_error_t
-save_attr (GpaCMOpenpgp *card, const char *name, const char *value)
+save_attr (GpaCMOpenpgp *card, const char *name, 
+           const char *value, int is_escaped)
 {
   gpg_error_t err;
   char *command;
-  char *p;
   gpgme_ctx_t gpgagent;
 
   g_return_val_if_fail (*name && value, gpg_error (GPG_ERR_BUG));
@@ -393,11 +468,16 @@ save_attr (GpaCMOpenpgp *card, const char *name, const char *value)
   gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
   g_return_val_if_fail (gpgagent,gpg_error (GPG_ERR_BUG));
 
-  
-  p = percent_escape (value, NULL, 1);
-  command = g_strdup_printf ("SCD SETATTR %s %s", name, p);
-  xfree (p);
+  if (is_escaped)
+    command = g_strdup_printf ("SCD SETATTR %s %s", name, value);
+  else
+    {
+      char *p;
 
+      p = percent_escape (value, NULL, 1);
+      command = g_strdup_printf ("SCD SETATTR %s %s", name, p);
+      xfree (p);
+    }
   err = gpgme_op_assuan_transact (gpgagent,
                                   command,
                                   NULL, NULL,
@@ -470,7 +550,7 @@ save_entry_name (GpaCMOpenpgp *card)
       if (strlen (buffer) > 39)
         errstr = _("Total length of first and last name "
                    "may not be longer than 39 characters.");
-      else if (save_attr (card, "DISP-NAME", buffer))
+      else if (save_attr (card, "DISP-NAME", buffer, 0))
         errstr = _("Saving the field failed.");
       g_free (buffer);
     }
@@ -508,7 +588,7 @@ save_entry_language (GpaCMOpenpgp *card)
       goto leave;
     }
 
-  if (save_attr (card, "DISP-LANG", value))
+  if (save_attr (card, "DISP-LANG", value, 0))
     errstr = _("Saving the field failed.");
 
 leave:
@@ -519,7 +599,7 @@ leave:
 }
 
 
-/* Save the sex field.  Returns true on error.  */
+/* Save the salutation field.  Returns true on error.  */
 static gpg_error_t
 save_entry_sex (GpaCMOpenpgp *card)
 {
@@ -535,7 +615,7 @@ save_entry_sex (GpaCMOpenpgp *card)
   else
     string = "9";
 
-  if (save_attr (card, "DISP-SEX", string))
+  if (save_attr (card, "DISP-SEX", string, 0))
     errstr = _("Saving the field failed.");
 
   if (errstr)
@@ -559,7 +639,7 @@ save_entry_pubkey_url (GpaCMOpenpgp *card)
       goto leave;
     }
 
-  if (save_attr (card, "PUBKEY-URL", value))
+  if (save_attr (card, "PUBKEY-URL", value, 0))
     errstr = _("Saving the field failed.");
 
 leave:
@@ -584,10 +664,30 @@ save_entry_login (GpaCMOpenpgp *card)
       goto leave;
     }
 
-  if (save_attr (card, "LOGIN-DATA", value))
+  if (save_attr (card, "LOGIN-DATA", value, 0))
     errstr = _("Saving the field failed.");
 
 leave:
+  if (errstr)
+    show_edit_error (card, errstr);
+
+  return !!errstr;
+}
+
+
+/* Save the force signature PIN field.  */
+static gpg_error_t
+save_entry_sig_force_pin (GpaCMOpenpgp *card)
+{
+  int value;
+  const char *errstr = NULL;
+
+  value = gtk_toggle_button_get_active 
+    (GTK_TOGGLE_BUTTON (card->entries[ENTRY_SIG_FORCE_PIN]));
+
+  if (save_attr (card, "CHV-STATUS-1", value? "%01":"%00", 1))
+    errstr = _("Saving the field failed.");
+
   if (errstr)
     show_edit_error (card, errstr);
 
@@ -658,6 +758,30 @@ edit_changed_combo_box_cb (GtkComboBox *cbox, void *opaque)
     }
 }
 
+/* Callback for the "changed" signal connected to entry fields.  We
+   figure out the entry field for which this signal has been emitted
+   and set a flag to know ehether we have unsaved data.  */
+static void
+edit_toggled_cb (GtkToggleButton *toggle, void *opaque)
+{
+  GpaCMOpenpgp *card = opaque;
+  int idx;
+
+  for (idx=0; idx < ENTRY_LAST; idx++)
+    if (GTK_IS_TOGGLE_BUTTON (card->entries[idx])
+        && GTK_TOGGLE_BUTTON (card->entries[idx]) == toggle)
+      break;
+  if (!(idx < ENTRY_LAST))
+    return;
+  
+  if (!card->changed[idx])
+    {
+      card->changed[idx] = TRUE;
+/*       g_debug ("toggled signal for entry %d", idx); */
+    }
+}
+
+
 
 /* Callback for the "focus" signal connected to entry fields.  We
    figure out the entry field for which this signal has been emitted
@@ -706,6 +830,9 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
             case ENTRY_LOGIN:
               result = save_entry_login (card);
               break;
+            case ENTRY_SIG_FORCE_PIN:
+              result = save_entry_sig_force_pin (card);
+              break;
             }
 
           if (!result)
@@ -726,8 +853,8 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
 
 
 
-/* Helper for construct_data_widget.  */
-static void
+/* Helper for construct_data_widget.  Returns the label widget. */
+static GtkLabel *
 add_table_row (GtkWidget *table, int *rowidx,
                const char *labelstr, GtkWidget *widget, GtkWidget *widget2,
                int readonly)
@@ -736,7 +863,7 @@ add_table_row (GtkWidget *table, int *rowidx,
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-  //  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
                     *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
   
@@ -755,6 +882,8 @@ add_table_row (GtkWidget *table, int *rowidx,
     gtk_table_attach (GTK_TABLE (table), widget2, 2, 3,
 		      *rowidx, *rowidx + 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
   ++*rowidx;
+
+  return GTK_LABEL (label);
 }
 
 
@@ -774,161 +903,154 @@ construct_data_widget (GpaCMOpenpgp *card)
   GtkWidget *pin_table;
   int rowidx;
   int idx;
-/*   GtkWidget *hbox; */
 
-  /* Create frames and tables. */
 
+  /* General frame.  */
   general_frame = card->general_frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (general_frame), GTK_SHADOW_NONE);
   label = gtk_label_new (_("<b>General</b>"));
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (general_frame), label);
 
+  general_table = gtk_table_new (4, 3, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (general_table), 10);
+
+  rowidx = 0;
+
+  card->entries[ENTRY_SERIALNO] = gtk_entry_new ();
+  add_table_row (general_table, &rowidx, 
+                 _("Serial number:"), card->entries[ENTRY_SERIALNO], NULL, 1);
+
+  card->entries[ENTRY_VERSION] = gtk_entry_new ();
+  add_table_row (general_table, &rowidx,
+                 _("Card version:"), card->entries[ENTRY_VERSION], NULL, 1);
+
+  card->entries[ENTRY_MANUFACTURER] = gtk_entry_new ();
+  add_table_row (general_table, &rowidx,
+                 _("Manufacturer:"),
+                 card->entries[ENTRY_MANUFACTURER], NULL, 1);
+
+  gtk_container_add (GTK_CONTAINER (general_frame), general_table);
+
+
+  /* Personal frame.  */
   personal_frame = card->personal_frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (personal_frame), GTK_SHADOW_NONE);
   label = gtk_label_new (_("<b>Personal</b>"));
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (personal_frame), label);
 
-  keys_frame = card->keys_frame = gtk_expander_new (NULL);
-  label = gtk_label_new (_("<b>Keys</b>"));
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_expander_set_label_widget (GTK_EXPANDER (keys_frame), label);
-  gtk_expander_set_expanded (GTK_EXPANDER (keys_frame), TRUE);
-
-  pin_frame = card->pin_frame = gtk_expander_new (NULL);
-  label = gtk_label_new (_("<b>PIN</b>"));
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_expander_set_label_widget (GTK_EXPANDER (pin_frame), label);
-  gtk_expander_set_expanded (GTK_EXPANDER (pin_frame), TRUE);
-
-  general_table = gtk_table_new (4, 3, FALSE);
   personal_table = gtk_table_new (6, 3, FALSE);
-  keys_table = gtk_table_new (3, 3, FALSE);
-  pin_table = gtk_table_new (3, 3, FALSE);
-
-  gtk_container_set_border_width (GTK_CONTAINER (general_table), 10);
   gtk_container_set_border_width (GTK_CONTAINER (personal_table), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (keys_table), 10);
-  gtk_container_set_border_width (GTK_CONTAINER (pin_table), 10);
-  
-  /* General frame.  */
+
   rowidx = 0;
-
-  card->entries[ENTRY_SERIALNO] = gtk_entry_new ();
-  add_table_row (general_table, &rowidx, 
-                 "Serial number: ", card->entries[ENTRY_SERIALNO], NULL, 1);
-
-  card->entries[ENTRY_VERSION] = gtk_entry_new ();
-  add_table_row (general_table, &rowidx,
-                 "Card version: ", card->entries[ENTRY_VERSION], NULL, 1);
-
-  card->entries[ENTRY_MANUFACTURER] = gtk_entry_new ();
-  add_table_row (general_table, &rowidx,
-                 "Manufacturer: ", card->entries[ENTRY_MANUFACTURER], NULL, 1);
-
-  gtk_container_add (GTK_CONTAINER (general_frame), general_table);
-
-  /* Personal frame.  */
-  rowidx = 0;
-
-  card->entries[ENTRY_FIRST_NAME] = gtk_entry_new ();
-  gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_FIRST_NAME]), 35);
-  add_table_row (personal_table, &rowidx, 
-                 "First name:", card->entries[ENTRY_FIRST_NAME], NULL, 0);
-
-  card->entries[ENTRY_LAST_NAME] = gtk_entry_new ();
-  gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LAST_NAME]), 35);
-  add_table_row (personal_table, &rowidx,
-                 "Last name:",  card->entries[ENTRY_LAST_NAME], NULL, 0);
 
   card->entries[ENTRY_SEX] = gtk_combo_box_new_text ();
   for (idx=0; "mfu"[idx]; idx++)
     gtk_combo_box_append_text (GTK_COMBO_BOX (card->entries[ENTRY_SEX]),
                                gpa_sex_char_to_string ("mfu"[idx]));
   add_table_row (personal_table, &rowidx,
-                 "Sex:", card->entries[ENTRY_SEX], NULL, 0);
+                 _("Salutation:"), card->entries[ENTRY_SEX], NULL, 0);
 
-/*   hbox = gtk_hbox_new (FALSE, 0); */
-/*   card->entries[ENTRY_SEX] = gtk_radio_button_new_with_label */
-/*     (NULL, gpa_sex_char_to_string ('m')); */
-/*   gtk_box_pack_start (GTK_BOX (hbox), card->entries[ENTRY_SEX],  */
-/*                       FALSE, FALSE, 5); */
-/*   gtk_box_pack_start (GTK_BOX (hbox),  */
-/*                       gtk_radio_button_new_with_label_from_widget  */
-/*                       (GTK_RADIO_BUTTON (card->entries[ENTRY_SEX]),  */
-/*                        gpa_sex_char_to_string ('f')), */
-/*                       FALSE, FALSE, 5); */
-/*   gtk_box_pack_start (GTK_BOX (hbox),  */
-/*                       gtk_radio_button_new_with_label_from_widget  */
-/*                       (GTK_RADIO_BUTTON (card->entries[ENTRY_SEX]),  */
-/*                        gpa_sex_char_to_string ('u')), */
-/*                       FALSE, FALSE, 5); */
-/*   add_table_row (personal_table, &rowidx, */
-/*                  "Sex:", hbox, NULL); */
-  
+  card->entries[ENTRY_FIRST_NAME] = gtk_entry_new ();
+  gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_FIRST_NAME]), 35);
+  add_table_row (personal_table, &rowidx, 
+                 _("First name:"), card->entries[ENTRY_FIRST_NAME], NULL, 0);
+
+  card->entries[ENTRY_LAST_NAME] = gtk_entry_new ();
+  gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LAST_NAME]), 35);
+  add_table_row (personal_table, &rowidx,
+                 _("Last name:"),  card->entries[ENTRY_LAST_NAME], NULL, 0);
 
   card->entries[ENTRY_LANGUAGE] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LANGUAGE]), 8);
   add_table_row (personal_table, &rowidx,
-                 "Language: ", card->entries[ENTRY_LANGUAGE], NULL, 0);
+                 _("Language:"), card->entries[ENTRY_LANGUAGE], NULL, 0);
 
   card->entries[ENTRY_LOGIN] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LOGIN]), 254);
   add_table_row (personal_table, &rowidx,
-                 "Login data: ", card->entries[ENTRY_LOGIN], NULL, 0);
+                 _("Login data:"), card->entries[ENTRY_LOGIN], NULL, 0);
 
   card->entries[ENTRY_PUBKEY_URL] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_PUBKEY_URL]), 254);
   add_table_row (personal_table, &rowidx,
-                 "Public key URL: ", card->entries[ENTRY_PUBKEY_URL], NULL, 0);
+                 _("Public key URL:"),
+                 card->entries[ENTRY_PUBKEY_URL], NULL, 0);
 
   gtk_container_add (GTK_CONTAINER (personal_frame), personal_table);
 
+
   /* Keys frame.  */
+  keys_frame = card->keys_frame = gtk_expander_new (NULL);
+  label = gtk_label_new (_("<b>Keys</b>"));
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_expander_set_label_widget (GTK_EXPANDER (keys_frame), label);
+  gtk_expander_set_expanded (GTK_EXPANDER (keys_frame), TRUE);
+
+  keys_table = gtk_table_new (3, 3, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (keys_table), 10);
+
   rowidx = 0;
 
   card->entries[ENTRY_KEY_SIG] = gtk_entry_new ();
   gtk_entry_set_width_chars (GTK_ENTRY (card->entries[ENTRY_KEY_SIG]), 48);
   add_table_row (keys_table, &rowidx, 
-                 "Signature key: ", card->entries[ENTRY_KEY_SIG], NULL, 1);
+                 _("Signature key:"), card->entries[ENTRY_KEY_SIG], NULL, 1);
 
   card->entries[ENTRY_KEY_ENC] = gtk_entry_new ();
   add_table_row (keys_table, &rowidx,
-                 "Encryption key: ", card->entries[ENTRY_KEY_ENC], NULL, 1);
+                 _("Encryption key:"), card->entries[ENTRY_KEY_ENC], NULL, 1);
 
   card->entries[ENTRY_KEY_AUTH] = gtk_entry_new ();
   add_table_row (keys_table, &rowidx,
-                 "Authentication key: ",card->entries[ENTRY_KEY_AUTH], NULL, 1);
+                 ("Authentication key:"),
+                 card->entries[ENTRY_KEY_AUTH], NULL, 1);
 
   gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
 
 
   /* PIN frame.  */
+  pin_frame = card->pin_frame = gtk_expander_new (NULL);
+  label = gtk_label_new (_("<b>PIN</b>"));
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_expander_set_label_widget (GTK_EXPANDER (pin_frame), label);
+  gtk_expander_set_expanded (GTK_EXPANDER (pin_frame), TRUE);
+
+  pin_table = gtk_table_new (4, 3, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (pin_table), 10);
+  
   rowidx = 0;
+
+  card->entries[ENTRY_SIG_FORCE_PIN] = gtk_check_button_new ();
+  add_table_row (pin_table, &rowidx, 
+                 _("Force signature PIN:"),
+                 card->entries[ENTRY_SIG_FORCE_PIN], NULL, 0);
 
   card->entries[ENTRY_PIN_RETRYCOUNTER] = gtk_entry_new ();
   gtk_entry_set_width_chars
-    (GTK_ENTRY (card->entries[ENTRY_PIN_RETRYCOUNTER]), 24);
+    (GTK_ENTRY (card->entries[ENTRY_PIN_RETRYCOUNTER]), 1);
   add_table_row (pin_table, &rowidx, 
-                 "PIN Retry Counter: ", 
+                 _("PIN retry counter:"), 
                  card->entries[ENTRY_PIN_RETRYCOUNTER], NULL, 1);
+
+  card->entries[ENTRY_PUK_RETRYCOUNTER] = gtk_entry_new ();
+  gtk_entry_set_width_chars
+    (GTK_ENTRY (card->entries[ENTRY_PUK_RETRYCOUNTER]), 1);
+  card->puk_label = 
+    add_table_row (pin_table, &rowidx, 
+                   "", /* The label depends on the card version.  */ 
+                   card->entries[ENTRY_PUK_RETRYCOUNTER], NULL, 1);
 
   card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER] = gtk_entry_new ();
   gtk_entry_set_width_chars 
-    (GTK_ENTRY (card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER]), 24);
+    (GTK_ENTRY (card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER]), 1);
   add_table_row (pin_table, &rowidx, 
-                 "Admin PIN Retry Counter: ",
+                 _("Admin PIN retry counter:"),
                  card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], NULL, 1);
 
-  card->entries[ENTRY_SIG_FORCE_PIN] = gtk_entry_new ();
-  gtk_entry_set_width_chars 
-    (GTK_ENTRY (card->entries[ENTRY_SIG_FORCE_PIN]), 24);
-  add_table_row (pin_table, &rowidx, 
-                 "Force Signature PIN: ",
-                 card->entries[ENTRY_SIG_FORCE_PIN], NULL, 1);
-
   gtk_container_add (GTK_CONTAINER (pin_frame), pin_table);
+
 
   /* Put all frames together.  */
   gtk_box_pack_start (GTK_BOX (card), general_frame, FALSE, TRUE, 0);
@@ -946,6 +1068,13 @@ construct_data_widget (GpaCMOpenpgp *card)
         case ENTRY_SEX:
           g_signal_connect (G_OBJECT (card->entries[idx]), "changed",
                             G_CALLBACK (edit_changed_combo_box_cb), card);
+          g_signal_connect (G_OBJECT (card->entries[idx]), "focus",
+                            G_CALLBACK (edit_focus_cb), card);
+          break;
+
+        case ENTRY_SIG_FORCE_PIN:
+          g_signal_connect (G_OBJECT (card->entries[idx]), "toggled",
+                            G_CALLBACK (edit_toggled_cb), card);
           g_signal_connect (G_OBJECT (card->entries[idx]), "focus",
                             G_CALLBACK (edit_focus_cb), card);
           break;

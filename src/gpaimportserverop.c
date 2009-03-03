@@ -27,7 +27,7 @@
 #include "gtktools.h"
 #include "gparecvkeydlg.h"
 #include "gpaimportserverop.h"
-#include "server_access.h"
+#include "server-access.h"
 
 static GObjectClass *parent_class = NULL;
 
