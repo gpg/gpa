@@ -131,6 +131,8 @@ clear_card_data (GpaCMOpenpgp *card)
   for (idx=0; idx < ENTRY_LAST; idx++)
     if (idx == ENTRY_SEX)
       gtk_combo_box_set_active (GTK_COMBO_BOX (card->entries[idx]), 2);
+    else if (GTK_IS_LABEL (card->entries[idx]))
+      gtk_label_set_text (GTK_LABEL (card->entries[idx]), "");
     else
       gtk_entry_set_text (GTK_ENTRY (card->entries[idx]), "");
 }
@@ -198,9 +200,9 @@ update_entry_serialno (GpaCMOpenpgp *card, int entry_id, const char *string)
       vendor = get_manufacturer (xtoi_2(string+16)*256 + xtoi_2 (string+18));
 
     }
-  gtk_entry_set_text (GTK_ENTRY (card->entries[ENTRY_SERIALNO]), serialno);
-  gtk_entry_set_text (GTK_ENTRY (card->entries[ENTRY_MANUFACTURER]), vendor);
-  gtk_entry_set_text (GTK_ENTRY (card->entries[ENTRY_VERSION]), version);
+  gtk_label_set_text (GTK_LABEL (card->entries[ENTRY_SERIALNO]), serialno);
+  gtk_label_set_text (GTK_LABEL (card->entries[ENTRY_MANUFACTURER]), vendor);
+  gtk_label_set_text (GTK_LABEL (card->entries[ENTRY_VERSION]), version);
 
   if ((*version == '1' || *version == '0') && version[1] == '.')
     {
@@ -268,7 +270,7 @@ set_integer (GtkWidget *entry, int value)
   char numbuf[35];
   
   snprintf (numbuf, sizeof numbuf, "%d", value);
-  gtk_entry_set_text (GTK_ENTRY (entry), numbuf);
+  gtk_label_set_text (GTK_LABEL (entry), numbuf);
 }
 
 
@@ -324,7 +326,7 @@ update_entry_fpr (GpaCMOpenpgp *card, int entry_id, const char *string)
   char *buf;
 
   buf = gpa_gpgme_key_format_fingerprint (string);
-  gtk_entry_set_text (GTK_ENTRY (card->entries[entry_id]), buf);
+  gtk_label_set_text (GTK_LABEL (card->entries[entry_id]), buf);
   xfree (buf);
 }
 
@@ -375,6 +377,9 @@ scd_getattr_cb (void *opaque, const char *status, const char *args)
           percent_unescape (tmp, 1);
           if (parm->updfnc)
             parm->updfnc (parm->card, entry_id, tmp);
+          else if (GTK_IS_LABEL (parm->card->entries[entry_id]))
+            gtk_label_set_text 
+              (GTK_LABEL (parm->card->entries[entry_id]), tmp);
           else
             gtk_entry_set_text 
               (GTK_ENTRY (parm->card->entries[entry_id]), tmp);
@@ -486,7 +491,8 @@ save_attr (GpaCMOpenpgp *card, const char *name,
   if (!err)
     err = gpgme_op_assuan_result (gpgagent)->err;
 
-  if (err)
+  if (err && !(gpg_err_code (err) == GPG_ERR_CANCELED
+               && gpg_err_source (err) == GPG_ERR_SOURCE_PINENTRY))
     {
       char *message = g_strdup_printf 
         (_("Error saving the changed values.\n"
@@ -860,6 +866,7 @@ add_table_row (GtkWidget *table, int *rowidx,
                int readonly)
 {
   GtkWidget *label;
+  int is_label = GTK_IS_LABEL (widget);
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
@@ -867,13 +874,21 @@ add_table_row (GtkWidget *table, int *rowidx,
   gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
                     *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
   
+  if (is_label)
+    gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
+
   if (readonly)
     {
-      if (GTK_IS_ENTRY (widget))
+      if (!is_label && GTK_IS_ENTRY (widget))
         {
           gtk_entry_set_has_frame (GTK_ENTRY (widget), FALSE);
           gtk_entry_set_editable (GTK_ENTRY (widget), FALSE);
         }
+    }
+  else
+    {
+      if (is_label)
+        gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
     }
 
   gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
@@ -917,18 +932,17 @@ construct_data_widget (GpaCMOpenpgp *card)
 
   rowidx = 0;
 
-  card->entries[ENTRY_SERIALNO] = gtk_entry_new ();
-  add_table_row (general_table, &rowidx, 
-                 _("Serial number:"), card->entries[ENTRY_SERIALNO], NULL, 1);
+  card->entries[ENTRY_SERIALNO] = gtk_label_new (NULL);
+  add_table_row (general_table, &rowidx, _("Serial number:"), 
+                 card->entries[ENTRY_SERIALNO], NULL, 0);
 
-  card->entries[ENTRY_VERSION] = gtk_entry_new ();
-  add_table_row (general_table, &rowidx,
-                 _("Card version:"), card->entries[ENTRY_VERSION], NULL, 1);
+  card->entries[ENTRY_VERSION] = gtk_label_new (NULL);
+  add_table_row (general_table, &rowidx, _("Card version:"),
+                 card->entries[ENTRY_VERSION], NULL, 0);
 
-  card->entries[ENTRY_MANUFACTURER] = gtk_entry_new ();
-  add_table_row (general_table, &rowidx,
-                 _("Manufacturer:"),
-                 card->entries[ENTRY_MANUFACTURER], NULL, 1);
+  card->entries[ENTRY_MANUFACTURER] = gtk_label_new (NULL);
+  add_table_row (general_table, &rowidx, _("Manufacturer:"),
+                 card->entries[ENTRY_MANUFACTURER], NULL, 0);
 
   gtk_container_add (GTK_CONTAINER (general_frame), general_table);
 
@@ -993,19 +1007,17 @@ construct_data_widget (GpaCMOpenpgp *card)
 
   rowidx = 0;
 
-  card->entries[ENTRY_KEY_SIG] = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (card->entries[ENTRY_KEY_SIG]), 48);
-  add_table_row (keys_table, &rowidx, 
-                 _("Signature key:"), card->entries[ENTRY_KEY_SIG], NULL, 1);
+  card->entries[ENTRY_KEY_SIG] = gtk_label_new (NULL);
+  add_table_row (keys_table, &rowidx, _("Signature key:"),
+                 card->entries[ENTRY_KEY_SIG], NULL, 0);
 
-  card->entries[ENTRY_KEY_ENC] = gtk_entry_new ();
-  add_table_row (keys_table, &rowidx,
-                 _("Encryption key:"), card->entries[ENTRY_KEY_ENC], NULL, 1);
+  card->entries[ENTRY_KEY_ENC] = gtk_label_new (NULL);
+  add_table_row (keys_table, &rowidx, _("Encryption key:"),
+                 card->entries[ENTRY_KEY_ENC], NULL, 0);
 
-  card->entries[ENTRY_KEY_AUTH] = gtk_entry_new ();
-  add_table_row (keys_table, &rowidx,
-                 ("Authentication key:"),
-                 card->entries[ENTRY_KEY_AUTH], NULL, 1);
+  card->entries[ENTRY_KEY_AUTH] = gtk_label_new (NULL);
+  add_table_row (keys_table, &rowidx, _("Authentication key:"),
+                 card->entries[ENTRY_KEY_AUTH], NULL, 0);
 
   gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
 
@@ -1027,26 +1039,18 @@ construct_data_widget (GpaCMOpenpgp *card)
                  _("Force signature PIN:"),
                  card->entries[ENTRY_SIG_FORCE_PIN], NULL, 0);
 
-  card->entries[ENTRY_PIN_RETRYCOUNTER] = gtk_entry_new ();
-  gtk_entry_set_width_chars
-    (GTK_ENTRY (card->entries[ENTRY_PIN_RETRYCOUNTER]), 1);
-  add_table_row (pin_table, &rowidx, 
-                 _("PIN retry counter:"), 
+  card->entries[ENTRY_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
+  add_table_row (pin_table, &rowidx, _("PIN retry counter:"), 
                  card->entries[ENTRY_PIN_RETRYCOUNTER], NULL, 1);
 
-  card->entries[ENTRY_PUK_RETRYCOUNTER] = gtk_entry_new ();
-  gtk_entry_set_width_chars
-    (GTK_ENTRY (card->entries[ENTRY_PUK_RETRYCOUNTER]), 1);
+  card->entries[ENTRY_PUK_RETRYCOUNTER] = gtk_label_new (NULL);
   card->puk_label = 
     add_table_row (pin_table, &rowidx, 
                    "", /* The label depends on the card version.  */ 
                    card->entries[ENTRY_PUK_RETRYCOUNTER], NULL, 1);
 
-  card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER] = gtk_entry_new ();
-  gtk_entry_set_width_chars 
-    (GTK_ENTRY (card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER]), 1);
-  add_table_row (pin_table, &rowidx, 
-                 _("Admin PIN retry counter:"),
+  card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
+  add_table_row (pin_table, &rowidx, _("Admin PIN retry counter:"),
                  card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], NULL, 1);
 
   gtk_container_add (GTK_CONTAINER (pin_frame), pin_table);
@@ -1080,10 +1084,13 @@ construct_data_widget (GpaCMOpenpgp *card)
           break;
 
         default:
-          g_signal_connect (G_OBJECT (card->entries[idx]), "changed",
-                            G_CALLBACK (edit_changed_cb), card);
-          g_signal_connect (G_OBJECT (card->entries[idx]), "focus",
-                            G_CALLBACK (edit_focus_cb), card);
+          if (!GTK_IS_LABEL (card->entries[idx]))
+            {
+              g_signal_connect (G_OBJECT (card->entries[idx]), "changed",
+                                G_CALLBACK (edit_changed_cb), card);
+              g_signal_connect (G_OBJECT (card->entries[idx]), "focus",
+                                G_CALLBACK (edit_focus_cb), card);
+            }
           break;
         }
     }

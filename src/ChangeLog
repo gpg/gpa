@@ -1,5 +1,10 @@
 2009-03-04  Werner Koch  <wk@g10code.com>
 
+	* cm-openpgp.c (add_table_row): Allow for GtkLabel as widget.
+	(construct_data_widget): Change all read-only fields to GtkLabel.
+	Change all users of these fields.
+	(save_attr): No error message if canceled.
+
 	* cardman.c (struct _GpaCardManager): Add field APP_SELECTOR.
 	(setup_app_selector, setup_app_selector_data_cb): New.
 	(gpa_card_manager_init): Call setup_app_selector.

@@ -333,7 +333,9 @@ card_reload (GpaCardManager *cardman)
 
 
       if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT)
-        ;
+        {
+          err_desc = _("No card found.");
+        }
       else if (gpg_err_source (err) == GPG_ERR_SOURCE_SCD
                && gpg_err_code (err) == GPG_ERR_CONFLICT)
         {
@@ -697,33 +699,23 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
       gtk_widget_destroy (cardman->card_widget);
       cardman->card_widget = NULL;
     }
-  /* Fixme: We should use a signal to get and reload the card widget.  */
+
   if (cardman->cardtype == GPA_CM_OPENPGP_TYPE)
     {
       cardman->card_widget = gpa_cm_openpgp_new ();
-      gpa_cm_openpgp_reload (cardman->card_widget, cardman->gpgagent);
-      g_signal_connect_swapped (G_OBJECT (cardman->card_widget),
-                                "update-status",
-                                G_CALLBACK (statusbar_update_cb), cardman);
     }
   else if (cardman->cardtype == GPA_CM_GELDKARTE_TYPE)
     {
       cardman->card_widget = gpa_cm_geldkarte_new ();
-      gpa_cm_geldkarte_reload (cardman->card_widget, cardman->gpgagent);
     }
   else if (cardman->cardtype == GPA_CM_NETKEY_TYPE)
     {
       cardman->card_widget = gpa_cm_netkey_new ();
-      gpa_cm_netkey_reload (cardman->card_widget, cardman->gpgagent);
     }
   else
     {
       if (!error_description)
-        {
-          error_description = cardman->cardtype
-            ? _("This card application is not yet supported.")
-            : _("No card found.");
-        }
+        error_description = _("This card application is not yet supported.");
       cardman->card_widget = gtk_label_new (error_description);
     }
 
@@ -731,6 +723,21 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
     (GTK_SCROLLED_WINDOW (cardman->card_container), cardman->card_widget);
 
   gtk_widget_show_all (cardman->card_widget);
+
+  /* We need to do the reload after a show_all so that a card
+     application may hide parts of its window.  */
+  if (GPA_IS_CM_OBJECT (cardman->card_widget))
+    {
+      g_signal_connect_swapped (G_OBJECT (cardman->card_widget),
+                                "update-status",
+                                G_CALLBACK (statusbar_update_cb), cardman);
+
+      /* Fixme: We should use a signal to reload the card widget
+         instead of using a class test in each reload fucntion.  */
+      gpa_cm_openpgp_reload (cardman->card_widget, cardman->gpgagent);
+      gpa_cm_geldkarte_reload (cardman->card_widget, cardman->gpgagent);
+      gpa_cm_netkey_reload (cardman->card_widget, cardman->gpgagent);
+    }
 }
 
 
