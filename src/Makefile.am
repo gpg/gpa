@@ -138,6 +138,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      strlist.h strlist.c \
 	      gpg-stuff.h gpg-stuff.c \
 	      convert.c convert.h \
+              membuf.c membuf.h \
 	      utils.c $(gpa_w32_sources) $(gpa_cardman_sources)
 
 dndtest_SOURCES = dndtest.c

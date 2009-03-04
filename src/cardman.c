@@ -38,6 +38,7 @@
 #include "icons.h"
 #include "cardman.h"
 #include "convert.h"
+#include "membuf.h"
 
 #include "gpagenkeycardop.h"
 
@@ -62,10 +63,11 @@ struct _GpaCardManager
 
   GtkUIManager *ui_manager;
 
+
+  GtkWidget *app_selector;    /* Combo Box to select the application.  */
   
   GtkWidget *card_container;  /* The container holding the card widget.  */
   GtkWidget *card_widget;     /* The widget to display a card applciation.  */
-
 
   /* Labels in the status bar.  */
   GtkWidget *status_label;
@@ -99,7 +101,7 @@ static GpaCardManager *this_instance;
 
 /* Local prototypes */
 static void start_ticker (GpaCardManager *cardman);
-static void update_card_widget (GpaCardManager *cardman);
+static void update_card_widget (GpaCardManager *cardman, const char *err_desc);
 
 static void gpa_card_manager_finalize (GObject *object);
 
@@ -258,7 +260,11 @@ static void
 card_reload (GpaCardManager *cardman)
 {
   gpg_error_t err;
+  const char *application;
+  char *command_buf = NULL;
   const char *command;
+  const char *err_desc = NULL;
+  int auto_app;
 
   if (!cardman->gpgagent)
     return;  /* No support for GPGME_PROTOCOL_ASSUAN.  */
@@ -279,22 +285,80 @@ card_reload (GpaCardManager *cardman)
          command; this makes sure that scdaemon initalizes the card if
          that has not yet been done.  */
       command = "SCD SERIALNO";
+      if (cardman->app_selector 
+          && (gtk_combo_box_get_active 
+              (GTK_COMBO_BOX (cardman->app_selector)) > 0)
+          && (application = gtk_combo_box_get_active_text
+              (GTK_COMBO_BOX (cardman->app_selector))))
+        {
+          command_buf = g_strdup_printf ("%s %s", command, application);
+          command = command_buf;
+          auto_app = 0;
+        }
+      else
+        auto_app = 1;
       err = gpgme_op_assuan_transact (cardman->gpgagent,
                                       command,
                                       scd_data_cb, NULL,
                                       scd_inq_cb, NULL,
                                       scd_status_cb, cardman);
       if (!err)
-        err = gpgme_op_assuan_result (cardman->gpgagent)->err;
+        {
+          err = gpgme_op_assuan_result (cardman->gpgagent)->err;
+          if (!auto_app
+              && gpg_err_source (err) == GPG_ERR_SOURCE_SCD
+              && gpg_err_code (err) == GPG_ERR_CONFLICT)
+            {
+              /* Not in auto select mode and the scdaemon told us
+                 about a conflicting use.  We now do a restart and try
+                 again to display an application selection conflict
+                 error only if it is not due to our own connection to
+                 the scdaemon.  */
+              if (!gpgme_op_assuan_transact (cardman->gpgagent,
+                                             "SCD RESTART",
+                                             NULL, NULL, NULL, NULL,
+                                             NULL, NULL)
+                  && !gpgme_op_assuan_result (cardman->gpgagent)->err)
+                {
+                  err = gpgme_op_assuan_transact (cardman->gpgagent,
+                                                  command,
+                                                  scd_data_cb, NULL,
+                                                  scd_inq_cb, NULL,
+                                                  scd_status_cb, cardman);
+                  if (!err)
+                    err = gpgme_op_assuan_result (cardman->gpgagent)->err;
+                }
+            }
+        }
+
 
       if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT)
         ;
+      else if (gpg_err_source (err) == GPG_ERR_SOURCE_SCD
+               && gpg_err_code (err) == GPG_ERR_CONFLICT)
+        {
+          err_desc = auto_app
+            ? _("The selected card application is currently not available.")
+            : _("Another process is using a different card application "
+                "than the selected one.\n\n"
+                "You may change the application selection mode to "
+                "\"Auto\" to select the active application.");
+        }
+      else if (!auto_app
+               && gpg_err_source (err) == GPG_ERR_SOURCE_SCD
+               && gpg_err_code (err) == GPG_ERR_NOT_SUPPORTED)
+        {
+          err_desc = 
+            _("The selected card application is not available.");
+        }
       else if (err)
         {
           g_debug ("assuan command `%s' failed: %s <%s>\n", 
                    command, gpg_strerror (err), gpg_strsource (err));
+          err_desc = _("Error accessing the card.");
           statusbar_update (cardman, _("Error accessing card"));
         }
+      g_free (command_buf);
 
  
       if (!err)
@@ -329,7 +393,7 @@ card_reload (GpaCardManager *cardman)
         }
 
       
-      update_card_widget (cardman);
+      update_card_widget (cardman, err_desc);
       update_title (cardman);
       
       update_info_visibility (cardman);
@@ -626,7 +690,7 @@ card_manager_closed (GtkWidget *widget, gpointer param)
 
 
 static void
-update_card_widget (GpaCardManager *cardman)
+update_card_widget (GpaCardManager *cardman, const char *error_description)
 {
   if (cardman->card_widget)
     {
@@ -654,7 +718,13 @@ update_card_widget (GpaCardManager *cardman)
     }
   else
     {
-      cardman->card_widget = gtk_label_new (_("No card found."));
+      if (!error_description)
+        {
+          error_description = cardman->cardtype
+            ? _("This card application is not yet supported.")
+            : _("No card found.");
+        }
+      cardman->card_widget = gtk_label_new (error_description);
     }
 
   gtk_scrolled_window_add_with_viewport 
@@ -664,11 +734,82 @@ update_card_widget (GpaCardManager *cardman)
 }
 
 
+/* Handler for the "changed" signal of the application selector.  */
+static void
+app_selector_changed_cb (GtkComboBox *cbox, void *opaque)
+{
+  GpaCardManager *cardman = opaque;
+
+  g_object_ref (cardman);
+  g_idle_add (card_reload_idle_cb, cardman);
+}
+
+
+/* Assuan data callback used by setup_app_selector.  */
+static gpg_error_t
+setup_app_selector_data_cb (void *opaque, const void *data, size_t datalen)
+{
+  membuf_t *mb = opaque;
+
+  put_membuf (mb, data, datalen);
+
+  return 0;
+}
+
+
+/* Fill the app_selection box with the available applications.  */
+static void
+setup_app_selector (GpaCardManager *cardman)
+{
+  gpg_error_t err;
+  membuf_t mb;
+  char *string;
+  char *p, *p0, *p1;
+
+  if (!cardman->gpgagent || !cardman->app_selector)
+    return;
+
+  init_membuf (&mb, 256);
+
+  err = gpgme_op_assuan_transact (cardman->gpgagent,
+                                  "SCD GETINFO app_list",
+                                  setup_app_selector_data_cb, &mb,
+                                  NULL, NULL, NULL, NULL);
+  if (err || gpgme_op_assuan_result (cardman->gpgagent)->err)
+    {
+      g_free (get_membuf (&mb, NULL));
+      return;
+    }
+  /* Make sure the data is a string and get it. */
+  put_membuf (&mb, "", 1);
+  string = get_membuf (&mb, NULL);
+  if (!string)
+    return; /* Out of core.  */
+
+  for (p=p0=string; *p; p++)
+    {
+      if (*p == '\n')
+        {
+          *p = 0;
+          p1 = strchr (p0, ':');
+          if (p1)
+            *p1 = 0;
+          gtk_combo_box_append_text 
+            (GTK_COMBO_BOX (cardman->app_selector), p0);
+          if (p[1])
+            p0 = p+1;
+        }
+    }
+
+  g_free (string);
+}
+
+
 static void
 construct_widgets (GpaCardManager *cardman)
 {
   GtkWidget *vbox;
-  GtkWidget *hbox;
+  GtkWidget *hbox, *hbox1, *hbox2;
   GtkWidget *label;
   GtkWidget *icon;
   gchar *markup;
@@ -691,22 +832,39 @@ construct_widgets (GpaCardManager *cardman)
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
 
   /* Add a fancy label that tells us: This is the card manager.  */
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+  hbox1 = gtk_hbox_new (FALSE, 0);
   
   icon = gtk_image_new_from_stock (GPA_STOCK_CARDMAN, GTK_ICON_SIZE_DND);
-  gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox1), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);
   markup = g_strdup_printf ("<span font_desc=\"16\">%s</span>",
                             _("Card Manager"));
   gtk_label_set_markup (GTK_LABEL (label), markup);
   g_free (markup);
-  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
+  gtk_box_pack_start (GTK_BOX (hbox1), label, TRUE, TRUE, 10);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
-  /* Create a container (a scolled windows) which will take the actual
-     card widgte.  This container is required so that we can easily
+  /* Add a application selection box.  */
+  hbox2 = gtk_hbox_new (FALSE, 0);
+  label = gtk_label_new (_("Application selection:"));
+  gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 5);
+  cardman->app_selector = gtk_combo_box_new_text ();
+  gtk_combo_box_append_text (GTK_COMBO_BOX (cardman->app_selector),
+                             _("Auto"));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (cardman->app_selector), 0);
+  gtk_box_pack_start (GTK_BOX (hbox2), cardman->app_selector, FALSE, TRUE, 0);
+
+  /* Put Card Manager label and application selector into the same line.  */
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), hbox1, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (hbox), hbox2, FALSE, FALSE, 0);
+
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+
+
+  /* Create a container (a scolled window) which will take the actual
+     card widget.  This container is required so that we can easily
      change to a differet card widget. */
   cardman->card_container = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy 
@@ -715,7 +873,7 @@ construct_widgets (GpaCardManager *cardman)
   gtk_box_pack_start (GTK_BOX (vbox), cardman->card_container, TRUE, TRUE, 0);
 
   /* Update the container using the current card application.  */
-  update_card_widget (cardman);
+  update_card_widget (cardman, NULL);
 
   statusbar = statusbar_new (cardman);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, FALSE, 0);
@@ -777,6 +935,13 @@ gpa_card_manager_init (GTypeInstance *instance, void *class_ptr)
       gpgme_release (cardman->gpgagent);
       cardman->gpgagent = NULL;
     }
+
+  setup_app_selector (cardman);
+  if (cardman->app_selector)
+    g_signal_connect (cardman->app_selector, "changed",
+                      G_CALLBACK (app_selector_changed_cb), cardman);
+
+
 }
 
 

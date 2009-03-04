@@ -1,3 +1,15 @@
+2009-03-04  Werner Koch  <wk@g10code.com>
+
+	* cardman.c (struct _GpaCardManager): Add field APP_SELECTOR.
+	(setup_app_selector, setup_app_selector_data_cb): New.
+	(gpa_card_manager_init): Call setup_app_selector.
+	(card_reload): Implement application selection.
+	(update_card_widget): Add arg ERROR_DESCRIPTION and change all
+	callers.
+
+	* membuf.c, membuf.h: New.  Taken from GnuPG and modified for use
+	with Glib.
+
 2009-03-03  Werner Koch  <wk@g10code.com>
 
 	* convert.c (gpa_sex_char_to_string): Make strings a salutation.
