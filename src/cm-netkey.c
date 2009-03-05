@@ -44,6 +44,8 @@ enum
 
     ENTRY_PIN_RETRYCOUNTER,
     ENTRY_PUK_RETRYCOUNTER,
+    ENTRY_SIGG_PIN_RETRYCOUNTER,
+    ENTRY_SIGG_PUK_RETRYCOUNTER,
 
     ENTRY_LAST
   }; 
@@ -55,6 +57,7 @@ struct pininfo_s
   int valid;            /* Valid information.  */
   int nullpin;          /* The NullPIN is activ.  */
   int blocked;          /* The PIN is blocked.  */
+  int nopin;            /* No such PIN.  */
   int tries_left;       /* How many verification tries are left.  */
 };
 
@@ -76,11 +79,17 @@ struct _GpaCMNetkey
 
   GtkWidget *entries[ENTRY_LAST];
 
-  GtkWidget *change_pin_btn; /* The button to change the PIN.  */
-  GtkWidget *change_puk_btn; /* The button to change the PUK.  */
+  GtkWidget *change_pin_btn;      /* The button to change the PIN for NKS.  */
+  GtkWidget *change_puk_btn;      /* The button to change the PUK for NKS.  */
+  GtkWidget *change_sigg_pin_btn; /* The button to change the PIN for SigG. */
+  GtkWidget *change_sigg_puk_btn; /* The button to change the PUK for SigG. */
 
   /* Information about the PINs. */
-  struct pininfo_s pininfo[3];
+  struct pininfo_s pininfo[4];
+
+
+  int  reloading;   /* Sentinel to avoid recursive reloads.  */
+
 };
 
 /* The parent class.  */
@@ -111,12 +120,123 @@ clear_card_data (GpaCMNetkey *card)
 }
 
 
+/* Put the PIN information into the field with ENTRY_ID.  If BUTTON is
+   not NULL its sensitivity is set as well. */
+static void
+update_entry_retry_counter (GpaCMNetkey *card, int entry_id, 
+                            struct pininfo_s *info, int any_isnull,
+                            int is_puk, GtkWidget *button)
+{
+  char numbuf[50];
+  const char *string;
+  
+  if (!info->valid)
+    string = _("unknown");
+  else if (info->nullpin)
+    string = "NullPIN";
+  else if (info->blocked)
+    string = _("blocked");
+  else if (info->nopin)
+    string = "n/a";
+  else
+    {
+      snprintf (numbuf, sizeof numbuf, "%d", info->tries_left);
+      string = numbuf;
+    }
+  gtk_label_set_text (GTK_LABEL (card->entries[entry_id]), string);
+  if (button)
+    {
+      gtk_button_set_label (GTK_BUTTON (button), 
+                            (info->valid && !info->nullpin
+                             && (info->blocked || !info->tries_left))
+                            ? (is_puk? _("Reset PUK") : _("Reset PIN"))
+                            : (is_puk? _("Change PUK"): _("Change PIN")));
+      gtk_widget_set_sensitive (button, 
+                                (info->valid && !any_isnull
+                                 && !info->nullpin && !info->blocked
+                                 && !info->nopin));
+    }
+}
+
+
+
+/* Update the CHV status fields.  This function may modify STRING.  */
+static void
+update_entry_chv_status (GpaCMNetkey *card, int entry_id, char *string)
+{
+  struct { 
+    int info_idx;
+    int is_puk;
+    int entry_id;
+    GtkWidget *widget;
+  } tbl[] = 
+    {
+      {  0, 0, ENTRY_PIN_RETRYCOUNTER },
+      {  1, 1, ENTRY_PUK_RETRYCOUNTER  },
+      {  2, 0, ENTRY_SIGG_PIN_RETRYCOUNTER },
+      {  3, 1, ENTRY_SIGG_PUK_RETRYCOUNTER },
+      { -1, 0 }
+    };
+  int idx;
+  int any_isnull = 0;
+
+  tbl[0].widget = card->change_pin_btn;
+  tbl[1].widget = card->change_puk_btn;
+  tbl[2].widget = card->change_sigg_pin_btn;
+  tbl[3].widget = card->change_sigg_puk_btn;
+
+  (void)entry_id; /* Not used.  */
+  
+  for (idx=0; idx < DIM (card->pininfo); idx++)
+    memset (&card->pininfo[idx], 0, sizeof card->pininfo[0]);
+
+  while (spacep (string))
+    string++;
+  for (idx=0; *string && idx < DIM (card->pininfo); idx++)
+    {
+      int value = atoi (string);
+      while (*string && !spacep (string))
+        string++;
+      while (spacep (string))
+        string++;
+      
+      card->pininfo[idx].valid = 1;
+      if (value >= 0)
+        card->pininfo[idx].tries_left = value;
+      else if (value == -4)
+        {
+          card->pininfo[idx].nullpin = 1;
+          any_isnull = 1;
+        }
+      else if (value == -3)
+        card->pininfo[idx].blocked = 1;
+      else if (value == -2)
+        card->pininfo[idx].nopin = 1;
+      else
+        card->pininfo[idx].valid = 0;
+    }
+
+  for (idx=0; tbl[idx].info_idx != -1; idx++)
+    if (tbl[idx].info_idx < DIM (card->pininfo))
+      update_entry_retry_counter (card, tbl[idx].entry_id,
+                                  &card->pininfo[tbl[idx].info_idx],
+                                  any_isnull, 
+                                  tbl[idx].is_puk, tbl[idx].widget);
+
+  if (any_isnull)
+    gtk_widget_show_all (card->warning_frame);
+  else
+    gtk_widget_hide_all (card->warning_frame);
+}
+
+
+
 struct scd_getattr_parm
 {
   GpaCMNetkey *card;  /* The object.  */
-  const char *name;     /* Name of expected attribute.  */
-  int entry_id;        /* The identifier for the entry.  */
-  void (*updfnc) (GpaCMNetkey *card, int entry_id, const char *string);
+  const char *name;   /* Name of expected attribute.  */
+  int entry_id;       /* The identifier for the entry.  */
+  void (*updfnc) (GpaCMNetkey *card, int entry_id, char *string);
 };
 
 
@@ -134,120 +254,23 @@ scd_getattr_cb (void *opaque, const char *status, const char *args)
 
       if (entry_id < ENTRY_LAST)
         {
+          char *tmp = xstrdup (args);
+
+          percent_unescape (tmp, 1);
           if (parm->updfnc)
-            parm->updfnc (parm->card, entry_id, args);
+            parm->updfnc (parm->card, entry_id, tmp);
           else if (GTK_IS_LABEL (parm->card->entries[entry_id]))
             gtk_label_set_text 
-              (GTK_LABEL (parm->card->entries[entry_id]), args);
+              (GTK_LABEL (parm->card->entries[entry_id]), tmp);
           else
             gtk_entry_set_text 
-              (GTK_ENTRY (parm->card->entries[entry_id]), args);
+              (GTK_ENTRY (parm->card->entries[entry_id]), tmp);
+          xfree (tmp);
         }
     }
 
   return 0;
 }     
-
-
-/* Data callback used by check_nullpin. */
-static gpg_error_t
-check_nullpin_data_cb (void *opaque, const void *data_arg, size_t datalen)
-{
-  int *pinstat = opaque;
-  const unsigned char *data = data_arg;
-
-  if (datalen >= 2)
-    {
-      unsigned int sw = ((data[datalen-2] << 8) | data[datalen-1]);
-
-      if (sw == 0x6985)
-        *pinstat = -2;  /* NullPIN is activ.  */
-      else if (sw == 0x6983)
-        *pinstat = -3; /* PIN is blocked.  */
-      else if ((sw & 0xfff0) == 0x63C0)
-        *pinstat = (sw & 0x000f); /* PIN has N tries left.  */
-      else
-        ; /* Probably no such PIN. */
-    }
-  return 0;
-}     
-
-
-/* Check whether the NullPIN is still active.  */
-static void
-check_nullpin (GpaCMNetkey *card)
-{
-  gpg_error_t err;
-  gpgme_ctx_t gpgagent;
-  int idx;
-
-  gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
-  g_return_if_fail (gpgagent);
-
-  for (idx=0; idx < DIM (card->pininfo); idx++)
-    memset (&card->pininfo[idx], 0, sizeof card->pininfo[0]);
-
-  /* A TCOS card responds to a verify with empty data (i.e. without
-     the Lc byte) with the status of the PIN.  The PIN is given as
-     usual as P2. */
-  for (idx=0; idx < DIM (card->pininfo) && idx < 2; idx++)
-    {
-      int pinstat = -1;
-      char command[100];
-      
-      snprintf (command, sizeof command, "SCD APDU 00:20:00:%02x", idx);
-
-      err = gpgme_op_assuan_transact (gpgagent, command,
-                                      check_nullpin_data_cb, &pinstat,
-                                      NULL, NULL,
-                                      NULL, NULL);
-      if (!err)
-        err = gpgme_op_assuan_result (gpgagent)->err;
-      if (err)
-        g_debug ("assuan empty verify command failed: %s <%s>\n", 
-                 gpg_strerror (err), gpg_strsource (err));
-      else
-        {
-          card->pininfo[idx].valid = 1;
-          if (pinstat == -2)
-            card->pininfo[idx].nullpin = 1;
-          else if (pinstat == -3)
-            card->pininfo[idx].blocked = 1;
-          else if (pinstat >= 0)
-            card->pininfo[idx].tries_left = pinstat;
-          else
-            card->pininfo[idx].valid = 0;
-        }
-    }
-}
-
-
-/* Put the PIN information into the field with ENTRY_ID.  If BUTTON is
-   not NULL its sensitivity is set as well. */
-static void
-update_entry_retry_counter (GpaCMNetkey *card, int entry_id, 
-                            struct pininfo_s *info, int pin0_isnull,
-                            GtkWidget *button)
-{
-  char numbuf[50];
-  const char *string;
-  
-  if (!info->valid)
-    string = _("unknown");
-  else if (info->nullpin)
-    string = "NullPIN";
-  else if (info->blocked)
-    string = _("blocked");
-  else
-    {
-      snprintf (numbuf, sizeof numbuf, "%d", info->tries_left);
-      string = numbuf;
-    }
-  gtk_label_set_text (GTK_LABEL (card->entries[entry_id]), string);
-  if (button)
-    gtk_widget_set_sensitive (button, (info->valid && !pin0_isnull
-                                       && !info->nullpin && !info->blocked));
-}
 
 
 /* Use the assuan machinery to load the bulk of the OpenPGP card data.  */
@@ -257,10 +280,11 @@ reload_data (GpaCMNetkey *card)
   static struct {
     const char *name;
     int entry_id;
-    void (*updfnc) (GpaCMNetkey *card, int entry_id,  const char *string);
+    void (*updfnc) (GpaCMNetkey *card, int entry_id, char *string);
   } attrtbl[] = {
     { "SERIALNO",    ENTRY_SERIALNO },
     { "NKS-VERSION", ENTRY_NKS_VERSION },
+    { "CHV-STATUS",  ENTRY_PIN_RETRYCOUNTER, update_entry_chv_status },
     { NULL }
   };
   int attridx;
@@ -268,13 +292,11 @@ reload_data (GpaCMNetkey *card)
   char command[100];
   struct scd_getattr_parm parm;
   gpgme_ctx_t gpgagent;
-  int pin0_isnull;
 
   gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
   g_return_if_fail (gpgagent);
 
-  check_nullpin (card);
-
+  card->reloading++;
   parm.card = card;
   for (attridx=0; attrtbl[attridx].name; attridx++)
     {
@@ -311,59 +333,75 @@ reload_data (GpaCMNetkey *card)
           break;
         }
     }
-
-  pin0_isnull = (card->pininfo[0].valid && card->pininfo[0].nullpin);
-  if (pin0_isnull)
-    gtk_widget_show_all (card->warning_frame);
-  else
-    gtk_widget_hide_all (card->warning_frame);
-
-  update_entry_retry_counter (card, ENTRY_PIN_RETRYCOUNTER, &card->pininfo[0],
-                              pin0_isnull, card->change_pin_btn);
-  update_entry_retry_counter (card, ENTRY_PUK_RETRYCOUNTER, &card->pininfo[1],
-                              pin0_isnull, card->change_puk_btn);
+  card->reloading--;
 }
 
 
 static void
 change_nullpin (GpaCMNetkey *card)
 {
-  GtkMessageDialog *dialog;
-  gpgme_ctx_t gpgagent;
   gpg_error_t err;
+  GtkWidget *dialog;
+  gpgme_ctx_t gpgagent;
+  int is_sigg;
+  char *string;
+  int okay;
 
   gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
   g_return_if_fail (gpgagent);
-  
+
+  if (card->pininfo[0].valid && card->pininfo[0].nullpin)
+    is_sigg = 0;
+  else if (card->pininfo[2].valid && card->pininfo[2].nullpin)
+    is_sigg = 1;
+  else
+    return; /* Oops: No NullPIN.  */
+
+  string = g_strdup_printf 
+    (_("<b>Setting the Initial PIN</b> (%s)\n\n"
+       "You selected to set the initial PIN of your card.  "
+       "The PIN is currently set to the NullPIN.  Setting an "
+       "initial PIN is <b>required but can't be reverted</b>.\n\n"
+       "Please check the documentation of your card to learn "
+       "for what the NullPIN is good.\n\n"
+       "If you proceeed you will be asked to enter a new PIN "
+       "and later to repeat that PIN.  Make sure that you "
+       "will remember that PIN - it will not be possible to "
+       "recover the PIN if it has been entered wrongly more "
+       "than %d times.\n\n%s"),
+     is_sigg? "SigG" : "NKS",
+     2,
+     is_sigg
+     ? _("You are now setting the PIN for the SigG key used to create "
+         "<b>qualified signatures</b>.  You may want to set the "
+         "PIN to the same value as used for the NKS keys.")
+     : _("You are now setting the PIN for the NKS keys used for standard "
+         "signatures, encryption and authentication."));
+    
   /* FIXME:  How do we figure out our GtkWindow?  */
-  dialog = GTK_MESSAGE_DIALOG (gtk_message_dialog_new 
-                               (NULL /*GTK_WINDOW (card)*/,
-                                GTK_DIALOG_DESTROY_WITH_PARENT,
-                                GTK_MESSAGE_INFO, 
-                                GTK_BUTTONS_OK_CANCEL, NULL));
-  gtk_message_dialog_set_markup 
-    (dialog, _("<b>Setting the Initial PIN</b>\n\n"
-               "You selected to set the initial PIN of your card.  "
-               "The PIN is currently set to the NullPIN, setting an "
-               "initial PIN is thus <b>required but can't be reverted</b>.\n\n"
-               "Please check the documentation of your card to learn "
-               "for what the NullPIN is good.\n\n"
-               "If you proceeed you will be asked to enter a new PIN "
-               "and later to repeat that PIN.  Make sure that you "
-               "will remember that PIN - it will not be possible to "
-               "recover the PIN if it has been entered wrongly more "
-               "than 2 times." ));
-                                 
-  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK )
+  dialog = gtk_message_dialog_new_with_markup (NULL /*GTK_WINDOW (card)*/,
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_INFO, 
+                                               GTK_BUTTONS_OK_CANCEL, 
+                                               NULL);
+  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), string);
+  g_free (string);
+
+  okay = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK);
+  if (okay)
     {
       err = gpgme_op_assuan_transact (gpgagent,
-                                      "SCD PASSWD --nullpin 0",
+                                      is_sigg
+                                      ? "SCD PASSWD --nullpin PW1.CH.SIG"
+                                      : "SCD PASSWD --nullpin PW1.CH",
                                       NULL, NULL,
                                       NULL, NULL,
                                       NULL, NULL);
       if (!err)
         err = gpgme_op_assuan_result (gpgagent)->err;
-      if (err && gpg_err_code (err) != GPG_ERR_CANCELED)
+      if (gpg_err_code (err) == GPG_ERR_CANCELED)
+        okay = 0; /* No need to reload the data.  */
+      else if (err)
         {
           char *message = g_strdup_printf 
             (_("Error changing the NullPIN.\n"
@@ -373,7 +411,120 @@ change_nullpin (GpaCMNetkey *card)
         }
     }
   gtk_widget_destroy (GTK_WIDGET (dialog));
+  if (okay)
+    reload_data (card);
 }
+
+
+
+static void
+change_or_reset_pin (GpaCMNetkey *card, int info_idx)
+{
+  gpg_error_t err;
+  GtkWidget *dialog;
+  gpgme_ctx_t gpgagent;
+  int reset_mode;
+  const char *string;
+  int is_puk;
+  int okay;
+  const char *pwidstr;
+
+  gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
+  g_return_if_fail (gpgagent);
+  g_return_if_fail (info_idx < DIM (card->pininfo));
+
+  if (!card->pininfo[info_idx].valid 
+      || card->pininfo[info_idx].nopin
+      || card->pininfo[info_idx].nullpin)
+    {
+      g_debug ("oops: NullPIN or not valid");
+      return;
+    }
+  reset_mode = (card->pininfo[info_idx].blocked
+                || !card->pininfo[info_idx].tries_left);
+  is_puk = !!(info_idx & 1);
+  g_debug ("%s PIN at idx %d", reset_mode?"Resetting":"Changing", info_idx);
+  switch (info_idx)
+    {
+    case 0: pwidstr = "PW1.CH"; break;
+    case 1: pwidstr = "PW2.CH"; break;
+    case 2: pwidstr = "PW1.CH.SIG"; break;
+    case 3: pwidstr = "PW2.CH.SIG"; break;
+    default: return;  /* Ooops.  */
+    }
+
+  string = (!reset_mode
+            ? _("<b>Changing a PIN or PUK</b>\n"
+                "\n"
+                "If you proceed you will be asked to enter "
+                "the current value and then to enter a new "
+                "value and repeat that value at another prompt.\n"
+                "\n"
+                "Entering a wrong value for the current value "
+                "decrements the retry counter.  If the retry counters "
+                "of the PIN and the corresponding PUK are both down "
+                "to zero, the keys controlled by the PIN are not anymore "
+                "usable and there is no way to unblock them!")
+            : is_puk 
+            ? _("<b>Resetting a PUK</b>\n"
+                "\n"
+                "Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> "
+                "the TCOS operating system of the NetKey card implements it "
+                "as an alternative PIN and thus it is possible to use the "
+                "PIN to unblock the PUK.\n"
+                "\n"
+                "If the PUK is blocked (the retry counter is down to zero), "
+                "you may unblock it by using the non-blocked PIN.  The retry "
+                "counter is then set back to its initial value.\n"
+                "\n"
+                "If you proceed you will be asked to enter the current "
+                "value of the PIN and then to enter a new value for the "
+                "blocked PUK and repeat that new value at another prompt.")
+            : _("<b>Resetting a PIN</b>\n"
+                "\n"
+                "If the PIN is blocked (the retry counter is down to zero), "
+                "you may unblock it by using the non-blocked PUK.  The retry "
+                "counter is then set back to its initial value.\n"
+                "\n"
+                "If you proceed you will be asked to enter the current "
+                "value of the PUK and then to enter a new value for the "
+                "blocked PIN and repeat that new value at another prompt.")
+            );
+              
+  /* FIXME:  How do we figure out our GtkWindow?  */
+  dialog = gtk_message_dialog_new_with_markup (NULL /*GTK_WINDOW (card)*/,
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_INFO, 
+                                               GTK_BUTTONS_OK_CANCEL, 
+                                               NULL);
+  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), string);
+  okay = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK);
+  if (okay)
+    {
+      char command[100];
+
+      snprintf (command, sizeof command, "SCD PASSWD%s %s",
+                reset_mode? " --reset":"", pwidstr);
+      err = gpgme_op_assuan_transact (gpgagent, command,
+                                      NULL, NULL, NULL, NULL, NULL, NULL);
+      if (!err) 
+        err = gpgme_op_assuan_result (gpgagent)->err;
+      if (gpg_err_code (err) == GPG_ERR_CANCELED)
+        okay = 0; /* No need to reload the data.  */
+      else if (err) 
+        {
+          char *message = g_strdup_printf 
+            (_("Error changing or resetting the PIN/PUK.\n"
+               "(%s <%s>)"), gpg_strerror (err), gpg_strsource (err));
+          gpa_window_error (message, NULL);
+          xfree (message);
+        }
+    }
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+  if (okay)
+    reload_data (card);
+}
+
 
 
 static void
@@ -382,6 +533,22 @@ set_initial_pin_clicked_cb (GtkButton *widget, void *user_data)
   GpaCMNetkey *card = user_data;
 
   change_nullpin (card);
+}
+
+
+static void
+change_pin_clicked_cb (void *widget, void *user_data)
+{
+  GpaCMNetkey *card = user_data;
+
+  if (widget == card->change_pin_btn)
+    change_or_reset_pin (card, 0);
+  else if (widget == card->change_puk_btn)
+    change_or_reset_pin (card, 1);
+  else if (widget == card->change_sigg_pin_btn)
+    change_or_reset_pin (card, 2);
+  else if (widget == card->change_sigg_puk_btn)
+    change_or_reset_pin (card, 3);
 }
 
 
@@ -467,7 +634,7 @@ construct_data_widget (GpaCMNetkey *card)
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
   vbox = gtk_vbox_new (FALSE, 5);
   label = gtk_label_new
-    (_("<b>The NullPIN is still active on this card</b>.\n"
+    (_("<b>A NullPIN is still active on this card</b>.\n"
        "You need to set a real PIN before you can make use of the card."));
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
@@ -491,27 +658,43 @@ construct_data_widget (GpaCMNetkey *card)
   label = gtk_label_new (_("<b>PIN</b>"));
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
-  table = gtk_table_new (2, 3, FALSE);
+  table = gtk_table_new (4, 3, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (table), 10);
   gtk_container_add (GTK_CONTAINER (frame), table);
   rowidx = 0;
 
   card->entries[ENTRY_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
-  button = gtk_button_new_with_label (_("Change PIN"));
-  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NORMAL);
-  add_table_row (table, &rowidx, 
-                 _("PIN retry counter:"), 
+  button = gtk_button_new ();
+  add_table_row (table, &rowidx, _("PIN retry counter:"), 
                  card->entries[ENTRY_PIN_RETRYCOUNTER], button, 1);
   card->change_pin_btn = button; 
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (change_pin_clicked_cb), card);
 
   card->entries[ENTRY_PUK_RETRYCOUNTER] = gtk_label_new (NULL);
-  button = gtk_button_new_with_label (_("Change PUK"));
-  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_HALF);
-  add_table_row (table, &rowidx, 
-                 _("PUK retry counter:"), 
+  button = gtk_button_new ();
+  add_table_row (table, &rowidx, _("PUK retry counter:"), 
                  card->entries[ENTRY_PUK_RETRYCOUNTER], button, 1);
   card->change_puk_btn = button; 
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (change_pin_clicked_cb), card);
 
+  card->entries[ENTRY_SIGG_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
+  button = gtk_button_new ();
+  add_table_row (table, &rowidx, _("SigG PIN retry counter:"), 
+                 card->entries[ENTRY_SIGG_PIN_RETRYCOUNTER], button, 1);
+  card->change_sigg_pin_btn = button; 
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (change_pin_clicked_cb), card);
+
+  card->entries[ENTRY_SIGG_PUK_RETRYCOUNTER] = gtk_label_new (NULL);
+  button = gtk_button_new ();
+  add_table_row (table, &rowidx, _("SigG PUK retry counter:"), 
+                 card->entries[ENTRY_SIGG_PUK_RETRYCOUNTER], button, 1);
+  card->change_sigg_puk_btn = button; 
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (change_pin_clicked_cb), card);
+  
   gtk_box_pack_start (GTK_BOX (card), frame, FALSE, TRUE, 0);
   
 }

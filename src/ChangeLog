@@ -1,3 +1,9 @@
+2009-03-05  Werner Koch  <wk@g10code.com>
+
+	* cm-netkey.c (check_nullpin, check_nullpin_data_cb): Remove.
+	(update_entry_chv_status): New.
+	(reload_data): Use CHV-STATUS attribute.
+
 2009-03-04  Werner Koch  <wk@g10code.com>
 
 	* cm-openpgp.c (add_table_row): Allow for GtkLabel as widget.
