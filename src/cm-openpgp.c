@@ -83,6 +83,13 @@ struct _GpaCMOpenpgp
 
   GtkLabel  *puk_label;  /* The label of the PUK field.  */
 
+  /* An array for the buttons to change the 3 PINs.  */
+  GtkWidget *change_pin_btn[3];
+
+  /* True is this is a version 2 card. */
+  int is_v2;
+  
+  /* This flag is set while we are reloading data.  */
   int  reloading;
 };
 
@@ -131,6 +138,8 @@ clear_card_data (GpaCMOpenpgp *card)
   for (idx=0; idx < ENTRY_LAST; idx++)
     if (idx == ENTRY_SEX)
       gtk_combo_box_set_active (GTK_COMBO_BOX (card->entries[idx]), 2);
+    else if (idx == ENTRY_SIG_FORCE_PIN)
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (card->entries[idx]), 0);
     else if (GTK_IS_LABEL (card->entries[idx]))
       gtk_label_set_text (GTK_LABEL (card->entries[idx]), "");
     else
@@ -204,14 +213,10 @@ update_entry_serialno (GpaCMOpenpgp *card, int entry_id, const char *string)
   gtk_label_set_text (GTK_LABEL (card->entries[ENTRY_MANUFACTURER]), vendor);
   gtk_label_set_text (GTK_LABEL (card->entries[ENTRY_VERSION]), version);
 
-  if ((*version == '1' || *version == '0') && version[1] == '.')
-    {
-      gtk_label_set_text (card->puk_label, _("CHV2 retry counter: "));
-    }
-  else /* Version 2 card.  */
-    {
-      gtk_label_set_text (card->puk_label, _("PUK retry counter: "));
-    }
+  card->is_v2 = !((*version == '1' || *version == '0') && version[1] == '.');
+  gtk_label_set_text (card->puk_label, (card->is_v2
+                                        ? _("PUK retry counter:")
+                                        : _("CHV2 retry counter: ")));
 }
 
 
@@ -315,7 +320,36 @@ update_entry_chv_status (GpaCMOpenpgp *card, int entry_id, const char *string)
   set_integer (card->entries[ENTRY_PIN_RETRYCOUNTER], pw_retry[0]);
   set_integer (card->entries[ENTRY_PUK_RETRYCOUNTER], pw_retry[1]);
   set_integer (card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], pw_retry[2]);
-  
+
+  /* Set the Change button label to reset or change depending on the
+     current retry count.  Make the button insensitive if the the
+     Admin PIN is blocked.  */
+  gtk_button_set_label (GTK_BUTTON (card->change_pin_btn[0]), 
+                        (!pw_retry[0]? _("Reset PIN") : _("Change PIN")));
+  gtk_widget_set_sensitive (card->change_pin_btn[0], !!pw_retry[2]);
+
+  /* For version 1 cards, PIN2 is usually synchronized with PIN1 thus
+     we don't need the Change PIN button.  However, if the retry
+     counters differ, it is likely that there is a problem and thus we
+     better allow to set them individually.  Version 2 cards use a PUK
+     (actually a Reset Code) with entirely different semantics.  */
+  gtk_button_set_label (GTK_BUTTON (card->change_pin_btn[1]), 
+                        card->is_v2
+                        ? (!pw_retry[1]? _("Reset PUK") : _("Change PUK"))
+                        : (!pw_retry[1]? _("Reset PIN") : _("Change PIN")));
+  gtk_widget_set_sensitive (card->change_pin_btn[1],
+                            (pw_retry[2] 
+                             && (card->is_v2
+                                 || (pw_retry[0] != pw_retry[1]))));
+                            
+  /* The Admin PIN has always the same label.  If the Admin PIN is
+     blocked the button is made insensitive.  Fixme: In the case of a
+     blocked Admin PIN we should have a button to allow a factory
+     reset of v2 cards.  */
+  gtk_button_set_label (GTK_BUTTON (card->change_pin_btn[2]), 
+                        _("Change PIN"));
+  gtk_widget_set_sensitive (card->change_pin_btn[2], !!pw_retry[2]);
+
 }
 
 
@@ -857,6 +891,33 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
 }
 
 
+
+/* The button to chnage the PIN with number PINNO has been clicked.  */
+static void
+change_pin (GpaCMOpenpgp *card, int pinno)
+{
+
+  g_debug ("change pin for PIN %d", pinno);
+
+}
+
+
+/* Handler for the "clicked" signal connected to the Change PIN
+   buttons.  */
+static void
+change_pin_clicked_cb (void *widget, void *user_data)
+{
+  GpaCMOpenpgp *card = user_data;
+  int idx;
+  
+  for (idx=0; idx < 3; idx++)
+    if (widget == card->change_pin_btn[idx])
+      {
+        change_pin (card, idx);
+        break;
+      }
+}
+
 
 
 /* Helper for construct_data_widget.  Returns the label widget. */
@@ -916,6 +977,7 @@ construct_data_widget (GpaCMOpenpgp *card)
   GtkWidget *keys_table;
   GtkWidget *pin_frame;
   GtkWidget *pin_table;
+  GtkWidget *button;
   int rowidx;
   int idx;
 
@@ -1040,18 +1102,24 @@ construct_data_widget (GpaCMOpenpgp *card)
                  card->entries[ENTRY_SIG_FORCE_PIN], NULL, 0);
 
   card->entries[ENTRY_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
+  button = gtk_button_new ();
   add_table_row (pin_table, &rowidx, _("PIN retry counter:"), 
-                 card->entries[ENTRY_PIN_RETRYCOUNTER], NULL, 1);
+                 card->entries[ENTRY_PIN_RETRYCOUNTER], button, 1);
+  card->change_pin_btn[0] = button; 
 
   card->entries[ENTRY_PUK_RETRYCOUNTER] = gtk_label_new (NULL);
+  button = gtk_button_new ();
   card->puk_label = 
     add_table_row (pin_table, &rowidx, 
                    "", /* The label depends on the card version.  */ 
-                   card->entries[ENTRY_PUK_RETRYCOUNTER], NULL, 1);
+                   card->entries[ENTRY_PUK_RETRYCOUNTER], button, 1);
+  card->change_pin_btn[1] = button; 
 
   card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
+  button = gtk_button_new ();
   add_table_row (pin_table, &rowidx, _("Admin PIN retry counter:"),
-                 card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], NULL, 1);
+                 card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], button, 1);
+  card->change_pin_btn[2] = button; 
 
   gtk_container_add (GTK_CONTAINER (pin_frame), pin_table);
 
@@ -1095,6 +1163,10 @@ construct_data_widget (GpaCMOpenpgp *card)
         }
     }
 
+  for (idx=0; idx < 3; idx++)
+    g_signal_connect (G_OBJECT (card->change_pin_btn[idx]), "clicked",
+                      G_CALLBACK (change_pin_clicked_cb), card);
+  
 }
 
 

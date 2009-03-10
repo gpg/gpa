@@ -1,5 +1,14 @@
 2009-03-10  Werner Koch  <wk@g10code.com>
 
+	* Makefile.am (localedir): New.
+	(AM_CPPFLAGS): Define LOCALEDIR.
+	* gpa.c (get_locale_dir): s/GPA_LOCALEDIR/LOCALEDIR/.
+
+	* cm-openpgp.c (construct_data_widget): Add change PIN buttons.
+	(update_entry_chv_status): Set button labels.
+	(change_pin_clicked_cb, change_pin): New.
+	(update_entry_serialno): Init new IS_V2 global.
+
 	* cm-geldkarte.c: Replace GtkEntry by GtkLabel.
 
 	* cm-dinsig.h, cm-dinsig.c: New.

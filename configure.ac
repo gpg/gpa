@@ -29,7 +29,7 @@ min_automake_version="1.9.3"
 # Remember to change the version number immediately *after* a release.
 # Set my_issvn to "yes" for non-released code.  Remember to run an
 # "svn up" and "autogen.sh --force" right before creating a distribution.
-m4_define(my_version, [0.8.1])
+m4_define(my_version, [0.9.0])
 m4_define(my_issvn, yes)
 
 m4_define([svn_revision], m4_esyscmd([echo -n $( (svn info 2>/dev/null \
@@ -304,12 +304,10 @@ cat >gpadefs.tmp <<GPAEOF
 #ifdef HAVE_DRIVE_LETTERS
   /* These W32 locations are fallbacks 
      and not used with current gpg installations. */
-  #define GPA_LOCALEDIR "c:/lib/gnupg/locale"
   #define GPA_DATADIR   "c:/lib/gnupg"
   #define GPG_PROGRAM   "c:/gnupg/gpg"
   #define GPA_KEYSERVER_HELPERS_DIR "c:/gnupg"
 #else
-  #define GPA_LOCALEDIR "${datadir}${localedir}"
   #define GPA_DATADIR   "${datadir}/gpa"
   #define GPG_PROGRAM   "${GPG}"
   #define GPA_KEYSERVER_HELPERS_DIR "$KEYSERVER_HELPERS_DIR"

@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+localedir = $(datadir)/locale
+
 logo = gpa-logo.ppm 
 
 pkgdata_DATA = $(logo)
@@ -37,7 +39,9 @@ endif
 bin_PROGRAMS = gpa
 noinst_PROGRAMS = dndtest
 
-AM_CPPFLAGS = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
+AM_CPPFLAGS = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps 
+AM_CPPFLAGS += -DLOCALEDIR=\"$(localedir)\" 
+
 AM_CFLAGS = $(GPGME_CFLAGS) $(LIBASSUAN_CFLAGS) $(GPG_ERROR_CFLAGS) \
 	    $(GTK_CFLAGS)
 LDADD = $(GPGME_LIBS) $(LIBASSUAN_LIBS) $(GPG_ERROR_LIBS) \

@@ -64,7 +64,7 @@ src/passwddlg.c
 src/qdchkpwd.c
 src/recipientdlg.c
 src/selectkeydlg.c
-src/server_access.c
+src/server-access.c
 src/settingsdlg.c
 src/siglist.c
 src/verifydlg.c
@@ -72,3 +72,6 @@ src/w32reg.c
 src/cardman.c
 src/cm-object.c
 src/cm-openpgp.c
+src/cm-netkey.c
+src/cm-dinsig.c
+

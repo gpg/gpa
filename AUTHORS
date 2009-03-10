@@ -20,7 +20,7 @@ Peter Neuhaus <pneuhaus@openit.de>
 
 Werner Koch <wk@gnupg.org>
         Glued everything together, fixes here and there, W32 porting,
-        about dialog.
+        about dialog, card manager.
 
 Jan-Oliver Wagner <jan@intevation.de>
 	Polishing (toolbar, icons integration), some fixing.

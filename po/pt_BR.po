@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-02-12 12:18+0100\n"
+"POT-Creation-Date: 2009-03-10 12:18+0100\n"
 "PO-Revision-Date: 2003-01-20 18:39+0100\n"
 "Last-Translator: Renato Martini <rmartini@cipsga.org.br>\n"
 "Language-Team: PORTUGUES <rmartini@cipsga.org.br>\n"
@@ -40,12 +40,12 @@ msgstr ""
 msgid "Clipboard"
 msgstr ""
 
-#: src/clipboard.c:754 src/fileman.c:517 src/keyring.c:891 src/cardman.c:345
+#: src/clipboard.c:754 src/fileman.c:517 src/keyring.c:891 src/cardman.c:590
 #, fuzzy
 msgid "_File"
 msgstr "/Ar_quivo"
 
-#: src/clipboard.c:755 src/fileman.c:518 src/keyring.c:892 src/cardman.c:346
+#: src/clipboard.c:755 src/fileman.c:518 src/keyring.c:892 src/cardman.c:591
 #, fuzzy
 msgid "_Edit"
 msgstr "_Editar"
@@ -87,7 +87,7 @@ msgstr "Desencriptar o arquivo selecionado"
 msgid "Close the buffer"
 msgstr ""
 
-#: src/clipboard.c:775 src/fileman.c:536 src/keyring.c:900 src/cardman.c:351
+#: src/clipboard.c:775 src/fileman.c:536 src/keyring.c:900 src/cardman.c:596
 msgid "Quit the program"
 msgstr ""
 
@@ -123,12 +123,12 @@ msgstr "Desencriptar o arquivo selecionado"
 msgid "Select the entire document"
 msgstr ""
 
-#: src/clipboard.c:908 src/fileman.c:634 src/cardman.c:443
+#: src/clipboard.c:908 src/fileman.c:634 src/cardman.c:680
 #, fuzzy
 msgid "Keyring"
 msgstr "Editor do chaveiro digital"
 
-#: src/clipboard.c:910 src/keyring.c:1087 src/cardman.c:445
+#: src/clipboard.c:910 src/keyring.c:1087 src/cardman.c:682
 msgid "Files"
 msgstr "Arquivos"
 
@@ -471,13 +471,13 @@ msgid ""
 msgstr ""
 
 #: src/gpaexportserverop.c:134 src/gpafileencryptop.c:478
-#: src/gpafileverifyop.c:181 src/gpgmetools.c:142 src/keydeletedlg.c:44
+#: src/gpafileverifyop.c:181 src/gpgmetools.c:155 src/keydeletedlg.c:44
 #: src/keydeletedlg.c:93 src/keysigndlg.c:61
 msgid "_Yes"
 msgstr "_Sim"
 
 #: src/gpaexportserverop.c:135 src/gpafileencryptop.c:479
-#: src/gpafileverifyop.c:182 src/gpgmetools.c:143 src/keydeletedlg.c:46
+#: src/gpafileverifyop.c:182 src/gpgmetools.c:156 src/keydeletedlg.c:46
 #: src/keydeletedlg.c:95 src/keysigndlg.c:63
 msgid "_No"
 msgstr "_Não"
@@ -857,16 +857,16 @@ msgstr ""
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:163 src/gpgmetools.c:622 src/gpgmetools.c:837
-#: src/gpgmetools.c:956
+#: src/gpasubkeylist.c:163 src/gpgmetools.c:635 src/gpgmetools.c:850
+#: src/gpgmetools.c:969
 msgid "Revoked"
 msgstr "Revogado"
 
-#: src/gpasubkeylist.c:167 src/gpgmetools.c:624 src/gpgmetools.c:952
+#: src/gpasubkeylist.c:167 src/gpgmetools.c:637 src/gpgmetools.c:965
 msgid "Expired"
 msgstr "Expirado"
 
-#: src/gpasubkeylist.c:171 src/gpgmetools.c:626
+#: src/gpasubkeylist.c:171 src/gpgmetools.c:639
 msgid "Disabled"
 msgstr "Desabilitado"
 
@@ -875,11 +875,11 @@ msgstr "Desabilitado"
 msgid "Unsigned"
 msgstr "assinado"
 
-#: src/gpasubkeylist.c:179 src/gpgmetools.c:943 src/verifydlg.c:212
+#: src/gpasubkeylist.c:179 src/gpgmetools.c:956 src/verifydlg.c:212
 msgid "Valid"
 msgstr "Válido"
 
-#: src/gpawidgets.c:71 src/gpgmetools.c:670 src/gpgmetools.c:677
+#: src/gpawidgets.c:71 src/gpgmetools.c:683 src/gpgmetools.c:690
 #: src/keyring.c:1266 src/keysigndlg.c:100
 msgid "User Name:"
 msgstr "Nome do Usuário:"
@@ -888,7 +888,7 @@ msgstr "Nome do Usuário:"
 msgid "User Names:"
 msgstr "Nomes de Usuário:"
 
-#: src/gpawidgets.c:77 src/gpgmetools.c:671 src/gpgmetools.c:678
+#: src/gpawidgets.c:77 src/gpgmetools.c:684 src/gpgmetools.c:691
 #: src/keyring.c:1268
 msgid "Key ID:"
 msgstr "Key ID:"
@@ -909,7 +909,7 @@ msgstr "expira _após"
 msgid "expire o_n:"
 msgstr "_expira em:"
 
-#: src/gpawidgets.c:288 src/keygendlg.c:335
+#: src/gpawidgets.c:288 src/keygendlg.c:344
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -917,7 +917,13 @@ msgstr ""
 "!ERRO FATAL!\n"
 "Forma de inserção inválida para a data de expiração."
 
-#: src/gpgmetools.c:59
+#: src/gpgmeedit.c:1196
+msgid ""
+"Keys are already stored on the card.\n"
+"Really replace existing keys?"
+msgstr ""
+
+#: src/gpgmetools.c:70
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -934,7 +940,7 @@ msgstr ""
 "\n"
 "O aplicativo será encerrado"
 
-#: src/gpgmetools.c:73
+#: src/gpgmetools.c:86
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -946,7 +952,7 @@ msgid ""
 "GPA will now try to recover from this error."
 msgstr ""
 
-#: src/gpgmetools.c:139
+#: src/gpgmetools.c:152
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -955,7 +961,7 @@ msgstr ""
 "O arquivo %s já existe.\n"
 "Você quer sobrescrevê-lo?"
 
-#: src/gpgmetools.c:486
+#: src/gpgmetools.c:499
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -971,7 +977,7 @@ msgstr ""
 "****************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:491
+#: src/gpgmetools.c:504
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -979,123 +985,123 @@ msgstr ""
 "A chave copiada por segurança para este arquivo é:\n"
 "\n"
 
-#: src/gpgmetools.c:552
+#: src/gpgmetools.c:565
 msgid "DSA and ElGamal (default)"
 msgstr "DSA e ElGamal (default)"
 
-#: src/gpgmetools.c:553
+#: src/gpgmetools.c:566
 msgid "DSA (sign only)"
 msgstr "DSA (assinatura somente)"
 
-#: src/gpgmetools.c:554
+#: src/gpgmetools.c:567
 msgid "RSA (sign only)"
 msgstr "RSA (assinatura somente)"
 
-#: src/gpgmetools.c:590 src/gpgmetools.c:613 src/gpgmetools.c:630
-#: src/gpgmetools.c:948 src/gpgmetools.c:981
+#: src/gpgmetools.c:603 src/gpgmetools.c:626 src/gpgmetools.c:643
+#: src/gpgmetools.c:961 src/gpgmetools.c:994
 msgid "Unknown"
 msgstr "desconhecido"
 
-#: src/gpgmetools.c:593
+#: src/gpgmetools.c:606
 msgid "Never"
 msgstr "Nunca"
 
-#: src/gpgmetools.c:596
+#: src/gpgmetools.c:609
 msgid "Marginal"
 msgstr "Moderado"
 
-#: src/gpgmetools.c:599
+#: src/gpgmetools.c:612
 msgid "Full"
 msgstr "Completo"
 
-#: src/gpgmetools.c:602
+#: src/gpgmetools.c:615
 msgid "Ultimate"
 msgstr "Inteira"
 
-#: src/gpgmetools.c:628
+#: src/gpgmetools.c:641
 msgid "Incomplete"
 msgstr "Incompleto"
 
-#: src/gpgmetools.c:634
+#: src/gpgmetools.c:647
 msgid "Fully Valid"
 msgstr "Totalmente válido"
 
-#: src/gpgmetools.c:668
+#: src/gpgmetools.c:681
 msgid "Please enter the passphrase for the following key:"
 msgstr "Queria indicar a senha para a seguinte chave:"
 
-#: src/gpgmetools.c:676
+#: src/gpgmetools.c:689
 msgid "Wrong passphrase, please try again:"
 msgstr "Senha errada, por favor tente de novo:"
 
-#: src/gpgmetools.c:701
+#: src/gpgmetools.c:714
 msgid "Enter Passphrase"
 msgstr "Entrar com a senha"
 
-#: src/gpgmetools.c:826
+#: src/gpgmetools.c:839
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:920 src/verifydlg.c:269
+#: src/gpgmetools.c:933 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[User ID desconhecido]"
 
-#: src/gpgmetools.c:946 src/verifydlg.c:217
+#: src/gpgmetools.c:959 src/verifydlg.c:217
 msgid "Bad"
 msgstr "Ruim"
 
-#: src/gpgmetools.c:969
+#: src/gpgmetools.c:982
 msgid "Generic"
 msgstr ""
 
-#: src/gpgmetools.c:972
+#: src/gpgmetools.c:985
 msgid "Persona"
 msgstr ""
 
-#: src/gpgmetools.c:975
+#: src/gpgmetools.c:988
 msgid "Casual"
 msgstr ""
 
-#: src/gpgmetools.c:978
+#: src/gpgmetools.c:991
 msgid "Positive"
 msgstr ""
 
-#: src/gpgmetools.c:996
+#: src/gpgmetools.c:1009
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
 
-#: src/gpgmetools.c:999
+#: src/gpgmetools.c:1012
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 
-#: src/gpgmetools.c:1005
+#: src/gpgmetools.c:1018
 #, fuzzy
 msgid "The key can be used for certification and encryption."
 msgstr "E não pode ser usada para encriptação."
 
-#: src/gpgmetools.c:1008
+#: src/gpgmetools.c:1021
 #, fuzzy
 msgid "The key can be used only for certification."
 msgstr "E não pode ser usada para encriptação."
 
-#: src/gpgmetools.c:1016
+#: src/gpgmetools.c:1029
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr ""
 
-#: src/gpgmetools.c:1019
+#: src/gpgmetools.c:1032
 #, fuzzy
 msgid "The key can be used only for signing."
 msgstr "Nenhuma chave selecionada para assinar."
 
-#: src/gpgmetools.c:1024
+#: src/gpgmetools.c:1037
 #, fuzzy
 msgid "The key can be used only for encryption."
 msgstr "E não pode ser usada para encriptação."
 
-#: src/gpgmetools.c:1027
+#: src/gpgmetools.c:1040
 msgid "This key is useless."
 msgstr ""
 
@@ -1233,15 +1239,15 @@ msgstr "Mudar _senha"
 msgid "Change _expiration"
 msgstr "Mudar _expiração"
 
-#: src/keygendlg.c:68
+#: src/keygendlg.c:77
 msgid "You must enter a key size."
 msgstr ""
 
-#: src/keygendlg.c:73
+#: src/keygendlg.c:82
 msgid "You must enter a User ID."
 msgstr ""
 
-#: src/keygendlg.c:78 src/passwddlg.c:45
+#: src/keygendlg.c:87 src/passwddlg.c:45
 msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
@@ -1249,7 +1255,7 @@ msgstr ""
 "Na \"senha\" e \"Repetir a senha\",\n"
 "você deve usar a mesma senha."
 
-#: src/keygendlg.c:85 src/passwddlg.c:52
+#: src/keygendlg.c:94 src/passwddlg.c:52
 msgid ""
 "You did not enter a passphrase.\n"
 "It is needed to protect your private key."
@@ -1257,7 +1263,7 @@ msgstr ""
 "Você não entrou com uma senha.\n"
 "É necessário proteger sua chave privada."
 
-#: src/keygendlg.c:98 src/passwddlg.c:65
+#: src/keygendlg.c:107 src/passwddlg.c:65
 msgid ""
 "Warning: You have entered a passphrase\n"
 "that is obviously not secure.\n"
@@ -1269,62 +1275,62 @@ msgstr ""
 "\n"
 "Por favor entre com uma nova senha."
 
-#: src/keygendlg.c:103 src/passwddlg.c:70
+#: src/keygendlg.c:112 src/passwddlg.c:70
 msgid "_Enter new passphrase"
 msgstr "_Entre com uma nova senha"
 
-#: src/keygendlg.c:105 src/passwddlg.c:71
+#: src/keygendlg.c:114 src/passwddlg.c:71
 msgid "Take this one _anyway"
 msgstr "_Use esta assim mesmo"
 
-#: src/keygendlg.c:155
+#: src/keygendlg.c:164
 #, fuzzy
 msgid "Generate new keys on card"
 msgstr "Gerar chave"
 
-#: src/keygendlg.c:155 src/keygenwizard.c:570 src/keygenwizard.c:583
+#: src/keygendlg.c:164 src/keygenwizard.c:570 src/keygenwizard.c:583
 #: src/keygenwizard.c:593 src/keygenwizard.c:603 src/keygenwizard.c:615
 #: src/keygenwizard.c:632 src/keygenwizard.c:644
 msgid "Generate key"
 msgstr "Gerar chave"
 
-#: src/keygendlg.c:182
+#: src/keygendlg.c:191
 msgid "_Algorithm: "
 msgstr "_Algoritmo:"
 
-#: src/keygendlg.c:203
+#: src/keygendlg.c:212
 msgid "_Key size (bits): "
 msgstr "_Tamanho da chave (bits)"
 
-#: src/keygendlg.c:214 src/keygendlg.c:220
+#: src/keygendlg.c:223 src/keygendlg.c:229
 msgid "1024"
 msgstr "1024"
 
-#: src/keygendlg.c:219
+#: src/keygendlg.c:228
 msgid "768"
 msgstr "768"
 
-#: src/keygendlg.c:221
+#: src/keygendlg.c:230
 msgid "2048"
 msgstr "2048"
 
-#: src/keygendlg.c:228
+#: src/keygendlg.c:237
 msgid "_User ID: "
 msgstr "User _ID:"
 
-#: src/keygendlg.c:239
+#: src/keygendlg.c:248
 msgid "_Email: "
 msgstr "E-_Mail:"
 
-#: src/keygendlg.c:248
+#: src/keygendlg.c:257
 msgid "_Comment: "
 msgstr "C_omentário:"
 
-#: src/keygendlg.c:267
+#: src/keygendlg.c:276
 msgid "_Passphrase: "
 msgstr "Se_nha"
 
-#: src/keygendlg.c:278
+#: src/keygendlg.c:287
 msgid "_Repeat passphrase: "
 msgstr "_Repetir senha:"
 
@@ -1983,51 +1989,51 @@ msgstr "Encriptar o arquivo selecionado"
 msgid "Select a key"
 msgstr "Chave default selecionada:"
 
-#: src/server_access.c:294
+#: src/server-access.c:294
 msgid "No error"
 msgstr "Nenhum erro"
 
-#: src/server_access.c:297
+#: src/server-access.c:297
 msgid "Internal error"
 msgstr "Erro interno"
 
-#: src/server_access.c:300
+#: src/server-access.c:300
 msgid "Operation not supported"
 msgstr "Operação não suportada"
 
-#: src/server_access.c:303
+#: src/server-access.c:303
 msgid "Version mismatch"
 msgstr "Versão incorreta"
 
-#: src/server_access.c:306
+#: src/server-access.c:306
 msgid "Internal keyserver error"
 msgstr "Erro interno do servidor"
 
-#: src/server_access.c:309
+#: src/server-access.c:309
 msgid "Out of memory"
 msgstr "Sem memória"
 
-#: src/server_access.c:312
+#: src/server-access.c:312
 msgid "Key not found"
 msgstr "Chave não encontrada"
 
-#: src/server_access.c:315
+#: src/server-access.c:315
 msgid "Key already exists on server"
 msgstr "Chave já existe no servidor"
 
-#: src/server_access.c:318
+#: src/server-access.c:318
 msgid "Key incomplete"
 msgstr "Chave incompleta"
 
-#: src/server_access.c:321
+#: src/server-access.c:321
 msgid "Could not contact keyserver"
 msgstr "Não foi possível contactar o servidor"
 
-#: src/server_access.c:324
+#: src/server-access.c:324
 msgid "Unknown Error"
 msgstr "ERRO desconhecido"
 
-#: src/server_access.c:360
+#: src/server-access.c:360
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -2036,7 +2042,7 @@ msgstr ""
 "Conectando com o servidor \"%s\".\n"
 "Por favor espere."
 
-#: src/server_access.c:383 src/server_access.c:403
+#: src/server-access.c:383 src/server-access.c:403
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -2047,7 +2053,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/server_access.c:467
+#: src/server-access.c:469
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
@@ -2055,7 +2061,7 @@ msgstr ""
 "Não há um plugin disponível para o servidor de chaves\n"
 "com o protocolo especificado."
 
-#: src/server_access.c:540 src/server_access.c:584
+#: src/server-access.c:542 src/server-access.c:586
 msgid "The keyserver you specified is not valid"
 msgstr "O servidor de chaves especificado não é válido"
 
@@ -2224,90 +2230,375 @@ msgstr "Assinaturas"
 msgid "Signatures:"
 msgstr "Assinaturas:"
 
-#: src/cardman.c:114
+#: src/cardman.c:126
 #, fuzzy
 msgid "Status: "
 msgstr "Status:"
 
-#: src/cardman.c:139
+#: src/cardman.c:159
 #, fuzzy
 msgid "GNU Privacy Assistant - Card Manager"
 msgstr "GNU Privacy Assistant - Gerenciador de arquivos"
 
-#: src/cardman.c:160
+#: src/cardman.c:180
 #, c-format
 msgid "%s card detected."
 msgstr ""
 
-#: src/cardman.c:167
+#: src/cardman.c:187
 msgid "Checking for card..."
 msgstr ""
 
-#: src/cardman.c:267 src/cardman.c:290
-msgid "Error accessing card"
-msgstr ""
-
-#: src/cardman.c:285
-msgid "No card"
-msgstr ""
-
-#: src/cardman.c:347
-#, fuzzy
-msgid "_Card"
-msgstr "/Janelas/_Gerenciador de arquivos"
-
-#: src/cardman.c:355
-#, fuzzy
-msgid "Reload card information"
-msgstr "Mostrar as informações sobre a garantia\n"
-
-#: src/cardman.c:359
-msgid "Edit card information"
-msgstr ""
-
-#: src/cardman.c:487
+#: src/cardman.c:341
 #, fuzzy
 msgid "No card found."
 msgstr "Nenhuma chave foi encontrada."
 
-#: src/cardman.c:532
+#: src/cardman.c:347
+msgid "The selected card application is currently not available."
+msgstr ""
+
+#: src/cardman.c:348
+msgid ""
+"Another process is using a different card application than the selected "
+"one.\n"
+"\n"
+"You may change the application selection mode to \"Auto\" to select the "
+"active application."
+msgstr ""
+
+#: src/cardman.c:358
+#, fuzzy
+msgid "The selected card application is not available."
+msgstr "A chave que você selecionou não está disponível para assinar"
+
+#: src/cardman.c:364
+msgid "Error accessing the card."
+msgstr ""
+
+#: src/cardman.c:365 src/cardman.c:397
+msgid "Error accessing card"
+msgstr ""
+
+#: src/cardman.c:392
+msgid "No card"
+msgstr ""
+
+#: src/cardman.c:592
+#, fuzzy
+msgid "_Card"
+msgstr "/Janelas/_Gerenciador de arquivos"
+
+#: src/cardman.c:600
+#, fuzzy
+msgid "Reload card information"
+msgstr "Mostrar as informações sobre a garantia\n"
+
+#: src/cardman.c:602
+#, fuzzy
+msgid "Generate new key on card"
+msgstr "Gerar chave"
+
+#: src/cardman.c:726
+#, fuzzy
+msgid "This card application is not yet supported."
+msgstr "Operação não suportada"
+
+#: src/cardman.c:858
 #, fuzzy
 msgid "Card Manager"
 msgstr "gerenciador de arquivos"
 
-#: src/cardman.c:600
+#: src/cardman.c:866
+#, fuzzy
+msgid "Application selection:"
+msgstr "Encriptar o arquivo selecionado"
+
+#: src/cardman.c:870
+msgid "Auto"
+msgstr ""
+
+#: src/cardman.c:947
 msgid "The GPGME library is too old to support smartcards."
 msgstr ""
 
-#: src/cm-openpgp.c:215
-msgid "male"
-msgstr ""
-
-#: src/cm-openpgp.c:217
-msgid "female"
+#: src/cm-openpgp.c:218 src/cm-netkey.c:676
+msgid "PUK retry counter:"
 msgstr ""
 
 #: src/cm-openpgp.c:219
-msgid "unspecified"
+msgid "CHV2 retry counter: "
 msgstr ""
 
-#: src/cm-openpgp.c:387
+#: src/cm-openpgp.c:328 src/cm-openpgp.c:339 src/cm-netkey.c:152
+msgid "Reset PIN"
+msgstr ""
+
+#: src/cm-openpgp.c:328 src/cm-openpgp.c:339 src/cm-openpgp.c:350
+#: src/cm-netkey.c:153
+#, fuzzy
+msgid "Change PIN"
+msgstr "Alterar _a confiança"
+
+#: src/cm-openpgp.c:338 src/cm-netkey.c:152
+msgid "Reset PUK"
+msgstr ""
+
+#: src/cm-openpgp.c:338 src/cm-netkey.c:153
+#, fuzzy
+msgid "Change PUK"
+msgstr "Alterar _a confiança"
+
+#: src/cm-openpgp.c:532
+#, c-format
+msgid ""
+"Error saving the changed values.\n"
+"(%s <%s>)"
+msgstr ""
+
+#: src/cm-openpgp.c:555
+msgid "Only plain ASCII is currently allowed."
+msgstr ""
+
+#: src/cm-openpgp.c:557
+msgid "The \"<\" character may not be used."
+msgstr ""
+
+#: src/cm-openpgp.c:559
+msgid "Double spaces are not allowed."
+msgstr ""
+
+#: src/cm-openpgp.c:591
+msgid ""
+"Total length of first and last name may not be longer than 39 characters."
+msgstr ""
+
+#: src/cm-openpgp.c:594 src/cm-openpgp.c:632 src/cm-openpgp.c:659
+#: src/cm-openpgp.c:683 src/cm-openpgp.c:708 src/cm-openpgp.c:729
+#, fuzzy
+msgid "Saving the field failed."
+msgstr "Assinar o arquivo selecionado"
+
+#: src/cm-openpgp.c:618
+msgid "Invalid length of the language preference."
+msgstr ""
+
+#: src/cm-openpgp.c:626
+msgid "The language preference may only contain the letters 'a' through 'z'."
+msgstr ""
+
+#: src/cm-openpgp.c:678 src/cm-openpgp.c:703
+msgid "The field may not be longer than 254 characters."
+msgstr ""
+
+#: src/cm-openpgp.c:988 src/cm-netkey.c:613 src/cm-dinsig.c:255
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "Usar modo _avançado:"
 
-#: src/cm-openpgp.c:393
+#: src/cm-openpgp.c:998 src/cm-netkey.c:622 src/cm-dinsig.c:264
+msgid "Serial number:"
+msgstr ""
+
+#: src/cm-openpgp.c:1002 src/cm-netkey.c:626
+msgid "Card version:"
+msgstr ""
+
+#: src/cm-openpgp.c:1006
+msgid "Manufacturer:"
+msgstr ""
+
+#: src/cm-openpgp.c:1015
 #, fuzzy
 msgid "<b>Personal</b>"
 msgstr "Usar modo _avançado:"
 
-#: src/cm-openpgp.c:398
+#: src/cm-openpgp.c:1029
+#, fuzzy
+msgid "Salutation:"
+msgstr "Escolha: "
+
+#: src/cm-openpgp.c:1034
+#, fuzzy
+msgid "First name:"
+msgstr "Nome de Diretório"
+
+#: src/cm-openpgp.c:1039
+#, fuzzy
+msgid "Last name:"
+msgstr "Nome do Usuário:"
+
+#: src/cm-openpgp.c:1044
+msgid "Language:"
+msgstr ""
+
+#: src/cm-openpgp.c:1049
+msgid "Login data:"
+msgstr ""
+
+#: src/cm-openpgp.c:1054
+#, fuzzy
+msgid "Public key URL:"
+msgstr "_Chaves públicas"
+
+#: src/cm-openpgp.c:1062
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "Assinar _como"
 
-#: src/cm-openpgp.c:404
+#: src/cm-openpgp.c:1073
+#, fuzzy
+msgid "Signature key:"
+msgstr "Assinaturas:"
+
+#: src/cm-openpgp.c:1077
+#, fuzzy
+msgid "Encryption key:"
+msgstr "Encriptar"
+
+#: src/cm-openpgp.c:1081
+msgid "Authentication key:"
+msgstr ""
+
+#: src/cm-openpgp.c:1089 src/cm-netkey.c:658
 msgid "<b>PIN</b>"
+msgstr ""
+
+#: src/cm-openpgp.c:1101
+#, fuzzy
+msgid "Force signature PIN:"
+msgstr "_assinatura em texto puro"
+
+#: src/cm-openpgp.c:1106 src/cm-netkey.c:668
+msgid "PIN retry counter:"
+msgstr ""
+
+#: src/cm-openpgp.c:1120
+msgid "Admin PIN retry counter:"
+msgstr ""
+
+#: src/cm-netkey.c:134 src/cm-netkey.c:321
+msgid "unknown"
+msgstr "desconhecido"
+
+#: src/cm-netkey.c:138
+msgid "blocked"
+msgstr ""
+
+#: src/cm-netkey.c:361
+#, c-format
+msgid ""
+"<b>Setting the Initial PIN</b> (%s)\n"
+"\n"
+"You selected to set the initial PIN of your card.  The PIN is currently set "
+"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
+"reverted</b>.\n"
+"\n"
+"Please check the documentation of your card to learn for what the NullPIN is "
+"good.\n"
+"\n"
+"If you proceeed you will be asked to enter a new PIN and later to repeat "
+"that PIN.  Make sure that you will remember that PIN - it will not be "
+"possible to recover the PIN if it has been entered wrongly more than %d "
+"times.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: src/cm-netkey.c:375
+msgid ""
+"You are now setting the PIN for the SigG key used to create <b>qualified "
+"signatures</b>.  You may want to set the PIN to the same value as used for "
+"the NKS keys."
+msgstr ""
+
+#: src/cm-netkey.c:378
+msgid ""
+"You are now setting the PIN for the NKS keys used for standard signatures, "
+"encryption and authentication."
+msgstr ""
+
+#: src/cm-netkey.c:407
+#, c-format
+msgid ""
+"Error changing the NullPIN.\n"
+"(%s <%s>)"
+msgstr ""
+
+#: src/cm-netkey.c:457
+msgid ""
+"<b>Changing a PIN or PUK</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value and then to "
+"enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the current value decrements the retry counter.  "
+"If the retry counters of the PIN and the corresponding PUK are both down to "
+"zero, the keys controlled by the PIN are not anymore usable and there is no "
+"way to unblock them!"
+msgstr ""
+
+#: src/cm-netkey.c:469
+msgid ""
+"<b>Resetting a PUK</b>\n"
+"\n"
+"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
+"system of the NetKey card implements it as an alternative PIN and thus it is "
+"possible to use the PIN to unblock the PUK.\n"
+"\n"
+"If the PUK is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PIN.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the blocked PUK and repeat that new value at "
+"another prompt."
+msgstr ""
+
+#: src/cm-netkey.c:483
+msgid ""
+"<b>Resetting a PIN</b>\n"
+"\n"
+"If the PIN is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PUK.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PUK and "
+"then to enter a new value for the blocked PIN and repeat that new value at "
+"another prompt."
+msgstr ""
+
+#: src/cm-netkey.c:517
+#, c-format
+msgid ""
+"Error changing or resetting the PIN/PUK.\n"
+"(%s <%s>)"
+msgstr ""
+
+#: src/cm-netkey.c:637
+msgid ""
+"<b>A NullPIN is still active on this card</b>.\n"
+"You need to set a real PIN before you can make use of the card."
+msgstr ""
+
+#: src/cm-netkey.c:643
+msgid "Set initial PIN"
+msgstr ""
+
+#: src/cm-netkey.c:684
+msgid "SigG PIN retry counter:"
+msgstr ""
+
+#: src/cm-netkey.c:692
+msgid "SigG PUK retry counter:"
+msgstr ""
+
+#: src/cm-dinsig.c:274
+#, c-format
+msgid ""
+"There is not much information to display for a %s card.  You may want to use "
+"the application selector button to switch to another application available "
+"on this card."
 msgstr ""
 
 #~ msgid "days"
@@ -2324,9 +2615,6 @@ msgstr ""
 
 #~ msgid "never expires"
 #~ msgstr "jamais expira"
-
-#~ msgid "unknown"
-#~ msgstr "desconhecido"
 
 #, fuzzy
 #~ msgid "/File/C_lear"
@@ -2763,9 +3051,6 @@ msgstr ""
 #~ msgid "The key you selected is not available for encryption"
 #~ msgstr "A chave que você escolheu não está disponível para encriptação"
 
-#~ msgid "The key you selected is not available for signing"
-#~ msgstr "A chave que você selecionou não está disponível para assinar"
-
 #~ msgid ""
 #~ "No public keys available.\n"
 #~ "Currently, there is nobody who could read a\n"
@@ -2875,9 +3160,6 @@ msgstr ""
 #~ msgid "_Directory name:"
 #~ msgstr "_Nome de Diretório:"
 
-#~ msgid "Directory name:"
-#~ msgstr "Nome de Diretório"
-
 #~ msgid "C_reate"
 #~ msgstr "C_riado"
 
@@ -2944,9 +3226,6 @@ msgstr ""
 
 #~ msgid "Rename"
 #~ msgstr "Renomear"
-
-#~ msgid "Selection: "
-#~ msgstr "Escolha: "
 
 #~ msgid ""
 #~ "The filename %s couldn't be converted to UTF-8. Try setting the "
@@ -3211,9 +3490,6 @@ msgstr ""
 
 #~ msgid "/Help/_Warranty"
 #~ msgstr "/Ajuda/_Garantia"
-
-#~ msgid "Change _trust"
-#~ msgstr "Alterar _a confiança"
 
 #~ msgid "Export keys"
 #~ msgstr "Exportar chaves"

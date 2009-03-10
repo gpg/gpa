@@ -136,7 +136,7 @@ get_locale_dir (void)
   strcpy (p, "share\\locale");
   return strdup (name);
 #else
-  return strdup (GPA_LOCALEDIR);
+  return strdup (LOCALEDIR);
 #endif
 }
 

@@ -1,3 +1,7 @@
+2009-03-10  Werner Koch  <wk@g10code.com>
+
+	* configure.ac (AC_CONFIG_COMMANDS): Remove GPA_LOCALEDIR.
+
 2009-02-12  Werner Koch  <wk@g10code.com>
 
 	* configure.ac (BUILD_CARD_MANAGER): Define as AC_DEFINE and
