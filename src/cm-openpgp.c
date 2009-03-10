@@ -329,25 +329,25 @@ update_entry_chv_status (GpaCMOpenpgp *card, int entry_id, const char *string)
   gtk_widget_set_sensitive (card->change_pin_btn[0], !!pw_retry[2]);
 
   /* For version 1 cards, PIN2 is usually synchronized with PIN1 thus
-     we don't need the Change PIN button.  However, if the retry
-     counters differ, it is likely that there is a problem and thus we
-     better allow to set them individually.  Version 2 cards use a PUK
-     (actually a Reset Code) with entirely different semantics.  */
-  gtk_button_set_label (GTK_BUTTON (card->change_pin_btn[1]), 
-                        card->is_v2
-                        ? (!pw_retry[1]? _("Reset PUK") : _("Change PUK"))
-                        : (!pw_retry[1]? _("Reset PIN") : _("Change PIN")));
-  gtk_widget_set_sensitive (card->change_pin_btn[1],
-                            (pw_retry[2] 
-                             && (card->is_v2
-                                 || (pw_retry[0] != pw_retry[1]))));
-                            
+     we don't need the Change PIN button.  Version 2 cards use a PUK
+     (actually a Reset Code) with entirely different semantics, thus a
+     button is required.  */
+  if (card->is_v2)
+    {
+      gtk_button_set_label (GTK_BUTTON (card->change_pin_btn[1]), 
+                            (pw_retry[1]? _("Change PUK"):_("Reset PUK")));
+      gtk_widget_set_sensitive (card->change_pin_btn[1], !!pw_retry[2]);
+      gtk_widget_show_all (card->change_pin_btn[1]);
+    }
+  else
+    gtk_widget_hide_all (card->change_pin_btn[1]);
+  gtk_widget_set_no_show_all (card->change_pin_btn[1], !card->is_v2);
+   
   /* The Admin PIN has always the same label.  If the Admin PIN is
      blocked the button is made insensitive.  Fixme: In the case of a
      blocked Admin PIN we should have a button to allow a factory
      reset of v2 cards.  */
-  gtk_button_set_label (GTK_BUTTON (card->change_pin_btn[2]), 
-                        _("Change PIN"));
+  gtk_button_set_label (GTK_BUTTON (card->change_pin_btn[2]), _("Change PIN"));
   gtk_widget_set_sensitive (card->change_pin_btn[2], !!pw_retry[2]);
 
 }
