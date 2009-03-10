@@ -8,6 +8,10 @@
 	(update_entry_chv_status): Set button labels.
 	(change_pin_clicked_cb, change_pin): New.
 	(update_entry_serialno): Init new IS_V2 global.
+	(struct _GpaCMOpenpgp): Add field RETRY_COUNTER.
+	(update_entry_chv_status): Init them.
+
+	* cm-openpgp.c (construct_data_widget): Add signature counter item.
 
 	* cm-geldkarte.c: Replace GtkEntry by GtkLabel.
 

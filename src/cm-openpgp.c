@@ -51,6 +51,7 @@ enum
     ENTRY_KEY_SIG,
     ENTRY_KEY_ENC,
     ENTRY_KEY_AUTH,
+    ENTRY_SIG_COUNTER,
     ENTRY_PIN_RETRYCOUNTER,
     ENTRY_PUK_RETRYCOUNTER,
     ENTRY_ADMIN_PIN_RETRYCOUNTER,
@@ -82,6 +83,9 @@ struct _GpaCMOpenpgp
   gboolean  changed[ENTRY_LAST];
 
   GtkLabel  *puk_label;  /* The label of the PUK field.  */
+
+  /* An array with the current value of the retry counters.  */
+  int retry_counter[3];
 
   /* An array for the buttons to change the 3 PINs.  */
   GtkWidget *change_pin_btn[3];
@@ -320,12 +324,15 @@ update_entry_chv_status (GpaCMOpenpgp *card, int entry_id, const char *string)
   set_integer (card->entries[ENTRY_PIN_RETRYCOUNTER], pw_retry[0]);
   set_integer (card->entries[ENTRY_PUK_RETRYCOUNTER], pw_retry[1]);
   set_integer (card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], pw_retry[2]);
+  for (i=0; i < 3; i++)
+    card->retry_counter[i] = pw_retry[i];
 
   /* Set the Change button label to reset or change depending on the
-     current retry count.  Make the button insensitive if the the
+     current retry count.  Make the button insensitive if the
      Admin PIN is blocked.  */
   gtk_button_set_label (GTK_BUTTON (card->change_pin_btn[0]), 
-                        (!pw_retry[0]? _("Reset PIN") : _("Change PIN")));
+                        (!pw_retry[0] || (!pw_retry[1] && !card->is_v2)
+                         ? _("Reset PIN") : _("Change PIN")));
   gtk_widget_set_sensitive (card->change_pin_btn[0], !!pw_retry[2]);
 
   /* For version 1 cards, PIN2 is usually synchronized with PIN1 thus
@@ -441,7 +448,7 @@ reload_data (GpaCMOpenpgp *card)
     { "DISP-SEX",   ENTRY_SEX, update_entry_sex },
     { "PUBKEY-URL", ENTRY_PUBKEY_URL },
     { "LOGIN-DATA", ENTRY_LOGIN },
-/*     { "SIG-COUNTER",ENTRY_SIG_COUNTER }, */
+    { "SIG-COUNTER",ENTRY_SIG_COUNTER },
     { "CHV-STATUS", ENTRY_PIN_RETRYCOUNTER,  update_entry_chv_status },
     { "KEY-FPR",    ENTRY_LAST, update_entry_fpr },
 /*     { "CA-FPR", }, */
@@ -892,13 +899,129 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
 
 
 
-/* The button to chnage the PIN with number PINNO has been clicked.  */
+/* The button to change the PIN with number PINNO has been clicked.  */
 static void
 change_pin (GpaCMOpenpgp *card, int pinno)
 {
+  gpg_error_t err;
+  GtkWidget *dialog;
+  gpgme_ctx_t gpgagent;
+  int reset_mode;
+  const char *string;
+  int okay;
 
-  g_debug ("change pin for PIN %d", pinno);
 
+  gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
+  g_return_if_fail (gpgagent);
+  g_return_if_fail (pinno >= 0 && pinno < DIM (card->change_pin_btn));
+
+  if (!card->is_v2 && pinno == 1)
+    return;  /* ooops, we should never get to here.  */
+
+  if (pinno == 0 && !card->is_v2)
+    reset_mode = (!card->retry_counter[0] || !card->retry_counter[1]);
+  else
+    reset_mode = !card->retry_counter[pinno];
+
+  g_debug ("%s pin for PIN %d", reset_mode? "reset":"change", pinno);
+
+  if (!reset_mode && pinno == 0)
+    string = _("<b>Changing the PIN</b>\n"
+               "\n"
+               "If you proceed you will be asked to enter "
+               "the current value of the PIN and then to enter a new "
+               "value and repeat that value at another prompt.\n"
+               "\n"
+               "Entering a wrong value for the PIN "
+               "decrements the retry counter.  If the retry counters "
+               "of the PIN and of the Reset Code are both down "
+               "to zero, the PIN can still be reseted by using the "
+               "Admin-PIN.\n"
+               "\n"
+               "A fresh standard card has set the PIN to the value "
+               "<i>123456</i>.  However, the issuer of your card might "
+               "have initialized the card with a different PIN.  "
+               "Please check the instructions of your issuer.");
+  else if (!reset_mode && pinno == 1)
+    string = _("<b>Changing the Reset Code</b>\n"
+               "\n"
+               "The Reset Code is similar to a PUK (PIN Unblocking Code) "
+               "and used to unblock a PIN without the need to know the "
+               "Admin-PIN.\n"
+               "\n"
+               "If you proceed you will be asked to enter the current "
+               "value of the PIN and then to enter a new value for the "
+               "Reset Code and repeat that new value at another prompt.");
+  else if (reset_mode && pinno < 2)
+    string = _("<b>Reseting the PIN or the Reset Code</b>\n"
+               "\n"
+               "If the retry counters of the PIN and of the Reset Code are "
+               "both down to zero, it is only possible to reset them if you "
+               "have access to the Admin-PIN.\n"
+               "\n"
+               "A fresh standard card has set the Admin-PIN to the value "
+               "<i>12345678</i>.  However, the issuer of your card might "
+               "have initialized the card with a different Admin-PIN and "
+               "that Admin-PIN might only be nown to the issuer.  "
+               "Please check the instructions of your issuer.\n"
+               "\n" 
+               "If you proceed you will be asked to enter the current "
+               "value of the <b>Admin-PIN</b> and then to enter a new "
+               "value for the PIN or the Reset Code and repeat that new "
+               "value at another prompt.");
+  else if (pinno == 2)
+    string = _("<b>Changing the Admin-PIN</b>\n"
+               "\n"
+               "If you know the Admin-PIN you may change the Admin-PIN.\n"
+               "\n"
+               "The Admin-PIN is required to create keys on the card and to "
+               "change other data.  You may or may not know the Admin-PIN.  "
+               "A fresh standard card has set the Admin-PIN to the value "
+               "<i>12345678</i>.  However, the issuer of your card might "
+               "have initialized the card with a different Admin-PIN and "
+               "that Admin-PIN might only be known to the issuer.  "
+               "Please check the instructions of your issuer.\n"
+               "\n"
+               "If you proceed you will be asked to enter the current "
+               "value of the <b>Admin-PIN</b> and then to enter a new "
+               "value for that Admin-PIN and repeat that new "
+               "value at another prompt.");
+  else
+    string = "oops";
+            
+              
+  /* FIXME:  How do we figure out our GtkWindow?  */
+  dialog = gtk_message_dialog_new_with_markup (NULL /*GTK_WINDOW (card)*/,
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_INFO, 
+                                               GTK_BUTTONS_OK_CANCEL, 
+                                               NULL);
+  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), string);
+  okay = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK);
+  if (okay)
+    {
+      char command[100];
+
+      snprintf (command, sizeof command, "SCD PASSWD%s %d",
+                reset_mode? " --reset":"", pinno+1);
+      err = gpgme_op_assuan_transact (gpgagent, command,
+                                      NULL, NULL, NULL, NULL, NULL, NULL);
+      if (!err) 
+        err = gpgme_op_assuan_result (gpgagent)->err;
+      if (gpg_err_code (err) == GPG_ERR_CANCELED)
+        okay = 0; /* No need to reload the data.  */
+      else if (err) 
+        {
+          char *message = g_strdup_printf 
+            (_("Error changing or resetting the PIN/PUK.\n"
+               "(%s <%s>)"), gpg_strerror (err), gpg_strsource (err));
+          gpa_window_error (message, NULL);
+          xfree (message);
+        }
+    }
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+  if (okay)
+    reload_data (card);
 }
 
 
@@ -1064,7 +1187,7 @@ construct_data_widget (GpaCMOpenpgp *card)
   gtk_expander_set_label_widget (GTK_EXPANDER (keys_frame), label);
   gtk_expander_set_expanded (GTK_EXPANDER (keys_frame), TRUE);
 
-  keys_table = gtk_table_new (3, 3, FALSE);
+  keys_table = gtk_table_new (4, 3, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (keys_table), 10);
 
   rowidx = 0;
@@ -1080,6 +1203,10 @@ construct_data_widget (GpaCMOpenpgp *card)
   card->entries[ENTRY_KEY_AUTH] = gtk_label_new (NULL);
   add_table_row (keys_table, &rowidx, _("Authentication key:"),
                  card->entries[ENTRY_KEY_AUTH], NULL, 0);
+
+  card->entries[ENTRY_SIG_COUNTER] = gtk_label_new (NULL);
+  add_table_row (keys_table, &rowidx, _("Signature counter:"),
+                 card->entries[ENTRY_SIG_COUNTER], NULL, 0);
 
   gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
 
@@ -1117,7 +1244,7 @@ construct_data_widget (GpaCMOpenpgp *card)
 
   card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
-  add_table_row (pin_table, &rowidx, _("Admin PIN retry counter:"),
+  add_table_row (pin_table, &rowidx, _("Admin-PIN retry counter:"),
                  card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], button, 1);
   card->change_pin_btn[2] = button; 
 
