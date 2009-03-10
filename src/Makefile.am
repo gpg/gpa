@@ -52,7 +52,8 @@ gpa_cardman_sources = \
                 cm-object.c cm-object.h \
                 cm-openpgp.c cm-openpgp.h \
 		cm-geldkarte.c cm-geldkarte.h \
-		cm-netkey.c cm-netkey.h
+		cm-netkey.c cm-netkey.h \
+		cm-dinsig.c cm-dinsig.h
 else
 gpa_cardman_sources =
 endif

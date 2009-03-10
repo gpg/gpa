@@ -46,6 +46,7 @@
 #include "cm-openpgp.h"
 #include "cm-geldkarte.h"
 #include "cm-netkey.h"
+#include "cm-dinsig.h"
 
 
 
@@ -228,7 +229,10 @@ scd_status_cb (void *opaque, const char *status, const char *args)
           cardman->cardtypename = "NetKey";
         }
       else if (!strcmp (args, "DINSIG"))
-        cardman->cardtypename = "DINSIG";
+        {
+          cardman->cardtype = GPA_CM_DINSIG_TYPE;
+          cardman->cardtypename = "DINSIG";
+        }
       else if (!strcmp (args, "P15"))
         cardman->cardtypename = "PKCS#15";
       else if (!strcmp (args, "GELDKARTE"))
@@ -712,6 +716,10 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
     {
       cardman->card_widget = gpa_cm_netkey_new ();
     }
+  else if (cardman->cardtype == GPA_CM_DINSIG_TYPE)
+    {
+      cardman->card_widget = gpa_cm_dinsig_new ();
+    }
   else
     {
       if (!error_description)
@@ -737,6 +745,7 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
       gpa_cm_openpgp_reload (cardman->card_widget, cardman->gpgagent);
       gpa_cm_geldkarte_reload (cardman->card_widget, cardman->gpgagent);
       gpa_cm_netkey_reload (cardman->card_widget, cardman->gpgagent);
+      gpa_cm_dinsig_reload (cardman->card_widget, cardman->gpgagent);
     }
 }
 

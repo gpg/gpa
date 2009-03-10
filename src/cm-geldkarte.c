@@ -95,15 +95,15 @@ clear_card_data (GpaCMGeldkarte *card)
   int idx;
 
   for (idx=0; idx < ENTRY_LAST; idx++)
-    gtk_entry_set_text (GTK_ENTRY (card->entries[idx]), "");
+    gtk_label_set_text (GTK_LABEL (card->entries[idx]), "");
 }
 
 
 struct scd_getattr_parm
 {
   GpaCMGeldkarte *card;  /* The object.  */
-  const char *name;     /* Name of expected attribute.  */
-  int entry_id;        /* The identifier for the entry.  */
+  const char *name;      /* Name of expected attribute.  */
+  int entry_id;          /* The identifier for the entry.  */
   void (*updfnc) (GpaCMGeldkarte *card, int entry_id, const char *string);
 };
 
@@ -125,8 +125,8 @@ scd_getattr_cb (void *opaque, const char *status, const char *args)
           if (parm->updfnc)
             parm->updfnc (parm->card, entry_id, args);
           else
-            gtk_entry_set_text 
-              (GTK_ENTRY (parm->card->entries[entry_id]), args);
+            gtk_label_set_text 
+              (GTK_LABEL (parm->card->entries[entry_id]), args);
         }
     }
 
@@ -201,7 +201,7 @@ add_table_row (GtkWidget *table, int *rowidx, const char *labelstr)
   GtkWidget *widget;
   GtkWidget *label;
 
-  widget = gtk_entry_new ();
+  widget = gtk_label_new (NULL);
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
@@ -209,8 +209,8 @@ add_table_row (GtkWidget *table, int *rowidx, const char *labelstr)
   gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
                     *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
 
-  gtk_editable_set_editable (GTK_EDITABLE (widget), FALSE);
-  gtk_entry_set_has_frame (GTK_ENTRY (widget), FALSE);
+  gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
+  gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
 
   gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
                     *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
@@ -258,13 +258,13 @@ construct_data_widget (GpaCMGeldkarte *card)
   rowidx = 0;
 
   card->entries[ENTRY_CARDNO] = add_table_row 
-    (general_table, &rowidx, _("Card Number: "));
+    (general_table, &rowidx, _("Card number: "));
 
   card->entries[ENTRY_KBLZ] = add_table_row 
-    (general_table, &rowidx, _("Short Bank Code Number: "));
+    (general_table, &rowidx, _("Short Bank Code number: "));
 
   card->entries[ENTRY_BANKTYPE] = add_table_row 
-    (general_table, &rowidx, _("Bank Type: "));
+    (general_table, &rowidx, _("Bank type: "));
 
   card->entries[ENTRY_VALIDFROM] = add_table_row 
     (general_table, &rowidx, _("Card valid from: "));
@@ -273,16 +273,16 @@ construct_data_widget (GpaCMGeldkarte *card)
     (general_table, &rowidx, _("Card expires: "));
 
   card->entries[ENTRY_COUNTRY] = add_table_row 
-    (general_table, &rowidx, _("Issuing Country: "));
+    (general_table, &rowidx, _("Issuing country: "));
 
   card->entries[ENTRY_CURRENCY] = add_table_row 
     (general_table, &rowidx, _("Currency: "));
 
   card->entries[ENTRY_ZKACHIPID] = add_table_row 
-    (general_table, &rowidx, _("ZKA Chip ID: "));
+    (general_table, &rowidx, _("ZKA chip Id: "));
 
   card->entries[ENTRY_OSVERSION] = add_table_row 
-    (general_table, &rowidx, _("Chip OS Version: "));
+    (general_table, &rowidx, _("Chip OS version: "));
 
   gtk_container_add (GTK_CONTAINER (general_frame), general_table);
 
@@ -294,10 +294,10 @@ construct_data_widget (GpaCMGeldkarte *card)
     (amount_table, &rowidx, _("Balance: "));
 
   card->entries[ENTRY_MAXAMOUNT] = add_table_row 
-    (amount_table, &rowidx, _("General Limit: "));
+    (amount_table, &rowidx, _("General limit: "));
 
   card->entries[ENTRY_MAXAMOUNT1] = add_table_row 
-    (amount_table, &rowidx, _("Transaction Limit: "));
+    (amount_table, &rowidx, _("Transaction limit: "));
 
   gtk_container_add (GTK_CONTAINER (amount_frame), amount_table);
 
