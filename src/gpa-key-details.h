@@ -52,6 +52,7 @@ GType gpa_key_details_get_type (void) G_GNUC_CONST;
 GtkWidget *gpa_key_details_new (void);
 void gpa_key_details_update (GtkWidget *keydetails,
                             gpgme_key_t key, int keycount);
+void gpa_key_details_find (GtkWidget *keydetails, const char *pattern);
 
 
 #endif /*GPA_KEY_DETAILS_H*/

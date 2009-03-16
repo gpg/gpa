@@ -1,5 +1,10 @@
 2009-03-16  Werner Koch  <wk@g10code.com>
 
+	* cm-openpgp.c (construct_data_widget): Use an expander for the
+	fingerprints.
+	(update_entry_fpr): Adjust for that.
+	(entry_fpr_expanded_cb): New.
+
 	* keyring.c (keyring_editor_new): s/g_malloc/g_malloc0/.
 	(keyring_update_details_notebook): Rename to keyring_update_details.
 

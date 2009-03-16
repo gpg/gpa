@@ -613,3 +613,40 @@ gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key, int keycount)
   gtk_widget_show_all (keydetails);
 }
 
+
+/* Find the key identified by pattern and show the details of the
+   first key found.  Pattern should be the fingerprint of a key so
+   that only one key will be shown.  */
+void
+gpa_key_details_find (GtkWidget *keydetails, const char *pattern)
+{
+  gpg_error_t err;
+  gpgme_ctx_t ctx;
+  gpgme_key_t key = NULL;
+  int any = 0;
+
+  err = gpgme_new (&ctx);
+  if (err)
+    {
+      gpa_gpgme_error (err);
+      gpa_key_details_update (keydetails, NULL, 0);
+      return;
+    }
+  gpgme_set_protocol (ctx, GPGME_PROTOCOL_OpenPGP);
+
+  if (!gpgme_op_keylist_start (ctx, pattern, 0))
+    {
+      while (!gpgme_op_keylist_next (ctx, &key))
+        {
+          gpa_key_details_update (keydetails, key, 1);
+          gpgme_key_unref (key);
+          any = 1;
+          break;
+        }
+    }
+  gpgme_op_keylist_end (ctx);
+  gpgme_release (ctx);
+  if (!any)
+    gpa_key_details_update (keydetails, NULL, 0);
+}
+

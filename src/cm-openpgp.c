@@ -29,6 +29,7 @@
 #include "gpa.h"   
 #include "gtktools.h"
 #include "convert.h"
+#include "gpa-key-details.h"
 
 #include "cm-object.h"
 #include "cm-openpgp.h"
@@ -81,6 +82,9 @@ struct _GpaCMOpenpgp
 
   GtkWidget *entries[ENTRY_LAST];
   gboolean  changed[ENTRY_LAST];
+
+  /* An array of 3 widgets to hold the key_details widget.  */
+  GtkWidget *key_details[3];
 
   GtkLabel  *puk_label;  /* The label of the PUK field.  */
 
@@ -367,7 +371,10 @@ update_entry_fpr (GpaCMOpenpgp *card, int entry_id, const char *string)
   char *buf;
 
   buf = gpa_gpgme_key_format_fingerprint (string);
-  gtk_label_set_text (GTK_LABEL (card->entries[entry_id]), buf);
+  if (GTK_IS_EXPANDER (card->entries[entry_id]))
+    gtk_expander_set_label (GTK_EXPANDER (card->entries[entry_id]), buf);
+  else
+    gtk_label_set_text (GTK_LABEL (card->entries[entry_id]), buf);
   xfree (buf);
 }
 
@@ -1043,6 +1050,66 @@ change_pin_clicked_cb (void *widget, void *user_data)
 
 
 
+static void
+entry_fpr_expanded_cb (GObject *object, GParamSpec *dummy, void *user_data)
+{
+  GtkExpander *expander = GTK_EXPANDER (object);
+  GpaCMOpenpgp *card = user_data;
+  int keyidx;
+
+  (void)dummy;
+
+  if (GTK_WIDGET (expander) == card->entries[ENTRY_KEY_SIG])
+    keyidx = 0;
+  else if (GTK_WIDGET (expander) == card->entries[ENTRY_KEY_ENC])
+    keyidx = 1;
+  else if (GTK_WIDGET (expander) == card->entries[ENTRY_KEY_AUTH])
+    keyidx = 2;
+  else
+    g_return_if_fail (!"invalid key entry");
+
+  if (gtk_expander_get_expanded (expander))
+    {
+      const char *fpr, *src;
+      char *rawfpr, *dst;
+ 
+      if (!card->key_details[keyidx])
+        {
+          card->key_details[keyidx] = gpa_key_details_new ();
+          gtk_container_add (GTK_CONTAINER (expander),
+                             card->key_details[keyidx]);
+        }
+
+      fpr = gtk_expander_get_label (expander);
+      if (fpr)
+        {
+          rawfpr = dst = xmalloc (2 + strlen (fpr) + 1);
+          *dst++ = '0';
+          *dst++ = 'x';
+          for (src=fpr; *src; src++)
+            if (*src != ' ' && *src != ':')
+              *dst++ = *src;
+          *dst = 0;
+        }
+      else
+        rawfpr = NULL;
+      if (rawfpr)
+        gpa_key_details_find (card->key_details[keyidx], rawfpr);
+      else
+        gpa_key_details_update (card->key_details[keyidx], NULL, 0);
+      xfree (rawfpr);
+    }
+  else
+    {
+      if (card->key_details[keyidx])
+        gtk_widget_destroy (card->key_details[keyidx]);
+      card->key_details[keyidx] = NULL;
+    }
+}
+
+
+
+
 /* Helper for construct_data_widget.  Returns the label widget. */
 static GtkLabel *
 add_table_row (GtkWidget *table, int *rowidx,
@@ -1192,15 +1259,21 @@ construct_data_widget (GpaCMOpenpgp *card)
 
   rowidx = 0;
 
-  card->entries[ENTRY_KEY_SIG] = gtk_label_new (NULL);
+  /* Fixme: A problem using an expander instead of a plain label is
+     that the label is not selectable.  Any ideas on how to fix that?
+     Is that really required given that we can use the details page
+     for selection.  We might always want to switch between expander
+     and label depending on whether we have a key for the fingerprint.
+     Check whether gtk_expander_set_label_wdiget works for us. */
+  card->entries[ENTRY_KEY_SIG] = gtk_expander_new (NULL);
   add_table_row (keys_table, &rowidx, _("Signature key:"),
                  card->entries[ENTRY_KEY_SIG], NULL, 0);
 
-  card->entries[ENTRY_KEY_ENC] = gtk_label_new (NULL);
+  card->entries[ENTRY_KEY_ENC] = gtk_expander_new (NULL);
   add_table_row (keys_table, &rowidx, _("Encryption key:"),
                  card->entries[ENTRY_KEY_ENC], NULL, 0);
 
-  card->entries[ENTRY_KEY_AUTH] = gtk_label_new (NULL);
+  card->entries[ENTRY_KEY_AUTH] = gtk_expander_new (NULL);
   add_table_row (keys_table, &rowidx, _("Authentication key:"),
                  card->entries[ENTRY_KEY_AUTH], NULL, 0);
 
@@ -1278,6 +1351,13 @@ construct_data_widget (GpaCMOpenpgp *card)
                             G_CALLBACK (edit_focus_cb), card);
           break;
 
+        case ENTRY_KEY_SIG:
+        case ENTRY_KEY_ENC:
+        case ENTRY_KEY_AUTH:
+          g_signal_connect (G_OBJECT (card->entries[idx]), "notify::expanded",
+                            G_CALLBACK (entry_fpr_expanded_cb), card);
+          break;
+          
         default:
           if (!GTK_IS_LABEL (card->entries[idx]))
             {
