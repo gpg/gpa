@@ -14,9 +14,9 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
    GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License along
-   with this program; if not, write to the Free Software Foundation, Inc.,
-   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  */
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
+
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -71,21 +71,15 @@
 #include "gpagenkeyadvop.h"
 #include "gpagenkeysimpleop.h"
 
+#include "gpa-key-details.h"
+
+
 #if ! GTK_CHECK_VERSION (2, 10, 0)
 #define GTK_STOCK_SELECT_ALL "gtk-select-all"
 #endif
 
 
 /* The public keyring editor.  */
-
-/* Constants for the pages in the details notebook.  */
-enum
-  {
-    GPA_KEYRING_EDITOR_DETAILS,
-    GPA_KEYRING_EDITOR_SIGNATURES,
-    GPA_KEYRING_EDITOR_SUBKEYS,
-  };
-
 
 /* Struct passed to all signal handlers of the keyring editor as user
    data.  */
@@ -100,36 +94,13 @@ struct _GPAKeyringEditor
   /* The "Show Ownertrust" toggle button.  */
   GtkWidget *toggle_show;
 
-  /* The details notebook.  */
-  GtkWidget *notebook_details;
+  /* The details widget.  */
+  GtkWidget *details;
 
-  /* Idle handler id for updates of the notebook.  Will be nonzero
-     whenever a handler is currently set and zero otherwise.  */
+  /* Idle handler id for updates of the details widget.  Will be
+     nonzero whenever a handler is currently set and zero
+     otherwise.  */
   guint details_idle_id;
-
-  /* Widgets in the details notebook page.  */
-  GtkWidget *details_num_label;
-  GtkWidget *details_table;
-  GtkWidget *detail_public_private;
-  GtkWidget *detail_capabilities;
-  GtkWidget *detail_name;
-  GtkWidget *detail_fingerprint;
-  GtkWidget *detail_expiry;
-  GtkWidget *detail_key_id;
-  GtkWidget *detail_owner_trust;
-  GtkWidget *detail_key_trust;
-  GtkWidget *detail_key_type;
-  GtkWidget *detail_creation;
-
-  /* The signatures list in the notebook.  */
-  GtkWidget *signatures_list;
-  GtkWidget *signatures_uids;
-  gint signatures_count;
-  GtkWidget *signatures_hbox;
-
-  /* The subkeys list in the notebook.  */
-  GtkWidget *subkeys_list;
-  GtkWidget *subkeys_page;
   
   /* Labels in the status bar.  */
   GtkWidget *status_label;
@@ -160,7 +131,7 @@ typedef struct _GPAKeyringEditor GPAKeyringEditor;
 
 /* Forward declarations.  */
 static int idle_update_details (gpointer param);
-static void keyring_update_details_notebook (GPAKeyringEditor *editor);
+static void keyring_update_details (GPAKeyringEditor *editor);
 
 
 /* A simple sensitivity callback mechanism.
@@ -629,7 +600,7 @@ static void
 keyring_selection_update_actions (GPAKeyringEditor *editor)
 {
   update_selection_sensitive_actions (editor);
-  keyring_update_details_notebook (editor);
+  keyring_update_details (editor);
 }  
 
 
@@ -1127,395 +1098,9 @@ keyring_editor_action_new (GPAKeyringEditor *editor,
   *popup = gtk_ui_manager_get_widget (ui_manager, "/PopupMenu");
 }
 
-
-/* The details notebook.  */ 
 
-/* Add a single row to the details table.  */
-static GtkWidget *
-add_details_row (GtkWidget *table, gint row, gchar *text,
-                 gboolean selectable)
-{
-  GtkWidget *widget;
-
-  widget = gtk_label_new (text);
-  gtk_table_attach (GTK_TABLE (table), widget, 0, 1, row, row + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (widget), 1.0, 0.0);
-
-  widget = gtk_label_new ("");
-  gtk_label_set_selectable (GTK_LABEL (widget), selectable);
-  gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
-
-  gtk_table_attach (GTK_TABLE (table), widget, 1, 2, row, row + 1,
-                    GTK_FILL | GTK_EXPAND, 0, 0, 0);
-
-  return widget;
-}
-
-
-/* Callback for the popdown menu on the signatures page.  */
-static void
-signatures_uid_selected (GtkComboBox *combo, gpointer user_data)
-{
-  GPAKeyringEditor *editor = user_data;
-  gpgme_key_t key = keyring_editor_current_key (editor);
-
-  /* We subtract one, as the first entry with index 0 means "all user
-     names".  */
-  gpa_siglist_set_signatures
-    (editor->signatures_list, key,
-     gtk_combo_box_get_active (GTK_COMBO_BOX (combo)) - 1);
-}
-
-
-/* Add the subkeys page from the notebook.  */
-static void
-keyring_editor_add_subkeys_page (GPAKeyringEditor *editor)
-{
-  if (!editor->subkeys_page)
-    {
-      GtkWidget *vbox;
-      GtkWidget *scrolled;
-      GtkWidget *subkeylist;
-
-      vbox = gtk_vbox_new (FALSE, 5);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-      scrolled = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
-					   GTK_SHADOW_IN);
-      gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
-      subkeylist = gpa_subkey_list_new ();
-      gtk_container_add (GTK_CONTAINER (scrolled), subkeylist);
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
-				      GTK_POLICY_AUTOMATIC,
-				      GTK_POLICY_AUTOMATIC);
-      editor->subkeys_list = subkeylist;
-      editor->subkeys_page = vbox;
-      gtk_notebook_append_page (GTK_NOTEBOOK (editor->notebook_details),
-				editor->subkeys_page,
-				gtk_label_new (_("Subkeys")));
-      gtk_widget_show_all (editor->notebook_details);
-      keyring_update_details_notebook (editor);
-      idle_update_details (editor);
-    }
-}
-
-
-/* Remove the subkeys page from the notebook.  */
-static void
-keyring_editor_remove_subkeys_page (GPAKeyringEditor *editor)
-{
-  if (editor->subkeys_page)
-    {
-      gtk_notebook_remove_page (GTK_NOTEBOOK (editor->notebook_details),
-				GPA_KEYRING_EDITOR_SUBKEYS);
-      editor->subkeys_list = NULL;
-      editor->subkeys_page = NULL;
-    }
-}
-
-
-/* Create and return the Details/Signatures notebook.  */
-static GtkWidget *
-keyring_details_notebook (GPAKeyringEditor *editor)
-{
-  GtkWidget *notebook;
-  GtkWidget *table;
-  GtkWidget *label;
-  GtkWidget *vbox;
-  GtkWidget *scrolled;
-  GtkWidget *viewport;
-  GtkWidget *siglist;
-  GtkWidget *combo;
-  GtkWidget *hbox;
-  gint table_row;
-
-  notebook = gtk_notebook_new ();
-  editor->notebook_details = notebook;
-
-  /* Details Page */
-  scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
-				       GTK_SHADOW_NONE);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-  viewport = gtk_viewport_new (NULL, NULL);
-  gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
-  gtk_container_add (GTK_CONTAINER (viewport), vbox);
-  gtk_container_add (GTK_CONTAINER (scrolled), viewport);
-
-  label = gtk_label_new ("");
-  editor->details_num_label = label;
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
-  
-  table = gtk_table_new (2, 7, FALSE);
-  editor->details_table = table;
-  gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
-
-  table_row = 0;
-  editor->detail_public_private = add_details_row (table, table_row++,
-                                                   "", TRUE);
-  editor->detail_capabilities = add_details_row (table, table_row++,
-						 "", TRUE);
-  editor->detail_name = add_details_row (table, table_row++,
-                                         _("User Name:"), TRUE);
-  editor->detail_key_id = add_details_row (table, table_row++,
-                                           _("Key ID:"), TRUE);
-  editor->detail_fingerprint = add_details_row (table, table_row++,
-                                                _("Fingerprint:"), TRUE);
-  editor->detail_expiry = add_details_row (table, table_row++,
-                                           _("Expires at:"), FALSE); 
-  editor->detail_owner_trust = add_details_row (table, table_row++,
-                                                _("Owner Trust:"), FALSE);
-  editor->detail_key_trust = add_details_row (table, table_row++,
-                                              _("Key Validity:"), FALSE);
-  editor->detail_key_type = add_details_row (table, table_row++,
-                                             _("Key Type:"), FALSE);
-  editor->detail_creation = add_details_row (table, table_row++,
-                                             _("Created at:"), FALSE);
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), scrolled,
-                            gtk_label_new (_("Details")));
-
-  /* Signatures Page.  */
-  vbox = gtk_vbox_new (FALSE, 5);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-
-  /* UID menu and label.  */
-  hbox = gtk_hbox_new (FALSE, 5);
-  label = gtk_label_new (_("Show signatures on user name:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-  combo = gtk_combo_box_new_text ();
-  gtk_box_pack_start (GTK_BOX (hbox), combo, TRUE, TRUE, 0);
-  gtk_widget_set_sensitive (combo, FALSE);
-  editor->signatures_uids = combo;
-  editor->signatures_count = 0;
-  editor->signatures_hbox = hbox;
-  g_signal_connect (G_OBJECT (combo), "changed",
-                    G_CALLBACK (signatures_uid_selected), editor);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-
-  /* Signature list.  */
-  scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
-				       GTK_SHADOW_IN);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
-  siglist = gpa_siglist_new ();
-  editor->signatures_list = siglist;
-  gtk_container_add (GTK_CONTAINER (scrolled), siglist);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), vbox,
-                            gtk_label_new (_("Signatures")));
-
-  /* Subkeys page.  */
-  editor->subkeys_list = NULL;
-  editor->subkeys_page = NULL;
-
-  if (! gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-    keyring_editor_add_subkeys_page (editor);
-
-  return notebook;
-}
-
-
-/* Fill the details page of the details notebook with the properties
-   of the public key.  */
-static void
-keyring_details_page_fill_key (GPAKeyringEditor *editor, gpgme_key_t key)
-{
-  gpgme_user_id_t uid;
-  gpgme_key_t seckey;
-  char *text;
-
-  seckey = gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
-                                    key->subkeys->fpr);
-  if (seckey)
-    {
-#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
-      if (seckey->subkeys && seckey->subkeys->is_cardkey)
-        gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
-                            _("The key has both a smartcard based private part"
-                              " and a public part"));
-      else
-#endif
-        gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
-                            _("The key has both a private and a public part"));
-    }
-  else
-    gtk_label_set_text (GTK_LABEL (editor->detail_public_private),
-			_("The key has only a public part"));
-
-  gtk_label_set_text (GTK_LABEL (editor->detail_capabilities),
-		      gpa_get_key_capabilities_text (key));
-
-  /* One user ID on each line.  */
-  text = gpa_gpgme_key_get_userid (key->uids);
-  if (key->uids)
-    {
-      for (uid = key->uids->next; uid; uid = uid->next)
-        {
-          gchar *uid_string = gpa_gpgme_key_get_userid (uid);
-          gchar *tmp = text;
-
-          text = g_strconcat (text, "\n", uid_string, NULL);
-          g_free (tmp);
-          g_free (uid_string);
-        }
-    }
-  gtk_label_set_text (GTK_LABEL (editor->detail_name), text);
-  g_free (text);
-
-  text = (gchar*) gpa_gpgme_key_get_short_keyid (key);
-  gtk_label_set_text (GTK_LABEL (editor->detail_key_id), text);
-
-  text = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
-  gtk_label_set_text (GTK_LABEL (editor->detail_fingerprint), text);
-  g_free (text);
-  text = gpa_expiry_date_string (key->subkeys->expires);
-  gtk_label_set_text (GTK_LABEL (editor->detail_expiry), text);
-  g_free (text);
-
-  gtk_label_set_text (GTK_LABEL (editor->detail_key_trust),
-                      gpa_key_validity_string (key));
-
-  text = g_strdup_printf (_("%s %u bits"),
-			  gpgme_pubkey_algo_name (key->subkeys->pubkey_algo),
-			  key->subkeys->length);
-  gtk_label_set_text (GTK_LABEL (editor->detail_key_type), text);
-  g_free (text);
-
-  gtk_label_set_text (GTK_LABEL (editor->detail_owner_trust),
-                      gpa_key_ownertrust_string (key));
-
-  text = gpa_creation_date_string (key->subkeys->timestamp);
-  gtk_label_set_text (GTK_LABEL (editor->detail_creation), text);
-  g_free (text);
-
-  gtk_widget_hide (editor->details_num_label);
-  gtk_widget_show (editor->details_table);
-}
-
-
-/* Show the number of keys num_key in the details page of the details
-   notebook and make sure that that page is in front.  */
-static void
-keyring_details_page_fill_num_keys (GPAKeyringEditor *editor, gint num_key)
-{
-  if (! num_key)
-    gtk_label_set_text (GTK_LABEL (editor->details_num_label),
-			_("No keys selected"));
-  else
-    {
-      char *text = g_strdup_printf (ngettext("%d key selected",
-                                             "%d keys selected",
-                                             num_key), num_key); 
-
-      gtk_label_set_text (GTK_LABEL (editor->details_num_label), text);
-      g_free (text);
-    }
-
-  gtk_widget_show (editor->details_num_label);
-  gtk_widget_hide (editor->details_table);
-
-  /* FIXME: Assumes that the 0th page is the details page.  This
-     should be done better.  */
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (editor->notebook_details), 0);
-}
-
-
-/* Fill the signatures page of the details notebook with the signatures
-   of the public key key.  */
-static void
-keyring_signatures_page_fill_key (GPAKeyringEditor *editor, gpgme_key_t key)
-{
-  GtkComboBox *combo;
-  gint i;
-
-  combo = GTK_COMBO_BOX (editor->signatures_uids);
-  for (i = editor->signatures_count - 1; i >= 0; i--)
-    gtk_combo_box_remove_text (combo, i);
-  editor->signatures_count = 0;
-
-  /* Create the popdown UID list if there is more than one UID.  */
-  if (key->uids && key->uids->next)
-    {
-      gpgme_user_id_t uid;
-
-      gtk_combo_box_append_text (combo, _("All signatures"));
-      gtk_combo_box_set_active (combo, 0);
-      i = 1;
-
-      uid = key->uids;
-      while (uid)
-	{
-	  gchar *uid_string = gpa_gpgme_key_get_userid (uid);
-	  gtk_combo_box_append_text (combo, uid_string);
-	  g_free (uid_string);
-	  uid = uid->next;
-	  i++;
-	}
-      editor->signatures_count = i;
-
-      gtk_widget_show (editor->signatures_hbox);
-      gtk_widget_set_sensitive (editor->signatures_uids, TRUE);
-      /* Add the signatures.  */
-      gpa_siglist_set_signatures (editor->signatures_list, key, -1);
-    }
-  else
-    {
-      /* If there is just one uid, display its signatures explicitly,
-         and do not show the list of uids.  */
-      gtk_widget_hide (editor->signatures_hbox);
-      gpa_siglist_set_signatures (editor->signatures_list, key, 0);
-    }
-}
-
-
-/* Empty the list of signatures in the details notebook.  */
-static void
-keyring_signatures_page_empty (GPAKeyringEditor *editor)
-{
-  GtkComboBox *combo;
-  gint i;
-
-  gpa_siglist_set_signatures (editor->signatures_list, NULL, 0);
-
-  combo = GTK_COMBO_BOX (editor->signatures_uids);
-  gtk_widget_set_sensitive (GTK_WIDGET (combo), FALSE);
-  for (i = editor->signatures_count - 1; i >= 0; i--)
-    gtk_combo_box_remove_text (combo, i);
-  editor->signatures_count = 0;
-}
-
-
-/* Fill the subkeys page.  */
-static void
-keyring_subkeys_page_fill_key (GPAKeyringEditor *editor, gpgme_key_t key)
-{
-  if (editor->subkeys_page)
-    gpa_subkey_list_set_key (editor->subkeys_list, key);
-}
-
-
-/* Empty the list of subkeys.  */
-static void
-keyring_subkeys_page_empty (GPAKeyringEditor *editor)
-{
-  if (editor->subkeys_page)
-    gpa_subkey_list_set_key (editor->subkeys_list, NULL);
-}
-
-
-/* Update the details notebook according to the current selection.
-   This means that if there is exactly one key selected, display its
+/* Update the details widget according to the current selection.  This
+   means that if there is exactly one key selected, display its
    properties in the pages, otherwise show the number of currently
    selected keys.  */
 static int
@@ -1534,16 +1119,13 @@ idle_update_details (gpointer param)
 	     there is time.  */
 	  return TRUE;
 	}
-      keyring_details_page_fill_key (editor, key);
-      keyring_signatures_page_fill_key (editor, key);
-      keyring_subkeys_page_fill_key (editor, key);
+      gpa_key_details_update (editor->details, key, 1);
     }
   else
     {
       GList *selection = gpa_keylist_get_selected_keys (editor->keylist);
-      keyring_details_page_fill_num_keys (editor, g_list_length (selection));
-      keyring_signatures_page_empty (editor);
-      keyring_subkeys_page_empty (editor);
+      gpa_key_details_update (editor->details, NULL,
+                              g_list_length (selection));
       g_list_free (selection);
     }
 
@@ -1551,16 +1133,16 @@ idle_update_details (gpointer param)
      been run.  */
   editor->details_idle_id = 0;
   
-  /* Return 0 to indicate that this function shouldn't be called again
-     by GTK, only when we expicitly add it again */
-  return 0;
+  /* Return false to indicate that this function shouldn't be called
+     again by GTK, only when we expicitly add it again.  */
+  return FALSE;
 }
 
 
-/* Add an idle handler to update the details notebook, but only when
-   none has been set yet.  */
+/* Add an idle handler to update the details, but only when none has
+   been set yet.  */
 static void
-keyring_update_details_notebook (GPAKeyringEditor *editor)
+keyring_update_details (GPAKeyringEditor *editor)
 {
   if (! editor->details_idle_id)
     editor->details_idle_id = g_idle_add (idle_update_details, editor);
@@ -1684,20 +1266,6 @@ keyring_default_key_changed (GpaOptions *options, gpointer param)
 }
 
 
-/* Signal handler for the "changed_ui_mode" signal.  */
-static void
-keyring_ui_mode_changed (GpaOptions *options, gpointer param)
-{
-  GPAKeyringEditor *editor = param;
-
-  /* Toggles the subkeys page in the details notebook.  */
-  if (! gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-    keyring_editor_add_subkeys_page (editor);
-  else
-    keyring_editor_remove_subkeys_page (editor);
-}
-
-
 /* Create and return a new keyring editor dialog.  The dialog is
    hidden by default.  */
 GtkWidget *
@@ -1709,7 +1277,6 @@ keyring_editor_new (void)
   GtkWidget *label;
   GtkWidget *scrolled;
   GtkWidget *keylist;
-  GtkWidget *notebook;
   GtkWidget *menubar;
   GtkWidget *toolbar;
   GtkWidget *hbox;
@@ -1721,9 +1288,7 @@ keyring_editor_new (void)
   gchar *markup;
   guint pt, pb, pl, pr;
 
-  editor = g_malloc (sizeof (GPAKeyringEditor));
-  editor->selection_sensitive_actions = NULL;
-  editor->details_idle_id = 0;
+  editor = g_malloc0 (sizeof (GPAKeyringEditor));
 
   window = editor->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window),
@@ -1797,8 +1362,8 @@ keyring_editor_new (void)
   g_signal_connect_swapped (G_OBJECT (keylist), "button_press_event",
                             G_CALLBACK (display_popup_menu), editor);
 
-  notebook = keyring_details_notebook (editor);
-  gtk_paned_pack2 (GTK_PANED (paned), notebook, TRUE, TRUE);
+  editor->details = gpa_key_details_new ();
+  gtk_paned_pack2 (GTK_PANED (paned), editor->details, TRUE, TRUE);
   gtk_paned_set_position (GTK_PANED (paned), 250);
 
   statusbar = keyring_statusbar_new (editor);
@@ -1806,13 +1371,10 @@ keyring_editor_new (void)
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
 		    "changed_default_key",
                     G_CALLBACK (keyring_default_key_changed), editor);
-  g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
-		    "changed_ui_mode",
-                    G_CALLBACK (keyring_ui_mode_changed), editor);
 
   keyring_update_status_bar (editor);
   update_selection_sensitive_actions (editor);
-  keyring_update_details_notebook (editor);
+  keyring_update_details (editor);
 
   editor->current_key = NULL;
   editor->ctx = gpa_context_new ();

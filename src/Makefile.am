@@ -79,6 +79,7 @@ gpa_SOURCES = get-path.h get-path.c \
               recipientdlg.c recipientdlg.h \
               selectkeydlg.c selectkeydlg.h \
 	      keyring.c keyring.h \
+	      gpa-key-details.c gpa-key-details.h \
 	      ownertrustdlg.c ownertrustdlg.h \
 	      keysigndlg.c keysigndlg.h \
 	      keygendlg.c keygendlg.h \

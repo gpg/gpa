@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-03-10 12:18+0100\n"
+"POT-Creation-Date: 2009-03-16 18:06+0100\n"
 "PO-Revision-Date: 2003-11-03 17:11+0100\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
@@ -42,12 +42,12 @@ msgstr ""
 msgid "Clipboard"
 msgstr "クリップボードへコピー (_C)"
 
-#: src/clipboard.c:754 src/fileman.c:517 src/keyring.c:891 src/cardman.c:590
+#: src/clipboard.c:754 src/fileman.c:517 src/keyring.c:862 src/cardman.c:590
 #, fuzzy
 msgid "_File"
 msgstr "/ファイル (_F)"
 
-#: src/clipboard.c:755 src/fileman.c:518 src/keyring.c:892 src/cardman.c:591
+#: src/clipboard.c:755 src/fileman.c:518 src/keyring.c:863 src/cardman.c:591
 #, fuzzy
 msgid "_Edit"
 msgstr "/編集 (_E)"
@@ -89,7 +89,7 @@ msgstr "選択ファイルを復号化する"
 msgid "Close the buffer"
 msgstr ""
 
-#: src/clipboard.c:775 src/fileman.c:536 src/keyring.c:900 src/cardman.c:596
+#: src/clipboard.c:775 src/fileman.c:536 src/keyring.c:871 src/cardman.c:596
 msgid "Quit the program"
 msgstr ""
 
@@ -107,12 +107,12 @@ msgstr ""
 msgid "Cut the selection"
 msgstr "選択ファイルを暗号化する"
 
-#: src/clipboard.c:788 src/keyring.c:904
+#: src/clipboard.c:788 src/keyring.c:875
 #, fuzzy
 msgid "Copy the selection"
 msgstr "選択ファイルを暗号化する"
 
-#: src/clipboard.c:790 src/keyring.c:906
+#: src/clipboard.c:790 src/keyring.c:877
 #, fuzzy
 msgid "Paste the clipboard"
 msgstr "クリップボードへコピー (_C)"
@@ -131,11 +131,11 @@ msgstr ""
 msgid "Keyring"
 msgstr "鍵束エディタ"
 
-#: src/clipboard.c:910 src/keyring.c:1087 src/cardman.c:682
+#: src/clipboard.c:910 src/keyring.c:1058 src/cardman.c:682
 msgid "Files"
 msgstr "ファイル"
 
-#: src/clipboard.c:913 src/fileman.c:637 src/keyring.c:1090
+#: src/clipboard.c:913 src/fileman.c:637 src/keyring.c:1061
 #, fuzzy
 msgid "Card"
 msgstr "クリップボードへコピー (_C)"
@@ -877,7 +877,7 @@ msgid "Valid"
 msgstr "有効"
 
 #: src/gpawidgets.c:71 src/gpgmetools.c:683 src/gpgmetools.c:690
-#: src/keyring.c:1266 src/keysigndlg.c:100
+#: src/keysigndlg.c:100
 msgid "User Name:"
 msgstr "ユーザ名:"
 
@@ -886,7 +886,7 @@ msgid "User Names:"
 msgstr "ユーザ名:"
 
 #: src/gpawidgets.c:77 src/gpgmetools.c:684 src/gpgmetools.c:691
-#: src/keyring.c:1268
+#: src/gpa-key-details.c:365
 msgid "Key ID:"
 msgstr "鍵 ID:"
 
@@ -1409,7 +1409,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "バックアップの作成 (_B)"
 
-#: src/keygenwizard.c:424 src/keyring.c:744 src/keyring.c:770
+#: src/keygenwizard.c:424 src/keyring.c:715 src/keyring.c:741
 msgid "Do it _later"
 msgstr "後で (_L)"
 
@@ -1484,22 +1484,22 @@ msgid ""
 "certificate."
 msgstr ""
 
-#: src/keyring.c:461
+#: src/keyring.c:432
 msgid "No keys selected for signing."
 msgstr "署名する鍵が選択されていません"
 
-#: src/keyring.c:739
+#: src/keyring.c:710
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
 msgstr ""
 "まだ秘密鍵がありません。今すぐ作成しますか (←推奨)、それとも後にしますか?"
 
-#: src/keyring.c:743
+#: src/keyring.c:714
 msgid "_Generate key now"
 msgstr "今すぐ鍵を作成する (_G)"
 
-#: src/keyring.c:764
+#: src/keyring.c:735
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1507,242 +1507,249 @@ msgstr ""
 "まだ秘密鍵のバックアップがありません。今すぐ鍵をバックアップしますか (←推"
 "奨)、それとも後にしますか？"
 
-#: src/keyring.c:769
+#: src/keyring.c:740
 msgid "_Backup key now"
 msgstr "今すぐ鍵をバックアップする (_B)"
 
-#: src/keyring.c:893
+#: src/keyring.c:864
 #, fuzzy
 msgid "_Keys"
 msgstr "/鍵 (_K)"
 
-#: src/keyring.c:894
+#: src/keyring.c:865
 #, fuzzy
 msgid "_Server"
 msgstr "/サーバ (_S)"
 
-#: src/keyring.c:908
+#: src/keyring.c:879
 #, fuzzy
 msgid "Select all certificates"
 msgstr "失効証明の生成 (_V)"
 
-#: src/keyring.c:913
+#: src/keyring.c:884
 msgid "Refresh the keyring"
 msgstr ""
 
-#: src/keyring.c:914
+#: src/keyring.c:885
 #, fuzzy
 msgid "_New key..."
 msgstr "/鍵 (K)/鍵を作成... (_N)"
 
-#: src/keyring.c:915
+#: src/keyring.c:886
 #, fuzzy
 msgid "Generate a new key"
 msgstr "鍵を生成"
 
-#: src/keyring.c:916
+#: src/keyring.c:887
 #, fuzzy
 msgid "_Delete keys"
 msgstr "/鍵を削除... (_D)"
 
-#: src/keyring.c:917
+#: src/keyring.c:888
 msgid "Remove the selected key"
 msgstr "選択された鍵を削除"
 
-#: src/keyring.c:918
+#: src/keyring.c:889
 #, fuzzy
 msgid "_Sign Keys..."
 msgstr "/鍵に署名... (_S)"
 
-#: src/keyring.c:919
+#: src/keyring.c:890
 msgid "Sign the selected key"
 msgstr "選択された鍵に署名する"
 
-#: src/keyring.c:920
+#: src/keyring.c:891
 #, fuzzy
 msgid "Set _Owner Trust..."
 msgstr "/所有者の信用度を指定... (_O)"
 
-#: src/keyring.c:921
+#: src/keyring.c:892
 #, fuzzy
 msgid "Set owner trust of the selected key"
 msgstr "選択された鍵を削除"
 
-#: src/keyring.c:923
+#: src/keyring.c:894
 #, fuzzy
 msgid "_Edit Private Key..."
 msgstr "/秘密鍵を編集... (_E)"
 
-#: src/keyring.c:924
+#: src/keyring.c:895
 msgid "Edit the selected private key"
 msgstr "選択された秘密鍵を編集"
 
-#: src/keyring.c:926
+#: src/keyring.c:897
 #, fuzzy
 msgid "_Import Keys..."
 msgstr "鍵をインポート"
 
-#: src/keyring.c:927
+#: src/keyring.c:898
 msgid "Import Keys"
 msgstr "鍵をインポート"
 
-#: src/keyring.c:928
+#: src/keyring.c:899
 #, fuzzy
 msgid "E_xport Keys..."
 msgstr "/鍵をエクスポート... (_X)"
 
-#: src/keyring.c:929
+#: src/keyring.c:900
 msgid "Export Keys"
 msgstr "鍵をエクスポート"
 
-#: src/keyring.c:930
+#: src/keyring.c:901
 #, fuzzy
 msgid "_Backup..."
 msgstr "/バックアップ... (_B)"
 
-#: src/keyring.c:931
+#: src/keyring.c:902
 #, fuzzy
 msgid "Backup key"
 msgstr "鍵をバックアップ"
 
-#: src/keyring.c:934
+#: src/keyring.c:905
 #, fuzzy
 msgid "_Retrieve Keys..."
 msgstr "/サーバ (S)/鍵を取得... (_R)"
 
-#: src/keyring.c:935
+#: src/keyring.c:906
 #, fuzzy
 msgid "Retrieve keys from server"
 msgstr "鍵をサーバから受信"
 
-#: src/keyring.c:937
+#: src/keyring.c:908
 #, fuzzy
 msgid "_Send Keys..."
 msgstr "/鍵に署名... (_S)"
 
-#: src/keyring.c:938
+#: src/keyring.c:909
 #, fuzzy
 msgid "Send keys to server"
 msgstr "/鍵をサーバへ送信... (_N)"
 
-#: src/keyring.c:944
+#: src/keyring.c:915
 msgid "Show Brief Keylist"
 msgstr "要約版の鍵リストを表示"
 
-#: src/keyring.c:946
+#: src/keyring.c:917
 msgid "Show Key Details"
 msgstr "鍵の詳細を表示"
 
-#: src/keyring.c:1077
+#: src/keyring.c:1048
 msgid "Edit"
 msgstr "編集"
 
-#: src/keyring.c:1079
+#: src/keyring.c:1050
 msgid "Delete"
 msgstr "削除"
 
-#: src/keyring.c:1081
+#: src/keyring.c:1052
 msgid "Sign"
 msgstr "署名する"
 
-#: src/keyring.c:1083
+#: src/keyring.c:1054
 msgid "Export"
 msgstr "エクスポート"
 
-#: src/keyring.c:1085
+#: src/keyring.c:1056
 msgid "Import"
 msgstr "インポート"
 
-#: src/keyring.c:1196
-msgid "Subkeys"
-msgstr "副鍵"
+#: src/keyring.c:1189
+#, fuzzy
+msgid "Selected default key:"
+msgstr "選択されたデフォルトの鍵:"
 
-#: src/keyring.c:1270 src/keysigndlg.c:106
-msgid "Fingerprint:"
-msgstr "指紋:"
+#: src/keyring.c:1199
+#, fuzzy
+msgid "No default key selected in the preferences."
+msgstr "保護するファイルが選択されていません"
 
-#: src/keyring.c:1272
-msgid "Expires at:"
-msgstr "有効期限:"
+#: src/keyring.c:1295
+msgid "GNU Privacy Assistant - Keyring Editor"
+msgstr "GNU Privacy Assistant - 鍵束エディタ"
 
-#: src/keyring.c:1274
-msgid "Owner Trust:"
-msgstr "所有者の信用度:"
+#: src/keyring.c:1322
+msgid "Keyring Editor"
+msgstr "鍵束エディタ"
 
-#: src/keyring.c:1276
-msgid "Key Validity:"
-msgstr "鍵の有効性:"
-
-#: src/keyring.c:1278
-msgid "Key Type:"
-msgstr "鍵タイプ:"
-
-#: src/keyring.c:1280
-msgid "Created at:"
-msgstr "作成日:"
-
-#: src/keyring.c:1283
-msgid "Details"
-msgstr "詳細"
-
-#: src/keyring.c:1291
-msgid "Show signatures on user name:"
-msgstr "ユーザ名に対する署名を表示"
-
-#: src/keyring.c:1316
-msgid "Signatures"
-msgstr "署名"
-
-#: src/keyring.c:1345
+#: src/gpa-key-details.c:128
 #, fuzzy
 msgid "The key has both a smartcard based private part and a public part"
 msgstr "この鍵は秘密鍵と公開鍵がある"
 
-#: src/keyring.c:1350
+#: src/gpa-key-details.c:133
 msgid "The key has both a private and a public part"
 msgstr "この鍵は秘密鍵と公開鍵がある"
 
-#: src/keyring.c:1354
+#: src/gpa-key-details.c:137
 msgid "The key has only a public part"
 msgstr "この鍵は公開鍵しかない"
 
-#: src/keyring.c:1389
+#: src/gpa-key-details.c:173
 #, c-format
 msgid "%s %u bits"
 msgstr "%s %u ビット"
 
-#: src/keyring.c:1414
+#: src/gpa-key-details.c:199
 msgid "No keys selected"
 msgstr "鍵が選択されていません"
 
-#: src/keyring.c:1417
+#: src/gpa-key-details.c:202
 #, fuzzy, c-format
 msgid "%d key selected"
 msgid_plural "%d keys selected"
 msgstr[0] "%d 個の鍵が選択されています"
 msgstr[1] "%d 個の鍵が選択されています"
 
-#: src/keyring.c:1452
+#: src/gpa-key-details.c:237
 msgid "All signatures"
 msgstr "すべての署名"
 
-#: src/keyring.c:1607
+#: src/gpa-key-details.c:363
 #, fuzzy
-msgid "Selected default key:"
-msgstr "選択されたデフォルトの鍵:"
+msgid "User name:"
+msgstr "ユーザ名:"
 
-#: src/keyring.c:1617
+#: src/gpa-key-details.c:367 src/keysigndlg.c:106
+msgid "Fingerprint:"
+msgstr "指紋:"
+
+#: src/gpa-key-details.c:369
+msgid "Expires at:"
+msgstr "有効期限:"
+
+#: src/gpa-key-details.c:371
+msgid "Owner Trust:"
+msgstr "所有者の信用度:"
+
+#: src/gpa-key-details.c:373
 #, fuzzy
-msgid "No default key selected in the preferences."
-msgstr "保護するファイルが選択されていません"
+msgid "Key validity:"
+msgstr "鍵の有効性:"
 
-#: src/keyring.c:1730
-msgid "GNU Privacy Assistant - Keyring Editor"
-msgstr "GNU Privacy Assistant - 鍵束エディタ"
+#: src/gpa-key-details.c:375
+#, fuzzy
+msgid "Key type:"
+msgstr "鍵タイプ:"
 
-#: src/keyring.c:1757
-msgid "Keyring Editor"
-msgstr "鍵束エディタ"
+#: src/gpa-key-details.c:377
+msgid "Created at:"
+msgstr "作成日:"
+
+#: src/gpa-key-details.c:380
+msgid "Details"
+msgstr "詳細"
+
+#: src/gpa-key-details.c:399
+msgid "Show signatures on user name:"
+msgstr "ユーザ名に対する署名を表示"
+
+#: src/gpa-key-details.c:422
+msgid "Signatures"
+msgstr "署名"
+
+#: src/gpa-key-details.c:452
+msgid "Subkeys"
+msgstr "副鍵"
 
 #: src/keysigndlg.c:59
 msgid "Sign Key"
@@ -2309,160 +2316,235 @@ msgstr ""
 msgid "The GPGME library is too old to support smartcards."
 msgstr ""
 
-#: src/cm-openpgp.c:218 src/cm-netkey.c:676
+#: src/cm-openpgp.c:222 src/cm-netkey.c:676
 msgid "PUK retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:219
+#: src/cm-openpgp.c:223
 msgid "CHV2 retry counter: "
 msgstr ""
 
-#: src/cm-openpgp.c:328 src/cm-openpgp.c:339 src/cm-netkey.c:152
+#: src/cm-openpgp.c:335 src/cm-netkey.c:152
 msgid "Reset PIN"
 msgstr ""
 
-#: src/cm-openpgp.c:328 src/cm-openpgp.c:339 src/cm-openpgp.c:350
-#: src/cm-netkey.c:153
+#: src/cm-openpgp.c:335 src/cm-openpgp.c:357 src/cm-netkey.c:153
 #, fuzzy
 msgid "Change PIN"
 msgstr "信用度の変更 (_T)"
 
-#: src/cm-openpgp.c:338 src/cm-netkey.c:152
-msgid "Reset PUK"
-msgstr ""
-
-#: src/cm-openpgp.c:338 src/cm-netkey.c:153
+#: src/cm-openpgp.c:345 src/cm-netkey.c:153
 #, fuzzy
 msgid "Change PUK"
 msgstr "信用度の変更 (_T)"
 
-#: src/cm-openpgp.c:532
+#: src/cm-openpgp.c:345 src/cm-netkey.c:152
+msgid "Reset PUK"
+msgstr ""
+
+#: src/cm-openpgp.c:539
 #, c-format
 msgid ""
 "Error saving the changed values.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:555
+#: src/cm-openpgp.c:562
 msgid "Only plain ASCII is currently allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:557
+#: src/cm-openpgp.c:564
 msgid "The \"<\" character may not be used."
 msgstr ""
 
-#: src/cm-openpgp.c:559
+#: src/cm-openpgp.c:566
 msgid "Double spaces are not allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:591
+#: src/cm-openpgp.c:598
 msgid ""
 "Total length of first and last name may not be longer than 39 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:594 src/cm-openpgp.c:632 src/cm-openpgp.c:659
-#: src/cm-openpgp.c:683 src/cm-openpgp.c:708 src/cm-openpgp.c:729
+#: src/cm-openpgp.c:601 src/cm-openpgp.c:639 src/cm-openpgp.c:666
+#: src/cm-openpgp.c:690 src/cm-openpgp.c:715 src/cm-openpgp.c:736
 #, fuzzy
 msgid "Saving the field failed."
 msgstr "選択ファイルに署名する"
 
-#: src/cm-openpgp.c:618
+#: src/cm-openpgp.c:625
 msgid "Invalid length of the language preference."
 msgstr ""
 
-#: src/cm-openpgp.c:626
+#: src/cm-openpgp.c:633
 msgid "The language preference may only contain the letters 'a' through 'z'."
 msgstr ""
 
-#: src/cm-openpgp.c:678 src/cm-openpgp.c:703
+#: src/cm-openpgp.c:685 src/cm-openpgp.c:710
 msgid "The field may not be longer than 254 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:988 src/cm-netkey.c:613 src/cm-dinsig.c:255
+#: src/cm-openpgp.c:929
+msgid ""
+"<b>Changing the PIN</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the PIN decrements the retry counter.  If the "
+"retry counters of the PIN and of the Reset Code are both down to zero, the "
+"PIN can still be reseted by using the Admin-PIN.\n"
+"\n"
+"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
+"the issuer of your card might have initialized the card with a different "
+"PIN.  Please check the instructions of your issuer."
+msgstr ""
+
+#: src/cm-openpgp.c:946
+msgid ""
+"<b>Changing the Reset Code</b>\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the Reset Code and repeat that new value at "
+"another prompt."
+msgstr ""
+
+#: src/cm-openpgp.c:956
+msgid ""
+"<b>Reseting the PIN or the Reset Code</b>\n"
+"\n"
+"If the retry counters of the PIN and of the Reset Code are both down to "
+"zero, it is only possible to reset them if you have access to the Admin-"
+"PIN.\n"
+"\n"
+"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
+"However, the issuer of your card might have initialized the card with a "
+"different Admin-PIN and that Admin-PIN might only be nown to the issuer.  "
+"Please check the instructions of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
+"repeat that new value at another prompt."
+msgstr ""
+
+#: src/cm-openpgp.c:973
+msgid ""
+"<b>Changing the Admin-PIN</b>\n"
+"\n"
+"If you know the Admin-PIN you may change the Admin-PIN.\n"
+"\n"
+"The Admin-PIN is required to create keys on the card and to change other "
+"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
+"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
+"card might have initialized the card with a different Admin-PIN and that "
+"Admin-PIN might only be known to the issuer.  Please check the instructions "
+"of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
+"value at another prompt."
+msgstr ""
+
+#: src/cm-openpgp.c:1016 src/cm-netkey.c:517
+#, c-format
+msgid ""
+"Error changing or resetting the PIN/PUK.\n"
+"(%s <%s>)"
+msgstr ""
+
+#: src/cm-openpgp.c:1111 src/cm-netkey.c:613 src/cm-dinsig.c:255
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "上級者モードを使う (_A):"
 
-#: src/cm-openpgp.c:998 src/cm-netkey.c:622 src/cm-dinsig.c:264
+#: src/cm-openpgp.c:1121 src/cm-netkey.c:622 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr ""
 
-#: src/cm-openpgp.c:1002 src/cm-netkey.c:626
+#: src/cm-openpgp.c:1125 src/cm-netkey.c:626
 msgid "Card version:"
 msgstr ""
 
-#: src/cm-openpgp.c:1006
+#: src/cm-openpgp.c:1129
 msgid "Manufacturer:"
 msgstr ""
 
-#: src/cm-openpgp.c:1015
+#: src/cm-openpgp.c:1138
 #, fuzzy
 msgid "<b>Personal</b>"
 msgstr "個人"
 
-#: src/cm-openpgp.c:1029
+#: src/cm-openpgp.c:1152
 #, fuzzy
 msgid "Salutation:"
 msgstr "選択: "
 
-#: src/cm-openpgp.c:1034
+#: src/cm-openpgp.c:1157
 #, fuzzy
 msgid "First name:"
 msgstr "ディレクトリ名:"
 
-#: src/cm-openpgp.c:1039
+#: src/cm-openpgp.c:1162
 #, fuzzy
 msgid "Last name:"
 msgstr "ユーザ名:"
 
-#: src/cm-openpgp.c:1044
+#: src/cm-openpgp.c:1167
 msgid "Language:"
 msgstr ""
 
-#: src/cm-openpgp.c:1049
+#: src/cm-openpgp.c:1172
 msgid "Login data:"
 msgstr ""
 
-#: src/cm-openpgp.c:1054
+#: src/cm-openpgp.c:1177
 #, fuzzy
 msgid "Public key URL:"
 msgstr "公開鍵 (_P)"
 
-#: src/cm-openpgp.c:1062
+#: src/cm-openpgp.c:1185
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "署名選択 (_A)"
 
-#: src/cm-openpgp.c:1073
+#: src/cm-openpgp.c:1196
 #, fuzzy
 msgid "Signature key:"
 msgstr "署名:"
 
-#: src/cm-openpgp.c:1077
+#: src/cm-openpgp.c:1200
 #, fuzzy
 msgid "Encryption key:"
 msgstr "暗号化中..."
 
-#: src/cm-openpgp.c:1081
+#: src/cm-openpgp.c:1204
 #, fuzzy
 msgid "Authentication key:"
 msgstr "認証可能"
 
-#: src/cm-openpgp.c:1089 src/cm-netkey.c:658
+#: src/cm-openpgp.c:1208
+#, fuzzy
+msgid "Signature counter:"
+msgstr "署名:"
+
+#: src/cm-openpgp.c:1216 src/cm-netkey.c:658
 msgid "<b>PIN</b>"
 msgstr ""
 
-#: src/cm-openpgp.c:1101
+#: src/cm-openpgp.c:1228
 #, fuzzy
 msgid "Force signature PIN:"
 msgstr "署名にエラー"
 
-#: src/cm-openpgp.c:1106 src/cm-netkey.c:668
+#: src/cm-openpgp.c:1233 src/cm-netkey.c:668
 msgid "PIN retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:1120
-msgid "Admin PIN retry counter:"
+#: src/cm-openpgp.c:1247
+msgid "Admin-PIN retry counter:"
 msgstr ""
 
 #: src/cm-netkey.c:134 src/cm-netkey.c:321
@@ -2554,13 +2636,6 @@ msgid ""
 "If you proceed you will be asked to enter the current value of the PUK and "
 "then to enter a new value for the blocked PIN and repeat that new value at "
 "another prompt."
-msgstr ""
-
-#: src/cm-netkey.c:517
-#, c-format
-msgid ""
-"Error changing or resetting the PIN/PUK.\n"
-"(%s <%s>)"
 msgstr ""
 
 #: src/cm-netkey.c:637

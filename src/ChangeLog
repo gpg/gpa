@@ -1,3 +1,11 @@
+2009-03-16  Werner Koch  <wk@g10code.com>
+
+	* keyring.c (keyring_editor_new): s/g_malloc/g_malloc0/.
+	(keyring_update_details_notebook): Rename to keyring_update_details.
+
+	* keyring.c: Factor key details code out to ...
+	* gpa-key-details.c, gpa-key-details.h: New.
+	
 2009-03-10  Werner Koch  <wk@g10code.com>
 
 	* Makefile.am (localedir): New.
