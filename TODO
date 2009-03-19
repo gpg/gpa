@@ -116,3 +116,12 @@ In no particular order:
    When doing multi-file verify/decrypt, we may ignore more errors as
    to make more progress.  This seems more useful than the current
    behavior.
+** FileChooser Dialog with pseudo-random window size
+   When clicking "import" in the keyring manager, the FileChooser pops
+   up in a tiny window most of the time -- sometimes the window size is just right.
+** keyring manager window changes it's size in a counter-intuitive way
+   After startup the keyring manager is displayed in a rather compact
+   window. When selecting a key, the window increases it's size --
+   sometimes dramatically! It's not obvious why the window needs to be
+   that big. Note: the "detailed view" mode is not enabled.
+
