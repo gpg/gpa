@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-03-16 18:06+0100\n"
+"POT-Creation-Date: 2009-03-19 16:37+0100\n"
 "PO-Revision-Date: 2009-03-16 18:07+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -41,11 +41,11 @@ msgstr "Zwischenablage"
 
 #: src/clipboard.c:754 src/fileman.c:517 src/keyring.c:862 src/cardman.c:590
 msgid "_File"
-msgstr "/_Datei"
+msgstr "_Datei"
 
 #: src/clipboard.c:755 src/fileman.c:518 src/keyring.c:863 src/cardman.c:591
 msgid "_Edit"
-msgstr "/_Bearbeiten"
+msgstr "_Bearbeiten"
 
 #: src/clipboard.c:759
 msgid "Clear buffer"
@@ -1484,11 +1484,11 @@ msgstr "_Sicherheitskopie anlegen"
 
 #: src/keyring.c:864
 msgid "_Keys"
-msgstr "/_Schlüssel"
+msgstr "_Schlüssel"
 
 #: src/keyring.c:865
 msgid "_Server"
-msgstr "/_Server"
+msgstr "_Server"
 
 #: src/keyring.c:879
 msgid "Select all certificates"
@@ -2285,31 +2285,31 @@ msgstr "Auto"
 msgid "The GPGME library is too old to support smartcards."
 msgstr "Die verwendete GPGME Bibliothek unterstützt noch keine Smartcards."
 
-#: src/cm-openpgp.c:222 src/cm-netkey.c:676
+#: src/cm-openpgp.c:226 src/cm-netkey.c:676
 msgid "PUK retry counter:"
 msgstr "PUK Versuche frei:"
 
-#: src/cm-openpgp.c:223
+#: src/cm-openpgp.c:227
 msgid "CHV2 retry counter: "
 msgstr "CHV2 Versuche frei:"
 
-#: src/cm-openpgp.c:335 src/cm-netkey.c:152
+#: src/cm-openpgp.c:339 src/cm-netkey.c:152
 msgid "Reset PIN"
 msgstr "PIN zurücksetzen"
 
-#: src/cm-openpgp.c:335 src/cm-openpgp.c:357 src/cm-netkey.c:153
+#: src/cm-openpgp.c:339 src/cm-openpgp.c:361 src/cm-netkey.c:153
 msgid "Change PIN"
 msgstr "PIN ändern"
 
-#: src/cm-openpgp.c:345 src/cm-netkey.c:153
+#: src/cm-openpgp.c:349 src/cm-netkey.c:153
 msgid "Change PUK"
 msgstr "PUK ändern"
 
-#: src/cm-openpgp.c:345 src/cm-netkey.c:152
+#: src/cm-openpgp.c:349 src/cm-netkey.c:152
 msgid "Reset PUK"
 msgstr "PUK zurücksetzen"
 
-#: src/cm-openpgp.c:539
+#: src/cm-openpgp.c:546
 #, c-format
 msgid ""
 "Error saving the changed values.\n"
@@ -2318,44 +2318,44 @@ msgstr ""
 "Das Speichern der geänderten Werte war nicht erfolgreich.\n"
 "(%s <%s>)"
 
-#: src/cm-openpgp.c:562
+#: src/cm-openpgp.c:569
 msgid "Only plain ASCII is currently allowed."
 msgstr "Es sind nur reine ASCII Zeichen erlaubt."
 
-#: src/cm-openpgp.c:564
+#: src/cm-openpgp.c:571
 msgid "The \"<\" character may not be used."
 msgstr "Das \"<\" Zeichen kann nicht verwendet werden."
 
-#: src/cm-openpgp.c:566
+#: src/cm-openpgp.c:573
 msgid "Double spaces are not allowed."
 msgstr "Doppelte Leerzeichen sind nicht erlaubt."
 
-#: src/cm-openpgp.c:598
+#: src/cm-openpgp.c:605
 msgid ""
 "Total length of first and last name may not be longer than 39 characters."
 msgstr ""
 "Die Gesamtlänge der Namensfelder darf nicht größer als 39 Zeichen sein."
 
-#: src/cm-openpgp.c:601 src/cm-openpgp.c:639 src/cm-openpgp.c:666
-#: src/cm-openpgp.c:690 src/cm-openpgp.c:715 src/cm-openpgp.c:736
+#: src/cm-openpgp.c:608 src/cm-openpgp.c:646 src/cm-openpgp.c:673
+#: src/cm-openpgp.c:697 src/cm-openpgp.c:722 src/cm-openpgp.c:743
 msgid "Saving the field failed."
 msgstr "Das speichern dieses Feldes ist fehlgeschlagen"
 
-#: src/cm-openpgp.c:625
+#: src/cm-openpgp.c:632
 msgid "Invalid length of the language preference."
 msgstr "Ungültige Länge in den Spracheinstellungen."
 
-#: src/cm-openpgp.c:633
+#: src/cm-openpgp.c:640
 msgid "The language preference may only contain the letters 'a' through 'z'."
 msgstr ""
 "Die Spracheinstellungen dürfen nur aus den Kleinbuchstaben 'a' bis 'z' "
 "bestehen."
 
-#: src/cm-openpgp.c:685 src/cm-openpgp.c:710
+#: src/cm-openpgp.c:692 src/cm-openpgp.c:717
 msgid "The field may not be longer than 254 characters."
 msgstr "Das Feld darf nicht länger als 254 Zeichen sein."
 
-#: src/cm-openpgp.c:929
+#: src/cm-openpgp.c:936
 msgid ""
 "<b>Changing the PIN</b>\n"
 "\n"
@@ -2371,7 +2371,7 @@ msgid ""
 "PIN.  Please check the instructions of your issuer."
 msgstr ""
 
-#: src/cm-openpgp.c:946
+#: src/cm-openpgp.c:953
 msgid ""
 "<b>Changing the Reset Code</b>\n"
 "\n"
@@ -2383,7 +2383,7 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:956
+#: src/cm-openpgp.c:963
 msgid ""
 "<b>Reseting the PIN or the Reset Code</b>\n"
 "\n"
@@ -2401,7 +2401,7 @@ msgid ""
 "repeat that new value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:973
+#: src/cm-openpgp.c:980
 msgid ""
 "<b>Changing the Admin-PIN</b>\n"
 "\n"
@@ -2419,90 +2419,90 @@ msgid ""
 "value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1016 src/cm-netkey.c:517
+#: src/cm-openpgp.c:1023 src/cm-netkey.c:517
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:1111 src/cm-netkey.c:613 src/cm-dinsig.c:255
+#: src/cm-openpgp.c:1178 src/cm-netkey.c:613 src/cm-dinsig.c:255
 msgid "<b>General</b>"
 msgstr "<b>Allgemein</b>"
 
-#: src/cm-openpgp.c:1121 src/cm-netkey.c:622 src/cm-dinsig.c:264
+#: src/cm-openpgp.c:1188 src/cm-netkey.c:622 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr "Seriennummer:"
 
-#: src/cm-openpgp.c:1125 src/cm-netkey.c:626
+#: src/cm-openpgp.c:1192 src/cm-netkey.c:626
 msgid "Card version:"
 msgstr "Kartenversion:"
 
-#: src/cm-openpgp.c:1129
+#: src/cm-openpgp.c:1196
 msgid "Manufacturer:"
 msgstr "Hersteller:"
 
-#: src/cm-openpgp.c:1138
+#: src/cm-openpgp.c:1205
 msgid "<b>Personal</b>"
 msgstr "Persona"
 
-#: src/cm-openpgp.c:1152
+#: src/cm-openpgp.c:1219
 msgid "Salutation:"
 msgstr "Anrede:"
 
-#: src/cm-openpgp.c:1157
+#: src/cm-openpgp.c:1224
 msgid "First name:"
 msgstr "Vorname:"
 
-#: src/cm-openpgp.c:1162
+#: src/cm-openpgp.c:1229
 msgid "Last name:"
 msgstr "Nachname:"
 
-#: src/cm-openpgp.c:1167
+#: src/cm-openpgp.c:1234
 msgid "Language:"
 msgstr "Sprache:"
 
-#: src/cm-openpgp.c:1172
+#: src/cm-openpgp.c:1239
 msgid "Login data:"
 msgstr "Login Daten:"
 
-#: src/cm-openpgp.c:1177
+#: src/cm-openpgp.c:1244
 msgid "Public key URL:"
 msgstr "URL des öff. Schlüssels:"
 
-#: src/cm-openpgp.c:1185
+#: src/cm-openpgp.c:1252
 msgid "<b>Keys</b>"
 msgstr "<b>Schlüssel</b>"
 
-#: src/cm-openpgp.c:1196
+#: src/cm-openpgp.c:1269
 msgid "Signature key:"
 msgstr "Signaturschlüssel:"
 
-#: src/cm-openpgp.c:1200
+#: src/cm-openpgp.c:1273
 msgid "Encryption key:"
 msgstr "Verschlüsselungsschlüssel:"
 
-#: src/cm-openpgp.c:1204
+#: src/cm-openpgp.c:1277
 msgid "Authentication key:"
 msgstr "Autentifizierungsschlüssel:"
 
-#: src/cm-openpgp.c:1208
+#: src/cm-openpgp.c:1281
 msgid "Signature counter:"
 msgstr "Signaturzähler:"
 
-#: src/cm-openpgp.c:1216 src/cm-netkey.c:658
+#: src/cm-openpgp.c:1289 src/cm-netkey.c:658
 msgid "<b>PIN</b>"
 msgstr "<b>PIN</b>"
 
-#: src/cm-openpgp.c:1228
+#: src/cm-openpgp.c:1301
 msgid "Force signature PIN:"
 msgstr "Signatur PIN erzwingen:"
 
-#: src/cm-openpgp.c:1233 src/cm-netkey.c:668
+#: src/cm-openpgp.c:1306 src/cm-netkey.c:668
 msgid "PIN retry counter:"
 msgstr "PIN Versuche frei:"
 
-#: src/cm-openpgp.c:1247
+#: src/cm-openpgp.c:1320
 msgid "Admin-PIN retry counter:"
 msgstr "Admin PIN Versuche frei:"
 
