@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
 "POT-Creation-Date: 2009-03-19 16:37+0100\n"
-"PO-Revision-Date: 2009-03-16 18:07+0100\n"
+"PO-Revision-Date: 2009-03-22 16:34+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -286,7 +286,7 @@ msgstr "<b>Signieren als</b>"
 
 #: src/filesigndlg.c:201
 msgid "<b>Signing Mode</b>"
-msgstr "Signiermodus"
+msgstr "<b>Signiermodus</b>"
 
 #: src/filesigndlg.c:211
 msgid "Si_gn and compress"
@@ -495,7 +495,7 @@ msgstr "Allerdings ist nicht sicher, dass der Schlüssel dieser Person gehört."
 
 #: src/gpafileencryptop.c:504
 msgid "Do you <b>really</b> want to use this key?"
-msgstr "Wollen Sie diesen Schlüssel tatsächlich benutzen?"
+msgstr "Wollen Sie diesen Schlüssel <b>tatsächlich</b> benutzen?"
 
 #: src/gpafileencryptop.c:525 src/gpafileencryptop.c:565 src/verifydlg.c:227
 msgid "Revoked Key"
@@ -1690,8 +1690,7 @@ msgstr "Details"
 
 #: src/gpa-key-details.c:399
 msgid "Show signatures on user name:"
-msgstr ""
-"Signaturen für die einzelnen im Schlüssel enthaltenen Benutzernamen anzeigen:"
+msgstr "Signaturen für Benutzerkennung anzeigen:"
 
 #: src/gpa-key-details.c:422
 msgid "Signatures"
@@ -2071,7 +2070,7 @@ msgstr "<b>Benutzerschnittstelle</b>"
 
 #: src/settingsdlg.c:215
 msgid "Use _advanced mode"
-msgstr "<b>Einstellungen für _Fortgeschrittene verwenden</b>"
+msgstr "Einstellungen für _Fortgeschrittene verwenden"
 
 #: src/settingsdlg.c:221
 msgid "Show advanced _options"
@@ -2444,7 +2443,7 @@ msgstr "Hersteller:"
 
 #: src/cm-openpgp.c:1205
 msgid "<b>Personal</b>"
-msgstr "Persona"
+msgstr "<b>Persona</b>"
 
 #: src/cm-openpgp.c:1219
 msgid "Salutation:"

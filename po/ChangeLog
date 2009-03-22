@@ -1,3 +1,11 @@
+2009-03-22  Moritz  <moritz@gnu.org>
+
+	* de.po: Be more consistent in respect to <b>...</b>-formatting.
+
+2009-03-20  Moritz  <moritz@gnu.org>
+
+	* de.po: Simplify a translation.
+
 2009-03-20  Moritz  <moritz@gnu.org>
 
 	* de.po: Removed a couple of ugly "/" prefixes in translation.
