@@ -119,6 +119,8 @@ In no particular order:
 ** FileChooser Dialog with pseudo-random window size
    When clicking "import" in the keyring manager, the FileChooser pops
    up in a tiny window most of the time -- sometimes the window size is just right.
+   (It seems this bug is fixed in Upstream and will hopefully find it's way into
+   distributions)
 ** keyring manager window changes it's size in a counter-intuitive way
    After startup the keyring manager is displayed in a rather compact
    window. When selecting a key, the window increases it's size --
