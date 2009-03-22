@@ -652,6 +652,7 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
   GError *error;
 
   action_group = gtk_action_group_new ("MenuActions");
+  gtk_action_group_set_translation_domain (action_group, PACKAGE);
   gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries),
 				cardman);
   gtk_action_group_add_actions (action_group, gpa_help_menu_action_entries,

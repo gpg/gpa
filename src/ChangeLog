@@ -1,3 +1,9 @@
+2009-03-22  Moritz  <moritz@gnu.org>
+
+	* cardman.c (cardman_action_new): Call
+	gtk_action_group_set_translation_domain before
+	gtk_action_group_add_actions.
+
 2009-03-16  Werner Koch  <wk@g10code.com>
 
 	* cm-openpgp.c (construct_data_widget): Use an expander for the
