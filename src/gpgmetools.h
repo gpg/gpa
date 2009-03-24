@@ -194,5 +194,13 @@ void gpa_switch_to_gpg2 (void);
 /* Return true if the gpg engine has at least version NEED_VERSION.  */
 int is_gpg_version_at_least (const char *need_version);
 
+/* Run a simple gpg command.  */
+gpg_error_t gpa_start_simple_gpg_command (gboolean (*cb)
+                                          (void *opaque, char *line),
+                                          void *cb_arg, 
+                                          gpgme_protocol_t protocol,
+                                          const char *first_arg, ...)
+     G_GNUC_NULL_TERMINATED;
+
 
 #endif /*GPGMETOOLS_H*/

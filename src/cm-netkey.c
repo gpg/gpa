@@ -29,6 +29,7 @@
 #include "gpa.h"   
 #include "gtktools.h"
 #include "convert.h"
+#include "gpa-key-details.h"
 
 #include "cm-object.h"
 #include "cm-netkey.h"
@@ -77,6 +78,8 @@ struct _GpaCMNetkey
 
   GtkWidget *warning_frame;  /* The frame used to display warnings etc.  */
 
+  GtkWidget *keys_frame;     /* The frame containing the keys.  */
+
   GtkWidget *entries[ENTRY_LAST];
 
   GtkWidget *change_pin_btn;      /* The button to change the PIN for NKS.  */
@@ -98,6 +101,7 @@ static GObjectClass *parent_class;
 
 
 /* Local prototypes */
+static void learn_keys_clicked_cb (GtkButton *widget, void *user_data);
 static void gpa_cm_netkey_finalize (GObject *object);
 
 
@@ -223,12 +227,186 @@ update_entry_chv_status (GpaCMNetkey *card, int entry_id, char *string)
                                   any_isnull, 
                                   tbl[idx].is_puk, tbl[idx].widget);
 
+  gtk_widget_set_no_show_all (card->warning_frame, FALSE);
   if (any_isnull)
     gtk_widget_show_all (card->warning_frame);
   else
-    gtk_widget_hide_all (card->warning_frame);
+    {
+      gtk_widget_hide_all (card->warning_frame);
+      gtk_widget_set_no_show_all (card->warning_frame, TRUE);
+    }
 }
 
+
+/* Structure form comminucation between reload_more_data and
+   reload_more_data_cb.  */
+struct reload_more_data_parm
+{
+  GpaCMNetkey *card; /* self  */
+  gpgme_ctx_t ctx;   /* A prepared context for relaod_more_data_cb.  */
+  int any_unknown;   /* Set if at least one key is not known.  */
+};
+
+
+/* Helper for relaod_more_data.  This is actually an Assuan status
+   callback  */
+static gpg_error_t
+reload_more_data_cb (void *opaque, const char *status, const char *args)
+{
+  struct reload_more_data_parm *parm = opaque;
+  gpgme_key_t key = NULL;
+  const char *s;
+  char pattern[100];
+  int idx;
+  gpg_error_t err;
+  const char *keyid;
+  int any = 0;
+
+  if (strcmp (status, "KEYPAIRINFO") )
+    return 0;
+
+  idx = 0;
+  pattern[idx++] = '&';
+  for (s=args; hexdigitp (s) && idx < sizeof pattern - 1; s++)
+    pattern[idx++] = *s;
+  pattern[idx] = 0;
+  if (!spacep (s) || (s - args != 40))
+    return 0;  /* Invalid formatted keygrip.  */
+  while (spacep (s))
+    s++;
+  keyid = s;
+
+  if (!(err=gpgme_op_keylist_start (parm->ctx, pattern, 0)))
+    {
+      if (!(err=gpgme_op_keylist_next (parm->ctx, &key)))
+        {
+          GtkWidget *vbox, *expander, *details, *hbox, *label;
+
+          vbox = gtk_bin_get_child (GTK_BIN (parm->card->keys_frame));
+          if (!vbox)
+            g_debug ("Ooops, vbox missing in key frame");
+          else
+            {
+              expander = gtk_expander_new (keyid);
+              details = gpa_key_details_new ();
+              gtk_container_add (GTK_CONTAINER (expander), details);
+              gpa_key_details_update (details, key, 1);
+
+              hbox = gtk_hbox_new (FALSE, 0);
+              label = gtk_label_new (NULL);
+              gtk_label_set_width_chars  (GTK_LABEL (label), 22);
+              gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+              gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+              gtk_box_pack_start (GTK_BOX (hbox), expander, TRUE, TRUE, 0);
+              gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+
+              any = 1;
+            }
+          gpgme_key_unref (key);
+        }
+    }
+  gpgme_op_keylist_end (parm->ctx);
+  if (!any)
+    parm->any_unknown = 1;
+  return 0;
+}
+
+
+/* Reload more data.  This function is called from the idle handler.  */
+static void
+reload_more_data (GpaCMNetkey *card)
+{
+  gpg_error_t err;
+  gpgme_ctx_t gpgagent;
+  GtkWidget *vbox;
+  struct reload_more_data_parm parm;
+
+  gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
+  g_return_if_fail (gpgagent);
+  g_return_if_fail (card->keys_frame);
+
+  /* We remove any existing children of the keys frame and then we add
+     a new vbox to be filled with new widgets by the callback.  */
+  vbox = gtk_bin_get_child (GTK_BIN (card->keys_frame));
+  if (vbox)
+    gtk_widget_destroy (vbox);
+  vbox = gtk_vbox_new (FALSE, 5);
+  gtk_container_add (GTK_CONTAINER (card->keys_frame), vbox);
+
+  /* Create a context for key listings.  */
+  parm.any_unknown = 0;
+  parm.card = card;
+  err = gpgme_new (&parm.ctx);
+  if (err)
+    {
+      /* We don't want an error window because we are run from an idle
+         handler and the information is not that important.  */
+      g_debug ("failed to create a context: %s", gpg_strerror (err));
+      return;
+    }
+  gpgme_set_protocol (parm.ctx, GPGME_PROTOCOL_CMS);
+  /* We include ephemeral keys in the listing.  */
+  gpgme_set_keylist_mode (parm.ctx, GPGME_KEYLIST_MODE_EPHEMERAL);
+
+  err = gpgme_op_assuan_transact (gpgagent,
+                                  "SCD LEARN --keypairinfo",
+                                  NULL, NULL, NULL, NULL,
+                                  reload_more_data_cb, &parm);
+  if (!err)
+    err = gpgme_op_assuan_result (gpgagent)->err;
+  if (err)
+    g_debug ("SCD LEARN failed: %s", gpg_strerror (err));
+
+  if (parm.any_unknown)
+    {
+      GtkWidget *button, *align;
+
+      align = gtk_alignment_new (0.5, 0, 0, 0);
+      button = gtk_button_new_with_label (_("Learn keys"));
+      gpa_add_tooltip 
+        (button, _("For some or all of the keys available on the card, "
+                   "the GnuPG crypto engine does not yet know the "
+                   "corresponding certificates.\n"
+                   "\n"
+                   "If you click this button, GnuPG will be asked to "
+                   "\"learn\" "
+                   "this card and import all certificates stored on the "
+                   "card into its own certificate store.  This is not done "
+                   "automatically because it may take several seconds to "
+                   "read all certificates from the card.\n"
+                   "\n"
+                   "If you are unsure what to do, just click the button."));
+      gtk_container_add (GTK_CONTAINER (align), button);
+      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 5);
+      gtk_box_reorder_child (GTK_BOX (vbox), align, 0);
+
+      g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (learn_keys_clicked_cb), card);
+    }
+
+  gpgme_release (parm.ctx);
+  gtk_widget_show_all (card->keys_frame);
+  return;
+}
+
+
+/* Idle queue callback to reload more data.  */
+static gboolean
+reload_more_data_idle_cb (void *user_data)
+{
+  GpaCMNetkey *card = user_data;
+  
+  if (card->reloading)
+    return TRUE; /* Just in case we are still reloading, wait for the
+                    next idle slot.  */
+
+  card->reloading++;
+  reload_more_data (card);
+  g_object_unref (card); 
+  card->reloading--;
+
+  return FALSE;  /* Remove us from the idle queue.  */
+}
 
 
 struct scd_getattr_parm
@@ -297,6 +475,8 @@ reload_data (GpaCMNetkey *card)
   g_return_if_fail (gpgagent);
 
   card->reloading++;
+
+  /* Show all attributes.  */
   parm.card = card;
   for (attridx=0; attrtbl[attridx].name; attridx++)
     {
@@ -333,10 +513,95 @@ reload_data (GpaCMNetkey *card)
           break;
         }
     }
+  if (!err)
+    {
+      g_object_ref (card);
+      g_idle_add (reload_more_data_idle_cb, card);
+    }
   card->reloading--;
 }
 
 
+/* A structure used to pass data to the learn_keys_gpg_status_cb.  */
+struct learn_keys_gpg_status_parm 
+{
+  GpaCMNetkey    *card;
+  GtkWidget      *button;
+  GtkProgressBar *pbar;
+};
+
+
+/* Helper for learn_keys_clicked_cb.  */
+static gboolean 
+learn_keys_gpg_status_cb (void *opaque, char *line)
+{
+  struct learn_keys_gpg_status_parm *parm = opaque;
+  
+  if (!line)
+    {
+      /* We are finished with the command.  */
+      g_debug ("learn_keys_gpg_status_cb: cleanup");
+      /* Trigger a reload of the key data.  */
+      g_object_ref (parm->card);
+      g_idle_add (reload_more_data_idle_cb, parm->card);
+      /* Cleanup.  */
+      gtk_widget_destroy (parm->button);
+      g_object_unref (parm->button);
+      g_object_unref (parm->card);
+      xfree (parm);
+      return FALSE; /* (The return code does not matter here.)  */
+    }
+
+  g_debug ("learn_keys_gpg_status_cb: `%s'", line);
+  if (!strncmp (line, "PROGRESS", 8))
+    gtk_progress_bar_pulse (parm->pbar);
+
+  return TRUE; /* Keep on running.  */
+}
+
+
+/* Fire up the learn command.  */
+static void
+learn_keys_clicked_cb (GtkButton *button, void *user_data)
+{
+  GpaCMNetkey *card = user_data;
+  GtkWidget *widget;
+  gpg_error_t err;
+  struct learn_keys_gpg_status_parm *parm;
+
+  parm = xcalloc (1, sizeof *parm);
+
+  g_debug ("learn keys clicked");
+  gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
+  widget = gtk_bin_get_child (GTK_BIN (button));
+  if (widget)
+    gtk_widget_destroy (widget);
+
+  widget = gtk_progress_bar_new ();
+  gtk_container_add (GTK_CONTAINER (button), widget);
+  gtk_progress_bar_set_text (GTK_PROGRESS_BAR (widget), 
+                              _("Learning keys ..."));
+  gtk_widget_show_all (GTK_WIDGET (button));
+
+  g_object_ref (card);
+  parm->card = card;
+  g_object_ref (button);
+  parm->button = GTK_WIDGET (button);
+  parm->pbar = GTK_PROGRESS_BAR (widget);
+
+  err = gpa_start_simple_gpg_command 
+    (learn_keys_gpg_status_cb, parm, GPGME_PROTOCOL_CMS,
+     "--learn-card", "-v", NULL);
+  if (err)
+    {
+      g_debug ("error starting gpg: %s", gpg_strerror (err));
+      learn_keys_gpg_status_cb (parm, NULL);
+      return;
+    }
+}
+
+
+/* Run the dialog to change the NullPIN.  */
 static void
 change_nullpin (GpaCMNetkey *card)
 {
@@ -652,6 +917,22 @@ construct_data_widget (GpaCMNetkey *card)
                     G_CALLBACK (set_initial_pin_clicked_cb), card);
 
 
+  /* Keys frame.  */
+  frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
+  label = gtk_label_new (_("<b>Keys</b>"));
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_frame_set_label_widget (GTK_FRAME (frame), label);
+
+  /* There is only a label widget yet in the frame for now.  The real
+     widgets are added while figuring out the keys of the card.  */
+  label = gtk_label_new (_("scanning ..."));
+  gtk_container_add (GTK_CONTAINER (frame), label);
+  
+  gtk_box_pack_start (GTK_BOX (card), frame, FALSE, TRUE, 0);
+  card->keys_frame = frame;
+
+
   /* PIN frame.  */
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
@@ -696,7 +977,6 @@ construct_data_widget (GpaCMNetkey *card)
                     G_CALLBACK (change_pin_clicked_cb), card);
   
   gtk_box_pack_start (GTK_BOX (card), frame, FALSE, TRUE, 0);
-  
 }
 
 

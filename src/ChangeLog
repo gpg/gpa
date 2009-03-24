@@ -1,8 +1,46 @@
+2009-03-23  Werner Koch  <wk@g10code.com>
+
+	* gpgmetools.c (gpg_simple_stderr_cb): Use GString and skip
+	non-status lines. 
+
+	* gpa.h (disable_ticker): New.
+	* gpa.c: Add hidden option --disable-ticker.
+	* cardman.c (start_ticker): Implement option.
+	(ticker_cb): Ignore tick while reloading.
+	(watcher_cb): Avoid reload already here.
+
 2009-03-22  Moritz  <moritz@gnu.org>
 
 	* cardman.c (cardman_action_new): Call
 	gtk_action_group_set_translation_domain before
 	gtk_action_group_add_actions.
+
+2009-03-19  Werner Koch  <wk@g10code.com>
+
+	* gpgmetools.c (gpa_backup_key): Replace g_assert for the gpg path
+	test by a cleaner return_if_fail.
+	(gpa_start_simple_gpg_command): New.
+
+2009-03-18  Werner Koch  <wk@g10code.com>
+
+	* cardman.c (construct_widgets): Do not update the card widget here.
+	(card_reload_finish_idle_cb): New.
+	(card_reload): Decrement card via idle handler.
+
+	* cm-netkey.c (reload_more_data_idle_cb, reload_more_data) 
+	(reload_more_data_cb): New.
+	(reload_data): Call reload_more_data.
+	(construct_data_widget): Add a keys frame.
+	(reload_data): Clear the frame.
+
+2009-03-17  Werner Koch  <wk@g10code.com>
+
+	* cm-openpgp.c (show_admin_pin_notice): New.
+	(save_attr): Call it.
+
+	* gpa-key-details.c (gpa_key_details_update): Keep track of the
+	current key.
+	(signatures_uid_changed): Select sigs according to current key.
 
 2009-03-16  Werner Koch  <wk@g10code.com>
 

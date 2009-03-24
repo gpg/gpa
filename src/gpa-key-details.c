@@ -75,6 +75,10 @@ struct _GpaKeyDetails
   /* The widgets in the subkeys list.  */
   GtkWidget *subkeys_page;
   GtkWidget *subkeys_list;
+
+  /* The key currently shown or NULL.  */
+  gpgme_key_t current_key;
+
 };
 
 
@@ -99,13 +103,11 @@ static void
 signatures_uid_changed (GtkComboBox *combo, gpointer user_data)
 {
   GpaKeyDetails *kdt = user_data;
-  gpgme_key_t key;
 
-  /* FIXME  key = keyring_editor_current_key (kdt);*/ key = NULL;
   /* Note that we need to subtract one, as the first entry (with index
      0 means) "all user names".  */
   gpa_siglist_set_signatures 
-    (kdt->signatures_list, key,
+    (kdt->signatures_list, kdt->current_key,
      gtk_combo_box_get_active (GTK_COMBO_BOX (combo)) - 1);
 }
 
@@ -450,9 +452,6 @@ construct_subkeys_page (GpaKeyDetails *kdt)
   kdt->subkeys_page = vbox;
   gtk_notebook_append_page (GTK_NOTEBOOK (kdt), kdt->subkeys_page,
                             gtk_label_new (_("Subkeys")));
-/* FIXME gtk_widget_show_all (kdt->notebook_details); */
-/*       keyring_update_details_notebook (editor); */
-/*       idle_update_details (editor); */
 }
 
 
@@ -531,16 +530,22 @@ gpa_key_details_class_init (void *class_ptr, void *class_data)
 static void
 gpa_key_details_init (GTypeInstance *instance, void *class_ptr)
 {
-  GpaKeyDetails *obj = GPA_KEY_DETAILS (instance);
+  GpaKeyDetails *kdt = GPA_KEY_DETAILS (instance);
 
-  construct_main_widget (obj);
+  construct_main_widget (kdt);
 }
 
 
 static void
 gpa_key_details_finalize (GObject *object)
 {  
-/*   GpaKeyDetails *obj = GPA_KEY_DETAILS (object); */
+  GpaKeyDetails *kdt = GPA_KEY_DETAILS (object);
+
+  if (kdt->current_key)
+    {
+      gpgme_key_unref (kdt->current_key);
+      kdt->current_key = NULL;
+    }
 
   parent_class->finalize (object);
 }
@@ -598,8 +603,15 @@ gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key, int keycount)
   g_return_if_fail (GPA_IS_KEY_DETAILS (keydetails));
   kdt = GPA_KEY_DETAILS (keydetails);
 
+  if (kdt->current_key)
+    {
+      gpgme_key_unref (kdt->current_key);
+      kdt->current_key = NULL;
+    }
   if (key && keycount == 1)
     {
+      gpgme_key_ref (key);
+      kdt->current_key = key;
       details_page_fill_key (kdt, key);
       signatures_page_fill_key (kdt, key);
       subkeys_page_fill_key (kdt, key);

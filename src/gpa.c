@@ -54,6 +54,9 @@ gchar *gnupg_homedir;
 /* True if CMS hack mode is enabled.  */
 gboolean cms_hack;
 
+/* True if the ticker used for card operations should not be started.  */
+gboolean disable_ticker;
+
 
 /* Local variables.  */
 typedef struct
@@ -108,6 +111,8 @@ static GOptionEntry option_entries[] =
       N_("Read options from file"), "FILE" },
     { "cms", 'x', 0, G_OPTION_ARG_NONE, &cms_hack,
       "Enable CMS/X.509 support", NULL },
+    { "disable-ticker", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
+      &disable_ticker, NULL, NULL },
     { NULL }
   };
 

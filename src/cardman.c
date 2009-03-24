@@ -259,6 +259,19 @@ scd_status_cb (void *opaque, const char *status, const char *args)
 }     
 
 
+/* Idle queue callback to mark a relaod operation finished.  */
+static gboolean
+card_reload_finish_idle_cb (void *user_data)
+{
+  GpaCardManager *cardman = user_data;
+  
+  cardman->in_card_reload--;
+  g_object_unref (cardman);
+
+  return FALSE;  /* Remove us from the idle queue. */
+}
+
+
 /* This function is called to trigger a card-reload.  */
 static void
 card_reload (GpaCardManager *cardman)
@@ -275,7 +288,6 @@ card_reload (GpaCardManager *cardman)
 
   /* Start the ticker if not yet done.  */
   start_ticker (cardman);
-    
   if (!cardman->in_card_reload)
     {
       cardman->in_card_reload++;
@@ -336,7 +348,8 @@ card_reload (GpaCardManager *cardman)
         }
 
 
-      if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT)
+      if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT
+          || gpg_err_code (err) == GPG_ERR_CARD_REMOVED)
         {
           err_desc = _("No card found.");
         }
@@ -387,8 +400,9 @@ card_reload (GpaCardManager *cardman)
                                           scd_status_cb, cardman);
           if (!err)
             err = gpgme_op_assuan_result (cardman->gpgagent)->err;
-
-          if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT)
+          
+          if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT
+              || gpg_err_code (err) == GPG_ERR_CARD_REMOVED)
             statusbar_update (cardman, _("No card"));
           else if (err)
             {
@@ -403,12 +417,12 @@ card_reload (GpaCardManager *cardman)
       update_title (cardman);
       
       update_info_visibility (cardman);
-      /* Fixme: We should decrement the sentinel only after finishing
-         the operation, so that we don't run them over and over if the
-         user clicks too often.  Note however that the primary reason
-         for this sentinel is to avoid concurrent reloads triggered by
-         the user and by the file watcher.  */
-      cardman->in_card_reload--;
+      /* We decrement our lock using a idle handler with lo priority.
+         This gives us a better chance not to do a reload a second
+         time on behalf of the file watcher or ticker.  */
+      g_object_ref (cardman);
+      g_idle_add_full (G_PRIORITY_LOW,
+                       card_reload_finish_idle_cb, cardman, NULL);
     }
 }
 
@@ -469,7 +483,7 @@ geteventcounter_status_cb (void *opaque, const char *status, const char *args)
   return 0;
 }
 
-/* This fucntion is called by the timerout ticker started by
+/* This function is called by the timeout ticker started by
    start_ticker.  It is used to poll scdaemon to detect a card status
    change.  */
 static gboolean
@@ -477,7 +491,8 @@ ticker_cb (gpointer user_data)
 {
   GpaCardManager *cardman = user_data;
 
-  if (!cardman || !cardman->ticker_timeout_id || !cardman->gpgagent)
+  if (!cardman || !cardman->ticker_timeout_id || !cardman->gpgagent
+      || cardman->in_card_reload)
     return TRUE;  /* Keep on ticking.  */
   
   /* Note that we are single threaded and thus there is no need to
@@ -497,6 +512,9 @@ ticker_cb (gpointer user_data)
 static void
 start_ticker (GpaCardManager *cardman)
 {
+  if (disable_ticker)
+    return;
+
   if (!cardman->ticker_timeout_id)
     {
 #if GTK_CHECK_VERSION (2, 14, 0)
@@ -571,7 +589,7 @@ watcher_cb (void *opaque, const char *filename, const char *reason)
 {
   GpaCardManager *cardman = opaque;
 
-  if (cardman && strchr (reason, 'w') )
+  if (cardman && strchr (reason, 'w') && !cardman->in_card_reload)
     {
       card_reload (cardman);
     }

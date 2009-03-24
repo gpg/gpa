@@ -1,4 +1,4 @@
--*- outline -*-
+-*- org -*-
 
 In no particular order:
 
@@ -54,6 +54,14 @@ In no particular order:
 * There is no way to refresh selected keys from the keyserver.
   We might also want to have a scheduled refresh mode.  But that might
   be better implemented in gpg.
+
+* Cardman
+
+** We don't care about duplicate keys
+   In particular with X.509 it is common to use the same key (keygrip)
+   with several certificates.  GpaKeyDetails can't cope with that but
+   uses the first key found.
+
 
 * MB:
 ** Support getting plaintext from verify operation (should emit "created file"
@@ -116,6 +124,7 @@ In no particular order:
    When doing multi-file verify/decrypt, we may ignore more errors as
    to make more progress.  This seems more useful than the current
    behavior.
+
 ** FileChooser Dialog with pseudo-random window size
    When clicking "import" in the keyring manager, the FileChooser pops
    up in a tiny window most of the time -- sometimes the window size is just right.
@@ -130,3 +139,4 @@ In no particular order:
    It seems, GPA windows have no icon set. Besides: GTK+ has a rather
    nice key icon in it's stock: GTK_STOCK_AUTHENTICATION_DIALOG. Using
    that would probably look more natural in a GNOME environment.
+

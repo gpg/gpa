@@ -104,8 +104,6 @@ struct _GpaCMOpenpgp
 /* The parent class.  */
 static GObjectClass *parent_class;
 
-
-
 /* Local prototypes */
 static void gpa_cm_openpgp_finalize (GObject *object);
 
@@ -134,6 +132,52 @@ get_manufacturer (unsigned int no)
     case 0xffff: return "test card";
     default: return (no & 0xff00) == 0xff00? "unmanaged S/N range":"unknown";
     }
+}
+
+
+/* If not yet done show a warning to tell the user about the Admin
+   PIN.  Returns true if the operation shall continue.  */
+static int
+show_admin_pin_notice (GpaCMOpenpgp *card)
+{
+  static int shown;
+  GtkWidget *dialog;
+  const char *string;
+  int okay;
+
+  if (shown)
+    return 1;
+
+  string = _("<b>Admin-PIN Required</b>\n"
+             "\n"
+             "Depending on the previous operations you may now "
+             "be asked for the Admin-PIN.  Entering a wrong value "
+             "for the Admin-PIN decrements the corresponding retry counter. "
+             "If the retry counter is down to zero, the Admin-PIN can't "
+             "be restored anymore and thus the data on the card can't be "
+             "modified.\n"
+             "\n"
+             "Unless changed, a fresh standard card has set the Admin-PIN "
+             "to the value <i>12345678</i>.  "
+             "However, the issuer of your card might "
+             "have initialized the card with a different Admin-PIN and "
+             "that Admin-PIN might only be known to the issuer.  "
+             "Please check the instructions of your issuer.\n"
+             "\n"
+             "This notice will be shown only once per session.");
+
+  /* FIXME:  How do we figure out our GtkWindow?  */
+  dialog = gtk_message_dialog_new_with_markup (NULL /*GTK_WINDOW (card)*/,
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_INFO, 
+                                               GTK_BUTTONS_OK_CANCEL, 
+                                               NULL);
+  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog), string);
+  okay = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+  if (okay)
+    shown = 1;
+  return okay;
 }
 
 
@@ -520,6 +564,9 @@ save_attr (GpaCMOpenpgp *card, const char *name,
 
   gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
   g_return_val_if_fail (gpgagent,gpg_error (GPG_ERR_BUG));
+
+  if (!show_admin_pin_notice (card))
+    return gpg_error (GPG_ERR_CANCELED);
 
   if (is_escaped)
     command = g_strdup_printf ("SCD SETATTR %s %s", name, value);

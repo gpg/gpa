@@ -1,6 +1,6 @@
 /* gpgmetools.h - Additional gpgme support functions for GPA.
    Copyright (C) 2002 Miguel Coca.
-   Copyright (C) 2005, 2008 g10 Code GmbH.
+   Copyright (C) 2005, 2008, 2009 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -25,6 +25,8 @@
 
 #include <errno.h>
 #include <ctype.h>
+#include <stdarg.h>
+
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpgmetools.h"
@@ -433,7 +435,7 @@ gpa_generate_key_start (gpgme_ctx_t ctx, GPAKeyGenParameters *params)
 }
 
 
-/* Retrieve the path to the GnuPG executable.  */
+/* Retrieve the path to the GPG executable.  */
 static const gchar *
 get_gpg_path (void)
 {
@@ -448,6 +450,24 @@ get_gpg_path (void)
     }
   return NULL;
 }
+
+
+/* Retrieve the path to the GPGSM executable.  */
+static const gchar *
+get_gpgsm_path (void)
+{
+  gpgme_engine_info_t engine;
+  
+  gpgme_get_engine_info (&engine);
+  while (engine)
+    {
+      if (engine->protocol == GPGME_PROTOCOL_CMS)
+	return engine->file_name;
+      engine = engine->next;
+    }
+  return NULL;
+}
+
 
 
 /* Backup a key. It exports both the public and secret keys to a file.
@@ -476,9 +496,10 @@ gpa_backup_key (const gchar *fpr, const char *filename)
   const gchar *path;
   mode_t mask;
 
-  /* Get the gpg path */
+  /* Get the gpg path.  */
   path = get_gpg_path ();
-  g_assert (path != NULL);
+  g_return_val_if_fail (path && *path, FALSE);
+
   /* Add the executable to the arg arrays */
   header_argv[0] = (gchar*) path;
   pub_argv[0] = (gchar*) path;
@@ -1230,5 +1251,165 @@ is_gpg_version_at_least (const char *need_version)
       engine = engine->next;
     }
   return 0; /* No gpg-engine available. */
+}
+
+
+/* Structure used to communicate with gpg_simple_stderr_cb.  */
+struct gpg_simple_stderr_parm_s 
+{
+  gboolean (*cb)(void *opaque, char *line);
+  void *cb_arg;
+  GString *string;
+};
+
+/* Helper for gpa_start_simple_gpg_command.  */
+static gboolean 
+gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition, 
+                      void *user_data)
+{
+  struct gpg_simple_stderr_parm_s *parm = user_data;
+  GIOStatus status;
+  char *line, *p;
+
+  if ((condition & G_IO_IN))
+    {
+      /* We don't use a while but an if because that allows to update
+         progress bars nicely.  A bit slower, but no real problem.  */
+      if ((status = g_io_channel_read_line_string
+           (channel, parm->string, NULL, NULL)) == G_IO_STATUS_NORMAL)
+        {
+          line = parm->string->str;
+
+          /* We care only about status lines.  */
+          if (!strncmp (line, "[GNUPG:] ", 9)) 
+            {
+              line += 9;
+
+              /* Strip line terminator.  */
+              p = strchr (line, '\n');
+              if (p)
+                {
+                  if (p > line && p[-1] == '\r')
+                    p[-1] = 0;
+                  else
+                    *p = 0;
+                }
+
+              /* Call user callback.  */ 
+              if (parm->cb && !parm->cb (parm->cb_arg, line))
+                {
+                  g_debug ("User requested EOF");
+                  goto cleanup;
+                }
+            }
+        }
+      if (status != G_IO_STATUS_NORMAL && status != G_IO_STATUS_AGAIN )
+        {
+          /* Error or EOF.  */
+          g_debug ("Received %s", status==G_IO_STATUS_EOF? "EOF":"ERROR");
+          goto cleanup;
+        }
+    }
+  if ((condition & G_IO_HUP))
+    {
+      g_debug ("Received HUP");
+      goto cleanup;
+    }
+
+  return TRUE;  /* Keep on watching this channel. */
+
+ cleanup:
+  if (parm->cb)
+    parm->cb (parm->cb_arg, NULL);  /* Tell user about EOF.  */
+  g_string_free (parm->string, TRUE);
+  xfree (parm);
+  g_io_channel_unref (channel);  /* Close channel.  */
+  return FALSE;  /* Remove us from the watch list.  */
+}
+
+
+/* Run gpg asynchronously with the given arguments and return a gpg
+   error code on error.  The list of arguments are all of type (const
+   char*) and end with a NULL argument (FIRST_ARG may already be NULL,
+   but that does not make any sense).  STDIN and STDOUT are connected
+   to /dev/null.  No more than 20 arguments may be given.
+
+   If the function returns success the provided callback CB is called
+   for each line received on STDERR.  EOF is send to this callback by
+   passing a LINE argument of NULL.  The callback may use this for
+   cleanup. If the callback returns FALSE, an EOF is forced with the
+   result that the callback is called once more with LINE set to NULL.  */
+gpg_error_t
+gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
+                              void *cb_arg, gpgme_protocol_t protocol,
+                              const char *first_arg, ...)
+{
+  char *argv[24];
+  int argc;
+  int fd_stderr;
+  GIOChannel *channel;
+  struct gpg_simple_stderr_parm_s *parm = NULL;
+
+  if (protocol == GPGME_PROTOCOL_OpenPGP)
+    argv[0] = (char*)get_gpg_path ();
+  else if (protocol == GPGME_PROTOCOL_CMS)
+    argv[0] = (char*)get_gpgsm_path ();
+  else
+    argv[0] = NULL;
+  g_return_val_if_fail (argv[0], gpg_error (GPG_ERR_INV_ARG));
+  argc = 1;
+  argv[argc++] = (char*)"--status-fd";
+  argv[argc++] = (char*)"2";
+  argv[argc++] = (char*)first_arg;
+  if (first_arg)
+    {
+      va_list arg_ptr;
+      const char *s;
+
+      va_start (arg_ptr, first_arg);
+      while (argc < DIM (argv)-1 && (s=va_arg (arg_ptr, const char *)))
+        argv[argc++] = (char*)s;
+      va_end (arg_ptr);
+      argv[argc] = NULL;
+      g_return_val_if_fail (argc < DIM (argv), gpg_error (GPG_ERR_INV_ARG));
+    }
+
+  parm = g_try_malloc (sizeof *parm);
+  if (!parm)
+    return gpg_error_from_syserror ();
+  parm->cb = cb;
+  parm->cb_arg = cb_arg;
+  parm->string = g_string_sized_new (200);
+
+  if (!g_spawn_async_with_pipes (NULL, argv, NULL, 
+                                 (G_SPAWN_STDOUT_TO_DEV_NULL),
+                                 NULL, NULL, NULL,
+                                 NULL, NULL, &fd_stderr, NULL))
+    {
+      gpa_window_error (_("Calling the crypto engine program failed."), NULL);
+      xfree (parm);
+      return gpg_error (GPG_ERR_GENERAL);
+    }
+#ifdef G_OS_WIN32
+  channel = g_io_channel_win32_new_fd (fd_stderr);
+#else
+  channel = g_io_channel_unix_new (fd_stderr);
+#endif 
+  g_io_channel_set_encoding (channel, NULL, NULL);
+  /* Note that we need a buffered channel, so that we can use the read
+     line function.  */
+  g_io_channel_set_close_on_unref (channel, TRUE);
+
+  /* Create a watch for the channel.  */
+  if (!g_io_add_watch (channel, (G_IO_IN|G_IO_HUP), 
+                       gpg_simple_stderr_cb, parm))
+    {
+      g_debug ("error creating watch for gpg command");
+      g_io_channel_unref (channel);
+      xfree (parm);
+      return gpg_error (GPG_ERR_GENERAL);
+    }
+
+  return 0;
 }
 
