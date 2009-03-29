@@ -139,4 +139,11 @@ In no particular order:
    It seems, GPA windows have no icon set. Besides: GTK+ has a rather
    nice key icon in it's stock: GTK_STOCK_AUTHENTICATION_DIALOG. Using
    that would probably look more natural in a GNOME environment.
-
+** Use a fixed-size font
+   We should use a fixed-size font at certain places (e.g. display of fingerprints)
+** Resizing of widgets
+   In the cardmanager: when activating the expander for a key
+   fingerprint, the key details widget appers. But that widget's width
+   is bounded by the width of the expander's label (the
+   fingerprint). I think the expander's width should be allowed to
+   grow in case there's unused space to the right of the expander widget.
