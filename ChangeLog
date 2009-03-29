@@ -1,3 +1,7 @@
+2009-03-30  Moritz  <moritz@gnu.org>
+
+	* configure.ac: Typo fix: change _save_CFLAGS to _save_cflags.
+
 2009-03-29  Moritz  <moritz@gnu.org>
 
 	* Makefile.am: Added rules for generating gpadefs.h from
