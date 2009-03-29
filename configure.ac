@@ -160,9 +160,17 @@ dnl Find the keyserver plugins. Assume that gpgkeys_ldap is always available
 AC_PATH_PROG(GPGKEYS_LDAP, gpgkeys_ldap, [${libexecdir}/gnupg/gpgkeys_ldap],
              [$PATH:/usr/libexec/gnupg/:/usr/lib/gnupg/])
 KEYSERVER_HELPERS_DIR=`dirname $GPGKEYS_LDAP`
+if test -z "$KEYSERVER_HELPERS_DIR"; then
+       AC_MSG_ERROR([[
+***
+*** Keyserver helpers not found. They should be contained in the GnuPG package.
+***
+  ]])
+fi
 
 AC_DEFINE_UNQUOTED(GPG_PATH, "$GPG", [Path to the gpg binary.])
-
+AC_DEFINE_UNQUOTED(KEYSERVER_HELPERS_DIR,
+		   "$KEYSERVER_HELPERS_DIR", [Path to keyserver helper tools])
 
 dnl
 dnl Checks for compiler features
@@ -296,40 +304,6 @@ if test "$GCC" = yes; then
        CFLAGS="$CFLAGS -mms-bitfields"
     fi
 fi
-
-
-AC_CONFIG_COMMANDS(gpadefs.h,[[
-cat >gpadefs.tmp <<GPAEOF
-/* Generated automatically by configure */
-#ifdef HAVE_DRIVE_LETTERS
-  /* These W32 locations are fallbacks 
-     and not used with current gpg installations. */
-  #define GPA_DATADIR   "c:/lib/gnupg"
-  #define GPG_PROGRAM   "c:/gnupg/gpg"
-  #define GPA_KEYSERVER_HELPERS_DIR "c:/gnupg"
-#else
-  #define GPA_DATADIR   "${datadir}/gpa"
-  #define GPG_PROGRAM   "${GPG}"
-  #define GPA_KEYSERVER_HELPERS_DIR "$KEYSERVER_HELPERS_DIR"
-#endif
-GPAEOF
-if cmp -s gpadefs.h gpadefs.tmp 2>/dev/null; then
-    echo "gpadefs.h is unchanged"
-    rm -f gpadefs.tmp
-else
-    rm -f gpadefs.h
-    mv gpadefs.tmp gpadefs.h
-    echo "gpadefs.h created"
-fi
-]],[[
-prefix=$prefix
-exec_prefix=$exec_prefix
-libdir=$libdir
-KEYSERVER_HELPERS_DIR=$KEYSERVER_HELPERS_DIR
-datadir=$datadir
-localedir=$localedir
-GPG=$GPG
-]])
 
 
 #

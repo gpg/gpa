@@ -1,6 +1,6 @@
 /* gpa.h  -  main header
    Copyright (C) 2000, 2001 G-N-U GmbH.
-   Copyright (C) 2008 g10 Code GmbH.
+   Copyright (C) 2008, 2009 g10 Code GmbH.
 
    This file is part of GPA.
 
@@ -28,7 +28,6 @@
 #include <string.h>
 #include <assuan.h>
 
-#include "gpadefs.h"
 #include "gpgmetools.h"
 #include "options.h"
 #include "icons.h"

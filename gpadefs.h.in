@@ -1,0 +1,17 @@
+/* Generated automatically by make from gpadefs.h.in.  */
+
+/* This file is expected to be included by config.h only.  It's
+   purpose is to provide parameters (e.g. "datadir") whose final
+   values are determined at make-time, not at configure-time.  */
+
+#ifdef HAVE_DRIVE_LETTERS
+/* These W32 locations are fallbacks and not used with current gpg
+   installations. */
+# define GPA_DATADIR   "c:/lib/gnupg"
+# define GPG_PROGRAM   "c:/gnupg/gpg"
+# define GPA_KEYSERVER_HELPERS_DIR "c:/gnupg"
+#else
+# define GPA_DATADIR   "@datadir@"
+# define GPG_PROGRAM   GPG_PATH
+# define GPA_KEYSERVER_HELPERS_DIR KEYSERVER_HELPERS_DIR
+#endif

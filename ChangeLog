@@ -1,3 +1,14 @@
+2009-03-29  Moritz  <moritz@gnu.org>
+
+	* Makefile.am: Added rules for generating gpadefs.h from
+	gpadefs.h.in at make-time.
+	(EXTRA_DIST): Added gpadefs.h.in.
+	* configure.ac: Trigger AC_MSG_ERROR in case directory for
+	keyserver helpers could not figured out.
+	Call AC_DEFINE_UNQUOTED to define KEYSERVER_HELPERS_DIR in
+	config.h.
+	Remove generation of gpadefs.h through AC_CONFIG_COMMANDS.
+
 2009-03-10  Werner Koch  <wk@g10code.com>
 
 	* configure.ac (AC_CONFIG_COMMANDS): Remove GPA_LOCALEDIR.
@@ -6,7 +17,7 @@
 
 	* configure.ac (BUILD_CARD_MANAGER): Define as AC_DEFINE and
 	AM_CONDITIONAL.
-	
+
 2009-02-07  Moritz  <moritz@gnu.org>
 
 	* TODO: New item.

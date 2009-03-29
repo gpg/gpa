@@ -1,3 +1,7 @@
+2009-03-29  Moritz  <moritz@gnu.org>
+
+	* gpa.h: Do not include gpadefs.h.
+
 2009-03-23  Werner Koch  <wk@g10code.com>
 
 	* gpgmetools.c (gpg_simple_stderr_cb): Use GString and skip
