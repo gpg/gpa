@@ -236,6 +236,13 @@ signatures_page_fill_key (GpaKeyDetails *kdt, gpgme_key_t key)
     {
       gpgme_user_id_t uid;
 
+      /* Make the combo widget's width shrink as much as
+	 possible. This (hopefully) fixes the previous behaviour
+	 correctly: displaying a key with slightly longer signed UIDs
+	 caused the top-level window to pseudo-randomly increase it's
+	 size (which couldn't even be undone by the user anymore).  */
+      gtk_widget_set_size_request (GTK_WIDGET (combo), 0, -1);
+
       gtk_combo_box_append_text (combo, _("All signatures"));
       gtk_combo_box_set_active (combo, 0);
       for (i=1, uid = key->uids; uid; i++, uid = uid->next)

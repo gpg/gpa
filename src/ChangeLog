@@ -1,3 +1,8 @@
+2009-03-30  Moritz  <moritz@gnu.org>
+
+	* gpa-key-details.c (signatures_page_fill_key): Call
+	gtk_widget_set_size_request on ComboBox holding the key's UIDs.
+
 2009-03-29  Moritz  <moritz@gnu.org>
 
 	* gpa.h: Do not include gpadefs.h.
