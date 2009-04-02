@@ -1,3 +1,28 @@
+2009-04-02  Werner Koch  <wk@g10code.com>
+
+	* keylist.c (gpa_keylist_next): Format user name the X.509 way.
+
+	* gpa-key-details.c (construct_subkeys_page)
+	(subkeys_page_fill_key, remove_subkeys_page, subkeys_page_empty):
+	Merge and rename to build_subkeys_page.
+	(ui_mode_changed): Adjust.
+	(construct_signatures_page, signatures_page_fill_key)
+	(signatures_page_empty): Merge and rename to
+	build_signatures_page.  Support X.509.
+	(gpa_key_details_update): Create the signature pages only in
+	advanced mode.
+	(struct _GpaKeyDetails): Remove field signatures_count.  Add field
+	signatures_page.
+	(signatures_uid_changed): Check that there is a signatures page.
+	(construct_main_widget): Remove signature and subkey creation.
+	(gpa_key_details_find): Support X.509.
+	* certchain.c, certchain.h: New.
+	* format-dn.c, format-dn.h: New.
+
+	* options.c (gpa_options_set_simplified_ui): Send signal only for
+	a real change.
+	(gpa_options_set_show_advanced_options): Ditto.
+
 2009-03-30  Moritz  <moritz@gnu.org>
 
 	* gpa-key-details.c (signatures_page_fill_key): Call

@@ -19,7 +19,7 @@
 
 
 /* Violation of GNOME standards: Cancel does not revert a previous
-   apply.  Excvept for the UI mode, we do not auto-apply or syntax
+   apply.  Except for the UI mode, we do not auto-apply or syntax
    check after focus change.  The rationale for this is that:
 
      * gpgconf operations are expensive.

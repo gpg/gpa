@@ -35,6 +35,7 @@
 #include "convert.h"
 #include "keytable.h"
 #include "siglist.h"
+#include "certchain.h"
 #include "gpasubkeylist.h"
 #include "gpa-key-details.h"
 
@@ -67,10 +68,10 @@ struct _GpaKeyDetails
   GtkWidget *detail_creation;
 
   /* The widgets in the signatures page.  */
+  GtkWidget *signatures_page;
   GtkWidget *signatures_list;
   GtkWidget *signatures_uids;
-  gint signatures_count;
-  GtkWidget *signatures_hbox;
+  GtkWidget *certchain_list;
 
   /* The widgets in the subkeys list.  */
   GtkWidget *subkeys_page;
@@ -96,7 +97,6 @@ static void gpa_key_details_finalize (GObject *object);
  *******************   Implementation   *********************
  ************************************************************/
 
-
 /* Callback for the "changed" signal to update the popdown menu on the
    signatures page of the notebook.  */
 static void
@@ -104,11 +104,14 @@ signatures_uid_changed (GtkComboBox *combo, gpointer user_data)
 {
   GpaKeyDetails *kdt = user_data;
 
-  /* Note that we need to subtract one, as the first entry (with index
-     0 means) "all user names".  */
-  gpa_siglist_set_signatures 
-    (kdt->signatures_list, kdt->current_key,
-     gtk_combo_box_get_active (GTK_COMBO_BOX (combo)) - 1);
+  if (kdt->signatures_list)
+    {
+      /* Note that we need to subtract one, as the first entry (with
+         index 0 means) "all user names".  */
+      gpa_siglist_set_signatures 
+        (kdt->signatures_list, kdt->current_key,
+         gtk_combo_box_get_active (GTK_COMBO_BOX (combo)) - 1);
+    }
 }
 
 
@@ -219,92 +222,6 @@ details_page_fill_num_keys (GpaKeyDetails *kdt, gint num_key)
 
 
 
-/* Fill the signatures page with the signatures of the public key.  */
-static void
-signatures_page_fill_key (GpaKeyDetails *kdt, gpgme_key_t key)
-{
-  GtkComboBox *combo;
-  int i;
-
-  combo = GTK_COMBO_BOX (kdt->signatures_uids);
-  for (i = kdt->signatures_count - 1; i >= 0; i--)
-    gtk_combo_box_remove_text (combo, i);
-  kdt->signatures_count = 0;
-
-  /* Populate the popdown UID list if there is more than one UID.  */
-  if (key->uids && key->uids->next)
-    {
-      gpgme_user_id_t uid;
-
-      /* Make the combo widget's width shrink as much as
-	 possible. This (hopefully) fixes the previous behaviour
-	 correctly: displaying a key with slightly longer signed UIDs
-	 caused the top-level window to pseudo-randomly increase it's
-	 size (which couldn't even be undone by the user anymore).  */
-      gtk_widget_set_size_request (GTK_WIDGET (combo), 0, -1);
-
-      gtk_combo_box_append_text (combo, _("All signatures"));
-      gtk_combo_box_set_active (combo, 0);
-      for (i=1, uid = key->uids; uid; i++, uid = uid->next)
-	{
-	  gchar *uid_string = gpa_gpgme_key_get_userid (uid);
-	  gtk_combo_box_append_text (combo, uid_string);
-	  g_free (uid_string);
-	}
-      kdt->signatures_count = i;
-
-      gtk_widget_show (kdt->signatures_hbox);
-      gtk_widget_set_no_show_all (kdt->signatures_hbox, FALSE);
-      gtk_widget_set_sensitive (kdt->signatures_uids, TRUE);
-      /* Add the signatures.  */
-      gpa_siglist_set_signatures (kdt->signatures_list, key, -1);
-    }
-  else
-    {
-      /* If there is just one uid, display its signatures explicitly,
-         and do not show the list of uids.  */
-      gtk_widget_hide (kdt->signatures_hbox);
-      gtk_widget_set_no_show_all (kdt->signatures_hbox, TRUE);
-      gpa_siglist_set_signatures (kdt->signatures_list, key, 0);
-    }
-}
-
-
-/* Empty the list of signatures in the details notebook.  */
-static void
-signatures_page_empty (GpaKeyDetails *kdt)
-{
-  GtkComboBox *combo;
-  gint i;
-
-  gpa_siglist_set_signatures (kdt->signatures_list, NULL, 0);
-
-  combo = GTK_COMBO_BOX (kdt->signatures_uids);
-  gtk_widget_set_sensitive (GTK_WIDGET (combo), FALSE);
-  for (i = kdt->signatures_count - 1; i >= 0; i--)
-    gtk_combo_box_remove_text (combo, i);
-  kdt->signatures_count = 0;
-}
-
-
-/* Fill the subkeys page.  */
-static void
-subkeys_page_fill_key (GpaKeyDetails *kdt, gpgme_key_t key)
-{
-  if (kdt->subkeys_page)
-    gpa_subkey_list_set_key (kdt->subkeys_list, key);
-}
-
-
-/* Empty the subkeys page.  */
-static void
-subkeys_page_empty (GpaKeyDetails *kdt)
-{
-  if (kdt->subkeys_page)
-    gpa_subkey_list_set_key (kdt->subkeys_list, NULL);
-}
-
-
 
 /* Add a single row to the details table.  */
 static GtkWidget *
@@ -392,58 +309,149 @@ construct_details_page (GpaKeyDetails *kdt)
 
 /* Add the signatures page to the notebook.  */
 static void
-construct_signatures_page (GpaKeyDetails *kdt)
+build_signatures_page (GpaKeyDetails *kdt, gpgme_key_t key)
 {
   GtkWidget *label;
   GtkWidget *vbox, *hbox;
-  GtkWidget *combo;
   GtkWidget *scrolled;
-  GtkWidget *siglist;
+  int pnum;
+
+  if (kdt->signatures_page)
+    {
+      if (kdt->signatures_uids)
+        g_signal_handlers_disconnect_by_func
+          (G_OBJECT (kdt->signatures_uids), 
+           G_CALLBACK (signatures_uid_changed), kdt);
+      
+      pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->signatures_page);
+      if (pnum >= 0)
+        gtk_notebook_remove_page (GTK_NOTEBOOK (kdt), pnum);
+      kdt->signatures_page = NULL;
+      kdt->signatures_uids = NULL;
+    }
+  if (kdt->signatures_list)
+    {
+      g_object_unref (kdt->signatures_list);
+      kdt->signatures_list = NULL;
+    }
+  if (kdt->certchain_list)
+    {
+      g_object_unref (kdt->certchain_list);
+      kdt->certchain_list = NULL;
+    }
+  if (!key)
+    return;
 
   vbox = gtk_vbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
-  /* UID select button and label.  */
-  hbox = gtk_hbox_new (FALSE, 5);
-  label = gtk_label_new (_("Show signatures on user name:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-  combo = gtk_combo_box_new_text ();
-  gtk_box_pack_start (GTK_BOX (hbox), combo, TRUE, TRUE, 0);
-  gtk_widget_set_sensitive (combo, FALSE);
-  kdt->signatures_uids = combo;
-  kdt->signatures_count = 0;
-  kdt->signatures_hbox = hbox;
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  /* If there is more than one OpenPGP UID, we need a select button.  */
+  if (key->uids && key->uids->next && key->protocol == GPGME_PROTOCOL_OpenPGP)
+    {
+      hbox = gtk_hbox_new (FALSE, 5);
+      label = gtk_label_new (_("Show signatures on user name:"));
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+      kdt->signatures_uids = gtk_combo_box_new_text ();
+      gtk_box_pack_start (GTK_BOX (hbox), kdt->signatures_uids, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+      
+      /* Connect the signal to update the list of user IDs in the
+         signatures page of the notebook.  */
+      g_signal_connect (G_OBJECT (kdt->signatures_uids), "changed",
+                        G_CALLBACK (signatures_uid_changed), kdt);
+    }
 
   /* Signature list.  */
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
 				       GTK_SHADOW_IN);
   gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
-  siglist = gpa_siglist_new ();
-  kdt->signatures_list = siglist;
-  gtk_container_add (GTK_CONTAINER (scrolled), siglist);
+  if (key->protocol == GPGME_PROTOCOL_OpenPGP)
+    {
+      kdt->signatures_list = gpa_siglist_new ();
+      g_object_ref (kdt->signatures_list);
+      gtk_container_add (GTK_CONTAINER (scrolled), kdt->signatures_list);
+    }
+  else
+    {
+      kdt->certchain_list = gpa_certchain_new ();
+      g_object_ref (kdt->certchain_list);
+      gtk_container_add (GTK_CONTAINER (scrolled), kdt->certchain_list);
+    }
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
 
+  kdt->signatures_page = vbox;
   gtk_notebook_append_page (GTK_NOTEBOOK (kdt), vbox,
-                            gtk_label_new (_("Signatures")));
+                            gtk_label_new 
+                            (kdt->certchain_list? _("Chain"):_("Signatures")));
 
+
+  /* Fill this page.  */
+  if (kdt->certchain_list)
+    {
+      gpa_certchain_update (kdt->certchain_list, key);
+    }
+  else if (kdt->signatures_uids)
+    {
+      gpgme_user_id_t uid;
+      GtkComboBox *combo;
+      int i;
+      
+      /* Make the combo widget's width shrink as much as
+	 possible. This (hopefully) fixes the previous behaviour
+	 correctly: displaying a key with slightly longer signed UIDs
+	 caused the top-level window to pseudo-randomly increase it's
+	 size (which couldn't even be undone by the user anymore).  */
+      combo = GTK_COMBO_BOX (kdt->signatures_uids);
+      gtk_widget_set_size_request (GTK_WIDGET (combo), 0, -1);
+
+      gtk_combo_box_append_text (combo, _("All signatures"));
+      gtk_combo_box_set_active (combo, 0);
+      for (i=1, uid = key->uids; uid; i++, uid = uid->next)
+	{
+	  gchar *uid_string = gpa_gpgme_key_get_userid (uid);
+	  gtk_combo_box_append_text (combo, uid_string);
+	  g_free (uid_string);
+	}
+      
+      gpa_siglist_set_signatures (kdt->signatures_list, key, -1);
+    }
+  else
+    {
+      gpa_siglist_set_signatures (kdt->signatures_list, key, 0);
+    }
 }
 
 
-/* Add the subkeys page to the notebook.  */
+/* Create and append new page with all subkeys for KEY.  If KEY is
+   NULL remove an existing subkeys page. */
 static void
-construct_subkeys_page (GpaKeyDetails *kdt)
+build_subkeys_page (GpaKeyDetails *kdt, gpgme_key_t key)
 {
   GtkWidget *vbox;
   GtkWidget *scrolled;
   GtkWidget *subkeylist;
-  
-  if (kdt->subkeys_page)
-    return;  /* The page has already been constructed.  */
+  int pnum;
 
+  /* First remove an existing page.  */
+  if (kdt->subkeys_page)
+    {
+      pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->subkeys_page);
+      if (pnum >= 0)
+        gtk_notebook_remove_page (GTK_NOTEBOOK (kdt), pnum);
+      kdt->subkeys_page = NULL;
+      if (kdt->subkeys_list)
+        {
+          g_object_unref (kdt->subkeys_list);
+          kdt->subkeys_list = NULL;
+        }
+    }
+  if (!key)
+    return;
+
+  /* Create a new page.  */
   vbox = gtk_vbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   scrolled = gtk_scrolled_window_new (NULL, NULL);
@@ -456,22 +464,17 @@ construct_subkeys_page (GpaKeyDetails *kdt)
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
   kdt->subkeys_list = subkeylist;
+  g_object_ref (kdt->subkeys_list);
   kdt->subkeys_page = vbox;
   gtk_notebook_append_page (GTK_NOTEBOOK (kdt), kdt->subkeys_page,
-                            gtk_label_new (_("Subkeys")));
-}
+                            gtk_label_new 
+                            (key->protocol == GPGME_PROTOCOL_OpenPGP
+                             ? _("Subkeys") : _("Key")));
+  
+  /* Fill this page.  */
+  gpa_subkey_list_set_key (kdt->subkeys_list, key);
 
 
-/* Remove the subkeys page from the notebook.  */
-static void
-remove_subkeys_page (GpaKeyDetails *kdt)
-{
-  if (!kdt->subkeys_page)
-    return;  /* Page has not been constructed.  */
-    
-  gtk_notebook_remove_page (GTK_NOTEBOOK (kdt), 2);
-  kdt->subkeys_list = NULL;
-  kdt->subkeys_page = NULL;
 }
 
 
@@ -481,10 +484,19 @@ ui_mode_changed (GpaOptions *options, gpointer param)
 {
   GpaKeyDetails *kdt = param;
 
-  if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-    construct_subkeys_page (kdt);
-  else
-    remove_subkeys_page (kdt);
+  if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
+    {
+      build_signatures_page (kdt, NULL);
+      build_subkeys_page (kdt, NULL);
+    }
+  else 
+    {
+      build_signatures_page (kdt, kdt->current_key);
+      build_subkeys_page (kdt, kdt->current_key);
+    }
+  gtk_notebook_set_show_tabs 
+    (GTK_NOTEBOOK (kdt), gtk_notebook_get_n_pages (GTK_NOTEBOOK (kdt)) > 1);
+  gtk_widget_show_all (GTK_WIDGET (kdt));
 }
 
 
@@ -493,23 +505,8 @@ ui_mode_changed (GpaOptions *options, gpointer param)
 static void
 construct_main_widget (GpaKeyDetails *kdt)
 {
-/*   kdt->notebook = gtk_notebook_new (); */
-/*   gtk_container_add (GTK_CONTAINER (kdt), kdt->notebook); */
-
   /* Details Page */
   construct_details_page (kdt);
-
-  /* Signatures Page.  */
-  construct_signatures_page (kdt);
-
-  /* The Subkeys page is only added if the simplified UI is not used.  */
-  if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-    construct_subkeys_page (kdt);
-
-  /* Connect the signal to update the list of user IDs in the
-     signatures page of the notebook.  */
-  g_signal_connect (G_OBJECT (kdt->signatures_uids), "changed",
-                    G_CALLBACK (signatures_uid_changed), kdt);
 
   /* Connect the signal to act on the simplified UI change signal.  */
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
@@ -552,6 +549,21 @@ gpa_key_details_finalize (GObject *object)
     {
       gpgme_key_unref (kdt->current_key);
       kdt->current_key = NULL;
+    }
+  if (kdt->signatures_list)
+    {
+      g_object_unref (kdt->signatures_list);
+      kdt->signatures_list = NULL;
+    }
+  if (kdt->certchain_list)
+    {
+      g_object_unref (kdt->certchain_list);
+      kdt->certchain_list = NULL;
+    }
+  if (kdt->subkeys_list)
+    {
+      g_object_unref (kdt->subkeys_list);
+      kdt->subkeys_list = NULL;
     }
 
   parent_class->finalize (object);
@@ -606,30 +618,71 @@ void
 gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key, int keycount)
 {
   GpaKeyDetails *kdt;
+  GtkWidget *widget;
+  int pnum;
 
   g_return_if_fail (GPA_IS_KEY_DETAILS (keydetails));
   kdt = GPA_KEY_DETAILS (keydetails);
 
+  /* Save the currently selected page.  */
+  pnum = gtk_notebook_get_current_page (GTK_NOTEBOOK (kdt));
+  if (pnum >= 0
+      && (widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (kdt), pnum)))
+    {
+      if (widget == kdt->signatures_page)
+        pnum = 1;
+      else if (widget == kdt->subkeys_page)
+        pnum = 2;
+      else
+        pnum = 0;
+    }
+  else
+    pnum = 0;
+  
+  
   if (kdt->current_key)
     {
       gpgme_key_unref (kdt->current_key);
       kdt->current_key = NULL;
     }
+
   if (key && keycount == 1)
     {
       gpgme_key_ref (key);
       kdt->current_key = key;
       details_page_fill_key (kdt, key);
-      signatures_page_fill_key (kdt, key);
-      subkeys_page_fill_key (kdt, key);
+
+      /* Depend the generation of pages on the mode of the UI.  */
+      if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
+        {
+          build_signatures_page (kdt, NULL);
+          build_subkeys_page (kdt, NULL);
+        }
+      else
+        {
+          build_signatures_page (kdt, key);
+          build_subkeys_page (kdt, key);
+        }
     }
   else
     {
       details_page_fill_num_keys (kdt, keycount);
-      signatures_page_empty (kdt);
-      subkeys_page_empty (kdt);
+      build_signatures_page (kdt, NULL);
+      build_subkeys_page (kdt, NULL);
     }
+  gtk_notebook_set_show_tabs 
+    (GTK_NOTEBOOK (kdt), gtk_notebook_get_n_pages (GTK_NOTEBOOK (kdt)) > 1);
+
   gtk_widget_show_all (keydetails);
+
+  /* Try to select the last selected page.  */
+  if (pnum == 1 && kdt->signatures_page)
+    pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->signatures_page);
+  else if (pnum == 2 && kdt->subkeys_page)
+    pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->subkeys_page);
+  else
+    pnum = 0;
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (kdt), pnum);
 }
 
 
@@ -664,6 +717,24 @@ gpa_key_details_find (GtkWidget *keydetails, const char *pattern)
         }
     }
   gpgme_op_keylist_end (ctx);
+
+  if (!any)
+    {
+      gpgme_set_protocol (ctx, GPGME_PROTOCOL_CMS);
+
+      if (!gpgme_op_keylist_start (ctx, pattern, 0))
+        {
+          while (!gpgme_op_keylist_next (ctx, &key))
+            {
+              gpa_key_details_update (keydetails, key, 1);
+              gpgme_key_unref (key);
+              any = 1;
+              break;
+            }
+        }
+      gpgme_op_keylist_end (ctx);
+    }
+
   gpgme_release (ctx);
   if (!any)
     gpa_key_details_update (keydetails, NULL, 0);

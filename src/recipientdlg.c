@@ -90,7 +90,7 @@ struct keyinfo_s
   /* An array with associated key(s) or NULL if none found/selected.  */
   gpgme_key_t *keys;
   
-  /* The allocated size of the KEYS array.  This included the
+  /* The allocated size of the KEYS array.  This includes the
      terminating NULL entry.  */
   unsigned int dimof_keys;
   
@@ -197,6 +197,7 @@ recplist_window_new (void)
   return list;
 }
 
+
 /* Get an interator for the selected row.  Store it in ITER and
    returns the mdeol.  if nothing is selected NULL is return and ITER
    is not valid.  */ 
@@ -214,7 +215,6 @@ get_selected_row (RecipientDlg *dialog, GtkTreeIter *iter)
     return model;
   return NULL;
 }
-
 
 
 /* Compute and display a new help text for the statushint.  */
@@ -236,7 +236,6 @@ update_statushint (RecipientDlg *dialog)
   if (dialog->freeze_update_statushint)
     return;
 
-  g_debug ("update_statushint called");
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->clist_keys));
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_pgp)))
@@ -377,6 +376,7 @@ append_key_to_keyinfo (struct keyinfo_s *keyinfo, gpgme_key_t key)
   return nkeys;
 }
 
+
 /* Clear the content of a keyinfo object.  */
 static void
 clear_keyinfo (struct keyinfo_s *keyinfo)
@@ -491,7 +491,7 @@ parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
           else if (append_key_to_keyinfo (&info->pgp, key)
                    >= TRUNCATE_KEYSEARCH_AT)
             {
-              /* Note that the truncation flag is not 100 correct.  In
+              /* Note that the truncation flag is not 100% correct.  In
                  case the next iteration would not yield a new key we
                  have not actually truncated the search.  */ 
               info->pgp.truncated = 1;
@@ -553,7 +553,7 @@ parse_recipients (GtkListStore *store)
                             -1);
         
         /* Do something with the data */
-        g_print ("parsing mailbox `%s'\n", info? info->mailbox:"(null)");
+        /*g_print ("parsing mailbox `%s'\n", info? info->mailbox:"(null)");*/
         parse_one_recipient (ctx, store, &iter,info);
       }
     while (gtk_tree_model_iter_next (model, &iter));
@@ -574,7 +574,6 @@ recplist_row_activated_cb (GtkTreeView       *tree_view,
   GtkTreeModel *model;
   char *mailbox;
 
-  g_print ("tree view row-activated received\n");
   model = gtk_tree_view_get_model (tree_view);
   if (!gtk_tree_model_get_iter (model, &iter, path))
     return; 
@@ -582,7 +581,6 @@ recplist_row_activated_cb (GtkTreeView       *tree_view,
   gtk_tree_model_get (model, &iter, 
                       RECPLIST_MAILBOX, &mailbox,
                       -1);
-  g_print ("  mailbox is `%s'\n", mailbox);
   g_free (mailbox);
 }
 
@@ -593,7 +591,6 @@ recplist_row_changed_cb (GtkTreeModel *model, GtkTreePath *path,
 {
   RecipientDlg *dialog = user_data;
 
-  g_print ("row changed signal received\n");
   g_return_if_fail (dialog);
   update_statushint (dialog);
 }
@@ -656,7 +653,6 @@ select_key_response_cb (SelectKeyDlg *seldlg, int response, void *user_data)
       struct userdata_s *info = NULL;
       char *uidstr = gpa_gpgme_key_get_userid (key->uids);
 
-      g_print ("selected key is `%s'\n", uidstr);
       g_free (uidstr);
       if ((model = get_selected_row (dialog, &iter)))
         {
@@ -723,17 +719,20 @@ do_select_key (RecipientDlg *dialog, gpgme_protocol_t protocol)
     dialog->freeze_key_selection--;
 }
 
+
 static void
 recplist_popup_pgp (GtkAction *action, RecipientDlg *dialog)
 {
   do_select_key (dialog, GPGME_PROTOCOL_OpenPGP);
 }
 
+
 static void
 recplist_popup_x509 (GtkAction *action, RecipientDlg *dialog)
 {
   do_select_key (dialog, GPGME_PROTOCOL_CMS);
 }
+
 
 static void
 recplist_popup_ignore (GtkAction *action, RecipientDlg *dialog)
@@ -760,6 +759,7 @@ recplist_default_action (RecipientDlg *dialog)
 
   dialog->freeze_key_selection--;
 }
+
 
 static gint
 recplist_display_popup_menu (RecipientDlg *dialog, GdkEvent *event, 
@@ -1097,7 +1097,7 @@ recipient_dlg_new (GtkWidget *parent)
 }
 
 
-/* Put RECIPIENTS into the list.  PROTOCOL select the defualt protocol. */
+/* Put RECIPIENTS into the list.  PROTOCOL select the default protocol. */
 void 
 recipient_dlg_set_recipients (RecipientDlg *dialog, GSList *recipients,
                               gpgme_protocol_t protocol)
@@ -1211,7 +1211,6 @@ recipient_dlg_get_keys (RecipientDlg *dialog, gpgme_protocol_t *r_protocol)
                 key = NULL;
               if (key)
                 {
-                  g_print ("returning key for recipient '%s'\n", mailbox);
                   gpgme_key_ref (key);
                   keyarray[idx++] = key;
                 }

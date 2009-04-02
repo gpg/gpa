@@ -29,6 +29,7 @@
 #include "gtktools.h"
 #include "keytable.h"
 #include "icons.h"
+#include "format-dn.h"
 
 
 /* Properties */
@@ -448,7 +449,10 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
   expiry = gpa_expiry_date_string (key->subkeys->expires);
   ownertrust = gpa_key_ownertrust_string (key);
   validity = gpa_key_validity_string (key);
-  userid = gpa_gpgme_key_get_userid (key->uids);
+  if (key->protocol == GPGME_PROTOCOL_CMS)
+    userid = gpa_format_dn (key->uids? key->uids->uid : NULL);
+  else
+    userid = gpa_gpgme_key_get_userid (key->uids);
   if (list->public_only)
     has_secret = 0;
   else

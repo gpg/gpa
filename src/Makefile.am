@@ -91,6 +91,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      keylist.c keylist.h \
 	      siglist.c siglist.h \
 	      gpasubkeylist.c gpasubkeylist.h \
+              certchain.c certchain.h \
 	      gpl-text.c gpl-text.h \
 	      keyserver.c keyserver.h \
 	      hidewnd.c hidewnd.h \
@@ -143,6 +144,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpa-marshal.c gpa-marshal.h \
 	      strlist.h strlist.c \
 	      gpg-stuff.h gpg-stuff.c \
+              format-dn.c format-dn.h \
 	      convert.c convert.h \
               membuf.c membuf.h \
 	      utils.c $(gpa_w32_sources) $(gpa_cardman_sources)

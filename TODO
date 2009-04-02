@@ -150,3 +150,8 @@ In no particular order:
    grow in case there's unused space to the right of the expander widget.
 * Building
 ** po/remove-potcdate.sed is deleted during make distcheck, thus make distcheck fails.
+
+* Bugs
+** Error messages while switching simplified mode.
+  This happens with the gpa-details-view and might be related to
+  siglist.c

@@ -821,7 +821,9 @@ string_to_utf8 (const gchar *string)
      et al. in their name will see their names garbled.  Although this
      is not an issue for me (;-)), I have a couple of friends with
      Umlauts in their name, so let's try to make their life easier by
-     detecting invalid encodings and convert that to Latin-1. */
+     detecting invalid encodings and convert that to Latin-1.  We use
+     this even for X.509 because it may make things even better given
+     all the invalid encodings often found in X.509 certificates.  */
   for (s = string; *s && !(*s & 0x80); s++)
     ;
   if (*s && ((s[1] & 0xc0) == 0x80) && ( ((*s & 0xe0) == 0xc0)
@@ -1298,7 +1300,7 @@ gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
               /* Call user callback.  */ 
               if (parm->cb && !parm->cb (parm->cb_arg, line))
                 {
-                  g_debug ("User requested EOF");
+                  /* User requested EOF.  */
                   goto cleanup;
                 }
             }
@@ -1306,13 +1308,11 @@ gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
       if (status != G_IO_STATUS_NORMAL && status != G_IO_STATUS_AGAIN )
         {
           /* Error or EOF.  */
-          g_debug ("Received %s", status==G_IO_STATUS_EOF? "EOF":"ERROR");
           goto cleanup;
         }
     }
   if ((condition & G_IO_HUP))
     {
-      g_debug ("Received HUP");
       goto cleanup;
     }
 

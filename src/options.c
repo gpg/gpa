@@ -216,8 +216,10 @@ gpa_options_get_file (GpaOptions *options)
 void
 gpa_options_set_simplified_ui (GpaOptions *options, gboolean value)
 {
+  int change = (!options->simplified_ui != !value);
   options->simplified_ui = value;
-  g_signal_emit (options, signals[CHANGED_UI_MODE], 0);
+  if (change)
+    g_signal_emit (options, signals[CHANGED_UI_MODE], 0);
 }
 
 gboolean
@@ -230,8 +232,10 @@ gpa_options_get_simplified_ui (GpaOptions *options)
 void
 gpa_options_set_show_advanced_options (GpaOptions *options, gboolean value)
 {
+  int change = (!options->show_advanced_options != !value);
   options->show_advanced_options = value;
-  g_signal_emit (options, signals[CHANGED_SHOW_ADVANCED_OPTIONS], 0);
+  if (change)
+    g_signal_emit (options, signals[CHANGED_SHOW_ADVANCED_OPTIONS], 0);
 }
 
 gboolean
