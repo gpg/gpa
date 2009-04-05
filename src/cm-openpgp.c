@@ -1161,7 +1161,7 @@ entry_fpr_expanded_cb (GObject *object, GParamSpec *dummy, void *user_data)
 static GtkLabel *
 add_table_row (GtkWidget *table, int *rowidx,
                const char *labelstr, GtkWidget *widget, GtkWidget *widget2,
-               int readonly)
+               int readonly, int compact)
 {
   GtkWidget *label;
   int is_label = GTK_IS_LABEL (widget);
@@ -1190,7 +1190,9 @@ add_table_row (GtkWidget *table, int *rowidx,
     }
 
   gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
+		    *rowidx, *rowidx + 1,
+		    (compact ? GTK_FILL : (GTK_FILL | GTK_EXPAND)),
+		    GTK_SHRINK, 0, 0);
   if (widget2)
     gtk_table_attach (GTK_TABLE (table), widget2, 2, 3,
 		      *rowidx, *rowidx + 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
@@ -1233,15 +1235,15 @@ construct_data_widget (GpaCMOpenpgp *card)
 
   card->entries[ENTRY_SERIALNO] = gtk_label_new (NULL);
   add_table_row (general_table, &rowidx, _("Serial number:"), 
-                 card->entries[ENTRY_SERIALNO], NULL, 0);
+                 card->entries[ENTRY_SERIALNO], NULL, 0, 1);
 
   card->entries[ENTRY_VERSION] = gtk_label_new (NULL);
   add_table_row (general_table, &rowidx, _("Card version:"),
-                 card->entries[ENTRY_VERSION], NULL, 0);
+                 card->entries[ENTRY_VERSION], NULL, 0, 1);
 
   card->entries[ENTRY_MANUFACTURER] = gtk_label_new (NULL);
   add_table_row (general_table, &rowidx, _("Manufacturer:"),
-                 card->entries[ENTRY_MANUFACTURER], NULL, 0);
+                 card->entries[ENTRY_MANUFACTURER], NULL, 0, 1);
 
   gtk_container_add (GTK_CONTAINER (general_frame), general_table);
 
@@ -1263,33 +1265,33 @@ construct_data_widget (GpaCMOpenpgp *card)
     gtk_combo_box_append_text (GTK_COMBO_BOX (card->entries[ENTRY_SEX]),
                                gpa_sex_char_to_string ("mfu"[idx]));
   add_table_row (personal_table, &rowidx,
-                 _("Salutation:"), card->entries[ENTRY_SEX], NULL, 0);
+                 _("Salutation:"), card->entries[ENTRY_SEX], NULL, 0, 0);
 
   card->entries[ENTRY_FIRST_NAME] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_FIRST_NAME]), 35);
   add_table_row (personal_table, &rowidx, 
-                 _("First name:"), card->entries[ENTRY_FIRST_NAME], NULL, 0);
+                 _("First name:"), card->entries[ENTRY_FIRST_NAME], NULL, 0, 0);
 
   card->entries[ENTRY_LAST_NAME] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LAST_NAME]), 35);
   add_table_row (personal_table, &rowidx,
-                 _("Last name:"),  card->entries[ENTRY_LAST_NAME], NULL, 0);
+                 _("Last name:"),  card->entries[ENTRY_LAST_NAME], NULL, 0, 0);
 
   card->entries[ENTRY_LANGUAGE] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LANGUAGE]), 8);
   add_table_row (personal_table, &rowidx,
-                 _("Language:"), card->entries[ENTRY_LANGUAGE], NULL, 0);
+                 _("Language:"), card->entries[ENTRY_LANGUAGE], NULL, 0, 0);
 
   card->entries[ENTRY_LOGIN] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LOGIN]), 254);
   add_table_row (personal_table, &rowidx,
-                 _("Login data:"), card->entries[ENTRY_LOGIN], NULL, 0);
+                 _("Login data:"), card->entries[ENTRY_LOGIN], NULL, 0, 0);
 
   card->entries[ENTRY_PUBKEY_URL] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_PUBKEY_URL]), 254);
   add_table_row (personal_table, &rowidx,
                  _("Public key URL:"),
-                 card->entries[ENTRY_PUBKEY_URL], NULL, 0);
+                 card->entries[ENTRY_PUBKEY_URL], NULL, 0, 0);
 
   gtk_container_add (GTK_CONTAINER (personal_frame), personal_table);
 
@@ -1314,19 +1316,19 @@ construct_data_widget (GpaCMOpenpgp *card)
      Check whether gtk_expander_set_label_wdiget works for us. */
   card->entries[ENTRY_KEY_SIG] = gtk_expander_new (NULL);
   add_table_row (keys_table, &rowidx, _("Signature key:"),
-                 card->entries[ENTRY_KEY_SIG], NULL, 0);
+                 card->entries[ENTRY_KEY_SIG], NULL, 0, 0);
 
   card->entries[ENTRY_KEY_ENC] = gtk_expander_new (NULL);
   add_table_row (keys_table, &rowidx, _("Encryption key:"),
-                 card->entries[ENTRY_KEY_ENC], NULL, 0);
+                 card->entries[ENTRY_KEY_ENC], NULL, 0, 0);
 
   card->entries[ENTRY_KEY_AUTH] = gtk_expander_new (NULL);
   add_table_row (keys_table, &rowidx, _("Authentication key:"),
-                 card->entries[ENTRY_KEY_AUTH], NULL, 0);
+                 card->entries[ENTRY_KEY_AUTH], NULL, 0, 0);
 
   card->entries[ENTRY_SIG_COUNTER] = gtk_label_new (NULL);
   add_table_row (keys_table, &rowidx, _("Signature counter:"),
-                 card->entries[ENTRY_SIG_COUNTER], NULL, 0);
+                 card->entries[ENTRY_SIG_COUNTER], NULL, 0, 0);
 
   gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
 
@@ -1346,12 +1348,11 @@ construct_data_widget (GpaCMOpenpgp *card)
   card->entries[ENTRY_SIG_FORCE_PIN] = gtk_check_button_new ();
   add_table_row (pin_table, &rowidx, 
                  _("Force signature PIN:"),
-                 card->entries[ENTRY_SIG_FORCE_PIN], NULL, 0);
-
+                 card->entries[ENTRY_SIG_FORCE_PIN], NULL, 0, 1);
   card->entries[ENTRY_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
   add_table_row (pin_table, &rowidx, _("PIN retry counter:"), 
-                 card->entries[ENTRY_PIN_RETRYCOUNTER], button, 1);
+                 card->entries[ENTRY_PIN_RETRYCOUNTER], button, 1, 1);
   card->change_pin_btn[0] = button; 
 
   card->entries[ENTRY_PUK_RETRYCOUNTER] = gtk_label_new (NULL);
@@ -1359,13 +1360,13 @@ construct_data_widget (GpaCMOpenpgp *card)
   card->puk_label = 
     add_table_row (pin_table, &rowidx, 
                    "", /* The label depends on the card version.  */ 
-                   card->entries[ENTRY_PUK_RETRYCOUNTER], button, 1);
+                   card->entries[ENTRY_PUK_RETRYCOUNTER], button, 1, 1);
   card->change_pin_btn[1] = button; 
 
   card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
   add_table_row (pin_table, &rowidx, _("Admin-PIN retry counter:"),
-                 card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], button, 1);
+                 card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], button, 1, 1);
   card->change_pin_btn[2] = button; 
 
   gtk_container_add (GTK_CONTAINER (pin_frame), pin_table);
