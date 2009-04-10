@@ -1,3 +1,17 @@
+2009-04-10  Moritz  <moritz@gnu.org>
+
+	* cm-openpgp.c (add_table_row): Made labels top aligned, so that
+	they don't jump around when activating expander widgets.
+
+2009-04-05  Moritz  <moritz@gnu.org>
+
+	* cm-openpgp.c (add_table_row): Added new boolean parameter:
+	compact; set table attach options according to value of COMPACT.
+	Adjusted all callers of add_table_row.
+
+	* cardman.c (cardman_action_new): Change menu item label; enable
+	translation.
+
 2009-04-02  Werner Koch  <wk@g10code.com>
 
 	* keylist.c (gpa_keylist_next): Format user name the X.509 way.

@@ -1168,9 +1168,9 @@ add_table_row (GtkWidget *table, int *rowidx,
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
   gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
+                    *rowidx, *rowidx + 1, GTK_FILL, GTK_FILL, 0, 0); 
   
   if (is_label)
     gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);

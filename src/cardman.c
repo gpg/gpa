@@ -616,7 +616,7 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
       /* Card menu.  */
       { "CardReload", GTK_STOCK_REFRESH, NULL, NULL,
 	N_("Reload card information"), G_CALLBACK (card_reload_action) },
-      { "CardGenkey", GTK_STOCK_NEW, "Generate new key...", NULL,
+      { "CardGenkey", GTK_STOCK_NEW, N_("Generate key"), NULL,
 	N_("Generate new key on card"), G_CALLBACK (card_genkey_action) },
     };
 
