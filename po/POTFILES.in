@@ -1,6 +1,7 @@
 src/clipboard.c
 src/clipboard.h
 src/confdialog.c
+src/convert.c
 src/encryptdlg.c
 src/expirydlg.c
 src/fileman.c

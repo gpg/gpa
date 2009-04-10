@@ -1,3 +1,10 @@
+2009-04-10  Moritz  <moritz@gnu.org>
+
+	* de.po: Added translations for days/weeks/months/years.
+	Fixed two typos.
+
+	* POTFILES.in: Added src/convert.c.
+
 2009-03-22  Moritz  <moritz@gnu.org>
 
 	* de.po: Be more consistent in respect to <b>...</b>-formatting.
