@@ -52,6 +52,9 @@ gpa_window_error (const gchar *message, GtkWidget *messenger)
                                              _("_Close"),
                                              GTK_RESPONSE_CLOSE,
                                              NULL);
+  if (messenger)
+    gtk_window_set_transient_for (GTK_WINDOW (windowError), GTK_WINDOW (messenger));
+
   gtk_container_set_border_width (GTK_CONTAINER (windowError), 5);
   gtk_dialog_set_default_response (GTK_DIALOG (windowError),
                                    GTK_RESPONSE_CLOSE);

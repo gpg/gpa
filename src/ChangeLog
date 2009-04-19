@@ -1,3 +1,20 @@
+2009-04-20  Moritz  <moritz@gnu.org>
+
+	* cm-openpgp.c (save_attr): Call gpa_cm_object_alert_dialog()
+	instead of gpa_window_error().
+	* gtktools.c (gpa_window_error): Use
+	gtk_window_set_transient_for().
+	* cm-object.c: New item ALERT_DIALOG in enum.
+	(gpa_cm_object_class_init): Register "alert-dialog" signal through
+	g_signal_new.
+	(gpa_cm_object_alert_dialog): New function, emits alert-dialog
+	signal on given object.
+	* cm-object.h (struct _GpaCMObjectClass): New member: alert_dialog.
+	Declare function gpa_cm_object_alert_dialog.
+	* cardman.c (alert_dialog_cb): New function.
+	(update_card_widget): Connect to alert-dialog signal of newly
+	created GpaCMObject object.
+
 2009-04-10  Moritz  <moritz@gnu.org>
 
 	* cm-openpgp.c (add_table_row): Made labels top aligned, so that

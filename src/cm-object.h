@@ -55,6 +55,7 @@ struct _GpaCMObjectClass
 
   /* Signal handlers */
   void (*update_status) (GpaCMObject *obj, gchar *status);
+  void (*alert_dialog) (GpaCMObject *obj, gchar *message);
 };
 
 
@@ -73,7 +74,7 @@ struct _GpaCMObject
 /* The class specific API.  */
 
 void gpa_cm_object_update_status (GpaCMObject *obj, const char *text);
-
+void gpa_cm_object_alert_dialog (GpaCMObject *obj, const gchar *messageg);
 
 
 #endif /*CM_OBJECT_H*/

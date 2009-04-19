@@ -35,6 +35,7 @@
 enum
 {
   UPDATE_STATUS,
+  ALERT_DIALOG,
   LAST_SIGNAL
 };
 
@@ -80,7 +81,14 @@ gpa_cm_object_class_init (void *class_ptr, void *class_data)
                   g_cclosure_marshal_VOID__STRING,
 		  G_TYPE_NONE, 1, G_TYPE_STRING);
 
-
+  signals[ALERT_DIALOG] =
+    g_signal_new ("alert-dialog",
+		  G_TYPE_FROM_CLASS (klass),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+		  G_STRUCT_OFFSET (GpaCMObjectClass, alert_dialog),
+		  NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+		  G_TYPE_NONE, 1, G_TYPE_STRING);
 }
 
 
@@ -148,4 +156,14 @@ gpa_cm_object_update_status (GpaCMObject *obj, const char *text)
     text = "";
 
   g_signal_emit (obj, signals[UPDATE_STATUS], 0, text);
+}
+
+/* Emit the error message MSG.  */
+void
+gpa_cm_object_alert_dialog (GpaCMObject *obj, const gchar *messageg)
+{
+  g_return_if_fail (obj);
+  g_return_if_fail (GPA_CM_OBJECT (obj));
+  
+  g_signal_emit (obj, signals[ALERT_DIALOG], 0, messageg);
 }

@@ -152,6 +152,13 @@ statusbar_update_cb (GpaCardManager *cardman, gchar *status)
   gtk_label_set_text (GTK_LABEL (cardman->status_text), status);
 }
 
+/* Signal handler for GpaCMObject's "alert-dialog".  */
+static void
+alert_dialog_cb (GpaCardManager *cardman, gchar *msg)
+{
+  gpa_window_error (msg, GTK_WIDGET (cardman));
+}
+
 
 static void
 update_title (GpaCardManager *cardman)
@@ -758,6 +765,9 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
       g_signal_connect_swapped (G_OBJECT (cardman->card_widget),
                                 "update-status",
                                 G_CALLBACK (statusbar_update_cb), cardman);
+      g_signal_connect_swapped (G_OBJECT (cardman->card_widget),
+				"alert-dialog",
+				G_CALLBACK (alert_dialog_cb), cardman);
 
       /* Fixme: We should use a signal to reload the card widget
          instead of using a class test in each reload fucntion.  */

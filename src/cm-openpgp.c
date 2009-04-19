@@ -592,7 +592,7 @@ save_attr (GpaCMOpenpgp *card, const char *name,
       char *message = g_strdup_printf 
         (_("Error saving the changed values.\n"
            "(%s <%s>)"), gpg_strerror (err), gpg_strsource (err));
-      gpa_window_error (message, NULL);
+      gpa_cm_object_alert_dialog (card, message);
       xfree (message);
     }
   xfree (command);
