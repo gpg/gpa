@@ -142,14 +142,18 @@ In no particular order:
 * GUI
 ** Use a fixed-size font
    We should use a fixed-size font at certain places (e.g. display of fingerprints)
+
 ** Resizing of widgets
    In the cardmanager: when activating the expander for a key
    fingerprint, the key details widget appers. But that widget's width
    is bounded by the width of the expander's label (the
    fingerprint). I think the expander's width should be allowed to
    grow in case there's unused space to the right of the expander widget.
+
+** Rework the About dialog
+  For example, there is no version number.
+
 * Building
-** po/remove-potcdate.sed is deleted during make distcheck, thus make distcheck fails.
 
 * Bugs
 ** Error messages while switching simplified mode.
