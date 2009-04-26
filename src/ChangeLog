@@ -1,3 +1,8 @@
+2009-04-26  Moritz  <moritz@gnu.org>
+
+	* options.c (determine_default_key): Replaced dummy code with
+	working code.
+
 2009-04-20  Moritz  <moritz@gnu.org>
 
 	* cm-openpgp.c (save_attr): Call gpa_cm_object_alert_dialog()

@@ -279,35 +279,37 @@ determine_default_key (void)
 {
   gpgme_key_t key = NULL;
   gpg_error_t err;
-  gpgme_ctx_t ctx/* = gpa_gpgme_new ()*/;
+  gpgme_ctx_t ctx;
 
-  return NULL;
+  ctx = gpa_gpgme_new ();
+  if (!ctx)
+    return NULL;
 
   err = gpgme_op_keylist_start (ctx, NULL, 1);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     {
-      gpa_gpgme_warning (err);
+      gpa_gpgme_error (err); 	/* Or should we use
+				   gpa_gpgme_warning()?  -mo*/
     }
   else
     {
       err = gpgme_op_keylist_next (ctx, &key);
-      if (gpg_err_code (err) == GPG_ERR_NO_ERROR)
+      if (!err)
 	{
+	  /* Got a new key. */
 	  err = gpgme_op_keylist_end (ctx);
 	  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	    {
 	      gpa_gpgme_warning (err); 
 	    }
 	}
-      else if (gpg_err_code (err) == GPG_ERR_EOF)
+      else if (gpg_err_code (err) != GPG_ERR_EOF)
 	{
-	  /* No secret keys found */
-	}
-      else
-	{
-	  gpa_gpgme_warning (err);
+	  gpa_gpgme_error (err); 	/* Or should we use
+					   gpa_gpgme_warning()?  -mo*/
 	}
     }
+
   gpgme_release (ctx);
   return key;
 }
