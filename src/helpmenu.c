@@ -68,11 +68,9 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
     "Copyright \xc2\xa9 2000-2002 G-N-U GmbH\n"
     "Copyright \xc2\xa9 2002-2003 Miguel Coca\n"
     "Copyright \xc2\xa9 2005-2008 g10 Code GmbH";
-#ifdef HAVE_W32_SYSTEM
-  static const gchar website[] = "http://www.gpg4win.org/";
-#else
-  static const gchar website[] = "http://www.gnupg.org/";
-#endif
+  static const gchar website[] = "http://www.gnupg.org/related_software/gpa/";
+  static const gchar website_label[] = "www.gnupg.org";
+
 
   GdkPixbuf *logo;
 
@@ -84,6 +82,7 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
 			 /* Only clickable if
 			    gtk_about_dialog_set_url_hook() is
 			    used.  */
+                         "website-label", website_label,
 			 "website", website,
 			 "copyright", copyright,
 			 "comments", _("GPA is the GNU Privacy Assistant."),

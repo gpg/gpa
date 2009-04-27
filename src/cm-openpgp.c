@@ -799,7 +799,7 @@ save_entry_sig_force_pin (GpaCMOpenpgp *card)
 
 /* Callback for the "changed" signal connected to entry fields.  We
    figure out the entry field for which this signal has been emitted
-   and set a flag to know ehether we have unsaved data.  */
+   and set a flag to know wether we have unsaved data.  */
 static void
 edit_changed_cb (GtkEditable *editable, void *opaque)
 {

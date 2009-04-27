@@ -1,3 +1,8 @@
+2009-04-27  Werner Koch  <wk@g10code.com>
+
+	* helpmenu.c (gpa_help_about): Link directly to the GPA page.  Use
+	the same dialog for W32 and !W32.  
+
 2009-04-26  Moritz  <moritz@gnu.org>
 
 	* options.c (determine_default_key): Replaced dummy code with

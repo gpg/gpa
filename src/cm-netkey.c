@@ -466,7 +466,7 @@ reload_data (GpaCMNetkey *card)
     { NULL }
   };
   int attridx;
-  gpg_error_t err;
+  gpg_error_t err = 0;
   char command[100];
   struct scd_getattr_parm parm;
   gpgme_ctx_t gpgagent;
@@ -540,7 +540,6 @@ learn_keys_gpg_status_cb (void *opaque, char *line)
   if (!line)
     {
       /* We are finished with the command.  */
-      g_debug ("learn_keys_gpg_status_cb: cleanup");
       /* Trigger a reload of the key data.  */
       g_object_ref (parm->card);
       g_idle_add (reload_more_data_idle_cb, parm->card);
@@ -552,7 +551,6 @@ learn_keys_gpg_status_cb (void *opaque, char *line)
       return FALSE; /* (The return code does not matter here.)  */
     }
 
-  g_debug ("learn_keys_gpg_status_cb: `%s'", line);
   if (!strncmp (line, "PROGRESS", 8))
     gtk_progress_bar_pulse (parm->pbar);
 
@@ -571,7 +569,6 @@ learn_keys_clicked_cb (GtkButton *button, void *user_data)
 
   parm = xcalloc (1, sizeof *parm);
 
-  g_debug ("learn keys clicked");
   gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
   widget = gtk_bin_get_child (GTK_BIN (button));
   if (widget)
