@@ -1,3 +1,12 @@
+2009-05-04  Werner Koch  <wk@g10code.com>
+
+	* keylist.h (struct _GpaKeyList): Add field DISPOSED.
+	* keylist.c (gpa_keylist_get_type): Remove casts.
+	(gpa_keylist_class_init): Use correct function prototype.
+	(gpa_keylist_init): Ditto.
+	(gpa_keylist_constructor): Merge into gpa_keylist_init.
+	(gpa_keylist_dispose): New.
+
 2009-04-27  Werner Koch  <wk@g10code.com>
 
 	* helpmenu.c (gpa_help_about): Link directly to the GPA page.  Use

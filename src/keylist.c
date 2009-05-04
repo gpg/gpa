@@ -149,6 +149,18 @@ gpa_keylist_set_property (GObject     *object,
     }
 }
 
+
+static void
+gpa_keylist_dispose (GObject *object)
+{  
+  GpaKeyList *list = GPA_KEYLIST (object);
+
+  list->disposed = 1;
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+
 static void
 gpa_keylist_finalize (GObject *object)
 {  
@@ -157,6 +169,7 @@ gpa_keylist_finalize (GObject *object)
   /* Dereference all keys in the list */
   g_list_foreach (list->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (list->keys);
+  list->keys = NULL;
   gpa_gpgme_release_keyarray (list->initial_keys);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -164,28 +177,13 @@ gpa_keylist_finalize (GObject *object)
 
 
 static void
-gpa_keylist_init (GpaKeyList *list)
+gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
 {
-
-}
-
-
-static GObject*
-gpa_keylist_constructor (GType type,
-                         guint n_construct_properties,
-                         GObjectConstructParam *construct_properties)
-{
-  GObject *object;
-  GpaKeyList *list;
+  GpaKeyList *list = GPA_KEYLIST (instance);
   GtkListStore *store;
   GtkTreeSelection *selection; 
 
-  object = parent_class->constructor (type,
-				      n_construct_properties,
-				      construct_properties);
-  list = GPA_KEYLIST (object);
-
-   /* Init the model */
+  /* Setup the model.  */
   store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
@@ -200,13 +198,14 @@ gpa_keylist_constructor (GType type,
 			      G_TYPE_ULONG,
 			      G_TYPE_LONG);
 
-  /* The view */
+  /* Setup the view.  */
   gtk_tree_view_set_model (GTK_TREE_VIEW (list), GTK_TREE_MODEL (store));
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
   gpa_keylist_set_brief (list);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-  /* Load the keyring */
+
+  /* Load the keyring.  */
   add_trustdb_dialog (list);
   if (list->initial_keys)
     {
@@ -227,18 +226,20 @@ gpa_keylist_constructor (GType type,
       gpa_keytable_list_keys (gpa_keytable_get_public_instance(),
                               gpa_keylist_next, gpa_keylist_end, list);
     }
-  return object;
+
 }
 
 
+
 static void
-gpa_keylist_class_init (GpaKeyListClass *klass)
+gpa_keylist_class_init (void *class_ptr, void *class_data)
 {
+  GpaKeyListClass *klass = class_ptr;
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
-  object_class->constructor = gpa_keylist_constructor;
+  object_class->dispose = gpa_keylist_dispose;
   object_class->finalize = gpa_keylist_finalize;
   object_class->set_property = gpa_keylist_set_property;
   object_class->get_property = gpa_keylist_get_property;
@@ -298,17 +299,17 @@ gpa_keylist_get_type (void)
         sizeof (GpaKeyListClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gpa_keylist_class_init,
+        gpa_keylist_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
         sizeof (GpaKeyList),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gpa_keylist_init,
+        gpa_keylist_init,
       };
       
       keylist_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
-						  "GpaKeyList",
-						  &keylist_info, 0);
+                                             "GpaKeyList",
+                                             &keylist_info, 0);
     }
   
   return keylist_type;
@@ -415,6 +416,9 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
 
   /* Remove the dialog if it is being displayed */
   remove_trustdb_dialog (list);
+
+  if (list->disposed)
+    return;  /* Should not access our store anymore.  */
 
   /* Filter out keys we don't want.  */
   if (key && list->protocol != GPGME_PROTOCOL_UNKNOWN

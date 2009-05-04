@@ -54,6 +54,8 @@ struct _GpaKeyList {
   gpgme_key_t *initial_keys;
   const char *initial_pattern;
   int requested_usage;
+
+  int disposed;
 };
 
 struct _GpaKeyListClass {
