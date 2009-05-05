@@ -1,4 +1,15 @@
+2009-05-05  Werner Koch  <wk@g10code.com>
+
+	* keyring.h: Rename to keymanager.h and rewrite.
+	* keyring.c: Rename to keymanager.c and rewrte as proper GObject.
+	* gpa.c (gpa_open_keyring_editor): Adjust for changed keymanager.
+	Rename to gpa_open_key_manager.
+	(quit_if_no_window): Ditto.
+	(keyringeditor): Remove.
+
 2009-05-04  Werner Koch  <wk@g10code.com>
+
+	* fileman.c (DIM): Remove as it is already in gpa.h.
 
 	* keylist.h (struct _GpaKeyList): Add field DISPOSED.
 	* keylist.c (gpa_keylist_get_type): Remove casts.

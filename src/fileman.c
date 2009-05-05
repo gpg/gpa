@@ -49,11 +49,6 @@
 #include "gpafileverifyop.h"
 
 
-/* FIXME:  Move to a gloabl file.  */
-#ifndef DIM
-#define DIM(array) (sizeof (array) / sizeof (*array))
-#endif
-
 #if ! GTK_CHECK_VERSION (2, 10, 0)
 #define GTK_STOCK_SELECT_ALL "gtk-select-all"
 #endif

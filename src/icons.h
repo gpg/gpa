@@ -34,20 +34,19 @@ void gpa_register_stock_items (void);
 #define GPA_STOCK_DECRYPT "gpa-decrypt"
 
 /* Windows items.  */
-#define GPA_STOCK_KEYRING_EDITOR "gpa-keyring"
-/* Simplified version of GPA_STOCK_KEYRING_EDITOR.  */
-#define GPA_STOCK_KEYRING "gpa-keyringeditor"
-#define GPA_STOCK_FILEMAN "gpa-fileman"
-#define GPA_STOCK_CLIPBOARD "gpa-clipboard"
-#define GPA_STOCK_CARDMAN "gpa-cardman"
+#define GPA_STOCK_KEYMAN        "gpa-keyring"
+#define GPA_STOCK_KEYMAN_SIMPLE "gpa-keyringeditor"
+#define GPA_STOCK_FILEMAN       "gpa-fileman"
+#define GPA_STOCK_CLIPBOARD     "gpa-clipboard"
+#define GPA_STOCK_CARDMAN       "gpa-cardman"
 
-/* Toolbar in keyring editor.  */
-#define GPA_STOCK_BRIEF "gpa-brief"
+/* Toolbar in key manager.  */
+#define GPA_STOCK_BRIEF    "gpa-brief"
 #define GPA_STOCK_DETAILED "gpa-detailed"
-#define GPA_STOCK_EDIT "gpa-edit"
-#define GPA_STOCK_IMPORT "gpa-import"
-#define GPA_STOCK_EXPORT "gpa-export"
-#define GPA_STOCK_BACKUP "gpa-backup"
+#define GPA_STOCK_EDIT     "gpa-edit"
+#define GPA_STOCK_IMPORT   "gpa-import"
+#define GPA_STOCK_EXPORT   "gpa-export"
+#define GPA_STOCK_BACKUP   "gpa-backup"
 
 #define GPA_STOCK_SECRET_CARDKEY "gpa-secret-cardkey"
 #define GPA_STOCK_SECRET_KEY "gpa-secret-key"

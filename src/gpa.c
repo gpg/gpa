@@ -32,7 +32,7 @@
 
 #include "get-path.h"
 #include "gpa.h"
-#include "keyring.h"
+#include "keymanager.h"
 #include "fileman.h"
 #include "clipboard.h"
 #include "cardman.h"
@@ -61,7 +61,7 @@ gboolean disable_ticker;
 /* Local variables.  */
 typedef struct
 {
-  gboolean start_keyring_editor;
+  gboolean start_key_manager;
   gboolean start_file_manager;
   gboolean start_card_manager;
   gboolean start_clipboard;
@@ -76,13 +76,12 @@ static gpa_args_t args;
 /* The copyright notice.  */
 static const char *copyright = 
 "Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
-"Copyright (C) 2008 g10 Code GmbH.\n"
+"Copyright (C) 2008, 2009 g10 Code GmbH.\n"
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "This is free software, and you are welcome to redistribute it\n"
 "under certain conditions.  See the file COPYING for details.\n";
 
 
-static GtkWidget *keyringeditor = NULL;
 static GtkWidget *backend_config_dialog = NULL;
 
 
@@ -95,8 +94,8 @@ static GOptionEntry option_entries[] =
     { "version", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
       (gpointer) &print_version,
       N_("Output version information and exit"), NULL, },
-    { "keyring", 'k', 0, G_OPTION_ARG_NONE, &args.start_keyring_editor,
-      N_("Open keyring editor (default)"), NULL },
+    { "keyring", 'k', 0, G_OPTION_ARG_NONE, &args.start_key_manager,
+      N_("Open key manager (default)"), NULL },
     { "files", 'f', 0, G_OPTION_ARG_NONE, &args.start_file_manager,
       N_("Open file manager"), NULL },
     { "card", 'C', 0, G_OPTION_ARG_NONE, &args.start_card_manager,
@@ -170,8 +169,8 @@ i18n_init (void)
 static void
 quit_if_no_window (void)
 {
-  if (!keyringeditor 
-      && !args.start_only_server
+  if (!args.start_only_server
+      && !gpa_key_manager_is_open ()
       && !gpa_file_manager_is_open ()
       && !gpa_clipboard_is_open ()
 #ifdef BUILD_CARD_MANAGER
@@ -192,19 +191,20 @@ close_main_window (GtkWidget *widget, gpointer param)
 }
 
 
-/* Show the keyring editor dialog.  */
+/* Show the key manager dialog.  */
 void
-gpa_open_keyring_editor (GtkAction *action, void *data)
+gpa_open_key_manager (GtkAction *action, void *data)
 {
-  if (! keyringeditor)
-    {
-      keyringeditor = keyring_editor_new ();
-      g_signal_connect (G_OBJECT (keyringeditor), "destroy",
-			G_CALLBACK (close_main_window), &keyringeditor);
-      gtk_widget_show_all (keyringeditor);
-    }
+  GtkWidget *widget;
+  gboolean created;
 
-  gtk_window_present (GTK_WINDOW (keyringeditor));
+  widget = gpa_key_manager_get_instance (&created);
+  if (created)
+    g_signal_connect (G_OBJECT (widget), "destroy",
+                      G_CALLBACK (quit_if_no_window), NULL);
+
+  gtk_widget_show_all (widget);
+  gtk_window_present (GTK_WINDOW (widget));
 }
 
 
@@ -213,7 +213,9 @@ void
 gpa_open_clipboard (GtkAction *action, void *data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
-     created the first time?  Looks like a memory leak to me.  */
+     created the first time?  Looks like a memory leak to me.  Right:
+     although the closure is ref counted an inetrnal data object will
+     get allocated.  */
   g_signal_connect (G_OBJECT (gpa_clipboard_get_instance ()), "destroy",
 		    G_CALLBACK (quit_if_no_window), NULL);
   gtk_widget_show_all (gpa_clipboard_get_instance ());
@@ -399,8 +401,8 @@ main (int argc, char *argv[])
   if (args.start_only_server)
     cms_hack = 1; 
 
-  /* Start the keyring editor by default.  */
-  if (!args.start_keyring_editor 
+  /* Start the key manger by default.  */
+  if (!args.start_key_manager
       && !args.start_file_manager
       && !args.start_clipboard
       && !args.start_settings
@@ -408,7 +410,7 @@ main (int argc, char *argv[])
       && !args.start_card_manager
 #endif
       )
-    args.start_keyring_editor = TRUE;
+    args.start_key_manager = TRUE;
 
   /* Note: We can not use GPGME's engine info, as that returns NULL
      (default) for home_dir.  Consider improving GPGME to get it from
@@ -455,10 +457,10 @@ main (int argc, char *argv[])
     }
   else
     {
-      /* Don't open the keyring editor if any files are given on the
-         command line.  Ditto for the clipboard.   */
-      if (args.start_keyring_editor && (optind >= argc))
-	gpa_open_keyring_editor (NULL, NULL);
+      /* Don't open the key manager if any files are given on the
+         command line.  Ditto for the clipboard.  */
+      if (args.start_key_manager && (optind >= argc))
+	gpa_open_key_manager (NULL, NULL);
 
       if (args.start_clipboard && (optind >= argc))
 	gpa_open_clipboard (NULL, NULL);

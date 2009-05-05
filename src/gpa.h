@@ -54,7 +54,7 @@ extern gboolean cms_hack;
 extern gboolean disable_ticker;
 
 /* Show the keyring editor dialog.  */
-void gpa_open_keyring_editor (GtkAction *action, void *data);
+void gpa_open_key_manager (GtkAction *action, void *data);
 
 /* Show the filemanager dialog.  */
 void gpa_open_filemanager (GtkAction *action, void *data);
@@ -70,8 +70,8 @@ static const GtkActionEntry gpa_windows_menu_action_entries[] =
   {
       { "Windows", NULL, N_("_Windows"), NULL },
 
-      { "WindowsKeyringEditor", GPA_STOCK_KEYRING, NULL, NULL,
-	N_("Open the keyring editor"), G_CALLBACK (gpa_open_keyring_editor) },
+      { "WindowsKeyringEditor", GPA_STOCK_KEYMAN, NULL, NULL,
+	N_("Open the keyring editor"), G_CALLBACK (gpa_open_key_manager) },
       { "WindowsFileManager", GPA_STOCK_FILEMAN, NULL, NULL,
 	N_("Open the file manager"), G_CALLBACK (gpa_open_filemanager) },
       { "WindowsClipboard", GPA_STOCK_CLIPBOARD, NULL, NULL,
