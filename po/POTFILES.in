@@ -55,7 +55,7 @@ src/keyeditdlg.c
 src/keygendlg.c
 src/keygenwizard.c
 src/keylist.c
-src/keyring.c
+src/keymanager.c
 src/gpa-key-details.c
 src/keyserver.c
 src/keysigndlg.c

@@ -1,3 +1,7 @@
+2009-05-07  Werner Koch  <wk@g10code.com>
+
+	* POTFILES.in: s/keyring.c/keymanager.c/.
+
 2009-04-10  Moritz  <moritz@gnu.org>
 
 	* de.po: Added translations for days/weeks/months/years.
