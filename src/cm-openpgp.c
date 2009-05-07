@@ -62,7 +62,6 @@ enum
   }; 
 
 
-
 /* Object's class definition.  */
 struct _GpaCMOpenpgpClass 
 {
@@ -85,6 +84,12 @@ struct _GpaCMOpenpgp
 
   /* An array of 3 widgets to hold the key_details widget.  */
   GtkWidget *key_details[3];
+
+  /* The key attributes.  */
+  struct {
+    int algo;
+    int nbits;
+  } key_attr[3];
 
   GtkLabel  *puk_label;  /* The label of the PUK field.  */
 
@@ -423,6 +428,65 @@ update_entry_fpr (GpaCMOpenpgp *card, int entry_id, const char *string)
 }
 
 
+/* Update the key attributes.  We don't have a regular entry field but
+   append it to the version number field.  We are called for each key
+   in turn and thus we only collect the information here and print
+   them if we care called with STRING set to NULL.  */
+static void
+update_entry_key_attr (GpaCMOpenpgp *card, int entry_id, const char *string)
+{
+  int keyno, algo, nbits;
+  char *buf, *tmpbuf;
+  const char *s;
+  int items;
+
+  (void)entry_id; /* Not used.  */
+
+  if (string)
+    {
+      sscanf (string, "%d %d %d", &keyno, &algo, &nbits);
+      keyno--;
+      if (keyno >= 0 && keyno < DIM (card->key_attr))
+        {
+          card->key_attr[keyno].algo = algo;
+          card->key_attr[keyno].nbits = nbits;
+        }
+    }
+  else
+    {
+      for (keyno=1; keyno < DIM (card->key_attr); keyno++)
+        if (card->key_attr[0].algo != card->key_attr[keyno].algo
+            || card->key_attr[0].nbits != card->key_attr[keyno].nbits)
+          break;
+      if (keyno < DIM (card->key_attr))
+        items = DIM (card->key_attr); /* Attributes are mixed.  */
+      else
+        items = 1; /* All the same attributes.  */
+          
+      buf = NULL;
+      for (keyno=0; keyno < items; keyno++)
+        {
+          tmpbuf = g_strdup_printf ("%s%s%s-%d", 
+                                    buf? buf : "",
+                                    buf? ", ":"",
+                                    card->key_attr[keyno].algo ==  1?"RSA":
+                                    card->key_attr[keyno].algo == 17?"DSA":"?",
+                                    card->key_attr[keyno].nbits);
+          g_free (buf);
+          buf = tmpbuf;
+        }
+
+      s = gtk_label_get_text (GTK_LABEL (card->entries[ENTRY_VERSION]));
+      if (!s)
+        s = "";
+      tmpbuf = g_strdup_printf ("%s  (%s)", s, buf);
+      g_free (buf);
+      gtk_label_set_text (GTK_LABEL (card->entries[ENTRY_VERSION]), tmpbuf);
+      g_free (tmpbuf);
+    }
+}
+
+
 struct scd_getattr_parm
 {
   GpaCMOpenpgp *card;  /* The object.  */
@@ -477,6 +541,14 @@ scd_getattr_cb (void *opaque, const char *status, const char *args)
               (GTK_ENTRY (parm->card->entries[entry_id]), tmp);
           xfree (tmp);
         }
+      else if (entry_id == ENTRY_LAST && parm->updfnc)
+        {
+          char *tmp = xstrdup (args);
+
+          percent_unescape (tmp, 1);
+          parm->updfnc (parm->card, entry_id, tmp);
+          xfree (tmp);
+        }
     }
 
   return 0;
@@ -503,6 +575,7 @@ reload_data (GpaCMOpenpgp *card)
     { "CHV-STATUS", ENTRY_PIN_RETRYCOUNTER,  update_entry_chv_status },
     { "KEY-FPR",    ENTRY_LAST, update_entry_fpr },
 /*     { "CA-FPR", }, */
+    { "KEY-ATTR",   ENTRY_LAST, update_entry_key_attr },
     { NULL }
   };
   int attridx;
@@ -547,6 +620,7 @@ reload_data (GpaCMOpenpgp *card)
         }
 
     }
+  update_entry_key_attr (card, 0, NULL);  /* Append ky attributes.  */
   clear_changed_flags (card);
   card->reloading--;
 }
