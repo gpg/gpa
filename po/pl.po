@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-03-16 18:06+0100\n"
+"POT-Creation-Date: 2009-05-13 19:57+0200\n"
 "PO-Revision-Date: 2004-08-22 02:23+0200\n"
 "Last-Translator: Emilian Nowak <emil5@go2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -15,11 +15,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/clipboard.c:375 src/fileman.c:394
+#: src/clipboard.c:375 src/fileman.c:389
 msgid "Open File"
 msgstr "Otwórz plik"
 
-#: src/clipboard.c:403 src/confdialog.c:1274 src/gtktools.c:82
+#: src/clipboard.c:403 src/confdialog.c:1274 src/gtktools.c:85
 msgid "GPA Message"
 msgstr "Komunikat GPA"
 
@@ -41,12 +41,14 @@ msgstr ""
 msgid "Clipboard"
 msgstr ""
 
-#: src/clipboard.c:754 src/fileman.c:517 src/keyring.c:862 src/cardman.c:590
+#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:867
+#: src/cardman.c:615
 #, fuzzy
 msgid "_File"
 msgstr "/_Plik"
 
-#: src/clipboard.c:755 src/fileman.c:518 src/keyring.c:863 src/cardman.c:591
+#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:868
+#: src/cardman.c:616
 #, fuzzy
 msgid "_Edit"
 msgstr "/_Edycja"
@@ -55,7 +57,7 @@ msgstr "/_Edycja"
 msgid "Clear buffer"
 msgstr ""
 
-#: src/clipboard.c:761 src/fileman.c:522
+#: src/clipboard.c:761 src/fileman.c:517
 msgid "Open a file"
 msgstr "Otwiera plik"
 
@@ -88,7 +90,8 @@ msgstr "Deszyfruje wybrany plik"
 msgid "Close the buffer"
 msgstr ""
 
-#: src/clipboard.c:775 src/fileman.c:536 src/keyring.c:871 src/cardman.c:596
+#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:876
+#: src/cardman.c:621
 msgid "Quit the program"
 msgstr ""
 
@@ -106,12 +109,12 @@ msgstr ""
 msgid "Cut the selection"
 msgstr "Szyfruje wybrany plik"
 
-#: src/clipboard.c:788 src/keyring.c:875
+#: src/clipboard.c:788 src/keymanager.c:880
 #, fuzzy
 msgid "Copy the selection"
 msgstr "Szyfruje wybrany plik"
 
-#: src/clipboard.c:790 src/keyring.c:877
+#: src/clipboard.c:790 src/keymanager.c:882
 msgid "Paste the clipboard"
 msgstr ""
 
@@ -124,16 +127,16 @@ msgstr "Deszyfruje wybrany plik"
 msgid "Select the entire document"
 msgstr ""
 
-#: src/clipboard.c:908 src/fileman.c:634 src/cardman.c:680
+#: src/clipboard.c:908 src/fileman.c:629 src/cardman.c:706
 #, fuzzy
 msgid "Keyring"
 msgstr "Edytor zbioru kluczy"
 
-#: src/clipboard.c:910 src/keyring.c:1058 src/cardman.c:682
+#: src/clipboard.c:910 src/keymanager.c:1063 src/cardman.c:708
 msgid "Files"
 msgstr "Pliki"
 
-#: src/clipboard.c:913 src/fileman.c:637 src/keyring.c:1061
+#: src/clipboard.c:913 src/fileman.c:632 src/keymanager.c:1066
 msgid "Card"
 msgstr ""
 
@@ -207,6 +210,43 @@ msgstr ""
 msgid "Expert"
 msgstr "Eksport"
 
+#: src/convert.c:29
+msgid "days"
+msgstr "dni"
+
+#: src/convert.c:30
+msgid "weeks"
+msgstr "tygodni"
+
+#: src/convert.c:31
+msgid "months"
+msgstr "miesięcy"
+
+#: src/convert.c:32
+msgid "years"
+msgstr "lat"
+
+#: src/convert.c:89
+msgid "never expires"
+msgstr "nie traci ważności"
+
+#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:501
+msgid "unknown"
+msgstr "nieznany"
+
+#: src/convert.c:117
+msgid "Mr."
+msgstr ""
+
+#: src/convert.c:119
+msgid "Ms."
+msgstr ""
+
+#: src/convert.c:123
+#, fuzzy
+msgid "(unknown)"
+msgstr "nieznany"
+
 #: src/encryptdlg.c:152
 #, fuzzy
 msgid "Encrypt documents"
@@ -248,49 +288,49 @@ msgstr "_nigdy nie wygasa"
 msgid "_expire on:"
 msgstr "_wygasa dnia:"
 
-#: src/fileman.c:524
+#: src/fileman.c:519
 msgid "Close all files"
 msgstr "Zamyka wszystkie pliki"
 
-#: src/fileman.c:526
+#: src/fileman.c:521
 msgid "Sign the selected file"
 msgstr "Podpisuje wybrany pliki"
 
-#: src/fileman.c:528
+#: src/fileman.c:523
 msgid "Check signatures of selected file"
 msgstr "Sprawdza podpis wybranego pliku"
 
-#: src/fileman.c:530
+#: src/fileman.c:525
 msgid "Encrypt the selected file"
 msgstr "Szyfruje wybrany plik"
 
-#: src/fileman.c:532
+#: src/fileman.c:527
 msgid "Decrypt the selected file"
 msgstr "Deszyfruje wybrany plik"
 
-#: src/fileman.c:534
+#: src/fileman.c:529
 msgid "Close the window"
 msgstr ""
 
-#: src/fileman.c:540
+#: src/fileman.c:535
 #, fuzzy
 msgid "Select all files"
 msgstr "Zamyka wszystkie pliki"
 
-#: src/fileman.c:744
+#: src/fileman.c:739
 msgid "File"
 msgstr "Plik"
 
-#: src/fileman.c:809
+#: src/fileman.c:804
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - Menedżer plików "
 
-#: src/fileman.c:832
+#: src/fileman.c:827
 #, fuzzy
 msgid "File Manager"
 msgstr "menedżer plików"
 
-#: src/fileman.c:908
+#: src/fileman.c:903
 msgid "The file is already open."
 msgstr "Ten plik jest już otwarty"
 
@@ -323,90 +363,90 @@ msgstr "podpisz _czystym tekstem"
 msgid "_Detached signature"
 msgstr "podpisz _czystym tekstem"
 
-#: src/gpa.c:94
+#: src/gpa.c:96
 #, fuzzy
 msgid "Output version information and exit"
 msgstr "wyświetlenie informacji o wersji i zakończenie"
 
-#: src/gpa.c:96
+#: src/gpa.c:98
 #, fuzzy
-msgid "Open keyring editor (default)"
+msgid "Open key manager (default)"
 msgstr "otwiera edytor zbioru kluczy (domyślne)"
 
-#: src/gpa.c:98
+#: src/gpa.c:100
 #, fuzzy
 msgid "Open file manager"
 msgstr "otwiera okno menedżera plików"
 
-#: src/gpa.c:100 src/gpa.h:81
+#: src/gpa.c:102 src/gpa.h:80
 #, fuzzy
 msgid "Open the card manager"
 msgstr "Otwiera okno menedżera plików"
 
-#: src/gpa.c:102
+#: src/gpa.c:104
 msgid "Open clipboard"
 msgstr ""
 
-#: src/gpa.c:104
+#: src/gpa.c:106
 #, fuzzy
 msgid "Open the settings dialog"
 msgstr "Otwiera okno dialogowe z ustawieniami"
 
-#: src/gpa.c:106
-msgid "Enable the UI server (implies --cms)"
+#: src/gpa.c:108
+msgid "Enable the UI server"
 msgstr ""
 
-#: src/gpa.c:108
+#: src/gpa.c:110
 #, fuzzy
 msgid "Read options from file"
 msgstr "odczytuje opcje z podanego pliku"
 
-#: src/gpa.c:310
+#: src/gpa.c:318
 msgid "[FILE...]"
 msgstr ""
 
-#: src/gpa.c:312
+#: src/gpa.c:320
 #, fuzzy
 msgid "Graphical frontend to GnuPG"
 msgstr ""
 "Składnia: gpa [opcje]\n"
 "Nakładka graficzna na GnuPG\n"
 
-#: src/gpa.c:313
+#: src/gpa.c:321
 msgid "Please report bugs to <"
 msgstr "Raporty o błędach wysyłaj do <"
 
-#: src/gpa.h:72
+#: src/gpa.h:71
 #, fuzzy
 msgid "_Windows"
 msgstr "/_Okna"
 
-#: src/gpa.h:75
+#: src/gpa.h:74
 #, fuzzy
 msgid "Open the keyring editor"
 msgstr "otwiera edytor zbioru kluczy (domyślne)"
 
-#: src/gpa.h:77
+#: src/gpa.h:76
 #, fuzzy
 msgid "Open the file manager"
 msgstr "Otwiera okno menedżera plików"
 
-#: src/gpa.h:79
+#: src/gpa.h:78
 #, fuzzy
 msgid "Open the clipboard"
 msgstr "Otwiera okno menedżera plików"
 
-#: src/gpa.h:94
+#: src/gpa.h:93
 #, fuzzy
 msgid "Configure the application"
 msgstr "Szyfruje wybrany plik"
 
-#: src/gpa.h:97
+#: src/gpa.h:96
 #, fuzzy
 msgid "_Backend Preferences"
 msgstr "/Edycja/_Ustawienia..."
 
-#: src/gpa.h:98
+#: src/gpa.h:97
 msgid "Configure the backend programs"
 msgstr ""
 
@@ -470,13 +510,13 @@ msgstr ""
 "Na pewno chcesz rozpowszechnić ten klucz?"
 
 #: src/gpaexportserverop.c:134 src/gpafileencryptop.c:478
-#: src/gpafileverifyop.c:181 src/gpgmetools.c:155 src/keydeletedlg.c:44
+#: src/gpafileverifyop.c:181 src/gpgmetools.c:157 src/keydeletedlg.c:44
 #: src/keydeletedlg.c:93 src/keysigndlg.c:61
 msgid "_Yes"
 msgstr "_Tak"
 
 #: src/gpaexportserverop.c:135 src/gpafileencryptop.c:479
-#: src/gpafileverifyop.c:182 src/gpgmetools.c:156 src/keydeletedlg.c:46
+#: src/gpafileverifyop.c:182 src/gpgmetools.c:158 src/keydeletedlg.c:46
 #: src/keydeletedlg.c:95 src/keysigndlg.c:63
 msgid "_No"
 msgstr "_Nie"
@@ -541,7 +581,7 @@ msgid "Revoked Key"
 msgstr "Unieważniony klucz"
 
 #: src/gpafileencryptop.c:527 src/gpafileencryptop.c:567 src/gtktools.c:52
-#: src/gtktools.c:86 src/keyeditdlg.c:150 src/verifydlg.c:115
+#: src/gtktools.c:89 src/keyeditdlg.c:150 src/verifydlg.c:115
 msgid "_Close"
 msgstr "Z_amknij"
 
@@ -628,12 +668,12 @@ msgid ""
 "(you may not set the expiration time to the past.)"
 msgstr ""
 
-#: src/gpakeyselector.c:86 src/keylist.c:564 src/recipientdlg.c:191
+#: src/gpakeyselector.c:86 src/keylist.c:572 src/recipientdlg.c:191
 #: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "ID klucza"
 
-#: src/gpakeyselector.c:95 src/keylist.c:615 src/siglist.c:99
+#: src/gpakeyselector.c:95 src/keylist.c:623 src/siglist.c:99
 #: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "Nazwa użytkownika"
@@ -799,7 +839,7 @@ msgstr "Algorytm"
 msgid "Size"
 msgstr "Rozmiar"
 
-#: src/gpasubkeylist.c:108 src/keyeditdlg.c:169 src/keylist.c:577
+#: src/gpasubkeylist.c:108 src/keyeditdlg.c:169 src/keylist.c:585
 msgid "Expiry Date"
 msgstr "Data końca ważności"
 
@@ -851,16 +891,16 @@ msgstr ""
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:163 src/gpgmetools.c:635 src/gpgmetools.c:850
+#: src/gpasubkeylist.c:163 src/gpgmetools.c:633 src/gpgmetools.c:850
 #: src/gpgmetools.c:969
 msgid "Revoked"
 msgstr "Unieważniony"
 
-#: src/gpasubkeylist.c:167 src/gpgmetools.c:637 src/gpgmetools.c:965
+#: src/gpasubkeylist.c:167 src/gpgmetools.c:635 src/gpgmetools.c:965
 msgid "Expired"
 msgstr "Po terminie ważności"
 
-#: src/gpasubkeylist.c:171 src/gpgmetools.c:639
+#: src/gpasubkeylist.c:171 src/gpgmetools.c:637
 msgid "Disabled"
 msgstr "Wyłączone"
 
@@ -872,7 +912,7 @@ msgstr "Brak podpisów"
 msgid "Valid"
 msgstr "Poprawny"
 
-#: src/gpawidgets.c:71 src/gpgmetools.c:683 src/gpgmetools.c:690
+#: src/gpawidgets.c:71 src/gpgmetools.c:681 src/gpgmetools.c:688
 #: src/keysigndlg.c:100
 msgid "User Name:"
 msgstr "Nazwa użytkownika:"
@@ -881,28 +921,28 @@ msgstr "Nazwa użytkownika:"
 msgid "User Names:"
 msgstr "Nazwy użytkownika:"
 
-#: src/gpawidgets.c:77 src/gpgmetools.c:684 src/gpgmetools.c:691
-#: src/gpa-key-details.c:365
+#: src/gpawidgets.c:77 src/gpgmetools.c:682 src/gpgmetools.c:689
+#: src/gpa-key-details.c:291
 msgid "Key ID:"
 msgstr "ID klucza:"
 
-#: src/gpawidgets.c:179
+#: src/gpawidgets.c:180
 msgid "Expiration"
 msgstr "Data końca ważności"
 
-#: src/gpawidgets.c:186
+#: src/gpawidgets.c:187
 msgid "_indefinitely valid"
 msgstr "_zawsze ważny"
 
-#: src/gpawidgets.c:194
+#: src/gpawidgets.c:195
 msgid "expire _after"
 msgstr "traci ważność _po"
 
-#: src/gpawidgets.c:214
+#: src/gpawidgets.c:215
 msgid "expire o_n:"
 msgstr "traci ważność _dnia:"
 
-#: src/gpawidgets.c:288 src/keygendlg.c:344
+#: src/gpawidgets.c:289
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -916,7 +956,7 @@ msgid ""
 "Really replace existing keys?"
 msgstr ""
 
-#: src/gpgmetools.c:70
+#: src/gpgmetools.c:72
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -933,7 +973,7 @@ msgstr ""
 "\n"
 "Działanie aplikacji zostanie za chwilę przerwane"
 
-#: src/gpgmetools.c:86
+#: src/gpgmetools.c:88
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -953,7 +993,7 @@ msgstr ""
 "błędem w samym GPA.\n"
 "Nastąpi teraz próba powrotu do normalnego działania GPA."
 
-#: src/gpgmetools.c:152
+#: src/gpgmetools.c:154
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -962,7 +1002,7 @@ msgstr ""
 "Plik %s już istnieje.\n"
 "Czy chcesz go nadpisać?"
 
-#: src/gpgmetools.c:499
+#: src/gpgmetools.c:529
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -976,7 +1016,7 @@ msgstr ""
 "************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:504
+#: src/gpgmetools.c:534
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -984,56 +1024,44 @@ msgstr ""
 "Kopia zapasowa tego klucza znajduje się w pliku: \n"
 "\n"
 
-#: src/gpgmetools.c:565
-msgid "DSA and ElGamal (default)"
-msgstr "DSA oraz ElGamal (domyślne)"
-
-#: src/gpgmetools.c:566
-msgid "DSA (sign only)"
-msgstr "DSA (tylko do podpisywania)"
-
-#: src/gpgmetools.c:567
-msgid "RSA (sign only)"
-msgstr "RSA (tylko do podpisywania)"
-
-#: src/gpgmetools.c:603 src/gpgmetools.c:626 src/gpgmetools.c:643
+#: src/gpgmetools.c:601 src/gpgmetools.c:624 src/gpgmetools.c:641
 #: src/gpgmetools.c:961 src/gpgmetools.c:994
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: src/gpgmetools.c:606
+#: src/gpgmetools.c:604
 msgid "Never"
 msgstr "Nigdy"
 
-#: src/gpgmetools.c:609
+#: src/gpgmetools.c:607
 msgid "Marginal"
 msgstr "Marginalne"
 
-#: src/gpgmetools.c:612
+#: src/gpgmetools.c:610
 msgid "Full"
 msgstr "Pełne"
 
-#: src/gpgmetools.c:615
+#: src/gpgmetools.c:613
 msgid "Ultimate"
 msgstr "Nieograniczone"
 
-#: src/gpgmetools.c:641
+#: src/gpgmetools.c:639
 msgid "Incomplete"
 msgstr "Niepełne"
 
-#: src/gpgmetools.c:647
+#: src/gpgmetools.c:645
 msgid "Fully Valid"
 msgstr "W pełni poprawny"
 
-#: src/gpgmetools.c:681
+#: src/gpgmetools.c:679
 msgid "Please enter the passphrase for the following key:"
 msgstr "Proszę podać hasło dla następującego klucza:"
 
-#: src/gpgmetools.c:689
+#: src/gpgmetools.c:687
 msgid "Wrong passphrase, please try again:"
 msgstr "Niewłaściwe hasło, proszę spróbować ponownie:"
 
-#: src/gpgmetools.c:714
+#: src/gpgmetools.c:712
 msgid "Enter Passphrase"
 msgstr "Wprowadź hasło"
 
@@ -1106,22 +1134,26 @@ msgstr "Ten klucz może być użyty tylko do szyfrowania."
 msgid "This key is useless."
 msgstr "Ten klucz jest bezużyteczny."
 
+#: src/gpgmetools.c:1366
+msgid "Calling the crypto engine program failed."
+msgstr ""
+
 #: src/gtktools.c:48
 msgid "GPA Error"
 msgstr "Błąd GPA"
 
 #: src/helpmenu.c:83
-msgid "About GPA"
-msgstr "Informacje o GPA"
-
-#: src/helpmenu.c:89
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GNU Privacy Assistant - Menedżer plików "
 
+#: src/helpmenu.c:88
+msgid "About GPA"
+msgstr "Informacje o GPA"
+
 #. TRANSLATORS: The translation of this string should
 #. be your name and mail
-#: src/helpmenu.c:95
+#: src/helpmenu.c:101
 msgid "translator-credits"
 msgstr ""
 
@@ -1167,8 +1199,8 @@ msgstr "Szczegółowy"
 
 #: src/icons.c:208
 #, fuzzy
-msgid "_Keyring Editor"
-msgstr "Edytor zbioru kluczy"
+msgid "_Keyring Manager"
+msgstr "menedżer plików"
 
 #: src/icons.c:209
 #, fuzzy
@@ -1244,102 +1276,67 @@ msgstr "Zmień _hasło"
 msgid "Change _expiration"
 msgstr "Zmień datę utraty _ważności"
 
-#: src/keygendlg.c:77
-msgid "You must enter a key size."
+#: src/keygendlg.c:40
+msgid "RSA"
 msgstr ""
 
-#: src/keygendlg.c:82
+#: src/keygendlg.c:41
+msgid "RSA (sign only)"
+msgstr "RSA (tylko do podpisywania)"
+
+#: src/keygendlg.c:42
+msgid "DSA"
+msgstr ""
+
+#: src/keygendlg.c:43
+msgid "DSA (sign only)"
+msgstr "DSA (tylko do podpisywania)"
+
+#: src/keygendlg.c:90
 msgid "You must enter a User ID."
 msgstr ""
 
-#: src/keygendlg.c:87 src/passwddlg.c:45
-msgid ""
-"In \"Passphrase\" and \"Repeat passphrase\",\n"
-"you must enter the same passphrase."
+#: src/keygendlg.c:97
+msgid "You must enter a key size."
 msgstr ""
-"W polu \"Hasło\" i \"Powtórz hasło\",\n"
-"należy wpisać te same dane."
 
-#: src/keygendlg.c:94 src/passwddlg.c:52
-msgid ""
-"You did not enter a passphrase.\n"
-"It is needed to protect your private key."
-msgstr ""
-"Nie podano hasła.\n"
-"Jest ono niezbędna do zabezpieczenia twojego klucza prywatnego."
-
-#: src/keygendlg.c:107 src/passwddlg.c:65
-msgid ""
-"Warning: You have entered a passphrase\n"
-"that is obviously not secure.\n"
-"\n"
-"Please enter a new passphrase."
-msgstr ""
-"Uwaga: Wprowadzone przez Ciebie hasło\n"
-"jest łatwe do odgadnięcia.\n"
-"\n"
-"Proszę wprowadzić nowe hasło."
-
-#: src/keygendlg.c:112 src/passwddlg.c:70
-msgid "_Enter new passphrase"
-msgstr "_Wprowadź nowe hasło"
-
-#: src/keygendlg.c:114 src/passwddlg.c:71
-msgid "Take this one _anyway"
-msgstr "Mimo wszystko użyj _tego"
-
-#: src/keygendlg.c:164
+#: src/keygendlg.c:150
 #, fuzzy
 msgid "Generate new keys on card"
 msgstr "Wygeneruj klucz"
 
-#: src/keygendlg.c:164 src/keygenwizard.c:570 src/keygenwizard.c:583
-#: src/keygenwizard.c:593 src/keygenwizard.c:603 src/keygenwizard.c:615
-#: src/keygenwizard.c:632 src/keygenwizard.c:644
+#: src/keygendlg.c:150 src/keygenwizard.c:578 src/keygenwizard.c:591
+#: src/keygenwizard.c:601 src/keygenwizard.c:611 src/keygenwizard.c:623
+#: src/keygenwizard.c:640 src/keygenwizard.c:652 src/cardman.c:626
 msgid "Generate key"
 msgstr "Wygeneruj klucz"
 
-#: src/keygendlg.c:191
+#: src/keygendlg.c:174
 msgid "_Algorithm: "
 msgstr "_Algorytm: "
 
-#: src/keygendlg.c:212
+#: src/keygendlg.c:190
 msgid "_Key size (bits): "
 msgstr "_Rozmiar klucza (bity): "
 
-#: src/keygendlg.c:223 src/keygendlg.c:229
-msgid "1024"
-msgstr "1024"
-
-#: src/keygendlg.c:228
-msgid "768"
-msgstr "768"
-
-#: src/keygendlg.c:230
-msgid "2048"
-msgstr "2048"
-
-#: src/keygendlg.c:237
+#: src/keygendlg.c:226
 msgid "_User ID: "
 msgstr "Identyfikator _użytkownika: "
 
-#: src/keygendlg.c:248
+#: src/keygendlg.c:239
 msgid "_Email: "
 msgstr "_Email: "
 
-#: src/keygendlg.c:257
+#: src/keygendlg.c:252
 msgid "_Comment: "
 msgstr "_Komentarz: "
 
-#: src/keygendlg.c:276
-msgid "_Passphrase: "
-msgstr "_Hasło: "
+#: src/keygendlg.c:265
+#, fuzzy
+msgid "_Expires: "
+msgstr "Traci ważność:"
 
-#: src/keygendlg.c:287
-msgid "_Repeat passphrase: "
-msgstr "_Potwierdzenie hasła: "
-
-#: src/keygenwizard.c:171
+#: src/keygenwizard.c:175
 msgid ""
 "Please insert your full name.\n"
 "\n"
@@ -1351,11 +1348,11 @@ msgstr ""
 "Twoje dane personalne będą częścią nowego klucza, dzięki czemu łatwiej "
 "będzie innym osobom identyfikować do kogo należy dany klucz."
 
-#: src/keygenwizard.c:174
+#: src/keygenwizard.c:178
 msgid "Your Name:"
 msgstr "Twoje imię i nazwisko:"
 
-#: src/keygenwizard.c:210
+#: src/keygenwizard.c:214
 #, fuzzy
 msgid ""
 "Please insert your email address.\n"
@@ -1370,15 +1367,15 @@ msgstr ""
 "innym osobom identyfikować do kogo należy dany klucz. Jeżeli posiadasz kilka "
 "adresów email, to będzie można dodać je później."
 
-#: src/keygenwizard.c:214
+#: src/keygenwizard.c:218
 msgid "Your Email Address:"
 msgstr "Twój adres email:"
 
-#: src/keygenwizard.c:318
+#: src/keygenwizard.c:322
 msgid "Please choose a passphrase for the new key."
 msgstr "Proszę wybrać hasło dla nowo utworzonego klucza."
 
-#: src/keygenwizard.c:325
+#: src/keygenwizard.c:329
 #, fuzzy
 msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\", you must enter the same "
@@ -1387,23 +1384,23 @@ msgstr ""
 "W polu \"Hasło\" i \"Powtórz hasło\",\n"
 "należy wpisać te same dane."
 
-#: src/keygenwizard.c:334
+#: src/keygenwizard.c:338
 msgid "Warning: The passphrase you have entered is not very secure."
 msgstr ""
 
-#: src/keygenwizard.c:349
+#: src/keygenwizard.c:353
 msgid "Quality: "
 msgstr ""
 
-#: src/keygenwizard.c:357 src/passwddlg.c:111
+#: src/keygenwizard.c:361 src/passwddlg.c:111
 msgid "Passphrase: "
 msgstr "Hasło: "
 
-#: src/keygenwizard.c:369 src/passwddlg.c:120
+#: src/keygenwizard.c:373 src/passwddlg.c:120
 msgid "Repeat Passphrase: "
 msgstr "Powtórz hasło: "
 
-#: src/keygenwizard.c:411
+#: src/keygenwizard.c:415
 msgid ""
 "It is recommended that you create a backup copy of your new key, once it has "
 "been generated.\n"
@@ -1413,15 +1410,15 @@ msgstr ""
 "Zaleca się utworzenie kopii zapasowej klucza, zaraz po jego utworzeniu.\n"
 "Chcesz utworzyć kopię zapasową?"
 
-#: src/keygenwizard.c:419
+#: src/keygenwizard.c:423
 msgid "Create _backup copy"
 msgstr "Utwórz kopię _zapasową"
 
-#: src/keygenwizard.c:424 src/keyring.c:715 src/keyring.c:741
+#: src/keygenwizard.c:428 src/keymanager.c:731 src/keymanager.c:757
 msgid "Do it _later"
 msgstr "Zrób to _później"
 
-#: src/keygenwizard.c:453
+#: src/keygenwizard.c:457
 msgid ""
 "Your key is being generated.\n"
 "\n"
@@ -1432,19 +1429,20 @@ msgstr ""
 "Nawet na szybkich komputerach może, to trochę potrwać. Prosimy zachować "
 "cierpliwość."
 
-#: src/keygenwizard.c:462
+#: src/keygenwizard.c:469
+#, fuzzy, c-format
 msgid ""
 "Congratulations!\n"
 "\n"
 "You have successfully generated a key. The key is indefinitely valid and has "
-"a length of 1024 bits."
+"a length of %d bits."
 msgstr ""
 "Gratulacje!\n"
 "\n"
 "Twój klucz został poprawnie wygenerowany. Został on oznaczony jako poprawny "
 "i ma długość 1024 bitów."
 
-#: src/keylist.c:342
+#: src/keylist.c:344
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1452,54 +1450,54 @@ msgstr ""
 "GnuPG przebudowuje bazę danych zaufania.\n"
 "Może to zająć klika sekund."
 
-#: src/keylist.c:556
+#: src/keylist.c:564
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#: src/keylist.c:565
+#: src/keylist.c:573
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "Ten klucz może być użyty tylko do certyfikatów."
 
-#: src/keylist.c:578
+#: src/keylist.c:586
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
-#: src/keylist.c:588 src/ownertrustdlg.c:122
+#: src/keylist.c:596 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "Zaufanie do właściciela"
 
-#: src/keylist.c:589
+#: src/keylist.c:597
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
 
-#: src/keylist.c:601
+#: src/keylist.c:609
 #, fuzzy
 msgid "Validity"
 msgstr "Poprawność klucza"
 
-#: src/keylist.c:602
+#: src/keylist.c:610
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
 
-#: src/keylist.c:616
+#: src/keylist.c:624
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr ""
 
-#: src/keyring.c:432
+#: src/keymanager.c:447
 msgid "No keys selected for signing."
 msgstr "Nie wybrano kluczy do podpisu."
 
-#: src/keyring.c:710
+#: src/keymanager.c:726
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1507,11 +1505,11 @@ msgstr ""
 "Nie posiadasz jeszcze klucza prywatnego. Wygenerować taki klucz teraz "
 "(zalecane), czy uczynić to później?"
 
-#: src/keyring.c:714
+#: src/keymanager.c:730
 msgid "_Generate key now"
 msgstr "_Wygeneruj klucz teraz"
 
-#: src/keyring.c:735
+#: src/keymanager.c:751
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1519,247 +1517,259 @@ msgstr ""
 "Nie posiadasz kopii zapasowej swojego klucza prywatnego. Sporządzić kopię "
 "zapasową klucza teraz (zalecane), czy uczynić to później? "
 
-#: src/keyring.c:740
+#: src/keymanager.c:756
 msgid "_Backup key now"
 msgstr "_Sporządź kopię zapasową teraz"
 
-#: src/keyring.c:864
+#: src/keymanager.c:869
 #, fuzzy
 msgid "_Keys"
 msgstr "/_Klucze"
 
-#: src/keyring.c:865
+#: src/keymanager.c:870
 #, fuzzy
 msgid "_Server"
 msgstr "/_Serwer"
 
-#: src/keyring.c:879
+#: src/keymanager.c:884
 msgid "Select all certificates"
 msgstr ""
 
-#: src/keyring.c:884
+#: src/keymanager.c:889
 msgid "Refresh the keyring"
 msgstr "Odświeża zbiór kluczy"
 
-#: src/keyring.c:885
+#: src/keymanager.c:890
 #, fuzzy
 msgid "_New key..."
 msgstr "/Klucze/_Nowy Klucz..."
 
-#: src/keyring.c:886
+#: src/keymanager.c:891
 #, fuzzy
 msgid "Generate a new key"
 msgstr "Wygeneruj klucz"
 
-#: src/keyring.c:887
+#: src/keymanager.c:892
 #, fuzzy
 msgid "_Delete keys"
 msgstr "/_Usuń klucze..."
 
-#: src/keyring.c:888
+#: src/keymanager.c:893
 msgid "Remove the selected key"
 msgstr "Usuwa wybrany klucz"
 
-#: src/keyring.c:889
+#: src/keymanager.c:894
 #, fuzzy
 msgid "_Sign Keys..."
 msgstr "/_Podpisz klucze..."
 
-#: src/keyring.c:890
+#: src/keymanager.c:895
 msgid "Sign the selected key"
 msgstr "Podpisuje wybrany klucz"
 
-#: src/keyring.c:891
+#: src/keymanager.c:896
 #, fuzzy
 msgid "Set _Owner Trust..."
 msgstr "/Ustaw poziom zaufania do właściciela..."
 
-#: src/keyring.c:892
+#: src/keymanager.c:897
 #, fuzzy
 msgid "Set owner trust of the selected key"
 msgstr "Usuwa wybrany klucz"
 
-#: src/keyring.c:894
+#: src/keymanager.c:899
 #, fuzzy
 msgid "_Edit Private Key..."
 msgstr "/_Edytuj klucz prywatny..."
 
-#: src/keyring.c:895
+#: src/keymanager.c:900
 msgid "Edit the selected private key"
 msgstr "Edytuje wybrany klucz prywatny"
 
-#: src/keyring.c:897
+#: src/keymanager.c:902
 #, fuzzy
 msgid "_Import Keys..."
 msgstr "Importuje klucze"
 
-#: src/keyring.c:898
+#: src/keymanager.c:903
 msgid "Import Keys"
 msgstr "Importuje klucze"
 
-#: src/keyring.c:899
+#: src/keymanager.c:904
 #, fuzzy
 msgid "E_xport Keys..."
 msgstr "/E_ksportuj klucze..."
 
-#: src/keyring.c:900
+#: src/keymanager.c:905
 msgid "Export Keys"
 msgstr "Eksportuje klucze"
 
-#: src/keyring.c:901
+#: src/keymanager.c:906
 #, fuzzy
 msgid "_Backup..."
 msgstr "/_Kopia zapasowa..."
 
-#: src/keyring.c:902
+#: src/keymanager.c:907
 #, fuzzy
 msgid "Backup key"
 msgstr "Kopia zaspasowa kluczy"
 
-#: src/keyring.c:905
+#: src/keymanager.c:910
 #, fuzzy
 msgid "_Retrieve Keys..."
 msgstr "/Serwer/_Pobierz klucze..."
 
-#: src/keyring.c:906
+#: src/keymanager.c:911
 msgid "Retrieve keys from server"
 msgstr ""
 
-#: src/keyring.c:908
+#: src/keymanager.c:913
 #, fuzzy
 msgid "_Send Keys..."
 msgstr "/_Podpisz klucze..."
 
-#: src/keyring.c:909
+#: src/keymanager.c:914
 #, fuzzy
 msgid "Send keys to server"
 msgstr "/W_yślij klucze na serwer..."
 
-#: src/keyring.c:915
+#: src/keymanager.c:920
 msgid "Show Brief Keylist"
 msgstr "Pokazuje zwięzłą listę kluczy"
 
-#: src/keyring.c:917
+#: src/keymanager.c:922
 msgid "Show Key Details"
 msgstr "Pokazuje szczegółową listę kluczy"
 
-#: src/keyring.c:1048
+#: src/keymanager.c:1053
 msgid "Edit"
 msgstr "Edycja"
 
-#: src/keyring.c:1050
+#: src/keymanager.c:1055
 #, fuzzy
 msgid "Delete"
 msgstr "/Edycja/Wybierz _wszystko"
 
-#: src/keyring.c:1052
+#: src/keymanager.c:1057
 msgid "Sign"
 msgstr "Podpisz"
 
-#: src/keyring.c:1054
+#: src/keymanager.c:1059
 msgid "Export"
 msgstr "Eksport"
 
-#: src/keyring.c:1056
+#: src/keymanager.c:1061
 msgid "Import"
 msgstr "Import"
 
-#: src/keyring.c:1189
+#: src/keymanager.c:1194
 #, fuzzy
 msgid "Selected default key:"
 msgstr "Wybrano domyślny klucz"
 
-#: src/keyring.c:1199
+#: src/keymanager.c:1204
 msgid "No default key selected in the preferences."
 msgstr ""
 
-#: src/keyring.c:1295
-msgid "GNU Privacy Assistant - Keyring Editor"
-msgstr "GNU Privacy Assistant - Edytor zbioru kluczy"
+#: src/keymanager.c:1295
+#, fuzzy
+msgid "GNU Privacy Assistant - Key Manager"
+msgstr "GNU Privacy Assistant - Menedżer plików "
 
-#: src/keyring.c:1322
-msgid "Keyring Editor"
-msgstr "Edytor zbioru kluczy"
+#: src/keymanager.c:1323
+#, fuzzy
+msgid "Key Manager"
+msgstr "menedżer plików"
 
-#: src/gpa-key-details.c:128
+#: src/gpa-key-details.c:133
 #, fuzzy
 msgid "The key has both a smartcard based private part and a public part"
 msgstr "Klucz posiada zarówno cześć publiczną jak i prywatną"
 
-#: src/gpa-key-details.c:133
+#: src/gpa-key-details.c:138
 msgid "The key has both a private and a public part"
 msgstr "Klucz posiada zarówno cześć publiczną jak i prywatną"
 
-#: src/gpa-key-details.c:137
+#: src/gpa-key-details.c:142
 msgid "The key has only a public part"
 msgstr "Klucz posiada tylko część publiczną"
 
-#: src/gpa-key-details.c:173
+#: src/gpa-key-details.c:178
 #, c-format
 msgid "%s %u bits"
 msgstr "%s %u bit"
 
-#: src/gpa-key-details.c:199
+#: src/gpa-key-details.c:204
 msgid "No keys selected"
 msgstr "Nie wybrano żadnego klucza"
 
-#: src/gpa-key-details.c:202
+#: src/gpa-key-details.c:207
 #, fuzzy, c-format
 msgid "%d key selected"
 msgid_plural "%d keys selected"
 msgstr[0] "wybranych kluczy - %d"
 msgstr[1] "wybranych kluczy - %d"
 
-#: src/gpa-key-details.c:237
-msgid "All signatures"
-msgstr "Wszystkie podpisy"
-
-#: src/gpa-key-details.c:363
+#: src/gpa-key-details.c:289
 #, fuzzy
 msgid "User name:"
 msgstr "Nazwa użytkownika:"
 
-#: src/gpa-key-details.c:367 src/keysigndlg.c:106
+#: src/gpa-key-details.c:293 src/keysigndlg.c:106
 msgid "Fingerprint:"
 msgstr "Odcisk klucza:"
 
-#: src/gpa-key-details.c:369
+#: src/gpa-key-details.c:295
 msgid "Expires at:"
 msgstr "Traci ważność:"
 
-#: src/gpa-key-details.c:371
+#: src/gpa-key-details.c:297
 msgid "Owner Trust:"
 msgstr "Zaufanie do właściciela:"
 
-#: src/gpa-key-details.c:373
+#: src/gpa-key-details.c:299
 #, fuzzy
 msgid "Key validity:"
 msgstr "Poprawność klucza:"
 
-#: src/gpa-key-details.c:375
+#: src/gpa-key-details.c:301
 #, fuzzy
 msgid "Key type:"
 msgstr "Rodzaj klucza:"
 
-#: src/gpa-key-details.c:377
+#: src/gpa-key-details.c:303
 msgid "Created at:"
 msgstr "Utworzony dnia:"
 
-#: src/gpa-key-details.c:380
+#: src/gpa-key-details.c:306
 msgid "Details"
 msgstr "Szczegóły"
 
-#: src/gpa-key-details.c:399
+#: src/gpa-key-details.c:352
 msgid "Show signatures on user name:"
 msgstr "Pokaż podpisy danego użytkownika:"
 
-#: src/gpa-key-details.c:422
+#: src/gpa-key-details.c:388
+#, fuzzy
+msgid "Chain"
+msgstr "Można podpisywać"
+
+#: src/gpa-key-details.c:388
 msgid "Signatures"
 msgstr "Podpisy"
 
-#: src/gpa-key-details.c:452
+#: src/gpa-key-details.c:410
+msgid "All signatures"
+msgstr "Wszystkie podpisy"
+
+#: src/gpa-key-details.c:472
 msgid "Subkeys"
 msgstr "Podklucze"
+
+#: src/gpa-key-details.c:472
+#, fuzzy
+msgid "Key"
+msgstr "/_Klucze"
 
 #: src/keysigndlg.c:59
 msgid "Sign Key"
@@ -1790,7 +1800,7 @@ msgstr ""
 msgid "Sign only _locally"
 msgstr "Podpisz tylko _lokalnie"
 
-#: src/options.c:323
+#: src/options.c:329
 msgid ""
 "The private key you selected as default is no longer available.\n"
 "GPA will try to choose a new default key automatically."
@@ -1876,6 +1886,42 @@ msgstr ""
 "powinno się jej stosować dla kluczy innych użytkowników, chyba że dobrze "
 "zdajesz sobie sprawę z konsekwencji)\n"
 
+#: src/passwddlg.c:45
+msgid ""
+"In \"Passphrase\" and \"Repeat passphrase\",\n"
+"you must enter the same passphrase."
+msgstr ""
+"W polu \"Hasło\" i \"Powtórz hasło\",\n"
+"należy wpisać te same dane."
+
+#: src/passwddlg.c:52
+msgid ""
+"You did not enter a passphrase.\n"
+"It is needed to protect your private key."
+msgstr ""
+"Nie podano hasła.\n"
+"Jest ono niezbędna do zabezpieczenia twojego klucza prywatnego."
+
+#: src/passwddlg.c:65
+msgid ""
+"Warning: You have entered a passphrase\n"
+"that is obviously not secure.\n"
+"\n"
+"Please enter a new passphrase."
+msgstr ""
+"Uwaga: Wprowadzone przez Ciebie hasło\n"
+"jest łatwe do odgadnięcia.\n"
+"\n"
+"Proszę wprowadzić nowe hasło."
+
+#: src/passwddlg.c:70
+msgid "_Enter new passphrase"
+msgstr "_Wprowadź nowe hasło"
+
+#: src/passwddlg.c:71
+msgid "Take this one _anyway"
+msgstr "Mimo wszystko użyj _tego"
+
 #: src/passwddlg.c:96
 msgid "Choose new passphrase"
 msgstr "Wprowadź nowe hasło"
@@ -1906,34 +1952,34 @@ msgid ""
 "selected."
 msgstr ""
 
-#: src/recipientdlg.c:307
+#: src/recipientdlg.c:306
 msgid ""
 "You need to select a key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
 
-#: src/recipientdlg.c:315
+#: src/recipientdlg.c:314
 msgid ""
 "You need to select exactly one key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
 
-#: src/recipientdlg.c:322
+#: src/recipientdlg.c:321
 msgid ""
 "Although you selected keys for all recipients a common encryption protocol "
 "can't be used. Please decide on one protocol by clicking one of the above "
 "radio buttons."
 msgstr ""
 
-#: src/recipientdlg.c:328
+#: src/recipientdlg.c:327
 msgid "Using OpenPGP for encryption."
 msgstr ""
 
-#: src/recipientdlg.c:333
+#: src/recipientdlg.c:332
 msgid "Using S/MIME for encryption."
 msgstr ""
 
-#: src/recipientdlg.c:337
+#: src/recipientdlg.c:336
 msgid "No recipients - encryption is not possible"
 msgstr ""
 
@@ -2236,30 +2282,30 @@ msgstr "Podpisy:"
 msgid "Status: "
 msgstr "Stan"
 
-#: src/cardman.c:159
+#: src/cardman.c:166
 #, fuzzy
 msgid "GNU Privacy Assistant - Card Manager"
 msgstr "GNU Privacy Assistant - Menedżer plików "
 
-#: src/cardman.c:180
+#: src/cardman.c:187
 #, c-format
 msgid "%s card detected."
 msgstr ""
 
-#: src/cardman.c:187
+#: src/cardman.c:194
 msgid "Checking for card..."
 msgstr ""
 
-#: src/cardman.c:341
+#: src/cardman.c:361
 #, fuzzy
 msgid "No card found."
 msgstr "Nie odnaleziono żadnych kluczy."
 
-#: src/cardman.c:347
+#: src/cardman.c:367
 msgid "The selected card application is currently not available."
 msgstr ""
 
-#: src/cardman.c:348
+#: src/cardman.c:368
 msgid ""
 "Another process is using a different card application than the selected "
 "one.\n"
@@ -2268,126 +2314,143 @@ msgid ""
 "active application."
 msgstr ""
 
-#: src/cardman.c:358
+#: src/cardman.c:378
 msgid "The selected card application is not available."
 msgstr ""
 
-#: src/cardman.c:364
+#: src/cardman.c:384
 msgid "Error accessing the card."
 msgstr ""
 
-#: src/cardman.c:365 src/cardman.c:397
+#: src/cardman.c:385 src/cardman.c:418
 msgid "Error accessing card"
 msgstr ""
 
-#: src/cardman.c:392
+#: src/cardman.c:413
 msgid "No card"
 msgstr ""
 
-#: src/cardman.c:592
+#: src/cardman.c:617
 #, fuzzy
 msgid "_Card"
 msgstr "/Okna/Menadżer _plików"
 
-#: src/cardman.c:600
+#: src/cardman.c:625
 msgid "Reload card information"
 msgstr ""
 
-#: src/cardman.c:602
+#: src/cardman.c:627
 #, fuzzy
 msgid "Generate new key on card"
 msgstr "Wygeneruj klucz"
 
-#: src/cardman.c:726
+#: src/cardman.c:752
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "Operacja nie jest obsługiwana"
 
-#: src/cardman.c:858
+#: src/cardman.c:887
 #, fuzzy
 msgid "Card Manager"
 msgstr "menedżer plików"
 
-#: src/cardman.c:866
+#: src/cardman.c:895
 #, fuzzy
 msgid "Application selection:"
 msgstr "Szyfruje wybrany plik"
 
-#: src/cardman.c:870
+#: src/cardman.c:899
 msgid "Auto"
 msgstr ""
 
-#: src/cardman.c:947
+#: src/cardman.c:976
 msgid "The GPGME library is too old to support smartcards."
 msgstr ""
 
-#: src/cm-openpgp.c:222 src/cm-netkey.c:676
+#: src/cm-openpgp.c:156
+msgid ""
+"<b>Admin-PIN Required</b>\n"
+"\n"
+"Depending on the previous operations you may now be asked for the Admin-"
+"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
+"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
+"restored anymore and thus the data on the card can't be modified.\n"
+"\n"
+"Unless changed, a fresh standard card has set the Admin-PIN to the value "
+"<i>12345678</i>.  However, the issuer of your card might have initialized "
+"the card with a different Admin-PIN and that Admin-PIN might only be known "
+"to the issuer.  Please check the instructions of your issuer.\n"
+"\n"
+"This notice will be shown only once per session."
+msgstr ""
+
+#: src/cm-openpgp.c:275 src/cm-netkey.c:954
 msgid "PUK retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:223
+#: src/cm-openpgp.c:276
 msgid "CHV2 retry counter: "
 msgstr ""
 
-#: src/cm-openpgp.c:335 src/cm-netkey.c:152
+#: src/cm-openpgp.c:388 src/cm-netkey.c:156
 msgid "Reset PIN"
 msgstr ""
 
-#: src/cm-openpgp.c:335 src/cm-openpgp.c:357 src/cm-netkey.c:153
+#: src/cm-openpgp.c:388 src/cm-openpgp.c:410 src/cm-netkey.c:157
 msgid "Change PIN"
 msgstr ""
 
-#: src/cm-openpgp.c:345 src/cm-netkey.c:153
+#: src/cm-openpgp.c:398 src/cm-netkey.c:157
 msgid "Change PUK"
 msgstr ""
 
-#: src/cm-openpgp.c:345 src/cm-netkey.c:152
+#: src/cm-openpgp.c:398 src/cm-netkey.c:156
 msgid "Reset PUK"
 msgstr ""
 
-#: src/cm-openpgp.c:539
+#: src/cm-openpgp.c:667
 #, c-format
 msgid ""
 "Error saving the changed values.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:562
+#: src/cm-openpgp.c:690
 msgid "Only plain ASCII is currently allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:564
+#: src/cm-openpgp.c:692
 msgid "The \"<\" character may not be used."
 msgstr ""
 
-#: src/cm-openpgp.c:566
+#: src/cm-openpgp.c:694
 msgid "Double spaces are not allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:598
+#: src/cm-openpgp.c:726
 msgid ""
 "Total length of first and last name may not be longer than 39 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:601 src/cm-openpgp.c:639 src/cm-openpgp.c:666
-#: src/cm-openpgp.c:690 src/cm-openpgp.c:715 src/cm-openpgp.c:736
+#: src/cm-openpgp.c:729 src/cm-openpgp.c:767 src/cm-openpgp.c:794
+#: src/cm-openpgp.c:818 src/cm-openpgp.c:843 src/cm-openpgp.c:864
 #, fuzzy
 msgid "Saving the field failed."
 msgstr "Podpisuje wybrany pliki"
 
-#: src/cm-openpgp.c:625
+#: src/cm-openpgp.c:753
 msgid "Invalid length of the language preference."
 msgstr ""
 
-#: src/cm-openpgp.c:633
+#: src/cm-openpgp.c:761
 msgid "The language preference may only contain the letters 'a' through 'z'."
 msgstr ""
 
-#: src/cm-openpgp.c:685 src/cm-openpgp.c:710
+#: src/cm-openpgp.c:813 src/cm-openpgp.c:838
 msgid "The field may not be longer than 254 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:929
+#: src/cm-openpgp.c:1057
 msgid ""
 "<b>Changing the PIN</b>\n"
 "\n"
@@ -2403,7 +2466,7 @@ msgid ""
 "PIN.  Please check the instructions of your issuer."
 msgstr ""
 
-#: src/cm-openpgp.c:946
+#: src/cm-openpgp.c:1074
 msgid ""
 "<b>Changing the Reset Code</b>\n"
 "\n"
@@ -2415,7 +2478,7 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:956
+#: src/cm-openpgp.c:1084
 msgid ""
 "<b>Reseting the PIN or the Reset Code</b>\n"
 "\n"
@@ -2433,7 +2496,7 @@ msgid ""
 "repeat that new value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:973
+#: src/cm-openpgp.c:1101
 msgid ""
 "<b>Changing the Admin-PIN</b>\n"
 "\n"
@@ -2451,112 +2514,131 @@ msgid ""
 "value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1016 src/cm-netkey.c:517
+#: src/cm-openpgp.c:1144 src/cm-netkey.c:779
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:1111 src/cm-netkey.c:613 src/cm-dinsig.c:255
+#: src/cm-openpgp.c:1301 src/cm-netkey.c:875 src/cm-dinsig.c:255
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "Użyj trybu zaawansowanego:"
 
-#: src/cm-openpgp.c:1121 src/cm-netkey.c:622 src/cm-dinsig.c:264
+#: src/cm-openpgp.c:1311 src/cm-netkey.c:884 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr ""
 
-#: src/cm-openpgp.c:1125 src/cm-netkey.c:626
+#: src/cm-openpgp.c:1315 src/cm-netkey.c:888
 msgid "Card version:"
 msgstr ""
 
-#: src/cm-openpgp.c:1129
+#: src/cm-openpgp.c:1319
 msgid "Manufacturer:"
 msgstr ""
 
-#: src/cm-openpgp.c:1138
+#: src/cm-openpgp.c:1328
 #, fuzzy
 msgid "<b>Personal</b>"
 msgstr "Nie sprawdzone"
 
-#: src/cm-openpgp.c:1152
+#: src/cm-openpgp.c:1342
 msgid "Salutation:"
 msgstr ""
 
-#: src/cm-openpgp.c:1157
+#: src/cm-openpgp.c:1347
 msgid "First name:"
 msgstr ""
 
-#: src/cm-openpgp.c:1162
+#: src/cm-openpgp.c:1352
 #, fuzzy
 msgid "Last name:"
 msgstr "Nazwa użytkownika:"
 
-#: src/cm-openpgp.c:1167
+#: src/cm-openpgp.c:1357
 msgid "Language:"
 msgstr ""
 
-#: src/cm-openpgp.c:1172
+#: src/cm-openpgp.c:1362
 msgid "Login data:"
 msgstr ""
 
-#: src/cm-openpgp.c:1177
+#: src/cm-openpgp.c:1367
 #, fuzzy
 msgid "Public key URL:"
 msgstr "Klucze _Publiczne"
 
-#: src/cm-openpgp.c:1185
+#: src/cm-openpgp.c:1375 src/cm-netkey.c:920
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "Podpisz _jako "
 
-#: src/cm-openpgp.c:1196
+#: src/cm-openpgp.c:1392
 #, fuzzy
 msgid "Signature key:"
 msgstr "Podpisy:"
 
-#: src/cm-openpgp.c:1200
+#: src/cm-openpgp.c:1396
 #, fuzzy
 msgid "Encryption key:"
 msgstr "Szyfrowanie..."
 
-#: src/cm-openpgp.c:1204
+#: src/cm-openpgp.c:1400
 #, fuzzy
 msgid "Authentication key:"
 msgstr "Można autoryzować"
 
-#: src/cm-openpgp.c:1208
+#: src/cm-openpgp.c:1404
 #, fuzzy
 msgid "Signature counter:"
 msgstr "Podpisy:"
 
-#: src/cm-openpgp.c:1216 src/cm-netkey.c:658
+#: src/cm-openpgp.c:1412 src/cm-netkey.c:936
 msgid "<b>PIN</b>"
 msgstr ""
 
-#: src/cm-openpgp.c:1228
+#: src/cm-openpgp.c:1424
 #, fuzzy
 msgid "Force signature PIN:"
 msgstr "podpisz _czystym tekstem"
 
-#: src/cm-openpgp.c:1233 src/cm-netkey.c:668
+#: src/cm-openpgp.c:1428 src/cm-netkey.c:946
 msgid "PIN retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:1247
+#: src/cm-openpgp.c:1442
 msgid "Admin-PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:134 src/cm-netkey.c:321
-msgid "unknown"
-msgstr "nieznany"
-
-#: src/cm-netkey.c:138
+#: src/cm-netkey.c:142
 msgid "blocked"
 msgstr ""
 
-#: src/cm-netkey.c:361
+#: src/cm-netkey.c:365
+#, fuzzy
+msgid "Learn keys"
+msgstr "eksport kluczy"
+
+#: src/cm-netkey.c:367
+msgid ""
+"For some or all of the keys available on the card, the GnuPG crypto engine "
+"does not yet know the corresponding certificates.\n"
+"\n"
+"If you click this button, GnuPG will be asked to \"learn\" this card and "
+"import all certificates stored on the card into its own certificate store.  "
+"This is not done automatically because it may take several seconds to read "
+"all certificates from the card.\n"
+"\n"
+"If you are unsure what to do, just click the button."
+msgstr ""
+
+#: src/cm-netkey.c:580
+#, fuzzy
+msgid "Learning keys ..."
+msgstr "Generowanie klucza..."
+
+#: src/cm-netkey.c:623
 #, c-format
 msgid ""
 "<b>Setting the Initial PIN</b> (%s)\n"
@@ -2576,27 +2658,27 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/cm-netkey.c:375
+#: src/cm-netkey.c:637
 msgid ""
 "You are now setting the PIN for the SigG key used to create <b>qualified "
 "signatures</b>.  You may want to set the PIN to the same value as used for "
 "the NKS keys."
 msgstr ""
 
-#: src/cm-netkey.c:378
+#: src/cm-netkey.c:640
 msgid ""
 "You are now setting the PIN for the NKS keys used for standard signatures, "
 "encryption and authentication."
 msgstr ""
 
-#: src/cm-netkey.c:407
+#: src/cm-netkey.c:669
 #, c-format
 msgid ""
 "Error changing the NullPIN.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-netkey.c:457
+#: src/cm-netkey.c:719
 msgid ""
 "<b>Changing a PIN or PUK</b>\n"
 "\n"
@@ -2609,7 +2691,7 @@ msgid ""
 "way to unblock them!"
 msgstr ""
 
-#: src/cm-netkey.c:469
+#: src/cm-netkey.c:731
 msgid ""
 "<b>Resetting a PUK</b>\n"
 "\n"
@@ -2626,7 +2708,7 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:483
+#: src/cm-netkey.c:745
 msgid ""
 "<b>Resetting a PIN</b>\n"
 "\n"
@@ -2639,21 +2721,26 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:637
+#: src/cm-netkey.c:899
 msgid ""
 "<b>A NullPIN is still active on this card</b>.\n"
 "You need to set a real PIN before you can make use of the card."
 msgstr ""
 
-#: src/cm-netkey.c:643
+#: src/cm-netkey.c:905
 msgid "Set initial PIN"
 msgstr ""
 
-#: src/cm-netkey.c:684
+#: src/cm-netkey.c:926
+#, fuzzy
+msgid "scanning ..."
+msgstr "Podpisywanie..."
+
+#: src/cm-netkey.c:962
 msgid "SigG PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:692
+#: src/cm-netkey.c:970
 msgid "SigG PUK retry counter:"
 msgstr ""
 
@@ -2665,20 +2752,33 @@ msgid ""
 "on this card."
 msgstr ""
 
-#~ msgid "days"
-#~ msgstr "dni"
+#~ msgid "DSA and ElGamal (default)"
+#~ msgstr "DSA oraz ElGamal (domyślne)"
 
-#~ msgid "weeks"
-#~ msgstr "tygodni"
+#, fuzzy
+#~ msgid "_Keyring Editor"
+#~ msgstr "Edytor zbioru kluczy"
 
-#~ msgid "months"
-#~ msgstr "miesięcy"
+#~ msgid "1024"
+#~ msgstr "1024"
 
-#~ msgid "years"
-#~ msgstr "lat"
+#~ msgid "768"
+#~ msgstr "768"
 
-#~ msgid "never expires"
-#~ msgstr "nie traci ważności"
+#~ msgid "2048"
+#~ msgstr "2048"
+
+#~ msgid "_Passphrase: "
+#~ msgstr "_Hasło: "
+
+#~ msgid "_Repeat passphrase: "
+#~ msgstr "_Potwierdzenie hasła: "
+
+#~ msgid "GNU Privacy Assistant - Keyring Editor"
+#~ msgstr "GNU Privacy Assistant - Edytor zbioru kluczy"
+
+#~ msgid "Keyring Editor"
+#~ msgstr "Edytor zbioru kluczy"
 
 #~ msgid "/File/C_lear"
 #~ msgstr "/Plik/Wy_czyść"
@@ -2985,9 +3085,6 @@ msgstr ""
 
 #~ msgid "import keys"
 #~ msgstr "importuj klucze"
-
-#~ msgid "export keys"
-#~ msgstr "eksport kluczy"
 
 #~ msgid "brief"
 #~ msgstr "zwięzły"

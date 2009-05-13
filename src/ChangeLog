@@ -1,5 +1,7 @@
 2009-05-13  Werner Koch  <wk@g10code.com>
 
+	* helpmenu.c (gpa_help_about): Show GnuPG version.
+
 	* gpa.c (cms_hack): Always enable CMS support.
 
 	* convert.c (gpa_expiry_date_string, gpa_creation_date_string):

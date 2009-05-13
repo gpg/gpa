@@ -1,7 +1,7 @@
 Noteworthy changes in version 0.9.0 (not released)
 ------------------------------------------------
  
- * Add a basic smartcard manager and the option --card.
+ * Add a smartcard manager and the option --card.
 
  * GPA now requires gpg2.
 
