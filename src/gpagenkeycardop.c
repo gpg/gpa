@@ -153,7 +153,7 @@ gpa_gen_key_card_operation_idle_cb (gpointer data)
 {
   GpaGenKeyCardOperation *op = data;
   gpg_error_t err;
-  GPAKeyGenParameters *parms;
+  gpa_keygen_para_t *parms;
   
   parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window, 1);
   if (!parms)

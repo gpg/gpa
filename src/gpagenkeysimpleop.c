@@ -38,7 +38,7 @@ static void gpa_gen_key_simple_operation_done_error_cb (GpaContext *context,
 							  GpaGenKeySimpleOperation *op);
 
 static gboolean 
-gpa_gen_key_simple_operation_generate (GPAKeyGenParameters *params,
+gpa_gen_key_simple_operation_generate (gpa_keygen_para_t *params,
 				       gboolean do_backup, gpointer data);
 
 /* GObject boilerplate */
@@ -145,7 +145,7 @@ gpa_gen_key_simple_operation_new (GtkWidget *window)
 /* Internal */
 
 static gboolean 
-gpa_gen_key_simple_operation_generate (GPAKeyGenParameters *params,
+gpa_gen_key_simple_operation_generate (gpa_keygen_para_t *params,
 				       gboolean do_backup, gpointer data)
 {
   GpaGenKeySimpleOperation *op = data;

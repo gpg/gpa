@@ -1,3 +1,42 @@
+2009-05-13  Werner Koch  <wk@g10code.com>
+
+	* gpa.c (cms_hack): Always enable CMS support.
+
+	* convert.c (gpa_expiry_date_string, gpa_creation_date_string):
+	Change to use ISO date format.
+
+	* keygenwizard.c (gpa_keygen_wizard_generate_action): Use
+	gpa_keygen_para functions.  Change default algo to RSA-2048.
+	(STANDARD_KEY_LENGTH): New.
+	(gpa_keygen_wizard_final_page): Adjust for changed key length.
+
+	* gpgmetools.h (GPAKeyGenParameters): Rename to
+	gpa_keygen_para_t.  Change all users.
+	(gpa_keygen_para_t): Remove EXPIRYDATE, INTERVAL
+	and UNIT.  Add EXPIRE.  Rename USERID to NAME.
+	* gpgmetools.c (key_gen_params_new): Rename to ...
+	(gpa_keygen_para_new): .. this.  Adjust for changed EXPIRE.
+	(gpa_key_gen_free_parameters): Rename to ...
+	(gpa_keygen_para_free): .. this.  Rewrite
+	* gpgmeedit.c (calculate_expiration_day): Remove.
+	(card_edit_genkey_parms_new): Use new EXPIRE parameter.
+
+2009-05-12  Werner Koch  <wk@g10code.com>
+
+	* keygendlg.c: Rewritten.
+	* gpgmetools.c (gpa_algorithm_string, gpa_algorithm_from_string)
+	(algorithm_strings): Remove.
+	* gpgmetools.h (GPA_KEYGEN_ALGO_FIRST, GPA_KEYGEN_ALGO_LAST): Remove.
+
+	* gpadatebutton.c, gpadatebutton.h: New.
+	* gpadatebox.c, gpadatebox.h: New.
+
+2009-05-11  Werner Koch  <wk@g10code.com>
+
+	* gpgmetools.h (GPA_KEYGEN_ALGO_RSA_RSA): New.
+
+	* keygendlg.c (gpa_key_gen_run_dialog): Remove the 768 bit key size.
+
 2009-05-07  Werner Koch  <wk@g10code.com>
 
 	* cm-openpgp.c (update_entry_key_attr): New.

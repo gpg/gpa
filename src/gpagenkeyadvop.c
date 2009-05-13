@@ -150,7 +150,7 @@ gpa_gen_key_advanced_operation_idle_cb (gpointer data)
 {
   GpaGenKeyAdvancedOperation *op = data;
   gpg_error_t err;
-  GPAKeyGenParameters *parms;
+  gpa_keygen_para_t *parms;
   
   parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window, 0);
   if (!parms)

@@ -35,6 +35,10 @@
 #include "gpgmetools.h"
 #include "keygenwizard.h"
 
+
+#define STANDARD_KEY_LENGTH 2048
+
+
 /* The key generation wizard.
  
    New users should not be overwhelmed by too many options most of which
@@ -458,10 +462,17 @@ gpa_keygen_wizard_wait_page (GPAKeyGenWizard *wizard)
 static GtkWidget *
 gpa_keygen_wizard_final_page (GPAKeyGenWizard * keygen_wizard)
 {
-  return gpa_keygen_wizard_message_page
+  GtkWidget *widget;
+  char *desc;
+
+  desc = g_strdup_printf 
     (_("Congratulations!\n\n"
        "You have successfully generated a key."
-       " The key is indefinitely valid and has a length of 1024 bits."));
+       " The key is indefinitely valid and has a length of %d bits."), 
+     STANDARD_KEY_LENGTH);
+  widget = gpa_keygen_wizard_message_page (desc);
+  g_free (desc);
+  return widget;
 }
 
 
@@ -472,11 +483,11 @@ gpa_keygen_wizard_generate_action (gpointer data)
 //GtkAssistant *assistant, GtkWidget *page, gpointer data)
 {
   GPAKeyGenWizard *wizard = data;
-  GPAKeyGenParameters params;
+  gpa_keygen_para_t *para;
   gboolean do_backup;
   GtkWidget *radio;
 
-  memset (&params, 0, sizeof params);
+  para = gpa_keygen_para_new ();
 
   /* Shall we make backups?  */
   radio = g_object_get_data (G_OBJECT (wizard->backup_page),
@@ -484,21 +495,18 @@ gpa_keygen_wizard_generate_action (gpointer data)
   do_backup = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio));
 
   /* The User ID.  */
-  params.userID = gpa_keygen_wizard_simple_get_text (wizard->name_page);
-  params.email = gpa_keygen_wizard_simple_get_text (wizard->email_page);
-  params.password
+  para->name = gpa_keygen_wizard_simple_get_text (wizard->name_page);
+  para->email = gpa_keygen_wizard_simple_get_text (wizard->email_page);
+  para->password
     = gpa_keygen_wizard_password_get_password (wizard->passwd_page);
 
   /* Default values for newbie mode.  */
-  params.algo = GPA_KEYGEN_ALGO_DSA_ELGAMAL;
-  params.keysize = 1024;
-  params.expiryDate = NULL;
-  params.interval = 0;
+  para->algo = GPA_KEYGEN_ALGO_RSA_RSA;
+  para->keysize = STANDARD_KEY_LENGTH;
 
-  wizard->generate (&params, do_backup, wizard->generate_data);
+  wizard->generate (para, do_backup, wizard->generate_data);
 
-  g_free (params.userID);
-  g_free (params.email);
+  gpa_keygen_para_free (para);
 
   return FALSE;
 }

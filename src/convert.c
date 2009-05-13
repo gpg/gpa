@@ -74,15 +74,16 @@ gpa_time_unit_from_string (const char *string)
 char *
 gpa_expiry_date_string (unsigned long expiry_time)
 {
-  gchar date_buffer[256];
   gchar *result;
   GDate expiry_date;
 
   if( expiry_time > 0 )
     {
       g_date_set_time_t (&expiry_date, (time_t) expiry_time);
-      g_date_strftime (date_buffer, 256, "%x", &expiry_date);
-      result = g_strdup (date_buffer);
+      result = g_strdup_printf ("%04d-%02d-%02d", 
+                                g_date_get_year (&expiry_date),
+                                g_date_get_month (&expiry_date),
+                                g_date_get_day (&expiry_date));
     }
   else
     result = g_strdup (_("never expires"));
@@ -93,15 +94,16 @@ gpa_expiry_date_string (unsigned long expiry_time)
 char *
 gpa_creation_date_string (unsigned long creation_time)
 {
-  gchar date_buffer[256];
   gchar *result;
   GDate creation_date;
 
   if( creation_time > 0 )
     {
       g_date_set_time_t (&creation_date, (time_t) creation_time);
-      g_date_strftime (date_buffer, 256, "%x", &creation_date);
-      result = g_strdup (date_buffer);
+      result = g_strdup_printf ("%04d-%02d-%02d", 
+                                g_date_get_year (&creation_date),
+                                g_date_get_month (&creation_date),
+                                g_date_get_day (&creation_date));
     }
   else
     result = g_strdup (_("unknown"));

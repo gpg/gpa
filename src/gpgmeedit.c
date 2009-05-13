@@ -1153,7 +1153,7 @@ gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
 struct genkey_parms_s
 {
   int  post_default_state;
-  char expiration_day[11];	/* "YYYY-MM-DD". */
+  char expiration_day[11];	/* "YYYY-MM-DD" or "0". */
   char *name;
   char *email;
   char *comment;
@@ -1168,7 +1168,7 @@ card_edit_genkey_fnc_action (int state, void *opaque, char **result)
   switch (state)
     {
     case CARD_DEFAULT:
-      /* Return an empty line toindicate that the default is to be used.  */
+      /* Return an empty line to indicate that the default is to be used.  */
       *result = "";
       break;
 
@@ -1403,47 +1403,6 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
 
 
 static void
-calculate_expiration_day (GPAKeyGenParameters *parms,
-                          char *expiration_day, size_t length)
-{
-  assert (length >= 11);
-
-  if (parms->expiryDate)
-    g_date_strftime (expiration_day, length, "%Y-%m-%d", parms->expiryDate);
-  else if (parms->interval)
-    {
-      GDate *date = g_date_new ();
-      g_date_set_time_t (date, time (NULL));
-
-      assert ((parms->unit == 'd') || (parms->unit == 'w')
-	      || (parms->unit == 'm') || (parms->unit == 'y'));
-
-      switch (parms->unit)
-	{
-	case 'd':
-	  g_date_add_days (date, parms->interval);
-	  break;
-	case 'w':
-	  g_date_add_days (date, parms->interval * 7);
-	  break;
-	case 'm':
-	  g_date_add_months (date, parms->interval);
-	  break;
-	case 'y':
-	  g_date_add_years (date, parms->interval);
-	  break;
-	}
-
-      g_date_strftime (expiration_day, length, "%Y-%m-%d", date);
-      g_date_free (date);
-    }
-  else
-    /* Never expire.  */
-    strcpy (expiration_day, "0");
-}
-
-
-static void
 card_edit_genkey_parms_release (GpaContext *ctx, gpg_error_t err,
 				struct edit_parms_s *parms)
 {
@@ -1461,7 +1420,7 @@ card_edit_genkey_parms_release (GpaContext *ctx, gpg_error_t err,
 /* Generate the edit parameters needed for setting owner trust.  */
 static struct edit_parms_s *
 card_edit_genkey_parms_new (GpaContext *ctx,
-                            GPAKeyGenParameters *parms, gpgme_data_t out)
+                            gpa_keygen_para_t *parms, gpgme_data_t out)
 {
   struct edit_parms_s *edit_parms;
   struct genkey_parms_s *genkey_parms;
@@ -1475,9 +1434,18 @@ card_edit_genkey_parms_new (GpaContext *ctx,
   edit_parms->out = out;
   edit_parms->opaque = genkey_parms;
 
-  calculate_expiration_day (parms, genkey_parms->expiration_day,
-			    sizeof (genkey_parms->expiration_day));
-  genkey_parms->name = parms->userID;
+  assert (sizeof (genkey_parms->expiration_day) > 10);
+  if (g_date_valid (&parms->expire))
+    snprintf (genkey_parms->expiration_day, 
+              sizeof genkey_parms->expiration_day,
+              "%04d-%02d-%02d", 
+              g_date_get_year (&parms->expire),
+              g_date_get_month (&parms->expire),
+              g_date_get_day (&parms->expire));
+  else /* Never expire.  */
+    strcpy (genkey_parms->expiration_day, "0");
+
+  genkey_parms->name = parms->name;
   genkey_parms->email = parms->email;
   genkey_parms->comment = parms->comment;
 
@@ -1493,7 +1461,7 @@ card_edit_genkey_parms_new (GpaContext *ctx,
 
 gpg_error_t
 gpa_gpgme_card_edit_genkey_start (GpaContext *ctx,
-                                  GPAKeyGenParameters *genkey_parms)
+                                  gpa_keygen_para_t *genkey_parms)
 {
   struct edit_parms_s *edit_parms;
   gpgme_data_t out = NULL;

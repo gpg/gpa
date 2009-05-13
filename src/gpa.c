@@ -105,11 +105,12 @@ static GOptionEntry option_entries[] =
     { "settings", 's', 0, G_OPTION_ARG_NONE, &args.start_settings,
       N_("Open the settings dialog"), NULL },
     { "daemon", 'd', 0, G_OPTION_ARG_NONE, &args.start_only_server,
-      N_("Enable the UI server (implies --cms)"), NULL },
+      N_("Enable the UI server"), NULL },
     { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
       N_("Read options from file"), "FILE" },
-    { "cms", 'x', 0, G_OPTION_ARG_NONE, &cms_hack,
-      "Enable CMS/X.509 support", NULL },
+    /* Note:  the cms option will eventually be removed.  */
+    { "cms", 'x', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
+      &cms_hack, NULL, NULL },
     { "disable-ticker", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &disable_ticker, NULL, NULL },
     { NULL }
@@ -397,9 +398,7 @@ main (int argc, char *argv[])
 
 
   /* Handle command line options.  */
-
-  if (args.start_only_server)
-    cms_hack = 1; 
+  cms_hack = 1; /* CMS is now always enabled.  */
 
   /* Start the key manger by default.  */
   if (!args.start_key_manager

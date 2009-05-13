@@ -130,7 +130,7 @@ gpa_progress_dialog_init (GpaProgressDialog *dialog)
   dialog->label = gtk_label_new (NULL);
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			       dialog->label);
-  dialog->pbar = gpa_progress_bar_new ();
+  dialog->pbar = GPA_PROGRESS_BAR (gpa_progress_bar_new ());
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			       GTK_WIDGET (dialog->pbar));
   /* Set up the dialog.  */

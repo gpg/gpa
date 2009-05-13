@@ -26,25 +26,29 @@
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
+/* Internal algorithm identifiers, describing which keys to
+   create.  */
 typedef enum
   {
+    GPA_KEYGEN_ALGO_RSA_RSA,
+    GPA_KEYGEN_ALGO_RSA_ELGAMAL,
+    GPA_KEYGEN_ALGO_RSA,
     GPA_KEYGEN_ALGO_DSA_ELGAMAL,
     GPA_KEYGEN_ALGO_DSA,
-    GPA_KEYGEN_ALGO_RSA
-  } GPAKeyGenAlgo;
+    GPA_KEYGEN_ALGO_VIA_CARD
+  } gpa_keygen_algo_t;
 
-#define GPA_KEYGEN_ALGO_FIRST GPA_KEYGEN_ALGO_DSA_ELGAMAL
-#define GPA_KEYGEN_ALGO_LAST GPA_KEYGEN_ALGO_RSA
+
 
 typedef struct
- {
+{
   /* User ID.  */
-  gchar *userID;
+  gchar *name;
   gchar *email;
   gchar *comment;
-
+  
   /* Algorithm.  */
-  GPAKeyGenAlgo algo;
+  gpa_keygen_algo_t algo;
 
   /* Key size.  */
   gint keysize;
@@ -52,14 +56,11 @@ typedef struct
   /* The password to use.  */
   gchar *password;
 
-  /* The expiry date.  If expiryDate is not NULL it holds the expiry
-     date, otherwise if interval is not zero, it defines the period of
-     time until expiration together with unit (which is one of d, w,
-     m, y), otherwise the user chose "never expire".  */
-  GDate *expiryDate;
-  gint interval;
-  gchar unit;
-} GPAKeyGenParameters;
+  /* Epiration date.  It is only used if it is valid.  */
+  GDate expire;
+
+} gpa_keygen_para_t;
+
 
 /* Report an unexpected error in GPGME and quit the application.
    Better to use the macro instead of the function.  */
@@ -116,20 +117,16 @@ void dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard);
    the parameters required by Gpgme and returns whatever
    gpgme_op_genkey_start returns.  */
 gpg_error_t gpa_generate_key_start (gpgme_ctx_t ctx, 
-				    GPAKeyGenParameters *params);
+				    gpa_keygen_para_t *params);
 
 /* Backup a key.  It exports both the public and secret keys to a
    file.  Returns TRUE on success and FALSE on error.  It displays
    errors to the user.  */
 gboolean gpa_backup_key (const gchar *fpr, const char *filename);
 
-GPAKeyGenParameters *key_gen_params_new (void);
+gpa_keygen_para_t *gpa_keygen_para_new (void);
 
-void gpa_key_gen_free_parameters (GPAKeyGenParameters *params);
-
-const gchar * gpa_algorithm_string (GPAKeyGenAlgo algo);
-
-GPAKeyGenAlgo gpa_algorithm_from_string (const gchar * string);
+void gpa_keygen_para_free (gpa_keygen_para_t *params);
 
 /* Ownertrust strings.  */
 const gchar *gpa_key_ownertrust_string (gpgme_key_t key);

@@ -23,7 +23,7 @@
 
 #include <gtk/gtk.h>
 
-typedef gboolean (*GpaKeyGenWizardGenerateCb) (GPAKeyGenParameters *params,
+typedef gboolean (*GpaKeyGenWizardGenerateCb) (gpa_keygen_para_t *params,
 					       gboolean do_backup,
 					       gpointer data);
 

@@ -137,6 +137,8 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpabackupop.h gpabackupop.c \
 	      gpakeyselector.h gpakeyselector.c \
 	      gpapinchange.h gpapinchange.c \
+	      gpadatebutton.c gpadatebutton.h \
+	      gpadatebox.c gpadatebox.h \
 	      server.c \
 	      filewatch.c \
 	      options.c \

@@ -47,7 +47,7 @@ gpg_error_t gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
  */
 gpg_error_t gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key);
 
-gpg_error_t gpa_gpgme_card_edit_genkey_start (GpaContext *ctx, GPAKeyGenParameters *parms);
+gpg_error_t gpa_gpgme_card_edit_genkey_start (GpaContext *ctx, gpa_keygen_para_t *parms);
 
 #if 0
 gpg_error_t gpa_gpgme_card_edit_modify_start (GpaContext *ctx, const gchar *login);

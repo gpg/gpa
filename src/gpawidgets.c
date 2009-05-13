@@ -157,6 +157,7 @@ expire_date_toggled_cb (GtkToggleButton *togglebutton, gpointer user_data)
                             gtk_toggle_button_get_active (togglebutton));
 }
 
+
 GtkWidget *
 gpa_expiry_frame_new (GDate * expiryDate)
 {
