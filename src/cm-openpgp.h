@@ -51,6 +51,7 @@ GType gpa_cm_openpgp_get_type (void) G_GNUC_CONST;
 /* The class specific API.  */
 GtkWidget *gpa_cm_openpgp_new (void);
 void gpa_cm_openpgp_reload (GtkWidget *widget, gpgme_ctx_t gpgagent);
+char *gpa_cm_openpgp_get_key_attributes (GtkWidget *widget);
 
 
 

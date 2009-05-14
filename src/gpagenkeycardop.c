@@ -56,7 +56,11 @@ gpa_gen_key_card_operation_finalize (GObject *object)
 {
   GpaGenKeyCardOperation *op = GPA_GEN_KEY_CARD_OPERATION (object);
 
+  xfree (op->key_attributes);
+  op->key_attributes = NULL;
   gtk_widget_destroy (op->progress_dialog);
+  gpa_keygen_para_free (op->parms);
+  op->parms = NULL;
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -136,12 +140,13 @@ gpa_gen_key_card_operation_get_type (void)
 /* API */
 
 GpaGenKeyCardOperation* 
-gpa_gen_key_card_operation_new (GtkWidget *window)
+gpa_gen_key_card_operation_new (GtkWidget *window, const char *keyattr)
 {
   GpaGenKeyCardOperation *op;
   
   op = g_object_new (GPA_GEN_KEY_CARD_OPERATION_TYPE,
 		     "window", window, NULL);
+  op->key_attributes = g_strdup (keyattr);
 
   return op;
 }
@@ -153,14 +158,16 @@ gpa_gen_key_card_operation_idle_cb (gpointer data)
 {
   GpaGenKeyCardOperation *op = data;
   gpg_error_t err;
-  gpa_keygen_para_t *parms;
   
-  parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window, 1);
-  if (!parms)
+  op->parms = gpa_key_gen_run_dialog 
+    (GPA_OPERATION (op)->window, op->key_attributes? op->key_attributes : "");
+
+  if (!op->parms)
     g_signal_emit_by_name (op, "completed", gpg_error (GPG_ERR_CANCELED));
   else
     {
-      err = gpa_gpgme_card_edit_genkey_start (GPA_OPERATION (op)->context, parms);
+      err = gpa_gpgme_card_edit_genkey_start (GPA_OPERATION (op)->context,
+                                              op->parms);
       if (err)
         {
           gpa_gpgme_warning (err);
@@ -169,7 +176,7 @@ gpa_gen_key_card_operation_idle_cb (gpointer data)
       else
         gtk_widget_show_all (op->progress_dialog);
     }
-  return FALSE;
+  return FALSE;  /* Remove this idle function.  */
 }
 
 
@@ -201,7 +208,7 @@ gpa_gen_key_card_operation_done_error_cb (GpaContext *context,
       /* Ignore these */
       break;
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warning_ext (err, op->parms? op->parms->r_error_desc : NULL);
       break;
     }
 }

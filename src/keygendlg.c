@@ -58,6 +58,7 @@ struct _GpaKeyGenDlg
   GtkWidget *entry_email;
   GtkWidget *entry_comment;
   GtkWidget *entry_expire;
+  GtkWidget *entry_backup;
 
   GtkWidget *label_userid;
 };
@@ -132,12 +133,13 @@ update_preview_cb (void *widget, void *user_data)
 
 /* Helper to create the dialog.  PARENT is the parent window.  */
 static void
-create_dialog (GpaKeyGenDlg *self, GtkWidget *parent)
+create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
 {
   GtkWidget *dialog;
   GtkWidget *vbox;
   GtkWidget *table;
 
+  GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *combo;
   GtkWidget *entry;
@@ -147,7 +149,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent)
 
 
   dialog = gtk_dialog_new_with_buttons
-    (self->forcard ? _("Generate new keys on card") : _("Generate key"),
+    (forcard ? _("Generate card key") : _("Generate key"),
      GTK_WINDOW (parent),
      GTK_DIALOG_MODAL,
      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -163,19 +165,26 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent)
   vbox = GTK_DIALOG (dialog)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
-  table = gtk_table_new (7, 2, FALSE);
+  table = gtk_table_new (9, 2, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (table), 5);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
   rowidx = 0;
 
+  label = gtk_label_new_with_mnemonic (_("_Algorithm: "));
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
+                    GTK_FILL, GTK_SHRINK, 0, 0);
 
-  if (!self->forcard)
+  if (forcard)
     {
-      label = gtk_label_new_with_mnemonic (_("_Algorithm: "));
-      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-      gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
+      label = gtk_label_new (forcard);
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_table_attach (GTK_TABLE (table), label, 1, 2, rowidx, rowidx+1,
                         GTK_FILL, GTK_SHRINK, 0, 0);
-      
+      rowidx++;
+    }
+  else
+    {
       combo = gtk_combo_box_new_text ();
       for (idx=0; algorithm_table[idx].name; idx++)
 	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), 
@@ -212,9 +221,14 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent)
   rowidx++;
 
 
+  label = gtk_label_new_with_mnemonic (_("User ID: "));
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
+		    GTK_FILL, GTK_SHRINK, 0, 0);
   label = gtk_label_new (NULL);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 2, rowidx, rowidx+1,
-                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_table_attach (GTK_TABLE (table), label, 1, 2, rowidx, rowidx+1,
+                    GTK_FILL, GTK_SHRINK, 0, 0);
   self->label_userid = label;
   rowidx++;
 
@@ -223,14 +237,14 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent)
                     GTK_FILL, GTK_FILL, 0, 0);
   rowidx++;
 
-  label = gtk_label_new_with_mnemonic (_("_User ID: "));
+  label = gtk_label_new_with_mnemonic (_("_Name: "));
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
 		    GTK_FILL, GTK_SHRINK, 0, 0);
   entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, rowidx, rowidx+1,
-                    GTK_FILL, GTK_SHRINK, 0, 0);
+                    GTK_FILL|GTK_EXPAND, GTK_SHRINK, 0, 0);
   self->entry_name = entry;
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (update_preview_cb), self);
@@ -243,7 +257,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent)
   entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, rowidx, rowidx+1,
-                    GTK_FILL, GTK_SHRINK, 0, 0);
+                    GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
   self->entry_email = entry;
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (update_preview_cb), self);
@@ -256,7 +270,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent)
   entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, rowidx, rowidx+1,
-                    GTK_FILL, GTK_SHRINK, 0, 0);
+                    GTK_FILL|GTK_EXPAND, GTK_SHRINK, 0, 0);
   self->entry_comment = entry;
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (update_preview_cb), self);
@@ -270,25 +284,45 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent)
   gtk_table_attach (GTK_TABLE (table), button, 1, 2, rowidx, rowidx+1,
                     GTK_FILL, GTK_SHRINK, 0, 0);
   self->entry_expire = button;
+  rowidx++;
+
+  label = gtk_label_new_with_mnemonic (_("Backup: "));
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
+                    GTK_FILL, GTK_SHRINK, 0, 0);
+  button = gtk_check_button_new ();
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  gtk_table_attach (GTK_TABLE (table), hbox, 1, 2, rowidx, rowidx+1,
+                    GTK_FILL, GTK_SHRINK, 0, 0);
+  self->entry_backup = button;
+  gpa_add_tooltip (hbox,
+                   _("If checked the encryption key will be created "
+                     "and stored to a backup file and then loaded into "
+                     "the card.  This is recommended so that encrypted "
+                     "messages can be decrypted even if the card has a "
+                     "malfunction."));
 
 }
 
 
 /* Run the "Generate Key" dialog and if the user presses OK, return
    the values from the dialog in a newly allocated gpa_keygen_para_t
-   struct.  If FORCARD is true, display the dialog suitable for
-   generation keys on the OpenPGP smartcard. If the user pressed
-   "Cancel", return NULL.  The returned struct has to be freed with
-   gpa_keygen_para_free.  */
+   struct.  If FORCARD is not NULL display a dialog suitable for
+   generation of keys on the OpenPGP smartcard; thye string will be
+   shown to identify the capabilities of the card.  If the user
+   pressed "Cancel", return NULL.  The returned struct has to be freed
+   with gpa_keygen_para_free.  */
 gpa_keygen_para_t *
-gpa_key_gen_run_dialog (GtkWidget *parent, gboolean forcard)
+gpa_key_gen_run_dialog (GtkWidget *parent, const char *forcard)
 {
   GpaKeyGenDlg *self;
   gpa_keygen_para_t *params;
 
   self = xcalloc (1, sizeof *self);
-  self->forcard = forcard;
-  create_dialog (self, parent);
+  self->forcard = !!forcard;
+  create_dialog (self, parent, forcard);
   g_signal_connect (G_OBJECT (self->dialog), "response",
                     G_CALLBACK (response_cb), self);
 
@@ -334,6 +368,9 @@ gpa_key_gen_run_dialog (GtkWidget *parent, gboolean forcard)
     }
       
   gpa_date_box_get_date (GPA_DATE_BOX (self->entry_expire), &params->expire);
+
+  params->backup = gtk_toggle_button_get_active 
+    (GTK_TOGGLE_BUTTON (self->entry_backup));
 
   gtk_widget_destroy (self->dialog);
   g_free (self);

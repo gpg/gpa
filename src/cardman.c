@@ -549,6 +549,7 @@ card_genkey (GpaCardManager *cardman)
 {
   GpaGenKeyCardOperation *op;
   gpg_error_t err;
+  char *keyattr;
 
   if (cardman->cardtype != GPA_CM_OPENPGP_TYPE)
     return;  /* Not possible.  */
@@ -572,8 +573,11 @@ card_genkey (GpaCardManager *cardman)
       return;
     }
 
+  keyattr = (cardman->card_widget
+             ? gpa_cm_openpgp_get_key_attributes (cardman->card_widget)
+             : NULL);
 
-  op = gpa_gen_key_card_operation_new (GTK_WIDGET (cardman));
+  op = gpa_gen_key_card_operation_new (GTK_WIDGET (cardman), keyattr);
   g_signal_connect_swapped (G_OBJECT (op), "completed",
                             G_CALLBACK (card_genkey_completed), cardman);
   g_signal_connect (G_OBJECT (op), "completed",

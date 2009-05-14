@@ -26,7 +26,7 @@
 #include "gpgmetools.h"
 
 gpa_keygen_para_t * gpa_key_gen_run_dialog (GtkWidget *parent, 
-                                              gboolean forcard);
+                                            const char *forcard);
 
 
 #endif /* KEYSIGNDLG_H */

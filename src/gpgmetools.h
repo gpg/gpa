@@ -59,6 +59,12 @@ typedef struct
   /* Epiration date.  It is only used if it is valid.  */
   GDate expire;
 
+  /* True if the encryption key is created with an backup file.  */
+  gboolean backup;
+
+  /* Used to return an error description.  */
+  char *r_error_desc;
+
 } gpa_keygen_para_t;
 
 
@@ -69,6 +75,7 @@ typedef struct
 void _gpa_gpgme_error (gpg_error_t err, const char *file, int line);
 
 /* The same as gpa_gpgme_error, without quitting.  */
+void gpa_gpgme_warning_ext (gpg_error_t err, const char *desc);
 void gpa_gpgme_warning (gpg_error_t err);
 
 /* Initialize a gpgme_ctx_t for use with GPA.  */

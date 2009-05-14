@@ -91,6 +91,10 @@ struct _GpaCMOpenpgp
     int nbits;
   } key_attr[3];
 
+  /* A malloced string with the key attributes in a human readable
+     format.  */
+  char *key_attributes;
+
   GtkLabel  *puk_label;  /* The label of the PUK field.  */
 
   /* An array with the current value of the retry counters.  */
@@ -476,13 +480,15 @@ update_entry_key_attr (GpaCMOpenpgp *card, int entry_id, const char *string)
           buf = tmpbuf;
         }
 
+      g_free (card->key_attributes);
+      card->key_attributes = buf;
+
       s = gtk_label_get_text (GTK_LABEL (card->entries[ENTRY_VERSION]));
       if (!s)
         s = "";
-      tmpbuf = g_strdup_printf ("%s  (%s)", s, buf);
+      buf = g_strdup_printf ("%s  (%s)", s, card->key_attributes);
+      gtk_label_set_text (GTK_LABEL (card->entries[ENTRY_VERSION]), buf);
       g_free (buf);
-      gtk_label_set_text (GTK_LABEL (card->entries[ENTRY_VERSION]), tmpbuf);
-      g_free (tmpbuf);
     }
 }
 
@@ -1528,7 +1534,10 @@ gpa_cm_openpgp_init (GTypeInstance *instance, void *class_ptr)
 static void
 gpa_cm_openpgp_finalize (GObject *object)
 {  
-/*   GpaCMOpenpgp *card = GPA_CM_OPENPGP (object); */
+  GpaCMOpenpgp *card = GPA_CM_OPENPGP (object);
+
+  xfree (card->key_attributes);
+  card->key_attributes = NULL;
 
   parent_class->finalize (object);
 }
@@ -1587,4 +1596,11 @@ gpa_cm_openpgp_reload (GtkWidget *widget, gpgme_ctx_t gpgagent)
       if (gpgagent)
         reload_data (GPA_CM_OPENPGP (widget));
     }
+}
+
+char *
+gpa_cm_openpgp_get_key_attributes (GtkWidget *widget)
+{
+  g_return_val_if_fail (GPA_IS_CM_OPENPGP (widget), NULL);
+  return g_strdup (GPA_CM_OPENPGP (widget)->key_attributes);
 }

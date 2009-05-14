@@ -39,10 +39,13 @@
 typedef struct _GpaGenKeyCardOperation GpaGenKeyCardOperation;
 typedef struct _GpaGenKeyCardOperationClass GpaGenKeyCardOperationClass;
 
-struct _GpaGenKeyCardOperation {
+struct _GpaGenKeyCardOperation 
+{
   GpaGenKeyOperation parent;
-
+  
   GtkWidget *progress_dialog;
+  char *key_attributes;
+  gpa_keygen_para_t *parms;
 };
 
 struct _GpaGenKeyCardOperationClass {
@@ -54,6 +57,7 @@ GType gpa_gen_key_card_operation_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-GpaGenKeyCardOperation *gpa_gen_key_card_operation_new (GtkWidget *window);
+GpaGenKeyCardOperation *gpa_gen_key_card_operation_new (GtkWidget *window,
+                                                        const char *keyattr);
 
 #endif

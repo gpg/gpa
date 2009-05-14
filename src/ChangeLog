@@ -1,3 +1,35 @@
+2009-05-14  Werner Koch  <wk@g10code.com>
+
+	* cm-openpgp.c (struct _GpaCMOpenpgp): Add field KEY_ATTRIBUTES.
+	(gpa_cm_openpgp_finalize): Release it.
+	(update_entry_key_attr): Set them.
+	(gpa_cm_openpgp_get_key_attributes): New.
+	* gpagenkeycardop.h (struct _GpaGenKeyCardOperation): Add field
+	KEY_ATTRIBUTES and R_ERROR_DESC.
+	* gpagenkeycardop.c (gpa_gen_key_card_operation_finalize): Release
+	these fields.
+	(gpa_gen_key_card_operation_new): Set that field.
+	(gpa_gen_key_card_operation_idle_cb): Pass it to the generate fnc.
+	(gpa_gen_key_card_operation_done_error_cb): Print status error.
+	* keygendlg.c (gpa_key_gen_run_dialog): Change arg FORCARD to a
+	string.
+	(create_dialog): Show the key attributes of a card. Add backup
+	checkbox.
+	(gpa_key_gen_run_dialog): Store backup flag in the params.
+	* gpgmetools.h (gpa_keygen_para_t): Add field BACKUP and R_ERROR_DESC.
+	* gpgmeedit.c (struct genkey_parms_s): Add field BACKUP.
+	(card_edit_genkey_parms_new): Set that field.
+	(card_edit_genkey_fnc_action): Use that field.
+	(struct edit_parms_s): Add fucntion ptr SAVE_ERROR.
+	(edit_fnc): Call it.
+	(gpa_gpgme_edit_trust_parms_new, gpa_gpgme_edit_expire_parms_new)
+	(gpa_gpgme_edit_sign_parms_new, gpa_gpgme_edit_passwd_parms_new):
+	Use g_malloc0.
+	(card_edit_genkey_save_error): New.
+	(edit_fnc): Ignore STATUS_PROGRESS.
+
+	* gpgmetools.c (gpa_gpgme_warning_ext): New.
+
 2009-05-13  Werner Koch  <wk@g10code.com>
 
 	* helpmenu.c (gpa_help_about): Show GnuPG version.

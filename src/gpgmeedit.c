@@ -56,6 +56,7 @@ typedef int (*edit_transit_t) (int current_state, gpgme_status_code_t status,
                                const char *args, void *opaque,
                                gpg_error_t *err);
 
+
 /* States for the edit expire command.  */
 enum
   {
@@ -176,6 +177,11 @@ struct edit_parms_s
   /* The transit function */
   edit_transit_t transit;
 
+  /* This optional function is called with a string describing the
+     error conveyed by the GPGME_STATUS_ERROR message.  The function
+     takes ownership of the malloced string.  */
+  void (*save_error) (void *opaque, char *errdesc);
+
   /* The output data object */
   gpgme_data_t out;
 
@@ -209,7 +215,8 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       || status == GPGME_STATUS_BAD_PASSPHRASE
       || status == GPGME_STATUS_USERID_HINT
       || status == GPGME_STATUS_SIGEXPIRED
-      || status == GPGME_STATUS_KEYEXPIRED)
+      || status == GPGME_STATUS_KEYEXPIRED
+      || status == GPGME_STATUS_PROGRESS)
     {
       return parms->err;
     }
@@ -217,6 +224,15 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
            && status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
     {
       return parms->err;
+    }
+
+  /* Call the save_error function.  */
+  if (status == GPGME_STATUS_ERROR && args && parms->save_error)
+    {
+      int n = strcspn (args, " \t");
+      char *buf = g_strdup_printf ("%.*s: %s", n, args,
+                                   gpg_strerror (strtoul (args+n, NULL, 10)));
+      parms->save_error (parms->opaque, buf);
     }
 
 #if DEBUG_FSM
@@ -844,13 +860,11 @@ static struct edit_parms_s*
 gpa_gpgme_edit_trust_parms_new (GpaContext *ctx, const char *trust_string,
 				gpgme_data_t out)
 {
-  struct edit_parms_s *edit_parms = g_malloc (sizeof (struct edit_parms_s));
+  struct edit_parms_s *edit_parms = g_malloc0 (sizeof (struct edit_parms_s));
 
   edit_parms->state = TRUST_START;
-  edit_parms->err = gpg_error (GPG_ERR_NO_ERROR);
   edit_parms->action = edit_trust_fnc_action;
   edit_parms->transit = edit_trust_fnc_transit;
-  edit_parms->signal_id = 0;
   edit_parms->out = out;
   edit_parms->opaque = g_strdup (trust_string);
 
@@ -907,15 +921,13 @@ static struct edit_parms_s*
 gpa_gpgme_edit_expire_parms_new (GpaContext *ctx, GDate *date,
 				 gpgme_data_t out)
 {
-  struct edit_parms_s *edit_parms = g_malloc (sizeof (struct edit_parms_s));
+  struct edit_parms_s *edit_parms = g_malloc0 (sizeof (struct edit_parms_s));
   int buf_len = 12;
   gchar *buf = g_malloc (buf_len);
 
   edit_parms->state = EXPIRE_START;
-  edit_parms->err = gpg_error (GPG_ERR_NO_ERROR);
   edit_parms->action = edit_expire_fnc_action;
   edit_parms->transit = edit_expire_fnc_transit;
-  edit_parms->signal_id = 0;
   edit_parms->out = out;
   edit_parms->opaque = buf;
 
@@ -980,14 +992,12 @@ static struct edit_parms_s*
 gpa_gpgme_edit_sign_parms_new (GpaContext *ctx, char *check_level,
 			       gboolean local, gpgme_data_t out)
 {
-  struct sign_parms_s *sign_parms = g_malloc (sizeof (struct sign_parms_s));
-  struct edit_parms_s *edit_parms = g_malloc (sizeof (struct edit_parms_s));
+  struct sign_parms_s *sign_parms = g_malloc0 (sizeof (struct sign_parms_s));
+  struct edit_parms_s *edit_parms = g_malloc0 (sizeof (struct edit_parms_s));
 
   edit_parms->state = SIGN_START;
-  edit_parms->err = gpg_error (GPG_ERR_NO_ERROR);
   edit_parms->action = edit_sign_fnc_action;
   edit_parms->transit = edit_sign_fnc_transit;
-  edit_parms->signal_id = 0;
   edit_parms->out = out;
   edit_parms->opaque = sign_parms;
   sign_parms->check_level = check_level;
@@ -1090,15 +1100,13 @@ gpa_gpgme_edit_passwd_parms_release (GpaContext *ctx, gpg_error_t err,
 static struct edit_parms_s*
 gpa_gpgme_edit_passwd_parms_new (GpaContext *ctx, gpgme_data_t out)
 {
-  struct edit_parms_s *edit_parms = g_malloc (sizeof (struct edit_parms_s));
-  struct passwd_parms_s *passwd_parms = g_malloc (sizeof 
-						  (struct passwd_parms_s));
+  struct edit_parms_s *edit_parms = g_malloc0 (sizeof (struct edit_parms_s));
+  struct passwd_parms_s *passwd_parms = g_malloc0 (sizeof 
+                                                   (struct passwd_parms_s));
 
   edit_parms->state = PASSWD_START;
-  edit_parms->err = gpg_error (GPG_ERR_NO_ERROR);
   edit_parms->action = edit_passwd_fnc_action;
   edit_parms->transit = edit_passwd_fnc_transit;
-  edit_parms->signal_id = 0;
   edit_parms->out = out;
   edit_parms->opaque = passwd_parms;
   gpgme_get_passphrase_cb (ctx->ctx, &passwd_parms->func,
@@ -1157,6 +1165,8 @@ struct genkey_parms_s
   char *name;
   char *email;
   char *comment;
+  gboolean backup;
+  char **error_desc_adr;
 };
 
 
@@ -1181,9 +1191,7 @@ card_edit_genkey_fnc_action (int state, void *opaque, char **result)
       break;
 
     case CARD_GENERATE_BACKUP:
-      /* FIXME: disable encryption key backup functionality for
-	 now. -mo  */
-      *result = "N";
+      *result = parms->backup? "Y":"N";
       break;
 
     case CARD_GENERATE_REPLACE_KEYS:
@@ -1402,6 +1410,19 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
 }
 
 
+
+static void
+card_edit_genkey_save_error (void *opaque, char *errdesc)
+{
+  struct genkey_parms_s *parms = opaque;
+
+  if (*parms->error_desc_adr)
+    xfree (errdesc); /* Already set.  */
+  else
+    *parms->error_desc_adr = errdesc;
+}
+
+
 static void
 card_edit_genkey_parms_release (GpaContext *ctx, gpg_error_t err,
 				struct edit_parms_s *parms)
@@ -1431,6 +1452,7 @@ card_edit_genkey_parms_new (GpaContext *ctx,
   edit_parms->state = CARD_START;
   edit_parms->action = card_edit_genkey_fnc_action;
   edit_parms->transit = card_edit_genkey_fnc_transit;
+  edit_parms->save_error = card_edit_genkey_save_error;
   edit_parms->out = out;
   edit_parms->opaque = genkey_parms;
 
@@ -1448,6 +1470,8 @@ card_edit_genkey_parms_new (GpaContext *ctx,
   genkey_parms->name = parms->name;
   genkey_parms->email = parms->email;
   genkey_parms->comment = parms->comment;
+  genkey_parms->backup = parms->backup;
+  genkey_parms->error_desc_adr = &parms->r_error_desc;
 
   /* Make sure the cleanup is run when the edit completes */
   edit_parms->signal_id =
@@ -1477,4 +1501,3 @@ gpa_gpgme_card_edit_genkey_start (GpaContext *ctx,
 
   return err;
 }
-

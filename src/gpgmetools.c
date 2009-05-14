@@ -82,19 +82,39 @@ _gpa_gpgme_error (gpg_error_t err, const char *file, int line)
 
 
 void
-gpa_gpgme_warning (gpg_error_t err)
+gpa_gpgme_warning_ext (gpg_error_t err, const char *desc)
 {
-  gchar *message = g_strdup_printf 
+  char *argbuf = NULL;
+  const char *arg;
+  char *message;
+
+  if (desc && (!err || gpg_err_code (err) == GPG_ERR_GENERAL))
+    arg = desc;
+  else if (desc)
+    {
+      argbuf = g_strdup_printf ("%s (%s)", gpgme_strerror (err), desc);
+      arg = argbuf;
+    }
+  else
+    arg = gpgme_strerror (err);
+
+  message = g_strdup_printf 
     (_("The GPGME library returned an unexpected\n"
        "error. The error was:\n\n"
        "\t%s\n\n"
        "This is probably a bug in GPA.\n"
        "GPA will now try to recover from this error."),
-     gpgme_strerror (err));
+     arg);
+  g_free (argbuf);
   gpa_window_error (message, NULL);
   g_free (message);
 }
 
+void
+gpa_gpgme_warning (gpg_error_t err)
+{
+  gpa_gpgme_warning_ext (err, NULL);
+}
 
 /* Initialize a gpgme_ctx_t for use with GPA.  */
 gpgme_ctx_t
@@ -569,10 +589,14 @@ gpa_backup_key (const gchar *fpr, const char *filename)
 void
 gpa_keygen_para_free (gpa_keygen_para_t *params)
 {
-  g_free (params->name);
-  g_free (params->email);
-  g_free (params->comment);
-  g_free (params);
+  if (params)
+    {
+      g_free (params->name);
+      g_free (params->email);
+      g_free (params->comment);
+      g_free (params->r_error_desc);
+      g_free (params);
+    }
 }
 
 

@@ -152,7 +152,7 @@ gpa_gen_key_advanced_operation_idle_cb (gpointer data)
   gpg_error_t err;
   gpa_keygen_para_t *parms;
   
-  parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window, 0);
+  parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window, NULL);
   if (!parms)
     g_signal_emit_by_name (op, "completed", gpg_error (GPG_ERR_CANCELED));
   else
