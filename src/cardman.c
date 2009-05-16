@@ -999,8 +999,11 @@ gpa_card_manager_finalize (GObject *object)
 {  
   GpaCardManager *cardman = GPA_CARD_MANAGER (object);
 
-  gpgme_release (cardman->gpgagent);
-  cardman->gpgagent = NULL;
+  if (cardman->gpgagent)
+    {
+      gpgme_release (cardman->gpgagent);
+      cardman->gpgagent = NULL;
+    }
   
   if (cardman->ticker_timeout_id)
     {
