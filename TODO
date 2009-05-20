@@ -8,17 +8,14 @@ In no particular order:
    than a second (idea: simply disable refresh button?)
 ** display messages "please attach reader" in case no smartcard reader is attached
 ** mark readonly data objects on the card (maybe grey them out?)
-** buttons for modifying writable data objects that open a modal dialog plus
-   automatic refresh after write.
 ** generate-new-key-pair button if card contains no key.
 ** check if cardman releases the smartcard (reader) as it should. maybe we have
    to destroy the cardman instance instead of simply hiding it.
-** button for automatic retrival of key through url field?
+** button for automatic retrieval of key through url field?
 
 * Redo the key generation wizard stuff, as it is one ugly hack on top of
   another at this point.
 ** It should also print a progress indicator as the expert mode does.
-
 
 * Dialogs should check user input and react to it.
 ** Don't allow the user to go on unless the input makes sense (particularly
@@ -92,14 +89,9 @@ In no particular order:
    - Or print a hint in the status bar the first time something is
      selected.  Such hints helped me a lot to get acquainted with JOSM [wk].
 
-** The keyring editor has a pop up if there is no default key that says
-   that the user has no private key.  But the user can have a private key.
-   Either fix the message or the check.
 ** The keyserver setting should remember the strings entered by the user.
 ** In the expiration widget, the expire after and the calender widgets should
    be synchronized.
-** Confirm generation of key pair by popping up a dialog, or convert
-   the progress meter to a dialog that needs to be OK'ed.
 ** When doing signing etc operations, gpa keylist should filter out expired
    and otherwise unusable keys.  When an operation fails (due to bad
    key, for example), GPA creates a signature of zero bytes and shows
@@ -149,9 +141,6 @@ In no particular order:
    is bounded by the width of the expander's label (the
    fingerprint). I think the expander's width should be allowed to
    grow in case there's unused space to the right of the expander widget.
-
-** Rework the About dialog
-  For example, there is no version number.
 
 * Building
 

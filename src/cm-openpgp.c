@@ -354,7 +354,7 @@ update_entry_chv_status (GpaCMOpenpgp *card, int entry_id, const char *string)
 
   while (spacep (string))
     string++;
-  force_pw1 = atoi (string);
+  force_pw1 = !atoi (string);
   while (*string && !spacep (string))
     string++;
   while (spacep (string))
@@ -866,7 +866,7 @@ save_entry_sig_force_pin (GpaCMOpenpgp *card)
   value = gtk_toggle_button_get_active 
     (GTK_TOGGLE_BUTTON (card->entries[ENTRY_SIG_FORCE_PIN]));
 
-  if (save_attr (card, "CHV-STATUS-1", value? "%01":"%00", 1))
+  if (save_attr (card, "CHV-STATUS-1", value? "%00":"%01", 1))
     errstr = _("Saving the field failed.");
 
   if (errstr)
