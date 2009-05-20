@@ -1040,7 +1040,8 @@ change_pin (GpaCMOpenpgp *card, int pinno)
   gpg_error_t err;
   GtkWidget *dialog;
   gpgme_ctx_t gpgagent;
-  int reset_mode;
+  int reset_mode = 0;
+  int unblock_pin = 0;
   const char *string;
   int okay;
 
@@ -1054,12 +1055,31 @@ change_pin (GpaCMOpenpgp *card, int pinno)
 
   if (pinno == 0 && !card->is_v2)
     reset_mode = (!card->retry_counter[0] || !card->retry_counter[1]);
-  else
-    reset_mode = !card->retry_counter[pinno];
+  else if (pinno == 0 && !card->retry_counter[0] && card->retry_counter[1])
+    {
+      unblock_pin = 1;
+      pinno = 1;
+    }
+  else if (!card->retry_counter[pinno])
+    reset_mode = 1;
 
-  g_debug ("%s pin for PIN %d", reset_mode? "reset":"change", pinno);
+/*   g_debug ("%s pin for PIN %d", reset_mode? "reset":"change", pinno); */
 
-  if (!reset_mode && pinno == 0)
+  if (unblock_pin)
+    string = _("<b>Unblocking the PIN</b>\n"
+               "\n"
+               "The retry counter of the PIN is down to zero "
+               "but a Reset Code has been set.\n"
+               "\n"
+               "The Reset Code is similar to a PUK (PIN Unblocking Code)"
+               "and used to unblock a PIN without the need to know the "
+               "Admin-PIN.\n"
+               "\n"
+               "If you proceed you will be asked to enter the current "
+               "value of the <b>Reset Code</b> and then to enter a new "
+               "value for the PIN and repeat that new value at another "
+               "prompt.");
+  else if (!reset_mode && pinno == 0)
     string = _("<b>Changing the PIN</b>\n"
                "\n"
                "If you proceed you will be asked to enter "
