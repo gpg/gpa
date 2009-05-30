@@ -89,8 +89,8 @@ enum
   FILE_N_COLUMNS
 };
 
+#define DND_TARGET_URI_LIST 1
 
-#define DND_TARGET_URI_LIST 0
 
 /* Drag and drop target list. */
 static GtkTargetEntry dnd_target_list[] = 
