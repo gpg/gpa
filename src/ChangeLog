@@ -2,6 +2,15 @@
 
 	* fileman.c (DND_TARGET_URI_LIST): Change constant from 0 to 1.
 
+2009-05-28  Werner Koch  <wk@g10code.com>
+
+	* gpgmetools.c (get_gpgconf_path): New.
+	(get_gpg_connect_agent_path): New.
+	(gpa_start_simple_gpg_command): Extend to allow calling gpgconf
+	and gpg-connect-agent.
+	(gpa_start_agent): New.
+	* gpa.c (main): Call it.
+
 2009-05-20  Werner Koch  <wk@g10code.com>
 
 	* cm-openpgp.c (change_pin): Fix use of the Reset Code.

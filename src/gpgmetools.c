@@ -498,6 +498,59 @@ get_gpgsm_path (void)
 }
 
 
+/* Retrieve the path to the GPGCONF executable.  */
+static const gchar *
+get_gpgconf_path (void)
+{
+  gpgme_engine_info_t engine;
+  
+  gpgme_get_engine_info (&engine);
+  while (engine)
+    {
+      if (engine->protocol == GPGME_PROTOCOL_GPGCONF)
+	return engine->file_name;
+      engine = engine->next;
+    }
+  return NULL;
+}
+
+
+/* Retrieve the path to the GPG-CONNECT-AGENT executable.  Note that
+   the caller must free the returned string.  */
+static char *
+get_gpg_connect_agent_path (void)
+{
+  const char *gpgconf;
+  char *fname, *p;
+
+  gpgconf = get_gpgconf_path ();
+  if (!gpgconf)
+    return NULL;
+
+#if G_OS_WIN32
+# define NEWNAME "gpg-connect-agent.exe"
+#else
+# define NEWNAME "gpg-connect-agent"
+#endif
+          
+  fname = g_malloc (strlen (gpgconf) + strlen (NEWNAME) + 1);
+  strcpy (fname, gpgconf);
+#if G_OS_WIN32 
+  for (p=fname; *p; p++)
+    if (*p == '\\')
+      *p = '/';
+#endif /*G_OS_WIN32*/
+  p = strrchr (fname, '/');
+  if (p)
+    p++;
+  else
+    p = fname;
+  strcpy (p, NEWNAME);
+
+#undef NEWNAME
+  return fname;
+}
+
 
 /* Backup a key. It exports both the public and secret keys to a file.
    Returns TRUE on success and FALSE on error. It displays errors to
@@ -1335,6 +1388,9 @@ gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
    but that does not make any sense).  STDIN and STDOUT are connected
    to /dev/null.  No more than 20 arguments may be given.
 
+   Because the protocol GPGME_PROTOCOL_ASSUAN makes no sense here, it
+   is used to call gpg-connect-agent.
+
    If the function returns success the provided callback CB is called
    for each line received on STDERR.  EOF is send to this callback by
    passing a LINE argument of NULL.  The callback may use this for
@@ -1350,17 +1406,25 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
   int fd_stderr;
   GIOChannel *channel;
   struct gpg_simple_stderr_parm_s *parm = NULL;
+  char *freeme = NULL;
 
   if (protocol == GPGME_PROTOCOL_OpenPGP)
     argv[0] = (char*)get_gpg_path ();
   else if (protocol == GPGME_PROTOCOL_CMS)
     argv[0] = (char*)get_gpgsm_path ();
+  else if (protocol == GPGME_PROTOCOL_GPGCONF)
+    argv[0] = (char*)get_gpgconf_path ();
+  else if (protocol == GPGME_PROTOCOL_ASSUAN)
+    argv[0] = freeme = get_gpg_connect_agent_path ();
   else
     argv[0] = NULL;
   g_return_val_if_fail (argv[0], gpg_error (GPG_ERR_INV_ARG));
   argc = 1;
-  argv[argc++] = (char*)"--status-fd";
-  argv[argc++] = (char*)"2";
+  if (protocol != GPGME_PROTOCOL_GPGCONF)
+    {
+      argv[argc++] = (char*)"--status-fd";
+      argv[argc++] = (char*)"2";
+    }
   argv[argc++] = (char*)first_arg;
   if (first_arg)
     {
@@ -1389,8 +1453,10 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
     {
       gpa_window_error (_("Calling the crypto engine program failed."), NULL);
       xfree (parm);
+      g_free (freeme);
       return gpg_error (GPG_ERR_GENERAL);
     }
+  g_free (freeme);
 #ifdef G_OS_WIN32
   channel = g_io_channel_win32_new_fd (fd_stderr);
 #else
@@ -1414,3 +1480,13 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
   return 0;
 }
 
+
+/* Try to start the gpg-agent if it has not yet been started.
+   Starting the agent works in the background.  Thus if the function
+   returns, it is not sure that the agent is now running.  */
+void 
+gpa_start_agent (void)
+{
+  gpa_start_simple_gpg_command (NULL, NULL, GPGME_PROTOCOL_ASSUAN,
+                                "NOP", "/bye", NULL);
+}

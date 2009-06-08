@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-05-13 19:57+0200\n"
+"POT-Creation-Date: 2009-06-08 10:23+0200\n"
 "PO-Revision-Date: 2008-09-12 18:01+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -42,12 +42,12 @@ msgid "Clipboard"
 msgstr "Urklipp"
 
 #: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:867
-#: src/cardman.c:615
+#: src/cardman.c:619
 msgid "_File"
 msgstr "_Arkiv"
 
 #: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:868
-#: src/cardman.c:616
+#: src/cardman.c:620
 msgid "_Edit"
 msgstr "R_edigera"
 
@@ -84,7 +84,7 @@ msgid "Close the buffer"
 msgstr "Stäng bufferten"
 
 #: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:876
-#: src/cardman.c:621
+#: src/cardman.c:625
 msgid "Quit the program"
 msgstr "Avsluta programmet"
 
@@ -116,11 +116,11 @@ msgstr "Ta bort markerad text"
 msgid "Select the entire document"
 msgstr "Välj hela dokumentet"
 
-#: src/clipboard.c:908 src/fileman.c:629 src/cardman.c:706
+#: src/clipboard.c:908 src/fileman.c:629 src/cardman.c:710
 msgid "Keyring"
 msgstr "Nyckelring"
 
-#: src/clipboard.c:910 src/keymanager.c:1063 src/cardman.c:708
+#: src/clipboard.c:910 src/keymanager.c:1063 src/cardman.c:712
 msgid "Files"
 msgstr "Filer"
 
@@ -476,13 +476,13 @@ msgstr ""
 "Är du säker på att du vill distribuera nyckeln?"
 
 #: src/gpaexportserverop.c:134 src/gpafileencryptop.c:478
-#: src/gpafileverifyop.c:181 src/gpgmetools.c:157 src/keydeletedlg.c:44
+#: src/gpafileverifyop.c:181 src/gpgmetools.c:177 src/keydeletedlg.c:44
 #: src/keydeletedlg.c:93 src/keysigndlg.c:61
 msgid "_Yes"
 msgstr "_Ja"
 
 #: src/gpaexportserverop.c:135 src/gpafileencryptop.c:479
-#: src/gpafileverifyop.c:182 src/gpgmetools.c:158 src/keydeletedlg.c:46
+#: src/gpafileverifyop.c:182 src/gpgmetools.c:178 src/keydeletedlg.c:46
 #: src/keydeletedlg.c:95 src/keysigndlg.c:63
 msgid "_No"
 msgstr "_Nej"
@@ -857,16 +857,16 @@ msgstr ""
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:163 src/gpgmetools.c:633 src/gpgmetools.c:850
-#: src/gpgmetools.c:969
+#: src/gpasubkeylist.c:163 src/gpgmetools.c:710 src/gpgmetools.c:927
+#: src/gpgmetools.c:1046
 msgid "Revoked"
 msgstr "Spärrad"
 
-#: src/gpasubkeylist.c:167 src/gpgmetools.c:635 src/gpgmetools.c:965
+#: src/gpasubkeylist.c:167 src/gpgmetools.c:712 src/gpgmetools.c:1042
 msgid "Expired"
 msgstr "Utgången"
 
-#: src/gpasubkeylist.c:171 src/gpgmetools.c:637
+#: src/gpasubkeylist.c:171 src/gpgmetools.c:714
 msgid "Disabled"
 msgstr "Inaktiverad"
 
@@ -874,11 +874,11 @@ msgstr "Inaktiverad"
 msgid "Unsigned"
 msgstr "Osignerad"
 
-#: src/gpasubkeylist.c:179 src/gpgmetools.c:956 src/verifydlg.c:212
+#: src/gpasubkeylist.c:179 src/gpgmetools.c:1033 src/verifydlg.c:212
 msgid "Valid"
 msgstr "Giltig"
 
-#: src/gpawidgets.c:71 src/gpgmetools.c:681 src/gpgmetools.c:688
+#: src/gpawidgets.c:71 src/gpgmetools.c:758 src/gpgmetools.c:765
 #: src/keysigndlg.c:100
 msgid "User Name:"
 msgstr "Användarnamn:"
@@ -887,7 +887,7 @@ msgstr "Användarnamn:"
 msgid "User Names:"
 msgstr "Användarnamn:"
 
-#: src/gpawidgets.c:77 src/gpgmetools.c:682 src/gpgmetools.c:689
+#: src/gpawidgets.c:77 src/gpgmetools.c:759 src/gpgmetools.c:766
 #: src/gpa-key-details.c:291
 msgid "Key ID:"
 msgstr "Nyckelidentitet:"
@@ -916,7 +916,7 @@ msgstr ""
 "!ÖDESDIGERT FEL!\n"
 "Ogiltigt infogande av utgångsdatum."
 
-#: src/gpgmeedit.c:1196
+#: src/gpgmeedit.c:1204
 msgid ""
 "Keys are already stored on the card.\n"
 "Really replace existing keys?"
@@ -939,7 +939,7 @@ msgstr ""
 "\n"
 "Programmet kommer nu att avslutas."
 
-#: src/gpgmetools.c:88
+#: src/gpgmetools.c:102
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -958,7 +958,7 @@ msgstr ""
 "Det här är antagligen ett fel i GPA.\n"
 "GPA kommer nu att försöka komma över felet."
 
-#: src/gpgmetools.c:154
+#: src/gpgmetools.c:174
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -967,7 +967,7 @@ msgstr ""
 "Filen %s finns redan.\n"
 "Vill du skriva över den?"
 
-#: src/gpgmetools.c:529
+#: src/gpgmetools.c:602
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -981,7 +981,7 @@ msgstr ""
 "************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:534
+#: src/gpgmetools.c:607
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -989,113 +989,113 @@ msgstr ""
 "Nyckeln som säkerhetskopierats till denna fil är:\n"
 "\n"
 
-#: src/gpgmetools.c:601 src/gpgmetools.c:624 src/gpgmetools.c:641
-#: src/gpgmetools.c:961 src/gpgmetools.c:994
+#: src/gpgmetools.c:678 src/gpgmetools.c:701 src/gpgmetools.c:718
+#: src/gpgmetools.c:1038 src/gpgmetools.c:1071
 msgid "Unknown"
 msgstr "Okänd"
 
-#: src/gpgmetools.c:604
+#: src/gpgmetools.c:681
 msgid "Never"
 msgstr "Aldrig"
 
-#: src/gpgmetools.c:607
+#: src/gpgmetools.c:684
 msgid "Marginal"
 msgstr "Marginell"
 
-#: src/gpgmetools.c:610
+#: src/gpgmetools.c:687
 msgid "Full"
 msgstr "Fullständig"
 
-#: src/gpgmetools.c:613
+#: src/gpgmetools.c:690
 msgid "Ultimate"
 msgstr "Förbehållslös"
 
-#: src/gpgmetools.c:639
+#: src/gpgmetools.c:716
 msgid "Incomplete"
 msgstr "Ofullständigt"
 
-#: src/gpgmetools.c:645
+#: src/gpgmetools.c:722
 msgid "Fully Valid"
 msgstr "Fullständigt giltig"
 
-#: src/gpgmetools.c:679
+#: src/gpgmetools.c:756
 msgid "Please enter the passphrase for the following key:"
 msgstr "Ange lösenfrasen för följande nyckel:"
 
-#: src/gpgmetools.c:687
+#: src/gpgmetools.c:764
 msgid "Wrong passphrase, please try again:"
 msgstr "Felaktig lösenfras, försök igen:"
 
-#: src/gpgmetools.c:712
+#: src/gpgmetools.c:789
 msgid "Enter Passphrase"
 msgstr "Ange lösenfras"
 
-#: src/gpgmetools.c:839
+#: src/gpgmetools.c:916
 msgid "[None]"
 msgstr "[Ingen]"
 
-#: src/gpgmetools.c:933 src/verifydlg.c:269
+#: src/gpgmetools.c:1010 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[Okänd användaridentitet]"
 
-#: src/gpgmetools.c:959 src/verifydlg.c:217
+#: src/gpgmetools.c:1036 src/verifydlg.c:217
 msgid "Bad"
 msgstr "Felaktigt"
 
-#: src/gpgmetools.c:982
+#: src/gpgmetools.c:1059
 msgid "Generic"
 msgstr "Allmänt"
 
-#: src/gpgmetools.c:985
+#: src/gpgmetools.c:1062
 msgid "Persona"
 msgstr "Personligen"
 
-#: src/gpgmetools.c:988
+#: src/gpgmetools.c:1065
 msgid "Casual"
 msgstr "Flyktigt"
 
-#: src/gpgmetools.c:991
+#: src/gpgmetools.c:1068
 msgid "Positive"
 msgstr "Helt säkert"
 
-#: src/gpgmetools.c:1009
+#: src/gpgmetools.c:1086
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Nyckeln kan användas för certifiering, signering och kryptering."
 
-#: src/gpgmetools.c:1012
+#: src/gpgmetools.c:1089
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Nyckeln kan användas för certifiering och signering, men inte för kryptering."
 
-#: src/gpgmetools.c:1018
+#: src/gpgmetools.c:1095
 msgid "The key can be used for certification and encryption."
 msgstr "Nyckeln kan användas för certifiering och kryptering."
 
-#: src/gpgmetools.c:1021
+#: src/gpgmetools.c:1098
 msgid "The key can be used only for certification."
 msgstr "Nyckeln kan endast användas för certifiering."
 
-#: src/gpgmetools.c:1029
+#: src/gpgmetools.c:1106
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr ""
 "Nyckeln kan användas för signering och kryptering, men inte för certifiering."
 
-#: src/gpgmetools.c:1032
+#: src/gpgmetools.c:1109
 msgid "The key can be used only for signing."
 msgstr "Nyckeln kan endast användas för signering."
 
-#: src/gpgmetools.c:1037
+#: src/gpgmetools.c:1114
 msgid "The key can be used only for encryption."
 msgstr "Nyckeln kan endast användas för kryptering."
 
-#: src/gpgmetools.c:1040
+#: src/gpgmetools.c:1117
 msgid "This key is useless."
 msgstr "Den här nyckeln är oanvändbar."
 
-#: src/gpgmetools.c:1366
+#: src/gpgmetools.c:1454
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
@@ -1241,49 +1241,66 @@ msgstr ""
 msgid "DSA (sign only)"
 msgstr "DSA (endast signering)"
 
-#: src/keygendlg.c:90
+#: src/keygendlg.c:91
 msgid "You must enter a User ID."
 msgstr "Du måste ange en användaridentitet."
 
-#: src/keygendlg.c:97
+#: src/keygendlg.c:98
 msgid "You must enter a key size."
 msgstr "Du måste ange en nyckelstorlek."
 
-#: src/keygendlg.c:150
+#: src/keygendlg.c:152
 #, fuzzy
-msgid "Generate new keys on card"
-msgstr "Generera en ny nyckel"
+msgid "Generate card key"
+msgstr "Skapa nyckel"
 
-#: src/keygendlg.c:150 src/keygenwizard.c:578 src/keygenwizard.c:591
+#: src/keygendlg.c:152 src/keygenwizard.c:578 src/keygenwizard.c:591
 #: src/keygenwizard.c:601 src/keygenwizard.c:611 src/keygenwizard.c:623
-#: src/keygenwizard.c:640 src/keygenwizard.c:652 src/cardman.c:626
+#: src/keygenwizard.c:640 src/keygenwizard.c:652 src/cardman.c:630
 msgid "Generate key"
 msgstr "Skapa nyckel"
 
-#: src/keygendlg.c:174
+#: src/keygendlg.c:173
 msgid "_Algorithm: "
 msgstr "_Algoritm:"
 
-#: src/keygendlg.c:190
+#: src/keygendlg.c:199
 msgid "_Key size (bits): "
 msgstr "_Nyckelstorlek (bitar): "
 
-#: src/keygendlg.c:226
-msgid "_User ID: "
+#: src/keygendlg.c:224
+#, fuzzy
+msgid "User ID: "
 msgstr "_Användaridentitet: "
 
-#: src/keygendlg.c:239
+#: src/keygendlg.c:240
+msgid "_Name: "
+msgstr ""
+
+#: src/keygendlg.c:253
 msgid "_Email: "
 msgstr "_E-postadress: "
 
-#: src/keygendlg.c:252
+#: src/keygendlg.c:266
 msgid "_Comment: "
 msgstr "_Kommentar: "
 
-#: src/keygendlg.c:265
+#: src/keygendlg.c:279
 #, fuzzy
 msgid "_Expires: "
 msgstr "Går ut den:"
+
+#: src/keygendlg.c:289
+#, fuzzy
+msgid "Backup: "
+msgstr "Säkerhetskopiera nyckel"
+
+#: src/keygendlg.c:301
+msgid ""
+"If checked the encryption key will be created and stored to a backup file "
+"and then loaded into the card.  This is recommended so that encrypted "
+"messages can be decrypted even if the card has a malfunction."
+msgstr ""
 
 #: src/keygenwizard.c:175
 msgid ""
@@ -2276,45 +2293,45 @@ msgstr ""
 msgid "No card"
 msgstr ""
 
-#: src/cardman.c:617
+#: src/cardman.c:621
 #, fuzzy
 msgid "_Card"
 msgstr "_Urklipp"
 
-#: src/cardman.c:625
+#: src/cardman.c:629
 msgid "Reload card information"
 msgstr ""
 
-#: src/cardman.c:627
+#: src/cardman.c:631
 #, fuzzy
 msgid "Generate new key on card"
 msgstr "Generera en ny nyckel"
 
-#: src/cardman.c:752
+#: src/cardman.c:756
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "Åtgärden stöds inte"
 
-#: src/cardman.c:887
+#: src/cardman.c:891
 #, fuzzy
 msgid "Card Manager"
 msgstr "Filhanterare"
 
-#: src/cardman.c:895
+#: src/cardman.c:899
 #, fuzzy
 msgid "Application selection:"
 msgstr "_Automatiskt val"
 
-#: src/cardman.c:899
+#: src/cardman.c:903
 #, fuzzy
 msgid "Auto"
 msgstr "Anpassad"
 
-#: src/cardman.c:976
+#: src/cardman.c:980
 msgid "The GPGME library is too old to support smartcards."
 msgstr ""
 
-#: src/cm-openpgp.c:156
+#: src/cm-openpgp.c:162
 msgid ""
 "<b>Admin-PIN Required</b>\n"
 "\n"
@@ -2331,75 +2348,89 @@ msgid ""
 "This notice will be shown only once per session."
 msgstr ""
 
-#: src/cm-openpgp.c:275 src/cm-netkey.c:954
+#: src/cm-openpgp.c:281 src/cm-netkey.c:954
 msgid "PUK retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:276
+#: src/cm-openpgp.c:282
 msgid "CHV2 retry counter: "
 msgstr ""
 
-#: src/cm-openpgp.c:388 src/cm-netkey.c:156
+#: src/cm-openpgp.c:394 src/cm-netkey.c:156
 #, fuzzy
 msgid "Reset PIN"
 msgstr "Återställ"
 
-#: src/cm-openpgp.c:388 src/cm-openpgp.c:410 src/cm-netkey.c:157
+#: src/cm-openpgp.c:394 src/cm-openpgp.c:416 src/cm-netkey.c:157
 msgid "Change PIN"
 msgstr ""
 
-#: src/cm-openpgp.c:398 src/cm-netkey.c:157
+#: src/cm-openpgp.c:404 src/cm-netkey.c:157
 msgid "Change PUK"
 msgstr ""
 
-#: src/cm-openpgp.c:398 src/cm-netkey.c:156
+#: src/cm-openpgp.c:404 src/cm-netkey.c:156
 #, fuzzy
 msgid "Reset PUK"
 msgstr "Återställ"
 
-#: src/cm-openpgp.c:667
+#: src/cm-openpgp.c:675
 #, c-format
 msgid ""
 "Error saving the changed values.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:690
+#: src/cm-openpgp.c:698
 msgid "Only plain ASCII is currently allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:692
+#: src/cm-openpgp.c:700
 msgid "The \"<\" character may not be used."
 msgstr ""
 
-#: src/cm-openpgp.c:694
+#: src/cm-openpgp.c:702
 msgid "Double spaces are not allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:726
+#: src/cm-openpgp.c:734
 msgid ""
 "Total length of first and last name may not be longer than 39 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:729 src/cm-openpgp.c:767 src/cm-openpgp.c:794
-#: src/cm-openpgp.c:818 src/cm-openpgp.c:843 src/cm-openpgp.c:864
+#: src/cm-openpgp.c:737 src/cm-openpgp.c:775 src/cm-openpgp.c:802
+#: src/cm-openpgp.c:826 src/cm-openpgp.c:851 src/cm-openpgp.c:872
 #, fuzzy
 msgid "Saving the field failed."
 msgstr "Signera markerad fil"
 
-#: src/cm-openpgp.c:753
+#: src/cm-openpgp.c:761
 msgid "Invalid length of the language preference."
 msgstr ""
 
-#: src/cm-openpgp.c:761
+#: src/cm-openpgp.c:769
 msgid "The language preference may only contain the letters 'a' through 'z'."
 msgstr ""
 
-#: src/cm-openpgp.c:813 src/cm-openpgp.c:838
+#: src/cm-openpgp.c:821 src/cm-openpgp.c:846
 msgid "The field may not be longer than 254 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:1057
+#: src/cm-openpgp.c:1071
+msgid ""
+"<b>Unblocking the PIN</b>\n"
+"\n"
+"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Reset "
+"Code</b> and then to enter a new value for the PIN and repeat that new value "
+"at another prompt."
+msgstr ""
+
+#: src/cm-openpgp.c:1085
 msgid ""
 "<b>Changing the PIN</b>\n"
 "\n"
@@ -2415,7 +2446,7 @@ msgid ""
 "PIN.  Please check the instructions of your issuer."
 msgstr ""
 
-#: src/cm-openpgp.c:1074
+#: src/cm-openpgp.c:1102
 msgid ""
 "<b>Changing the Reset Code</b>\n"
 "\n"
@@ -2427,7 +2458,7 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1084
+#: src/cm-openpgp.c:1112
 msgid ""
 "<b>Reseting the PIN or the Reset Code</b>\n"
 "\n"
@@ -2445,7 +2476,7 @@ msgid ""
 "repeat that new value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1101
+#: src/cm-openpgp.c:1129
 msgid ""
 "<b>Changing the Admin-PIN</b>\n"
 "\n"
@@ -2463,101 +2494,101 @@ msgid ""
 "value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1144 src/cm-netkey.c:779
+#: src/cm-openpgp.c:1172 src/cm-netkey.c:779
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:1301 src/cm-netkey.c:875 src/cm-dinsig.c:255
+#: src/cm-openpgp.c:1329 src/cm-netkey.c:875 src/cm-dinsig.c:255
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "<b>Användargränssnitt</b>"
 
-#: src/cm-openpgp.c:1311 src/cm-netkey.c:884 src/cm-dinsig.c:264
+#: src/cm-openpgp.c:1339 src/cm-netkey.c:884 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr ""
 
-#: src/cm-openpgp.c:1315 src/cm-netkey.c:888
+#: src/cm-openpgp.c:1343 src/cm-netkey.c:888
 msgid "Card version:"
 msgstr ""
 
-#: src/cm-openpgp.c:1319
+#: src/cm-openpgp.c:1347
 msgid "Manufacturer:"
 msgstr ""
 
-#: src/cm-openpgp.c:1328
+#: src/cm-openpgp.c:1356
 #, fuzzy
 msgid "<b>Personal</b>"
 msgstr "Personligen"
 
-#: src/cm-openpgp.c:1342
+#: src/cm-openpgp.c:1370
 msgid "Salutation:"
 msgstr ""
 
-#: src/cm-openpgp.c:1347
+#: src/cm-openpgp.c:1375
 msgid "First name:"
 msgstr ""
 
-#: src/cm-openpgp.c:1352
+#: src/cm-openpgp.c:1380
 #, fuzzy
 msgid "Last name:"
 msgstr "Användarnamn:"
 
-#: src/cm-openpgp.c:1357
+#: src/cm-openpgp.c:1385
 msgid "Language:"
 msgstr ""
 
-#: src/cm-openpgp.c:1362
+#: src/cm-openpgp.c:1390
 msgid "Login data:"
 msgstr ""
 
-#: src/cm-openpgp.c:1367
+#: src/cm-openpgp.c:1395
 #, fuzzy
 msgid "Public key URL:"
 msgstr "_Publika nycklar"
 
-#: src/cm-openpgp.c:1375 src/cm-netkey.c:920
+#: src/cm-openpgp.c:1403 src/cm-netkey.c:920
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "<b>Allmänt</b>"
 
-#: src/cm-openpgp.c:1392
+#: src/cm-openpgp.c:1420
 #, fuzzy
 msgid "Signature key:"
 msgstr "Signaturer:"
 
-#: src/cm-openpgp.c:1396
+#: src/cm-openpgp.c:1424
 #, fuzzy
 msgid "Encryption key:"
 msgstr "Krypterar..."
 
-#: src/cm-openpgp.c:1400
+#: src/cm-openpgp.c:1428
 #, fuzzy
 msgid "Authentication key:"
 msgstr "Kan authentisera"
 
-#: src/cm-openpgp.c:1404
+#: src/cm-openpgp.c:1432
 #, fuzzy
 msgid "Signature counter:"
 msgstr "Signaturer:"
 
-#: src/cm-openpgp.c:1412 src/cm-netkey.c:936
+#: src/cm-openpgp.c:1440 src/cm-netkey.c:936
 #, fuzzy
 msgid "<b>PIN</b>"
 msgstr "<b>Allmänt</b>"
 
-#: src/cm-openpgp.c:1424
+#: src/cm-openpgp.c:1452
 #, fuzzy
 msgid "Force signature PIN:"
 msgstr "_Frikopplad signatur"
 
-#: src/cm-openpgp.c:1428 src/cm-netkey.c:946
+#: src/cm-openpgp.c:1456 src/cm-netkey.c:946
 msgid "PIN retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:1442
+#: src/cm-openpgp.c:1470
 msgid "Admin-PIN retry counter:"
 msgstr ""
 
@@ -2701,6 +2732,10 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Generate new keys on card"
+#~ msgstr "Generera en ny nyckel"
 
 #~ msgid "DSA and ElGamal (default)"
 #~ msgstr "DSA och ElGamal (standard)"
