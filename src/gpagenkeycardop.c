@@ -207,6 +207,11 @@ gpa_gen_key_card_operation_done_error_cb (GpaContext *context,
     case GPG_ERR_CANCELED:
       /* Ignore these */
       break;
+
+    case GPG_ERR_BAD_PIN:
+      gpa_window_error (gpg_strerror (err), NULL);
+      break;
+
     default:
       gpa_gpgme_warning_ext (err, op->parms? op->parms->r_error_desc : NULL);
       break;

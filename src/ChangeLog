@@ -2,6 +2,9 @@
 
 	* gpgmeedit.c (edit_fnc): Use gpgme_io_write.
 	(gpgme_io_write) [!HAVE_GPGME_IO_WRITE]: Define replacement.
+	(edit_fnc): Handle SC_OP status codes.
+	* gpagenkeycardop.c (gpa_gen_key_card_operation_done_error_cb):
+	Show a useful message for GPG_ERR_BAD_PIN.
 
 2009-06-08  Werner Koch  <wk@g10code.com>
 

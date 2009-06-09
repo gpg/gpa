@@ -201,6 +201,7 @@ struct edit_parms_s
   int need_status_passphrase_sym;
 };
 
+
 /* The edit callback proper */
 static gpg_error_t
 edit_fnc (void *opaque, gpgme_status_code_t status,
@@ -210,7 +211,6 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
   char *result = NULL;
 
   /* Ignore these status lines, as they don't require any response */
-  /* FIXME: should GPGME_STATUS_CARDCTRL be included here as well? -mo */
   if (status == GPGME_STATUS_EOF 
       || status == GPGME_STATUS_GOT_IT
       || status == GPGME_STATUS_NEED_PASSPHRASE
@@ -221,6 +221,8 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       || status == GPGME_STATUS_SIGEXPIRED
       || status == GPGME_STATUS_KEYEXPIRED
       || status == GPGME_STATUS_BACKUP_KEY_CREATED
+      || status == GPGME_STATUS_CARDCTRL       /* Issued by gpg1.  */
+      || status == GPGME_STATUS_SC_OP_SUCCESS
       || status == GPGME_STATUS_PROGRESS)
     {
       return parms->err;
@@ -228,6 +230,23 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
   else if (!parms->need_status_passphrase_sym
            && status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
     {
+      return parms->err;
+    }
+  else if (status == GPGME_STATUS_SC_OP_FAILURE)
+    {
+      if (args && !parms->err)
+        {
+          gpg_err_code_t ec;
+
+          switch (strtoul (args, NULL, 10))
+            {
+            case 1: ec = GPG_ERR_CANCELED; break;
+            case 2: ec = GPG_ERR_BAD_PIN; break;
+            default: ec = GPG_ERR_CARD; break;
+            }
+          if (ec)
+            parms->err = gpg_error (ec);
+        }
       return parms->err;
     }
 
