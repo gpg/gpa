@@ -326,7 +326,7 @@ dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard)
   char buffer[128];
   int nread;
   gchar *text = NULL;
-  gint len = 0;
+  size_t len = 0;
 
   nread = gpgme_data_seek (data, 0, SEEK_SET);
   if (nread == -1)
@@ -350,7 +350,7 @@ dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard)
   dos_to_unix (text, &len);
 #endif
 
-  gtk_clipboard_set_text (clipboard, text, len);
+  gtk_clipboard_set_text (clipboard, text, (int)len);
   g_free (text);
   return;
 }
@@ -527,7 +527,7 @@ get_gpg_connect_agent_path (void)
   if (!gpgconf)
     return NULL;
 
-#if G_OS_WIN32
+#ifdef G_OS_WIN32
 # define NEWNAME "gpg-connect-agent.exe"
 #else
 # define NEWNAME "gpg-connect-agent"
@@ -535,7 +535,7 @@ get_gpg_connect_agent_path (void)
           
   fname = g_malloc (strlen (gpgconf) + strlen (NEWNAME) + 1);
   strcpy (fname, gpgconf);
-#if G_OS_WIN32 
+#ifdef G_OS_WIN32 
   for (p=fname; *p; p++)
     if (*p == '\\')
       *p = '/';

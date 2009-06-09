@@ -233,6 +233,7 @@ _save_cflags=$CFLAGS
 LIBS="$LIBS $GPGME_LIBS"
 CFLAGS="$CFLAGS $GPGME_CFLAGS"
 AC_CHECK_FUNCS([gpgme_op_assuan_transact])
+AC_CHECK_FUNCS([gpgme_io_write])
 # Fixme:  We should write a test based on gpgme_subkey_t 
 #         We might even want to put such a test into gpgme.m4.
 AC_CHECK_MEMBERS([struct _gpgme_subkey.card_number],,,[#include <gpgme.h>])

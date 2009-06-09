@@ -1,3 +1,13 @@
+2009-06-09  Werner Koch  <wk@g10code.com>
+
+	* gpgmeedit.c (edit_fnc): Use gpgme_io_write.
+	(gpgme_io_write) [!HAVE_GPGME_IO_WRITE]: Define replacement.
+
+2009-06-08  Werner Koch  <wk@g10code.com>
+
+	* gpgmetools.c (dump_data_to_clipboard): Use size_t for LEN.
+	(get_gpg_connect_agent_path) [G_OS_WIN32]: s/#if/#ifdef/.
+
 2009-05-30  Moritz  <moritz@gnu.org>
 
 	* fileman.c (DND_TARGET_URI_LIST): Change constant from 0 to 1.

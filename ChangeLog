@@ -1,3 +1,7 @@
+2009-06-09  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: test for gpgme-io_write.
+
 2009-03-30  Moritz  <moritz@gnu.org>
 
 	* configure.ac: Typo fix: change _save_CFLAGS to _save_cflags.

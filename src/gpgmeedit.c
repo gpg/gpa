@@ -23,11 +23,15 @@
 #endif
 
 #include <assert.h>
+#include <unistd.h>
 
 #include "gpgmeedit.h"
 #include "passwddlg.h"
 
-#include <unistd.h>
+/* Let older versions of gpgme work on Unix. */
+#ifndef HAVE_GPGME_IO_WRITE
+#define gpgme_io_write write
+#endif
 
 
 /* The edit callback for all the edit operations is edit_fnc(). Each
@@ -216,6 +220,7 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       || status == GPGME_STATUS_USERID_HINT
       || status == GPGME_STATUS_SIGEXPIRED
       || status == GPGME_STATUS_KEYEXPIRED
+      || status == GPGME_STATUS_BACKUP_KEY_CREATED
       || status == GPGME_STATUS_PROGRESS)
     {
       return parms->err;
@@ -258,8 +263,8 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       if (result)
 	{
           if (*result)
-            write (fd, result, strlen (result));
-	  write (fd, "\n", 1);
+            gpgme_io_write (fd, result, strlen (result));
+	  gpgme_io_write (fd, "\n", 1);
 	}
     }
   else
