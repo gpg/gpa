@@ -1420,7 +1420,8 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
     argv[0] = NULL;
   g_return_val_if_fail (argv[0], gpg_error (GPG_ERR_INV_ARG));
   argc = 1;
-  if (protocol != GPGME_PROTOCOL_GPGCONF)
+  if (protocol != GPGME_PROTOCOL_GPGCONF
+      && protocol != GPGME_PROTOCOL_ASSUAN)
     {
       argv[argc++] = (char*)"--status-fd";
       argv[argc++] = (char*)"2";
