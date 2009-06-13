@@ -1,3 +1,13 @@
+2009-06-13  Moritz  <moritz@gnu.org>
+
+	* keygenwizard.c (focus_repeat_passphrase, passwd_validate_cb)
+	(keygen_wizard_passwd_page)
+	(gpa_keygen_wizard_password_get_password): Removed.
+	(gpa_keygen_wizard_generate_action): Do not set para->password.
+	(struct GPAKeyGenWizard): Removed member passwd_page.
+	(keygen_wizard_prepare_cb): Removed code for password page.
+	(gpa_keygen_wizard_new): Likewise.
+
 2009-06-10  Werner Koch  <wk@g10code.com>
 
 	* gpgmetools.c (gpa_start_simple_gpg_command): Do not use
