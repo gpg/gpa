@@ -1491,3 +1491,111 @@ gpa_start_agent (void)
   gpa_start_simple_gpg_command (NULL, NULL, GPGME_PROTOCOL_ASSUAN,
                                 "NOP", "/bye", NULL);
 }
+
+
+
+/* Fucntions matching the user id verification isn gpg's key generation.  */
+
+const char *
+gpa_validate_gpg_name (const char *name)
+{
+  const char *result = NULL;
+
+  if (!name || !*name)
+    result = _("You must enter a name.");
+  else if (strpbrk (name, "<>"))
+    result = _("Invalid character in name.");
+  else if (g_ascii_isdigit (*name))
+    result = _("Name may not start with a digit.");
+  else if (g_utf8_strlen (name, -1) < 5)
+    result = _("Name is too short.");
+  
+  return result;
+}
+
+
+/* Check whether the string has characters not valid in an RFC-822
+   address.  To cope with OpenPGP we allow non-ascii characters
+   so that for example umlauts are legal in an email address.  An
+   OpenPGP user ID must be utf-8 encoded but there is no strict
+   requirement for RFC-822.  Thus to avoid IDNA encoding we put the
+   address verbatim as utf-8 into the user ID under the assumption
+   that mail programs handle IDNA at a lower level and take OpenPGP
+   user IDs as utf-8.  */
+static int
+has_invalid_email_chars (const char *s)
+{
+  int at_seen = 0;
+  const char *valid_chars=
+    "01234567890_-.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  for ( ; *s; s++ ) 
+    {
+      if ((*s & 0x80))
+        continue; /* We only care about ASCII.  */
+      if (*s == '@')
+        at_seen=1;
+      else if (!at_seen && !( !!strchr( valid_chars, *s ) || *s == '+' ))
+        return 1;
+      else if (at_seen && !strchr (valid_chars, *s))
+        return 1;
+    }
+  return 0;
+}
+
+
+static int
+string_count_chr (const char *string, int c)
+{
+  int count;
+
+  for (count=0; *string; string++ )
+    if ( *string == c )
+      count++;
+  return count;
+}
+
+
+/* Check whether NAME represents a valid mailbox according to RFC822
+   except for non-ascii utf-8 characters. Returns true if so. */
+static int
+is_valid_mailbox (const char *name)
+{
+  return !( !name
+            || !*name
+            || has_invalid_email_chars (name)
+            || string_count_chr (name,'@') != 1
+            || *name == '@'
+            || name[strlen(name)-1] == '@'
+            || name[strlen(name)-1] == '.'
+            || strstr (name, "..") );
+}
+
+
+const char *
+gpa_validate_gpg_email (const char *email)
+{
+  const char *result = NULL;
+
+  if (!email || !*email)
+    ;
+  else if (!is_valid_mailbox (email))
+    result = _("Email address is not valid.");
+
+  return result;
+}
+
+
+const char *
+gpa_validate_gpg_comment (const char *comment)
+{
+  const char *result = NULL;
+
+  if (!comment || !*comment)
+    ;
+  else if (strpbrk (comment, "()"))
+    result = _("Invalid character in comments.");
+
+  return result;
+}
+

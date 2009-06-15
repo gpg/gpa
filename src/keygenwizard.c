@@ -157,7 +157,8 @@ name_validate_cb (GtkWidget *widget, gpointer data)
   while (*name && g_unichar_isspace (g_utf8_get_char (name)))
     name = g_utf8_next_char (name);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (wizard->window),
-				   wizard->name_page, *name != '\0');
+				   wizard->name_page, 
+                                   !gpa_validate_gpg_name (name));
 
   return FALSE;
 }
@@ -193,10 +194,8 @@ email_validate_cb (GtkWidget *widget, gpointer data)
   while (*email && g_unichar_isspace (g_utf8_get_char (email)))
     email = g_utf8_next_char (email);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (wizard->window),
-				   wizard->email_page, *email != '\0');
-
-  /* FIXME: we should do much more checking. Best would be exactly the
-     same checks gpg does in interactive mode with --gen-key.  */
+				   wizard->email_page,
+                                   !gpa_validate_gpg_email (email));
 
   return FALSE;
 }

@@ -1371,7 +1371,8 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
         {
           if (!strcmp (args, "keygen.email"))
             next_state = CARD_GENERATE_EMAIL;
-          else if (!strcmp (args, "cardedit.prompt"))
+          else if (!strcmp (args, "cardedit.prompt")
+                   || !strcmp (args, "keygen.name"))
             goto unexpected_prompt;
           else
             {
@@ -1388,7 +1389,8 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
         {
           if (!strcmp (args, "keygen.comment"))
             next_state = CARD_GENERATE_COMMENT;
-          else if (!strcmp (args, "cardedit.prompt"))
+          else if (!strcmp (args, "cardedit.prompt")
+                   || !strcmp (args, "keygen.email"))
             goto unexpected_prompt;
           else
             {
@@ -1403,6 +1405,8 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
     case CARD_GENERATE_COMMENT:
       if (status == GPGME_STATUS_KEY_CREATED)
 	next_state = CARD_GENERATE_DONE;
+      else if (!strcmp (args, "keygen.comment"))
+        goto unexpected_prompt;
       else
         goto bad_state;
       break;

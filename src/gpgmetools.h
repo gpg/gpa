@@ -208,5 +208,10 @@ gpg_error_t gpa_start_simple_gpg_command (gboolean (*cb)
 
 void gpa_start_agent (void);
 
+/* Funtions to check user inputs in the same way gpg does.  */
+const char *gpa_validate_gpg_name (const char *name);
+const char *gpa_validate_gpg_email (const char *email);
+const char *gpa_validate_gpg_comment (const char *comment);
+
 
 #endif /*GPGMETOOLS_H*/

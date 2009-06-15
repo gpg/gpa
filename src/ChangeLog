@@ -1,3 +1,19 @@
+2009-06-15  Werner Koch  <wk@g10code.com>
+
+	* keygenwizard.c (name_validate_cb, email_validate_cb): Use new
+	validation functions.
+
+	* keygendlg.c (create_dialog): Show backup button only in card mode.
+	(gpa_key_gen_run_dialog): Adjust for this.
+	(validate_name, validate_comment): New.
+	(response_cb): Use them.
+	* gpgmetools.c (gpa_validate_gpg_name, gpa_validate_gpg_email)
+	(gpa_validate_gpg_comment): New.
+	(has_invalid_email_chars, string_count_chr, is_valid_mailbox): New.
+
+	* gpgmeedit.c (card_edit_genkey_fnc_transit): Check for repeated
+	name/email/comment prompts.
+
 2009-06-13  Moritz  <moritz@gnu.org>
 
 	* keygenwizard.c (focus_repeat_passphrase, passwd_validate_cb)

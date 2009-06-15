@@ -58,11 +58,48 @@ struct _GpaKeyGenDlg
   GtkWidget *entry_email;
   GtkWidget *entry_comment;
   GtkWidget *entry_expire;
-  GtkWidget *entry_backup;
+  GtkWidget *entry_backup;  /* Maybe NULL.  */
 
   GtkWidget *label_userid;
 };
 typedef struct _GpaKeyGenDlg GpaKeyGenDlg;
+
+
+static gboolean
+validate_name (GpaKeyGenDlg *self)
+{
+  const char *s;
+
+  s = gpa_validate_gpg_name (gtk_entry_get_text 
+                             (GTK_ENTRY (self->entry_name)));
+  if (s)
+    gpa_window_error (s, self->dialog);
+  return !s;
+}
+
+static gboolean
+validate_email (GpaKeyGenDlg *self)
+{
+  const char *s;
+
+  s = gpa_validate_gpg_email (gtk_entry_get_text 
+                              (GTK_ENTRY (self->entry_email)));
+  if (s)
+    gpa_window_error (s, self->dialog);
+  return !s;
+}
+
+static gboolean
+validate_comment (GpaKeyGenDlg *self)
+{
+  const char *s;
+
+  s = gpa_validate_gpg_comment (gtk_entry_get_text 
+                                (GTK_ENTRY (self->entry_comment)));
+  if (s)
+    gpa_window_error (s, self->dialog);
+  return !s;
+}
 
 
 /* This callback gets called each time the user clicks on the [OK] or
@@ -86,9 +123,10 @@ response_cb (GtkDialog *dlg, gint response, gpointer user_data)
           :  NULL);
   keysize = temp? atoi (temp):0; 
              
-  if (!name || !*name)
+  if (!validate_name (self)
+      || !validate_email (self)
+      || !validate_comment (self))
     {
-      gpa_window_error (_("You must enter a User ID."), self->dialog);
       g_signal_stop_emission_by_name (dlg, "response");
     }
   else if (self->forcard)
@@ -286,23 +324,28 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
   self->entry_expire = button;
   rowidx++;
 
-  label = gtk_label_new_with_mnemonic (_("Backup: "));
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
-                    GTK_FILL, GTK_SHRINK, 0, 0);
-  button = gtk_check_button_new ();
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-  gtk_table_attach (GTK_TABLE (table), hbox, 1, 2, rowidx, rowidx+1,
-                    GTK_FILL, GTK_SHRINK, 0, 0);
-  self->entry_backup = button;
-  gpa_add_tooltip (hbox,
-                   _("If checked the encryption key will be created "
-                     "and stored to a backup file and then loaded into "
-                     "the card.  This is recommended so that encrypted "
-                     "messages can be decrypted even if the card has a "
-                     "malfunction."));
+  if (forcard)
+    {
+      label = gtk_label_new_with_mnemonic (_("Backup: "));
+      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+      gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
+                        GTK_FILL, GTK_SHRINK, 0, 0);
+      button = gtk_check_button_new ();
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+      gtk_table_attach (GTK_TABLE (table), hbox, 1, 2, rowidx, rowidx+1,
+                        GTK_FILL, GTK_SHRINK, 0, 0);
+      self->entry_backup = button;
+      gpa_add_tooltip (hbox,
+                       _("If checked the encryption key will be created "
+                         "and stored to a backup file and then loaded into "
+                         "the card.  This is recommended so that encrypted "
+                         "messages can be decrypted even if the card has a "
+                         "malfunction."));
+    }
+  else
+    self->entry_backup = NULL;
 
 }
 
@@ -369,8 +412,10 @@ gpa_key_gen_run_dialog (GtkWidget *parent, const char *forcard)
       
   gpa_date_box_get_date (GPA_DATE_BOX (self->entry_expire), &params->expire);
 
-  params->backup = gtk_toggle_button_get_active 
-    (GTK_TOGGLE_BUTTON (self->entry_backup));
+  params->backup = self->entry_backup 
+                   ? gtk_toggle_button_get_active 
+                        (GTK_TOGGLE_BUTTON (self->entry_backup))
+                   : 0;
 
   gtk_widget_destroy (self->dialog);
   g_free (self);

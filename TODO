@@ -3,11 +3,9 @@
 In no particular order:
 
 * Improve support for smartcard
-** lookup and display public key details associated to a smartcard
 ** display status during smartcard access, since it often takes longer
    than a second (idea: simply disable refresh button?)
 ** display messages "please attach reader" in case no smartcard reader is attached
-** mark readonly data objects on the card (maybe grey them out?)
 ** generate-new-key-pair button if card contains no key.
 ** check if cardman releases the smartcard (reader) as it should. maybe we have
    to destroy the cardman instance instead of simply hiding it.
@@ -141,6 +139,11 @@ In no particular order:
    is bounded by the width of the expander's label (the
    fingerprint). I think the expander's width should be allowed to
    grow in case there's unused space to the right of the expander widget.
+
+** Keygenwizard
+   Immediately show an error description if the entered values does
+   not pass the validation function.
+
 
 * Building
 
