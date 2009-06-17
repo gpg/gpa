@@ -1,3 +1,20 @@
+2009-06-17  Werner Koch  <wk@g10code.com>
+
+	* Makefile.am (gpa_cardman_sources): Remove cpp condition on
+	BUILD_CARD_MANAGER.
+	* gpa.c (quit_if_no_window, gpa_open_cardmanager, main): Ditto.
+	* clipboard.c (clipboard_action_new): Ditto.
+	* fileman.c (fileman_action_new): Ditto.
+	* keymanager.c (key_manager_action_new)
+	(keyring_editor_action_new): Ditto.
+	* gpa-key-details.c (details_page_fill_key): Remove cpp condition
+	on HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER.
+	* gpasubkeylist.c (enum): Ditto.
+	(gpa_subkey_list_new): Ditto.
+	(gpa_subkey_list_set_key): Ditto.
+	* keylist.c (get_key_pixbuf): Ditto.
+	* gpgmeedit.c (gpgme_io_write): Remove replacement function.
+
 2009-06-15  Werner Koch  <wk@g10code.com>
 
 	* keygenwizard.c (name_validate_cb, email_validate_cb): Use new

@@ -956,9 +956,7 @@ key_manager_action_new (GpaKeyManager *self,
     "      <menuitem action='WindowsKeyringEditor'/>"
     "      <menuitem action='WindowsFileManager'/>"
     "      <menuitem action='WindowsClipboard'/>"
-#ifdef BUILD_CARD_MANAGER
     "      <menuitem action='WindowsCardManager'/>"
-#endif
     "    </menu>"
     "    <menu action='Server'>"
     "      <menuitem action='ServerRetrieve'/>"
@@ -987,9 +985,7 @@ key_manager_action_new (GpaKeyManager *self,
     "    <separator/>"
     "    <toolitem action='WindowsFileManager'/>"
     "    <toolitem action='WindowsClipboard'/>"
-#ifdef BUILD_CARD_MANAGER
     "    <toolitem action='WindowsCardManager'/>"
-#endif
 #if 0
     "    <toolitem action='HelpContents'/>"
 #endif
@@ -1061,10 +1057,8 @@ key_manager_action_new (GpaKeyManager *self,
   g_object_set (action, "short_label", _("Import"), NULL);
   action = gtk_action_group_get_action (action_group, "WindowsFileManager");
   g_object_set (action, "short_label", _("Files"), NULL);
-#ifdef BUILD_CARD_MANAGER
   action = gtk_action_group_get_action (action_group, "WindowsCardManager");
   g_object_set (action, "short_label", _("Card"), NULL);
-#endif
 
   /* Take care of sensitiveness of widgets.  */
   action = gtk_action_group_get_action (action_group, "EditCopy");

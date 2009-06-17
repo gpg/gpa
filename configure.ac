@@ -1,24 +1,22 @@
 # configure.ac for GPA
 # Copyright (C) 2000, 2001  Werner Koch
 # Copyright (C) 2002, 2003, 2004  Miguel Coca
-# Copyright (C) 2005, 2006, 2007, 2008  g10 Code GmbH
+# Copyright (C) 2005, 2006, 2007, 2008, 2009  g10 Code GmbH
 # 
 # This file is part of GPA.
 # 
-# GPA is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# GPA is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
 # 
-# GPA is distributed in the hope that it will be useful,g
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GPA is distributed in the hope that it will be useful but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+# License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
-# MA 02110-1301, USA
+# along with this program; if not, see <http://www.gnu.org/licenses/>.
 # 
 # (Process this file with autoconf to produce a configure script.)
 AC_PREREQ(2.59)
@@ -42,7 +40,7 @@ NEED_GPG_ERROR_VERSION=1.4
 NEED_LIBASSUAN_API=1
 NEED_LIBASSUAN_VERSION=1.0.4
 NEED_GPGME_API=1
-NEED_GPGME_VERSION=1.1.6
+NEED_GPGME_VERSION=1.2.0
 
 
 AM_CONFIG_HEADER(config.h)
@@ -228,24 +226,29 @@ else
   AM_PATH_GPGME("$NEED_GPGME_API:$NEED_GPGME_VERSION",
                 have_gpgme=yes,have_gpgme=no)
 fi
-_save_libs=$LIBS
-_save_cflags=$CFLAGS
-LIBS="$LIBS $GPGME_LIBS"
-CFLAGS="$CFLAGS $GPGME_CFLAGS"
-AC_CHECK_FUNCS([gpgme_op_assuan_transact])
-AC_CHECK_FUNCS([gpgme_io_write])
-# Fixme:  We should write a test based on gpgme_subkey_t 
-#         We might even want to put such a test into gpgme.m4.
-AC_CHECK_MEMBERS([struct _gpgme_subkey.card_number],,,[#include <gpgme.h>])
-LIBS=$_save_libs
-CFLAGS="$_save_cflags"
-# We build the card manager only if we have a decent libgpgme.  */
-if test "x$ac_cv_func_gpgme_op_assuan_transact" = "xyes"; then
-    AC_DEFINE(BUILD_CARD_MANAGER, 1,
-              [Defined if the card manager shall be build.])
-fi
-AM_CONDITIONAL(BUILD_CARD_MANAGER, 
-               test "x$ac_cv_func_gpgme_op_assuan_transact" = "xyes")
+
+dnl The tests below are not anymore used because we now depend on a
+dnl gpgme which has all these features.  However, I keep the code here
+dnl for future work.
+dnl
+dnl _save_libs=$LIBS
+dnl _save_cflags=$CFLAGS
+dnl LIBS="$LIBS $GPGME_LIBS"
+dnl CFLAGS="$CFLAGS $GPGME_CFLAGS"
+dnl AC_CHECK_FUNCS([gpgme_op_assuan_transact])
+dnl AC_CHECK_FUNCS([gpgme_io_write])
+dnl # Fixme:  We should write a test based on gpgme_subkey_t 
+dnl #         We might even want to put such a test into gpgme.m4.
+dnl AC_CHECK_MEMBERS([struct _gpgme_subkey.card_number],,,[#include <gpgme.h>])
+dnl LIBS=$_save_libs
+dnl CFLAGS="$_save_cflags"
+dnl # We build the card manager only if we have a decent libgpgme.  */
+dnl if test "x$ac_cv_func_gpgme_op_assuan_transact" = "xyes"; then
+dnl     AC_DEFINE(BUILD_CARD_MANAGER, 1,
+dnl               [Defined if the card manager shall be build.])
+dnl fi
+dnl AM_CONDITIONAL(BUILD_CARD_MANAGER, 
+dnl                test "x$ac_cv_func_gpgme_op_assuan_transact" = "xyes")
 
 
 #

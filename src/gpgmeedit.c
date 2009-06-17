@@ -28,12 +28,6 @@
 #include "gpgmeedit.h"
 #include "passwddlg.h"
 
-/* Let older versions of gpgme work on Unix. */
-#ifndef HAVE_GPGME_IO_WRITE
-#define gpgme_io_write write
-#endif
-
-
 /* The edit callback for all the edit operations is edit_fnc(). Each
  * operation is modelled as a sequential machine (a Moore machine, to be
  * precise). Therefore, for each operation you must write two functions.

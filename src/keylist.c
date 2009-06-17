@@ -377,10 +377,8 @@ get_key_pixbuf (gpgme_key_t key)
                                     key->subkeys->fpr);
   if (seckey)
     {
-#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
       if (seckey->subkeys && seckey->subkeys->is_cardkey)
         return GPA_STOCK_SECRET_CARDKEY;
-#endif        
       return GPA_STOCK_SECRET_KEY;
     }
   else

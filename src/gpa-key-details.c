@@ -127,13 +127,11 @@ details_page_fill_key (GpaKeyDetails *kdt, gpgme_key_t key)
                                     key->subkeys->fpr);
   if (seckey)
     {
-#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
       if (seckey->subkeys && seckey->subkeys->is_cardkey)
         gtk_label_set_text (GTK_LABEL (kdt->detail_public_private),
                             _("The key has both a smartcard based private part"
                               " and a public part"));
       else
-#endif
         gtk_label_set_text (GTK_LABEL (kdt->detail_public_private),
                             _("The key has both a private and a public part"));
     }

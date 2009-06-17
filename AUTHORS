@@ -1,5 +1,5 @@
 Program: GPA
-Maintainer: Miguel Coca <mcoca@gnu.org>
+Maintainer: None, check the mailing list gpa-dev@gnupg.org.
 Bug reports: <bug-gpa@gnupg.org>
 Security related bug reports: <security@gnupg.org>
 License: GPLv3+
@@ -85,8 +85,9 @@ Zdenek Hatas <zdenek.hatas@gmail.com>
 Maxim Britov <maxim.britov@gmail.com>
         Russian translation.
 
-Marcus Brinkmann  <marcus@g10code.de>
+Marcus Brinkmann  <marcus@g10code.com>
         Clipboard code, cleanups, bug fixes.
+
         
 
         

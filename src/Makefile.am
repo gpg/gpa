@@ -1,3 +1,23 @@
+# Makefile.am - Top makefile for GPA.
+# Copyright (C) 2000, 2001  Werner Koch
+# Copyright (C) 2002, 2003, 2004  Miguel Coca
+# Copyright (C) 2005, 2006, 2007, 2008, 2009  g10 Code GmbH
+# 
+# This file is part of GPA.
+# 
+# GPA is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
+# 
+# GPA is distributed in the hope that it will be useful but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+# License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, see <http://www.gnu.org/licenses/>.
+
 ## Process this file with automake to produce Makefile.in
 
 localedir = $(datadir)/locale
@@ -50,7 +70,6 @@ gpa_LDFLAGS = $(gpa_res_ldflag)
 gpa_DEPENDENCIES = $(gpa_deps)
 
 
-if BUILD_CARD_MANAGER
 gpa_cardman_sources = \
                 cardman.c cardman.h \
                 cm-object.c cm-object.h \
@@ -58,10 +77,6 @@ gpa_cardman_sources = \
 		cm-geldkarte.c cm-geldkarte.h \
 		cm-netkey.c cm-netkey.h \
 		cm-dinsig.c cm-dinsig.h
-else
-gpa_cardman_sources =
-endif
-
 
 
 gpa_SOURCES = get-path.h get-path.c \

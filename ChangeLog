@@ -1,3 +1,15 @@
+2009-06-17  Werner Koch  <wk@g10code.com>
+
+	* config.sub, config.guess: Update to 2007-11-19 from GnuPG.
+
+	* README: Remove outdated installation info.
+
+	* configure.ac: Require at least GPGME 1.2.
+	(HAVE_GPGME_IO_WRITE): Remove test for this.
+	(HAVE_GPGME_OP_ASSUAN_TRANSACT): Ditto.
+	(HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER): Ditto.
+	(BUILD_CARD_MANAGER): Remove this conditional.
+
 2009-06-09  Werner Koch  <wk@g10code.com>
 
 	* configure.ac: Test for gpgme_io_write.

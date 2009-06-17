@@ -40,10 +40,8 @@ typedef enum
   SUBKEY_CAN_CERTIFY,
   SUBKEY_CAN_ENCRYPT,
   SUBKEY_CAN_AUTHENTICATE,
-#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
   SUBKEY_IS_CARDKEY,
   SUBKEY_CARD_NUMBER,
-#endif /*HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER*/
   SUBKEY_STATUS,
   SUBKEY_N_COLUMNS
 } SubkeyListColumn;
@@ -68,10 +66,8 @@ gpa_subkey_list_new (void)
 			      G_TYPE_BOOLEAN,
 			      G_TYPE_BOOLEAN,
 			      G_TYPE_BOOLEAN,
-#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
 			      G_TYPE_BOOLEAN,
 			      G_TYPE_STRING,
-#endif /*HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER*/
 			      G_TYPE_STRING);
 
   /* The view */
@@ -135,7 +131,6 @@ gpa_subkey_list_new (void)
   gpa_set_column_title (column, _("[A]"), _("Can authenticate"));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
-#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", SUBKEY_IS_CARDKEY, NULL);
@@ -149,7 +144,6 @@ gpa_subkey_list_new (void)
   gpa_set_column_title (column, _("Card S/N"), 
                         _("Serial number of the smart card."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
-#endif /*HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER*/
 
   return list;
 }
@@ -230,10 +224,8 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
              SUBKEY_CAN_CERTIFY, subkey->can_certify,
              SUBKEY_CAN_ENCRYPT, subkey->can_encrypt,
              SUBKEY_CAN_AUTHENTICATE, subkey->can_authenticate,
-#ifdef HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER
              SUBKEY_IS_CARDKEY, secsubkey? secsubkey->is_cardkey :0,
              SUBKEY_CARD_NUMBER, secsubkey? secsubkey->card_number:NULL,
-#endif /*HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER*/
              SUBKEY_STATUS, subkey_status (subkey),
              -1);
 	  g_free (size);

@@ -174,9 +174,7 @@ quit_if_no_window (void)
       && !gpa_key_manager_is_open ()
       && !gpa_file_manager_is_open ()
       && !gpa_clipboard_is_open ()
-#ifdef BUILD_CARD_MANAGER
       && !gpa_card_manager_is_open ()
-#endif
       )
     gpa_stop_server ();
 }
@@ -242,7 +240,6 @@ gpa_open_filemanager (GtkAction *action, void *data)
 void
 gpa_open_cardmanager (GtkAction *action, void *data)
 {
-#ifdef BUILD_CARD_MANAGER
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  */
   g_signal_connect (G_OBJECT (gpa_card_manager_get_instance ()), "destroy",
@@ -250,7 +247,6 @@ gpa_open_cardmanager (GtkAction *action, void *data)
   gtk_widget_show_all (gpa_card_manager_get_instance ());
 
   gtk_window_present (GTK_WINDOW (gpa_card_manager_get_instance ()));
-#endif /*BUILD_CARD_MANAGER*/
 }
 
 /* Show the settings dialog.  */
@@ -409,9 +405,7 @@ main (int argc, char *argv[])
       && !args.start_file_manager
       && !args.start_clipboard
       && !args.start_settings
-#ifdef BUILD_CARD_MANAGER
       && !args.start_card_manager
-#endif
       )
     args.start_key_manager = TRUE;
 
@@ -471,10 +465,8 @@ main (int argc, char *argv[])
       if (args.start_file_manager || (optind < argc))
 	gpa_open_filemanager (NULL, NULL);
 
-#ifdef BUILD_CARD_MANAGER
       if (args.start_card_manager)
 	gpa_open_cardmanager (NULL, NULL);
-#endif
 
       if (args.start_settings)
 	gpa_open_settings_dialog (NULL, NULL);
