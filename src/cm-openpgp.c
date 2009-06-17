@@ -1029,6 +1029,7 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
     {
       /* Entry IDX is about to receive the focus.  */
 /*       g_debug ("entry %d is about to receive the focus", idx); */
+      show_edit_error (card, NULL);
     } 
   return result;
 }
@@ -1256,6 +1257,75 @@ entry_fpr_expanded_cb (GObject *object, GParamSpec *dummy, void *user_data)
     }
 }
 
+
+/* Menu function to fetch the key from the URL.  */
+static void
+pubkey_url_menu_fetch_key (GtkMenuItem *menuitem, void *opaque)
+{
+  GpaCMOpenpgp *card = opaque;
+  const char *url;
+  gpg_error_t err;
+  gpgme_data_t urllist;
+  gpgme_ctx_t ctx;
+  
+  (void)menuitem;
+
+  url = gtk_entry_get_text (GTK_ENTRY (card->entries[ENTRY_PUBKEY_URL])); 
+  if (!url || !*url)
+    return;
+
+  err = gpgme_data_new_from_mem (&urllist, url, strlen (url), 1);
+  if (err)
+    gpa_gpgme_error (err);
+  gpgme_data_set_encoding (urllist, GPGME_DATA_ENCODING_URL0);
+
+  ctx = gpa_gpgme_new ();
+  err = gpgme_op_import (ctx, urllist);
+  if (err)
+    {
+      char *message = g_strdup_printf 
+        (_("Error fetching the key.\n"
+           "(%s <%s>)"), gpg_strerror (err), gpg_strsource (err));
+      gpa_cm_object_alert_dialog (GPA_CM_OBJECT (card), message);
+      xfree (message);
+    }
+  else
+    {
+      gpgme_import_result_t impres;
+
+      impres = gpgme_op_import_result (ctx);
+      if (impres)
+        {
+          char *message = g_strdup_printf 
+            (_("Keys found: %d, imported: %d, unchanged: %d"),
+             impres->considered, impres->imported, impres->unchanged);
+          gpa_cm_object_update_status (GPA_CM_OBJECT(card), message);
+          xfree (message);
+        }
+    }
+  
+  gpgme_release (ctx);
+  gpgme_data_release (urllist);
+}
+
+
+/* Add a context menu item to the pubkey URL box.  */
+static void
+pubkey_url_populate_popup_cb (GtkEntry *entry, GtkMenu *menu, void *opaque)
+{
+  GtkWidget *menuitem;
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), menuitem);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label (_("Fetch Key"));
+  gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), menuitem);
+  gtk_widget_show (menuitem);
+
+  g_signal_connect (menuitem, "activate",
+                    G_CALLBACK (pubkey_url_menu_fetch_key), opaque);
+}
 
 
 
@@ -1507,7 +1577,7 @@ construct_data_widget (GpaCMOpenpgp *card)
           g_signal_connect (G_OBJECT (card->entries[idx]), "notify::expanded",
                             G_CALLBACK (entry_fpr_expanded_cb), card);
           break;
-          
+
         default:
           if (!GTK_IS_LABEL (card->entries[idx]))
             {
@@ -1524,6 +1594,11 @@ construct_data_widget (GpaCMOpenpgp *card)
     g_signal_connect (G_OBJECT (card->change_pin_btn[idx]), "clicked",
                       G_CALLBACK (change_pin_clicked_cb), card);
   
+  g_signal_connect (G_OBJECT (card->entries[ENTRY_PUBKEY_URL]), 
+                    "populate-popup",
+                    G_CALLBACK (pubkey_url_populate_popup_cb), card);
+
+
 }
 
 

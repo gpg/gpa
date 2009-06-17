@@ -123,7 +123,7 @@ statusbar_new (GpaCardManager *cardman)
 
   hbox = gtk_hbox_new (FALSE, 0);
  
-  label = gtk_label_new (_("Status: "));
+  label = gtk_label_new (NULL);
   cardman->status_label = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
