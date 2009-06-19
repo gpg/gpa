@@ -1,11 +1,13 @@
 Noteworthy changes in version 0.9.0 (not released)
 ------------------------------------------------
  
- * Add a smartcard manager and the option --card.
+ * Added a smartcard manager.
 
- * GPA now requires gpg2.
+ * GPA now requires GnuPG-2.
 
  * X.509 support is now always enabled.
+
+ * Major internal cleanups.  More to follow soon.
 
 
 Noteworthy changes in version 0.8.0 (2008-09-04)
