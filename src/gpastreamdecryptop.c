@@ -455,7 +455,7 @@ gpa_stream_decrypt_operation_new (GtkWidget *window,
 		     "output_stream", output_stream,
                      "no-verify", no_verify,
                      "protocol", (int) protocol,
-                     "title", title,
+                     "client-title", title,
 		     NULL);
 
   return op;

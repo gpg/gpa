@@ -1,3 +1,8 @@
+2009-06-20  Werner Koch  <wk@g10code.com>
+
+	* gpastreamdecryptop.c (gpa_stream_decrypt_operation_new): Use
+	"client-title" property.
+
 2009-06-17  Werner Koch  <wk@g10code.com>
 
 	* cardman.c (statusbar_new): Do not print "Status:" in the status
