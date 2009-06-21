@@ -1,5 +1,9 @@
 2009-06-21  Moritz  <moritz@gnu.org>
 
+	* keylist.c (setup_columns): Removed several calls to
+	gtk_tree_view_column_set_sort_indicator.
+	(gpa_keylist_init): Call gtk_tree_sortable_set_sort_column_id.
+
 	* gpa-key-window.c, gpa-key-window.h: New files.
 	* keymanager.c (key_manager_key_listed): Call
 	gpa_keylist_update_key_window.

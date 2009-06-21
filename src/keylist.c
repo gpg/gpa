@@ -318,6 +318,9 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+					GPA_KEYLIST_COLUMN_USERID,
+					GTK_SORT_ASCENDING);
 
   /* Add support for key windows, created through a double click on a
      row in the key list. */
@@ -672,7 +675,6 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
       gtk_tree_view_column_set_sort_column_id 
         (column, GPA_KEYLIST_COLUMN_HAS_SECRET);
-      gtk_tree_view_column_set_sort_indicator (column, TRUE);
     }
 
   renderer = gtk_cell_renderer_text_new ();
@@ -692,7 +694,6 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
      _("The key ID is a short number to identify a certificate."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
   gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_KEYID);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
 
   if (detailed)
@@ -706,7 +707,6 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
       gtk_tree_view_column_set_sort_column_id
         (column, GPA_KEYLIST_COLUMN_EXPIRY_TS);
-      gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes 
@@ -719,7 +719,6 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
       gtk_tree_view_column_set_sort_column_id 
         (column, GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE);
-      gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes
@@ -732,7 +731,6 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
       gtk_tree_view_column_set_sort_column_id 
         (column, GPA_KEYLIST_COLUMN_VALIDITY_VALUE);
-      gtk_tree_view_column_set_sort_indicator (column, TRUE);
     }
 
   renderer = gtk_cell_renderer_text_new ();
@@ -744,7 +742,6 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
        " of the certificate."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
   gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_USERID);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 }
 
 
