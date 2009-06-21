@@ -630,6 +630,9 @@ key_manager_key_listed (GpaContext *ctx, gpgme_key_t key, gpointer param)
   self->current_key = key;
 
   keyring_selection_update_actions (self);
+
+  /* Update key window if necessary. */
+  gpa_keylist_update_key_window (self->keylist, key);
 }
 
 

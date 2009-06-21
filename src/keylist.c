@@ -1,6 +1,6 @@
 /* keylist.c - The GNU Privacy Assistant keylist.
    Copyright (C) 2003 Miguel Coca.
-   Copyright (C) 2005, 2008 g10 Code GmbH.
+   Copyright (C) 2005, 2008, 2009 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -31,6 +31,7 @@
 #include "icons.h"
 #include "format-dn.h"
 
+#include "gpa-key-window.h"
 
 /* Properties */
 enum
@@ -61,6 +62,8 @@ typedef enum
   GPA_KEYLIST_COLUMN_USERID,
   /* This column contains the gpgme_key_t */
   GPA_KEYLIST_COLUMN_KEY,
+  /* This column references the key window. */
+  GPA_KEYLIST_COLUMN_KEY_WINDOW,
   /* These columns are used only internally for sorting */
   GPA_KEYLIST_COLUMN_HAS_SECRET,
   GPA_KEYLIST_COLUMN_EXPIRY_TS,
@@ -175,6 +178,115 @@ gpa_keylist_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/* This function is called whenever a key window object is destroyed
+   in order to delete the reference to the key window object
+   previously installed in the tree model.  */
+static void
+key_window_weak_ref_cb (gpointer data, GObject *where_the_object_was)
+{
+  GtkTreeRowReference *rowref;
+  GtkTreeModel *model;
+  GtkTreePath *path;
+
+  rowref = data;
+  model = gtk_tree_row_reference_get_model (rowref);
+  path = gtk_tree_row_reference_get_path (rowref);
+
+  if (path)
+    {
+      GtkTreeIter iter;
+      gboolean iter_found;
+      
+      iter_found = gtk_tree_model_get_iter (model, &iter, path);
+      if (iter_found)
+	gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+			    GPA_KEYLIST_COLUMN_KEY_WINDOW, NULL, -1);
+
+      gtk_tree_path_free (path);
+    }
+
+  gtk_tree_row_reference_free (rowref);
+}
+
+/* This function is called when the user "activates"
+   (i.e. double-clicks) on a key contained in the key list and either
+   creates a new key window for that key or focuses a previously
+   opened key window. */
+static void
+keylist_row_activated (GtkTreeView *tree_view,
+		       GtkTreePath *path,
+		       GtkTreeViewColumn *column,
+		       gpointer user_data)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gboolean iter_found;
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
+
+  iter_found = gtk_tree_model_get_iter (model, &iter, path);
+  if (iter_found)
+    {
+      GValue value = {0,};
+      GtkWidget *key_window;
+
+      fprintf (stderr, "row activated\n");
+
+      gtk_tree_model_get_value (model, &iter,
+				GPA_KEYLIST_COLUMN_KEY_WINDOW,
+				&value);
+      key_window = g_value_get_pointer (&value);
+      g_value_unset (&value);
+
+      if (key_window)
+	{
+	  /* Key already opened in a window, request to focus it. */
+	  fprintf (stderr, "present window\n");
+	  gtk_window_present (GTK_WINDOW (key_window));
+	}
+      else
+	{
+	  gpgme_key_t key;
+
+	  /* Key not yet opened in a window, create the key
+	     window.  */
+	  fprintf (stderr, "open window\n");
+	  
+	  gtk_tree_model_get_value (model, &iter,
+				    GPA_KEYLIST_COLUMN_KEY,
+				    &value);
+	  key = g_value_get_pointer (&value);
+	  g_value_unset (&value);
+
+	  if (!key)
+	    {
+	      /* FIXME: display error message? */
+	      fprintf (stderr, "key not found\n");
+	    }
+	  else
+	    {
+	      /* Key found, set up key window. */
+
+	      if (key->uids && key->uids->name)
+		fprintf (stderr, "UID: %s\n", key->uids->name);
+
+	      key_window = gpa_key_window_new ();
+
+	      g_object_weak_ref (G_OBJECT (key_window),
+				 &key_window_weak_ref_cb,
+				 gtk_tree_row_reference_new (model, path));
+	      gpa_key_window_update (key_window, key);
+	      gtk_widget_show (key_window);
+
+	      gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+				  GPA_KEYLIST_COLUMN_KEY_WINDOW,
+				  key_window, -1);
+	    }
+	}
+    }
+}
+
+
 
 static void
 gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
@@ -193,6 +305,7 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_POINTER,
+			      G_TYPE_POINTER,
 			      G_TYPE_INT,
 			      G_TYPE_ULONG,
 			      G_TYPE_ULONG,
@@ -204,6 +317,12 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
   gpa_keylist_set_brief (list);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+
+
+  /* Add support for key windows, created through a double click on a
+     row in the key list. */
+  g_signal_connect (GTK_TREE_VIEW (list), "row-activated",
+		    G_CALLBACK (keylist_row_activated), NULL);
 
   /* Load the keyring.  */
   add_trustdb_dialog (list);
@@ -495,6 +614,8 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
 		      /* Set revoked and expired keys to "never trust"
 		         for sorting.  */
 		      GPA_KEYLIST_COLUMN_VALIDITY_VALUE, val_value,
+		      /* Initially there are no key windows. */
+		      GPA_KEYLIST_COLUMN_KEY_WINDOW, NULL,
                       /* Store the image only if enabled.  */
 		      list->public_only ? -1 : GPA_KEYLIST_COLUMN_IMAGE,
                       list->public_only ? NULL : get_key_pixbuf (key),
@@ -868,4 +989,55 @@ gpa_keylist_imported_secret_key (GpaKeyList *keylist)
   gtk_main ();
 }
 
+/* This function is called through gtk_tree_model_foreach().  It's
+   purpose is to find the key window for a given gpgme_key_t object
+   and update that window with the data contained in the new gpgme
+   key. */
+static gboolean
+update_key_window_func (GtkTreeModel *model,
+			GtkTreePath *path,
+			GtkTreeIter *iter,
+			gpointer data)
+{
+  gpgme_key_t key_provided = data;
+  gpgme_key_t key;
+  GValue value = { 0 };
+      
+  gtk_tree_model_get_value (model, iter,
+			    GPA_KEYLIST_COLUMN_KEY,
+			    &value);
+  key = g_value_get_pointer (&value);
+  g_value_unset (&value);
 
+  /* FIXME: do we need more checks here? e.g: are there subkeys at
+     all? can subkeys->fpr be empty? -mo */
+  if (strcmp (key_provided->subkeys->fpr, key->subkeys->fpr) == 0)
+    {
+      GtkWidget *key_window;
+
+      gtk_tree_model_get_value (model, iter,
+				GPA_KEYLIST_COLUMN_KEY_WINDOW,
+				&value);
+      key_window = g_value_get_pointer (&value);
+      g_value_unset (&value);
+
+      if (key_window)
+	{
+	  gpa_key_window_update (key_window, key_provided);
+	  return TRUE;
+	}
+      else
+	return FALSE;
+    }
+  return FALSE;
+}
+
+/* In case a key window exists for the key KEY, update that window
+   with the data contained in KEY.  */
+void
+gpa_keylist_update_key_window (GpaKeyList *keylist, gpgme_key_t key)
+{
+  GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
+
+  gtk_tree_model_foreach (model, &update_key_window_func, key);
+}

@@ -1,3 +1,24 @@
+2009-06-21  Moritz  <moritz@gnu.org>
+
+	* gpa-key-window.c, gpa-key-window.h: New files.
+	* keymanager.c (key_manager_key_listed): Call
+	gpa_keylist_update_key_window.
+	* keylist.c: Include "gpa-key-window.h".
+	(enum): New entry GPA_KEYLIST_COLUMN_KEY_WINDOW.
+	(key_window_weak_ref_cb): New function.
+	(keylist_row_activated): New function.
+	(gpa_keylist_init): Adjust gtk_list_store_new call for new
+	column (GPA_KEYLIST_COLUMN_KEY_WINDOW).
+	(gpa_keylist_init): Connect keylist_row_activated to the
+	"row-activated" signal.
+	(gpa_keylist_next): Also set GPA_KEYLIST_COLUMN_KEY_WINDOW value
+	when calling gtk_list_store_set.
+	(update_key_window_func): New function.
+	(gpa_keylist_update_key_window): New function.
+	* keylist.h: Declare gpa_keylist_update_key_window.
+	* Makefile.am (gpa_SOURCES): Added gpa-key-window.c and
+	gpa-key-window.h.
+
 2009-06-20  Werner Koch  <wk@g10code.com>
 
 	* gpastreamdecryptop.c (gpa_stream_decrypt_operation_new): Use

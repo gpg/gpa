@@ -1,6 +1,6 @@
 /* keylist.h  -  The GNU Privacy Assistant
  *      Copyright (C) 2000, 2001 G-N-U GmbH.
- *      Copyright (C) 2008 g10 Code GmbH,
+ *      Copyright (C) 2008, 2009 g10 Code GmbH,
  *
  * This file is part of GPA
  *
@@ -121,5 +121,9 @@ void gpa_keylist_new_key (GpaKeyList * keylist, const char *fpr);
 /* Let the keylist know that a new sceret key has been imported.  */
 void gpa_keylist_imported_secret_key (GpaKeyList * keylist);
 
+/* In case a key window exists for the key KEY, update that window
+   with the data contained in KEY.  */
+void gpa_keylist_update_key_window (GpaKeyList *keylist,
+				    gpgme_key_t key);
 
 #endif /* GPA_KEYLIST_H */
