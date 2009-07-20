@@ -1,6 +1,10 @@
 [Desktop Entry]
-Name=GNU Privacy Assistant
-Name[en_US.ISO8859-1]=GNU Privacy Assistant
+Name=gpa
+Name[sv]=gpa
+Name[en_US.ISO8859-1]=gpa
+GenericName=GNU Privacy Assistant
+GenericName[sv]=GNU Integritets-hjälpreda
+GenericName[en_US.ISO8859-1]=GNU Privacy Assistant
 Exec=gpa
 Icon=gpa.png
 Terminal=false
