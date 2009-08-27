@@ -1,11 +1,12 @@
 # translation of cs.po to czech
 # Written by Zdenek Hatas <zdenek.hatas@gmail.com>
 #
+#: src/gpgmetools.c:1101
 msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-06-20 00:08+0200\n"
+"POT-Creation-Date: 2009-08-27 14:01+0200\n"
 "PO-Revision-Date: 2007-05-24 15:04+0200\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: czech <cs@li.org>\n"
@@ -45,13 +46,13 @@ msgstr ""
 msgid "Clipboard"
 msgstr "Zur _Zwischenablage exportieren"
 
-#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:867
+#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:868
 #: src/cardman.c:619
 #, fuzzy
 msgid "_File"
 msgstr "/_Soubor"
 
-#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:868
+#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:869
 #: src/cardman.c:620
 #, fuzzy
 msgid "_Edit"
@@ -94,7 +95,7 @@ msgstr "Dešifrovat vybraný soubor"
 msgid "Close the buffer"
 msgstr ""
 
-#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:876
+#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:877
 #: src/cardman.c:625
 msgid "Quit the program"
 msgstr ""
@@ -113,12 +114,12 @@ msgstr ""
 msgid "Cut the selection"
 msgstr "Zašifrovat vybraný soubor"
 
-#: src/clipboard.c:788 src/keymanager.c:880
+#: src/clipboard.c:788 src/keymanager.c:881
 #, fuzzy
 msgid "Copy the selection"
 msgstr "Zašifrovat vybraný soubor"
 
-#: src/clipboard.c:790 src/keymanager.c:882
+#: src/clipboard.c:790 src/keymanager.c:883
 #, fuzzy
 msgid "Paste the clipboard"
 msgstr "Zur _Zwischenablage exportieren"
@@ -137,11 +138,11 @@ msgstr ""
 msgid "Keyring"
 msgstr "Správce klíčů"
 
-#: src/clipboard.c:906 src/keymanager.c:1059 src/cardman.c:712
+#: src/clipboard.c:906 src/keymanager.c:1060 src/cardman.c:712
 msgid "Files"
 msgstr "Soubory"
 
-#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1061
+#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1062
 #, fuzzy
 msgid "Card"
 msgstr "Zur _Zwischenablage exportieren"
@@ -265,7 +266,7 @@ msgstr "Zašifrovat soubor"
 msgid "_Public Keys"
 msgstr "_Veřejné klíče"
 
-#: src/encryptdlg.c:192 src/icons.c:202
+#: src/encryptdlg.c:192 src/icons.c:203
 msgid "_Sign"
 msgstr "Podep_sat"
 
@@ -677,12 +678,12 @@ msgid ""
 "(you may not set the expiration time to the past.)"
 msgstr "Neplatný čas.(nemůžete nastavit čas vypršení do minulosti.)"
 
-#: src/gpakeyselector.c:86 src/keylist.c:570 src/recipientdlg.c:191
+#: src/gpakeyselector.c:86 src/keylist.c:755 src/recipientdlg.c:191
 #: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "ID klíče"
 
-#: src/gpakeyselector.c:95 src/keylist.c:621 src/siglist.c:99
+#: src/gpakeyselector.c:95 src/keylist.c:802 src/siglist.c:99
 #: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "Jméno uživatele"
@@ -850,7 +851,7 @@ msgstr "Algoritmus"
 msgid "Size"
 msgstr "Velikost"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:583
+#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:767
 msgid "Expiry Date"
 msgstr "Platnost do"
 
@@ -903,12 +904,11 @@ msgstr ""
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:927
-#: src/gpgmetools.c:1046
+#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:1035
 msgid "Revoked"
 msgstr "Zneplatněn"
 
-#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1042
+#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1031
 msgid "Expired"
 msgstr "Vypršela platnost"
 
@@ -920,7 +920,7 @@ msgstr "Deaktivovaný"
 msgid "Unsigned"
 msgstr "Nepodepsaný"
 
-#: src/gpasubkeylist.c:173 src/gpgmetools.c:1033 src/verifydlg.c:212
+#: src/gpasubkeylist.c:173 src/gpgmetools.c:1022 src/verifydlg.c:212
 msgid "Valid"
 msgstr "Platný"
 
@@ -934,7 +934,6 @@ msgid "User Names:"
 msgstr "Jména uživatelů:"
 
 #: src/gpawidgets.c:77 src/gpgmetools.c:759 src/gpgmetools.c:766
-#: src/gpa-key-details.c:289
 msgid "Key ID:"
 msgstr "ID klíče:"
 
@@ -1039,7 +1038,7 @@ msgstr ""
 "\n"
 
 #: src/gpgmetools.c:678 src/gpgmetools.c:701 src/gpgmetools.c:718
-#: src/gpgmetools.c:1038 src/gpgmetools.c:1071
+#: src/gpgmetools.c:1027 src/gpgmetools.c:1060
 msgid "Unknown"
 msgstr "Neznámá"
 
@@ -1083,94 +1082,87 @@ msgstr "Zadat heslo"
 msgid "[None]"
 msgstr "[Žádný]"
 
-#: src/gpgmetools.c:1010 src/verifydlg.c:269
+#: src/gpgmetools.c:999 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[Neznámé ID uživatele]"
 
-#: src/gpgmetools.c:1036 src/verifydlg.c:217
+#: src/gpgmetools.c:1025 src/verifydlg.c:217
 msgid "Bad"
 msgstr "Špatný"
 
-#: src/gpgmetools.c:1059
+#: src/gpgmetools.c:1048
 msgid "Generic"
 msgstr "Obecný"
 
-#: src/gpgmetools.c:1062
+#: src/gpgmetools.c:1051
 msgid "Persona"
 msgstr "Persona"
 
-#: src/gpgmetools.c:1065
+#: src/gpgmetools.c:1054
 msgid "Casual"
 msgstr "Přibližný"
 
-#: src/gpgmetools.c:1068
+#: src/gpgmetools.c:1057
 msgid "Positive"
 msgstr "Pozitivní"
 
-#: src/gpgmetools.c:1086
-msgid "The key can be used for certification, signing and encryption."
+#: src/gpgmetools.c:1074
+#, fuzzy
+msgid "Certification, Signing, Encryption"
 msgstr "Tento klíč smí být použit pro certifikaci, podpis a šifrování."
 
-#: src/gpgmetools.c:1089
-msgid ""
-"The key can be used for certification and signing, but not for encryption."
+#: src/gpgmetools.c:1076
+msgid "Certification, Signing"
 msgstr ""
-"Tento klíč smí být použit pro certifikaci a podpis, ne však pro šifrování."
 
-#: src/gpgmetools.c:1095
-msgid "The key can be used for certification and encryption."
-msgstr "Tento klíč smí být použit pro certifikaci a šifrování."
+#: src/gpgmetools.c:1081
+msgid "Certification, Encryption"
+msgstr ""
+
+#: src/gpgmetools.c:1083
+msgid "Certification"
+msgstr ""
+
+#: src/gpgmetools.c:1091
+msgid "Signing, Encryption"
+msgstr ""
+
+#: src/gpgmetools.c:1093
+#, fuzzy
+msgid "Signing"
+msgstr "Podepisuji ..."
 
 #: src/gpgmetools.c:1098
-msgid "The key can be used only for certification."
-msgstr "Tento klíč smí být použit pouze pro certifikaci."
+#, fuzzy
+msgid "Encryption."
+msgstr "Šifruji ..."
 
-#: src/gpgmetools.c:1106
-msgid ""
-"The key can be used only for signing and encryption, but not for "
-"certification."
-msgstr ""
-"Tento klíč smí být použit pouze pro šifrování a podpis, ne však pro "
-"certifikaci."
-
-#: src/gpgmetools.c:1109
-msgid "The key can be used only for signing."
-msgstr "Tento klíč smí být použit pouze pro podpis."
-
-#: src/gpgmetools.c:1114
-msgid "The key can be used only for encryption."
-msgstr "Tento klíč smí být použit pouze pro šifrování."
-
-#: src/gpgmetools.c:1117
-msgid "This key is useless."
-msgstr "Tento klíč je nepoužitelný."
-
-#: src/gpgmetools.c:1455
+#: src/gpgmetools.c:1439
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
-#: src/gpgmetools.c:1505
+#: src/gpgmetools.c:1489
 msgid "You must enter a name."
 msgstr ""
 
-#: src/gpgmetools.c:1507
+#: src/gpgmetools.c:1491
 msgid "Invalid character in name."
 msgstr ""
 
-#: src/gpgmetools.c:1509
+#: src/gpgmetools.c:1493
 msgid "Name may not start with a digit."
 msgstr ""
 
-#: src/gpgmetools.c:1511
+#: src/gpgmetools.c:1495
 #, fuzzy
 msgid "Name is too short."
 msgstr "Diese Name ist zu lang."
 
-#: src/gpgmetools.c:1583
+#: src/gpgmetools.c:1567
 msgid "Email address is not valid."
 msgstr ""
 
-#: src/gpgmetools.c:1597
+#: src/gpgmetools.c:1581
 msgid "Invalid character in comments."
 msgstr ""
 
@@ -1208,46 +1200,46 @@ msgstr "Otevřít Správce souborů"
 msgid "About this application"
 msgstr "Zašifrovat vybraný soubor"
 
-#: src/icons.c:203
+#: src/icons.c:204
 #, fuzzy
 msgid "_Verify"
 msgstr "Ověřit"
 
-#: src/icons.c:204
+#: src/icons.c:205
 msgid "_Encrypt"
 msgstr "_Verschlüsseln"
 
-#: src/icons.c:205
+#: src/icons.c:206
 #, fuzzy
 msgid "_Decrypt"
 msgstr "Dešifrovat"
 
-#: src/icons.c:206
+#: src/icons.c:207
 #, fuzzy
 msgid "_Brief"
 msgstr "Stručně"
 
-#: src/icons.c:207
+#: src/icons.c:208
 #, fuzzy
 msgid "_Detailed"
 msgstr "Podrobně"
 
-#: src/icons.c:208
+#: src/icons.c:209
 #, fuzzy
 msgid "_Keyring Manager"
 msgstr "Správce souborů"
 
-#: src/icons.c:209
+#: src/icons.c:210
 #, fuzzy
 msgid "_Clipboard"
 msgstr "Zur _Zwischenablage exportieren"
 
-#: src/icons.c:210
+#: src/icons.c:211
 #, fuzzy
 msgid "_File Manager"
 msgstr "Správce souborů"
 
-#: src/icons.c:211
+#: src/icons.c:212
 #, fuzzy
 msgid "_Card Manager"
 msgstr "Správce souborů"
@@ -1430,7 +1422,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "Vytvořit _záložní kopii"
 
-#: src/keygenwizard.c:248 src/keymanager.c:731 src/keymanager.c:757
+#: src/keygenwizard.c:248 src/keymanager.c:732 src/keymanager.c:758
 msgid "Do it _later"
 msgstr "_Později"
 
@@ -1456,7 +1448,7 @@ msgstr ""
 "\n"
 "Právě jste vytvořili klíč. Klíč je trvale platný a jeho délka je 1024 bitů."
 
-#: src/keylist.c:344
+#: src/keylist.c:523
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1464,53 +1456,53 @@ msgstr ""
 "GnuPG rekonstruuje databázi důvěry.\n"
 "Toto může pár sekund trvat."
 
-#: src/keylist.c:562
+#: src/keylist.c:746
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#: src/keylist.c:571
+#: src/keylist.c:756
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "Tento klíč smí být použit pouze pro certifikaci."
 
-#: src/keylist.c:584
+#: src/keylist.c:768
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
-#: src/keylist.c:594 src/ownertrustdlg.c:122
+#: src/keylist.c:777 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "Důvěra ve vlastníka"
 
-#: src/keylist.c:595
+#: src/keylist.c:778
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
 
-#: src/keylist.c:607
+#: src/keylist.c:789
 msgid "Validity"
 msgstr "Gültigkeit"
 
-#: src/keylist.c:608
+#: src/keylist.c:790
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
 
-#: src/keylist.c:622
+#: src/keylist.c:803
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr ""
 
-#: src/keymanager.c:447
+#: src/keymanager.c:446
 msgid "No keys selected for signing."
 msgstr "Nebyl vybrán klíč pro podpis."
 
-#: src/keymanager.c:726
+#: src/keymanager.c:727
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1518,11 +1510,11 @@ msgstr ""
 "Ještě nemáte žádný soukromý klíč. Chcete jej vytvořit nyní (doporučeno), "
 "nebo později?"
 
-#: src/keymanager.c:730
+#: src/keymanager.c:731
 msgid "_Generate key now"
 msgstr "_Vytvořit klíč nyní"
 
-#: src/keymanager.c:751
+#: src/keymanager.c:752
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1530,258 +1522,258 @@ msgstr ""
 "Nemáte záložní kopii soukromého klíče. Chcete ji vytvořit nyní (doporučeno), "
 "nebo později?"
 
-#: src/keymanager.c:756
+#: src/keymanager.c:757
 msgid "_Backup key now"
 msgstr "_Zálohovat klíč nyní"
 
-#: src/keymanager.c:869
+#: src/keymanager.c:870
 #, fuzzy
 msgid "_Keys"
 msgstr "/_Klíče"
 
-#: src/keymanager.c:870
+#: src/keymanager.c:871
 #, fuzzy
 msgid "_Server"
 msgstr "/_Server"
 
-#: src/keymanager.c:884
+#: src/keymanager.c:885
 #, fuzzy
 msgid "Select all certificates"
 msgstr "Rückrufurkunde erzeugen"
 
-#: src/keymanager.c:889
+#: src/keymanager.c:890
 msgid "Refresh the keyring"
 msgstr "Aktualizovat keyring"
 
-#: src/keymanager.c:890
+#: src/keymanager.c:891
 #, fuzzy
 msgid "_New key..."
 msgstr "/Klíče/_Nový klíč..."
 
-#: src/keymanager.c:891
+#: src/keymanager.c:892
 #, fuzzy
 msgid "Generate a new key"
 msgstr "Vytvořit klíč"
 
-#: src/keymanager.c:892
+#: src/keymanager.c:893
 msgid "_Delete keys"
 msgstr "Schlüssel _löschen"
 
-#: src/keymanager.c:893
+#: src/keymanager.c:894
 msgid "Remove the selected key"
 msgstr "Odstranit vybraný klíč"
 
-#: src/keymanager.c:894
+#: src/keymanager.c:895
 #, fuzzy
 msgid "_Sign Keys..."
 msgstr "/Podep_sat klíče..."
 
-#: src/keymanager.c:895
+#: src/keymanager.c:896
 msgid "Sign the selected key"
 msgstr "Podepsat vybraný klíč"
 
-#: src/keymanager.c:896
+#: src/keymanager.c:897
 #, fuzzy
 msgid "Set _Owner Trust..."
 msgstr "/Nastavit úroveň důvěry..."
 
-#: src/keymanager.c:897
+#: src/keymanager.c:898
 #, fuzzy
 msgid "Set owner trust of the selected key"
 msgstr "Odstranit vybraný klíč"
 
-#: src/keymanager.c:899
+#: src/keymanager.c:900
 #, fuzzy
 msgid "_Edit Private Key..."
 msgstr "/Upravit soukromý klíč..."
 
-#: src/keymanager.c:900
+#: src/keymanager.c:901
 msgid "Edit the selected private key"
 msgstr "Upravit vybraný soukromý klíč"
 
-#: src/keymanager.c:902
+#: src/keymanager.c:903
 #, fuzzy
 msgid "_Import Keys..."
 msgstr "Importovat klíče"
 
-#: src/keymanager.c:903
+#: src/keymanager.c:904
 msgid "Import Keys"
 msgstr "Importovat klíče"
 
-#: src/keymanager.c:904
+#: src/keymanager.c:905
 #, fuzzy
 msgid "E_xport Keys..."
 msgstr "/E_xportovat klíče..."
 
-#: src/keymanager.c:905
+#: src/keymanager.c:906
 msgid "Export Keys"
 msgstr "Exportovat klíče"
 
-#: src/keymanager.c:906
+#: src/keymanager.c:907
 #, fuzzy
 msgid "_Backup..."
 msgstr "/_Zálohovat..."
 
-#: src/keymanager.c:907
+#: src/keymanager.c:908
 #, fuzzy
 msgid "Backup key"
 msgstr "Zálohovat klíče"
 
-#: src/keymanager.c:910
+#: src/keymanager.c:911
 #, fuzzy
 msgid "_Retrieve Keys..."
 msgstr "/Server/_Získat klíče..."
 
-#: src/keymanager.c:911
+#: src/keymanager.c:912
 #, fuzzy
 msgid "Retrieve keys from server"
 msgstr "Schlüssel vom Key-Server _empfangen:"
 
-#: src/keymanager.c:913
+#: src/keymanager.c:914
 #, fuzzy
 msgid "_Send Keys..."
 msgstr "/Podep_sat klíče..."
 
-#: src/keymanager.c:914
+#: src/keymanager.c:915
 #, fuzzy
 msgid "Send keys to server"
 msgstr "/Odeslat klíče na _server..."
 
-#: src/keymanager.c:920
+#: src/keymanager.c:921
 msgid "Show Brief Keylist"
 msgstr "Zobrazit stručný seznam klíčů"
 
-#: src/keymanager.c:922
+#: src/keymanager.c:923
 msgid "Show Key Details"
 msgstr "Zobrazit podrobný seznam klíčů"
 
-#: src/keymanager.c:1049
+#: src/keymanager.c:1050
 msgid "Edit"
 msgstr "Upravit"
 
-#: src/keymanager.c:1051
+#: src/keymanager.c:1052
 msgid "Delete"
 msgstr "Löschen"
 
-#: src/keymanager.c:1053
+#: src/keymanager.c:1054
 msgid "Sign"
 msgstr "Podepsat"
 
-#: src/keymanager.c:1055
+#: src/keymanager.c:1056
 msgid "Export"
 msgstr "Exportovat"
 
-#: src/keymanager.c:1057
+#: src/keymanager.c:1058
 msgid "Import"
 msgstr "Importovat"
 
-#: src/keymanager.c:1188
+#: src/keymanager.c:1139
 #, fuzzy
 msgid "Selected default key:"
 msgstr "Vybraný výchozí klíč:"
 
-#: src/keymanager.c:1198
+#: src/keymanager.c:1149
 #, fuzzy
 msgid "No default key selected in the preferences."
 msgstr "Keine zu schützenden Dateien ausgewählt."
 
-#: src/keymanager.c:1289
+#: src/keymanager.c:1343
 #, fuzzy
 msgid "GNU Privacy Assistant - Key Manager"
 msgstr "GNU Privacy Assistant - Správce souborů"
 
-#: src/keymanager.c:1317
+#: src/keymanager.c:1371
 #, fuzzy
 msgid "Key Manager"
 msgstr "Správce souborů"
 
-#: src/gpa-key-details.c:132
+#: src/gpa-key-details.c:162
 #, fuzzy
-msgid "The key has both a smartcard based private part and a public part"
-msgstr "Klíč má soukromou i veřejnou část"
+msgid "Secret OpenPGP key"
+msgstr "Geheime _Schlüssel"
 
-#: src/gpa-key-details.c:136
-msgid "The key has both a private and a public part"
-msgstr "Klíč má soukromou i veřejnou část"
-
-#: src/gpa-key-details.c:140
-msgid "The key has only a public part"
-msgstr "Klíč má pouze veřejnou část"
-
-#: src/gpa-key-details.c:176
-#, c-format
-msgid "%s %u bits"
-msgstr "%s %u bitů"
-
-#: src/gpa-key-details.c:202
-msgid "No keys selected"
-msgstr "Žádný klíč nevybrán"
-
-#: src/gpa-key-details.c:205
-#, c-format
-msgid "%d key selected"
-msgid_plural "%d keys selected"
-msgstr[0] "%d klíčů vybráno"
-msgstr[1] "%d klíčů vybráno"
-msgstr[2] "%d klíčů vybráno"
-
-#: src/gpa-key-details.c:287
+#: src/gpa-key-details.c:166
 #, fuzzy
-msgid "User name:"
-msgstr "Jméno uživatele:"
+msgid "Public OpenPGP key"
+msgstr "_Veřejné klíče"
 
-#: src/gpa-key-details.c:291 src/keysigndlg.c:106
-msgid "Fingerprint:"
+#: src/gpa-key-details.c:171
+#, fuzzy
+msgid "Secret X.509 key"
+msgstr "Geheime _Schlüssel"
+
+#: src/gpa-key-details.c:175
+#, fuzzy
+msgid "Public X.509 key"
+msgstr "_Veřejné klíče"
+
+#: src/gpa-key-details.c:235
+#, fuzzy
+msgid "<b>Key type:</b>"
+msgstr "Podeps_at jako"
+
+#: src/gpa-key-details.c:237
+#, fuzzy
+msgid "<b>Key ID:</b>"
+msgstr "Podeps_at jako"
+
+#: src/gpa-key-details.c:239
+#, fuzzy
+msgid "<b>Key capabilities:</b>"
+msgstr "Podeps_at jako"
+
+#: src/gpa-key-details.c:241
+#, fuzzy
+msgid "<b>Fingerprint:</b>"
 msgstr "Otisk:"
 
-#: src/gpa-key-details.c:293
-msgid "Expires at:"
+#: src/gpa-key-details.c:243
+#, fuzzy
+msgid "<b>Expires at:</b>"
 msgstr "Vyprší:"
 
-#: src/gpa-key-details.c:295
-msgid "Owner Trust:"
-msgstr "Důvěra ve vlastníka:"
-
-#: src/gpa-key-details.c:297
+#: src/gpa-key-details.c:245
 #, fuzzy
-msgid "Key validity:"
+msgid "<b>Key validity:</b>"
 msgstr "Platnost klíče:"
 
-#: src/gpa-key-details.c:299
+#: src/gpa-key-details.c:247
 #, fuzzy
-msgid "Key type:"
-msgstr "Typ klíče:"
+msgid "<b>Owner Trust:</b>"
+msgstr "Důvěra ve vlastníka:"
 
-#: src/gpa-key-details.c:301
-msgid "Created at:"
+#: src/gpa-key-details.c:249
+#, fuzzy
+msgid "<b>Created at:</b>"
 msgstr "Vytvořen:"
 
-#: src/gpa-key-details.c:304
-msgid "Details"
-msgstr "Podrobnosti"
+#: src/gpa-key-details.c:252
+#, fuzzy
+msgid "Overview"
+msgstr "_Überschreiben"
 
-#: src/gpa-key-details.c:350
+#: src/gpa-key-details.c:347
 msgid "Show signatures on user name:"
 msgstr "Zobrazit podpisy u jména uživatele:"
 
-#: src/gpa-key-details.c:386
+#: src/gpa-key-details.c:383
 #, fuzzy
 msgid "Chain"
 msgstr "Smí podepisovat"
 
-#: src/gpa-key-details.c:386
+#: src/gpa-key-details.c:383
 msgid "Signatures"
 msgstr "Podpisy"
 
-#: src/gpa-key-details.c:408
+#: src/gpa-key-details.c:405
 msgid "All signatures"
 msgstr "Všechny podpisy"
 
-#: src/gpa-key-details.c:470
+#: src/gpa-key-details.c:466
 msgid "Subkeys"
 msgstr "Podklíče"
 
-#: src/gpa-key-details.c:470
+#: src/gpa-key-details.c:466
 #, fuzzy
 msgid "Key"
 msgstr "/_Klíče"
@@ -1793,6 +1785,10 @@ msgstr "Podepsat klíč"
 #: src/keysigndlg.c:72
 msgid "Do you want to sign the following key?"
 msgstr "Chcete podepsat tento klíč?"
+
+#: src/keysigndlg.c:106
+msgid "Fingerprint:"
+msgstr "Otisk:"
 
 #: src/keysigndlg.c:116
 msgid ""
@@ -2810,6 +2806,66 @@ msgid ""
 "on this card."
 msgstr ""
 
+#~ msgid ""
+#~ "The key can be used for certification and signing, but not for encryption."
+#~ msgstr ""
+#~ "Tento klíč smí být použit pro certifikaci a podpis, ne však pro šifrování."
+
+#~ msgid "The key can be used for certification and encryption."
+#~ msgstr "Tento klíč smí být použit pro certifikaci a šifrování."
+
+#~ msgid "The key can be used only for certification."
+#~ msgstr "Tento klíč smí být použit pouze pro certifikaci."
+
+#~ msgid ""
+#~ "The key can be used only for signing and encryption, but not for "
+#~ "certification."
+#~ msgstr ""
+#~ "Tento klíč smí být použit pouze pro šifrování a podpis, ne však pro "
+#~ "certifikaci."
+
+#~ msgid "The key can be used only for signing."
+#~ msgstr "Tento klíč smí být použit pouze pro podpis."
+
+#~ msgid "The key can be used only for encryption."
+#~ msgstr "Tento klíč smí být použit pouze pro šifrování."
+
+#~ msgid "This key is useless."
+#~ msgstr "Tento klíč je nepoužitelný."
+
+#, fuzzy
+#~ msgid "The key has both a smartcard based private part and a public part"
+#~ msgstr "Klíč má soukromou i veřejnou část"
+
+#~ msgid "The key has both a private and a public part"
+#~ msgstr "Klíč má soukromou i veřejnou část"
+
+#~ msgid "The key has only a public part"
+#~ msgstr "Klíč má pouze veřejnou část"
+
+#~ msgid "%s %u bits"
+#~ msgstr "%s %u bitů"
+
+#~ msgid "No keys selected"
+#~ msgstr "Žádný klíč nevybrán"
+
+#~ msgid "%d key selected"
+#~ msgid_plural "%d keys selected"
+#~ msgstr[0] "%d klíčů vybráno"
+#~ msgstr[1] "%d klíčů vybráno"
+#~ msgstr[2] "%d klíčů vybráno"
+
+#, fuzzy
+#~ msgid "User name:"
+#~ msgstr "Jméno uživatele:"
+
+#, fuzzy
+#~ msgid "Key type:"
+#~ msgstr "Typ klíče:"
+
+#~ msgid "Details"
+#~ msgstr "Podrobnosti"
+
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "Vyberte prosím heslo pro nový klíč."
 
@@ -3808,9 +3864,6 @@ msgstr ""
 #~ msgid "Directory:"
 #~ msgstr "Verzeichnis:"
 
-#~ msgid "_Overwrite"
-#~ msgstr "_Überschreiben"
-
 #~ msgid "File exists"
 #~ msgstr "Datei existiert"
 
@@ -3876,9 +3929,6 @@ msgstr ""
 
 #~ msgid "No keys selected to create revocation certificate for."
 #~ msgstr "Keine Schlüssel ausgewählt."
-
-#~ msgid "_Secret keys"
-#~ msgstr "Geheime _Schlüssel"
 
 #~ msgid "Import keys"
 #~ msgstr "Schlüssel importieren"

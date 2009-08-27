@@ -19,8 +19,7 @@
  */
 
 /* 
-   This widget is used to display details of a key.
-
+ * This widget is used to display details of a single key.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -35,12 +34,13 @@
 #include "convert.h"
 #include "keytable.h"
 #include "siglist.h"
+#include "uidlist.h"
 #include "certchain.h"
 #include "gpasubkeylist.h"
 #include "gpa-key-details.h"
 
-
 
+
 /* Object's class definition.  */
 struct _GpaKeyDetailsClass 
 {
@@ -53,33 +53,37 @@ struct _GpaKeyDetails
 {
   GtkNotebook parent_instance;
 
-  /* Widgets in the details page.  */
-  GtkWidget *details_num_label;
-  GtkWidget *details_table;
-  GtkWidget *detail_public_private;
-  GtkWidget *detail_capabilities;
+  /* The key currently shown.  */
+  gpgme_key_t current_key;
+
+  /* Page: Overview. */
+  GtkWidget *page_overview;
   GtkWidget *detail_name;
+  GtkWidget *detail_key_id;
+  GtkWidget *detail_key_type;
+  GtkWidget *detail_capabilities;
+  GtkWidget *detail_public_private;
   GtkWidget *detail_fingerprint;
   GtkWidget *detail_expiry;
-  GtkWidget *detail_key_id;
+  GtkWidget *detail_key_validity;
   GtkWidget *detail_owner_trust;
-  GtkWidget *detail_key_trust;
-  GtkWidget *detail_key_type;
   GtkWidget *detail_creation;
 
-  /* The widgets in the signatures page.  */
-  GtkWidget *signatures_page;
+  GtkWidget *details_table;
+
+  /* Page: User IDs. */
+  GtkWidget *page_userids;
+  GtkWidget *userids_list;
+
+  /* Page: Subkeys. */
+  GtkWidget *page_subkeys;
+  GtkWidget *subkeys_list;
+
+  /* Page: Signatures. */
+  GtkWidget *page_signatures;
   GtkWidget *signatures_list;
   GtkWidget *signatures_uids;
   GtkWidget *certchain_list;
-
-  /* The widgets in the subkeys list.  */
-  GtkWidget *subkeys_page;
-  GtkWidget *subkeys_list;
-
-  /* The key currently shown or NULL.  */
-  gpgme_key_t current_key;
-
 };
 
 
@@ -119,108 +123,71 @@ signatures_uid_changed (GtkComboBox *combo, gpointer user_data)
 static void
 details_page_fill_key (GpaKeyDetails *kdt, gpgme_key_t key)
 {
-  gpgme_user_id_t uid;
   gpgme_key_t seckey;
   char *text;
 
-  seckey = gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
+  seckey = gpa_keytable_lookup_key (gpa_keytable_get_secret_instance (), 
                                     key->subkeys->fpr);
-  if (seckey)
-    {
-      if (seckey->subkeys && seckey->subkeys->is_cardkey)
-        gtk_label_set_text (GTK_LABEL (kdt->detail_public_private),
-                            _("The key has both a smartcard based private part"
-                              " and a public part"));
-      else
-        gtk_label_set_text (GTK_LABEL (kdt->detail_public_private),
-                            _("The key has both a private and a public part"));
-    }
-  else
-    gtk_label_set_text (GTK_LABEL (kdt->detail_public_private),
-			_("The key has only a public part"));
 
-  gtk_label_set_text (GTK_LABEL (kdt->detail_capabilities),
-		      gpa_get_key_capabilities_text (key));
-
-  /* One user ID per line.  */
-  text = gpa_gpgme_key_get_userid (key->uids);
-  if (key->uids)
-    {
-      for (uid = key->uids->next; uid; uid = uid->next)
-        {
-          gchar *uid_string = gpa_gpgme_key_get_userid (uid);
-          gchar *tmp = text;
-
-          text = g_strconcat (text, "\n", uid_string, NULL);
-          g_free (tmp);
-          g_free (uid_string);
-        }
-    }
-  gtk_label_set_text (GTK_LABEL (kdt->detail_name), text);
-  g_free (text);
-
-  text = (gchar*) gpa_gpgme_key_get_short_keyid (key);
+  /* Key ID. */
+  text = (gchar *) gpa_gpgme_key_get_short_keyid (key);
   gtk_label_set_text (GTK_LABEL (kdt->detail_key_id), text);
 
+  /* Fingerprint. */
   text = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
   gtk_label_set_text (GTK_LABEL (kdt->detail_fingerprint), text);
   g_free (text);
 
+  /* Validity. */
+  gtk_label_set_text (GTK_LABEL (kdt->detail_key_validity),
+                      gpa_key_validity_string (key));
+
+  /* Expiry. */
   text = gpa_expiry_date_string (key->subkeys->expires);
   gtk_label_set_text (GTK_LABEL (kdt->detail_expiry), text);
   g_free (text);
 
-  gtk_label_set_text (GTK_LABEL (kdt->detail_key_trust),
-                      gpa_key_validity_string (key));
-
-  text = g_strdup_printf (_("%s %u bits"),
-			  gpgme_pubkey_algo_name (key->subkeys->pubkey_algo),
-			  key->subkeys->length);
-  gtk_label_set_text (GTK_LABEL (kdt->detail_key_type), text);
-  g_free (text);
-
+  /* Ownertrust. */
   gtk_label_set_text (GTK_LABEL (kdt->detail_owner_trust),
                       gpa_key_ownertrust_string (key));
-
+  
+  /* Creation date. */
   text = gpa_creation_date_string (key->subkeys->timestamp);
   gtk_label_set_text (GTK_LABEL (kdt->detail_creation), text);
   g_free (text);
 
-  gtk_widget_hide_all (kdt->details_num_label);
+  if (key->protocol == GPGME_PROTOCOL_OpenPGP)
+    {
+      if (seckey)
+	text = _("Secret OpenPGP key");	/* FIXME: shouldn't this
+					   better read "Public+Secret
+					   key"? -mo */
+      else
+	text = _("Public OpenPGP key");
+    }
+  else if (key->protocol == GPGME_PROTOCOL_CMS)
+    {
+      if (seckey)
+	text = _("Secret X.509 key");	/* FIXME: shouldn't this
+					   better read "Public+Secret
+					   key"? -mo */
+      else
+	text = _("Public X.509 key");
+    }
+  else
+    abort ();			/* FIXME? -mo */
+
+  gtk_label_set_text (GTK_LABEL (kdt->detail_key_type), text);
+
+  gtk_label_set_text (GTK_LABEL (kdt->detail_capabilities),
+		      gpa_get_key_capabilities_text (key));
+
   gtk_widget_show_all (kdt->details_table);
-  gtk_widget_set_no_show_all (kdt->details_num_label, TRUE);
   gtk_widget_set_no_show_all (kdt->details_table, FALSE);
 }
 
-
-/* Fill the details page with the number of selected keys.  */
-static void
-details_page_fill_num_keys (GpaKeyDetails *kdt, gint num_key)
-{
-  if (!num_key)
-    gtk_label_set_text (GTK_LABEL (kdt->details_num_label),
-			_("No keys selected"));
-  else
-    {
-      char *text = g_strdup_printf (ngettext("%d key selected",
-                                             "%d keys selected",
-                                             num_key), num_key); 
-
-      gtk_label_set_text (GTK_LABEL (kdt->details_num_label), text);
-      g_free (text);
-    }
-  
-  gtk_widget_show_all (kdt->details_num_label);
-  gtk_widget_hide_all (kdt->details_table);
-  gtk_widget_set_no_show_all (kdt->details_num_label, FALSE);
-  gtk_widget_set_no_show_all (kdt->details_table, TRUE);
-
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (kdt), 0);
-}
-
-
-
 
+
 /* Add a single row to the details table.  */
 static GtkWidget *
 add_details_row (GtkWidget *table, gint row, gchar *text,
@@ -229,6 +196,7 @@ add_details_row (GtkWidget *table, gint row, gchar *text,
   GtkWidget *widget;
 
   widget = gtk_label_new (text);
+  gtk_label_set_use_markup (GTK_LABEL (widget), TRUE);
   gtk_table_attach (GTK_TABLE (table), widget, 0, 1, row, row + 1,
                     GTK_FILL, GTK_FILL, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (widget), 1.0, 0.0);
@@ -240,70 +208,99 @@ add_details_row (GtkWidget *table, gint row, gchar *text,
   gtk_table_attach (GTK_TABLE (table), widget, 1, 2, row, row + 1,
                     GTK_FILL | GTK_EXPAND, 0, 0, 0);
 
+  gtk_table_set_row_spacing (GTK_TABLE (table), row, 4);
+
   return widget;
 }
 
 
+/* Overview Page */
 static void
-construct_details_page (GpaKeyDetails *kdt)
+construct_overview_page (GpaKeyDetails *kdt)
 {
   GtkWidget *table;
-  GtkWidget *label;
   GtkWidget *vbox;
-  GtkWidget *scrolled;
-  GtkWidget *viewport;
   gint table_row;
 
-  /* Details Page */
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
+
+  table = gtk_table_new (2, 7, FALSE);
+  kdt->details_table = table;
+  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 8);
+
+  table_row = 0;
+  kdt->detail_key_type = add_details_row 
+    (table, table_row++, _("<b>Key type:</b>"), FALSE);
+  kdt->detail_key_id = add_details_row 
+    (table, table_row++, _("<b>Key ID:</b>"), TRUE);
+  kdt->detail_capabilities = add_details_row 
+    (table, table_row++, _("<b>Key capabilities:</b>"), TRUE);
+  kdt->detail_fingerprint = add_details_row 
+    (table, table_row++, _("<b>Fingerprint:</b>"), TRUE);
+  kdt->detail_expiry = add_details_row 
+    (table, table_row++, _("<b>Expires at:</b>"), FALSE); 
+  kdt->detail_key_validity = add_details_row 
+    (table, table_row++, _("<b>Key validity:</b>"), FALSE);
+  kdt->detail_owner_trust = add_details_row 
+    (table, table_row++, _("<b>Owner Trust:</b>"), FALSE);
+  kdt->detail_creation = add_details_row 
+    (table, table_row++, _("<b>Created at:</b>"), FALSE);
+
+  gtk_notebook_append_page (GTK_NOTEBOOK (kdt), vbox,
+                            gtk_label_new (_("Overview")));
+}
+
+/* Add the user IDs page to the notebook.  */
+static void
+build_userids_page (GpaKeyDetails *kdt, gpgme_key_t key)
+{
+  GtkWidget *vbox;
+  GtkWidget *scrolled;
+  GtkWidget *useridlist;
+  int pnum;
+
+  /* First remove an existing page.  */
+  if (kdt->page_userids)
+    {
+      pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->page_userids);
+      if (pnum >= 0)
+        gtk_notebook_remove_page (GTK_NOTEBOOK (kdt), pnum);
+      kdt->page_userids = NULL;
+      if (kdt->userids_list)
+	{
+	  g_object_unref (kdt->userids_list);
+	  kdt->userids_list = NULL;
+	}
+    }
+  if (!key)
+    return;
+
+  /*
+   * Create a new page.
+   */
+
+  vbox = gtk_vbox_new (FALSE, 5);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
-				       GTK_SHADOW_NONE);
+				       GTK_SHADOW_IN);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
+  useridlist = gpa_uidlist_new ();
+  gtk_container_add (GTK_CONTAINER (scrolled), useridlist);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
-  viewport = gtk_viewport_new (NULL, NULL);
-  gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
-  gtk_container_add (GTK_CONTAINER (viewport), vbox);
-  gtk_container_add (GTK_CONTAINER (scrolled), viewport);
-
-  label = gtk_label_new ("");
-  kdt->details_num_label = label;
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+  kdt->userids_list = useridlist;
+  g_object_ref (kdt->userids_list);
+  kdt->page_userids = vbox;
+  gtk_notebook_append_page (GTK_NOTEBOOK (kdt), vbox,
+                            gtk_label_new ("User IDs"));
   
-  table = gtk_table_new (2, 7, FALSE);
-  kdt->details_table = table;
-  gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
-
-  table_row = 0;
-  kdt->detail_public_private = add_details_row 
-    (table, table_row++, "", TRUE);
-  kdt->detail_capabilities = add_details_row 
-    (table, table_row++, "", TRUE);
-  kdt->detail_name = add_details_row 
-    (table, table_row++, _("User name:"), TRUE);
-  kdt->detail_key_id = add_details_row 
-    (table, table_row++, _("Key ID:"), TRUE);
-  kdt->detail_fingerprint = add_details_row 
-    (table, table_row++, _("Fingerprint:"), TRUE);
-  kdt->detail_expiry = add_details_row 
-    (table, table_row++, _("Expires at:"), FALSE); 
-  kdt->detail_owner_trust = add_details_row 
-    (table, table_row++, _("Owner Trust:"), FALSE);
-  kdt->detail_key_trust = add_details_row 
-    (table, table_row++, _("Key validity:"), FALSE);
-  kdt->detail_key_type = add_details_row 
-    (table, table_row++, _("Key type:"), FALSE);
-  kdt->detail_creation = add_details_row 
-    (table, table_row++, _("Created at:"), FALSE);
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (kdt), scrolled,
-                            gtk_label_new (_("Details")));
+  /* Fill this page.  */
+  gpa_uidlist_set_uids (kdt->userids_list, key);
 }
-
 
 /* Add the signatures page to the notebook.  */
 static void
@@ -314,17 +311,17 @@ build_signatures_page (GpaKeyDetails *kdt, gpgme_key_t key)
   GtkWidget *scrolled;
   int pnum;
 
-  if (kdt->signatures_page)
+  if (kdt->page_signatures)
     {
       if (kdt->signatures_uids)
         g_signal_handlers_disconnect_by_func
           (G_OBJECT (kdt->signatures_uids), 
            G_CALLBACK (signatures_uid_changed), kdt);
       
-      pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->signatures_page);
+      pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->page_signatures);
       if (pnum >= 0)
         gtk_notebook_remove_page (GTK_NOTEBOOK (kdt), pnum);
-      kdt->signatures_page = NULL;
+      kdt->page_signatures = NULL;
       kdt->signatures_uids = NULL;
     }
   if (kdt->signatures_list)
@@ -380,7 +377,7 @@ build_signatures_page (GpaKeyDetails *kdt, gpgme_key_t key)
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
 
-  kdt->signatures_page = vbox;
+  kdt->page_signatures = vbox;
   gtk_notebook_append_page (GTK_NOTEBOOK (kdt), vbox,
                             gtk_label_new 
                             (kdt->certchain_list? _("Chain"):_("Signatures")));
@@ -422,7 +419,6 @@ build_signatures_page (GpaKeyDetails *kdt, gpgme_key_t key)
     }
 }
 
-
 /* Create and append new page with all subkeys for KEY.  If KEY is
    NULL remove an existing subkeys page. */
 static void
@@ -434,12 +430,12 @@ build_subkeys_page (GpaKeyDetails *kdt, gpgme_key_t key)
   int pnum;
 
   /* First remove an existing page.  */
-  if (kdt->subkeys_page)
+  if (kdt->page_subkeys)
     {
-      pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->subkeys_page);
+      pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->page_subkeys);
       if (pnum >= 0)
         gtk_notebook_remove_page (GTK_NOTEBOOK (kdt), pnum);
-      kdt->subkeys_page = NULL;
+      kdt->page_subkeys = NULL;
       if (kdt->subkeys_list)
         {
           g_object_unref (kdt->subkeys_list);
@@ -463,8 +459,8 @@ build_subkeys_page (GpaKeyDetails *kdt, gpgme_key_t key)
                                   GTK_POLICY_AUTOMATIC);
   kdt->subkeys_list = subkeylist;
   g_object_ref (kdt->subkeys_list);
-  kdt->subkeys_page = vbox;
-  gtk_notebook_append_page (GTK_NOTEBOOK (kdt), kdt->subkeys_page,
+  kdt->page_subkeys = vbox;
+  gtk_notebook_append_page (GTK_NOTEBOOK (kdt), kdt->page_subkeys,
                             gtk_label_new 
                             (key->protocol == GPGME_PROTOCOL_OpenPGP
                              ? _("Subkeys") : _("Key")));
@@ -475,7 +471,6 @@ build_subkeys_page (GpaKeyDetails *kdt, gpgme_key_t key)
 
 }
 
-
 /* Signal handler for the "changed_ui_mode" signal.  */
 static void
 ui_mode_changed (GpaOptions *options, gpointer param)
@@ -484,13 +479,15 @@ ui_mode_changed (GpaOptions *options, gpointer param)
 
   if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
-      build_signatures_page (kdt, NULL);
+      build_userids_page (kdt, NULL);
       build_subkeys_page (kdt, NULL);
+      build_signatures_page (kdt, NULL);
     }
   else 
     {
-      build_signatures_page (kdt, kdt->current_key);
+      build_userids_page (kdt, kdt->current_key);
       build_subkeys_page (kdt, kdt->current_key);
+      build_signatures_page (kdt, kdt->current_key);
     }
   gtk_notebook_set_show_tabs 
     (GTK_NOTEBOOK (kdt), gtk_notebook_get_n_pages (GTK_NOTEBOOK (kdt)) > 1);
@@ -503,8 +500,8 @@ ui_mode_changed (GpaOptions *options, gpointer param)
 static void
 construct_main_widget (GpaKeyDetails *kdt)
 {
-  /* Details Page */
-  construct_details_page (kdt);
+  /* Overview Page */
+  construct_overview_page (kdt);
 
   /* Connect the signal to act on the simplified UI change signal.  */
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
@@ -563,6 +560,11 @@ gpa_key_details_finalize (GObject *object)
       g_object_unref (kdt->subkeys_list);
       kdt->subkeys_list = NULL;
     }
+  if (kdt->userids_list)
+    {
+      g_object_unref (kdt->userids_list);
+      kdt->userids_list = NULL;
+    }
 
   parent_class->finalize (object);
 }
@@ -608,12 +610,9 @@ gpa_key_details_new ()
 }
 
 
-/* Update the key details widget KEYDETAILS with KEY.  The caller also
-   needs to provide the number of keys, so that the widget may show a
-   key count instead of a key.  The actual key details are only shown
-   if KEY is not NULL and KEYCOUNT is 1.  */
+/* Update the key details widget KEYDETAILS with KEY. */
 void
-gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key, int keycount)
+gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key)
 {
   GpaKeyDetails *kdt;
   GtkWidget *widget;
@@ -627,16 +626,17 @@ gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key, int keycount)
   if (pnum >= 0
       && (widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (kdt), pnum)))
     {
-      if (widget == kdt->signatures_page)
+      if (widget == kdt->page_userids)
         pnum = 1;
-      else if (widget == kdt->subkeys_page)
+      else if (widget == kdt->page_subkeys)
         pnum = 2;
+      if (widget == kdt->page_signatures)
+        pnum = 3;
       else
         pnum = 0;
     }
   else
     pnum = 0;
-  
   
   if (kdt->current_key)
     {
@@ -644,40 +644,38 @@ gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key, int keycount)
       kdt->current_key = NULL;
     }
 
-  if (key && keycount == 1)
+  gpgme_key_ref (key);
+  kdt->current_key = key;
+  details_page_fill_key (kdt, key);
+	  
+  /* Depend the generation of pages on the mode of the UI.  */
+  if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
-      gpgme_key_ref (key);
-      kdt->current_key = key;
-      details_page_fill_key (kdt, key);
-
-      /* Depend the generation of pages on the mode of the UI.  */
-      if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
-        {
-          build_signatures_page (kdt, NULL);
-          build_subkeys_page (kdt, NULL);
-        }
-      else
-        {
-          build_signatures_page (kdt, key);
-          build_subkeys_page (kdt, key);
-        }
+      build_userids_page (kdt, NULL);
+      build_subkeys_page (kdt, NULL);
+      build_signatures_page (kdt, NULL);
     }
   else
     {
-      details_page_fill_num_keys (kdt, keycount);
-      build_signatures_page (kdt, NULL);
-      build_subkeys_page (kdt, NULL);
+      build_userids_page (kdt, key);
+      build_subkeys_page (kdt, key);
+      build_signatures_page (kdt, key);
     }
-  gtk_notebook_set_show_tabs 
-    (GTK_NOTEBOOK (kdt), gtk_notebook_get_n_pages (GTK_NOTEBOOK (kdt)) > 1);
+
+  if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (kdt)) > 1)
+    gtk_notebook_set_show_tabs (GTK_NOTEBOOK (kdt), TRUE);
+  else
+    gtk_notebook_set_show_tabs (GTK_NOTEBOOK (kdt), FALSE);
 
   gtk_widget_show_all (keydetails);
 
   /* Try to select the last selected page.  */
-  if (pnum == 1 && kdt->signatures_page)
-    pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->signatures_page);
-  else if (pnum == 2 && kdt->subkeys_page)
-    pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->subkeys_page);
+  if (pnum == 1 && kdt->page_userids)
+    pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->page_userids);
+  else if (pnum == 2 && kdt->page_subkeys)
+    pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->page_subkeys);
+  else if (pnum == 3 && kdt->page_signatures)
+    pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->page_signatures);
   else
     pnum = 0;
   gtk_notebook_set_current_page (GTK_NOTEBOOK (kdt), pnum);
@@ -695,11 +693,13 @@ gpa_key_details_find (GtkWidget *keydetails, const char *pattern)
   gpgme_key_t key = NULL;
   int any = 0;
 
+  /* Retrieve key specified by PATTERN through GPGME.  */
+
   err = gpgme_new (&ctx);
   if (err)
     {
       gpa_gpgme_error (err);
-      gpa_key_details_update (keydetails, NULL, 0);
+      gpa_key_details_update (keydetails, NULL);
       return;
     }
   gpgme_set_protocol (ctx, GPGME_PROTOCOL_OpenPGP);
@@ -708,7 +708,7 @@ gpa_key_details_find (GtkWidget *keydetails, const char *pattern)
     {
       while (!gpgme_op_keylist_next (ctx, &key))
         {
-          gpa_key_details_update (keydetails, key, 1);
+          gpa_key_details_update (keydetails, key);
           gpgme_key_unref (key);
           any = 1;
           break;
@@ -724,7 +724,7 @@ gpa_key_details_find (GtkWidget *keydetails, const char *pattern)
         {
           while (!gpgme_op_keylist_next (ctx, &key))
             {
-              gpa_key_details_update (keydetails, key, 1);
+              gpa_key_details_update (keydetails, key);
               gpgme_key_unref (key);
               any = 1;
               break;
@@ -735,6 +735,6 @@ gpa_key_details_find (GtkWidget *keydetails, const char *pattern)
 
   gpgme_release (ctx);
   if (!any)
-    gpa_key_details_update (keydetails, NULL, 0);
+    gpa_key_details_update (keydetails, NULL);
 }
 

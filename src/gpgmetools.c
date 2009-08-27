@@ -917,17 +917,6 @@ gpa_gpgme_key_get_userid (gpgme_user_id_t uid)
 
   uid_utf8 = string_to_utf8 (uid->uid);
 
-  /* Tag revoked UID's*/
-  if (uid->revoked)
-    {
-      /* FIXME: I think, this code should be simply disabled. Even if
-	 the uid U is revoked, it is "U", not "[Revoked] U". Side
-	 note: adding this prefix obviously breaks sorting by
-	 uid. -moritz */
-      gchar *tmp = g_strdup_printf ("[%s] %s", _("Revoked"), uid_utf8);
-      g_free (uid_utf8);
-      uid_utf8 = tmp;
-    }
   return uid_utf8;
 }
 
@@ -1073,7 +1062,6 @@ gpa_gpgme_key_sig_get_level (gpgme_key_sig_t sig)
     }
 }
 
-
 /* Return a string listing the capabilities of a key.  */
 const gchar *
 gpa_get_key_capabilities_text (gpgme_key_t key)
@@ -1083,19 +1071,16 @@ gpa_get_key_capabilities_text (gpgme_key_t key)
       if (key->can_sign)
 	{
 	  if (key->can_encrypt)
-	    return _("The key can be used for certification, signing "
-		     "and encryption.");
+	    return _("Certification, Signing, Encryption");
 	  else
-	    return _("The key can be used for certification and "
-		     "signing, but not for encryption.");
+	    return _("Certification, Signing");
 	}
       else
 	{
 	  if (key->can_encrypt)
-	    return _("The key can be used for certification and "
-		     "encryption.");
+	    return _("Certification, Encryption");
 	  else
-	    return _("The key can be used only for certification.");
+	    return _("Certification");
 	}
     }
   else
@@ -1103,18 +1088,17 @@ gpa_get_key_capabilities_text (gpgme_key_t key)
       if (key->can_sign)
 	{
 	  if (key->can_encrypt)
-	    return _("The key can be used only for signing and "
-		     "encryption, but not for certification.");
+	    return _("Signing, Encryption");
 	  else
-	    return _("The key can be used only for signing.");
+	    return _("Signing");
 	}
       else
 	{
 	  if (key->can_encrypt)
-	    return _("The key can be used only for encryption.");
+	    return _("Encryption.");
 	  else
 	    /* Can't happen, even for subkeys.  */
-	      return _("This key is useless.");
+	      return _("");
 	}
     }
 }

@@ -151,3 +151,23 @@ In no particular order:
 ** Error messages while switching simplified mode.
   This happens with the gpa-details-view and might be related to
   siglist.c
+** There is a problem with ui-mode changing and the siglist widget
+   While having a siglist open (through the key details widget) and
+   changing the UI mode through the preferences, the following
+   warnings occur:
+
+   GLib-GObject-WARNING **: invalid uninstantiatable type `yscale' in cast to `GtkTreeView'
+   Gtk-CRITICAL **: gtk_tree_view_get_columns: assertion `GTK_IS_TREE_VIEW (tree_view)' failed
+   GLib-GObject-WARNING **: invalid uninstantiatable type `yscale' in cast to `GObject'
+   GLib-GObject-CRITICAL **: g_object_get_data: assertion `G_IS_OBJECT (object)' failed
+   GLib-GObject-WARNING **: invalid uninstantiatable type `yscale' in cast to `GtkTreeView'
+   [...]
+
+   Disabling the code in the function
+   siglist.c::gpa_siglist_ui_mode_changed_cb() makes these warning
+   vanish. I am not sure where the problem lies.
+
+
+
+
+

@@ -39,7 +39,11 @@ struct _GpaKeyWindow
 {
   GtkDialog parent;
 
+  GtkUIManager *ui_manager;
+  GtkWidget *icon;
+  GtkWidget *title_label;
   GtkWidget *key_details;
+  gpgme_key_t key;
 };
 
 struct _GpaKeyWindowClass
@@ -61,7 +65,10 @@ GType gpa_key_window_get_type (void) G_GNUC_CONST;
  * Public API.
  */
 
+/* Create and return a new GpaKeyWindow widget. */
 GtkWidget *gpa_key_window_new    (void);
-void       gpa_key_window_update (GtkWidget *key_window,
-				  gpgme_key_t key);
+
+/* Update the key window WIDGET with the key KEY. */
+void       gpa_key_window_update (GtkWidget *key_window, gpgme_key_t key);
+
 #endif /* GPA_KEY_WINDOW_H */

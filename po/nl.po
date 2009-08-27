@@ -1,10 +1,11 @@
 # Written by Michael Anckaert <michael.anckaert@pi.be>
 #
+#: src/gpgmetools.c:1101
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.5.1\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-06-20 00:08+0200\n"
+"POT-Creation-Date: 2009-08-27 14:01+0200\n"
 "PO-Revision-Date: 2003-10-19 14:29+0200\n"
 "Last-Translator: Michael Anckaert <michael.anckaert@pi.be>\n"
 "Language-Team: DUTCH <nl@li.org>\n"
@@ -39,13 +40,13 @@ msgstr ""
 msgid "Clipboard"
 msgstr "Naar _klembord"
 
-#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:867
+#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:868
 #: src/cardman.c:619
 #, fuzzy
 msgid "_File"
 msgstr "/_Bestand"
 
-#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:868
+#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:869
 #: src/cardman.c:620
 #, fuzzy
 msgid "_Edit"
@@ -88,7 +89,7 @@ msgstr "Ontsleutel het geselecteerde bestand"
 msgid "Close the buffer"
 msgstr ""
 
-#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:876
+#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:877
 #: src/cardman.c:625
 msgid "Quit the program"
 msgstr ""
@@ -107,12 +108,12 @@ msgstr ""
 msgid "Cut the selection"
 msgstr "Versleutel het geselecteerde bestand"
 
-#: src/clipboard.c:788 src/keymanager.c:880
+#: src/clipboard.c:788 src/keymanager.c:881
 #, fuzzy
 msgid "Copy the selection"
 msgstr "Versleutel het geselecteerde bestand"
 
-#: src/clipboard.c:790 src/keymanager.c:882
+#: src/clipboard.c:790 src/keymanager.c:883
 #, fuzzy
 msgid "Paste the clipboard"
 msgstr "Naar _klembord"
@@ -131,11 +132,11 @@ msgstr ""
 msgid "Keyring"
 msgstr "Keyring Editor"
 
-#: src/clipboard.c:906 src/keymanager.c:1059 src/cardman.c:712
+#: src/clipboard.c:906 src/keymanager.c:1060 src/cardman.c:712
 msgid "Files"
 msgstr "Bestanden"
 
-#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1061
+#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1062
 #, fuzzy
 msgid "Card"
 msgstr "Naar _klembord"
@@ -259,7 +260,7 @@ msgstr "Versleutel bestanden"
 msgid "_Public Keys"
 msgstr "_Publieke sleutels"
 
-#: src/encryptdlg.c:192 src/icons.c:202
+#: src/encryptdlg.c:192 src/icons.c:203
 msgid "_Sign"
 msgstr "_Ondertekenen"
 
@@ -667,12 +668,12 @@ msgid ""
 "(you may not set the expiration time to the past.)"
 msgstr ""
 
-#: src/gpakeyselector.c:86 src/keylist.c:570 src/recipientdlg.c:191
+#: src/gpakeyselector.c:86 src/keylist.c:755 src/recipientdlg.c:191
 #: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "Sleutel ID:"
 
-#: src/gpakeyselector.c:95 src/keylist.c:621 src/siglist.c:99
+#: src/gpakeyselector.c:95 src/keylist.c:802 src/siglist.c:99
 #: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "Gebruiker naam"
@@ -840,7 +841,7 @@ msgstr "Algoritme"
 msgid "Size"
 msgstr "Grootte"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:583
+#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:767
 msgid "Expiry Date"
 msgstr "Verval datum"
 
@@ -892,12 +893,11 @@ msgstr ""
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:927
-#: src/gpgmetools.c:1046
+#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:1035
 msgid "Revoked"
 msgstr "Terugtrekken"
 
-#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1042
+#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1031
 msgid "Expired"
 msgstr "Vervallen"
 
@@ -909,7 +909,7 @@ msgstr "Uitgeschakeld"
 msgid "Unsigned"
 msgstr "Niet ondertekend"
 
-#: src/gpasubkeylist.c:173 src/gpgmetools.c:1033 src/verifydlg.c:212
+#: src/gpasubkeylist.c:173 src/gpgmetools.c:1022 src/verifydlg.c:212
 msgid "Valid"
 msgstr "Geldig"
 
@@ -923,7 +923,6 @@ msgid "User Names:"
 msgstr "Gebruikers Namen:"
 
 #: src/gpawidgets.c:77 src/gpgmetools.c:759 src/gpgmetools.c:766
-#: src/gpa-key-details.c:289
 msgid "Key ID:"
 msgstr "Sleutel ID:"
 
@@ -1024,7 +1023,7 @@ msgstr ""
 "\n"
 
 #: src/gpgmetools.c:678 src/gpgmetools.c:701 src/gpgmetools.c:718
-#: src/gpgmetools.c:1038 src/gpgmetools.c:1071
+#: src/gpgmetools.c:1027 src/gpgmetools.c:1060
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -1068,97 +1067,89 @@ msgstr "Wachtwoord ingeven"
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:1010 src/verifydlg.c:269
+#: src/gpgmetools.c:999 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[Onbekende gebruiker ID]"
 
-#: src/gpgmetools.c:1036 src/verifydlg.c:217
+#: src/gpgmetools.c:1025 src/verifydlg.c:217
 msgid "Bad"
 msgstr "Slecht"
 
-#: src/gpgmetools.c:1059
+#: src/gpgmetools.c:1048
 msgid "Generic"
 msgstr "Algemeen"
 
-#: src/gpgmetools.c:1062
+#: src/gpgmetools.c:1051
 msgid "Persona"
 msgstr "Persoonlijk"
 
-#: src/gpgmetools.c:1065
+#: src/gpgmetools.c:1054
 msgid "Casual"
 msgstr "Gewoon"
 
-#: src/gpgmetools.c:1068
+#: src/gpgmetools.c:1057
 msgid "Positive"
 msgstr "Positief"
 
-#: src/gpgmetools.c:1086
-msgid "The key can be used for certification, signing and encryption."
+#: src/gpgmetools.c:1074
+#, fuzzy
+msgid "Certification, Signing, Encryption"
 msgstr ""
 "De sleutel kan gebruikt worden voor certificatie, onderteken en "
 "versleuteling."
 
-#: src/gpgmetools.c:1089
-msgid ""
-"The key can be used for certification and signing, but not for encryption."
+#: src/gpgmetools.c:1076
+msgid "Certification, Signing"
 msgstr ""
-"De sleutel kan gebruikt worden voor certificatie en ondertekenen, maar niet "
-"voor versleuteling."
 
-#: src/gpgmetools.c:1095
-msgid "The key can be used for certification and encryption."
-msgstr "De sleutel kan gebruikt worden voor certificatie en versleuteling."
+#: src/gpgmetools.c:1081
+msgid "Certification, Encryption"
+msgstr ""
+
+#: src/gpgmetools.c:1083
+msgid "Certification"
+msgstr ""
+
+#: src/gpgmetools.c:1091
+msgid "Signing, Encryption"
+msgstr ""
+
+#: src/gpgmetools.c:1093
+#, fuzzy
+msgid "Signing"
+msgstr "Aan het ondertekenen..."
 
 #: src/gpgmetools.c:1098
-msgid "The key can be used only for certification."
-msgstr "De sleutel kan alleen gebruikt worden voor certificatie."
+#, fuzzy
+msgid "Encryption."
+msgstr "Aan het versleutelen..."
 
-#: src/gpgmetools.c:1106
-msgid ""
-"The key can be used only for signing and encryption, but not for "
-"certification."
-msgstr ""
-"De sleutel kan enkel gebruikt worden voor ondertekenen en encryptie, maar "
-"niet voor certificatie."
-
-#: src/gpgmetools.c:1109
-msgid "The key can be used only for signing."
-msgstr "De sleutel kan alleen gebruikt worden voor ondertekenen."
-
-#: src/gpgmetools.c:1114
-msgid "The key can be used only for encryption."
-msgstr "De sleutel kan alleen gebruikt worden voor versleuteling."
-
-#: src/gpgmetools.c:1117
-msgid "This key is useless."
-msgstr "Deze sleutel is waardeloos."
-
-#: src/gpgmetools.c:1455
+#: src/gpgmetools.c:1439
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
-#: src/gpgmetools.c:1505
+#: src/gpgmetools.c:1489
 msgid "You must enter a name."
 msgstr ""
 
-#: src/gpgmetools.c:1507
+#: src/gpgmetools.c:1491
 msgid "Invalid character in name."
 msgstr ""
 
-#: src/gpgmetools.c:1509
+#: src/gpgmetools.c:1493
 msgid "Name may not start with a digit."
 msgstr ""
 
-#: src/gpgmetools.c:1511
+#: src/gpgmetools.c:1495
 #, fuzzy
 msgid "Name is too short."
 msgstr "Naam te lang"
 
-#: src/gpgmetools.c:1583
+#: src/gpgmetools.c:1567
 msgid "Email address is not valid."
 msgstr ""
 
-#: src/gpgmetools.c:1597
+#: src/gpgmetools.c:1581
 msgid "Invalid character in comments."
 msgstr ""
 
@@ -1196,47 +1187,47 @@ msgstr "Open de bestandsbeheerder"
 msgid "About this application"
 msgstr "Versleutel het geselecteerde bestand"
 
-#: src/icons.c:203
+#: src/icons.c:204
 #, fuzzy
 msgid "_Verify"
 msgstr "Verifieer"
 
-#: src/icons.c:204
+#: src/icons.c:205
 #, fuzzy
 msgid "_Encrypt"
 msgstr "Versleutel"
 
-#: src/icons.c:205
+#: src/icons.c:206
 #, fuzzy
 msgid "_Decrypt"
 msgstr " Ontsleutel "
 
-#: src/icons.c:206
+#: src/icons.c:207
 #, fuzzy
 msgid "_Brief"
 msgstr "Beperkt"
 
-#: src/icons.c:207
+#: src/icons.c:208
 #, fuzzy
 msgid "_Detailed"
 msgstr "Details"
 
-#: src/icons.c:208
+#: src/icons.c:209
 #, fuzzy
 msgid "_Keyring Manager"
 msgstr "bestandsbeheerder"
 
-#: src/icons.c:209
+#: src/icons.c:210
 #, fuzzy
 msgid "_Clipboard"
 msgstr "Naar _klembord"
 
-#: src/icons.c:210
+#: src/icons.c:211
 #, fuzzy
 msgid "_File Manager"
 msgstr "bestandsbeheerder"
 
-#: src/icons.c:211
+#: src/icons.c:212
 #, fuzzy
 msgid "_Card Manager"
 msgstr "bestandsbeheerder"
@@ -1422,7 +1413,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "Maak _backup kopie"
 
-#: src/keygenwizard.c:248 src/keymanager.c:731 src/keymanager.c:757
+#: src/keygenwizard.c:248 src/keymanager.c:732 src/keymanager.c:758
 msgid "Do it _later"
 msgstr "Doe het _later"
 
@@ -1449,59 +1440,59 @@ msgstr ""
 "U heeft succesvol een sleutel genereert. De sleutel oneindig geldig en "
 "heefeen lengte van 1024 bits."
 
-#: src/keylist.c:344
+#: src/keylist.c:523
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
 msgstr ""
 
-#: src/keylist.c:562
+#: src/keylist.c:746
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#: src/keylist.c:571
+#: src/keylist.c:756
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "De sleutel kan alleen gebruikt worden voor certificatie."
 
-#: src/keylist.c:584
+#: src/keylist.c:768
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
-#: src/keylist.c:594 src/ownertrustdlg.c:122
+#: src/keylist.c:777 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "Eigenaars vertrouwen"
 
-#: src/keylist.c:595
+#: src/keylist.c:778
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
 
-#: src/keylist.c:607
+#: src/keylist.c:789
 msgid "Validity"
 msgstr "Geldigheid"
 
-#: src/keylist.c:608
+#: src/keylist.c:790
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
 
-#: src/keylist.c:622
+#: src/keylist.c:803
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr ""
 
-#: src/keymanager.c:447
+#: src/keymanager.c:446
 msgid "No keys selected for signing."
 msgstr "Geen sleutels geselecteerd voor ondertekening."
 
-#: src/keymanager.c:726
+#: src/keymanager.c:727
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1509,11 +1500,11 @@ msgstr ""
 "U heeft nog geen geheime sleutel. Wil u er nu een genereren (aanbevolen) of "
 "dit later doen?"
 
-#: src/keymanager.c:730
+#: src/keymanager.c:731
 msgid "_Generate key now"
 msgstr "_Genereer sleutel nu"
 
-#: src/keymanager.c:751
+#: src/keymanager.c:752
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1521,258 +1512,258 @@ msgstr ""
 "U heeft nog geen backup van uw geheime sleutel. Wil u uw sleutel nubackuppen "
 "(aanbevolen) of dit later doen?"
 
-#: src/keymanager.c:756
+#: src/keymanager.c:757
 msgid "_Backup key now"
 msgstr "_Backup sleutel nu"
 
-#: src/keymanager.c:869
+#: src/keymanager.c:870
 #, fuzzy
 msgid "_Keys"
 msgstr "/_Sleutels"
 
-#: src/keymanager.c:870
+#: src/keymanager.c:871
 #, fuzzy
 msgid "_Server"
 msgstr "/_Server"
 
-#: src/keymanager.c:884
+#: src/keymanager.c:885
 #, fuzzy
 msgid "Select all certificates"
 msgstr "_genereerd terugtrekkings certificaat"
 
-#: src/keymanager.c:889
+#: src/keymanager.c:890
 msgid "Refresh the keyring"
 msgstr ""
 
-#: src/keymanager.c:890
+#: src/keymanager.c:891
 #, fuzzy
 msgid "_New key..."
 msgstr "/Sleutels/_Nieuwe Sleutel..."
 
-#: src/keymanager.c:891
+#: src/keymanager.c:892
 #, fuzzy
 msgid "Generate a new key"
 msgstr "Genereer sleutel"
 
-#: src/keymanager.c:892
+#: src/keymanager.c:893
 #, fuzzy
 msgid "_Delete keys"
 msgstr "/_Verwijder sleutels...."
 
-#: src/keymanager.c:893
+#: src/keymanager.c:894
 msgid "Remove the selected key"
 msgstr "Verwijder de geselecteerde sleutel"
 
-#: src/keymanager.c:894
+#: src/keymanager.c:895
 #, fuzzy
 msgid "_Sign Keys..."
 msgstr "/_Onderteken Sleutels..."
 
-#: src/keymanager.c:895
+#: src/keymanager.c:896
 msgid "Sign the selected key"
 msgstr "Onderteken de geselecteerde sleutel"
 
-#: src/keymanager.c:896
+#: src/keymanager.c:897
 #, fuzzy
 msgid "Set _Owner Trust..."
 msgstr "/Verander _Eigenaars Vertrouwen...."
 
-#: src/keymanager.c:897
+#: src/keymanager.c:898
 #, fuzzy
 msgid "Set owner trust of the selected key"
 msgstr "Verwijder de geselecteerde sleutel"
 
-#: src/keymanager.c:899
+#: src/keymanager.c:900
 #, fuzzy
 msgid "_Edit Private Key..."
 msgstr "/_Bewerk Sleutel..."
 
-#: src/keymanager.c:900
+#: src/keymanager.c:901
 msgid "Edit the selected private key"
 msgstr "Bewerk de geselecteerde sleutel"
 
-#: src/keymanager.c:902
+#: src/keymanager.c:903
 #, fuzzy
 msgid "_Import Keys..."
 msgstr "Importeer sleutels"
 
-#: src/keymanager.c:903
+#: src/keymanager.c:904
 msgid "Import Keys"
 msgstr "Importeer sleutels"
 
-#: src/keymanager.c:904
+#: src/keymanager.c:905
 #, fuzzy
 msgid "E_xport Keys..."
 msgstr "/E_xporteer Sleutels...."
 
-#: src/keymanager.c:905
+#: src/keymanager.c:906
 msgid "Export Keys"
 msgstr "Exporteer Sleutels"
 
-#: src/keymanager.c:906
+#: src/keymanager.c:907
 #, fuzzy
 msgid "_Backup..."
 msgstr "/_Backup...."
 
-#: src/keymanager.c:907
+#: src/keymanager.c:908
 #, fuzzy
 msgid "Backup key"
 msgstr "Sleutels Backuppen"
 
-#: src/keymanager.c:910
+#: src/keymanager.c:911
 #, fuzzy
 msgid "_Retrieve Keys..."
 msgstr "/Server/_Haal sleutels...."
 
-#: src/keymanager.c:911
+#: src/keymanager.c:912
 #, fuzzy
 msgid "Retrieve keys from server"
 msgstr "Ontvang sleutel van server:"
 
-#: src/keymanager.c:913
+#: src/keymanager.c:914
 #, fuzzy
 msgid "_Send Keys..."
 msgstr "/_Onderteken Sleutels..."
 
-#: src/keymanager.c:914
+#: src/keymanager.c:915
 #, fuzzy
 msgid "Send keys to server"
 msgstr "Stel keyserver in"
 
-#: src/keymanager.c:920
+#: src/keymanager.c:921
 msgid "Show Brief Keylist"
 msgstr "Toon beperkte sleutellijst"
 
-#: src/keymanager.c:922
+#: src/keymanager.c:923
 msgid "Show Key Details"
 msgstr "Toon Sleutel Details"
 
-#: src/keymanager.c:1049
+#: src/keymanager.c:1050
 msgid "Edit"
 msgstr "Bewerk"
 
-#: src/keymanager.c:1051
+#: src/keymanager.c:1052
 msgid "Delete"
 msgstr "Wissen"
 
-#: src/keymanager.c:1053
+#: src/keymanager.c:1054
 msgid "Sign"
 msgstr "Ondertekenen"
 
-#: src/keymanager.c:1055
+#: src/keymanager.c:1056
 msgid "Export"
 msgstr "Exporteer"
 
-#: src/keymanager.c:1057
+#: src/keymanager.c:1058
 msgid "Import"
 msgstr "Importeer"
 
-#: src/keymanager.c:1188
+#: src/keymanager.c:1139
 #, fuzzy
 msgid "Selected default key:"
 msgstr "Selecteer Standaard Sleutel:"
 
-#: src/keymanager.c:1198
+#: src/keymanager.c:1149
 #, fuzzy
 msgid "No default key selected in the preferences."
 msgstr "Geen sleutels geselecteerd voor export."
 
-#: src/keymanager.c:1289
+#: src/keymanager.c:1343
 #, fuzzy
 msgid "GNU Privacy Assistant - Key Manager"
 msgstr "GNU Privacy Assistant - Bestands beheerder"
 
-#: src/keymanager.c:1317
+#: src/keymanager.c:1371
 #, fuzzy
 msgid "Key Manager"
 msgstr "bestandsbeheerder"
 
-#: src/gpa-key-details.c:132
+#: src/gpa-key-details.c:162
 #, fuzzy
-msgid "The key has both a smartcard based private part and a public part"
-msgstr "De sleutel heeft een geheim en publiek deel"
+msgid "Secret OpenPGP key"
+msgstr "Selecteer Standaard Sleutel:"
 
-#: src/gpa-key-details.c:136
-msgid "The key has both a private and a public part"
-msgstr "De sleutel heeft een geheim en publiek deel"
-
-#: src/gpa-key-details.c:140
-msgid "The key has only a public part"
-msgstr "De sleutel heeft enkel een publiek deel"
-
-#: src/gpa-key-details.c:176
-#, c-format
-msgid "%s %u bits"
-msgstr ""
-
-#: src/gpa-key-details.c:202
-msgid "No keys selected"
-msgstr "Geen sleutels geselecteerd"
-
-#: src/gpa-key-details.c:205
-#, fuzzy, c-format
-msgid "%d key selected"
-msgid_plural "%d keys selected"
-msgstr[0] "%d sleutels geselecteerd"
-msgstr[1] "%d sleutels geselecteerd"
-
-#: src/gpa-key-details.c:287
+#: src/gpa-key-details.c:166
 #, fuzzy
-msgid "User name:"
-msgstr "Gebruiker naam:"
+msgid "Public OpenPGP key"
+msgstr "_Publieke sleutels"
 
-#: src/gpa-key-details.c:291 src/keysigndlg.c:106
-msgid "Fingerprint:"
+#: src/gpa-key-details.c:171
+#, fuzzy
+msgid "Secret X.509 key"
+msgstr "Selecteer Standaard Sleutel:"
+
+#: src/gpa-key-details.c:175
+#, fuzzy
+msgid "Public X.509 key"
+msgstr "_Publieke sleutels"
+
+#: src/gpa-key-details.c:235
+#, fuzzy
+msgid "<b>Key type:</b>"
+msgstr "Ondertekenen_als"
+
+#: src/gpa-key-details.c:237
+#, fuzzy
+msgid "<b>Key ID:</b>"
+msgstr "Ondertekenen_als"
+
+#: src/gpa-key-details.c:239
+#, fuzzy
+msgid "<b>Key capabilities:</b>"
+msgstr "Ondertekenen_als"
+
+#: src/gpa-key-details.c:241
+#, fuzzy
+msgid "<b>Fingerprint:</b>"
 msgstr "Vingerafdruk:"
 
-#: src/gpa-key-details.c:293
-msgid "Expires at:"
+#: src/gpa-key-details.c:243
+#, fuzzy
+msgid "<b>Expires at:</b>"
 msgstr "Vervalt op:"
 
-#: src/gpa-key-details.c:295
-msgid "Owner Trust:"
-msgstr "Eigenaars Vertrouwen:"
-
-#: src/gpa-key-details.c:297
+#: src/gpa-key-details.c:245
 #, fuzzy
-msgid "Key validity:"
+msgid "<b>Key validity:</b>"
 msgstr "Sleutel geldigheid:"
 
-#: src/gpa-key-details.c:299
+#: src/gpa-key-details.c:247
 #, fuzzy
-msgid "Key type:"
-msgstr "Sleutel Type:"
+msgid "<b>Owner Trust:</b>"
+msgstr "Eigenaars Vertrouwen:"
 
-#: src/gpa-key-details.c:301
-msgid "Created at:"
+#: src/gpa-key-details.c:249
+#, fuzzy
+msgid "<b>Created at:</b>"
 msgstr "Gemaakt op:"
 
-#: src/gpa-key-details.c:304
-msgid "Details"
-msgstr "Details"
+#: src/gpa-key-details.c:252
+msgid "Overview"
+msgstr ""
 
-#: src/gpa-key-details.c:350
+#: src/gpa-key-details.c:347
 msgid "Show signatures on user name:"
 msgstr "Controleer ondertekeningen van het geselecteerde bestand"
 
-#: src/gpa-key-details.c:386
+#: src/gpa-key-details.c:383
 #, fuzzy
 msgid "Chain"
 msgstr "Kan ondertekend worden"
 
-#: src/gpa-key-details.c:386
+#: src/gpa-key-details.c:383
 msgid "Signatures"
 msgstr "Ondertekeningen"
 
-#: src/gpa-key-details.c:408
+#: src/gpa-key-details.c:405
 msgid "All signatures"
 msgstr "Ondertekeningen"
 
-#: src/gpa-key-details.c:470
+#: src/gpa-key-details.c:466
 msgid "Subkeys"
 msgstr "Subsleutels"
 
-#: src/gpa-key-details.c:470
+#: src/gpa-key-details.c:466
 #, fuzzy
 msgid "Key"
 msgstr "/_Sleutels"
@@ -1784,6 +1775,10 @@ msgstr "Onderteken Sleutel"
 #: src/keysigndlg.c:72
 msgid "Do you want to sign the following key?"
 msgstr "Wilt u de volgende sleutel ondertekenen?"
+
+#: src/keysigndlg.c:106
+msgid "Fingerprint:"
+msgstr "Vingerafdruk:"
 
 #: src/keysigndlg.c:116
 msgid ""
@@ -2797,6 +2792,64 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid ""
+#~ "The key can be used for certification and signing, but not for encryption."
+#~ msgstr ""
+#~ "De sleutel kan gebruikt worden voor certificatie en ondertekenen, maar "
+#~ "niet voor versleuteling."
+
+#~ msgid "The key can be used for certification and encryption."
+#~ msgstr "De sleutel kan gebruikt worden voor certificatie en versleuteling."
+
+#~ msgid "The key can be used only for certification."
+#~ msgstr "De sleutel kan alleen gebruikt worden voor certificatie."
+
+#~ msgid ""
+#~ "The key can be used only for signing and encryption, but not for "
+#~ "certification."
+#~ msgstr ""
+#~ "De sleutel kan enkel gebruikt worden voor ondertekenen en encryptie, maar "
+#~ "niet voor certificatie."
+
+#~ msgid "The key can be used only for signing."
+#~ msgstr "De sleutel kan alleen gebruikt worden voor ondertekenen."
+
+#~ msgid "The key can be used only for encryption."
+#~ msgstr "De sleutel kan alleen gebruikt worden voor versleuteling."
+
+#~ msgid "This key is useless."
+#~ msgstr "Deze sleutel is waardeloos."
+
+#, fuzzy
+#~ msgid "The key has both a smartcard based private part and a public part"
+#~ msgstr "De sleutel heeft een geheim en publiek deel"
+
+#~ msgid "The key has both a private and a public part"
+#~ msgstr "De sleutel heeft een geheim en publiek deel"
+
+#~ msgid "The key has only a public part"
+#~ msgstr "De sleutel heeft enkel een publiek deel"
+
+#~ msgid "No keys selected"
+#~ msgstr "Geen sleutels geselecteerd"
+
+#, fuzzy
+#~ msgid "%d key selected"
+#~ msgid_plural "%d keys selected"
+#~ msgstr[0] "%d sleutels geselecteerd"
+#~ msgstr[1] "%d sleutels geselecteerd"
+
+#, fuzzy
+#~ msgid "User name:"
+#~ msgstr "Gebruiker naam:"
+
+#, fuzzy
+#~ msgid "Key type:"
+#~ msgstr "Sleutel Type:"
+
+#~ msgid "Details"
+#~ msgstr "Details"
 
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "Kies aub een wachtwoord voor de nieuwe sleutel."

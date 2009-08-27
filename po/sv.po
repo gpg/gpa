@@ -4,11 +4,12 @@
 # Daniel Nylander <po@danielnylander.se>, 2006, 2008.
 # Mick Ohrberg <mick.ohrberg@umb.com>, 2003.
 #
+#: src/gpgmetools.c:1101
 msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-06-20 00:08+0200\n"
+"POT-Creation-Date: 2009-08-27 14:01+0200\n"
 "PO-Revision-Date: 2008-09-12 18:01+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -41,12 +42,12 @@ msgstr "Spara som..."
 msgid "Clipboard"
 msgstr "Urklipp"
 
-#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:867
+#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:868
 #: src/cardman.c:619
 msgid "_File"
 msgstr "_Arkiv"
 
-#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:868
+#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:869
 #: src/cardman.c:620
 msgid "_Edit"
 msgstr "R_edigera"
@@ -83,7 +84,7 @@ msgstr "Dekryptera bufferttexten"
 msgid "Close the buffer"
 msgstr "Stäng bufferten"
 
-#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:876
+#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:877
 #: src/cardman.c:625
 msgid "Quit the program"
 msgstr "Avsluta programmet"
@@ -100,11 +101,11 @@ msgstr "Gör om senaste ångrade åtgärden"
 msgid "Cut the selection"
 msgstr "Klipp ut markeringen"
 
-#: src/clipboard.c:788 src/keymanager.c:880
+#: src/clipboard.c:788 src/keymanager.c:881
 msgid "Copy the selection"
 msgstr "Kopiera markeringen"
 
-#: src/clipboard.c:790 src/keymanager.c:882
+#: src/clipboard.c:790 src/keymanager.c:883
 msgid "Paste the clipboard"
 msgstr "Klistra in urklipp"
 
@@ -120,11 +121,11 @@ msgstr "Välj hela dokumentet"
 msgid "Keyring"
 msgstr "Nyckelring"
 
-#: src/clipboard.c:906 src/keymanager.c:1059 src/cardman.c:712
+#: src/clipboard.c:906 src/keymanager.c:1060 src/cardman.c:712
 msgid "Files"
 msgstr "Filer"
 
-#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1061
+#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1062
 #, fuzzy
 msgid "Card"
 msgstr "Urklipp"
@@ -242,7 +243,7 @@ msgstr "Kryptera dokument"
 msgid "_Public Keys"
 msgstr "_Publika nycklar"
 
-#: src/encryptdlg.c:192 src/icons.c:202
+#: src/encryptdlg.c:192 src/icons.c:203
 msgid "_Sign"
 msgstr "_Signera"
 
@@ -638,12 +639,12 @@ msgstr ""
 "Ogiltig tid angiven.\n"
 "(du kan inte ställa in utgångsdatumet till dåtid.)"
 
-#: src/gpakeyselector.c:86 src/keylist.c:570 src/recipientdlg.c:191
+#: src/gpakeyselector.c:86 src/keylist.c:755 src/recipientdlg.c:191
 #: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "Nyckelidentitet"
 
-#: src/gpakeyselector.c:95 src/keylist.c:621 src/siglist.c:99
+#: src/gpakeyselector.c:95 src/keylist.c:802 src/siglist.c:99
 #: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "Användarnamn"
@@ -805,7 +806,7 @@ msgstr "Algoritm"
 msgid "Size"
 msgstr "Storlek"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:583
+#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:767
 msgid "Expiry Date"
 msgstr "Utgångsdatum"
 
@@ -857,12 +858,11 @@ msgstr ""
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:927
-#: src/gpgmetools.c:1046
+#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:1035
 msgid "Revoked"
 msgstr "Spärrad"
 
-#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1042
+#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1031
 msgid "Expired"
 msgstr "Utgången"
 
@@ -874,7 +874,7 @@ msgstr "Inaktiverad"
 msgid "Unsigned"
 msgstr "Osignerad"
 
-#: src/gpasubkeylist.c:173 src/gpgmetools.c:1033 src/verifydlg.c:212
+#: src/gpasubkeylist.c:173 src/gpgmetools.c:1022 src/verifydlg.c:212
 msgid "Valid"
 msgstr "Giltig"
 
@@ -888,7 +888,6 @@ msgid "User Names:"
 msgstr "Användarnamn:"
 
 #: src/gpawidgets.c:77 src/gpgmetools.c:759 src/gpgmetools.c:766
-#: src/gpa-key-details.c:289
 msgid "Key ID:"
 msgstr "Nyckelidentitet:"
 
@@ -990,7 +989,7 @@ msgstr ""
 "\n"
 
 #: src/gpgmetools.c:678 src/gpgmetools.c:701 src/gpgmetools.c:718
-#: src/gpgmetools.c:1038 src/gpgmetools.c:1071
+#: src/gpgmetools.c:1027 src/gpgmetools.c:1060
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -1034,93 +1033,87 @@ msgstr "Ange lösenfras"
 msgid "[None]"
 msgstr "[Ingen]"
 
-#: src/gpgmetools.c:1010 src/verifydlg.c:269
+#: src/gpgmetools.c:999 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[Okänd användaridentitet]"
 
-#: src/gpgmetools.c:1036 src/verifydlg.c:217
+#: src/gpgmetools.c:1025 src/verifydlg.c:217
 msgid "Bad"
 msgstr "Felaktigt"
 
-#: src/gpgmetools.c:1059
+#: src/gpgmetools.c:1048
 msgid "Generic"
 msgstr "Allmänt"
 
-#: src/gpgmetools.c:1062
+#: src/gpgmetools.c:1051
 msgid "Persona"
 msgstr "Personligen"
 
-#: src/gpgmetools.c:1065
+#: src/gpgmetools.c:1054
 msgid "Casual"
 msgstr "Flyktigt"
 
-#: src/gpgmetools.c:1068
+#: src/gpgmetools.c:1057
 msgid "Positive"
 msgstr "Helt säkert"
 
-#: src/gpgmetools.c:1086
-msgid "The key can be used for certification, signing and encryption."
+#: src/gpgmetools.c:1074
+#, fuzzy
+msgid "Certification, Signing, Encryption"
 msgstr "Nyckeln kan användas för certifiering, signering och kryptering."
 
-#: src/gpgmetools.c:1089
-msgid ""
-"The key can be used for certification and signing, but not for encryption."
+#: src/gpgmetools.c:1076
+msgid "Certification, Signing"
 msgstr ""
-"Nyckeln kan användas för certifiering och signering, men inte för kryptering."
 
-#: src/gpgmetools.c:1095
-msgid "The key can be used for certification and encryption."
-msgstr "Nyckeln kan användas för certifiering och kryptering."
+#: src/gpgmetools.c:1081
+msgid "Certification, Encryption"
+msgstr ""
+
+#: src/gpgmetools.c:1083
+msgid "Certification"
+msgstr ""
+
+#: src/gpgmetools.c:1091
+msgid "Signing, Encryption"
+msgstr ""
+
+#: src/gpgmetools.c:1093
+#, fuzzy
+msgid "Signing"
+msgstr "Signerar..."
 
 #: src/gpgmetools.c:1098
-msgid "The key can be used only for certification."
-msgstr "Nyckeln kan endast användas för certifiering."
+#, fuzzy
+msgid "Encryption."
+msgstr "Krypterar..."
 
-#: src/gpgmetools.c:1106
-msgid ""
-"The key can be used only for signing and encryption, but not for "
-"certification."
-msgstr ""
-"Nyckeln kan användas för signering och kryptering, men inte för certifiering."
-
-#: src/gpgmetools.c:1109
-msgid "The key can be used only for signing."
-msgstr "Nyckeln kan endast användas för signering."
-
-#: src/gpgmetools.c:1114
-msgid "The key can be used only for encryption."
-msgstr "Nyckeln kan endast användas för kryptering."
-
-#: src/gpgmetools.c:1117
-msgid "This key is useless."
-msgstr "Den här nyckeln är oanvändbar."
-
-#: src/gpgmetools.c:1455
+#: src/gpgmetools.c:1439
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
-#: src/gpgmetools.c:1505
+#: src/gpgmetools.c:1489
 #, fuzzy
 msgid "You must enter a name."
 msgstr "Du måste ange en användaridentitet."
 
-#: src/gpgmetools.c:1507
+#: src/gpgmetools.c:1491
 msgid "Invalid character in name."
 msgstr ""
 
-#: src/gpgmetools.c:1509
+#: src/gpgmetools.c:1493
 msgid "Name may not start with a digit."
 msgstr ""
 
-#: src/gpgmetools.c:1511
+#: src/gpgmetools.c:1495
 msgid "Name is too short."
 msgstr ""
 
-#: src/gpgmetools.c:1583
+#: src/gpgmetools.c:1567
 msgid "Email address is not valid."
 msgstr ""
 
-#: src/gpgmetools.c:1597
+#: src/gpgmetools.c:1581
 msgid "Invalid character in comments."
 msgstr ""
 
@@ -1154,40 +1147,40 @@ msgstr "Öppna handboken för GPA"
 msgid "About this application"
 msgstr "Om detta program"
 
-#: src/icons.c:203
+#: src/icons.c:204
 msgid "_Verify"
 msgstr "_Validera"
 
-#: src/icons.c:204
+#: src/icons.c:205
 msgid "_Encrypt"
 msgstr "_Kryptera"
 
-#: src/icons.c:205
+#: src/icons.c:206
 msgid "_Decrypt"
 msgstr "_Dekryptera"
 
-#: src/icons.c:206
+#: src/icons.c:207
 msgid "_Brief"
 msgstr "Ko_rtfattat"
 
-#: src/icons.c:207
+#: src/icons.c:208
 msgid "_Detailed"
 msgstr "D_etaljerat"
 
-#: src/icons.c:208
+#: src/icons.c:209
 #, fuzzy
 msgid "_Keyring Manager"
 msgstr "F_ilhanterare"
 
-#: src/icons.c:209
+#: src/icons.c:210
 msgid "_Clipboard"
 msgstr "_Urklipp"
 
-#: src/icons.c:210
+#: src/icons.c:211
 msgid "_File Manager"
 msgstr "F_ilhanterare"
 
-#: src/icons.c:211
+#: src/icons.c:212
 #, fuzzy
 msgid "_Card Manager"
 msgstr "F_ilhanterare"
@@ -1373,7 +1366,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "Skapa _säkerhetskopia"
 
-#: src/keygenwizard.c:248 src/keymanager.c:731 src/keymanager.c:757
+#: src/keygenwizard.c:248 src/keymanager.c:732 src/keymanager.c:758
 msgid "Do it _later"
 msgstr "_Vänta till senare"
 
@@ -1400,7 +1393,7 @@ msgstr ""
 "Du har skapat en nyckel som är 1024 bitar lång. Giltighetstiden är "
 "obegränsad."
 
-#: src/keylist.c:344
+#: src/keylist.c:523
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1408,7 +1401,7 @@ msgstr ""
 "GnuPG bygger om tillitsdatabasen.\n"
 "Det här kan ta några sekunder."
 
-#: src/keylist.c:562
+#: src/keylist.c:746
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
@@ -1416,19 +1409,19 @@ msgstr ""
 "Denna kolumn listar typen för certifikatet.  Ett \"P\" betyder OpenPGP och "
 "ett \"X\" betyder X.509 (S/MIME)."
 
-#: src/keylist.c:571
+#: src/keylist.c:756
 msgid "The key ID is a short number to identify a certificate."
 msgstr "Nyckelidentiteten är ett kort tal för att identifiera ett certifikat."
 
-#: src/keylist.c:584
+#: src/keylist.c:768
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Utgångsdatum är det datum som certifikatet är giltigt fram till."
 
-#: src/keylist.c:594 src/ownertrustdlg.c:122
+#: src/keylist.c:777 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "Ägartillit"
 
-#: src/keylist.c:595
+#: src/keylist.c:778
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
@@ -1438,11 +1431,11 @@ msgstr ""
 "ägaren av certifikatet korrekt signerar (certifierar) andra certifikat.  Det "
 "är endast betydelsefullt för OpenPGP."
 
-#: src/keylist.c:607
+#: src/keylist.c:789
 msgid "Validity"
 msgstr "Giltighet"
 
-#: src/keylist.c:608
+#: src/keylist.c:790
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
@@ -1450,17 +1443,17 @@ msgstr ""
 "Giltighet beskriver tillitsnivån systemet har i detta certifikat.  Det är "
 "hur säkert det är att namngiven användare verkligen är den användaren."
 
-#: src/keylist.c:622
+#: src/keylist.c:803
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr "Användarnamn är namnet och ofta även e-postadressen för certifikatet."
 
-#: src/keymanager.c:447
+#: src/keymanager.c:446
 msgid "No keys selected for signing."
 msgstr "Inga nycklar valda för signering."
 
-#: src/keymanager.c:726
+#: src/keymanager.c:727
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1468,11 +1461,11 @@ msgstr ""
 "Du har inte skapat en privat nyckel ännu. Vill du skapa en nu "
 "(rekommenderas) eller vänta till senare?"
 
-#: src/keymanager.c:730
+#: src/keymanager.c:731
 msgid "_Generate key now"
 msgstr "Generera nyckel _nu"
 
-#: src/keymanager.c:751
+#: src/keymanager.c:752
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1480,238 +1473,238 @@ msgstr ""
 "Du har inte gjort en säkerhetskopia av din privata nyckel ännu. Vill du göra "
 "en nu (rekommenderas) eller vänta till senare?"
 
-#: src/keymanager.c:756
+#: src/keymanager.c:757
 msgid "_Backup key now"
 msgstr "Skapa _säkerhetskopia nu"
 
-#: src/keymanager.c:869
+#: src/keymanager.c:870
 msgid "_Keys"
 msgstr "_Nycklar"
 
-#: src/keymanager.c:870
+#: src/keymanager.c:871
 msgid "_Server"
 msgstr "_Server"
 
-#: src/keymanager.c:884
+#: src/keymanager.c:885
 msgid "Select all certificates"
 msgstr "Markera alla certifikat"
 
-#: src/keymanager.c:889
+#: src/keymanager.c:890
 msgid "Refresh the keyring"
 msgstr "Uppdatera nyckelringen"
 
-#: src/keymanager.c:890
+#: src/keymanager.c:891
 msgid "_New key..."
 msgstr "_Ny nyckel..."
 
-#: src/keymanager.c:891
+#: src/keymanager.c:892
 msgid "Generate a new key"
 msgstr "Generera en ny nyckel"
 
-#: src/keymanager.c:892
+#: src/keymanager.c:893
 msgid "_Delete keys"
 msgstr "_Ta bort nycklar..."
 
-#: src/keymanager.c:893
+#: src/keymanager.c:894
 msgid "Remove the selected key"
 msgstr "Ta bort vald nyckel"
 
-#: src/keymanager.c:894
+#: src/keymanager.c:895
 msgid "_Sign Keys..."
 msgstr "_Signera nycklar..."
 
-#: src/keymanager.c:895
+#: src/keymanager.c:896
 msgid "Sign the selected key"
 msgstr "Signera vald nyckel"
 
-#: src/keymanager.c:896
+#: src/keymanager.c:897
 msgid "Set _Owner Trust..."
 msgstr "Ange _ägartillit..."
 
-#: src/keymanager.c:897
+#: src/keymanager.c:898
 msgid "Set owner trust of the selected key"
 msgstr "Ange ägartillit för vald nyckel"
 
-#: src/keymanager.c:899
+#: src/keymanager.c:900
 msgid "_Edit Private Key..."
 msgstr "Redigera _privat nyckel..."
 
-#: src/keymanager.c:900
+#: src/keymanager.c:901
 msgid "Edit the selected private key"
 msgstr "Redigera markerad privat nyckel"
 
-#: src/keymanager.c:902
+#: src/keymanager.c:903
 msgid "_Import Keys..."
 msgstr "_Importera nycklar..."
 
-#: src/keymanager.c:903
+#: src/keymanager.c:904
 msgid "Import Keys"
 msgstr "Importera nycklar"
 
-#: src/keymanager.c:904
+#: src/keymanager.c:905
 msgid "E_xport Keys..."
 msgstr "E_xportera nycklar..."
 
-#: src/keymanager.c:905
+#: src/keymanager.c:906
 msgid "Export Keys"
 msgstr "Exportera nycklar"
 
-#: src/keymanager.c:906
+#: src/keymanager.c:907
 msgid "_Backup..."
 msgstr "Säkerhetsk_opiera..."
 
-#: src/keymanager.c:907
+#: src/keymanager.c:908
 msgid "Backup key"
 msgstr "Säkerhetskopiera nyckel"
 
-#: src/keymanager.c:910
+#: src/keymanager.c:911
 msgid "_Retrieve Keys..."
 msgstr "_Hämta nycklar..."
 
-#: src/keymanager.c:911
+#: src/keymanager.c:912
 msgid "Retrieve keys from server"
 msgstr "Hämta nycklar från server"
 
-#: src/keymanager.c:913
+#: src/keymanager.c:914
 msgid "_Send Keys..."
 msgstr "_Skicka nycklar..."
 
-#: src/keymanager.c:914
+#: src/keymanager.c:915
 msgid "Send keys to server"
 msgstr "Skicka nycklar till server"
 
-#: src/keymanager.c:920
+#: src/keymanager.c:921
 msgid "Show Brief Keylist"
 msgstr "Visa kortfattad nyckellista"
 
-#: src/keymanager.c:922
+#: src/keymanager.c:923
 msgid "Show Key Details"
 msgstr "Visa nyckeldetaljer"
 
-#: src/keymanager.c:1049
+#: src/keymanager.c:1050
 msgid "Edit"
 msgstr "Redigera"
 
-#: src/keymanager.c:1051
+#: src/keymanager.c:1052
 msgid "Delete"
 msgstr "Ta bort"
 
-#: src/keymanager.c:1053
+#: src/keymanager.c:1054
 msgid "Sign"
 msgstr "Signera"
 
-#: src/keymanager.c:1055
+#: src/keymanager.c:1056
 msgid "Export"
 msgstr "Exportera"
 
-#: src/keymanager.c:1057
+#: src/keymanager.c:1058
 msgid "Import"
 msgstr "Importera"
 
-#: src/keymanager.c:1188
+#: src/keymanager.c:1139
 msgid "Selected default key:"
 msgstr "Vald standardnyckel:"
 
-#: src/keymanager.c:1198
+#: src/keymanager.c:1149
 msgid "No default key selected in the preferences."
 msgstr "Ingen standardnyckel har valts i inställningarna."
 
-#: src/keymanager.c:1289
+#: src/keymanager.c:1343
 #, fuzzy
 msgid "GNU Privacy Assistant - Key Manager"
 msgstr "GNU Privacy Assistant - Filhanterare"
 
-#: src/keymanager.c:1317
+#: src/keymanager.c:1371
 #, fuzzy
 msgid "Key Manager"
 msgstr "Filhanterare"
 
-#: src/gpa-key-details.c:132
+#: src/gpa-key-details.c:162
 #, fuzzy
-msgid "The key has both a smartcard based private part and a public part"
-msgstr "Denna nyckel har både en privat och en publik del"
+msgid "Secret OpenPGP key"
+msgstr "Välj _PGP-nyckel..."
 
-#: src/gpa-key-details.c:136
-msgid "The key has both a private and a public part"
-msgstr "Denna nyckel har både en privat och en publik del"
-
-#: src/gpa-key-details.c:140
-msgid "The key has only a public part"
-msgstr "Denna nyckel har endast en publik del"
-
-#: src/gpa-key-details.c:176
-#, c-format
-msgid "%s %u bits"
-msgstr "%s %u bitar"
-
-#: src/gpa-key-details.c:202
-msgid "No keys selected"
-msgstr "Inga nycklar valda"
-
-#: src/gpa-key-details.c:205
-#, c-format
-msgid "%d key selected"
-msgid_plural "%d keys selected"
-msgstr[0] "%d nyckel markerad"
-msgstr[1] "%d nycklar markerade"
-
-#: src/gpa-key-details.c:287
+#: src/gpa-key-details.c:166
 #, fuzzy
-msgid "User name:"
-msgstr "Användarnamn:"
+msgid "Public OpenPGP key"
+msgstr "_Publika nycklar"
 
-#: src/gpa-key-details.c:291 src/keysigndlg.c:106
-msgid "Fingerprint:"
+#: src/gpa-key-details.c:171
+#, fuzzy
+msgid "Secret X.509 key"
+msgstr "Välj en nyckel"
+
+#: src/gpa-key-details.c:175
+#, fuzzy
+msgid "Public X.509 key"
+msgstr "_Publika nycklar"
+
+#: src/gpa-key-details.c:235
+#, fuzzy
+msgid "<b>Key type:</b>"
+msgstr "<b>Allmänt</b>"
+
+#: src/gpa-key-details.c:237
+#, fuzzy
+msgid "<b>Key ID:</b>"
+msgstr "<b>Allmänt</b>"
+
+#: src/gpa-key-details.c:239
+#, fuzzy
+msgid "<b>Key capabilities:</b>"
+msgstr "<b>Allmänt</b>"
+
+#: src/gpa-key-details.c:241
+#, fuzzy
+msgid "<b>Fingerprint:</b>"
 msgstr "Fingeravtryck:"
 
-#: src/gpa-key-details.c:293
-msgid "Expires at:"
+#: src/gpa-key-details.c:243
+#, fuzzy
+msgid "<b>Expires at:</b>"
 msgstr "Går ut den:"
 
-#: src/gpa-key-details.c:295
-msgid "Owner Trust:"
-msgstr "Ägartillit:"
-
-#: src/gpa-key-details.c:297
+#: src/gpa-key-details.c:245
 #, fuzzy
-msgid "Key validity:"
+msgid "<b>Key validity:</b>"
 msgstr "Nyckelgiltighet:"
 
-#: src/gpa-key-details.c:299
+#: src/gpa-key-details.c:247
 #, fuzzy
-msgid "Key type:"
-msgstr "Nyckeltyp:"
+msgid "<b>Owner Trust:</b>"
+msgstr "Ägartillit:"
 
-#: src/gpa-key-details.c:301
-msgid "Created at:"
+#: src/gpa-key-details.c:249
+#, fuzzy
+msgid "<b>Created at:</b>"
 msgstr "Skapad den:"
 
-#: src/gpa-key-details.c:304
-msgid "Details"
-msgstr "Detaljer"
+#: src/gpa-key-details.c:252
+msgid "Overview"
+msgstr ""
 
-#: src/gpa-key-details.c:350
+#: src/gpa-key-details.c:347
 msgid "Show signatures on user name:"
 msgstr "Visa signaturer på användarnamn:"
 
-#: src/gpa-key-details.c:386
+#: src/gpa-key-details.c:383
 #, fuzzy
 msgid "Chain"
 msgstr "Kan signera"
 
-#: src/gpa-key-details.c:386
+#: src/gpa-key-details.c:383
 msgid "Signatures"
 msgstr "Signaturer"
 
-#: src/gpa-key-details.c:408
+#: src/gpa-key-details.c:405
 msgid "All signatures"
 msgstr "Alla signaturer"
 
-#: src/gpa-key-details.c:470
+#: src/gpa-key-details.c:466
 msgid "Subkeys"
 msgstr "Undernycklar"
 
-#: src/gpa-key-details.c:470
+#: src/gpa-key-details.c:466
 #, fuzzy
 msgid "Key"
 msgstr "_Nycklar"
@@ -1723,6 +1716,10 @@ msgstr "Signera nyckel"
 #: src/keysigndlg.c:72
 msgid "Do you want to sign the following key?"
 msgstr "Vill du signera följande nyckel?"
+
+#: src/keysigndlg.c:106
+msgid "Fingerprint:"
+msgstr "Fingeravtryck:"
 
 #: src/keysigndlg.c:116
 msgid ""
@@ -2744,6 +2741,66 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid ""
+#~ "The key can be used for certification and signing, but not for encryption."
+#~ msgstr ""
+#~ "Nyckeln kan användas för certifiering och signering, men inte för "
+#~ "kryptering."
+
+#~ msgid "The key can be used for certification and encryption."
+#~ msgstr "Nyckeln kan användas för certifiering och kryptering."
+
+#~ msgid "The key can be used only for certification."
+#~ msgstr "Nyckeln kan endast användas för certifiering."
+
+#~ msgid ""
+#~ "The key can be used only for signing and encryption, but not for "
+#~ "certification."
+#~ msgstr ""
+#~ "Nyckeln kan användas för signering och kryptering, men inte för "
+#~ "certifiering."
+
+#~ msgid "The key can be used only for signing."
+#~ msgstr "Nyckeln kan endast användas för signering."
+
+#~ msgid "The key can be used only for encryption."
+#~ msgstr "Nyckeln kan endast användas för kryptering."
+
+#~ msgid "This key is useless."
+#~ msgstr "Den här nyckeln är oanvändbar."
+
+#, fuzzy
+#~ msgid "The key has both a smartcard based private part and a public part"
+#~ msgstr "Denna nyckel har både en privat och en publik del"
+
+#~ msgid "The key has both a private and a public part"
+#~ msgstr "Denna nyckel har både en privat och en publik del"
+
+#~ msgid "The key has only a public part"
+#~ msgstr "Denna nyckel har endast en publik del"
+
+#~ msgid "%s %u bits"
+#~ msgstr "%s %u bitar"
+
+#~ msgid "No keys selected"
+#~ msgstr "Inga nycklar valda"
+
+#~ msgid "%d key selected"
+#~ msgid_plural "%d keys selected"
+#~ msgstr[0] "%d nyckel markerad"
+#~ msgstr[1] "%d nycklar markerade"
+
+#, fuzzy
+#~ msgid "User name:"
+#~ msgstr "Användarnamn:"
+
+#, fuzzy
+#~ msgid "Key type:"
+#~ msgstr "Nyckeltyp:"
+
+#~ msgid "Details"
+#~ msgstr "Detaljer"
 
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "Välj en lösenfras för den nya nyckeln."

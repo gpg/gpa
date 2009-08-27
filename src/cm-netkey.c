@@ -290,7 +290,7 @@ reload_more_data_cb (void *opaque, const char *status, const char *args)
               expander = gtk_expander_new (keyid);
               details = gpa_key_details_new ();
               gtk_container_add (GTK_CONTAINER (expander), details);
-              gpa_key_details_update (details, key, 1);
+              gpa_key_details_update (details, key);
 
               hbox = gtk_hbox_new (FALSE, 0);
               label = gtk_label_new (NULL);

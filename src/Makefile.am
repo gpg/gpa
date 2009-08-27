@@ -106,6 +106,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      keydeletedlg.c keydeletedlg.h \
 	      keylist.c keylist.h \
 	      siglist.c siglist.h \
+	      uidlist.c uidlist.h \
 	      gpasubkeylist.c gpasubkeylist.h \
               certchain.c certchain.h \
 	      gpl-text.c gpl-text.h \

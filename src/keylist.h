@@ -56,6 +56,11 @@ struct _GpaKeyList {
   int requested_usage;
 
   int disposed;
+
+  int filter_column;
+  char *filter_string;
+
+  GtkListStore *store;
 };
 
 struct _GpaKeyListClass {
@@ -125,5 +130,9 @@ void gpa_keylist_imported_secret_key (GpaKeyList * keylist);
    with the data contained in KEY.  */
 void gpa_keylist_update_key_window (GpaKeyList *keylist,
 				    gpgme_key_t key);
+
+/* Let the keylist only display keys that match (column, string).
+   column == -1 means: remove previously set filter.  */
+void gpa_keylist_filter (GpaKeyList *keylist, int column, const char *string);
 
 #endif /* GPA_KEYLIST_H */

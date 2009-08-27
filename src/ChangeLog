@@ -1,3 +1,103 @@
+2009-08-27  Moritz  <moritz@gnu.org>
+
+	* icons.c (register_stock_icons): Disable scaling for
+	GA_STOCK_SECRET_CARDKEY too.
+	* gpa-key-window.h (struct _GpaKeyWindow): New members: icon,
+	title_label, key.
+	* gpa-key-window.c: Include "keytable.h", "helpmenu.h",
+	"gpaexportfileop.h" and "icons.h".
+	(register_operation, key_export, key_close)
+	(key_window_action_new): New functions.
+	(gpa_key_window_init): New local variables: menubar, label,
+	title_hbox, icon; create menubar widget and pack it into vbox;
+	changed container layout; create new hbox widget icon and title
+	label; pack everything together.
+	(gpa_key_window_update): Reorganized. New variables: title_markup,
+	uid, seckey, stock. Return if key is NULL. Deref previous set key,
+	add reference on new key, install it in key_window->key. Fetch
+	secret key part through gpa_keytable_lookup_key. Set title to be
+	the first uid, likewise for the title label. Display icon through
+	gtk_image_set_from_stock.
+	* cm-netkey.c (reload_more_data_cb): Drop keycount argument when
+	calling gpa_key_details_update.
+	* cm-openpgp.c (entry_fpr_expanded_cb): Likewise.
+	* keylist.c (keylist_row_activated): Renamed parameter "path" to
+	"path_sort"; new local variables: model_sort, model_filter, path,
+	path_filter. Convert given path_sort first to a path into the
+	filter model and then to a path into the underlying model.
+	Removed debugging output.
+	(filter_visible_func): New static function.
+	(gpa_keylist_init): New local variables: model_filter, model_sort;
+	removed "selection". Initialize list->filter_string and
+	list->filter_column. Create filter model and sort model, setup
+	filter visibility func. Set sorted model as model for the tree
+	view widget; write backend store into list->store.
+	(gpa_keylist_next): Use store taken from list->store, not from the
+	treeview widget.
+	(setup_columns): Display "key type" column (openpgp vs. x509) only
+	in detailed mode.
+	(gpa_keylist_has_single_secret_selection): Renamed local variable
+	"model" to "model_sort".
+	(gpa_keylist_get_selected_keys): Likewise; pass NULL as second
+	argument to gtk_tree_selection_get_selected_rows.
+	(gpa_keylist_get_selected_key): Likewise.
+	(gpa_keylist_start_reload): Access underlying store as
+	keylist->store.
+	(gpa_keylist_update_key_window): New local variables: model_sort,
+	model_filter. Extract underlying model from tree view.
+	(gpa_keylist_filter): New function.
+	* keylist.h (struct _GpaKeyList): New members: filter_column,
+	filter_string.
+	Declare new function gpa_keylist_filter.
+	* keymanager.c: Removed include of "gpa-key-details.h".
+	(struct _GpaKeyManager): Removed details widget member, new
+	members: filter_entry and filter_timeout_id.
+	Removed functions idle_update_details
+	(keyring_selection_update_actions): Removed call to
+	keyring_update_details.
+	Removed functions ilde_update_details, keyring_update_details.
+	(filter_do, filter_keys_icon_cb, filter_keys_enter_cb)
+	(filter_timeout_cb, filter_entry_activity, filter_activity_cb):
+	New functions.
+	(construct_widgets): New local variable: filter_entry; setup this
+	new widget, fill self->filter_entry and pack it into hbox; removed
+	widget "paned", changed layout accordingly. Do not create
+	GpaKeyDetails widget, do not call keyring_update_details.
+	* uidlist.c, uidlist.h: New files.
+	* Makefile.am (gpa_SOURCES): Added uidlist.c and uidlist.h.
+	* gpa-key-details.h: Drop keycount parameter of function
+	gpa_key_details_update.
+	* gpa-key-details.c: Include "uidlist.h".
+	(struct _GpaKeyDetails): Removed, added and renamed some members.
+	(details_page_fill_key): Removed local variable: uid, do not
+	iterate over key uids; function slightly reorganized and ajusted
+	to new layout of the _GpaKeyDetails struct.
+	(add_details_row): Enable markup for label widget; adjust table
+	row spacing.
+	(construct_details_page): Renamed to ...
+	(construct_overview_page): ... this.
+	(construct_overview_page): Removed code for scrolled window,
+	changed table and container layout, added label markup codes for
+	bold font and renamed page from "Details" to "Overview".
+	(build_userids_page): New function, similar to
+	build_signatures_page.
+	(build_signatures_page): Minor changes because of new struct
+	layout.
+	(build_subkeys_page): Likewise.
+	(ui_mode_changed): Changed order of calls to page-building
+	functions.
+	(construct_main_widget): Call construct_overview_page instead of
+	construct_details_page.
+	(gpa_key_details_finalize): Free kdt->userids_list.
+	(gpa_key_details_update): Removed parameter: keycount, adjusted to
+	new struct layout, removed special cases for keycount != 1, add
+	code for userids page.
+	(gpa_key_details_find): Drop keycount parameter in calls to
+	gpa_key_details_update.
+	* gpgmetools.c (gpa_gpgme_key_get_userid): Do not prefix revoked
+	UIDs with "Revoked" (this breaks sorting, etc.).
+	(gpa_get_key_capabilities_text): Shortened user messages.
+
 2009-06-21  Moritz  <moritz@gnu.org>
 
 	* keylist.c (setup_columns): Removed several calls to

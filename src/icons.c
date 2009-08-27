@@ -164,7 +164,8 @@ register_stock_icons (void)
       gtk_icon_source_set_direction_wildcarded (icon_source, TRUE);
       gtk_icon_source_set_state_wildcarded (icon_source, TRUE);
       if (! strcmp (xpms[i].name, GPA_STOCK_PUBLIC_KEY)
-	  || ! strcmp (xpms[i].name, GPA_STOCK_SECRET_KEY))
+	  || ! strcmp (xpms[i].name, GPA_STOCK_SECRET_KEY)
+	  || ! strcmp (xpms[i].name, GPA_STOCK_SECRET_CARDKEY))
 	{
 	  /* FIXME: For the keylist icons, we disable scaling for now
 	     for best visual results.  */

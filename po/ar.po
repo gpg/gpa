@@ -3,11 +3,12 @@
 #
 # Khaled Hosny <khaledhosny@eglug.org>, 2008.
 # Ahmad Gharbeia <gharbeia@gmail.com>, 2008.
+#: src/gpgmetools.c:1101
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-06-20 00:08+0200\n"
+"POT-Creation-Date: 2009-08-27 14:01+0200\n"
 "PO-Revision-Date: 2008-03-17 13:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -41,13 +42,13 @@ msgstr "احفظ باسم..."
 msgid "Clipboard"
 msgstr "الحافظة"
 
-#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:867
+#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:868
 #: src/cardman.c:619
 #, fuzzy
 msgid "_File"
 msgstr "/_ملف"
 
-#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:868
+#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:869
 #: src/cardman.c:620
 #, fuzzy
 msgid "_Edit"
@@ -90,7 +91,7 @@ msgstr "يظهِّر النصّ المحدد"
 msgid "Close the buffer"
 msgstr "يخلي البراح"
 
-#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:876
+#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:877
 #: src/cardman.c:625
 msgid "Quit the program"
 msgstr ""
@@ -108,11 +109,11 @@ msgstr ""
 msgid "Cut the selection"
 msgstr "يقص المحدد إلى الحافظة"
 
-#: src/clipboard.c:788 src/keymanager.c:880
+#: src/clipboard.c:788 src/keymanager.c:881
 msgid "Copy the selection"
 msgstr "ينسخ المحدد"
 
-#: src/clipboard.c:790 src/keymanager.c:882
+#: src/clipboard.c:790 src/keymanager.c:883
 msgid "Paste the clipboard"
 msgstr "يلصق ما في الحافظة"
 
@@ -129,11 +130,11 @@ msgstr ""
 msgid "Keyring"
 msgstr "حلقة مفاتيح"
 
-#: src/clipboard.c:906 src/keymanager.c:1059 src/cardman.c:712
+#: src/clipboard.c:906 src/keymanager.c:1060 src/cardman.c:712
 msgid "Files"
 msgstr "ملفات"
 
-#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1061
+#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1062
 #, fuzzy
 msgid "Card"
 msgstr "الحافظة"
@@ -251,7 +252,7 @@ msgstr "عمّ الوثيقة"
 msgid "_Public Keys"
 msgstr "_مفاتيح علنية"
 
-#: src/encryptdlg.c:192 src/icons.c:202
+#: src/encryptdlg.c:192 src/icons.c:203
 msgid "_Sign"
 msgstr "_وقِّع"
 
@@ -653,12 +654,12 @@ msgstr ""
 "أُدخلت وقتا غير صحيح.\n"
 "(لا يمكن أن يكون تاريخ انتهاء الصلاحية في الماضي.)"
 
-#: src/gpakeyselector.c:86 src/keylist.c:570 src/recipientdlg.c:191
+#: src/gpakeyselector.c:86 src/keylist.c:755 src/recipientdlg.c:191
 #: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "معرِّف المفتاح"
 
-#: src/gpakeyselector.c:95 src/keylist.c:621 src/siglist.c:99
+#: src/gpakeyselector.c:95 src/keylist.c:802 src/siglist.c:99
 #: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "اسم المستخدم"
@@ -824,7 +825,7 @@ msgstr "الخوارزمية"
 msgid "Size"
 msgstr "الطول"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:583
+#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:767
 msgid "Expiry Date"
 msgstr "تاريخ الانتهاء"
 
@@ -876,12 +877,11 @@ msgstr ""
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:927
-#: src/gpgmetools.c:1046
+#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:1035
 msgid "Revoked"
 msgstr "منقوض"
 
-#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1042
+#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1031
 msgid "Expired"
 msgstr "منتهية صلاحيته"
 
@@ -893,7 +893,7 @@ msgstr "معطل"
 msgid "Unsigned"
 msgstr "غير موقّع"
 
-#: src/gpasubkeylist.c:173 src/gpgmetools.c:1033 src/verifydlg.c:212
+#: src/gpasubkeylist.c:173 src/gpgmetools.c:1022 src/verifydlg.c:212
 msgid "Valid"
 msgstr "صالح"
 
@@ -907,7 +907,6 @@ msgid "User Names:"
 msgstr "أسماء المستخدم:"
 
 #: src/gpawidgets.c:77 src/gpgmetools.c:759 src/gpgmetools.c:766
-#: src/gpa-key-details.c:289
 msgid "Key ID:"
 msgstr "معرِّف المفتاح:"
 
@@ -1008,7 +1007,7 @@ msgstr ""
 "\n"
 
 #: src/gpgmetools.c:678 src/gpgmetools.c:701 src/gpgmetools.c:718
-#: src/gpgmetools.c:1038 src/gpgmetools.c:1071
+#: src/gpgmetools.c:1027 src/gpgmetools.c:1060
 msgid "Unknown"
 msgstr "مجهول"
 
@@ -1052,91 +1051,87 @@ msgstr "أدخل عبارة السر"
 msgid "[None]"
 msgstr "[لاشيء]"
 
-#: src/gpgmetools.c:1010 src/verifydlg.c:269
+#: src/gpgmetools.c:999 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[هوية مستخدم مجهولة]"
 
-#: src/gpgmetools.c:1036 src/verifydlg.c:217
+#: src/gpgmetools.c:1025 src/verifydlg.c:217
 msgid "Bad"
 msgstr "سيئ"
 
-#: src/gpgmetools.c:1059
+#: src/gpgmetools.c:1048
 msgid "Generic"
 msgstr "عام"
 
-#: src/gpgmetools.c:1062
+#: src/gpgmetools.c:1051
 msgid "Persona"
 msgstr "شخصي"
 
-#: src/gpgmetools.c:1065
+#: src/gpgmetools.c:1054
 msgid "Casual"
 msgstr "عادي"
 
-#: src/gpgmetools.c:1068
+#: src/gpgmetools.c:1057
 msgid "Positive"
 msgstr "إيجابي"
 
-#: src/gpgmetools.c:1086
-msgid "The key can be used for certification, signing and encryption."
+#: src/gpgmetools.c:1074
+#, fuzzy
+msgid "Certification, Signing, Encryption"
 msgstr "يمكن استخدام المفتاح في الشهادة و التوقيع و التعمية."
 
-#: src/gpgmetools.c:1089
-msgid ""
-"The key can be used for certification and signing, but not for encryption."
-msgstr "يمكن استخدام المفتاح في الشهادة و التوقيع لكن ليس في التعمية."
+#: src/gpgmetools.c:1076
+msgid "Certification, Signing"
+msgstr ""
 
-#: src/gpgmetools.c:1095
-msgid "The key can be used for certification and encryption."
-msgstr "يمكن استخدام المفتاح في الشهادة و التعمية."
+#: src/gpgmetools.c:1081
+msgid "Certification, Encryption"
+msgstr ""
+
+#: src/gpgmetools.c:1083
+msgid "Certification"
+msgstr ""
+
+#: src/gpgmetools.c:1091
+msgid "Signing, Encryption"
+msgstr ""
+
+#: src/gpgmetools.c:1093
+#, fuzzy
+msgid "Signing"
+msgstr "يجري التوقيع..."
 
 #: src/gpgmetools.c:1098
-msgid "The key can be used only for certification."
-msgstr "يمكن استخدام المفتاح في الشهادة فقط."
+#, fuzzy
+msgid "Encryption."
+msgstr "تجري التعمية..."
 
-#: src/gpgmetools.c:1106
-msgid ""
-"The key can be used only for signing and encryption, but not for "
-"certification."
-msgstr "يمكن استخدام المفتاح في التوقيع و التعمية لكن ليس في الشهادة."
-
-#: src/gpgmetools.c:1109
-msgid "The key can be used only for signing."
-msgstr "يمكن استخدام المفتاح في التوقيع فقط."
-
-#: src/gpgmetools.c:1114
-msgid "The key can be used only for encryption."
-msgstr "يمكن استخدام المفتاح في التعمية فقط."
-
-#: src/gpgmetools.c:1117
-msgid "This key is useless."
-msgstr "لا فائدة لهذا المفتاح."
-
-#: src/gpgmetools.c:1455
+#: src/gpgmetools.c:1439
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
-#: src/gpgmetools.c:1505
+#: src/gpgmetools.c:1489
 #, fuzzy
 msgid "You must enter a name."
 msgstr "يجب أن تُدخِل هوية مُستخدم."
 
-#: src/gpgmetools.c:1507
+#: src/gpgmetools.c:1491
 msgid "Invalid character in name."
 msgstr ""
 
-#: src/gpgmetools.c:1509
+#: src/gpgmetools.c:1493
 msgid "Name may not start with a digit."
 msgstr ""
 
-#: src/gpgmetools.c:1511
+#: src/gpgmetools.c:1495
 msgid "Name is too short."
 msgstr ""
 
-#: src/gpgmetools.c:1583
+#: src/gpgmetools.c:1567
 msgid "Email address is not valid."
 msgstr ""
 
-#: src/gpgmetools.c:1597
+#: src/gpgmetools.c:1581
 msgid "Invalid character in comments."
 msgstr ""
 
@@ -1174,47 +1169,47 @@ msgstr "يفتح مدير الملفات"
 msgid "About this application"
 msgstr "يقص المحدد إلى الحافظة"
 
-#: src/icons.c:203
+#: src/icons.c:204
 #, fuzzy
 msgid "_Verify"
 msgstr "تحقق"
 
-#: src/icons.c:204
+#: src/icons.c:205
 #, fuzzy
 msgid "_Encrypt"
 msgstr "عمّ"
 
-#: src/icons.c:205
+#: src/icons.c:206
 #, fuzzy
 msgid "_Decrypt"
 msgstr "ظهِّر"
 
-#: src/icons.c:206
+#: src/icons.c:207
 #, fuzzy
 msgid "_Brief"
 msgstr "موجزة"
 
-#: src/icons.c:207
+#: src/icons.c:208
 #, fuzzy
 msgid "_Detailed"
 msgstr "مفصَّلة"
 
-#: src/icons.c:208
+#: src/icons.c:209
 #, fuzzy
 msgid "_Keyring Manager"
 msgstr "مدير الملفات"
 
-#: src/icons.c:209
+#: src/icons.c:210
 #, fuzzy
 msgid "_Clipboard"
 msgstr "الحافظة"
 
-#: src/icons.c:210
+#: src/icons.c:211
 #, fuzzy
 msgid "_File Manager"
 msgstr "مدير الملفات"
 
-#: src/icons.c:211
+#: src/icons.c:212
 #, fuzzy
 msgid "_Card Manager"
 msgstr "مدير الملفات"
@@ -1398,7 +1393,7 @@ msgstr ""
 msgid "Create _backup copy"
 msgstr "خُذ _نسخة احتياطية"
 
-#: src/keygenwizard.c:248 src/keymanager.c:731 src/keymanager.c:757
+#: src/keygenwizard.c:248 src/keymanager.c:732 src/keymanager.c:758
 msgid "Do it _later"
 msgstr "_لاحقا"
 
@@ -1424,7 +1419,7 @@ msgstr ""
 "\n"
 "تم توليد مفتاحك بنجاح. المفتاح صالح بلا أمد محدد وطوله 1024 بتّة."
 
-#: src/keylist.c:344
+#: src/keylist.c:523
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1432,25 +1427,25 @@ msgstr ""
 "يُعيد GnuPG بناء قاعدة بيانات الثقة.\n"
 "قد يستغرق هذا بضع دقائق."
 
-#: src/keylist.c:562
+#: src/keylist.c:746
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#: src/keylist.c:571
+#: src/keylist.c:756
 msgid "The key ID is a short number to identify a certificate."
 msgstr "مُعرّف المفتاح هو رقم صغير لتعريف الشهادة."
 
-#: src/keylist.c:584
+#: src/keylist.c:768
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "تاريخ الانتهاء هو التاريخ الذي تنتهي عنده صلاحية الشهادة."
 
-#: src/keylist.c:594 src/ownertrustdlg.c:122
+#: src/keylist.c:777 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "الثقة في المالك"
 
-#: src/keylist.c:595
+#: src/keylist.c:778
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
@@ -1459,11 +1454,11 @@ msgstr ""
 "لقد وُضِعت الثقة في المالك من قِبلك وتوضّح إلى أي مدى تثق في حامل الشهادة ليوقّع "
 "(يُجيز) الشهادات الأخرى.  لهذا معنى بالنسبة إلى OpenGPG فقط."
 
-#: src/keylist.c:607
+#: src/keylist.c:789
 msgid "Validity"
 msgstr "الصلاحية"
 
-#: src/keylist.c:608
+#: src/keylist.c:790
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
@@ -1471,27 +1466,27 @@ msgstr ""
 "تصف الصلاحية مستوى ثقة النظام في هذه الشهادة.  هذا هو مدى الثقة في أن "
 "المستخدم المذكور هو من يكون."
 
-#: src/keylist.c:622
+#: src/keylist.c:803
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr "اسم المستخدم هو اسم وفي أحان كثيرة عنوان بريد الشهادة."
 
-#: src/keymanager.c:447
+#: src/keymanager.c:446
 msgid "No keys selected for signing."
 msgstr "لم تُحدد أي مفاتيح للتعمية."
 
-#: src/keymanager.c:726
+#: src/keymanager.c:727
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
 msgstr "ليس لديك مفتاح سري. أتريد توليد واحد الآن (محبذ) أم القيام بهذا لاحقا؟"
 
-#: src/keymanager.c:730
+#: src/keymanager.c:731
 msgid "_Generate key now"
 msgstr "_ولِّد المفتاح الآن"
 
-#: src/keymanager.c:751
+#: src/keymanager.c:752
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1499,259 +1494,255 @@ msgstr ""
 "لم تتخذ نسخة احتياطية من مفتاحك السري بعد. أتريد أخذ نسخة احتياطية الآن "
 "(محبذ) أم القيام بهذا لاحقا؟"
 
-#: src/keymanager.c:756
+#: src/keymanager.c:757
 msgid "_Backup key now"
 msgstr "ا_حفظ المفتاح احتياطيا الآن"
 
-#: src/keymanager.c:869
+#: src/keymanager.c:870
 #, fuzzy
 msgid "_Keys"
 msgstr "/ال_مفاتيح"
 
-#: src/keymanager.c:870
+#: src/keymanager.c:871
 #, fuzzy
 msgid "_Server"
 msgstr "/ال_خادوم"
 
-#: src/keymanager.c:884
+#: src/keymanager.c:885
 msgid "Select all certificates"
 msgstr ""
 
-#: src/keymanager.c:889
+#: src/keymanager.c:890
 msgid "Refresh the keyring"
 msgstr "ينعش حلقة المفاتيح"
 
-#: src/keymanager.c:890
+#: src/keymanager.c:891
 #, fuzzy
 msgid "_New key..."
 msgstr "/المفاتيح/مفتاح _جديد"
 
-#: src/keymanager.c:891
+#: src/keymanager.c:892
 #, fuzzy
 msgid "Generate a new key"
 msgstr "ولّد مفتاحا"
 
-#: src/keymanager.c:892
+#: src/keymanager.c:893
 #, fuzzy
 msgid "_Delete keys"
 msgstr "/ا_حذف المفاتيح..."
 
-#: src/keymanager.c:893
+#: src/keymanager.c:894
 msgid "Remove the selected key"
 msgstr "احذف المفتاح المحدد"
 
-#: src/keymanager.c:894
+#: src/keymanager.c:895
 #, fuzzy
 msgid "_Sign Keys..."
 msgstr "/و_قّع المفاتيح..."
 
-#: src/keymanager.c:895
+#: src/keymanager.c:896
 msgid "Sign the selected key"
 msgstr "وقّع المفتاح المحدد"
 
-#: src/keymanager.c:896
+#: src/keymanager.c:897
 #, fuzzy
 msgid "Set _Owner Trust..."
 msgstr "/حدّد ال_ثقة في المالك..."
 
-#: src/keymanager.c:897
+#: src/keymanager.c:898
 #, fuzzy
 msgid "Set owner trust of the selected key"
 msgstr "احذف المفتاح المحدد"
 
-#: src/keymanager.c:899
+#: src/keymanager.c:900
 #, fuzzy
 msgid "_Edit Private Key..."
 msgstr "/حرّ_ر المفتاح السرّي..."
 
-#: src/keymanager.c:900
+#: src/keymanager.c:901
 msgid "Edit the selected private key"
 msgstr "حرّر المفتاح السري المحدد"
 
-#: src/keymanager.c:902
+#: src/keymanager.c:903
 #, fuzzy
 msgid "_Import Keys..."
 msgstr "استورِد المفاتيح"
 
-#: src/keymanager.c:903
+#: src/keymanager.c:904
 msgid "Import Keys"
 msgstr "استورِد المفاتيح"
 
-#: src/keymanager.c:904
+#: src/keymanager.c:905
 #, fuzzy
 msgid "E_xport Keys..."
 msgstr "/_صدّر المفاتيح..."
 
-#: src/keymanager.c:905
+#: src/keymanager.c:906
 msgid "Export Keys"
 msgstr "صدّر المفاتيح"
 
-#: src/keymanager.c:906
+#: src/keymanager.c:907
 #, fuzzy
 msgid "_Backup..."
 msgstr "/احفظ ا_حتياطيا..."
 
-#: src/keymanager.c:907
+#: src/keymanager.c:908
 #, fuzzy
 msgid "Backup key"
 msgstr "ا_حفظ المفتاح احتياطيا الآن"
 
-#: src/keymanager.c:910
+#: src/keymanager.c:911
 #, fuzzy
 msgid "_Retrieve Keys..."
 msgstr "/الخادوم/المفاتيح ال_سرّية..."
 
-#: src/keymanager.c:911
+#: src/keymanager.c:912
 msgid "Retrieve keys from server"
 msgstr ""
 
-#: src/keymanager.c:913
+#: src/keymanager.c:914
 #, fuzzy
 msgid "_Send Keys..."
 msgstr "/و_قّع المفاتيح..."
 
-#: src/keymanager.c:914
+#: src/keymanager.c:915
 #, fuzzy
 msgid "Send keys to server"
 msgstr "/أر_سِل المفاتيح للخادوم..."
 
-#: src/keymanager.c:920
+#: src/keymanager.c:921
 msgid "Show Brief Keylist"
 msgstr "يعرض قائمة مفاتيح موجزة"
 
-#: src/keymanager.c:922
+#: src/keymanager.c:923
 msgid "Show Key Details"
 msgstr "يعرض تفاصيل المفاتيح"
 
-#: src/keymanager.c:1049
+#: src/keymanager.c:1050
 msgid "Edit"
 msgstr "حرّر"
 
-#: src/keymanager.c:1051
+#: src/keymanager.c:1052
 #, fuzzy
 msgid "Delete"
 msgstr "/تحرير/احذف"
 
-#: src/keymanager.c:1053
+#: src/keymanager.c:1054
 msgid "Sign"
 msgstr "وقّع"
 
-#: src/keymanager.c:1055
+#: src/keymanager.c:1056
 msgid "Export"
 msgstr "صدّر"
 
-#: src/keymanager.c:1057
+#: src/keymanager.c:1058
 msgid "Import"
 msgstr "استورد"
 
-#: src/keymanager.c:1188
+#: src/keymanager.c:1139
 msgid "Selected default key:"
 msgstr "المفتاح المحدد بدئيا:"
 
-#: src/keymanager.c:1198
+#: src/keymanager.c:1149
 msgid "No default key selected in the preferences."
 msgstr "لم يحدد أي مفتاح بدئيا في التفضيلات."
 
-#: src/keymanager.c:1289
+#: src/keymanager.c:1343
 #, fuzzy
 msgid "GNU Privacy Assistant - Key Manager"
 msgstr "مساعد خصوصية جنو - مدير الملفات"
 
-#: src/keymanager.c:1317
+#: src/keymanager.c:1371
 #, fuzzy
 msgid "Key Manager"
 msgstr "مدير الملفات"
 
-#: src/gpa-key-details.c:132
+#: src/gpa-key-details.c:162
 #, fuzzy
-msgid "The key has both a smartcard based private part and a public part"
-msgstr "للمفتاح جزءان؛ سرّي وعلني"
+msgid "Secret OpenPGP key"
+msgstr "المفتاح المحدد بدئيا:"
 
-#: src/gpa-key-details.c:136
-msgid "The key has both a private and a public part"
-msgstr "للمفتاح جزءان؛ سرّي وعلني"
-
-#: src/gpa-key-details.c:140
-msgid "The key has only a public part"
-msgstr "لهذا المفتاح جزء علني فقط"
-
-#: src/gpa-key-details.c:176
-#, c-format
-msgid "%s %u bits"
-msgstr "%s %u بتّة"
-
-#: src/gpa-key-details.c:202
-msgid "No keys selected"
-msgstr "لم تُحدد أي مفاتيح"
-
-#: src/gpa-key-details.c:205
-#, c-format
-msgid "%d key selected"
-msgid_plural "%d keys selected"
-msgstr[0] "لم تُحدد أي مفاتيح"
-msgstr[1] "حُدِّد مفتاح واحد"
-msgstr[2] "حُدِّد مفتاحان"
-msgstr[3] "حُدِّدت %d مفاتيح"
-msgstr[4] "حُدِّد %d مفتاحًا"
-msgstr[5] "حُدِّد %d مفتاح"
-
-#: src/gpa-key-details.c:287
+#: src/gpa-key-details.c:166
 #, fuzzy
-msgid "User name:"
-msgstr "اسم المستخدم:"
+msgid "Public OpenPGP key"
+msgstr "_مفاتيح علنية"
 
-#: src/gpa-key-details.c:291 src/keysigndlg.c:106
-msgid "Fingerprint:"
+#: src/gpa-key-details.c:171
+#, fuzzy
+msgid "Secret X.509 key"
+msgstr "المفتاح المحدد بدئيا:"
+
+#: src/gpa-key-details.c:175
+#, fuzzy
+msgid "Public X.509 key"
+msgstr "_مفاتيح علنية"
+
+#: src/gpa-key-details.c:235
+#, fuzzy
+msgid "<b>Key type:</b>"
+msgstr "<b>الرئيسي</b>"
+
+#: src/gpa-key-details.c:237
+#, fuzzy
+msgid "<b>Key ID:</b>"
+msgstr "<b>الرئيسي</b>"
+
+#: src/gpa-key-details.c:239
+#, fuzzy
+msgid "<b>Key capabilities:</b>"
+msgstr "<b>الرئيسي</b>"
+
+#: src/gpa-key-details.c:241
+#, fuzzy
+msgid "<b>Fingerprint:</b>"
 msgstr "البصمة:"
 
-#: src/gpa-key-details.c:293
-msgid "Expires at:"
+#: src/gpa-key-details.c:243
+#, fuzzy
+msgid "<b>Expires at:</b>"
 msgstr "ينتهي في:"
 
-#: src/gpa-key-details.c:295
-msgid "Owner Trust:"
-msgstr "الثقة في المالك:"
-
-#: src/gpa-key-details.c:297
+#: src/gpa-key-details.c:245
 #, fuzzy
-msgid "Key validity:"
+msgid "<b>Key validity:</b>"
 msgstr "صلاحية المفتاح:"
 
-#: src/gpa-key-details.c:299
+#: src/gpa-key-details.c:247
 #, fuzzy
-msgid "Key type:"
-msgstr "نوع المفتاح:"
+msgid "<b>Owner Trust:</b>"
+msgstr "الثقة في المالك:"
 
-#: src/gpa-key-details.c:301
-msgid "Created at:"
+#: src/gpa-key-details.c:249
+#, fuzzy
+msgid "<b>Created at:</b>"
 msgstr "أُنشئ في:"
 
-#: src/gpa-key-details.c:304
-msgid "Details"
-msgstr "التفاصيل"
+#: src/gpa-key-details.c:252
+msgid "Overview"
+msgstr ""
 
-#: src/gpa-key-details.c:350
+#: src/gpa-key-details.c:347
 msgid "Show signatures on user name:"
 msgstr "اعرض التوقيعات على اسم المستخدم:"
 
-#: src/gpa-key-details.c:386
+#: src/gpa-key-details.c:383
 #, fuzzy
 msgid "Chain"
 msgstr "يمكن التوقيع به"
 
-#: src/gpa-key-details.c:386
+#: src/gpa-key-details.c:383
 msgid "Signatures"
 msgstr "التوقيعات"
 
-#: src/gpa-key-details.c:408
+#: src/gpa-key-details.c:405
 msgid "All signatures"
 msgstr "كل التوقيعات"
 
-#: src/gpa-key-details.c:470
+#: src/gpa-key-details.c:466
 msgid "Subkeys"
 msgstr "المفاتيح الفرعية"
 
-#: src/gpa-key-details.c:470
+#: src/gpa-key-details.c:466
 #, fuzzy
 msgid "Key"
 msgstr "/ال_مفاتيح"
@@ -1763,6 +1754,10 @@ msgstr "وقّع المفتاح"
 #: src/keysigndlg.c:72
 msgid "Do you want to sign the following key?"
 msgstr "أتريد توقيع المفتاح التالي؟"
+
+#: src/keysigndlg.c:106
+msgid "Fingerprint:"
+msgstr "البصمة:"
 
 #: src/keysigndlg.c:116
 msgid ""
@@ -2757,6 +2752,66 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid ""
+#~ "The key can be used for certification and signing, but not for encryption."
+#~ msgstr "يمكن استخدام المفتاح في الشهادة و التوقيع لكن ليس في التعمية."
+
+#~ msgid "The key can be used for certification and encryption."
+#~ msgstr "يمكن استخدام المفتاح في الشهادة و التعمية."
+
+#~ msgid "The key can be used only for certification."
+#~ msgstr "يمكن استخدام المفتاح في الشهادة فقط."
+
+#~ msgid ""
+#~ "The key can be used only for signing and encryption, but not for "
+#~ "certification."
+#~ msgstr "يمكن استخدام المفتاح في التوقيع و التعمية لكن ليس في الشهادة."
+
+#~ msgid "The key can be used only for signing."
+#~ msgstr "يمكن استخدام المفتاح في التوقيع فقط."
+
+#~ msgid "The key can be used only for encryption."
+#~ msgstr "يمكن استخدام المفتاح في التعمية فقط."
+
+#~ msgid "This key is useless."
+#~ msgstr "لا فائدة لهذا المفتاح."
+
+#, fuzzy
+#~ msgid "The key has both a smartcard based private part and a public part"
+#~ msgstr "للمفتاح جزءان؛ سرّي وعلني"
+
+#~ msgid "The key has both a private and a public part"
+#~ msgstr "للمفتاح جزءان؛ سرّي وعلني"
+
+#~ msgid "The key has only a public part"
+#~ msgstr "لهذا المفتاح جزء علني فقط"
+
+#~ msgid "%s %u bits"
+#~ msgstr "%s %u بتّة"
+
+#~ msgid "No keys selected"
+#~ msgstr "لم تُحدد أي مفاتيح"
+
+#~ msgid "%d key selected"
+#~ msgid_plural "%d keys selected"
+#~ msgstr[0] "لم تُحدد أي مفاتيح"
+#~ msgstr[1] "حُدِّد مفتاح واحد"
+#~ msgstr[2] "حُدِّد مفتاحان"
+#~ msgstr[3] "حُدِّدت %d مفاتيح"
+#~ msgstr[4] "حُدِّد %d مفتاحًا"
+#~ msgstr[5] "حُدِّد %d مفتاح"
+
+#, fuzzy
+#~ msgid "User name:"
+#~ msgstr "اسم المستخدم:"
+
+#, fuzzy
+#~ msgid "Key type:"
+#~ msgstr "نوع المفتاح:"
+
+#~ msgid "Details"
+#~ msgstr "التفاصيل"
 
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "أدخل عبارة سر للمفتاح الجديد."

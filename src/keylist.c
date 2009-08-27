@@ -21,6 +21,7 @@
 #include <config.h>
 
 #include <glib/gstdio.h>
+#include <assert.h>
 
 #include "gpa.h"
 #include "keylist.h"
@@ -214,23 +215,37 @@ key_window_weak_ref_cb (gpointer data, GObject *where_the_object_was)
    opened key window. */
 static void
 keylist_row_activated (GtkTreeView *tree_view,
-		       GtkTreePath *path,
+		       GtkTreePath *path_sort,
 		       GtkTreeViewColumn *column,
 		       gpointer user_data)
 {
+  GtkTreeModel *model_sort;
+  GtkTreeModel *model_filter;
   GtkTreeModel *model;
+  GtkTreePath *path_filter;
+  GtkTreePath *path;
   GtkTreeIter iter;
   gboolean iter_found;
 
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
+  /* Retrieve sort model from the TreeView. */
+  model_sort = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
+
+  /* Retrieve filter model.  */
+  model_filter = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (model_sort));
+
+  /* Retrieve underlying model (the ListStore).  */
+  model = gtk_tree_model_filter_get_model
+    (GTK_TREE_MODEL_FILTER (model_filter));
+  path_filter = gtk_tree_model_sort_convert_path_to_child_path
+    (GTK_TREE_MODEL_SORT (model_sort), path_sort);
+  path = gtk_tree_model_filter_convert_path_to_child_path
+    (GTK_TREE_MODEL_FILTER (model_filter), path_filter);
 
   iter_found = gtk_tree_model_get_iter (model, &iter, path);
   if (iter_found)
     {
       GValue value = {0,};
       GtkWidget *key_window;
-
-      fprintf (stderr, "row activated\n");
 
       gtk_tree_model_get_value (model, &iter,
 				GPA_KEYLIST_COLUMN_KEY_WINDOW,
@@ -239,19 +254,15 @@ keylist_row_activated (GtkTreeView *tree_view,
       g_value_unset (&value);
 
       if (key_window)
-	{
-	  /* Key already opened in a window, request to focus it. */
-	  fprintf (stderr, "present window\n");
-	  gtk_window_present (GTK_WINDOW (key_window));
-	}
+	/* Key already opened in a window, request to focus it. */
+	gtk_window_present (GTK_WINDOW (key_window));
       else
 	{
-	  gpgme_key_t key;
-
 	  /* Key not yet opened in a window, create the key
 	     window.  */
-	  fprintf (stderr, "open window\n");
-	  
+
+	  gpgme_key_t key;
+
 	  gtk_tree_model_get_value (model, &iter,
 				    GPA_KEYLIST_COLUMN_KEY,
 				    &value);
@@ -267,8 +278,7 @@ keylist_row_activated (GtkTreeView *tree_view,
 	    {
 	      /* Key found, set up key window. */
 
-	      if (key->uids && key->uids->name)
-		fprintf (stderr, "UID: %s\n", key->uids->name);
+	      /* Convert  */
 
 	      key_window = gpa_key_window_new ();
 
@@ -278,6 +288,7 @@ keylist_row_activated (GtkTreeView *tree_view,
 	      gpa_key_window_update (key_window, key);
 	      gtk_widget_show (key_window);
 
+	      /* FIXME */
 	      gtk_list_store_set (GTK_LIST_STORE (model), &iter,
 				  GPA_KEYLIST_COLUMN_KEY_WINDOW,
 				  key_window, -1);
@@ -287,13 +298,45 @@ keylist_row_activated (GtkTreeView *tree_view,
 }
 
 
+static gboolean
+filter_visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+  GpaKeyList *keylist = data;
+  int column = keylist->filter_column;
+
+  if (column == -1)
+    /* No filter set. */
+    return TRUE;
+  else
+    {
+      char *filter_string = keylist->filter_string;
+      char *str = NULL;
+      int ret;
+
+      gtk_tree_model_get (model, iter, column, &str, -1);
+      if (str && strstr (str, filter_string))
+	ret = TRUE;
+      else
+	ret = FALSE;
+      g_free (str);
+
+      return ret;
+    }
+}
+
 
 static void
 gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
 {
   GpaKeyList *list = GPA_KEYLIST (instance);
   GtkListStore *store;
-  GtkTreeSelection *selection; 
+  GtkTreeModel *model_filter;
+  GtkTreeModel *model_sort;
+  GtkTreeSelection *selection;
+
+  /* Initially no filter is set.  */
+  list->filter_string = NULL;
+  list->filter_column = -1;
 
   /* Setup the model.  */
   store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
@@ -310,15 +353,29 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
 			      G_TYPE_ULONG,
 			      G_TYPE_ULONG,
 			      G_TYPE_LONG);
+  list->store = store;
+
+  /* Wrap ListStore in a filtered model. */
+  model_filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+
+  /* For some reason we need to wrap this again in a sorted model
+     although ListStore _implements_ the TreeSortable interface.  */
+  model_sort = gtk_tree_model_sort_new_with_model (model_filter);
+
+  /* Setup filter mechanism through 'visible'-callback function.  */
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (model_filter),
+					  &filter_visible_func,
+					  list, NULL);
 
   /* Setup the view.  */
-  gtk_tree_view_set_model (GTK_TREE_VIEW (list), GTK_TREE_MODEL (store));
+  gtk_tree_view_set_model (GTK_TREE_VIEW (list), model_sort);
+
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
   gpa_keylist_set_brief (list);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model_sort),
 					GPA_KEYLIST_COLUMN_USERID,
 					GTK_SORT_ASCENDING);
 
@@ -565,7 +622,9 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
 
   /* Append the key to the list.  */
   list->keys = g_list_append (list->keys, key);
-  store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (list)));
+
+  store = list->store;
+
   /* Get the column values */
   keyid = gpa_gpgme_key_get_short_keyid (key);
   keytype = (key->protocol == GPGME_PROTOCOL_OpenPGP? "P" :
@@ -677,14 +736,17 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
         (column, GPA_KEYLIST_COLUMN_HAS_SECRET);
     }
 
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes 
-    (NULL, renderer, "text", GPA_KEYLIST_COLUMN_KEYTYPE, NULL);
-  gpa_set_column_title 
-    (column, " ",
-     _("This columns lists the type of the certificate."
-       "  A 'P' denotes OpenPGP and a 'X' denotes X.509 (S/MIME)."));
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  if (detailed)
+    {
+      renderer = gtk_cell_renderer_text_new ();
+      column = gtk_tree_view_column_new_with_attributes 
+	(NULL, renderer, "text", GPA_KEYLIST_COLUMN_KEYTYPE, NULL);
+      gpa_set_column_title 
+	(column, " ",
+	 _("This columns lists the type of the certificate."
+	   "  A 'P' denotes OpenPGP and a 'X' denotes X.509 (S/MIME)."));
+      gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+    }
     
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes 
@@ -836,18 +898,18 @@ gpa_keylist_has_single_secret_selection (GpaKeyList *keylist)
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
   if (gtk_tree_selection_count_selected_rows (selection) == 1)
     {
-      GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
-      GList *list = gtk_tree_selection_get_selected_rows (selection, &model);
+      GtkTreeModel *model_sort = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
+      GList *list = gtk_tree_selection_get_selected_rows (selection, NULL);
       gpgme_key_t key;
       GtkTreeIter iter;
       GtkTreePath *path = list->data;
       GValue value = {0,};
 
-      gtk_tree_model_get_iter (model, &iter, path);
-      gtk_tree_model_get_value (model, &iter, GPA_KEYLIST_COLUMN_KEY,
+      gtk_tree_model_get_iter (model_sort, &iter, path);
+      gtk_tree_model_get_value (model_sort, &iter, GPA_KEYLIST_COLUMN_KEY,
 				&value);
       key = g_value_get_pointer (&value);
-      g_value_unset(&value);      
+      g_value_unset(&value);
 
       g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
       g_list_free (list);
@@ -868,8 +930,8 @@ gpa_keylist_get_selected_keys (GpaKeyList * keylist)
 {
   GtkTreeSelection *selection = 
     gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
-  GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
-  GList *list = gtk_tree_selection_get_selected_rows (selection, &model);
+  GtkTreeModel *model_sort = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
+  GList *list = gtk_tree_selection_get_selected_rows (selection, NULL);
   GList *keys = NULL;
   GList *cur;
 
@@ -880,8 +942,8 @@ gpa_keylist_get_selected_keys (GpaKeyList * keylist)
       GtkTreePath *path = cur->data;
       GValue value = {0,};
 
-      gtk_tree_model_get_iter (model, &iter, path);
-      gtk_tree_model_get_value (model, &iter, GPA_KEYLIST_COLUMN_KEY,
+      gtk_tree_model_get_iter (model_sort, &iter, path);
+      gtk_tree_model_get_value (model_sort, &iter, GPA_KEYLIST_COLUMN_KEY,
 				&value);
       key = g_value_get_pointer (&value);
       g_value_unset(&value);      
@@ -902,7 +964,7 @@ gpgme_key_t
 gpa_keylist_get_selected_key (GpaKeyList *keylist)
 {
   GtkTreeSelection *selection;
-  GtkTreeModel *model;
+  GtkTreeModel *model_sort;
   GList *list;
   GtkTreePath *path;
   GtkTreeIter iter;
@@ -913,16 +975,16 @@ gpa_keylist_get_selected_key (GpaKeyList *keylist)
   if (gtk_tree_selection_count_selected_rows (selection) != 1)
     return NULL;
 
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
-  list = gtk_tree_selection_get_selected_rows (selection, &model);
+  model_sort = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
+  list = gtk_tree_selection_get_selected_rows (selection, NULL);
   if (!list)
     return NULL;
   path = list->data;
 
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get_value (model, &iter, GPA_KEYLIST_COLUMN_KEY, &value);
+  gtk_tree_model_get_iter (model_sort, &iter, path);
+  gtk_tree_model_get_value (model_sort, &iter, GPA_KEYLIST_COLUMN_KEY, &value);
   key = g_value_get_pointer (&value);
-  g_value_unset (&value);      
+  g_value_unset (&value);
   gpgme_key_ref (key);
 
   g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
@@ -939,8 +1001,7 @@ gpa_keylist_start_reload (GpaKeyList * keylist)
   GtkTreeSelection *selection = 
     gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
   gtk_tree_selection_unselect_all (selection);
-  gtk_list_store_clear (GTK_LIST_STORE (gtk_tree_view_get_model 
-					(GTK_TREE_VIEW (keylist))));
+  gtk_list_store_clear (keylist->store);
   g_list_foreach (keylist->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (keylist->keys);
   keylist->keys = NULL;
@@ -1034,7 +1095,40 @@ update_key_window_func (GtkTreeModel *model,
 void
 gpa_keylist_update_key_window (GpaKeyList *keylist, gpgme_key_t key)
 {
-  GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
+  GtkTreeModel *model_sort;
+  GtkTreeModel *model_filter;
+  GtkTreeModel *model;
+
+  model_sort = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
+  model_filter = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (model_sort));
+  model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model_filter));
 
   gtk_tree_model_foreach (model, &update_key_window_func, key);
+}
+
+/* Let the keylist only display keys that match (column, string).
+   column == -1 means: remove previously set filter.  */
+void
+gpa_keylist_filter (GpaKeyList *keylist, int column, const char *string)
+{
+  GtkTreeView *treeview = GTK_TREE_VIEW (keylist);
+  GtkTreeModel *model_sort;
+  GtkTreeModel *model_filter;
+
+  /* Extract sort model.  */
+  model_sort = gtk_tree_view_get_model (treeview);
+
+  /* Extract filter model.  */
+  model_filter = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (model_sort));
+
+  /* Add new (column, string) data into keylist object. */
+  keylist->filter_column = column;
+  g_free (keylist->filter_string);
+  if (string)
+    keylist->filter_string = g_strdup (string);
+  else
+    keylist->filter_string = NULL;
+
+  /* Trigger filtering on each row. */
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (model_filter));
 }

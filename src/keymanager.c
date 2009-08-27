@@ -67,8 +67,6 @@
 #include "gpagenkeyadvop.h"
 #include "gpagenkeysimpleop.h"
 
-#include "gpa-key-details.h"
-
 #include "keymanager.h"
 
 
@@ -95,9 +93,6 @@ struct _GpaKeyManager
   /* The "Show Ownertrust" toggle button.  */
   GtkWidget *toggle_show;
 
-  /* The details widget.  */
-  GtkWidget *details;
-
   /* Idle handler id for updates of the details widget.  Will be
      nonzero whenever a handler is currently set and zero
      otherwise.  */
@@ -123,6 +118,12 @@ struct _GpaKeyManager
   /* Hack: warn the selection callback to ignore changes. Don't, ever,
      assign a value directly.  Raise and lower it with increments.  */
   int freeze_selection;
+
+  /* Entry for filtering key list.  */
+  GtkWidget *filter_entry;
+
+  /* FIXME, document! */
+  guint filter_timeout_id;
 };
 
 
@@ -138,8 +139,6 @@ typedef gboolean (*sensitivity_func_t) (gpointer);
 
 
 /* Local prototypes */
-static int idle_update_details (gpointer param);
-static void keyring_update_details (GpaKeyManager *self);
 
 static void gpa_key_manager_finalize (GObject *object);
 
@@ -615,7 +614,6 @@ static void
 keyring_selection_update_actions (GpaKeyManager *self)
 {
   update_selection_sensitive_actions (self);
-  keyring_update_details (self);
 }  
 
 
@@ -1100,58 +1098,8 @@ key_manager_action_new (GpaKeyManager *self,
   *popup = gtk_ui_manager_get_widget (ui_manager, "/PopupMenu");
 }
 
-
-/* Update the details widget according to the current selection.  This
-   means that if there is exactly one key selected, display its
-   properties in the pages, otherwise show the number of currently
-   selected keys.  */
-static int
-idle_update_details (gpointer param)
-{
-  GpaKeyManager *self = param;
-
-  if (gpa_keylist_has_single_selection (self->keylist))
-    {
-      gpgme_key_t key = key_manager_current_key (self);
-      if (! key)
-	{
-	  /* There is a single key selected, but the current key is
-	     NULL.  This means the key has not been returned yet, so
-	     we exit the function asking GTK to run it again when
-	     there is time.  */
-	  return TRUE;
-	}
-      gpa_key_details_update (self->details, key, 1);
-    }
-  else
-    {
-      GList *selection = gpa_keylist_get_selected_keys (self->keylist);
-      gpa_key_details_update (self->details, NULL,
-                              g_list_length (selection));
-      g_list_free (selection);
-    }
-
-  /* Set the idle id to NULL to indicate that the idle handler has
-     been run.  */
-  self->details_idle_id = 0;
-  
-  /* Return false to indicate that this function shouldn't be called
-     again by GTK, only when we expicitly add it again.  */
-  return FALSE;
-}
-
-
-/* Add an idle handler to update the details, but only when none has
-   been set yet.  */
-static void
-keyring_update_details (GpaKeyManager *self)
-{
-  if (! self->details_idle_id)
-    self->details_idle_id = g_idle_add (idle_update_details, self);
-}
-
-
 
+
 /* Status bar handling.  */
 static GtkWidget *
 keyring_statusbar_new (GpaKeyManager *self)
@@ -1268,6 +1216,109 @@ keyring_default_key_changed (GpaOptions *options, gpointer param)
   update_selection_sensitive_actions (self);
 }
 
+static void
+filter_do (GpaKeyManager *keymanager)
+{
+  const gchar *str;
+  int column;
+
+  str = gtk_entry_get_text (GTK_ENTRY (keymanager->filter_entry));
+  column = 6;			/* FIXME!! */
+  if (*str)
+    gpa_keylist_filter (keymanager->keylist, column, str);
+  else
+    gpa_keylist_filter (keymanager->keylist, -1, NULL);
+}
+
+static void
+filter_keys_icon_cb (GtkEntry *entry, 
+		     GtkEntryIconPosition icon_pos,
+		     GdkEvent *event,
+		     gpointer data)
+{
+  GpaKeyManager *keymanager = GPA_KEY_MANAGER (data);
+
+  if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+    {
+      /* Display menu. */
+    }
+  else if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
+    {
+      /* Clear search string. */
+      GtkWidget *filter_entry = keymanager->filter_entry;
+      gtk_entry_set_text (GTK_ENTRY (filter_entry), "");
+      filter_do (keymanager);
+      g_source_remove (keymanager->filter_timeout_id);
+      keymanager->filter_timeout_id = 0;
+    }
+}
+
+/* Callback for the "activate" signal emitted by filter_entry
+   (i.e. when the user presses enter).  */
+static void
+filter_keys_enter_cb (GtkEntry *entry,
+		      gpointer data)
+{
+  GpaKeyManager *keymanager = GPA_KEY_MANAGER (data);
+
+  /* Forget about timeout handling; filter _now_. */
+  g_source_remove (keymanager->filter_timeout_id);
+  keymanager->filter_timeout_id = 0;
+  filter_do (keymanager);
+}
+
+/* This is the timeout callback for the filter_entry.  It is called
+   when the user modifies the text in the Entry and then waits for a
+   certain time (one second). */
+static gboolean
+filter_timeout_cb (gpointer data)
+{
+  filter_do (data);
+  return FALSE;			/* Don't call this timeout again. */
+}
+
+static void
+filter_entry_activity (GpaKeyManager *keymanager)
+{
+  GtkWidget *filter_entry;
+  int isempty;
+
+  filter_entry = keymanager->filter_entry;
+  isempty = ! strlen (gtk_entry_get_text (GTK_ENTRY (filter_entry)));
+  
+  if (isempty)
+    {
+      /* Disable "clear"-icon.  */
+      gtk_entry_set_icon_from_stock (GTK_ENTRY (filter_entry),
+				     GTK_ENTRY_ICON_SECONDARY,
+				     NULL);
+    }
+  else
+    {
+      /* Display "clear"-icon.  */
+      gtk_entry_set_icon_from_stock (GTK_ENTRY (filter_entry),
+				     GTK_ENTRY_ICON_SECONDARY,
+				     GTK_STOCK_CLEAR);
+      gtk_entry_set_icon_activatable (GTK_ENTRY (filter_entry),
+				      GTK_ENTRY_ICON_SECONDARY,
+				      TRUE);
+    }
+
+  /* Remove previously set timeout handler and install new one
+     (effectively resets the timeout counter).  */
+  if (keymanager->filter_timeout_id)
+    g_source_remove (keymanager->filter_timeout_id);
+  keymanager->filter_timeout_id = g_timeout_add (1000, &filter_timeout_cb,
+						 keymanager);
+}
+
+/* This is a callback for the "changed"-signal of filter_entry
+   GtkEntry. */
+static void
+filter_activity_cb (GtkEditable *editable, gpointer data)
+{
+  filter_entry_activity (data);
+}
 
 /* Create all the widgets of this window.  */
 static void
@@ -1281,10 +1332,10 @@ construct_widgets (GpaKeyManager *self)
   GtkWidget *toolbar;
   GtkWidget *hbox;
   GtkWidget *icon;
-  GtkWidget *paned;
   GtkWidget *statusbar;
   GtkWidget *main_box;
   GtkWidget *align;
+  GtkWidget *filter_entry;
   gchar *markup;
   guint pt, pb, pl, pr;
 
@@ -1324,9 +1375,27 @@ construct_widgets (GpaKeyManager *self)
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
+  keylist = gpa_keylist_new (GTK_WIDGET (self));
+  self->keylist = GPA_KEYLIST (keylist);
+  if (gpa_options_get_detailed_view (gpa_options_get_instance()))
+    gpa_keylist_set_detailed (self->keylist);
+  else
+    gpa_keylist_set_brief (self->keylist);
 
-
-  paned = gtk_vpaned_new ();
+  filter_entry = gtk_entry_new ();
+  gtk_entry_set_icon_from_stock (GTK_ENTRY (filter_entry),
+				 GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_FIND);
+  gtk_entry_set_icon_activatable (GTK_ENTRY (filter_entry),
+				  GTK_ENTRY_ICON_PRIMARY, TRUE);
+  g_signal_connect (G_OBJECT (filter_entry),
+		    "icon-press", G_CALLBACK (filter_keys_icon_cb), self);
+  g_signal_connect (G_OBJECT (filter_entry),
+		    "activate", G_CALLBACK (filter_keys_enter_cb), self);
+  gtk_entry_set_width_chars (GTK_ENTRY (filter_entry), 36);
+  gtk_box_pack_start (GTK_BOX (hbox), filter_entry, FALSE, TRUE, 10);
+  g_signal_connect (G_OBJECT (filter_entry), "changed",
+		    G_CALLBACK (filter_activity_cb), self);
+  self->filter_entry = filter_entry;
 
   main_box = gtk_hbox_new (TRUE, 0);
   align = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -1334,24 +1403,16 @@ construct_widgets (GpaKeyManager *self)
   gtk_alignment_set_padding (GTK_ALIGNMENT (align), pt, pb + 5,
                              pl + 5, pr + 5);
   gtk_box_pack_start (GTK_BOX (vbox), align, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (main_box), paned, TRUE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (align), main_box);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_paned_pack1 (GTK_PANED (paned), scrolled, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (main_box), scrolled, TRUE, TRUE, 0);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
   /* FIXME: Which shadow type - get it from a global resource?  */
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
 				       GTK_SHADOW_IN);
-
-  keylist = gpa_keylist_new (GTK_WIDGET (self));
-  self->keylist = GPA_KEYLIST (keylist);
-  if (gpa_options_get_detailed_view (gpa_options_get_instance()))
-    gpa_keylist_set_detailed (self->keylist);
-  else
-    gpa_keylist_set_brief (self->keylist);
 
   gtk_container_add (GTK_CONTAINER (scrolled), keylist);
 
@@ -1363,10 +1424,6 @@ construct_widgets (GpaKeyManager *self)
   g_signal_connect_swapped (G_OBJECT (keylist), "button_press_event",
                             G_CALLBACK (display_popup_menu), self);
 
-  self->details = gpa_key_details_new ();
-  gtk_paned_pack2 (GTK_PANED (paned), self->details, TRUE, TRUE);
-  gtk_paned_set_position (GTK_PANED (paned), 250);
-
   statusbar = keyring_statusbar_new (self);
   gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, TRUE, 0);
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
@@ -1375,7 +1432,6 @@ construct_widgets (GpaKeyManager *self)
 
   keyring_update_status_bar (self);
   update_selection_sensitive_actions (self);
-  keyring_update_details (self);
 
   self->current_key = NULL;
   self->ctx = gpa_context_new ();

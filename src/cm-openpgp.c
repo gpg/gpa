@@ -1246,7 +1246,7 @@ entry_fpr_expanded_cb (GObject *object, GParamSpec *dummy, void *user_data)
       if (rawfpr)
         gpa_key_details_find (card->key_details[keyidx], rawfpr);
       else
-        gpa_key_details_update (card->key_details[keyidx], NULL, 0);
+        gpa_key_details_update (card->key_details[keyidx], NULL);
       xfree (rawfpr);
     }
   else
