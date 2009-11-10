@@ -1715,8 +1715,8 @@ connection_startup (assuan_fd_t fd)
       return NULL;
     }
 
-  err = assuan_init_socket_server (ctx, fd, ASSUAN_SOCKET_SERVER_FDPASSING
-				   | ASSUAN_SOCKET_SERVER_ACCEPTED);
+  err = assuan_init_socket_server (ctx, fd, (ASSUAN_SOCKET_SERVER_FDPASSING
+                                             | ASSUAN_SOCKET_SERVER_ACCEPTED));
   if (err)
     {
       g_debug ("failed to initialize the new connection: %s",

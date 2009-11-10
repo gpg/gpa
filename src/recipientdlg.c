@@ -525,7 +525,7 @@ parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
 }
 
 
-/* Parse the list of recipeints, find possible keys and update the
+/* Parse the list of recipients, find possible keys and update the
    store.  */
 static void
 parse_recipients (GtkListStore *store)
