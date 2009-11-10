@@ -394,7 +394,7 @@ main (int argc, char *argv[])
 
   /* Start the agent if needed.  We need to do this because the card
      manager uses direct assuan commands to the agent and thus expects
-     thatthe agent has been startet. */
+     that the agent has been startet. */
   gpa_start_agent ();
 
   /* Handle command line options.  */

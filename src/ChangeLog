@@ -1,3 +1,7 @@
+2009-11-10  Werner Koch  <wk@g10code.com>
+
+	* server.c (register_commands): Add a couple of help strings.
+
 2009-11-10  Marcus Brinkmann  <marcus@g10code.de>
 
 	* server.c: Update to new assuan interface.

@@ -552,22 +552,22 @@ prepare_io_streams (assuan_context_t ctx,
 
 
 
-/* SESSION <number> [<string>]
-
-   The NUMBER is an arbitrary value, a server may use to associate
-   simultaneous running sessions.  It is a 32 bit unsigned integer
-   with 0 as a special value indicating that no session association
-   shall be done.
-
-   If STRING is given, the server may use this as the title of a
-   window or, in the case of an email operation, to extract the
-   sender's address. The string may contain spaces; thus no
-   plus-escaping is used.
-
-   This command may be used at any time and overrides the effect of
-   the last command.  A RESET command undoes the effect of this
-   command.
-*/
+static const char hlp_session[] = 
+  "SESSION <number> [<string>]\n"
+  "\n"
+  "The NUMBER is an arbitrary value, a server may use to associate\n"
+  "simultaneous running sessions.  It is a 32 bit unsigned integer\n"
+  "with 0 as a special value indicating that no session association\n"
+  "shall be done.\n"
+  "\n"
+  "If STRING is given, the server may use this as the title of a\n"
+  "window or, in the case of an email operation, to extract the\n"
+  "sender's address. The string may contain spaces; thus no\n"
+  "plus-escaping is used.\n"
+  "\n"
+  "This command may be used at any time and overrides the effect of\n"
+  "the last command.  A RESET command undoes the effect of this\n"
+  "command.";
 static gpg_error_t
 cmd_session (assuan_context_t ctx, char *line)
 {
@@ -587,13 +587,14 @@ cmd_session (assuan_context_t ctx, char *line)
 
 
 
-/*  RECIPIENT <recipient>
-
-  Set the recipient for the encryption.  <recipient> is an RFC2822
-  recipient name.  This command may or may not check the recipient for
-  validity right away; if it does not (as here) all recipients are
-  checked at the time of the ENCRYPT command.  All RECIPIENT commands
-  are cumulative until a RESET or an successful ENCRYPT command.  */
+static const char hlp_recipient[] = 
+  "RECIPIENT <recipient>\n"
+  "\n"
+  "Set the recipient for the encryption.  <recipient> is an RFC2822\n"
+  "recipient name.  This command may or may not check the recipient for\n"
+  "validity right away; if it does not (as here) all recipients are\n"
+  "checked at the time of the ENCRYPT command.  All RECIPIENT commands\n"
+  "are cumulative until a RESET or an successful ENCRYPT command.";
 static gpg_error_t
 cmd_recipient (assuan_context_t ctx, char *line)
 {
@@ -610,11 +611,10 @@ cmd_recipient (assuan_context_t ctx, char *line)
 
 
 
-/* MESSAGE FD=<n>
-
-   Set the file descriptor to read a message which is used with
-   detached signatures.
- */
+static const char hlp_message[] = 
+  "MESSAGE FD[=<n>]\n"
+  "\n"
+  "Set the file descriptor to read a message of a detached signature to N.";
 static gpg_error_t
 cmd_message (assuan_context_t ctx, char *line)
 {
@@ -655,10 +655,10 @@ cont_encrypt (assuan_context_t ctx, gpg_error_t err)
 }
 
 
-/* ENCRYPT --protocol=OpenPGP|CMS
-
-   Encrypt the data received on INPUT to OUTPUT.
-*/
+static const char hlp_encrypt[] = 
+  "ENCRYPT --protocol=OpenPGP|CMS\n"
+  "\n"
+  "Encrypt the data received on INPUT to OUTPUT.";
 static gpg_error_t
 cmd_encrypt (assuan_context_t ctx, char *line)
 {
@@ -751,10 +751,11 @@ cont_prep_encrypt (assuan_context_t ctx, gpg_error_t err)
   assuan_process_done (ctx, err);
 }
 
-/* PREP_ENCRYPT [--protocol=OpenPGP|CMS]
-
-   Dummy encryption command used to check whether the given recipients
-   are all valid and to tell the client the preferred protocol.  */
+static const char hlp_prep_encrypt[] = 
+  "PREP_ENCRYPT [--protocol=OpenPGP|CMS]\n"
+  "\n"
+  "Dummy encryption command used to check whether the given recipients\n"
+  "are all valid and to tell the client the preferred protocol.";
 static gpg_error_t
 cmd_prep_encrypt (assuan_context_t ctx, char *line)
 {
@@ -806,14 +807,15 @@ cmd_prep_encrypt (assuan_context_t ctx, char *line)
 
 
 
-/*  SENDER <email>
-
-    EMAIL is the plain ASCII encoded address ("addr-spec" as per
-    RFC-2822) enclosed in angle brackets.  The address set by this
-    command is valid until a successful @code{SIGN} command or until a
-    @code{RESET} command.  A second command overrides the effect of
-    the first one; if EMAIL is not given the server shall use the
-    default signing key.  */
+static const char hlp_sender[] =
+  "SENDER <email>\n"
+  "\n"
+  "EMAIL is the plain ASCII encoded address (\"addr-spec\" as per\n"
+  "RFC-2822) enclosed in angle brackets.  The address set by this\n"
+  "command is valid until a successful \"SIGN\" command or until a\n"
+  "\"RESET\" command.  A second command overrides the effect of\n"
+  "the first one; if EMAIL is not given the server shall use the\n"
+  "default signing key.";
 static gpg_error_t
 cmd_sender (assuan_context_t ctx, char *line)
 {
@@ -863,10 +865,10 @@ cont_sign (assuan_context_t ctx, gpg_error_t err)
 }
 
 
-/* SIGN --protocol=OpenPGP|CMS [--detached]
-
-   Sign the data received on INPUT to OUTPUT.
-*/
+static const char hlp_sign[] =
+  "SIGN --protocol=OpenPGP|CMS [--detached]\n"
+  "\n"
+  "Sign the data received on INPUT to OUTPUT.";
 static gpg_error_t
 cmd_sign (assuan_context_t ctx, char *line)
 {
@@ -935,14 +937,15 @@ cont_decrypt (assuan_context_t ctx, gpg_error_t err)
 }
 
 
-/* DECRYPT --protocol=OpenPGP|CMS [--no-verify]
-
-   Decrypt a message given by the source set with the INPUT command
-   and write the plaintext to the sink set with the OUTPUT command.
-
-   If the option --no-verify is given, the server should not try to
-   verify a signature, in case the input data is an OpenPGP combined
-   message.  */
+static const char hlp_decrypt[] = 
+  "DECRYPT --protocol=OpenPGP|CMS [--no-verify]\n"
+  "\n"
+  "Decrypt a message given by the source set with the INPUT command\n"
+  "and write the plaintext to the sink set with the OUTPUT command.\n"
+  "\n"
+  "If the option --no-verify is given, the server should not try to\n"
+  "verify a signature, in case the input data is an OpenPGP combined\n"
+  "message.";
 static gpg_error_t
 cmd_decrypt (assuan_context_t ctx, char *line)
 {
@@ -1015,49 +1018,49 @@ cont_verify (assuan_context_t ctx, gpg_error_t err)
 }
 
 
-/* VERIFY --protocol=OpenPGP|CMS [--silent]
-
-   Verify a message.  Depending on the combination of the
-   sources/sinks set by the commands MESSAGE, INPUT and OUTPUT, the
-   verification mode is selected like this:
-
-   MESSAGE and INPUT
-     This indicates a detached signature.  Output data is not applicable.
-
-   INPUT 
-     This indicates an opaque signature.  As no output command has
-     been given, we are only required to check the signature.
-
-   INPUT and OUTPUT
-     This indicates an opaque signature.  We write the signed data to
-     the file descriptor set by the OUTPUT command.  This data is even
-     written if the signature can't be verified.
-
-   With the option --silent we won't display any dialog; this is for
-   example used by the client to get the content of an opaque signed
-   message.  Sending the follwoing status message is mandatory before
-   sending the OK response:
-
-      SIGSTATUS <flag> <displaystring>
-
-   Defines FLAGS are:
-
-      none
-        The message has a signature but it could not not be verified
-        due to a missing key.
-
-      green
-        The signature is fully valid.
-
-      yellow
-        The signature is valid but additional information was shown
-        regarding the validity of the key.
-
-      red
-        The signature is not valid. 
-
-   The DISPLAYSTRING is a percent-and-plus-encoded string with a short
-   human readable description of the status.  */
+static const char hlp_verify[] = 
+  "VERIFY --protocol=OpenPGP|CMS [--silent]\n"
+  "\n"
+  "Verify a message.  Depending on the combination of the\n"
+  "sources/sinks set by the commands MESSAGE, INPUT and OUTPUT, the\n"
+  "verification mode is selected like this:\n"
+  "\n"
+  "MESSAGE and INPUT\n"
+  "  This indicates a detached signature.  Output data is not applicable.\n"
+  "\n"
+  "INPUT \n"
+  "  This indicates an opaque signature.  As no output command has\n"
+  "  been given, we are only required to check the signature.\n"
+  "\n"
+  "INPUT and OUTPUT\n"
+  "  This indicates an opaque signature.  We write the signed data to\n"
+  "  the file descriptor set by the OUTPUT command.  This data is even\n"
+  "  written if the signature can't be verified.\n"
+  "\n"
+  "With the option --silent we won't display any dialog; this is for\n"
+  "example used by the client to get the content of an opaque signed\n"
+  "message.  This status message is always send before an OK response:\n"
+  "\n"
+  "   SIGSTATUS <flag> <displaystring>\n"
+  "\n"
+  "Defined FLAGS are:\n"
+  "\n"
+  "   none\n"
+  "     The message has a signature but it could not not be verified\n"
+  "     due to a missing key.\n"
+  "\n"
+  "   green\n"
+  "     The signature is fully valid.\n"
+  "\n"
+  "   yellow\n"
+  "     The signature is valid but additional information was shown\n"
+  "     regarding the validity of the key.\n"
+  "\n"
+  "   red\n"
+  "     The signature is not valid. \n"
+  "\n"
+  "The DISPLAYSTRING is a percent-and-plus-encoded string with a short\n"
+  "human readable description of the status.";
 static gpg_error_t
 cmd_verify (assuan_context_t ctx, char *line)
 {
@@ -1137,12 +1140,12 @@ cmd_verify (assuan_context_t ctx, char *line)
 
 
 
-/* START_KEYMANAGER
-
-   Pop up the key manager window.  The client expects that the key
-   manager is brought into the foregound and that this command
-   immediatley returns.
-*/
+static const char hlp_start_keymanager[] = 
+  "START_KEYMANAGER\n"
+  "\n"
+  "Pop up the key manager window.  The client expects that the key\n"
+  "manager is brought into the foregound and that this command\n"
+  "immediatley returns.";
 static gpg_error_t
 cmd_start_keymanager (assuan_context_t ctx, char *line)
 {
@@ -1151,12 +1154,13 @@ cmd_start_keymanager (assuan_context_t ctx, char *line)
   return assuan_process_done (ctx, 0);
 }
 
-/* START_CARDMANAGER
 
-   Pop up the card manager window.  The client expects that the key
-   manager is brought into the foregound and that this command
-   immediatley returns.
-*/
+static const char hlp_start_cardmanager[] = 
+  "START_CARDMANAGER\n"
+  "\n"
+  "Pop up the card manager window.  The client expects that the key\n"
+  "manager is brought into the foregound and that this command\n"
+  "immediatley returns.";
 static gpg_error_t
 cmd_start_cardmanager (assuan_context_t ctx, char *line)
 {
@@ -1165,13 +1169,13 @@ cmd_start_cardmanager (assuan_context_t ctx, char *line)
   return assuan_process_done (ctx, 0);
 }
 
-
-/* START_CONFDIALOG
 
-   Pop up the configure dialog.  The client expects that the key
-   manager is brought into the foregound and that this command
-   immediatley returns.
-*/
+static const char hlp_start_confdialog[] = 
+  "START_CONFDIALOG\n"
+  "\n"
+  "Pop up the configure dialog.  The client expects that the key\n"
+  "manager is brought into the foregound and that this command\n"
+  "immediatley returns.";
 static gpg_error_t
 cmd_start_confdialog (assuan_context_t ctx, char *line)
 {
@@ -1183,14 +1187,14 @@ cmd_start_confdialog (assuan_context_t ctx, char *line)
 
 
 
-/* GETINFO <what>
-
-   Multipurpose function to return a variety of information.
-   Supported values for WHAT are:
-
-     version     - Return the version of the program.
-     pid         - Return the process id of the server.
- */
+static const char hlp_getinfo[] = 
+  "GETINFO <what>\n"
+  "\n"
+  "Multipurpose function to return a variety of information.\n"
+  "Supported values for WHAT are:\n"
+  "\n"
+  "  version     - Return the version of the program.\n"
+  "  pid         - Return the process id of the server.";
 static gpg_error_t
 cmd_getinfo (assuan_context_t ctx, char *line)
 {
@@ -1650,22 +1654,23 @@ register_commands (assuan_context_t ctx)
   static struct {
     const char *name;
     assuan_handler_t handler;
+    const char * const help;
   } table[] = {
-    { "SESSION", cmd_session },
-    { "RECIPIENT", cmd_recipient },
+    { "SESSION", cmd_session, hlp_session },
+    { "RECIPIENT", cmd_recipient, hlp_recipient },
     { "INPUT", NULL },
     { "OUTPUT", NULL },
-    { "MESSAGE", cmd_message },
-    { "ENCRYPT", cmd_encrypt },
-    { "PREP_ENCRYPT", cmd_prep_encrypt },
-    { "SENDER", cmd_sender },
-    { "SIGN", cmd_sign   },
-    { "DECRYPT", cmd_decrypt },
-    { "VERIFY", cmd_verify },
-    { "START_KEYMANAGER", cmd_start_keymanager },
-    { "START_CONFDIALOG", cmd_start_confdialog },
-    { "START_CARDMANAGER", cmd_start_cardmanager },
-    { "GETINFO", cmd_getinfo },
+    { "MESSAGE", cmd_message, hlp_message },
+    { "ENCRYPT", cmd_encrypt, hlp_encrypt },
+    { "PREP_ENCRYPT", cmd_prep_encrypt, hlp_prep_encrypt },
+    { "SENDER", cmd_sender, hlp_sender },
+    { "SIGN", cmd_sign, hlp_sign },
+    { "DECRYPT", cmd_decrypt, hlp_decrypt },
+    { "VERIFY", cmd_verify, hlp_verify },
+    { "START_KEYMANAGER", cmd_start_keymanager, hlp_start_keymanager },
+    { "START_CONFDIALOG", cmd_start_confdialog, hlp_start_confdialog },
+    { "START_CARDMANAGER", cmd_start_cardmanager, hlp_start_cardmanager },
+    { "GETINFO", cmd_getinfo, hlp_getinfo },
     { "FILE", cmd_file },
     { "ENCRYPT_FILES", cmd_encrypt_files },
     { "SIGN_FILES", cmd_sign_files },
@@ -1683,7 +1688,7 @@ register_commands (assuan_context_t ctx)
   for (i=0; table[i].name; i++)
     {
       rc = assuan_register_command (ctx, table[i].name, table[i].handler,
-				    NULL);
+				    table[i].help);
       if (rc)
         return rc;
     } 

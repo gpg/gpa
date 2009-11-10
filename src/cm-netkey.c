@@ -262,9 +262,11 @@ reload_more_data_cb (void *opaque, const char *status, const char *args)
   const char *keyid;
   int any = 0;
 
+  g_debug ("  reload_more_data (%s=%s)", status, args);
   if (strcmp (status, "KEYPAIRINFO") )
     return 0;
 
+  g_debug ("   start search");
   idx = 0;
   pattern[idx++] = '&';
   for (s=args; hexdigitp (s) && idx < sizeof pattern - 1; s++)
@@ -308,6 +310,7 @@ reload_more_data_cb (void *opaque, const char *status, const char *args)
   gpgme_op_keylist_end (parm->ctx);
   if (!any)
     parm->any_unknown = 1;
+  g_debug ("   ready");
   return 0;
 }
 
@@ -321,9 +324,11 @@ reload_more_data (GpaCMNetkey *card)
   GtkWidget *vbox;
   struct reload_more_data_parm parm;
 
+  g_debug ("start reload_more_data (count=%d)", card->reloading);
   gpgagent = GPA_CM_OBJECT (card)->agent_ctx;
   g_return_if_fail (gpgagent);
   g_return_if_fail (card->keys_frame);
+  g_debug ("  gpgagent=%p", gpgagent);
 
   /* We remove any existing children of the keys frame and then we add
      a new vbox to be filled with new widgets by the callback.  */
@@ -348,10 +353,13 @@ reload_more_data (GpaCMNetkey *card)
   /* We include ephemeral keys in the listing.  */
   gpgme_set_keylist_mode (parm.ctx, GPGME_KEYLIST_MODE_EPHEMERAL);
 
+  g_debug ("  parm.ctx=%p", parm.ctx);
+
   err = gpgme_op_assuan_transact (gpgagent,
                                   "SCD LEARN --keypairinfo",
                                   NULL, NULL, NULL, NULL,
                                   reload_more_data_cb, &parm);
+  g_debug ("  assuan ret=%d", err);
   if (!err)
     err = gpgme_op_assuan_result (gpgagent)->err;
   if (err)
@@ -386,6 +394,7 @@ reload_more_data (GpaCMNetkey *card)
 
   gpgme_release (parm.ctx);
   gtk_widget_show_all (card->keys_frame);
+  g_debug ("end   reload_more_data (count=%d)", card->reloading);
   return;
 }
 
@@ -397,8 +406,11 @@ reload_more_data_idle_cb (void *user_data)
   GpaCMNetkey *card = user_data;
   
   if (card->reloading)
+    {
+      g_debug ("already reloading (count=%d)", card->reloading);
     return TRUE; /* Just in case we are still reloading, wait for the
                     next idle slot.  */
+    }
 
   card->reloading++;
   reload_more_data (card);
@@ -475,6 +487,7 @@ reload_data (GpaCMNetkey *card)
   g_return_if_fail (gpgagent);
 
   card->reloading++;
+  g_debug ("uped reloading counter (count=%d)", card->reloading);
 
   /* Show all attributes.  */
   parm.card = card;
@@ -519,6 +532,7 @@ reload_data (GpaCMNetkey *card)
       g_idle_add (reload_more_data_idle_cb, card);
     }
   card->reloading--;
+  g_debug ("downed reloading counter (count=%d)", card->reloading);
 }
 
 
