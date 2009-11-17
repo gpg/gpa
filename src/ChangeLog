@@ -1,3 +1,12 @@
+2009-11-13    <wk@g10code.com>
+
+	* gpastreamencryptop.c (struct _GpaStreamEncryptOperation): Add
+	field KEY_DIALOG.
+	(gpa_stream_encrypt_operation_constructor): Use a simple key
+	selection dialog if no recipients are given.
+	(response_cb): Get the keys from the new dialog.
+	* selectkeydlg.c (select_key_dlg_get_keys): New.
+
 2009-11-10  Werner Koch  <wk@g10code.com>
 
 	* server.c (register_commands): Add a couple of help strings.

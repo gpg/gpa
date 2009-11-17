@@ -109,6 +109,7 @@ SelectKeyDlg *select_key_dlg_new_with_keys (GtkWidget *parent,
                                             const char *pattern);
 
 gpgme_key_t select_key_dlg_get_key (SelectKeyDlg *dialog);
+gpgme_key_t *select_key_dlg_get_keys (SelectKeyDlg *dialog);
 
 
 

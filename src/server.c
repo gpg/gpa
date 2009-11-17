@@ -645,7 +645,7 @@ cont_encrypt (assuan_context_t ctx, gpg_error_t err)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
 
-  g_debug ("cont_encrypt called with with ERR=%s <%s>",
+  g_debug ("cont_encrypt called with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
   finish_io_streams (ctx, NULL, NULL, NULL);
@@ -727,7 +727,7 @@ cont_prep_encrypt (assuan_context_t ctx, gpg_error_t err)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
 
-  g_debug ("cont_prep_encrypt called with with ERR=%s <%s>",
+  g_debug ("cont_prep_encrypt called with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
   if (!err)
@@ -851,7 +851,7 @@ cont_sign (assuan_context_t ctx, gpg_error_t err)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
 
-  g_debug ("cont_sign called with with ERR=%s <%s>",
+  g_debug ("cont_sign called with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
   finish_io_streams (ctx, NULL, NULL, NULL);
@@ -929,7 +929,7 @@ cmd_sign (assuan_context_t ctx, char *line)
 static void
 cont_decrypt (assuan_context_t ctx, gpg_error_t err)
 {
-  g_debug ("cont_decrypt called with with ERR=%s <%s>",
+  g_debug ("cont_decrypt called with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
   finish_io_streams (ctx, NULL, NULL, NULL);
@@ -1010,7 +1010,7 @@ cmd_decrypt (assuan_context_t ctx, char *line)
 static void
 cont_verify (assuan_context_t ctx, gpg_error_t err)
 {
-  g_debug ("cont_verify called with with ERR=%s <%s>",
+  g_debug ("cont_verify called with ERR=%s <%s>",
            gpg_strerror (err), gpg_strsource (err));
 
   finish_io_streams (ctx, NULL, NULL, NULL);

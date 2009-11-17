@@ -352,5 +352,22 @@ select_key_dlg_get_key (SelectKeyDlg *dialog)
   return key;
 }
 
+/* Return an array of selected keys. 
+
+   FIXME: For now it returns only one key. */
+gpgme_key_t *
+select_key_dlg_get_keys (SelectKeyDlg *dialog)
+{
+  gpgme_key_t *keyarray;
+
+  g_return_val_if_fail (dialog, NULL);
+  g_return_val_if_fail (dialog->keylist, NULL);
+
+  keyarray = g_new (gpgme_key_t, 1+1); 
+  keyarray[0] = gpa_keylist_get_selected_key (dialog->keylist);
+  keyarray[1] = NULL;
+
+  return keyarray;
+}
 
 

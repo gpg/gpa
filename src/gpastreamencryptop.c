@@ -25,13 +25,14 @@
 #include "recipientdlg.h"
 #include "gpawidgets.h"
 #include "gpastreamencryptop.h"
-
+#include "selectkeydlg.h"
 
 
 struct _GpaStreamEncryptOperation 
 {
   GpaStreamOperation parent;
   
+  SelectKeyDlg *key_dialog;  
   RecipientDlg *recp_dialog;
   GSList *recipients;
   gpgme_key_t *keys;
@@ -170,6 +171,7 @@ gpa_stream_encrypt_operation_finalize (GObject *object)
 static void
 gpa_stream_encrypt_operation_init (GpaStreamEncryptOperation *op)
 {
+  op->key_dialog = NULL;
   op->recp_dialog = NULL;
   op->recipients = NULL;
   op->keys = NULL;
@@ -193,8 +195,17 @@ gpa_stream_encrypt_operation_constructor
 
   /* Create the recipient key selection dialog if we don't know the
      keys yet. */
-  if (!op->keys)
+  if (!op->keys && (!op->recipients || !g_slist_length (op->recipients)))
     {
+      /* No recipients - use a generic key selection dialog.  */
+      op->key_dialog = select_key_dlg_new (GPA_OPERATION (op)->window);
+      g_signal_connect (G_OBJECT (op->key_dialog), "response",
+                        G_CALLBACK (response_cb), op);
+    }
+  else if (!op->keys)
+    {
+      /* Caller gave us some recipients - use the mail address
+         matching key selectiion dialog.  */
       op->recp_dialog = recipient_dlg_new (GPA_OPERATION (op)->window);
       recipient_dlg_set_recipients (op->recp_dialog,
                                     op->recipients,
@@ -217,6 +228,8 @@ gpa_stream_encrypt_operation_constructor
     (GTK_WINDOW (GPA_STREAM_OPERATION (op)->progress_dialog),
 			_("Encrypting message ..."));
 
+  if (op->key_dialog)
+    gtk_widget_show_all (GTK_WIDGET (op->key_dialog));
   if (op->recp_dialog)
     gtk_widget_show_all (GTK_WIDGET (op->recp_dialog));
 
@@ -394,13 +407,17 @@ response_cb (GtkDialog *dialog, int response, void *user_data)
 	 operation.  */
       g_signal_emit_by_name (GPA_OPERATION (op), "completed",
                                    gpg_error (GPG_ERR_CANCELED));
+      /* FIXME: We might need to destroy the widget in the KEY_DIALOG case.  */
       return;
     }
 
   /* Get the keys.  */
   gpa_gpgme_release_keyarray (op->keys);
   op->keys = NULL;
-  op->keys = recipient_dlg_get_keys (op->recp_dialog, &op->selected_protocol);
+  if (op->key_dialog)
+    op->keys = select_key_dlg_get_keys (op->key_dialog);
+  else if (op->recp_dialog)
+    op->keys = recipient_dlg_get_keys (op->recp_dialog, &op->selected_protocol);
 
   start_encryption (op);
 }
@@ -476,7 +493,7 @@ gpa_stream_encrypt_operation_new (GtkWidget *window,
   GpaStreamEncryptOperation *op;
 
   /* Fixme: SILENT is not yet implemented.  */
-
+  g_debug ("recipients %p  recp_keys %p", recipients, recp_keys);
   op = g_object_new (GPA_STREAM_ENCRYPT_OPERATION_TYPE,
 		     "window", window,
 		     "input_stream", input_stream,
