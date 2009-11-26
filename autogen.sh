@@ -151,4 +151,6 @@ echo "Running autoconf${FORCE} ..."
 $AUTOCONF${FORCE}
 
 
-echo "You may now run \"./configure --enable-maintainer-mode\" and then \"make\"."
+echo "You may now run \"
+  ./configure --enable-maintainer-mode\" and then \"make\"
+"
