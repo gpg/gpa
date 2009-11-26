@@ -208,7 +208,7 @@ select_key_dlg_constructor (GType type, guint n_construct_properties,
                                                dialog->protocol,
                                                dialog->initial_keys,
                                                dialog->initial_pattern,
-                                               KEY_USAGE_ENCR);
+                                               KEY_USAGE_ENCR, TRUE);
   gpa_gpgme_release_keyarray (dialog->initial_keys);
   dialog->initial_keys = NULL;
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET(dialog->keylist));

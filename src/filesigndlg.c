@@ -191,7 +191,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollerWho),
 				       GTK_SHADOW_IN);
 
-  clistWho = gpa_key_selector_new (TRUE);
+  clistWho = gpa_key_selector_new (TRUE, TRUE);
   dialog->clist_who = clistWho;
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
   gtk_label_set_mnemonic_widget (GTK_LABEL (labelWho), clistWho);

@@ -41,7 +41,8 @@ enum
   PROP_PROTOCOL,
   PROP_INITIAL_KEYS,
   PROP_INITIAL_PATTERN,
-  PROP_REQUESTED_USAGE
+  PROP_REQUESTED_USAGE,
+  PROP_ONLY_USABLE_KEYS
 };
 
 /* GObject */
@@ -109,6 +110,9 @@ gpa_keylist_get_property (GObject     *object,
     case PROP_REQUESTED_USAGE:
       g_value_set_int (value, list->requested_usage);
       break;
+    case PROP_ONLY_USABLE_KEYS:
+      g_value_set_boolean (value, list->only_usable_keys);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -142,6 +146,9 @@ gpa_keylist_set_property (GObject     *object,
       break;
     case PROP_REQUESTED_USAGE:
       list->requested_usage = g_value_get_int (value);
+      break;
+    case PROP_ONLY_USABLE_KEYS:
+      list->only_usable_keys = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -282,6 +289,15 @@ gpa_keylist_class_init (void *class_ptr, void *class_data)
       "A bit vector describing the requested key usage (capabilities).",
       0, 65535, 0, 
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property 
+    (object_class, PROP_ONLY_USABLE_KEYS,
+     g_param_spec_boolean
+     ("only-usable-keys", "Only-usable-keys",
+      "Include only usable keys in the listing.",
+      FALSE,
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+
 
 }
 
@@ -439,6 +455,13 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
           gpgme_key_unref (key);
           return;
         }
+    }
+
+  if (key && list->only_usable_keys
+      && (key->revoked || key->disabled || key->expired || key->invalid))
+    {
+      gpgme_key_unref (key);
+      return;
     }
 
   /* Append the key to the list.  */
@@ -653,7 +676,7 @@ GpaKeyList *
 gpa_keylist_new_with_keys (GtkWidget *window, gboolean public_only,
                            gpgme_protocol_t protocol,
                            gpgme_key_t *keys, const char *pattern,
-                           int requested_usage)
+                           int requested_usage, gboolean only_usable_keys)
 {
   GpaKeyList *list;
 
@@ -663,6 +686,7 @@ gpa_keylist_new_with_keys (GtkWidget *window, gboolean public_only,
                        "initial-keys", gpa_gpgme_copy_keyarray (keys),
                        "initial-pattern", pattern,
                        "requested-usage", requested_usage,
+                       "only-usable-keys", only_usable_keys,
                        NULL);
 
   return list;

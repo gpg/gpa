@@ -1,4 +1,17 @@
-2009-11-13    <wk@g10code.com>
+2009-11-26  Werner Koch  <wk@g10code.com>
+
+	* gpakeyselector.h (_GpaKeySelector): Add field ONLY_USABLE_KEYS.
+	* gpakeyselector.c (gpa_key_selector_new): Add arg
+	ONLY_USABLE_KEYS.  Change all callers.
+	(gpa_key_selector_next_key): Implement option.
+	* keylist.c (PROP_ONLY_USABLE_KEYS): New.
+	(gpa_keylist_get_property, gpa_keylist_set_property)
+	(gpa_keylist_class_init): Init new property.
+	(gpa_keylist_new_with_keys): Add arg ONLY_USABLE_KEYS.
+	* selectkeydlg.c (select_key_dlg_constructor): Ask only for usable
+	keys.
+
+2009-11-13  Werner koch  <wk@g10code.com>
 
 	* gpastreamencryptop.c (struct _GpaStreamEncryptOperation): Add
 	field KEY_DIALOG.

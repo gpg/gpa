@@ -179,7 +179,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollerKeys),
 				       GTK_SHADOW_IN);
 
-  clistKeys = gpa_key_selector_new (FALSE);
+  clistKeys = gpa_key_selector_new (FALSE, TRUE);
   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
 			      (GTK_TREE_VIEW (clistKeys))),
 		    "changed", G_CALLBACK (changed_select_row_cb),
@@ -207,7 +207,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
 				       GTK_SHADOW_IN);
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), scrollerWho, TRUE, TRUE, 0);
 
-  clistWho = gpa_key_selector_new (TRUE);
+  clistWho = gpa_key_selector_new (TRUE, TRUE);
   dialog->clist_who = clistWho;
   gtk_container_add (GTK_CONTAINER (scrollerWho), clistWho);
   gtk_label_set_mnemonic_widget (GTK_LABEL (labelWho), clistWho);

@@ -213,7 +213,7 @@ gpa_open_clipboard (GtkAction *action, void *data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  Right:
-     although the closure is ref counted an inetrnal data object will
+     although the closure is ref counted an internal data object will
      get allocated.  */
   g_signal_connect (G_OBJECT (gpa_clipboard_get_instance ()), "destroy",
 		    G_CALLBACK (quit_if_no_window), NULL);

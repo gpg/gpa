@@ -39,8 +39,13 @@ typedef struct _GpaKeySelectorClass GpaKeySelectorClass;
 
 struct _GpaKeySelector {
   GtkTreeView parent;
+
   /* Whether we are listing secret or public keys */
   gboolean secret;
+
+  /* Whether we want only usable keys.  */
+  gboolean only_usable_keys;
+
   /* All gpgme_key_ts we hold. We keep them here to free them.
    * Ideally this should be done by the list itself, but that would
    * involve mucking around with GValues */
@@ -56,7 +61,7 @@ GType gpa_key_selector_get_type (void) G_GNUC_CONST;
 
 /* API */
 
-GtkWidget *gpa_key_selector_new (gboolean secret);
+GtkWidget *gpa_key_selector_new (gboolean secret, gboolean only_usable_keys);
 
 /* Return a list of selected gpgme_key_t's. The caller must free the list, but
  * not dereference the keys, as they belong to the selector.

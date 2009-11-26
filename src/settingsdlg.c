@@ -306,7 +306,7 @@ default_key_frame (SettingsDlg *dialog)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 
-  list = gpa_key_selector_new (TRUE);
+  list = gpa_key_selector_new (TRUE, FALSE);
   dialog->default_key.list = GPA_KEY_SELECTOR (list);
   gtk_tree_selection_set_mode (gtk_tree_view_get_selection 
 			       (GTK_TREE_VIEW (list)), GTK_SELECTION_SINGLE);

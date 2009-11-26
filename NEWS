@@ -1,7 +1,13 @@
 Noteworthy changes in version 0.9.1 (not released)
 -------------------------------------------------
 
+ * The key selection dialogs for encryption and signing do not anymore
+   list expired, revoked or otherwise invalid keys.
  
+ * If no recipients are given to the server, a generic key selection
+   dialog is now used.
+
+
 Noteworthy changes in version 0.9.0 (2009-06-20)
 ------------------------------------------------
  

@@ -28,5 +28,6 @@ This file documents the use of Glib signals in GPA.
 
 ** changed_view
 
+
 ** changed_backup_generated
 

@@ -134,11 +134,13 @@ gpa_key_selector_get_type (void)
 /* API */
 
 GtkWidget *
-gpa_key_selector_new (gboolean secret)
+gpa_key_selector_new (gboolean secret, gboolean only_usable_keys)
 {
   GtkWidget *sel = (GtkWidget*) g_object_new (GPA_KEY_SELECTOR_TYPE, NULL);
 
   GPA_KEY_SELECTOR (sel)->secret = secret;
+  GPA_KEY_SELECTOR (sel)->only_usable_keys = only_usable_keys;
+
   /* Disable the list while loading keys */
   gtk_widget_set_sensitive (GTK_WIDGET (sel), FALSE);
   if (secret)
@@ -214,6 +216,10 @@ gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
   GtkTreeIter iter;
   const gchar *keyid;
   gchar *userid;
+
+  if (key && selector->only_usable_keys
+      && (key->revoked || key->disabled || key->expired || key->invalid))
+    return;
   
   selector->keys = g_list_prepend (selector->keys, key);
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (selector)));

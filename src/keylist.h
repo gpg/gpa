@@ -54,6 +54,7 @@ struct _GpaKeyList {
   gpgme_key_t *initial_keys;
   const char *initial_pattern;
   int requested_usage;
+  gboolean only_usable_keys;
 
   int disposed;
 };
@@ -86,7 +87,8 @@ GpaKeyList *gpa_keylist_new_with_keys (GtkWidget *window,
                                        gpgme_protocol_t protocol,
                                        gpgme_key_t *keys,
                                        const char *pattern,
-                                       int requested_usage);
+                                       int requested_usage,
+                                       gboolean only_usable_keys);
 
 /* Set the key list in "brief" mode.  */
 void gpa_keylist_set_brief (GpaKeyList * keylist);

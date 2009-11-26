@@ -1102,7 +1102,8 @@ gpa_clipboard_get_instance (void)
   return GTK_WIDGET (instance);
 }
 
-gboolean gpa_clipboard_is_open (void)
+gboolean
+gpa_clipboard_is_open (void)
 {
   return (instance != NULL);
 }
