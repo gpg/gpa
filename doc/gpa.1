@@ -1,0 +1,75 @@
+.TH "gpa" "1" "" "" "User Commands"
+.nh
+.SH "NAME"
+gpa \- graphical frontend for the GNU Privacy Guard
+
+.SH "SYNOPSIS"
+.B gpa
+.RI [ "OPTION(S)" ]
+
+.SH "DESCRIPTION"
+The GNU Privacy Assistant (GPA) is a graphical user interface for the GNU
+Privacy Guard (GnuPG).
+.PP
+\fBgpa\fP can be used to encrypt, decrypt, and sign files, to verify
+signatures and to manage the private and public keys.
+
+.SH "OPTIONS"
+.TP
+.B \-C, \-\-card
+Start with the card-manager open.
+.TP
+.B \-c, \-\-clipboard
+Open the clipboard.
+.TP
+.B \-d, \-\-daemon
+Enable the UI server.
+.TP
+.B \-\-display=\fIDISPLAY\fP
+Open on the specified \fIDISPLAY\fP.
+.TP
+.B \-f, \-\-files
+Start with the file-manager open.
+.TP
+.B \-k, \-\-keyring
+Start with the keyring editor. This is the \fIdefault\fP.
+.TP
+.B \-o, \-\-options=\fIFILE\fP
+Read options from the specified file instead of \fI~/.gnupg/gpa.conf\fP.
+.TP
+.B \-s, \-\-settings
+Open the settings dialog.
+.TP
+.B \-?, \-\-help, \-\-help\-all
+Print usage information and exit.
+.TP
+.B \-\-help\-gtk
+Print options related to GTK. See also
+.BR gtk-options "(7)."
+.TP
+.B \-v, \-\-version
+Print version information and exit.
+
+.SH FILES
+.TP
+.I ~/.gnupg/gpa.conf
+Standard user configuration file read by \fBgpa\fP on startup.
+
+.SH "BUGS"
+Please report bugs to <bug\-gpa@gnupg.org>.
+
+.SH AUTHORS
+.B gpa
+was written by \fBMiguel Coca\fP, amongst others.
+.PP 
+This manual page was written by \fBArthur de Jong\fP <\&adejong@debian.org\&>
+and \fBDaniel Leidert\fP <\&daniel.leidert@wgdd.de\&> for the Debian GNU/Linux
+system (but may be used by others).
+\" Accroding to https://bugs.g10code.com/gnupg/issue1165:
+\" After talking to Arthur, the author of the manual page, the manual
+\" page is provided under the GNU General Public license version 2 or
+\" (at your option) any later version.
+
+.SH "SEE ALSO"
+.BR gpg (1),
+.BR gtk-options (7)

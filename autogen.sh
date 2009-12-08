@@ -152,5 +152,6 @@ $AUTOCONF${FORCE}
 
 
 echo "You may now run \"
-  ./configure --enable-maintainer-mode\" and then \"make\"
+  ./configure --enable-maintainer-mode
+\" and then \"make\"
 "
