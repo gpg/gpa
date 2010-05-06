@@ -1,3 +1,8 @@
+2010-05-06  Werner Koch  <wk@g10code.com>
+
+	* gpadatebutton.c: Include i18n.h.
+	(update_widgets): Make string translatable.
+
 2009-11-26  Werner Koch  <wk@g10code.com>
 
 	* gpakeyselector.h (_GpaKeySelector): Add field ONLY_USABLE_KEYS.

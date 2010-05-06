@@ -43,6 +43,7 @@ src/gpastreamverifyop.c
 src/gpasubkeylist.c
 src/gpawidgets.c
 src/gpawindowkeeper.c
+src/gpadatebutton.c
 src/gpgmeedit.c
 src/gpgmetools.c
 src/gtktools.c

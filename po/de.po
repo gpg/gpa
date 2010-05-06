@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-06-20 00:08+0200\n"
-"PO-Revision-Date: 2009-06-17 20:31+0200\n"
+"POT-Creation-Date: 2010-05-06 13:11+0200\n"
+"PO-Revision-Date: 2010-05-06 13:13+0200\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -215,7 +215,7 @@ msgstr "Jahre"
 msgid "never expires"
 msgstr "kein Verfallsdatum"
 
-#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:501
+#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:514
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -632,12 +632,12 @@ msgstr ""
 "Ungültige Zeitangabe.\n"
 "(Sie können die Ablaufzeit nicht in die Vergangenheit setzen.)"
 
-#: src/gpakeyselector.c:86 src/keylist.c:570 src/recipientdlg.c:191
+#: src/gpakeyselector.c:86 src/keylist.c:593 src/recipientdlg.c:191
 #: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "Schlüsselkennung"
 
-#: src/gpakeyselector.c:95 src/keylist.c:621 src/siglist.c:99
+#: src/gpakeyselector.c:95 src/keylist.c:644 src/siglist.c:99
 #: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "Benutzerkennung"
@@ -719,11 +719,11 @@ msgstr "Ungültige Signatur durch unbekanntes Zertifikat: %s"
 msgid "Document"
 msgstr "Dokument"
 
-#: src/gpastreamencryptop.c:218
+#: src/gpastreamencryptop.c:229
 msgid "Encrypting message ..."
 msgstr "Nachricht verschlüsseln..."
 
-#: src/gpastreamencryptop.c:368
+#: src/gpastreamencryptop.c:381
 msgid "Message encryption"
 msgstr "Verschlüsseln einer Nachricht"
 
@@ -797,7 +797,7 @@ msgstr "_Verschlüsselungsalgorithmus"
 msgid "Size"
 msgstr "Größe"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:583
+#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:606
 msgid "Expiry Date"
 msgstr "Verfallsdatum"
 
@@ -907,6 +907,10 @@ msgid ""
 msgstr ""
 "!FATALER FEHLER!\n"
 "Ungültiger Eingabemodus für das Verfallsdatum."
+
+#: src/gpadatebutton.c:86
+msgid "(not set)"
+msgstr "(nicht gesetzt)"
 
 #: src/gpgmeedit.c:1222
 msgid ""
@@ -1396,7 +1400,7 @@ msgstr ""
 "Sie haben erfolgreich Ihren neuen Schlüssel erzeugt. Dieser Schlüssel hat "
 "eine Länge von %d Bit und hat kein Verfallsdatum."
 
-#: src/keylist.c:344
+#: src/keylist.c:360
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1404,7 +1408,7 @@ msgstr ""
 "GnuPG stellt die Verlässlichkeits-Datenbank wieder her.\n"
 "Das kann einige Sekunden dauern."
 
-#: src/keylist.c:562
+#: src/keylist.c:585
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
@@ -1412,21 +1416,21 @@ msgstr ""
 "Diese Spalte beschreibt den Typ des Zertifikats. Ein 'P' steht für\n"
 "OpenPGP und ein 'X' für X.509 (S/MIME). "
 
-#: src/keylist.c:571
+#: src/keylist.c:594
 msgid "The key ID is a short number to identify a certificate."
 msgstr ""
 "Die Schlüsselkennung (Key ID) is eine kurze Zahl zur Identifizerung eines "
 "Zertifikats."
 
-#: src/keylist.c:584
+#: src/keylist.c:607
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Das Ablaufdatum ist das Datum bis zu dem das Zertifikat gültig ist."
 
-#: src/keylist.c:594 src/ownertrustdlg.c:122
+#: src/keylist.c:617 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "Benutzervertrauen"
 
-#: src/keylist.c:595
+#: src/keylist.c:618
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
@@ -1437,11 +1441,11 @@ msgstr ""
 "zu unterschreiben (zertifizieren).  Dieser Wert ist nur für OpenPGP\n"
 "relevant."
 
-#: src/keylist.c:607
+#: src/keylist.c:630
 msgid "Validity"
 msgstr "Gültigkeit"
 
-#: src/keylist.c:608
+#: src/keylist.c:631
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
@@ -1450,7 +1454,7 @@ msgstr ""
 "Zertifikat steckt.  Also, wie sicher es ist, daß die benannte Person\n"
 "wirklich diese Person ist. "
 
-#: src/keylist.c:622
+#: src/keylist.c:645
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
@@ -2355,7 +2359,7 @@ msgid ""
 "This notice will be shown only once per session."
 msgstr ""
 
-#: src/cm-openpgp.c:281 src/cm-netkey.c:954
+#: src/cm-openpgp.c:281 src/cm-netkey.c:968
 msgid "PUK retry counter:"
 msgstr "PUK Versuche frei:"
 
@@ -2503,7 +2507,7 @@ msgid ""
 "value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1173 src/cm-netkey.c:779
+#: src/cm-openpgp.c:1173 src/cm-netkey.c:793
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
@@ -2530,15 +2534,15 @@ msgstr "Gefundene Schlüssel: %d, importiert: %d, nicht geändert: %d"
 msgid "Fetch Key"
 msgstr "Schlüssel holen"
 
-#: src/cm-openpgp.c:1399 src/cm-netkey.c:875 src/cm-dinsig.c:255
+#: src/cm-openpgp.c:1399 src/cm-netkey.c:889 src/cm-dinsig.c:255
 msgid "<b>General</b>"
 msgstr "<b>Allgemein</b>"
 
-#: src/cm-openpgp.c:1409 src/cm-netkey.c:884 src/cm-dinsig.c:264
+#: src/cm-openpgp.c:1409 src/cm-netkey.c:898 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr "Seriennummer:"
 
-#: src/cm-openpgp.c:1413 src/cm-netkey.c:888
+#: src/cm-openpgp.c:1413 src/cm-netkey.c:902
 msgid "Card version:"
 msgstr "Kartenversion:"
 
@@ -2574,7 +2578,7 @@ msgstr "Login Daten:"
 msgid "Public key URL:"
 msgstr "URL des öff. Schlüssels:"
 
-#: src/cm-openpgp.c:1473 src/cm-netkey.c:920
+#: src/cm-openpgp.c:1473 src/cm-netkey.c:934
 msgid "<b>Keys</b>"
 msgstr "<b>Schlüssel</b>"
 
@@ -2594,7 +2598,7 @@ msgstr "Authentifizierungsschlüssel:"
 msgid "Signature counter:"
 msgstr "Signaturzähler:"
 
-#: src/cm-openpgp.c:1510 src/cm-netkey.c:936
+#: src/cm-openpgp.c:1510 src/cm-netkey.c:950
 msgid "<b>PIN</b>"
 msgstr "<b>PIN</b>"
 
@@ -2602,7 +2606,7 @@ msgstr "<b>PIN</b>"
 msgid "Force signature PIN:"
 msgstr "Signatur PIN erzwingen:"
 
-#: src/cm-openpgp.c:1526 src/cm-netkey.c:946
+#: src/cm-openpgp.c:1526 src/cm-netkey.c:960
 msgid "PIN retry counter:"
 msgstr "PIN Versuche frei:"
 
@@ -2614,11 +2618,11 @@ msgstr "Admin PIN Versuche frei:"
 msgid "blocked"
 msgstr "blockiert"
 
-#: src/cm-netkey.c:365
+#: src/cm-netkey.c:373
 msgid "Learn keys"
 msgstr "Schlüssel erlernen"
 
-#: src/cm-netkey.c:367
+#: src/cm-netkey.c:375
 msgid ""
 "For some or all of the keys available on the card, the GnuPG crypto engine "
 "does not yet know the corresponding certificates.\n"
@@ -2631,11 +2635,11 @@ msgid ""
 "If you are unsure what to do, just click the button."
 msgstr ""
 
-#: src/cm-netkey.c:580
+#: src/cm-netkey.c:594
 msgid "Learning keys ..."
 msgstr "Schlüssel erlernen..."
 
-#: src/cm-netkey.c:623
+#: src/cm-netkey.c:637
 #, c-format
 msgid ""
 "<b>Setting the Initial PIN</b> (%s)\n"
@@ -2671,7 +2675,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/cm-netkey.c:637
+#: src/cm-netkey.c:651
 msgid ""
 "You are now setting the PIN for the SigG key used to create <b>qualified "
 "signatures</b>.  You may want to set the PIN to the same value as used for "
@@ -2681,7 +2685,7 @@ msgstr ""
 "<b>qualifizierte Signaturen</b> zu erzeugen.  Es ist anzuraten, die PIN auf "
 "denselben Wert zu setzen die Sie auch für den NKS Schlüssel benutzen."
 
-#: src/cm-netkey.c:640
+#: src/cm-netkey.c:654
 msgid ""
 "You are now setting the PIN for the NKS keys used for standard signatures, "
 "encryption and authentication."
@@ -2689,7 +2693,7 @@ msgstr ""
 "Sie setzen nun die PIN für den NKS Schlüssel, der für normale Signaturen, "
 "zur Verschlüsselung und zur Authentifizierung verwendet wird."
 
-#: src/cm-netkey.c:669
+#: src/cm-netkey.c:683
 #, c-format
 msgid ""
 "Error changing the NullPIN.\n"
@@ -2698,7 +2702,7 @@ msgstr ""
 "Das Ändern der NullPIN war nicht erfolgreich.\n"
 "(%s <%s>)"
 
-#: src/cm-netkey.c:719
+#: src/cm-netkey.c:733
 msgid ""
 "<b>Changing a PIN or PUK</b>\n"
 "\n"
@@ -2711,7 +2715,7 @@ msgid ""
 "way to unblock them!"
 msgstr ""
 
-#: src/cm-netkey.c:731
+#: src/cm-netkey.c:745
 msgid ""
 "<b>Resetting a PUK</b>\n"
 "\n"
@@ -2728,7 +2732,7 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:745
+#: src/cm-netkey.c:759
 msgid ""
 "<b>Resetting a PIN</b>\n"
 "\n"
@@ -2741,7 +2745,7 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:899
+#: src/cm-netkey.c:913
 msgid ""
 "<b>A NullPIN is still active on this card</b>.\n"
 "You need to set a real PIN before you can make use of the card."
@@ -2749,19 +2753,19 @@ msgstr ""
 "<b>Eine NullPIN ist noch immer auf dieser Karte gesetzt</b>.\n"
 "Sie müßen eine echte PIn setzen, bevor Sie die Karte benutzen können."
 
-#: src/cm-netkey.c:905
+#: src/cm-netkey.c:919
 msgid "Set initial PIN"
 msgstr "Echte PIN setzen"
 
-#: src/cm-netkey.c:926
+#: src/cm-netkey.c:940
 msgid "scanning ..."
 msgstr "untersuche..."
 
-#: src/cm-netkey.c:962
+#: src/cm-netkey.c:976
 msgid "SigG PIN retry counter:"
 msgstr "SigG PIN Versuche frei:"
 
-#: src/cm-netkey.c:970
+#: src/cm-netkey.c:984
 msgid "SigG PUK retry counter:"
 msgstr "SigG PUK Versuche frei:"
 

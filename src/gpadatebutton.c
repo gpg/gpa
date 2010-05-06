@@ -28,6 +28,7 @@
 #include <gtk/gtk.h>
 
 #include "gpadatebutton.h"
+#include "i18n.h"  
 
 
 
@@ -83,8 +84,7 @@ update_widgets (GpaDateButton *self)
     snprintf (buf, sizeof buf, "%04d-%02d-%02d", 
               self->current_year, self->current_month+1, self->current_day);
   
-  gtk_label_set_text (GTK_LABEL (self->label), 
-                      *buf? buf : "(not set)");
+  gtk_label_set_text (GTK_LABEL (self->label), *buf? buf : _("(not set)"));
   if (self->calendar && *buf)
     {
       gtk_calendar_select_month (GTK_CALENDAR (self->calendar),

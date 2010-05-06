@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-06-20 00:08+0200\n"
+"POT-Creation-Date: 2010-05-06 13:11+0200\n"
 "PO-Revision-Date: 2004-08-22 02:23+0200\n"
 "Last-Translator: Emilian Nowak <emil5@go2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -230,7 +230,7 @@ msgstr "lat"
 msgid "never expires"
 msgstr "nie traci ważności"
 
-#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:501
+#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:514
 msgid "unknown"
 msgstr "nieznany"
 
@@ -668,12 +668,12 @@ msgid ""
 "(you may not set the expiration time to the past.)"
 msgstr ""
 
-#: src/gpakeyselector.c:86 src/keylist.c:570 src/recipientdlg.c:191
+#: src/gpakeyselector.c:86 src/keylist.c:593 src/recipientdlg.c:191
 #: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "ID klucza"
 
-#: src/gpakeyselector.c:95 src/keylist.c:621 src/siglist.c:99
+#: src/gpakeyselector.c:95 src/keylist.c:644 src/siglist.c:99
 #: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "Nazwa użytkownika"
@@ -757,12 +757,12 @@ msgstr ""
 msgid "Document"
 msgstr "Komentarz:"
 
-#: src/gpastreamencryptop.c:218
+#: src/gpastreamencryptop.c:229
 #, fuzzy
 msgid "Encrypting message ..."
 msgstr "Szyfrowanie..."
 
-#: src/gpastreamencryptop.c:368
+#: src/gpastreamencryptop.c:381
 #, fuzzy
 msgid "Message encryption"
 msgstr "Można szyfrować"
@@ -839,7 +839,7 @@ msgstr "Algorytm"
 msgid "Size"
 msgstr "Rozmiar"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:583
+#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:606
 msgid "Expiry Date"
 msgstr "Data końca ważności"
 
@@ -949,6 +949,10 @@ msgid ""
 msgstr ""
 "!POWAŻNY BŁĄD!\n"
 "Wprowadzono niepoprwane dane określające datę końca ważności."
+
+#: src/gpadatebutton.c:86
+msgid "(not set)"
+msgstr ""
 
 #: src/gpgmeedit.c:1222
 msgid ""
@@ -1450,7 +1454,7 @@ msgstr ""
 "Twój klucz został poprawnie wygenerowany. Został on oznaczony jako poprawny "
 "i ma długość 1024 bitów."
 
-#: src/keylist.c:344
+#: src/keylist.c:360
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1458,44 +1462,44 @@ msgstr ""
 "GnuPG przebudowuje bazę danych zaufania.\n"
 "Może to zająć klika sekund."
 
-#: src/keylist.c:562
+#: src/keylist.c:585
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#: src/keylist.c:571
+#: src/keylist.c:594
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "Ten klucz może być użyty tylko do certyfikatów."
 
-#: src/keylist.c:584
+#: src/keylist.c:607
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
-#: src/keylist.c:594 src/ownertrustdlg.c:122
+#: src/keylist.c:617 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "Zaufanie do właściciela"
 
-#: src/keylist.c:595
+#: src/keylist.c:618
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
 
-#: src/keylist.c:607
+#: src/keylist.c:630
 #, fuzzy
 msgid "Validity"
 msgstr "Poprawność klucza"
 
-#: src/keylist.c:608
+#: src/keylist.c:631
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
 
-#: src/keylist.c:622
+#: src/keylist.c:645
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
@@ -2395,7 +2399,7 @@ msgid ""
 "This notice will be shown only once per session."
 msgstr ""
 
-#: src/cm-openpgp.c:281 src/cm-netkey.c:954
+#: src/cm-openpgp.c:281 src/cm-netkey.c:968
 msgid "PUK retry counter:"
 msgstr ""
 
@@ -2539,7 +2543,7 @@ msgid ""
 "value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1173 src/cm-netkey.c:779
+#: src/cm-openpgp.c:1173 src/cm-netkey.c:793
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
@@ -2562,16 +2566,16 @@ msgstr ""
 msgid "Fetch Key"
 msgstr ""
 
-#: src/cm-openpgp.c:1399 src/cm-netkey.c:875 src/cm-dinsig.c:255
+#: src/cm-openpgp.c:1399 src/cm-netkey.c:889 src/cm-dinsig.c:255
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "Użyj trybu zaawansowanego:"
 
-#: src/cm-openpgp.c:1409 src/cm-netkey.c:884 src/cm-dinsig.c:264
+#: src/cm-openpgp.c:1409 src/cm-netkey.c:898 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr ""
 
-#: src/cm-openpgp.c:1413 src/cm-netkey.c:888
+#: src/cm-openpgp.c:1413 src/cm-netkey.c:902
 msgid "Card version:"
 msgstr ""
 
@@ -2610,7 +2614,7 @@ msgstr ""
 msgid "Public key URL:"
 msgstr "Klucze _Publiczne"
 
-#: src/cm-openpgp.c:1473 src/cm-netkey.c:920
+#: src/cm-openpgp.c:1473 src/cm-netkey.c:934
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "Podpisz _jako "
@@ -2635,7 +2639,7 @@ msgstr "Można autoryzować"
 msgid "Signature counter:"
 msgstr "Podpisy:"
 
-#: src/cm-openpgp.c:1510 src/cm-netkey.c:936
+#: src/cm-openpgp.c:1510 src/cm-netkey.c:950
 msgid "<b>PIN</b>"
 msgstr ""
 
@@ -2644,7 +2648,7 @@ msgstr ""
 msgid "Force signature PIN:"
 msgstr "podpisz _czystym tekstem"
 
-#: src/cm-openpgp.c:1526 src/cm-netkey.c:946
+#: src/cm-openpgp.c:1526 src/cm-netkey.c:960
 msgid "PIN retry counter:"
 msgstr ""
 
@@ -2656,12 +2660,12 @@ msgstr ""
 msgid "blocked"
 msgstr ""
 
-#: src/cm-netkey.c:365
+#: src/cm-netkey.c:373
 #, fuzzy
 msgid "Learn keys"
 msgstr "eksport kluczy"
 
-#: src/cm-netkey.c:367
+#: src/cm-netkey.c:375
 msgid ""
 "For some or all of the keys available on the card, the GnuPG crypto engine "
 "does not yet know the corresponding certificates.\n"
@@ -2674,12 +2678,12 @@ msgid ""
 "If you are unsure what to do, just click the button."
 msgstr ""
 
-#: src/cm-netkey.c:580
+#: src/cm-netkey.c:594
 #, fuzzy
 msgid "Learning keys ..."
 msgstr "Generowanie klucza..."
 
-#: src/cm-netkey.c:623
+#: src/cm-netkey.c:637
 #, c-format
 msgid ""
 "<b>Setting the Initial PIN</b> (%s)\n"
@@ -2699,27 +2703,27 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/cm-netkey.c:637
+#: src/cm-netkey.c:651
 msgid ""
 "You are now setting the PIN for the SigG key used to create <b>qualified "
 "signatures</b>.  You may want to set the PIN to the same value as used for "
 "the NKS keys."
 msgstr ""
 
-#: src/cm-netkey.c:640
+#: src/cm-netkey.c:654
 msgid ""
 "You are now setting the PIN for the NKS keys used for standard signatures, "
 "encryption and authentication."
 msgstr ""
 
-#: src/cm-netkey.c:669
+#: src/cm-netkey.c:683
 #, c-format
 msgid ""
 "Error changing the NullPIN.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-netkey.c:719
+#: src/cm-netkey.c:733
 msgid ""
 "<b>Changing a PIN or PUK</b>\n"
 "\n"
@@ -2732,7 +2736,7 @@ msgid ""
 "way to unblock them!"
 msgstr ""
 
-#: src/cm-netkey.c:731
+#: src/cm-netkey.c:745
 msgid ""
 "<b>Resetting a PUK</b>\n"
 "\n"
@@ -2749,7 +2753,7 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:745
+#: src/cm-netkey.c:759
 msgid ""
 "<b>Resetting a PIN</b>\n"
 "\n"
@@ -2762,26 +2766,26 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:899
+#: src/cm-netkey.c:913
 msgid ""
 "<b>A NullPIN is still active on this card</b>.\n"
 "You need to set a real PIN before you can make use of the card."
 msgstr ""
 
-#: src/cm-netkey.c:905
+#: src/cm-netkey.c:919
 msgid "Set initial PIN"
 msgstr ""
 
-#: src/cm-netkey.c:926
+#: src/cm-netkey.c:940
 #, fuzzy
 msgid "scanning ..."
 msgstr "Podpisywanie..."
 
-#: src/cm-netkey.c:962
+#: src/cm-netkey.c:976
 msgid "SigG PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:970
+#: src/cm-netkey.c:984
 msgid "SigG PUK retry counter:"
 msgstr ""
 

@@ -1,3 +1,7 @@
+2010-05-06  Werner Koch  <wk@g10code.com>
+
+	* POTFILES.in: Add gpadatebutton.c
+
 2009-05-07  Werner Koch  <wk@g10code.com>
 
 	* POTFILES.in: s/keyring.c/keymanager.c/.

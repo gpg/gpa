@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2009-06-20 00:08+0200\n"
+"POT-Creation-Date: 2010-05-06 13:11+0200\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -229,7 +229,7 @@ msgstr "年"
 msgid "never expires"
 msgstr "永遠生效"
 
-#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:501
+#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:514
 msgid "unknown"
 msgstr "不知名"
 
@@ -662,12 +662,12 @@ msgid ""
 "(you may not set the expiration time to the past.)"
 msgstr ""
 
-#: src/gpakeyselector.c:86 src/keylist.c:570 src/recipientdlg.c:191
+#: src/gpakeyselector.c:86 src/keylist.c:593 src/recipientdlg.c:191
 #: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "密鑰ID"
 
-#: src/gpakeyselector.c:95 src/keylist.c:621 src/siglist.c:99
+#: src/gpakeyselector.c:95 src/keylist.c:644 src/siglist.c:99
 #: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "用者名稱"
@@ -751,12 +751,12 @@ msgstr ""
 msgid "Document"
 msgstr "備註:"
 
-#: src/gpastreamencryptop.c:218
+#: src/gpastreamencryptop.c:229
 #, fuzzy
 msgid "Encrypting message ..."
 msgstr "加密中..."
 
-#: src/gpastreamencryptop.c:368
+#: src/gpastreamencryptop.c:381
 #, fuzzy
 msgid "Message encryption"
 msgstr "允許加密"
@@ -833,7 +833,7 @@ msgstr "加密算式"
 msgid "Size"
 msgstr "大小"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:583
+#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:606
 msgid "Expiry Date"
 msgstr "有效日期"
 
@@ -943,6 +943,10 @@ msgid ""
 msgstr ""
 "!執行錯誤!\n"
 "有效期不法的插入模式."
+
+#: src/gpadatebutton.c:86
+msgid "(not set)"
+msgstr ""
 
 #: src/gpgmeedit.c:1222
 msgid ""
@@ -1428,7 +1432,7 @@ msgstr ""
 "\n"
 "新的鑰已經建立. 這鑰已被認正及其重長1024 bits."
 
-#: src/keylist.c:344
+#: src/keylist.c:360
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1436,44 +1440,44 @@ msgstr ""
 "GnuPG 正在重建資料庫.\n"
 "請耐心等候..."
 
-#: src/keylist.c:562
+#: src/keylist.c:585
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#: src/keylist.c:571
+#: src/keylist.c:594
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "密鑰只可用作驗證."
 
-#: src/keylist.c:584
+#: src/keylist.c:607
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
-#: src/keylist.c:594 src/ownertrustdlg.c:122
+#: src/keylist.c:617 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "相信擁有者"
 
-#: src/keylist.c:595
+#: src/keylist.c:618
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
 
-#: src/keylist.c:607
+#: src/keylist.c:630
 #, fuzzy
 msgid "Validity"
 msgstr "驟證公鑰"
 
-#: src/keylist.c:608
+#: src/keylist.c:631
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
 
-#: src/keylist.c:622
+#: src/keylist.c:645
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
@@ -2356,7 +2360,7 @@ msgid ""
 "This notice will be shown only once per session."
 msgstr ""
 
-#: src/cm-openpgp.c:281 src/cm-netkey.c:954
+#: src/cm-openpgp.c:281 src/cm-netkey.c:968
 msgid "PUK retry counter:"
 msgstr ""
 
@@ -2500,7 +2504,7 @@ msgid ""
 "value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1173 src/cm-netkey.c:779
+#: src/cm-openpgp.c:1173 src/cm-netkey.c:793
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
@@ -2523,16 +2527,16 @@ msgstr ""
 msgid "Fetch Key"
 msgstr ""
 
-#: src/cm-openpgp.c:1399 src/cm-netkey.c:875 src/cm-dinsig.c:255
+#: src/cm-openpgp.c:1399 src/cm-netkey.c:889 src/cm-dinsig.c:255
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "使用進階模式 (&A):"
 
-#: src/cm-openpgp.c:1409 src/cm-netkey.c:884 src/cm-dinsig.c:264
+#: src/cm-openpgp.c:1409 src/cm-netkey.c:898 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr ""
 
-#: src/cm-openpgp.c:1413 src/cm-netkey.c:888
+#: src/cm-openpgp.c:1413 src/cm-netkey.c:902
 msgid "Card version:"
 msgstr ""
 
@@ -2571,7 +2575,7 @@ msgstr ""
 msgid "Public key URL:"
 msgstr "公鑰 (&P)"
 
-#: src/cm-openpgp.c:1473 src/cm-netkey.c:920
+#: src/cm-openpgp.c:1473 src/cm-netkey.c:934
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "簽署為 (&a)"
@@ -2596,7 +2600,7 @@ msgstr "允許發放"
 msgid "Signature counter:"
 msgstr "簽署"
 
-#: src/cm-openpgp.c:1510 src/cm-netkey.c:936
+#: src/cm-openpgp.c:1510 src/cm-netkey.c:950
 msgid "<b>PIN</b>"
 msgstr ""
 
@@ -2605,7 +2609,7 @@ msgstr ""
 msgid "Force signature PIN:"
 msgstr "純文字簽署 (&C)"
 
-#: src/cm-openpgp.c:1526 src/cm-netkey.c:946
+#: src/cm-openpgp.c:1526 src/cm-netkey.c:960
 msgid "PIN retry counter:"
 msgstr ""
 
@@ -2617,12 +2621,12 @@ msgstr ""
 msgid "blocked"
 msgstr ""
 
-#: src/cm-netkey.c:365
+#: src/cm-netkey.c:373
 #, fuzzy
 msgid "Learn keys"
 msgstr "輸出密鑰"
 
-#: src/cm-netkey.c:367
+#: src/cm-netkey.c:375
 msgid ""
 "For some or all of the keys available on the card, the GnuPG crypto engine "
 "does not yet know the corresponding certificates.\n"
@@ -2635,12 +2639,12 @@ msgid ""
 "If you are unsure what to do, just click the button."
 msgstr ""
 
-#: src/cm-netkey.c:580
+#: src/cm-netkey.c:594
 #, fuzzy
 msgid "Learning keys ..."
 msgstr "建立新鑰..."
 
-#: src/cm-netkey.c:623
+#: src/cm-netkey.c:637
 #, c-format
 msgid ""
 "<b>Setting the Initial PIN</b> (%s)\n"
@@ -2660,27 +2664,27 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/cm-netkey.c:637
+#: src/cm-netkey.c:651
 msgid ""
 "You are now setting the PIN for the SigG key used to create <b>qualified "
 "signatures</b>.  You may want to set the PIN to the same value as used for "
 "the NKS keys."
 msgstr ""
 
-#: src/cm-netkey.c:640
+#: src/cm-netkey.c:654
 msgid ""
 "You are now setting the PIN for the NKS keys used for standard signatures, "
 "encryption and authentication."
 msgstr ""
 
-#: src/cm-netkey.c:669
+#: src/cm-netkey.c:683
 #, c-format
 msgid ""
 "Error changing the NullPIN.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-netkey.c:719
+#: src/cm-netkey.c:733
 msgid ""
 "<b>Changing a PIN or PUK</b>\n"
 "\n"
@@ -2693,7 +2697,7 @@ msgid ""
 "way to unblock them!"
 msgstr ""
 
-#: src/cm-netkey.c:731
+#: src/cm-netkey.c:745
 msgid ""
 "<b>Resetting a PUK</b>\n"
 "\n"
@@ -2710,7 +2714,7 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:745
+#: src/cm-netkey.c:759
 msgid ""
 "<b>Resetting a PIN</b>\n"
 "\n"
@@ -2723,26 +2727,26 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:899
+#: src/cm-netkey.c:913
 msgid ""
 "<b>A NullPIN is still active on this card</b>.\n"
 "You need to set a real PIN before you can make use of the card."
 msgstr ""
 
-#: src/cm-netkey.c:905
+#: src/cm-netkey.c:919
 msgid "Set initial PIN"
 msgstr ""
 
-#: src/cm-netkey.c:926
+#: src/cm-netkey.c:940
 #, fuzzy
 msgid "scanning ..."
 msgstr "簽署中..."
 
-#: src/cm-netkey.c:962
+#: src/cm-netkey.c:976
 msgid "SigG PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:970
+#: src/cm-netkey.c:984
 msgid "SigG PUK retry counter:"
 msgstr ""
 

@@ -64,7 +64,7 @@ struct conn_ctrl_s
      still registyered.  */
   int client_died;
 
-  /* This is a helper to detect that the unfinished erroe code actually
+  /* This is a helper to detect that the unfinished error code actually
      comes from our command handler.  */
   int is_unfinished;
 
