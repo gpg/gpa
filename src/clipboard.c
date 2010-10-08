@@ -270,12 +270,31 @@ file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
   if (! suc)
     {
       gchar *str;
+      gsize *len;
+
       str = g_strdup_printf ("Error in operation result:\n"
-			     "No valid UTF-8 at position %i.",
+			     "No valid UTF-8 at position %i.\n"
+                             "Assuming Latin-1 encoding instead.",
 			     ((int) (end - item->direct_out)));
       gpa_window_error (str, GTK_WIDGET (clipboard));
       g_free (str);
-      return;
+
+      str = g_convert (item->direct_out, item->direct_out_len,
+                       "UTF-8", "ISO-8859-1",
+                       NULL, &len, NULL);
+      if (str)
+        {
+#ifdef G_OS_WIN32
+          dos_to_unix (str, &item->direct_out_len);
+#endif
+          
+          gtk_text_buffer_set_text (clipboard->text_buffer, str, len);
+          g_free (str);
+          return;
+        }
+      gpa_window_error ("Error converting Latin-1 to UTF-8",
+                        GTK_WIDGET (clipboard));
+      /* Enough warnings: Try to show even with invalid encoding.  */
     }
 
 #ifdef G_OS_WIN32
