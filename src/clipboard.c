@@ -272,11 +272,10 @@ file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
       gchar *str;
       gsize *len;
 
-      str = g_strdup_printf ("Error in operation result:\n"
-			     "No valid UTF-8 at position %i.\n"
+      str = g_strdup_printf ("No valid UTF-8 encoding at position %i.\n"
                              "Assuming Latin-1 encoding instead.",
 			     ((int) (end - item->direct_out)));
-      gpa_window_error (str, GTK_WIDGET (clipboard));
+      gpa_window_message (str, GTK_WIDGET (clipboard));
       g_free (str);
 
       str = g_convert (item->direct_out, item->direct_out_len,
