@@ -2,27 +2,27 @@
 # Copyright (C) 2000, 2001  Werner Koch
 # Copyright (C) 2002, 2003, 2004  Miguel Coca
 # Copyright (C) 2005, 2006, 2007, 2008, 2009  g10 Code GmbH
-# 
+#
 # This file is part of GPA.
-# 
+#
 # GPA is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free
 # Software Foundation; either version 3 of the License, or (at your
 # option) any later version.
-# 
+#
 # GPA is distributed in the hope that it will be useful but WITHOUT
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 # License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
-# 
+#
 # (Process this file with autoconf to produce a configure script.)
-AC_PREREQ(2.59)
-min_automake_version="1.9.3"
+AC_PREREQ(2.61)
+min_automake_version="1.10"
 
-# The version number goes here. 
+# The version number goes here.
 #
 # Remember to change the version number immediately *after* a release.
 # Set my_issvn to "yes" for non-released code.  Remember to run an
@@ -30,11 +30,13 @@ min_automake_version="1.9.3"
 m4_define(my_version, [0.9.1])
 m4_define(my_issvn, yes)
 
-m4_define([svn_revision], m4_esyscmd([echo -n $( (svn info 2>/dev/null \
-            || echo 'Revision: 0')|sed -n '/^Revision:/ {s/[^0-9]//gp;q;}')]))
-AC_INIT([gpa], 
-        [my_version[]m4_if(my_issvn,[yes],[-svn[]svn_revision])],
-        [bug-gpa@gnupg.org])
+m4_define([svn_revision], m4_esyscmd([printf "%d" $(svn info 2>/dev/null \
+          | sed -n '/^Revision:/ s/[^0-9]//gp'|head -1)]))
+m4_define([git_revision], m4_esyscmd([git branch -v 2>/dev/null \
+          | awk '/^\* / {printf "%s",$3}']))
+m4_define([my_full_version], [my_version[]m4_if(my_issvn,[yes],
+          [m4_if(git_revision,[],[-svn[]svn_revision],[-git[]git_revision])])])
+AC_INIT([gpa],[my_full_version],[http://bugs.gnupg.org])
 
 NEED_GPG_ERROR_VERSION=1.4
 NEED_LIBASSUAN_API=2
@@ -66,7 +68,7 @@ have_libassuan=no
 # Generate extended version information
 if test "$have_w32_system" = yes; then
    BUILD_TIMESTAMP=`date --iso-8601=minutes`
-   changequote(,)dnl 
+   changequote(,)dnl
    BUILD_FILEVERSION=`echo "$VERSION" | sed 's/\([0-9.]*\).*/\1./;s/\./,/g'`
    changequote([,])dnl
    BUILD_FILEVERSION="${BUILD_FILEVERSION}${BUILD_REVISION}"
@@ -74,7 +76,7 @@ fi
 AC_SUBST(BUILD_REVISION)
 AC_SUBST(BUILD_TIMESTAMP)
 AC_SUBST(BUILD_FILEVERSION)
-AC_DEFINE_UNQUOTED(BUILD_REVISION, "$BUILD_REVISION", 
+AC_DEFINE_UNQUOTED(BUILD_REVISION, "$BUILD_REVISION",
                    [Subversion revision used to build this package])
 
 
@@ -98,7 +100,7 @@ AC_CHECK_FUNCS([strsep stpcpy])
 development_version=no
 # Allow users to append something to the version string (other than -cvs)
 # without flagging it as development version.  The user version parts is
-# considered everything after a dash. 
+# considered everything after a dash.
 if test "$development_version" != yes; then
   changequote(,)dnl
   tmp_pat='[a-zA-Z]'
@@ -147,7 +149,7 @@ if test -z "$GPG"; then
   if test -z "$GPG"; then
        AC_MSG_ERROR([[
 ***
-*** GnuPG not found. Please install GnuPG first. 
+*** GnuPG not found. Please install GnuPG first.
 *** See   http://www.gnupg.org/download.html
 ***
   ]])
@@ -237,7 +239,7 @@ dnl LIBS="$LIBS $GPGME_LIBS"
 dnl CFLAGS="$CFLAGS $GPGME_CFLAGS"
 dnl AC_CHECK_FUNCS([gpgme_op_assuan_transact])
 dnl AC_CHECK_FUNCS([gpgme_io_write])
-dnl # Fixme:  We should write a test based on gpgme_subkey_t 
+dnl # Fixme:  We should write a test based on gpgme_subkey_t
 dnl #         We might even want to put such a test into gpgme.m4.
 dnl AC_CHECK_MEMBERS([struct _gpgme_subkey.card_number],,,[#include <gpgme.h>])
 dnl LIBS=$_save_libs
@@ -247,7 +249,7 @@ dnl if test "x$ac_cv_func_gpgme_op_assuan_transact" = "xyes"; then
 dnl     AC_DEFINE(BUILD_CARD_MANAGER, 1,
 dnl               [Defined if the card manager shall be build.])
 dnl fi
-dnl AM_CONDITIONAL(BUILD_CARD_MANAGER, 
+dnl AM_CONDITIONAL(BUILD_CARD_MANAGER,
 dnl                test "x$ac_cv_func_gpgme_op_assuan_transact" = "xyes")
 
 
@@ -281,7 +283,7 @@ esac
 
 #
 # Set extra compiler flags
-# 
+#
 if test "$GCC" = yes; then
     if test "$USE_MAINTAINER_MODE" = "yes"; then
         # FIXME:
@@ -318,7 +320,7 @@ die=no
 if test "$have_gpg_error" = "no"; then
    die=yes
    AC_MSG_NOTICE([[
-***  
+***
 *** You need libgpg-error to build this program.
 **  This library is for example available at
 ***   ftp://ftp.gnupg.org/gcrypt/libgpg-error
@@ -328,7 +330,7 @@ fi
 if test "$have_gpgme" = "no"; then
    die=yes
    AC_MSG_NOTICE([[
-***  
+***
 *** You need gpgme to build this program.
 **  This library is for example available at
 ***   ftp://ftp.gnupg.org/gcrypt/gpgme/

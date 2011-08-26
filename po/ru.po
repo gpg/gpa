@@ -6,7 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.8\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2010-05-06 13:11+0200\n"
 "PO-Revision-Date: 2008-03-18 20:12+0300\n"
 "Last-Translator: Sergei Smirnov <moscow@hro.org>\n"
 "Language-Team: Russian <moscow@hro.org>\n"
@@ -18,160 +17,121 @@ msgstr ""
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 
-#: src/clipboard.c:375 src/fileman.c:389
 msgid "Open File"
 msgstr "Открыть файл"
 
-#: src/clipboard.c:403 src/confdialog.c:1274 src/gtktools.c:85
 msgid "GPA Message"
 msgstr "Сообщение GPA"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#: src/clipboard.c:420
 #, c-format
 msgid "The file %s is %lli%s large.  Do you really  want to open it?"
 msgstr "Файл %s очень (%lli%s) велик. Действительно хотите его открыть?"
 
-#: src/clipboard.c:541
 msgid "Save As..."
 msgstr "Сохранить как..."
 
-#: src/clipboard.c:582 src/clipboard.c:612 src/clipboard.c:642
-#: src/clipboard.c:672 src/clipboard.c:1038
 msgid "Clipboard"
 msgstr "Буфер"
 
-#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:867
-#: src/cardman.c:619
 #, fuzzy
 msgid "_File"
 msgstr "/_Файл"
 
-#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:868
-#: src/cardman.c:620
 #, fuzzy
 msgid "_Edit"
 msgstr "/_Правка"
 
-#: src/clipboard.c:759
 msgid "Clear buffer"
 msgstr "Очистить буфер"
 
-#: src/clipboard.c:761 src/fileman.c:517
 msgid "Open a file"
 msgstr "Открыть файл"
 
-#: src/clipboard.c:763
 msgid "Save to a file"
 msgstr "Сохранить в файле"
 
-#: src/clipboard.c:765
 #, fuzzy
 msgid "Sign buffer text"
 msgstr "подписать текст"
 
-#: src/clipboard.c:767
 #, fuzzy
 msgid "Check signatures of buffer text"
 msgstr "Проверить подпись выбранного текста"
 
-#: src/clipboard.c:769
 #, fuzzy
 msgid "Encrypt the buffer text"
 msgstr "Зашифровать выбранный текст"
 
-#: src/clipboard.c:771
 #, fuzzy
 msgid "Decrypt the buffer text"
 msgstr "Расшифровать выбранный текст"
 
-#: src/clipboard.c:773
 #, fuzzy
 msgid "Close the buffer"
 msgstr "Очистить буфер"
 
-#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:876
-#: src/cardman.c:625
 msgid "Quit the program"
 msgstr ""
 
-#: src/clipboard.c:781
 #, fuzzy
 msgid "Undo the last action"
 msgstr "Копировать выделенное в буфер"
 
-#: src/clipboard.c:783
 msgid "Redo the last undone action"
 msgstr ""
 
-#: src/clipboard.c:786
 msgid "Cut the selection"
 msgstr "Вырезать выделенное в буфер"
 
-#: src/clipboard.c:788 src/keymanager.c:880
 msgid "Copy the selection"
 msgstr "Копировать выделенное в буфер"
 
-#: src/clipboard.c:790 src/keymanager.c:882
 msgid "Paste the clipboard"
 msgstr "Вставить из буфера"
 
-#: src/clipboard.c:792
 #, fuzzy
 msgid "Delete the selected text"
 msgstr "Расшифровать выбранный текст"
 
-#: src/clipboard.c:794
 msgid "Select the entire document"
 msgstr ""
 
-#: src/clipboard.c:904 src/fileman.c:625 src/cardman.c:710
 msgid "Keyring"
 msgstr "Ключи"
 
-#: src/clipboard.c:906 src/keymanager.c:1059 src/cardman.c:712
 msgid "Files"
 msgstr "Файлы"
 
-#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1061
 #, fuzzy
 msgid "Card"
 msgstr "Буфер"
 
-#: src/clipboard.c:1008
 msgid "GNU Privacy Assistant - Clipboard"
 msgstr "GNU Privacy Assistant - Буфер"
 
-#: src/confdialog.c:994
 msgid "<b>Main</b>"
 msgstr "<b>Главное</b>"
 
-#: src/confdialog.c:1151
 msgid "Use default values"
 msgstr "Использовать значения по умолчанию"
 
-#: src/confdialog.c:1151
 msgid "Use default value"
 msgstr "Использовать значение по умолчанию"
 
-#: src/confdialog.c:1154
 msgid "Do not use option"
 msgstr "Не использовать опцию"
 
-#: src/confdialog.c:1159
 msgid "Use custom values"
 msgstr "Использовать свои значения"
 
-#: src/confdialog.c:1159
 msgid "Use custom value"
 msgstr "Использовать свое значение"
 
-#: src/confdialog.c:1163
 msgid "Use default argument"
 msgstr "Использовать аргумент по умолчанию"
 
-#: src/confdialog.c:1288
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
@@ -179,265 +139,203 @@ msgstr ""
 "Есть незафиксированные изменения. Изменение экспертной установки поможет их "
 "запомнить. Продолжить?"
 
-#: src/confdialog.c:1333
 msgid "Crypto Backend Configuration"
 msgstr "Настройки шифровальной программы"
 
-#: src/confdialog.c:1339
 msgid "Reset"
 msgstr "Сбросить"
 
-#: src/confdialog.c:1358
 msgid "Configure the tools of the GnuPG system."
 msgstr "Настройки инструментов GnuPG."
 
-#: src/confdialog.c:1362
 msgid "Level:"
 msgstr "Уровень:"
 
-#: src/confdialog.c:1371
 msgid "Basic"
 msgstr "Обычный"
 
-#: src/confdialog.c:1372
 msgid "Advanced"
 msgstr "Расширенный"
 
-#: src/confdialog.c:1373
 msgid "Expert"
 msgstr "Экспертный"
 
-#: src/convert.c:29
 msgid "days"
 msgstr "дней"
 
-#: src/convert.c:30
 msgid "weeks"
 msgstr "недель"
 
-#: src/convert.c:31
 msgid "months"
 msgstr "месяцев"
 
-#: src/convert.c:32
 msgid "years"
 msgstr "лет"
 
-#: src/convert.c:89
 msgid "never expires"
 msgstr "неогр."
 
-#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:514
 msgid "unknown"
 msgstr "неизвестно"
 
-#: src/convert.c:117
 msgid "Mr."
 msgstr ""
 
-#: src/convert.c:119
 msgid "Ms."
 msgstr ""
 
-#: src/convert.c:123
 #, fuzzy
 msgid "(unknown)"
 msgstr "неизвестно"
 
-#: src/encryptdlg.c:152
 msgid "Encrypt documents"
 msgstr "Зашифровать файлы"
 
-#: src/encryptdlg.c:169
 msgid "_Public Keys"
 msgstr "_Открытые ключи"
 
-#: src/encryptdlg.c:192 src/icons.c:202
 msgid "_Sign"
 msgstr "_Подписать"
 
-#: src/encryptdlg.c:198
 msgid "Sign _as "
 msgstr "Подписать _как"
 
-#: src/encryptdlg.c:228 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "_Защитить"
 
-#: src/expirydlg.c:64
 msgid "Please provide a correct date."
 msgstr "Пожалуйста, введите корректную дату."
 
-#: src/expirydlg.c:108
 msgid "Change expiry date"
 msgstr "Изменить срок годности"
 
-#: src/expirydlg.c:113 src/gpaprogressdlg.c:138
 msgid "_Cancel"
 msgstr "От_мена"
 
-#: src/expirydlg.c:124
 msgid "_never expire"
 msgstr "_неогранич."
 
-#: src/expirydlg.c:129
 msgid "_expire on:"
 msgstr "_годен до:"
 
-#: src/fileman.c:519
 msgid "Close all files"
 msgstr "Закрыть все файлы"
 
-#: src/fileman.c:521
 msgid "Sign the selected file"
 msgstr "Подписать выбранный файл"
 
-#: src/fileman.c:523
 msgid "Check signatures of selected file"
 msgstr "Проверить подписи выбранного файла"
 
-#: src/fileman.c:525
 msgid "Encrypt the selected file"
 msgstr "Зашифровать выбранный файл"
 
-#: src/fileman.c:527
 msgid "Decrypt the selected file"
 msgstr "Расшифровать выбранный файл"
 
-#: src/fileman.c:529
 msgid "Close the window"
 msgstr ""
 
-#: src/fileman.c:535
 #, fuzzy
 msgid "Select all files"
 msgstr "Закрыть все файлы"
 
-#: src/fileman.c:733
 msgid "File"
 msgstr "Файл"
 
-#: src/fileman.c:798
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - Менеджер файлов"
 
-#: src/fileman.c:821
 msgid "File Manager"
 msgstr "Менеджер _файлов"
 
-#: src/fileman.c:897
 msgid "The file is already open."
 msgstr "Файл уже открыт."
 
-#: src/filesigndlg.c:171
 msgid "Sign documents"
 msgstr "Подпись файлов"
 
-#: src/filesigndlg.c:180
 #, fuzzy
 msgid "<b>Sign _as</b>"
 msgstr "<b>Главное</b>"
 
-#: src/filesigndlg.c:201
 #, fuzzy
 msgid "<b>Signing Mode</b>"
 msgstr "Режим подписи"
 
-#: src/filesigndlg.c:211
 #, fuzzy
 msgid "Si_gn and compress"
 msgstr "_подпись и сжатие"
 
-#: src/filesigndlg.c:217
 #, fuzzy
 msgid "Clear_text signature"
 msgstr "_текстовая подпись"
 
-#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "_отделяемая подпись"
 
-#: src/gpa.c:96
 msgid "Output version information and exit"
 msgstr "Показать информацию о версии и завершить"
 
-#: src/gpa.c:98
 #, fuzzy
 msgid "Open key manager (default)"
 msgstr "Открыть менеджер ключей (по умолчанию)"
 
-#: src/gpa.c:100
 msgid "Open file manager"
 msgstr "Открыть менеджер файлов"
 
-#: src/gpa.c:102 src/gpa.h:80
 #, fuzzy
 msgid "Open the card manager"
 msgstr "Открыть менеджер файлов"
 
-#: src/gpa.c:104
 msgid "Open clipboard"
 msgstr "Открыть буфер"
 
-#: src/gpa.c:106
 #, fuzzy
 msgid "Open the settings dialog"
 msgstr "Открыть окно настроек"
 
-#: src/gpa.c:108
 #, fuzzy
 msgid "Enable the UI server"
 msgstr "Стартовать только сервер UI"
 
-#: src/gpa.c:110
 msgid "Read options from file"
 msgstr "Получить настройки из файла"
 
-#: src/gpa.c:314
 msgid "[FILE...]"
 msgstr "[ФАЙЛ...]"
 
-#: src/gpa.c:316
 msgid "Graphical frontend to GnuPG"
 msgstr "Графическая оболочка к GnuPG"
 
-#: src/gpa.c:317
 msgid "Please report bugs to <"
 msgstr "Об ошибках сообщайте <"
 
-#: src/gpa.h:71
 #, fuzzy
 msgid "_Windows"
 msgstr "/_Окно"
 
-#: src/gpa.h:74
 msgid "Open the keyring editor"
 msgstr "Открыть менеджер ключей"
 
-#: src/gpa.h:76
 msgid "Open the file manager"
 msgstr "Открыть менеджер файлов"
 
-#: src/gpa.h:78
 msgid "Open the clipboard"
 msgstr "Открыть буфер"
 
-#: src/gpa.h:93
 #, fuzzy
 msgid "Configure the application"
 msgstr "Вырезать выделенное в буфер"
 
-#: src/gpa.h:96
 #, fuzzy
 msgid "_Backend Preferences"
 msgstr "/Правка/Настройки _шифр. программы..."
 
-#: src/gpa.h:97
 msgid "Configure the backend programs"
 msgstr ""
 
-#: src/gpabackupop.c:208
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -454,37 +352,29 @@ msgstr ""
 "Это деликатная иформация, ее следует тщательно оберегать\n"
 "(храните на сменном носителе CD/DVD/Flash в надежном и безопасном месте)."
 
-#: src/gpabackupop.c:223
 msgid "An error ocurred during the backup operation."
 msgstr "Ошибка создания резервной копии."
 
-#: src/gpabackupop.c:245
 msgid "Backup key to file"
 msgstr "Резервная копия ключа в файл"
 
-#: src/gpabackupop.c:255
 #, c-format
 msgid "Generating backup of key: %s"
 msgstr "Создание резервной копии ключа: %s"
 
-#: src/gpaexportclipop.c:139
 msgid "The keys have been copied to the clipboard."
 msgstr "Ключи скопированы в буфер."
 
-#: src/gpaexportfileop.c:139
 msgid "Export public keys to file"
 msgstr "Экспорт открытого ключа в файл"
 
-#: src/gpaexportfileop.c:150
 msgid "_armor"
 msgstr "_защитить"
 
-#: src/gpaexportfileop.c:182
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "Ключи экспортированы в %s."
 
-#: src/gpaexportserverop.c:129
 #, c-format
 msgid ""
 "The selected key will be sent to a public key\n"
@@ -495,116 +385,83 @@ msgstr ""
 "(\"%s\").\n"
 "Действительно хотите распространить данный ключ?"
 
-#: src/gpaexportserverop.c:134 src/gpafileencryptop.c:478
-#: src/gpafileverifyop.c:181 src/gpgmetools.c:177 src/keydeletedlg.c:44
-#: src/keydeletedlg.c:93 src/keysigndlg.c:61
 msgid "_Yes"
 msgstr "Да"
 
-#: src/gpaexportserverop.c:135 src/gpafileencryptop.c:479
-#: src/gpafileverifyop.c:182 src/gpgmetools.c:178 src/keydeletedlg.c:46
-#: src/keydeletedlg.c:95 src/keysigndlg.c:63
 msgid "_No"
 msgstr "Нет"
 
-#: src/gpaexportserverop.c:187
 msgid "The keys have been sent to the server."
 msgstr "Ключи успешно отправлены на сервер."
 
-#: src/gpafiledecryptop.c:154
 msgid "Decrypting..."
 msgstr "Расшифровка..."
 
-#: src/gpafiledecryptop.c:499 src/gpafileverifyop.c:467
 #, c-format
 msgid "\"%s\" contained no OpenPGP data."
 msgstr "\"%s\" не содержит данных OpenPGP."
 
-#: src/gpafiledecryptop.c:500 src/gpafileverifyop.c:468
 #, c-format
 msgid "The file \"%s\" contained no OpenPGPdata."
 msgstr "Файл \"%s\" не содержит данных OpenPGP."
 
-#: src/gpafiledecryptop.c:510
 #, c-format
 msgid "\"%s\" contained no valid encrypted data."
 msgstr "\"%s\" не содержит зашифрованных данных."
 
-#: src/gpafiledecryptop.c:512
 #, c-format
 msgid "The file \"%s\" contained no validencrypted data."
 msgstr "Файл \"%s\" не содержит зашифрованных данных."
 
-#: src/gpafiledecryptop.c:521 src/gpafileencryptop.c:770
-#: src/gpafilesignop.c:524 src/gpafileverifyop.c:478 src/gpakeyexpireop.c:240
-#: src/gpakeypasswdop.c:209 src/gpakeysignop.c:237 src/gpastreamsignop.c:421
 msgid "Wrong passphrase!"
 msgstr "Неверный пароль!"
 
-#: src/gpafileencryptop.c:155
 msgid "Encrypting..."
 msgstr "Шифрование..."
 
-#: src/gpafileencryptop.c:476 src/verifydlg.c:222
 msgid "Unknown Key"
 msgstr "Неизвестный ключ"
 
-#: src/gpafileencryptop.c:492
 msgid "You are going to encrypt a document using the following key:"
 msgstr "Файл будет зашифрован ключом:"
 
-#: src/gpafileencryptop.c:498
 msgid "However, it is not certain that the key belongs to that person."
 msgstr "Однако нет уверенности, что ключ принадлежит именно этому человеку."
 
-#: src/gpafileencryptop.c:504
 msgid "Do you <b>really</b> want to use this key?"
 msgstr "Вы <b><действительно уверены/b>, что хотите использовать этот ключ? "
 
-#: src/gpafileencryptop.c:525 src/gpafileencryptop.c:565 src/verifydlg.c:227
 msgid "Revoked Key"
 msgstr "Отзыв ключа"
 
-#: src/gpafileencryptop.c:527 src/gpafileencryptop.c:567 src/gtktools.c:52
-#: src/gtktools.c:89 src/keyeditdlg.c:150 src/verifydlg.c:115
 msgid "_Close"
 msgstr "_Закрыть"
 
-#: src/gpafileencryptop.c:540
 msgid "The following key has been revoked by it's owner:"
 msgstr "Ключ отозван владельцем:"
 
-#: src/gpafileencryptop.c:545 src/gpafileencryptop.c:588
 msgid "And can not be used for encryption."
 msgstr "Он не может использоваться для шифрования."
 
-#: src/gpafileencryptop.c:580
 #, c-format
 msgid "The following key expired on %s:"
 msgstr "Срок годности ключа истек %s:"
 
-#: src/gpafileencryptop.c:619 src/gpafilesignop.c:447
-#: src/gpastreamsignop.c:278
 msgid ""
 "The selected certificates are not all of the same type. That is, you mixed "
 "OpenPGP and X.509 certificates. Please make sure to select only certificates "
 "of the same type."
 msgstr ""
 
-#: src/gpafileencryptop.c:694 src/gpafilesignop.c:433
-#: src/gpastreamsignop.c:264
 msgid "You didn't select any key for signing"
 msgstr "Не выбран ключ для подписи"
 
-#: src/gpafilesignop.c:156
 msgid "Signing..."
 msgstr "Подпись..."
 
-#: src/gpafileverifyop.c:102
 msgid "Verifying..."
 msgstr "Проверка..."
 
-#: src/gpafileverifyop.c:175
 #, c-format
 msgid ""
 "GPA found a file that could be a signature of %s. Would you like to verify "
@@ -617,20 +474,16 @@ msgstr ""
 "\n"
 "Найденный файл: %s"
 
-#: src/gpagenkeyadvop.c:80
 msgid "Generating Key..."
 msgstr "Создание ключа..."
 
-#: src/gpaimportfileop.c:132
 #, fuzzy
 msgid "Import keys from file"
 msgstr "Импорт открытого ключа из файла"
 
-#: src/gpaimportop.c:196
 msgid "No keys were found."
 msgstr "Ключи не обнаружены."
 
-#: src/gpaimportop.c:204
 #, c-format
 msgid ""
 "%i public keys read\n"
@@ -647,7 +500,6 @@ msgstr ""
 "Импортировано закрытых ключей: %i\n"
 "Не изменено закрытых ключей: %i"
 
-#: src/gpakeyexpireop.c:244
 msgid ""
 "Invalid time given.\n"
 "(you may not set the expiration time to the past.)"
@@ -655,281 +507,213 @@ msgstr ""
 "Некорректная дата.\n"
 "(Нельзя устанавливать срок годности задним числом.)"
 
-#: src/gpakeyselector.c:86 src/keylist.c:593 src/recipientdlg.c:191
-#: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "ID ключа"
 
-#: src/gpakeyselector.c:95 src/keylist.c:644 src/siglist.c:99
-#: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "Имя"
 
-#: src/gpakeysignop.c:191
 msgid "No private key for signing."
 msgstr "Нет секретного ключа для подписи."
 
-#: src/gpakeysignop.c:241
 msgid "This key has expired! Unable to sign."
 msgstr "Этот ключ устарел! Подпись невозможна."
 
-#: src/gpakeysignop.c:245
 msgid "This key has already been signed with your own!"
 msgstr "Этот ключ уже подписан вашим ключом!"
 
-#: src/gpakeysignop.c:250
 msgid "You haven't selected a default key to sign with!"
 msgstr "Не выбран ключ по умолчанию для подписи!"
 
-#: src/gparecvkeydlg.c:106
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "Какой ключ импортировать (ID ключа)?"
 
-#: src/gparecvkeydlg.c:116
 msgid "Key _ID:"
 msgstr "ID _ключа:"
 
-#: src/gpastreamdecryptop.c:155
 #, fuzzy
 msgid "Decrypting message ..."
 msgstr "Расшифровка..."
 
-#: src/gpastreamdecryptop.c:343 src/gpastreamverifyop.c:352
 #, fuzzy, c-format
 msgid "Bad signature by %s: %s"
 msgstr "Подпись: %s"
 
-#: src/gpastreamdecryptop.c:346 src/gpastreamverifyop.c:358
 #, c-format
 msgid "Bad signature by unknown key %s: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:349 src/gpastreamverifyop.c:364
 #, c-format
 msgid "Bad signature by unknown key: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:355 src/gpastreamverifyop.c:372
 #, fuzzy, c-format
 msgid "Good signature by %s: %s"
 msgstr "Подпись: %s"
 
-#: src/gpastreamdecryptop.c:358 src/gpastreamverifyop.c:378
 #, c-format
 msgid "Good signature by unknown key %s: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:361 src/gpastreamverifyop.c:384
 #, c-format
 msgid "Good signature by unknown key: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:367 src/gpastreamverifyop.c:392
 #, fuzzy, c-format
 msgid "Invalid signature by %s: %s"
 msgstr "Подпись: %s"
 
-#: src/gpastreamdecryptop.c:370 src/gpastreamverifyop.c:398
 #, c-format
 msgid "Invalid signature by unknown key %s: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:373 src/gpastreamverifyop.c:404
 #, c-format
 msgid "Invalid signature by unknown key: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:399 src/gpastreamverifyop.c:437
 #, fuzzy
 msgid "Document"
 msgstr "Подпись файлов"
 
-#: src/gpastreamencryptop.c:229
 #, fuzzy
 msgid "Encrypting message ..."
 msgstr "Шифрование..."
 
-#: src/gpastreamencryptop.c:381
 #, fuzzy
 msgid "Message encryption"
 msgstr "Может шифр."
 
-#: src/gpastreamsignop.c:176
 #, fuzzy
 msgid "Signing message ..."
 msgstr "Подпись..."
 
-#: src/gpastreamsignop.c:359
 msgid "Message signing"
 msgstr ""
 
-#: src/gpastreamverifyop.c:156
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "Проверка..."
 
-#: src/gpastreamverifyop.c:355
 #, fuzzy, c-format
 msgid "Bad signature by %s"
 msgstr "Подпись: %s"
 
-#: src/gpastreamverifyop.c:361
 #, c-format
 msgid "Bad signature by unknown key %s"
 msgstr ""
 
-#: src/gpastreamverifyop.c:367
 msgid "Bad signature by unknown key"
 msgstr ""
 
-#: src/gpastreamverifyop.c:375
 #, fuzzy, c-format
 msgid "Good signature by %s"
 msgstr "Подпись: %s"
 
-#: src/gpastreamverifyop.c:381
 #, c-format
 msgid "Good signature by unknown key %s"
 msgstr ""
 
-#: src/gpastreamverifyop.c:387
 msgid "Good signature by unknown key"
 msgstr ""
 
-#: src/gpastreamverifyop.c:395
 #, fuzzy, c-format
 msgid "Invalid signature by %s"
 msgstr "Все подписи"
 
-#: src/gpastreamverifyop.c:401
 #, c-format
 msgid "Invalid signature by unknown key %s"
 msgstr ""
 
-#: src/gpastreamverifyop.c:407
 msgid "Invalid signature by unknown key"
 msgstr ""
 
-#: src/gpasubkeylist.c:79
 msgid "Subkey ID"
 msgstr "ID подключа"
 
-#: src/gpasubkeylist.c:85 src/siglist.c:119 src/verifydlg.c:330
 msgid "Status"
 msgstr "Статус"
 
-#: src/gpasubkeylist.c:91
 msgid "Algorithm"
 msgstr "Алгоритм"
 
-#: src/gpasubkeylist.c:98
 msgid "Size"
 msgstr "Размер"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:606
 msgid "Expiry Date"
 msgstr "Срок годности"
 
-#: src/gpasubkeylist.c:113
 msgid "[S]"
 msgstr ""
 
-#: src/gpasubkeylist.c:113
 msgid "Can sign"
 msgstr "Может подпис."
 
-#: src/gpasubkeylist.c:119
 msgid "[C]"
 msgstr ""
 
-#: src/gpasubkeylist.c:119
 msgid "Can certify"
 msgstr "Может сертиф."
 
-#: src/gpasubkeylist.c:125
 msgid "[E]"
 msgstr ""
 
-#: src/gpasubkeylist.c:125
 msgid "Can encrypt"
 msgstr "Может шифр."
 
-#: src/gpasubkeylist.c:131
 msgid "[A]"
 msgstr ""
 
-#: src/gpasubkeylist.c:131
 msgid "Can authenticate"
 msgstr "Может авториз."
 
-#: src/gpasubkeylist.c:137
 msgid "[T]"
 msgstr ""
 
-#: src/gpasubkeylist.c:138
 msgid "Secret key stored on a smartcard."
 msgstr ""
 
-#: src/gpasubkeylist.c:144
 msgid "Card S/N"
 msgstr ""
 
-#: src/gpasubkeylist.c:145
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:927
-#: src/gpgmetools.c:1046
 msgid "Revoked"
 msgstr "Отозван"
 
-#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1042
 msgid "Expired"
 msgstr "Истек"
 
-#: src/gpasubkeylist.c:165 src/gpgmetools.c:714
 msgid "Disabled"
 msgstr "Отключен"
 
-#: src/gpasubkeylist.c:169
 msgid "Unsigned"
 msgstr "Неподписан"
 
-#: src/gpasubkeylist.c:173 src/gpgmetools.c:1033 src/verifydlg.c:212
 msgid "Valid"
 msgstr "Достоверно"
 
-#: src/gpawidgets.c:71 src/gpgmetools.c:758 src/gpgmetools.c:765
-#: src/keysigndlg.c:100
 msgid "User Name:"
 msgstr "Имя:"
 
-#: src/gpawidgets.c:71 src/keysigndlg.c:100
 msgid "User Names:"
 msgstr "Имена:"
 
-#: src/gpawidgets.c:77 src/gpgmetools.c:759 src/gpgmetools.c:766
-#: src/gpa-key-details.c:289
 msgid "Key ID:"
 msgstr "ID ключа:"
 
-#: src/gpawidgets.c:180
 msgid "Expiration"
 msgstr "Срок годности"
 
-#: src/gpawidgets.c:187
 msgid "_indefinitely valid"
 msgstr "_не вполне достоверен"
 
-#: src/gpawidgets.c:195
 msgid "expire _after"
 msgstr "недействителен после"
 
-#: src/gpawidgets.c:215
 msgid "expire o_n:"
 msgstr "недействителен с:"
 
-#: src/gpawidgets.c:289
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -937,17 +721,14 @@ msgstr ""
 "!КРИТИЧЕСКАЯ ОШИБКА!\n"
 "Неверный режим для даты срока годности."
 
-#: src/gpadatebutton.c:86
 msgid "(not set)"
 msgstr ""
 
-#: src/gpgmeedit.c:1222
 msgid ""
 "Keys are already stored on the card.\n"
 "Really replace existing keys?"
 msgstr ""
 
-#: src/gpgmetools.c:72
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -964,7 +745,6 @@ msgstr ""
 "\n"
 "Работа программы будет прервана"
 
-#: src/gpgmetools.c:102
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -983,7 +763,6 @@ msgstr ""
 "Возможно, ошибка в программе GPA.\n"
 "GPA попытатется возобновить свою работоспособность."
 
-#: src/gpgmetools.c:174
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -992,7 +771,6 @@ msgstr ""
 "Файл %s уже существует.\n"
 "Перезаписать?"
 
-#: src/gpgmetools.c:602
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -1006,7 +784,6 @@ msgstr ""
 "****************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:607
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -1014,96 +791,73 @@ msgstr ""
 "Резервная копия сохранена в файле:\n"
 "\n"
 
-#: src/gpgmetools.c:678 src/gpgmetools.c:701 src/gpgmetools.c:718
-#: src/gpgmetools.c:1038 src/gpgmetools.c:1071
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: src/gpgmetools.c:681
 msgid "Never"
 msgstr "Никогда"
 
-#: src/gpgmetools.c:684
 msgid "Marginal"
 msgstr "Ограниченное"
 
-#: src/gpgmetools.c:687
 msgid "Full"
 msgstr "Полное"
 
-#: src/gpgmetools.c:690
 msgid "Ultimate"
 msgstr "Абсолютное"
 
-#: src/gpgmetools.c:716
 msgid "Incomplete"
 msgstr "Не полностью"
 
-#: src/gpgmetools.c:722
 msgid "Fully Valid"
 msgstr "Полностью достоверен"
 
-#: src/gpgmetools.c:756
 msgid "Please enter the passphrase for the following key:"
 msgstr "Введите пароль для доступа к ключу:"
 
-#: src/gpgmetools.c:764
 msgid "Wrong passphrase, please try again:"
 msgstr "Неверный пароль, пожалуйста, еще раз:"
 
-#: src/gpgmetools.c:789
 msgid "Enter Passphrase"
 msgstr "Введите пароль"
 
-#: src/gpgmetools.c:916
 msgid "[None]"
 msgstr "[Нет]"
 
-#: src/gpgmetools.c:1010 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[Неизвестный ID пользователя]"
 
-#: src/gpgmetools.c:1036 src/verifydlg.c:217
 msgid "Bad"
 msgstr "Плохой"
 
-#: src/gpgmetools.c:1059
 msgid "Generic"
 msgstr "Общий"
 
-#: src/gpgmetools.c:1062
 msgid "Persona"
 msgstr "Персон."
 
-#: src/gpgmetools.c:1065
 msgid "Casual"
 msgstr "Случайн."
 
-#: src/gpgmetools.c:1068
 msgid "Positive"
 msgstr "Позитив."
 
-#: src/gpgmetools.c:1086
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
 "Ключ может быть использован для сертифицирования, подписи и шифрования."
 
-#: src/gpgmetools.c:1089
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Ключ может быть использован для сертифицирования и подписи, но не для "
 "шифрования."
 
-#: src/gpgmetools.c:1095
 msgid "The key can be used for certification and encryption."
 msgstr "Ключ может быть использован для сертифицирования и шифрования."
 
-#: src/gpgmetools.c:1098
 msgid "The key can be used only for certification."
 msgstr "Ключ может быть использован только для сертифицирования."
 
-#: src/gpgmetools.c:1106
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -1111,131 +865,103 @@ msgstr ""
 "Ключ может быть использован для подписи и шифрования, но не для "
 "сертифицирования."
 
-#: src/gpgmetools.c:1109
 msgid "The key can be used only for signing."
 msgstr "Ключ может быть использован только для подписи."
 
-#: src/gpgmetools.c:1114
 msgid "The key can be used only for encryption."
 msgstr "Ключ может быть использован только для шифрования."
 
-#: src/gpgmetools.c:1117
 msgid "This key is useless."
 msgstr "Данный ключ бесполезен/неприменим."
 
-#: src/gpgmetools.c:1455
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
-#: src/gpgmetools.c:1505
 #, fuzzy
 msgid "You must enter a name."
 msgstr "Введите ID пользователя."
 
-#: src/gpgmetools.c:1507
 msgid "Invalid character in name."
 msgstr ""
 
-#: src/gpgmetools.c:1509
 msgid "Name may not start with a digit."
 msgstr ""
 
-#: src/gpgmetools.c:1511
 msgid "Name is too short."
 msgstr ""
 
-#: src/gpgmetools.c:1583
 msgid "Email address is not valid."
 msgstr ""
 
-#: src/gpgmetools.c:1597
 msgid "Invalid character in comments."
 msgstr ""
 
-#: src/gtktools.c:48
 msgid "GPA Error"
 msgstr "Ошибка GPA"
 
-#: src/helpmenu.c:83
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "Как работает GNU Privacy Assistant"
 
-#: src/helpmenu.c:88
 msgid "About GPA"
 msgstr "О программе GPA"
 
 #. TRANSLATORS: The translation of this string should
 #. be your name and mail
-#: src/helpmenu.c:101
 msgid "translator-credits"
 msgstr ""
 
-#: src/helpmenu.h:29
 #, fuzzy
 msgid "_Help"
 msgstr "/Сп_равка"
 
-#: src/helpmenu.h:32
 #, fuzzy
 msgid "Open the GPA manual"
 msgstr "Открыть менеджер файлов"
 
-#: src/helpmenu.h:35
 #, fuzzy
 msgid "About this application"
 msgstr "Вырезать выделенное в буфер"
 
-#: src/icons.c:203
 #, fuzzy
 msgid "_Verify"
 msgstr "Проверить"
 
-#: src/icons.c:204
 #, fuzzy
 msgid "_Encrypt"
 msgstr "Зашифровать"
 
-#: src/icons.c:205
 #, fuzzy
 msgid "_Decrypt"
 msgstr "Расшифровать"
 
-#: src/icons.c:206
 #, fuzzy
 msgid "_Brief"
 msgstr "Кратко"
 
-#: src/icons.c:207
 #, fuzzy
 msgid "_Detailed"
 msgstr "Подробно"
 
-#: src/icons.c:208
 #, fuzzy
 msgid "_Keyring Manager"
 msgstr "Менеджер _файлов"
 
-#: src/icons.c:209
 #, fuzzy
 msgid "_Clipboard"
 msgstr "Буфер"
 
-#: src/icons.c:210
 #, fuzzy
 msgid "_File Manager"
 msgstr "Менеджер _файлов"
 
-#: src/icons.c:211
 #, fuzzy
 msgid "_Card Manager"
 msgstr "Менеджер _файлов"
 
-#: src/keydeletedlg.c:41
 msgid "Removing Secret Key"
 msgstr "Удаление закрытого ключа"
 
-#: src/keydeletedlg.c:55
 msgid ""
 "If you delete this key, you won't be able to\n"
 "read messages encrypted with it.\n"
@@ -1247,15 +973,12 @@ msgstr ""
 "\n"
 "Удалить ключ?"
 
-#: src/keydeletedlg.c:91
 msgid "Remove Key"
 msgstr "Удалить ключ"
 
-#: src/keydeletedlg.c:104
 msgid "You have selected the following key for removal:"
 msgstr "Этот ключ будет удален:"
 
-#: src/keydeletedlg.c:114
 msgid ""
 "This key has a secret key. Deleting this key cannot be undone, unless you "
 "have a backup copy."
@@ -1263,7 +986,6 @@ msgstr ""
 "Присутствует закрытый ключ. Восстановить его можно только из резервной копии "
 "(если она есть)."
 
-#: src/keydeletedlg.c:123
 msgid ""
 "This key is a public key. Deleting this key cannot be undone easily, "
 "although you may be able to get a new copy  from the owner or from a key "
@@ -1272,97 +994,74 @@ msgstr ""
 "Это открытый ключ. После удаления восстановить открытый ключ можно, только "
 "получив его у владельца или с сервера ключей."
 
-#: src/keydeletedlg.c:132
 msgid "Are you sure you want to delete this key?"
 msgstr "Вы действительно хотите удалить этот ключ?"
 
-#: src/keyeditdlg.c:148
 msgid "Edit Key"
 msgstr "Редактировать ключ"
 
-#: src/keyeditdlg.c:163
 msgid "Change _passphrase"
 msgstr "Изменить пароль"
 
-#: src/keyeditdlg.c:183
 msgid "Change _expiration"
 msgstr "Изменить срок годности"
 
-#: src/keygendlg.c:40
 msgid "RSA"
 msgstr ""
 
-#: src/keygendlg.c:41
 msgid "RSA (sign only)"
 msgstr "RSA (только шифрование)"
 
-#: src/keygendlg.c:42
 msgid "DSA"
 msgstr ""
 
-#: src/keygendlg.c:43
 msgid "DSA (sign only)"
 msgstr "DSA (только подпись)"
 
-#: src/keygendlg.c:136
 #, fuzzy
 msgid "You must enter a key size."
 msgstr "Введите ID пользователя."
 
-#: src/keygendlg.c:190
 #, fuzzy
 msgid "Generate card key"
 msgstr "Генерация ключа"
 
-#: src/keygendlg.c:190 src/keygenwizard.c:387 src/keygenwizard.c:400
-#: src/keygenwizard.c:410 src/keygenwizard.c:421 src/keygenwizard.c:438
-#: src/keygenwizard.c:450 src/cardman.c:630
 msgid "Generate key"
 msgstr "Генерация ключа"
 
-#: src/keygendlg.c:211
 msgid "_Algorithm: "
 msgstr "Алгоритм: "
 
-#: src/keygendlg.c:237
 msgid "_Key size (bits): "
 msgstr "Длина ключа (бит): "
 
-#: src/keygendlg.c:262
 #, fuzzy
 msgid "User ID: "
 msgstr "Имя пользователя"
 
-#: src/keygendlg.c:278
 msgid "_Name: "
 msgstr ""
 
-#: src/keygendlg.c:291
 msgid "_Email: "
 msgstr "_Email: "
 
-#: src/keygendlg.c:304
 msgid "_Comment: "
 msgstr "Комментарий: "
 
-#: src/keygendlg.c:317
 #, fuzzy
 msgid "_Expires: "
 msgstr "Годен до:"
 
-#: src/keygendlg.c:329
 #, fuzzy
 msgid "Backup: "
 msgstr "Создать резервную копию"
 
-#: src/keygendlg.c:341
 msgid ""
 "If checked the encryption key will be created and stored to a backup file "
 "and then loaded into the card.  This is recommended so that encrypted "
 "messages can be decrypted even if the card has a malfunction."
 msgstr ""
 
-#: src/keygenwizard.c:175
 msgid ""
 "Please insert your full name.\n"
 "\n"
@@ -1374,11 +1073,9 @@ msgstr ""
 "Ваше имя станет часть вновь создаваемого ключа и поможет другим найти Ваш "
 "ключ."
 
-#: src/keygenwizard.c:178
 msgid "Your Name:"
 msgstr "Ваше имя (англ.):"
 
-#: src/keygenwizard.c:212
 #, fuzzy
 msgid ""
 "Please insert your email address.\n"
@@ -1393,11 +1090,9 @@ msgstr ""
 "опознавать ваш ключ.\n"
 "Если вы используете несколько адресов email, вы можете добавить их позже."
 
-#: src/keygenwizard.c:216
 msgid "Your Email Address:"
 msgstr "Ваш адрес email:"
 
-#: src/keygenwizard.c:235
 msgid ""
 "It is recommended that you create a backup copy of your new key, once it has "
 "been generated.\n"
@@ -1408,15 +1103,12 @@ msgstr ""
 "\n"
 "Сделать резервную копию?"
 
-#: src/keygenwizard.c:243
 msgid "Create _backup copy"
 msgstr "Создать резервную копию"
 
-#: src/keygenwizard.c:248 src/keymanager.c:731 src/keymanager.c:757
 msgid "Do it _later"
 msgstr "Позже"
 
-#: src/keygenwizard.c:277
 msgid ""
 "Your key is being generated.\n"
 "\n"
@@ -1427,7 +1119,6 @@ msgstr ""
 "Даже на быстрых компьютерах это занимает некоторое время. Пожалуйста, "
 "подождите."
 
-#: src/keygenwizard.c:289
 #, fuzzy, c-format
 msgid ""
 "Congratulations!\n"
@@ -1440,7 +1131,6 @@ msgstr ""
 "Создание ключа успешно завершено. Новый ключ имеет абсолютную достоверность "
 "и длину 1024 бит."
 
-#: src/keylist.c:360
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1448,25 +1138,20 @@ msgstr ""
 "GnuPG перестраивает базу с записями об уровне доверия.\n"
 "Это может занять несколько секунд."
 
-#: src/keylist.c:585
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#: src/keylist.c:594
 msgid "The key ID is a short number to identify a certificate."
 msgstr "ID ключа - короткий номер для идентификации сертификата."
 
-#: src/keylist.c:607
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Срок годности определяет продолжительность действия сертификата."
 
-#: src/keylist.c:617 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "Доверие владельцу"
 
-#: src/keylist.c:618
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
@@ -1476,11 +1161,9 @@ msgstr ""
 "насколько доверяете владельцу сертификата подписывать другие сертификаты. "
 "(Актуально только для OpenPGP)."
 
-#: src/keylist.c:630
 msgid "Validity"
 msgstr "Достоверность"
 
-#: src/keylist.c:631
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
@@ -1488,17 +1171,14 @@ msgstr ""
 "Достоверность - уровень доверия к данному сертификату (насколько можно быть "
 "уверенным, что сертификат действительно принадлежит данному лицу)."
 
-#: src/keylist.c:645
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr "Имя владельца сертификата и (часто) его электронный адрес."
 
-#: src/keymanager.c:447
 msgid "No keys selected for signing."
 msgstr "Не выбран ключ для подписи."
 
-#: src/keymanager.c:726
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1506,11 +1186,9 @@ msgstr ""
 "У вас пока нет закрытого ключа. Хотите создать его сейчас (рекомендуется) "
 "или позже?"
 
-#: src/keymanager.c:730
 msgid "_Generate key now"
 msgstr "Создать ключ"
 
-#: src/keymanager.c:751
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1518,192 +1196,150 @@ msgstr ""
 "Вы еще не сделали резервную копию закрытого ключа. Хотите сделать ее сейчас "
 "(рекомендуется) или позже?"
 
-#: src/keymanager.c:756
 msgid "_Backup key now"
 msgstr "Создать резервную копию"
 
-#: src/keymanager.c:869
 #, fuzzy
 msgid "_Keys"
 msgstr "/_Ключи"
 
-#: src/keymanager.c:870
 #, fuzzy
 msgid "_Server"
 msgstr "/_Сервер"
 
-#: src/keymanager.c:884
 msgid "Select all certificates"
 msgstr ""
 
-#: src/keymanager.c:889
 msgid "Refresh the keyring"
 msgstr "Обновить связку ключей"
 
-#: src/keymanager.c:890
 #, fuzzy
 msgid "_New key..."
 msgstr "/Ключи/_Создать..."
 
-#: src/keymanager.c:891
 #, fuzzy
 msgid "Generate a new key"
 msgstr "Генерация ключа"
 
-#: src/keymanager.c:892
 #, fuzzy
 msgid "_Delete keys"
 msgstr "/Удалить ключи..."
 
-#: src/keymanager.c:893
 msgid "Remove the selected key"
 msgstr "Удалить выбранный ключ"
 
-#: src/keymanager.c:894
 #, fuzzy
 msgid "_Sign Keys..."
 msgstr "/Подписать ключи..."
 
-#: src/keymanager.c:895
 msgid "Sign the selected key"
 msgstr "Подписать выбранный ключ"
 
-#: src/keymanager.c:896
 #, fuzzy
 msgid "Set _Owner Trust..."
 msgstr "/Доверие владельцу..."
 
-#: src/keymanager.c:897
 #, fuzzy
 msgid "Set owner trust of the selected key"
 msgstr "Удалить выбранный ключ"
 
-#: src/keymanager.c:899
 #, fuzzy
 msgid "_Edit Private Key..."
 msgstr "/Редактировать закрытый ключ..."
 
-#: src/keymanager.c:900
 msgid "Edit the selected private key"
 msgstr "Правка выделенного закрытого ключа"
 
-#: src/keymanager.c:902
 #, fuzzy
 msgid "_Import Keys..."
 msgstr "Импорт ключей"
 
-#: src/keymanager.c:903
 msgid "Import Keys"
 msgstr "Импорт ключей"
 
-#: src/keymanager.c:904
 #, fuzzy
 msgid "E_xport Keys..."
 msgstr "/Экспортировать ключи..."
 
-#: src/keymanager.c:905
 msgid "Export Keys"
 msgstr "Экспорт ключей"
 
-#: src/keymanager.c:906
 #, fuzzy
 msgid "_Backup..."
 msgstr "/Резервная копия..."
 
-#: src/keymanager.c:907
 #, fuzzy
 msgid "Backup key"
 msgstr "Создать резервную копию"
 
-#: src/keymanager.c:910
 #, fuzzy
 msgid "_Retrieve Keys..."
 msgstr "/Сервер/_Загрузить ключи..."
 
-#: src/keymanager.c:911
 msgid "Retrieve keys from server"
 msgstr ""
 
-#: src/keymanager.c:913
 #, fuzzy
 msgid "_Send Keys..."
 msgstr "/Подписать ключи..."
 
-#: src/keymanager.c:914
 #, fuzzy
 msgid "Send keys to server"
 msgstr "/Отправить на сервер..."
 
-#: src/keymanager.c:920
 msgid "Show Brief Keylist"
 msgstr "Краткий список ключей"
 
-#: src/keymanager.c:922
 msgid "Show Key Details"
 msgstr "Подробный список ключей"
 
-#: src/keymanager.c:1049
 msgid "Edit"
 msgstr "Правка"
 
-#: src/keymanager.c:1051
 #, fuzzy
 msgid "Delete"
 msgstr "/Правка/_Удалить"
 
-#: src/keymanager.c:1053
 msgid "Sign"
 msgstr "Подписать"
 
-#: src/keymanager.c:1055
 msgid "Export"
 msgstr "Экспорт"
 
-#: src/keymanager.c:1057
 msgid "Import"
 msgstr "Импорт"
 
-#: src/keymanager.c:1188
 msgid "Selected default key:"
 msgstr "Ключ по умолчанию:"
 
-#: src/keymanager.c:1198
 msgid "No default key selected in the preferences."
 msgstr "В настройках не выбран ключ по умолчанию."
 
-#: src/keymanager.c:1289
 #, fuzzy
 msgid "GNU Privacy Assistant - Key Manager"
 msgstr "GNU Privacy Assistant - Менеджер файлов"
 
-#: src/keymanager.c:1317
 #, fuzzy
 msgid "Key Manager"
 msgstr "Менеджер _файлов"
 
-#: src/gpa-key-details.c:132
 #, fuzzy
 msgid "The key has both a smartcard based private part and a public part"
 msgstr "Закрытый и открытый ключи"
 
-#: src/gpa-key-details.c:136
 msgid "The key has both a private and a public part"
 msgstr "Закрытый и открытый ключи"
 
-#: src/gpa-key-details.c:140
 msgid "The key has only a public part"
 msgstr "Только открытый ключ"
 
-#: src/gpa-key-details.c:176
 #, c-format
 msgid "%s %u bits"
 msgstr "%s %u бит"
 
-#: src/gpa-key-details.c:202
 msgid "No keys selected"
 msgstr "Не выбран ключ"
 
-#: src/gpa-key-details.c:205
 #, c-format
 msgid "%d key selected"
 msgid_plural "%d keys selected"
@@ -1711,76 +1347,59 @@ msgstr[0] "%d ключ выбран"
 msgstr[1] "%d ключа выбрано"
 msgstr[2] "%d ключей выбрано"
 
-#: src/gpa-key-details.c:287
 #, fuzzy
 msgid "User name:"
 msgstr "Имя:"
 
-#: src/gpa-key-details.c:291 src/keysigndlg.c:106
 msgid "Fingerprint:"
 msgstr "Отпечаток:"
 
-#: src/gpa-key-details.c:293
 msgid "Expires at:"
 msgstr "Годен до:"
 
-#: src/gpa-key-details.c:295
 msgid "Owner Trust:"
 msgstr "Доверие владельцу:"
 
-#: src/gpa-key-details.c:297
 #, fuzzy
 msgid "Key validity:"
 msgstr "Достоверность ключа:"
 
-#: src/gpa-key-details.c:299
 #, fuzzy
 msgid "Key type:"
 msgstr "Тип ключа:"
 
-#: src/gpa-key-details.c:301
 msgid "Created at:"
 msgstr "Создан:"
 
-#: src/gpa-key-details.c:304
 msgid "Details"
 msgstr "Подробно"
 
-#: src/gpa-key-details.c:350
 msgid "Show signatures on user name:"
 msgstr "Показать подписи имени владельца:"
 
-#: src/gpa-key-details.c:386
 #, fuzzy
 msgid "Chain"
 msgstr "Может подпис."
 
-#: src/gpa-key-details.c:386
 msgid "Signatures"
 msgstr "Подписи"
 
-#: src/gpa-key-details.c:408
 msgid "All signatures"
 msgstr "Все подписи"
 
-#: src/gpa-key-details.c:470
 msgid "Subkeys"
 msgstr "Подключи"
 
-#: src/gpa-key-details.c:470
 #, fuzzy
 msgid "Key"
 msgstr "/_Ключи"
 
-#: src/keysigndlg.c:59
 msgid "Sign Key"
 msgstr "Подпись ключа"
 
-#: src/keysigndlg.c:72
 msgid "Do you want to sign the following key?"
 msgstr "Подписать этот ключ?"
 
-#: src/keysigndlg.c:116
 msgid ""
 "Check the name and fingerprint carefully to be sure that it really is the "
 "key you want to sign."
@@ -1788,19 +1407,15 @@ msgstr ""
 "Тщательно сверьте имя и отпечаток ключа. Нужно быть уверенным, что вы "
 "подписываете именно тот ключ, который хотите."
 
-#: src/keysigndlg.c:124
 msgid "All user names in this key will be signed."
 msgstr "Все имена в ключе будут подписаны."
 
-#: src/keysigndlg.c:130
 msgid "The key will be signed with your default private key."
 msgstr "Ключ будет подписан вашим закрытым ключом по умолчанию."
 
-#: src/keysigndlg.c:137
 msgid "Sign only _locally"
 msgstr "Подписать только локально"
 
-#: src/options.c:329
 msgid ""
 "The private key you selected as default is no longer available.\n"
 "GPA will try to choose a new default key automatically."
@@ -1808,36 +1423,29 @@ msgstr ""
 "Закрытый ключ по умолчанию более не доступен.\n"
 "GPA попытается автоматически выбрать новый ключ по умолчанию."
 
-#: src/ownertrustdlg.c:106
 msgid "Change key ownertrust"
 msgstr "Смена доверия"
 
-#: src/ownertrustdlg.c:130
 msgid "_Unknown"
 msgstr "Неизвестно"
 
-#: src/ownertrustdlg.c:135
 msgid ""
 "You don't know how much to trust this user to verify other people's keys.\n"
 msgstr ""
 "Неизвестно, можно ли доверять этому пользователю подписывать ключи других "
 "людей.\n"
 
-#: src/ownertrustdlg.c:145
 msgid "_Never"
 msgstr "Нет"
 
-#: src/ownertrustdlg.c:150
 msgid ""
 "You don't trust this user at all to verify the validity of other people's "
 "keys at all.\n"
 msgstr "Никакого доверия этому пользователю.\n"
 
-#: src/ownertrustdlg.c:160
 msgid "_Marginal"
 msgstr "Ограниченное"
 
-#: src/ownertrustdlg.c:165
 msgid ""
 "You don't trust this user's ability to verify the validity of other people's "
 "keys enough to consider keys valid based on his/her sole word.\n"
@@ -1850,11 +1458,9 @@ msgstr ""
 "Однако если еще минимум двое пользователей с таким же уровнем доверия "
 "подпишут тот же ключ, такой ключ можно будет считать достоверным\n"
 
-#: src/ownertrustdlg.c:182
 msgid "_Full"
 msgstr "Полное"
 
-#: src/ownertrustdlg.c:187
 msgid ""
 "You trust this user's ability to verify the validity of other people's keys "
 "so much, that you'll consider valid any key signed by him/her, provided this "
@@ -1863,11 +1469,9 @@ msgstr ""
 "Пользователь обладает достаточным уровнем доверия. Подписанные им чужие "
 "ключи можно считать достоверными.\n"
 
-#: src/ownertrustdlg.c:200
 msgid "U_ltimate"
 msgstr "Абсолютное"
 
-#: src/ownertrustdlg.c:205
 msgid ""
 "You consider this key valid, and trust the user so much that you will "
 "consider any key signed by him/her fully valid.\n"
@@ -1881,7 +1485,6 @@ msgstr ""
 "(Абсолютное доверие - для ваших ключей. Не используйте его для других "
 "ключей, если не доверяете этим ключам и их владельцам на 100%)\n"
 
-#: src/passwddlg.c:45
 msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
@@ -1889,7 +1492,6 @@ msgstr ""
 "В полях \"Пароль\" и \"Повторите\",\n"
 "нужно ввести одинаковые пароли."
 
-#: src/passwddlg.c:52
 msgid ""
 "You did not enter a passphrase.\n"
 "It is needed to protect your private key."
@@ -1897,7 +1499,6 @@ msgstr ""
 "Вы не ввели пароль.\n"
 "Пароль требуется для защиты вашего закрытого ключа."
 
-#: src/passwddlg.c:65
 msgid ""
 "Warning: You have entered a passphrase\n"
 "that is obviously not secure.\n"
@@ -1909,182 +1510,141 @@ msgstr ""
 "\n"
 "Пожалуйста, введите новый пароль."
 
-#: src/passwddlg.c:70
 msgid "_Enter new passphrase"
 msgstr "_Новый пароль"
 
-#: src/passwddlg.c:71
 msgid "Take this one _anyway"
 msgstr "Буду _использовать этот"
 
-#: src/passwddlg.c:96
 msgid "Choose new passphrase"
 msgstr "Выберите новый пароль"
 
-#: src/passwddlg.c:111
 msgid "Passphrase: "
 msgstr "Пароль: "
 
-#: src/passwddlg.c:120
 msgid "Repeat Passphrase: "
 msgstr "Повторите пароль: "
 
-#: src/recipientdlg.c:165
 msgid "Recipient"
 msgstr ""
 
-#: src/recipientdlg.c:166
 msgid ""
 "Shows the recipients of the message. A key needs to be assigned to each "
 "recipient."
 msgstr ""
 
-#: src/recipientdlg.c:174
 msgid "Checked if at least one matching OpenPGP certificate has been found."
 msgstr ""
 
-#: src/recipientdlg.c:182
 msgid ""
 "Checked if at least one matching X.509 certificate for use with S/MIME has "
 "been found."
 msgstr ""
 
-#: src/recipientdlg.c:192
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
 "selected."
 msgstr ""
 
-#: src/recipientdlg.c:306
 msgid ""
 "You need to select a key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
 
-#: src/recipientdlg.c:314
 msgid ""
 "You need to select exactly one key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
 
-#: src/recipientdlg.c:321
 msgid ""
 "Although you selected keys for all recipients a common encryption protocol "
 "can't be used. Please decide on one protocol by clicking one of the above "
 "radio buttons."
 msgstr ""
 
-#: src/recipientdlg.c:327
 msgid "Using OpenPGP for encryption."
 msgstr ""
 
-#: src/recipientdlg.c:332
 msgid "Using S/MIME for encryption."
 msgstr ""
 
-#: src/recipientdlg.c:336
 msgid "No recipients - encryption is not possible"
 msgstr ""
 
-#: src/recipientdlg.c:422
 msgid "[Ambiguous keys. Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:424
 msgid "[Ambiguous PGP key.  Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:426
 msgid "[Ambiguous X.509 key. Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:439
 msgid "[Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:824
 msgid "Select _PGP key..."
 msgstr ""
 
-#: src/recipientdlg.c:826
 msgid "Select _S\\/MIME key..."
 msgstr ""
 
-#: src/recipientdlg.c:828
 msgid "Toggle _Ignore flag"
 msgstr ""
 
-#: src/recipientdlg.c:942
 msgid "Select keys for recipients"
 msgstr ""
 
-#: src/recipientdlg.c:959
 msgid "_Recipient list"
 msgstr ""
 
-#: src/recipientdlg.c:982
 msgid "Use _PGP"
 msgstr ""
 
-#: src/recipientdlg.c:985
 msgid "Use _X.509"
 msgstr ""
 
-#: src/recipientdlg.c:988
 #, fuzzy
 msgid "_Auto selection"
 msgstr "Вырезать выделенное в буфер"
 
-#: src/selectkeydlg.c:179
 #, fuzzy
 msgid "Select a key"
 msgstr "Ключ по умолчанию:"
 
-#: src/server-access.c:294
 msgid "No error"
 msgstr "Нет ошибок"
 
-#: src/server-access.c:297
 msgid "Internal error"
 msgstr "Внутренняя ошибка"
 
-#: src/server-access.c:300
 msgid "Operation not supported"
 msgstr "Действие не поддерживается"
 
-#: src/server-access.c:303
 msgid "Version mismatch"
 msgstr "Несоответствие версии"
 
-#: src/server-access.c:306
 msgid "Internal keyserver error"
 msgstr "Внутренняя ошибка сервера ключей"
 
-#: src/server-access.c:309
 msgid "Out of memory"
 msgstr "Недостаточно памяти"
 
-#: src/server-access.c:312
 msgid "Key not found"
 msgstr "Ключ не найден"
 
-#: src/server-access.c:315
 msgid "Key already exists on server"
 msgstr "Ключ уже существует на сервере"
 
-#: src/server-access.c:318
 msgid "Key incomplete"
 msgstr "Ключ неполный"
 
-#: src/server-access.c:321
 msgid "Could not contact keyserver"
 msgstr "Не удалось связаться с сервером"
 
-#: src/server-access.c:324
 msgid "Unknown Error"
 msgstr "Неизвестная ошибка"
 
-#: src/server-access.c:360
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -2093,7 +1653,6 @@ msgstr ""
 "Подключение к серверу \"%s\".\n"
 "Подождите, пожалуйста."
 
-#: src/server-access.c:383 src/server-access.c:403
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -2104,7 +1663,6 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/server-access.c:469
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
@@ -2112,67 +1670,52 @@ msgstr ""
 "Отсутствует плагин выбранного протокола\n"
 "для связи с сервером ключей."
 
-#: src/server-access.c:542 src/server-access.c:586
 msgid "The keyserver you specified is not valid"
 msgstr "Некорректно задан сервер ключей"
 
-#: src/settingsdlg.c:133 src/siglist.c:134
 msgid "Local"
 msgstr "Локал."
 
-#: src/settingsdlg.c:134
 msgid "Local, Keyserver"
 msgstr ""
 
-#: src/settingsdlg.c:135
 #, fuzzy
 msgid "Local, PKA"
 msgstr "Локал."
 
-#: src/settingsdlg.c:136
 msgid "Local, PKA, Keyserver"
 msgstr ""
 
-#: src/settingsdlg.c:137
 msgid "Local, Keyserver, PKA"
 msgstr ""
 
-#: src/settingsdlg.c:138
 #, fuzzy
 msgid "Local, kDNS"
 msgstr "Локал."
 
-#: src/settingsdlg.c:139
 msgid "Local, kDNS, Keyserver"
 msgstr ""
 
-#: src/settingsdlg.c:140
 msgid "PKA"
 msgstr ""
 
-#: src/settingsdlg.c:141
 msgid "kDNS"
 msgstr ""
 
-#: src/settingsdlg.c:142
 msgid "Custom"
 msgstr ""
 
-#: src/settingsdlg.c:208
 #, fuzzy
 msgid "<b>User interface</b>"
 msgstr "<b>Рас_ширенный режим</b>"
 
-#: src/settingsdlg.c:215
 #, fuzzy
 msgid "Use _advanced mode"
 msgstr "<b>Рас_ширенный режим</b>"
 
-#: src/settingsdlg.c:221
 msgid "Show advanced _options"
 msgstr ""
 
-#: src/settingsdlg.c:272
 msgid ""
 "No default key has been selected.  This may lead to problems when signing or "
 "encrypting.  For example you might later not be able to read a mail written "
@@ -2181,29 +1724,23 @@ msgid ""
 "Please consider creating your own key and select it then."
 msgstr ""
 
-#: src/settingsdlg.c:278
 msgid "Continue without a default key"
 msgstr ""
 
-#: src/settingsdlg.c:280
 #, fuzzy
 msgid "Let me select a default key"
 msgstr "Ключ по умолчанию:"
 
-#: src/settingsdlg.c:305
 msgid "<b>Default _key</b>"
 msgstr "<b>_Ключ по умолчанию</b>"
 
-#: src/settingsdlg.c:405
 msgid "<b>Default key_server</b>"
 msgstr "<b>_Сервер ключей по умолчанию</b>"
 
-#: src/settingsdlg.c:602
 #, fuzzy
 msgid "<b>Auto key _locate</b>"
 msgstr "<b>_Сервер ключей по умолчанию</b>"
 
-#: src/settingsdlg.c:612
 msgid ""
 "The list of methods to locate keys via an email address.\n"
 "All given methods are used in turn until a matching key is found.  The "
@@ -2220,87 +1757,68 @@ msgid ""
 "   - Configured in the backend dialog.\n"
 msgstr ""
 
-#: src/settingsdlg.c:627
 msgid "Method:"
 msgstr ""
 
-#: src/settingsdlg.c:644
 msgid "The IP address of the nameserver used for the kDNS method."
 msgstr ""
 
-#: src/settingsdlg.c:646
 #, fuzzy
 msgid "kDNS Server:"
 msgstr "/_Сервер"
 
-#: src/settingsdlg.c:740
 #, fuzzy
 msgid "The URL given for the keyserver is not valid."
 msgstr "Некорректно задан сервер ключей"
 
-#: src/settingsdlg.c:749
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 
-#: src/settingsdlg.c:886
 #, fuzzy
 msgid "GNU Privacy Assistant - Settings"
 msgstr "GNU Privacy Assistant - Менеджер ключей"
 
-#: src/siglist.c:127
 msgid "Level"
 msgstr "Уровень"
 
-#: src/verifydlg.c:116
 msgid "Verify documents"
 msgstr "Проверить файлы"
 
-#: src/verifydlg.c:232
 msgid "Expired Key"
 msgstr "Ключ устарел"
 
-#: src/verifydlg.c:240
 msgid "Key NOT valid"
 msgstr "Ключ НЕ достоверен"
 
-#: src/verifydlg.c:359
 #, c-format
 msgid "Verified data in file: %s"
 msgstr "Проверены данные файла: %s"
 
-#: src/verifydlg.c:364
 #, c-format
 msgid "Signature: %s"
 msgstr "Подпись: %s"
 
-#: src/verifydlg.c:370
 msgid "Signatures:"
 msgstr "Подписи:"
 
-#: src/cardman.c:166
 #, fuzzy
 msgid "GNU Privacy Assistant - Card Manager"
 msgstr "GNU Privacy Assistant - Менеджер файлов"
 
-#: src/cardman.c:187
 #, c-format
 msgid "%s card detected."
 msgstr ""
 
-#: src/cardman.c:194
 msgid "Checking for card..."
 msgstr ""
 
-#: src/cardman.c:361
 #, fuzzy
 msgid "No card found."
 msgstr "Ключи не обнаружены."
 
-#: src/cardman.c:367
 msgid "The selected card application is currently not available."
 msgstr ""
 
-#: src/cardman.c:368
 msgid ""
 "Another process is using a different card application than the selected "
 "one.\n"
@@ -2309,60 +1827,47 @@ msgid ""
 "active application."
 msgstr ""
 
-#: src/cardman.c:378
 msgid "The selected card application is not available."
 msgstr ""
 
-#: src/cardman.c:384
 msgid "Error accessing the card."
 msgstr ""
 
-#: src/cardman.c:385 src/cardman.c:418
 msgid "Error accessing card"
 msgstr ""
 
-#: src/cardman.c:413
 msgid "No card"
 msgstr ""
 
-#: src/cardman.c:621
 #, fuzzy
 msgid "_Card"
 msgstr "Буфер"
 
-#: src/cardman.c:629
 msgid "Reload card information"
 msgstr ""
 
-#: src/cardman.c:631
 #, fuzzy
 msgid "Generate new key on card"
 msgstr "Генерация ключа"
 
-#: src/cardman.c:756
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "Действие не поддерживается"
 
-#: src/cardman.c:891
 #, fuzzy
 msgid "Card Manager"
 msgstr "Менеджер _файлов"
 
-#: src/cardman.c:899
 #, fuzzy
 msgid "Application selection:"
 msgstr "Вырезать выделенное в буфер"
 
-#: src/cardman.c:903
 msgid "Auto"
 msgstr ""
 
-#: src/cardman.c:980
 msgid "The GPGME library is too old to support smartcards."
 msgstr ""
 
-#: src/cm-openpgp.c:162
 msgid ""
 "<b>Admin-PIN Required</b>\n"
 "\n"
@@ -2379,75 +1884,58 @@ msgid ""
 "This notice will be shown only once per session."
 msgstr ""
 
-#: src/cm-openpgp.c:281 src/cm-netkey.c:968
 msgid "PUK retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:282
 msgid "CHV2 retry counter: "
 msgstr ""
 
-#: src/cm-openpgp.c:394 src/cm-netkey.c:156
 #, fuzzy
 msgid "Reset PIN"
 msgstr "Сбросить"
 
-#: src/cm-openpgp.c:394 src/cm-openpgp.c:416 src/cm-netkey.c:157
 msgid "Change PIN"
 msgstr ""
 
-#: src/cm-openpgp.c:404 src/cm-netkey.c:157
 msgid "Change PUK"
 msgstr ""
 
-#: src/cm-openpgp.c:404 src/cm-netkey.c:156
 #, fuzzy
 msgid "Reset PUK"
 msgstr "Сбросить"
 
-#: src/cm-openpgp.c:675
 #, c-format
 msgid ""
 "Error saving the changed values.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:698
 msgid "Only plain ASCII is currently allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:700
 msgid "The \"<\" character may not be used."
 msgstr ""
 
-#: src/cm-openpgp.c:702
 msgid "Double spaces are not allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:734
 msgid ""
 "Total length of first and last name may not be longer than 39 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:737 src/cm-openpgp.c:775 src/cm-openpgp.c:802
-#: src/cm-openpgp.c:826 src/cm-openpgp.c:851 src/cm-openpgp.c:872
 #, fuzzy
 msgid "Saving the field failed."
 msgstr "Подписать выбранный файл"
 
-#: src/cm-openpgp.c:761
 msgid "Invalid length of the language preference."
 msgstr ""
 
-#: src/cm-openpgp.c:769
 msgid "The language preference may only contain the letters 'a' through 'z'."
 msgstr ""
 
-#: src/cm-openpgp.c:821 src/cm-openpgp.c:846
 msgid "The field may not be longer than 254 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:1072
 msgid ""
 "<b>Unblocking the PIN</b>\n"
 "\n"
@@ -2461,7 +1949,6 @@ msgid ""
 "at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1086
 msgid ""
 "<b>Changing the PIN</b>\n"
 "\n"
@@ -2477,7 +1964,6 @@ msgid ""
 "PIN.  Please check the instructions of your issuer."
 msgstr ""
 
-#: src/cm-openpgp.c:1103
 msgid ""
 "<b>Changing the Reset Code</b>\n"
 "\n"
@@ -2489,7 +1975,6 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1113
 msgid ""
 "<b>Reseting the PIN or the Reset Code</b>\n"
 "\n"
@@ -2507,7 +1992,6 @@ msgid ""
 "repeat that new value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1130
 msgid ""
 "<b>Changing the Admin-PIN</b>\n"
 "\n"
@@ -2525,130 +2009,103 @@ msgid ""
 "value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1173 src/cm-netkey.c:793
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:1287
 #, c-format
 msgid ""
 "Error fetching the key.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:1300
 #, c-format
 msgid "Keys found: %d, imported: %d, unchanged: %d"
 msgstr ""
 
-#: src/cm-openpgp.c:1322
 msgid "Fetch Key"
 msgstr ""
 
-#: src/cm-openpgp.c:1399 src/cm-netkey.c:889 src/cm-dinsig.c:255
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "<b>Рас_ширенный режим</b>"
 
-#: src/cm-openpgp.c:1409 src/cm-netkey.c:898 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr ""
 
-#: src/cm-openpgp.c:1413 src/cm-netkey.c:902
 msgid "Card version:"
 msgstr ""
 
-#: src/cm-openpgp.c:1417
 msgid "Manufacturer:"
 msgstr ""
 
-#: src/cm-openpgp.c:1426
 #, fuzzy
 msgid "<b>Personal</b>"
 msgstr "Персон."
 
-#: src/cm-openpgp.c:1440
 msgid "Salutation:"
 msgstr ""
 
-#: src/cm-openpgp.c:1445
 msgid "First name:"
 msgstr ""
 
-#: src/cm-openpgp.c:1450
 #, fuzzy
 msgid "Last name:"
 msgstr "Имя:"
 
-#: src/cm-openpgp.c:1455
 msgid "Language:"
 msgstr ""
 
-#: src/cm-openpgp.c:1460
 msgid "Login data:"
 msgstr ""
 
-#: src/cm-openpgp.c:1465
 #, fuzzy
 msgid "Public key URL:"
 msgstr "_Открытые ключи"
 
-#: src/cm-openpgp.c:1473 src/cm-netkey.c:934
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "<b>Главное</b>"
 
-#: src/cm-openpgp.c:1490
 #, fuzzy
 msgid "Signature key:"
 msgstr "Подписи:"
 
-#: src/cm-openpgp.c:1494
 #, fuzzy
 msgid "Encryption key:"
 msgstr "Шифрование..."
 
-#: src/cm-openpgp.c:1498
 #, fuzzy
 msgid "Authentication key:"
 msgstr "Может авториз."
 
-#: src/cm-openpgp.c:1502
 #, fuzzy
 msgid "Signature counter:"
 msgstr "Подписи:"
 
-#: src/cm-openpgp.c:1510 src/cm-netkey.c:950
 #, fuzzy
 msgid "<b>PIN</b>"
 msgstr "<b>Главное</b>"
 
-#: src/cm-openpgp.c:1522
 #, fuzzy
 msgid "Force signature PIN:"
 msgstr "_отделяемая подпись"
 
-#: src/cm-openpgp.c:1526 src/cm-netkey.c:960
 msgid "PIN retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:1540
 msgid "Admin-PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:142
 msgid "blocked"
 msgstr ""
 
-#: src/cm-netkey.c:373
 #, fuzzy
 msgid "Learn keys"
 msgstr "экспорт ключей"
 
-#: src/cm-netkey.c:375
 msgid ""
 "For some or all of the keys available on the card, the GnuPG crypto engine "
 "does not yet know the corresponding certificates.\n"
@@ -2661,12 +2118,10 @@ msgid ""
 "If you are unsure what to do, just click the button."
 msgstr ""
 
-#: src/cm-netkey.c:594
 #, fuzzy
 msgid "Learning keys ..."
 msgstr "Создание ключа..."
 
-#: src/cm-netkey.c:637
 #, c-format
 msgid ""
 "<b>Setting the Initial PIN</b> (%s)\n"
@@ -2686,27 +2141,23 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/cm-netkey.c:651
 msgid ""
 "You are now setting the PIN for the SigG key used to create <b>qualified "
 "signatures</b>.  You may want to set the PIN to the same value as used for "
 "the NKS keys."
 msgstr ""
 
-#: src/cm-netkey.c:654
 msgid ""
 "You are now setting the PIN for the NKS keys used for standard signatures, "
 "encryption and authentication."
 msgstr ""
 
-#: src/cm-netkey.c:683
 #, c-format
 msgid ""
 "Error changing the NullPIN.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-netkey.c:733
 msgid ""
 "<b>Changing a PIN or PUK</b>\n"
 "\n"
@@ -2719,7 +2170,6 @@ msgid ""
 "way to unblock them!"
 msgstr ""
 
-#: src/cm-netkey.c:745
 msgid ""
 "<b>Resetting a PUK</b>\n"
 "\n"
@@ -2736,7 +2186,6 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:759
 msgid ""
 "<b>Resetting a PIN</b>\n"
 "\n"
@@ -2749,30 +2198,24 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:913
 msgid ""
 "<b>A NullPIN is still active on this card</b>.\n"
 "You need to set a real PIN before you can make use of the card."
 msgstr ""
 
-#: src/cm-netkey.c:919
 msgid "Set initial PIN"
 msgstr ""
 
-#: src/cm-netkey.c:940
 #, fuzzy
 msgid "scanning ..."
 msgstr "Подпись..."
 
-#: src/cm-netkey.c:976
 msgid "SigG PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:984
 msgid "SigG PUK retry counter:"
 msgstr ""
 
-#: src/cm-dinsig.c:274
 #, c-format
 msgid ""
 "There is not much information to display for a %s card.  You may want to use "

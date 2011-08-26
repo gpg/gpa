@@ -53,7 +53,7 @@ if test "$1" = "--build-w32"; then
 
     [ -z "$w32root" ] && w32root="$HOME/w32root"
     echo "Using $w32root as standard install directory" >&2
-    
+
     # Locate the cross compiler
     crossbindir=
     for host in i586-mingw32msvc i386-mingw32msvc mingw32; do
@@ -66,11 +66,11 @@ if test "$1" = "--build-w32"; then
     if [ -z "$crossbindir" ]; then
         echo "Cross compiler kit not installed" >&2
         echo "Under Debian GNU/Linux, you may install it using" >&2
-        echo "  apt-get install mingw32 mingw32-runtime mingw32-binutils" >&2 
+        echo "  apt-get install mingw32 mingw32-runtime mingw32-binutils" >&2
         echo "Stop." >&2
         exit 1
     fi
-   
+
     if [ -f "$tsdir/config.log" ]; then
         if ! head $tsdir/config.log | grep "$host" >/dev/null; then
             echo "Please run a 'make distclean' first" >&2
@@ -94,19 +94,19 @@ fi
 
 
 # Grep the required versions from configure.ac
-autoconf_vers=`sed -n '/^AC_PREREQ(/ { 
+autoconf_vers=`sed -n '/^AC_PREREQ(/ {
 s/^.*(\(.*\))/\1/p
 q
 }' ${configure_ac}`
 autoconf_vers_num=`echo "$autoconf_vers" | cvtver`
 
-automake_vers=`sed -n '/^min_automake_version=/ { 
+automake_vers=`sed -n '/^min_automake_version=/ {
 s/^.*="\(.*\)"/\1/p
 q
 }' ${configure_ac}`
 automake_vers_num=`echo "$automake_vers" | cvtver`
 
-gettext_vers=`sed -n '/^AM_GNU_GETTEXT_VERSION(/ { 
+gettext_vers=`sed -n '/^AM_GNU_GETTEXT_VERSION(/ {
 s/^.*(\(.*\))/\1/p
 q
 }' ${configure_ac}`
@@ -133,13 +133,34 @@ fi
 if test "$DIE" = "yes"; then
     cat <<EOF
 
-Note that you may use alternative versions of the tools by setting 
+Note that you may use alternative versions of the tools by setting
 the corresponding environment variables; see README.CVS for details.
-                   
+
 EOF
     exit 1
 fi
 
+# Check the git setup.
+if [ -d .git ]; then
+  if [ -f .git/hooks/pre-commit.sample -a ! -f .git/hooks/pre-commit ] ; then
+    cat <<EOF >&2
+*** Activating trailing whitespace git pre-commit hook. ***
+    For more information see this thread:
+      http://mail.gnome.org/archives/desktop-devel-list/2009-May/msg00084html
+    To deactivate this pre-commit hook again move .git/hooks/pre-commit
+    and .git/hooks/pre-commit.sample out of the way.
+EOF
+      cp -av .git/hooks/pre-commit.sample .git/hooks/pre-commit
+      chmod -c +x  .git/hooks/pre-commit
+  fi
+  tmp=$(git config --get filter.cleanpo.clean)
+  if [ "$tmp" != "awk '/^\"POT-Creation-Date:/&&!s{s=1;next};!/^#: /{print}'" ]
+  then
+    echo "*** Adding GIT filter.cleanpo.clean configuration." >&2
+    git config --add filter.cleanpo.clean \
+        "awk '/^\"POT-Creation-Date:/&&!s{s=1;next};!/^#: /{print}'"
+  fi
+fi
 
 echo "Running aclocal -I m4 ${ACLOCAL_FLAGS:+$ACLOCAL_FLAGS }..."
 $ACLOCAL -I m4  $ACLOCAL_FLAGS

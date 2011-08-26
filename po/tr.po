@@ -7,7 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa 0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2010-05-06 13:11+0200\n"
 "PO-Revision-Date: 2004-06-20 14:42+0300\n"
 "Last-Translator: Mert Çetin <mertc@su.sabanciuniv.edu>\n"
 "Language-Team: xTc & Déjà Vu\n"
@@ -15,442 +14,341 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-9\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/clipboard.c:375 src/fileman.c:389
 msgid "Open File"
 msgstr "Dosyayý Aç"
 
-#: src/clipboard.c:403 src/confdialog.c:1274 src/gtktools.c:85
 msgid "GPA Message"
 msgstr "GPA Mesajý"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#: src/clipboard.c:420
 #, fuzzy, c-format
 msgid "The file %s is %lli%s large.  Do you really  want to open it?"
 msgstr ""
 "%s dosyasý zaten var. \n"
 "Üzerine yazmak istiyor musunuz?"
 
-#: src/clipboard.c:541
 msgid "Save As..."
 msgstr ""
 
-#: src/clipboard.c:582 src/clipboard.c:612 src/clipboard.c:642
-#: src/clipboard.c:672 src/clipboard.c:1038
 msgid "Clipboard"
 msgstr ""
 
-#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:867
-#: src/cardman.c:619
 #, fuzzy
 msgid "_File"
 msgstr "/_Dosya"
 
-#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:868
-#: src/cardman.c:620
 #, fuzzy
 msgid "_Edit"
 msgstr "/Dü_zen"
 
-#: src/clipboard.c:759
 msgid "Clear buffer"
 msgstr ""
 
-#: src/clipboard.c:761 src/fileman.c:517
 msgid "Open a file"
 msgstr "Bir dosya aç"
 
-#: src/clipboard.c:763
 #, fuzzy
 msgid "Save to a file"
 msgstr "Bir dosya aç"
 
-#: src/clipboard.c:765
 #, fuzzy
 msgid "Sign buffer text"
 msgstr "anahtarý imzala"
 
-#: src/clipboard.c:767
 #, fuzzy
 msgid "Check signatures of buffer text"
 msgstr "Seçili dosyanýn imzalarýný kontrol edin"
 
-#: src/clipboard.c:769
 #, fuzzy
 msgid "Encrypt the buffer text"
 msgstr "Seçili dosyayý þifrele"
 
-#: src/clipboard.c:771
 #, fuzzy
 msgid "Decrypt the buffer text"
 msgstr "Seçili dosyayý çöz"
 
-#: src/clipboard.c:773
 msgid "Close the buffer"
 msgstr ""
 
-#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:876
-#: src/cardman.c:625
 msgid "Quit the program"
 msgstr ""
 
-#: src/clipboard.c:781
 #, fuzzy
 msgid "Undo the last action"
 msgstr "Seçili dosyayý þifrele"
 
-#: src/clipboard.c:783
 msgid "Redo the last undone action"
 msgstr ""
 
-#: src/clipboard.c:786
 #, fuzzy
 msgid "Cut the selection"
 msgstr "Seçili dosyayý þifrele"
 
-#: src/clipboard.c:788 src/keymanager.c:880
 #, fuzzy
 msgid "Copy the selection"
 msgstr "Seçili dosyayý þifrele"
 
-#: src/clipboard.c:790 src/keymanager.c:882
 msgid "Paste the clipboard"
 msgstr ""
 
-#: src/clipboard.c:792
 #, fuzzy
 msgid "Delete the selected text"
 msgstr "Seçili dosyayý çöz"
 
-#: src/clipboard.c:794
 msgid "Select the entire document"
 msgstr ""
 
-#: src/clipboard.c:904 src/fileman.c:625 src/cardman.c:710
 #, fuzzy
 msgid "Keyring"
 msgstr "Anahtarlýk Düzenleyicisi"
 
-#: src/clipboard.c:906 src/keymanager.c:1059 src/cardman.c:712
 msgid "Files"
 msgstr "Dosyalar"
 
-#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1061
 msgid "Card"
 msgstr ""
 
-#: src/clipboard.c:1008
 #, fuzzy
 msgid "GNU Privacy Assistant - Clipboard"
 msgstr "GNU Gizlilik Asistaný - Dosya Yöneticisi"
 
-#: src/confdialog.c:994
 msgid "<b>Main</b>"
 msgstr ""
 
-#: src/confdialog.c:1151
 msgid "Use default values"
 msgstr ""
 
-#: src/confdialog.c:1151
 msgid "Use default value"
 msgstr ""
 
-#: src/confdialog.c:1154
 msgid "Do not use option"
 msgstr ""
 
-#: src/confdialog.c:1159
 msgid "Use custom values"
 msgstr ""
 
-#: src/confdialog.c:1159
 msgid "Use custom value"
 msgstr ""
 
-#: src/confdialog.c:1163
 msgid "Use default argument"
 msgstr ""
 
-#: src/confdialog.c:1288
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
 msgstr ""
 
-#: src/confdialog.c:1333
 msgid "Crypto Backend Configuration"
 msgstr ""
 
-#: src/confdialog.c:1339
 msgid "Reset"
 msgstr ""
 
-#: src/confdialog.c:1358
 msgid "Configure the tools of the GnuPG system."
 msgstr ""
 
-#: src/confdialog.c:1362
 #, fuzzy
 msgid "Level:"
 msgstr "Seviye"
 
-#: src/confdialog.c:1371
 #, fuzzy
 msgid "Basic"
 msgstr "/_Yedekle..."
 
-#: src/confdialog.c:1372
 msgid "Advanced"
 msgstr ""
 
-#: src/confdialog.c:1373
 #, fuzzy
 msgid "Expert"
 msgstr "Dýþarý Yaz"
 
-#: src/convert.c:29
 msgid "days"
 msgstr "gün"
 
-#: src/convert.c:30
 msgid "weeks"
 msgstr "hafta"
 
-#: src/convert.c:31
 msgid "months"
 msgstr "ay"
 
-#: src/convert.c:32
 msgid "years"
 msgstr "yýl"
 
-#: src/convert.c:89
 msgid "never expires"
 msgstr "asla bitmez"
 
-#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:514
 msgid "unknown"
 msgstr "bilinmeyen"
 
-#: src/convert.c:117
 msgid "Mr."
 msgstr ""
 
-#: src/convert.c:119
 msgid "Ms."
 msgstr ""
 
-#: src/convert.c:123
 #, fuzzy
 msgid "(unknown)"
 msgstr "bilinmeyen"
 
-#: src/encryptdlg.c:152
 #, fuzzy
 msgid "Encrypt documents"
 msgstr "Dosyalarý Þifrele"
 
-#: src/encryptdlg.c:169
 msgid "_Public Keys"
 msgstr "Genel Anahtarlar"
 
-#: src/encryptdlg.c:192 src/icons.c:202
 msgid "_Sign"
 msgstr "_Ýmzala"
 
-#: src/encryptdlg.c:198
 msgid "Sign _as "
 msgstr "_Farklý Ýmzala"
 
-#: src/encryptdlg.c:228 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "_Kalkan"
 
-#: src/expirydlg.c:64
 msgid "Please provide a correct date."
 msgstr "Lütfen doðru bir tarih girin"
 
-#: src/expirydlg.c:108
 msgid "Change expiry date"
 msgstr "Bitim süresini deðiþtir"
 
-#: src/expirydlg.c:113 src/gpaprogressdlg.c:138
 msgid "_Cancel"
 msgstr ""
 
-#: src/expirydlg.c:124
 msgid "_never expire"
 msgstr "_asla bitme"
 
-#: src/expirydlg.c:129
 msgid "_expire on:"
 msgstr "_bitim açýk"
 
-#: src/fileman.c:519
 msgid "Close all files"
 msgstr "Bütün dosyalarý kapat"
 
-#: src/fileman.c:521
 msgid "Sign the selected file"
 msgstr "Seçili dosyayý imzala"
 
-#: src/fileman.c:523
 msgid "Check signatures of selected file"
 msgstr "Seçili dosyanýn imzalarýný kontrol edin"
 
-#: src/fileman.c:525
 msgid "Encrypt the selected file"
 msgstr "Seçili dosyayý þifrele"
 
-#: src/fileman.c:527
 msgid "Decrypt the selected file"
 msgstr "Seçili dosyayý çöz"
 
-#: src/fileman.c:529
 msgid "Close the window"
 msgstr ""
 
-#: src/fileman.c:535
 #, fuzzy
 msgid "Select all files"
 msgstr "Bütün dosyalarý kapat"
 
-#: src/fileman.c:733
 msgid "File"
 msgstr "Dosya"
 
-#: src/fileman.c:798
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Gizlilik Asistaný - Dosya Yöneticisi"
 
-#: src/fileman.c:821
 #, fuzzy
 msgid "File Manager"
 msgstr "dosya yöneticisi"
 
-#: src/fileman.c:897
 msgid "The file is already open."
 msgstr "Bu dosya zaten açýk"
 
-#: src/filesigndlg.c:171
 msgid "Sign documents"
 msgstr ""
 
-#: src/filesigndlg.c:180
 #, fuzzy
 msgid "<b>Sign _as</b>"
 msgstr "_Farklý Ýmzala"
 
-#: src/filesigndlg.c:201
 #, fuzzy
 msgid "<b>Signing Mode</b>"
 msgstr "Ýmzalama Biçimi"
 
-#: src/filesigndlg.c:211
 #, fuzzy
 msgid "Si_gn and compress"
 msgstr "im_zala ve sýkýþtýr"
 
-#: src/filesigndlg.c:217
 #, fuzzy
 msgid "Clear_text signature"
 msgstr "_temiz yazý imzasý"
 
-#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "_temiz yazý imzasý"
 
-#: src/gpa.c:96
 #, fuzzy
 msgid "Output version information and exit"
 msgstr "sürüm bilgisini göster ve çýk"
 
-#: src/gpa.c:98
 #, fuzzy
 msgid "Open key manager (default)"
 msgstr "anahtarlýk düzenleyicisini aç (varsayýlan)"
 
-#: src/gpa.c:100
 #, fuzzy
 msgid "Open file manager"
 msgstr "dosya yöneticisini aç"
 
-#: src/gpa.c:102 src/gpa.h:80
 #, fuzzy
 msgid "Open the card manager"
 msgstr "Dosya Yöneticisini Aç"
 
-#: src/gpa.c:104
 msgid "Open clipboard"
 msgstr ""
 
-#: src/gpa.c:106
 #, fuzzy
 msgid "Open the settings dialog"
 msgstr "Tercihler penceresini aç"
 
-#: src/gpa.c:108
 msgid "Enable the UI server"
 msgstr ""
 
-#: src/gpa.c:110
 #, fuzzy
 msgid "Read options from file"
 msgstr "seçenekleri dosyadan oku"
 
-#: src/gpa.c:314
 msgid "[FILE...]"
 msgstr ""
 
-#: src/gpa.c:316
 #, fuzzy
 msgid "Graphical frontend to GnuPG"
 msgstr ""
 "Sentaks: gpa [seçenekler]\n"
 "GnuPG'ye grafiksel uçbirim\n"
 
-#: src/gpa.c:317
 msgid "Please report bugs to <"
 msgstr "Lütfen hatalarý <"
 
-#: src/gpa.h:71
 #, fuzzy
 msgid "_Windows"
 msgstr "/_Pencereler"
 
-#: src/gpa.h:74
 #, fuzzy
 msgid "Open the keyring editor"
 msgstr "anahtarlýk düzenleyicisini aç (varsayýlan)"
 
-#: src/gpa.h:76
 #, fuzzy
 msgid "Open the file manager"
 msgstr "Dosya Yöneticisini Aç"
 
-#: src/gpa.h:78
 #, fuzzy
 msgid "Open the clipboard"
 msgstr "Dosya Yöneticisini Aç"
 
-#: src/gpa.h:93
 #, fuzzy
 msgid "Configure the application"
 msgstr "Seçili dosyayý þifrele"
 
-#: src/gpa.h:96
 #, fuzzy
 msgid "_Backend Preferences"
 msgstr "/Düzen/Te_rcihler..."
 
-#: src/gpa.h:97
 msgid "Configure the backend programs"
 msgstr ""
 
-#: src/gpabackupop.c:208
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -467,37 +365,29 @@ msgstr ""
 "Bu önemli bir bilgidir, ve dikkatlica saklanmasý gerekmektedir\n"
 "(örneðin, güvenli bir yerde saklayacaðýnýz bir diskette)."
 
-#: src/gpabackupop.c:223
 msgid "An error ocurred during the backup operation."
 msgstr ""
 
-#: src/gpabackupop.c:245
 msgid "Backup key to file"
 msgstr "Anahtarý dosyaya yedekle"
 
-#: src/gpabackupop.c:255
 #, c-format
 msgid "Generating backup of key: %s"
 msgstr "%s anahtarýnýn yedeklemesi yapýlýyor"
 
-#: src/gpaexportclipop.c:139
 msgid "The keys have been copied to the clipboard."
 msgstr "Anahtarlar panoya kopyalandý"
 
-#: src/gpaexportfileop.c:139
 msgid "Export public keys to file"
 msgstr "Genel anahtarlarý dosyaya aktar"
 
-#: src/gpaexportfileop.c:150
 msgid "_armor"
 msgstr "_kalkan"
 
-#: src/gpaexportfileop.c:182
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "Anahtarlar %s isimli dosyaya aktarýldý."
 
-#: src/gpaexportserverop.c:129
 #, c-format
 msgid ""
 "The selected key will be sent to a public key\n"
@@ -508,117 +398,84 @@ msgstr ""
 "sunucusuna gönderilecektir.\n"
 "Bu anahtarý daðýtmak istediðinizden emin misiniz?"
 
-#: src/gpaexportserverop.c:134 src/gpafileencryptop.c:478
-#: src/gpafileverifyop.c:181 src/gpgmetools.c:177 src/keydeletedlg.c:44
-#: src/keydeletedlg.c:93 src/keysigndlg.c:61
 msgid "_Yes"
 msgstr "_Evet"
 
-#: src/gpaexportserverop.c:135 src/gpafileencryptop.c:479
-#: src/gpafileverifyop.c:182 src/gpgmetools.c:178 src/keydeletedlg.c:46
-#: src/keydeletedlg.c:95 src/keysigndlg.c:63
 msgid "_No"
 msgstr "_Hayýr"
 
-#: src/gpaexportserverop.c:187
 msgid "The keys have been sent to the server."
 msgstr "Anahtarlar sunucuya yollandý."
 
-#: src/gpafiledecryptop.c:154
 msgid "Decrypting..."
 msgstr "Çözüyor..."
 
-#: src/gpafiledecryptop.c:499 src/gpafileverifyop.c:467
 #, fuzzy, c-format
 msgid "\"%s\" contained no OpenPGP data."
 msgstr "\"%s\" dosyasý OpenPGP verisi içermiyor."
 
-#: src/gpafiledecryptop.c:500 src/gpafileverifyop.c:468
 #, fuzzy, c-format
 msgid "The file \"%s\" contained no OpenPGPdata."
 msgstr "\"%s\" dosyasý OpenPGP verisi içermiyor."
 
-#: src/gpafiledecryptop.c:510
 #, fuzzy, c-format
 msgid "\"%s\" contained no valid encrypted data."
 msgstr "\"%s\" dosyasý þifrelenmiþ geçerli veri içermiyor."
 
-#: src/gpafiledecryptop.c:512
 #, fuzzy, c-format
 msgid "The file \"%s\" contained no validencrypted data."
 msgstr "\"%s\" dosyasý þifrelenmiþ geçerli veri içermiyor."
 
-#: src/gpafiledecryptop.c:521 src/gpafileencryptop.c:770
-#: src/gpafilesignop.c:524 src/gpafileverifyop.c:478 src/gpakeyexpireop.c:240
-#: src/gpakeypasswdop.c:209 src/gpakeysignop.c:237 src/gpastreamsignop.c:421
 msgid "Wrong passphrase!"
 msgstr "Hatalý þifre!"
 
-#: src/gpafileencryptop.c:155
 msgid "Encrypting..."
 msgstr "Þifreliyor..."
 
-#: src/gpafileencryptop.c:476 src/verifydlg.c:222
 msgid "Unknown Key"
 msgstr "Bilinmeyen Anahtar"
 
-#: src/gpafileencryptop.c:492
 #, fuzzy
 msgid "You are going to encrypt a document using the following key:"
 msgstr "Bir dosyayý þu anahtarý kullanarak þifrelemek üzeresiniz:"
 
-#: src/gpafileencryptop.c:498
 msgid "However, it is not certain that the key belongs to that person."
 msgstr "Yine de, anahtarýn o kiþiye ait olduðu kesin deðil."
 
-#: src/gpafileencryptop.c:504
 msgid "Do you <b>really</b> want to use this key?"
 msgstr "Bu anahtarý <b>gerçekten</b> kullanmak istiyor musunuz?"
 
-#: src/gpafileencryptop.c:525 src/gpafileencryptop.c:565 src/verifydlg.c:227
 msgid "Revoked Key"
 msgstr "Feshedilmiþ Anahtar"
 
-#: src/gpafileencryptop.c:527 src/gpafileencryptop.c:567 src/gtktools.c:52
-#: src/gtktools.c:89 src/keyeditdlg.c:150 src/verifydlg.c:115
 msgid "_Close"
 msgstr "_Kapat"
 
-#: src/gpafileencryptop.c:540
 msgid "The following key has been revoked by it's owner:"
 msgstr "Þu anahtar sahibi tarafýndan feshedilmiþtir:"
 
-#: src/gpafileencryptop.c:545 src/gpafileencryptop.c:588
 msgid "And can not be used for encryption."
 msgstr "Ve þifreleme için kullanýlamaz."
 
-#: src/gpafileencryptop.c:580
 #, c-format
 msgid "The following key expired on %s:"
 msgstr "Þu anahtar %s tarihinde sona ermiþtir:"
 
-#: src/gpafileencryptop.c:619 src/gpafilesignop.c:447
-#: src/gpastreamsignop.c:278
 msgid ""
 "The selected certificates are not all of the same type. That is, you mixed "
 "OpenPGP and X.509 certificates. Please make sure to select only certificates "
 "of the same type."
 msgstr ""
 
-#: src/gpafileencryptop.c:694 src/gpafilesignop.c:433
-#: src/gpastreamsignop.c:264
 msgid "You didn't select any key for signing"
 msgstr "Þifreleme için hiçbir anahtar seçmediniz"
 
-#: src/gpafilesignop.c:156
 msgid "Signing..."
 msgstr "Þifreliyor..."
 
-#: src/gpafileverifyop.c:102
 msgid "Verifying..."
 msgstr "Doðruluyor..."
 
-#: src/gpafileverifyop.c:175
 #, c-format
 msgid ""
 "GPA found a file that could be a signature of %s. Would you like to verify "
@@ -627,20 +484,16 @@ msgid ""
 "The file found is: %s"
 msgstr ""
 
-#: src/gpagenkeyadvop.c:80
 msgid "Generating Key..."
 msgstr "Anahtar Yaratýlýyor..."
 
-#: src/gpaimportfileop.c:132
 #, fuzzy
 msgid "Import keys from file"
 msgstr "Genel anahtarlarý dosyadan al"
 
-#: src/gpaimportop.c:196
 msgid "No keys were found."
 msgstr "Hiçbir anahtar bulunamadý."
 
-#: src/gpaimportop.c:204
 #, c-format
 msgid ""
 "%i public keys read\n"
@@ -657,289 +510,220 @@ msgstr ""
 "%i gizli anahtar dýþarýdan alýndý\n"
 "%i gizli anahtar deðiþtirilmedi"
 
-#: src/gpakeyexpireop.c:244
 msgid ""
 "Invalid time given.\n"
 "(you may not set the expiration time to the past.)"
 msgstr ""
 
-#: src/gpakeyselector.c:86 src/keylist.c:593 src/recipientdlg.c:191
-#: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
 msgid "Key ID"
 msgstr "Anahtar Kimliði"
 
-#: src/gpakeyselector.c:95 src/keylist.c:644 src/siglist.c:99
-#: src/siglist.c:142 src/verifydlg.c:336
 msgid "User Name"
 msgstr "Kullanýcý Adý"
 
-#: src/gpakeysignop.c:191
 msgid "No private key for signing."
 msgstr "Þifreleme için hiçbir özel anahtar bulunamadý."
 
-#: src/gpakeysignop.c:241
 msgid "This key has expired! Unable to sign."
 msgstr "Bu anahtar bitmiþ! Ýmzalama gerçekleþtirilemedi."
 
-#: src/gpakeysignop.c:245
 msgid "This key has already been signed with your own!"
 msgstr "Bu anahtar zaten kendiniz tarafýndan imzalanmýþ!"
 
-#: src/gpakeysignop.c:250
 msgid "You haven't selected a default key to sign with!"
 msgstr "Ýmzalamak için varsayýlan bir anahtar seçmediniz!"
 
-#: src/gparecvkeydlg.c:106
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr ""
 "Hangi anahtarý dýþarýdan almak istiyorsunuz? (Anahtar, kimliði ile "
 "belirtilmeli)."
 
-#: src/gparecvkeydlg.c:116
 msgid "Key _ID:"
 msgstr "Anahtar _Kimliði:"
 
-#: src/gpastreamdecryptop.c:155
 #, fuzzy
 msgid "Decrypting message ..."
 msgstr "Çözüyor..."
 
-#: src/gpastreamdecryptop.c:343 src/gpastreamverifyop.c:352
 #, fuzzy, c-format
 msgid "Bad signature by %s: %s"
 msgstr "Ýmzalar: %s"
 
-#: src/gpastreamdecryptop.c:346 src/gpastreamverifyop.c:358
 #, c-format
 msgid "Bad signature by unknown key %s: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:349 src/gpastreamverifyop.c:364
 #, c-format
 msgid "Bad signature by unknown key: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:355 src/gpastreamverifyop.c:372
 #, fuzzy, c-format
 msgid "Good signature by %s: %s"
 msgstr "Ýmzalar: %s"
 
-#: src/gpastreamdecryptop.c:358 src/gpastreamverifyop.c:378
 #, c-format
 msgid "Good signature by unknown key %s: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:361 src/gpastreamverifyop.c:384
 #, c-format
 msgid "Good signature by unknown key: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:367 src/gpastreamverifyop.c:392
 #, fuzzy, c-format
 msgid "Invalid signature by %s: %s"
 msgstr "Ýmzalar: %s"
 
-#: src/gpastreamdecryptop.c:370 src/gpastreamverifyop.c:398
 #, c-format
 msgid "Invalid signature by unknown key %s: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:373 src/gpastreamverifyop.c:404
 #, c-format
 msgid "Invalid signature by unknown key: %s"
 msgstr ""
 
-#: src/gpastreamdecryptop.c:399 src/gpastreamverifyop.c:437
 #, fuzzy
 msgid "Document"
 msgstr "Yorum:"
 
-#: src/gpastreamencryptop.c:229
 #, fuzzy
 msgid "Encrypting message ..."
 msgstr "Þifreliyor..."
 
-#: src/gpastreamencryptop.c:381
 #, fuzzy
 msgid "Message encryption"
 msgstr "Þifreleyebilir"
 
-#: src/gpastreamsignop.c:176
 #, fuzzy
 msgid "Signing message ..."
 msgstr "Þifreliyor..."
 
-#: src/gpastreamsignop.c:359
 msgid "Message signing"
 msgstr ""
 
-#: src/gpastreamverifyop.c:156
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "Doðruluyor..."
 
-#: src/gpastreamverifyop.c:355
 #, fuzzy, c-format
 msgid "Bad signature by %s"
 msgstr "Ýmzalar: %s"
 
-#: src/gpastreamverifyop.c:361
 #, c-format
 msgid "Bad signature by unknown key %s"
 msgstr ""
 
-#: src/gpastreamverifyop.c:367
 msgid "Bad signature by unknown key"
 msgstr ""
 
-#: src/gpastreamverifyop.c:375
 #, fuzzy, c-format
 msgid "Good signature by %s"
 msgstr "Ýmzalar: %s"
 
-#: src/gpastreamverifyop.c:381
 #, c-format
 msgid "Good signature by unknown key %s"
 msgstr ""
 
-#: src/gpastreamverifyop.c:387
 msgid "Good signature by unknown key"
 msgstr ""
 
-#: src/gpastreamverifyop.c:395
 #, fuzzy, c-format
 msgid "Invalid signature by %s"
 msgstr "Tüm imzalar"
 
-#: src/gpastreamverifyop.c:401
 #, c-format
 msgid "Invalid signature by unknown key %s"
 msgstr ""
 
-#: src/gpastreamverifyop.c:407
 msgid "Invalid signature by unknown key"
 msgstr ""
 
-#: src/gpasubkeylist.c:79
 msgid "Subkey ID"
 msgstr "Altanahtar Kimliði"
 
-#: src/gpasubkeylist.c:85 src/siglist.c:119 src/verifydlg.c:330
 msgid "Status"
 msgstr "Durum"
 
-#: src/gpasubkeylist.c:91
 msgid "Algorithm"
 msgstr "Algoritma"
 
-#: src/gpasubkeylist.c:98
 msgid "Size"
 msgstr "Boyut"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:606
 msgid "Expiry Date"
 msgstr "Bitim Tarihi"
 
-#: src/gpasubkeylist.c:113
 msgid "[S]"
 msgstr ""
 
-#: src/gpasubkeylist.c:113
 msgid "Can sign"
 msgstr "Ýmzalayabilir"
 
-#: src/gpasubkeylist.c:119
 msgid "[C]"
 msgstr ""
 
-#: src/gpasubkeylist.c:119
 msgid "Can certify"
 msgstr "Onaylayabilir"
 
-#: src/gpasubkeylist.c:125
 msgid "[E]"
 msgstr ""
 
-#: src/gpasubkeylist.c:125
 msgid "Can encrypt"
 msgstr "Þifreleyebilir"
 
-#: src/gpasubkeylist.c:131
 msgid "[A]"
 msgstr ""
 
-#: src/gpasubkeylist.c:131
 msgid "Can authenticate"
 msgstr "Doðrulayabilir"
 
-#: src/gpasubkeylist.c:137
 msgid "[T]"
 msgstr ""
 
-#: src/gpasubkeylist.c:138
 msgid "Secret key stored on a smartcard."
 msgstr ""
 
-#: src/gpasubkeylist.c:144
 msgid "Card S/N"
 msgstr ""
 
-#: src/gpasubkeylist.c:145
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:927
-#: src/gpgmetools.c:1046
 msgid "Revoked"
 msgstr "Feshedilmiþ"
 
-#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1042
 msgid "Expired"
 msgstr "Sona Ermiþ"
 
-#: src/gpasubkeylist.c:165 src/gpgmetools.c:714
 msgid "Disabled"
 msgstr "Geçersiz Kýlýnmýþ"
 
-#: src/gpasubkeylist.c:169
 msgid "Unsigned"
 msgstr "Ýmzalanmamýþ"
 
-#: src/gpasubkeylist.c:173 src/gpgmetools.c:1033 src/verifydlg.c:212
 msgid "Valid"
 msgstr "Geçerli"
 
-#: src/gpawidgets.c:71 src/gpgmetools.c:758 src/gpgmetools.c:765
-#: src/keysigndlg.c:100
 msgid "User Name:"
 msgstr "Kullanýcý Adý:"
 
-#: src/gpawidgets.c:71 src/keysigndlg.c:100
 msgid "User Names:"
 msgstr "Kullanýcý Adlarý:"
 
-#: src/gpawidgets.c:77 src/gpgmetools.c:759 src/gpgmetools.c:766
-#: src/gpa-key-details.c:289
 msgid "Key ID:"
 msgstr "Anahtar Kimliði:"
 
-#: src/gpawidgets.c:180
 msgid "Expiration"
 msgstr "Sona Erme"
 
-#: src/gpawidgets.c:187
 msgid "_indefinitely valid"
 msgstr "_sýnýrsýzca geçerli"
 
-#: src/gpawidgets.c:195
 msgid "expire _after"
 msgstr "þu _tarihten sonra sona er"
 
-#: src/gpawidgets.c:215
 msgid "expire o_n:"
 msgstr "þu ta_rihte sona er:"
 
-#: src/gpawidgets.c:289
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -947,17 +731,14 @@ msgstr ""
 "!TEHLÝKELÝ HATA!\n"
 "Bitim tarihi için geçersiz ekleme biçimi."
 
-#: src/gpadatebutton.c:86
 msgid "(not set)"
 msgstr ""
 
-#: src/gpgmeedit.c:1222
 msgid ""
 "Keys are already stored on the card.\n"
 "Really replace existing keys?"
 msgstr ""
 
-#: src/gpgmetools.c:72
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -974,7 +755,6 @@ msgstr ""
 "\n"
 "Uygulama kapatýlacaktýr"
 
-#: src/gpgmetools.c:102
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -993,7 +773,6 @@ msgstr ""
 "Bu büyük ihtimalle GPA'deki bir hata.\n"
 "GPA þimdi bu hatadan toparlanmaya çalýþacaktýr."
 
-#: src/gpgmetools.c:174
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -1002,7 +781,6 @@ msgstr ""
 "%s dosyasý zaten var. \n"
 "Üzerine yazmak istiyor musunuz?"
 
-#: src/gpgmetools.c:602
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -1016,7 +794,6 @@ msgstr ""
 "************************************************************************\n"
 "\n"
 
-#: src/gpgmetools.c:607
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -1024,95 +801,72 @@ msgstr ""
 "Bu dosyada yedeklenmiþ olan anahtar:\n"
 "\n"
 
-#: src/gpgmetools.c:678 src/gpgmetools.c:701 src/gpgmetools.c:718
-#: src/gpgmetools.c:1038 src/gpgmetools.c:1071
 msgid "Unknown"
 msgstr "Bilinmiyor"
 
-#: src/gpgmetools.c:681
 msgid "Never"
 msgstr "Hiç"
 
-#: src/gpgmetools.c:684
 msgid "Marginal"
 msgstr "Sýnýrlý"
 
-#: src/gpgmetools.c:687
 msgid "Full"
 msgstr "Tam"
 
-#: src/gpgmetools.c:690
 msgid "Ultimate"
 msgstr "Sonsuz"
 
-#: src/gpgmetools.c:716
 msgid "Incomplete"
 msgstr "Eksik"
 
-#: src/gpgmetools.c:722
 msgid "Fully Valid"
 msgstr "Tamamen Geçerli"
 
-#: src/gpgmetools.c:756
 msgid "Please enter the passphrase for the following key:"
 msgstr "Lütfen þu anahtar için þifre girin:"
 
-#: src/gpgmetools.c:764
 msgid "Wrong passphrase, please try again:"
 msgstr "Hatalý þifre, lütfen tekrar deneyin:"
 
-#: src/gpgmetools.c:789
 msgid "Enter Passphrase"
 msgstr "Þifreyi Girin"
 
-#: src/gpgmetools.c:916
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:1010 src/verifydlg.c:269
 msgid "[Unknown user ID]"
 msgstr "[Bilinmeyen kullanýcý kimliði]"
 
-#: src/gpgmetools.c:1036 src/verifydlg.c:217
 msgid "Bad"
 msgstr "Kötü"
 
-#: src/gpgmetools.c:1059
 msgid "Generic"
 msgstr "Genel"
 
-#: src/gpgmetools.c:1062
 msgid "Persona"
 msgstr "Kiþisel"
 
-#: src/gpgmetools.c:1065
 msgid "Casual"
 msgstr "Hafif"
 
-#: src/gpgmetools.c:1068
 msgid "Positive"
 msgstr "Olumlu"
 
-#: src/gpgmetools.c:1086
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Anahtar onaylama, imzalama, ve þifreleme için kullanýlabilir."
 
-#: src/gpgmetools.c:1089
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
 "Anahtar onaylama ve imzalama için kullanýlabilir ama þifreleme için "
 "kullanýlamaz."
 
-#: src/gpgmetools.c:1095
 msgid "The key can be used for certification and encryption."
 msgstr "Anahtar onaylama ve þifreleme için kullanýlabilir."
 
-#: src/gpgmetools.c:1098
 msgid "The key can be used only for certification."
 msgstr "Anahtar sadece onaylama için kullanýlabilir."
 
-#: src/gpgmetools.c:1106
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
@@ -1120,130 +874,102 @@ msgstr ""
 "Anahtar sadece imzalama ve þifreleme için kullanýlabilir, ama onaylama için "
 "kullanýlamaz."
 
-#: src/gpgmetools.c:1109
 msgid "The key can be used only for signing."
 msgstr "Anahtar sadece imzalama için kullanýlabilir."
 
-#: src/gpgmetools.c:1114
 msgid "The key can be used only for encryption."
 msgstr "Anahtar sadece þifreleme için kullanýlabilir."
 
-#: src/gpgmetools.c:1117
 msgid "This key is useless."
 msgstr "Bu anahtar iþe yaramaz."
 
-#: src/gpgmetools.c:1455
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
-#: src/gpgmetools.c:1505
 msgid "You must enter a name."
 msgstr ""
 
-#: src/gpgmetools.c:1507
 msgid "Invalid character in name."
 msgstr ""
 
-#: src/gpgmetools.c:1509
 msgid "Name may not start with a digit."
 msgstr ""
 
-#: src/gpgmetools.c:1511
 msgid "Name is too short."
 msgstr ""
 
-#: src/gpgmetools.c:1583
 msgid "Email address is not valid."
 msgstr ""
 
-#: src/gpgmetools.c:1597
 msgid "Invalid character in comments."
 msgstr ""
 
-#: src/gtktools.c:48
 msgid "GPA Error"
 msgstr "GPA Hatasý"
 
-#: src/helpmenu.c:83
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GNU Gizlilik Asistanýný Anlamak"
 
-#: src/helpmenu.c:88
 msgid "About GPA"
 msgstr "GPA Hakkýnda"
 
 #. TRANSLATORS: The translation of this string should
 #. be your name and mail
-#: src/helpmenu.c:101
 msgid "translator-credits"
 msgstr ""
 
-#: src/helpmenu.h:29
 #, fuzzy
 msgid "_Help"
 msgstr "/_Yardým"
 
-#: src/helpmenu.h:32
 #, fuzzy
 msgid "Open the GPA manual"
 msgstr "Dosya Yöneticisini Aç"
 
-#: src/helpmenu.h:35
 #, fuzzy
 msgid "About this application"
 msgstr "Seçili dosyayý þifrele"
 
-#: src/icons.c:203
 #, fuzzy
 msgid "_Verify"
 msgstr "Doðrula"
 
-#: src/icons.c:204
 #, fuzzy
 msgid "_Encrypt"
 msgstr "Þifrele"
 
-#: src/icons.c:205
 #, fuzzy
 msgid "_Decrypt"
 msgstr "Çöz"
 
-#: src/icons.c:206
 #, fuzzy
 msgid "_Brief"
 msgstr "Özet"
 
-#: src/icons.c:207
 #, fuzzy
 msgid "_Detailed"
 msgstr "Detaylý"
 
-#: src/icons.c:208
 #, fuzzy
 msgid "_Keyring Manager"
 msgstr "dosya yöneticisi"
 
-#: src/icons.c:209
 #, fuzzy
 msgid "_Clipboard"
 msgstr "/Pencereler/_Dosya Yöneticisi"
 
-#: src/icons.c:210
 #, fuzzy
 msgid "_File Manager"
 msgstr "dosya yöneticisi"
 
-#: src/icons.c:211
 #, fuzzy
 msgid "_Card Manager"
 msgstr "dosya yöneticisi"
 
-#: src/keydeletedlg.c:41
 msgid "Removing Secret Key"
 msgstr "Gizli Anahtar Kaldýrýlýyor"
 
-#: src/keydeletedlg.c:55
 msgid ""
 "If you delete this key, you won't be able to\n"
 "read messages encrypted with it.\n"
@@ -1255,15 +981,12 @@ msgstr ""
 "\n"
 "Silmek istediðinize emin misiniz?"
 
-#: src/keydeletedlg.c:91
 msgid "Remove Key"
 msgstr "Anahtarý Kaldýr"
 
-#: src/keydeletedlg.c:104
 msgid "You have selected the following key for removal:"
 msgstr "Þu anahtarý kaldýrmak için seçtiniz:"
 
-#: src/keydeletedlg.c:114
 msgid ""
 "This key has a secret key. Deleting this key cannot be undone, unless you "
 "have a backup copy."
@@ -1271,7 +994,6 @@ msgstr ""
 "Bu anahtarýn bir gizli anahtarý var. Bir yedek kopyanýz olmadýðý sürece "
 "silme iþlemini geri alamazsýnýz."
 
-#: src/keydeletedlg.c:123
 msgid ""
 "This key is a public key. Deleting this key cannot be undone easily, "
 "although you may be able to get a new copy  from the owner or from a key "
@@ -1281,96 +1003,73 @@ msgstr ""
 "yeni bir kopya alabilecek olsanýz bile silme iþlemini kolayca geri "
 "alamazsýnýz."
 
-#: src/keydeletedlg.c:132
 msgid "Are you sure you want to delete this key?"
 msgstr "Bu anahtarý silmek istediðinize emin misiniz?"
 
-#: src/keyeditdlg.c:148
 msgid "Edit Key"
 msgstr "Anahtarý Düzenle"
 
-#: src/keyeditdlg.c:163
 msgid "Change _passphrase"
 msgstr "_Þifreyi Deðiþtir"
 
-#: src/keyeditdlg.c:183
 msgid "Change _expiration"
 msgstr "_Bitim süresini deðiþtir"
 
-#: src/keygendlg.c:40
 msgid "RSA"
 msgstr ""
 
-#: src/keygendlg.c:41
 msgid "RSA (sign only)"
 msgstr "RSA (sadece imzalama)"
 
-#: src/keygendlg.c:42
 msgid "DSA"
 msgstr ""
 
-#: src/keygendlg.c:43
 msgid "DSA (sign only)"
 msgstr "DSA (sadece imzalama)"
 
-#: src/keygendlg.c:136
 msgid "You must enter a key size."
 msgstr ""
 
-#: src/keygendlg.c:190
 #, fuzzy
 msgid "Generate card key"
 msgstr "Anahtar yarat"
 
-#: src/keygendlg.c:190 src/keygenwizard.c:387 src/keygenwizard.c:400
-#: src/keygenwizard.c:410 src/keygenwizard.c:421 src/keygenwizard.c:438
-#: src/keygenwizard.c:450 src/cardman.c:630
 msgid "Generate key"
 msgstr "Anahtar yarat"
 
-#: src/keygendlg.c:211
 msgid "_Algorithm: "
 msgstr "_Algoritma: "
 
-#: src/keygendlg.c:237
 msgid "_Key size (bits): "
 msgstr "_Anahtar boyutu (bits): "
 
-#: src/keygendlg.c:262
 #, fuzzy
 msgid "User ID: "
 msgstr "_Kullanýcý Kimliði: "
 
-#: src/keygendlg.c:278
 msgid "_Name: "
 msgstr ""
 
-#: src/keygendlg.c:291
 msgid "_Email: "
 msgstr "_Email: "
 
-#: src/keygendlg.c:304
 msgid "_Comment: "
 msgstr "_Yorum: "
 
-#: src/keygendlg.c:317
 #, fuzzy
 msgid "_Expires: "
 msgstr "Bitim tarihi:"
 
-#: src/keygendlg.c:329
 #, fuzzy
 msgid "Backup: "
 msgstr "Anahtarlarý Yedekle"
 
-#: src/keygendlg.c:341
 msgid ""
 "If checked the encryption key will be created and stored to a backup file "
 "and then loaded into the card.  This is recommended so that encrypted "
 "messages can be decrypted even if the card has a malfunction."
 msgstr ""
 
-#: src/keygenwizard.c:175
 msgid ""
 "Please insert your full name.\n"
 "\n"
@@ -1382,11 +1081,9 @@ msgstr ""
 "Ýsminiz diðerlerinin anahtarlarý tanýmasýný kolaylaþtýrmak için yeni "
 "anahtarýn bir parçasý olacaktýr."
 
-#: src/keygenwizard.c:178
 msgid "Your Name:"
 msgstr "Ýsminiz:"
 
-#: src/keygenwizard.c:212
 #, fuzzy
 msgid ""
 "Please insert your email address.\n"
@@ -1401,11 +1098,9 @@ msgstr ""
 "yeni anahtarýn bir parçasý olacaktýr. Birden fazla email adresiniz varsa, "
 "daha sonra baþka email adresleri ekleyebilirsiniz."
 
-#: src/keygenwizard.c:216
 msgid "Your Email Address:"
 msgstr "Email Adresiniz:"
 
-#: src/keygenwizard.c:235
 msgid ""
 "It is recommended that you create a backup copy of your new key, once it has "
 "been generated.\n"
@@ -1416,15 +1111,12 @@ msgstr ""
 "\n"
 "Yedek kopya yaratmak istiyor musunuz?"
 
-#: src/keygenwizard.c:243
 msgid "Create _backup copy"
 msgstr "Yedek _kopya yarat"
 
-#: src/keygenwizard.c:248 src/keymanager.c:731 src/keymanager.c:757
 msgid "Do it _later"
 msgstr "So_nra yap"
 
-#: src/keygenwizard.c:277
 msgid ""
 "Your key is being generated.\n"
 "\n"
@@ -1434,7 +1126,6 @@ msgstr ""
 "\n"
 "Bu iþlem hýzlý bilgisayarlarda bile uzun sürebilir. Lütfen sabýrlý olun."
 
-#: src/keygenwizard.c:289
 #, fuzzy, c-format
 msgid ""
 "Congratulations!\n"
@@ -1447,7 +1138,6 @@ msgstr ""
 "Baþarýyla bir anahtar yarattýnýz. Anahtar sonsuz geçerliliðe sahip, ve 1024 "
 "bit uzunluðundadýr."
 
-#: src/keylist.c:360
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1455,54 +1145,44 @@ msgstr ""
 "GnuPG güven veritabanýný yeniden yapýlandýrýyor.\n"
 "Bu birkaç saniyenizi alabilir."
 
-#: src/keylist.c:585
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#: src/keylist.c:594
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "Anahtar sadece onaylama için kullanýlabilir."
 
-#: src/keylist.c:607
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
-#: src/keylist.c:617 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "Sahibine Güven"
 
-#: src/keylist.c:618
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
 
-#: src/keylist.c:630
 #, fuzzy
 msgid "Validity"
 msgstr "Anahtar Geçerliliði"
 
-#: src/keylist.c:631
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
 
-#: src/keylist.c:645
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr ""
 
-#: src/keymanager.c:447
 msgid "No keys selected for signing."
 msgstr "Ýmzalamak için hiçbir anahtar seçilmedi."
 
-#: src/keymanager.c:726
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
@@ -1510,11 +1190,9 @@ msgstr ""
 "Hala bir özel anahtara sahip deðilsiniz. Bir tane yaratmak ister misiniz "
 "(önerilen) ya da daha sonra da yapabilirsiniz?"
 
-#: src/keymanager.c:730
 msgid "_Generate key now"
 msgstr "Anahtarý þimdi _yarat"
 
-#: src/keymanager.c:751
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
@@ -1522,269 +1200,210 @@ msgstr ""
 "Hala özel anahtarýnýzýn bir yedek kopyasýna sahip deðilsiniz. Anahtarýnýzý "
 "þimdi mi yedeklemek istersiniz (önerilen) ya da daha sonra da yapabilirsiniz?"
 
-#: src/keymanager.c:756
 msgid "_Backup key now"
 msgstr "Anahtarý þimdi ye_dekle"
 
-#: src/keymanager.c:869
 #, fuzzy
 msgid "_Keys"
 msgstr "/_Anahtarlar"
 
-#: src/keymanager.c:870
 #, fuzzy
 msgid "_Server"
 msgstr "/_Sunucu"
 
-#: src/keymanager.c:884
 msgid "Select all certificates"
 msgstr ""
 
-#: src/keymanager.c:889
 msgid "Refresh the keyring"
 msgstr ""
 
-#: src/keymanager.c:890
 #, fuzzy
 msgid "_New key..."
 msgstr "/Anahtarlar/_Yeni Anahtar..."
 
-#: src/keymanager.c:891
 #, fuzzy
 msgid "Generate a new key"
 msgstr "Anahtar yarat"
 
-#: src/keymanager.c:892
 #, fuzzy
 msgid "_Delete keys"
 msgstr "/Anahtarlarý _Sil..."
 
-#: src/keymanager.c:893
 msgid "Remove the selected key"
 msgstr "Seçili anahtarý kaldýr"
 
-#: src/keymanager.c:894
 #, fuzzy
 msgid "_Sign Keys..."
 msgstr "/Anahtarlarý Ým_zala..."
 
-#: src/keymanager.c:895
 msgid "Sign the selected key"
 msgstr "Seçili anahtarý imzala"
 
-#: src/keymanager.c:896
 #, fuzzy
 msgid "Set _Owner Trust..."
 msgstr "/Sahibine _Güveni Belirle..."
 
-#: src/keymanager.c:897
 #, fuzzy
 msgid "Set owner trust of the selected key"
 msgstr "Seçili anahtarý kaldýr"
 
-#: src/keymanager.c:899
 #, fuzzy
 msgid "_Edit Private Key..."
 msgstr "/Özel Anahtarý _Düzenle..."
 
-#: src/keymanager.c:900
 msgid "Edit the selected private key"
 msgstr "Seçili özel anahtarý düzenle"
 
-#: src/keymanager.c:902
 #, fuzzy
 msgid "_Import Keys..."
 msgstr "Anahtarlarý Dýþarýdan Al"
 
-#: src/keymanager.c:903
 msgid "Import Keys"
 msgstr "Anahtarlarý Dýþarýdan Al"
 
-#: src/keymanager.c:904
 #, fuzzy
 msgid "E_xport Keys..."
 msgstr "/Anahtarlarý _Yaz..."
 
-#: src/keymanager.c:905
 msgid "Export Keys"
 msgstr "Anahtarlarý Dýþarý Yaz"
 
-#: src/keymanager.c:906
 #, fuzzy
 msgid "_Backup..."
 msgstr "/_Yedekle..."
 
-#: src/keymanager.c:907
 #, fuzzy
 msgid "Backup key"
 msgstr "Anahtarlarý Yedekle"
 
-#: src/keymanager.c:910
 #, fuzzy
 msgid "_Retrieve Keys..."
 msgstr "/Sunucu/A_nahtarlarý Edin..."
 
-#: src/keymanager.c:911
 msgid "Retrieve keys from server"
 msgstr ""
 
-#: src/keymanager.c:913
 #, fuzzy
 msgid "_Send Keys..."
 msgstr "/Anahtarlarý Ým_zala..."
 
-#: src/keymanager.c:914
 #, fuzzy
 msgid "Send keys to server"
 msgstr "/Anahtarlarý Sunucuya _Gönder..."
 
-#: src/keymanager.c:920
 msgid "Show Brief Keylist"
 msgstr "Özet Anahtar Listesi Göster"
 
-#: src/keymanager.c:922
 msgid "Show Key Details"
 msgstr "Anahtar Detaylarýný Göster"
 
-#: src/keymanager.c:1049
 msgid "Edit"
 msgstr "Düzenle"
 
-#: src/keymanager.c:1051
 #, fuzzy
 msgid "Delete"
 msgstr "/Düzen/_Tümünü Seç"
 
-#: src/keymanager.c:1053
 msgid "Sign"
 msgstr "Ýmzala"
 
-#: src/keymanager.c:1055
 msgid "Export"
 msgstr "Dýþarý Yaz"
 
-#: src/keymanager.c:1057
 msgid "Import"
 msgstr "Dýþarýdan Al"
 
-#: src/keymanager.c:1188
 #, fuzzy
 msgid "Selected default key:"
 msgstr "Seçili Varsayýlan Anahtar:"
 
-#: src/keymanager.c:1198
 msgid "No default key selected in the preferences."
 msgstr ""
 
-#: src/keymanager.c:1289
 #, fuzzy
 msgid "GNU Privacy Assistant - Key Manager"
 msgstr "GNU Gizlilik Asistaný - Dosya Yöneticisi"
 
-#: src/keymanager.c:1317
 #, fuzzy
 msgid "Key Manager"
 msgstr "dosya yöneticisi"
 
-#: src/gpa-key-details.c:132
 #, fuzzy
 msgid "The key has both a smartcard based private part and a public part"
 msgstr "Anahtar hem genel hem de özel bölümler içeriyor"
 
-#: src/gpa-key-details.c:136
 msgid "The key has both a private and a public part"
 msgstr "Anahtar hem genel hem de özel bölümler içeriyor"
 
-#: src/gpa-key-details.c:140
 msgid "The key has only a public part"
 msgstr "Anahtar sadece genel bölüme sahip"
 
-#: src/gpa-key-details.c:176
 #, c-format
 msgid "%s %u bits"
 msgstr "%s %u bit"
 
-#: src/gpa-key-details.c:202
 msgid "No keys selected"
 msgstr "Hiçbir anahtar seçilmedi"
 
-#: src/gpa-key-details.c:205
 #, fuzzy, c-format
 msgid "%d key selected"
 msgid_plural "%d keys selected"
 msgstr[0] "%d anahtar seçildi"
 msgstr[1] "%d anahtar seçildi"
 
-#: src/gpa-key-details.c:287
 #, fuzzy
 msgid "User name:"
 msgstr "Kullanýcý Adý:"
 
-#: src/gpa-key-details.c:291 src/keysigndlg.c:106
 msgid "Fingerprint:"
 msgstr "Parmakizi:"
 
-#: src/gpa-key-details.c:293
 msgid "Expires at:"
 msgstr "Bitim tarihi:"
 
-#: src/gpa-key-details.c:295
 msgid "Owner Trust:"
 msgstr "Sahibine Güven:"
 
-#: src/gpa-key-details.c:297
 #, fuzzy
 msgid "Key validity:"
 msgstr "Anahtar Geçerliliði"
 
-#: src/gpa-key-details.c:299
 #, fuzzy
 msgid "Key type:"
 msgstr "Anahtar Tipi:"
 
-#: src/gpa-key-details.c:301
 msgid "Created at:"
 msgstr "Yaratýlma Tarihi:"
 
-#: src/gpa-key-details.c:304
 msgid "Details"
 msgstr "Detaylar"
 
-#: src/gpa-key-details.c:350
 msgid "Show signatures on user name:"
 msgstr "Þu kullanýcý adýndaki imzalarý göster:"
 
-#: src/gpa-key-details.c:386
 #, fuzzy
 msgid "Chain"
 msgstr "Ýmzalayabilir"
 
-#: src/gpa-key-details.c:386
 msgid "Signatures"
 msgstr "Ýmzalar"
 
-#: src/gpa-key-details.c:408
 msgid "All signatures"
 msgstr "Tüm imzalar"
 
-#: src/gpa-key-details.c:470
 msgid "Subkeys"
 msgstr "Altanahtarlar"
 
-#: src/gpa-key-details.c:470
 #, fuzzy
 msgid "Key"
 msgstr "/_Anahtarlar"
 
-#: src/keysigndlg.c:59
 msgid "Sign Key"
 msgstr "Anahtarý Ýmzala"
 
-#: src/keysigndlg.c:72
 msgid "Do you want to sign the following key?"
 msgstr "Bu anahtarý imzalamak istediðiniza emin misiniz?"
 
-#: src/keysigndlg.c:116
 msgid ""
 "Check the name and fingerprint carefully to be sure that it really is the "
 "key you want to sign."
@@ -1792,19 +1411,15 @@ msgstr ""
 "Bu anahtarýn gerçekten imzalamak istediðiniz anahtar olduðuna emin olmak "
 "için lütfen ismini ve parmakizini dikkatli kontrol edin."
 
-#: src/keysigndlg.c:124
 msgid "All user names in this key will be signed."
 msgstr "Bu anahtardaki bütün kullanýcý isimleri imzalanacaktýr."
 
-#: src/keysigndlg.c:130
 msgid "The key will be signed with your default private key."
 msgstr "Bu anahtar sizin varsayýlan özel anahtarýnýzla imzalanacaktýr."
 
-#: src/keysigndlg.c:137
 msgid "Sign only _locally"
 msgstr "Sadece _yerel olarak imzala"
 
-#: src/options.c:329
 msgid ""
 "The private key you selected as default is no longer available.\n"
 "GPA will try to choose a new default key automatically."
@@ -1812,26 +1427,21 @@ msgstr ""
 "Varsayýlan olarak seçmiþ olduðunuz özel anahtar artýk mevcut deðil. \n"
 "GPA kendiliðinden yeni bir varsayýlan anahtar seçmeye çalýþacak."
 
-#: src/ownertrustdlg.c:106
 msgid "Change key ownertrust"
 msgstr "Anahtarýn sahibine güveni deðiþtir"
 
-#: src/ownertrustdlg.c:130
 msgid "_Unknown"
 msgstr "_Bilinmiyor"
 
-#: src/ownertrustdlg.c:135
 msgid ""
 "You don't know how much to trust this user to verify other people's keys.\n"
 msgstr ""
 "Bu kullanýcýya diðer insanlarýn anahtarlarýný doðrulamada ne kadar "
 "güvenmeniz gerektiðini bilmiyorsunuz.\n"
 
-#: src/ownertrustdlg.c:145
 msgid "_Never"
 msgstr "_Hiç"
 
-#: src/ownertrustdlg.c:150
 msgid ""
 "You don't trust this user at all to verify the validity of other people's "
 "keys at all.\n"
@@ -1839,11 +1449,9 @@ msgstr ""
 "Bu kullanýcýya diðer insanlarýn anahtarlarýnýn geçerliliðini doðrulamada hiç "
 "güvenmiyorsunuz.\n"
 
-#: src/ownertrustdlg.c:160
 msgid "_Marginal"
 msgstr "_Sýnýrlý"
 
-#: src/ownertrustdlg.c:165
 msgid ""
 "You don't trust this user's ability to verify the validity of other people's "
 "keys enough to consider keys valid based on his/her sole word.\n"
@@ -1857,11 +1465,9 @@ msgstr ""
 "kullanýcý tarafýndan geçerli anahtarlarla imzalanmýþsa onu geçerli "
 "sayacaksýnýz.\n"
 
-#: src/ownertrustdlg.c:182
 msgid "_Full"
 msgstr "_Tam"
 
-#: src/ownertrustdlg.c:187
 msgid ""
 "You trust this user's ability to verify the validity of other people's keys "
 "so much, that you'll consider valid any key signed by him/her, provided this "
@@ -1871,11 +1477,9 @@ msgstr ""
 "yeteneðine onun imzaladýðý herhangi bir anahtarý geçerli sayacak kadar çok "
 "güveniyorsunuz.\n"
 
-#: src/ownertrustdlg.c:200
 msgid "U_ltimate"
 msgstr "S_onsuz"
 
-#: src/ownertrustdlg.c:205
 msgid ""
 "You consider this key valid, and trust the user so much that you will "
 "consider any key signed by him/her fully valid.\n"
@@ -1891,7 +1495,6 @@ msgstr ""
 "Bunu ne yaptýðýnýzdan emin olmadýðýnýz sürece baþkalarýnýn anahtarlarýnda "
 "kullanmayýnýz.\n"
 
-#: src/passwddlg.c:45
 msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
@@ -1899,7 +1502,6 @@ msgstr ""
 "\"Þifre\" ve \"Þifre tekrar\" bölümlerinde,\n"
 "ayný þifreyi girmelisiniz."
 
-#: src/passwddlg.c:52
 msgid ""
 "You did not enter a passphrase.\n"
 "It is needed to protect your private key."
@@ -1907,7 +1509,6 @@ msgstr ""
 "Bir þifre girmediniz.\n"
 "Bu özel þifrenizi korumak için gerekli."
 
-#: src/passwddlg.c:65
 msgid ""
 "Warning: You have entered a passphrase\n"
 "that is obviously not secure.\n"
@@ -1919,182 +1520,141 @@ msgstr ""
 "\n"
 "Lütfen yeni bir þifre girin."
 
-#: src/passwddlg.c:70
 msgid "_Enter new passphrase"
 msgstr "_Yeni þifre gir"
 
-#: src/passwddlg.c:71
 msgid "Take this one _anyway"
 msgstr "Her _durumda bunu kullan"
 
-#: src/passwddlg.c:96
 msgid "Choose new passphrase"
 msgstr "Yeni þifre seçin"
 
-#: src/passwddlg.c:111
 msgid "Passphrase: "
 msgstr "Þifre: "
 
-#: src/passwddlg.c:120
 msgid "Repeat Passphrase: "
 msgstr "Þifre Tekrar: "
 
-#: src/recipientdlg.c:165
 msgid "Recipient"
 msgstr ""
 
-#: src/recipientdlg.c:166
 msgid ""
 "Shows the recipients of the message. A key needs to be assigned to each "
 "recipient."
 msgstr ""
 
-#: src/recipientdlg.c:174
 msgid "Checked if at least one matching OpenPGP certificate has been found."
 msgstr ""
 
-#: src/recipientdlg.c:182
 msgid ""
 "Checked if at least one matching X.509 certificate for use with S/MIME has "
 "been found."
 msgstr ""
 
-#: src/recipientdlg.c:192
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
 "selected."
 msgstr ""
 
-#: src/recipientdlg.c:306
 msgid ""
 "You need to select a key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
 
-#: src/recipientdlg.c:314
 msgid ""
 "You need to select exactly one key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
 
-#: src/recipientdlg.c:321
 msgid ""
 "Although you selected keys for all recipients a common encryption protocol "
 "can't be used. Please decide on one protocol by clicking one of the above "
 "radio buttons."
 msgstr ""
 
-#: src/recipientdlg.c:327
 msgid "Using OpenPGP for encryption."
 msgstr ""
 
-#: src/recipientdlg.c:332
 msgid "Using S/MIME for encryption."
 msgstr ""
 
-#: src/recipientdlg.c:336
 msgid "No recipients - encryption is not possible"
 msgstr ""
 
-#: src/recipientdlg.c:422
 msgid "[Ambiguous keys. Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:424
 msgid "[Ambiguous PGP key.  Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:426
 msgid "[Ambiguous X.509 key. Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:439
 msgid "[Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:824
 msgid "Select _PGP key..."
 msgstr ""
 
-#: src/recipientdlg.c:826
 msgid "Select _S\\/MIME key..."
 msgstr ""
 
-#: src/recipientdlg.c:828
 msgid "Toggle _Ignore flag"
 msgstr ""
 
-#: src/recipientdlg.c:942
 msgid "Select keys for recipients"
 msgstr ""
 
-#: src/recipientdlg.c:959
 msgid "_Recipient list"
 msgstr ""
 
-#: src/recipientdlg.c:982
 msgid "Use _PGP"
 msgstr ""
 
-#: src/recipientdlg.c:985
 msgid "Use _X.509"
 msgstr ""
 
-#: src/recipientdlg.c:988
 #, fuzzy
 msgid "_Auto selection"
 msgstr "Seçili dosyayý þifrele"
 
-#: src/selectkeydlg.c:179
 #, fuzzy
 msgid "Select a key"
 msgstr "Seçili Varsayýlan Anahtar:"
 
-#: src/server-access.c:294
 msgid "No error"
 msgstr "Hata yok"
 
-#: src/server-access.c:297
 msgid "Internal error"
 msgstr "Dahili hata"
 
-#: src/server-access.c:300
 msgid "Operation not supported"
 msgstr "Ýþlem desteklenmiyor"
 
-#: src/server-access.c:303
 msgid "Version mismatch"
 msgstr "Sürüm tutmuyor"
 
-#: src/server-access.c:306
 msgid "Internal keyserver error"
 msgstr "Dahili anahtar sunucusu hatasý"
 
-#: src/server-access.c:309
 msgid "Out of memory"
 msgstr "Hafýza yetersiz"
 
-#: src/server-access.c:312
 msgid "Key not found"
 msgstr "Anahtar bulunamadý"
 
-#: src/server-access.c:315
 msgid "Key already exists on server"
 msgstr "Anahtar sunucuda zaten var"
 
-#: src/server-access.c:318
 msgid "Key incomplete"
 msgstr "Eksik anahtar"
 
-#: src/server-access.c:321
 msgid "Could not contact keyserver"
 msgstr "Anahtar sunucusuna baðlanýlamýyor"
 
-#: src/server-access.c:324
 msgid "Unknown Error"
 msgstr "Bilinmeyen Hata"
 
-#: src/server-access.c:360
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -2103,7 +1663,6 @@ msgstr ""
 "\"%s\" sunucusuna baðlanýlýyor.\n"
 "Lütfen bekleyin."
 
-#: src/server-access.c:383 src/server-access.c:403
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -2114,7 +1673,6 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/server-access.c:469
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
@@ -2122,67 +1680,52 @@ msgstr ""
 "Belirttiðiniz anahtar sunucusu protokolü için\n"
 "mevcut bir plugin bulunamadý."
 
-#: src/server-access.c:542 src/server-access.c:586
 msgid "The keyserver you specified is not valid"
 msgstr "Belittiðiniz anahtar sunucusu geçersiz"
 
-#: src/settingsdlg.c:133 src/siglist.c:134
 msgid "Local"
 msgstr "Yerel"
 
-#: src/settingsdlg.c:134
 msgid "Local, Keyserver"
 msgstr ""
 
-#: src/settingsdlg.c:135
 #, fuzzy
 msgid "Local, PKA"
 msgstr "Yerel"
 
-#: src/settingsdlg.c:136
 msgid "Local, PKA, Keyserver"
 msgstr ""
 
-#: src/settingsdlg.c:137
 msgid "Local, Keyserver, PKA"
 msgstr ""
 
-#: src/settingsdlg.c:138
 #, fuzzy
 msgid "Local, kDNS"
 msgstr "Yerel"
 
-#: src/settingsdlg.c:139
 msgid "Local, kDNS, Keyserver"
 msgstr ""
 
-#: src/settingsdlg.c:140
 msgid "PKA"
 msgstr ""
 
-#: src/settingsdlg.c:141
 msgid "kDNS"
 msgstr ""
 
-#: src/settingsdlg.c:142
 msgid "Custom"
 msgstr ""
 
-#: src/settingsdlg.c:208
 #, fuzzy
 msgid "<b>User interface</b>"
 msgstr "U_zman modunu kullan:"
 
-#: src/settingsdlg.c:215
 #, fuzzy
 msgid "Use _advanced mode"
 msgstr "U_zman modunu kullan:"
 
-#: src/settingsdlg.c:221
 msgid "Show advanced _options"
 msgstr ""
 
-#: src/settingsdlg.c:272
 msgid ""
 "No default key has been selected.  This may lead to problems when signing or "
 "encrypting.  For example you might later not be able to read a mail written "
@@ -2191,31 +1734,25 @@ msgid ""
 "Please consider creating your own key and select it then."
 msgstr ""
 
-#: src/settingsdlg.c:278
 msgid "Continue without a default key"
 msgstr ""
 
-#: src/settingsdlg.c:280
 #, fuzzy
 msgid "Let me select a default key"
 msgstr "Seçili Varsayýlan Anahtar:"
 
-#: src/settingsdlg.c:305
 #, fuzzy
 msgid "<b>Default _key</b>"
 msgstr "Varsayýlan _anahtar:"
 
-#: src/settingsdlg.c:405
 #, fuzzy
 msgid "<b>Default key_server</b>"
 msgstr "Varsayýlan anahtar _sunucusu: "
 
-#: src/settingsdlg.c:602
 #, fuzzy
 msgid "<b>Auto key _locate</b>"
 msgstr "Varsayýlan anahtar _sunucusu: "
 
-#: src/settingsdlg.c:612
 msgid ""
 "The list of methods to locate keys via an email address.\n"
 "All given methods are used in turn until a matching key is found.  The "
@@ -2232,88 +1769,69 @@ msgid ""
 "   - Configured in the backend dialog.\n"
 msgstr ""
 
-#: src/settingsdlg.c:627
 msgid "Method:"
 msgstr ""
 
-#: src/settingsdlg.c:644
 msgid "The IP address of the nameserver used for the kDNS method."
 msgstr ""
 
-#: src/settingsdlg.c:646
 #, fuzzy
 msgid "kDNS Server:"
 msgstr "/_Sunucu"
 
-#: src/settingsdlg.c:740
 #, fuzzy
 msgid "The URL given for the keyserver is not valid."
 msgstr "Belittiðiniz anahtar sunucusu geçersiz"
 
-#: src/settingsdlg.c:749
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 
-#: src/settingsdlg.c:886
 #, fuzzy
 msgid "GNU Privacy Assistant - Settings"
 msgstr "GNU Gizlilik Asistaný - Anahtarlýk Düzenleyicisi"
 
-#: src/siglist.c:127
 msgid "Level"
 msgstr "Seviye"
 
-#: src/verifydlg.c:116
 #, fuzzy
 msgid "Verify documents"
 msgstr "Dosyalarý doðrula"
 
-#: src/verifydlg.c:232
 msgid "Expired Key"
 msgstr "Sona ermiþ anatar"
 
-#: src/verifydlg.c:240
 msgid "Key NOT valid"
 msgstr "Anahtar Geçersiz"
 
-#: src/verifydlg.c:359
 #, c-format
 msgid "Verified data in file: %s"
 msgstr "%s dosyasýndaki veri doðrulandý"
 
-#: src/verifydlg.c:364
 #, fuzzy, c-format
 msgid "Signature: %s"
 msgstr "Ýmzalar: %s"
 
-#: src/verifydlg.c:370
 msgid "Signatures:"
 msgstr "Ýmzalar:"
 
-#: src/cardman.c:166
 #, fuzzy
 msgid "GNU Privacy Assistant - Card Manager"
 msgstr "GNU Gizlilik Asistaný - Dosya Yöneticisi"
 
-#: src/cardman.c:187
 #, c-format
 msgid "%s card detected."
 msgstr ""
 
-#: src/cardman.c:194
 msgid "Checking for card..."
 msgstr ""
 
-#: src/cardman.c:361
 #, fuzzy
 msgid "No card found."
 msgstr "Hiçbir anahtar bulunamadý."
 
-#: src/cardman.c:367
 msgid "The selected card application is currently not available."
 msgstr ""
 
-#: src/cardman.c:368
 msgid ""
 "Another process is using a different card application than the selected "
 "one.\n"
@@ -2322,60 +1840,47 @@ msgid ""
 "active application."
 msgstr ""
 
-#: src/cardman.c:378
 msgid "The selected card application is not available."
 msgstr ""
 
-#: src/cardman.c:384
 msgid "Error accessing the card."
 msgstr ""
 
-#: src/cardman.c:385 src/cardman.c:418
 msgid "Error accessing card"
 msgstr ""
 
-#: src/cardman.c:413
 msgid "No card"
 msgstr ""
 
-#: src/cardman.c:621
 #, fuzzy
 msgid "_Card"
 msgstr "/Pencereler/_Dosya Yöneticisi"
 
-#: src/cardman.c:629
 msgid "Reload card information"
 msgstr ""
 
-#: src/cardman.c:631
 #, fuzzy
 msgid "Generate new key on card"
 msgstr "Anahtar yarat"
 
-#: src/cardman.c:756
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "Ýþlem desteklenmiyor"
 
-#: src/cardman.c:891
 #, fuzzy
 msgid "Card Manager"
 msgstr "dosya yöneticisi"
 
-#: src/cardman.c:899
 #, fuzzy
 msgid "Application selection:"
 msgstr "Seçili dosyayý þifrele"
 
-#: src/cardman.c:903
 msgid "Auto"
 msgstr ""
 
-#: src/cardman.c:980
 msgid "The GPGME library is too old to support smartcards."
 msgstr ""
 
-#: src/cm-openpgp.c:162
 msgid ""
 "<b>Admin-PIN Required</b>\n"
 "\n"
@@ -2392,73 +1897,56 @@ msgid ""
 "This notice will be shown only once per session."
 msgstr ""
 
-#: src/cm-openpgp.c:281 src/cm-netkey.c:968
 msgid "PUK retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:282
 msgid "CHV2 retry counter: "
 msgstr ""
 
-#: src/cm-openpgp.c:394 src/cm-netkey.c:156
 msgid "Reset PIN"
 msgstr ""
 
-#: src/cm-openpgp.c:394 src/cm-openpgp.c:416 src/cm-netkey.c:157
 msgid "Change PIN"
 msgstr ""
 
-#: src/cm-openpgp.c:404 src/cm-netkey.c:157
 msgid "Change PUK"
 msgstr ""
 
-#: src/cm-openpgp.c:404 src/cm-netkey.c:156
 msgid "Reset PUK"
 msgstr ""
 
-#: src/cm-openpgp.c:675
 #, c-format
 msgid ""
 "Error saving the changed values.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:698
 msgid "Only plain ASCII is currently allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:700
 msgid "The \"<\" character may not be used."
 msgstr ""
 
-#: src/cm-openpgp.c:702
 msgid "Double spaces are not allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:734
 msgid ""
 "Total length of first and last name may not be longer than 39 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:737 src/cm-openpgp.c:775 src/cm-openpgp.c:802
-#: src/cm-openpgp.c:826 src/cm-openpgp.c:851 src/cm-openpgp.c:872
 #, fuzzy
 msgid "Saving the field failed."
 msgstr "Seçili dosyayý imzala"
 
-#: src/cm-openpgp.c:761
 msgid "Invalid length of the language preference."
 msgstr ""
 
-#: src/cm-openpgp.c:769
 msgid "The language preference may only contain the letters 'a' through 'z'."
 msgstr ""
 
-#: src/cm-openpgp.c:821 src/cm-openpgp.c:846
 msgid "The field may not be longer than 254 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:1072
 msgid ""
 "<b>Unblocking the PIN</b>\n"
 "\n"
@@ -2472,7 +1960,6 @@ msgid ""
 "at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1086
 msgid ""
 "<b>Changing the PIN</b>\n"
 "\n"
@@ -2488,7 +1975,6 @@ msgid ""
 "PIN.  Please check the instructions of your issuer."
 msgstr ""
 
-#: src/cm-openpgp.c:1103
 msgid ""
 "<b>Changing the Reset Code</b>\n"
 "\n"
@@ -2500,7 +1986,6 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1113
 msgid ""
 "<b>Reseting the PIN or the Reset Code</b>\n"
 "\n"
@@ -2518,7 +2003,6 @@ msgid ""
 "repeat that new value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1130
 msgid ""
 "<b>Changing the Admin-PIN</b>\n"
 "\n"
@@ -2536,129 +2020,102 @@ msgid ""
 "value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1173 src/cm-netkey.c:793
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:1287
 #, c-format
 msgid ""
 "Error fetching the key.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:1300
 #, c-format
 msgid "Keys found: %d, imported: %d, unchanged: %d"
 msgstr ""
 
-#: src/cm-openpgp.c:1322
 msgid "Fetch Key"
 msgstr ""
 
-#: src/cm-openpgp.c:1399 src/cm-netkey.c:889 src/cm-dinsig.c:255
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "U_zman modunu kullan:"
 
-#: src/cm-openpgp.c:1409 src/cm-netkey.c:898 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr ""
 
-#: src/cm-openpgp.c:1413 src/cm-netkey.c:902
 msgid "Card version:"
 msgstr ""
 
-#: src/cm-openpgp.c:1417
 msgid "Manufacturer:"
 msgstr ""
 
-#: src/cm-openpgp.c:1426
 #, fuzzy
 msgid "<b>Personal</b>"
 msgstr "Kiþisel"
 
-#: src/cm-openpgp.c:1440
 msgid "Salutation:"
 msgstr ""
 
-#: src/cm-openpgp.c:1445
 msgid "First name:"
 msgstr ""
 
-#: src/cm-openpgp.c:1450
 #, fuzzy
 msgid "Last name:"
 msgstr "Kullanýcý Adý:"
 
-#: src/cm-openpgp.c:1455
 msgid "Language:"
 msgstr ""
 
-#: src/cm-openpgp.c:1460
 msgid "Login data:"
 msgstr ""
 
-#: src/cm-openpgp.c:1465
 #, fuzzy
 msgid "Public key URL:"
 msgstr "Genel Anahtarlar"
 
-#: src/cm-openpgp.c:1473 src/cm-netkey.c:934
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "_Farklý Ýmzala"
 
-#: src/cm-openpgp.c:1490
 #, fuzzy
 msgid "Signature key:"
 msgstr "Ýmzalar:"
 
-#: src/cm-openpgp.c:1494
 #, fuzzy
 msgid "Encryption key:"
 msgstr "Þifreliyor..."
 
-#: src/cm-openpgp.c:1498
 #, fuzzy
 msgid "Authentication key:"
 msgstr "Doðrulayabilir"
 
-#: src/cm-openpgp.c:1502
 #, fuzzy
 msgid "Signature counter:"
 msgstr "Ýmzalar:"
 
-#: src/cm-openpgp.c:1510 src/cm-netkey.c:950
 msgid "<b>PIN</b>"
 msgstr ""
 
-#: src/cm-openpgp.c:1522
 #, fuzzy
 msgid "Force signature PIN:"
 msgstr "_temiz yazý imzasý"
 
-#: src/cm-openpgp.c:1526 src/cm-netkey.c:960
 msgid "PIN retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:1540
 msgid "Admin-PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:142
 msgid "blocked"
 msgstr ""
 
-#: src/cm-netkey.c:373
 #, fuzzy
 msgid "Learn keys"
 msgstr "anahtarlarý dýþarý yaz"
 
-#: src/cm-netkey.c:375
 msgid ""
 "For some or all of the keys available on the card, the GnuPG crypto engine "
 "does not yet know the corresponding certificates.\n"
@@ -2671,12 +2128,10 @@ msgid ""
 "If you are unsure what to do, just click the button."
 msgstr ""
 
-#: src/cm-netkey.c:594
 #, fuzzy
 msgid "Learning keys ..."
 msgstr "Anahtar Yaratýlýyor..."
 
-#: src/cm-netkey.c:637
 #, c-format
 msgid ""
 "<b>Setting the Initial PIN</b> (%s)\n"
@@ -2696,27 +2151,23 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/cm-netkey.c:651
 msgid ""
 "You are now setting the PIN for the SigG key used to create <b>qualified "
 "signatures</b>.  You may want to set the PIN to the same value as used for "
 "the NKS keys."
 msgstr ""
 
-#: src/cm-netkey.c:654
 msgid ""
 "You are now setting the PIN for the NKS keys used for standard signatures, "
 "encryption and authentication."
 msgstr ""
 
-#: src/cm-netkey.c:683
 #, c-format
 msgid ""
 "Error changing the NullPIN.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-netkey.c:733
 msgid ""
 "<b>Changing a PIN or PUK</b>\n"
 "\n"
@@ -2729,7 +2180,6 @@ msgid ""
 "way to unblock them!"
 msgstr ""
 
-#: src/cm-netkey.c:745
 msgid ""
 "<b>Resetting a PUK</b>\n"
 "\n"
@@ -2746,7 +2196,6 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:759
 msgid ""
 "<b>Resetting a PIN</b>\n"
 "\n"
@@ -2759,30 +2208,24 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:913
 msgid ""
 "<b>A NullPIN is still active on this card</b>.\n"
 "You need to set a real PIN before you can make use of the card."
 msgstr ""
 
-#: src/cm-netkey.c:919
 msgid "Set initial PIN"
 msgstr ""
 
-#: src/cm-netkey.c:940
 #, fuzzy
 msgid "scanning ..."
 msgstr "Þifreliyor..."
 
-#: src/cm-netkey.c:976
 msgid "SigG PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:984
 msgid "SigG PUK retry counter:"
 msgstr ""
 
-#: src/cm-dinsig.c:274
 #, c-format
 msgid ""
 "There is not much information to display for a %s card.  You may want to use "

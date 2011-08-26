@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2010-05-06 13:11+0200\n"
+"POT-Creation-Date: 2011-08-26 10:32+0200\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -14,132 +14,132 @@ msgstr ""
 "Content-Type: text/plain; charset=big5\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/clipboard.c:375 src/fileman.c:389
+#: src/clipboard.c:393 src/fileman.c:389
 msgid "Open File"
 msgstr "開啟檔案"
 
-#: src/clipboard.c:403 src/confdialog.c:1274 src/gtktools.c:85
+#: src/clipboard.c:421 src/confdialog.c:1274 src/gtktools.c:85
 msgid "GPA Message"
 msgstr "GPA 訊息"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#: src/clipboard.c:420
+#: src/clipboard.c:438
 #, fuzzy, c-format
 msgid "The file %s is %lli%s large.  Do you really  want to open it?"
 msgstr ""
 "檔案 %s 已經存在.\n"
 "要進行覆寫嗎?"
 
-#: src/clipboard.c:541
+#: src/clipboard.c:559
 msgid "Save As..."
 msgstr ""
 
-#: src/clipboard.c:582 src/clipboard.c:612 src/clipboard.c:642
-#: src/clipboard.c:672 src/clipboard.c:1038
+#: src/clipboard.c:600 src/clipboard.c:630 src/clipboard.c:660
+#: src/clipboard.c:690 src/clipboard.c:1056
 msgid "Clipboard"
 msgstr ""
 
-#: src/clipboard.c:754 src/fileman.c:512 src/keymanager.c:867
+#: src/clipboard.c:772 src/fileman.c:512 src/keymanager.c:867
 #: src/cardman.c:619
 #, fuzzy
 msgid "_File"
 msgstr "/檔案"
 
-#: src/clipboard.c:755 src/fileman.c:513 src/keymanager.c:868
+#: src/clipboard.c:773 src/fileman.c:513 src/keymanager.c:868
 #: src/cardman.c:620
 #, fuzzy
 msgid "_Edit"
 msgstr "/編輯"
 
-#: src/clipboard.c:759
+#: src/clipboard.c:777
 msgid "Clear buffer"
 msgstr ""
 
-#: src/clipboard.c:761 src/fileman.c:517
+#: src/clipboard.c:779 src/fileman.c:517
 msgid "Open a file"
 msgstr "開啟檔案"
 
-#: src/clipboard.c:763
+#: src/clipboard.c:781
 #, fuzzy
 msgid "Save to a file"
 msgstr "開啟檔案"
 
-#: src/clipboard.c:765
+#: src/clipboard.c:783
 #, fuzzy
 msgid "Sign buffer text"
 msgstr "簽署密鑰"
 
-#: src/clipboard.c:767
+#: src/clipboard.c:785
 #, fuzzy
 msgid "Check signatures of buffer text"
 msgstr "檢查已選擇檔案的簽署"
 
-#: src/clipboard.c:769
+#: src/clipboard.c:787
 #, fuzzy
 msgid "Encrypt the buffer text"
 msgstr "加密已選擇檔案"
 
-#: src/clipboard.c:771
+#: src/clipboard.c:789
 #, fuzzy
 msgid "Decrypt the buffer text"
 msgstr "解密已選擇檔案"
 
-#: src/clipboard.c:773
+#: src/clipboard.c:791
 msgid "Close the buffer"
 msgstr ""
 
-#: src/clipboard.c:775 src/fileman.c:531 src/keymanager.c:876
+#: src/clipboard.c:793 src/fileman.c:531 src/keymanager.c:876
 #: src/cardman.c:625
 msgid "Quit the program"
 msgstr ""
 
-#: src/clipboard.c:781
+#: src/clipboard.c:799
 #, fuzzy
 msgid "Undo the last action"
 msgstr "加密已選擇檔案"
 
-#: src/clipboard.c:783
+#: src/clipboard.c:801
 msgid "Redo the last undone action"
 msgstr ""
 
-#: src/clipboard.c:786
+#: src/clipboard.c:804
 #, fuzzy
 msgid "Cut the selection"
 msgstr "加密已選擇檔案"
 
-#: src/clipboard.c:788 src/keymanager.c:880
+#: src/clipboard.c:806 src/keymanager.c:880
 #, fuzzy
 msgid "Copy the selection"
 msgstr "加密已選擇檔案"
 
-#: src/clipboard.c:790 src/keymanager.c:882
+#: src/clipboard.c:808 src/keymanager.c:882
 msgid "Paste the clipboard"
 msgstr ""
 
-#: src/clipboard.c:792
+#: src/clipboard.c:810
 #, fuzzy
 msgid "Delete the selected text"
 msgstr "解密已選擇檔案"
 
-#: src/clipboard.c:794
+#: src/clipboard.c:812
 msgid "Select the entire document"
 msgstr ""
 
-#: src/clipboard.c:904 src/fileman.c:625 src/cardman.c:710
+#: src/clipboard.c:922 src/fileman.c:625 src/cardman.c:710
 #, fuzzy
 msgid "Keyring"
 msgstr "鑰圈編輯器"
 
-#: src/clipboard.c:906 src/keymanager.c:1059 src/cardman.c:712
+#: src/clipboard.c:924 src/keymanager.c:1059 src/cardman.c:712
 msgid "Files"
 msgstr "檔案"
 
-#: src/clipboard.c:908 src/fileman.c:627 src/keymanager.c:1061
+#: src/clipboard.c:926 src/fileman.c:627 src/keymanager.c:1061
 msgid "Card"
 msgstr ""
 
-#: src/clipboard.c:1008
+#: src/clipboard.c:1026
 #, fuzzy
 msgid "GNU Privacy Assistant - Clipboard"
 msgstr "GNU Privacy Assistant - 檔案管理"
@@ -944,7 +944,7 @@ msgstr ""
 "!執行錯誤!\n"
 "有效期不法的插入模式."
 
-#: src/gpadatebutton.c:86
+#: src/gpadatebutton.c:87
 msgid "(not set)"
 msgstr ""
 
