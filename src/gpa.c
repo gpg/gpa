@@ -67,6 +67,7 @@ typedef struct
   gboolean start_clipboard;
   gboolean start_settings;
   gboolean start_only_server;
+  gboolean disable_x509;
   gchar *options_filename;
 } gpa_args_t;
 
@@ -74,7 +75,7 @@ static gpa_args_t args;
 
 
 /* The copyright notice.  */
-static const char *copyright = 
+static const char *copyright =
 "Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
 "Copyright (C) 2008, 2009 g10 Code GmbH.\n"
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
@@ -106,6 +107,8 @@ static GOptionEntry option_entries[] =
       N_("Open the settings dialog"), NULL },
     { "daemon", 'd', 0, G_OPTION_ARG_NONE, &args.start_only_server,
       N_("Enable the UI server"), NULL },
+    { "disable-x509", 0, 0, G_OPTION_ARG_NONE, &args.disable_x509,
+      N_("Disable support for X.509"), NULL },
     { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
       N_("Read options from file"), "FILE" },
     /* Note:  the cms option will eventually be removed.  */
@@ -317,7 +320,7 @@ main (int argc, char *argv[])
   g_option_context_set_description (context, N_("Please report bugs to <"
 						PACKAGE_BUGREPORT ">."));
   g_option_context_set_translation_domain (context, PACKAGE);
-#endif 
+#endif
   g_option_context_add_main_entries (context, option_entries, PACKAGE);
   g_option_context_add_group (context, gtk_get_option_group (TRUE));
 
@@ -381,7 +384,7 @@ main (int argc, char *argv[])
      to ignore.  Nobody wants this signal.  */
   {
     struct sigaction sa;
-    
+
     sa.sa_handler = SIG_IGN;
     sigemptyset (&sa.sa_mask);
     sa.sa_flags = 0;
@@ -398,7 +401,7 @@ main (int argc, char *argv[])
   gpa_start_agent ();
 
   /* Handle command line options.  */
-  cms_hack = 1; /* CMS is now always enabled.  */
+  cms_hack = !args.disable_x509;
 
   /* Start the key manger by default.  */
   if (!args.start_key_manager
@@ -461,7 +464,7 @@ main (int argc, char *argv[])
 
       if (args.start_clipboard && (optind >= argc))
 	gpa_open_clipboard (NULL, NULL);
-  
+
       if (args.start_file_manager || (optind < argc))
 	gpa_open_filemanager (NULL, NULL);
 

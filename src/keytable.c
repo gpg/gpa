@@ -44,7 +44,7 @@ GType
 gpa_keytable_get_type (void)
 {
   static GType keytable_type = 0;
-  
+
   if (!keytable_type)
     {
       static const GTypeInfo keytable_info =
@@ -59,12 +59,12 @@ gpa_keytable_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_keytable_init,
       };
-      
+
       keytable_type = g_type_register_static (G_TYPE_OBJECT,
 					      "GpaTable",
 					      &keytable_info, 0);
     }
-  
+
   return keytable_type;
 }
 
@@ -72,7 +72,7 @@ static void
 gpa_keytable_class_init (GpaKeyTableClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gpa_keytable_finalize;
@@ -114,11 +114,11 @@ gpa_keytable_finalize (GObject *object)
 
 /* Internal functions */
 
-static void 
+static void
 reload_cache (GpaKeyTable *keytable, const char *fpr)
 {
   gpg_error_t err;
-  
+
   /* We select the Open PGP protocol here.  At the end
      first_half_done_cb will do another keylist_start for X,509.  */
   keytable->did_first_half = 0;
@@ -139,7 +139,7 @@ reload_cache (GpaKeyTable *keytable, const char *fpr)
   keytable->tmp_list = NULL;
 }
 
-static void 
+static void
 done_cb (GpaContext *context, gpg_error_t err, GpaKeyTable *keytable)
 {
   if (err || keytable->first_half_err)
@@ -155,7 +155,7 @@ done_cb (GpaContext *context, gpg_error_t err, GpaKeyTable *keytable)
   keytable->tmp_list = g_list_reverse (keytable->tmp_list);
   if (keytable->new_key)
     {
-      /* Append the new key(s) 
+      /* Append the new key(s)
        */
       keytable->keys = g_list_concat (keytable->keys, keytable->tmp_list);
     }
@@ -165,9 +165,9 @@ done_cb (GpaContext *context, gpg_error_t err, GpaKeyTable *keytable)
        */
       if (keytable->keys)
 	{
-	  g_list_foreach (keytable->keys, (GFunc) gpgme_key_unref, 
+	  g_list_foreach (keytable->keys, (GFunc) gpgme_key_unref,
 			  NULL);
-	  g_list_free (keytable->keys); 
+	  g_list_free (keytable->keys);
 	}
       keytable->keys = keytable->tmp_list;
     }
@@ -179,7 +179,7 @@ done_cb (GpaContext *context, gpg_error_t err, GpaKeyTable *keytable)
 }
 
 
-static void 
+static void
 first_half_done_cb (GpaContext *context, gpg_error_t err,
                     GpaKeyTable *keytable)
 {
@@ -194,14 +194,14 @@ first_half_done_cb (GpaContext *context, gpg_error_t err,
       done_cb (context, err, keytable);
       return;
     }
-  
+
   /* Now continue with a key listing for X.509 keys but save the error
      of the the PGP key listing.  */
   keytable->first_half_err = err;
   keytable->did_first_half = 1;
 
   gpgme_set_protocol (context->ctx, GPGME_PROTOCOL_CMS);
-  err = gpgme_op_keylist_start (keytable->context->ctx, 
+  err = gpgme_op_keylist_start (keytable->context->ctx,
                                 keytable->fpr,
 				keytable->secret);
   keytable->fpr = NULL; /* Not needed anymore.  */
@@ -209,7 +209,20 @@ first_half_done_cb (GpaContext *context, gpg_error_t err,
     {
       if (keytable->first_half_err)
         gpa_gpgme_warning (keytable->first_half_err);
-      gpa_gpgme_warning (err);
+
+      if (gpg_err_code (err) == GPG_ERR_INV_ENGINE
+          && gpg_err_source (err) == GPG_ERR_SOURCE_GPGME)
+        {
+          gpa_window_error
+            (_("It seems that GPGSM is not installed.\n\n"
+               "Temporary disabling support for X.509.\n\n"
+               "Please install GPGSM or invoke this program\n"
+               "with the option --disable-x509 ."), NULL);
+          cms_hack = 0;
+          err = 0;
+        }
+      else
+        gpa_gpgme_warning (err);
       if (keytable->end)
 	{
 	  keytable->end (keytable->data);
@@ -218,7 +231,7 @@ first_half_done_cb (GpaContext *context, gpg_error_t err,
 }
 
 
-static void 
+static void
 next_key_cb (GpaContext *context, gpgme_key_t key, GpaKeyTable *keytable)
 {
   keytable->tmp_list = g_list_prepend (keytable->tmp_list, key);
@@ -229,11 +242,11 @@ next_key_cb (GpaContext *context, gpgme_key_t key, GpaKeyTable *keytable)
     }
 }
 
-static void 
+static void
 list_cache (GpaKeyTable *keytable)
 {
   GList *list = keytable->keys;
-  
+
   for (; list; list = g_list_next (list))
     {
       gpgme_key_t key = (gpgme_key_t) list->data;
@@ -261,7 +274,7 @@ static GpaKeyTable *
 gpa_keytable_new (gboolean secret)
 {
   GpaKeyTable *keytable;
-  
+
   keytable = g_object_new (GPA_KEYTABLE_TYPE, NULL);
   keytable->secret = secret;
 
@@ -318,7 +331,7 @@ void gpa_keytable_list_keys (GpaKeyTable *keytable,
       /* There is a cached list */
       list_cache (keytable);
     }
-  else 
+  else
     {
       reload_cache (keytable, NULL);
     }

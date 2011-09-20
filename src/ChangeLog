@@ -1,3 +1,9 @@
+2011-09-20  Werner Koch  <wk@g10code.com>
+
+	* keytable.c (first_half_done_cb): Detect missing GPGSM.
+	* gpa.c: Add option --disable-x509.
+	(main): Set CMS_HACK according to the new option.
+
 2010-10-08  Werner Koch  <wk@g10code.com>
 
 	* clipboard.c (file_created_cb): Use gpa_window_message.
@@ -244,7 +250,7 @@
 2009-04-27  Werner Koch  <wk@g10code.com>
 
 	* helpmenu.c (gpa_help_about): Link directly to the GPA page.  Use
-	the same dialog for W32 and !W32.  
+	the same dialog for W32 and !W32.
 
 2009-04-26  Moritz  <moritz@gnu.org>
 
@@ -319,7 +325,7 @@
 2009-03-23  Werner Koch  <wk@g10code.com>
 
 	* gpgmetools.c (gpg_simple_stderr_cb): Use GString and skip
-	non-status lines. 
+	non-status lines.
 
 	* gpa.h (disable_ticker): New.
 	* gpa.c: Add hidden option --disable-ticker.
@@ -345,7 +351,7 @@
 	(card_reload_finish_idle_cb): New.
 	(card_reload): Decrement card via idle handler.
 
-	* cm-netkey.c (reload_more_data_idle_cb, reload_more_data) 
+	* cm-netkey.c (reload_more_data_idle_cb, reload_more_data)
 	(reload_more_data_cb): New.
 	(reload_data): Call reload_more_data.
 	(construct_data_widget): Add a keys frame.
@@ -372,7 +378,7 @@
 
 	* keyring.c: Factor key details code out to ...
 	* gpa-key-details.c, gpa-key-details.h: New.
-	
+
 2009-03-10  Werner Koch  <wk@g10code.com>
 
 	* Makefile.am (localedir): New.
@@ -435,10 +441,10 @@
 	* server_access.c: Rename to server-access.c.
 	* server_access.h: Rename to server-access.h.
 	* gpa_logo.ppm: Rename to gpa-logo.ppm.
-	* Makefile.am: Adjust accordingly.  
+	* Makefile.am: Adjust accordingly.
 	* server-access.c, keyring.c, gpaimportserverop.c
 	* gpaexportserverop.c: Ditto.
-	
+
 	* server_access.c (helper_path) [G_OS_WIN32]: Fix syntax error.
 	(close_dialog): Build only for G_OS_UNIX.
 
@@ -509,8 +515,8 @@
 	(card_edit_genkey_fnc_action): Pop up a dialog to ask for
 	overwriting existing keys.
 
-	* gpgmeedit.c (gpa_gpgme_card_edit_list_start) 
-	(card_edit_list_parms_release, card_edit_list_fnc_transit) 
+	* gpgmeedit.c (gpa_gpgme_card_edit_list_start)
+	(card_edit_list_parms_release, card_edit_list_fnc_transit)
 	(card_edit_list_fnc_action): Remove.
 	* gpacardreloadop.h, gpacardreloadop.c: Remove.
 
@@ -534,7 +540,7 @@
 	* cm-object.c, cm-object.h New.
 	* cm-geldkarte.c, cm-geldkarte.h: New.
 	* cm-netkey.c, cm-netkey.h: New.
-			
+
 2009-02-10  Werner Koch  <wk@g10code.com>
 
 	* cardman.c (modify_name_cb): Disabled due to the use of new gtk+
@@ -760,8 +766,8 @@
 	* keygenwizard.c (string_strip_dup): Make arg const char and get
 	rid of the stupid "gchar".
 
-	* gpacardreloadop.h: Remove include files. Re-indent macros.  
-	(_GpaCardReloadOperation) 
+	* gpacardreloadop.h: Remove include files. Re-indent macros.
+	(_GpaCardReloadOperation)
 	(_GpaCardReloadOperationClass): Move to gpacardreloadop.c.
 
 	* icons.c: Include smartcard.xpm.
@@ -943,7 +949,7 @@
 	TITLE.
 	(gpa_stream_verify_operation_ctor): Display title.
 	* gpaoperation.c (PROP_CLIENT_TITLE): New.
-	(gpa_operation_get_property, gpa_operation_set_property) 
+	(gpa_operation_get_property, gpa_operation_set_property)
 	(gpa_operation_class_init): Register this property.
 	* gpaoperation.h (_GpaOperation): Add field CLIENT_TITLE.
 
@@ -1114,7 +1120,7 @@
 	* strlist.c, strlist.h: New.  Taken from gnupg/jnlib and modified
 	for use in gpa.
 	* gpg-stuff.c, gpg-stuff.h: New. Code taken from GnuPG.
-	
+
 	* confdialog.c (gpa_store_configured_keyserver): Factor code out
 	to ..
 	(gpa_store_gpgconf_string): .. new.
@@ -1123,12 +1129,12 @@
 
 	* options.c (CHANGED_SHOW_ADVANCED_OPTION): New.
 	(gpa_options_class_init): Create new signal
-	(gpa_options_set_simplified_ui): New. 
+	(gpa_options_set_simplified_ui): New.
 	(gpa_options_get_simplified_ui): New.
 	(gpa_options_save_settings, gpa_options_read_settings): Store/Load
 	new option.
 	* settingsdlg.c (ui_mode_changed_for_keyserver): Rename to ..
-	(show_advanced_option_changed_for_keyserver): .. this. 
+	(show_advanced_option_changed_for_keyserver): .. this.
 	(user_interface_mode_frame): Add checkbox "show advanced options".
 
 	* options (gpa_options_class_init): Factor common code out to ..
@@ -1137,7 +1143,7 @@
 2008-04-28  Werner Koch  <wk@g10code.com>
 
 	* settingsdlg.c (gpa_settings_dialog_new): Put advanced UI
-	selection at top.  
+	selection at top.
 	(user_interface_mode_frame): Change to use a checkbox.
 	(advanced_mode_toggled): Simplified.
 	(ui_mode_changed_for_keyserver): New.
@@ -1480,13 +1486,13 @@
 	* gpastreamsignop.c, gpastreamsignop.h: New.
 
 	* gpafileencryptop.c (set_recipients): Free RSET before malloc.
-	(set_recipients): Set the protocol to use. 
+	(set_recipients): Set the protocol to use.
 
 	* keytable.c (reload_cache): Reset FIRST_HALF_DONE.
 
 	* gpacontext.c (gpa_context_init): Do not set the passphrse
 	callback in CMS mode.
-	* gpgmeedit.c (gpa_gpgme_edit_passwd_parms_release) 
+	* gpgmeedit.c (gpa_gpgme_edit_passwd_parms_release)
 	(gpa_gpgme_edit_passwd_start): Ditto.
 	* gpgmetools.c (gpa_gpgme_new): Ditto.
 	* gpafilesignop.c (set_signers): Set protocol from the keys.
@@ -1497,7 +1503,7 @@
 	(gpa_args_t): Add field START_CLIPBOARD.
 	(main): Implement option.
 	(args): Remove explicit initialization to put it into BSS.
-	
+
 	* gpa_license.c, gpa_license.h: Remove.
 	* gpl-text.c, gpl-text.h: New.
 	* helpmenu.c (help_license): Use the new get_gpl_text.
@@ -1521,7 +1527,7 @@
 	(_GpaKeyList): Add field REQUESTED_USAGE.
 	* keylist.c (gpa_keylist_new_with_keys): Add arg REQUESTED_USAGE.
 	(PROP_REQUESTED_USAGE): New.
-	(gpa_keylist_get_property, gpa_keylist_set_property) 
+	(gpa_keylist_get_property, gpa_keylist_set_property)
 	(gpa_keylist_class_init): Install property.
 	(gpa_keylist_next): Filetr on usage and account.
 	* recipientdlg.c (parse_one_recipient): List only keys with
@@ -1575,7 +1581,7 @@
 	(gpa_keylist_finalize): Release initial_keys.
 	(gpa_keylist_constructor): Fill the list with provided keys.
 
-	* gpgmetools.c (gpa_gpgme_copy_keyarray) 
+	* gpgmetools.c (gpa_gpgme_copy_keyarray)
 	(gpa_gpgme_release_keyarray): New.
 	* gpastreamencryptop.c (release_keys, copy_keys): Remove and
 	replace all callers by the new functions.
@@ -1590,7 +1596,7 @@
 	(gpa_keylist_new_public_only): New.
 	(gpa_keylist_class_init, gpa_keylist_get_property)
 	(gpa_keylist_set_property): Add property.
-	(gpa_keylist_set_brief, gpa_keylist_set_detailed) 
+	(gpa_keylist_set_brief, gpa_keylist_set_detailed)
 	(gpa_keylist_next): Do not display the image in public_only mode.
 	(gpa_keylist_has_single_secret_selection, gpa_keylist_next):
 	Implement public_only.
@@ -1995,7 +2001,7 @@
 
 2007-10-01  Werner Koch  <wk@g10code.com>
 
-	* utils.c: New to implement xmalloc and xcalloc. 
+	* utils.c: New to implement xmalloc and xcalloc.
 
 2007-09-28  Werner Koch  <wk@g10code.com>
 
@@ -2012,7 +2018,7 @@
 	* gpafileencryptop.c (gpa_file_encrypt_operation_new_for_server):
 	New.
 	(gpa_file_encrypt_operation_next)
-	(gpa_file_encrypt_operation_done_cb) 
+	(gpa_file_encrypt_operation_done_cb)
 	(gpa_file_encrypt_operation_response_cb): Call server finish.
 	* gpaoperation.c (PROP_SERVER_CTX): New property.
 	(gpa_operation_set_property, gpa_operation_get_property): Set it.
@@ -2090,10 +2096,10 @@
 	* gpakeyexpireop.c (gpa_key_expire_operation_done_error_cb): Give
 	a more specific error message.
 	* gpgmeedit.c (edit_expire_fnc_transit): Return a more suitable
-	error code for invalid dates.  
+	error code for invalid dates.
 	(gpa_gpgme_edit_expire_parms_new): Do not use %F for strftime as
 	this is C99 and not supported on all systems (i.e. Windows).
-	
+
 2007-01-10  Werner Koch  <wk@g10code.com>
 
 	* Makefile.am (INCLUDES): Removed.
@@ -2142,7 +2148,7 @@
 	* gpafileverifyop.c: Revert last change, it broke verification of
 	non-encrypted files.  Instead, the decryption operation has to
 	show the signatures, but that is a bigger change.
-	
+
 2006-02-28  Marcus Brinkmann  <marcus@g10code.de>
 
 	* gpafileverifyop.c (gpa_file_verify_operation_start): Use
@@ -2249,7 +2255,7 @@
 	* helpmenu.c [G_OS_WIN32]: Disable broken scroll text.
 
 	* simple-gettext.c: Unused file removed.
-	
+
 2005-11-08  Marcus Brinkmann  <marcus@g10code.de>
 
 	* server_access.c (write_command): New argument scheme.
@@ -2268,7 +2274,7 @@
 
 	* gpabackupop.c (export_browse): Pass ENTRY as parent to
 	gpa_get_save_file_name.
-	
+
 	* keyring.c (keyring_details_page_fill_key): Use
 	gpa_gpgme_key_format_fingerprint.
 	* keysigndlg.c (gpa_key_sign_run_dialog): Likewise.
@@ -2307,7 +2313,7 @@
 	(add_signature_to_model): Invoke gpa_gpgme_key_get_userid with
 	right argument.
 	* keyring.c [!HAVE_CONFIG_H]: Do not include config.h.
-	(keyring_details_page_fill_key, keyring_signatures_page_fill_key) 
+	(keyring_details_page_fill_key, keyring_signatures_page_fill_key)
 	(keyring_update_status_bar): Fix callers of gpa_gpgme_key_get_userid.
 	* keysigndlg.c [!HAVE_CONFIG_H]: Do not include config.h.
 	(gpa_key_sign_run_dialog): Fix caller of gpa_gpgme_key_get_userid.
@@ -2319,7 +2325,7 @@
 
 	* gpa.c [!HAVE_CONFIG_H]: Don't include config.h.
 	(main) [!USE_SIMPLE_GETTEXT && ENABLE_NLS]: Invoke
-	gpgme_set_locale.	
+	gpgme_set_locale.
 	* options.h: Remove const qualifier from return type.
 	* options.c (gpa_options_get_default_key): Likewise.
 	* keytable.h (gpa_keytable_lookup_key): Likewise.
@@ -2381,7 +2387,7 @@
 
 2003-11-21  Miguel Coca  <mcoca@gnu.org>
 
-	* filesigndlg.c (gpa_file_sign_dialog_constructor): Use the name 
+	* filesigndlg.c (gpa_file_sign_dialog_constructor): Use the name
 	"cleartext signature" even when in advanced mode. This is the same
 	nomenclature gpg uses.
 
@@ -2605,7 +2611,7 @@
 
 	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb): Fix
 	broken error check.
-	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): 
+	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb):
 	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): Likewise.
 
 	* keyexportdlg.c, keyexportdlg.h, keyimportdlg.c,
@@ -2622,13 +2628,13 @@
 
 	* gparecvkeydlg.h, gparecvkeydlg.c: New. Simple "Receive key"
 	dialog. Asks for the key ID to be retrieved.
-	
+
 	* Makefile.am (gpa_SOURCES): Add new files, remove old.
 
 2003-08-20  Miguel Coca  <mcoca@gnu.org>
 
-	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_sig_get_userid) 
-	(gpa_gpgme_key_sig_get_short_keyid) 
+	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_sig_get_userid)
+	(gpa_gpgme_key_sig_get_short_keyid)
 	(gpa_gpgme_key_sig_get_sig_status): Change to work on key signatures
 	instead of whole keys.
 	(gpa_gpgme_key_sig_get_level): New.
@@ -2647,13 +2653,13 @@
 
 2003-08-18  Miguel Coca  <mcoca@gnu.org>
 
-	* gpafileverifyop.c (gpa_file_verify_operation_init) 
-	(gpa_file_verify_operation_start) 
+	* gpafileverifyop.c (gpa_file_verify_operation_init)
+	(gpa_file_verify_operation_start)
 	(gpa_file_verify_operation_done_cb): Add a field to the operation
 	to hold the name of the signed file for dettached signatures, and
 	use it.
 
-	* verifydlg.c (gpa_file_verify_dialog_finalize) 
+	* verifydlg.c (gpa_file_verify_dialog_finalize)
 	(gpa_file_verify_dialog_constructor): Add a GpaContext to the dialog,
 	to retrieve signature keys.
 	(fill_sig_model): Replace deprecated gpgme calls.
@@ -2668,7 +2674,7 @@
 
 	* keyring.c (key_has_been_signed): Remove deprecated gpgme calls.
 	(keyring_editor_can_sign): Fix check for selected keys.
-	(keyring_editor_add_subkeys_page) 
+	(keyring_editor_add_subkeys_page)
 	(keyring_editor_remove_subkeys_page): New. Add and remove the subkey
 	tab to the details notebook.
 	(keyring_details_notebook): Add capabilities and the subkeys page.
@@ -2703,18 +2709,18 @@
 	the selected trust in an argument. Don't edit the key from this
 	function.
 
-	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_trust_parms_new) 
+	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_trust_parms_new)
 	(gpa_gpgme_edit_trust_parms_release): New.
 	(gpa_gpgme_edit_trust): Renamed to:
 	(gpa_gpgme_edit_trust_start): Same changes as the "sign" operation.
-	
+
 2003-07-28  Miguel Coca  <mcoca@gnu.org>
 
 	* Makefile.am (gpa_SOURCES): Add gpakeysignop.{c,h}
 
 	* gpakeysignop.h, gpakeysignop.c: New. The key signing operation.
-	
-	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_sign_parms_new) 
+
+	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_sign_parms_new)
 	(gpa_gpgme_edit_sign_parms_release): New.
 	(gpa_gpgme_edit_sign): Renamed to:
 	(gpa_gpgme_edit_sign_start): Use the event loop. Now receives a
@@ -2736,13 +2742,13 @@
 	(register_operation): New.
 	(keyring_editor_delete): Use the GpaKeyDeleteOperation.
 
-	* keylist.h, keylist.c (gpa_keylist_init, gpa_keylist_start_reload) 
+	* keylist.h, keylist.c (gpa_keylist_init, gpa_keylist_start_reload)
 	(gpa_keylist_next): Display a warning while the trustdb rebuilds.
 
 	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): Remove
 	obsolete comment.
 	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): Likewise.
-	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb): 
+	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb):
 	Likewise.
 	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb):
 	Likewise.
@@ -2752,7 +2758,7 @@
 
 2003-06-29  Miguel Coca  <mcoca@gnu.org>
 
-	* gpaprogressdlg.c (gpa_progress_dialog_set_property) 
+	* gpaprogressdlg.c (gpa_progress_dialog_set_property)
 	(gpa_progress_dialog_progress_cb): Receive progress signals from the
 	context.
 	(gpa_progress_dialog_pulse, gpa_progress_dialog_start_cb)
@@ -2798,7 +2804,7 @@
 	* gpgmetools.c (gpa_generate_key): Return the key, not the fingerprint.
 	* keygenwizard.c (gpa_keygen_wizard_generate_action):
 	* keyring.c (keyring_editor_generate_key_advanced): Likewise.
-	
+
 	* gpgmetools.c: Add missing include.
 
 	* keytable.c (gpa_keytable_lookup_key): Fix warning.
@@ -2814,18 +2820,18 @@
 2003-06-22  Miguel Coca  <mcoca@gnu.org>
 
 	* All files: Replace old style error checking with libgpg-error.
-	
+
 	* gpakeyselector.h, gpakeyselector.c: Use the keytable instead of
 	listing keys ourselves.
 
 2003-06-21  Miguel Coca  <mcoca@gnu.org>
 
 	* siglist.h, siglist.c (gpa_siglist_set_all)
-	(gpa_siglist_set_userid, gpa_siglist_set_signatures): Use 
+	(gpa_siglist_set_userid, gpa_siglist_set_signatures): Use
 	gpgme_key_t instead of fingerprints.
 
-	* options.h, options.c (gpa_options_init, gpa_options_finalize) 
-	(gpa_options_set_default_key, gpa_options_get_default_key) 
+	* options.h, options.c (gpa_options_init, gpa_options_finalize)
+	(gpa_options_set_default_key, gpa_options_get_default_key)
 	(determine_default_key, gpa_options_update_default_key)
 	(gpa_options_save_settings): The default key is now a
 	gpgme_key_t.
@@ -2841,15 +2847,15 @@
 	(keyring_editor_can_sign):
 	(keyring_editor_has_private_selected):
 	(keyring_editor_delete):
-	(keyring_editor_sign, keyring_editor_edit, keyring_editor_trust) 
-	(keyring_editor_import_do_import) 
-	(keyring_editor_export_do_export, keyring_editor_export) 
-	(keyring_editor_generate_key_advanced) 
-	(keyring_editor_generate_key_advanced) 
+	(keyring_editor_sign, keyring_editor_edit, keyring_editor_trust)
+	(keyring_editor_import_do_import)
+	(keyring_editor_export_do_export, keyring_editor_export)
+	(keyring_editor_generate_key_advanced)
+	(keyring_editor_generate_key_advanced)
 	(idle_update_details)
-	(keyring_set_brief_listing, keyring_set_detailed_listing) 
+	(keyring_set_brief_listing, keyring_set_detailed_listing)
 	(keyring_update_status_bar)
-	(display_popup_menu, keyring_editor_new): 
+	(display_popup_menu, keyring_editor_new):
 	(keyring_editor_generate_key_simple): Likewise.
 	(keyring_editor_current_key): Rename from _current_key_id.
 	(keyring_editor_selection_changed): Set the current key with
@@ -2893,7 +2899,7 @@
 
 2003-06-07  Miguel Coca  <mcoca@gnu.org>
 
-	* gpgmetools.c (gpa_backup_key): Make backups 600. Patch by 
+	* gpgmetools.c (gpa_backup_key): Make backups 600. Patch by
 	Bastian Blank <waldi@debian.org>.
 
 2003-05-30  Miguel Coca  <mcoca@gnu.org>
@@ -2906,7 +2912,7 @@
 	* qdchkpwd.c: Add include to remove warning.
 
 	* passwddlg.c (gpa_change_passphrase_dialog_run): New prototype.
-	
+
 	* gpgmetools.h, gpgmetools.c (gpa_passphrase_cb)
 	(passphrase_question_label): Use new passphrase interface.
 
@@ -2919,34 +2925,34 @@
 	new type name.
 
 	* gpafileencryptop.h: Change the way recipients are specified.
-	* gpafileencryptop.c (gpa_file_encrypt_operation_done_cb) 
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_cb)
 	(set_recipients, gpa_file_encrypt_operation_start): Likewise.
 
 2003-05-22  Miguel Coca  <mcoca@gnu.org>
 
-	* encryptdlg.c, encryptdlg.h, expirydlg.c, expirydlg.h, fileman.c, 
- 	fileman.h, filesigndlg.c, filesigndlg.h, gpa.c, gpa.h, 
- 	gpa_license.c, gpa_license.h, gpacontext.c, gpacontext.h, 
- 	gpafiledecryptop.c, gpafiledecryptop.h, gpafileencryptop.c, 
- 	gpafileencryptop.h, gpafileop.c, gpafileop.h, gpafilesignop.c, 
- 	gpafilesignop.h, gpafileverifyop.c, gpafileverifyop.h, 
- 	gpakeyselector.c, gpakeyselector.h, gpaoperation.c, 
- 	gpaoperation.h, gpapastrings.c, gpapastrings.h, gpaprogressdlg.c, 
- 	gpaprogressdlg.h, gpawidgets.c, gpawidgets.h, gpawindowkeeper.c, 
- 	gpawindowkeeper.h, gpawizard.c, gpawizard.h, gpgmeedit.c, 
- 	gpgmeedit.h, gpgmetools.c, gpgmetools.h, gtktools.c, gtktools.h, 
- 	helpmenu.c, helpmenu.h, hidewnd.c, hidewnd.h, i18n.h, icons.c, 
- 	icons.h, keydeletedlg.c, keydeletedlg.h, keyeditdlg.c, 
- 	keyeditdlg.h, keyexportdlg.c, keyexportdlg.h, keygendlg.c, 
- 	keygendlg.h, keygenwizard.c, keygenwizard.h, keyimportdlg.c, 
- 	keyimportdlg.h, keyimpseldlg.c, keyimpseldlg.h, keylist.c, 
- 	keylist.h, keyring.c, keyring.h, keyserver.c, keyserver.h, 
- 	keysigndlg.c, keysigndlg.h, keytable.c, keytable.h, options.c, 
- 	options.h, ownertrustdlg.c, ownertrustdlg.h, passwddlg.c, 
- 	passwddlg.h, qdchkpwd.c, qdchkpwd.h, server_access.c, 
- 	server_access.h, settingsdlg.c, settingsdlg.h, siglist.c, 
- 	siglist.h, simple-gettext.c, verifydlg.c, verifydlg.h, w32reg.c, 
- 	w32reg.h: Do a global search and replace for new Gpgme type names.
+	* encryptdlg.c, encryptdlg.h, expirydlg.c, expirydlg.h, fileman.c,
+	fileman.h, filesigndlg.c, filesigndlg.h, gpa.c, gpa.h,
+	gpa_license.c, gpa_license.h, gpacontext.c, gpacontext.h,
+	gpafiledecryptop.c, gpafiledecryptop.h, gpafileencryptop.c,
+	gpafileencryptop.h, gpafileop.c, gpafileop.h, gpafilesignop.c,
+	gpafilesignop.h, gpafileverifyop.c, gpafileverifyop.h,
+	gpakeyselector.c, gpakeyselector.h, gpaoperation.c,
+	gpaoperation.h, gpapastrings.c, gpapastrings.h, gpaprogressdlg.c,
+	gpaprogressdlg.h, gpawidgets.c, gpawidgets.h, gpawindowkeeper.c,
+	gpawindowkeeper.h, gpawizard.c, gpawizard.h, gpgmeedit.c,
+	gpgmeedit.h, gpgmetools.c, gpgmetools.h, gtktools.c, gtktools.h,
+	helpmenu.c, helpmenu.h, hidewnd.c, hidewnd.h, i18n.h, icons.c,
+	icons.h, keydeletedlg.c, keydeletedlg.h, keyeditdlg.c,
+	keyeditdlg.h, keyexportdlg.c, keyexportdlg.h, keygendlg.c,
+	keygendlg.h, keygenwizard.c, keygenwizard.h, keyimportdlg.c,
+	keyimportdlg.h, keyimpseldlg.c, keyimpseldlg.h, keylist.c,
+	keylist.h, keyring.c, keyring.h, keyserver.c, keyserver.h,
+	keysigndlg.c, keysigndlg.h, keytable.c, keytable.h, options.c,
+	options.h, ownertrustdlg.c, ownertrustdlg.h, passwddlg.c,
+	passwddlg.h, qdchkpwd.c, qdchkpwd.h, server_access.c,
+	server_access.h, settingsdlg.c, settingsdlg.h, siglist.c,
+	siglist.h, simple-gettext.c, verifydlg.c, verifydlg.h, w32reg.c,
+	w32reg.h: Do a global search and replace for new Gpgme type names.
 
 2003-05-20  Miguel Coca  <mcoca@gnu.org>
 
@@ -2959,19 +2965,19 @@
 
 	* settingsdlg.c (key_selected_cb): Don't unreference keys.
 	* gpafileencryptop.c (gpa_file_encrypt_operation_response_cb):
-	* gpafilesignop.c (gpa_file_sign_operation_response_cb): Likewise. 
+	* gpafilesignop.c (gpa_file_sign_operation_response_cb): Likewise.
 
 2003-05-16  Miguel Coca  <mcoca@gnu.org>
 
 	* Makefile.am (gpa_SOURCES): Remove keyimpseldlg.{c,h}, as they
 	were not being used.
 
-	* gpawidgets.c (gpa_key_list_add_key, gpa_secret_key_list_new) 
-	(gpa_public_key_list_new, gpa_key_list_new_from_glist) 
-	(gpa_key_list_selection_length, gpa_key_list_selected_ids) 
+	* gpawidgets.c (gpa_key_list_add_key, gpa_secret_key_list_new)
+	(gpa_public_key_list_new, gpa_key_list_new_from_glist)
+	(gpa_key_list_selection_length, gpa_key_list_selected_ids)
 	(gpa_key_list_selected_id): Remove the gpa_key_list.
 
-	* gpawidgets.h, gpawidgets.c (gpa_key_list_new): 
+	* gpawidgets.h, gpawidgets.c (gpa_key_list_new):
 
 	* settingsdlg.c (default_key_frame): Use a GpaKeySelector.
 
@@ -2982,19 +2988,19 @@
 	* gpakeyselector.h, gpakeyselector.c: New. A replacement for the
 	gpa_key_list that lists the keys itself.
 
-	* gpafilesignop.c (gpa_file_sign_operation_response_cb) 
+	* gpafilesignop.c (gpa_file_sign_operation_response_cb)
 	(set_signers):
-	* gpafileencryptop.c (set_recipients, set_signers) 
+	* gpafileencryptop.c (set_recipients, set_signers)
 	(gpa_file_encrypt_operation_response_cb): Adapt to receive GLists of
 	keys instead of fingerprints from the encrypt dialog.
 
-	* filesigndlg.c (gpa_file_sign_dialog_constructor) 
+	* filesigndlg.c (gpa_file_sign_dialog_constructor)
 	(gpa_file_sign_dialog_signers): Use a key selector.
 
 	* encryptdlg.c (select_row_cb, unselect_row_cb): Delete.
 	(changed_select_row_cb): New.
 	(gpa_file_encrypt_dialog_init)
-	(gpa_file_encrypt_dialog_recipients) 
+	(gpa_file_encrypt_dialog_recipients)
 	(gpa_file_encrypt_dialog_signers): Use key selectors.
 
 2003-05-04  Miguel Coca  <mcoca@gnu.org>
@@ -3007,18 +3013,18 @@
 
 	* Makefile.am (gpa_SOURCES): Remove gpgmeparsers.{c,h}
 
-	* keyimportdlg.c (key_import_results_dialog_run): 
+	* keyimportdlg.c (key_import_results_dialog_run):
 	* keyring.c (keyring_editor_import_do_import): Use a GpgmeImportResult.
 
-	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): 
-	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): 
-	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb): 
+	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb):
+	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb):
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb):
 	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb): Remove
 	error codes that no longer exist.
 
 	* siglist.c (gpa_siglist_set_all, gpa_siglist_set_userid):
-	* options.c (gpa_options_update_default_key): 
-	* keyring.c (key_has_been_signed): 
+	* options.c (gpa_options_update_default_key):
+	* keyring.c (key_has_been_signed):
 	* gpafilesignop.c (set_signers):
 	* keyeditdlg.c (key_edit_change_passphrase):
 	* gpafileencryptop.c (set_recipients, set_signers): New gpgme_get_key
@@ -3026,9 +3032,9 @@
 
 2003-04-27  Miguel Coca  <mcoca@gnu.org>
 
-	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb): 
-	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb): 
-	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): 
+	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb):
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb):
+	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb):
 	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): Use
 	new names for error codes.
 
@@ -3040,8 +3046,8 @@
 
 	* fileman.h, fileman.c (gpa_file_manager_open_file): New.
 
-2003-04-05  Miguel Coca  <mcoca@gnu.org>	
-	
+2003-04-05  Miguel Coca  <mcoca@gnu.org>
+
 	* fileman.c (fileman_menu_new): Add a "clear" entry.
 	(fileman_toolbar_new): Likewise.
 	(toolbar_close_all, close_all_files): New.
@@ -3059,32 +3065,32 @@
 	* fileman.h, fileman.c: Reworked file manager. Use pure GTK+2 lists,
 	disable buttons when no file is selected, and don't display scrollbars
 	unless they are needed.
-	
+
 2003-03-23  Andy Ruddock <andy.ruddock@minnesund.net>
 
 	* options.h: Added 'detailed_view' configuration file option for
 	keylist window key view.
-	
+
 	* options.c: Added functions to read/write 'detailed_view'
 	configuration file option.
-	
+
 	* keyring.c: keylist window view reads configuration file and
 	defaults to brief/detailed view last used.
 
 2003-03-22  Miguel Coca  <mcoca@gnu.org>
 
 	* Makefile.am (gpa_SOURCES): Really remove gtkhacks.h.
-	
+
 2003-03-22  Miguel Coca  <mcoca@gnu.org>
 
 	* options.h, options.c (gpa_options_get_instance): New. Turn the
 	GpaOptions object into a singleton.
 
 	* Change all users of GpaOptions.
-	
-	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb): 
-	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb): 
-	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb): 
+
+	* gpafileverifyop.c (gpa_file_verify_operation_done_error_cb):
+	* gpafilesignop.c (gpa_file_sign_operation_done_error_cb):
+	* gpafileencryptop.c (gpa_file_encrypt_operation_done_error_cb):
 	* gpafiledecryptop.c (gpa_file_decrypt_operation_done_error_cb): Make
 	all error cheking here.
 
@@ -3122,7 +3128,7 @@
 
 2003-03-07  Miguel Coca  <mcoca@gnu.org>
 
-	* gpaoperation.c (gpa_operation_class_init) 
+	* gpaoperation.c (gpa_operation_class_init)
 	(gpa_operation_constructor): Use a constructor.
 	* gpafileop.c, gpafileencryptop.c, gpafiledecryptop.c: Likewise.
 
@@ -3169,7 +3175,7 @@
 	* passwddlg.c (gpa_change_passphrase_dialog_run): Use new prototype.
 
 	* gpgmetools.c (gpa_gpgme_new): Don't pass the context as data to
-	the passphrase callback. 
+	the passphrase callback.
 	(check_overwriting): New.
 	(gpa_fopen): Use it.
 	(gpa_open_output, gpa_open_input): New.
@@ -3190,7 +3196,7 @@
 	(gpa_context_remove_cb): Always remove callbacks from the list.
 	(gpa_context_passphrase_cb): New. Our own passphrase callback.
 	(gpa_context_start, gpa_context_done): Remove debugging
-	
+
 	* Makefile.am (gpa_SOURCES): Add new files.
 
 	* gpaprogressdlg.h, gpaprogressdlg.c: New. The progress dialog.
@@ -3215,16 +3221,16 @@
 
 	* fileman.c (decrypt_files): Use one GpgmeCtx per operation.
 	* filesigndlg.c (sign_files):
-	* encryptdlg.c (encrypt_file, set_signers, do_encrypt): 
-	* keyring.c (keyring_editor_delete, key_has_been_signed) 
-	(keyring_editor_import_do_import) 
-	(keyring_editor_export_do_export, keyring_editor_sign): 
-	* keyeditdlg.c (key_edit_change_passphrase) 
-	(key_edit_change_expiry): 
-	* options.c (determine_default_key): 
-	* gpgmetools.c (gpa_generate_key): 
-	* keytable.c (do_keylisting, keytable_fill, load_keys): 
-	* siglist.c (gpa_siglist_set_all, gpa_siglist_set_userid): 
+	* encryptdlg.c (encrypt_file, set_signers, do_encrypt):
+	* keyring.c (keyring_editor_delete, key_has_been_signed)
+	(keyring_editor_import_do_import)
+	(keyring_editor_export_do_export, keyring_editor_sign):
+	* keyeditdlg.c (key_edit_change_passphrase)
+	(key_edit_change_expiry):
+	* options.c (determine_default_key):
+	* gpgmetools.c (gpa_generate_key):
+	* keytable.c (do_keylisting, keytable_fill, load_keys):
+	* siglist.c (gpa_siglist_set_all, gpa_siglist_set_userid):
 	* keylist.c (keylist_fill_list):  Likewise.
 
 	* gpgmeedit.h, gpgmeedit.c (gpa_gpgme_edit_trust)
@@ -3255,7 +3261,7 @@
 	in GPGME.
 
 	* helpmenu.c (help_about): Fix formatting and copyright message.
-	
+
 2003-01-24  Miguel Coca  <mcoca@gnu.org>
 
 	* gpa.c (main): Replace getenv with more portable putenv.
@@ -3284,7 +3290,7 @@
 	* keygenwizard.c (gpa_keygen_wizard_run): Use the new wizard
 	interface.
 
-	* gpawizard.c, gpawizard.h (gpa_wizard_update_buttons) 
+	* gpawizard.c, gpawizard.h (gpa_wizard_update_buttons)
 	(gpa_wizard_new, gpa_wizard_append_page): Changes to use GTK+2 stock
 	buttons.
 
@@ -3297,10 +3303,10 @@
 
 	* gpawidgets.c (gpa_expiry_frame_get_expiration): Fix bug in previous
 	change.
-	
-	* gpawidgets.c (gpa_expiry_frame_dont, gpa_expiry_frame_after) 
-	(gpa_expiry_frame_at, expire_date_toggled_cb) 
-	(gpa_expiry_frame_new, gpa_expiry_frame_get_expiration) 
+
+	* gpawidgets.c (gpa_expiry_frame_dont, gpa_expiry_frame_after)
+	(gpa_expiry_frame_at, expire_date_toggled_cb)
+	(gpa_expiry_frame_new, gpa_expiry_frame_get_expiration)
 	(gpa_expiry_frame_validate): Use a calendar for choosing the
 	expiration date.
 
@@ -3308,7 +3314,7 @@
 	(key_gen_cancel, key_gen_ok): Removed.
 	(response_cb): New.
 
-	* gpawidgets.c (gpa_expiry_frame_new): 
+	* gpawidgets.c (gpa_expiry_frame_new):
 
 	* keygenwizard.c (gpa_keygen_wizard_generate_action): Don't set the
 	removed fields.
@@ -3329,7 +3335,7 @@
 	(expiry_ok): Change to use the calendar.
 
 	* gpafilesel.c, gpafilesel.h: Remove.
-	
+
 	* Makefile.am (gpa_SOURCES): Remove gpafilesel.{c,h}
 
 	* gtktools.c (file_dialog_ok, gpa_get_save_file_name): Use
@@ -3354,7 +3360,7 @@
 	* gpgmetools.c (gpa_passphrase_cb): Fix cleanup.
 
 	* gpgmeedit.c (edit_fnc): Ignore NEED_PASSPHRASE_SYM too.
-	(edit_passwd_fnc_action, edit_passwd_fnc_transit) 
+	(edit_passwd_fnc_action, edit_passwd_fnc_transit)
 	(passwd_passphrase_cb, gpa_gpgme_edit_passwd): New. Change the key's
 	passphrase.
 
@@ -3428,8 +3434,8 @@
 	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_sig_get_sig_status): Use
 	a hash of revoked signatures to check for them.
 
-	* siglist.c (gpa_siglist_set_userid, gpa_siglist_set_all) 
-	(gpa_siglist_clear_columns, gpa_siglist_all_add_columns) 
+	* siglist.c (gpa_siglist_set_userid, gpa_siglist_set_all)
+	(gpa_siglist_clear_columns, gpa_siglist_all_add_columns)
 	(gpa_siglist_uid_add_columns, gpa_siglist_new): Use different number
 	of columns and type for "all signatures" and individual uids.
 	(revoked_signatures, gpa_siglist_set_userid): Keep a list of revoked
@@ -3452,7 +3458,7 @@
 	* keylist.c (keylist_fill_list): Likewise.
 	* keygenwizard.c (gpa_keygen_wizard_password_validate): Likewise.
 
-	* gtktools.h, gtktools.c (message_box_destroy, message_box_clicked) 
+	* gtktools.h, gtktools.c (message_box_destroy, message_box_clicked)
 	(gpa_message_box_run, gpa_window_passphrase): Removed obsolete.
 
 	* Makefile.am (gpa_SOURCES): Remove icons.xpm
@@ -3464,7 +3470,7 @@
 	* encrypt.xpm: Removed.
 	* verify.xpm, floppy.xpm, folder.xpm, icons.xpm, open_folder.xpm: Moved
 	to pixmap directory.
-	
+
 	* fileman.c (gpa_fileman_toolbar_new): Add Preferences.
 	(toolbar_preferences): New.
 
@@ -3486,19 +3492,19 @@
 	* helpmenu.c (gpa_help_menu_add_to_factory): Change order of buttons
 	to a more standard one.
 
-	* keyring.c (keyring_editor_import_get_source) 
+	* keyring.c (keyring_editor_import_get_source)
 	(keyring_editor_import_do_import, keyring_editor_import): Split import
 	into these functions.
 	(keyring_editor_export_do_export): New.
 	(keyring_editor_export): Use the above.
 	(keyring_editor_menubar_new): Add an edit menu. Move preferences
 	there. Use stock icons where possible.
-	(keyring_editor_select_all, keyring_editor_paste) 
+	(keyring_editor_select_all, keyring_editor_paste)
 	(keyring_editor_copy): New. The edit menu actions.
 
-	* keyexportdlg.c, keyexportdlg.h (key_backup_dialog_run, do_backup): 
+	* keyexportdlg.c, keyexportdlg.h (key_backup_dialog_run, do_backup):
 	Add const to prototype. Fixes warning.
-	
+
 	* keyexportdlg.c (key_export_dialog_run): Remove clipboard option.
 	Available from edit menu.
 
@@ -3528,7 +3534,7 @@
 
 2002-12-09  Miguel Coca  <e970095@zipi.fi.upm.es>
 
-	* keyring.c (keyring_details_page_fill_key) 
+	* keyring.c (keyring_details_page_fill_key)
 	(keyring_details_notebook): Add key length and type to the details
 	notebook. They replace the public/private label, which is moved to the
 	top of the notebook.
@@ -3542,7 +3548,7 @@
 	* siglist.c (gpa_siglist_new): Sort the list by user ID. We should
 	find a way to make Unknown come last always.
 
-	* keyring.c (keyring_details_notebook): Add label to the menu. 
+	* keyring.c (keyring_details_notebook): Add label to the menu.
 	(keyring_details_page_fill_num_keys): Change the text for "all
 	signatures."
 
@@ -3563,16 +3569,16 @@
 	(idle_update_details): Use new prototype of signatures_page_fill_key.
 	(keyring_editor_new): Increase default window size, leave more space
 	for the details notebook.
-	
+
 	* siglist.h, siglist.c (gpa_siglist_new)
 	(gpa_siglist_set_signatures): Completely new signature list, for key
 	signatures only.
 
 	* gpgmetools.c (string_to_utf8): New.
 	(gpa_gpgme_key_get_userid): Use string_to_utf8.
-	
+
 	* gpgmetools.h, gpgmetools.c (gpa_gpgme_key_sig_get_userid)
-	(gpa_gpgme_key_sig_get_short_keyid) 
+	(gpa_gpgme_key_sig_get_short_keyid)
 	(gpa_gpgme_key_sig_get_sig_status): New.
 
 2002-12-04  Miguel Coca  <e970095@zipi.fi.upm.es>
@@ -3612,7 +3618,7 @@
 
 2002-11-29  Miguel Coca  <e970095@zipi.fi.upm.es>
 
-	* gpawidgets.c (struct add_key_data_s, gpa_key_list_add_key) 
+	* gpawidgets.c (struct add_key_data_s, gpa_key_list_add_key)
 	(gpa_public_key_list_new): Remove the default key row from here, as
 	reordering the clist was messing it up.
 	(gpa_secret_key_list_new): Add a loop to find and select the default
@@ -3620,30 +3626,30 @@
 
 	* gpa.c: Rework the main function, and parsing of command line
 	arguments to use getopt.
-	
+
 	* gpa.h, gpa.c (gpa_simplified_ui, gpa_set_simplified_ui)
 	(gpa_backup_generated, gpa_set_backup_generated)
 	(gpa_remember_backup_generated): Remove, superseded by the options
 	object.
 
-	* filesigndlg.c (file_sign_ok, gpa_file_sign_dialog_run) 
+	* filesigndlg.c (file_sign_ok, gpa_file_sign_dialog_run)
 	(gpa_file_sign_dialog_run): Use the options object.
 	* gpawidgets.c (gpa_key_list_add_key):
 	* keyexportdlg.c (do_backup):
 	* keyimportdlg.c (key_import_dialog_run):
-	* keyring.c (keyring_editor_backup) 
-	(keyring_editor_generate_key_advanced) 
-	(keyring_editor_generate_key_simple, keyring_editor_generate_key) 
-	(keyring_editor_mapped, keyring_editor_mapped) 
-	(keyring_signatures_page_fill_key, keyring_update_status_bar) 
-	(keyring_default_key_changed, keyring_editor_new): 
-	* keysigndlg.c (gpa_key_sign_run_dialog): 
-	* optionsmenu.c (options_keyserver_set, options_keyserver) 
+	* keyring.c (keyring_editor_backup)
+	(keyring_editor_generate_key_advanced)
+	(keyring_editor_generate_key_simple, keyring_editor_generate_key)
+	(keyring_editor_mapped, keyring_editor_mapped)
+	(keyring_signatures_page_fill_key, keyring_update_status_bar)
+	(keyring_default_key_changed, keyring_editor_new):
+	* keysigndlg.c (gpa_key_sign_run_dialog):
+	* optionsmenu.c (options_keyserver_set, options_keyserver)
 	(options_key_set, options_key): Likewise.
-	
+
 	* keyserver.c, keyserver.h: Remove management of the current
 	keyserver.
-	
+
 	* fileman.c: Remove jnlib includes.
 	* gpa.h:
 	* helpmenu.c: Likewise.
@@ -3655,7 +3661,7 @@
 	* options.h: Might as well be considered new.
 
 	* helpmenu.c (help_about): Fix copyright notice.
-	
+
 2002-11-28  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* server_access.c (protocol_version): The version number is
@@ -3664,8 +3670,8 @@
 2002-11-27  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keyreceivedlg.c, keyreceivedlg.h: Removed obsolete.
-	
-	* gpgmeedit.c (edit_trust_fnc_action) 
+
+	* gpgmeedit.c (edit_trust_fnc_action)
 	(edit_trust_fnc_transit): Added a state for the "set_ultimate.okay"
 	prompt. Fixes a crash when setting a key to ultimate trust.
 
@@ -3683,9 +3689,9 @@
 
 	* keygenwizard.c (file_dirname, isdir): Removed.
 	(gpa_keygen_wizard_run): Remove the backup directory page.
-	(gpa_keygen_wizard_backup_dir_browse) 
-	(gpa_keygen_wizard_backup_dir_page) 
-	(gpa_keygen_wizard_backup_get_text) 
+	(gpa_keygen_wizard_backup_dir_browse)
+	(gpa_keygen_wizard_backup_dir_page)
+	(gpa_keygen_wizard_backup_get_text)
 	(gpa_keygen_wizard_backup_dir_action): Removed.
 	(gpa_keygen_wizard_backup_action): Removed, replaced by
 	_generate_action.
@@ -3698,17 +3704,17 @@
 
 	* keyring.c (keyring_editor_backup): Assume backups are done by the
 	dialog.
-	
+
 	* gpa.c (main): Remove unused variable.
-	
+
 	* keyring.c (keyring_editor_generate_key_advanced): Use the new
 	prototype of gpa_generate_key().
 	* keygenwizard.c (gpa_keygen_wizard_generate_action): Likewise.
 
 	* gpgmetools.h, gpgmetools.c (gpa_generate_key): Return the key
 	fingerprint.
-	
-	* gpgmetools.c (dump_data_to_file, fill_data_from_clipboard) 
+
+	* gpgmetools.c (dump_data_to_file, fill_data_from_clipboard)
 	(dump_data_to_clipboard): Change for GPGME 0.4.0.
 
 	* verifydlg.c (is_detached_sig): Fix dettached signatures.
@@ -3739,7 +3745,7 @@
 	warnings.
 	* gpgmetools.c (gpa_backup_key): Likewise.
 	* gpgmeparsers.c (gpa_parse_engine_info, gpa_parse_import_info): Ditto.
-	
+
 	* keyeditdlg.c: Removed obsolete ownertrust prototype.
 
 	* fileman.c: Forgot one of Francis's patches.
@@ -3752,7 +3758,7 @@
 	functions, fix compiler warnings and add conditional compilation
 	of headers where missing.
 	Submitted by Francis J. A. Pinteric <linuxdoctor@linux.ca>
-	
+
 2002-11-11  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.c (build_genkey_parms): Fix the date string.
@@ -3766,7 +3772,7 @@
 	back to "Help" for consistency with other programs.
 	(scroll_text): Added myself to the about dialog.
 
-	* keygenwizard.c (gpa_keygen_wizard_email_page) 
+	* keygenwizard.c (gpa_keygen_wizard_email_page)
 	(gpa_keygen_wizard_comment_page): Fix spelling of "address".
 
 2002-11-09  Miguel Coca  <e970095@zipi.fi.upm.es>
@@ -3841,20 +3847,20 @@
 	(gpa_ownertrust_from_string, gpa_ownertrust_icon_name): Remove
 	obsolete.
 
-	* ownertrustdialog.h, ownertrustdlg.c (gpa_ownertrust_run_dialog): 
+	* ownertrustdialog.h, ownertrustdlg.c (gpa_ownertrust_run_dialog):
 	Completedy redo the owner trust dialog. Edit the key inside this
 	function.
 
 	* keylist.c (get_trust_value, get_ownertrust_value): Rename key
 	trust as validity. Use new string functions.
-	* keyring.c (keyring_details_notebook) 
+	* keyring.c (keyring_details_notebook)
 	(keyring_details_page_fill_key): Likewise.
 
 	* keyeditdlg.c (gpa_key_edit_dialog_run): Use the new string
 	functions.
 	(key_edit_change_trust): Use new version of owner trust dialog.
 
-	* gpgmetools.h, gpgmetools.c (gpa_key_ownertrust_string) 
+	* gpgmetools.h, gpgmetools.c (gpa_key_ownertrust_string)
 	(gpa_key_validity_string): New functions.
 
 	* gpawidgets.c (gpa_key_info_new): Cosmetic fix to the label
@@ -3865,14 +3871,14 @@
 	* helpmenu.c (gpa_help_menu_add_to_factory, help_warranty): Remove
 	the "warranty" item, as it just an exact copy of "license".
 
-	* encryptdlg.c (gpa_file_encrypt_dialog_run, file_encrypt_ok): 
+	* encryptdlg.c (gpa_file_encrypt_dialog_run, file_encrypt_ok):
 	Enable encrypt+sign.
 	(toggle_sign_cb): New function.
 
 	* gpgmeparsers.c (gpa_parse_import_info): Free the operation
 	information.
 
-	* keyimportdlg.h, keyimportdlg.c (key_import_results_dialog_run): 
+	* keyimportdlg.h, keyimportdlg.c (key_import_results_dialog_run):
 	New function.
 
 	* keyring.c (keyring_editor_import): Load only those keys we just
@@ -3884,7 +3890,7 @@
 
 	* keytable.h, keytable.c (gpa_keytable_load_key): New function.
 
-	* gpgmeparsers.c (gpa_parse_import_info, parse_import_info_text) 
+	* gpgmeparsers.c (gpa_parse_import_info, parse_import_info_text)
 	(parse_import_info_end, parse_import_info_start): Parse the import
 	operation detailed results.
 
@@ -3917,7 +3923,7 @@
 	(invoke_helper): Added support for error reporting under both
 	GnuPG 1.2 and 1.3.
 
-	* gpgmetools.c (parse_engine_info_start, parse_engine_info_end) 
+	* gpgmetools.c (parse_engine_info_start, parse_engine_info_end)
 	(parse_engine_info_text, find_gpg_executable): Remove from here.
 	Mostly moved (and expanded) to gpgmeparsers.c.
 	(gpa_backup_key): Use gpa_parse_engine_info.
@@ -3974,7 +3980,7 @@
 
 	* gpapastrings.c, gpapastrings.h (gpa_ownertrust_from_string)
 	(gpa_ownertrust_icon_name): Fix prototype.
-	(gpa_file_status_string) 
+	(gpa_file_status_string)
 	(gpa_sig_validity_string): Removed.
 
 	* filesigndlg.c: Likewise.
@@ -3993,23 +3999,23 @@
 
 	* optionsmenu.c (add_key): Fix warning.
 
-	* gpa.c, gpa.h (gpa_callback, gpa_get_global_clist_file, sigs_append) 
-	(compareInts, gpa_selectRecipient, gpa_unselectRecipient) 
-	(gpa_removeRecipients, gpa_addRecipient, gpa_addRecipients) 
+	* gpa.c, gpa.h (gpa_callback, gpa_get_global_clist_file, sigs_append)
+	(compareInts, gpa_selectRecipient, gpa_unselectRecipient)
+	(gpa_removeRecipients, gpa_addRecipient, gpa_addRecipients)
 	(freeRowData, gpa_recipientWindow_close): Removed obsolete.
-	* optionsmenu.c (options_recipients_fillDefault) 
-	(options_recipients_set, options_recipients_destroy) 
+	* optionsmenu.c (options_recipients_fillDefault)
+	(options_recipients_set, options_recipients_destroy)
 	(options_recipients): Ditto.
 	* filemenu.c, filemenu.h, keysmenu.c, keysmenu.h, gpapa.h,
 	dummy_gpapa.c: Likewise for the whole files.
 
 	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Use a gpa_key_info
-	instead of a gpa_tableKey.	
+	instead of a gpa_tableKey.
 
 	* fileman.c (fileman_menu_new): Use gtk_main_quit() directly for
 	the quit menu entry.
 	* keyring.c (keyring_editor_menubar_new): Likewise.
-	
+
 	* keyring.c (keyring_editor_export): Use gpa_fopen.
 
 	* fileman.c (decrypt_files): Implemented using Gpgme.
@@ -4020,7 +4026,7 @@
 	(encrypt_files): Free the list of files.
 	(gpa_window_file_new, add_file): Set the file list to have
 	just one column, the filename, as the other one left was useless.
-	
+
 	* filesigndlg.c (open_destination_file): Make sure there is proper
 	cleanup on error. Use gpa_fopen.
 	* encryptdlg.c (open_destination_file): Likewise.
@@ -4034,10 +4040,10 @@
 	* server_access.c (error_string): Added KEYSERVER_UNREACHABLE error
 	code.
 
-	* gpgmeedit.c (edit_fnc, edit_expire_fnc_action) 
-	(edit_expire_fnc_transit, edit_trust_fnc_action) 
-	(edit_trust_fnc_transit, edit_sign_fnc_action) 
-	(edit_sign_fnc_transit, gpa_gpgme_edit_trust) 
+	* gpgmeedit.c (edit_fnc, edit_expire_fnc_action)
+	(edit_expire_fnc_transit, edit_trust_fnc_action)
+	(edit_trust_fnc_transit, edit_sign_fnc_action)
+	(edit_sign_fnc_transit, gpa_gpgme_edit_trust)
 	(gpa_gpgme_edit_sign, gpa_gpgme_edit_expire): Rebuilt key editing to
 	follow a more consistent model. Use the same edit callback, with
 	different data, for all operations. Hopefully this will make it easier
@@ -4067,16 +4073,16 @@
 
 	* fileman.c (count_sigs, free_file_info, attach_file),
 	(get_file): Removed obsolete.
-	(get_selected_files, add_file, show_file_detail, sign_files) 
+	(get_selected_files, add_file, show_file_detail, sign_files)
 	(gpa_window_file_new): Change to use Gpgme.
 
 	* filesigndlg.c: Ported dialog to Gpgme. Use a GtkDialog.
 
-	* gpawidget.h, gpawidgets.c (gpa_key_list_new, gpa_key_list_add_key) 
+	* gpawidget.h, gpawidgets.c (gpa_key_list_new, gpa_key_list_add_key)
 	(gpa_secret_key_list_new, gpa_public_key_list_new): Port to Gpgme.
 	(gpa_key_list_new_from_glist): Disable. Unused at the moment.
 
-	* encryptdlg.c (gpa_file_encrypt_dialog_run): Fix call to 
+	* encryptdlg.c (gpa_file_encrypt_dialog_run): Fix call to
 	gpa_public_key_list_new.
 
 	* keyring.c (isdir): Remove obsolote.
@@ -4108,7 +4114,7 @@
 	(invoke_helper): Try to parse the helper output if it returned and
 	error code.
 	(server_send_keys): Remove placeholder code.
-	
+
 	* keyring.c (keyring_editor_export): Minor fixes.
 
 2002-09-24  Miguel Coca  <e970095@zipi.fi.upm.es>
@@ -4120,7 +4126,7 @@
 	keyserver support.
 
 	* server_access.c, server_access.h: New files with the implementation
-	of all calls to the keyserver helpers. 
+	of all calls to the keyserver helpers.
 
 	* Makefile.am (gpa_SOURCES): Added server_access.{c,h}.
 
@@ -4134,7 +4140,7 @@
 
 2002-09-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
-	* gpgmeedit.c (gpa_gpgme_edit_ownertrust, gpa_gpgme_edit_expiry) 
+	* gpgmeedit.c (gpa_gpgme_edit_ownertrust, gpa_gpgme_edit_expiry)
 	(gpa_gpgme_edit_sign): Fix error reporting: always report errors to
 	the caller.
 
@@ -4152,7 +4158,7 @@
 
 2002-09-11  Miguel Coca  <e970095@zipi.fi.upm.es>
 
-	* gpgmeedit.c (edit_sign_fnc_action, edit_sign_fnc_transit) 
+	* gpgmeedit.c (edit_sign_fnc_action, edit_sign_fnc_transit)
 	(edit_sign_fnc): Use an enum for the state names. Minor fixes.
 
 	* gpgmetools.c, gpgmetools.h, gpgmeedit.c, gpgmeedit.h: Moved the
@@ -4168,7 +4174,7 @@
 	gpa_gpgme_key_get_userid, so that it is always in UTF-8.
 	* keysmenu.c (gpa_tableKey_new): Likewise.
 	* keysigndlg.c (gpa_key_sign_run_dialog): Likewise.
-	* keyring.c (keyring_details_page_fill_key) 
+	* keyring.c (keyring_details_page_fill_key)
 	(keyring_update_status_bar): Likewise.
 	* keylist.c (get_name_value): Likewise.
 	* keyeditdlg.c (gpa_key_edit_dialog_run): Likewise.
@@ -4190,7 +4196,7 @@
 	(expiry_ok): Modify not to be a callback.
 	(gpa_expiry_dialog_run): Use a GtkDialog.
 
-	* ownertrustdlg.c (ownertrust_cancel, ownertrust_destroy) 
+	* ownertrustdlg.c (ownertrust_cancel, ownertrust_destroy)
 	(ownertrust_ok): Remove functions.
 	(gpa_ownertrust_run_dialog): Use a GtkDialog.
 
@@ -4216,7 +4222,7 @@
 2002-08-28  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* gpgmetools.c (find_gpg_executable): New function.
-	(parse_engine_info_text, parse_engine_info_end) 
+	(parse_engine_info_text, parse_engine_info_end)
 	(parse_engine_info_start): Helper functions for a GLib XML parser.
 
 	* keyexportdlg.c (key_backup_dialog_run): Ask for a file, not a dir.
@@ -4285,7 +4291,7 @@
 
 	* keysigndlg.c (gpa_key_sign_run_dialog): Change to use a GtkDialog.
 	(key_sign_cancel, key_sign_ok, key_sign_destroy): Deleted
-	functions, as the dialog does not need them. 
+	functions, as the dialog does not need them.
 	(gpa_key_sign_run_dialog): Display all user ID's. Warn that all of
 	them will be signed. Use "user name" instead of "user id" on
 	screen.
@@ -4324,7 +4330,7 @@
 	* keyserver.c: Likewise.
 	* optionsmenu.c: Likewise.
 	* siglist.c: Likewise.
-	
+
 	* gpapastrings.c (gpa_unit_expiry_time_string): Renamed index
 	argument to idx.
 
@@ -4382,14 +4388,14 @@
 
 	* keysmenu.c (gpa_tableKey_new): Port to gpgme.
 
-	* ownertrustdlg.c (GPAOwnertrustDialog, ownertrust_ok) 
+	* ownertrustdlg.c (GPAOwnertrustDialog, ownertrust_ok)
 	(gpa_ownertrust_run_dialog): Port to gpgme.
 
 	* gpgmetools.c (gpa_gpgme_edit_ownertrust)
 	(gpa_gpgme_edit_expiry): New (empty) functions.
 
 	* keyeditdlg.c (key_edit_change_trust): Change to use gpgme.
-	
+
 	* gpa.c (main): Set the passphrase callback.
 
 	* gpgmetools.c, gpgmetools.h (gpa_passphrase_cb): New function.
@@ -4408,10 +4414,10 @@
 	represent the key's fingerprint.
 	(gpa_key_edit_dialog_run): Port to GPGME.
 
-	
+
 2002-08-17  Miguel Coca  <e970095@zipi.fi.upm.es>
 
-	* keyring.c (keyring_editor_generate_key_simple) 
+	* keyring.c (keyring_editor_generate_key_simple)
 	(keyring_editor_generate_key_advanced): Reload the keytable after
 	generating a key.
 
@@ -4438,11 +4444,11 @@
 	* keygendlg.c, gpgmetools.c (gpa_key_gen_free_parameters)
 	(key_gen_params_new): Moved functions to where they can be used by
 	other files.
-	
+
 	* keygendlg.h, gpgmetools.h: Moved the GPAKeyGenParameters
 	definition and related functions to gpgmetools.h and changed the
 	fields that depended on GPAPA.
-	
+
 2002-08-16  Miguel Coca  <e970095@zipi.fi.upm.es>
 
 	* keysmenu.c, keysmenu.h (keys_openSecret)
@@ -4478,11 +4484,11 @@
 
 	* passphrasedlg.c (gpa_passphrase_run_dialog): In dialogs, set the
 	button ordering to [OK] [Cancel] in all cases.
-	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Likewise. 
+	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Likewise.
 	* keyreceivedlg.c (key_receive_run_dialog): Likewise.
 	* keyimpseldlg.c (gpa_key_import_selection_dialog_run): Likewise.
 	* keyimportdlg.c (key_import_dialog_run): Likewise.
-	* keyexportdlg.c (key_export_dialog_run) 
+	* keyexportdlg.c (key_export_dialog_run)
 	(secret_key_export_dialog_run, key_backup_dialog_run): Likewise.
 	* filesigndlg.c (gpa_file_sign_dialog_run): Likewise.
 	* encryptdlg.c (gpa_file_encrypt_dialog_run): Likewise.
@@ -4502,12 +4508,12 @@
 	(key_has_been_signed): Disable function until it can be
 	implemented with gpgme.
 
-	* gtktools.c, gpgmetools.c (gpa_gpgme_error): Move function to 
+	* gtktools.c, gpgmetools.c (gpa_gpgme_error): Move function to
 	gpgmetools.c
 
 2002-08-12  Miguel Coca  <e970095@zipi.fi.upm.es>
 
-	* keyring.c (keyring_editor_export_secret) 
+	* keyring.c (keyring_editor_export_secret)
 	(keyring_editor_menubar_new): Removed the option to export secret
 	keys.
 
@@ -4526,7 +4532,7 @@
 	* gpapastrings.h: Include gpgme.h
 
 	* Makefile.am (gpa_SOURCES): Added new file.
-	
+
 	* gpapa.h: New file. All gpapa headers combined in one file that
 	can be used to compile GPA during the migration without any
 	problems.
@@ -4570,8 +4576,8 @@
 	* keylist.c (get_key_type_pixmap_value): Fixed to properly detect
 	secret keys.
 
-	* keytable.c (keytable_fill, keytable_empty, gpa_keytable_new) 
-	(gpa_keytable_reload, gpa_keytable_secret_lookup) 
+	* keytable.c (keytable_fill, keytable_empty, gpa_keytable_new)
+	(gpa_keytable_reload, gpa_keytable_secret_lookup)
 	(gpa_keytable_secret_foreach, gpa_keytable_destroy): Added the
 	secret keyring to the keytable.
 
@@ -4587,7 +4593,7 @@
 	ownertrustdlg.c (gpa_ownertrust_run_dialog),
 	keyring.c (keyring_details_page_fill_key): Replace string functions.
 
-	* gpapastrings.c, gpapastrings.h 
+	* gpapastrings.c, gpapastrings.h
 	(gpa_keytrust_string, gpa_ownertrust_string, gpa_trust_string)
 	(gpa_ownertrust_from_string): Merged the trust strings fuctions
 	and arrays, since gpgme does not have different values for key
@@ -4610,7 +4616,7 @@
 
 2002-08-05  Miguel Coca  <e970095@zipi.fi.upm.es>
 
-	* keylist.c (get_name_value, get_trust_value, get_ownertrust_value) 
+	* keylist.c (get_name_value, get_trust_value, get_ownertrust_value)
 	(get_identifier_value, get_key_type_pixmap_value): Ported to use GPGME.
 
 	* gpa.c (main): Remove commented out code.
@@ -4680,8 +4686,8 @@
 	authoritative one.
 
 2002-07-30  Miguel Coca  <e970095@zipi.fi.upm.es>
-	
-	* gpawidgets.c (gpa_key_list_new, gpa_secret_key_list_new) 
+
+	* gpawidgets.c (gpa_key_list_new, gpa_secret_key_list_new)
 	(gpa_public_key_list_new, gpa_key_list_new_from_glist): Move the
 	repeated code for creating the CList to a new gpa_key_list_new
 	function. Changed the others to use it.
@@ -4751,7 +4757,7 @@
 	(options_recipients)
 	(options_key_select)
 	(options_key): Swapped column titles. Changed default widths.
-	
+
 2002-02-22  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* Makefile.am (gpa_SOURCES): Added gpa.rc
@@ -4770,12 +4776,12 @@
 	default-key.
 	(opts): Changed description of --advanced-ui.
 	(gpa_set_default_key): Save the default key to the config file.
-	
+
 2002-02-21  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* filemenu.c, filesigndlg.c: Reformatted to completely comply with
 	the GNU Coding Standards.
-	
+
 	* filemenu.c (file_sign_sign_exec): Choose the filename for the
 	dettached signature here, and not in gpapa.
 
@@ -4798,7 +4804,7 @@
 
 	* gtkhacks.h: New file, contains some definitions to work around
 	incompatibilities between GTK+ 1.2 and 2.0.
-	
+
 	* fileman.c (show_file_detail): Use the new compatibility
 	functions defined in gtkhacks.h.
 	(gpa_fileman_toolbar_new): Allow compilation under both GTK 1.2
@@ -4842,12 +4848,12 @@
 
 	* simple-gettext.c (set_gettext_file): Return 0 instead of NULL,
 	since the function returns "int".
-	
+
 2002-02-15  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* keyring.c (keyring_editor_menubar_new): Added "Delete Keys" menu
 	item.
-	
+
 2002-02-14  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* fileman.c: Reformatted to completely comply with the GNU
@@ -4858,7 +4864,7 @@
 	(main): Find out the file where keyserver list using the new
 	search_config_file(). Changed the order in which config files are
 	read.
-	(search_config_file): Fixed broken g_strconcat calls.	
+	(search_config_file): Fixed broken g_strconcat calls.
 
 	* gpafilesel.c (read_directory): Display the directory names using
 	UTF8.
@@ -4877,7 +4883,7 @@
 	* keyserver.c (serverlist): Initialize as NULL.
 	(read_list): Changed to assume we receive the full pathname to the
 	keyserver file. Commented out error messages.
-	
+
 2002-02-13  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* gpa.c, keylist.c: Reformatted to completely comply with the GNU
@@ -4898,7 +4904,7 @@
 
 	* keylist.c (keylist_fill_list): Added checks to verify that every
 	secret key has a corresponding public key in the keyring.
-	
+
 2002-02-11  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* keyring.c (keyring_editor_backup): Test for the directory the user
@@ -4910,7 +4916,7 @@
 	* gpafilesel.c: Extensive changes to the way directories are
 	handled. Now the directory list is a tree that expands as the user
 	navigates the filesystem.
-	
+
 2002-02-10  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* Makefile.am (LDADD): Added -lm and -lz to the hardcoded libraries.
@@ -4924,9 +4930,9 @@
 	* gpa.c, icons.c, keyserver.c, keyring.c: Fixed debug output.
 
 	* keyeditdlg.c, keyexportdlg.c, keyserver.c, keygenwizard.c,
-	keyring.c, gpawizard.h: Reformatted to completely comply with the 
+	keyring.c, gpawizard.h: Reformatted to completely comply with the
 	GNU Coding Standards.
-	
+
 	* fileman.c, filemenu.c, gpawidgets.c: Use the GTK+ 2.0 API for
 	finding out the right width for GtkEntry's.
 
@@ -4935,7 +4941,7 @@
 
 	* keyexportdlg.c, keyimportdlg.c, keysmenu.c, optionsmenu.c: Use
 	new keyserver_get_current().
-	
+
 	* gpa.h, gpa.c (gpa_backup_generated)
 	(gpa_set_backup_generated)
 	(gpa_remember_backup_generated): New functions for implementing
@@ -4964,7 +4970,7 @@
 
 	* keyexportdlg.c (export_ok): Cleaned up code a bit, reordered if
 	conditions (in preparation for adding export to clipboard).
-	
+
 	* keyexportdlg.c, keyexportdlg.h (secret_key_export_dialog_run)
 	(key_backup_dialog_run): New dialogues. First exports secret keys,
 	and the second makes a backup of the user's keys.
@@ -5004,16 +5010,16 @@
 
 	* keyring.c (keyring_toolbar_new): Disabled the help button, since
 	it does nothing at the moment.
-	
+
 2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
-	* Makefile.am (gpa_SOURCES): Included gpafilesel.c and gpafilesel.h 
+	* Makefile.am (gpa_SOURCES): Included gpafilesel.c and gpafilesel.h
 	to the list.
 
 	* harddisk.xpm, harddisk1.xpm, harddisk2.xpm, harddisk3.xpm,
 	open_folder.xpm, open_folder1.xpm, open_folder2.xpm, floppy.xpm,
-	folder.xpm, folder1.xpm, folder2.xpm: New icons.	
-	
+	folder.xpm, folder1.xpm, folder2.xpm: New icons.
+
 	* encryptdlg.c, expirydlg.c, fileman.c, filemenu.c, filesigndlg.c,
 	gpawidgets.c, gpawidgets.c, gtktools.c, keygendlg.c,
 	keygenwizard.c, keysmenu.c, passphrasedlg.c: Small corrections to
@@ -5032,7 +5038,7 @@
 	passphrasedlg.c: Changed to use GTK_WINDOW_TOPLEVEL instead of
 	GTK_WINDOW_DIALOG in all calls to gtk_window_new, since
 	GTK_WINDOW_DIALOG doesn't exist in GTK+ 2.0.
-	
+
 	* fileman.c (show_file_detail)
 	filemenu.c (file_encrypt_detail)
 	gpawidgets.c (gpa_expiry_frame_new)
@@ -5084,7 +5090,7 @@
 	(toolbar_import_keys): Added prototypes.
 	(export_secret_key): New (empty) function.
 	(keyring_editor_generate_key_advanced): Changed #warning to a comment.
-	(keyring_editor_mapped): Remind the user to make a backup of his 
+	(keyring_editor_mapped): Remind the user to make a backup of his
 	private key.
 	(keyring_editor_menubar_new): Added keyboard accelerator to the
 	File/Close menu item. Added key operations (sign, export, export
@@ -5094,11 +5100,11 @@
 	the file manager.
 	(keyring_editor_new): Changed default window size. Increased area
 	reserved for the key list.
-	
+
 	* keyimportdlg.c (_GPAKeyImportDialog)
 	(key_import_dialog_run): Support for exporting keys to the
 	clipboard.
-	
+
 2002-01-14  Werner Koch  <wk@gnupg.org>
 
 	* gpa.c (my_strusage): Take bug report address from configure.
@@ -5128,7 +5134,7 @@
 
 2001-05-30  Werner Koch  <wk@gnupg.org>
 
-	* i18n.h, options.h: New. 
+	* i18n.h, options.h: New.
 	* gpa.h: Moved some code to the new header files.
 
 	* keyserver.c, keyserver.h: New.
@@ -5147,7 +5153,7 @@
 2001-03-28  Werner Koch  <wk@gnupg.org>
 
 	* gpa.c (gpa_determine_default_key): Replaced xstrdup by
-	xstrdup_or_null to avoid a segv. 
+	xstrdup_or_null to avoid a segv.
 	* optionsmenu.c (options_key_set): Ditto, to make it more robust.
 	(options_keyserver_set): Ditto.
 	* passphrasedlg.c (passphrase_ok): Ditto.
@@ -5161,7 +5167,7 @@
 
 2001-02-27	Jan-Oliver Wagner <jan@intevation.de>
 
-	* helpmenu.c: Added some authors for scroll text 
+	* helpmenu.c: Added some authors for scroll text
 
 2001-02-15  Thomas Koester  <tkoester@intevation.de>
 
@@ -5245,10 +5251,10 @@
 	importing the key
 	(keyring_toolbar_new): Change "details" to "detailed"
 
-	* icons.xpm: 
+	* icons.xpm:
 	* icons.c (xpms): Add some new graphics
 
-	* keyring.c (keyring_toolbar_new): 
+	* keyring.c (keyring_toolbar_new):
 	* fileman.c (gpa_fileman_toolbar_new): Use the new toolbar icons
 
 	* keylist.c (get_key_type_pixmap_value): Use the new key icons
@@ -5423,11 +5429,11 @@
 	* gpa.c (gpa_addRecipient): Only add the key if it's not already
 	in the recipients list.
 
-	* keysmenu.c (keys_openPublic_exportTrust_export): 
-	(keys_openPublic_exportTrust): 
-	(keys_openSecret_editKey_close): 
-	(keys_openSecret_editKey): 
-	(keys_openSecret): 
+	* keysmenu.c (keys_openPublic_exportTrust_export):
+	(keys_openPublic_exportTrust):
+	(keys_openSecret_editKey_close):
+	(keys_openSecret_editKey):
+	(keys_openSecret):
 	* filemenu.c (file_sign_sign):
 	(file_encryptAs):
 	(file_protect):
@@ -5440,7 +5446,7 @@
 	children of the keyring editor window are shown all the time and a
 	show_all will make them all visible again.
 
-	* fileman.c (gpa_fileman_new): 
+	* fileman.c (gpa_fileman_new):
 	* keyring.c (keyring_editor_new): Realize the window before
 	creating the toolbar so that we can create pixmaps without
 	warnings
@@ -5470,10 +5476,10 @@
 	(keylist_free_row_labels): Removed.
 	(keylist_fill_row): New function to fill a row with the
 	labels/pixmaps for one key
-	
+
 	* keyring.c (keyring_toolbar_new): Use the new help icon
 
-	* icons.xpm: 
+	* icons.xpm:
 	* icons.c (xpms): Add some new icons
 
 	* keyring.c (keyring_editor_delete): Deleting keys has changed in
@@ -5580,13 +5586,13 @@
 	* keysigndlg.c (key_sign_ok): Pass the default key to the password
 	dialog
 
-	* passphrasedlg.h (gpa_passphrase_run_dialog): 
+	* passphrasedlg.h (gpa_passphrase_run_dialog):
 	* passphrasedlg.c (gpa_passphrase_run_dialog): Add a key parameter
 	and display information about the key whose password is required.
 
-	* keysigndlg.c (key_sign_ok): 
-	* filesigndlg.c (file_sign_ok): 
-	* fileman.c (decrypt_files): 
+	* keysigndlg.c (key_sign_ok):
+	* filesigndlg.c (file_sign_ok):
+	* fileman.c (decrypt_files):
 	* expirydlg.c (expiry_ok): Call gpa_passphrase_run_dialog with
 	NULL as the new key parameter. Should be replaced with the correct
 	key later.
@@ -5594,7 +5600,7 @@
 	* keyring.c (keyring_editor_toggle_show_trust): Removed because
 	it's no longer used. A similar effect is available with the
 	brief/detailed listings.
- 
+
 	* keydeletedlg.h:
 	* keydeletedlg.c: New files for the key delete dialog.
 
@@ -5626,7 +5632,7 @@
 
 	* gpapastrings.c (gpa_expiry_date_string): Use %x instead of
 	  %d.%m.%Y as date format string.
-	
+
 	* expirydlg.c (gpa_expiry_dialog_run):
 	* gpawidgets.c (gpa_expiry_frame_at):
 	(gpa_expiry_frame_new):
@@ -5699,8 +5705,8 @@
 
 	* gpa.h (global_defaultKey): Removed. Its definition was deleted
 	some time ago.
-	
-	* gpa.h (global_homeDirectory): 
+
+	* gpa.h (global_homeDirectory):
 	* gpa.c (global_homeDirectory): Removed as it's no longer used.
 
 	* gpa.c (main): Don't init the home dir and load/save options dialogs.
@@ -5718,7 +5724,7 @@
 	(options_load):
 	(options_save): Removed. Loading and saving options wasn't
 	actually implemented in gpapa anyway and the home directory was
-	only used by the load/save options functions. 
+	only used by the load/save options functions.
 	(gpa_options_menu_add_to_factory): Remove the menu entries for the
 	home directory and loading/saving options.
 
@@ -5733,7 +5739,7 @@
 	* Makefile.am (gpa_SOURCES): Replace the keyreceivedlg files with
 	the keyimportdlg files.
 
-	* keyimportdlg.h: 
+	* keyimportdlg.h:
 	* keyimportdlg.c: New files implementing the import dialog
 
 	* keyring.c (keyring_editor_import):
@@ -5755,7 +5761,7 @@
 	* keyring.c (keyring_editor_export): Actually call the appropriate
 	gpap functions and handle sending keys to key servers as well.
 
-	* keyexportdlg.h: 
+	* keyexportdlg.h:
 	* keyexportdlg.c: Substantial changes in practically all functions
 	to extend the dialog to support sending keys to key servers (which
 	includes a new parameter in key_export_dialog_run) as well and to
@@ -5779,7 +5785,7 @@
 
 	* Makefile.am (gpa_SOURCES): Add the new expiry dialog files
 
-	* expirydlg.h: 
+	* expirydlg.h:
 	* expirydlg.c: New files implementing the dialog to change the
 	expiry date
 
@@ -5787,8 +5793,8 @@
 	the change button of the expiry date
 	(gpa_key_edit_dialog_run): Add the signal handler for the expiry
 	date change
-	
-	* keyring.c (keyring_editor_generate_key_advanced): 
+
+	* keyring.c (keyring_editor_generate_key_advanced):
 	* keygenwizard.c (gpa_keygen_wizard_password_action): Remove some
 	debug printfs
 
@@ -5806,8 +5812,8 @@
 	"cancel". (it may be null if the user exited the message box
 	through the window manager)
 
-	* keyeditdlg.c (key_edit_change_trust): 
-	* ownertrustdlg.h (gpa_ownertrust_run_dialog): 
+	* keyeditdlg.c (key_edit_change_trust):
+	* ownertrustdlg.h (gpa_ownertrust_run_dialog):
 	* ownertrustdlg.c (gpa_ownertrust_run_dialog): Remove the tip
 	parameter of gpa_ownertrust_run_dialog which was intended for the
 	now removed tip window. Update callers.
@@ -5825,9 +5831,9 @@
 	* optionsmenu.c (gpa_options_menu_add_to_factory): Remove the
 	"Online _tips" entry
 
-	* optionsmenu.h (options_tips): 
-	* optionsmenu.c (options_tips): 
-	* gpa.h (gpa_switch_tips): 
+	* optionsmenu.h (options_tips):
+	* optionsmenu.c (options_tips):
+	* gpa.h (gpa_switch_tips):
 	* gpa.c (gpa_switch_tips): Removed because they're not needed
 	anymore now that the tip window's gone
 
@@ -5871,20 +5877,20 @@
 	(gpa_loadOptionsSelect_init):
 	(gpa_saveOptionsSelect_init): Remove commented out window tip code
 
-	* encryptdlg.c: 
-	* fileman.c: 
-	* filemenu.c: 
-	* filesigndlg.c: 
-	* gpa.c: 
-	* gpawidgets.c: 
-	* gtktools.c: 
+	* encryptdlg.c:
+	* fileman.c:
+	* filemenu.c:
+	* filesigndlg.c:
+	* gpa.c:
+	* gpawidgets.c:
+	* gtktools.c:
 	* optionsmenu.c: Don't include help.h
 
-	* tipwindow.c: 
+	* tipwindow.c:
 	* help.h:
 	* help.c: Removed because the tip windows are not used anymore.
 	tipwindow.c wasn't actually used anyway
-	
+
 	* Makefile.am (gpa_SOURCES): Removed help.c and help.h
 
 	* gpa.c (main): Don't init the tipwindow.
@@ -5896,12 +5902,12 @@
 	* gtktools.c (gpa_window_destroy): Remove the window tip handling
 
 	* filemenu.c (file_open):
-	(gpa_fileOpenSelect_init): 
-	(file_open_ok): 
-	(file_showDetail): 
-	(file_close): 
-	(file_sign): 
-	(get_file_selection_count): 
+	(gpa_fileOpenSelect_init):
+	(file_open_ok):
+	(file_showDetail):
+	(file_close):
+	(file_sign):
+	(get_file_selection_count):
 	(file_encrypt):
 	(file_decrypt_decrypt_exec):
 	(file_decrypt_decrypt):
@@ -5914,8 +5920,8 @@
 	* gtktools.c (gpa_widget_set_centered): Removed. Use
 	gpa_window_show_centered instead
 
-	* gtktools.c (gpa_window_passphrase): 
-	(gpa_window_message): 
+	* gtktools.c (gpa_window_passphrase):
+	(gpa_window_message):
 	* helpmenu.c (help_license): Use gpa_window_show_centered instead
 	of gpa_widget_set_centered.
 
@@ -5923,34 +5929,34 @@
 	* gtktools.c (gpa_widget_show): Removed. Use
 	gpa_window_show_centered instead
 
-	* encryptdlg.c (gpa_file_encrypt_dialog_run): 
-	* fileman.c (show_file_detail): 
-	* filemenu.c (file_showDetail): 
-	(file_sign_dialog): 
-	(file_encrypt_detail): 
-	(file_encrypt_dialog): 
-	(file_protect_dialog): 
-	(file_decryptAs): 
-	* filesigndlg.c (gpa_file_sign_dialog_run): 
-	* gtktools.c (gpa_window_error): 
-	* keyexportdlg.c (key_export_dialog_run): 
-	* keyreceivedlg.c (key_receive_run_dialog): 
-	* keysmenu.c (keys_export_dialog): 
-	(keys_openPublic_editTrust): 
-	(keys_openPublic_editKey): 
-	(keys_openPublic_receive): 
-	(keys_openPublic_exportTrust): 
-	(keys_openPublic): 
-	(keys_openSecret_editKey): 
-	(keys_openSecret): 
-	(keys_generateKey): 
-	(keys_generateRevocation): 
-	(keys_import): 
-	(keys_importOwnertrust): 
-	* optionsmenu.c (options_keyserver): 
-	(options_recipients): 
-	(options_key): 
-	(options_tips): 
+	* encryptdlg.c (gpa_file_encrypt_dialog_run):
+	* fileman.c (show_file_detail):
+	* filemenu.c (file_showDetail):
+	(file_sign_dialog):
+	(file_encrypt_detail):
+	(file_encrypt_dialog):
+	(file_protect_dialog):
+	(file_decryptAs):
+	* filesigndlg.c (gpa_file_sign_dialog_run):
+	* gtktools.c (gpa_window_error):
+	* keyexportdlg.c (key_export_dialog_run):
+	* keyreceivedlg.c (key_receive_run_dialog):
+	* keysmenu.c (keys_export_dialog):
+	(keys_openPublic_editTrust):
+	(keys_openPublic_editKey):
+	(keys_openPublic_receive):
+	(keys_openPublic_exportTrust):
+	(keys_openPublic):
+	(keys_openSecret_editKey):
+	(keys_openSecret):
+	(keys_generateKey):
+	(keys_generateRevocation):
+	(keys_import):
+	(keys_importOwnertrust):
+	* optionsmenu.c (options_keyserver):
+	(options_recipients):
+	(options_key):
+	(options_tips):
 	Call gpa_window_show_centered instead of gpa_widget_show
 
 	* keygendlg.c (gpa_key_gen_run_dialog): Remove the commented out
@@ -6018,7 +6024,7 @@
 	(key_edit_delete_event): Removed because the default handler does
 	exactly what we need now.
 
-	* keyeditdlg.h: 
+	* keyeditdlg.h:
 	* keyeditdlg.c: New files implementing the key edit dialog (still
 	incomplete, though)
 
@@ -6037,9 +6043,9 @@
 	gpa_update_default_key now.
 	* gpa.h: Update the prototypes accordingly.
 
-	* gpa.c (main): 
-	* keyring.c (keyring_editor_generate_key_simple): 
-	(keyring_editor_generate_key_advanced): 
+	* gpa.c (main):
+	* keyring.c (keyring_editor_generate_key_simple):
+	(keyring_editor_generate_key_advanced):
 	Use gpa_update_default_key instead of gpa_determine_default_key
 
 	* keyring.c (keyring_editor_mapped): Fix a typo
@@ -6058,7 +6064,7 @@
 	(gpa_emit_default_key_changed): New functions to implement a user
 	signal "gpa_default_key_changed" for GtkWindows that is emit on
 	all toplevel windows whenever the default key changes.
-	(main): Initialize the user signal 
+	(main): Initialize the user signal
 	(gpa_set_default_key): Emit the new signal when the key changes.
 	(gpa_get_keyring_editor): New function to return the keyring
 	editor window
@@ -6069,10 +6075,10 @@
 
 2001-01-25  Bernhard Herzog  <bh@intevation.de>
 
-	* filemenu.c: 
-	* gtktools.c: 
-	* helpmenu.c: 
-	* keysmenu.c: 
+	* filemenu.c:
+	* gtktools.c:
+	* helpmenu.c:
+	* keysmenu.c:
 	* optionsmenu.c: Replace all those silly _("") with ""
 
 2001-01-25	Jan-Oliver Wagner <jan@intevation.de>
@@ -6087,7 +6093,7 @@
 
 	* siglist.c: Add some comments
 
-	* siglist.h: 
+	* siglist.h:
 	* siglist.c (gpa_siglist_set_signatures): Add a key_id parameter
 	to filter out signatures of a given key. Useful to hide the self
 	signatures of keys.
@@ -6099,7 +6105,7 @@
 	for the widgets. Clean up the code a bit, too.
 
 	* Makefile.am (gpa_SOURCES):
-	* siglist.h: 
+	* siglist.h:
 	* siglist.c: New files implementing the list of signatures in the
 	keying editor.
 
@@ -6111,7 +6117,7 @@
 	(GPAKeyringEditor): Add the signatures list widget
 
 	* keylist.c: Remove some uneeded includes
-	
+
 	* keylist.c (keylist_fill_list): Try to keep the current selection
 	if the new keep_selection parameter is TRUE.
 	(gpa_keylist_update_list): Keep the current selection.
@@ -6159,7 +6165,7 @@
 
 	* Makefile.am (gpa_SOURCES): Add the keylist files.
 
-	* keylist.h: 
+	* keylist.h:
 	* keylist.c: New files implementing the key list of the key ring
 	editor.
 
@@ -6173,9 +6179,9 @@
 
 	(keyring_editor_has_selection):
 	(keyring_editor_has_single_selection):
-	(keyring_editor_fill_keylist): 
-	(keyring_editor_current_key_id): 
-	(keyring_editor_current_key): 
+	(keyring_editor_fill_keylist):
+	(keyring_editor_current_key_id):
+	(keyring_editor_current_key):
 	These function are now just frontends for the corresponding
 	functions in keylist.c
 
@@ -6248,12 +6254,12 @@
 
 2001-01-18  Bernhard Herzog  <bh@intevation.de>
 
-	* gpa.c (cmd_and_opt_values): 
+	* gpa.c (cmd_and_opt_values):
 	(opts):
-	(main): 
+	(main):
 	Rename the option simplified-ui to advanced-ui and
 	reverse its meaning. The simplified UI is now the default.
-	
+
 	* keyring.c (keyring_editor_menubar_new): Add ... to "generate
 	key" because it pops up a dialog
 
@@ -6269,7 +6275,7 @@
 
 	* keysigndlg.h (gpa_key_sign_run_dialog): Update the parameter
 	list.
-	
+
 	* keysigndlg.c (gpa_key_sign_run_dialog): Remove the list box with
 	the secret keys and the key_id paramter because we assume the
 	selected keys are always signed with the default key. Also, in
@@ -6300,7 +6306,7 @@
 	declaration and define it in gpa.c. Rename it to gpa_options. Fix
 	all references to it. Introduce a typedef for the struct.
 
-	* keysigndlg.h: 
+	* keysigndlg.h:
 	* keysigndlg.c (gpa_key_sign_run_dialog): Add the key to be signed
 	to the parameter list and display its user id and fingerprint.
 
@@ -6311,14 +6317,14 @@
 
 2001-01-16  Bernhard Herzog  <bh@intevation.de>
 
-	* filemenu.c (file_sign_dialog): 
-	* gpawidgets.c (gpa_secret_key_list_new): 
+	* filemenu.c (file_sign_dialog):
+	* gpawidgets.c (gpa_secret_key_list_new):
 	* optionsmenu.c (gpa_loadOptionsSelect_ok):
 	(gpa_saveOptionsSelect_ok):
 	(options_key_set):
 	(options_key): Use gpa_default_key and gpa_set_default_key instead
 	of accessing global_defaultKey directly.
-	
+
 	* gpa.h: Add the two new functions gpa_default_key
 	gpa_set_default_key
 
@@ -6333,16 +6339,16 @@
 
 	* gpa.h: Removed global_tempWindows
 
-	* gpa.c: 
-	* gpawindowkeeper.c: 
+	* gpa.c:
+	* gpawindowkeeper.c:
 	Moved global_tempWindows to gpawindowkeeper as it's only used
 	there, made it static and renamed it to tempWindows because it's
 	not a global variable anymore.
-	
+
 
 2001-01-15  Bernhard Herzog  <bh@intevation.de>
 
-	* keygenwizard.c (gpa_keygen_wizard_final_page): 
+	* keygenwizard.c (gpa_keygen_wizard_final_page):
 	Fix typo
 
 	* keyring.c: Add and update comments
@@ -6367,12 +6373,12 @@
 
 	(keyring_editor_new): Connect to the map signal
 
-	* gpawizard.c: 
-	* gpawizard.h: 
+	* gpawizard.c:
+	* gpawizard.h:
 	New files implementing a simple generic wizard interface
 
-	* keygenwizard.h: 
-	* keygenwizard.c: 
+	* keygenwizard.h:
+	* keygenwizard.c:
 	New files implementing the key generation wizard
 
 	* Makefile.am: Add the new files.
@@ -6385,9 +6391,9 @@
 
 	* gtktools.c (gpa_button_set_text): Handle accelerators
 
-	(message_box_delete): 
-	(message_box_clicked): 
-	(gpa_message_box_run): 
+	(message_box_delete):
+	(message_box_clicked):
+	(gpa_message_box_run):
 
 	New functions implementing a flexible message box with caller
 	definable buttons.
@@ -6395,11 +6401,11 @@
 	* gpa.h: Add the prototypes for gpa_simplified_ui and
 	gpa_set_simplified_ui
 
-	* gpa.c (opts): 
+	* gpa.c (opts):
 	(cmd_and_opt_values)
 	Add a new option "simplified-ui" to turn on the simplified interface
-	(gpa_simplified_ui): 
-	(gpa_set_simplified_ui): 
+	(gpa_simplified_ui):
+	(gpa_set_simplified_ui):
 	New functions to read and set the simplified ui flag
 
 	(main): handle the simplified ui option in argument parsing
@@ -6411,7 +6417,7 @@
 	(gpa_key_sign_run_dialog): Use gpa_window_show_centered instead of
 	gpa_widget_show
 
-	* passphrasedlg.c 
+	* passphrasedlg.c
 	Add some comments
 	(gpa_passphrase_run_dialog): The handler for the
 	delete-event expected to be connected with gtk_signal_connect not
@@ -6439,14 +6445,14 @@
 
 	* gtktools.h: Add the two new function in gtktools.c
 
-	* gpa.c (evalMouseClistFile): 
+	* gpa.c (evalMouseClistFile):
 	(gpa_menubar_new):
-	(delete_event): 
-	(evalKeyClistFile): 
+	(delete_event):
+	(evalKeyClistFile):
 
 	Removed because they're no longer used
 
-	* keyexportdlg.c (key_export_dialog_run): 
+	* keyexportdlg.c (key_export_dialog_run):
 	get rid of the gpa_space_new () call
 
 2001-01-05  Bernhard Herzog  <bh@intevation.de>
@@ -6480,21 +6486,21 @@
 	new files
 
 	* filemenu.c:
-	* gpa.c: 
-	* gpa.h: 
-	* gtktools.c: 
-	* gtktools.h: 
-	* help.c: 
-	* helpmenu.c: 
-	* helpmenu.h: 
-	* optionsmenu.c: 
-	* optionsmenu.h: 
+	* gpa.c:
+	* gpa.h:
+	* gtktools.c:
+	* gtktools.h:
+	* help.c:
+	* helpmenu.c:
+	* helpmenu.h:
+	* optionsmenu.c:
+	* optionsmenu.h:
 
 	A lot of changes and reorganization of the code. Much of the code
 	is now in the new files.
 
-	The reorganization has two goals: 
-	
+	The reorganization has two goals:
+
 	1. Change the user interface to make the keyring editor the main
 	window.
 
@@ -6514,7 +6520,7 @@
 	* gtktools.c (gpa_xpm_label_box): Ditto
 	* keysmenu.c (getIconNameForOwnertrust): Replaces
 	getIconForOwnertrust.  Changed all callers to provide a string now.
-	
+
 2000-08-17  Werner Koch  <wk@gnupg.org>
 
 	* gpa.c (i18n_init,main): Fixed locale setting as suggested by
