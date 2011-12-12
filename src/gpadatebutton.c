@@ -14,7 +14,7 @@
  * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>. 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -28,12 +28,12 @@
 #include <gtk/gtk.h>
 
 #include "gpadatebutton.h"
-#include "i18n.h"  
+#include "i18n.h"
 
 
 
 /* Object's class definition.  */
-struct _GpaDateButtonClass 
+struct _GpaDateButtonClass
 {
   GtkButtonClass parent_class;
 
@@ -53,7 +53,7 @@ struct _GpaDateButton
   GtkWidget *label;
 
   guint current_year;
-  guint current_month;
+  guint current_month;  /* 1..12 ! */
   guint current_day;
 
   int ignore_next_selection;
@@ -69,7 +69,7 @@ static void gpa_date_button_finalize (GObject *object);
 
 
 
-/************************************************************ 
+/************************************************************
  *******************   Implementation   *********************
  ************************************************************/
 
@@ -81,14 +81,14 @@ update_widgets (GpaDateButton *self)
   if (!self->current_day && !self->current_month && !self->current_year)
     *buf = 0;
   else
-    snprintf (buf, sizeof buf, "%04d-%02d-%02d", 
-              self->current_year, self->current_month+1, self->current_day);
-  
+    snprintf (buf, sizeof buf, "%04d-%02d-%02d",
+              self->current_year, self->current_month, self->current_day);
+
   gtk_label_set_text (GTK_LABEL (self->label), *buf? buf : _("(not set)"));
   if (self->calendar && *buf)
     {
       gtk_calendar_select_month (GTK_CALENDAR (self->calendar),
-                                 self->current_month, self->current_year);
+                                 self->current_month-1, self->current_year);
       gtk_calendar_select_day (GTK_CALENDAR (self->calendar),
                                self->current_day);
     }
@@ -103,7 +103,7 @@ destroy_cb (GtkWidget *widget, gpointer user_data)
   GpaDateButton *self = GPA_DATE_BUTTON (user_data);
 
   self->dialog = NULL;
-} 
+}
 
 
 static void
@@ -121,6 +121,7 @@ day_selected_cb (GtkWidget *widget, gpointer user_data)
                          &self->current_year,
                          &self->current_month,
                          &self->current_day);
+  self->current_month++;
   update_widgets (self);
 
   g_signal_emit_by_name (self, "date-set");
@@ -147,11 +148,11 @@ create_widgets (GpaDateButton *self)
   update_widgets (self);
   gtk_widget_show (self->label);
   gtk_container_add (GTK_CONTAINER (self), self->label);
-} 
+}
 
 
 
-/************************************************************ 
+/************************************************************
  ******************   Object Management  ********************
  ************************************************************/
 
@@ -161,12 +162,12 @@ gpa_date_button_clicked (GtkButton *button)
 {
   GpaDateButton *self = GPA_DATE_BUTTON (button);
 
-  if (!self->dialog) 
+  if (!self->dialog)
     {
       self->dialog = gtk_dialog_new ();
       gtk_window_set_decorated (GTK_WINDOW (self->dialog), FALSE);
       gtk_window_set_modal (GTK_WINDOW (self->dialog), TRUE);
-      
+
       g_signal_connect (self->dialog, "destroy",
                         G_CALLBACK (destroy_cb), self);
       g_signal_connect_swapped (self->dialog, "response",
@@ -184,7 +185,7 @@ gpa_date_button_clicked (GtkButton *button)
       gtk_widget_show_all (self->dialog);
 
     }
-  
+
   update_widgets (self);
   gtk_window_present (GTK_WINDOW (self->dialog));
 }
@@ -194,11 +195,11 @@ static void
 gpa_date_button_class_init (void *class_ptr, void *class_data)
 {
   GpaDateButtonClass *klass = class_ptr;
-  
+
   (void)class_data;
 
   parent_class = g_type_class_peek_parent (klass);
-  
+
   G_OBJECT_CLASS (klass)->finalize = gpa_date_button_finalize;
   GTK_BUTTON_CLASS (klass)->clicked = gpa_date_button_clicked;
 
@@ -225,7 +226,7 @@ gpa_date_button_init (GTypeInstance *instance, void *class_ptr)
 
 static void
 gpa_date_button_finalize (GObject *object)
-{  
+{
   GpaDateButton *self = GPA_DATE_BUTTON (object);
   (void)self;
 
@@ -238,7 +239,7 @@ GType
 gpa_date_button_get_type (void)
 {
   static GType this_type = 0;
-  
+
   if (!this_type)
     {
       static const GTypeInfo this_info =
@@ -253,17 +254,17 @@ gpa_date_button_get_type (void)
 	  0,    /* n_preallocs */
 	  gpa_date_button_init
 	};
-      
+
       this_type = g_type_register_static (GTK_TYPE_BUTTON,
                                           "GpaDateButton",
                                           &this_info, 0);
     }
-  
+
   return this_type;
 }
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 GtkWidget *

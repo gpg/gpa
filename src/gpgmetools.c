@@ -98,7 +98,7 @@ gpa_gpgme_warning_ext (gpg_error_t err, const char *desc)
   else
     arg = gpgme_strerror (err);
 
-  message = g_strdup_printf 
+  message = g_strdup_printf
     (_("The GPGME library returned an unexpected\n"
        "error. The error was:\n\n"
        "\t%s\n\n"
@@ -130,7 +130,7 @@ gpa_gpgme_new (void)
 
   if (! cms_hack)
     gpgme_set_passphrase_cb (ctx, gpa_passphrase_cb, NULL);
-  
+
   return ctx;
 }
 
@@ -168,9 +168,9 @@ check_overwriting (const char *filename, GtkWidget *parent)
   /* If the file exists, ask before overwriting.  */
   if (g_file_test (filename, G_FILE_TEST_EXISTS))
     {
-      GtkWidget *msgbox = gtk_message_dialog_new 
+      GtkWidget *msgbox = gtk_message_dialog_new
 	(GTK_WINDOW(parent), GTK_DIALOG_MODAL,
-	 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
+	 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
 	 _("The file %s already exists.\n"
 	   "Do you want to overwrite it?"), filename);
       gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
@@ -195,7 +195,7 @@ FILE *
 gpa_fopen (const char *filename, GtkWidget *parent)
 {
   FILE *target;
-  
+
   if (!check_overwriting (filename, parent))
     return NULL;
   target = g_fopen (filename, "w");
@@ -303,7 +303,7 @@ dos_to_unix (gchar *str, gsize *len)
      inserted).  */
   gchar *src;
   gchar *dst;
-  
+
   src = str;
   dst = str;
   while (*src)
@@ -412,7 +412,7 @@ build_genkey_parms (gpa_keygen_para_t *params)
 
   /* Build the expiration date string if needed */
   if (g_date_valid (&params->expire))
-    expire = g_strdup_printf ("Expire-Date: %04d-%02d-%02d\n", 
+    expire = g_strdup_printf ("Expire-Date: %04d-%02d-%02d\n",
                               g_date_get_year (&params->expire),
                               g_date_get_month (&params->expire),
                               g_date_get_day (&params->expire));
@@ -430,7 +430,7 @@ build_genkey_parms (gpa_keygen_para_t *params)
                             "%%ask-passphrase\n"
                             "</GnupgKeyParms>\n",
                             key_algo,
-                            params->keysize, 
+                            params->keysize,
                             subkeys? subkeys : "",
                             name? name:"",
                             email? email : "",
@@ -469,7 +469,7 @@ static const gchar *
 get_gpg_path (void)
 {
   gpgme_engine_info_t engine;
-  
+
   gpgme_get_engine_info (&engine);
   while (engine)
     {
@@ -486,7 +486,7 @@ static const gchar *
 get_gpgsm_path (void)
 {
   gpgme_engine_info_t engine;
-  
+
   gpgme_get_engine_info (&engine);
   while (engine)
     {
@@ -503,7 +503,7 @@ static const gchar *
 get_gpgconf_path (void)
 {
   gpgme_engine_info_t engine;
-  
+
   gpgme_get_engine_info (&engine);
   while (engine)
     {
@@ -532,10 +532,10 @@ get_gpg_connect_agent_path (void)
 #else
 # define NEWNAME "gpg-connect-agent"
 #endif
-          
+
   fname = g_malloc (strlen (gpgconf) + strlen (NEWNAME) + 1);
   strcpy (fname, gpgconf);
-#ifdef G_OS_WIN32 
+#ifdef G_OS_WIN32
   for (p=fname; *p; p++)
     if (*p == '\\')
       *p = '/';
@@ -562,17 +562,17 @@ gpa_backup_key (const gchar *fpr, const char *filename)
   gchar *err;
   FILE *file;
   gint ret_code;
-  gchar *header_argv[] = 
+  gchar *header_argv[] =
     {
       NULL, "--batch", "--no-tty", "--fingerprint", (gchar*) fpr, NULL
     };
-  gchar *pub_argv[] = 
+  gchar *pub_argv[] =
     {
       NULL, "--batch", "--no-tty", "--armor", "--export", (gchar*) fpr, NULL
     };
-  gchar *sec_argv[] = 
+  gchar *sec_argv[] =
     {
-      NULL, "--batch", "--no-tty", "--armor", "--export-secret-key", 
+      NULL, "--batch", "--no-tty", "--armor", "--export-secret-key",
       (gchar*) fpr, NULL
     };
   const gchar *path;
@@ -670,7 +670,7 @@ gpa_key_ownertrust_string (gpgme_key_t key)
   if (key->protocol == GPGME_PROTOCOL_CMS)
     return "";
 
-  switch (key->owner_trust) 
+  switch (key->owner_trust)
     {
     case GPGME_VALIDITY_UNKNOWN:
     case GPGME_VALIDITY_UNDEFINED:
@@ -699,7 +699,7 @@ gpa_key_validity_string (gpgme_key_t key)
 {
   if (!key->uids)
     return _("Unknown");
-  switch (key->uids->validity) 
+  switch (key->uids->validity)
     {
     case GPGME_VALIDITY_UNKNOWN:
     case GPGME_VALIDITY_UNDEFINED:
@@ -726,7 +726,7 @@ gpa_key_validity_string (gpgme_key_t key)
 
 static GtkWidget *
 passphrase_question_label (const char *uid_hint,
-			   const char *passphrase_info, 
+			   const char *passphrase_info,
 			   int prev_was_bad)
 {
   GtkWidget *label;
@@ -775,7 +775,7 @@ passphrase_question_label (const char *uid_hint,
 /* This is the function called by GPGME when it wants a passphrase.  */
 gpg_error_t
 gpa_passphrase_cb (void *hook, const char *uid_hint,
-		   const char *passphrase_info, 
+		   const char *passphrase_info,
 		   int prev_was_bad, int fd)
 {
   GtkWidget * dialog;
@@ -785,7 +785,7 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
   GtkWidget * pixmap;
   GtkResponseType response;
   gchar *passphrase;
-  
+
   dialog = gtk_dialog_new_with_buttons (_("Enter Passphrase"),
 					NULL, GTK_DIALOG_MODAL,
                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -797,7 +797,7 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
                                            -1);
 
   hbox = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, 
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
 		      TRUE, FALSE, 10);
   pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION,
 				     GTK_ICON_SIZE_DIALOG);
@@ -819,7 +819,7 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
   /* Run the dialog */
   gtk_widget_show_all (dialog);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
-  passphrase = g_strdup_printf ("%s\n", 
+  passphrase = g_strdup_printf ("%s\n",
 				gtk_entry_get_text (GTK_ENTRY (entry)));
   gtk_widget_destroy (dialog);
   if (response == GTK_RESPONSE_OK)
@@ -831,7 +831,7 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
       if (WriteFile ((HANDLE) _get_osfhandle (fd), passphrase,
 		     passphrase_len, &res, NULL) == 0
 	  || res < passphrase_len)
-	{	
+	{
 	  g_free (passphrase);
 	  return gpg_error (gpg_err_code_from_errno (EIO));
 	}
@@ -866,10 +866,10 @@ static gchar *
 string_to_utf8 (const gchar *string)
 {
   const char *s;
-  
+
   if (!string)
     return NULL;
-  
+
   /* Due to a bug in old and not so old PGP versions user IDs have
      been copied verbatim into the key.  Thus many users with Umlauts
      et al. in their name will see their names garbled.  Although this
@@ -885,7 +885,7 @@ string_to_utf8 (const gchar *string)
                                          || ((*s & 0xf8) == 0xf0)
                                          || ((*s & 0xfc) == 0xf8)
                                          || ((*s & 0xfe) == 0xfc)) )
-    {  
+    {
       /* Possible utf-8 character followed by continuation byte.
          Although this might still be Latin-1 we better assume that it
          is valid utf-8. */
@@ -1133,7 +1133,7 @@ gpa_gpgme_copy_keyarray (gpgme_key_t *keys)
   for (idx=0; keys[idx]; idx++)
     ;
   idx++;
-  newarray = g_new (gpgme_key_t, idx); 
+  newarray = g_new (gpgme_key_t, idx);
   for (idx=0; keys[idx]; idx++)
     {
       gpgme_key_ref (keys[idx]);
@@ -1152,7 +1152,7 @@ gpa_gpgme_release_keyarray (gpgme_key_t *keys)
   if (keys)
     {
       int idx;
-      
+
       for (idx=0; keys[idx]; idx++)
         gpgme_key_unref (keys[idx]);
       g_free (keys);
@@ -1240,7 +1240,7 @@ compare_version_strings (const char *my_version,
 
   if (my_major > rq_major
       || (my_major == rq_major && my_minor > rq_minor)
-      || (my_major == rq_major && my_minor == rq_minor 
+      || (my_major == rq_major && my_minor == rq_minor
 	  && my_micro > rq_micro)
       || (my_major == rq_major && my_minor == rq_minor
 	  && my_micro == rq_micro && strcmp (my_plvl, rq_plvl) >= 0))
@@ -1265,14 +1265,14 @@ gpa_switch_to_gpg2 (void)
   newname = xmalloc (strlen (oldname) + 1 + 1);
   strcpy (newname, oldname);
 #ifdef G_OS_WIN32
-# define OLD_NAME "gpg.exe"  
-# define NEW_NAME "gpg2.exe"  
+# define OLD_NAME "gpg.exe"
+# define NEW_NAME "gpg2.exe"
   for (p=newname; *p; p++)
     if (*p == '\\')
       *p = '/';
 #else
-# define OLD_NAME "gpg"  
-# define NEW_NAME "gpg2"  
+# define OLD_NAME "gpg"
+# define NEW_NAME "gpg2"
 #endif /*G_OS_WIN32*/
   p = strrchr (newname, '/');
   if (p)
@@ -1298,7 +1298,7 @@ int
 is_gpg_version_at_least (const char *need_version)
 {
   gpgme_engine_info_t engine;
-  
+
   gpgme_get_engine_info (&engine);
   while (engine)
     {
@@ -1311,7 +1311,7 @@ is_gpg_version_at_least (const char *need_version)
 
 
 /* Structure used to communicate with gpg_simple_stderr_cb.  */
-struct gpg_simple_stderr_parm_s 
+struct gpg_simple_stderr_parm_s
 {
   gboolean (*cb)(void *opaque, char *line);
   void *cb_arg;
@@ -1319,8 +1319,8 @@ struct gpg_simple_stderr_parm_s
 };
 
 /* Helper for gpa_start_simple_gpg_command.  */
-static gboolean 
-gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition, 
+static gboolean
+gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
                       void *user_data)
 {
   struct gpg_simple_stderr_parm_s *parm = user_data;
@@ -1337,7 +1337,7 @@ gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
           line = parm->string->str;
 
           /* We care only about status lines.  */
-          if (!strncmp (line, "[GNUPG:] ", 9)) 
+          if (!strncmp (line, "[GNUPG:] ", 9))
             {
               line += 9;
 
@@ -1351,7 +1351,7 @@ gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
                     *p = 0;
                 }
 
-              /* Call user callback.  */ 
+              /* Call user callback.  */
               if (parm->cb && !parm->cb (parm->cb_arg, line))
                 {
                   /* User requested EOF.  */
@@ -1447,7 +1447,7 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
   parm->cb_arg = cb_arg;
   parm->string = g_string_sized_new (200);
 
-  if (!g_spawn_async_with_pipes (NULL, argv, NULL, 
+  if (!g_spawn_async_with_pipes (NULL, argv, NULL,
                                  (G_SPAWN_STDOUT_TO_DEV_NULL),
                                  NULL, NULL, NULL,
                                  NULL, NULL, &fd_stderr, NULL))
@@ -1462,14 +1462,14 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
   channel = g_io_channel_win32_new_fd (fd_stderr);
 #else
   channel = g_io_channel_unix_new (fd_stderr);
-#endif 
+#endif
   g_io_channel_set_encoding (channel, NULL, NULL);
   /* Note that we need a buffered channel, so that we can use the read
      line function.  */
   g_io_channel_set_close_on_unref (channel, TRUE);
 
   /* Create a watch for the channel.  */
-  if (!g_io_add_watch (channel, (G_IO_IN|G_IO_HUP), 
+  if (!g_io_add_watch (channel, (G_IO_IN|G_IO_HUP),
                        gpg_simple_stderr_cb, parm))
     {
       g_debug ("error creating watch for gpg command");
@@ -1485,7 +1485,7 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
 /* Try to start the gpg-agent if it has not yet been started.
    Starting the agent works in the background.  Thus if the function
    returns, it is not sure that the agent is now running.  */
-void 
+void
 gpa_start_agent (void)
 {
   gpa_start_simple_gpg_command (NULL, NULL, GPGME_PROTOCOL_ASSUAN,
@@ -1509,7 +1509,7 @@ gpa_validate_gpg_name (const char *name)
     result = _("Name may not start with a digit.");
   else if (g_utf8_strlen (name, -1) < 5)
     result = _("Name is too short.");
-  
+
   return result;
 }
 
@@ -1529,7 +1529,7 @@ has_invalid_email_chars (const char *s)
   const char *valid_chars=
     "01234567890_-.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-  for ( ; *s; s++ ) 
+  for ( ; *s; s++ )
     {
       if ((*s & 0x80))
         continue; /* We only care about ASCII.  */
