@@ -310,6 +310,9 @@ msgstr "Open de voorkeuren dialoog"
 msgid "Enable the UI server"
 msgstr ""
 
+msgid "Disable support for X.509"
+msgstr ""
+
 #, fuzzy
 msgid "Read options from file"
 msgstr "lees opties van bestand"
@@ -455,7 +458,8 @@ msgstr "Teruggetrokken sleutel"
 msgid "_Close"
 msgstr "_Sluiten"
 
-msgid "The following key has been revoked by it's owner:"
+#, fuzzy
+msgid "The following key has been revoked by its owner:"
 msgstr "De volgende sleutel is gerevoceerd door de eigenaar:"
 
 msgid "And can not be used for encryption."
@@ -1096,7 +1100,7 @@ msgid ""
 "\n"
 "Your email address will be part of the new key to make it easier for others "
 "to identify keys. If you have several email addresses, you can add further "
-"email adresses later."
+"email addresses later."
 msgstr ""
 "Geef aub uw E-mail adress in.\n"
 "\n"
@@ -1424,6 +1428,15 @@ msgstr "De sleutel zal ondertekend worden met uw standaard geheime sleutel."
 
 msgid "Sign only _locally"
 msgstr "Onderteken alleen _lokaal"
+
+msgid ""
+"It seems that GPGSM is not installed.\n"
+"\n"
+"Temporary disabling support for X.509.\n"
+"\n"
+"Please install GPGSM or invoke this program\n"
+"with the option --disable-x509 ."
+msgstr ""
 
 msgid ""
 "The private key you selected as default is no longer available.\n"

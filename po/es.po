@@ -302,6 +302,9 @@ msgstr "Abrir la ventana de preferencias"
 msgid "Enable the UI server"
 msgstr "Iniciar solo el servicio de interface de usuario (implica --cms)"
 
+msgid "Disable support for X.509"
+msgstr ""
+
 msgid "Read options from file"
 msgstr "Leer opciones desde un archivo"
 
@@ -440,7 +443,8 @@ msgstr "Clave Revocada"
 msgid "_Close"
 msgstr "_Cerrar"
 
-msgid "The following key has been revoked by it's owner:"
+#, fuzzy
+msgid "The following key has been revoked by its owner:"
 msgstr "Esta clave ha sido revocada por su propietario:"
 
 msgid "And can not be used for encryption."
@@ -1084,7 +1088,7 @@ msgid ""
 "\n"
 "Your email address will be part of the new key to make it easier for others "
 "to identify keys. If you have several email addresses, you can add further "
-"email adresses later."
+"email addresses later."
 msgstr ""
 "Por favor, introduzca su dirección de correo electrónico.\n"
 "\n"
@@ -1423,6 +1427,15 @@ msgstr "Esta clave se firmará con su clave privada por defecto."
 
 msgid "Sign only _locally"
 msgstr "Firmar solo _localmente"
+
+msgid ""
+"It seems that GPGSM is not installed.\n"
+"\n"
+"Temporary disabling support for X.509.\n"
+"\n"
+"Please install GPGSM or invoke this program\n"
+"with the option --disable-x509 ."
+msgstr ""
 
 msgid ""
 "The private key you selected as default is no longer available.\n"

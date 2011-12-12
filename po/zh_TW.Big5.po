@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2011-08-26 10:32+0200\n"
+"POT-Creation-Date: 2011-12-12 10:10+0100\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -362,56 +362,60 @@ msgstr "純文字簽署 (&C)"
 msgid "_Detached signature"
 msgstr "純文字簽署 (&C)"
 
-#: src/gpa.c:96
+#: src/gpa.c:97
 #, fuzzy
 msgid "Output version information and exit"
 msgstr "顯示版本資料及離開"
 
-#: src/gpa.c:98
+#: src/gpa.c:99
 #, fuzzy
 msgid "Open key manager (default)"
 msgstr "開啟鑰圈編輯器 (預設)"
 
-#: src/gpa.c:100
+#: src/gpa.c:101
 #, fuzzy
 msgid "Open file manager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:102 src/gpa.h:80
+#: src/gpa.c:103 src/gpa.h:80
 #, fuzzy
 msgid "Open the card manager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:104
+#: src/gpa.c:105
 msgid "Open clipboard"
 msgstr ""
 
-#: src/gpa.c:106
+#: src/gpa.c:107
 #, fuzzy
 msgid "Open the settings dialog"
 msgstr "開啟設定視窗"
 
-#: src/gpa.c:108
+#: src/gpa.c:109
 msgid "Enable the UI server"
 msgstr ""
 
-#: src/gpa.c:110
+#: src/gpa.c:111
+msgid "Disable support for X.509"
+msgstr ""
+
+#: src/gpa.c:113
 #, fuzzy
 msgid "Read options from file"
 msgstr "由檔案中讀取選項"
 
-#: src/gpa.c:314
+#: src/gpa.c:317
 msgid "[FILE...]"
 msgstr ""
 
-#: src/gpa.c:316
+#: src/gpa.c:319
 #, fuzzy
 msgid "Graphical frontend to GnuPG"
 msgstr ""
 "語法: gpa [選項]\n"
 "GnuPG的圖像介面\n"
 
-#: src/gpa.c:317
+#: src/gpa.c:320
 msgid "Please report bugs to <"
 msgstr "回報臭蟲至 <"
 
@@ -584,7 +588,8 @@ msgid "_Close"
 msgstr "關閉 (&C)"
 
 #: src/gpafileencryptop.c:540
-msgid "The following key has been revoked by it's owner:"
+#, fuzzy
+msgid "The following key has been revoked by its owner:"
 msgstr "這公鑰已被對方取消了:"
 
 #: src/gpafileencryptop.c:545 src/gpafileencryptop.c:588
@@ -1380,7 +1385,7 @@ msgid ""
 "\n"
 "Your email address will be part of the new key to make it easier for others "
 "to identify keys. If you have several email addresses, you can add further "
-"email adresses later."
+"email addresses later."
 msgstr ""
 "請輸入您的電郵.\n"
 "\n"
@@ -1782,6 +1787,16 @@ msgstr "這密鑰會以您的私鑰簽署."
 #: src/keysigndlg.c:137
 msgid "Sign only _locally"
 msgstr "只是本地上的簽署 (&l)"
+
+#: src/keytable.c:217
+msgid ""
+"It seems that GPGSM is not installed.\n"
+"\n"
+"Temporary disabling support for X.509.\n"
+"\n"
+"Please install GPGSM or invoke this program\n"
+"with the option --disable-x509 ."
+msgstr ""
 
 #: src/options.c:329
 msgid ""

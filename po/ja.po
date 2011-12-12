@@ -313,6 +313,9 @@ msgstr "設定ダイアログを開く"
 msgid "Enable the UI server"
 msgstr ""
 
+msgid "Disable support for X.509"
+msgstr ""
+
 #, fuzzy
 msgid "Read options from file"
 msgstr "ファイルからオプション読込"
@@ -458,7 +461,8 @@ msgstr "破棄済みの鍵"
 msgid "_Close"
 msgstr "閉じる (_C)"
 
-msgid "The following key has been revoked by it's owner:"
+#, fuzzy
+msgid "The following key has been revoked by its owner:"
 msgstr "以下の鍵は所有者によって破棄されています:"
 
 msgid "And can not be used for encryption."
@@ -1091,7 +1095,7 @@ msgid ""
 "\n"
 "Your email address will be part of the new key to make it easier for others "
 "to identify keys. If you have several email addresses, you can add further "
-"email adresses later."
+"email addresses later."
 msgstr ""
 "E メールアドレスをひとつ記入して下さい。\n"
 "\n"
@@ -1415,6 +1419,15 @@ msgstr "この鍵はデフォルトの秘密鍵で署名されます。"
 
 msgid "Sign only _locally"
 msgstr "ローカルでだけ署名 (_L)"
+
+msgid ""
+"It seems that GPGSM is not installed.\n"
+"\n"
+"Temporary disabling support for X.509.\n"
+"\n"
+"Please install GPGSM or invoke this program\n"
+"with the option --disable-x509 ."
+msgstr ""
 
 msgid ""
 "The private key you selected as default is no longer available.\n"
