@@ -437,7 +437,7 @@ msgstr "Отзыв ключа"
 msgid "_Close"
 msgstr "_Закрыть"
 
-msgid "The following key has been revoked by it's owner:"
+msgid "The following key has been revoked by its owner:"
 msgstr "Ключ отозван владельцем:"
 
 msgid "And can not be used for encryption."

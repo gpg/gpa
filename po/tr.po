@@ -451,7 +451,7 @@ msgstr "Feshedilmiþ Anahtar"
 msgid "_Close"
 msgstr "_Kapat"
 
-msgid "The following key has been revoked by it's owner:"
+msgid "The following key has been revoked by its owner:"
 msgstr "Þu anahtar sahibi tarafýndan feshedilmiþtir:"
 
 msgid "And can not be used for encryption."

@@ -436,7 +436,7 @@ msgstr "مفتاح منقوض"
 msgid "_Close"
 msgstr "أ_غلق"
 
-msgid "The following key has been revoked by it's owner:"
+msgid "The following key has been revoked by its owner:"
 msgstr "نُقض هذا المفتاح من قِبِل مالكه:"
 
 msgid "And can not be used for encryption."
@@ -1067,13 +1067,12 @@ msgstr ""
 msgid "Your Name:"
 msgstr "اسمك:"
 
-#, fuzzy
 msgid ""
 "Please insert your email address.\n"
 "\n"
 "Your email address will be part of the new key to make it easier for others "
 "to identify keys. If you have several email addresses, you can add further "
-"email adresses later."
+"email addresses later."
 msgstr ""
 "أدخل عنوان بريدك الإلكتروني.\n"
 "\n"

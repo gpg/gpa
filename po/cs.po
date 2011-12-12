@@ -461,7 +461,8 @@ msgstr "Zneplatněný klíč"
 msgid "_Close"
 msgstr "_Zavřít"
 
-msgid "The following key has been revoked by it's owner:"
+#, fuzzy
+msgid "The following key has been revoked by its owner:"
 msgstr "Následující klíč byl zneplatněn vlastníkem:"
 
 msgid "And can not be used for encryption."

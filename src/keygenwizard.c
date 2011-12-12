@@ -40,7 +40,7 @@
 
 
 /* The key generation wizard.
- 
+
    New users should not be overwhelmed by too many options most of which
    are not easily explained and will only confuse them. To solve that
    problem we use default values for the algorithm and size of the keys
@@ -48,7 +48,7 @@
    name and email address in a step by step manner.  */
 
 /* Helper functions.  */
- 
+
 /* Return a copy of string with leading and trailing whitespace
    stripped.  */
 static char *
@@ -70,7 +70,7 @@ typedef struct
   GtkWidget *final_page;
   GtkWidget *backup_page;
   GtkWidget *backup_dir_page;
-  
+
   GpaKeyGenWizardGenerateCb generate;
   gpointer generate_data;
 } GPAKeyGenWizard;
@@ -157,7 +157,7 @@ name_validate_cb (GtkWidget *widget, gpointer data)
   while (*name && g_unichar_isspace (g_utf8_get_char (name)))
     name = g_utf8_next_char (name);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (wizard->window),
-				   wizard->name_page, 
+				   wizard->name_page,
                                    !gpa_validate_gpg_name (name));
 
   return FALSE;
@@ -212,7 +212,7 @@ keygen_wizard_email_page (GPAKeyGenWizard *wizard)
      _("Please insert your email address.\n\n"
        "Your email address will be part of the new key to make it easier"
        " for others to identify keys. If you have several email addresses,"
-       " you can add further email adresses later."),
+       " you can add further email addresses later."),
      _("Your Email Address:"));
 
   entry = g_object_get_data (G_OBJECT (widget), "gpa_keygen_entry");
@@ -228,7 +228,7 @@ gpa_keygen_wizard_backup_page (GPAKeyGenWizard *wizard)
   GtkWidget *vbox;
   GtkWidget *description;
   GtkWidget *radio;
-  
+
   vbox = gtk_vbox_new (FALSE, 0);
 
   description = gtk_label_new
@@ -243,7 +243,7 @@ gpa_keygen_wizard_backup_page (GPAKeyGenWizard *wizard)
   radio = gtk_radio_button_new_with_mnemonic (NULL, _("Create _backup copy"));
   gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, TRUE, 5);
   g_object_set_data (G_OBJECT (vbox), "gpa_keygen_backup", radio);
-  
+
   radio = gtk_radio_button_new_with_mnemonic_from_widget
     (GTK_RADIO_BUTTON (radio), _("Do it _later"));
   gtk_box_pack_start (GTK_BOX (vbox), radio, FALSE, TRUE, 5);
@@ -285,10 +285,10 @@ gpa_keygen_wizard_final_page (GPAKeyGenWizard * keygen_wizard)
   GtkWidget *widget;
   char *desc;
 
-  desc = g_strdup_printf 
+  desc = g_strdup_printf
     (_("Congratulations!\n\n"
        "You have successfully generated a key."
-       " The key is indefinitely valid and has a length of %d bits."), 
+       " The key is indefinitely valid and has a length of %d bits."),
      STANDARD_KEY_LENGTH);
   widget = gpa_keygen_wizard_message_page (desc);
   g_free (desc);
@@ -364,7 +364,7 @@ keygen_wizard_prepare_cb (GtkAssistant *assistant, GtkWidget *page,
 
 
 GtkWidget *
-gpa_keygen_wizard_new (GtkWidget *parent, 
+gpa_keygen_wizard_new (GtkWidget *parent,
 		       GpaKeyGenWizardGenerateCb generate_action,
 		       gpointer data)
 {
@@ -372,7 +372,7 @@ gpa_keygen_wizard_new (GtkWidget *parent,
   GtkWidget *window;
   GdkPixbuf *genkey_pixbuf;
   GdkPixbuf *backup_pixbuf;
-  
+
 
   wizard = g_malloc (sizeof (*wizard));
   genkey_pixbuf = gpa_create_icon_pixbuf ("wizard_genkey");
