@@ -1,0 +1,625 @@
+2011-12-01  Werner Koch  <wk@g10code.com>
+
+	NB: ChangeLog files are no longer manually maintained.  Starting
+	on December 1st, 2011 we put change information only in the GIT
+	commit log, and generate a top-level ChangeLog file from logs at
+	"make dist".  See doc/HACKING for details.
+
+2011-08-26  Werner Koch  <wk@g10code.com>
+
+	Migrated the repository to git.
+
+	* configure.ac: Adjust for the new git repo.
+
+2009-12-08  Werner Koch  <wk@g10code.com>
+
+	* doc/gpa.1: New.
+	* doc/Makefile.am: New.
+
+2009-11-10  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Set NEED_LIBASSUAN_VERSION and NEED_LIBASSUAN_API
+	to 1.1.0 and 2 resp.
+
+2009-07-20  Niklas 'Nille' Åkerström  <nille.kungen@gmail.com>  (wk)
+
+	* gpa.desktop: Add GenericName and sv translations.
+
+2009-06-20  Werner Koch  <wk@g10code.com>
+
+	Release 0.9.0.
+
+2009-06-17  Werner Koch  <wk@g10code.com>
+
+	* config.sub, config.guess: Update to 2007-11-19 from GnuPG.
+
+	* README: Remove outdated installation info.
+
+	* configure.ac: Require at least GPGME 1.2.
+	(HAVE_GPGME_IO_WRITE): Remove test for this.
+	(HAVE_GPGME_OP_ASSUAN_TRANSACT): Ditto.
+	(HAVE_STRUCT__GPGME_SUBKEY_CARD_NUMBER): Ditto.
+	(BUILD_CARD_MANAGER): Remove this conditional.
+
+2009-06-09  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Test for gpgme_io_write.
+
+2009-03-30  Moritz  <moritz@gnu.org>
+
+	* configure.ac: Typo fix: change _save_CFLAGS to _save_cflags.
+
+2009-03-29  Moritz  <moritz@gnu.org>
+
+	* Makefile.am: Added rules for generating gpadefs.h from
+	gpadefs.h.in at make-time.
+	(EXTRA_DIST): Added gpadefs.h.in.
+	* configure.ac: Trigger AC_MSG_ERROR in case directory for
+	keyserver helpers could not figured out.
+	Call AC_DEFINE_UNQUOTED to define KEYSERVER_HELPERS_DIR in
+	config.h.
+	Remove generation of gpadefs.h through AC_CONFIG_COMMANDS.
+
+2009-03-10  Werner Koch  <wk@g10code.com>
+
+	* configure.ac (AC_CONFIG_COMMANDS): Remove GPA_LOCALEDIR.
+
+2009-02-12  Werner Koch  <wk@g10code.com>
+
+	* configure.ac (BUILD_CARD_MANAGER): Define as AC_DEFINE and
+	AM_CONDITIONAL.
+
+2009-02-07  Moritz  <moritz@gnu.org>
+
+	* TODO: New item.
+
+2009-02-04  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Check for card_number member of gpgme_subkey_t.
+
+2009-01-26  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Check for gpgme_op_assuan_transact.
+
+2009-01-17  Moritz  <moritz@gnu.org>
+
+	* configure.ac: Use AC_CHECK_HEADERS to check for locale.h.
+
+2008-12-16  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Remove unused test for getopt_long.
+	(AC_CHECK_FUNCS): Check for inotify_init.
+
+2008-12-10  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Require gtk 2.10.0.
+
+2008-12-04  Marcus Brinkmann  <marcus@g10code.com>
+
+	* configure.ac: Require gtk 2.8.0.
+
+	* configure.ac (GPA_LOCALEDIR): Fix definition.
+	(gpadefs.h): Remove DATADIRNAME, add localedir.
+	Submitted by gozer@progrock.com.
+
+2008-10-31  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* configure.ac (AM_GNU_GETTEXT_VERSION): Bump to 0.17.
+        * config.rpath, ABOUT-NLS: Update.
+
+2008-09-04  Marcus Brinkmann  <marcus@g10code.com>
+
+	Released 0.8.0.
+
+2008-05-08  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Require external gettext.
+	* Makefile.am (SUBDIRS): Remove intl.
+
+2008-04-01  Werner Koch  <wk@g10code.com>
+
+	* configure.ac (AC_INIT): Fix quoting.
+
+2008-03-12  Werner Koch  <wk@g10code.com>
+
+	* COPYING: Replace by GPLv3 version.
+
+2008-03-06  Werner Koch  <wk@g10code.com>
+
+	Note that the code is now under the GPLv3+ due to a couple of new
+	stuff.
+
+	* AUTHORS: Add bug reporting address.  Add license info.
+
+2008-02-28  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Invoke AC_SYS_LARGEFILE.
+
+2008-02-16  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Update macro svn_revision.
+
+2008-02-05  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Fix download URLs.  Reported by Alberto
+	Escudero-Pascual.
+
+2008-01-17  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac (NEED_GPGME_VERSION): Bump to 1.1.6.
+
+2007-09-27  Werner Koch  <wk@g10code.com>
+
+	* configure.ac (NETLIBS) [W32]: New.
+
+2007-09-26  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Add test for libassuan and gpg-error.
+
+2007-06-04  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac (BUILD_REVISION): Invoke AC_GNU_SOURCE properly.
+	* autogen.sh: Require bash.
+	* depcomp, install-sh, missing: New files from automake.
+	* intl/Makefile.in, config.rpath: New files from gettext.
+
+2007-05-24  Werner Koch  <wk@g10code.com>
+
+	Released 0.7.6.
+
+2007-04-25  Werner Koch  <wk@g10code.com>
+
+	* configure.ac (AM_GNU_GETTEXT): Require ngettext.
+
+2007-02-26  Werner Koch  <wk@g10code.com>
+
+	Released 0.7.5.
+
+2007-01-10  Werner Koch  <wk@g10code.com>
+
+	* configure.ac (GPGME_CFLAGS, GPGME_LIBS): Use them and do not
+	append them to CFLAGS etc.
+	(AM_PATH_GTK_2_0): Likewise.
+
+2006-07-25  Werner Koch  <wk@g10code.com>
+
+	Released 0.7.4.
+
+	* configure.ac: Extract revison from SVN.
+
+2006-07-15  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Check for windres.
+
+2006-03-21  Werner Koch  <wk@g10code.com>
+
+	Released 0.7.3.
+
+2006-03-09  Werner Koch  <wk@g10code.com>
+
+	* config.guess, config.sub:  Updated.
+
+2006-03-03  Marcus Brinkmann  <marcus@g10code.de>
+
+	Released 0.7.2.
+
+2006-01-09  Werner Koch  <wk@g10code.com>
+
+	Released 0.7.1.
+
+	* configure.ac: Check for gpgme-glib only under W32.
+
+2006-01-03  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Require just gpgme 1.1.1 as 1.2.0 was unintentional.
+
+2005-11-29  Werner Koch  <wk@g10code.com>
+
+	* configure.ac: Add m4 hackery to append the revision number to
+	the version.
+
+2005-11-18  Werner Koch  <wk@g10code.com>
+
+	* configure.ac (AM_PATH_GPGME_GLIB): New; replaces AM_PATH_GPGME.
+
+2005-11-15  Werner Koch  <wk@g10code.com>
+
+	* autogen.sh <build-w32>:  Updated to support Debian's mingw kit.
+
+	* configure.ac (PACKAGE_BUGREPORT): Create extended version
+	information.
+	(HAVE_W32_SYSTEM): Define it.
+	(CFLAGS) [W32]: Make sure that -mmsbitfields is used.  Strange
+	that the GTK macros don't define it.
+
+2005-11-10  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac (IS_DEVELOPMENT_VERSION): Remove unused ming32
+	cruft.
+
+2005-11-07  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Require GPGME 0.4.5.
+
+2005-10-26  Werner Koch  <wk@g10code.com>
+
+	* Makefile.am: Use dist-bzip2 option.
+
+2005-10-21  Werner Koch  <wk@g10code.com>
+
+	* acinclude.m4: Fixed quoting.
+
+2005-10-07  Marcus Brinkmann  <marcus@g10code.de>
+
+	* acinclude.m4 (AM_PATH_GPGME): Removed.
+
+2005-10-06  Marcus Brinkmann  <marcus@g10code.de>
+
+	* configure.ac: Invoke CHECK_ZLIB instead of generic AC_CHECK_LIB
+	macro (which doesn't support a --with-foo-prefix argument).  Check
+	for stpcpy.
+
+2004-08-21  Miguel Coca  <mcoca@gnu.org>
+
+	* gpa.spec: Fix version number. Reported by jan.grobecker@gmx.net.
+
+2003-11-25  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (pkgdata_DATA): Save the icon to the DATADIR too.
+
+2003-11-25  Miguel Coca  <mcoca@gnu.org>
+
+	* gpa.png: New icon by Josué Burgos.
+
+2003-11-21  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (EXTRA_DIST): Updated to include the desktop file and
+	the renamed icon.
+	(desktop_DATA, icon_DATA): Install the .desktop and the icon to
+	their respective directories.
+
+	* gpa.spec, gpa.desktop: Updated by Ling Li <ling@caltech.edu>.
+
+	* gpa-logo-48x48.png: Renamed to the, more standard, gpa.png.
+
+2003-10-27  Miguel Coca  <mcoca@gnu.org>
+
+	* NEWS: Note changes in signature verification.
+
+	* configure.ac: Check for GTK+ 2.2, as this is what we really need
+	now.
+
+2003-10-22  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac, NEWS: Bump version number after release.
+
+2003-10-22  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Release 0.7.0.
+
+2003-10-13  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (SUBDIRS): Add m4.
+	(ACLOCAL_AMFLAGS): New variable.
+	(EXTRA_DIST): Add config.rpath.
+	* configure.ac (AC_CONFIG_FILES): Add m4/Makefile.
+
+2003-10-12  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Update version number to 0.7.0-cvs. Update gpgme
+	version check to 0.4.3.
+
+	* TODO: Remove obsolete items
+
+	* NEWS: Clean up items, add missing.
+
+2003-06-21  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Disable deprecated GTK widgets.
+
+2003-03-25  Miguel Coca  <mcoca@gnu.org>
+
+	* AUTHORS, NEWS: Updated.
+
+2003-02-07  Miguel Coca  <mcoca@gnu.org>
+
+	* Makefile.am (EXTRA_DIST): Add logo.
+
+2003-01-30  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Require gpgme 0.4.1. Remove compatibility hack.
+
+	* configure.ac, NEWS: Bump version number.
+
+2003-01-29  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Release 0.6.1.
+
+	* configure.ac (ALL_LINGUAS): Fix Swedish. It's sv, not se.
+
+2003-01-28  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Fix getopt_long check.
+
+2003-01-24  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac (ALL_LINGUAS): Add Swedish.
+
+	* configure.ac: Add checks for getopt_long.
+
+2003-01-23  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Add check for strsep
+
+	* configure.ac: Add a hack to detect gpgme 0.4.0. To be removed after
+	the release.
+
+2003-01-19  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Add check for development version, adapted
+	from GnuPG with some changes.
+
+2003-01-08  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Remove some flags from the maintainer's CFLAGS to avoid
+	a ton of warnings due to bugs in gcc and GTK+ (see bug report at
+	http://gcc.gnu.org/cgi-bin/gnatsweb.pl?cmd=view&pr=529&database=gcc).
+
+	* configure.ac: Go back to GPGME 0.4.0 for the moment.
+
+2002-12-29  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Require GPGME 0.4.1.
+
+2002-12-24  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac, NEWS: Bump version number.
+
+2002-12-23  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac: Release 0.6.0.
+
+	* NEWS, THANKS: Update.
+
+2002-12-17  Miguel Coca  <mcoca@gnu.org>
+
+	* configure.ac (ALL_LINGUAS): Add Spanish.
+
+2002-12-15  Miguel Coca  <mcoca@gnu.org>
+
+	* NEWS: Add some entries for 0.6.0.
+
+2002-12-12  Miguel Coca  <mcoca@gnu.org>
+
+	* config.sub, config.guess: Updated.
+
+	* Makefile.am (SUBDIRS): Add pixmaps.
+	* configure.ac: Likewise.
+
+2002-12-07  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* configure.ac (ALL_LINGUAS): Added nl.
+
+2002-11-29  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* configure.ac: Remove jnlib/ and assorted tests.
+	* Makefile.am (SUBDIRS): Likewise.
+
+2002-11-27  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* THANKS, AUTHORS: Updated.
+
+2002-11-20  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* TODO: Updated.
+
+	* configure.ac: Update to gpgme 0.4
+
+2002-10-25  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* configure.ac: Add /usr/libexec/gnupg/ to the list of possible
+	locations of gpgkeys_ldap.
+
+	* gtkrc-1.2.gpa, gtkrc-1.3.12+.gpa: Removed unused files.
+
+	* configure.ac: Check for the keyserver plugins directories, instead
+	of using always the same directory. This allows some flexibility in
+	case of compiling GPA against a GnuPG installed via a package manager.
+
+2002-09-24  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* configure.ac: Add constant to gpadefs.h for the directory where the
+	keyserver helpers are installed.
+
+2002-08-29  Werner Koch  <wk@gnupg.org>
+
+	* AUTHORS (Maintainer): Now it is Miguel.
+
+	* configure.ac (ALL_LINGUAS): Added ja.
+
+2002-08-27  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* autogen.sh: Changes to support gettext 0.11.
+
+2002-08-20  Werner Koch  <wk@gnupg.org>
+
+	* acinclude.m4 (GNUPG_CHECK_TYPEDEF): Updated for newer autoconfs.
+	(AM_PATH_GPGME): New.
+	* configure.ac (AH_BOTTOM): New.
+	* acconfig.h: Removed.
+
+2002-08-16  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* configure.ac: Bumbed version number to 0.6.0-cvs to distinguish
+	from the 0.5.1 tag.
+
+2002-08-09  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* configure.ac, Makefile.am (SUBDIRS): Don't compile gpapa.
+
+2002-08-04  Miguel Coca  <e970095@zipi.fi.upm.es>
+
+	* configure.ac: Added check for GPGME.
+
+2002-07-29  Werner Koch  <wk@gnupg.org>
+
+	* configure.ac: Check for gtk-2 suing Miguel's patch from early
+	June.
+
+	* configure.ac: Bumbed version number to 0.5.1 now that Miguel
+	solved the 0.4.3-0.5.0 schism.
+
+2002-06-15  Werner Koch  <wk@gnupg.org>
+
+	* configure.ac: Bumbed version number to 0.4.4-cvs.
+
+2002-04-17  Jan-Oliver Wagner <jan@intevation.de>
+
+	* gpa.desktop (new): gnome desktop entry for gpa
+	* gpa-logo-48x48.png (new): small gpa logo for gnome desktop
+	* gpa.spec: added gnome menu entry
+
+2002-03-15  Werner Koch  <wk@gnupg.org>
+
+	* configure.ac (ALL_LINGUAS): Add pt_BR.
+
+Mon 25 Feb 2002 25:15 Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+        Released 0.5.0.
+
+        See `NEWS' for an overview of the changes since 0.4.3.
+
+2002-02-20  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gtkrc.gpa: Splitted into two new files: gtkrc-1.2.gpa and
+	gtkrc-1.3.12+.gpa.
+
+2002-02-19  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* to-utf8: Changed to use short options to iconv.
+
+2002-02-10  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* gtkrc.gpa: Changed default font.
+
+2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
+
+	* THANKS: Updated.
+
+	* gtkrc.gpa: Added file.
+
+2002-01-14  Werner Koch  <wk@gnupg.org>
+
+        Released 0.4.3.
+
+	* configure.in: Replaced by
+	* configure.ac: autoconf 2.5 suggested file.  Adjusted for it.
+	* VERSION: Removed
+	* Makefile.am: Create the VERSION file in the dist tarball.
+	* autogen.sh: Fixed required versions
+
+2001-08-03  Werner Koch  <wk@gnupg.org>
+
+	* gpa.spec: New.  Contributed by Peter Hanecak.
+
+2001-06-07  Werner Koch  <wk@gnupg.org>
+
+	* configure.in (ALL_LINGUAS): Add Chinese translation.
+
+2001-06-05  Werner Koch  <wk@gnupg.org>
+
+	Released 0.4.2
+
+	* configure.in (BUILD_INCLUDED_LIBINTL): Set to no for W32.
+	* Makefile.am: Include autogen.sh
+
+2001-04-05  Werner Koch  <wk@gnupg.org>
+
+	* VERSION: Release 0.4.1
+
+2001-02-27  Werner Koch  <wk@gnupg.org>
+
+	* to-utf8: New.
+	* README.W32: Describe how to use this script.
+
+2001-02-27	Jan-Oliver Wagner <jan@intevation.de>
+
+	* VERSION: new revision 0.4.0
+	* TODO: added hint
+	* configure.in: added french as available language
+	* README.W32: more hints on building under w32
+
+2001-01-25	Jan-Oliver Wagner <jan@intevation.de>
+
+	* README.W32: New
+
+2001-01-23	Jan-Oliver Wagner <jan@intevation.de>
+
+	* acconfig.h: added USE_ONLY_8DOT3 and  USE_SIMPLE_GETTEXT
+	* configure.in: added USE_SIMPLE_GETTEXT for Windows
+
+2001-01-23  Werner Koch  <wk@gnupg.org>
+
+	* configure.in (GPG): Fixed initialization for W32. Changed test
+	for gpg.
+	* acconfig.h (GPG_PATH): New.
+
+2001-01-18  Werner Koch  <wk@gnupg.org>
+
+	* autogen.sh:  Add --build-w32 option
+	* configure.in: Modifications for the new MingW32/CPD version.
+
+2000-07-25 13:15:56  Werner Koch  (wk@habibti.openit.de)
+
+  Changed the copyright notices from FSF to G-N-U because we have not
+  yet assigned the copyright and the G-N-U is the main authors.
+
+2000-07-25 09:08:59  Werner Koch  (wk@habibti.openit.de)
+
+  * configure.in (GPA_DATADIR): Create this macro.
+
+2000-06-28 20:09:49  Werner Koch  (wk@habibti.openit.de)
+
+  * VERSION: New because it is easier for the mkdiff script to move
+  this file to the beginning, so that in trun patch can find the prereq
+  * Makefile.am, configure.in: Adjusted for that.
+
+  Version 0.3.1 has been released (without this entry :-()
+
+2000-05-25 17:55:29  Werner Koch  (wk@habibti.openit.de)
+
+  * configure.in: Check for gpg.
+
+2000-05-24 09:04:44  Werner Koch  (wk@habibti.openit.de)
+
+  * configure.in: Removed -Wshadow because this hits on glib's usage of
+  "index".
+
+2000-05-17 10:25:54  Werner Koch  (wk@habibti.openit.de)
+
+  * TODO: Updated by Markus
+  * AUTHORS, THANKS: Updated.
+
+2000-05-16 20:08:47  Werner Koch  (wk@habibti.openit.de)
+
+  Set version to 0.3 to indicate that we have a German
+  translation and GNU formatted source (I don't like the last
+  one but it is something which we can easily agree on).
+
+2000-05-15 16:49:59  Werner Koch  (wk@habibti.openit.de)
+
+  Added PO support.
+
+2000-05-11 16:59:24  Werner Koch  (wk@habibti.openit.de)
+
+  * configure.in: Add a few function checks. Fixed some hardcoded
+  paths for the W32 version of Gtk+ - needs a better solution.
+
+  GPA shows up on a Windows NT box and didn't crash.  This is a good
+  reason to increase the version number.
+
+  Version 0.2.0
+
+2000-05-03 20:09:17  Werner Koch  (wk@habibti.openit.de)
+
+  Version 0.1.0

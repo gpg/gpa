@@ -1,3 +1,10 @@
+2011-12-01  Werner Koch  <wk@g10code.com>
+
+	NB: ChangeLog files are no longer manually maintained.  Starting
+	on December 12st, 2011 we put change information only in the GIT
+	commit log, and generate a top-level ChangeLog file from logs at
+	"make dist".  See doc/HACKING for details.
+
 2010-05-06  Werner Koch  <wk@g10code.com>
 
 	* POTFILES.in: Add gpadatebutton.c
@@ -324,7 +331,7 @@
 	* de.po: Updated.
 
 	* POTFILES.in: Added all new files, as well as all of gpapa.
-	
+
 2002-02-22  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* de.po: Updated.
@@ -336,33 +343,33 @@
 2002-02-19  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* de.po: Updated.
-	
+
 2002-02-15  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* de.po: Updated.
-	
+
 2002-02-14  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* de.po: Updated.
-	
+
 2002-02-13  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* de.po: Updated.
-	
+
 2002-02-11  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* de.po: Updated again.
-	
+
 2002-02-10  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* de.po: Updated.
-	
+
 2002-02-05  Peter Gerwinski <peter.gerwinski@g-n-u.de>
 
 	* POTFILES.in: Added src/gpafilesel.c to the list.
 	* de.po: Updated and transcoded to UTF-8.
 	* de.po.lat1: German translation in Latin-1 encoding.
-	
+
 2002-01-29  Werner Koch  <wk@gnupg.org>
 
 	* de.po: Fixed the fuzzy marked translations
@@ -456,5 +463,3 @@
 2000-05-16 20:07:52  Werner Koch  (wk@habibti.openit.de)
 
 	* de.po: Added
-
-

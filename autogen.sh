@@ -160,6 +160,13 @@ EOF
     git config --add filter.cleanpo.clean \
         "awk '/^\"POT-Creation-Date:/&&!s{s=1;next};!/^#: /{print}'"
   fi
+  if [ -f build-aux/git-hooks/commit-msg -a ! -f .git/hooks/commit-msg ] ; then
+    cat <<EOF >&2
+*** Activating commit log message check hook. ***
+EOF
+      cp -av build-aux/git-hooks/commit-msg .git/hooks/commit-msg
+      chmod -c +x  .git/hooks/commit-msg
+  fi
 fi
 
 echo "Running aclocal -I m4 ${ACLOCAL_FLAGS:+$ACLOCAL_FLAGS }..."

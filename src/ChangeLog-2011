@@ -1,3 +1,10 @@
+2011-12-01  Werner Koch  <wk@g10code.com>
+
+	NB: ChangeLog files are no longer manually maintained.  Starting
+	on December 1st, 2011 we put change information only in the GIT
+	commit log, and generate a top-level ChangeLog file from logs at
+	"make dist".  See doc/HACKING for details.
+
 2011-09-20  Werner Koch  <wk@g10code.com>
 
 	* keytable.c (first_half_done_cb): Detect missing GPGSM.
@@ -5363,7 +5370,7 @@
 	* gtktools.c (gpa_window_error):
 	(gpa_window_message): Translate window titles.
 	* keygenwizard.c (gpa_keygen_wizard_run): Use "Finish" button
- 	instead of "Next" on wait_page and final_page.
+	instead of "Next" on wait_page and final_page.
 	* gpawizard.c (gpa_wizard_new): Add accelerator to "Next" and "Prev"
 
 2001-02-13  Bernhard Herzog  <bh@intevation.de>
@@ -6607,5 +6614,3 @@
 
 	* gpa.c, keymenu.c, filemenu.c: Removed libiberty header.
 	* gpa.h: Included xmalloc header.
-
-
