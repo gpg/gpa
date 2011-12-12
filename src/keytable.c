@@ -313,10 +313,11 @@ GpaKeyTable *gpa_keytable_get_secret_instance ()
  * This function MAY not do anything until the application goes back into
  * the GLib main loop.
  */
-void gpa_keytable_list_keys (GpaKeyTable *keytable,
-			     GpaKeyTableNextFunc next,
-			     GpaKeyTableEndFunc end,
-			     gpointer data)
+void
+gpa_keytable_list_keys (GpaKeyTable *keytable,
+                        GpaKeyTableNextFunc next,
+                        GpaKeyTableEndFunc end,
+                        gpointer data)
 {
   g_return_if_fail (keytable != NULL);
   g_return_if_fail (GPA_IS_KEYTABLE (keytable));
@@ -339,10 +340,11 @@ void gpa_keytable_list_keys (GpaKeyTable *keytable,
 
 /* Same as list_keys, but forces the internal cache to be rebuilt.
  */
-void gpa_keytable_force_reload (GpaKeyTable *keytable,
-				GpaKeyTableNextFunc next,
-				GpaKeyTableEndFunc end,
-				gpointer data)
+void
+gpa_keytable_force_reload (GpaKeyTable *keytable,
+                           GpaKeyTableNextFunc next,
+                           GpaKeyTableEndFunc end,
+                           gpointer data)
 {
   g_return_if_fail (keytable != NULL);
   g_return_if_fail (GPA_IS_KEYTABLE (keytable));
@@ -358,11 +360,12 @@ void gpa_keytable_force_reload (GpaKeyTable *keytable,
 /* Load the key with the given fingerprint from GnuPG, replacing it in the
  * keytable if needed.
  */
-void gpa_keytable_load_new (GpaKeyTable *keytable,
-			    const char *fpr,
-			    GpaKeyTableNextFunc next,
-			    GpaKeyTableEndFunc end,
-			    gpointer data)
+void
+gpa_keytable_load_new (GpaKeyTable *keytable,
+                       const char *fpr,
+                       GpaKeyTableNextFunc next,
+                       GpaKeyTableEndFunc end,
+                       gpointer data)
 {
   g_return_if_fail (keytable != NULL);
   g_return_if_fail (GPA_IS_KEYTABLE (keytable));
