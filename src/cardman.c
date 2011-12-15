@@ -29,7 +29,7 @@
 #include <assert.h>
 #include <time.h>
 
-#include "gpa.h"   
+#include "gpa.h"
 
 #include "gtktools.h"
 #include "gpawidgets.h"
@@ -47,11 +47,12 @@
 #include "cm-geldkarte.h"
 #include "cm-netkey.h"
 #include "cm-dinsig.h"
+#include "cm-unknown.h"
 
 
 
 /* Object's class definition.  */
-struct _GpaCardManagerClass 
+struct _GpaCardManagerClass
 {
   GtkWindowClass parent_class;
 };
@@ -66,7 +67,7 @@ struct _GpaCardManager
 
 
   GtkWidget *app_selector;    /* Combo Box to select the application.  */
-  
+
   GtkWidget *card_container;  /* The container holding the card widget.  */
   GtkWidget *card_widget;     /* The widget to display a card applciation.  */
 
@@ -90,7 +91,7 @@ struct _GpaCardManager
 
   struct {
     int card_any;           /* Any card event counter seen.  */
-    unsigned int card;      /* Last seen card event counter.  */      
+    unsigned int card;      /* Last seen card event counter.  */
   } eventcounter;
 
 };
@@ -108,7 +109,7 @@ static void gpa_card_manager_finalize (GObject *object);
 
 
 
-/************************************************************ 
+/************************************************************
  *******************   Implementation   *********************
  ************************************************************/
 
@@ -122,7 +123,7 @@ statusbar_new (GpaCardManager *cardman)
   GtkWidget *label;
 
   hbox = gtk_hbox_new (FALSE, 0);
- 
+
   label = gtk_label_new (NULL);
   cardman->status_label = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -130,7 +131,7 @@ statusbar_new (GpaCardManager *cardman)
   label = gtk_label_new ("");
   cardman->status_text = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 5);
-  
+
   align = gtk_alignment_new (0, 1, 1, 0);
   gtk_container_add (GTK_CONTAINER (align), hbox);
 
@@ -170,7 +171,7 @@ update_title (GpaCardManager *cardman)
   else
     {
       char *tmp;
-      
+
       tmp = g_strdup_printf ("%s (%s)", title, cardman->cardtypename);
       gtk_window_set_title (GTK_WINDOW (cardman), tmp);
       xfree (tmp);
@@ -202,7 +203,7 @@ scd_data_cb (void *opaque, const void *data, size_t datalen)
 {
 /*   g_debug ("DATA_CB: datalen=%d", (int)datalen); */
   return 0;
-}     
+}
 
 
 static gpg_error_t
@@ -212,7 +213,7 @@ scd_inq_cb (void *opaque, const char *name, const char *args,
 /*   g_debug ("INQ_CB: name=`%s' args=`%s'", name, args); */
 
   return 0;
-}     
+}
 
 
 static gpg_error_t
@@ -247,6 +248,11 @@ scd_status_cb (void *opaque, const char *status, const char *args)
           cardman->cardtype = GPA_CM_GELDKARTE_TYPE;
           cardman->cardtypename = "Geldkarte";
         }
+      else if (!strcmp (args, "UNDEFINED"))
+        {
+          cardman->cardtype = GPA_CM_UNKNOWN_TYPE;
+          cardman->cardtypename = "UNKNOWN";
+        }
       else
         cardman->cardtypename = "Unknown";
 
@@ -263,7 +269,7 @@ scd_status_cb (void *opaque, const char *status, const char *args)
     }
 
   return 0;
-}     
+}
 
 
 /* Idle queue callback to mark a relaod operation finished.  */
@@ -271,7 +277,7 @@ static gboolean
 card_reload_finish_idle_cb (void *user_data)
 {
   GpaCardManager *cardman = user_data;
-  
+
   cardman->in_card_reload--;
   g_object_unref (cardman);
 
@@ -288,6 +294,7 @@ card_reload (GpaCardManager *cardman)
   char *command_buf = NULL;
   const char *command;
   const char *err_desc = NULL;
+  char *err_desc_buffer = NULL;
   int auto_app;
 
   if (!cardman->gpgagent)
@@ -298,7 +305,7 @@ card_reload (GpaCardManager *cardman)
   if (!cardman->in_card_reload)
     {
       cardman->in_card_reload++;
-      
+
       update_info_visibility (cardman);
 
       cardman->cardtype = G_TYPE_NONE;
@@ -308,8 +315,8 @@ card_reload (GpaCardManager *cardman)
          command; this makes sure that scdaemon initalizes the card if
          that has not yet been done.  */
       command = "SCD SERIALNO";
-      if (cardman->app_selector 
-          && (gtk_combo_box_get_active 
+      if (cardman->app_selector
+          && (gtk_combo_box_get_active
               (GTK_COMBO_BOX (cardman->app_selector)) > 0)
           && (application = gtk_combo_box_get_active_text
               (GTK_COMBO_BOX (cardman->app_selector))))
@@ -374,19 +381,26 @@ card_reload (GpaCardManager *cardman)
                && gpg_err_source (err) == GPG_ERR_SOURCE_SCD
                && gpg_err_code (err) == GPG_ERR_NOT_SUPPORTED)
         {
-          err_desc = 
+          err_desc =
             _("The selected card application is not available.");
         }
       else if (err)
         {
-          g_debug ("assuan command `%s' failed: %s <%s>\n", 
+          g_debug ("assuan command `%s' failed: %s <%s>\n",
                    command, gpg_strerror (err), gpg_strsource (err));
-          err_desc = _("Error accessing the card.");
-          statusbar_update (cardman, _("Error accessing card"));
+          if (!gpgme_op_assuan_transact (cardman->gpgagent,
+                                         "SCD SERIALNO undefined",
+                                         NULL, NULL, NULL, NULL, NULL, NULL))
+            err = 0;
+          else
+            {
+              err_desc = _("Error accessing the card.");
+              statusbar_update (cardman, _("Error accessing card"));
+            }
         }
       g_free (command_buf);
 
- 
+
       if (!err)
         {
           /* Get the event counter to avoid a duplicate reload due to
@@ -407,22 +421,25 @@ card_reload (GpaCardManager *cardman)
                                           scd_status_cb, cardman);
           if (!err)
             err = gpgme_op_assuan_result (cardman->gpgagent)->err;
-          
+
           if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT
               || gpg_err_code (err) == GPG_ERR_CARD_REMOVED)
             statusbar_update (cardman, _("No card"));
           else if (err)
             {
-              g_debug ("assuan command `%s' failed: %s <%s>\n", 
+              g_debug ("assuan command `%s' failed: %s <%s>\n",
                        command, gpg_strerror (err), gpg_strsource (err));
               statusbar_update (cardman, _("Error accessing card"));
             }
         }
 
-      
+
       update_card_widget (cardman, err_desc);
+      g_free (err_desc_buffer);
+      err_desc_buffer = NULL;
+      err_desc = NULL;
       update_title (cardman);
-      
+
       update_info_visibility (cardman);
       /* We decrement our lock using a idle handler with lo priority.
          This gives us a better chance not to do a reload a second
@@ -449,7 +466,7 @@ static gboolean
 card_reload_idle_cb (void *user_data)
 {
   GpaCardManager *cardman = user_data;
-  
+
   card_reload (cardman);
   g_object_unref (cardman);
 
@@ -501,7 +518,7 @@ ticker_cb (gpointer user_data)
   if (!cardman || !cardman->ticker_timeout_id || !cardman->gpgagent
       || cardman->in_card_reload)
     return TRUE;  /* Keep on ticking.  */
-  
+
   /* Note that we are single threaded and thus there is no need to
      lock the assuan context.  */
 
@@ -526,9 +543,9 @@ start_ticker (GpaCardManager *cardman)
     {
 #if GTK_CHECK_VERSION (2, 14, 0)
       cardman->ticker_timeout_id = g_timeout_add_seconds (1,
-                                                          ticker_cb, cardman); 
+                                                          ticker_cb, cardman);
 #else
-      cardman->ticker_timeout_id = g_timeout_add (1000, ticker_cb, cardman); 
+      cardman->ticker_timeout_id = g_timeout_add (1000, ticker_cb, cardman);
 #endif
     }
 }
@@ -569,7 +586,7 @@ card_genkey (GpaCardManager *cardman)
   if (!err)
     {
       gpa_window_error ("Admin commands are disabled in scdamon.\n"
-                        "Key generation is not possible.", NULL); 
+                        "Key generation is not possible.", NULL);
       return;
     }
 
@@ -750,6 +767,10 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
     {
       cardman->card_widget = gpa_cm_dinsig_new ();
     }
+  else if (cardman->cardtype == GPA_CM_UNKNOWN_TYPE)
+    {
+      cardman->card_widget = gpa_cm_unknown_new ();
+    }
   else
     {
       if (!error_description)
@@ -757,7 +778,7 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
       cardman->card_widget = gtk_label_new (error_description);
     }
 
-  gtk_scrolled_window_add_with_viewport 
+  gtk_scrolled_window_add_with_viewport
     (GTK_SCROLLED_WINDOW (cardman->card_container), cardman->card_widget);
 
   gtk_widget_show_all (cardman->card_widget);
@@ -779,6 +800,7 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
       gpa_cm_geldkarte_reload (cardman->card_widget, cardman->gpgagent);
       gpa_cm_netkey_reload (cardman->card_widget, cardman->gpgagent);
       gpa_cm_dinsig_reload (cardman->card_widget, cardman->gpgagent);
+      gpa_cm_unknown_reload (cardman->card_widget, cardman->gpgagent);
     }
 }
 
@@ -843,7 +865,7 @@ setup_app_selector (GpaCardManager *cardman)
           p1 = strchr (p0, ':');
           if (p1)
             *p1 = 0;
-          gtk_combo_box_append_text 
+          gtk_combo_box_append_text
             (GTK_COMBO_BOX (cardman->app_selector), p0);
           if (p[1])
             p0 = p+1;
@@ -882,7 +904,7 @@ construct_widgets (GpaCardManager *cardman)
 
   /* Add a fancy label that tells us: This is the card manager.  */
   hbox1 = gtk_hbox_new (FALSE, 0);
-  
+
   icon = gtk_image_new_from_stock (GPA_STOCK_CARDMAN, GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox1), icon, FALSE, TRUE, 0);
 
@@ -916,7 +938,7 @@ construct_widgets (GpaCardManager *cardman)
      card widget.  This container is required so that we can easily
      change to a differet card widget. */
   cardman->card_container = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy 
+  gtk_scrolled_window_set_policy
     (GTK_SCROLLED_WINDOW (cardman->card_container),
      GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (vbox), cardman->card_container, TRUE, TRUE, 0);
@@ -932,7 +954,7 @@ construct_widgets (GpaCardManager *cardman)
 }
 
 
-/************************************************************ 
+/************************************************************
  ******************   Object Management  ********************
  ************************************************************/
 
@@ -996,7 +1018,7 @@ gpa_card_manager_init (GTypeInstance *instance, void *class_ptr)
 
 static void
 gpa_card_manager_finalize (GObject *object)
-{  
+{
   GpaCardManager *cardman = GPA_CARD_MANAGER (object);
 
   if (cardman->gpgagent)
@@ -1004,7 +1026,7 @@ gpa_card_manager_finalize (GObject *object)
       gpgme_release (cardman->gpgagent);
       cardman->gpgagent = NULL;
     }
-  
+
   if (cardman->ticker_timeout_id)
     {
       g_source_remove (cardman->ticker_timeout_id);
@@ -1013,7 +1035,7 @@ gpa_card_manager_finalize (GObject *object)
 
   /* FIXME: Remove the watch object and all other resources.  */
 
-  G_OBJECT_CLASS (g_type_class_peek_parent 
+  G_OBJECT_CLASS (g_type_class_peek_parent
                   (GPA_CM_OPENPGP_GET_CLASS (cardman)))->finalize (object);
 }
 
@@ -1022,7 +1044,7 @@ GType
 gpa_card_manager_get_type (void)
 {
   static GType this_type = 0;
-  
+
   if (!this_type)
     {
       static const GTypeInfo this_info =
@@ -1037,17 +1059,17 @@ gpa_card_manager_get_type (void)
 	  0,    /* n_preallocs */
 	  gpa_card_manager_init,
 	};
-      
+
       this_type = g_type_register_static (GTK_TYPE_WINDOW,
                                           "GpaCardManager",
                                           &this_info, 0);
     }
-  
+
   return this_type;
 }
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 GtkWidget *
@@ -1055,14 +1077,14 @@ gpa_card_manager_get_instance (void)
 {
   if (!this_instance)
     {
-      this_instance = g_object_new (GPA_CARD_MANAGER_TYPE, NULL);  
+      this_instance = g_object_new (GPA_CARD_MANAGER_TYPE, NULL);
       card_reload (this_instance);
     }
   return GTK_WIDGET (this_instance);
 }
 
 
-gboolean 
+gboolean
 gpa_card_manager_is_open (void)
 {
   return !!this_instance;

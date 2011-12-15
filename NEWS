@@ -3,14 +3,18 @@ Noteworthy changes in version 0.9.1 (not released)
 
  * The key selection dialogs for encryption and signing do not anymore
    list expired, revoked or otherwise invalid keys.
- 
+
  * If no recipients are given to the server, a generic key selection
    dialog is now used.
+
+ * Now works with Libassuan 2.x.
+
+ * The card manager now displays the ATR for an unknown card.
 
 
 Noteworthy changes in version 0.9.0 (2009-06-20)
 ------------------------------------------------
- 
+
  * Added a smartcard manager.
 
  * GPA now requires GnuPG-2.
@@ -140,7 +144,7 @@ Noteworthy changes in version 0.7.0 (2003-10-22)
  * Cosmetical and minor fixes to the file manager window.
 
  * GPA now remembers the brief/detailed setting view and restores it
- when GPA is started. 
+ when GPA is started.
 
  * Removed all deprecated widgets. GPA is now pure GTK+ 2.2.
 
@@ -258,7 +262,7 @@ Noteworthy changes in version 0.5.0 (2002-02-25)
 
  * There now is an icon in the tool bar to switch from the keyring
    manager to the file manager.
- 
+
  * GPA can now be compiled using a standard GNU toolchain.
    In particular it can be cross-compiled from GNU/Linux to
    mingw32/MS-Windows (which is what we did for the GnuPP CD),
