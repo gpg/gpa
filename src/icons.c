@@ -82,56 +82,20 @@ struct {
 };
 
 
-static GdkPixmap *
-pixmap_for_icon (GtkWidget *window, const char *name, GdkBitmap **r_mask)
-{
-    GtkStyle  *style;
-    GdkPixmap *pix;
-    char **xpm = NULL;
-    int i;
-    
-    for (i = 0; xpms[i].name; i++)
-      if (! strcmp (xpms[i].name, name))
-        {
-          xpm = xpms[i].xpm;
-          break;
-        }
-    
-    if (! xpm)
-      {
-        fprintf (stderr, "Icon `%s' not found\n", name);
-	fflush (stderr);
-        return NULL;
-      }
-    
-    style = gtk_widget_get_style (window);
-    pix = gdk_pixmap_create_from_xpm_d (window->window, r_mask,
-                                        &style->bg[GTK_STATE_NORMAL],
-                                        xpm);
-    return pix;
-}
-
-
-GdkPixmap *
-gpa_create_icon_pixmap (GtkWidget *window, const char *name, GdkBitmap **mask)
-{
-  return pixmap_for_icon (window, name, mask);
-}
-
 
 GdkPixbuf *
 gpa_create_icon_pixbuf (const char *name)
 {
   char **xpm = NULL;
-  int i; 
-  
+  int i;
+
   for (i = 0; xpms[i].name; i++)
     if (! strcmp (xpms[i].name, name))
       {
 	xpm = xpms[i].xpm;
 	break;
       }
-  
+
   if (! xpm)
     {
       fprintf (stderr, "Icon `%s' not found\n", name);
@@ -148,7 +112,7 @@ register_stock_icons (void)
 {
   GdkPixbuf *pixbuf;
   GtkIconFactory *icon_factory;
-  GtkIconSet *icon_set; 
+  GtkIconSet *icon_set;
   GtkIconSource *icon_source;
   gint i;
 
@@ -188,7 +152,7 @@ register_stock_icons (void)
   icon_set = gtk_icon_set_copy (icon_set);
   gtk_icon_factory_add (icon_factory, GPA_STOCK_FILEMAN, icon_set);
 
-  gtk_icon_factory_add_default (icon_factory); 
+  gtk_icon_factory_add_default (icon_factory);
 
   g_object_unref (icon_factory);
 }

@@ -21,9 +21,6 @@
 #ifndef ICONS_H
 #define ICONS_H
 
-GdkPixmap *gpa_create_icon_pixmap (GtkWidget *window, const char *name,
-                                   GdkBitmap **mask);
-
 GdkPixbuf *gpa_create_icon_pixbuf (const char *name);
 
 void gpa_register_stock_items (void);
@@ -51,5 +48,5 @@ void gpa_register_stock_items (void);
 #define GPA_STOCK_SECRET_CARDKEY "gpa-secret-cardkey"
 #define GPA_STOCK_SECRET_KEY "gpa-secret-key"
 #define GPA_STOCK_PUBLIC_KEY "gpa-public-key"
-     
+
 #endif /*ICONS_H*/
