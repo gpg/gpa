@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2011-12-12 10:10+0100\n"
+"POT-Creation-Date: 2012-01-02 17:58+0100\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -41,13 +41,13 @@ msgid "Clipboard"
 msgstr ""
 
 #: src/clipboard.c:772 src/fileman.c:512 src/keymanager.c:867
-#: src/cardman.c:619
+#: src/cardman.c:636
 #, fuzzy
 msgid "_File"
 msgstr "/檔案"
 
 #: src/clipboard.c:773 src/fileman.c:513 src/keymanager.c:868
-#: src/cardman.c:620
+#: src/cardman.c:637
 #, fuzzy
 msgid "_Edit"
 msgstr "/編輯"
@@ -90,7 +90,7 @@ msgid "Close the buffer"
 msgstr ""
 
 #: src/clipboard.c:793 src/fileman.c:531 src/keymanager.c:876
-#: src/cardman.c:625
+#: src/cardman.c:642
 msgid "Quit the program"
 msgstr ""
 
@@ -126,12 +126,12 @@ msgstr "解密已選擇檔案"
 msgid "Select the entire document"
 msgstr ""
 
-#: src/clipboard.c:922 src/fileman.c:625 src/cardman.c:710
+#: src/clipboard.c:922 src/fileman.c:625 src/cardman.c:727
 #, fuzzy
 msgid "Keyring"
 msgstr "鑰圈編輯器"
 
-#: src/clipboard.c:924 src/keymanager.c:1059 src/cardman.c:712
+#: src/clipboard.c:924 src/keymanager.c:1059 src/cardman.c:729
 msgid "Files"
 msgstr "檔案"
 
@@ -1317,7 +1317,7 @@ msgstr "建立新鑰"
 
 #: src/keygendlg.c:190 src/keygenwizard.c:387 src/keygenwizard.c:400
 #: src/keygenwizard.c:410 src/keygenwizard.c:421 src/keygenwizard.c:438
-#: src/keygenwizard.c:450 src/cardman.c:630
+#: src/keygenwizard.c:450 src/cardman.c:647
 msgid "Generate key"
 msgstr "建立新鑰"
 
@@ -2273,30 +2273,30 @@ msgstr "簽署"
 msgid "Signatures:"
 msgstr "簽署"
 
-#: src/cardman.c:166
+#: src/cardman.c:167
 #, fuzzy
 msgid "GNU Privacy Assistant - Card Manager"
 msgstr "GNU Privacy Assistant - 檔案管理"
 
-#: src/cardman.c:187
+#: src/cardman.c:188
 #, c-format
 msgid "%s card detected."
 msgstr ""
 
-#: src/cardman.c:194
+#: src/cardman.c:195
 msgid "Checking for card..."
 msgstr ""
 
-#: src/cardman.c:361
+#: src/cardman.c:368
 #, fuzzy
 msgid "No card found."
 msgstr "找不到密鑰."
 
-#: src/cardman.c:367
+#: src/cardman.c:374
 msgid "The selected card application is currently not available."
 msgstr ""
 
-#: src/cardman.c:368
+#: src/cardman.c:375
 msgid ""
 "Another process is using a different card application than the selected "
 "one.\n"
@@ -2305,56 +2305,56 @@ msgid ""
 "active application."
 msgstr ""
 
-#: src/cardman.c:378
+#: src/cardman.c:385
 msgid "The selected card application is not available."
 msgstr ""
 
-#: src/cardman.c:384
+#: src/cardman.c:397
 msgid "Error accessing the card."
 msgstr ""
 
-#: src/cardman.c:385 src/cardman.c:418
+#: src/cardman.c:398 src/cardman.c:432
 msgid "Error accessing card"
 msgstr ""
 
-#: src/cardman.c:413
+#: src/cardman.c:427
 msgid "No card"
 msgstr ""
 
-#: src/cardman.c:621
+#: src/cardman.c:638
 #, fuzzy
 msgid "_Card"
 msgstr "/視窗/檔案管理 (&F)"
 
-#: src/cardman.c:629
+#: src/cardman.c:646
 msgid "Reload card information"
 msgstr ""
 
-#: src/cardman.c:631
+#: src/cardman.c:648
 #, fuzzy
 msgid "Generate new key on card"
 msgstr "建立新鑰"
 
-#: src/cardman.c:756
+#: src/cardman.c:777
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "操作不支援"
 
-#: src/cardman.c:891
+#: src/cardman.c:913
 #, fuzzy
 msgid "Card Manager"
 msgstr "檔案管理員"
 
-#: src/cardman.c:899
+#: src/cardman.c:921
 #, fuzzy
 msgid "Application selection:"
 msgstr "加密已選擇檔案"
 
-#: src/cardman.c:903
+#: src/cardman.c:925
 msgid "Auto"
 msgstr ""
 
-#: src/cardman.c:980
+#: src/cardman.c:1002
 msgid "The GPGME library is too old to support smartcards."
 msgstr ""
 
