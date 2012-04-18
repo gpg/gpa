@@ -1,5 +1,5 @@
-Noteworthy changes in version 0.9.1 (not released)
--------------------------------------------------
+Noteworthy changes in version 0.9.1 (2012-04-18)
+------------------------------------------------
 
  * The key selection dialogs for encryption and signing do not anymore
    list expired, revoked or otherwise invalid keys.
