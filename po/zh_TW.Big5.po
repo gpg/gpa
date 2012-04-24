@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2012-01-02 17:58+0100\n"
+"POT-Creation-Date: 2012-04-18 10:03+0200\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -255,7 +255,7 @@ msgstr "加密檔案"
 msgid "_Public Keys"
 msgstr "公鑰 (&P)"
 
-#: src/encryptdlg.c:192 src/icons.c:202
+#: src/encryptdlg.c:192 src/icons.c:166
 msgid "_Sign"
 msgstr "簽署 (&S)"
 
@@ -1191,47 +1191,47 @@ msgstr "開啟檔案管理員"
 msgid "About this application"
 msgstr "加密已選擇檔案"
 
-#: src/icons.c:203
+#: src/icons.c:167
 #, fuzzy
 msgid "_Verify"
 msgstr "驗證"
 
-#: src/icons.c:204
+#: src/icons.c:168
 #, fuzzy
 msgid "_Encrypt"
 msgstr "加密"
 
-#: src/icons.c:205
+#: src/icons.c:169
 #, fuzzy
 msgid "_Decrypt"
 msgstr "解密"
 
-#: src/icons.c:206
+#: src/icons.c:170
 #, fuzzy
 msgid "_Brief"
 msgstr "摘要"
 
-#: src/icons.c:207
+#: src/icons.c:171
 #, fuzzy
 msgid "_Detailed"
 msgstr "詳情"
 
-#: src/icons.c:208
+#: src/icons.c:172
 #, fuzzy
 msgid "_Keyring Manager"
 msgstr "檔案管理員"
 
-#: src/icons.c:209
+#: src/icons.c:173
 #, fuzzy
 msgid "_Clipboard"
 msgstr "/視窗/檔案管理 (&F)"
 
-#: src/icons.c:210
+#: src/icons.c:174
 #, fuzzy
 msgid "_File Manager"
 msgstr "檔案管理員"
 
-#: src/icons.c:211
+#: src/icons.c:175
 #, fuzzy
 msgid "_Card Manager"
 msgstr "檔案管理員"

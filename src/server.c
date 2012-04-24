@@ -116,7 +116,7 @@ static gboolean shutdown_pending;
 
 
 /* The nonce used by the server connection.  This nonce is required
-   uner Windows to emulate Unix Domain Sockets.  This is managed by
+   under Windows to emulate Unix Domain Sockets.  This is managed by
    libassuan but we need to store the nonce in the application.  Under
    Unix this is just a stub.  */
 static assuan_sock_nonce_t socket_nonce;
@@ -161,7 +161,7 @@ has_option (const char *line, const char *name)
 {
   const char *s;
   int n = strlen (name);
-  
+
   s = strstr (line, name);
   return (s && (s == line || spacep (s-1)) && (!s[n] || spacep (s+n)));
 }
@@ -252,7 +252,7 @@ my_gpgme_write_cb (void *opaque, const void *buffer, size_t size)
 
 
 static struct gpgme_data_cbs my_gpgme_data_cbs =
-  { 
+  {
     my_gpgme_read_cb,
     my_gpgme_write_cb,
     NULL,
@@ -290,7 +290,7 @@ my_gpgme_message_read_cb (void *opaque, void *buffer, size_t size)
 }
 
 static struct gpgme_data_cbs my_gpgme_message_cbs =
-  { 
+  {
     my_gpgme_message_read_cb,
     NULL,
     NULL,
@@ -306,7 +306,7 @@ my_devnull_write_cb (void *opaque, const void *buffer, size_t size)
 
 
 static struct gpgme_data_cbs my_devnull_data_cbs =
-  { 
+  {
     NULL,
     my_devnull_write_cb,
     NULL,
@@ -356,7 +356,7 @@ release_keys (gpgme_key_t *keys)
   if (keys)
     {
       int idx;
-      
+
       for (idx=0; keys[idx]; idx++)
         gpgme_key_unref (keys[idx]);
       g_free (keys);
@@ -393,7 +393,7 @@ parse_protocol_option (assuan_context_t ctx, char *line, int mandatory,
 }
 
 
-static void 
+static void
 close_message_fd (conn_ctrl_t ctrl)
 {
   if (ctrl->message_fd != -1)
@@ -412,11 +412,11 @@ finish_io_streams (assuan_context_t ctx,
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
 
   if (r_input_data)
-    gpgme_data_release (*r_input_data); 
+    gpgme_data_release (*r_input_data);
   if (r_output_data)
     gpgme_data_release (*r_output_data);
   if (r_message_data)
-    gpgme_data_release (*r_message_data); 
+    gpgme_data_release (*r_message_data);
   if (ctrl->input_channel)
     {
       g_io_channel_shutdown (ctrl->input_channel, 0, NULL);
@@ -552,7 +552,7 @@ prepare_io_streams (assuan_context_t ctx,
 
 
 
-static const char hlp_session[] = 
+static const char hlp_session[] =
   "SESSION <number> [<string>]\n"
   "\n"
   "The NUMBER is an arbitrary value, a server may use to associate\n"
@@ -587,7 +587,7 @@ cmd_session (assuan_context_t ctx, char *line)
 
 
 
-static const char hlp_recipient[] = 
+static const char hlp_recipient[] =
   "RECIPIENT <recipient>\n"
   "\n"
   "Set the recipient for the encryption.  <recipient> is an RFC2822\n"
@@ -611,7 +611,7 @@ cmd_recipient (assuan_context_t ctx, char *line)
 
 
 
-static const char hlp_message[] = 
+static const char hlp_message[] =
   "MESSAGE FD[=<n>]\n"
   "\n"
   "Set the file descriptor to read a message of a detached signature to N.";
@@ -655,7 +655,7 @@ cont_encrypt (assuan_context_t ctx, gpg_error_t err)
 }
 
 
-static const char hlp_encrypt[] = 
+static const char hlp_encrypt[] =
   "ENCRYPT --protocol=OpenPGP|CMS\n"
   "\n"
   "Encrypt the data received on INPUT to OUTPUT.";
@@ -696,7 +696,7 @@ cmd_encrypt (assuan_context_t ctx, char *line)
 
   ctrl->cont_cmd = cont_encrypt;
   op = gpa_stream_encrypt_operation_new (NULL, input_data, output_data,
-                                         ctrl->recipients, 
+                                         ctrl->recipients,
                                          ctrl->recipient_keys,
                                          protocol, 0);
   input_data = output_data = NULL;
@@ -751,7 +751,7 @@ cont_prep_encrypt (assuan_context_t ctx, gpg_error_t err)
   assuan_process_done (ctx, err);
 }
 
-static const char hlp_prep_encrypt[] = 
+static const char hlp_prep_encrypt[] =
   "PREP_ENCRYPT [--protocol=OpenPGP|CMS]\n"
   "\n"
   "Dummy encryption command used to check whether the given recipients\n"
@@ -835,7 +835,7 @@ cmd_sender (assuan_context_t ctx, char *line)
   ctrl->sender = NULL;
   if (*line)
     ctrl->sender = xstrdup (line);
-  
+
   if (!err)
     ctrl->sender_protocol_hint = protocol;
 
@@ -937,7 +937,7 @@ cont_decrypt (assuan_context_t ctx, gpg_error_t err)
 }
 
 
-static const char hlp_decrypt[] = 
+static const char hlp_decrypt[] =
   "DECRYPT --protocol=OpenPGP|CMS [--no-verify]\n"
   "\n"
   "Decrypt a message given by the source set with the INPUT command\n"
@@ -1018,7 +1018,7 @@ cont_verify (assuan_context_t ctx, gpg_error_t err)
 }
 
 
-static const char hlp_verify[] = 
+static const char hlp_verify[] =
   "VERIFY --protocol=OpenPGP|CMS [--silent]\n"
   "\n"
   "Verify a message.  Depending on the combination of the\n"
@@ -1091,13 +1091,13 @@ cmd_verify (assuan_context_t ctx, char *line)
      error if one is not opened but that is not an error here.  */
   ctrl->input_fd = translate_sys2libc_fd (assuan_get_input_fd (ctx), 0);
   ctrl->output_fd = translate_sys2libc_fd (assuan_get_output_fd (ctx), 1);
-  if (ctrl->message_fd != -1 && ctrl->input_fd != -1 
+  if (ctrl->message_fd != -1 && ctrl->input_fd != -1
       && ctrl->output_fd == -1)
     op_mode = VERIFY_DETACH;
-  else if (ctrl->message_fd == -1 && ctrl->input_fd != -1 
+  else if (ctrl->message_fd == -1 && ctrl->input_fd != -1
            && ctrl->output_fd == -1)
     op_mode = VERIFY_OPAQUE;
-  else if (ctrl->message_fd == -1 && ctrl->input_fd != -1 
+  else if (ctrl->message_fd == -1 && ctrl->input_fd != -1
            && ctrl->output_fd != -1)
     op_mode = VERIFY_OPAQUE_WITH_OUTPUT;
   else
@@ -1105,7 +1105,7 @@ cmd_verify (assuan_context_t ctx, char *line)
       err = set_error (GPG_ERR_CONFLICT, "invalid verify mode");
       goto leave;
     }
-  
+
   err = prepare_io_streams (ctx, &input_data, &output_data, &message_data);
   if (! err && op_mode == VERIFY_OPAQUE)
     err = gpgme_data_new_from_cbs (&output_data, &my_devnull_data_cbs, ctrl);
@@ -1140,7 +1140,7 @@ cmd_verify (assuan_context_t ctx, char *line)
 
 
 
-static const char hlp_start_keymanager[] = 
+static const char hlp_start_keymanager[] =
   "START_KEYMANAGER\n"
   "\n"
   "Pop up the key manager window.  The client expects that the key\n"
@@ -1155,7 +1155,7 @@ cmd_start_keymanager (assuan_context_t ctx, char *line)
 }
 
 
-static const char hlp_start_cardmanager[] = 
+static const char hlp_start_cardmanager[] =
   "START_CARDMANAGER\n"
   "\n"
   "Pop up the card manager window.  The client expects that the key\n"
@@ -1170,7 +1170,7 @@ cmd_start_cardmanager (assuan_context_t ctx, char *line)
 }
 
 
-static const char hlp_start_confdialog[] = 
+static const char hlp_start_confdialog[] =
   "START_CONFDIALOG\n"
   "\n"
   "Pop up the configure dialog.  The client expects that the key\n"
@@ -1187,7 +1187,7 @@ cmd_start_confdialog (assuan_context_t ctx, char *line)
 
 
 
-static const char hlp_getinfo[] = 
+static const char hlp_getinfo[] =
   "GETINFO <what>\n"
   "\n"
   "Multipurpose function to return a variety of information.\n"
@@ -1266,7 +1266,7 @@ decode_percent_string (char *str)
       else
         {
           int val = hextobyte (&src[1]);
-          
+
           if (val == -1)
             {
               /* Should not happen.  */
@@ -1283,9 +1283,9 @@ decode_percent_string (char *str)
                   /* A binary zero is not representable in a C
                      string.  */
                   *(dest++) = '\\';
-                  *(dest++) = '0'; 
+                  *(dest++) = '0';
                 }
-              else 
+              else
                 *((unsigned char *) dest++) = val;
               src += 3;
             }
@@ -1647,7 +1647,7 @@ reset_notify (assuan_context_t ctx, char *line)
 }
 
 
-/* Tell the assuan library about our commands.   */
+/* Tell libassuan about our commands.   */
 static int
 register_commands (assuan_context_t ctx)
 {
@@ -1691,7 +1691,7 @@ register_commands (assuan_context_t ctx)
 				    table[i].help);
       if (rc)
         return rc;
-    } 
+    }
 
   return 0;
 }
@@ -1798,7 +1798,7 @@ run_server_continuation (assuan_context_t ctx, gpg_error_t err)
 
 /* This function is called by the main event loop if data can be read
    from the status channel.  */
-static gboolean 
+static gboolean
 receive_cb (GIOChannel *channel, GIOCondition condition, void *data)
 {
   assuan_context_t ctx = data;
@@ -1858,7 +1858,7 @@ receive_cb (GIOChannel *channel, GIOCondition condition, void *data)
                   assuan_process_done (ctx, err);
                 }
             }
-          else 
+          else
             assuan_process_done (ctx, err);
         }
     }
@@ -1869,8 +1869,8 @@ receive_cb (GIOChannel *channel, GIOCondition condition, void *data)
 /* This function is called by the main event loop if the listen fd is
    readable.  The function runs the accept and prepares the
    connection.  */
-static gboolean 
-accept_connection_cb (GIOChannel *listen_channel, 
+static gboolean
+accept_connection_cb (GIOChannel *listen_channel,
                       GIOCondition condition, void *data)
 {
   gpg_error_t err;
@@ -1895,7 +1895,7 @@ accept_connection_cb (GIOChannel *listen_channel,
     }
   if (assuan_sock_check_nonce ((assuan_fd_t) fd, &socket_nonce))
     {
-      g_debug ("new connection at fd %d refused", fd); 
+      g_debug ("new connection at fd %d refused", fd);
       goto leave;
     }
 
@@ -1955,16 +1955,16 @@ gpa_start_server (void)
   unsigned int source_id;
 
   assuan_set_gpg_err_source (GPG_ERR_SOURCE_DEFAULT);
-  
+
   socket_name = g_build_filename (gnupg_homedir, "S.uiserver", NULL);
-  if (strlen (socket_name)+1 >= sizeof serv_addr.sun_path ) 
+  if (strlen (socket_name)+1 >= sizeof serv_addr.sun_path )
     {
       g_debug ("name of socket too long\n");
       g_free (socket_name);
       return;
     }
   g_debug ("using server socket `%s'", socket_name);
-    
+
   fd = assuan_sock_new (AF_UNIX, SOCK_STREAM, 0);
   if (fd == ASSUAN_INVALID_FD)
     {
