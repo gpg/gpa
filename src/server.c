@@ -1947,6 +1947,7 @@ void
 gpa_start_server (void)
 {
   char *socket_name;
+  gpg_error_t err;
   int rc;
   assuan_fd_t fd;
   struct sockaddr_un serv_addr;
@@ -1955,6 +1956,13 @@ gpa_start_server (void)
   unsigned int source_id;
 
   assuan_set_gpg_err_source (GPG_ERR_SOURCE_DEFAULT);
+  err = assuan_sock_init ();
+  if (err)
+    {
+      g_debug ("assuan_sock_init failed: %s <%s>",
+               gpg_strerror (err), gpg_strsource (err));
+      return;
+    }
 
   socket_name = g_build_filename (gnupg_homedir, "S.uiserver", NULL);
   if (strlen (socket_name)+1 >= sizeof serv_addr.sun_path )
