@@ -33,17 +33,70 @@ MSGMERGE=${GETTEXT_PREFIX}${MSGMERGE:-msgmerge}${GETTEXT_SUFFIX}
 
 DIE=no
 FORCE=
-if test "$1" == "--force"; then
+tmp=`dirname $0`
+tsdir=`cd "$tmp"; pwd`
+if test x"$1" == x"--force"; then
   FORCE=" --force"
   shift
 fi
 
+# Reject unsafe characters in $HOME, $tsdir and cwd.  We consider spaces
+# as unsafe because it is too easy to get scripts wrong in this regard.
+am_lf='
+'
+case `pwd` in
+  *[\;\\\"\#\$\&\'\`$am_lf\ \	]*)
+    echo "unsafe working directory name"; DIE=yes;;
+esac
+case $tsdir in
+  *[\;\\\"\#\$\&\'\`$am_lf\ \	]*)
+    echo "unsafe source directory: \`$tsdir'"; DIE=yes;;
+esac
+case $HOME in
+  *[\;\\\"\#\$\&\'\`$am_lf\ \	]*)
+    echo "unsafe home directory: \`$HOME'"; DIE=yes;;
+esac
+if test "$DIE" = "yes"; then
+  exit 1
+fi
+
+# Begin list of optional variables sourced from ~/.gnupg-autogen.rc
+w32_toolprefixes=
+w32_extraoptions=
+w32ce_toolprefixes=
+w32ce_extraoptions=
+amd64_toolprefixes=
+# End list of optional variables sourced from ~/.gnupg-autogen.rc
+# What follows are variables which are sourced but default to
+# environment variables or lacking them hardcoded values.
+#w32root=
+#w32ce_root=
+#amd64root=
+
+if [ -f "$HOME/.gnupg-autogen.rc" ]; then
+    echo "sourcing extra definitions from $HOME/.gnupg-autogen.rc"
+    . "$HOME/.gnupg-autogen.rc"
+fi
+
+# Convenience option to use certain configure options for some hosts.
+myhost=""
+myhostsub=""
+case "$1" in
+    --build-w32)
+        myhost="w32"
+        ;;
+    --build*)
+        echo "**Error**: invalid build option $1" >&2
+        exit 1
+        ;;
+    *)
+        ;;
+esac
+
 
 # ***** W32 build script *******
 # Used to cross-compile for Windows.
-if test "$1" = "--build-w32"; then
-    tmp=`dirname $0`
-    tsdir=`cd "$tmp"; pwd`
+if [ "$myhost" = "w32" ]; then
     shift
     if [ ! -f $tsdir/config.guess ]; then
         echo "$tsdir/config.guess not found" >&2
@@ -51,12 +104,19 @@ if test "$1" = "--build-w32"; then
     fi
     build=`$tsdir/config.guess`
 
-    [ -z "$w32root" ] && w32root="$HOME/w32root"
+    case $myhostsub in
+        *)
+          [ -z "$w32root" ] && w32root="$HOME/w32root"
+          toolprefixes="$w32_toolprefixes i586-mingw32msvc"
+          toolprefixes="$toolprefixes i386-mingw32msvc mingw32"
+          extraoptions="$w32_extraoptions"
+          ;;
+    esac
     echo "Using $w32root as standard install directory" >&2
 
     # Locate the cross compiler
     crossbindir=
-    for host in i586-mingw32msvc i386-mingw32msvc mingw32; do
+    for host in $toolprefixes; do
         if ${host}-gcc --version >/dev/null 2>&1 ; then
             crossbindir=/usr/${host}/bin
             conf_CC="CC=${host}-gcc"
@@ -65,8 +125,10 @@ if test "$1" = "--build-w32"; then
     done
     if [ -z "$crossbindir" ]; then
         echo "Cross compiler kit not installed" >&2
-        echo "Under Debian GNU/Linux, you may install it using" >&2
-        echo "  apt-get install mingw32 mingw32-runtime mingw32-binutils" >&2
+        if [ -z "$sub" ]; then
+          echo "Under Debian GNU/Linux, you may install it using" >&2
+          echo "  apt-get install mingw32 mingw32-runtime mingw32-binutils" >&2
+        fi
         echo "Stop." >&2
         exit 1
     fi
@@ -85,6 +147,7 @@ if test "$1" = "--build-w32"; then
 	    --with-gpgme-prefix=${w32root} \
             --with-lib-prefix=${w32root} \
             --with-libiconv-prefix=${w32root} \
+            SYSROOT="$w32root" \
             PKG_CONFIG="$w32root/bin/pkg-config" \
             PKG_CONFIG_LIBDIR="$w32root/lib/pkgconfig" "$@"
     rc=$?
@@ -180,6 +243,5 @@ $AUTOCONF${FORCE}
 
 
 echo "You may now run \"
-  ./configure --enable-maintainer-mode
-\" and then \"make\"
+  ./configure --enable-maintainer-mode && make
 "
