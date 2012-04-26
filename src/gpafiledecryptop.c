@@ -35,12 +35,13 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpgmetools.h"
+#include "filetype.h"
 #include "gpafiledecryptop.h"
 #include "verifydlg.h"
 
 /* Internal functions */
 static gboolean gpa_file_decrypt_operation_idle_cb (gpointer data);
-static void gpa_file_decrypt_operation_done_cb (GpaContext *context, 
+static void gpa_file_decrypt_operation_done_cb (GpaContext *context,
 						gpg_error_t err,
 						GpaFileDecryptOperation *op);
 static void gpa_file_decrypt_operation_done_error_cb (GpaContext *context,
@@ -64,7 +65,7 @@ gpa_file_decrypt_operation_get_property (GObject *object, guint prop_id,
 					 GValue *value, GParamSpec *pspec)
 {
   GpaFileDecryptOperation *op = GPA_FILE_DECRYPT_OPERATION (object);
-  
+
   switch (prop_id)
     {
     case PROP_VERIFY:
@@ -97,7 +98,7 @@ gpa_file_decrypt_operation_set_property (GObject *object, guint prop_id,
 
 static void
 gpa_file_decrypt_operation_finalize (GObject *object)
-{  
+{
   GpaFileDecryptOperation *op = GPA_FILE_DECRYPT_OPERATION (object);
 
   if (op->dialog)
@@ -128,8 +129,8 @@ gpa_file_decrypt_operation_response_cb (GtkDialog *dialog,
 
 
 static GObject*
-gpa_file_decrypt_operation_constructor 
-(GType type, 
+gpa_file_decrypt_operation_constructor
+(GType type,
  guint n_construct_properties,
  GObjectConstructParam *construct_properties)
 {
@@ -169,7 +170,7 @@ static void
 gpa_file_decrypt_operation_class_init (GpaFileDecryptOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_file_decrypt_operation_constructor;
@@ -190,7 +191,7 @@ GType
 gpa_file_decrypt_operation_get_type (void)
 {
   static GType file_decrypt_operation_type = 0;
-  
+
   if (!file_decrypt_operation_type)
     {
       static const GTypeInfo file_decrypt_operation_info =
@@ -205,12 +206,12 @@ gpa_file_decrypt_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_file_decrypt_operation_init,
       };
-      
-      file_decrypt_operation_type = g_type_register_static 
+
+      file_decrypt_operation_type = g_type_register_static
 	(GPA_FILE_OPERATION_TYPE, "GpaFileDecryptOperation",
 	 &file_decrypt_operation_info, 0);
     }
-  
+
   return file_decrypt_operation_type;
 }
 
@@ -221,7 +222,7 @@ gpa_file_decrypt_operation_new (GtkWidget *window,
 				GList *files)
 {
   GpaFileDecryptOperation *op;
-  
+
   op = g_object_new (GPA_FILE_DECRYPT_OPERATION_TYPE,
 		     "window", window,
 		     "input_files", files,
@@ -236,7 +237,7 @@ gpa_file_decrypt_verify_operation_new (GtkWidget *window,
 				       GList *files)
 {
   GpaFileDecryptOperation *op;
-  
+
   op = g_object_new (GPA_FILE_DECRYPT_OPERATION_TYPE,
 		     "window", window,
 		     "input_files", files,
@@ -253,10 +254,10 @@ static gchar *
 destination_filename (const gchar *filename)
 {
   gchar *extension, *plain_filename;
-  
+
   /* Find out the destination file */
   extension = g_strrstr (filename, ".");
-  if (extension && (g_str_equal (extension, ".asc") || 
+  if (extension && (g_str_equal (extension, ".asc") ||
 		    g_str_equal (extension, ".gpg") ||
 		    g_str_equal (extension, ".pgp")))
     {
@@ -288,7 +289,7 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 	  gpa_gpgme_warning (err);
 	  return err;
 	}
-      
+
       err = gpgme_data_new (&op->plain);
       if (err)
 	{
@@ -297,6 +298,11 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 	  op->plain = NULL;
 	  return err;
 	}
+
+      gpgme_set_protocol (GPA_OPERATION (op)->context->ctx,
+                          is_cms_data (file_item->direct_in,
+                                       file_item->direct_in_len) ?
+                          GPGME_PROTOCOL_CMS : GPGME_PROTOCOL_OpenPGP);
     }
   else
     {
@@ -304,7 +310,7 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 
       file_item->filename_out = destination_filename (cipher_filename);
       /* Open the files */
-      op->cipher_fd = gpa_open_input (cipher_filename, &op->cipher, 
+      op->cipher_fd = gpa_open_input (cipher_filename, &op->cipher,
 				  GPA_OPERATION (op)->window);
       if (op->cipher_fd == -1)
 	/* FIXME: Error value.  */
@@ -319,6 +325,10 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 	  /* FIXME: Error value.  */
 	  return gpg_error (GPG_ERR_GENERAL);
 	}
+
+      gpgme_set_protocol (GPA_OPERATION (op)->context->ctx,
+                          is_cms_file (cipher_filename) ?
+                          GPGME_PROTOCOL_CMS : GPGME_PROTOCOL_OpenPGP);
     }
 
   /* Start the operation.  */
@@ -342,7 +352,7 @@ gpa_file_decrypt_operation_start (GpaFileDecryptOperation *op,
 
   /* Show and update the progress dialog.  */
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
-  gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG 
+  gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG
 				 (GPA_FILE_OPERATION (op)->progress_dialog),
 				 file_item->direct_name
 				 ? file_item->direct_name
@@ -385,7 +395,7 @@ gpa_file_decrypt_operation_next (GpaFileDecryptOperation *op)
 
 
 static void
-gpa_file_decrypt_operation_done_cb (GpaContext *context, 
+gpa_file_decrypt_operation_done_cb (GpaContext *context,
 				    gpg_error_t err,
 				    GpaFileDecryptOperation *op)
 {
@@ -436,7 +446,7 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
 	  file_item->filename_out = NULL;
 	}
       /* FIXME:CLIPBOARD: Server finish?  */
-      g_signal_emit_by_name (GPA_OPERATION (op), "completed", err); 
+      g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
     }
   else
     {
@@ -446,7 +456,7 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
       if (op->verify)
 	{
 	  gpgme_verify_result_t result;
- 
+
 	  result = gpgme_op_verify_result (GPA_OPERATION (op)->context->ctx);
 	  if (result->signatures)
 	    {
@@ -463,7 +473,7 @@ gpa_file_decrypt_operation_done_cb (GpaContext *context,
 	}
 
       /* Go to the next file in the list and decrypt it */
-      GPA_FILE_OPERATION (op)->current = g_list_next 
+      GPA_FILE_OPERATION (op)->current = g_list_next
 	(GPA_FILE_OPERATION (op)->current);
       gpa_file_decrypt_operation_next (op);
     }

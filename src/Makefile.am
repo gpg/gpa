@@ -165,6 +165,8 @@ gpa_SOURCES = get-path.h get-path.c \
               format-dn.c format-dn.h \
 	      convert.c convert.h \
               membuf.c membuf.h \
+	      parsetlv.c parsetlv.h \
+	      filetype.c filetype.h \
 	      utils.c $(gpa_w32_sources) $(gpa_cardman_sources)
 
 dndtest_SOURCES = dndtest.c

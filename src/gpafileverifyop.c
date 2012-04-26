@@ -1,7 +1,7 @@
 /* gpafileverifyop.c - The GpaOperation object.
    Copyright (C) 2003 Miguel Coca.
    Copyright (C) 2008 g10 Code GmbH.
-  
+
    This file is part of GPA.
 
    GPA is free software; you can redistribute it and/or modify it
@@ -34,15 +34,17 @@
 #include "gpa.h"
 #include "gtktools.h"
 #include "gpgmetools.h"
+#include "filetype.h"
 #include "gpafileverifyop.h"
 #include "verifydlg.h"
+
 
 /* Internal functions */
 static gboolean gpa_file_verify_operation_idle_cb (gpointer data);
 static void gpa_file_verify_operation_done_error_cb (GpaContext *context,
 						     gpg_error_t err,
 						     GpaFileVerifyOperation *op);
-static void gpa_file_verify_operation_done_cb (GpaContext *context, 
+static void gpa_file_verify_operation_done_cb (GpaContext *context,
 						gpg_error_t err,
 						GpaFileVerifyOperation *op);
 static void gpa_file_verify_operation_response_cb (GtkDialog *dialog,
@@ -55,11 +57,11 @@ static GObjectClass *parent_class = NULL;
 
 static void
 gpa_file_verify_operation_finalize (GObject *object)
-{  
+{
   GpaFileVerifyOperation *op = GPA_FILE_VERIFY_OPERATION (object);
 
   gtk_widget_destroy (op->dialog);
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -105,7 +107,7 @@ gpa_file_verify_operation_constructor
   op->dialog = gpa_file_verify_dialog_new (GPA_OPERATION (op)->window);
   g_signal_connect (G_OBJECT (op->dialog), "response",
 		    G_CALLBACK (gpa_file_verify_operation_response_cb), op);
-  
+
   return object;
 }
 
@@ -114,7 +116,7 @@ static void
 gpa_file_verify_operation_class_init (GpaFileVerifyOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_file_verify_operation_constructor;
@@ -125,7 +127,7 @@ GType
 gpa_file_verify_operation_get_type (void)
 {
   static GType file_verify_operation_type = 0;
-  
+
   if (!file_verify_operation_type)
     {
       static const GTypeInfo file_verify_operation_info =
@@ -140,12 +142,12 @@ gpa_file_verify_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_file_verify_operation_init,
       };
-      
-      file_verify_operation_type = g_type_register_static 
+
+      file_verify_operation_type = g_type_register_static
 	(GPA_FILE_OPERATION_TYPE, "GpaFileVerifyOperation",
 	 &file_verify_operation_info, 0);
     }
-  
+
   return file_verify_operation_type;
 }
 
@@ -155,7 +157,7 @@ GpaFileVerifyOperation*
 gpa_file_verify_operation_new (GtkWidget *window, GList *files)
 {
   GpaFileVerifyOperation *op;
-  
+
   op = g_object_new (GPA_FILE_VERIFY_OPERATION_TYPE,
 		     "window", window,
 		     "input_files", files,
@@ -169,20 +171,20 @@ gpa_file_verify_operation_new (GtkWidget *window, GList *files)
 static gboolean
 ask_use_detached_sig (const gchar *file, const gchar *sig, GtkWidget *parent)
 {
-  GtkWidget *dialog = gtk_message_dialog_new 
+  GtkWidget *dialog = gtk_message_dialog_new
     (GTK_WINDOW(parent), GTK_DIALOG_MODAL,
-     GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 
+     GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
      _("GPA found a file that could be a signature of %s. "
        "Would you like to verify it instead?\n\n"
        "The file found is: %s"), file, sig);
   gboolean result;
-  
+
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  _("_Yes"), GTK_RESPONSE_YES,
 			  _("_No"), GTK_RESPONSE_NO, NULL);
   result = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES);
   gtk_widget_destroy (dialog);
-  
+
   return result;
 }
 
@@ -217,7 +219,7 @@ is_detached_sig (const gchar *filename, gchar **signature_file,
       for (i = 0; i < sizeof(sig_extension)/sizeof(sig_extension[0]); i++)
 	{
 	  gchar *sig = g_strconcat (filename, sig_extension[i], NULL);
-	  
+
 	  if (g_file_test (sig, G_FILE_TEST_EXISTS) &&
 	      ask_use_detached_sig (filename, sig, window))
 	    {
@@ -253,7 +255,7 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 	  gpa_gpgme_warning (err);
 	  return FALSE;
 	}
-      
+
       err = gpgme_data_new (&op->plain);
       if (err)
 	{
@@ -262,16 +264,21 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 	  op->sig = NULL;
 	  return FALSE;
 	}
+
+      gpgme_set_protocol (GPA_OPERATION (op)->context->ctx,
+                          is_cms_data (file_item->direct_in,
+                                       file_item->direct_in_len) ?
+                          GPGME_PROTOCOL_CMS : GPGME_PROTOCOL_OpenPGP);
     }
   else
     {
       const gchar *sig_filename = file_item->filename_in;
-      
+
       if (is_detached_sig (sig_filename, &op->signature_file, &op->signed_file,
 			   GPA_OPERATION (op)->window))
 	{
 	  /* Allocate data objects for a detached signature */
-	  op->sig_fd = gpa_open_input (op->signature_file, &op->sig, 
+	  op->sig_fd = gpa_open_input (op->signature_file, &op->sig,
 				       GPA_OPERATION (op)->window);
 	  if (op->sig_fd == -1)
 	    {
@@ -290,7 +297,7 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
       else
 	{
 	  /* Allocate data object for non-detached signatures */
-	  op->sig_fd = gpa_open_input (sig_filename, &op->sig, 
+	  op->sig_fd = gpa_open_input (sig_filename, &op->sig,
 				       GPA_OPERATION (op)->window);
 	  if (op->sig_fd == -1)
 	    {
@@ -306,7 +313,12 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
 	  op->signed_text_fd = -1;
 	  op->signed_text = NULL;
 	}
+
+      gpgme_set_protocol (GPA_OPERATION (op)->context->ctx,
+                          is_cms_file (sig_filename) ?
+                          GPGME_PROTOCOL_CMS : GPGME_PROTOCOL_OpenPGP);
     }
+
 
   /* Start the operation */
   err = gpgme_op_verify_start (GPA_OPERATION (op)->context->ctx, op->sig,
@@ -318,7 +330,7 @@ gpa_file_verify_operation_start (GpaFileVerifyOperation *op,
     }
   /* Show and update the progress dialog */
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
-  gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG 
+  gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG
 				 (GPA_FILE_OPERATION (op)->progress_dialog),
 				 file_item->direct_name
 				 ? file_item->direct_name
@@ -342,7 +354,7 @@ gpa_file_verify_operation_next (GpaFileVerifyOperation *op)
 
 
 static void
-gpa_file_verify_operation_done_cb (GpaContext *context, 
+gpa_file_verify_operation_done_cb (GpaContext *context,
 				    gpg_error_t err,
 				    GpaFileVerifyOperation *op)
 {
@@ -394,7 +406,7 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
   else
     {
       gpgme_verify_result_t result;
-      
+
       result = gpgme_op_verify_result (GPA_OPERATION (op)->context->ctx);
       /* Add the file to the result dialog.  FIXME: Maybe we should
 	 use the filename without the directory.  */
@@ -421,7 +433,7 @@ gpa_file_verify_operation_done_cb (GpaContext *context,
 	}
 
       /* Go to the next file in the list and verify it */
-      GPA_FILE_OPERATION (op)->current = g_list_next 
+      GPA_FILE_OPERATION (op)->current = g_list_next
 	(GPA_FILE_OPERATION (op)->current);
       gpa_file_verify_operation_next (op);
     }
