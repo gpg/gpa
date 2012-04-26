@@ -68,6 +68,7 @@ typedef struct
   gboolean start_settings;
   gboolean start_only_server;
   gboolean disable_x509;
+  gboolean enable_logging;
   gchar *options_filename;
 } gpa_args_t;
 
@@ -116,6 +117,8 @@ static GOptionEntry option_entries[] =
       &cms_hack, NULL, NULL },
     { "disable-ticker", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &disable_ticker, NULL, NULL },
+    { "enable-logging", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
+      &args.enable_logging, NULL, NULL },
     { NULL }
   };
 
@@ -288,14 +291,13 @@ print_version (void)
 
 
 
-#ifdef G_OS_WIN32
 static void
 dummy_log_func (const gchar *log_domain, GLogLevelFlags log_level,
                 const gchar *message, gpointer user_data)
 {
   /* Nothing to be done.  */
 }
-#endif /*G_OS_WIN32*/
+
 
 int
 main (int argc, char *argv[])
@@ -306,8 +308,10 @@ main (int argc, char *argv[])
   char *keyservers_configname = NULL;
   int i;
 
-#ifdef __MINGW32__
-  hide_gpa_console_window();
+  /* Under W32 logging is disabled by default to prevent MS Windows NT
+     from opening a console.  */
+#ifndef G_OS_WIN32
+  args.enable_logging = 1;
 #endif
 
   /* Set locale before option parsing for UTF-8 conversion.  */
@@ -330,26 +334,26 @@ main (int argc, char *argv[])
       exit (1);
     }
 
+  if (!args.enable_logging)
+    {
+#ifdef __MINGW32__
+      hide_gpa_console_window();
+#endif
+      g_log_set_handler ("Glib", G_LOG_LEVEL_CRITICAL
+                         | G_LOG_LEVEL_WARNING
+                         | G_LOG_LEVEL_MESSAGE
+                         | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
 
-  /* Disable logging to prevent MS Windows NT from opening a
-     console.  */
+      g_log_set_handler ("Gdk", G_LOG_LEVEL_CRITICAL
+                         | G_LOG_LEVEL_WARNING
+                         | G_LOG_LEVEL_MESSAGE
+                         | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
 
-#ifdef G_OS_WIN32
-  g_log_set_handler ("Glib", G_LOG_LEVEL_CRITICAL
-                             | G_LOG_LEVEL_WARNING
-                             | G_LOG_LEVEL_MESSAGE
-                             | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
-
-  g_log_set_handler ("Gdk", G_LOG_LEVEL_CRITICAL
-                            | G_LOG_LEVEL_WARNING
-                            | G_LOG_LEVEL_MESSAGE
-                            | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
-
-  g_log_set_handler ("Gtk", G_LOG_LEVEL_CRITICAL
-                            | G_LOG_LEVEL_WARNING
-                            | G_LOG_LEVEL_MESSAGE
-                            | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
-#endif /*G_OS_WIN32*/
+      g_log_set_handler ("Gtk", G_LOG_LEVEL_CRITICAL
+                         | G_LOG_LEVEL_WARNING
+                         | G_LOG_LEVEL_MESSAGE
+                         | G_LOG_LEVEL_INFO, dummy_log_func, NULL);
+    }
 
   gtk_init (&argc, &argv);
 

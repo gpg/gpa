@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2012-04-18 10:03+0200\n"
+"POT-Creation-Date: 2012-04-24 10:19+0200\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -362,60 +362,60 @@ msgstr "純文字簽署 (&C)"
 msgid "_Detached signature"
 msgstr "純文字簽署 (&C)"
 
-#: src/gpa.c:97
+#: src/gpa.c:98
 #, fuzzy
 msgid "Output version information and exit"
 msgstr "顯示版本資料及離開"
 
-#: src/gpa.c:99
+#: src/gpa.c:100
 #, fuzzy
 msgid "Open key manager (default)"
 msgstr "開啟鑰圈編輯器 (預設)"
 
-#: src/gpa.c:101
+#: src/gpa.c:102
 #, fuzzy
 msgid "Open file manager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:103 src/gpa.h:80
+#: src/gpa.c:104 src/gpa.h:80
 #, fuzzy
 msgid "Open the card manager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:105
+#: src/gpa.c:106
 msgid "Open clipboard"
 msgstr ""
 
-#: src/gpa.c:107
+#: src/gpa.c:108
 #, fuzzy
 msgid "Open the settings dialog"
 msgstr "開啟設定視窗"
 
-#: src/gpa.c:109
+#: src/gpa.c:110
 msgid "Enable the UI server"
 msgstr ""
 
-#: src/gpa.c:111
+#: src/gpa.c:112
 msgid "Disable support for X.509"
 msgstr ""
 
-#: src/gpa.c:113
+#: src/gpa.c:114
 #, fuzzy
 msgid "Read options from file"
 msgstr "由檔案中讀取選項"
 
-#: src/gpa.c:317
+#: src/gpa.c:321
 msgid "[FILE...]"
 msgstr ""
 
-#: src/gpa.c:319
+#: src/gpa.c:323
 #, fuzzy
 msgid "Graphical frontend to GnuPG"
 msgstr ""
 "語法: gpa [選項]\n"
 "GnuPG的圖像介面\n"
 
-#: src/gpa.c:320
+#: src/gpa.c:324
 msgid "Please report bugs to <"
 msgstr "回報臭蟲至 <"
 
