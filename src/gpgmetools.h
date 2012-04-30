@@ -193,7 +193,7 @@ gpgme_key_t *gpa_gpgme_copy_keyarray (gpgme_key_t *keys);
 void gpa_gpgme_release_keyarray (gpgme_key_t *keys);
 
 /* Try switching to the gpg2 backend.  */
-void gpa_switch_to_gpg2 (void);
+void gpa_switch_to_gpg2 (const char *gpg_binary, const char *gpgsm_binary);
 
 /* Return true if the gpg engine has at least version NEED_VERSION.  */
 int is_gpg_version_at_least (const char *need_version);

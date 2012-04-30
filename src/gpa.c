@@ -1,6 +1,6 @@
 /* gpa.c - The GNU Privacy Assistant main file.
    Copyright (C) 2000-2002 G-N-U GmbH.
-   Copyright (C) 2005, 2008 g10 Code GmbH.
+   Copyright (C) 2005, 2008, 2012 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -70,6 +70,8 @@ typedef struct
   gboolean disable_x509;
   gboolean enable_logging;
   gchar *options_filename;
+  char  *gpg_binary;
+  char  *gpgsm_binary;
 } gpa_args_t;
 
 static gpa_args_t args;
@@ -78,7 +80,7 @@ static gpa_args_t args;
 /* The copyright notice.  */
 static const char *copyright =
 "Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
-"Copyright (C) 2008, 2009 g10 Code GmbH.\n"
+"Copyright (C) 2008, 2009, 2012 g10 Code GmbH.\n"
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "This is free software, and you are welcome to redistribute it\n"
 "under certain conditions.  See the file COPYING for details.\n";
@@ -119,6 +121,10 @@ static GOptionEntry option_entries[] =
       &disable_ticker, NULL, NULL },
     { "enable-logging", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &args.enable_logging, NULL, NULL },
+    { "gpg-binary", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME,
+      &args.gpg_binary, NULL, NULL },
+    { "gpgsm-binary", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME,
+      &args.gpgsm_binary, NULL, NULL },
     { NULL }
   };
 
@@ -396,8 +402,8 @@ main (int argc, char *argv[])
   }
 #endif
 
-  /* Prefer gpg2 over gpg1.  */
-  gpa_switch_to_gpg2 ();
+  /* Prefer gpg2 over gpg1 or use the requested gpg binary if given.  */
+  gpa_switch_to_gpg2 (args.gpg_binary, args.gpgsm_binary);
 
   /* Start the agent if needed.  We need to do this because the card
      manager uses direct assuan commands to the agent and thus expects

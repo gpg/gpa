@@ -1249,13 +1249,35 @@ compare_version_strings (const char *my_version,
   return 0;
 }
 
-/* Try switching to the gpg2 backend.  */
+/* Try switching to the gpg2 backend or the one given by filename.  */
 void
-gpa_switch_to_gpg2 (void)
+gpa_switch_to_gpg2 (const char *gpg_binary, const char *gpgsm_binary)
 {
   const char *oldname;
   char *newname;
   char *p;
+
+  if (gpgsm_binary)
+    {
+      if (!access (gpgsm_binary, X_OK))
+        {
+          gpgme_set_engine_info (GPGME_PROTOCOL_CMS, gpgsm_binary, NULL);
+          g_message ("switched CMS engine to `%s'", gpgsm_binary);
+        }
+      else
+        g_message ("problem accessing CMS engine `%s'", gpgsm_binary);
+    }
+
+  if (gpg_binary)
+    {
+      if (!access (gpg_binary, X_OK))
+        {
+          gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, gpg_binary, NULL);
+          g_message ("switched OpenPGP engine to `%s'", gpg_binary);
+          return;
+        }
+      g_message ("problem accessing OpenPGP engine `%s'", gpg_binary);
+    }
 
   if (is_gpg_version_at_least ("2.0.0"))
     return; /* Already using 2.0.  */
