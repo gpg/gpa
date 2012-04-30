@@ -1,3 +1,16 @@
+Noteworthy changes in version 0.9.2
+------------------------------------------------
+
+ * Adjust server mode to modern Libassuan.
+
+ * Add debug option --enable-logging for W32.
+
+ * Add debug options --gpg-binary and --gpgsm-binary.
+
+ * Properly process CMS data in the clipboard and with the server's
+   VERIFY_FILES and DECRYPT_FILES commands.
+
+
 Noteworthy changes in version 0.9.1 (2012-04-18)
 ------------------------------------------------
 
