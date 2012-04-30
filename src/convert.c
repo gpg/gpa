@@ -77,10 +77,16 @@ gpa_expiry_date_string (unsigned long expiry_time)
   gchar *result;
   GDate expiry_date;
 
-  if( expiry_time > 0 )
+  if (sizeof (time_t) <= 4 && expiry_time == (time_t)2145914603)
+    {
+      /* 2145914603 (2037-12-31 23:23:23) is used by GPGME to indicate
+         a time we can't represent. */
+      result = g_strdup (">= 2038");
+    }
+  else if ( expiry_time > 0 )
     {
       g_date_set_time_t (&expiry_date, (time_t) expiry_time);
-      result = g_strdup_printf ("%04d-%02d-%02d", 
+      result = g_strdup_printf ("%04d-%02d-%02d",
                                 g_date_get_year (&expiry_date),
                                 g_date_get_month (&expiry_date),
                                 g_date_get_day (&expiry_date));
