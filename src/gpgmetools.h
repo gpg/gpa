@@ -46,7 +46,7 @@ typedef struct
   gchar *name;
   gchar *email;
   gchar *comment;
-  
+
   /* Algorithm.  */
   gpa_keygen_algo_t algo;
 
@@ -123,7 +123,7 @@ void dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard);
 /* Begin generation of a key with the given parameters.  It prepares
    the parameters required by Gpgme and returns whatever
    gpgme_op_genkey_start returns.  */
-gpg_error_t gpa_generate_key_start (gpgme_ctx_t ctx, 
+gpg_error_t gpa_generate_key_start (gpgme_ctx_t ctx,
 				    gpa_keygen_para_t *params);
 
 /* Backup a key.  It exports both the public and secret keys to a
@@ -144,7 +144,7 @@ const gchar *gpa_key_validity_string (gpgme_key_t key);
 /* This is the function called by GPGME when it wants a
    passphrase.  */
 gpg_error_t gpa_passphrase_cb (void *hook, const char *uid_hint,
-			       const char *passphrase_info, 
+			       const char *passphrase_info,
 			       int prev_was_bad, int fd);
 
 
@@ -183,6 +183,12 @@ const gchar *gpa_gpgme_key_sig_get_sig_status (gpgme_key_sig_t sig,
 /* Return a string with the level of the key signature.  */
 const gchar *gpa_gpgme_key_sig_get_level (gpgme_key_sig_t sig);
 
+/* Return a human readable string with the status of the signature
+   SIG.  */
+char *gpa_gpgme_get_signature_desc (gpgme_ctx_t ctx, gpgme_signature_t sig,
+                                    char **r_keydesc, gpgme_key_t *r_key);
+
+
 /* Return a string listing the capabilities of a key.  */
 const gchar *gpa_get_key_capabilities_text (gpgme_key_t key);
 
@@ -201,7 +207,7 @@ int is_gpg_version_at_least (const char *need_version);
 /* Run a simple gpg command.  */
 gpg_error_t gpa_start_simple_gpg_command (gboolean (*cb)
                                           (void *opaque, char *line),
-                                          void *cb_arg, 
+                                          void *cb_arg,
                                           gpgme_protocol_t protocol,
                                           const char *first_arg, ...
                                           ) G_GNUC_NULL_TERMINATED;

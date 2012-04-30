@@ -1,6 +1,6 @@
 /* gpgmetools.h - Additional gpgme support functions for GPA.
    Copyright (C) 2002 Miguel Coca.
-   Copyright (C) 2005, 2008, 2009 g10 Code GmbH.
+   Copyright (C) 2005, 2008, 2009, 2012 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -1072,6 +1072,109 @@ gpa_gpgme_key_sig_get_level (gpgme_key_sig_t sig)
       break;
     }
 }
+
+
+/* Return a human readable string with the status of the signature
+   SIG.  If R_KEYDESC is not NULL, the description of the key
+   (e.g.. the user ID) will be stored as a malloced string at that
+   address; if no key is known, NULL will be stored.  If R_KEY is not
+   NULL, a key object will be stored at that address; NULL if no key
+   is known.  CTX is used as helper to figure out the key
+   description.  */
+char *
+gpa_gpgme_get_signature_desc (gpgme_ctx_t ctx, gpgme_signature_t sig,
+                              char **r_keydesc, gpgme_key_t *r_key)
+{
+  gpgme_key_t key = NULL;
+  char *keydesc = NULL;
+  char *sigdesc;
+  const char *sigstatus;
+
+  sigstatus = sig->status? gpg_strerror (sig->status) : "";
+
+  if (sig->fpr && ctx)
+    {
+      gpgme_get_key (ctx, sig->fpr, &key, 0);
+      if (key)
+        keydesc = gpa_gpgme_key_get_userid (key->uids);
+    }
+
+  if (sig->summary & GPGME_SIGSUM_RED)
+    {
+      if (keydesc && *sigstatus)
+        sigdesc = g_strdup_printf (_("Bad signature by %s: %s"),
+                                   keydesc, sigstatus);
+      else if (keydesc)
+        sigdesc = g_strdup_printf (_("Bad signature by %s"),
+                                   keydesc);
+      else if (sig->fpr && *sigstatus)
+        sigdesc = g_strdup_printf (_("Bad signature by unknown key "
+                                     "%s: %s"), sig->fpr, sigstatus);
+      else if (sig->fpr)
+        sigdesc = g_strdup_printf (_("Bad signature by unknown key "
+                                     "%s"), sig->fpr);
+      else if (*sigstatus)
+        sigdesc = g_strdup_printf (_("Bad signature by unknown key: "
+                                     "%s"), sigstatus);
+      else
+        sigdesc = g_strdup_printf (_("Bad signature by unknown key"));
+    }
+  else if (sig->summary & GPGME_SIGSUM_VALID)
+    {
+      if (keydesc && *sigstatus)
+        sigdesc = g_strdup_printf (_("Good signature by %s: %s"),
+                                   keydesc, sigstatus);
+      else if (keydesc)
+        sigdesc = g_strdup_printf (_("Good signature by %s"),
+                                   keydesc);
+      else if (sig->fpr && *sigstatus)
+        sigdesc = g_strdup_printf (_("Good signature by unknown key "
+                                     "%s: %s"), sig->fpr, sigstatus);
+      else if (sig->fpr)
+        sigdesc = g_strdup_printf (_("Good signature by unknown key "
+                                     "%s"), sig->fpr);
+      else if (*sigstatus)
+        sigdesc = g_strdup_printf (_("Good signature by unknown key: "
+                                     "%s"), sigstatus);
+      else
+        sigdesc = g_strdup_printf (_("Good signature by unknown key"));
+    }
+  else
+    {
+      if (keydesc && *sigstatus)
+        sigdesc = g_strdup_printf (_("Invalid signature by %s: %s"),
+                                   keydesc, sigstatus);
+      else if (keydesc)
+        sigdesc = g_strdup_printf (_("Invalid signature by %s"),
+                                   keydesc);
+      else if (sig->fpr && *sigstatus)
+        sigdesc = g_strdup_printf (_("Invalid signature by unknown key "
+                                     "%s: %s"), sig->fpr, sigstatus);
+      else if (sig->fpr)
+        sigdesc = g_strdup_printf (_("Invalid signature by unknown key "
+                                     "%s"), sig->fpr);
+      else if (*sigstatus)
+        sigdesc = g_strdup_printf (_("Invalid signature by unknown "
+                                     "key: %s"), sigstatus);
+      else
+        sigdesc = g_strdup_printf (_("Invalid signature by unknown "
+                                     "key"));
+    }
+
+
+  if (r_keydesc)
+    *r_keydesc = keydesc;
+  else
+    g_free (keydesc);
+
+  if (r_key)
+    *r_key = key;
+  else
+    gpgme_key_unref (key);
+
+  return sigdesc;
+}
+
 
 
 /* Return a string listing the capabilities of a key.  */

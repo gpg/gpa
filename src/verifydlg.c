@@ -1,6 +1,6 @@
 /* fileverifydlg.c - Dialog for verifying files.
    Copyright (C) 2000, 2001 G-N-U GmbH.
-   Copyright (C) 2005 g10 Code GmbH.
+   Copyright (C) 2005, 2012 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -45,7 +45,7 @@ gpa_file_verify_dialog_get_property (GObject     *object,
 				      GParamSpec  *pspec)
 {
   GpaFileVerifyDialog *dialog = GPA_FILE_VERIFY_DIALOG (object);
-  
+
   switch (prop_id)
     {
     case PROP_WINDOW:
@@ -80,7 +80,7 @@ gpa_file_verify_dialog_set_property (GObject     *object,
 
 static void
 gpa_file_verify_dialog_finalize (GObject *object)
-{  
+{
   GpaFileVerifyDialog *dialog = GPA_FILE_VERIFY_DIALOG (object);
 
   g_object_unref (dialog->ctx);
@@ -132,9 +132,9 @@ static void
 gpa_file_verify_dialog_class_init (GpaFileVerifyDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->constructor = gpa_file_verify_dialog_constructor;
   object_class->finalize = gpa_file_verify_dialog_finalize;
   object_class->set_property = gpa_file_verify_dialog_set_property;
@@ -143,7 +143,7 @@ gpa_file_verify_dialog_class_init (GpaFileVerifyDialogClass *klass)
   /* Properties */
   g_object_class_install_property (object_class,
 				   PROP_WINDOW,
-				   g_param_spec_object 
+				   g_param_spec_object
 				   ("window", "Parent window",
 				    "Parent window", GTK_TYPE_WIDGET,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
@@ -153,7 +153,7 @@ GType
 gpa_file_verify_dialog_get_type (void)
 {
   static GType verify_dialog_type = 0;
-  
+
   if (!verify_dialog_type)
     {
       static const GTypeInfo verify_dialog_info =
@@ -168,12 +168,12 @@ gpa_file_verify_dialog_get_type (void)
 	  0,              /* n_preallocs */
 	  (GInstanceInitFunc) gpa_file_verify_dialog_init,
 	};
-      
+
       verify_dialog_type = g_type_register_static (GTK_TYPE_DIALOG,
 						    "GpaFileVerifyDialog",
 						    &verify_dialog_info, 0);
     }
-  
+
   return verify_dialog_type;
 }
 
@@ -188,6 +188,8 @@ typedef struct
   unsigned long summary;
   time_t created;
   time_t expire;
+  char *sigdesc;
+  char *keydesc;
 } SignatureData;
 
 typedef enum
@@ -195,6 +197,7 @@ typedef enum
   SIG_KEYID_COLUMN,
   SIG_STATUS_COLUMN,
   SIG_USERID_COLUMN,
+  SIG_DESC_COLUMN,
   SIG_N_COLUMNS
 } SignatureListColumn;
 
@@ -258,27 +261,36 @@ add_signature_to_model (GtkListStore *store, SignatureData *data)
   if (data->key)
     {
       keyid = gpa_gpgme_key_get_short_keyid (data->key);
-      userid = gpa_gpgme_key_get_userid (data->key->uids);
-      status = signature_status_label (data);
+    }
+  else if (data->fpr && strlen (data->fpr) > 8)
+    {
+      /* We use the last 8 bytes of fingerprint for the keyID. */
+      keyid = data->fpr + strlen (data->fpr) - 8;
     }
   else
     {
-      /* This is really the keyID */
-      keyid = data->fpr + 8;
-      /* Dup the static string, so that we are always safe free'ing it*/
-      userid = g_strdup (_("[Unknown user ID]"));
-      status = signature_status_label (data);
+      keyid = "";
     }
+
+  status = signature_status_label (data);
+
+  userid = data->keydesc;
+  if (!userid)
+    userid = _("[Unknown user ID]");
+
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-		      SIG_KEYID_COLUMN, keyid, 
+		      SIG_KEYID_COLUMN, keyid,
 		      SIG_STATUS_COLUMN, status,
-		      SIG_USERID_COLUMN, userid, -1);
+		      SIG_USERID_COLUMN, userid,
+                      SIG_DESC_COLUMN, data->sigdesc,
+                      -1);
 
-  g_free (userid);
   g_free (status);
-  /* Someday we might want to keep the SignatureData in the table */
+
   gpgme_key_unref (data->key);
+  g_free (data->sigdesc);
+  g_free (data->keydesc);
   g_free (data);
 }
 
@@ -293,13 +305,13 @@ fill_sig_model (GtkListStore *store, gpgme_signature_t sigs,
   for (sig = sigs; sig; sig = sig->next)
     {
       data = g_malloc (sizeof (SignatureData));
-      data->fpr = g_strdup (sig->fpr);
-      data->key = NULL;
-      gpgme_get_key (ctx, sig->fpr, &data->key, FALSE);
+      data->fpr = sig->fpr? g_strdup (sig->fpr) : NULL;
       data->validity = sig->validity;
       data->summary = sig->summary;
       data->created = sig->timestamp;
       data->expire = sig->exp_timestamp;
+      data->sigdesc = gpa_gpgme_get_signature_desc (ctx, sig,
+                                                    &data->keydesc, &data->key);
       add_signature_to_model (store, data);
     }
 }
@@ -315,7 +327,7 @@ signature_list (gpgme_signature_t sigs, gpgme_ctx_t ctx)
   GtkWidget *list;
 
   store = gtk_list_store_new (SIG_N_COLUMNS, G_TYPE_STRING,
-			      G_TYPE_STRING, G_TYPE_STRING);
+			      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
   list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
   gtk_widget_set_size_request (list, 400, 100);
@@ -328,13 +340,19 @@ signature_list (gpgme_signature_t sigs, gpgme_ctx_t ctx)
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Status"), renderer,
-						     "markup", 
+						     "markup",
 						     SIG_STATUS_COLUMN, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("User Name"), renderer,
 						     "text", SIG_USERID_COLUMN,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Description"), renderer,
+						     "text", SIG_DESC_COLUMN,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
@@ -350,7 +368,7 @@ verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
   GtkWidget *vbox;
   GtkWidget *list;
   GtkWidget *label;
-  
+
   vbox = gtk_vbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
@@ -382,7 +400,7 @@ verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
 GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent)
 {
   GpaFileVerifyDialog *dialog;
-  
+
   dialog = g_object_new (GPA_FILE_VERIFY_DIALOG_TYPE,
 			 "window", parent,
 			 NULL);
@@ -391,7 +409,7 @@ GtkWidget *gpa_file_verify_dialog_new (GtkWidget *parent)
 }
 
 void
-gpa_file_verify_dialog_set_title (GpaFileVerifyDialog *dialog, 
+gpa_file_verify_dialog_set_title (GpaFileVerifyDialog *dialog,
                                   const char *title)
 {
   if (dialog && title && *title)
@@ -406,10 +424,10 @@ void gpa_file_verify_dialog_add_file (GpaFileVerifyDialog *dialog,
 				      gpgme_signature_t sigs)
 {
   GtkWidget *page;
-  
-  page = verify_file_page (sigs, signed_file, signature_file, 
+
+  page = verify_file_page (sigs, signed_file, signature_file,
 			   dialog->ctx->ctx);
-  
+
   gtk_notebook_append_page (GTK_NOTEBOOK (dialog->notebook), page,
 			    gtk_label_new (filename));
 }

@@ -7,7 +7,7 @@
    under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
- 
+
    GPA is distributed in the hope that it will be useful, but WITHOUT
    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
    or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
@@ -28,7 +28,7 @@
 #include "gpastreamverifyop.h"
 
 
-struct _GpaStreamVerifyOperation 
+struct _GpaStreamVerifyOperation
 {
   GpaStreamOperation parent;
 
@@ -48,7 +48,7 @@ struct _GpaStreamVerifyOperationClass
 
 
 /* Indentifiers for our properties. */
-enum 
+enum
   {
     PROP_0,
     PROP_SILENT,
@@ -72,7 +72,7 @@ gpa_stream_verify_operation_get_property (GObject *object, guint prop_id,
 					  GValue *value, GParamSpec *pspec)
 {
   GpaStreamVerifyOperation *op = GPA_STREAM_VERIFY_OPERATION (object);
-  
+
   switch (prop_id)
     {
     case PROP_SILENT:
@@ -178,7 +178,7 @@ static void
 gpa_stream_verify_operation_class_init (GpaStreamVerifyOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_stream_verify_operation_ctor;
@@ -187,13 +187,13 @@ gpa_stream_verify_operation_class_init (GpaStreamVerifyOperationClass *klass)
   object_class->get_property = gpa_stream_verify_operation_get_property;
 
   g_object_class_install_property (object_class, PROP_SILENT,
-				   g_param_spec_boolean 
+				   g_param_spec_boolean
 				   ("silent", "Silent",
 				    "Flag requesting silent operation.", FALSE,
 				    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_PROTOCOL,
-     g_param_spec_int 
+     g_param_spec_int
      ("protocol", "Protocol",
       "The gpgme protocol currently selected.",
       GPGME_PROTOCOL_OpenPGP, GPGME_PROTOCOL_UNKNOWN, GPGME_PROTOCOL_UNKNOWN,
@@ -206,7 +206,7 @@ GType
 gpa_stream_verify_operation_get_type (void)
 {
   static GType stream_verify_operation_type = 0;
-  
+
   if (! stream_verify_operation_type)
     {
       static const GTypeInfo stream_verify_operation_info =
@@ -221,24 +221,24 @@ gpa_stream_verify_operation_get_type (void)
         0,    /* n_preallocs */
         (GInstanceInitFunc) gpa_stream_verify_operation_init,
       };
-      
-      stream_verify_operation_type = g_type_register_static 
+
+      stream_verify_operation_type = g_type_register_static
 	(GPA_STREAM_OPERATION_TYPE, "GpaStreamVerifyOperation",
 	 &stream_verify_operation_info, 0);
     }
-  
+
   return stream_verify_operation_type;
 }
 
 
 /* The verify status dialog has returned.  */
-static void 
+static void
 response_cb (GtkDialog *dialog, int response, void *user_data)
 {
   GpaStreamVerifyOperation *op = user_data;
 
   gtk_widget_hide (GTK_WIDGET (dialog));
-  
+
   g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
 }
 
@@ -279,7 +279,7 @@ my_percent_escape (const gchar *src)
 	  *(dst++) = '%';
 	  *(dst++) = '2';
 	  *(dst++) = '5';
-	}	  
+	}
       else if (*src == ':')
 	{
 	  /* The colon is used as field separator.  */
@@ -320,8 +320,7 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamVerifyOperation *op)
 
       while (sig)
 	{
-	  gpgme_key_t key = NULL;
-	  char *keydesc = NULL;
+	  char *keydesc;
 	  char *sigsum;
 	  char *sigdesc;
 	  char *sigdesc_esc;
@@ -336,108 +335,35 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamVerifyOperation *op)
 	  else
 	    sigsum = "red";
 
-	  sigstatus = sig->status? gpg_strerror (sig->status) : "";
+          sigdesc = gpa_gpgme_get_signature_desc
+            (GPA_OPERATION (op)->context->ctx, sig, &keydesc, NULL);
 
-	  if (sig->fpr)
-	    {
-	      gpgme_get_key (GPA_OPERATION (op)->context->ctx,
-			     sig->fpr, &key, 0);
-	      if (key)
-		keydesc = gpa_gpgme_key_get_userid (key->uids);
-	    }
-	  
-	  if (sig->summary & GPGME_SIGSUM_RED)
-	    {
-	      if (keydesc && *sigstatus)
-		sigdesc = g_strdup_printf (_("Bad signature by %s: %s"),
-					   keydesc, sigstatus);
-	      else if (keydesc)
-		sigdesc = g_strdup_printf (_("Bad signature by %s"),
-					   keydesc);
-	      else if (sig->fpr && *sigstatus)
-		sigdesc = g_strdup_printf (_("Bad signature by unknown key "
-					     "%s: %s"), sig->fpr, sigstatus);
-	      else if (sig->fpr)
-		sigdesc = g_strdup_printf (_("Bad signature by unknown key "
-					     "%s"), sig->fpr);
-	      else if (*sigstatus)
-		sigdesc = g_strdup_printf (_("Bad signature by unknown key: "
-					     "%s"), sigstatus);
-	      else
-		sigdesc = g_strdup_printf (_("Bad signature by unknown key"));
-	    }
-	  else if (sig->summary & GPGME_SIGSUM_VALID)
-	    {
-	      if (keydesc && *sigstatus)
-		sigdesc = g_strdup_printf (_("Good signature by %s: %s"),
-					   keydesc, sigstatus);
-	      else if (keydesc)
-		sigdesc = g_strdup_printf (_("Good signature by %s"),
-					   keydesc);
-	      else if (sig->fpr && *sigstatus)
-		sigdesc = g_strdup_printf (_("Good signature by unknown key "
-					     "%s: %s"), sig->fpr, sigstatus);
-	      else if (sig->fpr)
-		sigdesc = g_strdup_printf (_("Good signature by unknown key "
-					     "%s"), sig->fpr);
-	      else if (*sigstatus)
-		sigdesc = g_strdup_printf (_("Good signature by unknown key: "
-					     "%s"), sigstatus);
-	      else
-		sigdesc = g_strdup_printf (_("Good signature by unknown key"));
-	    }
-	  else
-	    {
-	      if (keydesc && *sigstatus)
-		sigdesc = g_strdup_printf (_("Invalid signature by %s: %s"),
-					   keydesc, sigstatus);
-	      else if (keydesc)
-		sigdesc = g_strdup_printf (_("Invalid signature by %s"),
-					   keydesc);
-	      else if (sig->fpr && *sigstatus)
-		sigdesc = g_strdup_printf (_("Invalid signature by unknown key "
-					     "%s: %s"), sig->fpr, sigstatus);
-	      else if (sig->fpr)
-		sigdesc = g_strdup_printf (_("Invalid signature by unknown key "
-					     "%s"), sig->fpr);
-	      else if (*sigstatus)
-		sigdesc = g_strdup_printf (_("Invalid signature by unknown "
-					     "key: %s"), sigstatus);
-	      else
-		sigdesc = g_strdup_printf (_("Invalid signature by unknown "
-					     "key"));
-	    }
-	  
 	  sigdesc_esc = my_percent_escape (sigdesc);
-	  
+
 	  /* FIXME: Error handling.  */
 	  err = gpa_operation_write_status (GPA_OPERATION (op), "SIGSTATUS",
 					    sigsum, sigdesc_esc, NULL);
-	  
+
 	  g_free (sigdesc);
 	  g_free (sigdesc_esc);
-	  
-	  if (key)
-	    gpgme_key_unref (key);
-	  if (keydesc)
-	    g_free (keydesc);
-	  
+          g_free (keydesc);
+
 	  sig = sig->next;
 	}
     }
 
   if (err || op->silent)
-    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);    
+    g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
   else
     {
       gpgme_verify_result_t result;
-      
+
       result = gpgme_op_verify_result (GPA_OPERATION (op)->context->ctx);
       gpa_file_verify_dialog_add_file (GPA_FILE_VERIFY_DIALOG (op->dialog),
 				       _("Document"), NULL, NULL,
 				       result->signatures);
 
-      gtk_widget_show_all (op->dialog);     
+      gtk_widget_show_all (op->dialog);
     }
 }
 
