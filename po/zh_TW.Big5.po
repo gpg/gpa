@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2012-04-24 10:19+0200\n"
+"POT-Creation-Date: 2012-04-26 17:53+0200\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -512,13 +512,13 @@ msgstr ""
 "要確定發放這些公鑰嗎 ?"
 
 #: src/gpaexportserverop.c:134 src/gpafileencryptop.c:478
-#: src/gpafileverifyop.c:181 src/gpgmetools.c:177 src/keydeletedlg.c:44
+#: src/gpafileverifyop.c:183 src/gpgmetools.c:177 src/keydeletedlg.c:44
 #: src/keydeletedlg.c:93 src/keysigndlg.c:61
 msgid "_Yes"
 msgstr "是 (&Y)"
 
 #: src/gpaexportserverop.c:135 src/gpafileencryptop.c:479
-#: src/gpafileverifyop.c:182 src/gpgmetools.c:178 src/keydeletedlg.c:46
+#: src/gpafileverifyop.c:184 src/gpgmetools.c:178 src/keydeletedlg.c:46
 #: src/keydeletedlg.c:95 src/keysigndlg.c:63
 msgid "_No"
 msgstr "否 (&N)"
@@ -527,32 +527,32 @@ msgstr "否 (&N)"
 msgid "The keys have been sent to the server."
 msgstr "公鑰已被傳到公鑰佝服器."
 
-#: src/gpafiledecryptop.c:154
+#: src/gpafiledecryptop.c:155
 msgid "Decrypting..."
 msgstr "解密中..."
 
-#: src/gpafiledecryptop.c:499 src/gpafileverifyop.c:467
+#: src/gpafiledecryptop.c:509 src/gpafileverifyop.c:479
 #, fuzzy, c-format
 msgid "\"%s\" contained no OpenPGP data."
 msgstr "檔案 \"%s\" 沒有正確的 OpenPGP 資料."
 
-#: src/gpafiledecryptop.c:500 src/gpafileverifyop.c:468
+#: src/gpafiledecryptop.c:510 src/gpafileverifyop.c:480
 #, fuzzy, c-format
 msgid "The file \"%s\" contained no OpenPGPdata."
 msgstr "檔案 \"%s\" 沒有正確的 OpenPGP 資料."
 
-#: src/gpafiledecryptop.c:510
+#: src/gpafiledecryptop.c:520
 #, fuzzy, c-format
 msgid "\"%s\" contained no valid encrypted data."
 msgstr "檔案 \"%s\" 沒有正確的加密資料."
 
-#: src/gpafiledecryptop.c:512
+#: src/gpafiledecryptop.c:522
 #, fuzzy, c-format
 msgid "The file \"%s\" contained no validencrypted data."
 msgstr "檔案 \"%s\" 沒有正確的加密資料."
 
-#: src/gpafiledecryptop.c:521 src/gpafileencryptop.c:770
-#: src/gpafilesignop.c:524 src/gpafileverifyop.c:478 src/gpakeyexpireop.c:240
+#: src/gpafiledecryptop.c:531 src/gpafileencryptop.c:770
+#: src/gpafilesignop.c:524 src/gpafileverifyop.c:490 src/gpakeyexpireop.c:240
 #: src/gpakeypasswdop.c:209 src/gpakeysignop.c:237 src/gpastreamsignop.c:421
 msgid "Wrong passphrase!"
 msgstr "密碼錯誤!"
@@ -618,11 +618,11 @@ msgstr "沒有選擇簽署的檔案"
 msgid "Signing..."
 msgstr "簽署中..."
 
-#: src/gpafileverifyop.c:102
+#: src/gpafileverifyop.c:104
 msgid "Verifying..."
 msgstr "驗證中..."
 
-#: src/gpafileverifyop.c:175
+#: src/gpafileverifyop.c:177
 #, c-format
 msgid ""
 "GPA found a file that could be a signature of %s. Would you like to verify "

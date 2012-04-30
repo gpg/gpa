@@ -15,7 +15,7 @@
  * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.  
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <config.h>
@@ -24,7 +24,7 @@
 #include "convert.h"
 
 
-static gchar *unit_expiry_time[4] = 
+static gchar *unit_expiry_time[4] =
   {
     N_("days"),
     N_("weeks"),
@@ -68,7 +68,7 @@ gpa_time_unit_from_string (const char *string)
   if (i < DIM(unit_expiry_time) && i < DIM(unit_time))
     result = unit_time[i];
   return result;
-} 
+}
 
 
 char *
@@ -94,7 +94,7 @@ gpa_expiry_date_string (unsigned long expiry_time)
   else
     result = g_strdup (_("never expires"));
   return result;
-} 
+}
 
 
 char *
@@ -106,7 +106,7 @@ gpa_creation_date_string (unsigned long creation_time)
   if( creation_time > 0 )
     {
       g_date_set_time_t (&creation_date, (time_t) creation_time);
-      result = g_strdup_printf ("%04d-%02d-%02d", 
+      result = g_strdup_printf ("%04d-%02d-%02d",
                                 g_date_get_year (&creation_date),
                                 g_date_get_month (&creation_date),
                                 g_date_get_day (&creation_date));
@@ -114,7 +114,7 @@ gpa_creation_date_string (unsigned long creation_time)
   else
     result = g_strdup (_("unknown"));
   return result;
-} 
+}
 
 const char *
 gpa_sex_char_to_string (char sex)

@@ -17,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <config.h>
 
 #include <glib/gstdio.h>
@@ -53,7 +53,7 @@ static GObjectClass *parent_class = NULL;
 typedef enum
 {
   /* These are the displayed columns */
-  GPA_KEYLIST_COLUMN_IMAGE, 
+  GPA_KEYLIST_COLUMN_IMAGE,
   GPA_KEYLIST_COLUMN_KEYTYPE,
   GPA_KEYLIST_COLUMN_KEYID,
   GPA_KEYLIST_COLUMN_EXPIRY,
@@ -78,7 +78,7 @@ static void gpa_keylist_end (gpointer data);
 
 
 
-/************************************************************ 
+/************************************************************
  ******************  Object Management  *********************
  ************************************************************/
 
@@ -159,7 +159,7 @@ gpa_keylist_set_property (GObject     *object,
 
 static void
 gpa_keylist_dispose (GObject *object)
-{  
+{
   GpaKeyList *list = GPA_KEYLIST (object);
 
   list->disposed = 1;
@@ -170,7 +170,7 @@ gpa_keylist_dispose (GObject *object)
 
 static void
 gpa_keylist_finalize (GObject *object)
-{  
+{
   GpaKeyList *list = GPA_KEYLIST (object);
 
   /* Dereference all keys in the list */
@@ -188,7 +188,7 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
 {
   GpaKeyList *list = GPA_KEYLIST (instance);
   GtkListStore *store;
-  GtkTreeSelection *selection; 
+  GtkTreeSelection *selection;
 
   /* Setup the model.  */
   store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
@@ -243,7 +243,7 @@ gpa_keylist_class_init (void *class_ptr, void *class_data)
 {
   GpaKeyListClass *klass = class_ptr;
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->dispose = gpa_keylist_dispose;
@@ -251,7 +251,7 @@ gpa_keylist_class_init (void *class_ptr, void *class_data)
   object_class->set_property = gpa_keylist_set_property;
   object_class->get_property = gpa_keylist_get_property;
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_PUBLIC_ONLY,
      g_param_spec_boolean
      ("public-only", "Public-only",
@@ -259,38 +259,38 @@ gpa_keylist_class_init (void *class_ptr, void *class_data)
       FALSE,
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_PROTOCOL,
-     g_param_spec_int 
+     g_param_spec_int
      ("protocol", "Protocol",
       "The gpgme protocol used to restruct the key listing.",
       GPGME_PROTOCOL_OpenPGP, GPGME_PROTOCOL_UNKNOWN, GPGME_PROTOCOL_UNKNOWN,
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_INITIAL_KEYS,
-     g_param_spec_pointer 
+     g_param_spec_pointer
      ("initial-keys", "Initial-keys",
       "An array of gpgme_key_t with the initial set of keys or NULL.",
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_INITIAL_PATTERN,
-     g_param_spec_string 
+     g_param_spec_string
      ("initial-pattern", "Initial-pattern",
       "A string with pattern to be used for a key search or NULL.",
       NULL,
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_REQUESTED_USAGE,
-     g_param_spec_int 
+     g_param_spec_int
      ("requested-usage", "Requested-Key-Usage",
       "A bit vector describing the requested key usage (capabilities).",
-      0, 65535, 0, 
+      0, 65535, 0,
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_ONLY_USABLE_KEYS,
      g_param_spec_boolean
      ("only-usable-keys", "Only-usable-keys",
@@ -307,7 +307,7 @@ GType
 gpa_keylist_get_type (void)
 {
   static GType keylist_type = 0;
-  
+
   if (!keylist_type)
     {
       static const GTypeInfo keylist_info =
@@ -322,18 +322,18 @@ gpa_keylist_get_type (void)
         0,              /* n_preallocs */
         gpa_keylist_init,
       };
-      
+
       keylist_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
                                              "GpaKeyList",
                                              &keylist_info, 0);
     }
-  
+
   return keylist_type;
 }
 
 
 
-/************************************************************ 
+/************************************************************
  ******************  Internal Functions  ********************
  ************************************************************/
 
@@ -355,7 +355,7 @@ add_trustdb_dialog (GpaKeyList * keylist)
      shown at times when it's not needed. But it shouldn't appear for
      long those times.  */
   keylist->dialog = gtk_message_dialog_new
-    (GTK_WINDOW (keylist->window), GTK_DIALOG_MODAL, 
+    (GTK_WINDOW (keylist->window), GTK_DIALOG_MODAL,
      GTK_MESSAGE_INFO, GTK_BUTTONS_NONE,
      _("GnuPG is rebuilding the trust database.\n"
        "This might take a few seconds."));
@@ -363,7 +363,7 @@ add_trustdb_dialog (GpaKeyList * keylist)
   /* Wait a second before displaying the dialog. This avoids most
      "false alarms".  That is the message will not be shown if GnuPG
      does not run a long check trustdb.  */
-  keylist->timeout_id = g_timeout_add (1000, (GSourceFunc) display_dialog, 
+  keylist->timeout_id = g_timeout_add (1000, (GSourceFunc) display_dialog,
 				       keylist);
 }
 
@@ -416,7 +416,7 @@ is_zero_fpr (const char *fpr)
 
 
 /* Note that this function takes ownership of KEY.  */
-static void 
+static void
 gpa_keylist_next (gpgme_key_t key, gpointer data)
 {
   GpaKeyList *list = data;
@@ -482,13 +482,13 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
     has_secret = 0;
   else
     has_secret = (!is_zero_fpr (key->subkeys->fpr)
-                  && gpa_keytable_lookup_key 
+                  && gpa_keytable_lookup_key
                   (gpa_keytable_get_secret_instance(), key->subkeys->fpr));
 
   /* Append the key to the list */
   gtk_list_store_append (store, &iter);
 
-  /* Set an appropiate value for sorting revoked and expired keys. This 
+  /* Set an appropiate value for sorting revoked and expired keys. This
    * includes a hack for forcing a value to a range outside the
    * usual validity values */
   if (key->subkeys->revoked)
@@ -501,19 +501,19 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
       val_value = GPGME_VALIDITY_UNKNOWN;
 
   gtk_list_store_set (store, &iter,
-		      GPA_KEYLIST_COLUMN_KEYTYPE, keytype, 
-		      GPA_KEYLIST_COLUMN_KEYID, keyid, 
+		      GPA_KEYLIST_COLUMN_KEYTYPE, keytype,
+		      GPA_KEYLIST_COLUMN_KEYID, keyid,
 		      GPA_KEYLIST_COLUMN_EXPIRY, expiry,
 		      GPA_KEYLIST_COLUMN_OWNERTRUST, ownertrust,
 		      GPA_KEYLIST_COLUMN_VALIDITY, validity,
 		      GPA_KEYLIST_COLUMN_USERID, userid,
-		      GPA_KEYLIST_COLUMN_KEY, key, 
+		      GPA_KEYLIST_COLUMN_KEY, key,
 		      GPA_KEYLIST_COLUMN_HAS_SECRET, has_secret,
 		      /* Set "no expiration" to a large value for sorting */
-		      GPA_KEYLIST_COLUMN_EXPIRY_TS, 
-		      key->subkeys->expires ? 
+		      GPA_KEYLIST_COLUMN_EXPIRY_TS,
+		      key->subkeys->expires ?
 		      key->subkeys->expires : G_MAXULONG,
-		      GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE, 
+		      GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE,
 		      key->owner_trust,
 		      /* Set revoked and expired keys to "never trust"
 		         for sorting.  */
@@ -528,16 +528,16 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
 }
 
 
-static void 
+static void
 gpa_keylist_end (gpointer data)
 {
   GpaKeyList *list = data;
-  
+
   remove_trustdb_dialog (list);
 }
 
 
-static void 
+static void
 gpa_keylist_clear_columns (GpaKeyList *keylist)
 {
   GList *columns, *i;
@@ -551,7 +551,7 @@ gpa_keylist_clear_columns (GpaKeyList *keylist)
 }
 
 
-static void 
+static void
 setup_columns (GpaKeyList *keylist, gboolean detailed)
 {
   GtkCellRenderer *renderer;
@@ -567,29 +567,29 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
 	 and thus no scaling or padding is done (see icons.c).  */
       g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
 
-      column = gtk_tree_view_column_new_with_attributes 
+      column = gtk_tree_view_column_new_with_attributes
         (NULL, renderer, "stock-id",
          GPA_KEYLIST_COLUMN_IMAGE,
          NULL);
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-      gtk_tree_view_column_set_sort_column_id 
+      gtk_tree_view_column_set_sort_column_id
         (column, GPA_KEYLIST_COLUMN_HAS_SECRET);
       gtk_tree_view_column_set_sort_indicator (column, TRUE);
     }
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes 
+  column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "text", GPA_KEYLIST_COLUMN_KEYTYPE, NULL);
-  gpa_set_column_title 
+  gpa_set_column_title
     (column, " ",
      _("This columns lists the type of the certificate."
        "  A 'P' denotes OpenPGP and a 'X' denotes X.509 (S/MIME)."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-    
+
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes 
+  column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "text", GPA_KEYLIST_COLUMN_KEYID, NULL);
-  gpa_set_column_title 
+  gpa_set_column_title
     (column, _("Key ID"),
      _("The key ID is a short number to identify a certificate."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
@@ -602,7 +602,7 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes
         (NULL, renderer, "text", GPA_KEYLIST_COLUMN_EXPIRY, NULL);
-      gpa_set_column_title 
+      gpa_set_column_title
         (column, _("Expiry Date"),
          _("The Expiry Date is the date until the certificate is valid."));
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
@@ -611,36 +611,36 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
       renderer = gtk_cell_renderer_text_new ();
-      column = gtk_tree_view_column_new_with_attributes 
+      column = gtk_tree_view_column_new_with_attributes
         (NULL, renderer, "text", GPA_KEYLIST_COLUMN_OWNERTRUST, NULL);
-      gpa_set_column_title 
+      gpa_set_column_title
         (column, _("Owner Trust"),
          _("The Owner Trust has been set by you and describes how far you"
            " trust the holder of the certificate to correctly sign (certify)"
            " other certificates.  It is only meaningful for OpenPGP."));
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-      gtk_tree_view_column_set_sort_column_id 
+      gtk_tree_view_column_set_sort_column_id
         (column, GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE);
       gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes
         (NULL, renderer, "text", GPA_KEYLIST_COLUMN_VALIDITY, NULL);
-      gpa_set_column_title 
-        (column, _("Validity"), 
+      gpa_set_column_title
+        (column, _("Validity"),
          _("The Validity describes the trust level the system has"
            " in this certificate.  That is how sure it is that the named"
            " user is actually that user."));
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-      gtk_tree_view_column_set_sort_column_id 
+      gtk_tree_view_column_set_sort_column_id
         (column, GPA_KEYLIST_COLUMN_VALIDITY_VALUE);
       gtk_tree_view_column_set_sort_indicator (column, TRUE);
     }
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes 
+  column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "text", GPA_KEYLIST_COLUMN_USERID, NULL);
-  gpa_set_column_title 
+  gpa_set_column_title
     (column, _("User Name"),
      _("The User Name is the name and often also the email address "
        " of the certificate."));
@@ -651,7 +651,7 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
 
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 
@@ -695,7 +695,7 @@ gpa_keylist_new_with_keys (GtkWidget *window, gboolean public_only,
 
 
 /* Set the key list in "brief" mode.  */
-void 
+void
 gpa_keylist_set_brief (GpaKeyList *keylist)
 {
   setup_columns (keylist, FALSE);
@@ -703,7 +703,7 @@ gpa_keylist_set_brief (GpaKeyList *keylist)
 
 
 /* Set the key list in "detailed" mode.  */
-void 
+void
 gpa_keylist_set_detailed (GpaKeyList * keylist)
 {
   setup_columns (keylist, TRUE);
@@ -711,34 +711,34 @@ gpa_keylist_set_detailed (GpaKeyList * keylist)
 
 
 /* Return true if any key is selected in the list.  */
-gboolean 
+gboolean
 gpa_keylist_has_selection (GpaKeyList * keylist)
 {
-  GtkTreeSelection *selection = 
+  GtkTreeSelection *selection =
     gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
   return gtk_tree_selection_count_selected_rows (selection) > 0;
 }
 
 
 /* Return true if one, and only one, key is selected in the list.  */
-gboolean 
+gboolean
 gpa_keylist_has_single_selection (GpaKeyList * keylist)
 {
-  GtkTreeSelection *selection = 
+  GtkTreeSelection *selection =
     gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
   return gtk_tree_selection_count_selected_rows (selection) == 1;
 }
 
 
 /* Return true if one, and only one, secret key is selected in the list.  */
-gboolean 
+gboolean
 gpa_keylist_has_single_secret_selection (GpaKeyList *keylist)
 {
   GtkTreeSelection *selection;
 
   if (keylist->public_only)
     return FALSE;
-  
+
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
   if (gtk_tree_selection_count_selected_rows (selection) == 1)
     {
@@ -753,11 +753,11 @@ gpa_keylist_has_single_secret_selection (GpaKeyList *keylist)
       gtk_tree_model_get_value (model, &iter, GPA_KEYLIST_COLUMN_KEY,
 				&value);
       key = g_value_get_pointer (&value);
-      g_value_unset(&value);      
+      g_value_unset(&value);
 
       g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
       g_list_free (list);
-      return (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(), 
+      return (gpa_keytable_lookup_key (gpa_keytable_get_secret_instance(),
 				       key->subkeys->fpr) != NULL);
     }
   else
@@ -772,7 +772,7 @@ gpa_keylist_has_single_secret_selection (GpaKeyList *keylist)
 GList *
 gpa_keylist_get_selected_keys (GpaKeyList * keylist)
 {
-  GtkTreeSelection *selection = 
+  GtkTreeSelection *selection =
     gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
   GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (keylist));
   GList *list = gtk_tree_selection_get_selected_rows (selection, &model);
@@ -790,14 +790,14 @@ gpa_keylist_get_selected_keys (GpaKeyList * keylist)
       gtk_tree_model_get_value (model, &iter, GPA_KEYLIST_COLUMN_KEY,
 				&value);
       key = g_value_get_pointer (&value);
-      g_value_unset(&value);      
+      g_value_unset(&value);
 
       keys = g_list_append (keys, key);
     }
 
   g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
   g_list_free (list);
-  
+
   return keys;
 }
 
@@ -828,24 +828,24 @@ gpa_keylist_get_selected_key (GpaKeyList *keylist)
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_model_get_value (model, &iter, GPA_KEYLIST_COLUMN_KEY, &value);
   key = g_value_get_pointer (&value);
-  g_value_unset (&value);      
+  g_value_unset (&value);
   gpgme_key_ref (key);
 
   g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
   g_list_free (list);
-  
+
   return key;
 }
 
 
 /* Begin a reload of the keyring. */
-void 
+void
 gpa_keylist_start_reload (GpaKeyList * keylist)
 {
-  GtkTreeSelection *selection = 
+  GtkTreeSelection *selection =
     gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
   gtk_tree_selection_unselect_all (selection);
-  gtk_list_store_clear (GTK_LIST_STORE (gtk_tree_view_get_model 
+  gtk_list_store_clear (GTK_LIST_STORE (gtk_tree_view_get_model
 					(GTK_TREE_VIEW (keylist))));
   g_list_foreach (keylist->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (keylist->keys);
@@ -859,12 +859,12 @@ gpa_keylist_start_reload (GpaKeyList * keylist)
 
 /* Let the keylist know that a new key with the given fingerprint is
    available.  */
-void 
+void
 gpa_keylist_new_key (GpaKeyList * keylist, const char *fpr)
 {
   /* FIXME: I don't understand the code.  Investigate this and
      implement public_only.  */
-  
+
   add_trustdb_dialog (keylist);
   gpa_keytable_load_new (gpa_keytable_get_secret_instance (), fpr,
 			 NULL, (GpaKeyTableEndFunc) gtk_main_quit, NULL);
@@ -880,7 +880,7 @@ gpa_keylist_new_key (GpaKeyList * keylist, const char *fpr)
 
 
 /* Let the keylist know that a new sceret key has been imported. */
-void 
+void
 gpa_keylist_imported_secret_key (GpaKeyList *keylist)
 {
   /* KEYLIST is currently not used. */
@@ -888,7 +888,7 @@ gpa_keylist_imported_secret_key (GpaKeyList *keylist)
   gpa_keytable_load_new (gpa_keytable_get_secret_instance (), NULL,
 			 NULL, (GpaKeyTableEndFunc) gtk_main_quit, NULL);
   /* Hack. Turn the asynchronous listing into a synchronous one */
-  /* FIXME:  Does that work well with the server shutdown code? */ 
+  /* FIXME:  Does that work well with the server shutdown code? */
   gtk_main ();
 }
 
