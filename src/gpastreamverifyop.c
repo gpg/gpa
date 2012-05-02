@@ -316,15 +316,12 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamVerifyOperation *op)
       gpgme_signature_t sig;
 
       res = gpgme_op_verify_result (GPA_OPERATION (op)->context->ctx);
-      sig = res->signatures;
 
-      while (sig)
+      for (sig = res->signatures; sig; sig = sig->next)
 	{
-	  char *keydesc;
 	  char *sigsum;
 	  char *sigdesc;
 	  char *sigdesc_esc;
-	  const char *sigstatus;
 
 	  if (sig->summary & GPGME_SIGSUM_VALID)
 	    sigsum = "green";
@@ -336,19 +333,15 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamVerifyOperation *op)
 	    sigsum = "red";
 
           sigdesc = gpa_gpgme_get_signature_desc
-            (GPA_OPERATION (op)->context->ctx, sig, &keydesc, NULL);
-
+            (GPA_OPERATION (op)->context->ctx, sig, NULL, NULL);
 	  sigdesc_esc = my_percent_escape (sigdesc);
 
 	  /* FIXME: Error handling.  */
 	  err = gpa_operation_write_status (GPA_OPERATION (op), "SIGSTATUS",
 					    sigsum, sigdesc_esc, NULL);
 
-	  g_free (sigdesc);
 	  g_free (sigdesc_esc);
-          g_free (keydesc);
-
-	  sig = sig->next;
+	  g_free (sigdesc);
 	}
     }
 

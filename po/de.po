@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"PO-Revision-Date: 2011-12-12 10:11+0100\n"
+"PO-Revision-Date: 2012-05-02 13:29+0200\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -278,7 +278,7 @@ msgid "Enable the UI server"
 msgstr "Den UI Server aktivieren"
 
 msgid "Disable support for X.509"
-msgstr ""
+msgstr "Keine Unterstützung von X.509"
 
 msgid "Read options from file"
 msgstr "Optionen aus einer Datei lesen"
@@ -514,42 +514,6 @@ msgstr "Schlüssel_kennung:"
 msgid "Decrypting message ..."
 msgstr "Nachricht entschlüsseln..."
 
-#, c-format
-msgid "Bad signature by %s: %s"
-msgstr "Falsche Signatur von %s: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr "Falsche Signatur durch unbekannten Schlüssel %s: %s"
-
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr "Falsche Signatur durch unbekannten Schlüsel: %s"
-
-#, c-format
-msgid "Good signature by %s: %s"
-msgstr "Korrekte Signatur von %s: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr "Korrekte Signatur durch unbekannten Schlüssel %s: %s"
-
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr "Korrekte Signatur durch unbekannten Schlüssel: %s"
-
-#, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "Ungültige Signatur von %s: %s"
-
-#, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr "Ungültige Signatur durch unbekanntes Zertifikat %s: %s"
-
-#, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr "Ungültige Signatur durch unbekanntes Zertifikat: %s"
-
 msgid "Document"
 msgstr "Dokument"
 
@@ -567,39 +531,6 @@ msgstr "Nachricht signieren"
 
 msgid "Verifying message ..."
 msgstr "Prüfen einer Nachricht ..."
-
-#, c-format
-msgid "Bad signature by %s"
-msgstr "Falsche Signatur durch %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr "Falsche Signatur durch unbekannten Schlüssel %s"
-
-msgid "Bad signature by unknown key"
-msgstr "Falsche Signatur durch unbekanntes Zertifikat"
-
-#, c-format
-msgid "Good signature by %s"
-msgstr "Korrekte Signatur von %s"
-
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr "Korrekte Signatur durch unbekannten Schlüssel %s"
-
-msgid "Good signature by unknown key"
-msgstr "Korrekte Signatur durch unbekannten Schlüssel"
-
-#, c-format
-msgid "Invalid signature by %s"
-msgstr "Ungültige Signatur von %s"
-
-#, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr "Ungültige Signatur durch unbekanntes Zertifikat %s"
-
-msgid "Invalid signature by unknown key"
-msgstr "Ungültige Signatur durch unbekanntes Zertifikat"
 
 msgid "Subkey ID"
 msgstr "Kennung des untergeordneten Schlüssels"
@@ -818,6 +749,75 @@ msgstr "Beiläufig"
 
 msgid "Positive"
 msgstr "Positiv"
+
+#, c-format
+msgid "Bad signature by %s: %s"
+msgstr "Falsche Signatur von %s: %s"
+
+#, c-format
+msgid "Bad signature by %s"
+msgstr "Falsche Signatur durch %s"
+
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr "Falsche Signatur durch unbekannten Schlüssel %s: %s"
+
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr "Falsche Signatur durch unbekannten Schlüssel %s"
+
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr "Falsche Signatur durch unbekannten Schlüsel: %s"
+
+msgid "Bad signature by unknown key"
+msgstr "Falsche Signatur durch unbekanntes Zertifikat"
+
+#, c-format
+msgid "Good signature by %s: %s"
+msgstr "Korrekte Signatur von %s: %s"
+
+#, c-format
+msgid "Good signature by %s"
+msgstr "Korrekte Signatur von %s"
+
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr "Korrekte Signatur durch unbekannten Schlüssel %s: %s"
+
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr "Korrekte Signatur durch unbekannten Schlüssel %s"
+
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr "Korrekte Signatur durch unbekannten Schlüssel: %s"
+
+msgid "Good signature by unknown key"
+msgstr "Korrekte Signatur durch unbekannten Schlüssel"
+
+#, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "Ungewisse Signatur von %s: %s"
+
+#, c-format
+msgid "Uncertain signature by %s"
+msgstr "Ungewisse Signatur von %s"
+
+#, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "Ungewisse Signatur durch unbekanntes Zertifikat %s: %s"
+
+#, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "Ungewisse Signatur durch unbekanntes Zertifikat %s"
+
+#, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "Ungewisse Signatur durch unbekanntes Zertifikat: %s"
+
+msgid "Uncertain signature by unknown key"
+msgstr "Ungewisse Signatur durch unbekanntes Zertifikat"
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
@@ -1784,6 +1784,9 @@ msgstr "Abgelaufene Schlüssel"
 msgid "Key NOT valid"
 msgstr "Schlüssel ist NICHT gültig!"
 
+msgid "Description"
+msgstr "Beschreibung"
+
 #, c-format
 msgid "Verified data in file: %s"
 msgstr "Überprüfte Daten in Datei: %s"
@@ -2287,7 +2290,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Generate new key..."
-#~ msgstr "Schlüssel erzeugen"
+#~ msgstr "Neuen Schlüssel erzeugen..."
 
 #~ msgid "/File/C_lear"
 #~ msgstr "/Datei/_Leeren"

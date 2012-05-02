@@ -1142,22 +1142,22 @@ gpa_gpgme_get_signature_desc (gpgme_ctx_t ctx, gpgme_signature_t sig,
   else
     {
       if (keydesc && *sigstatus)
-        sigdesc = g_strdup_printf (_("Invalid signature by %s: %s"),
+        sigdesc = g_strdup_printf (_("Uncertain signature by %s: %s"),
                                    keydesc, sigstatus);
       else if (keydesc)
-        sigdesc = g_strdup_printf (_("Invalid signature by %s"),
+        sigdesc = g_strdup_printf (_("Uncertain signature by %s"),
                                    keydesc);
       else if (sig->fpr && *sigstatus)
-        sigdesc = g_strdup_printf (_("Invalid signature by unknown key "
+        sigdesc = g_strdup_printf (_("Uncertain signature by unknown key "
                                      "%s: %s"), sig->fpr, sigstatus);
       else if (sig->fpr)
-        sigdesc = g_strdup_printf (_("Invalid signature by unknown key "
+        sigdesc = g_strdup_printf (_("Uncertain signature by unknown key "
                                      "%s"), sig->fpr);
       else if (*sigstatus)
-        sigdesc = g_strdup_printf (_("Invalid signature by unknown "
+        sigdesc = g_strdup_printf (_("Uncertain signature by unknown "
                                      "key: %s"), sigstatus);
       else
-        sigdesc = g_strdup_printf (_("Invalid signature by unknown "
+        sigdesc = g_strdup_printf (_("Uncertain signature by unknown "
                                      "key"));
     }
 
