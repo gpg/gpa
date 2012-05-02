@@ -1,6 +1,6 @@
 /* gpgmeedit.c - The GNU Privacy Assistant's edit interactor.
  *      Copyright (C) 2002 Miguel Coca.
- *	Copyright (C) 2008, 2009 g10 Code GmbH.
+ *	Copyright (C) 2008, 2009, 2012 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -41,16 +41,13 @@
  * See the comments below for details.
  */
 
-/* Define this macro to 1 to enable debugging of the FSM. */
-#define DEBUG_FSM 0
-
 
 /* Prototype of the action function. Returns the error if there is one */
 typedef gpg_error_t (*edit_action_t) (int state, void *opaque,
                                       char **result);
 /* Prototype of the transit function. Returns the next state. If and error
  * is found changes *err. If there is no error it should NOT touch it */
-typedef int (*edit_transit_t) (int current_state, gpgme_status_code_t status, 
+typedef int (*edit_transit_t) (int current_state, gpgme_status_code_t status,
                                const char *args, void *opaque,
                                gpg_error_t *err);
 
@@ -114,7 +111,7 @@ enum
   };
 
 /* Parameter for the passwd command.  */
-struct passwd_parms_s 
+struct passwd_parms_s
 {
   gpgme_passphrase_cb_t func;
   void *opaque;
@@ -205,7 +202,7 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
   char *result = NULL;
 
   /* Ignore these status lines, as they don't require any response */
-  if (status == GPGME_STATUS_EOF 
+  if (status == GPGME_STATUS_EOF
       || status == GPGME_STATUS_GOT_IT
       || status == GPGME_STATUS_NEED_PASSPHRASE
       || status == GPGME_STATUS_NEED_PASSPHRASE_SYM
@@ -253,11 +250,11 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       parms->save_error (parms->opaque, buf);
     }
 
-#if DEBUG_FSM
-  g_debug ("edit_fnc: state=%d input=%d (%s)", parms->state, status, args);
-#endif
+  if (debug_edit_fsm)
+    g_debug ("edit_fnc: state=%d input=%d (%s)", parms->state, status, args);
+
   /* Choose the next state based on the current one and the input */
-  parms->state = parms->transit (parms->state, status, args, parms->opaque, 
+  parms->state = parms->transit (parms->state, status, args, parms->opaque,
 				 &parms->err);
   if (!parms->err)
     {
@@ -265,10 +262,11 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
 
       /* Choose the action based on the state */
       err = parms->action (parms->state, parms->opaque, &result);
-#if DEBUG_FSM
-      g_debug ("edit_fnc: newstate=%d err=%s result=%s",
-               parms->state, gpg_strerror (err), result);
-#endif
+
+      if (debug_edit_fsm)
+        g_debug ("edit_fnc: newstate=%d err=%s result=%s",
+                 parms->state, gpg_strerror (err), result);
+
       if (err)
         parms->err = err;
 
@@ -282,10 +280,9 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
     }
   else
     {
-#if DEBUG_FSM
-      g_debug ("edit_fnc: newstate=%d err=%s transit failed",
-               parms->state, gpg_strerror (parms->err));
-#endif
+      if (debug_edit_fsm)
+        g_debug ("edit_fnc: newstate=%d err=%s transit failed",
+                 parms->state, gpg_strerror (parms->err));
     }
   return parms->err;
 }
@@ -297,7 +294,7 @@ static gpg_error_t
 edit_expire_fnc_action (int state, void *opaque, char **result)
 {
   char *date = opaque;
-  
+
   switch (state)
     {
       /* Start the operation */
@@ -329,11 +326,11 @@ edit_expire_fnc_action (int state, void *opaque, char **result)
 
 /* Change expiry time: transit.  */
 static int
-edit_expire_fnc_transit (int current_state, gpgme_status_code_t status, 
+edit_expire_fnc_transit (int current_state, gpgme_status_code_t status,
 			 const char *args, void *opaque, gpg_error_t *err)
 {
   int next_state;
- 
+
   switch (current_state)
     {
     case EXPIRE_START:
@@ -416,7 +413,7 @@ static gpg_error_t
 edit_trust_fnc_action (int state, void *opaque, char **result)
 {
   gchar *trust = opaque;
-  
+
   switch (state)
     {
       /* Start the operation */
@@ -451,7 +448,7 @@ edit_trust_fnc_action (int state, void *opaque, char **result)
 
 /* Change the key ownertrust: transit.  */
 static int
-edit_trust_fnc_transit (int current_state, gpgme_status_code_t status, 
+edit_trust_fnc_transit (int current_state, gpgme_status_code_t status,
 			const char *args, void *opaque, gpg_error_t *err)
 {
   int next_state;
@@ -551,7 +548,7 @@ static gpg_error_t
 edit_sign_fnc_action (int state, void *opaque, char **result)
 {
   struct sign_parms_s *parms = opaque;
-  
+
   switch (state)
     {
       /* Start the operation */
@@ -595,7 +592,7 @@ edit_sign_fnc_action (int state, void *opaque, char **result)
 
 /* Sign a key: transit.  */
 static int
-edit_sign_fnc_transit (int current_state, gpgme_status_code_t status, 
+edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
 		       const char *args, void *opaque, gpg_error_t *err)
 {
   int next_state;
@@ -788,11 +785,11 @@ edit_passwd_fnc_action (int state, void *opaque, char **result)
 
 /* Change passphrase: transit.  */
 static int
-edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status, 
+edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status,
 			 const char *args, void *opaque, gpg_error_t *err)
 {
   int next_state;
- 
+
   switch (current_state)
     {
     case PASSWD_START:
@@ -888,7 +885,7 @@ gpa_gpgme_edit_trust_parms_new (GpaContext *ctx, const char *trust_string,
 
   /* Make sure the cleanup is run when the edit completes */
   edit_parms->signal_id =
-    g_signal_connect (G_OBJECT (ctx), "done", 
+    g_signal_connect (G_OBJECT (ctx), "done",
 		      G_CALLBACK (gpa_gpgme_edit_trust_parms_release),
 		      edit_parms);
 
@@ -897,7 +894,7 @@ gpa_gpgme_edit_trust_parms_new (GpaContext *ctx, const char *trust_string,
 
 
 /* Change the ownertrust of a key.  */
-gpg_error_t 
+gpg_error_t
 gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
                             gpgme_validity_t ownertrust)
 {
@@ -917,7 +914,7 @@ gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
 }
 
 
-/* Release the edit parameters needed for changing the expiry date. The 
+/* Release the edit parameters needed for changing the expiry date. The
    prototype is that of a GpaContext's "done" signal handler.  */
 static void
 gpa_gpgme_edit_expire_parms_release (GpaContext *ctx, gpg_error_t err,
@@ -960,8 +957,8 @@ gpa_gpgme_edit_expire_parms_new (GpaContext *ctx, GDate *date,
     }
 
   /* Make sure the cleanup is run when the edit completes */
-  edit_parms->signal_id = 
-    g_signal_connect (G_OBJECT (ctx), "done", 
+  edit_parms->signal_id =
+    g_signal_connect (G_OBJECT (ctx), "done",
 		      G_CALLBACK (gpa_gpgme_edit_expire_parms_release),
 		      edit_parms);
 
@@ -970,7 +967,7 @@ gpa_gpgme_edit_expire_parms_new (GpaContext *ctx, GDate *date,
 
 
 /* Change the expire date of a key.  */
-gpg_error_t 
+gpg_error_t
 gpa_gpgme_edit_expire_start (GpaContext *ctx, gpgme_key_t key, GDate *date)
 {
   struct edit_parms_s *parms;
@@ -1023,7 +1020,7 @@ gpa_gpgme_edit_sign_parms_new (GpaContext *ctx, char *check_level,
 
   /* Make sure the cleanup is run when the edit completes */
   edit_parms->signal_id =
-    g_signal_connect (G_OBJECT (ctx), "done", 
+    g_signal_connect (G_OBJECT (ctx), "done",
 		      G_CALLBACK (gpa_gpgme_edit_sign_parms_release),
 		      edit_parms);
 
@@ -1032,7 +1029,7 @@ gpa_gpgme_edit_sign_parms_new (GpaContext *ctx, char *check_level,
 
 
 /* Sign this key with the given private key.  */
-gpg_error_t 
+gpg_error_t
 gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
                            gpgme_key_t secret_key, gboolean local)
 {
@@ -1044,7 +1041,7 @@ gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
     {
       return err;
-    }  
+    }
   gpgme_signers_clear (ctx->ctx);
   err = gpgme_signers_add (ctx->ctx, secret_key);
   if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
@@ -1063,31 +1060,31 @@ gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
  */
 
 /* Special passphrase callback for use within the passwd command */
-gpg_error_t 
+gpg_error_t
 passwd_passphrase_cb (void *hook, const char *uid_hint,
-                      const char *passphrase_info, 
+                      const char *passphrase_info,
                       int prev_was_bad, int fd)
 {
   struct edit_parms_s *parms = hook;
-  
+
   if (parms->state == PASSWD_ENTERNEW)
     {
       /* Gpg is asking for the new passphrase.  Run the dialog to
          enter and re-enter the new passphrase.  */
-      return gpa_change_passphrase_dialog_run (hook, uid_hint, 
-					       passphrase_info, 
+      return gpa_change_passphrase_dialog_run (hook, uid_hint,
+					       passphrase_info,
 					       prev_was_bad, fd);
     }
   else
     {
       /* Gpg is asking for the passphrase to unprotect the key.  */
-      return gpa_passphrase_cb (hook, uid_hint, passphrase_info, 
+      return gpa_passphrase_cb (hook, uid_hint, passphrase_info,
 				prev_was_bad, fd);
     }
 }
 
 
-/* Release the edit parameters needed for changing the passphrase. The 
+/* Release the edit parameters needed for changing the passphrase. The
  * prototype is that of a GpaContext's "done" signal handler.
  */
 static void
@@ -1108,7 +1105,7 @@ gpa_gpgme_edit_passwd_parms_release (GpaContext *ctx, gpg_error_t err,
       /* Don't run this signal handler again if the context is reused */
       g_signal_handler_disconnect (ctx, parms->signal_id);
     }
-  
+
   g_free (parms);
   g_free (parms->opaque);
 }
@@ -1119,7 +1116,7 @@ static struct edit_parms_s*
 gpa_gpgme_edit_passwd_parms_new (GpaContext *ctx, gpgme_data_t out)
 {
   struct edit_parms_s *edit_parms = g_malloc0 (sizeof (struct edit_parms_s));
-  struct passwd_parms_s *passwd_parms = g_malloc0 (sizeof 
+  struct passwd_parms_s *passwd_parms = g_malloc0 (sizeof
                                                    (struct passwd_parms_s));
 
   edit_parms->state = PASSWD_START;
@@ -1131,15 +1128,15 @@ gpa_gpgme_edit_passwd_parms_new (GpaContext *ctx, gpgme_data_t out)
 			   &passwd_parms->opaque);
 
   /* Make sure the cleanup is run when the edit completes */
-  edit_parms->signal_id = 
-    g_signal_connect (G_OBJECT (ctx), "done", 
+  edit_parms->signal_id =
+    g_signal_connect (G_OBJECT (ctx), "done",
 		      G_CALLBACK (gpa_gpgme_edit_passwd_parms_release),
 		      edit_parms);
 
   return edit_parms;
 }
 
-gpg_error_t 
+gpg_error_t
 gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
 {
   struct edit_parms_s *parms;
@@ -1216,7 +1213,7 @@ card_edit_genkey_fnc_action (int state, void *opaque, char **result)
       {
         GtkWidget *dialog;
 
-        dialog = gtk_message_dialog_new 
+        dialog = gtk_message_dialog_new
           (NULL, GTK_DIALOG_MODAL,
            GTK_MESSAGE_WARNING,  GTK_BUTTONS_OK_CANCEL,
            _("Keys are already stored on the card.\n"
@@ -1254,7 +1251,7 @@ card_edit_genkey_fnc_action (int state, void *opaque, char **result)
       *result = "quit";
       break;
 
-    default: 
+    default:
       return unexpected_state (state);
     }
 
@@ -1275,7 +1272,7 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
   switch (current_state)
     {
     case CARD_START:
-      if (status == GPGME_STATUS_GET_LINE 
+      if (status == GPGME_STATUS_GET_LINE
           && !strcmp (args, "cardedit.prompt"))
 	next_state = CARD_COMMAND;
       else
@@ -1480,9 +1477,9 @@ card_edit_genkey_parms_new (GpaContext *ctx,
 
   assert (sizeof (genkey_parms->expiration_day) > 10);
   if (g_date_valid (&parms->expire))
-    snprintf (genkey_parms->expiration_day, 
+    snprintf (genkey_parms->expiration_day,
               sizeof genkey_parms->expiration_day,
-              "%04d-%02d-%02d", 
+              "%04d-%02d-%02d",
               g_date_get_year (&parms->expire),
               g_date_get_month (&parms->expire),
               g_date_get_day (&parms->expire));
@@ -1497,7 +1494,7 @@ card_edit_genkey_parms_new (GpaContext *ctx,
 
   /* Make sure the cleanup is run when the edit completes */
   edit_parms->signal_id =
-    g_signal_connect (G_OBJECT (ctx), "done", 
+    g_signal_connect (G_OBJECT (ctx), "done",
 		      G_CALLBACK (card_edit_genkey_parms_release),
 		      edit_parms);
 
@@ -1518,7 +1515,7 @@ gpa_gpgme_card_edit_genkey_start (GpaContext *ctx,
     return err;
 
   edit_parms = card_edit_genkey_parms_new (ctx, genkey_parms, out);
-  
+
   err = gpgme_op_card_edit_start (ctx->ctx, NULL, edit_fnc, edit_parms, out);
 
   return err;

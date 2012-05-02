@@ -52,6 +52,7 @@ extern GList *global_defaultRecipients;
 extern gchar *gnupg_homedir;
 extern gboolean cms_hack;
 extern gboolean disable_ticker;
+extern gboolean debug_edit_fsm;
 
 /* Show the keyring editor dialog.  */
 void gpa_open_key_manager (GtkAction *action, void *data);
@@ -107,7 +108,7 @@ void gpa_stop_server (void);
 
 
 typedef struct gpa_filewatch_id_s *gpa_filewatch_id_t;
-typedef void (*gpa_filewatch_cb_t) 
+typedef void (*gpa_filewatch_cb_t)
      (void *user_data, const char *filename, const char *reason);
 void gpa_init_filewatch (void);
 gpa_filewatch_id_t gpa_add_filewatch (const char *filename,

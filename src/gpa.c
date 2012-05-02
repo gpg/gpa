@@ -57,6 +57,8 @@ gboolean cms_hack;
 /* True if the ticker used for card operations should not be started.  */
 gboolean disable_ticker;
 
+/* True if the gpgme edit FSM shall output debug messages.  */
+gboolean debug_edit_fsm;
 
 /* Local variables.  */
 typedef struct
@@ -119,6 +121,8 @@ static GOptionEntry option_entries[] =
       &cms_hack, NULL, NULL },
     { "disable-ticker", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &disable_ticker, NULL, NULL },
+    { "debug-edit-fsm", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
+      &debug_edit_fsm, NULL, NULL },
     { "enable-logging", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &args.enable_logging, NULL, NULL },
     { "gpg-binary", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME,
