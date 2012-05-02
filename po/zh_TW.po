@@ -6,7 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2012-05-02 13:26+0200\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -14,446 +13,344 @@ msgstr ""
 "Content-Type: text/plain; charset=big5\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/clipboard.c:393 src/fileman.c:389
 msgid "Open File"
 msgstr "開啟檔案"
 
-#: src/clipboard.c:421 src/confdialog.c:1274 src/gtktools.c:85
 msgid "GPA Message"
 msgstr "GPA 訊息"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#: src/clipboard.c:438
 #, fuzzy, c-format
 msgid "The file %s is %lli%s large.  Do you really  want to open it?"
 msgstr ""
 "檔案 %s 已經存在.\n"
 "要進行覆寫嗎?"
 
-#: src/clipboard.c:559
 msgid "Save As..."
 msgstr ""
 
-#: src/clipboard.c:600 src/clipboard.c:630 src/clipboard.c:660
-#: src/clipboard.c:690 src/clipboard.c:1056
 msgid "Clipboard"
 msgstr ""
 
-#: src/clipboard.c:772 src/fileman.c:512 src/keymanager.c:867
-#: src/cardman.c:636
 #, fuzzy
 msgid "_File"
 msgstr "/檔案"
 
-#: src/clipboard.c:773 src/fileman.c:513 src/keymanager.c:868
-#: src/cardman.c:637
 #, fuzzy
 msgid "_Edit"
 msgstr "/編輯"
 
-#: src/clipboard.c:777
 msgid "Clear buffer"
 msgstr ""
 
-#: src/clipboard.c:779 src/fileman.c:517
 msgid "Open a file"
 msgstr "開啟檔案"
 
-#: src/clipboard.c:781
 #, fuzzy
 msgid "Save to a file"
 msgstr "開啟檔案"
 
-#: src/clipboard.c:783
 #, fuzzy
 msgid "Sign buffer text"
 msgstr "簽署密鑰"
 
-#: src/clipboard.c:785
 #, fuzzy
 msgid "Check signatures of buffer text"
 msgstr "檢查已選擇檔案的簽署"
 
-#: src/clipboard.c:787
 #, fuzzy
 msgid "Encrypt the buffer text"
 msgstr "加密已選擇檔案"
 
-#: src/clipboard.c:789
 #, fuzzy
 msgid "Decrypt the buffer text"
 msgstr "解密已選擇檔案"
 
-#: src/clipboard.c:791
 msgid "Close the buffer"
 msgstr ""
 
-#: src/clipboard.c:793 src/fileman.c:531 src/keymanager.c:876
-#: src/cardman.c:642
 msgid "Quit the program"
 msgstr ""
 
-#: src/clipboard.c:799
 #, fuzzy
 msgid "Undo the last action"
 msgstr "加密已選擇檔案"
 
-#: src/clipboard.c:801
 msgid "Redo the last undone action"
 msgstr ""
 
-#: src/clipboard.c:804
 #, fuzzy
 msgid "Cut the selection"
 msgstr "加密已選擇檔案"
 
-#: src/clipboard.c:806 src/keymanager.c:880
 #, fuzzy
 msgid "Copy the selection"
 msgstr "加密已選擇檔案"
 
-#: src/clipboard.c:808 src/keymanager.c:882
 msgid "Paste the clipboard"
 msgstr ""
 
-#: src/clipboard.c:810
 #, fuzzy
 msgid "Delete the selected text"
 msgstr "解密已選擇檔案"
 
-#: src/clipboard.c:812
 msgid "Select the entire document"
 msgstr ""
 
-#: src/clipboard.c:922 src/fileman.c:625 src/cardman.c:727
 #, fuzzy
 msgid "Keyring"
 msgstr "鑰圈編輯器"
 
-#: src/clipboard.c:924 src/keymanager.c:1059 src/cardman.c:729
 msgid "Files"
 msgstr "檔案"
 
-#: src/clipboard.c:926 src/fileman.c:627 src/keymanager.c:1061
 msgid "Card"
 msgstr ""
 
-#: src/clipboard.c:1026
 #, fuzzy
 msgid "GNU Privacy Assistant - Clipboard"
 msgstr "GNU Privacy Assistant - 檔案管理"
 
-#: src/confdialog.c:994
 msgid "<b>Main</b>"
 msgstr ""
 
-#: src/confdialog.c:1151
 msgid "Use default values"
 msgstr ""
 
-#: src/confdialog.c:1151
 msgid "Use default value"
 msgstr ""
 
-#: src/confdialog.c:1154
 msgid "Do not use option"
 msgstr ""
 
-#: src/confdialog.c:1159
 msgid "Use custom values"
 msgstr ""
 
-#: src/confdialog.c:1159
 msgid "Use custom value"
 msgstr ""
 
-#: src/confdialog.c:1163
 msgid "Use default argument"
 msgstr ""
 
-#: src/confdialog.c:1288
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
 msgstr ""
 
-#: src/confdialog.c:1333
 msgid "Crypto Backend Configuration"
 msgstr ""
 
-#: src/confdialog.c:1339
 msgid "Reset"
 msgstr ""
 
-#: src/confdialog.c:1358
 msgid "Configure the tools of the GnuPG system."
 msgstr ""
 
-#: src/confdialog.c:1362
 #, fuzzy
 msgid "Level:"
 msgstr "程度"
 
-#: src/confdialog.c:1371
 #, fuzzy
 msgid "Basic"
 msgstr "/備份... (&B)"
 
-#: src/confdialog.c:1372
 msgid "Advanced"
 msgstr ""
 
-#: src/confdialog.c:1373
 #, fuzzy
 msgid "Expert"
 msgstr "輸出"
 
-#: src/convert.c:29
 msgid "days"
 msgstr "日"
 
-#: src/convert.c:30
 msgid "weeks"
 msgstr "星期"
 
-#: src/convert.c:31
 msgid "months"
 msgstr "月"
 
-#: src/convert.c:32
 msgid "years"
 msgstr "年"
 
-#: src/convert.c:95
 msgid "never expires"
 msgstr "永遠生效"
 
-#: src/convert.c:115 src/cm-netkey.c:138 src/cm-netkey.c:514
 msgid "unknown"
 msgstr "不知名"
 
-#: src/convert.c:123
 msgid "Mr."
 msgstr ""
 
-#: src/convert.c:125
 msgid "Ms."
 msgstr ""
 
-#: src/convert.c:129
 #, fuzzy
 msgid "(unknown)"
 msgstr "不知名"
 
-#: src/encryptdlg.c:152
 #, fuzzy
 msgid "Encrypt documents"
 msgstr "加密檔案"
 
-#: src/encryptdlg.c:169
 msgid "_Public Keys"
 msgstr "公鑰 (&P)"
 
-#: src/encryptdlg.c:192 src/icons.c:166
 msgid "_Sign"
 msgstr "簽署 (&S)"
 
-#: src/encryptdlg.c:198
 msgid "Sign _as "
 msgstr "簽署為 (&a)"
 
-#: src/encryptdlg.c:228 src/filesigndlg.c:241
 msgid "A_rmor"
 msgstr "純文字 (&r)"
 
-#: src/expirydlg.c:64
 msgid "Please provide a correct date."
 msgstr "請提供正確日期"
 
-#: src/expirydlg.c:108
 msgid "Change expiry date"
 msgstr "更改有效日期"
 
-#: src/expirydlg.c:113 src/gpaprogressdlg.c:138
 msgid "_Cancel"
 msgstr ""
 
-#: src/expirydlg.c:124
 msgid "_never expire"
 msgstr "永遠生效 (&n)"
 
-#: src/expirydlg.c:129
 msgid "_expire on:"
 msgstr "失效期為 (&e)"
 
-#: src/fileman.c:519
 msgid "Close all files"
 msgstr "關閉所有檔案"
 
-#: src/fileman.c:521
 msgid "Sign the selected file"
 msgstr "簽署已選擇檔案"
 
-#: src/fileman.c:523
 msgid "Check signatures of selected file"
 msgstr "檢查已選擇檔案的簽署"
 
-#: src/fileman.c:525
 msgid "Encrypt the selected file"
 msgstr "加密已選擇檔案"
 
-#: src/fileman.c:527
 msgid "Decrypt the selected file"
 msgstr "解密已選擇檔案"
 
-#: src/fileman.c:529
 msgid "Close the window"
 msgstr ""
 
-#: src/fileman.c:535
 #, fuzzy
 msgid "Select all files"
 msgstr "關閉所有檔案"
 
-#: src/fileman.c:733
 msgid "File"
 msgstr "檔案"
 
-#: src/fileman.c:798
 msgid "GNU Privacy Assistant - File Manager"
 msgstr "GNU Privacy Assistant - 檔案管理"
 
-#: src/fileman.c:821
 #, fuzzy
 msgid "File Manager"
 msgstr "檔案管理員"
 
-#: src/fileman.c:897
 msgid "The file is already open."
 msgstr "這個檔案已經開啟."
 
-#: src/filesigndlg.c:171
 msgid "Sign documents"
 msgstr ""
 
-#: src/filesigndlg.c:180
 #, fuzzy
 msgid "<b>Sign _as</b>"
 msgstr "簽署為 (&a)"
 
-#: src/filesigndlg.c:201
 #, fuzzy
 msgid "<b>Signing Mode</b>"
 msgstr "簽署中"
 
-#: src/filesigndlg.c:211
 #, fuzzy
 msgid "Si_gn and compress"
 msgstr "簽署及壓縮 (&g)"
 
-#: src/filesigndlg.c:217
 #, fuzzy
 msgid "Clear_text signature"
 msgstr "純文字簽署 (&C)"
 
-#: src/filesigndlg.c:232
 #, fuzzy
 msgid "_Detached signature"
 msgstr "純文字簽署 (&C)"
 
-#: src/gpa.c:100
 #, fuzzy
 msgid "Output version information and exit"
 msgstr "顯示版本資料及離開"
 
-#: src/gpa.c:102
 #, fuzzy
 msgid "Open key manager (default)"
 msgstr "開啟鑰圈編輯器 (預設)"
 
-#: src/gpa.c:104
 #, fuzzy
 msgid "Open file manager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:106 src/gpa.h:80
 #, fuzzy
 msgid "Open the card manager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:108
 msgid "Open clipboard"
 msgstr ""
 
-#: src/gpa.c:110
 #, fuzzy
 msgid "Open the settings dialog"
 msgstr "開啟設定視窗"
 
-#: src/gpa.c:112
 msgid "Enable the UI server"
 msgstr ""
 
-#: src/gpa.c:114
 msgid "Disable support for X.509"
 msgstr ""
 
-#: src/gpa.c:116
 #, fuzzy
 msgid "Read options from file"
 msgstr "由檔案中讀取選項"
 
-#: src/gpa.c:327
 msgid "[FILE...]"
 msgstr ""
 
-#: src/gpa.c:329
 #, fuzzy
 msgid "Graphical frontend to GnuPG"
 msgstr ""
 "語法: gpa [選項]\n"
 "GnuPG的圖像介面\n"
 
-#: src/gpa.c:330
 msgid "Please report bugs to <"
 msgstr "回報臭蟲至 <"
 
-#: src/gpa.h:71
 #, fuzzy
 msgid "_Windows"
 msgstr "/視窗"
 
-#: src/gpa.h:74
 #, fuzzy
 msgid "Open the keyring editor"
 msgstr "開啟鑰圈編輯器 (預設)"
 
-#: src/gpa.h:76
 #, fuzzy
 msgid "Open the file manager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.h:78
 #, fuzzy
 msgid "Open the clipboard"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.h:93
 #, fuzzy
 msgid "Configure the application"
 msgstr "加密已選擇檔案"
 
-#: src/gpa.h:96
 #, fuzzy
 msgid "_Backend Preferences"
 msgstr "/編輯/設定 (&E)"
 
-#: src/gpa.h:97
 msgid "Configure the backend programs"
 msgstr ""
 
-#: src/gpabackupop.c:208
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -470,37 +367,29 @@ msgstr ""
 "請小心保存這個檔案\n"
 "(例如, 儲存在磁碟片中並放在安全地方中安置)."
 
-#: src/gpabackupop.c:223
 msgid "An error ocurred during the backup operation."
 msgstr ""
 
-#: src/gpabackupop.c:245
 msgid "Backup key to file"
 msgstr "備份密鑰到檔案"
 
-#: src/gpabackupop.c:255
 #, c-format
 msgid "Generating backup of key: %s"
 msgstr "正在建立 %s 的備份"
 
-#: src/gpaexportclipop.c:139
 msgid "The keys have been copied to the clipboard."
 msgstr "公鑰已複制到剪貼簿內."
 
-#: src/gpaexportfileop.c:139
 msgid "Export public keys to file"
 msgstr "輸出公鑰為檔案"
 
-#: src/gpaexportfileop.c:150
 msgid "_armor"
 msgstr "純文字 (&r)"
 
-#: src/gpaexportfileop.c:182
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "密鑰已被匯出到 %s."
 
-#: src/gpaexportserverop.c:129
 #, c-format
 msgid ""
 "The selected key will be sent to a public key\n"
@@ -511,118 +400,85 @@ msgstr ""
 "(\"%s\")中.\n"
 "要確定發放這些公鑰嗎 ?"
 
-#: src/gpaexportserverop.c:134 src/gpafileencryptop.c:478
-#: src/gpafileverifyop.c:183 src/gpgmetools.c:177 src/keydeletedlg.c:44
-#: src/keydeletedlg.c:93 src/keysigndlg.c:61
 msgid "_Yes"
 msgstr "是 (&Y)"
 
-#: src/gpaexportserverop.c:135 src/gpafileencryptop.c:479
-#: src/gpafileverifyop.c:184 src/gpgmetools.c:178 src/keydeletedlg.c:46
-#: src/keydeletedlg.c:95 src/keysigndlg.c:63
 msgid "_No"
 msgstr "否 (&N)"
 
-#: src/gpaexportserverop.c:187
 msgid "The keys have been sent to the server."
 msgstr "公鑰已被傳到公鑰佝服器."
 
-#: src/gpafiledecryptop.c:155
 msgid "Decrypting..."
 msgstr "解密中..."
 
-#: src/gpafiledecryptop.c:509 src/gpafileverifyop.c:479
 #, fuzzy, c-format
 msgid "\"%s\" contained no OpenPGP data."
 msgstr "檔案 \"%s\" 沒有正確的 OpenPGP 資料."
 
-#: src/gpafiledecryptop.c:510 src/gpafileverifyop.c:480
 #, fuzzy, c-format
 msgid "The file \"%s\" contained no OpenPGPdata."
 msgstr "檔案 \"%s\" 沒有正確的 OpenPGP 資料."
 
-#: src/gpafiledecryptop.c:520
 #, fuzzy, c-format
 msgid "\"%s\" contained no valid encrypted data."
 msgstr "檔案 \"%s\" 沒有正確的加密資料."
 
-#: src/gpafiledecryptop.c:522
 #, fuzzy, c-format
 msgid "The file \"%s\" contained no validencrypted data."
 msgstr "檔案 \"%s\" 沒有正確的加密資料."
 
-#: src/gpafiledecryptop.c:531 src/gpafileencryptop.c:770
-#: src/gpafilesignop.c:524 src/gpafileverifyop.c:490 src/gpakeyexpireop.c:240
-#: src/gpakeypasswdop.c:209 src/gpakeysignop.c:237 src/gpastreamsignop.c:421
 msgid "Wrong passphrase!"
 msgstr "密碼錯誤!"
 
-#: src/gpafileencryptop.c:155
 msgid "Encrypting..."
 msgstr "加密中..."
 
-#: src/gpafileencryptop.c:476 src/verifydlg.c:225
 msgid "Unknown Key"
 msgstr "未知的公鑰"
 
-#: src/gpafileencryptop.c:492
 #, fuzzy
 msgid "You are going to encrypt a document using the following key:"
 msgstr "您正使用以下的密鑰加密這個檔案:"
 
-#: src/gpafileencryptop.c:498
 msgid "However, it is not certain that the key belongs to that person."
 msgstr "不過, 密鑰並不屬於對方的"
 
-#: src/gpafileencryptop.c:504
 msgid "Do you <b>really</b> want to use this key?"
 msgstr "您確定要使用這個密鑰 ?"
 
-#: src/gpafileencryptop.c:525 src/gpafileencryptop.c:565 src/verifydlg.c:230
 msgid "Revoked Key"
 msgstr "移除密鑰"
 
-#: src/gpafileencryptop.c:527 src/gpafileencryptop.c:567 src/gtktools.c:52
-#: src/gtktools.c:89 src/keyeditdlg.c:150 src/verifydlg.c:115
 msgid "_Close"
 msgstr "關閉 (&C)"
 
-#: src/gpafileencryptop.c:540
 #, fuzzy
 msgid "The following key has been revoked by its owner:"
 msgstr "這公鑰已被對方取消了:"
 
-#: src/gpafileencryptop.c:545 src/gpafileencryptop.c:588
 msgid "And can not be used for encryption."
 msgstr "而且不可以使用作為加密之用."
 
-#: src/gpafileencryptop.c:580
 #, c-format
 msgid "The following key expired on %s:"
 msgstr "這密鑰會在 %s 失效 :"
 
-#: src/gpafileencryptop.c:619 src/gpafilesignop.c:447
-#: src/gpastreamsignop.c:278
 msgid ""
 "The selected certificates are not all of the same type. That is, you mixed "
 "OpenPGP and X.509 certificates. Please make sure to select only certificates "
 "of the same type."
 msgstr ""
 
-#: src/gpafileencryptop.c:694 src/gpafilesignop.c:433
-#: src/gpastreamsignop.c:264
 msgid "You didn't select any key for signing"
 msgstr "沒有選擇簽署的檔案"
 
-#: src/gpafilesignop.c:156
 msgid "Signing..."
 msgstr "簽署中..."
 
-#: src/gpafileverifyop.c:104
 msgid "Verifying..."
 msgstr "驗證中..."
 
-#: src/gpafileverifyop.c:177
 #, c-format
 msgid ""
 "GPA found a file that could be a signature of %s. Would you like to verify "
@@ -631,20 +487,16 @@ msgid ""
 "The file found is: %s"
 msgstr ""
 
-#: src/gpagenkeyadvop.c:80
 msgid "Generating Key..."
 msgstr "建立新鑰..."
 
-#: src/gpaimportfileop.c:132
 #, fuzzy
 msgid "Import keys from file"
 msgstr "由檔案中匯入公鑰"
 
-#: src/gpaimportop.c:196
 msgid "No keys were found."
 msgstr "找不到密鑰."
 
-#: src/gpaimportop.c:204
 #, c-format
 msgid ""
 "%i public keys read\n"
@@ -661,200 +513,149 @@ msgstr ""
 "%i 私鑰已匯入\n"
 "%i 私鑰已匯入"
 
-#: src/gpakeyexpireop.c:244
 msgid ""
 "Invalid time given.\n"
 "(you may not set the expiration time to the past.)"
 msgstr ""
 
-#: src/gpakeyselector.c:86 src/keylist.c:593 src/recipientdlg.c:191
-#: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:336
 msgid "Key ID"
 msgstr "密鑰ID"
 
-#: src/gpakeyselector.c:95 src/keylist.c:644 src/siglist.c:99
-#: src/siglist.c:142 src/verifydlg.c:348
 msgid "User Name"
 msgstr "用者名稱"
 
-#: src/gpakeysignop.c:191
 msgid "No private key for signing."
 msgstr "沒有選擇作簽署的私鑰."
 
-#: src/gpakeysignop.c:241
 msgid "This key has expired! Unable to sign."
 msgstr "這公鑰已是過時的! 不能用作簽署."
 
-#: src/gpakeysignop.c:245
 msgid "This key has already been signed with your own!"
 msgstr "這公鑰已被簽署了!"
 
-#: src/gpakeysignop.c:250
 msgid "You haven't selected a default key to sign with!"
 msgstr "沒有選擇預設簽署的密鑰!"
 
-#: src/gparecvkeydlg.c:106
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "選擇要匯入的密鑰. (請必須提供密鑰的序號)."
 
-#: src/gparecvkeydlg.c:116
 msgid "Key _ID:"
 msgstr "密鑰序號: (&I)"
 
-#: src/gpastreamdecryptop.c:155
 #, fuzzy
 msgid "Decrypting message ..."
 msgstr "解密中..."
 
-#: src/gpastreamdecryptop.c:344 src/gpastreamverifyop.c:356
 #, fuzzy
 msgid "Document"
 msgstr "備註:"
 
-#: src/gpastreamencryptop.c:229
 #, fuzzy
 msgid "Encrypting message ..."
 msgstr "加密中..."
 
-#: src/gpastreamencryptop.c:381
 #, fuzzy
 msgid "Message encryption"
 msgstr "允許加密"
 
-#: src/gpastreamsignop.c:176
 #, fuzzy
 msgid "Signing message ..."
 msgstr "簽署中..."
 
-#: src/gpastreamsignop.c:359
 msgid "Message signing"
 msgstr ""
 
-#: src/gpastreamverifyop.c:156
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "驗證中..."
 
-#: src/gpasubkeylist.c:79
 msgid "Subkey ID"
 msgstr "子鑰序號"
 
-#: src/gpasubkeylist.c:85 src/siglist.c:119 src/verifydlg.c:342
 msgid "Status"
 msgstr "狀態"
 
-#: src/gpasubkeylist.c:91
 msgid "Algorithm"
 msgstr "加密算式"
 
-#: src/gpasubkeylist.c:98
 msgid "Size"
 msgstr "大小"
 
-#: src/gpasubkeylist.c:104 src/keyeditdlg.c:169 src/keylist.c:606
 msgid "Expiry Date"
 msgstr "有效日期"
 
-#: src/gpasubkeylist.c:113
 msgid "[S]"
 msgstr ""
 
-#: src/gpasubkeylist.c:113
 msgid "Can sign"
 msgstr "允許簽署"
 
-#: src/gpasubkeylist.c:119
 msgid "[C]"
 msgstr ""
 
-#: src/gpasubkeylist.c:119
 msgid "Can certify"
 msgstr "允許驗證"
 
-#: src/gpasubkeylist.c:125
 msgid "[E]"
 msgstr ""
 
-#: src/gpasubkeylist.c:125
 msgid "Can encrypt"
 msgstr "允許加密"
 
-#: src/gpasubkeylist.c:131
 msgid "[A]"
 msgstr ""
 
-#: src/gpasubkeylist.c:131
 msgid "Can authenticate"
 msgstr "允許發放"
 
-#: src/gpasubkeylist.c:137
 msgid "[T]"
 msgstr ""
 
-#: src/gpasubkeylist.c:138
 msgid "Secret key stored on a smartcard."
 msgstr ""
 
-#: src/gpasubkeylist.c:144
 msgid "Card S/N"
 msgstr ""
 
-#: src/gpasubkeylist.c:145
 msgid "Serial number of the smart card."
 msgstr ""
 
-#: src/gpasubkeylist.c:157 src/gpgmetools.c:710 src/gpgmetools.c:927
-#: src/gpgmetools.c:1046
 msgid "Revoked"
 msgstr "移除"
 
-#: src/gpasubkeylist.c:161 src/gpgmetools.c:712 src/gpgmetools.c:1042
 msgid "Expired"
 msgstr "已經過時"
 
-#: src/gpasubkeylist.c:165 src/gpgmetools.c:714
 msgid "Disabled"
 msgstr "已經失效"
 
-#: src/gpasubkeylist.c:169
 msgid "Unsigned"
 msgstr "沒有簽署"
 
-#: src/gpasubkeylist.c:173 src/gpgmetools.c:1033 src/verifydlg.c:215
 msgid "Valid"
 msgstr "正確"
 
-#: src/gpawidgets.c:71 src/gpgmetools.c:758 src/gpgmetools.c:765
-#: src/keysigndlg.c:100
 msgid "User Name:"
 msgstr "用者名稱 :"
 
-#: src/gpawidgets.c:71 src/keysigndlg.c:100
 msgid "User Names:"
 msgstr "用者名稱 :"
 
-#: src/gpawidgets.c:77 src/gpgmetools.c:759 src/gpgmetools.c:766
-#: src/gpa-key-details.c:289
 msgid "Key ID:"
 msgstr "密鑰 ID:"
 
-#: src/gpawidgets.c:180
 msgid "Expiration"
 msgstr "有效期"
 
-#: src/gpawidgets.c:187
 msgid "_indefinitely valid"
 msgstr "不正確的合法 (&i)"
 
-#: src/gpawidgets.c:195
 msgid "expire _after"
 msgstr "失效自 (&a)"
 
-#: src/gpawidgets.c:215
 msgid "expire o_n:"
 msgstr "失效期為 (&n):"
 
-#: src/gpawidgets.c:289
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
@@ -862,17 +663,14 @@ msgstr ""
 "!執行錯誤!\n"
 "有效期不法的插入模式."
 
-#: src/gpadatebutton.c:87
 msgid "(not set)"
 msgstr ""
 
-#: src/gpgmeedit.c:1222
 msgid ""
 "Keys are already stored on the card.\n"
 "Really replace existing keys?"
 msgstr ""
 
-#: src/gpgmetools.c:72
 #, c-format
 msgid ""
 "Fatal Error in GPGME library\n"
@@ -889,7 +687,6 @@ msgstr ""
 "\n"
 "程式會被終止"
 
-#: src/gpgmetools.c:102
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
@@ -907,7 +704,6 @@ msgstr ""
 "\n"
 "這有可能是 GPA 程式的問題.nGPA 現在嘗試從錯誤中回復."
 
-#: src/gpgmetools.c:174
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -916,7 +712,6 @@ msgstr ""
 "檔案 %s 已經存在.\n"
 "要進行覆寫嗎?"
 
-#: src/gpgmetools.c:602
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -930,7 +725,6 @@ msgstr ""
 "****************************************\n"
 "\n"
 
-#: src/gpgmetools.c:607
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
@@ -938,309 +732,240 @@ msgstr ""
 "已備份的鑰對在檔案的是 :\n"
 "\n"
 
-#: src/gpgmetools.c:678 src/gpgmetools.c:701 src/gpgmetools.c:718
-#: src/gpgmetools.c:1038 src/gpgmetools.c:1071
 msgid "Unknown"
 msgstr "不知名"
 
-#: src/gpgmetools.c:681
 msgid "Never"
 msgstr "永不信任"
 
-#: src/gpgmetools.c:684
 msgid "Marginal"
 msgstr "部份信任"
 
-#: src/gpgmetools.c:687
 msgid "Full"
 msgstr "完全信任"
 
-#: src/gpgmetools.c:690
 msgid "Ultimate"
 msgstr "永遠信任"
 
-#: src/gpgmetools.c:716
 msgid "Incomplete"
 msgstr "不完整的"
 
-#: src/gpgmetools.c:722
 msgid "Fully Valid"
 msgstr "完全合法的"
 
-#: src/gpgmetools.c:756
 msgid "Please enter the passphrase for the following key:"
 msgstr "輸入以下密鑰的密碼:"
 
-#: src/gpgmetools.c:764
 msgid "Wrong passphrase, please try again:"
 msgstr "密碼錯誤, 請再嘗試 :"
 
-#: src/gpgmetools.c:789
 msgid "Enter Passphrase"
 msgstr "輸入密碼"
 
-#: src/gpgmetools.c:916
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:1010 src/verifydlg.c:279
 msgid "[Unknown user ID]"
 msgstr "[不名用者ID]"
 
-#: src/gpgmetools.c:1036 src/verifydlg.c:220
 msgid "Bad"
 msgstr "不合法的"
 
-#: src/gpgmetools.c:1059
 msgid "Generic"
 msgstr "通用"
 
-#: src/gpgmetools.c:1062
 msgid "Persona"
 msgstr "私用"
 
-#: src/gpgmetools.c:1065
 msgid "Casual"
 msgstr "臨時"
 
-#: src/gpgmetools.c:1068
 msgid "Positive"
 msgstr "確定"
 
-#: src/gpgmetools.c:1105
 #, fuzzy, c-format
 msgid "Bad signature by %s: %s"
 msgstr "簽署"
 
-#: src/gpgmetools.c:1108
 #, fuzzy, c-format
 msgid "Bad signature by %s"
 msgstr "簽署"
 
-#: src/gpgmetools.c:1111
 #, c-format
 msgid "Bad signature by unknown key %s: %s"
 msgstr ""
 
-#: src/gpgmetools.c:1114
 #, c-format
 msgid "Bad signature by unknown key %s"
 msgstr ""
 
-#: src/gpgmetools.c:1117
 #, c-format
 msgid "Bad signature by unknown key: %s"
 msgstr ""
 
-#: src/gpgmetools.c:1120
 msgid "Bad signature by unknown key"
 msgstr ""
 
-#: src/gpgmetools.c:1125
 #, fuzzy, c-format
 msgid "Good signature by %s: %s"
 msgstr "簽署"
 
-#: src/gpgmetools.c:1128
 #, fuzzy, c-format
 msgid "Good signature by %s"
 msgstr "簽署"
 
-#: src/gpgmetools.c:1131
 #, c-format
 msgid "Good signature by unknown key %s: %s"
 msgstr ""
 
-#: src/gpgmetools.c:1134
 #, c-format
 msgid "Good signature by unknown key %s"
 msgstr ""
 
-#: src/gpgmetools.c:1137
 #, c-format
 msgid "Good signature by unknown key: %s"
 msgstr ""
 
-#: src/gpgmetools.c:1140
 msgid "Good signature by unknown key"
 msgstr ""
 
-#: src/gpgmetools.c:1145
 #, fuzzy, c-format
 msgid "Uncertain signature by %s: %s"
 msgstr "簽署"
 
-#: src/gpgmetools.c:1148
 #, fuzzy, c-format
 msgid "Uncertain signature by %s"
 msgstr "所有簽署"
 
-#: src/gpgmetools.c:1151
 #, fuzzy, c-format
 msgid "Uncertain signature by unknown key %s: %s"
 msgstr "簽署"
 
-#: src/gpgmetools.c:1154
 #, fuzzy, c-format
 msgid "Uncertain signature by unknown key %s"
 msgstr "所有簽署"
 
-#: src/gpgmetools.c:1157
 #, fuzzy, c-format
 msgid "Uncertain signature by unknown key: %s"
 msgstr "簽署"
 
-#: src/gpgmetools.c:1160
 msgid "Uncertain signature by unknown key"
 msgstr ""
 
-#: src/gpgmetools.c:1189
 msgid "The key can be used for certification, signing and encryption."
 msgstr "密鑰可被用作驗證, 簽署及加密."
 
-#: src/gpgmetools.c:1192
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr "密鑰可被用作驗證及簽署, 並不允許用在加密上."
 
-#: src/gpgmetools.c:1198
 msgid "The key can be used for certification and encryption."
 msgstr "密鑰可用作驗證及加密."
 
-#: src/gpgmetools.c:1201
 msgid "The key can be used only for certification."
 msgstr "密鑰只可用作驗證."
 
-#: src/gpgmetools.c:1209
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr "密鑰只可以被用作簽署及加密.並不允許用在驗證用途."
 
-#: src/gpgmetools.c:1212
 msgid "The key can be used only for signing."
 msgstr "密鑰只可用作簽署."
 
-#: src/gpgmetools.c:1217
 msgid "The key can be used only for encryption."
 msgstr "密鑰只可用作加密."
 
-#: src/gpgmetools.c:1220
 msgid "This key is useless."
 msgstr "密鑰是不可使用的."
 
-#: src/gpgmetools.c:1580
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
-#: src/gpgmetools.c:1630
 msgid "You must enter a name."
 msgstr ""
 
-#: src/gpgmetools.c:1632
 msgid "Invalid character in name."
 msgstr ""
 
-#: src/gpgmetools.c:1634
 msgid "Name may not start with a digit."
 msgstr ""
 
-#: src/gpgmetools.c:1636
 msgid "Name is too short."
 msgstr ""
 
-#: src/gpgmetools.c:1708
 msgid "Email address is not valid."
 msgstr ""
 
-#: src/gpgmetools.c:1722
 msgid "Invalid character in comments."
 msgstr ""
 
-#: src/gtktools.c:48
 msgid "GPA Error"
 msgstr "GPA 錯誤"
 
-#: src/helpmenu.c:83
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "了解GNU Privacy Assistant"
 
-#: src/helpmenu.c:88
 msgid "About GPA"
 msgstr "關於GPA"
 
 #. TRANSLATORS: The translation of this string should
 #. be your name and mail
-#: src/helpmenu.c:101
 msgid "translator-credits"
 msgstr ""
 
-#: src/helpmenu.h:29
 #, fuzzy
 msgid "_Help"
 msgstr "/求助"
 
-#: src/helpmenu.h:32
 #, fuzzy
 msgid "Open the GPA manual"
 msgstr "開啟檔案管理員"
 
-#: src/helpmenu.h:35
 #, fuzzy
 msgid "About this application"
 msgstr "加密已選擇檔案"
 
-#: src/icons.c:167
 #, fuzzy
 msgid "_Verify"
 msgstr "驗證"
 
-#: src/icons.c:168
 #, fuzzy
 msgid "_Encrypt"
 msgstr "加密"
 
-#: src/icons.c:169
 #, fuzzy
 msgid "_Decrypt"
 msgstr "解密"
 
-#: src/icons.c:170
 #, fuzzy
 msgid "_Brief"
 msgstr "摘要"
 
-#: src/icons.c:171
 #, fuzzy
 msgid "_Detailed"
 msgstr "詳情"
 
-#: src/icons.c:172
 #, fuzzy
 msgid "_Keyring Manager"
 msgstr "檔案管理員"
 
-#: src/icons.c:173
 #, fuzzy
 msgid "_Clipboard"
 msgstr "/視窗/檔案管理 (&F)"
 
-#: src/icons.c:174
 #, fuzzy
 msgid "_File Manager"
 msgstr "檔案管理員"
 
-#: src/icons.c:175
 #, fuzzy
 msgid "_Card Manager"
 msgstr "檔案管理員"
 
-#: src/keydeletedlg.c:41
 msgid "Removing Secret Key"
 msgstr "移除密鑰"
 
-#: src/keydeletedlg.c:55
 msgid ""
 "If you delete this key, you won't be able to\n"
 "read messages encrypted with it.\n"
@@ -1252,21 +977,17 @@ msgstr ""
 "\n"
 "要確定刪除嗎 ?"
 
-#: src/keydeletedlg.c:91
 msgid "Remove Key"
 msgstr "移除密鑰"
 
-#: src/keydeletedlg.c:104
 msgid "You have selected the following key for removal:"
 msgstr "您選擇移除以下的密鑰:"
 
-#: src/keydeletedlg.c:114
 msgid ""
 "This key has a secret key. Deleting this key cannot be undone, unless you "
 "have a backup copy."
 msgstr "這密鑰包含私鑰. 刪除後不複原, 除非您有備份."
 
-#: src/keydeletedlg.c:123
 msgid ""
 "This key is a public key. Deleting this key cannot be undone easily, "
 "although you may be able to get a new copy  from the owner or from a key "
@@ -1274,96 +995,73 @@ msgid ""
 msgstr ""
 "這是公鑰. 刪除後不能輕易複原, 除非您可以從擁有人或Key Server中取得新公鑰."
 
-#: src/keydeletedlg.c:132
 msgid "Are you sure you want to delete this key?"
 msgstr "您確定要刪除這密鑰?"
 
-#: src/keyeditdlg.c:148
 msgid "Edit Key"
 msgstr "修改密鑰"
 
-#: src/keyeditdlg.c:163
 msgid "Change _passphrase"
 msgstr "更改密碼 (&P)"
 
-#: src/keyeditdlg.c:183
 msgid "Change _expiration"
 msgstr "改變有效日期 (&E)"
 
-#: src/keygendlg.c:40
 msgid "RSA"
 msgstr ""
 
-#: src/keygendlg.c:41
 msgid "RSA (sign only)"
 msgstr "只簽署的 RSA"
 
-#: src/keygendlg.c:42
 msgid "DSA"
 msgstr ""
 
-#: src/keygendlg.c:43
 msgid "DSA (sign only)"
 msgstr "只簽署的DSA"
 
-#: src/keygendlg.c:136
 msgid "You must enter a key size."
 msgstr ""
 
-#: src/keygendlg.c:190
 #, fuzzy
 msgid "Generate card key"
 msgstr "建立新鑰"
 
-#: src/keygendlg.c:190 src/keygenwizard.c:387 src/keygenwizard.c:400
-#: src/keygenwizard.c:410 src/keygenwizard.c:421 src/keygenwizard.c:438
-#: src/keygenwizard.c:450 src/cardman.c:647
 msgid "Generate key"
 msgstr "建立新鑰"
 
-#: src/keygendlg.c:211
 msgid "_Algorithm: "
 msgstr "加密算式 (&A):"
 
-#: src/keygendlg.c:237
 msgid "_Key size (bits): "
 msgstr "密鑰大小 (位):"
 
-#: src/keygendlg.c:262
 #, fuzzy
 msgid "User ID: "
 msgstr "用者ID (&U):"
 
-#: src/keygendlg.c:278
 msgid "_Name: "
 msgstr ""
 
-#: src/keygendlg.c:291
 msgid "_Email: "
 msgstr "電郵 (&E):"
 
-#: src/keygendlg.c:304
 msgid "_Comment: "
 msgstr "備註 (&C):"
 
-#: src/keygendlg.c:317
 #, fuzzy
 msgid "_Expires: "
 msgstr "有效期至:"
 
-#: src/keygendlg.c:329
 #, fuzzy
 msgid "Backup: "
 msgstr "備份密鑰"
 
-#: src/keygendlg.c:341
 msgid ""
 "If checked the encryption key will be created and stored to a backup file "
 "and then loaded into the card.  This is recommended so that encrypted "
 "messages can be decrypted even if the card has a malfunction."
 msgstr ""
 
-#: src/keygenwizard.c:175
 msgid ""
 "Please insert your full name.\n"
 "\n"
@@ -1374,11 +1072,9 @@ msgstr ""
 "\n"
 "這個名字會是鑰的一部份使其他人容易辨認您的密鑰."
 
-#: src/keygenwizard.c:178
 msgid "Your Name:"
 msgstr "您的名字:"
 
-#: src/keygenwizard.c:212
 #, fuzzy
 msgid ""
 "Please insert your email address.\n"
@@ -1392,11 +1088,9 @@ msgstr ""
 "您的電郵地址會是鑰的一部份使其他人容易辨認您. 如果您有多個電郵地址, 您可以在"
 "日後再增加."
 
-#: src/keygenwizard.c:216
 msgid "Your Email Address:"
 msgstr "您的電郵地址:"
 
-#: src/keygenwizard.c:235
 msgid ""
 "It is recommended that you create a backup copy of your new key, once it has "
 "been generated.\n"
@@ -1407,15 +1101,12 @@ msgstr ""
 "\n"
 "您是否想製作一個備份?"
 
-#: src/keygenwizard.c:243
 msgid "Create _backup copy"
 msgstr "建立備份 (&b)"
 
-#: src/keygenwizard.c:248 src/keymanager.c:731 src/keymanager.c:757
 msgid "Do it _later"
 msgstr "往後才進行 (&l)"
 
-#: src/keygenwizard.c:277
 msgid ""
 "Your key is being generated.\n"
 "\n"
@@ -1425,7 +1116,6 @@ msgstr ""
 "\n"
 "在更快的電腦上也可能要等侯一段時間. 請等侯..."
 
-#: src/keygenwizard.c:289
 #, fuzzy, c-format
 msgid ""
 "Congratulations!\n"
@@ -1437,7 +1127,6 @@ msgstr ""
 "\n"
 "新的鑰已經建立. 這鑰已被認正及其重長1024 bits."
 
-#: src/keylist.c:360
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1445,350 +1134,275 @@ msgstr ""
 "GnuPG 正在重建資料庫.\n"
 "請耐心等候..."
 
-#: src/keylist.c:585
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#: src/keylist.c:594
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "密鑰只可用作驗證."
 
-#: src/keylist.c:607
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
-#: src/keylist.c:617 src/ownertrustdlg.c:122
 msgid "Owner Trust"
 msgstr "相信擁有者"
 
-#: src/keylist.c:618
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
 
-#: src/keylist.c:630
 #, fuzzy
 msgid "Validity"
 msgstr "驟證公鑰"
 
-#: src/keylist.c:631
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
 
-#: src/keylist.c:645
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr ""
 
-#: src/keymanager.c:447
 msgid "No keys selected for signing."
 msgstr "沒有選擇作簽署的密鑰."
 
-#: src/keymanager.c:726
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
 msgstr "您並沒有私鑰, 建議您現在建立或是往後才建立?"
 
-#: src/keymanager.c:730
 msgid "_Generate key now"
 msgstr "現在建立鑰 (&G)"
 
-#: src/keymanager.c:751
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
 msgstr "您並沒有私鑰, 建議您現在建立或是往後才建立?"
 
-#: src/keymanager.c:756
 msgid "_Backup key now"
 msgstr "現在進行備份 (&G)"
 
-#: src/keymanager.c:869
 #, fuzzy
 msgid "_Keys"
 msgstr "/鑰對"
 
-#: src/keymanager.c:870
 #, fuzzy
 msgid "_Server"
 msgstr "/伺服器"
 
-#: src/keymanager.c:884
 msgid "Select all certificates"
 msgstr ""
 
-#: src/keymanager.c:889
 msgid "Refresh the keyring"
 msgstr ""
 
-#: src/keymanager.c:890
 #, fuzzy
 msgid "_New key..."
 msgstr "/鑰對/建立新鑰... (&N)"
 
-#: src/keymanager.c:891
 #, fuzzy
 msgid "Generate a new key"
 msgstr "建立新鑰"
 
-#: src/keymanager.c:892
 #, fuzzy
 msgid "_Delete keys"
 msgstr "/刪除密鑰... (&D)"
 
-#: src/keymanager.c:893
 msgid "Remove the selected key"
 msgstr "移除已選擇的密鑰"
 
-#: src/keymanager.c:894
 #, fuzzy
 msgid "_Sign Keys..."
 msgstr "/簽署公鑰... (&S)"
 
-#: src/keymanager.c:895
 msgid "Sign the selected key"
 msgstr "簽署已選擇的密鑰"
 
-#: src/keymanager.c:896
 #, fuzzy
 msgid "Set _Owner Trust..."
 msgstr "/設定信任度... (&O)"
 
-#: src/keymanager.c:897
 #, fuzzy
 msgid "Set owner trust of the selected key"
 msgstr "移除已選擇的密鑰"
 
-#: src/keymanager.c:899
 #, fuzzy
 msgid "_Edit Private Key..."
 msgstr "/修改私鑰... (&E)"
 
-#: src/keymanager.c:900
 msgid "Edit the selected private key"
 msgstr "修改已選擇的密鑰"
 
-#: src/keymanager.c:902
 #, fuzzy
 msgid "_Import Keys..."
 msgstr "匯入密鑰"
 
-#: src/keymanager.c:903
 msgid "Import Keys"
 msgstr "匯入密鑰"
 
-#: src/keymanager.c:904
 #, fuzzy
 msgid "E_xport Keys..."
 msgstr "/匯出鑰對... (&X)"
 
-#: src/keymanager.c:905
 msgid "Export Keys"
 msgstr "輸出密鑰"
 
-#: src/keymanager.c:906
 #, fuzzy
 msgid "_Backup..."
 msgstr "/備份... (&B)"
 
-#: src/keymanager.c:907
 #, fuzzy
 msgid "Backup key"
 msgstr "備份密鑰"
 
-#: src/keymanager.c:910
 #, fuzzy
 msgid "_Retrieve Keys..."
 msgstr "/伺服器/下載公鑰... (&R)"
 
-#: src/keymanager.c:911
 msgid "Retrieve keys from server"
 msgstr ""
 
-#: src/keymanager.c:913
 #, fuzzy
 msgid "_Send Keys..."
 msgstr "/簽署公鑰... (&S)"
 
-#: src/keymanager.c:914
 #, fuzzy
 msgid "Send keys to server"
 msgstr "寄出公鑰到伺服器... (&N)"
 
-#: src/keymanager.c:920
 msgid "Show Brief Keylist"
 msgstr "顯示密鑰清單摘要"
 
-#: src/keymanager.c:922
 msgid "Show Key Details"
 msgstr "顯示密鑰詳情"
 
-#: src/keymanager.c:1049
 msgid "Edit"
 msgstr "修改"
 
-#: src/keymanager.c:1051
 #, fuzzy
 msgid "Delete"
 msgstr "/編輯/全部選擇 (&A)"
 
-#: src/keymanager.c:1053
 msgid "Sign"
 msgstr "簽署"
 
-#: src/keymanager.c:1055
 msgid "Export"
 msgstr "輸出"
 
-#: src/keymanager.c:1057
 msgid "Import"
 msgstr "匯入"
 
-#: src/keymanager.c:1188
 #, fuzzy
 msgid "Selected default key:"
 msgstr "選擇預設密鑰:"
 
-#: src/keymanager.c:1198
 msgid "No default key selected in the preferences."
 msgstr ""
 
-#: src/keymanager.c:1289
 #, fuzzy
 msgid "GNU Privacy Assistant - Key Manager"
 msgstr "GNU Privacy Assistant - 檔案管理"
 
-#: src/keymanager.c:1317
 #, fuzzy
 msgid "Key Manager"
 msgstr "檔案管理員"
 
-#: src/gpa-key-details.c:132
 #, fuzzy
 msgid "The key has both a smartcard based private part and a public part"
 msgstr "這是有私人及公共部份的完鑰"
 
-#: src/gpa-key-details.c:136
 msgid "The key has both a private and a public part"
 msgstr "這是有私人及公共部份的完鑰"
 
-#: src/gpa-key-details.c:140
 msgid "The key has only a public part"
 msgstr "這密鑰只有公共部份"
 
-#: src/gpa-key-details.c:176
 #, c-format
 msgid "%s %u bits"
 msgstr "%s %u 位"
 
-#: src/gpa-key-details.c:202
 msgid "No keys selected"
 msgstr "沒有選擇密鑰"
 
-#: src/gpa-key-details.c:205
 #, fuzzy, c-format
 msgid "%d key selected"
 msgid_plural "%d keys selected"
 msgstr[0] "%d 密鑰被選擇"
 msgstr[1] "%d 密鑰被選擇"
 
-#: src/gpa-key-details.c:287
 #, fuzzy
 msgid "User name:"
 msgstr "用者名稱 :"
 
-#: src/gpa-key-details.c:291 src/keysigndlg.c:106
 msgid "Fingerprint:"
 msgstr "指紋:"
 
-#: src/gpa-key-details.c:293
 msgid "Expires at:"
 msgstr "有效期至:"
 
-#: src/gpa-key-details.c:295
 msgid "Owner Trust:"
 msgstr "擁有者信任:"
 
-#: src/gpa-key-details.c:297
 #, fuzzy
 msgid "Key validity:"
 msgstr "認正公鑰:"
 
-#: src/gpa-key-details.c:299
 #, fuzzy
 msgid "Key type:"
 msgstr "密鑰種類:"
 
-#: src/gpa-key-details.c:301
 msgid "Created at:"
 msgstr "建立在 :"
 
-#: src/gpa-key-details.c:304
 msgid "Details"
 msgstr "詳情"
 
-#: src/gpa-key-details.c:350
 msgid "Show signatures on user name:"
 msgstr "在用者名稱顯示簽署:"
 
-#: src/gpa-key-details.c:386
 #, fuzzy
 msgid "Chain"
 msgstr "允許簽署"
 
-#: src/gpa-key-details.c:386
 msgid "Signatures"
 msgstr "簽署"
 
-#: src/gpa-key-details.c:408
 msgid "All signatures"
 msgstr "所有簽署"
 
-#: src/gpa-key-details.c:470
 msgid "Subkeys"
 msgstr "子鑰"
 
-#: src/gpa-key-details.c:470
 #, fuzzy
 msgid "Key"
 msgstr "/鑰對"
 
-#: src/keysigndlg.c:59
 msgid "Sign Key"
 msgstr "簽署密鑰"
 
-#: src/keysigndlg.c:72
 msgid "Do you want to sign the following key?"
 msgstr "您希望簽署以下的密鑰 ?"
 
-#: src/keysigndlg.c:116
 msgid ""
 "Check the name and fingerprint carefully to be sure that it really is the "
 "key you want to sign."
 msgstr "檢查密鑰的名稱及指紋以確定沒有錯誤."
 
-#: src/keysigndlg.c:124
 msgid "All user names in this key will be signed."
 msgstr "所有在這個鑰下的用者都作簽署."
 
-#: src/keysigndlg.c:130
 msgid "The key will be signed with your default private key."
 msgstr "這密鑰會以您的私鑰簽署."
 
-#: src/keysigndlg.c:137
 msgid "Sign only _locally"
 msgstr "只是本地上的簽署 (&l)"
 
-#: src/keytable.c:217
 msgid ""
 "It seems that GPGSM is not installed.\n"
 "\n"
@@ -1798,7 +1412,6 @@ msgid ""
 "with the option --disable-x509 ."
 msgstr ""
 
-#: src/options.c:329
 msgid ""
 "The private key you selected as default is no longer available.\n"
 "GPA will try to choose a new default key automatically."
@@ -1806,34 +1419,27 @@ msgstr ""
 "已選作為預設的私鑰並不能使用.\n"
 "GPA 會嘗試自動選擇其他私鑰."
 
-#: src/ownertrustdlg.c:106
 msgid "Change key ownertrust"
 msgstr "改變信任度"
 
-#: src/ownertrustdlg.c:130
 msgid "_Unknown"
 msgstr "不知名 (&U)"
 
-#: src/ownertrustdlg.c:135
 msgid ""
 "You don't know how much to trust this user to verify other people's keys.\n"
 msgstr "不知道信任這公鑰的信任程度.\n"
 
-#: src/ownertrustdlg.c:145
 msgid "_Never"
 msgstr "永不信任 (&N)"
 
-#: src/ownertrustdlg.c:150
 msgid ""
 "You don't trust this user at all to verify the validity of other people's "
 "keys at all.\n"
 msgstr "完全不信任所有這個用者的資料\n"
 
-#: src/ownertrustdlg.c:160
 msgid "_Marginal"
 msgstr "部份信任 (&M)"
 
-#: src/ownertrustdlg.c:165
 msgid ""
 "You don't trust this user's ability to verify the validity of other people's "
 "keys enough to consider keys valid based on his/her sole word.\n"
@@ -1845,11 +1451,9 @@ msgstr ""
 "但是這個用者的公鑰是合法的, 如果這個用者的公鑰被兩人以前所簽署, 您會信任這個"
 "公鑰\n"
 
-#: src/ownertrustdlg.c:182
 msgid "_Full"
 msgstr "完全信任 (&F)"
 
-#: src/ownertrustdlg.c:187
 msgid ""
 "You trust this user's ability to verify the validity of other people's keys "
 "so much, that you'll consider valid any key signed by him/her, provided this "
@@ -1858,11 +1462,9 @@ msgstr ""
 "您信任這個用者有能力驗證其他人的公鑰.並且您會認為所有由這個公鑰所簽署的文件都"
 "會是合法及正確的.\n"
 
-#: src/ownertrustdlg.c:200
 msgid "U_ltimate"
 msgstr "永遠信任 (&L)"
 
-#: src/ownertrustdlg.c:205
 msgid ""
 "You consider this key valid, and trust the user so much that you will "
 "consider any key signed by him/her fully valid.\n"
@@ -1874,7 +1476,6 @@ msgstr ""
 "\n"
 "(警告: 除非必要, 請不要與其他公鑰同時使用這個用者的公鑰)\n"
 
-#: src/passwddlg.c:45
 msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
@@ -1882,7 +1483,6 @@ msgstr ""
 "在 \"密碼\"及\"重複密碼\",\n"
 "您需要輸入相同的密碼."
 
-#: src/passwddlg.c:52
 msgid ""
 "You did not enter a passphrase.\n"
 "It is needed to protect your private key."
@@ -1890,7 +1490,6 @@ msgstr ""
 "您並沒有輸入密碼.\n"
 "這個密碼是需要用作保護密鑰的."
 
-#: src/passwddlg.c:65
 msgid ""
 "Warning: You have entered a passphrase\n"
 "that is obviously not secure.\n"
@@ -1902,182 +1501,141 @@ msgstr ""
 "\n"
 "請輸入新的密碼."
 
-#: src/passwddlg.c:70
 msgid "_Enter new passphrase"
 msgstr "輸入新密碼 (&E)"
 
-#: src/passwddlg.c:71
 msgid "Take this one _anyway"
 msgstr "強行使用這個密碼 (&A)"
 
-#: src/passwddlg.c:96
 msgid "Choose new passphrase"
 msgstr "輸入新密碼"
 
-#: src/passwddlg.c:111
 msgid "Passphrase: "
 msgstr "密碼 :"
 
-#: src/passwddlg.c:120
 msgid "Repeat Passphrase: "
 msgstr "重複密碼 :"
 
-#: src/recipientdlg.c:165
 msgid "Recipient"
 msgstr ""
 
-#: src/recipientdlg.c:166
 msgid ""
 "Shows the recipients of the message. A key needs to be assigned to each "
 "recipient."
 msgstr ""
 
-#: src/recipientdlg.c:174
 msgid "Checked if at least one matching OpenPGP certificate has been found."
 msgstr ""
 
-#: src/recipientdlg.c:182
 msgid ""
 "Checked if at least one matching X.509 certificate for use with S/MIME has "
 "been found."
 msgstr ""
 
-#: src/recipientdlg.c:192
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
 "selected."
 msgstr ""
 
-#: src/recipientdlg.c:306
 msgid ""
 "You need to select a key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
 
-#: src/recipientdlg.c:314
 msgid ""
 "You need to select exactly one key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
 
-#: src/recipientdlg.c:321
 msgid ""
 "Although you selected keys for all recipients a common encryption protocol "
 "can't be used. Please decide on one protocol by clicking one of the above "
 "radio buttons."
 msgstr ""
 
-#: src/recipientdlg.c:327
 msgid "Using OpenPGP for encryption."
 msgstr ""
 
-#: src/recipientdlg.c:332
 msgid "Using S/MIME for encryption."
 msgstr ""
 
-#: src/recipientdlg.c:336
 msgid "No recipients - encryption is not possible"
 msgstr ""
 
-#: src/recipientdlg.c:422
 msgid "[Ambiguous keys. Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:424
 msgid "[Ambiguous PGP key.  Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:426
 msgid "[Ambiguous X.509 key. Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:439
 msgid "[Right-click to select]"
 msgstr ""
 
-#: src/recipientdlg.c:824
 msgid "Select _PGP key..."
 msgstr ""
 
-#: src/recipientdlg.c:826
 msgid "Select _S\\/MIME key..."
 msgstr ""
 
-#: src/recipientdlg.c:828
 msgid "Toggle _Ignore flag"
 msgstr ""
 
-#: src/recipientdlg.c:942
 msgid "Select keys for recipients"
 msgstr ""
 
-#: src/recipientdlg.c:959
 msgid "_Recipient list"
 msgstr ""
 
-#: src/recipientdlg.c:982
 msgid "Use _PGP"
 msgstr ""
 
-#: src/recipientdlg.c:985
 msgid "Use _X.509"
 msgstr ""
 
-#: src/recipientdlg.c:988
 #, fuzzy
 msgid "_Auto selection"
 msgstr "加密已選擇檔案"
 
-#: src/selectkeydlg.c:179
 #, fuzzy
 msgid "Select a key"
 msgstr "選擇預設密鑰:"
 
-#: src/server-access.c:294
 msgid "No error"
 msgstr "沒有錯誤"
 
-#: src/server-access.c:297
 msgid "Internal error"
 msgstr "內部錯誤"
 
-#: src/server-access.c:300
 msgid "Operation not supported"
 msgstr "操作不支援"
 
-#: src/server-access.c:303
 msgid "Version mismatch"
 msgstr "版本不對"
 
-#: src/server-access.c:306
 msgid "Internal keyserver error"
 msgstr "內部公鑰伺服器錯誤"
 
-#: src/server-access.c:309
 msgid "Out of memory"
 msgstr "記憶體不足"
 
-#: src/server-access.c:312
 msgid "Key not found"
 msgstr "找不到公鑰"
 
-#: src/server-access.c:315
 msgid "Key already exists on server"
 msgstr "已經寄到伺服器."
 
-#: src/server-access.c:318
 msgid "Key incomplete"
 msgstr "鑰對不完整"
 
-#: src/server-access.c:321
 msgid "Could not contact keyserver"
 msgstr "找不到公鑰伺服器"
 
-#: src/server-access.c:324
 msgid "Unknown Error"
 msgstr "不名的錯誤"
 
-#: src/server-access.c:360
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
@@ -2086,7 +1644,6 @@ msgstr ""
 "正在聯絡伺服器 \"%s\" 中\n"
 "請等候..."
 
-#: src/server-access.c:383 src/server-access.c:403
 #, c-format
 msgid ""
 "An error ocurred while contacting the server:\n"
@@ -2097,7 +1654,6 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/server-access.c:469
 msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
@@ -2105,67 +1661,52 @@ msgstr ""
 "沒有與伺服器通訊協定使用的\n"
 "外掛模組"
 
-#: src/server-access.c:542 src/server-access.c:586
 msgid "The keyserver you specified is not valid"
 msgstr "伺服器並不正確"
 
-#: src/settingsdlg.c:133 src/siglist.c:134
 msgid "Local"
 msgstr "本區的"
 
-#: src/settingsdlg.c:134
 msgid "Local, Keyserver"
 msgstr ""
 
-#: src/settingsdlg.c:135
 #, fuzzy
 msgid "Local, PKA"
 msgstr "本區的"
 
-#: src/settingsdlg.c:136
 msgid "Local, PKA, Keyserver"
 msgstr ""
 
-#: src/settingsdlg.c:137
 msgid "Local, Keyserver, PKA"
 msgstr ""
 
-#: src/settingsdlg.c:138
 #, fuzzy
 msgid "Local, kDNS"
 msgstr "本區的"
 
-#: src/settingsdlg.c:139
 msgid "Local, kDNS, Keyserver"
 msgstr ""
 
-#: src/settingsdlg.c:140
 msgid "PKA"
 msgstr ""
 
-#: src/settingsdlg.c:141
 msgid "kDNS"
 msgstr ""
 
-#: src/settingsdlg.c:142
 msgid "Custom"
 msgstr ""
 
-#: src/settingsdlg.c:208
 #, fuzzy
 msgid "<b>User interface</b>"
 msgstr "使用進階模式 (&A):"
 
-#: src/settingsdlg.c:215
 #, fuzzy
 msgid "Use _advanced mode"
 msgstr "使用進階模式 (&A):"
 
-#: src/settingsdlg.c:221
 msgid "Show advanced _options"
 msgstr ""
 
-#: src/settingsdlg.c:272
 msgid ""
 "No default key has been selected.  This may lead to problems when signing or "
 "encrypting.  For example you might later not be able to read a mail written "
@@ -2174,31 +1715,25 @@ msgid ""
 "Please consider creating your own key and select it then."
 msgstr ""
 
-#: src/settingsdlg.c:278
 msgid "Continue without a default key"
 msgstr ""
 
-#: src/settingsdlg.c:280
 #, fuzzy
 msgid "Let me select a default key"
 msgstr "選擇預設密鑰:"
 
-#: src/settingsdlg.c:305
 #, fuzzy
 msgid "<b>Default _key</b>"
 msgstr "預設密鑰 (&K):"
 
-#: src/settingsdlg.c:405
 #, fuzzy
 msgid "<b>Default key_server</b>"
 msgstr "預設公鑰伺服器 :"
 
-#: src/settingsdlg.c:602
 #, fuzzy
 msgid "<b>Auto key _locate</b>"
 msgstr "預設公鑰伺服器 :"
 
-#: src/settingsdlg.c:612
 msgid ""
 "The list of methods to locate keys via an email address.\n"
 "All given methods are used in turn until a matching key is found.  The "
@@ -2215,93 +1750,73 @@ msgid ""
 "   - Configured in the backend dialog.\n"
 msgstr ""
 
-#: src/settingsdlg.c:627
 msgid "Method:"
 msgstr ""
 
-#: src/settingsdlg.c:644
 msgid "The IP address of the nameserver used for the kDNS method."
 msgstr ""
 
-#: src/settingsdlg.c:646
 #, fuzzy
 msgid "kDNS Server:"
 msgstr "/伺服器"
 
-#: src/settingsdlg.c:740
 #, fuzzy
 msgid "The URL given for the keyserver is not valid."
 msgstr "伺服器並不正確"
 
-#: src/settingsdlg.c:749
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 
-#: src/settingsdlg.c:886
 #, fuzzy
 msgid "GNU Privacy Assistant - Settings"
 msgstr "GNU Privacy Assistant - 鑰圈編輯器"
 
-#: src/siglist.c:127
 msgid "Level"
 msgstr "程度"
 
-#: src/verifydlg.c:116
 #, fuzzy
 msgid "Verify documents"
 msgstr "驗證檔案"
 
-#: src/verifydlg.c:235
 msgid "Expired Key"
 msgstr "已過時的公鑰"
 
-#: src/verifydlg.c:243
 msgid "Key NOT valid"
 msgstr "公鑰不正確"
 
-#: src/verifydlg.c:354
 #, fuzzy
 msgid "Description"
 msgstr "解密中..."
 
-#: src/verifydlg.c:377
 #, c-format
 msgid "Verified data in file: %s"
 msgstr "驗證檔案中的資料: %s"
 
-#: src/verifydlg.c:382
 #, fuzzy, c-format
 msgid "Signature: %s"
 msgstr "簽署"
 
-#: src/verifydlg.c:388
 msgid "Signatures:"
 msgstr "簽署"
 
-#: src/cardman.c:167
 #, fuzzy
 msgid "GNU Privacy Assistant - Card Manager"
 msgstr "GNU Privacy Assistant - 檔案管理"
 
-#: src/cardman.c:188
 #, c-format
 msgid "%s card detected."
 msgstr ""
 
-#: src/cardman.c:195
 msgid "Checking for card..."
 msgstr ""
 
-#: src/cardman.c:368
 #, fuzzy
 msgid "No card found."
 msgstr "找不到密鑰."
 
-#: src/cardman.c:374
 msgid "The selected card application is currently not available."
 msgstr ""
 
-#: src/cardman.c:375
 msgid ""
 "Another process is using a different card application than the selected "
 "one.\n"
@@ -2310,60 +1825,47 @@ msgid ""
 "active application."
 msgstr ""
 
-#: src/cardman.c:385
 msgid "The selected card application is not available."
 msgstr ""
 
-#: src/cardman.c:397
 msgid "Error accessing the card."
 msgstr ""
 
-#: src/cardman.c:398 src/cardman.c:432
 msgid "Error accessing card"
 msgstr ""
 
-#: src/cardman.c:427
 msgid "No card"
 msgstr ""
 
-#: src/cardman.c:638
 #, fuzzy
 msgid "_Card"
 msgstr "/視窗/檔案管理 (&F)"
 
-#: src/cardman.c:646
 msgid "Reload card information"
 msgstr ""
 
-#: src/cardman.c:648
 #, fuzzy
 msgid "Generate new key on card"
 msgstr "建立新鑰"
 
-#: src/cardman.c:777
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "操作不支援"
 
-#: src/cardman.c:913
 #, fuzzy
 msgid "Card Manager"
 msgstr "檔案管理員"
 
-#: src/cardman.c:921
 #, fuzzy
 msgid "Application selection:"
 msgstr "加密已選擇檔案"
 
-#: src/cardman.c:925
 msgid "Auto"
 msgstr ""
 
-#: src/cardman.c:1002
 msgid "The GPGME library is too old to support smartcards."
 msgstr ""
 
-#: src/cm-openpgp.c:162
 msgid ""
 "<b>Admin-PIN Required</b>\n"
 "\n"
@@ -2380,73 +1882,56 @@ msgid ""
 "This notice will be shown only once per session."
 msgstr ""
 
-#: src/cm-openpgp.c:281 src/cm-netkey.c:968
 msgid "PUK retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:282
 msgid "CHV2 retry counter: "
 msgstr ""
 
-#: src/cm-openpgp.c:394 src/cm-netkey.c:156
 msgid "Reset PIN"
 msgstr ""
 
-#: src/cm-openpgp.c:394 src/cm-openpgp.c:416 src/cm-netkey.c:157
 msgid "Change PIN"
 msgstr ""
 
-#: src/cm-openpgp.c:404 src/cm-netkey.c:157
 msgid "Change PUK"
 msgstr ""
 
-#: src/cm-openpgp.c:404 src/cm-netkey.c:156
 msgid "Reset PUK"
 msgstr ""
 
-#: src/cm-openpgp.c:675
 #, c-format
 msgid ""
 "Error saving the changed values.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:698
 msgid "Only plain ASCII is currently allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:700
 msgid "The \"<\" character may not be used."
 msgstr ""
 
-#: src/cm-openpgp.c:702
 msgid "Double spaces are not allowed."
 msgstr ""
 
-#: src/cm-openpgp.c:734
 msgid ""
 "Total length of first and last name may not be longer than 39 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:737 src/cm-openpgp.c:775 src/cm-openpgp.c:802
-#: src/cm-openpgp.c:826 src/cm-openpgp.c:851 src/cm-openpgp.c:872
 #, fuzzy
 msgid "Saving the field failed."
 msgstr "簽署已選擇檔案"
 
-#: src/cm-openpgp.c:761
 msgid "Invalid length of the language preference."
 msgstr ""
 
-#: src/cm-openpgp.c:769
 msgid "The language preference may only contain the letters 'a' through 'z'."
 msgstr ""
 
-#: src/cm-openpgp.c:821 src/cm-openpgp.c:846
 msgid "The field may not be longer than 254 characters."
 msgstr ""
 
-#: src/cm-openpgp.c:1072
 msgid ""
 "<b>Unblocking the PIN</b>\n"
 "\n"
@@ -2460,7 +1945,6 @@ msgid ""
 "at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1086
 msgid ""
 "<b>Changing the PIN</b>\n"
 "\n"
@@ -2476,7 +1960,6 @@ msgid ""
 "PIN.  Please check the instructions of your issuer."
 msgstr ""
 
-#: src/cm-openpgp.c:1103
 msgid ""
 "<b>Changing the Reset Code</b>\n"
 "\n"
@@ -2488,7 +1971,6 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1113
 msgid ""
 "<b>Reseting the PIN or the Reset Code</b>\n"
 "\n"
@@ -2506,7 +1988,6 @@ msgid ""
 "repeat that new value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1130
 msgid ""
 "<b>Changing the Admin-PIN</b>\n"
 "\n"
@@ -2524,129 +2005,102 @@ msgid ""
 "value at another prompt."
 msgstr ""
 
-#: src/cm-openpgp.c:1173 src/cm-netkey.c:793
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:1287
 #, c-format
 msgid ""
 "Error fetching the key.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-openpgp.c:1300
 #, c-format
 msgid "Keys found: %d, imported: %d, unchanged: %d"
 msgstr ""
 
-#: src/cm-openpgp.c:1322
 msgid "Fetch Key"
 msgstr ""
 
-#: src/cm-openpgp.c:1399 src/cm-netkey.c:889 src/cm-dinsig.c:255
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "使用進階模式 (&A):"
 
-#: src/cm-openpgp.c:1409 src/cm-netkey.c:898 src/cm-dinsig.c:264
 msgid "Serial number:"
 msgstr ""
 
-#: src/cm-openpgp.c:1413 src/cm-netkey.c:902
 msgid "Card version:"
 msgstr ""
 
-#: src/cm-openpgp.c:1417
 msgid "Manufacturer:"
 msgstr ""
 
-#: src/cm-openpgp.c:1426
 #, fuzzy
 msgid "<b>Personal</b>"
 msgstr "私用"
 
-#: src/cm-openpgp.c:1440
 msgid "Salutation:"
 msgstr ""
 
-#: src/cm-openpgp.c:1445
 msgid "First name:"
 msgstr ""
 
-#: src/cm-openpgp.c:1450
 #, fuzzy
 msgid "Last name:"
 msgstr "用者名稱 :"
 
-#: src/cm-openpgp.c:1455
 msgid "Language:"
 msgstr ""
 
-#: src/cm-openpgp.c:1460
 msgid "Login data:"
 msgstr ""
 
-#: src/cm-openpgp.c:1465
 #, fuzzy
 msgid "Public key URL:"
 msgstr "公鑰 (&P)"
 
-#: src/cm-openpgp.c:1473 src/cm-netkey.c:934
 #, fuzzy
 msgid "<b>Keys</b>"
 msgstr "簽署為 (&a)"
 
-#: src/cm-openpgp.c:1490
 #, fuzzy
 msgid "Signature key:"
 msgstr "簽署"
 
-#: src/cm-openpgp.c:1494
 #, fuzzy
 msgid "Encryption key:"
 msgstr "加密中..."
 
-#: src/cm-openpgp.c:1498
 #, fuzzy
 msgid "Authentication key:"
 msgstr "允許發放"
 
-#: src/cm-openpgp.c:1502
 #, fuzzy
 msgid "Signature counter:"
 msgstr "簽署"
 
-#: src/cm-openpgp.c:1510 src/cm-netkey.c:950
 msgid "<b>PIN</b>"
 msgstr ""
 
-#: src/cm-openpgp.c:1522
 #, fuzzy
 msgid "Force signature PIN:"
 msgstr "純文字簽署 (&C)"
 
-#: src/cm-openpgp.c:1526 src/cm-netkey.c:960
 msgid "PIN retry counter:"
 msgstr ""
 
-#: src/cm-openpgp.c:1540
 msgid "Admin-PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:142
 msgid "blocked"
 msgstr ""
 
-#: src/cm-netkey.c:373
 #, fuzzy
 msgid "Learn keys"
 msgstr "輸出密鑰"
 
-#: src/cm-netkey.c:375
 msgid ""
 "For some or all of the keys available on the card, the GnuPG crypto engine "
 "does not yet know the corresponding certificates.\n"
@@ -2659,12 +2113,10 @@ msgid ""
 "If you are unsure what to do, just click the button."
 msgstr ""
 
-#: src/cm-netkey.c:594
 #, fuzzy
 msgid "Learning keys ..."
 msgstr "建立新鑰..."
 
-#: src/cm-netkey.c:637
 #, c-format
 msgid ""
 "<b>Setting the Initial PIN</b> (%s)\n"
@@ -2684,27 +2136,23 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/cm-netkey.c:651
 msgid ""
 "You are now setting the PIN for the SigG key used to create <b>qualified "
 "signatures</b>.  You may want to set the PIN to the same value as used for "
 "the NKS keys."
 msgstr ""
 
-#: src/cm-netkey.c:654
 msgid ""
 "You are now setting the PIN for the NKS keys used for standard signatures, "
 "encryption and authentication."
 msgstr ""
 
-#: src/cm-netkey.c:683
 #, c-format
 msgid ""
 "Error changing the NullPIN.\n"
 "(%s <%s>)"
 msgstr ""
 
-#: src/cm-netkey.c:733
 msgid ""
 "<b>Changing a PIN or PUK</b>\n"
 "\n"
@@ -2717,7 +2165,6 @@ msgid ""
 "way to unblock them!"
 msgstr ""
 
-#: src/cm-netkey.c:745
 msgid ""
 "<b>Resetting a PUK</b>\n"
 "\n"
@@ -2734,7 +2181,6 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:759
 msgid ""
 "<b>Resetting a PIN</b>\n"
 "\n"
@@ -2747,30 +2193,24 @@ msgid ""
 "another prompt."
 msgstr ""
 
-#: src/cm-netkey.c:913
 msgid ""
 "<b>A NullPIN is still active on this card</b>.\n"
 "You need to set a real PIN before you can make use of the card."
 msgstr ""
 
-#: src/cm-netkey.c:919
 msgid "Set initial PIN"
 msgstr ""
 
-#: src/cm-netkey.c:940
 #, fuzzy
 msgid "scanning ..."
 msgstr "簽署中..."
 
-#: src/cm-netkey.c:976
 msgid "SigG PIN retry counter:"
 msgstr ""
 
-#: src/cm-netkey.c:984
 msgid "SigG PUK retry counter:"
 msgstr ""
 
-#: src/cm-dinsig.c:274
 #, c-format
 msgid ""
 "There is not much information to display for a %s card.  You may want to use "
