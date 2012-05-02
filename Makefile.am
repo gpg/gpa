@@ -24,7 +24,7 @@ AUTOMAKE_OPTIONS = dist-bzip2
 SUBDIRS = m4 src po pixmaps doc
 
 EXTRA_DIST = 								\
-	config.rpath  TODO README-alpha to-utf8 autogen.sh gpa.spec 	\
+	config.rpath TODO to-utf8 autogen.sh gpa.spec 			\
 	gpa.desktop gpa.png gpadefs.h.in      				\
 	po/ChangeLog-2011 pixmaps/ChangeLog-2011 ChangeLog-2011 	\
 	m4/ChangeLog-2011 src/ChangeLog-2011 st-fonts/ChangeLog-2011
