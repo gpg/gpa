@@ -2,17 +2,17 @@
    Copyright (C) 2007, 2008 g10 Code GmbH
 
    This file is part of GPA.
-  
+
    GPA is free software; you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
-  
+
    GPA is distributed in the hope that it will be useful, but WITHOUT
    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
    or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
    License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, see <http://www.gnu.org/licenses/>.  */
 
@@ -107,7 +107,7 @@ typedef enum
     COMBO_CUSTOM = 1,
     COMBO_NO_ARG = 2
   } option_combo_t;
-    
+
 
 /* This structure combines an option with its GUI elements.  */
 typedef struct option_widget_s
@@ -220,7 +220,7 @@ arg_to_str (gpgme_conf_arg_t arg, gpgme_conf_type_t type)
 	  g_free (result);
 	  result = new_result;
 	  break;
-	  
+
 	default:
 	  assert (!"Not supported.");
 	  break;
@@ -243,11 +243,11 @@ option_widget_to_arg (option_widget_t opt)
     {
       int active;
       unsigned int count = 1;
- 
+
       active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (opt->check));
       if (!active)
 	return NULL;
-     
+
       if (opt->type == OPTION_SPIN)
 	count = gtk_spin_button_get_value (GTK_SPIN_BUTTON (opt->widget));
 
@@ -366,7 +366,7 @@ option_widget_to_arg (option_widget_t opt)
 		    argp = &(*argp)->next;
 		  }
 		  break;
-		  
+
 		case GPGME_CONF_INT32:
 		  {
 		    int nr;
@@ -459,7 +459,7 @@ save_options (gpgme_conf_comp_t comp)
     {
       option_widget_t opt = option->user_data;
       gpgme_conf_arg_t arg;
-      
+
       /* Exclude group headers etc.  */
       if (!opt)
 	{
@@ -615,7 +615,7 @@ update_option (option_widget_t opt)
 
       opt->old_combo_box_state = combo;
     }
-}	      
+}
 
 
 /* Update the tab when it is modified (if modified is true) or reset
@@ -638,7 +638,7 @@ update_modified (int modified)
   else
     {
       /* This is also called at initialization time.  */
-      
+
       dialog_tab_modified = 0;
       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
 					 GTK_RESPONSE_APPLY, FALSE);
@@ -682,7 +682,7 @@ static void create_dialog_tabs (void);
 
 /* Handle stock response "apply".  */
 static void
-dialog_response_apply (GtkDialog *dialog)
+dialog_response_apply (GtkDialog *dummy)
 {
   save_all_options ();
 
@@ -702,7 +702,7 @@ reset_options (gpgme_conf_comp_t comp)
   while (option)
     {
       option_widget_t opt = option->user_data;
-      
+
       if (!opt)
 	{
 	  /* Exclude group headers etc.  */
@@ -744,7 +744,7 @@ reset_all_options (void)
 
 /* Handle stock response "reset".  */
 static void
-dialog_response_reset (GtkDialog *dialog)
+dialog_response_reset (GtkDialog *dummy)
 {
 #if 0
   /* Allow to use the reset button also as a refresh button.  Note:
@@ -764,7 +764,7 @@ dialog_response_reset (GtkDialog *dialog)
 
 /* Handle stock responses like OK, apply and cancel.  */
 static int
-dialog_response (GtkDialog *dialog, gint response, gpointer data)
+dialog_response (GtkDialog *dlg, gint response, gpointer data)
 {
   switch (response)
     {
@@ -783,11 +783,11 @@ dialog_response (GtkDialog *dialog, gint response, gpointer data)
       break;
 
     case GTK_RESPONSE_APPLY:
-      dialog_response_apply (dialog);
+      dialog_response_apply (dlg);
       break;
 
     case CUSTOM_RESPONSE_RESET:
-      dialog_response_reset (dialog);
+      dialog_response_reset (dlg);
       break;
 
     default:
@@ -883,7 +883,7 @@ group_has_options (gpgme_conf_opt_t option, gpgme_conf_opt_t *next_group)
 
   if (! has_options && next_group)
     *next_group = option;
-  
+
   return has_options;
 }
 
@@ -1018,7 +1018,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
                  used for it.  AFAICS, we would only need to prefix
                  the description with the group name and gpgconf would
                  instantly privide that. */
-	      snprintf (name, sizeof (name), "<b>%s</b>", 
+	      snprintf (name, sizeof (name), "<b>%s</b>",
                         (option->argname && *option->argname)?
                          option->argname : option->description);
 	      name[sizeof (name) - 1] = '\0';
@@ -1026,7 +1026,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 
 	      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
 	      gtk_frame_set_label_widget (GTK_FRAME (frame), label);
-	      
+
 	      frame_vbox = gtk_vbox_new (FALSE, 0);
 	      gtk_container_add (GTK_CONTAINER (frame), frame_vbox);
 	    }
@@ -1071,9 +1071,9 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	      if (opt->type == OPTION_SIMPLE)
 		{
 		  widget = gtk_check_button_new_with_label (option->name);
-		  opt->check = widget; 
+		  opt->check = widget;
 		  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-		  
+
 		  /* Add the checkbox label to the size group.  */
 		  gtk_size_group_add_widget (GTK_SIZE_GROUP (size_group[0]),
 					     widget);
@@ -1084,9 +1084,9 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	      else if (opt->type == OPTION_SPIN)
 		{
 		  widget = gtk_check_button_new_with_label (option->name);
-		  opt->check = widget; 
+		  opt->check = widget;
 		  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-		  
+
 		  /* Add the checkbox label to the size group.  */
 		  gtk_size_group_add_widget (GTK_SIZE_GROUP (size_group[0]),
 					     widget);
@@ -1106,7 +1106,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 
 		  g_signal_connect ((gpointer) widget, "value-changed",
 				    G_CALLBACK (update_modified_cb), NULL);
-		  
+
 		  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 		}
 	      else
@@ -1122,9 +1122,9 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 		  gtk_box_pack_start (GTK_BOX (hbox), align, FALSE, FALSE, 0);
 
 		  widget = gtk_label_new (option->name);
-		  opt->check = widget; 
+		  opt->check = widget;
 		  gtk_container_add (GTK_CONTAINER (align), widget);
-		  
+
 		  /* Add the checkbox label to the size group.  */
 		  gtk_size_group_add_widget (GTK_SIZE_GROUP (size_group[0]),
 					     align);
@@ -1137,7 +1137,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 
 		  entry = gtk_entry_new ();
 		  gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-		  
+
 		  opt->widget = entry;
 
 		  g_signal_connect ((gpointer) entry, "changed",
@@ -1175,7 +1175,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 		g_signal_connect ((gpointer) opt->check, "toggled",
 				  G_CALLBACK (option_checkbutton_toggled),
 				  opt);
-      
+
 	      /* Grey out options which can not be changed at all.  */
 	      if (option->flags & GPGME_CONF_NO_CHANGE)
 		gtk_widget_set_sensitive (vbox, FALSE);
@@ -1258,7 +1258,7 @@ dialog_level_chooser_cb (GtkComboBox *level_chooser, gpointer *data)
   gpgme_conf_level_t level;
 
   level = gtk_combo_box_get_active (GTK_COMBO_BOX (level_chooser));
-  
+
   if (level == dialog_level)
     return;
 
@@ -1273,7 +1273,7 @@ dialog_level_chooser_cb (GtkComboBox *level_chooser, gpointer *data)
       window = gtk_dialog_new_with_buttons
 	(_("GPA Message"), (GtkWindow *) dialog, GTK_DIALOG_MODAL,
 	 GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
-	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL); 
+	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 5);
       gtk_dialog_set_default_response (GTK_DIALOG (window),
@@ -1291,7 +1291,7 @@ dialog_level_chooser_cb (GtkComboBox *level_chooser, gpointer *data)
 				      "continue?"));
       gtk_label_set_line_wrap (GTK_LABEL (labelMessage), TRUE);
       gtk_box_pack_start (GTK_BOX (hbox), labelMessage, TRUE, FALSE, 10);
-      
+
       gtk_widget_show_all (window);
       result = gtk_dialog_run (GTK_DIALOG (window));
       gtk_widget_destroy (window);
@@ -1349,7 +1349,7 @@ create_dialog (void)
 
   g_signal_connect ((gpointer) dialog, "response",
 		    G_CALLBACK (dialog_response), NULL);
-  
+
   dialog_vbox = GTK_DIALOG (dialog)->vbox;
   /*  gtk_box_set_spacing (GTK_CONTAINER (dialog_vbox), 5); */
 
@@ -1418,7 +1418,7 @@ hide_backend_config (void)
 
   gpgme_release (dialog_ctx);
   dialog_ctx = NULL;
-}  
+}
 
 
 
@@ -1448,7 +1448,7 @@ gpa_load_gpgconf_string (const char *cname, const char *name)
       gpgme_release (ctx);
       return NULL;
     }
-      
+
   for (conf = conf_list; conf; conf = conf->next)
     {
       if ( !strcmp (conf->name, cname) )
@@ -1474,7 +1474,7 @@ gpa_load_gpgconf_string (const char *cname, const char *name)
 /* Set the option NAME in component "CNAME" to VALUE.  The option
    needs to be of type string. */
 void
-gpa_store_gpgconf_string (const char *cname, 
+gpa_store_gpgconf_string (const char *cname,
                           const char *name, const char *value)
 {
   gpg_error_t err;

@@ -40,10 +40,10 @@
 #include "gpawidgets.h"
 
 /* Internal functions */
-static void gpa_file_sign_operation_done_error_cb (GpaContext *context, 
+static void gpa_file_sign_operation_done_error_cb (GpaContext *context,
 						   gpg_error_t err,
 						   GpaFileSignOperation *op);
-static void gpa_file_sign_operation_done_cb (GpaContext *context, 
+static void gpa_file_sign_operation_done_cb (GpaContext *context,
 						gpg_error_t err,
 						GpaFileSignOperation *op);
 static void gpa_file_sign_operation_response_cb (GtkDialog *dialog,
@@ -67,7 +67,7 @@ gpa_file_sign_operation_get_property (GObject *object, guint prop_id,
 				      GValue *value, GParamSpec *pspec)
 {
   GpaFileSignOperation *op = GPA_FILE_SIGN_OPERATION (object);
-  
+
   switch (prop_id)
     {
     case PROP_FORCE_ARMOR:
@@ -99,7 +99,7 @@ gpa_file_sign_operation_set_property (GObject *object, guint prop_id,
 
 static void
 gpa_file_sign_operation_finalize (GObject *object)
-{  
+{
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -165,7 +165,7 @@ static void
 gpa_file_sign_operation_class_init (GpaFileSignOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_file_sign_operation_constructor;
@@ -187,7 +187,7 @@ GType
 gpa_file_sign_operation_get_type (void)
 {
   static GType file_sign_operation_type = 0;
-  
+
   if (!file_sign_operation_type)
     {
       static const GTypeInfo file_sign_operation_info =
@@ -202,12 +202,12 @@ gpa_file_sign_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_file_sign_operation_init,
       };
-      
-      file_sign_operation_type = g_type_register_static 
+
+      file_sign_operation_type = g_type_register_static
 	(GPA_FILE_OPERATION_TYPE, "GpaFileSignOperation",
 	 &file_sign_operation_info, 0);
     }
-  
+
   return file_sign_operation_type;
 }
 
@@ -218,7 +218,7 @@ gpa_file_sign_operation_new (GtkWidget *window, GList *files,
 			     gboolean force_armor)
 {
   GpaFileSignOperation *op;
-  
+
   op = g_object_new (GPA_FILE_SIGN_OPERATION_TYPE,
 		     "window", window,
 		     "input_files", files,
@@ -231,14 +231,14 @@ gpa_file_sign_operation_new (GtkWidget *window, GList *files,
 /* Internal */
 
 static gchar*
-destination_filename (const gchar *filename, gboolean armor, 
+destination_filename (const gchar *filename, gboolean armor,
                       gpgme_protocol_t protocol,
 		      gpgme_sig_mode_t sign_type)
 {
   const gchar *extension;
   gchar *signature_filename;
 
-  if (protocol == GPGME_PROTOCOL_CMS && armor 
+  if (protocol == GPGME_PROTOCOL_CMS && armor
       && sign_type != GPGME_SIG_MODE_DETACH)
     extension = ".pem";
   else if (protocol == GPGME_PROTOCOL_CMS)
@@ -264,8 +264,6 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
 
   if (file_item->direct_in)
     {
-      gpgme_error_t err;
-
       /* No copy is made.  */
       err = gpgme_data_new_from_mem (&op->plain, file_item->direct_in,
 				     file_item->direct_in_len, 0);
@@ -274,7 +272,7 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
 	  gpa_gpgme_warning (err);
 	  return err;
 	}
-      
+
       err = gpgme_data_new (&op->sig);
       if (err)
 	{
@@ -288,12 +286,12 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
     {
       gchar *plain_filename = file_item->filename_in;
 
-      file_item->filename_out = destination_filename 
+      file_item->filename_out = destination_filename
 	(plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx),
 	 gpgme_get_protocol (GPA_OPERATION (op)->context->ctx), op->sign_type);
 
       /* Open the files */
-      op->plain_fd = gpa_open_input (plain_filename, &op->plain, 
+      op->plain_fd = gpa_open_input (plain_filename, &op->plain,
 				     GPA_OPERATION (op)->window);
       if (op->plain_fd == -1)
 	/* FIXME: Error value.  */
@@ -309,7 +307,7 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
 	  return gpg_error (GPG_ERR_GENERAL);
 	}
     }
-  
+
   /* Start the operation */
   err = gpgme_op_sign_start (GPA_OPERATION (op)->context->ctx, op->plain,
 			     op->sig, op->sign_type);
@@ -320,7 +318,7 @@ gpa_file_sign_operation_start (GpaFileSignOperation *op,
     }
   /* Show and update the progress dialog */
   gtk_widget_show_all (GPA_FILE_OPERATION (op)->progress_dialog);
-  gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG 
+  gpa_progress_dialog_set_label (GPA_PROGRESS_DIALOG
 				 (GPA_FILE_OPERATION (op)->progress_dialog),
 				 file_item->direct_name
 				 ? file_item->direct_name
@@ -340,7 +338,7 @@ gpa_file_sign_operation_next (GpaFileSignOperation *op)
       g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
       return;
     }
-  
+
   err = gpa_file_sign_operation_start (op,
 				       GPA_FILE_OPERATION (op)->current->data);
   if (err)
@@ -349,7 +347,7 @@ gpa_file_sign_operation_next (GpaFileSignOperation *op)
 
 
 static void
-gpa_file_sign_operation_done_cb (GpaContext *context, 
+gpa_file_sign_operation_done_cb (GpaContext *context,
 				 gpg_error_t err,
 				 GpaFileSignOperation *op)
 {
@@ -407,7 +405,7 @@ gpa_file_sign_operation_done_cb (GpaContext *context,
       g_signal_emit_by_name (GPA_OPERATION (op), "created_file",
 			     file_item);
       /* Go to the next file in the list and sign it */
-      GPA_FILE_OPERATION (op)->current = g_list_next 
+      GPA_FILE_OPERATION (op)->current = g_list_next
 	(GPA_FILE_OPERATION (op)->current);
       gpa_file_sign_operation_next (op);
     }
@@ -443,11 +441,11 @@ set_signers (GpaFileSignOperation *op, GList *signers)
         {
           /* Should not happen because the selection dialog should
              have not allowed to select different key types.  */
-          gpa_window_error 
+          gpa_window_error
             (_("The selected certificates are not all of the same type."
                " That is, you mixed OpenPGP and X.509 certificates."
                " Please make sure to select only certificates of the"
-               " same type."), 
+               " same type."),
              GPA_OPERATION (op)->window);
           return FALSE;
         }
@@ -470,7 +468,7 @@ set_signers (GpaFileSignOperation *op, GList *signers)
 /*
  * The key selection dialog has returned.
  */
-static void 
+static void
 gpa_file_sign_operation_response_cb (GtkDialog *dialog,
                                      gint response,
                                      gpointer user_data)
@@ -478,17 +476,17 @@ gpa_file_sign_operation_response_cb (GtkDialog *dialog,
   GpaFileSignOperation *op = user_data;
 
   gtk_widget_hide (GTK_WIDGET (dialog));
-  
+
   if (response == GTK_RESPONSE_OK)
     {
       gboolean success = TRUE;
-      gboolean armor = gpa_file_sign_dialog_get_armor 
+      gboolean armor = gpa_file_sign_dialog_get_armor
 	(GPA_FILE_SIGN_DIALOG (op->sign_dialog));
-      GList *signers = gpa_file_sign_dialog_signers 
+      GList *signers = gpa_file_sign_dialog_signers
 	(GPA_FILE_SIGN_DIALOG (op->sign_dialog));
       op->sign_type = gpa_file_sign_dialog_get_sig_mode
 	(GPA_FILE_SIGN_DIALOG (op->sign_dialog));
-      
+
       /* Set the armor value */
       gpgme_set_armor (GPA_OPERATION (op)->context->ctx, armor);
       /* Set the signers for the context */

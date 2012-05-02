@@ -32,9 +32,9 @@
 static GObjectClass *parent_class = NULL;
 
 static gboolean
-gpa_import_server_operation_get_source (GpaImportOperation *operation, 
+gpa_import_server_operation_get_source (GpaImportOperation *operation,
 					gpgme_data_t *source);
-static void 
+static void
 gpa_import_server_operation_complete_import (GpaImportOperation *operation);
 
 /* GObject boilerplate */
@@ -56,13 +56,13 @@ gpa_import_server_operation_constructor (GType type,
 				  GObjectConstructParam *construct_properties)
 {
   GObject *object;
-  GpaImportServerOperation *op;
+  /* GpaImportServerOperation *op; */
 
   /* Invoke parent's constructor */
   object = parent_class->constructor (type,
 				      n_construct_properties,
 				      construct_properties);
-  op = GPA_IMPORT_SERVER_OPERATION (object);
+  /* op = GPA_IMPORT_SERVER_OPERATION (object); */
 
   return object;
 }
@@ -78,14 +78,14 @@ gpa_import_server_operation_class_init (GpaImportServerOperationClass *klass)
   object_class->constructor = gpa_import_server_operation_constructor;
   object_class->finalize = gpa_import_server_operation_finalize;
   import_class->get_source = gpa_import_server_operation_get_source;
-  import_class->complete_import = gpa_import_server_operation_complete_import;  
+  import_class->complete_import = gpa_import_server_operation_complete_import;
 }
 
 GType
 gpa_import_server_operation_get_type (void)
 {
   static GType server_operation_type = 0;
-  
+
   if (!server_operation_type)
     {
       static const GTypeInfo server_operation_info =
@@ -100,12 +100,12 @@ gpa_import_server_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_import_server_operation_init,
       };
-      
+
       server_operation_type = g_type_register_static (GPA_IMPORT_OPERATION_TYPE,
 						    "GpaImportServerOperation",
 						    &server_operation_info, 0);
     }
-  
+
   return server_operation_type;
 }
 
@@ -114,24 +114,24 @@ gpa_import_server_operation_get_type (void)
 /* Virtual methods */
 
 static gboolean
-gpa_import_server_operation_get_source (GpaImportOperation *operation, 
+gpa_import_server_operation_get_source (GpaImportOperation *operation,
 					gpgme_data_t *source)
 {
   GpaImportServerOperation *op = GPA_IMPORT_SERVER_OPERATION (operation);
   GtkWidget *dialog = gpa_receive_key_dialog_new (GPA_OPERATION (op)->window);
   GtkResponseType response;
   gchar *keyid;
-  
+
   gtk_widget_show_all (dialog);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
-  keyid = g_strdup (gpa_receive_key_dialog_get_id 
+  keyid = g_strdup (gpa_receive_key_dialog_get_id
 		    (GPA_RECEIVE_KEY_DIALOG (dialog)));
   gtk_widget_destroy (dialog);
-  
+
   if (response == GTK_RESPONSE_OK)
     {
-      if (server_get_key (gpa_options_get_default_keyserver 
-			  (gpa_options_get_instance ()), 
+      if (server_get_key (gpa_options_get_default_keyserver
+			  (gpa_options_get_instance ()),
 			  keyid, source, GPA_OPERATION (op)->window))
 	{
 	  g_free (keyid);
@@ -142,7 +142,7 @@ gpa_import_server_operation_get_source (GpaImportOperation *operation,
   return FALSE;
 }
 
-static void 
+static void
 gpa_import_server_operation_complete_import (GpaImportOperation *operation)
 {
   /* Nothing special to do */
@@ -154,7 +154,7 @@ GpaImportServerOperation*
 gpa_import_server_operation_new (GtkWidget *window)
 {
   GpaImportServerOperation *op;
-  
+
   op = g_object_new (GPA_IMPORT_SERVER_OPERATION_TYPE,
 		     "window", window, NULL);
 

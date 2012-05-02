@@ -31,9 +31,9 @@
 static GObjectClass *parent_class = NULL;
 
 static gboolean
-gpa_import_file_operation_get_source (GpaImportOperation *operation, 
+gpa_import_file_operation_get_source (GpaImportOperation *operation,
 				      gpgme_data_t *source);
-static void 
+static void
 gpa_import_file_operation_complete_import (GpaImportOperation *operation);
 
 /* GObject boilerplate */
@@ -65,13 +65,13 @@ gpa_import_file_operation_constructor (GType type,
 				  GObjectConstructParam *construct_properties)
 {
   GObject *object;
-  GpaImportFileOperation *op;
+  /* GpaImportFileOperation *op; */
 
   /* Invoke parent's constructor */
   object = parent_class->constructor (type,
 				      n_construct_properties,
 				      construct_properties);
-  op = GPA_IMPORT_FILE_OPERATION (object);
+  /* op = GPA_IMPORT_FILE_OPERATION (object); */
 
   return object;
 }
@@ -87,14 +87,14 @@ gpa_import_file_operation_class_init (GpaImportFileOperationClass *klass)
   object_class->constructor = gpa_import_file_operation_constructor;
   object_class->finalize = gpa_import_file_operation_finalize;
   import_class->get_source = gpa_import_file_operation_get_source;
-  import_class->complete_import = gpa_import_file_operation_complete_import;  
+  import_class->complete_import = gpa_import_file_operation_complete_import;
 }
 
 GType
 gpa_import_file_operation_get_type (void)
 {
   static GType file_operation_type = 0;
-  
+
   if (!file_operation_type)
     {
       static const GTypeInfo file_operation_info =
@@ -109,19 +109,19 @@ gpa_import_file_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_import_file_operation_init,
       };
-      
+
       file_operation_type = g_type_register_static (GPA_IMPORT_OPERATION_TYPE,
 						    "GpaImportFileOperation",
 						    &file_operation_info, 0);
     }
-  
+
   return file_operation_type;
 }
 
 /* Virtual methods */
 
 static gboolean
-gpa_import_file_operation_get_source (GpaImportOperation *operation, 
+gpa_import_file_operation_get_source (GpaImportOperation *operation,
 				      gpgme_data_t *source)
 {
   GpaImportFileOperation *op = GPA_IMPORT_FILE_OPERATION (operation);
@@ -135,24 +135,24 @@ gpa_import_file_operation_get_source (GpaImportOperation *operation,
      GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
 
   /* Run the dialog until there is a valid response.  */
-  do 
+  do
     {
       response = gtk_dialog_run (GTK_DIALOG (dialog));
       /* Save the selected file, free'ing the previous value if required.  */
       if (op->file)
 	g_free (op->file);
-      op->file = g_strdup (gtk_file_chooser_get_filename 
+      op->file = g_strdup (gtk_file_chooser_get_filename
 			   (GTK_FILE_CHOOSER (dialog)));
     }
   while (response == GTK_RESPONSE_OK
-	 && (op->fd = gpa_open_input 
+	 && (op->fd = gpa_open_input
 	     (op->file, source, GPA_OPERATION (op)->window)) == -1);
   gtk_widget_destroy (dialog);
 
   return (response == GTK_RESPONSE_OK);
 }
 
-static void 
+static void
 gpa_import_file_operation_complete_import (GpaImportOperation *operation)
 {
   /* Nothing special to do */
@@ -164,7 +164,7 @@ GpaImportFileOperation*
 gpa_import_file_operation_new (GtkWidget *window)
 {
   GpaImportFileOperation *op;
-  
+
   op = g_object_new (GPA_IMPORT_FILE_OPERATION_TYPE,
 		     "window", window, NULL);
 

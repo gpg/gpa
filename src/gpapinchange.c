@@ -18,7 +18,7 @@
 
 /* This class is used to let the user perform a PIN change.  It has a
    couple of card specific features, for example a way to chnage the
-   NullPIN as used by TCOS cards. 
+   NullPIN as used by TCOS cards.
 
  */
 
@@ -36,7 +36,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "gpa.h"   
+#include "gpa.h"
 
 #include "gpapinchange.h"
 
@@ -54,7 +54,7 @@ struct _GpaPinChange
 
 };
 
-struct _GpaPinChangeClass 
+struct _GpaPinChangeClass
 {
   GtkWindowClass parent_class;
 };
@@ -68,7 +68,7 @@ static GObjectClass *parent_class;
 
 
 
-/************************************************************ 
+/************************************************************
  *******************   Implementation   *********************
  ************************************************************/
 
@@ -76,14 +76,14 @@ static GObjectClass *parent_class;
 
 
 
-/************************************************************ 
+/************************************************************
  ******************   Object Management  ********************
  ************************************************************/
 
 /* Deinitialize this instance.  */
 static void
 gpa_pin_change_finalize (GObject *object)
-{  
+{
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -102,12 +102,12 @@ gpa_pin_change_constructor (GType type,
                             GObjectConstructParam *construct_properties)
 {
   GObject *object;
-  GpaPinChange *pinchange;
+  /* GpaPinChange *pinchange; */
 
   object = parent_class->constructor (type,
 				      n_construct_properties,
 				      construct_properties);
-  pinchange = GPA_PIN_CHANGE (object);
+  /* pinchange = GPA_PIN_CHANGE (object); */
 
   return object;
 }
@@ -118,9 +118,9 @@ static void
 gpa_pin_change_class_init (GpaPinChangeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->constructor = gpa_pin_change_constructor;
   object_class->finalize = gpa_pin_change_finalize;
 }
@@ -131,7 +131,7 @@ GType
 gpa_pin_change_get_type (void)
 {
   static GType this_type = 0;
-  
+
   if (!this_type)
     {
       static const GTypeInfo this_info =
@@ -146,18 +146,18 @@ gpa_pin_change_get_type (void)
 	  0,    /* n_preallocs */
 	  (GInstanceInitFunc) gpa_pin_change_init,
 	};
-      
+
       this_type = g_type_register_static (GTK_TYPE_WINDOW,
                                           "GpaPinChange",
                                           &this_info, 0);
     }
-  
+
   return this_type;
 }
 
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 GtkWidget *
@@ -165,7 +165,7 @@ gpa_pin_change_new (void)
 {
   GObject *instance;
 
-  instance = g_object_new (GPA_PIN_CHANGE_TYPE, NULL);  
+  instance = g_object_new (GPA_PIN_CHANGE_TYPE, NULL);
   return GTK_WIDGET (instance);
 }
 

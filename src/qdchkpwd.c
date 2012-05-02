@@ -44,7 +44,7 @@ qdchkpwd (const char *pwd)
   unsigned hit_num[256];
   unsigned hit_card = 0;
   char *source_buffer, *dest_buffer;
-  unsigned long source_length, dest_length, test_comp_length, comp_length;
+  unsigned long source_length, dest_length, test_comp_length;
   double S, M;
 
   if (pwd == NULL)
@@ -83,7 +83,6 @@ qdchkpwd (const char *pwd)
   if (compress ((unsigned char *) dest_buffer, &dest_length,
 		(unsigned char *) source_buffer, source_length) != 0)
     return -1.0;
-  comp_length = dest_length;
   g_free (source_buffer);
   g_free (dest_buffer);
 

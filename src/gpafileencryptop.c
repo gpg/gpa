@@ -289,8 +289,6 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
 
   if (file_item->direct_in)
     {
-      gpgme_error_t err;
-
       /* No copy is made.  */
       err = gpgme_data_new_from_mem (&op->plain, file_item->direct_in,
 				     file_item->direct_in_len, 0);

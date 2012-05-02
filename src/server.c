@@ -619,7 +619,7 @@ static gpg_error_t
 cmd_message (assuan_context_t ctx, char *line)
 {
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
-  gpg_error_t err;;
+  gpg_error_t err;
   assuan_fd_t sysfd;
   int fd;
 
@@ -1331,7 +1331,7 @@ cmd_file (assuan_context_t ctx, char *line)
 
 
 static gpg_error_t
-impl_encrypt_sign_files (assuan_context_t ctx, int encrypt, int sign)
+impl_encrypt_sign_files (assuan_context_t ctx, int encr, int sign)
 {
   gpg_error_t err = 0;
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
@@ -1349,10 +1349,10 @@ impl_encrypt_sign_files (assuan_context_t ctx, int encrypt, int sign)
     }
 
   /* FIXME: Needs a root window.  Need to set "sign" default.  */
-  if (encrypt && sign)
+  if (encr && sign)
     op = (GpaFileOperation *)
       gpa_file_encrypt_sign_operation_new (NULL, ctrl->files, FALSE);
-  if (encrypt)
+  if (encr)
     op = (GpaFileOperation *)
       gpa_file_encrypt_operation_new (NULL, ctrl->files, FALSE);
   else

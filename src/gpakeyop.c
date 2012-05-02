@@ -90,7 +90,7 @@ gpa_key_operation_finalize (GObject *object)
   /* Free each key, and then the list of keys */
   g_list_foreach (op->keys, (GFunc) gpgme_key_unref, NULL);
   g_list_free (op->keys);
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -107,13 +107,13 @@ gpa_key_operation_constructor (GType type,
 				GObjectConstructParam *construct_properties)
 {
   GObject *object;
-  GpaKeyOperation *op;
+  /* GpaKeyOperation *op; */
 
   /* Invoke parent's constructor */
   object = parent_class->constructor (type,
 				      n_construct_properties,
 				      construct_properties);
-  op = GPA_KEY_OPERATION (object);
+  /* op = GPA_KEY_OPERATION (object); */
 
   return object;
 }
@@ -122,7 +122,7 @@ static void
 gpa_key_operation_class_init (GpaKeyOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_key_operation_constructor;
@@ -142,7 +142,7 @@ gpa_key_operation_class_init (GpaKeyOperationClass *klass)
   /* Properties */
   g_object_class_install_property (object_class,
 				   PROP_KEYS,
-				   g_param_spec_pointer 
+				   g_param_spec_pointer
 				   ("keys", "Keys",
 				    "Keys",
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
@@ -152,7 +152,7 @@ GType
 gpa_key_operation_get_type (void)
 {
   static GType file_operation_type = 0;
-  
+
   if (!file_operation_type)
     {
       static const GTypeInfo file_operation_info =
@@ -167,18 +167,18 @@ gpa_key_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_key_operation_init,
       };
-      
+
       file_operation_type = g_type_register_static (GPA_OPERATION_TYPE,
 						    "GpaKeyOperation",
 						    &file_operation_info, 0);
     }
-  
+
   return file_operation_type;
 }
 
 /* API */
 
-/* Returns the list of keys on which the operation has been called. 
+/* Returns the list of keys on which the operation has been called.
  */
 GList*
 gpa_key_operation_keys (GpaKeyOperation *op)

@@ -31,10 +31,10 @@
 static GObjectClass *parent_class = NULL;
 
 static gboolean
-gpa_export_clipboard_operation_get_destination (GpaExportOperation *operation, 
+gpa_export_clipboard_operation_get_destination (GpaExportOperation *operation,
 						gpgme_data_t *dest,
 						gboolean *armor);
-static void 
+static void
 gpa_export_clipboard_operation_complete_export (GpaExportOperation *operation);
 
 /* GObject boilerplate */
@@ -56,13 +56,13 @@ gpa_export_clipboard_operation_constructor (GType type,
 				  GObjectConstructParam *construct_properties)
 {
   GObject *object;
-  GpaExportClipboardOperation *op;
+  /* GpaExportClipboardOperation *op; */
 
   /* Invoke parent's constructor */
   object = parent_class->constructor (type,
 				      n_construct_properties,
 				      construct_properties);
-  op = GPA_EXPORT_CLIPBOARD_OPERATION (object);
+  /* op = GPA_EXPORT_CLIPBOARD_OPERATION (object); */
 
   return object;
 }
@@ -78,14 +78,14 @@ gpa_export_clipboard_operation_class_init (GpaExportClipboardOperationClass *kla
   object_class->constructor = gpa_export_clipboard_operation_constructor;
   object_class->finalize = gpa_export_clipboard_operation_finalize;
   export_class->get_destination = gpa_export_clipboard_operation_get_destination;
-  export_class->complete_export = gpa_export_clipboard_operation_complete_export;  
+  export_class->complete_export = gpa_export_clipboard_operation_complete_export;
 }
 
 GType
 gpa_export_clipboard_operation_get_type (void)
 {
   static GType file_operation_type = 0;
-  
+
   if (!file_operation_type)
     {
       static const GTypeInfo file_operation_info =
@@ -100,19 +100,19 @@ gpa_export_clipboard_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_export_clipboard_operation_init,
       };
-      
+
       file_operation_type = g_type_register_static (GPA_EXPORT_OPERATION_TYPE,
 						    "GpaExportClipboardOperation",
 						    &file_operation_info, 0);
     }
-  
+
   return file_operation_type;
 }
 
 /* Virtual methods */
 
 static gboolean
-gpa_export_clipboard_operation_get_destination (GpaExportOperation *operation, 
+gpa_export_clipboard_operation_get_destination (GpaExportOperation *operation,
 						gpgme_data_t *dest,
 						gboolean *armor)
 {
@@ -122,7 +122,7 @@ gpa_export_clipboard_operation_get_destination (GpaExportOperation *operation,
   if (err)
     {
       gpa_gpgme_warning (err);
-      return FALSE;    
+      return FALSE;
     }
   else
     {
@@ -130,7 +130,7 @@ gpa_export_clipboard_operation_get_destination (GpaExportOperation *operation,
     }
 }
 
-static void 
+static void
 gpa_export_clipboard_operation_complete_export (GpaExportOperation *operation)
 {
   GpaExportClipboardOperation *op = GPA_EXPORT_CLIPBOARD_OPERATION (operation);
@@ -146,7 +146,7 @@ GpaExportClipboardOperation*
 gpa_export_clipboard_operation_new (GtkWidget *window, GList *keys)
 {
   GpaExportClipboardOperation *op;
-  
+
   op = g_object_new (GPA_EXPORT_CLIPBOARD_OPERATION_TYPE,
 		     "window", window,
 		     "keys", keys,

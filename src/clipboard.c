@@ -33,7 +33,7 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
-#include "gpa.h"   
+#include "gpa.h"
 
 #include "gtktools.h"
 #include "gpgmetools.h"
@@ -81,7 +81,7 @@ struct _GpaClipboard
   gboolean paste_p;
 };
 
-struct _GpaClipboardClass 
+struct _GpaClipboardClass
 {
   GtkWindowClass parent_class;
 };
@@ -97,7 +97,7 @@ static GObjectClass *parent_class;
 
 
 /* Local prototypes */
-static GObject *gpa_clipboard_constructor 
+static GObject *gpa_clipboard_constructor
                          (GType type,
                           guint n_construct_properties,
                           GObjectConstructParam *construct_properties);
@@ -106,7 +106,7 @@ static GObject *gpa_clipboard_constructor
 /* GtkWidget boilerplate.  */
 static void
 gpa_clipboard_finalize (GObject *object)
-{  
+{
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -122,9 +122,9 @@ static void
 gpa_clipboard_class_init (GpaClipboardClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->constructor = gpa_clipboard_constructor;
   object_class->finalize = gpa_clipboard_finalize;
 }
@@ -133,7 +133,7 @@ GType
 gpa_clipboard_get_type (void)
 {
   static GType clipboard_type = 0;
-  
+
   if (!clipboard_type)
     {
       static const GTypeInfo clipboard_info =
@@ -148,12 +148,12 @@ gpa_clipboard_get_type (void)
 	  0,              /* n_preallocs */
 	  (GInstanceInitFunc) gpa_clipboard_init,
 	};
-      
+
       clipboard_type = g_type_register_static (GTK_TYPE_WINDOW,
 					     "GpaClipboard",
 					     &clipboard_info, 0);
     }
-  
+
   return clipboard_type;
 }
 
@@ -241,7 +241,7 @@ set_paste_sensitivity (GpaClipboard *clipboard, GtkClipboard *clip)
   GdkDisplay *display;
 
   display = gtk_clipboard_get_display (clip);
-  
+
   if (gdk_display_supports_selection_notification (display))
     gtk_clipboard_request_contents
       (clip, gdk_atom_intern_static_string ("TARGETS"),
@@ -286,7 +286,7 @@ file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
 #ifdef G_OS_WIN32
           dos_to_unix (str, &item->direct_out_len);
 #endif
-          
+
           gtk_text_buffer_set_text (clipboard->text_buffer, str, len);
           g_free (str);
           return;
@@ -353,7 +353,7 @@ get_load_file_name (GtkWidget *parent, const gchar *title)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
 					 last_directory);
   gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
-  
+
   /* Run the dialog until there is a valid response.  */
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   if (response == GTK_RESPONSE_OK)
@@ -436,13 +436,13 @@ file_open (GtkAction *action, gpointer param)
       /* TRANSLATORS: The arguments are the filename, the integer size
 	 and the unit (such as KB or MB).  */
       str = g_strdup_printf (_("The file %s is %lli%s large.  Do you really "
-			       " want to open it?"), filename, 
+			       " want to open it?"), filename,
 			       buf.st_size / 1024 / 1024, "MB");
       labelMessage = gtk_label_new (str);
       g_free (str);
       gtk_label_set_line_wrap (GTK_LABEL (labelMessage), TRUE);
       gtk_box_pack_start (GTK_BOX (hbox), labelMessage, TRUE, FALSE, 10);
-      
+
       gtk_widget_show_all (window);
       result = gtk_dialog_run (GTK_DIALOG (window));
       gtk_widget_destroy (window);
@@ -453,7 +453,7 @@ file_open (GtkAction *action, gpointer param)
 	  return;
 	}
     }
-  
+
   suc = g_file_get_contents (filename, &contents, &length, &err);
   if (! suc)
     {
@@ -513,7 +513,7 @@ get_save_file_name (GtkWidget *parent, const gchar *title)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
 					 last_directory);
   gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
-  
+
   /* Run the dialog until there is a valid response.  */
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   if (response == GTK_RESPONSE_OK)
@@ -578,7 +578,7 @@ file_save_as (GtkAction *action, gpointer param)
       g_free (filename);
       return;
     }
-  
+
   g_free (filename);
 }
 
@@ -605,10 +605,10 @@ file_verify (GtkAction *action, gpointer param)
   file_item->direct_in_len = strlen (file_item->direct_in);
 
   files = g_list_append (files, file_item);
-  
+
   /* Start the operation.  */
   op = gpa_file_verify_operation_new (GTK_WIDGET (clipboard), files);
-  
+
   register_operation (clipboard, GPA_FILE_OPERATION (op));
 }
 
@@ -635,10 +635,10 @@ file_sign (GtkAction *action, gpointer param)
   file_item->direct_in_len = strlen (file_item->direct_in);
 
   files = g_list_append (files, file_item);
-  
+
   /* Start the operation.  */
   op = gpa_file_sign_operation_new (GTK_WIDGET (clipboard), files, TRUE);
-  
+
   register_operation (clipboard, GPA_FILE_OPERATION (op));
 }
 
@@ -665,7 +665,7 @@ file_encrypt (GtkAction *action, gpointer param)
   file_item->direct_in_len = strlen (file_item->direct_in);
 
   files = g_list_append (files, file_item);
-  
+
   /* Start the operation.  */
   op = gpa_file_encrypt_operation_new (GTK_WIDGET (clipboard), files, TRUE);
 
@@ -695,10 +695,10 @@ file_decrypt (GtkAction *action, gpointer param)
   file_item->direct_in_len = strlen (file_item->direct_in);
 
   files = g_list_append (files, file_item);
-  
+
   /* Start the operation.  */
   op = gpa_file_decrypt_operation_new (GTK_WIDGET (clipboard), files);
-  
+
   register_operation (clipboard, GPA_FILE_OPERATION (op));
 }
 
@@ -992,7 +992,7 @@ clipboard_text_new (GpaClipboard *clipboard)
   gtk_container_add (GTK_CONTAINER (scroller), clipboard->text_view);
 
   return scroller;
-} 
+}
 
 
 /* Construct a new class object of GpaClipboard.  */
@@ -1046,7 +1046,7 @@ gpa_clipboard_constructor (GType type,
   /* Add a fancy label that tells us: This is the clipboard.  */
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
-  
+
   /* FIXME: Need better icon.  */
   icon = gtk_image_new_from_stock (GTK_STOCK_PASTE, GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
@@ -1080,7 +1080,7 @@ gpa_clipboard_constructor (GType type,
   /* Update the sensitivity of paste items.  */
   {
     GtkClipboard *clip;
-    
+
     /* Do this once for all paste sensitive items.  Note that the
        window is realized already.  */
     clip = gtk_widget_get_clipboard (GTK_WIDGET (clipboard),
@@ -1103,7 +1103,7 @@ gpa_clipboard_new ()
 {
   GpaClipboard *clipboard;
 
-  clipboard = g_object_new (GPA_CLIPBOARD_TYPE, NULL);  
+  clipboard = g_object_new (GPA_CLIPBOARD_TYPE, NULL);
 
   return clipboard;
 }

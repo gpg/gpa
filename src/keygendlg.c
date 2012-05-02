@@ -31,11 +31,11 @@
 
 
 /* A table of algorithm combinations we offer to create.  */
-static struct 
+static struct
 {
   gpa_keygen_algo_t algo;
   const char *name;
-} algorithm_table[] = 
+} algorithm_table[] =
   {
     { GPA_KEYGEN_ALGO_RSA_RSA,     N_("RSA")},
     { GPA_KEYGEN_ALGO_RSA,         N_("RSA (sign only)")},
@@ -70,7 +70,7 @@ validate_name (GpaKeyGenDlg *self)
 {
   const char *s;
 
-  s = gpa_validate_gpg_name (gtk_entry_get_text 
+  s = gpa_validate_gpg_name (gtk_entry_get_text
                              (GTK_ENTRY (self->entry_name)));
   if (s)
     gpa_window_error (s, self->dialog);
@@ -82,7 +82,7 @@ validate_email (GpaKeyGenDlg *self)
 {
   const char *s;
 
-  s = gpa_validate_gpg_email (gtk_entry_get_text 
+  s = gpa_validate_gpg_email (gtk_entry_get_text
                               (GTK_ENTRY (self->entry_email)));
   if (s)
     gpa_window_error (s, self->dialog);
@@ -94,7 +94,7 @@ validate_comment (GpaKeyGenDlg *self)
 {
   const char *s;
 
-  s = gpa_validate_gpg_comment (gtk_entry_get_text 
+  s = gpa_validate_gpg_comment (gtk_entry_get_text
                                 (GTK_ENTRY (self->entry_comment)));
   if (s)
     gpa_window_error (s, self->dialog);
@@ -109,20 +109,18 @@ static void
 response_cb (GtkDialog *dlg, gint response, gpointer user_data)
 {
   GpaKeyGenDlg *self = user_data;
-  const gchar *name;
   const char *temp;
   int   keysize;
 
   if (response != GTK_RESPONSE_OK)
     return;
 
-  name = gtk_entry_get_text (GTK_ENTRY (self->entry_name));
   temp = (self->entry_keysize
-          ? gtk_combo_box_get_active_text (GTK_COMBO_BOX 
+          ? gtk_combo_box_get_active_text (GTK_COMBO_BOX
                                            (self->entry_keysize))
           :  NULL);
-  keysize = temp? atoi (temp):0; 
-             
+  keysize = temp? atoi (temp):0;
+
   if (!validate_name (self)
       || !validate_email (self)
       || !validate_comment (self))
@@ -135,7 +133,7 @@ response_cb (GtkDialog *dlg, gint response, gpointer user_data)
     {
       gpa_window_error (_("You must enter a key size."), self->dialog);
       g_signal_stop_emission_by_name (dlg, "response");
-    }      
+    }
 
   /* FIXME: check that the expire date is not in the past.  */
 }
@@ -160,7 +158,7 @@ update_preview_cb (void *widget, void *user_data)
     comment = "";
 
   uid = g_strdup_printf ("%s%s%s%s%s%s%s",
-                         name, 
+                         name,
                          *comment? " (":"", comment, *comment? ")":"",
                          *email? " <":"", email, *email? ">":"");
   gtk_label_set_text (GTK_LABEL (self->label_userid), uid);
@@ -225,7 +223,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
     {
       combo = gtk_combo_box_new_text ();
       for (idx=0; algorithm_table[idx].name; idx++)
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), 
+	gtk_combo_box_append_text (GTK_COMBO_BOX (combo),
 				   algorithm_table[idx].name);
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
@@ -233,7 +231,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
                         GTK_FILL, GTK_SHRINK, 0, 0);
       self->entry_algo = combo;
       rowidx++;
-      
+
       label = gtk_label_new_with_mnemonic (_("_Key size (bits): "));
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
@@ -245,14 +243,14 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
       gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "3072");
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 2);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
-      
+
       gtk_table_attach (GTK_TABLE (table), combo, 1, 2, rowidx, rowidx+1,
                         GTK_FILL, GTK_SHRINK, 0, 0);
       self->entry_keysize = combo;
       rowidx++;
     }
 
-  
+
   label = gtk_label_new (NULL);  /* Dummy label.  */
   gtk_table_attach (GTK_TABLE (table), label, 0, 2, rowidx, rowidx+1,
                     GTK_FILL, GTK_FILL, 0, 0);
@@ -385,7 +383,7 @@ gpa_key_gen_run_dialog (GtkWidget *parent, const char *forcard)
                              (GTK_ENTRY (self->entry_name)));
   params->email  = g_strdup (gtk_entry_get_text
                              (GTK_ENTRY (self->entry_email)));
-  params->comment= g_strdup (gtk_entry_get_text 
+  params->comment= g_strdup (gtk_entry_get_text
                              (GTK_ENTRY (self->entry_comment)));
 
   if (forcard)
@@ -396,7 +394,7 @@ gpa_key_gen_run_dialog (GtkWidget *parent, const char *forcard)
       int idx;
 
       idx = gtk_combo_box_get_active (GTK_COMBO_BOX (self->entry_algo));
-      if (idx < 0 || idx >= DIM (algorithm_table) 
+      if (idx < 0 || idx >= DIM (algorithm_table)
           || !algorithm_table[idx].name)
         {
 	  gpa_keygen_para_free (params);
@@ -405,15 +403,15 @@ gpa_key_gen_run_dialog (GtkWidget *parent, const char *forcard)
           g_return_val_if_reached (NULL);
         }
       params->algo = algorithm_table[idx].algo;
-      temp = gtk_combo_box_get_active_text 
+      temp = gtk_combo_box_get_active_text
         (GTK_COMBO_BOX (self->entry_keysize));
       params->keysize = temp? atoi (temp) : 0;
     }
-      
+
   gpa_date_box_get_date (GPA_DATE_BOX (self->entry_expire), &params->expire);
 
-  params->backup = self->entry_backup 
-                   ? gtk_toggle_button_get_active 
+  params->backup = self->entry_backup
+                   ? gtk_toggle_button_get_active
                         (GTK_TOGGLE_BUTTON (self->entry_backup))
                    : 0;
 

@@ -34,7 +34,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "gpa.h"   
+#include "gpa.h"
 
 #include "gtktools.h"
 #include "gpawidgets.h"
@@ -64,7 +64,7 @@ struct _GpaFileManager
   GList *selection_sensitive_actions;
 };
 
-struct _GpaFileManagerClass 
+struct _GpaFileManagerClass
 {
   GtkWindowClass parent_class;
 };
@@ -93,7 +93,7 @@ enum
 
 
 /* Drag and drop target list. */
-static GtkTargetEntry dnd_target_list[] = 
+static GtkTargetEntry dnd_target_list[] =
   {
     { "text/uri-list", 0, DND_TARGET_URI_LIST }
   };
@@ -102,7 +102,7 @@ static GtkTargetEntry dnd_target_list[] =
 
 
 /* Local prototypes */
-static GObject *gpa_file_manager_constructor 
+static GObject *gpa_file_manager_constructor
                          (GType type,
                           guint n_construct_properties,
                           GObjectConstructParam *construct_properties);
@@ -114,7 +114,7 @@ static GObject *gpa_file_manager_constructor
  */
 static void
 gpa_file_manager_finalize (GObject *object)
-{  
+{
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -129,9 +129,9 @@ static void
 gpa_file_manager_class_init (GpaFileManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->constructor = gpa_file_manager_constructor;
   object_class->finalize = gpa_file_manager_finalize;
 }
@@ -140,7 +140,7 @@ GType
 gpa_file_manager_get_type (void)
 {
   static GType fileman_type = 0;
-  
+
   if (!fileman_type)
     {
       static const GTypeInfo fileman_info =
@@ -155,12 +155,12 @@ gpa_file_manager_get_type (void)
 	  0,              /* n_preallocs */
 	  (GInstanceInitFunc) gpa_file_manager_init,
 	};
-      
+
       fileman_type = g_type_register_static (GTK_TYPE_WINDOW,
 					     "GpaFileManager",
 					     &fileman_info, 0);
     }
-  
+
   return fileman_type;
 }
 
@@ -169,7 +169,7 @@ gpa_file_manager_get_type (void)
 /*
  *	File manager methods
  */
- 
+
 
 /* Return the currently selected files as a new list of filenames
  * structs. The list and the texts must be freed by the caller.
@@ -178,8 +178,8 @@ static GList *
 get_selected_files (GtkWidget *list)
 {
   GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (list));
-  GtkTreeSelection *select = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
-  GList *selection = gtk_tree_selection_get_selected_rows (select, &model);
+  GtkTreeSelection *sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
+  GList *selection = gtk_tree_selection_get_selected_rows (sel, &model);
   GList *files = NULL;
 
   while (selection)
@@ -213,7 +213,7 @@ add_file (GpaFileManager *fileman, const gchar *filename)
   GtkListStore *store;
   GtkTreeIter iter;
   GtkTreePath *path;
-  GtkTreeSelection *select;
+  GtkTreeSelection *sel;
   gchar *filename_utf8;
 
   /* The tree contains filenames in the UTF-8 encoding.  */
@@ -229,7 +229,7 @@ add_file (GpaFileManager *fileman, const gchar *filename)
       {
 	gchar *tmp;
 	gboolean exists;
-	
+
 	gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, FILE_NAME_COLUMN,
 			    &tmp, -1);
 	exists = g_str_equal (filename_utf8, tmp);
@@ -249,10 +249,10 @@ add_file (GpaFileManager *fileman, const gchar *filename)
 
   /* FIXME: Add the file status when/if gpgme supports it */
   gtk_list_store_set (store, &iter, FILE_NAME_COLUMN, filename_utf8, -1);
-  
+
   /* Select the row */
-  select = gtk_tree_view_get_selection (GTK_TREE_VIEW (fileman->list_files));
-  gtk_tree_selection_select_iter (select, &iter);
+  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (fileman->list_files));
+  gtk_tree_selection_select_iter (sel, &iter);
 
   return TRUE;
 }
@@ -263,7 +263,7 @@ static void
 file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
 {
   GpaFileManager *fileman = data;
-  
+
   add_file (fileman, item->filename_out);
 }
 
@@ -287,11 +287,10 @@ static gboolean
 has_selection (gpointer param)
 {
   GpaFileManager *fileman = param;
+  GtkTreeSelection *sel;
 
-  GtkTreeSelection *select = gtk_tree_view_get_selection 
-    (GTK_TREE_VIEW (fileman->list_files));
-
-  return (gtk_tree_selection_count_selected_rows (select) > 0);
+  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (fileman->list_files));
+  return (gtk_tree_selection_count_selected_rows (sel) > 0);
 }
 
 /* Add WIDGET to the list of sensitive actions of FILEMAN.  */
@@ -354,7 +353,7 @@ get_load_file_name (GtkWidget *parent, const gchar *title,
   if (directory)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), directory);
   gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
-  
+
   /* Run the dialog until there is a valid response.  */
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   if (response == GTK_RESPONSE_OK)
@@ -493,7 +492,7 @@ static void
 edit_select_all (GtkAction *action, gpointer param)
 {
   GpaFileManager *fileman = param;
-  
+
   gtk_tree_selection_select_all (gtk_tree_view_get_selection
 				 (GTK_TREE_VIEW (fileman->list_files)));
 }
@@ -648,18 +647,18 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
 /* Handler for "drag-drop".  This signal is emitted when the user
    drops the selection.  */
 static gboolean
-dnd_drop_handler (GtkWidget *widget, GdkDragContext *context, 
-                  gint x, gint y, guint time, gpointer user_data)
+dnd_drop_handler (GtkWidget *widget, GdkDragContext *context,
+                  gint x, gint y, guint tim, gpointer user_data)
 {
   GdkAtom  target_type;
-        
+
   /* If the source offers a target we request the data from her. */
   if (context->targets)
     {
-      target_type = GDK_POINTER_TO_ATOM 
+      target_type = GDK_POINTER_TO_ATOM
         (g_list_nth_data (context->targets, DND_TARGET_URI_LIST));
-      gtk_drag_get_data (widget, context, target_type, time);
-      
+      gtk_drag_get_data (widget, context, target_type, tim);
+
       return TRUE;
     }
 
@@ -672,18 +671,18 @@ dnd_drop_handler (GtkWidget *widget, GdkDragContext *context,
 static void
 dnd_data_received_handler (GtkWidget *widget, GdkDragContext *context,
                            gint x, gint y, GtkSelectionData *selection_data,
-                           guint target_type, guint time, gpointer user_data)
-{       
+                           guint target_type, guint tim, gpointer user_data)
+{
   GpaFileManager *fileman = user_data;
   gboolean dnd_success = FALSE;
   gboolean delete_selection_data = FALSE;
-        
+
   /* Is that usable by us?  */
   if (selection_data && selection_data->length >= 0 )
     {
       if (context->action == GDK_ACTION_MOVE)
         delete_selection_data = TRUE;
-      
+
       /* Check that we got a format we can use.  */
       if (target_type == DND_TARGET_URI_LIST)
         {
@@ -710,7 +709,7 @@ dnd_data_received_handler (GtkWidget *widget, GdkDragContext *context,
     }
 
   /* Finish the DnD processing.  */
-  gtk_drag_finish (context, dnd_success, delete_selection_data, time);
+  gtk_drag_finish (context, dnd_success, delete_selection_data, tim);
 }
 
 
@@ -725,19 +724,19 @@ file_list_new (GpaFileManager * fileman)
   GtkWidget *scrollerFile;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
-  GtkTreeSelection *select;
+  GtkTreeSelection *sel;
   GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
   GtkWidget *list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("File"), renderer,
-						     "text", 
+						     "text",
 						     FILE_NAME_COLUMN,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
-  select = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
-  gtk_tree_selection_set_mode (select, GTK_SELECTION_MULTIPLE);
+  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
+  gtk_tree_selection_set_mode (sel, GTK_SELECTION_MULTIPLE);
   g_signal_connect_swapped (select, "changed",
 			    G_CALLBACK (update_selection_sensitive_actions),
 			    fileman);
@@ -756,7 +755,7 @@ file_list_new (GpaFileManager * fileman)
   gtk_container_add (GTK_CONTAINER (scrollerFile), list);
 
   return scrollerFile;
-} 
+}
 
 
 /* Callback for the destroy signal.  */
@@ -812,7 +811,7 @@ gpa_file_manager_constructor (GType type,
   /* Add a fancy label that tells us: This is the file manager.  */
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
-  
+
   icon = gtk_image_new_from_stock ("gtk-directory", GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
@@ -852,7 +851,7 @@ gpa_file_manager_constructor (GType type,
                      GDK_ACTION_COPY);
   g_signal_connect (file_box, "drag-drop",
                     G_CALLBACK (dnd_drop_handler), fileman);
-  g_signal_connect (file_box, "drag-data-received", 
+  g_signal_connect (file_box, "drag-data-received",
                     G_CALLBACK (dnd_data_received_handler), fileman);
 
 
@@ -866,7 +865,7 @@ gpa_fileman_new ()
 {
   GpaFileManager *fileman;
 
-  fileman = g_object_new (GPA_FILE_MANAGER_TYPE, NULL);  
+  fileman = g_object_new (GPA_FILE_MANAGER_TYPE, NULL);
   update_selection_sensitive_actions (fileman);
 
   return fileman;

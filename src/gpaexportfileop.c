@@ -31,10 +31,10 @@
 static GObjectClass *parent_class = NULL;
 
 static gboolean
-gpa_export_file_operation_get_destination (GpaExportOperation *operation, 
+gpa_export_file_operation_get_destination (GpaExportOperation *operation,
 					   gpgme_data_t *dest,
 					   gboolean *armor);
-static void 
+static void
 gpa_export_file_operation_complete_export (GpaExportOperation *operation);
 
 /* GObject boilerplate */
@@ -70,13 +70,13 @@ gpa_export_file_operation_constructor (GType type,
 				  GObjectConstructParam *construct_properties)
 {
   GObject *object;
-  GpaExportFileOperation *op;
+  /* GpaExportFileOperation *op; */
 
   /* Invoke parent's constructor */
   object = parent_class->constructor (type,
 				      n_construct_properties,
 				      construct_properties);
-  op = GPA_EXPORT_FILE_OPERATION (object);
+  /* op = GPA_EXPORT_FILE_OPERATION (object); */
 
   return object;
 }
@@ -92,14 +92,14 @@ gpa_export_file_operation_class_init (GpaExportFileOperationClass *klass)
   object_class->constructor = gpa_export_file_operation_constructor;
   object_class->finalize = gpa_export_file_operation_finalize;
   export_class->get_destination = gpa_export_file_operation_get_destination;
-  export_class->complete_export = gpa_export_file_operation_complete_export;  
+  export_class->complete_export = gpa_export_file_operation_complete_export;
 }
 
 GType
 gpa_export_file_operation_get_type (void)
 {
   static GType file_operation_type = 0;
-  
+
   if (!file_operation_type)
     {
       static const GTypeInfo file_operation_info =
@@ -114,19 +114,19 @@ gpa_export_file_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_export_file_operation_init,
       };
-      
+
       file_operation_type = g_type_register_static (GPA_EXPORT_OPERATION_TYPE,
 						    "GpaExportFileOperation",
 						    &file_operation_info, 0);
     }
-  
+
   return file_operation_type;
 }
 
 /* Virtual methods */
 
 static gboolean
-gpa_export_file_operation_get_destination (GpaExportOperation *operation, 
+gpa_export_file_operation_get_destination (GpaExportOperation *operation,
 					   gpgme_data_t *dest,
 					   gboolean *armor)
 {
@@ -145,8 +145,6 @@ gpa_export_file_operation_get_destination (GpaExportOperation *operation,
   /* Customize the dialog, adding the "armor" option.  */
   if (! gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
-      GtkWidget *armor_check;
-
       armor_check = gtk_check_button_new_with_mnemonic (_("_armor"));
       gtk_widget_show_all (armor_check);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (armor_check), *armor);
@@ -155,13 +153,13 @@ gpa_export_file_operation_get_destination (GpaExportOperation *operation,
     }
 
   /* Run the dialog until there is a valid response.  */
-  do 
+  do
     {
       response = gtk_dialog_run (GTK_DIALOG (dialog));
       /* Save the selected file, free'ing the previous value if required.  */
       if (op->file)
 	g_free (op->file);
-      op->file = g_strdup (gtk_file_chooser_get_filename 
+      op->file = g_strdup (gtk_file_chooser_get_filename
 			   (GTK_FILE_CHOOSER (dialog)));
       *armor = (armor_check == NULL) ? TRUE
 	: gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (armor_check));
@@ -175,7 +173,7 @@ gpa_export_file_operation_get_destination (GpaExportOperation *operation,
 }
 
 
-static void 
+static void
 gpa_export_file_operation_complete_export (GpaExportOperation *operation)
 {
   GpaExportFileOperation *op = GPA_EXPORT_FILE_OPERATION (operation);
@@ -191,7 +189,7 @@ GpaExportFileOperation*
 gpa_export_file_operation_new (GtkWidget *window, GList *keys)
 {
   GpaExportFileOperation *op;
-  
+
   op = g_object_new (GPA_EXPORT_FILE_OPERATION_TYPE,
 		     "window", window,
 		     "keys", keys,
