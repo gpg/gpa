@@ -554,42 +554,6 @@ msgstr "鍵 _ID"
 msgid "Decrypting message ..."
 msgstr "復号化中..."
 
-#, fuzzy, c-format
-msgid "Bad signature by %s: %s"
-msgstr "署名"
-
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s: %s"
-msgstr "署名"
-
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "無効な署名タイプ"
-
-#, fuzzy, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr "無効な署名タイプ"
-
-#, fuzzy, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr "無効な署名タイプ"
-
 #, fuzzy
 msgid "Document"
 msgstr "コメント:"
@@ -612,41 +576,6 @@ msgstr ""
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "検証中..."
-
-#, fuzzy, c-format
-msgid "Bad signature by %s"
-msgstr "署名"
-
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr ""
-
-#, fuzzy
-msgid "Bad signature by unknown key"
-msgstr "無効な署名タイプ"
-
-#, fuzzy, c-format
-msgid "Good signature by %s"
-msgstr "署名"
-
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr ""
-
-msgid "Good signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s"
-msgstr "無効な署名タイプ"
-
-#, fuzzy, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr "無効な署名タイプ"
-
-#, fuzzy
-msgid "Invalid signature by unknown key"
-msgstr "無効な署名タイプ"
 
 msgid "Subkey ID"
 msgstr "副鍵 ID"
@@ -862,6 +791,77 @@ msgstr "カジュアル"
 
 msgid "Positive"
 msgstr "ポジティヴ"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s: %s"
+msgstr "署名"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s"
+msgstr "署名"
+
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Bad signature by unknown key"
+msgstr "無効な署名タイプ"
+
+#, fuzzy, c-format
+msgid "Good signature by %s: %s"
+msgstr "署名"
+
+#, fuzzy, c-format
+msgid "Good signature by %s"
+msgstr "署名"
+
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr ""
+
+msgid "Good signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "無効な署名タイプ"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s"
+msgstr "無効な署名タイプ"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "無効な署名タイプ"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "無効な署名タイプ"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "無効な署名タイプ"
+
+#, fuzzy
+msgid "Uncertain signature by unknown key"
+msgstr "無効な署名タイプ"
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr "証明、署名、暗号化に使える鍵です。"
@@ -1815,6 +1815,10 @@ msgstr "期限切れの鍵"
 
 msgid "Key NOT valid"
 msgstr "鍵は有効では「ありません」"
+
+#, fuzzy
+msgid "Description"
+msgstr "復号化中..."
 
 #, c-format
 msgid "Verified data in file: %s"

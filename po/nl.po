@@ -553,42 +553,6 @@ msgstr "Sleutel _ID:"
 msgid "Decrypting message ..."
 msgstr "Aan het ontsleutelen..."
 
-#, fuzzy, c-format
-msgid "Bad signature by %s: %s"
-msgstr "Ondertekeningen"
-
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s: %s"
-msgstr "Ondertekeningen"
-
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "Ondertekeningen"
-
-#, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr ""
-
 #, fuzzy
 msgid "Document"
 msgstr "Commentaar:"
@@ -611,39 +575,6 @@ msgstr ""
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "Aan het verifieren..."
-
-#, fuzzy, c-format
-msgid "Bad signature by %s"
-msgstr "Ondertekeningen"
-
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr ""
-
-msgid "Bad signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s"
-msgstr "Ondertekeningen"
-
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr ""
-
-msgid "Good signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s"
-msgstr "Ondertekeningen"
-
-#, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr ""
-
-msgid "Invalid signature by unknown key"
-msgstr ""
 
 msgid "Subkey ID"
 msgstr "Subsleutels ID"
@@ -858,6 +789,75 @@ msgstr "Gewoon"
 
 msgid "Positive"
 msgstr "Positief"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s: %s"
+msgstr "Ondertekeningen"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s"
+msgstr "Ondertekeningen"
+
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr ""
+
+msgid "Bad signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Good signature by %s: %s"
+msgstr "Ondertekeningen"
+
+#, fuzzy, c-format
+msgid "Good signature by %s"
+msgstr "Ondertekeningen"
+
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr ""
+
+msgid "Good signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "Ondertekeningen"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s"
+msgstr "Ondertekeningen"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "Ondertekeningen"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "Ondertekeningen"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "Ondertekeningen"
+
+msgid "Uncertain signature by unknown key"
+msgstr ""
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
@@ -1823,6 +1823,10 @@ msgstr "Vervallen sleutel"
 
 msgid "Key NOT valid"
 msgstr "Sleutel NIET geldig"
+
+#, fuzzy
+msgid "Description"
+msgstr "Aan het ontsleutelen..."
 
 #, c-format
 msgid "Verified data in file: %s"

@@ -522,42 +522,6 @@ msgstr "_Nyckelidentitet:"
 msgid "Decrypting message ..."
 msgstr "Dekrypterar meddelande..."
 
-#, c-format
-msgid "Bad signature by %s: %s"
-msgstr "Dålig signatur av %s: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr "Dålig signatur av okänd nyckel %s: %s"
-
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr "Dålig signatur av okänd nyckel: %s"
-
-#, c-format
-msgid "Good signature by %s: %s"
-msgstr "Bra signatur av %s: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr "Bra signatur av okänd nyckel %s: %s"
-
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr "Bra signatur av okänd nyckel: %s"
-
-#, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "Ogiltig signatur av %s: %s"
-
-#, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr "Ogiltig signatur av okänd nyckel %s: %s"
-
-#, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr "Ogiltig signatur av okänd nyckel: %s"
-
 msgid "Document"
 msgstr "Dokument"
 
@@ -575,39 +539,6 @@ msgstr "Meddelandesignering"
 
 msgid "Verifying message ..."
 msgstr "Validerar meddelande..."
-
-#, c-format
-msgid "Bad signature by %s"
-msgstr "Dålig signatur av %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr "Dålig signatur av okänd nyckel %s"
-
-msgid "Bad signature by unknown key"
-msgstr "Dålig signatur av okänd nyckel"
-
-#, c-format
-msgid "Good signature by %s"
-msgstr "Bra signatur av %s"
-
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr "Bra signatur av okänd nyckel %s"
-
-msgid "Good signature by unknown key"
-msgstr "Bra signatur av okänd nyckel"
-
-#, c-format
-msgid "Invalid signature by %s"
-msgstr "Ogiltig signatur av %s"
-
-#, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr "Ogiltig signatur av okänd nyckel %s"
-
-msgid "Invalid signature by unknown key"
-msgstr "Ogiltig signatur av okänd nyckel"
 
 msgid "Subkey ID"
 msgstr "Undernyckelsidentitet"
@@ -823,6 +754,76 @@ msgstr "Flyktigt"
 
 msgid "Positive"
 msgstr "Helt säkert"
+
+#, c-format
+msgid "Bad signature by %s: %s"
+msgstr "Dålig signatur av %s: %s"
+
+#, c-format
+msgid "Bad signature by %s"
+msgstr "Dålig signatur av %s"
+
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr "Dålig signatur av okänd nyckel %s: %s"
+
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr "Dålig signatur av okänd nyckel %s"
+
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr "Dålig signatur av okänd nyckel: %s"
+
+msgid "Bad signature by unknown key"
+msgstr "Dålig signatur av okänd nyckel"
+
+#, c-format
+msgid "Good signature by %s: %s"
+msgstr "Bra signatur av %s: %s"
+
+#, c-format
+msgid "Good signature by %s"
+msgstr "Bra signatur av %s"
+
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr "Bra signatur av okänd nyckel %s: %s"
+
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr "Bra signatur av okänd nyckel %s"
+
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr "Bra signatur av okänd nyckel: %s"
+
+msgid "Good signature by unknown key"
+msgstr "Bra signatur av okänd nyckel"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "Ogiltig signatur av %s: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s"
+msgstr "Ogiltig signatur av %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "Ogiltig signatur av okänd nyckel %s: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "Ogiltig signatur av okänd nyckel %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "Ogiltig signatur av okänd nyckel: %s"
+
+#, fuzzy
+msgid "Uncertain signature by unknown key"
+msgstr "Ogiltig signatur av okänd nyckel"
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Nyckeln kan användas för certifiering, signering och kryptering."
@@ -1768,6 +1769,10 @@ msgstr "Utgången nyckel"
 
 msgid "Key NOT valid"
 msgstr "Nyckel är INTE giltig"
+
+#, fuzzy
+msgid "Description"
+msgstr "Dekrypterar..."
 
 #, c-format
 msgid "Verified data in file: %s"

@@ -548,42 +548,6 @@ msgstr "Anahtar _Kimliði:"
 msgid "Decrypting message ..."
 msgstr "Çözüyor..."
 
-#, fuzzy, c-format
-msgid "Bad signature by %s: %s"
-msgstr "Ýmzalar: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s: %s"
-msgstr "Ýmzalar: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "Ýmzalar: %s"
-
-#, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr ""
-
 #, fuzzy
 msgid "Document"
 msgstr "Yorum:"
@@ -606,39 +570,6 @@ msgstr ""
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "Doðruluyor..."
-
-#, fuzzy, c-format
-msgid "Bad signature by %s"
-msgstr "Ýmzalar: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr ""
-
-msgid "Bad signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s"
-msgstr "Ýmzalar: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr ""
-
-msgid "Good signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s"
-msgstr "Tüm imzalar"
-
-#, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr ""
-
-msgid "Invalid signature by unknown key"
-msgstr ""
 
 msgid "Subkey ID"
 msgstr "Altanahtar Kimliði"
@@ -854,6 +785,75 @@ msgstr "Hafif"
 
 msgid "Positive"
 msgstr "Olumlu"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s: %s"
+msgstr "Ýmzalar: %s"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s"
+msgstr "Ýmzalar: %s"
+
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr ""
+
+msgid "Bad signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Good signature by %s: %s"
+msgstr "Ýmzalar: %s"
+
+#, fuzzy, c-format
+msgid "Good signature by %s"
+msgstr "Ýmzalar: %s"
+
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr ""
+
+msgid "Good signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "Ýmzalar: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s"
+msgstr "Tüm imzalar"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "Ýmzalar: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "Tüm imzalar"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "Ýmzalar: %s"
+
+msgid "Uncertain signature by unknown key"
+msgstr ""
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Anahtar onaylama, imzalama, ve þifreleme için kullanýlabilir."
@@ -1813,6 +1813,10 @@ msgstr "Sona ermiþ anatar"
 
 msgid "Key NOT valid"
 msgstr "Anahtar Geçersiz"
+
+#, fuzzy
+msgid "Description"
+msgstr "Çözüyor..."
 
 #, c-format
 msgid "Verified data in file: %s"

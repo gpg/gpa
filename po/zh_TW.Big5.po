@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"POT-Creation-Date: 2012-04-26 17:53+0200\n"
+"POT-Creation-Date: 2012-05-02 13:26+0200\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -225,23 +225,23 @@ msgstr "月"
 msgid "years"
 msgstr "年"
 
-#: src/convert.c:89
+#: src/convert.c:95
 msgid "never expires"
 msgstr "永遠生效"
 
-#: src/convert.c:109 src/cm-netkey.c:138 src/cm-netkey.c:514
+#: src/convert.c:115 src/cm-netkey.c:138 src/cm-netkey.c:514
 msgid "unknown"
 msgstr "不知名"
 
-#: src/convert.c:117
+#: src/convert.c:123
 msgid "Mr."
 msgstr ""
 
-#: src/convert.c:119
+#: src/convert.c:125
 msgid "Ms."
 msgstr ""
 
-#: src/convert.c:123
+#: src/convert.c:129
 #, fuzzy
 msgid "(unknown)"
 msgstr "不知名"
@@ -362,60 +362,60 @@ msgstr "純文字簽署 (&C)"
 msgid "_Detached signature"
 msgstr "純文字簽署 (&C)"
 
-#: src/gpa.c:98
+#: src/gpa.c:100
 #, fuzzy
 msgid "Output version information and exit"
 msgstr "顯示版本資料及離開"
 
-#: src/gpa.c:100
+#: src/gpa.c:102
 #, fuzzy
 msgid "Open key manager (default)"
 msgstr "開啟鑰圈編輯器 (預設)"
 
-#: src/gpa.c:102
+#: src/gpa.c:104
 #, fuzzy
 msgid "Open file manager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:104 src/gpa.h:80
+#: src/gpa.c:106 src/gpa.h:80
 #, fuzzy
 msgid "Open the card manager"
 msgstr "開啟檔案管理員"
 
-#: src/gpa.c:106
+#: src/gpa.c:108
 msgid "Open clipboard"
 msgstr ""
 
-#: src/gpa.c:108
+#: src/gpa.c:110
 #, fuzzy
 msgid "Open the settings dialog"
 msgstr "開啟設定視窗"
 
-#: src/gpa.c:110
+#: src/gpa.c:112
 msgid "Enable the UI server"
 msgstr ""
 
-#: src/gpa.c:112
+#: src/gpa.c:114
 msgid "Disable support for X.509"
 msgstr ""
 
-#: src/gpa.c:114
+#: src/gpa.c:116
 #, fuzzy
 msgid "Read options from file"
 msgstr "由檔案中讀取選項"
 
-#: src/gpa.c:321
+#: src/gpa.c:327
 msgid "[FILE...]"
 msgstr ""
 
-#: src/gpa.c:323
+#: src/gpa.c:329
 #, fuzzy
 msgid "Graphical frontend to GnuPG"
 msgstr ""
 "語法: gpa [選項]\n"
 "GnuPG的圖像介面\n"
 
-#: src/gpa.c:324
+#: src/gpa.c:330
 msgid "Please report bugs to <"
 msgstr "回報臭蟲至 <"
 
@@ -561,7 +561,7 @@ msgstr "密碼錯誤!"
 msgid "Encrypting..."
 msgstr "加密中..."
 
-#: src/gpafileencryptop.c:476 src/verifydlg.c:222
+#: src/gpafileencryptop.c:476 src/verifydlg.c:225
 msgid "Unknown Key"
 msgstr "未知的公鑰"
 
@@ -578,7 +578,7 @@ msgstr "不過, 密鑰並不屬於對方的"
 msgid "Do you <b>really</b> want to use this key?"
 msgstr "您確定要使用這個密鑰 ?"
 
-#: src/gpafileencryptop.c:525 src/gpafileencryptop.c:565 src/verifydlg.c:227
+#: src/gpafileencryptop.c:525 src/gpafileencryptop.c:565 src/verifydlg.c:230
 msgid "Revoked Key"
 msgstr "移除密鑰"
 
@@ -668,12 +668,12 @@ msgid ""
 msgstr ""
 
 #: src/gpakeyselector.c:86 src/keylist.c:593 src/recipientdlg.c:191
-#: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:324
+#: src/siglist.c:93 src/siglist.c:113 src/verifydlg.c:336
 msgid "Key ID"
 msgstr "密鑰ID"
 
 #: src/gpakeyselector.c:95 src/keylist.c:644 src/siglist.c:99
-#: src/siglist.c:142 src/verifydlg.c:336
+#: src/siglist.c:142 src/verifydlg.c:348
 msgid "User Name"
 msgstr "用者名稱"
 
@@ -706,52 +706,7 @@ msgstr "密鑰序號: (&I)"
 msgid "Decrypting message ..."
 msgstr "解密中..."
 
-#: src/gpastreamdecryptop.c:343 src/gpastreamverifyop.c:352
-#, fuzzy, c-format
-msgid "Bad signature by %s: %s"
-msgstr "簽署"
-
-#: src/gpastreamdecryptop.c:346 src/gpastreamverifyop.c:358
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr ""
-
-#: src/gpastreamdecryptop.c:349 src/gpastreamverifyop.c:364
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr ""
-
-#: src/gpastreamdecryptop.c:355 src/gpastreamverifyop.c:372
-#, fuzzy, c-format
-msgid "Good signature by %s: %s"
-msgstr "簽署"
-
-#: src/gpastreamdecryptop.c:358 src/gpastreamverifyop.c:378
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr ""
-
-#: src/gpastreamdecryptop.c:361 src/gpastreamverifyop.c:384
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr ""
-
-#: src/gpastreamdecryptop.c:367 src/gpastreamverifyop.c:392
-#, fuzzy, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "簽署"
-
-#: src/gpastreamdecryptop.c:370 src/gpastreamverifyop.c:398
-#, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr ""
-
-#: src/gpastreamdecryptop.c:373 src/gpastreamverifyop.c:404
-#, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr ""
-
-#: src/gpastreamdecryptop.c:399 src/gpastreamverifyop.c:437
+#: src/gpastreamdecryptop.c:344 src/gpastreamverifyop.c:356
 #, fuzzy
 msgid "Document"
 msgstr "備註:"
@@ -780,53 +735,11 @@ msgstr ""
 msgid "Verifying message ..."
 msgstr "驗證中..."
 
-#: src/gpastreamverifyop.c:355
-#, fuzzy, c-format
-msgid "Bad signature by %s"
-msgstr "簽署"
-
-#: src/gpastreamverifyop.c:361
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr ""
-
-#: src/gpastreamverifyop.c:367
-msgid "Bad signature by unknown key"
-msgstr ""
-
-#: src/gpastreamverifyop.c:375
-#, fuzzy, c-format
-msgid "Good signature by %s"
-msgstr "簽署"
-
-#: src/gpastreamverifyop.c:381
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr ""
-
-#: src/gpastreamverifyop.c:387
-msgid "Good signature by unknown key"
-msgstr ""
-
-#: src/gpastreamverifyop.c:395
-#, fuzzy, c-format
-msgid "Invalid signature by %s"
-msgstr "所有簽署"
-
-#: src/gpastreamverifyop.c:401
-#, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr ""
-
-#: src/gpastreamverifyop.c:407
-msgid "Invalid signature by unknown key"
-msgstr ""
-
 #: src/gpasubkeylist.c:79
 msgid "Subkey ID"
 msgstr "子鑰序號"
 
-#: src/gpasubkeylist.c:85 src/siglist.c:119 src/verifydlg.c:330
+#: src/gpasubkeylist.c:85 src/siglist.c:119 src/verifydlg.c:342
 msgid "Status"
 msgstr "狀態"
 
@@ -907,7 +820,7 @@ msgstr "已經失效"
 msgid "Unsigned"
 msgstr "沒有簽署"
 
-#: src/gpasubkeylist.c:173 src/gpgmetools.c:1033 src/verifydlg.c:212
+#: src/gpasubkeylist.c:173 src/gpgmetools.c:1033 src/verifydlg.c:215
 msgid "Valid"
 msgstr "正確"
 
@@ -1070,11 +983,11 @@ msgstr "輸入密碼"
 msgid "[None]"
 msgstr ""
 
-#: src/gpgmetools.c:1010 src/verifydlg.c:269
+#: src/gpgmetools.c:1010 src/verifydlg.c:279
 msgid "[Unknown user ID]"
 msgstr "[不名用者ID]"
 
-#: src/gpgmetools.c:1036 src/verifydlg.c:217
+#: src/gpgmetools.c:1036 src/verifydlg.c:220
 msgid "Bad"
 msgstr "不合法的"
 
@@ -1094,66 +1007,153 @@ msgstr "臨時"
 msgid "Positive"
 msgstr "確定"
 
-#: src/gpgmetools.c:1086
+#: src/gpgmetools.c:1105
+#, fuzzy, c-format
+msgid "Bad signature by %s: %s"
+msgstr "簽署"
+
+#: src/gpgmetools.c:1108
+#, fuzzy, c-format
+msgid "Bad signature by %s"
+msgstr "簽署"
+
+#: src/gpgmetools.c:1111
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr ""
+
+#: src/gpgmetools.c:1114
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr ""
+
+#: src/gpgmetools.c:1117
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr ""
+
+#: src/gpgmetools.c:1120
+msgid "Bad signature by unknown key"
+msgstr ""
+
+#: src/gpgmetools.c:1125
+#, fuzzy, c-format
+msgid "Good signature by %s: %s"
+msgstr "簽署"
+
+#: src/gpgmetools.c:1128
+#, fuzzy, c-format
+msgid "Good signature by %s"
+msgstr "簽署"
+
+#: src/gpgmetools.c:1131
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr ""
+
+#: src/gpgmetools.c:1134
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr ""
+
+#: src/gpgmetools.c:1137
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr ""
+
+#: src/gpgmetools.c:1140
+msgid "Good signature by unknown key"
+msgstr ""
+
+#: src/gpgmetools.c:1145
+#, fuzzy, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "簽署"
+
+#: src/gpgmetools.c:1148
+#, fuzzy, c-format
+msgid "Uncertain signature by %s"
+msgstr "所有簽署"
+
+#: src/gpgmetools.c:1151
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "簽署"
+
+#: src/gpgmetools.c:1154
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "所有簽署"
+
+#: src/gpgmetools.c:1157
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "簽署"
+
+#: src/gpgmetools.c:1160
+msgid "Uncertain signature by unknown key"
+msgstr ""
+
+#: src/gpgmetools.c:1189
 msgid "The key can be used for certification, signing and encryption."
 msgstr "密鑰可被用作驗證, 簽署及加密."
 
-#: src/gpgmetools.c:1089
+#: src/gpgmetools.c:1192
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr "密鑰可被用作驗證及簽署, 並不允許用在加密上."
 
-#: src/gpgmetools.c:1095
+#: src/gpgmetools.c:1198
 msgid "The key can be used for certification and encryption."
 msgstr "密鑰可用作驗證及加密."
 
-#: src/gpgmetools.c:1098
+#: src/gpgmetools.c:1201
 msgid "The key can be used only for certification."
 msgstr "密鑰只可用作驗證."
 
-#: src/gpgmetools.c:1106
+#: src/gpgmetools.c:1209
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr "密鑰只可以被用作簽署及加密.並不允許用在驗證用途."
 
-#: src/gpgmetools.c:1109
+#: src/gpgmetools.c:1212
 msgid "The key can be used only for signing."
 msgstr "密鑰只可用作簽署."
 
-#: src/gpgmetools.c:1114
+#: src/gpgmetools.c:1217
 msgid "The key can be used only for encryption."
 msgstr "密鑰只可用作加密."
 
-#: src/gpgmetools.c:1117
+#: src/gpgmetools.c:1220
 msgid "This key is useless."
 msgstr "密鑰是不可使用的."
 
-#: src/gpgmetools.c:1455
+#: src/gpgmetools.c:1580
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
-#: src/gpgmetools.c:1505
+#: src/gpgmetools.c:1630
 msgid "You must enter a name."
 msgstr ""
 
-#: src/gpgmetools.c:1507
+#: src/gpgmetools.c:1632
 msgid "Invalid character in name."
 msgstr ""
 
-#: src/gpgmetools.c:1509
+#: src/gpgmetools.c:1634
 msgid "Name may not start with a digit."
 msgstr ""
 
-#: src/gpgmetools.c:1511
+#: src/gpgmetools.c:1636
 msgid "Name is too short."
 msgstr ""
 
-#: src/gpgmetools.c:1583
+#: src/gpgmetools.c:1708
 msgid "Email address is not valid."
 msgstr ""
 
-#: src/gpgmetools.c:1597
+#: src/gpgmetools.c:1722
 msgid "Invalid character in comments."
 msgstr ""
 
@@ -2251,25 +2251,30 @@ msgstr "程度"
 msgid "Verify documents"
 msgstr "驗證檔案"
 
-#: src/verifydlg.c:232
+#: src/verifydlg.c:235
 msgid "Expired Key"
 msgstr "已過時的公鑰"
 
-#: src/verifydlg.c:240
+#: src/verifydlg.c:243
 msgid "Key NOT valid"
 msgstr "公鑰不正確"
 
-#: src/verifydlg.c:359
+#: src/verifydlg.c:354
+#, fuzzy
+msgid "Description"
+msgstr "解密中..."
+
+#: src/verifydlg.c:377
 #, c-format
 msgid "Verified data in file: %s"
 msgstr "驗證檔案中的資料: %s"
 
-#: src/verifydlg.c:364
+#: src/verifydlg.c:382
 #, fuzzy, c-format
 msgid "Signature: %s"
 msgstr "簽署"
 
-#: src/verifydlg.c:370
+#: src/verifydlg.c:388
 msgid "Signatures:"
 msgstr "簽署"
 

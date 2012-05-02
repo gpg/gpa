@@ -536,42 +536,6 @@ msgstr "_مُعرِّف المفتاح:"
 msgid "Decrypting message ..."
 msgstr "يجري التَّظهير..."
 
-#, fuzzy, c-format
-msgid "Bad signature by %s: %s"
-msgstr "التوقيع: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s: %s"
-msgstr "التوقيع: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "التوقيع: %s"
-
-#, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr ""
-
 #, fuzzy
 msgid "Document"
 msgstr "وقّع الملفات"
@@ -594,39 +558,6 @@ msgstr ""
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "يجري التحقق..."
-
-#, fuzzy, c-format
-msgid "Bad signature by %s"
-msgstr "التوقيع: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr ""
-
-msgid "Bad signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s"
-msgstr "التوقيع: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr ""
-
-msgid "Good signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s"
-msgstr "كل التوقيعات"
-
-#, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr ""
-
-msgid "Invalid signature by unknown key"
-msgstr ""
 
 msgid "Subkey ID"
 msgstr "مُعرِّف المفتاح الفرعي"
@@ -841,6 +772,75 @@ msgstr "عادي"
 
 msgid "Positive"
 msgstr "إيجابي"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s: %s"
+msgstr "التوقيع: %s"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s"
+msgstr "التوقيع: %s"
+
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr ""
+
+msgid "Bad signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Good signature by %s: %s"
+msgstr "التوقيع: %s"
+
+#, fuzzy, c-format
+msgid "Good signature by %s"
+msgstr "التوقيع: %s"
+
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr ""
+
+msgid "Good signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "التوقيع: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s"
+msgstr "كل التوقيعات"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "التوقيع: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "كل التوقيعات"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "التوقيع: %s"
+
+msgid "Uncertain signature by unknown key"
+msgstr ""
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr "يمكن استخدام المفتاح في الشهادة و التوقيع و التعمية."
@@ -1782,6 +1782,10 @@ msgstr "مفتاح منتهي الصلاحية"
 
 msgid "Key NOT valid"
 msgstr "المفتاح غير صالح"
+
+#, fuzzy
+msgid "Description"
+msgstr "يجري التَّظهير..."
 
 #, c-format
 msgid "Verified data in file: %s"

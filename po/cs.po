@@ -561,42 +561,6 @@ msgstr "_ID klíče:"
 msgid "Decrypting message ..."
 msgstr "Dešifruji...."
 
-#, fuzzy, c-format
-msgid "Bad signature by %s: %s"
-msgstr "Podpis: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s: %s"
-msgstr "Podpis: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "Ungültiger Signaturtyp"
-
-#, fuzzy, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr "Ungültiger Signaturtyp"
-
-#, fuzzy, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr "Ungültiger Signaturtyp"
-
 #, fuzzy
 msgid "Document"
 msgstr "Bemerkung:"
@@ -619,41 +583,6 @@ msgstr ""
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "Ověřuji ..."
-
-#, fuzzy, c-format
-msgid "Bad signature by %s"
-msgstr "Podpis: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr ""
-
-#, fuzzy
-msgid "Bad signature by unknown key"
-msgstr "Ungültiger Signaturtyp"
-
-#, fuzzy, c-format
-msgid "Good signature by %s"
-msgstr "Podpis: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr ""
-
-msgid "Good signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s"
-msgstr "Ungültiger Signaturtyp"
-
-#, fuzzy, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr "Ungültiger Signaturtyp"
-
-#, fuzzy
-msgid "Invalid signature by unknown key"
-msgstr "Ungültiger Signaturtyp"
 
 msgid "Subkey ID"
 msgstr "ID podklíče"
@@ -873,6 +802,77 @@ msgstr "Přibližný"
 
 msgid "Positive"
 msgstr "Pozitivní"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s: %s"
+msgstr "Podpis: %s"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s"
+msgstr "Podpis: %s"
+
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Bad signature by unknown key"
+msgstr "Ungültiger Signaturtyp"
+
+#, fuzzy, c-format
+msgid "Good signature by %s: %s"
+msgstr "Podpis: %s"
+
+#, fuzzy, c-format
+msgid "Good signature by %s"
+msgstr "Podpis: %s"
+
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr ""
+
+msgid "Good signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "Ungültiger Signaturtyp"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s"
+msgstr "Ungültiger Signaturtyp"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "Ungültiger Signaturtyp"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "Ungültiger Signaturtyp"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "Ungültiger Signaturtyp"
+
+#, fuzzy
+msgid "Uncertain signature by unknown key"
+msgstr "Ungültiger Signaturtyp"
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Tento klíč smí být použit pro certifikaci, podpis a šifrování."
@@ -1832,6 +1832,10 @@ msgstr "Klíči vypršela platnost"
 
 msgid "Key NOT valid"
 msgstr "Klíč není platný"
+
+#, fuzzy
+msgid "Description"
+msgstr "Dešifruji...."
 
 #, c-format
 msgid "Verified data in file: %s"

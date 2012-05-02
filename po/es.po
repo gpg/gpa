@@ -542,42 +542,6 @@ msgstr "_ID de Clave:"
 msgid "Decrypting message ..."
 msgstr "Descifrando..."
 
-#, fuzzy, c-format
-msgid "Bad signature by %s: %s"
-msgstr "Firmas: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s: %s"
-msgstr "Firmas: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "Firmas: %s"
-
-#, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr ""
-
 #, fuzzy
 msgid "Document"
 msgstr "Firmar documentos"
@@ -600,39 +564,6 @@ msgstr ""
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "Verificando..."
-
-#, fuzzy, c-format
-msgid "Bad signature by %s"
-msgstr "Firmas: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr ""
-
-msgid "Bad signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s"
-msgstr "Firmas: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr ""
-
-msgid "Good signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s"
-msgstr "Todas las firmas"
-
-#, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr ""
-
-msgid "Invalid signature by unknown key"
-msgstr ""
 
 msgid "Subkey ID"
 msgstr "ID de Subclave"
@@ -848,6 +779,75 @@ msgstr "Casual"
 
 msgid "Positive"
 msgstr "Positiva"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s: %s"
+msgstr "Firmas: %s"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s"
+msgstr "Firmas: %s"
+
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr ""
+
+msgid "Bad signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Good signature by %s: %s"
+msgstr "Firmas: %s"
+
+#, fuzzy, c-format
+msgid "Good signature by %s"
+msgstr "Firmas: %s"
+
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr ""
+
+msgid "Good signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "Firmas: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s"
+msgstr "Todas las firmas"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "Firmas: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "Todas las firmas"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "Firmas: %s"
+
+msgid "Uncertain signature by unknown key"
+msgstr ""
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Esta clave puede utilizarse para certificación, firma y cifrado."
@@ -1817,6 +1817,10 @@ msgstr "Clave Caducada"
 
 msgid "Key NOT valid"
 msgstr "Clave NO válida"
+
+#, fuzzy
+msgid "Description"
+msgstr "Descifrando..."
 
 #, c-format
 msgid "Verified data in file: %s"

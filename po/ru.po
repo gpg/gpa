@@ -538,42 +538,6 @@ msgstr "ID _ключа:"
 msgid "Decrypting message ..."
 msgstr "Расшифровка..."
 
-#, fuzzy, c-format
-msgid "Bad signature by %s: %s"
-msgstr "Подпись: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Bad signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s: %s"
-msgstr "Подпись: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Good signature by unknown key: %s"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s: %s"
-msgstr "Подпись: %s"
-
-#, c-format
-msgid "Invalid signature by unknown key %s: %s"
-msgstr ""
-
-#, c-format
-msgid "Invalid signature by unknown key: %s"
-msgstr ""
-
 #, fuzzy
 msgid "Document"
 msgstr "Подпись файлов"
@@ -596,39 +560,6 @@ msgstr ""
 #, fuzzy
 msgid "Verifying message ..."
 msgstr "Проверка..."
-
-#, fuzzy, c-format
-msgid "Bad signature by %s"
-msgstr "Подпись: %s"
-
-#, c-format
-msgid "Bad signature by unknown key %s"
-msgstr ""
-
-msgid "Bad signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Good signature by %s"
-msgstr "Подпись: %s"
-
-#, c-format
-msgid "Good signature by unknown key %s"
-msgstr ""
-
-msgid "Good signature by unknown key"
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Invalid signature by %s"
-msgstr "Все подписи"
-
-#, c-format
-msgid "Invalid signature by unknown key %s"
-msgstr ""
-
-msgid "Invalid signature by unknown key"
-msgstr ""
 
 msgid "Subkey ID"
 msgstr "ID подключа"
@@ -844,6 +775,75 @@ msgstr "Случайн."
 
 msgid "Positive"
 msgstr "Позитив."
+
+#, fuzzy, c-format
+msgid "Bad signature by %s: %s"
+msgstr "Подпись: %s"
+
+#, fuzzy, c-format
+msgid "Bad signature by %s"
+msgstr "Подпись: %s"
+
+#, c-format
+msgid "Bad signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Bad signature by unknown key: %s"
+msgstr ""
+
+msgid "Bad signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Good signature by %s: %s"
+msgstr "Подпись: %s"
+
+#, fuzzy, c-format
+msgid "Good signature by %s"
+msgstr "Подпись: %s"
+
+#, c-format
+msgid "Good signature by unknown key %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key %s"
+msgstr ""
+
+#, c-format
+msgid "Good signature by unknown key: %s"
+msgstr ""
+
+msgid "Good signature by unknown key"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s: %s"
+msgstr "Подпись: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by %s"
+msgstr "Все подписи"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s: %s"
+msgstr "Подпись: %s"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key %s"
+msgstr "Все подписи"
+
+#, fuzzy, c-format
+msgid "Uncertain signature by unknown key: %s"
+msgstr "Подпись: %s"
+
+msgid "Uncertain signature by unknown key"
+msgstr ""
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr ""
@@ -1801,6 +1801,10 @@ msgstr "Ключ устарел"
 
 msgid "Key NOT valid"
 msgstr "Ключ НЕ достоверен"
+
+#, fuzzy
+msgid "Description"
+msgstr "Расшифровка..."
 
 #, c-format
 msgid "Verified data in file: %s"
