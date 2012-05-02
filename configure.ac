@@ -284,28 +284,73 @@ esac
 #
 # Set extra compiler flags
 #
+AC_MSG_NOTICE([checking for cc features])
 if test "$GCC" = yes; then
     if test "$USE_MAINTAINER_MODE" = "yes"; then
-        # FIXME:
-	#
-        # Should have -Wshadow here too, but it causes too many warnings
-        # along with GTK+, due to:
         #
-        # http://gcc.gnu.org/cgi-bin/gnatsweb.pl?cmd=view&pr=529&database=gcc
+        # Enable all kins of warnings.
         #
-        # Add it again if that bug is ever fixed.
-	#
-	# The same goes to -Wstrict-prototypes, as it causes too many warnings
-	# in gtkitemfactory.h:51 (see comment in the code for the reason).
-	#
-	# All those warnings make it difficult to tell apart real GPA
-	# warnings.
-	#
-	# CFLAGS="$CFLAGS -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
-        CFLAGS="$CFLAGS -Wall -Wcast-align"
+        CFLAGS="$CFLAGS -O3 -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
+        CFLAGS="$CFLAGS -Wformat -Wno-format-y2k -Wformat-security"
+
+        AC_MSG_CHECKING([if gcc supports -Wno-missing-field-initializers])
+        _gcc_cflags_save=$CFLAGS
+        CFLAGS="-Wno-missing-field-initializers"
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],_gcc_wopt=yes,_gcc_wopt=no)
+        AC_MSG_RESULT($_gcc_wopt)
+        CFLAGS=$_gcc_cflags_save;
+        if test x"$_gcc_wopt" = xyes ; then
+          CFLAGS="$CFLAGS -W -Wno-sign-compare -Wno-missing-field-initializers"
+        fi
+
+        AC_MSG_CHECKING([if gcc supports -Wdeclaration-after-statement])
+        _gcc_cflags_save=$CFLAGS
+        CFLAGS="-Wdeclaration-after-statement"
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],_gcc_wopt=yes,_gcc_wopt=no)
+        AC_MSG_RESULT($_gcc_wopt)
+        CFLAGS=$_gcc_cflags_save;
+        if test x"$_gcc_wopt" = xyes ; then
+          CFLAGS="$CFLAGS -Wdeclaration-after-statement"
+        fi
+
+	# We should keep -Wstrict-prototypes here.  However, it causes
+	# too many warnings in gtkitemfactory.h:51 (see comment over
+	# there).  This might be solved with GTK 3.
+        AC_MSG_CHECKING([if gcc supports -Wno-strict-prototypes])
+        _gcc_cflags_save=$CFLAGS
+        CFLAGS="-Wno-strict-prototypes"
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],_gcc_wopt=yes,_gcc_wopt=no)
+        AC_MSG_RESULT($_gcc_wopt)
+        CFLAGS=$_gcc_cflags_save;
+        if test x"$_gcc_wopt" = xyes ; then
+          CFLAGS="$CFLAGS -Wno-strict-prototypes"
+        fi
+
     else
         CFLAGS="$CFLAGS -Wall"
     fi
+
+    AC_MSG_CHECKING([if gcc supports -Wno-pointer-sign])
+    _gcc_cflags_save=$CFLAGS
+    CFLAGS="-Wno-pointer-sign"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],_gcc_wopt=yes,_gcc_wopt=no)
+    AC_MSG_RESULT($_gcc_wopt)
+    CFLAGS=$_gcc_cflags_save;
+    if test x"$_gcc_wopt" = xyes ; then
+       CFLAGS="$CFLAGS -Wno-pointer-sign"
+    fi
+
+    AC_MSG_CHECKING([if gcc supports -Wno-unused-parameter])
+    _gcc_cflags_save=$CFLAGS
+    CFLAGS="-Wno-unused-parameter"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],_gcc_wopt=yes,_gcc_wopt=no)
+    AC_MSG_RESULT($_gcc_wopt)
+    CFLAGS=$_gcc_cflags_save;
+    if test x"$_gcc_wopt" = xyes ; then
+       CFLAGS="$CFLAGS -Wno-unused-parameter"
+    fi
+
+    # We need to use ms-bitfields.
     if test "$have_w32_system" = yes; then
        CFLAGS="$CFLAGS -mms-bitfields"
     fi
