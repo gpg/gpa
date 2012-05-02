@@ -270,7 +270,7 @@ file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
   if (! suc)
     {
       gchar *str;
-      gsize *len;
+      gsize len;
 
       str = g_strdup_printf ("No valid UTF-8 encoding at position %i.\n"
                              "Assuming Latin-1 encoding instead.",
