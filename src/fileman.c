@@ -737,7 +737,7 @@ file_list_new (GpaFileManager * fileman)
 
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_MULTIPLE);
-  g_signal_connect_swapped (select, "changed",
+  g_signal_connect_swapped (sel, "changed",
 			    G_CALLBACK (update_selection_sensitive_actions),
 			    fileman);
 
