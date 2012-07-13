@@ -198,33 +198,36 @@ arg_to_str (gpgme_conf_arg_t arg, gpgme_conf_type_t type)
       else
 	result = g_strdup ("");
 
-      switch (type)
-	{
-	case GPGME_CONF_NONE:
-	case GPGME_CONF_UINT32:
-	  new_result = g_strdup_printf ("%s%u", result, arg->value.uint32);
-	  g_free (result);
-	  result = new_result;
-	  break;
+      if (!arg->no_arg)
+        {
+          switch (type)
+            {
+            case GPGME_CONF_NONE:
+            case GPGME_CONF_UINT32:
+              new_result = g_strdup_printf ("%s%u", result, arg->value.uint32);
+              g_free (result);
+              result = new_result;
+              break;
 
-	case GPGME_CONF_INT32:
-	  new_result = g_strdup_printf ("%s%i", result, arg->value.int32);
-	  g_free (result);
-	  result = new_result;
-	  break;
+            case GPGME_CONF_INT32:
+              new_result = g_strdup_printf ("%s%i", result, arg->value.int32);
+              g_free (result);
+              result = new_result;
+              break;
 
-	case GPGME_CONF_STRING:
-	case GPGME_CONF_PATHNAME:
-	case GPGME_CONF_LDAP_SERVER:
-	  new_result = g_strdup_printf ("%s%s", result, arg->value.string);
-	  g_free (result);
-	  result = new_result;
-	  break;
+            case GPGME_CONF_STRING:
+            case GPGME_CONF_PATHNAME:
+            case GPGME_CONF_LDAP_SERVER:
+              new_result = g_strdup_printf ("%s%s", result, arg->value.string);
+              g_free (result);
+              result = new_result;
+              break;
 
-	default:
-	  assert (!"Not supported.");
-	  break;
-	}
+            default:
+              assert (!"Not supported.");
+              break;
+            }
+        }
       arg = arg->next;
     }
   return result;
@@ -412,30 +415,35 @@ args_are_equal (gpgme_conf_arg_t arg1, gpgme_conf_arg_t arg2,
 {
   while (arg1 && arg2)
     {
-      switch (type)
-	{
-	case GPGME_CONF_NONE:
-	case GPGME_CONF_UINT32:
-	  if (arg1->value.uint32 != arg2->value.uint32)
-	    return 0;
-	  break;
+      if ((!arg1->no_arg ^ !arg2->no_arg))
+        return 0;
+      if (!arg1->no_arg)
+        {
+          switch (type)
+            {
+            case GPGME_CONF_NONE:
+            case GPGME_CONF_UINT32:
+              if (arg1->value.uint32 != arg2->value.uint32)
+                return 0;
+              break;
 
-	case GPGME_CONF_INT32:
-	  if (arg1->value.int32 != arg2->value.int32)
-	    return 0;
-	  break;
+            case GPGME_CONF_INT32:
+              if (arg1->value.int32 != arg2->value.int32)
+                return 0;
+              break;
 
-	case GPGME_CONF_STRING:
-	case GPGME_CONF_LDAP_SERVER:
-	case GPGME_CONF_PATHNAME:
-	  if (strcmp (arg1->value.string, arg2->value.string))
-	    return 0;
-	  break;
+            case GPGME_CONF_STRING:
+            case GPGME_CONF_LDAP_SERVER:
+            case GPGME_CONF_PATHNAME:
+              if (strcmp (arg1->value.string, arg2->value.string))
+                return 0;
+              break;
 
-	default:
-	  assert (!"Not supported.");
-	  break;
-	}
+            default:
+              assert (!"Not supported.");
+              break;
+            }
+        }
 
       arg1 = arg1->next;
       arg2 = arg2->next;
