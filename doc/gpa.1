@@ -1,11 +1,12 @@
-.TH "GPA" "1" "" "" "User Commands"
+.TH "gpa" "1" "" "" "User Commands"
 .nh
 .SH "NAME"
 gpa \- graphical frontend for the GNU Privacy Guard
 
 .SH "SYNOPSIS"
 .B gpa
-.RI [ "OPTION(S)" ]
+.RB [ "OPTION(S)" ]
+.RI [ "FILE(S)" ]
 
 .SH "DESCRIPTION"
 The GNU Privacy Assistant (GPA) is a graphical user interface for the GNU
@@ -16,60 +17,85 @@ signatures and to manage the private and public keys.
 
 .SH "OPTIONS"
 .TP
-.B \-C, \-\-card
-Start with the card-manager open.
-.TP
 .B \-c, \-\-clipboard
 Open the clipboard.
+.TP
+.B \-C, \-\-card
+Start with the card-manager open.
 .TP
 .B \-d, \-\-daemon
 Enable the UI server.
 .TP
-.B \-\-display=\fIDISPLAY\fP
-Open on the specified \fIDISPLAY\fP.
+.B \-\-debug-edit-fsm
+Debug the Finite State Machine (FSM).
+.TP
+.B \-\-disable\-ticker
+Disable ticker used for card operations.
+.TP
+.B \-\-disable-x509
+Disable support for X.509.
+.TP
+.B \-\-enable-logging
+Enable logging on Win32 systems.
 .TP
 .B \-f, \-\-files
-Start with the file-manager open.
+Start with the file-manager open. This is the \fIdefault\fP if one or more
+\fIFILE(S)\fP are added to the command arguments.
+.TP
+.B \-\-gpg-binary=\fIFILE\fP
+Path to the
+.BR gpg (1)
+or
+.BR gpg2 (1)
+binary.
+.TP
+.B \-\-gpgsm-binary=\fIFILE\fP
+Path to the
+.BR gpgsm (1)
+binary.
 .TP
 .B \-k, \-\-keyring
 Start with the keyring editor. This is the \fIdefault\fP.
 .TP
 .B \-o, \-\-options=\fIFILE\fP
-Read options from the specified file instead of \fI\%~/.gnupg/gpa.conf\fP.
+Read options from the specified file instead of \fI~/.gnupg/gpa.conf\fP.
 .TP
 .B \-s, \-\-settings
 Open the settings dialog.
 .TP
-.B \-?, \-\-help, \-\-help\-all
-Print usage information and exit.
+.B \-v, \-\-version
+Print version information and exit.
+.TP
+.B \-x, \-\-cms
+Enable basic support for X.509.
 .TP
 .B \-\-help\-gtk
 Print options related to GTK. See also
-.BR \%gtk\-options "(7)."
+.BR gtk-options "(7)."
 .TP
-.B \-v, \-\-version
-Print version information and exit.
+.B \-?, \-\-help, \-\-help\-all
+Print usage information and exit.
 
 .SH FILES
 .TP
-.I \%~/.gnupg/gpa.conf
+.I ~/.gnupg/gpa.conf
 Standard user configuration file read by \fBgpa\fP on startup.
 
 .SH "BUGS"
-Please report bugs to <\&\%bug\-gpa@gnupg.org\&>.
+Please report bugs to <bug\-gpa@gnupg.org> or to
+\fI\%https://bugs.g10code.com/gnupg/\fR.
 
 .SH AUTHORS
 .B gpa
 was written by \fBMiguel Coca\fP, amongst others.
-.PP 
+.PP
 This manual page was written by \fBArthur de Jong\fP <\&adejong@debian.org\&>
 and \fBDaniel Leidert\fP <\&daniel.leidert@wgdd.de\&> for the Debian GNU/Linux
 system (but may be used by others).
-\" Accroding to https://bugs.g10code.com/gnupg/issue1165:
-\" After talking to Arthur, the author of the manual page, the manual
-\" page is provided under the GNU General Public license version 2 or
-\" (at your option) any later version.
 
 .SH "SEE ALSO"
 .BR gpg (1),
-.BR gtk\-options (7)
+.BR gpg2 (1),
+.BR gpgconf (1),
+.BR gpgsm (1),
+.BR gtk-options (7)
