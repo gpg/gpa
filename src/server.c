@@ -544,6 +544,8 @@ prepare_io_streams (assuan_context_t ctx,
         goto leave;
     }
 
+  err = 0;
+
  leave:
   if (err)
     finish_io_streams (ctx, r_input_data, r_output_data, r_message_data);
