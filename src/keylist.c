@@ -551,6 +551,33 @@ gpa_keylist_clear_columns (GpaKeyList *keylist)
 }
 
 
+gboolean
+search_keylist_function (GtkTreeModel *model, gint column,
+                         const gchar *key_to_search_for, GtkTreeIter *iter,
+                         gpointer search_data)
+{
+  gboolean result = TRUE;
+  gchar *key_id, *user_id;
+  gint search_len;
+
+  gtk_tree_model_get (model, iter,
+                      GPA_KEYLIST_COLUMN_KEYID, &key_id,
+                      GPA_KEYLIST_COLUMN_USERID, &user_id, -1);
+
+  search_len = strlen (key_to_search_for);
+
+  if (!g_ascii_strncasecmp (key_id, key_to_search_for, search_len))
+    result=FALSE;
+  if (!g_ascii_strncasecmp (user_id, key_to_search_for, search_len))
+    result=FALSE;
+
+  g_free (key_id);
+  g_free (user_id);
+
+  return result;
+}
+
+
 static void
 setup_columns (GpaKeyList *keylist, gboolean detailed)
 {
@@ -648,7 +675,9 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
   gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_USERID);
   gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
-  gtk_tree_view_set_search_column(GTK_TREE_VIEW(keylist),GPA_KEYLIST_COLUMN_USERID);
+  gtk_tree_view_set_enable_search (GTK_TREE_VIEW(keylist), TRUE);
+  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW(keylist),
+                                       search_keylist_function, NULL, NULL);
 }
 
 
