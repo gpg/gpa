@@ -647,6 +647,8 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
   gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_USERID);
   gtk_tree_view_column_set_sort_indicator (column, TRUE);
+
+  gtk_tree_view_set_search_column(GTK_TREE_VIEW(keylist),GPA_KEYLIST_COLUMN_USERID);
 }
 
 
