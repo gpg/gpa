@@ -157,8 +157,9 @@ if test -z "$GPG"; then
 fi
 
 dnl Find the keyserver plugins. Assume that gpgkeys_ldap is always available
-AC_PATH_PROG(GPGKEYS_LDAP, gpgkeys_ldap, [${libexecdir}/gnupg/gpgkeys_ldap],
-             [$PATH:/usr/libexec/gnupg/:/usr/lib/gnupg/])
+AC_PATH_PROGS(GPGKEYS_LDAP, gpg2keys_ldap gpgkeys_ldap,
+             [${libexecdir}/gnupg/gpg2keys_ldap],
+             [$PATH:/usr/libexec/gnupg:/usr/lib/gnupg2:/usr/lib/gnupg])
 KEYSERVER_HELPERS_DIR=`dirname $GPGKEYS_LDAP`
 if test -z "$KEYSERVER_HELPERS_DIR"; then
        AC_MSG_ERROR([[
