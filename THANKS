@@ -1,35 +1,36 @@
-GPA was originally written by Markus Gerwinski. The included GPAPA library
-is due to Peter Gerwinski. Other people contributed by reporting problems,
-suggesting various improvements or submitting actual code. Here is a list
-of those people. Help us keep it complete and free of errors. See the
-file AUTHORS for the current maintainer.
+GPA was originally written by Markus Gerwinski.  Other people
+contributed by reporting problems, suggesting various improvements or
+submitting actual code.  Here is a list of those people.  Help us keep
+it complete and free of errors.  See the file AUTHORS for the current
+maintainer.
 
-Andreas Rönnquist       mailinglists@gusnan.se
-Beate Esser             begrafik@aol.com
-Benedikt Wildenhain     mail@benedikt-wildenhain.de
-Bernhard Herzog         bh@intevation.de
-Clive Lin               clive@CirX.ORG
-Jan-Oliver Wagner       jan@intevation.de
-Markus Gerwinski	markus@gnu.de
-Michael Mauch           michael.mauch@gmx.de
-Michael Roth		mroth@nessie.de
-Miguel Coca             mcoca@gnu.org
-Peter Gerwinski 	peter.gerwinski@g-n-u.de
-Peter Hanecak           hanecak@megaloman.sk
-Peter Neuhaus		pneuhaus@openit.de
-Richard Becker		becker@it-fabrik.de
-Shell Hung              shell@linux.org.hk
-Timo Schulz             ts@winpt.org
-Werner Koch		wk@gnupg.org
-Francis J. A. Pinteric  linuxdoctor@linux.ca
-Michael Anckaert	xantor@linux.be
-Steffen Michalek	steffen@michalek.de
-Mick Ohrberg            Mick.Ohrberg@umb.com
-TAKAHASHI Tamotsu       tamo@momonga-linux.org
-wwp                     chabredier.tristan@free.fr
+Andreas Rönnquist       gusnan at gusnan.se
+Beate Esser             begrafik at aol.com
+Benedikt Wildenhain     mail at benedikt-wildenhain.de
+Bernhard Herzog         bh at intevation.de
+Clive Lin               clive at CirX.ORG
+Jan-Oliver Wagner       jan at intevation.de
+Markus Gerwinski	markus at gnu.de
+Michael Mauch           michael.mauch at gmx.de
+Michael Roth		mroth at nessie.de
+Miguel Coca             mcoca at gnu.org
+Peter Gerwinski 	peter.gerwinski at g-n-u.de
+Peter Hanecak           hanecak at megaloman.sk
+Peter Neuhaus		pneuhaus at openit.de
+Richard Becker		becker at it-fabrik.de
+Shell Hung              shell at linux.org.hk
+Timo Schulz             ts at winpt.org
+Werner Koch		wk at gnupg.org
+Francis J. A. Pinteric  linuxdoctor at linux.ca
+Michael Anckaert	xantor at linux.be
+Steffen Michalek	steffen at michalek.de
+Mick Ohrberg            Mick.Ohrberg at umb.com
+TAKAHASHI Tamotsu       tamo at momonga-linux.org
+wwp                     chabredier.tristan at free.fr
 
 
-Thanks to Michael Roth for his PGG project which heavily influenced GPAPA.
+Thanks to Michael Roth for his PGG project which heavily influenced
+the formerly used GPAPA.
 
 The development of this software has partly been funded by the German
 Ministry for Economics and Technology under grant VIB3-68553.168-001/1999.
