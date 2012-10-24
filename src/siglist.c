@@ -41,6 +41,32 @@ typedef enum
   SIG_N_COLUMNS
 } SignatureListColumn;
 
+gboolean
+search_siglist_function (GtkTreeModel *model, int column,
+                         const gchar *key_to_search_for, GtkTreeIter *iter,
+                         gpointer search_data)
+{
+  gboolean result=TRUE;
+  gchar *key_id, *user_id;
+  gint search_len;
+
+  gtk_tree_model_get (model, iter,
+                     SIG_KEYID_COLUMN, &key_id,
+                     SIG_USERID_COLUMN, &user_id, -1);
+
+  search_len = strlen (key_to_search_for);
+
+  if (!g_ascii_strncasecmp (key_id, key_to_search_for, search_len))
+	result=FALSE;
+  if (!g_ascii_strncasecmp (user_id, key_to_search_for, search_len))
+	result=FALSE;
+
+  g_free (key_id);
+  g_free (user_id);
+
+  return result;
+}
+
 static void
 gpa_siglist_ui_mode_changed_cb (GpaOptions *options, GtkWidget *list);
 
@@ -60,6 +86,10 @@ gpa_siglist_new (void)
 
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
                                         SIG_USERID_COLUMN, GTK_SORT_ASCENDING);
+
+  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (list), TRUE);
+  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (list),
+                                       search_siglist_function, NULL, NULL);
 
   g_signal_connect (G_OBJECT (gpa_options_get_instance ()),
 		    "changed_ui_mode",
