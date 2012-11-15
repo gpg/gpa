@@ -366,6 +366,12 @@ main (int argc, char *argv[])
     }
 
   gtk_init (&argc, &argv);
+#ifdef G_OS_WIN32
+  gtk_settings_set_string_property(gtk_settings_get_default(),
+                                   "gtk-theme-name",
+                                   "MS-Windows",
+                                   "XProperty");
+#endif
 
   /* Default icon for all windows.  */
   gtk_window_set_default_icon_from_file (GPA_DATADIR "/gpa.png", &err);
