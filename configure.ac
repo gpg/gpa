@@ -32,8 +32,8 @@ m4_define(my_issvn, no)
 
 m4_define([svn_revision], m4_esyscmd([printf "%d" $(svn info 2>/dev/null \
           | sed -n '/^Revision:/ s/[^0-9]//gp'|head -1)]))
-m4_define([git_revision], m4_esyscmd([git branch -v 2>/dev/null \
-          | awk '/^\* / {printf "%s",$3}']))
+m4_define([git_revision],
+          m4_esyscmd([git rev-parse --short HEAD | tr -d '\n\r']))
 m4_define([my_full_version], [my_version[]m4_if(my_issvn,[yes],
           [m4_if(git_revision,[],[-svn[]svn_revision],[-git[]git_revision])])])
 AC_INIT([gpa],[my_full_version],[http://bugs.gnupg.org])
@@ -412,3 +412,10 @@ doc/Makefile
 
 
 AC_OUTPUT
+
+echo "
+        GPA v${VERSION} has been configured as follows:
+
+        Revision:        git_revision
+        Platform:        $host
+"
