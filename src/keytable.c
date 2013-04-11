@@ -210,9 +210,13 @@ first_half_done_cb (GpaContext *context, gpg_error_t err,
       if (keytable->first_half_err)
         gpa_gpgme_warning (keytable->first_half_err);
 
-      if (gpg_err_code (err) == GPG_ERR_INV_ENGINE
+      if ((gpg_err_code (err) == GPG_ERR_INV_ENGINE
+           || gpg_err_code (err) == GPG_ERR_UNSUPPORTED_PROTOCOL)
           && gpg_err_source (err) == GPG_ERR_SOURCE_GPGME)
         {
+          if (gpg_err_code (err) == GPG_ERR_UNSUPPORTED_PROTOCOL)
+            g_message ("Note: Please check libgpgme has "
+                       "been build with support for GPGSM");
           gpa_window_error
             (_("It seems that GPGSM is not installed.\n\n"
                "Temporary disabling support for X.509.\n\n"
