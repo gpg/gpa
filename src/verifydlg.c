@@ -368,6 +368,7 @@ verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
   GtkWidget *vbox;
   GtkWidget *list;
   GtkWidget *label;
+  GtkWidget *scrolled;
 
   vbox = gtk_vbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
@@ -390,7 +391,14 @@ verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
   gtk_box_pack_start_defaults (GTK_BOX (vbox), label);
 
   list = signature_list (sigs, ctx);
-  gtk_box_pack_start_defaults (GTK_BOX (vbox), list);
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
+                                       GTK_SHADOW_IN);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_container_add (GTK_CONTAINER (scrolled), list);
+  gtk_box_pack_start_defaults (GTK_BOX (vbox), scrolled);
 
   return vbox;
 }
