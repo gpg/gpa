@@ -37,10 +37,13 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
   static const gchar *authors[] =
     {
       "Andy Ruddock",
+      "Andreas Rönnquist",
       "Beate Esser",
       "Benedikt Wildenhain",
       "Bernhard Herzog",
+      "Bernhard Reiter",
       "Can Berk Güder",
+      "Daniel Leidert",
       "Daniel Nylander",
       "Emilian Nowak",
       "Jan-Oliver Wagner",
@@ -52,8 +55,10 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
       "Michael Anckaert",
       "Michael Fischer v. Mollard",
       "Michael Mauch",
+      "Michael Petzold",
       "Mick Ohrberg",
       "Miguel Coca",
+      "Moritz Schulte",
       "Peter Gerwinski",
       "Peter Hanecak",
       "Peter Neuhaus",
@@ -67,18 +72,18 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
   static const gchar copyright[] =
     "Copyright \xc2\xa9 2000-2002 G-N-U GmbH\n"
     "Copyright \xc2\xa9 2002-2003 Miguel Coca\n"
-    "Copyright \xc2\xa9 2005-2008 g10 Code GmbH";
+    "Copyright \xc2\xa9 2005-2013 g10 Code GmbH";
   static const gchar website[] = "http://www.gnupg.org/related_software/gpa/";
   static const gchar website_label[] = "www.gnupg.org";
   char *comment;
   GdkPixbuf *logo;
   gpgme_engine_info_t engine;
-  
+
   gpgme_get_engine_info (&engine);
   for (; engine; engine = engine->next)
     if (engine->protocol == GPGME_PROTOCOL_OpenPGP)
       break;
-  comment = g_strdup_printf ("(GnuPG %s)\n\n%s", 
+  comment = g_strdup_printf ("(GnuPG %s)\n\n%s",
                              engine? engine->version : "?",
                              _("GPA is the GNU Privacy Assistant."));
   logo = gpa_create_icon_pixbuf ("gpa_logo");
@@ -96,7 +101,7 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
 			 "authors", authors,
 			 "license", get_gpl_text (),
 			 "logo", logo,
-			 /* TRANSLATORS: The translation of this string should 
+			 /* TRANSLATORS: The translation of this string should
 			  be your name and mail */
 			 "translator-credits", _("translator-credits"),
 			 NULL);

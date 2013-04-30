@@ -1,7 +1,7 @@
 # Makefile.am - Top makefile for GPA.
 # Copyright (C) 2000, 2001  Werner Koch
 # Copyright (C) 2002, 2003, 2004  Miguel Coca
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2011  g10 Code GmbH
+# Copyright (C) 2005-2013  g10 Code GmbH
 #
 # This file is part of GPA.
 #
