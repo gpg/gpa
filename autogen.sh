@@ -107,7 +107,7 @@ if [ "$myhost" = "w32" ]; then
     case $myhostsub in
         *)
           [ -z "$w32root" ] && w32root="$HOME/w32root"
-          toolprefixes="$w32_toolprefixes i586-mingw32msvc"
+          toolprefixes="$w32_toolprefixes i686-w64-mingw32 i586-mingw32msvc"
           toolprefixes="$toolprefixes i386-mingw32msvc mingw32"
           extraoptions="$w32_extraoptions"
           ;;
@@ -145,7 +145,7 @@ if [ "$myhost" = "w32" ]; then
             --with-zlib=${w32root} \
             --with-gpg-error-prefix=${w32root} \
 	    --with-gpgme-prefix=${w32root} \
-            --with-lib-prefix=${w32root} \
+            --with-libassuan-prefix=${w32root} \
             --with-libiconv-prefix=${w32root} \
             SYSROOT="$w32root" \
             PKG_CONFIG="$w32root/bin/pkg-config" \
@@ -213,7 +213,7 @@ if [ -d .git ]; then
     To deactivate this pre-commit hook again move .git/hooks/pre-commit
     and .git/hooks/pre-commit.sample out of the way.
 EOF
-      cp -av .git/hooks/pre-commit.sample .git/hooks/pre-commit
+      cp .git/hooks/pre-commit.sample .git/hooks/pre-commit
       chmod +x  .git/hooks/pre-commit
   fi
   tmp=$(git config --get filter.cleanpo.clean)
@@ -227,7 +227,7 @@ EOF
     cat <<EOF >&2
 *** Activating commit log message check hook. ***
 EOF
-      cp -av build-aux/git-hooks/commit-msg .git/hooks/commit-msg
+      cp build-aux/git-hooks/commit-msg .git/hooks/commit-msg
       chmod +x  .git/hooks/commit-msg
   fi
 fi
