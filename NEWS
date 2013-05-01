@@ -1,7 +1,11 @@
-Noteworthy changes in version 0.9.4 (unreleased)
+Noteworthy changes in version 0.9.4 (2013-05-01)
 ------------------------------------------------
 
  * Added scrollbars to the verification result window.
+
+ * Improved searching in the key listing.
+
+ * Now uses the native theme under Windows.
 
 
 Noteworthy changes in version 0.9.3 (2012-08-08)
