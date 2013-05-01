@@ -107,7 +107,7 @@ read_list (const gchar *fname)
 #else
   fp = fopen (fname, "r");
 #endif
-  if (!fp)       
+  if (!fp)
     {
 /*
       fprintf (stderr, "can't open `%s': %s\n", fname, strerror (errno) );
@@ -116,21 +116,21 @@ read_list (const gchar *fname)
       return -1;
     }
 
-  while ( fgets( line, DIM(line)-1, fp ) ) 
+  while ( fgets( line, DIM(line)-1, fp ) )
     {
       lnr++;
-      if ( *line && line[strlen(line)-1] != '\n' ) 
+      if ( *line && line[strlen(line)-1] != '\n' )
         {
           err = "line too long";
           break;
 	}
-      
+
 
       g_strstrip (line);
       if( !*line || *line == '#' )
         continue; /* comment or empty line */
 
-      for( p=line; *p; p++ ) 
+      for( p=line; *p; p++ )
         {
           if (isspace (*p))
             {
@@ -156,7 +156,7 @@ read_list (const gchar *fname)
       release_server_list (list);
       return -1;
     }
-  
+
   return 0;
 }
 
@@ -175,8 +175,8 @@ keyserver_read_list (const gchar *confname)
   if (!serverlist)
     { /* no entries in list - use default values */
       add_server (&serverlist, "hkp://keys.gnupg.net");
-      add_server (&serverlist, "hkp://blackhole.pca.dfn.de"); 
-      add_server (&serverlist, "hkp://minsky.surfnet.nl"); 
+      add_server (&serverlist, "hkp://zimmermann.mayfirst.org");
+      add_server (&serverlist, "hkp://minsky.surfnet.nl");
       add_server (&serverlist, "hkp://pks.gpg.cz");
       add_server (&serverlist, "hkp://pgp.cns.ualberta.ca");
       add_server (&serverlist, "hkp://keyserver.ubuntu.com");
