@@ -1,7 +1,7 @@
 # Makefile.am - Top makefile for GPA.
 # Copyright (C) 2000, 2001  Werner Koch
 # Copyright (C) 2002, 2003, 2004  Miguel Coca
-# Copyright (C) 2005, 2006, 2007, 2008, 2009  g10 Code GmbH
+# Copyright (C) 2005-2013  g10 Code GmbH
 #
 # This file is part of GPA.
 #
@@ -26,7 +26,8 @@ logo = gpa-logo.ppm
 
 pkgdata_DATA = $(logo)
 
-EXTRA_DIST = $(logo) gpa.ico gpa-resource.rc gpa-marshal.list Signals
+EXTRA_DIST = $(logo) gpa.ico gpa-resource.rc versioninfo.rc.in \
+	     gpa-marshal.list Signals
 BUILT_SOURCES = gpa-marshal.h gpa-marshal.c
 MOSTLYCLEANFILES = gpa-marshal.h gpa-marshal.c
 
@@ -46,7 +47,7 @@ if HAVE_W32_SYSTEM
 	 sed -e 's/-I/--include-dir /g;s/-D/--define /g'` -i $< -o $@
 
 gpa_res_ldflag = -Wl,gpa-resource.o
-gpa_deps = gpa-resource.o
+gpa_deps = gpa-resource.o versioninfo.rc
 gpa_w32_sources = w32reg.h w32reg.c w32-afunix.h w32-afunix.c
 
 else

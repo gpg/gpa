@@ -83,7 +83,8 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
   for (; engine; engine = engine->next)
     if (engine->protocol == GPGME_PROTOCOL_OpenPGP)
       break;
-  comment = g_strdup_printf ("(GnuPG %s)\n\n%s",
+  comment = g_strdup_printf ("[%s]\n\n(GnuPG %s)\n\n%s",
+                             BUILD_REVISION,
                              engine? engine->version : "?",
                              _("GPA is the GNU Privacy Assistant."));
   logo = gpa_create_icon_pixbuf ("gpa_logo");

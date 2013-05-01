@@ -1,1 +1,3 @@
 1 ICON "gpa.ico"
+
+#include "versioninfo.rc"
