@@ -2,9 +2,7 @@ NOTE, THAT THE INFORMATION BELOW ARE PRETTY MUCH OUT OF DATE!
 
 Some hints for compiling GPA for Windows:
 
-- supported compiler: mingw cross-compiler
-	(things are in flux. please ask on the
-	developer mailing list for details)
+- supported compiler: i686-w64-mingw32 and some older mingw versions.
 
 - once you have the cross-compiler set up:
 	./autogen.sh
@@ -15,10 +13,3 @@ Some hints for compiling GPA for Windows:
 	rm gpa
 	(compile gpa again with option -mwindows)
 	mingw32 strip gpa
-
-- for Windows, GTK 1.3 is used requirering
-	UTF-8 encoding of the .mo file.
-	The conversion to UTF-8 is not
-	automized. Just do the following:
-
-        ./to-utf8 po/de.po | msgfmt -o po/de.mo -
