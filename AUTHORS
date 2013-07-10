@@ -1,6 +1,6 @@
 Program: GPA
-Maintainer: None, check the mailing list gpa-dev@gnupg.org.
-Bug reports: <bug-gpa@gnupg.org>
+Maintainer: Werner Koch <wk@gnupg.org>
+Bug reports: http://bugs.gnupg.org
 Security related bug reports: <security@gnupg.org>
 License: GPLv3+
 
@@ -75,12 +75,12 @@ Can Berk Güder <cbguder@su.sabanciuniv.edu>
 
 Emilian Nowak <emil5@go2.pl>
         Polish translation.
-        
+
 Daniel Nylander <po@danielnylander.se>
         Swedish translation.
-        
+
 Zdenek Hatas <zdenek.hatas@gmail.com>
-        Czech translation. 
+        Czech translation.
 
 Maxim Britov <maxim.britov@gmail.com>
         Russian translation.
@@ -88,3 +88,19 @@ Maxim Britov <maxim.britov@gmail.com>
 Marcus Brinkmann  <marcus@g10code.com>
         Clipboard code, cleanups, bug fixes.
 
+
+
+Copyright and Redistribution
+============================
+
+The copyright for GPA is hold by the authors.  Check the above list
+and each source file for the details.  The file src/helpmenu.c is used
+to show the names of the author and of the major copyright holders.
+
+GPA is distributed under the GNU General Public License, version 3 or
+later.
+
+To allow easy reuse of certain parts of the code, some files are under
+a different license, for example the GNU Lesser General Public
+License.  These licenses are compatible with the GPLv3 which covers
+the entire work.
