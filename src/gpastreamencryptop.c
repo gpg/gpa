@@ -28,11 +28,11 @@
 #include "selectkeydlg.h"
 
 
-struct _GpaStreamEncryptOperation 
+struct _GpaStreamEncryptOperation
 {
   GpaStreamOperation parent;
-  
-  SelectKeyDlg *key_dialog;  
+
+  SelectKeyDlg *key_dialog;
   RecipientDlg *recp_dialog;
   GSList *recipients;
   gpgme_key_t *keys;
@@ -40,7 +40,7 @@ struct _GpaStreamEncryptOperation
 };
 
 
-struct _GpaStreamEncryptOperationClass 
+struct _GpaStreamEncryptOperationClass
 {
   GpaStreamOperationClass parent_class;
 };
@@ -48,7 +48,7 @@ struct _GpaStreamEncryptOperationClass
 
 
 /* Indentifiers for our properties. */
-enum 
+enum
   {
     PROP_0,
     PROP_RECIPIENTS,
@@ -95,7 +95,7 @@ static GSList *
 copy_recipients (GSList *recipients)
 {
   GSList *recp, *newlist;
-  
+
   newlist= NULL;
   for (recp = recipients; recp; recp = g_slist_next (recp))
     newlist = g_slist_append (newlist, g_strdup (recp->data));
@@ -110,7 +110,7 @@ gpa_stream_encrypt_operation_get_property (GObject *object, guint prop_id,
                                            GValue *value, GParamSpec *pspec)
 {
   GpaStreamEncryptOperation *op = GPA_STREAM_ENCRYPT_OPERATION (object);
-  
+
   switch (prop_id)
     {
     case PROP_RECIPIENTS:
@@ -156,7 +156,7 @@ gpa_stream_encrypt_operation_set_property (GObject *object, guint prop_id,
 
 static void
 gpa_stream_encrypt_operation_finalize (GObject *object)
-{  
+{
   GpaStreamEncryptOperation *op = GPA_STREAM_ENCRYPT_OPERATION (object);
 
   release_recipients (op->recipients);
@@ -180,7 +180,7 @@ gpa_stream_encrypt_operation_init (GpaStreamEncryptOperation *op)
 
 
 static GObject*
-gpa_stream_encrypt_operation_constructor 
+gpa_stream_encrypt_operation_constructor
 	(GType type,
          guint n_construct_properties,
          GObjectConstructParam *construct_properties)
@@ -224,7 +224,7 @@ gpa_stream_encrypt_operation_constructor
   g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
 		    G_CALLBACK (done_cb), op);
 
-  gtk_window_set_title 
+  gtk_window_set_title
     (GTK_WINDOW (GPA_STREAM_OPERATION (op)->progress_dialog),
 			_("Encrypting message ..."));
 
@@ -241,7 +241,7 @@ static void
 gpa_stream_encrypt_operation_class_init (GpaStreamEncryptOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_stream_encrypt_operation_constructor;
@@ -249,21 +249,21 @@ gpa_stream_encrypt_operation_class_init (GpaStreamEncryptOperationClass *klass)
   object_class->set_property = gpa_stream_encrypt_operation_set_property;
   object_class->get_property = gpa_stream_encrypt_operation_get_property;
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_RECIPIENTS,
-     g_param_spec_pointer 
+     g_param_spec_pointer
      ("recipients", "Recipients",
       "A list of recipients in rfc-822 mailbox format.",
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_RECIPIENT_KEYS,
-     g_param_spec_pointer 
+     g_param_spec_pointer
      ("recipient-keys", "Recipient-keys",
       "An array of gpgme_key_t with the selected keys.",
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_PROTOCOL,
-     g_param_spec_int 
+     g_param_spec_int
      ("protocol", "Protocol",
       "The gpgme protocol currently selected.",
       GPGME_PROTOCOL_OpenPGP, GPGME_PROTOCOL_UNKNOWN, GPGME_PROTOCOL_UNKNOWN,
@@ -276,7 +276,7 @@ GType
 gpa_stream_encrypt_operation_get_type (void)
 {
   static GType stream_encrypt_operation_type = 0;
-  
+
   if (!stream_encrypt_operation_type)
     {
       static const GTypeInfo stream_encrypt_operation_info =
@@ -291,12 +291,12 @@ gpa_stream_encrypt_operation_get_type (void)
         0,    /* n_preallocs */
         (GInstanceInitFunc) gpa_stream_encrypt_operation_init,
       };
-      
-      stream_encrypt_operation_type = g_type_register_static 
+
+      stream_encrypt_operation_type = g_type_register_static
 	(GPA_STREAM_OPERATION_TYPE, "GpaStreamEncryptOperation",
 	 &stream_encrypt_operation_info, 0);
     }
-  
+
   return stream_encrypt_operation_type;
 }
 
@@ -343,10 +343,14 @@ start_encryption (GpaStreamEncryptOperation *op)
     goto leave;
 
   /* Set the output encoding.  */
-  if (GPA_STREAM_OPERATION (op)->input_stream 
+  if (GPA_STREAM_OPERATION (op)->input_stream
       && GPA_STREAM_OPERATION (op)->output_stream)
     {
-      if (op->selected_protocol == GPGME_PROTOCOL_CMS)
+      if (gpgme_data_get_encoding (GPA_STREAM_OPERATION(op)->output_stream))
+        gpgme_data_set_encoding
+          (GPA_STREAM_OPERATION (op)->output_stream,
+           gpgme_data_get_encoding (GPA_STREAM_OPERATION(op)->output_stream));
+      else if (op->selected_protocol == GPGME_PROTOCOL_CMS)
         gpgme_data_set_encoding (GPA_STREAM_OPERATION (op)->output_stream,
                                  GPGME_DATA_ENCODING_BASE64);
       else
@@ -358,8 +362,8 @@ start_encryption (GpaStreamEncryptOperation *op)
           err = gpg_error (GPG_ERR_CONFLICT);
           goto leave;
         }
-                                   
-      gpgme_set_protocol (GPA_OPERATION (op)->context->ctx, 
+
+      gpgme_set_protocol (GPA_OPERATION (op)->context->ctx,
                           op->selected_protocol);
 
       /* We always trust the keys because the recipient selection
@@ -376,7 +380,7 @@ start_encryption (GpaStreamEncryptOperation *op)
 
       /* Show and update the progress dialog.  */
       gtk_widget_show_all (GPA_STREAM_OPERATION (op)->progress_dialog);
-      gpa_progress_dialog_set_label 
+      gpa_progress_dialog_set_label
         (GPA_PROGRESS_DIALOG (GPA_STREAM_OPERATION (op)->progress_dialog),
          _("Message encryption"));
     }
@@ -394,13 +398,13 @@ start_encryption (GpaStreamEncryptOperation *op)
 
 
 /* The recipient key selection dialog has returned.  */
-static void 
+static void
 response_cb (GtkDialog *dialog, int response, void *user_data)
 {
   GpaStreamEncryptOperation *op = user_data;
 
   gtk_widget_hide (GTK_WIDGET (dialog));
-  
+
   if (response != GTK_RESPONSE_OK)
     {
       /* The dialog was canceled, so we do nothing and complete the
@@ -514,7 +518,7 @@ gpa_stream_encrypt_operation_get_keys (GpaStreamEncryptOperation *op,
                                        gpgme_protocol_t *r_protocol)
 {
   g_return_val_if_fail (op, NULL);
-  
+
   if (r_protocol)
     *r_protocol = op->selected_protocol;
   return gpa_gpgme_copy_keyarray (op->keys);

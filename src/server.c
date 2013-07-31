@@ -78,6 +78,9 @@ struct conn_ctrl_s
   /* File descriptor set with the MESSAGE command.  */
   int message_fd;
 
+  /* Flag indicating the the output shall be binary.  */
+  int output_binary;
+
   /* Channels used with the gpgme callbacks.  */
   GIOChannel *input_channel;
   GIOChannel *output_channel;
@@ -535,6 +538,8 @@ prepare_io_streams (assuan_context_t ctx,
       err = gpgme_data_new_from_cbs (r_output_data, &my_gpgme_data_cbs, ctrl);
       if (err)
         goto leave;
+      if (ctrl->output_binary)
+        gpgme_data_set_encoding (*r_output_data, GPGME_DATA_ENCODING_BINARY);
     }
   if (ctrl->message_channel)
     {
@@ -1637,6 +1642,7 @@ reset_notify (assuan_context_t ctx, char *line)
   assuan_close_output_fd (ctx);
   ctrl->input_fd = -1;
   ctrl->output_fd = -1;
+  ctrl->output_binary = 0;
   if (ctrl->gpa_op)
     {
       g_object_unref (ctrl->gpa_op);
@@ -1647,6 +1653,22 @@ reset_notify (assuan_context_t ctx, char *line)
   ctrl->session_title = NULL;
   return 0;
 }
+
+
+static gpg_error_t
+output_notify (assuan_context_t ctx, char *line)
+{
+  conn_ctrl_t ctrl = assuan_get_pointer (ctx);
+
+  if (strstr (line, "--binary"))
+    ctrl->output_binary = 1;
+  else
+    ctrl->output_binary = 0;
+  /* Note: We also allow --armor and --base64 but because we don't
+     check for errors we don't need to parse them.  */
+  return 0;
+}
+
 
 
 /* Tell libassuan about our commands.   */
@@ -1738,6 +1760,7 @@ connection_startup (assuan_fd_t fd)
   assuan_set_pointer (ctx, ctrl);
   assuan_set_log_stream (ctx, stderr);
   assuan_register_reset_notify (ctx, reset_notify);
+  assuan_register_output_notify (ctx, output_notify);
   ctrl->message_fd = -1;
 
   connection_counter++;

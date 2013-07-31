@@ -28,19 +28,19 @@
 
 
 
-struct _GpaStreamSignOperation 
+struct _GpaStreamSignOperation
 {
   GpaStreamOperation parent;
 
   GtkWidget *sign_dialog;
-  
+
   const char *sender;
   gpgme_protocol_t requested_protocol;
   gboolean detached;
 };
 
 
-struct _GpaStreamSignOperationClass 
+struct _GpaStreamSignOperationClass
 {
   GpaStreamOperationClass parent_class;
 };
@@ -48,7 +48,7 @@ struct _GpaStreamSignOperationClass
 
 
 /* Indentifiers for our properties. */
-enum 
+enum
   {
     PROP_0,
     PROP_SENDER,
@@ -76,7 +76,7 @@ gpa_stream_sign_operation_get_property (GObject *object, guint prop_id,
                                            GValue *value, GParamSpec *pspec)
 {
   GpaStreamSignOperation *op = GPA_STREAM_SIGN_OPERATION (object);
-  
+
   switch (prop_id)
     {
     case PROP_SENDER:
@@ -122,7 +122,7 @@ gpa_stream_sign_operation_set_property (GObject *object, guint prop_id,
 
 static void
 gpa_stream_sign_operation_finalize (GObject *object)
-{  
+{
 /*   GpaStreamSignOperation *op = GPA_STREAM_SIGN_OPERATION (object); */
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -171,7 +171,7 @@ gpa_stream_sign_operation_ctor (GType type, guint n_construct_properties,
   g_signal_connect (G_OBJECT (GPA_OPERATION (op)->context), "done",
 		    G_CALLBACK (done_cb), op);
 
-  gtk_window_set_title 
+  gtk_window_set_title
     (GTK_WINDOW (GPA_STREAM_OPERATION (op)->progress_dialog),
 			_("Signing message ..."));
 
@@ -186,7 +186,7 @@ static void
 gpa_stream_sign_operation_class_init (GpaStreamSignOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_stream_sign_operation_ctor;
@@ -194,22 +194,22 @@ gpa_stream_sign_operation_class_init (GpaStreamSignOperationClass *klass)
   object_class->set_property = gpa_stream_sign_operation_set_property;
   object_class->get_property = gpa_stream_sign_operation_get_property;
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_SENDER,
-     g_param_spec_pointer 
+     g_param_spec_pointer
      ("sender", "Sender",
       "The sender of the message in rfc-822 mailbox format or NULL.",
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_PROTOCOL,
-     g_param_spec_int 
+     g_param_spec_int
      ("protocol", "Protocol",
       "The requested gpgme protocol.",
       GPGME_PROTOCOL_OpenPGP, GPGME_PROTOCOL_UNKNOWN, GPGME_PROTOCOL_UNKNOWN,
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_DETACHED,
-     g_param_spec_boolean 
+     g_param_spec_boolean
      ("detached", "Detached",
       "Flag requesting a detached signature.",
       FALSE,
@@ -221,7 +221,7 @@ GType
 gpa_stream_sign_operation_get_type (void)
 {
   static GType stream_sign_operation_type = 0;
-  
+
   if (!stream_sign_operation_type)
     {
       static const GTypeInfo stream_sign_operation_info =
@@ -236,12 +236,12 @@ gpa_stream_sign_operation_get_type (void)
         0,    /* n_preallocs */
         (GInstanceInitFunc) gpa_stream_sign_operation_init,
       };
-      
-      stream_sign_operation_type = g_type_register_static 
+
+      stream_sign_operation_type = g_type_register_static
 	(GPA_STREAM_OPERATION_TYPE, "GpaStreamSignOperation",
 	 &stream_sign_operation_info, 0);
     }
-  
+
   return stream_sign_operation_type;
 }
 
@@ -274,11 +274,11 @@ set_signers (GpaStreamSignOperation *op, GList *signers)
         {
           /* Should not happen because the selection dialog should
              have not allowed to select different key types.  */
-          gpa_window_error 
+          gpa_window_error
             (_("The selected certificates are not all of the same type."
                " That is, you mixed OpenPGP and X.509 certificates."
                " Please make sure to select only certificates of the"
-               " same type."), 
+               " same type."),
              GPA_OPERATION (op)->window);
           return FALSE;
         }
@@ -311,7 +311,7 @@ start_signing (GpaStreamSignOperation *op)
   GList *signers;
   gpgme_protocol_t protocol;
 
-  signers = gpa_file_sign_dialog_signers 
+  signers = gpa_file_sign_dialog_signers
     (GPA_FILE_SIGN_DIALOG (op->sign_dialog));
   if (!set_signers (op, signers))
     {
@@ -332,29 +332,33 @@ start_signing (GpaStreamSignOperation *op)
     goto leave;
 
   /* Set the output encoding.  */
-  if (GPA_STREAM_OPERATION (op)->input_stream 
+  if (GPA_STREAM_OPERATION (op)->input_stream
       && GPA_STREAM_OPERATION (op)->output_stream)
     {
-      if (protocol == GPGME_PROTOCOL_CMS)
+      if (gpgme_data_get_encoding (GPA_STREAM_OPERATION(op)->output_stream))
+        gpgme_data_set_encoding
+          (GPA_STREAM_OPERATION (op)->output_stream,
+           gpgme_data_get_encoding (GPA_STREAM_OPERATION(op)->output_stream));
+      else if (protocol == GPGME_PROTOCOL_CMS)
         gpgme_data_set_encoding (GPA_STREAM_OPERATION (op)->output_stream,
                                  GPGME_DATA_ENCODING_BASE64);
       else
         gpgme_set_armor (GPA_OPERATION (op)->context->ctx, 1);
 
-      err = gpgme_op_sign_start (GPA_OPERATION (op)->context->ctx, 
+      err = gpgme_op_sign_start (GPA_OPERATION (op)->context->ctx,
                                  GPA_STREAM_OPERATION (op)->input_stream,
                                  GPA_STREAM_OPERATION (op)->output_stream,
                                  (op->detached? GPGME_SIG_MODE_DETACH
-                                  /* */       : GPGME_SIG_MODE_NORMAL)); 
+                                  /* */       : GPGME_SIG_MODE_NORMAL));
       if (err)
         {
           gpa_gpgme_warning (err);
           goto leave;
         }
-      
+
       /* Show and update the progress dialog.  */
       gtk_widget_show_all (GPA_STREAM_OPERATION (op)->progress_dialog);
-      gpa_progress_dialog_set_label 
+      gpa_progress_dialog_set_label
         (GPA_PROGRESS_DIALOG (GPA_STREAM_OPERATION (op)->progress_dialog),
          _("Message signing"));
     }
@@ -372,13 +376,13 @@ start_signing (GpaStreamSignOperation *op)
 
 
 /* The recipient key selection dialog has returned.  */
-static void 
+static void
 response_cb (GtkDialog *dialog, int response, void *user_data)
 {
   GpaStreamSignOperation *op = user_data;
 
   gtk_widget_hide (GTK_WIDGET (dialog));
-  
+
   if (response != GTK_RESPONSE_OK)
     {
       /* The dialog was canceled, so we do nothing and complete the
@@ -448,7 +452,7 @@ done_cb (GpaContext *context, gpg_error_t err, GpaStreamSignOperation *op)
 	    {
 	      char *str;
 	      char *algo_name;
-	      
+
 	      str = g_strdup_printf
 		("%s%s", (protocol == GPGME_PROTOCOL_OpenPGP) ? "pgp-" : "",
 		 gpgme_hash_algo_name (sig->hash_algo));
