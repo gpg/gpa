@@ -244,6 +244,15 @@ else
                 have_gpgme=yes,have_gpgme=no)
 fi
 
+_save_libs=$LIBS
+_save_cflags=$CFLAGS
+LIBS="$LIBS $GPGME_LIBS"
+CFLAGS="$CFLAGS $GPGME_CFLAGS"
+AC_CHECK_FUNCS([gpgme_data_identify])
+LIBS=$_save_libs
+CFLAGS="$_save_cflags"
+
+
 dnl The tests below are not anymore used because we now depend on a
 dnl gpgme which has all these features.  However, I keep the code here
 dnl for future work.

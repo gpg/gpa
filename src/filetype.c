@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <gpgme.h>
 
 #include "parsetlv.h"
 #include "filetype.h"
@@ -32,6 +33,7 @@
 
 
 /* Warning: DATA may be binary but there must be a Nul before DATALEN.  */
+#ifndef HAVE_GPGME_DATA_IDENTIFY
 static int
 detect_cms (const char *data, size_t datalen)
 {
@@ -90,6 +92,7 @@ detect_cms (const char *data, size_t datalen)
 
   return 0;
 }
+#endif /*!HAVE_GPGME_DATA_IDENTIFY*/
 
 
 /* Return true if the file FNAME looks like an CMS file.  There is no
@@ -98,6 +101,34 @@ detect_cms (const char *data, size_t datalen)
 int
 is_cms_file (const char *fname)
 {
+#ifdef HAVE_GPGME_DATA_IDENTIFY
+  FILE *fp;
+  gpgme_data_t dh;
+  gpgme_data_type_t dt;
+
+  fp = fopen (fname, "rb");
+  if (!fp)
+    return 0; /* Not found - can't be a CMS file.  */
+  if (gpgme_data_new_from_stream (&dh, fp))
+    {
+      fclose (fp);
+      return 0;
+    }
+  dt = gpgme_data_identify (dh, 0);
+  gpgme_data_release (dh);
+  fclose (fp);
+  switch (dt)
+    {
+    case GPGME_DATA_TYPE_CMS_SIGNED:
+    case GPGME_DATA_TYPE_CMS_ENCRYPTED:
+    case GPGME_DATA_TYPE_CMS_OTHER:
+    case GPGME_DATA_TYPE_X509_CERT:
+    case GPGME_DATA_TYPE_PKCS12:
+      return 1;
+    default:
+      return 0;
+    }
+#else
   int result;
   FILE *fp;
   char *data;
@@ -121,6 +152,7 @@ is_cms_file (const char *fname)
   result = detect_cms (data, datalen);
   free (data);
   return result;
+#endif
 }
 
 
@@ -129,9 +161,28 @@ is_cms_file (const char *fname)
 int
 is_cms_data (const char *data, size_t datalen)
 {
+#ifdef HAVE_GPGME_DATA_IDENTIFY
+  gpgme_data_t dh;
+  gpgme_data_type_t dt;
+
+  if (gpgme_data_new_from_mem (&dh, data, datalen, 0))
+    return 0;
+  dt = gpgme_data_identify (dh, 0);
+  gpgme_data_release (dh);
+  switch (dt)
+    {
+    case GPGME_DATA_TYPE_CMS_SIGNED:
+    case GPGME_DATA_TYPE_CMS_ENCRYPTED:
+    case GPGME_DATA_TYPE_CMS_OTHER:
+    case GPGME_DATA_TYPE_X509_CERT:
+    case GPGME_DATA_TYPE_PKCS12:
+      return 1;
+    default:
+      return 0;
+    }
+#else
   int result;
   char *buffer;
-
   if (datalen < 24)
     return 0; /* Too short - don't bother to copy the buffer.  */
 
@@ -147,4 +198,5 @@ is_cms_data (const char *data, size_t datalen)
   result = detect_cms (buffer, datalen);
   free (buffer);
   return result;
+#endif
 }
