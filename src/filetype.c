@@ -200,3 +200,26 @@ is_cms_data (const char *data, size_t datalen)
   return result;
 #endif
 }
+
+/* New version of is_cms_data which requires a decent version of
+   gpgme.  In contrast to is_cms_data this works directly on a gpgme
+   data object.  */
+int
+is_cms_data_ext (gpgme_data_t dh)
+{
+#ifdef HAVE_GPGME_DATA_IDENTIFY
+  switch (gpgme_data_identify (dh, 0))
+    {
+    case GPGME_DATA_TYPE_CMS_SIGNED:
+    case GPGME_DATA_TYPE_CMS_ENCRYPTED:
+    case GPGME_DATA_TYPE_CMS_OTHER:
+    case GPGME_DATA_TYPE_X509_CERT:
+    case GPGME_DATA_TYPE_PKCS12:
+      return 1;
+    default:
+      return 0;
+    }
+#else
+  return 0;
+#endif
+}

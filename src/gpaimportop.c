@@ -25,6 +25,7 @@
 #include "i18n.h"
 #include "gtktools.h"
 #include "gpaimportop.h"
+#include "filetype.h"
 
 static GObjectClass *parent_class = NULL;
 
@@ -40,7 +41,7 @@ static guint signals [LAST_SIGNAL] = { 0 };
 static gboolean gpa_import_operation_idle_cb (gpointer data);
 static void gpa_import_operation_done_cb (GpaContext *context, gpg_error_t err,
 			      GpaImportOperation *op);
-static void gpa_import_operation_done_error_cb (GpaContext *context, 
+static void gpa_import_operation_done_error_cb (GpaContext *context,
 						gpg_error_t err,
 						GpaImportOperation *op);
 
@@ -56,7 +57,7 @@ gpa_import_operation_finalize (GObject *object)
     {
       gpgme_data_release (op->source);
     }
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -95,12 +96,12 @@ static void
 gpa_import_operation_class_init (GpaImportOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_import_operation_constructor;
   object_class->finalize = gpa_import_operation_finalize;
-  
+
   /* Virtual methods */
   klass->get_source = NULL;
   klass->complete_import = NULL;
@@ -130,7 +131,7 @@ GType
 gpa_import_operation_get_type (void)
 {
   static GType file_operation_type = 0;
-  
+
   if (!file_operation_type)
     {
       static const GTypeInfo file_operation_info =
@@ -145,12 +146,12 @@ gpa_import_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_import_operation_init,
       };
-      
+
       file_operation_type = g_type_register_static (GPA_OPERATION_TYPE,
 						    "GpaImportOperation",
 						    &file_operation_info, 0);
     }
-  
+
   return file_operation_type;
 }
 
@@ -164,7 +165,10 @@ gpa_import_operation_idle_cb (gpointer data)
   if (GPA_IMPORT_OPERATION_GET_CLASS (op)->get_source (op, &op->source))
     {
       gpg_error_t err;
-      
+
+      gpgme_set_protocol (GPA_OPERATION (op)->context->ctx,
+                          is_cms_data_ext (op->source)?
+                          GPGME_PROTOCOL_CMS : GPGME_PROTOCOL_OpenPGP);
       err = gpgme_op_import_start (GPA_OPERATION (op)->context->ctx,
 				   op->source);
       if (err)
@@ -181,8 +185,8 @@ gpa_import_operation_idle_cb (gpointer data)
   return FALSE;
 }
 
-static void 
-key_import_results_dialog_run (GtkWidget *parent, 
+static void
+key_import_results_dialog_run (GtkWidget *parent,
 			       gpgme_import_result_t info)
 {
   GtkWidget *dialog;
@@ -211,7 +215,7 @@ key_import_results_dialog_run (GtkWidget *parent,
                                        info->unchanged, info->secret_read,
                                        info->secret_imported,
 				       info->secret_unchanged);
-    }			   
+    }
 
   /* Run the dialog */
   gtk_widget_show_all (dialog);

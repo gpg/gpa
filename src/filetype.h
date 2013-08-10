@@ -20,6 +20,7 @@
 
 int is_cms_file (const char *fname);
 int is_cms_data (const char *data, size_t datalen);
+int is_cms_data_ext (gpgme_data_t dh);
 
 
 #endif /*FILETYPE_H*/

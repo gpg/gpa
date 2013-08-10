@@ -38,7 +38,7 @@ enum
 static gboolean gpa_export_operation_idle_cb (gpointer data);
 static void gpa_export_operation_done_cb (GpaContext *context, gpg_error_t err,
 			      GpaExportOperation *op);
-static void gpa_export_operation_done_error_cb (GpaContext *context, 
+static void gpa_export_operation_done_error_cb (GpaContext *context,
 						gpg_error_t err,
 						GpaExportOperation *op);
 
@@ -97,7 +97,7 @@ gpa_export_operation_finalize (GObject *object)
     {
       gpgme_data_release (op->dest);
     }
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -138,14 +138,14 @@ static void
 gpa_export_operation_class_init (GpaExportOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_export_operation_constructor;
   object_class->finalize = gpa_export_operation_finalize;
   object_class->set_property = gpa_export_operation_set_property;
   object_class->get_property = gpa_export_operation_get_property;
-  
+
   /* Virtual methods */
   klass->get_destination = NULL;
   klass->complete_export = NULL;
@@ -153,7 +153,7 @@ gpa_export_operation_class_init (GpaExportOperationClass *klass)
   /* Properties */
   g_object_class_install_property (object_class,
 				   PROP_KEYS,
-				   g_param_spec_pointer 
+				   g_param_spec_pointer
 				   ("keys", "Keys",
 				    "Keys",
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
@@ -163,7 +163,7 @@ GType
 gpa_export_operation_get_type (void)
 {
   static GType file_operation_type = 0;
-  
+
   if (!file_operation_type)
     {
       static const GTypeInfo file_operation_info =
@@ -178,12 +178,12 @@ gpa_export_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_export_operation_init,
       };
-      
+
       file_operation_type = g_type_register_static (GPA_OPERATION_TYPE,
 						    "GpaExportOperation",
 						    &file_operation_info, 0);
     }
-  
+
   return file_operation_type;
 }
 
@@ -198,10 +198,11 @@ gpa_export_operation_idle_cb (gpointer data)
   if (GPA_EXPORT_OPERATION_GET_CLASS (op)->get_destination (op, &op->dest,
 							    &armor))
     {
-      gpg_error_t err;
+      gpg_error_t err = 0;
       const char **patterns;
       GList *k;
       int i;
+      gpgme_protocol_t prot = GPGME_PROTOCOL_UNKNOWN;
 
       gpgme_set_armor (GPA_OPERATION (op)->context->ctx, armor);
       /* Create the set of keys to export */
@@ -210,17 +211,33 @@ gpa_export_operation_idle_cb (gpointer data)
 	{
 	  gpgme_key_t key = (gpgme_key_t) k->data;
 	  patterns[i] = key->subkeys->fpr;
+          if (prot == GPGME_PROTOCOL_UNKNOWN)
+            prot = key->protocol;
+          else if (prot != key->protocol)
+            {
+              gpa_window_error
+                (_("Only keys of the same procotol may be exported"
+                   " as a collection."), NULL);
+              g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
+              goto cleanup;
+            }
 	}
+      if (prot == GPGME_PROTOCOL_UNKNOWN)
+        {
+          g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
+          goto cleanup;  /* No keys.  */
+        }
+      gpgme_set_protocol (GPA_OPERATION (op)->context->ctx, prot);
       /* Export to the gpgme_data_t */
-      err = gpgme_op_export_ext_start (GPA_OPERATION (op)->context->ctx, 
+      err = gpgme_op_export_ext_start (GPA_OPERATION (op)->context->ctx,
 				       patterns, 0, op->dest);
       if (err)
 	{
 	  gpa_gpgme_warning (err);
 	  g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 	}
-      /* Clean up */
-      g_free (patterns);      
+    cleanup:
+      g_free (patterns);
     }
   else
     /* Abort the operation.  */
