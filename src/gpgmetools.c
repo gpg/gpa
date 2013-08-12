@@ -1435,20 +1435,21 @@ is_gpg_version_at_least (const char *need_version)
 }
 
 
-/* Structure used to communicate with gpg_simple_stderr_cb.  */
-struct gpg_simple_stderr_parm_s
+/* Structure used to communicate with gpg_simple_stdio_cb.  */
+struct gpg_simple_stdio_parm_s
 {
   gboolean (*cb)(void *opaque, char *line);
   void *cb_arg;
   GString *string;
+  int only_status_lines;
 };
 
 /* Helper for gpa_start_simple_gpg_command.  */
 static gboolean
-gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
-                      void *user_data)
+gpg_simple_stdio_cb (GIOChannel *channel, GIOCondition condition,
+                     void *user_data)
 {
-  struct gpg_simple_stderr_parm_s *parm = user_data;
+  struct gpg_simple_stdio_parm_s *parm = user_data;
   GIOStatus status;
   char *line, *p;
 
@@ -1461,20 +1462,20 @@ gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
         {
           line = parm->string->str;
 
+          /* Strip line terminator.  */
+          p = strchr (line, '\n');
+          if (p)
+            {
+              if (p > line && p[-1] == '\r')
+                p[-1] = 0;
+              else
+                *p = 0;
+            }
+
           /* We care only about status lines.  */
-          if (!strncmp (line, "[GNUPG:] ", 9))
+          if (parm->only_status_lines && !strncmp (line, "[GNUPG:] ", 9))
             {
               line += 9;
-
-              /* Strip line terminator.  */
-              p = strchr (line, '\n');
-              if (p)
-                {
-                  if (p > line && p[-1] == '\r')
-                    p[-1] = 0;
-                  else
-                    *p = 0;
-                }
 
               /* Call user callback.  */
               if (parm->cb && !parm->cb (parm->cb_arg, line))
@@ -1482,6 +1483,20 @@ gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
                   /* User requested EOF.  */
                   goto cleanup;
                 }
+              /* Return direct so that we do not run into the G_IO_HUP
+                 check.  This is required to read all buffered input.  */
+              return TRUE;  /* Keep on watching this channel. */
+            }
+          else if (!parm->only_status_lines)
+            {
+              /* Call user callback.  */
+              if (parm->cb && !parm->cb (parm->cb_arg, line))
+                {
+                  /* User requested EOF.  */
+                  goto cleanup;
+                }
+
+              return TRUE;  /* Keep on watching this channel. */
             }
         }
       if (status != G_IO_STATUS_NORMAL && status != G_IO_STATUS_AGAIN )
@@ -1517,20 +1532,22 @@ gpg_simple_stderr_cb (GIOChannel *channel, GIOCondition condition,
    is used to call gpg-connect-agent.
 
    If the function returns success the provided callback CB is called
-   for each line received on STDERR.  EOF is send to this callback by
-   passing a LINE argument of NULL.  The callback may use this for
-   cleanup. If the callback returns FALSE, an EOF is forced with the
-   result that the callback is called once more with LINE set to NULL.  */
+   for each line received on stdout (respective stderr if USE_STADERR
+   is true).  EOF is send to this callback by passing a LINE as NULL.
+   The callback may use this for cleanup.  If the callback returns
+   FALSE, an EOF is forced so that the callback is called once more
+   with LINE set to NULL.  */
 gpg_error_t
 gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
                               void *cb_arg, gpgme_protocol_t protocol,
+                              int use_stderr,
                               const char *first_arg, ...)
 {
   char *argv[24];
   int argc;
-  int fd_stderr;
+  int fd_stdio;
   GIOChannel *channel;
-  struct gpg_simple_stderr_parm_s *parm = NULL;
+  struct gpg_simple_stdio_parm_s *parm = NULL;
   char *freeme = NULL;
 
   if (protocol == GPGME_PROTOCOL_OpenPGP)
@@ -1571,11 +1588,17 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
   parm->cb = cb;
   parm->cb_arg = cb_arg;
   parm->string = g_string_sized_new (200);
+  parm->only_status_lines = use_stderr;
 
   if (!g_spawn_async_with_pipes (NULL, argv, NULL,
-                                 (G_SPAWN_STDOUT_TO_DEV_NULL),
+                                 (use_stderr
+                                  ? G_SPAWN_STDOUT_TO_DEV_NULL
+                                  : G_SPAWN_STDERR_TO_DEV_NULL),
                                  NULL, NULL, NULL,
-                                 NULL, NULL, &fd_stderr, NULL))
+                                 NULL,
+                                 use_stderr? NULL : &fd_stdio,
+                                 use_stderr? &fd_stdio : NULL,
+                                 NULL))
     {
       gpa_window_error (_("Calling the crypto engine program failed."), NULL);
       xfree (parm);
@@ -1584,9 +1607,9 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
     }
   g_free (freeme);
 #ifdef G_OS_WIN32
-  channel = g_io_channel_win32_new_fd (fd_stderr);
+  channel = g_io_channel_win32_new_fd (fd_stdio);
 #else
-  channel = g_io_channel_unix_new (fd_stderr);
+  channel = g_io_channel_unix_new (fd_stdio);
 #endif
   g_io_channel_set_encoding (channel, NULL, NULL);
   /* Note that we need a buffered channel, so that we can use the read
@@ -1595,7 +1618,7 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
 
   /* Create a watch for the channel.  */
   if (!g_io_add_watch (channel, (G_IO_IN|G_IO_HUP),
-                       gpg_simple_stderr_cb, parm))
+                       gpg_simple_stdio_cb, parm))
     {
       g_debug ("error creating watch for gpg command");
       g_io_channel_unref (channel);
@@ -1613,7 +1636,7 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
 void
 gpa_start_agent (void)
 {
-  gpa_start_simple_gpg_command (NULL, NULL, GPGME_PROTOCOL_ASSUAN,
+  gpa_start_simple_gpg_command (NULL, NULL, GPGME_PROTOCOL_ASSUAN, 1,
                                 "NOP", "/bye", NULL);
 }
 

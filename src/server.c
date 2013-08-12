@@ -1255,53 +1255,6 @@ hextobyte (const char *str)
 }
 
 
-/* Decode the percent escaped string STR in place.  */
-static void
-decode_percent_string (char *str)
-{
-  char *src = str;
-  char *dest = str;
-
-  /* Convert the string.  */
-  while (*src)
-    {
-      if (*src != '%')
-        {
-          *(dest++) = *(src++);
-          continue;
-        }
-      else
-        {
-          int val = hextobyte (&src[1]);
-
-          if (val == -1)
-            {
-              /* Should not happen.  */
-              *(dest++) = *(src++);
-              if (*src)
-                *(dest++) = *(src++);
-              if (*src)
-                *(dest++) = *(src++);
-            }
-          else
-            {
-              if (!val)
-                {
-                  /* A binary zero is not representable in a C
-                     string.  */
-                  *(dest++) = '\\';
-                  *(dest++) = '0';
-                }
-              else
-                *((unsigned char *) dest++) = val;
-              src += 3;
-            }
-        }
-    }
-  *(dest++) = 0;
-}
-
-
 /* FILE <file> [--continued]
 
    Set the files on which to operate.

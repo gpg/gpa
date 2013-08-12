@@ -209,6 +209,7 @@ gpg_error_t gpa_start_simple_gpg_command (gboolean (*cb)
                                           (void *opaque, char *line),
                                           void *cb_arg,
                                           gpgme_protocol_t protocol,
+                                          int use_stderr,
                                           const char *first_arg, ...
                                           ) G_GNUC_NULL_TERMINATED;
 

@@ -65,7 +65,7 @@ xcalloc (size_t n, size_t m)
     memset (p, 0, nbytes);
   else
     {
-      g_error ("%s: failed to allocate %lu bytes", 
+      g_error ("%s: failed to allocate %lu bytes",
                G_STRLOC, (unsigned long)nbytes);
       abort (); /* Just in case g_error returns.  */
     }
@@ -97,7 +97,7 @@ translate_sys2libc_fd (assuan_fd_t fd, int for_write)
 
   if (fd == ASSUAN_INVALID_FD)
     return -1;
-  
+
   /* Note that _open_osfhandle is currently defined to take and return
      a long.  */
   x = _open_osfhandle ((long)fd, for_write ? 1 : 0);
@@ -111,15 +111,15 @@ translate_sys2libc_fd (assuan_fd_t fd, int for_write)
 
 
 #ifdef HAVE_W32_SYSTEM
-int 
+int
 inet_aton (const char *cp, struct in_addr *inp)
 {
   if (!cp || !*cp || !inp)
     {
       errno = EINVAL;
-      return 0; 
+      return 0;
     }
-  
+
   if (!strcmp(cp, "255.255.255.255"))
     {
       /*  Although this is a valid address, the old inet_addr function
@@ -127,7 +127,7 @@ inet_aton (const char *cp, struct in_addr *inp)
         inp->s_addr = INADDR_NONE;
         return 1;
     }
-  
+
   inp->s_addr = inet_addr (cp);
   return (inp->s_addr != INADDR_NONE);
 }
@@ -226,9 +226,9 @@ decode_c_string (const char *src)
 		       this will also never be larger than the source
 		       string.  */
 		    *(dest++) = '\\';
-		    *(dest++) = '0'; 
+		    *(dest++) = '0';
 		  }
-		else 
+		else
 		  *((unsigned char *) dest++) = val;
 		src += 4;
 	      }
@@ -322,7 +322,7 @@ percent_unescape (char *string, int plus2space)
   while (*string)
     {
       if (*string == '%' && string[1] && string[2])
-        { 
+        {
           string++;
           *p++ = xtoi_2 (string);
           n++;
@@ -345,3 +345,50 @@ percent_unescape (char *string, int plus2space)
 }
 
 
+/* Decode the percent escaped string STR in place.  In contrast to
+   percent_unescape, this make sure that the result is a string and in
+   addition escapes embedded nuls. */
+void
+decode_percent_string (char *str)
+{
+  char *src = str;
+  char *dest = str;
+
+  /* Convert the string.  */
+  while (*src)
+    {
+      if (*src != '%')
+        {
+          *(dest++) = *(src++);
+          continue;
+        }
+      else
+        {
+          int val = hextobyte (&src[1]);
+
+          if (val == -1)
+            {
+              /* Should not happen.  */
+              *(dest++) = *(src++);
+              if (*src)
+                *(dest++) = *(src++);
+              if (*src)
+                *(dest++) = *(src++);
+            }
+          else
+            {
+              if (!val)
+                {
+                  /* A binary zero is not representable in a C
+                     string.  */
+                  *(dest++) = '\\';
+                  *(dest++) = '0';
+                }
+              else
+                *((unsigned char *) dest++) = val;
+              src += 3;
+            }
+        }
+    }
+  *(dest++) = 0;
+}
