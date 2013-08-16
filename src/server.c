@@ -1226,35 +1226,6 @@ cmd_getinfo (assuan_context_t ctx, char *line)
 }
 
 
-
-/* Convert two hexadecimal digits from STR to the value they
-   represent.  Returns -1 if one of the characters is not a
-   hexadecimal digit.  */
-static int
-hextobyte (const char *str)
-{
-  int val = 0;
-  int i;
-
-#define NROFHEXDIGITS 2
-  for (i = 0; i < NROFHEXDIGITS; i++)
-    {
-      if (*str >= '0' && *str <= '9')
-        val += *str - '0';
-      else if (*str >= 'A' && *str <= 'F')
-        val += 10 + *str - 'A';
-      else if (*str >= 'a' && *str <= 'f')
-        val += 10 + *str - 'a';
-      else
-        return -1;
-      if (i < NROFHEXDIGITS - 1)
-        val *= 16;
-      str++;
-    }
-  return val;
-}
-
-
 /* FILE <file> [--continued]
 
    Set the files on which to operate.
