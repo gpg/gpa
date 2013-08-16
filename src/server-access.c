@@ -581,7 +581,7 @@ server_get_key (const gchar *server, const gchar *keyid,
     {
       /* Create an empty gpgme_data_t, so that we always return a valid one */
       err = gpgme_data_new (data);
-      if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+      if (err)
         gpa_gpgme_error (err);
       gpa_window_error (_("The keyserver you specified is not valid"), parent);
       return FALSE;
@@ -599,7 +599,7 @@ server_get_key (const gchar *server, const gchar *keyid,
   /* Read the output */
   /* No error checking: the import will take care of that. */
   err = gpa_gpgme_data_new_from_file (data, output_filename, parent);
-  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
+  if (err)
     gpa_gpgme_error (err);
   g_free (keyserver);
   /* Delete temp files */

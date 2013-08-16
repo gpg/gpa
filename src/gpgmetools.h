@@ -119,7 +119,7 @@ void dos_to_unix (gchar *str, gsize *len);
 #endif
 
 /* Write the contents of the gpgme_data_t into the clipboard.  */
-void dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard);
+int dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard);
 
 /* Begin generation of a key with the given parameters.  It prepares
    the parameters required by Gpgme and returns whatever

@@ -138,7 +138,8 @@ gpa_gpgme_new (void)
 /* Write the contents of the gpgme_data_t object to the file.
    Receives a filehandle instead of the filename, so that the caller
    can make sure the file is accesible before putting anything into
-   data.  */
+   data.  This is only used for a TMP file, thus it is okay to
+   terminate the application on error. */
 void
 dump_data_to_file (gpgme_data_t data, FILE *file)
 {
