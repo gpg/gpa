@@ -697,11 +697,7 @@ gpa_key_details_find (GtkWidget *keydetails, const char *pattern)
 
   err = gpgme_new (&ctx);
   if (err)
-    {
-      gpa_gpgme_error (err);
-      gpa_key_details_update (keydetails, NULL, 0);
-      return;
-    }
+    gpa_gpgme_error (err);
   gpgme_set_protocol (ctx, GPGME_PROTOCOL_OpenPGP);
 
   if (!gpgme_op_keylist_start (ctx, pattern, 0))

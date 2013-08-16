@@ -72,7 +72,8 @@ typedef struct
    Better to use the macro instead of the function.  */
 #define gpa_gpgme_error(err) \
          do { _gpa_gpgme_error (err, __FILE__, __LINE__); } while (0)
-void _gpa_gpgme_error (gpg_error_t err, const char *file, int line);
+void _gpa_gpgme_error (gpg_error_t err,
+                       const char *file, int line) G_GNUC_NORETURN;
 
 /* The same as gpa_gpgme_error, without quitting.  */
 void gpa_gpgme_warning_ext (gpg_error_t err, const char *desc);
