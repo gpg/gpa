@@ -283,10 +283,6 @@ file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
                        NULL, &len, NULL);
       if (str)
         {
-#ifdef G_OS_WIN32
-          dos_to_unix (str, &item->direct_out_len);
-#endif
-
           gtk_text_buffer_set_text (clipboard->text_buffer, str, len);
           g_free (str);
           return;
@@ -295,10 +291,6 @@ file_created_cb (GpaFileOperation *op, gpa_file_item_t item, gpointer data)
                         GTK_WIDGET (clipboard));
       /* Enough warnings: Try to show even with invalid encoding.  */
     }
-
-#ifdef G_OS_WIN32
-  dos_to_unix (item->direct_out, &item->direct_out_len);
-#endif
 
   gtk_text_buffer_set_text (clipboard->text_buffer,
 			    item->direct_out, item->direct_out_len);
@@ -480,10 +472,6 @@ file_open (GtkAction *action, gpointer param)
       g_free (filename);
       return;
     }
-
-#ifdef G_OS_WIN32
-  dos_to_unix (contents, &length);
-#endif
 
   gtk_text_buffer_set_text (clipboard->text_buffer, contents, length);
   g_free (contents);

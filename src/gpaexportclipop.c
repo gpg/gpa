@@ -134,10 +134,10 @@ static void
 gpa_export_clipboard_operation_complete_export (GpaExportOperation *operation)
 {
   GpaExportClipboardOperation *op = GPA_EXPORT_CLIPBOARD_OPERATION (operation);
-  dump_data_to_clipboard (operation->dest, gtk_clipboard_get
-			  (GDK_SELECTION_CLIPBOARD));
-  gpa_window_message (_("The keys have been copied to the clipboard."),
-		      GPA_OPERATION (op)->window);
+  if (!dump_data_to_clipboard (operation->dest, gtk_clipboard_get
+                               (GDK_SELECTION_CLIPBOARD)))
+    gpa_window_message (_("The keys have been copied to the clipboard."),
+                        GPA_OPERATION (op)->window);
 }
 
 /* API */

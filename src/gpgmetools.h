@@ -113,11 +113,6 @@ int gpa_open_output (const char *filename, gpgme_data_t *data,
 int gpa_open_input (const char *filename, gpgme_data_t *data,
 		    GtkWidget *parent);
 
-#ifdef G_OS_WIN32
-/* Convert newlines.  */
-void dos_to_unix (gchar *str, gsize *len);
-#endif
-
 /* Write the contents of the gpgme_data_t into the clipboard.  */
 int dump_data_to_clipboard (gpgme_data_t data, GtkClipboard *clipboard);
 
