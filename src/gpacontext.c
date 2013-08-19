@@ -405,16 +405,21 @@ static void
 gpa_context_event_cb (void *data, gpgme_event_io_t type, void *type_data)
 {
   GpaContext *context = data;
-  gpg_error_t *err;
-  
+  gpg_error_t err, op_err;
+
   switch (type)
     {
     case GPGME_EVENT_START:
       g_signal_emit (context, signals[START], 0);
       break;
     case GPGME_EVENT_DONE:
-      err = type_data;
-      g_signal_emit (context, signals[DONE], 0, *err);
+      err = ((gpgme_io_event_done_data_t)type_data)->err;
+      op_err = ((gpgme_io_event_done_data_t)type_data)->op_err;
+      g_debug ("EVENT_DONE: err=%s op_err=%s",
+               gpg_strerror (err), gpg_strerror (op_err));
+      if (!err)
+        err = op_err;
+      g_signal_emit (context, signals[DONE], 0, err);
       break;
     case GPGME_EVENT_NEXT_KEY:
       g_signal_emit (context, signals[NEXT_KEY], 0, type_data);
