@@ -1162,6 +1162,7 @@ cmd_start_keymanager (assuan_context_t ctx, char *line)
 }
 
 
+#ifdef ENABLE_CARD_MANAGER
 static const char hlp_start_cardmanager[] =
   "START_CARDMANAGER\n"
   "\n"
@@ -1175,7 +1176,7 @@ cmd_start_cardmanager (assuan_context_t ctx, char *line)
 
   return assuan_process_done (ctx, 0);
 }
-
+#endif /*ENABLE_CARD_MANAGER*/
 
 static const char hlp_start_confdialog[] =
   "START_CONFDIALOG\n"
@@ -1617,7 +1618,9 @@ register_commands (assuan_context_t ctx)
     { "VERIFY", cmd_verify, hlp_verify },
     { "START_KEYMANAGER", cmd_start_keymanager, hlp_start_keymanager },
     { "START_CONFDIALOG", cmd_start_confdialog, hlp_start_confdialog },
+#ifdef ENABLE_CARD_MANAGER
     { "START_CARDMANAGER", cmd_start_cardmanager, hlp_start_cardmanager },
+#endif /*ENABLE_CARD_MANAGER*/
     { "GETINFO", cmd_getinfo, hlp_getinfo },
     { "FILE", cmd_file },
     { "ENCRYPT_FILES", cmd_encrypt_files },

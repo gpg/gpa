@@ -23,6 +23,8 @@
 #ifndef CARDMAN_H
 #define CARDMAN_H
 
+#ifdef ENABLE_CARD_MANAGER
+
 #include <gtk/gtk.h>
 
 /* Declare the Object. */
@@ -54,6 +56,8 @@ GType gpa_card_manager_get_type (void) G_GNUC_CONST;
 
 GtkWidget *gpa_card_manager_get_instance (void);
 
+
 gboolean gpa_card_manager_is_open (void);
 
+#endif /*ENABLE_CARD_MANAGER*/
 #endif /*CARDMAN_H*/

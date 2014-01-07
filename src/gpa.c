@@ -1,6 +1,6 @@
 /* gpa.c - The GNU Privacy Assistant main file.
    Copyright (C) 2000-2002 G-N-U GmbH.
-   Copyright (C) 2005, 2008, 2012 g10 Code GmbH.
+   Copyright (C) 2005, 2008, 2012, 2014 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -104,8 +104,10 @@ static GOptionEntry option_entries[] =
       N_("Open key manager (default)"), NULL },
     { "files", 'f', 0, G_OPTION_ARG_NONE, &args.start_file_manager,
       N_("Open file manager"), NULL },
+#ifdef ENABLE_CARD_MANAGER
     { "card", 'C', 0, G_OPTION_ARG_NONE, &args.start_card_manager,
       N_("Open the card manager"), NULL },
+#endif
     { "clipboard", 'c', 0, G_OPTION_ARG_NONE, &args.start_clipboard,
       N_("Open clipboard"), NULL },
     { "settings", 's', 0, G_OPTION_ARG_NONE, &args.start_settings,
@@ -190,7 +192,9 @@ quit_if_no_window (void)
       && !gpa_key_manager_is_open ()
       && !gpa_file_manager_is_open ()
       && !gpa_clipboard_is_open ()
+#ifdef ENABLE_CARD_MANAGER
       && !gpa_card_manager_is_open ()
+#endif /*ENABLE_CARD_MANAGER*/
       )
     gpa_stop_server ();
 }
@@ -253,6 +257,7 @@ gpa_open_filemanager (GtkAction *action, void *data)
 }
 
 /* Show the card manager.  */
+#ifdef ENABLE_CARD_MANAGER
 void
 gpa_open_cardmanager (GtkAction *action, void *data)
 {
@@ -264,6 +269,7 @@ gpa_open_cardmanager (GtkAction *action, void *data)
 
   gtk_window_present (GTK_WINDOW (gpa_card_manager_get_instance ()));
 }
+#endif /*ENABLE_CARD_MANAGER*/
 
 /* Show the settings dialog.  */
 void
@@ -412,9 +418,6 @@ main (int argc, char *argv[])
   }
 #endif
 
-  /* Prefer gpg2 over gpg1 or use the requested gpg binary if given.  */
-  gpa_switch_to_gpg2 (args.gpg_binary, args.gpgsm_binary);
-
   /* Start the agent if needed.  We need to do this because the card
      manager uses direct assuan commands to the agent and thus expects
      that the agent has been startet. */
@@ -488,8 +491,10 @@ main (int argc, char *argv[])
       if (args.start_file_manager || (optind < argc))
 	gpa_open_filemanager (NULL, NULL);
 
+#ifdef ENABLE_CARD_MANAGER
       if (args.start_card_manager)
 	gpa_open_cardmanager (NULL, NULL);
+#endif /*ENABLE_CARD_MANAGER*/
 
       if (args.start_settings)
 	gpa_open_settings_dialog (NULL, NULL);

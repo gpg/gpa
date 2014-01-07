@@ -1232,7 +1232,10 @@ create_dialog_tabs (void)
 
   err = gpgme_op_conf_load (dialog_ctx, &new_conf);
   if (err)
-    gpa_gpgme_error (err);
+    {
+      gpa_gpgme_warning (err);
+      return;
+    }
 
   create_dialog_tabs_2 (dialog_conf, new_conf);
   gpgme_conf_release (dialog_conf);
@@ -1452,7 +1455,7 @@ gpa_load_gpgconf_string (const char *cname, const char *name)
   err = gpgme_op_conf_load (ctx, &conf_list);
   if (err)
     {
-      gpa_gpgme_error (err);
+      gpa_gpgme_warning (err);
       gpgme_release (ctx);
       return NULL;
     }
@@ -1494,7 +1497,7 @@ gpa_store_gpgconf_string (const char *cname,
   err = gpgme_conf_arg_new (&arg, GPGME_CONF_STRING, (char*)value);
   if (err)
     {
-      gpa_gpgme_error (err);
+      gpa_gpgme_warning (err);
       return;
     }
 

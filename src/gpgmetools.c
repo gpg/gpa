@@ -1324,71 +1324,8 @@ compare_version_strings (const char *my_version,
   return 0;
 }
 
+
 /* Try switching to the gpg2 backend or the one given by filename.  */
-void
-gpa_switch_to_gpg2 (const char *gpg_binary, const char *gpgsm_binary)
-{
-  const char *oldname;
-  char *newname;
-  char *p;
-
-  if (gpgsm_binary)
-    {
-      if (!access (gpgsm_binary, X_OK))
-        {
-          gpgme_set_engine_info (GPGME_PROTOCOL_CMS, gpgsm_binary, NULL);
-          g_message ("switched CMS engine to `%s'", gpgsm_binary);
-        }
-      else
-        g_message ("problem accessing CMS engine `%s'", gpgsm_binary);
-    }
-
-  if (gpg_binary)
-    {
-      if (!access (gpg_binary, X_OK))
-        {
-          gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, gpg_binary, NULL);
-          g_message ("switched OpenPGP engine to `%s'", gpg_binary);
-          return;
-        }
-      g_message ("problem accessing OpenPGP engine `%s'", gpg_binary);
-    }
-
-  if (is_gpg_version_at_least ("2.0.0"))
-    return; /* Already using 2.0.  */
-
-  oldname = get_gpg_path ();
-  g_return_if_fail (oldname && *oldname);
-  newname = xmalloc (strlen (oldname) + 1 + 1);
-  strcpy (newname, oldname);
-#ifdef G_OS_WIN32
-# define OLD_NAME "gpg.exe"
-# define NEW_NAME "gpg2.exe"
-  for (p=newname; *p; p++)
-    if (*p == '\\')
-      *p = '/';
-#else
-# define OLD_NAME "gpg"
-# define NEW_NAME "gpg2"
-#endif /*G_OS_WIN32*/
-  p = strrchr (newname, '/');
-  if (p)
-    p++;
-  if (!strcmp (p, OLD_NAME))
-    {
-      strcpy (p, NEW_NAME);
-      if (!access (newname, X_OK))
-        {
-          gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, newname, NULL);
-          g_message ("switched engine to `%s'", newname);
-        }
-    }
-#undef OLD_NAME
-#undef NEW_NAME
-  xfree (newname);
-}
-
-
 /* Return 1 if the gpg engine has at least version NEED_VERSION,
    otherwise 0.  */
 int

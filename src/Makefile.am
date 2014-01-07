@@ -70,7 +70,7 @@ LDADD = $(GPGME_LIBS) $(LIBASSUAN_LIBS) $(GPG_ERROR_LIBS) \
 gpa_LDFLAGS = $(gpa_res_ldflag)
 gpa_DEPENDENCIES = $(gpa_deps)
 
-
+if ENABLE_CARD_MANAGER
 gpa_cardman_sources = \
                 cardman.c cardman.h \
                 cm-object.c cm-object.h \
@@ -79,7 +79,9 @@ gpa_cardman_sources = \
 		cm-netkey.c cm-netkey.h \
 		cm-dinsig.c cm-dinsig.h \
 		cm-unknown.c cm-unknown.h
-
+else
+gpa_cardman_sources =
+endif
 
 gpa_SOURCES = get-path.h get-path.c \
 	      gpa.c gpa.h i18n.h options.h \

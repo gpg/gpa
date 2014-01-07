@@ -427,9 +427,10 @@ file_open (GtkAction *action, gpointer param)
 
       /* TRANSLATORS: The arguments are the filename, the integer size
 	 and the unit (such as KB or MB).  */
-      str = g_strdup_printf (_("The file %s is %lli%s large.  Do you really "
+      str = g_strdup_printf (_("The file %s is %llu%s large.  Do you really "
 			       " want to open it?"), filename,
-			       buf.st_size / 1024 / 1024, "MB");
+                             (unsigned long long)buf.st_size / 1024 / 1024,
+                             "MB");
       labelMessage = gtk_label_new (str);
       g_free (str);
       gtk_label_set_line_wrap (GTK_LABEL (labelMessage), TRUE);

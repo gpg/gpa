@@ -170,7 +170,25 @@ if test -z "$GPG"; then
   fi
 fi
 
-dnl Find the keyserver plugins. Assume that gpgkeys_ldap is always available
+
+#
+#  Options to disable features
+#
+enable_card_manager=yes
+AC_ARG_ENABLE(card-manager,
+              AC_HELP_STRING([--disable-card-manager],
+                             [build without the card manager]),
+              enable_card_manager=$enableval)
+AC_MSG_RESULT($enable_card_manager)
+if test "$enable_card_manager" = yes ; then
+  AC_DEFINE(ENABLE_CARD_MANAGER, 1, [Include the card manager in the build])
+fi
+AM_CONDITIONAL(ENABLE_CARD_MANAGER, test "$enable_card_manager" = yes)
+
+
+#
+# Find the keyserver plugins. Assume that gpgkeys_ldap is always available
+#
 AC_PATH_PROGS(GPGKEYS_LDAP, gpg2keys_ldap gpgkeys_ldap,
              [${libexecdir}/gnupg/gpg2keys_ldap],
              [$PATH:/usr/libexec/gnupg:/usr/lib/gnupg2:/usr/lib/gnupg])
@@ -312,7 +330,7 @@ AC_MSG_NOTICE([checking for cc features])
 if test "$GCC" = yes; then
     if test "$USE_MAINTAINER_MODE" = "yes"; then
         #
-        # Enable all kins of warnings.
+        # Enable all kinds of warnings.
         #
         CFLAGS="$CFLAGS -O3 -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
         CFLAGS="$CFLAGS -Wformat -Wno-format-y2k -Wformat-security"

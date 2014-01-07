@@ -76,9 +76,12 @@ static const GtkActionEntry gpa_windows_menu_action_entries[] =
       { "WindowsFileManager", GPA_STOCK_FILEMAN, NULL, NULL,
 	N_("Open the file manager"), G_CALLBACK (gpa_open_filemanager) },
       { "WindowsClipboard", GPA_STOCK_CLIPBOARD, NULL, NULL,
-	N_("Open the clipboard"), G_CALLBACK (gpa_open_clipboard) },
+	N_("Open the clipboard"), G_CALLBACK (gpa_open_clipboard) }
+#ifdef ENABLE_CARD_MANAGER
+      ,
       { "WindowsCardManager", GPA_STOCK_CARDMAN, NULL, NULL,
 	N_("Open the card manager"), G_CALLBACK (gpa_open_cardmanager) }
+#endif /*ENABLE_CARD_MANAGER*/
   };
 
 

@@ -216,11 +216,11 @@ first_half_done_cb (GpaContext *context, gpg_error_t err,
         {
           if (gpg_err_code (err) == GPG_ERR_UNSUPPORTED_PROTOCOL)
             g_message ("Note: Please check libgpgme has "
-                       "been build with support for GPGSM");
+                       "been build with support for CMS");
           gpa_window_error
-            (_("It seems that GPGSM is not installed.\n\n"
+            (_("It seems that no CMS engine is installed.\n\n"
                "Temporary disabling support for X.509.\n\n"
-               "Please install GPGSM or invoke this program\n"
+               "Please install a CMS engine or invoke this program\n"
                "with the option --disable-x509 ."), NULL);
           cms_hack = 0;
           err = 0;
