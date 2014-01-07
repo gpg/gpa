@@ -384,7 +384,7 @@ gpa_keygen_wizard_new (GtkWidget *parent,
 
   window = gtk_assistant_new ();
   wizard->window = window;
-  gtk_window_set_title (GTK_WINDOW (window), _("Generate key"));
+  gpa_window_set_title (GTK_WINDOW (window), _("Generate key"));
   g_object_set_data_full (G_OBJECT (window), "user_data",
 			  wizard, free_keygen_wizard);
 

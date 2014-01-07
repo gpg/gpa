@@ -1299,8 +1299,7 @@ construct_widgets (GpaKeyManager *self)
   gchar *markup;
   guint pt, pb, pl, pr;
 
-  gtk_window_set_title (GTK_WINDOW (self),
-                        _("GNU Privacy Assistant - Key Manager"));
+  gpa_window_set_title (GTK_WINDOW (self), _("Key Manager"));
   gtk_window_set_default_size (GTK_WINDOW (self), 680, 600);
 
 

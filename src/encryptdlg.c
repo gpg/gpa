@@ -59,7 +59,7 @@ gpa_file_encrypt_dialog_get_property (GObject     *object,
 				      GParamSpec  *pspec)
 {
   GpaFileEncryptDialog *dialog = GPA_FILE_ENCRYPT_DIALOG (object);
-  
+
   switch (prop_id)
     {
     case PROP_WINDOW:
@@ -114,7 +114,7 @@ gpa_file_encrypt_dialog_set_property (GObject     *object,
 
 static void
 gpa_file_encrypt_dialog_finalize (GObject *object)
-{  
+{
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -149,7 +149,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
   /* Initialize */
 
   /* Set up the dialog */
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Encrypt documents"));
+  gpa_window_set_title (GTK_WINDOW (dialog), _("Encrypt documents"));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			  GTK_STOCK_OK, GTK_RESPONSE_OK,
@@ -159,7 +159,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
                                            GTK_RESPONSE_CANCEL,
                                            -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, 
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK,
 				     FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
@@ -180,7 +180,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
 				       GTK_SHADOW_IN);
 
   clistKeys = gpa_key_selector_new (FALSE, TRUE);
-  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
+  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection
 			      (GTK_TREE_VIEW (clistKeys))),
 		    "changed", G_CALLBACK (changed_select_row_cb),
 		    dialog);
@@ -188,7 +188,7 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
   gtk_label_set_mnemonic_widget (GTK_LABEL (labelKeys), clistKeys);
 
- 
+
   checkerSign = gtk_check_button_new_with_mnemonic (_("_Sign"));
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), checkerSign, FALSE, FALSE, 0);
   dialog->check_sign = checkerSign;
@@ -244,9 +244,9 @@ static void
 gpa_file_encrypt_dialog_class_init (GpaFileEncryptDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->constructor = gpa_file_encrypt_dialog_constructor;
   object_class->finalize = gpa_file_encrypt_dialog_finalize;
   object_class->set_property = gpa_file_encrypt_dialog_set_property;
@@ -255,7 +255,7 @@ gpa_file_encrypt_dialog_class_init (GpaFileEncryptDialogClass *klass)
   /* Properties */
   g_object_class_install_property (object_class,
 				   PROP_WINDOW,
-				   g_param_spec_object 
+				   g_param_spec_object
 				   ("window", "Parent window",
 				    "Parent window", GTK_TYPE_WIDGET,
 				    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
@@ -285,7 +285,7 @@ GType
 gpa_file_encrypt_dialog_get_type (void)
 {
   static GType encrypt_dialog_type = 0;
-  
+
   if (!encrypt_dialog_type)
     {
       static const GTypeInfo encrypt_dialog_info =
@@ -300,12 +300,12 @@ gpa_file_encrypt_dialog_get_type (void)
 	  0,              /* n_preallocs */
 	  (GInstanceInitFunc) gpa_file_encrypt_dialog_init,
 	};
-      
+
       encrypt_dialog_type = g_type_register_static (GTK_TYPE_DIALOG,
 						    "GpaFileEncryptDialog",
 						    &encrypt_dialog_info, 0);
     }
-  
+
   return encrypt_dialog_type;
 }
 
@@ -315,7 +315,7 @@ GtkWidget *
 gpa_file_encrypt_dialog_new (GtkWidget *parent, gboolean force_armor)
 {
   GpaFileEncryptDialog *dialog;
-  
+
   dialog = g_object_new (GPA_FILE_ENCRYPT_DIALOG_TYPE,
 			 "window", parent,
 			 "force-armor", force_armor,
@@ -370,7 +370,7 @@ static void
 changed_select_row_cb (GtkTreeSelection *treeselection, gpointer user_data)
 {
   GpaFileEncryptDialog *dialog = user_data;
-  
+
   if (gpa_key_selector_has_selection (GPA_KEY_SELECTOR (dialog->clist_keys)))
     {
       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),

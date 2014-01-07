@@ -68,7 +68,7 @@ gpa_key_edit_dialog_get_property (GObject     *object,
 				      GParamSpec  *pspec)
 {
   GpaKeyEditDialog *dialog = GPA_KEY_EDIT_DIALOG (object);
-  
+
   switch (prop_id)
     {
     case PROP_WINDOW:
@@ -117,7 +117,7 @@ gpa_key_edit_dialog_finalize (GObject *object)
     {
       gpgme_key_unref (dialog->key);
     }
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -145,7 +145,7 @@ gpa_key_edit_dialog_constructor (GType                  type,
   dialog = GPA_KEY_EDIT_DIALOG (object);
 
   /* Initialize */
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Edit Key"));
+  gpa_window_set_title (GTK_WINDOW (dialog), _("Edit Key"));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  _("_Close"),
 			  GTK_RESPONSE_CLOSE,
@@ -168,7 +168,7 @@ gpa_key_edit_dialog_constructor (GType                  type,
   /* change expiry date */
   frame = gtk_frame_new (_("Expiry Date"));
   gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, TRUE, 5);
-  
+
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (frame), hbox);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
@@ -182,14 +182,14 @@ gpa_key_edit_dialog_constructor (GType                  type,
 
   button = gtk_button_new_with_mnemonic (_("Change _expiration"));
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-  gtk_widget_set_sensitive (button,(gpa_keytable_lookup_key 
-			     (gpa_keytable_get_secret_instance(), 
+  gtk_widget_set_sensitive (button,(gpa_keytable_lookup_key
+			     (gpa_keytable_get_secret_instance(),
 			      dialog->key->subkeys->fpr) != NULL));
   g_signal_connect (G_OBJECT (button), "clicked",
 		    G_CALLBACK (gpa_key_edit_change_expiry), dialog);
 
   /* Close the dialog in response */
-  g_signal_connect (G_OBJECT (dialog), "response", 
+  g_signal_connect (G_OBJECT (dialog), "response",
 		    G_CALLBACK (gtk_widget_destroy), dialog);
 
   return object;
@@ -206,9 +206,9 @@ static void
 gpa_key_edit_dialog_class_init (GpaKeyEditDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->constructor = gpa_key_edit_dialog_constructor;
   object_class->finalize = gpa_key_edit_dialog_finalize;
   object_class->set_property = gpa_key_edit_dialog_set_property;
@@ -217,13 +217,13 @@ gpa_key_edit_dialog_class_init (GpaKeyEditDialogClass *klass)
   /* Properties */
   g_object_class_install_property (object_class,
 				   PROP_WINDOW,
-				   g_param_spec_object 
+				   g_param_spec_object
 				   ("window", "Parent window",
 				    "Parent window", GTK_TYPE_WIDGET,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
 				   PROP_KEY,
-				   g_param_spec_pointer 
+				   g_param_spec_pointer
 				   ("key", "Key",
 				    "Key",
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
@@ -244,7 +244,7 @@ GType
 gpa_key_edit_dialog_get_type (void)
 {
   static GType dialog_type = 0;
-  
+
   if (!dialog_type)
     {
       static const GTypeInfo dialog_info =
@@ -259,12 +259,12 @@ gpa_key_edit_dialog_get_type (void)
 	  0,              /* n_preallocs */
 	  (GInstanceInitFunc) gpa_key_edit_dialog_init,
 	};
-      
+
       dialog_type = g_type_register_static (GTK_TYPE_DIALOG,
 					    "GpaKeyEditDialog",
 					    &dialog_info, 0);
     }
-  
+
   return dialog_type;
 }
 
@@ -272,7 +272,7 @@ gpa_key_edit_dialog_get_type (void)
 
 static void
 gpa_key_edit_dialog_new_expiration (GpaKeyOperation *op,
-				    gpgme_key_t key, 
+				    gpgme_key_t key,
 				    GDate *new_date,
 				    gpointer data)
 {
@@ -307,7 +307,7 @@ gpa_key_edit_change_expiry(GtkWidget * widget, GpaKeyEditDialog *dialog)
 {
   /* All key operations want a list of key, so we give them one */
   GList *keys = g_list_append (NULL, dialog->key);
-  GpaKeyExpireOperation *op = 
+  GpaKeyExpireOperation *op =
     gpa_key_expire_operation_new (GTK_WIDGET (dialog), keys);
 
   g_signal_connect (G_OBJECT (op), "new_expiration",
@@ -317,7 +317,7 @@ gpa_key_edit_change_expiry(GtkWidget * widget, GpaKeyEditDialog *dialog)
 		    G_CALLBACK (gpa_key_edit_dialog_changed_wot_cb),
 		    dialog);
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (g_object_unref), dialog); 
+		    G_CALLBACK (g_object_unref), dialog);
 }
 
 /* signal handler for the change passphrase button. */
@@ -326,7 +326,7 @@ gpa_key_edit_change_passphrase (GtkWidget *widget, GpaKeyEditDialog *dialog)
 {
   /* All key operations want a list of key, so we give them one */
   GList *keys = g_list_append (NULL, dialog->key);
-  GpaKeyPasswdOperation *op = 
+  GpaKeyPasswdOperation *op =
     gpa_key_passwd_operation_new (GTK_WIDGET (dialog), keys);
 
   g_signal_connect (G_OBJECT (op), "changed_wot",
@@ -344,9 +344,9 @@ GtkWidget*
 gpa_key_edit_dialog_new (GtkWidget *parent, gpgme_key_t key)
 {
   GpaKeyEditDialog *dialog;
-  
+
   dialog = g_object_new (GPA_KEY_EDIT_DIALOG_TYPE,
-			 "window", parent, 
+			 "window", parent,
 			 "key", key, NULL);
 
   return GTK_WIDGET(dialog);

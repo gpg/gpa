@@ -909,8 +909,7 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
 				      n_construct_properties,
 				      construct_properties);
   dialog = SETTINGS_DLG (object);
-  gtk_window_set_title (GTK_WINDOW (dialog),
-			_("GNU Privacy Assistant - Settings"));
+  gpa_window_set_title (GTK_WINDOW (dialog), _("Settings"));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,

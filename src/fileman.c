@@ -793,8 +793,7 @@ gpa_file_manager_constructor (GType type,
   fileman = GPA_FILE_MANAGER (object);
 
   /* Initialize.  */
-  gtk_window_set_title (GTK_WINDOW (fileman),
-			_("GNU Privacy Assistant - File Manager"));
+  gpa_window_set_title (GTK_WINDOW (fileman), _("File Manager"));
   gtk_window_set_default_size (GTK_WINDOW (fileman), 640, 480);
   /* Realize the window so that we can create pixmaps without warnings.  */
   gtk_widget_realize (GTK_WIDGET (fileman));

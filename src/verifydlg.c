@@ -113,7 +113,7 @@ gpa_file_verify_dialog_constructor (GType type,
   /* Set up the dialog */
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  _("_Close"), GTK_RESPONSE_CLOSE, NULL);
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Verify documents"));
+  gpa_window_set_title (GTK_WINDOW (dialog), _("Verify documents"));
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
@@ -421,7 +421,7 @@ gpa_file_verify_dialog_set_title (GpaFileVerifyDialog *dialog,
                                   const char *title)
 {
   if (dialog && title && *title)
-    gtk_window_set_title (GTK_WINDOW (dialog), title);
+    gpa_window_set_title (GTK_WINDOW (dialog), title);
 }
 
 

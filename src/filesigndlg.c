@@ -1,7 +1,7 @@
 /* filesigndlg.c  -  The GNU Privacy Assistant
    Copyright (C) 2000, 2001 G-N-U GmbH.
    Copyright (C) 2008 g10 Code GmbH.
-  
+
    This file is part of GPA.
 
    GPA is free software; you can redistribute it and/or modify it
@@ -55,7 +55,7 @@ gpa_file_sign_dialog_get_property (GObject     *object,
 				   GParamSpec  *pspec)
 {
   GpaFileSignDialog *dialog = GPA_FILE_SIGN_DIALOG (object);
-  
+
   switch (prop_id)
     {
     case PROP_WINDOW:
@@ -120,7 +120,7 @@ gpa_file_sign_dialog_set_property (GObject     *object,
 
 static void
 gpa_file_sign_dialog_finalize (GObject *object)
-{  
+{
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -168,7 +168,7 @@ gpa_file_sign_dialog_constructor (GType type,
                                            GTK_RESPONSE_OK,
                                            GTK_RESPONSE_CANCEL,
                                            -1);
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Sign documents"));
+  gpa_window_set_title (GTK_WINDOW (dialog), _("Sign documents"));
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
@@ -237,7 +237,7 @@ gpa_file_sign_dialog_constructor (GType type,
      does.  */
   gtk_widget_show_all (frameMode);
   gtk_widget_set_no_show_all (frameMode, TRUE);
-			      
+
   checkerArmor = gtk_check_button_new_with_mnemonic (_("A_rmor"));
   gtk_box_pack_start (GTK_BOX (vboxSign), checkerArmor, FALSE, FALSE, 0);
   /* Take care of any child widgets there might be.  */
@@ -253,9 +253,9 @@ static void
 gpa_file_sign_dialog_class_init (GpaFileSignDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->constructor = gpa_file_sign_dialog_constructor;
   object_class->finalize = gpa_file_sign_dialog_finalize;
   object_class->set_property = gpa_file_sign_dialog_set_property;
@@ -264,7 +264,7 @@ gpa_file_sign_dialog_class_init (GpaFileSignDialogClass *klass)
   /* Properties */
   g_object_class_install_property (object_class,
 				   PROP_WINDOW,
-				   g_param_spec_object 
+				   g_param_spec_object
 				   ("window", "Parent window",
 				    "Parent window", GTK_TYPE_WIDGET,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
@@ -304,7 +304,7 @@ GType
 gpa_file_sign_dialog_get_type (void)
 {
   static GType sign_dialog_type = 0;
-  
+
   if (!sign_dialog_type)
     {
       static const GTypeInfo sign_dialog_info =
@@ -319,12 +319,12 @@ gpa_file_sign_dialog_get_type (void)
 	  0,              /* n_preallocs */
 	  (GInstanceInitFunc) gpa_file_sign_dialog_init,
 	};
-      
+
       sign_dialog_type = g_type_register_static (GTK_TYPE_DIALOG,
 						    "GpaFileSignDialog",
 						    &sign_dialog_info, 0);
     }
-  
+
   return sign_dialog_type;
 }
 
@@ -335,7 +335,7 @@ GtkWidget *
 gpa_file_sign_dialog_new (GtkWidget *parent)
 {
   GpaFileSignDialog *dialog;
-  
+
   dialog = g_object_new (GPA_FILE_SIGN_DIALOG_TYPE,
 			 "window", parent,
 			 NULL);
@@ -352,7 +352,7 @@ gpa_file_sign_dialog_signers (GpaFileSignDialog *dialog)
 }
 
 
-gboolean 
+gboolean
 gpa_file_sign_dialog_get_armor (GpaFileSignDialog *dialog)
 {
   g_return_val_if_fail (GPA_IS_FILE_SIGN_DIALOG (dialog), FALSE);
@@ -400,7 +400,7 @@ gpa_file_sign_dialog_set_force_armor (GpaFileSignDialog *dialog,
 }
 
 
-gpgme_sig_mode_t 
+gpgme_sig_mode_t
 gpa_file_sign_dialog_get_sig_mode (GpaFileSignDialog *dialog)
 {
   gpgme_sig_mode_t sig_mode = GPGME_SIG_MODE_NORMAL;

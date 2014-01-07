@@ -1,6 +1,6 @@
 /* gtktools.c  -  The GNU Privacy Assistant
    Copyright (C) 2000, 2001 G-N-U GmbH.
-   Copyright (C) 2008 g10 Code GmbH.
+   Copyright (C) 2008, 2014 g10 Code GmbH.
 
    This file is part of GPA.
 
@@ -37,6 +37,13 @@
 
 /* BEGIN of old unchecked code (wk 2008-03-07) */
 
+static char *
+make_box_title (const char *string)
+{
+  return g_strdup_printf ("%s %s", GPA_NAME, string);
+}
+
+
 void
 gpa_window_error (const gchar *message, GtkWidget *messenger)
 {
@@ -44,16 +51,20 @@ gpa_window_error (const gchar *message, GtkWidget *messenger)
   GtkWidget *hboxError;
   GtkWidget *labelMessage;
   GtkWidget *pixmap;
+  char *title;
 
-  windowError = gtk_dialog_new_with_buttons (_("GPA Error"),
-                                             (messenger ? 
+  title = make_box_title (_("Error"));
+  windowError = gtk_dialog_new_with_buttons (title,
+                                             (messenger ?
                                              GTK_WINDOW(messenger) : NULL),
                                              GTK_DIALOG_MODAL,
                                              _("_Close"),
                                              GTK_RESPONSE_CLOSE,
                                              NULL);
+  g_free (title);
   if (messenger)
-    gtk_window_set_transient_for (GTK_WINDOW (windowError), GTK_WINDOW (messenger));
+    gtk_window_set_transient_for (GTK_WINDOW (windowError),
+                                  GTK_WINDOW (messenger));
 
   gtk_container_set_border_width (GTK_CONTAINER (windowError), 5);
   gtk_dialog_set_default_response (GTK_DIALOG (windowError),
@@ -81,14 +92,17 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
   GtkWidget *hbox;
   GtkWidget *labelMessage;
   GtkWidget *pixmap;
+  char *title;
 
-  window = gtk_dialog_new_with_buttons (_("GPA Message"),
-					(messenger ? 
+  title = make_box_title (_("Message"));
+  window = gtk_dialog_new_with_buttons (title,
+					(messenger ?
 					 GTK_WINDOW(messenger) : NULL),
 					GTK_DIALOG_MODAL,
 					_("_Close"),
 					GTK_RESPONSE_CLOSE,
 					NULL);
+  g_free (title);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   gtk_dialog_set_default_response (GTK_DIALOG (window),
                                    GTK_RESPONSE_CLOSE);
@@ -157,3 +171,22 @@ gpa_toolbar_set_homogeneous (GtkToolbar *toolbar, gboolean is_hom)
 			 (GtkCallback) set_homogeneous, &is_hom);
 }
 
+
+/* Customized set title function.  */
+void
+gpa_window_set_title (GtkWindow *window, const char *string)
+{
+  const char *prefix = GPA_LONG_NAME;
+  char *buffer;
+
+  if (!string || !*string)
+    {
+      gtk_window_set_title (window, prefix);
+    }
+  else
+    {
+      buffer = g_strdup_printf ("%s - %s", prefix, string);
+      gtk_window_set_title (window, buffer);
+      g_free (buffer);
+    }
+}

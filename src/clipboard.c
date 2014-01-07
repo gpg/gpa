@@ -1011,8 +1011,7 @@ gpa_clipboard_constructor (GType type,
   clipboard = GPA_CLIPBOARD (object);
 
   /* Initialize.  */
-  gtk_window_set_title (GTK_WINDOW (clipboard),
-			_("GNU Privacy Assistant - Clipboard"));
+  gpa_window_set_title (GTK_WINDOW (clipboard), _("Clipboard"));
   gtk_window_set_default_size (GTK_WINDOW (clipboard), 640, 480);
 
   /* Realize the window so that we can create pixmaps without warnings

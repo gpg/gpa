@@ -29,7 +29,7 @@ extern void gpa_window_message (gchar * message, GtkWidget * messenger);
 
 /* Set a tooltip TEXT to WIDGET.  TEXT and WIDGET may both be NULL.
    This function is useful so that GPA can be build with older GTK+
-   versions.  */ 
+   versions.  */
 void gpa_add_tooltip (GtkWidget *widget, const char *text);
 
 /* Set the title of COLUMN to TITLE and also set TOOLTIP. */
@@ -38,6 +38,9 @@ void gpa_set_column_title (GtkTreeViewColumn *column,
 
 /* Set the homogeneous property for all children of TOOLBAR to IS_HOM.  */
 void gpa_toolbar_set_homogeneous (GtkToolbar *toolbar, gboolean is_hom);
+
+/* Customized set title function.  */
+void gpa_window_set_title (GtkWindow *window, const char *string);
 
 
 

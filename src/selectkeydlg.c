@@ -27,10 +27,10 @@
 #include "selectkeydlg.h"
 
 
-struct _SelectKeyDlg 
+struct _SelectKeyDlg
 {
   GtkDialog parent;
-  
+
   GpaKeyList *keylist;
 
   gpgme_protocol_t protocol;
@@ -39,7 +39,7 @@ struct _SelectKeyDlg
 };
 
 
-struct _SelectKeyDlgClass 
+struct _SelectKeyDlgClass
 {
   GtkDialogClass parent_class;
 
@@ -51,7 +51,7 @@ static GObjectClass *parent_class;
 
 
 /* Indentifiers for our properties. */
-enum 
+enum
   {
     PROP_0,
     PROP_WINDOW,
@@ -66,15 +66,15 @@ enum
 
 /* Signal handler for selection changes of the keylist.  */
 static void
-keylist_selection_changed_cb (GtkTreeSelection *treeselection, 
+keylist_selection_changed_cb (GtkTreeSelection *treeselection,
                               gpointer user_data)
 {
   SelectKeyDlg *dialog = user_data;
   gboolean okay;
-  
+
   g_debug ("keyring_selection_changed_cb called");
   okay = gpa_keylist_has_single_selection (dialog->keylist);
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), 
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
                                      GTK_RESPONSE_OK, okay);
 }
 
@@ -82,7 +82,7 @@ keylist_selection_changed_cb (GtkTreeSelection *treeselection,
 
 
 
-/************************************************************ 
+/************************************************************
  ******************   Object Management  ********************
  ************************************************************/
 
@@ -91,7 +91,7 @@ select_key_dlg_get_property (GObject *object, guint prop_id,
                              GValue *value, GParamSpec *pspec)
 {
   SelectKeyDlg *dialog = SELECT_KEY_DLG (object);
-  
+
   switch (prop_id)
     {
     case PROP_WINDOW:
@@ -144,7 +144,7 @@ select_key_dlg_set_property (GObject *object, guint prop_id,
 
 static void
 select_key_dlg_finalize (GObject *object)
-{  
+{
   SelectKeyDlg *dialog = SELECT_KEY_DLG (object);
 
   gpa_gpgme_release_keyarray (dialog->initial_keys);
@@ -175,8 +175,7 @@ select_key_dlg_constructor (GType type, guint n_construct_properties,
 				      n_construct_properties,
 				      construct_properties);
   dialog = SELECT_KEY_DLG (object);
-  gtk_window_set_title (GTK_WINDOW (dialog),
-                        _("Select a key"));
+  gpa_window_set_title (GTK_WINDOW (dialog), _("Select a key"));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			  GTK_STOCK_OK, GTK_RESPONSE_OK,
@@ -186,7 +185,7 @@ select_key_dlg_constructor (GType type, guint n_construct_properties,
                                            GTK_RESPONSE_CANCEL,
                                            -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, 
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK,
 				     FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
@@ -214,7 +213,7 @@ select_key_dlg_constructor (GType type, guint n_construct_properties,
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET(dialog->keylist));
 
 
-  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
+  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection
 			      (GTK_TREE_VIEW (dialog->keylist))),
 		    "changed",
                     G_CALLBACK (keylist_selection_changed_cb), dialog);
@@ -228,9 +227,9 @@ static void
 select_key_dlg_class_init (SelectKeyDlgClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->constructor = select_key_dlg_constructor;
   object_class->finalize = select_key_dlg_finalize;
   object_class->set_property = select_key_dlg_set_property;
@@ -239,29 +238,29 @@ select_key_dlg_class_init (SelectKeyDlgClass *klass)
   g_object_class_install_property
     (object_class,
      PROP_WINDOW,
-     g_param_spec_object 
+     g_param_spec_object
      ("window", "Parent window",
       "Parent window", GTK_TYPE_WIDGET,
       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_PROTOCOL,
-     g_param_spec_int 
+     g_param_spec_int
      ("protocol", "Protocol",
       "The gpgme protocol used to restruct the key listing.",
       GPGME_PROTOCOL_OpenPGP, GPGME_PROTOCOL_UNKNOWN, GPGME_PROTOCOL_UNKNOWN,
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_INITIAL_KEYS,
-     g_param_spec_pointer 
+     g_param_spec_pointer
      ("initial-keys", "Initial-keys",
       "An array of gpgme_key_t with the initial set of keys or NULL.",
       G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 
-  g_object_class_install_property 
+  g_object_class_install_property
     (object_class, PROP_INITIAL_PATTERN,
-     g_param_spec_string 
+     g_param_spec_string
      ("initial-pattern", "Initial-pattern",
       "A string with pattern to be used for the search boxor NULL.",
       NULL,
@@ -273,7 +272,7 @@ GType
 select_key_dlg_get_type (void)
 {
   static GType this_type;
-  
+
   if (!this_type)
     {
       static const GTypeInfo this_info =
@@ -289,18 +288,18 @@ select_key_dlg_get_type (void)
 	  0,    /* n_preallocs */
 	  (GInstanceInitFunc) select_key_dlg_init,
 	};
-      
+
       this_type = g_type_register_static (GTK_TYPE_DIALOG,
                                           "SelectKeyDlg",
                                           &this_info, 0);
     }
-  
+
   return this_type;
 }
 
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 
@@ -308,7 +307,7 @@ SelectKeyDlg *
 select_key_dlg_new (GtkWidget *parent)
 {
   SelectKeyDlg *dialog;
-  
+
   dialog = g_object_new (SELECT_KEY_DLG_TYPE,
 			 "window", parent,
 			 NULL);
@@ -352,7 +351,7 @@ select_key_dlg_get_key (SelectKeyDlg *dialog)
   return key;
 }
 
-/* Return an array of selected keys. 
+/* Return an array of selected keys.
 
    FIXME: For now it returns only one key. */
 gpgme_key_t *
@@ -363,7 +362,7 @@ select_key_dlg_get_keys (SelectKeyDlg *dialog)
   g_return_val_if_fail (dialog, NULL);
   g_return_val_if_fail (dialog->keylist, NULL);
 
-  keyarray = g_new (gpgme_key_t, 1+1); 
+  keyarray = g_new (gpgme_key_t, 1+1);
   keyarray[0] = gpa_keylist_get_selected_key (dialog->keylist);
   keyarray[1] = NULL;
 

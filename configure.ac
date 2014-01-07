@@ -404,7 +404,9 @@ fi
 
 #
 # Define name strings
-AC_DEFINE_UNQUOTED(GPA_NAME, "GPA", [The name of thsi program])
+AC_DEFINE_UNQUOTED(GPA_NAME, "GPA", [The name of this program])
+AC_DEFINE_UNQUOTED(GPA_LONG_NAME, "GNU Privacy Assistant",
+                                   [The spelled out name of this program])
 
 
 #

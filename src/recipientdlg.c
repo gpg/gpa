@@ -2,17 +2,17 @@
    Copyright (C) 2008 g10 Code GmbH.
 
    This file is part of GPA
-  
+
    GPA is free software; you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
-  
+
    GPA is distributed in the hope that it will be useful, but WITHOUT
    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
    or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
    License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, see <http://www.gnu.org/licenses/>.  */
 
@@ -30,10 +30,10 @@
 #include "recipientdlg.h"
 
 
-struct _RecipientDlg 
+struct _RecipientDlg
 {
   GtkDialog parent;
-  
+
   GtkWidget *clist_keys;
   GtkWidget *statushint;
   GtkWidget *radio_pgp;
@@ -59,7 +59,7 @@ struct _RecipientDlg
 };
 
 
-struct _RecipientDlgClass 
+struct _RecipientDlgClass
 {
   GtkDialogClass parent_class;
 
@@ -71,7 +71,7 @@ static GObjectClass *parent_class;
 
 
 /* Indentifiers for our properties. */
-enum 
+enum
   {
     PROP_0,
     PROP_WINDOW,
@@ -85,15 +85,15 @@ enum
 
 
 /* An object to keep information about keys.  */
-struct keyinfo_s 
+struct keyinfo_s
 {
   /* An array with associated key(s) or NULL if none found/selected.  */
   gpgme_key_t *keys;
-  
+
   /* The allocated size of the KEYS array.  This includes the
      terminating NULL entry.  */
   unsigned int dimof_keys;
-  
+
   /* If set, indicates that the KEYS array has been truncated.  */
   int truncated:1;
 };
@@ -115,7 +115,7 @@ struct userdata_s
   /* If the user has set this field, no encryption key will be
      required for the recipient.  */
   int ignore_recipient;
-  
+
 };
 
 
@@ -160,7 +160,7 @@ recplist_window_new (void)
 
   /* Define the columns.  */
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes 
+  column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "markup", RECPLIST_MAILBOX, NULL);
   gpa_set_column_title (column, _("Recipient"),
                         _("Shows the recipients of the message."
@@ -172,7 +172,7 @@ recplist_window_new (void)
     (NULL, renderer, "active", RECPLIST_HAS_PGP, NULL);
   gpa_set_column_title (column, "PGP",
                         _("Checked if at least one matching"
-                          " OpenPGP certificate has been found.")); 
+                          " OpenPGP certificate has been found."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
@@ -181,11 +181,11 @@ recplist_window_new (void)
   gpa_set_column_title (column, "X.509",
                         _("Checked if at least one matching"
                           " X.509 certificate for use with S/MIME"
-                          " has been found.")); 
+                          " has been found."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes 
+  column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "text", RECPLIST_KEYID, NULL);
   gpa_set_column_title (column,
                         _("Key ID"),
@@ -200,7 +200,7 @@ recplist_window_new (void)
 
 /* Get an interator for the selected row.  Store it in ITER and
    returns the mdeol.  if nothing is selected NULL is return and ITER
-   is not valid.  */ 
+   is not valid.  */
 static GtkTreeModel *
 get_selected_row (RecipientDlg *dialog, GtkTreeIter *iter)
 {
@@ -210,7 +210,7 @@ get_selected_row (RecipientDlg *dialog, GtkTreeIter *iter)
   g_return_val_if_fail (dialog, NULL);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->clist_keys));
-  if (gtk_tree_selection_count_selected_rows (selection) == 1 
+  if (gtk_tree_selection_count_selected_rows (selection) == 1
       && gtk_tree_selection_get_selected (selection, &model, iter))
     return model;
   return NULL;
@@ -240,12 +240,12 @@ update_statushint (RecipientDlg *dialog)
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radio_pgp)))
     req_protocol = GPGME_PROTOCOL_OpenPGP;
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON 
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
                                          (dialog->radio_x509)))
     req_protocol = GPGME_PROTOCOL_CMS;
   else
     req_protocol = GPGME_PROTOCOL_UNKNOWN;
-  
+
   sel_protocol = GPGME_PROTOCOL_UNKNOWN;
 
   if (gtk_tree_model_get_iter_first (model, &iter))
@@ -255,7 +255,7 @@ update_statushint (RecipientDlg *dialog)
           gboolean has_pgp, has_x509;
           struct userdata_s *info;
 
-          gtk_tree_model_get (model, &iter, 
+          gtk_tree_model_get (model, &iter,
                               RECPLIST_HAS_PGP, &has_pgp,
                               RECPLIST_HAS_X509, &has_x509,
                               RECPLIST_USERDATA, &info,
@@ -269,7 +269,7 @@ update_statushint (RecipientDlg *dialog)
           else if ((req_protocol == GPGME_PROTOCOL_OpenPGP && !has_pgp)
                    ||(req_protocol == GPGME_PROTOCOL_CMS && !has_x509))
             ; /* Not of the requested protocol.  */
-          else 
+          else
             {
               n_keys++;
               if (info->pgp.keys && info->pgp.keys[0])
@@ -298,7 +298,7 @@ update_statushint (RecipientDlg *dialog)
       else if (n_x509_keys)
         sel_protocol = GPGME_PROTOCOL_CMS;
     }
-  else 
+  else
     sel_protocol = req_protocol;
 
 
@@ -340,7 +340,7 @@ update_statushint (RecipientDlg *dialog)
 
   dialog->usable = okay;
   dialog->selected_protocol = sel_protocol;
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, 
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK,
 				     okay);
 }
 
@@ -367,7 +367,7 @@ append_key_to_keyinfo (struct keyinfo_s *keyinfo, gpgme_key_t key)
       if (nkeys+1 >= keyinfo->dimof_keys)
         {
           keyinfo->dimof_keys += 10;
-          keyinfo->keys = g_renew (gpgme_key_t, keyinfo->keys, 
+          keyinfo->keys = g_renew (gpgme_key_t, keyinfo->keys,
                                    keyinfo->dimof_keys);
         }
       keyinfo->keys[nkeys++] = key;
@@ -493,7 +493,7 @@ parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
             {
               /* Note that the truncation flag is not 100% correct.  In
                  case the next iteration would not yield a new key we
-                 have not actually truncated the search.  */ 
+                 have not actually truncated the search.  */
               info->pgp.truncated = 1;
               break;
             }
@@ -511,7 +511,7 @@ parse_one_recipient (gpgme_ctx_t ctx, GtkListStore *store, GtkTreeIter *iter,
           if (key->revoked || key->disabled || key->expired
               || !key->can_encrypt)
             gpgme_key_unref (key);
-          else if (append_key_to_keyinfo (&info->x509,key) 
+          else if (append_key_to_keyinfo (&info->x509,key)
                    >= TRUNCATE_KEYSEARCH_AT)
             {
               info->x509.truncated = 1;
@@ -539,25 +539,25 @@ parse_recipients (GtkListStore *store)
   if (err)
     gpa_gpgme_error (err);
 
-  
+
   model = GTK_TREE_MODEL (store);
   /* Walk through the list, reading each row. */
-  
+
   if (gtk_tree_model_get_iter_first (model, &iter))
     do
       {
         struct userdata_s *info;
-        
-        gtk_tree_model_get (model, &iter, 
+
+        gtk_tree_model_get (model, &iter,
                             RECPLIST_USERDATA, &info,
                             -1);
-        
+
         /* Do something with the data */
         /*g_print ("parsing mailbox `%s'\n", info? info->mailbox:"(null)");*/
         parse_one_recipient (ctx, store, &iter,info);
       }
     while (gtk_tree_model_iter_next (model, &iter));
-  
+
   gpgme_release (ctx);
 }
 
@@ -567,7 +567,7 @@ static void
 recplist_row_activated_cb (GtkTreeView       *tree_view,
                            GtkTreePath       *path,
                            GtkTreeViewColumn *column,
-                           gpointer           user_data)    
+                           gpointer           user_data)
 {
   /*RecipientDlg *dialog = user_data;*/
   GtkTreeIter iter;
@@ -576,9 +576,9 @@ recplist_row_activated_cb (GtkTreeView       *tree_view,
 
   model = gtk_tree_view_get_model (tree_view);
   if (!gtk_tree_model_get_iter (model, &iter, path))
-    return; 
-        
-  gtk_tree_model_get (model, &iter, 
+    return;
+
+  gtk_tree_model_get (model, &iter,
                       RECPLIST_MAILBOX, &mailbox,
                       -1);
   g_free (mailbox);
@@ -608,7 +608,7 @@ rbutton_toggled_cb (GtkToggleButton *button, gpointer user_data)
     {
       pgp = TRUE;
     }
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON 
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
                                          (dialog->radio_x509)))
     {
       x509 = TRUE;
@@ -644,7 +644,7 @@ select_key_response_cb (SelectKeyDlg *seldlg, int response, void *user_data)
       dialog->freeze_key_selection--;
       return;
     }
-  
+
   key = select_key_dlg_get_key (seldlg);
   if (key)
     {
@@ -762,7 +762,7 @@ recplist_default_action (RecipientDlg *dialog)
 
 
 static gint
-recplist_display_popup_menu (RecipientDlg *dialog, GdkEvent *event, 
+recplist_display_popup_menu (RecipientDlg *dialog, GdkEvent *event,
                              GtkListStore *list)
 {
   GtkMenu *menu;
@@ -770,9 +770,9 @@ recplist_display_popup_menu (RecipientDlg *dialog, GdkEvent *event,
 
   g_return_val_if_fail (dialog, FALSE);
   g_return_val_if_fail (event, FALSE);
-  
+
   menu = GTK_MENU (dialog->popup_menu);
-  
+
   if (event->type == GDK_BUTTON_PRESS)
     {
       event_button = (GdkEventButton *) event;
@@ -782,18 +782,18 @@ recplist_display_popup_menu (RecipientDlg *dialog, GdkEvent *event,
 	  GtkTreeSelection *selection;
 	  GtkTreePath *path;
 	  GtkTreeIter iter;
-          
+
           selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
           /* Make sure the clicked key is selected.  */
 	  if (!dialog->freeze_key_selection
-              && gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (list), 
+              && gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (list),
                                                 event_button->x,
-                                                event_button->y, 
+                                                event_button->y,
                                                 &path, NULL,
                                                 NULL, NULL))
 	    {
               dialog->freeze_key_selection++;
-	      gtk_tree_model_get_iter (gtk_tree_view_get_model 
+	      gtk_tree_model_get_iter (gtk_tree_view_get_model
 				       (GTK_TREE_VIEW (list)), &iter, path);
 	      if (!gtk_tree_selection_iter_is_selected (selection, &iter))
 		{
@@ -803,7 +803,7 @@ recplist_display_popup_menu (RecipientDlg *dialog, GdkEvent *event,
               if (event_button->button == 1)
                 recplist_default_action (dialog);
               else
-                gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
+                gtk_menu_popup (menu, NULL, NULL, NULL, NULL,
                                 event_button->button, event_button->time);
 	    }
 	  return TRUE;
@@ -864,7 +864,7 @@ recplist_popup_menu_new (GtkWidget *window, RecipientDlg *dialog)
 
 
 
-/************************************************************ 
+/************************************************************
  ******************   Object Management  ********************
  ************************************************************/
 
@@ -873,7 +873,7 @@ recipient_dlg_get_property (GObject *object, guint prop_id,
                             GValue *value, GParamSpec *pspec)
 {
   RecipientDlg *dialog = RECIPIENT_DLG (object);
-  
+
   switch (prop_id)
     {
     case PROP_WINDOW:
@@ -908,7 +908,7 @@ recipient_dlg_set_property (GObject *object, guint prop_id,
 
 static void
 recipient_dlg_finalize (GObject *object)
-{  
+{
   /* Fixme:  Release the store.  */
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -938,8 +938,7 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
 				      construct_properties);
   dialog = RECIPIENT_DLG (object);
 
-  gtk_window_set_title (GTK_WINDOW (dialog),
-                        _("Select keys for recipients"));
+  gpa_window_set_title (GTK_WINDOW (dialog), _("Select keys for recipients"));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			  GTK_STOCK_OK, GTK_RESPONSE_OK,
@@ -949,7 +948,7 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
                                            GTK_RESPONSE_CANCEL,
                                            -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, 
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK,
 				     FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
@@ -971,7 +970,7 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
   dialog->clist_keys = clistKeys;
   gtk_container_add (GTK_CONTAINER (scrollerKeys), clistKeys);
   gtk_label_set_mnemonic_widget (GTK_LABEL (labelKeys), clistKeys);
-			      
+
 
   dialog->popup_menu = recplist_popup_menu_new (dialog->clist_keys, dialog);
   g_signal_connect_swapped (GTK_OBJECT (dialog->clist_keys),
@@ -980,10 +979,10 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
 
   dialog->radio_pgp  = gtk_radio_button_new_with_mnemonic
     (NULL, _("Use _PGP"));
-  dialog->radio_x509 = gtk_radio_button_new_with_mnemonic 
+  dialog->radio_x509 = gtk_radio_button_new_with_mnemonic
     (gtk_radio_button_get_group (GTK_RADIO_BUTTON (dialog->radio_pgp)),
      _("Use _X.509"));
-  dialog->radio_auto = gtk_radio_button_new_with_mnemonic 
+  dialog->radio_auto = gtk_radio_button_new_with_mnemonic
     (gtk_radio_button_get_group (GTK_RADIO_BUTTON (dialog->radio_pgp)),
      _("_Auto selection"));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->radio_auto), TRUE);
@@ -1005,8 +1004,8 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
   g_signal_connect (G_OBJECT (GTK_TREE_VIEW (dialog->clist_keys)),
                     "row-activated",
                     G_CALLBACK (recplist_row_activated_cb), dialog);
- 
-  g_signal_connect (G_OBJECT (gtk_tree_view_get_model 
+
+  g_signal_connect (G_OBJECT (gtk_tree_view_get_model
                               (GTK_TREE_VIEW (dialog->clist_keys))),
                     "row-changed",
                     G_CALLBACK (recplist_row_changed_cb), dialog);
@@ -1030,9 +1029,9 @@ static void
 recipient_dlg_class_init (RecipientDlgClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->constructor = recipient_dlg_constructor;
   object_class->finalize = recipient_dlg_finalize;
   object_class->set_property = recipient_dlg_set_property;
@@ -1041,7 +1040,7 @@ recipient_dlg_class_init (RecipientDlgClass *klass)
   g_object_class_install_property
     (object_class,
      PROP_WINDOW,
-     g_param_spec_object 
+     g_param_spec_object
      ("window", "Parent window",
       "Parent window", GTK_TYPE_WIDGET,
       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
@@ -1053,7 +1052,7 @@ GType
 recipient_dlg_get_type (void)
 {
   static GType this_type;
-  
+
   if (!this_type)
     {
       static const GTypeInfo this_info =
@@ -1069,18 +1068,18 @@ recipient_dlg_get_type (void)
 	  0,    /* n_preallocs */
 	  (GInstanceInitFunc) recipient_dlg_init,
 	};
-      
+
       this_type = g_type_register_static (GTK_TYPE_DIALOG,
                                           "RecipientDlg",
                                           &this_info, 0);
     }
-  
+
   return this_type;
 }
 
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 
@@ -1088,7 +1087,7 @@ RecipientDlg *
 recipient_dlg_new (GtkWidget *parent)
 {
   RecipientDlg *dialog;
-  
+
   dialog = g_object_new (RECIPIENT_DLG_TYPE,
 			 "window", parent,
 			 NULL);
@@ -1098,7 +1097,7 @@ recipient_dlg_new (GtkWidget *parent)
 
 
 /* Put RECIPIENTS into the list.  PROTOCOL select the default protocol. */
-void 
+void
 recipient_dlg_set_recipients (RecipientDlg *dialog, GSList *recipients,
                               gpgme_protocol_t protocol)
 {
@@ -1122,11 +1121,11 @@ recipient_dlg_set_recipients (RecipientDlg *dialog, GSList *recipients,
 
   if (widget != dialog->radio_auto)
     {
-      gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_pgp), FALSE);  
-      gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_x509), FALSE);  
-      gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_auto), FALSE);  
+      gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_pgp), FALSE);
+      gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_x509), FALSE);
+      gtk_widget_set_sensitive (GTK_WIDGET (dialog->radio_auto), FALSE);
     }
-  
+
   store = GTK_LIST_STORE (gtk_tree_view_get_model
                           (GTK_TREE_VIEW (dialog->clist_keys)));
 
@@ -1137,7 +1136,7 @@ recipient_dlg_set_recipients (RecipientDlg *dialog, GSList *recipients,
       if (name && *name)
         {
           struct userdata_s *info = g_malloc0 (sizeof *info);
-          
+
           info->mailbox = g_strdup (name);
           gtk_list_store_append (store, &iter);
           gtk_list_store_set (store, &iter,
@@ -1147,7 +1146,7 @@ recipient_dlg_set_recipients (RecipientDlg *dialog, GSList *recipients,
                               RECPLIST_KEYID,  NULL,
                               RECPLIST_USERDATA, info,
                               -1);
-        }    
+        }
     }
 
   parse_recipients (store);
@@ -1165,7 +1164,7 @@ recipient_dlg_get_keys (RecipientDlg *dialog, gpgme_protocol_t *r_protocol)
   size_t idx, nkeys;
   gpgme_key_t key, *keyarray;
   gpgme_protocol_t protocol;
-  
+
   g_return_val_if_fail (dialog, NULL);
 
   if (!dialog->usable)
@@ -1182,7 +1181,7 @@ recipient_dlg_get_keys (RecipientDlg *dialog, gpgme_protocol_t *r_protocol)
         nkeys++;
       while (gtk_tree_model_iter_next (model, &iter));
     }
-  keyarray = g_new (gpgme_key_t, nkeys+1); 
+  keyarray = g_new (gpgme_key_t, nkeys+1);
   idx = 0;
   if (gtk_tree_model_get_iter_first (model, &iter))
     {
@@ -1196,8 +1195,8 @@ recipient_dlg_get_keys (RecipientDlg *dialog, gpgme_protocol_t *r_protocol)
               g_debug ("key list grew unexpectedly\n");
               break;
             }
-          
-          gtk_tree_model_get (model, &iter, 
+
+          gtk_tree_model_get (model, &iter,
                               RECPLIST_MAILBOX, &mailbox,
                               RECPLIST_USERDATA, &info,
                               -1);

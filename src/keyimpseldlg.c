@@ -114,7 +114,7 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
     }
 
   windowSelect = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (windowSelect), _("Select keys to import"));
+  gpa_window_set_title (GTK_WINDOW (windowSelect), _("Select keys to import"));
   dialog.window = windowSelect;
   g_signal_connect (G_OBJECT (windowSelect), "destroy",
 		    G_CALLBACK (key_import_selection_destroy), NULL);

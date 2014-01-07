@@ -164,16 +164,16 @@ alert_dialog_cb (GpaCardManager *cardman, gchar *msg)
 static void
 update_title (GpaCardManager *cardman)
 {
-  const char *title = _("GNU Privacy Assistant - Card Manager");
+  const char *title = _("Card Manager");
 
   if (cardman->cardtype == G_TYPE_NONE)
-    gtk_window_set_title (GTK_WINDOW (cardman), title);
+    gpa_window_set_title (GTK_WINDOW (cardman), title);
   else
     {
       char *tmp;
 
       tmp = g_strdup_printf ("%s (%s)", title, cardman->cardtypename);
-      gtk_window_set_title (GTK_WINDOW (cardman), tmp);
+      gpa_window_set_title (GTK_WINDOW (cardman), tmp);
       xfree (tmp);
     }
 }
