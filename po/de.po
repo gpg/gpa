@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"PO-Revision-Date: 2012-05-02 13:29+0200\n"
+"PO-Revision-Date: 2014-01-07 23:06+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -24,8 +24,8 @@ msgstr "GPA Meldung"
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
 #, c-format
-msgid "The file %s is %lli%s large.  Do you really  want to open it?"
-msgstr "Die Datei »%s« ist %lli%s groß.  Möchten Sie sie wirklich öffnen?"
+msgid "The file %s is %llu%s large.  Do you really  want to open it?"
+msgstr "Die Datei »%s« ist %llu%s groß.  Möchten Sie sie wirklich öffnen?"
 
 msgid "Save As..."
 msgstr "Speichern unter..."
@@ -95,9 +95,6 @@ msgstr "Dateien"
 
 msgid "Card"
 msgstr "Smartcard"
-
-msgid "GNU Privacy Assistant - Clipboard"
-msgstr "GNU Privacy Assistant - Zwischenablage"
 
 msgid "<b>Main</b>"
 msgstr "<b>Allgemein</b>"
@@ -230,9 +227,6 @@ msgstr "Alle Dateien auswählen"
 msgid "File"
 msgstr "Datei"
 
-msgid "GNU Privacy Assistant - File Manager"
-msgstr "GNU Privacy Assistant - Dateiverwaltung"
-
 msgid "File Manager"
 msgstr "Dateiverwaltung"
 
@@ -353,6 +347,9 @@ msgstr "ASCII-_Verpackung"
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "Die Schlüssel wurden exportiert nach %s."
+
+msgid "Only keys of the same procotol may be exported as a collection."
+msgstr ""
 
 #, c-format
 msgid ""
@@ -656,20 +653,20 @@ msgstr ""
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
-"error. The error was:\n"
+"error at %s:%d. The error was:\n"
 "\n"
 "\t%s\n"
 "\n"
-"This is probably a bug in GPA.\n"
-"GPA will now try to recover from this error."
+"This is either an installation problem or a bug in %s.\n"
+"%s will now try to recover from this error."
 msgstr ""
 "Die GPGME-Biblothek gab eine unerwartete\n"
-"Fehlermeldung zurück:\n"
+"Fehlermeldung zurück (%s:%d):\n"
 "\n"
 "\t%s\n"
 "\n"
-"Dies ist wahrscheinlich ein Fehler in GPA.\n"
-"GPA versucht nun, sich davon wieder zu erholen."
+"Dies ist wahrscheinlich ein Fehler in %s.\n"
+"%s versucht nun, sich davon wieder zu erholen."
 
 #, c-format
 msgid ""
@@ -855,6 +852,9 @@ msgstr "Der Schlüssel ist ausschließlich zum Verschlüsseln verwendbar."
 msgid "This key is useless."
 msgstr "Dieser Schlüssel ist nicht verwendbar."
 
+msgid "A required engine component is not installed."
+msgstr ""
+
 msgid "Calling the crypto engine program failed."
 msgstr "Aufruf der Crypto-Engine fehlgeschlagen."
 
@@ -876,8 +876,11 @@ msgstr "Die Email Adresse ist nicht gültig."
 msgid "Invalid character in comments."
 msgstr "Ungültige Zeichen im Kommentarfeld."
 
-msgid "GPA Error"
-msgstr "GPA Fehler"
+msgid "Error"
+msgstr "Fehler"
+
+msgid "Message"
+msgstr "Meldung"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA ist der GNU Privacy Assistant"
@@ -1270,9 +1273,6 @@ msgstr "Standard-Schlüssel:"
 msgid "No default key selected in the preferences."
 msgstr "Kein Standard-Schlüssel in den Einstellungen ausgewählt."
 
-msgid "GNU Privacy Assistant - Key Manager"
-msgstr "GNU Privacy Assistant - Schlüsselverwaltung"
-
 msgid "Key Manager"
 msgstr "Schlüsselverwaltung"
 
@@ -1365,11 +1365,11 @@ msgid "Sign only _locally"
 msgstr "Nur _lokal signieren"
 
 msgid ""
-"It seems that GPGSM is not installed.\n"
+"It seems that no CMS engine is installed.\n"
 "\n"
 "Temporary disabling support for X.509.\n"
 "\n"
-"Please install GPGSM or invoke this program\n"
+"Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
 
@@ -1770,8 +1770,8 @@ msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 "Die Angaben für \"Automatisches Auffinden von Schlüsseln\" sind nicht gültig."
 
-msgid "GNU Privacy Assistant - Settings"
-msgstr "GNU Privacy Assistant - Einstellungen"
+msgid "Settings"
+msgstr "Einstellungen"
 
 msgid "Level"
 msgstr "Stufe"
@@ -1799,8 +1799,8 @@ msgstr "Signatur: %s"
 msgid "Signatures:"
 msgstr "Signaturen (Beglaubigungen)"
 
-msgid "GNU Privacy Assistant - Card Manager"
-msgstr "GNU Privacy Assistant - Kartenverwaltung"
+msgid "Card Manager"
+msgstr "Kartenverwaltung"
 
 #, c-format
 msgid "%s card detected."
@@ -1851,9 +1851,6 @@ msgstr "Neuen Schlüssel auf Karte erzeugen"
 
 msgid "This card application is not yet supported."
 msgstr "Diese Kartenanwendung wird noch nicht unterstützt."
-
-msgid "Card Manager"
-msgstr "Kartenverwaltung"
 
 msgid "Application selection:"
 msgstr "Anwendungsauswahl:"
@@ -2239,6 +2236,24 @@ msgstr ""
 "können jedoch mit dem Knopf zur Anwendungsauswahl auf eine andere, auf der "
 "Karte verfügbare, Anwendung umschalten."
 
+#~ msgid "GNU Privacy Assistant - Clipboard"
+#~ msgstr "GNU Privacy Assistant - Zwischenablage"
+
+#~ msgid "GNU Privacy Assistant - File Manager"
+#~ msgstr "GNU Privacy Assistant - Dateiverwaltung"
+
+#~ msgid "GPA Error"
+#~ msgstr "GPA Fehler"
+
+#~ msgid "GNU Privacy Assistant - Key Manager"
+#~ msgstr "GNU Privacy Assistant - Schlüsselverwaltung"
+
+#~ msgid "GNU Privacy Assistant - Settings"
+#~ msgstr "GNU Privacy Assistant - Einstellungen"
+
+#~ msgid "GNU Privacy Assistant - Card Manager"
+#~ msgstr "GNU Privacy Assistant - Kartenverwaltung"
+
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "Bitte geben Sie den Passwortsatz für Ihren neuen Schlüssel an:"
 
@@ -2614,9 +2629,6 @@ msgstr ""
 #~ msgid "refresh keyring"
 #~ msgstr "Schlüsselbund auffrischen"
 
-#~ msgid "Settings"
-#~ msgstr "Einstellungen"
-
 #~ msgid "Key Validity"
 #~ msgstr "Gültigkeit des Schlüssels"
 
@@ -2818,9 +2830,6 @@ msgstr ""
 
 #~ msgid "Rename File"
 #~ msgstr "Datei umbenennen"
-
-#~ msgid "Error"
-#~ msgstr "Fehler"
 
 #~ msgid "Close"
 #~ msgstr "Schließen"

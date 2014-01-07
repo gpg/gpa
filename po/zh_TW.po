@@ -23,7 +23,7 @@ msgstr "GPA 訊息"
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
 #, fuzzy, c-format
-msgid "The file %s is %lli%s large.  Do you really  want to open it?"
+msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr ""
 "檔案 %s 已經存在.\n"
 "要進行覆寫嗎?"
@@ -108,10 +108,6 @@ msgstr "檔案"
 
 msgid "Card"
 msgstr ""
-
-#, fuzzy
-msgid "GNU Privacy Assistant - Clipboard"
-msgstr "GNU Privacy Assistant - 檔案管理"
 
 msgid "<b>Main</b>"
 msgstr ""
@@ -246,9 +242,6 @@ msgstr "關閉所有檔案"
 
 msgid "File"
 msgstr "檔案"
-
-msgid "GNU Privacy Assistant - File Manager"
-msgstr "GNU Privacy Assistant - 檔案管理"
 
 #, fuzzy
 msgid "File Manager"
@@ -390,6 +383,9 @@ msgstr "純文字 (&r)"
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "密鑰已被匯出到 %s."
+
+msgid "Only keys of the same procotol may be exported as a collection."
+msgstr ""
 
 #, c-format
 msgid ""
@@ -688,15 +684,15 @@ msgstr ""
 "\n"
 "程式會被終止"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
-"error. The error was:\n"
+"error at %s:%d. The error was:\n"
 "\n"
 "\t%s\n"
 "\n"
-"This is probably a bug in GPA.\n"
-"GPA will now try to recover from this error."
+"This is either an installation problem or a bug in %s.\n"
+"%s will now try to recover from this error."
 msgstr ""
 "GPGME 程式庫回傳非預期的錯誤.\n"
 "錯誤的資料 :\n"
@@ -880,6 +876,9 @@ msgstr "密鑰只可用作加密."
 msgid "This key is useless."
 msgstr "密鑰是不可使用的."
 
+msgid "A required engine component is not installed."
+msgstr ""
+
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
@@ -901,8 +900,13 @@ msgstr ""
 msgid "Invalid character in comments."
 msgstr ""
 
-msgid "GPA Error"
+#, fuzzy
+msgid "Error"
 msgstr "GPA 錯誤"
+
+#, fuzzy
+msgid "Message"
+msgstr "GPA 訊息"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1307,10 +1311,6 @@ msgid "No default key selected in the preferences."
 msgstr ""
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Key Manager"
-msgstr "GNU Privacy Assistant - 檔案管理"
-
-#, fuzzy
 msgid "Key Manager"
 msgstr "檔案管理員"
 
@@ -1405,11 +1405,11 @@ msgid "Sign only _locally"
 msgstr "只是本地上的簽署 (&l)"
 
 msgid ""
-"It seems that GPGSM is not installed.\n"
+"It seems that no CMS engine is installed.\n"
 "\n"
 "Temporary disabling support for X.509.\n"
 "\n"
-"Please install GPGSM or invoke this program\n"
+"Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
 
@@ -1768,9 +1768,8 @@ msgstr "伺服器並不正確"
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 
-#, fuzzy
-msgid "GNU Privacy Assistant - Settings"
-msgstr "GNU Privacy Assistant - 鑰圈編輯器"
+msgid "Settings"
+msgstr "設定"
 
 msgid "Level"
 msgstr "程度"
@@ -1801,8 +1800,8 @@ msgid "Signatures:"
 msgstr "簽署"
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Card Manager"
-msgstr "GNU Privacy Assistant - 檔案管理"
+msgid "Card Manager"
+msgstr "檔案管理員"
 
 #, c-format
 msgid "%s card detected."
@@ -1852,10 +1851,6 @@ msgstr "建立新鑰"
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "操作不支援"
-
-#, fuzzy
-msgid "Card Manager"
-msgstr "檔案管理員"
 
 #, fuzzy
 msgid "Application selection:"
@@ -2219,6 +2214,25 @@ msgid ""
 "on this card."
 msgstr ""
 
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Clipboard"
+#~ msgstr "GNU Privacy Assistant - 檔案管理"
+
+#~ msgid "GNU Privacy Assistant - File Manager"
+#~ msgstr "GNU Privacy Assistant - 檔案管理"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Key Manager"
+#~ msgstr "GNU Privacy Assistant - 檔案管理"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Settings"
+#~ msgstr "GNU Privacy Assistant - 鑰圈編輯器"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Card Manager"
+#~ msgstr "GNU Privacy Assistant - 檔案管理"
+
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "請輸入新鑰的密碼."
 
@@ -2575,9 +2589,6 @@ msgstr ""
 
 #~ msgid "detailed"
 #~ msgstr "詳情"
-
-#~ msgid "Settings"
-#~ msgstr "設定"
 
 #~ msgid "Sign files"
 #~ msgstr "簽署檔案"

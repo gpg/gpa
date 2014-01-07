@@ -24,7 +24,7 @@ msgstr "GPA メッセージ"
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
 #, fuzzy, c-format
-msgid "The file %s is %lli%s large.  Do you really  want to open it?"
+msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr ""
 "同じファイル %s があります\n"
 "上書きしますか?"
@@ -112,10 +112,6 @@ msgstr "ファイル"
 #, fuzzy
 msgid "Card"
 msgstr "クリップボードへコピー (_C)"
-
-#, fuzzy
-msgid "GNU Privacy Assistant - Clipboard"
-msgstr "GNU Privacy Assistant - ファイルマネージャ"
 
 msgid "<b>Main</b>"
 msgstr ""
@@ -253,9 +249,6 @@ msgstr "ファイルをすべて閉じる"
 
 msgid "File"
 msgstr "ファイル"
-
-msgid "GNU Privacy Assistant - File Manager"
-msgstr "GNU Privacy Assistant - ファイルマネージャ"
 
 #, fuzzy
 msgid "File Manager"
@@ -398,6 +391,9 @@ msgstr "アーマ (_A)"
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "鍵が %s にエクスポートされました。"
+
+msgid "Only keys of the same procotol may be exported as a collection."
+msgstr ""
 
 #, c-format
 msgid ""
@@ -696,15 +692,15 @@ msgstr ""
 "\n"
 "このアプリケーションは終了します"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
-"error. The error was:\n"
+"error at %s:%d. The error was:\n"
 "\n"
 "\t%s\n"
 "\n"
-"This is probably a bug in GPA.\n"
-"GPA will now try to recover from this error."
+"This is either an installation problem or a bug in %s.\n"
+"%s will now try to recover from this error."
 msgstr ""
 "GPGME ライブラリが予期せぬエラーを返しました。\n"
 "エラーは以下の通り:\n"
@@ -891,6 +887,9 @@ msgstr "暗号化にのみ使える鍵です。"
 msgid "This key is useless."
 msgstr "この鍵は使えません。"
 
+msgid "A required engine component is not installed."
+msgstr ""
+
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
@@ -913,8 +912,12 @@ msgstr ""
 msgid "Invalid character in comments."
 msgstr ""
 
-msgid "GPA Error"
-msgstr "GPA エラー"
+msgid "Error"
+msgstr "エラー"
+
+#, fuzzy
+msgid "Message"
+msgstr "GPA メッセージ"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1324,10 +1327,6 @@ msgid "No default key selected in the preferences."
 msgstr "保護するファイルが選択されていません"
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Key Manager"
-msgstr "GNU Privacy Assistant - ファイルマネージャ"
-
-#, fuzzy
 msgid "Key Manager"
 msgstr "ファイルマネージャ"
 
@@ -1422,11 +1421,11 @@ msgid "Sign only _locally"
 msgstr "ローカルでだけ署名 (_L)"
 
 msgid ""
-"It seems that GPGSM is not installed.\n"
+"It seems that no CMS engine is installed.\n"
 "\n"
 "Temporary disabling support for X.509.\n"
 "\n"
-"Please install GPGSM or invoke this program\n"
+"Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
 
@@ -1800,9 +1799,8 @@ msgstr "指定された鍵サーバは無効です"
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 
-#, fuzzy
-msgid "GNU Privacy Assistant - Settings"
-msgstr "GNU Privacy Assistant - 鍵束エディタ"
+msgid "Settings"
+msgstr "設定"
 
 msgid "Level"
 msgstr "レベル"
@@ -1833,8 +1831,8 @@ msgid "Signatures:"
 msgstr "署名:"
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Card Manager"
-msgstr "GNU Privacy Assistant - ファイルマネージャ"
+msgid "Card Manager"
+msgstr "ファイルマネージャ"
 
 #, c-format
 msgid "%s card detected."
@@ -1887,10 +1885,6 @@ msgstr "鍵を生成"
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "操作がサポートされていません"
-
-#, fuzzy
-msgid "Card Manager"
-msgstr "ファイルマネージャ"
 
 #, fuzzy
 msgid "Application selection:"
@@ -2257,6 +2251,28 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Clipboard"
+#~ msgstr "GNU Privacy Assistant - ファイルマネージャ"
+
+#~ msgid "GNU Privacy Assistant - File Manager"
+#~ msgstr "GNU Privacy Assistant - ファイルマネージャ"
+
+#~ msgid "GPA Error"
+#~ msgstr "GPA エラー"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Key Manager"
+#~ msgstr "GNU Privacy Assistant - ファイルマネージャ"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Settings"
+#~ msgstr "GNU Privacy Assistant - 鍵束エディタ"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Card Manager"
+#~ msgstr "GNU Privacy Assistant - ファイルマネージャ"
 
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "新しい鍵のためのパスフレーズを入力して下さい。"
@@ -2638,9 +2654,6 @@ msgstr ""
 #~ msgid "detailed"
 #~ msgstr "詳細"
 
-#~ msgid "Settings"
-#~ msgstr "設定"
-
 #~ msgid "Sign files"
 #~ msgstr "ファイルに署名する"
 
@@ -2809,9 +2822,6 @@ msgstr ""
 
 #~ msgid "Rename File"
 #~ msgstr "ファイル名変更"
-
-#~ msgid "Error"
-#~ msgstr "エラー"
 
 #~ msgid "Close"
 #~ msgstr "閉じる"

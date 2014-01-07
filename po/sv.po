@@ -25,8 +25,8 @@ msgstr "GPA-meddelande"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#, c-format
-msgid "The file %s is %lli%s large.  Do you really  want to open it?"
+#, fuzzy, c-format
+msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr "Filen %s är %lli%s stor.  Vill du verkligen öppna den?"
 
 msgid "Save As..."
@@ -98,9 +98,6 @@ msgstr "Filer"
 #, fuzzy
 msgid "Card"
 msgstr "Urklipp"
-
-msgid "GNU Privacy Assistant - Clipboard"
-msgstr "GNU Privacy Assistant - Urklipp"
 
 msgid "<b>Main</b>"
 msgstr "<b>Allmänt</b>"
@@ -233,9 +230,6 @@ msgstr "Markera alla filer"
 msgid "File"
 msgstr "Arkiv"
 
-msgid "GNU Privacy Assistant - File Manager"
-msgstr "GNU Privacy Assistant - Filhanterare"
-
 msgid "File Manager"
 msgstr "Filhanterare"
 
@@ -358,6 +352,9 @@ msgstr "AS_CII-skal"
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "Nycklarna har exporterats till %s."
+
+msgid "Only keys of the same procotol may be exported as a collection."
+msgstr ""
 
 #, c-format
 msgid ""
@@ -659,15 +656,15 @@ msgstr ""
 "\n"
 "Programmet kommer nu att avslutas."
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
-"error. The error was:\n"
+"error at %s:%d. The error was:\n"
 "\n"
 "\t%s\n"
 "\n"
-"This is probably a bug in GPA.\n"
-"GPA will now try to recover from this error."
+"This is either an installation problem or a bug in %s.\n"
+"%s will now try to recover from this error."
 msgstr ""
 "GPGME-biblioteket returnerade ett oväntat\n"
 "fel. Felet var:\n"
@@ -855,6 +852,9 @@ msgstr "Nyckeln kan endast användas för kryptering."
 msgid "This key is useless."
 msgstr "Den här nyckeln är oanvändbar."
 
+msgid "A required engine component is not installed."
+msgstr ""
+
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
@@ -877,8 +877,13 @@ msgstr ""
 msgid "Invalid character in comments."
 msgstr ""
 
-msgid "GPA Error"
+#, fuzzy
+msgid "Error"
 msgstr "GPA-fel"
+
+#, fuzzy
+msgid "Message"
+msgstr "GPA-meddelande"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA är GNU Privacy Assistant."
@@ -1270,10 +1275,6 @@ msgid "No default key selected in the preferences."
 msgstr "Ingen standardnyckel har valts i inställningarna."
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Key Manager"
-msgstr "GNU Privacy Assistant - Filhanterare"
-
-#, fuzzy
 msgid "Key Manager"
 msgstr "Filhanterare"
 
@@ -1370,11 +1371,11 @@ msgid "Sign only _locally"
 msgstr "Signera endast _lokalt"
 
 msgid ""
-"It seems that GPGSM is not installed.\n"
+"It seems that no CMS engine is installed.\n"
 "\n"
 "Temporary disabling support for X.509.\n"
 "\n"
-"Please install GPGSM or invoke this program\n"
+"Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
 
@@ -1756,8 +1757,8 @@ msgstr "URL:en angiven för nyckelservern är inte giltig."
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr "Angivet data för \"Automatisk sökning av nyckel\" är inte giltig."
 
-msgid "GNU Privacy Assistant - Settings"
-msgstr "GNU Privacy Assistant - Inställningar"
+msgid "Settings"
+msgstr "Inställningar"
 
 msgid "Level"
 msgstr "Nivå"
@@ -1787,8 +1788,8 @@ msgid "Signatures:"
 msgstr "Signaturer:"
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Card Manager"
-msgstr "GNU Privacy Assistant - Filhanterare"
+msgid "Card Manager"
+msgstr "Filhanterare"
 
 #, c-format
 msgid "%s card detected."
@@ -1839,10 +1840,6 @@ msgstr "Generera en ny nyckel"
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "Åtgärden stöds inte"
-
-#, fuzzy
-msgid "Card Manager"
-msgstr "Filhanterare"
 
 #, fuzzy
 msgid "Application selection:"
@@ -2209,6 +2206,23 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "GNU Privacy Assistant - Clipboard"
+#~ msgstr "GNU Privacy Assistant - Urklipp"
+
+#~ msgid "GNU Privacy Assistant - File Manager"
+#~ msgstr "GNU Privacy Assistant - Filhanterare"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Key Manager"
+#~ msgstr "GNU Privacy Assistant - Filhanterare"
+
+#~ msgid "GNU Privacy Assistant - Settings"
+#~ msgstr "GNU Privacy Assistant - Inställningar"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Card Manager"
+#~ msgstr "GNU Privacy Assistant - Filhanterare"
 
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "Välj en lösenfras för den nya nyckeln."
@@ -2580,9 +2594,6 @@ msgstr ""
 
 #~ msgid "refresh keyring"
 #~ msgstr "uppdatera nyckelring"
-
-#~ msgid "Settings"
-#~ msgstr "Inställningar"
 
 #~ msgid "Sign files"
 #~ msgstr "Signera filer"

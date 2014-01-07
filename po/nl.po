@@ -21,7 +21,7 @@ msgstr "GPA Bericht"
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
 #, fuzzy, c-format
-msgid "The file %s is %lli%s large.  Do you really  want to open it?"
+msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr ""
 "Het bestand %s bestaat al.\n"
 "Wilt u het bestand overschrijven?"
@@ -109,10 +109,6 @@ msgstr "Bestanden"
 #, fuzzy
 msgid "Card"
 msgstr "Naar _klembord"
-
-#, fuzzy
-msgid "GNU Privacy Assistant - Clipboard"
-msgstr "GNU Privacy Assistant - Bestands beheerder"
 
 msgid "<b>Main</b>"
 msgstr ""
@@ -250,9 +246,6 @@ msgstr "Alle bestanden sluiten"
 
 msgid "File"
 msgstr "Bestand"
-
-msgid "GNU Privacy Assistant - File Manager"
-msgstr "GNU Privacy Assistant - Bestands beheerder"
 
 #, fuzzy
 msgid "File Manager"
@@ -395,6 +388,9 @@ msgstr "ASCII-_Armor"
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "De sleutels werden naar %s geëxporteerd."
+
+msgid "Only keys of the same procotol may be exported as a collection."
+msgstr ""
 
 #, c-format
 msgid ""
@@ -695,15 +691,15 @@ msgstr ""
 "\n"
 "De toepassing zal worden afgesloten"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
-"error. The error was:\n"
+"error at %s:%d. The error was:\n"
 "\n"
 "\t%s\n"
 "\n"
-"This is probably a bug in GPA.\n"
-"GPA will now try to recover from this error."
+"This is either an installation problem or a bug in %s.\n"
+"%s will now try to recover from this error."
 msgstr ""
 "De GPGME bibliotheek gaf een onverwachte fout.\n"
 "Deze fout was:\n"
@@ -893,6 +889,9 @@ msgstr "De sleutel kan alleen gebruikt worden voor versleuteling."
 msgid "This key is useless."
 msgstr "Deze sleutel is waardeloos."
 
+msgid "A required engine component is not installed."
+msgstr ""
+
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
@@ -915,8 +914,12 @@ msgstr ""
 msgid "Invalid character in comments."
 msgstr ""
 
-msgid "GPA Error"
-msgstr "GPA Fout"
+msgid "Error"
+msgstr "Fout"
+
+#, fuzzy
+msgid "Message"
+msgstr "GPA Bericht"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1331,10 +1334,6 @@ msgid "No default key selected in the preferences."
 msgstr "Geen sleutels geselecteerd voor export."
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Key Manager"
-msgstr "GNU Privacy Assistant - Bestands beheerder"
-
-#, fuzzy
 msgid "Key Manager"
 msgstr "bestandsbeheerder"
 
@@ -1431,11 +1430,11 @@ msgid "Sign only _locally"
 msgstr "Onderteken alleen _lokaal"
 
 msgid ""
-"It seems that GPGSM is not installed.\n"
+"It seems that no CMS engine is installed.\n"
 "\n"
 "Temporary disabling support for X.509.\n"
 "\n"
-"Please install GPGSM or invoke this program\n"
+"Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
 
@@ -1808,9 +1807,8 @@ msgstr "De keyserver die u specifieerde is niet geldig"
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 
-#, fuzzy
-msgid "GNU Privacy Assistant - Settings"
-msgstr "GNU Privacy Assistent - Keyring Editor"
+msgid "Settings"
+msgstr "Instellingen"
 
 msgid "Level"
 msgstr "Niveau"
@@ -1841,8 +1839,8 @@ msgid "Signatures:"
 msgstr "Ondertekeningen:"
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Card Manager"
-msgstr "GNU Privacy Assistant - Bestands beheerder"
+msgid "Card Manager"
+msgstr "bestandsbeheerder"
 
 #, c-format
 msgid "%s card detected."
@@ -1894,10 +1892,6 @@ msgstr "Genereer sleutel"
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "Actie niet ondersteund"
-
-#, fuzzy
-msgid "Card Manager"
-msgstr "bestandsbeheerder"
 
 #, fuzzy
 msgid "Application selection:"
@@ -2262,6 +2256,28 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Clipboard"
+#~ msgstr "GNU Privacy Assistant - Bestands beheerder"
+
+#~ msgid "GNU Privacy Assistant - File Manager"
+#~ msgstr "GNU Privacy Assistant - Bestands beheerder"
+
+#~ msgid "GPA Error"
+#~ msgstr "GPA Fout"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Key Manager"
+#~ msgstr "GNU Privacy Assistant - Bestands beheerder"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Settings"
+#~ msgstr "GNU Privacy Assistent - Keyring Editor"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Card Manager"
+#~ msgstr "GNU Privacy Assistant - Bestands beheerder"
 
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "Kies aub een wachtwoord voor de nieuwe sleutel."
@@ -2636,9 +2652,6 @@ msgstr ""
 #~ msgid "detailed"
 #~ msgstr "gedetailleerd"
 
-#~ msgid "Settings"
-#~ msgstr "Instellingen"
-
 #~ msgid "Sign files"
 #~ msgstr "Bestanden ondertekenen"
 
@@ -2806,9 +2819,6 @@ msgstr ""
 
 #~ msgid "Rename File"
 #~ msgstr "Hernoem bestand"
-
-#~ msgid "Error"
-#~ msgstr "Fout"
 
 #~ msgid "Close"
 #~ msgstr "Sluiten"

@@ -27,8 +27,8 @@ msgstr "Message de GPA"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#, c-format
-msgid "The file %s is %lli%s large.  Do you really  want to open it?"
+#, fuzzy, c-format
+msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr "Le fichier %s a une taille de %lli%s. Voulez-vous vraiment l'ouvrir ?"
 
 msgid "Save As..."
@@ -100,9 +100,6 @@ msgstr "Fichiers"
 #, fuzzy
 msgid "Card"
 msgstr "Presse-papiers"
-
-msgid "GNU Privacy Assistant - Clipboard"
-msgstr "Assistant GNU Privacy - Presse-papiers"
 
 msgid "<b>Main</b>"
 msgstr "<b>Principal</b>"
@@ -235,9 +232,6 @@ msgstr "Sélectionner tous les fichiers"
 msgid "File"
 msgstr "Fichier"
 
-msgid "GNU Privacy Assistant - File Manager"
-msgstr "Assistant GNU Privacy - Gestionnaire de fichiers"
-
 msgid "File Manager"
 msgstr "Gestionnaire de fichiers"
 
@@ -361,6 +355,9 @@ msgstr "_Armure"
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "Les clefs ont été exportées dans %s."
+
+msgid "Only keys of the same procotol may be exported as a collection."
+msgstr ""
 
 #, c-format
 msgid ""
@@ -670,15 +667,15 @@ msgstr ""
 "\n"
 "L'application va se terminer"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
-"error. The error was:\n"
+"error at %s:%d. The error was:\n"
 "\n"
 "\t%s\n"
 "\n"
-"This is probably a bug in GPA.\n"
-"GPA will now try to recover from this error."
+"This is either an installation problem or a bug in %s.\n"
+"%s will now try to recover from this error."
 msgstr ""
 "La librairie GPGME a retourné une erreur\n"
 "inopinée. L'erreur était :\n"
@@ -870,6 +867,9 @@ msgstr "La clef peut être utilisée pour fins de chiffrement seulement."
 msgid "This key is useless."
 msgstr "Cette clef est inutilisable."
 
+msgid "A required engine component is not installed."
+msgstr ""
+
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
@@ -892,8 +892,13 @@ msgstr ""
 msgid "Invalid character in comments."
 msgstr ""
 
-msgid "GPA Error"
+#, fuzzy
+msgid "Error"
 msgstr "Erreur GPA"
+
+#, fuzzy
+msgid "Message"
+msgstr "Message de GPA"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA est l'assistant GNU Privacy."
@@ -1292,10 +1297,6 @@ msgid "No default key selected in the preferences."
 msgstr "Aucune clef sélectionnée par défaut dans les préférences"
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Key Manager"
-msgstr "Assistant GNU Privacy - Gestionnaire de fichiers"
-
-#, fuzzy
 msgid "Key Manager"
 msgstr "Gestionnaire de fichiers"
 
@@ -1392,11 +1393,11 @@ msgid "Sign only _locally"
 msgstr "Signer seulement en _local"
 
 msgid ""
-"It seems that GPGSM is not installed.\n"
+"It seems that no CMS engine is installed.\n"
 "\n"
 "Temporary disabling support for X.509.\n"
 "\n"
-"Please install GPGSM or invoke this program\n"
+"Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
 
@@ -1778,8 +1779,8 @@ msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 "La donnée pour « Localiser automatiquement les clefs » n'est pas valide"
 
-msgid "GNU Privacy Assistant - Settings"
-msgstr "Assistant GNU Privacy - Paramètres"
+msgid "Settings"
+msgstr ""
 
 msgid "Level"
 msgstr "Niveau"
@@ -1809,8 +1810,8 @@ msgid "Signatures:"
 msgstr "Signatures :"
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Card Manager"
-msgstr "Assistant GNU Privacy - Gestionnaire de fichiers"
+msgid "Card Manager"
+msgstr "Gestionnaire de fichiers"
 
 #, c-format
 msgid "%s card detected."
@@ -1860,10 +1861,6 @@ msgstr "Générer une nouvelle clef"
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "Opération non supportée"
-
-#, fuzzy
-msgid "Card Manager"
-msgstr "Gestionnaire de fichiers"
 
 #, fuzzy
 msgid "Application selection:"
@@ -2229,6 +2226,23 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "GNU Privacy Assistant - Clipboard"
+#~ msgstr "Assistant GNU Privacy - Presse-papiers"
+
+#~ msgid "GNU Privacy Assistant - File Manager"
+#~ msgstr "Assistant GNU Privacy - Gestionnaire de fichiers"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Key Manager"
+#~ msgstr "Assistant GNU Privacy - Gestionnaire de fichiers"
+
+#~ msgid "GNU Privacy Assistant - Settings"
+#~ msgstr "Assistant GNU Privacy - Paramètres"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Card Manager"
+#~ msgstr "Assistant GNU Privacy - Gestionnaire de fichiers"
 
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "Veuillez choisir un mot de passe pour cette nouvelle clef."

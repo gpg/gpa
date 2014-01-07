@@ -25,8 +25,8 @@ msgstr "رسالة GPA"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#, c-format
-msgid "The file %s is %lli%s large.  Do you really  want to open it?"
+#, fuzzy, c-format
+msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr "الملف %s حجمه %lli%s.  أتريد حقا فتحه؟"
 
 msgid "Save As..."
@@ -107,9 +107,6 @@ msgstr "ملفات"
 #, fuzzy
 msgid "Card"
 msgstr "الحافظة"
-
-msgid "GNU Privacy Assistant - Clipboard"
-msgstr "مساعد خصوصية جنو - الحافظة"
 
 msgid "<b>Main</b>"
 msgstr "<b>الرئيسي</b>"
@@ -243,9 +240,6 @@ msgstr "أغلق كل الملفات"
 msgid "File"
 msgstr "ملف"
 
-msgid "GNU Privacy Assistant - File Manager"
-msgstr "مساعد خصوصية جنو - مدير الملفات"
-
 msgid "File Manager"
 msgstr "مدير الملفات"
 
@@ -377,6 +371,9 @@ msgstr "_درّْع"
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "تم تصدير المفاتيح إلى %s."
+
+msgid "Only keys of the same procotol may be exported as a collection."
+msgstr ""
 
 #, c-format
 msgid ""
@@ -677,15 +674,15 @@ msgstr ""
 "\n"
 "سيُغلق التطبيق"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
-"error. The error was:\n"
+"error at %s:%d. The error was:\n"
 "\n"
 "\t%s\n"
 "\n"
-"This is probably a bug in GPA.\n"
-"GPA will now try to recover from this error."
+"This is either an installation problem or a bug in %s.\n"
+"%s will now try to recover from this error."
 msgstr ""
 "أرجعت مكتبة GMGME عطلا غير متوقع.\n"
 "العطل:\n"
@@ -870,6 +867,9 @@ msgstr "يمكن استخدام المفتاح في التعمية فقط."
 msgid "This key is useless."
 msgstr "لا فائدة لهذا المفتاح."
 
+msgid "A required engine component is not installed."
+msgstr ""
+
 msgid "Calling the crypto engine program failed."
 msgstr ""
 
@@ -892,8 +892,13 @@ msgstr ""
 msgid "Invalid character in comments."
 msgstr ""
 
-msgid "GPA Error"
+#, fuzzy
+msgid "Error"
 msgstr "عطل في GPA"
+
+#, fuzzy
+msgid "Message"
+msgstr "رسالة GPA"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1304,10 +1309,6 @@ msgid "No default key selected in the preferences."
 msgstr "لم يحدد أي مفتاح بدئيا في التفضيلات."
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Key Manager"
-msgstr "مساعد خصوصية جنو - مدير الملفات"
-
-#, fuzzy
 msgid "Key Manager"
 msgstr "مدير الملفات"
 
@@ -1406,11 +1407,11 @@ msgid "Sign only _locally"
 msgstr "وقّع _محليّا فقط"
 
 msgid ""
-"It seems that GPGSM is not installed.\n"
+"It seems that no CMS engine is installed.\n"
 "\n"
 "Temporary disabling support for X.509.\n"
 "\n"
-"Please install GPGSM or invoke this program\n"
+"Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
 
@@ -1768,9 +1769,8 @@ msgstr "خادوم المفاتيح الذي حددته غير صالح"
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 
-#, fuzzy
-msgid "GNU Privacy Assistant - Settings"
-msgstr "مساعد خصوصية جنو - محرر حلقة المفاتيح"
+msgid "Settings"
+msgstr "التضبيطات"
 
 msgid "Level"
 msgstr "المستوى"
@@ -1800,8 +1800,8 @@ msgid "Signatures:"
 msgstr "التوقيعات:"
 
 #, fuzzy
-msgid "GNU Privacy Assistant - Card Manager"
-msgstr "مساعد خصوصية جنو - مدير الملفات"
+msgid "Card Manager"
+msgstr "مدير الملفات"
 
 #, c-format
 msgid "%s card detected."
@@ -1851,10 +1851,6 @@ msgstr "ولّد مفتاحا"
 #, fuzzy
 msgid "This card application is not yet supported."
 msgstr "العمليّة غير مدعومة"
-
-#, fuzzy
-msgid "Card Manager"
-msgstr "مدير الملفات"
 
 #, fuzzy
 msgid "Application selection:"
@@ -2221,6 +2217,24 @@ msgid ""
 "on this card."
 msgstr ""
 
+#~ msgid "GNU Privacy Assistant - Clipboard"
+#~ msgstr "مساعد خصوصية جنو - الحافظة"
+
+#~ msgid "GNU Privacy Assistant - File Manager"
+#~ msgstr "مساعد خصوصية جنو - مدير الملفات"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Key Manager"
+#~ msgstr "مساعد خصوصية جنو - مدير الملفات"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Settings"
+#~ msgstr "مساعد خصوصية جنو - محرر حلقة المفاتيح"
+
+#, fuzzy
+#~ msgid "GNU Privacy Assistant - Card Manager"
+#~ msgstr "مساعد خصوصية جنو - مدير الملفات"
+
 #~ msgid "Please choose a passphrase for the new key."
 #~ msgstr "أدخل عبارة سر للمفتاح الجديد."
 
@@ -2573,6 +2587,3 @@ msgstr ""
 
 #~ msgid "refresh keyring"
 #~ msgstr "أنعش حلقة المفاتيح"
-
-#~ msgid "Settings"
-#~ msgstr "التضبيطات"
