@@ -46,11 +46,11 @@ m4_define([mym4_full_version],[mym4_version[]mym4_betastring])
 
 AC_INIT([gpa],[mym4_full_version], [http://bugs.gnupg.org])
 
-NEED_GPG_ERROR_VERSION=1.4
+NEED_GPG_ERROR_VERSION=1.12
 NEED_LIBASSUAN_API=2
 NEED_LIBASSUAN_VERSION=1.1.0
 NEED_GPGME_API=1
-NEED_GPGME_VERSION=1.2.0
+NEED_GPGME_VERSION=1.5.0
 
 
 AM_CONFIG_HEADER(config.h)
