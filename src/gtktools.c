@@ -114,7 +114,7 @@ gpa_window_message (gchar * message, GtkWidget * messenger)
 
 /* Set a tooltip TEXT to WIDGET.  TEXT and WIDGET may both be NULL.
    This function is useful so that GPA can be build with older GTK+
-   versions.  */ 
+   versions.  */
 void
 gpa_add_tooltip (GtkWidget *widget, const char *text)
 {

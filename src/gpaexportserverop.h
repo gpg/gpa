@@ -20,6 +20,7 @@
 
 #ifndef GPA_EXPORT_SERVER_OP_H
 #define GPA_EXPORT_SERVER_OP_H
+#ifdef ENABLE_KEYSERVER_SUPPORT
 
 #include "gpa.h"
 #include <glib.h>
@@ -57,4 +58,5 @@ GType gpa_export_server_operation_get_type (void) G_GNUC_CONST;
 GpaExportServerOperation*
 gpa_export_server_operation_new (GtkWidget *window, GList *keys);
 
-#endif
+#endif /*ENABLE_KEYSERVER_SUPPORT*/
+#endif /*GPA_EXPORT_SERVER_OP_H*/

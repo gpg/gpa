@@ -23,6 +23,7 @@
 
 #ifndef SERVER_ACCESS_H
 #define SERVER_ACCESS_H
+#ifdef ENABLE_KEYSERVER_SUPPORT
 
 #include <gtk/gtk.h>
 #include <gpgme.h>
@@ -37,4 +38,5 @@ gboolean server_send_keys (const gchar *server, const gchar *keyid,
 gboolean server_get_key (const gchar *server, const gchar *keyid,
                          gpgme_data_t *data, GtkWidget *parent);
 
-#endif
+#endif /*ENABLE_KEYSERVER_SUPPORT*/
+#endif /*SERVER_ACCESS_H*/

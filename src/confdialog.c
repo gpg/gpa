@@ -1553,7 +1553,11 @@ gpa_store_gpgconf_string (const char *cname,
 char *
 gpa_load_configured_keyserver (void)
 {
+#ifdef ENABLE_KEYSERVER_SUPPORT
   return gpa_load_gpgconf_string ("gpg", "keyserver");
+#else
+  return NULL;
+#endif
 }
 
 /* Save the configured keyserver from the backend.  If none is
@@ -1561,5 +1565,7 @@ gpa_load_configured_keyserver (void)
 void
 gpa_store_configured_keyserver (const char *value)
 {
+#ifdef ENABLE_KEYSERVER_SUPPORT
   gpa_store_gpgconf_string ("gpg", "keyserver", value);
+#endif
 }

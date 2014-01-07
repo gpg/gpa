@@ -158,52 +158,55 @@ AC_STDC_HEADERS
 AC_PROG_RANLIB
 AC_CHECK_TOOL(WINDRES, windres, :)
 
-if test -z "$GPG"; then
-  AC_PATH_PROG(GPG, gpg)
-  if test -z "$GPG"; then
-       AC_MSG_ERROR([[
-***
-*** GnuPG not found. Please install GnuPG first.
-*** See   http://www.gnupg.org/download.html
-***
-  ]])
-  fi
-fi
-
 
 #
 #  Options to disable features
 #
-enable_card_manager=yes
+card_manager=yes
+AC_MSG_CHECKING([whether to build the card manager])
 AC_ARG_ENABLE(card-manager,
               AC_HELP_STRING([--disable-card-manager],
                              [build without the card manager]),
-              enable_card_manager=$enableval)
-AC_MSG_RESULT($enable_card_manager)
-if test "$enable_card_manager" = yes ; then
+              card_manager=$enableval)
+AC_MSG_RESULT($card_manager)
+if test "$card_manager" = yes ; then
   AC_DEFINE(ENABLE_CARD_MANAGER, 1, [Include the card manager in the build])
 fi
-AM_CONDITIONAL(ENABLE_CARD_MANAGER, test "$enable_card_manager" = yes)
+AM_CONDITIONAL(ENABLE_CARD_MANAGER, test "$card_manager" = yes)
+
+keyserver_support=yes
+AC_MSG_CHECKING([whether to include keyserver support])
+AC_ARG_ENABLE(keyserver-support,
+              AC_HELP_STRING([--disable-keyserver-support],
+                             [build without keyserver support]),
+              keyserver_support=$enableval)
+AC_MSG_RESULT($keyserver_support)
+if test "$keyserver_support" = yes ; then
+  AC_DEFINE(ENABLE_KEYSERVER_SUPPORT, 1,
+            [Include keyserver support in the build])
+fi
+AM_CONDITIONAL(ENABLE_KEYSERVER_SUPPORT, test "$keyserver_support" = yes)
 
 
 #
 # Find the keyserver plugins. Assume that gpgkeys_ldap is always available
 #
-AC_PATH_PROGS(GPGKEYS_LDAP, gpg2keys_ldap gpgkeys_ldap,
-             [${libexecdir}/gnupg/gpg2keys_ldap],
-             [$PATH:/usr/libexec/gnupg:/usr/lib/gnupg2:/usr/lib/gnupg])
-KEYSERVER_HELPERS_DIR=`dirname $GPGKEYS_LDAP`
-if test -z "$KEYSERVER_HELPERS_DIR"; then
+if test "$keyserver_support" = yes ; then
+  AC_PATH_PROGS(GPGKEYS_LDAP, gpg2keys_ldap gpgkeys_ldap,
+               [${libexecdir}/gnupg/gpg2keys_ldap],
+               [$PATH:/usr/libexec/gnupg:/usr/lib/gnupg2:/usr/lib/gnupg])
+  KEYSERVER_HELPERS_DIR=`dirname $GPGKEYS_LDAP`
+  if test -z "$KEYSERVER_HELPERS_DIR"; then
        AC_MSG_ERROR([[
 ***
 *** Keyserver helpers not found. They should be contained in the GnuPG package.
 ***
-  ]])
+    ]])
+  fi
+  AC_DEFINE_UNQUOTED(KEYSERVER_HELPERS_DIR,
+                     "$KEYSERVER_HELPERS_DIR", [Path to keyserver helper tools])
 fi
 
-AC_DEFINE_UNQUOTED(GPG_PATH, "$GPG", [Path to the gpg binary.])
-AC_DEFINE_UNQUOTED(KEYSERVER_HELPERS_DIR,
-		   "$KEYSERVER_HELPERS_DIR", [Path to keyserver helper tools])
 
 dnl
 dnl Checks for compiler features
@@ -397,6 +400,11 @@ if test "$GCC" = yes; then
        CFLAGS="$CFLAGS -mms-bitfields"
     fi
 fi
+
+
+#
+# Define name strings
+AC_DEFINE_UNQUOTED(GPA_NAME, "GPA", [The name of thsi program])
 
 
 #

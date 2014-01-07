@@ -81,8 +81,10 @@ _gpa_gpgme_error (gpg_error_t err, const char *file, int line)
 }
 
 
+/* (Please use the gpa_gpgme_warning macros).  */
 void
-gpa_gpgme_warning_ext (gpg_error_t err, const char *desc)
+_gpa_gpgme_warning (gpg_error_t err, const char *desc,
+                    const char *file, int line)
 {
   char *argbuf = NULL;
   const char *arg;
@@ -100,21 +102,16 @@ gpa_gpgme_warning_ext (gpg_error_t err, const char *desc)
 
   message = g_strdup_printf
     (_("The GPGME library returned an unexpected\n"
-       "error. The error was:\n\n"
+       "error at %s:%d. The error was:\n\n"
        "\t%s\n\n"
-       "This is probably a bug in GPA.\n"
-       "GPA will now try to recover from this error."),
-     arg);
+       "This is either an installation problem or a bug in %s.\n"
+       "%s will now try to recover from this error."),
+     strip_path (file), line, arg, GPA_NAME, GPA_NAME);
   g_free (argbuf);
   gpa_window_error (message, NULL);
   g_free (message);
 }
 
-void
-gpa_gpgme_warning (gpg_error_t err)
-{
-  gpa_gpgme_warning_ext (err, NULL);
-}
 
 /* Initialize a gpgme_ctx_t for use with GPA.  */
 gpgme_ctx_t
@@ -1469,7 +1466,14 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
     argv[0] = freeme = get_gpg_connect_agent_path ();
   else
     argv[0] = NULL;
-  g_return_val_if_fail (argv[0], gpg_error (GPG_ERR_INV_ARG));
+
+  if (!argv[0])
+    {
+      gpa_window_error (_("A required engine component is not installed."),
+                        NULL);
+      return gpg_error (GPG_ERR_INV_ARG);
+    }
+
   argc = 1;
   if (protocol != GPGME_PROTOCOL_GPGCONF
       && protocol != GPGME_PROTOCOL_ASSUAN)

@@ -20,6 +20,7 @@
 
 #ifndef GPA_IMPORT_SERVER_OP_H
 #define GPA_IMPORT_SERVER_OP_H
+#ifdef ENABLE_KEYSERVER_SUPPORT
 
 #include "gpa.h"
 #include <glib.h>
@@ -57,4 +58,5 @@ GType gpa_import_server_operation_get_type (void) G_GNUC_CONST;
 GpaImportServerOperation*
 gpa_import_server_operation_new (GtkWidget *window);
 
-#endif
+#endif /*ENABLE_KEYSERVER_SUPPORT*/
+#endif /*GPA_IMPORT_SERVER_OP_H*/

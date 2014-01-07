@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>. 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -78,7 +78,7 @@
 
 
 /* Object's class definition.  */
-struct _GpaKeyManagerClass 
+struct _GpaKeyManagerClass
 {
   GtkWindowClass parent_class;
 };
@@ -102,7 +102,7 @@ struct _GpaKeyManager
      nonzero whenever a handler is currently set and zero
      otherwise.  */
   guint details_idle_id;
-  
+
   /* Labels in the status bar.  */
   GtkWidget *status_label;
   GtkWidget *status_key_user;
@@ -145,7 +145,7 @@ static void gpa_key_manager_finalize (GObject *object);
 
 
 
-/************************************************************ 
+/************************************************************
  *******************   Implementation   *********************
  ************************************************************/
 
@@ -155,12 +155,12 @@ static void gpa_key_manager_finalize (GObject *object);
    as well) should know when they should be sensitive or not.  The
    implementation here is very simple and quite specific for the
    key manager's needs.
-  
+
    We maintain a list of sensitive widgets each of which has a
    sensitivity callback associated with them as the "gpa_sensitivity"
    data.  The callback returns TRUE when the widget should be
    sensitive and FALSE otherwise.
-  
+
    Whenever the selection in the key list widget changes we call
    update_selection_sensitive_actions which iterates through the
    widgets in the list, calls the sensitivity callback and changes the
@@ -208,7 +208,7 @@ static void
 disable_selection_sensitive_actions (GpaKeyManager *self)
 {
   GList *cur;
-  
+
   cur = self->selection_sensitive_actions;
   while (cur)
     {
@@ -270,7 +270,7 @@ key_manager_has_private_selected (gpointer param)
 {
   GpaKeyManager *self = param;
 
-  return gpa_keylist_has_single_secret_selection 
+  return gpa_keylist_has_single_secret_selection
     (GPA_KEYLIST(self->keylist));
 }
 
@@ -291,7 +291,7 @@ static void
 gpa_key_manager_changed_wot_cb (gpointer data)
 {
   GpaKeyManager *self = data;
-  gpa_keylist_start_reload (self->keylist);  
+  gpa_keylist_start_reload (self->keylist);
 }
 
 
@@ -301,7 +301,7 @@ gpa_key_manager_changed_wot_secret_cb (gpointer data)
   GpaKeyManager *self = data;
 
   gpa_keylist_imported_secret_key (self->keylist);
-  gpa_keylist_start_reload (self->keylist);  
+  gpa_keylist_start_reload (self->keylist);
 }
 
 static void
@@ -309,7 +309,7 @@ gpa_key_manager_key_modified (GpaKeyEditDialog *dialog, gpgme_key_t key,
 				 gpointer data)
 {
   GpaKeyManager *self = data;
-  gpa_keylist_start_reload (self->keylist);  
+  gpa_keylist_start_reload (self->keylist);
 }
 
 
@@ -317,7 +317,7 @@ static void
 gpa_key_manager_new_key_cb (gpointer data, const gchar *fpr)
 {
   GpaKeyManager *self = data;
-  
+
   gpa_keylist_new_key (GPA_KEYLIST (self->keylist), fpr);
 
   gpa_options_update_default_key (gpa_options_get_instance ());
@@ -331,7 +331,7 @@ register_key_operation (GpaKeyManager *self, GpaKeyOperation *op)
 			    G_CALLBACK (gpa_key_manager_changed_wot_cb),
 			    self);
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (g_object_unref), self); 
+		    G_CALLBACK (g_object_unref), self);
 }
 
 
@@ -341,12 +341,12 @@ register_import_operation (GpaKeyManager *self, GpaImportOperation *op)
   g_signal_connect_swapped (G_OBJECT (op), "imported_keys",
 			    G_CALLBACK (gpa_key_manager_changed_wot_cb),
 			    self);
-  g_signal_connect_swapped 
+  g_signal_connect_swapped
     (G_OBJECT (op), "imported_secret_keys",
      G_CALLBACK (gpa_key_manager_changed_wot_secret_cb),
      self);
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (g_object_unref), self); 
+		    G_CALLBACK (g_object_unref), self);
 }
 
 
@@ -357,7 +357,7 @@ register_generate_operation (GpaKeyManager *self, GpaGenKeyOperation *op)
 			    G_CALLBACK (gpa_key_manager_new_key_cb),
 			    self);
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (g_object_unref), self); 
+		    G_CALLBACK (g_object_unref), self);
 }
 
 
@@ -365,7 +365,7 @@ static void
 register_operation (GpaKeyManager *self, GpaOperation *op)
 {
   g_signal_connect (G_OBJECT (op), "completed",
-		    G_CALLBACK (g_object_unref), self); 
+		    G_CALLBACK (g_object_unref), self);
 }
 
 
@@ -383,7 +383,7 @@ key_manager_delete (GtkAction *action, GpaKeyManager *self)
 /* Return true if the public key key has been signed by the key with
    the id key_id, otherwise return FALSE.  */
 static gboolean
-key_has_been_signed (const gpgme_key_t key, 
+key_has_been_signed (const gpgme_key_t key,
 		     const gpgme_key_t signer_key)
 {
   gboolean uid_signed, key_signed;
@@ -402,7 +402,7 @@ key_has_been_signed (const gpgme_key_t key,
 	  uid_signed = TRUE;
       key_signed = key_signed && uid_signed;
     }
-  
+
   return key_signed;
 }
 
@@ -469,7 +469,7 @@ key_manager_edit (GtkAction *action, gpointer param)
 
   dialog = gpa_key_edit_dialog_new (GTK_WIDGET (self), key);
   gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
-      
+
   g_signal_connect (G_OBJECT (dialog), "key_modified",
 		    G_CALLBACK (gpa_key_manager_key_modified), self);
   gtk_widget_show_all (dialog);
@@ -524,6 +524,7 @@ key_manager_export (GtkAction *action, gpointer param)
 
 
 /* Import a key from the keyserver.  */
+#ifdef ENABLE_KEYSERVER_SUPPORT
 static void
 key_manager_retrieve (GtkAction *action, gpointer param)
 {
@@ -533,9 +534,11 @@ key_manager_retrieve (GtkAction *action, gpointer param)
   op = gpa_import_server_operation_new (GTK_WIDGET (self));
   register_import_operation (self, GPA_IMPORT_OPERATION (op));
 }
+#endif /*ENABLE_KEYSERVER_SUPPORT*/
 
 
 /* Send a key to the keyserver.  */
+#ifdef ENABLE_KEYSERVER_SUPPORT
 static void
 key_manager_send (GtkAction *action, gpointer param)
 {
@@ -552,6 +555,7 @@ key_manager_send (GtkAction *action, gpointer param)
   op = gpa_export_server_operation_new (GTK_WIDGET (self), selection);
   register_operation (self, GPA_OPERATION (op));
 }
+#endif /*ENABLE_KEYSERVER_SUPPORT*/
 
 
 /* Backup the default keys.  */
@@ -616,7 +620,7 @@ keyring_selection_update_actions (GpaKeyManager *self)
 {
   update_selection_sensitive_actions (self);
   keyring_update_details (self);
-}  
+}
 
 
 /* Callback for key listings invoked with the "next_key" signal.  Used
@@ -635,11 +639,11 @@ key_manager_key_listed (GpaContext *ctx, gpgme_key_t key, gpointer param)
 
 /* FIXME: CHECK! Signal handler for selection changes. */
 static void
-key_manager_selection_changed (GtkTreeSelection *treeselection, 
+key_manager_selection_changed (GtkTreeSelection *treeselection,
 				  gpointer param)
 {
   GpaKeyManager *self = param;
-  
+
   /* Some other piece of the keyring wants us to ignore this signal.  */
   if (self->freeze_selection)
     return;
@@ -657,7 +661,7 @@ key_manager_selection_changed (GtkTreeSelection *treeselection,
     gpgme_op_keylist_end (self->ctx->ctx);
 
   /* Load the new one.  */
-  if (gpa_keylist_has_single_selection (self->keylist)) 
+  if (gpa_keylist_has_single_selection (self->keylist))
     {
       gpg_error_t err;
       GList *selection;
@@ -673,12 +677,12 @@ key_manager_selection_changed (GtkTreeSelection *treeselection,
          because the protocol should not be changed before the
          gpgme_op_keylist_end.  Saving and restoring the keylist mode
          is okay. */
-      gpgme_set_keylist_mode (self->ctx->ctx, 
-			      (old_mode 
+      gpgme_set_keylist_mode (self->ctx->ctx,
+			      (old_mode
                                | GPGME_KEYLIST_MODE_SIGS
                                | GPGME_KEYLIST_MODE_VALIDATE));
       gpgme_set_protocol (self->ctx->ctx, key->protocol);
-      err = gpgme_op_keylist_start (self->ctx->ctx, key->subkeys->fpr, 
+      err = gpgme_op_keylist_start (self->ctx->ctx, key->subkeys->fpr,
 				    FALSE);
       if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	gpa_gpgme_warning (err);
@@ -737,7 +741,7 @@ key_manager_mapped (gpointer param)
 	  asked_about_key_generation = TRUE;
         }
       else if (!asked_about_key_backup
-               && !gpa_options_get_backup_generated 
+               && !gpa_options_get_backup_generated
 	       (gpa_options_get_instance ())
                && !gpa_options_get_default_key (gpa_options_get_instance()))
         {
@@ -760,8 +764,8 @@ key_manager_mapped (gpointer param)
 	  gtk_widget_destroy (dialog);
           if (response == GTK_RESPONSE_OK)
 	    {
-	      GpaBackupOperation *op = gpa_backup_operation_new 
-		(GTK_WIDGET (self), gpa_options_get_default_key 
+	      GpaBackupOperation *op = gpa_backup_operation_new
+		(GTK_WIDGET (self), gpa_options_get_default_key
 		 (gpa_options_get_instance ()));
 	      register_operation (self, GPA_OPERATION (op));
 	    }
@@ -827,7 +831,7 @@ static void
 key_manager_refresh (GtkAction *action, gpointer param)
 {
   GpaKeyManager *self = param;
-  
+
   gpa_keylist_start_reload (self->keylist);
 }
 
@@ -867,7 +871,9 @@ key_manager_action_new (GpaKeyManager *self,
       { "File", NULL, N_("_File"), NULL },
       { "Edit", NULL, N_("_Edit"), NULL },
       { "Keys", NULL, N_("_Keys"), NULL },
+#ifdef ENABLE_KEYSERVER_SUPPORT
       { "Server", NULL, N_("_Server"), NULL },
+#endif
 
       /* File menu.  */
       { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
@@ -907,11 +913,13 @@ key_manager_action_new (GpaKeyManager *self,
 	N_("Backup key"), G_CALLBACK (key_manager_backup) },
 
       /* Server menu.  */
+#ifdef ENABLE_KEYSERVER_SUPPORT
       { "ServerRetrieve", NULL, N_("_Retrieve Keys..."), NULL,
-	N_("Retrieve keys from server"),
-	G_CALLBACK (key_manager_retrieve) },
+        N_("Retrieve keys from server"),
+        G_CALLBACK (key_manager_retrieve) },
       { "ServerSend", NULL, N_("_Send Keys..."), NULL,
-	N_("Send keys to server"), G_CALLBACK (key_manager_send) }
+        N_("Send keys to server"), G_CALLBACK (key_manager_send) }
+#endif /*ENABLE_KEYSERVER_SUPPORT*/
     };
 
   static const GtkRadioActionEntry radio_entries[] =
@@ -958,10 +966,12 @@ key_manager_action_new (GpaKeyManager *self,
     "      <menuitem action='WindowsClipboard'/>"
     "      <menuitem action='WindowsCardManager'/>"
     "    </menu>"
+#ifdef ENABLE_KEYSERVER_SUPPORT
     "    <menu action='Server'>"
     "      <menuitem action='ServerRetrieve'/>"
     "      <menuitem action='ServerSend'/>"
     "    </menu>"
+#endif /*ENABLE_KEYSERVER_SUPPORT*/
     "    <menu action='Help'>"
 #if 0
     "      <menuitem action='HelpContents'/>"
@@ -1000,7 +1010,9 @@ key_manager_action_new (GpaKeyManager *self,
     "    <menuitem action='KeysEditPrivateKey'/>"
     "    <separator/>"
     "    <menuitem action='KeysExport'/>"
+#ifdef ENABLE_KEYSERVER_SUPPORT
     "    <menuitem action='ServerSend'/>"
+#endif
     "    <menuitem action='KeysBackup'/>"
     "  </popup>"
     "</ui>";
@@ -1071,9 +1083,11 @@ key_manager_action_new (GpaKeyManager *self,
   add_selection_sensitive_action (self, action,
                                   key_manager_has_selection);
 
+#ifdef ENABLE_KEYSERVER_SUPPORT
   action = gtk_action_group_get_action (action_group, "ServerSend");
   add_selection_sensitive_action (self, action,
-				  key_manager_has_single_selection);
+                                  key_manager_has_single_selection);
+#endif /*ENABLE_KEYSERVER_SUPPORT*/
 
   action = gtk_action_group_get_action (action_group, "KeysSetOwnerTrust");
   add_selection_sensitive_action (self, action,
@@ -1131,7 +1145,7 @@ idle_update_details (gpointer param)
   /* Set the idle id to NULL to indicate that the idle handler has
      been run.  */
   self->details_idle_id = 0;
-  
+
   /* Return false to indicate that this function shouldn't be called
      again by GTK, only when we expicitly add it again.  */
   return FALSE;
@@ -1169,7 +1183,7 @@ keyring_statusbar_new (GpaKeyManager *self)
   label = gtk_label_new ("");
   self->status_key_user = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-  
+
   return hbox;
 }
 
@@ -1198,11 +1212,11 @@ keyring_update_status_bar (GpaKeyManager *self)
 			  _("No default key selected in the preferences."));
       gtk_label_set_text (GTK_LABEL (self->status_key_user), "");
       gtk_label_set_text (GTK_LABEL (self->status_key_id), "");
-    }     
+    }
 }
 
 
-// FIXME: Check.
+/* FIXME: Check. */
 /* The context menu of the keyring list.  This is the callback for the
    "button_press_event" signal.  */
 static gint
@@ -1213,26 +1227,26 @@ display_popup_menu (GpaKeyManager *self, GdkEvent *event, GpaKeyList *list)
 
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-  
+
   menu = GTK_MENU (self->popup_menu);
-  
+
   if (event->type == GDK_BUTTON_PRESS)
     {
       event_button = (GdkEventButton *) event;
       if (event_button->button == 3)
 	{
-	  GtkTreeSelection *selection = 
+	  GtkTreeSelection *selection =
 	    gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
 	  GtkTreePath *path;
 	  GtkTreeIter iter;
           /* Make sure the clicked key is selected.  */
-	  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (list), 
+	  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (list),
 					     event_button->x,
-					     event_button->y, 
+					     event_button->y,
 					     &path, NULL,
 					     NULL, NULL))
 	    {
-	      gtk_tree_model_get_iter (gtk_tree_view_get_model 
+	      gtk_tree_model_get_iter (gtk_tree_view_get_model
 				       (GTK_TREE_VIEW(list)), &iter, path);
 	      if (! gtk_tree_selection_iter_is_selected (selection, &iter))
 		{
@@ -1242,7 +1256,7 @@ display_popup_menu (GpaKeyManager *self, GdkEvent *event, GpaKeyList *list)
 		  self->freeze_selection--;
 		  gtk_tree_selection_select_path (selection, path);
 		}
-	      gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
+	      gtk_menu_popup (menu, NULL, NULL, NULL, NULL,
 			      event_button->button, event_button->time);
 	    }
 	  return TRUE;
@@ -1307,7 +1321,7 @@ construct_widgets (GpaKeyManager *self)
   /* FIXME: We should have a common function for this.  */
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
-  
+
   icon = gtk_image_new_from_stock (GPA_STOCK_KEYMAN_SIMPLE,
                                    GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
@@ -1352,7 +1366,7 @@ construct_widgets (GpaKeyManager *self)
 
   gtk_container_add (GTK_CONTAINER (scrolled), keylist);
 
-  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection 
+  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection
 			      (GTK_TREE_VIEW (keylist))),
 		    "changed", G_CALLBACK (key_manager_selection_changed),
 		    self);
@@ -1393,7 +1407,7 @@ gpa_key_manager_closed (GtkWidget *widget, gpointer param)
 
 
 
-/************************************************************ 
+/************************************************************
  ******************   Object Management  ********************
  ************************************************************/
 
@@ -1421,13 +1435,13 @@ gpa_key_manager_init (GTypeInstance *instance, void *class_ptr)
 
 static void
 gpa_key_manager_finalize (GObject *object)
-{  
+{
   GpaKeyManager *self = GPA_KEY_MANAGER (object);
 
   g_list_free (self->selection_sensitive_actions);
   self->selection_sensitive_actions = NULL;
 
-  G_OBJECT_CLASS (g_type_class_peek_parent 
+  G_OBJECT_CLASS (g_type_class_peek_parent
                   (GPA_KEY_MANAGER_GET_CLASS (self)))->finalize (object);
 }
 
@@ -1436,7 +1450,7 @@ GType
 gpa_key_manager_get_type (void)
 {
   static GType this_type = 0;
-  
+
   if (!this_type)
     {
       static const GTypeInfo this_info =
@@ -1451,17 +1465,17 @@ gpa_key_manager_get_type (void)
 	  0,    /* n_preallocs */
 	  gpa_key_manager_init,
 	};
-      
+
       this_type = g_type_register_static (GTK_TYPE_WINDOW,
                                           "GpaKeyManager",
                                           &this_info, 0);
     }
-  
+
   return this_type;
 }
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 
@@ -1474,14 +1488,14 @@ gpa_key_manager_get_instance (gboolean *r_created)
     *r_created = !this_instance;
   if (!this_instance)
     {
-      this_instance = g_object_new (GPA_KEY_MANAGER_TYPE, NULL);  
-      //FIXME      load_all_keys (this_instance);
+      this_instance = g_object_new (GPA_KEY_MANAGER_TYPE, NULL);
+      /*FIXME      load_all_keys (this_instance);*/
     }
   return GTK_WIDGET (this_instance);
 }
 
 
-gboolean 
+gboolean
 gpa_key_manager_is_open (void)
 {
   return !!this_instance;

@@ -76,8 +76,12 @@ void _gpa_gpgme_error (gpg_error_t err,
                        const char *file, int line) G_GNUC_NORETURN;
 
 /* The same as gpa_gpgme_error, without quitting.  */
-void gpa_gpgme_warning_ext (gpg_error_t err, const char *desc);
-void gpa_gpgme_warning (gpg_error_t err);
+#define gpa_gpgme_warning_ext(err,desc) \
+         do { _gpa_gpgme_warning (err, desc, __FILE__, __LINE__); } while (0)
+#define gpa_gpgme_warning(err) \
+         do { _gpa_gpgme_warning (err, NULL, __FILE__, __LINE__); } while (0)
+void _gpa_gpgme_warning (gpg_error_t err, const char *desc,
+                         const char *file, int line);
 
 /* Initialize a gpgme_ctx_t for use with GPA.  */
 gpgme_ctx_t gpa_gpgme_new (void);

@@ -1,7 +1,7 @@
 # Makefile.am - Top makefile for GPA.
 # Copyright (C) 2000, 2001  Werner Koch
 # Copyright (C) 2002, 2003, 2004  Miguel Coca
-# Copyright (C) 2005-2013  g10 Code GmbH
+# Copyright (C) 2005-2014  g10 Code GmbH
 #
 # This file is part of GPA.
 #
@@ -83,7 +83,17 @@ else
 gpa_cardman_sources =
 endif
 
-gpa_SOURCES = get-path.h get-path.c \
+if ENABLE_KEYSERVER_SUPPORT
+keyserver_support_sources = \
+		server-access.c     	\
+		gpaimportserverop.c	\
+		gpaexportserverop.c
+else
+keyserver_support_sources =
+endif
+
+gpa_SOURCES = \
+              get-path.h get-path.c \
 	      gpa.c gpa.h i18n.h options.h \
 	      gpawindowkeeper.c gpawindowkeeper.h \
 	      gtktools.c gtktools.h  \
@@ -117,7 +127,7 @@ gpa_SOURCES = get-path.h get-path.c \
 	      keytable.c keytable.h \
 	      gpgmetools.h gpgmetools.c \
 	      gpgmeedit.h gpgmeedit.c \
-	      server-access.h server-access.c \
+	      server-access.h $(keyserver_support_sources) \
 	      settingsdlg.h settingsdlg.c \
 	      passwddlg.h passwddlg.c \
 	      gpacontext.h gpacontext.c \
@@ -144,11 +154,11 @@ gpa_SOURCES = get-path.h get-path.c \
 	      gpaexportop.h gpaexportop.c \
 	      gpaexportfileop.h gpaexportfileop.c \
 	      gpaexportclipop.h gpaexportclipop.c \
-	      gpaexportserverop.h gpaexportserverop.c \
+	      gpaexportserverop.h  \
 	      gpaimportop.h gpaimportop.c \
 	      gpaimportfileop.h gpaimportfileop.c \
 	      gpaimportclipop.h gpaimportclipop.c \
-	      gpaimportserverop.h gpaimportserverop.c \
+	      gpaimportserverop.h  \
 	      gpagenkeyop.h gpagenkeyop.c \
 	      gpagenkeyadvop.h gpagenkeyadvop.c \
 	      gpagenkeysimpleop.h gpagenkeysimpleop.c \
