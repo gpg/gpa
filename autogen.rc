@@ -1,0 +1,14 @@
+# autogen.sh configuration for GPA                          -*- sh -*-
+
+configure_opts="
+  --with-zlib=@SYSROOT@
+  --with-gpg-error-prefix=@SYSROOT@
+  --with-gpgme-prefix=@SYSROOT@
+  --with-libassuan-prefix=@SYSROOT@
+  --with-libiconv-prefix=@SYSROOT@
+  SYSROOT=\"@SYSROOT@\"
+  PKG_CONFIG=\"@SYSROOT@/bin/pkg-config\"
+  PKG_CONFIG_LIBDIR=\"@SYSROOT@/lib/pkgconfig\"
+  "
+
+final_info="./configure --enable-maintainer-mode && make"

@@ -24,7 +24,7 @@ AUTOMAKE_OPTIONS = dist-bzip2
 SUBDIRS = m4 src po pixmaps doc
 
 EXTRA_DIST = 								\
-	autogen.sh TODO to-utf8 gpa.spec 			        \
+	autogen.sh autogen.rc TODO to-utf8 gpa.spec 			\
 	gpa.desktop gpa.png gpadefs.h.in      				\
 	po/ChangeLog-2011 pixmaps/ChangeLog-2011 ChangeLog-2011 	\
 	m4/ChangeLog-2011 src/ChangeLog-2011 st-fonts/ChangeLog-2011
