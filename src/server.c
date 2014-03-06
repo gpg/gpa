@@ -1284,7 +1284,7 @@ impl_encrypt_sign_files (assuan_context_t ctx, int encr, int sign)
   if (encr && sign)
     op = (GpaFileOperation *)
       gpa_file_encrypt_sign_operation_new (NULL, ctrl->files, FALSE);
-  if (encr)
+  else if (encr)
     op = (GpaFileOperation *)
       gpa_file_encrypt_operation_new (NULL, ctrl->files, FALSE);
   else
