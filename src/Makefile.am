@@ -58,6 +58,10 @@ endif
 
 
 bin_PROGRAMS = gpa
+if HAVE_W32_SYSTEM
+ bin_PROGRAMS += launch-gpa
+endif
+
 noinst_PROGRAMS = dndtest
 
 AM_CPPFLAGS = -I$(top_srcdir)/intl -I$(top_srcdir)/pixmaps
@@ -69,6 +73,11 @@ LDADD = $(GPGME_LIBS) $(LIBASSUAN_LIBS) $(GPG_ERROR_LIBS) \
         $(GTK_LIBS) $(LIBINTL) $(NETLIBS)
 gpa_LDFLAGS = $(gpa_res_ldflag)
 gpa_DEPENDENCIES = $(gpa_deps)
+
+if HAVE_W32_SYSTEM
+launch_gpa_SOURCES = launch-gpa.c
+launch_gpa_LDFLAGS = -mwindows
+endif
 
 if ENABLE_CARD_MANAGER
 gpa_cardman_sources = \

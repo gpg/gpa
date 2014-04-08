@@ -1442,7 +1442,27 @@ gpg_simple_stdio_cb (GIOChannel *channel, GIOCondition condition,
    is true).  EOF is send to this callback by passing a LINE as NULL.
    The callback may use this for cleanup.  If the callback returns
    FALSE, an EOF is forced so that the callback is called once more
-   with LINE set to NULL.  */
+   with LINE set to NULL.
+
+   This function is used to run
+
+    gpgsm --learn-card
+    gpgconf --list-dirs
+    gpg-connect-agent NOP /bye
+
+   The problem is that under Windows g_spawn does not allow to specify
+   flags for the underlying CreateProcess.  Thus it is not possible to
+   create a process detached (i.e. without a console); the result is
+   that a windows pops up.  I can see two solutions: (1) Use a wrapper
+   process to start them detached. or (2) move the required function
+   into GPGME and use that new API.
+
+   With the latest GnuPG we can even forget about gpg-connect-agent
+   and use "gpgconf --launch gpg-agent" instead.  However that is no
+   solution if we are required to use an old gnupg.
+
+
+  */
 gpg_error_t
 gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
                               void *cb_arg, gpgme_protocol_t protocol,
