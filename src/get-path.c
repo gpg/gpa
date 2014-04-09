@@ -147,81 +147,19 @@ w32_shgetfolderpath (HWND a, int b, HANDLE c, DWORD d, LPSTR e)
 #endif	/* G_OS_WIN32 */
 
 
-
-
 
-struct homedir_from_gpgconf_s
-{
-  GMainLoop *loop;
-  char *homedir;
-};
-
-static gboolean
-homedir_from_gpgconf_parser (void *opaque, char *line)
-{
-  struct homedir_from_gpgconf_s *parm = opaque;
-  char *value, *p;
-
-  if (!line)
-    {
-      /* We are finished with the command.  Stop the loop.  */
-      g_main_loop_quit (parm->loop);
-      return FALSE; /* (The return code does not matter here.)  */
-    }
-
-  value = strchr (line, ':');
-  if (!value)
-    return TRUE; /* Invalid line - keep on running.  */;
-  *value++ = 0;
-  if (strcmp (line, "homedir"))
-    return TRUE; /* Not the right item - keep on running.  */
-
-  p = strchr (value, ':');
-  if (p)
-    *p = 0;
-  decode_percent_string (value);
-  parm->homedir = g_strdup (value);
-  return FALSE; /* Ready - force an EOF.  */
-}
-
-
-/* Retrieve the default home directory via gpgconf and return it as a
-   malloced string.  If this is not possible, return NULL.  */
-static char *
-homedir_from_gpgconf (void)
-{
-  struct homedir_from_gpgconf_s parm;
-
-  memset (&parm, 0, sizeof parm);
-
-  parm.loop = g_main_loop_new (NULL, TRUE);
-
-  if (gpa_start_simple_gpg_command
-      (homedir_from_gpgconf_parser, &parm,
-       GPGME_PROTOCOL_GPGCONF, 0, "--list-dirs", NULL))
-    {
-      g_main_loop_unref (parm.loop);
-      return NULL;
-    }
-
-  g_main_loop_run (parm.loop);
-  g_main_loop_unref (parm.loop);
-  return parm.homedir;
-}
-
-
 /* Get the path to the default home directory.  */
 gchar *
 default_homedir (void)
 {
-  gchar *dir;
+  const char *s;
+  gchar *dir = NULL;
 
-  dir = homedir_from_gpgconf ();
-  if (dir)
-    {
-      g_debug ("Found homedir '%s' via gpgconf", dir);
-      return dir;
-    }
+  s = gpgme_get_dirinfo ("homedir");
+  if (s)
+    return g_strdup (s);
+
+  /* No gpgconf installed.  That is we are using GnuPG-1.  */
 
   /* g_getenv returns string in filename encoding.  */
   dir = (gchar *) g_getenv ("GNUPGHOME");
