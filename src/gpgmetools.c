@@ -1562,8 +1562,29 @@ gpa_start_simple_gpg_command (gboolean (*cb)(void *opaque, char *line),
 void
 gpa_start_agent (void)
 {
-  gpa_start_simple_gpg_command (NULL, NULL, GPGME_PROTOCOL_ASSUAN, 1,
-                                "NOP", "/bye", NULL);
+  gpg_error_t err;
+  gpgme_ctx_t ctx;
+  char *pgm;
+  const char *argv[3];
+
+  pgm = get_gpg_connect_agent_path ();
+  if (!pgm)
+    {
+      g_message ("tool to start the agent is not available");
+      return;
+    }
+
+  ctx = gpa_gpgme_new ();
+  gpgme_set_protocol (ctx, GPGME_PROTOCOL_SPAWN);
+  argv[0] = "";   /* Auto-insert the basename.  */
+  argv[1] = "NOP";
+  argv[2] = NULL;
+  err = gpgme_op_spawn (ctx, pgm, argv, NULL, NULL, NULL, GPGME_SPAWN_DETACHED);
+  if (err)
+    g_message ("error running '%s': %s", pgm, gpg_strerror (err));
+  g_free (pgm);
+  gpgme_release (ctx);
+
 }
 
 
