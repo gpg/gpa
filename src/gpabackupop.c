@@ -146,7 +146,7 @@ static void
 gpa_backup_operation_class_init (GpaBackupOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_backup_operation_constructor;
@@ -157,13 +157,13 @@ gpa_backup_operation_class_init (GpaBackupOperationClass *klass)
   /* Properties */
   g_object_class_install_property (object_class,
 				   PROP_KEY,
-				   g_param_spec_pointer 
+				   g_param_spec_pointer
 				   ("key", "Key",
 				    "Key",
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
 				   PROP_FINGERPRINT,
-				   g_param_spec_pointer 
+				   g_param_spec_pointer
 				   ("fpr", "fpr",
 				    "Fingerprint",
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
@@ -173,7 +173,7 @@ GType
 gpa_backup_operation_get_type (void)
 {
   static GType file_operation_type = 0;
-  
+
   if (!file_operation_type)
     {
       static const GTypeInfo file_operation_info =
@@ -188,12 +188,12 @@ gpa_backup_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_backup_operation_init,
       };
-      
+
       file_operation_type = g_type_register_static (GPA_OPERATION_TYPE,
 						    "GpaBackupOperation",
 						    &file_operation_info, 0);
     }
-  
+
   return file_operation_type;
 }
 
@@ -259,7 +259,8 @@ gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id)
     }
 
   /* Set the default file name.  */
-  default_comp = g_strdup_printf ("secret-key-%s.asc", key_id);
+  default_comp = g_strdup_printf ("%s/secret-key-%s.asc",
+                                  gnupg_homedir, key_id);
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), default_comp);
   g_free (default_comp);
 
@@ -308,15 +309,15 @@ gpa_backup_operation_new (GtkWidget *window, gpgme_key_t key)
   return op;
 }
 
-GpaBackupOperation* 
+GpaBackupOperation*
 gpa_backup_operation_new_from_fpr (GtkWidget *window, const gchar *fpr)
 {
   GpaBackupOperation *op;
-  
+
   op = g_object_new (GPA_BACKUP_OPERATION_TYPE,
 		     "window", window,
 		     "fpr", fpr,
 		     NULL);
-  
+
   return op;
 }
