@@ -56,6 +56,7 @@ typedef enum
   GPA_KEYLIST_COLUMN_IMAGE,
   GPA_KEYLIST_COLUMN_KEYTYPE,
   GPA_KEYLIST_COLUMN_KEYID,
+  GPA_KEYLIST_COLUMN_CREATED,
   GPA_KEYLIST_COLUMN_EXPIRY,
   GPA_KEYLIST_COLUMN_OWNERTRUST,
   GPA_KEYLIST_COLUMN_VALIDITY,
@@ -64,6 +65,7 @@ typedef enum
   GPA_KEYLIST_COLUMN_KEY,
   /* These columns are used only internally for sorting */
   GPA_KEYLIST_COLUMN_HAS_SECRET,
+  GPA_KEYLIST_COLUMN_CREATED_TS,
   GPA_KEYLIST_COLUMN_EXPIRY_TS,
   GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE,
   GPA_KEYLIST_COLUMN_VALIDITY_VALUE,
@@ -199,8 +201,10 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
+			      G_TYPE_STRING,
 			      G_TYPE_POINTER,
 			      G_TYPE_INT,
+			      G_TYPE_ULONG,
 			      G_TYPE_ULONG,
 			      G_TYPE_ULONG,
 			      G_TYPE_LONG);
@@ -423,7 +427,7 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
   GtkListStore *store;
   GtkTreeIter iter;
   const gchar *keyid, *ownertrust, *validity;
-  gchar *userid, *expiry;
+  gchar *userid, *created, *expiry;
   gboolean has_secret;
   long int val_value;
   const char *keytype;
@@ -471,6 +475,7 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
   keyid = gpa_gpgme_key_get_short_keyid (key);
   keytype = (key->protocol == GPGME_PROTOCOL_OpenPGP? "P" :
              key->protocol == GPGME_PROTOCOL_CMS? "X" : "?");
+  created = gpa_creation_date_string (key->subkeys->timestamp);
   expiry = gpa_expiry_date_string (key->subkeys->expires);
   ownertrust = gpa_key_ownertrust_string (key);
   validity = gpa_key_validity_string (key);
@@ -503,16 +508,20 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
   gtk_list_store_set (store, &iter,
 		      GPA_KEYLIST_COLUMN_KEYTYPE, keytype,
 		      GPA_KEYLIST_COLUMN_KEYID, keyid,
+		      GPA_KEYLIST_COLUMN_CREATED, created,
 		      GPA_KEYLIST_COLUMN_EXPIRY, expiry,
 		      GPA_KEYLIST_COLUMN_OWNERTRUST, ownertrust,
 		      GPA_KEYLIST_COLUMN_VALIDITY, validity,
 		      GPA_KEYLIST_COLUMN_USERID, userid,
 		      GPA_KEYLIST_COLUMN_KEY, key,
 		      GPA_KEYLIST_COLUMN_HAS_SECRET, has_secret,
+		      GPA_KEYLIST_COLUMN_CREATED_TS, key->subkeys->timestamp,
+
 		      /* Set "no expiration" to a large value for sorting */
 		      GPA_KEYLIST_COLUMN_EXPIRY_TS,
 		      key->subkeys->expires ?
 		      key->subkeys->expires : G_MAXULONG,
+
 		      GPA_KEYLIST_COLUMN_OWNERTRUST_VALUE,
 		      key->owner_trust,
 		      /* Set revoked and expired keys to "never trust"
@@ -524,6 +533,7 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
 		      -1);
   /* Clean up */
   g_free (userid);
+  g_free (created);
   g_free (expiry);
 }
 
@@ -623,6 +633,16 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
   gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_KEYID);
   gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes
+    (NULL, renderer, "text", GPA_KEYLIST_COLUMN_CREATED, NULL);
+  gpa_set_column_title
+    (column, _("Created"),
+     _("The Creation Date is the date the certificate was created."));
+  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
+  gtk_tree_view_column_set_sort_column_id
+    (column, GPA_KEYLIST_COLUMN_CREATED_TS);
+  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   if (detailed)
     {
