@@ -282,23 +282,24 @@ gpa_backup_operation_idle_cb (gpointer data)
   GpaBackupOperation *op = data;
   gchar *file;
 
-  if ((file = gpa_backup_operation_dialog_run (GPA_OPERATION (op)->window,
-					       op->key_id)))
+  file = gpa_backup_operation_dialog_run (GPA_OPERATION (op)->window,
+                                          op->key_id);
+  if (file)
     gpa_backup_operation_do_backup (op, file);
 
   /* FIXME: Error handling.  */
   g_signal_emit_by_name (GPA_OPERATION (op), "completed", 0);
 
-  return FALSE;
+  return FALSE;  /* Remove us from the idle chain.  */
 }
 
 /* API */
 
-GpaBackupOperation* 
+GpaBackupOperation*
 gpa_backup_operation_new (GtkWidget *window, gpgme_key_t key)
 {
   GpaBackupOperation *op;
-  
+
   op = g_object_new (GPA_BACKUP_OPERATION_TYPE,
 		     "window", window,
 		     "key", key,

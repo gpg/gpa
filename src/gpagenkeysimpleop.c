@@ -30,14 +30,14 @@
 
 static GObjectClass *parent_class = NULL;
 
-static void gpa_gen_key_simple_operation_done_cb (GpaContext *context, 
+static void gpa_gen_key_simple_operation_done_cb (GpaContext *context,
 						    gpg_error_t err,
 						    GpaGenKeySimpleOperation *op);
-static void gpa_gen_key_simple_operation_done_error_cb (GpaContext *context, 
+static void gpa_gen_key_simple_operation_done_error_cb (GpaContext *context,
 							  gpg_error_t err,
 							  GpaGenKeySimpleOperation *op);
 
-static gboolean 
+static gboolean
 gpa_gen_key_simple_operation_generate (gpa_keygen_para_t *params,
 				       gboolean do_backup, gpointer data);
 
@@ -94,7 +94,7 @@ static void
 gpa_gen_key_simple_operation_class_init (GpaGenKeySimpleOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_gen_key_simple_operation_constructor;
@@ -105,7 +105,7 @@ GType
 gpa_gen_key_simple_operation_get_type (void)
 {
   static GType operation_type = 0;
-  
+
   if (!operation_type)
     {
       static const GTypeInfo operation_info =
@@ -120,22 +120,22 @@ gpa_gen_key_simple_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_gen_key_simple_operation_init,
       };
-      
+
       operation_type = g_type_register_static (GPA_GEN_KEY_OPERATION_TYPE,
 					       "GpaGenKeySimpleOperation",
 					       &operation_info, 0);
     }
-  
+
   return operation_type;
 }
 
 /* API */
 
-GpaGenKeySimpleOperation* 
+GpaGenKeySimpleOperation*
 gpa_gen_key_simple_operation_new (GtkWidget *window)
 {
   GpaGenKeySimpleOperation *op;
-  
+
   op = g_object_new (GPA_GEN_KEY_SIMPLE_OPERATION_TYPE,
 		     "window", window, NULL);
 
@@ -144,7 +144,7 @@ gpa_gen_key_simple_operation_new (GtkWidget *window)
 
 /* Internal */
 
-static gboolean 
+static gboolean
 gpa_gen_key_simple_operation_generate (gpa_keygen_para_t *params,
 				       gboolean do_backup, gpointer data)
 {
@@ -165,10 +165,12 @@ gpa_gen_key_simple_operation_generate (gpa_keygen_para_t *params,
 
 static void
 gpa_gen_key_simple_operation_backup_complete (GpaBackupOperation *backup,
+                                              gpg_error_t err,
 					      GpaGenKeySimpleOperation *op)
 {
-  gpgme_genkey_result_t result = gpgme_op_genkey_result 
-    (GPA_OPERATION (op)->context->ctx);
+  gpgme_genkey_result_t result;
+
+  result = gpgme_op_genkey_result(GPA_OPERATION (op)->context->ctx);
 
   g_signal_emit_by_name (op, "generated_key", result->fpr);
 
@@ -178,7 +180,7 @@ gpa_gen_key_simple_operation_backup_complete (GpaBackupOperation *backup,
 }
 
 static void
-gpa_gen_key_simple_operation_done_cb (GpaContext *context, 
+gpa_gen_key_simple_operation_done_cb (GpaContext *context,
 				      gpg_error_t err,
 				      GpaGenKeySimpleOperation *op)
 {
@@ -188,11 +190,12 @@ gpa_gen_key_simple_operation_done_cb (GpaContext *context,
 
       if (op->do_backup)
 	{
-	  GpaBackupOperation *backup = gpa_backup_operation_new_from_fpr 
-	    (op->wizard, result->fpr);
+	  GpaBackupOperation *backup;
 
-	  g_signal_connect (backup, "completed", G_CALLBACK 
-			    (gpa_gen_key_simple_operation_backup_complete), 
+          backup = gpa_backup_operation_new_from_fpr (op->wizard, result->fpr);
+
+	  g_signal_connect (backup, "completed", G_CALLBACK
+			    (gpa_gen_key_simple_operation_backup_complete),
 			    op);
 	}
       else
@@ -206,7 +209,7 @@ gpa_gen_key_simple_operation_done_cb (GpaContext *context,
 }
 
 static void
-gpa_gen_key_simple_operation_done_error_cb (GpaContext *context, 
+gpa_gen_key_simple_operation_done_error_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaGenKeySimpleOperation *op)
 {
