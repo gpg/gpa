@@ -24,7 +24,11 @@ Open the clipboard.
 Start with the card-manager open.
 .TP
 .B \-d, \-\-daemon
-Enable the UI server.
+Only start the UI server and no user interface.
+.TP
+.B \-\-no-remote
+Do not connect to a running instance but start a new one.  This can
+also be used to not start an UI server.
 .TP
 .B \-\-debug-edit-fsm
 Debug the Finite State Machine (FSM).
@@ -41,18 +45,6 @@ Enable logging on Win32 systems.
 .B \-f, \-\-files
 Start with the file-manager open. This is the \fIdefault\fP if one or more
 \fIFILE(S)\fP are added to the command arguments.
-.TP
-.B \-\-gpg-binary=\fIFILE\fP
-Path to the
-.BR gpg (1)
-or
-.BR gpg2 (1)
-binary.
-.TP
-.B \-\-gpgsm-binary=\fIFILE\fP
-Path to the
-.BR gpgsm (1)
-binary.
 .TP
 .B \-k, \-\-keyring
 Start with the keyring editor. This is the \fIdefault\fP.
@@ -77,6 +69,9 @@ Print usage information and exit.
 .TP
 .I ~/.gnupg/gpa.conf
 Standard user configuration file read by \fBgpa\fP on startup.
+.TP
+.I ~/.gnupg/S.uiserver
+Socket listening for commands to the UI server.
 
 .SH "BUGS"
 Please report bugs to

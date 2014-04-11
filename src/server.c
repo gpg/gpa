@@ -1161,6 +1161,34 @@ cmd_start_keymanager (assuan_context_t ctx, char *line)
   return assuan_process_done (ctx, 0);
 }
 
+static const char hlp_start_clipboard[] =
+  "START_CLIPBOARD\n"
+  "\n"
+  "Pop up the clipboard window.  The client expects that the\n"
+  "clipboard is brought into the foregound and that this command\n"
+  "immediatley returns.";
+static gpg_error_t
+cmd_start_clipboard (assuan_context_t ctx, char *line)
+{
+  gpa_open_clipboard (NULL, NULL);
+
+  return assuan_process_done (ctx, 0);
+}
+
+static const char hlp_start_filemanager[] =
+  "START_FILEMANAGER\n"
+  "\n"
+  "Pop up the file manager window.  The client expects that the file\n"
+  "manager is brought into the foregound and that this command\n"
+  "immediatley returns.";
+static gpg_error_t
+cmd_start_filemanager (assuan_context_t ctx, char *line)
+{
+  gpa_open_filemanager (NULL, NULL);
+
+  return assuan_process_done (ctx, 0);
+}
+
 
 #ifdef ENABLE_CARD_MANAGER
 static const char hlp_start_cardmanager[] =
@@ -1202,6 +1230,7 @@ static const char hlp_getinfo[] =
   "Supported values for WHAT are:\n"
   "\n"
   "  version     - Return the version of the program.\n"
+  "  name        - Return the name of the program\n"
   "  pid         - Return the process id of the server.";
 static gpg_error_t
 cmd_getinfo (assuan_context_t ctx, char *line)
@@ -1219,6 +1248,11 @@ cmd_getinfo (assuan_context_t ctx, char *line)
 
       snprintf (numbuf, sizeof numbuf, "%lu", (unsigned long)getpid ());
       err = assuan_send_data (ctx, numbuf, strlen (numbuf));
+    }
+  else if (!strcmp (line, "name"))
+    {
+      const char *s = PACKAGE_NAME;
+      err = assuan_send_data (ctx, s, strlen (s));
     }
   else
     err = set_error (GPG_ERR_ASS_PARAMETER, "unknown value for WHAT");
@@ -1617,10 +1651,12 @@ register_commands (assuan_context_t ctx)
     { "DECRYPT", cmd_decrypt, hlp_decrypt },
     { "VERIFY", cmd_verify, hlp_verify },
     { "START_KEYMANAGER", cmd_start_keymanager, hlp_start_keymanager },
-    { "START_CONFDIALOG", cmd_start_confdialog, hlp_start_confdialog },
+    { "START_CLIPBOARD", cmd_start_clipboard, hlp_start_clipboard },
+    { "START_FILEMANAGER", cmd_start_filemanager, hlp_start_filemanager },
 #ifdef ENABLE_CARD_MANAGER
     { "START_CARDMANAGER", cmd_start_cardmanager, hlp_start_cardmanager },
 #endif /*ENABLE_CARD_MANAGER*/
+    { "START_CONFDIALOG", cmd_start_confdialog, hlp_start_confdialog },
     { "GETINFO", cmd_getinfo, hlp_getinfo },
     { "FILE", cmd_file },
     { "ENCRYPT_FILES", cmd_encrypt_files },
@@ -1997,4 +2033,101 @@ gpa_stop_server (void)
   shutdown_pending = TRUE;
   if (!connection_counter)
     gtk_main_quit ();
+}
+
+
+/* Helper for gpa_check-server.  */
+static gpg_error_t
+check_name_cb (void *opaque, const void *buffer, size_t length)
+{
+  int *result = opaque;
+  const char *name = PACKAGE_NAME;
+
+  if (length == strlen (name) && !strcmp (name, buffer))
+    *result = 1;
+
+  return 0;
+}
+
+
+/* Check whether an UI server is already running:
+   0  = no
+   1  = yes
+   2  = yes - same program
+ */
+int
+gpa_check_server (void)
+{
+  gpg_error_t err;
+  assuan_context_t ctx;
+  int name_check = 0;
+  int result;
+
+  err = assuan_new (&ctx);
+  if (!err)
+    err = assuan_socket_connect (ctx,
+                                 gpgme_get_dirinfo ("uiserver-socket"), 0, 0);
+  if (err)
+    {
+      g_message ("error connecting an UI server: %s - %s",
+                 gpg_strerror (err), "assuming not running");
+      result = 0;
+      goto leave;
+    }
+
+  err = assuan_transact (ctx, "GETINFO name",
+                         check_name_cb, &name_check, NULL, NULL, NULL, NULL);
+  if (err)
+    {
+      g_message ("requesting name of UI server failed: %s - %s",
+                 gpg_strerror (err), "assuming not running");
+      result = 1;
+      goto leave;
+    }
+
+  if (name_check)
+    {
+      g_message ("an instance of this program is already running");
+      result = 2;
+    }
+  else
+    {
+      g_message ("an different UI server is already running");
+      result = 1;
+    }
+
+ leave:
+  assuan_release (ctx);
+  return result;
+}
+
+
+/* Send a command to the server.  */
+gpg_error_t
+gpa_send_to_server (const char *cmd)
+{
+  gpg_error_t err;
+  assuan_context_t ctx;
+
+  err = assuan_new (&ctx);
+  if (!err)
+    err = assuan_socket_connect (ctx,
+                                 gpgme_get_dirinfo ("uiserver-socket"), 0, 0);
+  if (err)
+    {
+      g_message ("error connecting the UI server: %s", gpg_strerror (err));
+      goto leave;
+    }
+
+  err = assuan_transact (ctx, cmd, NULL, NULL, NULL, NULL, NULL, NULL);
+  if (err)
+    {
+      g_message ("error sending '%s' to the UI server: %s",
+                 cmd, gpg_strerror (err));
+      goto leave;
+    }
+
+ leave:
+  assuan_release (ctx);
+  return err;
 }

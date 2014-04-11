@@ -108,6 +108,8 @@ typedef void (*GPADefaultKeyChanged) (gpointer user_data);
 void gpa_run_server_continuation (assuan_context_t ctx, gpg_error_t err);
 void gpa_start_server (void);
 void gpa_stop_server (void);
+int  gpa_check_server (void);
+gpg_error_t gpa_send_to_server (const char *cmd);
 
 
 typedef struct gpa_filewatch_id_s *gpa_filewatch_id_t;

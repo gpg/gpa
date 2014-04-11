@@ -70,11 +70,12 @@ typedef struct
   gboolean start_settings;
   gboolean start_only_server;
   gboolean disable_x509;
+  gboolean no_remote;
   gboolean enable_logging;
   gchar *options_filename;
-  char  *gpg_binary;
-  char  *gpgsm_binary;
 } gpa_args_t;
+
+static char *dummy_arg;
 
 static gpa_args_t args;
 
@@ -82,7 +83,7 @@ static gpa_args_t args;
 /* The copyright notice.  */
 static const char *copyright =
 "Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
-"Copyright (C) 2005-2013 g10 Code GmbH.\n"
+"Copyright (C) 2005-2014 g10 Code GmbH.\n"
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "This is free software, and you are welcome to redistribute it\n"
 "under certain conditions.  See the file COPYING for details.\n";
@@ -113,11 +114,13 @@ static GOptionEntry option_entries[] =
     { "settings", 's', 0, G_OPTION_ARG_NONE, &args.start_settings,
       N_("Open the settings dialog"), NULL },
     { "daemon", 'd', 0, G_OPTION_ARG_NONE, &args.start_only_server,
-      N_("Enable the UI server"), NULL },
+      N_("Only start the UI server"), NULL },
     { "disable-x509", 0, 0, G_OPTION_ARG_NONE, &args.disable_x509,
       N_("Disable support for X.509"), NULL },
     { "options", 'o', 0, G_OPTION_ARG_FILENAME, &args.options_filename,
       N_("Read options from file"), "FILE" },
+    { "no-remote", 0, 0, G_OPTION_ARG_NONE, &args.no_remote,
+      N_("Do not connect to a running instance"), NULL },
     /* Note:  the cms option will eventually be removed.  */
     { "cms", 'x', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &cms_hack, NULL, NULL },
@@ -128,9 +131,9 @@ static GOptionEntry option_entries[] =
     { "enable-logging", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &args.enable_logging, NULL, NULL },
     { "gpg-binary", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME,
-      &args.gpg_binary, NULL, NULL },
+      &dummy_arg, NULL, NULL },
     { "gpgsm-binary", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME,
-      &args.gpgsm_binary, NULL, NULL },
+      &dummy_arg, NULL, NULL },
     { NULL }
   };
 
@@ -315,6 +318,97 @@ dummy_log_func (const gchar *log_domain, GLogLevelFlags log_level,
 }
 
 
+
+/* Helper for main.  */
+static gpg_error_t
+open_requested_window (int argc, char **argv, int use_server)
+{
+  gpg_error_t err = 0;
+  int did_server = 0;
+  int i;
+
+  /* Don't open the key manager if any files are given on the command
+     line.  Ditto for the clipboard.  */
+  if (args.start_key_manager && (optind >= argc))
+    {
+      if (use_server)
+        {
+          did_server = 1;
+          err = gpa_send_to_server ("START_KEYMANAGER");
+        }
+      else
+        gpa_open_key_manager (NULL, NULL);
+    }
+
+  if (args.start_clipboard && (optind >= argc))
+    {
+      if (use_server)
+        {
+          did_server = 1;
+          err = gpa_send_to_server ("START_CLIPBOARD");
+        }
+      else
+        gpa_open_clipboard (NULL, NULL);
+    }
+
+  if (args.start_file_manager || (optind < argc))
+    {
+      /* Do not use the server if there are file args - see below.  */
+      if (use_server && !(optind < argc))
+        {
+          did_server = 1;
+          err = gpa_send_to_server ("START_FILEMANAGER");
+        }
+      else
+        gpa_open_filemanager (NULL, NULL);
+    }
+
+#ifdef ENABLE_CARD_MANAGER
+  if (args.start_card_manager)
+    {
+      if (use_server)
+        {
+          did_server = 1;
+          err = gpa_send_to_server ("START_CARDMANAGER");
+        }
+      else
+        gpa_open_cardmanager (NULL, NULL);
+    }
+#endif /*ENABLE_CARD_MANAGER*/
+
+  if (args.start_settings)
+    {
+      if (use_server)
+        {
+          did_server = 1;
+          err = gpa_send_to_server ("START_CONFDIALOG");
+        }
+      else
+        gpa_open_settings_dialog (NULL, NULL);
+    }
+
+  /* If there are any command line arguments that are not options, try
+     to open them as files in the filemanager.  However if we are to
+     connect to a server this can't be done because the running
+     instance may already have files in the file manager and thus we
+     better do not add new files.  Instead we start a new instance. */
+  if (use_server)
+    {
+      if (!did_server)
+        err = -1; /* Create a new instance.  */
+    }
+  else
+    {
+      for (i = optind; i < argc; i++)
+        gpa_file_manager_open_file (GPA_FILE_MANAGER
+                                    (gpa_file_manager_get_instance ()),
+                                    argv[i]);
+    }
+
+  return err;
+}
+
+
 int
 main (int argc, char *argv[])
 {
@@ -322,7 +416,6 @@ main (int argc, char *argv[])
   GOptionContext *context;
   char *configname = NULL;
   char *keyservers_configname = NULL;
-  int i;
 
   /* Under W32 logging is disabled by default to prevent MS Windows NT
      from opening a console.  */
@@ -452,6 +545,26 @@ main (int argc, char *argv[])
   gpa_options_set_file (gpa_options_get_instance (), configname);
   g_free (configname);
 
+  /* Check whether we need to start a server or to simply open a
+     windowin an existing server.  */
+  switch (gpa_check_server ())
+    {
+    case 0: /* No running server on the expected socket.  Start one.  */
+      gpa_start_server ();
+      break;
+    case 1: /* An old instance or a differen UI server is already running.
+               Do not start a server.  */
+      break;
+    case 2: /* An instance is already running - open the appropriate
+               window and terminate.  */
+      if (args.no_remote)
+        break;
+      if (!open_requested_window (argc, argv, 1))
+        return 0; /* ready */
+      /* Start a new instance on error.  */
+      break;
+    }
+
   /* Locate the list of keyservers.  */
   keyservers_configname = g_build_filename (gnupg_homedir, "keyservers", NULL);
 
@@ -472,43 +585,10 @@ main (int argc, char *argv[])
   gpa_init_filewatch ();
 
   /* Startup whatever has been requested by the user.  */
-  if (args.start_only_server)
-    {
-      /* Fire up the server.  Note that the server allows to start the
-         other parts too.  */
-      gpa_start_server ();
-    }
-  else
-    {
-      /* Don't open the key manager if any files are given on the
-         command line.  Ditto for the clipboard.  */
-      if (args.start_key_manager && (optind >= argc))
-	gpa_open_key_manager (NULL, NULL);
-
-      if (args.start_clipboard && (optind >= argc))
-	gpa_open_clipboard (NULL, NULL);
-
-      if (args.start_file_manager || (optind < argc))
-	gpa_open_filemanager (NULL, NULL);
-
-#ifdef ENABLE_CARD_MANAGER
-      if (args.start_card_manager)
-	gpa_open_cardmanager (NULL, NULL);
-#endif /*ENABLE_CARD_MANAGER*/
-
-      if (args.start_settings)
-	gpa_open_settings_dialog (NULL, NULL);
-
-      /* If there are any command line arguments that are not options,
-	 try to open them as files in the filemanager */
-      for (i = optind; i < argc; i++)
-	gpa_file_manager_open_file (GPA_FILE_MANAGER
-				    (gpa_file_manager_get_instance ()),
-				    argv[i]);
-    }
+  if (!args.start_only_server)
+    open_requested_window (argc, argv, 0);
 
   gtk_main ();
 
   return 0;
 }
-
