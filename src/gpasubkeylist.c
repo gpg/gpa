@@ -35,6 +35,7 @@ typedef enum
   SUBKEY_ID,
   SUBKEY_SIZE,
   SUBKEY_ALGO,
+  SUBKEY_CREATED,
   SUBKEY_EXPIRE,
   SUBKEY_CAN_SIGN,
   SUBKEY_CAN_CERTIFY,
@@ -58,6 +59,7 @@ gpa_subkey_list_new (void)
 
   /* Init the model */
   store = gtk_list_store_new (SUBKEY_N_COLUMNS,
+			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
@@ -88,7 +90,7 @@ gpa_subkey_list_new (void)
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Algorithm"),
+  column = gtk_tree_view_column_new_with_attributes (_("Algo"),
 						     renderer,
 						     "text", SUBKEY_ALGO,
 						     NULL);
@@ -101,7 +103,14 @@ gpa_subkey_list_new (void)
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Expiry Date"),
+  column = gtk_tree_view_column_new_with_attributes (_("Created"),
+						     renderer,
+						     "text", SUBKEY_CREATED,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Expires"),
 						     renderer,
 						     "text", SUBKEY_EXPIRE,
 						     NULL);
@@ -110,38 +119,38 @@ gpa_subkey_list_new (void)
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", SUBKEY_CAN_SIGN, NULL);
-  gpa_set_column_title (column, _("[S]"), _("Can sign"));
+  gpa_set_column_title (column, _("S"), _("Can sign"));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
-  column = gtk_tree_view_column_new_with_attributes 
+  column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", SUBKEY_CAN_CERTIFY, NULL);
-  gpa_set_column_title (column, _("[C]"), _("Can certify"));
+  gpa_set_column_title (column, _("C"), _("Can certify"));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", SUBKEY_CAN_ENCRYPT, NULL);
-  gpa_set_column_title (column, _("[E]"), _("Can encrypt"));
+  gpa_set_column_title (column, _("E"), _("Can encrypt"));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", SUBKEY_CAN_AUTHENTICATE, NULL);
-  gpa_set_column_title (column, _("[A]"), _("Can authenticate"));
+  gpa_set_column_title (column, _("A"), _("Can authenticate"));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "active", SUBKEY_IS_CARDKEY, NULL);
-  gpa_set_column_title (column, _("[T]"), 
+  gpa_set_column_title (column, _("T"),
                         _("Secret key stored on a smartcard."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes
     (NULL, renderer, "text", SUBKEY_CARD_NUMBER, NULL);
-  gpa_set_column_title (column, _("Card S/N"), 
+  gpa_set_column_title (column, _("Card S/N"),
                         _("Serial number of the smart card."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
@@ -183,16 +192,16 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
                                         (GTK_TREE_VIEW (list)));
   gpgme_subkey_t subkey, secsubkey;
   gpgme_key_t seckey;
-  gchar *size;
+  gchar *p, *size, *expires;
 
   /* Empty the list */
   gtk_list_store_clear (store);
 
   if (key)
     {
-      seckey = gpa_keytable_lookup_key 
+      seckey = gpa_keytable_lookup_key
         (gpa_keytable_get_secret_instance (), key->subkeys->fpr);
-      
+
       /* Add all the subkeys */
       for (subkey = key->subkeys; subkey; subkey = subkey->next)
 	{
@@ -202,7 +211,7 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
             {
               for (secsubkey = seckey->subkeys; secsubkey;
                    secsubkey = secsubkey->next)
-                if (subkey->fpr && secsubkey->fpr 
+                if (subkey->fpr && secsubkey->fpr
                     && g_str_equal (subkey->fpr, secsubkey->fpr))
                   break;
             }
@@ -211,15 +220,27 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
 
 	  /* Append */
 	  gtk_list_store_append (store, &iter);
-	  size = g_strdup_printf ("%i bits", subkey->length);
-          gtk_list_store_set 
+          if (subkey->curve)
+            size = g_strdup (subkey->curve);
+          else
+            size = g_strdup_printf ("%i bits", subkey->length);
+
+          /* We only want "never" and not "never expires" but we need
+             to take care of the ">= 2038" string.  */
+          expires = gpa_expiry_date_string (subkey->expires);
+          if (*expires != '>' && (p = strchr (expires, ' ')))
+            *p = 0;
+
+          gtk_list_store_set
             (store, &iter,
              SUBKEY_ID, subkey->keyid+8,
              SUBKEY_SIZE, size,
              SUBKEY_ALGO,
              gpgme_pubkey_algo_name (subkey->pubkey_algo),
-             SUBKEY_EXPIRE, 
-             gpa_expiry_date_string (subkey->expires),
+             SUBKEY_CREATED,
+             gpa_creation_date_string (subkey->timestamp),
+             SUBKEY_EXPIRE,
+             expires,
              SUBKEY_CAN_SIGN, subkey->can_sign,
              SUBKEY_CAN_CERTIFY, subkey->can_certify,
              SUBKEY_CAN_ENCRYPT, subkey->can_encrypt,
@@ -229,6 +250,7 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
              SUBKEY_STATUS, subkey_status (subkey),
              -1);
 	  g_free (size);
-	} 
-    }    
+	  g_free (expires);
+	}
+    }
 }
