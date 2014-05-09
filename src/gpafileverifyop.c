@@ -196,45 +196,48 @@ static gboolean
 is_detached_sig (const gchar *filename, gchar **signature_file,
 		 gchar **signed_file, GtkWidget *window)
 {
-  const gchar *sig_extension[] = {".sig", ".sign"};
+  const gchar *sig_extension[] = {".sig", ".asc", ".sign"};
   int i;
   gchar *extension;
-  /* First, check whether this file is a dettached signature */
+
+  /* First, check whether this file is a detached signature.  */
   *signed_file = g_strdup (filename);
   extension = g_strrstr (*signed_file, ".");
-  if (extension &&
-      (g_str_equal (extension, ".sig") ||
-       g_str_equal (extension, ".sign")))
+  if (extension)
     {
-      *extension++ = '\0';
-      *signature_file = g_strdup (filename);
-      return TRUE;
+      for (i = 0; i < DIM (sig_extension); i++)
+        if (g_str_equal (extension, sig_extension[i]))
+          {
+            *extension = '\0';  /* That makes SIGNED_FILE */
+            if (g_file_test (*signed_file, G_FILE_TEST_EXISTS))
+              {
+                *signature_file = g_strdup (filename);
+                return TRUE;
+              }
+            g_free (*signed_file);
+            *signed_file = NULL;
+            return FALSE; /* signed file does not exist.  */
+          }
     }
-  /* Now, check whether a dettached signature exists for this file */
-  else
+  g_free (*signed_file);
+  *signed_file = NULL;
+
+  /* Now, check whether a detached signature exists for this file */
+  for (i = 0; i < DIM (sig_extension); i++)
     {
-      g_free (*signed_file);
-      *signed_file = NULL;
+      gchar *sig = g_strconcat (filename, sig_extension[i], NULL);
 
-      for (i = 0; i < sizeof(sig_extension)/sizeof(sig_extension[0]); i++)
-	{
-	  gchar *sig = g_strconcat (filename, sig_extension[i], NULL);
-
-	  if (g_file_test (sig, G_FILE_TEST_EXISTS) &&
-	      ask_use_detached_sig (filename, sig, window))
-	    {
-	      *signed_file = g_strdup (filename);
-	      *signature_file = sig;
-	      return TRUE;
-	    }
-	  else
-	    {
-	      g_free (sig);
-	    }
-	}
-
-      return FALSE;
+      if (g_file_test (sig, G_FILE_TEST_EXISTS)
+          && ask_use_detached_sig (filename, sig, window))
+        {
+          *signed_file = g_strdup (filename);
+          *signature_file = sig;
+          return TRUE;
+        }
+      g_free (sig);
     }
+
+  return FALSE;
 }
 
 static gboolean
