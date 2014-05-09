@@ -244,7 +244,7 @@ destination_filename (const gchar *filename, gboolean armor,
   else if (protocol == GPGME_PROTOCOL_CMS)
     extension = ".p7s";
   else if (sign_type == GPGME_SIG_MODE_DETACH)
-    extension = ".sig";
+    extension = (armor && protocol == GPGME_PROTOCOL_OPENPGP)? ".asc" : ".sig";
   else if (sign_type == GPGME_SIG_MODE_CLEAR)
     extension = ".asc";
   else
