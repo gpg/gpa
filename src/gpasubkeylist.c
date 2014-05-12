@@ -26,6 +26,13 @@
 #include "keytable.h"
 #include "gpasubkeylist.h"
 
+
+static gboolean query_tooltip_cb (GtkWidget *wdiget, int x, int y,
+                                  gboolean keyboard_mode,
+                                  GtkTooltip *tooltip, gpointer user_data);
+
+
+
 /*
  *  Implement a List showing the subkeys in a given key
  */
@@ -154,6 +161,10 @@ gpa_subkey_list_new (void)
                         _("Serial number of the smart card."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
+  g_object_set (list, "has-tooltip", TRUE, NULL);
+  g_signal_connect (list, "query-tooltip",
+                    G_CALLBACK (query_tooltip_cb), list);
+
   return list;
 }
 
@@ -253,4 +264,33 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
 	  g_free (expires);
 	}
     }
+}
+
+
+/* Tooltip display callback.  */
+static gboolean
+query_tooltip_cb (GtkWidget *widget, int x, int y, gboolean keyboard_tip,
+                  GtkTooltip *tooltip, gpointer user_data)
+{
+  GtkTreeView *tv = GTK_TREE_VIEW (widget);
+  GtkTreeViewColumn *column;
+  char *text;
+
+  (void)user_data;
+
+  if (!gtk_tree_view_get_tooltip_context (tv, &x, &y, keyboard_tip,
+                                          NULL, NULL, NULL))
+    return FALSE; /* Not at a row - do not show a tooltip.  */
+  if (!gtk_tree_view_get_path_at_pos (tv, x, y, NULL, &column, NULL, NULL))
+    return FALSE;
+
+  widget = gtk_tree_view_column_get_widget (column);
+  text = widget? gtk_widget_get_tooltip_text (widget) : NULL;
+  if (!text)
+    return FALSE; /* No tooltip desired.  */
+
+  gtk_tooltip_set_text (tooltip, text);
+  g_free (text);
+
+  return TRUE; /* Show tooltip.  */
 }
