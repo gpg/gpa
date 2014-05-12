@@ -161,12 +161,20 @@ static void
 gpa_date_button_clicked (GtkButton *button)
 {
   GpaDateButton *self = GPA_DATE_BUTTON (button);
+  GtkWidget *toplevel;
 
   if (!self->dialog)
     {
-      self->dialog = gtk_dialog_new ();
-      gtk_window_set_decorated (GTK_WINDOW (self->dialog), FALSE);
-      gtk_window_set_modal (GTK_WINDOW (self->dialog), TRUE);
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+      if (!gtk_widget_is_toplevel (toplevel))
+        toplevel = NULL;
+
+      self->dialog = gtk_dialog_new_with_buttons
+        (NULL,
+         GTK_WINDOW (toplevel),
+         (GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
+         GTK_STOCK_CLOSE, GTK_RESPONSE_REJECT,
+         NULL);
 
       g_signal_connect (self->dialog, "destroy",
                         G_CALLBACK (destroy_cb), self);
@@ -183,7 +191,6 @@ gpa_date_button_clicked (GtkButton *button)
                         G_CALLBACK (month_changed_cb), self);
 
       gtk_widget_show_all (self->dialog);
-
     }
 
   update_widgets (self);
