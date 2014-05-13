@@ -214,6 +214,7 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       || status == GPGME_STATUS_BACKUP_KEY_CREATED
       || status == GPGME_STATUS_CARDCTRL       /* Issued by gpg1.  */
       || status == GPGME_STATUS_SC_OP_SUCCESS
+      || status == GPGME_STATUS_PINENTRY_LAUNCHED
       || status == GPGME_STATUS_PROGRESS)
     {
       return parms->err;
