@@ -38,6 +38,7 @@ enum
   PROP_0,
   PROP_KEY,
   PROP_FINGERPRINT,
+  PROP_PROTOCOL
 };
 
 static void
@@ -56,6 +57,10 @@ gpa_backup_operation_get_property (GObject     *object,
     case PROP_FINGERPRINT:
       g_value_set_string (value, op->fpr);
       break;
+    case PROP_PROTOCOL:
+      g_value_set_int (value, op->protocol);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -93,6 +98,9 @@ gpa_backup_operation_set_property (GObject     *object,
 	  op->key_id = g_strdup (fpr + strlen (fpr) - 8);
 	}
       break;
+    case PROP_PROTOCOL:
+      op->protocol = g_value_get_int (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -104,10 +112,7 @@ gpa_backup_operation_finalize (GObject *object)
 {
   GpaBackupOperation *op = GPA_BACKUP_OPERATION (object);
 
-  if (op->key)
-    {
-      gpgme_key_unref (op->key);
-    }
+  gpgme_key_unref (op->key);
   g_free (op->fpr);
   g_free (op->key_id);
 
@@ -120,6 +125,7 @@ gpa_backup_operation_init (GpaBackupOperation *op)
   op->key = NULL;
   op->fpr = NULL;
   op->key_id = NULL;
+  op->protocol = GPGME_PROTOCOL_UNKNOWN;
 }
 
 static GObject*
@@ -167,6 +173,13 @@ gpa_backup_operation_class_init (GpaBackupOperationClass *klass)
 				   ("fpr", "fpr",
 				    "Fingerprint",
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property
+    (object_class, PROP_PROTOCOL,
+     g_param_spec_int
+     ("protocol", "Protocol",
+      "The gpgme protocol used for FPR.",
+      GPGME_PROTOCOL_OpenPGP, GPGME_PROTOCOL_UNKNOWN, GPGME_PROTOCOL_UNKNOWN,
+      G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
 
 GType
@@ -202,7 +215,7 @@ gpa_backup_operation_get_type (void)
 static void
 gpa_backup_operation_do_backup (GpaBackupOperation *op, gchar *filename)
 {
-  if (gpa_backup_key (op->fpr, filename))
+  if (gpa_backup_key (op->fpr, filename, (op->protocol == GPGME_PROTOCOL_CMS)))
     {
       gchar *message;
       message = g_strdup_printf (_("A copy of your secret key has "
@@ -229,17 +242,18 @@ gpa_backup_operation_do_backup (GpaBackupOperation *op, gchar *filename)
 
 /* Return the filename in filename encoding.  */
 static gchar*
-gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id)
+gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id,
+                                 int is_x509)
 {
   static GtkWidget *dialog;
   GtkResponseType response;
   gchar *default_comp;
   gchar *filename = NULL;
+  gchar *id_text;
+  GtkWidget *id_label;
 
   if (! dialog)
     {
-      gchar *id_text;
-      GtkWidget *id_label;
 
       dialog = gtk_file_chooser_dialog_new
 	(_("Backup key to file"), GTK_WINDOW (parent),
@@ -251,16 +265,19 @@ gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id)
       gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
 					   g_get_home_dir ());
 
-      /* Set the label with more explanations.  */
-      id_text = g_strdup_printf (_("Generating backup of key: %s"), key_id);
-      id_label = gtk_label_new (id_text);
-      g_free (id_text);
-      gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), id_label);
     }
 
-  /* Set the default file name.  */
-  default_comp = g_strdup_printf ("%s/secret-key-%s.asc",
-                                  gnupg_homedir, key_id);
+  /* Set the label with more explanations.  */
+  id_text = g_strdup_printf (_("Generating backup of key: 0x%s"), key_id);
+  id_label = gtk_label_new (id_text);
+  g_free (id_text);
+  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), id_label);
+
+  /* Set the default file name.  I am not sure whether ".p12" or
+     ".pem" is better for an _armored_ pkcs#12. */
+  default_comp = g_strdup_printf ("%s/secret-key-%s.%s",
+                                  gnupg_homedir, key_id,
+                                  is_x509? "p12":"asc");
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), default_comp);
   g_free (default_comp);
 
@@ -284,7 +301,8 @@ gpa_backup_operation_idle_cb (gpointer data)
   gchar *file;
 
   file = gpa_backup_operation_dialog_run (GPA_OPERATION (op)->window,
-                                          op->key_id);
+                                          op->key_id,
+                                          !!(op->protocol==GPGME_PROTOCOL_CMS));
   if (file)
     gpa_backup_operation_do_backup (op, file);
 
@@ -304,19 +322,22 @@ gpa_backup_operation_new (GtkWidget *window, gpgme_key_t key)
   op = g_object_new (GPA_BACKUP_OPERATION_TYPE,
 		     "window", window,
 		     "key", key,
+                     "protocol", key->protocol,
 		     NULL);
 
   return op;
 }
 
 GpaBackupOperation*
-gpa_backup_operation_new_from_fpr (GtkWidget *window, const gchar *fpr)
+gpa_backup_operation_new_from_fpr (GtkWidget *window,
+                                   const gchar *fpr, gpgme_protocol_t protocol)
 {
   GpaBackupOperation *op;
 
   op = g_object_new (GPA_BACKUP_OPERATION_TYPE,
 		     "window", window,
 		     "fpr", fpr,
+                     "protocol", protocol,
 		     NULL);
 
   return op;

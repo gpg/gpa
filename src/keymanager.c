@@ -764,10 +764,15 @@ key_manager_mapped (gpointer param)
 	  gtk_widget_destroy (dialog);
           if (response == GTK_RESPONSE_OK)
 	    {
-	      GpaBackupOperation *op = gpa_backup_operation_new
-		(GTK_WIDGET (self), gpa_options_get_default_key
-		 (gpa_options_get_instance ()));
-	      register_operation (self, GPA_OPERATION (op));
+              gpgme_key_t key;
+	      GpaBackupOperation *op;
+
+              key = gpa_options_get_default_key (gpa_options_get_instance ());
+              if (key)
+                {
+                  op = gpa_backup_operation_new (GTK_WIDGET (self), key);
+                  register_operation (self, GPA_OPERATION (op));
+                }
 	    }
           asked_about_key_backup = TRUE;
         }

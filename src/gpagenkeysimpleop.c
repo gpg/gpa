@@ -192,7 +192,8 @@ gpa_gen_key_simple_operation_done_cb (GpaContext *context,
 	{
 	  GpaBackupOperation *backup;
 
-          backup = gpa_backup_operation_new_from_fpr (op->wizard, result->fpr);
+          backup = gpa_backup_operation_new_from_fpr
+            (op->wizard, result->fpr, gpgme_get_protocol (context->ctx));
 
 	  g_signal_connect (backup, "completed", G_CALLBACK
 			    (gpa_gen_key_simple_operation_backup_complete),

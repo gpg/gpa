@@ -127,9 +127,10 @@ gpg_error_t gpa_generate_key_start (gpgme_ctx_t ctx,
 				    gpa_keygen_para_t *params);
 
 /* Backup a key.  It exports both the public and secret keys to a
-   file.  Returns TRUE on success and FALSE on error.  It displays
-   errors to the user.  */
-gboolean gpa_backup_key (const gchar *fpr, const char *filename);
+   file.  IS_X509 tells the function that the fingerprint is from an
+   X.509 key.  Returns TRUE on success and FALSE on error.  It
+   displays errors to the user.  */
+gboolean gpa_backup_key (const gchar *fpr, const char *filename, int is_x509);
 
 gpa_keygen_para_t *gpa_keygen_para_new (void);
 

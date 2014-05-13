@@ -522,10 +522,11 @@ get_gpg_connect_agent_path (void)
 
 
 /* Backup a key. It exports both the public and secret keys to a file.
-   Returns TRUE on success and FALSE on error. It displays errors to
-   the user.  */
+   IS_X509 tells the function that the fingerprint is from an X.509
+   key.  Returns TRUE on success and FALSE on error. It displays
+   errors to the user.  */
 gboolean
-gpa_backup_key (const gchar *fpr, const char *filename)
+gpa_backup_key (const gchar *fpr, const char *filename, int is_x509)
 {
   gchar *header, *pub_key, *sec_key;
   gchar *err;
@@ -544,17 +545,26 @@ gpa_backup_key (const gchar *fpr, const char *filename)
       NULL, "--batch", "--no-tty", "--armor", "--export-secret-key",
       (gchar*) fpr, NULL
     };
+  gchar *seccms_argv[] =
+    {
+      NULL, "--batch", "--no-tty", "--armor", "--export-secret-key-p12",
+      (gchar*) fpr, NULL
+    };
   const gchar *path;
   mode_t mask;
 
   /* Get the gpg path.  */
-  path = get_gpg_path ();
+  if (is_x509)
+    path = get_gpgsm_path ();
+  else
+    path = get_gpg_path ();
   g_return_val_if_fail (path && *path, FALSE);
 
   /* Add the executable to the arg arrays */
   header_argv[0] = (gchar*) path;
   pub_argv[0] = (gchar*) path;
   sec_argv[0] = (gchar*) path;
+  seccms_argv[0] = (gchar*) path;
   /* Open the file */
   mask = umask (0077);
   file = g_fopen (filename, "w");
@@ -568,11 +578,13 @@ gpa_backup_key (const gchar *fpr, const char *filename)
       return FALSE;
     }
   /* Get the keys and write them into the file */
-  fputs (_("************************************************************************\n"
-	   "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
-	   "* a safe place.                                                        *\n"
-	   "************************************************************************\n\n"),
-	 file);
+  fputs (_(
+    "************************************************************************\n"
+    "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
+    "* a safe place.                                                        *\n"
+    "************************************************************************\n"
+    "\n"), file);
+
   fputs (_("The key backed up in this file is:\n\n"), file);
   if( !g_spawn_sync (NULL, header_argv, NULL, 0, NULL, NULL, &header,
 		     &err, &ret_code, NULL))
@@ -584,7 +596,7 @@ gpa_backup_key (const gchar *fpr, const char *filename)
   g_free (header);
   fputs ("\n", file);
   if( !g_spawn_sync (NULL, pub_argv, NULL, 0, NULL, NULL, &pub_key,
-		     &err, &ret_code, NULL))
+                     &err, &ret_code, NULL))
     {
       fclose (file);
       return FALSE;
@@ -593,7 +605,9 @@ gpa_backup_key (const gchar *fpr, const char *filename)
   g_free (err);
   g_free (pub_key);
   fputs ("\n", file);
-  if( !g_spawn_sync (NULL, sec_argv, NULL, 0, NULL, NULL, &sec_key,
+  if( !g_spawn_sync (NULL,
+                     is_x509? seccms_argv : sec_argv,
+                     NULL, 0, NULL, NULL, &sec_key,
 		     &err, &ret_code, NULL))
     {
       fclose (file);
