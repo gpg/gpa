@@ -275,8 +275,10 @@ gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id,
 
   /* Set the default file name.  I am not sure whether ".p12" or
      ".pem" is better for an _armored_ pkcs#12. */
-  default_comp = g_strdup_printf ("%s/secret-key-%s.%s",
-                                  gnupg_homedir, key_id,
+  default_comp = g_strdup_printf ("%s%csecret-key-%s.%s",
+                                  gnupg_homedir,
+                                  G_DIR_SEPARATOR,
+                                  key_id,
                                   is_x509? "p12":"asc");
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), default_comp);
   g_free (default_comp);
