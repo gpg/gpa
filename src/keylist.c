@@ -819,9 +819,11 @@ gpa_keylist_has_single_secret_selection (GpaKeyList *keylist)
 
 
 /* Return a GList of selected keys. The caller must not dereference
-   the keys as they belong to the caller.  */
+   the keys as they belong to the caller.  Unless PROTOCOL is
+   GPGME_PROTOCOL_UNKNOWN, only keys matching thhe requested protocol
+   are returned.  */
 GList *
-gpa_keylist_get_selected_keys (GpaKeyList * keylist)
+gpa_keylist_get_selected_keys (GpaKeyList * keylist, gpgme_protocol_t protocol)
 {
   GtkTreeSelection *selection =
     gtk_tree_view_get_selection (GTK_TREE_VIEW (keylist));
@@ -843,7 +845,10 @@ gpa_keylist_get_selected_keys (GpaKeyList * keylist)
       key = g_value_get_pointer (&value);
       g_value_unset(&value);
 
-      keys = g_list_append (keys, key);
+      /* Fixme: Why don't we ref KEY? */
+      if (key && (protocol == GPGME_PROTOCOL_UNKNOWN
+                  || protocol == key->protocol))
+        keys = g_list_append (keys, key);
     }
 
   g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);

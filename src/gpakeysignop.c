@@ -38,10 +38,10 @@
 
 /* Internal functions */
 static gboolean gpa_key_sign_operation_idle_cb (gpointer data);
-static void gpa_key_sign_operation_done_error_cb (GpaContext *context, 
+static void gpa_key_sign_operation_done_error_cb (GpaContext *context,
 						    gpg_error_t err,
 						    GpaKeySignOperation *op);
-static void gpa_key_sign_operation_done_cb (GpaContext *context, 
+static void gpa_key_sign_operation_done_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaKeySignOperation *op);
 
@@ -98,7 +98,7 @@ static void
 gpa_key_sign_operation_class_init (GpaKeySignOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_key_sign_operation_constructor;
@@ -109,7 +109,7 @@ GType
 gpa_key_sign_operation_get_type (void)
 {
   static GType key_sign_operation_type = 0;
-  
+
   if (!key_sign_operation_type)
     {
       static const GTypeInfo key_sign_operation_info =
@@ -124,12 +124,12 @@ gpa_key_sign_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_key_sign_operation_init,
       };
-      
-      key_sign_operation_type = g_type_register_static 
+
+      key_sign_operation_type = g_type_register_static
 	(GPA_KEY_OPERATION_TYPE, "GpaKeySignOperation",
 	 &key_sign_operation_info, 0);
     }
-  
+
   return key_sign_operation_type;
 }
 
@@ -141,7 +141,7 @@ GpaKeySignOperation*
 gpa_key_sign_operation_new (GtkWidget *window, GList *keys)
 {
   GpaKeySignOperation *op;
-  
+
   op = g_object_new (GPA_KEY_SIGN_OPERATION_TYPE,
 		     "window", window,
 		     "keys", keys,
@@ -154,13 +154,15 @@ gpa_key_sign_operation_new (GtkWidget *window, GList *keys)
 
 static gpg_error_t
 gpa_key_sign_operation_start (GpaKeySignOperation *op)
-{ 
+{
   gpg_error_t err;
   gpgme_key_t key;
   gboolean sign_locally = FALSE;
 
   key = gpa_key_operation_current_key (GPA_KEY_OPERATION (op));
   g_return_val_if_fail (key, gpg_error (GPG_ERR_CANCELED));
+  if (key->protocol != GPGME_PROTOCOL_OpenPGP)
+    return 0;
 
   if (! gpa_key_sign_run_dialog (GPA_OPERATION (op)->window,
 				 key, &sign_locally))
@@ -222,9 +224,10 @@ gpa_key_sign_operation_next (GpaKeySignOperation *op)
 }
 
 
-static void gpa_key_sign_operation_done_error_cb (GpaContext *context, 
-						  gpg_error_t err,
-						  GpaKeySignOperation *op)
+static void
+gpa_key_sign_operation_done_error_cb (GpaContext *context,
+                                      gpg_error_t err,
+                                      GpaKeySignOperation *op)
 {
   switch (gpg_err_code (err))
     {
@@ -256,9 +259,10 @@ static void gpa_key_sign_operation_done_error_cb (GpaContext *context,
     }
 }
 
-static void gpa_key_sign_operation_done_cb (GpaContext *context, 
-					    gpg_error_t err,
-					    GpaKeySignOperation *op)
+static void
+gpa_key_sign_operation_done_cb (GpaContext *context,
+                                gpg_error_t err,
+                                GpaKeySignOperation *op)
 {
   GPA_KEY_OPERATION (op)->current = g_list_next
     (GPA_KEY_OPERATION (op)->current);

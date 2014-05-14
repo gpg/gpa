@@ -373,7 +373,8 @@ register_operation (GpaKeyManager *self, GpaOperation *op)
 static void
 key_manager_delete (GtkAction *action, GpaKeyManager *self)
 {
-  GList *selection = gpa_keylist_get_selected_keys (self->keylist);
+  GList *selection = gpa_keylist_get_selected_keys (self->keylist,
+                                                    GPGME_PROTOCOL_UNKNOWN);
   GpaKeyDeleteOperation *op = gpa_key_delete_operation_new (GTK_WIDGET (self),
 							    selection);
   register_key_operation (self, GPA_KEY_OPERATION (op));
@@ -423,7 +424,8 @@ key_manager_can_sign (gpointer param)
 	 the selected key was already signed with the default key.  */
       GpaKeyManager *self = param;
       gpgme_key_t key = key_manager_current_key (self);
-      result = ! key_has_been_signed (key, default_key);
+      if (key->protocol == GPGME_PROTOCOL_OpenPGP)
+        result = ! key_has_been_signed (key, default_key);
     }
   else if (default_key && key_manager_has_selection (param))
     /* Always allow signing many keys at once.  */
@@ -448,9 +450,13 @@ key_manager_sign (GtkAction *action, gpointer param)
       return;
     }
 
-  selection = gpa_keylist_get_selected_keys (self->keylist);
-  op = gpa_key_sign_operation_new (GTK_WIDGET (self), selection);
-  register_key_operation (self, GPA_KEY_OPERATION (op));
+  selection = gpa_keylist_get_selected_keys (self->keylist,
+                                             GPGME_PROTOCOL_OpenPGP);
+  if (selection)
+    {
+      op = gpa_key_sign_operation_new (GTK_WIDGET (self), selection);
+      register_key_operation (self, GPA_KEY_OPERATION (op));
+    }
 }
 
 /* Invoke the "edit key" dialog.  */
@@ -488,9 +494,13 @@ key_manager_trust (GtkAction *action, gpointer param)
   if (! key_manager_has_single_selection (self))
     return;
 
-  selection = gpa_keylist_get_selected_keys (self->keylist);
-  op = gpa_key_trust_operation_new (GTK_WIDGET (self), selection);
-  register_key_operation (self, GPA_KEY_OPERATION (op));
+  selection = gpa_keylist_get_selected_keys (self->keylist,
+                                             GPGME_PROTOCOL_OpenPGP);
+  if (selection)
+    {
+      op = gpa_key_trust_operation_new (GTK_WIDGET (self), selection);
+      register_key_operation (self, GPA_KEY_OPERATION (op));
+    }
 }
 
 
@@ -514,7 +524,8 @@ key_manager_export (GtkAction *action, gpointer param)
   GList *selection;
   GpaExportFileOperation *op;
 
-  selection = gpa_keylist_get_selected_keys (self->keylist);
+  selection = gpa_keylist_get_selected_keys (self->keylist,
+                                             GPGME_PROTOCOL_UNKNOWN);
   if (! selection)
     return;
 
@@ -551,9 +562,13 @@ key_manager_send (GtkAction *action, gpointer param)
   if (! key_manager_has_single_selection (self))
     return;
 
-  selection = gpa_keylist_get_selected_keys (self->keylist);
-  op = gpa_export_server_operation_new (GTK_WIDGET (self), selection);
-  register_operation (self, GPA_OPERATION (op));
+  selection = gpa_keylist_get_selected_keys (self->keylist,
+                                             GPGME_PROTOCOL_OPENPGP);
+  if (selection)
+    {
+      op = gpa_export_server_operation_new (GTK_WIDGET (self), selection);
+      register_operation (self, GPA_OPERATION (op));
+    }
 }
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
 
@@ -643,6 +658,7 @@ key_manager_selection_changed (GtkTreeSelection *treeselection,
 				  gpointer param)
 {
   GpaKeyManager *self = param;
+  GList *selection;
 
   /* Some other piece of the keyring wants us to ignore this signal.  */
   if (self->freeze_selection)
@@ -661,14 +677,14 @@ key_manager_selection_changed (GtkTreeSelection *treeselection,
     gpgme_op_keylist_end (self->ctx->ctx);
 
   /* Load the new one.  */
-  if (gpa_keylist_has_single_selection (self->keylist))
+  if (gpa_keylist_has_single_selection (self->keylist)
+      && (selection = gpa_keylist_get_selected_keys (self->keylist,
+                                                     GPGME_PROTOCOL_UNKNOWN)))
     {
       gpg_error_t err;
-      GList *selection;
       gpgme_key_t key;
       int old_mode;
 
-      selection = gpa_keylist_get_selected_keys (self->keylist);
       key = (gpgme_key_t) selection->data;
       old_mode = gpgme_get_keylist_mode (self->ctx->ctx);
 
@@ -822,7 +838,8 @@ key_manager_copy (GtkAction *action, gpointer param)
   GList *selection;
   GpaExportClipboardOperation *op;
 
-  selection = gpa_keylist_get_selected_keys (self->keylist);
+  selection = gpa_keylist_get_selected_keys (self->keylist,
+                                             GPGME_PROTOCOL_UNKNOWN);
   if (! selection)
     return;
 
@@ -1141,10 +1158,14 @@ idle_update_details (gpointer param)
     }
   else
     {
-      GList *selection = gpa_keylist_get_selected_keys (self->keylist);
-      gpa_key_details_update (self->details, NULL,
-                              g_list_length (selection));
-      g_list_free (selection);
+      GList *selection = gpa_keylist_get_selected_keys (self->keylist,
+                                                        GPGME_PROTOCOL_UNKNOWN);
+      if (selection)
+        {
+          gpa_key_details_update (self->details, NULL,
+                                  g_list_length (selection));
+          g_list_free (selection);
+        }
     }
 
   /* Set the idle id to NULL to indicate that the idle handler has

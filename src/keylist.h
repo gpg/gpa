@@ -72,10 +72,10 @@ GType gpa_keylist_get_type (void) G_GNUC_CONST;
 
 
 /* Usage flags.  */
-#define KEY_USAGE_SIGN 1   /* Good for signatures. */            
-#define KEY_USAGE_ENCR 2   /* Good for encryption. */            
+#define KEY_USAGE_SIGN 1   /* Good for signatures. */
+#define KEY_USAGE_ENCR 2   /* Good for encryption. */
 #define KEY_USAGE_CERT 4   /* Good to certify other keys. */
-#define KEY_USAGE_AUTH 8   /* Good for authentication. */        
+#define KEY_USAGE_AUTH 8   /* Good for authentication. */
 
 
 /* Create a new key list widget.  */
@@ -107,7 +107,8 @@ gboolean gpa_keylist_has_single_secret_selection (GpaKeyList * keylist);
 
 /* Return a GList of selected keys. The caller must not dereference
    the keys as they belong to the caller.  */
-GList *gpa_keylist_get_selected_keys (GpaKeyList * keylist);
+GList *gpa_keylist_get_selected_keys (GpaKeyList *keylist,
+                                      gpgme_protocol_t protocol);
 
 /* Return the selected key.  This function returns NULL if no or more
    than one key has been selected.  */
