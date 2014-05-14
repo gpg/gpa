@@ -1583,6 +1583,18 @@ cmd_checksum_verify_files (assuan_context_t ctx, char *line)
   return assuan_process_done (ctx, err);
 }
 
+
+
+/* KILL_UISERVER  */
+static gpg_error_t
+cmd_kill_uiserver (assuan_context_t ctx, char *line)
+{
+  (void)line;
+  shutdown_pending = TRUE;
+  return assuan_process_done (ctx, 0);
+}
+
+
 
 static gpg_error_t
 reset_notify (assuan_context_t ctx, char *line)
@@ -1668,6 +1680,7 @@ register_commands (assuan_context_t ctx)
     { "IMPORT_FILES", cmd_import_files },
     { "CHECKSUM_CREATE_FILES", cmd_checksum_create_files },
     { "CHECKSUM_VERIFY_FILES", cmd_checksum_verify_files },
+    { "KILL_UISERVER", cmd_kill_uiserver },
     { NULL }
   };
   int i, rc;

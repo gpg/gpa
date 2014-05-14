@@ -69,6 +69,7 @@ typedef struct
   gboolean start_clipboard;
   gboolean start_settings;
   gboolean start_only_server;
+  gboolean stop_running_server;
   gboolean disable_x509;
   gboolean no_remote;
   gboolean enable_logging;
@@ -121,6 +122,8 @@ static GOptionEntry option_entries[] =
       N_("Read options from file"), "FILE" },
     { "no-remote", 0, 0, G_OPTION_ARG_NONE, &args.no_remote,
       N_("Do not connect to a running instance"), NULL },
+    { "stop-server", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
+      &args.stop_running_server, NULL, NULL },
     /* Note:  the cms option will eventually be removed.  */
     { "cms", 'x', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &cms_hack, NULL, NULL },
@@ -545,8 +548,18 @@ main (int argc, char *argv[])
   gpa_options_set_file (gpa_options_get_instance (), configname);
   g_free (configname);
 
+  if (args.stop_running_server)
+    {
+      /* If a UI server with the same name is already running, stop
+         it.  If not, do nothing.  */
+      if (gpa_check_server () == 2)
+        gpa_send_to_server ("KILL_UISERVER");
+      return 0;
+    }
+
+
   /* Check whether we need to start a server or to simply open a
-     windowin an existing server.  */
+     window in an already running server.  */
   switch (gpa_check_server ())
     {
     case 0: /* No running server on the expected socket.  Start one.  */
