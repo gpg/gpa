@@ -242,6 +242,7 @@ key_manager_has_single_selection (gpointer param)
   return gpa_keylist_has_single_selection (self->keylist);
 }
 
+
 /* Return TRUE if the key list widget of the key manager has
    exactly one selected OpenPGP item.  Usable as a sensitivity
    callback.  */
@@ -990,7 +991,9 @@ key_manager_action_new (GpaKeyManager *self,
     "      <menuitem action='WindowsKeyringEditor'/>"
     "      <menuitem action='WindowsFileManager'/>"
     "      <menuitem action='WindowsClipboard'/>"
+#ifdef ENABLE_CARD_MANAGER
     "      <menuitem action='WindowsCardManager'/>"
+#endif
     "    </menu>"
 #ifdef ENABLE_KEYSERVER_SUPPORT
     "    <menu action='Server'>"
@@ -1021,7 +1024,9 @@ key_manager_action_new (GpaKeyManager *self,
     "    <separator/>"
     "    <toolitem action='WindowsFileManager'/>"
     "    <toolitem action='WindowsClipboard'/>"
+#ifdef ENABLE_CARD_MANAGER
     "    <toolitem action='WindowsCardManager'/>"
+#endif
 #if 0
     "    <toolitem action='HelpContents'/>"
 #endif
@@ -1095,8 +1100,10 @@ key_manager_action_new (GpaKeyManager *self,
   g_object_set (action, "short_label", _("Import"), NULL);
   action = gtk_action_group_get_action (action_group, "WindowsFileManager");
   g_object_set (action, "short_label", _("Files"), NULL);
+#ifdef ENABLE_CARD_MANAGER
   action = gtk_action_group_get_action (action_group, "WindowsCardManager");
   g_object_set (action, "short_label", _("Card"), NULL);
+#endif
 
   /* Take care of sensitiveness of widgets.  */
   action = gtk_action_group_get_action (action_group, "EditCopy");
