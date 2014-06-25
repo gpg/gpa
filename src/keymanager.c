@@ -854,6 +854,10 @@ key_manager_refresh (GtkAction *action, gpointer param)
 {
   GpaKeyManager *self = param;
 
+  /* Hack: To force reloading of secret keys we claim that a secret
+     key has been imported.  */
+  gpa_keylist_imported_secret_key (self->keylist);
+
   gpa_keylist_start_reload (self->keylist);
 }
 
