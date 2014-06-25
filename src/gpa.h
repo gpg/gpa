@@ -53,6 +53,7 @@ extern gchar *gnupg_homedir;
 extern gboolean cms_hack;
 extern gboolean disable_ticker;
 extern gboolean debug_edit_fsm;
+extern gboolean verbose;
 
 /* Show the keyring editor dialog.  */
 void gpa_open_key_manager (GtkAction *action, void *data);

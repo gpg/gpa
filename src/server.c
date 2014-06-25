@@ -2082,8 +2082,9 @@ gpa_check_server (void)
                                  gpgme_get_dirinfo ("uiserver-socket"), 0, 0);
   if (err)
     {
-      g_message ("error connecting an UI server: %s - %s",
-                 gpg_strerror (err), "assuming not running");
+      if (verbose || gpg_err_code (err) != GPG_ERR_ASS_CONNECT_FAILED)
+        g_message ("error connecting an UI server: %s - %s",
+                   gpg_strerror (err), "assuming not running");
       result = 0;
       goto leave;
     }
@@ -2100,7 +2101,8 @@ gpa_check_server (void)
 
   if (name_check)
     {
-      g_message ("an instance of this program is already running");
+      if (verbose)
+        g_message ("an instance of this program is already running");
       result = 2;
     }
   else

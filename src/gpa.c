@@ -60,6 +60,9 @@ gboolean disable_ticker;
 /* True if the gpgme edit FSM shall output debug messages.  */
 gboolean debug_edit_fsm;
 
+/* True if verbose messages are requested.  */
+gboolean verbose;
+
 /* Local variables.  */
 typedef struct
 {
@@ -99,7 +102,7 @@ static void print_version (void);
 /* All command line options of the main application.  */
 static GOptionEntry option_entries[] =
   {
-    { "version", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
+    { "version", 'V', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
       (gpointer) &print_version,
       N_("Output version information and exit"), NULL, },
     { "keyring", 'k', 0, G_OPTION_ARG_NONE, &args.start_key_manager,
@@ -127,6 +130,8 @@ static GOptionEntry option_entries[] =
     /* Note:  the cms option will eventually be removed.  */
     { "cms", 'x', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &cms_hack, NULL, NULL },
+    { "verbose", 'v',      G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
+      &verbose,  NULL, NULL },
     { "disable-ticker", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
       &disable_ticker, NULL, NULL },
     { "debug-edit-fsm", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,
