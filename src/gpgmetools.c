@@ -1,6 +1,6 @@
 /* gpgmetools.h - Additional gpgme support functions for GPA.
    Copyright (C) 2002 Miguel Coca.
-   Copyright (C) 2005, 2008, 2009, 2012 g10 Code GmbH.
+   Copyright (C) 2005, 2008, 2009, 2012, 2014 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -528,48 +528,47 @@ get_gpg_connect_agent_path (void)
 gboolean
 gpa_backup_key (const gchar *fpr, const char *filename, int is_x509)
 {
-  gchar *header, *pub_key, *sec_key;
-  gchar *err;
-  FILE *file;
-  gint ret_code;
-  gchar *header_argv[] =
+  const char *header_argv[] =
     {
-      NULL, "--batch", "--no-tty", "--fingerprint", (gchar*) fpr, NULL
+      "", "--batch", "--no-tty", "--fingerprint",
+      (char*) fpr, NULL
     };
-  gchar *pub_argv[] =
+  const char *pub_argv[] =
     {
-      NULL, "--batch", "--no-tty", "--armor", "--export", (gchar*) fpr, NULL
+      "", "--batch", "--no-tty", "--armor", "--export",
+      (char*) fpr, NULL
     };
-  gchar *sec_argv[] =
+  const char *sec_argv[] =
     {
-      NULL, "--batch", "--no-tty", "--armor", "--export-secret-key",
-      (gchar*) fpr, NULL
+      "", "--batch", "--no-tty", "--armor", "--export-secret-key",
+      (char*) fpr, NULL
     };
-  gchar *seccms_argv[] =
+  const char *seccms_argv[] =
     {
-      NULL, "--batch", "--no-tty", "--armor", "--export-secret-key-p12",
-      (gchar*) fpr, NULL
+      "", "--batch", "--no-tty", "--armor", "--export-secret-key-p12",
+      (char*) fpr, NULL
     };
-  const gchar *path;
-  mode_t mask;
+  gpg_error_t err;
+  FILE *fp;
+  gpgme_data_t dfp = NULL;
+  const char *pgm;
+  gpgme_ctx_t ctx = NULL;
+  int result = FALSE;
 
   /* Get the gpg path.  */
   if (is_x509)
-    path = get_gpgsm_path ();
+    pgm = get_gpgsm_path ();
   else
-    path = get_gpg_path ();
-  g_return_val_if_fail (path && *path, FALSE);
+    pgm = get_gpg_path ();
+  g_return_val_if_fail (pgm && *pgm, FALSE);
 
-  /* Add the executable to the arg arrays */
-  header_argv[0] = (gchar*) path;
-  pub_argv[0] = (gchar*) path;
-  sec_argv[0] = (gchar*) path;
-  seccms_argv[0] = (gchar*) path;
   /* Open the file */
-  mask = umask (0077);
-  file = g_fopen (filename, "w");
-  umask (mask);
-  if (!file)
+  {
+    mode_t mask = umask (0077);
+    fp = g_fopen (filename, "w");
+    umask (mask);
+  }
+  if (!fp)
     {
       gchar message[256];
       g_snprintf (message, sizeof(message), "%s: %s",
@@ -577,48 +576,62 @@ gpa_backup_key (const gchar *fpr, const char *filename, int is_x509)
       gpa_window_error (message, NULL);
       return FALSE;
     }
-  /* Get the keys and write them into the file */
+
   fputs (_(
     "************************************************************************\n"
     "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
     "* a safe place.                                                        *\n"
     "************************************************************************\n"
-    "\n"), file);
+    "\n"), fp);
 
-  fputs (_("The key backed up in this file is:\n\n"), file);
-  if( !g_spawn_sync (NULL, header_argv, NULL, 0, NULL, NULL, &header,
-		     &err, &ret_code, NULL))
-    {
-      return FALSE;
-    }
-  fputs (header, file);
-  g_free (err);
-  g_free (header);
-  fputs ("\n", file);
-  if( !g_spawn_sync (NULL, pub_argv, NULL, 0, NULL, NULL, &pub_key,
-                     &err, &ret_code, NULL))
-    {
-      fclose (file);
-      return FALSE;
-    }
-  fputs (pub_key, file);
-  g_free (err);
-  g_free (pub_key);
-  fputs ("\n", file);
-  if( !g_spawn_sync (NULL,
-                     is_x509? seccms_argv : sec_argv,
-                     NULL, 0, NULL, NULL, &sec_key,
-		     &err, &ret_code, NULL))
-    {
-      fclose (file);
-      return FALSE;
-    }
-  fputs (sec_key, file);
-  g_free (err);
-  g_free (sec_key);
+  fputs (_("The key backed up in this file is:\n\n"), fp);
+  fflush (fp);
 
-  fclose (file);
-  return TRUE;
+  err = gpgme_data_new_from_stream (&dfp, fp);
+  if (err)
+    {
+      g_message ("error creating data object '%s': %s",
+                 filename, gpg_strerror (err));
+      goto leave;
+    }
+
+  ctx = gpa_gpgme_new ();
+  gpgme_set_protocol (ctx, GPGME_PROTOCOL_SPAWN);
+
+  err = gpgme_op_spawn (ctx, pgm, header_argv, NULL, dfp, NULL,
+                        GPGME_SPAWN_DETACHED|GPGME_SPAWN_ALLOW_SET_FG);
+  if (err)
+    {
+      g_message ("error running '%s' (1): %s", pgm, gpg_strerror (err));
+      goto leave;
+    }
+  gpgme_data_write (dfp, "\n", 1);
+
+  err = gpgme_op_spawn (ctx, pgm, pub_argv, NULL, dfp, NULL,
+                        GPGME_SPAWN_DETACHED|GPGME_SPAWN_ALLOW_SET_FG);
+  if (err)
+    {
+      g_message ("error running '%s' (2): %s", pgm, gpg_strerror (err));
+      goto leave;
+    }
+  gpgme_data_write (dfp, "\n", 1);
+
+  err = gpgme_op_spawn (ctx, pgm, is_x509? seccms_argv : sec_argv,
+                        NULL, dfp, NULL,
+                        GPGME_SPAWN_DETACHED|GPGME_SPAWN_ALLOW_SET_FG);
+  if (err)
+    {
+      g_message ("error running '%s' (3): %s", pgm, gpg_strerror (err));
+      goto leave;
+    }
+
+  result = TRUE;
+
+ leave:
+  gpgme_release (ctx);
+  gpgme_data_release (dfp);
+  fclose (fp);
+  return result;
 }
 
 
