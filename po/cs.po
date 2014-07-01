@@ -1,20 +1,18 @@
 # translation of cs.po to czech
-# Written by Zdenek Hatas <zdenek.hatas@gmail.com>
+# Written by Zdenek Hatas <zdenek.hatas@gmail.com>, 2007 - 2014
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"PO-Revision-Date: 2007-05-24 15:04+0200\n"
+"PO-Revision-Date: 2014-06-05 08:46+0100\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: czech <cs@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.2\n"
-"X-Poedit-Language: Czech\n"
-"X-Poedit-Country: CZECH REPUBLIC\n"
+"X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
@@ -26,148 +24,127 @@ msgstr "Zpráva GPA"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s is %llu%s large.  Do you really  want to open it?"
-msgstr ""
-"Soubor %s již existuje.\n"
-"Chcete jej přepsat?"
+msgstr "Soubor %s je %llu%s  velký. Opravdu jej chcete otevřít?"
 
 msgid "Save As..."
-msgstr ""
+msgstr "Uložit jako..."
 
-#, fuzzy
 msgid "Clipboard"
-msgstr "Zur _Zwischenablage exportieren"
+msgstr "Schránka"
 
-#, fuzzy
 msgid "_File"
-msgstr "/_Soubor"
+msgstr "_Soubor"
 
-#, fuzzy
 msgid "_Edit"
-msgstr "/_Upravit"
+msgstr "Úpr_avy"
 
 msgid "Clear buffer"
-msgstr ""
+msgstr "Vyprázdnit mezipaměť"
 
 msgid "Open a file"
 msgstr "Otevřít soubor"
 
-#, fuzzy
 msgid "Save to a file"
-msgstr "Otevřít soubor"
+msgstr "Uložit do souboru"
 
-#, fuzzy
 msgid "Sign buffer text"
-msgstr "podepsat klíč"
+msgstr "Podepsat text v mezipaměti"
 
-#, fuzzy
 msgid "Check signatures of buffer text"
-msgstr "Zkontrolovat podpis vybraného souboru"
+msgstr "Zkontrolovat podpis textu v mezipaměti"
 
-#, fuzzy
 msgid "Encrypt the buffer text"
-msgstr "Zašifrovat vybraný soubor"
+msgstr "Šifrovat text v mezipaměti"
 
-#, fuzzy
 msgid "Decrypt the buffer text"
-msgstr "Dešifrovat vybraný soubor"
+msgstr "Dešifrovat text v mezipaměti"
 
 msgid "Close the buffer"
-msgstr ""
+msgstr "Uzavřít mezipaměť"
 
 msgid "Quit the program"
-msgstr ""
+msgstr "Ukončit program"
 
-#, fuzzy
 msgid "Undo the last action"
-msgstr "Zašifrovat vybraný soubor"
+msgstr "Vrátit zpět poslední akci"
 
 msgid "Redo the last undone action"
-msgstr ""
+msgstr "Opakovat poslední vrácenou akci"
 
-#, fuzzy
 msgid "Cut the selection"
-msgstr "Zašifrovat vybraný soubor"
+msgstr "Vyjmout výběr"
 
-#, fuzzy
 msgid "Copy the selection"
-msgstr "Zašifrovat vybraný soubor"
+msgstr "Kopírovat výběr"
 
-#, fuzzy
 msgid "Paste the clipboard"
-msgstr "Zur _Zwischenablage exportieren"
+msgstr "Vložit ze schránky"
 
-#, fuzzy
 msgid "Delete the selected text"
-msgstr "Dešifrovat vybraný soubor"
+msgstr "Smazat vybraný text"
 
 msgid "Select the entire document"
-msgstr ""
+msgstr "Vybrat celý dokument"
 
-#, fuzzy
 msgid "Keyring"
-msgstr "Správce klíčů"
+msgstr "Klíčenka"
 
 msgid "Files"
 msgstr "Soubory"
 
-#, fuzzy
 msgid "Card"
-msgstr "Zur _Zwischenablage exportieren"
+msgstr "Karta"
 
 msgid "<b>Main</b>"
-msgstr ""
+msgstr "<b>Hlavní</b>"
 
-#, fuzzy
 msgid "Use default values"
-msgstr "Standard-Schlüssel festlegen"
+msgstr "Použít výchozí hodnoty"
 
-#, fuzzy
 msgid "Use default value"
-msgstr "Standard-Schlüssel festlegen"
+msgstr "Použít výchozí hodnotu"
 
 msgid "Do not use option"
-msgstr ""
+msgstr "Nepoužívat tuto volbu"
 
 msgid "Use custom values"
-msgstr ""
+msgstr "Použít vlastní hodnoty"
 
 msgid "Use custom value"
-msgstr ""
+msgstr "Použít vlastní hodnotu"
 
-#, fuzzy
 msgid "Use default argument"
-msgstr "Empfängerliste festlegen"
+msgstr "Použít výchozí argument"
 
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
 msgstr ""
+"Nebyly uloženy změny, které jste provedl. Přepnutí nastavení úrovně expert "
+"tyto změny uloží. Přejete si pokračovat?"
 
 msgid "Crypto Backend Configuration"
-msgstr ""
+msgstr "Nastavení šifrovacího backendu"
 
 msgid "Reset"
-msgstr ""
+msgstr "Výchozí"
 
 msgid "Configure the tools of the GnuPG system."
-msgstr ""
+msgstr "Nastavit nástroje GnuPG systému."
 
-#, fuzzy
 msgid "Level:"
-msgstr "Úroveň"
+msgstr "Úroveň:"
 
-#, fuzzy
 msgid "Basic"
-msgstr "_Zpět"
+msgstr "Základní"
 
 msgid "Advanced"
-msgstr ""
+msgstr "Pokročilý"
 
-#, fuzzy
 msgid "Expert"
-msgstr "Exportovat"
+msgstr "Expert"
 
 msgid "days"
 msgstr "dny"
@@ -188,18 +165,16 @@ msgid "unknown"
 msgstr "neznámá"
 
 msgid "Mr."
-msgstr ""
+msgstr "Pan"
 
 msgid "Ms."
-msgstr ""
+msgstr "Paní"
 
-#, fuzzy
 msgid "(unknown)"
-msgstr "neznámá"
+msgstr "(neznámý)"
 
-#, fuzzy
 msgid "Encrypt documents"
-msgstr "Zašifrovat soubor"
+msgstr "Šifrovat dokumenty"
 
 msgid "_Public Keys"
 msgstr "_Veřejné klíče"
@@ -244,16 +219,14 @@ msgid "Decrypt the selected file"
 msgstr "Dešifrovat vybraný soubor"
 
 msgid "Close the window"
-msgstr ""
+msgstr "Zavřít okno"
 
-#, fuzzy
 msgid "Select all files"
-msgstr "Vymazat všechny soubory"
+msgstr "Vybrat všechny soubory"
 
 msgid "File"
 msgstr "Soubor"
 
-#, fuzzy
 msgid "File Manager"
 msgstr "Správce souborů"
 
@@ -261,100 +234,83 @@ msgid "The file is already open."
 msgstr "Soubor je již otevřený"
 
 msgid "Sign documents"
-msgstr ""
+msgstr "Podepsat dokumenty"
 
-#, fuzzy
 msgid "<b>Sign _as</b>"
-msgstr "Podeps_at jako"
+msgstr "<b>Podeps_at jako</b>"
 
-#, fuzzy
 msgid "<b>Signing Mode</b>"
-msgstr "Mód podpisu"
+msgstr "<b>Mód podpisu</b>"
 
-#, fuzzy
 msgid "Si_gn and compress"
-msgstr "podep_sat a komprimovat"
+msgstr "Podep_sat a komprimovat"
 
-#, fuzzy
 msgid "Clear_text signature"
-msgstr "podpis v čistém _textu"
+msgstr "Clear _text podpis"
 
-#, fuzzy
 msgid "_Detached signature"
-msgstr "podpis v čistém _textu"
+msgstr "O_ddělený podpis"
 
-#, fuzzy
 msgid "Output version information and exit"
-msgstr "vypsat verzi a skončit"
+msgstr "Vypsat informace o verzi a skončit"
 
-#, fuzzy
 msgid "Open key manager (default)"
-msgstr "otevřít Správce klíčů (výchozí)"
+msgstr "Otevřít správce klíčů (výchozí)"
 
-#, fuzzy
 msgid "Open file manager"
-msgstr "otevřít Správce souborů"
+msgstr "Otevřít správce souborů"
 
-#, fuzzy
 msgid "Open the card manager"
-msgstr "Otevřít Správce souborů"
+msgstr "Otevřít správce karet"
 
-#, fuzzy
 msgid "Open clipboard"
-msgstr "Zur _Zwischenablage exportieren"
+msgstr "Otevřít schránku"
+
+msgid "Open the settings dialog"
+msgstr "Otevřít dialog nastavení"
 
 #, fuzzy
-msgid "Open the settings dialog"
-msgstr "Otevřít dialog Nastavení"
-
-msgid "Enable the UI server"
-msgstr ""
+msgid "Only start the UI server"
+msgstr "Povolit UI server"
 
 msgid "Disable support for X.509"
-msgstr ""
+msgstr "Vypnout podporu pro X.509"
 
-#, fuzzy
 msgid "Read options from file"
-msgstr "číst možnosti ze souboru"
+msgstr "Číst možnosti ze souboru"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
-msgstr ""
+msgstr "[SOUBOR...]"
 
-#, fuzzy
 msgid "Graphical frontend to GnuPG"
-msgstr ""
-"Syntaxe: gpa [možnosti]\n"
-"Grafické rozhraní pro GnuPG\n"
+msgstr "Grafické rozhraní pro GnuPG"
 
 msgid "Please report bugs to <"
 msgstr "Nahlaste prosím chybu <"
 
-#, fuzzy
 msgid "_Windows"
-msgstr "/_Okna"
+msgstr "_Okna"
 
-#, fuzzy
 msgid "Open the keyring editor"
-msgstr "otevřít Správce klíčů (výchozí)"
+msgstr "Otevřít správce klíčenky"
 
-#, fuzzy
 msgid "Open the file manager"
-msgstr "Otevřít Správce souborů"
+msgstr "Otevřít správce souborů"
 
-#, fuzzy
 msgid "Open the clipboard"
-msgstr "Zur _Zwischenablage exportieren"
+msgstr "Otevřít schránku"
 
-#, fuzzy
 msgid "Configure the application"
-msgstr "Zašifrovat vybraný soubor"
+msgstr "Nastavit aplikaci"
 
-#, fuzzy
 msgid "_Backend Preferences"
-msgstr "/Upravit/Na_stavení"
+msgstr "Na_stavení backendu"
 
 msgid "Configure the backend programs"
-msgstr ""
+msgstr "Nastavit programy backednu"
 
 #, c-format
 msgid ""
@@ -378,9 +334,9 @@ msgstr "V průběhu zálohování došlo k chybě."
 msgid "Backup key to file"
 msgstr "Zálohovat klíč do souboru"
 
-#, c-format
-msgid "Generating backup of key: %s"
-msgstr "Vytvářím zálohu klíče: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
+msgstr "Vytváří se zálohu klíče: %s"
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Klíče byly zkopírovány do schránky."
@@ -396,7 +352,7 @@ msgid "The keys have been exported to %s."
 msgstr "Klíče byly exportovány do %s."
 
 msgid "Only keys of the same procotol may be exported as a collection."
-msgstr ""
+msgstr "Pouze klíče stejného protokolu smějí být exportovány jako kolekce."
 
 #, c-format
 msgid ""
@@ -420,21 +376,21 @@ msgstr "Klíče byly odeslány na server."
 msgid "Decrypting..."
 msgstr "Dešifruji...."
 
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" contained no OpenPGP data."
-msgstr "Soubor \"%s\" neobsahuje žádná OpenPGP data."
+msgstr "\"%s\" neobsahoval OpenPGP data."
 
-#, fuzzy, c-format
+#, c-format
 msgid "The file \"%s\" contained no OpenPGPdata."
-msgstr "Soubor \"%s\" neobsahuje žádná OpenPGP data."
+msgstr "Soubor \"%s\" neobsahoval OpenPGP data."
 
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" contained no valid encrypted data."
-msgstr "Soubor \"%s\" neobsahuje platná šifrovaná data."
+msgstr "\"%s\" neobsahoval platná šifrovaná data."
 
-#, fuzzy, c-format
+#, c-format
 msgid "The file \"%s\" contained no validencrypted data."
-msgstr "Soubor \"%s\" neobsahuje platná šifrovaná data."
+msgstr "Soubor \"%s\" neobsahoval platná šifrovaná data."
 
 msgid "Wrong passphrase!"
 msgstr "Neplatné heslo!"
@@ -445,9 +401,8 @@ msgstr "Šifruji ..."
 msgid "Unknown Key"
 msgstr "Neznámý klíč"
 
-#, fuzzy
 msgid "You are going to encrypt a document using the following key:"
-msgstr "Hodláte zašifrovat soubor následujícím klíčem:"
+msgstr "Hodláte zašifrovat dokument následujícím klíčem:"
 
 msgid "However, it is not certain that the key belongs to that person."
 msgstr "Nicméně není jisté, že klíč patří této osobě."
@@ -461,7 +416,6 @@ msgstr "Zneplatněný klíč"
 msgid "_Close"
 msgstr "_Zavřít"
 
-#, fuzzy
 msgid "The following key has been revoked by its owner:"
 msgstr "Následující klíč byl zneplatněn vlastníkem:"
 
@@ -477,6 +431,8 @@ msgid ""
 "OpenPGP and X.509 certificates. Please make sure to select only certificates "
 "of the same type."
 msgstr ""
+"Vybrané certifikáty nejsou stejného typu. To znamená, že mícháte certifikáty "
+"OpenPGP a X.509. Ujistěte se prosím, že volíte certifikáty stejného typu."
 
 msgid "You didn't select any key for signing"
 msgstr "Nevybrali jste žádný klíč pro podpis"
@@ -500,11 +456,10 @@ msgstr ""
 "Nalezený soubor: %s"
 
 msgid "Generating Key..."
-msgstr "Vytvářím klíč ..."
+msgstr "Vytváří se klíč ..."
 
-#, fuzzy
 msgid "Import keys from file"
-msgstr "Nahrát veřejné klíče ze souboru"
+msgstr "Importovat klíče ze souboru"
 
 msgid "No keys were found."
 msgstr "Nebyly nalezeny žádné klíče."
@@ -554,32 +509,26 @@ msgstr "Který klíč chcete získat? (Musíte zadat ID klíče)."
 msgid "Key _ID:"
 msgstr "_ID klíče:"
 
-#, fuzzy
 msgid "Decrypting message ..."
-msgstr "Dešifruji...."
+msgstr "Zpráva je dešifrována ..."
 
-#, fuzzy
 msgid "Document"
-msgstr "Bemerkung:"
+msgstr "Dokument"
 
-#, fuzzy
 msgid "Encrypting message ..."
-msgstr "Šifruji ..."
+msgstr "Zpráva je šifrována ..."
 
-#, fuzzy
 msgid "Message encryption"
-msgstr "Smí šifrovat"
+msgstr "Šifrování zprávy"
 
-#, fuzzy
 msgid "Signing message ..."
-msgstr "Podepisuji ..."
+msgstr "Zpráva je podepisována ..."
 
 msgid "Message signing"
-msgstr ""
+msgstr "Zprava je podepisována"
 
-#, fuzzy
 msgid "Verifying message ..."
-msgstr "Ověřuji ..."
+msgstr "Zpráva je ověřována..."
 
 msgid "Subkey ID"
 msgstr "ID podklíče"
@@ -587,51 +536,56 @@ msgstr "ID podklíče"
 msgid "Status"
 msgstr "Stav"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "Algoritmus"
 
 msgid "Size"
 msgstr "Velikost"
 
-msgid "Expiry Date"
-msgstr "Platnost do"
+#, fuzzy
+msgid "Created"
+msgstr "Vytvořen:"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "Vypršela platnost"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "Smí podepisovat"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "Smí certifikovat"
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "Smí šifrovat"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "Smí autentizovat"
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
-#, fuzzy
 msgid "Secret key stored on a smartcard."
-msgstr "Schlüsseleditor für geheimen Schlüssel"
+msgstr "Soukromý klíč byl uložen na kartě."
 
 msgid "Card S/N"
-msgstr ""
+msgstr "SČ karty"
 
 msgid "Serial number of the smart card."
-msgstr ""
+msgstr "Výrobní číslo čipové karty."
 
 msgid "Revoked"
 msgstr "Zneplatněn"
@@ -677,12 +631,14 @@ msgstr ""
 "Neplatný mód pro vkládání data vypršení."
 
 msgid "(not set)"
-msgstr ""
+msgstr "(není nastaveno)"
 
 msgid ""
 "Keys are already stored on the card.\n"
 "Really replace existing keys?"
 msgstr ""
+"Klíče jsou již na kartě uložené.\n"
+"Opravdu přepsat existující klíče?"
 
 #, c-format
 msgid ""
@@ -700,7 +656,7 @@ msgstr ""
 "\n"
 "Program bude ukončen"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
 "error at %s:%d. The error was:\n"
@@ -711,12 +667,12 @@ msgid ""
 "%s will now try to recover from this error."
 msgstr ""
 "Knihovna GPGME vrátila neočekávanou\n"
-"chybu. Chyba je:\n"
+"chybu v %s:%d . Chyba je:\n"
 "\n"
 "\t%s\n"
 "\n"
-"Toto je zřejmě chyba v GPA.\n"
-"GPA se pokusí obnovit z chybového stavu."
+"Toto je zřejmě problém v instalaci nebo chyba v %s.\n"
+"%s se pokusí obnovit z chybového stavu."
 
 #, c-format
 msgid ""
@@ -800,76 +756,74 @@ msgstr "Přibližný"
 msgid "Positive"
 msgstr "Pozitivní"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Bad signature by %s: %s"
-msgstr "Podpis: %s"
+msgstr "Neplatný podpis od %s: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Bad signature by %s"
-msgstr "Podpis: %s"
+msgstr "Neplatný podpis od %s"
 
 #, c-format
 msgid "Bad signature by unknown key %s: %s"
-msgstr ""
+msgstr "Neplatný podpis neznámým klíčem %s: %s"
 
 #, c-format
 msgid "Bad signature by unknown key %s"
-msgstr ""
+msgstr "Neplatný podpis neznámým klíčem %s"
 
 #, c-format
 msgid "Bad signature by unknown key: %s"
-msgstr ""
+msgstr "Neplatný podpis neznámým klíčem: %s"
 
-#, fuzzy
 msgid "Bad signature by unknown key"
-msgstr "Ungültiger Signaturtyp"
+msgstr "Neplatný podpis neznámým klíčem"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Good signature by %s: %s"
-msgstr "Podpis: %s"
+msgstr "Platný podpis od %s: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Good signature by %s"
-msgstr "Podpis: %s"
+msgstr "Platný podpis od %s"
 
 #, c-format
 msgid "Good signature by unknown key %s: %s"
-msgstr ""
+msgstr "Platný podpis neznámým klíčem %s: %s"
 
 #, c-format
 msgid "Good signature by unknown key %s"
-msgstr ""
+msgstr "Platný podpis neznámým klíčem %s"
 
 #, c-format
 msgid "Good signature by unknown key: %s"
-msgstr ""
+msgstr "Platný podpis neznámým klíčem: %s"
 
 msgid "Good signature by unknown key"
-msgstr ""
+msgstr "Platný podpis neznámým klíčem"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by %s: %s"
-msgstr "Ungültiger Signaturtyp"
+msgstr "Nejistý podpis od %s: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by %s"
-msgstr "Ungültiger Signaturtyp"
+msgstr "Nejistý podpis od %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by unknown key %s: %s"
-msgstr "Ungültiger Signaturtyp"
+msgstr "Nejistý podpis neznámým klíčem %s: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by unknown key %s"
-msgstr "Ungültiger Signaturtyp"
+msgstr "Nejistý podpis neznámým klíčem %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by unknown key: %s"
-msgstr "Ungültiger Signaturtyp"
+msgstr "Nejistý podpis neznámým klíčem: %s"
 
-#, fuzzy
 msgid "Uncertain signature by unknown key"
-msgstr "Ungültiger Signaturtyp"
+msgstr "Nejistý podpis neznámým klíčem"
 
 msgid "The key can be used for certification, signing and encryption."
 msgstr "Tento klíč smí být použit pro certifikaci, podpis a šifrování."
@@ -902,40 +856,37 @@ msgid "This key is useless."
 msgstr "Tento klíč je nepoužitelný."
 
 msgid "A required engine component is not installed."
-msgstr ""
+msgstr "Požadovaná komponenta stroje není instalovaná."
 
 msgid "Calling the crypto engine program failed."
-msgstr ""
+msgstr "Volání programu šifrovacího stroje selhalo."
 
 msgid "You must enter a name."
-msgstr ""
+msgstr "Musíte zadat jméno."
 
 msgid "Invalid character in name."
-msgstr ""
+msgstr "Neplatný znak ve jménu."
 
 msgid "Name may not start with a digit."
-msgstr ""
+msgstr "Jméno nemůže začínat číslicí."
 
-#, fuzzy
 msgid "Name is too short."
-msgstr "Diese Name ist zu lang."
+msgstr "Jméno je příliš krátké."
 
 msgid "Email address is not valid."
-msgstr ""
+msgstr "E-mailová adresa není platná."
 
 msgid "Invalid character in comments."
-msgstr ""
+msgstr "Neplatný znak v komentářích."
 
 msgid "Error"
 msgstr "Fehler"
 
-#, fuzzy
 msgid "Message"
-msgstr "Zpráva GPA"
+msgstr "Zpráva"
 
-#, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
-msgstr "Co je GNU Privacy Assistant"
+msgstr "GPA je GNU Privacy Assistant"
 
 msgid "About GPA"
 msgstr "O GPA"
@@ -943,54 +894,43 @@ msgstr "O GPA"
 #. TRANSLATORS: The translation of this string should
 #. be your name and mail
 msgid "translator-credits"
-msgstr ""
+msgstr "Zdeněk Hataš <zdenek.hatas@gmail.com>"
 
-#, fuzzy
 msgid "_Help"
-msgstr "/_Nápověda"
+msgstr "_Nápověda"
 
-#, fuzzy
 msgid "Open the GPA manual"
-msgstr "Otevřít Správce souborů"
+msgstr "Otevřít návod GPA"
 
-#, fuzzy
 msgid "About this application"
-msgstr "Zašifrovat vybraný soubor"
+msgstr "O této aplikaci"
 
-#, fuzzy
 msgid "_Verify"
-msgstr "Ověřit"
+msgstr "O_věřit"
 
 msgid "_Encrypt"
 msgstr "_Verschlüsseln"
 
-#, fuzzy
 msgid "_Decrypt"
-msgstr "Dešifrovat"
+msgstr "_Dešifrovat"
 
-#, fuzzy
 msgid "_Brief"
-msgstr "Stručně"
+msgstr "_Stručně"
 
-#, fuzzy
 msgid "_Detailed"
-msgstr "Podrobně"
+msgstr "Po_drobně"
 
-#, fuzzy
 msgid "_Keyring Manager"
-msgstr "Správce souborů"
+msgstr "Správce _klíčenky"
 
-#, fuzzy
 msgid "_Clipboard"
-msgstr "Zur _Zwischenablage exportieren"
+msgstr "S_chránka"
 
-#, fuzzy
 msgid "_File Manager"
-msgstr "Správce souborů"
+msgstr "Správce _souborů"
 
-#, fuzzy
 msgid "_Card Manager"
-msgstr "Správce souborů"
+msgstr "Správce _karet"
 
 msgid "Removing Secret Key"
 msgstr "Odstraňuji soukromý klíč"
@@ -1036,27 +976,29 @@ msgstr "Upravit klíč"
 msgid "Change _passphrase"
 msgstr "Změnit _heslo"
 
+msgid "Expiry Date"
+msgstr "Platnost do"
+
 msgid "Change _expiration"
 msgstr "Změnit _dobu platnosti"
 
 msgid "RSA"
-msgstr ""
+msgstr "RSA"
 
 msgid "RSA (sign only)"
 msgstr "RSA (jen podpis)"
 
 msgid "DSA"
-msgstr ""
+msgstr "DSA"
 
 msgid "DSA (sign only)"
 msgstr "DSA (jen podpis)"
 
 msgid "You must enter a key size."
-msgstr ""
+msgstr "Musíte zadat velikost klíče."
 
-#, fuzzy
 msgid "Generate card key"
-msgstr "Vytvořit klíč"
+msgstr "Vytvořit klíč karty"
 
 msgid "Generate key"
 msgstr "Vytvořit klíč"
@@ -1067,12 +1009,11 @@ msgstr "_Algoritmus: "
 msgid "_Key size (bits): "
 msgstr "Délka _klíče (v bitech): "
 
-#, fuzzy
 msgid "User ID: "
-msgstr "ID _uživatele:"
+msgstr "ID uživatele:"
 
 msgid "_Name: "
-msgstr ""
+msgstr "_Jméno:"
 
 msgid "_Email: "
 msgstr "_E-Mail: "
@@ -1080,19 +1021,20 @@ msgstr "_E-Mail: "
 msgid "_Comment: "
 msgstr "_Komentář: "
 
-#, fuzzy
 msgid "_Expires: "
-msgstr "Vyprší:"
+msgstr "_Vyprší:"
 
-#, fuzzy
 msgid "Backup: "
-msgstr "Zálohovat klíče"
+msgstr "Záloha:"
 
 msgid ""
 "If checked the encryption key will be created and stored to a backup file "
 "and then loaded into the card.  This is recommended so that encrypted "
 "messages can be decrypted even if the card has a malfunction."
 msgstr ""
+"Pokud je zaškrtnuto, bude šifrovací klíč vytvořen a uložen v záložním "
+"souboru a poté nahrán do karty. Tato volba je doporučena v případě, kdy musí "
+"být zašifrovaná zpráva dešifrovatelná i v případě poruchy karty."
 
 msgid ""
 "Please insert your full name.\n"
@@ -1108,7 +1050,6 @@ msgstr ""
 msgid "Your Name:"
 msgstr "Vaše jméno:"
 
-#, fuzzy
 msgid ""
 "Please insert your email address.\n"
 "\n"
@@ -1144,11 +1085,11 @@ msgid ""
 "\n"
 "Even on fast computers this may take a while. Please be patient."
 msgstr ""
-"Vytvářím váš klíč.\n"
+"Vytváří se váš klíč.\n"
 "\n"
 "I na výkonném počítači může tato operace chvíli trvat. Prosím vyčkejte."
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Congratulations!\n"
 "\n"
@@ -1157,7 +1098,8 @@ msgid ""
 msgstr ""
 "Gratuluji!\n"
 "\n"
-"Právě jste vytvořili klíč. Klíč je trvale platný a jeho délka je 1024 bitů."
+"Právě jste úspěšně vytvořili klíč. Tento klíč je trvale platný, jeho délka "
+"je %d bitů."
 
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
@@ -1170,13 +1112,18 @@ msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
+"Tento sloupec indikuje typ certifikátu. Písmeno 'P' znamená OpenPGP, 'X' "
+"znamená X.509 (S/MIME)."
+
+msgid "The key ID is a short number to identify a certificate."
+msgstr "ID klíče je krátké číslo k identifikaci certifikátu."
 
 #, fuzzy
-msgid "The key ID is a short number to identify a certificate."
-msgstr "Tento klíč smí být použit pouze pro certifikaci."
+msgid "The Creation Date is the date the certificate was created."
+msgstr "Datum vypršení je datum, do kterého je certifikát platný."
 
 msgid "The Expiry Date is the date until the certificate is valid."
-msgstr ""
+msgstr "Datum vypršení je datum, do kterého je certifikát platný."
 
 msgid "Owner Trust"
 msgstr "Důvěra ve vlastníka"
@@ -1186,19 +1133,26 @@ msgid ""
 "holder of the certificate to correctly sign (certify) other certificates.  "
 "It is only meaningful for OpenPGP."
 msgstr ""
+"Vámi nastavená důvěra ve vlastníka popisuje jak dalece věříte, že držitel "
+"certifikátu korektně podepisuje (certifikuje) ostatní certifikáty. To má "
+"smysl pouze pro OpenPGP."
 
 msgid "Validity"
-msgstr "Gültigkeit"
+msgstr "Platnost"
 
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
 msgstr ""
+"Platnost popisuje úroveň důvěry systému vůči tomuto certifikátu. Říká, jak "
+"jste si jisti, že daný uživatel je skutečně tím, za koho se vydává."
 
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
 msgstr ""
+"Uživatelské jméno je vlastní jméno a většinou také emailová adresa "
+"certifikátu."
 
 msgid "No keys selected for signing."
 msgstr "Nebyl vybrán klíč pro podpis."
@@ -1223,94 +1177,77 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "_Zálohovat klíč nyní"
 
-#, fuzzy
 msgid "_Keys"
-msgstr "/_Klíče"
+msgstr "_Klíče"
 
-#, fuzzy
 msgid "_Server"
-msgstr "/_Server"
+msgstr "_Server"
 
-#, fuzzy
 msgid "Select all certificates"
-msgstr "Rückrufurkunde erzeugen"
+msgstr "Vybrat všechny certifikáty"
 
 msgid "Refresh the keyring"
 msgstr "Aktualizovat keyring"
 
-#, fuzzy
 msgid "_New key..."
-msgstr "/Klíče/_Nový klíč..."
+msgstr "_Nový klíč..."
 
-#, fuzzy
 msgid "Generate a new key"
-msgstr "Vytvořit klíč"
+msgstr "Vytvořit nový klíč"
 
 msgid "_Delete keys"
-msgstr "Schlüssel _löschen"
+msgstr "Smazat klíče"
 
 msgid "Remove the selected key"
 msgstr "Odstranit vybraný klíč"
 
-#, fuzzy
 msgid "_Sign Keys..."
-msgstr "/Podep_sat klíče..."
+msgstr "Podep_sat klíče..."
 
 msgid "Sign the selected key"
 msgstr "Podepsat vybraný klíč"
 
-#, fuzzy
 msgid "Set _Owner Trust..."
-msgstr "/Nastavit úroveň důvěry..."
+msgstr "Nastavit úr_oveň důvěry..."
 
-#, fuzzy
 msgid "Set owner trust of the selected key"
-msgstr "Odstranit vybraný klíč"
+msgstr "Nastavit úroveň důvěry zvoleného klíče"
 
-#, fuzzy
 msgid "_Edit Private Key..."
-msgstr "/Upravit soukromý klíč..."
+msgstr "Upravit _soukromý klíč..."
 
 msgid "Edit the selected private key"
 msgstr "Upravit vybraný soukromý klíč"
 
-#, fuzzy
 msgid "_Import Keys..."
-msgstr "Importovat klíče"
+msgstr "_Importovat klíče..."
 
 msgid "Import Keys"
 msgstr "Importovat klíče"
 
-#, fuzzy
 msgid "E_xport Keys..."
-msgstr "/E_xportovat klíče..."
+msgstr "E_xportovat klíče..."
 
 msgid "Export Keys"
 msgstr "Exportovat klíče"
 
-#, fuzzy
 msgid "_Backup..."
-msgstr "/_Zálohovat..."
+msgstr "_Zálohovat..."
 
-#, fuzzy
 msgid "Backup key"
-msgstr "Zálohovat klíče"
+msgstr "Zálohovat klíč"
 
-#, fuzzy
 msgid "_Retrieve Keys..."
-msgstr "/Server/_Získat klíče..."
+msgstr "_Získat klíče..."
 
-#, fuzzy
 msgid "Retrieve keys from server"
-msgstr "Schlüssel vom Key-Server _empfangen:"
+msgstr "Získat klíče ze serveru"
 
-#, fuzzy
 msgid "_Send Keys..."
-msgstr "/Podep_sat klíče..."
+msgstr "Ode_slat klíče..."
 
-#, fuzzy
 msgid "Send keys to server"
-msgstr "/Odeslat klíče na _server..."
+msgstr "Odeslat klíče na server..."
 
 msgid "Show Brief Keylist"
 msgstr "Zobrazit stručný seznam klíčů"
@@ -1322,7 +1259,7 @@ msgid "Edit"
 msgstr "Upravit"
 
 msgid "Delete"
-msgstr "Löschen"
+msgstr "Smazat"
 
 msgid "Sign"
 msgstr "Podepsat"
@@ -1333,21 +1270,17 @@ msgstr "Exportovat"
 msgid "Import"
 msgstr "Importovat"
 
-#, fuzzy
 msgid "Selected default key:"
-msgstr "Vybraný výchozí klíč:"
+msgstr "Zvolený výchozí klíč:"
 
-#, fuzzy
 msgid "No default key selected in the preferences."
-msgstr "Keine zu schützenden Dateien ausgewählt."
+msgstr "V předvolbách nebyl zvolen žádný výchozí klíč."
 
-#, fuzzy
 msgid "Key Manager"
-msgstr "Správce souborů"
+msgstr "Správce klíčů"
 
-#, fuzzy
 msgid "The key has both a smartcard based private part and a public part"
-msgstr "Klíč má soukromou i veřejnou část"
+msgstr "Klíč má soukromou i veřejnou část uloženou na čipové kartě"
 
 msgid "The key has both a private and a public part"
 msgstr "Klíč má soukromou i veřejnou část"
@@ -1369,9 +1302,8 @@ msgstr[0] "%d klíčů vybráno"
 msgstr[1] "%d klíčů vybráno"
 msgstr[2] "%d klíčů vybráno"
 
-#, fuzzy
 msgid "User name:"
-msgstr "Jméno uživatele:"
+msgstr "Uživatelské jméno:"
 
 msgid "Fingerprint:"
 msgstr "Otisk:"
@@ -1382,11 +1314,9 @@ msgstr "Vyprší:"
 msgid "Owner Trust:"
 msgstr "Důvěra ve vlastníka:"
 
-#, fuzzy
 msgid "Key validity:"
 msgstr "Platnost klíče:"
 
-#, fuzzy
 msgid "Key type:"
 msgstr "Typ klíče:"
 
@@ -1399,9 +1329,8 @@ msgstr "Podrobnosti"
 msgid "Show signatures on user name:"
 msgstr "Zobrazit podpisy u jména uživatele:"
 
-#, fuzzy
 msgid "Chain"
-msgstr "Smí podepisovat"
+msgstr "Řetěz"
 
 msgid "Signatures"
 msgstr "Podpisy"
@@ -1412,9 +1341,8 @@ msgstr "Všechny podpisy"
 msgid "Subkeys"
 msgstr "Podklíče"
 
-#, fuzzy
 msgid "Key"
-msgstr "/_Klíče"
+msgstr "Klíč"
 
 msgid "Sign Key"
 msgstr "Podepsat klíč"
@@ -1446,6 +1374,12 @@ msgid ""
 "Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
+"Nejspíš není nainstalován žádný CMS.\n"
+"\n"
+"Podpora X.509 bude dočasně vypnuta.\n"
+"\n"
+"Nainstalujte prosím CMS nebo spouštějte tento program\n"
+"s parametrem --disable-x509 ."
 
 msgid ""
 "The private key you selected as default is no longer available.\n"
@@ -1557,97 +1491,99 @@ msgstr "Heslo: "
 msgid "Repeat Passphrase: "
 msgstr "Opakovat heslo: "
 
-#, fuzzy
 msgid "Recipient"
-msgstr "_Empfänger"
+msgstr "Příjemce"
 
 msgid ""
 "Shows the recipients of the message. A key needs to be assigned to each "
 "recipient."
-msgstr ""
+msgstr "Zobrazí příjemce zprávy. Ke každému příjemci musí být přiřazen klíč."
 
 msgid "Checked if at least one matching OpenPGP certificate has been found."
 msgstr ""
+"Zkontrolujte zda byl nalezen alespoň jeden odpovídající OpenPGP certifikát."
 
 msgid ""
 "Checked if at least one matching X.509 certificate for use with S/MIME has "
 "been found."
 msgstr ""
+"Zkontrolujte zda byl nalezen alespoň jeden odpovídající X.509 certifikát pro "
+"použití s S/MIME."
 
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
 "selected."
-msgstr ""
+msgstr "Zobrazí ID vybraného klíče  nebo upozornění, že klíč musí být vybrán."
 
 msgid ""
 "You need to select a key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
+"Musíte vybrat klíč pro každého příjemce.\n"
+"Výběr provedete kliknutím pravého tlačítka myši na příslušný řádek."
 
 msgid ""
 "You need to select exactly one key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
+"Musíte vybrat právě jeden klíč pro každého příjemce.\n"
+"Výběr provedete kliknutím pravého tlačítka myši na příslušný řádek."
 
 msgid ""
 "Although you selected keys for all recipients a common encryption protocol "
 "can't be used. Please decide on one protocol by clicking one of the above "
 "radio buttons."
 msgstr ""
+"Přestože jste vybrali klíče pro všechny příjemce, nemůže být použit obvyklý "
+"šifrovací protokol. Vyberte a zaškrtněte prosím jeden z nabízených protokolů."
 
-#, fuzzy
 msgid "Using OpenPGP for encryption."
-msgstr "Passwortsatz für Entschlüsselung fehlt"
+msgstr "Použít OpenPGP pro šifrování."
 
 msgid "Using S/MIME for encryption."
-msgstr ""
+msgstr "Pro šifrování je používáno S/MIME."
 
-#, fuzzy
 msgid "No recipients - encryption is not possible"
-msgstr "Es sind keine Empfänger ausgewählt."
+msgstr "Žádní příjemci - šifrování není možné"
 
 msgid "[Ambiguous keys. Right-click to select]"
-msgstr ""
+msgstr "[Nejednoznačné klíče. Vyberte pravým tlačítkem myši]"
 
 msgid "[Ambiguous PGP key.  Right-click to select]"
-msgstr ""
+msgstr "[Nejednoznačný PGP klíč. Vyberte pravým tlačítkem myši]"
 
 msgid "[Ambiguous X.509 key. Right-click to select]"
-msgstr ""
+msgstr "[Nejednoznačný X.509 klíč. Vyberte pravým tlačítkem myši]"
 
 msgid "[Right-click to select]"
-msgstr ""
+msgstr "[Vybrat pravým tlačítkem myši]"
 
 msgid "Select _PGP key..."
-msgstr ""
+msgstr "Zvolit _PGP klíč..."
 
 msgid "Select _S\\/MIME key..."
-msgstr ""
+msgstr "Zvolit _S\\/MIME klíč..."
 
 msgid "Toggle _Ignore flag"
-msgstr ""
+msgstr "Přepnout _ignore příznak"
 
-#, fuzzy
 msgid "Select keys for recipients"
-msgstr "Schlüssel von Empfängern _entfernen"
+msgstr "Vybrat klíče příjemců"
 
-#, fuzzy
 msgid "_Recipient list"
-msgstr "_Empfänger"
+msgstr "Seznam _příjemců"
 
 msgid "Use _PGP"
-msgstr ""
+msgstr "Použít _PGP"
 
 msgid "Use _X.509"
-msgstr ""
+msgstr "Použít _X.509"
 
-#, fuzzy
 msgid "_Auto selection"
-msgstr "Zašifrovat vybraný soubor"
+msgstr "_Automatický výběr"
 
-#, fuzzy
 msgid "Select a key"
-msgstr "Vybraný výchozí klíč:"
+msgstr "Vybrat klíč"
 
 msgid "No error"
 msgstr "Bez chyb"
@@ -1714,47 +1650,41 @@ msgstr "Zadali jste neplatný server klíčů"
 msgid "Local"
 msgstr "Lokální"
 
-#, fuzzy
 msgid "Local, Keyserver"
-msgstr "An _Key-Server senden: "
+msgstr "Lokální, server klíčů"
 
-#, fuzzy
 msgid "Local, PKA"
-msgstr "Lokální"
+msgstr "Lokální, PKA"
 
 msgid "Local, PKA, Keyserver"
-msgstr ""
+msgstr "Lokální, PKA,  Server klíčů"
 
 msgid "Local, Keyserver, PKA"
-msgstr ""
+msgstr "Lokální, Server klíčů, PKA"
 
-#, fuzzy
 msgid "Local, kDNS"
-msgstr "Lokální"
+msgstr "Lokální, kDNS"
 
 msgid "Local, kDNS, Keyserver"
-msgstr ""
+msgstr "Lokální, kDNS,  Server klíčů"
 
 msgid "PKA"
-msgstr ""
+msgstr "PKA"
 
 msgid "kDNS"
-msgstr ""
+msgstr "kDNS"
 
 msgid "Custom"
-msgstr ""
+msgstr "Volitelný"
 
-#, fuzzy
 msgid "<b>User interface</b>"
-msgstr "Použít rozšířený mód:"
+msgstr "<b>Uživatelské rozhraní</b>"
 
-#, fuzzy
 msgid "Use _advanced mode"
-msgstr "Použít rozšířený mód:"
+msgstr "Použít _rozšířený mód"
 
-#, fuzzy
 msgid "Show advanced _options"
-msgstr "Dateiaktionen anzeigen"
+msgstr "Zobrazit rozšířené v_olby"
 
 msgid ""
 "No default key has been selected.  This may lead to problems when signing or "
@@ -1763,25 +1693,26 @@ msgid ""
 "\n"
 "Please consider creating your own key and select it then."
 msgstr ""
+"Nebyl zvolen žádný výchozí klíč. To může vést k problémům při podepisování "
+"nebo šifrování. Nemusí být například možné přečíst vámi vytvořenou zprávu "
+"zašifrovanou pro někoho jiného.\n"
+"\n"
+"Zvažte prosím vytvoření vlastního klíče a označte jej."
 
 msgid "Continue without a default key"
-msgstr ""
+msgstr "Pokračovat bez výchozího klíče"
 
-#, fuzzy
 msgid "Let me select a default key"
-msgstr "Vybraný výchozí klíč:"
+msgstr "Dovolte mi zvolit výchozí klíč"
 
-#, fuzzy
 msgid "<b>Default _key</b>"
-msgstr "Výchozí _klíč:"
+msgstr "<b>Výchozí _klíč</b>"
 
-#, fuzzy
 msgid "<b>Default key_server</b>"
-msgstr "Výchozí key_server:"
+msgstr "<b>Výchozí _server klíčů</b>"
 
-#, fuzzy
 msgid "<b>Auto key _locate</b>"
-msgstr "Výchozí key_server:"
+msgstr "<b>Automatické na_lezení klíče</b>"
 
 msgid ""
 "The list of methods to locate keys via an email address.\n"
@@ -1798,23 +1729,34 @@ msgid ""
 " Custom\n"
 "   - Configured in the backend dialog.\n"
 msgstr ""
+"Seznam metod nalezení klíčů prostřednictvím emailové adresy.\n"
+"Všechny uvedené metody jsou použity v daném pořadí dokud není nalezen klíč. "
+"Podporovány jsou:\n"
+" Lokální\n"
+"   - Použít lokální klíčenku.\n"
+" Keyserver\n"
+"   - Použít výchozí keyserver.\n"
+" PKA\n"
+"   - Použít Public Key Association.\n"
+" kDNS\n"
+"   - Použít kDNS s jmenným serverem níže.\n"
+" Vlastní\n"
+"   - Nastaveno v backendovém dialogu.\n"
 
 msgid "Method:"
-msgstr ""
+msgstr "Metoda:"
 
 msgid "The IP address of the nameserver used for the kDNS method."
-msgstr ""
+msgstr "IP adresa jmenného serveru použitého pro metodu kDNS."
 
-#, fuzzy
 msgid "kDNS Server:"
-msgstr "/_Server"
+msgstr "kDNS Server:"
 
-#, fuzzy
 msgid "The URL given for the keyserver is not valid."
-msgstr "Zadali jste neplatný server klíčů"
+msgstr "Zadané URL serveru klíčů není platné."
 
 msgid "The data given for \"Auto key locate\" is not valid."
-msgstr ""
+msgstr "Data předaná pro \"Automatické nalezení klíče\" nejsou platná."
 
 msgid "Settings"
 msgstr "Nastavení"
@@ -1822,9 +1764,8 @@ msgstr "Nastavení"
 msgid "Level"
 msgstr "Úroveň"
 
-#, fuzzy
 msgid "Verify documents"
-msgstr "Ověřit soubory"
+msgstr "Ověřit dokumenty"
 
 msgid "Expired Key"
 msgstr "Klíči vypršela platnost"
@@ -1832,9 +1773,8 @@ msgstr "Klíči vypršela platnost"
 msgid "Key NOT valid"
 msgstr "Klíč není platný"
 
-#, fuzzy
 msgid "Description"
-msgstr "Dešifruji...."
+msgstr "Popis"
 
 #, c-format
 msgid "Verified data in file: %s"
@@ -1847,23 +1787,21 @@ msgstr "Podpis: %s"
 msgid "Signatures:"
 msgstr "Podpisy:"
 
-#, fuzzy
 msgid "Card Manager"
-msgstr "Správce souborů"
+msgstr "Správce karet"
 
 #, c-format
 msgid "%s card detected."
-msgstr ""
+msgstr "Detekována %s karta."
 
 msgid "Checking for card..."
-msgstr ""
+msgstr "Hledá se karta..."
 
-#, fuzzy
 msgid "No card found."
-msgstr "Nebyly nalezeny žádné klíče."
+msgstr "Nebyla nalezena žádná karta."
 
 msgid "The selected card application is currently not available."
-msgstr ""
+msgstr "Zvolená aplikace karty v tuto chvíli není dostupná."
 
 msgid ""
 "Another process is using a different card application than the selected "
@@ -1872,46 +1810,42 @@ msgid ""
 "You may change the application selection mode to \"Auto\" to select the "
 "active application."
 msgstr ""
+"Jiný proces používá odlišnou aplikaci karty než tu která je vybrána.\n"
+"\n"
+"Nastavením na \"Auto\" můžete změnit mód výběru aktivní aplikace. "
 
-#, fuzzy
 msgid "The selected card application is not available."
-msgstr "Der ausgewählte Schlüssel steht nicht zum Signieren zur Verfügung."
+msgstr "Zvolená aplikace karty není dostupná."
 
-#, fuzzy
 msgid "Error accessing the card."
-msgstr "Auf die Datei kann nicht zugegriffen werden"
+msgstr "Chyba přístupu ke kartě."
 
-#, fuzzy
 msgid "Error accessing card"
-msgstr "Auf die Datei kann nicht zugegriffen werden"
+msgstr "Chyba přístupu ke kartě"
 
 msgid "No card"
-msgstr ""
+msgstr "Žádná karta"
 
-#, fuzzy
 msgid "_Card"
-msgstr "Zur _Zwischenablage exportieren"
+msgstr "_Karta"
 
 msgid "Reload card information"
-msgstr ""
+msgstr "Obnovit informace o kartě"
 
-#, fuzzy
 msgid "Generate new key on card"
-msgstr "Vytvořit klíč"
+msgstr "Vytvořit nový klíč na kartě"
 
-#, fuzzy
 msgid "This card application is not yet supported."
-msgstr "Operace není podporována"
+msgstr "Tato aplikace karty není zatím podporována."
 
-#, fuzzy
 msgid "Application selection:"
-msgstr "Zašifrovat vybraný soubor"
+msgstr "Volba aplikace: "
 
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 msgid "The GPGME library is too old to support smartcards."
-msgstr ""
+msgstr "Knihovna GPGME je příliš zastaralá aby podporovala čipové karty."
 
 msgid ""
 "<b>Admin-PIN Required</b>\n"
@@ -1928,58 +1862,70 @@ msgid ""
 "\n"
 "This notice will be shown only once per session."
 msgstr ""
+"<b>Admin-PIN požadován</b>\n"
+"\n"
+"V závislosti na předchozích operacích můžete být nyní požádáni o Admin-PIN. "
+"Vložení špatné hodnoty Admin-PIN sníží odpovídající čítač opakování. Pokud "
+"čítač dosáhne nuly, Admin-PIN nelze obnovit a data na kartě nemohu být "
+"změněna.\n"
+"\n"
+"Pokud nebyl změněn, nová standardní karta má nastaven Admin-PIN na hodnotu "
+"<i>12345678</i>. Nicméně vydavatel mohl vaši kartu inicializovat s jiným "
+"Admin-PIN a ten tedy bude znám pouze vydavateli. Zkontrolujte prosím "
+"instrukce od vašeho vydavatele.\n"
+"\n"
+"Toto oznámení bude zobrazeno pouze jednou za relaci."
 
 msgid "PUK retry counter:"
-msgstr ""
+msgstr "Čítač opakování PUK:"
 
 msgid "CHV2 retry counter: "
-msgstr ""
+msgstr "Čítač opakování CHV2:"
 
 msgid "Reset PIN"
-msgstr ""
+msgstr "Resetovat PIN"
 
-#, fuzzy
 msgid "Change PIN"
-msgstr "_Benutzervertrauen ändern"
+msgstr "Změnit PIN"
 
-#, fuzzy
 msgid "Change PUK"
-msgstr "_Benutzervertrauen ändern"
+msgstr "Změnit PUK"
 
 msgid "Reset PUK"
-msgstr ""
+msgstr "Resetovat PUK"
 
 #, c-format
 msgid ""
 "Error saving the changed values.\n"
 "(%s <%s>)"
 msgstr ""
+"Chyba při ukládání změněných hodnot.\n"
+"(%s <%s>)"
 
 msgid "Only plain ASCII is currently allowed."
-msgstr ""
+msgstr "Aktuálně je povoleno pouze základní ASCII."
 
 msgid "The \"<\" character may not be used."
-msgstr ""
+msgstr "Znak \"<\" nelze použít."
 
 msgid "Double spaces are not allowed."
-msgstr ""
+msgstr "Více mezer není povoleno."
 
 msgid ""
 "Total length of first and last name may not be longer than 39 characters."
-msgstr ""
+msgstr "Celková délka křestního jména a příjmení nesmí přesáhnout 39 znaků."
 
-#, fuzzy
 msgid "Saving the field failed."
-msgstr "Podepsat vybraný soubor"
+msgstr "Uložení pole selhalo."
 
 msgid "Invalid length of the language preference."
-msgstr ""
+msgstr "Neplatná délka předvolby jazyka."
 
 msgid "The language preference may only contain the letters 'a' through 'z'."
-msgstr ""
+msgstr "Volba jazyka smí obsahovat pouze písmena 'a' až 'z'."
 
 msgid "The field may not be longer than 254 characters."
-msgstr ""
+msgstr "Délka tohoto pole nesmí přesáhnout 254 znaků."
 
 msgid ""
 "<b>Unblocking the PIN</b>\n"
@@ -1993,6 +1939,15 @@ msgid ""
 "Code</b> and then to enter a new value for the PIN and repeat that new value "
 "at another prompt."
 msgstr ""
+"<b>Odblokování PIN</b>\n"
+"\n"
+"Čítač opakovaného zadání PIN je na nule, ale je nastaven Reset kód.\n"
+"\n"
+"Reset kód je podobný PUK (PIN Unblocking Code) a je používán pro odblokování "
+"PIN bez nutnosti znát Admin-PIN.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"<b>Reset kódu</b> , poté novou hodnotu PIN a tu na dalším řádku zopakovali."
 
 msgid ""
 "<b>Changing the PIN</b>\n"
@@ -2008,6 +1963,18 @@ msgid ""
 "the issuer of your card might have initialized the card with a different "
 "PIN.  Please check the instructions of your issuer."
 msgstr ""
+"<b>Změna PIN</b>\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"PIN, poté novou hodnotu a tu na dalším řádku zopakovali.\n"
+"\n"
+"Vložení nesprávné hodnoty PIN sníží čítač opakovaného zadání. Pokud oba "
+"čítače opakování pro PIN a Reset kód klesnou na nulu, může být PIN "
+"odblokován použitím Admin-PIN.\n"
+"\n"
+"Čistá standardní karta má PIN nastaven na hodnotu <i>12345678</i>. Nicméně "
+"vydavatel mohl vaši kartu inicializovat s jiným PIN. Zkontrolujte prosím "
+"instrukce od vašeho vydavatele."
 
 msgid ""
 "<b>Changing the Reset Code</b>\n"
@@ -2019,6 +1986,13 @@ msgid ""
 "then to enter a new value for the Reset Code and repeat that new value at "
 "another prompt."
 msgstr ""
+"<b>Změna Reset kódu</b>\n"
+"\n"
+"Reset kód je podobný PUK (PIN Unblocking Code) a je používán pro odblokování "
+"PIN bez nutnosti znát Admin-PIN.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"PIN, poté novou hodnotu Reset kódu a tu na dalším řádku zopakovali."
 
 msgid ""
 "<b>Reseting the PIN or the Reset Code</b>\n"
@@ -2036,6 +2010,18 @@ msgid ""
 "PIN</b> and then to enter a new value for the PIN or the Reset Code and "
 "repeat that new value at another prompt."
 msgstr ""
+"<b>Resetování PIN nebo Reset kódu</b>\n"
+"\n"
+"Pokud klesnou oba čítače opakování PIN a Reset kódu na nulu, bude jedinou "
+"možností jejich resetu použití Admin-PIN\n"
+"\n"
+"Čistá standardní karta má Admin-PIN nastaven na hodnotu <i>12345678</i>. "
+"Nicméně vydavatel mohl vaši kartu inicializovat s jiným Admin-PIN a ten tedy "
+"bude znám pouze jemu. Zkontrolujte prosím instrukce od vašeho vydavatele.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"<b>Admin-PIN</b>, poté novou hodnotu PIN nebo Reset kódu a tu na dalším "
+"řádku zopakovali."
 
 msgid ""
 "<b>Changing the Admin-PIN</b>\n"
@@ -2053,104 +2039,107 @@ msgid ""
 "PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
 "value at another prompt."
 msgstr ""
+"<b>Změna Admin-PIN</b>\n"
+"\n"
+"Znáte-li Admin-PIN, můžete jej změnit.\n"
+"\n"
+"Admin-PIN je vyžadovaný při tvorbě klíčů na kartě a změně dalších dat. Admin-"
+"PIN můžete, ale také nemusíte znát. Čistá standardní karta má Admin-PIN "
+"nastaven na hodnotu <i>12345678</i>. Nicméně vydavatel mohl vaši kartu "
+"inicializovat s jiným Admin-PIN a ten tedy bude znám pouze jemu. "
+"Zkontrolujte prosím instrukce od vašeho vydavatele.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"<b>Admin-PIN</b>, poté novou hodnotu a tu na dalším řádku zopakovali."
 
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
 "(%s <%s>)"
 msgstr ""
+"Chyba při změně nebo resetu PIN/PUK.\n"
+"(%s <%s>)"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error fetching the key.\n"
 "(%s <%s>)"
-msgstr "Fehler beim Löschen der Datei \"%s\": %s"
+msgstr ""
+"Chyba při stahování klíče.\n"
+"(%s <%s>)"
 
 #, c-format
 msgid "Keys found: %d, imported: %d, unchanged: %d"
-msgstr ""
+msgstr "Nalezeno %d klíčů, importováno: %d, nezměněno: %d"
 
 msgid "Fetch Key"
-msgstr ""
+msgstr "Získat klíč"
 
-#, fuzzy
 msgid "<b>General</b>"
-msgstr "Použít rozšířený mód:"
+msgstr "<b>Obecné</b>"
 
 msgid "Serial number:"
-msgstr ""
+msgstr "Výrobní číslo:"
 
 msgid "Card version:"
-msgstr ""
+msgstr "Verze karty:"
 
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Výrobce:"
 
-#, fuzzy
 msgid "<b>Personal</b>"
-msgstr "Persona"
+msgstr "<b>Osobní</b>"
 
-#, fuzzy
 msgid "Salutation:"
-msgstr "Auswahl:"
+msgstr "Oslovení:"
 
-#, fuzzy
 msgid "First name:"
-msgstr "Verzeichnisname:"
+msgstr "Křestní jméno:"
 
-#, fuzzy
 msgid "Last name:"
-msgstr "Jméno uživatele:"
+msgstr "Příjmení:"
 
 msgid "Language:"
-msgstr ""
+msgstr "Jazyk:"
 
 msgid "Login data:"
-msgstr ""
+msgstr "Data přihlášení:"
 
-#, fuzzy
 msgid "Public key URL:"
-msgstr "_Veřejné klíče"
+msgstr "URL veřejného klíče: "
 
-#, fuzzy
 msgid "<b>Keys</b>"
-msgstr "Podeps_at jako"
+msgstr "<b>Klíče</b>"
 
-#, fuzzy
 msgid "Signature key:"
-msgstr "Podpisy:"
+msgstr "Podpisový klíč:"
 
-#, fuzzy
 msgid "Encryption key:"
-msgstr "Šifruji ..."
+msgstr "Šifrovací klíč:"
 
-#, fuzzy
 msgid "Authentication key:"
-msgstr "Smí autentizovat"
+msgstr "Autentizační klíč:"
 
-#, fuzzy
 msgid "Signature counter:"
-msgstr "Podpisy:"
+msgstr "Počítadlo podpisů:"
 
 msgid "<b>PIN</b>"
-msgstr ""
+msgstr "<b>PIN</b>"
 
-#, fuzzy
 msgid "Force signature PIN:"
-msgstr "Fehlerhafte Signatur"
+msgstr "Vynutit podpisový PIN:"
 
 msgid "PIN retry counter:"
-msgstr ""
+msgstr "Čítač opakování PIN:"
 
 msgid "Admin-PIN retry counter:"
-msgstr ""
+msgstr "Čítač opakování admin PIN:"
 
 msgid "blocked"
-msgstr ""
+msgstr "blokováno"
 
-#, fuzzy
 msgid "Learn keys"
-msgstr "exportovat klíče"
+msgstr "Učit klíče"
 
 msgid ""
 "For some or all of the keys available on the card, the GnuPG crypto engine "
@@ -2163,10 +2152,18 @@ msgid ""
 "\n"
 "If you are unsure what to do, just click the button."
 msgstr ""
+"Pro některé nebo všechny klíče dostupné na kartě nezná GnuPG šifrovací stroj "
+"odpovídající certifikáty.\n"
+"\n"
+"Pokud kliknete na toto tlačítko, GnuPG bude požádán, aby se \"naučil\" tuto "
+"kartu a importoval všechny certifikáty uložené na kartě do svého vlastního "
+"úložiště certifikátů. Tato operace není prováděna automaticky. Čtení všech "
+"certifikátů z karty může trvat několik sekund.\n"
+"\n"
+"Pokud si nejste jistí co dělat, klikněte na tlačítko."
 
-#, fuzzy
 msgid "Learning keys ..."
-msgstr "Vytvářím klíč ..."
+msgstr "Klíče jsou učeny"
 
 #, c-format
 msgid ""
@@ -2186,23 +2183,43 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"<b>Nastavení výchozího PIN</b> (%s)\n"
+"\n"
+"Zvolili jste možnost nastavit výchozí PIN vaší karty. PIN je v tuto chvíli "
+"nastaven na NullPIN. Nastavení výchozího PIN je <b>vyžadování ale nemůže být "
+"odvoláno</b>.\n"
+"\n"
+"Zkontrolujte prosím dokumentaci vaší karty a podívejte se k čemu je NullPIN "
+"dobrý.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzváni abyste vložili nový PIN, později "
+"abyste jej opakovali. Ujistěte se, že si PIN pamatujete - nebude možné jej "
+"obnovit pokud bude zadán více než %d krát nesprávně.\n"
+"\n"
+"%s"
 
 msgid ""
 "You are now setting the PIN for the SigG key used to create <b>qualified "
 "signatures</b>.  You may want to set the PIN to the same value as used for "
 "the NKS keys."
 msgstr ""
+"Nyní nastavujete PIN pro SigG klíče používané pro vytváření "
+"<b>kvalifikovaných podpisů</b>. PIN můžete nastavit stejný jako u NKS klíčů."
 
 msgid ""
 "You are now setting the PIN for the NKS keys used for standard signatures, "
 "encryption and authentication."
 msgstr ""
+"Nyní nastavujete PIN pro NKS klíče používané pro běžné podpisy, šifrování a "
+"autentizaci."
 
 #, c-format
 msgid ""
 "Error changing the NullPIN.\n"
 "(%s <%s>)"
 msgstr ""
+"Chyba při změně prázdného PIN.\n"
+"(%s <%s>)"
 
 msgid ""
 "<b>Changing a PIN or PUK</b>\n"
@@ -2215,6 +2232,14 @@ msgid ""
 "zero, the keys controlled by the PIN are not anymore usable and there is no "
 "way to unblock them!"
 msgstr ""
+"<b>Změna PIN nebo PUK</b>\n"
+"\n"
+"Pokud budete pokračovat, budete vyzváni abyste zadali současnou hodnotu, "
+"poté novou a zopakovali ji na dalším řádku.\n"
+"\n"
+"Vložením nesprávné hodnoty pro současný PIN/PUK snížíte čítač opakování. "
+"Pokud oba čítače (PIN a odpovídající PUK) klesnou na nulu, klíče chráněné "
+"tímto PIN nebudou více použitelné. Ani je nebude možné nikdy odblokovat!"
 
 msgid ""
 "<b>Resetting a PUK</b>\n"
@@ -2231,6 +2256,18 @@ msgid ""
 "then to enter a new value for the blocked PUK and repeat that new value at "
 "another prompt."
 msgstr ""
+"<b>Resetování PUK</b>\n"
+"\n"
+"Přestože <i>PUK</i> znamená <i>kód k odblokování PIN (PIN Unblocking Code)</"
+"i> implementuje jej operační systém TCOS karty NetKey jako alternativní PIN "
+"a tutíž je možné použít PIN pro odblokování PUK.\n"
+"\n"
+"Pokud je PUK zablokovaný (čítač opakování klesl na nulu), můžete jej "
+"odblokovat použitím neblokovaného PIN. Čítač opakovaného zadání se vrátí "
+"zpět na původní hodnotu.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzváni abyste zadali současnou hodnotu PIN, "
+"poté novou hodnotu pro blokovaný PUK a tu na dalším řádku zopakovali."
 
 msgid ""
 "<b>Resetting a PIN</b>\n"
@@ -2243,24 +2280,33 @@ msgid ""
 "then to enter a new value for the blocked PIN and repeat that new value at "
 "another prompt."
 msgstr ""
+"<b>Resetovat PIN</b>\n"
+"\n"
+"Pokud je PIN zablokovaný (čítač opakování klesl na nulu), můžete jej "
+"odblokovat použitím neblokovaného PUK. Čítač opakovaného zadání se vrátí "
+"zpět na původní hodnotu.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzváni abyste zadali současnou hodnotu PUK, "
+"poté novou hodnotu pro blokovaný PIN a tu na dalším řádku zopakovali."
 
 msgid ""
 "<b>A NullPIN is still active on this card</b>.\n"
 "You need to set a real PIN before you can make use of the card."
 msgstr ""
+"<b>NullPIN je na této kartě stále aktivní</b>.\n"
+"Před použitím karty musíte nastavit reálný PIN."
 
 msgid "Set initial PIN"
-msgstr ""
+msgstr "Nastavit výchozí PIN"
 
-#, fuzzy
 msgid "scanning ..."
-msgstr "Podepisuji ..."
+msgstr "skenování ..."
 
 msgid "SigG PIN retry counter:"
-msgstr ""
+msgstr "Čítač opakování SigG PIN:"
 
 msgid "SigG PUK retry counter:"
-msgstr ""
+msgstr "Čítač opakování SigG PUK:"
 
 #, c-format
 msgid ""
@@ -2268,1219 +2314,20 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+"Pro kartu %s není mnoho informací ke zobrazení. Zkuste použít tlačítko pro "
+"volbu aplikace pro přepnutí na jinou aplikaci, která je na kartě k dispozici."
 
-#, fuzzy
-#~ msgid "GNU Privacy Assistant - Clipboard"
-#~ msgstr "GNU Privacy Assistant - Správce souborů"
+#~ msgid "[S]"
+#~ msgstr "[S]"
 
-#~ msgid "GNU Privacy Assistant - File Manager"
-#~ msgstr "GNU Privacy Assistant - Správce souborů"
+#~ msgid "[C]"
+#~ msgstr "[C]"
 
-#~ msgid "GPA Error"
-#~ msgstr "Chyba GPA"
+#~ msgid "[E]"
+#~ msgstr "[E]"
 
-#, fuzzy
-#~ msgid "GNU Privacy Assistant - Key Manager"
-#~ msgstr "GNU Privacy Assistant - Správce souborů"
+#~ msgid "[A]"
+#~ msgstr "[A]"
 
-#, fuzzy
-#~ msgid "GNU Privacy Assistant - Settings"
-#~ msgstr "GNU Privacy Assistant - Správce klíčů"
-
-#, fuzzy
-#~ msgid "GNU Privacy Assistant - Card Manager"
-#~ msgstr "GNU Privacy Assistant - Správce souborů"
-
-#~ msgid "Please choose a passphrase for the new key."
-#~ msgstr "Vyberte prosím heslo pro nový klíč."
-
-#, fuzzy
-#~ msgid ""
-#~ "In \"Passphrase\" and \"Repeat passphrase\", you must enter the same "
-#~ "passphrase."
-#~ msgstr ""
-#~ "Do pole \"Heslo\" and \"Opakovat heslo\",\n"
-#~ "musíte zadat stejný řetězec."
-
-#, fuzzy
-#~ msgid "Status: "
-#~ msgstr "Status:"
-
-#, fuzzy
-#~ msgid "Generate new keys on card"
-#~ msgstr "Vytvořit klíč"
-
-#~ msgid "DSA and ElGamal (default)"
-#~ msgstr "DSA a ElGamal (výchozí)"
-
-#, fuzzy
-#~ msgid "_Keyring Editor"
-#~ msgstr "Správce klíčů"
-
-#~ msgid "1024"
-#~ msgstr "1024"
-
-#~ msgid "768"
-#~ msgstr "768"
-
-#~ msgid "2048"
-#~ msgstr "2048"
-
-#~ msgid "_Passphrase: "
-#~ msgstr "_Heslo: "
-
-#~ msgid "_Repeat passphrase: "
-#~ msgstr "_Opakovat heslo: "
-
-#~ msgid "GNU Privacy Assistant - Keyring Editor"
-#~ msgstr "GNU Privacy Assistant - Správce klíčů"
-
-#~ msgid "Keyring Editor"
-#~ msgstr "Správce klíčů"
-
-#, fuzzy
-#~ msgid "unspecified"
-#~ msgstr "Eingabedatei nicht angegeben"
-
-#~ msgid "/File/C_lear"
-#~ msgstr "/Soubor/Vymazat"
-
-#~ msgid "/File/_Open"
-#~ msgstr "/Soubor/_Otevřít"
-
-#, fuzzy
-#~ msgid "/File/Save _As"
-#~ msgstr "/Soubor/_Zavřít"
-
-#~ msgid "/File/sep1"
-#~ msgstr "/Soubor/sep1"
-
-#~ msgid "/File/_Sign"
-#~ msgstr "/Soubor/Podep_sat"
-
-#~ msgid "/File/_Verify"
-#~ msgstr "/Soubor/O_věřit"
-
-#~ msgid "/File/_Encrypt"
-#~ msgstr "/Soubor/Š_ifrovat"
-
-#~ msgid "/File/_Decrypt"
-#~ msgstr "/Soubor/_Dešifrovat"
-
-#~ msgid "/File/sep2"
-#~ msgstr "/Soubor/sep2"
-
-#~ msgid "/File/_Close"
-#~ msgstr "/Soubor/_Zavřít"
-
-#~ msgid "/File/_Quit"
-#~ msgstr "/Soubor/U_končit"
-
-#, fuzzy
-#~ msgid "/Edit/_Undo"
-#~ msgstr "/Upravit/Kopírovat"
-
-#, fuzzy
-#~ msgid "/Edit/_Redo"
-#~ msgstr "/Upravit/Kopírovat"
-
-#, fuzzy
-#~ msgid "/Edit/sep0"
-#~ msgstr "/Upravit/sep2"
-
-#, fuzzy
-#~ msgid "/Edit/Cut"
-#~ msgstr "/Upravit/Kopírovat"
-
-#~ msgid "/Edit/_Copy"
-#~ msgstr "/Upravit/Kopírovat"
-
-#~ msgid "/Edit/_Paste"
-#~ msgstr "/Upravit/Vložit"
-
-#, fuzzy
-#~ msgid "/Edit/_Delete"
-#~ msgstr "/Upravit/Vložit"
-
-#~ msgid "/Edit/sep1"
-#~ msgstr "/Upravit/sep1"
-
-#~ msgid "/Edit/Select _All"
-#~ msgstr "/Upravit/Vybrat vše"
-
-#~ msgid "/Edit/sep2"
-#~ msgstr "/Upravit/sep2"
-
-#~ msgid "/Edit/Pr_eferences..."
-#~ msgstr "/Upravit/Na_stavení"
-
-#~ msgid "/Windows/_Keyring Editor"
-#~ msgstr "/Okna/Správce _klíčů"
-
-#~ msgid "/Windows/_Filemanager"
-#~ msgstr "/Okna/_Správce souborů"
-
-#, fuzzy
-#~ msgid "/Windows/_Clipboard"
-#~ msgstr "/Okna/_Správce souborů"
-
-#~ msgid "/Edit/Copy"
-#~ msgstr "/Upravit/Kopírovat"
-
-#, fuzzy
-#~ msgid "/Edit/Delete"
-#~ msgstr "/Upravit/Vybrat vše"
-
-#, fuzzy
-#~ msgid "/Edit/Paste"
-#~ msgstr "/Upravit/Vložit"
-
-#~ msgid "open file"
-#~ msgstr "otevřít soubor"
-
-#, fuzzy
-#~ msgid "save file as"
-#~ msgstr "Datei _speichern unter: "
-
-#, fuzzy
-#~ msgid "cut the selection"
-#~ msgstr "Zašifrovat vybraný soubor"
-
-#, fuzzy
-#~ msgid "copy the selection"
-#~ msgstr "Zašifrovat vybraný soubor"
-
-#, fuzzy
-#~ msgid "paste the clipboard"
-#~ msgstr "Zur _Zwischenablage exportieren"
-
-#, fuzzy
-#~ msgid "Sign the selected text"
-#~ msgstr "Podepsat vybraný klíč"
-
-#, fuzzy
-#~ msgid "verify text"
-#~ msgstr "ověřit soubor"
-
-#~ msgid "Encrypt"
-#~ msgstr "Zašifrovat"
-
-#, fuzzy
-#~ msgid "encrypt text"
-#~ msgstr "zašifrovat soubor"
-
-#, fuzzy
-#~ msgid "decrypt text"
-#~ msgstr "dešifrovat soubor"
-
-#~ msgid "preferences"
-#~ msgstr "nastavení"
-
-#, fuzzy
-#~ msgid "keyring editor"
-#~ msgstr "Správce klíčů"
-
-#~ msgid "file manager"
-#~ msgstr "Správce souborů"
-
-#~ msgid "Help"
-#~ msgstr "Nápověda"
-
-#~ msgid "help"
-#~ msgstr "nápověda"
-
-#~ msgid "/File/Sign"
-#~ msgstr "/Soubor/Podepsat"
-
-#~ msgid "/File/Verify"
-#~ msgstr "/Soubor/Ověřit"
-
-#~ msgid "/File/Encrypt"
-#~ msgstr "/Soubor/Šifrovat"
-
-#~ msgid "/File/Decrypt"
-#~ msgstr "/Soubor/Dešifrovat"
-
-#~ msgid "close files"
-#~ msgstr "Uzavřít soubory"
-
-#~ msgid "sign file"
-#~ msgstr "podepsat soubor"
-
-#~ msgid "verify file"
-#~ msgstr "ověřit soubor"
-
-#~ msgid "encrypt file"
-#~ msgstr "zašifrovat soubor"
-
-#~ msgid "decrypt file"
-#~ msgstr "dešifrovat soubor"
-
-#, fuzzy
-#~ msgid "clipboard"
-#~ msgstr "Zur _Zwischenablage exportieren"
-
-#~ msgid "_Backup to file:"
-#~ msgstr "_Zálohovat do souboru:"
-
-#~ msgid "B_rowse..."
-#~ msgstr "_Procházet"
-
-#~ msgid "_Back"
-#~ msgstr "_Zpět"
-
-#~ msgid "_Forward"
-#~ msgstr "_Vpřed"
-
-#~ msgid "_Apply"
-#~ msgstr "_Potvrdit"
-
-#~ msgid "Brought to you by:"
-#~ msgstr "Program vám přináší:"
-
-#~ msgid "GPA is Free Software under the"
-#~ msgstr "GPA je otevřený program šířený"
-
-#~ msgid "GNU General Public License."
-#~ msgstr "pod GNU General Public License."
-
-#~ msgid "For news see:"
-#~ msgstr "Novinky na:"
-
-#~ msgid "http://www.gpg4win.org"
-#~ msgstr "http://www.gpg4win.org"
-
-#~ msgid "http://www.gnupg.org"
-#~ msgstr "http://www.gnupg.org"
-
-#~ msgid "GNU General Public License"
-#~ msgstr "pod GNU General Public License."
-
-#~ msgid "_GNU General Public License"
-#~ msgstr "pod _GNU General Public License."
-
-#~ msgid "Show Help Text\n"
-#~ msgstr "Zobrazit test nápovědy\n"
-
-#~ msgid "/Help/_Contents"
-#~ msgstr "/Nápověda/_Obsah"
-
-#~ msgid "/Help/_License"
-#~ msgstr "/Nápověda/_Licence"
-
-#~ msgid "/Help/_About"
-#~ msgstr "/Nápověda/O _programu"
-
-#~ msgid "Please insert your name"
-#~ msgstr "Vložte prosím své jméno."
-
-#~ msgid "Please insert your email address"
-#~ msgstr "Vložte prosím e-mailovou adresu"
-
-#~ msgid "/Keys/_Refresh"
-#~ msgstr "/Klíče/_Aktualizovat"
-
-#~ msgid "/Keys/sep0"
-#~ msgstr "/Klíče/sep0"
-
-#~ msgid "/Keys/_Delete Keys..."
-#~ msgstr "/Klíče/O_dstranit klíče..."
-
-#~ msgid "/Keys/sep1"
-#~ msgstr "/Klíče/sep1"
-
-#~ msgid "/Keys/_Sign Keys..."
-#~ msgstr "/Klíče/Podep_sat klíče..."
-
-#~ msgid "/Keys/Set _Owner Trust..."
-#~ msgstr "/Klíče/Nastavit úroveň dů_věry..."
-
-#~ msgid "/Keys/_Edit Private Key..."
-#~ msgstr "/Klíče/Upravit soukromý klíč..."
-
-#~ msgid "/Keys/sep2"
-#~ msgstr "/Klíče/sep2"
-
-#~ msgid "/Keys/_Import Keys..."
-#~ msgstr "/Klíče/_Nahrát klíče..."
-
-#~ msgid "/Keys/E_xport Keys..."
-#~ msgstr "/Klíče/E_xportovat klíče..."
-
-#~ msgid "/Keys/_Backup..."
-#~ msgstr "/Klíče/Zálohovat..."
-
-#~ msgid "/Server/_Send Keys..."
-#~ msgstr "/Server/_Odeslat klíče..."
-
-#, fuzzy
-#~ msgid "/Windows/_File Manager"
-#~ msgstr "/Okna/_Správce souborů"
-
-#~ msgid "/Keys/Export Keys..."
-#~ msgstr "/Klíče/Exportovat klíče..."
-
-#~ msgid "/Keys/Delete Keys..."
-#~ msgstr "/Klíče/Odstranit klíče..."
-
-#~ msgid "/Server/Send Keys..."
-#~ msgstr "/Server/Odeslat klíče..."
-
-#~ msgid "/Keys/Set Owner Trust..."
-#~ msgstr "/Klíče/Nastavit úroveň důvěry..."
-
-#~ msgid "/Keys/Sign Keys..."
-#~ msgstr "/Klíče/Podepsat klíče..."
-
-#~ msgid "/Keys/Edit Private Key..."
-#~ msgstr "/Klíče/Upravit soukromý klíč..."
-
-#~ msgid "/Keys/Backup..."
-#~ msgstr "/Klíče/Zálohovat..."
-
-#~ msgid "/_Copy"
-#~ msgstr "/Kopírovat"
-
-#~ msgid "/_Paste"
-#~ msgstr "/Vložit"
-
-#~ msgid "/_Delete Keys..."
-#~ msgstr "/O_dstranit klíče..."
-
-#~ msgid "/Set Owner Trust..."
-#~ msgstr "/Nastavit úroveň důvěry..."
-
-#~ msgid "/Sign Keys..."
-#~ msgstr "/Podepsat klíče..."
-
-#~ msgid "/Edit Private Key..."
-#~ msgstr "/Upravit soukromý klíč..."
-
-#~ msgid "/Backup..."
-#~ msgstr "/Zálohovat..."
-
-#~ msgid "edit key"
-#~ msgstr "Upravit klíč"
-
-#~ msgid "remove key"
-#~ msgstr "odstranit klíč"
-
-#~ msgid "sign key"
-#~ msgstr "podepsat klíč"
-
-#~ msgid "import keys"
-#~ msgstr "získat klíče"
-
-#~ msgid "brief"
-#~ msgstr "stručně"
-
-#~ msgid "detailed"
-#~ msgstr "podrobně"
-
-#~ msgid "refresh keyring"
-#~ msgstr "aktualizovat keyring"
-
-#~ msgid "Sign files"
-#~ msgstr "Podepsat soubory"
-
-#~ msgid "sign in separate _file"
-#~ msgstr "podpis v _odděleném souboru"
-
-#~ msgid "a_rmor"
-#~ msgstr "ASCII-_zakódovat"
-
-#~ msgid "display this help and exit"
-#~ msgstr "zobrazit tuto nápovědu a skončit"
-
-#~ msgid "Options"
-#~ msgstr "/_Možnosti"
-
-#~ msgid "Key Validity"
-#~ msgstr "Platnost klíče"
-
-#~ msgid "GPA Warning"
-#~ msgstr "Varování GPA"
-
-#~ msgid ""
-#~ "One of your secret keys contains an ElGamal signing key. Due to a bug in "
-#~ "GnuPG, all ElGamal keys used with GnuPG 1.0.2 and later must be "
-#~ "considered compromised.\n"
-#~ "\n"
-#~ "Please revoke your key as soon as possible.\n"
-#~ "\n"
-#~ "The affected key is:"
-#~ msgstr ""
-#~ "Jeden z vašich soukromých klíčů obsahuje podpisových klíčů s algoritmem "
-#~ "ElGamal. Díky chybě v GnuPG, musí být všechny ElGamal klíče používané s "
-#~ "GnuPG verze 1.0.2 a novější považovány za kompromitované.\n"
-#~ "\n"
-#~ "Zneplatněte tento klíč nejdříve jak to bude možné.\n"
-#~ "\n"
-#~ "Dotčený klíč:"
-
-#~ msgid "GNU general public license"
-#~ msgstr "GNU general public license"
-
-#~ msgid "_GNU general public license"
-#~ msgstr "_GNU general public license"
-
-#~ msgid ">.\n"
-#~ msgstr ">.\n"
-
-#~ msgid ""
-#~ "If you want you can supply a comment that further identifies the key to "
-#~ "other users. The comment is especially useful if you generate several "
-#~ "keys for the same email address. The comment is completely optional. "
-#~ "Leave it empty if you don't have a use for it."
-#~ msgstr ""
-#~ "Wenn Sie möchten, können Sie einen Kommentar hinzufügen, der den "
-#~ "Schlüssel genauer beschreibt. Ein Kommentar ist vor allem dann sinnvoll, "
-#~ "wenn Sie mehrere Schlüssel für die gleiche E-Mail-Adresse erstellen. Wenn "
-#~ "Sie keine Verwendung dafür haben, können Sie den Kommentar auch einfach "
-#~ "leer lassen."
-
-#~ msgid "sign, do_n't compress"
-#~ msgstr "signieren, _nicht komprimieren"
-
-#~ msgid "Keyserver did not return any matching keys."
-#~ msgstr ""
-#~ "Der Key-Server hat keine passenden\n"
-#~ "Schlüssel zurückgeliefert."
-
-#~ msgid "Select keys to import"
-#~ msgstr "Schlüssel zum Importieren auswählen"
-
-#~ msgid "_Import"
-#~ msgstr "_Importieren"
-
-#~ msgid "Export Key"
-#~ msgstr "Schlüssel exportieren"
-
-#~ msgid "E_xport to file:"
-#~ msgstr "E_xportieren in Datei: "
-
-#~ msgid "Import Key"
-#~ msgstr "Schlüssel importieren"
-
-#~ msgid "I_mport from file:"
-#~ msgstr "_Importieren aus Datei:"
-
-#~ msgid "Receive from _server:"
-#~ msgstr "Schlüssel vom Key-Server _empfangen:"
-
-#~ msgid ""
-#~ "You have a secret key without the\n"
-#~ "corresponding public key in your\n"
-#~ "key ring. In order to use this key\n"
-#~ "you will need to import the public\n"
-#~ "key, too."
-#~ msgstr ""
-#~ "Sie haben einen geheimen Schlüssel ohne den\n"
-#~ "zugehörigen öffentlichen Schlüssel in Ihrem\n"
-#~ "Schlüsselbund. Um diesen Schlüssel nutzen zu\n"
-#~ "können, müssen Sie den öffentlichen Schlüssel\n"
-#~ "ebenfalls importieren."
-
-#~ msgid "No keys selected to export."
-#~ msgstr "Keine Schlüssel zum Exportieren ausgewählt."
-
-#~ msgid "No private key to backup."
-#~ msgstr "Kein privater Schlüssel vorhanden."
-
-#~ msgid "GPA: Loading keyring"
-#~ msgstr "GPA: Schlüsselbund einlesen"
-
-#~ msgid "Loading secret keys"
-#~ msgstr "Geheime Schlüssel einlesen"
-
-#~ msgid "Loading public keys"
-#~ msgstr "Öffentliche Schlüssel einlesen"
-
-#~ msgid "The key you selected is not available for encryption"
-#~ msgstr "Der ausgewählte Schlüssel ist nicht zum Verschlüsseln verfügbar."
-
-#~ msgid ""
-#~ "No public keys available.\n"
-#~ "Currently, there is nobody who could read a\n"
-#~ "file encrypted by you."
-#~ msgstr ""
-#~ "Kein öffentlicher Schlüssel verfügbar.\n"
-#~ "Derzeit kann niemand eine Datei lesen,\n"
-#~ "die von Ihnen verschlüsselt wurde."
-
-#~ msgid "No secret keys available."
-#~ msgstr "Kein geheimer Schlüssel vorhanden."
-
-#~ msgid "Files in work"
-#~ msgstr "Ausgewählte Dateien"
-
-#~ msgid ""
-#~ "Internal error:\n"
-#~ "Invalid sign mode"
-#~ msgstr ""
-#~ "Interner Fehler:\n"
-#~ "ungültige Signaturkennung"
-
-#~ msgid "No key selected!"
-#~ msgstr "Kein Schlüssel ausgewählt!"
-
-#~ msgid ""
-#~ "No secret keys available for signing.\n"
-#~ "Please generate or import a secret key first."
-#~ msgstr ""
-#~ "Kein geheimer Schlüssel zum Signieren vorhanden.\n"
-#~ "Bitte zuerst einen geheimen Schlüssel erzeugen oder importieren."
-
-#~ msgid "Sign Files"
-#~ msgstr "Dateien signieren"
-
-# ~ msgid "Show Warranty Information\n"
-# ~ msgstr "Gewährleistung\n"
-#~ msgid "Filename"
-#~ msgstr "Dateiname"
-
-#~ msgid "The currently selected filename."
-#~ msgstr "Der momentan ausgewählte Dateiname."
-
-#~ msgid "Whether buttons for creating/manipulating files should be displayed."
-#~ msgstr ""
-#~ "Sollen Knöpfe zum Erstellen bzw. Verwalten von Dateien angezeigt werden?"
-
-#~ msgid "Directories"
-#~ msgstr "Verzeichnisse"
-
-#~ msgid "_OK"
-#~ msgstr "_OK"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Cancel"
-#~ msgstr "Abbrechen"
-
-#~ msgid "Directory unreadable: %s"
-#~ msgstr "Verzeichnis nicht lesbar: %s"
-
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "Die Datei \"%s\" befindet sich auf einer anderen Maschine (%s)\n"
-#~ "und ist möglicherweise für dieses Programm nicht erreichbar.\n"
-#~ "Sind Sie sicher, dass Sie diese Datei auswählen möchten?"
-
-#~ msgid "Create Dir"
-#~ msgstr "Verzeichnis erstellen"
-
-#~ msgid "Delete File"
-#~ msgstr "Datei löschen"
-
-#~ msgid "Rename File"
-#~ msgstr "Datei umbenennen"
-
-#~ msgid "Close"
-#~ msgstr "Schließen"
-
-#, fuzzy
-#~ msgid ""
-#~ "The directory name \"%s\" contains symbols that are not allowed in "
-#~ "filenames"
-#~ msgstr ""
-#~ "Der Verzeichnisname \"%s\" enthält Symbole, die nicht in Dateinamen "
-#~ "vorkommen dürfen."
-
-#~ msgid ""
-#~ "Error creating directory \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Fehler beim Erstellen des Verzeichnisses \"%s\": %s\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr ""
-#~ "Sie haben wahrscheinlich Symbole benutzt, die nicht in Dateinamen "
-#~ "vorkommen dürfen."
-
-#~ msgid "Error creating directory \"%s\": %s\n"
-#~ msgstr "Fehler beim Erstellen des Verzeichnisses \"%s\": %s\n"
-
-#~ msgid "Create Directory"
-#~ msgstr "Verzeichnis erstellen"
-
-#~ msgid "_Directory name:"
-#~ msgstr "_Verzeichnisname:"
-
-#~ msgid "C_reate"
-#~ msgstr "_Erstellen"
-
-#~ msgid "Create"
-#~ msgstr "Erstellen"
-
-#, fuzzy
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "Der Dateiname \"%s\" enthält Symbole, die nicht in Dateinamen vorkommen "
-#~ "dürfen."
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Fehler beim Löschen der Datei \"%s\": %s\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr ""
-#~ "Sie enthält wahrscheinlich Symbole, die nicht in Dateinamen vorkommen "
-#~ "dürfen."
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "Datei \"%s\" wirklich löschen?"
-
-#~ msgid "_Delete"
-#~ msgstr "_Löschen"
-
-#, fuzzy
-#~ msgid ""
-#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "Der Dateiname \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt "
-#~ "sind."
-
-#~ msgid ""
-#~ "Error renaming file to \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Fehler beim Umbenennen der Datei in \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "Error renaming file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Fehler beim Umbenennen der Datei \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "Fehler beim Umbenennen der Datei \"%s\" in \"%s\": %s"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "Neuer Name für Datei \"%s\":"
-
-#~ msgid "_Rename"
-#~ msgstr "_Umbenennen"
-
-#~ msgid "Rename"
-#~ msgstr "Umbenennen"
-
-#~ msgid ""
-#~ "The filename %s couldn't be converted to UTF-8. Try setting the "
-#~ "environment variable G_BROKEN_FILENAMES."
-#~ msgstr ""
-#~ "Der Dateiname %s konnte nicht in UTF-8 umgewandelt werden. Versuchen Sie, "
-#~ "die Umgebungsvariable G_BROKEN_FILENAMES zu belegen."
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "Der Dateiname konnte nicht umgewandelt werden."
-
-#~ msgid "01.01.2000"
-#~ msgstr "01.01.2000"
-
-#~ msgid "expire a_t"
-#~ msgstr "verfä_llt am"
-
-#~ msgid "_Prev"
-#~ msgstr "_Zurück"
-
-#~ msgid "_Next"
-#~ msgstr "_Weiter"
-
-#~ msgid ""
-#~ "In \"Passphrase\" and \"Repeat passphrase\"\n"
-#~ "you must enter the same passphrase."
-#~ msgstr ""
-#~ "Bitte achten Sie darauf, daß Sie unter\n"
-#~ "\"Passwortsatz\" und \"Passwortsatz wiederholen\"\n"
-#~ "genau denselben Passwortsatz eingeben."
-
-#~ msgid "generate re_vocation certificate"
-#~ msgstr "_Rückrufurkunde erzeugen"
-
-#~ msgid "_send to key server"
-#~ msgstr "_Zum Key-Server schicken"
-
-#~ msgid "_Generate key"
-#~ msgstr "Schlüssel _erzeugen"
-
-#~ msgid "F_inish"
-#~ msgstr "F_ertig"
-
-#~ msgid "User Identity/Role"
-#~ msgstr "Benutzerkennung"
-
-#~ msgid " Decrypt "
-#~ msgstr " Entschlüsseln "
-
-#~ msgid "Invalid Date"
-#~ msgstr "Ungültiges Datum"
-
-#~ msgid "/File/C_heck"
-#~ msgstr "/Datei/_Prüfen"
-
-#~ msgid "Open"
-#~ msgstr "öffnen"
-
-#~ msgid "NOTE: no default option file `%s'\n"
-#~ msgstr "HINWEIS: Keine Standard-Konfigurationsdatei `%s'\n"
-
-#~ msgid "option file `%s': %s\n"
-#~ msgstr "Konfigurationsdatei `%s': %s\n"
-
-#~ msgid "reading options from `%s'\n"
-#~ msgstr "Lese Konfiguration aus `%s'\n"
-
-#~ msgid "Insert passphrase"
-#~ msgstr "Passwortsatz eingeben"
-
-#, fuzzy
-#~ msgid "/Help/_Help"
-#~ msgstr "/Info/_Hilfe"
-
-#~ msgid "Weak passphrase"
-#~ msgstr "Unsicherer Passwortsatz"
-
-#~ msgid "Import from _clipboard:"
-#~ msgstr "Aus _Zwischenablage importieren"
-
-#~ msgid "Missing public key"
-#~ msgstr "Öffentlicher Schlüssel fehlt"
-
-#, fuzzy
-#~ msgid ""
-#~ "An error occured while receiving\n"
-#~ "the requested key from the keyserver."
-#~ msgstr ""
-#~ "Fehler beim Exportieren\n"
-#~ "geheimer Schlüssel."
-
-#, fuzzy
-#~ msgid "_Key ID: "
-#~ msgstr "Schlüsselkennung:"
-
-#, fuzzy
-#~ msgid "_Receive"
-#~ msgstr "_Empfänger"
-
-#~ msgid "Remove"
-#~ msgstr "Löschen"
-
-#~ msgid "Set key server"
-#~ msgstr "Key-Server festlegen"
-
-#~ msgid "_Key server: "
-#~ msgstr "_Key-Server: "
-
-#~ msgid "_Set"
-#~ msgstr "Über_nehmen"
-
-#, fuzzy
-#~ msgid "Fingerprint"
-#~ msgstr "Fingerabdruck:"
-
-#~ msgid "User identity / role"
-#~ msgstr "Benutzerkennung"
-
-#~ msgid ""
-#~ "No secret keys available to\n"
-#~ "select a default key from."
-#~ msgstr ""
-#~ "Keine geheimen Schlüssel für die Auswahl\n"
-#~ "eines Standard-Schlüssels vorhanden."
-
-#~ msgid "/Options/_Keyserver"
-#~ msgstr "/Optionen/_Key-Server"
-
-#~ msgid "/Options/_Default Key"
-#~ msgstr "/Optionen/_Standard-Schlüssel"
-
-#~ msgid "Signature"
-#~ msgstr "Signatur"
-
-#~ msgid "The keyserver returned an error message."
-#~ msgstr "Der Server antwortete mit einer Fehlermeldung."
-
-#~ msgid "Keyserver timeout"
-#~ msgstr "Server-Zeitüberschreitung"
-
-#~ msgid "Error initializing network"
-#~ msgstr "Fehler beim Initialisieren des Netzwerks"
-
-#~ msgid "Error resolving host name"
-#~ msgstr "Fehler bei der Namensauflösung"
-
-#~ msgid "Error while connecting to keyserver"
-#~ msgstr "Fehler beim Verbindungsaufbau zum Server"
-
-#~ msgid "No file selected for verifying signature."
-#~ msgstr "Keine Datei zum Prüfen der Signatur ausgewählt."
-
-#~ msgid "Verifying file signature"
-#~ msgstr "Dateisignatur prüfen"
-
-#~ msgid "Filename: "
-#~ msgstr "Dateiname: "
-
-#~ msgid "_Signatures"
-#~ msgstr "_Signaturen"
-
-#~ msgid "Sigs total"
-#~ msgstr "Sign. gesamt"
-
-#~ msgid "Valid Sigs"
-#~ msgstr "Gültige Sign."
-
-#~ msgid "Invalid Sigs"
-#~ msgstr "Ungültige Sign."
-
-#~ msgid "Info"
-#~ msgstr "Info"
-
-#~ msgid "clear"
-#~ msgstr "Klartext"
-
-#~ msgid "protected"
-#~ msgstr "geschützt"
-
-#~ msgid "clearsigned"
-#~ msgstr "Klartext-Signatur"
-
-#~ msgid "detach-signed"
-#~ msgstr "separate Signatur"
-
-#~ msgid "No key selected for detail view."
-#~ msgstr "Kein Schlüssel für Detailansicht ausgewählt."
-
-#~ msgid "Show public key detail"
-#~ msgstr "Detailansicht öffentlicher Schlüssel"
-
-#~ msgid "Fingerprint: "
-#~ msgstr "Fingerabdruck: "
-
-#~ msgid "Key owner"
-#~ msgstr "Schlüsseleigentümer"
-
-#~ msgid "Add _default recipients:"
-#~ msgstr "_Empfänger hinzufügen"
-
-#~ msgid "Add _keys to recipients"
-#~ msgstr "_Schlüssel zu Empfängern hinzufügen"
-
-#~ msgid "S_how detail"
-#~ msgstr "Detail _zeigen"
-
-#~ msgid "Save encrypted file _as: "
-#~ msgstr "Verschlüsselte Datei speichern als: "
-
-#~ msgid "   _Browse   "
-#~ msgstr "   _Durchsuchen   "
-
-#~ msgid "Save encrypted file as"
-#~ msgstr "Verschlüsselte Datei speichern als"
-
-#~ msgid "Protect files by Password"
-#~ msgstr "Dateien mit Passwort schützen"
-
-#~ msgid "Save protected _file as: "
-#~ msgstr "Geschützte _Datei speichern unter: "
-
-#~ msgid "Save protected file as"
-#~ msgstr "Geschützte Datei speichern unter"
-
-#~ msgid "P_assword: "
-#~ msgstr "P_asswort: "
-
-#~ msgid "Repeat Pa_ssword: "
-#~ msgstr "Pa_sswort wiederholen: "
-
-#~ msgid "_Protect"
-#~ msgstr "_Schützen"
-
-#~ msgid "No files selected to decrypt."
-#~ msgstr "Keine Dateien zum Entschlüsseln ausgewählt."
-
-#~ msgid "Save decrypted file as"
-#~ msgstr "Entschlüsselte Datei speichern unter"
-
-#~ msgid "No keys selected to remove from recipients list"
-#~ msgstr "Keine Schlüssel aus Empfängerliste ausgewählt"
-
-#~ msgid "No keys selected to add to recipients list."
-#~ msgstr "Keine Schlüssel ausgewählt"
-
-#~ msgid "don't trust"
-#~ msgstr "kein Vertrauen"
-
-#~ msgid "trust marginally"
-#~ msgstr "teilweises Vertrauen"
-
-#~ msgid "trust fully"
-#~ msgstr "volles Vertrauen"
-
-#~ msgid "trust ultimately"
-#~ msgstr "vollständiges Vertrauen"
-
-#~ msgid "invalid"
-#~ msgstr "ungültig"
-
-#~ msgid "ElGamal (sign and encrypt)"
-#~ msgstr "ElGamal (signieren und verschlüsseln)"
-
-#~ msgid "ElGamal (encrypt only)"
-#~ msgstr "ElGamal (nur verschlüsseln)"
-
-#~ msgid "!INVALID!"
-#~ msgstr "!UNGÜLTIG!"
-
-#~ msgid "/_Info"
-#~ msgstr "/_Info"
-
-#~ msgid "/Info/_Warranty"
-#~ msgstr "/Info/_Gewährleistung"
-
-#~ msgid "Export keys"
-#~ msgstr "Schlüssel exportieren"
-
-#~ msgid "Directory does not exist"
-#~ msgstr "Verzeichnis existiert nicht"
-
-#~ msgid ""
-#~ "Directory %s does not exist.\n"
-#~ "Do you want to create it now?"
-#~ msgstr ""
-#~ "Verzeichnis %s existiert nicht.\n"
-#~ "Möchten Sie es jetzt erstellen?"
-
-#~ msgid "Error creating directory"
-#~ msgstr "Fehler beim Erstellen des Verzeichnisses"
-
-#~ msgid "Backup Directory"
-#~ msgstr "Verzeichnis für Sicherheitskopie"
-
-#~ msgid ""
-#~ "Please enter a directory where your backup keys should be saved.\n"
-#~ "\n"
-#~ "GPA will create two files in that directory: pub_key.asc and sec_key.asc"
-#~ msgstr ""
-#~ "Bitte geben Sie ein Verzeichnis zur Speicherung der Sicherheitskopie "
-#~ "Ihres neuen Schlüssels an. Wir empfehlen die Sicherung auf einer Diskette "
-#~ "(Laufwerk A:\\).\n"
-#~ "GPA wird dort die beiden Dateien pub_key.asc und sec_key.asc speichern."
-
-#~ msgid "Directory:"
-#~ msgstr "Verzeichnis:"
-
-#~ msgid "_Overwrite"
-#~ msgstr "_Überschreiben"
-
-#~ msgid "File exists"
-#~ msgstr "Datei existiert"
-
-#~ msgid "Please enter a valid directory"
-#~ msgstr "Bitte geben Sie ein gültiges Verzeichnis an"
-
-#~ msgid "Key Trust"
-#~ msgstr "Schlüsselvertrauen"
-
-#~ msgid "No key defined"
-#~ msgstr "Kein Schlüssel"
-
-#~ msgid "No key backup"
-#~ msgstr "Keine Sicherheitskopie"
-
-#~ msgid "Key Trust:"
-#~ msgstr "Schlüsselvertrauen:"
-
-#~ msgid "User ID:"
-#~ msgstr "Benutzerkennung:"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "Keys exported."
-#~ msgstr "Schlüssel exportiert."
-
-#~ msgid "Export to _file: "
-#~ msgstr "Exportieren in _Datei: "
-
-#~ msgid "E_xport"
-#~ msgstr "E_xportieren"
-
-#~ msgid "Export ownertrust to file"
-#~ msgstr "Benutzervertrauen in Datei exportieren"
-
-#~ msgid "No keys selected to delete."
-#~ msgstr "Keine Schlüssel zum Löschen ausgewählt."
-
-#~ msgid "!FATAL ERROR: Invalid key selection info!\n"
-#~ msgstr "!FATAL ERROR: Invalid key selection info!\n"
-
-#~ msgid "Revocation certificate created."
-#~ msgstr "Rückrufurkunde erzeugt."
-
-#~ msgid "No key selected for editing."
-#~ msgstr "Kein Schlüssel zum Bearbeiten ausgewählt."
-
-#~ msgid "Create Re_vocation"
-#~ msgstr "_Rückrufurkunde erzeugen"
-
-#~ msgid "E_xport key"
-#~ msgstr "Schlüssel e_xportieren"
-
-#~ msgid "_Save and exit"
-#~ msgstr "_Speichern und Schließen"
-
-#~ msgid "E_xport keys"
-#~ msgstr "Schlüssel e_xportieren"
-
-#~ msgid "_Edit key"
-#~ msgstr "Schlüssel _bearbeiten"
-
-#~ msgid "No keys selected to create revocation certificate for."
-#~ msgstr "Keine Schlüssel ausgewählt."
-
-#~ msgid "_Secret keys"
-#~ msgstr "Geheime _Schlüssel"
-
-#~ msgid "Import keys"
-#~ msgstr "Schlüssel importieren"
-
-#~ msgid "Import ownertrust"
-#~ msgstr "Benutzervertrauen importieren"
-
-#~ msgid "Trust database updated."
-#~ msgstr "Vertrauensdatenbank aktualisiert."
-
-#~ msgid ""
-#~ "No public keys available to denote\n"
-#~ "as default recipients."
-#~ msgstr ""
-#~ "Keine öffentlichen Schlüssel für die\n"
-#~ "Auswahl der Empfänger vorhanden."
-
-#~ msgid "_Remove from recipients"
-#~ msgstr "Aus Empfängerliste ent_fernen"
-
-#~ msgid "_Add to recipients"
-#~ msgstr "Zu Empfängerliste _hinzufügen"
-
-#~ msgid "/Options/Default _Recipients"
-#~ msgstr "/Optionen/_Empfängerliste"
-
-#~ msgid "Invalid ownertrust level."
-#~ msgstr "Ungültige Benutzervertrauen-Stufe."
-
-#~ msgid "_Ownertrust level: "
-#~ msgstr "_Benutzervertrauen-Stufe: "
-
-#~ msgid "_Accept"
-#~ msgstr "_Übernehmen"
-
-#~ msgid "_Open"
-#~ msgstr "_Öffnen"
-
-#~ msgid ""
-#~ "The keyserver returned an error message:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Der Key-Server antwortete mit einer Fehlermeldung:\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid "Invalid number of fields in GnuPG colon output"
-#~ msgstr "Fehlerhafte Anzahl von Feldern im GnuPG-Ausgabetext"
-
-#~ msgid "Target file not specified"
-#~ msgstr "Ausgabedatei nicht angegeben"
-
-#~ msgid "Not a regular file"
-#~ msgstr "Keine reguläre Datei"
-
-#~ msgid "Missing file name"
-#~ msgstr "Dateiname fehlt"
-
-#~ msgid "Missing private key ID for signing"
-#~ msgstr ""
-#~ "Es wurde kein geheimer Schlüssel angegeben,\n"
-#~ "mit dem die Unterschrift ausgeführt werden kann."
-
-#~ msgid "Missing public key ID(s) for encrypting"
-#~ msgstr ""
-#~ "Es wurde kein öffentlicher Schlüssel angegeben,\n"
-#~ "für den verschlüsselt werden soll."
-
-#~ msgid "Missing passphrase for symmetric encrypting"
-#~ msgstr "Passwortsatz für symmetrische Verschlüsselung fehlt"
-
-#~ msgid "GnuPG execution aborted"
-#~ msgstr "Die Ausführung von GnuPG wurde abgebrochen."
-
-#~ msgid "Invalid file: bad armor"
-#~ msgstr "Fehlerhafte Datei: ungültige ASCII-Verpackung"
-
-#~ msgid "Invalid file: bad MDC"
-#~ msgstr "Fehlerhafte Datei: ungültige MDC"
-
-#~ msgid "Decryption failed"
-#~ msgstr "Entschlüsselung fehlgeschlagen"
-
-#~ msgid "Delete problem"
-#~ msgstr "Problem beim Löschen"
-
-#~ msgid "Error in MDC"
-#~ msgstr "Fehler in MDC"
-
-#~ msgid "File error"
-#~ msgstr "Fehlerhafte Datei"
-
-#~ msgid "Missing passphrase"
-#~ msgstr "Passwortsatz fehlt"
-
-#~ msgid "No valid OpenPGP data found"
-#~ msgstr "Keine gültigen OpenPGP-Daten gefunden"
-
-#~ msgid ""
-#~ "GnuPG execution failed:\n"
-#~ "internal error while setting\n"
-#~ "command handler"
-#~ msgstr ""
-#~ "GnuPG-Ausführung fehlgeschlagen:\n"
-#~ "Interner Fehler beim Setzen des\n"
-#~ "\"command handler\""
-
-#~ msgid ""
-#~ "GnuPG execution failed:\n"
-#~ "could not spawn external program"
-#~ msgstr ""
-#~ "GnuPG-Ausführung fehlgeschlagen:\n"
-#~ "Externes Programm kann nicht aufgerufen werden"
-
-#~ msgid "GnuPG execution terminated"
-#~ msgstr "GnuPG-Aufruf beendet"
-
-#~ msgid "Invalid number of fields in output of `gpg --check-sigs'"
-#~ msgstr ""
-#~ "Fehlerhafte Anzahl von Feldern in der Ausgabe von `gpg --check-sigs'"
-
-#~ msgid "No valid public key specified"
-#~ msgstr "Kein gültiger öffentlicher Schlüssel angegeben"
-
-#~ msgid "No valid secret key specified"
-#~ msgstr "Kein gültiger geheimer Schlüssel angegeben"
-
-#~ msgid "No valid passphrase specified"
-#~ msgstr "Kein gültiger Passwortsatz angegeben"
+#~ msgid "[T]"
+#~ msgstr "[T]"
