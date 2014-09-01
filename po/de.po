@@ -269,7 +269,8 @@ msgstr "Zwischenablage öffnen"
 msgid "Open the settings dialog"
 msgstr "Öffne den Dialog für die Einstellungen"
 
-msgid "Enable the UI server"
+#, fuzzy
+msgid "Only start the UI server"
 msgstr "Den UI Server aktivieren"
 
 msgid "Disable support for X.509"
@@ -277,6 +278,9 @@ msgstr "Keine Unterstützung von X.509"
 
 msgid "Read options from file"
 msgstr "Optionen aus einer Datei lesen"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr "[DATEI...]"
@@ -331,8 +335,8 @@ msgstr "Beim Erstellen der Datensicherung ist ein Fehler aufgetreten."
 msgid "Backup key to file"
 msgstr "_Sicherheitskopie des Schlüssels in Datei:"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "Sicherheitskopie von Schlüssel %s erstellen"
 
 msgid "The keys have been copied to the clipboard."
@@ -536,41 +540,47 @@ msgstr "Kennung des untergeordneten Schlüssels"
 msgid "Status"
 msgstr "Gültigkeit der Beglaubigung"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "_Verschlüsselungsalgorithmus"
 
 msgid "Size"
 msgstr "Größe"
 
-msgid "Expiry Date"
-msgstr "Verfallsdatum"
+#, fuzzy
+msgid "Created"
+msgstr "Erstellen"
 
-msgid "[S]"
-msgstr "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "Abgelaufen"
+
+msgid "S"
+msgstr ""
 
 msgid "Can sign"
 msgstr "Zum Signieren verwendbar"
 
-msgid "[C]"
-msgstr "[C]"
+msgid "C"
+msgstr ""
 
 msgid "Can certify"
 msgstr "Zum Überprüfen verwendbar"
 
-msgid "[E]"
-msgstr "[E]"
+msgid "E"
+msgstr ""
 
 msgid "Can encrypt"
 msgstr "Zum Verschlüsseln verwendbar"
 
-msgid "[A]"
-msgstr "[A]"
+msgid "A"
+msgstr ""
 
 msgid "Can authenticate"
 msgstr "Zum Authentifizieren verwendbar"
 
-msgid "[T]"
-msgstr "[T]"
+msgid "T"
+msgstr ""
 
 msgid "Secret key stored on a smartcard."
 msgstr "Geheimer Schlüssel befindet sich auf einer Smartcard"
@@ -974,6 +984,9 @@ msgstr "Schlüssel bearbeiten"
 msgid "Change _passphrase"
 msgstr "_Passwortsatz ändern"
 
+msgid "Expiry Date"
+msgstr "Verfallsdatum"
+
 msgid "Change _expiration"
 msgstr "_Verfallsdatum ändern"
 
@@ -1116,6 +1129,10 @@ msgid "The key ID is a short number to identify a certificate."
 msgstr ""
 "Die Schlüsselkennung (Key ID) is eine kurze Zahl zur Identifizerung eines "
 "Zertifikats."
+
+#, fuzzy
+msgid "The Creation Date is the date the certificate was created."
+msgstr "Das Ablaufdatum ist das Datum bis zu dem das Zertifikat gültig ist."
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Das Ablaufdatum ist das Datum bis zu dem das Zertifikat gültig ist."
@@ -2236,6 +2253,21 @@ msgstr ""
 "können jedoch mit dem Knopf zur Anwendungsauswahl auf eine andere, auf der "
 "Karte verfügbare, Anwendung umschalten."
 
+#~ msgid "[S]"
+#~ msgstr "[S]"
+
+#~ msgid "[C]"
+#~ msgstr "[C]"
+
+#~ msgid "[E]"
+#~ msgstr "[E]"
+
+#~ msgid "[A]"
+#~ msgstr "[A]"
+
+#~ msgid "[T]"
+#~ msgstr "[T]"
+
 #~ msgid "GNU Privacy Assistant - Clipboard"
 #~ msgstr "GNU Privacy Assistant - Zwischenablage"
 
@@ -2864,9 +2896,6 @@ msgstr ""
 
 #~ msgid "C_reate"
 #~ msgstr "_Erstellen"
-
-#~ msgid "Create"
-#~ msgstr "Erstellen"
 
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"

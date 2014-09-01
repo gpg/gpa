@@ -301,7 +301,7 @@ msgstr "Naar _klembord"
 msgid "Open the settings dialog"
 msgstr "Open de voorkeuren dialoog"
 
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr ""
 
 msgid "Disable support for X.509"
@@ -310,6 +310,9 @@ msgstr ""
 #, fuzzy
 msgid "Read options from file"
 msgstr "lees opties van bestand"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr ""
@@ -372,8 +375,8 @@ msgstr ""
 msgid "Backup key to file"
 msgstr "_Backup sleutel naar bestand:"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "Genereren van backup van sleutel: %s"
 
 msgid "The keys have been copied to the clipboard."
@@ -579,40 +582,46 @@ msgstr "Subsleutels ID"
 msgid "Status"
 msgstr "Status"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "Algoritme"
 
 msgid "Size"
 msgstr "Grootte"
 
-msgid "Expiry Date"
-msgstr "Verval datum"
+#, fuzzy
+msgid "Created"
+msgstr "Maken"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "Vervallen"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "Kan ondertekend worden"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "Kan gecertifieerd worden"
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "Kan versleuteld worden"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "Kan geauthenticeerd worden"
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -1026,6 +1035,9 @@ msgstr "Bewerk sleutel"
 msgid "Change _passphrase"
 msgstr "Verkeerd wachtwoord!"
 
+msgid "Expiry Date"
+msgstr "Verval datum"
+
 msgid "Change _expiration"
 msgstr "_Verander verval datum"
 
@@ -1165,6 +1177,9 @@ msgstr ""
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "De sleutel kan alleen gebruikt worden voor certificatie."
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr ""
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
@@ -2853,9 +2868,6 @@ msgstr ""
 
 #~ msgid "C_reate"
 #~ msgstr "_Maken"
-
-#~ msgid "Create"
-#~ msgstr "Maken"
 
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"

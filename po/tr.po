@@ -297,7 +297,7 @@ msgstr ""
 msgid "Open the settings dialog"
 msgstr "Tercihler penceresini aç"
 
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr ""
 
 msgid "Disable support for X.509"
@@ -306,6 +306,9 @@ msgstr ""
 #, fuzzy
 msgid "Read options from file"
 msgstr "seçenekleri dosyadan oku"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr ""
@@ -368,8 +371,8 @@ msgstr ""
 msgid "Backup key to file"
 msgstr "Anahtarý dosyaya yedekle"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "%s anahtarýnýn yedeklemesi yapýlýyor"
 
 msgid "The keys have been copied to the clipboard."
@@ -574,40 +577,46 @@ msgstr "Altanahtar Kimliði"
 msgid "Status"
 msgstr "Durum"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "Algoritma"
 
 msgid "Size"
 msgstr "Boyut"
 
-msgid "Expiry Date"
-msgstr "Bitim Tarihi"
+#, fuzzy
+msgid "Created"
+msgstr "Yaratýlma Tarihi:"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "Sona Ermiþ"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "Ýmzalayabilir"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "Onaylayabilir"
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "Þifreleyebilir"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "Doðrulayabilir"
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -1020,6 +1029,9 @@ msgstr "Anahtarý Düzenle"
 msgid "Change _passphrase"
 msgstr "_Þifreyi Deðiþtir"
 
+msgid "Expiry Date"
+msgstr "Bitim Tarihi"
+
 msgid "Change _expiration"
 msgstr "_Bitim süresini deðiþtir"
 
@@ -1160,6 +1172,9 @@ msgstr ""
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "Anahtar sadece onaylama için kullanýlabilir."
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr ""
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""

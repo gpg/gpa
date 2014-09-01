@@ -1,5 +1,28 @@
-Noteworthy changes in version 0.9.5 (unreleased)
+Noteworthy changes in version 0.9.5 (2014-09-01)
 ------------------------------------------------
+
+ * GPA now starts with the UI server enabled and tests on startup
+   whether such a server is already running to open that one instead
+   of launching a second instance.
+
+ * GPA is now aware of ECC keys.
+
+ * Improved detection of CMS objects (which are used by S/MIME) and
+   detached OpenPGP signatures.
+
+ * Allow import and export of X.509 certificates.  Allow backup of
+   X.509 keys.
+
+ * The key creation date is now displayed in the key listing.
+
+ * Armored detached signature files are now created with an ".asc"
+   suffix and not with ".sig".
+
+ * The GnuPG home directory is now detected using the gpgconf tool.
+
+ * Added launch-gpa wrapper for Windows.
+
+ * Fixed several bugs leading to crashs.
 
 
 Noteworthy changes in version 0.9.4 (2013-05-01)

@@ -1,7 +1,7 @@
 # configure.ac for GPA
 # Copyright (C) 2000, 2001  Werner Koch
 # Copyright (C) 2002, 2003, 2004  Miguel Coca
-# Copyright (C) 2005-2013   g10 Code GmbH
+# Copyright (C) 2005-2014   g10 Code GmbH
 #
 # This file is part of GPA.
 #

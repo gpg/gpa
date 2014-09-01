@@ -304,7 +304,7 @@ msgstr "クリップボードへコピー (_C)"
 msgid "Open the settings dialog"
 msgstr "設定ダイアログを開く"
 
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr ""
 
 msgid "Disable support for X.509"
@@ -313,6 +313,9 @@ msgstr ""
 #, fuzzy
 msgid "Read options from file"
 msgstr "ファイルからオプション読込"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr ""
@@ -375,8 +378,8 @@ msgstr ""
 msgid "Backup key to file"
 msgstr "鍵をファイルにバックアップする"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "鍵のバックアップを作成する: %s"
 
 msgid "The keys have been copied to the clipboard."
@@ -580,40 +583,46 @@ msgstr "副鍵 ID"
 msgid "Status"
 msgstr "ステータス"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "アルゴリズム"
 
 msgid "Size"
 msgstr "サイズ"
 
-msgid "Expiry Date"
-msgstr "有効期限"
+#, fuzzy
+msgid "Created"
+msgstr "作成"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "期限切れ"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "署名可能"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "証明可能"
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "暗号化可能"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "認証可能"
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -1022,6 +1031,9 @@ msgstr "鍵を編集"
 msgid "Change _passphrase"
 msgstr "パスフレーズを変更 (_P)"
 
+msgid "Expiry Date"
+msgstr "有効期限"
+
 msgid "Change _expiration"
 msgstr "有効期限を変更 (_E)"
 
@@ -1158,6 +1170,9 @@ msgstr ""
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "証明にのみ使える鍵です。"
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr ""
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
@@ -2853,9 +2868,6 @@ msgstr ""
 
 #~ msgid "C_reate"
 #~ msgstr "作成 (_R)"
-
-#~ msgid "Create"
-#~ msgstr "作成"
 
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"

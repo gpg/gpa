@@ -277,7 +277,7 @@ msgid "Open the settings dialog"
 msgstr "Ouvrir la fenêtre des préférences"
 
 #, fuzzy
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr ""
 "Démarrer seulement le serveur d'interface graphique (implique « --cms »)"
 
@@ -286,6 +286,9 @@ msgstr ""
 
 msgid "Read options from file"
 msgstr "Lire les options depuis le fichier"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr "[FICHIER…]"
@@ -339,8 +342,8 @@ msgstr "Une erreur est survenue lors de l'opération de sauvegarde."
 msgid "Backup key to file"
 msgstr "Sauvegarder la clef dans le fichier :"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "Génération de la sauvegarde de clef : %s"
 
 msgid "The keys have been copied to the clipboard."
@@ -555,40 +558,46 @@ msgstr "ID de sous-clef"
 msgid "Status"
 msgstr "État"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "Algorithme"
 
 msgid "Size"
 msgstr "Taille"
 
-msgid "Expiry Date"
-msgstr "Expiration"
+#, fuzzy
+msgid "Created"
+msgstr "Créée le :"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "Expirée"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "Signe"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "Certifie"
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "Chiffre"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "Authentifie"
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -994,6 +1003,9 @@ msgstr "Éditer la clef"
 msgid "Change _passphrase"
 msgstr "Changer le mot de _passe"
 
+msgid "Expiry Date"
+msgstr "Expiration"
+
 msgid "Change _expiration"
 msgstr "Changer l'_expiration"
 
@@ -1139,6 +1151,12 @@ msgid "The key ID is a short number to identify a certificate."
 msgstr ""
 "L'identificateur de clef est une suite de chiffres et de lettres servant à "
 "identifier un certificat."
+
+#, fuzzy
+msgid "The Creation Date is the date the certificate was created."
+msgstr ""
+"La date d'expiration indique la date à laquelle le certificat cesse d'être "
+"valide."
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""

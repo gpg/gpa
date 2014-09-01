@@ -292,7 +292,7 @@ msgid "Open the settings dialog"
 msgstr "Открыть окно настроек"
 
 #, fuzzy
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr "Стартовать только сервер UI"
 
 msgid "Disable support for X.509"
@@ -300,6 +300,9 @@ msgstr ""
 
 msgid "Read options from file"
 msgstr "Получить настройки из файла"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr "[ФАЙЛ...]"
@@ -356,8 +359,8 @@ msgstr "Ошибка создания резервной копии."
 msgid "Backup key to file"
 msgstr "Резервная копия ключа в файл"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "Создание резервной копии ключа: %s"
 
 msgid "The keys have been copied to the clipboard."
@@ -565,40 +568,46 @@ msgstr "ID подключа"
 msgid "Status"
 msgstr "Статус"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "Алгоритм"
 
 msgid "Size"
 msgstr "Размер"
 
-msgid "Expiry Date"
-msgstr "Срок годности"
+#, fuzzy
+msgid "Created"
+msgstr "Создан:"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "Истек"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "Может подпис."
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "Может сертиф."
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "Может шифр."
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "Может авториз."
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -1012,6 +1021,9 @@ msgstr "Редактировать ключ"
 msgid "Change _passphrase"
 msgstr "Изменить пароль"
 
+msgid "Expiry Date"
+msgstr "Срок годности"
+
 msgid "Change _expiration"
 msgstr "Изменить срок годности"
 
@@ -1154,6 +1166,10 @@ msgstr ""
 
 msgid "The key ID is a short number to identify a certificate."
 msgstr "ID ключа - короткий номер для идентификации сертификата."
+
+#, fuzzy
+msgid "The Creation Date is the date the certificate was created."
+msgstr "Срок годности определяет продолжительность действия сертификата."
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Срок годности определяет продолжительность действия сертификата."

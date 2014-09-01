@@ -275,7 +275,7 @@ msgid "Open the settings dialog"
 msgstr "Öppna inställningsdialogen"
 
 #, fuzzy
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr "Aktivera användargränssnittsservern (innebär --cms)"
 
 msgid "Disable support for X.509"
@@ -283,6 +283,9 @@ msgstr ""
 
 msgid "Read options from file"
 msgstr "Läs flaggor från fil"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr "[FIL...]"
@@ -336,8 +339,8 @@ msgstr "Ett fel inträffade under säkerhetskopieringen."
 msgid "Backup key to file"
 msgstr "Säkerhetskopiera nyckel till fil"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "Skapar säkerhetskopia av nyckel: %s"
 
 msgid "The keys have been copied to the clipboard."
@@ -544,40 +547,46 @@ msgstr "Undernyckelsidentitet"
 msgid "Status"
 msgstr "Status"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "Algoritm"
 
 msgid "Size"
 msgstr "Storlek"
 
-msgid "Expiry Date"
-msgstr "Utgångsdatum"
+#, fuzzy
+msgid "Created"
+msgstr "Skapad den:"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "Utgången"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "Kan signera"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "Kan certifiera"
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "Kan kryptera"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "Kan authentisera"
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -979,6 +988,9 @@ msgstr "Redigera nyckel"
 msgid "Change _passphrase"
 msgstr "Ändra _lösenfras"
 
+msgid "Expiry Date"
+msgstr "Utgångsdatum"
+
 msgid "Change _expiration"
 msgstr "Ändra _utgångsdatum"
 
@@ -1121,6 +1133,10 @@ msgstr ""
 
 msgid "The key ID is a short number to identify a certificate."
 msgstr "Nyckelidentiteten är ett kort tal för att identifiera ett certifikat."
+
+#, fuzzy
+msgid "The Creation Date is the date the certificate was created."
+msgstr "Utgångsdatum är det datum som certifikatet är giltigt fram till."
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Utgångsdatum är det datum som certifikatet är giltigt fram till."

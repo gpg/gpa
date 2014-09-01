@@ -297,7 +297,7 @@ msgstr ""
 msgid "Open the settings dialog"
 msgstr "Otwiera okno dialogowe z ustawieniami"
 
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr ""
 
 msgid "Disable support for X.509"
@@ -306,6 +306,9 @@ msgstr ""
 #, fuzzy
 msgid "Read options from file"
 msgstr "odczytuje opcje z podanego pliku"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr ""
@@ -369,8 +372,8 @@ msgstr ""
 msgid "Backup key to file"
 msgstr "Wykonaj kopię zapasową klucza do pliku"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "Generowanie kopii zapasowej klucza: %s"
 
 msgid "The keys have been copied to the clipboard."
@@ -578,40 +581,46 @@ msgstr "Identyfikator podklucza"
 msgid "Status"
 msgstr "Stan"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "Algorytm"
 
 msgid "Size"
 msgstr "Rozmiar"
 
-msgid "Expiry Date"
-msgstr "Data końca ważności"
+#, fuzzy
+msgid "Created"
+msgstr "Utworzony dnia:"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "Po terminie ważności"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "Można podpisywać"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "Można poświadczać"
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "Można szyfrować"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "Można autoryzować"
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -1028,6 +1037,9 @@ msgstr "Edycja klucza"
 msgid "Change _passphrase"
 msgstr "Zmień _hasło"
 
+msgid "Expiry Date"
+msgstr "Data końca ważności"
+
 msgid "Change _expiration"
 msgstr "Zmień datę utraty _ważności"
 
@@ -1169,6 +1181,9 @@ msgstr ""
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "Ten klucz może być użyty tylko do certyfikatów."
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr ""
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""

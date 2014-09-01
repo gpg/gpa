@@ -300,7 +300,7 @@ msgstr ""
 msgid "Open the settings dialog"
 msgstr "Abrir caixa de diálogo das Preferências"
 
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr ""
 
 msgid "Disable support for X.509"
@@ -309,6 +309,9 @@ msgstr ""
 #, fuzzy
 msgid "Read options from file"
 msgstr "ler as preferências do arquivo"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr ""
@@ -372,8 +375,8 @@ msgstr ""
 msgid "Backup key to file"
 msgstr "E_xportar para o arquivo:"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "Gerando backup de chave: %s"
 
 msgid "The keys have been copied to the clipboard."
@@ -582,42 +585,47 @@ msgid "Status"
 msgstr "Status"
 
 #, fuzzy
-msgid "Algorithm"
+msgid "Algo"
 msgstr "_Algoritmo:"
 
 msgid "Size"
 msgstr ""
 
-msgid "Expiry Date"
-msgstr "Date de expiração"
+#, fuzzy
+msgid "Created"
+msgstr "Criado"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "Expirado"
+
+msgid "S"
 msgstr ""
 
 #, fuzzy
 msgid "Can sign"
 msgstr "_assinar"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr ""
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 #, fuzzy
 msgid "Can encrypt"
 msgstr "encriptado"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr ""
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -1023,6 +1031,9 @@ msgstr "Editar a chave"
 msgid "Change _passphrase"
 msgstr "Mudar _senha"
 
+msgid "Expiry Date"
+msgstr "Date de expiração"
+
 msgid "Change _expiration"
 msgstr "Mudar _expiração"
 
@@ -1164,6 +1175,10 @@ msgstr ""
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "E não pode ser usada para encriptação."
+
+#, fuzzy
+msgid "The Creation Date is the date the certificate was created."
+msgstr "Certificado de revogação criado."
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
@@ -2872,9 +2887,6 @@ msgstr ""
 #~ msgid "C_reate"
 #~ msgstr "C_riado"
 
-#~ msgid "Create"
-#~ msgstr "Criado"
-
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"
 #~ msgstr ""
@@ -3258,9 +3270,6 @@ msgstr ""
 
 #~ msgid "!FATAL ERROR: Invalid key selection info!\n"
 #~ msgstr "!ERRO FATAL: seleção de chave inválida!\n"
-
-#~ msgid "Revocation certificate created."
-#~ msgstr "Certificado de revogação criado."
 
 #~ msgid "No key selected for editing."
 #~ msgstr "Nenhuma chave selecionada para ser editada."

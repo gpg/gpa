@@ -296,7 +296,7 @@ msgstr ""
 msgid "Open the settings dialog"
 msgstr "開啟設定視窗"
 
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr ""
 
 msgid "Disable support for X.509"
@@ -305,6 +305,9 @@ msgstr ""
 #, fuzzy
 msgid "Read options from file"
 msgstr "由檔案中讀取選項"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr ""
@@ -367,8 +370,8 @@ msgstr ""
 msgid "Backup key to file"
 msgstr "備份密鑰到檔案"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "正在建立 %s 的備份"
 
 msgid "The keys have been copied to the clipboard."
@@ -572,40 +575,46 @@ msgstr "子鑰序號"
 msgid "Status"
 msgstr "狀態"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "加密算式"
 
 msgid "Size"
 msgstr "大小"
 
-msgid "Expiry Date"
-msgstr "有效日期"
+#, fuzzy
+msgid "Created"
+msgstr "建立在 :"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "已經過時"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "允許簽署"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "允許驗證"
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "允許加密"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "允許發放"
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -1009,6 +1018,9 @@ msgstr "修改密鑰"
 msgid "Change _passphrase"
 msgstr "更改密碼 (&P)"
 
+msgid "Expiry Date"
+msgstr "有效日期"
+
 msgid "Change _expiration"
 msgstr "改變有效日期 (&E)"
 
@@ -1147,6 +1159,9 @@ msgstr ""
 #, fuzzy
 msgid "The key ID is a short number to identify a certificate."
 msgstr "密鑰只可用作驗證."
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr ""
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""

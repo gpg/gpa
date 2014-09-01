@@ -291,7 +291,7 @@ msgid "Open the settings dialog"
 msgstr "يفتح حوار التفضيلات"
 
 #, fuzzy
-msgid "Enable the UI server"
+msgid "Only start the UI server"
 msgstr "ابدأ فقط خادوم واجهة المستخدم (يفترض ‪--cms‬ أيضا)"
 
 msgid "Disable support for X.509"
@@ -299,6 +299,9 @@ msgstr ""
 
 msgid "Read options from file"
 msgstr "اقرأ الخيارات من ملفّ"
+
+msgid "Do not connect to a running instance"
+msgstr ""
 
 msgid "[FILE...]"
 msgstr "[ملف...]"
@@ -355,8 +358,8 @@ msgstr "حدث عطل أثناء الحفظ الاحتياطي."
 msgid "Backup key to file"
 msgstr "يحفظ نسخة احتياطية من المفتاح في ملفّ"
 
-#, c-format
-msgid "Generating backup of key: %s"
+#, fuzzy, c-format
+msgid "Generating backup of key: 0x%s"
 msgstr "يجري حفظ المفتاح: %s"
 
 msgid "The keys have been copied to the clipboard."
@@ -563,40 +566,46 @@ msgstr "مُعرِّف المفتاح الفرعي"
 msgid "Status"
 msgstr "الحالة"
 
-msgid "Algorithm"
+#, fuzzy
+msgid "Algo"
 msgstr "الخوارزمية"
 
 msgid "Size"
 msgstr "الطول"
 
-msgid "Expiry Date"
-msgstr "تاريخ الانتهاء"
+#, fuzzy
+msgid "Created"
+msgstr "أُنشئ في:"
 
-msgid "[S]"
+#, fuzzy
+msgid "Expires"
+msgstr "منتهية صلاحيته"
+
+msgid "S"
 msgstr ""
 
 msgid "Can sign"
 msgstr "يمكن التوقيع به"
 
-msgid "[C]"
+msgid "C"
 msgstr ""
 
 msgid "Can certify"
 msgstr "يمكن الشهادة به"
 
-msgid "[E]"
+msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
 msgstr "يمكن التعمية به"
 
-msgid "[A]"
+msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
 msgstr "يمكن الاستيثاق به"
 
-msgid "[T]"
+msgid "T"
 msgstr ""
 
 msgid "Secret key stored on a smartcard."
@@ -1004,6 +1013,9 @@ msgstr "حرر المفتاح"
 msgid "Change _passphrase"
 msgstr "غيّر _عبارة السر"
 
+msgid "Expiry Date"
+msgstr "تاريخ الانتهاء"
+
 msgid "Change _expiration"
 msgstr "غيّر _تاريخ انتهاء الصلاحية"
 
@@ -1141,6 +1153,10 @@ msgstr ""
 
 msgid "The key ID is a short number to identify a certificate."
 msgstr "مُعرّف المفتاح هو رقم صغير لتعريف الشهادة."
+
+#, fuzzy
+msgid "The Creation Date is the date the certificate was created."
+msgstr "تاريخ الانتهاء هو التاريخ الذي تنتهي عنده صلاحية الشهادة."
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "تاريخ الانتهاء هو التاريخ الذي تنتهي عنده صلاحية الشهادة."
