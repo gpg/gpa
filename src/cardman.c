@@ -624,6 +624,15 @@ watcher_cb (void *opaque, const char *filename, const char *reason)
 }
 
 
+/* Handle menu item "File/Close".  */
+static void
+file_close (GtkAction *action, gpointer param)
+{
+  GpaCardManager *cardman = param;
+  gtk_widget_destroy (GTK_WIDGET (cardman));
+}
+
+
 /* Construct the card manager menu and toolbar widgets and return
    them. */
 static void
@@ -638,6 +647,8 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
       { "Card", NULL, N_("_Card"), NULL },
 
       /* File menu.  */
+      { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
+	N_("Close the window"), G_CALLBACK (file_close) },
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
 	N_("Quit the program"), G_CALLBACK (gtk_main_quit) },
 
@@ -652,6 +663,7 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
     "<ui>"
     "  <menubar name='MainMenu'>"
     "    <menu action='File'>"
+    "      <menuitem action='FileClose'/>"
     "      <menuitem action='FileQuit'/>"
     "    </menu>"
     "    <menu action='Edit'>"
