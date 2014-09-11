@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"PO-Revision-Date: 2014-06-05 08:46+0100\n"
+"PO-Revision-Date: 2014-09-11 09:17+0100\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: czech <cs@li.org>\n"
 "Language: cs\n"
@@ -269,9 +269,8 @@ msgstr "Otevřít schránku"
 msgid "Open the settings dialog"
 msgstr "Otevřít dialog nastavení"
 
-#, fuzzy
 msgid "Only start the UI server"
-msgstr "Povolit UI server"
+msgstr "Spustit pouze UI server"
 
 msgid "Disable support for X.509"
 msgstr "Vypnout podporu pro X.509"
@@ -280,7 +279,7 @@ msgid "Read options from file"
 msgstr "Číst možnosti ze souboru"
 
 msgid "Do not connect to a running instance"
-msgstr ""
+msgstr "Nepřipojujte se k běžící instanci"
 
 msgid "[FILE...]"
 msgstr "[SOUBOR...]"
@@ -334,9 +333,9 @@ msgstr "V průběhu zálohování došlo k chybě."
 msgid "Backup key to file"
 msgstr "Zálohovat klíč do souboru"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Generating backup of key: 0x%s"
-msgstr "Vytváří se zálohu klíče: %s"
+msgstr "Vytváří se zálohu klíče: 0x%s"
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Klíče byly zkopírovány do schránky."
@@ -536,47 +535,44 @@ msgstr "ID podklíče"
 msgid "Status"
 msgstr "Stav"
 
-#, fuzzy
 msgid "Algo"
 msgstr "Algoritmus"
 
 msgid "Size"
 msgstr "Velikost"
 
-#, fuzzy
 msgid "Created"
-msgstr "Vytvořen:"
+msgstr "Vytvořen"
 
-#, fuzzy
 msgid "Expires"
-msgstr "Vypršela platnost"
+msgstr "Vyprší platnost"
 
 msgid "S"
-msgstr ""
+msgstr "P"
 
 msgid "Can sign"
 msgstr "Smí podepisovat"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Can certify"
 msgstr "Smí certifikovat"
 
 msgid "E"
-msgstr ""
+msgstr "Š"
 
 msgid "Can encrypt"
 msgstr "Smí šifrovat"
 
 msgid "A"
-msgstr ""
+msgstr "A"
 
 msgid "Can authenticate"
 msgstr "Smí autentizovat"
 
 msgid "T"
-msgstr ""
+msgstr "K"
 
 msgid "Secret key stored on a smartcard."
 msgstr "Soukromý klíč byl uložen na kartě."
@@ -1118,9 +1114,8 @@ msgstr ""
 msgid "The key ID is a short number to identify a certificate."
 msgstr "ID klíče je krátké číslo k identifikaci certifikátu."
 
-#, fuzzy
 msgid "The Creation Date is the date the certificate was created."
-msgstr "Datum vypršení je datum, do kterého je certifikát platný."
+msgstr "Datum vytvoření je datum, kdy byl certifikát vytvořen."
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Datum vypršení je datum, do kterého je certifikát platný."
