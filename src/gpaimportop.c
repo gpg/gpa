@@ -51,11 +51,17 @@ static void
 gpa_import_operation_finalize (GObject *object)
 {
   GpaImportOperation *op = GPA_IMPORT_OPERATION (object);
+  int i;
 
   /* Free the data object, if it exists */
-  if (op->source)
+  gpgme_data_release (op->source);
+  op->source = NULL;
+  if (op->source2)
     {
-      gpgme_data_release (op->source);
+      for (i=0; op->source2[i]; i++)
+        gpgme_key_unref (op->source2[i]);
+      g_free (op->source2);
+      op->source2 = NULL;
     }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -65,6 +71,7 @@ static void
 gpa_import_operation_init (GpaImportOperation *op)
 {
   op->source = NULL;
+  op->source2 = NULL;
 }
 
 static GObject*
@@ -162,15 +169,29 @@ gpa_import_operation_idle_cb (gpointer data)
 {
   GpaImportOperation *op = data;
 
-  if (GPA_IMPORT_OPERATION_GET_CLASS (op)->get_source (op, &op->source))
+  if (GPA_IMPORT_OPERATION_GET_CLASS (op)->get_source (op))
     {
       gpg_error_t err;
 
-      gpgme_set_protocol (GPA_OPERATION (op)->context->ctx,
-                          is_cms_data_ext (op->source)?
-                          GPGME_PROTOCOL_CMS : GPGME_PROTOCOL_OpenPGP);
-      err = gpgme_op_import_start (GPA_OPERATION (op)->context->ctx,
-				   op->source);
+      if (op->source)
+        {
+          gpgme_set_protocol (GPA_OPERATION (op)->context->ctx,
+                              is_cms_data_ext (op->source)?
+                              GPGME_PROTOCOL_CMS : GPGME_PROTOCOL_OpenPGP);
+          err = gpgme_op_import_start (GPA_OPERATION (op)->context->ctx,
+                                       op->source);
+        }
+      else if (op->source2)
+        {
+          /* The only protocol where an array of keys is used in GPA
+             is OpenPGP.  */
+          gpgme_set_protocol (GPA_OPERATION (op)->context->ctx,
+                              GPGME_PROTOCOL_OpenPGP);
+          err = gpgme_op_import_keys_start (GPA_OPERATION (op)->context->ctx,
+                                            op->source2);
+        }
+      else
+        err = gpg_error (GPG_ERR_BUG);
       if (err)
 	{
 	  gpa_gpgme_warning (err);
@@ -185,6 +206,7 @@ gpa_import_operation_idle_cb (gpointer data)
   return FALSE;
 }
 
+
 static void
 key_import_results_dialog_run (GtkWidget *parent,
 			       gpgme_import_result_t info)
@@ -192,35 +214,19 @@ key_import_results_dialog_run (GtkWidget *parent,
   GtkWidget *dialog;
 
   if (info->considered == 0)
-    {
-      dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-                                       GTK_DIALOG_MODAL,
-                                       GTK_MESSAGE_WARNING,
-                                       GTK_BUTTONS_CLOSE,
-                                       _("No keys were found."));
-    }
+    gpa_show_warning (parent, _("No keys were found."));
   else
-    {
-      dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-                                       GTK_DIALOG_MODAL,
-                                       GTK_MESSAGE_INFO,
-                                       GTK_BUTTONS_CLOSE,
-                                       _("%i public keys read\n"
-                                         "%i public keys imported\n"
-                                         "%i public keys unchanged\n"
-                                         "%i secret keys read\n"
-                                         "%i secret keys imported\n"
-                                         "%i secret keys unchanged"),
-                                       info->considered, info->imported,
-                                       info->unchanged, info->secret_read,
-                                       info->secret_imported,
-				       info->secret_unchanged);
-    }
-
-  /* Run the dialog */
-  gtk_widget_show_all (dialog);
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+    gpa_show_info (parent,
+                   _("%i public keys read\n"
+                     "%i public keys imported\n"
+                     "%i public keys unchanged\n"
+                     "%i secret keys read\n"
+                     "%i secret keys imported\n"
+                     "%i secret keys unchanged"),
+                   info->considered, info->imported,
+                   info->unchanged, info->secret_read,
+                   info->secret_imported,
+                   info->secret_unchanged);
 }
 
 

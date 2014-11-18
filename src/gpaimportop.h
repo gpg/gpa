@@ -41,16 +41,17 @@ typedef struct _GpaImportOperationClass GpaImportOperationClass;
 struct _GpaImportOperation {
   GpaOperation parent;
 
-  gpgme_data_t source;
+  gpgme_data_t source;    /* Either a data object with the full key  */
+  gpgme_key_t *source2;   /* or an array of key descriptions.  */
 };
 
 struct _GpaImportOperationClass {
   GpaOperationClass parent_class;
 
-  /* Get the gpgme_data_t from which the keys should be imported.
-   * Returns FALSE if the operation should be aborted.
+  /* Get the data from which the keys should be imported.  Returns
+   * FALSE if the operation should be aborted.
    */
-  gboolean (*get_source) (GpaImportOperation *op, gpgme_data_t *source);
+  gboolean (*get_source) (GpaImportOperation *op);
 
   /* Do whatever it takes to complete the import once the gpgme_data_t is
    * filled. Basically, this sends the data to the server, the clipboard,

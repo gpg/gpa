@@ -30,9 +30,8 @@
 static GObjectClass *parent_class = NULL;
 
 static gboolean
-gpa_import_clipboard_operation_get_source (GpaImportOperation *operation, 
-					   gpgme_data_t *source);
-static void 
+gpa_import_clipboard_operation_get_source (GpaImportOperation *operation);
+static void
 gpa_import_clipboard_operation_complete_import (GpaImportOperation *operation);
 
 /* GObject boilerplate */
@@ -50,14 +49,14 @@ gpa_import_clipboard_operation_class_init (GpaImportClipboardOperationClass *kla
   parent_class = g_type_class_peek_parent (klass);
 
   import_class->get_source = gpa_import_clipboard_operation_get_source;
-  import_class->complete_import = gpa_import_clipboard_operation_complete_import;  
+  import_class->complete_import = gpa_import_clipboard_operation_complete_import;
 }
 
 GType
 gpa_import_clipboard_operation_get_type (void)
 {
   static GType clipboard_operation_type = 0;
-  
+
   if (!clipboard_operation_type)
     {
       static const GTypeInfo clipboard_operation_info =
@@ -72,36 +71,38 @@ gpa_import_clipboard_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_import_clipboard_operation_init,
       };
-      
+
       clipboard_operation_type = g_type_register_static (GPA_IMPORT_OPERATION_TYPE,
 							 "GpaImportClipboardOperation",
 							 &clipboard_operation_info, 0);
     }
-  
+
   return clipboard_operation_type;
 }
 
 /* Virtual methods */
 
 static gboolean
-gpa_import_clipboard_operation_get_source (GpaImportOperation *operation, 
-					   gpgme_data_t *source)
+gpa_import_clipboard_operation_get_source (GpaImportOperation *operation)
 {
   gpg_error_t err;
-  gchar *text = gtk_clipboard_wait_for_text (gtk_clipboard_get
-					     (GDK_SELECTION_CLIPBOARD));
-  
+  gchar *text;
+
+  text = gtk_clipboard_wait_for_text (gtk_clipboard_get
+                                      (GDK_SELECTION_CLIPBOARD));
+  gpgme_data_release (operation->source);
   if (text)
     {
       /* Fill the data from the selection clipboard.
        */
-      err = gpgme_data_new_from_mem (source, text, strlen (text), FALSE);
+      err = gpgme_data_new_from_mem (&operation->source,
+                                     text, strlen (text), TRUE);
     }
   else
     {
-      /* If the keyboard was empty, create an empty data
+      /* If the keyboard was empty, create an empty data object.
        */
-      err = gpgme_data_new (source);
+      err = gpgme_data_new (&operation->source);
     }
 
   if (err)
@@ -112,7 +113,7 @@ gpa_import_clipboard_operation_get_source (GpaImportOperation *operation,
   return TRUE;
 }
 
-static void 
+static void
 gpa_import_clipboard_operation_complete_import (GpaImportOperation *operation)
 {
   /* Nothing special to do */
@@ -124,7 +125,7 @@ GpaImportClipboardOperation*
 gpa_import_clipboard_operation_new (GtkWidget *window)
 {
   GpaImportClipboardOperation *op;
-  
+
   op = g_object_new (GPA_IMPORT_CLIPBOARD_OPERATION_TYPE,
 		     "window", window, NULL);
 

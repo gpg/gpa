@@ -46,7 +46,7 @@ gpa_receive_key_dialog_get_property (GObject *object, guint prop_id,
 				     GValue *value, GParamSpec *pspec)
 {
   GpaReceiveKeyDialog *dialog = GPA_RECEIVE_KEY_DIALOG (object);
-  
+
   switch (prop_id)
     {
     case PROP_WINDOW:
@@ -100,24 +100,34 @@ gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
                                            GTK_RESPONSE_OK,
                                            GTK_RESPONSE_CANCEL,
                                            -1);
-  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),5);
+  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),10);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
-  label = gtk_label_new (_("Which key do you want to import? (The key must "
+  label = gtk_label_new (is_gpg_version_at_least ("2.1.0")?
+                         _("Which key do you want to import?") :
+                         _("Which key do you want to import? (The key must "
 			   "be specified by key ID)."));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE,
-		      TRUE, 5);
+		      TRUE, 10);
 
   dialog->entry = gtk_entry_new ();
-  hbox = gtk_hbox_new (0, FALSE);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, FALSE, 
-		      TRUE, 5);
-  label = gtk_label_new_with_mnemonic (_("Key _ID:"));
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), dialog->entry);
+  if (is_gpg_version_at_least ("2.1.0"))
+    {
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+                          dialog->entry, FALSE, TRUE, 10);
+    }
+  else
+    {
+      hbox = gtk_hbox_new (0, FALSE);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, FALSE,
+                          TRUE, 10);
+      label = gtk_label_new_with_mnemonic (_("Key _ID:"));
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), dialog->entry);
+      gtk_box_pack_start_defaults (GTK_BOX (hbox), label);
+      gtk_box_pack_start_defaults (GTK_BOX (hbox), dialog->entry);
+    }
 
-  gtk_box_pack_start_defaults (GTK_BOX (hbox), label);
-  gtk_box_pack_start_defaults (GTK_BOX (hbox), dialog->entry);
 }
 
 
@@ -125,9 +135,9 @@ static void
 gpa_receive_key_dialog_class_init (GpaReceiveKeyDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
-  
+
   object_class->finalize = gpa_receive_key_dialog_finalize;
   object_class->set_property = gpa_receive_key_dialog_set_property;
   object_class->get_property = gpa_receive_key_dialog_get_property;
@@ -135,7 +145,7 @@ gpa_receive_key_dialog_class_init (GpaReceiveKeyDialogClass *klass)
   /* Properties */
   g_object_class_install_property (object_class,
 				   PROP_WINDOW,
-				   g_param_spec_object 
+				   g_param_spec_object
 				   ("window", "Parent window",
 				    "Parent window", GTK_TYPE_WIDGET,
 				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
@@ -146,7 +156,7 @@ GType
 gpa_receive_key_dialog_get_type (void)
 {
   static GType verify_dialog_type = 0;
-  
+
   if (!verify_dialog_type)
     {
       static const GTypeInfo verify_dialog_info =
@@ -161,12 +171,12 @@ gpa_receive_key_dialog_get_type (void)
 	  0,              /* n_preallocs */
 	  (GInstanceInitFunc) gpa_receive_key_dialog_init,
 	};
-      
+
       verify_dialog_type = g_type_register_static (GTK_TYPE_DIALOG,
 						    "GpaReceiveKeyDialog",
 						    &verify_dialog_info, 0);
     }
-  
+
   return verify_dialog_type;
 }
 
@@ -177,7 +187,7 @@ GtkWidget*
 gpa_receive_key_dialog_new (GtkWidget *parent)
 {
   GpaReceiveKeyDialog *dialog;
-  
+
   dialog = g_object_new (GPA_RECEIVE_KEY_DIALOG_TYPE,
 			 "window", parent, NULL);
 

@@ -29,11 +29,17 @@
 #include "gpaimportserverop.h"
 #include "server-access.h"
 
+/* The number of keys we allow to import at once.  If we have more
+   than this we terminate the dialog and ask the user to give a better
+   specification of the key.  A better way to do this would be to pop
+   up a dialog to allow the user to select matching keys.  */
+#define MAX_KEYSEARCH_RESULTS 5
+
+
 static GObjectClass *parent_class = NULL;
 
 static gboolean
-gpa_import_server_operation_get_source (GpaImportOperation *operation,
-					gpgme_data_t *source);
+gpa_import_server_operation_get_source (GpaImportOperation *operation);
 static void
 gpa_import_server_operation_complete_import (GpaImportOperation *operation);
 
@@ -111,28 +117,132 @@ gpa_import_server_operation_get_type (void)
 
 /* Internal */
 
+/* Search for keys with KEYID.  Return true on success and set the
+   SOURCE2 instance variable.  */
+static gboolean
+search_keys (GpaImportOperation *operation, const char *keyid)
+{
+  gpg_error_t err;
+  gboolean result = FALSE;
+  gpgme_ctx_t ctx;
+  gpgme_key_t key;
+  gpgme_key_t *keyarray;
+  int i, nkeys;
+
+  if (!keyid || !*keyid)
+    return FALSE;
+
+  keyarray = g_malloc0_n (MAX_KEYSEARCH_RESULTS + 1, sizeof *keyarray);
+
+  /* We need to use a separate context because the operaion's context
+     has already been setup and the done signal would relate to the
+     actual import operation done later.  */
+  ctx = gpa_gpgme_new ();
+  gpgme_set_protocol (ctx, GPGME_PROTOCOL_OpenPGP);
+  /* Switch to extern-only list mode.  */
+  err = gpgme_set_keylist_mode (ctx, GPGME_KEYLIST_MODE_EXTERN);
+  if (err)
+    gpa_gpgme_error (err);
+
+  /* List keys matching the given keyid.  Actually all kind of search
+     specifications can be given.  */
+  nkeys = 0;
+  err = gpgme_op_keylist_start (ctx, keyid, 0);
+  while (!err && !(err = gpgme_op_keylist_next (ctx, &key)))
+    {
+      if (nkeys >= MAX_KEYSEARCH_RESULTS)
+        {
+          gpa_show_warning (GPA_OPERATION (operation)->window,
+                            _("More than %d keys match your search pattern.\n"
+                              "Use the long keyid or a fingerprint "
+                              "for a better match"), nkeys);
+          gpgme_key_unref (key);
+          err = gpg_error (GPG_ERR_TRUNCATED);
+          break;
+        }
+      keyarray[nkeys++] = key;
+    }
+  gpgme_op_keylist_end (ctx);
+  if (gpg_err_code (err) == GPG_ERR_EOF)
+    err = 0;
+
+  if (!err && !nkeys)
+    {
+      gpa_show_warning (GPA_OPERATION (operation)->window,
+                        _("No keys were found."));
+    }
+  else if (!err)
+    {
+      operation->source2 = keyarray;
+      keyarray = NULL;
+      result = TRUE;
+    }
+  else if (gpg_err_code (err) != GPG_ERR_TRUNCATED)
+    gpa_gpgme_warning (err);
+
+  gpgme_release (ctx);
+  if (keyarray)
+    {
+      for (i=0; keyarray[i]; i++)
+        gpgme_key_unref (keyarray[i]);
+      g_free (keyarray);
+    }
+  return result;
+}
+
+
 /* Virtual methods */
 
 static gboolean
-gpa_import_server_operation_get_source (GpaImportOperation *operation,
-					gpgme_data_t *source)
+gpa_import_server_operation_get_source (GpaImportOperation *operation)
 {
   GpaImportServerOperation *op = GPA_IMPORT_SERVER_OPERATION (operation);
-  GtkWidget *dialog = gpa_receive_key_dialog_new (GPA_OPERATION (op)->window);
+  GtkWidget *dialog;
   GtkResponseType response;
   gchar *keyid;
+  int i;
 
+  dialog = gpa_receive_key_dialog_new (GPA_OPERATION (op)->window);
   gtk_widget_show_all (dialog);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   keyid = g_strdup (gpa_receive_key_dialog_get_id
 		    (GPA_RECEIVE_KEY_DIALOG (dialog)));
   gtk_widget_destroy (dialog);
 
-  if (response == GTK_RESPONSE_OK)
+  /* Better reset the source variables.  */
+  gpgme_data_release (operation->source);
+  operation->source = NULL;
+  if (operation->source2)
+    {
+      for (i=0; operation->source2[i]; i++)
+        gpgme_key_unref (operation->source2[i]);
+      g_free (operation->source2);
+      operation->source2 = NULL;
+    }
+
+  if (response == GTK_RESPONSE_OK && is_gpg_version_at_least ("2.1.0"))
+    {
+      /* GnuPG 2.1.0 does not anymore use the keyserver helpers and
+         thus we need to use the real API for receiving keys.  Given
+         that there is currently no way to create a list of keys from
+         the keyids to be passed to the import function we run a
+         --search-keys first to get the list of matching keys and pass
+         them to the actual import function (which does a --recv-keys).  */
+      /* Fixme: As with server_get_key (below), this is a blocking
+         operation. */
+      if (search_keys (operation, keyid))
+        {
+          /* Okay, found key(s).  */
+	  g_free (keyid);
+	  return TRUE;
+        }
+    }
+  else if (response == GTK_RESPONSE_OK)
     {
       if (server_get_key (gpa_options_get_default_keyserver
 			  (gpa_options_get_instance ()),
-			  keyid, source, GPA_OPERATION (op)->window))
+			  keyid,
+                          &operation->source, GPA_OPERATION (op)->window))
 	{
 	  g_free (keyid);
 	  return TRUE;
@@ -141,6 +251,7 @@ gpa_import_server_operation_get_source (GpaImportOperation *operation,
   g_free (keyid);
   return FALSE;
 }
+
 
 static void
 gpa_import_server_operation_complete_import (GpaImportOperation *operation)

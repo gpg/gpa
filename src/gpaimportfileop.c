@@ -31,8 +31,7 @@
 static GObjectClass *parent_class = NULL;
 
 static gboolean
-gpa_import_file_operation_get_source (GpaImportOperation *operation,
-				      gpgme_data_t *source);
+gpa_import_file_operation_get_source (GpaImportOperation *operation);
 static void
 gpa_import_file_operation_complete_import (GpaImportOperation *operation);
 
@@ -121,8 +120,7 @@ gpa_import_file_operation_get_type (void)
 /* Virtual methods */
 
 static gboolean
-gpa_import_file_operation_get_source (GpaImportOperation *operation,
-				      gpgme_data_t *source)
+gpa_import_file_operation_get_source (GpaImportOperation *operation)
 {
   GpaImportFileOperation *op = GPA_IMPORT_FILE_OPERATION (operation);
   GtkWidget *dialog;
@@ -133,6 +131,9 @@ gpa_import_file_operation_get_source (GpaImportOperation *operation,
      GTK_WINDOW (GPA_OPERATION (op)->window),
      GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
      GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+
+  gpgme_data_release (operation->source);
+  operation->source = NULL;
 
   /* Run the dialog until there is a valid response.  */
   do
@@ -145,8 +146,9 @@ gpa_import_file_operation_get_source (GpaImportOperation *operation,
 			   (GTK_FILE_CHOOSER (dialog)));
     }
   while (response == GTK_RESPONSE_OK
-	 && (op->fd = gpa_open_input
-	     (op->file, source, GPA_OPERATION (op)->window)) == -1);
+	 && (op->fd = gpa_open_input (op->file,
+                                      &operation->source,
+                                      GPA_OPERATION (op)->window)) == -1);
   gtk_widget_destroy (dialog);
 
   return (response == GTK_RESPONSE_OK);

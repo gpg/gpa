@@ -18,6 +18,10 @@
    along with GPA; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA  */
 
+/* Note: This is the old code using the keyserver helpers
+         directly.  This code is not used if GnuPG 2.1 is used.  */
+
+
 #include <config.h>
 
 #include "gpa.h"
@@ -58,7 +62,7 @@
 
 /* Internal API */
 
-/* FIXME: THIS SHOULDN'T BE HERE 
+/* FIXME: THIS SHOULDN'T BE HERE
  * The strsep function is not portable, yet parse_keyserver_uri needs it and
  * I'm too lazy to rewrite it using GLib or ANSI functions, so we copy an
  * implementation here. If there is no other way around it, this kind or
@@ -116,7 +120,7 @@ strsep (char **stringp, const char *delim)
 #endif /*HAVE_STRSEP*/
 
 /* Code adapted from GnuPG (file g10/keyserver.c) */
-static gboolean 
+static gboolean
 parse_keyserver_uri (char *uri, char **scheme, char **host,
 		     char **port, char **opaque)
 {
@@ -232,19 +236,19 @@ helper_path (const gchar *scheme)
       path = g_build_filename (GPA_KEYSERVER_HELPERS_DIR, helper, NULL);
       g_free (helper);
     }
-#endif  
+#endif
   return path;
 }
 
 /* Find out the plugin protocol version */
-static int 
+static int
 protocol_version (const gchar *scheme)
 {
   gchar *helper[] = {helper_path (scheme), "-V", NULL};
   gchar *output = NULL;
   gint version;
 
-  g_spawn_sync (NULL, helper, NULL, G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, 
+  g_spawn_sync (NULL, helper, NULL, G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL,
 		&output, NULL, NULL, NULL);
   if (output && *output)
     {
@@ -280,7 +284,7 @@ parse_helper_output (const gchar *filename)
 	break;
       }
   fclose (file);
-  
+
   return error;
 }
 
@@ -327,7 +331,7 @@ error_string (gint error_code)
 
 static void
 write_command (FILE *file, const char *scheme,
-	       const char *host, const char *port, 
+	       const char *host, const char *port,
 	       const char *opaque, const char *command)
 {
   fprintf (file, "%s\n", "VERSION 1");
@@ -353,9 +357,9 @@ write_command (FILE *file, const char *scheme,
 static GtkWidget *
 wait_dialog (const gchar *server, GtkWidget *parent)
 {
-  GtkWidget *dialog = 
+  GtkWidget *dialog =
     gtk_message_dialog_new (GTK_WINDOW (parent),
-			    GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR, 
+			    GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR,
 			    GTK_MESSAGE_INFO, GTK_BUTTONS_NONE,
 			    _("Connecting to server \"%s\".\n"
 			      "Please wait."), server);
@@ -370,7 +374,7 @@ static gboolean
 check_errors (int exit_status, gchar *error_message, gchar *output_filename,
               int version, GtkWidget *parent)
 {
-  /* Error during connection. Try to parse the output and report the 
+  /* Error during connection. Try to parse the output and report the
    * error.
    */
   if (version == 0)
@@ -381,7 +385,7 @@ check_errors (int exit_status, gchar *error_message, gchar *output_filename,
       if (exit_status)
         {
           gchar *message = g_strdup_printf (_("An error ocurred while "
-                                              "contacting the server:\n\n%s"), 
+                                              "contacting the server:\n\n%s"),
                                             error_message);
           gpa_window_error (message, parent);
           return TRUE;
@@ -401,7 +405,7 @@ check_errors (int exit_status, gchar *error_message, gchar *output_filename,
       else
         {
           gchar *message = g_strdup_printf (_("An error ocurred while "
-                                              "contacting the server:\n\n%s"), 
+                                              "contacting the server:\n\n%s"),
                                             error_string (error_code));
           gpa_window_error (message, parent);
           return TRUE;
@@ -447,15 +451,15 @@ do_spawn (const gchar *scheme, const gchar *command_filename,
   /* Invoke the keyserver helper */
 #ifdef G_OS_UNIX
   /* On Unix, run the helper asyncronously, so that we can update the dialog */
-  g_spawn_async_with_pipes (NULL, helper_argv, NULL, 
+  g_spawn_async_with_pipes (NULL, helper_argv, NULL,
                             G_SPAWN_STDOUT_TO_DEV_NULL|
-                            G_SPAWN_DO_NOT_REAP_CHILD, 
+                            G_SPAWN_DO_NOT_REAP_CHILD,
                             NULL, NULL, &pid, NULL, NULL, &standard_error,
                             &error);
 #else
   /* On Windows, use syncronous spawn */
-  g_spawn_sync (NULL, helper_argv, NULL, 
-		G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL, 
+  g_spawn_sync (NULL, helper_argv, NULL,
+		G_SPAWN_STDOUT_TO_DEV_NULL, NULL, NULL,
 		NULL, error_output, exit_status, &error);
 #endif
 
@@ -525,7 +529,7 @@ invoke_helper (const gchar *server, const gchar *scheme,
 
 /* Public functions */
 
-gboolean 
+gboolean
 server_send_keys (const gchar *server, const gchar *keyid,
                   gpgme_data_t data, GtkWidget *parent)
 {
@@ -552,7 +556,7 @@ server_send_keys (const gchar *server, const gchar *keyid,
   dump_data_to_file (data, command);
   fprintf (command, "\nKEY %s END\n", keyid);
   fclose (command);
-  success = invoke_helper (server, scheme, command_filename, 
+  success = invoke_helper (server, scheme, command_filename,
                            &output_filename, parent);
   g_free (keyserver);
   /* Delete temp files */
@@ -564,7 +568,7 @@ server_send_keys (const gchar *server, const gchar *keyid,
   return success;
 }
 
-gboolean 
+gboolean
 server_get_key (const gchar *server, const gchar *keyid,
                 gpgme_data_t *data, GtkWidget *parent)
 {
