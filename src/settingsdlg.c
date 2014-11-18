@@ -58,7 +58,8 @@ struct _SettingsDlg
 {
   GtkDialog parent;
 
-  gboolean modified;  /* True is tehre are unsaved changes.  */
+  gboolean modified;  /* True is there are unsaved changes.  */
+  gboolean gnupg21;   /* True if gnupg 2.1.0 or later is in use.  */
 
   /* Data for the user interface frame.  */
   struct {
@@ -170,7 +171,8 @@ update_show_advanced_options (SettingsDlg *dialog)
   if (gpa_options_get_show_advanced_options (options))
     {
 #ifdef ENABLE_KEYSERVER_SUPPORT
-      gtk_widget_show_all (dialog->keyserver.frame);
+      if (!dialog->gnupg21)
+        gtk_widget_show_all (dialog->keyserver.frame);
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
       if (dialog->akl.enabled)
         gtk_widget_show_all (dialog->akl.frame);
@@ -178,7 +180,8 @@ update_show_advanced_options (SettingsDlg *dialog)
   else
     {
 #ifdef ENABLE_KEYSERVER_SUPPORT
-      gtk_widget_hide_all (dialog->keyserver.frame);
+      if (!dialog->gnupg21)
+        gtk_widget_hide_all (dialog->keyserver.frame);
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
       if (dialog->akl.enabled)
         gtk_widget_hide_all (dialog->akl.frame);
@@ -353,6 +356,9 @@ keyserver_selected_from_list_cb (SettingsDlg *dialog)
 {
   char *text;
 
+  if (dialog->gnupg21)
+    return;
+
   text = gtk_combo_box_get_active_text (dialog->keyserver.combo);
   g_message ("got `%s'", text);
   xfree (dialog->keyserver.url);
@@ -369,6 +375,9 @@ static GtkWidget *
 check_default_keyserver (SettingsDlg *dialog)
 {
   keyserver_spec_t kspec;
+
+  if (dialog->gnupg21)
+    return NULL; /* GnuPG manages the keyservers.  */
 
   keyserver_selected_from_list_cb (dialog);
 
@@ -728,9 +737,13 @@ load_settings (SettingsDlg *dialog)
 
   /* Default keyserver section.  */
 #ifdef ENABLE_KEYSERVER_SUPPORT
-  gtk_entry_set_text (GTK_ENTRY
-                      (gtk_bin_get_child (GTK_BIN (dialog->keyserver.combo))),
-                      gpa_options_get_default_keyserver (options));
+  if (!dialog->gnupg21)
+    {
+      gtk_entry_set_text (GTK_ENTRY
+                          (gtk_bin_get_child
+                           (GTK_BIN (dialog->keyserver.combo))),
+                          gpa_options_get_default_keyserver (options));
+    }
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
 
   /* AKL section. */
@@ -758,13 +771,16 @@ save_settings (SettingsDlg *dialog)
     }
 
 #ifdef ENABLE_KEYSERVER_SUPPORT
-  if ((errwdg = check_default_keyserver (dialog)))
+  if (!dialog->gnupg21)
     {
-      gpa_window_error
-        (_("The URL given for the keyserver is not valid."),
-         GTK_WIDGET (dialog));
-      gtk_widget_grab_focus (errwdg);
-      return -1;
+      if ((errwdg = check_default_keyserver (dialog)))
+        {
+          gpa_window_error
+            (_("The URL given for the keyserver is not valid."),
+             GTK_WIDGET (dialog));
+          gtk_widget_grab_focus (errwdg);
+          return -1;
+        }
     }
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
 
@@ -893,7 +909,7 @@ static void
 settings_dlg_init (SettingsDlg *dialog)
 {
   dialog->akl.method_idx = -1;
-
+  dialog->gnupg21 = is_gpg_version_at_least ("2.1.0");
 }
 
 
@@ -931,15 +947,21 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
   frame = default_key_frame (dialog);
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame);
 
-  /* The default keyserver section.  */
+  /* The default keyserver section.  Note that there is no keyserver
+     entry if we are using gnupg 2.1.  There we do not have the
+     keyserver helpers anymore and thus the keyservers are to be
+     enabled in the backend preferences. */
 #ifdef ENABLE_KEYSERVER_SUPPORT
-  frame = default_keyserver_frame (dialog);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
-                      FALSE, FALSE, 0);
+  if (!dialog->gnupg21)
+    {
+      frame = default_keyserver_frame (dialog);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
+                          FALSE, FALSE, 0);
+    }
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
 
   /* The auto key locate section.  */
-  dialog->akl.enabled = is_gpg_version_at_least ("2.0.10");
+  dialog->akl.enabled = dialog->gnupg21;
   if (dialog->akl.enabled)
     {
       frame = auto_key_locate_frame (dialog);
