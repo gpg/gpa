@@ -23,9 +23,13 @@
 
 #include <gtk/gtk.h>
 
-extern void gpa_window_error (const gchar * message, GtkWidget * messenger);
-extern void gpa_window_message (gchar * message, GtkWidget * messenger);
 
+/* Show a modal info message. */
+void gpa_show_info (GtkWidget *parent,
+                    const char *format, ...) G_GNUC_PRINTF(2,3);
+/* Show a modal warning message. */
+void gpa_show_warning (GtkWidget *parent,
+                       const char *format, ...) G_GNUC_PRINTF(2,3);
 
 /* Set a tooltip TEXT to WIDGET.  TEXT and WIDGET may both be NULL.
    This function is useful so that GPA can be build with older GTK+
@@ -41,6 +45,12 @@ void gpa_toolbar_set_homogeneous (GtkToolbar *toolbar, gboolean is_hom);
 
 /* Customized set title function.  */
 void gpa_window_set_title (GtkWindow *window, const char *string);
+
+
+
+/* Deprecated functions.  */
+void gpa_window_error (const gchar * message, GtkWidget * messenger);
+void gpa_window_message (const gchar * message, GtkWidget * messenger);
 
 
 

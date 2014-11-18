@@ -35,95 +35,65 @@
 #include "icons.h"
 
 
-/* BEGIN of old unchecked code (wk 2008-03-07) */
-
-static char *
-make_box_title (const char *string)
-{
-  return g_strdup_printf ("%s %s", GPA_NAME, string);
-}
-
-
+/* Deprecated - use gpa_show_warning instead.  */
 void
 gpa_window_error (const gchar *message, GtkWidget *messenger)
 {
-  GtkWidget *windowError;
-  GtkWidget *hboxError;
-  GtkWidget *labelMessage;
-  GtkWidget *pixmap;
-  char *title;
-
-  title = make_box_title (_("Error"));
-  windowError = gtk_dialog_new_with_buttons (title,
-                                             (messenger ?
-                                             GTK_WINDOW(messenger) : NULL),
-                                             GTK_DIALOG_MODAL,
-                                             _("_Close"),
-                                             GTK_RESPONSE_CLOSE,
-                                             NULL);
-  g_free (title);
-  if (messenger)
-    gtk_window_set_transient_for (GTK_WINDOW (windowError),
-                                  GTK_WINDOW (messenger));
-
-  gtk_container_set_border_width (GTK_CONTAINER (windowError), 5);
-  gtk_dialog_set_default_response (GTK_DIALOG (windowError),
-                                   GTK_RESPONSE_CLOSE);
-  hboxError = gtk_hbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (hboxError), 5);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (windowError)->vbox),
-                               hboxError);
-  pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
-                                     GTK_ICON_SIZE_DIALOG);
-  gtk_box_pack_start (GTK_BOX (hboxError), pixmap, TRUE, FALSE, 10);
-  labelMessage = gtk_label_new (message);
-  gtk_box_pack_start (GTK_BOX (hboxError), labelMessage, TRUE, FALSE, 10);
-
-  gtk_widget_show_all (windowError);
-  gtk_dialog_run (GTK_DIALOG (windowError));
-  gtk_widget_destroy (windowError);
+  gpa_show_warning (messenger, "%s", message);
 }
 
 
+/* Deprecated - use gpa_show_info instead.  */
 void
-gpa_window_message (gchar * message, GtkWidget * messenger)
+gpa_window_message (const gchar *message, GtkWidget * messenger)
 {
-  GtkWidget *window;
-  GtkWidget *hbox;
-  GtkWidget *labelMessage;
-  GtkWidget *pixmap;
-  char *title;
-
-  title = make_box_title (_("Message"));
-  window = gtk_dialog_new_with_buttons (title,
-					(messenger ?
-					 GTK_WINDOW(messenger) : NULL),
-					GTK_DIALOG_MODAL,
-					_("_Close"),
-					GTK_RESPONSE_CLOSE,
-					NULL);
-  g_free (title);
-  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  gtk_dialog_set_default_response (GTK_DIALOG (window),
-                                   GTK_RESPONSE_CLOSE);
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox),
-                               hbox);
-  pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
-                                     GTK_ICON_SIZE_DIALOG);
-  gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
-  labelMessage = gtk_label_new (message);
-  gtk_box_pack_start (GTK_BOX (hbox), labelMessage, TRUE, FALSE, 10);
-
-  gtk_widget_show_all (window);
-  gtk_dialog_run (GTK_DIALOG (window));
-  gtk_widget_destroy (window);
+  gpa_show_info (messenger, "%s", message);
 }
 
 
-/* END of old unchecked code (wk 2008-03-07) */
-
+static void
+show_gtk_message (GtkWidget *parent, GtkMessageType mtype,
+                  const char *format, va_list arg_ptr)
+{
+  GtkWidget *dialog;
+  char *buffer;
+
+  buffer = g_strdup_vprintf (format, arg_ptr);
+  dialog = gtk_message_dialog_new (parent? GTK_WINDOW (parent):NULL,
+                                   GTK_DIALOG_MODAL,
+                                   mtype,
+                                   GTK_BUTTONS_CLOSE,
+                                   "%s", buffer);
+  g_free (buffer);
+
+  gtk_widget_show_all (dialog);
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
+
+/* Show a modal info message. */
+void
+gpa_show_info (GtkWidget *parent, const char *format, ...)
+{
+  va_list arg_ptr;
+
+  va_start (arg_ptr, format);
+  show_gtk_message (parent, GTK_MESSAGE_INFO, format, arg_ptr);
+  va_end (arg_ptr);
+}
+
+
+/* Show a modal warning message. */
+void
+gpa_show_warning (GtkWidget *parent, const char *format, ...)
+{
+  va_list arg_ptr;
+
+  va_start (arg_ptr, format);
+  show_gtk_message (parent, GTK_MESSAGE_WARNING, format, arg_ptr);
+  va_end (arg_ptr);
+}
 
 
 /* Set a tooltip TEXT to WIDGET.  TEXT and WIDGET may both be NULL.
