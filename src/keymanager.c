@@ -61,6 +61,7 @@
 #include "gpaimportfileop.h"
 #include "gpaimportclipop.h"
 #include "gpaimportserverop.h"
+#include "gpaimportbykeyidop.h"
 
 #include "gpabackupop.h"
 
@@ -549,6 +550,32 @@ key_manager_retrieve (GtkAction *action, gpointer param)
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
 
 
+/* Refresh keys from the keyserver.  */
+#ifdef ENABLE_KEYSERVER_SUPPORT
+static void
+key_manager_refresh_keys (GtkAction *action, gpointer param)
+{
+  GpaKeyManager *self = param;
+  GpaImportByKeyidOperation *op;
+  GList *selection;
+
+  /* FIXME: The refresh-from-server operation currently only supports
+     one key at a time.  */
+  if (!key_manager_has_single_selection (self))
+    return;
+
+  selection = gpa_keylist_get_selected_keys (self->keylist,
+                                             GPGME_PROTOCOL_OPENPGP);
+  if (selection)
+    {
+      op = gpa_import_bykeyid_operation_new (GTK_WIDGET (self),
+                                             (gpgme_key_t) selection->data);
+      register_import_operation (self, GPA_IMPORT_OPERATION (op));
+    }
+}
+#endif /*ENABLE_KEYSERVER_SUPPORT*/
+
+
 /* Send a key to the keyserver.  */
 #ifdef ENABLE_KEYSERVER_SUPPORT
 static void
@@ -889,8 +916,8 @@ keyring_set_listing_cb (GtkAction *action,
 /* Create and return the menu bar for the key ring editor.  */
 static void
 key_manager_action_new (GpaKeyManager *self,
-			   GtkWidget **menu, GtkWidget **toolbar,
-			   GtkWidget **popup)
+                        GtkWidget **menu, GtkWidget **toolbar,
+                        GtkWidget **popup)
 {
   static const GtkActionEntry entries[] =
     {
@@ -944,6 +971,9 @@ key_manager_action_new (GpaKeyManager *self,
       { "ServerRetrieve", NULL, N_("_Retrieve Keys..."), NULL,
         N_("Retrieve keys from server"),
         G_CALLBACK (key_manager_retrieve) },
+      { "ServerRefresh", NULL, N_("Re_fresh Keys"), NULL,
+        N_("Refresh keys from server"),
+        G_CALLBACK (key_manager_refresh_keys) },
       { "ServerSend", NULL, N_("_Send Keys..."), NULL,
         N_("Send keys to server"), G_CALLBACK (key_manager_send) }
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
@@ -1042,6 +1072,7 @@ key_manager_action_new (GpaKeyManager *self,
     "    <separator/>"
     "    <menuitem action='KeysExport'/>"
 #ifdef ENABLE_KEYSERVER_SUPPORT
+    "    <menuitem action='ServerRefresh'/>"
     "    <menuitem action='ServerSend'/>"
 #endif
     "    <menuitem action='KeysBackup'/>"
@@ -1117,6 +1148,9 @@ key_manager_action_new (GpaKeyManager *self,
                                   key_manager_has_selection);
 
 #ifdef ENABLE_KEYSERVER_SUPPORT
+  action = gtk_action_group_get_action (action_group, "ServerRefresh");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_single_selection);
   action = gtk_action_group_get_action (action_group, "ServerSend");
   add_selection_sensitive_action (self, action,
                                   key_manager_has_single_selection);

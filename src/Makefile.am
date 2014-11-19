@@ -96,6 +96,7 @@ if ENABLE_KEYSERVER_SUPPORT
 keyserver_support_sources = \
 		server-access.c     	\
 		gpaimportserverop.c	\
+		gpaimportbykeyidop.c	\
 		gpaexportserverop.c
 else
 keyserver_support_sources =
@@ -169,6 +170,7 @@ gpa_SOURCES = \
 	      gpaimportfileop.h gpaimportfileop.c \
 	      gpaimportclipop.h gpaimportclipop.c \
 	      gpaimportserverop.h  \
+	      gpaimportbykeyidop.h  \
 	      gpagenkeyop.h gpagenkeyop.c \
 	      gpagenkeyadvop.h gpagenkeyadvop.c \
 	      gpagenkeysimpleop.h gpagenkeysimpleop.c \
