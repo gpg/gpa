@@ -1,5 +1,11 @@
-Noteworthy changes in version 0.9.6 (unreleased)
+Noteworthy changes in version 0.9.6 (2014-11-21)
 ------------------------------------------------
+
+ * Support keyserver operations for GnuPG 2.1.
+
+ * Implement the IMPORT_FILES server command.
+
+ * New "Refresh Key" action in the key manager's context menu.
 
 
 Noteworthy changes in version 0.9.5 (2014-09-01)
