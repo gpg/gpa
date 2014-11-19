@@ -502,24 +502,14 @@ msgstr "/Chaves/_Gerar Chave..."
 msgid "Import keys from file"
 msgstr "Importar chave pública de um arquivo"
 
-msgid "No keys were found."
-msgstr "Nenhuma chave foi encontrada."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i chave pública lida\n"
-"%i chave pública importada\n"
-"%i chave pública sem alterações\n"
-"%i chave secreta lida\n"
-"%i chave secreta importada\n"
-"%i chave secreta sem alterações"
+
+msgid "No keys were found."
+msgstr "Nenhuma chave foi encontrada."
 
 msgid ""
 "Invalid time given.\n"
@@ -543,6 +533,9 @@ msgstr "Esta chave já está assinada com sua chave!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "Você não selecionou uma chave default para assinar!"
+
+msgid "Which key do you want to import?"
+msgstr ""
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr ""
@@ -897,6 +890,28 @@ msgstr "E não pode ser usada para encriptação."
 msgid "This key is useless."
 msgstr ""
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i chave pública lida\n"
+"%i chave pública importada\n"
+"%i chave pública sem alterações\n"
+"%i chave secreta lida\n"
+"%i chave secreta importada\n"
+"%i chave secreta sem alterações"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -921,13 +936,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-msgid "Error"
-msgstr "Erro"
-
-#, fuzzy
-msgid "Message"
-msgstr "Mensagem do GPA"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1309,6 +1317,14 @@ msgstr "/Chaves/_Apagar Chaves..."
 
 #, fuzzy
 msgid "Retrieve keys from server"
+msgstr "Receber chave de _servidor:"
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "_Chaveiro de chaves secretas"
+
+#, fuzzy
+msgid "Refresh keys from server"
 msgstr "Receber chave de _servidor:"
 
 #, fuzzy
@@ -2280,6 +2296,13 @@ msgid ""
 "on this card."
 msgstr ""
 
+#~ msgid "Error"
+#~ msgstr "Erro"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "Mensagem do GPA"
+
 #, fuzzy
 #~ msgid "GNU Privacy Assistant - Clipboard"
 #~ msgstr "GNU Privacy Assistant - Gerenciador de arquivos"
@@ -2677,10 +2700,6 @@ msgstr ""
 
 #~ msgid "detailed"
 #~ msgstr "detalhado"
-
-#, fuzzy
-#~ msgid "refresh keyring"
-#~ msgstr "_Chaveiro de chaves secretas"
 
 #~ msgid "Sign files"
 #~ msgstr "Arquivo assinado"

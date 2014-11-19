@@ -483,24 +483,14 @@ msgstr "يجري توليد المفتاح..."
 msgid "Import keys from file"
 msgstr "استورد المفاتيح العلنية من ملفّ"
 
-msgid "No keys were found."
-msgstr "لم توجد مفاتيح."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"قُرئت %i مفاتيح علنية\n"
-"استُورِدت %i مفاتيح علنية\n"
-"لم تتغير %i مفاتيح علنية\n"
-"قُرئت %i مفاتيح سرّية\n"
-"استُورِدت %i مفاتيح سرّية\n"
-"لم تتغير %i مفاتيح سرّية"
+
+msgid "No keys were found."
+msgstr "لم توجد مفاتيح."
 
 msgid ""
 "Invalid time given.\n"
@@ -526,6 +516,10 @@ msgstr "هذا المفتاح موقع بمفتاحك بالفِعل!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "لم تختر مفتاح التوقيع البدئي."
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr "أي المفاتيح تريد استيراده؟ (يجب تحديده بمعرِّف المفتاح)."
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "أي المفاتيح تريد استيراده؟ (يجب تحديده بمعرِّف المفتاح)."
@@ -876,6 +870,28 @@ msgstr "يمكن استخدام المفتاح في التعمية فقط."
 msgid "This key is useless."
 msgstr "لا فائدة لهذا المفتاح."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"قُرئت %i مفاتيح علنية\n"
+"استُورِدت %i مفاتيح علنية\n"
+"لم تتغير %i مفاتيح علنية\n"
+"قُرئت %i مفاتيح سرّية\n"
+"استُورِدت %i مفاتيح سرّية\n"
+"لم تتغير %i مفاتيح سرّية"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -900,14 +916,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-#, fuzzy
-msgid "Error"
-msgstr "عطل في GPA"
-
-#, fuzzy
-msgid "Message"
-msgstr "رسالة GPA"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1287,6 +1295,14 @@ msgstr "/الخادوم/المفاتيح ال_سرّية..."
 
 msgid "Retrieve keys from server"
 msgstr ""
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "أنعش حلقة المفاتيح"
+
+#, fuzzy
+msgid "Refresh keys from server"
+msgstr "/أر_سِل المفاتيح للخادوم..."
 
 #, fuzzy
 msgid "_Send Keys..."
@@ -2233,6 +2249,14 @@ msgid ""
 "on this card."
 msgstr ""
 
+#, fuzzy
+#~ msgid "Error"
+#~ msgstr "عطل في GPA"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "رسالة GPA"
+
 #~ msgid "GNU Privacy Assistant - Clipboard"
 #~ msgstr "مساعد خصوصية جنو - الحافظة"
 
@@ -2600,6 +2624,3 @@ msgstr ""
 
 #~ msgid "detailed"
 #~ msgstr "مُفصَّلة"
-
-#~ msgid "refresh keyring"
-#~ msgstr "أنعش حلقة المفاتيح"

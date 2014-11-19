@@ -460,24 +460,14 @@ msgstr "Vytváří se klíč ..."
 msgid "Import keys from file"
 msgstr "Importovat klíče ze souboru"
 
-msgid "No keys were found."
-msgstr "Nebyly nalezeny žádné klíče."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i přečteno veřejných klíčů\n"
-"%i získáno veřejných klíčů\n"
-"%i nezměněných veřejných klíčů\n"
-"%i přečteno soukromých klíčů\n"
-"%i získáno soukromých klíčů\n"
-"%i nezměněných soukromých klíčů"
+
+msgid "No keys were found."
+msgstr "Nebyly nalezeny žádné klíče."
 
 msgid ""
 "Invalid time given.\n"
@@ -501,6 +491,10 @@ msgstr "Tento klíč už jste sám podepsal!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "Nebyl vybrán výchozí klíč pro podepisování!"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr "Který klíč chcete získat? (Musíte zadat ID klíče)."
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "Který klíč chcete získat? (Musíte zadat ID klíče)."
@@ -851,6 +845,28 @@ msgstr "Tento klíč smí být použit pouze pro šifrování."
 msgid "This key is useless."
 msgstr "Tento klíč je nepoužitelný."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i přečteno veřejných klíčů\n"
+"%i získáno veřejných klíčů\n"
+"%i nezměněných veřejných klíčů\n"
+"%i přečteno soukromých klíčů\n"
+"%i získáno soukromých klíčů\n"
+"%i nezměněných soukromých klíčů"
+
 msgid "A required engine component is not installed."
 msgstr "Požadovaná komponenta stroje není instalovaná."
 
@@ -874,12 +890,6 @@ msgstr "E-mailová adresa není platná."
 
 msgid "Invalid character in comments."
 msgstr "Neplatný znak v komentářích."
-
-msgid "Error"
-msgstr "Fehler"
-
-msgid "Message"
-msgstr "Zpráva"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA je GNU Privacy Assistant"
@@ -1236,6 +1246,14 @@ msgid "_Retrieve Keys..."
 msgstr "_Získat klíče..."
 
 msgid "Retrieve keys from server"
+msgstr "Získat klíče ze serveru"
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "Aktualizovat keyring"
+
+#, fuzzy
+msgid "Refresh keys from server"
 msgstr "Získat klíče ze serveru"
 
 msgid "_Send Keys..."
@@ -2311,6 +2329,12 @@ msgid ""
 msgstr ""
 "Pro kartu %s není mnoho informací ke zobrazení. Zkuste použít tlačítko pro "
 "volbu aplikace pro přepnutí na jinou aplikaci, která je na kartě k dispozici."
+
+#~ msgid "Error"
+#~ msgstr "Fehler"
+
+#~ msgid "Message"
+#~ msgstr "Zpráva"
 
 #~ msgid "[S]"
 #~ msgstr "[S]"

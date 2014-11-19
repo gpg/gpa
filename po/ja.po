@@ -502,24 +502,14 @@ msgstr "鍵を生成中..."
 msgid "Import keys from file"
 msgstr "ファイルから公開鍵をインポートする"
 
-msgid "No keys were found."
-msgstr "鍵が見付かりませんでした。"
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i 個の公開鍵を読み込みました\n"
-"%i 個の公開鍵をインポートしました\n"
-"%i 個の公開鍵は無変更です\n"
-"%i 個の秘密鍵を読み込みました\n"
-"%i 個の秘密鍵をインポートしました\n"
-"%i 個の秘密鍵は無変更です"
+
+msgid "No keys were found."
+msgstr "鍵が見付かりませんでした。"
 
 msgid ""
 "Invalid time given.\n"
@@ -543,6 +533,10 @@ msgstr "この鍵は既に自分自身の鍵で署名してあります！"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "署名するデフォルトの鍵を選択していません！"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr "どの鍵をインポートしますか? (鍵は ID で指定する必要があります)"
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "どの鍵をインポートしますか? (鍵は ID で指定する必要があります)"
@@ -896,6 +890,28 @@ msgstr "暗号化にのみ使える鍵です。"
 msgid "This key is useless."
 msgstr "この鍵は使えません。"
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i 個の公開鍵を読み込みました\n"
+"%i 個の公開鍵をインポートしました\n"
+"%i 個の公開鍵は無変更です\n"
+"%i 個の秘密鍵を読み込みました\n"
+"%i 個の秘密鍵をインポートしました\n"
+"%i 個の秘密鍵は無変更です"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -920,13 +936,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-msgid "Error"
-msgstr "エラー"
-
-#, fuzzy
-msgid "Message"
-msgstr "GPA メッセージ"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1302,6 +1311,14 @@ msgstr "/サーバ (S)/鍵を取得... (_R)"
 
 #, fuzzy
 msgid "Retrieve keys from server"
+msgstr "鍵をサーバから受信"
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "鍵を削除"
+
+#, fuzzy
+msgid "Refresh keys from server"
 msgstr "鍵をサーバから受信"
 
 #, fuzzy
@@ -2266,6 +2283,13 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "Error"
+#~ msgstr "エラー"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "GPA メッセージ"
 
 #, fuzzy
 #~ msgid "GNU Privacy Assistant - Clipboard"

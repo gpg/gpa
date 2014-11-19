@@ -488,24 +488,14 @@ msgstr "Generando Clave..."
 msgid "Import keys from file"
 msgstr "Importar claves públicas de fichero"
 
-msgid "No keys were found."
-msgstr "No se encontró ninguna clave."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i claves públicas leídas\n"
-"%i claves públicas importadas\n"
-"%i claces públicas sin cambios\n"
-"%i claves secretas leídas\n"
-"%i claves secretas importadas\n"
-"%i claves secretas sin cambios"
+
+msgid "No keys were found."
+msgstr "No se encontró ninguna clave."
 
 msgid ""
 "Invalid time given.\n"
@@ -531,6 +521,11 @@ msgstr "¡Esta clave ya ha sido firmada con la suya!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "¡No ha seleccionado una clave por defecto con la que firmar!"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr ""
+"¿Qué clave desea importar? (La clave debe especificarse por su ID de clave)."
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr ""
@@ -886,6 +881,28 @@ msgstr "Esta clave puede utilizarse tan sólo para cifrado."
 msgid "This key is useless."
 msgstr "Esta clave no vale para nada."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i claves públicas leídas\n"
+"%i claves públicas importadas\n"
+"%i claces públicas sin cambios\n"
+"%i claves secretas leídas\n"
+"%i claves secretas importadas\n"
+"%i claves secretas sin cambios"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -910,14 +927,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-#, fuzzy
-msgid "Error"
-msgstr "Error de GPA"
-
-#, fuzzy
-msgid "Message"
-msgstr "Mensaje de GPA"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1314,6 +1323,14 @@ msgstr "/Servidor/_Descargar Claves..."
 
 msgid "Retrieve keys from server"
 msgstr ""
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "actualizar el anillo de llaves"
+
+#, fuzzy
+msgid "Refresh keys from server"
+msgstr "E_nviar claves al servidor"
 
 #, fuzzy
 msgid "_Send Keys..."
@@ -2269,6 +2286,14 @@ msgid ""
 "on this card."
 msgstr ""
 
+#, fuzzy
+#~ msgid "Error"
+#~ msgstr "Error de GPA"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "Mensaje de GPA"
+
 #~ msgid "GNU Privacy Assistant - Clipboard"
 #~ msgstr "GNU Privacy Assistant - Portapapeles"
 
@@ -2636,6 +2661,3 @@ msgstr ""
 
 #~ msgid "detailed"
 #~ msgstr "detallada"
-
-#~ msgid "refresh keyring"
-#~ msgstr "actualizar el anillo de llaves"

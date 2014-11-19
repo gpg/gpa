@@ -494,24 +494,14 @@ msgstr "Anahtar Yaratýlýyor..."
 msgid "Import keys from file"
 msgstr "Genel anahtarlarý dosyadan al"
 
-msgid "No keys were found."
-msgstr "Hiçbir anahtar bulunamadý."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i genel anahtar okundu\n"
-"%i genel anahtar dýþarýdan alýndý\n"
-"%i genel anahtar deðiþtirilmedi\n"
-"%i gizli anahtar okundu\n"
-"%i gizli anahtar dýþarýdan alýndý\n"
-"%i gizli anahtar deðiþtirilmedi"
+
+msgid "No keys were found."
+msgstr "Hiçbir anahtar bulunamadý."
 
 msgid ""
 "Invalid time given.\n"
@@ -535,6 +525,12 @@ msgstr "Bu anahtar zaten kendiniz tarafýndan imzalanmýþ!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "Ýmzalamak için varsayýlan bir anahtar seçmediniz!"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr ""
+"Hangi anahtarý dýþarýdan almak istiyorsunuz? (Anahtar, kimliði ile "
+"belirtilmeli)."
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr ""
@@ -892,6 +888,28 @@ msgstr "Anahtar sadece þifreleme için kullanýlabilir."
 msgid "This key is useless."
 msgstr "Bu anahtar iþe yaramaz."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i genel anahtar okundu\n"
+"%i genel anahtar dýþarýdan alýndý\n"
+"%i genel anahtar deðiþtirilmedi\n"
+"%i gizli anahtar okundu\n"
+"%i gizli anahtar dýþarýdan alýndý\n"
+"%i gizli anahtar deðiþtirilmedi"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -915,14 +933,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-#, fuzzy
-msgid "Error"
-msgstr "GPA Hatasý"
-
-#, fuzzy
-msgid "Message"
-msgstr "GPA Mesajý"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1304,6 +1314,14 @@ msgstr "/Sunucu/A_nahtarlarý Edin..."
 
 msgid "Retrieve keys from server"
 msgstr ""
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "Anahtarý Kaldýr"
+
+#, fuzzy
+msgid "Refresh keys from server"
+msgstr "/Anahtarlarý Sunucuya _Gönder..."
 
 #, fuzzy
 msgid "_Send Keys..."
@@ -2258,6 +2276,14 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Error"
+#~ msgstr "GPA Hatasý"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "GPA Mesajý"
 
 #, fuzzy
 #~ msgid "GNU Privacy Assistant - Clipboard"

@@ -468,24 +468,14 @@ msgstr "Genererar nyckel..."
 msgid "Import keys from file"
 msgstr "Importera publika nycklar från fil"
 
-msgid "No keys were found."
-msgstr "Inga nycklar hittades."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i publika nycklar inlästa\n"
-"%i publika nycklar importerade\n"
-"%i publika nycklar oförändrade\n"
-"%i hemliga nycklar inlästa\n"
-"%i hemliga nycklar importerade\n"
-"%i hemliga nycklar oförändrade"
+
+msgid "No keys were found."
+msgstr "Inga nycklar hittades."
 
 msgid ""
 "Invalid time given.\n"
@@ -511,6 +501,12 @@ msgstr "Den här nyckeln har redan signerats med din egen nyckel!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "Du har inte valt en standardnyckel att signera med!"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr ""
+"Vilken nyckel vill du importera? (Nyckeln måste anges med dess "
+"nyckelidentitet)."
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr ""
@@ -861,6 +857,28 @@ msgstr "Nyckeln kan endast användas för kryptering."
 msgid "This key is useless."
 msgstr "Den här nyckeln är oanvändbar."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i publika nycklar inlästa\n"
+"%i publika nycklar importerade\n"
+"%i publika nycklar oförändrade\n"
+"%i hemliga nycklar inlästa\n"
+"%i hemliga nycklar importerade\n"
+"%i hemliga nycklar oförändrade"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -885,14 +903,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-#, fuzzy
-msgid "Error"
-msgstr "GPA-fel"
-
-#, fuzzy
-msgid "Message"
-msgstr "GPA-meddelande"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA är GNU Privacy Assistant."
@@ -1255,6 +1265,14 @@ msgid "_Retrieve Keys..."
 msgstr "_Hämta nycklar..."
 
 msgid "Retrieve keys from server"
+msgstr "Hämta nycklar från server"
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "uppdatera nyckelring"
+
+#, fuzzy
+msgid "Refresh keys from server"
 msgstr "Hämta nycklar från server"
 
 msgid "_Send Keys..."
@@ -2223,6 +2241,14 @@ msgid ""
 "on this card."
 msgstr ""
 
+#, fuzzy
+#~ msgid "Error"
+#~ msgstr "GPA-fel"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "GPA-meddelande"
+
 #~ msgid "GNU Privacy Assistant - Clipboard"
 #~ msgstr "GNU Privacy Assistant - Urklipp"
 
@@ -2607,9 +2633,6 @@ msgstr ""
 
 #~ msgid "detailed"
 #~ msgstr "detaljerat"
-
-#~ msgid "refresh keyring"
-#~ msgstr "uppdatera nyckelring"
 
 #~ msgid "Sign files"
 #~ msgstr "Signera filer"

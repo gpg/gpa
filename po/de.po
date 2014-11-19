@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"PO-Revision-Date: 2014-11-20 15:46+0100\n"
+"PO-Revision-Date: 2014-11-21 09:40+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -468,7 +468,8 @@ msgid ""
 "Use the long keyid or a fingerprint for a better match"
 msgstr ""
 "Mehr als %d Schlüssel entsprechen Ihren Suchkriterien.\n"
-"Benutzen Sie die lange Schlüsselkennung oder den Fingerprint für eine verfeinerte Suche."
+"Benutzen Sie die lange Schlüsselkennung oder den Fingerprint für eine "
+"verfeinerte Suche."
 
 msgid "No keys were found."
 msgstr "Es wurde kein Schlüssel gefunden."
@@ -1264,6 +1265,12 @@ msgstr "_Schlüssel erhalten..."
 
 msgid "Retrieve keys from server"
 msgstr "Schlüssel _zum Key-Server senden"
+
+msgid "Re_fresh Keys"
+msgstr "Schlüssel auf_frischen"
+
+msgid "Refresh keys from server"
+msgstr "Schlüssel vom Key-Server auffrischen"
 
 msgid "_Send Keys..."
 msgstr "Schlüssel _Senden..."
@@ -2676,9 +2683,6 @@ msgstr ""
 
 #~ msgid "detailed"
 #~ msgstr "detailliert"
-
-#~ msgid "refresh keyring"
-#~ msgstr "Schlüsselbund auffrischen"
 
 #~ msgid "Key Validity"
 #~ msgstr "Gültigkeit des Schlüssels"

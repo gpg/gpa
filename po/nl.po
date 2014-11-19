@@ -499,24 +499,14 @@ msgstr "Genereren van de sleutel..."
 msgid "Import keys from file"
 msgstr "Importeer publieke sleutels vanuit een bestand"
 
-msgid "No keys were found."
-msgstr "Geen sleutels gevonden."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i publieke sleutels gelezen\n"
-"%i publieke sleutels geïmporteerd\n"
-"%i publieke sleutels onveranderd\n"
-"%i geheime sleutels gelezen\n"
-"%i geheime sleutels geïmporteerd\n"
-"%i geheime sleutels onveranderd"
+
+msgid "No keys were found."
+msgstr "Geen sleutels gevonden."
 
 msgid ""
 "Invalid time given.\n"
@@ -540,6 +530,12 @@ msgstr "Deze sleutel is al ondertekend met uw eigen sleutel!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "U hebt geen sleutel geselecteerd voor ondertekening"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr ""
+"Welke sleutel wilt u importeren? (De sleutel moet aangeduid zijn\n"
+"met zijn sleutel id."
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr ""
@@ -898,6 +894,28 @@ msgstr "De sleutel kan alleen gebruikt worden voor versleuteling."
 msgid "This key is useless."
 msgstr "Deze sleutel is waardeloos."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i publieke sleutels gelezen\n"
+"%i publieke sleutels geïmporteerd\n"
+"%i publieke sleutels onveranderd\n"
+"%i geheime sleutels gelezen\n"
+"%i geheime sleutels geïmporteerd\n"
+"%i geheime sleutels onveranderd"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -922,13 +940,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-msgid "Error"
-msgstr "Fout"
-
-#, fuzzy
-msgid "Message"
-msgstr "GPA Bericht"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1309,6 +1320,14 @@ msgstr "/Server/_Haal sleutels...."
 
 #, fuzzy
 msgid "Retrieve keys from server"
+msgstr "Ontvang sleutel van server:"
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "Verwijder sleutel"
+
+#, fuzzy
+msgid "Refresh keys from server"
 msgstr "Ontvang sleutel van server:"
 
 #, fuzzy
@@ -2271,6 +2290,13 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "Error"
+#~ msgstr "Fout"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "GPA Bericht"
 
 #, fuzzy
 #~ msgid "GNU Privacy Assistant - Clipboard"

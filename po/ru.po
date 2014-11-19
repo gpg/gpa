@@ -485,24 +485,14 @@ msgstr "Создание ключа..."
 msgid "Import keys from file"
 msgstr "Импорт открытого ключа из файла"
 
-msgid "No keys were found."
-msgstr "Ключи не обнаружены."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"Прочитано открытых ключей: %i\n"
-"Импортировано открытых ключей: %i\n"
-"Не изменено открытых ключей: %i\n"
-"Прочитано закрытых ключей: %i\n"
-"Импортировано закрытых ключей: %i\n"
-"Не изменено закрытых ключей: %i"
+
+msgid "No keys were found."
+msgstr "Ключи не обнаружены."
 
 msgid ""
 "Invalid time given.\n"
@@ -528,6 +518,10 @@ msgstr "Этот ключ уже подписан вашим ключом!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "Не выбран ключ по умолчанию для подписи!"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr "Какой ключ импортировать (ID ключа)?"
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "Какой ключ импортировать (ID ключа)?"
@@ -884,6 +878,28 @@ msgstr "Ключ может быть использован только для 
 msgid "This key is useless."
 msgstr "Данный ключ бесполезен/неприменим."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"Прочитано открытых ключей: %i\n"
+"Импортировано открытых ключей: %i\n"
+"Не изменено открытых ключей: %i\n"
+"Прочитано закрытых ключей: %i\n"
+"Импортировано закрытых ключей: %i\n"
+"Не изменено закрытых ключей: %i"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -908,14 +924,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-#, fuzzy
-msgid "Error"
-msgstr "Ошибка GPA"
-
-#, fuzzy
-msgid "Message"
-msgstr "Сообщение GPA"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1303,6 +1311,14 @@ msgstr "/Сервер/_Загрузить ключи..."
 
 msgid "Retrieve keys from server"
 msgstr ""
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "обновить связку ключей"
+
+#, fuzzy
+msgid "Refresh keys from server"
+msgstr "/Отправить на сервер..."
 
 #, fuzzy
 msgid "_Send Keys..."
@@ -2252,6 +2268,14 @@ msgid ""
 "on this card."
 msgstr ""
 
+#, fuzzy
+#~ msgid "Error"
+#~ msgstr "Ошибка GPA"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "Сообщение GPA"
+
 #~ msgid "GNU Privacy Assistant - Clipboard"
 #~ msgstr "GNU Privacy Assistant - Буфер"
 
@@ -2619,6 +2643,3 @@ msgstr ""
 
 #~ msgid "detailed"
 #~ msgstr "подробный"
-
-#~ msgid "refresh keyring"
-#~ msgstr "обновить связку ключей"

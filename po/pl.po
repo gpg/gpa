@@ -500,24 +500,14 @@ msgstr "Generowanie klucza..."
 msgid "Import keys from file"
 msgstr "Import kluczy publicznych z pliku"
 
-msgid "No keys were found."
-msgstr "Nie odnaleziono żadnych kluczy."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i publicznych kluczy odczytano\n"
-"%i publicznych kluczy zaimportowano\n"
-"%i publicznych kluczy nie uległo zmianie\n"
-"%i tajnych kluczy odczytano\n"
-"%i tajnych kluczy zaimportowano\n"
-"%i tajnych kluczy nie uległo zmianie"
+
+msgid "No keys were found."
+msgstr "Nie odnaleziono żadnych kluczy."
 
 msgid ""
 "Invalid time given.\n"
@@ -541,6 +531,10 @@ msgstr "Ten klucz został już podpisany przez ciebie!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "Nie wybrano domyślnego klucza, który ma posłużyć do podpisania!"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr "Który klucz chcesz importować? (Należy podać identyfikator klucza)."
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "Który klucz chcesz importować? (Należy podać identyfikator klucza)."
@@ -899,6 +893,28 @@ msgstr "Ten klucz może być użyty tylko do szyfrowania."
 msgid "This key is useless."
 msgstr "Ten klucz jest bezużyteczny."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i publicznych kluczy odczytano\n"
+"%i publicznych kluczy zaimportowano\n"
+"%i publicznych kluczy nie uległo zmianie\n"
+"%i tajnych kluczy odczytano\n"
+"%i tajnych kluczy zaimportowano\n"
+"%i tajnych kluczy nie uległo zmianie"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -922,14 +938,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-#, fuzzy
-msgid "Error"
-msgstr "Błąd GPA"
-
-#, fuzzy
-msgid "Message"
-msgstr "Komunikat GPA"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1313,6 +1321,14 @@ msgstr "/Serwer/_Pobierz klucze..."
 
 msgid "Retrieve keys from server"
 msgstr ""
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "odświeża zbiór kluczy"
+
+#, fuzzy
+msgid "Refresh keys from server"
+msgstr "/W_yślij klucze na serwer..."
 
 #, fuzzy
 msgid "_Send Keys..."
@@ -2269,6 +2285,14 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "Error"
+#~ msgstr "Błąd GPA"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "Komunikat GPA"
+
+#, fuzzy
 #~ msgid "GNU Privacy Assistant - Clipboard"
 #~ msgstr "GNU Privacy Assistant - Menedżer plików "
 
@@ -2645,9 +2669,6 @@ msgstr ""
 
 #~ msgid "detailed"
 #~ msgstr "szczegółowy"
-
-#~ msgid "refresh keyring"
-#~ msgstr "odświeża zbiór kluczy"
 
 #~ msgid "Sign files"
 #~ msgstr "Podpisz pliki"

@@ -494,24 +494,14 @@ msgstr "建立新鑰..."
 msgid "Import keys from file"
 msgstr "由檔案中匯入公鑰"
 
-msgid "No keys were found."
-msgstr "找不到密鑰."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i 公鑰被讀取\n"
-"%i 公鑰已匯入\n"
-"%i 公鑰沒改變\n"
-"%i 私鑰被讀取\n"
-"%i 私鑰已匯入\n"
-"%i 私鑰已匯入"
+
+msgid "No keys were found."
+msgstr "找不到密鑰."
 
 msgid ""
 "Invalid time given.\n"
@@ -535,6 +525,10 @@ msgstr "這公鑰已被簽署了!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "沒有選擇預設簽署的密鑰!"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr "選擇要匯入的密鑰. (請必須提供密鑰的序號)."
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "選擇要匯入的密鑰. (請必須提供密鑰的序號)."
@@ -885,6 +879,28 @@ msgstr "密鑰只可用作加密."
 msgid "This key is useless."
 msgstr "密鑰是不可使用的."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i 公鑰被讀取\n"
+"%i 公鑰已匯入\n"
+"%i 公鑰沒改變\n"
+"%i 私鑰被讀取\n"
+"%i 私鑰已匯入\n"
+"%i 私鑰已匯入"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -908,14 +924,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-#, fuzzy
-msgid "Error"
-msgstr "GPA 錯誤"
-
-#, fuzzy
-msgid "Message"
-msgstr "GPA 訊息"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1287,6 +1295,14 @@ msgstr "/伺服器/下載公鑰... (&R)"
 
 msgid "Retrieve keys from server"
 msgstr ""
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "移除密鑰"
+
+#, fuzzy
+msgid "Refresh keys from server"
+msgstr "寄出公鑰到伺服器... (&N)"
 
 #, fuzzy
 msgid "_Send Keys..."
@@ -2228,6 +2244,14 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Error"
+#~ msgstr "GPA 錯誤"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "GPA 訊息"
 
 #, fuzzy
 #~ msgid "GNU Privacy Assistant - Clipboard"

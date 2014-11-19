@@ -473,24 +473,14 @@ msgstr "Génération de clef…"
 msgid "Import keys from file"
 msgstr "Importer des clefs publiques d'un fichier"
 
-msgid "No keys were found."
-msgstr "Clefs introuvables."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i clefs publiques lues\n"
-"%i clefs publiques importées\n"
-"%i clefs publiques inchangées\n"
-"%i clefs secrètes lues\n"
-"%i clefs secrètes importées\n"
-"%i clefs secrètes inchangées"
+
+msgid "No keys were found."
+msgstr "Clefs introuvables."
 
 msgid ""
 "Invalid time given.\n"
@@ -516,6 +506,12 @@ msgstr "Cette clef a déjà été signée par la vôtre !"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "Pas de clef par défaut pour signer !"
+
+#, fuzzy
+msgid "Which key do you want to import?"
+msgstr ""
+"Quelle clef désirez-vous importer (La clef doit être spécifiée par son ID de "
+"clef) ?"
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr ""
@@ -876,6 +872,28 @@ msgstr "La clef peut être utilisée pour fins de chiffrement seulement."
 msgid "This key is useless."
 msgstr "Cette clef est inutilisable."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i clefs publiques lues\n"
+"%i clefs publiques importées\n"
+"%i clefs publiques inchangées\n"
+"%i clefs secrètes lues\n"
+"%i clefs secrètes importées\n"
+"%i clefs secrètes inchangées"
+
 msgid "A required engine component is not installed."
 msgstr ""
 
@@ -900,14 +918,6 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
-
-#, fuzzy
-msgid "Error"
-msgstr "Erreur GPA"
-
-#, fuzzy
-msgid "Message"
-msgstr "Message de GPA"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA est l'assistant GNU Privacy."
@@ -1279,6 +1289,14 @@ msgid "_Retrieve Keys..."
 msgstr "_Récupération de clefs…"
 
 msgid "Retrieve keys from server"
+msgstr "Récupérer des clefs depuis un serveur"
+
+#, fuzzy
+msgid "Re_fresh Keys"
+msgstr "Recharger le trousseau de clefs"
+
+#, fuzzy
+msgid "Refresh keys from server"
 msgstr "Récupérer des clefs depuis un serveur"
 
 msgid "_Send Keys..."
@@ -2244,6 +2262,14 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Error"
+#~ msgstr "Erreur GPA"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "Message de GPA"
 
 #~ msgid "GNU Privacy Assistant - Clipboard"
 #~ msgstr "Assistant GNU Privacy - Presse-papiers"
