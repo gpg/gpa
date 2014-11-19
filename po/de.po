@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"PO-Revision-Date: 2014-01-07 23:06+0100\n"
+"PO-Revision-Date: 2014-11-20 15:46+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -269,9 +269,8 @@ msgstr "Zwischenablage öffnen"
 msgid "Open the settings dialog"
 msgstr "Öffne den Dialog für die Einstellungen"
 
-#, fuzzy
 msgid "Only start the UI server"
-msgstr "Den UI Server aktivieren"
+msgstr "Nur den UI Server starten"
 
 msgid "Disable support for X.509"
 msgstr "Keine Unterstützung von X.509"
@@ -280,7 +279,7 @@ msgid "Read options from file"
 msgstr "Optionen aus einer Datei lesen"
 
 msgid "Do not connect to a running instance"
-msgstr ""
+msgstr "Nicht mit einem laufenden GPA verbinden"
 
 msgid "[FILE...]"
 msgstr "[DATEI...]"
@@ -335,9 +334,9 @@ msgstr "Beim Erstellen der Datensicherung ist ein Fehler aufgetreten."
 msgid "Backup key to file"
 msgstr "_Sicherheitskopie des Schlüssels in Datei:"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Generating backup of key: 0x%s"
-msgstr "Sicherheitskopie von Schlüssel %s erstellen"
+msgstr "Sicherheitskopie von Schlüssel 0x%s wird erstellt"
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Die Schlüssel wurden in die Zwischenablage kopiert."
@@ -353,7 +352,7 @@ msgid "The keys have been exported to %s."
 msgstr "Die Schlüssel wurden exportiert nach %s."
 
 msgid "Only keys of the same procotol may be exported as a collection."
-msgstr ""
+msgstr "Nur Schlüssel eines Protokolls können zusammen exportiert werden"
 
 #, c-format
 msgid ""
@@ -463,24 +462,16 @@ msgstr "Schlüssel erzeugen..."
 msgid "Import keys from file"
 msgstr "Zertifikate aus Datei importieren"
 
-msgid "No keys were found."
-msgstr "Es wurde kein Schlüssel gefunden."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i öffentliche Schlüssel gelesen\n"
-"%i öffentliche Schlüssel importiert\n"
-"%i öffentliche Schlüssel unverändert\n"
-"%i geheime Schlüssel gelesen\n"
-"%i geheime Schlüssel importiert\n"
-"%i geheime Schlüssel unverändert"
+"Mehr als %d Schlüssel entsprechen Ihren Suchkriterien.\n"
+"Benutzen Sie die lange Schlüsselkennung oder den Fingerprint für eine verfeinerte Suche."
+
+msgid "No keys were found."
+msgstr "Es wurde kein Schlüssel gefunden."
 
 msgid ""
 "Invalid time given.\n"
@@ -506,6 +497,9 @@ msgstr "Dieser Schlüssel ist bereits mit Ihrem eigenen Schlüssel signiert."
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "Kein Standardschlüssel zum Signieren ausgewählt."
+
+msgid "Which key do you want to import?"
+msgstr "Welchen Schlüssel möchten Sie importieren?"
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "Welchen Schlüssel möchten Sie importieren? (Schlüsselkennung angeben)"
@@ -540,47 +534,44 @@ msgstr "Kennung des untergeordneten Schlüssels"
 msgid "Status"
 msgstr "Gültigkeit der Beglaubigung"
 
-#, fuzzy
 msgid "Algo"
-msgstr "_Verschlüsselungsalgorithmus"
+msgstr "Algo"
 
 msgid "Size"
 msgstr "Größe"
 
-#, fuzzy
 msgid "Created"
-msgstr "Erstellen"
+msgstr "Erstellt"
 
-#, fuzzy
 msgid "Expires"
-msgstr "Abgelaufen"
+msgstr "Läuft ab"
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "Can sign"
 msgstr "Zum Signieren verwendbar"
 
 msgid "C"
-msgstr ""
+msgstr "Z"
 
 msgid "Can certify"
 msgstr "Zum Überprüfen verwendbar"
 
 msgid "E"
-msgstr ""
+msgstr "V"
 
 msgid "Can encrypt"
 msgstr "Zum Verschlüsseln verwendbar"
 
 msgid "A"
-msgstr ""
+msgstr "A"
 
 msgid "Can authenticate"
 msgstr "Zum Authentifizieren verwendbar"
 
 msgid "T"
-msgstr ""
+msgstr "T"
 
 msgid "Secret key stored on a smartcard."
 msgstr "Geheimer Schlüssel befindet sich auf einer Smartcard"
@@ -862,8 +853,32 @@ msgstr "Der Schlüssel ist ausschließlich zum Verschlüsseln verwendbar."
 msgid "This key is useless."
 msgstr "Dieser Schlüssel ist nicht verwendbar."
 
-msgid "A required engine component is not installed."
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
 msgstr ""
+"%u Datei(en) gelesen\n"
+"%u Datei(en) mit Fehlern"
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i öffentliche Schlüssel gelesen\n"
+"%i öffentliche Schlüssel importiert\n"
+"%i öffentliche Schlüssel unverändert\n"
+"%i geheime Schlüssel gelesen\n"
+"%i geheime Schlüssel importiert\n"
+"%i geheime Schlüssel unverändert"
+
+msgid "A required engine component is not installed."
+msgstr "Eine notwendige Krypto-Engine ist nicht installiert"
 
 msgid "Calling the crypto engine program failed."
 msgstr "Aufruf der Crypto-Engine fehlgeschlagen."
@@ -885,12 +900,6 @@ msgstr "Die Email Adresse ist nicht gültig."
 
 msgid "Invalid character in comments."
 msgstr "Ungültige Zeichen im Kommentarfeld."
-
-msgid "Error"
-msgstr "Fehler"
-
-msgid "Message"
-msgstr "Meldung"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA ist der GNU Privacy Assistant"
@@ -1130,9 +1139,8 @@ msgstr ""
 "Die Schlüsselkennung (Key ID) is eine kurze Zahl zur Identifizerung eines "
 "Zertifikats."
 
-#, fuzzy
 msgid "The Creation Date is the date the certificate was created."
-msgstr "Das Ablaufdatum ist das Datum bis zu dem das Zertifikat gültig ist."
+msgstr "Das Erstellungsdatum ist das Datum ab dem das Zertifikat gültig ist."
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Das Ablaufdatum ist das Datum bis zu dem das Zertifikat gültig ist."
@@ -1389,6 +1397,12 @@ msgid ""
 "Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
+"Anscheinend ist keine CMS Crypto-Engine installiert.\n"
+"\n"
+"Unterstütztung für X.509 wird vorerst ausgeschaltet.\n"
+"\n"
+"Bitte installieren Sie eine CMS Crypto-Engine oder starten\n"
+"Sie dieses Programm mit der Option --disable-x509 ."
 
 msgid ""
 "The private key you selected as default is no longer available.\n"
@@ -2253,6 +2267,12 @@ msgstr ""
 "können jedoch mit dem Knopf zur Anwendungsauswahl auf eine andere, auf der "
 "Karte verfügbare, Anwendung umschalten."
 
+#~ msgid "Error"
+#~ msgstr "Fehler"
+
+#~ msgid "Message"
+#~ msgstr "Meldung"
+
 #~ msgid "[S]"
 #~ msgstr "[S]"
 
@@ -2336,7 +2356,6 @@ msgstr ""
 #~ msgid "Keyring Editor"
 #~ msgstr "Schlüsselverwaltung"
 
-#, fuzzy
 #~ msgid "Generate new key..."
 #~ msgstr "Neuen Schlüssel erzeugen..."
 
