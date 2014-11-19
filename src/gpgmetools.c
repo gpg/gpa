@@ -1219,6 +1219,73 @@ gpa_get_key_capabilities_text (gpgme_key_t key)
 }
 
 
+/* Update the result structure RESULT using the gpgme result INFO and
+   the FILES and BAD_FILES counter.  */
+void
+gpa_gpgme_update_import_results (gpa_import_result_t result,
+                                 unsigned int files, unsigned int bad_files,
+                                 gpgme_import_result_t info)
+{
+  result->files     += files;
+  result->bad_files += bad_files;
+  if (info)
+    {
+      result->considered       += info->considered;
+      result->imported         += info->imported;
+      result->unchanged        += info->unchanged;
+      result->secret_read      += info->secret_read;
+      result->secret_imported  += info->secret_imported;
+      result->secret_unchanged += info->secret_unchanged;
+    }
+}
+
+
+void
+gpa_gpgme_show_import_results (GtkWidget *parent, gpa_import_result_t result)
+{
+  char *buf1, *buf2;
+
+  if (result->files)
+    buf2 = g_strdup_printf (_("%u file(s) read\n"
+                              "%u file(s) with errors"),
+                            result->files,
+                            result->bad_files);
+  else
+    buf2 = NULL;
+
+
+  if (!result->considered)
+    gpa_show_warning (parent, "%s%s%s",
+                      _("No keys were found."),
+                      buf2? "\n":"",
+                      buf2? buf2:"");
+  else
+    {
+      buf1 = g_strdup_printf (_("%i public keys read\n"
+                                "%i public keys imported\n"
+                                "%i public keys unchanged\n"
+                                "%i secret keys read\n"
+                                "%i secret keys imported\n"
+                                "%i secret keys unchanged"),
+                              result->considered,
+                              result->imported,
+                              result->unchanged,
+                              result->secret_read,
+                              result->secret_imported,
+                              result->secret_unchanged);
+
+      gpa_show_info (parent,
+                     "%s%s%s",
+                     buf1,
+                     buf2? "\n":"",
+                     buf2? buf2:"");
+      g_free (buf1);
+    }
+
+  g_free (buf2);
+}
+
+
 /* Return a copy of the key array.  */
 gpgme_key_t *
 gpa_gpgme_copy_keyarray (gpgme_key_t *keys)
@@ -1244,7 +1311,7 @@ gpa_gpgme_copy_keyarray (gpgme_key_t *keys)
 }
 
 
-/* Release all keys in the array KEYS as weel as ARRY itself.  */
+/* Release all keys in the array KEYS as well as ARRAY itself.  */
 void
 gpa_gpgme_release_keyarray (gpgme_key_t *keys)
 {

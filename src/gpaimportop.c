@@ -26,6 +26,7 @@
 #include "gtktools.h"
 #include "gpaimportop.h"
 #include "filetype.h"
+#include "gpgmetools.h"
 
 static GObjectClass *parent_class = NULL;
 
@@ -208,35 +209,15 @@ gpa_import_operation_idle_cb (gpointer data)
 
 
 static void
-key_import_results_dialog_run (GtkWidget *parent,
-			       gpgme_import_result_t info)
-{
-  GtkWidget *dialog;
-
-  if (info->considered == 0)
-    gpa_show_warning (parent, _("No keys were found."));
-  else
-    gpa_show_info (parent,
-                   _("%i public keys read\n"
-                     "%i public keys imported\n"
-                     "%i public keys unchanged\n"
-                     "%i secret keys read\n"
-                     "%i secret keys imported\n"
-                     "%i secret keys unchanged"),
-                   info->considered, info->imported,
-                   info->unchanged, info->secret_read,
-                   info->secret_imported,
-                   info->secret_unchanged);
-}
-
-
-static void
 gpa_import_operation_done_cb (GpaContext *context, gpg_error_t err,
 			      GpaImportOperation *op)
 {
   if (! err)
     {
+      struct gpa_import_result_s result;
       gpgme_import_result_t res;
+
+      memset (&result, 0, sizeof result);
 
       GPA_IMPORT_OPERATION_GET_CLASS (op)->complete_import (op);
 
@@ -249,7 +230,9 @@ gpa_import_operation_done_cb (GpaContext *context, gpg_error_t err,
 	{
 	  g_signal_emit_by_name (GPA_OPERATION (op), "imported_keys");
 	}
-      key_import_results_dialog_run (GPA_OPERATION (op)->window, res);
+
+      gpa_gpgme_update_import_results (&result, 0, 0, res);
+      gpa_gpgme_show_import_results (GPA_OPERATION (op)->window, &result);
     }
   g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }

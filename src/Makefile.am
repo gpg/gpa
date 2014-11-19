@@ -154,6 +154,7 @@ gpa_SOURCES = \
 	      gpafileencryptop.h gpafileencryptop.c \
 	      gpafilesignop.h gpafilesignop.c \
 	      gpafileverifyop.h gpafileverifyop.c \
+	      gpafileimportop.h gpafileimportop.c \
 	      gpakeyop.h gpakeyop.c \
 	      gpakeydeleteop.h gpakeydeleteop.c \
 	      gpakeysignop.h gpakeysignop.c \

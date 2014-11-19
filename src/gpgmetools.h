@@ -68,6 +68,25 @@ typedef struct
 } gpa_keygen_para_t;
 
 
+/* An object to collect information about key imports.  */
+struct gpa_import_result_s
+{
+  unsigned int files;     /* # of files imported.  */
+  unsigned int bad_files; /* # of files with errors.  */
+
+  /* To avoid breaking translated strings the variables below are int
+     and not unsigned int as they should be for counters.  */
+  int considered;
+  int imported;
+  int unchanged;
+  int secret_read;
+  int secret_imported;
+  int secret_unchanged;
+};
+typedef struct gpa_import_result_s *gpa_import_result_t;
+
+
+
 /* Report an unexpected error in GPGME and quit the application.
    Better to use the macro instead of the function.  */
 #define gpa_gpgme_error(err) \
@@ -141,6 +160,16 @@ const gchar *gpa_key_ownertrust_string (gpgme_key_t key);
 
 /* Key validity strings.  */
 const gchar *gpa_key_validity_string (gpgme_key_t key);
+
+/* Function to manage import results.  */
+void gpa_gpgme_update_import_results (gpa_import_result_t result,
+                                      unsigned int files,
+                                      unsigned int bad_files,
+                                      gpgme_import_result_t info);
+void gpa_gpgme_show_import_results (GtkWidget *parent,
+                                    gpa_import_result_t result);
+
+
 
 /* This is the function called by GPGME when it wants a
    passphrase.  */

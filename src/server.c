@@ -45,6 +45,7 @@
 #include "gpafilesignop.h"
 #include "gpafiledecryptop.h"
 #include "gpafileverifyop.h"
+#include "gpafileimportop.h"
 
 
 #define set_error(e,t) assuan_set_error (ctx, gpg_error (e), (t))
@@ -107,7 +108,6 @@ struct conn_ctrl_s
 
   /* The list of all files to be processed.  */
   GList *files;
-  gboolean files_finished;
 };
 
 
@@ -349,7 +349,6 @@ release_files (conn_ctrl_t ctrl)
   g_list_foreach (ctrl->files, (GFunc) free_file_item, NULL);
   g_list_free (ctrl->files);
   ctrl->files = NULL;
-  ctrl->files_finished = FALSE;
 }
 
 
@@ -1261,22 +1260,24 @@ cmd_getinfo (assuan_context_t ctx, char *line)
 }
 
 
-/* FILE <file> [--continued]
-
-   Set the files on which to operate.
- */
+static const char hlp_file[] =
+  "FILE [--clear] <file>\n"
+  "\n"
+  "Add FILE to the list of files on which to operate.\n"
+  "With --clear given, that list is first cleared.";
 static gpg_error_t
 cmd_file (assuan_context_t ctx, char *line)
 {
   gpg_error_t err = 0;
   conn_ctrl_t ctrl = assuan_get_pointer (ctx);
-  gboolean continued;
+  gboolean clear;
   gpa_file_item_t file_item;
   char *tail;
 
-  continued = has_option (line, "--continued");
+  clear = has_option (line, "--clear");
+  line = skip_options (line);
 
-  if (ctrl->files_finished)
+  if (clear)
     release_files (ctrl);
 
   tail = line;
@@ -1289,13 +1290,12 @@ cmd_file (assuan_context_t ctx, char *line)
   file_item->filename_in = g_strdup (line);
   ctrl->files = g_list_append (ctrl->files, file_item);
 
-  if (! continued)
-    ctrl->files_finished = TRUE;
-
   return assuan_process_done (ctx, err);
 }
 
 
+/* Encrypt or sign files.  If neither ENCR nor SIGN is set, import
+   files. */
 static gpg_error_t
 impl_encrypt_sign_files (assuan_context_t ctx, int encr, int sign)
 {
@@ -1308,11 +1308,6 @@ impl_encrypt_sign_files (assuan_context_t ctx, int encr, int sign)
       err = set_error (GPG_ERR_ASS_SYNTAX, "no files specified");
       return assuan_process_done (ctx, err);
     }
-  else if (! ctrl->files_finished)
-    {
-      err = set_error (GPG_ERR_ASS_SYNTAX, "more files expected");
-      return assuan_process_done (ctx, err);
-    }
 
   /* FIXME: Needs a root window.  Need to set "sign" default.  */
   if (encr && sign)
@@ -1321,13 +1316,15 @@ impl_encrypt_sign_files (assuan_context_t ctx, int encr, int sign)
   else if (encr)
     op = (GpaFileOperation *)
       gpa_file_encrypt_operation_new (NULL, ctrl->files, FALSE);
-  else
+  else if (sign)
     op = (GpaFileOperation *)
       gpa_file_sign_operation_new (NULL, ctrl->files, FALSE);
+  else
+    op = (GpaFileOperation *)
+      gpa_file_import_operation_new (NULL, ctrl->files);
 
   /* Ownership of CTRL->files was passed to callee.  */
   ctrl->files = NULL;
-  ctrl->files_finished = FALSE;
   g_signal_connect (G_OBJECT (op), "completed",
 		    G_CALLBACK (g_object_unref), NULL);
 
@@ -1416,11 +1413,6 @@ impl_decrypt_verify_files (assuan_context_t ctx, int decrypt, int verify)
       err = set_error (GPG_ERR_ASS_SYNTAX, "no files specified");
       return assuan_process_done (ctx, err);
     }
-  else if (! ctrl->files_finished)
-    {
-      err = set_error (GPG_ERR_ASS_SYNTAX, "more files expected");
-      return assuan_process_done (ctx, err);
-    }
 
   /* FIXME: Needs a root window.  Need to enable "verify".  */
   if (decrypt && verify)
@@ -1435,7 +1427,6 @@ impl_decrypt_verify_files (assuan_context_t ctx, int decrypt, int verify)
 
   /* Ownership of CTRL->files was passed to callee.  */
   ctrl->files = NULL;
-  ctrl->files_finished = FALSE;
   g_signal_connect (G_OBJECT (op), "completed",
 		    G_CALLBACK (g_object_unref), NULL);
 
@@ -1531,9 +1522,9 @@ cmd_import_files (assuan_context_t ctx, char *line)
       return assuan_process_done (ctx, err);
     }
 
-  err = set_error (GPG_ERR_NOT_IMPLEMENTED, "not implemented");
-  return assuan_process_done (ctx, err);
+  return impl_encrypt_sign_files (ctx, 0, 0);
 }
+
 
 
 /* CHECKSUM_CREATE_FILES --nohup  */
@@ -1670,7 +1661,7 @@ register_commands (assuan_context_t ctx)
 #endif /*ENABLE_CARD_MANAGER*/
     { "START_CONFDIALOG", cmd_start_confdialog, hlp_start_confdialog },
     { "GETINFO", cmd_getinfo, hlp_getinfo },
-    { "FILE", cmd_file },
+    { "FILE", cmd_file, hlp_file },
     { "ENCRYPT_FILES", cmd_encrypt_files },
     { "SIGN_FILES", cmd_sign_files },
     { "ENCRYPT_SIGN_FILES", cmd_encrypt_sign_files },
