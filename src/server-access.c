@@ -359,7 +359,7 @@ wait_dialog (const gchar *server, GtkWidget *parent)
 {
   GtkWidget *dialog =
     gtk_message_dialog_new (GTK_WINDOW (parent),
-			    GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR,
+			    GTK_DIALOG_MODAL,
 			    GTK_MESSAGE_INFO, GTK_BUTTONS_NONE,
 			    _("Connecting to server \"%s\".\n"
 			      "Please wait."), server);
