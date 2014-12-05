@@ -132,12 +132,18 @@ get_manufacturer (unsigned int no)
     case 0x0001: return "PPC Card Systems";
     case 0x0002: return "Prism";
     case 0x0003: return "OpenFortress";
-    case 0x0004: return "Wewid AB";
+    case 0x0004: return "Wewid";
     case 0x0005: return "ZeitControl";
+    case 0x0006: return "Yubico";
+    case 0x0007: return "OpenKMS";
+    case 0x0008: return "LogoEmail";
 
     case 0x002A: return "Magrathea";
-      /* 0x00000 and 0xFFFF are defined as test cards per spec,
-         0xFFF00 to 0xFFFE are assigned for use with randomly created
+
+    case 0xF517: return "FSIJ";
+
+      /* 0x0000 and 0xFFFF are defined as test cards per spec,
+         0xFF00 to 0xFFFE are assigned for use with randomly created
          serial numbers.  */
     case 0x0000:
     case 0xffff: return "test card";
@@ -1121,7 +1127,7 @@ change_pin (GpaCMOpenpgp *card, int pinno)
                "A fresh standard card has set the Admin-PIN to the value "
                "<i>12345678</i>.  However, the issuer of your card might "
                "have initialized the card with a different Admin-PIN and "
-               "that Admin-PIN might only be nown to the issuer.  "
+               "that Admin-PIN might only be known to the issuer.  "
                "Please check the instructions of your issuer.\n"
                "\n"
                "If you proceed you will be asked to enter the current "
