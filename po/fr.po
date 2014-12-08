@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.8.0\n"
 "Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"PO-Revision-Date: 2011-12-12 10:12+0100\n"
+"PO-Revision-Date: 2014-12-08 17:37+0100\n"
 "Last-Translator: Eric Lassauge <lassauge@users.sf.net>\n"
 "Language-Team:  <fr@li.org>\n"
 "Language: fr\n"
@@ -149,6 +149,23 @@ msgstr "Avancé"
 
 msgid "Expert"
 msgstr "Expert"
+
+msgid "A keyserver has not been configured."
+msgstr ""
+
+#, fuzzy
+msgid "Configure backend to use a keyserver?"
+msgstr "Configurer les programmes « backend »"
+
+msgid "_Yes"
+msgstr "_Oui"
+
+msgid "_No"
+msgstr "_Non"
+
+#, fuzzy
+msgid "Configuring the backend to use a keyserver failed"
+msgstr "Configurer les programmes « backend »"
 
 msgid "days"
 msgstr "jours"
@@ -327,7 +344,7 @@ msgid ""
 "\t\"%s\"\n"
 "\n"
 "This is sensitive information, and should be stored carefully\n"
-"(for example, in a floppy disk kept in a safe place)."
+"(for example, on a USB stick kept in a safe place)."
 msgstr ""
 "Une copie de votre clef secrète a été faite dans le fichier :\n"
 "\n"
@@ -362,21 +379,22 @@ msgstr "Les clefs ont été exportées dans %s."
 msgid "Only keys of the same procotol may be exported as a collection."
 msgstr ""
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The selected key will be sent to a public key\n"
-"server (\"%s\").\n"
-"Are you sure you want to distribute this key?"
+"The selected key(s) will be sent to a public key\n"
+"server (\"%s\")."
 msgstr ""
 "La clé sélectionnée sera envoyée au serveur de\n"
 "clé publique (« %s »).\n"
 "Êtes-vous certain de vouloir distribuer cette clé ?"
 
-msgid "_Yes"
-msgstr "_Oui"
+#, fuzzy
+msgid "Are you sure you want to distribute this key?"
+msgstr "Êtes-vous certain de vouloir effacer cette clef ?"
 
-msgid "_No"
-msgstr "_Non"
+#, fuzzy
+msgid "Error sending key(s) to the server."
+msgstr "Envoi de clefs au serveur"
 
 msgid "The keys have been sent to the server."
 msgstr "Les clés ont été envoyées au serveur."
@@ -2025,7 +2043,7 @@ msgid ""
 "\n"
 "A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
 "However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be nown to the issuer.  "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
 "Please check the instructions of your issuer.\n"
 "\n"
 "If you proceed you will be asked to enter the current value of the <b>Admin-"

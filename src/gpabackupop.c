@@ -223,7 +223,7 @@ gpa_backup_operation_do_backup (GpaBackupOperation *op, gchar *filename)
 				   "\t\"%s\"\n\n"
 				   "This is sensitive information, "
 				   "and should be stored carefully\n"
-				   "(for example, on a flash memory "
+				   "(for example, on a USB stick "
 				   "kept in a safe place)."),
 				 filename);
       gpa_window_message (message, GPA_OPERATION (op)->window);
