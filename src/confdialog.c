@@ -32,6 +32,7 @@
 
 #include "i18n.h"
 #include "gpgmetools.h"
+#include "gtktools.h"
 #include "options.h"
 
 /* Violation of GNOME standards: Cancel does not revert previous
@@ -1567,5 +1568,46 @@ gpa_store_configured_keyserver (const char *value)
 {
 #ifdef ENABLE_KEYSERVER_SUPPORT
   gpa_store_gpgconf_string ("gpg", "keyserver", value);
+#endif
+}
+
+
+/* Ask the user whether to configure GnuPG to use a keyserver.  Return
+   NULL if it could or shall not be configured or the name of the
+   keyserver which needs to be g_freed.  */
+char *
+gpa_configure_keyserver (GtkWidget *parent)
+{
+#ifdef ENABLE_KEYSERVER_SUPPORT
+  GtkWidget *msgbox;
+  char *keyserver;
+
+  msgbox = gtk_message_dialog_new
+    (GTK_WINDOW(parent), GTK_DIALOG_MODAL,
+     GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+     "%s\n\n%s",
+     _("A keyserver has not been configured."),
+     _("Configure backend to use a keyserver?"));
+  gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
+                          _("_Yes"), GTK_RESPONSE_YES,
+                          _("_No"), GTK_RESPONSE_NO, NULL);
+  if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
+    {
+      gtk_widget_destroy (msgbox);
+      return NULL;
+    }
+  gtk_widget_destroy (msgbox);
+  gpa_store_configured_keyserver ("hkp://keys.gnupg.net");
+  keyserver = gpa_load_configured_keyserver ();
+  if (!keyserver)
+    {
+      gpa_show_warning
+        (parent, _("Configuring the backend to use a keyserver failed"));
+      return NULL;
+    }
+  return keyserver;
+#else
+  (void)parent;
+  return NULL
 #endif
 }

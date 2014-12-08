@@ -27,6 +27,7 @@
 #include "gtktools.h"
 #include "gpgmetools.h"
 #include "server-access.h"
+#include "confdialog.h"
 #include "gpaexportserverop.h"
 
 static GObjectClass *parent_class = NULL;
@@ -121,15 +122,38 @@ gpa_export_server_operation_get_type (void)
 /* Internal */
 
 static gboolean
-confirm_send (GtkWidget * parent, const gchar *server)
+confirm_send (GtkWidget *parent, const gchar *server)
 {
-  GtkWidget *msgbox = gtk_message_dialog_new
-	(GTK_WINDOW(parent), GTK_DIALOG_MODAL,
-	 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-	 _("The selected key will be sent to a public key\n"
-	   "server (\"%s\").\n"
-	   "Are you sure you want to distribute this key?"),
-	 server);
+  GtkWidget *msgbox;
+  char *info;
+  char *keyserver = NULL;
+
+  if (is_gpg_version_at_least ("2.1.0"))
+    {
+      keyserver = gpa_load_configured_keyserver ();
+      server = keyserver;
+    }
+
+  if (!server)
+    {
+      keyserver = gpa_configure_keyserver (parent);
+      if (!keyserver)
+        return FALSE;
+      server = keyserver;
+    }
+
+
+  info = g_strdup_printf (_("The selected key(s) will be sent to a public key\n"
+                            "server (\"%s\")."), server);
+  g_free (keyserver);
+  msgbox = gtk_message_dialog_new
+    (GTK_WINDOW(parent), GTK_DIALOG_MODAL,
+     GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+     "%s\n\n%s",
+     info,
+     _("Are you sure you want to distribute this key?"));
+  g_free (info);
+
   gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
 			  _("_Yes"), GTK_RESPONSE_YES,
 			  _("_No"), GTK_RESPONSE_NO, NULL);
@@ -172,21 +196,77 @@ gpa_export_server_operation_get_destination (GpaExportOperation *operation,
     }
 }
 
+
+/* GnuPG 2.1 method to send keys to the keyserver.  KEYLIST has a list
+   of keys to be sent.  Returns true on success. */
+static gboolean
+send_keys (GpaExportServerOperation *op, GList *keylist)
+{
+  gpg_error_t err;
+  GList *item;
+  gpgme_key_t *keyarray;
+  gpgme_key_t key;
+  int i;
+
+  keyarray = g_malloc0_n (g_list_length (keylist)+1, sizeof *keyarray);
+  i = 0;
+  for (item = keylist; item; i++, item = g_list_next (item))
+    {
+      key = (gpgme_key_t) item->data;
+      if (!key || key->protocol != GPGME_PROTOCOL_OpenPGP)
+        continue;
+      gpgme_key_ref (key);
+      keyarray[i++] = key;
+    }
+
+  gpgme_set_protocol (GPA_OPERATION (op)->context->ctx, GPGME_PROTOCOL_OpenPGP);
+  err = gpgme_op_export_keys (GPA_OPERATION (op)->context->ctx,
+                              keyarray, GPGME_KEYLIST_MODE_EXTERN, NULL);
+  for (i=0; keyarray[i]; i++)
+    gpgme_key_unref (keyarray[i]);
+  g_free (keyarray);
+
+  if (err)
+    {
+      gpa_show_warning (GPA_OPERATION (op)->window,
+                        "%s\n\n(%s <%s>)",
+                        _("Error sending key(s) to the server."),
+                        gpg_strerror (err), gpg_strsource (err));
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+
+
 static void
 gpa_export_server_operation_complete_export (GpaExportOperation *operation)
 {
   GpaExportServerOperation *op = GPA_EXPORT_SERVER_OPERATION (operation);
-  gpgme_key_t key;
-  op->server = g_strdup (gpa_options_get_default_keyserver
-			 (gpa_options_get_instance ()));
+  int okay = 0;
 
-  key = (gpgme_key_t) operation->keys->data;
-  if (server_send_keys (op->server, key->subkeys->keyid, operation->dest,
-			GPA_OPERATION (op)->window))
+  if (is_gpg_version_at_least ("2.1.0"))
     {
-      gpa_window_message (_("The keys have been sent to the server."),
-			  GPA_OPERATION (op)->window);
+      /* GnuPG 2.1.0 does not anymore use the keyserver helpers and
+         thus we need to use the real API for sending keys.  */
+      if (send_keys (op, operation->keys))
+        okay = 1;
     }
+  else
+    {
+      gpgme_key_t key = (gpgme_key_t) operation->keys->data;
+
+      op->server = g_strdup (gpa_options_get_default_keyserver
+                             (gpa_options_get_instance ()));
+      if (server_send_keys (op->server, key->subkeys->keyid, operation->dest,
+                             GPA_OPERATION (op)->window))
+        okay = 1;
+    }
+
+  if (okay)
+    gpa_window_message (_("The keys have been sent to the server."),
+                        GPA_OPERATION (op)->window);
 }
 
 /* API */

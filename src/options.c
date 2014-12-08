@@ -3,17 +3,17 @@
    Copyright (C) 2005, 2008 g10 Code GmbH.
 
    This file is part of GPA
-  
+
    GPA is free software; you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
-  
+
    GPA is distributed in the hope that it will be useful, but WITHOUT
    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
    or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
    License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, see <http://www.gnu.org/licenses/>. */
 
@@ -61,7 +61,7 @@ GType
 gpa_options_get_type (void)
 {
   static GType style_type = 0;
-  
+
   if (!style_type)
     {
       static const GTypeInfo style_info =
@@ -76,12 +76,12 @@ gpa_options_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_options_init,
       };
-      
+
       style_type = g_type_register_static (G_TYPE_OBJECT,
 					   "GpaOptions",
 					   &style_info, 0);
     }
-  
+
   return style_type;
 }
 
@@ -105,7 +105,7 @@ static void
 gpa_options_class_init (GpaOptionsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gpa_options_finalize;
@@ -121,7 +121,7 @@ gpa_options_class_init (GpaOptionsClass *klass)
   make_signal (CHANGED_UI_MODE, object_class,
                "changed_ui_mode",
                G_STRUCT_OFFSET (GpaOptionsClass, changed_ui_mode));
-  make_signal (CHANGED_SHOW_ADVANCED_OPTIONS, object_class, 
+  make_signal (CHANGED_SHOW_ADVANCED_OPTIONS, object_class,
                "changed_show_advanced_options",
                G_STRUCT_OFFSET (GpaOptionsClass,
                                 changed_show_advanced_options));
@@ -156,12 +156,12 @@ static void
 gpa_options_finalize (GObject *object)
 {
   GpaOptions *options = GPA_OPTIONS (object);
-  
+
   g_free (options->options_file);
   gpgme_key_unref (options->default_key);
   g_free (options->default_key_fpr);
   g_free (options->default_keyserver);
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -176,7 +176,7 @@ static GpaOptions *
 gpa_options_new (void)
 {
   GpaOptions *options;
-  
+
   options = g_object_new (GPA_OPTIONS_TYPE, NULL);
 
   return options;
@@ -300,7 +300,7 @@ determine_default_key (void)
 	  err = gpgme_op_keylist_end (ctx);
 	  if (gpg_err_code (err) != GPG_ERR_NO_ERROR)
 	    {
-	      gpa_gpgme_warning (err); 
+	      gpa_gpgme_warning (err);
 	    }
 	}
       else if (gpg_err_code (err) != GPG_ERR_EOF)
@@ -323,7 +323,7 @@ gpa_options_update_default_key (GpaOptions *options)
 
   if (! options->default_key_fpr)
     update = TRUE;
-  else if (gpg_err_code (gpgme_get_key (ctx, options->default_key_fpr, 
+  else if (gpg_err_code (gpgme_get_key (ctx, options->default_key_fpr,
 					&key, TRUE)) == GPG_ERR_EOF)
     {
       gpa_window_error (_("The private key you selected as default is no "
@@ -357,6 +357,9 @@ gpa_options_update_default_key (GpaOptions *options)
 void
 gpa_options_set_default_keyserver (GpaOptions *options, const gchar *keyserver)
 {
+  if (is_gpg_version_at_least ("2.1.0"))
+    return;
+
   if (options->default_keyserver)
     {
       g_free (options->default_keyserver);
@@ -404,7 +407,7 @@ static void
 gpa_options_save_settings (GpaOptions *options)
 {
   FILE *options_file;
-  
+
   g_assert(options->options_file != NULL);
   options_file = g_fopen (options->options_file, "w");
   if (!options_file)
@@ -420,7 +423,7 @@ gpa_options_save_settings (GpaOptions *options)
         }
       if (options->default_keyserver)
         {
-          /* we do not write the keyserver anymore to gpg.conf.  */
+          /* we do not write the keyserver anymore to gpa.conf.  */
 /*           fprintf (options_file, "keyserver %s\n",  */
 /*                    options->default_keyserver); */
         }
@@ -444,7 +447,7 @@ gpa_options_save_settings (GpaOptions *options)
     }
 
   /* Write the keyserver to the backend.  */
-  if (options->default_keyserver)
+  if (options->default_keyserver && !is_gpg_version_at_least ("2.1.0"))
     gpa_store_configured_keyserver (options->default_keyserver);
 }
 
@@ -472,12 +475,12 @@ read_next_word (FILE *file, char *buffer, int size)
           buffer[i++] = c;
         }
       buffer[i] = '\0';
-      
+
       return TRUE;
     }
 }
 
-typedef enum 
+typedef enum
  {
    PARSE_OPTIONS_STATE_START,
    PARSE_OPTIONS_STATE_HAVE_KEY,
@@ -490,7 +493,7 @@ static void
 gpa_options_read_settings (GpaOptions *options)
 {
   FILE *options_file;
-  
+
   g_assert(options->options_file != NULL);
   options_file = g_fopen (options->options_file, "r");
   if (!options_file)
@@ -558,5 +561,7 @@ gpa_options_read_settings (GpaOptions *options)
 
   /* Read the keyserver from the abckend.  */
   g_free (options->default_keyserver);
-  options->default_keyserver = gpa_load_configured_keyserver ();
+  options->default_keyserver = NULL;
+  if (!is_gpg_version_at_least ("2.1.0"))
+    options->default_keyserver = gpa_load_configured_keyserver ();
 }

@@ -798,8 +798,9 @@ save_settings (SettingsDlg *dialog)
 
 
 #ifdef ENABLE_KEYSERVER_SUPPORT
-  gpa_options_set_default_keyserver (gpa_options_get_instance (),
-                                     dialog->keyserver.url);
+  if (!dialog->gnupg21)
+    gpa_options_set_default_keyserver (gpa_options_get_instance (),
+                                       dialog->keyserver.url);
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
 
   if (!dialog->akl.enabled)

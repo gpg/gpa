@@ -592,7 +592,8 @@ main (int argc, char *argv[])
   gpa_options_update_default_key (gpa_options_get_instance ());
   /* Now, make sure there are reasonable defaults for the default key
     and keyserver.  */
-  if (!gpa_options_get_default_keyserver (gpa_options_get_instance ()))
+  if (!is_gpg_version_at_least ("2.1.0")
+      && !gpa_options_get_default_keyserver (gpa_options_get_instance ()))
     {
       GList *keyservers = keyserver_get_as_glist ();
       gpa_options_set_default_keyserver (gpa_options_get_instance (),

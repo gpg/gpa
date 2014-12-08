@@ -25,13 +25,14 @@ GtkWidget *gpa_backend_config_dialog_new (void);
 
 
 char *gpa_load_gpgconf_string (const char *cname, const char *name);
-void gpa_store_gpgconf_string (const char *cname, 
+void gpa_store_gpgconf_string (const char *cname,
                                const char *name, const char *value);
 
 
 
 char *gpa_load_configured_keyserver (void);
 void gpa_store_configured_keyserver (const char *value);
+char *gpa_configure_keyserver (GtkWidget *parent);
 
 
 #endif
