@@ -14,7 +14,7 @@
  * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>. 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 /* DINSIG is the old and still used standard for smartcards to create
@@ -32,7 +32,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "gpa.h"   
+#include "gpa.h"
 #include "gtktools.h"
 #include "convert.h"
 
@@ -48,12 +48,12 @@ enum
     ENTRY_SERIALNO,
 
     ENTRY_LAST
-  }; 
+  };
 
 
 
 /* Object's class definition.  */
-struct _GpaCMDinsigClass 
+struct _GpaCMDinsigClass
 {
   GpaCMObjectClass parent_class;
 };
@@ -81,7 +81,7 @@ static void gpa_cm_dinsig_finalize (GObject *object);
 
 
 
-/************************************************************ 
+/************************************************************
  *******************   Implementation   *********************
  ************************************************************/
 
@@ -126,17 +126,17 @@ scd_getattr_cb (void *opaque, const char *status, const char *args)
           if (parm->updfnc)
             parm->updfnc (parm->card, entry_id, tmp);
           else if (GTK_IS_LABEL (parm->card->entries[entry_id]))
-            gtk_label_set_text 
+            gtk_label_set_text
               (GTK_LABEL (parm->card->entries[entry_id]), tmp);
           else
-            gtk_entry_set_text 
+            gtk_entry_set_text
               (GTK_ENTRY (parm->card->entries[entry_id]), tmp);
           xfree (tmp);
         }
     }
 
   return 0;
-}     
+}
 
 
 /* Use the assuan machinery to load the bulk of the OpenPGP card data.  */
@@ -152,7 +152,7 @@ reload_data (GpaCMDinsig *card)
     { NULL }
   };
   int attridx;
-  gpg_error_t err;
+  gpg_error_t err, operr;
   char command[100];
   struct scd_getattr_parm parm;
   gpgme_ctx_t gpgagent;
@@ -168,13 +168,13 @@ reload_data (GpaCMDinsig *card)
       parm.entry_id = attrtbl[attridx].entry_id;
       parm.updfnc   = attrtbl[attridx].updfnc;
       snprintf (command, sizeof command, "SCD GETATTR %s", parm.name);
-      err = gpgme_op_assuan_transact (gpgagent,
-                                      command,
-                                      NULL, NULL,
-                                      NULL, NULL,
-                                      scd_getattr_cb, &parm);
+      err = gpgme_op_assuan_transact_ext (gpgagent,
+                                          command,
+                                          NULL, NULL,
+                                          NULL, NULL,
+                                          scd_getattr_cb, &parm, &operr);
       if (!err)
-        err = gpgme_op_assuan_result (gpgagent)->err;
+        err = operr;
 
       if (err)
         {
@@ -182,7 +182,7 @@ reload_data (GpaCMDinsig *card)
             ; /* Lost the card.  */
           else
             {
-              g_debug ("assuan command `%s' failed: %s <%s>\n", 
+              g_debug ("assuan command `%s' failed: %s <%s>\n",
                        command, gpg_strerror (err), gpg_strsource (err));
             }
           clear_card_data (card);
@@ -206,12 +206,12 @@ add_table_row (GtkWidget *table, int *rowidx,
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1,
+                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
   if (is_label)
     gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
-  
+
   if (readonly)
     {
       if (!is_label && GTK_IS_ENTRY (widget))
@@ -225,7 +225,7 @@ add_table_row (GtkWidget *table, int *rowidx,
       if (is_label)
         gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
     }
-      
+
   gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
                     *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
   if (widget2)
@@ -259,18 +259,18 @@ construct_data_widget (GpaCMDinsig *card)
   gtk_container_set_border_width (GTK_CONTAINER (table), 10);
   gtk_container_add (GTK_CONTAINER (frame), table);
   rowidx = 0;
-  
+
   card->entries[ENTRY_SERIALNO] = gtk_label_new (NULL);
   add_table_row (table, &rowidx, _("Serial number:"),
                  card->entries[ENTRY_SERIALNO], NULL, 0);
 
   gtk_box_pack_start (GTK_BOX (card), frame, FALSE, TRUE, 0);
-  
+
   /* Info frame.  */
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
   vbox = gtk_vbox_new (FALSE, 5);
-  text = g_strdup_printf 
+  text = g_strdup_printf
     (_("There is not much information to display for a %s card.  "
        "You may want to use the application selector button to "
        "switch to another application available on this card."), "DINSIG");
@@ -281,12 +281,12 @@ construct_data_widget (GpaCMDinsig *card)
 
   gtk_container_add (GTK_CONTAINER (frame), vbox);
   gtk_box_pack_start (GTK_BOX (card), frame, FALSE, TRUE, 0);
-  
+
 }
 
 
 
-/************************************************************ 
+/************************************************************
  ******************   Object Management  ********************
  ************************************************************/
 
@@ -296,7 +296,7 @@ gpa_cm_dinsig_class_init (void *class_ptr, void *class_data)
   GpaCMDinsigClass *klass = class_ptr;
 
   parent_class = g_type_class_peek_parent (klass);
-  
+
   G_OBJECT_CLASS (klass)->finalize = gpa_cm_dinsig_finalize;
 }
 
@@ -313,7 +313,7 @@ gpa_cm_dinsig_init (GTypeInstance *instance, void *class_ptr)
 
 static void
 gpa_cm_dinsig_finalize (GObject *object)
-{  
+{
 /*   GpaCMDinsig *card = GPA_CM_DINSIG (object); */
 
   parent_class->finalize (object);
@@ -325,7 +325,7 @@ GType
 gpa_cm_dinsig_get_type (void)
 {
   static GType this_type = 0;
-  
+
   if (!this_type)
     {
       static const GTypeInfo this_info =
@@ -340,23 +340,23 @@ gpa_cm_dinsig_get_type (void)
 	  0,    /* n_preallocs */
 	  gpa_cm_dinsig_init
 	};
-      
+
       this_type = g_type_register_static (GPA_CM_OBJECT_TYPE,
                                           "GpaCMDinsig",
                                           &this_info, 0);
     }
-  
+
   return this_type;
 }
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 GtkWidget *
 gpa_cm_dinsig_new ()
 {
-  return GTK_WIDGET (g_object_new (GPA_CM_DINSIG_TYPE, NULL));  
+  return GTK_WIDGET (g_object_new (GPA_CM_DINSIG_TYPE, NULL));
 }
 
 

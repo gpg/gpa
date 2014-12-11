@@ -86,7 +86,7 @@ scd_atr_data_cb (void *opaque, const void *data, size_t datalen)
 static void
 reload_data (GpaCMUnknown *card)
 {
-  gpg_error_t err;
+  gpg_error_t err, operr;
   char command[100];
   gpgme_ctx_t gpgagent;
   membuf_t mb;
@@ -99,12 +99,12 @@ reload_data (GpaCMUnknown *card)
 
   init_membuf (&mb, 512);
 
-  err = gpgme_op_assuan_transact (gpgagent,
-                                  "SCD APDU --dump-atr",
-                                  scd_atr_data_cb, &mb,
-                                  NULL, NULL, NULL, NULL);
+  err = gpgme_op_assuan_transact_ext (gpgagent,
+                                      "SCD APDU --dump-atr",
+                                      scd_atr_data_cb, &mb,
+                                      NULL, NULL, NULL, NULL, &operr);
   if (!err)
-    err = gpgme_op_assuan_result (gpgagent)->err;
+    err = operr;
 
   if (!err)
     {

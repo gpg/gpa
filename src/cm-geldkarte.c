@@ -14,7 +14,7 @@
  * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>. 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -26,7 +26,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "gpa.h"   
+#include "gpa.h"
 #include "convert.h"
 
 #include "cm-object.h"
@@ -52,12 +52,12 @@ enum
     ENTRY_MAXAMOUNT1,
 
     ENTRY_LAST
-  }; 
+  };
 
 
 
 /* Object's class definition.  */
-struct _GpaCMGeldkarteClass 
+struct _GpaCMGeldkarteClass
 {
   GpaCMObjectClass parent_class;
 };
@@ -84,7 +84,7 @@ static void gpa_cm_geldkarte_finalize (GObject *object);
 
 
 
-/************************************************************ 
+/************************************************************
  *******************   Implementation   *********************
  ************************************************************/
 
@@ -125,13 +125,13 @@ scd_getattr_cb (void *opaque, const char *status, const char *args)
           if (parm->updfnc)
             parm->updfnc (parm->card, entry_id, args);
           else
-            gtk_label_set_text 
+            gtk_label_set_text
               (GTK_LABEL (parm->card->entries[entry_id]), args);
         }
     }
 
   return 0;
-}     
+}
 
 
 /* Use the assuan machinery to load the bulk of the OpenPGP card data.  */
@@ -158,7 +158,7 @@ reload_data (GpaCMGeldkarte *card, gpgme_ctx_t gpgagent)
     { NULL }
   };
   int attridx;
-  gpg_error_t err;
+  gpg_error_t err, operr;
   char command[100];
   struct scd_getattr_parm parm;
 
@@ -169,13 +169,13 @@ reload_data (GpaCMGeldkarte *card, gpgme_ctx_t gpgagent)
       parm.entry_id = attrtbl[attridx].entry_id;
       parm.updfnc   = attrtbl[attridx].updfnc;
       snprintf (command, sizeof command, "SCD GETATTR %s", parm.name);
-      err = gpgme_op_assuan_transact (gpgagent,
-                                      command,
-                                      NULL, NULL,
-                                      NULL, NULL,
-                                      scd_getattr_cb, &parm);
+      err = gpgme_op_assuan_transact_ext (gpgagent,
+                                          command,
+                                          NULL, NULL,
+                                          NULL, NULL,
+                                          scd_getattr_cb, &parm, &operr);
       if (!err)
-        err = gpgme_op_assuan_result (gpgagent)->err;
+        err = operr;
 
       if (err)
         {
@@ -183,7 +183,7 @@ reload_data (GpaCMGeldkarte *card, gpgme_ctx_t gpgagent)
             ; /* Lost the card.  */
           else
             {
-              g_debug ("assuan command `%s' failed: %s <%s>\n", 
+              g_debug ("assuan command `%s' failed: %s <%s>\n",
                        command, gpg_strerror (err), gpg_strsource (err));
             }
           clear_card_data (card);
@@ -206,8 +206,8 @@ add_table_row (GtkWidget *table, int *rowidx, const char *labelstr)
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1,	       
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0); 
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1,
+                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
   gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
   gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
@@ -253,35 +253,35 @@ construct_data_widget (GpaCMGeldkarte *card)
   amount_table = gtk_table_new (3, 3, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (amount_table), 10);
 
-  
+
   /* General frame.  */
   rowidx = 0;
 
-  card->entries[ENTRY_CARDNO] = add_table_row 
+  card->entries[ENTRY_CARDNO] = add_table_row
     (general_table, &rowidx, _("Card number: "));
 
-  card->entries[ENTRY_KBLZ] = add_table_row 
+  card->entries[ENTRY_KBLZ] = add_table_row
     (general_table, &rowidx, _("Short Bank Code number: "));
 
-  card->entries[ENTRY_BANKTYPE] = add_table_row 
+  card->entries[ENTRY_BANKTYPE] = add_table_row
     (general_table, &rowidx, _("Bank type: "));
 
-  card->entries[ENTRY_VALIDFROM] = add_table_row 
+  card->entries[ENTRY_VALIDFROM] = add_table_row
     (general_table, &rowidx, _("Card valid from: "));
 
-  card->entries[ENTRY_EXPIRES] = add_table_row 
+  card->entries[ENTRY_EXPIRES] = add_table_row
     (general_table, &rowidx, _("Card expires: "));
 
-  card->entries[ENTRY_COUNTRY] = add_table_row 
+  card->entries[ENTRY_COUNTRY] = add_table_row
     (general_table, &rowidx, _("Issuing country: "));
 
-  card->entries[ENTRY_CURRENCY] = add_table_row 
+  card->entries[ENTRY_CURRENCY] = add_table_row
     (general_table, &rowidx, _("Currency: "));
 
-  card->entries[ENTRY_ZKACHIPID] = add_table_row 
+  card->entries[ENTRY_ZKACHIPID] = add_table_row
     (general_table, &rowidx, _("ZKA chip Id: "));
 
-  card->entries[ENTRY_OSVERSION] = add_table_row 
+  card->entries[ENTRY_OSVERSION] = add_table_row
     (general_table, &rowidx, _("Chip OS version: "));
 
   gtk_container_add (GTK_CONTAINER (general_frame), general_table);
@@ -290,13 +290,13 @@ construct_data_widget (GpaCMGeldkarte *card)
   /* Amount frame.  */
   rowidx = 0;
 
-  card->entries[ENTRY_BALANCE] = add_table_row 
+  card->entries[ENTRY_BALANCE] = add_table_row
     (amount_table, &rowidx, _("Balance: "));
 
-  card->entries[ENTRY_MAXAMOUNT] = add_table_row 
+  card->entries[ENTRY_MAXAMOUNT] = add_table_row
     (amount_table, &rowidx, _("General limit: "));
 
-  card->entries[ENTRY_MAXAMOUNT1] = add_table_row 
+  card->entries[ENTRY_MAXAMOUNT1] = add_table_row
     (amount_table, &rowidx, _("Transaction limit: "));
 
   gtk_container_add (GTK_CONTAINER (amount_frame), amount_table);
@@ -309,7 +309,7 @@ construct_data_widget (GpaCMGeldkarte *card)
 
 
 
-/************************************************************ 
+/************************************************************
  ******************   Object Management  ********************
  ************************************************************/
 
@@ -319,7 +319,7 @@ gpa_cm_geldkarte_class_init (void *class_ptr, void *class_data)
   GpaCMGeldkarteClass *klass = class_ptr;
 
   parent_class = g_type_class_peek_parent (klass);
-  
+
   G_OBJECT_CLASS (klass)->finalize = gpa_cm_geldkarte_finalize;
 }
 
@@ -336,7 +336,7 @@ gpa_cm_geldkarte_init (GTypeInstance *instance, void *class_ptr)
 
 static void
 gpa_cm_geldkarte_finalize (GObject *object)
-{  
+{
 /*   GpaCMGeldkarte *card = GPA_CM_GELDKARTE (object); */
 
   parent_class->finalize (object);
@@ -348,7 +348,7 @@ GType
 gpa_cm_geldkarte_get_type (void)
 {
   static GType this_type = 0;
-  
+
   if (!this_type)
     {
       static const GTypeInfo this_info =
@@ -363,23 +363,23 @@ gpa_cm_geldkarte_get_type (void)
 	  0,    /* n_preallocs */
 	  gpa_cm_geldkarte_init
 	};
-      
+
       this_type = g_type_register_static (GPA_CM_OBJECT_TYPE,
                                           "GpaCMGeldkarte",
                                           &this_info, 0);
     }
-  
+
   return this_type;
 }
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 GtkWidget *
 gpa_cm_geldkarte_new ()
 {
-  return GTK_WIDGET (g_object_new (GPA_CM_GELDKARTE_TYPE, NULL));  
+  return GTK_WIDGET (g_object_new (GPA_CM_GELDKARTE_TYPE, NULL));
 }
 
 

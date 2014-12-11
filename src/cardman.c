@@ -289,7 +289,7 @@ card_reload_finish_idle_cb (void *user_data)
 static void
 card_reload (GpaCardManager *cardman)
 {
-  gpg_error_t err;
+  gpg_error_t err, operr;
   const char *application;
   char *command_buf = NULL;
   const char *command;
@@ -327,14 +327,14 @@ card_reload (GpaCardManager *cardman)
         }
       else
         auto_app = 1;
-      err = gpgme_op_assuan_transact (cardman->gpgagent,
-                                      command,
-                                      scd_data_cb, NULL,
-                                      scd_inq_cb, NULL,
-                                      scd_status_cb, cardman);
+      err = gpgme_op_assuan_transact_ext (cardman->gpgagent,
+                                          command,
+                                          scd_data_cb, NULL,
+                                          scd_inq_cb, NULL,
+                                          scd_status_cb, cardman, &operr);
       if (!err)
         {
-          err = gpgme_op_assuan_result (cardman->gpgagent)->err;
+          err = operr;
           if (!auto_app
               && gpg_err_source (err) == GPG_ERR_SOURCE_SCD
               && gpg_err_code (err) == GPG_ERR_CONFLICT)
@@ -344,19 +344,20 @@ card_reload (GpaCardManager *cardman)
                  again to display an application selection conflict
                  error only if it is not due to our own connection to
                  the scdaemon.  */
-              if (!gpgme_op_assuan_transact (cardman->gpgagent,
-                                             "SCD RESTART",
-                                             NULL, NULL, NULL, NULL,
-                                             NULL, NULL)
-                  && !gpgme_op_assuan_result (cardman->gpgagent)->err)
+              if (!gpgme_op_assuan_transact_ext (cardman->gpgagent,
+                                                 "SCD RESTART",
+                                                 NULL, NULL, NULL, NULL,
+                                                 NULL, NULL, &operr)
+                  && !operr)
                 {
-                  err = gpgme_op_assuan_transact (cardman->gpgagent,
-                                                  command,
-                                                  scd_data_cb, NULL,
-                                                  scd_inq_cb, NULL,
-                                                  scd_status_cb, cardman);
+                  err = gpgme_op_assuan_transact_ext (cardman->gpgagent,
+                                                      command,
+                                                      scd_data_cb, NULL,
+                                                      scd_inq_cb, NULL,
+                                                      scd_status_cb, cardman,
+                                                      &operr);
                   if (!err)
-                    err = gpgme_op_assuan_result (cardman->gpgagent)->err;
+                    err = operr;
                 }
             }
         }
@@ -388,9 +389,10 @@ card_reload (GpaCardManager *cardman)
         {
           g_debug ("assuan command `%s' failed: %s <%s>\n",
                    command, gpg_strerror (err), gpg_strsource (err));
-          if (!gpgme_op_assuan_transact (cardman->gpgagent,
-                                         "SCD SERIALNO undefined",
-                                         NULL, NULL, NULL, NULL, NULL, NULL))
+          if (!gpgme_op_assuan_transact_ext (cardman->gpgagent,
+                                             "SCD SERIALNO undefined",
+                                             NULL, NULL, NULL, NULL,
+                                             NULL, NULL, &operr) && !operr)
             err = 0;
           else
             {
@@ -405,22 +407,22 @@ card_reload (GpaCardManager *cardman)
         {
           /* Get the event counter to avoid a duplicate reload due to
              the ticker.  */
-          gpgme_op_assuan_transact (cardman->gpgagent,
-                                    "GETEVENTCOUNTER",
-                                    NULL, NULL,
-                                    NULL, NULL,
-                                    scd_status_cb, cardman);
+          gpgme_op_assuan_transact_ext (cardman->gpgagent,
+                                        "GETEVENTCOUNTER",
+                                        NULL, NULL,
+                                        NULL, NULL,
+                                        scd_status_cb, cardman, NULL);
 
           /* Now we need to get the APPTYPE of the card so that the
              correct GpaCM* object can can act on the data.  */
           command = "SCD GETATTR APPTYPE";
-          err = gpgme_op_assuan_transact (cardman->gpgagent,
-                                          command,
-                                          scd_data_cb, NULL,
-                                          scd_inq_cb, NULL,
-                                          scd_status_cb, cardman);
+          err = gpgme_op_assuan_transact_ext (cardman->gpgagent,
+                                              command,
+                                              scd_data_cb, NULL,
+                                              scd_inq_cb, NULL,
+                                              scd_status_cb, cardman, &operr);
           if (!err)
-            err = gpgme_op_assuan_result (cardman->gpgagent)->err;
+            err = operr;
 
           if (gpg_err_code (err) == GPG_ERR_CARD_NOT_PRESENT
               || gpg_err_code (err) == GPG_ERR_CARD_REMOVED)
@@ -522,11 +524,11 @@ ticker_cb (gpointer user_data)
   /* Note that we are single threaded and thus there is no need to
      lock the assuan context.  */
 
-  gpgme_op_assuan_transact (cardman->gpgagent,
-                            "GETEVENTCOUNTER",
-                            NULL, NULL,
-                            NULL, NULL,
-                            geteventcounter_status_cb, cardman);
+  gpgme_op_assuan_transact_ext (cardman->gpgagent,
+                                "GETEVENTCOUNTER",
+                                NULL, NULL,
+                                NULL, NULL,
+                                geteventcounter_status_cb, cardman, NULL);
 
   return TRUE;  /* Keep on ticking.  */
 }
@@ -564,8 +566,8 @@ card_genkey_completed (GpaCardManager *cardman, gpg_error_t err)
 static void
 card_genkey (GpaCardManager *cardman)
 {
+  gpg_error_t err, operr;
   GpaGenKeyCardOperation *op;
-  gpg_error_t err;
   char *keyattr;
 
   if (cardman->cardtype != GPA_CM_OPENPGP_TYPE)
@@ -578,11 +580,13 @@ card_genkey (GpaCardManager *cardman)
 
   /* Note: This test works only with GnuPG > 2.0.10 but that version
      is anyway required for the card manager to work correctly.  */
-  err = gpgme_op_assuan_transact (cardman->gpgagent,
-                                  "SCD GETINFO deny_admin",
-                                  NULL, NULL, NULL, NULL, NULL, NULL);
+  err = gpgme_op_assuan_transact_ext (cardman->gpgagent,
+                                      "SCD GETINFO deny_admin",
+                                      NULL, NULL, NULL, NULL, NULL, NULL,
+                                      &operr);
   if (!err)
-    err = gpgme_op_assuan_result (cardman->gpgagent)->err;
+    err = operr;
+
   if (!err)
     {
       gpa_window_error ("Admin commands are disabled in scdamon.\n"
@@ -844,7 +848,7 @@ setup_app_selector_data_cb (void *opaque, const void *data, size_t datalen)
 static void
 setup_app_selector (GpaCardManager *cardman)
 {
-  gpg_error_t err;
+  gpg_error_t err, operr;
   membuf_t mb;
   char *string;
   char *p, *p0, *p1;
@@ -854,11 +858,11 @@ setup_app_selector (GpaCardManager *cardman)
 
   init_membuf (&mb, 256);
 
-  err = gpgme_op_assuan_transact (cardman->gpgagent,
-                                  "SCD GETINFO app_list",
-                                  setup_app_selector_data_cb, &mb,
-                                  NULL, NULL, NULL, NULL);
-  if (err || gpgme_op_assuan_result (cardman->gpgagent)->err)
+  err = gpgme_op_assuan_transact_ext (cardman->gpgagent,
+                                      "SCD GETINFO app_list",
+                                      setup_app_selector_data_cb, &mb,
+                                      NULL, NULL, NULL, NULL, &operr);
+  if (err || operr)
     {
       g_free (get_membuf (&mb, NULL));
       return;

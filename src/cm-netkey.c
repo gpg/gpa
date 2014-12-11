@@ -319,7 +319,7 @@ reload_more_data_cb (void *opaque, const char *status, const char *args)
 static void
 reload_more_data (GpaCMNetkey *card)
 {
-  gpg_error_t err;
+  gpg_error_t err, operr;
   gpgme_ctx_t gpgagent;
   GtkWidget *vbox;
   struct reload_more_data_parm parm;
@@ -355,13 +355,14 @@ reload_more_data (GpaCMNetkey *card)
 
   g_debug ("  parm.ctx=%p", parm.ctx);
 
-  err = gpgme_op_assuan_transact (gpgagent,
-                                  "SCD LEARN --keypairinfo",
-                                  NULL, NULL, NULL, NULL,
-                                  reload_more_data_cb, &parm);
+  err = gpgme_op_assuan_transact_ext (gpgagent,
+                                      "SCD LEARN --keypairinfo",
+                                      NULL, NULL, NULL, NULL,
+                                      reload_more_data_cb, &parm, &operr);
   g_debug ("  assuan ret=%d", err);
   if (!err)
-    err = gpgme_op_assuan_result (gpgagent)->err;
+    err = operr;
+
   if (err)
     g_debug ("SCD LEARN failed: %s", gpg_strerror (err));
 
@@ -479,6 +480,7 @@ reload_data (GpaCMNetkey *card)
   };
   int attridx;
   gpg_error_t err = 0;
+  gpg_error_t operr;
   char command[100];
   struct scd_getattr_parm parm;
   gpgme_ctx_t gpgagent;
@@ -497,13 +499,13 @@ reload_data (GpaCMNetkey *card)
       parm.entry_id = attrtbl[attridx].entry_id;
       parm.updfnc   = attrtbl[attridx].updfnc;
       snprintf (command, sizeof command, "SCD GETATTR %s", parm.name);
-      err = gpgme_op_assuan_transact (gpgagent,
-                                      command,
-                                      NULL, NULL,
-                                      NULL, NULL,
-                                      scd_getattr_cb, &parm);
+      err = gpgme_op_assuan_transact_ext (gpgagent,
+                                          command,
+                                          NULL, NULL,
+                                          NULL, NULL,
+                                          scd_getattr_cb, &parm, &operr);
       if (!err)
-        err = gpgme_op_assuan_result (gpgagent)->err;
+        err = operr;
 
       if (err && attrtbl[attridx].entry_id == ENTRY_NKS_VERSION)
         {
@@ -616,7 +618,7 @@ learn_keys_clicked_cb (GtkButton *button, void *user_data)
 static void
 change_nullpin (GpaCMNetkey *card)
 {
-  gpg_error_t err;
+  gpg_error_t err, operr;
   GtkWidget *dialog;
   gpgme_ctx_t gpgagent;
   int is_sigg;
@@ -666,15 +668,16 @@ change_nullpin (GpaCMNetkey *card)
   okay = (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK);
   if (okay)
     {
-      err = gpgme_op_assuan_transact (gpgagent,
-                                      is_sigg
-                                      ? "SCD PASSWD --nullpin PW1.CH.SIG"
-                                      : "SCD PASSWD --nullpin PW1.CH",
-                                      NULL, NULL,
-                                      NULL, NULL,
-                                      NULL, NULL);
+      err = gpgme_op_assuan_transact_ext (gpgagent,
+                                          is_sigg
+                                          ? "SCD PASSWD --nullpin PW1.CH.SIG"
+                                          : "SCD PASSWD --nullpin PW1.CH",
+                                          NULL, NULL,
+                                          NULL, NULL,
+                                          NULL, NULL, &operr);
       if (!err)
-        err = gpgme_op_assuan_result (gpgagent)->err;
+        err = operr;
+
       if (gpg_err_code (err) == GPG_ERR_CANCELED)
         okay = 0; /* No need to reload the data.  */
       else if (err)
@@ -696,7 +699,7 @@ change_nullpin (GpaCMNetkey *card)
 static void
 change_or_reset_pin (GpaCMNetkey *card, int info_idx)
 {
-  gpg_error_t err;
+  gpg_error_t err, operr;
   GtkWidget *dialog;
   gpgme_ctx_t gpgagent;
   int reset_mode;
@@ -781,10 +784,12 @@ change_or_reset_pin (GpaCMNetkey *card, int info_idx)
 
       snprintf (command, sizeof command, "SCD PASSWD%s %s",
                 reset_mode? " --reset":"", pwidstr);
-      err = gpgme_op_assuan_transact (gpgagent, command,
-                                      NULL, NULL, NULL, NULL, NULL, NULL);
+      err = gpgme_op_assuan_transact_ext (gpgagent, command,
+                                          NULL, NULL, NULL, NULL, NULL, NULL,
+                                          &operr);
       if (!err)
-        err = gpgme_op_assuan_result (gpgagent)->err;
+        err = operr;
+
       if (gpg_err_code (err) == GPG_ERR_CANCELED)
         okay = 0; /* No need to reload the data.  */
       else if (err)

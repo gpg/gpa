@@ -597,7 +597,7 @@ reload_data (GpaCMOpenpgp *card)
     { NULL }
   };
   int attridx;
-  gpg_error_t err;
+  gpg_error_t err, operr;
   char command[100];
   struct scd_getattr_parm parm;
   gpgme_ctx_t gpgagent;
@@ -616,13 +616,13 @@ reload_data (GpaCMOpenpgp *card)
       parm.updfnc   = attrtbl[attridx].updfnc;
       snprintf (command, sizeof command, "SCD GETATTR %s", parm.name);
 
-      err = gpgme_op_assuan_transact (gpgagent,
-                                      command,
-                                      NULL, NULL,
-                                      NULL, NULL,
-                                      scd_getattr_cb, &parm);
+      err = gpgme_op_assuan_transact_ext (gpgagent,
+                                          command,
+                                          NULL, NULL,
+                                          NULL, NULL,
+                                          scd_getattr_cb, &parm, &operr);
       if (!err)
-        err = gpgme_op_assuan_result (gpgagent)->err;
+        err = operr;
 
       if (err)
         {
@@ -648,7 +648,7 @@ static gpg_error_t
 save_attr (GpaCMOpenpgp *card, const char *name,
            const char *value, int is_escaped)
 {
-  gpg_error_t err;
+  gpg_error_t err, operr;
   char *command;
   gpgme_ctx_t gpgagent;
 
@@ -670,13 +670,13 @@ save_attr (GpaCMOpenpgp *card, const char *name,
       command = g_strdup_printf ("SCD SETATTR %s %s", name, p);
       xfree (p);
     }
-  err = gpgme_op_assuan_transact (gpgagent,
-                                  command,
-                                  NULL, NULL,
-                                  NULL, NULL,
-                                  NULL, NULL);
+  err = gpgme_op_assuan_transact_ext (gpgagent,
+                                      command,
+                                      NULL, NULL,
+                                      NULL, NULL,
+                                      NULL, NULL, &operr);
   if (!err)
-    err = gpgme_op_assuan_result (gpgagent)->err;
+    err = operr;
 
   if (err && !(gpg_err_code (err) == GPG_ERR_CANCELED
                && gpg_err_source (err) == GPG_ERR_SOURCE_PINENTRY))
@@ -1050,7 +1050,7 @@ edit_focus_cb (GtkWidget *widget, GtkDirectionType direction, void *opaque)
 static void
 change_pin (GpaCMOpenpgp *card, int pinno)
 {
-  gpg_error_t err;
+  gpg_error_t err, operr;
   GtkWidget *dialog;
   gpgme_ctx_t gpgagent;
   int reset_mode = 0;
@@ -1171,10 +1171,12 @@ change_pin (GpaCMOpenpgp *card, int pinno)
 
       snprintf (command, sizeof command, "SCD PASSWD%s %d",
                 reset_mode? " --reset":"", pinno+1);
-      err = gpgme_op_assuan_transact (gpgagent, command,
-                                      NULL, NULL, NULL, NULL, NULL, NULL);
+      err = gpgme_op_assuan_transact_ext (gpgagent, command,
+                                          NULL, NULL, NULL, NULL, NULL, NULL,
+                                          &operr);
       if (!err)
-        err = gpgme_op_assuan_result (gpgagent)->err;
+        err = operr;
+
       if (gpg_err_code (err) == GPG_ERR_CANCELED)
         okay = 0; /* No need to reload the data.  */
       else if (err)
