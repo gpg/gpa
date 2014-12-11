@@ -1102,7 +1102,7 @@ change_pin (GpaCMOpenpgp *card, int pinno)
                "Entering a wrong value for the PIN "
                "decrements the retry counter.  If the retry counters "
                "of the PIN and of the Reset Code are both down "
-               "to zero, the PIN can still be reseted by using the "
+               "to zero, the PIN can still be reset by using the "
                "Admin-PIN.\n"
                "\n"
                "A fresh standard card has set the PIN to the value "
@@ -1120,7 +1120,7 @@ change_pin (GpaCMOpenpgp *card, int pinno)
                "value of the PIN and then to enter a new value for the "
                "Reset Code and repeat that new value at another prompt.");
   else if (reset_mode && pinno < 2)
-    string = _("<b>Reseting the PIN or the Reset Code</b>\n"
+    string = _("<b>Resetting the PIN or the Reset Code</b>\n"
                "\n"
                "If the retry counters of the PIN and of the Reset Code are "
                "both down to zero, it is only possible to reset them if you "

@@ -525,7 +525,7 @@ gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
       message = g_strdup_printf (file_item->direct_name
 				 ? _("\"%s\" contained no valid "
 				     "encrypted data.")
-				 : _("The file \"%s\" contained no valid"
+				 : _("The file \"%s\" contained no valid "
 				     "encrypted data."),
 				 file_item->direct_name
 				 ? file_item->direct_name
