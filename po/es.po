@@ -160,6 +160,21 @@ msgstr "Avanzado"
 msgid "Expert"
 msgstr "Experto"
 
+msgid "A keyserver has not been configured."
+msgstr ""
+
+msgid "Configure backend to use a keyserver?"
+msgstr ""
+
+msgid "_Yes"
+msgstr "_Sí"
+
+msgid "_No"
+msgstr "_No"
+
+msgid "Configuring the backend to use a keyserver failed"
+msgstr ""
+
 msgid "days"
 msgstr "días"
 
@@ -339,14 +354,14 @@ msgstr "/Editar/Pr_eferencias del motor..."
 msgid "Configure the backend programs"
 msgstr ""
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
 "\n"
 "\t\"%s\"\n"
 "\n"
 "This is sensitive information, and should be stored carefully\n"
-"(for example, in a floppy disk kept in a safe place)."
+"(for example, on a USB stick kept in a safe place)."
 msgstr ""
 "Se ha copiado su clave secreta al archivo:\n"
 "\n"
@@ -381,21 +396,22 @@ msgstr "Las claves se han exportado a %s."
 msgid "Only keys of the same procotol may be exported as a collection."
 msgstr ""
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The selected key will be sent to a public key\n"
-"server (\"%s\").\n"
-"Are you sure you want to distribute this key?"
+"The selected key(s) will be sent to a public key\n"
+"server (\"%s\")."
 msgstr ""
 "La clave seleccionada se enviará a un servidor de\n"
 "claves público (\"%s\").\n"
 "¿Está seguro de que quiere distribuir esta clave?"
 
-msgid "_Yes"
-msgstr "_Sí"
+#, fuzzy
+msgid "Are you sure you want to distribute this key?"
+msgstr "Seguro que desea borrar esta clave?"
 
-msgid "_No"
-msgstr "_No"
+#, fuzzy
+msgid "Error sending key(s) to the server."
+msgstr "E_nviar claves al servidor"
 
 msgid "The keys have been sent to the server."
 msgstr "Las claves se han enviado al servidor."
@@ -2047,7 +2063,7 @@ msgid ""
 "\n"
 "A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
 "However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be nown to the issuer.  "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
 "Please check the instructions of your issuer.\n"
 "\n"
 "If you proceed you will be asked to enter the current value of the <b>Admin-"

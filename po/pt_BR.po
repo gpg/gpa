@@ -162,6 +162,21 @@ msgstr ""
 msgid "Expert"
 msgstr "Exportar"
 
+msgid "A keyserver has not been configured."
+msgstr ""
+
+msgid "Configure backend to use a keyserver?"
+msgstr ""
+
+msgid "_Yes"
+msgstr "_Sim"
+
+msgid "_No"
+msgstr "_Não"
+
+msgid "Configuring the backend to use a keyserver failed"
+msgstr ""
+
 msgid "days"
 msgstr "dias"
 
@@ -352,14 +367,14 @@ msgstr "/Editar/Pr_eferências..."
 msgid "Configure the backend programs"
 msgstr ""
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
 "\n"
 "\t\"%s\"\n"
 "\n"
 "This is sensitive information, and should be stored carefully\n"
-"(for example, in a floppy disk kept in a safe place)."
+"(for example, on a USB stick kept in a safe place)."
 msgstr ""
 "Uma cópia de sua chave secreta foi feita para o arquivo:\n"
 "\n"
@@ -398,16 +413,17 @@ msgstr ""
 
 #, c-format
 msgid ""
-"The selected key will be sent to a public key\n"
-"server (\"%s\").\n"
-"Are you sure you want to distribute this key?"
+"The selected key(s) will be sent to a public key\n"
+"server (\"%s\")."
 msgstr ""
 
-msgid "_Yes"
-msgstr "_Sim"
+#, fuzzy
+msgid "Are you sure you want to distribute this key?"
+msgstr "Você está certo que deseja apagar esta chave?"
 
-msgid "_No"
-msgstr "_Não"
+#, fuzzy
+msgid "Error sending key(s) to the server."
+msgstr "_Servidor de chave:"
 
 msgid "The keys have been sent to the server."
 msgstr ""
@@ -2057,7 +2073,7 @@ msgid ""
 "\n"
 "A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
 "However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be nown to the issuer.  "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
 "Please check the instructions of your issuer.\n"
 "\n"
 "If you proceed you will be asked to enter the current value of the <b>Admin-"

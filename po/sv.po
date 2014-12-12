@@ -148,6 +148,23 @@ msgstr "Avancerat"
 msgid "Expert"
 msgstr "Expert"
 
+msgid "A keyserver has not been configured."
+msgstr ""
+
+#, fuzzy
+msgid "Configure backend to use a keyserver?"
+msgstr "Konfigurera bakändesprogram"
+
+msgid "_Yes"
+msgstr "_Ja"
+
+msgid "_No"
+msgstr "_Nej"
+
+#, fuzzy
+msgid "Configuring the backend to use a keyserver failed"
+msgstr "Konfigurera bakändesprogram"
+
 msgid "days"
 msgstr "dagar"
 
@@ -317,14 +334,14 @@ msgstr "Inställningar för bakände"
 msgid "Configure the backend programs"
 msgstr "Konfigurera bakändesprogram"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
 "\n"
 "\t\"%s\"\n"
 "\n"
 "This is sensitive information, and should be stored carefully\n"
-"(for example, in a floppy disk kept in a safe place)."
+"(for example, on a USB stick kept in a safe place)."
 msgstr ""
 "En kopia av din hemliga nyckel har skapats i filen:\n"
 "\n"
@@ -359,21 +376,22 @@ msgstr "Nycklarna har exporterats till %s."
 msgid "Only keys of the same procotol may be exported as a collection."
 msgstr ""
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The selected key will be sent to a public key\n"
-"server (\"%s\").\n"
-"Are you sure you want to distribute this key?"
+"The selected key(s) will be sent to a public key\n"
+"server (\"%s\")."
 msgstr ""
 "Den valda nyckeln kommer att skickas till en\n"
 "publik nyckelserver (\"%s\").\n"
 "Är du säker på att du vill distribuera nyckeln?"
 
-msgid "_Yes"
-msgstr "_Ja"
+#, fuzzy
+msgid "Are you sure you want to distribute this key?"
+msgstr "Är du säker på att du vill ta bort denna nyckel?"
 
-msgid "_No"
-msgstr "_Nej"
+#, fuzzy
+msgid "Error sending key(s) to the server."
+msgstr "Skicka nycklar till server"
 
 msgid "The keys have been sent to the server."
 msgstr "Nycklarna har skickats till servern."
@@ -2002,7 +2020,7 @@ msgid ""
 "\n"
 "A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
 "However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be nown to the issuer.  "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
 "Please check the instructions of your issuer.\n"
 "\n"
 "If you proceed you will be asked to enter the current value of the <b>Admin-"

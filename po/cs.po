@@ -146,6 +146,23 @@ msgstr "Pokročilý"
 msgid "Expert"
 msgstr "Expert"
 
+msgid "A keyserver has not been configured."
+msgstr ""
+
+#, fuzzy
+msgid "Configure backend to use a keyserver?"
+msgstr "Nastavit programy backednu"
+
+msgid "_Yes"
+msgstr "_Ano"
+
+msgid "_No"
+msgstr "_Ne"
+
+#, fuzzy
+msgid "Configuring the backend to use a keyserver failed"
+msgstr "Nastavit programy backednu"
+
 msgid "days"
 msgstr "dny"
 
@@ -311,14 +328,14 @@ msgstr "Na_stavení backendu"
 msgid "Configure the backend programs"
 msgstr "Nastavit programy backednu"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
 "\n"
 "\t\"%s\"\n"
 "\n"
 "This is sensitive information, and should be stored carefully\n"
-"(for example, in a floppy disk kept in a safe place)."
+"(for example, on a USB stick kept in a safe place)."
 msgstr ""
 "Kopie vašeho soukromého klíče byla uložena v souboru:\n"
 "\n"
@@ -353,21 +370,22 @@ msgstr "Klíče byly exportovány do %s."
 msgid "Only keys of the same procotol may be exported as a collection."
 msgstr "Pouze klíče stejného protokolu smějí být exportovány jako kolekce."
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The selected key will be sent to a public key\n"
-"server (\"%s\").\n"
-"Are you sure you want to distribute this key?"
+"The selected key(s) will be sent to a public key\n"
+"server (\"%s\")."
 msgstr ""
 "Vybraný klíč bude odeslán na server klíčů\n"
 "(\"%s\").\n"
 "Určitě chcete šířit tento klíč?"
 
-msgid "_Yes"
-msgstr "_Ano"
+#, fuzzy
+msgid "Are you sure you want to distribute this key?"
+msgstr "Jste si jistý, že chcete smazat tento klíč?"
 
-msgid "_No"
-msgstr "_Ne"
+#, fuzzy
+msgid "Error sending key(s) to the server."
+msgstr "Odeslat klíče na server..."
 
 msgid "The keys have been sent to the server."
 msgstr "Klíče byly odeslány na server."
@@ -2007,6 +2025,7 @@ msgstr ""
 "Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
 "PIN, poté novou hodnotu Reset kódu a tu na dalším řádku zopakovali."
 
+#, fuzzy
 msgid ""
 "<b>Reseting the PIN or the Reset Code</b>\n"
 "\n"
@@ -2016,7 +2035,7 @@ msgid ""
 "\n"
 "A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
 "However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be nown to the issuer.  "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
 "Please check the instructions of your issuer.\n"
 "\n"
 "If you proceed you will be asked to enter the current value of the <b>Admin-"
