@@ -28,7 +28,7 @@ min_automake_version="1.10"
 # (git tag -s gpa-1.n.m) and run "./autogen.sh --force".  Please
 # bump the version number immediately *after* the release and do
 # another commit and push so that the git magic is able to work.
-m4_define([mym4_version], [0.9.7])
+m4_define([mym4_version], [0.9.8])
 
 # Below is m4 magic to extract and compute the git revision number,
 # the decimalized short revision number, a beta version string and a
