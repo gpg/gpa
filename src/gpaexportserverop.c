@@ -157,7 +157,7 @@ confirm_send (GtkWidget *parent, const gchar *server)
   gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
 			  _("_Yes"), GTK_RESPONSE_YES,
 			  _("_No"), GTK_RESPONSE_NO, NULL);
-  if (gtk_dialog_run (GTK_DIALOG (msgbox)) == GTK_RESPONSE_NO)
+  if (gtk_dialog_run (GTK_DIALOG (msgbox)) != GTK_RESPONSE_YES)
     {
       gtk_widget_destroy (msgbox);
       return FALSE;
