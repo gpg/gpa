@@ -484,7 +484,7 @@ prepare_io_streams (assuan_context_t ctx,
 #endif
       if (!ctrl->input_channel)
         {
-          g_debug ("error creating input channel");
+          /* g_debug ("error creating input channel"); */
           err = gpg_error (GPG_ERR_EIO);
           goto leave;
         }

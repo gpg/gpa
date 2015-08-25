@@ -193,6 +193,16 @@ struct edit_parms_s
 };
 
 
+/* Parse the args of an ERROR status line and return its error
+   code.  */
+static gpg_error_t
+parse_status_error (const char *args)
+{
+  size_t n = strcspn (args, " \t");
+  return (gpg_error_t)strtoul (args+n, NULL, 10);
+}
+
+
 /* The edit callback proper */
 static gpg_error_t
 edit_fnc (void *opaque, gpgme_status_code_t status,
@@ -278,6 +288,14 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
             gpgme_io_write (fd, result, strlen (result));
 	  gpgme_io_write (fd, "\n", 1);
 	}
+    }
+  else if (parms->err == gpg_error (GPG_ERR_EAGAIN))
+    {
+      parms->err = 0;
+      if (debug_edit_fsm)
+        g_debug ("edit_fnc: newstate=%d again, default response", parms->state);
+      /* Send an empty line as default response.  */
+      gpgme_io_write (fd, "\n", 1);
     }
   else
     {
@@ -647,6 +665,12 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
           next_state = SIGN_ERROR;
           *err = gpg_error (GPG_ERR_UNUSABLE_PUBKEY);
         }
+      else if (status == GPGME_STATUS_GET_LINE
+               || status == GPGME_STATUS_GET_BOOL)
+        {
+          next_state = current_state;
+          *err = gpg_error (GPG_ERR_EAGAIN);
+        }
       else
         {
           next_state = SIGN_ERROR;
@@ -677,6 +701,12 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
           next_state = SIGN_ERROR;
           *err = gpg_error (GPG_ERR_UNUSABLE_PUBKEY);
         }
+      else if (status == GPGME_STATUS_GET_LINE
+               || status == GPGME_STATUS_GET_BOOL)
+        {
+          next_state = current_state;
+          *err = gpg_error (GPG_ERR_EAGAIN);
+        }
       else
         {
           next_state = SIGN_ERROR;
@@ -688,6 +718,12 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
           g_str_equal (args, "sign_uid.class"))
         {
           next_state = SIGN_SET_CHECK_LEVEL;
+        }
+      else if (status == GPGME_STATUS_GET_LINE
+               || status == GPGME_STATUS_GET_BOOL)
+        {
+          next_state = current_state;
+          *err = gpg_error (GPG_ERR_EAGAIN);
         }
       else
         {
@@ -701,6 +737,12 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
         {
           next_state = SIGN_CONFIRM;
         }
+      else if (status == GPGME_STATUS_GET_LINE
+               || status == GPGME_STATUS_GET_BOOL)
+        {
+          next_state = current_state;
+          *err = gpg_error (GPG_ERR_EAGAIN);
+        }
       else
         {
           next_state = SIGN_ERROR;
@@ -712,6 +754,17 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
           g_str_equal (args, "keyedit.prompt"))
         {
           next_state = SIGN_QUIT;
+        }
+      else if (status == GPGME_STATUS_GET_LINE
+               || status == GPGME_STATUS_GET_BOOL)
+        {
+          next_state = current_state;
+          *err = gpg_error (GPG_ERR_EAGAIN);
+        }
+      else if (status == GPGME_STATUS_ERROR)
+        {
+          next_state = SIGN_ERROR;
+          *err = parse_status_error (args);
         }
       else
         {
