@@ -46,6 +46,13 @@
 #include "options.h" /* ditto */
 
 
+/* Global constants.  */
+#define GPA_MAX_UID_WIDTH 50  /* # of chars after wich a user id is
+                                 truncated in dialog boxes.  */
+
+
+
+/* Some variable declarations.  */
 extern GtkWidget *global_windowMain;
 extern GtkWidget *global_windowTip;
 extern GList *global_defaultRecipients;

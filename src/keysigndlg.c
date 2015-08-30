@@ -89,7 +89,10 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
 	  /* One user ID on each line.  */
 	  string = gpa_gpgme_key_get_userid (uid);
           label = gtk_label_new (string);
+          gpa_add_tooltip (label, string);
           g_free (string);
+          gtk_label_set_max_width_chars (GTK_LABEL (label), GPA_MAX_UID_WIDTH);
+          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
           gtk_box_pack_start_defaults (GTK_BOX(uid_box), label);
           gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         }
@@ -106,7 +109,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   label = gtk_label_new (_("Fingerprint:"));
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  
+
   string = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
   label = gtk_label_new (string);
   g_free (string);
@@ -143,7 +146,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   response = gtk_dialog_run (GTK_DIALOG (window));
   if (response == GTK_RESPONSE_YES)
     {
-      *sign_locally = check && 
+      *sign_locally = check &&
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
       gtk_widget_destroy (window);
       return TRUE;

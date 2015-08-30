@@ -32,7 +32,7 @@
 #include "convert.h"
 
 /* A table showing some basic information about the key, such as the
-   key id and the user name.  */ 
+   key id and the user name.  */
 GtkWidget *
 gpa_key_info_new (gpgme_key_t key)
 {
@@ -41,7 +41,7 @@ gpa_key_info_new (gpgme_key_t key)
   gchar *string;
   gpgme_user_id_t uid;
 
-  table = gtk_table_new (2, 2, FALSE);
+  table = gtk_table_new (3, 2, FALSE);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 0);
 
@@ -61,7 +61,11 @@ gpa_key_info_new (gpgme_key_t key)
       uid = uid->next;
     }
   label = gtk_label_new (string);
+  gpa_add_tooltip (label, string);
   g_free (string);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), GPA_MAX_UID_WIDTH);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 		    GTK_FILL, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
@@ -69,7 +73,7 @@ gpa_key_info_new (gpgme_key_t key)
   /* User Name */
   label = gtk_label_new (key->uids->next == NULL
 			 ? _("User Name:") : _("User Names:") );
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL,
                     0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.0);
 
@@ -83,8 +87,19 @@ gpa_key_info_new (gpgme_key_t key)
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
+  /* Fingerprint */
+  label = gtk_label_new (_("Fingerprint:"));
+  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+
+  string = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
+  label = gtk_label_new (string);
+  g_free (string);
+  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3, GTK_FILL, 0, 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
   return table;
-}      
+}
 
 /* A Frame to select an expiry date.  */
 
@@ -132,7 +147,7 @@ gpa_expiry_frame_after (GtkToggleButton * radioAfter, gpointer param)
   gtk_widget_set_sensitive (frame->entryAfter, TRUE);
   gtk_widget_set_sensitive (frame->comboAfter, TRUE);
 
-  gtk_widget_grab_focus (frame->entryAfter);  
+  gtk_widget_grab_focus (frame->entryAfter);
 }
 
 
@@ -152,7 +167,7 @@ static void
 expire_date_toggled_cb (GtkToggleButton *togglebutton, gpointer user_data)
 {
   GtkWidget *calendar = user_data;
-  
+
   gtk_widget_set_sensitive (calendar,
                             gtk_toggle_button_get_active (togglebutton));
 }
@@ -203,7 +218,7 @@ gpa_expiry_frame_new (GDate * expiryDate)
   comboAfter = gtk_combo_box_new_text ();
   frame->comboAfter = comboAfter;
   for (i = 3; i >= 0; i--)
-    gtk_combo_box_prepend_text (GTK_COMBO_BOX (comboAfter), 
+    gtk_combo_box_prepend_text (GTK_COMBO_BOX (comboAfter),
 				gpa_unit_expiry_time_string (i));
   gtk_combo_box_set_active (GTK_COMBO_BOX (comboAfter), 0);
   gtk_box_pack_start (GTK_BOX (hboxAfter), comboAfter, FALSE, FALSE, 0);
@@ -282,7 +297,7 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
                              &year, &month, &day);
       *date = g_date_new_dmy (day, month+1, year);
       result = TRUE;
-    } 
+    }
   else
     {
       /* this should never happen */
@@ -322,7 +337,7 @@ gpa_expiry_frame_validate(GtkWidget * expiry_frame)
     {
       /* This case is always correct.  */
       result = NULL;
-    } 
+    }
   return result;
 }
-    
+
