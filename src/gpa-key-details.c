@@ -38,7 +38,7 @@
 #include "certchain.h"
 #include "gpasubkeylist.h"
 #include "gpa-key-details.h"
-
+#include "gtktools.h"
 
 
 /* Object's class definition.  */
@@ -173,9 +173,17 @@ details_page_fill_key (GpaKeyDetails *kdt, gpgme_key_t key)
   gtk_label_set_text (GTK_LABEL (kdt->detail_key_trust),
                       gpa_key_validity_string (key));
 
+#if GPGME_VERSION_NUMBER >= 0x010601  /* GPGME >= 1.6.1 */
+  text = gpgme_pubkey_algo_string (key->subkeys);
+  gtk_label_set_text (GTK_LABEL (kdt->detail_key_type), text? text : "?");
+  gpgme_free (text);
+#endif  /* GPGME >= 1.6.1 */
+
   text = g_strdup_printf (_("%s %u bits"),
-			  gpgme_pubkey_algo_name (key->subkeys->pubkey_algo),
-			  key->subkeys->length);
+                          gpgme_pubkey_algo_name (key->subkeys->pubkey_algo)?
+                          gpgme_pubkey_algo_name (key->subkeys->pubkey_algo):
+                          (key->subkeys->curve? "ECC" : "?"),
+                          key->subkeys->length);
   if (key->subkeys->curve)
     {
       char *text2;
@@ -183,8 +191,13 @@ details_page_fill_key (GpaKeyDetails *kdt, gpgme_key_t key)
       g_free (text);
       text = text2;
     }
+#if GPGME_VERSION_NUMBER >= 0x010601  /* GPGME >= 1.6.1 */
+  gpa_add_tooltip (kdt->detail_key_type, text);
+#else
   gtk_label_set_text (GTK_LABEL (kdt->detail_key_type), text);
+#endif
   g_free (text);
+
 
   gtk_label_set_text (GTK_LABEL (kdt->detail_owner_trust),
                       gpa_key_ownertrust_string (key));
