@@ -762,7 +762,7 @@ key_manager_mapped (gpointer param)
       /* FIXME: We assume that the only reason a user might not have a
          default key is because he has no private keys.  */
       if (! asked_about_key_generation
-          && ! gpa_options_get_default_key (gpa_options_get_instance()))
+          && ! gpa_options_have_default_key (gpa_options_get_instance()))
         {
 	  GtkWidget *dialog;
 	  GtkResponseType response;
@@ -787,7 +787,7 @@ key_manager_mapped (gpointer param)
       else if (!asked_about_key_backup
                && !gpa_options_get_backup_generated
 	       (gpa_options_get_instance ())
-               && !gpa_options_get_default_key (gpa_options_get_instance()))
+               && !gpa_options_have_default_key (gpa_options_get_instance()))
         {
 	  GtkWidget *dialog;
 	  GtkResponseType response;
@@ -1569,4 +1569,26 @@ gboolean
 gpa_key_manager_is_open (void)
 {
   return !!this_instance;
+}
+
+
+/* Return true if we should ask for a first time key generation.
+ *
+ * This function basically duplicates the conditions from
+ * key_manager_mapped.  However that function mus be used from a
+ * key_manager context and can't easily be used from other GPA
+ * components.  */
+gboolean
+key_manager_maybe_firsttime (void)
+{
+  if (!gpa_options_get_simplified_ui (gpa_options_get_instance ()))
+    return FALSE;
+
+  if (!gpa_options_have_default_key (gpa_options_get_instance()))
+    return TRUE;
+
+  if (!gpa_options_get_backup_generated (gpa_options_get_instance ()))
+    return TRUE;
+
+  return FALSE;
 }

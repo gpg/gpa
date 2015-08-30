@@ -270,6 +270,17 @@ gpa_options_get_default_key (GpaOptions *options)
 }
 
 
+/* Return whether a default key is somehow known.  This is either the
+   default key's fingerprint from gpa.conf or the default key from the
+   options dialog.  */
+gboolean
+gpa_options_have_default_key (GpaOptions *options)
+{
+  return ((options->default_key_fpr && *options->default_key_fpr)
+          || options->default_key);
+}
+
+
 /* Return the default key gpg would use, or at least a first
  * approximation. Currently this means the first secret key in the keyring.
  * If there's no secret key at all, return NULL

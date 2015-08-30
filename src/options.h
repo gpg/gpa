@@ -93,6 +93,9 @@ gpgme_key_t gpa_options_get_default_key (GpaOptions *options);
 /* Try to find a reasonable value for the default key if there wasn't one */
 void gpa_options_update_default_key (GpaOptions *options);
 
+/* Return whether a default key is known.  */
+gboolean gpa_options_have_default_key (GpaOptions *options);
+
 /* Specify the default keyserver */
 void gpa_options_set_default_keyserver (GpaOptions *options,
                                         const gchar *keyserver);

@@ -524,24 +524,10 @@ main (int argc, char *argv[])
      that the agent has been startet. */
   gpa_start_agent ();
 
-  /* Handle command line options.  */
-  cms_hack = !args.disable_x509;
-
-  /* Start the key manger by default.  */
-  if (!args.start_key_manager
-      && !args.start_file_manager
-      && !args.start_clipboard
-      && !args.start_settings
-      && !args.start_card_manager
-      )
-    args.start_key_manager = TRUE;
-
-  /* Note: We can not use GPGME's engine info, as that returns NULL
-     (default) for home_dir.  Consider improving GPGME to get it from
-     there, or using gpgconf (via GPGME).  */
   gnupg_homedir = default_homedir ();
-  /* FIXME: GnuPG can not create a key if its home directory is
-     missing.  We help it out here.  Should be fixed in GnuPG.  */
+
+  /* GnuPG can not create a key if its home directory is missing.  We
+     help it out here.  Should be fixed in GnuPG.  */
   if (! g_file_test (gnupg_homedir, G_FILE_TEST_IS_DIR))
     g_mkdir (gnupg_homedir, 0700);
 
@@ -560,6 +546,26 @@ main (int argc, char *argv[])
       if (gpa_check_server () == 2)
         gpa_send_to_server ("KILL_UISERVER");
       return 0;
+    }
+
+  /* Handle command line options.  */
+  cms_hack = !args.disable_x509;
+
+  /* Start the default component.  */
+  if (!args.start_key_manager
+      && !args.start_file_manager
+      && !args.start_clipboard
+      && !args.start_settings
+      && !args.start_card_manager
+      )
+    {
+      /* The default action is to start the clipboard.  However, if we
+         have not yet created a key we remind the user by starting
+         with the key manager dialog.  */
+      if (key_manager_maybe_firsttime ())
+        args.start_key_manager = TRUE;
+      else
+        args.start_clipboard = TRUE;
     }
 
 

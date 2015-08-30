@@ -18,7 +18,8 @@ signatures and to manage the private and public keys.
 .SH "OPTIONS"
 .TP
 .B \-c, \-\-clipboard
-Open the clipboard.
+Open the clipboard.  This is the \fIdefault\fP action if no arguments are
+given and a key has already been created.
 .TP
 .B \-C, \-\-card
 Start with the card-manager open.
@@ -47,7 +48,8 @@ Start with the file-manager open. This is the \fIdefault\fP if one or more
 \fIFILE(S)\fP are added to the command arguments.
 .TP
 .B \-k, \-\-keyring
-Start with the keyring editor. This is the \fIdefault\fP.
+Start with the keyring editor. This is the \fIdefault\fP for a new
+installation.
 .TP
 .B \-o, \-\-options=\fIFILE\fP
 Read options from the specified file instead of \fI~/.gnupg/gpa.conf\fP.

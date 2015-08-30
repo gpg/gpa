@@ -14,7 +14,7 @@
  * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>. 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef KEYMANAGER_H
@@ -51,6 +51,8 @@ GType gpa_key_manager_get_type (void) G_GNUC_CONST;
 GtkWidget *gpa_key_manager_get_instance (gboolean *r_created);
 
 gboolean gpa_key_manager_is_open (void);
+
+gboolean key_manager_maybe_firsttime (void);
 
 
 #endif /*KEYMANAGER_H*/
