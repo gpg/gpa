@@ -45,19 +45,17 @@ See the file INSTALL for installation details; in short:
     make
     make install
 
-The configure scrits check whether all required libraries are
+The configure scripts check whether all required libraries are
 installed and that they are recent enough.  In order to do anything
 useful with GPA you also need the GNU Privacy Guard (GnuPG) version 2
-installed - see http://www.gnupg.org.
-
-Please report any problems to gpa-dev@gnupg.org.
+installed - see https://gnupg.org.
 
 
 Installation under MS-Windows
 =============================
 
 Instead of building GPA by yourself, you probably want to download
-the ready-to-use installer from http://www.gpg4win.org, the light
+the ready-to-use installer from https://www.gpg4win.org, the light
 installer is sufficient, don't you? ;-)
 
 If you want to do it your self, you need to have the Windows
