@@ -1,5 +1,15 @@
-Noteworthy changes in version 0.9.8 (unreleased)
+Noteworthy changes in version 0.9.8 (2015-09-09)
 ------------------------------------------------
+
+ * Does start with the clipboard view after a key has been created.
+
+ * Limit the size of dialogs by truncating too long user ids.
+
+ * Make the window frame's close button work as expected.
+
+ * With a decent version of libgpgme the key algorithm and size is
+   shown using the GnuPG 2.1 format.
+
 
 Noteworthy changes in version 0.9.7 (2014-12-12)
 ------------------------------------------------

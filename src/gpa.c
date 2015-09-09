@@ -1,6 +1,6 @@
 /* gpa.c - The GNU Privacy Assistant main file.
    Copyright (C) 2000-2002 G-N-U GmbH.
-   Copyright (C) 2005, 2008, 2012, 2014 g10 Code GmbH.
+   Copyright (C) 2005, 2008, 2012, 2014, 2015 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -87,7 +87,7 @@ static gpa_args_t args;
 /* The copyright notice.  */
 static const char *copyright =
 "Copyright (C) 2000-2002 Miguel Coca, G-N-U GmbH, Intevation GmbH.\n"
-"Copyright (C) 2005-2014 g10 Code GmbH.\n"
+"Copyright (C) 2005-2015 g10 Code GmbH.\n"
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "This is free software, and you are welcome to redistribute it\n"
 "under certain conditions.  See the file COPYING for details.\n";
