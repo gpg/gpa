@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.8\n"
-"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"Report-Msgid-Bugs-To: translations@gnupg.org\n"
 "PO-Revision-Date: 2011-12-12 10:17+0100\n"
 "Last-Translator: Sergei Smirnov <moscow@hro.org>\n"
 "Language-Team: Russian <moscow@hro.org>\n"
@@ -652,6 +652,9 @@ msgstr "Имена:"
 
 msgid "Key ID:"
 msgstr "ID ключа:"
+
+msgid "Fingerprint:"
+msgstr "Отпечаток:"
 
 msgid "Expiration"
 msgstr "Срок годности"
@@ -1403,9 +1406,6 @@ msgstr[2] "%d ключей выбрано"
 #, fuzzy
 msgid "User name:"
 msgstr "Имя:"
-
-msgid "Fingerprint:"
-msgstr "Отпечаток:"
 
 msgid "Expires at:"
 msgstr "Годен до:"

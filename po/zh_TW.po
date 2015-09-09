@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7.0\n"
-"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"Report-Msgid-Bugs-To: translations@gnupg.org\n"
 "PO-Revision-Date: 2003-10-20 11:55+0200\n"
 "Last-Translator: Shell Hung <shell@linux.org.hk>\n"
 "Language-Team: Hong Kong Linux User Group <info@linux.org.hk>\n"
@@ -659,6 +659,9 @@ msgstr "用者名稱 :"
 
 msgid "Key ID:"
 msgstr "密鑰 ID:"
+
+msgid "Fingerprint:"
+msgstr "指紋:"
 
 msgid "Expiration"
 msgstr "有效期"
@@ -1387,9 +1390,6 @@ msgstr[1] "%d 密鑰被選擇"
 #, fuzzy
 msgid "User name:"
 msgstr "用者名稱 :"
-
-msgid "Fingerprint:"
-msgstr "指紋:"
 
 msgid "Expires at:"
 msgstr "有效期至:"

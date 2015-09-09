@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
-"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"Report-Msgid-Bugs-To: translations@gnupg.org\n"
 "PO-Revision-Date: 2014-12-08 17:36+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -619,6 +619,9 @@ msgstr "Benutzernamen:"
 
 msgid "Key ID:"
 msgstr "Schlüsselkennung:"
+
+msgid "Fingerprint:"
+msgstr "Fingerabdruck:"
 
 msgid "Expiration"
 msgstr "Verfallsdatum"
@@ -1347,9 +1350,6 @@ msgstr[1] "%d Schlüssel ausgewählt"
 
 msgid "User name:"
 msgstr "Benutzerkennung:"
-
-msgid "Fingerprint:"
-msgstr "Fingerabdruck:"
 
 msgid "Expires at:"
 msgstr "ungültig ab:"

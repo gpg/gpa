@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gpa-0.7\n"
-"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"Report-Msgid-Bugs-To: translations@gnupg.org\n"
 "PO-Revision-Date: 2004-08-22 02:23+0200\n"
 "Last-Translator: Emilian Nowak <emil5@go2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -665,6 +665,9 @@ msgstr "Nazwy użytkownika:"
 
 msgid "Key ID:"
 msgstr "ID klucza:"
+
+msgid "Fingerprint:"
+msgstr "Odcisk klucza:"
 
 msgid "Expiration"
 msgstr "Data końca ważności"
@@ -1413,9 +1416,6 @@ msgstr[1] "wybranych kluczy - %d"
 #, fuzzy
 msgid "User name:"
 msgstr "Nazwa użytkownika:"
-
-msgid "Fingerprint:"
-msgstr "Odcisk klucza:"
 
 msgid "Expires at:"
 msgstr "Traci ważność:"

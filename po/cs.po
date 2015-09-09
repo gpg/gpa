@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
-"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"Report-Msgid-Bugs-To: translations@gnupg.org\n"
 "PO-Revision-Date: 2014-09-11 09:17+0100\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: czech <cs@li.org>\n"
@@ -618,6 +618,9 @@ msgstr "Jména uživatelů:"
 
 msgid "Key ID:"
 msgstr "ID klíče:"
+
+msgid "Fingerprint:"
+msgstr "Otisk:"
 
 msgid "Expiration"
 msgstr "Platnost do"
@@ -1335,9 +1338,6 @@ msgstr[2] "%d klíčů vybráno"
 
 msgid "User name:"
 msgstr "Uživatelské jméno:"
-
-msgid "Fingerprint:"
-msgstr "Otisk:"
 
 msgid "Expires at:"
 msgstr "Vyprší:"

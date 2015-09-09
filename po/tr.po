@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gpa 0.7.0\n"
-"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"Report-Msgid-Bugs-To: translations@gnupg.org\n"
 "PO-Revision-Date: 2011-12-12 10:14+0100\n"
 "Last-Translator: Mert Çetin <mertc@su.sabanciuniv.edu>\n"
 "Language-Team: xTc & Déjà Vu\n"
@@ -663,6 +663,9 @@ msgstr "Kullanýcý Adlarý:"
 
 msgid "Key ID:"
 msgstr "Anahtar Kimliði:"
+
+msgid "Fingerprint:"
+msgstr "Parmakizi:"
 
 msgid "Expiration"
 msgstr "Sona Erme"
@@ -1406,9 +1409,6 @@ msgstr[1] "%d anahtar seçildi"
 #, fuzzy
 msgid "User name:"
 msgstr "Kullanýcý Adý:"
-
-msgid "Fingerprint:"
-msgstr "Parmakizi:"
 
 msgid "Expires at:"
 msgstr "Bitim tarihi:"

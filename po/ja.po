@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GPA 0.6.1-cvs\n"
-"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"Report-Msgid-Bugs-To: translations@gnupg.org\n"
 "PO-Revision-Date: 2003-11-03 17:11+0100\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
@@ -668,6 +668,9 @@ msgstr "ユーザ名:"
 
 msgid "Key ID:"
 msgstr "鍵 ID:"
+
+msgid "Fingerprint:"
+msgstr "指紋:"
 
 msgid "Expiration"
 msgstr "期限"
@@ -1405,9 +1408,6 @@ msgstr[1] "%d 個の鍵が選択されています"
 #, fuzzy
 msgid "User name:"
 msgstr "ユーザ名:"
-
-msgid "Fingerprint:"
-msgstr "指紋:"
 
 msgid "Expires at:"
 msgstr "有効期限:"

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
-"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
+"Report-Msgid-Bugs-To: translations@gnupg.org\n"
 "PO-Revision-Date: 2011-12-12 10:13+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -635,6 +635,9 @@ msgstr "Användarnamn:"
 
 msgid "Key ID:"
 msgstr "Nyckelidentitet:"
+
+msgid "Fingerprint:"
+msgstr "Fingeravtryck:"
 
 msgid "Expiration"
 msgstr "Utgångstid"
@@ -1356,9 +1359,6 @@ msgstr[1] "%d nycklar markerade"
 #, fuzzy
 msgid "User name:"
 msgstr "Användarnamn:"
-
-msgid "Fingerprint:"
-msgstr "Fingeravtryck:"
 
 msgid "Expires at:"
 msgstr "Går ut den:"
