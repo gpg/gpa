@@ -1,5 +1,7 @@
-Noteworthy changes in version 0.9.9 (unreleased)
+Noteworthy changes in version 0.9.9 (2015-09-09)
 ------------------------------------------------
+
+ * Fixed build problem in 0.9.8 if Libgpgme < 1.6.1 is used.
 
 
 Noteworthy changes in version 0.9.8 (2015-09-09)
