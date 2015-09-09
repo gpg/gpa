@@ -40,7 +40,7 @@ static gboolean query_tooltip_cb (GtkWidget *wdiget, int x, int y,
 typedef enum
 {
   SUBKEY_ID,
-#if GPGME_VERSION_NUMBER >= 0x010601  /* GPGME < 1.6.1 */
+#if GPGME_VERSION_NUMBER < 0x010601  /* GPGME < 1.6.1 */
   SUBKEY_SIZE,
 #endif
   SUBKEY_ALGO,
