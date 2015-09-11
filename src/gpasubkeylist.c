@@ -68,7 +68,9 @@ gpa_subkey_list_new (void)
 
   /* Init the model */
   store = gtk_list_store_new (SUBKEY_N_COLUMNS,
+#if GPGME_VERSION_NUMBER < 0x010601  /* GPGME < 1.6.1 */
 			      G_TYPE_STRING,
+#endif
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
