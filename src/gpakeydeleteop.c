@@ -35,10 +35,10 @@
 
 /* Internal functions */
 static gboolean gpa_key_delete_operation_idle_cb (gpointer data);
-static void gpa_key_delete_operation_done_error_cb (GpaContext *context, 
+static void gpa_key_delete_operation_done_error_cb (GpaContext *context,
 						    gpg_error_t err,
 						    GpaKeyDeleteOperation *op);
-static void gpa_key_delete_operation_done_cb (GpaContext *context, 
+static void gpa_key_delete_operation_done_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaKeyDeleteOperation *op);
 
@@ -48,7 +48,7 @@ static GObjectClass *parent_class = NULL;
 
 static void
 gpa_key_delete_operation_finalize (GObject *object)
-{  
+{
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -88,7 +88,7 @@ static void
 gpa_key_delete_operation_class_init (GpaKeyDeleteOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_key_delete_operation_constructor;
@@ -99,7 +99,7 @@ GType
 gpa_key_delete_operation_get_type (void)
 {
   static GType key_delete_operation_type = 0;
-  
+
   if (!key_delete_operation_type)
     {
       static const GTypeInfo key_delete_operation_info =
@@ -114,12 +114,12 @@ gpa_key_delete_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_key_delete_operation_init,
       };
-      
-      key_delete_operation_type = g_type_register_static 
+
+      key_delete_operation_type = g_type_register_static
 	(GPA_KEY_OPERATION_TYPE, "GpaKeyDeleteOperation",
 	 &key_delete_operation_info, 0);
     }
-  
+
   return key_delete_operation_type;
 }
 
@@ -131,7 +131,7 @@ GpaKeyDeleteOperation*
 gpa_key_delete_operation_new (GtkWidget *window, GList *keys)
 {
   GpaKeyDeleteOperation *op;
-  
+
   op = g_object_new (GPA_KEY_DELETE_OPERATION_TYPE,
 		     "window", window,
 		     "keys", keys,
@@ -144,7 +144,7 @@ gpa_key_delete_operation_new (GtkWidget *window, GList *keys)
 
 static gpg_error_t
 gpa_key_delete_operation_start (GpaKeyDeleteOperation *op)
-{ 
+{
   gpg_error_t err;
   gpgme_key_t key;
 
@@ -154,6 +154,7 @@ gpa_key_delete_operation_start (GpaKeyDeleteOperation *op)
   if (! gpa_delete_dialog_run (GPA_OPERATION (op)->window, key))
     return gpg_error (GPG_ERR_CANCELED);
 
+  gpgme_set_protocol (GPA_OPERATION (op)->context->ctx, key->protocol);
   err = gpgme_op_delete_start (GPA_OPERATION(op)->context->ctx, key, TRUE);
   if (err)
     {
@@ -194,7 +195,7 @@ gpa_key_delete_operation_next (GpaKeyDeleteOperation *op)
   g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 }
 
-static void gpa_key_delete_operation_done_error_cb (GpaContext *context, 
+static void gpa_key_delete_operation_done_error_cb (GpaContext *context,
 						    gpg_error_t err,
 						    GpaKeyDeleteOperation *op)
 {
@@ -210,7 +211,7 @@ static void gpa_key_delete_operation_done_error_cb (GpaContext *context,
     }
 }
 
-static void gpa_key_delete_operation_done_cb (GpaContext *context, 
+static void gpa_key_delete_operation_done_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaKeyDeleteOperation *op)
 {
