@@ -1,6 +1,6 @@
 /* gpafiledecryptop.c - The GpaOperation object.
  * Copyright (C) 2003 Miguel Coca.
- * Copyright (C) 2008 g10 Code GmbH.
+ * Copyright (C) 2008, 2015 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -310,6 +310,7 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
   else
     {
       gchar *plain_filename = file_item->filename_in;
+      char *filename_used;
 
       file_item->filename_out = destination_filename
 	(plain_filename, gpgme_get_armor (GPA_OPERATION (op)->context->ctx));
@@ -321,15 +322,20 @@ gpa_file_encrypt_operation_start (GpaFileEncryptOperation *op,
 	return gpg_error (GPG_ERR_GENERAL);
 
       op->cipher_fd = gpa_open_output (file_item->filename_out, &op->cipher,
-				       GPA_OPERATION (op)->window);
+				       GPA_OPERATION (op)->window,
+                                       &filename_used);
       if (op->cipher_fd == -1)
 	{
 	  gpgme_data_release (op->plain);
 	  close (op->plain_fd);
 	  op->plain_fd = -1;
+          xfree (filename_used);
 	  /* FIXME: Error value.  */
 	  return gpg_error (GPG_ERR_GENERAL);
 	}
+
+      xfree (file_item->filename_out);
+      file_item->filename_out = filename_used;
     }
 
   /* Start the operation.  */

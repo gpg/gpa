@@ -1,6 +1,7 @@
 /* gpgmetools.h - additional gpgme support functions for GPA.
    Copyright (C) 2002, Miguel Coca.
    Copyright (C) 2005, 2008 g10 Code GmbH.
+   Copyright (C) 2015 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -114,8 +115,13 @@ void dump_data_to_file (gpgme_data_t data, FILE *file);
    dump_data_to_file is used.  Opens a file for writing, asking the
    user to overwrite if it exists and reporting any errors.  Returns
    NULL on failure, but you can assume the user has been informed of
-   the error (or maybe he just didn't want to overwrite!).  */
-FILE *gpa_fopen (const char *filename, GtkWidget *parent);
+   the error (or maybe he just didn't want to overwrite!).  The
+   filename of the file that is actually open (if FILENAME already
+   exists, then the user can choose a different file) is saved in
+   *FILENAME_USED.  It must be xfreed.  This is set even if this
+   function returns NULL!  */
+FILE *gpa_fopen (const char *filename, GtkWidget *parent,
+                 char **filename_used);
 
 /* Do a gpgme_data_new_from_file and report any GPG_ERR_File_Error to
    the user.  */
@@ -125,11 +131,15 @@ gpg_error_t gpa_gpgme_data_new_from_file (gpgme_data_t *data,
 
 /* Create a new gpgme_data_t from a file for writing, and return the
    file descriptor for the file.  Always reports all errors to the
-   user.  The _direct variant does not check for overwriting.  */
+   user.  The _direct variant does not check for overwriting.  The
+   filename of the file that is actually open (if FILENAME already
+   exists, then the user can choose a different file) is saved in
+   *FILENAME_USED.  It must be xfreed.  This is set even if this
+   function returns NULL!  */
 int gpa_open_output_direct (const char *filename, gpgme_data_t *data,
 			    GtkWidget *parent);
 int gpa_open_output (const char *filename, gpgme_data_t *data,
-		     GtkWidget *parent);
+		     GtkWidget *parent, char **filename_used);
 
 /* Create a new gpgme_data_t from a file for reading, and return the
    file descriptor for the file.  Always reports all errors to the user.  */

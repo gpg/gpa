@@ -1,6 +1,6 @@
 /* gpgmetools.h - Additional gpgme support functions for GPA.
    Copyright (C) 2002 Miguel Coca.
-   Copyright (C) 2005, 2008, 2009, 2012, 2014 g10 Code GmbH.
+   Copyright (C) 2005, 2008, 2009, 2012, 2014, 2015 g10 Code GmbH.
 
    This file is part of GPA
 
@@ -160,28 +160,56 @@ dump_data_to_file (gpgme_data_t data, FILE *file)
 }
 
 
-static gboolean
+static char *
 check_overwriting (const char *filename, GtkWidget *parent)
 {
-  /* If the file exists, ask before overwriting.  */
-  if (g_file_test (filename, G_FILE_TEST_EXISTS))
+  GtkWidget *dialog;
+  int response;
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+  char *filename_used = xstrdup (filename);
+
+  while (1)
     {
-      GtkWidget *msgbox = gtk_message_dialog_new
-	(GTK_WINDOW(parent), GTK_DIALOG_MODAL,
-	 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-	 _("The file %s already exists.\n"
-	   "Do you want to overwrite it?"), filename);
-      gtk_dialog_add_buttons (GTK_DIALOG (msgbox),
-			      _("_Yes"), GTK_RESPONSE_YES,
-			      _("_No"), GTK_RESPONSE_NO, NULL);
-      if (gtk_dialog_run (GTK_DIALOG (msgbox)) != GTK_RESPONSE_YES)
-	{
-	  gtk_widget_destroy (msgbox);
-	  return FALSE;
-	}
-      gtk_widget_destroy (msgbox);
+      /* If the file exists, ask before overwriting.  */
+      if (! g_file_test (filename_used, G_FILE_TEST_EXISTS))
+        return filename_used;
+
+      dialog = gtk_message_dialog_new
+        (GTK_WINDOW (parent), GTK_DIALOG_MODAL,
+         GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+         _("The file %s already exists.\n"
+           "Do you want to overwrite it?"), filename_used);
+      gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                              _("_Yes"), GTK_RESPONSE_YES,
+                              _("_No"), GTK_RESPONSE_NO,
+                              _("_Use a different filename"), 1,
+                              NULL);
+
+      response = gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      if (response == GTK_RESPONSE_YES)
+        return filename_used;
+      if (response == GTK_RESPONSE_NO)
+        {
+          xfree (filename_used);
+          return NULL;
+        }
+
+      /* Use a different filename.  */
+      dialog = gtk_file_chooser_dialog_new
+        ("Open File", GTK_WINDOW (parent), action,
+         _("_Cancel"), GTK_RESPONSE_CANCEL,
+         _("_Open"), GTK_RESPONSE_ACCEPT,
+         NULL);
+      response = gtk_dialog_run (GTK_DIALOG (dialog));
+      if (response == GTK_RESPONSE_ACCEPT)
+        {
+          GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+          filename_used = gtk_file_chooser_get_filename (chooser);
+        }
+
+      gtk_widget_destroy (dialog);
     }
-  return TRUE;
 }
 
 /* Not really a gpgme function, but needed in most places
@@ -190,20 +218,20 @@ check_overwriting (const char *filename, GtkWidget *parent)
    NULL on failure, but you can assume the user has been informed of
    the error (or maybe he just didn't want to overwrite!).  */
 FILE *
-gpa_fopen (const char *filename, GtkWidget *parent)
+gpa_fopen (const char *filename, GtkWidget *parent, char **filename_used)
 {
   FILE *target;
 
-  if (!check_overwriting (filename, parent))
+  *filename_used = check_overwriting (filename, parent);
+  if (! *filename_used)
     return NULL;
-  target = g_fopen (filename, "w");
+  target = g_fopen (*filename_used, "w");
   if (!target)
     {
       gchar *message;
-      message = g_strdup_printf ("%s: %s", filename, strerror(errno));
+      message = g_strdup_printf ("%s: %s", *filename_used, strerror(errno));
       gpa_window_error (message, parent);
       g_free (message);
-      return NULL;
     }
   return target;
 }
@@ -237,12 +265,17 @@ gpa_open_output_direct (const char *filename, gpgme_data_t *data,
 
 
 int
-gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent)
+gpa_open_output (const char *filename, gpgme_data_t *data, GtkWidget *parent,
+                 char **filename_used)
 {
-  if (! check_overwriting (filename, parent))
+  int res;
+
+  *filename_used = check_overwriting (filename, parent);
+  if (! *filename_used)
     return -1;
 
-  return gpa_open_output_direct (filename, data, parent);
+  res = gpa_open_output_direct (*filename_used, data, parent);
+  return res;
 }
 
 
