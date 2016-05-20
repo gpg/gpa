@@ -211,26 +211,26 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
   struct edit_parms_s *parms = opaque;
   char *result = NULL;
 
-  /* Ignore these status lines, as they don't require any response */
-  if (status == GPGME_STATUS_EOF
-      || status == GPGME_STATUS_GOT_IT
-      || status == GPGME_STATUS_NEED_PASSPHRASE
-      || status == GPGME_STATUS_NEED_PASSPHRASE_SYM
-      || status == GPGME_STATUS_GOOD_PASSPHRASE
-      || status == GPGME_STATUS_BAD_PASSPHRASE
-      || status == GPGME_STATUS_USERID_HINT
-      || status == GPGME_STATUS_SIGEXPIRED
-      || status == GPGME_STATUS_KEYEXPIRED
-      || status == GPGME_STATUS_BACKUP_KEY_CREATED
-      || status == GPGME_STATUS_CARDCTRL       /* Issued by gpg1.  */
-      || status == GPGME_STATUS_SC_OP_SUCCESS
-      || status == GPGME_STATUS_PINENTRY_LAUNCHED
-      || status == GPGME_STATUS_PROGRESS)
+  /* Whitelist all status code we know about.  */
+  switch (status)
     {
+    case GPGME_STATUS_ALREADY_SIGNED:
+    case GPGME_STATUS_ERROR:
+    case GPGME_STATUS_GET_BOOL:
+    case GPGME_STATUS_GET_LINE:
+    case GPGME_STATUS_KEY_CREATED:
+    case GPGME_STATUS_NEED_PASSPHRASE_SYM:
+    case GPGME_STATUS_SC_OP_FAILURE:
+      break;
+
+    default:
+      /* We don't know and thus do not need this status code.  */
       return parms->err;
     }
-  else if (!parms->need_status_passphrase_sym
-           && status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
+
+
+  if (!parms->need_status_passphrase_sym
+      && status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
     {
       return parms->err;
     }
