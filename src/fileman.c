@@ -656,13 +656,12 @@ static gboolean
 dnd_drop_handler (GtkWidget *widget, GdkDragContext *context,
                   gint x, gint y, guint tim, gpointer user_data)
 {
-  GdkAtom  target_type;
+  GdkAtom target_type = gdk_atom_intern ("text/uri-list", FALSE);
 
   /* If the source offers a target we request the data from her. */
-  if (context->targets)
+  if (context->targets && g_list_find (context->targets,
+                                       GDK_ATOM_TO_POINTER (target_type)))
     {
-      target_type = GDK_POINTER_TO_ATOM
-        (g_list_nth_data (context->targets, DND_TARGET_URI_LIST));
       gtk_drag_get_data (widget, context, target_type, tim);
 
       return TRUE;
