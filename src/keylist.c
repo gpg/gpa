@@ -55,7 +55,6 @@ typedef enum
   /* These are the displayed columns */
   GPA_KEYLIST_COLUMN_IMAGE,
   GPA_KEYLIST_COLUMN_KEYTYPE,
-  GPA_KEYLIST_COLUMN_KEYID,
   GPA_KEYLIST_COLUMN_CREATED,
   GPA_KEYLIST_COLUMN_EXPIRY,
   GPA_KEYLIST_COLUMN_OWNERTRUST,
@@ -194,7 +193,6 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
 
   /* Setup the model.  */
   store = gtk_list_store_new (GPA_KEYLIST_N_COLUMNS,
-			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
@@ -426,7 +424,7 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
   GpaKeyList *list = data;
   GtkListStore *store;
   GtkTreeIter iter;
-  const gchar *keyid, *ownertrust, *validity;
+  const gchar *ownertrust, *validity;
   gchar *userid, *created, *expiry;
   gboolean has_secret;
   long int val_value;
@@ -472,7 +470,6 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
   list->keys = g_list_append (list->keys, key);
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (list)));
   /* Get the column values */
-  keyid = gpa_gpgme_key_get_short_keyid (key);
   keytype = (key->protocol == GPGME_PROTOCOL_OpenPGP? "P" :
              key->protocol == GPGME_PROTOCOL_CMS? "X" : "?");
   created = gpa_creation_date_string (key->subkeys->timestamp);
@@ -507,7 +504,6 @@ gpa_keylist_next (gpgme_key_t key, gpointer data)
 
   gtk_list_store_set (store, &iter,
 		      GPA_KEYLIST_COLUMN_KEYTYPE, keytype,
-		      GPA_KEYLIST_COLUMN_KEYID, keyid,
 		      GPA_KEYLIST_COLUMN_CREATED, created,
 		      GPA_KEYLIST_COLUMN_EXPIRY, expiry,
 		      GPA_KEYLIST_COLUMN_OWNERTRUST, ownertrust,
@@ -567,21 +563,17 @@ search_keylist_function (GtkTreeModel *model, gint column,
                          gpointer search_data)
 {
   gboolean result = TRUE;
-  gchar *key_id, *user_id;
+  gchar *user_id;
   gint search_len;
 
   gtk_tree_model_get (model, iter,
-                      GPA_KEYLIST_COLUMN_KEYID, &key_id,
                       GPA_KEYLIST_COLUMN_USERID, &user_id, -1);
 
   search_len = strlen (key_to_search_for);
 
-  if (!g_ascii_strncasecmp (key_id, key_to_search_for, search_len))
-    result=FALSE;
   if (!g_ascii_strncasecmp (user_id, key_to_search_for, search_len))
     result=FALSE;
 
-  g_free (key_id);
   g_free (user_id);
 
   return result;
@@ -622,16 +614,6 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
      _("This columns lists the type of the certificate."
        "  A 'P' denotes OpenPGP and a 'X' denotes X.509 (S/MIME)."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes
-    (NULL, renderer, "text", GPA_KEYLIST_COLUMN_KEYID, NULL);
-  gpa_set_column_title
-    (column, _("Key ID"),
-     _("The key ID is a short number to identify a certificate."));
-  gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
-  gtk_tree_view_column_set_sort_column_id (column, GPA_KEYLIST_COLUMN_KEYID);
-  gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes

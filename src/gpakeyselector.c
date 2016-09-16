@@ -23,6 +23,8 @@
 #include "gpa.h"
 #include "gpakeyselector.h"
 #include "keytable.h"
+#include "gtktools.h"
+#include "convert.h"
 
 /* Callbacks */
 
@@ -35,7 +37,7 @@ static GObjectClass *parent_class = NULL;
 
 static void
 gpa_key_selector_finalize (GObject *object)
-{  
+{
   GpaKeySelector *sel = GPA_KEY_SELECTOR (object);
 
   /* Dereference all keys in the list */
@@ -49,7 +51,7 @@ static void
 gpa_key_selector_class_init (GpaKeySelectorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gpa_key_selector_finalize;
@@ -57,7 +59,7 @@ gpa_key_selector_class_init (GpaKeySelectorClass *klass)
 
 typedef enum
 {
-  GPA_KEY_SELECTOR_COLUMN_KEYID,
+  GPA_KEY_SELECTOR_COLUMN_CREATED,
   GPA_KEY_SELECTOR_COLUMN_USERID,
   GPA_KEY_SELECTOR_COLUMN_KEY,
   GPA_KEY_SELECTOR_N_COLUMNS
@@ -69,7 +71,7 @@ gpa_key_selector_init (GpaKeySelector *selector)
   GtkListStore *store;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
-  GtkTreeSelection *selection = 
+  GtkTreeSelection *selection =
     gtk_tree_view_get_selection (GTK_TREE_VIEW (selector));
 
   selector->secret = FALSE;
@@ -83,12 +85,14 @@ gpa_key_selector_init (GpaKeySelector *selector)
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (selector), TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer,
-						     "text",
-						     GPA_KEY_SELECTOR_COLUMN_KEYID,
-						     NULL);
+  column = gtk_tree_view_column_new_with_attributes
+    (NULL, renderer, "text", GPA_KEY_SELECTOR_COLUMN_CREATED, NULL);
+  gpa_set_column_title
+    (column, _("Created"),
+     _("The Creation Date is the date the certificate was created."));
   gtk_tree_view_append_column (GTK_TREE_VIEW (selector), column);
-  gtk_tree_view_column_set_sort_column_id (column, GPA_KEY_SELECTOR_COLUMN_KEYID);
+  gtk_tree_view_column_set_sort_column_id
+    (column, GPA_KEY_SELECTOR_COLUMN_CREATED);
   gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
@@ -107,7 +111,7 @@ GType
 gpa_key_selector_get_type (void)
 {
   static GType key_selector_type = 0;
-  
+
   if (!key_selector_type)
     {
       static const GTypeInfo key_selector_info =
@@ -122,12 +126,12 @@ gpa_key_selector_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_key_selector_init,
       };
-      
+
       key_selector_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
 						  "GpaKeySelector",
 						  &key_selector_info, 0);
     }
-  
+
   return key_selector_type;
 }
 
@@ -152,13 +156,13 @@ gpa_key_selector_new (gboolean secret, gboolean only_usable_keys)
        * shouldn't matter much.
        */
       gpa_keytable_force_reload (gpa_keytable_get_secret_instance (),
-				 gpa_key_selector_next_key, 
+				 gpa_key_selector_next_key,
 				 gpa_key_selector_done, sel);
     }
   else
     {
       gpa_keytable_list_keys (gpa_keytable_get_public_instance (),
-			      gpa_key_selector_next_key, 
+			      gpa_key_selector_next_key,
 			      gpa_key_selector_done, sel);
     }
 
@@ -170,7 +174,7 @@ gpa_key_selector_new (gboolean secret, gboolean only_usable_keys)
 GList *
 gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
 {
-  GtkTreeSelection *selection = 
+  GtkTreeSelection *selection =
     gtk_tree_view_get_selection (GTK_TREE_VIEW (selector));
   GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (selector));
   GList *list = gtk_tree_selection_get_selected_rows (selection, &model);
@@ -194,43 +198,43 @@ gpa_key_selector_get_selected_keys (GpaKeySelector * selector)
 
   g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
   g_list_free (list);
-  
+
   return keys;
 }
 
-gboolean 
+gboolean
 gpa_key_selector_has_selection (GpaKeySelector * selector)
 {
-  int selected =  gtk_tree_selection_count_selected_rows 
+  int selected =  gtk_tree_selection_count_selected_rows
     (gtk_tree_view_get_selection (GTK_TREE_VIEW (selector)));
   return (selected > 0);
 }
 
 /* Internal */
 
-void 
+void
 gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
 {
   GpaKeySelector *selector = data;
   GtkListStore *store;
   GtkTreeIter iter;
-  const gchar *keyid;
+  gchar *created;
   gchar *userid;
 
   if (key && selector->only_usable_keys
       && (key->revoked || key->disabled || key->expired || key->invalid))
     return;
-  
+
   selector->keys = g_list_prepend (selector->keys, key);
   store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (selector)));
-  /* The Key ID */
-  keyid = gpa_gpgme_key_get_short_keyid (key);
+  /* The Creation date */
+  created = gpa_creation_date_string (key->subkeys->timestamp);
   /* The user ID */
   userid = gpa_gpgme_key_get_userid (key->uids);
   /* Append it to the list */
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-		      GPA_KEY_SELECTOR_COLUMN_KEYID, keyid, 
+		      GPA_KEY_SELECTOR_COLUMN_CREATED, created,
 		      GPA_KEY_SELECTOR_COLUMN_USERID, userid,
 		      GPA_KEY_SELECTOR_COLUMN_KEY, key, -1);
   /* If this is a secret key selector, select the default key */
@@ -239,21 +243,22 @@ gpa_key_selector_next_key (gpgme_key_t key, gpointer data)
       const char *key_fpr = key->subkeys->fpr;
       gpgme_key_t akey;
       const char *default_key;
-      
+
       akey = gpa_options_get_default_key (gpa_options_get_instance());
       default_key = akey? akey->subkeys->fpr : NULL;
 
-      if (default_key && g_str_equal (key_fpr, default_key)) 
+      if (default_key && g_str_equal (key_fpr, default_key))
         {
-          gtk_tree_selection_select_iter 
+          gtk_tree_selection_select_iter
             (gtk_tree_view_get_selection (GTK_TREE_VIEW (selector)),&iter);
         }
     }
   /* Clean up */
   g_free (userid);
+  g_free (created);
 }
 
-void 
+void
 gpa_key_selector_done (gpointer data)
 {
   GpaKeySelector *selector = data;
