@@ -581,6 +581,7 @@ expired_key (gpgme_key_t key, GtkWidget *parent)
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
 
+  /* Fixme: We leak the date string.  */
   message = g_strdup_printf (_("The following key expired on %s:"),
                              gpa_expiry_date_string
                              (key->subkeys->expires));

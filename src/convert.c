@@ -72,28 +72,41 @@ gpa_time_unit_from_string (const char *string)
 
 
 char *
-gpa_expiry_date_string (unsigned long expiry_time)
+gpa_date_string (unsigned long t)
 {
   gchar *result;
-  GDate expiry_date;
+  GDate date;
 
-  if (sizeof (time_t) <= 4 && expiry_time == (time_t)2145914603)
+  if (sizeof (time_t) <= 4 && t == (time_t)2145914603)
     {
       /* 2145914603 (2037-12-31 23:23:23) is used by GPGME to indicate
          a time we can't represent. */
       result = g_strdup (">= 2038");
     }
-  else if ( expiry_time > 0 )
+  else if ( t > 0 )
     {
-      g_date_set_time_t (&expiry_date, (time_t) expiry_time);
+      g_date_set_time_t (&date, (time_t)t );
       result = g_strdup_printf ("%04d-%02d-%02d",
-                                g_date_get_year (&expiry_date),
-                                g_date_get_month (&expiry_date),
-                                g_date_get_day (&expiry_date));
+                                g_date_get_year (&date),
+                                g_date_get_month (&date),
+                                g_date_get_day (&date));
     }
   else
-    result = g_strdup (_("never expires"));
+    result = g_strdup ("");
   return result;
+}
+
+
+char *
+gpa_expiry_date_string (unsigned long expiry_time)
+{
+  char *p = gpa_date_string (expiry_time);
+  if (!*p)
+    {
+      g_free (p);
+      p = g_strdup (_("never expires"));
+    }
+  return p;
 }
 
 

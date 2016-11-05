@@ -723,6 +723,9 @@ key_manager_selection_changed (GtkTreeSelection *treeselection,
          is okay. */
       gpgme_set_keylist_mode (self->ctx->ctx,
 			      (old_mode
+#ifdef GPGME_KEYLIST_MODE_WITH_TOFU
+                               | GPGME_KEYLIST_MODE_WITH_TOFU
+#endif
                                | GPGME_KEYLIST_MODE_SIGS
                                | GPGME_KEYLIST_MODE_VALIDATE));
       gpgme_set_protocol (self->ctx->ctx, key->protocol);

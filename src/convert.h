@@ -14,7 +14,7 @@
  * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.  
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef CONVERT_H
@@ -22,6 +22,7 @@
 
 const char *gpa_unit_expiry_time_string (int idx);
 char gpa_time_unit_from_string (const char *string);
+char *gpa_date_string (unsigned long t);
 char *gpa_expiry_date_string (unsigned long expiry_time);
 char *gpa_creation_date_string (unsigned long creation_time);
 const char *gpa_sex_char_to_string (char sex);
