@@ -442,7 +442,7 @@ msgid "\"%s\" contained no valid encrypted data."
 msgstr "\"%s\" dosyasý þifrelenmiþ geçerli veri içermiyor."
 
 #, fuzzy, c-format
-msgid "The file \"%s\" contained no validencrypted data."
+msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "\"%s\" dosyasý þifrelenmiþ geçerli veri içermiyor."
 
 msgid "Wrong passphrase!"
@@ -524,8 +524,12 @@ msgid ""
 "(you may not set the expiration time to the past.)"
 msgstr ""
 
-msgid "Key ID"
-msgstr "Anahtar Kimliði"
+#, fuzzy
+msgid "Created"
+msgstr "Yaratýlma Tarihi:"
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr ""
 
 msgid "User Name"
 msgstr "Kullanýcý Adý"
@@ -595,10 +599,6 @@ msgstr "Algoritma"
 
 msgid "Size"
 msgstr "Boyut"
-
-#, fuzzy
-msgid "Created"
-msgstr "Yaratýlma Tarihi:"
 
 #, fuzzy
 msgid "Expires"
@@ -735,6 +735,13 @@ msgid ""
 msgstr ""
 "%s dosyasý zaten var. \n"
 "Üzerine yazmak istiyor musunuz?"
+
+msgid "_Use a different filename"
+msgstr ""
+
+#, fuzzy
+msgid "_Open"
+msgstr "/Dosya/_Aç"
 
 msgid ""
 "************************************************************************\n"
@@ -1198,13 +1205,6 @@ msgid ""
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#, fuzzy
-msgid "The key ID is a short number to identify a certificate."
-msgstr "Anahtar sadece onaylama için kullanýlabilir."
-
-msgid "The Creation Date is the date the certificate was created."
-msgstr ""
-
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
@@ -1450,6 +1450,9 @@ msgstr "Altanahtarlar"
 msgid "Key"
 msgstr "/_Anahtarlar"
 
+msgid "Tofu"
+msgstr ""
+
 msgid "Sign Key"
 msgstr "Anahtarý Ýmzala"
 
@@ -1611,6 +1614,9 @@ msgid ""
 "Checked if at least one matching X.509 certificate for use with S/MIME has "
 "been found."
 msgstr ""
+
+msgid "Key ID"
+msgstr "Anahtar Kimliði"
 
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
@@ -2028,7 +2034,7 @@ msgid ""
 "\n"
 "Entering a wrong value for the PIN decrements the retry counter.  If the "
 "retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reseted by using the Admin-PIN.\n"
+"PIN can still be reset by using the Admin-PIN.\n"
 "\n"
 "A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
 "the issuer of your card might have initialized the card with a different "
@@ -2047,7 +2053,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<b>Reseting the PIN or the Reset Code</b>\n"
+"<b>Resetting the PIN or the Reset Code</b>\n"
 "\n"
 "If the retry counters of the PIN and of the Reset Code are both down to "
 "zero, it is only possible to reset them if you have access to the Admin-"
@@ -2294,6 +2300,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "The key ID is a short number to identify a certificate."
+#~ msgstr "Anahtar sadece onaylama için kullanýlabilir."
+
+#, fuzzy
 #~ msgid "Error"
 #~ msgstr "GPA Hatasý"
 
@@ -2369,9 +2379,6 @@ msgstr ""
 
 #~ msgid "/File/C_lear"
 #~ msgstr "/Dosya/_Temizle"
-
-#~ msgid "/File/_Open"
-#~ msgstr "/Dosya/_Aç"
 
 #, fuzzy
 #~ msgid "/File/Save _As"

@@ -405,8 +405,8 @@ msgstr "Soubor \"%s\" neobsahoval OpenPGP data."
 msgid "\"%s\" contained no valid encrypted data."
 msgstr "\"%s\" neobsahoval platná šifrovaná data."
 
-#, c-format
-msgid "The file \"%s\" contained no validencrypted data."
+#, fuzzy, c-format
+msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "Soubor \"%s\" neobsahoval platná šifrovaná data."
 
 msgid "Wrong passphrase!"
@@ -492,8 +492,11 @@ msgid ""
 "(you may not set the expiration time to the past.)"
 msgstr "Neplatný čas.(nemůžete nastavit čas vypršení do minulosti.)"
 
-msgid "Key ID"
-msgstr "ID klíče"
+msgid "Created"
+msgstr "Vytvořen"
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr "Datum vytvoření je datum, kdy byl certifikát vytvořen."
 
 msgid "User Name"
 msgstr "Jméno uživatele"
@@ -552,9 +555,6 @@ msgstr "Algoritmus"
 
 msgid "Size"
 msgstr "Velikost"
-
-msgid "Created"
-msgstr "Vytvořen"
 
 msgid "Expires"
 msgstr "Vyprší platnost"
@@ -692,6 +692,12 @@ msgid ""
 msgstr ""
 "Soubor %s již existuje.\n"
 "Chcete jej přepsat?"
+
+msgid "_Use a different filename"
+msgstr ""
+
+msgid "_Open"
+msgstr ""
 
 msgid ""
 "************************************************************************\n"
@@ -1142,12 +1148,6 @@ msgstr ""
 "Tento sloupec indikuje typ certifikátu. Písmeno 'P' znamená OpenPGP, 'X' "
 "znamená X.509 (S/MIME)."
 
-msgid "The key ID is a short number to identify a certificate."
-msgstr "ID klíče je krátké číslo k identifikaci certifikátu."
-
-msgid "The Creation Date is the date the certificate was created."
-msgstr "Datum vytvoření je datum, kdy byl certifikát vytvořen."
-
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Datum vypršení je datum, do kterého je certifikát platný."
 
@@ -1375,6 +1375,9 @@ msgstr "Podklíče"
 msgid "Key"
 msgstr "Klíč"
 
+msgid "Tofu"
+msgstr ""
+
 msgid "Sign Key"
 msgstr "Podepsat klíč"
 
@@ -1540,6 +1543,9 @@ msgid ""
 msgstr ""
 "Zkontrolujte zda byl nalezen alespoň jeden odpovídající X.509 certifikát pro "
 "použití s S/MIME."
+
+msgid "Key ID"
+msgstr "ID klíče"
 
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
@@ -1980,6 +1986,7 @@ msgstr ""
 "Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
 "<b>Reset kódu</b> , poté novou hodnotu PIN a tu na dalším řádku zopakovali."
 
+#, fuzzy
 msgid ""
 "<b>Changing the PIN</b>\n"
 "\n"
@@ -1988,7 +1995,7 @@ msgid ""
 "\n"
 "Entering a wrong value for the PIN decrements the retry counter.  If the "
 "retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reseted by using the Admin-PIN.\n"
+"PIN can still be reset by using the Admin-PIN.\n"
 "\n"
 "A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
 "the issuer of your card might have initialized the card with a different "
@@ -2027,7 +2034,7 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"<b>Reseting the PIN or the Reset Code</b>\n"
+"<b>Resetting the PIN or the Reset Code</b>\n"
 "\n"
 "If the retry counters of the PIN and of the Reset Code are both down to "
 "zero, it is only possible to reset them if you have access to the Admin-"
@@ -2348,6 +2355,9 @@ msgid ""
 msgstr ""
 "Pro kartu %s není mnoho informací ke zobrazení. Zkuste použít tlačítko pro "
 "volbu aplikace pro přepnutí na jinou aplikaci, která je na kartě k dispozici."
+
+#~ msgid "The key ID is a short number to identify a certificate."
+#~ msgstr "ID klíče je krátké číslo k identifikaci certifikátu."
 
 #~ msgid "Error"
 #~ msgstr "Fehler"

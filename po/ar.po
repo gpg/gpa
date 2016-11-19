@@ -428,8 +428,8 @@ msgstr "لا يحتوي الملفّ \"%s\" على بيانات OpenPGP."
 msgid "\"%s\" contained no valid encrypted data."
 msgstr "لا يحوي \"%s\" بيانات معماة صالحة."
 
-#, c-format
-msgid "The file \"%s\" contained no validencrypted data."
+#, fuzzy, c-format
+msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "لا يحوي الملفّ \"%s\" بيانات معماة صالحة."
 
 msgid "Wrong passphrase!"
@@ -515,8 +515,13 @@ msgstr ""
 "أُدخلت وقتا غير صحيح.\n"
 "(لا يمكن أن يكون تاريخ انتهاء الصلاحية في الماضي.)"
 
-msgid "Key ID"
-msgstr "معرِّف المفتاح"
+#, fuzzy
+msgid "Created"
+msgstr "أُنشئ في:"
+
+#, fuzzy
+msgid "The Creation Date is the date the certificate was created."
+msgstr "تاريخ الانتهاء هو التاريخ الذي تنتهي عنده صلاحية الشهادة."
 
 msgid "User Name"
 msgstr "اسم المستخدم"
@@ -582,10 +587,6 @@ msgstr "الخوارزمية"
 
 msgid "Size"
 msgstr "الطول"
-
-#, fuzzy
-msgid "Created"
-msgstr "أُنشئ في:"
 
 #, fuzzy
 msgid "Expires"
@@ -721,6 +722,13 @@ msgid ""
 msgstr ""
 "الملفّ %s موجود بالفعل.\n"
 "أتريد استبداله؟"
+
+msgid "_Use a different filename"
+msgstr ""
+
+#, fuzzy
+msgid "_Open"
+msgstr "/ملف/_افتح"
 
 msgid ""
 "************************************************************************\n"
@@ -1178,13 +1186,6 @@ msgid ""
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-msgid "The key ID is a short number to identify a certificate."
-msgstr "مُعرّف المفتاح هو رقم صغير لتعريف الشهادة."
-
-#, fuzzy
-msgid "The Creation Date is the date the certificate was created."
-msgstr "تاريخ الانتهاء هو التاريخ الذي تنتهي عنده صلاحية الشهادة."
-
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "تاريخ الانتهاء هو التاريخ الذي تنتهي عنده صلاحية الشهادة."
 
@@ -1434,6 +1435,9 @@ msgstr "المفاتيح الفرعية"
 msgid "Key"
 msgstr "/ال_مفاتيح"
 
+msgid "Tofu"
+msgstr ""
+
 msgid "Sign Key"
 msgstr "وقّع المفتاح"
 
@@ -1585,6 +1589,9 @@ msgid ""
 "Checked if at least one matching X.509 certificate for use with S/MIME has "
 "been found."
 msgstr ""
+
+msgid "Key ID"
+msgstr "معرِّف المفتاح"
 
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
@@ -1999,7 +2006,7 @@ msgid ""
 "\n"
 "Entering a wrong value for the PIN decrements the retry counter.  If the "
 "retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reseted by using the Admin-PIN.\n"
+"PIN can still be reset by using the Admin-PIN.\n"
 "\n"
 "A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
 "the issuer of your card might have initialized the card with a different "
@@ -2018,7 +2025,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<b>Reseting the PIN or the Reset Code</b>\n"
+"<b>Resetting the PIN or the Reset Code</b>\n"
 "\n"
 "If the retry counters of the PIN and of the Reset Code are both down to "
 "zero, it is only possible to reset them if you have access to the Admin-"
@@ -2265,6 +2272,9 @@ msgid ""
 "on this card."
 msgstr ""
 
+#~ msgid "The key ID is a short number to identify a certificate."
+#~ msgstr "مُعرّف المفتاح هو رقم صغير لتعريف الشهادة."
+
 #, fuzzy
 #~ msgid "Error"
 #~ msgstr "عطل في GPA"
@@ -2340,9 +2350,6 @@ msgstr ""
 
 #~ msgid "/File/C_lear"
 #~ msgstr "/ملف/ا_مسح"
-
-#~ msgid "/File/_Open"
-#~ msgstr "/ملف/_افتح"
 
 #~ msgid "/File/Save _As"
 #~ msgstr "/ملف/احفظ _باسم"

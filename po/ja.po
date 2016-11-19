@@ -450,7 +450,7 @@ msgid "\"%s\" contained no valid encrypted data."
 msgstr "ファイル \"%s\" には有効な暗号化データが含まれていません。"
 
 #, fuzzy, c-format
-msgid "The file \"%s\" contained no validencrypted data."
+msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "ファイル \"%s\" には有効な暗号化データが含まれていません。"
 
 msgid "Wrong passphrase!"
@@ -533,8 +533,12 @@ msgid ""
 "(you may not set the expiration time to the past.)"
 msgstr ""
 
-msgid "Key ID"
-msgstr "鍵 ID"
+#, fuzzy
+msgid "Created"
+msgstr "作成"
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr ""
 
 msgid "User Name"
 msgstr "ユーザ名"
@@ -600,10 +604,6 @@ msgstr "アルゴリズム"
 
 msgid "Size"
 msgstr "サイズ"
-
-#, fuzzy
-msgid "Created"
-msgstr "作成"
 
 #, fuzzy
 msgid "Expires"
@@ -740,6 +740,13 @@ msgid ""
 msgstr ""
 "同じファイル %s があります\n"
 "上書きしますか?"
+
+msgid "_Use a different filename"
+msgstr ""
+
+#, fuzzy
+msgid "_Open"
+msgstr "開く"
 
 msgid ""
 "************************************************************************\n"
@@ -1196,13 +1203,6 @@ msgid ""
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#, fuzzy
-msgid "The key ID is a short number to identify a certificate."
-msgstr "証明にのみ使える鍵です。"
-
-msgid "The Creation Date is the date the certificate was created."
-msgstr ""
-
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
@@ -1449,6 +1449,9 @@ msgstr "副鍵"
 msgid "Key"
 msgstr "/鍵 (_K)"
 
+msgid "Tofu"
+msgstr ""
+
 msgid "Sign Key"
 msgstr "鍵に署名"
 
@@ -1606,6 +1609,9 @@ msgid ""
 "Checked if at least one matching X.509 certificate for use with S/MIME has "
 "been found."
 msgstr ""
+
+msgid "Key ID"
+msgstr "鍵 ID"
 
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
@@ -2034,7 +2040,7 @@ msgid ""
 "\n"
 "Entering a wrong value for the PIN decrements the retry counter.  If the "
 "retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reseted by using the Admin-PIN.\n"
+"PIN can still be reset by using the Admin-PIN.\n"
 "\n"
 "A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
 "the issuer of your card might have initialized the card with a different "
@@ -2053,7 +2059,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<b>Reseting the PIN or the Reset Code</b>\n"
+"<b>Resetting the PIN or the Reset Code</b>\n"
 "\n"
 "If the retry counters of the PIN and of the Reset Code are both down to "
 "zero, it is only possible to reset them if you have access to the Admin-"
@@ -2300,6 +2306,10 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#, fuzzy
+#~ msgid "The key ID is a short number to identify a certificate."
+#~ msgstr "証明にのみ使える鍵です。"
 
 #~ msgid "Error"
 #~ msgstr "エラー"
@@ -3003,9 +3013,6 @@ msgstr ""
 
 #~ msgid "/File/C_heck"
 #~ msgstr "/ファイル (F)/チェック (_H)"
-
-#~ msgid "Open"
-#~ msgstr "開く"
 
 #~ msgid " Decrypt "
 #~ msgstr " 復号化 "

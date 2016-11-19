@@ -445,7 +445,7 @@ msgid "\"%s\" contained no valid encrypted data."
 msgstr "O arquivo \"%s\" não contém dados encriptados válidos."
 
 #, fuzzy, c-format
-msgid "The file \"%s\" contained no validencrypted data."
+msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "O arquivo \"%s\" não contém dados encriptados válidos."
 
 msgid "Wrong passphrase!"
@@ -532,8 +532,13 @@ msgid ""
 "(you may not set the expiration time to the past.)"
 msgstr ""
 
-msgid "Key ID"
-msgstr "Key ID"
+#, fuzzy
+msgid "Created"
+msgstr "Criado"
+
+#, fuzzy
+msgid "The Creation Date is the date the certificate was created."
+msgstr "Certificado de revogação criado."
 
 msgid "User Name"
 msgstr "Nome do Usuário"
@@ -599,10 +604,6 @@ msgstr "_Algoritmo:"
 
 msgid "Size"
 msgstr ""
-
-#, fuzzy
-msgid "Created"
-msgstr "Criado"
 
 #, fuzzy
 msgid "Expires"
@@ -735,6 +736,13 @@ msgid ""
 msgstr ""
 "O arquivo %s já existe.\n"
 "Você quer sobrescrevê-lo?"
+
+msgid "_Use a different filename"
+msgstr ""
+
+#, fuzzy
+msgid "_Open"
+msgstr "Abrir"
 
 msgid ""
 "************************************************************************\n"
@@ -1199,14 +1207,6 @@ msgid ""
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
 
-#, fuzzy
-msgid "The key ID is a short number to identify a certificate."
-msgstr "E não pode ser usada para encriptação."
-
-#, fuzzy
-msgid "The Creation Date is the date the certificate was created."
-msgstr "Certificado de revogação criado."
-
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
@@ -1455,6 +1455,9 @@ msgstr "Key ID"
 msgid "Key"
 msgstr "/_Chaves"
 
+msgid "Tofu"
+msgstr ""
+
 msgid "Sign Key"
 msgstr "Assinar chave"
 
@@ -1621,6 +1624,9 @@ msgid ""
 "Checked if at least one matching X.509 certificate for use with S/MIME has "
 "been found."
 msgstr ""
+
+msgid "Key ID"
+msgstr "Key ID"
 
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
@@ -2046,7 +2052,7 @@ msgid ""
 "\n"
 "Entering a wrong value for the PIN decrements the retry counter.  If the "
 "retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reseted by using the Admin-PIN.\n"
+"PIN can still be reset by using the Admin-PIN.\n"
 "\n"
 "A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
 "the issuer of your card might have initialized the card with a different "
@@ -2065,7 +2071,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<b>Reseting the PIN or the Reset Code</b>\n"
+"<b>Resetting the PIN or the Reset Code</b>\n"
 "\n"
 "If the retry counters of the PIN and of the Reset Code are both down to "
 "zero, it is only possible to reset them if you have access to the Admin-"
@@ -2311,6 +2317,10 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#, fuzzy
+#~ msgid "The key ID is a short number to identify a certificate."
+#~ msgstr "E não pode ser usada para encriptação."
 
 #~ msgid "Error"
 #~ msgstr "Erro"
@@ -3033,9 +3043,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "/File/C_heck"
 #~ msgstr "/Arquivo/Abri_r"
-
-#~ msgid "Open"
-#~ msgstr "Abrir"
 
 #~ msgid ""
 #~ "@Options:\n"
