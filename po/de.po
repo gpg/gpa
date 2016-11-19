@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: translations@gnupg.org\n"
-"PO-Revision-Date: 2014-12-08 17:36+0100\n"
+"PO-Revision-Date: 2016-11-19 11:40+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -402,7 +402,7 @@ msgid "\"%s\" contained no valid encrypted data."
 msgstr "\"%s\" enthält keine korrekt verschlüsselten Daten."
 
 #, c-format
-msgid "The file \"%s\" contained no validencrypted data."
+msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "Die Datei \"%s\" enthält keine korrekt verschlüsselten Daten."
 
 msgid "Wrong passphrase!"
@@ -494,8 +494,11 @@ msgstr ""
 "Ungültige Zeitangabe.\n"
 "(Sie können die Ablaufzeit nicht in die Vergangenheit setzen.)"
 
-msgid "Key ID"
-msgstr "Schlüsselkennung"
+msgid "Created"
+msgstr "Erstellt"
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr "Das Erstellungsdatum ist das Datum ab dem das Zertifikat gültig ist."
 
 msgid "User Name"
 msgstr "Benutzerkennung"
@@ -553,9 +556,6 @@ msgstr "Algo"
 
 msgid "Size"
 msgstr "Größe"
-
-msgid "Created"
-msgstr "Erstellt"
 
 msgid "Expires"
 msgstr "Läuft ab"
@@ -693,6 +693,12 @@ msgid ""
 msgstr ""
 "Die Datei »%s« existiert bereits.\n"
 "Möchten Sie sie überschreiben?"
+
+msgid "_Use a different filename"
+msgstr "Einen _anderen Dateiname benutzen"
+
+msgid "_Open"
+msgstr "_Öffnen"
 
 msgid ""
 "************************************************************************\n"
@@ -1151,14 +1157,6 @@ msgstr ""
 "Diese Spalte beschreibt den Typ des Zertifikats. Ein 'P' steht für\n"
 "OpenPGP und ein 'X' für X.509 (S/MIME). "
 
-msgid "The key ID is a short number to identify a certificate."
-msgstr ""
-"Die Schlüsselkennung (Key ID) is eine kurze Zahl zur Identifizerung eines "
-"Zertifikats."
-
-msgid "The Creation Date is the date the certificate was created."
-msgstr "Das Erstellungsdatum ist das Datum ab dem das Zertifikat gültig ist."
-
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Das Ablaufdatum ist das Datum bis zu dem das Zertifikat gültig ist."
 
@@ -1387,6 +1385,9 @@ msgstr "Untergeordnete Schlüssel"
 msgid "Key"
 msgstr "Schlüssel"
 
+msgid "Tofu"
+msgstr "TOFU"
+
 msgid "Sign Key"
 msgstr "Schlüssel signieren"
 
@@ -1563,6 +1564,9 @@ msgid ""
 msgstr ""
 "Angekreuzt falls zumindest ein für S.MIME verwendbares Zertifikat gefunden "
 "wurde"
+
+msgid "Key ID"
+msgstr "Schlüsselkennung"
 
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
@@ -2003,7 +2007,7 @@ msgid ""
 "\n"
 "Entering a wrong value for the PIN decrements the retry counter.  If the "
 "retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reseted by using the Admin-PIN.\n"
+"PIN can still be reset by using the Admin-PIN.\n"
 "\n"
 "A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
 "the issuer of your card might have initialized the card with a different "
@@ -2022,7 +2026,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"<b>Reseting the PIN or the Reset Code</b>\n"
+"<b>Resetting the PIN or the Reset Code</b>\n"
 "\n"
 "If the retry counters of the PIN and of the Reset Code are both down to "
 "zero, it is only possible to reset them if you have access to the Admin-"
@@ -2286,6 +2290,11 @@ msgstr ""
 "Für eine %s Karte können nicht viele Informationen angezeigt werden.  Sie "
 "können jedoch mit dem Knopf zur Anwendungsauswahl auf eine andere, auf der "
 "Karte verfügbare, Anwendung umschalten."
+
+#~ msgid "The key ID is a short number to identify a certificate."
+#~ msgstr ""
+#~ "Die Schlüsselkennung (Key ID) is eine kurze Zahl zur Identifizerung eines "
+#~ "Zertifikats."
 
 #~ msgid "Error"
 #~ msgstr "Fehler"
@@ -3395,9 +3404,6 @@ msgstr ""
 
 #~ msgid "_Accept"
 #~ msgstr "_Übernehmen"
-
-#~ msgid "_Open"
-#~ msgstr "_Öffnen"
 
 #~ msgid ""
 #~ "The keyserver returned an error message:\n"
