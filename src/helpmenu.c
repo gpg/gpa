@@ -72,7 +72,7 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
   static const gchar copyright[] =
     "Copyright \xc2\xa9 2000-2002 G-N-U GmbH\n"
     "Copyright \xc2\xa9 2002-2003 Miguel Coca\n"
-    "Copyright \xc2\xa9 2005-2015 g10 Code GmbH";
+    "Copyright \xc2\xa9 2005-2016 g10 Code GmbH";
   static const gchar website[] = "https://gnupg.org/related_software/gpa/";
   static const gchar website_label[] = "www.gnupg.org";
   char *comment;

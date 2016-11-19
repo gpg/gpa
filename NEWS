@@ -1,5 +1,19 @@
-Noteworthy changes in version 0.9.10 (unreleased)
+Noteworthy changes in version 0.9.10 (2016-11-19)
 -------------------------------------------------
+
+ * Addded basic support for TOFU information.
+
+ * Removed key-ID from some listings in favor of using the
+   fingerprint.
+
+ * Fixed deletion of X.509 keys.
+
+ * Allow for saving to an alternate file name if the file already
+   exists.
+
+ * Fixed several problems with key edit functions.
+
+ * Fixed drag-and-drop.
 
 
 Noteworthy changes in version 0.9.9 (2015-09-09)
