@@ -642,7 +642,7 @@ change_nullpin (GpaCMNetkey *card)
        "initial PIN is <b>required but can't be reverted</b>.\n\n"
        "Please check the documentation of your card to learn "
        "for what the NullPIN is good.\n\n"
-       "If you proceeed you will be asked to enter a new PIN "
+       "If you proceed you will be asked to enter a new PIN "
        "and later to repeat that PIN.  Make sure that you "
        "will remember that PIN - it will not be possible to "
        "recover the PIN if it has been entered wrongly more "
