@@ -3,10 +3,20 @@
  *
  * This file is part of GPA.
  *
- * GPA is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ * GPA is free software; you can redistribute and/or modify this part
+ * of GPA under the terms of either
+ *
+ *   - the GNU Lesser General Public License as published by the Free
+ *     Software Foundation; either version 3 of the License, or (at
+ *     your option) any later version.
+ *
+ * or
+ *
+ *   - the GNU General Public License as published by the Free
+ *     Software Foundation; either version 2 of the License, or (at
+ *     your option) any later version.
+ *
+ * or both in parallel, as here.
  *
  * GPA is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -14,7 +24,7 @@
  * License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>. 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -26,7 +36,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "gpa.h"   
+#include "gpa.h"
 
 #include "cm-object.h"
 
@@ -52,14 +62,14 @@ static void gpa_cm_object_finalize (GObject *object);
 
 
 
-/************************************************************ 
+/************************************************************
  *******************   Implementation   *********************
  ************************************************************/
 
 
 
 
-/************************************************************ 
+/************************************************************
  ******************   Object Management  ********************
  ************************************************************/
 
@@ -102,10 +112,10 @@ gpa_cm_object_init (GTypeInstance *instance, void *class_ptr)
 
 static void
 gpa_cm_object_finalize (GObject *object)
-{  
+{
 /*   GpaCMObject *card = GPA_CM_OBJECT (object); */
 
-  
+
   parent_class->finalize (object);
 }
 
@@ -115,7 +125,7 @@ GType
 gpa_cm_object_get_type (void)
 {
   static GType this_type = 0;
-  
+
   if (!this_type)
     {
       static const GTypeInfo this_info =
@@ -130,17 +140,17 @@ gpa_cm_object_get_type (void)
 	  0,    /* n_preallocs */
 	  gpa_cm_object_init
 	};
-      
+
       this_type = g_type_register_static (GTK_TYPE_VBOX,
                                           "GpaCMObject",
                                           &this_info, 0);
     }
-  
+
   return this_type;
 }
 
 
-/************************************************************ 
+/************************************************************
  **********************  Public API  ************************
  ************************************************************/
 
@@ -151,7 +161,7 @@ gpa_cm_object_update_status (GpaCMObject *obj, const char *text)
 {
   g_return_if_fail (obj);
   g_return_if_fail (GPA_CM_OBJECT (obj));
-  
+
   if (!text)
     text = "";
 
@@ -164,6 +174,6 @@ gpa_cm_object_alert_dialog (GpaCMObject *obj, const gchar *messageg)
 {
   g_return_if_fail (obj);
   g_return_if_fail (GPA_CM_OBJECT (obj));
-  
+
   g_signal_emit (obj, signals[ALERT_DIALOG], 0, messageg);
 }
