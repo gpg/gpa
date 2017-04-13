@@ -160,7 +160,15 @@ get_locale_dir (void)
 
   if (! GetModuleFileNameA (0, name, sizeof (name) - 30))
     return NULL;
-  p = strrchr (name, '\\');
+
+  /* If installed under bin assume that share is on the same
+     hierarchy as the bin subdirectory. Otherwise assume that
+     share is a subdirectory of the gpa.exe location. */
+  p = strstr (name, "\\bin\\");
+  if (!p)
+    {
+      p = strrchr (name, '\\');
+    }
   if (!p)
     {
       *name = '\\';
