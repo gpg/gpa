@@ -217,7 +217,22 @@ add_file (GpaFileManager *fileman, const gchar *filename)
   gchar *filename_utf8;
 
   /* The tree contains filenames in the UTF-8 encoding.  */
-  filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL),
+  filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+
+  /* Try to convert from the current locale as fallback. This is important
+     for windows where g_filename_to_utf8 does not take locale into account
+     because the filedialogs already convert to utf8. */
+  if (!filename_utf8)
+    {
+      filename_utf8 = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+    }
+
+  /* Last fallback is guranteed to never be NULL so in doubt we can still fail
+     later showing a filename that can't be found to the user etc.*/
+  if (!filename_utf8)
+    {
+      filename_utf8 = g_filename_display_name (filename);
+    }
 
   store = GTK_LIST_STORE (gtk_tree_view_get_model
                           (GTK_TREE_VIEW (fileman->list_files)));
