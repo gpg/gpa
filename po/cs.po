@@ -1,11 +1,11 @@
 # translation of cs.po to czech
-# Written by Zdenek Hatas <zdenek.hatas@gmail.com>, 2007 - 2014
+# Written by Zdenek Hatas <zdenek.hatas@gmail.com>, 2007 - 2017
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
-"Report-Msgid-Bugs-To: gpa-dev@gnupg.org\n"
-"PO-Revision-Date: 2016-11-21 12:44+0100\n"
+"Report-Msgid-Bugs-To: translations@gnupg.org\n"
+"PO-Revision-Date: 2017-04-04 09:38+0200\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: czech <cs@li.org>\n"
 "Language: cs\n"
@@ -24,8 +24,8 @@ msgstr "Zpráva GPA"
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
 #, c-format
-msgid "The file %s is %lli%s large.  Do you really  want to open it?"
-msgstr "Soubor %s je %lli%s velký. Opravdu jej chcete otevřít?"
+msgid "The file %s is %llu%s large.  Do you really  want to open it?"
+msgstr "Soubor %s je  %llu%s velký. Opravdu jej chcete otevřít?"
 
 msgid "Save As..."
 msgstr "Uložit jako..."
@@ -96,9 +96,6 @@ msgstr "Soubory"
 msgid "Card"
 msgstr "Karta"
 
-msgid "GNU Privacy Assistant - Clipboard"
-msgstr "GNU Privacy Assistant - Schránka"
-
 msgid "<b>Main</b>"
 msgstr "<b>Hlavní</b>"
 
@@ -147,6 +144,21 @@ msgstr "Pokročilý"
 
 msgid "Expert"
 msgstr "Expert"
+
+msgid "A keyserver has not been configured."
+msgstr "Server klíčů nebyl nastaven."
+
+msgid "Configure backend to use a keyserver?"
+msgstr "Nastavit využití serveru klíčů backendem?"
+
+msgid "_Yes"
+msgstr "_Ano"
+
+msgid "_No"
+msgstr "_Ne"
+
+msgid "Configuring the backend to use a keyserver failed"
+msgstr "Nastavení využití serveru klíčů backendem selhalo"
 
 msgid "days"
 msgstr "dny"
@@ -229,9 +241,6 @@ msgstr "Vybrat všechny soubory"
 msgid "File"
 msgstr "Soubor"
 
-msgid "GNU Privacy Assistant - File Manager"
-msgstr "GNU Privacy Assistant - Správce souborů"
-
 msgid "File Manager"
 msgstr "Správce souborů"
 
@@ -274,14 +283,17 @@ msgstr "Otevřít schránku"
 msgid "Open the settings dialog"
 msgstr "Otevřít dialog nastavení"
 
-msgid "Enable the UI server"
-msgstr "Povolit UI server"
+msgid "Only start the UI server"
+msgstr "Spustit pouze UI server"
 
 msgid "Disable support for X.509"
 msgstr "Vypnout podporu pro X.509"
 
 msgid "Read options from file"
 msgstr "Číst možnosti ze souboru"
+
+msgid "Do not connect to a running instance"
+msgstr "Nepřipojujte se k běžící instanci"
 
 msgid "[FILE...]"
 msgstr "[SOUBOR...]"
@@ -320,14 +332,14 @@ msgid ""
 "\t\"%s\"\n"
 "\n"
 "This is sensitive information, and should be stored carefully\n"
-"(for example, in a floppy disk kept in a safe place)."
+"(for example, on a USB stick kept in a safe place)."
 msgstr ""
 "Kopie vašeho soukromého klíče byla uložena v souboru:\n"
 "\n"
 "\t\"%s\"\n"
 "\n"
 "Toto je citlivá informace a měla by být bezpečně uložena\n"
-"(např. na disketě na bezpečném místě)."
+"(např. na USB paměti uložené na bezpečném místě)."
 
 msgid "An error ocurred during the backup operation."
 msgstr "V průběhu zálohování došlo k chybě."
@@ -336,8 +348,8 @@ msgid "Backup key to file"
 msgstr "Zálohovat klíč do souboru"
 
 #, c-format
-msgid "Generating backup of key: %s"
-msgstr "Vytváří se záloha klíče: %s"
+msgid "Generating backup of key: 0x%s"
+msgstr "Vytváří se záloha klíče: 0x%s"
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Klíče byly zkopírovány do schránky."
@@ -352,21 +364,22 @@ msgstr "ASCII-z_akódovat"
 msgid "The keys have been exported to %s."
 msgstr "Klíče byly exportovány do %s."
 
+msgid "Only keys of the same procotol may be exported as a collection."
+msgstr "Pouze klíče stejného protokolu smějí být exportovány jako kolekce."
+
 #, c-format
 msgid ""
-"The selected key will be sent to a public key\n"
-"server (\"%s\").\n"
-"Are you sure you want to distribute this key?"
+"The selected key(s) will be sent to a public key\n"
+"server (\"%s\")."
 msgstr ""
 "Vybraný klíč bude odeslán na server klíčů\n"
-"(\"%s\").\n"
-"Určitě chcete šířit tento klíč?"
+"(\"%s\")."
 
-msgid "_Yes"
-msgstr "_Ano"
+msgid "Are you sure you want to distribute this key?"
+msgstr "Jste si jistý, že chcete šířit tento klíč?"
 
-msgid "_No"
-msgstr "_Ne"
+msgid "Error sending key(s) to the server."
+msgstr "Chyba odeslání kllče(ů) na server."
 
 msgid "The keys have been sent to the server."
 msgstr "Klíče byly odeslány na server."
@@ -387,7 +400,7 @@ msgid "\"%s\" contained no valid encrypted data."
 msgstr "\"%s\" neobsahoval platná šifrovaná data."
 
 #, c-format
-msgid "The file \"%s\" contained no validencrypted data."
+msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "Soubor \"%s\" neobsahoval platná šifrovaná data."
 
 msgid "Wrong passphrase!"
@@ -456,32 +469,27 @@ msgstr "Vytváří se klíč ..."
 msgid "Import keys from file"
 msgstr "Importovat klíče ze souboru"
 
-msgid "No keys were found."
-msgstr "Nebyly nalezeny žádné klíče."
-
 #, c-format
 msgid ""
-"%i public keys read\n"
-"%i public keys imported\n"
-"%i public keys unchanged\n"
-"%i secret keys read\n"
-"%i secret keys imported\n"
-"%i secret keys unchanged"
+"More than %d keys match your search pattern.\n"
+"Use the long keyid or a fingerprint for a better match"
 msgstr ""
-"%i přečteno veřejných klíčů\n"
-"%i získáno veřejných klíčů\n"
-"%i nezměněných veřejných klíčů\n"
-"%i přečteno soukromých klíčů\n"
-"%i získáno soukromých klíčů\n"
-"%i nezměněných soukromých klíčů"
+"Vašemu vyhledávacímu vzoru odpovídá více než %d klíčů.\n"
+"Pro zpřesnění použijte dlouhé id klíče nebo otisk."
+
+msgid "No keys were found."
+msgstr "Nebyly nalezeny žádné klíče."
 
 msgid ""
 "Invalid time given.\n"
 "(you may not set the expiration time to the past.)"
 msgstr "Neplatný čas.(nemůžete nastavit čas vypršení do minulosti.)"
 
-msgid "Key ID"
-msgstr "ID klíče"
+msgid "Created"
+msgstr "Vytvořen"
+
+msgid "The Creation Date is the date the certificate was created."
+msgstr "Datum vytvoření je datum, kdy byl certifikát vytvořen."
 
 msgid "User Name"
 msgstr "Jméno uživatele"
@@ -497,6 +505,9 @@ msgstr "Tento klíč už jste sám podepsal!"
 
 msgid "You haven't selected a default key to sign with!"
 msgstr "Nebyl vybrán výchozí klíč pro podepisování!"
+
+msgid "Which key do you want to import?"
+msgstr "Který klíč chcete importovat?"
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
 msgstr "Který klíč chcete získat? (Musíte zadat ID klíče)."
@@ -531,41 +542,41 @@ msgstr "ID podklíče"
 msgid "Status"
 msgstr "Stav"
 
-msgid "Algorithm"
+msgid "Algo"
 msgstr "Algoritmus"
 
 msgid "Size"
 msgstr "Velikost"
 
-msgid "Expiry Date"
-msgstr "Platnost do"
+msgid "Expires"
+msgstr "Vyprší platnost"
 
-msgid "[S]"
-msgstr "[S]"
+msgid "S"
+msgstr "P"
 
 msgid "Can sign"
 msgstr "Smí podepisovat"
 
-msgid "[C]"
-msgstr "[C]"
+msgid "C"
+msgstr "C"
 
 msgid "Can certify"
 msgstr "Smí certifikovat"
 
-msgid "[E]"
-msgstr "[E]"
+msgid "E"
+msgstr "Š"
 
 msgid "Can encrypt"
 msgstr "Smí šifrovat"
 
-msgid "[A]"
-msgstr "[A]"
+msgid "A"
+msgstr "A"
 
 msgid "Can authenticate"
 msgstr "Smí autentizovat"
 
-msgid "[T]"
-msgstr "[T]"
+msgid "T"
+msgstr "K"
 
 msgid "Secret key stored on a smartcard."
 msgstr "Soukromý klíč byl uložen na kartě."
@@ -599,6 +610,9 @@ msgstr "Jména uživatelů:"
 
 msgid "Key ID:"
 msgstr "ID klíče:"
+
+msgid "Fingerprint:"
+msgstr "Otisk:"
 
 msgid "Expiration"
 msgstr "Platnost do"
@@ -648,20 +662,20 @@ msgstr ""
 #, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
-"error. The error was:\n"
+"error at %s:%d. The error was:\n"
 "\n"
 "\t%s\n"
 "\n"
-"This is probably a bug in GPA.\n"
-"GPA will now try to recover from this error."
+"This is either an installation problem or a bug in %s.\n"
+"%s will now try to recover from this error."
 msgstr ""
 "Knihovna GPGME vrátila neočekávanou\n"
-"chybu. Chyba je:\n"
+"chybu v %s:%d.. Chyba je:\n"
 "\n"
 "\t%s\n"
 "\n"
-"Toto je zřejmě chyba v GPA.\n"
-"GPA se pokusí obnovit z chybového stavu."
+"Toto je buď problém v instalaci nebo chyba v %s.\n"
+"%s se nyní pokusí obnovit z chybového stavu."
 
 #, c-format
 msgid ""
@@ -670,6 +684,12 @@ msgid ""
 msgstr ""
 "Soubor %s již existuje.\n"
 "Chcete jej přepsat?"
+
+msgid "_Use a different filename"
+msgstr "Po_užijte jiný název souboru"
+
+msgid "_Open"
+msgstr "_Otevřít"
 
 msgid ""
 "************************************************************************\n"
@@ -837,6 +857,33 @@ msgstr "Tento klíč smí být použit pouze pro šifrování."
 msgid "This key is useless."
 msgstr "Tento klíč je nepoužitelný."
 
+#, c-format
+msgid ""
+"%u file(s) read\n"
+"%u file(s) with errors"
+msgstr ""
+"%u soubor(ů) přečten(o)\n"
+"%u soubor(ů) s chybami"
+
+#, c-format
+msgid ""
+"%i public keys read\n"
+"%i public keys imported\n"
+"%i public keys unchanged\n"
+"%i secret keys read\n"
+"%i secret keys imported\n"
+"%i secret keys unchanged"
+msgstr ""
+"%i přečteno veřejných klíčů\n"
+"%i získáno veřejných klíčů\n"
+"%i nezměněných veřejných klíčů\n"
+"%i přečteno soukromých klíčů\n"
+"%i získáno soukromých klíčů\n"
+"%i nezměněných soukromých klíčů"
+
+msgid "A required engine component is not installed."
+msgstr "Požadovaná komponenta stroje není instalovaná."
+
 msgid "Calling the crypto engine program failed."
 msgstr "Volání programu šifrovacího stroje selhalo."
 
@@ -857,9 +904,6 @@ msgstr "E-mailová adresa není platná."
 
 msgid "Invalid character in comments."
 msgstr "Neplatný znak v komentářích."
-
-msgid "GPA Error"
-msgstr "Chyba GPA"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA je GNU Privacy Assistant"
@@ -948,6 +992,9 @@ msgstr "Upravit klíč"
 
 msgid "Change _passphrase"
 msgstr "Změnit _heslo"
+
+msgid "Expiry Date"
+msgstr "Platnost do"
 
 msgid "Change _expiration"
 msgstr "Změnit _dobu platnosti"
@@ -1081,9 +1128,6 @@ msgstr ""
 "Tento sloupec indikuje typ certifikátu. Písmeno 'P' znamená OpenPGP, 'X' znamená X.509 (S/"
 "MIME)."
 
-msgid "The key ID is a short number to identify a certificate."
-msgstr "ID klíče je krátké číslo k identifikaci certifikátu."
-
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Datum vypršení je datum, do kterého je certifikát platný."
 
@@ -1198,6 +1242,12 @@ msgstr "_Získat klíče..."
 msgid "Retrieve keys from server"
 msgstr "Získat klíče ze serveru"
 
+msgid "Re_fresh Keys"
+msgstr "A_ktualizovat klíče"
+
+msgid "Refresh keys from server"
+msgstr "Aktualizovat klíče ze serveru"
+
 msgid "_Send Keys..."
 msgstr "Ode_slat klíče..."
 
@@ -1231,9 +1281,6 @@ msgstr "Zvolený výchozí klíč:"
 msgid "No default key selected in the preferences."
 msgstr "V předvolbách nebyl zvolen žádný výchozí klíč."
 
-msgid "GNU Privacy Assistant - Key Manager"
-msgstr "GNU Privacy Assistant - Správce klíčů"
-
 msgid "Key Manager"
 msgstr "Správce klíčů"
 
@@ -1262,9 +1309,6 @@ msgstr[2] "%d klíčů vybráno"
 
 msgid "User name:"
 msgstr "Uživatelské jméno:"
-
-msgid "Fingerprint:"
-msgstr "Otisk:"
 
 msgid "Expires at:"
 msgstr "Vyprší:"
@@ -1302,6 +1346,9 @@ msgstr "Podklíče"
 msgid "Key"
 msgstr "Klíč"
 
+msgid "Tofu"
+msgstr "Tofu"
+
 msgid "Sign Key"
 msgstr "Podepsat klíč"
 
@@ -1325,18 +1372,18 @@ msgid "Sign only _locally"
 msgstr "Podepsat pouze _lokálně"
 
 msgid ""
-"It seems that GPGSM is not installed.\n"
+"It seems that no CMS engine is installed.\n"
 "\n"
 "Temporary disabling support for X.509.\n"
 "\n"
-"Please install GPGSM or invoke this program\n"
+"Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
-"GPGSM zřejmě není nainstalován.\n"
+"CMS zřejmě není nainstalován.\n"
 "\n"
 "Podpora X.509 bude dočasně vypnuta.\n"
 "\n"
-"Nainstalujte prosím GPGSM nebo spusťte tento program\n"
+"Nainstalujte prosím CMS nebo spusťte tento program\n"
 "s parametrem --disable-x509 ."
 
 msgid ""
@@ -1454,6 +1501,9 @@ msgid "Checked if at least one matching X.509 certificate for use with S/MIME ha
 msgstr ""
 "Zkontrolujte zda byl nalezen alespoň jeden odpovídající X.509 certifikát pro použití s S/"
 "MIME."
+
+msgid "Key ID"
+msgstr "ID klíče"
 
 msgid "Shows the key ID of the selected key or an indication that a key needs to be selected."
 msgstr "Zobrazí ID vybraného klíče  nebo upozornění, že klíč musí být vybrán."
@@ -1699,8 +1749,8 @@ msgstr "Zadané URL serveru klíčů není platné."
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr "Data předaná pro \"Automatické nalezení klíče\" nejsou platná."
 
-msgid "GNU Privacy Assistant - Settings"
-msgstr "GNU Privacy Assistant - Nastavení"
+msgid "Settings"
+msgstr "Nastavení"
 
 msgid "Level"
 msgstr "Úroveň"
@@ -1728,8 +1778,8 @@ msgstr "Podpis: %s"
 msgid "Signatures:"
 msgstr "Podpisy:"
 
-msgid "GNU Privacy Assistant - Card Manager"
-msgstr "GNU Privacy Assistant - Správce karet"
+msgid "Card Manager"
+msgstr "Správce karet"
 
 #, c-format
 msgid "%s card detected."
@@ -1776,9 +1826,6 @@ msgstr "Vytvořit nový klíč na kartě"
 
 msgid "This card application is not yet supported."
 msgstr "Tato aplikace karty není zatím podporována."
-
-msgid "Card Manager"
-msgstr "Správce karet"
 
 msgid "Application selection:"
 msgstr "Volba aplikace: "
@@ -1894,7 +1941,7 @@ msgid ""
 "new value and repeat that value at another prompt.\n"
 "\n"
 "Entering a wrong value for the PIN decrements the retry counter.  If the retry counters of "
-"the PIN and of the Reset Code are both down to zero, the PIN can still be reseted by using "
+"the PIN and of the Reset Code are both down to zero, the PIN can still be reset by using "
 "the Admin-PIN.\n"
 "\n"
 "A fresh standard card has set the PIN to the value <i>123456</i>.  However, the issuer of "
@@ -1930,14 +1977,15 @@ msgstr ""
 "hodnotu Reset kódu a tu na dalším řádku zopakovali."
 
 msgid ""
-"<b>Reseting the PIN or the Reset Code</b>\n"
+"<b>Resetting the PIN or the Reset Code</b>\n"
 "\n"
 "If the retry counters of the PIN and of the Reset Code are both down to zero, it is only "
 "possible to reset them if you have access to the Admin-PIN.\n"
 "\n"
 "A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  However, the "
 "issuer of your card might have initialized the card with a different Admin-PIN and that "
-"Admin-PIN might only be nown to the issuer.  Please check the instructions of your issuer.\n"
+"Admin-PIN might only be known to the issuer.  Please check the instructions of your "
+"issuer.\n"
 "\n"
 "If you proceed you will be asked to enter the current value of the <b>Admin-PIN</b> and "
 "then to enter a new value for the PIN or the Reset Code and repeat that new value at "
@@ -2102,7 +2150,7 @@ msgid ""
 "\n"
 "Please check the documentation of your card to learn for what the NullPIN is good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat that PIN.  Make "
+"If you proceed you will be asked to enter a new PIN and later to repeat that PIN.  Make "
 "sure that you will remember that PIN - it will not be possible to recover the PIN if it has "
 "been entered wrongly more than %d times.\n"
 "\n"
@@ -2230,72 +2278,44 @@ msgstr ""
 "Pro kartu %s není mnoho informací ke zobrazení. Zkuste použít tlačítko pro volbu aplikace "
 "pro přepnutí na jinou aplikaci, která je na kartě k dispozici."
 
-#, fuzzy
-#~ msgid "Configure backend to use a keyserver?"
-#~ msgstr "Nastavit programy backednu"
+#~ msgid "GNU Privacy Assistant - Clipboard"
+#~ msgstr "GNU Privacy Assistant - Schránka"
 
-#, fuzzy
-#~ msgid "Configuring the backend to use a keyserver failed"
-#~ msgstr "Nastavit programy backednu"
+#~ msgid "GNU Privacy Assistant - File Manager"
+#~ msgstr "GNU Privacy Assistant - Správce souborů"
 
-#~ msgid "Do not connect to a running instance"
-#~ msgstr "Nepřipojujte se k běžící instanci"
-
-#~ msgid "Only keys of the same procotol may be exported as a collection."
-#~ msgstr "Pouze klíče stejného protokolu smějí být exportovány jako kolekce."
-
-#, fuzzy
-#~ msgid "Are you sure you want to distribute this key?"
-#~ msgstr "Jste si jistý, že chcete smazat tento klíč?"
-
-#, fuzzy
-#~ msgid "Error sending key(s) to the server."
-#~ msgstr "Odeslat klíče na server..."
-
-#~ msgid "Created"
-#~ msgstr "Vytvořen"
-
-#~ msgid "The Creation Date is the date the certificate was created."
-#~ msgstr "Datum vytvoření je datum, kdy byl certifikát vytvořen."
-
-#, fuzzy
-#~ msgid "Which key do you want to import?"
-#~ msgstr "Který klíč chcete získat? (Musíte zadat ID klíče)."
-
-#~ msgid "Algo"
+#~ msgid "Algorithm"
 #~ msgstr "Algoritmus"
 
-#~ msgid "Expires"
-#~ msgstr "Vyprší platnost"
+#~ msgid "[S]"
+#~ msgstr "[S]"
 
-#~ msgid "S"
-#~ msgstr "P"
+#~ msgid "[C]"
+#~ msgstr "[C]"
 
-#~ msgid "C"
-#~ msgstr "C"
+#~ msgid "[E]"
+#~ msgstr "[E]"
 
-#~ msgid "E"
-#~ msgstr "Š"
+#~ msgid "[A]"
+#~ msgstr "[A]"
 
-#~ msgid "A"
-#~ msgstr "A"
+#~ msgid "[T]"
+#~ msgstr "[T]"
 
-#~ msgid "T"
-#~ msgstr "K"
+#~ msgid "GPA Error"
+#~ msgstr "Chyba GPA"
 
-#~ msgid "A required engine component is not installed."
-#~ msgstr "Požadovaná komponenta stroje není instalovaná."
+#~ msgid "The key ID is a short number to identify a certificate."
+#~ msgstr "ID klíče je krátké číslo k identifikaci certifikátu."
 
-#, fuzzy
-#~ msgid "Re_fresh Keys"
-#~ msgstr "Aktualizovat keyring"
+#~ msgid "GNU Privacy Assistant - Key Manager"
+#~ msgstr "GNU Privacy Assistant - Správce klíčů"
 
-#, fuzzy
-#~ msgid "Refresh keys from server"
-#~ msgstr "Získat klíče ze serveru"
+#~ msgid "GNU Privacy Assistant - Settings"
+#~ msgstr "GNU Privacy Assistant - Nastavení"
 
-#~ msgid "Settings"
-#~ msgstr "Nastavení"
+#~ msgid "GNU Privacy Assistant - Card Manager"
+#~ msgstr "GNU Privacy Assistant - Správce karet"
 
 #~ msgid "Message"
 #~ msgstr "Zpráva"
