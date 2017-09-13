@@ -253,7 +253,7 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
             *p = 0;
 
 #if GPGME_VERSION_NUMBER >= 0x010601  /* GPGME >= 1.6.1 */
-          algostr_buf = gpgme_pubkey_algo_string (key->subkeys);
+          algostr_buf = gpgme_pubkey_algo_string (subkey);
           algostr = algostr_buf? algostr_buf : "?";
 #else  /* GPGME < 1.6.1 */
           algostr = gpgme_pubkey_algo_name (subkey->pubkey_algo),
