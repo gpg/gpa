@@ -1,6 +1,6 @@
 /* gpgmeedit.c - The GNU Privacy Assistant's edit interactor.
  *      Copyright (C) 2002 Miguel Coca.
- *	Copyright (C) 2008, 2009, 2012 g10 Code GmbH.
+ *	Copyright (C) 2008, 2009, 2012, 2017 g10 Code GmbH.
  *
  * This file is part of GPA
  *
@@ -28,9 +28,10 @@
 #include "gpgmeedit.h"
 #include "passwddlg.h"
 
-/* The edit callback for all the edit operations is edit_fnc(). Each
- * operation is modelled as a sequential machine (a Moore machine, to be
- * precise). Therefore, for each operation you must write two functions.
+/* The edit callback for all the edit operations is edit_fnc.  Each
+ * operation is modelled as a sequential machine (a Moore machine, to
+ * be precise).  Therefore, for each operation you must write two
+ * functions.
  *
  * One of them is "action" or output function, that chooses the right value
  * for *result (the next command issued in the edit command line) based on
@@ -42,12 +43,25 @@
  */
 
 
+/* If posssible we use the modern interact interface.  */
+#undef USE_GPGME_INTERACT
+#if GPGME_VERSION_NUMBER >= 0x010700  /* GPGME >= 1.7.0 */
+# define USE_GPGME_INTERACT 1
+# define CMP_STATUS(a) !strcmp (status, G_STRINGIFY (a))
+  typedef const char *status_type_t ;
+#else
+# define CMP_STATUS(a) (status == GPGME_STATUS_ ## b)
+  typedef gpgme_status_code_t status_type_t;
+#endif
+
+
+
 /* Prototype of the action function. Returns the error if there is one */
 typedef gpg_error_t (*edit_action_t) (int state, void *opaque,
                                       char **result);
 /* Prototype of the transit function. Returns the next state. If and error
  * is found changes *err. If there is no error it should NOT touch it */
-typedef int (*edit_transit_t) (int current_state, gpgme_status_code_t status,
+typedef int (*edit_transit_t) (int current_state, status_type_t status,
                                const char *args, void *opaque,
                                gpg_error_t *err);
 
@@ -203,15 +217,41 @@ parse_status_error (const char *args)
 }
 
 
-/* The edit callback proper */
+/* The interact/edit callback proper.  */
 static gpg_error_t
-edit_fnc (void *opaque, gpgme_status_code_t status,
+edit_fnc (void *opaque, status_type_t status,
 	  const char *args, int fd)
 {
   struct edit_parms_s *parms = opaque;
   char *result = NULL;
 
   /* Whitelist all status code we know about.  */
+#if USE_GPGME_INTERACT
+  {
+    static const char *whitelist[] = {
+      "ALREADY_SIGNED",
+      "ERROR",
+      "GET_BOOL",
+      "GET_LINE",
+      "KEY_CREATED",
+      "NEED_PASSPHRASE_SYM",
+      "SC_OP_FAILURE",
+      NULL
+    };
+    int i;
+
+    /* Whitelist all status code we know about.  */
+    for (i=0; whitelist[i]; i++)
+      if (!strcmp (status, whitelist[i]))
+        break; /* Known.  */
+    if (!whitelist[i])
+      {
+        /* We don't know this keyword thus do not need to handle it.  */
+        return parms->err;
+      }
+  }
+#else /* !USE_GPGME_INTERACT */
+
   switch (status)
     {
     case GPGME_STATUS_ALREADY_SIGNED:
@@ -227,14 +267,15 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
       /* We don't know and thus do not need this status code.  */
       return parms->err;
     }
+#endif /* !USE_GPGME_INTERACT */
 
 
   if (!parms->need_status_passphrase_sym
-      && status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
+      && CMP_STATUS (NEED_PASSPHRASE_SYM))
     {
       return parms->err;
     }
-  else if (status == GPGME_STATUS_SC_OP_FAILURE)
+  else if (CMP_STATUS (SC_OP_FAILURE))
     {
       if (args && !parms->err)
         {
@@ -253,7 +294,7 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
     }
 
   /* Call the save_error function.  */
-  if (status == GPGME_STATUS_ERROR && args && parms->save_error)
+  if (CMP_STATUS (ERROR) && args && parms->save_error)
     {
       int n = strcspn (args, " \t");
       char *buf = g_strdup_printf ("%.*s: %s", n, args,
@@ -262,7 +303,13 @@ edit_fnc (void *opaque, gpgme_status_code_t status,
     }
 
   if (debug_edit_fsm)
-    g_debug ("edit_fnc: state=%d input=%d (%s)", parms->state, status, args);
+    g_debug (
+#ifdef USE_GPGME_INTERACT
+             "edit_fnc: state=%d input=%s (%s)"
+#else
+             "edit_fnc: state=%d input=%d (%s)"
+#endif
+             , parms->state, status, args);
 
   /* Choose the next state based on the current one and the input */
   parms->state = parms->transit (parms->state, status, args, parms->opaque,
@@ -345,7 +392,7 @@ edit_expire_fnc_action (int state, void *opaque, char **result)
 
 /* Change expiry time: transit.  */
 static int
-edit_expire_fnc_transit (int current_state, gpgme_status_code_t status,
+edit_expire_fnc_transit (int current_state, status_type_t status,
 			 const char *args, void *opaque, gpg_error_t *err)
 {
   int next_state;
@@ -353,8 +400,7 @@ edit_expire_fnc_transit (int current_state, gpgme_status_code_t status,
   switch (current_state)
     {
     case EXPIRE_START:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           next_state = EXPIRE_COMMAND;
         }
@@ -365,8 +411,7 @@ edit_expire_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case EXPIRE_COMMAND:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keygen.valid"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keygen.valid"))
         {
           next_state = EXPIRE_DATE;
         }
@@ -377,13 +422,11 @@ edit_expire_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case EXPIRE_DATE:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           next_state = EXPIRE_QUIT;
         }
-      else if (status == GPGME_STATUS_GET_LINE &&
-               g_str_equal (args, "keygen.valid"))
+      else if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keygen.valid"))
         {
           next_state = EXPIRE_ERROR;
           *err = gpg_error (GPG_ERR_INV_TIME);
@@ -395,8 +438,7 @@ edit_expire_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case EXPIRE_QUIT:
-      if (status == GPGME_STATUS_GET_BOOL &&
-          g_str_equal (args, "keyedit.save.okay"))
+      if (CMP_STATUS (GET_BOOL) && g_str_equal (args, "keyedit.save.okay"))
         {
           next_state = EXPIRE_SAVE;
         }
@@ -407,8 +449,7 @@ edit_expire_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case EXPIRE_ERROR:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           /* Go to quit operation state */
           next_state = EXPIRE_QUIT;
@@ -467,7 +508,7 @@ edit_trust_fnc_action (int state, void *opaque, char **result)
 
 /* Change the key ownertrust: transit.  */
 static int
-edit_trust_fnc_transit (int current_state, gpgme_status_code_t status,
+edit_trust_fnc_transit (int current_state, status_type_t status,
 			const char *args, void *opaque, gpg_error_t *err)
 {
   int next_state;
@@ -475,8 +516,7 @@ edit_trust_fnc_transit (int current_state, gpgme_status_code_t status,
   switch (current_state)
     {
     case TRUST_START:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           next_state = TRUST_COMMAND;
         }
@@ -487,8 +527,7 @@ edit_trust_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case TRUST_COMMAND:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "edit_ownertrust.value"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "edit_ownertrust.value"))
         {
           next_state = TRUST_VALUE;
         }
@@ -499,13 +538,12 @@ edit_trust_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case TRUST_VALUE:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           next_state = TRUST_QUIT;
         }
-      else if (status == GPGME_STATUS_GET_BOOL &&
-               g_str_equal (args, "edit_ownertrust.set_ultimate.okay"))
+      else if (CMP_STATUS (GET_BOOL)
+               && g_str_equal (args, "edit_ownertrust.set_ultimate.okay"))
         {
           next_state = TRUST_REALLY_ULTIMATE;
         }
@@ -516,8 +554,7 @@ edit_trust_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case TRUST_REALLY_ULTIMATE:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           next_state = TRUST_QUIT;
         }
@@ -528,8 +565,7 @@ edit_trust_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case TRUST_QUIT:
-      if (status == GPGME_STATUS_GET_BOOL &&
-          g_str_equal (args, "keyedit.save.okay"))
+      if (CMP_STATUS (GET_BOOL) && g_str_equal (args, "keyedit.save.okay"))
         {
           next_state = TRUST_SAVE;
         }
@@ -540,8 +576,7 @@ edit_trust_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case TRUST_ERROR:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           /* Go to quit operation state */
           next_state = TRUST_QUIT;
@@ -611,7 +646,7 @@ edit_sign_fnc_action (int state, void *opaque, char **result)
 
 /* Sign a key: transit.  */
 static int
-edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
+edit_sign_fnc_transit (int current_state, status_type_t status,
 		       const char *args, void *opaque, gpg_error_t *err)
 {
   int next_state;
@@ -619,8 +654,7 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
   switch (current_state)
     {
     case SIGN_START:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           next_state = SIGN_COMMAND;
         }
@@ -631,42 +665,36 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case SIGN_COMMAND:
-      if (status == GPGME_STATUS_GET_BOOL &&
-          g_str_equal (args, "keyedit.sign_all.okay"))
+      if (CMP_STATUS (GET_BOOL) && g_str_equal (args, "keyedit.sign_all.okay"))
         {
           next_state = SIGN_UIDS;
         }
-      else if (status == GPGME_STATUS_GET_BOOL &&
-          g_str_equal (args, "sign_uid.okay"))
+      else if (CMP_STATUS (GET_BOOL) && g_str_equal (args, "sign_uid.okay"))
         {
           next_state = SIGN_CONFIRM;
         }
-      else if (status == GPGME_STATUS_GET_LINE &&
-               g_str_equal (args, "sign_uid.expire"))
+      else if (CMP_STATUS (GET_LINE) && g_str_equal (args, "sign_uid.expire"))
         {
           next_state = SIGN_SET_EXPIRE;
           break;
         }
-      else if (status == GPGME_STATUS_GET_LINE &&
-               g_str_equal (args, "sign_uid.class"))
+      else if (CMP_STATUS (GET_LINE) && g_str_equal (args, "sign_uid.class"))
         {
           next_state = SIGN_SET_CHECK_LEVEL;
         }
-      else if (status == GPGME_STATUS_ALREADY_SIGNED)
+      else if (CMP_STATUS (ALREADY_SIGNED))
         {
           /* The key has already been signed with this key */
           next_state = SIGN_ERROR;
           *err =  gpg_error (GPG_ERR_CONFLICT);
         }
-      else if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      else if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           /* Failed sign: expired key */
           next_state = SIGN_ERROR;
           *err = gpg_error (GPG_ERR_UNUSABLE_PUBKEY);
         }
-      else if (status == GPGME_STATUS_GET_LINE
-               || status == GPGME_STATUS_GET_BOOL)
+      else if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           next_state = current_state;
           *err = gpg_error (GPG_ERR_EAGAIN);
@@ -678,31 +706,26 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case SIGN_UIDS:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "sign_uid.expire"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "sign_uid.expire"))
         {
           next_state = SIGN_SET_EXPIRE;
           break;
         }
-      else if (status == GPGME_STATUS_GET_LINE &&
-               g_str_equal (args, "sign_uid.class"))
+      else if (CMP_STATUS (GET_LINE) && g_str_equal (args, "sign_uid.class"))
         {
           next_state = SIGN_SET_CHECK_LEVEL;
         }
-      else if (status == GPGME_STATUS_GET_BOOL &&
-               g_str_equal (args, "sign_uid.okay"))
+      else if (CMP_STATUS (GET_BOOL) && g_str_equal (args, "sign_uid.okay"))
         {
           next_state = SIGN_CONFIRM;
         }
-      else if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      else if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           /* Failed sign: expired key */
           next_state = SIGN_ERROR;
           *err = gpg_error (GPG_ERR_UNUSABLE_PUBKEY);
         }
-      else if (status == GPGME_STATUS_GET_LINE
-               || status == GPGME_STATUS_GET_BOOL)
+      else if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           next_state = current_state;
           *err = gpg_error (GPG_ERR_EAGAIN);
@@ -714,13 +737,11 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case SIGN_SET_EXPIRE:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "sign_uid.class"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "sign_uid.class"))
         {
           next_state = SIGN_SET_CHECK_LEVEL;
         }
-      else if (status == GPGME_STATUS_GET_LINE
-               || status == GPGME_STATUS_GET_BOOL)
+      else if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           next_state = current_state;
           *err = gpg_error (GPG_ERR_EAGAIN);
@@ -732,13 +753,11 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case SIGN_SET_CHECK_LEVEL:
-      if (status == GPGME_STATUS_GET_BOOL &&
-          g_str_equal (args, "sign_uid.okay"))
+      if (CMP_STATUS (GET_BOOL) && g_str_equal (args, "sign_uid.okay"))
         {
           next_state = SIGN_CONFIRM;
         }
-      else if (status == GPGME_STATUS_GET_LINE
-               || status == GPGME_STATUS_GET_BOOL)
+      else if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           next_state = current_state;
           *err = gpg_error (GPG_ERR_EAGAIN);
@@ -750,18 +769,16 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case SIGN_CONFIRM:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           next_state = SIGN_QUIT;
         }
-      else if (status == GPGME_STATUS_GET_LINE
-               || status == GPGME_STATUS_GET_BOOL)
+      else if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           next_state = current_state;
           *err = gpg_error (GPG_ERR_EAGAIN);
         }
-      else if (status == GPGME_STATUS_ERROR)
+      else if (CMP_STATUS (ERROR))
         {
           next_state = SIGN_ERROR;
           *err = parse_status_error (args);
@@ -773,8 +790,7 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case SIGN_QUIT:
-      if (status == GPGME_STATUS_GET_BOOL &&
-          g_str_equal (args, "keyedit.save.okay"))
+      if (CMP_STATUS (GET_BOOL) && g_str_equal (args, "keyedit.save.okay"))
         {
           next_state = SIGN_SAVE;
         }
@@ -785,8 +801,7 @@ edit_sign_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case SIGN_ERROR:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           /* Go to quit operation state */
           next_state = SIGN_QUIT;
@@ -839,7 +854,7 @@ edit_passwd_fnc_action (int state, void *opaque, char **result)
 
 /* Change passphrase: transit.  */
 static int
-edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status,
+edit_passwd_fnc_transit (int current_state, status_type_t status,
 			 const char *args, void *opaque, gpg_error_t *err)
 {
   int next_state;
@@ -847,8 +862,7 @@ edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status,
   switch (current_state)
     {
     case PASSWD_START:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           next_state = PASSWD_COMMAND;
         }
@@ -860,12 +874,11 @@ edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status,
       break;
     case PASSWD_COMMAND:
     case PASSWD_ENTERNEW:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           next_state = PASSWD_QUIT;
         }
-      else if (status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
+      else if (CMP_STATUS (NEED_PASSPHRASE_SYM))
         {
           next_state = PASSWD_ENTERNEW;
         }
@@ -876,8 +889,7 @@ edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case PASSWD_QUIT:
-      if (status == GPGME_STATUS_GET_BOOL &&
-          g_str_equal (args, "keyedit.save.okay"))
+      if (CMP_STATUS (GET_BOOL) && g_str_equal (args, "keyedit.save.okay"))
         {
           next_state = PASSWD_SAVE;
         }
@@ -888,8 +900,7 @@ edit_passwd_fnc_transit (int current_state, gpgme_status_code_t status,
         }
       break;
     case PASSWD_ERROR:
-      if (status == GPGME_STATUS_GET_LINE &&
-          g_str_equal (args, "keyedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && g_str_equal (args, "keyedit.prompt"))
         {
           /* Go to quit operation state */
           next_state = PASSWD_QUIT;
@@ -963,7 +974,11 @@ gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
       return err;
     }
   parms = gpa_gpgme_edit_trust_parms_new (ctx, trust_strings[ownertrust], out);
+#if USE_GPGME_INTERACT
+  err = gpgme_op_interact_start (ctx->ctx, key, 0, edit_fnc, parms, out);
+#else
   err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
+#endif
   return err;
 }
 
@@ -1035,7 +1050,11 @@ gpa_gpgme_edit_expire_start (GpaContext *ctx, gpgme_key_t key, GDate *date)
     }
 
   parms = gpa_gpgme_edit_expire_parms_new (ctx, date, out);
+#if USE_GPGME_INTERACT
+  err = gpgme_op_interact_start (ctx->ctx, key, 0, edit_fnc, parms, out);
+#else
   err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
+#endif
   return err;
 }
 
@@ -1103,8 +1122,11 @@ gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
       return err;
     }
   parms = gpa_gpgme_edit_sign_parms_new (ctx, "0", local, out);
+#if USE_GPGME_INTERACT
+  err = gpgme_op_interact_start (ctx->ctx, key, 0, edit_fnc, parms, out);
+#else
   err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
-
+#endif
   return err;
 }
 
@@ -1210,8 +1232,11 @@ gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
   if (!cms_hack)
     gpgme_set_passphrase_cb (ctx->ctx, passwd_passphrase_cb, parms);
 
+#if USE_GPGME_INTERACT
+  err = gpgme_op_interact_start (ctx->ctx, key, 0, edit_fnc, parms, out);
+#else
   err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
-
+#endif
   return err;
 }
 
@@ -1314,7 +1339,7 @@ card_edit_genkey_fnc_action (int state, void *opaque, char **result)
 
 
 static int
-card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
+card_edit_genkey_fnc_transit (int current_state, status_type_t status,
                               const char *args, void *opaque, gpg_error_t *err)
 {
   struct genkey_parms_s *genkey_parms = opaque;
@@ -1326,23 +1351,21 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
   switch (current_state)
     {
     case CARD_START:
-      if (status == GPGME_STATUS_GET_LINE
-          && !strcmp (args, "cardedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && !strcmp (args, "cardedit.prompt"))
 	next_state = CARD_COMMAND;
       else
         goto bad_state;
       break;
 
     case CARD_COMMAND:
-      if (status == GPGME_STATUS_GET_LINE
-          && !strcmp (args, "cardedit.prompt"))
+      if (CMP_STATUS (GET_LINE) && !strcmp (args, "cardedit.prompt"))
         next_state = CARD_ADMIN_COMMAND;
       else
         goto bad_state;
       break;
 
     case CARD_ADMIN_COMMAND:
-      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
+      if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           if (!strcmp (args, "cardedit.genkeys.backup_enc"))
             next_state = CARD_GENERATE_BACKUP;
@@ -1359,7 +1382,7 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
       break;
 
     case CARD_GENERATE_BACKUP:
-      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
+      if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           if (!strcmp (args, "cardedit.genkeys.replace_keys"))
             next_state = CARD_GENERATE_REPLACE_KEYS;
@@ -1378,7 +1401,7 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
       break;
 
     case CARD_GENERATE_REPLACE_KEYS:
-      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
+      if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           if (!strcmp (args, "keygen.valid"))
             next_state = CARD_GENERATE_VALIDITY;
@@ -1395,7 +1418,7 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
       break;
 
     case CARD_GENERATE_VALIDITY:
-      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
+      if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           if (!strcmp (args, "keygen.name"))
             next_state = CARD_GENERATE_NAME;
@@ -1412,7 +1435,7 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
       break;
 
     case CARD_GENERATE_NAME:
-      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
+      if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           if (!strcmp (args, "keygen.email"))
             next_state = CARD_GENERATE_EMAIL;
@@ -1430,7 +1453,7 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
       break;
 
     case CARD_GENERATE_EMAIL:
-      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
+      if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           if (!strcmp (args, "keygen.comment"))
             next_state = CARD_GENERATE_COMMENT;
@@ -1448,7 +1471,7 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
       break;
 
     case CARD_GENERATE_COMMENT:
-      if (status == GPGME_STATUS_KEY_CREATED)
+      if (CMP_STATUS (KEY_CREATED))
 	next_state = CARD_GENERATE_DONE;
       else if (!strcmp (args, "keygen.comment"))
         goto unexpected_prompt;
@@ -1457,7 +1480,7 @@ card_edit_genkey_fnc_transit (int current_state, gpgme_status_code_t status,
       break;
 
     case CARD_GENERATE_DONE:
-      if (status == GPGME_STATUS_GET_LINE || status == GPGME_STATUS_GET_BOOL)
+      if (CMP_STATUS (GET_LINE) || CMP_STATUS (GET_BOOL))
         {
           if (!strcmp (args, "cardedit.prompt"))
             next_state = CARD_QUIT;
@@ -1570,7 +1593,11 @@ gpa_gpgme_card_edit_genkey_start (GpaContext *ctx,
 
   edit_parms = card_edit_genkey_parms_new (ctx, genkey_parms, out);
 
+#if USE_GPGME_INTERACT
+  err = gpgme_op_interact_start (ctx->ctx, NULL, GPGME_INTERACT_CARD,
+                                 edit_fnc, edit_parms, out);
+#else
   err = gpgme_op_card_edit_start (ctx->ctx, NULL, edit_fnc, edit_parms, out);
-
+#endif
   return err;
 }
