@@ -231,7 +231,16 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
     }
   else
     {
-      /* Initialize from the global keytable.  */
+      /* Initialize from the global keytable.
+       *
+       * We must forcefully load the secret keytable first to
+       * prevent concurrent access to the TOFU database. */
+      gpa_keytable_force_reload (gpa_keytable_get_secret_instance (),
+                                 NULL, (GpaKeyTableEndFunc) gtk_main_quit,
+                                 NULL);
+      gtk_main ();
+
+      /* Now we can load the public keyring. */
       gpa_keytable_list_keys (gpa_keytable_get_public_instance(),
                               gpa_keylist_next, gpa_keylist_end, list);
     }
