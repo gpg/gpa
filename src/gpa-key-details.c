@@ -37,6 +37,7 @@
 #include "siglist.h"
 #include "certchain.h"
 #include "gpasubkeylist.h"
+#include "gpa-uid-list.h"
 #include "gpa-tofu-list.h"
 #include "gpa-key-details.h"
 #include "gtktools.h"
@@ -67,6 +68,11 @@ struct _GpaKeyDetails
   GtkWidget *detail_key_trust;
   GtkWidget *detail_key_type;
   GtkWidget *detail_creation;
+  GtkWidget *detail_last_update;
+
+  /* The widgets in the user ID page.  */
+  GtkWidget *uid_page;
+  GtkWidget *uid_list;
 
   /* The widgets in the signatures page.  */
   GtkWidget *signatures_page;
@@ -211,6 +217,12 @@ details_page_fill_key (GpaKeyDetails *kdt, gpgme_key_t key)
   gtk_label_set_text (GTK_LABEL (kdt->detail_creation), text);
   g_free (text);
 
+#if GPGME_VERSION_NUMBER >= 0x010100  /* GPGME >= 1.10.0 */
+  text = gpa_update_origin_string (key->last_update, key->origin);
+  gtk_label_set_text (GTK_LABEL (kdt->detail_last_update), text);
+  g_free (text);
+#endif
+
   gtk_widget_hide_all (kdt->details_num_label);
   gtk_widget_show_all (kdt->details_table);
   gtk_widget_set_no_show_all (kdt->details_num_label, TRUE);
@@ -324,9 +336,60 @@ construct_details_page (GpaKeyDetails *kdt)
     (table, table_row++, _("Key type:"), FALSE);
   kdt->detail_creation = add_details_row
     (table, table_row++, _("Created at:"), FALSE);
+  kdt->detail_last_update = add_details_row
+    (table, table_row++, _("Last update:"), FALSE);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (kdt), scrolled,
                             gtk_label_new (_("Details")));
+}
+
+
+/* Create and append new page with USER ID info for KEY.  If KEY is NULL
+   remove an existing USER ID page. */
+static void
+build_uid_page (GpaKeyDetails *kdt, gpgme_key_t key)
+{
+  GtkWidget *vbox;
+  GtkWidget *scrolled;
+  GtkWidget *uidlist;
+  int pnum;
+
+  /* First remove an existing page.  */
+  if (kdt->uid_page)
+    {
+      pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->uid_page);
+      if (pnum >= 0)
+        gtk_notebook_remove_page (GTK_NOTEBOOK (kdt), pnum);
+      kdt->uid_page = NULL;
+      if (kdt->uid_list)
+        {
+          g_object_unref (kdt->uid_list);
+          kdt->uid_list = NULL;
+        }
+    }
+  if (!key)
+    return;
+
+  /* Create a new page.  */
+  vbox = gtk_vbox_new (FALSE, 5);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
+                                       GTK_SHADOW_IN);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
+  uidlist = gpa_uid_list_new ();
+  gtk_container_add (GTK_CONTAINER (scrolled), uidlist);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  kdt->uid_list = uidlist;
+  g_object_ref (kdt->uid_list);
+  kdt->uid_page = vbox;
+  gtk_notebook_append_page (GTK_NOTEBOOK (kdt), kdt->uid_page,
+                            gtk_label_new (_("User IDs")));
+
+  /* Fill this page.  */
+  gpa_uid_list_set_key (kdt->uid_list, key);
 }
 
 
@@ -560,11 +623,13 @@ ui_mode_changed (GpaOptions *options, gpointer param)
 
   if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
+      build_uid_page (kdt, NULL);
       build_signatures_page (kdt, NULL);
       build_subkeys_page (kdt, NULL);
     }
   else
     {
+      build_uid_page (kdt, kdt->current_key);
       build_signatures_page (kdt, kdt->current_key);
       build_subkeys_page (kdt, kdt->current_key);
     }
@@ -624,6 +689,11 @@ gpa_key_details_finalize (GObject *object)
     {
       gpgme_key_unref (kdt->current_key);
       kdt->current_key = NULL;
+    }
+  if (kdt->uid_list)
+    {
+      g_object_unref (kdt->uid_list);
+      kdt->uid_list = NULL;
     }
   if (kdt->signatures_list)
     {
@@ -709,13 +779,15 @@ gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key, int keycount)
   if (pnum >= 0
       && (widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (kdt), pnum)))
     {
-      if (widget == kdt->signatures_page)
+      if (widget == kdt->uid_page)
         pnum = 1;
-      else if (widget == kdt->subkeys_page)
+      else if (widget == kdt->signatures_page)
         pnum = 2;
+      else if (widget == kdt->subkeys_page)
+        pnum = 3;
 #ifdef ENABLE_TOFU_INFO
       else if (widget == kdt->tofu_page)
-        pnum = 3;
+        pnum = 4;
 #endif /*ENABLE_TOFU_INFO*/
       else
         pnum = 0;
@@ -739,11 +811,13 @@ gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key, int keycount)
       /* Depend the generation of pages on the mode of the UI.  */
       if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
         {
+          build_uid_page (kdt, NULL);
           build_signatures_page (kdt, NULL);
           build_subkeys_page (kdt, NULL);
         }
       else
         {
+          build_uid_page (kdt, key);
           build_signatures_page (kdt, key);
           build_subkeys_page (kdt, key);
         }
@@ -761,12 +835,14 @@ gpa_key_details_update (GtkWidget *keydetails, gpgme_key_t key, int keycount)
   gtk_widget_show_all (keydetails);
 
   /* Try to select the last selected page.  */
-  if (pnum == 1 && kdt->signatures_page)
+  if (pnum == 1 && kdt->uid_page)
+    pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->uid_page);
+  else if (pnum == 2 && kdt->signatures_page)
     pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->signatures_page);
-  else if (pnum == 2 && kdt->subkeys_page)
+  else if (pnum == 3 && kdt->subkeys_page)
     pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->subkeys_page);
 #ifdef ENABLE_TOFU_INFO
-  else if (pnum == 3 && kdt->tofu_page)
+  else if (pnum == 4 && kdt->tofu_page)
     pnum = gtk_notebook_page_num (GTK_NOTEBOOK (kdt), kdt->tofu_page);
 #endif /*ENABLE_TOFU_INFO*/
   else

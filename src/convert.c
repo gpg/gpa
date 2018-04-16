@@ -129,6 +129,48 @@ gpa_creation_date_string (unsigned long creation_time)
   return result;
 }
 
+
+#if GPGME_VERSION_NUMBER >= 0x010a00  /* GPGME >= 1.10.0 */
+static const char *
+keyorg_string (unsigned int origin)
+{
+  switch (origin)
+    {
+    case GPGME_KEYORG_UNKNOWN: return _("unknown");
+    case GPGME_KEYORG_KS:      return _("keyserver");
+    case GPGME_KEYORG_DANE:    return _("DANE");
+    case GPGME_KEYORG_WKD:     return _("Web Key Directory");
+    case GPGME_KEYORG_URL:     return _("URL");
+    case GPGME_KEYORG_FILE:    return _("file");
+    case GPGME_KEYORG_SELF:    return _("self");
+    case GPGME_KEYORG_OTHER:   return _("other");
+    }
+  return "[?]";
+}
+
+
+char *
+gpa_update_origin_string (unsigned long last_update, unsigned int origin)
+{
+  gchar *result;
+  GDate adate;
+
+  if (last_update && origin)
+    {
+      g_date_set_time_t (&adate, (time_t)last_update);
+      result = g_strdup_printf ("%04d-%02d-%02d (%s)",
+                                g_date_get_year (&adate),
+                                g_date_get_month (&adate),
+                                g_date_get_day (&adate),
+                                keyorg_string (origin));
+    }
+  else
+    result = g_strdup (_("Unknown"));
+  return result;
+}
+#endif /* gpgme >= 1.10.0 */
+
+
 const char *
 gpa_sex_char_to_string (char sex)
 {

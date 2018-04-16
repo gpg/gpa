@@ -119,6 +119,7 @@ gpa_SOURCES = \
               selectkeydlg.c selectkeydlg.h \
 	      keymanager.c keymanager.h \
 	      gpa-key-details.c gpa-key-details.h \
+	      gpa-uid-list.c gpa-uid-list.h \
 	      gpa-tofu-list.c gpa-tofu-list.h \
 	      ownertrustdlg.c ownertrustdlg.h \
 	      keysigndlg.c keysigndlg.h \

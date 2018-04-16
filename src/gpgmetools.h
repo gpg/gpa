@@ -171,6 +171,9 @@ const gchar *gpa_key_ownertrust_string (gpgme_key_t key);
 /* Key validity strings.  */
 const gchar *gpa_key_validity_string (gpgme_key_t key);
 
+/* UID validity strings.  */
+const gchar *gpa_uid_validity_string (gpgme_user_id_t uid);
+
 /* Function to manage import results.  */
 void gpa_gpgme_update_import_results (gpa_import_result_t result,
                                       unsigned int files,

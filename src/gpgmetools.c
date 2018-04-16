@@ -753,6 +753,28 @@ gpa_key_validity_string (gpgme_key_t key)
 }
 
 
+/* UID validity strings.  */
+const gchar *
+gpa_uid_validity_string (gpgme_user_id_t uid)
+{
+  if (uid->revoked)
+    return _("Revoked");
+  else if (uid->invalid)
+    return _("Invalid");
+
+  switch (uid->validity)
+    {
+    case GPGME_VALIDITY_UNKNOWN:
+    case GPGME_VALIDITY_UNDEFINED:return _("Unknown");
+    case GPGME_VALIDITY_NEVER:    return _("Faked");
+    case GPGME_VALIDITY_MARGINAL: return _("Marginal");
+    case GPGME_VALIDITY_FULL:     return _("Fully");
+    case GPGME_VALIDITY_ULTIMATE: return _("Ultimate");
+    default: return "[?]";
+    }
+}
+
+
 static GtkWidget *
 passphrase_question_label (const char *uid_hint,
 			   const char *passphrase_info,
