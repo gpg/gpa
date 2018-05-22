@@ -971,12 +971,16 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 
       if (reset)
 	{
+	  char *description;
 	  /* FIXME: Might need to put pages into scrolled panes if
 	     there are too many.  */
 	  page = gtk_vbox_new (FALSE, 0);
 	  gtk_container_add (GTK_CONTAINER (dialog_notebook), page);
 
-	  label = gtk_label_new (comp->description);
+	  description = xstrdup (comp->description);
+	  percent_unescape (description, 0);
+	  label = gtk_label_new (description);
+	  xfree (description);
 	  gtk_notebook_set_tab_label
 	    (GTK_NOTEBOOK (dialog_notebook),
 	     gtk_notebook_get_nth_page (GTK_NOTEBOOK (dialog_notebook),
@@ -1036,6 +1040,8 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	      name = xmalloc (name_len);
 	      snprintf (name, name_len, "<b>%s</b>", title);
 	      name[name_len - 1] = '\0';
+	      percent_unescape (name, 0);
+
 	      label = gtk_label_new (name);
 	      xfree (name);
 
@@ -1198,7 +1204,13 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 #if GTK_CHECK_VERSION (2, 12, 0)
 	      /* Add a tooltip description.  */
 	      if (option->description)
-		gtk_widget_set_tooltip_text (vbox, option->description);
+		{
+		  char *description = xstrdup (option->description);
+
+	          percent_unescape (description, 0);
+		  gtk_widget_set_tooltip_text (vbox, description);
+		  xfree (description);
+		}
 #endif
 	    }
 	  option = option->next;
