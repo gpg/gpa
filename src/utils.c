@@ -340,6 +340,7 @@ percent_unescape (char *string, int plus2space)
           n++;
         }
     }
+  *p = 0;
 
   return n;
 }
