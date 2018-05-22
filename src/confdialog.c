@@ -34,6 +34,7 @@
 #include "gpgmetools.h"
 #include "gtktools.h"
 #include "options.h"
+#include "gpa.h"
 
 /* Violation of GNOME standards: Cancel does not revert previous
    apply.  We do not auto-apply or syntax check after focus
@@ -1012,7 +1013,9 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	{
 	  if (option->flags & GPGME_CONF_GROUP)
 	    {
-	      char name[80];
+	      char *name;
+	      size_t name_len;
+	      const char *title;
 
 	      if (! group_has_options (option, &option))
 		continue;
@@ -1027,11 +1030,14 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
                  used for it.  AFAICS, we would only need to prefix
                  the description with the group name and gpgconf would
                  instantly privide that. */
-	      snprintf (name, sizeof (name), "<b>%s</b>",
-                        (option->argname && *option->argname)?
-                         option->argname : option->description);
-	      name[sizeof (name) - 1] = '\0';
+	      title = (option->argname && *option->argname)?
+			option->argname : option->description;
+	      name_len = strlen (title) + strlen("<b></b>") + 1;
+	      name = xmalloc (name_len);
+	      snprintf (name, name_len, "<b>%s</b>", title);
+	      name[name_len - 1] = '\0';
 	      label = gtk_label_new (name);
+	      xfree (name);
 
 	      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
 	      gtk_frame_set_label_widget (GTK_FRAME (frame), label);
