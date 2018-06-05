@@ -1018,7 +1018,6 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	  if (option->flags & GPGME_CONF_GROUP)
 	    {
 	      char *name;
-	      size_t name_len;
 	      const char *title;
 
 	      if (! group_has_options (option, &option))
@@ -1036,12 +1035,8 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
                  instantly privide that. */
 	      title = (option->argname && *option->argname)?
 			option->argname : option->description;
-	      name_len = strlen (title) + strlen("<b></b>") + 1;
-	      name = xmalloc (name_len);
-	      snprintf (name, name_len, "<b>%s</b>", title);
-	      name[name_len - 1] = '\0';
+	      name = g_strdup_printf ("<b>%s</b>", title);
 	      percent_unescape (name, 0);
-
 	      label = gtk_label_new (name);
 	      xfree (name);
 
