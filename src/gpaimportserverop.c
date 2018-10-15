@@ -128,6 +128,8 @@ search_keys (GpaImportOperation *operation, const char *keyid)
   gpgme_key_t key;
   gpgme_key_t *keyarray;
   int i, nkeys;
+  gpgme_keylist_mode_t listmode;
+  char *mbox = NULL;
 
   if (!keyid || !*keyid)
     return FALSE;
@@ -139,8 +141,20 @@ search_keys (GpaImportOperation *operation, const char *keyid)
      actual import operation done later.  */
   ctx = gpa_gpgme_new ();
   gpgme_set_protocol (ctx, GPGME_PROTOCOL_OpenPGP);
-  /* Switch to extern-only list mode.  */
-  err = gpgme_set_keylist_mode (ctx, GPGME_KEYLIST_MODE_EXTERN);
+  /* Switch to extern-only or locate list mode.  We use --locate-key
+   * iff KEYID is a single mail address.  */
+  listmode = GPGME_KEYLIST_MODE_EXTERN;
+#if GPGME_VERSION_NUMBER >= 0x010701
+  mbox = gpgme_addrspec_from_uid (keyid);
+  if (mbox)
+    {
+      listmode = GPGME_KEYLIST_MODE_LOCATE;
+      /* We already extracted the mbox - use it directly than letting
+       * gnupg extract it.  */
+      keyid = mbox;
+    }
+#endif /* GPGME >= 1.7.1 */
+  err = gpgme_set_keylist_mode (ctx, listmode);
   if (err)
     gpa_gpgme_error (err);
 
@@ -187,6 +201,8 @@ search_keys (GpaImportOperation *operation, const char *keyid)
         gpgme_key_unref (keyarray[i]);
       g_free (keyarray);
     }
+
+  gpgme_free (mbox);
   return result;
 }
 
