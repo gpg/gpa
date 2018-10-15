@@ -34,12 +34,11 @@
 #include "gpawindowkeeper.h"
 #include "icons.h"
 
-
 /* Deprecated - use gpa_show_warning instead.  */
 void
 gpa_window_error (const gchar *message, GtkWidget *messenger)
 {
-  gpa_show_warning (messenger, "%s", message);
+  gpa_show_warn (messenger, NULL, "%s", message);
 }
 
 
@@ -52,7 +51,7 @@ gpa_window_message (const gchar *message, GtkWidget * messenger)
 
 
 static void
-show_gtk_message (GtkWidget *parent, GtkMessageType mtype,
+show_gtk_message (GtkWidget *parent, GtkMessageType mtype, GpaContext *ctx,
                   const char *format, va_list arg_ptr)
 {
   GtkWidget *dialog;
@@ -65,9 +64,26 @@ show_gtk_message (GtkWidget *parent, GtkMessageType mtype,
                                    GTK_BUTTONS_CLOSE,
                                    "%s", buffer);
   g_free (buffer);
+  buffer = NULL;
+  if (ctx)
+    gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                            _("_Details"), GTK_RESPONSE_HELP,
+                            NULL);
 
   gtk_widget_show_all (dialog);
-  gtk_dialog_run (GTK_DIALOG (dialog));
+  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_HELP && ctx)
+    {
+      /* If requested and possible get diagnostics from GPGME.  */
+      buffer = gpa_context_get_diag (ctx);
+      if (!buffer)
+        gpa_show_info (parent, "No diagnostic data available");
+      else
+        {
+          gpa_show_info (parent, "Diagnostics:\n%s", buffer);
+          g_free (buffer);
+        }
+    }
+
   gtk_widget_destroy (dialog);
 }
 
@@ -79,19 +95,21 @@ gpa_show_info (GtkWidget *parent, const char *format, ...)
   va_list arg_ptr;
 
   va_start (arg_ptr, format);
-  show_gtk_message (parent, GTK_MESSAGE_INFO, format, arg_ptr);
+  show_gtk_message (parent, GTK_MESSAGE_INFO, NULL, format, arg_ptr);
   va_end (arg_ptr);
 }
 
 
-/* Show a modal warning message. */
+/* Show a modal warning message.  PARENT is the parent windows, CTX is
+ * eitehr NULL or a related GPGME context to be used to allow shoing
+ * additional information. */
 void
-gpa_show_warning (GtkWidget *parent, const char *format, ...)
+gpa_show_warn (GtkWidget *parent, GpaContext *ctx, const char *format, ...)
 {
   va_list arg_ptr;
 
   va_start (arg_ptr, format);
-  show_gtk_message (parent, GTK_MESSAGE_WARNING, format, arg_ptr);
+  show_gtk_message (parent, GTK_MESSAGE_WARNING, ctx, format, arg_ptr);
   va_end (arg_ptr);
 }
 

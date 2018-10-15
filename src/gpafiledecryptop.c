@@ -502,7 +502,6 @@ gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
 					  GpaFileDecryptOperation *op)
 {
   gpa_file_item_t file_item = GPA_FILE_OPERATION (op)->current->data;
-  gchar *message;
 
   switch (gpg_err_code (err))
     {
@@ -511,33 +510,32 @@ gpa_file_decrypt_operation_done_error_cb (GpaContext *context, gpg_error_t err,
       /* Ignore these */
       break;
     case GPG_ERR_NO_DATA:
-      message = g_strdup_printf (file_item->direct_name
-				 ? _("\"%s\" contained no OpenPGP data.")
-				 : _("The file \"%s\" contained no OpenPGP"
-				     "data."),
-				 file_item->direct_name
-				 ? file_item->direct_name
-				 : file_item->filename_in);
-      gpa_window_error (message, GPA_OPERATION (op)->window);
-      g_free (message);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     file_item->direct_name
+                     ? _("\"%s\" contained no OpenPGP data.")
+                     : _("The file \"%s\" contained no OpenPGP"
+                         "data."),
+                     file_item->direct_name
+                     ? file_item->direct_name
+                     : file_item->filename_in);
       break;
     case GPG_ERR_DECRYPT_FAILED:
-      message = g_strdup_printf (file_item->direct_name
-				 ? _("\"%s\" contained no valid "
-				     "encrypted data.")
-				 : _("The file \"%s\" contained no valid "
-				     "encrypted data."),
-				 file_item->direct_name
-				 ? file_item->direct_name
-				 : file_item->filename_in);
-      gpa_window_error (message, GPA_OPERATION (op)->window);
-      g_free (message);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     file_item->direct_name
+                     ? _("\"%s\" contained no valid "
+                         "encrypted data.")
+                     : _("The file \"%s\" contained no valid "
+                         "encrypted data."),
+                     file_item->direct_name
+                     ? file_item->direct_name
+                     : file_item->filename_in);
       break;
     case GPG_ERR_BAD_PASSPHRASE:
-      gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     _("Wrong passphrase!"));
       break;
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }

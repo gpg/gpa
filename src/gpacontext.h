@@ -52,6 +52,8 @@ struct _GpaContext {
   GList *cbs;
   /* The IO callback structure */
   struct gpgme_io_cbs *io_cbs;
+  /* Hack to block certain events.  */
+  int inhibit_gpgme_events;
 };
 
 struct _GpaContextClass {
@@ -77,5 +79,7 @@ GpaContext *gpa_context_new (void);
  */
 gboolean gpa_context_busy (GpaContext *context);
 
-#endif
+/* Return a string with the diagnostics from gpgme.  */
+char *gpa_context_get_diag (GpaContext *context);
 
+#endif /*GPA_CONTEXT_H*/

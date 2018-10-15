@@ -166,7 +166,7 @@ search_keys (GpaImportOperation *operation, const char *keyid)
     {
       if (nkeys >= MAX_KEYSEARCH_RESULTS)
         {
-          gpa_show_warning (GPA_OPERATION (operation)->window,
+          gpa_show_warn (GPA_OPERATION (operation)->window, NULL,
                             _("More than %d keys match your search pattern.\n"
                               "Use the long keyid or a fingerprint "
                               "for a better match"), nkeys);
@@ -182,7 +182,7 @@ search_keys (GpaImportOperation *operation, const char *keyid)
 
   if (!err && !nkeys)
     {
-      gpa_show_warning (GPA_OPERATION (operation)->window,
+      gpa_show_warn (GPA_OPERATION (operation)->window, NULL,
                         _("No keys were found."));
     }
   else if (!err)

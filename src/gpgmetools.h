@@ -27,6 +27,8 @@
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
+#include "gpacontext.h"
+
 /* Internal algorithm identifiers, describing which keys to
    create.  */
 typedef enum
@@ -96,12 +98,14 @@ void _gpa_gpgme_error (gpg_error_t err,
                        const char *file, int line) G_GNUC_NORETURN;
 
 /* The same as gpa_gpgme_error, without quitting.  */
+#define gpa_gpgme_warn(err,desc,ctx)                                       \
+  do { _gpa_gpgme_warn (err, desc, ctx, __FILE__, __LINE__); } while (0)
 #define gpa_gpgme_warning_ext(err,desc) \
-         do { _gpa_gpgme_warning (err, desc, __FILE__, __LINE__); } while (0)
+  do { _gpa_gpgme_warn (err, desc, NULL, __FILE__, __LINE__); } while (0)
 #define gpa_gpgme_warning(err) \
-         do { _gpa_gpgme_warning (err, NULL, __FILE__, __LINE__); } while (0)
-void _gpa_gpgme_warning (gpg_error_t err, const char *desc,
-                         const char *file, int line);
+  do { _gpa_gpgme_warn (err, NULL, NULL, __FILE__, __LINE__); } while (0)
+void _gpa_gpgme_warn (gpg_error_t err, const char *desc, GpaContext *ctx,
+                      const char *file, int line);
 
 /* Initialize a gpgme_ctx_t for use with GPA.  */
 gpgme_ctx_t gpa_gpgme_new (void);

@@ -81,14 +81,13 @@ _gpa_gpgme_error (gpg_error_t err, const char *file, int line)
 }
 
 
-/* (Please use the gpa_gpgme_warning macros).  */
+/* (Please use the gpa_gpgme_warn macros).  */
 void
-_gpa_gpgme_warning (gpg_error_t err, const char *desc,
-                    const char *file, int line)
+_gpa_gpgme_warn (gpg_error_t err, const char *desc, GpaContext *ctx,
+                 const char *file, int line)
 {
   char *argbuf = NULL;
   const char *arg;
-  char *message;
 
   if (desc && (!err || gpg_err_code (err) == GPG_ERR_GENERAL))
     arg = desc;
@@ -100,16 +99,14 @@ _gpa_gpgme_warning (gpg_error_t err, const char *desc,
   else
     arg = gpgme_strerror (err);
 
-  message = g_strdup_printf
-    (_("The GPGME library returned an unexpected\n"
-       "error at %s:%d. The error was:\n\n"
-       "\t%s\n\n"
-       "This is either an installation problem or a bug in %s.\n"
-       "%s will now try to recover from this error."),
-     strip_path (file), line, arg, GPA_NAME, GPA_NAME);
+  gpa_show_warn (NULL, ctx,
+                 _("The GPGME library returned an unexpected\n"
+                   "error at %s:%d. The error was:\n\n"
+                   "\t%s\n\n"
+                   "This is either an installation problem or a bug in %s.\n"
+                   "%s will now try to recover from this error."),
+                 strip_path (file), line, arg, GPA_NAME, GPA_NAME);
   g_free (argbuf);
-  gpa_window_error (message, NULL);
-  g_free (message);
 }
 
 
@@ -1310,7 +1307,7 @@ gpa_gpgme_show_import_results (GtkWidget *parent, gpa_import_result_t result)
 
 
   if (!result->considered)
-    gpa_show_warning (parent, "%s%s%s",
+    gpa_show_warn (parent, NULL, "%s%s%s",
                       _("No keys were found."),
                       buf2? "\n":"",
                       buf2? buf2:"");

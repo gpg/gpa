@@ -289,7 +289,7 @@ gpa_file_import_operation_done_error_cb (GpaContext *context, gpg_error_t err,
       break;
 
     case GPG_ERR_NO_DATA:
-      gpa_show_warning (GPA_OPERATION (op)->window,
+      gpa_show_warn (GPA_OPERATION (op)->window, NULL,
                         file_item->direct_name
                         ? _("\"%s\" contained no OpenPGP data.")
                         : _("The file \"%s\" contained no OpenPGP"
@@ -300,7 +300,7 @@ gpa_file_import_operation_done_error_cb (GpaContext *context, gpg_error_t err,
       break;
 
     default:
-      gpa_show_warning (GPA_OPERATION (op)->window,
+      gpa_show_warn (GPA_OPERATION (op)->window, NULL,
                         _("Error importing \"%s\": %s <%s>"),
                         file_item->direct_name
                         ? file_item->direct_name

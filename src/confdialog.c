@@ -1614,8 +1614,8 @@ gpa_configure_keyserver (GtkWidget *parent)
   keyserver = gpa_load_configured_keyserver ();
   if (!keyserver)
     {
-      gpa_show_warning
-        (parent, _("Configuring the backend to use a keyserver failed"));
+      gpa_show_warn
+        (parent, NULL, _("Configuring the backend to use a keyserver failed"));
       return NULL;
     }
   return keyserver;

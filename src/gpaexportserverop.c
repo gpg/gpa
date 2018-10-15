@@ -228,7 +228,7 @@ send_keys (GpaExportServerOperation *op, GList *keylist)
 
   if (err)
     {
-      gpa_show_warning (GPA_OPERATION (op)->window,
+      gpa_show_warn (GPA_OPERATION (op)->window, NULL,
                         "%s\n\n(%s <%s>)",
                         _("Error sending key(s) to the server."),
                         gpg_strerror (err), gpg_strsource (err));

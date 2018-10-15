@@ -45,7 +45,7 @@ static void gpa_context_progress (GpaContext *context, int current, int total);
 /* The GPGME I/O callbacks */
 
 static gpg_error_t gpa_context_register_cb (void *data, int fd, int dir,
-                                           gpgme_io_cb_t fnc, void *fnc_data, 
+                                           gpgme_io_cb_t fnc, void *fnc_data,
                                            void **tag);
 static void gpa_context_remove_cb (void *tag);
 static void gpa_context_event_cb (void *data, gpgme_event_io_t type,
@@ -53,7 +53,7 @@ static void gpa_context_event_cb (void *data, gpgme_event_io_t type,
 
 static gpg_error_t
 gpa_context_passphrase_cb (void *hook, const char *uid_hint,
-			   const char *passphrase_info, int prev_was_bad, 
+			   const char *passphrase_info, int prev_was_bad,
 			   int fd);
 static void
 gpa_context_progress_cb (void *opaque, const char *what,
@@ -77,7 +77,7 @@ GType
 gpa_context_get_type (void)
 {
   static GType context_type = 0;
-  
+
   if (!context_type)
     {
       static const GTypeInfo context_info =
@@ -92,12 +92,12 @@ gpa_context_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_context_init,
       };
-      
+
       context_type = g_type_register_static (G_TYPE_OBJECT,
                                              "GpaContext",
                                              &context_info, 0);
     }
-  
+
   return context_type;
 }
 
@@ -105,7 +105,7 @@ static void
 gpa_context_class_init (GpaContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gpa_context_finalize;
@@ -169,6 +169,7 @@ gpa_context_init (GpaContext *context)
   gpg_error_t err;
 
   context->busy = FALSE;
+  context->inhibit_gpgme_events = 0;
 
   /* The callback queue */
   context->cbs = NULL;
@@ -206,11 +207,11 @@ static void
 gpa_context_finalize (GObject *object)
 {
   GpaContext *context = GPA_CONTEXT (object);
-  
+
   gpgme_release (context->ctx);
   g_list_free (context->cbs);
   g_free (context->io_cbs);
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -222,7 +223,7 @@ GpaContext *
 gpa_context_new (void)
 {
   GpaContext *context;
-  
+
   context = g_object_new (GPA_CONTEXT_TYPE, NULL);
 
   return context;
@@ -239,8 +240,47 @@ gpa_context_busy (GpaContext *context)
   return context->busy;
 }
 
-/* 
- * The GPGME I/O callbacks 
+
+/* Return a malloced string with the last diagnostic data of the
+ * context.  Returns NULL if no diagnostics are available.  */
+char *
+gpa_context_get_diag (GpaContext *context)
+{
+#if GPGME_VERSION_NUMBER >= 0x010c00 /* >= 1.12 */
+  gpgme_data_t diag;
+  char *buffer, *result;
+  gpg_error_t err;
+
+  if (!context)
+    return NULL;
+  if (gpgme_data_new (&diag))
+    return NULL;  /* Ooops.  */
+
+  context->inhibit_gpgme_events++;
+  err = gpgme_op_getauditlog (context->ctx, diag, GPGME_AUDITLOG_DIAG);
+  context->inhibit_gpgme_events--;
+  if (err)
+    {
+      gpgme_data_release (diag);
+      return NULL;  /* No data.  */
+    }
+
+  /* Append a trailing zero and return the string.  */
+  gpgme_data_seek (diag, 0, SEEK_END);
+  gpgme_data_write (diag, "", 1);
+  buffer = gpgme_data_release_and_get_mem (diag, NULL);
+  result = g_strdup (buffer);
+  gpgme_free (buffer);
+  return result;
+#else
+  return NULL;
+#endif
+}
+
+
+
+/*
+ * The GPGME I/O callbacks
  */
 
 /* Registering callbacks with GLib */
@@ -282,7 +322,7 @@ static void
 register_callback (struct gpa_io_cb_data *cb)
 {
   GIOChannel *channel;
- 
+
 #ifdef G_OS_WIN32
   /* We have to ask GPGME for the GIOChannel to use.  The "file
      descriptor" may not be a system file descriptor.  */
@@ -292,7 +332,7 @@ register_callback (struct gpa_io_cb_data *cb)
   channel = g_io_channel_unix_new (cb->fd);
 #endif
 
-  cb->watch = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, 
+  cb->watch = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT,
 				   cb->dir ? READ_CONDITION : WRITE_CONDITION,
 				   gpa_io_cb, cb, NULL);
   cb->registered = TRUE;
@@ -310,7 +350,7 @@ register_callback (struct gpa_io_cb_data *cb)
  */
 static void
 add_callback (GpaContext *context, struct gpa_io_cb_data *cb)
-{ 
+{
   context->cbs = g_list_append (context->cbs, cb);
 }
 
@@ -321,7 +361,7 @@ register_all_callbacks (GpaContext *context)
 {
   struct gpa_io_cb_data *cb;
   GList *list;
-  
+
   for (list = context->cbs; list; list = g_list_next (list))
     {
       cb = list->data;
@@ -337,7 +377,7 @@ unregister_all_callbacks (GpaContext *context)
 {
   struct gpa_io_cb_data *cb;
   GList *list;
-  
+
   for (list = context->cbs; list; list = g_list_next (list))
     {
       cb = list->data;
@@ -353,7 +393,7 @@ unregister_all_callbacks (GpaContext *context)
 /* The real GPGME callbacks */
 
 /* Register a callback.  This is called by GPGME when a crypto
-   operation is initiated in this context.  */ 
+   operation is initiated in this context.  */
 static gpg_error_t
 gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
                          void *fnc_data, void **tag)
@@ -364,7 +404,7 @@ gpa_context_register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc,
 
   cb->registered = FALSE;
   cb->fd = fd;
-  cb->dir = dir;  
+  cb->dir = dir;
   cb->fnc = fnc;
   cb->fnc_data = fnc_data;
   cb->context = context;
@@ -406,6 +446,9 @@ gpa_context_event_cb (void *data, gpgme_event_io_t type, void *type_data)
 {
   GpaContext *context = data;
   gpg_error_t err, op_err;
+
+  if (context->inhibit_gpgme_events)
+    return;
 
   switch (type)
     {
@@ -474,7 +517,7 @@ gpa_context_progress (GpaContext *context, int current, int total)
 /* The passphrase callback */
 static gpg_error_t
 gpa_context_passphrase_cb (void *hook, const char *uid_hint,
-			   const char *passphrase_info, int prev_was_bad, 
+			   const char *passphrase_info, int prev_was_bad,
 			   int fd)
 {
   GpaContext *context = hook;
@@ -493,6 +536,5 @@ gpa_context_progress_cb (void *opaque, const char *what,
 			 int type, int current, int total)
 {
   GpaContext *context = opaque;
-  g_signal_emit (context, signals[PROGRESS], 0, current, total);  
+  g_signal_emit (context, signals[PROGRESS], 0, current, total);
 }
-

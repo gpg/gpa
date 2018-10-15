@@ -21,15 +21,18 @@
 #ifndef GTK_TOOLS_H_
 #define GTK_TOOLS_H_
 
+#include <gpgme.h>
 #include <gtk/gtk.h>
+
+#include "gpacontext.h"
 
 
 /* Show a modal info message. */
 void gpa_show_info (GtkWidget *parent,
                     const char *format, ...) G_GNUC_PRINTF(2,3);
 /* Show a modal warning message. */
-void gpa_show_warning (GtkWidget *parent,
-                       const char *format, ...) G_GNUC_PRINTF(2,3);
+void gpa_show_warn (GtkWidget *parent, GpaContext *ctx,
+                    const char *format, ...) G_GNUC_PRINTF(3,4);
 
 /* Set a tooltip TEXT to WIDGET.  TEXT and WIDGET may both be NULL.
    This function is useful so that GPA can be build with older GTK+
