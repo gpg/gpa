@@ -43,6 +43,9 @@ struct _GpaExportOperation {
 
   GList *keys;
   gpgme_data_t dest;
+
+  /*:: private ::*/
+  int secret;
 };
 
 struct _GpaExportOperationClass {

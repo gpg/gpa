@@ -32,7 +32,8 @@ static GObjectClass *parent_class = NULL;
 enum
 {
   PROP_0,
-  PROP_KEYS
+  PROP_KEYS,
+  PROP_SECRET
 };
 
 static gboolean gpa_export_operation_idle_cb (gpointer data);
@@ -57,6 +58,9 @@ gpa_export_operation_get_property (GObject     *object,
     case PROP_KEYS:
       g_value_set_pointer (value, op->keys);
       break;
+    case PROP_SECRET:
+      g_value_set_boolean (value, op->secret);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -77,6 +81,9 @@ gpa_export_operation_set_property (GObject     *object,
       op->keys = (GList*) g_value_get_pointer (value);
       /* Make sure we keep a reference for our keys */
       g_list_foreach (op->keys, (GFunc) gpgme_key_ref, NULL);
+      break;
+    case PROP_SECRET:
+      op->secret = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -106,6 +113,7 @@ gpa_export_operation_init (GpaExportOperation *op)
 {
   op->keys = NULL;
   op->dest = NULL;
+  op->secret = 0;
 }
 
 static GObject*
@@ -156,7 +164,13 @@ gpa_export_operation_class_init (GpaExportOperationClass *klass)
 				   g_param_spec_pointer
 				   ("keys", "Keys",
 				    "Keys",
-				    G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
+				    G_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_SECRET,
+				   g_param_spec_boolean
+				   ("secret", "Secret",
+				    "Secret", FALSE,
+				    G_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 }
 
 GType
@@ -203,6 +217,7 @@ gpa_export_operation_idle_cb (gpointer data)
       GList *k;
       int i;
       gpgme_protocol_t prot = GPGME_PROTOCOL_UNKNOWN;
+      gboolean secret;
 
       gpgme_set_armor (GPA_OPERATION (op)->context->ctx, armor);
       /* Create the set of keys to export */
@@ -229,8 +244,11 @@ gpa_export_operation_idle_cb (gpointer data)
         }
       gpgme_set_protocol (GPA_OPERATION (op)->context->ctx, prot);
       /* Export to the gpgme_data_t */
+      g_object_get (op, "secret", &secret, NULL);
       err = gpgme_op_export_ext_start (GPA_OPERATION (op)->context->ctx,
-				       patterns, 0, op->dest);
+				       patterns,
+                                       secret? GPGME_EXPORT_MODE_SECRET : 0,
+                                       op->dest);
       if (err)
 	{
 	  gpa_gpgme_warning (err);

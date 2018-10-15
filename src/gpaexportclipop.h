@@ -54,6 +54,7 @@ GType gpa_export_clipboard_operation_get_type (void) G_GNUC_CONST;
 /* Creates a new export to file operation.
  */
 GpaExportClipboardOperation*
-gpa_export_clipboard_operation_new (GtkWidget *window, GList *keys);
+  gpa_export_clipboard_operation_new (GtkWidget *window, GList *keys,
+                                      gboolean secret);
 
 #endif

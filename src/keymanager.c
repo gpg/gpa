@@ -874,7 +874,25 @@ key_manager_copy (GtkAction *action, gpointer param)
   if (! selection)
     return;
 
-  op = gpa_export_clipboard_operation_new (GTK_WIDGET (self), selection);
+  op = gpa_export_clipboard_operation_new (GTK_WIDGET (self), selection, 0);
+  register_operation (self, GPA_OPERATION (op));
+}
+
+
+/* Copy the secret keys into the clipboard.  */
+static void
+key_manager_copy_sec (GtkAction *action, gpointer param)
+{
+  GpaKeyManager *self = param;
+  GList *selection;
+  GpaExportClipboardOperation *op;
+
+  selection = gpa_keylist_get_selected_keys (self->keylist,
+                                             GPGME_PROTOCOL_UNKNOWN);
+  if (!selection || g_list_length (selection) != 1)
+    return;
+
+  op = gpa_export_clipboard_operation_new (GTK_WIDGET (self), selection, 1);
   register_operation (self, GPA_OPERATION (op));
 }
 
@@ -997,6 +1015,8 @@ key_manager_action_new (GpaKeyManager *self,
 	N_("Copy the selection"), G_CALLBACK (key_manager_copy) },
       { "EditCopyFpr", GTK_STOCK_COPY, N_("Copy _Fingerprint"), "<control>F",
 	N_("Copy the fingerprints"), G_CALLBACK (key_manager_copy_fpr) },
+      { "EditCopySec", GTK_STOCK_COPY, N_("Copy Private Key"), NULL,
+	N_("Copy a single private key"), G_CALLBACK (key_manager_copy_sec) },
       { "EditPaste", GTK_STOCK_PASTE, NULL, NULL,
 	N_("Paste the clipboard"), G_CALLBACK (key_manager_paste) },
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",
@@ -1129,6 +1149,7 @@ key_manager_action_new (GpaKeyManager *self,
     "    <menuitem action='KeysSign'/>"
     "    <menuitem action='KeysSetOwnerTrust'/>"
     "    <menuitem action='KeysEditPrivateKey'/>"
+    "    <menuitem action='EditCopySec'/>"
     "    <separator/>"
     "    <menuitem action='KeysExport'/>"
 #ifdef ENABLE_KEYSERVER_SUPPORT
@@ -1203,6 +1224,9 @@ key_manager_action_new (GpaKeyManager *self,
   action = gtk_action_group_get_action (action_group, "EditCopyFpr");
   add_selection_sensitive_action (self, action,
                                   key_manager_has_selection);
+  action = gtk_action_group_get_action (action_group, "EditCopySec");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_single_selection);
   action = gtk_action_group_get_action (action_group, "KeysDelete");
   add_selection_sensitive_action (self, action,
                                   key_manager_has_selection);

@@ -134,22 +134,33 @@ static void
 gpa_export_clipboard_operation_complete_export (GpaExportOperation *operation)
 {
   GpaExportClipboardOperation *op = GPA_EXPORT_CLIPBOARD_OPERATION (operation);
+  gboolean is_secret;
+  GList *keys;
+  unsigned int nkeys;
+
+  g_object_get (op, "secret", &is_secret, "keys", &keys, NULL);
+  nkeys = g_list_length (keys);
   if (!dump_data_to_clipboard (operation->dest, gtk_clipboard_get
                                (GDK_SELECTION_CLIPBOARD)))
-    gpa_show_info(GPA_OPERATION (op)->window,
-                  _("The keys have been copied to the clipboard."));
+    gpa_show_info
+      (GPA_OPERATION (op)->window,
+       is_secret? _("The private key has been copied to the clipboard.") :
+       nkeys==1 ? _("The key has bees copied to the clipboard.") :
+       /* */      _("The keys have been copied to the clipboard."));
 }
 
 /* API */
 
 GpaExportClipboardOperation*
-gpa_export_clipboard_operation_new (GtkWidget *window, GList *keys)
+gpa_export_clipboard_operation_new (GtkWidget *window, GList *keys,
+                                    gboolean secret)
 {
   GpaExportClipboardOperation *op;
 
   op = g_object_new (GPA_EXPORT_CLIPBOARD_OPERATION_TYPE,
 		     "window", window,
 		     "keys", keys,
+                     "secret", secret,
 		     NULL);
 
   return op;
