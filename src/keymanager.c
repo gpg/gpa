@@ -879,6 +879,59 @@ key_manager_copy (GtkAction *action, gpointer param)
 }
 
 
+/* Copy the fingerprints of the keys into the clipboard.  */
+static void
+key_manager_copy_fpr (GtkAction *action, gpointer param)
+{
+  GpaKeyManager *self = param;
+  GList *selection, *item;
+  gpgme_protocol_t prot = GPGME_PROTOCOL_UNKNOWN;
+  gpgme_key_t key;
+  char *buffer = NULL;
+  char *p;
+
+  selection = gpa_keylist_get_selected_keys (self->keylist,
+                                             GPGME_PROTOCOL_UNKNOWN);
+  if (!selection)
+    return;
+
+  for (item = selection; item; item = g_list_next (item))
+    {
+      key = (gpgme_key_t)item->data;
+
+      if (prot == GPGME_PROTOCOL_UNKNOWN)
+        prot = key->protocol;
+      else if (prot != key->protocol)
+        {
+          gpa_window_error
+            (_("Only keys of the same procotol may be copied."), NULL);
+          g_free (buffer);
+          buffer = NULL;
+          break;
+        }
+      if (prot == GPGME_PROTOCOL_UNKNOWN)
+        ;
+      else if (!buffer)
+        buffer = g_strconcat (key->subkeys->fpr, "\n", NULL);
+      else
+        {
+          p = g_strconcat (buffer, key->subkeys->fpr, "\n", NULL);
+          g_free (buffer);
+          buffer = p;
+        }
+    }
+  if (buffer)
+    {
+      gtk_clipboard_set_text (gtk_clipboard_get
+                              (GDK_SELECTION_PRIMARY), buffer, -1);
+      gtk_clipboard_set_text (gtk_clipboard_get
+                              (GDK_SELECTION_CLIPBOARD), buffer, -1);
+    }
+
+  g_free (buffer);
+}
+
+
 /* Reload the key list.  */
 static void
 key_manager_refresh (GtkAction *action, gpointer param)
@@ -922,7 +975,8 @@ key_manager_action_new (GpaKeyManager *self,
                         GtkWidget **menu, GtkWidget **toolbar,
                         GtkWidget **popup)
 {
-  static const GtkActionEntry entries[] =
+  static const
+    GtkActionEntry entries[] =
     {
       /* Toplevel.  */
       { "File", NULL, N_("_File"), NULL },
@@ -941,6 +995,8 @@ key_manager_action_new (GpaKeyManager *self,
       /* Edit menu.  */
       { "EditCopy", GTK_STOCK_COPY, NULL, NULL,
 	N_("Copy the selection"), G_CALLBACK (key_manager_copy) },
+      { "EditCopyFpr", GTK_STOCK_COPY, N_("Copy _Fingerprint"), "<control>F",
+	N_("Copy the fingerprints"), G_CALLBACK (key_manager_copy_fpr) },
       { "EditPaste", GTK_STOCK_PASTE, NULL, NULL,
 	N_("Paste the clipboard"), G_CALLBACK (key_manager_paste) },
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",
@@ -1065,6 +1121,7 @@ key_manager_action_new (GpaKeyManager *self,
 #endif
     "  </toolbar>"
     "  <popup name='PopupMenu'>"
+    "    <menuitem action='EditCopyFpr'/>"
     "    <menuitem action='EditCopy'/>"
     "    <menuitem action='EditPaste'/>"
     "    <menuitem action='KeysDelete'/>"
@@ -1141,6 +1198,9 @@ key_manager_action_new (GpaKeyManager *self,
 
   /* Take care of sensitiveness of widgets.  */
   action = gtk_action_group_get_action (action_group, "EditCopy");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_selection);
+  action = gtk_action_group_get_action (action_group, "EditCopyFpr");
   add_selection_sensitive_action (self, action,
                                   key_manager_has_selection);
   action = gtk_action_group_get_action (action_group, "KeysDelete");
