@@ -200,6 +200,33 @@ msgstr "無期限"
 msgid "unknown"
 msgstr "未確認"
 
+#, fuzzy
+msgid "keyserver"
+msgstr "鍵サーバを設定"
+
+msgid "DANE"
+msgstr ""
+
+#, fuzzy
+msgid "Web Key Directory"
+msgstr "ディレクトリ作成"
+
+msgid "URL"
+msgstr ""
+
+#, fuzzy
+msgid "file"
+msgstr "ファイル開く"
+
+msgid "self"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "Unknown"
+msgstr "未確認"
+
 msgid "Mr."
 msgstr ""
 
@@ -397,6 +424,14 @@ msgstr "鍵をファイルにバックアップする"
 #, fuzzy, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "鍵のバックアップを作成する: %s"
+
+#, fuzzy
+msgid "The private key has been copied to the clipboard."
+msgstr "鍵をクリップボードへコピーしました。"
+
+#, fuzzy
+msgid "The key has bees copied to the clipboard."
+msgstr "鍵をクリップボードへコピーしました。"
 
 msgid "The keys have been copied to the clipboard."
 msgstr "鍵をクリップボードへコピーしました。"
@@ -602,9 +637,6 @@ msgstr "ステータス"
 msgid "Algo"
 msgstr "アルゴリズム"
 
-msgid "Size"
-msgstr "サイズ"
-
 #, fuzzy
 msgid "Expires"
 msgstr "期限切れ"
@@ -768,9 +800,6 @@ msgstr ""
 "このファイルにバックアップされている鍵は:\n"
 "\n"
 
-msgid "Unknown"
-msgstr "未確認"
-
 msgid "Never"
 msgstr "不信"
 
@@ -788,6 +817,17 @@ msgstr "不完全"
 
 msgid "Fully Valid"
 msgstr "完全に有効"
+
+#, fuzzy
+msgid "Invalid"
+msgstr "無効な日付"
+
+msgid "Faked"
+msgstr ""
+
+#, fuzzy
+msgid "Fully"
+msgstr "完全"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "以下の鍵のパスワードを入力して下さい:"
@@ -963,6 +1003,10 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
+
+#, fuzzy
+msgid "_Details"
+msgstr "詳細"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1251,6 +1295,9 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "今すぐ鍵をバックアップする (_B)"
 
+msgid "Only keys of the same procotol may be copied."
+msgstr ""
+
 #, fuzzy
 msgid "_Keys"
 msgstr "/鍵 (_K)"
@@ -1258,6 +1305,22 @@ msgstr "/鍵 (_K)"
 #, fuzzy
 msgid "_Server"
 msgstr "/サーバ (_S)"
+
+#, fuzzy
+msgid "Copy _Fingerprint"
+msgstr "指紋"
+
+#, fuzzy
+msgid "Copy the fingerprints"
+msgstr "指紋"
+
+#, fuzzy
+msgid "Copy Private Key"
+msgstr "/秘密鍵を編集... (_E)"
+
+#, fuzzy
+msgid "Copy a single private key"
+msgstr "選択された秘密鍵を編集"
 
 #, fuzzy
 msgid "Select all certificates"
@@ -1426,8 +1489,16 @@ msgstr "鍵タイプ:"
 msgid "Created at:"
 msgstr "作成日:"
 
+#, fuzzy
+msgid "Last update:"
+msgstr "ユーザ名:"
+
 msgid "Details"
 msgstr "詳細"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "ユーザ ID (_U): "
 
 msgid "Show signatures on user name:"
 msgstr "ユーザ名に対する署名を表示"
@@ -2217,10 +2288,9 @@ msgid ""
 "Please check the documentation of your card to learn for what the NullPIN is "
 "good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat "
-"that PIN.  Make sure that you will remember that PIN - it will not be "
-"possible to recover the PIN if it has been entered wrongly more than %d "
-"times.\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
 "\n"
 "%s"
 msgstr ""
@@ -2306,6 +2376,9 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "Size"
+#~ msgstr "サイズ"
 
 #, fuzzy
 #~ msgid "The key ID is a short number to identify a certificate."
@@ -2483,9 +2556,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "/Edit/Paste"
 #~ msgstr "/編集 (E)/貼り付け (_P)"
-
-#~ msgid "open file"
-#~ msgstr "ファイル開く"
 
 #, fuzzy
 #~ msgid "save file as"
@@ -2911,9 +2981,6 @@ msgstr ""
 #~ msgid "Error creating directory \"%s\": %s\n"
 #~ msgstr "ディレクトリ作成エラー \"%s\": %s\n"
 
-#~ msgid "Create Directory"
-#~ msgstr "ディレクトリ作成"
-
 #~ msgid "_Directory name:"
 #~ msgstr "ディレクトリ名 (_D):"
 
@@ -3007,9 +3074,6 @@ msgstr ""
 
 #~ msgid "F_inish"
 #~ msgstr "完了 (_I)"
-
-#~ msgid "Invalid Date"
-#~ msgstr "無効な日付"
 
 #~ msgid "/File/C_heck"
 #~ msgstr "/ファイル (F)/チェック (_H)"
@@ -3144,17 +3208,11 @@ msgstr ""
 #~ msgid "Key Trust:"
 #~ msgstr "鍵の信用度:"
 
-#~ msgid "Set key server"
-#~ msgstr "鍵サーバを設定"
-
 #~ msgid "_Key server: "
 #~ msgstr "鍵サーバ (_K): "
 
 #~ msgid "_Set"
 #~ msgstr "設定 (_S)"
-
-#~ msgid "Fingerprint"
-#~ msgstr "指紋"
 
 #~ msgid "User identity / role"
 #~ msgstr "ユーザーの身元/身分"

@@ -179,6 +179,31 @@ msgstr "永远生效"
 msgid "unknown"
 msgstr "未知"
 
+#, fuzzy
+msgid "keyserver"
+msgstr "寄出公钥到服务器"
+
+msgid "DANE"
+msgstr ""
+
+msgid "Web Key Directory"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "self"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "Unknown"
+msgstr "未知"
+
 msgid "Mr."
 msgstr "先生"
 
@@ -351,6 +376,14 @@ msgstr "备份密钥到文件"
 #, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "正在建立 0x%s 的备份"
+
+#, fuzzy
+msgid "The private key has been copied to the clipboard."
+msgstr "公钥已复制到剪贴板内。"
+
+#, fuzzy
+msgid "The key has bees copied to the clipboard."
+msgstr "公钥已复制到剪贴板内。"
 
 msgid "The keys have been copied to the clipboard."
 msgstr "公钥已复制到剪贴板内。"
@@ -550,9 +583,6 @@ msgstr "状态"
 msgid "Algo"
 msgstr "加密算法"
 
-msgid "Size"
-msgstr "大小"
-
 msgid "Expires"
 msgstr "有效至"
 
@@ -714,9 +744,6 @@ msgstr ""
 "已备份的钥对在文件的是 :\n"
 "\n"
 
-msgid "Unknown"
-msgstr "未知"
-
 msgid "Never"
 msgstr "永不"
 
@@ -734,6 +761,17 @@ msgstr "不全"
 
 msgid "Fully Valid"
 msgstr "完全合法的"
+
+#, fuzzy
+msgid "Invalid"
+msgstr "有效"
+
+msgid "Faked"
+msgstr ""
+
+#, fuzzy
+msgid "Fully"
+msgstr "完全"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "输入以下密钥的密码:"
@@ -908,6 +946,10 @@ msgstr "电子邮件地址无效。"
 
 msgid "Invalid character in comments."
 msgstr "注释含有无效的字符。"
+
+#, fuzzy
+msgid "_Details"
+msgstr "详情"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA 是指 GNU Privacy Assistant。"
@@ -1188,11 +1230,31 @@ msgstr "您并没有私钥，建议您现在建立或是往后才建立？"
 msgid "_Backup key now"
 msgstr "现在进行备份 (_G)"
 
+#, fuzzy
+msgid "Only keys of the same procotol may be copied."
+msgstr "只有相同协议"
+
 msgid "_Keys"
 msgstr "密钥 (_K)"
 
 msgid "_Server"
 msgstr "服务器 (_S)"
+
+#, fuzzy
+msgid "Copy _Fingerprint"
+msgstr "指纹:"
+
+#, fuzzy
+msgid "Copy the fingerprints"
+msgstr "复制选区"
+
+#, fuzzy
+msgid "Copy Private Key"
+msgstr "修改私钥… (_E)"
+
+#, fuzzy
+msgid "Copy a single private key"
+msgstr "修改已选择的私钥"
 
 msgid "Select all certificates"
 msgstr "选择所有证书"
@@ -1336,8 +1398,16 @@ msgstr "密钥种类:"
 msgid "Created at:"
 msgstr "建立在 :"
 
+#, fuzzy
+msgid "Last update:"
+msgstr "姓:"
+
 msgid "Details"
 msgstr "详情"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "用户ID (_U):"
 
 msgid "Show signatures on user name:"
 msgstr "在用户名称显示签名:"
@@ -2092,10 +2162,9 @@ msgid ""
 "Please check the documentation of your card to learn for what the NullPIN is "
 "good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat "
-"that PIN.  Make sure that you will remember that PIN - it will not be "
-"possible to recover the PIN if it has been entered wrongly more than %d "
-"times.\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
 "\n"
 "%s"
 msgstr ""
@@ -2180,6 +2249,9 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "Size"
+#~ msgstr "大小"
 
 #~ msgid "The key ID is a short number to identify a certificate."
 #~ msgstr "密钥 ID 是一串用来辨别证书的短数字。"

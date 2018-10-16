@@ -190,6 +190,32 @@ msgstr "لا تنتهي أبدا"
 msgid "unknown"
 msgstr "مجهول"
 
+#, fuzzy
+msgid "keyserver"
+msgstr "/أر_سِل المفاتيح للخادوم..."
+
+msgid "DANE"
+msgstr ""
+
+msgid "Web Key Directory"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+#, fuzzy
+msgid "file"
+msgstr "افتح ملفا"
+
+msgid "self"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "Unknown"
+msgstr "مجهول"
+
 msgid "Mr."
 msgstr ""
 
@@ -376,6 +402,14 @@ msgstr "يحفظ نسخة احتياطية من المفتاح في ملفّ"
 #, fuzzy, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "يجري حفظ المفتاح: %s"
+
+#, fuzzy
+msgid "The private key has been copied to the clipboard."
+msgstr "تم نسخ المفاتيح إلى الحافظة."
+
+#, fuzzy
+msgid "The key has bees copied to the clipboard."
+msgstr "تم نسخ المفاتيح إلى الحافظة."
 
 msgid "The keys have been copied to the clipboard."
 msgstr "تم نسخ المفاتيح إلى الحافظة."
@@ -585,9 +619,6 @@ msgstr "الحالة"
 msgid "Algo"
 msgstr "الخوارزمية"
 
-msgid "Size"
-msgstr "الطول"
-
 #, fuzzy
 msgid "Expires"
 msgstr "منتهية صلاحيته"
@@ -750,9 +781,6 @@ msgstr ""
 "المفتاح المحفوظ احتياطيا في هذا الملف هو:\n"
 "\n"
 
-msgid "Unknown"
-msgstr "مجهول"
-
 msgid "Never"
 msgstr "أبدًا"
 
@@ -770,6 +798,17 @@ msgstr "ناقص"
 
 msgid "Fully Valid"
 msgstr "صالح تماما"
+
+#, fuzzy
+msgid "Invalid"
+msgstr "صالح"
+
+msgid "Faked"
+msgstr ""
+
+#, fuzzy
+msgid "Fully"
+msgstr "كاملة"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "من فضلك أدخل عبارة سر المفتاح التالي:"
@@ -943,6 +982,10 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
+
+#, fuzzy
+msgid "_Details"
+msgstr "التفاصيل"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1236,6 +1279,9 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "ا_حفظ المفتاح احتياطيا الآن"
 
+msgid "Only keys of the same procotol may be copied."
+msgstr ""
+
 #, fuzzy
 msgid "_Keys"
 msgstr "/ال_مفاتيح"
@@ -1243,6 +1289,22 @@ msgstr "/ال_مفاتيح"
 #, fuzzy
 msgid "_Server"
 msgstr "/ال_خادوم"
+
+#, fuzzy
+msgid "Copy _Fingerprint"
+msgstr "البصمة:"
+
+#, fuzzy
+msgid "Copy the fingerprints"
+msgstr "ينسخ المحدد"
+
+#, fuzzy
+msgid "Copy Private Key"
+msgstr "/حرّ_ر المفتاح السرّي..."
+
+#, fuzzy
+msgid "Copy a single private key"
+msgstr "حرّر المفتاح السري المحدد"
 
 msgid "Select all certificates"
 msgstr ""
@@ -1412,8 +1474,16 @@ msgstr "نوع المفتاح:"
 msgid "Created at:"
 msgstr "أُنشئ في:"
 
+#, fuzzy
+msgid "Last update:"
+msgstr "اسم المستخدم:"
+
 msgid "Details"
 msgstr "التفاصيل"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "_هويّة المستخدم: "
 
 msgid "Show signatures on user name:"
 msgstr "اعرض التوقيعات على اسم المستخدم:"
@@ -2182,10 +2252,9 @@ msgid ""
 "Please check the documentation of your card to learn for what the NullPIN is "
 "good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat "
-"that PIN.  Make sure that you will remember that PIN - it will not be "
-"possible to recover the PIN if it has been entered wrongly more than %d "
-"times.\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
 "\n"
 "%s"
 msgstr ""
@@ -2271,6 +2340,9 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "Size"
+#~ msgstr "الطول"
 
 #~ msgid "The key ID is a short number to identify a certificate."
 #~ msgstr "مُعرّف المفتاح هو رقم صغير لتعريف الشهادة."
@@ -2428,9 +2500,6 @@ msgstr ""
 
 #~ msgid "clear buffer"
 #~ msgstr "أخل البراح"
-
-#~ msgid "open file"
-#~ msgstr "افتح ملفا"
 
 #~ msgid "save file as"
 #~ msgstr "احفظ الملف باسم"

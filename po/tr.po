@@ -193,6 +193,32 @@ msgstr "asla bitmez"
 msgid "unknown"
 msgstr "bilinmeyen"
 
+#, fuzzy
+msgid "keyserver"
+msgstr "/Anahtarlarý Sunucuya _Gönder..."
+
+msgid "DANE"
+msgstr ""
+
+msgid "Web Key Directory"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+#, fuzzy
+msgid "file"
+msgstr "dosyayý aç"
+
+msgid "self"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "Unknown"
+msgstr "Bilinmiyor"
+
 msgid "Mr."
 msgstr ""
 
@@ -389,6 +415,14 @@ msgstr "Anahtarý dosyaya yedekle"
 #, fuzzy, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "%s anahtarýnýn yedeklemesi yapýlýyor"
+
+#, fuzzy
+msgid "The private key has been copied to the clipboard."
+msgstr "Anahtarlar panoya kopyalandý"
+
+#, fuzzy
+msgid "The key has bees copied to the clipboard."
+msgstr "Anahtarlar panoya kopyalandý"
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Anahtarlar panoya kopyalandý"
@@ -597,9 +631,6 @@ msgstr "Durum"
 msgid "Algo"
 msgstr "Algoritma"
 
-msgid "Size"
-msgstr "Boyut"
-
 #, fuzzy
 msgid "Expires"
 msgstr "Sona Ermiþ"
@@ -763,9 +794,6 @@ msgstr ""
 "Bu dosyada yedeklenmiþ olan anahtar:\n"
 "\n"
 
-msgid "Unknown"
-msgstr "Bilinmiyor"
-
 msgid "Never"
 msgstr "Hiç"
 
@@ -783,6 +811,17 @@ msgstr "Eksik"
 
 msgid "Fully Valid"
 msgstr "Tamamen Geçerli"
+
+#, fuzzy
+msgid "Invalid"
+msgstr "Geçerli"
+
+msgid "Faked"
+msgstr ""
+
+#, fuzzy
+msgid "Fully"
+msgstr "Tam"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "Lütfen þu anahtar için þifre girin:"
@@ -959,6 +998,10 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
+
+#, fuzzy
+msgid "_Details"
+msgstr "Detaylar"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1254,6 +1297,9 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "Anahtarý þimdi ye_dekle"
 
+msgid "Only keys of the same procotol may be copied."
+msgstr ""
+
 #, fuzzy
 msgid "_Keys"
 msgstr "/_Anahtarlar"
@@ -1261,6 +1307,22 @@ msgstr "/_Anahtarlar"
 #, fuzzy
 msgid "_Server"
 msgstr "/_Sunucu"
+
+#, fuzzy
+msgid "Copy _Fingerprint"
+msgstr "Parmakizi:"
+
+#, fuzzy
+msgid "Copy the fingerprints"
+msgstr "Seçili dosyayý þifrele"
+
+#, fuzzy
+msgid "Copy Private Key"
+msgstr "/Özel Anahtarý _Düzenle..."
+
+#, fuzzy
+msgid "Copy a single private key"
+msgstr "Seçili özel anahtarý düzenle"
 
 msgid "Select all certificates"
 msgstr ""
@@ -1427,8 +1489,16 @@ msgstr "Anahtar Tipi:"
 msgid "Created at:"
 msgstr "Yaratýlma Tarihi:"
 
+#, fuzzy
+msgid "Last update:"
+msgstr "Kullanýcý Adý:"
+
 msgid "Details"
 msgstr "Detaylar"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "_Kullanýcý Kimliði: "
 
 msgid "Show signatures on user name:"
 msgstr "Þu kullanýcý adýndaki imzalarý göster:"
@@ -2209,10 +2279,9 @@ msgid ""
 "Please check the documentation of your card to learn for what the NullPIN is "
 "good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat "
-"that PIN.  Make sure that you will remember that PIN - it will not be "
-"possible to recover the PIN if it has been entered wrongly more than %d "
-"times.\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
 "\n"
 "%s"
 msgstr ""
@@ -2298,6 +2367,9 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "Size"
+#~ msgstr "Boyut"
 
 #, fuzzy
 #~ msgid "The key ID is a short number to identify a certificate."
@@ -2458,9 +2530,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "/Edit/Paste"
 #~ msgstr "/Düzen/_Yapýþtýr"
-
-#~ msgid "open file"
-#~ msgstr "dosyayý aç"
 
 #, fuzzy
 #~ msgid "save file as"

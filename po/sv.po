@@ -183,6 +183,31 @@ msgstr "går aldrig ut"
 msgid "unknown"
 msgstr "okänt"
 
+#, fuzzy
+msgid "keyserver"
+msgstr "Skicka nycklar till server"
+
+msgid "DANE"
+msgstr ""
+
+msgid "Web Key Directory"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "self"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "Unknown"
+msgstr "Okänd"
+
 msgid "Mr."
 msgstr "Herr"
 
@@ -355,6 +380,14 @@ msgstr "Säkerhetskopiera nyckel till fil"
 #, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "Skapar säkerhetskopia av nyckel: 0x%s"
+
+#, fuzzy
+msgid "The private key has been copied to the clipboard."
+msgstr "Nycklarna har kopierats till urklipp."
+
+#, fuzzy
+msgid "The key has bees copied to the clipboard."
+msgstr "Nycklarna har kopierats till urklipp."
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Nycklarna har kopierats till urklipp."
@@ -558,9 +591,6 @@ msgstr "Status"
 msgid "Algo"
 msgstr "Algo"
 
-msgid "Size"
-msgstr "Storlek"
-
 msgid "Expires"
 msgstr "Utgår"
 
@@ -724,9 +754,6 @@ msgstr ""
 "Nyckeln som säkerhetskopierats till denna fil är:\n"
 "\n"
 
-msgid "Unknown"
-msgstr "Okänd"
-
 msgid "Never"
 msgstr "Aldrig"
 
@@ -744,6 +771,17 @@ msgstr "Ofullständigt"
 
 msgid "Fully Valid"
 msgstr "Fullständigt giltig"
+
+#, fuzzy
+msgid "Invalid"
+msgstr "Giltig"
+
+msgid "Faked"
+msgstr ""
+
+#, fuzzy
+msgid "Fully"
+msgstr "Fullständig"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "Ange lösenfrasen för följande nyckel:"
@@ -920,6 +958,10 @@ msgstr "E-postadressen är inte giltig."
 
 msgid "Invalid character in comments."
 msgstr "Ogiltiga tecken i kommentarer."
+
+#, fuzzy
+msgid "_Details"
+msgstr "Detaljer"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA är GNU Privacy Assistant."
@@ -1208,11 +1250,31 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "Skapa _säkerhetskopia nu"
 
+#, fuzzy
+msgid "Only keys of the same procotol may be copied."
+msgstr "Endast nycklar av samma protokoll får exporteras som en samling."
+
 msgid "_Keys"
 msgstr "_Nycklar"
 
 msgid "_Server"
 msgstr "_Server"
+
+#, fuzzy
+msgid "Copy _Fingerprint"
+msgstr "Fingeravtryck:"
+
+#, fuzzy
+msgid "Copy the fingerprints"
+msgstr "Kopiera markeringen"
+
+#, fuzzy
+msgid "Copy Private Key"
+msgstr "Redigera _privat nyckel..."
+
+#, fuzzy
+msgid "Copy a single private key"
+msgstr "Redigera markerad privat nyckel"
 
 msgid "Select all certificates"
 msgstr "Markera alla certifikat"
@@ -1356,8 +1418,16 @@ msgstr "Nyckeltyp:"
 msgid "Created at:"
 msgstr "Skapad den:"
 
+#, fuzzy
+msgid "Last update:"
+msgstr "Efternamn:"
+
 msgid "Details"
 msgstr "Detaljer"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "Användaridentitet: "
 
 msgid "Show signatures on user name:"
 msgstr "Visa signaturer på användarnamn:"
@@ -2369,6 +2439,9 @@ msgstr ""
 "Det finns inte mycket information att visa för ett %s-kort. Du kanske vill "
 "använda knappen för applikationsval för att ändra till en annan applikation "
 "som finns tillgänglig på detta kort."
+
+#~ msgid "Size"
+#~ msgstr "Storlek"
 
 #~ msgid "The file \"%s\" contained no validencrypted data."
 #~ msgstr "Filen ”%s” innehöll ingen giltig krypterad data."

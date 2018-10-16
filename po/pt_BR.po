@@ -195,6 +195,33 @@ msgstr "jamais expira"
 msgid "unknown"
 msgstr "desconhecido"
 
+#, fuzzy
+msgid "keyserver"
+msgstr "Indicar servidor de chaves"
+
+msgid "DANE"
+msgstr ""
+
+#, fuzzy
+msgid "Web Key Directory"
+msgstr "Criar Diretório"
+
+msgid "URL"
+msgstr ""
+
+#, fuzzy
+msgid "file"
+msgstr "abrir um arquivo"
+
+msgid "self"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "Unknown"
+msgstr "desconhecido"
+
 msgid "Mr."
 msgstr ""
 
@@ -393,6 +420,13 @@ msgstr "E_xportar para o arquivo:"
 #, fuzzy, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "Gerando backup de chave: %s"
+
+msgid "The private key has been copied to the clipboard."
+msgstr ""
+
+#, fuzzy
+msgid "The key has bees copied to the clipboard."
+msgstr "Esta chave expirou! Impossível assinar."
 
 msgid "The keys have been copied to the clipboard."
 msgstr ""
@@ -602,9 +636,6 @@ msgstr "Status"
 msgid "Algo"
 msgstr "_Algoritmo:"
 
-msgid "Size"
-msgstr ""
-
 #, fuzzy
 msgid "Expires"
 msgstr "Expirado"
@@ -766,9 +797,6 @@ msgstr ""
 "A chave copiada por segurança para este arquivo é:\n"
 "\n"
 
-msgid "Unknown"
-msgstr "desconhecido"
-
 msgid "Never"
 msgstr "Nunca"
 
@@ -786,6 +814,17 @@ msgstr "Incompleto"
 
 msgid "Fully Valid"
 msgstr "Totalmente válido"
+
+#, fuzzy
+msgid "Invalid"
+msgstr "inválido"
+
+msgid "Faked"
+msgstr ""
+
+#, fuzzy
+msgid "Fully"
+msgstr "Completo"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "Queria indicar a senha para a seguinte chave:"
@@ -963,6 +1002,10 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
+
+#, fuzzy
+msgid "_Details"
+msgstr "Detalhes"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1255,6 +1298,9 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "_Backup de chave agora"
 
+msgid "Only keys of the same procotol may be copied."
+msgstr ""
+
 #, fuzzy
 msgid "_Keys"
 msgstr "/_Chaves"
@@ -1262,6 +1308,22 @@ msgstr "/_Chaves"
 #, fuzzy
 msgid "_Server"
 msgstr "_Nunca"
+
+#, fuzzy
+msgid "Copy _Fingerprint"
+msgstr "Impressão digital:"
+
+#, fuzzy
+msgid "Copy the fingerprints"
+msgstr "Impressão digital:"
+
+#, fuzzy
+msgid "Copy Private Key"
+msgstr "/_Editar Chave Privada..."
+
+#, fuzzy
+msgid "Copy a single private key"
+msgstr "Editar a chave privada selecionada"
 
 #, fuzzy
 msgid "Select all certificates"
@@ -1431,8 +1493,16 @@ msgstr "Tipo de chave:"
 msgid "Created at:"
 msgstr "Criada em:"
 
+#, fuzzy
+msgid "Last update:"
+msgstr "Nome do Usuário:"
+
 msgid "Details"
 msgstr "Detalhes"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "ID do usuário:"
 
 msgid "Show signatures on user name:"
 msgstr "Mostrar assinaturas no nome do usuário:"
@@ -2228,10 +2298,9 @@ msgid ""
 "Please check the documentation of your card to learn for what the NullPIN is "
 "good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat "
-"that PIN.  Make sure that you will remember that PIN - it will not be "
-"possible to recover the PIN if it has been entered wrongly more than %d "
-"times.\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
 "\n"
 "%s"
 msgstr ""
@@ -2487,9 +2556,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "/Edit/Paste"
 #~ msgstr "/Editar/C_olar"
-
-#~ msgid "open file"
-#~ msgstr "abrir um arquivo"
 
 #, fuzzy
 #~ msgid "save file as"
@@ -2923,9 +2989,6 @@ msgstr ""
 #~ msgid "Error creating directory \"%s\": %s\n"
 #~ msgstr "Erro ao criar diretório \"%s\": %s\n"
 
-#~ msgid "Create Directory"
-#~ msgstr "Criar Diretório"
-
 #~ msgid "_Directory name:"
 #~ msgstr "_Nome de Diretório:"
 
@@ -3093,18 +3156,11 @@ msgstr ""
 #~ msgid "Remove"
 #~ msgstr "Remover"
 
-#~ msgid "Set key server"
-#~ msgstr "Indicar servidor de chaves"
-
 #~ msgid "_Key server: "
 #~ msgstr "_Servidor de chaves: "
 
 #~ msgid "_Set"
 #~ msgstr "_Aceitar"
-
-#, fuzzy
-#~ msgid "Fingerprint"
-#~ msgstr "Impressão digital:"
 
 #~ msgid "User identity / role"
 #~ msgstr "Identidade do usuário"
@@ -3232,10 +3288,6 @@ msgstr ""
 #~ msgid "trust ultimately"
 #~ msgstr "inteira confiança"
 
-#, fuzzy
-#~ msgid "invalid"
-#~ msgstr "inválido"
-
 #~ msgid "ElGamal (sign and encrypt)"
 #~ msgstr "ElGamal (assinatura e encriptação)"
 
@@ -3291,9 +3343,6 @@ msgstr ""
 
 #~ msgid "Key Trust:"
 #~ msgstr "Confiança na chave:"
-
-#~ msgid "User ID:"
-#~ msgstr "ID do usuário:"
 
 #~ msgid "Keys exported."
 #~ msgstr "Chaves exportadas"

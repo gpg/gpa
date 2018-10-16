@@ -196,6 +196,33 @@ msgstr "vervalt nooit"
 msgid "unknown"
 msgstr "onbekend"
 
+#, fuzzy
+msgid "keyserver"
+msgstr "_Key-Server: "
+
+msgid "DANE"
+msgstr ""
+
+#, fuzzy
+msgid "Web Key Directory"
+msgstr "Maak map"
+
+msgid "URL"
+msgstr ""
+
+#, fuzzy
+msgid "file"
+msgstr "open bestand"
+
+msgid "self"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "Unknown"
+msgstr "Onbekend"
+
 msgid "Mr."
 msgstr ""
 
@@ -393,6 +420,14 @@ msgstr "_Backup sleutel naar bestand:"
 #, fuzzy, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "Genereren van backup van sleutel: %s"
+
+#, fuzzy
+msgid "The private key has been copied to the clipboard."
+msgstr "De sleutels werden naar het klembord gekopieerd."
+
+#, fuzzy
+msgid "The key has bees copied to the clipboard."
+msgstr "De sleutels werden naar het klembord gekopieerd."
 
 msgid "The keys have been copied to the clipboard."
 msgstr "De sleutels werden naar het klembord gekopieerd."
@@ -602,9 +637,6 @@ msgstr "Status"
 msgid "Algo"
 msgstr "Algoritme"
 
-msgid "Size"
-msgstr "Grootte"
-
 #, fuzzy
 msgid "Expires"
 msgstr "Vervallen"
@@ -767,9 +799,6 @@ msgstr ""
 "De sleutel is gebackuped in dit bestand:\n"
 "\n"
 
-msgid "Unknown"
-msgstr "Onbekend"
-
 msgid "Never"
 msgstr "Nooit"
 
@@ -787,6 +816,17 @@ msgstr "Niet compleet"
 
 msgid "Fully Valid"
 msgstr "Volledig geldig"
+
+#, fuzzy
+msgid "Invalid"
+msgstr "Ongeldige datum"
+
+msgid "Faked"
+msgstr ""
+
+#, fuzzy
+msgid "Fully"
+msgstr "Volledig"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "Geef aub het wachwoord in voor de volgende sleutel:"
@@ -966,6 +1006,10 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
+
+#, fuzzy
+msgid "_Details"
+msgstr "Details"
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
@@ -1259,6 +1303,9 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "_Backup sleutel nu"
 
+msgid "Only keys of the same procotol may be copied."
+msgstr ""
+
 #, fuzzy
 msgid "_Keys"
 msgstr "/_Sleutels"
@@ -1266,6 +1313,22 @@ msgstr "/_Sleutels"
 #, fuzzy
 msgid "_Server"
 msgstr "/_Server"
+
+#, fuzzy
+msgid "Copy _Fingerprint"
+msgstr "Vingerafdruk"
+
+#, fuzzy
+msgid "Copy the fingerprints"
+msgstr "Vingerafdruk"
+
+#, fuzzy
+msgid "Copy Private Key"
+msgstr "/_Bewerk Sleutel..."
+
+#, fuzzy
+msgid "Copy a single private key"
+msgstr "Bewerk de geselecteerde sleutel"
 
 #, fuzzy
 msgid "Select all certificates"
@@ -1434,8 +1497,16 @@ msgstr "Sleutel Type:"
 msgid "Created at:"
 msgstr "Gemaakt op:"
 
+#, fuzzy
+msgid "Last update:"
+msgstr "Gebruiker naam:"
+
 msgid "Details"
 msgstr "Details"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "_Gebruik ID: "
 
 msgid "Show signatures on user name:"
 msgstr "Controleer ondertekeningen van het geselecteerde bestand"
@@ -2223,10 +2294,9 @@ msgid ""
 "Please check the documentation of your card to learn for what the NullPIN is "
 "good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat "
-"that PIN.  Make sure that you will remember that PIN - it will not be "
-"possible to recover the PIN if it has been entered wrongly more than %d "
-"times.\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
 "\n"
 "%s"
 msgstr ""
@@ -2312,6 +2382,9 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "Size"
+#~ msgstr "Grootte"
 
 #, fuzzy
 #~ msgid "The key ID is a short number to identify a certificate."
@@ -2485,9 +2558,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "/Edit/Paste"
 #~ msgstr "/Bewerk/_Plak"
-
-#~ msgid "open file"
-#~ msgstr "open bestand"
 
 #, fuzzy
 #~ msgid "save file as"
@@ -2912,9 +2982,6 @@ msgstr ""
 #~ msgid "Error creating directory \"%s\": %s\n"
 #~ msgstr "Fout bij het maken van map \"%s\": %s\n"
 
-#~ msgid "Create Directory"
-#~ msgstr "Maak map"
-
 #~ msgid "_Directory name:"
 #~ msgstr "_Map naam:"
 
@@ -3018,9 +3085,6 @@ msgstr ""
 #~ msgid "User Identity/Role"
 #~ msgstr "Gebruiker ID/rol"
 
-#~ msgid "Invalid Date"
-#~ msgstr "Ongeldige datum"
-
 #~ msgid "/File/C_heck"
 #~ msgstr "/Bestand/C_heck"
 
@@ -3092,14 +3156,8 @@ msgstr ""
 #~ msgid "Remove"
 #~ msgstr "Verwijder"
 
-#~ msgid "_Key server: "
-#~ msgstr "_Key-Server: "
-
 #~ msgid "_Set"
 #~ msgstr "_Zet"
-
-#~ msgid "Fingerprint"
-#~ msgstr "Vingerafdruk"
 
 #~ msgid "User identity / role"
 #~ msgstr "Gebruiker identiteit / rol"

@@ -584,9 +584,6 @@ msgstr "Gültigkeit der Beglaubigung"
 msgid "Algo"
 msgstr "Algo"
 
-msgid "Size"
-msgstr "Größe"
-
 msgid "Expires"
 msgstr "Läuft ab"
 
@@ -2365,6 +2362,9 @@ msgstr ""
 "Für eine %s Karte können nicht viele Informationen angezeigt werden.  Sie "
 "können jedoch mit dem Knopf zur Anwendungsauswahl auf eine andere, auf der "
 "Karte verfügbare, Anwendung umschalten."
+
+#~ msgid "Size"
+#~ msgstr "Größe"
 
 #~ msgid "The key ID is a short number to identify a certificate."
 #~ msgstr ""

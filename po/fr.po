@@ -185,6 +185,31 @@ msgstr "N'expire jamais"
 msgid "unknown"
 msgstr "Inconnu(e)"
 
+#, fuzzy
+msgid "keyserver"
+msgstr "Envoi de clefs au serveur"
+
+msgid "DANE"
+msgstr ""
+
+msgid "Web Key Directory"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "self"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "Unknown"
+msgstr "inconnu"
+
 msgid "Mr."
 msgstr ""
 
@@ -362,6 +387,14 @@ msgstr "Sauvegarder la clef dans le fichier :"
 #, fuzzy, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "Génération de la sauvegarde de clef : %s"
+
+#, fuzzy
+msgid "The private key has been copied to the clipboard."
+msgstr "Les clefs ont été copiées dans le presse-papiers."
+
+#, fuzzy
+msgid "The key has bees copied to the clipboard."
+msgstr "Les clefs ont été copiées dans le presse-papiers."
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Les clefs ont été copiées dans le presse-papiers."
@@ -583,9 +616,6 @@ msgstr "État"
 msgid "Algo"
 msgstr "Algorithme"
 
-msgid "Size"
-msgstr "Taille"
-
 #, fuzzy
 msgid "Expires"
 msgstr "Expirée"
@@ -748,9 +778,6 @@ msgstr ""
 "La clef sauvegardée dans ce fichier est :\n"
 "\n"
 
-msgid "Unknown"
-msgstr "inconnu"
-
 msgid "Never"
 msgstr "Jamais"
 
@@ -768,6 +795,17 @@ msgstr "Incomplet"
 
 msgid "Fully Valid"
 msgstr "Complètement valide"
+
+#, fuzzy
+msgid "Invalid"
+msgstr "Valide"
+
+msgid "Faked"
+msgstr ""
+
+#, fuzzy
+msgid "Fully"
+msgstr "Complète"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "Veuillez entrer le mot de passe pour la clef suivante :"
@@ -948,6 +986,10 @@ msgstr ""
 
 msgid "Invalid character in comments."
 msgstr ""
+
+#, fuzzy
+msgid "_Details"
+msgstr "Détails"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA est l'assistant GNU Privacy."
@@ -1244,11 +1286,30 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "_Sauvegarder la clef maintenant"
 
+msgid "Only keys of the same procotol may be copied."
+msgstr ""
+
 msgid "_Keys"
 msgstr "_Clefs"
 
 msgid "_Server"
 msgstr "_Serveur"
+
+#, fuzzy
+msgid "Copy _Fingerprint"
+msgstr "Empreinte :"
+
+#, fuzzy
+msgid "Copy the fingerprints"
+msgstr "Copier la sélection"
+
+#, fuzzy
+msgid "Copy Private Key"
+msgstr "_Éditer une clef privée…"
+
+#, fuzzy
+msgid "Copy a single private key"
+msgstr "Éditer la clef sélectionnée"
 
 msgid "Select all certificates"
 msgstr "Sélectionner tout les certificats"
@@ -1399,8 +1460,16 @@ msgstr "Type de clef :"
 msgid "Created at:"
 msgstr "Créée le :"
 
+#, fuzzy
+msgid "Last update:"
+msgstr "Nom d'utilisateur :"
+
 msgid "Details"
 msgstr "Détails"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "_ID d'utilisateur : "
 
 msgid "Show signatures on user name:"
 msgstr "Afficher les signatures d'un nom d'usager :"
@@ -2195,10 +2264,9 @@ msgid ""
 "Please check the documentation of your card to learn for what the NullPIN is "
 "good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat "
-"that PIN.  Make sure that you will remember that PIN - it will not be "
-"possible to recover the PIN if it has been entered wrongly more than %d "
-"times.\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
 "\n"
 "%s"
 msgstr ""
@@ -2284,6 +2352,9 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+
+#~ msgid "Size"
+#~ msgstr "Taille"
 
 #~ msgid "The key ID is a short number to identify a certificate."
 #~ msgstr ""

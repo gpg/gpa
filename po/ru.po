@@ -182,6 +182,31 @@ msgstr "неогранич."
 msgid "unknown"
 msgstr "неизвестно"
 
+#, fuzzy
+msgid "keyserver"
+msgstr "Отправить ключи на сервер"
+
+msgid "DANE"
+msgstr ""
+
+msgid "Web Key Directory"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "self"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "Unknown"
+msgstr "Неизвестно"
+
 msgid "Mr."
 msgstr "Гр."
 
@@ -354,6 +379,14 @@ msgstr "Сохранить резервную копию ключа в файл�
 #, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "Создание резервной копии ключа: 0x%s"
+
+#, fuzzy
+msgid "The private key has been copied to the clipboard."
+msgstr "Ключи скопированы в буфер."
+
+#, fuzzy
+msgid "The key has bees copied to the clipboard."
+msgstr "Ключи скопированы в буфер."
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Ключи скопированы в буфер."
@@ -554,9 +587,6 @@ msgstr "Состояние"
 msgid "Algo"
 msgstr "Алгоритм"
 
-msgid "Size"
-msgstr "Размер"
-
 msgid "Expires"
 msgstr "Истекает"
 
@@ -720,9 +750,6 @@ msgstr ""
 "Резервная копия ключа сохранена в файле:\n"
 "\n"
 
-msgid "Unknown"
-msgstr "Неизвестно"
-
 msgid "Never"
 msgstr "Никогда"
 
@@ -740,6 +767,17 @@ msgstr "Не полностью"
 
 msgid "Fully Valid"
 msgstr "Полностью достоверен"
+
+#, fuzzy
+msgid "Invalid"
+msgstr "Достоверно"
+
+msgid "Faked"
+msgstr ""
+
+#, fuzzy
+msgid "Fully"
+msgstr "Полное"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "Введите фразу-пароль для доступа к ключу:"
@@ -916,6 +954,10 @@ msgstr "Недопустимый адрес электронной почты."
 
 msgid "Invalid character in comments."
 msgstr "Недопустимый символ в примечаниях."
+
+#, fuzzy
+msgid "_Details"
+msgstr "Подробно"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA - Помощник приватности GNU (GNU Privacy Assistant)"
@@ -1208,11 +1250,31 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "Создать _резервную копию сейчас"
 
+#, fuzzy
+msgid "Only keys of the same procotol may be copied."
+msgstr "В наборе можно экспортировать только ключи одного и того же протокола."
+
 msgid "_Keys"
 msgstr "_Ключи"
 
 msgid "_Server"
 msgstr "С_ервер"
+
+#, fuzzy
+msgid "Copy _Fingerprint"
+msgstr "Отпечаток:"
+
+#, fuzzy
+msgid "Copy the fingerprints"
+msgstr "Копировать выделенное в буфер"
+
+#, fuzzy
+msgid "Copy Private Key"
+msgstr "Править _секретный ключ..."
+
+#, fuzzy
+msgid "Copy a single private key"
+msgstr "Правка выбранного секретного ключа"
 
 msgid "Select all certificates"
 msgstr "Выбрать все сертификаты"
@@ -1357,8 +1419,16 @@ msgstr "Тип ключа:"
 msgid "Created at:"
 msgstr "Создан:"
 
+#, fuzzy
+msgid "Last update:"
+msgstr "Фамилия:"
+
 msgid "Details"
 msgstr "Подробно"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "Идентификатор пользователя"
 
 msgid "Show signatures on user name:"
 msgstr "Показать подписи на имени пользователя:"
@@ -2211,6 +2281,7 @@ msgstr ""
 msgid "Learning keys ..."
 msgstr "Регистрация ключей..."
 
+#, c-format
 msgid ""
 "<b>Setting the Initial PIN</b> (%s)\n"
 "\n"
@@ -2362,6 +2433,9 @@ msgid ""
 msgstr ""
 "На карте %s нет информации для отображения. Можно воспользоваться кнопкой "
 "выбора приложений, чтобы переключиться на другое приложение с этой карты."
+
+#~ msgid "Size"
+#~ msgstr "Размер"
 
 #~ msgid "The key ID is a short number to identify a certificate."
 #~ msgstr "ID ключа - короткое число для идентификации сертификата."
