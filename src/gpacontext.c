@@ -252,6 +252,7 @@ gpa_context_get_diag (GpaContext *context)
   gpg_error_t err;
   gpgme_engine_info_t engine;
   gpgme_protocol_t proto;
+  int need_gpgme_free;
 
   if (!context)
     return NULL;
@@ -281,8 +282,22 @@ gpa_context_get_diag (GpaContext *context)
   gpgme_data_seek (diag, 0, SEEK_END);
   gpgme_data_write (diag, "", 1);
   buffer = gpgme_data_release_and_get_mem (diag, NULL);
+  need_gpgme_free = 1;
+  /* In case the diags do not return proper utf-8 we transliterate to
+   * ascii using the "C" locale which might help in bug tracking.  */
+  if (!g_utf8_validate (buffer, -1, NULL))
+    {
+      result = g_str_to_ascii (buffer, "C");
+      gpgme_free (buffer);
+      buffer = result;
+      need_gpgme_free = 0;
+    }
+  /* Prefix with the version info. */
   result = g_strconcat (info, buffer, NULL);
-  gpgme_free (buffer);
+  if (need_gpgme_free)
+    gpgme_free (buffer);
+  else
+    g_free (buffer);
   g_free (info);
 
   return result;
