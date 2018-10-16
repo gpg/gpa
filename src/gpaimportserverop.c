@@ -136,6 +136,7 @@ search_keys (GpaImportOperation *operation, const char *keyid)
 
   keyarray = g_malloc0_n (MAX_KEYSEARCH_RESULTS + 1, sizeof *keyarray);
 
+
   /* We need to use a separate context because the operation's context
      has already been setup and the done signal would relate to the
      actual import operation done later.  */
@@ -152,6 +153,9 @@ search_keys (GpaImportOperation *operation, const char *keyid)
       /* We already extracted the mbox - use it directly than letting
        * gnupg extract it.  */
       keyid = mbox;
+
+      gpgme_set_ctx_flag (context->ctx, "auto-key-locate",
+                          "clear,nodefault,wkd,keyserver");
     }
 #endif /* GPGME >= 1.7.1 */
   err = gpgme_set_keylist_mode (context->ctx, listmode);

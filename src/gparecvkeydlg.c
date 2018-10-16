@@ -112,6 +112,7 @@ gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
 		      TRUE, 10);
 
   dialog->entry = gtk_entry_new ();
+  gtk_entry_set_activates_default (GTK_ENTRY (dialog->entry), TRUE);
   if (is_gpg_version_at_least ("2.1.0"))
     {
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
