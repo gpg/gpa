@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: translations@gnupg.org\n"
-"PO-Revision-Date: 2016-11-19 11:40+0100\n"
+"PO-Revision-Date: 2018-10-16 13:29+0200\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -177,6 +177,30 @@ msgid "never expires"
 msgstr "kein Verfallsdatum"
 
 msgid "unknown"
+msgstr "unbekannt"
+
+msgid "keyserver"
+msgstr "Key-Server"
+
+msgid "DANE"
+msgstr "DANE"
+
+msgid "Web Key Directory"
+msgstr "Web Key Directory"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "file"
+msgstr "Datei"
+
+msgid "self"
+msgstr "self"
+
+msgid "other"
+msgstr "Andere"
+
+msgid "Unknown"
 msgstr "unbekannt"
 
 msgid "Mr."
@@ -352,6 +376,12 @@ msgstr "_Sicherheitskopie des Schlüssels in Datei:"
 #, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "Sicherheitskopie von Schlüssel 0x%s wird erstellt"
+
+msgid "The private key has been copied to the clipboard."
+msgstr "Den geheimen Schlüssel wurde in die Zwischenablage kopiert."
+
+msgid "The key has bees copied to the clipboard."
+msgstr "Der Schlüssel wurde in die Zwischenablage kopiert."
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Die Schlüssel wurden in die Zwischenablage kopiert."
@@ -721,9 +751,6 @@ msgstr ""
 "Der in dieser Datei gesicherte Schlüssel ist:\n"
 "\n"
 
-msgid "Unknown"
-msgstr "unbekannt"
-
 msgid "Never"
 msgstr "niemals"
 
@@ -741,6 +768,15 @@ msgstr "unvollständig"
 
 msgid "Fully Valid"
 msgstr "voll gültig"
+
+msgid "Invalid"
+msgstr "Ungültig"
+
+msgid "Faked"
+msgstr "Gefälscht"
+
+msgid "Fully"
+msgstr "Vollständig"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "Bitte geben Sie den Passwortsatz für den folgenden Schlüssel ein:"
@@ -923,6 +959,9 @@ msgstr "Die Email Adresse ist nicht gültig."
 
 msgid "Invalid character in comments."
 msgstr "Ungültige Zeichen im Kommentarfeld."
+
+msgid "_Details"
+msgstr "_Details"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA ist der GNU Privacy Assistant"
@@ -1214,11 +1253,26 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "_Sicherheitskopie anlegen"
 
+msgid "Only keys of the same procotol may be copied."
+msgstr "Nur Schlüssel eines Protokolls können zusammen kopiert werden"
+
 msgid "_Keys"
 msgstr "_Schlüssel"
 
 msgid "_Server"
 msgstr "_Server"
+
+msgid "Copy _Fingerprint"
+msgstr "_Fingerabdruck kopieren"
+
+msgid "Copy the fingerprints"
+msgstr "Die Fingerabdrücke in die Zwischenablage kopieren"
+
+msgid "Copy Private Key"
+msgstr "Den geheimen Schlüssel kopieren"
+
+msgid "Copy a single private key"
+msgstr "Den ausgewählten geheimen Schlüssel in die Zwischenablage kopieren"
 
 msgid "Select all certificates"
 msgstr "Alle Zertifikate auswählen"
@@ -1364,8 +1418,14 @@ msgstr "Art:"
 msgid "Created at:"
 msgstr "erzeugt am:"
 
+msgid "Last update:"
+msgstr "Letztes Update:"
+
 msgid "Details"
 msgstr "Details"
+
+msgid "User IDs"
+msgstr "User-IDs"
 
 msgid "Show signatures on user name:"
 msgstr "Signaturen für Benutzerkennung anzeigen:"
@@ -1931,6 +1991,22 @@ msgid ""
 "\n"
 "This notice will be shown only once per session."
 msgstr ""
+"<b>Admin PIN notwendig</b>\n"
+"\n"
+"Abhängig von vorher durchgeführten Operationen werden Sie nun\n"
+"möglicherweise nach der Admin PIN gefragt.  Die Eingabe eines falschen\n"
+"Wertes wird den Falscheingabenzähler der Karte herunter setzen.  Sobald\n"
+"dieser Zähler den Wert 0 erreicht hat kann die Admin PIN nicht mehr\n"
+"wiederhergestellt werden und die Daten auf der Karten können nicht\n"
+"mehr geändert werden.\n"
+"\n"
+"Sofern nicht geändert, eine frische Standardkarte hat als Admin\n"
+"PIN den Wert <i>12345678</i> voreingestellt.  Es kann jedoch sein, daß\n"
+"der Herausgeber der Karte eine andere Voreinstellung getroffen hat\n"
+"oder die Admin PIN nur dem Herausgeber bekannt ist.  Bitte lesen Sie\n"
+"unbedingt die Hinweise des Herausgebers.\n"
+"\n"
+"Diese Benachrichtigung wird nur einmalig pro Sitzung angezeigt."
 
 msgid "PUK retry counter:"
 msgstr "PUK Versuche frei:"
@@ -2174,10 +2250,9 @@ msgid ""
 "Please check the documentation of your card to learn for what the NullPIN is "
 "good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat "
-"that PIN.  Make sure that you will remember that PIN - it will not be "
-"possible to recover the PIN if it has been entered wrongly more than %d "
-"times.\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
 "\n"
 "%s"
 msgstr ""
@@ -2474,9 +2549,6 @@ msgstr ""
 
 #~ msgid "clear buffer"
 #~ msgstr "Textfeld löschen"
-
-#~ msgid "open file"
-#~ msgstr "Datei öffnen"
 
 #~ msgid "save file as"
 #~ msgstr "Datei _speichern unter"
@@ -2933,9 +3005,6 @@ msgstr ""
 #~ msgid "Error creating directory \"%s\": %s\n"
 #~ msgstr "Fehler beim Erstellen des Verzeichnisses \"%s\": %s\n"
 
-#~ msgid "Create Directory"
-#~ msgstr "Verzeichnis erstellen"
-
 #~ msgid "_Directory name:"
 #~ msgstr "_Verzeichnisname:"
 
@@ -3098,17 +3167,11 @@ msgstr ""
 #~ msgid "Remove"
 #~ msgstr "Löschen"
 
-#~ msgid "Set key server"
-#~ msgstr "Key-Server festlegen"
-
 #~ msgid "_Key server: "
 #~ msgstr "_Key-Server: "
 
 #~ msgid "_Set"
 #~ msgstr "Über_nehmen"
-
-#~ msgid "Fingerprint"
-#~ msgstr "Fingerabdruck:"
 
 #~ msgid "User identity / role"
 #~ msgstr "Benutzerkennung"
@@ -3249,9 +3312,6 @@ msgstr ""
 #~ msgid "trust ultimately"
 #~ msgstr "vollständiges Vertrauen"
 
-#~ msgid "invalid"
-#~ msgstr "ungültig"
-
 #~ msgid "ElGamal (sign and encrypt)"
 #~ msgstr "ElGamal (signieren und verschlüsseln)"
 
@@ -3319,9 +3379,6 @@ msgstr ""
 
 #~ msgid "Key Trust:"
 #~ msgstr "Schlüsselvertrauen:"
-
-#~ msgid "User ID:"
-#~ msgstr "Benutzerkennung:"
 
 #~ msgid "1"
 #~ msgstr "1"
