@@ -1,22 +1,23 @@
 # GPA Russian translation.
-# This file is put in the public domain.
+# This file is distrubuted under the same license as the package.
 # Maxim Britov <maxim.britov@gmail.com>, 2007.
+# CJ <cj@neocaching.ru>, 2008.
+# Sergei Smirnov <moscow@hro.org>, 2008.
+# Ineiev <ineiev@gnu.org>, 2015, 2016, 2017.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GPA 0.8\n"
+"Project-Id-Version: GPA 0.9.9\n"
 "Report-Msgid-Bugs-To: translations@gnupg.org\n"
-"PO-Revision-Date: 2011-12-12 10:17+0100\n"
-"Last-Translator: Sergei Smirnov <moscow@hro.org>\n"
-"Language-Team: Russian <moscow@hro.org>\n"
+"PO-Revision-Date: 2017-05-25 10:17+0000\n"
+"Last-Translator: Ineiev <ineiev@gnu.org>\n"
+"Language-Team: Russian <gnupg-i18n@gnupg.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Poedit-Language: Russian\n"
-"X-Poedit-Country: RUSSIAN FEDERATION\n"
 
 msgid "Open File"
 msgstr "Открыть файл"
@@ -26,9 +27,9 @@ msgstr "Сообщение GPA"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s is %llu%s large.  Do you really  want to open it?"
-msgstr "Файл %s очень (%lli%s) велик. Действительно хотите его открыть?"
+msgstr "Размер файла %s равен %llu%s. Открыть его?"
 
 msgid "Save As..."
 msgstr "Сохранить как..."
@@ -36,13 +37,11 @@ msgstr "Сохранить как..."
 msgid "Clipboard"
 msgstr "Буфер"
 
-#, fuzzy
 msgid "_File"
-msgstr "/_Файл"
+msgstr "_Файл"
 
-#, fuzzy
 msgid "_Edit"
-msgstr "/_Правка"
+msgstr "_Правка"
 
 msgid "Clear buffer"
 msgstr "Очистить буфер"
@@ -53,35 +52,29 @@ msgstr "Открыть файл"
 msgid "Save to a file"
 msgstr "Сохранить в файле"
 
-#, fuzzy
 msgid "Sign buffer text"
-msgstr "подписать текст"
+msgstr "Подписать текст из буфера"
 
-#, fuzzy
 msgid "Check signatures of buffer text"
-msgstr "Проверить подпись выбранного текста"
+msgstr "Проверить подписи текста из буфера"
 
-#, fuzzy
 msgid "Encrypt the buffer text"
-msgstr "Зашифровать выбранный текст"
+msgstr "Зашифровать текст из буфера"
 
-#, fuzzy
 msgid "Decrypt the buffer text"
-msgstr "Расшифровать выбранный текст"
+msgstr "Расшифровать текст из буфера"
 
-#, fuzzy
 msgid "Close the buffer"
-msgstr "Очистить буфер"
+msgstr "Закрыть буфер"
 
 msgid "Quit the program"
-msgstr ""
+msgstr "Выйти из программы"
 
-#, fuzzy
 msgid "Undo the last action"
-msgstr "Копировать выделенное в буфер"
+msgstr "Отменить последнее действие"
 
 msgid "Redo the last undone action"
-msgstr ""
+msgstr "Выполнить последнее отмененное действие"
 
 msgid "Cut the selection"
 msgstr "Вырезать выделенное в буфер"
@@ -92,53 +85,51 @@ msgstr "Копировать выделенное в буфер"
 msgid "Paste the clipboard"
 msgstr "Вставить из буфера"
 
-#, fuzzy
 msgid "Delete the selected text"
-msgstr "Расшифровать выбранный текст"
+msgstr "Удалить выделенный текст"
 
 msgid "Select the entire document"
-msgstr ""
+msgstr "Выделить весь документ"
 
 msgid "Keyring"
-msgstr "Ключи"
+msgstr "Таблица ключей"
 
 msgid "Files"
 msgstr "Файлы"
 
-#, fuzzy
 msgid "Card"
-msgstr "Буфер"
+msgstr "Карта"
 
 msgid "<b>Main</b>"
 msgstr "<b>Главное</b>"
 
 msgid "Use default values"
-msgstr "Использовать значения по умолчанию"
+msgstr "Исходные значения"
 
 msgid "Use default value"
-msgstr "Использовать значение по умолчанию"
+msgstr "Исходное значение"
 
 msgid "Do not use option"
-msgstr "Не использовать опцию"
+msgstr "Не задавать"
 
 msgid "Use custom values"
-msgstr "Использовать свои значения"
+msgstr "Другие значения"
 
 msgid "Use custom value"
-msgstr "Использовать свое значение"
+msgstr "Другое значение"
 
 msgid "Use default argument"
-msgstr "Использовать аргумент по умолчанию"
+msgstr "Исходный аргумент"
 
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
 msgstr ""
-"Есть незафиксированные изменения. Изменение экспертной установки поможет их "
-"запомнить. Продолжить?"
+"Некоторые из изменений не вступили в силу. При изменении экспертной "
+"установки они начнут действовать. Продолжить?"
 
 msgid "Crypto Backend Configuration"
-msgstr "Настройки шифровальной программы"
+msgstr "Настройки базовых программ"
 
 msgid "Reset"
 msgstr "Сбросить"
@@ -159,19 +150,19 @@ msgid "Expert"
 msgstr "Экспертный"
 
 msgid "A keyserver has not been configured."
-msgstr ""
+msgstr "Сервер ключей не задан."
 
 msgid "Configure backend to use a keyserver?"
-msgstr ""
+msgstr "Настроить сервер ключей для базовых программ?"
 
 msgid "_Yes"
-msgstr "Да"
+msgstr "_Да"
 
 msgid "_No"
-msgstr "Нет"
+msgstr "_Нет"
 
 msgid "Configuring the backend to use a keyserver failed"
-msgstr ""
+msgstr "Сбой настройки сервера ключей в базовых программах"
 
 msgid "days"
 msgstr "дней"
@@ -186,23 +177,22 @@ msgid "years"
 msgstr "лет"
 
 msgid "never expires"
-msgstr "неогр."
+msgstr "неогранич."
 
 msgid "unknown"
 msgstr "неизвестно"
 
 msgid "Mr."
-msgstr ""
+msgstr "Гр."
 
 msgid "Ms."
-msgstr ""
+msgstr "Гр."
 
-#, fuzzy
 msgid "(unknown)"
-msgstr "неизвестно"
+msgstr "Гр."
 
 msgid "Encrypt documents"
-msgstr "Зашифровать файлы"
+msgstr "Зашифровать документы"
 
 msgid "_Public Keys"
 msgstr "_Открытые ключи"
@@ -247,17 +237,16 @@ msgid "Decrypt the selected file"
 msgstr "Расшифровать выбранный файл"
 
 msgid "Close the window"
-msgstr ""
+msgstr "Закрыть окно"
 
-#, fuzzy
 msgid "Select all files"
-msgstr "Закрыть все файлы"
+msgstr "Выбрать все файлы"
 
 msgid "File"
 msgstr "Файл"
 
 msgid "File Manager"
-msgstr "Менеджер _файлов"
+msgstr "Менеджер файлов"
 
 msgid "The file is already open."
 msgstr "Файл уже открыт."
@@ -265,75 +254,65 @@ msgstr "Файл уже открыт."
 msgid "Sign documents"
 msgstr "Подпись файлов"
 
-#, fuzzy
 msgid "<b>Sign _as</b>"
-msgstr "<b>Главное</b>"
+msgstr "<b>Подписать _как</b>"
 
-#, fuzzy
 msgid "<b>Signing Mode</b>"
-msgstr "Режим подписи"
+msgstr "<b>Режим подписи</b>"
 
-#, fuzzy
 msgid "Si_gn and compress"
-msgstr "_подпись и сжатие"
+msgstr "_Подпись и сжатие"
 
-#, fuzzy
 msgid "Clear_text signature"
-msgstr "_текстовая подпись"
+msgstr "_Текстовая подпись"
 
-#, fuzzy
 msgid "_Detached signature"
-msgstr "_отделяемая подпись"
+msgstr "_Отделенная подпись"
 
 msgid "Output version information and exit"
-msgstr "Показать информацию о версии и завершить"
+msgstr "Вывести версию и завершиться"
 
-#, fuzzy
 msgid "Open key manager (default)"
-msgstr "Открыть менеджер ключей (по умолчанию)"
+msgstr "Открыть диспетчер ключей (по умолчанию)"
 
 msgid "Open file manager"
 msgstr "Открыть менеджер файлов"
 
-#, fuzzy
 msgid "Open the card manager"
-msgstr "Открыть менеджер файлов"
+msgstr "Открыть диспетчер карт"
 
 msgid "Open clipboard"
 msgstr "Открыть буфер"
 
-#, fuzzy
 msgid "Open the settings dialog"
-msgstr "Открыть окно настроек"
+msgstr "Открыть диалог настроек"
 
-#, fuzzy
 msgid "Only start the UI server"
-msgstr "Стартовать только сервер UI"
+msgstr "Запустить только сервер пользовательского интерфейса"
 
 msgid "Disable support for X.509"
-msgstr ""
+msgstr "Отключить поддержку X.509"
 
 msgid "Read options from file"
-msgstr "Получить настройки из файла"
+msgstr "Получить параметры из файла"
 
 msgid "Do not connect to a running instance"
-msgstr ""
+msgstr "Не подключаться к работающему экземпляру"
 
 msgid "[FILE...]"
 msgstr "[ФАЙЛ...]"
 
 msgid "Graphical frontend to GnuPG"
-msgstr "Графическая оболочка к GnuPG"
+msgstr "Графическая оболочка для GnuPG"
 
 msgid "Please report bugs to <"
-msgstr "Об ошибках сообщайте <"
+msgstr "Об ошибках сообщайте по адресу <"
 
-#, fuzzy
 msgid "_Windows"
-msgstr "/_Окно"
+msgstr "_Окна"
 
 msgid "Open the keyring editor"
-msgstr "Открыть менеджер ключей"
+msgstr "Редактировать таблицу ключей"
 
 msgid "Open the file manager"
 msgstr "Открыть менеджер файлов"
@@ -341,18 +320,16 @@ msgstr "Открыть менеджер файлов"
 msgid "Open the clipboard"
 msgstr "Открыть буфер"
 
-#, fuzzy
 msgid "Configure the application"
-msgstr "Вырезать выделенное в буфер"
+msgstr "Настроить приложение"
 
-#, fuzzy
 msgid "_Backend Preferences"
-msgstr "/Правка/Настройки _шифр. программы..."
+msgstr "Настройки _базовых программ"
 
 msgid "Configure the backend programs"
-msgstr ""
+msgstr "Сконфиругировать базовые программы"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
 "\n"
@@ -361,57 +338,52 @@ msgid ""
 "This is sensitive information, and should be stored carefully\n"
 "(for example, on a USB stick kept in a safe place)."
 msgstr ""
-"Копия вашего закрытого ключа сохранена в файл:\n"
+"Копия Вашего секретного ключа сохранена в файле:\n"
 "\n"
 "\t\"%s\"\n"
 "\n"
-"Это деликатная иформация, ее следует тщательно оберегать\n"
-"(храните на сменном носителе CD/DVD/Flash в надежном и безопасном месте)."
+"Это особо важная иформация, ее следует тщательно оберегать\n"
+"(например, хранить на сменном носителе в надежном месте)."
 
 msgid "An error ocurred during the backup operation."
 msgstr "Ошибка создания резервной копии."
 
 msgid "Backup key to file"
-msgstr "Резервная копия ключа в файл"
+msgstr "Сохранить резервную копию ключа в файле"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Generating backup of key: 0x%s"
-msgstr "Создание резервной копии ключа: %s"
+msgstr "Создание резервной копии ключа: 0x%s"
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Ключи скопированы в буфер."
 
 msgid "Export public keys to file"
-msgstr "Экспорт открытого ключа в файл"
+msgstr "Экспорт открытых ключей в файл"
 
 msgid "_armor"
-msgstr "_защитить"
+msgstr "_упаковка в текст"
 
 #, c-format
 msgid "The keys have been exported to %s."
 msgstr "Ключи экспортированы в %s."
 
 msgid "Only keys of the same procotol may be exported as a collection."
-msgstr ""
-"Выбраны сертификаты разных типов, то есть сертификаты OpenPGP и X.509. "
-"Выберите, пожалуйста, сертификаты одного типа."
+msgstr "В наборе можно экспортировать только ключи одного и того же протокола."
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The selected key(s) will be sent to a public key\n"
 "server (\"%s\")."
 msgstr ""
-"Выбранный ключ будет отправлен на открытый сервер открытых ключей\n"
-"(\"%s\").\n"
-"Действительно хотите распространить данный ключ?"
+"Выбранные ключи будут отправлены на сервер открытых ключей\n"
+"(\"%s\")."
 
-#, fuzzy
 msgid "Are you sure you want to distribute this key?"
-msgstr "Вы действительно хотите удалить этот ключ?"
+msgstr "Вы действительно хотите распространять этот ключ?"
 
-#, fuzzy
 msgid "Error sending key(s) to the server."
-msgstr "/Отправить на сервер..."
+msgstr "Ошибка при отсылке ключей на сервер."
 
 msgid "The keys have been sent to the server."
 msgstr "Ключи успешно отправлены на сервер."
@@ -431,15 +403,15 @@ msgstr "Файл \"%s\" не содержит данных OpenPGP."
 msgid "\"%s\" contained no valid encrypted data."
 msgstr "\"%s\" не содержит зашифрованных данных."
 
-#, fuzzy, c-format
+#, c-format
 msgid "The file \"%s\" contained no valid encrypted data."
 msgstr "Файл \"%s\" не содержит зашифрованных данных."
 
 msgid "Wrong passphrase!"
-msgstr "Неверный пароль!"
+msgstr "Неверная фраза-пароль!"
 
 msgid "Encrypting..."
-msgstr "Шифрование..."
+msgstr "Зашифровка..."
 
 msgid "Unknown Key"
 msgstr "Неизвестный ключ"
@@ -451,19 +423,19 @@ msgid "However, it is not certain that the key belongs to that person."
 msgstr "Однако нет уверенности, что ключ принадлежит именно этому человеку."
 
 msgid "Do you <b>really</b> want to use this key?"
-msgstr "Вы <b><действительно уверены/b>, что хотите использовать этот ключ? "
+msgstr "Вы <b>точно</b> хотите использовать этот ключ?"
 
 msgid "Revoked Key"
-msgstr "Отзыв ключа"
+msgstr "Ключ отозван"
 
 msgid "_Close"
 msgstr "_Закрыть"
 
 msgid "The following key has been revoked by its owner:"
-msgstr "Ключ отозван владельцем:"
+msgstr "Следующий ключ отозван владельцем:"
 
 msgid "And can not be used for encryption."
-msgstr "Он не может использоваться для шифрования."
+msgstr "Его нельзя применять для шифрования."
 
 #, c-format
 msgid "The following key expired on %s:"
@@ -474,6 +446,8 @@ msgid ""
 "OpenPGP and X.509 certificates. Please make sure to select only certificates "
 "of the same type."
 msgstr ""
+"Выбраны сертификаты разных типов, то есть сертификаты OpenPGP и X.509. "
+"Выберите, пожалуйста, сертификаты одного типа."
 
 msgid "You didn't select any key for signing"
 msgstr "Не выбран ключ для подписи"
@@ -491,23 +465,24 @@ msgid ""
 "\n"
 "The file found is: %s"
 msgstr ""
-"Программа нашла файл, который, возможно, является подписью %s. Проверить с "
-"его помощью?\n"
+"Программа нашла файл, который, возможно, является подписью %s. Проверить его "
+"вместо исходного?\n"
 "\n"
 "Найденный файл: %s"
 
 msgid "Generating Key..."
 msgstr "Создание ключа..."
 
-#, fuzzy
 msgid "Import keys from file"
-msgstr "Импорт открытого ключа из файла"
+msgstr "Импорт ключей из файла"
 
 #, c-format
 msgid ""
 "More than %d keys match your search pattern.\n"
 "Use the long keyid or a fingerprint for a better match"
 msgstr ""
+"Найдено более %i ключей с такими данными.\n"
+"Для уточнения задайте отпечаток или длинный идентификатор."
 
 msgid "No keys were found."
 msgstr "Ключи не обнаружены."
@@ -519,13 +494,11 @@ msgstr ""
 "Неправильная дата\n"
 "(нельзя устанавливать истекший срок годности)."
 
-#, fuzzy
 msgid "Created"
-msgstr "Создан:"
+msgstr "Создан"
 
-#, fuzzy
 msgid "The Creation Date is the date the certificate was created."
-msgstr "Срок годности определяет продолжительность действия сертификата."
+msgstr "Дата создания - дата, когда создан сертификат."
 
 msgid "User Name"
 msgstr "Имя"
@@ -537,100 +510,91 @@ msgid "This key has expired! Unable to sign."
 msgstr "Этот ключ устарел! Подпись невозможна."
 
 msgid "This key has already been signed with your own!"
-msgstr "Этот ключ уже подписан вашим ключом!"
+msgstr "Этот ключ уже подписан Вашим ключом!"
 
 msgid "You haven't selected a default key to sign with!"
-msgstr "Не выбран ключ по умолчанию для подписи!"
+msgstr "Основной ключ для подписи не выбран!"
 
-#, fuzzy
 msgid "Which key do you want to import?"
-msgstr "Какой ключ импортировать (ID ключа)?"
+msgstr "Какой из ключей импортировать?"
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
-msgstr "Какой ключ импортировать (ID ключа)?"
+msgstr "Какой ключ импортировать (нужно задать ID ключа)?"
 
 msgid "Key _ID:"
-msgstr "ID _ключа:"
+msgstr "_ID ключа:"
 
-#, fuzzy
 msgid "Decrypting message ..."
-msgstr "Расшифровка..."
+msgstr "Расшифровка сообщения..."
 
-#, fuzzy
 msgid "Document"
-msgstr "Подпись файлов"
+msgstr "Документ"
 
-#, fuzzy
 msgid "Encrypting message ..."
-msgstr "Шифрование..."
+msgstr "Зашифровка сообщения..."
 
-#, fuzzy
 msgid "Message encryption"
-msgstr "Может шифр."
+msgstr "Зашифровка сообщения"
 
-#, fuzzy
 msgid "Signing message ..."
-msgstr "Подпись..."
+msgstr "Подпись сообщения..."
 
 msgid "Message signing"
-msgstr ""
+msgstr "Подпись сообщения"
 
-#, fuzzy
 msgid "Verifying message ..."
-msgstr "Проверка..."
+msgstr "Проверка сообщения..."
 
 msgid "Subkey ID"
 msgstr "ID подключа"
 
 msgid "Status"
-msgstr "Статус"
+msgstr "Состояние"
 
-#, fuzzy
 msgid "Algo"
 msgstr "Алгоритм"
 
 msgid "Size"
 msgstr "Размер"
 
-#, fuzzy
 msgid "Expires"
-msgstr "Истек"
+msgstr "Истекает"
 
 msgid "S"
-msgstr ""
+msgstr "П"
 
 msgid "Can sign"
-msgstr "Может подпис."
+msgstr "Для подписи"
 
 msgid "C"
-msgstr ""
+msgstr "С"
 
 msgid "Can certify"
-msgstr "Может сертиф."
+msgstr "Для сертификации"
 
 msgid "E"
-msgstr ""
+msgstr "Ш"
 
 msgid "Can encrypt"
-msgstr "Может шифр."
+msgstr "Для шифрования"
 
 msgid "A"
-msgstr ""
+msgstr "А"
 
 msgid "Can authenticate"
-msgstr "Может авториз."
+msgstr "Для проверки подлинности"
 
 msgid "T"
-msgstr ""
+msgstr "К"
 
 msgid "Secret key stored on a smartcard."
-msgstr ""
+msgstr "Секретный ключ хранится на электронной карте."
 
 msgid "Card S/N"
-msgstr ""
+msgstr "СН карты"
 
 msgid "Serial number of the smart card."
-msgstr ""
+msgstr "Серийный номер электронной карты."
 
 msgid "Revoked"
 msgstr "Отозван"
@@ -666,25 +630,27 @@ msgid "_indefinitely valid"
 msgstr "_не вполне достоверен"
 
 msgid "expire _after"
-msgstr "недействителен после"
+msgstr "недействителен _после"
 
 msgid "expire o_n:"
-msgstr "недействителен с:"
+msgstr "недействителен _с:"
 
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
 msgstr ""
 "!КРИТИЧЕСКАЯ ОШИБКА!\n"
-"Неверный режим для даты срока годности."
+"Неверный режим даты срока годности."
 
 msgid "(not set)"
-msgstr ""
+msgstr "(не установлен)"
 
 msgid ""
 "Keys are already stored on the card.\n"
 "Really replace existing keys?"
 msgstr ""
+"На карте уже хранятся ключи.\n"
+"Записать ключи поверх существующих?"
 
 #, c-format
 msgid ""
@@ -696,13 +662,13 @@ msgid ""
 "The application will be terminated"
 msgstr ""
 "Критическая ошибка в библиотеке GPGME.\n"
-"(файл %s, стр. %i):\n"
+"(файл %s, строка %i):\n"
 "\n"
 "\t%s\n"
 "\n"
 "Работа программы будет прервана"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The GPGME library returned an unexpected\n"
 "error at %s:%d. The error was:\n"
@@ -729,11 +695,10 @@ msgstr ""
 "Перезаписать?"
 
 msgid "_Use a different filename"
-msgstr ""
+msgstr "_Записать под другим именем"
 
-#, fuzzy
 msgid "_Open"
-msgstr "/Файл/_Открыть"
+msgstr "_Открыть"
 
 msgid ""
 "************************************************************************\n"
@@ -742,17 +707,17 @@ msgid ""
 "************************************************************************\n"
 "\n"
 msgstr ""
-"****************************************************************************\n"
-"* ВНИМАНИЕ: Данный файл является резервной копией вашего закрытого ключа. *\n"
-"* Его следует хранить в надежном месте.                       *\n"
-"****************************************************************************\n"
+"***********************************************************\n"
+"* ВНИМАНИЕ: Данный файл является резервной копией Вашего  *\n"
+"* секретного ключа. Его следует хранить в надежном месте. *\n"
+"***********************************************************\n"
 "\n"
 
 msgid ""
 "The key backed up in this file is:\n"
 "\n"
 msgstr ""
-"Резервная копия сохранена в файле:\n"
+"Резервная копия ключа сохранена в файле:\n"
 "\n"
 
 msgid "Unknown"
@@ -777,13 +742,13 @@ msgid "Fully Valid"
 msgstr "Полностью достоверен"
 
 msgid "Please enter the passphrase for the following key:"
-msgstr "Введите пароль для доступа к ключу:"
+msgstr "Введите фразу-пароль для доступа к ключу:"
 
 msgid "Wrong passphrase, please try again:"
-msgstr "Неверный пароль, пожалуйста, еще раз:"
+msgstr "Неверная фраза-пароль, повторите:"
 
 msgid "Enter Passphrase"
-msgstr "Введите пароль"
+msgstr "Введите фразу-пароль"
 
 msgid "[None]"
 msgstr "[Нет]"
@@ -792,126 +757,125 @@ msgid "[Unknown user ID]"
 msgstr "[Неизвестный ID пользователя]"
 
 msgid "Bad"
-msgstr "Плохой"
+msgstr "Плохое"
 
 msgid "Generic"
-msgstr "Общий"
+msgstr "Общ."
 
 msgid "Persona"
-msgstr "Персон."
+msgstr "Личн."
 
 msgid "Casual"
-msgstr "Случайн."
+msgstr "Частичн."
 
 msgid "Positive"
-msgstr "Позитив."
+msgstr "Тщательн."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Bad signature by %s: %s"
-msgstr "Подпись: %s"
+msgstr "Неверная подпись %s: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Bad signature by %s"
-msgstr "Подпись: %s"
+msgstr "Неверная подпись %s"
 
 #, c-format
 msgid "Bad signature by unknown key %s: %s"
-msgstr ""
+msgstr "Неверная подпись, сделанная неизвестным ключом %s: %s"
 
 #, c-format
 msgid "Bad signature by unknown key %s"
-msgstr ""
+msgstr "Неверная подпись, сделанная неизвестным ключом %s"
 
 #, c-format
 msgid "Bad signature by unknown key: %s"
-msgstr ""
+msgstr "Неверная подпись, сделанная неизвестным ключом: %s"
 
 msgid "Bad signature by unknown key"
-msgstr ""
+msgstr "Неверная подпись, сделанная неизвестным ключом"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Good signature by %s: %s"
-msgstr "Подпись: %s"
+msgstr "Верная подпись %s: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Good signature by %s"
-msgstr "Подпись: %s"
+msgstr "Верная подпись %s"
 
 #, c-format
 msgid "Good signature by unknown key %s: %s"
-msgstr ""
+msgstr "Верная подпись, сделанная неизвестным ключом %s: %s"
 
 #, c-format
 msgid "Good signature by unknown key %s"
-msgstr ""
+msgstr "Верная подпись, сделанная неизвестным ключом %s"
 
 #, c-format
 msgid "Good signature by unknown key: %s"
-msgstr ""
+msgstr "Верная подпись, сделанная неизвестным ключом: %s"
 
 msgid "Good signature by unknown key"
-msgstr ""
+msgstr "Верная подпись, сделанная неизвестным ключом"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by %s: %s"
-msgstr "Подпись: %s"
+msgstr "Неопределенная подпись %s: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by %s"
-msgstr "Все подписи"
+msgstr "Неопределенная подпись %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by unknown key %s: %s"
-msgstr "Подпись: %s"
+msgstr "Неопределенная подпись, сделанная неизвестным ключом %s: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by unknown key %s"
-msgstr "Все подписи"
+msgstr "Неопределенная подпись, сделанная неизвестным ключом %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Uncertain signature by unknown key: %s"
-msgstr "Подпись: %s"
+msgstr "Неопределенная подпись, сделанная неизвестным ключом: %s"
 
 msgid "Uncertain signature by unknown key"
-msgstr ""
+msgstr "Неопределенная подпись, сделанная неизвестным ключом %s"
 
 msgid "The key can be used for certification, signing and encryption."
-msgstr ""
-"Ключ может быть использован для сертифицирования, подписи и шифрования."
+msgstr "Ключом можно пользоваться для сертификации, подписи и шифрования."
 
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
 msgstr ""
-"Ключ может быть использован для сертифицирования и подписи, но не для "
-"шифрования."
+"Ключом можно пользоваться для подписи и сертификации, но не для шифрования."
 
 msgid "The key can be used for certification and encryption."
-msgstr "Ключ может быть использован для сертифицирования и шифрования."
+msgstr "Ключом можно пользоваться для шифрования и сертификации."
 
 msgid "The key can be used only for certification."
-msgstr "Ключ может быть использован только для сертифицирования."
+msgstr "Ключом можно пользоваться только для сертификации."
 
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
 msgstr ""
-"Ключ может быть использован для подписи и шифрования, но не для "
-"сертифицирования."
+"Ключом можно пользоваться для подписи и шифрования, но не для сертификации."
 
 msgid "The key can be used only for signing."
-msgstr "Ключ может быть использован только для подписи."
+msgstr "Ключом можно пользоваться только для подписи."
 
 msgid "The key can be used only for encryption."
-msgstr "Ключ может быть использован только для шифрования."
+msgstr "Ключом можно пользоваться только для шифрования."
 
 msgid "This key is useless."
-msgstr "Данный ключ бесполезен/неприменим."
+msgstr "Данный ключ непригоден."
 
 #, c-format
 msgid ""
 "%u file(s) read\n"
 "%u file(s) with errors"
 msgstr ""
+"Считано файлов:    %u\n"
+"Файлов с ошибками: %u"
 
 #, c-format
 msgid ""
@@ -922,41 +886,39 @@ msgid ""
 "%i secret keys imported\n"
 "%i secret keys unchanged"
 msgstr ""
-"Прочитано открытых ключей: %i\n"
-"Импортировано открытых ключей: %i\n"
-"Не изменено открытых ключей: %i\n"
-"Прочитано закрытых ключей: %i\n"
-"Импортировано закрытых ключей: %i\n"
-"Не изменено закрытых ключей: %i"
+"Прочитано открытых ключей:      %i\n"
+"Импортировано открытых ключей:  %i\n"
+"Не изменено открытых ключей:    %i\n"
+"Прочитано секретных ключей:     %i\n"
+"Импортировано секретных ключей: %i\n"
+"Не изменено секретных ключей:   %i"
 
 msgid "A required engine component is not installed."
-msgstr ""
+msgstr "Не установлен необходимый компонент механизма."
 
 msgid "Calling the crypto engine program failed."
-msgstr ""
+msgstr "Сбой при вызове криптографической программы."
 
-#, fuzzy
 msgid "You must enter a name."
-msgstr "Введите ID пользователя."
+msgstr "Нужно ввести имя."
 
 msgid "Invalid character in name."
-msgstr ""
+msgstr "Недопустимый символ в имени."
 
 msgid "Name may not start with a digit."
-msgstr ""
+msgstr "Имя не должно начинаться с цифры."
 
 msgid "Name is too short."
-msgstr ""
+msgstr "Имя слишком коротко."
 
 msgid "Email address is not valid."
-msgstr ""
+msgstr "Недопустимый адрес электронной почты."
 
 msgid "Invalid character in comments."
-msgstr ""
+msgstr "Недопустимый символ в примечаниях."
 
-#, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
-msgstr "Как работает GNU Privacy Assistant"
+msgstr "GPA - Помощник приватности GNU (GNU Privacy Assistant)"
 
 msgid "About GPA"
 msgstr "О программе GPA"
@@ -965,57 +927,49 @@ msgstr "О программе GPA"
 #. be your name and mail
 msgid "translator-credits"
 msgstr ""
+"Maxim Britov (2007);\n"
+"Sergei Smirnov (2008);\n"
+"CJ (2008);\n"
+"Ineiev <ineiev@gnu.org> (2016)"
 
-#, fuzzy
 msgid "_Help"
-msgstr "/Сп_равка"
+msgstr "_Справка"
 
-#, fuzzy
 msgid "Open the GPA manual"
-msgstr "Открыть менеджер файлов"
+msgstr "Открыть руководство по GPA"
 
-#, fuzzy
 msgid "About this application"
-msgstr "Вырезать выделенное в буфер"
+msgstr "Об этой программе"
 
-#, fuzzy
 msgid "_Verify"
-msgstr "Проверить"
+msgstr "Про_верить"
 
-#, fuzzy
 msgid "_Encrypt"
-msgstr "Зашифровать"
+msgstr "За_шифровать"
 
-#, fuzzy
 msgid "_Decrypt"
-msgstr "Расшифровать"
+msgstr "_Расшифровать"
 
-#, fuzzy
 msgid "_Brief"
-msgstr "Кратко"
+msgstr "Кра_тко"
 
-#, fuzzy
 msgid "_Detailed"
-msgstr "Подробно"
+msgstr "_Подробно"
 
-#, fuzzy
 msgid "_Keyring Manager"
-msgstr "Менеджер _файлов"
+msgstr "_Диспетчер ключей"
 
-#, fuzzy
 msgid "_Clipboard"
-msgstr "Буфер"
+msgstr "_Буфер"
 
-#, fuzzy
 msgid "_File Manager"
 msgstr "Менеджер _файлов"
 
-#, fuzzy
 msgid "_Card Manager"
-msgstr "Менеджер _файлов"
+msgstr "Диспетчер _карт"
 
 msgid "Removing Secret Key"
-msgstr "Удаление закрытого ключа"
+msgstr "Удаление секретного ключа"
 
 msgid ""
 "If you delete this key, you won't be able to\n"
@@ -1038,87 +992,85 @@ msgid ""
 "This key has a secret key. Deleting this key cannot be undone, unless you "
 "have a backup copy."
 msgstr ""
-"Присутствует закрытый ключ. Восстановить его можно только из резервной копии "
-"(если она есть)."
+"У ключа есть секретный ключ. Восстановить его можно только из резервной "
+"копии (если она есть)."
 
 msgid ""
 "This key is a public key. Deleting this key cannot be undone easily, "
 "although you may be able to get a new copy  from the owner or from a key "
 "server."
 msgstr ""
-"Это открытый ключ. После удаления восстановить открытый ключ можно, только "
-"получив его у владельца или с сервера ключей."
+"Это открытый ключ. Он не восстанавливается, хотя его копии могут быть "
+"доступны у владельца или на сервере ключей."
 
 msgid "Are you sure you want to delete this key?"
-msgstr "Вы действительно хотите удалить этот ключ?"
+msgstr "Вы твердо решили удалить этот ключ?"
 
 msgid "Edit Key"
 msgstr "Редактировать ключ"
 
 msgid "Change _passphrase"
-msgstr "Изменить пароль"
+msgstr "Изменить _фразу-пароль"
 
 msgid "Expiry Date"
 msgstr "Срок годности"
 
 msgid "Change _expiration"
-msgstr "Изменить срок годности"
+msgstr "Изменить срок _годности"
 
 msgid "RSA"
-msgstr ""
+msgstr "RSA"
 
 msgid "RSA (sign only)"
-msgstr "RSA (только шифрование)"
+msgstr "RSA (только подпись)"
 
 msgid "DSA"
-msgstr ""
+msgstr "DSA"
 
 msgid "DSA (sign only)"
 msgstr "DSA (только подпись)"
 
-#, fuzzy
 msgid "You must enter a key size."
-msgstr "Введите ID пользователя."
+msgstr "Нужно ввести размер ключа."
 
-#, fuzzy
 msgid "Generate card key"
-msgstr "Генерация ключа"
+msgstr "Генерация ключа на карте"
 
 msgid "Generate key"
 msgstr "Генерация ключа"
 
 msgid "_Algorithm: "
-msgstr "Алгоритм: "
+msgstr "_Алгоритм: "
 
 msgid "_Key size (bits): "
-msgstr "Длина ключа (бит): "
+msgstr "_Длина ключа (бит): "
 
-#, fuzzy
 msgid "User ID: "
-msgstr "Имя пользователя"
+msgstr "Идентификатор пользователя"
 
 msgid "_Name: "
-msgstr ""
+msgstr "_Имя: "
 
 msgid "_Email: "
 msgstr "_Email: "
 
 msgid "_Comment: "
-msgstr "Комментарий: "
+msgstr "_Примечание: "
 
-#, fuzzy
 msgid "_Expires: "
-msgstr "Годен до:"
+msgstr "_Годен до:"
 
-#, fuzzy
 msgid "Backup: "
-msgstr "Создать резервную копию"
+msgstr "Резервная копия: "
 
 msgid ""
 "If checked the encryption key will be created and stored to a backup file "
 "and then loaded into the card.  This is recommended so that encrypted "
 "messages can be decrypted even if the card has a malfunction."
 msgstr ""
+"Записать ключ для шифрования в резервный файл, а затем загрузить его в "
+"электронную карту. Это рекомендуется, чтобы защифрованные сообщения можно "
+"было расшифровать, даже если карта выйдет из строя."
 
 msgid ""
 "Please insert your full name.\n"
@@ -1126,15 +1078,14 @@ msgid ""
 "Your name will be part of the new key to make it easier for others to "
 "identify keys."
 msgstr ""
-"Введите свое полное имя (на английском).\n"
+"Введите свое полное имя.\n"
 "\n"
-"Ваше имя станет часть вновь создаваемого ключа и поможет другим найти Ваш "
-"ключ."
+"Ваше имя станет частью вновь создаваемого ключа и поможет другим опознавать "
+"ключи."
 
 msgid "Your Name:"
-msgstr "Ваше имя (англ.):"
+msgstr "Ваше имя:"
 
-#, fuzzy
 msgid ""
 "Please insert your email address.\n"
 "\n"
@@ -1142,14 +1093,14 @@ msgid ""
 "to identify keys. If you have several email addresses, you can add further "
 "email addresses later."
 msgstr ""
-"Введите свой адрес email.\n"
+"Введите свой адрес электронной почты.\n"
 "\n"
-"Ваш адрес станет частью нового ключа. Это поможет другим людям искать и "
-"опознавать ваш ключ.\n"
-"Если вы используете несколько адресов email, вы можете добавить их позже."
+"Ваш адрес станет частью нового ключа. Это поможет другим находить и "
+"распозначать ключи.\n"
+"Другие адреса при необходимости можно добавить позднее."
 
 msgid "Your Email Address:"
-msgstr "Ваш адрес email:"
+msgstr "Ваш адрес электронной почты:"
 
 msgid ""
 "It is recommended that you create a backup copy of your new key, once it has "
@@ -1157,27 +1108,27 @@ msgid ""
 "\n"
 "Do you want to create a backup copy?"
 msgstr ""
-"Рекомендуется сделать резервную копию нового ключа.\n"
+"После создания рекомендуется сделать резервную копию нового ключа.\n"
 "\n"
 "Сделать резервную копию?"
 
 msgid "Create _backup copy"
-msgstr "Создать резервную копию"
+msgstr "Создать _резервную копию"
 
 msgid "Do it _later"
-msgstr "Позже"
+msgstr "В _другой раз"
 
 msgid ""
 "Your key is being generated.\n"
 "\n"
 "Even on fast computers this may take a while. Please be patient."
 msgstr ""
-"Начато создание нового ключа.\n"
+"Создается ключ.\n"
 "\n"
 "Даже на быстрых компьютерах это занимает некоторое время. Пожалуйста, "
 "подождите."
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Congratulations!\n"
 "\n"
@@ -1186,20 +1137,22 @@ msgid ""
 msgstr ""
 "Поздравляем!\n"
 "\n"
-"Создание ключа успешно завершено. Новый ключ имеет абсолютную достоверность "
-"и длину 1024 бит."
+"Создание ключа успешно завершено. Новый ключ абсолютно достоверен, его длина "
+"равна %d бит."
 
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
 msgstr ""
-"GnuPG перестраивает базу с записями об уровне доверия.\n"
+"GnuPG пересоставляет базу данных доверия.\n"
 "Это может занять несколько секунд."
 
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
 "'X' denotes X.509 (S/MIME)."
 msgstr ""
+"В этом столбце указан тип сертификата. 'P' означает OpenPGP, 'X' - X.509 (S/"
+"MIME)."
 
 msgid "The Expiry Date is the date until the certificate is valid."
 msgstr "Срок годности определяет продолжительность действия сертификата."
@@ -1229,139 +1182,121 @@ msgstr ""
 msgid ""
 "The User Name is the name and often also the email address  of the "
 "certificate."
-msgstr "Имя владельца сертификата и (часто) его электронный адрес."
+msgstr ""
+"Имя пользователя - имя владельца сертификата, часто с электронным адресом."
 
 msgid "No keys selected for signing."
-msgstr "Не выбран ключ для подписи."
+msgstr "Ключи для подписи не выбраны."
 
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
 msgstr ""
-"У вас пока нет закрытого ключа. Хотите создать его сейчас (рекомендуется) "
-"или позже?"
+"У Вас пока нет секретного ключа. Хотите создать его сейчас (рекомендуется) "
+"или позднее?"
 
 msgid "_Generate key now"
-msgstr "Создать ключ"
+msgstr "_Создать ключ сейчас"
 
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
 msgstr ""
-"Вы еще не сделали резервную копию закрытого ключа. Хотите сделать ее сейчас "
-"(рекомендуется) или позже?"
+"Вы еще не сделали резервную копию секретного ключа. Хотите сделать ее сейчас "
+"(рекомендуется) или позднее?"
 
 msgid "_Backup key now"
-msgstr "Создать резервную копию"
+msgstr "Создать _резервную копию сейчас"
 
-#, fuzzy
 msgid "_Keys"
-msgstr "/_Ключи"
+msgstr "_Ключи"
 
-#, fuzzy
 msgid "_Server"
-msgstr "/_Сервер"
+msgstr "С_ервер"
 
 msgid "Select all certificates"
-msgstr ""
+msgstr "Выбрать все сертификаты"
 
 msgid "Refresh the keyring"
-msgstr "Обновить связку ключей"
+msgstr "Обновить таблицу ключей"
 
-#, fuzzy
 msgid "_New key..."
-msgstr "/Ключи/_Создать..."
+msgstr "_Новый ключ..."
 
-#, fuzzy
 msgid "Generate a new key"
-msgstr "Генерация ключа"
+msgstr "Создать ключ"
 
-#, fuzzy
 msgid "_Delete keys"
-msgstr "/Удалить ключи..."
+msgstr "_Удалить ключи"
 
 msgid "Remove the selected key"
 msgstr "Удалить выбранный ключ"
 
-#, fuzzy
 msgid "_Sign Keys..."
-msgstr "/Подписать ключи..."
+msgstr "_Подписать ключи..."
 
 msgid "Sign the selected key"
 msgstr "Подписать выбранный ключ"
 
-#, fuzzy
 msgid "Set _Owner Trust..."
-msgstr "/Доверие владельцу..."
+msgstr "_Доверие владельцу..."
 
-#, fuzzy
 msgid "Set owner trust of the selected key"
-msgstr "Удалить выбранный ключ"
+msgstr "Установить доверие владельцу выбранного ключа"
 
-#, fuzzy
 msgid "_Edit Private Key..."
-msgstr "/Редактировать закрытый ключ..."
+msgstr "Править _секретный ключ..."
 
 msgid "Edit the selected private key"
-msgstr "Правка выделенного закрытого ключа"
+msgstr "Правка выбранного секретного ключа"
 
-#, fuzzy
 msgid "_Import Keys..."
-msgstr "Импорт ключей"
+msgstr "_Импорт ключей"
 
 msgid "Import Keys"
 msgstr "Импорт ключей"
 
-#, fuzzy
 msgid "E_xport Keys..."
-msgstr "/Экспортировать ключи..."
+msgstr "_Экспорт ключей..."
 
 msgid "Export Keys"
 msgstr "Экспорт ключей"
 
-#, fuzzy
 msgid "_Backup..."
-msgstr "/Резервная копия..."
+msgstr "_Резервная копия..."
 
-#, fuzzy
 msgid "Backup key"
-msgstr "Создать резервную копию"
+msgstr "Создать резервную копию ключа"
 
-#, fuzzy
 msgid "_Retrieve Keys..."
-msgstr "/Сервер/_Загрузить ключи..."
+msgstr "Извлеч_ь ключи..."
 
 msgid "Retrieve keys from server"
-msgstr ""
+msgstr "Получить ключи с сервера"
 
-#, fuzzy
 msgid "Re_fresh Keys"
-msgstr "обновить связку ключей"
+msgstr "_Обновить ключи"
 
-#, fuzzy
 msgid "Refresh keys from server"
-msgstr "/Отправить на сервер..."
+msgstr "Обновить ключи с сервера"
 
-#, fuzzy
 msgid "_Send Keys..."
-msgstr "/Подписать ключи..."
+msgstr "О_тправить ключи..."
 
-#, fuzzy
 msgid "Send keys to server"
-msgstr "/Отправить на сервер..."
+msgstr "Отправить ключи на сервер"
 
 msgid "Show Brief Keylist"
-msgstr "Краткий список ключей"
+msgstr "Скрыть детали"
 
 msgid "Show Key Details"
-msgstr "Подробный список ключей"
+msgstr "Подробно"
 
 msgid "Edit"
 msgstr "Правка"
 
-#, fuzzy
 msgid "Delete"
-msgstr "/Правка/_Удалить"
+msgstr "Удалить"
 
 msgid "Sign"
 msgstr "Подписать"
@@ -1373,42 +1308,39 @@ msgid "Import"
 msgstr "Импорт"
 
 msgid "Selected default key:"
-msgstr "Ключ по умолчанию:"
+msgstr "Выбран основной ключ:"
 
 msgid "No default key selected in the preferences."
-msgstr "В настройках не выбран ключ по умолчанию."
+msgstr "В настройках основной ключ не выбран."
 
-#, fuzzy
 msgid "Key Manager"
-msgstr "Менеджер _файлов"
+msgstr "Диспетчер ключей"
 
-#, fuzzy
 msgid "The key has both a smartcard based private part and a public part"
-msgstr "Закрытый и открытый ключи"
+msgstr "У ключа есть секретная часть на карте и открытая часть"
 
 msgid "The key has both a private and a public part"
-msgstr "Закрытый и открытый ключи"
+msgstr "У ключа есть секретная и открытая части"
 
 msgid "The key has only a public part"
-msgstr "Только открытый ключ"
+msgstr "У ключа есть только открытая часть"
 
 #, c-format
 msgid "%s %u bits"
 msgstr "%s %u бит"
 
 msgid "No keys selected"
-msgstr "Не выбран ключ"
+msgstr "Ключи не выбраны"
 
 #, c-format
 msgid "%d key selected"
 msgid_plural "%d keys selected"
-msgstr[0] "%d ключ выбран"
-msgstr[1] "%d ключа выбрано"
-msgstr[2] "%d ключей выбрано"
+msgstr[0] "Выбран %d ключ"
+msgstr[1] "Выбраны %d ключа"
+msgstr[2] "Выбрано %d ключей"
 
-#, fuzzy
 msgid "User name:"
-msgstr "Имя:"
+msgstr "Имя пользователя:"
 
 msgid "Expires at:"
 msgstr "Годен до:"
@@ -1416,11 +1348,9 @@ msgstr "Годен до:"
 msgid "Owner Trust:"
 msgstr "Доверие владельцу:"
 
-#, fuzzy
 msgid "Key validity:"
 msgstr "Достоверность ключа:"
 
-#, fuzzy
 msgid "Key type:"
 msgstr "Тип ключа:"
 
@@ -1431,11 +1361,10 @@ msgid "Details"
 msgstr "Подробно"
 
 msgid "Show signatures on user name:"
-msgstr "Показать подписи имени владельца:"
+msgstr "Показать подписи на имени пользователя:"
 
-#, fuzzy
 msgid "Chain"
-msgstr "Может подпис."
+msgstr "Цепочка"
 
 msgid "Signatures"
 msgstr "Подписи"
@@ -1446,15 +1375,14 @@ msgstr "Все подписи"
 msgid "Subkeys"
 msgstr "Подключи"
 
-#, fuzzy
 msgid "Key"
-msgstr "/_Ключи"
+msgstr "Ключ"
 
 msgid "Tofu"
-msgstr ""
+msgstr "Tofu"
 
 msgid "Sign Key"
-msgstr "Подпись ключа"
+msgstr "Подписать ключ"
 
 msgid "Do you want to sign the following key?"
 msgstr "Подписать этот ключ?"
@@ -1463,17 +1391,17 @@ msgid ""
 "Check the name and fingerprint carefully to be sure that it really is the "
 "key you want to sign."
 msgstr ""
-"Тщательно сверьте имя и отпечаток ключа. Нужно быть уверенным, что вы "
-"подписываете именно тот ключ, который хотите."
+"Тщательно сверьте имя и отпечаток ключа. Нужно быть уверенным, что это "
+"именно тот ключ, который требуется подписать."
 
 msgid "All user names in this key will be signed."
-msgstr "Все имена в ключе будут подписаны."
+msgstr "Будут подписаны все имена в ключе."
 
 msgid "The key will be signed with your default private key."
-msgstr "Ключ будет подписан вашим закрытым ключом по умолчанию."
+msgstr "Ключ будет подписан Вашим основным секретным ключом."
 
 msgid "Sign only _locally"
-msgstr "Подписать только локально"
+msgstr "Подписать только _локально"
 
 msgid ""
 "It seems that no CMS engine is installed.\n"
@@ -1483,36 +1411,43 @@ msgid ""
 "Please install a CMS engine or invoke this program\n"
 "with the option --disable-x509 ."
 msgstr ""
+"Кажется, система для CMS не установлена.\n"
+"\n"
+"Поддержка X.509 временно отключается.\n"
+"\n"
+"Установите систему для CMS или вызывайте эту программу\n"
+"с параметром --disable-x509."
 
 msgid ""
 "The private key you selected as default is no longer available.\n"
 "GPA will try to choose a new default key automatically."
 msgstr ""
-"Закрытый ключ по умолчанию более не доступен.\n"
-"GPA попытается автоматически выбрать новый ключ по умолчанию."
+"Секретный ключ, выбранный в качестве основного, больше не доступен.\n"
+"GPA попытается автоматически выбрать новый основной ключ."
 
 msgid "Change key ownertrust"
-msgstr "Смена доверия"
+msgstr "Смена доверия владельцу"
 
 msgid "_Unknown"
-msgstr "Неизвестно"
+msgstr "Неи_звестно"
 
 msgid ""
 "You don't know how much to trust this user to verify other people's keys.\n"
 msgstr ""
-"Неизвестно, можно ли доверять этому пользователю подписывать ключи других "
-"людей.\n"
+"Неизвестно, насколько можно доверять этому пользователю проверять чужие "
+"ключи.\n"
 
 msgid "_Never"
-msgstr "Нет"
+msgstr "Ни_какого"
 
 msgid ""
 "You don't trust this user at all to verify the validity of other people's "
 "keys at all.\n"
-msgstr "Никакого доверия этому пользователю.\n"
+msgstr ""
+"Вы не доверяете этому пользователю проверять достоверность чужих ключей.\n"
 
 msgid "_Marginal"
-msgstr "Ограниченное"
+msgstr "_Ограниченное"
 
 msgid ""
 "You don't trust this user's ability to verify the validity of other people's "
@@ -1521,24 +1456,25 @@ msgid ""
 "by this user valid if it is also signed by at least other two marginally "
 "trusted users with valid keys\n"
 msgstr ""
-"Не следует полагаться на одно лишь слово этого пользователя при подписывании "
-"чужих ключей.\n"
-"Однако если еще минимум двое пользователей с таким же уровнем доверия "
-"подпишут тот же ключ, такой ключ можно будет считать достоверным\n"
+"Не следует полагаться на одно лишь слово этого пользователя при оценке чужих "
+"ключей.\n"
+"Но если этот ключ достоверен, то подписанные им ключи можно считать "
+"достоверными, когда они подписаны по меньшей мере двумя пользователями с "
+"ограниченным доверием.\n"
 
 msgid "_Full"
-msgstr "Полное"
+msgstr "_Полное"
 
 msgid ""
 "You trust this user's ability to verify the validity of other people's keys "
 "so much, that you'll consider valid any key signed by him/her, provided this "
 "user's key is valid.\n"
 msgstr ""
-"Пользователь обладает достаточным уровнем доверия. Подписанные им чужие "
-"ключи можно считать достоверными.\n"
+"Пользователь обладает достаточным уровнем доверия, чтобы считать все "
+"подписанные им ключи достоверными, если его ключ достоверен.\n"
 
 msgid "U_ltimate"
-msgstr "Абсолютное"
+msgstr "_Абсолютное"
 
 msgid ""
 "You consider this key valid, and trust the user so much that you will "
@@ -1550,22 +1486,22 @@ msgstr ""
 "Пользователь обладает абсолютным доверием. Подписанные им чужие ключи можно "
 "считать полностью достоверными.\n"
 "\n"
-"(Абсолютное доверие - для ваших ключей. Не используйте его для других "
-"ключей, если не доверяете этим ключам и их владельцам на 100%)\n"
+"(Внимание: этот уровень предназначен для своих ключей. Не используйте его "
+"для чужих ключей, если не уверены полностью в том, что делаете)\n"
 
 msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
 msgstr ""
-"В полях \"Пароль\" и \"Повторите\",\n"
-"нужно ввести одинаковые пароли."
+"В полях \"Фраза-пароль\" и \"Повторите\"\n"
+"нужно ввести одну и ту же фразу-пароль."
 
 msgid ""
 "You did not enter a passphrase.\n"
 "It is needed to protect your private key."
 msgstr ""
-"Вы не ввели пароль.\n"
-"Пароль требуется для защиты вашего закрытого ключа."
+"Вы не ввели фразу-пароль.\n"
+"Она требуется для защиты Вашего секретного ключа."
 
 msgid ""
 "Warning: You have entered a passphrase\n"
@@ -1573,41 +1509,43 @@ msgid ""
 "\n"
 "Please enter a new passphrase."
 msgstr ""
-"Внимание: Вы ввели пароль,\n"
-"который не может считаться надежным.\n"
+"Внимание: Введенная фраза-пароль\n"
+"откровенно слаба.\n"
 "\n"
-"Пожалуйста, введите новый пароль."
+"Пожалуйста, введите новую фразу-пароль."
 
 msgid "_Enter new passphrase"
-msgstr "_Новый пароль"
+msgstr "_Новая фраза-пароль"
 
 msgid "Take this one _anyway"
-msgstr "Буду _использовать этот"
+msgstr "Все _равно взять эту"
 
 msgid "Choose new passphrase"
-msgstr "Выберите новый пароль"
+msgstr "Выберите новую фразу-пароль"
 
 msgid "Passphrase: "
-msgstr "Пароль: "
+msgstr "Фраза-пароль: "
 
 msgid "Repeat Passphrase: "
-msgstr "Повторите пароль: "
+msgstr "Повторите фразу-пароль: "
 
 msgid "Recipient"
-msgstr ""
+msgstr "Получатель"
 
 msgid ""
 "Shows the recipients of the message. A key needs to be assigned to each "
 "recipient."
 msgstr ""
+"Показывает получателей сообщения. Каждому получателю нужно присвоить ключ."
 
 msgid "Checked if at least one matching OpenPGP certificate has been found."
-msgstr ""
+msgstr "Найден хотя бы один соответствующий сертификат OpenPGP."
 
 msgid ""
 "Checked if at least one matching X.509 certificate for use with S/MIME has "
 "been found."
 msgstr ""
+"Найден хотя бы один соответствующий сертификат X.509 для применения с S/MIME."
 
 msgid "Key ID"
 msgstr "ID ключа"
@@ -1616,75 +1554,81 @@ msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
 "selected."
 msgstr ""
+"Показывает идентификатор выбранного ключа или указывает, что нужно выбрать "
+"ключ."
 
 msgid ""
 "You need to select a key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
+"Нужно выбрать ключ для каждого получателя.\n"
+"Для выбора щелкните правой кнопкой на соответствующей строке."
 
 msgid ""
 "You need to select exactly one key for each recipient.\n"
 "To select a key right-click on the respective line."
 msgstr ""
+"Нужно выбрать ровно один ключ для каждого получателя.\n"
+"Для выбора щелкните правой кнопкой на соответствующей строке."
 
 msgid ""
 "Although you selected keys for all recipients a common encryption protocol "
 "can't be used. Please decide on one protocol by clicking one of the above "
 "radio buttons."
 msgstr ""
+"Хотя ключи выбраны для всех получателей, общего протокола шифрования нет. "
+"Выберите протокол на переключателе вверху."
 
 msgid "Using OpenPGP for encryption."
-msgstr ""
+msgstr "Шифрование по OpenPGP."
 
 msgid "Using S/MIME for encryption."
-msgstr ""
+msgstr "Шифрование по S/MIME."
 
 msgid "No recipients - encryption is not possible"
-msgstr ""
+msgstr "Зашифровать нельзя: нет получателей"
 
 msgid "[Ambiguous keys. Right-click to select]"
-msgstr ""
+msgstr "[Неоднозначные ключи. Для выбора щелкните правой кнопкой]"
 
 msgid "[Ambiguous PGP key.  Right-click to select]"
-msgstr ""
+msgstr "[Неоднозначный ключ PGP. Для выбора щелкните правой кнопкой]"
 
 msgid "[Ambiguous X.509 key. Right-click to select]"
-msgstr ""
+msgstr "[Неоднозначный ключ X.509. Для выбора щелкните правой кнопкой]"
 
 msgid "[Right-click to select]"
-msgstr ""
+msgstr "[Для выбора щелкните правой кнопкой]"
 
 msgid "Select _PGP key..."
-msgstr ""
+msgstr "Выбрать ключ _PGP..."
 
 msgid "Select _S\\/MIME key..."
-msgstr ""
+msgstr "Выбрать ключ _S\\/MIME..."
 
 msgid "Toggle _Ignore flag"
-msgstr ""
+msgstr "Переключить флаг \"_игнорировать\""
 
 msgid "Select keys for recipients"
-msgstr ""
+msgstr "Выбрать ключи получателей"
 
 msgid "_Recipient list"
-msgstr ""
+msgstr "_Список получателей"
 
 msgid "Use _PGP"
-msgstr ""
+msgstr "Пользоваться _PGP"
 
 msgid "Use _X.509"
-msgstr ""
+msgstr "Пользоваться _X.509"
 
-#, fuzzy
 msgid "_Auto selection"
-msgstr "Вырезать выделенное в буфер"
+msgstr "_Автовыбор"
 
-#, fuzzy
 msgid "Select a key"
-msgstr "Ключ по умолчанию:"
+msgstr "Выбрать ключ"
 
 msgid "No error"
-msgstr "Нет ошибок"
+msgstr "Ошибок нет"
 
 msgid "Internal error"
 msgstr "Внутренняя ошибка"
@@ -1738,54 +1682,50 @@ msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
 msgstr ""
-"Отсутствует плагин выбранного протокола\n"
-"для связи с сервером ключей."
+"Нет модуля для заданного протокола\n"
+"связи с сервером ключей."
 
 msgid "The keyserver you specified is not valid"
-msgstr "Некорректно задан сервер ключей"
+msgstr "Сервер ключей задан некорректно"
 
 msgid "Local"
-msgstr "Локал."
+msgstr "Локальный"
 
 msgid "Local, Keyserver"
-msgstr ""
+msgstr "Локальный, сервер ключей"
 
-#, fuzzy
 msgid "Local, PKA"
-msgstr "Локал."
+msgstr "Локальный, PKA"
 
 msgid "Local, PKA, Keyserver"
-msgstr ""
+msgstr "Локальный, PKA, сервер ключей"
 
 msgid "Local, Keyserver, PKA"
-msgstr ""
+msgstr "Локальный, сервер ключей, PKA"
 
-#, fuzzy
 msgid "Local, kDNS"
-msgstr "Локал."
+msgstr "Локальный, kDNS"
 
 msgid "Local, kDNS, Keyserver"
-msgstr ""
+msgstr "Локальный, kDNS, сервер ключей"
 
 msgid "PKA"
-msgstr ""
+msgstr "PKA"
 
 msgid "kDNS"
-msgstr ""
+msgstr "kDNS"
 
 msgid "Custom"
-msgstr ""
+msgstr "Другое"
 
-#, fuzzy
 msgid "<b>User interface</b>"
-msgstr "<b>Рас_ширенный режим</b>"
+msgstr "<b>Пользовательский интерфейс</b>"
 
-#, fuzzy
 msgid "Use _advanced mode"
-msgstr "<b>Рас_ширенный режим</b>"
+msgstr "Рас_ширенный режим"
 
 msgid "Show advanced _options"
-msgstr ""
+msgstr "Показать дополнительные _настройки"
 
 msgid ""
 "No default key has been selected.  This may lead to problems when signing or "
@@ -1794,23 +1734,26 @@ msgid ""
 "\n"
 "Please consider creating your own key and select it then."
 msgstr ""
+"Основной ключ не задан. Это может привести к неполадкам во время подписи или "
+"зашифровки. Например, впоследствии может оказаться невозможно прочесть "
+"написанное Вами сообщение, зашифрованное для кого-то другого.\n"
+"\n"
+"Подумайте о том, чтобы создать себе ключ и выбрать его."
 
 msgid "Continue without a default key"
-msgstr ""
+msgstr "Продолжить без основного ключа"
 
-#, fuzzy
 msgid "Let me select a default key"
-msgstr "Ключ по умолчанию:"
+msgstr "Выбрать основной ключ"
 
 msgid "<b>Default _key</b>"
-msgstr "<b>_Ключ по умолчанию</b>"
+msgstr "<b>Основной _ключ</b>"
 
 msgid "<b>Default key_server</b>"
-msgstr "<b>_Сервер ключей по умолчанию</b>"
+msgstr "<b>Основной _сервер ключей</b>"
 
-#, fuzzy
 msgid "<b>Auto key _locate</b>"
-msgstr "<b>_Сервер ключей по умолчанию</b>"
+msgstr "<b>Автоматический по_иск ключей</b>"
 
 msgid ""
 "The list of methods to locate keys via an email address.\n"
@@ -1827,23 +1770,34 @@ msgid ""
 " Custom\n"
 "   - Configured in the backend dialog.\n"
 msgstr ""
+"Список методов нахождения ключей по адресу электронной почты.\n"
+"Все данные методы применяются друг за другом, пока не найдется подходящий "
+"ключ. Поддерживаются методы:\n"
+" Локальный\n"
+"   - Искать в локальной таблице ключей.\n"
+" Сервер ключей\n"
+"   - Искать на основном сервере.\n"
+" PKA\n"
+"   - Поиск в PKA (Ассоциации открытых ключей).\n"
+" kDNS\n"
+"   - Применить kDNS с указанным сервером имен.\n"
+" Другое\n"
+"   - Настраивается в окне базовых программ.\n"
 
 msgid "Method:"
-msgstr ""
+msgstr "Метод:"
 
 msgid "The IP address of the nameserver used for the kDNS method."
-msgstr ""
+msgstr "Адрес IP сервера имен для метода kDNS."
 
-#, fuzzy
 msgid "kDNS Server:"
-msgstr "/_Сервер"
+msgstr "Сервер kDNS:"
 
-#, fuzzy
 msgid "The URL given for the keyserver is not valid."
-msgstr "Некорректно задан сервер ключей"
+msgstr "Некорректно задан URL сервера ключей"
 
 msgid "The data given for \"Auto key locate\" is not valid."
-msgstr ""
+msgstr "Данные для \"Автоматического поиска ключей\" некорректны."
 
 msgid "Settings"
 msgstr "Настройки"
@@ -1860,13 +1814,12 @@ msgstr "Ключ устарел"
 msgid "Key NOT valid"
 msgstr "Ключ НЕ достоверен"
 
-#, fuzzy
 msgid "Description"
-msgstr "Расшифровка..."
+msgstr "Описание"
 
 #, c-format
 msgid "Verified data in file: %s"
-msgstr "Проверены данные файла: %s"
+msgstr "Проверены данные из файла: %s"
 
 #, c-format
 msgid "Signature: %s"
@@ -1875,23 +1828,21 @@ msgstr "Подпись: %s"
 msgid "Signatures:"
 msgstr "Подписи:"
 
-#, fuzzy
 msgid "Card Manager"
-msgstr "Менеджер _файлов"
+msgstr "Диспетчер карт"
 
 #, c-format
 msgid "%s card detected."
-msgstr ""
+msgstr "Обнаружена карта %s."
 
 msgid "Checking for card..."
-msgstr ""
+msgstr "Поиск карты..."
 
-#, fuzzy
 msgid "No card found."
-msgstr "Ключи не обнаружены."
+msgstr "Карта не обнаружена."
 
 msgid "The selected card application is currently not available."
-msgstr ""
+msgstr "Выбранное приложение карты в настоящий момент недоступно."
 
 msgid ""
 "Another process is using a different card application than the selected "
@@ -1900,43 +1851,43 @@ msgid ""
 "You may change the application selection mode to \"Auto\" to select the "
 "active application."
 msgstr ""
+"Другой процесс пользуется приложением карты, отличным от выбранного.\n"
+"\n"
+"Можно изменить режим выбора приложения на \"Автоматический\", чтобы выбирать "
+"активное приложение."
 
 msgid "The selected card application is not available."
-msgstr ""
+msgstr "Выбранное приложение карты недоступно."
 
 msgid "Error accessing the card."
-msgstr ""
+msgstr "Ошибка доступа к карте."
 
 msgid "Error accessing card"
-msgstr ""
+msgstr "Ошибка доступа к карте"
 
 msgid "No card"
-msgstr ""
+msgstr "Карты нет"
 
-#, fuzzy
 msgid "_Card"
-msgstr "Буфер"
+msgstr "_Карта"
 
 msgid "Reload card information"
-msgstr ""
+msgstr "Перезагрузить информацию о карте"
 
-#, fuzzy
 msgid "Generate new key on card"
-msgstr "Генерация ключа"
+msgstr "Создать ключ на карте"
 
-#, fuzzy
 msgid "This card application is not yet supported."
-msgstr "Действие не поддерживается"
+msgstr "Это приложение карты пока не поддерживается."
 
-#, fuzzy
 msgid "Application selection:"
-msgstr "Вырезать выделенное в буфер"
+msgstr "Выбор приложения:"
 
 msgid "Auto"
-msgstr ""
+msgstr "Автоматический"
 
 msgid "The GPGME library is too old to support smartcards."
-msgstr ""
+msgstr "Библиотека GPGME слишком стара; электронные карты не поддерживаются."
 
 msgid ""
 "<b>Admin-PIN Required</b>\n"
@@ -1953,86 +1904,71 @@ msgid ""
 "\n"
 "This notice will be shown only once per session."
 msgstr ""
+"<b>Требуется административный PIN</b>\n"
+"\n"
+"В зависимости от предыдущих операций может потребоваться ввести "
+"административный PIN. Ввод неверного значения административного PIN "
+"уменьшает соответствующий счетчик попыток. Когда он достигает нуля, "
+"административный PIN не может быть воостановлен и данные карты больше не "
+"могут быть изменены.\n"
+"\n"
+"Если административный PIN не изменяли, на новых стандартных картах он равен "
+"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
+"значением административного PIN, известным только издателю. Сверьтесь с "
+"инструкциями своего издателя.\n"
+"\n"
+"Это замечание будет выводиться один раз за сеанс."
 
 msgid "PUK retry counter:"
-msgstr ""
+msgstr "Счетчик попыток PUK:"
 
 msgid "CHV2 retry counter: "
-msgstr ""
+msgstr "Счетчик попыток CHV2:"
 
-#, fuzzy
 msgid "Reset PIN"
-msgstr "Сбросить"
+msgstr "Сбросить PIN"
 
 msgid "Change PIN"
-msgstr ""
+msgstr "Изменить PIN"
 
 msgid "Change PUK"
-msgstr ""
+msgstr "Изменить PUK"
 
-#, fuzzy
 msgid "Reset PUK"
-msgstr "Сбросить"
+msgstr "Сбросить PUK"
 
 #, c-format
 msgid ""
 "Error saving the changed values.\n"
 "(%s <%s>)"
 msgstr ""
+"Ошибка сохранения измененных данных.\n"
+"(%s <%s>)"
 
 msgid "Only plain ASCII is currently allowed."
-msgstr ""
+msgstr "В настоящее время допустим только простой текст ASCII."
 
 msgid "The \"<\" character may not be used."
-msgstr ""
-"<b>Разблокировка PIN</b>\n"
-"\n"
-"Счетчик попыток PIN обратился в ноль, но был установлен код сброса.\n"
-"\n"
-"Код сброса сходен с PUK (кодом разблокировки PIN), с его помощью можно "
-"разблокировать PIN, не зная административного PIN.\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение <b>кода сброса</b>, а "
-"затем новое значение PIN, повторив его в ответ на другой запрос."
+msgstr "Символ \"<\" использовать нельзя."
 
 msgid "Double spaces are not allowed."
-msgstr ""
+msgstr "Двойные пробелы недопустимы."
 
 msgid ""
 "Total length of first and last name may not be longer than 39 characters."
-msgstr ""
+msgstr "Полная длина имени и фамилии должна быть не более 39 символов."
 
-#, fuzzy
 msgid "Saving the field failed."
-msgstr "Подписать выбранный файл"
+msgstr "Сбой при сохранении поля данных."
 
 msgid "Invalid length of the language preference."
-msgstr ""
-"<b>Изменение PIN</b>\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
-"значение, повторив его в ответ на другой запрос.\n"
-"\n"
-"Ввод неверного значения PIN уменьшает счетчик попыток. Если счетчики попыток "
-"PIN и кода сброса одновременно стали равны нулю, PIN все еще можно сбросить "
-"с помощью административного PIN.\n"
-"\n"
-"На новых стандартных картах PIN установлен равным <i>123456</i>. Однако "
-"издатель карты мог инициализировать карту другим значением PIN. Сверьтесь с "
-"инструкциями своего издателя."
+msgstr "Недопустимая длина языковых предпочтений."
 
 msgid "The language preference may only contain the letters 'a' through 'z'."
-msgstr ""
+msgstr "Языковые предпочтения могут содержать только буквы от 'a' до 'z'."
 
 msgid "The field may not be longer than 254 characters."
-msgstr ""
-"<b>Изменение кода сброса</b>\n"
-"\n"
-"Код сброса сходен с кодом разблокировки (PUK) и применяется для "
-"разблокировки PIN без необходимости прибегать к административному PIN.\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
-"значение кода сброса, повторив его в ответ на другой запрос."
+msgstr "Поле должно быть не длиннее 254 символов."
 
 msgid ""
 "<b>Unblocking the PIN</b>\n"
@@ -2046,19 +1982,15 @@ msgid ""
 "Code</b> and then to enter a new value for the PIN and repeat that new value "
 "at another prompt."
 msgstr ""
-"<b>Сброс PIN или кода сброса</b>\n"
+"<b>Разблокировка PIN</b>\n"
 "\n"
-"Если счетчики попыток PIN и кода сброса одновременно стали равны нулю, "
-"сбросить их можно, только если есть доступ к административному PIN.\n"
+"Счетчик попыток PIN обратился в ноль, но был установлен код сброса.\n"
 "\n"
-"На новых стандартных картах административный PIN установлен равным "
-"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
-"значением административного PIN, известным только издателю. Сверьтесь с "
-"инструкциями своего издателя.\n"
+"Код сброса сходен с PUK (кодом разблокировки PIN), с его помощью можно "
+"разблокировать PIN, не зная административного PIN.\n"
 "\n"
-"Если продолжить, нужно будет ввести текущее значение <b>административного "
-"PIN</b>, а затем новое значение PIN или кода сброса, повторив его в ответ на "
-"другой запрос."
+"Если продолжить, нужно будет ввести текущее значение <b>кода сброса</b>, а "
+"затем новое значение PIN, повторив его в ответ на другой запрос."
 
 msgid ""
 "<b>Changing the PIN</b>\n"
@@ -2074,6 +2006,18 @@ msgid ""
 "the issuer of your card might have initialized the card with a different "
 "PIN.  Please check the instructions of your issuer."
 msgstr ""
+"<b>Изменение PIN</b>\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
+"значение, повторив его в ответ на другой запрос.\n"
+"\n"
+"Ввод неверного значения PIN уменьшает счетчик попыток. Если счетчики попыток "
+"PIN и кода сброса одновременно стали равны нулю, PIN все еще можно сбросить "
+"с помощью административного PIN.\n"
+"\n"
+"На новых стандартных картах PIN установлен равным <i>123456</i>. Однако "
+"издатель карты мог инициализировать карту другим значением PIN. Сверьтесь с "
+"инструкциями своего издателя."
 
 msgid ""
 "<b>Changing the Reset Code</b>\n"
@@ -2085,6 +2029,13 @@ msgid ""
 "then to enter a new value for the Reset Code and repeat that new value at "
 "another prompt."
 msgstr ""
+"<b>Изменение кода сброса</b>\n"
+"\n"
+"Код сброса сходен с кодом разблокировки (PUK) и применяется для "
+"разблокировки PIN без необходимости прибегать к административному PIN.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
+"значение кода сброса, повторив его в ответ на другой запрос."
 
 msgid ""
 "<b>Resetting the PIN or the Reset Code</b>\n"
@@ -2102,6 +2053,19 @@ msgid ""
 "PIN</b> and then to enter a new value for the PIN or the Reset Code and "
 "repeat that new value at another prompt."
 msgstr ""
+"<b>Сброс PIN или кода сброса</b>\n"
+"\n"
+"Если счетчики попыток PIN и кода сброса одновременно стали равны нулю, "
+"сбросить их можно, только если есть доступ к административному PIN.\n"
+"\n"
+"На новых стандартных картах административный PIN установлен равным "
+"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
+"значением административного PIN, известным только издателю. Сверьтесь с "
+"инструкциями своего издателя.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение <b>административного "
+"PIN</b>, а затем новое значение PIN или кода сброса, повторив его в ответ на "
+"другой запрос."
 
 msgid ""
 "<b>Changing the Admin-PIN</b>\n"
@@ -2119,112 +2083,109 @@ msgid ""
 "PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
 "value at another prompt."
 msgstr ""
+"<b>Изменение административного PIN</b>\n"
+"\n"
+"Если известен административный PIN, его можно его изменить.\n"
+"\n"
+"Административный PIN требуется, чтобы создавать на карте ключи, а также "
+"изменять другие данные. Вы можете знать, а можете не знать административный "
+"PIN. На новых стандартных картах административный PIN установлен равным "
+"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
+"значением административного PIN, известным только издателю. Сверьтесь с "
+"инструкциями своего издателя.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение <b>административного "
+"PIN</b>, а затем новое значение административного PIN, повторив его в ответ "
+"на другой запрос."
 
 #, c-format
 msgid ""
 "Error changing or resetting the PIN/PUK.\n"
 "(%s <%s>)"
 msgstr ""
+"Ошибка изменения или сброса PIN/PUK.\n"
+"(%s <%s>)"
 
 #, c-format
 msgid ""
 "Error fetching the key.\n"
 "(%s <%s>)"
 msgstr ""
+"Ошибка получения ключа.\n"
+"(%s <%s>)"
 
 #, c-format
 msgid "Keys found: %d, imported: %d, unchanged: %d"
-msgstr ""
+msgstr "Найдено ключей: %i, импортировано: %i, без изменений: %i"
 
 msgid "Fetch Key"
-msgstr ""
+msgstr "Получить ключ"
 
-#, fuzzy
 msgid "<b>General</b>"
-msgstr "<b>Рас_ширенный режим</b>"
+msgstr "<b>Общие</b>"
 
 msgid "Serial number:"
-msgstr ""
+msgstr "Серийный номер:"
 
 msgid "Card version:"
-msgstr ""
+msgstr "Версия карты:"
 
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Изготовитель:"
 
-#, fuzzy
 msgid "<b>Personal</b>"
-msgstr "Персон."
+msgstr "<b>Личные</b>"
 
 msgid "Salutation:"
-msgstr ""
+msgstr "Приветствие:"
 
 msgid "First name:"
-msgstr ""
-
-#, fuzzy
-msgid "Last name:"
 msgstr "Имя:"
 
+msgid "Last name:"
+msgstr "Фамилия:"
+
 msgid "Language:"
-msgstr ""
+msgstr "Язык:"
 
 msgid "Login data:"
-msgstr ""
+msgstr "Учетная запись:"
 
-#, fuzzy
 msgid "Public key URL:"
-msgstr "_Открытые ключи"
+msgstr "URL открытых ключей"
 
-#, fuzzy
 msgid "<b>Keys</b>"
-msgstr "<b>Главное</b>"
+msgstr "<b>Ключи</b>"
 
-#, fuzzy
 msgid "Signature key:"
-msgstr "Подписи:"
+msgstr "Ключ для подписи:"
 
-#, fuzzy
 msgid "Encryption key:"
-msgstr "Шифрование..."
+msgstr "Ключ для шифрования:"
 
-#, fuzzy
 msgid "Authentication key:"
-msgstr "Может авториз."
+msgstr "Ключ для проверки подлинности:"
 
-#, fuzzy
 msgid "Signature counter:"
-msgstr "Подписи:"
+msgstr "Счетчик подписей:"
 
-#, fuzzy
 msgid "<b>PIN</b>"
-msgstr "<b>Главное</b>"
+msgstr "<b>PIN</b>"
 
-#, fuzzy
 msgid "Force signature PIN:"
-msgstr "_отделяемая подпись"
+msgstr "Требовать PIN для подписи:"
 
 msgid "PIN retry counter:"
-msgstr ""
+msgstr "Счетчик попыток PIN:"
 
 msgid "Admin-PIN retry counter:"
-msgstr ""
-"<b>Смена PIN или PUK</b>\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение, а затем новое "
-"значение, повторив его в ответ на другой запрос.\n"
-"\n"
-"Ввод неверного текущего значения уменьшает счетчик попыток. Если счетчики "
-"попыток PIN и соответствующего PUK одновременно стали равны нулю, то ключи, "
-"которыми они управляют, непригодны для пользования, и разблокировать их "
-"невозможно!"
+msgstr "Счетчик попыток административного PIN:"
 
 msgid "blocked"
-msgstr ""
+msgstr "заблокирована"
 
-#, fuzzy
 msgid "Learn keys"
-msgstr "экспорт ключей"
+msgstr "Зарегистрировать ключи"
 
 msgid ""
 "For some or all of the keys available on the card, the GnuPG crypto engine "
@@ -2237,24 +2198,19 @@ msgid ""
 "\n"
 "If you are unsure what to do, just click the button."
 msgstr ""
-"<b>Сброс PUK</b>\n"
+"Криптомеханизму GnuPG пока не известны соответствующие сертификаты для "
+"некоторых ключей с карты.\n"
 "\n"
-"Хотя <i>PUK</i> означает <i>код разблокировки PIN</i>, TCOS, операционная "
-"система карты NetKey, реализует его как альтернативный PIN; таким образом, "
-"PUK можно разблокировать с помощью PIN.\n"
+"Если щелкнуть по этой кнопке, GnuPG попросят \"выучить\" эту карту и "
+"импортировать все сертификаты с карты в хранилище сертификатов GnuPG. "
+"Автоматически это не делается потому, что чтение всех сертификатов с карты "
+"может занять несколько секунд.\n"
 "\n"
-"Если PUK заблокирован (счетчик попыток снизился до нуля), его можно "
-"разблокировать с помощью незаблокированного PIN. Тогда счетчик попыток снова "
-"устанавливается в первоначальное значение.\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
-"значение для заблокированного PUK, повторив его в ответ на другой запрос."
+"Если не уверены, щелкните по кнопке."
 
-#, fuzzy
 msgid "Learning keys ..."
-msgstr "Создание ключа..."
+msgstr "Регистрация ключей..."
 
-#, c-format
 msgid ""
 "<b>Setting the Initial PIN</b> (%s)\n"
 "\n"
@@ -2265,30 +2221,50 @@ msgid ""
 "Please check the documentation of your card to learn for what the NullPIN is "
 "good.\n"
 "\n"
-"If you proceeed you will be asked to enter a new PIN and later to repeat "
-"that PIN.  Make sure that you will remember that PIN - it will not be "
-"possible to recover the PIN if it has been entered wrongly more than %d "
-"times.\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
 "\n"
 "%s"
 msgstr ""
+"<b>Установка первоначального PIN</b> (%s)\n"
+"\n"
+"Вы решили установить на своей карте первоначальный PIN. Сейчас он установлен "
+"в нулевой PIN. Установка первоначального PIN <b>требуется, но необратима</"
+"b>.\n"
+"\n"
+"Сверьтесь с документацией на свою карту, чтобы узнать, на что годится "
+"нулевой PIN.\n"
+"\n"
+"Если продолжить, нужно будет ввести новый PIN, а затем повторить ввод. "
+"Запомните его как следует: восстановить PIN его после %i неудачных попыток "
+"будет невозможно.\n"
+"\n"
+"%s"
 
 msgid ""
 "You are now setting the PIN for the SigG key used to create <b>qualified "
 "signatures</b>.  You may want to set the PIN to the same value as used for "
 "the NKS keys."
 msgstr ""
+"Вы устанавливаете PIN для ключа SigG, с помощью которого создаются "
+"<b>квалифицированные подписи</b>. Возможно, следует установить то же "
+"значение PIN, что и для ключей NKS."
 
 msgid ""
 "You are now setting the PIN for the NKS keys used for standard signatures, "
 "encryption and authentication."
 msgstr ""
+"Вы устанавливаете PIN для ключей NKS, применяемых для обычных подписей, "
+"шифрования и проверки подлинности."
 
 #, c-format
 msgid ""
 "Error changing the NullPIN.\n"
 "(%s <%s>)"
 msgstr ""
+"Ошибка смены нулевого PIN.\n"
+"(%s <%s>)"
 
 msgid ""
 "<b>Changing a PIN or PUK</b>\n"
@@ -2301,6 +2277,15 @@ msgid ""
 "zero, the keys controlled by the PIN are not anymore usable and there is no "
 "way to unblock them!"
 msgstr ""
+"<b>Смена PIN или PUK</b>\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение, а затем новое "
+"значение, повторив его в ответ на другой запрос.\n"
+"\n"
+"Ввод неверного текущего значения уменьшает счетчик попыток. Если счетчики "
+"попыток PIN и соответствующего PUK одновременно стали равны нулю, то ключи, "
+"которыми они управляют, непригодны для пользования, и разблокировать их "
+"невозможно!"
 
 msgid ""
 "<b>Resetting a PUK</b>\n"
@@ -2317,6 +2302,18 @@ msgid ""
 "then to enter a new value for the blocked PUK and repeat that new value at "
 "another prompt."
 msgstr ""
+"<b>Сброс PUK</b>\n"
+"\n"
+"Хотя <i>PUK</i> означает <i>код разблокировки PIN</i>, TCOS, операционная "
+"система карты NetKey, реализует его как альтернативный PIN; таким образом, "
+"PUK можно разблокировать с помощью PIN.\n"
+"\n"
+"Если PUK заблокирован (счетчик попыток снизился до нуля), его можно "
+"разблокировать с помощью незаблокированного PIN. Тогда счетчик попыток снова "
+"устанавливается в первоначальное значение.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
+"значение для заблокированного PUK, повторив его в ответ на другой запрос."
 
 msgid ""
 "<b>Resetting a PIN</b>\n"
@@ -2329,24 +2326,33 @@ msgid ""
 "then to enter a new value for the blocked PIN and repeat that new value at "
 "another prompt."
 msgstr ""
+"<b>Сброс PIN</b>\n"
+"\n"
+"Если PIN заблокирован (счетчик попыток снизился до нуля), его можно "
+"разблокировать с помощью незаблокированного PUK. Тогда счетчик попыток снова "
+"устанавливается в первоначальное значение.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение PUK, а затем новое "
+"значение для заблокированного PIN, повторив его в ответ на другой запрос."
 
 msgid ""
 "<b>A NullPIN is still active on this card</b>.\n"
 "You need to set a real PIN before you can make use of the card."
 msgstr ""
+"<b>На этой карте все еще действует нулевой PIN</b>.\n"
+"Его нужно заменить на настоящий PIN, прежде чем пользоваться картой."
 
 msgid "Set initial PIN"
-msgstr ""
+msgstr "Установить первоначальный PIN"
 
-#, fuzzy
 msgid "scanning ..."
-msgstr "Подпись..."
+msgstr "сканирование..."
 
 msgid "SigG PIN retry counter:"
-msgstr ""
+msgstr "Счетчик попыток PIN SigG:"
 
 msgid "SigG PUK retry counter:"
-msgstr ""
+msgstr "Счетчик попыток PUK SigG:"
 
 #, c-format
 msgid ""
@@ -2354,379 +2360,8 @@ msgid ""
 "the application selector button to switch to another application available "
 "on this card."
 msgstr ""
+"На карте %s нет информации для отображения. Можно воспользоваться кнопкой "
+"выбора приложений, чтобы переключиться на другое приложение с этой карты."
 
 #~ msgid "The key ID is a short number to identify a certificate."
-#~ msgstr "ID ключа - короткий номер для идентификации сертификата."
-
-#, fuzzy
-#~ msgid "Error"
-#~ msgstr "Ошибка GPA"
-
-#, fuzzy
-#~ msgid "Message"
-#~ msgstr "Сообщение GPA"
-
-#~ msgid "GNU Privacy Assistant - Clipboard"
-#~ msgstr "GNU Privacy Assistant - Буфер"
-
-#~ msgid "GNU Privacy Assistant - File Manager"
-#~ msgstr "GNU Privacy Assistant - Менеджер файлов"
-
-#, fuzzy
-#~ msgid "GNU Privacy Assistant - Key Manager"
-#~ msgstr "GNU Privacy Assistant - Менеджер файлов"
-
-#, fuzzy
-#~ msgid "GNU Privacy Assistant - Settings"
-#~ msgstr "GNU Privacy Assistant - Менеджер ключей"
-
-#, fuzzy
-#~ msgid "GNU Privacy Assistant - Card Manager"
-#~ msgstr "GNU Privacy Assistant - Менеджер файлов"
-
-#~ msgid "Please choose a passphrase for the new key."
-#~ msgstr "Выберите пароль для нового ключа."
-
-#, fuzzy
-#~ msgid ""
-#~ "In \"Passphrase\" and \"Repeat passphrase\", you must enter the same "
-#~ "passphrase."
-#~ msgstr ""
-#~ "В полях \"Пароль\" и \"Повторите\",\n"
-#~ "нужно ввести одинаковые пароли."
-
-#, fuzzy
-#~ msgid "Status: "
-#~ msgstr "Статус"
-
-#, fuzzy
-#~ msgid "Generate new keys on card"
-#~ msgstr "Генерация ключа"
-
-#~ msgid "DSA and ElGamal (default)"
-#~ msgstr "DSA и ElGamal (по умолчанию)"
-
-#, fuzzy
-#~ msgid "_Keyring Editor"
-#~ msgstr "Менеджер ключей"
-
-#~ msgid "1024"
-#~ msgstr "1024"
-
-#~ msgid "768"
-#~ msgstr "768"
-
-#~ msgid "2048"
-#~ msgstr "2048"
-
-#~ msgid "_Passphrase: "
-#~ msgstr "Пароль: "
-
-#~ msgid "_Repeat passphrase: "
-#~ msgstr "Введите пароль еще раз: "
-
-#~ msgid "GNU Privacy Assistant - Keyring Editor"
-#~ msgstr "GNU Privacy Assistant - Менеджер ключей"
-
-#~ msgid "Keyring Editor"
-#~ msgstr "Менеджер ключей"
-
-#~ msgid "/File/C_lear"
-#~ msgstr "/Файл/О_чистить"
-
-#~ msgid "/File/Save _As"
-#~ msgstr "/Файл/Со_хранить как"
-
-#~ msgid "/File/sep1"
-#~ msgstr "/Файл/sep1"
-
-#~ msgid "/File/_Sign"
-#~ msgstr "/Файл/_Подписать"
-
-#~ msgid "/File/_Verify"
-#~ msgstr "/Файл/Пров_ерить"
-
-#~ msgid "/File/_Encrypt"
-#~ msgstr "/Файл/_Зашифровать"
-
-#~ msgid "/File/_Decrypt"
-#~ msgstr "/Файл/_Расшифровать"
-
-#~ msgid "/File/sep2"
-#~ msgstr "/Файл/sep2"
-
-#~ msgid "/File/_Close"
-#~ msgstr "/Файл/За_крыть"
-
-#~ msgid "/File/_Quit"
-#~ msgstr "/Файл/_Выйти"
-
-#~ msgid "/Edit/_Undo"
-#~ msgstr "/Правка/_Отменить"
-
-#~ msgid "/Edit/_Redo"
-#~ msgstr "/Правка/В_ернуть"
-
-#~ msgid "/Edit/sep0"
-#~ msgstr "/Edit/sep0"
-
-#~ msgid "/Edit/Cut"
-#~ msgstr "/Правка/Вырезать"
-
-#~ msgid "/Edit/_Copy"
-#~ msgstr "/Правка/_Копировать"
-
-#~ msgid "/Edit/_Paste"
-#~ msgstr "/Правка/_Вставить"
-
-#~ msgid "/Edit/_Delete"
-#~ msgstr "/Правка/_Удалить"
-
-#~ msgid "/Edit/sep1"
-#~ msgstr "/Правка/sep1"
-
-#~ msgid "/Edit/Select _All"
-#~ msgstr "/Правка/Вы_брать все"
-
-#~ msgid "/Edit/sep2"
-#~ msgstr "/Правка/sep2"
-
-#~ msgid "/Edit/Pr_eferences..."
-#~ msgstr "/Правка/_Настройки..."
-
-#~ msgid "/Windows/_Keyring Editor"
-#~ msgstr "/Окно/Менеджер _ключей"
-
-#~ msgid "/Windows/_Filemanager"
-#~ msgstr "/Окно/Менеджер _файлов"
-
-#~ msgid "/Windows/_Clipboard"
-#~ msgstr "/Окно/_Буфер"
-
-#~ msgid "/Edit/Copy"
-#~ msgstr "/Правка/_Копировать"
-
-#~ msgid "/Edit/Paste"
-#~ msgstr "/Правка/_Вставить"
-
-#~ msgid "clear buffer"
-#~ msgstr "очистить буфер"
-
-#~ msgid "open file"
-#~ msgstr "открыть файл"
-
-#~ msgid "save file as"
-#~ msgstr "сохранить файл как"
-
-#~ msgid "cut the selection"
-#~ msgstr "вырезать выделенное в буфер"
-
-#~ msgid "copy the selection"
-#~ msgstr "копировать выделенное в буфер"
-
-#~ msgid "paste the clipboard"
-#~ msgstr "вставить из буфера"
-
-#~ msgid "Sign the selected text"
-#~ msgstr "Подписать выбранный текст"
-
-#~ msgid "verify text"
-#~ msgstr "проверить текст"
-
-#~ msgid "encrypt text"
-#~ msgstr "зашифровать текст"
-
-#~ msgid "decrypt text"
-#~ msgstr "расшифровать текст"
-
-#~ msgid "preferences"
-#~ msgstr "предпочтения"
-
-#~ msgid "keyring editor"
-#~ msgstr "менеджер ключей"
-
-#~ msgid "file manager"
-#~ msgstr "менеджер файлов"
-
-#~ msgid "Help"
-#~ msgstr "Справка"
-
-#~ msgid "help"
-#~ msgstr "справка"
-
-#~ msgid "/File/Sign"
-#~ msgstr "/Файл/Подписать"
-
-#~ msgid "/File/Verify"
-#~ msgstr "/Файл/Проверить"
-
-#~ msgid "/File/Encrypt"
-#~ msgstr "/Файл/Зашифровать"
-
-#~ msgid "/File/Decrypt"
-#~ msgstr "/Файл/Расшифровать"
-
-#~ msgid "close files"
-#~ msgstr "закрыть файлы"
-
-#~ msgid "sign file"
-#~ msgstr "подписать файл"
-
-#~ msgid "verify file"
-#~ msgstr "проверить файл"
-
-#~ msgid "encrypt file"
-#~ msgstr "зашифровать файл"
-
-#~ msgid "decrypt file"
-#~ msgstr "расшифровать файл"
-
-#~ msgid "clipboard"
-#~ msgstr "буфер"
-
-#~ msgid "_Back"
-#~ msgstr "_Назад"
-
-#~ msgid "_Forward"
-#~ msgstr "_Далее"
-
-#~ msgid "_Apply"
-#~ msgstr "_Применить"
-
-#~ msgid "Brought to you by:"
-#~ msgstr "Предоставлен:"
-
-#~ msgid "GPA is Free Software under the"
-#~ msgstr "GPA - бесплатная программа по лицензии"
-
-#~ msgid "GNU General Public License."
-#~ msgstr "GNU General Public License."
-
-#~ msgid "For news see:"
-#~ msgstr "Обновления:"
-
-#~ msgid "http://www.gpg4win.org"
-#~ msgstr "http://www.gpg4win.org"
-
-#~ msgid "http://www.gnupg.org"
-#~ msgstr "http://www.gnupg.org"
-
-#~ msgid "GNU General Public License"
-#~ msgstr "GNU General Public License"
-
-#~ msgid "_GNU General Public License"
-#~ msgstr "_GNU General Public License"
-
-#~ msgid "Show Help Text\n"
-#~ msgstr "Показать подсказки\n"
-
-#~ msgid "/Help/_Contents"
-#~ msgstr "/Справка/_Содержание"
-
-#~ msgid "/Help/_License"
-#~ msgstr "/Справка/_Лицензия"
-
-#~ msgid "/Help/_About"
-#~ msgstr "/Справка/_О программе"
-
-#~ msgid "Please insert your name"
-#~ msgstr "Введите свое имя (англ.)"
-
-#~ msgid "Please insert your email address"
-#~ msgstr "Введите свой адрес email"
-
-#~ msgid "/Keys/_Refresh"
-#~ msgstr "/Ключи/_Обновить"
-
-#~ msgid "/Keys/sep0"
-#~ msgstr "/Ключи/sep0"
-
-#~ msgid "/Keys/_Delete Keys..."
-#~ msgstr "/Ключи/_Удалить..."
-
-#~ msgid "/Keys/sep1"
-#~ msgstr "/Ключи/sep1"
-
-#~ msgid "/Keys/_Sign Keys..."
-#~ msgstr "/Ключи/_Подписать..."
-
-#~ msgid "/Keys/Set _Owner Trust..."
-#~ msgstr "/Ключи/_Доверие..."
-
-#~ msgid "/Keys/_Edit Private Key..."
-#~ msgstr "/Ключи/_Редактировать..."
-
-#~ msgid "/Keys/sep2"
-#~ msgstr "/Ключи/sep2"
-
-#~ msgid "/Keys/_Import Keys..."
-#~ msgstr "/Ключи/_Импорт..."
-
-#~ msgid "/Keys/E_xport Keys..."
-#~ msgstr "/Ключи/_Экспорт..."
-
-#~ msgid "/Keys/_Backup..."
-#~ msgstr "/Ключи/Ре_зервная копия..."
-
-#~ msgid "/Server/_Send Keys..."
-#~ msgstr "/Сервер/_Отправить ключи..."
-
-#~ msgid "/Windows/_File Manager"
-#~ msgstr "/_Окно/Менеджер _файлов"
-
-#~ msgid "/Keys/Export Keys..."
-#~ msgstr "/Ключи/Экспортировать ключи..."
-
-#~ msgid "/Keys/Delete Keys..."
-#~ msgstr "/Ключи/Удалить ключи..."
-
-#~ msgid "/Server/Send Keys..."
-#~ msgstr "/Сервер/Отправить ключи..."
-
-#~ msgid "/Keys/Set Owner Trust..."
-#~ msgstr "/Ключи/Доверие владельцу..."
-
-#~ msgid "/Keys/Sign Keys..."
-#~ msgstr "/Ключи/Подписать ключ..."
-
-#~ msgid "/Keys/Edit Private Key..."
-#~ msgstr "/Ключи/Редактировать закрытый ключ..."
-
-#~ msgid "/Keys/Backup..."
-#~ msgstr "/Ключи/Резервная копия..."
-
-#~ msgid "/_Copy"
-#~ msgstr "/Копировать"
-
-#~ msgid "/_Paste"
-#~ msgstr "/Вставить"
-
-#~ msgid "/Set Owner Trust..."
-#~ msgstr "/Доверие владельцу..."
-
-#~ msgid "/Sign Keys..."
-#~ msgstr "/Подписать ключи..."
-
-#~ msgid "/Edit Private Key..."
-#~ msgstr "/Редактировать закрытый ключ..."
-
-#~ msgid "/Backup..."
-#~ msgstr "/Резервная копия..."
-
-#~ msgid "edit key"
-#~ msgstr "правка ключа"
-
-#~ msgid "remove key"
-#~ msgstr "удалить ключ"
-
-#~ msgid "sign key"
-#~ msgstr "подпись ключа"
-
-#~ msgid "import keys"
-#~ msgstr "импорт ключей"
-
-#~ msgid "brief"
-#~ msgstr "кратко"
-
-#~ msgid "detailed"
-#~ msgstr "подробный"
+#~ msgstr "ID ключа - короткое число для идентификации сертификата."
