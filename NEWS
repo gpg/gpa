@@ -1,5 +1,27 @@
-Noteworthy changes in version 0.9.11 (unreleased)
+Noteworthy changes in version 0.10.0 (2018-10-16)
 -------------------------------------------------
+
+ * Added key manager context menu items to copy the key fingerprint
+   and the secret key to the clipboard.
+
+ * Added "Details" buttons to many error popups to show raw
+   diagnostic output from gpg.
+
+ * Changed the "Retrieve Key" dialog to first try the Web Key
+   Directory if a mail address is given.  Only if this lookup fails
+   the keyservers are searched.
+
+ * Added a user-ID notebook page to show per user-ID info.
+
+ * Made location of locale dir under Windows more flexible.
+
+ * Fixed crash on filename conversion error.  [#2185]
+
+ * Fixed listing of key algos in the subkey windows.  [#3405]
+
+ * Removed lazy loading of the secret keyring.  [#3748]
+
+ Release-info: https://dev.gnupg.org/T4186
 
 
 Noteworthy changes in version 0.9.10 (2016-11-19)

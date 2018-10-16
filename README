@@ -1,10 +1,10 @@
         ******************************************************
               Welcome to GPA, the GNU Privacy Assistant!
-                            Version 0.9
+                            Version 0.10
         ******************************************************
 
 GPA is a graphical frontend for the GNU Privacy Guard (GnuPG,
-http://www.gnupg.org). GPA can be used to encrypt, decrypt, and sign
+https://gnupg.org). GPA can be used to encrypt, decrypt, and sign
 files, to verify signatures and to manage the private and public keys.
 
 Copyright (C) 2000-2002 G-N-U GmbH (http://www.g-n-u.de)
@@ -17,9 +17,8 @@ GPGME, Copyright (C) 2000-2001 Werner Koch
 WinPT, Copyright (C) 2000-2002 Timo Schulz
 (For details, see the file `AUTHORS'.)
 
-There is a mailing list devoted to the development of GPA.  See
-http://www.gnupg.org/gpa.html for more information.  There is also a
-project site available at: http://wald.intevation.org/projects/gpa/ .
+The gnupg-devel mailing list is also ysed for the development of GPA.  See
+https://gnupg.org/software/gpa/ for more information.
 
   GPA is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by

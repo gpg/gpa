@@ -1,4 +1,6 @@
 Program: GPA
+Homepage: https://gnupg.org/software/gpa/
+Download: https://gnupg.org/ftp/gcrypt/gpa/
 Maintainer: Werner Koch <wk@gnupg.org>
 Bug reports: https://bugs.gnupg.org
 Security related bug reports: <security@gnupg.org>
