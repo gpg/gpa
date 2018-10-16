@@ -38,10 +38,10 @@
 
 /* Internal functions */
 static gboolean gpa_key_expire_operation_idle_cb (gpointer data);
-static void gpa_key_expire_operation_done_error_cb (GpaContext *context, 
+static void gpa_key_expire_operation_done_error_cb (GpaContext *context,
 						    gpg_error_t err,
 						    GpaKeyExpireOperation *op);
-static void gpa_key_expire_operation_done_cb (GpaContext *context, 
+static void gpa_key_expire_operation_done_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaKeyExpireOperation *op);
 
@@ -101,7 +101,7 @@ static void
 gpa_key_expire_operation_class_init (GpaKeyExpireOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_key_expire_operation_constructor;
@@ -124,7 +124,7 @@ GType
 gpa_key_expire_operation_get_type (void)
 {
   static GType key_expire_operation_type = 0;
-  
+
   if (!key_expire_operation_type)
     {
       static const GTypeInfo key_expire_operation_info =
@@ -139,12 +139,12 @@ gpa_key_expire_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_key_expire_operation_init,
       };
-      
-      key_expire_operation_type = g_type_register_static 
+
+      key_expire_operation_type = g_type_register_static
 	(GPA_KEY_OPERATION_TYPE, "GpaKeyExpireOperation",
 	 &key_expire_operation_info, 0);
     }
-  
+
   return key_expire_operation_type;
 }
 
@@ -156,7 +156,7 @@ GpaKeyExpireOperation*
 gpa_key_expire_operation_new (GtkWidget *window, GList *keys)
 {
   GpaKeyExpireOperation *op;
-  
+
   op = g_object_new (GPA_KEY_EXPIRE_OPERATION_TYPE,
 		     "window", window,
 		     "keys", keys,
@@ -169,7 +169,7 @@ gpa_key_expire_operation_new (GtkWidget *window, GList *keys)
 
 static gpg_error_t
 gpa_key_expire_operation_start (GpaKeyExpireOperation *op)
-{ 
+{
   gpg_error_t err;
   gpgme_key_t key;
   GDate *date;
@@ -224,8 +224,8 @@ gpa_key_expire_operation_next (GpaKeyExpireOperation *op)
 }
 
 
-static void 
-gpa_key_expire_operation_done_error_cb (GpaContext *context, 
+static void
+gpa_key_expire_operation_done_error_cb (GpaContext *context,
                                         gpg_error_t err,
                                         GpaKeyExpireOperation *op)
 {
@@ -237,28 +237,29 @@ gpa_key_expire_operation_done_error_cb (GpaContext *context,
       /* Ignore these */
       break;
     case GPG_ERR_BAD_PASSPHRASE:
-      gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     _("Wrong passphrase!"));
       break;
     case GPG_ERR_INV_TIME:
-      gpa_window_error 
-        (_("Invalid time given.\n"
-           "(you may not set the expiration time to the past.)"),
-         GPA_OPERATION (op)->window);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     _("Invalid time given.\n"
+                       "(you may not set the expiration time to the past.)"));
       break;
     default:
       gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }
 
-static void 
+static void
 gpa_key_expire_operation_done_cb (GpaContext *context,
                                   gpg_error_t err,
                                   GpaKeyExpireOperation *op)
 {
   if (! err)
     /* The expiration was changed.  */
-    g_signal_emit_by_name (op, "new_expiration", 
+    g_signal_emit_by_name (op, "new_expiration",
 			   GPA_KEY_OPERATION (op)->current->data, op->date);
 
   /* Clean previous date.  */

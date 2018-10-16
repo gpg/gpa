@@ -37,10 +37,10 @@
 
 /* Internal functions */
 static gboolean gpa_key_passwd_operation_idle_cb (gpointer data);
-static void gpa_key_passwd_operation_done_error_cb (GpaContext *context, 
+static void gpa_key_passwd_operation_done_error_cb (GpaContext *context,
 						    gpg_error_t err,
 						    GpaKeyPasswdOperation *op);
-static void gpa_key_passwd_operation_done_cb (GpaContext *context, 
+static void gpa_key_passwd_operation_done_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaKeyPasswdOperation *op);
 
@@ -90,7 +90,7 @@ static void
 gpa_key_passwd_operation_class_init (GpaKeyPasswdOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_key_passwd_operation_constructor;
@@ -101,7 +101,7 @@ GType
 gpa_key_passwd_operation_get_type (void)
 {
   static GType key_passwd_operation_type = 0;
-  
+
   if (!key_passwd_operation_type)
     {
       static const GTypeInfo key_passwd_operation_info =
@@ -116,12 +116,12 @@ gpa_key_passwd_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_key_passwd_operation_init,
       };
-      
-      key_passwd_operation_type = g_type_register_static 
+
+      key_passwd_operation_type = g_type_register_static
 	(GPA_KEY_OPERATION_TYPE, "GpaKeyPasswdOperation",
 	 &key_passwd_operation_info, 0);
     }
-  
+
   return key_passwd_operation_type;
 }
 
@@ -133,7 +133,7 @@ GpaKeyPasswdOperation*
 gpa_key_passwd_operation_new (GtkWidget *window, GList *keys)
 {
   GpaKeyPasswdOperation *op;
-  
+
   op = g_object_new (GPA_KEY_PASSWD_OPERATION_TYPE,
 		     "window", window,
 		     "keys", keys,
@@ -146,7 +146,7 @@ gpa_key_passwd_operation_new (GtkWidget *window, GList *keys)
 
 static gpg_error_t
 gpa_key_passwd_operation_start (GpaKeyPasswdOperation *op)
-{ 
+{
   gpg_error_t err;
   gpgme_key_t key;
 
@@ -172,7 +172,7 @@ gpa_key_passwd_operation_idle_cb (gpointer data)
 
   err = gpa_key_passwd_operation_start (op);
 
-  if (err) 
+  if (err)
     g_signal_emit_by_name (GPA_OPERATION (op), "completed", err);
 
   return FALSE;
@@ -195,7 +195,7 @@ gpa_key_passwd_operation_next (GpaKeyPasswdOperation *op)
 }
 
 
-static void gpa_key_passwd_operation_done_error_cb (GpaContext *context, 
+static void gpa_key_passwd_operation_done_error_cb (GpaContext *context,
 						  gpg_error_t err,
 						  GpaKeyPasswdOperation *op)
 {
@@ -206,15 +206,16 @@ static void gpa_key_passwd_operation_done_error_cb (GpaContext *context,
       /* Ignore these */
       break;
     case GPG_ERR_BAD_PASSPHRASE:
-      gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     _("Wrong passphrase!"));
       break;
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }
 
-static void gpa_key_passwd_operation_done_cb (GpaContext *context, 
+static void gpa_key_passwd_operation_done_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaKeyPasswdOperation *op)
 {

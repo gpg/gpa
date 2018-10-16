@@ -124,7 +124,7 @@ search_keys (GpaImportOperation *operation, const char *keyid)
 {
   gpg_error_t err;
   gboolean result = FALSE;
-  gpgme_ctx_t ctx;
+  GpaContext *context;
   gpgme_key_t key;
   gpgme_key_t *keyarray;
   int i, nkeys;
@@ -136,11 +136,11 @@ search_keys (GpaImportOperation *operation, const char *keyid)
 
   keyarray = g_malloc0_n (MAX_KEYSEARCH_RESULTS + 1, sizeof *keyarray);
 
-  /* We need to use a separate context because the operaion's context
+  /* We need to use a separate context because the operation's context
      has already been setup and the done signal would relate to the
      actual import operation done later.  */
-  ctx = gpa_gpgme_new ();
-  gpgme_set_protocol (ctx, GPGME_PROTOCOL_OpenPGP);
+  context = gpa_context_new ();
+  gpgme_set_protocol (context->ctx, GPGME_PROTOCOL_OpenPGP);
   /* Switch to extern-only or locate list mode.  We use --locate-key
    * iff KEYID is a single mail address.  */
   listmode = GPGME_KEYLIST_MODE_EXTERN;
@@ -154,19 +154,19 @@ search_keys (GpaImportOperation *operation, const char *keyid)
       keyid = mbox;
     }
 #endif /* GPGME >= 1.7.1 */
-  err = gpgme_set_keylist_mode (ctx, listmode);
+  err = gpgme_set_keylist_mode (context->ctx, listmode);
   if (err)
     gpa_gpgme_error (err);
 
   /* List keys matching the given keyid.  Actually all kind of search
      specifications can be given.  */
   nkeys = 0;
-  err = gpgme_op_keylist_start (ctx, keyid, 0);
-  while (!err && !(err = gpgme_op_keylist_next (ctx, &key)))
+  err = gpgme_op_keylist_start (context->ctx, keyid, 0);
+  while (!err && !(err = gpgme_op_keylist_next (context->ctx, &key)))
     {
       if (nkeys >= MAX_KEYSEARCH_RESULTS)
         {
-          gpa_show_warn (GPA_OPERATION (operation)->window, NULL,
+          gpa_show_warn (GPA_OPERATION (operation)->window, context,
                             _("More than %d keys match your search pattern.\n"
                               "Use the long keyid or a fingerprint "
                               "for a better match"), nkeys);
@@ -176,14 +176,14 @@ search_keys (GpaImportOperation *operation, const char *keyid)
         }
       keyarray[nkeys++] = key;
     }
-  gpgme_op_keylist_end (ctx);
+  gpgme_op_keylist_end (context->ctx);
   if (gpg_err_code (err) == GPG_ERR_EOF)
     err = 0;
 
   if (!err && !nkeys)
     {
-      gpa_show_warn (GPA_OPERATION (operation)->window, NULL,
-                        _("No keys were found."));
+      gpa_show_warn (GPA_OPERATION (operation)->window, context,
+                     _("No keys were found."));
     }
   else if (!err)
     {
@@ -192,9 +192,9 @@ search_keys (GpaImportOperation *operation, const char *keyid)
       result = TRUE;
     }
   else if (gpg_err_code (err) != GPG_ERR_TRUNCATED)
-    gpa_gpgme_warning (err);
+    gpa_gpgme_warn (err, NULL, context);
 
-  gpgme_release (ctx);
+  g_object_unref (context);
   if (keyarray)
     {
       for (i=0; keyarray[i]; i++)

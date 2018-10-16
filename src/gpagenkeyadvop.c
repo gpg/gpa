@@ -29,10 +29,10 @@
 
 static GObjectClass *parent_class = NULL;
 
-static void gpa_gen_key_advanced_operation_done_cb (GpaContext *context, 
+static void gpa_gen_key_advanced_operation_done_cb (GpaContext *context,
 						    gpg_error_t err,
 						    GpaGenKeyAdvancedOperation *op);
-static void gpa_gen_key_advanced_operation_done_error_cb (GpaContext *context, 
+static void gpa_gen_key_advanced_operation_done_error_cb (GpaContext *context,
 							  gpg_error_t err,
 							  GpaGenKeyAdvancedOperation *op);
 
@@ -95,7 +95,7 @@ static void
 gpa_gen_key_advanced_operation_class_init (GpaGenKeyAdvancedOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_gen_key_advanced_operation_constructor;
@@ -106,7 +106,7 @@ GType
 gpa_gen_key_advanced_operation_get_type (void)
 {
   static GType operation_type = 0;
-  
+
   if (!operation_type)
     {
       static const GTypeInfo operation_info =
@@ -121,22 +121,22 @@ gpa_gen_key_advanced_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_gen_key_advanced_operation_init,
       };
-      
+
       operation_type = g_type_register_static (GPA_GEN_KEY_OPERATION_TYPE,
 					       "GpaGenKeyAdvancedOperation",
 					       &operation_info, 0);
     }
-  
+
   return operation_type;
 }
 
 /* API */
 
-GpaGenKeyAdvancedOperation* 
+GpaGenKeyAdvancedOperation*
 gpa_gen_key_advanced_operation_new (GtkWidget *window)
 {
   GpaGenKeyAdvancedOperation *op;
-  
+
   op = g_object_new (GPA_GEN_KEY_ADVANCED_OPERATION_TYPE,
 		     "window", window, NULL);
 
@@ -151,7 +151,7 @@ gpa_gen_key_advanced_operation_idle_cb (gpointer data)
   GpaGenKeyAdvancedOperation *op = data;
   gpg_error_t err;
   gpa_keygen_para_t *parms;
-  
+
   parms = gpa_key_gen_run_dialog (GPA_OPERATION (op)->window, NULL);
   if (!parms)
     g_signal_emit_by_name (op, "completed", gpg_error (GPG_ERR_CANCELED));
@@ -171,7 +171,7 @@ gpa_gen_key_advanced_operation_idle_cb (gpointer data)
 
 
 static void
-gpa_gen_key_advanced_operation_done_cb (GpaContext *context, 
+gpa_gen_key_advanced_operation_done_cb (GpaContext *context,
 					gpg_error_t err,
 					GpaGenKeyAdvancedOperation *op)
 {
@@ -185,7 +185,7 @@ gpa_gen_key_advanced_operation_done_cb (GpaContext *context,
 
 
 static void
-gpa_gen_key_advanced_operation_done_error_cb (GpaContext *context, 
+gpa_gen_key_advanced_operation_done_error_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaGenKeyAdvancedOperation *op)
 {
@@ -196,7 +196,7 @@ gpa_gen_key_advanced_operation_done_error_cb (GpaContext *context,
       /* Ignore these */
       break;
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }

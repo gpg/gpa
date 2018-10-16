@@ -248,7 +248,7 @@ gpa_import_operation_done_error_cb (GpaContext *context, gpg_error_t err,
       /* Ignore these */
       break;
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }

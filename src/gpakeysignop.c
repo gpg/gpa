@@ -237,24 +237,25 @@ gpa_key_sign_operation_done_error_cb (GpaContext *context,
       /* Ignore these */
       break;
     case GPG_ERR_BAD_PASSPHRASE:
-      gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     _("Wrong passphrase!"));
       break;
     case GPG_ERR_UNUSABLE_PUBKEY:
       /* Couldn't sign because the key was expired */
-      gpa_window_error (_("This key has expired! "
-			  "Unable to sign."), GPA_OPERATION (op)->window);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     _("This key has expired! Unable to sign."));
       break;
     case GPG_ERR_CONFLICT:
-      gpa_window_error (_("This key has already been signed with "
-			  "your own!"), GPA_OPERATION (op)->window);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     _("This key has already been signed with your own!"));
       break;
     case GPG_ERR_NO_SECKEY:
       /* Couldn't sign because there is no default key */
-      gpa_window_error (_("You haven't selected a default key "
-			  "to sign with!"), GPA_OPERATION (op)->window);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     _("You haven't selected a default key to sign with!"));
       break;
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }

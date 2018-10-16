@@ -455,7 +455,7 @@ done_error_cb (GpaContext *context, gpg_error_t err,
 /*       gpa_window_error (_("Wrong passphrase!"), GPA_OPERATION (op)->window); */
 /*       break; */
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }

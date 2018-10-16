@@ -206,7 +206,7 @@ static void gpa_key_delete_operation_done_error_cb (GpaContext *context,
       /* Ignore these */
       break;
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }

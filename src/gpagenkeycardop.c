@@ -31,11 +31,11 @@
 
 static GObjectClass *parent_class = NULL;
 
-static void gpa_gen_key_card_operation_done_cb (GpaContext *context, 
+static void gpa_gen_key_card_operation_done_cb (GpaContext *context,
 						    gpg_error_t err,
 						    GpaGenKeyCardOperation *op);
 
-static void gpa_gen_key_card_operation_done_error_cb (GpaContext *context, 
+static void gpa_gen_key_card_operation_done_error_cb (GpaContext *context,
 							  gpg_error_t err,
 							  GpaGenKeyCardOperation *op);
 
@@ -102,7 +102,7 @@ static void
 gpa_gen_key_card_operation_class_init (GpaGenKeyCardOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_gen_key_card_operation_constructor;
@@ -113,7 +113,7 @@ GType
 gpa_gen_key_card_operation_get_type (void)
 {
   static GType operation_type = 0;
-  
+
   if (!operation_type)
     {
       static const GTypeInfo operation_info =
@@ -128,22 +128,22 @@ gpa_gen_key_card_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_gen_key_card_operation_init,
       };
-      
+
       operation_type = g_type_register_static (GPA_GEN_KEY_OPERATION_TYPE,
 					       "GpaGenKeyCardOperation",
 					       &operation_info, 0);
     }
-  
+
   return operation_type;
 }
 
 /* API */
 
-GpaGenKeyCardOperation* 
+GpaGenKeyCardOperation*
 gpa_gen_key_card_operation_new (GtkWidget *window, const char *keyattr)
 {
   GpaGenKeyCardOperation *op;
-  
+
   op = g_object_new (GPA_GEN_KEY_CARD_OPERATION_TYPE,
 		     "window", window, NULL);
   op->key_attributes = g_strdup (keyattr);
@@ -158,8 +158,8 @@ gpa_gen_key_card_operation_idle_cb (gpointer data)
 {
   GpaGenKeyCardOperation *op = data;
   gpg_error_t err;
-  
-  op->parms = gpa_key_gen_run_dialog 
+
+  op->parms = gpa_key_gen_run_dialog
     (GPA_OPERATION (op)->window, op->key_attributes? op->key_attributes : "");
 
   if (!op->parms)
@@ -181,7 +181,7 @@ gpa_gen_key_card_operation_idle_cb (gpointer data)
 
 
 static void
-gpa_gen_key_card_operation_done_cb (GpaContext *context, 
+gpa_gen_key_card_operation_done_cb (GpaContext *context,
 				    gpg_error_t err,
 				    GpaGenKeyCardOperation *op)
 {
@@ -197,7 +197,7 @@ gpa_gen_key_card_operation_done_cb (GpaContext *context,
 
 
 static void
-gpa_gen_key_card_operation_done_error_cb (GpaContext *context, 
+gpa_gen_key_card_operation_done_error_cb (GpaContext *context,
 					  gpg_error_t err,
 					  GpaGenKeyCardOperation *op)
 {
@@ -209,11 +209,13 @@ gpa_gen_key_card_operation_done_error_cb (GpaContext *context,
       break;
 
     case GPG_ERR_BAD_PIN:
-      gpa_window_error (gpg_strerror (err), NULL);
+      gpa_show_warn (GPA_OPERATION (op)->window, GPA_OPERATION (op)->context,
+                     "%s", gpg_strerror (err));
       break;
 
     default:
-      gpa_gpgme_warning_ext (err, op->parms? op->parms->r_error_desc : NULL);
+      gpa_gpgme_warn (err, op->parms? op->parms->r_error_desc : NULL,
+                      GPA_OPERATION (op)->context);
       break;
     }
 }

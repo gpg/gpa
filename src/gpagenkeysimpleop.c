@@ -221,7 +221,7 @@ gpa_gen_key_simple_operation_done_error_cb (GpaContext *context,
       /* Ignore these */
       break;
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }

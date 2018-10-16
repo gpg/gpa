@@ -38,10 +38,10 @@
 
 /* Internal functions */
 static gboolean gpa_key_trust_operation_idle_cb (gpointer data);
-static void gpa_key_trust_operation_done_error_cb (GpaContext *context, 
+static void gpa_key_trust_operation_done_error_cb (GpaContext *context,
 						    gpg_error_t err,
 						    GpaKeyTrustOperation *op);
-static void gpa_key_trust_operation_done_cb (GpaContext *context, 
+static void gpa_key_trust_operation_done_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaKeyTrustOperation *op);
 
@@ -92,7 +92,7 @@ static void
 gpa_key_trust_operation_class_init (GpaKeyTrustOperationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructor = gpa_key_trust_operation_constructor;
@@ -103,7 +103,7 @@ GType
 gpa_key_trust_operation_get_type (void)
 {
   static GType key_trust_operation_type = 0;
-  
+
   if (!key_trust_operation_type)
     {
       static const GTypeInfo key_trust_operation_info =
@@ -118,12 +118,12 @@ gpa_key_trust_operation_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gpa_key_trust_operation_init,
       };
-      
-      key_trust_operation_type = g_type_register_static 
+
+      key_trust_operation_type = g_type_register_static
 	(GPA_KEY_OPERATION_TYPE, "GpaKeyTrustOperation",
 	 &key_trust_operation_info, 0);
     }
-  
+
   return key_trust_operation_type;
 }
 
@@ -135,7 +135,7 @@ GpaKeyTrustOperation*
 gpa_key_trust_operation_new (GtkWidget *window, GList *keys)
 {
   GpaKeyTrustOperation *op;
-  
+
   op = g_object_new (GPA_KEY_TRUST_OPERATION_TYPE,
 		     "window", window,
 		     "keys", keys,
@@ -148,7 +148,7 @@ gpa_key_trust_operation_new (GtkWidget *window, GList *keys)
 
 static gpg_error_t
 gpa_key_trust_operation_start (GpaKeyTrustOperation *op)
-{ 
+{
   gpg_error_t err;
   gpgme_key_t key;
   gpgme_validity_t trust;
@@ -202,7 +202,7 @@ gpa_key_trust_operation_next (GpaKeyTrustOperation *op)
 }
 
 
-static void gpa_key_trust_operation_done_error_cb (GpaContext *context, 
+static void gpa_key_trust_operation_done_error_cb (GpaContext *context,
 						  gpg_error_t err,
 						  GpaKeyTrustOperation *op)
 {
@@ -214,12 +214,12 @@ static void gpa_key_trust_operation_done_error_cb (GpaContext *context,
       /* Ignore these */
       break;
     default:
-      gpa_gpgme_warning (err);
+      gpa_gpgme_warn (err, NULL, GPA_OPERATION (op)->context);
       break;
     }
 }
 
-static void gpa_key_trust_operation_done_cb (GpaContext *context, 
+static void gpa_key_trust_operation_done_cb (GpaContext *context,
 					      gpg_error_t err,
 					      GpaKeyTrustOperation *op)
 {
