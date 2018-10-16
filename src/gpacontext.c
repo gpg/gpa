@@ -248,8 +248,10 @@ gpa_context_get_diag (GpaContext *context)
 {
 #if GPGME_VERSION_NUMBER >= 0x010c00 /* >= 1.12 */
   gpgme_data_t diag;
-  char *buffer, *result;
+  char *info, *buffer, *result;
   gpg_error_t err;
+  gpgme_engine_info_t engine;
+  gpgme_protocol_t proto;
 
   if (!context)
     return NULL;
@@ -265,12 +267,24 @@ gpa_context_get_diag (GpaContext *context)
       return NULL;  /* No data.  */
     }
 
+  proto = gpgme_get_protocol (context->ctx);
+  gpgme_get_engine_info (&engine);
+  for (; engine; engine = engine->next)
+    if (engine->protocol == proto)
+      break;
+  info = g_strdup_printf ("[GPA %s, GPGME %s, GnuPG %s]\n",
+                          VERSION,
+                          gpgme_check_version (NULL),
+                          engine? engine->version : "?");
+
   /* Append a trailing zero and return the string.  */
   gpgme_data_seek (diag, 0, SEEK_END);
   gpgme_data_write (diag, "", 1);
   buffer = gpgme_data_release_and_get_mem (diag, NULL);
-  result = g_strdup (buffer);
+  result = g_strconcat (info, buffer, NULL);
   gpgme_free (buffer);
+  g_free (info);
+
   return result;
 #else
   return NULL;

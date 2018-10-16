@@ -50,11 +50,56 @@ gpa_window_message (const gchar *message, GtkWidget * messenger)
 }
 
 
+/* Create a dialog with a textview containing STRING.  */
+static GtkWidget *
+create_diagnostics_dialog (GtkWidget *parent, const char *string)
+{
+  GtkWidget *widget, *scrollwidget, *textview;
+  GtkDialog *dialog;
+  GtkTextBuffer *textbuffer;
+
+  widget = gtk_dialog_new_with_buttons ("Diagnostics",
+                                        parent? GTK_WINDOW (parent):NULL,
+                                        GTK_DIALOG_MODAL,
+                                        GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
+                                        NULL);
+  dialog = GTK_DIALOG (widget);
+  gtk_dialog_set_has_separator (dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
+  gtk_window_set_default_size (GTK_WINDOW (dialog), 570, 320);
+  gtk_dialog_set_default_response (dialog, GTK_RESPONSE_CANCEL);
+
+  scrollwidget = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (scrollwidget), 5);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwidget),
+                                       GTK_SHADOW_IN);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwidget),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_box_pack_start (GTK_BOX (dialog->vbox), scrollwidget, TRUE, TRUE, 0);
+
+  textview = gtk_text_view_new ();
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (textview), GTK_WRAP_NONE);
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (textview), FALSE);
+  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (textview), FALSE);
+  textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+  gtk_text_buffer_set_text (textbuffer, string, -1);
+
+  gtk_container_add (GTK_CONTAINER (scrollwidget), textview);
+
+  gtk_widget_show_all (widget);
+
+  return widget;
+}
+
+
 static void
 show_gtk_message (GtkWidget *parent, GtkMessageType mtype, GpaContext *ctx,
                   const char *format, va_list arg_ptr)
 {
-  GtkWidget *dialog;
+  GtkWidget *dialog, *dialog2;
   char *buffer;
 
   buffer = g_strdup_vprintf (format, arg_ptr);
@@ -79,8 +124,10 @@ show_gtk_message (GtkWidget *parent, GtkMessageType mtype, GpaContext *ctx,
         gpa_show_info (parent, "No diagnostic data available");
       else
         {
-          gpa_show_info (parent, "Diagnostics:\n%s", buffer);
+          dialog2 = create_diagnostics_dialog (parent, buffer);
           g_free (buffer);
+          gtk_dialog_run (GTK_DIALOG (dialog2));
+          gtk_widget_destroy (dialog2);
         }
     }
 
