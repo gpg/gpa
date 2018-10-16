@@ -28,7 +28,7 @@ min_automake_version="1.10"
 # (git tag -s gpa-1.n.m) and run "./autogen.sh --force".  Please
 # bump the version number immediately *after* the release and do
 # another commit and push so that the git magic is able to work.
-m4_define([mym4_version], [0.9.11])
+m4_define([mym4_version], [0.10.0])
 
 # Below is m4 magic to extract and compute the git revision number,
 # the decimalized short revision number, a beta version string and a
@@ -46,11 +46,11 @@ m4_define([mym4_full_version],[mym4_version[]mym4_betastring])
 
 AC_INIT([gpa],[mym4_full_version], [https://bugs.gnupg.org])
 
-NEED_GPG_ERROR_VERSION=1.12
+NEED_GPG_ERROR_VERSION=1.27
 NEED_LIBASSUAN_API=2
-NEED_LIBASSUAN_VERSION=1.1.0
+NEED_LIBASSUAN_VERSION=2.4.2
 NEED_GPGME_API=1
-NEED_GPGME_VERSION=1.5.0
+NEED_GPGME_VERSION=1.9.0
 
 AC_CONFIG_AUX_DIR([build-aux])
 AM_CONFIG_HEADER(config.h)

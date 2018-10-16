@@ -43,16 +43,8 @@
  */
 
 
-/* If posssible we use the modern interact interface.  */
-#undef USE_GPGME_INTERACT
-#if GPGME_VERSION_NUMBER >= 0x010700  /* GPGME >= 1.7.0 */
-# define USE_GPGME_INTERACT 1
-# define CMP_STATUS(a) !strcmp (status, G_STRINGIFY (a))
-  typedef const char *status_type_t ;
-#else
-# define CMP_STATUS(a) (status == GPGME_STATUS_ ## b)
-  typedef gpgme_status_code_t status_type_t;
-#endif
+#define CMP_STATUS(a) !strcmp (status, G_STRINGIFY (a))
+typedef const char *status_type_t ;
 
 
 
@@ -226,7 +218,6 @@ edit_fnc (void *opaque, status_type_t status,
   char *result = NULL;
 
   /* Whitelist all status code we know about.  */
-#if USE_GPGME_INTERACT
   {
     static const char *whitelist[] = {
       "ALREADY_SIGNED",
@@ -250,25 +241,6 @@ edit_fnc (void *opaque, status_type_t status,
         return parms->err;
       }
   }
-#else /* !USE_GPGME_INTERACT */
-
-  switch (status)
-    {
-    case GPGME_STATUS_ALREADY_SIGNED:
-    case GPGME_STATUS_ERROR:
-    case GPGME_STATUS_GET_BOOL:
-    case GPGME_STATUS_GET_LINE:
-    case GPGME_STATUS_KEY_CREATED:
-    case GPGME_STATUS_NEED_PASSPHRASE_SYM:
-    case GPGME_STATUS_SC_OP_FAILURE:
-      break;
-
-    default:
-      /* We don't know and thus do not need this status code.  */
-      return parms->err;
-    }
-#endif /* !USE_GPGME_INTERACT */
-
 
   if (!parms->need_status_passphrase_sym
       && CMP_STATUS (NEED_PASSPHRASE_SYM))
@@ -303,12 +275,7 @@ edit_fnc (void *opaque, status_type_t status,
     }
 
   if (debug_edit_fsm)
-    g_debug (
-#ifdef USE_GPGME_INTERACT
-             "edit_fnc: state=%d input=%s (%s)"
-#else
-             "edit_fnc: state=%d input=%d (%s)"
-#endif
+    g_debug ("edit_fnc: state=%d input=%s (%s)"
              , parms->state, status, args);
 
   /* Choose the next state based on the current one and the input */
@@ -974,11 +941,7 @@ gpa_gpgme_edit_trust_start (GpaContext *ctx, gpgme_key_t key,
       return err;
     }
   parms = gpa_gpgme_edit_trust_parms_new (ctx, trust_strings[ownertrust], out);
-#if USE_GPGME_INTERACT
   err = gpgme_op_interact_start (ctx->ctx, key, 0, edit_fnc, parms, out);
-#else
-  err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
-#endif
   return err;
 }
 
@@ -1050,11 +1013,7 @@ gpa_gpgme_edit_expire_start (GpaContext *ctx, gpgme_key_t key, GDate *date)
     }
 
   parms = gpa_gpgme_edit_expire_parms_new (ctx, date, out);
-#if USE_GPGME_INTERACT
   err = gpgme_op_interact_start (ctx->ctx, key, 0, edit_fnc, parms, out);
-#else
-  err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
-#endif
   return err;
 }
 
@@ -1122,11 +1081,7 @@ gpa_gpgme_edit_sign_start (GpaContext *ctx, gpgme_key_t key,
       return err;
     }
   parms = gpa_gpgme_edit_sign_parms_new (ctx, "0", local, out);
-#if USE_GPGME_INTERACT
   err = gpgme_op_interact_start (ctx->ctx, key, 0, edit_fnc, parms, out);
-#else
-  err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
-#endif
   return err;
 }
 
@@ -1232,11 +1187,7 @@ gpa_gpgme_edit_passwd_start (GpaContext *ctx, gpgme_key_t key)
   if (!cms_hack)
     gpgme_set_passphrase_cb (ctx->ctx, passwd_passphrase_cb, parms);
 
-#if USE_GPGME_INTERACT
   err = gpgme_op_interact_start (ctx->ctx, key, 0, edit_fnc, parms, out);
-#else
-  err = gpgme_op_edit_start (ctx->ctx, key, edit_fnc, parms, out);
-#endif
   return err;
 }
 
@@ -1593,11 +1544,7 @@ gpa_gpgme_card_edit_genkey_start (GpaContext *ctx,
 
   edit_parms = card_edit_genkey_parms_new (ctx, genkey_parms, out);
 
-#if USE_GPGME_INTERACT
   err = gpgme_op_interact_start (ctx->ctx, NULL, GPGME_INTERACT_CARD,
                                  edit_fnc, edit_parms, out);
-#else
-  err = gpgme_op_card_edit_start (ctx->ctx, NULL, edit_fnc, edit_parms, out);
-#endif
   return err;
 }

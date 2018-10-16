@@ -145,7 +145,6 @@ search_keys (GpaImportOperation *operation, const char *keyid)
   /* Switch to extern-only or locate list mode.  We use --locate-key
    * iff KEYID is a single mail address.  */
   listmode = GPGME_KEYLIST_MODE_EXTERN;
-#if GPGME_VERSION_NUMBER >= 0x010701
   mbox = gpgme_addrspec_from_uid (keyid);
   if (mbox)
     {
@@ -157,7 +156,6 @@ search_keys (GpaImportOperation *operation, const char *keyid)
       gpgme_set_ctx_flag (context->ctx, "auto-key-locate",
                           "clear,nodefault,wkd,keyserver");
     }
-#endif /* GPGME >= 1.7.1 */
   err = gpgme_set_keylist_mode (context->ctx, listmode);
   if (err)
     gpa_gpgme_error (err);

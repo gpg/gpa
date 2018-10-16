@@ -40,9 +40,6 @@ static gboolean query_tooltip_cb (GtkWidget *wdiget, int x, int y,
 typedef enum
 {
   SUBKEY_ID,
-#if GPGME_VERSION_NUMBER < 0x010601  /* GPGME < 1.6.1 */
-  SUBKEY_SIZE,
-#endif
   SUBKEY_ALGO,
   SUBKEY_CREATED,
   SUBKEY_EXPIRE,
@@ -68,9 +65,6 @@ gpa_subkey_list_new (void)
 
   /* Init the model */
   store = gtk_list_store_new (SUBKEY_N_COLUMNS,
-#if GPGME_VERSION_NUMBER < 0x010601  /* GPGME < 1.6.1 */
-			      G_TYPE_STRING,
-#endif
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING,
@@ -106,14 +100,6 @@ gpa_subkey_list_new (void)
 						     "text", SUBKEY_ALGO,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
-
-#if GPGME_VERSION_NUMBER < 0x010601  /* GPGME < 1.6.1 */
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("Size"), renderer,
-						     "text", SUBKEY_SIZE,
-						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
-#endif
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("Created"),
@@ -210,9 +196,6 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
   gpgme_subkey_t subkey, secsubkey;
   gpgme_key_t seckey;
   gchar *p, *size, *expires;
-#if GPGME_VERSION_NUMBER >= 0x010601  /* GPGME >= 1.6.1 */
-  char *algostr_buf;
-#endif
   const char *algostr;
 
   /* Empty the list */
@@ -252,19 +235,11 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
           if (*expires != '>' && (p = strchr (expires, ' ')))
             *p = 0;
 
-#if GPGME_VERSION_NUMBER >= 0x010601  /* GPGME >= 1.6.1 */
-          algostr_buf = gpgme_pubkey_algo_string (subkey);
-          algostr = algostr_buf? algostr_buf : "?";
-#else  /* GPGME < 1.6.1 */
           algostr = gpgme_pubkey_algo_name (subkey->pubkey_algo),
-#endif  /* GPGME < 1.6.1 */
 
           gtk_list_store_set
             (store, &iter,
              SUBKEY_ID, subkey->keyid+8,
-#if GPGME_VERSION_NUMBER < 0x010601  /* GPGME < 1.6.1 */
-             SUBKEY_SIZE, size,
-#endif
              SUBKEY_ALGO,
              algostr,
              SUBKEY_CREATED,
@@ -281,9 +256,6 @@ gpa_subkey_list_set_key (GtkWidget *list, gpgme_key_t key)
              -1);
 	  g_free (size);
 	  g_free (expires);
-#if GPGME_VERSION_NUMBER >= 0x010601  /* GPGME >= 1.6.1 */
-          gpgme_free (algostr_buf);
-#endif
 	}
     }
 }

@@ -46,9 +46,7 @@
 #include "options.h" /* ditto */
 
 
-#if GPGME_VERSION_NUMBER >= 0x010700
-# define ENABLE_TOFU_INFO 1
-#endif
+#define ENABLE_TOFU_INFO 1
 
 /* Global constants.  */
 #define GPA_MAX_UID_WIDTH 50  /* # of chars after wich a user id is
