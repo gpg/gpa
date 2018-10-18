@@ -148,7 +148,8 @@ search_keys (GpaImportOperation *operation, const char *keyid)
   mbox = gpgme_addrspec_from_uid (keyid);
   if (mbox)
     {
-      listmode = GPGME_KEYLIST_MODE_LOCATE;
+      /* GPGME_KEYLIST_MODE_LOCATE is an alias for below. */
+      listmode = (GPGME_KEYLIST_MODE_LOCAL | GPGME_KEYLIST_MODE_EXTERN);
       /* We already extracted the mbox - use it directly than letting
        * gnupg extract it.  */
       keyid = mbox;
