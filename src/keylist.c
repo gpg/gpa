@@ -574,13 +574,18 @@ search_keylist_function (GtkTreeModel *model, gint column,
   gboolean result = TRUE;
   gchar *user_id;
   gint search_len;
+  const char *s;
 
   gtk_tree_model_get (model, iter,
                       GPA_KEYLIST_COLUMN_USERID, &user_id, -1);
 
   search_len = strlen (key_to_search_for);
 
+  /* Note that we also search for a mail address.  */
   if (!g_ascii_strncasecmp (user_id, key_to_search_for, search_len))
+    result=FALSE;
+  else if ((s = strchr (user_id, '<')) && s[1]
+           && !g_ascii_strncasecmp (s+1, key_to_search_for, search_len))
     result=FALSE;
 
   g_free (user_id);
