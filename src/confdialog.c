@@ -1203,7 +1203,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 		  char *description = xstrdup (option->description);
 
 	          percent_unescape (description, 0);
-		  gtk_widget_set_tooltip_text (vbox, description);
+		  gpa_add_tooltip (vbox, description);
 		  xfree (description);
 		}
 #endif

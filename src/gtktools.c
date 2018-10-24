@@ -169,7 +169,23 @@ gpa_add_tooltip (GtkWidget *widget, const char *text)
 {
 #if GTK_CHECK_VERSION (2, 12, 0)
   if (widget && text && *text)
-    gtk_widget_set_tooltip_text (widget, text);
+    {
+      size_t len = strlen (text);
+      if (text[len-1] == '\n')
+        {
+          /* Remove trailing line feeds.  The reason for this may be
+           * that the tooltip text is used for other purposes as
+           * well. */
+          char *buf = g_strdup (text);
+          for ( ;len && buf[len-1] == '\n'; len--)
+            buf[len-1] = 0;
+          if (*buf)
+            gtk_widget_set_tooltip_text (widget, buf);
+          g_free (buf);
+        }
+      else
+        gtk_widget_set_tooltip_text (widget, text);
+    }
 #endif
 }
 
