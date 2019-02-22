@@ -420,7 +420,7 @@ msgid "The private key has been copied to the clipboard."
 msgstr "公鑰已複制到剪貼簿內."
 
 #, fuzzy
-msgid "The key has bees copied to the clipboard."
+msgid "The key has been copied to the clipboard."
 msgstr "公鑰已複制到剪貼簿內."
 
 msgid "The keys have been copied to the clipboard."

@@ -393,7 +393,7 @@ msgid "The private key has been copied to the clipboard."
 msgstr "Les clefs ont été copiées dans le presse-papiers."
 
 #, fuzzy
-msgid "The key has bees copied to the clipboard."
+msgid "The key has been copied to the clipboard."
 msgstr "Les clefs ont été copiées dans le presse-papiers."
 
 msgid "The keys have been copied to the clipboard."

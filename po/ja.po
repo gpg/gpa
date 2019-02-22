@@ -430,7 +430,7 @@ msgid "The private key has been copied to the clipboard."
 msgstr "鍵をクリップボードへコピーしました。"
 
 #, fuzzy
-msgid "The key has bees copied to the clipboard."
+msgid "The key has been copied to the clipboard."
 msgstr "鍵をクリップボードへコピーしました。"
 
 msgid "The keys have been copied to the clipboard."
