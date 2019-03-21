@@ -145,7 +145,7 @@ gpa_export_clipboard_operation_complete_export (GpaExportOperation *operation)
     gpa_show_info
       (GPA_OPERATION (op)->window,
        is_secret? _("The private key has been copied to the clipboard.") :
-       nkeys==1 ? _("The key has bees copied to the clipboard.") :
+       nkeys==1 ? _("The key has been copied to the clipboard.") :
        /* */      _("The keys have been copied to the clipboard."));
 }
 

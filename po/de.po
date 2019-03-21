@@ -380,7 +380,7 @@ msgstr "Sicherheitskopie von Schlüssel 0x%s wird erstellt"
 msgid "The private key has been copied to the clipboard."
 msgstr "Den geheimen Schlüssel wurde in die Zwischenablage kopiert."
 
-msgid "The key has bees copied to the clipboard."
+msgid "The key has been copied to the clipboard."
 msgstr "Der Schlüssel wurde in die Zwischenablage kopiert."
 
 msgid "The keys have been copied to the clipboard."

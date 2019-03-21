@@ -385,7 +385,7 @@ msgid "The private key has been copied to the clipboard."
 msgstr "Ключи скопированы в буфер."
 
 #, fuzzy
-msgid "The key has bees copied to the clipboard."
+msgid "The key has been copied to the clipboard."
 msgstr "Ключи скопированы в буфер."
 
 msgid "The keys have been copied to the clipboard."

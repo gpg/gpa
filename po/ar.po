@@ -408,7 +408,7 @@ msgid "The private key has been copied to the clipboard."
 msgstr "تم نسخ المفاتيح إلى الحافظة."
 
 #, fuzzy
-msgid "The key has bees copied to the clipboard."
+msgid "The key has been copied to the clipboard."
 msgstr "تم نسخ المفاتيح إلى الحافظة."
 
 msgid "The keys have been copied to the clipboard."

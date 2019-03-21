@@ -426,7 +426,7 @@ msgid "The private key has been copied to the clipboard."
 msgstr "De sleutels werden naar het klembord gekopieerd."
 
 #, fuzzy
-msgid "The key has bees copied to the clipboard."
+msgid "The key has been copied to the clipboard."
 msgstr "De sleutels werden naar het klembord gekopieerd."
 
 msgid "The keys have been copied to the clipboard."

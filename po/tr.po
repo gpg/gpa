@@ -421,7 +421,7 @@ msgid "The private key has been copied to the clipboard."
 msgstr "Anahtarlar panoya kopyalandý"
 
 #, fuzzy
-msgid "The key has bees copied to the clipboard."
+msgid "The key has been copied to the clipboard."
 msgstr "Anahtarlar panoya kopyalandý"
 
 msgid "The keys have been copied to the clipboard."
