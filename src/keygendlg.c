@@ -237,11 +237,10 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
       gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
                         GTK_FILL, GTK_SHRINK, 0, 0);
       combo = gtk_combo_box_new_text ();
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "1024");
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "1536");
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "2048");
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "3072");
-      gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 2);
+      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "2048"); //up to 2030
+      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "3072"); //up to 2040
+      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "4096"); //post 2040
+      gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1); //Select 3072 as default
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 
       gtk_table_attach (GTK_TABLE (table), combo, 1, 2, rowidx, rowidx+1,
