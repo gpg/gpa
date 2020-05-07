@@ -226,29 +226,29 @@ scd_status_cb (void *opaque, const char *status, const char *args)
   if (!strcmp (status, "APPTYPE"))
     {
       cardman->cardtype = G_TYPE_NONE;
-      if (!strcmp (args, "OPENPGP"))
+      if (!g_ascii_strcasecmp (args, "openpgp"))
         {
           cardman->cardtype = GPA_CM_OPENPGP_TYPE;
           cardman->cardtypename = "OpenPGP";
         }
-      else if (!strcmp (args, "NKS"))
+      else if (!g_ascii_strcasecmp (args, "nks"))
         {
           cardman->cardtype = GPA_CM_NETKEY_TYPE;
           cardman->cardtypename = "NetKey";
         }
-      else if (!strcmp (args, "DINSIG"))
+      else if (!g_ascii_strcasecmp (args, "dinsig"))
         {
           cardman->cardtype = GPA_CM_DINSIG_TYPE;
           cardman->cardtypename = "DINSIG";
         }
-      else if (!strcmp (args, "P15"))
+      else if (!g_ascii_strcasecmp (args, "P15"))
         cardman->cardtypename = "PKCS#15";
-      else if (!strcmp (args, "GELDKARTE"))
+      else if (!g_ascii_strcasecmp (args, "geldkarte"))
         {
           cardman->cardtype = GPA_CM_GELDKARTE_TYPE;
           cardman->cardtypename = "Geldkarte";
         }
-      else if (!strcmp (args, "UNDEFINED"))
+      else if (!g_ascii_strcasecmp (args, "undefined"))
         {
           cardman->cardtype = GPA_CM_UNKNOWN_TYPE;
           cardman->cardtypename = "UNKNOWN";
