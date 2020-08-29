@@ -241,6 +241,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
       gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "1536");
       gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "2048");
       gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "3072");
+      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "4096");
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 2);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 
