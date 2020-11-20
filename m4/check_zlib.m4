@@ -12,7 +12,7 @@
 
 dnl zlib test
 AC_DEFUN([CHECK_ZLIB], [
-AC_ARG_WITH(zlib, AC_HELP_STRING([--with-zlib=PATH],
+AC_ARG_WITH(zlib, AS_HELP_STRING([--with-zlib=PATH],
 [Look for zlib library installed in PATH/lib and headers in
 PATH/include rather than default include and library paths. (Use an
 absolute path)]),
@@ -22,7 +22,7 @@ absolute path)]),
 
 AC_CHECK_LIB(z, compress,
 	LIBS="$LIBS -lz", 
-	AC_ERROR([GPA requires zlib (http://gzip.org/zlib or install Debian package zlib1g-dev)]))
+	AC_MSG_ERROR([GPA requires zlib (https://zlib.net/ or install Debian package zlib1g-dev)]))
 
 AC_SUBST(LIBZ)
 ])

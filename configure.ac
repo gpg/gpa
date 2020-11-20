@@ -19,7 +19,7 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #
 # (Process this file with autoconf to produce a configure script.)
-AC_PREREQ(2.61)
+AC_PREREQ([2.61])
 min_automake_version="1.10"
 
 # The version number goes here.
@@ -58,7 +58,7 @@ NEED_GPGME_API=1
 NEED_GPGME_VERSION=1.9.0
 
 AC_CONFIG_AUX_DIR([build-aux])
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR(src/gpa.c)
 AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip])
 
@@ -99,7 +99,7 @@ AC_DEFINE_UNQUOTED(BUILD_TIMESTAMP, "$BUILD_TIMESTAMP",
 
 
 
-AC_GNU_SOURCE
+AC_USE_SYSTEM_EXTENSIONS
 
 AH_BOTTOM([
 /* We don't want the old assuan codes anymore. */
@@ -159,8 +159,8 @@ AM_MISSING_PROG(AUTOMAKE, automake, $missing_dir)
 AM_MISSING_PROG(AUTOHEADER, autoheader, $missing_dir)
 AM_MISSING_PROG(MAKEINFO, makeinfo, $missing_dir)
 AC_PROG_CC
-AC_ISC_POSIX
-AC_STDC_HEADERS
+AC_SEARCH_LIBS([strerror],[cposix])
+AC_HEADER_STDC
 AC_PROG_RANLIB
 AC_CHECK_TOOL(WINDRES, windres, :)
 
@@ -171,7 +171,7 @@ AC_CHECK_TOOL(WINDRES, windres, :)
 card_manager=yes
 AC_MSG_CHECKING([whether to build the card manager])
 AC_ARG_ENABLE(card-manager,
-              AC_HELP_STRING([--disable-card-manager],
+              AS_HELP_STRING([--disable-card-manager],
                              [build without the card manager]),
               card_manager=$enableval)
 AC_MSG_RESULT($card_manager)
@@ -183,7 +183,7 @@ AM_CONDITIONAL(ENABLE_CARD_MANAGER, test "$card_manager" = yes)
 keyserver_support=yes
 AC_MSG_CHECKING([whether to include keyserver support])
 AC_ARG_ENABLE(keyserver-support,
-              AC_HELP_STRING([--disable-keyserver-support],
+              AS_HELP_STRING([--disable-keyserver-support],
                              [build without keyserver support]),
               keyserver_support=$enableval)
 AC_MSG_RESULT($keyserver_support)
@@ -313,12 +313,7 @@ AC_CHECK_HEADERS([locale.h])
 #
 # Checks for typedefs and structures
 #
-
-GNUPG_CHECK_TYPEDEF(byte, HAVE_BYTE_TYPEDEF)
-GNUPG_CHECK_TYPEDEF(ushort, HAVE_USHORT_TYPEDEF)
-GNUPG_CHECK_TYPEDEF(ulong, HAVE_ULONG_TYPEDEF)
-GNUPG_CHECK_TYPEDEF(u16, HAVE_U16_TYPEDEF)
-GNUPG_CHECK_TYPEDEF(u32, HAVE_U32_TYPEDEF)
+AC_CHECK_TYPES([byte, ushort, ulong, u16, u32])
 
 #
 # Check for library functions
