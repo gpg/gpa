@@ -24,7 +24,7 @@ SUBDIRS = m4 src po pixmaps doc
 
 EXTRA_DIST = 								\
 	autogen.sh autogen.rc TODO to-utf8 gpa.spec 			\
-	gpa.desktop gpa.png gpadefs.h.in      				\
+	gpa.desktop gpa.png gpadefs.h.in VERSION			\
 	po/ChangeLog-2011 pixmaps/ChangeLog-2011 ChangeLog-2011 	\
 	m4/ChangeLog-2011 src/ChangeLog-2011 st-fonts/ChangeLog-2011
 
@@ -52,9 +52,7 @@ gpadefs.h: $(srcdir)/gpadefs.h.in
 
 all: gpadefs.h
 
-# Create a VERSION file which we need for the Prereq: patch file trick.
 dist-hook: gen-ChangeLog
-	@set -e; echo "$(VERSION)" > $(distdir)/VERSION
 
 gen_start_date = 2011-12-12T00:00:00
 .PHONY: gen-ChangeLog

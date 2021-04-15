@@ -14,6 +14,7 @@ po/POTFILES
 stamp-h1
 Makefile
 .deps/
+/VERSION
 
 # Files created by make when not using a VPATH build
 *.o
