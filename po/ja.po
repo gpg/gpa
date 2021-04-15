@@ -5,124 +5,111 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GPA 0.6.1-cvs\n"
+"Project-Id-Version: GPA 0.9.11\n"
 "Report-Msgid-Bugs-To: translations@gnupg.org\n"
-"PO-Revision-Date: 2003-11-03 17:11+0100\n"
-"Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
-"Language-Team: Japanese <gnupg-i18n@gnupg.org>\n"
+"PO-Revision-Date: 2021-04-15 13:53+0900\n"
+"Last-Translator: NIIBE Yutaka <gniibe@fsij.org>\n"
+"Language-Team: none\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Open File"
-msgstr "¥Õ¥¡¥¤¥ë¤ò³«¤¯"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã"
 
 msgid "GPA Message"
-msgstr "GPA ¥á¥Ã¥»¡¼¥¸"
+msgstr "GPA ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸"
 
 #. TRANSLATORS: The arguments are the filename, the integer size
 #. and the unit (such as KB or MB).
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr ""
-"Æ±¤¸¥Õ¥¡¥¤¥ë %s ¤¬¤¢¤ê¤Ş¤¹\n"
-"¾å½ñ¤­¤·¤Ş¤¹¤«?"
+"ã“ã®ãƒ•ã‚¡ã‚¤ãƒ« %s ã¯ %llu%s ã®å¤§ãã•ã§ã™ã€‚æœ¬å½“ã«é–‹ãã¾ã™ã‹?"
 
 msgid "Save As..."
-msgstr ""
+msgstr "åˆ¥åã§ä¿å­˜..."
 
-#, fuzzy
 msgid "Clipboard"
-msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼ (_C)"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰"
 
-#, fuzzy
 msgid "_File"
-msgstr "/¥Õ¥¡¥¤¥ë (_F)"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ« (_F)"
 
-#, fuzzy
 msgid "_Edit"
-msgstr "/ÊÔ½¸ (_E)"
+msgstr "ç·¨é›† (_E)"
 
 msgid "Clear buffer"
-msgstr ""
+msgstr "ãƒãƒƒãƒ•ã‚¡ã‚’ã‚¯ãƒªã‚¢"
 
 msgid "Open a file"
-msgstr "¥Õ¥¡¥¤¥ë¤ò³«¤¯"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã"
 
-#, fuzzy
 msgid "Save to a file"
-msgstr "¥Õ¥¡¥¤¥ë¤ò³«¤¯"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜"
 
-#, fuzzy
 msgid "Sign buffer text"
-msgstr "¸°¤Ë½ğÌ¾"
+msgstr "ãƒãƒƒãƒ•ã‚¡ã®ãƒ†ã‚¯ã‚¹ãƒˆã«ç½²å"
 
-#, fuzzy
 msgid "Check signatures of buffer text"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤Î½ğÌ¾¤ò¥Á¥§¥Ã¥¯"
+msgstr "ãƒãƒƒãƒ•ã‚¡ã®ãƒ†ã‚¯ã‚¹ãƒˆã®ç½²åã‚’ãƒã‚§ãƒƒã‚¯"
 
-#, fuzzy
 msgid "Encrypt the buffer text"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+msgstr "ãƒãƒƒãƒ•ã‚¡ã®ãƒ†ã‚¯ã‚¹ãƒˆã‚’æš—å·åŒ–ã™ã‚‹"
 
-#, fuzzy
 msgid "Decrypt the buffer text"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤òÉü¹æ²½¤¹¤ë"
+msgstr "ãƒãƒƒãƒ•ã‚¡ã®ãƒ†ã‚¯ã‚¹ãƒˆã‚’å¾©å·ã™ã‚‹"
 
 msgid "Close the buffer"
-msgstr ""
+msgstr "ãƒãƒƒãƒ•ã‚¡ã‚’é–‰ã˜ã‚‹"
 
 msgid "Quit the program"
-msgstr ""
+msgstr "ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚äº†"
 
-#, fuzzy
 msgid "Undo the last action"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+msgstr "æœ€å¾Œã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’ã‚¢ãƒ³ãƒ‰ã‚¥"
 
 msgid "Redo the last undone action"
-msgstr ""
+msgstr "æœ€å¾Œã®å–ã‚Šæ¶ˆã•ã‚ŒãŸã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å®Ÿè¡Œ"
 
-#, fuzzy
 msgid "Cut the selection"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+msgstr "é¸æŠã‚’åˆ‡ã‚Šå–ã‚‹"
 
-#, fuzzy
 msgid "Copy the selection"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+msgstr "é¸æŠã‚’ã‚³ãƒ”ãƒ¼"
 
-#, fuzzy
 msgid "Paste the clipboard"
-msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼ (_C)"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ãƒšãƒ¼ã‚¹ãƒˆ"
 
-#, fuzzy
 msgid "Delete the selected text"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤òÉü¹æ²½¤¹¤ë"
+msgstr "é¸æŠã•ã‚ŒãŸãƒ†ã‚¯ã‚¹ãƒˆã‚’å‰Šé™¤"
 
 msgid "Select the entire document"
 msgstr ""
 
 #, fuzzy
 msgid "Keyring"
-msgstr "¸°Â«¥¨¥Ç¥£¥¿"
+msgstr "éµæŸã‚¨ãƒ‡ã‚£ã‚¿"
 
 msgid "Files"
-msgstr "¥Õ¥¡¥¤¥ë"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«"
 
 #, fuzzy
 msgid "Card"
-msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼ (_C)"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ (_C)"
 
 msgid "<b>Main</b>"
 msgstr ""
 
 #, fuzzy
 msgid "Use default values"
-msgstr "¥Ç¥Õ¥©¥ë¥È¤Î¸°¤òÀßÄê"
+msgstr "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµã‚’è¨­å®š"
 
 #, fuzzy
 msgid "Use default value"
-msgstr "¥Ç¥Õ¥©¥ë¥È¤Î¸°¤òÀßÄê"
+msgstr "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµã‚’è¨­å®š"
 
 msgid "Do not use option"
 msgstr ""
@@ -135,7 +122,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Use default argument"
-msgstr "¥Ç¥Õ¥©¥ë¥È¤Î°¸Àè¤ÎÀßÄê"
+msgstr "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å®›å…ˆã®è¨­å®š"
 
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
@@ -153,70 +140,70 @@ msgstr ""
 
 #, fuzzy
 msgid "Level:"
-msgstr "¥ì¥Ù¥ë"
+msgstr "ãƒ¬ãƒ™ãƒ«"
 
 #, fuzzy
 msgid "Basic"
-msgstr "/¥Ğ¥Ã¥¯¥¢¥Ã¥×... (_B)"
+msgstr "/ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—... (_B)"
 
 msgid "Advanced"
 msgstr ""
 
 #, fuzzy
 msgid "Expert"
-msgstr "¥¨¥¯¥¹¥İ¡¼¥È"
+msgstr "ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
 
 #, fuzzy
 msgid "A keyserver has not been configured."
-msgstr "¸°¥µ¡¼¥Ğ¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+msgstr "éµã‚µãƒ¼ãƒãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 msgid "Configure backend to use a keyserver?"
 msgstr ""
 
 msgid "_Yes"
-msgstr "¤Ï¤¤ (_Y)"
+msgstr "ã¯ã„ (_Y)"
 
 msgid "_No"
-msgstr "¤¤¤¤¤¨ (_N)"
+msgstr "ã„ã„ãˆ (_N)"
 
 msgid "Configuring the backend to use a keyserver failed"
 msgstr ""
 
 msgid "days"
-msgstr "Æü"
+msgstr "æ—¥"
 
 msgid "weeks"
-msgstr "½µ"
+msgstr "é€±"
 
 msgid "months"
-msgstr "·î"
+msgstr "æœˆ"
 
 msgid "years"
-msgstr "Ç¯"
+msgstr "å¹´"
 
 msgid "never expires"
-msgstr "Ìµ´ü¸Â"
+msgstr "ç„¡æœŸé™"
 
 msgid "unknown"
-msgstr "Ì¤³ÎÇ§"
+msgstr "æœªç¢ºèª"
 
 #, fuzzy
 msgid "keyserver"
-msgstr "¸°¥µ¡¼¥Ğ¤òÀßÄê"
+msgstr "éµã‚µãƒ¼ãƒ"
 
 msgid "DANE"
-msgstr ""
+msgstr "DANE"
 
 #, fuzzy
 msgid "Web Key Directory"
-msgstr "¥Ç¥£¥ì¥¯¥È¥êºîÀ®"
+msgstr ""
 
 msgid "URL"
 msgstr ""
 
 #, fuzzy
 msgid "file"
-msgstr "¥Õ¥¡¥¤¥ë³«¤¯"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«"
 
 msgid "self"
 msgstr ""
@@ -225,7 +212,7 @@ msgid "other"
 msgstr ""
 
 msgid "Unknown"
-msgstr "Ì¤³ÎÇ§"
+msgstr "Ì¤ä¸æ˜"
 
 msgid "Mr."
 msgstr ""
@@ -235,117 +222,117 @@ msgstr ""
 
 #, fuzzy
 msgid "(unknown)"
-msgstr "Ì¤³ÎÇ§"
+msgstr "æœªç¢ºèª"
 
 #, fuzzy
 msgid "Encrypt documents"
-msgstr "¥Õ¥¡¥¤¥ë°Å¹æ²½"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«æš—å·åŒ–"
 
 msgid "_Public Keys"
-msgstr "¸ø³«¸° (_P)"
+msgstr "å…¬é–‹éµ (_P)"
 
 msgid "_Sign"
-msgstr "½ğÌ¾¤¹¤ë (_S)"
+msgstr "ç½²åã™ã‚‹ (_S)"
 
 msgid "Sign _as "
-msgstr "½ğÌ¾ÁªÂò (_A)"
+msgstr "ç½²åé¸æŠ (_A)"
 
 msgid "A_rmor"
-msgstr "¥¢¡¼¥Ş¤Î·ÁÀ® (_R)"
+msgstr "ã‚¢ãƒ¼ãƒã®å½¢æˆ (_R)"
 
 msgid "Please provide a correct date."
-msgstr "Àµ¤·¤¤ÆüÉÕ¤òÆşÎÏ¤·¤Æ¤¯¤À¤µ¤¤"
+msgstr "æ­£ã—ã„æ—¥ä»˜ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„"
 
 msgid "Change expiry date"
-msgstr "Í­¸ú´ü¸Â¤òÊÑ¹¹"
+msgstr "æœ‰åŠ¹æœŸé™ã‚’å¤‰æ›´"
 
 msgid "_Cancel"
-msgstr "¥­¥ã¥ó¥»¥ë (_C)"
+msgstr "ã‚­ãƒ£ãƒ³ã‚»ãƒ« (_C)"
 
 msgid "_never expire"
-msgstr "Ìµ´ü¸ÂÍ­¸ú (_N)"
+msgstr "ç„¡æœŸé™æœ‰åŠ¹ (_N)"
 
 msgid "_expire on:"
-msgstr "Í­¸ú´ü¸Â¤Î»ØÄê (_E):"
+msgstr "æœ‰åŠ¹æœŸé™ã®æŒ‡å®š (_E):"
 
 msgid "Close all files"
-msgstr "¥Õ¥¡¥¤¥ë¤ò¤¹¤Ù¤ÆÊÄ¤¸¤ë"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã™ã¹ã¦é–‰ã˜ã‚‹"
 
 msgid "Sign the selected file"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤Ë½ğÌ¾¤¹¤ë"
+msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã«ç½²åã™ã‚‹"
 
 msgid "Check signatures of selected file"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤Î½ğÌ¾¤ò¥Á¥§¥Ã¥¯"
+msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã®ç½²åã‚’ãƒã‚§ãƒƒã‚¯"
 
 msgid "Encrypt the selected file"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã‚’æš—å·åŒ–ã™ã‚‹"
 
 msgid "Decrypt the selected file"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤òÉü¹æ²½¤¹¤ë"
+msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¾©å·åŒ–ã™ã‚‹"
 
 msgid "Close the window"
 msgstr ""
 
 #, fuzzy
 msgid "Select all files"
-msgstr "¥Õ¥¡¥¤¥ë¤ò¤¹¤Ù¤ÆÊÄ¤¸¤ë"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã™ã¹ã¦é–‰ã˜ã‚‹"
 
 msgid "File"
-msgstr "¥Õ¥¡¥¤¥ë"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«"
 
 #, fuzzy
 msgid "File Manager"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 msgid "The file is already open."
-msgstr "¥Õ¥¡¥¤¥ë¤Ï³«¤«¤ì¤Æ¤¤¤Ş¤¹"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã¯é–‹ã‹ã‚Œã¦ã„ã¾ã™"
 
 msgid "Sign documents"
 msgstr ""
 
 #, fuzzy
 msgid "<b>Sign _as</b>"
-msgstr "½ğÌ¾ÁªÂò (_A)"
+msgstr "ç½²åé¸æŠ (_A)"
 
 #, fuzzy
 msgid "<b>Signing Mode</b>"
-msgstr "½ğÌ¾Êı¼°"
+msgstr "ç½²åæ–¹å¼"
 
 #, fuzzy
 msgid "Si_gn and compress"
-msgstr "°µ½Ì¤¢¤ê¤Ç½ğÌ¾¤¹¤ë (_G)"
+msgstr "åœ§ç¸®ã‚ã‚Šã§ç½²åã™ã‚‹ (_G)"
 
 #, fuzzy
 msgid "Clear_text signature"
-msgstr "Ê¿Ê¸½ğÌ¾ (_C)"
+msgstr "å¹³æ–‡ç½²å (_C)"
 
 #, fuzzy
 msgid "_Detached signature"
-msgstr "Ê¿Ê¸½ğÌ¾ (_C)"
+msgstr "å¹³æ–‡ç½²å (_C)"
 
 #, fuzzy
 msgid "Output version information and exit"
-msgstr "¥Ğ¡¼¥¸¥ç¥ó¾ğÊó¤ò½ĞÎÏ¤·¤Æ½ªÎ»"
+msgstr "ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±ã‚’å‡ºåŠ›ã—ã¦çµ‚äº†"
 
 #, fuzzy
 msgid "Open key manager (default)"
-msgstr "¸°Â«¥¨¥Ç¥£¥¿¤ò³«¤¯ (¥Ç¥Õ¥©¥ë¥È)"
+msgstr "éµæŸã‚¨ãƒ‡ã‚£ã‚¿ã‚’é–‹ã (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)"
 
 #, fuzzy
 msgid "Open file manager"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã¤ò³«¤¯"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’é–‹ã"
 
 #, fuzzy
 msgid "Open the card manager"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã¤ò³«¤¯"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’é–‹ã"
 
 #, fuzzy
 msgid "Open clipboard"
-msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼ (_C)"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ (_C)"
 
 #, fuzzy
 msgid "Open the settings dialog"
-msgstr "ÀßÄê¥À¥¤¥¢¥í¥°¤ò³«¤¯"
+msgstr "è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‹ã"
 
 msgid "Only start the UI server"
 msgstr ""
@@ -355,7 +342,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Read options from file"
-msgstr "¥Õ¥¡¥¤¥ë¤«¤é¥ª¥×¥·¥ç¥óÆÉ¹ş"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã‚ªãƒ—ã‚·ãƒ§ãƒ³èª­è¾¼"
 
 msgid "Do not connect to a running instance"
 msgstr ""
@@ -366,35 +353,35 @@ msgstr ""
 #, fuzzy
 msgid "Graphical frontend to GnuPG"
 msgstr ""
-"¹½Ê¸: gpa [¥ª¥×¥·¥ç¥ó]\n"
-"GnuPG ¤Î¥°¥é¥Õ¥£¥«¥ë¤Ê¥Õ¥í¥ó¥È¥¨¥ó¥É\n"
+"æ§‹æ–‡: gpa [ã‚ªãƒ—ã‚·ãƒ§ãƒ³]\n"
+"GnuPG ã®ã‚°ãƒ©ãƒ•ã‚£ã‚«ãƒ«ãªãƒ•ãƒ­ãƒ³ãƒˆã‚¨ãƒ³ãƒ‰\n"
 
 msgid "Please report bugs to <"
-msgstr "¥Ğ¥°¤Ï <"
+msgstr "ãƒã‚°ã¯ <"
 
 #, fuzzy
 msgid "_Windows"
-msgstr "/¥¦¥£¥ó¥É¥¦ (_W)"
+msgstr "/ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ (_W)"
 
 #, fuzzy
 msgid "Open the keyring editor"
-msgstr "¸°Â«¥¨¥Ç¥£¥¿¤ò³«¤¯ (¥Ç¥Õ¥©¥ë¥È)"
+msgstr "éµæŸã‚¨ãƒ‡ã‚£ã‚¿ã‚’é–‹ã (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)"
 
 #, fuzzy
 msgid "Open the file manager"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã¤ò³«¤¯"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’é–‹ã"
 
 #, fuzzy
 msgid "Open the clipboard"
-msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼ (_C)"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ (_C)"
 
 #, fuzzy
 msgid "Configure the application"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã‚’æš—å·åŒ–ã™ã‚‹"
 
 #, fuzzy
 msgid "_Backend Preferences"
-msgstr "/ÊÔ½¸ (E)/ÀßÄê (_E)"
+msgstr "/ç·¨é›† (E)/è¨­å®š (_E)"
 
 msgid "Configure the backend programs"
 msgstr ""
@@ -408,43 +395,43 @@ msgid ""
 "This is sensitive information, and should be stored carefully\n"
 "(for example, on a USB stick kept in a safe place)."
 msgstr ""
-"ÈëÌ©¸°¤Î¥³¥Ô¡¼¤¬\n"
+"ç§˜å¯†éµã®ã‚³ãƒ”ãƒ¼ãŒ\n"
 "\n"
 "\t\"%s\"\n"
 "\n"
-"¤ËºîÀ®¤µ¤ì¤Ş¤·¤¿¡£¤³¤ì¤Ï½ÅÍ×¤Ê¾ğÊó¤Ç¤¹¤«¤é¡¢¿µ½Å¤ËÊİ´É¤·¤Æ\n"
-"¤¯¤À¤µ¤¤ (Îã¤¨¤Ğ¥Õ¥í¥Ã¥Ô¡¼¤ËÆş¤ì¤Æ°ÂÁ´¤Ê¾ì½ê¤Ë±£¤·¤Æ¤ª¤¯)¡£"
+"ã«ä½œæˆã•ã‚Œã¾ã—ãŸã€‚ã“ã‚Œã¯é‡è¦ãªæƒ…å ±ã§ã™ã‹ã‚‰ã€æ…é‡ã«ä¿ç®¡ã—ã¦\n"
+"ãã ã•ã„ (ä¾‹ãˆã°ãƒ•ãƒ­ãƒƒãƒ”ãƒ¼ã«å…¥ã‚Œã¦å®‰å…¨ãªå ´æ‰€ã«éš ã—ã¦ãŠã)ã€‚"
 
 msgid "An error ocurred during the backup operation."
 msgstr ""
 
 msgid "Backup key to file"
-msgstr "¸°¤ò¥Õ¥¡¥¤¥ë¤Ë¥Ğ¥Ã¥¯¥¢¥Ã¥×¤¹¤ë"
+msgstr "éµã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã™ã‚‹"
 
 #, fuzzy, c-format
 msgid "Generating backup of key: 0x%s"
-msgstr "¸°¤Î¥Ğ¥Ã¥¯¥¢¥Ã¥×¤òºîÀ®¤¹¤ë: %s"
+msgstr "éµã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’ä½œæˆã™ã‚‹: %s"
 
 #, fuzzy
 msgid "The private key has been copied to the clipboard."
-msgstr "¸°¤ò¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼¤·¤Ş¤·¤¿¡£"
+msgstr "éµã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ã—ã¾ã—ãŸã€‚"
 
 #, fuzzy
 msgid "The key has been copied to the clipboard."
-msgstr "¸°¤ò¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼¤·¤Ş¤·¤¿¡£"
+msgstr "éµã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ã—ã¾ã—ãŸã€‚"
 
 msgid "The keys have been copied to the clipboard."
-msgstr "¸°¤ò¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼¤·¤Ş¤·¤¿¡£"
+msgstr "éµã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ã—ã¾ã—ãŸã€‚"
 
 msgid "Export public keys to file"
-msgstr "¸ø³«¸°¤ò¥Õ¥¡¥¤¥ë¤Ø¥¨¥¯¥¹¥İ¡¼¥È"
+msgstr "å…¬é–‹éµã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
 
 msgid "_armor"
-msgstr "¥¢¡¼¥Ş (_A)"
+msgstr "ã‚¢ãƒ¼ãƒ (_A)"
 
 #, c-format
 msgid "The keys have been exported to %s."
-msgstr "¸°¤¬ %s ¤Ë¥¨¥¯¥¹¥İ¡¼¥È¤µ¤ì¤Ş¤·¤¿¡£"
+msgstr "éµãŒ %s ã«ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã•ã‚Œã¾ã—ãŸã€‚"
 
 msgid "Only keys of the same procotol may be exported as a collection."
 msgstr ""
@@ -454,75 +441,75 @@ msgid ""
 "The selected key(s) will be sent to a public key\n"
 "server (\"%s\")."
 msgstr ""
-"ÁªÂò¤µ¤ì¤¿¸°¤Ï¡¢¸ø³«¸°¥µ¡¼¥Ğ¤ØÁ÷¿®¤µ¤ì¤Ş¤¹¡£\n"
-"(¥µ¡¼¥Ğ: \"%s\")\n"
-"ËÜÅö¤Ë¤³¤Î¸°¤ò¹­¤¯ÇÛÉÛ¤·¤Æ¤è¤í¤·¤¤¤Ç¤¹¤«?"
+"é¸æŠã•ã‚ŒãŸéµã¯ã€å…¬é–‹éµã‚µãƒ¼ãƒã¸é€ä¿¡ã•ã‚Œã¾ã™ã€‚\n"
+"(ã‚µãƒ¼ãƒ: \"%s\")\n"
+"æœ¬å½“ã«ã“ã®éµã‚’åºƒãé…å¸ƒã—ã¦ã‚ˆã‚ã—ã„ã§ã™ã‹?"
 
 #, fuzzy
 msgid "Are you sure you want to distribute this key?"
-msgstr "ËÜÅö¤Ë¤³¤Î¸°¤òºï½ü¤·¤Ş¤¹¤«?"
+msgstr "æœ¬å½“ã«ã“ã®éµã‚’å‰Šé™¤ã—ã¾ã™ã‹?"
 
 #, fuzzy
 msgid "Error sending key(s) to the server."
-msgstr "/¸°¤ò¥µ¡¼¥Ğ¤ØÁ÷¿®... (_N)"
+msgstr "/éµã‚’ã‚µãƒ¼ãƒã¸é€ä¿¡... (_N)"
 
 msgid "The keys have been sent to the server."
-msgstr "¸°¤ò¥µ¡¼¥Ğ¤ØÁ÷¿®¤·¤Ş¤·¤¿¡£"
+msgstr "éµã‚’ã‚µãƒ¼ãƒã¸é€ä¿¡ã—ã¾ã—ãŸã€‚"
 
 msgid "Decrypting..."
-msgstr "Éü¹æ²½Ãæ..."
+msgstr "å¾©å·åŒ–ä¸­..."
 
 #, fuzzy, c-format
 msgid "\"%s\" contained no OpenPGP data."
-msgstr "¥Õ¥¡¥¤¥ë \"%s\" ¤Ë¤Ï OpenPGP ¥Ç¡¼¥¿¤¬´Ş¤Ş¤ì¤Æ¤¤¤Ş¤»¤ó¡£"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ« \"%s\" ã«ã¯ OpenPGP ãƒ‡ãƒ¼ã‚¿ãŒå«ã¾ã‚Œã¦ã„ã¾ã›ã‚“ã€‚"
 
 #, fuzzy, c-format
 msgid "The file \"%s\" contained no OpenPGPdata."
-msgstr "¥Õ¥¡¥¤¥ë \"%s\" ¤Ë¤Ï OpenPGP ¥Ç¡¼¥¿¤¬´Ş¤Ş¤ì¤Æ¤¤¤Ş¤»¤ó¡£"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ« \"%s\" ã«ã¯ OpenPGP ãƒ‡ãƒ¼ã‚¿ãŒå«ã¾ã‚Œã¦ã„ã¾ã›ã‚“ã€‚"
 
 #, fuzzy, c-format
 msgid "\"%s\" contained no valid encrypted data."
-msgstr "¥Õ¥¡¥¤¥ë \"%s\" ¤Ë¤ÏÍ­¸ú¤Ê°Å¹æ²½¥Ç¡¼¥¿¤¬´Ş¤Ş¤ì¤Æ¤¤¤Ş¤»¤ó¡£"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ« \"%s\" ã«ã¯æœ‰åŠ¹ãªæš—å·åŒ–ãƒ‡ãƒ¼ã‚¿ãŒå«ã¾ã‚Œã¦ã„ã¾ã›ã‚“ã€‚"
 
 #, fuzzy, c-format
 msgid "The file \"%s\" contained no valid encrypted data."
-msgstr "¥Õ¥¡¥¤¥ë \"%s\" ¤Ë¤ÏÍ­¸ú¤Ê°Å¹æ²½¥Ç¡¼¥¿¤¬´Ş¤Ş¤ì¤Æ¤¤¤Ş¤»¤ó¡£"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ« \"%s\" ã«ã¯æœ‰åŠ¹ãªæš—å·åŒ–ãƒ‡ãƒ¼ã‚¿ãŒå«ã¾ã‚Œã¦ã„ã¾ã›ã‚“ã€‚"
 
 msgid "Wrong passphrase!"
-msgstr "¥Ñ¥¹¥Õ¥ì¡¼¥º¤¬°ã¤¤¤Ş¤¹¡ª"
+msgstr "ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºãŒé•ã„ã¾ã™ï¼"
 
 msgid "Encrypting..."
-msgstr "°Å¹æ²½Ãæ..."
+msgstr "æš—å·åŒ–ä¸­..."
 
 msgid "Unknown Key"
-msgstr "Ì¤³ÎÇ§¤Î¸°"
+msgstr "æœªç¢ºèªã®éµ"
 
 #, fuzzy
 msgid "You are going to encrypt a document using the following key:"
-msgstr "¼¡¤Î¸°¤ò»È¤Ã¤Æ¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤·¤è¤¦¤È¤·¤Æ¤¤¤Ş¤¹:"
+msgstr "æ¬¡ã®éµã‚’ä½¿ã£ã¦ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æš—å·åŒ–ã—ã‚ˆã†ã¨ã—ã¦ã„ã¾ã™:"
 
 msgid "However, it is not certain that the key belongs to that person."
-msgstr "¤È¤Ï¤¤¤¨¡¢¤½¤Î¸°¤¬¤½¤Î¿Í¤ËÂ°¤·¤Æ¤¤¤ë¤«¤É¤¦¤«¤Ï³Î¼Â¤Ç¤Ï¤¢¤ê¤Ş¤»¤ó¡£"
+msgstr "ã¨ã¯ã„ãˆã€ãã®éµãŒãã®äººã«å±ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã¯ç¢ºå®Ÿã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚"
 
 msgid "Do you <b>really</b> want to use this key?"
-msgstr "<b>ËÜÅö¤Ë</b>¤³¤Î¸°¤ò»È¤¤¤¿¤¤¤Î¤Ç¤¹¤«?"
+msgstr "<b>æœ¬å½“ã«</b>ã“ã®éµã‚’ä½¿ã„ãŸã„ã®ã§ã™ã‹?"
 
 msgid "Revoked Key"
-msgstr "ÇË´şºÑ¤ß¤Î¸°"
+msgstr "ç ´æ£„æ¸ˆã¿ã®éµ"
 
 msgid "_Close"
-msgstr "ÊÄ¤¸¤ë (_C)"
+msgstr "é–‰ã˜ã‚‹ (_C)"
 
 #, fuzzy
 msgid "The following key has been revoked by its owner:"
-msgstr "°Ê²¼¤Î¸°¤Ï½êÍ­¼Ô¤Ë¤è¤Ã¤ÆÇË´ş¤µ¤ì¤Æ¤¤¤Ş¤¹:"
+msgstr "ä»¥ä¸‹ã®éµã¯æ‰€æœ‰è€…ã«ã‚ˆã£ã¦ç ´æ£„ã•ã‚Œã¦ã„ã¾ã™:"
 
 msgid "And can not be used for encryption."
-msgstr "¤è¤Ã¤Æ¡¢°Å¹æ²½¤Ë»È¤¦¤³¤È¤Ï¤Ç¤­¤Ş¤»¤ó¡£"
+msgstr "ã‚ˆã£ã¦ã€æš—å·åŒ–ã«ä½¿ã†ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚"
 
 #, c-format
 msgid "The following key expired on %s:"
-msgstr "¼¡¤Î¸°¤ÎÍ­¸ú´ü¸Â¤Ï %s ¤Ç¤¹:"
+msgstr "æ¬¡ã®éµã®æœ‰åŠ¹æœŸé™ã¯ %s ã§ã™:"
 
 msgid ""
 "The selected certificates are not all of the same type. That is, you mixed "
@@ -531,13 +518,13 @@ msgid ""
 msgstr ""
 
 msgid "You didn't select any key for signing"
-msgstr "½ğÌ¾¤¹¤ë¸°¤òÁªÂò¤·¤Ş¤»¤ó¤Ç¤·¤¿"
+msgstr "ç½²åã™ã‚‹éµã‚’é¸æŠã—ã¾ã›ã‚“ã§ã—ãŸ"
 
 msgid "Signing..."
-msgstr "½ğÌ¾Ãæ..."
+msgstr "ç½²åä¸­..."
 
 msgid "Verifying..."
-msgstr "¸¡¾ÚÃæ..."
+msgstr "æ¤œè¨¼ä¸­..."
 
 #, c-format
 msgid ""
@@ -548,11 +535,11 @@ msgid ""
 msgstr ""
 
 msgid "Generating Key..."
-msgstr "¸°¤òÀ¸À®Ãæ..."
+msgstr "éµã‚’ç”Ÿæˆä¸­..."
 
 #, fuzzy
 msgid "Import keys from file"
-msgstr "¥Õ¥¡¥¤¥ë¤«¤é¸ø³«¸°¤ò¥¤¥ó¥İ¡¼¥È¤¹¤ë"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰å…¬é–‹éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã™ã‚‹"
 
 #, c-format
 msgid ""
@@ -561,7 +548,7 @@ msgid ""
 msgstr ""
 
 msgid "No keys were found."
-msgstr "¸°¤¬¸«ÉÕ¤«¤ê¤Ş¤»¤ó¤Ç¤·¤¿¡£"
+msgstr "éµãŒè¦‹ä»˜ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚"
 
 msgid ""
 "Invalid time given.\n"
@@ -570,100 +557,103 @@ msgstr ""
 
 #, fuzzy
 msgid "Created"
-msgstr "ºîÀ®"
+msgstr "ä½œæˆ"
 
 msgid "The Creation Date is the date the certificate was created."
 msgstr ""
 
 msgid "User Name"
-msgstr "¥æ¡¼¥¶Ì¾"
+msgstr "ãƒ¦ãƒ¼ã‚¶å"
 
 msgid "No private key for signing."
-msgstr "½ğÌ¾¤Ë»È¤¦¸ø³«¸°¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "ç½²åã«ä½¿ã†å…¬é–‹éµãŒã‚ã‚Šã¾ã›ã‚“"
 
 msgid "This key has expired! Unable to sign."
-msgstr "¤³¤Î¸°¤Ï´ü¸Â¤¬ÀÚ¤ì¤Æ¤¤¤Ş¤¹¡ª ½ğÌ¾¤Ç¤­¤Ş¤»¤ó¡£"
+msgstr "ã“ã®éµã¯æœŸé™ãŒåˆ‡ã‚Œã¦ã„ã¾ã™ï¼ ç½²åã§ãã¾ã›ã‚“ã€‚"
 
 msgid "This key has already been signed with your own!"
-msgstr "¤³¤Î¸°¤Ï´û¤Ë¼«Ê¬¼«¿È¤Î¸°¤Ç½ğÌ¾¤·¤Æ¤¢¤ê¤Ş¤¹¡ª"
+msgstr "ã“ã®éµã¯æ—¢ã«è‡ªåˆ†è‡ªèº«ã®éµã§ç½²åã—ã¦ã‚ã‚Šã¾ã™ï¼"
 
 msgid "You haven't selected a default key to sign with!"
-msgstr "½ğÌ¾¤¹¤ë¥Ç¥Õ¥©¥ë¥È¤Î¸°¤òÁªÂò¤·¤Æ¤¤¤Ş¤»¤ó¡ª"
+msgstr "ç½²åã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµã‚’é¸æŠã—ã¦ã„ã¾ã›ã‚“ï¼"
 
 #, fuzzy
 msgid "Which key do you want to import?"
-msgstr "¤É¤Î¸°¤ò¥¤¥ó¥İ¡¼¥È¤·¤Ş¤¹¤«? (¸°¤Ï ID ¤Ç»ØÄê¤¹¤ëÉ¬Í×¤¬¤¢¤ê¤Ş¤¹)"
+msgstr "ã©ã®éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ã¾ã™ã‹? (éµã¯ ID ã§æŒ‡å®šã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™)"
 
 msgid "Which key do you want to import? (The key must be specified by key ID)."
-msgstr "¤É¤Î¸°¤ò¥¤¥ó¥İ¡¼¥È¤·¤Ş¤¹¤«? (¸°¤Ï ID ¤Ç»ØÄê¤¹¤ëÉ¬Í×¤¬¤¢¤ê¤Ş¤¹)"
+msgstr "ã©ã®éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ã¾ã™ã‹? (éµã¯ ID ã§æŒ‡å®šã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™)"
 
 msgid "Key _ID:"
-msgstr "¸° _ID"
+msgstr "éµ _ID"
 
 #, fuzzy
 msgid "Decrypting message ..."
-msgstr "Éü¹æ²½Ãæ..."
+msgstr "å¾©å·åŒ–ä¸­..."
 
 #, fuzzy
 msgid "Document"
-msgstr "¥³¥á¥ó¥È:"
+msgstr "ã‚³ãƒ¡ãƒ³ãƒˆ:"
 
 #, fuzzy
 msgid "Encrypting message ..."
-msgstr "°Å¹æ²½Ãæ..."
+msgstr "æš—å·åŒ–ä¸­..."
 
 #, fuzzy
 msgid "Message encryption"
-msgstr "°Å¹æ²½²ÄÇ½"
+msgstr "æš—å·åŒ–å¯èƒ½"
 
 #, fuzzy
 msgid "Signing message ..."
-msgstr "½ğÌ¾Ãæ..."
+msgstr "ç½²åä¸­..."
 
 msgid "Message signing"
 msgstr ""
 
 #, fuzzy
 msgid "Verifying message ..."
-msgstr "¸¡¾ÚÃæ..."
+msgstr "æ¤œè¨¼ä¸­..."
 
 msgid "Subkey ID"
-msgstr "Éû¸° ID"
+msgstr "å‰¯éµ ID"
 
 msgid "Status"
-msgstr "¥¹¥Æ¡¼¥¿¥¹"
+msgstr "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹"
 
 #, fuzzy
 msgid "Algo"
-msgstr "¥¢¥ë¥´¥ê¥º¥à"
+msgstr "ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ "
+
+msgid "Size"
+msgstr "ã‚µã‚¤ã‚º"
 
 #, fuzzy
 msgid "Expires"
-msgstr "´ü¸ÂÀÚ¤ì"
+msgstr "æœŸé™åˆ‡ã‚Œ"
 
 msgid "S"
 msgstr ""
 
 msgid "Can sign"
-msgstr "½ğÌ¾²ÄÇ½"
+msgstr "ç½²åå¯èƒ½"
 
 msgid "C"
 msgstr ""
 
 msgid "Can certify"
-msgstr "¾ÚÌÀ²ÄÇ½"
+msgstr "è¨¼æ˜å¯èƒ½"
 
 msgid "E"
 msgstr ""
 
 msgid "Can encrypt"
-msgstr "°Å¹æ²½²ÄÇ½"
+msgstr "æš—å·åŒ–å¯èƒ½"
 
 msgid "A"
 msgstr ""
 
 msgid "Can authenticate"
-msgstr "Ç§¾Ú²ÄÇ½"
+msgstr "èªè¨¼å¯èƒ½"
 
 msgid "T"
 msgstr ""
@@ -678,50 +668,50 @@ msgid "Serial number of the smart card."
 msgstr ""
 
 msgid "Revoked"
-msgstr "ÇË´şºÑ¤ß"
+msgstr "ç ´æ£„æ¸ˆã¿"
 
 msgid "Expired"
-msgstr "´ü¸ÂÀÚ¤ì"
+msgstr "æœŸé™åˆ‡ã‚Œ"
 
 msgid "Disabled"
-msgstr "Ìµ¸ú"
+msgstr "ç„¡åŠ¹"
 
 msgid "Unsigned"
-msgstr "½ğÌ¾¤Ê¤·"
+msgstr "ç½²åãªã—"
 
 msgid "Valid"
-msgstr "Í­¸ú"
+msgstr "æœ‰åŠ¹"
 
 msgid "User Name:"
-msgstr "¥æ¡¼¥¶Ì¾:"
+msgstr "ãƒ¦ãƒ¼ã‚¶å:"
 
 msgid "User Names:"
-msgstr "¥æ¡¼¥¶Ì¾:"
+msgstr "ãƒ¦ãƒ¼ã‚¶å:"
 
 msgid "Key ID:"
-msgstr "¸° ID:"
+msgstr "éµ ID:"
 
 msgid "Fingerprint:"
-msgstr "»ØÌæ:"
+msgstr "æŒ‡ç´‹:"
 
 msgid "Expiration"
-msgstr "´ü¸Â"
+msgstr "æœŸé™"
 
 msgid "_indefinitely valid"
-msgstr "Ìµ´ü¸ÂÍ­¸ú (_I)"
+msgstr "ç„¡æœŸé™æœ‰åŠ¹ (_I)"
 
 msgid "expire _after"
-msgstr "Í­¸ú¤Ê´ü´Ö (_A):"
+msgstr "æœ‰åŠ¹ãªæœŸé–“ (_A):"
 
 msgid "expire o_n:"
-msgstr "Í­¸ú´ü¸Â¤Î»ØÄê (_N):"
+msgstr "æœ‰åŠ¹æœŸé™ã®æŒ‡å®š (_N):"
 
 msgid ""
 "!FATAL ERROR!\n"
 "Invalid insert mode for expiry date."
 msgstr ""
-"¡ªÃ×Ì¿Åª¥¨¥é¡¼¡ª\n"
-"Í­¸ú´ü¸Â¤ÎÆşÎÏÊı¼°¤¬ÉÔÀµ¤Ç¤¹"
+"ï¼è‡´å‘½çš„ã‚¨ãƒ©ãƒ¼ï¼\n"
+"æœ‰åŠ¹æœŸé™ã®å…¥åŠ›æ–¹å¼ãŒä¸æ­£ã§ã™"
 
 msgid "(not set)"
 msgstr ""
@@ -740,12 +730,12 @@ msgid ""
 "\n"
 "The application will be terminated"
 msgstr ""
-"GPGME ¥é¥¤¥Ö¥é¥ê¤ÎÃ×Ì¿Åª¥¨¥é¡¼\n"
-"(¥Õ¥¡¥¤¥ë %s ¤Î %i ¹ÔÌÜ¤«¤é¼Â¹Ô¤µ¤ì¤¿):\n"
+"GPGME ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®è‡´å‘½çš„ã‚¨ãƒ©ãƒ¼\n"
+"(ãƒ•ã‚¡ã‚¤ãƒ« %s ã® %i è¡Œç›®ã‹ã‚‰å®Ÿè¡Œã•ã‚ŒãŸ):\n"
 "\n"
 "\t%s\n"
 "\n"
-"¤³¤Î¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤Ï½ªÎ»¤·¤Ş¤¹"
+"ã“ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã¯çµ‚äº†ã—ã¾ã™"
 
 #, fuzzy, c-format
 msgid ""
@@ -757,28 +747,28 @@ msgid ""
 "This is either an installation problem or a bug in %s.\n"
 "%s will now try to recover from this error."
 msgstr ""
-"GPGME ¥é¥¤¥Ö¥é¥ê¤¬Í½´ü¤»¤Ì¥¨¥é¡¼¤òÊÖ¤·¤Ş¤·¤¿¡£\n"
-"¥¨¥é¡¼¤Ï°Ê²¼¤ÎÄÌ¤ê:\n"
+"GPGME ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãŒäºˆæœŸã›ã¬ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã—ã¾ã—ãŸã€‚\n"
+"ã‚¨ãƒ©ãƒ¼ã¯ä»¥ä¸‹ã®é€šã‚Š:\n"
 "\n"
 "\t%s\n"
 "\n"
-"¤³¤ì¤Ï¤ª¤½¤é¤¯ GPA ¤Î¥Ğ¥°¤Ç¤¹¡£\n"
-"¤¿¤À¤¤¤Ş¥¨¥é¡¼¤«¤é¤ÎÉüµì¤ò»î¤ß¤Ş¤¹¡£"
+"ã“ã‚Œã¯ãŠãã‚‰ã GPA ã®ãƒã‚°ã§ã™ã€‚\n"
+"ãŸã ã„ã¾ã‚¨ãƒ©ãƒ¼ã‹ã‚‰ã®å¾©æ—§ã‚’è©¦ã¿ã¾ã™ã€‚"
 
 #, c-format
 msgid ""
 "The file %s already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
-"Æ±¤¸¥Õ¥¡¥¤¥ë %s ¤¬¤¢¤ê¤Ş¤¹\n"
-"¾å½ñ¤­¤·¤Ş¤¹¤«?"
+"åŒã˜ãƒ•ã‚¡ã‚¤ãƒ« %s ãŒã‚ã‚Šã¾ã™\n"
+"ä¸Šæ›¸ãã—ã¾ã™ã‹?"
 
 msgid "_Use a different filename"
 msgstr ""
 
 #, fuzzy
 msgid "_Open"
-msgstr "³«¤¯"
+msgstr "é–‹ã"
 
 msgid ""
 "************************************************************************\n"
@@ -788,8 +778,8 @@ msgid ""
 "\n"
 msgstr ""
 "**********************************************************************\n"
-"* ·Ù¹ğ: ¤³¤Î¥Õ¥¡¥¤¥ë¤ÏÈëÌ©¸°¤Î¥Ğ¥Ã¥¯¥¢¥Ã¥×¤Ç¤¹¡£°ÂÁ´¤Ê¾ì½ê¤ËÊİ´É¤·¤Æ *\n"
-"* ¤¯¤À¤µ¤¤¡£                                                         *\n"
+"* è­¦å‘Š: ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ç§˜å¯†éµã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã§ã™ã€‚å®‰å…¨ãªå ´æ‰€ã«ä¿ç®¡ã—ã¦ *\n"
+"* ãã ã•ã„ã€‚                                                         *\n"
 "**********************************************************************\n"
 "\n"
 
@@ -797,75 +787,75 @@ msgid ""
 "The key backed up in this file is:\n"
 "\n"
 msgstr ""
-"¤³¤Î¥Õ¥¡¥¤¥ë¤Ë¥Ğ¥Ã¥¯¥¢¥Ã¥×¤µ¤ì¤Æ¤¤¤ë¸°¤Ï:\n"
+"ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã•ã‚Œã¦ã„ã‚‹éµã¯:\n"
 "\n"
 
 msgid "Never"
-msgstr "ÉÔ¿®"
+msgstr "ä¸ä¿¡"
 
 msgid "Marginal"
-msgstr "°ìÉô"
+msgstr "ä¸€éƒ¨"
 
 msgid "Full"
-msgstr "´°Á´"
+msgstr "å®Œå…¨"
 
 msgid "Ultimate"
-msgstr "µæ¶Ë"
+msgstr "ç©¶æ¥µ"
 
 msgid "Incomplete"
-msgstr "ÉÔ´°Á´"
+msgstr "ä¸å®Œå…¨"
 
 msgid "Fully Valid"
-msgstr "´°Á´¤ËÍ­¸ú"
+msgstr "å®Œå…¨ã«æœ‰åŠ¹"
 
 #, fuzzy
 msgid "Invalid"
-msgstr "Ìµ¸ú¤ÊÆüÉÕ"
+msgstr "Ìµç„¡åŠ¹"
 
 msgid "Faked"
 msgstr ""
 
 #, fuzzy
 msgid "Fully"
-msgstr "´°Á´"
+msgstr ""
 
 msgid "Please enter the passphrase for the following key:"
-msgstr "°Ê²¼¤Î¸°¤Î¥Ñ¥¹¥ï¡¼¥É¤òÆşÎÏ¤·¤Æ²¼¤µ¤¤:"
+msgstr "ä»¥ä¸‹ã®éµã®ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ä¸‹ã•ã„:"
 
 msgid "Wrong passphrase, please try again:"
-msgstr "¥Ñ¥¹¥Õ¥ì¡¼¥º¤¬°ã¤¤¤Ş¤¹¡£¤â¤¦°ìÅÙ¤ª´ê¤¤¤·¤Ş¤¹:"
+msgstr "ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºãŒé•ã„ã¾ã™ã€‚ã‚‚ã†ä¸€åº¦ãŠé¡˜ã„ã—ã¾ã™:"
 
 msgid "Enter Passphrase"
-msgstr "¥Ñ¥¹¥Õ¥ì¡¼¥º¤òÆşÎÏ"
+msgstr "ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºã‚’å…¥åŠ›"
 
 msgid "[None]"
 msgstr ""
 
 msgid "[Unknown user ID]"
-msgstr "[Ì¤³ÎÇ§¥æ¡¼¥¶ ID]"
+msgstr "[æœªç¢ºèªãƒ¦ãƒ¼ã‚¶ ID]"
 
 msgid "Bad"
-msgstr "ÉÔÀµ"
+msgstr "ä¸æ­£"
 
 msgid "Generic"
-msgstr "°ìÈÌ"
+msgstr "ä¸€èˆ¬"
 
 msgid "Persona"
-msgstr "¸Ä¿Í"
+msgstr "å€‹äºº"
 
 msgid "Casual"
-msgstr "¥«¥¸¥å¥¢¥ë"
+msgstr "ã‚«ã‚¸ãƒ¥ã‚¢ãƒ«"
 
 msgid "Positive"
-msgstr "¥İ¥¸¥Æ¥£¥ô"
+msgstr "ãƒã‚¸ãƒ†ã‚£ãƒ´"
 
 #, fuzzy, c-format
 msgid "Bad signature by %s: %s"
-msgstr "½ğÌ¾"
+msgstr "ç½²å"
 
 #, fuzzy, c-format
 msgid "Bad signature by %s"
-msgstr "½ğÌ¾"
+msgstr "ç½²å"
 
 #, c-format
 msgid "Bad signature by unknown key %s: %s"
@@ -881,15 +871,15 @@ msgstr ""
 
 #, fuzzy
 msgid "Bad signature by unknown key"
-msgstr "Ìµ¸ú¤Ê½ğÌ¾¥¿¥¤¥×"
+msgstr "ç„¡åŠ¹ãªç½²åã‚¿ã‚¤ãƒ—"
 
 #, fuzzy, c-format
 msgid "Good signature by %s: %s"
-msgstr "½ğÌ¾"
+msgstr "ç½²å"
 
 #, fuzzy, c-format
 msgid "Good signature by %s"
-msgstr "½ğÌ¾"
+msgstr "ç½²å"
 
 #, c-format
 msgid "Good signature by unknown key %s: %s"
@@ -908,54 +898,54 @@ msgstr ""
 
 #, fuzzy, c-format
 msgid "Uncertain signature by %s: %s"
-msgstr "Ìµ¸ú¤Ê½ğÌ¾¥¿¥¤¥×"
+msgstr "ç„¡åŠ¹ãªç½²åã‚¿ã‚¤ãƒ—"
 
 #, fuzzy, c-format
 msgid "Uncertain signature by %s"
-msgstr "Ìµ¸ú¤Ê½ğÌ¾¥¿¥¤¥×"
+msgstr "ç„¡åŠ¹ãªç½²åã‚¿ã‚¤ãƒ—"
 
 #, fuzzy, c-format
 msgid "Uncertain signature by unknown key %s: %s"
-msgstr "Ìµ¸ú¤Ê½ğÌ¾¥¿¥¤¥×"
+msgstr "ç„¡åŠ¹ãªç½²åã‚¿ã‚¤ãƒ—"
 
 #, fuzzy, c-format
 msgid "Uncertain signature by unknown key %s"
-msgstr "Ìµ¸ú¤Ê½ğÌ¾¥¿¥¤¥×"
+msgstr "ç„¡åŠ¹ãªç½²åã‚¿ã‚¤ãƒ—"
 
 #, fuzzy, c-format
 msgid "Uncertain signature by unknown key: %s"
-msgstr "Ìµ¸ú¤Ê½ğÌ¾¥¿¥¤¥×"
+msgstr "ç„¡åŠ¹ãªç½²åã‚¿ã‚¤ãƒ—"
 
 #, fuzzy
 msgid "Uncertain signature by unknown key"
-msgstr "Ìµ¸ú¤Ê½ğÌ¾¥¿¥¤¥×"
+msgstr "ç„¡åŠ¹ãªç½²åã‚¿ã‚¤ãƒ—"
 
 msgid "The key can be used for certification, signing and encryption."
-msgstr "¾ÚÌÀ¡¢½ğÌ¾¡¢°Å¹æ²½¤Ë»È¤¨¤ë¸°¤Ç¤¹¡£"
+msgstr "è¨¼æ˜ã€ç½²åã€æš—å·åŒ–ã«ä½¿ãˆã‚‹éµã§ã™ã€‚"
 
 msgid ""
 "The key can be used for certification and signing, but not for encryption."
-msgstr "¾ÚÌÀ¤ª¤è¤Ó½ğÌ¾¤Ë»È¤¨¤Ş¤¹¤¬¡¢°Å¹æ²½¤Ë¤Ï»È¤¨¤Ê¤¤¸°¤Ç¤¹¡£"
+msgstr "è¨¼æ˜ãŠã‚ˆã³ç½²åã«ä½¿ãˆã¾ã™ãŒã€æš—å·åŒ–ã«ã¯ä½¿ãˆãªã„éµã§ã™ã€‚"
 
 msgid "The key can be used for certification and encryption."
-msgstr "¾ÚÌÀ¤È°Å¹æ²½¤Ë»È¤¨¤ë¸°¤Ç¤¹¡£"
+msgstr "è¨¼æ˜ã¨æš—å·åŒ–ã«ä½¿ãˆã‚‹éµã§ã™ã€‚"
 
 msgid "The key can be used only for certification."
-msgstr "¾ÚÌÀ¤Ë¤Î¤ß»È¤¨¤ë¸°¤Ç¤¹¡£"
+msgstr "è¨¼æ˜ã«ã®ã¿ä½¿ãˆã‚‹éµã§ã™ã€‚"
 
 msgid ""
 "The key can be used only for signing and encryption, but not for "
 "certification."
-msgstr "½ğÌ¾¤ª¤è¤Ó°Å¹æ²½¤Ë»È¤¨¤Ş¤¹¤¬¡¢¾ÚÌÀ¤Ë¤Ï»È¤¨¤Ê¤¤¸°¤Ç¤¹¡£"
+msgstr "ç½²åãŠã‚ˆã³æš—å·åŒ–ã«ä½¿ãˆã¾ã™ãŒã€è¨¼æ˜ã«ã¯ä½¿ãˆãªã„éµã§ã™ã€‚"
 
 msgid "The key can be used only for signing."
-msgstr "½ğÌ¾¤Ë¤Î¤ß»È¤¨¤ë¸°¤Ç¤¹¡£"
+msgstr "ç½²åã«ã®ã¿ä½¿ãˆã‚‹éµã§ã™ã€‚"
 
 msgid "The key can be used only for encryption."
-msgstr "°Å¹æ²½¤Ë¤Î¤ß»È¤¨¤ë¸°¤Ç¤¹¡£"
+msgstr "æš—å·åŒ–ã«ã®ã¿ä½¿ãˆã‚‹éµã§ã™ã€‚"
 
 msgid "This key is useless."
-msgstr "¤³¤Î¸°¤Ï»È¤¨¤Ş¤»¤ó¡£"
+msgstr "ã“ã®éµã¯ä½¿ãˆã¾ã›ã‚“ã€‚"
 
 #, c-format
 msgid ""
@@ -972,12 +962,12 @@ msgid ""
 "%i secret keys imported\n"
 "%i secret keys unchanged"
 msgstr ""
-"%i ¸Ä¤Î¸ø³«¸°¤òÆÉ¤ß¹ş¤ß¤Ş¤·¤¿\n"
-"%i ¸Ä¤Î¸ø³«¸°¤ò¥¤¥ó¥İ¡¼¥È¤·¤Ş¤·¤¿\n"
-"%i ¸Ä¤Î¸ø³«¸°¤ÏÌµÊÑ¹¹¤Ç¤¹\n"
-"%i ¸Ä¤ÎÈëÌ©¸°¤òÆÉ¤ß¹ş¤ß¤Ş¤·¤¿\n"
-"%i ¸Ä¤ÎÈëÌ©¸°¤ò¥¤¥ó¥İ¡¼¥È¤·¤Ş¤·¤¿\n"
-"%i ¸Ä¤ÎÈëÌ©¸°¤ÏÌµÊÑ¹¹¤Ç¤¹"
+"%i å€‹ã®å…¬é–‹éµã‚’èª­ã¿è¾¼ã¿ã¾ã—ãŸ\n"
+"%i å€‹ã®å…¬é–‹éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ã¾ã—ãŸ\n"
+"%i å€‹ã®å…¬é–‹éµã¯ç„¡å¤‰æ›´ã§ã™\n"
+"%i å€‹ã®ç§˜å¯†éµã‚’èª­ã¿è¾¼ã¿ã¾ã—ãŸ\n"
+"%i å€‹ã®ç§˜å¯†éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ã¾ã—ãŸ\n"
+"%i å€‹ã®ç§˜å¯†éµã¯ç„¡å¤‰æ›´ã§ã™"
 
 msgid "A required engine component is not installed."
 msgstr ""
@@ -996,7 +986,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Name is too short."
-msgstr "Ì¾Á°¤¬Ä¹²á¤®¤Ş¤¹"
+msgstr "åå‰ãŒé•·éãã¾ã™"
 
 msgid "Email address is not valid."
 msgstr ""
@@ -1006,14 +996,14 @@ msgstr ""
 
 #, fuzzy
 msgid "_Details"
-msgstr "¾ÜºÙ"
+msgstr ""
 
 #, fuzzy
 msgid "GPA is the GNU Privacy Assistant."
-msgstr "GNU Privacy Assistant ¤Ë¤Ä¤¤¤ÆÍı²ò¤¹¤ë"
+msgstr "GNU Privacy Assistant ã«ã¤ã„ã¦ç†è§£ã™ã‚‹"
 
 msgid "About GPA"
-msgstr "GPA ¤Ë¤Ä¤¤¤Æ"
+msgstr "GPA ã«ã¤ã„ã¦"
 
 #. TRANSLATORS: The translation of this string should
 #. be your name and mail
@@ -1022,53 +1012,53 @@ msgstr ""
 
 #, fuzzy
 msgid "_Help"
-msgstr "/¥Ø¥ë¥× (_H)"
+msgstr "/ãƒ˜ãƒ«ãƒ— (_H)"
 
 #, fuzzy
 msgid "Open the GPA manual"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã¤ò³«¤¯"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’é–‹ã"
 
 #, fuzzy
 msgid "About this application"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã‚’æš—å·åŒ–ã™ã‚‹"
 
 #, fuzzy
 msgid "_Verify"
-msgstr "¸¡¾Ú"
+msgstr "æ¤œè¨¼"
 
 msgid "_Encrypt"
-msgstr "°Å¹æ²½ (_E)"
+msgstr "æš—å·åŒ– (_E)"
 
 #, fuzzy
 msgid "_Decrypt"
-msgstr "Éü¹æ²½"
+msgstr "å¾©å·åŒ–"
 
 #, fuzzy
 msgid "_Brief"
-msgstr "Í×Ìó"
+msgstr "è¦ç´„"
 
 #, fuzzy
 msgid "_Detailed"
-msgstr "¾ÜºÙ"
+msgstr "è©³ç´°"
 
 #, fuzzy
 msgid "_Keyring Manager"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #, fuzzy
 msgid "_Clipboard"
-msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼ (_C)"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ (_C)"
 
 #, fuzzy
 msgid "_File Manager"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #, fuzzy
 msgid "_Card Manager"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 msgid "Removing Secret Key"
-msgstr "ÈëÌ©¸°¤òºï½ü"
+msgstr "ç§˜å¯†éµã‚’å‰Šé™¤"
 
 msgid ""
 "If you delete this key, you won't be able to\n"
@@ -1076,95 +1066,95 @@ msgid ""
 "\n"
 "Are you really sure you want to delete it?"
 msgstr ""
-"¤³¤Î¸°¤òºï½ü¤¹¤ë¤È¡¢¤³¤Î¸°ÍÑ¤Ë°Å¹æ²½¤µ¤ì¤¿\n"
-"¥á¥Ã¥»¡¼¥¸¤òÆóÅÙ¤ÈÆÉ¤á¤Ê¤¯¤Ê¤ê¤Ş¤¹¡£\n"
+"ã“ã®éµã‚’å‰Šé™¤ã™ã‚‹ã¨ã€ã“ã®éµç”¨ã«æš—å·åŒ–ã•ã‚ŒãŸ\n"
+"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’äºŒåº¦ã¨èª­ã‚ãªããªã‚Šã¾ã™ã€‚\n"
 "\n"
-"ËÜÅö¤Ëºï½ü¤·¤Æ¤·¤Ş¤¦¤Î¤Ç¤¹¤«?"
+"æœ¬å½“ã«å‰Šé™¤ã—ã¦ã—ã¾ã†ã®ã§ã™ã‹?"
 
 msgid "Remove Key"
-msgstr "¸°¤òºï½ü"
+msgstr "éµã‚’å‰Šé™¤"
 
 msgid "You have selected the following key for removal:"
-msgstr "ºï½ü¤¹¤ë¸°¤ò°Ê²¼¤Î¤È¤ª¤êÁªÂò¤·¤Ş¤·¤¿:"
+msgstr "å‰Šé™¤ã™ã‚‹éµã‚’ä»¥ä¸‹ã®ã¨ãŠã‚Šé¸æŠã—ã¾ã—ãŸ:"
 
 msgid ""
 "This key has a secret key. Deleting this key cannot be undone, unless you "
 "have a backup copy."
 msgstr ""
-"¤³¤Î¸°¤Ë¤ÏÈëÌ©¸°¤¬¤¢¤ê¤Ş¤¹¡£¤³¤Î¸°¤òºï½ü¤¹¤ë¤È¡¢¥Ğ¥Ã¥¯¥¢¥Ã¥×¤¬¤Ê¤±¤ì¤ĞÆóÅÙ¤È"
-"¸µ¤Ë¤ÏÌá¤»¤Ş¤»¤ó¡£"
+"ã“ã®éµã«ã¯ç§˜å¯†éµãŒã‚ã‚Šã¾ã™ã€‚ã“ã®éµã‚’å‰Šé™¤ã™ã‚‹ã¨ã€ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãŒãªã‘ã‚Œã°äºŒåº¦ã¨"
+"å…ƒã«ã¯æˆ»ã›ã¾ã›ã‚“ã€‚"
 
 msgid ""
 "This key is a public key. Deleting this key cannot be undone easily, "
 "although you may be able to get a new copy  from the owner or from a key "
 "server."
 msgstr ""
-"¤³¤Î¸°¤Ï¸ø³«¸°¤Ç¤¹¡£ºï½ü¤·¤Æ¤â¸°¤Î½êÍ­¼Ô¤«¸°¥µ¡¼¥Ğ¡¼¤«¤é²ş¤á¤ÆÆ±¤¸¸°¤ò¼èÆÀ¤¹"
-"¤ë¤³¤È¤Ï¤Ç¤­¤ë¤â¤Î¤Î¡¢´ÊÃ±¤Ë¸µ¤ËÌá¤¹¤³¤È¤Ï¤Ç¤­¤Ş¤»¤ó¡£"
+"ã“ã®éµã¯å…¬é–‹éµã§ã™ã€‚å‰Šé™¤ã—ã¦ã‚‚éµã®æ‰€æœ‰è€…ã‹éµã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰æ”¹ã‚ã¦åŒã˜éµã‚’å–å¾—ã™"
+"ã‚‹ã“ã¨ã¯ã§ãã‚‹ã‚‚ã®ã®ã€ç°¡å˜ã«å…ƒã«æˆ»ã™ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚"
 
 msgid "Are you sure you want to delete this key?"
-msgstr "ËÜÅö¤Ë¤³¤Î¸°¤òºï½ü¤·¤Ş¤¹¤«?"
+msgstr "æœ¬å½“ã«ã“ã®éµã‚’å‰Šé™¤ã—ã¾ã™ã‹?"
 
 msgid "Edit Key"
-msgstr "¸°¤òÊÔ½¸"
+msgstr "éµã‚’ç·¨é›†"
 
 msgid "Change _passphrase"
-msgstr "¥Ñ¥¹¥Õ¥ì¡¼¥º¤òÊÑ¹¹ (_P)"
+msgstr "ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºã‚’å¤‰æ›´ (_P)"
 
 msgid "Expiry Date"
-msgstr "Í­¸ú´ü¸Â"
+msgstr "æœ‰åŠ¹æœŸé™"
 
 msgid "Change _expiration"
-msgstr "Í­¸ú´ü¸Â¤òÊÑ¹¹ (_E)"
+msgstr "æœ‰åŠ¹æœŸé™ã‚’å¤‰æ›´ (_E)"
 
 msgid "RSA"
 msgstr ""
 
 msgid "RSA (sign only)"
-msgstr "RSA (½ğÌ¾¤Î¤ß)"
+msgstr "RSA (ç½²åã®ã¿)"
 
 msgid "DSA"
 msgstr ""
 
 msgid "DSA (sign only)"
-msgstr "DSA (½ğÌ¾¤Î¤ß)"
+msgstr "DSA (ç½²åã®ã¿)"
 
 msgid "You must enter a key size."
 msgstr ""
 
 #, fuzzy
 msgid "Generate card key"
-msgstr "¸°¤òÀ¸À®"
+msgstr "éµã‚’ç”Ÿæˆ"
 
 msgid "Generate key"
-msgstr "¸°¤òÀ¸À®"
+msgstr "éµã‚’ç”Ÿæˆ"
 
 msgid "_Algorithm: "
-msgstr "¥¢¥ë¥´¥ê¥º¥à (_A): "
+msgstr "ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ  (_A): "
 
 msgid "_Key size (bits): "
-msgstr "¸°¤Î¥µ¥¤¥º (¥Ó¥Ã¥È) (_K): "
+msgstr "éµã®ã‚µã‚¤ã‚º (ãƒ“ãƒƒãƒˆ) (_K): "
 
 #, fuzzy
 msgid "User ID: "
-msgstr "¥æ¡¼¥¶ ID (_U): "
+msgstr "ãƒ¦ãƒ¼ã‚¶ ID (_U): "
 
 msgid "_Name: "
 msgstr ""
 
 msgid "_Email: "
-msgstr "_E ¥á¡¼¥ë: "
+msgstr "_E ãƒ¡ãƒ¼ãƒ«: "
 
 msgid "_Comment: "
-msgstr "¥³¥á¥ó¥È (_C): "
+msgstr "ã‚³ãƒ¡ãƒ³ãƒˆ (_C): "
 
 #, fuzzy
 msgid "_Expires: "
-msgstr "Í­¸ú´ü¸Â:"
+msgstr "æœ‰åŠ¹æœŸé™:"
 
 #, fuzzy
 msgid "Backup: "
-msgstr "¸°¤ò¥Ğ¥Ã¥¯¥¢¥Ã¥×"
+msgstr "éµã‚’ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—"
 
 msgid ""
 "If checked the encryption key will be created and stored to a backup file "
@@ -1178,12 +1168,12 @@ msgid ""
 "Your name will be part of the new key to make it easier for others to "
 "identify keys."
 msgstr ""
-"¥Õ¥ë¥Í¡¼¥à¤òµ­Æş¤·¤Æ¤¯¤À¤µ¤¤¡£\n"
+"ãƒ•ãƒ«ãƒãƒ¼ãƒ ã‚’è¨˜å…¥ã—ã¦ãã ã•ã„ã€‚\n"
 "\n"
-"Â¾¤Î¿Í¤¬¸°¤òÍÆ°×¤Ë¼±ÊÌ¤Ç¤­¤ë¤è¤¦¤Ë¡¢Ì¾Á°¤ò¿·¤·¤¤¸°¤Î°ìÉô¤Ë¤·¤Ş¤¹"
+"ä»–ã®äººãŒéµã‚’å®¹æ˜“ã«è­˜åˆ¥ã§ãã‚‹ã‚ˆã†ã«ã€åå‰ã‚’æ–°ã—ã„éµã®ä¸€éƒ¨ã«ã—ã¾ã™"
 
 msgid "Your Name:"
-msgstr "»áÌ¾:"
+msgstr "æ°å:"
 
 #, fuzzy
 msgid ""
@@ -1193,13 +1183,13 @@ msgid ""
 "to identify keys. If you have several email addresses, you can add further "
 "email addresses later."
 msgstr ""
-"E ¥á¡¼¥ë¥¢¥É¥ì¥¹¤ò¤Ò¤È¤Äµ­Æş¤·¤Æ²¼¤µ¤¤¡£\n"
+"E ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ã²ã¨ã¤è¨˜å…¥ã—ã¦ä¸‹ã•ã„ã€‚\n"
 "\n"
-"Â¾¤Î¿Í¤¬¸°¤ò´ÊÃ±¤Ë¼±ÊÌ¤Ç¤­¤ë¤è¤¦¤Ë¡¢E ¥á¡¼¥ë¥¢¥É¥ì¥¹¤ò¿·¤·¤¤¸°¤Î°ìÉô¤Ë¤·¤Ş"
-"¤¹¡£E ¥á¡¼¥ë¥¢¥É¥ì¥¹¤òÊ£¿ô»ı¤Ã¤Æ¤¤¤ë¤Î¤Ê¤é¡¢»Ä¤ê¤Ï¸å¤ÇÄÉ²Ã¤Ç¤­¤Ş¤¹¡£"
+"ä»–ã®äººãŒéµã‚’ç°¡å˜ã«è­˜åˆ¥ã§ãã‚‹ã‚ˆã†ã«ã€E ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æ–°ã—ã„éµã®ä¸€éƒ¨ã«ã—ã¾"
+"ã™ã€‚E ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¤‡æ•°æŒã£ã¦ã„ã‚‹ã®ãªã‚‰ã€æ®‹ã‚Šã¯å¾Œã§è¿½åŠ ã§ãã¾ã™ã€‚"
 
 msgid "Your Email Address:"
-msgstr "E ¥á¡¼¥ë¥¢¥É¥ì¥¹:"
+msgstr "E ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹:"
 
 msgid ""
 "It is recommended that you create a backup copy of your new key, once it has "
@@ -1207,23 +1197,23 @@ msgid ""
 "\n"
 "Do you want to create a backup copy?"
 msgstr ""
-"¿·¤·¤¤¸°¤¬½ĞÍè¾å¤¬¤Ã¤¿¤é¡¢¥Ğ¥Ã¥¯¥¢¥Ã¥×¥³¥Ô¡¼¤òºîÀ®¤¹¤ë¤³¤È¤ò¤ª´«¤á¤·¤Ş¤¹¡£\n"
-"¥Ğ¥Ã¥¯¥¢¥Ã¥×¥³¥Ô¡¼¤òºî¤ê¤Ş¤¹¤«¡©"
+"æ–°ã—ã„éµãŒå‡ºæ¥ä¸ŠãŒã£ãŸã‚‰ã€ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚³ãƒ”ãƒ¼ã‚’ä½œæˆã™ã‚‹ã“ã¨ã‚’ãŠå‹§ã‚ã—ã¾ã™ã€‚\n"
+"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚³ãƒ”ãƒ¼ã‚’ä½œã‚Šã¾ã™ã‹ï¼Ÿ"
 
 msgid "Create _backup copy"
-msgstr "¥Ğ¥Ã¥¯¥¢¥Ã¥×¤ÎºîÀ® (_B)"
+msgstr "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã®ä½œæˆ (_B)"
 
 msgid "Do it _later"
-msgstr "¸å¤Ç (_L)"
+msgstr "å¾Œã§ (_L)"
 
 msgid ""
 "Your key is being generated.\n"
 "\n"
 "Even on fast computers this may take a while. Please be patient."
 msgstr ""
-"¸°¤òºîÀ®¤·¤Æ¤¤¤Ş¤¹¡£\n"
+"éµã‚’ä½œæˆã—ã¦ã„ã¾ã™ã€‚\n"
 "\n"
-"¹âÂ®¤Ê¥³¥ó¥Ô¥å¡¼¥¿¤Ç¤â¤·¤Ğ¤é¤¯¤«¤«¤ê¤Ş¤¹¡£²æËı¤·¤Æ²¼¤µ¤¤¡£"
+"é«˜é€Ÿãªã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã§ã‚‚ã—ã°ã‚‰ãã‹ã‹ã‚Šã¾ã™ã€‚æˆ‘æ…¢ã—ã¦ä¸‹ã•ã„ã€‚"
 
 #, fuzzy, c-format
 msgid ""
@@ -1232,15 +1222,15 @@ msgid ""
 "You have successfully generated a key. The key is indefinitely valid and has "
 "a length of %d bits."
 msgstr ""
-"¤ª¤á¤Ç¤È¤¦¤´¤¶¤¤¤Ş¤¹¡ª\n"
-"¸°¤ÎºîÀ®¤ËÀ®¸ù¤·¤Ş¤·¤¿¡£¤³¤Î¸°¤ÏÌµ´ü¸Â¤ËÍ­¸ú¤Ç¡¢Ä¹¤µ¤Ï 1024 ¥Ó¥Ã¥È¤Ç¤¹¡£"
+"ãŠã‚ã§ã¨ã†ã”ã–ã„ã¾ã™ï¼\n"
+"éµã®ä½œæˆã«æˆåŠŸã—ã¾ã—ãŸã€‚ã“ã®éµã¯ç„¡æœŸé™ã«æœ‰åŠ¹ã§ã€é•·ã•ã¯ 1024 ãƒ“ãƒƒãƒˆã§ã™ã€‚"
 
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
 msgstr ""
-"GnuPG ¤Ï¿®ÍÑÅÙ¥Ç¡¼¥¿¥Ù¡¼¥¹¤òºÆ¹½ÃÛ¤·¤Æ¤¤¤Ş¤¹¡£\n"
-"¤·¤Ğ¤é¤¯¤ªÂÔ¤Á¤¯¤À¤µ¤¤¡£"
+"GnuPG ã¯ä¿¡ç”¨åº¦ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’å†æ§‹ç¯‰ã—ã¦ã„ã¾ã™ã€‚\n"
+"ã—ã°ã‚‰ããŠå¾…ã¡ãã ã•ã„ã€‚"
 
 msgid ""
 "This columns lists the type of the certificate.  A 'P' denotes OpenPGP and a "
@@ -1251,7 +1241,7 @@ msgid "The Expiry Date is the date until the certificate is valid."
 msgstr ""
 
 msgid "Owner Trust"
-msgstr "½êÍ­¼Ô¤Î¿®ÍÑÅÙ"
+msgstr "æ‰€æœ‰è€…ã®ä¿¡ç”¨åº¦"
 
 msgid ""
 "The Owner Trust has been set by you and describes how far you trust the "
@@ -1261,7 +1251,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Validity"
-msgstr "¸°¤ÎÍ­¸úÀ­"
+msgstr "éµã®æœ‰åŠ¹æ€§"
 
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
@@ -1274,274 +1264,274 @@ msgid ""
 msgstr ""
 
 msgid "No keys selected for signing."
-msgstr "½ğÌ¾¤¹¤ë¸°¤¬ÁªÂò¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+msgstr "ç½²åã™ã‚‹éµãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 msgid ""
 "You do not have a private key yet. Do you want to generate one now "
 "(recommended) or do it later?"
 msgstr ""
-"¤Ş¤ÀÈëÌ©¸°¤¬¤¢¤ê¤Ş¤»¤ó¡£º£¤¹¤°ºîÀ®¤·¤Ş¤¹¤« (¢«¿ä¾©)¡¢¤½¤ì¤È¤â¸å¤Ë¤·¤Ş¤¹¤«?"
+"ã¾ã ç§˜å¯†éµãŒã‚ã‚Šã¾ã›ã‚“ã€‚ä»Šã™ãä½œæˆã—ã¾ã™ã‹ (â†æ¨å¥¨)ã€ãã‚Œã¨ã‚‚å¾Œã«ã—ã¾ã™ã‹?"
 
 msgid "_Generate key now"
-msgstr "º£¤¹¤°¸°¤òºîÀ®¤¹¤ë (_G)"
+msgstr "ä»Šã™ãéµã‚’ä½œæˆã™ã‚‹ (_G)"
 
 msgid ""
 "You do not have a backup copy of your private key yet. Do you want to backup "
 "your key now (recommended) or do it later?"
 msgstr ""
-"¤Ş¤ÀÈëÌ©¸°¤Î¥Ğ¥Ã¥¯¥¢¥Ã¥×¤¬¤¢¤ê¤Ş¤»¤ó¡£º£¤¹¤°¸°¤ò¥Ğ¥Ã¥¯¥¢¥Ã¥×¤·¤Ş¤¹¤« (¢«¿ä"
-"¾©)¡¢¤½¤ì¤È¤â¸å¤Ë¤·¤Ş¤¹¤«¡©"
+"ã¾ã ç§˜å¯†éµã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãŒã‚ã‚Šã¾ã›ã‚“ã€‚ä»Šã™ãéµã‚’ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã—ã¾ã™ã‹ (â†æ¨"
+"å¥¨)ã€ãã‚Œã¨ã‚‚å¾Œã«ã—ã¾ã™ã‹ï¼Ÿ"
 
 msgid "_Backup key now"
-msgstr "º£¤¹¤°¸°¤ò¥Ğ¥Ã¥¯¥¢¥Ã¥×¤¹¤ë (_B)"
+msgstr "ä»Šã™ãéµã‚’ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã™ã‚‹ (_B)"
 
 msgid "Only keys of the same procotol may be copied."
 msgstr ""
 
 #, fuzzy
 msgid "_Keys"
-msgstr "/¸° (_K)"
+msgstr "/éµ (_K)"
 
 #, fuzzy
 msgid "_Server"
-msgstr "/¥µ¡¼¥Ğ (_S)"
+msgstr "/ã‚µãƒ¼ãƒ (_S)"
 
 #, fuzzy
 msgid "Copy _Fingerprint"
-msgstr "»ØÌæ"
+msgstr ""
 
 #, fuzzy
 msgid "Copy the fingerprints"
-msgstr "»ØÌæ"
+msgstr ""
 
 #, fuzzy
 msgid "Copy Private Key"
-msgstr "/ÈëÌ©¸°¤òÊÔ½¸... (_E)"
+msgstr ""
 
 #, fuzzy
 msgid "Copy a single private key"
-msgstr "ÁªÂò¤µ¤ì¤¿ÈëÌ©¸°¤òÊÔ½¸"
+msgstr ""
 
 #, fuzzy
 msgid "Select all certificates"
-msgstr "¼º¸ú¾ÚÌÀ¤ÎÀ¸À® (_V)"
+msgstr "å¤±åŠ¹è¨¼æ˜ã®ç”Ÿæˆ (_V)"
 
 msgid "Refresh the keyring"
 msgstr ""
 
 #, fuzzy
 msgid "_New key..."
-msgstr "/¸° (K)/¸°¤òºîÀ®... (_N)"
+msgstr "/éµ (K)/éµã‚’ä½œæˆ... (_N)"
 
 #, fuzzy
 msgid "Generate a new key"
-msgstr "¸°¤òÀ¸À®"
+msgstr "éµã‚’ç”Ÿæˆ"
 
 #, fuzzy
 msgid "_Delete keys"
-msgstr "/¸°¤òºï½ü... (_D)"
+msgstr "/éµã‚’å‰Šé™¤... (_D)"
 
 msgid "Remove the selected key"
-msgstr "ÁªÂò¤µ¤ì¤¿¸°¤òºï½ü"
+msgstr "é¸æŠã•ã‚ŒãŸéµã‚’å‰Šé™¤"
 
 #, fuzzy
 msgid "_Sign Keys..."
-msgstr "/¸°¤Ë½ğÌ¾... (_S)"
+msgstr "/éµã«ç½²å... (_S)"
 
 msgid "Sign the selected key"
-msgstr "ÁªÂò¤µ¤ì¤¿¸°¤Ë½ğÌ¾¤¹¤ë"
+msgstr "é¸æŠã•ã‚ŒãŸéµã«ç½²åã™ã‚‹"
 
 #, fuzzy
 msgid "Set _Owner Trust..."
-msgstr "/½êÍ­¼Ô¤Î¿®ÍÑÅÙ¤ò»ØÄê... (_O)"
+msgstr "/æ‰€æœ‰è€…ã®ä¿¡ç”¨åº¦ã‚’æŒ‡å®š... (_O)"
 
 #, fuzzy
 msgid "Set owner trust of the selected key"
-msgstr "ÁªÂò¤µ¤ì¤¿¸°¤òºï½ü"
+msgstr "é¸æŠã•ã‚ŒãŸéµã‚’å‰Šé™¤"
 
 #, fuzzy
 msgid "_Edit Private Key..."
-msgstr "/ÈëÌ©¸°¤òÊÔ½¸... (_E)"
+msgstr "/ç§˜å¯†éµã‚’ç·¨é›†... (_E)"
 
 msgid "Edit the selected private key"
-msgstr "ÁªÂò¤µ¤ì¤¿ÈëÌ©¸°¤òÊÔ½¸"
+msgstr "é¸æŠã•ã‚ŒãŸç§˜å¯†éµã‚’ç·¨é›†"
 
 #, fuzzy
 msgid "_Import Keys..."
-msgstr "¸°¤ò¥¤¥ó¥İ¡¼¥È"
+msgstr "éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"
 
 msgid "Import Keys"
-msgstr "¸°¤ò¥¤¥ó¥İ¡¼¥È"
+msgstr "éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"
 
 #, fuzzy
 msgid "E_xport Keys..."
-msgstr "/¸°¤ò¥¨¥¯¥¹¥İ¡¼¥È... (_X)"
+msgstr "/éµã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ... (_X)"
 
 msgid "Export Keys"
-msgstr "¸°¤ò¥¨¥¯¥¹¥İ¡¼¥È"
+msgstr "éµã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
 
 #, fuzzy
 msgid "_Backup..."
-msgstr "/¥Ğ¥Ã¥¯¥¢¥Ã¥×... (_B)"
+msgstr "/ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—... (_B)"
 
 #, fuzzy
 msgid "Backup key"
-msgstr "¸°¤ò¥Ğ¥Ã¥¯¥¢¥Ã¥×"
+msgstr "éµã‚’ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—"
 
 #, fuzzy
 msgid "_Retrieve Keys..."
-msgstr "/¥µ¡¼¥Ğ (S)/¸°¤ò¼èÆÀ... (_R)"
+msgstr "/ã‚µãƒ¼ãƒ (S)/éµã‚’å–å¾—... (_R)"
 
 #, fuzzy
 msgid "Retrieve keys from server"
-msgstr "¸°¤ò¥µ¡¼¥Ğ¤«¤é¼õ¿®"
+msgstr "éµã‚’ã‚µãƒ¼ãƒã‹ã‚‰å—ä¿¡"
 
 #, fuzzy
 msgid "Re_fresh Keys"
-msgstr "¸°¤òºï½ü"
+msgstr "éµã‚’å‰Šé™¤"
 
 #, fuzzy
 msgid "Refresh keys from server"
-msgstr "¸°¤ò¥µ¡¼¥Ğ¤«¤é¼õ¿®"
+msgstr "éµã‚’ã‚µãƒ¼ãƒã‹ã‚‰å—ä¿¡"
 
 #, fuzzy
 msgid "_Send Keys..."
-msgstr "/¸°¤Ë½ğÌ¾... (_S)"
+msgstr "/éµã«ç½²å... (_S)"
 
 #, fuzzy
 msgid "Send keys to server"
-msgstr "/¸°¤ò¥µ¡¼¥Ğ¤ØÁ÷¿®... (_N)"
+msgstr "/éµã‚’ã‚µãƒ¼ãƒã¸é€ä¿¡... (_N)"
 
 msgid "Show Brief Keylist"
-msgstr "Í×ÌóÈÇ¤Î¸°¥ê¥¹¥È¤òÉ½¼¨"
+msgstr "è¦ç´„ç‰ˆã®éµãƒªã‚¹ãƒˆã‚’è¡¨ç¤º"
 
 msgid "Show Key Details"
-msgstr "¸°¤Î¾ÜºÙ¤òÉ½¼¨"
+msgstr "éµã®è©³ç´°ã‚’è¡¨ç¤º"
 
 msgid "Edit"
-msgstr "ÊÔ½¸"
+msgstr "ç·¨é›†"
 
 msgid "Delete"
-msgstr "ºï½ü"
+msgstr "å‰Šé™¤"
 
 msgid "Sign"
-msgstr "½ğÌ¾¤¹¤ë"
+msgstr "ç½²åã™ã‚‹"
 
 msgid "Export"
-msgstr "¥¨¥¯¥¹¥İ¡¼¥È"
+msgstr "ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
 
 msgid "Import"
-msgstr "¥¤¥ó¥İ¡¼¥È"
+msgstr "ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"
 
 #, fuzzy
 msgid "Selected default key:"
-msgstr "ÁªÂò¤µ¤ì¤¿¥Ç¥Õ¥©¥ë¥È¤Î¸°:"
+msgstr "é¸æŠã•ã‚ŒãŸãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµ:"
 
 #, fuzzy
 msgid "No default key selected in the preferences."
-msgstr "Êİ¸î¤¹¤ë¥Õ¥¡¥¤¥ë¤¬ÁªÂò¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+msgstr "ä¿è­·ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #, fuzzy
 msgid "Key Manager"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #, fuzzy
 msgid "The key has both a smartcard based private part and a public part"
-msgstr "¤³¤Î¸°¤ÏÈëÌ©¸°¤È¸ø³«¸°¤¬¤¢¤ë"
+msgstr "ã“ã®éµã¯ç§˜å¯†éµã¨å…¬é–‹éµãŒã‚ã‚‹"
 
 msgid "The key has both a private and a public part"
-msgstr "¤³¤Î¸°¤ÏÈëÌ©¸°¤È¸ø³«¸°¤¬¤¢¤ë"
+msgstr "ã“ã®éµã¯ç§˜å¯†éµã¨å…¬é–‹éµãŒã‚ã‚‹"
 
 msgid "The key has only a public part"
-msgstr "¤³¤Î¸°¤Ï¸ø³«¸°¤·¤«¤Ê¤¤"
+msgstr "ã“ã®éµã¯å…¬é–‹éµã—ã‹ãªã„"
 
 #, c-format
 msgid "%s %u bits"
-msgstr "%s %u ¥Ó¥Ã¥È"
+msgstr "%s %u ãƒ“ãƒƒãƒˆ"
 
 msgid "No keys selected"
-msgstr "¸°¤¬ÁªÂò¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+msgstr "éµãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #, fuzzy, c-format
 msgid "%d key selected"
 msgid_plural "%d keys selected"
-msgstr[0] "%d ¸Ä¤Î¸°¤¬ÁªÂò¤µ¤ì¤Æ¤¤¤Ş¤¹"
-msgstr[1] "%d ¸Ä¤Î¸°¤¬ÁªÂò¤µ¤ì¤Æ¤¤¤Ş¤¹"
+msgstr[0] "%d å€‹ã®éµãŒé¸æŠã•ã‚Œã¦ã„ã¾ã™"
+msgstr[1] "%d å€‹ã®éµãŒé¸æŠã•ã‚Œã¦ã„ã¾ã™"
 
 #, fuzzy
 msgid "User name:"
-msgstr "¥æ¡¼¥¶Ì¾:"
+msgstr "ãƒ¦ãƒ¼ã‚¶å:"
 
 msgid "Expires at:"
-msgstr "Í­¸ú´ü¸Â:"
+msgstr "æœ‰åŠ¹æœŸé™:"
 
 msgid "Owner Trust:"
-msgstr "½êÍ­¼Ô¤Î¿®ÍÑÅÙ:"
+msgstr "æ‰€æœ‰è€…ã®ä¿¡ç”¨åº¦:"
 
 #, fuzzy
 msgid "Key validity:"
-msgstr "¸°¤ÎÍ­¸úÀ­:"
+msgstr "éµã®æœ‰åŠ¹æ€§:"
 
 #, fuzzy
 msgid "Key type:"
-msgstr "¸°¥¿¥¤¥×:"
+msgstr "éµã‚¿ã‚¤ãƒ—:"
 
 msgid "Created at:"
-msgstr "ºîÀ®Æü:"
+msgstr "ä½œæˆæ—¥:"
 
 #, fuzzy
 msgid "Last update:"
-msgstr "¥æ¡¼¥¶Ì¾:"
+msgstr "æœ€çµ‚æ›´æ–°:"
 
 msgid "Details"
-msgstr "¾ÜºÙ"
+msgstr "è©³ç´°"
 
 #, fuzzy
 msgid "User IDs"
-msgstr "¥æ¡¼¥¶ ID (_U): "
+msgstr "ãƒ¦ãƒ¼ã‚¶ ID"
 
 msgid "Show signatures on user name:"
-msgstr "¥æ¡¼¥¶Ì¾¤ËÂĞ¤¹¤ë½ğÌ¾¤òÉ½¼¨"
+msgstr "ãƒ¦ãƒ¼ã‚¶åã«å¯¾ã™ã‚‹ç½²åã‚’è¡¨ç¤º"
 
 #, fuzzy
 msgid "Chain"
-msgstr "½ğÌ¾²ÄÇ½"
+msgstr "ç½²åå¯èƒ½"
 
 msgid "Signatures"
-msgstr "½ğÌ¾"
+msgstr "ç½²å"
 
 msgid "All signatures"
-msgstr "¤¹¤Ù¤Æ¤Î½ğÌ¾"
+msgstr "ã™ã¹ã¦ã®ç½²å"
 
 msgid "Subkeys"
-msgstr "Éû¸°"
+msgstr "å‰¯éµ"
 
 #, fuzzy
 msgid "Key"
-msgstr "/¸° (_K)"
+msgstr "/éµ (_K)"
 
 msgid "Tofu"
 msgstr ""
 
 msgid "Sign Key"
-msgstr "¸°¤Ë½ğÌ¾"
+msgstr "éµã«ç½²å"
 
 msgid "Do you want to sign the following key?"
-msgstr "°Ê²¼¤Î¸°¤Ë½ğÌ¾¤·¤Ş¤¹¤«?"
+msgstr "ä»¥ä¸‹ã®éµã«ç½²åã—ã¾ã™ã‹?"
 
 msgid ""
 "Check the name and fingerprint carefully to be sure that it really is the "
 "key you want to sign."
-msgstr "ËÜÅö¤Ë¤½¤ì¤¬½ğÌ¾¤·¤¿¤¤¸°¤Ê¤Î¤«¡¢Ì¾Á°¤È»ØÌæ¤ò¤è¤¯¸«¤Æ³ÎÇ§¤·¤Æ²¼¤µ¤¤¡£"
+msgstr "æœ¬å½“ã«ãã‚ŒãŒç½²åã—ãŸã„éµãªã®ã‹ã€åå‰ã¨æŒ‡ç´‹ã‚’ã‚ˆãè¦‹ã¦ç¢ºèªã—ã¦ä¸‹ã•ã„ã€‚"
 
 msgid "All user names in this key will be signed."
-msgstr "¤³¤Î¸°¤Ë¤¢¤ë¥æ¡¼¥¶Ì¾¤Ï¡¢¤¹¤Ù¤Æ½ğÌ¾¤µ¤ì¤Ş¤¹¡£"
+msgstr "ã“ã®éµã«ã‚ã‚‹ãƒ¦ãƒ¼ã‚¶åã¯ã€ã™ã¹ã¦ç½²åã•ã‚Œã¾ã™ã€‚"
 
 msgid "The key will be signed with your default private key."
-msgstr "¤³¤Î¸°¤Ï¥Ç¥Õ¥©¥ë¥È¤ÎÈëÌ©¸°¤Ç½ğÌ¾¤µ¤ì¤Ş¤¹¡£"
+msgstr "ã“ã®éµã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ç§˜å¯†éµã§ç½²åã•ã‚Œã¾ã™ã€‚"
 
 msgid "Sign only _locally"
-msgstr "¥í¡¼¥«¥ë¤Ç¤À¤±½ğÌ¾ (_L)"
+msgstr "ãƒ­ãƒ¼ã‚«ãƒ«ã§ã ã‘ç½²å (_L)"
 
 msgid ""
 "It seems that no CMS engine is installed.\n"
@@ -1556,32 +1546,32 @@ msgid ""
 "The private key you selected as default is no longer available.\n"
 "GPA will try to choose a new default key automatically."
 msgstr ""
-"¥Ç¥Õ¥©¥ë¥È¤È¤·¤ÆÁª¤ó¤Ç¤¢¤ë¸°¤¬¡¢¤â¤¦»È¤¨¤Ê¤¯¤Ê¤Ã¤Æ¤¤¤Ş¤¹¡£\n"
-"GPA ¤Ï¡¢¿·¤·¤¤¥Ç¥Õ¥©¥ë¥È¸°¤ò¼«Æ°ÁªÂò¤·¤Æ¤ß¤Ş¤¹¡£"
+"ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¨ã—ã¦é¸ã‚“ã§ã‚ã‚‹éµãŒã€ã‚‚ã†ä½¿ãˆãªããªã£ã¦ã„ã¾ã™ã€‚\n"
+"GPA ã¯ã€æ–°ã—ã„ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆéµã‚’è‡ªå‹•é¸æŠã—ã¦ã¿ã¾ã™ã€‚"
 
 msgid "Change key ownertrust"
-msgstr "¸°¤Î½êÍ­¼Ô¿®ÍÑÅÙ¤òÊÑ¹¹"
+msgstr "éµã®æ‰€æœ‰è€…ä¿¡ç”¨åº¦ã‚’å¤‰æ›´"
 
 msgid "_Unknown"
-msgstr "Ì¤³ÎÇ§ (_U)"
+msgstr "æœªç¢ºèª (_U)"
 
 msgid ""
 "You don't know how much to trust this user to verify other people's keys.\n"
 msgstr ""
-"Â¾¤Î¿Í¤¿¤Á¤Î¸°¤ò¸¡¾Ú¤¹¤ëºİ¤Ë¤³¤Î¥æ¡¼¥¶¤ò¤É¤ì¤À¤±¿®ÍÑ¤¹¤ë¤«¤Ï·è¤Ş¤Ã¤Æ¤¤¤Ê¤¤¤È"
-"¤¤¤¦¤³¤È¤Ç¤¹¡£\n"
+"ä»–ã®äººãŸã¡ã®éµã‚’æ¤œè¨¼ã™ã‚‹éš›ã«ã“ã®ãƒ¦ãƒ¼ã‚¶ã‚’ã©ã‚Œã ã‘ä¿¡ç”¨ã™ã‚‹ã‹ã¯æ±ºã¾ã£ã¦ã„ãªã„ã¨"
+"ã„ã†ã“ã¨ã§ã™ã€‚\n"
 
 msgid "_Never"
-msgstr "ÉÔ¿® (_N)"
+msgstr "ä¸ä¿¡ (_N)"
 
 msgid ""
 "You don't trust this user at all to verify the validity of other people's "
 "keys at all.\n"
 msgstr ""
-"Â¾¤Î¿Í¤¿¤Á¤Î¸°¤ò¸¡¾Ú¤¹¤ëºİ¤Ë¤Ï¡¢¤³¤Î¥æ¡¼¥¶¤ò°ìÀÚ¿®ÍÑ¤·¤Ê¤¤¤È¤¤¤¦¤³¤È¤Ç¤¹¡£\n"
+"ä»–ã®äººãŸã¡ã®éµã‚’æ¤œè¨¼ã™ã‚‹éš›ã«ã¯ã€ã“ã®ãƒ¦ãƒ¼ã‚¶ã‚’ä¸€åˆ‡ä¿¡ç”¨ã—ãªã„ã¨ã„ã†ã“ã¨ã§ã™ã€‚\n"
 
 msgid "_Marginal"
-msgstr "°ìÉô (_M)"
+msgstr "ä¸€éƒ¨ (_M)"
 
 msgid ""
 "You don't trust this user's ability to verify the validity of other people's "
@@ -1590,25 +1580,25 @@ msgid ""
 "by this user valid if it is also signed by at least other two marginally "
 "trusted users with valid keys\n"
 msgstr ""
-"¤³¤Î¥æ¡¼¥¶¤Î¸À¤¦¤³¤È¤À¤±¤Ë´ğ¤Å¤¤¤ÆÂ¾¤Î¿Í¤¿¤Á¤Î¸°¤òÍ­¸ú¤À¤È¤ß¤Ê¤¹¤Û¤É¤Ë¤Ï¡¢¤³"
-"¤Î¥æ¡¼¥¶¤Î¸¡¾ÚÇ½ÎÏ¤ò¿®ÍÑ¤·¤Ê¤¤¤È¤¤¤¦¤³¤È¤Ç¤¹¡£\n"
-"¤È¤Ï¤¤¤¨¡¢¤³¤Î¥æ¡¼¥¶¤Î¸°¤¬Í­¸ú¤Ç¤¢¤ì¤Ğ¡¢¤³¤Î¥æ¡¼¥¶¤ÈÂ¾¤Î 2 ¿Í°Ê¾å¤Î¡Ö°ìÉô¡×Åª"
-"¤Ê¿®ÍÑÅÙ¤Î¿Í¤ÎÍ­¸ú¤Ê¸°¤Ë¤è¤Ã¤Æ½ğÌ¾¤µ¤ì¤¿¸°¤òÍ­¸ú¤È¤ß¤Ê¤·¤Ş¤¹¡£\n"
+"ã“ã®ãƒ¦ãƒ¼ã‚¶ã®è¨€ã†ã“ã¨ã ã‘ã«åŸºã¥ã„ã¦ä»–ã®äººãŸã¡ã®éµã‚’æœ‰åŠ¹ã ã¨ã¿ãªã™ã»ã©ã«ã¯ã€ã“"
+"ã®ãƒ¦ãƒ¼ã‚¶ã®æ¤œè¨¼èƒ½åŠ›ã‚’ä¿¡ç”¨ã—ãªã„ã¨ã„ã†ã“ã¨ã§ã™ã€‚\n"
+"ã¨ã¯ã„ãˆã€ã“ã®ãƒ¦ãƒ¼ã‚¶ã®éµãŒæœ‰åŠ¹ã§ã‚ã‚Œã°ã€ã“ã®ãƒ¦ãƒ¼ã‚¶ã¨ä»–ã® 2 äººä»¥ä¸Šã®ã€Œä¸€éƒ¨ã€çš„"
+"ãªä¿¡ç”¨åº¦ã®äººã®æœ‰åŠ¹ãªéµã«ã‚ˆã£ã¦ç½²åã•ã‚ŒãŸéµã‚’æœ‰åŠ¹ã¨ã¿ãªã—ã¾ã™ã€‚\n"
 
 msgid "_Full"
-msgstr "´°Á´ (_F)"
+msgstr "å®Œå…¨ (_F)"
 
 msgid ""
 "You trust this user's ability to verify the validity of other people's keys "
 "so much, that you'll consider valid any key signed by him/her, provided this "
 "user's key is valid.\n"
 msgstr ""
-"Â¾¤Î¿Í¤¿¤Á¤Î¸°¤ÎÍ­¸úÀ­¤ò¸¡¾Ú¤¹¤ë¤³¤Î¥æ¡¼¥¶¤ÎÇ½ÎÏ¤ò¿®ÍÑ¤·¤Æ¡¢¤³¤Î¿Í¤¬½ğÌ¾¤·¤¿"
-"¸°¤ò¤¹¤Ù¤ÆÍ­¸ú¤È¤ß¤Ê¤¹¤È¤¤¤¦¤³¤È¤Ç¤¹¡£¤¿¤À¤·¡¢¤³¤Î¥æ¡¼¥¶¤Î¸°¤¬Í­¸ú¤Ç¤¢¤ì¤Ğ¡¢"
-"¤Ç¤¹¡£\n"
+"ä»–ã®äººãŸã¡ã®éµã®æœ‰åŠ¹æ€§ã‚’æ¤œè¨¼ã™ã‚‹ã“ã®ãƒ¦ãƒ¼ã‚¶ã®èƒ½åŠ›ã‚’ä¿¡ç”¨ã—ã¦ã€ã“ã®äººãŒç½²åã—ãŸ"
+"éµã‚’ã™ã¹ã¦æœ‰åŠ¹ã¨ã¿ãªã™ã¨ã„ã†ã“ã¨ã§ã™ã€‚ãŸã ã—ã€ã“ã®ãƒ¦ãƒ¼ã‚¶ã®éµãŒæœ‰åŠ¹ã§ã‚ã‚Œã°ã€"
+"ã§ã™ã€‚\n"
 
 msgid "U_ltimate"
-msgstr "µæ¶Ë (_L)"
+msgstr "ç©¶æ¥µ (_L)"
 
 msgid ""
 "You consider this key valid, and trust the user so much that you will "
@@ -1617,26 +1607,26 @@ msgid ""
 "(Warning: This is intended to be used for keys you own. Don't use it with "
 "other people's keys unless you really know what you are doing)\n"
 msgstr ""
-"¤³¤Î¸°¤òÍ­¸ú¤È¤ß¤Ê¤·¡¢¤«¤Ä¡¢¤³¤Î¥æ¡¼¥¶¤¬½ğÌ¾¤·¤¿¸°¤ò¤¹¤Ù¤Æ´°Á´¤ËÍ­¸ú¤È¤ß¤Ê¤¹"
-"¤Û¤É¡¢¤³¤Î¿Í¤ò¿®ÍÑ¤¹¤ë¤È¤¤¤¦¤³¤È¤Ç¤¹¡£\n"
+"ã“ã®éµã‚’æœ‰åŠ¹ã¨ã¿ãªã—ã€ã‹ã¤ã€ã“ã®ãƒ¦ãƒ¼ã‚¶ãŒç½²åã—ãŸéµã‚’ã™ã¹ã¦å®Œå…¨ã«æœ‰åŠ¹ã¨ã¿ãªã™"
+"ã»ã©ã€ã“ã®äººã‚’ä¿¡ç”¨ã™ã‚‹ã¨ã„ã†ã“ã¨ã§ã™ã€‚\n"
 "\n"
-"(·Ù¹ğ: ¤³¤ì¤Ï¼«Ê¬¤Î¸°¤Ë»È¤¦¤è¤¦°Õ¿Ş¤µ¤ì¤¿¤â¤Î¤Ç¤¹¡£¼«Ê¬¤¬²¿¤ò¤·¤Æ¤¤¤ë¤«ËÜÅö¤Ë"
-"Ê¬¤«¤Ã¤Æ¤¤¤ë¤Î¤Ç¤Ê¤±¤ì¤Ğ¡¢Â¾¤Î¿Í¤¿¤Á¤ËÂĞ¤·¤Æ¤³¤Î¿®ÍÑÅÙ¤ò»È¤ï¤Ê¤¤¤Ç¤¯¤À¤µ"
-"¤¤¡£)\n"
+"(è­¦å‘Š: ã“ã‚Œã¯è‡ªåˆ†ã®éµã«ä½¿ã†ã‚ˆã†æ„å›³ã•ã‚ŒãŸã‚‚ã®ã§ã™ã€‚è‡ªåˆ†ãŒä½•ã‚’ã—ã¦ã„ã‚‹ã‹æœ¬å½“ã«"
+"åˆ†ã‹ã£ã¦ã„ã‚‹ã®ã§ãªã‘ã‚Œã°ã€ä»–ã®äººãŸã¡ã«å¯¾ã—ã¦ã“ã®ä¿¡ç”¨åº¦ã‚’ä½¿ã‚ãªã„ã§ãã ã•"
+"ã„ã€‚)\n"
 
 msgid ""
 "In \"Passphrase\" and \"Repeat passphrase\",\n"
 "you must enter the same passphrase."
 msgstr ""
-"\"¥Ñ¥¹¥ï¡¼¥É\" ¤È \"ºÆÆşÎÏ\" ¤Ë¤Ï\n"
-"Æ±¤¸¥Ñ¥¹¥ï¡¼¥É¤òÆşÎÏ¤·¤Ê¤¯¤Æ¤Ï¤Ê¤ê¤Ş¤»¤ó¡£"
+"\"ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰\" ã¨ \"å†å…¥åŠ›\" ã«ã¯\n"
+"åŒã˜ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ãªãã¦ã¯ãªã‚Šã¾ã›ã‚“ã€‚"
 
 msgid ""
 "You did not enter a passphrase.\n"
 "It is needed to protect your private key."
 msgstr ""
-"¥Ñ¥¹¥ï¡¼¥É¤¬ÆşÎÏ¤µ¤ì¤Ş¤»¤ó¤Ç¤·¤¿¡£\n"
-"ÈëÌ©¸°¤ò¼é¤ë¤¿¤á¤ËÉ¬Í×¤Ç¤¹¡£"
+"ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒå…¥åŠ›ã•ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚\n"
+"ç§˜å¯†éµã‚’å®ˆã‚‹ãŸã‚ã«å¿…è¦ã§ã™ã€‚"
 
 msgid ""
 "Warning: You have entered a passphrase\n"
@@ -1644,29 +1634,29 @@ msgid ""
 "\n"
 "Please enter a new passphrase."
 msgstr ""
-"·Ù¹ğ: ÌÀ¤é¤«¤Ë·øÏ´¤Ç¤Ê¤¤¥Ñ¥¹¥Õ¥ì¡¼¥º¤ò\n"
-"ÆşÎÏ¤·¤Ş¤·¤¿¡£\n"
+"è­¦å‘Š: æ˜ã‚‰ã‹ã«å …ç‰¢ã§ãªã„ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºã‚’\n"
+"å…¥åŠ›ã—ã¾ã—ãŸã€‚\n"
 "\n"
-"¿·¤·¤¤¥Ñ¥¹¥Õ¥ì¡¼¥º¤òÆşÎÏ¤·¤Æ¤¯¤À¤µ¤¤¡£"
+"æ–°ã—ã„ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚"
 
 msgid "_Enter new passphrase"
-msgstr "¿·¤·¤¤¥Ñ¥¹¥Õ¥ì¡¼¥º¤òÆşÎÏ (_E)"
+msgstr "æ–°ã—ã„ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºã‚’å…¥åŠ› (_E)"
 
 msgid "Take this one _anyway"
-msgstr "¤È¤Ë¤«¤¯¤³¤ì¤Ë¤¹¤ë (_A)"
+msgstr "ã¨ã«ã‹ãã“ã‚Œã«ã™ã‚‹ (_A)"
 
 msgid "Choose new passphrase"
-msgstr "¿·¤·¤¤¥Ñ¥¹¥Õ¥ì¡¼¥º¤òÁªÂò"
+msgstr "æ–°ã—ã„ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºã‚’é¸æŠ"
 
 msgid "Passphrase: "
-msgstr "¥Ñ¥¹¥Õ¥ì¡¼¥º: "
+msgstr "ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚º: "
 
 msgid "Repeat Passphrase: "
-msgstr "ºÆÆşÎÏ: "
+msgstr "å†å…¥åŠ›: "
 
 #, fuzzy
 msgid "Recipient"
-msgstr "°¸Àè (_R)"
+msgstr "å®›å…ˆ (_R)"
 
 msgid ""
 "Shows the recipients of the message. A key needs to be assigned to each "
@@ -1682,7 +1672,7 @@ msgid ""
 msgstr ""
 
 msgid "Key ID"
-msgstr "¸° ID"
+msgstr "éµ ID"
 
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
@@ -1707,14 +1697,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Using OpenPGP for encryption."
-msgstr "Éü¹æ²½¤Ë»È¤¦¥Ñ¥¹¥Õ¥ì¡¼¥º¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+msgstr "å¾©å·åŒ–ã«ä½¿ã†ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 msgid "Using S/MIME for encryption."
 msgstr ""
 
 #, fuzzy
 msgid "No recipients - encryption is not possible"
-msgstr "°Å¹æ²½¤¹¤ëÁê¼ê¤¬Áª¤Ğ¤ì¤Æ¤¤¤Ş¤»¤ó"
+msgstr "æš—å·åŒ–ã™ã‚‹ç›¸æ‰‹ãŒé¸ã°ã‚Œã¦ã„ã¾ã›ã‚“"
 
 msgid "[Ambiguous keys. Right-click to select]"
 msgstr ""
@@ -1739,11 +1729,11 @@ msgstr ""
 
 #, fuzzy
 msgid "Select keys for recipients"
-msgstr "¸°¤ò°¸Àè¤«¤éºï½ü (_V)"
+msgstr "éµã‚’å®›å…ˆã‹ã‚‰å‰Šé™¤ (_V)"
 
 #, fuzzy
 msgid "_Recipient list"
-msgstr "°¸Àè (_R)"
+msgstr "å®›å…ˆ (_R)"
 
 msgid "Use _PGP"
 msgstr ""
@@ -1753,52 +1743,52 @@ msgstr ""
 
 #, fuzzy
 msgid "_Auto selection"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã‚’æš—å·åŒ–ã™ã‚‹"
 
 #, fuzzy
 msgid "Select a key"
-msgstr "ÁªÂò¤µ¤ì¤¿¥Ç¥Õ¥©¥ë¥È¤Î¸°:"
+msgstr "é¸æŠã•ã‚ŒãŸãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµ:"
 
 msgid "No error"
-msgstr "¥¨¥é¡¼¤Ê¤·"
+msgstr "ã‚¨ãƒ©ãƒ¼ãªã—"
 
 msgid "Internal error"
-msgstr "ÆâÉô¥¨¥é¡¼"
+msgstr "å†…éƒ¨ã‚¨ãƒ©ãƒ¼"
 
 msgid "Operation not supported"
-msgstr "Áàºî¤¬¥µ¥İ¡¼¥È¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+msgstr "æ“ä½œãŒã‚µãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 msgid "Version mismatch"
-msgstr "¥Ğ¡¼¥¸¥ç¥ó¤¬¹ç¤Ã¤Æ¤¤¤Ş¤»¤ó"
+msgstr "ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒåˆã£ã¦ã„ã¾ã›ã‚“"
 
 msgid "Internal keyserver error"
-msgstr "¸°¥µ¡¼¥Ğ´ØÏ¢¤ÎÆâÉô¥¨¥é¡¼"
+msgstr "éµã‚µãƒ¼ãƒé–¢é€£ã®å†…éƒ¨ã‚¨ãƒ©ãƒ¼"
 
 msgid "Out of memory"
-msgstr "¥á¥â¥êÉÔÂ­"
+msgstr "ãƒ¡ãƒ¢ãƒªä¸è¶³"
 
 msgid "Key not found"
-msgstr "¸°¤¬¸«ÉÕ¤«¤ê¤Ş¤»¤ó"
+msgstr "éµãŒè¦‹ä»˜ã‹ã‚Šã¾ã›ã‚“"
 
 msgid "Key already exists on server"
-msgstr "¥µ¡¼¥Ğ¤Ë´û¤Ë¸°¤¬Â¸ºß¤·¤Ş¤¹"
+msgstr "ã‚µãƒ¼ãƒã«æ—¢ã«éµãŒå­˜åœ¨ã—ã¾ã™"
 
 msgid "Key incomplete"
-msgstr "¸°¤¬ÉÔ´°Á´¤Ç¤¹"
+msgstr "éµãŒä¸å®Œå…¨ã§ã™"
 
 msgid "Could not contact keyserver"
-msgstr "¸°¥µ¡¼¥Ğ¡¼¤ÈÏ¢Íí¤¬¤È¤ì¤Ş¤»¤ó"
+msgstr "éµã‚µãƒ¼ãƒãƒ¼ã¨é€£çµ¡ãŒã¨ã‚Œã¾ã›ã‚“"
 
 msgid "Unknown Error"
-msgstr "Ì¤³ÎÇ§¥¨¥é¡¼"
+msgstr "æœªç¢ºèªã‚¨ãƒ©ãƒ¼"
 
 #, c-format
 msgid ""
 "Connecting to server \"%s\".\n"
 "Please wait."
 msgstr ""
-"¥µ¡¼¥Ğ \"%s\" ¤ËÀÜÂ³Ãæ¤Ç¤¹¡£\n"
-"¤ªÂÔ¤Á¤¯¤À¤µ¤¤¡£"
+"ã‚µãƒ¼ãƒ \"%s\" ã«æ¥ç¶šä¸­ã§ã™ã€‚\n"
+"ãŠå¾…ã¡ãã ã•ã„ã€‚"
 
 #, c-format
 msgid ""
@@ -1806,7 +1796,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"¥µ¡¼¥Ğ¤È¤ÎÏ¢ÍíÃæ¤Ë¥¨¥é¡¼¤¬È¯À¸¤·¤Ş¤·¤¿:\n"
+"ã‚µãƒ¼ãƒã¨ã®é€£çµ¡ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ:\n"
 "\n"
 "%s"
 
@@ -1814,22 +1804,22 @@ msgid ""
 "There is no plugin available for the keyserver\n"
 "protocol you specified."
 msgstr ""
-"»ØÄê¤µ¤ì¤¿¥×¥í¥È¥³¥ë¤Î¸°¥µ¡¼¥Ğ¤Ë\n"
-"»È¤¨¤ë¥×¥é¥°¥¤¥ó¤Ï¤¢¤ê¤Ş¤»¤ó¡£"
+"æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒˆã‚³ãƒ«ã®éµã‚µãƒ¼ãƒã«\n"
+"ä½¿ãˆã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚"
 
 msgid "The keyserver you specified is not valid"
-msgstr "»ØÄê¤µ¤ì¤¿¸°¥µ¡¼¥Ğ¤ÏÌµ¸ú¤Ç¤¹"
+msgstr "æŒ‡å®šã•ã‚ŒãŸéµã‚µãƒ¼ãƒã¯ç„¡åŠ¹ã§ã™"
 
 msgid "Local"
-msgstr "¥í¡¼¥«¥ë"
+msgstr "ãƒ­ãƒ¼ã‚«ãƒ«"
 
 #, fuzzy
 msgid "Local, Keyserver"
-msgstr "¸°¥µ¡¼¥Ğ¡¼ (_K):"
+msgstr "éµã‚µãƒ¼ãƒãƒ¼ (_K):"
 
 #, fuzzy
 msgid "Local, PKA"
-msgstr "¥í¡¼¥«¥ë"
+msgstr "ãƒ­ãƒ¼ã‚«ãƒ«"
 
 msgid "Local, PKA, Keyserver"
 msgstr ""
@@ -1839,7 +1829,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Local, kDNS"
-msgstr "¥í¡¼¥«¥ë"
+msgstr "ãƒ­ãƒ¼ã‚«ãƒ«"
 
 msgid "Local, kDNS, Keyserver"
 msgstr ""
@@ -1855,15 +1845,15 @@ msgstr ""
 
 #, fuzzy
 msgid "<b>User interface</b>"
-msgstr "¾åµé¼Ô¥â¡¼¥É¤ò»È¤¦ (_A):"
+msgstr "ä¸Šç´šè€…ãƒ¢ãƒ¼ãƒ‰ã‚’ä½¿ã† (_A):"
 
 #, fuzzy
 msgid "Use _advanced mode"
-msgstr "¾åµé¼Ô¥â¡¼¥É¤ò»È¤¦ (_A):"
+msgstr "ä¸Šç´šè€…ãƒ¢ãƒ¼ãƒ‰ã‚’ä½¿ã† (_A):"
 
 #, fuzzy
 msgid "Show advanced _options"
-msgstr "¥Õ¥¡¥¤¥ëÆ°ºî¤òÉ½¼¨"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«å‹•ä½œã‚’è¡¨ç¤º"
 
 msgid ""
 "No default key has been selected.  This may lead to problems when signing or "
@@ -1878,19 +1868,19 @@ msgstr ""
 
 #, fuzzy
 msgid "Let me select a default key"
-msgstr "ÁªÂò¤µ¤ì¤¿¥Ç¥Õ¥©¥ë¥È¤Î¸°:"
+msgstr "é¸æŠã•ã‚ŒãŸãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµ:"
 
 #, fuzzy
 msgid "<b>Default _key</b>"
-msgstr "¥Ç¥Õ¥©¥ë¥È¤Î¸° (_K):"
+msgstr "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµ (_K):"
 
 #, fuzzy
 msgid "<b>Default key_server</b>"
-msgstr "¥Ç¥Õ¥©¥ë¥È¤Î¸°¥µ¡¼¥Ğ (_S):"
+msgstr "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµã‚µãƒ¼ãƒ (_S):"
 
 #, fuzzy
 msgid "<b>Auto key _locate</b>"
-msgstr "¥Ç¥Õ¥©¥ë¥È¤Î¸°¥µ¡¼¥Ğ (_S):"
+msgstr "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµã‚µãƒ¼ãƒ (_S):"
 
 msgid ""
 "The list of methods to locate keys via an email address.\n"
@@ -1916,49 +1906,49 @@ msgstr ""
 
 #, fuzzy
 msgid "kDNS Server:"
-msgstr "/¥µ¡¼¥Ğ (_S)"
+msgstr "/ã‚µãƒ¼ãƒ (_S)"
 
 #, fuzzy
 msgid "The URL given for the keyserver is not valid."
-msgstr "»ØÄê¤µ¤ì¤¿¸°¥µ¡¼¥Ğ¤ÏÌµ¸ú¤Ç¤¹"
+msgstr "æŒ‡å®šã•ã‚ŒãŸéµã‚µãƒ¼ãƒã¯ç„¡åŠ¹ã§ã™"
 
 msgid "The data given for \"Auto key locate\" is not valid."
 msgstr ""
 
 msgid "Settings"
-msgstr "ÀßÄê"
+msgstr "è¨­å®š"
 
 msgid "Level"
-msgstr "¥ì¥Ù¥ë"
+msgstr "ãƒ¬ãƒ™ãƒ«"
 
 #, fuzzy
 msgid "Verify documents"
-msgstr "¥Õ¥¡¥¤¥ë¸¡¾Ú"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«æ¤œè¨¼"
 
 msgid "Expired Key"
-msgstr "´ü¸ÂÀÚ¤ì¤Î¸°"
+msgstr "æœŸé™åˆ‡ã‚Œã®éµ"
 
 msgid "Key NOT valid"
-msgstr "¸°¤ÏÍ­¸ú¤Ç¤Ï¡Ö¤¢¤ê¤Ş¤»¤ó¡×"
+msgstr "éµã¯æœ‰åŠ¹ã§ã¯ã€Œã‚ã‚Šã¾ã›ã‚“ã€"
 
 #, fuzzy
 msgid "Description"
-msgstr "Éü¹æ²½Ãæ..."
+msgstr "å¾©å·åŒ–ä¸­..."
 
 #, c-format
 msgid "Verified data in file: %s"
-msgstr "¸¡¾Ú¤µ¤ì¤¿¥Ç¡¼¥¿: %s"
+msgstr "æ¤œè¨¼ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿: %s"
 
 #, fuzzy, c-format
 msgid "Signature: %s"
-msgstr "½ğÌ¾"
+msgstr "ç½²å"
 
 msgid "Signatures:"
-msgstr "½ğÌ¾:"
+msgstr "ç½²å:"
 
 #, fuzzy
 msgid "Card Manager"
-msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #, c-format
 msgid "%s card detected."
@@ -1969,7 +1959,7 @@ msgstr ""
 
 #, fuzzy
 msgid "No card found."
-msgstr "¸°¤¬¸«ÉÕ¤«¤ê¤Ş¤»¤ó¤Ç¤·¤¿¡£"
+msgstr "éµãŒè¦‹ä»˜ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚"
 
 msgid "The selected card application is currently not available."
 msgstr ""
@@ -1984,37 +1974,37 @@ msgstr ""
 
 #, fuzzy
 msgid "The selected card application is not available."
-msgstr "ÁªÂò¤·¤¿¸°¤Ï½ğÌ¾¤Ë¤ÏÍøÍÑ¤Ç¤­¤Ş¤»¤ó"
+msgstr "é¸æŠã—ãŸéµã¯ç½²åã«ã¯åˆ©ç”¨ã§ãã¾ã›ã‚“"
 
 #, fuzzy
 msgid "Error accessing the card."
-msgstr "¥Õ¥¡¥¤¥ë¥¢¥¯¥»¥¹¤Î¥¨¥é¡¼"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‚¢ã‚¯ã‚»ã‚¹ã®ã‚¨ãƒ©ãƒ¼"
 
 #, fuzzy
 msgid "Error accessing card"
-msgstr "¥Õ¥¡¥¤¥ë¥¢¥¯¥»¥¹¤Î¥¨¥é¡¼"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‚¢ã‚¯ã‚»ã‚¹ã®ã‚¨ãƒ©ãƒ¼"
 
 msgid "No card"
 msgstr ""
 
 #, fuzzy
 msgid "_Card"
-msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼ (_C)"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ (_C)"
 
 msgid "Reload card information"
 msgstr ""
 
 #, fuzzy
 msgid "Generate new key on card"
-msgstr "¸°¤òÀ¸À®"
+msgstr "éµã‚’ç”Ÿæˆ"
 
 #, fuzzy
 msgid "This card application is not yet supported."
-msgstr "Áàºî¤¬¥µ¥İ¡¼¥È¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+msgstr "æ“ä½œãŒã‚µãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #, fuzzy
 msgid "Application selection:"
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã‚’æš—å·åŒ–ã™ã‚‹"
 
 msgid "Auto"
 msgstr ""
@@ -2049,11 +2039,11 @@ msgstr ""
 
 #, fuzzy
 msgid "Change PIN"
-msgstr "¿®ÍÑÅÙ¤ÎÊÑ¹¹ (_T)"
+msgstr "ä¿¡ç”¨åº¦ã®å¤‰æ›´ (_T)"
 
 #, fuzzy
 msgid "Change PUK"
-msgstr "¿®ÍÑÅÙ¤ÎÊÑ¹¹ (_T)"
+msgstr "ä¿¡ç”¨åº¦ã®å¤‰æ›´ (_T)"
 
 msgid "Reset PUK"
 msgstr ""
@@ -2079,7 +2069,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Saving the field failed."
-msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤Ë½ğÌ¾¤¹¤ë"
+msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã«ç½²åã™ã‚‹"
 
 msgid "Invalid length of the language preference."
 msgstr ""
@@ -2173,7 +2163,7 @@ msgstr ""
 msgid ""
 "Error fetching the key.\n"
 "(%s <%s>)"
-msgstr "ºï½ü¥¨¥é¡¼ \"%s\": %s"
+msgstr "å‰Šé™¤ã‚¨ãƒ©ãƒ¼ \"%s\": %s"
 
 #, c-format
 msgid "Keys found: %d, imported: %d, unchanged: %d"
@@ -2184,7 +2174,7 @@ msgstr ""
 
 #, fuzzy
 msgid "<b>General</b>"
-msgstr "¾åµé¼Ô¥â¡¼¥É¤ò»È¤¦ (_A):"
+msgstr "ä¸Šç´šè€…ãƒ¢ãƒ¼ãƒ‰ã‚’ä½¿ã† (_A):"
 
 msgid "Serial number:"
 msgstr ""
@@ -2197,19 +2187,19 @@ msgstr ""
 
 #, fuzzy
 msgid "<b>Personal</b>"
-msgstr "¸Ä¿Í"
+msgstr "å€‹äºº"
 
 #, fuzzy
 msgid "Salutation:"
-msgstr "ÁªÂò: "
+msgstr "é¸æŠ: "
 
 #, fuzzy
 msgid "First name:"
-msgstr "¥Ç¥£¥ì¥¯¥È¥êÌ¾:"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå:"
 
 #, fuzzy
 msgid "Last name:"
-msgstr "¥æ¡¼¥¶Ì¾:"
+msgstr "ãƒ¦ãƒ¼ã‚¶å:"
 
 msgid "Language:"
 msgstr ""
@@ -2219,34 +2209,34 @@ msgstr ""
 
 #, fuzzy
 msgid "Public key URL:"
-msgstr "¸ø³«¸° (_P)"
+msgstr "å…¬é–‹éµ (_P)"
 
 #, fuzzy
 msgid "<b>Keys</b>"
-msgstr "½ğÌ¾ÁªÂò (_A)"
+msgstr "ç½²åé¸æŠ (_A)"
 
 #, fuzzy
 msgid "Signature key:"
-msgstr "½ğÌ¾:"
+msgstr "ç½²å:"
 
 #, fuzzy
 msgid "Encryption key:"
-msgstr "°Å¹æ²½Ãæ..."
+msgstr "æš—å·åŒ–ä¸­..."
 
 #, fuzzy
 msgid "Authentication key:"
-msgstr "Ç§¾Ú²ÄÇ½"
+msgstr "èªè¨¼å¯èƒ½"
 
 #, fuzzy
 msgid "Signature counter:"
-msgstr "½ğÌ¾:"
+msgstr "ç½²å:"
 
 msgid "<b>PIN</b>"
 msgstr ""
 
 #, fuzzy
 msgid "Force signature PIN:"
-msgstr "½ğÌ¾¤Ë¥¨¥é¡¼"
+msgstr "ç½²åã«ã‚¨ãƒ©ãƒ¼"
 
 msgid "PIN retry counter:"
 msgstr ""
@@ -2259,7 +2249,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Learn keys"
-msgstr "¸°¥¨¥¯¥¹¥İ¡¼¥È"
+msgstr "éµã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
 
 msgid ""
 "For some or all of the keys available on the card, the GnuPG crypto engine "
@@ -2275,7 +2265,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Learning keys ..."
-msgstr "¸°¤òÀ¸À®Ãæ..."
+msgstr "éµã‚’ç”Ÿæˆä¸­..."
 
 #, c-format
 msgid ""
@@ -2362,7 +2352,7 @@ msgstr ""
 
 #, fuzzy
 msgid "scanning ..."
-msgstr "½ğÌ¾Ãæ..."
+msgstr "ç½²åä¸­..."
 
 msgid "SigG PIN retry counter:"
 msgstr ""
@@ -2377,67 +2367,64 @@ msgid ""
 "on this card."
 msgstr ""
 
-#~ msgid "Size"
-#~ msgstr "¥µ¥¤¥º"
-
 #, fuzzy
 #~ msgid "The key ID is a short number to identify a certificate."
-#~ msgstr "¾ÚÌÀ¤Ë¤Î¤ß»È¤¨¤ë¸°¤Ç¤¹¡£"
+#~ msgstr "è¨¼æ˜ã«ã®ã¿ä½¿ãˆã‚‹éµã§ã™ã€‚"
 
 #~ msgid "Error"
-#~ msgstr "¥¨¥é¡¼"
+#~ msgstr "ã‚¨ãƒ©ãƒ¼"
 
 #, fuzzy
 #~ msgid "Message"
-#~ msgstr "GPA ¥á¥Ã¥»¡¼¥¸"
+#~ msgstr "GPA ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸"
 
 #, fuzzy
 #~ msgid "GNU Privacy Assistant - Clipboard"
-#~ msgstr "GNU Privacy Assistant - ¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+#~ msgstr "GNU Privacy Assistant - ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #~ msgid "GNU Privacy Assistant - File Manager"
-#~ msgstr "GNU Privacy Assistant - ¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+#~ msgstr "GNU Privacy Assistant - ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #~ msgid "GPA Error"
-#~ msgstr "GPA ¥¨¥é¡¼"
+#~ msgstr "GPA ã‚¨ãƒ©ãƒ¼"
 
 #, fuzzy
 #~ msgid "GNU Privacy Assistant - Key Manager"
-#~ msgstr "GNU Privacy Assistant - ¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+#~ msgstr "GNU Privacy Assistant - ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #, fuzzy
 #~ msgid "GNU Privacy Assistant - Settings"
-#~ msgstr "GNU Privacy Assistant - ¸°Â«¥¨¥Ç¥£¥¿"
+#~ msgstr "GNU Privacy Assistant - éµæŸã‚¨ãƒ‡ã‚£ã‚¿"
 
 #, fuzzy
 #~ msgid "GNU Privacy Assistant - Card Manager"
-#~ msgstr "GNU Privacy Assistant - ¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+#~ msgstr "GNU Privacy Assistant - ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #~ msgid "Please choose a passphrase for the new key."
-#~ msgstr "¿·¤·¤¤¸°¤Î¤¿¤á¤Î¥Ñ¥¹¥Õ¥ì¡¼¥º¤òÆşÎÏ¤·¤Æ²¼¤µ¤¤¡£"
+#~ msgstr "æ–°ã—ã„éµã®ãŸã‚ã®ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºã‚’å…¥åŠ›ã—ã¦ä¸‹ã•ã„ã€‚"
 
 #, fuzzy
 #~ msgid ""
 #~ "In \"Passphrase\" and \"Repeat passphrase\", you must enter the same "
 #~ "passphrase."
 #~ msgstr ""
-#~ "\"¥Ñ¥¹¥ï¡¼¥É\" ¤È \"ºÆÆşÎÏ\" ¤Ë¤Ï\n"
-#~ "Æ±¤¸¥Ñ¥¹¥ï¡¼¥É¤òÆşÎÏ¤·¤Ê¤¯¤Æ¤Ï¤Ê¤ê¤Ş¤»¤ó¡£"
+#~ "\"ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰\" ã¨ \"å†å…¥åŠ›\" ã«ã¯\n"
+#~ "åŒã˜ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ãªãã¦ã¯ãªã‚Šã¾ã›ã‚“ã€‚"
 
 #, fuzzy
 #~ msgid "Status: "
-#~ msgstr "¥¹¥Æ¡¼¥¿¥¹: "
+#~ msgstr "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹: "
 
 #, fuzzy
 #~ msgid "Generate new keys on card"
-#~ msgstr "¸°¤òÀ¸À®"
+#~ msgstr "éµã‚’ç”Ÿæˆ"
 
 #~ msgid "DSA and ElGamal (default)"
-#~ msgstr "DSA ¤È ElGamel (¥Ç¥Õ¥©¥ë¥È)"
+#~ msgstr "DSA ã¨ ElGamel (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)"
 
 #, fuzzy
 #~ msgid "_Keyring Editor"
-#~ msgstr "¸°Â«¥¨¥Ç¥£¥¿"
+#~ msgstr "éµæŸã‚¨ãƒ‡ã‚£ã‚¿"
 
 #~ msgid "1024"
 #~ msgstr "1024"
@@ -2449,208 +2436,211 @@ msgstr ""
 #~ msgstr "2048"
 
 #~ msgid "_Passphrase: "
-#~ msgstr "¥Ñ¥¹¥Õ¥ì¡¼¥º (_P): "
+#~ msgstr "ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚º (_P): "
 
 #~ msgid "_Repeat passphrase: "
-#~ msgstr "ºÆÆşÎÏ (_R): "
+#~ msgstr "å†å…¥åŠ› (_R): "
 
 #~ msgid "GNU Privacy Assistant - Keyring Editor"
-#~ msgstr "GNU Privacy Assistant - ¸°Â«¥¨¥Ç¥£¥¿"
+#~ msgstr "GNU Privacy Assistant - éµæŸã‚¨ãƒ‡ã‚£ã‚¿"
 
 #~ msgid "Keyring Editor"
-#~ msgstr "¸°Â«¥¨¥Ç¥£¥¿"
+#~ msgstr "éµæŸã‚¨ãƒ‡ã‚£ã‚¿"
 
 #, fuzzy
 #~ msgid "unspecified"
-#~ msgstr "Ì¤ÄêµÁ"
+#~ msgstr "æœªå®šç¾©"
 
 #~ msgid "/File/C_lear"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/¥¯¥ê¥¢ (_L)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/ã‚¯ãƒªã‚¢ (_L)"
 
 #~ msgid "/File/_Open"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/³«¤¯ (_O)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/é–‹ã (_O)"
 
 #, fuzzy
 #~ msgid "/File/Save _As"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/ÊÄ¤¸¤ë (_C)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/é–‰ã˜ã‚‹ (_C)"
 
 #~ msgid "/File/sep1"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/sep1"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/sep1"
 
 #~ msgid "/File/_Sign"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/½ğÌ¾¤¹¤ë (_S)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/ç½²åã™ã‚‹ (_S)"
 
 #~ msgid "/File/_Verify"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/¸¡¾Ú (_V)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/æ¤œè¨¼ (_V)"
 
 #~ msgid "/File/_Encrypt"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/°Å¹æ²½ (_E)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/æš—å·åŒ– (_E)"
 
 #~ msgid "/File/_Decrypt"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/Éü¹æ²½ (_D)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/å¾©å·åŒ– (_D)"
 
 #~ msgid "/File/sep2"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/sep2"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/sep2"
 
 #~ msgid "/File/_Close"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/ÊÄ¤¸¤ë (_C)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/é–‰ã˜ã‚‹ (_C)"
 
 #~ msgid "/File/_Quit"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/½ªÎ» (_Q)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/çµ‚äº† (_Q)"
 
 #, fuzzy
 #~ msgid "/Edit/_Undo"
-#~ msgstr "/ÊÔ½¸ (E)/¥³¥Ô¡¼ (_C)"
+#~ msgstr "/ç·¨é›† (E)/ã‚³ãƒ”ãƒ¼ (_C)"
 
 #, fuzzy
 #~ msgid "/Edit/_Redo"
-#~ msgstr "/ÊÔ½¸ (E)/¥³¥Ô¡¼ (_C)"
+#~ msgstr "/ç·¨é›† (E)/ã‚³ãƒ”ãƒ¼ (_C)"
 
 #, fuzzy
 #~ msgid "/Edit/sep0"
-#~ msgstr "/ÊÔ½¸ (E)/sep2"
+#~ msgstr "/ç·¨é›† (E)/sep2"
 
 #, fuzzy
 #~ msgid "/Edit/Cut"
-#~ msgstr "/ÊÔ½¸ (E)/¥³¥Ô¡¼ (C)"
+#~ msgstr "/ç·¨é›† (E)/ã‚³ãƒ”ãƒ¼ (C)"
 
 #~ msgid "/Edit/_Copy"
-#~ msgstr "/ÊÔ½¸ (E)/¥³¥Ô¡¼ (_C)"
+#~ msgstr "/ç·¨é›† (E)/ã‚³ãƒ”ãƒ¼ (_C)"
 
 #~ msgid "/Edit/_Paste"
-#~ msgstr "/ÊÔ½¸ (E)/Å½¤êÉÕ¤± (_P)"
+#~ msgstr "/ç·¨é›† (E)/è²¼ã‚Šä»˜ã‘ (_P)"
 
 #, fuzzy
 #~ msgid "/Edit/_Delete"
-#~ msgstr "/ÊÔ½¸ (E)/Å½¤êÉÕ¤± (_P)"
+#~ msgstr "/ç·¨é›† (E)/è²¼ã‚Šä»˜ã‘ (_P)"
 
 #~ msgid "/Edit/sep1"
-#~ msgstr "/ÊÔ½¸ (E)/sep1"
+#~ msgstr "/ç·¨é›† (E)/sep1"
 
 #~ msgid "/Edit/Select _All"
-#~ msgstr "/ÊÔ½¸ (E)/¤¹¤Ù¤ÆÁªÂò (_A)"
+#~ msgstr "/ç·¨é›† (E)/ã™ã¹ã¦é¸æŠ (_A)"
 
 #~ msgid "/Edit/sep2"
-#~ msgstr "/ÊÔ½¸ (E)/sep2"
+#~ msgstr "/ç·¨é›† (E)/sep2"
 
 #~ msgid "/Edit/Pr_eferences..."
-#~ msgstr "/ÊÔ½¸ (E)/ÀßÄê (_E)"
+#~ msgstr "/ç·¨é›† (E)/è¨­å®š (_E)"
 
 #~ msgid "/Windows/_Keyring Editor"
-#~ msgstr "/¥¦¥£¥ó¥É¥¦ (W)/¸°Â«¥¨¥Ç¥£¥¿ (_K)"
+#~ msgstr "/ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ (W)/éµæŸã‚¨ãƒ‡ã‚£ã‚¿ (_K)"
 
 #~ msgid "/Windows/_Filemanager"
-#~ msgstr "/¥¦¥£¥ó¥É¥¦ (W)/¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã (_F)"
+#~ msgstr "/ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ (W)/ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ (_F)"
 
 #, fuzzy
 #~ msgid "/Windows/_Clipboard"
-#~ msgstr "/¥¦¥£¥ó¥É¥¦ (W)/¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã (_F)"
+#~ msgstr "/ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ (W)/ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ (_F)"
 
 #~ msgid "/Edit/Copy"
-#~ msgstr "/ÊÔ½¸ (E)/¥³¥Ô¡¼ (C)"
+#~ msgstr "/ç·¨é›† (E)/ã‚³ãƒ”ãƒ¼ (C)"
 
 #, fuzzy
 #~ msgid "/Edit/Delete"
-#~ msgstr "/ÊÔ½¸ (E)/¤¹¤Ù¤ÆÁªÂò (_A)"
+#~ msgstr "/ç·¨é›† (E)/ã™ã¹ã¦é¸æŠ (_A)"
 
 #, fuzzy
 #~ msgid "/Edit/Paste"
-#~ msgstr "/ÊÔ½¸ (E)/Å½¤êÉÕ¤± (_P)"
+#~ msgstr "/ç·¨é›† (E)/è²¼ã‚Šä»˜ã‘ (_P)"
+
+#~ msgid "open file"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«é–‹ã"
 
 #, fuzzy
 #~ msgid "save file as"
-#~ msgstr "Ì¾Á°¤òÉÕ¤±¤ÆÊİÂ¸ (_A): "
+#~ msgstr "åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜ (_A): "
 
 #, fuzzy
 #~ msgid "cut the selection"
-#~ msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+#~ msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã‚’æš—å·åŒ–ã™ã‚‹"
 
 #, fuzzy
 #~ msgid "copy the selection"
-#~ msgstr "ÁªÂò¥Õ¥¡¥¤¥ë¤ò°Å¹æ²½¤¹¤ë"
+#~ msgstr "é¸æŠãƒ•ã‚¡ã‚¤ãƒ«ã‚’æš—å·åŒ–ã™ã‚‹"
 
 #, fuzzy
 #~ msgid "paste the clipboard"
-#~ msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼ (_C)"
+#~ msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ (_C)"
 
 #, fuzzy
 #~ msgid "Sign the selected text"
-#~ msgstr "ÁªÂò¤µ¤ì¤¿¸°¤Ë½ğÌ¾¤¹¤ë"
+#~ msgstr "é¸æŠã•ã‚ŒãŸéµã«ç½²åã™ã‚‹"
 
 #, fuzzy
 #~ msgid "verify text"
-#~ msgstr "¥Õ¥¡¥¤¥ë¸¡¾Ú"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«æ¤œè¨¼"
 
 #~ msgid "Encrypt"
-#~ msgstr "°Å¹æ²½"
+#~ msgstr "æš—å·åŒ–"
 
 #, fuzzy
 #~ msgid "encrypt text"
-#~ msgstr "¥Õ¥¡¥¤¥ë°Å¹æ²½"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«æš—å·åŒ–"
 
 #, fuzzy
 #~ msgid "decrypt text"
-#~ msgstr "¥Õ¥¡¥¤¥ëÉü¹æ²½"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«å¾©å·åŒ–"
 
 #~ msgid "preferences"
-#~ msgstr "ÀßÄê"
+#~ msgstr "è¨­å®š"
 
 #, fuzzy
 #~ msgid "keyring editor"
-#~ msgstr "¸°Â«¥¨¥Ç¥£¥¿"
+#~ msgstr "éµæŸã‚¨ãƒ‡ã‚£ã‚¿"
 
 #~ msgid "file manager"
-#~ msgstr "¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #~ msgid "Help"
-#~ msgstr "¥Ø¥ë¥×"
+#~ msgstr "ãƒ˜ãƒ«ãƒ—"
 
 #~ msgid "help"
-#~ msgstr "¥Ø¥ë¥×"
+#~ msgstr "ãƒ˜ãƒ«ãƒ—"
 
 #~ msgid "/File/Sign"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/½ğÌ¾¤¹¤ë (S)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/ç½²åã™ã‚‹ (S)"
 
 #~ msgid "/File/Verify"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/¸¡¾Ú (V)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/æ¤œè¨¼ (V)"
 
 #~ msgid "/File/Encrypt"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/°Å¹æ²½ (E)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/æš—å·åŒ– (E)"
 
 #~ msgid "/File/Decrypt"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/Éü¹æ²½ (D)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/å¾©å·åŒ– (D)"
 
 #~ msgid "close files"
-#~ msgstr "¥Õ¥¡¥¤¥ëÊÄ¤¸¤ë"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«é–‰ã˜ã‚‹"
 
 #~ msgid "sign file"
-#~ msgstr "¥Õ¥¡¥¤¥ë¤Ë½ğÌ¾"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã«ç½²å"
 
 #~ msgid "verify file"
-#~ msgstr "¥Õ¥¡¥¤¥ë¸¡¾Ú"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«æ¤œè¨¼"
 
 #~ msgid "encrypt file"
-#~ msgstr "¥Õ¥¡¥¤¥ë°Å¹æ²½"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«æš—å·åŒ–"
 
 #~ msgid "decrypt file"
-#~ msgstr "¥Õ¥¡¥¤¥ëÉü¹æ²½"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«å¾©å·åŒ–"
 
 #, fuzzy
 #~ msgid "clipboard"
-#~ msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤Ø¥³¥Ô¡¼ (_C)"
+#~ msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã‚³ãƒ”ãƒ¼ (_C)"
 
 #~ msgid "_Backup to file:"
-#~ msgstr "¥Ğ¥Ã¥¯¥¢¥Ã¥×Àè¥Õ¥¡¥¤¥ë (_B):"
+#~ msgstr "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆãƒ•ã‚¡ã‚¤ãƒ« (_B):"
 
 #~ msgid "B_rowse..."
-#~ msgstr "¥Ö¥é¥¦¥º... (_R)"
+#~ msgstr "ãƒ–ãƒ©ã‚¦ã‚º... (_R)"
 
 #, fuzzy
 #~ msgid "_Back"
-#~ msgstr "/¥Ğ¥Ã¥¯¥¢¥Ã¥×... (_B)"
+#~ msgstr "/ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—... (_B)"
 
 #~ msgid "Brought to you by:"
-#~ msgstr "Äó¶¡¼Ô:"
+#~ msgstr "æä¾›è€…:"
 
 #, fuzzy
 #~ msgid "GPA is Free Software under the"
@@ -2660,7 +2650,7 @@ msgstr ""
 #~ msgstr "GNU General Public License."
 
 #~ msgid "For news see:"
-#~ msgstr "ºÇ¿·¾ğÊó¤Ï¤³¤Á¤é:"
+#~ msgstr "æœ€æ–°æƒ…å ±ã¯ã“ã¡ã‚‰:"
 
 #, fuzzy
 #~ msgid "http://www.gpg4win.org"
@@ -2678,141 +2668,141 @@ msgstr ""
 #~ msgstr "GNU General Public License."
 
 #~ msgid "Show Help Text\n"
-#~ msgstr "¥Ø¥ë¥×¤ò¸«¤ë\n"
+#~ msgstr "ãƒ˜ãƒ«ãƒ—ã‚’è¦‹ã‚‹\n"
 
 #~ msgid "/Help/_Contents"
-#~ msgstr "/¥Ø¥ë¥× (H)/ÆâÍÆ (_C)"
+#~ msgstr "/ãƒ˜ãƒ«ãƒ— (H)/å†…å®¹ (_C)"
 
 #~ msgid "/Help/_License"
-#~ msgstr "/¥Ø¥ë¥× (H)/¥é¥¤¥»¥ó¥¹ (_L)"
+#~ msgstr "/ãƒ˜ãƒ«ãƒ— (H)/ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ (_L)"
 
 #~ msgid "/Help/_About"
-#~ msgstr "/¥Ø¥ë¥× (H)/GPA ¤Ë¤Ä¤¤¤Æ (_A)"
+#~ msgstr "/ãƒ˜ãƒ«ãƒ— (H)/GPA ã«ã¤ã„ã¦ (_A)"
 
 #~ msgid "Please insert your name"
-#~ msgstr "»áÌ¾¤òµ­Æş¤·¤Æ¤¯¤À¤µ¤¤"
+#~ msgstr "æ°åã‚’è¨˜å…¥ã—ã¦ãã ã•ã„"
 
 #~ msgid "Please insert your email address"
-#~ msgstr "E ¥á¡¼¥ë¥¢¥É¥ì¥¹¤òµ­Æş¤·¤Æ²¼¤µ¤¤"
+#~ msgstr "E ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¨˜å…¥ã—ã¦ä¸‹ã•ã„"
 
 #, fuzzy
 #~ msgid "/Keys/sep0"
-#~ msgstr "/¸° (K)/sep1"
+#~ msgstr "/éµ (K)/sep1"
 
 #~ msgid "/Keys/_Delete Keys..."
-#~ msgstr "/¸° (K)/¸°¤òºï½ü... (_D)"
+#~ msgstr "/éµ (K)/éµã‚’å‰Šé™¤... (_D)"
 
 #~ msgid "/Keys/sep1"
-#~ msgstr "/¸° (K)/sep1"
+#~ msgstr "/éµ (K)/sep1"
 
 #~ msgid "/Keys/_Sign Keys..."
-#~ msgstr "/¸° (K)/¸°¤Ë½ğÌ¾... (_S)"
+#~ msgstr "/éµ (K)/éµã«ç½²å... (_S)"
 
 #~ msgid "/Keys/Set _Owner Trust..."
-#~ msgstr "/¸° (K)/½êÍ­¼Ô¤Î¿®ÍÑÅÙ¤ò»ØÄê... (_O)"
+#~ msgstr "/éµ (K)/æ‰€æœ‰è€…ã®ä¿¡ç”¨åº¦ã‚’æŒ‡å®š... (_O)"
 
 #~ msgid "/Keys/_Edit Private Key..."
-#~ msgstr "/¸° (K)/ÈëÌ©¸°¤òÊÔ½¸... (_E)"
+#~ msgstr "/éµ (K)/ç§˜å¯†éµã‚’ç·¨é›†... (_E)"
 
 #~ msgid "/Keys/sep2"
-#~ msgstr "/¸° (K)/sep2"
+#~ msgstr "/éµ (K)/sep2"
 
 #~ msgid "/Keys/_Import Keys..."
-#~ msgstr "/¸° (K)/¸°¤ò¥¤¥ó¥İ¡¼¥È... (_I)"
+#~ msgstr "/éµ (K)/éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆ... (_I)"
 
 #~ msgid "/Keys/E_xport Keys..."
-#~ msgstr "/¸° (K)/¸°¤ò¥¨¥¯¥¹¥İ¡¼¥È... (_X)"
+#~ msgstr "/éµ (K)/éµã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ... (_X)"
 
 #~ msgid "/Keys/_Backup..."
-#~ msgstr "/¸° (K)/¥Ğ¥Ã¥¯¥¢¥Ã¥×... (_B)"
+#~ msgstr "/éµ (K)/ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—... (_B)"
 
 #~ msgid "/Server/_Send Keys..."
-#~ msgstr "/¥µ¡¼¥Ğ (S)/¸°¤òÁ÷¿®... (_S)"
+#~ msgstr "/ã‚µãƒ¼ãƒ (S)/éµã‚’é€ä¿¡... (_S)"
 
 #, fuzzy
 #~ msgid "/Windows/_File Manager"
-#~ msgstr "/¥¦¥£¥ó¥É¥¦ (W)/¥Õ¥¡¥¤¥ë¥Ş¥Í¡¼¥¸¥ã (_F)"
+#~ msgstr "/ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ (W)/ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ (_F)"
 
 #~ msgid "/Keys/Export Keys..."
-#~ msgstr "/¸° (K)/¸°¤ò¥¨¥¯¥¹¥İ¡¼¥È... (X)"
+#~ msgstr "/éµ (K)/éµã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ... (X)"
 
 #~ msgid "/Keys/Delete Keys..."
-#~ msgstr "/¸° (K)/¸°¤òºï½ü... (D)"
+#~ msgstr "/éµ (K)/éµã‚’å‰Šé™¤... (D)"
 
 #~ msgid "/Server/Send Keys..."
-#~ msgstr "/¥µ¡¼¥Ğ (S)/¸°¤òÁ÷¿®... (S)"
+#~ msgstr "/ã‚µãƒ¼ãƒ (S)/éµã‚’é€ä¿¡... (S)"
 
 #~ msgid "/Keys/Set Owner Trust..."
-#~ msgstr "/¸° (K)/½êÍ­¼Ô¤Î¿®ÍÑÅÙ¤ò»ØÄê... (O)"
+#~ msgstr "/éµ (K)/æ‰€æœ‰è€…ã®ä¿¡ç”¨åº¦ã‚’æŒ‡å®š... (O)"
 
 #~ msgid "/Keys/Sign Keys..."
-#~ msgstr "/¸° (K)/¸°¤Ë½ğÌ¾... (S)"
+#~ msgstr "/éµ (K)/éµã«ç½²å... (S)"
 
 #~ msgid "/Keys/Edit Private Key..."
-#~ msgstr "/¸° (K)/ÈëÌ©¸°¤òÊÔ½¸... (E)"
+#~ msgstr "/éµ (K)/ç§˜å¯†éµã‚’ç·¨é›†... (E)"
 
 #~ msgid "/Keys/Backup..."
-#~ msgstr "/¸° (K)/¥Ğ¥Ã¥¯¥¢¥Ã¥×... (B)"
+#~ msgstr "/éµ (K)/ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—... (B)"
 
 #~ msgid "/_Copy"
-#~ msgstr "/¥³¥Ô¡¼ (_C)"
+#~ msgstr "/ã‚³ãƒ”ãƒ¼ (_C)"
 
 #~ msgid "/_Paste"
-#~ msgstr "/Å½¤êÉÕ¤± (_P)"
+#~ msgstr "/è²¼ã‚Šä»˜ã‘ (_P)"
 
 #~ msgid "/Set Owner Trust..."
-#~ msgstr "/½êÍ­¼Ô¤Î¿®ÍÑÅÙ¤ò»ØÄê... (O)"
+#~ msgstr "/æ‰€æœ‰è€…ã®ä¿¡ç”¨åº¦ã‚’æŒ‡å®š... (O)"
 
 #~ msgid "/Sign Keys..."
-#~ msgstr "/¸°¤Ë½ğÌ¾... (S)"
+#~ msgstr "/éµã«ç½²å... (S)"
 
 #~ msgid "/Edit Private Key..."
-#~ msgstr "/ÈëÌ©¸°¤òÊÔ½¸... (E)"
+#~ msgstr "/ç§˜å¯†éµã‚’ç·¨é›†... (E)"
 
 #~ msgid "/Backup..."
-#~ msgstr "/¥Ğ¥Ã¥¯¥¢¥Ã¥×... (B)"
+#~ msgstr "/ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—... (B)"
 
 #~ msgid "edit key"
-#~ msgstr "¸°¤òÊÔ½¸"
+#~ msgstr "éµã‚’ç·¨é›†"
 
 #~ msgid "remove key"
-#~ msgstr "¸°¤òºï½ü"
+#~ msgstr "éµã‚’å‰Šé™¤"
 
 #~ msgid "sign key"
-#~ msgstr "¸°¤Ë½ğÌ¾"
+#~ msgstr "éµã«ç½²å"
 
 #~ msgid "import keys"
-#~ msgstr "¸°¥¤¥ó¥İ¡¼¥È"
+#~ msgstr "éµã‚¤ãƒ³ãƒãƒ¼ãƒˆ"
 
 #~ msgid "brief"
-#~ msgstr "Í×Ìó"
+#~ msgstr "è¦ç´„"
 
 #~ msgid "detailed"
-#~ msgstr "¾ÜºÙ"
+#~ msgstr "è©³ç´°"
 
 #~ msgid "Sign files"
-#~ msgstr "¥Õ¥¡¥¤¥ë¤Ë½ğÌ¾¤¹¤ë"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã«ç½²åã™ã‚‹"
 
 #~ msgid "sign in separate _file"
-#~ msgstr "ÊÌ¥Õ¥¡¥¤¥ë¤Ë½ğÌ¾¤¹¤ë (_F)"
+#~ msgstr "åˆ¥ãƒ•ã‚¡ã‚¤ãƒ«ã«ç½²åã™ã‚‹ (_F)"
 
 #~ msgid "a_rmor"
-#~ msgstr "¥¢¡¼¥Ş·ÁÀ® (_R)"
+#~ msgstr "ã‚¢ãƒ¼ãƒå½¢æˆ (_R)"
 
 #~ msgid "display this help and exit"
-#~ msgstr "¤³¤Î¥Ø¥ë¥×¤òÉ½¼¨¤·¤Æ½ªÎ»"
+#~ msgstr "ã“ã®ãƒ˜ãƒ«ãƒ—ã‚’è¡¨ç¤ºã—ã¦çµ‚äº†"
 
 #~ msgid "Options"
-#~ msgstr "¥ª¥×¥·¥ç¥ó"
+#~ msgstr "ã‚ªãƒ—ã‚·ãƒ§ãƒ³"
 
 #~ msgid "GNU general public license"
-#~ msgstr "GNU °ìÈÌ¸øÍ­»ÈÍÑµöÂú½ñ (GPL)"
+#~ msgstr "GNU ä¸€èˆ¬å…¬æœ‰ä½¿ç”¨è¨±è«¾æ›¸ (GPL)"
 
 #~ msgid "_GNU general public license"
-#~ msgstr "_GNU °ìÈÌ¸øÍ­»ÈÍÑµöÂú½ñ (GPL)"
+#~ msgstr "_GNU ä¸€èˆ¬å…¬æœ‰ä½¿ç”¨è¨±è«¾æ›¸ (GPL)"
 
 #~ msgid ">.\n"
-#~ msgstr "> ¤ËÊó¹ğ¤·¤Æ¤¯¤À¤µ¤¤¡£\n"
+#~ msgstr "> ã«å ±å‘Šã—ã¦ãã ã•ã„ã€‚\n"
 
 #~ msgid ""
 #~ "If you want you can supply a comment that further identifies the key to "
@@ -2820,37 +2810,37 @@ msgstr ""
 #~ "keys for the same email address. The comment is completely optional. "
 #~ "Leave it empty if you don't have a use for it."
 #~ msgstr ""
-#~ "¤ªË¾¤ß¤Ê¤é¡¢¸°¤ò¤µ¤é¤ËÆÃÄ§¤Å¤±¤ë¥³¥á¥ó¥È¤òÂ¾¤Î¥æ¡¼¥¶¤Î¤¿¤á¤ËÄó¶¡¤¹¤ë¤³¤È¤¬"
-#~ "¤Ç¤­¤Ş¤¹¡£Æ±¤¸ E ¥á¡¼¥ë¥¢¥É¥ì¥¹¤Ë¸°¤òÊ£¿ôÀ¸À®¤¹¤ë¾ì¹ç¤Ï¡¢ÆÃ¤Ë¥³¥á¥ó¥È¤¬Ìò"
-#~ "¤ËÎ©¤Á¤Ş¤¹¡£¥³¥á¥ó¥È¤ÏÉÕ¤±¤Æ¤âÉÕ¤±¤Ê¤¯¤Æ¤â¤Ş¤Ã¤¿¤¯¹½¤¤¤Ş¤»¤ó¡£ÉÔÍ×¤Ê¤é¶õ¤Ë"
-#~ "¤·¤Æ¤ª¤¤¤Æ¤¯¤À¤µ¤¤¡£"
+#~ "ãŠæœ›ã¿ãªã‚‰ã€éµã‚’ã•ã‚‰ã«ç‰¹å¾´ã¥ã‘ã‚‹ã‚³ãƒ¡ãƒ³ãƒˆã‚’ä»–ã®ãƒ¦ãƒ¼ã‚¶ã®ãŸã‚ã«æä¾›ã™ã‚‹ã“ã¨ãŒ"
+#~ "ã§ãã¾ã™ã€‚åŒã˜ E ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã«éµã‚’è¤‡æ•°ç”Ÿæˆã™ã‚‹å ´åˆã¯ã€ç‰¹ã«ã‚³ãƒ¡ãƒ³ãƒˆãŒå½¹"
+#~ "ã«ç«‹ã¡ã¾ã™ã€‚ã‚³ãƒ¡ãƒ³ãƒˆã¯ä»˜ã‘ã¦ã‚‚ä»˜ã‘ãªãã¦ã‚‚ã¾ã£ãŸãæ§‹ã„ã¾ã›ã‚“ã€‚ä¸è¦ãªã‚‰ç©ºã«"
+#~ "ã—ã¦ãŠã„ã¦ãã ã•ã„ã€‚"
 
 #~ msgid "sign, do_n't compress"
-#~ msgstr "°µ½Ì¤Ê¤·¤Ç½ğÌ¾¤¹¤ë (_N)"
+#~ msgstr "åœ§ç¸®ãªã—ã§ç½²åã™ã‚‹ (_N)"
 
 #~ msgid "Keyserver did not return any matching keys."
-#~ msgstr "¸°¥µ¡¼¥Ğ¤«¤é¤Ï³ºÅö¤¹¤ë¸°¤¬ÊÖ¤Ã¤Æ¤­¤Ş¤»¤ó¤Ç¤·¤¿"
+#~ msgstr "éµã‚µãƒ¼ãƒã‹ã‚‰ã¯è©²å½“ã™ã‚‹éµãŒè¿”ã£ã¦ãã¾ã›ã‚“ã§ã—ãŸ"
 
 #~ msgid "Select keys to import"
-#~ msgstr "¥¤¥ó¥İ¡¼¥È¤¹¤ë¸°¤òÁªÂò"
+#~ msgstr "ã‚¤ãƒ³ãƒãƒ¼ãƒˆã™ã‚‹éµã‚’é¸æŠ"
 
 #~ msgid "_Import"
-#~ msgstr "¥¤¥ó¥İ¡¼¥È (_I)"
+#~ msgstr "ã‚¤ãƒ³ãƒãƒ¼ãƒˆ (_I)"
 
 #~ msgid "Export Key"
-#~ msgstr "¸°¤ò¥¨¥¯¥¹¥İ¡¼¥È"
+#~ msgstr "éµã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
 
 #~ msgid "E_xport to file:"
-#~ msgstr "¥¨¥¯¥¹¥İ¡¼¥ÈÀè¥Õ¥¡¥¤¥ë (_X):"
+#~ msgstr "ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆå…ˆãƒ•ã‚¡ã‚¤ãƒ« (_X):"
 
 #~ msgid "Import Key"
-#~ msgstr "¸°¤ò¥¤¥ó¥İ¡¼¥È"
+#~ msgstr "éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"
 
 #~ msgid "I_mport from file:"
-#~ msgstr "¥¤¥ó¥İ¡¼¥È¸µ¥Õ¥¡¥¤¥ë (_M):"
+#~ msgstr "ã‚¤ãƒ³ãƒãƒ¼ãƒˆå…ƒãƒ•ã‚¡ã‚¤ãƒ« (_M):"
 
 #~ msgid "Receive from _server:"
-#~ msgstr "¼õ¿®¸µ¥µ¡¼¥Ğ (_S): "
+#~ msgstr "å—ä¿¡å…ƒã‚µãƒ¼ãƒ (_S): "
 
 #~ msgid ""
 #~ "You have a secret key without the\n"
@@ -2859,75 +2849,75 @@ msgstr ""
 #~ "you will need to import the public\n"
 #~ "key, too."
 #~ msgstr ""
-#~ "ÂĞ±ş¤¹¤ë¸ø³«¸°¤¬¸°Â«¤Ë¤Ê¤¤ÈëÌ©¸°\n"
-#~ "¤¬¤¢¤ê¤Ş¤¹¡£¤³¤Î¸°¤ò»È¤¦¤¿¤á¤Ë¤Ï\n"
-#~ "¼«Ê¬¤Ç¤µ¤¨¸ø³«¸°¤ò¥¤¥ó¥İ¡¼¥È¤¹¤ë\n"
-#~ "É¬Í×¤¬¤¢¤ê¤Ş¤¹¡£"
+#~ "å¯¾å¿œã™ã‚‹å…¬é–‹éµãŒéµæŸã«ãªã„ç§˜å¯†éµ\n"
+#~ "ãŒã‚ã‚Šã¾ã™ã€‚ã“ã®éµã‚’ä½¿ã†ãŸã‚ã«ã¯\n"
+#~ "è‡ªåˆ†ã§ã•ãˆå…¬é–‹éµã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã™ã‚‹\n"
+#~ "å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚"
 
 #~ msgid "No keys selected to export."
-#~ msgstr "¥¨¥¯¥¹¥İ¡¼¥È¤¹¤ë¸°¤¬ÁªÂò¤µ¤ì¤Æ¤¤¤Ş¤»¤ó¡£"
+#~ msgstr "ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã™ã‚‹éµãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚"
 
 #~ msgid "No private key to backup."
-#~ msgstr "¥Ğ¥Ã¥¯¥¢¥Ã¥×¤¹¤ëÈëÌ©¸°¤¬¤¢¤ê¤Ş¤»¤ó¡£"
+#~ msgstr "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã™ã‚‹ç§˜å¯†éµãŒã‚ã‚Šã¾ã›ã‚“ã€‚"
 
 #~ msgid "GPA: Loading keyring"
-#~ msgstr "GPA: ¸°Â«¤ò¼õ¿®Ãæ"
+#~ msgstr "GPA: éµæŸã‚’å—ä¿¡ä¸­"
 
 #~ msgid "Loading secret keys"
-#~ msgstr "ÈëÌ©¸°¤ò¼è¤ê¹ş¤ßÃæ"
+#~ msgstr "ç§˜å¯†éµã‚’å–ã‚Šè¾¼ã¿ä¸­"
 
 #~ msgid "Loading public keys"
-#~ msgstr "¸ø³«¸°¤ò¼è¤ê¹ş¤ßÃæ"
+#~ msgstr "å…¬é–‹éµã‚’å–ã‚Šè¾¼ã¿ä¸­"
 
 #~ msgid "The key you selected is not available for encryption"
-#~ msgstr "ÁªÂò¤·¤¿¸°¤Ï°Å¹æ²½¤Ë¤ÏÍøÍÑ¤Ç¤­¤Ş¤»¤ó¡£"
+#~ msgstr "é¸æŠã—ãŸéµã¯æš—å·åŒ–ã«ã¯åˆ©ç”¨ã§ãã¾ã›ã‚“ã€‚"
 
 #~ msgid ""
 #~ "No public keys available.\n"
 #~ "Currently, there is nobody who could read a\n"
 #~ "file encrypted by you."
 #~ msgstr ""
-#~ "ÍøÍÑ¤Ç¤­¤ë¸ø³«¸°¤¬¤¢¤ê¤Ş¤»¤ó¡£\n"
-#~ "¤³¤Î¾õÂÖ¤Ç¤Ï¡¢°Å¹æ²½¤·¤Æ¤â¤½¤Î¥Õ¥¡¥¤¥ë¤ò\n"
-#~ "ÆÉ¤á¤ë¿Í¤¬°ì¿Í¤â¤¤¤Ê¤¤¤È¤¤¤¦¤³¤È¤Ç¤¹¡£"
+#~ "åˆ©ç”¨ã§ãã‚‹å…¬é–‹éµãŒã‚ã‚Šã¾ã›ã‚“ã€‚\n"
+#~ "ã“ã®çŠ¶æ…‹ã§ã¯ã€æš—å·åŒ–ã—ã¦ã‚‚ãã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’\n"
+#~ "èª­ã‚ã‚‹äººãŒä¸€äººã‚‚ã„ãªã„ã¨ã„ã†ã“ã¨ã§ã™ã€‚"
 
 #~ msgid "No secret keys available."
-#~ msgstr "ÍøÍÑ¤Ç¤­¤ëÈëÌ©¸°¤¬¤¢¤ê¤Ş¤»¤ó"
+#~ msgstr "åˆ©ç”¨ã§ãã‚‹ç§˜å¯†éµãŒã‚ã‚Šã¾ã›ã‚“"
 
 #~ msgid "Files in work"
-#~ msgstr "ºî¶ÈÃæ¤Î¥Õ¥¡¥¤¥ë"
+#~ msgstr "ä½œæ¥­ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«"
 
 #~ msgid ""
 #~ "Internal error:\n"
 #~ "Invalid sign mode"
 #~ msgstr ""
-#~ "ÆâÉô¥¨¥é¡¼:\n"
-#~ "ÉÔÀµ¤Ê½ğÌ¾Êı¼°"
+#~ "å†…éƒ¨ã‚¨ãƒ©ãƒ¼:\n"
+#~ "ä¸æ­£ãªç½²åæ–¹å¼"
 
 #~ msgid "No key selected!"
-#~ msgstr "¸°¤òÁªÂò¤·¤Æ²¼¤µ¤¤!"
+#~ msgstr "éµã‚’é¸æŠã—ã¦ä¸‹ã•ã„!"
 
 #~ msgid ""
 #~ "No secret keys available for signing.\n"
 #~ "Please generate or import a secret key first."
 #~ msgstr ""
-#~ "½ğÌ¾¤¹¤ë¤¿¤á¤Ë»È¤¦ÈëÌ©¸°¤¬¤¢¤ê¤Ş¤»¤ó¡£\n"
-#~ "¤Ş¤º¡¢ÈëÌ©¸°¤òÀ¸À®¤¹¤ë¤«¥¤¥ó¥İ¡¼¥È¤¹¤ë¤«¤·¤Æ²¼¤µ¤¤¡£"
+#~ "ç½²åã™ã‚‹ãŸã‚ã«ä½¿ã†ç§˜å¯†éµãŒã‚ã‚Šã¾ã›ã‚“ã€‚\n"
+#~ "ã¾ãšã€ç§˜å¯†éµã‚’ç”Ÿæˆã™ã‚‹ã‹ã‚¤ãƒ³ãƒãƒ¼ãƒˆã™ã‚‹ã‹ã—ã¦ä¸‹ã•ã„ã€‚"
 
 #~ msgid "Sign Files"
-#~ msgstr "¥Õ¥¡¥¤¥ë¤Ë½ğÌ¾¤¹¤ë"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã«ç½²åã™ã‚‹"
 
 #~ msgid "Filename"
-#~ msgstr "¥Õ¥¡¥¤¥ëÌ¾"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«å"
 
 #~ msgid "The currently selected filename."
-#~ msgstr "¸½ºßÁªÂò¤µ¤ì¤Æ¤¤¤ë¥Õ¥¡¥¤¥ëÌ¾¡£"
+#~ msgstr "ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«åã€‚"
 
 #~ msgid "Whether buttons for creating/manipulating files should be displayed."
-#~ msgstr "¥Õ¥¡¥¤¥ë¤ÎºîÀ®/½èÍı¤Î¤¿¤á¤Î¥Ü¥¿¥ó¤òÉ½¼¨¤¹¤ë¤«¤É¤¦¤«"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ/å‡¦ç†ã®ãŸã‚ã®ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤ºã™ã‚‹ã‹ã©ã†ã‹"
 
 #~ msgid "Directories"
-#~ msgstr "¥Ç¥£¥ì¥¯¥È¥ê"
+#~ msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"
 
 #~ msgid "_OK"
 #~ msgstr "_OK"
@@ -2936,518 +2926,530 @@ msgstr ""
 #~ msgstr "OK"
 
 #~ msgid "Cancel"
-#~ msgstr "¥­¥ã¥ó¥»¥ë"
+#~ msgstr "ã‚­ãƒ£ãƒ³ã‚»ãƒ«"
 
 #~ msgid "Directory unreadable: %s"
-#~ msgstr "¥Ç¥£¥ì¥¯¥È¥êÆÉ¹şÉÔÇ½: %s"
+#~ msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªèª­è¾¼ä¸èƒ½: %s"
 
 #~ msgid ""
 #~ "The file \"%s\" resides on another machine (called %s) and may not be "
 #~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
-#~ "¥Õ¥¡¥¤¥ë \"%s\" ¤ÏÊÌ¤Î¥Ş¥·¥ó (Ì¾Á°¤Ï %s) ¤Ë¤¢¤ë¤¿¤á¡¢¤³¤Î¥×¥í¥°¥é¥à¤Ç¤ÏÍø"
-#~ "ÍÑ¤Ç¤­¤Ê¤¤¤è¤¦¤Ç¤¹¡£\n"
-#~ "ËÜÅö¤Ë¤³¤ì¤òÁªÂò¤·¤¿¤¤¤Î¤Ç¤¹¤«?"
+#~ "ãƒ•ã‚¡ã‚¤ãƒ« \"%s\" ã¯åˆ¥ã®ãƒã‚·ãƒ³ (åå‰ã¯ %s) ã«ã‚ã‚‹ãŸã‚ã€ã“ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã§ã¯åˆ©"
+#~ "ç”¨ã§ããªã„ã‚ˆã†ã§ã™ã€‚\n"
+#~ "æœ¬å½“ã«ã“ã‚Œã‚’é¸æŠã—ãŸã„ã®ã§ã™ã‹?"
 
 #~ msgid "Create Dir"
-#~ msgstr "¥Ç¥£¥ì¥¯¥È¥êºîÀ®"
+#~ msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆ"
 
 #~ msgid "Delete File"
-#~ msgstr "¥Õ¥¡¥¤¥ëºï½ü"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤"
 
 #~ msgid "Rename File"
-#~ msgstr "¥Õ¥¡¥¤¥ëÌ¾ÊÑ¹¹"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«åå¤‰æ›´"
 
 #~ msgid "Close"
-#~ msgstr "ÊÄ¤¸¤ë"
+#~ msgstr "é–‰ã˜ã‚‹"
 
 #~ msgid ""
 #~ "The directory name \"%s\" contains symbols that are not allowed in "
 #~ "filenames"
 #~ msgstr ""
-#~ "\"%s\" ¤È¤¤¤¦¥Ç¥£¥ì¥¯¥È¥êÌ¾¤Ï¡¢¥Õ¥¡¥¤¥ëÌ¾¤Ë»È¤¨¤Ê¤¤µ­¹æ¤ò´Ş¤ó¤Ç¤¤¤Ş¤¹"
+#~ "\"%s\" ã¨ã„ã†ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã¯ã€ãƒ•ã‚¡ã‚¤ãƒ«åã«ä½¿ãˆãªã„è¨˜å·ã‚’å«ã‚“ã§ã„ã¾ã™"
 
 #~ msgid ""
 #~ "Error creating directory \"%s\": %s\n"
 #~ "%s"
 #~ msgstr ""
-#~ "¥Ç¥£¥ì¥¯¥È¥êºîÀ®¥¨¥é¡¼ \"%s\": %s\n"
+#~ "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆã‚¨ãƒ©ãƒ¼ \"%s\": %s\n"
 #~ "%s"
 
 #~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr "¤ª¤½¤é¤¯¥Õ¥¡¥¤¥ëÌ¾¤Ë»È¤¨¤Ê¤¤µ­¹æ¤ò»È¤Ã¤Æ¤¤¤Ş¤¹¡£"
+#~ msgstr "ãŠãã‚‰ããƒ•ã‚¡ã‚¤ãƒ«åã«ä½¿ãˆãªã„è¨˜å·ã‚’ä½¿ã£ã¦ã„ã¾ã™ã€‚"
 
 #~ msgid "Error creating directory \"%s\": %s\n"
-#~ msgstr "¥Ç¥£¥ì¥¯¥È¥êºîÀ®¥¨¥é¡¼ \"%s\": %s\n"
+#~ msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆã‚¨ãƒ©ãƒ¼ \"%s\": %s\n"
+
+#~ msgid "Create Directory"
+#~ msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆ"
 
 #~ msgid "_Directory name:"
-#~ msgstr "¥Ç¥£¥ì¥¯¥È¥êÌ¾ (_D):"
+#~ msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå (_D):"
 
 #~ msgid "C_reate"
-#~ msgstr "ºîÀ® (_R)"
+#~ msgstr "ä½œæˆ (_R)"
 
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "\"%s\" ¤È¤¤¤¦¥Õ¥¡¥¤¥ëÌ¾¤Ë¤Ï¥Õ¥¡¥¤¥ëÌ¾¤Ë»È¤¨¤Ê¤¤µ­¹æ¤¬Æş¤Ã¤Æ¤¤¤Ş¤¹"
+#~ msgstr "\"%s\" ã¨ã„ã†ãƒ•ã‚¡ã‚¤ãƒ«åã«ã¯ãƒ•ã‚¡ã‚¤ãƒ«åã«ä½¿ãˆãªã„è¨˜å·ãŒå…¥ã£ã¦ã„ã¾ã™"
 
 #~ msgid ""
 #~ "Error deleting file \"%s\": %s\n"
 #~ "%s"
 #~ msgstr ""
-#~ "ºï½ü¥¨¥é¡¼ \"%s\": %s\n"
+#~ "å‰Šé™¤ã‚¨ãƒ©ãƒ¼ \"%s\": %s\n"
 #~ "%s"
 
 #~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr "¤ª¤½¤é¤¯¥Õ¥¡¥¤¥ëÌ¾¤Ë»È¤¨¤Ê¤¤µ­¹æ¤¬Æş¤Ã¤Æ¤¤¤Ş¤¹"
+#~ msgstr "ãŠãã‚‰ããƒ•ã‚¡ã‚¤ãƒ«åã«ä½¿ãˆãªã„è¨˜å·ãŒå…¥ã£ã¦ã„ã¾ã™"
 
 #~ msgid "Really delete file \"%s\"?"
-#~ msgstr "ËÜÅö¤Ë \"%s\" ¤È¤¤¤¦¥Õ¥¡¥¤¥ë¤òºï½ü¤·¤Ş¤¹¤«?"
+#~ msgstr "æœ¬å½“ã« \"%s\" ã¨ã„ã†ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã—ã¾ã™ã‹?"
 
 #~ msgid "_Delete"
-#~ msgstr "ºï½ü (_D)"
+#~ msgstr "å‰Šé™¤ (_D)"
 
 #~ msgid ""
 #~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "\"%s\" ¤È¤¤¤¦¥Õ¥¡¥¤¥ëÌ¾¤Ë¤Ï¥Õ¥¡¥¤¥ëÌ¾¤Ë»È¤¨¤Ê¤¤µ­¹æ¤¬Æş¤Ã¤Æ¤¤¤Ş¤¹"
+#~ msgstr "\"%s\" ã¨ã„ã†ãƒ•ã‚¡ã‚¤ãƒ«åã«ã¯ãƒ•ã‚¡ã‚¤ãƒ«åã«ä½¿ãˆãªã„è¨˜å·ãŒå…¥ã£ã¦ã„ã¾ã™"
 
 #~ msgid ""
 #~ "Error renaming file to \"%s\": %s\n"
 #~ "%s"
 #~ msgstr ""
-#~ "\"%s\" ¤Ø¤ÎÌ¾Á°ÊÑ¹¹¥¨¥é¡¼: %s\n"
+#~ "\"%s\" ã¸ã®åå‰å¤‰æ›´ã‚¨ãƒ©ãƒ¼: %s\n"
 #~ "%s"
 
 #~ msgid ""
 #~ "Error renaming file \"%s\": %s\n"
 #~ "%s"
 #~ msgstr ""
-#~ "\"%s\" ¤«¤é¤ÎÌ¾Á°ÊÑ¹¹¥¨¥é¡¼: %s\n"
+#~ "\"%s\" ã‹ã‚‰ã®åå‰å¤‰æ›´ã‚¨ãƒ©ãƒ¼: %s\n"
 #~ "%s"
 
 #~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "\"%s\" ¤«¤é \"%s\" ¤Ø¤ÎÌ¾Á°ÊÑ¹¹¥¨¥é¡¼: %s"
+#~ msgstr "\"%s\" ã‹ã‚‰ \"%s\" ã¸ã®åå‰å¤‰æ›´ã‚¨ãƒ©ãƒ¼: %s"
 
 #~ msgid "Rename file \"%s\" to:"
-#~ msgstr "\"%s\" ¤ÎÌ¾Á°ÊÑ¹¹Àè:"
+#~ msgstr "\"%s\" ã®åå‰å¤‰æ›´å…ˆ:"
 
 #~ msgid "_Rename"
-#~ msgstr "Ì¾Á°ÊÑ¹¹ (_R)"
+#~ msgstr "åå‰å¤‰æ›´ (_R)"
 
 #~ msgid "Rename"
-#~ msgstr "Ì¾Á°ÊÑ¹¹"
+#~ msgstr "åå‰å¤‰æ›´"
 
 #~ msgid ""
 #~ "The filename %s couldn't be converted to UTF-8. Try setting the "
 #~ "environment variable G_BROKEN_FILENAMES."
 #~ msgstr ""
-#~ "¥Õ¥¡¥¤¥ëÌ¾ %s ¤Ï UTF-8 ¤ËÊÑ´¹¤Ç¤­¤Ş¤»¤ó¡£´Ä¶­ÊÑ¿ô G_BROKEN_FILENAMES ¤òÀß"
-#~ "Äê¤·¤Æ¤ß¤Æ¤¯¤À¤µ¤¤¡£"
+#~ "ãƒ•ã‚¡ã‚¤ãƒ«å %s ã¯ UTF-8 ã«å¤‰æ›ã§ãã¾ã›ã‚“ã€‚ç’°å¢ƒå¤‰æ•° G_BROKEN_FILENAMES ã‚’è¨­"
+#~ "å®šã—ã¦ã¿ã¦ãã ã•ã„ã€‚"
 
 #~ msgid "Couldn't convert filename"
-#~ msgstr "¥Õ¥¡¥¤¥ëÌ¾¤òÊÑ´¹¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸ"
 
 #~ msgid "01.01.2000"
 #~ msgstr "01.01.2000"
 
 #~ msgid "expire a_t"
-#~ msgstr "´ü¸ÂÆü (_T)"
+#~ msgstr "æœŸé™æ—¥ (_T)"
 
 #~ msgid "_Prev"
-#~ msgstr "Á° (_P)"
+#~ msgstr "å‰ (_P)"
 
 #~ msgid "_Next"
-#~ msgstr "¼¡ (_N)"
+#~ msgstr "æ¬¡ (_N)"
 
 #~ msgid ""
 #~ "In \"Passphrase\" and \"Repeat passphrase\"\n"
 #~ "you must enter the same passphrase."
 #~ msgstr ""
-#~ "\"¥Ñ¥¹¥ï¡¼¥É\" ¤È \"ºÆÆşÎÏ\" ¤Ë¤Ï\n"
-#~ "Æ±¤¸¥Ñ¥¹¥ï¡¼¥É¤òÆşÎÏ¤·¤Ê¤¯¤Æ¤Ï¤Ê¤ê¤Ş¤»¤ó"
+#~ "\"ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰\" ã¨ \"å†å…¥åŠ›\" ã«ã¯\n"
+#~ "åŒã˜ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ãªãã¦ã¯ãªã‚Šã¾ã›ã‚“"
 
 #~ msgid "_send to key server"
-#~ msgstr "¸°¥µ¡¼¥Ğ¡¼¤ØÁ÷¿® (_S)"
+#~ msgstr "éµã‚µãƒ¼ãƒãƒ¼ã¸é€ä¿¡ (_S)"
 
 #~ msgid "_Generate key"
-#~ msgstr "¸°¤òÀ¸À® (_G)"
+#~ msgstr "éµã‚’ç”Ÿæˆ (_G)"
 
 #~ msgid "F_inish"
-#~ msgstr "´°Î» (_I)"
+#~ msgstr "å®Œäº† (_I)"
+
+#~ msgid "Invalid Date"
+#~ msgstr "ç„¡åŠ¹ãªæ—¥ä»˜"
 
 #~ msgid "/File/C_heck"
-#~ msgstr "/¥Õ¥¡¥¤¥ë (F)/¥Á¥§¥Ã¥¯ (_H)"
+#~ msgstr "/ãƒ•ã‚¡ã‚¤ãƒ« (F)/ãƒã‚§ãƒƒã‚¯ (_H)"
 
 #~ msgid " Decrypt "
-#~ msgstr " Éü¹æ²½ "
+#~ msgstr " å¾©å·åŒ– "
 
 #~ msgid ""
 #~ "@Options:\n"
 #~ " "
 #~ msgstr ""
-#~ "¥ª¥×¥·¥ç¥ó¤Ï°Ê²¼¤Î¤È¤ª¤ê:\n"
+#~ "ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¯ä»¥ä¸‹ã®ã¨ãŠã‚Š:\n"
 #~ " "
 
 #~ msgid "verbose"
-#~ msgstr "¾éÄ¹"
+#~ msgstr "å†—é•·"
 
 #~ msgid "be somewhat more quiet"
-#~ msgstr "¾¯¤·½ĞÎÏ¤ò¸º¤é¤¹"
+#~ msgstr "å°‘ã—å‡ºåŠ›ã‚’æ¸›ã‚‰ã™"
 
 #~ msgid "set debugging flags"
-#~ msgstr "¥Ç¥Ğ¥Ã¥°¤Î¥Õ¥é¥°¤ò¥»¥Ã¥È"
+#~ msgstr "ãƒ‡ãƒãƒƒã‚°ã®ãƒ•ãƒ©ã‚°ã‚’ã‚»ãƒƒãƒˆ"
 
 #~ msgid "enable full debugging"
-#~ msgstr "¥Õ¥ë¥Ç¥Ğ¥Ã¥°¤òÍ­¸ú¤Ë¤¹¤ë"
+#~ msgstr "ãƒ•ãƒ«ãƒ‡ãƒãƒƒã‚°ã‚’æœ‰åŠ¹ã«ã™ã‚‹"
 
 #~ msgid "set the user interface to advanced mode"
-#~ msgstr "ÁàºîÂÎ·Ï¤ò¾åµé¼Ô¥â¡¼¥É¤ËÀßÄê"
+#~ msgstr "æ“ä½œä½“ç³»ã‚’ä¸Šç´šè€…ãƒ¢ãƒ¼ãƒ‰ã«è¨­å®š"
 
 #~ msgid "omit \"no backup yet\" warning at startup"
-#~ msgstr "µ¯Æ°»ş¤Î¡Ö¥Ğ¥Ã¥¯¥¢¥Ã¥×¤¬¤Ê¤¤¡×¤È¤¤¤¦·Ù¹ğ¤ò¾ÊÎ¬"
+#~ msgstr "èµ·å‹•æ™‚ã®ã€Œãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãŒãªã„ã€ã¨ã„ã†è­¦å‘Šã‚’çœç•¥"
 
 #~ msgid "Usage: gpa [options] (-h for help)"
-#~ msgstr "ÍÑË¡: gpa [¥ª¥×¥·¥ç¥ó] (-h ¤Ç¥Ø¥ë¥×)"
+#~ msgstr "ç”¨æ³•: gpa [ã‚ªãƒ—ã‚·ãƒ§ãƒ³] (-h ã§ãƒ˜ãƒ«ãƒ—)"
 
 #~ msgid "NOTE: no default option file `%s'\n"
-#~ msgstr "Ãí°Õ: ¥Ç¥Õ¥©¥ë¥È¤Î¥ª¥×¥·¥ç¥ó¥Õ¥¡¥¤¥ë `%s' ¤¬¤¢¤ê¤Ş¤»¤ó\n"
+#~ msgstr "æ³¨æ„: ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ•ã‚¡ã‚¤ãƒ« `%s' ãŒã‚ã‚Šã¾ã›ã‚“\n"
 
 #~ msgid "option file `%s': %s\n"
-#~ msgstr "¥ª¥×¥·¥ç¥ó¥Õ¥¡¥¤¥ë `%s': %s\n"
+#~ msgstr "ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ•ã‚¡ã‚¤ãƒ« `%s': %s\n"
 
 #~ msgid "reading options from `%s'\n"
-#~ msgstr "¥ª¥×¥·¥ç¥ó¤ò `%s' ¤«¤éÆÉ¹ş\n"
+#~ msgstr "ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’ `%s' ã‹ã‚‰èª­è¾¼\n"
 
 #~ msgid "don't trust"
-#~ msgstr "¿®ÍÑ¤·¤Ê¤¤"
+#~ msgstr "ä¿¡ç”¨ã—ãªã„"
 
 #~ msgid "trust marginally"
-#~ msgstr "¿®ÍÑÅÙÄã"
+#~ msgstr "ä¿¡ç”¨åº¦ä½"
 
 #~ msgid "trust fully"
-#~ msgstr "¿®ÍÑÅÙ¹â"
+#~ msgstr "ä¿¡ç”¨åº¦é«˜"
 
 #~ msgid "trust ultimately"
-#~ msgstr "´°àú¤Ë¿®ÍÑ"
+#~ msgstr "å®Œç’§ã«ä¿¡ç”¨"
 
 #~ msgid "User Identity/Role"
-#~ msgstr "¥æ¡¼¥¶¡¼¤Î¿È¸µ/¿ÈÊ¬"
+#~ msgstr "ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®èº«å…ƒ/èº«åˆ†"
 
 #~ msgid "Insert passphrase"
-#~ msgstr "¥Ñ¥¹¥ï¡¼¥É¤òÆşÎÏ"
+#~ msgstr "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›"
 
 #~ msgid "/_Info"
-#~ msgstr "/¾ğÊó (_I)"
+#~ msgstr "/æƒ…å ± (_I)"
 
 #~ msgid "/Info/_Help"
-#~ msgstr "/¾ğÊó (I)/¥Ø¥ë¥× (_H)"
+#~ msgstr "/æƒ…å ± (I)/ãƒ˜ãƒ«ãƒ— (_H)"
 
 #~ msgid "Weak passphrase"
-#~ msgstr "ÀÈ¼å¤Ê¥Ñ¥¹¥Õ¥ì¡¼¥º"
+#~ msgstr "è„†å¼±ãªãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚º"
 
 #~ msgid "Backup Directory"
-#~ msgstr "¥Ğ¥Ã¥¯¥¢¥Ã¥× ¥Ç¥£¥ì¥¯¥È¥ê"
+#~ msgstr "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ— ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"
 
 #~ msgid ""
 #~ "Please enter a directory where your backup keys should be saved.\n"
 #~ "\n"
 #~ "GPA will create two files in that directory: pub_key.asc and sec_key.asc"
 #~ msgstr ""
-#~ "¸°¤Î¥Ğ¥Ã¥¯¥¢¥Ã¥×¤òÊİÂ¸¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê¤òÆşÎÏ¤·¤Æ²¼¤µ¤¤¡£\n"
+#~ "éµã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’ä¿å­˜ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å…¥åŠ›ã—ã¦ä¸‹ã•ã„ã€‚\n"
 #~ "\n"
-#~ "GPA ¤Ï¤½¤Î¥Ç¥£¥ì¥¯¥È¥ê¤Ë¤Õ¤¿¤Ä¤Î¥Õ¥¡¥¤¥ë¤òºîÀ®¤·¤Ş¤¹: pub_key.asc ¤È "
-#~ "sec_key.asc ¤Ç¤¹"
+#~ "GPA ã¯ãã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ãµãŸã¤ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã—ã¾ã™: pub_key.asc ã¨ "
+#~ "sec_key.asc ã§ã™"
 
 #~ msgid "Directory:"
-#~ msgstr "¥Ç¥£¥ì¥¯¥È¥ê:"
+#~ msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª:"
 
 #~ msgid "_Overwrite"
-#~ msgstr "¾å½ñ¤­ (_O)"
+#~ msgstr "ä¸Šæ›¸ã (_O)"
 
 #~ msgid ""
 #~ "Directory %s does not exist.\n"
 #~ "Do you want to create it now?"
 #~ msgstr ""
-#~ "¥Ç¥£¥ì¥¯¥È¥ê %s ¤ÏÂ¸ºß¤·¤Ş¤»¤ó¡£\n"
-#~ "º£¤³¤³¤ÇºîÀ®¤·¤Ş¤¹¤«?"
+#~ "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª %s ã¯å­˜åœ¨ã—ã¾ã›ã‚“ã€‚\n"
+#~ "ä»Šã“ã“ã§ä½œæˆã—ã¾ã™ã‹?"
 
 #~ msgid "Directory does not exist"
-#~ msgstr "¥Ç¥£¥ì¥¯¥È¥ê¤¬Â¸ºß¤·¤Ş¤»¤ó"
+#~ msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå­˜åœ¨ã—ã¾ã›ã‚“"
 
 #~ msgid "Error creating directory"
-#~ msgstr "¥Ç¥£¥ì¥¯¥È¥êºîÀ®¥¨¥é¡¼"
+#~ msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆã‚¨ãƒ©ãƒ¼"
 
 #~ msgid "File exists"
-#~ msgstr "¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤·¤Ş¤¹"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¾ã™"
 
 #~ msgid "Please enter a valid directory"
-#~ msgstr "Àµ¤·¤¤¥Ç¥£¥ì¥¯¥È¥ê¤òÆşÎÏ¤·¤Æ²¼¤µ¤¤"
+#~ msgstr "æ­£ã—ã„ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å…¥åŠ›ã—ã¦ä¸‹ã•ã„"
 
 #~ msgid "Import from _clipboard:"
-#~ msgstr "¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤«¤é¥¤¥ó¥İ¡¼¥È (_C):"
+#~ msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆ (_C):"
 
 #~ msgid "Key Trust"
-#~ msgstr "¸°¤Î¿®ÍÑÅÙ"
+#~ msgstr "éµã®ä¿¡ç”¨åº¦"
 
 #~ msgid "Missing public key"
-#~ msgstr "¸ø³«¸°¤¬¤¢¤ê¤Ş¤»¤ó"
+#~ msgstr "å…¬é–‹éµãŒã‚ã‚Šã¾ã›ã‚“"
 
 #~ msgid ""
 #~ "An error occured while receiving\n"
 #~ "the requested key from the keyserver."
 #~ msgstr ""
-#~ "Í×µá¤µ¤ì¤¿¸°¤ò¸°¥µ¡¼¥Ğ¤«¤é\n"
-#~ "¼õ¿®¤·¤Æ¤¤¤ë´Ö¤Ë¥¨¥é¡¼¤¬È¯À¸¤·¤Ş¤·¤¿¡£"
+#~ "è¦æ±‚ã•ã‚ŒãŸéµã‚’éµã‚µãƒ¼ãƒã‹ã‚‰\n"
+#~ "å—ä¿¡ã—ã¦ã„ã‚‹é–“ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚"
 
 #~ msgid "_Key ID: "
-#~ msgstr "¸° ID (_K): "
+#~ msgstr "éµ ID (_K): "
 
 #~ msgid "_Receive"
-#~ msgstr "¼õ¿® (_R)"
+#~ msgstr "å—ä¿¡ (_R)"
 
 #~ msgid "Key Trust:"
-#~ msgstr "¸°¤Î¿®ÍÑÅÙ:"
+#~ msgstr "éµã®ä¿¡ç”¨åº¦:"
+
+#~ msgid "Set key server"
+#~ msgstr "éµã‚µãƒ¼ãƒã‚’è¨­å®š"
 
 #~ msgid "_Key server: "
-#~ msgstr "¸°¥µ¡¼¥Ğ (_K): "
+#~ msgstr "éµã‚µãƒ¼ãƒ (_K): "
 
 #~ msgid "_Set"
-#~ msgstr "ÀßÄê (_S)"
+#~ msgstr "è¨­å®š (_S)"
+
+#~ msgid "Fingerprint"
+#~ msgstr "æŒ‡ç´‹"
 
 #~ msgid "User identity / role"
-#~ msgstr "¥æ¡¼¥¶¡¼¤Î¿È¸µ/¿ÈÊ¬"
+#~ msgstr "ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®èº«å…ƒ/èº«åˆ†"
 
 #~ msgid ""
 #~ "No secret keys available to\n"
 #~ "select a default key from."
-#~ msgstr "¥Ç¥Õ¥©¥ë¥È¸°¤ËÁª¤Ù¤ëÈëÌ©¸°¤¬¤¢¤ê¤Ş¤»¤ó"
+#~ msgstr "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆéµã«é¸ã¹ã‚‹ç§˜å¯†éµãŒã‚ã‚Šã¾ã›ã‚“"
 
 #~ msgid "/Options/_Keyserver"
-#~ msgstr "/¥ª¥×¥·¥ç¥ó (O)/¸°¥µ¡¼¥Ğ¡¼ (_K)"
+#~ msgstr "/ã‚ªãƒ—ã‚·ãƒ§ãƒ³ (O)/éµã‚µãƒ¼ãƒãƒ¼ (_K)"
 
 #~ msgid "/Options/_Default Key"
-#~ msgstr "/¥ª¥×¥·¥ç¥ó (O)/¥Ç¥Õ¥©¥ë¥È¤Î¸° (_D)"
+#~ msgstr "/ã‚ªãƒ—ã‚·ãƒ§ãƒ³ (O)/ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®éµ (_D)"
 
 #~ msgid "_Ownertrust level: "
-#~ msgstr "½êÍ­¼Ô¤Î¿®ÍÑÅÙ (_O):"
+#~ msgstr "æ‰€æœ‰è€…ã®ä¿¡ç”¨åº¦ (_O):"
 
 #~ msgid "Signature"
-#~ msgstr "½ğÌ¾"
+#~ msgstr "ç½²å"
 
 #~ msgid "Untrusted Key"
-#~ msgstr "¿®ÍÑ¤·¤Æ¤¤¤Ê¤¤¸°"
+#~ msgstr "ä¿¡ç”¨ã—ã¦ã„ãªã„éµ"
 
 #~ msgid ""
 #~ "The keyserver returned an error message:\n"
 #~ "\n"
 #~ "%s"
 #~ msgstr ""
-#~ "¸°¥µ¡¼¥Ğ¤¬¥¨¥é¡¼¥á¥Ã¥»¡¼¥¸¤òÊÖ¤·¤Æ¤­¤Ş¤·¤¿:\n"
+#~ "éµã‚µãƒ¼ãƒãŒã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿”ã—ã¦ãã¾ã—ãŸ:\n"
 #~ "\n"
 #~ "%s"
 
 #~ msgid "Keyserver timeout"
-#~ msgstr "¸°¥µ¡¼¥Ğ»ş´ÖÀÚ¤ì"
+#~ msgstr "éµã‚µãƒ¼ãƒæ™‚é–“åˆ‡ã‚Œ"
 
 #~ msgid "Error initializing network"
-#~ msgstr "¥Í¥Ã¥È¥ï¡¼¥¯½é´ü²½¥¨¥é¡¼"
+#~ msgstr "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯åˆæœŸåŒ–ã‚¨ãƒ©ãƒ¼"
 
 #~ msgid "Error resolving host name"
-#~ msgstr "¥Û¥¹¥ÈÌ¾²ò·è¥¨¥é¡¼"
+#~ msgstr "ãƒ›ã‚¹ãƒˆåè§£æ±ºã‚¨ãƒ©ãƒ¼"
 
 #~ msgid "Invalid number of fields in GnuPG colon output"
-#~ msgstr "GnuPG ¥³¥í¥ó½ĞÎÏÍó¤Î¿ô¤¬ÉÔÀµ¤Ç¤¹"
+#~ msgstr "GnuPG ã‚³ãƒ­ãƒ³å‡ºåŠ›æ¬„ã®æ•°ãŒä¸æ­£ã§ã™"
 
 #~ msgid "Target file not specified"
-#~ msgstr "½ĞÎÏÀè¤Î¥Õ¥¡¥¤¥ë¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "å‡ºåŠ›å…ˆã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "Source file not specified"
-#~ msgstr "ÆşÎÏ¸µ¤Î¥Õ¥¡¥¤¥ë¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "å…¥åŠ›å…ƒã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "Not a regular file"
-#~ msgstr "¥ì¥®¥å¥é¡¼¥Õ¥¡¥¤¥ë¤Ç¤Ï¤¢¤ê¤Ş¤»¤ó"
+#~ msgstr "ãƒ¬ã‚®ãƒ¥ãƒ©ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã¯ã‚ã‚Šã¾ã›ã‚“"
 
 #~ msgid "Missing file name"
-#~ msgstr "¥Õ¥¡¥¤¥ëÌ¾¤¬¤¢¤ê¤Ş¤»¤ó"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«åãŒã‚ã‚Šã¾ã›ã‚“"
 
 #~ msgid "Missing private key ID for signing"
-#~ msgstr "½ğÌ¾¤¹¤ë¤¿¤á¤Ë»È¤¦ÈëÌ©¸°¤Î ID ¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "ç½²åã™ã‚‹ãŸã‚ã«ä½¿ã†ç§˜å¯†éµã® ID ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "Missing public key ID(s) for encrypting"
-#~ msgstr "°Å¹æ²½¤Ë»È¤¦¸ø³«¸°¤Î ID ¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "æš—å·åŒ–ã«ä½¿ã†å…¬é–‹éµã® ID ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "Missing passphrase for symmetric encrypting"
-#~ msgstr "ÂĞ¾Î¼°°Å¹æ²½¤Ë»È¤¦¥Ñ¥¹¥Õ¥ì¡¼¥º¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "å¯¾ç§°å¼æš—å·åŒ–ã«ä½¿ã†ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "GnuPG execution aborted"
-#~ msgstr "GnuPG ¤Î¼Â¹Ô¤¬Ãæ»ß¤µ¤ì¤Ş¤·¤¿"
+#~ msgstr "GnuPG ã®å®Ÿè¡ŒãŒä¸­æ­¢ã•ã‚Œã¾ã—ãŸ"
 
 #~ msgid "Invalid file: bad armor"
-#~ msgstr "Ìµ¸ú¤Ê¥Õ¥¡¥¤¥ë: ÉÔÀµ¤Ê¥¢¡¼¥Ş"
+#~ msgstr "ç„¡åŠ¹ãªãƒ•ã‚¡ã‚¤ãƒ«: ä¸æ­£ãªã‚¢ãƒ¼ãƒ"
 
 #~ msgid "Invalid file: bad MDC"
-#~ msgstr "Ìµ¸ú¤Ê¥Õ¥¡¥¤¥ë: ÉÔÀµ¤Ê MDC"
+#~ msgstr "ç„¡åŠ¹ãªãƒ•ã‚¡ã‚¤ãƒ«: ä¸æ­£ãª MDC"
 
 #~ msgid "Decryption failed"
-#~ msgstr "Éü¹æ²½¤Ë¼ºÇÔ¤·¤Ş¤·¤¿"
+#~ msgstr "å¾©å·åŒ–ã«å¤±æ•—ã—ã¾ã—ãŸ"
 
 #~ msgid "Delete problem"
-#~ msgstr "ºï½ü¤ËÌäÂêÈ¯À¸"
+#~ msgstr "å‰Šé™¤ã«å•é¡Œç™ºç”Ÿ"
 
 #~ msgid "Error in MDC"
-#~ msgstr "MDC ¤Ë¥¨¥é¡¼"
+#~ msgstr "MDC ã«ã‚¨ãƒ©ãƒ¼"
 
 #~ msgid "File error"
-#~ msgstr "¥Õ¥¡¥¤¥ë¥¨¥é¡¼"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‚¨ãƒ©ãƒ¼"
 
 #~ msgid "Missing passphrase"
-#~ msgstr "¥Ñ¥¹¥Õ¥ì¡¼¥ºÉÔÌÀ"
+#~ msgstr "ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºä¸æ˜"
 
 #~ msgid "No valid OpenPGP data found"
-#~ msgstr "Å¬ÀÚ¤Ê OpenPGP ¥Ç¡¼¥¿¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó¤Ç¤·¤¿"
+#~ msgstr "é©åˆ‡ãª OpenPGP ãƒ‡ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ"
 
 #~ msgid ""
 #~ "GnuPG execution failed:\n"
 #~ "internal error while setting\n"
 #~ "command handler"
 #~ msgstr ""
-#~ "GnuPG ¤Î¼Â¹Ô¤Ë¼ºÇÔ¤·¤Ş¤·¤¿:\n"
-#~ "¥³¥Ş¥ó¥É¥Ï¥ó¥É¥éÀßÄêÃæ¤Ë\n"
-#~ "ÆâÉô¥¨¥é¡¼È¯À¸"
+#~ "GnuPG ã®å®Ÿè¡Œã«å¤±æ•—ã—ã¾ã—ãŸ:\n"
+#~ "ã‚³ãƒãƒ³ãƒ‰ãƒãƒ³ãƒ‰ãƒ©è¨­å®šä¸­ã«\n"
+#~ "å†…éƒ¨ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ"
 
 #~ msgid ""
 #~ "GnuPG execution failed:\n"
 #~ "could not spawn external program"
 #~ msgstr ""
-#~ "GnuPG ¤Î¼Â¹Ô¤Ë¼ºÇÔ¤·¤Ş¤·¤¿:\n"
-#~ "³°Éô¥×¥í¥°¥é¥à¤ò°û¤ß¹ş¤á¤Ş¤»¤ó¤Ç¤·¤¿"
+#~ "GnuPG ã®å®Ÿè¡Œã«å¤±æ•—ã—ã¾ã—ãŸ:\n"
+#~ "å¤–éƒ¨ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’é£²ã¿è¾¼ã‚ã¾ã›ã‚“ã§ã—ãŸ"
 
 #~ msgid "GnuPG execution terminated"
-#~ msgstr "GnuPG ¤Î¼Â¹Ô¤¬½ªÎ»¤µ¤ì¤Ş¤·¤¿"
+#~ msgstr "GnuPG ã®å®Ÿè¡ŒãŒçµ‚äº†ã•ã‚Œã¾ã—ãŸ"
 
 #~ msgid "Invalid number of fields in output of `gpg --check-sigs'"
-#~ msgstr "`gpg --check-sigs' ¤Î½ĞÎÏ¤ÎÍó¤Î¿ô¤¬ÉÔÀµ¤Ç¤¹"
+#~ msgstr "`gpg --check-sigs' ã®å‡ºåŠ›ã®æ¬„ã®æ•°ãŒä¸æ­£ã§ã™"
 
 #~ msgid "No valid public key specified"
-#~ msgstr "Å¬ÀÚ¤Ê¸ø³«¸°¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "é©åˆ‡ãªå…¬é–‹éµãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "No valid secret key specified"
-#~ msgstr "Å¬ÀÚ¤ÊÈëÌ©¸°¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "é©åˆ‡ãªç§˜å¯†éµãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "No valid passphrase specified"
-#~ msgstr "Å¬ÀÚ¤Ê¥Ñ¥¹¥Õ¥ì¡¼¥º¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "é©åˆ‡ãªãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "No file selected for verifying signature."
-#~ msgstr "½ğÌ¾¤ò¸¡¾Ú¤¹¤ë¥Õ¥¡¥¤¥ë¤¬ÁªÂò¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "ç½²åã‚’æ¤œè¨¼ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "Verifying file signature"
-#~ msgstr "¥Õ¥¡¥¤¥ë½ğÌ¾¤Î¸¡¾Ú"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ç½²åã®æ¤œè¨¼"
 
 #~ msgid "Filename: "
-#~ msgstr "¥Õ¥¡¥¤¥ëÌ¾: "
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«å: "
 
 #~ msgid "_Signatures"
-#~ msgstr "½ğÌ¾ (_S)"
+#~ msgstr "ç½²å (_S)"
 
 #~ msgid "Sigs total"
-#~ msgstr "½ğÌ¾¤Î¹ç·×¿ô"
+#~ msgstr "ç½²åã®åˆè¨ˆæ•°"
 
 #~ msgid "Valid Sigs"
-#~ msgstr "Í­¸ú¤Ê½ğÌ¾¿ô"
+#~ msgstr "æœ‰åŠ¹ãªç½²åæ•°"
 
 #~ msgid "Invalid Sigs"
-#~ msgstr "Ìµ¸ú¤Ê½ğÌ¾¿ô"
+#~ msgstr "ç„¡åŠ¹ãªç½²åæ•°"
 
 #~ msgid "clear"
-#~ msgstr "Ê¿Ê¸"
+#~ msgstr "å¹³æ–‡"
 
 #~ msgid "protected"
-#~ msgstr "Êİ¸î"
+#~ msgstr "ä¿è­·"
 
 #~ msgid "clearsigned"
-#~ msgstr "Ê¿Ê¸½ğÌ¾"
+#~ msgstr "å¹³æ–‡ç½²å"
 
 #~ msgid "detach-signed"
-#~ msgstr "Ê¬Î¥½ğÌ¾"
+#~ msgstr "åˆ†é›¢ç½²å"
 
 #~ msgid "No key selected for detail view."
-#~ msgstr "¾ÜºÙÉ½¼¨¤¹¤ë¸°¤¬ÁªÂò¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "è©³ç´°è¡¨ç¤ºã™ã‚‹éµãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "Show public key detail"
-#~ msgstr "¸ø³«¸°¤Î¾ÜºÙ¤òÉ½¼¨"
+#~ msgstr "å…¬é–‹éµã®è©³ç´°ã‚’è¡¨ç¤º"
 
 #~ msgid "Fingerprint: "
-#~ msgstr "»ØÌæ: "
+#~ msgstr "æŒ‡ç´‹: "
 
 #~ msgid "Key owner"
-#~ msgstr "¸°¤Î½êÍ­¼Ô"
+#~ msgstr "éµã®æ‰€æœ‰è€…"
 
 #~ msgid "Add _default recipients:"
-#~ msgstr "¥Ç¥Õ¥©¥ë¥È¤Î°¸Àè¤ËÄÉ²Ã (_D)"
+#~ msgstr "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å®›å…ˆã«è¿½åŠ  (_D)"
 
 #~ msgid "Add _keys to recipients"
-#~ msgstr "¸°¤ò°¸Àè¤ËÄÉ²Ã (_K)"
+#~ msgstr "éµã‚’å®›å…ˆã«è¿½åŠ  (_K)"
 
 #~ msgid "S_how detail"
-#~ msgstr "¾ÜºÙ¤òÉ½¼¨ (_H)"
+#~ msgstr "è©³ç´°ã‚’è¡¨ç¤º (_H)"
 
 #~ msgid "Save encrypted file _as: "
-#~ msgstr "°Å¹æ²½¥Õ¥¡¥¤¥ë¤ÎÊİÂ¸Àè (_A)"
+#~ msgstr "æš—å·åŒ–ãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜å…ˆ (_A)"
 
 #~ msgid "   _Browse   "
-#~ msgstr "   ¥Ö¥é¥¦¥º (_B)   "
+#~ msgstr "   ãƒ–ãƒ©ã‚¦ã‚º (_B)   "
 
 #~ msgid "Save encrypted file as"
-#~ msgstr "°Å¹æ²½¥Õ¥¡¥¤¥ë¤ÎÊİÂ¸Àè"
+#~ msgstr "æš—å·åŒ–ãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜å…ˆ"
 
 #~ msgid "Protect files by Password"
-#~ msgstr "¥Ñ¥¹¥ï¡¼¥É¤Ç¥Õ¥¡¥¤¥ë¤òÊİ¸î"
+#~ msgstr "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿è­·"
 
 #~ msgid "Save protected _file as: "
-#~ msgstr "Êİ¸î¤µ¤ì¤¿¥Õ¥¡¥¤¥ë¤ÎÊİÂ¸Àè (_F): "
+#~ msgstr "ä¿è­·ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜å…ˆ (_F): "
 
 #~ msgid "Save protected file as"
-#~ msgstr "Êİ¸î¤µ¤ì¤¿¥Õ¥¡¥¤¥ë¤ÎÊİÂ¸Àè"
+#~ msgstr "ä¿è­·ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜å…ˆ"
 
 #~ msgid "P_assword: "
-#~ msgstr "¥Ñ¥¹¥ï¡¼¥É (_A): "
+#~ msgstr "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ (_A): "
 
 #~ msgid "Repeat Pa_ssword: "
-#~ msgstr "ºÆÆşÎÏ (_S): "
+#~ msgstr "å†å…¥åŠ› (_S): "
 
 #~ msgid "_Protect"
-#~ msgstr "Êİ¸î (_P)"
+#~ msgstr "ä¿è­· (_P)"
 
 #~ msgid "No files selected to decrypt."
-#~ msgstr "Éü¹æ²½¤¹¤ë¥Õ¥¡¥¤¥ë¤¬ÁªÂò¤µ¤ì¤Æ¤¤¤Ş¤»¤ó¡£"
+#~ msgstr "å¾©å·åŒ–ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚"
 
 #~ msgid "Save decrypted file as"
-#~ msgstr "Éü¹æ²½¤·¤¿¥Õ¥¡¥¤¥ë¤ÎÊİÂ¸Àè"
+#~ msgstr "å¾©å·åŒ–ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜å…ˆ"
 
 #~ msgid "No keys selected to remove from recipients list"
-#~ msgstr "°¸Àè¥ê¥¹¥È¤«¤éºï½ü¤¹¤ë¸°¤òÁªÂò¤·¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "å®›å…ˆãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹éµã‚’é¸æŠã—ã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "No keys selected to add to recipients list."
-#~ msgstr "°¸Àè¥ê¥¹¥È¤Ë²Ã¤¨¤ë¸°¤òÁªÂò¤·¤Æ¤¤¤Ş¤»¤ó"
+#~ msgstr "å®›å…ˆãƒªã‚¹ãƒˆã«åŠ ãˆã‚‹éµã‚’é¸æŠã—ã¦ã„ã¾ã›ã‚“"
 
 #~ msgid "!INVALID!"
-#~ msgstr "¡ª½ğÌ¾Ìµ¸ú¡ª"
+#~ msgstr "ï¼ç½²åç„¡åŠ¹ï¼"
 
 #~ msgid "/Info/_Warranty"
-#~ msgstr "/¾ğÊó (I)/Êİ¾Ú (_W)"
+#~ msgstr "/æƒ…å ± (I)/ä¿è¨¼ (_W)"
 
 #~ msgid "No key backup"
-#~ msgstr "¥Ğ¥Ã¥¯¥¢¥Ã¥×¤Ê¤·"
+#~ msgstr "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãªã—"
 
 #~ msgid ""
 #~ "No public keys available to denote\n"
 #~ "as default recipients."
 #~ msgstr ""
-#~ "¥Ç¥Õ¥©¥ë¥È¤Î°¸Àè¤È¤·¤Æ»È¤¨¤ë¸ø³«¸°¤¬\n"
-#~ "¤¢¤ê¤Ş¤»¤ó¡£"
+#~ "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å®›å…ˆã¨ã—ã¦ä½¿ãˆã‚‹å…¬é–‹éµãŒ\n"
+#~ "ã‚ã‚Šã¾ã›ã‚“ã€‚"
 
 #~ msgid "_Remove from recipients"
-#~ msgstr "°¸Àè¤«¤éºï½ü (_R)"
+#~ msgstr "å®›å…ˆã‹ã‚‰å‰Šé™¤ (_R)"
 
 #~ msgid "_Add to recipients"
-#~ msgstr "°¸Àè¤ËÄÉ²Ã (_A)"
+#~ msgstr "å®›å…ˆã«è¿½åŠ  (_A)"
