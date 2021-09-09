@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-/* 
+/*
    This code is based on code taken from GnuPG (sm/certdump.c).  It
    has been converted to use only Glib stuff.
  */
@@ -32,7 +32,7 @@
 #include "format-dn.h"
 
 
-struct dn_array_s 
+struct dn_array_s
 {
   char *key;
   char *value;
@@ -46,7 +46,7 @@ static void
 trim_trailing_spaces (char *string)
 {
   char *p, *mark;
-  
+
   for (mark=NULL, p=string; *p; p++)
     {
       if (g_ascii_isspace (*p))
@@ -70,7 +70,7 @@ parse_dn_part (struct dn_array_s *array, const char *string)
   static struct {
     const char *label;
     const char *oid;
-  } label_map[] = 
+  } label_map[] =
     {
       /* Note: Take care we expect the LABEL not more than 9 bytes
          longer than the OID.  */
@@ -78,13 +78,14 @@ parse_dn_part (struct dn_array_s *array, const char *string)
       {"T",            "2.5.4.12" },
       {"GN",           "2.5.4.42" },
       {"SN",           "2.5.4.4" },
-      {"NameDistinguisher", "0.2.262.1.10.7.20"}, 
+      {"NameDistinguisher", "0.2.262.1.10.7.20"},
       {"ADDR",         "2.5.4.16" },
       {"BC",           "2.5.4.15" },
       {"D",            "2.5.4.13" },
       {"PostalCode",   "2.5.4.17" },
       {"Pseudo",       "2.5.4.65" },
       {"SerialNumber", "2.5.4.5" },
+      {"Callsign",     "1.3.6.1.4.1.12348.1.1"},
       {NULL, NULL}
     };
   const char *s, *s1;
@@ -106,7 +107,7 @@ parse_dn_part (struct dn_array_s *array, const char *string)
   array->key = p = g_try_malloc (n+10);
   if (!array->key)
     return NULL;
-  memcpy (p, string, n); 
+  memcpy (p, string, n);
   p[n] = 0;
   trim_trailing_spaces (p);
 
@@ -122,7 +123,7 @@ parse_dn_part (struct dn_array_s *array, const char *string)
   string = s + 1;
 
   if (*string == '#')
-    { 
+    {
       /* Hexstring. */
       string++;
       for (s=string; g_ascii_isxdigit (*s); s++)
@@ -144,16 +145,16 @@ parse_dn_part (struct dn_array_s *array, const char *string)
       *p = 0;
    }
   else
-    { 
+    {
       /* Regular v3 quoted string.  */
       for (n=0, s=string; *s; s++)
         {
           if (*s == '\\')
-            { 
+            {
               /* Pair. */
               s++;
               if (*s == ',' || *s == '=' || *s == '+'
-                  || *s == '<' || *s == '>' || *s == '#' || *s == ';' 
+                  || *s == '<' || *s == '>' || *s == '#' || *s == ';'
                   || *s == '\\' || *s == '\"' || *s == ' ')
                 n++;
               else if (g_ascii_isxdigit (*s) && g_ascii_isxdigit(s[1]))
@@ -168,18 +169,18 @@ parse_dn_part (struct dn_array_s *array, const char *string)
             return NULL; /* Invalid encoding.  */
           else if (*s == ',' || *s == '=' || *s == '+'
                    || *s == '<' || *s == '>' || *s == ';' )
-            break; 
+            break;
           else
             n++;
         }
-      
+
       array->value = p = g_try_malloc (n+1);
       if (!p)
         return NULL;
       for (s=string; n; s++, n--)
         {
           if (*s == '\\')
-            { 
+            {
               s++;
               if (g_ascii_isxdigit (*s))
                 {
@@ -221,7 +222,7 @@ parse_dn (const char *string)
       if (!*string)
         break; /* Ready.  */
       if (arrayidx >= arraysize)
-        { 
+        {
           struct dn_array_s *a2;
 
           arraysize += 5;
@@ -262,18 +263,18 @@ parse_dn (const char *string)
 
 /* Append BUFFER to OUTOPUT while replacing all control characters and
    the characters in DELIMITERS by standard C escape sequences.  */
-static void 
+static void
 append_sanitized (GString *output, const void *buffer, size_t length,
                   const char *delimiters)
 {
   const unsigned char *p = buffer;
   size_t count = 0;
-  
+
   for (; length; length--, p++, count++)
     {
-      if (*p < 0x20 
+      if (*p < 0x20
           || *p == 0x7f
-          || (delimiters 
+          || (delimiters
               && (strchr (delimiters, *p) || *p == '\\')))
         {
           g_string_append_c (output, '\\');
@@ -338,10 +339,10 @@ static void
 print_dn_parts (GString *output, struct dn_array_s *dn)
 {
   const char *stdpart[] = {
-    "CN", "OU", "O", "STREET", "L", "ST", "C", "EMail", NULL 
+    "CN", "OU", "O", "STREET", "L", "ST", "C", "EMail", NULL
   };
   int i;
-  
+
   for (i=0; stdpart[i]; i++)
     print_dn_part (output, dn, stdpart[i]);
 
@@ -355,10 +356,10 @@ print_dn_parts (GString *output, struct dn_array_s *dn)
    release the return ed string.  This function will never return
    NULL.  */
 char *
-gpa_format_dn (const char *name) 
+gpa_format_dn (const char *name)
 {
   char *retval = NULL;
-  
+
   if (!name)
     retval = g_strdup (_("[Error - No name]"));
   else if (*name == '<')
@@ -378,7 +379,7 @@ gpa_format_dn (const char *name)
       if (dn)
         {
           GString *output = g_string_sized_new (strlen (name));
-          print_dn_parts (output, dn);          
+          print_dn_parts (output, dn);
           retval = g_string_free (output, FALSE);
           for (i=0; dn[i].key; i++)
             {
@@ -388,12 +389,9 @@ gpa_format_dn (const char *name)
           g_free (dn);
         }
     }
- 
+
   if (!retval)
     retval = g_strdup (_("[Error - Invalid encoding]"));
 
   return retval;
 }
-
-
-
