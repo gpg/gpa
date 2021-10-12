@@ -3,13 +3,13 @@
 # Maxim Britov <maxim.britov@gmail.com>, 2007.
 # CJ <cj@neocaching.ru>, 2008.
 # Sergei Smirnov <moscow@hro.org>, 2008.
-# Ineiev <ineiev@gnu.org>, 2015, 2016, 2017.
+# Ineiev <ineiev@gnu.org>, 2015, 2016, 2017, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GPA 0.9.9\n"
+"Project-Id-Version: GPA 0.10.0\n"
 "Report-Msgid-Bugs-To: translations@gnupg.org\n"
-"PO-Revision-Date: 2017-05-25 10:17+0000\n"
+"PO-Revision-Date: 2021-10-12 10:17+0000\n"
 "Last-Translator: Ineiev <ineiev@gnu.org>\n"
 "Language-Team: Russian <gnupg-i18n@gnupg.org>\n"
 "Language: ru\n"
@@ -18,6 +18,106 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Card Manager"
+msgstr "Диспетчер карт"
+
+#, c-format
+msgid "%s card detected."
+msgstr "Обнаружена карта %s."
+
+msgid "Checking for card..."
+msgstr "Поиск карты..."
+
+msgid "No card found."
+msgstr "Карта не обнаружена."
+
+msgid "The selected card application is currently not available."
+msgstr "Выбранное приложение карты в настоящий момент недоступно."
+
+msgid ""
+"Another process is using a different card application than the selected "
+"one.\n"
+"\n"
+"You may change the application selection mode to \"Auto\" to select the "
+"active application."
+msgstr ""
+"Другой процесс пользуется приложением карты, отличным от выбранного.\n"
+"\n"
+"Можно изменить режим выбора приложения на \"Автоматический\", чтобы выбирать "
+"активное приложение."
+
+msgid "The selected card application is not available."
+msgstr "Выбранное приложение карты недоступно."
+
+msgid "Error accessing the card."
+msgstr "Ошибка доступа к карте."
+
+msgid "Error accessing card"
+msgstr "Ошибка доступа к карте"
+
+msgid "No card"
+msgstr "Карты нет"
+
+msgid "_File"
+msgstr "_Файл"
+
+msgid "_Edit"
+msgstr "_Правка"
+
+msgid "_Card"
+msgstr "_Карта"
+
+msgid "Close the window"
+msgstr "Закрыть окно"
+
+msgid "Quit the program"
+msgstr "Выйти из программы"
+
+msgid "Reload card information"
+msgstr "Перезагрузить информацию о карте"
+
+msgid "Generate key"
+msgstr "Генерация ключа"
+
+msgid "Generate new key on card"
+msgstr "Создать ключ на карте"
+
+msgid "Keyring"
+msgstr "Таблица ключей"
+
+msgid "Files"
+msgstr "Файлы"
+
+msgid "This card application is not yet supported."
+msgstr "Это приложение карты пока не поддерживается."
+
+msgid "Application selection:"
+msgstr "Выбор приложения:"
+
+msgid "Auto"
+msgstr "Автоматический"
+
+msgid "The GPGME library is too old to support smartcards."
+msgstr "Библиотека GPGME слишком стара; электронные карты не поддерживаются."
+
+msgid "Key ID"
+msgstr "ID ключа"
+
+msgid "The key ID is a short number to identify a certificate."
+msgstr "ID ключа - короткое число для идентификации сертификата."
+
+msgid "Serialno."
+msgstr "Серийный номер"
+
+msgid "Issuer"
+msgstr "Издатель"
+
+msgid "[chain too long]"
+msgstr "[слишком длинная цепочка]"
+
+msgid "[issuer not found]"
+msgstr "[издатель не найден]"
 
 msgid "Open File"
 msgstr "Открыть файл"
@@ -36,12 +136,6 @@ msgstr "Сохранить как..."
 
 msgid "Clipboard"
 msgstr "Буфер"
-
-msgid "_File"
-msgstr "_Файл"
-
-msgid "_Edit"
-msgstr "_Правка"
 
 msgid "Clear buffer"
 msgstr "Очистить буфер"
@@ -67,9 +161,6 @@ msgstr "Расшифровать текст из буфера"
 msgid "Close the buffer"
 msgstr "Закрыть буфер"
 
-msgid "Quit the program"
-msgstr "Выйти из программы"
-
 msgid "Undo the last action"
 msgstr "Отменить последнее действие"
 
@@ -91,14 +182,531 @@ msgstr "Удалить выделенный текст"
 msgid "Select the entire document"
 msgstr "Выделить весь документ"
 
-msgid "Keyring"
-msgstr "Таблица ключей"
-
-msgid "Files"
-msgstr "Файлы"
-
 msgid "Card"
 msgstr "Карта"
+
+msgid "<b>General</b>"
+msgstr "<b>Общие</b>"
+
+msgid "Serial number:"
+msgstr "Серийный номер:"
+
+#, c-format
+msgid ""
+"There is not much information to display for a %s card.  You may want to use "
+"the application selector button to switch to another application available "
+"on this card."
+msgstr ""
+"На карте %s нет информации для отображения. Можно воспользоваться кнопкой "
+"выбора приложений, чтобы переключиться на другое приложение с этой карты."
+
+msgid "<b>Amount</b>"
+msgstr "<b>Количество</b>"
+
+msgid "Card number: "
+msgstr "Номер карты: "
+
+msgid "Short Bank Code number: "
+msgstr "Краткий банковский код: "
+
+msgid "Bank type: "
+msgstr "Банковский тип: "
+
+msgid "Card valid from: "
+msgstr "Карта действительная с: "
+
+msgid "Card expires: "
+msgstr "Действие истекает: "
+
+msgid "Issuing country: "
+msgstr "Страна-издатель: "
+
+msgid "Currency: "
+msgstr "Валюта: "
+
+msgid "ZKA chip Id: "
+msgstr "Идентификатор ZKA: "
+
+msgid "Chip OS version: "
+msgstr "Версия ОС:"
+
+msgid "Balance: "
+msgstr "Баланс: "
+
+msgid "General limit: "
+msgstr "Общий предел: "
+
+msgid "Transaction limit: "
+msgstr "Предел транзакций: "
+
+msgid "unknown"
+msgstr "неизвестно"
+
+msgid "blocked"
+msgstr "заблокирована"
+
+msgid "Reset PUK"
+msgstr "Сбросить PUK"
+
+msgid "Reset PIN"
+msgstr "Сбросить PIN"
+
+msgid "Change PUK"
+msgstr "Изменить PUK"
+
+msgid "Change PIN"
+msgstr "Изменить PIN"
+
+msgid "Learn keys"
+msgstr "Зарегистрировать ключи"
+
+msgid ""
+"For some or all of the keys available on the card, the GnuPG crypto engine "
+"does not yet know the corresponding certificates.\n"
+"\n"
+"If you click this button, GnuPG will be asked to \"learn\" this card and "
+"import all certificates stored on the card into its own certificate store.  "
+"This is not done automatically because it may take several seconds to read "
+"all certificates from the card.\n"
+"\n"
+"If you are unsure what to do, just click the button."
+msgstr ""
+"Криптомеханизму GnuPG пока не известны соответствующие сертификаты для "
+"некоторых ключей с карты.\n"
+"\n"
+"Если щелкнуть по этой кнопке, GnuPG попросят \"выучить\" эту карту и "
+"импортировать все сертификаты с карты в хранилище сертификатов GnuPG. "
+"Автоматически это не делается потому, что чтение всех сертификатов с карты "
+"может занять несколько секунд.\n"
+"\n"
+"Если не уверены, щелкните по кнопке."
+
+msgid "Learning keys ..."
+msgstr "Регистрация ключей..."
+
+#, c-format
+msgid ""
+"<b>Setting the Initial PIN</b> (%s)\n"
+"\n"
+"You selected to set the initial PIN of your card.  The PIN is currently set "
+"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
+"reverted</b>.\n"
+"\n"
+"Please check the documentation of your card to learn for what the NullPIN is "
+"good.\n"
+"\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
+"\n"
+"%s"
+msgstr ""
+"<b>Установка первоначального PIN</b> (%s)\n"
+"\n"
+"Вы решили установить на своей карте первоначальный PIN. Сейчас он установлен "
+"в нулевой PIN. Установка первоначального PIN <b>требуется, но необратима</"
+"b>.\n"
+"\n"
+"Сверьтесь с документацией на свою карту, чтобы узнать, на что годится "
+"нулевой PIN.\n"
+"\n"
+"Если продолжить, нужно будет ввести новый PIN, а затем повторить ввод. "
+"Запомните его как следует: восстановить PIN его после %i неудачных попыток "
+"будет невозможно.\n"
+"\n"
+"%s"
+
+msgid ""
+"You are now setting the PIN for the SigG key used to create <b>qualified "
+"signatures</b>.  You may want to set the PIN to the same value as used for "
+"the NKS keys."
+msgstr ""
+"Вы устанавливаете PIN для ключа SigG, с помощью которого создаются "
+"<b>квалифицированные подписи</b>. Возможно, следует установить то же "
+"значение PIN, что и для ключей NKS."
+
+msgid ""
+"You are now setting the PIN for the NKS keys used for standard signatures, "
+"encryption and authentication."
+msgstr ""
+"Вы устанавливаете PIN для ключей NKS, применяемых для обычных подписей, "
+"шифрования и проверки подлинности."
+
+#, c-format
+msgid ""
+"Error changing the NullPIN.\n"
+"(%s <%s>)"
+msgstr ""
+"Ошибка смены нулевого PIN.\n"
+"(%s <%s>)"
+
+msgid ""
+"<b>Changing a PIN or PUK</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value and then to "
+"enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the current value decrements the retry counter.  "
+"If the retry counters of the PIN and the corresponding PUK are both down to "
+"zero, the keys controlled by the PIN are not anymore usable and there is no "
+"way to unblock them!"
+msgstr ""
+"<b>Смена PIN или PUK</b>\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение, а затем новое "
+"значение, повторив его в ответ на другой запрос.\n"
+"\n"
+"Ввод неверного текущего значения уменьшает счетчик попыток. Если счетчики "
+"попыток PIN и соответствующего PUK одновременно стали равны нулю, то ключи, "
+"которыми они управляют, непригодны для пользования, и разблокировать их "
+"невозможно!"
+
+msgid ""
+"<b>Resetting a PUK</b>\n"
+"\n"
+"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
+"system of the NetKey card implements it as an alternative PIN and thus it is "
+"possible to use the PIN to unblock the PUK.\n"
+"\n"
+"If the PUK is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PIN.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the blocked PUK and repeat that new value at "
+"another prompt."
+msgstr ""
+"<b>Сброс PUK</b>\n"
+"\n"
+"Хотя <i>PUK</i> означает <i>код разблокировки PIN</i>, TCOS, операционная "
+"система карты NetKey, реализует его как альтернативный PIN; таким образом, "
+"PUK можно разблокировать с помощью PIN.\n"
+"\n"
+"Если PUK заблокирован (счетчик попыток снизился до нуля), его можно "
+"разблокировать с помощью незаблокированного PIN. Тогда счетчик попыток снова "
+"устанавливается в первоначальное значение.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
+"значение для заблокированного PUK, повторив его в ответ на другой запрос."
+
+msgid ""
+"<b>Resetting a PIN</b>\n"
+"\n"
+"If the PIN is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PUK.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PUK and "
+"then to enter a new value for the blocked PIN and repeat that new value at "
+"another prompt."
+msgstr ""
+"<b>Сброс PIN</b>\n"
+"\n"
+"Если PIN заблокирован (счетчик попыток снизился до нуля), его можно "
+"разблокировать с помощью незаблокированного PUK. Тогда счетчик попыток снова "
+"устанавливается в первоначальное значение.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение PUK, а затем новое "
+"значение для заблокированного PIN, повторив его в ответ на другой запрос."
+
+#, c-format
+msgid ""
+"Error changing or resetting the PIN/PUK.\n"
+"(%s <%s>)"
+msgstr ""
+"Ошибка изменения или сброса PIN/PUK.\n"
+"(%s <%s>)"
+
+msgid "Card version:"
+msgstr "Версия карты:"
+
+msgid ""
+"<b>A NullPIN is still active on this card</b>.\n"
+"You need to set a real PIN before you can make use of the card."
+msgstr ""
+"<b>На этой карте все еще действует нулевой PIN</b>.\n"
+"Его нужно заменить на настоящий PIN, прежде чем пользоваться картой."
+
+msgid "Set initial PIN"
+msgstr "Установить первоначальный PIN"
+
+msgid "<b>Keys</b>"
+msgstr "<b>Ключи</b>"
+
+msgid "scanning ..."
+msgstr "сканирование..."
+
+msgid "<b>PIN</b>"
+msgstr "<b>PIN</b>"
+
+msgid "PIN retry counter:"
+msgstr "Счетчик попыток PIN:"
+
+msgid "PUK retry counter:"
+msgstr "Счетчик попыток PUK:"
+
+msgid "SigG PIN retry counter:"
+msgstr "Счетчик попыток PIN SigG:"
+
+msgid "SigG PUK retry counter:"
+msgstr "Счетчик попыток PUK SigG:"
+
+msgid ""
+"<b>Admin-PIN Required</b>\n"
+"\n"
+"Depending on the previous operations you may now be asked for the Admin-"
+"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
+"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
+"restored anymore and thus the data on the card can't be modified.\n"
+"\n"
+"Unless changed, a fresh standard card has set the Admin-PIN to the value "
+"<i>12345678</i>.  However, the issuer of your card might have initialized "
+"the card with a different Admin-PIN and that Admin-PIN might only be known "
+"to the issuer.  Please check the instructions of your issuer.\n"
+"\n"
+"This notice will be shown only once per session."
+msgstr ""
+"<b>Требуется административный PIN</b>\n"
+"\n"
+"В зависимости от предыдущих операций может потребоваться ввести "
+"административный PIN. Ввод неверного значения административного PIN "
+"уменьшает соответствующий счетчик попыток. Когда он достигает нуля, "
+"административный PIN не может быть воостановлен и данные карты больше не "
+"могут быть изменены.\n"
+"\n"
+"Если административный PIN не изменяли, на новых стандартных картах он равен "
+"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
+"значением административного PIN, известным только издателю. Сверьтесь с "
+"инструкциями своего издателя.\n"
+"\n"
+"Это замечание будет выводиться один раз за сеанс."
+
+msgid "CHV2 retry counter: "
+msgstr "Счетчик попыток CHV2:"
+
+#, c-format
+msgid ""
+"Error saving the changed values.\n"
+"(%s <%s>)"
+msgstr ""
+"Ошибка сохранения измененных данных.\n"
+"(%s <%s>)"
+
+msgid "Only plain ASCII is currently allowed."
+msgstr "В настоящее время допустим только простой текст ASCII."
+
+msgid "The \"<\" character may not be used."
+msgstr "Символ \"<\" использовать нельзя."
+
+msgid "Double spaces are not allowed."
+msgstr "Двойные пробелы недопустимы."
+
+msgid ""
+"Total length of first and last name may not be longer than 39 characters."
+msgstr "Полная длина имени и фамилии должна быть не более 39 символов."
+
+msgid "Saving the field failed."
+msgstr "Сбой при сохранении поля данных."
+
+msgid "Invalid length of the language preference."
+msgstr "Недопустимая длина языковых предпочтений."
+
+msgid "The language preference may only contain the letters 'a' through 'z'."
+msgstr "Языковые предпочтения могут содержать только буквы от 'a' до 'z'."
+
+msgid "The field may not be longer than 254 characters."
+msgstr "Поле должно быть не длиннее 254 символов."
+
+msgid ""
+"<b>Unblocking the PIN</b>\n"
+"\n"
+"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Reset "
+"Code</b> and then to enter a new value for the PIN and repeat that new value "
+"at another prompt."
+msgstr ""
+"<b>Разблокировка PIN</b>\n"
+"\n"
+"Счетчик попыток PIN обратился в ноль, но был установлен код сброса.\n"
+"\n"
+"Код сброса сходен с PUK (кодом разблокировки PIN), с его помощью можно "
+"разблокировать PIN, не зная административного PIN.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение <b>кода сброса</b>, а "
+"затем новое значение PIN, повторив его в ответ на другой запрос."
+
+msgid ""
+"<b>Changing the PIN</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the PIN decrements the retry counter.  If the "
+"retry counters of the PIN and of the Reset Code are both down to zero, the "
+"PIN can still be reset by using the Admin-PIN.\n"
+"\n"
+"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
+"the issuer of your card might have initialized the card with a different "
+"PIN.  Please check the instructions of your issuer."
+msgstr ""
+"<b>Изменение PIN</b>\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
+"значение, повторив его в ответ на другой запрос.\n"
+"\n"
+"Ввод неверного значения PIN уменьшает счетчик попыток. Если счетчики попыток "
+"PIN и кода сброса одновременно стали равны нулю, PIN все еще можно сбросить "
+"с помощью административного PIN.\n"
+"\n"
+"На новых стандартных картах PIN установлен равным <i>123456</i>. Однако "
+"издатель карты мог инициализировать карту другим значением PIN. Сверьтесь с "
+"инструкциями своего издателя."
+
+msgid ""
+"<b>Changing the Reset Code</b>\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the Reset Code and repeat that new value at "
+"another prompt."
+msgstr ""
+"<b>Изменение кода сброса</b>\n"
+"\n"
+"Код сброса сходен с кодом разблокировки (PUK) и применяется для "
+"разблокировки PIN без необходимости прибегать к административному PIN.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
+"значение кода сброса, повторив его в ответ на другой запрос."
+
+msgid ""
+"<b>Resetting the PIN or the Reset Code</b>\n"
+"\n"
+"If the retry counters of the PIN and of the Reset Code are both down to "
+"zero, it is only possible to reset them if you have access to the Admin-"
+"PIN.\n"
+"\n"
+"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
+"However, the issuer of your card might have initialized the card with a "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
+"Please check the instructions of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
+"repeat that new value at another prompt."
+msgstr ""
+"<b>Сброс PIN или кода сброса</b>\n"
+"\n"
+"Если счетчики попыток PIN и кода сброса одновременно стали равны нулю, "
+"сбросить их можно, только если есть доступ к административному PIN.\n"
+"\n"
+"На новых стандартных картах административный PIN установлен равным "
+"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
+"значением административного PIN, известным только издателю. Сверьтесь с "
+"инструкциями своего издателя.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение <b>административного "
+"PIN</b>, а затем новое значение PIN или кода сброса, повторив его в ответ на "
+"другой запрос."
+
+msgid ""
+"<b>Changing the Admin-PIN</b>\n"
+"\n"
+"If you know the Admin-PIN you may change the Admin-PIN.\n"
+"\n"
+"The Admin-PIN is required to create keys on the card and to change other "
+"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
+"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
+"card might have initialized the card with a different Admin-PIN and that "
+"Admin-PIN might only be known to the issuer.  Please check the instructions "
+"of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
+"value at another prompt."
+msgstr ""
+"<b>Изменение административного PIN</b>\n"
+"\n"
+"Если известен административный PIN, его можно его изменить.\n"
+"\n"
+"Административный PIN требуется, чтобы создавать на карте ключи, а также "
+"изменять другие данные. Вы можете знать, а можете не знать административный "
+"PIN. На новых стандартных картах административный PIN установлен равным "
+"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
+"значением административного PIN, известным только издателю. Сверьтесь с "
+"инструкциями своего издателя.\n"
+"\n"
+"Если продолжить, нужно будет ввести текущее значение <b>административного "
+"PIN</b>, а затем новое значение административного PIN, повторив его в ответ "
+"на другой запрос."
+
+#, c-format
+msgid ""
+"Error fetching the key.\n"
+"(%s <%s>)"
+msgstr ""
+"Ошибка получения ключа.\n"
+"(%s <%s>)"
+
+#, c-format
+msgid "Keys found: %d, imported: %d, unchanged: %d"
+msgstr "Найдено ключей: %i, импортировано: %i, без изменений: %i"
+
+msgid "Fetch Key"
+msgstr "Получить ключ"
+
+msgid "Manufacturer:"
+msgstr "Изготовитель:"
+
+msgid "<b>Personal</b>"
+msgstr "<b>Личные</b>"
+
+msgid "Salutation:"
+msgstr "Приветствие:"
+
+msgid "First name:"
+msgstr "Имя:"
+
+msgid "Last name:"
+msgstr "Фамилия:"
+
+msgid "Language:"
+msgstr "Язык:"
+
+msgid "Login data:"
+msgstr "Учетная запись:"
+
+msgid "Public key URL:"
+msgstr "URL открытых ключей"
+
+msgid "Signature key:"
+msgstr "Ключ для подписи:"
+
+msgid "Encryption key:"
+msgstr "Ключ для шифрования:"
+
+msgid "Authentication key:"
+msgstr "Ключ для проверки подлинности:"
+
+msgid "Signature counter:"
+msgstr "Счетчик подписей:"
+
+msgid "Force signature PIN:"
+msgstr "Требовать PIN для подписи:"
+
+msgid "Admin-PIN retry counter:"
+msgstr "Счетчик попыток административного PIN:"
+
+msgid "The ATR of the card is:"
+msgstr "ATR карты:"
+
+msgid "<b>Unknown Card</b>"
+msgstr "<b>Неизвестная карта</b>"
 
 msgid "<b>Main</b>"
 msgstr "<b>Главное</b>"
@@ -179,30 +787,26 @@ msgstr "лет"
 msgid "never expires"
 msgstr "неогранич."
 
-msgid "unknown"
-msgstr "неизвестно"
-
-#, fuzzy
 msgid "keyserver"
-msgstr "Отправить ключи на сервер"
+msgstr "сервер ключей"
 
 msgid "DANE"
-msgstr ""
+msgstr "DANE"
 
 msgid "Web Key Directory"
-msgstr ""
+msgstr "Сетевой каталог ключей"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "file"
-msgstr ""
+msgstr "файл"
 
 msgid "self"
-msgstr ""
+msgstr "сам"
 
 msgid "other"
-msgstr ""
+msgstr "другой"
 
 msgid "Unknown"
 msgstr "Неизвестно"
@@ -261,9 +865,6 @@ msgstr "Зашифровать выбранный файл"
 msgid "Decrypt the selected file"
 msgstr "Расшифровать выбранный файл"
 
-msgid "Close the window"
-msgstr "Закрыть окно"
-
 msgid "Select all files"
 msgstr "Выбрать все файлы"
 
@@ -293,6 +894,116 @@ msgstr "_Текстовая подпись"
 
 msgid "_Detached signature"
 msgstr "_Отделенная подпись"
+
+msgid "[Error - No name]"
+msgstr "[Ошибка - Нет имени]"
+
+msgid "[Error - Encoding not supported]"
+msgstr "[Ошибка - Кодировка не поддерживается]"
+
+msgid "[Error - Invalid encoding]"
+msgstr "[Ошибка - Неверная кодировка]"
+
+msgid "The key has both a smartcard based private part and a public part"
+msgstr "У ключа есть секретная часть на карте и открытая часть"
+
+msgid "The key has both a private and a public part"
+msgstr "У ключа есть секретная и открытая части"
+
+msgid "The key has only a public part"
+msgstr "У ключа есть только открытая часть"
+
+#, c-format
+msgid "%s %u bits"
+msgstr "%s %u бит"
+
+msgid "No keys selected"
+msgstr "Ключи не выбраны"
+
+#, c-format
+msgid "%d key selected"
+msgid_plural "%d keys selected"
+msgstr[0] "Выбран %d ключ"
+msgstr[1] "Выбраны %d ключа"
+msgstr[2] "Выбрано %d ключей"
+
+msgid "User name:"
+msgstr "Имя пользователя:"
+
+msgid "Fingerprint:"
+msgstr "Отпечаток:"
+
+msgid "Key ID:"
+msgstr "ID ключа:"
+
+msgid "Expires at:"
+msgstr "Годен до:"
+
+msgid "Owner Trust:"
+msgstr "Доверие владельцу:"
+
+msgid "Key validity:"
+msgstr "Достоверность ключа:"
+
+msgid "Key type:"
+msgstr "Тип ключа:"
+
+msgid "Created at:"
+msgstr "Создан:"
+
+msgid "Last update:"
+msgstr "Обновлен:"
+
+msgid "Details"
+msgstr "Подробно"
+
+msgid "User IDs"
+msgstr "Идентификаторы пользователя"
+
+msgid "Show signatures on user name:"
+msgstr "Показать подписи на имени пользователя:"
+
+msgid "Chain"
+msgstr "Цепочка"
+
+msgid "Signatures"
+msgstr "Подписи"
+
+msgid "All signatures"
+msgstr "Все подписи"
+
+msgid "Subkeys"
+msgstr "Подключи"
+
+msgid "Key"
+msgstr "Ключ"
+
+msgid "Tofu"
+msgstr "Tofu"
+
+msgid "Address"
+msgstr "Адрес"
+
+msgid "The mail address."
+msgstr "Почтовый адрес."
+
+msgid "Validity"
+msgstr "Достоверность"
+
+msgid "The validity of the mail address\n"
+msgstr "Достоверность почтового адреса\n"
+
+msgid "Update"
+msgstr "Обновление"
+
+msgid "The date the key was last updated via this mail address."
+msgstr "Дата последнего обновления этого почтового адреса."
+
+msgid "User ID"
+msgstr "Идентификатор пользователя"
+
+msgid "The full user ID."
+msgstr "Полный идентификатор пользователя."
 
 msgid "Output version information and exit"
 msgstr "Вывести версию и завершиться"
@@ -380,13 +1091,14 @@ msgstr "Сохранить резервную копию ключа в файл�
 msgid "Generating backup of key: 0x%s"
 msgstr "Создание резервной копии ключа: 0x%s"
 
-#, fuzzy
-msgid "The private key has been copied to the clipboard."
-msgstr "Ключи скопированы в буфер."
+msgid "(not set)"
+msgstr "(не установлен)"
 
-#, fuzzy
+msgid "The private key has been copied to the clipboard."
+msgstr "Секретный ключ скопирован в буфер."
+
 msgid "The key has been copied to the clipboard."
-msgstr "Ключи скопированы в буфер."
+msgstr "Ключ скопирован в буфер."
 
 msgid "The keys have been copied to the clipboard."
 msgstr "Ключи скопированы в буфер."
@@ -484,6 +1196,13 @@ msgstr ""
 
 msgid "You didn't select any key for signing"
 msgstr "Не выбран ключ для подписи"
+
+msgid "Importing..."
+msgstr "Импорт..."
+
+#, c-format
+msgid "Error importing \"%s\": %s <%s>"
+msgstr "Ошибка импорта \"%s\": %s <%s>"
 
 msgid "Signing..."
 msgstr "Подпись..."
@@ -647,12 +1366,6 @@ msgstr "Имя:"
 msgid "User Names:"
 msgstr "Имена:"
 
-msgid "Key ID:"
-msgstr "ID ключа:"
-
-msgid "Fingerprint:"
-msgstr "Отпечаток:"
-
 msgid "Expiration"
 msgstr "Срок годности"
 
@@ -671,9 +1384,6 @@ msgid ""
 msgstr ""
 "!КРИТИЧЕСКАЯ ОШИБКА!\n"
 "Неверный режим даты срока годности."
-
-msgid "(not set)"
-msgstr "(не установлен)"
 
 msgid ""
 "Keys are already stored on the card.\n"
@@ -757,10 +1467,10 @@ msgid "Marginal"
 msgstr "Ограниченное"
 
 msgid "Full"
-msgstr "Полное"
+msgstr "Полностью достоверен"
 
 msgid "Ultimate"
-msgstr "Абсолютное"
+msgstr "Абсолютно достоверен"
 
 msgid "Incomplete"
 msgstr "Не полностью"
@@ -768,16 +1478,14 @@ msgstr "Не полностью"
 msgid "Fully Valid"
 msgstr "Полностью достоверен"
 
-#, fuzzy
 msgid "Invalid"
-msgstr "Достоверно"
+msgstr "Недостоверен"
 
 msgid "Faked"
-msgstr ""
+msgstr "Подделан"
 
-#, fuzzy
 msgid "Fully"
-msgstr "Полное"
+msgstr "Полностью достоверен"
 
 msgid "Please enter the passphrase for the following key:"
 msgstr "Введите фразу-пароль для доступа к ключу:"
@@ -955,9 +1663,8 @@ msgstr "Недопустимый адрес электронной почты."
 msgid "Invalid character in comments."
 msgstr "Недопустимый символ в примечаниях."
 
-#, fuzzy
 msgid "_Details"
-msgstr "Подробно"
+msgstr "_Подробности"
 
 msgid "GPA is the GNU Privacy Assistant."
 msgstr "GPA - Помощник приватности GNU (GNU Privacy Assistant)"
@@ -1078,9 +1785,6 @@ msgstr "Нужно ввести размер ключа."
 msgid "Generate card key"
 msgstr "Генерация ключа на карте"
 
-msgid "Generate key"
-msgstr "Генерация ключа"
-
 msgid "_Algorithm: "
 msgstr "_Алгоритм: "
 
@@ -1182,6 +1886,15 @@ msgstr ""
 "Создание ключа успешно завершено. Новый ключ абсолютно достоверен, его длина "
 "равна %d бит."
 
+msgid "Keyserver did not return any matching keys."
+msgstr "Сервер ключей не вернул ни одного подходящего ключа."
+
+msgid "Select keys to import"
+msgstr "Выбрать ключи для импорта"
+
+msgid "_Import"
+msgstr "_Импорт"
+
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1210,9 +1923,6 @@ msgstr ""
 "Доверие владельцу устанавливается Вами. Оно определяет, насколько Вы "
 "доверяете владельцу сертификата подписывать другие сертификаты. Имеет смысл "
 "только для OpenPGP."
-
-msgid "Validity"
-msgstr "Достоверность"
 
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
@@ -1250,9 +1960,8 @@ msgstr ""
 msgid "_Backup key now"
 msgstr "Создать _резервную копию сейчас"
 
-#, fuzzy
 msgid "Only keys of the same procotol may be copied."
-msgstr "В наборе можно экспортировать только ключи одного и того же протокола."
+msgstr "Копировать можно только ключи одного и того же протокола."
 
 msgid "_Keys"
 msgstr "_Ключи"
@@ -1260,21 +1969,17 @@ msgstr "_Ключи"
 msgid "_Server"
 msgstr "С_ервер"
 
-#, fuzzy
 msgid "Copy _Fingerprint"
-msgstr "Отпечаток:"
+msgstr "Копировать _отпечаток"
 
-#, fuzzy
 msgid "Copy the fingerprints"
-msgstr "Копировать выделенное в буфер"
+msgstr "Копировать отпечатки"
 
-#, fuzzy
 msgid "Copy Private Key"
-msgstr "Править _секретный ключ..."
+msgstr "Копировать _секретный ключ..."
 
-#, fuzzy
 msgid "Copy a single private key"
-msgstr "Правка выбранного секретного ключа"
+msgstr "Копирование отдельного секретного ключа"
 
 msgid "Select all certificates"
 msgstr "Выбрать все сертификаты"
@@ -1377,79 +2082,6 @@ msgstr "В настройках основной ключ не выбран."
 
 msgid "Key Manager"
 msgstr "Диспетчер ключей"
-
-msgid "The key has both a smartcard based private part and a public part"
-msgstr "У ключа есть секретная часть на карте и открытая часть"
-
-msgid "The key has both a private and a public part"
-msgstr "У ключа есть секретная и открытая части"
-
-msgid "The key has only a public part"
-msgstr "У ключа есть только открытая часть"
-
-#, c-format
-msgid "%s %u bits"
-msgstr "%s %u бит"
-
-msgid "No keys selected"
-msgstr "Ключи не выбраны"
-
-#, c-format
-msgid "%d key selected"
-msgid_plural "%d keys selected"
-msgstr[0] "Выбран %d ключ"
-msgstr[1] "Выбраны %d ключа"
-msgstr[2] "Выбрано %d ключей"
-
-msgid "User name:"
-msgstr "Имя пользователя:"
-
-msgid "Expires at:"
-msgstr "Годен до:"
-
-msgid "Owner Trust:"
-msgstr "Доверие владельцу:"
-
-msgid "Key validity:"
-msgstr "Достоверность ключа:"
-
-msgid "Key type:"
-msgstr "Тип ключа:"
-
-msgid "Created at:"
-msgstr "Создан:"
-
-#, fuzzy
-msgid "Last update:"
-msgstr "Фамилия:"
-
-msgid "Details"
-msgstr "Подробно"
-
-#, fuzzy
-msgid "User IDs"
-msgstr "Идентификатор пользователя"
-
-msgid "Show signatures on user name:"
-msgstr "Показать подписи на имени пользователя:"
-
-msgid "Chain"
-msgstr "Цепочка"
-
-msgid "Signatures"
-msgstr "Подписи"
-
-msgid "All signatures"
-msgstr "Все подписи"
-
-msgid "Subkeys"
-msgstr "Подключи"
-
-msgid "Key"
-msgstr "Ключ"
-
-msgid "Tofu"
-msgstr "Tofu"
 
 msgid "Sign Key"
 msgstr "Подписать ключ"
@@ -1616,9 +2248,6 @@ msgid ""
 "been found."
 msgstr ""
 "Найден хотя бы один соответствующий сертификат X.509 для применения с S/MIME."
-
-msgid "Key ID"
-msgstr "ID ключа"
 
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
@@ -1898,544 +2527,5 @@ msgstr "Подпись: %s"
 msgid "Signatures:"
 msgstr "Подписи:"
 
-msgid "Card Manager"
-msgstr "Диспетчер карт"
-
-#, c-format
-msgid "%s card detected."
-msgstr "Обнаружена карта %s."
-
-msgid "Checking for card..."
-msgstr "Поиск карты..."
-
-msgid "No card found."
-msgstr "Карта не обнаружена."
-
-msgid "The selected card application is currently not available."
-msgstr "Выбранное приложение карты в настоящий момент недоступно."
-
-msgid ""
-"Another process is using a different card application than the selected "
-"one.\n"
-"\n"
-"You may change the application selection mode to \"Auto\" to select the "
-"active application."
-msgstr ""
-"Другой процесс пользуется приложением карты, отличным от выбранного.\n"
-"\n"
-"Можно изменить режим выбора приложения на \"Автоматический\", чтобы выбирать "
-"активное приложение."
-
-msgid "The selected card application is not available."
-msgstr "Выбранное приложение карты недоступно."
-
-msgid "Error accessing the card."
-msgstr "Ошибка доступа к карте."
-
-msgid "Error accessing card"
-msgstr "Ошибка доступа к карте"
-
-msgid "No card"
-msgstr "Карты нет"
-
-msgid "_Card"
-msgstr "_Карта"
-
-msgid "Reload card information"
-msgstr "Перезагрузить информацию о карте"
-
-msgid "Generate new key on card"
-msgstr "Создать ключ на карте"
-
-msgid "This card application is not yet supported."
-msgstr "Это приложение карты пока не поддерживается."
-
-msgid "Application selection:"
-msgstr "Выбор приложения:"
-
-msgid "Auto"
-msgstr "Автоматический"
-
-msgid "The GPGME library is too old to support smartcards."
-msgstr "Библиотека GPGME слишком стара; электронные карты не поддерживаются."
-
-msgid ""
-"<b>Admin-PIN Required</b>\n"
-"\n"
-"Depending on the previous operations you may now be asked for the Admin-"
-"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
-"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
-"restored anymore and thus the data on the card can't be modified.\n"
-"\n"
-"Unless changed, a fresh standard card has set the Admin-PIN to the value "
-"<i>12345678</i>.  However, the issuer of your card might have initialized "
-"the card with a different Admin-PIN and that Admin-PIN might only be known "
-"to the issuer.  Please check the instructions of your issuer.\n"
-"\n"
-"This notice will be shown only once per session."
-msgstr ""
-"<b>Требуется административный PIN</b>\n"
-"\n"
-"В зависимости от предыдущих операций может потребоваться ввести "
-"административный PIN. Ввод неверного значения административного PIN "
-"уменьшает соответствующий счетчик попыток. Когда он достигает нуля, "
-"административный PIN не может быть воостановлен и данные карты больше не "
-"могут быть изменены.\n"
-"\n"
-"Если административный PIN не изменяли, на новых стандартных картах он равен "
-"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
-"значением административного PIN, известным только издателю. Сверьтесь с "
-"инструкциями своего издателя.\n"
-"\n"
-"Это замечание будет выводиться один раз за сеанс."
-
-msgid "PUK retry counter:"
-msgstr "Счетчик попыток PUK:"
-
-msgid "CHV2 retry counter: "
-msgstr "Счетчик попыток CHV2:"
-
-msgid "Reset PIN"
-msgstr "Сбросить PIN"
-
-msgid "Change PIN"
-msgstr "Изменить PIN"
-
-msgid "Change PUK"
-msgstr "Изменить PUK"
-
-msgid "Reset PUK"
-msgstr "Сбросить PUK"
-
-#, c-format
-msgid ""
-"Error saving the changed values.\n"
-"(%s <%s>)"
-msgstr ""
-"Ошибка сохранения измененных данных.\n"
-"(%s <%s>)"
-
-msgid "Only plain ASCII is currently allowed."
-msgstr "В настоящее время допустим только простой текст ASCII."
-
-msgid "The \"<\" character may not be used."
-msgstr "Символ \"<\" использовать нельзя."
-
-msgid "Double spaces are not allowed."
-msgstr "Двойные пробелы недопустимы."
-
-msgid ""
-"Total length of first and last name may not be longer than 39 characters."
-msgstr "Полная длина имени и фамилии должна быть не более 39 символов."
-
-msgid "Saving the field failed."
-msgstr "Сбой при сохранении поля данных."
-
-msgid "Invalid length of the language preference."
-msgstr "Недопустимая длина языковых предпочтений."
-
-msgid "The language preference may only contain the letters 'a' through 'z'."
-msgstr "Языковые предпочтения могут содержать только буквы от 'a' до 'z'."
-
-msgid "The field may not be longer than 254 characters."
-msgstr "Поле должно быть не длиннее 254 символов."
-
-msgid ""
-"<b>Unblocking the PIN</b>\n"
-"\n"
-"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Reset "
-"Code</b> and then to enter a new value for the PIN and repeat that new value "
-"at another prompt."
-msgstr ""
-"<b>Разблокировка PIN</b>\n"
-"\n"
-"Счетчик попыток PIN обратился в ноль, но был установлен код сброса.\n"
-"\n"
-"Код сброса сходен с PUK (кодом разблокировки PIN), с его помощью можно "
-"разблокировать PIN, не зная административного PIN.\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение <b>кода сброса</b>, а "
-"затем новое значение PIN, повторив его в ответ на другой запрос."
-
-msgid ""
-"<b>Changing the PIN</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the PIN decrements the retry counter.  If the "
-"retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reset by using the Admin-PIN.\n"
-"\n"
-"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
-"the issuer of your card might have initialized the card with a different "
-"PIN.  Please check the instructions of your issuer."
-msgstr ""
-"<b>Изменение PIN</b>\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
-"значение, повторив его в ответ на другой запрос.\n"
-"\n"
-"Ввод неверного значения PIN уменьшает счетчик попыток. Если счетчики попыток "
-"PIN и кода сброса одновременно стали равны нулю, PIN все еще можно сбросить "
-"с помощью административного PIN.\n"
-"\n"
-"На новых стандартных картах PIN установлен равным <i>123456</i>. Однако "
-"издатель карты мог инициализировать карту другим значением PIN. Сверьтесь с "
-"инструкциями своего издателя."
-
-msgid ""
-"<b>Changing the Reset Code</b>\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the Reset Code and repeat that new value at "
-"another prompt."
-msgstr ""
-"<b>Изменение кода сброса</b>\n"
-"\n"
-"Код сброса сходен с кодом разблокировки (PUK) и применяется для "
-"разблокировки PIN без необходимости прибегать к административному PIN.\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
-"значение кода сброса, повторив его в ответ на другой запрос."
-
-msgid ""
-"<b>Resetting the PIN or the Reset Code</b>\n"
-"\n"
-"If the retry counters of the PIN and of the Reset Code are both down to "
-"zero, it is only possible to reset them if you have access to the Admin-"
-"PIN.\n"
-"\n"
-"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
-"However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
-"Please check the instructions of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
-"repeat that new value at another prompt."
-msgstr ""
-"<b>Сброс PIN или кода сброса</b>\n"
-"\n"
-"Если счетчики попыток PIN и кода сброса одновременно стали равны нулю, "
-"сбросить их можно, только если есть доступ к административному PIN.\n"
-"\n"
-"На новых стандартных картах административный PIN установлен равным "
-"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
-"значением административного PIN, известным только издателю. Сверьтесь с "
-"инструкциями своего издателя.\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение <b>административного "
-"PIN</b>, а затем новое значение PIN или кода сброса, повторив его в ответ на "
-"другой запрос."
-
-msgid ""
-"<b>Changing the Admin-PIN</b>\n"
-"\n"
-"If you know the Admin-PIN you may change the Admin-PIN.\n"
-"\n"
-"The Admin-PIN is required to create keys on the card and to change other "
-"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
-"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
-"card might have initialized the card with a different Admin-PIN and that "
-"Admin-PIN might only be known to the issuer.  Please check the instructions "
-"of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
-"value at another prompt."
-msgstr ""
-"<b>Изменение административного PIN</b>\n"
-"\n"
-"Если известен административный PIN, его можно его изменить.\n"
-"\n"
-"Административный PIN требуется, чтобы создавать на карте ключи, а также "
-"изменять другие данные. Вы можете знать, а можете не знать административный "
-"PIN. На новых стандартных картах административный PIN установлен равным "
-"<i>12345678</i>. Однако издатель карты мог инициализировать карту другим "
-"значением административного PIN, известным только издателю. Сверьтесь с "
-"инструкциями своего издателя.\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение <b>административного "
-"PIN</b>, а затем новое значение административного PIN, повторив его в ответ "
-"на другой запрос."
-
-#, c-format
-msgid ""
-"Error changing or resetting the PIN/PUK.\n"
-"(%s <%s>)"
-msgstr ""
-"Ошибка изменения или сброса PIN/PUK.\n"
-"(%s <%s>)"
-
-#, c-format
-msgid ""
-"Error fetching the key.\n"
-"(%s <%s>)"
-msgstr ""
-"Ошибка получения ключа.\n"
-"(%s <%s>)"
-
-#, c-format
-msgid "Keys found: %d, imported: %d, unchanged: %d"
-msgstr "Найдено ключей: %i, импортировано: %i, без изменений: %i"
-
-msgid "Fetch Key"
-msgstr "Получить ключ"
-
-msgid "<b>General</b>"
-msgstr "<b>Общие</b>"
-
-msgid "Serial number:"
-msgstr "Серийный номер:"
-
-msgid "Card version:"
-msgstr "Версия карты:"
-
-msgid "Manufacturer:"
-msgstr "Изготовитель:"
-
-msgid "<b>Personal</b>"
-msgstr "<b>Личные</b>"
-
-msgid "Salutation:"
-msgstr "Приветствие:"
-
-msgid "First name:"
-msgstr "Имя:"
-
-msgid "Last name:"
-msgstr "Фамилия:"
-
-msgid "Language:"
-msgstr "Язык:"
-
-msgid "Login data:"
-msgstr "Учетная запись:"
-
-msgid "Public key URL:"
-msgstr "URL открытых ключей"
-
-msgid "<b>Keys</b>"
-msgstr "<b>Ключи</b>"
-
-msgid "Signature key:"
-msgstr "Ключ для подписи:"
-
-msgid "Encryption key:"
-msgstr "Ключ для шифрования:"
-
-msgid "Authentication key:"
-msgstr "Ключ для проверки подлинности:"
-
-msgid "Signature counter:"
-msgstr "Счетчик подписей:"
-
-msgid "<b>PIN</b>"
-msgstr "<b>PIN</b>"
-
-msgid "Force signature PIN:"
-msgstr "Требовать PIN для подписи:"
-
-msgid "PIN retry counter:"
-msgstr "Счетчик попыток PIN:"
-
-msgid "Admin-PIN retry counter:"
-msgstr "Счетчик попыток административного PIN:"
-
-msgid "blocked"
-msgstr "заблокирована"
-
-msgid "Learn keys"
-msgstr "Зарегистрировать ключи"
-
-msgid ""
-"For some or all of the keys available on the card, the GnuPG crypto engine "
-"does not yet know the corresponding certificates.\n"
-"\n"
-"If you click this button, GnuPG will be asked to \"learn\" this card and "
-"import all certificates stored on the card into its own certificate store.  "
-"This is not done automatically because it may take several seconds to read "
-"all certificates from the card.\n"
-"\n"
-"If you are unsure what to do, just click the button."
-msgstr ""
-"Криптомеханизму GnuPG пока не известны соответствующие сертификаты для "
-"некоторых ключей с карты.\n"
-"\n"
-"Если щелкнуть по этой кнопке, GnuPG попросят \"выучить\" эту карту и "
-"импортировать все сертификаты с карты в хранилище сертификатов GnuPG. "
-"Автоматически это не делается потому, что чтение всех сертификатов с карты "
-"может занять несколько секунд.\n"
-"\n"
-"Если не уверены, щелкните по кнопке."
-
-msgid "Learning keys ..."
-msgstr "Регистрация ключей..."
-
-#, c-format
-msgid ""
-"<b>Setting the Initial PIN</b> (%s)\n"
-"\n"
-"You selected to set the initial PIN of your card.  The PIN is currently set "
-"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
-"reverted</b>.\n"
-"\n"
-"Please check the documentation of your card to learn for what the NullPIN is "
-"good.\n"
-"\n"
-"If you proceed you will be asked to enter a new PIN and later to repeat that "
-"PIN.  Make sure that you will remember that PIN - it will not be possible to "
-"recover the PIN if it has been entered wrongly more than %d times.\n"
-"\n"
-"%s"
-msgstr ""
-"<b>Установка первоначального PIN</b> (%s)\n"
-"\n"
-"Вы решили установить на своей карте первоначальный PIN. Сейчас он установлен "
-"в нулевой PIN. Установка первоначального PIN <b>требуется, но необратима</"
-"b>.\n"
-"\n"
-"Сверьтесь с документацией на свою карту, чтобы узнать, на что годится "
-"нулевой PIN.\n"
-"\n"
-"Если продолжить, нужно будет ввести новый PIN, а затем повторить ввод. "
-"Запомните его как следует: восстановить PIN его после %i неудачных попыток "
-"будет невозможно.\n"
-"\n"
-"%s"
-
-msgid ""
-"You are now setting the PIN for the SigG key used to create <b>qualified "
-"signatures</b>.  You may want to set the PIN to the same value as used for "
-"the NKS keys."
-msgstr ""
-"Вы устанавливаете PIN для ключа SigG, с помощью которого создаются "
-"<b>квалифицированные подписи</b>. Возможно, следует установить то же "
-"значение PIN, что и для ключей NKS."
-
-msgid ""
-"You are now setting the PIN for the NKS keys used for standard signatures, "
-"encryption and authentication."
-msgstr ""
-"Вы устанавливаете PIN для ключей NKS, применяемых для обычных подписей, "
-"шифрования и проверки подлинности."
-
-#, c-format
-msgid ""
-"Error changing the NullPIN.\n"
-"(%s <%s>)"
-msgstr ""
-"Ошибка смены нулевого PIN.\n"
-"(%s <%s>)"
-
-msgid ""
-"<b>Changing a PIN or PUK</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value and then to "
-"enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the current value decrements the retry counter.  "
-"If the retry counters of the PIN and the corresponding PUK are both down to "
-"zero, the keys controlled by the PIN are not anymore usable and there is no "
-"way to unblock them!"
-msgstr ""
-"<b>Смена PIN или PUK</b>\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение, а затем новое "
-"значение, повторив его в ответ на другой запрос.\n"
-"\n"
-"Ввод неверного текущего значения уменьшает счетчик попыток. Если счетчики "
-"попыток PIN и соответствующего PUK одновременно стали равны нулю, то ключи, "
-"которыми они управляют, непригодны для пользования, и разблокировать их "
-"невозможно!"
-
-msgid ""
-"<b>Resetting a PUK</b>\n"
-"\n"
-"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
-"system of the NetKey card implements it as an alternative PIN and thus it is "
-"possible to use the PIN to unblock the PUK.\n"
-"\n"
-"If the PUK is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PIN.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the blocked PUK and repeat that new value at "
-"another prompt."
-msgstr ""
-"<b>Сброс PUK</b>\n"
-"\n"
-"Хотя <i>PUK</i> означает <i>код разблокировки PIN</i>, TCOS, операционная "
-"система карты NetKey, реализует его как альтернативный PIN; таким образом, "
-"PUK можно разблокировать с помощью PIN.\n"
-"\n"
-"Если PUK заблокирован (счетчик попыток снизился до нуля), его можно "
-"разблокировать с помощью незаблокированного PIN. Тогда счетчик попыток снова "
-"устанавливается в первоначальное значение.\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение PIN, а затем новое "
-"значение для заблокированного PUK, повторив его в ответ на другой запрос."
-
-msgid ""
-"<b>Resetting a PIN</b>\n"
-"\n"
-"If the PIN is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PUK.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PUK and "
-"then to enter a new value for the blocked PIN and repeat that new value at "
-"another prompt."
-msgstr ""
-"<b>Сброс PIN</b>\n"
-"\n"
-"Если PIN заблокирован (счетчик попыток снизился до нуля), его можно "
-"разблокировать с помощью незаблокированного PUK. Тогда счетчик попыток снова "
-"устанавливается в первоначальное значение.\n"
-"\n"
-"Если продолжить, нужно будет ввести текущее значение PUK, а затем новое "
-"значение для заблокированного PIN, повторив его в ответ на другой запрос."
-
-msgid ""
-"<b>A NullPIN is still active on this card</b>.\n"
-"You need to set a real PIN before you can make use of the card."
-msgstr ""
-"<b>На этой карте все еще действует нулевой PIN</b>.\n"
-"Его нужно заменить на настоящий PIN, прежде чем пользоваться картой."
-
-msgid "Set initial PIN"
-msgstr "Установить первоначальный PIN"
-
-msgid "scanning ..."
-msgstr "сканирование..."
-
-msgid "SigG PIN retry counter:"
-msgstr "Счетчик попыток PIN SigG:"
-
-msgid "SigG PUK retry counter:"
-msgstr "Счетчик попыток PUK SigG:"
-
-#, c-format
-msgid ""
-"There is not much information to display for a %s card.  You may want to use "
-"the application selector button to switch to another application available "
-"on this card."
-msgstr ""
-"На карте %s нет информации для отображения. Можно воспользоваться кнопкой "
-"выбора приложений, чтобы переключиться на другое приложение с этой карты."
-
 #~ msgid "Size"
 #~ msgstr "Размер"
-
-#~ msgid "The key ID is a short number to identify a certificate."
-#~ msgstr "ID ключа - короткое число для идентификации сертификата."
