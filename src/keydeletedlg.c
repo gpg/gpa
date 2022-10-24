@@ -55,8 +55,11 @@ confirm_delete_secret (GtkWidget * parent)
   label = gtk_label_new (_("If you delete this key, you won't be able to\n"
                            "read messages encrypted with it.\n\n"
                            "Are you really sure you want to delete it?"));
-  gtk_box_pack_start_defaults (GTK_BOX (hbox), label);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), hbox);
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+
+  GtkBox *box = gtk_dialog_get_content_area(window);
+
+  gtk_box_pack_start(GTK_BOX (box), hbox, TRUE, TRUE, 0);
   gtk_widget_show_all (window);
   if (gtk_dialog_run (GTK_DIALOG (window)) == GTK_RESPONSE_YES)
     {
@@ -98,7 +101,8 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_YES);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
-  vbox = GTK_DIALOG (window)->vbox;
+  vbox = gtk_dialog_get_content_area(window);
+  // vbox = GTK_DIALOG (window)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
   label = gtk_label_new (_("You have selected the following key "

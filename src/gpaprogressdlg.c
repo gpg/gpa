@@ -124,7 +124,8 @@ gpa_progress_dialog_class_init (GpaProgressDialogClass *klass)
 static void
 gpa_progress_dialog_init (GpaProgressDialog *dialog)
 {
-  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
+  GtkBox *box = gtk_dialog_get_content_area(dialog);
+  gtk_container_set_border_width (GTK_CONTAINER (box),
 				  5);
   /* Elements.  */
   dialog->label = gtk_label_new (NULL);

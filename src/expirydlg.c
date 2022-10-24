@@ -117,7 +117,8 @@ gpa_expiry_dialog_run (GtkWidget * parent, gpgme_key_t key, GDate ** new_date)
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   dialog.window = window;
 
-  vbox = GTK_DIALOG (window)->vbox;
+  vbox = gtk_dialog_get_content_area(window);
+  //vbox = GTK_DIALOG (window)->vbox;
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 

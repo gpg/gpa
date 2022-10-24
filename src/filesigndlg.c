@@ -173,7 +173,10 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
   vboxSign = gtk_vbox_new (FALSE, 5);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), vboxSign);
+  // gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), vboxSign);
+  GtkWidget *box = gtk_dialog_get_content_area(dialog);
+  gtk_box_pack_start(box, vboxSign, TRUE, TRUE, 0);
+
 
   frameWho = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frameWho), GTK_SHADOW_NONE);

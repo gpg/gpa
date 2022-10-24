@@ -952,7 +952,9 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
 				     FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  vbox = GTK_DIALOG (dialog)->vbox;
+  //vbox = GTK_DIALOG (dialog)->vbox;
+  vbox = gtk_dialog_get_content_area(dialog);
+
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
   labelKeys = gtk_label_new_with_mnemonic (_("_Recipient list"));

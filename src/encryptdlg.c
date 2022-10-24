@@ -163,7 +163,9 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
 				     FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  vboxEncrypt = GTK_DIALOG (dialog)->vbox;
+  //vboxEncrypt = GTK_DIALOG (dialog)->vbox;
+  vboxEncrypt = gtk_dialog_get_content_area(dialog);
+
   gtk_container_set_border_width (GTK_CONTAINER (vboxEncrypt), 5);
 
   labelKeys = gtk_label_new_with_mnemonic (_("_Public Keys"));

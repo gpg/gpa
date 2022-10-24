@@ -182,7 +182,9 @@ gpa_date_button_clicked (GtkButton *button)
                                 G_CALLBACK (gtk_widget_destroy), self->dialog);
 
       self->calendar = gtk_calendar_new ();
-      gtk_container_add (GTK_CONTAINER (GTK_DIALOG (self->dialog)->vbox),
+      GtkBox *box = gtk_dialog_get_content_area(GTK_DIALOG(self->dialog));
+
+      gtk_container_add (GTK_CONTAINER (box),
                          self->calendar);
 
       g_signal_connect (self->calendar, "day-selected",

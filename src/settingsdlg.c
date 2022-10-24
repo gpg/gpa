@@ -942,7 +942,8 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
 
   /* The UI mode section.  */
   frame = user_interface_mode_frame (dialog);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
+  GtkBox *box = gtk_dialog_get_content_area(dialog);
+  gtk_box_pack_start (GTK_BOX (box), frame,
                       FALSE, FALSE, 0);
 
   /* The default key section.  */
@@ -957,7 +958,7 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
   if (!dialog->gnupg21)
     {
       frame = default_keyserver_frame (dialog);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
+      gtk_box_pack_start (GTK_BOX (box), frame,
                           FALSE, FALSE, 0);
     }
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
@@ -967,7 +968,7 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
   if (dialog->akl.enabled)
     {
       frame = auto_key_locate_frame (dialog);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame,
+      gtk_box_pack_start (GTK_BOX (box), frame,
                           FALSE, FALSE, 0);
     }
 
