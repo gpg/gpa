@@ -229,7 +229,7 @@ AM_GNU_GETTEXT([external],[need-ngettext])
 
 
 dnl Where is the GTK+ toolkit
-AM_PATH_GTK_2_0(2.10.0,, AC_MSG_ERROR(Cannot find GTK+ 2.0))
+AM_PATH_GTK_3_0(3.0.0,, AC_MSG_ERROR(Cannot find GTK+ 3.0))
 
 
 #
