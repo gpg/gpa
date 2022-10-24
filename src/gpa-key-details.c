@@ -430,7 +430,7 @@ build_signatures_page (GpaKeyDetails *kdt, gpgme_key_t key)
       hbox = gtk_hbox_new (FALSE, 5);
       label = gtk_label_new (_("Show signatures on user name:"));
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-      kdt->signatures_uids = gtk_combo_box_new_text ();
+      kdt->signatures_uids = gtk_combo_box_text_new ();
       gtk_box_pack_start (GTK_BOX (hbox), kdt->signatures_uids, TRUE, TRUE, 0);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 

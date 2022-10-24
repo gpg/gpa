@@ -215,7 +215,7 @@ gpa_expiry_frame_new (GDate * expiryDate)
   gtk_entry_set_width_chars (GTK_ENTRY (entryAfter), strlen (" 00000 "));
   gtk_box_pack_start (GTK_BOX (hboxAfter), entryAfter, FALSE, FALSE, 0);
 
-  comboAfter = gtk_combo_box_new_text ();
+  comboAfter = gtk_combo_box_text_new ();
   frame->comboAfter = comboAfter;
   for (i = 3; i >= 0; i--)
     gtk_combo_box_prepend_text (GTK_COMBO_BOX (comboAfter),

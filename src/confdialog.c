@@ -1145,7 +1145,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 		  gtk_size_group_add_widget (GTK_SIZE_GROUP (size_group[0]),
 					     align);
 
-		  widget = gtk_combo_box_new_text ();
+		  widget = gtk_combo_box_text_new ();
 		  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 		  gtk_size_group_add_widget (GTK_SIZE_GROUP (size_group[1]),
 					     widget);
