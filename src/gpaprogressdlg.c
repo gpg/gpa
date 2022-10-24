@@ -128,11 +128,11 @@ gpa_progress_dialog_init (GpaProgressDialog *dialog)
 				  5);
   /* Elements.  */
   dialog->label = gtk_label_new (NULL);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-			       dialog->label);
+  gtk_box_pack_start(GTK_BOX (box),
+			       dialog->label, TRUE, TRUE, 0);
   dialog->pbar = GPA_PROGRESS_BAR (gpa_progress_bar_new ());
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-			       GTK_WIDGET (dialog->pbar));
+  gtk_box_pack_start (GTK_BOX (box),
+			       GTK_WIDGET (dialog->pbar), TRUE, TRUE, 0);
   /* Set up the dialog.  */
   gtk_dialog_add_button (GTK_DIALOG (dialog),
 			 _("_Cancel"),

@@ -491,7 +491,8 @@ ignore_key_trust (gpgme_key_t key, GtkWidget *parent)
   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
   vbox = gtk_vbox_new (FALSE, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
+  GtkBox *box = gtk_dialog_get_content_area(dialog);
+  gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
   label = gtk_label_new (_("You are going to encrypt a document using "
 			   "the following key:"));
@@ -539,7 +540,8 @@ revoked_key (gpgme_key_t key, GtkWidget *parent)
   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
   vbox = gtk_vbox_new (FALSE, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
+  GtkBox *box = gtk_dialog_get_content_area(dialog);
+  gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
   label = gtk_label_new (_("The following key has been revoked by its owner:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -579,7 +581,8 @@ expired_key (gpgme_key_t key, GtkWidget *parent)
   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
   vbox = gtk_vbox_new (FALSE, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox);
+  GtkBox *box = gtk_dialog_get_content_area(dialog);
+  gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
   /* Fixme: We leak the date string.  */
   message = g_strdup_printf (_("The following key expired on %s:"),

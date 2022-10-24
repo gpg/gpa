@@ -93,7 +93,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
           g_free (string);
           gtk_label_set_max_width_chars (GTK_LABEL (label), GPA_MAX_UID_WIDTH);
           gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-          gtk_box_pack_start_defaults (GTK_BOX(uid_box), label);
+          gtk_box_pack_start (GTK_BOX(uid_box), label, TRUE, TRUE, 0);
           gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         }
       uid = uid->next;

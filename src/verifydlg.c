@@ -118,8 +118,12 @@ gpa_file_verify_dialog_constructor (GType type,
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
   dialog->notebook = gtk_notebook_new ();
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-			       dialog->notebook);
+
+  //vboxEncrypt = gtk_dialog_get_content_area(dialog);
+  GtkWidget *box = gtk_dialog_get_content_area(dialog);
+
+  gtk_box_pack_start (GTK_BOX (box),
+			       dialog->notebook, TRUE, TRUE, 0);
   /* Hide on response */
   g_signal_connect (G_OBJECT (dialog), "response",
 		    G_CALLBACK (gtk_widget_hide), NULL);
@@ -378,17 +382,17 @@ verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
       gchar *text = g_strdup_printf (_("Verified data in file: %s"),
 				     signed_file);
       label = gtk_label_new (text);
-      gtk_box_pack_start_defaults (GTK_BOX (vbox), label);
+      gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
       g_free (text);
       text = g_strdup_printf (_("Signature: %s"), signature_file);
       label = gtk_label_new (text);
-      gtk_box_pack_start_defaults (GTK_BOX (vbox), label);
+      gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
       g_free (text);
     }
 
   label = gtk_label_new (_("Signatures:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start_defaults (GTK_BOX (vbox), label);
+  gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 
   list = signature_list (sigs, ctx);
   scrolled = gtk_scrolled_window_new (NULL, NULL);
@@ -398,7 +402,7 @@ verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
   gtk_container_add (GTK_CONTAINER (scrolled), list);
-  gtk_box_pack_start_defaults (GTK_BOX (vbox), scrolled);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
 
   return vbox;
 }

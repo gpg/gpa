@@ -115,12 +115,14 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
   key_info = gpa_key_info_new (key);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), key_info);
+
+  GtkBox *box = gtk_dialog_get_content_area(dialog);
+  gtk_box_pack_start(GTK_BOX (box), key_info, TRUE, TRUE, 0);
 
   /* Create the "Owner Trust" frame */
 
   frame = gtk_frame_new (_("Owner Trust"));
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame);
+  gtk_box_pack_start (GTK_BOX (box), frame, TRUE, TRUE, 0);
   table = gtk_table_new (10, 2, FALSE);
   gtk_container_add (GTK_CONTAINER (frame), table);
 

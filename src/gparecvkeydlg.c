@@ -108,25 +108,25 @@ gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
                          _("Which key do you want to import? (The key must "
 			   "be specified by key ID)."));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE,
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE,
 		      TRUE, 10);
 
   dialog->entry = gtk_entry_new ();
   gtk_entry_set_activates_default (GTK_ENTRY (dialog->entry), TRUE);
   if (is_gpg_version_at_least ("2.1.0"))
     {
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+      gtk_box_pack_start (GTK_BOX (box),
                           dialog->entry, FALSE, TRUE, 10);
     }
   else
     {
       hbox = gtk_hbox_new (0, FALSE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, FALSE,
+      gtk_box_pack_start (GTK_BOX (box), hbox, FALSE,
                           TRUE, 10);
       label = gtk_label_new_with_mnemonic (_("Key _ID:"));
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), dialog->entry);
-      gtk_box_pack_start_defaults (GTK_BOX (hbox), label);
-      gtk_box_pack_start_defaults (GTK_BOX (hbox), dialog->entry);
+      gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), dialog->entry, TRUE, TRUE, 0);
     }
 
 }

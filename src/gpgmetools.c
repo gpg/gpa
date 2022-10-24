@@ -845,7 +845,9 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
                                            -1);
 
   hbox = gtk_hbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
+  GtkBox *box = gtk_dialog_get_content_area(dialog);
+
+  gtk_box_pack_start (GTK_BOX (box), hbox,
 		      TRUE, FALSE, 10);
   pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION,
 				     GTK_ICON_SIZE_DIALOG);
@@ -855,10 +857,10 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
   /* The default button is OK */
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   /* Set the contents of the dialog */
-  gtk_box_pack_start_defaults (GTK_BOX (vbox),
+  gtk_box_pack_start (GTK_BOX (vbox),
 			       passphrase_question_label (uid_hint,
 							  passphrase_info,
-							  prev_was_bad));
+							  prev_was_bad), TRUE, TRUE, 0);
   entry = gtk_entry_new ();
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
