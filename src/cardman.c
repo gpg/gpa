@@ -318,7 +318,7 @@ card_reload (GpaCardManager *cardman)
       if (cardman->app_selector
           && (gtk_combo_box_get_active
               (GTK_COMBO_BOX (cardman->app_selector)) > 0)
-          && (application = gtk_combo_box_get_active_text
+          && (application = gtk_combo_box_text_get_active_text
               (GTK_COMBO_BOX (cardman->app_selector))))
         {
           command_buf = g_strdup_printf ("%s %s", command, application);

@@ -285,7 +285,7 @@ gpa_expiry_frame_get_expiration(GtkWidget * expiry_frame, GDate ** date,
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(frame->radioAfter)))
     {
       *interval = atoi (gtk_entry_get_text (GTK_ENTRY(frame->entryAfter)));
-      temp = gtk_combo_box_get_active_text (GTK_COMBO_BOX (frame->comboAfter));
+      temp = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX (frame->comboAfter));
       *unit = gpa_time_unit_from_string (temp);
       *date = NULL;
       result = TRUE;

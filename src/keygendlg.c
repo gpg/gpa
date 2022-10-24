@@ -116,7 +116,7 @@ response_cb (GtkDialog *dlg, gint response, gpointer user_data)
     return;
 
   temp = (self->entry_keysize
-          ? gtk_combo_box_get_active_text (GTK_COMBO_BOX
+          ? gtk_combo_box_text_get_active_text (GTK_COMBO_BOX
                                            (self->entry_keysize))
           :  NULL);
   keysize = temp? atoi (temp):0;
@@ -405,7 +405,7 @@ gpa_key_gen_run_dialog (GtkWidget *parent, const char *forcard)
           g_return_val_if_reached (NULL);
         }
       params->algo = algorithm_table[idx].algo;
-      temp = gtk_combo_box_get_active_text
+      temp = gtk_combo_box_text_get_active_text
         (GTK_COMBO_BOX (self->entry_keysize));
       params->keysize = temp? atoi (temp) : 0;
     }

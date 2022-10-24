@@ -359,7 +359,7 @@ keyserver_selected_from_list_cb (SettingsDlg *dialog)
   if (dialog->gnupg21)
     return;
 
-  text = gtk_combo_box_get_active_text (dialog->keyserver.combo);
+  text = gtk_combo_box_text_get_active_text (dialog->keyserver.combo);
   g_message ("got `%s'", text);
   xfree (dialog->keyserver.url);
   dialog->keyserver.url = (text && *text)? text : NULL;
