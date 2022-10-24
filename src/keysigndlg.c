@@ -66,7 +66,8 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_YES);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
-  vboxSign = GTK_DIALOG (window)->vbox;
+  // vboxSign = GTK_DIALOG (window)->vbox;
+  vboxSign = gtk_dialog_get_content_area(window);
   gtk_container_set_border_width (GTK_CONTAINER (vboxSign), 5);
 
   label = gtk_label_new (_("Do you want to sign the following key?"));
