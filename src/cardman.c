@@ -881,8 +881,8 @@ setup_app_selector (GpaCardManager *cardman)
           p1 = strchr (p0, ':');
           if (p1)
             *p1 = 0;
-          gtk_combo_box_append_text
-            (GTK_COMBO_BOX (cardman->app_selector), p0);
+          gtk_combo_box_text_append
+            (GTK_COMBO_BOX (cardman->app_selector), NULL, p0);
           if (p[1])
             p0 = p+1;
         }
@@ -936,8 +936,8 @@ construct_widgets (GpaCardManager *cardman)
   hbox2 = gtk_hbox_new (FALSE, 0);
   label = gtk_label_new (_("Application selection:"));
   gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 5);
-  cardman->app_selector = gtk_combo_box_new_text ();
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cardman->app_selector),
+  cardman->app_selector = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append (GTK_COMBO_BOX (cardman->app_selector), NULL,
                              _("Auto"));
   gtk_combo_box_set_active (GTK_COMBO_BOX (cardman->app_selector), 0);
   gtk_box_pack_start (GTK_BOX (hbox2), cardman->app_selector, FALSE, TRUE, 0);

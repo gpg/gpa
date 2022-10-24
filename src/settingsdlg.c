@@ -412,7 +412,7 @@ append_to_combo (gpointer item, gpointer data)
   GtkWidget *combo = data;
   gchar *text = item;
 
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), text);
+  gtk_combo_box_text_append (GTK_COMBO_BOX (combo), NULL, text);
 }
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
 
@@ -660,12 +660,12 @@ auto_key_locate_frame (SettingsDlg *dialog)
   gtk_misc_set_padding (GTK_MISC (label), xpad, ypad);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  combo = gtk_combo_box_new_text ();
+  combo = gtk_combo_box_text_new ();
   gtk_box_pack_start (GTK_BOX (hbox), combo, FALSE, FALSE, 0);
 
   idx=0;
   do
-    gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _(akl_table[idx].text));
+    gtk_combo_box_text_append (GTK_COMBO_BOX (combo), NULL, _(akl_table[idx].text));
   while (akl_table[idx++].list);
 
   /* The kDNS server.  */

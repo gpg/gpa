@@ -221,9 +221,9 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
     }
   else
     {
-      combo = gtk_combo_box_new_text ();
+      combo = gtk_combo_box_text_new ();
       for (idx=0; algorithm_table[idx].name; idx++)
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo),
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo),
 				   algorithm_table[idx].name);
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
@@ -236,12 +236,12 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
                         GTK_FILL, GTK_SHRINK, 0, 0);
-      combo = gtk_combo_box_new_text ();
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "1024");
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "1536");
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "2048");
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "3072");
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "4096");
+      combo = gtk_combo_box_text_new ();
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "1024");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "1536");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "2048");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "3072");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "4096");
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 2);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 

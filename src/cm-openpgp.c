@@ -1454,9 +1454,9 @@ construct_data_widget (GpaCMOpenpgp *card)
 
   rowidx = 0;
 
-  card->entries[ENTRY_SEX] = gtk_combo_box_new_text ();
+  card->entries[ENTRY_SEX] = gtk_combo_box_text_new ();
   for (idx=0; "mfu"[idx]; idx++)
-    gtk_combo_box_append_text (GTK_COMBO_BOX (card->entries[ENTRY_SEX]),
+    gtk_combo_box_text_append (GTK_COMBO_BOX (card->entries[ENTRY_SEX]), NULL,
                                gpa_sex_char_to_string ("mfu"[idx]));
   add_table_row (personal_table, &rowidx,
                  _("Salutation:"), card->entries[ENTRY_SEX], NULL, 0, 0);

@@ -1161,22 +1161,22 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 
 		  if (option->flags & GPGME_CONF_DEFAULT
 		      || option->flags & GPGME_CONF_DEFAULT_DESC)
-		    gtk_combo_box_append_text
-		      (GTK_COMBO_BOX (widget),
+		    gtk_combo_box_text_append
+		      (GTK_COMBO_BOX (widget), NULL,
 		       (option->flags & GPGME_CONF_LIST) ?
 		       _("Use default values") : _("Use default value"));
 		  else
-		    gtk_combo_box_append_text
-		      (GTK_COMBO_BOX (widget), _("Do not use option"));
+		    gtk_combo_box_text_append
+		      (GTK_COMBO_BOX (widget), NULL, _("Do not use option"));
 
-		  gtk_combo_box_append_text
-		    (GTK_COMBO_BOX (widget),
+		  gtk_combo_box_text_append
+		    (GTK_COMBO_BOX (widget), NULL,
 		     (option->flags & GPGME_CONF_LIST) ?
 		     _("Use custom values") : _("Use custom value"));
 
 		  if (opt->type == OPTION_OPT_ENTRY)
-		    gtk_combo_box_append_text
-		      (GTK_COMBO_BOX (widget), _("Use default argument"));
+		    gtk_combo_box_text_append
+		      (GTK_COMBO_BOX (widget), NULL, _("Use default argument"));
 		}
 
 	      /* Force update.  */
@@ -1393,12 +1393,12 @@ create_dialog (void)
   gtk_misc_set_padding (GTK_MISC (label), xpad, ypad);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  level_chooser = gtk_combo_box_new_text ();
+  level_chooser = gtk_combo_box_text_new ();
   /* Note: We know intimately that this matches GPGME_CONF_BASIC,
      GPGME_CONF_ADVANCED and GPGME_CONF_BEGINNER.  */
-  gtk_combo_box_append_text (GTK_COMBO_BOX (level_chooser), _("Basic"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (level_chooser), _("Advanced"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (level_chooser), _("Expert"));
+  gtk_combo_box_text_append (GTK_COMBO_BOX (level_chooser), NULL, _("Basic"));
+  gtk_combo_box_text_append (GTK_COMBO_BOX (level_chooser), NULL, _("Advanced"));
+  gtk_combo_box_text_append (GTK_COMBO_BOX (level_chooser), NULL, _("Expert"));
   g_signal_connect ((gpointer) level_chooser, "changed",
 		    G_CALLBACK (dialog_level_chooser_cb), NULL);
 
