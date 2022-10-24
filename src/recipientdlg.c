@@ -975,7 +975,7 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
 
 
   dialog->popup_menu = recplist_popup_menu_new (dialog->clist_keys, dialog);
-  g_signal_connect_swapped (GTK_OBJECT (dialog->clist_keys),
+  g_signal_connect_swapped (G_OBJECT (dialog->clist_keys),
                             "button_press_event",
                             G_CALLBACK (recplist_display_popup_menu), dialog);
 

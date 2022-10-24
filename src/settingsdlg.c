@@ -973,7 +973,7 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
     }
 
   /* Connect the response signal.  */
-  g_signal_connect (GTK_OBJECT (dialog), "response",
+  g_signal_connect (G_OBJECT (dialog), "response",
                     G_CALLBACK (dialog_response), NULL);
 
 
