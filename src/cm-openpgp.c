@@ -424,7 +424,7 @@ update_entry_chv_status (GpaCMOpenpgp *card, int entry_id, const char *string)
       gtk_widget_show_all (card->change_pin_btn[1]);
     }
   else
-    gtk_widget_hide_all (card->change_pin_btn[1]);
+    gtk_widget_hide (card->change_pin_btn[1]);
   gtk_widget_set_no_show_all (card->change_pin_btn[1], !card->is_v2);
 
   /* The Admin PIN has always the same label.  If the Admin PIN is

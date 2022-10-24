@@ -216,7 +216,7 @@ details_page_fill_key (GpaKeyDetails *kdt, gpgme_key_t key)
   g_free (text);
 #endif
 
-  gtk_widget_hide_all (kdt->details_num_label);
+  gtk_widget_hide (kdt->details_num_label);
   gtk_widget_show_all (kdt->details_table);
   gtk_widget_set_no_show_all (kdt->details_num_label, TRUE);
   gtk_widget_set_no_show_all (kdt->details_table, FALSE);
@@ -241,7 +241,7 @@ details_page_fill_num_keys (GpaKeyDetails *kdt, gint num_key)
     }
 
   gtk_widget_show_all (kdt->details_num_label);
-  gtk_widget_hide_all (kdt->details_table);
+  gtk_widget_hide (kdt->details_table);
   gtk_widget_set_no_show_all (kdt->details_num_label, FALSE);
   gtk_widget_set_no_show_all (kdt->details_table, TRUE);
 

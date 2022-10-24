@@ -181,10 +181,10 @@ update_show_advanced_options (SettingsDlg *dialog)
     {
 #ifdef ENABLE_KEYSERVER_SUPPORT
       if (!dialog->gnupg21)
-        gtk_widget_hide_all (dialog->keyserver.frame);
+        gtk_widget_hide (dialog->keyserver.frame);
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
       if (dialog->akl.enabled)
-        gtk_widget_hide_all (dialog->akl.frame);
+        gtk_widget_hide (dialog->akl.frame);
     }
 }
 

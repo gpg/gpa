@@ -242,7 +242,7 @@ update_entry_chv_status (GpaCMNetkey *card, int entry_id, char *string)
     gtk_widget_show_all (card->warning_frame);
   else
     {
-      gtk_widget_hide_all (card->warning_frame);
+      gtk_widget_hide (card->warning_frame);
       gtk_widget_set_no_show_all (card->warning_frame, TRUE);
     }
 }
