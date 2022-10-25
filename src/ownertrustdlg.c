@@ -91,7 +91,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
 {
   GtkWidget *dialog;
   GtkWidget *key_info;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *frame;
   GtkWidget *unknown_radio, *never_radio, *marginal_radio, *full_radio,
     *ultimate_radio;
@@ -116,53 +116,54 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
 
   key_info = gpa_key_info_new (key);
 
-  GtkBox *box = gtk_dialog_get_content_area(dialog);
-  gtk_box_pack_start(GTK_BOX (box), key_info, TRUE, TRUE, 0);
+  GtkBox *box = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+  gtk_box_pack_start(GTK_BOX (box), key_info, FALSE, FALSE, 0);
 
   /* Create the "Owner Trust" frame */
 
   frame = gtk_frame_new (_("Owner Trust"));
-  gtk_box_pack_start (GTK_BOX (box), frame, TRUE, TRUE, 0);
-  table = gtk_table_new (10, 2, FALSE);
-  gtk_container_add (GTK_CONTAINER (frame), table);
+  gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
+  grid = gtk_grid_new();
 
   unknown_radio = gtk_radio_button_new (NULL);
-  gtk_table_attach (GTK_TABLE (table), unknown_radio, 0, 1, 0, 1, 
-                    0, 0, 0, 0);
+  gtk_grid_attach(GTK_GRID(grid), unknown_radio, 0, 0, 1, 1);
   label = gtk_label_new_with_mnemonic (_("_Unknown"));
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), unknown_radio);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 0, 1, 1);
 
   label = gtk_label_new (_("You don't know how much to trust this user to "
                            "verify other people's keys.\n"));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 1, 2);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 1, 1, 1);
 
   never_radio = gtk_radio_button_new_from_widget 
     (GTK_RADIO_BUTTON (unknown_radio));
-  gtk_table_attach (GTK_TABLE (table), never_radio, 0, 1, 2, 3,
-                    0, 0, 0, 0);
+  gtk_grid_attach(GTK_GRID (grid), never_radio, 0, 2, 1, 1);
   label = gtk_label_new_with_mnemonic (_("_Never"));
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), never_radio);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 2, 3);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 2, 1, 1);
 
   label = gtk_label_new (_("You don't trust this user at all to verify the "
                            "validity of other people's keys at all.\n"));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 3, 4);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 3, 1, 1);
 
   marginal_radio = gtk_radio_button_new_from_widget 
     (GTK_RADIO_BUTTON (unknown_radio));
-  gtk_table_attach (GTK_TABLE (table), marginal_radio, 0, 1, 4, 5,
-                    0, 0, 0, 0);
+  gtk_grid_attach(GTK_GRID (grid), marginal_radio, 0, 4, 1, 1);
   label = gtk_label_new_with_mnemonic (_("_Marginal"));
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), marginal_radio);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 4, 5);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 4, 1, 1);
 
   label = gtk_label_new (_("You don't trust this user's ability to "
                            "verify the validity of other people's keys "
@@ -174,17 +175,20 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
                            "other two marginally trusted users with "
                            "valid keys\n"));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 5, 6);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 5, 1, 1);
 
   full_radio = gtk_radio_button_new_from_widget 
     (GTK_RADIO_BUTTON (unknown_radio));
-  gtk_table_attach (GTK_TABLE (table), full_radio, 0, 1, 6, 7,
-                    0, 0, 0, 0);
+  gtk_grid_attach(GTK_GRID (grid), full_radio, 0, 6, 1, 1);
   label = gtk_label_new_with_mnemonic (_("_Full"));
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), full_radio);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 6, 7);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 6, 1, 1);
 
   label = gtk_label_new (_("You trust this user's ability to "
                            "verify the validity of other people's keys "
@@ -192,17 +196,19 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
                            "signed by him/her, provided this user's key "
                            "is valid.\n"));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 7, 8);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 7, 1, 1);
 
   ultimate_radio = gtk_radio_button_new_from_widget 
     (GTK_RADIO_BUTTON (unknown_radio));
-  gtk_table_attach (GTK_TABLE (table), ultimate_radio, 0, 1, 8, 9,
-                    0, 0, 0, 0);
+  gtk_grid_attach(GTK_GRID (grid), ultimate_radio, 0, 8, 1, 1);
   label = gtk_label_new_with_mnemonic (_("U_ltimate"));
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), ultimate_radio);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 8, 9);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 8, 1, 1);
 
   label = gtk_label_new (_("You consider this key valid, and trust the user "
                            "so much that you will consider any key signed "
@@ -211,12 +217,16 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
                            "you own. Don't use it with other people's keys "
                            "unless you really know what you are doing)\n"));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 9, 10);
+  gtk_widget_set_halign(label, GTK_ALIGN_START);
+  gtk_widget_set_valign(label, GTK_ALIGN_START);
+  gtk_grid_attach(GTK_GRID (grid), label, 1, 9, 1, 1);
 
   /* Initialize */
   init_radio_buttons (trust, unknown_radio, never_radio, marginal_radio, 
                       full_radio, ultimate_radio);
+
+  gtk_container_add (GTK_CONTAINER (frame), grid);
+  gtk_window_resize(GTK_WINDOW(dialog), 400, 300);
 
   /* Run */
   gtk_widget_show_all (dialog);
