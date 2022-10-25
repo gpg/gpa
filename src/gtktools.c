@@ -77,7 +77,7 @@ create_diagnostics_dialog (GtkWidget *parent, const char *string)
                                   GTK_POLICY_AUTOMATIC);
   GtkWidget *box;
   box = gtk_dialog_get_content_area(dialog);
-  gtk_box_pack_start (box, scrollwidget, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), scrollwidget, TRUE, TRUE, 0);
 
   textview = gtk_text_view_new ();
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (textview), GTK_WRAP_NONE);
