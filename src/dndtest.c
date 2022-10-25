@@ -323,7 +323,7 @@ main (int argc, char **argv)
 
         /* Create the widgets */
         window  = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        hbox    = gtk_hbox_new (FALSE, spacing);
+        hbox    = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
 
         coin_source     = gtk_button_new_with_label ("[coins]");
         well_dest       = gtk_label_new ("[a well]");
