@@ -189,7 +189,7 @@ i18n_init (void)
 #ifdef ENABLE_NLS
   char *tmp;
 
-  gtk_set_locale ();
+  setlocale(LC_ALL, "");
   bind_textdomain_codeset (PACKAGE, "UTF-8");
 
   tmp = get_locale_dir ();
