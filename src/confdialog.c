@@ -974,7 +974,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	  char *description;
 	  /* FIXME: Might need to put pages into scrolled panes if
 	     there are too many.  */
-	  page = gtk_vbox_new (FALSE, 0);
+	  page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	  gtk_container_add (GTK_CONTAINER (dialog_notebook), page);
 
 	  description = xstrdup (comp->description);
@@ -1009,7 +1009,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
 	  gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 
-	  frame_vbox = gtk_vbox_new (FALSE, 0);
+	  frame_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	  gtk_container_add (GTK_CONTAINER (frame), frame_vbox);
 	}
 
@@ -1043,7 +1043,7 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 	      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
 	      gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 
-	      frame_vbox = gtk_vbox_new (FALSE, 0);
+	      frame_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	      gtk_container_add (GTK_CONTAINER (frame), frame_vbox);
 	    }
 	  else if (option->level <= dialog_level)
@@ -1076,10 +1076,10 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 		 support multi-hbox setups for options.  Currently we
 		 only add one hbox to that vbox though.  */
 
-	      vbox = gtk_vbox_new (FALSE, 0);
+	      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	      gtk_box_pack_start (GTK_BOX (frame_vbox), vbox, TRUE, TRUE, 0);
 
-	      hbox = gtk_hbox_new (FALSE, 0);
+	      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	      gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
 
 	      /* Add the entry fields for the option, depending on its
@@ -1304,7 +1304,7 @@ dialog_level_chooser_cb (GtkComboBox *level_chooser, gpointer *data)
       gtk_dialog_set_default_response (GTK_DIALOG (window),
 				       GTK_RESPONSE_CANCEL);
 
-      hbox = gtk_hbox_new (FALSE, 0);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
 
       GtkBox *box = gtk_dialog_get_content_area(window);
@@ -1381,7 +1381,7 @@ create_dialog (void)
   dialog_vbox = gtk_dialog_get_content_area(dialog);
   /*  gtk_box_set_spacing (GTK_CONTAINER (dialog_vbox), 5); */
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   label = gtk_label_new (_("Configure the tools of the GnuPG system."));
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
