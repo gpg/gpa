@@ -116,7 +116,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
 
   key_info = gpa_key_info_new (key);
 
-  GtkBox *box = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+  GtkWidget *box = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
   gtk_box_pack_start(GTK_BOX (box), key_info, FALSE, FALSE, 0);
 
   /* Create the "Owner Trust" frame */
