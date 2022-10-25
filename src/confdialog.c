@@ -1378,7 +1378,7 @@ create_dialog (void)
   g_signal_connect ((gpointer) dialog, "response",
 		    G_CALLBACK (dialog_response), NULL);
 
-  dialog_vbox = GTK_DIALOG (dialog)->vbox;
+  dialog_vbox = gtk_dialog_get_content_area(dialog);
   /*  gtk_box_set_spacing (GTK_CONTAINER (dialog_vbox), 5); */
 
   hbox = gtk_hbox_new (FALSE, 0);
