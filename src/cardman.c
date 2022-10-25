@@ -122,7 +122,7 @@ statusbar_new (GpaCardManager *cardman)
   GtkWidget *hbox;
   GtkWidget *label;
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   label = gtk_label_new (NULL);
   cardman->status_label = label;
