@@ -433,7 +433,7 @@ default_keyserver_frame (SettingsDlg *dialog)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 
-  combo = gtk_combo_box_entry_new_text ();
+  combo = gtk_combo_box_text_new ();
   gtk_container_set_border_width (GTK_CONTAINER (combo), 5);
   gtk_container_add (GTK_CONTAINER (frame), combo);
   /* Set current value.  */
