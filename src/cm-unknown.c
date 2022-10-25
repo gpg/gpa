@@ -166,7 +166,7 @@ construct_data_widget (GpaCMUnknown *card)
 
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   card->label = gtk_label_new (NULL);
   gtk_box_pack_start (GTK_BOX (vbox), card->label, TRUE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (frame), vbox);
