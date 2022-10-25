@@ -141,7 +141,7 @@ gpa_cm_object_get_type (void)
 	  gpa_cm_object_init
 	};
 
-      this_type = g_type_register_static (GTK_TYPE_VBOX,
+      this_type = g_type_register_static (GTK_TYPE_BOX,
                                           "GpaCMObject",
                                           &this_info, 0);
     }
