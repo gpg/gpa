@@ -388,10 +388,6 @@ gpa_keygen_wizard_new (GtkWidget *parent,
   g_object_set_data_full (G_OBJECT (window), "user_data",
 			  wizard, free_keygen_wizard);
 
-  /* Set the forward button to be the default.  */
-  GTK_WIDGET_SET_FLAGS (GTK_ASSISTANT (window)->forward, GTK_CAN_DEFAULT);
-  gtk_window_set_default (GTK_WINDOW (window), GTK_ASSISTANT (window)->forward);
-
   wizard->name_page = keygen_wizard_name_page (wizard);
   gtk_assistant_append_page (GTK_ASSISTANT (window), wizard->name_page);
   gtk_assistant_set_page_type (GTK_ASSISTANT (window), wizard->name_page,

@@ -64,10 +64,7 @@ create_diagnostics_dialog (GtkWidget *parent, const char *string)
                                         GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
                                         NULL);
   dialog = GTK_DIALOG (widget);
-  gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
   gtk_window_set_default_size (GTK_WINDOW (dialog), 570, 320);
   gtk_dialog_set_default_response (dialog, GTK_RESPONSE_CANCEL);
 
