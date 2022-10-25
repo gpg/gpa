@@ -73,14 +73,16 @@ drag_data_received_handl
 
 
         /* Deal with what we are given from source */
-        if((selection_data != NULL) && (selection_data-> length >= 0))
+        if((selection_data != NULL) && (gtk_selection_data_get_length(selection_data) >= 0))
         {
-                if (context-> action == GDK_ACTION_ASK)
+                GdkDragAction drag_action = gdk_drag_context_get_suggested_action(context);
+
+                if (drag_action == GDK_ACTION_ASK)
                 {
                 /* Ask the user to move or copy, then set the context action. */
                 }
 
-                if (context-> action == GDK_ACTION_MOVE)
+                if (drag_action == GDK_ACTION_MOVE)
                         delete_selection_data = TRUE;
 
                 /* Check that we got the format we can use */
@@ -88,19 +90,19 @@ drag_data_received_handl
                 switch (target_type)
                 {
                         case TARGET_INT32:
-                                _idata = (glong*)selection_data-> data;
+                                _idata = (glong*)gtk_selection_data_get_data(selection_data);
                                 g_print ("integer: %ld", *_idata);
                                 dnd_success = TRUE;
                                 break;
 
                         case TARGET_STRING:
-                                _sdata = (gchar*)selection_data-> data;
+                                _sdata = (gchar*)gtk_selection_data_get_data(selection_data);
                                 g_print ("string: %s", _sdata);
                                 dnd_success = TRUE;
                                 break;
 
                         case TARGET_URIS:
-                                _sdata = (gchar*)selection_data-> data;
+                                _sdata = (gchar*)gtk_selection_data_get_data(selection_data);
                                 g_print ("uris: %s", _sdata);
                                 dnd_success = TRUE;
                                 break;
@@ -160,12 +162,14 @@ drag_drop_handl
         /* Check to see if (x,y) is a valid drop site within widget */
         is_valid_drop_site = TRUE;
 
+        GList *targets = gdk_drag_context_list_targets(context);
+
         /* If the source offers a target */
-        if (context-> targets)
+        if (targets)
         {
                 /* Choose the best target type */
                 target_type = GDK_POINTER_TO_ATOM
-                        (g_list_nth_data (context-> targets, TARGET_INT32));
+                        (g_list_nth_data (targets, TARGET_INT32));
 
                 /* Request the data from the source. */
                 gtk_drag_get_data
@@ -222,6 +226,8 @@ drag_data_get_handl
         g_print ("%s: drag_data_get_handl\n", name);
         g_assert (selection_data != NULL);
 
+        GdkAtom target = gtk_selection_data_get_target(selection_data);
+
         g_print (" Sending ");
         switch (target_type)
         {
@@ -235,7 +241,7 @@ drag_data_get_handl
                 gtk_selection_data_set
                 (
                         selection_data,         /* Allocated GdkSelectionData object */
-                        selection_data-> target,/* target type */
+                        target,/* target type */
                         _DWORD,                 /* number of bits per 'unit' */
                         (guchar*) &integer_data,/* pointer to data to be sent */
                         sizeof (integer_data)   /* length of data in units */
@@ -247,7 +253,7 @@ drag_data_get_handl
                 gtk_selection_data_set
                 (
                         selection_data,
-                        selection_data-> target,
+                        target,
                         _BYTE,
                         (guchar*) string_data,
                         strlen (string_data)
@@ -259,7 +265,7 @@ drag_data_get_handl
                 gtk_selection_data_set
                 (
                         selection_data,
-                        selection_data-> target,
+                        target,
                         _BYTE,
                         (guchar*) string_data,
                         strlen (string_data)

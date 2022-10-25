@@ -673,8 +673,10 @@ dnd_drop_handler (GtkWidget *widget, GdkDragContext *context,
 {
   GdkAtom target_type = gdk_atom_intern ("text/uri-list", FALSE);
 
+  GList *targets = gdk_drag_context_list_targets(context);
+
   /* If the source offers a target we request the data from her. */
-  if (context->targets && g_list_find (context->targets,
+  if (targets && g_list_find (targets,
                                        GDK_ATOM_TO_POINTER (target_type)))
     {
       gtk_drag_get_data (widget, context, target_type, tim);
@@ -697,16 +699,21 @@ dnd_data_received_handler (GtkWidget *widget, GdkDragContext *context,
   gboolean dnd_success = FALSE;
   gboolean delete_selection_data = FALSE;
 
+  // const guchar *our_selection_data = gtk_selection_data_get_data(selection_data);
+
   /* Is that usable by us?  */
-  if (selection_data && selection_data->length >= 0 )
+  if (selection_data && gtk_selection_data_get_length(selection_data) >= 0 )
     {
-      if (context->action == GDK_ACTION_MOVE)
+      GdkDragAction drag_action = gdk_drag_context_get_suggested_action(context);
+
+      if (drag_action == GDK_ACTION_MOVE)
         delete_selection_data = TRUE;
 
       /* Check that we got a format we can use.  */
       if (target_type == DND_TARGET_URI_LIST)
         {
-          char *p = (char *) selection_data->data;
+          //char *p = (char *) selection_data->data;
+          char *p = (char *)gtk_selection_data_get_data(selection_data);
           char **list;
           int i;
 
