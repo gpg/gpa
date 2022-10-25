@@ -158,9 +158,9 @@ gpa_context_class_init (GpaContextClass *klass)
                         G_SIGNAL_RUN_FIRST,
                         G_STRUCT_OFFSET (GpaContextClass, progress),
                         NULL, NULL,
-			gtk_marshal_VOID__INT_INT,
+                        g_cclosure_marshal_VOID__INT,
                         G_TYPE_NONE, 2,
-			G_TYPE_INT, G_TYPE_INT);
+			G_TYPE_INT);
 }
 
 static void
