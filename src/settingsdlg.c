@@ -948,7 +948,7 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
 
   /* The default key section.  */
   frame = default_key_frame (dialog);
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), frame);
+  gtk_box_pack_start (GTK_BOX (box), frame, TRUE, TRUE, 0);
 
   /* The default keyserver section.  Note that there is no keyserver
      entry if we are using gnupg 2.1.  There we do not have the
