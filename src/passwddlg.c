@@ -87,7 +87,7 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
 {
   GtkWidget *dialog;
   GtkWidget *vbox;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *label, *entry, *passwd_entry, *repeat_entry;
   GtkResponseType response;
   gchar *passwd = NULL;
@@ -106,27 +106,25 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
 
   vbox = gtk_dialog_get_content_area(dialog);
 
-  table = gtk_table_new (2, 2, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 5);
+  grid = gtk_grid_new();
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
+  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, TRUE, 5);
 
   label = gtk_label_new (_("Passphrase: "));
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
   entry = passwd_entry = gtk_entry_new ();
-  gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
-		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
 
   label = gtk_label_new (_("Repeat Passphrase: "));
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
   entry = repeat_entry = gtk_entry_new ();
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
-		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, 1, 1, 1);
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
 
   /* Pressing enter on the passphrase entry switches the focus to the
