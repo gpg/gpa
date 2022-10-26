@@ -112,7 +112,8 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
 
   label = gtk_label_new (_("Passphrase: "));
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   entry = passwd_entry = gtk_entry_new ();
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
@@ -120,7 +121,8 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
 
   label = gtk_label_new (_("Repeat Passphrase: "));
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   entry = repeat_entry = gtk_entry_new ();
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
