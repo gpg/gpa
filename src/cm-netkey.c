@@ -869,7 +869,6 @@ add_grid_row (GtkWidget *grid, int *rowidx,
       if (!is_label && GTK_IS_ENTRY (widget))
         {
           gtk_entry_set_has_frame (GTK_ENTRY (widget), FALSE);
-          //gtk_entry_set_editable (GTK_ENTRY (widget), FALSE);
           gtk_editable_set_editable(GTK_EDITABLE(widget), FALSE);
         }
     }
