@@ -379,10 +379,13 @@ reload_more_data (GpaCMNetkey *card)
 
   if (parm.any_unknown)
     {
-      GtkWidget *button, *align;
+      GtkWidget *button;
 
-      align = gtk_alignment_new (0.5, 0, 0, 0);
       button = gtk_button_new_with_label (_("Learn keys"));
+
+      gtk_widget_set_halign (GTK_WIDGET (button), 0.5);
+      gtk_widget_set_valign (GTK_WIDGET (button), 0);
+
       gpa_add_tooltip
         (button, _("For some or all of the keys available on the card, "
                    "the GnuPG crypto engine does not yet know the "
@@ -396,9 +399,8 @@ reload_more_data (GpaCMNetkey *card)
                    "read all certificates from the card.\n"
                    "\n"
                    "If you are unsure what to do, just click the button."));
-      gtk_container_add (GTK_CONTAINER (align), button);
-      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 5);
-      gtk_box_reorder_child (GTK_BOX (vbox), align, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 5);
+      gtk_box_reorder_child (GTK_BOX (vbox), button, 0);
 
       g_signal_connect (G_OBJECT (button), "clicked",
                         G_CALLBACK (learn_keys_clicked_cb), card);
@@ -895,7 +897,7 @@ construct_data_widget (GpaCMNetkey *card)
 {
   GtkWidget *frame;
   GtkWidget *grid;
-  GtkWidget *vbox, *hbox;
+  GtkWidget *vbox;
   GtkWidget *label;
   GtkWidget *button;
   int rowidx;
@@ -933,10 +935,12 @@ construct_data_widget (GpaCMNetkey *card)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 
-  hbox = gtk_alignment_new (0.5, 0.5, 0, 0);
   button = gtk_button_new_with_label (_("Set initial PIN"));
-  gtk_container_add (GTK_CONTAINER (hbox), button);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, FALSE, 0);
+
+  gtk_widget_set_halign (GTK_WIDGET (button), 0.5);
+  gtk_widget_set_valign (GTK_WIDGET (button), 0.5);
+
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, FALSE, 0);
 
   gtk_container_add (GTK_CONTAINER (frame), vbox);
   gtk_box_pack_start (GTK_BOX (card), frame, FALSE, TRUE, 0);
