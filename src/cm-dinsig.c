@@ -206,7 +206,7 @@ reload_data (GpaCMDinsig *card)
 
 /* Helper for construct_data_widget.  Returns the label widget. */
 static GtkLabel *
-add_table_row (GtkWidget *table, int *rowidx,
+add_table_row (GtkWidget *grid, int *rowidx,
                const char *labelstr, GtkWidget *widget, GtkWidget *widget2,
                int readonly)
 {
@@ -217,8 +217,7 @@ add_table_row (GtkWidget *table, int *rowidx,
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
   gtk_widget_set_halign(GTK_WIDGET (label), 0);
   gtk_widget_set_valign(GTK_WIDGET (label), 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1,
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID(grid), label, 0, *rowidx, 1, 1);
 
   if (is_label) {
     gtk_widget_set_halign(GTK_WIDGET (widget), 0);
@@ -230,7 +229,7 @@ add_table_row (GtkWidget *table, int *rowidx,
       if (!is_label && GTK_IS_ENTRY (widget))
         {
           gtk_entry_set_has_frame (GTK_ENTRY (widget), FALSE);
-          gtk_entry_set_editable (GTK_ENTRY (widget), FALSE);
+          gtk_editable_set_editable(GTK_EDITABLE (widget), FALSE);
         }
     }
   else
@@ -239,11 +238,9 @@ add_table_row (GtkWidget *table, int *rowidx,
         gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
     }
 
-  gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID(grid), widget, 1, *rowidx, 1, 1);
   if (widget2)
-    gtk_table_attach (GTK_TABLE (table), widget2, 2, 3,
-		      *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 5, 0);
+    gtk_grid_attach (GTK_GRID(grid), widget, 2, *rowidx, 1, 1);
   ++*rowidx;
 
   return GTK_LABEL (label);
@@ -256,7 +253,7 @@ static void
 construct_data_widget (GpaCMDinsig *card)
 {
   GtkWidget *frame;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *vbox;
   GtkWidget *label;
   int rowidx;
@@ -268,13 +265,13 @@ construct_data_widget (GpaCMDinsig *card)
   label = gtk_label_new (_("<b>General</b>"));
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
-  table = gtk_table_new (2, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 10);
-  gtk_container_add (GTK_CONTAINER (frame), table);
+  grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 10);
+  gtk_container_add (GTK_CONTAINER (frame), grid);
   rowidx = 0;
 
   card->entries[ENTRY_SERIALNO] = gtk_label_new (NULL);
-  add_table_row (table, &rowidx, _("Serial number:"),
+  add_table_row (grid, &rowidx, _("Serial number:"),
                  card->entries[ENTRY_SERIALNO], NULL, 0);
 
   gtk_box_pack_start (GTK_BOX (card), frame, FALSE, TRUE, 0);
@@ -282,7 +279,7 @@ construct_data_widget (GpaCMDinsig *card)
   /* Info frame.  */
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
   text = g_strdup_printf
     (_("There is not much information to display for a %s card.  "
        "You may want to use the application selector button to "
