@@ -304,10 +304,11 @@ reload_more_data_cb (void *opaque, const char *status, const char *args)
               gtk_container_add (GTK_CONTAINER (expander), details);
               gpa_key_details_update (details, key, 1);
 
-              hbox = gtk_hbox_new (FALSE, 0);
+              hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
               label = gtk_label_new (NULL);
               gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-              gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+              gtk_widget_set_halign (GTK_WIDGET (label), 0);
+              gtk_widget_set_valign (GTK_WIDGET (label), 0);
               gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
               gtk_box_pack_start (GTK_BOX (hbox), expander, TRUE, TRUE, 0);
               gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
@@ -345,7 +346,7 @@ reload_more_data (GpaCMNetkey *card)
   vbox = gtk_bin_get_child (GTK_BIN (card->keys_frame));
   if (vbox)
     gtk_widget_destroy (vbox);
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_add (GTK_CONTAINER (card->keys_frame), vbox);
 
   /* Create a context for key listings.  */
@@ -845,7 +846,7 @@ change_pin_clicked_cb (void *widget, void *user_data)
 
 /* Helper for construct_data_widget.  Returns the label widget. */
 static GtkLabel *
-add_table_row (GtkWidget *table, int *rowidx,
+add_grid_row (GtkWidget *grid, int *rowidx,
                const char *labelstr, GtkWidget *widget, GtkWidget *widget2,
                int readonly)
 {
@@ -854,12 +855,14 @@ add_table_row (GtkWidget *table, int *rowidx,
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1,
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, *rowidx, 1, 1);
 
-  if (is_label)
-    gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
+  if (is_label) {
+    gtk_widget_set_halign (GTK_WIDGET (widget), 0);
+    gtk_widget_set_valign (GTK_WIDGET (widget), 0.5);
+  }
 
   if (readonly)
     {
@@ -876,11 +879,10 @@ add_table_row (GtkWidget *table, int *rowidx,
         gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
     }
 
-  gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID(grid), widget, 1, *rowidx, 1, 1);
+
   if (widget2)
-    gtk_table_attach (GTK_TABLE (table), widget2, 2, 3,
-		      *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 5, 0);
+    gtk_grid_attach (GTK_GRID(grid), widget, 2, *rowidx, 3, 1);
   ++*rowidx;
 
   return GTK_LABEL (label);
@@ -893,7 +895,7 @@ static void
 construct_data_widget (GpaCMNetkey *card)
 {
   GtkWidget *frame;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *vbox, *hbox;
   GtkWidget *label;
   GtkWidget *button;
@@ -905,17 +907,18 @@ construct_data_widget (GpaCMNetkey *card)
   label = gtk_label_new (_("<b>General</b>"));
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
-  table = gtk_table_new (2, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 10);
-  gtk_container_add (GTK_CONTAINER (frame), table);
+  //table = gtk_table_new (2, 3, FALSE);
+  grid = gtk_grid_new();
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 10);
+  gtk_container_add (GTK_CONTAINER (frame), grid);
   rowidx = 0;
 
   card->entries[ENTRY_SERIALNO] = gtk_label_new (NULL);
-  add_table_row (table, &rowidx, _("Serial number:"),
+  add_grid_row (grid, &rowidx, _("Serial number:"),
                  card->entries[ENTRY_SERIALNO], NULL, 0);
 
   card->entries[ENTRY_NKS_VERSION] = gtk_label_new (NULL);
-  add_table_row (table, &rowidx, _("Card version:"),
+  add_grid_row (grid, &rowidx, _("Card version:"),
                  card->entries[ENTRY_NKS_VERSION], NULL, 0);
 
   gtk_box_pack_start (GTK_BOX (card), frame, FALSE, TRUE, 0);
@@ -924,7 +927,7 @@ construct_data_widget (GpaCMNetkey *card)
   /* Warning frame.  */
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   label = gtk_label_new
     (_("<b>A NullPIN is still active on this card</b>.\n"
        "You need to set a real PIN before you can make use of the card."));
@@ -966,14 +969,14 @@ construct_data_widget (GpaCMNetkey *card)
   label = gtk_label_new (_("<b>PIN</b>"));
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
-  table = gtk_table_new (4, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 10);
-  gtk_container_add (GTK_CONTAINER (frame), table);
+  grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 10);
+  gtk_container_add (GTK_CONTAINER (frame), grid);
   rowidx = 0;
 
   card->entries[ENTRY_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
-  add_table_row (table, &rowidx, _("PIN retry counter:"),
+  add_grid_row (grid, &rowidx, _("PIN retry counter:"),
                  card->entries[ENTRY_PIN_RETRYCOUNTER], button, 1);
   card->change_pin_btn = button;
   g_signal_connect (G_OBJECT (button), "clicked",
@@ -981,7 +984,7 @@ construct_data_widget (GpaCMNetkey *card)
 
   card->entries[ENTRY_PUK_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
-  add_table_row (table, &rowidx, _("PUK retry counter:"),
+  add_grid_row (grid, &rowidx, _("PUK retry counter:"),
                  card->entries[ENTRY_PUK_RETRYCOUNTER], button, 1);
   card->change_puk_btn = button;
   g_signal_connect (G_OBJECT (button), "clicked",
@@ -989,7 +992,7 @@ construct_data_widget (GpaCMNetkey *card)
 
   card->entries[ENTRY_SIGG_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
-  add_table_row (table, &rowidx, _("SigG PIN retry counter:"),
+  add_grid_row (grid, &rowidx, _("SigG PIN retry counter:"),
                  card->entries[ENTRY_SIGG_PIN_RETRYCOUNTER], button, 1);
   card->change_sigg_pin_btn = button;
   g_signal_connect (G_OBJECT (button), "clicked",
@@ -997,7 +1000,7 @@ construct_data_widget (GpaCMNetkey *card)
 
   card->entries[ENTRY_SIGG_PUK_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
-  add_table_row (table, &rowidx, _("SigG PUK retry counter:"),
+  add_grid_row (grid, &rowidx, _("SigG PUK retry counter:"),
                  card->entries[ENTRY_SIGG_PUK_RETRYCOUNTER], button, 1);
   card->change_sigg_puk_btn = button;
   g_signal_connect (G_OBJECT (button), "clicked",
