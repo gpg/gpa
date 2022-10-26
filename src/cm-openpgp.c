@@ -1353,7 +1353,7 @@ pubkey_url_populate_popup_cb (GtkEntry *entry, GtkMenu *menu, void *opaque)
 
 /* Helper for construct_data_widget.  Returns the label widget. */
 static GtkLabel *
-add_table_row (GtkWidget *table, int *rowidx,
+add_table_row (GtkWidget *grid, int *rowidx,
                const char *labelstr, GtkWidget *widget, GtkWidget *widget2,
                int readonly, int compact)
 {
@@ -1362,12 +1362,15 @@ add_table_row (GtkWidget *table, int *rowidx,
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1,
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_FILL, 0, 0);
+  gtk_widget_set_halign (GTK_WIDGET(label), 0);
+  gtk_widget_set_valign (GTK_WIDGET(label), 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, *rowidx, 1, 1);
 
   if (is_label)
-    gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
+    {
+    gtk_widget_set_halign (GTK_WIDGET (widget), 0);
+    gtk_widget_set_valign (GTK_WIDGET (widget), 0.5);
+    }
 
   if (readonly)
     {
@@ -1385,13 +1388,9 @@ add_table_row (GtkWidget *table, int *rowidx,
         gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
     }
 
-  gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
-		    *rowidx, *rowidx + 1,
-		    (compact ? GTK_FILL : (GTK_FILL | GTK_EXPAND)),
-		    GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), widget, 1, *rowidx, 1, 1);
   if (widget2)
-    gtk_table_attach (GTK_TABLE (table), widget2, 2, 3,
-		      *rowidx, *rowidx + 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
+    gtk_grid_attach (GTK_GRID (grid), widget2, 2, *rowidx, 1, 1);
   ++*rowidx;
 
   return GTK_LABEL (label);
@@ -1405,13 +1404,13 @@ construct_data_widget (GpaCMOpenpgp *card)
 {
   GtkWidget *label;
   GtkWidget *general_frame;
-  GtkWidget *general_table;
+  GtkWidget *general_grid;
   GtkWidget *personal_frame;
-  GtkWidget *personal_table;
+  GtkWidget *personal_grid;
   GtkWidget *keys_frame;
-  GtkWidget *keys_table;
+  GtkWidget *keys_grid;
   GtkWidget *pin_frame;
-  GtkWidget *pin_table;
+  GtkWidget *pin_grid;
   GtkWidget *button;
   int rowidx;
   int idx;
@@ -1424,24 +1423,24 @@ construct_data_widget (GpaCMOpenpgp *card)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (general_frame), label);
 
-  general_table = gtk_table_new (4, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (general_table), 10);
+  general_grid = gtk_grid_new();
+  gtk_container_set_border_width (GTK_CONTAINER (general_grid), 10);
 
   rowidx = 0;
 
   card->entries[ENTRY_SERIALNO] = gtk_label_new (NULL);
-  add_table_row (general_table, &rowidx, _("Serial number:"),
+  add_table_row (general_grid, &rowidx, _("Serial number:"),
                  card->entries[ENTRY_SERIALNO], NULL, 0, 1);
 
   card->entries[ENTRY_VERSION] = gtk_label_new (NULL);
-  add_table_row (general_table, &rowidx, _("Card version:"),
+  add_table_row (general_grid, &rowidx, _("Card version:"),
                  card->entries[ENTRY_VERSION], NULL, 0, 1);
 
   card->entries[ENTRY_MANUFACTURER] = gtk_label_new (NULL);
-  add_table_row (general_table, &rowidx, _("Manufacturer:"),
+  add_table_row (general_grid, &rowidx, _("Manufacturer:"),
                  card->entries[ENTRY_MANUFACTURER], NULL, 0, 1);
 
-  gtk_container_add (GTK_CONTAINER (general_frame), general_table);
+  gtk_container_add (GTK_CONTAINER (general_frame), general_grid);
 
 
   /* Personal frame.  */
@@ -1451,45 +1450,46 @@ construct_data_widget (GpaCMOpenpgp *card)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (personal_frame), label);
 
-  personal_table = gtk_table_new (6, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (personal_table), 10);
+  //personal_table = gtk_table_new (6, 3, FALSE);
+  personal_grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (personal_grid), 10);
 
   rowidx = 0;
 
   card->entries[ENTRY_SEX] = gtk_combo_box_text_new ();
   for (idx=0; "mfu"[idx]; idx++)
-    gtk_combo_box_text_append (GTK_COMBO_BOX (card->entries[ENTRY_SEX]), NULL,
+    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (card->entries[ENTRY_SEX]), NULL,
                                gpa_sex_char_to_string ("mfu"[idx]));
-  add_table_row (personal_table, &rowidx,
+  add_table_row (personal_grid, &rowidx,
                  _("Salutation:"), card->entries[ENTRY_SEX], NULL, 0, 0);
 
   card->entries[ENTRY_FIRST_NAME] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_FIRST_NAME]), 35);
-  add_table_row (personal_table, &rowidx,
+  add_table_row (personal_grid, &rowidx,
                  _("First name:"), card->entries[ENTRY_FIRST_NAME], NULL, 0, 0);
 
   card->entries[ENTRY_LAST_NAME] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LAST_NAME]), 35);
-  add_table_row (personal_table, &rowidx,
+  add_table_row (personal_grid, &rowidx,
                  _("Last name:"),  card->entries[ENTRY_LAST_NAME], NULL, 0, 0);
 
   card->entries[ENTRY_LANGUAGE] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LANGUAGE]), 8);
-  add_table_row (personal_table, &rowidx,
+  add_table_row (personal_grid, &rowidx,
                  _("Language:"), card->entries[ENTRY_LANGUAGE], NULL, 0, 0);
 
   card->entries[ENTRY_LOGIN] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_LOGIN]), 254);
-  add_table_row (personal_table, &rowidx,
+  add_table_row (personal_grid, &rowidx,
                  _("Login data:"), card->entries[ENTRY_LOGIN], NULL, 0, 0);
 
   card->entries[ENTRY_PUBKEY_URL] = gtk_entry_new ();
   gtk_entry_set_max_length (GTK_ENTRY (card->entries[ENTRY_PUBKEY_URL]), 254);
-  add_table_row (personal_table, &rowidx,
+  add_table_row (personal_grid, &rowidx,
                  _("Public key URL:"),
                  card->entries[ENTRY_PUBKEY_URL], NULL, 0, 0);
 
-  gtk_container_add (GTK_CONTAINER (personal_frame), personal_table);
+  gtk_container_add (GTK_CONTAINER (personal_frame), personal_grid);
 
 
   /* Keys frame.  */
@@ -1499,8 +1499,8 @@ construct_data_widget (GpaCMOpenpgp *card)
   gtk_expander_set_label_widget (GTK_EXPANDER (keys_frame), label);
   gtk_expander_set_expanded (GTK_EXPANDER (keys_frame), TRUE);
 
-  keys_table = gtk_table_new (4, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (keys_table), 10);
+  keys_grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (keys_grid), 10);
 
   rowidx = 0;
 
@@ -1511,22 +1511,22 @@ construct_data_widget (GpaCMOpenpgp *card)
      and label depending on whether we have a key for the fingerprint.
      Check whether gtk_expander_set_label_wdiget works for us. */
   card->entries[ENTRY_KEY_SIG] = gtk_expander_new (NULL);
-  add_table_row (keys_table, &rowidx, _("Signature key:"),
+  add_table_row (keys_grid, &rowidx, _("Signature key:"),
                  card->entries[ENTRY_KEY_SIG], NULL, 0, 0);
 
   card->entries[ENTRY_KEY_ENC] = gtk_expander_new (NULL);
-  add_table_row (keys_table, &rowidx, _("Encryption key:"),
+  add_table_row (keys_grid, &rowidx, _("Encryption key:"),
                  card->entries[ENTRY_KEY_ENC], NULL, 0, 0);
 
   card->entries[ENTRY_KEY_AUTH] = gtk_expander_new (NULL);
-  add_table_row (keys_table, &rowidx, _("Authentication key:"),
+  add_table_row (keys_grid, &rowidx, _("Authentication key:"),
                  card->entries[ENTRY_KEY_AUTH], NULL, 0, 0);
 
   card->entries[ENTRY_SIG_COUNTER] = gtk_label_new (NULL);
-  add_table_row (keys_table, &rowidx, _("Signature counter:"),
+  add_table_row (keys_grid, &rowidx, _("Signature counter:"),
                  card->entries[ENTRY_SIG_COUNTER], NULL, 0, 0);
 
-  gtk_container_add (GTK_CONTAINER (keys_frame), keys_table);
+  gtk_container_add (GTK_CONTAINER (keys_frame), keys_grid);
 
 
   /* PIN frame.  */
@@ -1536,37 +1536,38 @@ construct_data_widget (GpaCMOpenpgp *card)
   gtk_expander_set_label_widget (GTK_EXPANDER (pin_frame), label);
   gtk_expander_set_expanded (GTK_EXPANDER (pin_frame), TRUE);
 
-  pin_table = gtk_table_new (4, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (pin_table), 10);
+  pin_grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (pin_grid), 10);
 
   rowidx = 0;
 
   card->entries[ENTRY_SIG_FORCE_PIN] = gtk_check_button_new ();
-  add_table_row (pin_table, &rowidx,
+  add_table_row (pin_grid, &rowidx,
                  _("Force signature PIN:"),
                  card->entries[ENTRY_SIG_FORCE_PIN], NULL, 0, 1);
   card->entries[ENTRY_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
-  add_table_row (pin_table, &rowidx, _("PIN retry counter:"),
+  add_table_row (pin_grid, &rowidx, _("PIN retry counter:"),
                  card->entries[ENTRY_PIN_RETRYCOUNTER], button, 1, 1);
   card->change_pin_btn[0] = button;
 
   card->entries[ENTRY_PUK_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
   card->puk_label =
-    add_table_row (pin_table, &rowidx,
+    add_table_row (pin_grid, &rowidx,
                    "", /* The label depends on the card version.  */
                    card->entries[ENTRY_PUK_RETRYCOUNTER], button, 1, 1);
   card->change_pin_btn[1] = button;
 
   card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER] = gtk_label_new (NULL);
   button = gtk_button_new ();
-  add_table_row (pin_table, &rowidx, _("Admin-PIN retry counter:"),
+  add_table_row (pin_grid, &rowidx, _("Admin-PIN retry counter:"),
                  card->entries[ENTRY_ADMIN_PIN_RETRYCOUNTER], button, 1, 1);
   card->change_pin_btn[2] = button;
 
-  gtk_container_add (GTK_CONTAINER (pin_frame), pin_table);
+  gtk_container_add (GTK_CONTAINER (pin_frame), pin_grid);
 
+  gtk_orientable_set_orientation( GTK_ORIENTABLE (card), GTK_ORIENTATION_VERTICAL);
 
   /* Put all frames together.  */
   gtk_box_pack_start (GTK_BOX (card), general_frame, FALSE, TRUE, 0);
