@@ -104,7 +104,7 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
                                            -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
-  vbox = gtk_dialog_get_content_area(dialog);
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   grid = gtk_grid_new();
   gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
