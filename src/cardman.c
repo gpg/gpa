@@ -118,7 +118,6 @@ static void gpa_card_manager_finalize (GObject *object);
 static GtkWidget *
 statusbar_new (GpaCardManager *cardman)
 {
-  GtkWidget *align;
   GtkWidget *hbox;
   GtkWidget *label;
 
