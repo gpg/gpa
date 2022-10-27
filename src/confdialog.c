@@ -819,16 +819,16 @@ static gint
 get_checkbox_width (void)
 {
   GtkWidget *checkbox;
-  GtkRequisition checkbox_size;
+  GtkRequisition checkbox_minimum_size, checkbox_natural_size;
 
   /* We do not save the result, as it may change with a theme change.
      In this case we will at least refresh eventually.  */
 
   checkbox = gtk_check_button_new ();
-  gtk_widget_size_request (checkbox, &checkbox_size);
+  gtk_widget_get_preferred_size (checkbox, &checkbox_minimum_size, &checkbox_natural_size);
   gtk_widget_destroy (checkbox);
 
-  return checkbox_size.width;
+  return checkbox_natural_size.width;
 }
 
 
