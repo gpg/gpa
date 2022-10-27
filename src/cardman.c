@@ -911,7 +911,7 @@ construct_widgets (GpaCardManager *cardman)
   gtk_widget_realize (GTK_WIDGET (cardman));
 
   /* Use a vbox to show the menu, toolbar and the file container.  */
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   /* Get the menu and the toolbar.  */
   cardman_action_new (cardman, &menubar, &toolbar);
@@ -919,7 +919,7 @@ construct_widgets (GpaCardManager *cardman)
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
 
   /* Add a fancy label that tells us: This is the card manager.  */
-  hbox1 = gtk_hbox_new (FALSE, 0);
+  hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   icon = gtk_image_new_from_stock (GPA_STOCK_CARDMAN, GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox1), icon, FALSE, TRUE, 0);
@@ -934,7 +934,7 @@ construct_widgets (GpaCardManager *cardman)
   gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   /* Add a application selection box.  */
-  hbox2 = gtk_hbox_new (FALSE, 0);
+  hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   label = gtk_label_new (_("Application selection:"));
   gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 5);
   cardman->app_selector = gtk_combo_box_text_new ();
@@ -944,7 +944,7 @@ construct_widgets (GpaCardManager *cardman)
   gtk_box_pack_start (GTK_BOX (hbox2), cardman->app_selector, FALSE, TRUE, 0);
 
   /* Put Card Manager label and application selector into the same line.  */
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (hbox), hbox1, FALSE, FALSE, 0);
   gtk_box_pack_end (GTK_BOX (hbox), hbox2, FALSE, FALSE, 0);
 
