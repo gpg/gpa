@@ -168,7 +168,7 @@ gpa_date_box_get_type (void)
 	  gpa_date_box_init
 	};
       
-      this_type = g_type_register_static (GTK_TYPE_HBOX,
+      this_type = g_type_register_static (GTK_TYPE_BOX,
                                           "GpaDateBox",
                                           &this_info, 0);
     }
