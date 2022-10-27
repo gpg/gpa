@@ -68,35 +68,41 @@ gpa_key_info_new (gpgme_key_t key)
 
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 		    GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.0);
 
   /* User Name */
   label = gtk_label_new (key->uids->next == NULL
 			 ? _("User Name:") : _("User Names:") );
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL,
                     0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.0);
 
   /* Key ID */
   label = gtk_label_new (_("Key ID:"));
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   label = gtk_label_new (gpa_gpgme_key_get_short_keyid (key));
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   /* Fingerprint */
   label = gtk_label_new (_("Fingerprint:"));
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   string = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
   label = gtk_label_new (string);
   g_free (string);
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3, GTK_FILL, 0, 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   return table;
 }
