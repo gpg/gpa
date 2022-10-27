@@ -206,7 +206,7 @@ reload_data (GpaCMGeldkarte *card, gpgme_ctx_t gpgagent)
 
 /* Helper for construct_data_widget.  */
 static GtkWidget *
-add_table_row (GtkWidget *table, int *rowidx, const char *labelstr)
+add_table_row (GtkWidget *grid, int *rowidx, const char *labelstr)
 {
   GtkWidget *widget;
   GtkWidget *label;
@@ -215,16 +215,17 @@ add_table_row (GtkWidget *table, int *rowidx, const char *labelstr)
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1,
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
-  gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, *rowidx, 1, 1);
+
+  gtk_widget_set_halign (GTK_WIDGET (widget), 0);
+  gtk_widget_set_valign (GTK_WIDGET (widget), 0.5);
+
   gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
 
-  gtk_table_attach (GTK_TABLE (table), widget, 1, 2,
-                    *rowidx, *rowidx + 1, GTK_FILL, GTK_SHRINK, 0, 0);
-
+  gtk_grid_attach (GTK_GRID (grid), widget, 1, *rowidx, 1, 1);
   ++*rowidx;
 
   return widget;
@@ -237,9 +238,9 @@ static void
 construct_data_widget (GpaCMGeldkarte *card)
 {
   GtkWidget *amount_frame;
-  GtkWidget *amount_table;
+  GtkWidget *amount_grid;
   GtkWidget *general_frame;
-  GtkWidget *general_table;
+  GtkWidget *general_grid;
   GtkWidget *label;
   int rowidx;
 
@@ -251,8 +252,8 @@ construct_data_widget (GpaCMGeldkarte *card)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (general_frame), label);
 
-  general_table = gtk_table_new (9, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (general_table), 10);
+  general_grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (general_grid), 10);
 
   amount_frame = card->amount_frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (amount_frame), GTK_SHADOW_NONE);
@@ -260,56 +261,56 @@ construct_data_widget (GpaCMGeldkarte *card)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (amount_frame), label);
 
-  amount_table = gtk_table_new (3, 3, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (amount_table), 10);
+  amount_grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (amount_grid), 10);
 
 
   /* General frame.  */
   rowidx = 0;
 
   card->entries[ENTRY_CARDNO] = add_table_row
-    (general_table, &rowidx, _("Card number: "));
+    (general_grid, &rowidx, _("Card number: "));
 
   card->entries[ENTRY_KBLZ] = add_table_row
-    (general_table, &rowidx, _("Short Bank Code number: "));
+    (general_grid, &rowidx, _("Short Bank Code number: "));
 
   card->entries[ENTRY_BANKTYPE] = add_table_row
-    (general_table, &rowidx, _("Bank type: "));
+    (general_grid, &rowidx, _("Bank type: "));
 
   card->entries[ENTRY_VALIDFROM] = add_table_row
-    (general_table, &rowidx, _("Card valid from: "));
+    (general_grid, &rowidx, _("Card valid from: "));
 
   card->entries[ENTRY_EXPIRES] = add_table_row
-    (general_table, &rowidx, _("Card expires: "));
+    (general_grid, &rowidx, _("Card expires: "));
 
   card->entries[ENTRY_COUNTRY] = add_table_row
-    (general_table, &rowidx, _("Issuing country: "));
+    (general_grid, &rowidx, _("Issuing country: "));
 
   card->entries[ENTRY_CURRENCY] = add_table_row
-    (general_table, &rowidx, _("Currency: "));
+    (general_grid, &rowidx, _("Currency: "));
 
   card->entries[ENTRY_ZKACHIPID] = add_table_row
-    (general_table, &rowidx, _("ZKA chip Id: "));
+    (general_grid, &rowidx, _("ZKA chip Id: "));
 
   card->entries[ENTRY_OSVERSION] = add_table_row
-    (general_table, &rowidx, _("Chip OS version: "));
+    (general_grid, &rowidx, _("Chip OS version: "));
 
-  gtk_container_add (GTK_CONTAINER (general_frame), general_table);
+  gtk_container_add (GTK_CONTAINER (general_frame), general_grid);
 
 
   /* Amount frame.  */
   rowidx = 0;
 
   card->entries[ENTRY_BALANCE] = add_table_row
-    (amount_table, &rowidx, _("Balance: "));
+    (amount_grid, &rowidx, _("Balance: "));
 
   card->entries[ENTRY_MAXAMOUNT] = add_table_row
-    (amount_table, &rowidx, _("General limit: "));
+    (amount_grid, &rowidx, _("General limit: "));
 
   card->entries[ENTRY_MAXAMOUNT1] = add_table_row
-    (amount_table, &rowidx, _("Transaction limit: "));
+    (amount_grid, &rowidx, _("Transaction limit: "));
 
-  gtk_container_add (GTK_CONTAINER (amount_frame), amount_table);
+  gtk_container_add (GTK_CONTAINER (amount_frame), amount_grid);
 
 
   /* Put all frames together.  */
