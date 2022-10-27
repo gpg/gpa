@@ -82,7 +82,6 @@ gpa_key_selector_init (GpaKeySelector *selector)
 
   /* The view */
   gtk_tree_view_set_model (GTK_TREE_VIEW (selector), GTK_TREE_MODEL (store));
-  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (selector), TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes
