@@ -132,10 +132,10 @@ statusbar_new (GpaCardManager *cardman)
   cardman->status_text = label;
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 5);
 
-  align = gtk_alignment_new (0, 1, 1, 0);
-  gtk_container_add (GTK_CONTAINER (align), hbox);
+  gtk_widget_set_halign (GTK_WIDGET (hbox), 0);
+  gtk_widget_set_valign (GTK_WIDGET (hbox), 1);
 
-  return align;
+  return hbox;
 }
 
 
