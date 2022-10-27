@@ -1385,7 +1385,8 @@ create_dialog (void)
 
   label = gtk_label_new (_("Configure the tools of the GnuPG system."));
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   label = gtk_label_new (_("Level:"));
   gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
