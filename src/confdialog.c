@@ -1368,12 +1368,12 @@ create_dialog (void)
                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                           NULL );
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+  /* gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
                                            GTK_RESPONSE_ACCEPT,
                                            GTK_RESPONSE_CANCEL,
                                            CUSTOM_RESPONSE_RESET,
                                            GTK_RESPONSE_APPLY,
-                                           -1);
+                                           -1); */
 
   g_signal_connect ((gpointer) dialog, "response",
 		    G_CALLBACK (dialog_response), NULL);
