@@ -1162,21 +1162,21 @@ create_dialog_tabs_2 (gpgme_conf_comp_t old_conf, gpgme_conf_comp_t new_conf)
 		  if (option->flags & GPGME_CONF_DEFAULT
 		      || option->flags & GPGME_CONF_DEFAULT_DESC)
 		    gtk_combo_box_text_append
-		      (GTK_COMBO_BOX (widget), NULL,
+		      (GTK_COMBO_BOX_TEXT (widget), NULL,
 		       (option->flags & GPGME_CONF_LIST) ?
 		       _("Use default values") : _("Use default value"));
 		  else
 		    gtk_combo_box_text_append
-		      (GTK_COMBO_BOX (widget), NULL, _("Do not use option"));
+		      (GTK_COMBO_BOX_TEXT (widget), NULL, _("Do not use option"));
 
 		  gtk_combo_box_text_append
-		    (GTK_COMBO_BOX (widget), NULL,
+		    (GTK_COMBO_BOX_TEXT (widget), NULL,
 		     (option->flags & GPGME_CONF_LIST) ?
 		     _("Use custom values") : _("Use custom value"));
 
 		  if (opt->type == OPTION_OPT_ENTRY)
 		    gtk_combo_box_text_append
-		      (GTK_COMBO_BOX (widget), NULL, _("Use default argument"));
+		      (GTK_COMBO_BOX_TEXT (widget), NULL, _("Use default argument"));
 		}
 
 	      /* Force update.  */
@@ -1397,9 +1397,9 @@ create_dialog (void)
   level_chooser = gtk_combo_box_text_new ();
   /* Note: We know intimately that this matches GPGME_CONF_BASIC,
      GPGME_CONF_ADVANCED and GPGME_CONF_BEGINNER.  */
-  gtk_combo_box_text_append (GTK_COMBO_BOX (level_chooser), NULL, _("Basic"));
-  gtk_combo_box_text_append (GTK_COMBO_BOX (level_chooser), NULL, _("Advanced"));
-  gtk_combo_box_text_append (GTK_COMBO_BOX (level_chooser), NULL, _("Expert"));
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (level_chooser), NULL, _("Basic"));
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (level_chooser), NULL, _("Advanced"));
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (level_chooser), NULL, _("Expert"));
   g_signal_connect ((gpointer) level_chooser, "changed",
 		    G_CALLBACK (dialog_level_chooser_cb), NULL);
 
