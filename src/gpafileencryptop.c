@@ -496,18 +496,21 @@ ignore_key_trust (gpgme_key_t key, GtkWidget *parent)
 
   label = gtk_label_new (_("You are going to encrypt a document using "
 			   "the following key:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
   key_info = gpa_key_info_new (key);
   gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5);
   label = gtk_label_new (_("However, it is not certain that the key belongs "
 			   "to that person."));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label),
 			_("Do you <b>really</b> want to use this key?"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
 
   gtk_widget_show_all (dialog);
@@ -544,12 +547,14 @@ revoked_key (gpgme_key_t key, GtkWidget *parent)
   gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
   label = gtk_label_new (_("The following key has been revoked by its owner:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
   key_info = gpa_key_info_new (key);
   gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5);
   label = gtk_label_new (_("And can not be used for encryption."));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
 
   gtk_widget_show_all (dialog);
@@ -589,12 +594,14 @@ expired_key (gpgme_key_t key, GtkWidget *parent)
                              gpa_expiry_date_string
                              (key->subkeys->expires));
   label = gtk_label_new (message);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
   key_info = gpa_key_info_new (key);
   gtk_box_pack_start (GTK_BOX (vbox), key_info, FALSE, TRUE, 5);
   label = gtk_label_new (_("And can not be used for encryption."));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 5);
 
   gtk_widget_show_all (dialog);
