@@ -121,7 +121,7 @@ gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
     }
   else
     {
-      hbox = gtk_hbox_new (0, FALSE);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_pack_start (GTK_BOX (box), hbox, FALSE,
                           TRUE, 10);
       label = gtk_label_new_with_mnemonic (_("Key _ID:"));
