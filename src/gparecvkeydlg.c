@@ -96,10 +96,6 @@ gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			  GTK_STOCK_OK, GTK_RESPONSE_OK,
                           NULL);
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-                                           GTK_RESPONSE_OK,
-                                           GTK_RESPONSE_CANCEL,
-                                           -1);
   GtkBox *box = gtk_dialog_get_content_area(dialog);
   gtk_container_set_border_width (GTK_CONTAINER (box),10);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
