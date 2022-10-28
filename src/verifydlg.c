@@ -391,7 +391,8 @@ verify_file_page (gpgme_signature_t sigs, const gchar *signed_file,
     }
 
   label = gtk_label_new (_("Signatures:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 
   list = signature_list (sigs, ctx);
