@@ -485,11 +485,11 @@ ignore_key_trust (gpgme_key_t key, GtkWidget *parent)
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  hbox = gtk_hbox_new (FALSE, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
 				    GTK_ICON_SIZE_DIALOG);
   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   GtkBox *box = gtk_dialog_get_content_area(dialog);
   gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
@@ -534,11 +534,11 @@ revoked_key (gpgme_key_t key, GtkWidget *parent)
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  hbox = gtk_hbox_new (FALSE, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
 				    GTK_ICON_SIZE_DIALOG);
   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   GtkBox *box = gtk_dialog_get_content_area(dialog);
   gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
@@ -575,11 +575,11 @@ expired_key (gpgme_key_t key, GtkWidget *parent)
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  hbox = gtk_hbox_new (FALSE, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
 				    GTK_ICON_SIZE_DIALOG);
   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   GtkBox *box = gtk_dialog_get_content_area(dialog);
   gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
