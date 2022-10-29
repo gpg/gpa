@@ -49,6 +49,7 @@
 #include "cm-dinsig.h"
 #include "cm-unknown.h"
 
+#include "../pixmaps/smartcard.xpm"
 
 
 /* Object's class definition.  */
@@ -920,7 +921,9 @@ construct_widgets (GpaCardManager *cardman)
   /* Add a fancy label that tells us: This is the card manager.  */
   hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  icon = gtk_image_new_from_stock (GPA_STOCK_CARDMAN, GTK_ICON_SIZE_DND);
+  GdkPixbuf *cardman_pixbuf = gdk_pixbuf_new_from_xpm_data((const char**)smartcard_xpm);
+
+  icon = gtk_image_new_from_pixbuf (cardman_pixbuf);
   gtk_box_pack_start (GTK_BOX (hbox1), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);
