@@ -81,7 +81,7 @@ key_import_selection_cancel (gpointer param)
 static void
 key_import_selection_destroy (GtkWidget *widget, gpointer param)
 {
-  gtk_main_quit ();
+  g_application_quit ();
 }
 
 

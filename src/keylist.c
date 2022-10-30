@@ -236,9 +236,9 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
        * We must forcefully load the secret keytable first to
        * prevent concurrent access to the TOFU database. */
       gpa_keytable_force_reload (gpa_keytable_get_secret_instance (),
-                                 NULL, (GpaKeyTableEndFunc) gtk_main_quit,
+                                 NULL, (GpaKeyTableEndFunc) g_application_quit,
                                  NULL);
-      gtk_main ();
+      // gtk_main ();
 
       /* Now we can load the public keyring. */
       gpa_keytable_list_keys (gpa_keytable_get_public_instance(),
@@ -919,7 +919,7 @@ gpa_keylist_new_key (GpaKeyList * keylist, const char *fpr)
 
   add_trustdb_dialog (keylist);
   gpa_keytable_load_new (gpa_keytable_get_secret_instance (), fpr,
-			 NULL, (GpaKeyTableEndFunc) gtk_main_quit, NULL);
+			 NULL, (GpaKeyTableEndFunc) g_application_quit, NULL);
   /* Hack. Turn the asynchronous listing into a synchronous one */
   gtk_main ();
   remove_trustdb_dialog (keylist);
@@ -938,10 +938,10 @@ gpa_keylist_imported_secret_key (GpaKeyList *keylist)
   /* KEYLIST is currently not used. */
 
   gpa_keytable_load_new (gpa_keytable_get_secret_instance (), NULL,
-			 NULL, (GpaKeyTableEndFunc) gtk_main_quit, NULL);
+			 NULL, (GpaKeyTableEndFunc) g_application_quit, NULL);
   /* Hack. Turn the asynchronous listing into a synchronous one */
   /* FIXME:  Does that work well with the server shutdown code? */
-  gtk_main ();
+  // gtk_main ();
 }
 
 

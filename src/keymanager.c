@@ -1008,7 +1008,7 @@ key_manager_action_new (GpaKeyManager *self,
       { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
 	"FIXME", G_CALLBACK (key_manager_close) },
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
-	N_("Quit the program"), G_CALLBACK (gtk_main_quit) },
+	N_("Quit the program"), G_CALLBACK (g_application_quit) },
 
       /* Edit menu.  */
       { "EditCopy", GTK_STOCK_COPY, NULL, NULL,

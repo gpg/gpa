@@ -367,7 +367,7 @@ main (int argc, char **argv)
 
 
         /* Connect the signals */
-        g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+        g_signal_connect (window, "destroy", G_CALLBACK (g_application_quit), NULL);
 
         /* All possible destination signals */
         g_signal_connect (well_dest, "drag-data-received",

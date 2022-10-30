@@ -781,7 +781,7 @@ clipboard_action_new (GpaClipboard *clipboard,
       { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
 	N_("Close the buffer"), G_CALLBACK (file_close) },
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
-	N_("Quit the program"), G_CALLBACK (gtk_main_quit) },
+	N_("Quit the program"), G_CALLBACK (g_application_quit) },
 
       /* Edit menu.  */
 #if 0

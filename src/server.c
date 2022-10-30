@@ -1749,7 +1749,7 @@ connection_finish (assuan_context_t ctx)
       g_free (ctrl);
       connection_counter--;
       if (!connection_counter && shutdown_pending)
-        gtk_main_quit ();
+        g_application_quit (G_APPLICATION(get_gpa_application ()));
     }
 }
 
@@ -2036,7 +2036,7 @@ gpa_stop_server (void)
 {
   shutdown_pending = TRUE;
   if (!connection_counter)
-    gtk_main_quit ();
+    g_application_quit (G_APPLICATION(get_gpa_application ()));
 }
 
 

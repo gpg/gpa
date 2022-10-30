@@ -542,7 +542,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
       { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
 	N_("Close the window"), G_CALLBACK (file_close) },
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
-	N_("Quit the program"), G_CALLBACK (gtk_main_quit) },
+	N_("Quit the program"), G_CALLBACK (g_application_quit) },
 
       /* Edit menu.  */
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",

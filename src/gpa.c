@@ -83,6 +83,7 @@ static char *dummy_arg;
 
 static gpa_args_t args;
 
+static GtkApplication *gpa_application;
 
 /* The copyright notice.  */
 static const char *copyright =
@@ -240,7 +241,7 @@ gpa_open_key_manager (GtkAction *action, void *data)
   if (created)
     g_signal_connect (G_OBJECT (widget), "destroy",
                       G_CALLBACK (quit_if_no_window), NULL);
-
+  gtk_window_set_application (GTK_WINDOW (widget), gpa_application);
   gtk_widget_show_all (widget);
   gtk_window_present (GTK_WINDOW (widget));
 }
@@ -254,11 +255,15 @@ gpa_open_clipboard (GtkAction *action, void *data)
      created the first time?  Looks like a memory leak to me.  Right:
      although the closure is ref counted an internal data object will
      get allocated.  */
+  GtkWidget *widget;
+  widget = gpa_clipboard_get_instance();
+
   g_signal_connect (G_OBJECT (gpa_clipboard_get_instance ()), "destroy",
 		    G_CALLBACK (quit_if_no_window), NULL);
-  gtk_widget_show_all (gpa_clipboard_get_instance ());
+  gtk_window_set_application (GTK_WINDOW (widget), gpa_application);
+  gtk_widget_show_all (widget);
 
-  gtk_window_present (GTK_WINDOW (gpa_clipboard_get_instance ()));
+  gtk_window_present (GTK_WINDOW (widget));
 }
 
 
@@ -268,11 +273,16 @@ gpa_open_filemanager (GtkAction *action, void *data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  */
-  g_signal_connect (G_OBJECT (gpa_file_manager_get_instance ()), "destroy",
+  GtkWidget *widget;
+
+  widget = gpa_file_manager_get_instance();
+
+  g_signal_connect (G_OBJECT (widget), "destroy",
 		    G_CALLBACK (quit_if_no_window), NULL);
+  gtk_window_set_application (GTK_WINDOW (widget), gpa_application);
   gtk_widget_show_all (gpa_file_manager_get_instance ());
 
-  gtk_window_present (GTK_WINDOW (gpa_file_manager_get_instance ()));
+  gtk_window_present (GTK_WINDOW (widget));
 }
 
 /* Show the card manager.  */
@@ -282,11 +292,14 @@ gpa_open_cardmanager (GtkAction *action, void *data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  */
-  g_signal_connect (G_OBJECT (gpa_card_manager_get_instance ()), "destroy",
-		    G_CALLBACK (quit_if_no_window), NULL);
-  gtk_widget_show_all (gpa_card_manager_get_instance ());
+  GtkWidget *widget = gpa_card_manager_get_instance();
 
-  gtk_window_present (GTK_WINDOW (gpa_card_manager_get_instance ()));
+  g_signal_connect (G_OBJECT (widget), "destroy",
+		    G_CALLBACK (quit_if_no_window), NULL);
+  gtk_window_set_application (GTK_WINDOW (widget), gpa_application);
+  gtk_widget_show_all (GTK_WIDGET (widget));
+
+  gtk_window_present (GTK_WINDOW (widget));
 }
 #endif /*ENABLE_CARD_MANAGER*/
 
@@ -307,6 +320,7 @@ gpa_open_backend_config_dialog (GtkAction *action, void *data)
       backend_config_dialog = gpa_backend_config_dialog_new ();
       g_signal_connect (G_OBJECT (backend_config_dialog), "destroy",
 			G_CALLBACK (close_main_window), &backend_config_dialog);
+      gtk_window_set_application (GTK_WINDOW (backend_config_dialog), gpa_application);
       gtk_widget_show_all (backend_config_dialog);
     }
 
@@ -425,6 +439,41 @@ open_requested_window (int argc, char **argv, int use_server)
 }
 
 
+struct gpa_start_data {
+  int argc;
+  char **argv;
+  int start_only_server;
+};
+
+static void activate (GtkApplication *app, gpointer user_data)
+{
+  GList *list;
+
+  struct gpa_start_data *start_data = (struct gpa_start_data *) user_data;
+
+  int argc = start_data->argc;
+  char **argv = start_data->argv;
+
+  list = gtk_application_get_windows (app);
+
+  if (list)
+    {
+      gtk_window_present (GTK_WINDOW (list->data));
+    }
+  else
+    {
+      /* Startup whatever has been requested by the user.  */
+      if (!args.start_only_server)
+      open_requested_window (argc, argv, 0);
+    }
+}
+
+
+GtkApplication *get_gpa_application()
+{
+  return gpa_application;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -432,6 +481,7 @@ main (int argc, char *argv[])
   GOptionContext *context;
   char *configname = NULL;
   char *keyservers_configname = NULL;
+  int status;
 
   /* Under W32 logging is disabled by default to prevent MS Windows NT
      from opening a console.  */
@@ -576,6 +626,8 @@ main (int argc, char *argv[])
         args.start_clipboard = TRUE;
     }
 
+  gpa_application = gtk_application_new ("org.gnupg.gpa", 0);
+
 
   /* Check whether we need to start a server or to simply open a
      window in an already running server.  */
@@ -617,11 +669,16 @@ main (int argc, char *argv[])
   /* Initialize the file watch facility.  */
   gpa_init_filewatch ();
 
-  /* Startup whatever has been requested by the user.  */
-  if (!args.start_only_server)
-    open_requested_window (argc, argv, 0);
+  struct gpa_start_data start_data;
+  start_data.argv = argv;
+  start_data.argc = argc;
+  start_data.start_only_server = args.start_only_server;
 
-  gtk_main ();
+  g_signal_connect (gpa_application, "activate", G_CALLBACK(activate), &start_data);
 
-  return 0;
+  status = g_application_run (G_APPLICATION (gpa_application), start_data.argc, start_data.argv);
+
+  g_object_unref (gpa_application);
+
+  return status;
 }

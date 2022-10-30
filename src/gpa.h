@@ -131,6 +131,7 @@ gpa_filewatch_id_t gpa_add_filewatch (const char *filename,
                                       gpa_filewatch_cb_t cb,
                                       void *cb_data);
 
+GtkApplication *get_gpa_application();
 
 /*-- utils.c --*/
 /* We are so used to these function thus provide them.  */
