@@ -15,6 +15,7 @@ stamp-h1
 Makefile
 .deps/
 /VERSION
+src/versioninfo.rc
 
 # Files created by make when not using a VPATH build
 *.o
