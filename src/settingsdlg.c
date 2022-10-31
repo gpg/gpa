@@ -632,11 +632,11 @@ auto_key_locate_frame (SettingsDlg *dialog)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 
-  frame_vbox = gtk_vbox_new (FALSE, 0);
+  frame_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (frame), frame_vbox);
 
   /* The method selection.  */
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (frame_vbox), hbox);
   tooltip = _("The list of methods to locate keys via an email address.\n"
               "All given methods are used in turn until a matching "
