@@ -670,7 +670,7 @@ auto_key_locate_frame (SettingsDlg *dialog)
   while (akl_table[idx++].list);
 
   /* The kDNS server.  */
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (frame_vbox), hbox);
   tooltip = _("The IP address of the nameserver used for the kDNS method.");
   gpa_add_tooltip (hbox, tooltip);
