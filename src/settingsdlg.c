@@ -488,7 +488,7 @@ akl_addr_changed_cb (SettingsDlg *dialog)
   dialog->akl.ip_addr = NULL;
 
   // if (!GTK_WIDGET_IS_SENSITIVE (dialog->akl.addr_entry))
-  if (!gtk_widget_is_sensitive (dialog->akl.addr_entry))
+  if (!gtk_widget_is_sensitive ( GTK_WIDGET(dialog->akl.addr_entry)))
     return;
 
   addr = gtk_entry_get_text (dialog->akl.addr_entry);
