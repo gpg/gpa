@@ -222,7 +222,7 @@ user_interface_mode_frame (SettingsDlg *dialog)
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 
-  frame_vbox = gtk_vbox_new (FALSE, 0);
+  frame_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (frame), frame_vbox);
 
   button = gtk_check_button_new_with_mnemonic (_("Use _advanced mode"));
