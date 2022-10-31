@@ -359,7 +359,7 @@ keyserver_selected_from_list_cb (SettingsDlg *dialog)
   if (dialog->gnupg21)
     return;
 
-  text = gtk_combo_box_text_get_active_text (dialog->keyserver.combo);
+  text = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (dialog->keyserver.combo));
   g_message ("got `%s'", text);
   xfree (dialog->keyserver.url);
   dialog->keyserver.url = (text && *text)? text : NULL;
@@ -412,7 +412,7 @@ append_to_combo (gpointer item, gpointer data)
   GtkWidget *combo = data;
   gchar *text = item;
 
-  gtk_combo_box_text_append (GTK_COMBO_BOX (combo), NULL, text);
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), NULL, text);
 }
 #endif /*ENABLE_KEYSERVER_SUPPORT*/
 
@@ -666,7 +666,7 @@ auto_key_locate_frame (SettingsDlg *dialog)
 
   idx=0;
   do
-    gtk_combo_box_text_append (GTK_COMBO_BOX (combo), NULL, _(akl_table[idx].text));
+    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), NULL, _(akl_table[idx].text));
   while (akl_table[idx++].list);
 
   /* The kDNS server.  */
