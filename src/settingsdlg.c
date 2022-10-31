@@ -937,7 +937,7 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
 
   /* The UI mode section.  */
   frame = user_interface_mode_frame (dialog);
-  GtkBox *box = gtk_dialog_get_content_area(dialog);
+  GtkWidget *box = gtk_dialog_get_content_area( GTK_DIALOG (dialog));
   gtk_box_pack_start (GTK_BOX (box), frame,
                       FALSE, FALSE, 0);
 
