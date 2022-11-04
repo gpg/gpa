@@ -453,7 +453,6 @@ Makefile
 po/Makefile.in
 src/Makefile
 src/versioninfo.rc
-pixmaps/Makefile
 doc/Makefile
 ])
 
