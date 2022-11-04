@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="org/gnupg/gpa">
+    <file>decrypt.xpm</file>
+    <file>smartcard.xpm</file>
+    <file>keyringeditor.xpm</file>
+    <file>brief.xpm</file>
+    <file>gpa_logo.xpm</file>
+    <!-- Css -->
+    <!--<file>style.css</file> -->
+  </gresource>
+</gresources>
