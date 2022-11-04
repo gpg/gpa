@@ -28,7 +28,7 @@ pkgdata_DATA = $(logo)
 
 EXTRA_DIST = $(logo) gpa.ico gpa-resource.rc versioninfo.rc.in \
 	     gpa-marshal.list Signals
-BUILT_SOURCES = gpa-marshal.h gpa-marshal.c
+BUILT_SOURCES = gpa-marshal.h gpa-marshal.c org.gnupg.gpa.src.c org.gnupg.gpa.src.h
 MOSTLYCLEANFILES = gpa-marshal.h gpa-marshal.c
 
 GLIB_GENMARSHAL = glib-genmarshal
@@ -41,13 +41,19 @@ gpa-marshal.c: gpa-marshal.list
 	$(GLIB_GENMARSHAL) --body --prefix=gpa_marshal $< > $@.tmp
 	mv $@.tmp $@
 
+org.gnupg.gpa.src.c: org.gnupg.gpa.src.gresource.xml
+	glib-compile-resources --generate-source org.gnupg.gpa.src.gresource.xml
+
+org.gnupg.gpa.src.h: org.gnupg.gpa.src.c org.gnupg.gpa.src.gresource.xml
+	glib-compile-resources --generate-header org.gnupg.gpa.src.gresource.xml
+
 if HAVE_W32_SYSTEM
 .rc.o:
 	$(WINDRES) `echo $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) | \
 	 sed -e 's/-I/--include-dir /g;s/-D/--define /g'` -i $< -o $@
 
 gpa_res_ldflag = -Wl,gpa-resource.o
-gpa_deps = gpa-resource.o versioninfo.rc
+gpa_deps = gpa-resource.o versioninfo.rc org.gnupg.gpa.src.o
 gpa_w32_sources = w32reg.h w32reg.c w32-afunix.h w32-afunix.c
 
 else
@@ -194,6 +200,7 @@ gpa_SOURCES = \
               membuf.c membuf.h \
 	      parsetlv.c parsetlv.h \
 	      filetype.c filetype.h \
-	      utils.c $(gpa_w32_sources) $(gpa_cardman_sources)
+	      utils.c $(gpa_w32_sources) $(gpa_cardman_sources) \
+	      org.gnupg.gpa.src.c org.gnupg.gpa.src.h
 
 dndtest_SOURCES = dndtest.c

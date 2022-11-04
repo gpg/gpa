@@ -33,8 +33,8 @@ DISTCLEANFILES = gpadefs.h
 desktopdir = $(datadir)/applications/
 desktop_DATA = gpa.desktop
 
-icondir = $(datadir)/pixmaps
 icon_DATA = gpa.png
+icondir = src/
 
 pkgdata_DATA = gpa.png
 
