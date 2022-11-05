@@ -538,6 +538,8 @@ main (int argc, char *argv[])
                                    "XProperty");
 #endif
 
+  gpa_application = gtk_application_new ("org.gnupg.gpa", 0);
+
   /* Default icon for all windows.  */
   gtk_window_set_default_icon_from_file (GPA_DATADIR "/gpa.png", &err);
   if (err)
@@ -625,9 +627,6 @@ main (int argc, char *argv[])
       else
         args.start_clipboard = TRUE;
     }
-
-  gpa_application = gtk_application_new ("org.gnupg.gpa", 0);
-
 
   /* Check whether we need to start a server or to simply open a
      window in an already running server.  */
