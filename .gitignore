@@ -29,4 +29,6 @@ src/gpa
 src/dndtest
 src/gpa-marshal.c
 src/gpa-marshal.h
+src/org.gnupg.gpa.src.c
+src/org.gnupg.gpa.src.h
 /gpadefs.h
