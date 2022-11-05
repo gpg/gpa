@@ -49,8 +49,6 @@
 #include "cm-dinsig.h"
 #include "cm-unknown.h"
 
-#include "../pixmaps/smartcard.xpm"
-
 
 /* Object's class definition.  */
 struct _GpaCardManagerClass
