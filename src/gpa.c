@@ -232,7 +232,7 @@ close_main_window (GtkWidget *widget, gpointer param)
 
 /* Show the key manager dialog.  */
 void
-gpa_open_key_manager (GtkAction *action, void *data)
+gpa_open_key_manager (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
   GtkWidget *widget;
   gboolean created;
@@ -249,7 +249,7 @@ gpa_open_key_manager (GtkAction *action, void *data)
 
 /* Show the clipboard dialog.  */
 void
-gpa_open_clipboard (GtkAction *action, void *data)
+gpa_open_clipboard (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  Right:
@@ -269,7 +269,7 @@ gpa_open_clipboard (GtkAction *action, void *data)
 
 /* Show the filemanager dialog.  */
 void
-gpa_open_filemanager (GtkAction *action, void *data)
+gpa_open_filemanager (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  */
@@ -288,7 +288,7 @@ gpa_open_filemanager (GtkAction *action, void *data)
 /* Show the card manager.  */
 #ifdef ENABLE_CARD_MANAGER
 void
-gpa_open_cardmanager (GtkAction *action, void *data)
+gpa_open_cardmanager (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
   /* FIXME: Shouldn't this connect only happen if the instance is
      created the first time?  Looks like a memory leak to me.  */
@@ -305,15 +305,15 @@ gpa_open_cardmanager (GtkAction *action, void *data)
 
 /* Show the settings dialog.  */
 void
-gpa_open_settings_dialog (GtkAction *action, void *data)
+gpa_open_settings_dialog (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
-  settings_dlg_new (data);
+  settings_dlg_new (user_data);
 }
 
 
 /* Show the backend configuration dialog.  */
 void
-gpa_open_backend_config_dialog (GtkAction *action, void *data)
+gpa_open_backend_config_dialog (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
   if (!backend_config_dialog)
     {
@@ -367,7 +367,7 @@ open_requested_window (int argc, char **argv, int use_server)
           err = gpa_send_to_server ("START_KEYMANAGER");
         }
       else
-        gpa_open_key_manager (NULL, NULL);
+        gpa_open_key_manager (NULL, NULL, NULL);
     }
 
   if (args.start_clipboard && (optind >= argc))
@@ -378,7 +378,7 @@ open_requested_window (int argc, char **argv, int use_server)
           err = gpa_send_to_server ("START_CLIPBOARD");
         }
       else
-        gpa_open_clipboard (NULL, NULL);
+        gpa_open_clipboard (NULL, NULL, NULL);
     }
 
   if (args.start_file_manager || (optind < argc))
@@ -390,7 +390,7 @@ open_requested_window (int argc, char **argv, int use_server)
           err = gpa_send_to_server ("START_FILEMANAGER");
         }
       else
-        gpa_open_filemanager (NULL, NULL);
+        gpa_open_filemanager (NULL, NULL, NULL);
     }
 
 #ifdef ENABLE_CARD_MANAGER
@@ -402,7 +402,7 @@ open_requested_window (int argc, char **argv, int use_server)
           err = gpa_send_to_server ("START_CARDMANAGER");
         }
       else
-        gpa_open_cardmanager (NULL, NULL);
+        gpa_open_cardmanager (NULL, NULL, NULL);
     }
 #endif /*ENABLE_CARD_MANAGER*/
 
@@ -414,7 +414,7 @@ open_requested_window (int argc, char **argv, int use_server)
           err = gpa_send_to_server ("START_CONFDIALOG");
         }
       else
-        gpa_open_settings_dialog (NULL, NULL);
+        gpa_open_settings_dialog (NULL, NULL, NULL);
     }
 
   /* If there are any command line arguments that are not options, try

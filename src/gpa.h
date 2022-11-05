@@ -65,53 +65,43 @@ extern gboolean debug_edit_fsm;
 extern gboolean verbose;
 
 /* Show the keyring editor dialog.  */
-void gpa_open_key_manager (GtkAction *action, void *data);
+void gpa_open_key_manager (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 /* Show the filemanager dialog.  */
-void gpa_open_filemanager (GtkAction *action, void *data);
+void gpa_open_filemanager (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 /* Show the cardmanager dialog.  */
-void gpa_open_cardmanager (GtkAction *action, void *data);
+void gpa_open_cardmanager (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 /* Show the filemanager dialog.  */
-void gpa_open_clipboard (GtkAction *action, void *data);
+void gpa_open_clipboard (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 
-static const GtkActionEntry gpa_windows_menu_action_entries[] =
+static const GActionEntry gpa_windows_menu_g_action_entries[] =
   {
-      { "Windows", NULL, N_("_Windows"), NULL },
+    { "Windows", NULL },
 
-      { "WindowsKeyringEditor", GPA_STOCK_KEYMAN, NULL, NULL,
-	N_("Open the keyring editor"), G_CALLBACK (gpa_open_key_manager) },
-      { "WindowsFileManager", GPA_STOCK_FILEMAN, NULL, NULL,
-	N_("Open the file manager"), G_CALLBACK (gpa_open_filemanager) },
-      { "WindowsClipboard", GPA_STOCK_CLIPBOARD, NULL, NULL,
-	N_("Open the clipboard"), G_CALLBACK (gpa_open_clipboard) }
+    { "windows_keyring_editor", gpa_open_key_manager, NULL, NULL, NULL, { 0, 0, 0 } },
+    { "windows_file_manager", gpa_open_filemanager, NULL, NULL, NULL, { 0, 0, 0 } },
+    { "windows_clipboard", gpa_open_clipboard, NULL, NULL, NULL, { 0,0,0 } },
 #ifdef ENABLE_CARD_MANAGER
-      ,
-      { "WindowsCardManager", GPA_STOCK_CARDMAN, NULL, NULL,
-	N_("Open the card manager"), G_CALLBACK (gpa_open_cardmanager) }
-#endif /*ENABLE_CARD_MANAGER*/
+    { "windows_card_manager", gpa_open_cardmanager, NULL, NULL, NULL, { 0,0,0 } },
+#endif /* ENABLE_CARD_MANAGER */
   };
 
 
 /* Show the settings dialog.  */
-void gpa_open_settings_dialog (GtkAction *action, void *data);
+void gpa_open_settings_dialog (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 /* Show the backend configuration dialog.  */
-void gpa_open_backend_config_dialog (GtkAction *action, void *data);
+void gpa_open_backend_config_dialog (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
-static const GtkActionEntry gpa_preferences_menu_action_entries[] =
+
+static const GActionEntry gpa_preferences_menu_g_action_entries[] =
   {
-      { "EditPreferences", GTK_STOCK_PREFERENCES, NULL, NULL,
-	N_("Configure the application"),
-	G_CALLBACK (gpa_open_settings_dialog) },
-      { "EditBackendPreferences", GTK_STOCK_PREFERENCES,
-	N_("_Backend Preferences"), NULL,
-	N_("Configure the backend programs"),
-	G_CALLBACK (gpa_open_backend_config_dialog) }
+    { "edit_preferences", gpa_open_settings_dialog, NULL, NULL, NULL, { 0, 0, 0 } },
+    { "edit_backend_preferences", gpa_open_backend_config_dialog, NULL, NULL, NULL, { 0, 0, 0 } },
   };
-
 
 typedef void (*GPADefaultKeyChanged) (gpointer user_data);
 
