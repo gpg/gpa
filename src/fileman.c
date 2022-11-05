@@ -826,7 +826,7 @@ gpa_file_manager_constructor (GType type,
   gtk_widget_realize (GTK_WIDGET (fileman));
 
   /* Use a vbox to show the menu, toolbar and the file container.  */
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   /* Get the menu and the toolbar.  */
   fileman_action_new (fileman, &menubar, &toolbar);
@@ -835,7 +835,7 @@ gpa_file_manager_constructor (GType type,
 
 
   /* Add a fancy label that tells us: This is the file manager.  */
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
   icon = gtk_image_new_from_stock ("gtk-directory", GTK_ICON_SIZE_DND);
@@ -858,7 +858,7 @@ gpa_file_manager_constructor (GType type,
 			     pl + 5, pr + 5);
   gtk_box_pack_start (GTK_BOX (vbox), align, TRUE, TRUE, 0);
 
-  file_box = gtk_hbox_new (TRUE, 0);
+  file_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   file_frame = file_list_new (fileman);
   gtk_box_pack_start (GTK_BOX (file_box), file_frame, TRUE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (align), file_box);
