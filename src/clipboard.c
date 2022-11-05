@@ -1057,7 +1057,7 @@ gpa_clipboard_constructor (GType type,
 
 
   /* Third a text entry.  */
-  text_box = gtk_hbox_new (TRUE, 0);
+  text_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   align = gtk_alignment_new (0.5, 0.5, 1, 1);
   gtk_alignment_get_padding (GTK_ALIGNMENT (align),
 			     &pt, &pb, &pl, &pr);
