@@ -453,9 +453,11 @@ card_reload (GpaCardManager *cardman)
 
 /* This function is called when the user triggers a card-reload. */
 static void
-card_reload_action (GtkAction *action, gpointer param)
+card_reload_action (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
-  GpaCardManager *cardman = param;
+  // GpaCardManager *cardman = param;
+  GpaCardManager *cardman = (GpaCardManager*)user_data;
+
 
   card_reload (cardman);
 }
@@ -606,9 +608,10 @@ card_genkey (GpaCardManager *cardman)
 
 /* This function is called when the user triggers a key-generation.  */
 static void
-card_genkey_action (GtkAction *action, gpointer param)
+card_genkey_action (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
-  GpaCardManager *cardman = param;
+  // GpaCardManager *cardman = param;
+  GpaCardManager *cardman = this_instance;
 
   card_genkey (cardman);
 }
@@ -628,84 +631,45 @@ watcher_cb (void *opaque, const char *filename, const char *reason)
 
 /* Handle menu item "File/Close".  */
 static void
-file_close (GtkAction *action, gpointer param)
+file_close (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
-  GpaCardManager *cardman = param;
-  gtk_widget_destroy (GTK_WIDGET (cardman));
+  // GpaCardManager *cardman = this:ubsta;
+  gtk_widget_destroy (GTK_WIDGET (this_instance));
+}
+
+/* Handle menu item "File/Close".  */
+static void
+file_quit (GSimpleAction *simple, GVariant *parameter, gpointer param)
+{
+  // GpaCardManager *cardman = this:ubsta;
+  // gtk_widget_destroy (GTK_WIDGET (this_instance));
+
+  g_application_quit (G_APPLICATION (get_gpa_application ()));
 }
 
 
 /* Construct the card manager menu and toolbar widgets and return
    them. */
 static void
-cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
+cardman_action_new (GpaCardManager *cardman, GtkWidget **menu_bar,
 		    GtkWidget **toolbar)
 {
-  static const GtkActionEntry entries[] =
+  static const GActionEntry entries[] =
     {
-      /* Toplevel.  */
-      { "File", NULL, N_("_File"), NULL },
-      { "Edit", NULL, N_("_Edit"), NULL },
-      { "Card", NULL, N_("_Card"), NULL },
+      // Toplevel
+      { "File", NULL },
+      { "Edit", NULL },
+      { "Card", NULL },
 
-      /* File menu.  */
-      { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
-	N_("Close the window"), G_CALLBACK (file_close) },
-      { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
-	N_("Quit the program"), G_CALLBACK (gtk_main_quit) },
+      // File menu
+      { "file_close", file_close },
+      { "file_quit", file_quit },
 
-      /* Card menu.  */
-      { "CardReload", GTK_STOCK_REFRESH, NULL, NULL,
-	N_("Reload card information"), G_CALLBACK (card_reload_action) },
-      { "CardGenkey", GTK_STOCK_NEW, N_("Generate key"), NULL,
-	N_("Generate new key on card"), G_CALLBACK (card_genkey_action) },
+      { "card_reload", card_reload_action },
+      { "card_genkey", card_genkey_action },
     };
 
-  static const char *ui_description =
-    "<ui>"
-    "  <menubar name='MainMenu'>"
-    "    <menu action='File'>"
-    "      <menuitem action='FileClose'/>"
-    "      <menuitem action='FileQuit'/>"
-    "    </menu>"
-    "    <menu action='Edit'>"
-    "      <menuitem action='EditPreferences'/>"
-    "      <menuitem action='EditBackendPreferences'/>"
-    "    </menu>"
-    "    <menu action='Card'>"
-    "      <menuitem action='CardReload'/>"
-    "      <menuitem action='CardGenkey'/>"
-    "    </menu>"
-    "    <menu action='Windows'>"
-    "      <menuitem action='WindowsKeyringEditor'/>"
-    "      <menuitem action='WindowsFileManager'/>"
-    "      <menuitem action='WindowsClipboard'/>"
-    "      <menuitem action='WindowsCardManager'/>"
-    "    </menu>"
-    "    <menu action='Help'>"
-#if 0
-    "      <menuitem action='HelpContents'/>"
-#endif
-    "      <menuitem action='HelpAbout'/>"
-    "    </menu>"
-    "  </menubar>"
-    "  <toolbar name='ToolBar'>"
-    "    <toolitem action='CardReload'/>"
-#if 0
-    "    <toolitem action='CardEdit'/>"
-#endif
-    "    <separator/>"
-    "    <toolitem action='EditPreferences'/>"
-    "    <separator/>"
-    "    <toolitem action='WindowsKeyringEditor'/>"
-    "    <toolitem action='WindowsFileManager'/>"
-    "    <toolitem action='WindowsClipboard'/>"
-#if 0
-    "    <toolitem action='HelpContents'/>"
-#endif
-    "  </toolbar>"
-    "</ui>";
-
+  /*
   GtkAccelGroup *accel_group;
   GtkActionGroup *action_group;
   GtkAction *action;
@@ -736,15 +700,215 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menubar,
       exit (EXIT_FAILURE);
     }
 
-  /* Fixup the icon theme labels which are too long for the toolbar.  */
+  // Fixup the icon theme labels which are too long for the toolbar.
   action = gtk_action_group_get_action (action_group, "WindowsKeyringEditor");
   g_object_set (action, "short_label", _("Keyring"), NULL);
   action = gtk_action_group_get_action (action_group, "WindowsFileManager");
   g_object_set (action, "short_label", _("Files"), NULL);
+  */
 
-  *menubar = gtk_ui_manager_get_widget (cardman->ui_manager, "/MainMenu");
-  *toolbar = gtk_ui_manager_get_widget (cardman->ui_manager, "/ToolBar");
-  gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
+  /*
+
+    File
+      Close
+      Quit
+
+    Edit
+      Preferences
+      Backend Preferences
+
+    Card
+      Refresh
+      Generate Key
+
+    Windows
+      Keyring Manager
+      File Manager
+      Clipboard
+      Card Manager
+
+    Help
+      About
+  */
+
+  static const char *menu_string = ""
+  "<interface>"
+  "<menu id='menu'>"
+      "<submenu>"
+        "<attribute name='label' translatable='yes'>_File</attribute>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>Close</attribute>"
+          "<attribute name='action'>app.file_close</attribute>"
+        "</item>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>Quit</attribute>"
+          "<attribute name='action'>app.file_quit</attribute>"
+        "</item>"
+      "</submenu>"
+      "<submenu>"
+        "<attribute name='label' translatable='yes'>Edit</attribute>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>Preferences</attribute>"
+          "<attribute name='action'>app.edit_preferences</attribute>"
+        "</item>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>Backend Preferences</attribute>"
+          "<attribute name='action'>app.edit_backend_preferences</attribute>"
+        "</item>"
+      "</submenu>"
+      "<submenu>"
+        "<attribute name='label' translatable='yes'>Card</attribute>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>Refresh</attribute>"
+          "<attribute name='action'>app.card_reload</attribute>"
+        "</item>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>Generate Key</attribute>"
+          "<attribute name='action'>app.card_genkey</attribute>"
+        "</item>"
+      "</submenu>"
+      "<submenu>"
+        "<attribute name='label' translatable='yes'>Windows</attribute>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>Keyring Manager</attribute>"
+          "<attribute name='action'>app.windows_keyring_editor</attribute>"
+        "</item>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>File Manager</attribute>"
+          "<attribute name='action'>app.windows_file_manager</attribute>"
+        "</item>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>Clipboard</attribute>"
+          "<attribute name='action'>app.windows_clipboard</attribute>"
+        "</item>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>Card Manager</attribute>"
+          "<attribute name='action'>app.windows_card_manager</attribute>"
+        "</item>"
+      "</submenu>"
+      "<submenu>"
+        "<attribute name='label' translatable='yes'>Help</attribute>"
+        "<item>"
+          "<attribute name='label' translatable='yes'>About</attribute>"
+          "<attribute name='action'>app.help_about</attribute>"
+        "</item>"
+      "</submenu>"
+  "</menu>"
+
+  "<object id='toolbar' class='GtkToolbar'>"
+    "<property name='visible'>True</property>"
+    "<property name='can_focus'>False</property>"
+    "<property name='show_arrow'>False</property>"
+
+    "<child>"
+      "<object class='GtkToolButton'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>False</property>"
+        "<property name='use_underline'>True</property>"
+        "<property name='icon_name'>view-refresh</property>"
+      "</object>"
+      "<packing>"
+        "<property name='expand'>False</property>"
+        "<property name='homogeneous'>True</property>"
+      "</packing>"
+    "</child>"
+
+    "<child>"
+      "<object class='GtkSeparatorToolItem'>"
+      "</object>"
+    "</child>"
+
+    "<child>"
+      "<object class='GtkToolButton'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>False</property>"
+        "<property name='use_underline'>True</property>"
+        "<property name='icon_name'>preferences-desktop</property>"
+      "</object>"
+      "<packing>"
+        "<property name='expand'>False</property>"
+        "<property name='homogeneous'>True</property>"
+      "</packing>"
+    "</child>"
+
+    "<child>"
+      "<object class='GtkSeparatorToolItem'>"
+      "</object>"
+    "</child>"
+
+    "<child>"
+      "<object class='GtkToolButton'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>False</property>"
+        "<property name='use_underline'>True</property>"
+        "<property name='icon_name'>sign</property>"
+      "</object>"
+      "<packing>"
+        "<property name='expand'>False</property>"
+        "<property name='homogeneous'>True</property>"
+      "</packing>"
+    "</child>"
+
+    "<child>"
+      "<object class='GtkToolButton'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>False</property>"
+        "<property name='use_underline'>True</property>"
+        "<property name='icon_name'>import</property>"
+      "</object>"
+      "<packing>"
+        "<property name='expand'>False</property>"
+        "<property name='homogeneous'>True</property>"
+      "</packing>"
+    "</child>"
+
+    "<child>"
+      "<object class='GtkToolButton'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>False</property>"
+        "<property name='use_underline'>True</property>"
+        "<property name='icon_name'>export</property>"
+      "</object>"
+      "<packing>"
+        "<property name='expand'>False</property>"
+        "<property name='homogeneous'>True</property>"
+      "</packing>"
+    "</child>"
+
+  "</object>"
+
+  "</interface>";
+
+  GtkBuilder *gtk_builder = gtk_builder_new_from_string (menu_string, -1);
+  GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
+  *menu_bar = gtk_menu_bar_new_from_model (menu_bar_model);
+
+  // GObject *grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
+  *toolbar = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
+
+  GtkApplication *gpa_app = get_gpa_application ();
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    gpa_windows_menu_g_action_entries,
+                                    G_N_ELEMENTS (gpa_windows_menu_g_action_entries),
+                                    cardman);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    entries,
+                                    G_N_ELEMENTS (entries),
+                                    cardman);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    gpa_help_menu_g_action_entries,
+                                    G_N_ELEMENTS (gpa_help_menu_g_action_entries),
+                                    cardman);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    gpa_preferences_menu_g_action_entries,
+                                    G_N_ELEMENTS (gpa_preferences_menu_g_action_entries),
+                                    cardman);
+
+
 }
 
 
@@ -919,9 +1083,10 @@ construct_widgets (GpaCardManager *cardman)
   /* Add a fancy label that tells us: This is the card manager.  */
   hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  GdkPixbuf *cardman_pixbuf = gdk_pixbuf_new_from_xpm_data((const char**)smartcard_xpm);
+  GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
 
-  icon = gtk_image_new_from_pixbuf (cardman_pixbuf);
+  icon = GTK_WIDGET (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "smartcard"));
+
   gtk_box_pack_start (GTK_BOX (hbox1), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);
