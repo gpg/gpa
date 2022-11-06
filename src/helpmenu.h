@@ -22,17 +22,16 @@
 #include <gtk/gtk.h>
 
 /* Display the about dialog.  */
-void gpa_help_about (GtkAction *action, GtkWindow *window);
+void gpa_help_about(GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
-static const GtkActionEntry gpa_help_menu_action_entries[] =
+static const GActionEntry gpa_help_menu_g_action_entries[] =
   {
-    { "Help", NULL, N_("_Help"), NULL },
+    { "help", NULL },
 #if 0
-    { "HelpContents", GTK_STOCK_HELP, NULL, NULL,
-      N_("Open the GPA manual"), G_CALLBACK (gpa_help_contents) },
+    { "help_contents", gpa_help_contents, NULL, NULL, NULL, { 0, 0, 0 } },
 #endif
-    { "HelpAbout", GTK_STOCK_ABOUT, NULL, NULL,
-      N_("About this application"), G_CALLBACK (gpa_help_about) }
+    { "help_about", gpa_help_about, NULL, NULL, NULL, { 0, 0, 0 } },
   };
+
 
 #endif /* HELPMENU_H__ */

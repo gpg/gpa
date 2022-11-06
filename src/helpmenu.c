@@ -32,7 +32,7 @@
 
 /* Display the about dialog.  */
 void
-gpa_help_about (GtkAction *action, GtkWindow *window)
+gpa_help_about(GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
   static const gchar *authors[] =
     {
@@ -88,7 +88,13 @@ gpa_help_about (GtkAction *action, GtkWindow *window)
                              gpgme_check_version (NULL),
                              engine? engine->version : "?",
                              _("GPA is the GNU Privacy Assistant."));
-  logo = gpa_create_icon_pixbuf ("gpa_logo");
+  logo = gdk_pixbuf_new_from_resource ("/org/gnupg/gpa/gpa_logo.xpm", NULL);
+
+  // Get a window from the GtkApplication
+  GtkApplication *gpa_app = get_gpa_application ();
+
+  GtkWindow *window = gtk_application_get_active_window (gpa_app);
+
   gtk_show_about_dialog (window,
 			 "program-name", "GPA",
 			 "version", VERSION,
