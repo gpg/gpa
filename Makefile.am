@@ -20,12 +20,12 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = m4 src po pixmaps doc
+SUBDIRS = m4 src po doc
 
 EXTRA_DIST = 								\
 	autogen.sh autogen.rc TODO to-utf8 gpa.spec 			\
 	gpa.desktop gpa.png gpadefs.h.in VERSION			\
-	po/ChangeLog-2011 pixmaps/ChangeLog-2011 ChangeLog-2011 	\
+	po/ChangeLog-2011 ChangeLog-2011 	\
 	m4/ChangeLog-2011 src/ChangeLog-2011 st-fonts/ChangeLog-2011
 
 DISTCLEANFILES = gpadefs.h
