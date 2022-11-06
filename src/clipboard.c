@@ -48,6 +48,9 @@
 #include "gpafilesignop.h"
 #include "gpafileverifyop.h"
 
+#include "icons.h"
+#include "helpmenu.h"
+
 
 /* Support for Gtk 2.8.  */
 
@@ -757,13 +760,40 @@ static void
 clipboard_action_new (GpaClipboard *clipboard,
 		      GtkWidget **menu, GtkWidget **toolbar)
 {
+
+  static const GActionEntry g_entries[] =
+  {
+    { "File", NULL },
+    { "Edit", NULL },
+
+    { "file_clear", file_clear },
+    { "file_open", file_open },
+    { "file_save_as", file_save_as },
+    { "file_sign", file_sign },
+    { "file_verify", file_verify },
+    { "file_encrypt", file_encrypt },
+    { "file_decrypt", file_decrypt },
+    { "file_close", file_close },
+    { "file_quit", g_application_quit },
+#if g
+    { "edit_undo", edit_undo },
+    { "edit_redo", edit_redo },
+#endif
+    { "edit_cut", edit_cut },
+    { "edit_copy", edit_copy },
+    { "edit_paste", edit_paste },
+    { "edit_delete", edit_delete },
+    { "edit_select_all", edit_select_all },
+  };
+
+  /*
   static const GtkActionEntry entries[] =
     {
-      /* Toplevel.  */
+      // Toplevel
       { "File", NULL, N_("_File"), NULL },
       { "Edit", NULL, N_("_Edit"), NULL },
 
-      /* File menu.  */
+      // File menu.
       { "FileClear", GTK_STOCK_CLEAR, NULL, NULL,
 	N_("Clear buffer"), G_CALLBACK (file_clear) },
       { "FileOpen", GTK_STOCK_OPEN, NULL, NULL,
@@ -783,9 +813,9 @@ clipboard_action_new (GpaClipboard *clipboard,
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
 	N_("Quit the program"), G_CALLBACK (g_application_quit) },
 
-      /* Edit menu.  */
+      // Edit menu.
 #if 0
-      /* FIXME: Not implemented yet.  */
+      // FIXME: Not implemented yet.
       { "EditUndo", GTK_STOCK_UNDO, NULL, NULL,
 	N_("Undo the last action"), G_CALLBACK (edit_undo) },
       { "EditRedo", GTK_STOCK_REDO, NULL, NULL,
@@ -802,7 +832,305 @@ clipboard_action_new (GpaClipboard *clipboard,
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",
 	N_("Select the entire document"), G_CALLBACK (edit_select_all) }
     };
+    */
 
+  static const char *ui_string =
+    "<interface>"
+    "<menu id='menu'>"
+   "<submenu>"
+          "<attribute name='label' translatable='yes'>_File</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Clear</attribute>"
+            "<attribute name='action'>app.file_cleear</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Open</attribute>"
+            "<attribute name='action'>app.file_open</attribute>"
+          "</item>"
+          "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Sign</attribute>"
+            "<attribute name='action'>app.file_open</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Verify</attribute>"
+            "<attribute name='action'>app.file_open</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Encrypt</attribute>"
+            "<attribute name='action'>app.file_open</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Decrypt</attribute>"
+            "<attribute name='action'>app.file_open</attribute>"
+          "</item>"
+          "</section>"
+          "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Close</attribute>"
+            "<attribute name='action'>app.file_open</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Quit</attribute>"
+            "<attribute name='action'>app.file_open</attribute>"
+          "</item>"
+          "</section>"
+        "</submenu>"
+        "<submenu>"
+          "<attribute name='label' translatable='yes'>Edit</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Cut</attribute>"
+            "<attribute name='action'>app.edit_cut</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Copy</attribute>"
+            "<attribute name='action'>app.edit_copy</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Copy</attribute>"
+            "<attribute name='action'>app.edit_paste</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Delete</attribute>"
+            "<attribute name='action'>app.edit_delete</attribute>"
+          "</item>"
+          "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Select All</attribute>"
+            "<attribute name='action'>app.edit_select_all</attribute>"
+          "</item>"
+          "</section>"
+          "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Preferences</attribute>"
+            "<attribute name='action'>app.edit_preferences</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Backend Preferences</attribute>"
+            "<attribute name='action'>app.edit_backend_preferences</attribute>"
+          "</item>"
+          "</section>"
+        "</submenu>"
+        "<submenu>"
+          "<attribute name='label' translatable='yes'>Windows</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Keyring Manager</attribute>"
+            "<attribute name='action'>app.windows_keyring_editor</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>File Manager</attribute>"
+            "<attribute name='action'>app.windows_file_manager</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Clipboard</attribute>"
+            "<attribute name='action'>app.windows_clipboard</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Card Manager</attribute>"
+            "<attribute name='action'>app.windows_card_manager</attribute>"
+          "</item>"
+      "</submenu>"
+      "<submenu>"
+          "<attribute name='label' translatable='yes'>Help</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>About</attribute>"
+            "<attribute name='action'>app.help_about</attribute>"
+          "</item>"
+        "</submenu>"
+    "</menu>"
+    "<object id='toolbar' class='GtkToolbar'>"
+      "<property name='visible'>True</property>"
+      "<property name='can_focus'>False</property>"
+      "<property name='show_arrow'>False</property>"
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>edit-clear</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkSeparatorToolItem'>"
+        "</object>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>edit-cut</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>edit-copy</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>edit-paste</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkSeparatorToolItem'>"
+        "</object>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon-name'>sign</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton' id='brief_test'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='icon-name'>verify</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='action-name'>app.windows_file_manager</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon-name'>encrypt</property>"
+          "<property name='action-name'>app.windows_card_manager</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon-name'>decrypt</property>"
+          "<property name='action-name'>app.windows_card_manager</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkSeparatorToolItem'>"
+        "</object>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>preferences-desktop</property>"
+          "<property name='action-name'>app.windows_card_manager</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkSeparatorToolItem'>"
+        "</object>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon-name'>keyring</property>"
+          "<property name='action-name'>app.windows_keyring_editor</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='label' translatable='yes'>__glade_unnamed_10</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon-name'>folder</property>"
+          "<property name='action-name'>app.windows_file_manager</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+#ifdef ENABLE_CARD_MANAGER
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='label' translatable='yes'>__glade_unnamed_10</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon-name'>smartcard</property>"
+          "<property name='action-name'>app.windows_card_manager</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+#endif
+    "</object>"
+    "</interface>";
+
+/*
   static const char *ui_description =
     "<ui>"
     "  <menubar name='MainMenu'>"
@@ -820,7 +1148,7 @@ clipboard_action_new (GpaClipboard *clipboard,
     "    </menu>"
     "    <menu action='Edit'>"
 #if 0
-    /* Not implemented yet.  */
+    // Not implemented yet.
     "      <menuitem action='EditUndo'/>"
     "      <menuitem action='EditRedo'/>"
     "      <separator/>"
@@ -853,8 +1181,8 @@ clipboard_action_new (GpaClipboard *clipboard,
     "  <toolbar name='ToolBar'>"
     "    <toolitem action='FileClear'/>"
 #if 0
-    /* Disabled because the toolbar arrow mode doesn't work, and the
-       toolbar takes up too much space otherwise.  */
+    // Disabled because the toolbar arrow mode doesn't work, and the
+    // toolbar takes up too much space otherwise.
     "    <toolitem action='FileOpen'/>"
     "    <toolitem action='FileSaveAs'/>"
 #endif
@@ -880,7 +1208,9 @@ clipboard_action_new (GpaClipboard *clipboard,
 #endif
     "  </toolbar>"
     "</ui>";
+    */
 
+#ifdef OLD_MENU
   GtkAccelGroup *accel_group;
   GtkActionGroup *action_group;
   GtkAction *action;
@@ -937,6 +1267,68 @@ clipboard_action_new (GpaClipboard *clipboard,
   *menu = gtk_ui_manager_get_widget (ui_manager, "/MainMenu");
   *toolbar = gtk_ui_manager_get_widget (ui_manager, "/ToolBar");
   gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
+#else
+
+  GError **err;
+
+  GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
+
+  if (gtk_builder_add_from_string( gtk_builder, ui_string , -1, err) == 0) {
+    printf("ERROR: %s \n", (*err)->message);
+  }
+
+  GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
+  *menu = gtk_menu_bar_new_from_model (menu_bar_model);
+
+  GObject *grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
+
+  GtkCssProvider *css_provider = gtk_css_provider_new();
+  GdkDisplay *display = gdk_display_get_default();
+  GdkScreen *screen = gdk_display_get_default_screen (display);
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  gtk_css_provider_load_from_data(css_provider,
+                                        "#toolbar {\n"
+                                        //" padding-left: 55px;\n"
+                                        // " padding-right: 5px;\n"
+                                        // " border-radius: 3px;\n"
+                                        "}\n", -1, NULL);
+
+
+  GtkStyleContext *style_context;
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (grid));
+
+  *toolbar = grid;
+
+  // We must set the name to the toolbar for css to recognize it
+  gtk_widget_set_name(*toolbar, "toolbar");
+
+  gtk_style_context_add_class (style_context, "toolbar");
+
+
+  GtkApplication *gpa_app = get_gpa_application ();
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    gpa_windows_menu_g_action_entries,
+                                    G_N_ELEMENTS (gpa_windows_menu_g_action_entries),
+                                    clipboard);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    g_entries,
+                                    G_N_ELEMENTS (g_entries),
+                                    clipboard);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    gpa_help_menu_g_action_entries,
+                                    G_N_ELEMENTS (gpa_help_menu_g_action_entries),
+                                    clipboard);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    gpa_preferences_menu_g_action_entries,
+                                    G_N_ELEMENTS (gpa_preferences_menu_g_action_entries),
+                                    clipboard);
+#endif
 }
 
 
