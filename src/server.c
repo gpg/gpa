@@ -1155,7 +1155,7 @@ static const char hlp_start_keymanager[] =
 static gpg_error_t
 cmd_start_keymanager (assuan_context_t ctx, char *line)
 {
-  gpa_open_key_manager (NULL, NULL);
+  gpa_open_key_manager (NULL, NULL, NULL);
 
   return assuan_process_done (ctx, 0);
 }
@@ -1169,7 +1169,7 @@ static const char hlp_start_clipboard[] =
 static gpg_error_t
 cmd_start_clipboard (assuan_context_t ctx, char *line)
 {
-  gpa_open_clipboard (NULL, NULL);
+  gpa_open_clipboard (NULL, NULL, NULL);
 
   return assuan_process_done (ctx, 0);
 }
@@ -1183,7 +1183,7 @@ static const char hlp_start_filemanager[] =
 static gpg_error_t
 cmd_start_filemanager (assuan_context_t ctx, char *line)
 {
-  gpa_open_filemanager (NULL, NULL);
+  gpa_open_filemanager (NULL, NULL, NULL);
 
   return assuan_process_done (ctx, 0);
 }
@@ -1199,7 +1199,7 @@ static const char hlp_start_cardmanager[] =
 static gpg_error_t
 cmd_start_cardmanager (assuan_context_t ctx, char *line)
 {
-  gpa_open_cardmanager (NULL, NULL);
+  gpa_open_cardmanager (NULL, NULL, NULL);
 
   return assuan_process_done (ctx, 0);
 }
@@ -1214,7 +1214,7 @@ static const char hlp_start_confdialog[] =
 static gpg_error_t
 cmd_start_confdialog (assuan_context_t ctx, char *line)
 {
-  gpa_open_settings_dialog (NULL, NULL);
+  gpa_open_settings_dialog (NULL, NULL, NULL);
 
   return assuan_process_done (ctx, 0);
 }
