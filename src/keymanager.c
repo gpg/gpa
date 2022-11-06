@@ -831,9 +831,7 @@ key_manager_mapped (gpointer param)
 static void
 key_manager_close (GtkAction *action, gpointer param)
 {
-  GpaKeyManager *self = param;
-
-  gtk_widget_destroy (GTK_WIDGET (self));
+  gtk_widget_destroy (GTK_WIDGET (this_instance));
 }
 
 
@@ -952,9 +950,9 @@ key_manager_copy_fpr (GtkAction *action, gpointer param)
 
 /* Reload the key list.  */
 static void
-key_manager_refresh (GtkAction *action, gpointer param)
+key_manager_refresh (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
-  GpaKeyManager *self = param;
+  GpaKeyManager *self = user_data;
 
   /* Hack: To force reloading of secret keys we claim that a secret
      key has been imported.  */
@@ -993,10 +991,47 @@ key_manager_action_new (GpaKeyManager *self,
                         GtkWidget **menu, GtkWidget **toolbar,
                         GtkWidget **popup)
 {
+
+  // Rename this to "entries" when we don't need the GtkActionEntry array below
   static const
-    GtkActionEntry entries[] =
+    GActionEntry entries[] =
+  {
+      { "file", NULL },
+      { "edit", NULL },
+      { "keys", NULL },
+
+      { "file_close", key_manager_close },
+      { "file_quit", g_application_quit },
+
+      { "edit_copy", key_manager_copy },
+      { "edit_copy_fprr", key_manager_copy_fpr },
+      { "edit_copy_sec", key_manager_copy_sec },
+
+      { "edit_paste", key_manager_paste },
+      { "edit_select_all", key_manager_select_all },
+
+      { "keys_refresh", key_manager_refresh },
+      { "keys_new", key_manager_generate_key },
+      { "keys_delete", key_manager_delete },
+      { "keys_sign", key_manager_sign },
+      { "keys_set_owner_trust", key_manager_trust },
+      { "keys_edit_private_key", key_manager_edit },
+      { "keys_import_keys", key_manager_import },
+      { "keys_export_keys", key_manager_export},
+      { "keys_backup_key", key_manager_backup},
+
+#ifdef ENABLE_KEYSERVER_SUPPORT
+      { "server_retrive", key_manager_retrieve },
+      { "server_refresh", key_manager_refresh_keys },
+      { "server_send", key_manager_send },
+#endif
+  };
+
+  /*
+  static const
+    GtkActionEntry old_entries[] =
     {
-      /* Toplevel.  */
+      // Toplevel.
       { "File", NULL, N_("_File"), NULL },
       { "Edit", NULL, N_("_Edit"), NULL },
       { "Keys", NULL, N_("_Keys"), NULL },
@@ -1004,48 +1039,48 @@ key_manager_action_new (GpaKeyManager *self,
       { "Server", NULL, N_("_Server"), NULL },
 #endif
 
-      /* File menu.  */
+      // File menu.
       { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
 	"FIXME", G_CALLBACK (key_manager_close) },
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
-	N_("Quit the program"), G_CALLBACK (g_application_quit) },
+          N_("Quit the program"), G_CALLBACK (g_application_quit) },
 
-      /* Edit menu.  */
+      // Edit menu.
       { "EditCopy", GTK_STOCK_COPY, NULL, NULL,
-	N_("Copy the selection"), G_CALLBACK (key_manager_copy) },
+          N_("Copy the selection"), G_CALLBACK (key_manager_copy) },
       { "EditCopyFpr", GTK_STOCK_COPY, N_("Copy _Fingerprint"), "<control>F",
-	N_("Copy the fingerprints"), G_CALLBACK (key_manager_copy_fpr) },
+          N_("Copy the fingerprints"), G_CALLBACK (key_manager_copy_fpr) },
       { "EditCopySec", GTK_STOCK_COPY, N_("Copy Private Key"), NULL,
-	N_("Copy a single private key"), G_CALLBACK (key_manager_copy_sec) },
+          N_("Copy a single private key"), G_CALLBACK (key_manager_copy_sec) },
       { "EditPaste", GTK_STOCK_PASTE, NULL, NULL,
-	N_("Paste the clipboard"), G_CALLBACK (key_manager_paste) },
+          N_("Paste the clipboard"), G_CALLBACK (key_manager_paste) },
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",
-	N_("Select all certificates"),
-	G_CALLBACK (key_manager_select_all) },
+          N_("Select all certificates"),
+            G_CALLBACK (key_manager_select_all) },
 
-      /* Keys menu.  */
+      // Keys menu.
       { "KeysRefresh", GTK_STOCK_REFRESH, NULL, NULL,
-	N_("Refresh the keyring"), G_CALLBACK (key_manager_refresh) },
+          N_("Refresh the keyring"), G_CALLBACK (key_manager_refresh) },
       { "KeysNew", GTK_STOCK_NEW, N_("_New key..."), NULL,
-	N_("Generate a new key"), G_CALLBACK (key_manager_generate_key) },
+          N_("Generate a new key"), G_CALLBACK (key_manager_generate_key) },
       { "KeysDelete", GTK_STOCK_DELETE, N_("_Delete keys"), NULL,
-	N_("Remove the selected key"), G_CALLBACK (key_manager_delete) },
+          N_("Remove the selected key"), G_CALLBACK (key_manager_delete) },
       { "KeysSign", GPA_STOCK_SIGN, N_("_Sign Keys..."), NULL,
-	N_("Sign the selected key"), G_CALLBACK (key_manager_sign) },
+          N_("Sign the selected key"), G_CALLBACK (key_manager_sign) },
       { "KeysSetOwnerTrust", NULL, N_("Set _Owner Trust..."), NULL,
-	N_("Set owner trust of the selected key"),
+          N_("Set owner trust of the selected key"),
 	G_CALLBACK (key_manager_trust) },
       { "KeysEditPrivateKey", GPA_STOCK_EDIT, N_("_Edit Private Key..."), NULL,
-	N_("Edit the selected private key"),
+          N_("Edit the selected private key"),
 	G_CALLBACK (key_manager_edit) },
       { "KeysImport", GPA_STOCK_IMPORT, N_("_Import Keys..."), NULL,
-	N_("Import Keys"), G_CALLBACK (key_manager_import) },
+          N_("Import Keys"), G_CALLBACK (key_manager_import) },
       { "KeysExport", GPA_STOCK_EXPORT, N_("E_xport Keys..."), NULL,
-	N_("Export Keys"), G_CALLBACK (key_manager_export) },
+          N_("Export Keys"), G_CALLBACK (key_manager_export) },
       { "KeysBackup", NULL, N_("_Backup..."), NULL,
-	N_("Backup key"), G_CALLBACK (key_manager_backup) },
+          N_("Backup key"), G_CALLBACK (key_manager_backup) },
 
-      /* Server menu.  */
+      // Server menu.
 #ifdef ENABLE_KEYSERVER_SUPPORT
       { "ServerRetrieve", NULL, N_("_Retrieve Keys..."), NULL,
         N_("Retrieve keys from server"),
@@ -1055,16 +1090,409 @@ key_manager_action_new (GpaKeyManager *self,
         G_CALLBACK (key_manager_refresh_keys) },
       { "ServerSend", NULL, N_("_Send Keys..."), NULL,
         N_("Send keys to server"), G_CALLBACK (key_manager_send) }
-#endif /*ENABLE_KEYSERVER_SUPPORT*/
+#endif //ENABLE_KEYSERVER_SUPPORT
     };
+    */
 
   static const GtkRadioActionEntry radio_entries[] =
     {
-      { "DetailsBrief", GPA_STOCK_BRIEF, NULL, NULL,
+      { "DetailsBrief", "brief", NULL, NULL,
 	N_("Show Brief Keylist"), 0 },
       { "DetailsDetailed", GPA_STOCK_DETAILED, NULL, NULL,
 	N_("Show Key Details"), 1 }
     };
+
+  static const char *menu_string =
+    "<interface>"
+    "<menu id='menu'>"
+        "<submenu>"
+          "<attribute name='label' translatable='yes'>_File</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Close</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Quit</attribute>"
+            "<attribute name='action'>app.file_quit</attribute>"
+          "</item>"
+        "</submenu>"
+        "<submenu>"
+          "<attribute name='label' translatable='yes'>Edit</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Copy</attribute>"
+            "<attribute name='action'>app.edit_copy</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Paste</attribute>"
+            "<attribute name='action'>app.edit_paste</attribute>"
+          "</item>"
+          "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Select All</attribute>"
+            "<attribute name='action'>app.edit_select_all</attribute>"
+          "</item>"
+          "</section>"
+          "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Preferences</attribute>"
+            "<attribute name='action'>app.edit_preferences</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Backend Preferences</attribute>"
+            "<attribute name='action'>app.edit_backend_preferences</attribute>"
+          "</item>"
+          "</section>"
+        "</submenu>"
+        "<submenu>"
+          "<attribute name='label' translatable='yes'>Keys</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Refresh</attribute>"
+            "<attribute name='action'>app.keys_refresh</attribute>"
+          "</item>"
+          "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>New Key</attribute>"
+            "<attribute name='action'>app.keys_new</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Delete Keys</attribute>"
+            "<attribute name='action'>app.keys_delete</attribute>"
+          "</item>"
+          "</section>"
+          "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Sign Keys</attribute>"
+            "<attribute name='action'>app.keys_sign</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Set Owner Trust</attribute>"
+            "<attribute name='action'>app.keys_set_owner_trust</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Edit Private Key</attribute>"
+            "<attribute name='action'>app.keys_edit_private_key</attribute>"
+          "</item>"
+          "</section>"
+          "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Import Keys</attribute>"
+            "<attribute name='action'>app.keys_import_keys</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Export Keys</attribute>"
+            "<attribute name='action'>app.keys_export_keys</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Backup...</attribute>"
+            "<attribute name='action'>app.keys_backup_key</attribute>"
+          "</item>"
+          "</section>"
+        "</submenu>"
+        "<submenu>"
+          "<attribute name='label' translatable='yes'>Windows</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Keyring Manager</attribute>"
+            "<attribute name='action'>app.windows_keyring_editor</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>File Manager</attribute>"
+            "<attribute name='action'>app.windows_file_manager</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Clipboard</attribute>"
+            "<attribute name='action'>app.windows_clipboard</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Card Manager</attribute>"
+            "<attribute name='action'>app.windows_card_manager</attribute>"
+          "</item>"
+        "</submenu>"
+#ifdef ENABLE_KEYSERVER_SUPPORT
+        "<submenu>"
+          "<attribute name='label' translatable='yes'>Server</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Retieve Keys...</attribute>"
+            "<attribute name='action'>app.server_retrive</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Send Keys...</attribute>"
+            "<attribute name='action'>app.server_send</attribute>"
+          "</item>"
+        "</submenu>"
+#endif // ENABLE_KEYSERVER_SUPPORT
+        "<submenu>"
+          "<attribute name='label' translatable='yes'>Help</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>About</attribute>"
+            "<attribute name='action'>app.help_about</attribute>"
+          "</item>"
+        "</submenu>"
+    "</menu>"
+
+    /*
+        "  <popup name='PopupMenu'>"
+    "    <menuitem action='EditCopyFpr'/>"
+    "    <menuitem action='EditCopy'/>"
+    "    <menuitem action='EditPaste'/>"
+    "    <menuitem action='KeysDelete'/>"
+    "    <separator/>"
+    "    <menuitem action='KeysSign'/>"
+    "    <menuitem action='KeysSetOwnerTrust'/>"
+    "    <menuitem action='KeysEditPrivateKey'/>"
+    "    <menuitem action='EditCopySec'/>"
+    "    <separator/>"
+    "    <menuitem action='KeysExport'/>"
+#ifdef ENABLE_KEYSERVER_SUPPORT
+    "    <menuitem action='ServerRefresh'/>"
+    "    <menuitem action='ServerSend'/>"
+#endif
+    "    <menuitem action='KeysBackup'/>"
+    "  </popup>"
+    */
+    "<menu id='popupmenu'>"
+        "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Copy Fingerprint</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Copy</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Paste</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Delete Keys</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+        "</section>"
+        "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Sign Keys</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Set Ownertrust</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Edit Private Key</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Copy Private Key</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+        "</section>"
+        "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Export Keys</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Update Keys</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Send Keys</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Backup</attribute>"
+            "<attribute name='action'>app.file_close</attribute>"
+          "</item>"
+        "</section>"
+    "</menu>"
+
+    "<object id='toolbar' class='GtkToolbar'>"
+      "<property name='visible'>True</property>"
+      "<property name='can_focus'>False</property>"
+      "<property name='show_arrow'>False</property>"
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>edit</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>delete</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>sign</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>import</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>export</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkSeparatorToolItem'>"
+        "</object>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton' id='brief_test'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='action-name'>app.windows_file_manager</property>"
+          "<property name='icon_name'>brief</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton' id='detailed'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>detailed</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkSeparatorToolItem'>"
+        "</object>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>preferences-desktop</property>"
+          "<property name='action-name'>app.edit_preferences</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkSeparatorToolItem'>"
+        "</object>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>view-refresh</property>"
+          "<property name='action-name'>app.windows_card_manager</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkSeparatorToolItem'>"
+        "</object>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>folder</property>"
+          "<property name='action-name'>app.windows_file_manager</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>edit-paste</property>"
+          "<property name='action-name'>app.windows_clipboard</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+
+      "<child>"
+        "<object class='GtkToolButton'>"
+          "<property name='visible'>True</property>"
+          "<property name='can_focus'>False</property>"
+          "<property name='use_underline'>True</property>"
+          "<property name='icon_name'>smartcard</property>"
+          "<property name='action-name'>app.windows_card_manager</property>"
+        "</object>"
+        "<packing>"
+          "<property name='expand'>False</property>"
+          "<property name='homogeneous'>True</property>"
+        "</packing>"
+      "</child>"
+    "</object>"
+  "</interface>";
+
 
   static const char *ui_description =
     "<ui>"
@@ -1109,7 +1537,7 @@ key_manager_action_new (GpaKeyManager *self,
     "      <menuitem action='ServerRetrieve'/>"
     "      <menuitem action='ServerSend'/>"
     "    </menu>"
-#endif /*ENABLE_KEYSERVER_SUPPORT*/
+#endif // ENABLE_KEYSERVER_SUPPORT
     "    <menu action='Help'>"
 #if 0
     "      <menuitem action='HelpContents'/>"
@@ -1160,6 +1588,8 @@ key_manager_action_new (GpaKeyManager *self,
     "  </popup>"
     "</ui>";
 
+#ifdef OLD_MENU
+
   GtkAccelGroup *accel_group;
   GtkActionGroup *action_group;
   GtkAction *action;
@@ -1199,7 +1629,7 @@ key_manager_action_new (GpaKeyManager *self,
       exit (EXIT_FAILURE);
     }
 
-  /* Fixup the icon theme labels which are too long for the toolbar.  */
+  // Fixup the icon theme labels which are too long for the toolbar.
   action = gtk_action_group_get_action (action_group, "KeysEditPrivateKey");
   g_object_set (action, "short_label", _("Edit"), NULL);
   action = gtk_action_group_get_action (action_group, "KeysDelete");
@@ -1217,7 +1647,7 @@ key_manager_action_new (GpaKeyManager *self,
   g_object_set (action, "short_label", _("Card"), NULL);
 #endif
 
-  /* Take care of sensitiveness of widgets.  */
+  // Take care of sensitiveness of widgets.
   action = gtk_action_group_get_action (action_group, "EditCopy");
   add_selection_sensitive_action (self, action,
                                   key_manager_has_selection);
@@ -1241,7 +1671,7 @@ key_manager_action_new (GpaKeyManager *self,
   action = gtk_action_group_get_action (action_group, "ServerSend");
   add_selection_sensitive_action (self, action,
                                   key_manager_has_single_selection);
-#endif /*ENABLE_KEYSERVER_SUPPORT*/
+#endif // ENABLE_KEYSERVER_SUPPORT
 
   action = gtk_action_group_get_action (action_group, "KeysSetOwnerTrust");
   add_selection_sensitive_action (self, action,
@@ -1263,6 +1693,77 @@ key_manager_action_new (GpaKeyManager *self,
   gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
 
   *popup = gtk_ui_manager_get_widget (ui_manager, "/PopupMenu");
+
+#else
+
+  GError **err;
+
+  GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
+
+  if (gtk_builder_add_from_string( gtk_builder, menu_string , -1, err) == 0) {
+    printf("ERROR: %s \n", (*err)->message);
+  }
+
+  GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
+  *menu = gtk_menu_bar_new_from_model (menu_bar_model);
+
+  GMenuModel *popup_menu_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "popupmenu"));
+  *popup = gtk_menu_new_from_model (popup_menu_model);
+
+  GObject *grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
+
+  GtkCssProvider *css_provider = gtk_css_provider_new();
+  GdkDisplay *display = gdk_display_get_default();
+  GdkScreen *screen = gdk_display_get_default_screen (display);
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  gtk_css_provider_load_from_data(css_provider,
+                                        "#toolbar {\n"
+                                        //" padding-left: 55px;\n"
+                                        // " padding-right: 5px;\n"
+                                        // " border-radius: 3px;\n"
+                                        "}\n", -1, NULL);
+
+  GtkStyleContext *style_context;
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (grid));
+
+
+  //gtk_widget_add_css_class (grid, "toolbar");
+
+  *toolbar = grid;
+
+  // We must set the name to the toolbar for css to recognize it
+  gtk_widget_set_name(*toolbar, "toolbar");
+
+  gtk_style_context_add_class (style_context, "toolbar");
+
+  GtkApplication *gpa_app = get_gpa_application ();
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    gpa_windows_menu_g_action_entries,
+                                    G_N_ELEMENTS (gpa_windows_menu_g_action_entries),
+                                    self);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    entries,
+                                    G_N_ELEMENTS (entries),
+                                    self);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    gpa_help_menu_g_action_entries,
+                                    G_N_ELEMENTS (gpa_help_menu_g_action_entries),
+                                    self);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    gpa_preferences_menu_g_action_entries,
+                                    G_N_ELEMENTS (gpa_preferences_menu_g_action_entries),
+                                    self);
+
+#endif
+
+
+
 }
 
 
@@ -1465,7 +1966,7 @@ construct_widgets (GpaKeyManager *self)
 			    G_CALLBACK (key_manager_mapped), self);
 
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (self), vbox);
 
   /* FIXME: Check next line.  */
@@ -1476,11 +1977,12 @@ construct_widgets (GpaKeyManager *self)
 
   /* Add a fancy label that tells us: This is the key manager.  */
   /* FIXME: We should have a common function for this.  */
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
-  icon = gtk_image_new_from_stock (GPA_STOCK_KEYMAN_SIMPLE,
-                                   GTK_ICON_SIZE_DND);
+  GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
+
+  icon = gtk_image_new_from_resource ("/org/gnupg/gpa/keyringeditor.xpm");
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);
@@ -1496,7 +1998,7 @@ construct_widgets (GpaKeyManager *self)
 
   paned = gtk_vpaned_new ();
 
-  main_box = gtk_hbox_new (TRUE, 0);
+  main_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   align = gtk_alignment_new (0.5, 0.5, 1, 1);
   gtk_alignment_get_padding (GTK_ALIGNMENT (align), &pt, &pb, &pl, &pr);
   gtk_alignment_set_padding (GTK_ALIGNMENT (align), pt, pb + 5,
