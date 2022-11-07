@@ -171,7 +171,7 @@ static void gpa_key_manager_finalize (GObject *object);
 /* Add widget to the list of sensitive widgets of editor.  */
 static void
 add_selection_sensitive_action (GpaKeyManager *self,
-                                GtkAction *action,
+                                GSimpleAction *action,
                                 sensitivity_func_t callback)
 {
   g_object_set_data (G_OBJECT (action), "gpa_sensitivity", callback);
@@ -189,7 +189,7 @@ update_selection_sensitive_action (gpointer data, gpointer param)
   sensitivity_func_t func;
 
   func = g_object_get_data (G_OBJECT (data), "gpa_sensitivity");
-  gtk_action_set_sensitive (GTK_ACTION (data), func (param));
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (data), func (param));
 }
 
 
@@ -213,7 +213,7 @@ disable_selection_sensitive_actions (GpaKeyManager *self)
   cur = self->selection_sensitive_actions;
   while (cur)
     {
-      gtk_action_set_sensitive (GTK_ACTION (cur->data), FALSE);
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (cur->data), FALSE);
       cur = g_list_next (cur);
     }
 }
@@ -373,8 +373,9 @@ register_operation (GpaKeyManager *self, GpaOperation *op)
 
 /* delete the selected keys */
 static void
-key_manager_delete (GtkAction *action, GpaKeyManager *self)
+key_manager_delete (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
+  GpaKeyManager *self = param;
   GList *selection = gpa_keylist_get_selected_keys (self->keylist,
                                                     GPGME_PROTOCOL_UNKNOWN);
   GpaKeyDeleteOperation *op = gpa_key_delete_operation_new (GTK_WIDGET (self),
@@ -438,7 +439,7 @@ key_manager_can_sign (gpointer param)
 
 /* sign the selected keys */
 static void
-key_manager_sign (GtkAction *action, gpointer param)
+key_manager_sign (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GList *selection;
@@ -463,7 +464,7 @@ key_manager_sign (GtkAction *action, gpointer param)
 
 /* Invoke the "edit key" dialog.  */
 static void
-key_manager_edit (GtkAction *action, gpointer param)
+key_manager_edit (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   gpgme_key_t key;
@@ -485,7 +486,7 @@ key_manager_edit (GtkAction *action, gpointer param)
 
 
 static void
-key_manager_trust (GtkAction *action, gpointer param)
+key_manager_trust (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GList *selection;
@@ -508,7 +509,7 @@ key_manager_trust (GtkAction *action, gpointer param)
 
 /* Import keys.  */
 static void
-key_manager_import (GtkAction *action, gpointer param)
+key_manager_import (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GpaImportFileOperation *op;
@@ -520,7 +521,7 @@ key_manager_import (GtkAction *action, gpointer param)
 
 /* Export the selected keys to a file.  */
 static void
-key_manager_export (GtkAction *action, gpointer param)
+key_manager_export (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GList *selection;
@@ -539,7 +540,7 @@ key_manager_export (GtkAction *action, gpointer param)
 /* Import a key from the keyserver.  */
 #ifdef ENABLE_KEYSERVER_SUPPORT
 static void
-key_manager_retrieve (GtkAction *action, gpointer param)
+key_manager_retrieve (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GpaImportServerOperation *op;
@@ -553,7 +554,7 @@ key_manager_retrieve (GtkAction *action, gpointer param)
 /* Refresh keys from the keyserver.  */
 #ifdef ENABLE_KEYSERVER_SUPPORT
 static void
-key_manager_refresh_keys (GtkAction *action, gpointer param)
+key_manager_refresh_keys (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GpaImportByKeyidOperation *op;
@@ -579,7 +580,7 @@ key_manager_refresh_keys (GtkAction *action, gpointer param)
 /* Send a key to the keyserver.  */
 #ifdef ENABLE_KEYSERVER_SUPPORT
 static void
-key_manager_send (GtkAction *action, gpointer param)
+key_manager_send (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GList *selection;
@@ -603,7 +604,7 @@ key_manager_send (GtkAction *action, gpointer param)
 
 /* Backup the default keys.  */
 static void
-key_manager_backup (GtkAction *action, gpointer param)
+key_manager_backup (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   gpgme_key_t key;
@@ -647,7 +648,7 @@ key_manager_generate_key_simple (gpointer param)
 
 /* Generate a key.  */
 static void
-key_manager_generate_key (GtkAction *action, gpointer param)
+key_manager_generate_key (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   if (gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     key_manager_generate_key_simple (param);
@@ -784,7 +785,7 @@ key_manager_mapped (gpointer param)
 	  response = gtk_dialog_run (GTK_DIALOG (dialog));
 	  gtk_widget_destroy (dialog);
           if (response == GTK_RESPONSE_OK)
-	    key_manager_generate_key (NULL, param);
+	    key_manager_generate_key (NULL, NULL, param);
 	  asked_about_key_generation = TRUE;
         }
       else if (!asked_about_key_backup
@@ -829,7 +830,7 @@ key_manager_mapped (gpointer param)
 
 /* Close the key manager.  */
 static void
-key_manager_close (GtkAction *action, gpointer param)
+key_manager_close (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   gtk_widget_destroy (GTK_WIDGET (this_instance));
 }
@@ -837,7 +838,7 @@ key_manager_close (GtkAction *action, gpointer param)
 
 /* select all keys in the keyring */
 static void
-key_manager_select_all (GtkAction *action, gpointer param)
+key_manager_select_all (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GtkTreeSelection *selection;
@@ -849,7 +850,7 @@ key_manager_select_all (GtkAction *action, gpointer param)
 
 /* Paste the clipboard into the keyring.  */
 static void
-key_manager_paste (GtkAction *action, gpointer param)
+key_manager_paste (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GpaImportClipboardOperation *op;
@@ -861,7 +862,7 @@ key_manager_paste (GtkAction *action, gpointer param)
 
 /* Copy the keys into the clipboard.  */
 static void
-key_manager_copy (GtkAction *action, gpointer param)
+key_manager_copy (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GList *selection;
@@ -879,7 +880,7 @@ key_manager_copy (GtkAction *action, gpointer param)
 
 /* Copy the secret keys into the clipboard.  */
 static void
-key_manager_copy_sec (GtkAction *action, gpointer param)
+key_manager_copy_sec (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GList *selection;
@@ -897,7 +898,7 @@ key_manager_copy_sec (GtkAction *action, gpointer param)
 
 /* Copy the fingerprints of the keys into the clipboard.  */
 static void
-key_manager_copy_fpr (GtkAction *action, gpointer param)
+key_manager_copy_fpr (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaKeyManager *self = param;
   GList *selection, *item;
@@ -963,7 +964,7 @@ key_manager_refresh (GSimpleAction *simple, GVariant *parameter, gpointer user_d
 
 
 static void
-keyring_set_listing_cb (GtkAction *action,
+keyring_set_listing_cb (GSimpleAction *action,
 			GtkRadioAction *current_action, gpointer param)
 {
   GpaKeyManager *self = param;
@@ -984,7 +985,6 @@ keyring_set_listing_cb (GtkAction *action,
     }
 }
 
-
 /* Create and return the menu bar for the key ring editor.  */
 static void
 key_manager_action_new (GpaKeyManager *self,
@@ -1001,10 +1001,10 @@ key_manager_action_new (GpaKeyManager *self,
       { "keys", NULL },
 
       { "file_close", key_manager_close },
-      { "file_quit", g_application_quit },
+      { "file_quit", key_manager_close },
 
       { "edit_copy", key_manager_copy },
-      { "edit_copy_fprr", key_manager_copy_fpr },
+      { "edit_copy_fingerprint", key_manager_copy_fpr },
       { "edit_copy_sec", key_manager_copy_sec },
 
       { "edit_paste", key_manager_paste },
@@ -1249,62 +1249,6 @@ key_manager_action_new (GpaKeyManager *self,
     "    <menuitem action='KeysBackup'/>"
     "  </popup>"
     */
-    "<menu id='popupmenu'>"
-        "<section>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Copy Fingerprint</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Copy</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Paste</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Delete Keys</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-        "</section>"
-        "<section>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Sign Keys</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Set Ownertrust</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Edit Private Key</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Copy Private Key</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-        "</section>"
-        "<section>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Export Keys</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Update Keys</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Send Keys</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-          "<item>"
-            "<attribute name='label' translatable='yes'>Backup</attribute>"
-            "<attribute name='action'>app.file_close</attribute>"
-          "</item>"
-        "</section>"
-    "</menu>"
 
     "<object id='toolbar' class='GtkToolbar'>"
       "<property name='visible'>True</property>"
@@ -1491,9 +1435,67 @@ key_manager_action_new (GpaKeyManager *self,
         "</packing>"
       "</child>"
     "</object>"
+    "<menu id='popupmenu'>"
+        "<section>"
+          // "<attribute name='display-hint'>horizontal-buttons</attribute>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Copy Fingerprint</attribute>"
+            "<attribute name='action'>app.edit_copy_fingerprint</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Copy</attribute>"
+            "<attribute name='action'>app.edit_copy</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Paste</attribute>"
+            "<attribute name='action'>app.edit_paste</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Delete Keys</attribute>"
+            "<attribute name='action'>app.keys_delete</attribute>"
+          "</item>"
+        "</section>"
+        "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Sign Keys</attribute>"
+            "<attribute name='action'>app.keys_sign</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Set Ownertrust</attribute>"
+            "<attribute name='action'>app.keys_set_owner_trust</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Edit Private Key</attribute>"
+            "<attribute name='action'>app.keys_edit_private_key</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Copy Private Key</attribute>"
+            "<attribute name='action'>app.key_manager_copy_fpr</attribute>"
+          "</item>"
+        "</section>"
+        "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Export Keys</attribute>"
+            "<attribute name='action'>app.key_manager_export</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Update Keys</attribute>"
+            "<attribute name='action'>app.key_manager_refresh</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Send Keys</attribute>"
+            "<attribute name='action'>app.server_send</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Backup</attribute>"
+            "<attribute name='action'>app.keys_backup_key</attribute>"
+          "</item>"
+        "</section>"
+      "</menu>"
+
   "</interface>";
 
-
+/*
   static const char *ui_description =
     "<ui>"
     "  <menubar name='MainMenu'>"
@@ -1587,6 +1589,7 @@ key_manager_action_new (GpaKeyManager *self,
     "    <menuitem action='KeysBackup'/>"
     "  </popup>"
     "</ui>";
+    */
 
 #ifdef OLD_MENU
 
@@ -1698,10 +1701,14 @@ key_manager_action_new (GpaKeyManager *self,
 
   GError **err;
 
-  GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
+  GtkBuilder *gtk_builder = gtk_builder_new ();
+
+  if (gtk_builder_add_from_string( gtk_builder, icons_string , -1, err) == 0) {
+    printf("ERROR icons: %s \n", (*err)->message);
+  }
 
   if (gtk_builder_add_from_string( gtk_builder, menu_string , -1, err) == 0) {
-    printf("ERROR: %s \n", (*err)->message);
+    printf("ERROR menu: %s \n", (*err)->message);
   }
 
   GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
@@ -1710,7 +1717,7 @@ key_manager_action_new (GpaKeyManager *self,
   GMenuModel *popup_menu_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "popupmenu"));
   *popup = gtk_menu_new_from_model (popup_menu_model);
 
-  GObject *grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
+  GtkWidget *grid = GTK_WIDGET (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar"));
 
   GtkCssProvider *css_provider = gtk_css_provider_new();
   GdkDisplay *display = gdk_display_get_default();
@@ -1731,14 +1738,13 @@ key_manager_action_new (GpaKeyManager *self,
 
   //gtk_widget_add_css_class (grid, "toolbar");
 
-  *toolbar = grid;
-
   // We must set the name to the toolbar for css to recognize it
-  gtk_widget_set_name(*toolbar, "toolbar");
+  gtk_widget_set_name(GTK_WIDGET(grid), "toolbar");
 
   gtk_style_context_add_class (style_context, "toolbar");
 
-  GtkApplication *gpa_app = get_gpa_application ();
+  GApplication *gpa_app = G_APPLICATION (get_gpa_application ());
+
 
   g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
                                     gpa_windows_menu_g_action_entries,
@@ -1760,6 +1766,67 @@ key_manager_action_new (GpaKeyManager *self,
                                     G_N_ELEMENTS (gpa_preferences_menu_g_action_entries),
                                     self);
 
+
+  GSimpleAction *action;
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "edit_copy");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_selection);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "edit_copy_fingerprint");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_single_selection);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "edit_copy_sec");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_single_selection);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "keys_delete");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_selection);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "keys_export_keys");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_selection);
+
+
+#ifdef ENABLE_KEYSERVER_SUPPORT
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "server_refresh");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_single_selection);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "server_send");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_single_selection);
+
+#endif // ENABLE_KEYSERVER_SUPPORT
+
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "keys_set_owner_trust");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_single_selection_OpenPGP);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "keys_sign");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_can_sign);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "keys_edit_private_key");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_private_selected);
+
+  /*
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "keys_backup");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_private_selected);
+  */
+
+  *toolbar = GTK_WIDGET (grid);
+
+/*
+  action = gtk_action_group_get_action (action_group, "EditCopy");
+  add_selection_sensitive_action (self, action,
+                                  key_manager_has_selection);
+                                  */
 #endif
 
 
@@ -1890,37 +1957,40 @@ display_popup_menu (GpaKeyManager *self, GdkEvent *event, GpaKeyList *list)
   menu = GTK_MENU (self->popup_menu);
 
   if (event->type == GDK_BUTTON_PRESS)
+  {
+    event_button = (GdkEventButton *) event;
+    if (event_button->button == 3)
     {
-      event_button = (GdkEventButton *) event;
-      if (event_button->button == 3)
-	{
-	  GtkTreeSelection *selection =
-	    gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
-	  GtkTreePath *path;
-	  GtkTreeIter iter;
+      GtkTreeSelection *selection =
+      gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
+      GtkTreePath *path;
+      GtkTreeIter iter;
           /* Make sure the clicked key is selected.  */
-	  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (list),
+      if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (list),
 					     event_button->x,
 					     event_button->y,
 					     &path, NULL,
 					     NULL, NULL))
-	    {
+      {
 	      gtk_tree_model_get_iter (gtk_tree_view_get_model
 				       (GTK_TREE_VIEW(list)), &iter, path);
-	      if (! gtk_tree_selection_iter_is_selected (selection, &iter))
-		{
-		  /* Block selection updates.  */
-		  self->freeze_selection++;
-		  gtk_tree_selection_unselect_all (selection);
-		  self->freeze_selection--;
-		  gtk_tree_selection_select_path (selection, path);
-		}
-	      gtk_menu_popup (menu, NULL, NULL, NULL, NULL,
-			      event_button->button, event_button->time);
-	    }
-	  return TRUE;
-	}
+
+        if (! gtk_tree_selection_iter_is_selected (selection, &iter))
+        {
+          /* Block selection updates.  */
+          self->freeze_selection++;
+          gtk_tree_selection_unselect_all (selection);
+          self->freeze_selection--;
+          gtk_tree_selection_select_path (selection, path);
+        }
+
+        gtk_menu_popup_at_pointer (menu, NULL);
+
+      }
+
+      return TRUE;
     }
+  }
 
   return FALSE;
 }
@@ -1980,8 +2050,6 @@ construct_widgets (GpaKeyManager *self)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
-  GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
-
   icon = gtk_image_new_from_resource ("/org/gnupg/gpa/keyringeditor.xpm");
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
@@ -2023,6 +2091,8 @@ construct_widgets (GpaKeyManager *self)
     gpa_keylist_set_brief (self->keylist);
 
   gtk_container_add (GTK_CONTAINER (scrolled), keylist);
+
+  gtk_menu_attach_to_widget (GTK_MENU (self->popup_menu), GTK_WIDGET (keylist), NULL);
 
   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection
 			      (GTK_TREE_VIEW (keylist))),
