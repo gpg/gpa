@@ -100,7 +100,7 @@ gpa_keygen_wizard_simple_page (GPAKeyGenWizard *keygen_wizard,
   gtk_alignment_set_padding (GTK_ALIGNMENT (align),
 			     pt + 5, pb + 5, pl + 5, pr + 5);
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (align), vbox);
 
   description = gtk_label_new (description_text);
@@ -109,7 +109,7 @@ gpa_keygen_wizard_simple_page (GPAKeyGenWizard *keygen_wizard,
   gtk_label_set_line_wrap (GTK_LABEL (description), TRUE);
   gtk_label_set_justify (GTK_LABEL (description), GTK_JUSTIFY_LEFT);
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
   label = gtk_label_new (label_text);
@@ -229,7 +229,7 @@ gpa_keygen_wizard_backup_page (GPAKeyGenWizard *wizard)
   GtkWidget *description;
   GtkWidget *radio;
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   description = gtk_label_new
     (_("It is recommended that you create a backup copy of your new key,"
@@ -258,7 +258,7 @@ gpa_keygen_wizard_message_page (const gchar *description_text)
   GtkWidget *vbox;
   GtkWidget *description;
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   description = gtk_label_new (description_text);
   gtk_box_pack_start (GTK_BOX (vbox), description, TRUE, TRUE, 0);
