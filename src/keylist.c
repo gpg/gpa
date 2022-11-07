@@ -405,11 +405,11 @@ get_key_pixbuf (gpgme_key_t key)
   if (seckey)
     {
       if (seckey->subkeys && seckey->subkeys->is_cardkey)
-        return GPA_STOCK_SECRET_CARDKEY;
-      return GPA_STOCK_SECRET_KEY;
+        return "blue_yellow_cardkey"; //GPA_STOCK_SECRET_CARDKEY;
+      return "blue_yellow_key"; //GPA_STOCK_SECRET_KEY;
     }
   else
-    return GPA_STOCK_PUBLIC_KEY;
+    return "blue_key"; //GPA_STOCK_PUBLIC_KEY;
 }
 
 
@@ -611,7 +611,8 @@ setup_columns (GpaKeyList *keylist, gboolean detailed)
       g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
 
       column = gtk_tree_view_column_new_with_attributes
-        (NULL, renderer, "stock-id",
+        //(NULL, renderer, "stock-id",
+        (NULL, renderer, "icon-name",
          GPA_KEYLIST_COLUMN_IMAGE,
          NULL);
       gtk_tree_view_append_column (GTK_TREE_VIEW (keylist), column);
