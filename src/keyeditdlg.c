@@ -153,7 +153,7 @@ gpa_key_edit_dialog_constructor (GType                  type,
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  vbox = gtk_dialog_get_content_area(dialog);
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   /* info about the key */
   table = gpa_key_info_new (dialog->key);
