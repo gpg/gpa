@@ -169,7 +169,7 @@ gpa_key_edit_dialog_constructor (GType                  type,
   frame = gtk_frame_new (_("Expiry Date"));
   gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, TRUE, 5);
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (frame), hbox);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_set_spacing (GTK_BOX (hbox), 10);
