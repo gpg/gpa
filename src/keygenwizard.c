@@ -375,7 +375,6 @@ gpa_keygen_wizard_new (GtkWidget *parent,
 
 
   wizard = g_malloc (sizeof (*wizard));
-  GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
 
   GtkWidget *wizard_genkey = gtk_image_new_from_resource ("/org/gnupg/gpa/wizard_genkey.xpm");
   genkey_pixbuf = gtk_image_get_pixbuf (wizard_genkey);
