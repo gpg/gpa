@@ -1996,7 +1996,7 @@ construct_widgets (GpaKeyManager *self)
 
 
 
-  paned = gtk_vpaned_new ();
+  paned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
 
   main_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   align = gtk_alignment_new (0.5, 0.5, 1, 1);
