@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="org/gnupg/gpa">
+    <file>blue_key.xpm</file>
+    <file>blue_yellow_cardkey.xpm</file>
+    <file>blue_yellow_key.xpm</file>
     <file>brief.xpm</file>
     <file>decrypt.xpm</file>
     <file>detailed.xpm</file>
@@ -9,7 +12,9 @@
     <file>edit.xpm</file>
     <file>encrypt.xpm</file>
     <file>export.xpm</file>
+    <file>gpa_blue_key.xpm</file>
     <file>gpa_logo.xpm</file>
+    <file>gpa_yellow_key.xpm</file>
     <file>import.xpm</file>
 
     <file>keyringeditor.xpm</file>

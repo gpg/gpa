@@ -39,10 +39,28 @@
 const char *icons_string =
   "<interface>"
     // blue_key.xpm
+    "<object class='GtkImage' id='blue_key'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>True</property>"
+        "<property name='resource'>blue_key.xpm</property>"
+        "<property name='icon_size'>1</property>"
+      "</object>"
     // blue_yellow_cardkey.xpm
+    "<object class='GtkImage' id='blue_yellow_cardkey'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>True</property>"
+        "<property name='resource'>blue_yellow_cardkey.xpm</property>"
+        "<property name='icon_size'>1</property>"
+      "</object>"
     // blue_yellow_key.xpm
+    "<object class='GtkImage' id='blue_yellow_key'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>True</property>"
+        "<property name='resource'>blue_yellow_key.xpm</property>"
+        "<property name='icon_size'>1</property>"
+      "</object>"
     // brief.xpm
-    "<object class='GtkImage'    id='brief'>"
+    "<object class='GtkImage' id='brief'>"
         "<property name='visible'>True</property>"
         "<property name='can_focus'>False</property>"
         "<property name='resource'>brief.xpm</property>"
@@ -100,13 +118,26 @@ const char *icons_string =
     // floppy.xpm
     // folder.xpm
     // gpa_blue_key.xpm
+    "<object class='GtkImage' id='gpa_blue_key'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>True</property>"
+        "<property name='resource'>gpa_blue_key.xpm</property>"
+        "<property name='icon_size'>1</property>"
+      "</object>"
     // gpa_logo.xpm
     "<object class='GtkImage' id='gpa_logo'>"
         "<property name='visible'>True</property>"
         "<property name='can_focus'>True</property>"
         "<property name='resource'>gpa_logo.xpm</property>"
         "<property name='icon_size'>1</property>"
-      "</object>"    // gpa_yellow_key.xpm
+      "</object>"
+    // gpa_yellow_key.xpm
+    "<object class='GtkImage' id='gpa_yellow_key'>"
+        "<property name='visible'>True</property>"
+        "<property name='can_focus'>True</property>"
+        "<property name='resource'>gpa_yellow_key.xpm</property>"
+        "<property name='icon_size'>1</property>"
+      "</object>"
     // harddisk.xpm
     // help.xpm
     // import.xpm
