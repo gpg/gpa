@@ -1296,9 +1296,9 @@ dialog_level_chooser_cb (GtkComboBox *level_chooser, gpointer *data)
       gint result;
 
       window = gtk_dialog_new_with_buttons
-	(_("GPA Message"), (GtkWindow *) dialog, GTK_DIALOG_MODAL,
-	 GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
-	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+        (_("GPA Message"), (GtkWindow *) dialog, GTK_DIALOG_MODAL,
+        _("_Apply"), GTK_RESPONSE_APPLY,
+        _("_Cancel"), GTK_RESPONSE_CANCEL, NULL);
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 5);
       gtk_dialog_set_default_response (GTK_DIALOG (window),
@@ -1363,10 +1363,10 @@ create_dialog (void)
 					0,
 					NULL);
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
+                          _("Apply"), GTK_RESPONSE_APPLY,
                           _("Reset"), CUSTOM_RESPONSE_RESET,
-                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                          GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                          _("_OK"), GTK_RESPONSE_ACCEPT,
                           NULL );
   /* gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
                                            GTK_RESPONSE_ACCEPT,
