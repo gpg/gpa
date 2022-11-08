@@ -413,9 +413,9 @@ file_open (GtkAction *action, gpointer param)
       gchar *str;
 
       window = gtk_dialog_new_with_buttons
-	(_("GPA Message"), GTK_WINDOW (clipboard), GTK_DIALOG_MODAL,
-	 GTK_STOCK_OPEN, GTK_RESPONSE_OK,
-	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+        (_("GPA Message"), GTK_WINDOW (clipboard), GTK_DIALOG_MODAL,
+        _("_Open"), GTK_RESPONSE_OK,
+        _("_Cancel"), GTK_RESPONSE_CANCEL, NULL);
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 5);
       gtk_dialog_set_default_response (GTK_DIALOG (window),
