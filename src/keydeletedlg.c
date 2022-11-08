@@ -57,7 +57,7 @@ confirm_delete_secret (GtkWidget * parent)
                            "Are you really sure you want to delete it?"));
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
-  GtkBox *box = gtk_dialog_get_content_area(window);
+  GtkBox *box = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
   gtk_box_pack_start(GTK_BOX (box), hbox, TRUE, TRUE, 0);
   gtk_widget_show_all (window);
@@ -101,7 +101,7 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_YES);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
-  vbox = gtk_dialog_get_content_area(window);
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (window));
   // vbox = GTK_DIALOG (window)->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
