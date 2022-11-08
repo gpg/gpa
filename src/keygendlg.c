@@ -173,7 +173,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
 {
   GtkWidget *dialog;
   GtkWidget *vbox;
-  GtkWidget *table;
+  GtkWidget *grid;
 
   GtkWidget *hbox;
   GtkWidget *label;
@@ -202,22 +202,19 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
   vbox = gtk_dialog_get_content_area(dialog);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
-  table = gtk_table_new (9, 2, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+  grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
+  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE, 0);
   rowidx = 0;
 
   label = gtk_label_new_with_mnemonic (_("_Algorithm: "));
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
-                    GTK_FILL, GTK_SHRINK, 0, 0);
-
+  gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   if (forcard)
     {
       label = gtk_label_new (forcard);
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-      gtk_table_attach (GTK_TABLE (table), label, 1, 2, rowidx, rowidx+1,
-                        GTK_FILL, GTK_SHRINK, 0, 0);
+      gtk_grid_attach (GTK_GRID (grid), label, 1, rowidx, 1, 1);
       rowidx++;
     }
   else
@@ -228,15 +225,13 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
 				   algorithm_table[idx].name);
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
-      gtk_table_attach (GTK_TABLE (table), combo, 1, 2, rowidx, rowidx+1,
-                        GTK_FILL, GTK_SHRINK, 0, 0);
+      gtk_grid_attach (GTK_GRID (grid), combo, 1, rowidx, 1, 1);
       self->entry_algo = combo;
       rowidx++;
 
       label = gtk_label_new_with_mnemonic (_("_Key size (bits): "));
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-      gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
-                        GTK_FILL, GTK_SHRINK, 0, 0);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
       combo = gtk_combo_box_text_new ();
       gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "1024");
       gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "1536");
@@ -246,43 +241,36 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 2);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 
-      gtk_table_attach (GTK_TABLE (table), combo, 1, 2, rowidx, rowidx+1,
-                        GTK_FILL, GTK_SHRINK, 0, 0);
+      gtk_grid_attach (GTK_GRID (grid), combo, 1, rowidx, 1, 1);
       self->entry_keysize = combo;
       rowidx++;
     }
 
 
   label = gtk_label_new (NULL);  /* Dummy label.  */
-  gtk_table_attach (GTK_TABLE (table), label, 0, 2, rowidx, rowidx+1,
-                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 2, 1);
   rowidx++;
 
 
   label = gtk_label_new_with_mnemonic (_("User ID: "));
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
-		    GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   label = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, rowidx, rowidx+1,
-                    GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, rowidx, 1, 1);
   self->label_userid = label;
   rowidx++;
 
   label = gtk_label_new (NULL);  /* Dummy label.  */
-  gtk_table_attach (GTK_TABLE (table), label, 0, 2, rowidx, rowidx+1,
-                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 2, 1);
   rowidx++;
 
   label = gtk_label_new_with_mnemonic (_("_Name: "));
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
-		    GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-  gtk_table_attach (GTK_TABLE (table), entry, 1, 2, rowidx, rowidx+1,
-                    GTK_FILL|GTK_EXPAND, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, rowidx, 1, 1);
   self->entry_name = entry;
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (update_preview_cb), self);
@@ -290,12 +278,10 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
 
   label = gtk_label_new_with_mnemonic (_("_Email: "));
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
-		    GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-  gtk_table_attach (GTK_TABLE (table), entry, 1, 2, rowidx, rowidx+1,
-                    GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, rowidx, 1, 1);
   self->entry_email = entry;
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (update_preview_cb), self);
@@ -303,12 +289,10 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
 
   label = gtk_label_new_with_mnemonic (_("_Comment: "));
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
-		    GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-  gtk_table_attach (GTK_TABLE (table), entry, 1, 2, rowidx, rowidx+1,
-                    GTK_FILL|GTK_EXPAND, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, rowidx, 1, 1);
   self->entry_comment = entry;
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (update_preview_cb), self);
@@ -316,11 +300,9 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
 
   label = gtk_label_new_with_mnemonic (_("_Expires: "));
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
-                    GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   button = gpa_date_box_new ();
-  gtk_table_attach (GTK_TABLE (table), button, 1, 2, rowidx, rowidx+1,
-                    GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), button, 1, rowidx, 1, 1);
   self->entry_expire = button;
   rowidx++;
 
@@ -328,14 +310,12 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
     {
       label = gtk_label_new_with_mnemonic (_("Backup: "));
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-      gtk_table_attach (GTK_TABLE (table), label, 0, 1, rowidx, rowidx+1,
-                        GTK_FILL, GTK_SHRINK, 0, 0);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
       button = gtk_check_button_new ();
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-      gtk_table_attach (GTK_TABLE (table), hbox, 1, 2, rowidx, rowidx+1,
-                        GTK_FILL, GTK_SHRINK, 0, 0);
+      gtk_grid_attach (GTK_GRID (grid), hbox, 1, rowidx, 1, 1);
       self->entry_backup = button;
       gpa_add_tooltip (hbox,
                        _("If checked the encryption key will be created "
