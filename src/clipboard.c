@@ -421,7 +421,7 @@ file_open (GtkAction *action, gpointer param)
       gtk_dialog_set_default_response (GTK_DIALOG (window),
 				       GTK_RESPONSE_CANCEL);
 
-      hbox = gtk_hbox_new (FALSE, 0);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
       //gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), hbox);
       GtkWidget *box = gtk_dialog_get_content_area(window);
