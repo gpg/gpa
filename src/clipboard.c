@@ -1419,7 +1419,7 @@ gpa_clipboard_constructor (GType type,
   gtk_widget_realize (GTK_WIDGET (clipboard));
 
   /* Use a vbox to show the menu, toolbar and the text container.  */
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   /* We need to create the text_buffer before we create the menus and
      the toolbar, because of widget sensitivity issues, which depend
@@ -1432,7 +1432,7 @@ gpa_clipboard_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, TRUE, 0);
 
   /* Add a fancy label that tells us: This is the clipboard.  */
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
   /* FIXME: Need better icon.  */
