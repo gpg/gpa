@@ -845,7 +845,7 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
                                            -1);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  GtkBox *box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   gtk_box_pack_start (GTK_BOX (box), hbox,
 		      TRUE, FALSE, 10);
