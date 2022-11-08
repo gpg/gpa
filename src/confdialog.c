@@ -1310,8 +1310,8 @@ dialog_level_chooser_cb (GtkComboBox *level_chooser, gpointer *data)
       GtkWidget *box = gtk_dialog_get_content_area( GTK_DIALOG (window));
 
       gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
-      pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
-					 GTK_ICON_SIZE_DIALOG);
+      pixmap = gtk_image_new_from_icon_name ("dialog-information",
+        GTK_ICON_SIZE_DIALOG);
       gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
       labelMessage = gtk_label_new (_("There are unapplied changes by you. "
 				      "Changing the expert setting will apply "
