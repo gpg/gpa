@@ -992,7 +992,6 @@ key_manager_action_new (GpaKeyManager *self,
                         GtkWidget **popup)
 {
 
-  // Rename this to "entries" when we don't need the GtkActionEntry array below
   static const
     GActionEntry entries[] =
   {
@@ -1026,73 +1025,6 @@ key_manager_action_new (GpaKeyManager *self,
       { "server_send", key_manager_send },
 #endif
   };
-
-  /*
-  static const
-    GtkActionEntry old_entries[] =
-    {
-      // Toplevel.
-      { "File", NULL, N_("_File"), NULL },
-      { "Edit", NULL, N_("_Edit"), NULL },
-      { "Keys", NULL, N_("_Keys"), NULL },
-#ifdef ENABLE_KEYSERVER_SUPPORT
-      { "Server", NULL, N_("_Server"), NULL },
-#endif
-
-      // File menu.
-      { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
-	"FIXME", G_CALLBACK (key_manager_close) },
-      { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
-          N_("Quit the program"), G_CALLBACK (g_application_quit) },
-
-      // Edit menu.
-      { "EditCopy", GTK_STOCK_COPY, NULL, NULL,
-          N_("Copy the selection"), G_CALLBACK (key_manager_copy) },
-      { "EditCopyFpr", GTK_STOCK_COPY, N_("Copy _Fingerprint"), "<control>F",
-          N_("Copy the fingerprints"), G_CALLBACK (key_manager_copy_fpr) },
-      { "EditCopySec", GTK_STOCK_COPY, N_("Copy Private Key"), NULL,
-          N_("Copy a single private key"), G_CALLBACK (key_manager_copy_sec) },
-      { "EditPaste", GTK_STOCK_PASTE, NULL, NULL,
-          N_("Paste the clipboard"), G_CALLBACK (key_manager_paste) },
-      { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",
-          N_("Select all certificates"),
-            G_CALLBACK (key_manager_select_all) },
-
-      // Keys menu.
-      { "KeysRefresh", GTK_STOCK_REFRESH, NULL, NULL,
-          N_("Refresh the keyring"), G_CALLBACK (key_manager_refresh) },
-      { "KeysNew", GTK_STOCK_NEW, N_("_New key..."), NULL,
-          N_("Generate a new key"), G_CALLBACK (key_manager_generate_key) },
-      { "KeysDelete", GTK_STOCK_DELETE, N_("_Delete keys"), NULL,
-          N_("Remove the selected key"), G_CALLBACK (key_manager_delete) },
-      { "KeysSign", GPA_STOCK_SIGN, N_("_Sign Keys..."), NULL,
-          N_("Sign the selected key"), G_CALLBACK (key_manager_sign) },
-      { "KeysSetOwnerTrust", NULL, N_("Set _Owner Trust..."), NULL,
-          N_("Set owner trust of the selected key"),
-	G_CALLBACK (key_manager_trust) },
-      { "KeysEditPrivateKey", GPA_STOCK_EDIT, N_("_Edit Private Key..."), NULL,
-          N_("Edit the selected private key"),
-	G_CALLBACK (key_manager_edit) },
-      { "KeysImport", GPA_STOCK_IMPORT, N_("_Import Keys..."), NULL,
-          N_("Import Keys"), G_CALLBACK (key_manager_import) },
-      { "KeysExport", GPA_STOCK_EXPORT, N_("E_xport Keys..."), NULL,
-          N_("Export Keys"), G_CALLBACK (key_manager_export) },
-      { "KeysBackup", NULL, N_("_Backup..."), NULL,
-          N_("Backup key"), G_CALLBACK (key_manager_backup) },
-
-      // Server menu.
-#ifdef ENABLE_KEYSERVER_SUPPORT
-      { "ServerRetrieve", NULL, N_("_Retrieve Keys..."), NULL,
-        N_("Retrieve keys from server"),
-        G_CALLBACK (key_manager_retrieve) },
-      { "ServerRefresh", NULL, N_("Re_fresh Keys"), NULL,
-        N_("Refresh keys from server"),
-        G_CALLBACK (key_manager_refresh_keys) },
-      { "ServerSend", NULL, N_("_Send Keys..."), NULL,
-        N_("Send keys to server"), G_CALLBACK (key_manager_send) }
-#endif //ENABLE_KEYSERVER_SUPPORT
-    };
-    */
 
   static const GtkRadioActionEntry radio_entries[] =
     {
@@ -1228,27 +1160,6 @@ key_manager_action_new (GpaKeyManager *self,
           "</item>"
         "</submenu>"
     "</menu>"
-
-    /*
-        "  <popup name='PopupMenu'>"
-    "    <menuitem action='EditCopyFpr'/>"
-    "    <menuitem action='EditCopy'/>"
-    "    <menuitem action='EditPaste'/>"
-    "    <menuitem action='KeysDelete'/>"
-    "    <separator/>"
-    "    <menuitem action='KeysSign'/>"
-    "    <menuitem action='KeysSetOwnerTrust'/>"
-    "    <menuitem action='KeysEditPrivateKey'/>"
-    "    <menuitem action='EditCopySec'/>"
-    "    <separator/>"
-    "    <menuitem action='KeysExport'/>"
-#ifdef ENABLE_KEYSERVER_SUPPORT
-    "    <menuitem action='ServerRefresh'/>"
-    "    <menuitem action='ServerSend'/>"
-#endif
-    "    <menuitem action='KeysBackup'/>"
-    "  </popup>"
-    */
 
     "<object id='toolbar' class='GtkToolbar'>"
       "<property name='visible'>True</property>"
@@ -1495,210 +1406,6 @@ key_manager_action_new (GpaKeyManager *self,
 
   "</interface>";
 
-/*
-  static const char *ui_description =
-    "<ui>"
-    "  <menubar name='MainMenu'>"
-    "    <menu action='File'>"
-    "      <menuitem action='FileClose'/>"
-    "      <menuitem action='FileQuit'/>"
-    "    </menu>"
-    "    <menu action='Edit'>"
-    "      <menuitem action='EditCopy'/>"
-    "      <menuitem action='EditPaste'/>"
-    "      <separator/>"
-    "      <menuitem action='EditSelectAll'/>"
-    "      <separator/>"
-    "      <menuitem action='EditPreferences'/>"
-    "      <menuitem action='EditBackendPreferences'/>"
-    "    </menu>"
-    "    <menu action='Keys'>"
-    "      <menuitem action='KeysRefresh'/>"
-    "      <separator/>"
-    "      <menuitem action='KeysNew'/>"
-    "      <menuitem action='KeysDelete'/>"
-    "      <separator/>"
-    "      <menuitem action='KeysSign'/>"
-    "      <menuitem action='KeysSetOwnerTrust'/>"
-    "      <menuitem action='KeysEditPrivateKey'/>"
-    "      <separator/>"
-    "      <menuitem action='KeysImport'/>"
-    "      <menuitem action='KeysExport'/>"
-    "      <menuitem action='KeysBackup'/>"
-    "    </menu>"
-    "    <menu action='Windows'>"
-    "      <menuitem action='WindowsKeyringEditor'/>"
-    "      <menuitem action='WindowsFileManager'/>"
-    "      <menuitem action='WindowsClipboard'/>"
-#ifdef ENABLE_CARD_MANAGER
-    "      <menuitem action='WindowsCardManager'/>"
-#endif
-    "    </menu>"
-#ifdef ENABLE_KEYSERVER_SUPPORT
-    "    <menu action='Server'>"
-    "      <menuitem action='ServerRetrieve'/>"
-    "      <menuitem action='ServerSend'/>"
-    "    </menu>"
-#endif // ENABLE_KEYSERVER_SUPPORT
-    "    <menu action='Help'>"
-#if 0
-    "      <menuitem action='HelpContents'/>"
-#endif
-    "      <menuitem action='HelpAbout'/>"
-    "    </menu>"
-    "  </menubar>"
-    "  <toolbar name='ToolBar'>"
-    "    <toolitem action='KeysEditPrivateKey'/>"
-    "    <toolitem action='KeysDelete'/>"
-    "    <toolitem action='KeysSign'/>"
-    "    <toolitem action='KeysImport'/>"
-    "    <toolitem action='KeysExport'/>"
-    "    <separator/>"
-    "    <toolitem action='DetailsBrief'/>"
-    "    <toolitem action='DetailsDetailed'/>"
-    "    <separator/>"
-    "    <toolitem action='EditPreferences'/>"
-    "    <separator/>"
-    "    <toolitem action='KeysRefresh'/>"
-    "    <separator/>"
-    "    <toolitem action='WindowsFileManager'/>"
-    "    <toolitem action='WindowsClipboard'/>"
-#ifdef ENABLE_CARD_MANAGER
-    "    <toolitem action='WindowsCardManager'/>"
-#endif
-#if 0
-    "    <toolitem action='HelpContents'/>"
-#endif
-    "  </toolbar>"
-    "  <popup name='PopupMenu'>"
-    "    <menuitem action='EditCopyFpr'/>"
-    "    <menuitem action='EditCopy'/>"
-    "    <menuitem action='EditPaste'/>"
-    "    <menuitem action='KeysDelete'/>"
-    "    <separator/>"
-    "    <menuitem action='KeysSign'/>"
-    "    <menuitem action='KeysSetOwnerTrust'/>"
-    "    <menuitem action='KeysEditPrivateKey'/>"
-    "    <menuitem action='EditCopySec'/>"
-    "    <separator/>"
-    "    <menuitem action='KeysExport'/>"
-#ifdef ENABLE_KEYSERVER_SUPPORT
-    "    <menuitem action='ServerRefresh'/>"
-    "    <menuitem action='ServerSend'/>"
-#endif
-    "    <menuitem action='KeysBackup'/>"
-    "  </popup>"
-    "</ui>";
-    */
-
-#ifdef OLD_MENU
-
-  GtkAccelGroup *accel_group;
-  GtkActionGroup *action_group;
-  GtkAction *action;
-  GtkUIManager *ui_manager;
-  GError *error;
-  int detailed;
-
-  detailed = gpa_options_get_detailed_view (gpa_options_get_instance());
-
-  action_group = gtk_action_group_new ("MenuActions");
-  gtk_action_group_set_translation_domain (action_group, PACKAGE);
-  gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries),
-				self);
-  gtk_action_group_add_radio_actions (action_group, radio_entries,
-				      G_N_ELEMENTS (radio_entries),
-				      detailed ? 1 : 0,
-				      G_CALLBACK (keyring_set_listing_cb),
-				      self);
-  gtk_action_group_add_actions (action_group, gpa_help_menu_action_entries,
-				G_N_ELEMENTS (gpa_help_menu_action_entries),
-				GTK_WIDGET (self));
-  gtk_action_group_add_actions (action_group, gpa_windows_menu_action_entries,
-				G_N_ELEMENTS (gpa_windows_menu_action_entries),
-				GTK_WIDGET (self));
-  gtk_action_group_add_actions
-    (action_group, gpa_preferences_menu_action_entries,
-     G_N_ELEMENTS (gpa_preferences_menu_action_entries), GTK_WIDGET (self));
-  ui_manager = gtk_ui_manager_new ();
-  gtk_ui_manager_insert_action_group (ui_manager, action_group, 0);
-  accel_group = gtk_ui_manager_get_accel_group (ui_manager);
-  gtk_window_add_accel_group (GTK_WINDOW (GTK_WIDGET (self)), accel_group);
-  if (! gtk_ui_manager_add_ui_from_string (ui_manager, ui_description,
-					   -1, &error))
-    {
-      g_message ("building keyring menus failed: %s", error->message);
-      g_error_free (error);
-      exit (EXIT_FAILURE);
-    }
-
-  // Fixup the icon theme labels which are too long for the toolbar.
-  action = gtk_action_group_get_action (action_group, "KeysEditPrivateKey");
-  g_object_set (action, "short_label", _("Edit"), NULL);
-  action = gtk_action_group_get_action (action_group, "KeysDelete");
-  g_object_set (action, "short_label", _("Delete"), NULL);
-  action = gtk_action_group_get_action (action_group, "KeysSign");
-  g_object_set (action, "short_label", _("Sign"), NULL);
-  action = gtk_action_group_get_action (action_group, "KeysExport");
-  g_object_set (action, "short_label", _("Export"), NULL);
-  action = gtk_action_group_get_action (action_group, "KeysImport");
-  g_object_set (action, "short_label", _("Import"), NULL);
-  action = gtk_action_group_get_action (action_group, "WindowsFileManager");
-  g_object_set (action, "short_label", _("Files"), NULL);
-#ifdef ENABLE_CARD_MANAGER
-  action = gtk_action_group_get_action (action_group, "WindowsCardManager");
-  g_object_set (action, "short_label", _("Card"), NULL);
-#endif
-
-  // Take care of sensitiveness of widgets.
-  action = gtk_action_group_get_action (action_group, "EditCopy");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_selection);
-  action = gtk_action_group_get_action (action_group, "EditCopyFpr");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_selection);
-  action = gtk_action_group_get_action (action_group, "EditCopySec");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_single_selection);
-  action = gtk_action_group_get_action (action_group, "KeysDelete");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_selection);
-  action = gtk_action_group_get_action (action_group, "KeysExport");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_selection);
-
-#ifdef ENABLE_KEYSERVER_SUPPORT
-  action = gtk_action_group_get_action (action_group, "ServerRefresh");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_single_selection);
-  action = gtk_action_group_get_action (action_group, "ServerSend");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_single_selection);
-#endif // ENABLE_KEYSERVER_SUPPORT
-
-  action = gtk_action_group_get_action (action_group, "KeysSetOwnerTrust");
-  add_selection_sensitive_action (self, action,
-				  key_manager_has_single_selection_OpenPGP);
-
-  action = gtk_action_group_get_action (action_group, "KeysSign");
-  add_selection_sensitive_action (self, action,
-				  key_manager_can_sign);
-
-  action = gtk_action_group_get_action (action_group, "KeysEditPrivateKey");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_private_selected);
-  action = gtk_action_group_get_action (action_group, "KeysBackup");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_private_selected);
-
-  *menu = gtk_ui_manager_get_widget (ui_manager, "/MainMenu");
-  *toolbar = gtk_ui_manager_get_widget (ui_manager, "/ToolBar");
-  gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
-
-  *popup = gtk_ui_manager_get_widget (ui_manager, "/PopupMenu");
-
-#else
-
   GError **err;
 
   GtkBuilder *gtk_builder = gtk_builder_new ();
@@ -1814,23 +1521,7 @@ key_manager_action_new (GpaKeyManager *self,
   add_selection_sensitive_action (self, action,
                                   key_manager_has_private_selected);
 
-  /*
-  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "keys_backup");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_private_selected);
-  */
-
   *toolbar = GTK_WIDGET (grid);
-
-/*
-  action = gtk_action_group_get_action (action_group, "EditCopy");
-  add_selection_sensitive_action (self, action,
-                                  key_manager_has_selection);
-                                  */
-#endif
-
-
-
 }
 
 
