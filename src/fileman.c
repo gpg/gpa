@@ -311,7 +311,7 @@ has_selection (gpointer param)
 /* Add WIDGET to the list of sensitive actions of FILEMAN.  */
 static void
 add_selection_sensitive_action (GpaFileManager *fileman,
-				 GtkAction *action,
+				 GSimpleAction *action,
 				 sensitivity_func_t callback)
 {
   g_object_set_data (G_OBJECT (action), "gpa_sensitivity", callback);
@@ -328,7 +328,7 @@ update_selection_sensitive_action (gpointer data, gpointer param)
   sensitivity_func_t func;
 
   func = g_object_get_data (G_OBJECT (data), "gpa_sensitivity");
-  gtk_action_set_sensitive (GTK_ACTION (data), func (param));
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (data), func (param));
 }
 
 
@@ -395,7 +395,7 @@ open_file_one (gpointer data, gpointer user_data)
 
 
 static void
-file_open (GtkAction *action, gpointer param)
+file_open (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaFileManager *fileman = param;
   GSList *filenames;
@@ -411,7 +411,7 @@ file_open (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Clear".  */
 static void
-file_clear (GtkAction *action, gpointer param)
+file_clear (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaFileManager *fileman = param;
   GtkListStore *store = GTK_LIST_STORE (gtk_tree_view_get_model
@@ -423,7 +423,7 @@ file_clear (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Verify".  */
 static void
-file_verify (GtkAction *action, gpointer param)
+file_verify (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaFileManager *fileman = param;
   GList *files;
@@ -441,7 +441,7 @@ file_verify (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Sign".  */
 static void
-file_sign (GtkAction *action, gpointer param)
+file_sign (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaFileManager *fileman = param;
   GList * files;
@@ -459,7 +459,7 @@ file_sign (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Encrypt".  */
 static void
-file_encrypt (GtkAction *action, gpointer param)
+file_encrypt (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaFileManager *fileman = param;
   GList *files;
@@ -477,7 +477,7 @@ file_encrypt (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Decrypt".  */
 static void
-file_decrypt (GtkAction *action, gpointer param)
+file_decrypt (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaFileManager *fileman = param;
   GList *files;
@@ -495,7 +495,7 @@ file_decrypt (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Close".  */
 static void
-file_close (GtkAction *action, gpointer param)
+file_close (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaFileManager *fileman = param;
   gtk_widget_destroy (GTK_WIDGET (fileman));
@@ -504,7 +504,7 @@ file_close (GtkAction *action, gpointer param)
 
 /* Handle menu item "Edit/Select All".  */
 static void
-edit_select_all (GtkAction *action, gpointer param)
+edit_select_all (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaFileManager *fileman = param;
 
@@ -538,13 +538,14 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
     { "edit_select_all", edit_select_all },
   };
 
+  /*
   static const GtkActionEntry old_entries[] =
     {
-      /* Toplevel.  */
+      // Toplevel.
       { "File", NULL, N_("_File"), NULL },
       { "Edit", NULL, N_("_Edit"), NULL },
 
-      /* File menu.  */
+      // File menu.
       { "FileOpen", GTK_STOCK_OPEN, NULL, NULL,
 	N_("Open a file"), G_CALLBACK (file_open) },
       { "FileClear", GTK_STOCK_CLEAR, NULL, NULL,
@@ -562,10 +563,11 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
 	N_("Quit the program"), G_CALLBACK (g_application_quit) },
 
-      /* Edit menu.  */
+      // Edit menu.
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, "<control>A",
 	N_("Select all files"), G_CALLBACK (edit_select_all) }
     };
+    */
 
     /*
   static const char *ui_description =
@@ -998,7 +1000,19 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
                                     gpa_preferences_menu_g_action_entries,
                                     G_N_ELEMENTS (gpa_preferences_menu_g_action_entries),
                                     fileman);
+  GSimpleAction *action;
 
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "file_sign");
+  add_selection_sensitive_action (fileman, action, has_selection);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "file_verify");
+  add_selection_sensitive_action (fileman, action, has_selection);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "file_encrypt");
+  add_selection_sensitive_action (fileman, action, has_selection);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "file_decrypt");
+  add_selection_sensitive_action (fileman, action, has_selection);
 }
 
 
@@ -1178,7 +1192,7 @@ gpa_file_manager_constructor (GType type,
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
-  icon = gtk_image_new_from_stock ("gtk-directory", GTK_ICON_SIZE_DND);
+  icon = gtk_image_new_from_icon_name ("folder", GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);
