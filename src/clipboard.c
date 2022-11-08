@@ -426,7 +426,7 @@ file_open (GSimpleAction *simple, GVariant *parameter, gpointer param)
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
       //gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), hbox);
-      GtkWidget *box = gtk_dialog_get_content_area(window);
+      GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (window));
       gtk_box_pack_start( GTK_BOX (box), hbox, TRUE, TRUE, 0);
       pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
 					 GTK_ICON_SIZE_DIALOG);
