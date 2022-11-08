@@ -849,8 +849,7 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
 
   gtk_box_pack_start (GTK_BOX (box), hbox,
 		      TRUE, FALSE, 10);
-  pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION,
-				     GTK_ICON_SIZE_DIALOG);
+  pixmap = gtk_image_new_from_icon_name("dialog-warning", GTK_ICON_SIZE_DIALOG);
   gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, FALSE, 10);
