@@ -49,9 +49,11 @@ confirm_delete_secret (GtkWidget * parent)
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_NO);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 10);
-  gtk_box_pack_start (GTK_BOX (hbox), gtk_image_new_from_stock
-                               (GTK_STOCK_DIALOG_WARNING, 
-                                GTK_ICON_SIZE_DIALOG), TRUE, TRUE, 0);
+
+  GtkWidget *image_warning;
+  image_warning = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_DIALOG);
+
+  gtk_box_pack_start (GTK_BOX (hbox), GTK_WIDGET (image_warning), TRUE, TRUE, 0);
   label = gtk_label_new (_("If you delete this key, you won't be able to\n"
                            "read messages encrypted with it.\n\n"
                            "Are you really sure you want to delete it?"));
