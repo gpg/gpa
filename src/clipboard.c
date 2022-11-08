@@ -169,7 +169,7 @@ typedef gboolean (*sensitivity_func_t)(gpointer);
 /* Add widget to the list of sensitive widgets of editor.  */
 static void
 add_selection_sensitive_action (GpaClipboard *clipboard,
-                                GtkAction *action)
+                                GSimpleAction *action)
 {
   clipboard->selection_sensitive_actions
     = g_list_append (clipboard->selection_sensitive_actions, action);
@@ -192,7 +192,8 @@ has_selection (gpointer param)
 static void
 update_selection_sensitive_action (gpointer data, gpointer param)
 {
-  gtk_action_set_sensitive (GTK_ACTION (data), has_selection (param));
+//   gtk_action_set_sensitive (GTK_ACTION (data), has_selection (param));
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (data), has_selection (param));
 }
 
 
@@ -210,7 +211,7 @@ update_selection_sensitive_actions (GpaClipboard *clipboard)
 
 /* Add ACTION to the list of sensitive actions of CLIPBOARD.  */
 static void
-add_paste_sensitive_action (GpaClipboard *clipboard, GtkAction *action)
+add_paste_sensitive_action (GpaClipboard *clipboard, GSimpleAction *action)
 {
   clipboard->paste_sensitive_actions
     = g_list_append (clipboard->paste_sensitive_actions, action);
@@ -222,7 +223,8 @@ update_paste_sensitive_action (gpointer data, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
-  gtk_action_set_sensitive (GTK_ACTION (data), clipboard->paste_p);
+  // gtk_action_set_sensitive (GTK_ACTION (data), clipboard->paste_p);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (data), clipboard->paste_p);
 }
 
 
@@ -317,7 +319,7 @@ register_operation (GpaClipboard *clipboard, GpaFileOperation *op)
 
 /* Handle menu item "File/Clear".  */
 static void
-file_clear (GtkAction *action, gpointer param)
+file_clear (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -373,7 +375,7 @@ get_load_file_name (GtkWidget *parent, const gchar *title)
 
 /* Handle menu item "File/Open".  */
 static void
-file_open (GtkAction *action, gpointer param)
+file_open (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = param;
   gchar *filename;
@@ -539,7 +541,7 @@ get_save_file_name (GtkWidget *parent, const gchar *title)
 
 /* Handle menu item "File/Save As...".  */
 static void
-file_save_as (GtkAction *action, gpointer param)
+file_save_as (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = param;
   gchar *filename;
@@ -579,7 +581,7 @@ file_save_as (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Verify".  */
 static void
-file_verify (GtkAction *action, gpointer param)
+file_verify (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = (GpaClipboard *) param;
   GpaFileVerifyOperation *op;
@@ -609,7 +611,7 @@ file_verify (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Sign".  */
 static void
-file_sign (GtkAction *action, gpointer param)
+file_sign (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = (GpaClipboard *) param;
   GpaFileSignOperation *op;
@@ -639,7 +641,7 @@ file_sign (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Encrypt".  */
 static void
-file_encrypt (GtkAction *action, gpointer param)
+file_encrypt (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = (GpaClipboard *) param;
   GpaFileEncryptOperation *op;
@@ -669,7 +671,7 @@ file_encrypt (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Decrypt".  */
 static void
-file_decrypt (GtkAction *action, gpointer param)
+file_decrypt (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = (GpaClipboard *) param;
   GpaFileDecryptOperation *op;
@@ -699,7 +701,15 @@ file_decrypt (GtkAction *action, gpointer param)
 
 /* Handle menu item "File/Close".  */
 static void
-file_close (GtkAction *action, gpointer param)
+file_close (GSimpleAction *simple, GVariant *parameter, gpointer param)
+{
+  GpaClipboard *clipboard = param;
+  gtk_widget_destroy (GTK_WIDGET (clipboard));
+}
+
+/* Handle menu item "File/Quit".  */
+static void
+file_quit (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = param;
   gtk_widget_destroy (GTK_WIDGET (clipboard));
@@ -707,7 +717,7 @@ file_close (GtkAction *action, gpointer param)
 
 
 static void
-edit_cut (GtkAction *action, gpointer param)
+edit_cut (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -717,7 +727,7 @@ edit_cut (GtkAction *action, gpointer param)
 
 
 static void
-edit_copy (GtkAction *action, gpointer param)
+edit_copy (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -727,7 +737,7 @@ edit_copy (GtkAction *action, gpointer param)
 
 
 static void
-edit_paste (GtkAction *action, gpointer param)
+edit_paste (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -737,7 +747,7 @@ edit_paste (GtkAction *action, gpointer param)
 
 
 static void
-edit_delete (GtkAction *action, gpointer param)
+edit_delete (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -747,7 +757,7 @@ edit_delete (GtkAction *action, gpointer param)
 
 /* Handle menu item "Edit/Select All".  */
 static void
-edit_select_all (GtkAction *action, gpointer param)
+edit_select_all (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
   GpaClipboard *clipboard = param;
 
@@ -774,7 +784,7 @@ clipboard_action_new (GpaClipboard *clipboard,
     { "file_encrypt", file_encrypt },
     { "file_decrypt", file_decrypt },
     { "file_close", file_close },
-    { "file_quit", g_application_quit },
+    { "file_quit", file_quit },
 #if g
     { "edit_undo", edit_undo },
     { "edit_redo", edit_redo },
@@ -1328,6 +1338,21 @@ clipboard_action_new (GpaClipboard *clipboard,
                                     gpa_preferences_menu_g_action_entries,
                                     G_N_ELEMENTS (gpa_preferences_menu_g_action_entries),
                                     clipboard);
+
+  GSimpleAction *action;
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "edit_cut");
+  add_selection_sensitive_action (clipboard, action);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "edit_copy");
+  add_selection_sensitive_action (clipboard, action);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "edit_delete");
+  add_selection_sensitive_action (clipboard, action);
+
+  action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "edit_paste");
+  // Initialized later
+  add_paste_sensitive_action (clipboard, action);
+
 #endif
 }
 
