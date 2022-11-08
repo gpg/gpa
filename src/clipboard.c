@@ -1299,7 +1299,7 @@ clipboard_action_new (GpaClipboard *clipboard,
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (grid));
 
-  *toolbar = grid;
+  *toolbar = GTK_WIDGET (grid);
 
   // We must set the name to the toolbar for css to recognize it
   gtk_widget_set_name(*toolbar, "toolbar");
