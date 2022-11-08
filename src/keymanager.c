@@ -835,6 +835,13 @@ key_manager_close (GSimpleAction *simple, GVariant *parameter, gpointer param)
   gtk_widget_destroy (GTK_WIDGET (this_instance));
 }
 
+/* Quit the program */
+static void
+key_manager_quit (GSimpleAction *simple, GVariant *parameter, gpointer param)
+{
+  gtk_widget_destroy (GTK_WIDGET (this_instance));
+}
+
 
 /* select all keys in the keyring */
 static void
@@ -1000,7 +1007,7 @@ key_manager_action_new (GpaKeyManager *self,
       { "keys", NULL },
 
       { "file_close", key_manager_close },
-      { "file_quit", key_manager_close },
+      { "file_quit", key_manager_quit },
 
       { "edit_copy", key_manager_copy },
       { "edit_copy_fingerprint", key_manager_copy_fpr },
