@@ -428,8 +428,7 @@ file_open (GSimpleAction *simple, GVariant *parameter, gpointer param)
       //gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), hbox);
       GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (window));
       gtk_box_pack_start( GTK_BOX (box), hbox, TRUE, TRUE, 0);
-      pixmap = gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO,
-					 GTK_ICON_SIZE_DIALOG);
+      pixmap = gtk_image_new_from_icon_name ("dialog-information", GTK_ICON_SIZE_DIALOG);
       gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
 
       /* TRANSLATORS: The arguments are the filename, the integer size
@@ -1461,7 +1460,7 @@ gpa_clipboard_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
   /* FIXME: Need better icon.  */
-  icon = gtk_image_new_from_stock (GTK_STOCK_PASTE, GTK_ICON_SIZE_DND);
+  icon = gtk_image_new_from_icon_name ("edit-paste", GTK_ICON_SIZE_DND);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, TRUE, 0);
 
   label = gtk_label_new (NULL);
