@@ -253,22 +253,20 @@ details_page_fill_num_keys (GpaKeyDetails *kdt, gint num_key)
 
 /* Add a single row to the details table.  */
 static GtkWidget *
-add_details_row (GtkWidget *table, gint row, gchar *text,
+add_details_row (GtkWidget *grid, gint row, gchar *text,
                  gboolean selectable)
 {
   GtkWidget *widget;
 
   widget = gtk_label_new (text);
-  gtk_table_attach (GTK_TABLE (table), widget, 0, 1, row, row + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), widget, 0, row, 1, 1);
   gtk_misc_set_alignment (GTK_MISC (widget), 1.0, 0.0);
 
   widget = gtk_label_new ("");
   gtk_label_set_selectable (GTK_LABEL (widget), selectable);
   gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
 
-  gtk_table_attach (GTK_TABLE (table), widget, 1, 2, row, row + 1,
-                    GTK_FILL | GTK_EXPAND, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), widget, 1, row, 1, 1);
 
   return widget;
 }
@@ -277,7 +275,7 @@ add_details_row (GtkWidget *table, gint row, gchar *text,
 static void
 construct_details_page (GpaKeyDetails *kdt)
 {
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *label;
   GtkWidget *vbox;
   GtkWidget *scrolled;
@@ -302,35 +300,35 @@ construct_details_page (GpaKeyDetails *kdt)
   kdt->details_num_label = label;
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
 
-  table = gtk_table_new (2, 7, FALSE);
-  kdt->details_table = table;
-  gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
+  grid = gtk_grid_new ();
+  kdt->details_table = grid;
+  gtk_box_pack_start (GTK_BOX (vbox), grid, TRUE, TRUE, 0);
+  // gtk_table_set_row_spacing (GTK_TABLE (grid), 0, 2);
+  // gtk_table_set_col_spacing (GTK_TABLE (grid), 0, 4);
 
   table_row = 0;
   kdt->detail_public_private = add_details_row
-    (table, table_row++, "", TRUE);
+    (grid, table_row++, "", TRUE);
   kdt->detail_capabilities = add_details_row
-    (table, table_row++, "", TRUE);
+    (grid, table_row++, "", TRUE);
   kdt->detail_name = add_details_row
-    (table, table_row++, _("User name:"), TRUE);
+    (grid, table_row++, _("User name:"), TRUE);
   kdt->detail_fingerprint = add_details_row
-    (table, table_row++, _("Fingerprint:"), TRUE);
+    (grid, table_row++, _("Fingerprint:"), TRUE);
   kdt->detail_key_id = add_details_row
-    (table, table_row++, _("Key ID:"), TRUE);
+    (grid, table_row++, _("Key ID:"), TRUE);
   kdt->detail_expiry = add_details_row
-    (table, table_row++, _("Expires at:"), FALSE);
+    (grid, table_row++, _("Expires at:"), FALSE);
   kdt->detail_owner_trust = add_details_row
-    (table, table_row++, _("Owner Trust:"), FALSE);
+    (grid, table_row++, _("Owner Trust:"), FALSE);
   kdt->detail_key_trust = add_details_row
-    (table, table_row++, _("Key validity:"), FALSE);
+    (grid, table_row++, _("Key validity:"), FALSE);
   kdt->detail_key_type = add_details_row
-    (table, table_row++, _("Key type:"), FALSE);
+    (grid, table_row++, _("Key type:"), FALSE);
   kdt->detail_creation = add_details_row
-    (table, table_row++, _("Created at:"), FALSE);
+    (grid, table_row++, _("Created at:"), FALSE);
   kdt->detail_last_update = add_details_row
-    (table, table_row++, _("Last update:"), FALSE);
+    (grid, table_row++, _("Last update:"), FALSE);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (kdt), scrolled,
                             gtk_label_new (_("Details")));
