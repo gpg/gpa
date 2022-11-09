@@ -293,7 +293,7 @@ construct_details_page (GpaKeyDetails *kdt)
                                   GTK_POLICY_AUTOMATIC);
   viewport = gtk_viewport_new (NULL, NULL);
   gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
   gtk_container_add (GTK_CONTAINER (viewport), vbox);
   gtk_container_add (GTK_CONTAINER (scrolled), viewport);
@@ -364,7 +364,7 @@ build_uid_page (GpaKeyDetails *kdt, gpgme_key_t key)
     return;
 
   /* Create a new page.  */
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
@@ -421,13 +421,13 @@ build_signatures_page (GpaKeyDetails *kdt, gpgme_key_t key)
   if (!key)
     return;
 
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
   /* If there is more than one OpenPGP UID, we need a select button.  */
   if (key->uids && key->uids->next && key->protocol == GPGME_PROTOCOL_OpenPGP)
     {
-      hbox = gtk_hbox_new (FALSE, 5);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
       label = gtk_label_new (_("Show signatures on user name:"));
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
       kdt->signatures_uids = gtk_combo_box_text_new ();
@@ -531,7 +531,7 @@ build_subkeys_page (GpaKeyDetails *kdt, gpgme_key_t key)
     return;
 
   /* Create a new page.  */
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
@@ -585,7 +585,7 @@ build_tofu_page (GpaKeyDetails *kdt, gpgme_key_t key)
     return;
 
   /* Create a new page.  */
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
