@@ -209,7 +209,6 @@ gpa_keylist_init (GTypeInstance *instance, void *class_ptr)
 
   /* Setup the view.  */
   gtk_tree_view_set_model (GTK_TREE_VIEW (list), GTK_TREE_MODEL (store));
-  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
   gpa_keylist_set_brief (list);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (list));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
