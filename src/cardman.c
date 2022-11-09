@@ -1098,8 +1098,8 @@ construct_widgets (GpaCardManager *cardman)
   gtk_label_set_markup (GTK_LABEL (label), markup);
   g_free (markup);
   gtk_box_pack_start (GTK_BOX (hbox1), label, TRUE, TRUE, 10);
-  gtk_widget_set_halign (GTK_WIDGET (label), 0);
-  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   /* Add a application selection box.  */
   hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

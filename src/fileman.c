@@ -1201,7 +1201,9 @@ gpa_file_manager_constructor (GType type,
   gtk_label_set_markup (GTK_LABEL (label), markup);
   g_free (markup);
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 10);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+
 
 
   /* Third a hbox with the file list.  */
