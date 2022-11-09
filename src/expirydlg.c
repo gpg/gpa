@@ -108,7 +108,7 @@ gpa_expiry_dialog_run (GtkWidget * parent, gpgme_key_t key, GDate ** new_date)
   window = gtk_dialog_new_with_buttons (_("Change expiry date"),
                                         GTK_WINDOW (parent),
                                         GTK_DIALOG_MODAL,
-                                        GTK_STOCK_OK,
+                                        _("_OK"),
                                         GTK_RESPONSE_OK,
                                         _("_Cancel"),
                                         GTK_RESPONSE_CANCEL,
