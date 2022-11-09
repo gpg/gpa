@@ -839,10 +839,11 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
           _("_Cancel"), GTK_RESPONSE_CANCEL,
           _("_OK"), GTK_RESPONSE_OK,
           NULL);
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+  /*gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
                                            GTK_RESPONSE_OK,
                                            GTK_RESPONSE_CANCEL,
                                            -1);
+  */
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
