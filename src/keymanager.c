@@ -839,7 +839,7 @@ key_manager_close (GSimpleAction *simple, GVariant *parameter, gpointer param)
 static void
 key_manager_quit (GSimpleAction *simple, GVariant *parameter, gpointer param)
 {
-  gtk_widget_destroy (GTK_WIDGET (this_instance));
+  g_application_quit (G_APPLICATION (get_gpa_application ()));
 }
 
 
