@@ -49,7 +49,7 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   GtkWidget *window;
   GtkWidget *vboxSign;
   GtkWidget *check = NULL;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *label;
   GtkWidget *uid_box;
   GtkResponseType response;
@@ -67,20 +67,20 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
   // vboxSign = GTK_DIALOG (window)->vbox;
-  vboxSign = gtk_dialog_get_content_area(window);
+  vboxSign = GTK_WIDGET (gtk_dialog_get_content_area(window));
   gtk_container_set_border_width (GTK_CONTAINER (vboxSign), 5);
 
   label = gtk_label_new (_("Do you want to sign the following key?"));
   gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 5);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
-  table = gtk_table_new (2, 2, FALSE);
-  gtk_box_pack_start (GTK_BOX (vboxSign), table, FALSE, TRUE, 10);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 4);
+  grid = gtk_grid_new ();
+  gtk_box_pack_start (GTK_BOX (vboxSign), grid, FALSE, TRUE, 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
 
   /* Build this first, so that we can know how may user ID's there are */
-  uid_box = gtk_vbox_new (TRUE, 0);
+  uid_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   uid = key->uids;
   while (uid)
@@ -102,19 +102,18 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
 
   label = gtk_label_new (key->uids->next == NULL
 			 ? _("User Name:") : _("User Names:"));
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-		    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.0);
 
-  gtk_table_attach (GTK_TABLE (table), uid_box, 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), uid_box, 1, 0, 1, 1);
   label = gtk_label_new (_("Fingerprint:"));
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 
   string = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
   label = gtk_label_new (string);
   g_free (string);
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
   label = gtk_label_new (_("Check the name and fingerprint carefully to"
