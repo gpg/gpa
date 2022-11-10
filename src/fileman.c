@@ -501,6 +501,13 @@ file_close (GSimpleAction *simple, GVariant *parameter, gpointer param)
   gtk_widget_destroy (GTK_WIDGET (fileman));
 }
 
+/* Handle menu item "File/Quit". */
+static void
+file_quit (GSimpleAction *simple, GVariant *parameter, gpointer param)
+{
+  g_application_quit (G_APPLICATION (get_gpa_application ()));
+}
+
 
 /* Handle menu item "Edit/Select All".  */
 static void
@@ -533,7 +540,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
     { "file_encrypt", file_encrypt },
     { "file_decrypt", file_decrypt },
     { "file_close", file_close },
-    { "file_quit", g_application_quit },
+    { "file_quit", file_quit },
 
     { "edit_select_all", edit_select_all },
   };
@@ -637,29 +644,29 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<section>"
             "<item>"
               "<attribute name='label' translatable='yes'>Open</attribute>"
-              "<attribute name='action'>app.file_close</attribute>"
+              "<attribute name='action'>app.file_open</attribute>"
             "</item>"
             "<item>"
               "<attribute name='label' translatable='yes'>Clear</attribute>"
-              "<attribute name='action'>app.file_quit</attribute>"
+              "<attribute name='action'>app.file_clear</attribute>"
             "</item>"
           "</section>"
           "<section>"
             "<item>"
               "<attribute name='label' translatable='yes'>Sign</attribute>"
-              "<attribute name='action'>app.file_close</attribute>"
+              "<attribute name='action'>app.file_sign</attribute>"
             "</item>"
             "<item>"
               "<attribute name='label' translatable='yes'>Verify</attribute>"
-              "<attribute name='action'>app.file_quit</attribute>"
+              "<attribute name='action'>app.file_verify</attribute>"
             "</item>"
             "<item>"
               "<attribute name='label' translatable='yes'>Encrypt</attribute>"
-              "<attribute name='action'>app.file_quit</attribute>"
+              "<attribute name='action'>app.file_encrypt</attribute>"
             "</item>"
             "<item>"
               "<attribute name='label' translatable='yes'>Decrypt</attribute>"
-              "<attribute name='action'>app.file_quit</attribute>"
+              "<attribute name='action'>app.file_decrypt</attribute>"
             "</item>"
           "</section>"
           "<section>"
@@ -684,11 +691,11 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<section>"
             "<item>"
               "<attribute name='label' translatable='yes'>Backend Settings</attribute>"
-              "<attribute name='action'>app.file_quit</attribute>"
+              "<attribute name='action'>app.edit_backend_preferences</attribute>"
             "</item>"
             "<item>"
               "<attribute name='label' translatable='yes'>Settings</attribute>"
-              "<attribute name='action'>app.file_quit</attribute>"
+              "<attribute name='action'>app.edit_preferences</attribute>"
             "</item>"
           "</section>"
         "</submenu>"
@@ -696,19 +703,19 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<attribute name='label' translatable='yes'>Window</attribute>"
             "<item>"
               "<attribute name='label' translatable='yes'>Keyring Manager</attribute>"
-              "<attribute name='action'>app.file_close</attribute>"
+              "<attribute name='action'>app.windows_keyring_editor</attribute>"
             "</item>"
             "<item>"
               "<attribute name='label' translatable='yes'>File Manager</attribute>"
-              "<attribute name='action'>app.file_quit</attribute>"
+              "<attribute name='action'>app.windows_file_manager</attribute>"
             "</item>"
             "<item>"
               "<attribute name='label' translatable='yes'>Clipboard</attribute>"
-              "<attribute name='action'>app.file_quit</attribute>"
+              "<attribute name='action'>app.windows_clipboard</attribute>"
             "</item>"
             "<item>"
               "<attribute name='label' translatable='yes'>Card Manager</attribute>"
-              "<attribute name='action'>app.file_quit</attribute>"
+              "<attribute name='action'>app.windows_card_manager</attribute>"
             "</item>"
         "</submenu>"
         "<submenu>"
@@ -731,6 +738,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<property name='can_focus'>False</property>"
           "<property name='use_underline'>True</property>"
           "<property name='icon_name'>document-open</property>"
+          "<property name='action-name'>app.file_open</property>"
           "<property name='has_tooltip'>true</property>"
           "<property name='tooltip-text'>Open a file</property>"
         "</object>"
@@ -746,6 +754,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<property name='can_focus'>False</property>"
           "<property name='use_underline'>True</property>"
           "<property name='icon_name'>edit-clear</property>"
+          "<property name='action-name'>app.file_close</property>"
           "<property name='has_tooltip'>true</property>"
           "<property name='tooltip-text'>Close all files</property>"
         "</object>"
@@ -766,6 +775,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<property name='can_focus'>False</property>"
           "<property name='use_underline'>True</property>"
           "<property name='icon_name'>sign</property>"
+          "<property name='action-name'>app.file_sign</property>"
           "<property name='has_tooltip'>true</property>"
           "<property name='tooltip-text'>Sign the selected file</property>"
         "</object>"
@@ -781,6 +791,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<property name='can_focus'>False</property>"
           "<property name='use_underline'>True</property>"
           "<property name='icon_name'>verify</property>"
+          "<property name='action-name'>app.file_verify</property>"
           "<property name='has_tooltip'>true</property>"
           "<property name='tooltip-text'>Check signatures of selected files</property>"
         "</object>"
@@ -796,6 +807,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<property name='can_focus'>False</property>"
           "<property name='use_underline'>True</property>"
           "<property name='icon_name'>encrypt</property>"
+          "<property name='action-name'>app.file_encrypt</property>"
           "<property name='has_tooltip'>true</property>"
           "<property name='tooltip-text'>Encrypt the selected file</property>"
         "</object>"
@@ -811,6 +823,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<property name='can_focus'>False</property>"
           "<property name='use_underline'>True</property>"
           "<property name='icon_name'>decrypt</property>"
+          "<property name='action-name'>app.file_decrypt</property>"
           "<property name='has_tooltip'>true</property>"
           "<property name='tooltip-text'>Decrypt the selected file</property>"
         "</object>"
@@ -831,6 +844,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
           "<property name='can_focus'>False</property>"
           "<property name='use_underline'>True</property>"
           "<property name='icon_name'>preferences-desktop</property>"
+          "<property name='action-name'>app.edit_preferences</property>"
           "<property name='has_tooltip'>true</property>"
           "<property name='tooltip-text'>Configure the application</property>"
         "</object>"
