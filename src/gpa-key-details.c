@@ -486,12 +486,12 @@ build_signatures_page (GpaKeyDetails *kdt, gpgme_key_t key)
       combo = GTK_COMBO_BOX (kdt->signatures_uids);
       gtk_widget_set_size_request (GTK_WIDGET (combo), 0, -1);
 
-      gtk_combo_box_text_append (combo, NULL, _("All signatures"));
+      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), NULL, _("All signatures"));
       gtk_combo_box_set_active (combo, 0);
       for (i=1, uid = key->uids; uid; i++, uid = uid->next)
 	{
 	  gchar *uid_string = gpa_gpgme_key_get_userid (uid);
-	  gtk_combo_box_text_append (combo, NULL, uid_string);
+	  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), NULL, uid_string);
 	  g_free (uid_string);
 	}
 
