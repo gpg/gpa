@@ -105,7 +105,8 @@ gpa_keygen_wizard_simple_page (GPAKeyGenWizard *keygen_wizard,
 
   description = gtk_label_new (description_text);
   gtk_box_pack_start (GTK_BOX (vbox), description, TRUE, TRUE, 0);
-  gtk_misc_set_alignment (GTK_MISC (description), 0.0, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (description), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (description), 0.0);
   gtk_label_set_line_wrap (GTK_LABEL (description), TRUE);
   gtk_label_set_justify (GTK_LABEL (description), GTK_JUSTIFY_LEFT);
 
@@ -114,7 +115,8 @@ gpa_keygen_wizard_simple_page (GPAKeyGenWizard *keygen_wizard,
 
   label = gtk_label_new (label_text);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (description), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (description), 0.5);
 
   entry = gtk_entry_new ();
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
@@ -236,7 +238,8 @@ gpa_keygen_wizard_backup_page (GPAKeyGenWizard *wizard)
        " once it has been generated.\n\n"
        "Do you want to create a backup copy?"));
   gtk_box_pack_start (GTK_BOX (vbox), description, TRUE, TRUE, 0);
-  gtk_misc_set_alignment (GTK_MISC (description), 0.0, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (description), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (description), 0.0);
   gtk_label_set_line_wrap (GTK_LABEL (description), TRUE);
   gtk_label_set_justify (GTK_LABEL (description), GTK_JUSTIFY_LEFT);
 
@@ -262,7 +265,8 @@ gpa_keygen_wizard_message_page (const gchar *description_text)
 
   description = gtk_label_new (description_text);
   gtk_box_pack_start (GTK_BOX (vbox), description, TRUE, TRUE, 0);
-  gtk_misc_set_alignment (GTK_MISC (description), 0.0, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (description), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (description), 0.0);
   gtk_label_set_line_wrap (GTK_LABEL (description), TRUE);
   gtk_label_set_justify (GTK_LABEL (description), GTK_JUSTIFY_LEFT);
 
