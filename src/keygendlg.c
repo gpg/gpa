@@ -204,12 +204,14 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
   rowidx = 0;
 
   label = gtk_label_new_with_mnemonic (_("_Algorithm: "));
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   if (forcard)
     {
       label = gtk_label_new (forcard);
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+      gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
       gtk_grid_attach (GTK_GRID (grid), label, 1, rowidx, 1, 1);
       rowidx++;
     }
@@ -226,7 +228,9 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
       rowidx++;
 
       label = gtk_label_new_with_mnemonic (_("_Key size (bits): "));
-      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+      gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+      gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
+
       gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
       combo = gtk_combo_box_text_new ();
       gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "1024");
@@ -249,10 +253,12 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
 
 
   label = gtk_label_new_with_mnemonic (_("User ID: "));
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   label = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_grid_attach (GTK_GRID (grid), label, 1, rowidx, 1, 1);
   self->label_userid = label;
   rowidx++;
@@ -262,7 +268,8 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
   rowidx++;
 
   label = gtk_label_new_with_mnemonic (_("_Name: "));
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
@@ -273,7 +280,8 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
   rowidx++;
 
   label = gtk_label_new_with_mnemonic (_("_Email: "));
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
@@ -284,7 +292,8 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
   rowidx++;
 
   label = gtk_label_new_with_mnemonic (_("_Comment: "));
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
@@ -295,7 +304,8 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
   rowidx++;
 
   label = gtk_label_new_with_mnemonic (_("_Expires: "));
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
   button = gpa_date_box_new ();
   gtk_grid_attach (GTK_GRID (grid), button, 1, rowidx, 1, 1);
@@ -305,7 +315,8 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
   if (forcard)
     {
       label = gtk_label_new_with_mnemonic (_("Backup: "));
-      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+      gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+      gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
       gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
       button = gtk_check_button_new ();
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
