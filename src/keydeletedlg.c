@@ -109,7 +109,8 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
 
   label = gtk_label_new (_("You have selected the following key "
 			   "for removal:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
   
   info = gpa_key_info_new (key);
@@ -120,7 +121,8 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
       label = gtk_label_new (_("This key has a secret key."
 			       " Deleting this key cannot be undone,"
 			       " unless you have a backup copy."));
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+      gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
       gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
     }
@@ -130,7 +132,8 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
 			       " Deleting this key cannot be undone easily,"
 			       " although you may be able to get a new copy "
 			       " from the owner or from a key server."));
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+      gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
       gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
     }

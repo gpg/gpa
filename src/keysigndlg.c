@@ -67,12 +67,13 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
   // vboxSign = GTK_DIALOG (window)->vbox;
-  vboxSign = GTK_WIDGET (gtk_dialog_get_content_area(window));
+  vboxSign = GTK_WIDGET (gtk_dialog_get_content_area (GTK_DIALOG (window)));
   gtk_container_set_border_width (GTK_CONTAINER (vboxSign), 5);
 
   label = gtk_label_new (_("Do you want to sign the following key?"));
   gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 5);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   grid = gtk_grid_new ();
   gtk_box_pack_start (GTK_BOX (vboxSign), grid, FALSE, TRUE, 10);
@@ -95,7 +96,9 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
           gtk_label_set_max_width_chars (GTK_LABEL (label), GPA_MAX_UID_WIDTH);
           gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
           gtk_box_pack_start (GTK_BOX(uid_box), label, TRUE, TRUE, 0);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+          gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+          gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
+
         }
       uid = uid->next;
     }
@@ -103,37 +106,45 @@ gpa_key_sign_run_dialog (GtkWidget * parent, gpgme_key_t key,
   label = gtk_label_new (key->uids->next == NULL
 			 ? _("User Name:") : _("User Names:"));
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.0);
+
 
   gtk_grid_attach (GTK_GRID (grid), uid_box, 1, 0, 1, 1);
   label = gtk_label_new (_("Fingerprint:"));
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   string = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
   label = gtk_label_new (string);
   g_free (string);
   gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
+
 
   label = gtk_label_new (_("Check the name and fingerprint carefully to"
 		   " be sure that it really is the key you want to sign."));
   gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 10);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 1.0);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 
   if (key->uids->next)
     {
       label = gtk_label_new (_("All user names in this key will be signed."));
       gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 10);
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
+      gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+      gtk_widget_set_valign (GTK_WIDGET (label), 1.0);
       gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
     }
 
   label = gtk_label_new (_("The key will be signed with your default"
 			   " private key."));
   gtk_box_pack_start (GTK_BOX (vboxSign), label, FALSE, TRUE, 5);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
+  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   if (! gpa_options_get_simplified_ui (gpa_options_get_instance ()))
     {
