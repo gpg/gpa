@@ -192,10 +192,6 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
      GTK_STOCK_OK, GTK_RESPONSE_OK,
      NULL);
   self->dialog = dialog;
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-                                           GTK_RESPONSE_OK,
-                                           GTK_RESPONSE_CANCEL,
-                                           -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
   // vbox = GTK_DIALOG (dialog)->vbox;
