@@ -195,7 +195,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
   // vbox = GTK_DIALOG (dialog)->vbox;
-  vbox = gtk_dialog_get_content_area(dialog);
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
   grid = gtk_grid_new ();
