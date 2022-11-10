@@ -897,7 +897,7 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menu_bar,
   *menu_bar = gtk_menu_bar_new_from_model (menu_bar_model);
 
   // GObject *grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
-  *toolbar = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
+  *toolbar = GTK_WIDGET (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar"));
 
   GtkApplication *gpa_app = get_gpa_application ();
 
