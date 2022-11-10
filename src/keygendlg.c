@@ -116,7 +116,7 @@ response_cb (GtkDialog *dlg, gint response, gpointer user_data)
     return;
 
   temp = (self->entry_keysize
-          ? gtk_combo_box_text_get_active_text (GTK_COMBO_BOX
+          ? gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT
                                            (self->entry_keysize))
           :  NULL);
   keysize = temp? atoi (temp):0;
@@ -217,7 +217,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
     {
       combo = gtk_combo_box_text_new ();
       for (idx=0; algorithm_table[idx].name; idx++)
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo),
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
 				   algorithm_table[idx].name);
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
@@ -229,11 +229,11 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
       combo = gtk_combo_box_text_new ();
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "1024");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "1536");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "2048");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "3072");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX (combo), "4096");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "1024");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "1536");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "2048");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "3072");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "4096");
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 2);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 
@@ -382,7 +382,7 @@ gpa_key_gen_run_dialog (GtkWidget *parent, const char *forcard)
         }
       params->algo = algorithm_table[idx].algo;
       temp = gtk_combo_box_text_get_active_text
-        (GTK_COMBO_BOX (self->entry_keysize));
+        (GTK_COMBO_BOX_TEXT (self->entry_keysize));
       params->keysize = temp? atoi (temp) : 0;
     }
 
