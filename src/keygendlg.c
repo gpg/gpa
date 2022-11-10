@@ -309,7 +309,7 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
       gtk_grid_attach (GTK_GRID (grid), label, 0, rowidx, 1, 1);
       button = gtk_check_button_new ();
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-      hbox = gtk_hbox_new (FALSE, 0);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
       gtk_grid_attach (GTK_GRID (grid), hbox, 1, rowidx, 1, 1);
       self->entry_backup = button;
