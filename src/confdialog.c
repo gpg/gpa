@@ -1361,7 +1361,7 @@ create_dialog (void)
   dialog = gtk_dialog_new_with_buttons (_("Crypto Backend Configuration"),
 					NULL /* transient parent */,
 					0,
-					NULL);
+					NULL, NULL);
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("Apply"), GTK_RESPONSE_APPLY,
                           _("Reset"), CUSTOM_RESPONSE_RESET,
