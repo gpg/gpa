@@ -848,14 +848,14 @@ recplist_popup_menu_new (GtkWidget *window, RecipientDlg *dialog)
       "</menu>"
     "</interface>";
 
-  GError **err;
+  GError *err = NULL;
 
   GtkWidget *popup_menu_widget;
 
   GtkBuilder *gtk_builder = gtk_builder_new ();
 
-  if (gtk_builder_add_from_string( gtk_builder, menu_string , -1, err) == 0) {
-    printf("ERROR menu: %s \n", (*err)->message);
+  if (gtk_builder_add_from_string( gtk_builder, menu_string , -1, &err) == 0) {
+    printf("ERROR menu: %s \n", err->message);
   }
 
   GMenuModel *popup_menu_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "popup_menu"));
