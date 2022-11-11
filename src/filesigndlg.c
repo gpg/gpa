@@ -168,7 +168,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-  vboxSign = gtk_vbox_new (FALSE, 5);
+  vboxSign = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   // gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), vboxSign);
   GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_pack_start(box, vboxSign, TRUE, TRUE, 0);
@@ -181,7 +181,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_frame_set_label_widget (GTK_FRAME (frameWho), labelWho);
   gtk_box_pack_start (GTK_BOX (vboxSign), frameWho, FALSE, FALSE, 0);
 
-  vboxWho = gtk_vbox_new (FALSE, 0);
+  vboxWho = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (frameWho), vboxWho);
 
   scrollerWho = gtk_scrolled_window_new (NULL, NULL);
@@ -202,7 +202,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_frame_set_label_widget (GTK_FRAME (frameMode), label);
   gtk_box_pack_start (GTK_BOX (vboxSign), frameMode, FALSE, FALSE, 0);
 
-  vboxMode = gtk_vbox_new (FALSE, 0);
+  vboxMode = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (frameMode), vboxMode);
   dialog->frame_mode = frameMode;
 
