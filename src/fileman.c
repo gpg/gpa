@@ -1156,8 +1156,6 @@ file_list_new (GpaFileManager * fileman)
 			    G_CALLBACK (update_selection_sensitive_actions),
 			    fileman);
 
-  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
-
   scrollerFile = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy  (GTK_SCROLLED_WINDOW (scrollerFile),
 				   GTK_POLICY_AUTOMATIC,

@@ -71,7 +71,6 @@ gpa_tofu_list_new (void)
 
   /* The view */
   list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
-  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (list), TRUE);
 
   /* Add the columns */
   renderer = gtk_cell_renderer_text_new ();
