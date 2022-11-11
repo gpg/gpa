@@ -1443,16 +1443,18 @@ key_manager_action_new (GpaKeyManager *self,
 
   "</interface>";
 
-  GError **err;
+  GError *err = NULL;
 
   GtkBuilder *gtk_builder = gtk_builder_new ();
 
-  if (gtk_builder_add_from_string( gtk_builder, icons_string , -1, err) == 0) {
-    printf("ERROR icons: %s \n", (*err)->message);
+  if (gtk_builder_add_from_string( gtk_builder, icons_string , -1, &err) == 0) {
+    printf("ERROR icons: %s \n", err->message);
+    g_error_free (err);
   }
 
-  if (gtk_builder_add_from_string( gtk_builder, menu_string , -1, err) == 0) {
-    printf("ERROR menu: %s \n", (*err)->message);
+  if (gtk_builder_add_from_string( gtk_builder, menu_string , -1, &err) == 0) {
+    printf("ERROR menu: %s \n", err->message);
+    g_error_free (err);
   }
 
   GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
