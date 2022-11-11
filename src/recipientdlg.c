@@ -721,25 +721,31 @@ do_select_key (RecipientDlg *dialog, gpgme_protocol_t protocol)
 
 
 static void
-recplist_popup_pgp (GtkAction *action, RecipientDlg *dialog)
+recplist_popup_pgp (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
+  RecipientDlg *dialog = user_data;
+
   do_select_key (dialog, GPGME_PROTOCOL_OpenPGP);
 }
 
 
 static void
-recplist_popup_x509 (GtkAction *action, RecipientDlg *dialog)
+recplist_popup_x509 (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
+  RecipientDlg *dialog = user_data;
+
   do_select_key (dialog, GPGME_PROTOCOL_CMS);
 }
 
 
 static void
-recplist_popup_ignore (GtkAction *action, RecipientDlg *dialog)
+recplist_popup_ignore (GSimpleAction *simple, GVariant *parameter, gpointer user_data)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
   struct userdata_s *info;
+
+  RecipientDlg *dialog = user_data;
 
   if ((model = get_selected_row (dialog, &iter)))
     {
@@ -803,8 +809,7 @@ recplist_display_popup_menu (RecipientDlg *dialog, GdkEvent *event,
               if (event_button->button == 1)
                 recplist_default_action (dialog);
               else
-                gtk_menu_popup (menu, NULL, NULL, NULL, NULL,
-                                event_button->button, event_button->time);
+                gtk_menu_popup_at_pointer (menu, NULL);
 	    }
 	  return TRUE;
 	}
@@ -818,48 +823,54 @@ recplist_display_popup_menu (RecipientDlg *dialog, GdkEvent *event,
 static GtkWidget *
 recplist_popup_menu_new (GtkWidget *window, RecipientDlg *dialog)
 {
-  static const GtkActionEntry entries[] =
-    {
-      /* Toplevel.  */
-      { "SelectPGPKey", NULL, N_("Select _PGP key..."), NULL,
-	NULL, G_CALLBACK (recplist_popup_pgp) },
-      { "SelectCMSKey", NULL, N_("Select _S\\/MIME key..."), NULL,
-	NULL, G_CALLBACK (recplist_popup_x509) },
-      { "ToggleIgnoreFlag", NULL, N_("Toggle _Ignore flag"), NULL,
-	NULL, G_CALLBACK (recplist_popup_ignore) }
-    };
+  static const GActionEntry entries [] = {
+    { "select_gpg_key", recplist_popup_pgp },
+    { "select_cms_key", recplist_popup_x509 },
+    { "toggle_ignore_flag", recplist_popup_ignore },
+  };
 
-  static const char *ui_description =
-    "<ui>"
-    "  <popup name='PopupMenu'>"
-    "    <menuitem action='SelectPGPKey'/>"
-    "    <menuitem action='SelectCMSKey'/>"
-    "    <menuitem action='ToggleIgnoreFlag'/>"
-    "  </popup>"
-    "</ui>";
+  static const char *menu_string =
+    "<interface>"
+      "<menu id='popup_menu'>"
+        "<section>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Select _PGP key</attribute>"
+            "<attribute name='action'>app.select_pgp_key</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Select _S\\/MIME key</attribute>"
+            "<attribute name='action'>app.select_cms_key</attribute>"
+          "</item>"
+          "<item>"
+            "<attribute name='label' translatable='yes'>Toggle _Ignore flag</attribute>"
+            "<attribute name='action'>app.toggle_ignore_flag</attribute>"
+          "</item>"
+        "</section>"
+      "</menu>"
+    "</interface>";
 
-  GtkAccelGroup *accel_group;
-  GtkActionGroup *action_group;
-  GtkUIManager *ui_manager;
-  GError *error;
+  GError **err;
 
-  action_group = gtk_action_group_new ("MenuActions");
-  gtk_action_group_set_translation_domain (action_group, PACKAGE);
-  gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries),
-				dialog);
-  ui_manager = gtk_ui_manager_new ();
-  gtk_ui_manager_insert_action_group (ui_manager, action_group, 0);
-  accel_group = gtk_ui_manager_get_accel_group (ui_manager);
-  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-  if (! gtk_ui_manager_add_ui_from_string (ui_manager, ui_description,
-					   -1, &error))
-    {
-      g_message ("building clipboard menus failed: %s", error->message);
-      g_error_free (error);
-      exit (EXIT_FAILURE);
-    }
+  GtkWidget *popup_menu_widget;
 
-  return gtk_ui_manager_get_widget (ui_manager, "/PopupMenu");
+  GtkBuilder *gtk_builder = gtk_builder_new ();
+
+  if (gtk_builder_add_from_string( gtk_builder, menu_string , -1, err) == 0) {
+    printf("ERROR menu: %s \n", (*err)->message);
+  }
+
+  GMenuModel *popup_menu_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "popup_menu"));
+  popup_menu_widget = gtk_menu_new_from_model (popup_menu_model);
+
+  GApplication *gpa_app = G_APPLICATION (get_gpa_application ());
+
+  g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
+                                    entries,
+                                    G_N_ELEMENTS (entries),
+                                    window);
+
+
+  return popup_menu_widget;
 }
 
 
