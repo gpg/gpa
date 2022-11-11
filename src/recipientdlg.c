@@ -996,7 +996,7 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
   gtk_box_pack_start (GTK_BOX (hbox), dialog->radio_x509, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), dialog->radio_auto, FALSE, FALSE, 0);
 
-  widget = gtk_hseparator_new ();
+  widget = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
 
   dialog->statushint = gtk_label_new (NULL);
