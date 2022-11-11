@@ -1307,12 +1307,12 @@ clipboard_action_new (GpaClipboard *clipboard,
   gpa_toolbar_set_homogeneous (GTK_TOOLBAR (*toolbar), FALSE);
 #else
 
-  GError **err;
+  GError *err = NULL;
 
   GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
 
-  if (gtk_builder_add_from_string( gtk_builder, ui_string , -1, err) == 0) {
-    printf("ERROR: %s \n", (*err)->message);
+  if (gtk_builder_add_from_string( gtk_builder, ui_string , -1, &err) == 0) {
+    printf("ERROR: %s \n", err->message);
   }
 
   GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
