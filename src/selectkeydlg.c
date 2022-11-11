@@ -186,7 +186,7 @@ select_key_dlg_constructor (GType type, guint n_construct_properties,
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
   // vbox = GTK_DIALOG (dialog)->vbox;
-  vbox = gtk_dialog_get_content_area(dialog);
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
   scroller = gtk_scrolled_window_new (NULL, NULL);
