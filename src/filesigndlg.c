@@ -170,7 +170,7 @@ gpa_file_sign_dialog_constructor (GType type,
 
   vboxSign = gtk_vbox_new (FALSE, 5);
   // gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), vboxSign);
-  GtkWidget *box = gtk_dialog_get_content_area(dialog);
+  GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_pack_start(box, vboxSign, TRUE, TRUE, 0);
 
 
