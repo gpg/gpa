@@ -36,14 +36,14 @@
 GtkWidget *
 gpa_key_info_new (gpgme_key_t key)
 {
-  GtkWidget * table;
+  GtkWidget * grid;
   GtkWidget * label;
   gchar *string;
   gpgme_user_id_t uid;
 
-  table = gtk_table_new (3, 2, FALSE);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 0);
+  grid = gtk_grid_new ();
+  // gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
+  // gtk_table_set_row_spacing (GTK_TABLE (table), 0, 0);
 
   /* One user ID on each line.  */
   string = gpa_gpgme_key_get_userid (key->uids);
@@ -66,45 +66,42 @@ gpa_key_info_new (gpgme_key_t key)
   gtk_label_set_max_width_chars (GTK_LABEL (label), GPA_MAX_UID_WIDTH);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
 
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
-		    GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
   gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
   gtk_widget_set_valign (GTK_WIDGET (label), 0.0);
 
   /* User Name */
   label = gtk_label_new (key->uids->next == NULL
 			 ? _("User Name:") : _("User Names:") );
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL,
-                    0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
   gtk_widget_set_valign (GTK_WIDGET (label), 0.0);
 
   /* Key ID */
   label = gtk_label_new (_("Key ID:"));
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
   gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
   gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   label = gtk_label_new (gpa_gpgme_key_get_short_keyid (key));
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-		    GTK_FILL|GTK_EXPAND, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
   gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
   gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   /* Fingerprint */
   label = gtk_label_new (_("Fingerprint:"));
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
   gtk_widget_set_halign (GTK_WIDGET (label), 1.0);
   gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
   string = gpa_gpgme_key_format_fingerprint (key->subkeys->fpr);
   label = gtk_label_new (string);
   g_free (string);
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 2, 1, 1);
   gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
   gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
 
-  return table;
+  return grid;
 }
 
 /* A Frame to select an expiry date.  */
