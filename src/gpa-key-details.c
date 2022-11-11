@@ -260,13 +260,15 @@ add_details_row (GtkWidget *grid, gint row, gchar *text,
 
   widget = gtk_label_new (text);
   gtk_grid_attach (GTK_GRID (grid), widget, 0, row, 1, 1);
-  gtk_widget_set_halign (GTK_WIDGET (widget), 1.0);
-  gtk_widget_set_valign (GTK_WIDGET (widget), 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
   widget = gtk_label_new ("");
   gtk_label_set_selectable (GTK_LABEL (widget), selectable);
-  gtk_widget_set_halign (GTK_WIDGET (widget), 0.0);
-  gtk_widget_set_valign (GTK_WIDGET (widget), 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
+
+  gtk_widget_set_margin_start (GTK_WIDGET (widget), 5);
 
   gtk_grid_attach (GTK_GRID (grid), widget, 1, row, 1, 1);
 
