@@ -165,7 +165,8 @@ gpa_file_encrypt_dialog_constructor (GType type, guint n_construct_properties,
   gtk_container_set_border_width (GTK_CONTAINER (vboxEncrypt), 5);
 
   labelKeys = gtk_label_new_with_mnemonic (_("_Public Keys"));
-  gtk_misc_set_alignment (GTK_MISC (labelKeys), 0.0, 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (labelKeys), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (labelKeys), GTK_ALIGN_CENTER);
   gtk_box_pack_start (GTK_BOX (vboxEncrypt), labelKeys, FALSE, FALSE, 0);
 
   scrollerKeys = gtk_scrolled_window_new (NULL, NULL);
