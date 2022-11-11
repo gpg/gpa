@@ -198,7 +198,7 @@ gpa_expiry_frame_new (GDate * expiryDate)
   expiry_frame = gtk_frame_new (_("Expiration"));
   frame->frame = expiry_frame;
 
-  vboxExpire = gtk_vbox_new (FALSE, 5);
+  vboxExpire = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_add (GTK_CONTAINER (expiry_frame), vboxExpire);
   gtk_container_set_border_width (GTK_CONTAINER (vboxExpire), 5);
 
@@ -206,7 +206,7 @@ gpa_expiry_frame_new (GDate * expiryDate)
   frame->radioDont = radioDont;
   gtk_box_pack_start (GTK_BOX (vboxExpire), radioDont, FALSE, FALSE, 0);
 
-  hboxAfter = gtk_hbox_new (FALSE, 0);
+  hboxAfter = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vboxExpire), hboxAfter, FALSE, FALSE, 0);
 
   radioAfter = gtk_radio_button_new_with_mnemonic_from_widget
