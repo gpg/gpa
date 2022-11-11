@@ -215,13 +215,13 @@ add_table_row (GtkWidget *grid, int *rowidx, const char *labelstr)
 
   label = gtk_label_new (labelstr);
   gtk_label_set_width_chars  (GTK_LABEL (label), 22);
-  gtk_widget_set_halign (GTK_WIDGET (label), 0);
-  gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   gtk_grid_attach (GTK_GRID (grid), label, 0, *rowidx, 1, 1);
 
-  gtk_widget_set_halign (GTK_WIDGET (widget), 0);
-  gtk_widget_set_valign (GTK_WIDGET (widget), 0.5);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
   gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
 
