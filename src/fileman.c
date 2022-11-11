@@ -1005,7 +1005,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
 
    //gtk_widget_add_css_class (grid, "toolbar");
 
-  *toolbar = grid;
+  *toolbar = GTK_WIDGET (grid);
 
   // We must set the name to the toolbar for css to recognize it
   gtk_widget_set_name(*toolbar, "toolbar");
