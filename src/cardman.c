@@ -969,10 +969,40 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
       cardman->card_widget = gtk_label_new (error_description);
     }
 
-  gtk_scrolled_window_add_with_viewport
-    (GTK_SCROLLED_WINDOW (cardman->card_container), cardman->card_widget);
+  /* The following is basically what's in GTKs own
+     gtk_scrolled_window_add_with_viewport:
 
-  gtk_widget_show_all (cardman->card_widget);
+    https://salsa.debian.org/gnome-team/gtk3/-/blob/debian/master/gtk/gtkscrolledwindow.c#L4151
+  */
+
+  GtkWidget *viewport;
+  GtkBin *bin;
+  GtkWidget *child_widget;
+
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (cardman->card_container);
+
+  bin = GTK_BIN (scrolled_window);
+
+  child_widget = gtk_bin_get_child (bin);
+
+  if (child_widget)
+  {
+    g_return_if_fail (GTK_IS_VIEWPORT (child_widget));
+    g_return_if_fail (gtk_bin_get_child (GTK_BIN (child_widget)) == NULL);
+
+    viewport = child_widget;
+  }
+  else
+  {
+    viewport = gtk_viewport_new (gtk_scrolled_window_get_hadjustment (scrolled_window),
+                               gtk_scrolled_window_get_vadjustment (scrolled_window));
+
+    gtk_container_add (GTK_CONTAINER (scrolled_window), viewport);
+  }
+
+  gtk_widget_show (viewport);
+
+  gtk_container_add (GTK_CONTAINER (viewport), cardman->card_widget);
 
   /* We need to do the reload after a show_all so that a card
      application may hide parts of its window.  */
