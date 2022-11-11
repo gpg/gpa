@@ -989,7 +989,7 @@ recipient_dlg_constructor (GType type, guint n_construct_properties,
      _("_Auto selection"));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->radio_auto), TRUE);
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), dialog->radio_pgp,  FALSE, FALSE, 0);
