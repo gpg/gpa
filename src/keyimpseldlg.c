@@ -146,13 +146,13 @@ gpa_key_import_selection_dialog_run (GtkWidget *parent,
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hButtonBoxSelect), 10);
   gtk_container_set_border_width (GTK_CONTAINER (hButtonBoxSelect), 5);
 
-  buttonSelect = gtk_button_new_from_stock (GTK_STOCK_OK);
+  buttonSelect = gtk_button_new_from_stock (_("_OK"));
   g_signal_connect_swapped (G_OBJECT (buttonSelect), "clicked",
 			    G_CALLBACK (key_import_selection_ok), &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSelect), buttonSelect);
 
 
-  buttonCancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  buttonCancel = gtk_button_new_from_stock (_("_Cancel"));
   g_signal_connect (G_OBJECT (button), "clicked",
 		    G_CALLBACK (key_import_selection_cancel), &dialog);
   gtk_container_add (GTK_CONTAINER (hButtonBoxSelect), buttonCancel);

@@ -342,8 +342,8 @@ get_load_file_name (GtkWidget *parent, const gchar *title)
     {
       dialog = gtk_file_chooser_dialog_new
 	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_OPEN,
-	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-	 GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+	 _("_Cancel"), GTK_RESPONSE_CANCEL,
+	 _("_Open"), GTK_RESPONSE_OK, NULL);
       gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
     }
   if (last_directory)
@@ -498,8 +498,8 @@ get_save_file_name (GtkWidget *parent, const gchar *title)
     {
       dialog = gtk_file_chooser_dialog_new
 	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_SAVE,
-	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-	 GTK_STOCK_SAVE, GTK_RESPONSE_OK, NULL);
+	 _("_Cancel"), GTK_RESPONSE_CANCEL,
+	 _("_Save"), GTK_RESPONSE_OK, NULL);
       gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
       gtk_file_chooser_set_do_overwrite_confirmation
 	(GTK_FILE_CHOOSER (dialog), TRUE);
@@ -805,9 +805,9 @@ clipboard_action_new (GpaClipboard *clipboard,
       // File menu.
       { "FileClear", GTK_STOCK_CLEAR, NULL, NULL,
 	N_("Clear buffer"), G_CALLBACK (file_clear) },
-      { "FileOpen", GTK_STOCK_OPEN, NULL, NULL,
+      { "FileOpen", _("_Open"), NULL, NULL,
 	N_("Open a file"), G_CALLBACK (file_open) },
-      { "FileSaveAs", GTK_STOCK_SAVE_AS, NULL, NULL,
+      { "FileSaveAs", _("_Save")_AS, NULL, NULL,
 	N_("Save to a file"), G_CALLBACK (file_save_as) },
       { "FileSign", GPA_STOCK_SIGN, NULL, NULL,
 	N_("Sign buffer text"), G_CALLBACK (file_sign) },
@@ -817,7 +817,7 @@ clipboard_action_new (GpaClipboard *clipboard,
 	N_("Encrypt the buffer text"), G_CALLBACK (file_encrypt) },
       { "FileDecrypt", GPA_STOCK_DECRYPT, NULL, NULL,
 	N_("Decrypt the buffer text"), G_CALLBACK (file_decrypt) },
-      { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
+      { "FileClose", _("_Close"), NULL, NULL,
 	N_("Close the buffer"), G_CALLBACK (file_close) },
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
 	N_("Quit the program"), G_CALLBACK (g_application_quit) },

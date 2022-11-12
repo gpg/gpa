@@ -129,8 +129,8 @@ gpa_import_file_operation_get_source (GpaImportOperation *operation)
   dialog = gtk_file_chooser_dialog_new
     (_("Import keys from file"),
      GTK_WINDOW (GPA_OPERATION (op)->window),
-     GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-     GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+     GTK_FILE_CHOOSER_ACTION_OPEN, _("_Cancel"), GTK_RESPONSE_CANCEL,
+     _("_Open"), GTK_RESPONSE_OK, NULL);
 
   gpgme_data_release (operation->source);
   operation->source = NULL;

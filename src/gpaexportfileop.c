@@ -137,8 +137,8 @@ gpa_export_file_operation_get_destination (GpaExportOperation *operation,
 
   dialog = gtk_file_chooser_dialog_new
     (_("Export public keys to file"), GTK_WINDOW (GPA_OPERATION (op)->window),
-     GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-     GTK_STOCK_SAVE, GTK_RESPONSE_OK, NULL);
+     GTK_FILE_CHOOSER_ACTION_SAVE, _("_Cancel"), GTK_RESPONSE_CANCEL,
+     _("_Save"), GTK_RESPONSE_OK, NULL);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog),
 						  TRUE);
 

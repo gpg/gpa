@@ -257,8 +257,8 @@ gpa_backup_operation_dialog_run (GtkWidget *parent, const gchar *key_id,
 
       dialog = gtk_file_chooser_dialog_new
 	(_("Backup key to file"), GTK_WINDOW (parent),
-	 GTK_FILE_CHOOSER_ACTION_SAVE,  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-	 GTK_STOCK_SAVE, GTK_RESPONSE_OK, NULL);
+	 GTK_FILE_CHOOSER_ACTION_SAVE,  _("_Cancel"), GTK_RESPONSE_CANCEL,
+	 _("_Save"), GTK_RESPONSE_OK, NULL);
       gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
       gtk_file_chooser_set_do_overwrite_confirmation
 	(GTK_FILE_CHOOSER (dialog), TRUE);

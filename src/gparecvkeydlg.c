@@ -93,8 +93,8 @@ gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
   GtkWidget *hbox;
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			  GTK_STOCK_OK, GTK_RESPONSE_OK,
+			  _("_Cancel"), GTK_RESPONSE_CANCEL,
+			  _("_OK"), GTK_RESPONSE_OK,
                           NULL);
   GtkWidget *box = gtk_dialog_get_content_area( GTK_DIALOG( dialog));
   gtk_container_set_border_width (GTK_CONTAINER (box),10);

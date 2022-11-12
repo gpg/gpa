@@ -104,8 +104,8 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
 
   dialog = gtk_dialog_new_with_buttons
     (_("Change key ownertrust"), GTK_WINDOW(parent), GTK_DIALOG_MODAL,
-     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-     GTK_STOCK_OK, GTK_RESPONSE_OK,
+     _("_Cancel"), GTK_RESPONSE_CANCEL,
+     _("_OK"), GTK_RESPONSE_OK,
      NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);

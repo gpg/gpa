@@ -360,8 +360,8 @@ get_load_file_name (GtkWidget *parent, const gchar *title,
     {
       dialog = gtk_file_chooser_dialog_new
 	(title, GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_OPEN,
-	 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-	 GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+	 _("_Cancel"), GTK_RESPONSE_CANCEL,
+	 _("_Open"), GTK_RESPONSE_OK, NULL);
       gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
       gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (dialog), TRUE);
     }
@@ -553,7 +553,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
       { "Edit", NULL, N_("_Edit"), NULL },
 
       // File menu.
-      { "FileOpen", GTK_STOCK_OPEN, NULL, NULL,
+      { "FileOpen", _("_Open"), NULL, NULL,
 	N_("Open a file"), G_CALLBACK (file_open) },
       { "FileClear", GTK_STOCK_CLEAR, NULL, NULL,
 	N_("Close all files"), G_CALLBACK (file_clear) },
@@ -565,7 +565,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
 	N_("Encrypt the selected file"), G_CALLBACK (file_encrypt) },
       { "FileDecrypt", GPA_STOCK_DECRYPT, NULL, NULL,
 	N_("Decrypt the selected file"), G_CALLBACK (file_decrypt) },
-      { "FileClose", GTK_STOCK_CLOSE, NULL, NULL,
+      { "FileClose", _("_Close"), NULL, NULL,
 	N_("Close the window"), G_CALLBACK (file_close) },
       { "FileQuit", GTK_STOCK_QUIT, NULL, NULL,
 	N_("Quit the program"), G_CALLBACK (g_application_quit) },

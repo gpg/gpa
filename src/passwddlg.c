@@ -95,8 +95,8 @@ gpg_error_t gpa_change_passphrase_dialog_run (void *hook,
 
   dialog = gtk_dialog_new_with_buttons (_("Choose new passphrase"), NULL,
                                         GTK_DIALOG_MODAL,
-                                        GTK_STOCK_OK, GTK_RESPONSE_OK,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        _("_OK"), GTK_RESPONSE_OK,
+                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 

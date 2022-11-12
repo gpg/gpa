@@ -173,7 +173,7 @@ gpa_date_button_clicked (GtkButton *button)
         (NULL,
          GTK_WINDOW (toplevel),
          (GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
-         GTK_STOCK_CLOSE, GTK_RESPONSE_REJECT,
+         _("_Close"), GTK_RESPONSE_REJECT,
          NULL);
 
       g_signal_connect (self->dialog, "destroy",

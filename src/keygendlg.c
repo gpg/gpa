@@ -188,8 +188,8 @@ create_dialog (GpaKeyGenDlg *self, GtkWidget *parent, const char *forcard)
     (forcard ? _("Generate card key") : _("Generate key"),
      GTK_WINDOW (parent),
      GTK_DIALOG_MODAL,
-     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-     GTK_STOCK_OK, GTK_RESPONSE_OK,
+     _("_Cancel"), GTK_RESPONSE_CANCEL,
+     _("_OK"), GTK_RESPONSE_OK,
      NULL);
   self->dialog = dialog;
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);

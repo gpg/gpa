@@ -61,7 +61,7 @@ create_diagnostics_dialog (GtkWidget *parent, const char *string)
   widget = gtk_dialog_new_with_buttons ("Diagnostics",
                                         parent? GTK_WINDOW (parent):NULL,
                                         GTK_DIALOG_MODAL,
-                                        GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
+                                        _("_Close"), GTK_RESPONSE_CANCEL,
                                         NULL);
   dialog = GTK_DIALOG (widget);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
