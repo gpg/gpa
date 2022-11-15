@@ -154,7 +154,6 @@ AM_MISSING_PROG(AUTOHEADER, autoheader, $missing_dir)
 AM_MISSING_PROG(MAKEINFO, makeinfo, $missing_dir)
 AC_PROG_CC
 AC_SEARCH_LIBS([strerror],[cposix])
-AC_HEADER_STDC
 AC_PROG_RANLIB
 AC_CHECK_TOOL(WINDRES, windres, :)
 
@@ -229,7 +228,7 @@ AM_GNU_GETTEXT([external],[need-ngettext])
 
 
 dnl Where is the GTK+ toolkit
-AM_PATH_GTK_3_0(3.0.0,, AC_MSG_ERROR(Cannot find GTK+ 3.0))
+PKG_CHECK_MODULES([GTK], [gtk+-3.0])
 
 
 #
