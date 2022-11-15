@@ -42,10 +42,12 @@ gpa-marshal.c: gpa-marshal.list
 	mv $@.tmp $@
 
 org.gnupg.gpa.src.c: org.gnupg.gpa.src.gresource.xml
-	glib-compile-resources --generate-source org.gnupg.gpa.src.gresource.xml
+	glib-compile-resources --sourcedir=$(srcdir) \
+          --generate-source $(srcdir)/org.gnupg.gpa.src.gresource.xml
 
 org.gnupg.gpa.src.h: org.gnupg.gpa.src.c org.gnupg.gpa.src.gresource.xml
-	glib-compile-resources --generate-header org.gnupg.gpa.src.gresource.xml
+	glib-compile-resources --sourcedir=$(srcdir) \
+          --generate-header $(srcdir)/org.gnupg.gpa.src.gresource.xml
 
 if HAVE_W32_SYSTEM
 .rc.o:
