@@ -1150,7 +1150,7 @@ key_manager_action_new (GpaKeyManager *self,
         "<submenu>"
           "<attribute name='label' translatable='yes'>Server</attribute>"
           "<item>"
-            "<attribute name='label' translatable='yes'>Retieve Keys...</attribute>"
+            "<attribute name='label' translatable='yes'>Retrieve Keys...</attribute>"
             "<attribute name='action'>app.server_retrive</attribute>"
           "</item>"
           "<item>"
