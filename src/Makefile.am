@@ -95,6 +95,7 @@ gpa_cardman_sources = \
 		cm-geldkarte.c cm-geldkarte.h \
 		cm-netkey.c cm-netkey.h \
 		cm-dinsig.c cm-dinsig.h \
+		cm-piv.c cm-piv.h \
 		cm-unknown.c cm-unknown.h
 else
 gpa_cardman_sources =

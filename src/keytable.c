@@ -383,34 +383,49 @@ gpa_keytable_load_new (GpaKeyTable *keytable,
   reload_cache (keytable, fpr);
 }
 
+
+/* Make sure the keytable has been loaded.  Warning: This function
+ * must never be used from a idle callback because it starts another
+ * gtk_main temporary (at least that seems to be problematic in one of
+ * my tests).  */
+void
+gpa_keytable_ensure (GpaKeyTable *keytable)
+{
+  if (keytable->initialized)
+    return;
+
+  keytable->end = (GpaKeyTableEndFunc) gtk_main_quit;
+  reload_cache (keytable, NULL);
+  gtk_main ();
+  keytable->end = NULL;
+
+}
+
 /* Return the key with a given fingerprint from the keytable, NULL if
-   there is none. No reference is provided.  */
+ * there is none.  No reference is provided.  If this called from an
+ * idle callback, you should make sure that gpa_keytable_ensure has
+ * been called before the idle callback. */
 gpgme_key_t
 gpa_keytable_lookup_key (GpaKeyTable *keytable, const char *fpr)
 {
-  if (keytable->initialized)
+  GList *cur;
+
+  if (!keytable->initialized)
     {
-      GList *cur;
-      for (cur = keytable->keys; cur; cur = g_list_next (cur))
-	{
-	  gpgme_key_t key = (gpgme_key_t) cur->data;
-	  if (g_str_equal (fpr, key->subkeys->fpr))
-	    {
-	      return key;
-	    }
-	}
-      return NULL;
-    }
-  else
-    {
-      /* There is no list yet. We really, really, need to one, so we list it.
+      /* There is no list yet. We really, really, need one, so we list it.
        * FIXME: This is a hack and a basic problem. Hopefully it won't cause
        * any real problems.
-       */
-      keytable->end = (GpaKeyTableEndFunc) gtk_main_quit;
-      reload_cache (keytable, NULL);
-      gtk_main ();
-      keytable->end = NULL;
-      return gpa_keytable_lookup_key (keytable, fpr);
+       * Actually is a real problem, see function desription.    */
+      gpa_keytable_ensure (keytable);
     }
+
+  for (cur = keytable->keys; cur; cur = g_list_next (cur))
+    {
+      gpgme_key_t key = (gpgme_key_t) cur->data;
+      if (g_str_equal (fpr, key->subkeys->fpr))
+        {
+          return key;
+        }
+    }
+  return NULL;
 }

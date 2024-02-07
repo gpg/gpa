@@ -104,8 +104,16 @@ void gpa_keytable_load_new (GpaKeyTable *keytable,
 			    GpaKeyTableEndFunc end,
 			    gpointer data);
 
+/* Make sure the keytable has been loaded.  Warning: This function
+ * must never be used from a idle callback because it starts another
+ * gtk_main temporary (at least that seems to be problematic in one of
+ * my tests).  */
+void gpa_keytable_ensure (GpaKeyTable *keytable);
+
 /* Return the key with a given fingerprint from the keytable, NULL if
-   there is none. No reference is provided.  */
+ * there is none. No reference is provided.  If this called from an
+ * idle callback, you should make sure that gpa_keytable_ensure has
+ * been called before the idle callback.*/
 gpgme_key_t gpa_keytable_lookup_key (GpaKeyTable *keytable, const char *fpr);
 
 #endif /* KEYTABLE_H */

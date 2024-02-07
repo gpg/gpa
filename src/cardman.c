@@ -47,6 +47,7 @@
 #include "cm-geldkarte.h"
 #include "cm-netkey.h"
 #include "cm-dinsig.h"
+#include "cm-piv.h"
 #include "cm-unknown.h"
 
 
@@ -228,6 +229,11 @@ scd_status_cb (void *opaque, const char *status, const char *args)
         {
           cardman->cardtype = GPA_CM_OPENPGP_TYPE;
           cardman->cardtypename = "OpenPGP";
+        }
+      else if (!g_ascii_strcasecmp (args, "piv"))
+        {
+          cardman->cardtype = GPA_CM_PIV_TYPE;
+          cardman->cardtypename = "PIV";
         }
       else if (!g_ascii_strcasecmp (args, "nks"))
         {
@@ -946,6 +952,10 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
     {
       cardman->card_widget = gpa_cm_openpgp_new ();
     }
+  else if (cardman->cardtype == GPA_CM_PIV_TYPE)
+    {
+      cardman->card_widget = gpa_cm_piv_new ();
+    }
   else if (cardman->cardtype == GPA_CM_GELDKARTE_TYPE)
     {
       cardman->card_widget = gpa_cm_geldkarte_new ();
@@ -1020,6 +1030,7 @@ update_card_widget (GpaCardManager *cardman, const char *error_description)
       gpa_cm_openpgp_reload (cardman->card_widget, cardman->gpgagent);
       gpa_cm_geldkarte_reload (cardman->card_widget, cardman->gpgagent);
       gpa_cm_netkey_reload (cardman->card_widget, cardman->gpgagent);
+      gpa_cm_piv_reload (cardman->card_widget, cardman->gpgagent);
       gpa_cm_dinsig_reload (cardman->card_widget, cardman->gpgagent);
       gpa_cm_unknown_reload (cardman->card_widget, cardman->gpgagent);
     }
