@@ -27,8 +27,12 @@ logo = gpa-logo.ppm
 pkgdata_DATA = $(logo)
 
 EXTRA_DIST = $(logo) gpa.ico gpa-resource.rc versioninfo.rc.in \
-	     gpa-marshal.list Signals
-BUILT_SOURCES = gpa-marshal.h gpa-marshal.c org.gnupg.gpa.src.c org.gnupg.gpa.src.h
+	     gpa-marshal.list Signals \
+             org.gnupg.gpa.src.gresource.xml
+
+BUILT_SOURCES = gpa-marshal.h gpa-marshal.c org.gnupg.gpa.src.c \
+             org.gnupg.gpa.src.h
+
 MOSTLYCLEANFILES = gpa-marshal.h gpa-marshal.c
 
 GLIB_GENMARSHAL = glib-genmarshal

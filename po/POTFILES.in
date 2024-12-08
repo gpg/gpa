@@ -68,7 +68,6 @@ src/keydeletedlg.c
 src/keyeditdlg.c
 src/keygendlg.c
 src/keygenwizard.c
-src/keyimpseldlg.c
 src/keylist.c
 src/keymanager.c
 src/keyserver.c
