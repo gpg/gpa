@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpa\n"
 "Report-Msgid-Bugs-To: translations@gnupg.org\n"
-"PO-Revision-Date: 2018-10-16 13:29+0200\n"
+"PO-Revision-Date: 2024-12-10 18:45+0100\n"
 "Last-Translator: Werner Koch <wk@gnupg.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -14,6 +14,85 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Card Manager"
+msgstr "Kartenverwaltung"
+
+#, c-format
+msgid "%s card detected."
+msgstr "%s Karte erkannt."
+
+msgid "Checking for card..."
+msgstr "Warten auf Karte..."
+
+msgid "No card found."
+msgstr "Es wurde keine Karte gefunden."
+
+msgid "The selected card application is currently not available."
+msgstr "Die ausgewählte Kartenanwendung is momentan nicht verfügbar."
+
+msgid ""
+"Another process is using a different card application than the selected "
+"one.\n"
+"\n"
+"You may change the application selection mode to \"Auto\" to select the "
+"active application."
+msgstr ""
+"Ein anderer Prozess benutzt momentan eine andere als die aktuell ausgewählte "
+"Kartenanwendung.\n"
+"\n"
+"Sie können den Anwendungsauswahl-Modus auf \"Auto\" einstellen, um die "
+"aktive Anwendung auszuwählen."
+
+msgid "The selected card application is not available."
+msgstr "Die ausgewählte Kartenanwendung steht nicht zur Verfügung."
+
+msgid "Error accessing the card."
+msgstr "Fehler beim Zugriff auf die Karte."
+
+msgid "Error accessing card"
+msgstr "Auf die Karte kann nicht zugegriffen werden"
+
+msgid "No card"
+msgstr "Keine Karte"
+
+msgid "This card application is not yet supported."
+msgstr "Diese Kartenanwendung wird noch nicht unterstützt."
+
+msgid "Application selection:"
+msgstr "Anwendungsauswahl:"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "The GPGME library is too old to support smartcards."
+msgstr "Die verwendete GPGME Bibliothek unterstützt noch keine Smartcards."
+
+msgid "Key ID"
+msgstr "Schlüsselkennung"
+
+msgid "The key ID is a short number to identify a certificate."
+msgstr ""
+"Die Schlüsselkennung (Key ID) is eine kurze Zahl zur Identifizerung eines "
+"Zertifikats."
+
+msgid "Serialno."
+msgstr "Seriennummer:"
+
+msgid "Issuer"
+msgstr "Herausgeber"
+
+msgid "[chain too long]"
+msgstr "[Kette zu lang]"
+
+msgid "[issuer not found]"
+msgstr "Der Herausgeber wurde nicht gefunden."
+
+msgid "_Cancel"
+msgstr "_Abbrechen"
+
+msgid "_Open"
+msgstr "_Öffnen"
 
 msgid "Open File"
 msgstr "Datei öffnen"
@@ -27,65 +106,14 @@ msgstr "GPA Meldung"
 msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr "Die Datei »%s« ist %llu%s groß.  Möchten Sie sie wirklich öffnen?"
 
+msgid "_Save"
+msgstr "_Speichern"
+
 msgid "Save As..."
 msgstr "Speichern unter..."
 
 msgid "Clipboard"
 msgstr "Zwischenablage"
-
-msgid "_File"
-msgstr "_Datei"
-
-msgid "_Edit"
-msgstr "_Bearbeiten"
-
-msgid "Clear buffer"
-msgstr "Textfeld löschen"
-
-msgid "Open a file"
-msgstr "Datei öffnen"
-
-msgid "Save to a file"
-msgstr "In eine Datei speichern"
-
-msgid "Sign buffer text"
-msgstr "Text signieren"
-
-msgid "Check signatures of buffer text"
-msgstr "Signatur des Texts prüfen"
-
-msgid "Encrypt the buffer text"
-msgstr "Text verschlüsseln"
-
-msgid "Decrypt the buffer text"
-msgstr "Text entschlüsseln"
-
-msgid "Close the buffer"
-msgstr "Das Fenster schliessen"
-
-msgid "Quit the program"
-msgstr "Das Programm beenden"
-
-msgid "Undo the last action"
-msgstr "Die letzte Aktion rückgangig machen"
-
-msgid "Redo the last undone action"
-msgstr "Die letzte rückgängig gemachte Aktion wiederholen"
-
-msgid "Cut the selection"
-msgstr "Auswahl ausschneiden"
-
-msgid "Copy the selection"
-msgstr "Auswahl kopieren"
-
-msgid "Paste the clipboard"
-msgstr "Zwischenablage einfügen"
-
-msgid "Delete the selected text"
-msgstr "Gewählten Text löschen"
-
-msgid "Select the entire document"
-msgstr "Das gesamte Dokument auswählen"
 
 msgid "Keyring"
 msgstr "Schlüsselverwaltung"
@@ -95,6 +123,444 @@ msgstr "Dateien"
 
 msgid "Card"
 msgstr "Smartcard"
+
+msgid "<b>General</b>"
+msgstr "<b>Allgemein</b>"
+
+msgid "Serial number:"
+msgstr "Seriennummer:"
+
+#, c-format
+msgid ""
+"There is not much information to display for a %s card.  You may want to use "
+"the application selector button to switch to another application available "
+"on this card."
+msgstr ""
+"Für eine %s Karte können nicht viele Informationen angezeigt werden.  Sie "
+"können jedoch mit dem Knopf zur Anwendungsauswahl auf eine andere, auf der "
+"Karte verfügbare, Anwendung umschalten."
+
+msgid "<b>Amount</b>"
+msgstr "<b>Betrag</b>"
+
+msgid "Card number: "
+msgstr "Kartennummer: "
+
+msgid "Short Bank Code number: "
+msgstr "Kurze Banknummer: "
+
+msgid "Bank type: "
+msgstr "Art der Bank: "
+
+msgid "Card valid from: "
+msgstr "Karte gültig ab: "
+
+msgid "Card expires: "
+msgstr "Karte gültig bis: "
+
+msgid "Issuing country: "
+msgstr "Herausgebendes Land: "
+
+msgid "Currency: "
+msgstr "Währung: "
+
+msgid "ZKA chip Id: "
+msgstr "ZKA Chip-Id: "
+
+msgid "Chip OS version: "
+msgstr "Chip-OS Version: "
+
+msgid "Balance: "
+msgstr "Guthaben: "
+
+msgid "General limit: "
+msgstr "Allgemeines Limit: "
+
+msgid "Transaction limit: "
+msgstr "Transaktionslimit: "
+
+msgid "unknown"
+msgstr "unbekannt"
+
+msgid "blocked"
+msgstr "blockiert"
+
+msgid "Reset PUK"
+msgstr "PUK zurücksetzen"
+
+msgid "Reset PIN"
+msgstr "PIN zurücksetzen"
+
+msgid "Change PUK"
+msgstr "PUK ändern"
+
+msgid "Change PIN"
+msgstr "PIN ändern"
+
+msgid "Learn keys"
+msgstr "Schlüssel erlernen"
+
+msgid ""
+"For some or all of the keys available on the card, the GnuPG crypto engine "
+"does not yet know the corresponding certificates.\n"
+"\n"
+"If you click this button, GnuPG will be asked to \"learn\" this card and "
+"import all certificates stored on the card into its own certificate store.  "
+"This is not done automatically because it may take several seconds to read "
+"all certificates from the card.\n"
+"\n"
+"If you are unsure what to do, just click the button."
+msgstr ""
+
+msgid "Learning keys ..."
+msgstr "Schlüssel erlernen..."
+
+#, c-format
+msgid ""
+"<b>Setting the Initial PIN</b> (%s)\n"
+"\n"
+"You selected to set the initial PIN of your card.  The PIN is currently set "
+"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
+"reverted</b>.\n"
+"\n"
+"Please check the documentation of your card to learn for what the NullPIN is "
+"good.\n"
+"\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
+"\n"
+"%s"
+msgstr ""
+"<b>Erstmaliges Setzen der PIN</b> (%s)\n"
+"\n"
+"Sie möchten die PIN der Karte zum ersten mal setzen.  Die PIN is momentan "
+"noch auf die NullPIN gesetzt.  Das erstmalige Setzen der PIN is "
+"<b>notwendig, kann aber nicht rückgängig gemacht werden</b>.\n"
+"\n"
+"Bitle lesen Sie unbedingt die Dokumentation Ihrer Karte um den Sinn der "
+"NullPIN zu verstehen.\n"
+"\n"
+"Wenn sie nun weitermachen (OK drücken), so werden Sie nach einer neuen PIN "
+"gefragt und danach gebeten, diese PIN noch einmal zu wiederholen.  Bitte "
+"stellen Sie sicher, daß Sie sich diese PIN wirklich gemerkt haben - die "
+"Karte wird unbrauchbar sobald Sie mehr als %d mal hintereinander die PIN "
+"falsch eingegeben.\n"
+"\n"
+"%s"
+
+msgid ""
+"You are now setting the PIN for the SigG key used to create <b>qualified "
+"signatures</b>.  You may want to set the PIN to the same value as used for "
+"the NKS keys."
+msgstr ""
+"Sie setzen nun die PIN für den SigG Schlüssel, der verwendet wird um "
+"<b>qualifizierte Signaturen</b> zu erzeugen.  Es ist anzuraten, die PIN auf "
+"denselben Wert zu setzen die Sie auch für den NKS Schlüssel benutzen."
+
+msgid ""
+"You are now setting the PIN for the NKS keys used for standard signatures, "
+"encryption and authentication."
+msgstr ""
+"Sie setzen nun die PIN für den NKS Schlüssel, der für normale Signaturen, "
+"zur Verschlüsselung und zur Authentifizierung verwendet wird."
+
+#, c-format
+msgid ""
+"Error changing the NullPIN.\n"
+"(%s <%s>)"
+msgstr ""
+"Das Ändern der NullPIN war nicht erfolgreich.\n"
+"(%s <%s>)"
+
+msgid ""
+"<b>Changing a PIN or PUK</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value and then to "
+"enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the current value decrements the retry counter.  "
+"If the retry counters of the PIN and the corresponding PUK are both down to "
+"zero, the keys controlled by the PIN are not anymore usable and there is no "
+"way to unblock them!"
+msgstr ""
+
+msgid ""
+"<b>Resetting a PUK</b>\n"
+"\n"
+"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
+"system of the NetKey card implements it as an alternative PIN and thus it is "
+"possible to use the PIN to unblock the PUK.\n"
+"\n"
+"If the PUK is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PIN.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the blocked PUK and repeat that new value at "
+"another prompt."
+msgstr ""
+
+msgid ""
+"<b>Resetting a PIN</b>\n"
+"\n"
+"If the PIN is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PUK.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PUK and "
+"then to enter a new value for the blocked PIN and repeat that new value at "
+"another prompt."
+msgstr ""
+
+#, c-format
+msgid ""
+"Error changing or resetting the PIN/PUK.\n"
+"(%s <%s>)"
+msgstr ""
+"Fehler beim Ändern oder Rücksetzen der PIN/PUK.\n"
+"(%s <%s>)"
+
+msgid "Card version:"
+msgstr "Kartenversion:"
+
+msgid ""
+"<b>A NullPIN is still active on this card</b>.\n"
+"You need to set a real PIN before you can make use of the card."
+msgstr ""
+"<b>Eine NullPIN ist noch immer auf dieser Karte gesetzt</b>.\n"
+"Sie müßen eine echte PIn setzen, bevor Sie die Karte benutzen können."
+
+msgid "Set initial PIN"
+msgstr "Echte PIN setzen"
+
+msgid "<b>Keys</b>"
+msgstr "<b>Schlüssel</b>"
+
+msgid "scanning ..."
+msgstr "untersuche..."
+
+msgid "<b>PIN</b>"
+msgstr "<b>PIN</b>"
+
+msgid "PIN retry counter:"
+msgstr "PIN Versuche frei:"
+
+msgid "PUK retry counter:"
+msgstr "PUK Versuche frei:"
+
+msgid "SigG PIN retry counter:"
+msgstr "SigG PIN Versuche frei:"
+
+msgid "SigG PUK retry counter:"
+msgstr "SigG PUK Versuche frei:"
+
+msgid ""
+"<b>Admin-PIN Required</b>\n"
+"\n"
+"Depending on the previous operations you may now be asked for the Admin-"
+"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
+"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
+"restored anymore and thus the data on the card can't be modified.\n"
+"\n"
+"Unless changed, a fresh standard card has set the Admin-PIN to the value "
+"<i>12345678</i>.  However, the issuer of your card might have initialized "
+"the card with a different Admin-PIN and that Admin-PIN might only be known "
+"to the issuer.  Please check the instructions of your issuer.\n"
+"\n"
+"This notice will be shown only once per session."
+msgstr ""
+"<b>Admin PIN notwendig</b>\n"
+"\n"
+"Abhängig von vorher durchgeführten Operationen werden Sie nun\n"
+"möglicherweise nach der Admin PIN gefragt.  Die Eingabe eines falschen\n"
+"Wertes wird den Falscheingabenzähler der Karte herunter setzen.  Sobald\n"
+"dieser Zähler den Wert 0 erreicht hat kann die Admin PIN nicht mehr\n"
+"wiederhergestellt werden und die Daten auf der Karten können nicht\n"
+"mehr geändert werden.\n"
+"\n"
+"Sofern nicht geändert, eine frische Standardkarte hat als Admin\n"
+"PIN den Wert <i>12345678</i> voreingestellt.  Es kann jedoch sein, daß\n"
+"der Herausgeber der Karte eine andere Voreinstellung getroffen hat\n"
+"oder die Admin PIN nur dem Herausgeber bekannt ist.  Bitte lesen Sie\n"
+"unbedingt die Hinweise des Herausgebers.\n"
+"\n"
+"Diese Benachrichtigung wird nur einmalig pro Sitzung angezeigt."
+
+msgid "CHV2 retry counter: "
+msgstr "CHV2 Versuche frei:"
+
+#, c-format
+msgid ""
+"Error saving the changed values.\n"
+"(%s <%s>)"
+msgstr ""
+"Das Speichern der geänderten Werte war nicht erfolgreich.\n"
+"(%s <%s>)"
+
+msgid "Only plain ASCII is currently allowed."
+msgstr "Es sind nur reine ASCII Zeichen erlaubt."
+
+msgid "The \"<\" character may not be used."
+msgstr "Das \"<\" Zeichen kann nicht verwendet werden."
+
+msgid "Double spaces are not allowed."
+msgstr "Doppelte Leerzeichen sind nicht erlaubt."
+
+msgid ""
+"Total length of first and last name may not be longer than 39 characters."
+msgstr ""
+"Die Gesamtlänge der Namensfelder darf nicht größer als 39 Zeichen sein."
+
+msgid "Saving the field failed."
+msgstr "Das speichern dieses Feldes ist fehlgeschlagen"
+
+msgid "Invalid length of the language preference."
+msgstr "Ungültige Länge in den Spracheinstellungen."
+
+msgid "The language preference may only contain the letters 'a' through 'z'."
+msgstr ""
+"Die Spracheinstellungen dürfen nur aus den Kleinbuchstaben 'a' bis 'z' "
+"bestehen."
+
+msgid "The field may not be longer than 254 characters."
+msgstr "Das Feld darf nicht länger als 254 Zeichen sein."
+
+msgid ""
+"<b>Unblocking the PIN</b>\n"
+"\n"
+"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Reset "
+"Code</b> and then to enter a new value for the PIN and repeat that new value "
+"at another prompt."
+msgstr ""
+
+msgid ""
+"<b>Changing the PIN</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the PIN decrements the retry counter.  If the "
+"retry counters of the PIN and of the Reset Code are both down to zero, the "
+"PIN can still be reset by using the Admin-PIN.\n"
+"\n"
+"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
+"the issuer of your card might have initialized the card with a different "
+"PIN.  Please check the instructions of your issuer."
+msgstr ""
+
+msgid ""
+"<b>Changing the Reset Code</b>\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the Reset Code and repeat that new value at "
+"another prompt."
+msgstr ""
+
+msgid ""
+"<b>Resetting the PIN or the Reset Code</b>\n"
+"\n"
+"If the retry counters of the PIN and of the Reset Code are both down to "
+"zero, it is only possible to reset them if you have access to the Admin-"
+"PIN.\n"
+"\n"
+"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
+"However, the issuer of your card might have initialized the card with a "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
+"Please check the instructions of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
+"repeat that new value at another prompt."
+msgstr ""
+
+msgid ""
+"<b>Changing the Admin-PIN</b>\n"
+"\n"
+"If you know the Admin-PIN you may change the Admin-PIN.\n"
+"\n"
+"The Admin-PIN is required to create keys on the card and to change other "
+"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
+"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
+"card might have initialized the card with a different Admin-PIN and that "
+"Admin-PIN might only be known to the issuer.  Please check the instructions "
+"of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
+"value at another prompt."
+msgstr ""
+
+#, c-format
+msgid ""
+"Error fetching the key.\n"
+"(%s <%s>)"
+msgstr ""
+"Fehler beim Holen des Schlüssels.\n"
+"(%s <%s>)"
+
+#, c-format
+msgid "Keys found: %d, imported: %d, unchanged: %d"
+msgstr "Gefundene Schlüssel: %d, importiert: %d, nicht geändert: %d"
+
+msgid "Fetch Key"
+msgstr "Schlüssel holen"
+
+msgid "Manufacturer:"
+msgstr "Hersteller:"
+
+msgid "<b>Personal</b>"
+msgstr "<b>Persona</b>"
+
+msgid "Salutation:"
+msgstr "Anrede:"
+
+msgid "First name:"
+msgstr "Vorname:"
+
+msgid "Last name:"
+msgstr "Nachname:"
+
+msgid "Language:"
+msgstr "Sprache:"
+
+msgid "Login data:"
+msgstr "Login Daten:"
+
+msgid "Public key URL:"
+msgstr "URL des öff. Schlüssels:"
+
+msgid "Signature key:"
+msgstr "Signaturschlüssel:"
+
+msgid "Encryption key:"
+msgstr "Verschlüsselungsschlüssel:"
+
+msgid "Authentication key:"
+msgstr "Authentifizierungsschlüssel:"
+
+msgid "Signature counter:"
+msgstr "Signaturzähler:"
+
+msgid "Force signature PIN:"
+msgstr "Signatur PIN erzwingen:"
+
+msgid "Admin-PIN retry counter:"
+msgstr "Admin PIN Versuche frei:"
+
+msgid "The ATR of the card is:"
+msgstr "Der ATR der Karte ist:"
+
+msgid "<b>Unknown Card</b>"
+msgstr "<b>Unbekannte Karte</b>"
 
 msgid "<b>Main</b>"
 msgstr "<b>Allgemein</b>"
@@ -117,6 +583,9 @@ msgstr "Benutzerdefinierter Wert"
 msgid "Use default argument"
 msgstr "Standardargument verwenden"
 
+msgid "_Apply"
+msgstr "_Anwenden"
+
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
@@ -128,8 +597,14 @@ msgstr ""
 msgid "Crypto Backend Configuration"
 msgstr "Konfiguration des Krypto Backend"
 
+msgid "Apply"
+msgstr "_Anwenden"
+
 msgid "Reset"
 msgstr "Zurücksetzen"
+
+msgid "_OK"
+msgstr "_OK"
 
 msgid "Configure the tools of the GnuPG system."
 msgstr "Konfigurien Sie die Werkzeuge des GnuPG Systems."
@@ -175,9 +650,6 @@ msgstr "Jahre"
 
 msgid "never expires"
 msgstr "kein Verfallsdatum"
-
-msgid "unknown"
-msgstr "unbekannt"
 
 msgid "keyserver"
 msgstr "Key-Server"
@@ -233,35 +705,11 @@ msgstr "Bitte geben Sie ein gültiges Datum ein."
 msgid "Change expiry date"
 msgstr "Verfallsdatum ändern"
 
-msgid "_Cancel"
-msgstr "_Abbrechen"
-
 msgid "_never expire"
 msgstr "_kein Verfallsdatum"
 
 msgid "_expire on:"
 msgstr "_ungültig ab:"
-
-msgid "Close all files"
-msgstr "Alle Dateien schließen"
-
-msgid "Sign the selected file"
-msgstr "Gewählte Datei signieren"
-
-msgid "Check signatures of selected file"
-msgstr "Signatur der ausgewählten Datei prüfen"
-
-msgid "Encrypt the selected file"
-msgstr "Gewählte Datei verschlüsseln"
-
-msgid "Decrypt the selected file"
-msgstr "Gewählte Datei entschlüsseln"
-
-msgid "Close the window"
-msgstr "Das Fenster schliessen"
-
-msgid "Select all files"
-msgstr "Alle Dateien auswählen"
 
 msgid "File"
 msgstr "Datei"
@@ -289,6 +737,118 @@ msgstr "_Klartextsignatur"
 
 msgid "_Detached signature"
 msgstr "_Abgetrennte Signature"
+
+msgid "[Error - No name]"
+msgstr "[Fehler - Kein Name]"
+
+msgid "[Error - Encoding not supported]"
+msgstr "[Fehler - Kodierung nicht unterstützt]"
+
+msgid "[Error - Invalid encoding]"
+msgstr "[Fehler - Ungültige Kodierung]"
+
+msgid "The key has both a smartcard based private part and a public part"
+msgstr ""
+"Dieser Schlüssel hat einen öffentlichen und einen kartenbasierten geheimen "
+"Teil"
+
+msgid "The key has both a private and a public part"
+msgstr "Dieser Schlüssel hat einen öffentlichen und einen geheimen Teil"
+
+msgid "The key has only a public part"
+msgstr "Dieser Schlüssel hat nur einen öffentlichen Teil"
+
+#, c-format
+msgid "%s %u bits"
+msgstr "%s %u bit"
+
+msgid "No keys selected"
+msgstr "Keine Schlüssel ausgewählt"
+
+#, c-format
+msgid "%d key selected"
+msgid_plural "%d keys selected"
+msgstr[0] "%d Schlüssel ausgewählt"
+msgstr[1] "%d Schlüssel ausgewählt"
+
+msgid "User name:"
+msgstr "Benutzerkennung:"
+
+msgid "Fingerprint:"
+msgstr "Fingerabdruck:"
+
+msgid "Key ID:"
+msgstr "Schlüsselkennung:"
+
+msgid "Expires at:"
+msgstr "ungültig ab:"
+
+msgid "Owner Trust:"
+msgstr "Benutzervertrauen:"
+
+msgid "Key validity:"
+msgstr "Gültigkeit:"
+
+msgid "Key type:"
+msgstr "Art:"
+
+msgid "Created at:"
+msgstr "erzeugt am:"
+
+msgid "Last update:"
+msgstr "Letztes Update:"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "User IDs"
+msgstr "User-IDs"
+
+msgid "Show signatures on user name:"
+msgstr "Signaturen für Benutzerkennung anzeigen:"
+
+msgid "Chain"
+msgstr "Kette"
+
+msgid "Signatures"
+msgstr "Signaturen"
+
+msgid "All signatures"
+msgstr "Alle Signaturen"
+
+msgid "Subkeys"
+msgstr "Untergeordnete Schlüssel"
+
+msgid "Key"
+msgstr "Schlüssel"
+
+msgid "Tofu"
+msgstr "TOFU"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "The mail address."
+msgstr "Die Mailadresse."
+
+msgid "Validity"
+msgstr "Gültigkeit"
+
+msgid "The validity of the mail address\n"
+msgstr "Die Gültigkeit der Mailadresse.\n"
+
+msgid "Update"
+msgstr "Update"
+
+msgid "The date the key was last updated via this mail address."
+msgstr ""
+"Das Datum an dem der Schlüssel für diese Mailadresse aktualisiert wurde."
+
+msgid "User ID"
+msgstr "User-ID"
+
+msgid "The full user ID."
+msgstr "Komplette User-ID"
 
 msgid "Output version information and exit"
 msgstr "Versionsinformation anzeigen und beenden"
@@ -329,27 +889,6 @@ msgstr "Grafische Benutzeroberfläche für GnuPG"
 msgid "Please report bugs to <"
 msgstr "Fehler bitte berichten an <"
 
-msgid "_Windows"
-msgstr "_Fenster"
-
-msgid "Open the keyring editor"
-msgstr "Schlüsselverwaltung öffnen"
-
-msgid "Open the file manager"
-msgstr "Dateiverwaltung aufrufen"
-
-msgid "Open the clipboard"
-msgstr "Zwischenablage öffnen"
-
-msgid "Configure the application"
-msgstr "Konfigurieren des Programms"
-
-msgid "_Backend Preferences"
-msgstr "\"_Backend\" Einstellungen"
-
-msgid "Configure the backend programs"
-msgstr "Konfigurien des GnuPG Systems"
-
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -376,6 +915,12 @@ msgstr "_Sicherheitskopie des Schlüssels in Datei:"
 #, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "Sicherheitskopie von Schlüssel 0x%s wird erstellt"
+
+msgid "(not set)"
+msgstr "(nicht gesetzt)"
+
+msgid "_Close"
+msgstr "_Fenster schließen"
 
 msgid "The private key has been copied to the clipboard."
 msgstr "Den geheimen Schlüssel wurde in die Zwischenablage kopiert."
@@ -456,9 +1001,6 @@ msgstr "Wollen Sie diesen Schlüssel <b>tatsächlich</b> benutzen?"
 msgid "Revoked Key"
 msgstr "Zurückgezogener Schlüssel"
 
-msgid "_Close"
-msgstr "_Fenster schließen"
-
 msgid "The following key has been revoked by its owner:"
 msgstr "Der folgende Schlüssel wurde vom Besitzer zurückgezogen:"
 
@@ -480,6 +1022,13 @@ msgstr ""
 
 msgid "You didn't select any key for signing"
 msgstr "Es wurde kein Schlüssel zum Signieren ausgewählt."
+
+msgid "Importing..."
+msgstr "Importieren..."
+
+#, c-format
+msgid "Error importing \"%s\": %s <%s>"
+msgstr "Fehler beim Import vom \"%s\": %s <%s>"
 
 msgid "Signing..."
 msgstr "Signieren ..."
@@ -644,12 +1193,6 @@ msgstr "Benutzerkennung:"
 msgid "User Names:"
 msgstr "Benutzernamen:"
 
-msgid "Key ID:"
-msgstr "Schlüsselkennung:"
-
-msgid "Fingerprint:"
-msgstr "Fingerabdruck:"
-
 msgid "Expiration"
 msgstr "Verfallsdatum"
 
@@ -668,9 +1211,6 @@ msgid ""
 msgstr ""
 "!FATALER FEHLER!\n"
 "Ungültiger Eingabemodus für das Verfallsdatum."
-
-msgid "(not set)"
-msgstr "(nicht gesetzt)"
 
 msgid ""
 "Keys are already stored on the card.\n"
@@ -723,9 +1263,6 @@ msgstr ""
 
 msgid "_Use a different filename"
 msgstr "Einen _anderen Dateiname benutzen"
-
-msgid "_Open"
-msgstr "_Öffnen"
 
 msgid ""
 "************************************************************************\n"
@@ -971,42 +1508,6 @@ msgstr "Über GPA"
 msgid "translator-credits"
 msgstr "Peter Neuhaus, Steffen Michalek und Werner Koch."
 
-msgid "_Help"
-msgstr "_Hilfe"
-
-msgid "Open the GPA manual"
-msgstr "Das GPA Handbuch anzeigen"
-
-msgid "About this application"
-msgstr "Über dieses Programm"
-
-msgid "_Verify"
-msgstr "Prüfen"
-
-msgid "_Encrypt"
-msgstr "_Verschlüsseln"
-
-msgid "_Decrypt"
-msgstr "Entschlüsseln"
-
-msgid "_Brief"
-msgstr "Übersicht"
-
-msgid "_Detailed"
-msgstr "Details"
-
-msgid "_Keyring Manager"
-msgstr "Schlüsselverwaltung"
-
-msgid "_Clipboard"
-msgstr "Zwischenablage"
-
-msgid "_File Manager"
-msgstr "Dateiverwaltung"
-
-msgid "_Card Manager"
-msgstr "Kartenverwaltung"
-
 msgid "Removing Secret Key"
 msgstr "Geheimen Schlüssel entfernen"
 
@@ -1209,9 +1710,6 @@ msgstr ""
 "zu unterschreiben (zertifizieren).  Dieser Wert ist nur für OpenPGP\n"
 "relevant."
 
-msgid "Validity"
-msgstr "Gültigkeit"
-
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
@@ -1253,116 +1751,11 @@ msgstr "_Sicherheitskopie anlegen"
 msgid "Only keys of the same procotol may be copied."
 msgstr "Nur Schlüssel eines Protokolls können zusammen kopiert werden"
 
-msgid "_Keys"
-msgstr "_Schlüssel"
-
-msgid "_Server"
-msgstr "_Server"
-
-msgid "Copy _Fingerprint"
-msgstr "_Fingerabdruck kopieren"
-
-msgid "Copy the fingerprints"
-msgstr "Die Fingerabdrücke in die Zwischenablage kopieren"
-
-msgid "Copy Private Key"
-msgstr "Den geheimen Schlüssel kopieren"
-
-msgid "Copy a single private key"
-msgstr "Den ausgewählten geheimen Schlüssel in die Zwischenablage kopieren"
-
-msgid "Select all certificates"
-msgstr "Alle Zertifikate auswählen"
-
-msgid "Refresh the keyring"
-msgstr "Schlüsselbund auffrischen"
-
-msgid "_New key..."
-msgstr "_Neuer Schlüssel..."
-
-msgid "Generate a new key"
-msgstr "Schlüssel erzeugen"
-
-msgid "_Delete keys"
-msgstr "Schlüssel _löschen"
-
-msgid "Remove the selected key"
-msgstr "Gewählten Schlüssel entfernen"
-
-msgid "_Sign Keys..."
-msgstr "Schlüssel _Signieren..."
-
-msgid "Sign the selected key"
-msgstr "Gewählten Schlüssel signieren"
-
-msgid "Set _Owner Trust..."
-msgstr "Schlüssel-_Vertrauen einstellen..."
-
-msgid "Set owner trust of the selected key"
-msgstr "Vertrauen des gewählten Schlüssels einstellen"
-
-msgid "_Edit Private Key..."
-msgstr "G_eheimen Schlüssel bearbeiten..."
-
-msgid "Edit the selected private key"
-msgstr "Ausgewählten geheimen Schlüssel bearbeiten"
-
-msgid "_Import Keys..."
-msgstr "Schlüssel importieren..."
-
-msgid "Import Keys"
-msgstr "Schlüssel importieren"
-
-msgid "E_xport Keys..."
-msgstr "Schlüssel e_xportieren..."
-
-msgid "Export Keys"
-msgstr "Schlüssel exportieren"
-
-msgid "_Backup..."
-msgstr "Sicherheitskopie _anlegen..."
-
-msgid "Backup key"
-msgstr "Sicherheitskopie des Schlüssels"
-
-msgid "_Retrieve Keys..."
-msgstr "_Schlüssel erhalten..."
-
-msgid "Retrieve keys from server"
-msgstr "Schlüssel _zum Key-Server senden"
-
-msgid "Re_fresh Keys"
-msgstr "Schlüssel auf_frischen"
-
-msgid "Refresh keys from server"
-msgstr "Schlüssel vom Key-Server auffrischen"
-
-msgid "_Send Keys..."
-msgstr "Schlüssel _Senden..."
-
-msgid "Send keys to server"
-msgstr "Schlüssel _zum Server senden ..."
-
 msgid "Show Brief Keylist"
 msgstr "Schlüssel nur mit Benutzerkennung anzeigen"
 
 msgid "Show Key Details"
 msgstr "Schlüssel mit Verfallsdatum und Vertrauenswerten anzeigen"
-
-msgid "Edit"
-msgstr "Ändern"
-
-msgid "Delete"
-msgstr "Löschen"
-
-msgid "Sign"
-msgstr "Signieren"
-
-msgid "Export"
-msgstr "Export"
-
-msgid "Import"
-msgstr "Import"
 
 msgid "Selected default key:"
 msgstr "Standard-Schlüssel:"
@@ -1372,78 +1765,6 @@ msgstr "Kein Standard-Schlüssel in den Einstellungen ausgewählt."
 
 msgid "Key Manager"
 msgstr "Schlüsselverwaltung"
-
-msgid "The key has both a smartcard based private part and a public part"
-msgstr ""
-"Dieser Schlüssel hat einen öffentlichen und einen kartenbasierten geheimen "
-"Teil"
-
-msgid "The key has both a private and a public part"
-msgstr "Dieser Schlüssel hat einen öffentlichen und einen geheimen Teil"
-
-msgid "The key has only a public part"
-msgstr "Dieser Schlüssel hat nur einen öffentlichen Teil"
-
-#, c-format
-msgid "%s %u bits"
-msgstr "%s %u bit"
-
-msgid "No keys selected"
-msgstr "Keine Schlüssel ausgewählt"
-
-#, c-format
-msgid "%d key selected"
-msgid_plural "%d keys selected"
-msgstr[0] "%d Schlüssel ausgewählt"
-msgstr[1] "%d Schlüssel ausgewählt"
-
-msgid "User name:"
-msgstr "Benutzerkennung:"
-
-msgid "Expires at:"
-msgstr "ungültig ab:"
-
-msgid "Owner Trust:"
-msgstr "Benutzervertrauen:"
-
-msgid "Key validity:"
-msgstr "Gültigkeit:"
-
-msgid "Key type:"
-msgstr "Art:"
-
-msgid "Created at:"
-msgstr "erzeugt am:"
-
-msgid "Last update:"
-msgstr "Letztes Update:"
-
-msgid "Details"
-msgstr "Details"
-
-msgid "User IDs"
-msgstr "User-IDs"
-
-msgid "Show signatures on user name:"
-msgstr "Signaturen für Benutzerkennung anzeigen:"
-
-msgid "Chain"
-msgstr "Kette"
-
-msgid "Signatures"
-msgstr "Signaturen"
-
-msgid "All signatures"
-msgstr "Alle Signaturen"
-
-msgid "Subkeys"
-msgstr "Untergeordnete Schlüssel"
-
-msgid "Key"
-msgstr "Schlüssel"
-
-msgid "Tofu"
-msgstr "TOFU"
 
 msgid "Sign Key"
 msgstr "Schlüssel signieren"
@@ -1622,9 +1943,6 @@ msgstr ""
 "Angekreuzt falls zumindest ein für S.MIME verwendbares Zertifikat gefunden "
 "wurde"
 
-msgid "Key ID"
-msgstr "Schlüsselkennung"
-
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
 "selected."
@@ -1678,15 +1996,6 @@ msgstr ""
 
 msgid "[Right-click to select]"
 msgstr "[Auswahl durch Rechts-Klick.]"
-
-msgid "Select _PGP key..."
-msgstr "Open_PGP Zertifikat auswählen..."
-
-msgid "Select _S\\/MIME key..."
-msgstr "_S/MIME Zertifikat auswählen..."
-
-msgid "Toggle _Ignore flag"
-msgstr "Das _Ignorieren Flag umschalten"
 
 msgid "Select keys for recipients"
 msgstr "Schlüssel für Empfängern auswählen"
@@ -1911,465 +2220,260 @@ msgstr "Signatur: %s"
 msgid "Signatures:"
 msgstr "Signaturen (Beglaubigungen)"
 
-msgid "Card Manager"
-msgstr "Kartenverwaltung"
-
-#, c-format
-msgid "%s card detected."
-msgstr "%s Karte erkannt."
-
-msgid "Checking for card..."
-msgstr "Warten auf Karte..."
-
-msgid "No card found."
-msgstr "Es wurde keine Karte gefunden."
-
-msgid "The selected card application is currently not available."
-msgstr "Die ausgewählte Kartenanwendung is momentan nicht verfügbar."
-
-msgid ""
-"Another process is using a different card application than the selected "
-"one.\n"
-"\n"
-"You may change the application selection mode to \"Auto\" to select the "
-"active application."
-msgstr ""
-"Ein anderer Prozess benutzt momentan eine andere als die aktuell ausgewählte "
-"Kartenanwendung.\n"
-"\n"
-"Sie können den Anwendungsauswahl-Modus auf \"Auto\" einstellen, um die "
-"aktive Anwendung auszuwählen."
-
-msgid "The selected card application is not available."
-msgstr "Die ausgewählte Kartenanwendung steht nicht zur Verfügung."
-
-msgid "Error accessing the card."
-msgstr "Fehler beim Zugriff auf die Karte."
-
-msgid "Error accessing card"
-msgstr "Auf die Karte kann nicht zugegriffen werden"
-
-msgid "No card"
-msgstr "Keine Karte"
-
-msgid "_Card"
-msgstr "_Karte"
-
-msgid "Reload card information"
-msgstr "Karteninformationen auffrischen"
-
-msgid "Generate new key on card"
-msgstr "Neuen Schlüssel auf Karte erzeugen"
-
-msgid "This card application is not yet supported."
-msgstr "Diese Kartenanwendung wird noch nicht unterstützt."
-
-msgid "Application selection:"
-msgstr "Anwendungsauswahl:"
-
-msgid "Auto"
-msgstr "Auto"
-
-msgid "The GPGME library is too old to support smartcards."
-msgstr "Die verwendete GPGME Bibliothek unterstützt noch keine Smartcards."
-
-msgid ""
-"<b>Admin-PIN Required</b>\n"
-"\n"
-"Depending on the previous operations you may now be asked for the Admin-"
-"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
-"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
-"restored anymore and thus the data on the card can't be modified.\n"
-"\n"
-"Unless changed, a fresh standard card has set the Admin-PIN to the value "
-"<i>12345678</i>.  However, the issuer of your card might have initialized "
-"the card with a different Admin-PIN and that Admin-PIN might only be known "
-"to the issuer.  Please check the instructions of your issuer.\n"
-"\n"
-"This notice will be shown only once per session."
-msgstr ""
-"<b>Admin PIN notwendig</b>\n"
-"\n"
-"Abhängig von vorher durchgeführten Operationen werden Sie nun\n"
-"möglicherweise nach der Admin PIN gefragt.  Die Eingabe eines falschen\n"
-"Wertes wird den Falscheingabenzähler der Karte herunter setzen.  Sobald\n"
-"dieser Zähler den Wert 0 erreicht hat kann die Admin PIN nicht mehr\n"
-"wiederhergestellt werden und die Daten auf der Karten können nicht\n"
-"mehr geändert werden.\n"
-"\n"
-"Sofern nicht geändert, eine frische Standardkarte hat als Admin\n"
-"PIN den Wert <i>12345678</i> voreingestellt.  Es kann jedoch sein, daß\n"
-"der Herausgeber der Karte eine andere Voreinstellung getroffen hat\n"
-"oder die Admin PIN nur dem Herausgeber bekannt ist.  Bitte lesen Sie\n"
-"unbedingt die Hinweise des Herausgebers.\n"
-"\n"
-"Diese Benachrichtigung wird nur einmalig pro Sitzung angezeigt."
-
-msgid "PUK retry counter:"
-msgstr "PUK Versuche frei:"
-
-msgid "CHV2 retry counter: "
-msgstr "CHV2 Versuche frei:"
-
-msgid "Reset PIN"
-msgstr "PIN zurücksetzen"
-
-msgid "Change PIN"
-msgstr "PIN ändern"
-
-msgid "Change PUK"
-msgstr "PUK ändern"
-
-msgid "Reset PUK"
-msgstr "PUK zurücksetzen"
-
-#, c-format
-msgid ""
-"Error saving the changed values.\n"
-"(%s <%s>)"
-msgstr ""
-"Das Speichern der geänderten Werte war nicht erfolgreich.\n"
-"(%s <%s>)"
-
-msgid "Only plain ASCII is currently allowed."
-msgstr "Es sind nur reine ASCII Zeichen erlaubt."
-
-msgid "The \"<\" character may not be used."
-msgstr "Das \"<\" Zeichen kann nicht verwendet werden."
-
-msgid "Double spaces are not allowed."
-msgstr "Doppelte Leerzeichen sind nicht erlaubt."
-
-msgid ""
-"Total length of first and last name may not be longer than 39 characters."
-msgstr ""
-"Die Gesamtlänge der Namensfelder darf nicht größer als 39 Zeichen sein."
-
-msgid "Saving the field failed."
-msgstr "Das speichern dieses Feldes ist fehlgeschlagen"
-
-msgid "Invalid length of the language preference."
-msgstr "Ungültige Länge in den Spracheinstellungen."
-
-msgid "The language preference may only contain the letters 'a' through 'z'."
-msgstr ""
-"Die Spracheinstellungen dürfen nur aus den Kleinbuchstaben 'a' bis 'z' "
-"bestehen."
-
-msgid "The field may not be longer than 254 characters."
-msgstr "Das Feld darf nicht länger als 254 Zeichen sein."
-
-msgid ""
-"<b>Unblocking the PIN</b>\n"
-"\n"
-"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Reset "
-"Code</b> and then to enter a new value for the PIN and repeat that new value "
-"at another prompt."
-msgstr ""
-
-msgid ""
-"<b>Changing the PIN</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the PIN decrements the retry counter.  If the "
-"retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reset by using the Admin-PIN.\n"
-"\n"
-"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
-"the issuer of your card might have initialized the card with a different "
-"PIN.  Please check the instructions of your issuer."
-msgstr ""
-
-msgid ""
-"<b>Changing the Reset Code</b>\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the Reset Code and repeat that new value at "
-"another prompt."
-msgstr ""
-
-msgid ""
-"<b>Resetting the PIN or the Reset Code</b>\n"
-"\n"
-"If the retry counters of the PIN and of the Reset Code are both down to "
-"zero, it is only possible to reset them if you have access to the Admin-"
-"PIN.\n"
-"\n"
-"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
-"However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
-"Please check the instructions of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
-"repeat that new value at another prompt."
-msgstr ""
-
-msgid ""
-"<b>Changing the Admin-PIN</b>\n"
-"\n"
-"If you know the Admin-PIN you may change the Admin-PIN.\n"
-"\n"
-"The Admin-PIN is required to create keys on the card and to change other "
-"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
-"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
-"card might have initialized the card with a different Admin-PIN and that "
-"Admin-PIN might only be known to the issuer.  Please check the instructions "
-"of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
-"value at another prompt."
-msgstr ""
-
-#, c-format
-msgid ""
-"Error changing or resetting the PIN/PUK.\n"
-"(%s <%s>)"
-msgstr ""
-"Fehler beim Ändern oder Rücksetzen der PIN/PUK.\n"
-"(%s <%s>)"
-
-#, c-format
-msgid ""
-"Error fetching the key.\n"
-"(%s <%s>)"
-msgstr ""
-"Fehler beim Holen des Schlüssels.\n"
-"(%s <%s>)"
-
-#, c-format
-msgid "Keys found: %d, imported: %d, unchanged: %d"
-msgstr "Gefundene Schlüssel: %d, importiert: %d, nicht geändert: %d"
-
-msgid "Fetch Key"
-msgstr "Schlüssel holen"
-
-msgid "<b>General</b>"
-msgstr "<b>Allgemein</b>"
-
-msgid "Serial number:"
-msgstr "Seriennummer:"
-
-msgid "Card version:"
-msgstr "Kartenversion:"
-
-msgid "Manufacturer:"
-msgstr "Hersteller:"
-
-msgid "<b>Personal</b>"
-msgstr "<b>Persona</b>"
-
-msgid "Salutation:"
-msgstr "Anrede:"
-
-msgid "First name:"
-msgstr "Vorname:"
-
-msgid "Last name:"
-msgstr "Nachname:"
-
-msgid "Language:"
-msgstr "Sprache:"
-
-msgid "Login data:"
-msgstr "Login Daten:"
-
-msgid "Public key URL:"
-msgstr "URL des öff. Schlüssels:"
-
-msgid "<b>Keys</b>"
-msgstr "<b>Schlüssel</b>"
-
-msgid "Signature key:"
-msgstr "Signaturschlüssel:"
-
-msgid "Encryption key:"
-msgstr "Verschlüsselungsschlüssel:"
-
-msgid "Authentication key:"
-msgstr "Authentifizierungsschlüssel:"
-
-msgid "Signature counter:"
-msgstr "Signaturzähler:"
-
-msgid "<b>PIN</b>"
-msgstr "<b>PIN</b>"
-
-msgid "Force signature PIN:"
-msgstr "Signatur PIN erzwingen:"
-
-msgid "PIN retry counter:"
-msgstr "PIN Versuche frei:"
-
-msgid "Admin-PIN retry counter:"
-msgstr "Admin PIN Versuche frei:"
-
-msgid "blocked"
-msgstr "blockiert"
-
-msgid "Learn keys"
-msgstr "Schlüssel erlernen"
-
-msgid ""
-"For some or all of the keys available on the card, the GnuPG crypto engine "
-"does not yet know the corresponding certificates.\n"
-"\n"
-"If you click this button, GnuPG will be asked to \"learn\" this card and "
-"import all certificates stored on the card into its own certificate store.  "
-"This is not done automatically because it may take several seconds to read "
-"all certificates from the card.\n"
-"\n"
-"If you are unsure what to do, just click the button."
-msgstr ""
-
-msgid "Learning keys ..."
-msgstr "Schlüssel erlernen..."
-
-#, c-format
-msgid ""
-"<b>Setting the Initial PIN</b> (%s)\n"
-"\n"
-"You selected to set the initial PIN of your card.  The PIN is currently set "
-"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
-"reverted</b>.\n"
-"\n"
-"Please check the documentation of your card to learn for what the NullPIN is "
-"good.\n"
-"\n"
-"If you proceed you will be asked to enter a new PIN and later to repeat that "
-"PIN.  Make sure that you will remember that PIN - it will not be possible to "
-"recover the PIN if it has been entered wrongly more than %d times.\n"
-"\n"
-"%s"
-msgstr ""
-"<b>Erstmaliges Setzen der PIN</b> (%s)\n"
-"\n"
-"Sie möchten die PIN der Karte zum ersten mal setzen.  Die PIN is momentan "
-"noch auf die NullPIN gesetzt.  Das erstmalige Setzen der PIN is "
-"<b>notwendig, kann aber nicht rückgängig gemacht werden</b>.\n"
-"\n"
-"Bitle lesen Sie unbedingt die Dokumentation Ihrer Karte um den Sinn der "
-"NullPIN zu verstehen.\n"
-"\n"
-"Wenn sie nun weitermachen (OK drücken), so werden Sie nach einer neuen PIN "
-"gefragt und danach gebeten, diese PIN noch einmal zu wiederholen.  Bitte "
-"stellen Sie sicher, daß Sie sich diese PIN wirklich gemerkt haben - die "
-"Karte wird unbrauchbar sobald Sie mehr als %d mal hintereinander die PIN "
-"falsch eingegeben.\n"
-"\n"
-"%s"
-
-msgid ""
-"You are now setting the PIN for the SigG key used to create <b>qualified "
-"signatures</b>.  You may want to set the PIN to the same value as used for "
-"the NKS keys."
-msgstr ""
-"Sie setzen nun die PIN für den SigG Schlüssel, der verwendet wird um "
-"<b>qualifizierte Signaturen</b> zu erzeugen.  Es ist anzuraten, die PIN auf "
-"denselben Wert zu setzen die Sie auch für den NKS Schlüssel benutzen."
-
-msgid ""
-"You are now setting the PIN for the NKS keys used for standard signatures, "
-"encryption and authentication."
-msgstr ""
-"Sie setzen nun die PIN für den NKS Schlüssel, der für normale Signaturen, "
-"zur Verschlüsselung und zur Authentifizierung verwendet wird."
-
-#, c-format
-msgid ""
-"Error changing the NullPIN.\n"
-"(%s <%s>)"
-msgstr ""
-"Das Ändern der NullPIN war nicht erfolgreich.\n"
-"(%s <%s>)"
-
-msgid ""
-"<b>Changing a PIN or PUK</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value and then to "
-"enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the current value decrements the retry counter.  "
-"If the retry counters of the PIN and the corresponding PUK are both down to "
-"zero, the keys controlled by the PIN are not anymore usable and there is no "
-"way to unblock them!"
-msgstr ""
-
-msgid ""
-"<b>Resetting a PUK</b>\n"
-"\n"
-"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
-"system of the NetKey card implements it as an alternative PIN and thus it is "
-"possible to use the PIN to unblock the PUK.\n"
-"\n"
-"If the PUK is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PIN.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the blocked PUK and repeat that new value at "
-"another prompt."
-msgstr ""
-
-msgid ""
-"<b>Resetting a PIN</b>\n"
-"\n"
-"If the PIN is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PUK.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PUK and "
-"then to enter a new value for the blocked PIN and repeat that new value at "
-"another prompt."
-msgstr ""
-
-msgid ""
-"<b>A NullPIN is still active on this card</b>.\n"
-"You need to set a real PIN before you can make use of the card."
-msgstr ""
-"<b>Eine NullPIN ist noch immer auf dieser Karte gesetzt</b>.\n"
-"Sie müßen eine echte PIn setzen, bevor Sie die Karte benutzen können."
-
-msgid "Set initial PIN"
-msgstr "Echte PIN setzen"
-
-msgid "scanning ..."
-msgstr "untersuche..."
-
-msgid "SigG PIN retry counter:"
-msgstr "SigG PIN Versuche frei:"
-
-msgid "SigG PUK retry counter:"
-msgstr "SigG PUK Versuche frei:"
-
-#, c-format
-msgid ""
-"There is not much information to display for a %s card.  You may want to use "
-"the application selector button to switch to another application available "
-"on this card."
-msgstr ""
-"Für eine %s Karte können nicht viele Informationen angezeigt werden.  Sie "
-"können jedoch mit dem Knopf zur Anwendungsauswahl auf eine andere, auf der "
-"Karte verfügbare, Anwendung umschalten."
+#~ msgid "_File"
+#~ msgstr "_Datei"
+
+#~ msgid "_Edit"
+#~ msgstr "_Bearbeiten"
+
+#~ msgid "Clear buffer"
+#~ msgstr "Textfeld löschen"
+
+#~ msgid "Open a file"
+#~ msgstr "Datei öffnen"
+
+#~ msgid "Save to a file"
+#~ msgstr "In eine Datei speichern"
+
+#~ msgid "Sign buffer text"
+#~ msgstr "Text signieren"
+
+#~ msgid "Check signatures of buffer text"
+#~ msgstr "Signatur des Texts prüfen"
+
+#~ msgid "Encrypt the buffer text"
+#~ msgstr "Text verschlüsseln"
+
+#~ msgid "Decrypt the buffer text"
+#~ msgstr "Text entschlüsseln"
+
+#~ msgid "Close the buffer"
+#~ msgstr "Das Fenster schliessen"
+
+#~ msgid "Quit the program"
+#~ msgstr "Das Programm beenden"
+
+#~ msgid "Undo the last action"
+#~ msgstr "Die letzte Aktion rückgangig machen"
+
+#~ msgid "Redo the last undone action"
+#~ msgstr "Die letzte rückgängig gemachte Aktion wiederholen"
+
+#~ msgid "Cut the selection"
+#~ msgstr "Auswahl ausschneiden"
+
+#~ msgid "Copy the selection"
+#~ msgstr "Auswahl kopieren"
+
+#~ msgid "Paste the clipboard"
+#~ msgstr "Zwischenablage einfügen"
+
+#~ msgid "Delete the selected text"
+#~ msgstr "Gewählten Text löschen"
+
+#~ msgid "Select the entire document"
+#~ msgstr "Das gesamte Dokument auswählen"
+
+#~ msgid "Close all files"
+#~ msgstr "Alle Dateien schließen"
+
+#~ msgid "Sign the selected file"
+#~ msgstr "Gewählte Datei signieren"
+
+#~ msgid "Check signatures of selected file"
+#~ msgstr "Signatur der ausgewählten Datei prüfen"
+
+#~ msgid "Encrypt the selected file"
+#~ msgstr "Gewählte Datei verschlüsseln"
+
+#~ msgid "Decrypt the selected file"
+#~ msgstr "Gewählte Datei entschlüsseln"
+
+#~ msgid "Close the window"
+#~ msgstr "Das Fenster schliessen"
+
+#~ msgid "Select all files"
+#~ msgstr "Alle Dateien auswählen"
+
+#~ msgid "_Windows"
+#~ msgstr "_Fenster"
+
+#~ msgid "Open the keyring editor"
+#~ msgstr "Schlüsselverwaltung öffnen"
+
+#~ msgid "Open the file manager"
+#~ msgstr "Dateiverwaltung aufrufen"
+
+#~ msgid "Open the clipboard"
+#~ msgstr "Zwischenablage öffnen"
+
+#~ msgid "Configure the application"
+#~ msgstr "Konfigurieren des Programms"
+
+#~ msgid "_Backend Preferences"
+#~ msgstr "\"_Backend\" Einstellungen"
+
+#~ msgid "Configure the backend programs"
+#~ msgstr "Konfigurien des GnuPG Systems"
+
+#~ msgid "_Help"
+#~ msgstr "_Hilfe"
+
+#~ msgid "Open the GPA manual"
+#~ msgstr "Das GPA Handbuch anzeigen"
+
+#~ msgid "About this application"
+#~ msgstr "Über dieses Programm"
+
+#~ msgid "_Verify"
+#~ msgstr "Prüfen"
+
+#~ msgid "_Encrypt"
+#~ msgstr "_Verschlüsseln"
+
+#~ msgid "_Decrypt"
+#~ msgstr "Entschlüsseln"
+
+#~ msgid "_Brief"
+#~ msgstr "Übersicht"
+
+#~ msgid "_Detailed"
+#~ msgstr "Details"
+
+#~ msgid "_Keyring Manager"
+#~ msgstr "Schlüsselverwaltung"
+
+#~ msgid "_Clipboard"
+#~ msgstr "Zwischenablage"
+
+#~ msgid "_File Manager"
+#~ msgstr "Dateiverwaltung"
+
+#~ msgid "_Card Manager"
+#~ msgstr "Kartenverwaltung"
+
+#~ msgid "_Keys"
+#~ msgstr "_Schlüssel"
+
+#~ msgid "_Server"
+#~ msgstr "_Server"
+
+#~ msgid "Copy _Fingerprint"
+#~ msgstr "_Fingerabdruck kopieren"
+
+#~ msgid "Copy the fingerprints"
+#~ msgstr "Die Fingerabdrücke in die Zwischenablage kopieren"
+
+#~ msgid "Copy Private Key"
+#~ msgstr "Den geheimen Schlüssel kopieren"
+
+#~ msgid "Copy a single private key"
+#~ msgstr "Den ausgewählten geheimen Schlüssel in die Zwischenablage kopieren"
+
+#~ msgid "Select all certificates"
+#~ msgstr "Alle Zertifikate auswählen"
+
+#~ msgid "Refresh the keyring"
+#~ msgstr "Schlüsselbund auffrischen"
+
+#~ msgid "_New key..."
+#~ msgstr "_Neuer Schlüssel..."
+
+#~ msgid "Generate a new key"
+#~ msgstr "Schlüssel erzeugen"
+
+#~ msgid "_Delete keys"
+#~ msgstr "Schlüssel _löschen"
+
+#~ msgid "Remove the selected key"
+#~ msgstr "Gewählten Schlüssel entfernen"
+
+#~ msgid "_Sign Keys..."
+#~ msgstr "Schlüssel _Signieren..."
+
+#~ msgid "Sign the selected key"
+#~ msgstr "Gewählten Schlüssel signieren"
+
+#~ msgid "Set _Owner Trust..."
+#~ msgstr "Schlüssel-_Vertrauen einstellen..."
+
+#~ msgid "Set owner trust of the selected key"
+#~ msgstr "Vertrauen des gewählten Schlüssels einstellen"
+
+#~ msgid "_Edit Private Key..."
+#~ msgstr "G_eheimen Schlüssel bearbeiten..."
+
+#~ msgid "Edit the selected private key"
+#~ msgstr "Ausgewählten geheimen Schlüssel bearbeiten"
+
+#~ msgid "Import Keys"
+#~ msgstr "Schlüssel importieren"
+
+#~ msgid "E_xport Keys..."
+#~ msgstr "Schlüssel e_xportieren..."
+
+#~ msgid "Export Keys"
+#~ msgstr "Schlüssel exportieren"
+
+#~ msgid "_Backup..."
+#~ msgstr "Sicherheitskopie _anlegen..."
+
+#~ msgid "Backup key"
+#~ msgstr "Sicherheitskopie des Schlüssels"
+
+#~ msgid "_Retrieve Keys..."
+#~ msgstr "_Schlüssel erhalten..."
+
+#~ msgid "Retrieve keys from server"
+#~ msgstr "Schlüssel _zum Key-Server senden"
+
+#~ msgid "Re_fresh Keys"
+#~ msgstr "Schlüssel auf_frischen"
+
+#~ msgid "Refresh keys from server"
+#~ msgstr "Schlüssel vom Key-Server auffrischen"
+
+#~ msgid "_Send Keys..."
+#~ msgstr "Schlüssel _Senden..."
+
+#~ msgid "Send keys to server"
+#~ msgstr "Schlüssel _zum Server senden ..."
+
+#~ msgid "Edit"
+#~ msgstr "Ändern"
+
+#~ msgid "Delete"
+#~ msgstr "Löschen"
+
+#~ msgid "Sign"
+#~ msgstr "Signieren"
+
+#~ msgid "Export"
+#~ msgstr "Export"
+
+#~ msgid "Import"
+#~ msgstr "Import"
+
+#~ msgid "Select _PGP key..."
+#~ msgstr "Open_PGP Zertifikat auswählen..."
+
+#~ msgid "Select _S\\/MIME key..."
+#~ msgstr "_S/MIME Zertifikat auswählen..."
+
+#~ msgid "Toggle _Ignore flag"
+#~ msgstr "Das _Ignorieren Flag umschalten"
+
+#~ msgid "_Card"
+#~ msgstr "_Karte"
+
+#~ msgid "Reload card information"
+#~ msgstr "Karteninformationen auffrischen"
+
+#~ msgid "Generate new key on card"
+#~ msgstr "Neuen Schlüssel auf Karte erzeugen"
 
 #~ msgid "Size"
 #~ msgstr "Größe"
-
-#~ msgid "The key ID is a short number to identify a certificate."
-#~ msgstr ""
-#~ "Die Schlüsselkennung (Key ID) is eine kurze Zahl zur Identifizerung eines "
-#~ "Zertifikats."
 
 #~ msgid "Error"
 #~ msgstr "Fehler"
@@ -2634,9 +2738,6 @@ msgstr ""
 #~ msgid "_Forward"
 #~ msgstr "_Weiter"
 
-#~ msgid "_Apply"
-#~ msgstr "_Anwenden"
-
 #~ msgid "Brought to you by:"
 #~ msgstr "Ermöglicht durch die Arbeit von:"
 
@@ -2675,9 +2776,6 @@ msgstr ""
 
 #~ msgid "Please insert your name"
 #~ msgstr "Bitte geben Sie Ihren Namen an."
-
-#~ msgid "Please insert your email address"
-#~ msgstr "Bitte geben Sie Ihre E-Mail-Adresse an"
 
 #~ msgid "/Keys/_Refresh"
 #~ msgstr "/Schlüssel/Auf_frischen"
@@ -2950,9 +3048,6 @@ msgstr ""
 #~ msgid "Directories"
 #~ msgstr "Verzeichnisse"
 
-#~ msgid "_OK"
-#~ msgstr "_OK"
-
 #~ msgid "OK"
 #~ msgstr "OK"
 
@@ -3016,13 +3111,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Der Dateiname \"%s\" enthält Symbole, die nicht in Dateinamen vorkommen "
 #~ "dürfen."
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Fehler beim Löschen der Datei \"%s\": %s\n"
-#~ "%s"
 
 #~ msgid "It probably contains symbols not allowed in filenames."
 #~ msgstr ""
@@ -3200,9 +3288,6 @@ msgstr ""
 
 #~ msgid "Error initializing network"
 #~ msgstr "Fehler beim Initialisieren des Netzwerks"
-
-#~ msgid "Error resolving host name"
-#~ msgstr "Fehler bei der Namensauflösung"
 
 #~ msgid "Error while connecting to keyserver"
 #~ msgstr "Fehler beim Verbindungsaufbau zum Server"
