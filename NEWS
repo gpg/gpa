@@ -1,5 +1,13 @@
-Noteworthy changes in version 0.11.0 (unreleased)
+Noteworthy changes in version 0.11.0 (2024-12-10)
 -------------------------------------------------
+
+ * Ported to GTK 3.
+
+ * See the ChangeLog or better
+   https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpa.git for a list of
+   changes over the last 6 years.
+
+ Release-info: https://dev.gnupg.org/T7449
 
 
 Noteworthy changes in version 0.10.0 (2018-10-16)

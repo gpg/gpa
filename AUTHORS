@@ -90,6 +90,8 @@ Maxim Britov <maxim.britov@gmail.com>
 Marcus Brinkmann  <marcus@g10code.com>
         Clipboard code, cleanups, bug fixes.
 
+Andreas Rönnquist <gusnan@librem.one>
+        Port to GTK+ 3 and other changes.
 
 
 Copyright and Redistribution
