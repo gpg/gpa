@@ -56,7 +56,7 @@ NEED_GPGME_VERSION=1.9.0
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR(src/gpa.c)
-AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip])
+AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip tar-pax])
 
 PACKAGE=$PACKAGE_NAME
 VERSION=$PACKAGE_VERSION
@@ -79,6 +79,7 @@ have_libassuan=no
 BUILD_REVISION="mym4_revision"
 BUILD_COMMITID="mym4_commitid"
 AC_SUBST(BUILD_REVISION)
+AC_SUBST(BUILD_COMMITID)
 AC_DEFINE_UNQUOTED(BUILD_REVISION, "$BUILD_REVISION",
                    [GIT revisionn used to build this package])
 AC_DEFINE_UNQUOTED(BUILD_COMMITID, "$BUILD_COMMITID",
