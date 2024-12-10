@@ -16,6 +16,88 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#, fuzzy
+msgid "Card Manager"
+msgstr "ファイルマネージャ"
+
+#, c-format
+msgid "%s card detected."
+msgstr ""
+
+msgid "Checking for card..."
+msgstr ""
+
+#, fuzzy
+msgid "No card found."
+msgstr "鍵が見付かりませんでした。"
+
+msgid "The selected card application is currently not available."
+msgstr ""
+
+msgid ""
+"Another process is using a different card application than the selected "
+"one.\n"
+"\n"
+"You may change the application selection mode to \"Auto\" to select the "
+"active application."
+msgstr ""
+
+#, fuzzy
+msgid "The selected card application is not available."
+msgstr "選択した鍵は署名には利用できません"
+
+#, fuzzy
+msgid "Error accessing the card."
+msgstr "ファイルアクセスのエラー"
+
+#, fuzzy
+msgid "Error accessing card"
+msgstr "ファイルアクセスのエラー"
+
+msgid "No card"
+msgstr ""
+
+#, fuzzy
+msgid "This card application is not yet supported."
+msgstr "操作がサポートされていません"
+
+#, fuzzy
+msgid "Application selection:"
+msgstr "選択ファイルを暗号化する"
+
+msgid "Auto"
+msgstr ""
+
+msgid "The GPGME library is too old to support smartcards."
+msgstr ""
+
+msgid "Key ID"
+msgstr "鍵 ID"
+
+#, fuzzy
+msgid "The key ID is a short number to identify a certificate."
+msgstr "証明にのみ使える鍵です。"
+
+msgid "Serialno."
+msgstr ""
+
+msgid "Issuer"
+msgstr ""
+
+msgid "[chain too long]"
+msgstr ""
+
+#, fuzzy
+msgid "[issuer not found]"
+msgstr "鍵が見付かりません"
+
+msgid "_Cancel"
+msgstr "キャンセル (_C)"
+
+#, fuzzy
+msgid "_Open"
+msgstr "開く"
+
 msgid "Open File"
 msgstr "ファイルを開く"
 
@@ -26,68 +108,16 @@ msgstr "GPA メッセージ"
 #. and the unit (such as KB or MB).
 #, c-format
 msgid "The file %s is %llu%s large.  Do you really  want to open it?"
+msgstr "このファイル %s は %llu%s の大きさです。本当に開きますか?"
+
+msgid "_Save"
 msgstr ""
-"このファイル %s は %llu%s の大きさです。本当に開きますか?"
 
 msgid "Save As..."
 msgstr "別名で保存..."
 
 msgid "Clipboard"
 msgstr "クリップボード"
-
-msgid "_File"
-msgstr "ファイル (_F)"
-
-msgid "_Edit"
-msgstr "編集 (_E)"
-
-msgid "Clear buffer"
-msgstr "バッファをクリア"
-
-msgid "Open a file"
-msgstr "ファイルを開く"
-
-msgid "Save to a file"
-msgstr "ファイルを保存"
-
-msgid "Sign buffer text"
-msgstr "バッファのテクストに署名"
-
-msgid "Check signatures of buffer text"
-msgstr "バッファのテクストの署名をチェック"
-
-msgid "Encrypt the buffer text"
-msgstr "バッファのテクストを暗号化する"
-
-msgid "Decrypt the buffer text"
-msgstr "バッファのテクストを復号する"
-
-msgid "Close the buffer"
-msgstr "バッファを閉じる"
-
-msgid "Quit the program"
-msgstr "プログラムを終了"
-
-msgid "Undo the last action"
-msgstr "最後のアクションをアンドゥ"
-
-msgid "Redo the last undone action"
-msgstr "最後の取り消されたアクションを実行"
-
-msgid "Cut the selection"
-msgstr "選択を切り取る"
-
-msgid "Copy the selection"
-msgstr "選択をコピー"
-
-msgid "Paste the clipboard"
-msgstr "クリップボードにペースト"
-
-msgid "Delete the selected text"
-msgstr "選択されたテクストを削除"
-
-msgid "Select the entire document"
-msgstr ""
 
 #, fuzzy
 msgid "Keyring"
@@ -99,6 +129,413 @@ msgstr "ファイル"
 #, fuzzy
 msgid "Card"
 msgstr "クリップボードへコピー (_C)"
+
+#, fuzzy
+msgid "<b>General</b>"
+msgstr "上級者モードを使う (_A):"
+
+msgid "Serial number:"
+msgstr ""
+
+#, c-format
+msgid ""
+"There is not much information to display for a %s card.  You may want to use "
+"the application selector button to switch to another application available "
+"on this card."
+msgstr ""
+
+#, fuzzy
+msgid "<b>Amount</b>"
+msgstr "個人"
+
+#, fuzzy
+msgid "Card number: "
+msgstr "ファイルマネージャ"
+
+msgid "Short Bank Code number: "
+msgstr ""
+
+#, fuzzy
+msgid "Bank type: "
+msgstr "鍵タイプ:"
+
+msgid "Card valid from: "
+msgstr ""
+
+#, fuzzy
+msgid "Card expires: "
+msgstr "無期限"
+
+msgid "Issuing country: "
+msgstr ""
+
+msgid "Currency: "
+msgstr ""
+
+msgid "ZKA chip Id: "
+msgstr ""
+
+msgid "Chip OS version: "
+msgstr ""
+
+msgid "Balance: "
+msgstr ""
+
+msgid "General limit: "
+msgstr ""
+
+msgid "Transaction limit: "
+msgstr ""
+
+msgid "unknown"
+msgstr "未確認"
+
+msgid "blocked"
+msgstr ""
+
+msgid "Reset PUK"
+msgstr ""
+
+msgid "Reset PIN"
+msgstr ""
+
+#, fuzzy
+msgid "Change PUK"
+msgstr "信用度の変更 (_T)"
+
+#, fuzzy
+msgid "Change PIN"
+msgstr "信用度の変更 (_T)"
+
+#, fuzzy
+msgid "Learn keys"
+msgstr "鍵エクスポート"
+
+msgid ""
+"For some or all of the keys available on the card, the GnuPG crypto engine "
+"does not yet know the corresponding certificates.\n"
+"\n"
+"If you click this button, GnuPG will be asked to \"learn\" this card and "
+"import all certificates stored on the card into its own certificate store.  "
+"This is not done automatically because it may take several seconds to read "
+"all certificates from the card.\n"
+"\n"
+"If you are unsure what to do, just click the button."
+msgstr ""
+
+#, fuzzy
+msgid "Learning keys ..."
+msgstr "鍵を生成中..."
+
+#, c-format
+msgid ""
+"<b>Setting the Initial PIN</b> (%s)\n"
+"\n"
+"You selected to set the initial PIN of your card.  The PIN is currently set "
+"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
+"reverted</b>.\n"
+"\n"
+"Please check the documentation of your card to learn for what the NullPIN is "
+"good.\n"
+"\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid ""
+"You are now setting the PIN for the SigG key used to create <b>qualified "
+"signatures</b>.  You may want to set the PIN to the same value as used for "
+"the NKS keys."
+msgstr ""
+
+msgid ""
+"You are now setting the PIN for the NKS keys used for standard signatures, "
+"encryption and authentication."
+msgstr ""
+
+#, c-format
+msgid ""
+"Error changing the NullPIN.\n"
+"(%s <%s>)"
+msgstr ""
+
+msgid ""
+"<b>Changing a PIN or PUK</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value and then to "
+"enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the current value decrements the retry counter.  "
+"If the retry counters of the PIN and the corresponding PUK are both down to "
+"zero, the keys controlled by the PIN are not anymore usable and there is no "
+"way to unblock them!"
+msgstr ""
+
+msgid ""
+"<b>Resetting a PUK</b>\n"
+"\n"
+"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
+"system of the NetKey card implements it as an alternative PIN and thus it is "
+"possible to use the PIN to unblock the PUK.\n"
+"\n"
+"If the PUK is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PIN.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the blocked PUK and repeat that new value at "
+"another prompt."
+msgstr ""
+
+msgid ""
+"<b>Resetting a PIN</b>\n"
+"\n"
+"If the PIN is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PUK.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PUK and "
+"then to enter a new value for the blocked PIN and repeat that new value at "
+"another prompt."
+msgstr ""
+
+#, c-format
+msgid ""
+"Error changing or resetting the PIN/PUK.\n"
+"(%s <%s>)"
+msgstr ""
+
+msgid "Card version:"
+msgstr ""
+
+msgid ""
+"<b>A NullPIN is still active on this card</b>.\n"
+"You need to set a real PIN before you can make use of the card."
+msgstr ""
+
+msgid "Set initial PIN"
+msgstr ""
+
+#, fuzzy
+msgid "<b>Keys</b>"
+msgstr "署名選択 (_A)"
+
+#, fuzzy
+msgid "scanning ..."
+msgstr "署名中..."
+
+msgid "<b>PIN</b>"
+msgstr ""
+
+msgid "PIN retry counter:"
+msgstr ""
+
+msgid "PUK retry counter:"
+msgstr ""
+
+msgid "SigG PIN retry counter:"
+msgstr ""
+
+msgid "SigG PUK retry counter:"
+msgstr ""
+
+msgid ""
+"<b>Admin-PIN Required</b>\n"
+"\n"
+"Depending on the previous operations you may now be asked for the Admin-"
+"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
+"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
+"restored anymore and thus the data on the card can't be modified.\n"
+"\n"
+"Unless changed, a fresh standard card has set the Admin-PIN to the value "
+"<i>12345678</i>.  However, the issuer of your card might have initialized "
+"the card with a different Admin-PIN and that Admin-PIN might only be known "
+"to the issuer.  Please check the instructions of your issuer.\n"
+"\n"
+"This notice will be shown only once per session."
+msgstr ""
+
+msgid "CHV2 retry counter: "
+msgstr ""
+
+#, c-format
+msgid ""
+"Error saving the changed values.\n"
+"(%s <%s>)"
+msgstr ""
+
+msgid "Only plain ASCII is currently allowed."
+msgstr ""
+
+msgid "The \"<\" character may not be used."
+msgstr ""
+
+msgid "Double spaces are not allowed."
+msgstr ""
+
+msgid ""
+"Total length of first and last name may not be longer than 39 characters."
+msgstr ""
+
+#, fuzzy
+msgid "Saving the field failed."
+msgstr "選択ファイルに署名する"
+
+msgid "Invalid length of the language preference."
+msgstr ""
+
+msgid "The language preference may only contain the letters 'a' through 'z'."
+msgstr ""
+
+msgid "The field may not be longer than 254 characters."
+msgstr ""
+
+msgid ""
+"<b>Unblocking the PIN</b>\n"
+"\n"
+"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Reset "
+"Code</b> and then to enter a new value for the PIN and repeat that new value "
+"at another prompt."
+msgstr ""
+
+msgid ""
+"<b>Changing the PIN</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the PIN decrements the retry counter.  If the "
+"retry counters of the PIN and of the Reset Code are both down to zero, the "
+"PIN can still be reset by using the Admin-PIN.\n"
+"\n"
+"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
+"the issuer of your card might have initialized the card with a different "
+"PIN.  Please check the instructions of your issuer."
+msgstr ""
+
+msgid ""
+"<b>Changing the Reset Code</b>\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the Reset Code and repeat that new value at "
+"another prompt."
+msgstr ""
+
+msgid ""
+"<b>Resetting the PIN or the Reset Code</b>\n"
+"\n"
+"If the retry counters of the PIN and of the Reset Code are both down to "
+"zero, it is only possible to reset them if you have access to the Admin-"
+"PIN.\n"
+"\n"
+"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
+"However, the issuer of your card might have initialized the card with a "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
+"Please check the instructions of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
+"repeat that new value at another prompt."
+msgstr ""
+
+msgid ""
+"<b>Changing the Admin-PIN</b>\n"
+"\n"
+"If you know the Admin-PIN you may change the Admin-PIN.\n"
+"\n"
+"The Admin-PIN is required to create keys on the card and to change other "
+"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
+"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
+"card might have initialized the card with a different Admin-PIN and that "
+"Admin-PIN might only be known to the issuer.  Please check the instructions "
+"of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
+"value at another prompt."
+msgstr ""
+
+#, fuzzy, c-format
+msgid ""
+"Error fetching the key.\n"
+"(%s <%s>)"
+msgstr "削除エラー \"%s\": %s"
+
+#, c-format
+msgid "Keys found: %d, imported: %d, unchanged: %d"
+msgstr ""
+
+msgid "Fetch Key"
+msgstr ""
+
+msgid "Manufacturer:"
+msgstr ""
+
+#, fuzzy
+msgid "<b>Personal</b>"
+msgstr "個人"
+
+#, fuzzy
+msgid "Salutation:"
+msgstr "選択: "
+
+#, fuzzy
+msgid "First name:"
+msgstr "ディレクトリ名:"
+
+#, fuzzy
+msgid "Last name:"
+msgstr "ユーザ名:"
+
+msgid "Language:"
+msgstr ""
+
+msgid "Login data:"
+msgstr ""
+
+#, fuzzy
+msgid "Public key URL:"
+msgstr "公開鍵 (_P)"
+
+#, fuzzy
+msgid "Signature key:"
+msgstr "署名:"
+
+#, fuzzy
+msgid "Encryption key:"
+msgstr "暗号化中..."
+
+#, fuzzy
+msgid "Authentication key:"
+msgstr "認証可能"
+
+#, fuzzy
+msgid "Signature counter:"
+msgstr "署名:"
+
+#, fuzzy
+msgid "Force signature PIN:"
+msgstr "署名にエラー"
+
+msgid "Admin-PIN retry counter:"
+msgstr ""
+
+msgid "The ATR of the card is:"
+msgstr ""
+
+msgid "<b>Unknown Card</b>"
+msgstr ""
 
 msgid "<b>Main</b>"
 msgstr ""
@@ -124,6 +561,9 @@ msgstr ""
 msgid "Use default argument"
 msgstr "デフォルトの宛先の設定"
 
+msgid "_Apply"
+msgstr ""
+
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
@@ -132,8 +572,14 @@ msgstr ""
 msgid "Crypto Backend Configuration"
 msgstr ""
 
+msgid "Apply"
+msgstr ""
+
 msgid "Reset"
 msgstr ""
+
+msgid "_OK"
+msgstr "_OK"
 
 msgid "Configure the tools of the GnuPG system."
 msgstr ""
@@ -184,9 +630,6 @@ msgstr "年"
 msgid "never expires"
 msgstr "無期限"
 
-msgid "unknown"
-msgstr "未確認"
-
 #, fuzzy
 msgid "keyserver"
 msgstr "鍵サーバ"
@@ -194,7 +637,6 @@ msgstr "鍵サーバ"
 msgid "DANE"
 msgstr "DANE"
 
-#, fuzzy
 msgid "Web Key Directory"
 msgstr ""
 
@@ -246,36 +688,11 @@ msgstr "正しい日付を入力してください"
 msgid "Change expiry date"
 msgstr "有効期限を変更"
 
-msgid "_Cancel"
-msgstr "キャンセル (_C)"
-
 msgid "_never expire"
 msgstr "無期限有効 (_N)"
 
 msgid "_expire on:"
 msgstr "有効期限の指定 (_E):"
-
-msgid "Close all files"
-msgstr "ファイルをすべて閉じる"
-
-msgid "Sign the selected file"
-msgstr "選択ファイルに署名する"
-
-msgid "Check signatures of selected file"
-msgstr "選択ファイルの署名をチェック"
-
-msgid "Encrypt the selected file"
-msgstr "選択ファイルを暗号化する"
-
-msgid "Decrypt the selected file"
-msgstr "選択ファイルを復号化する"
-
-msgid "Close the window"
-msgstr ""
-
-#, fuzzy
-msgid "Select all files"
-msgstr "ファイルをすべて閉じる"
 
 msgid "File"
 msgstr "ファイル"
@@ -309,6 +726,129 @@ msgstr "平文署名 (_C)"
 #, fuzzy
 msgid "_Detached signature"
 msgstr "平文署名 (_C)"
+
+#, fuzzy
+msgid "[Error - No name]"
+msgstr "ホスト名解決エラー"
+
+#, fuzzy
+msgid "[Error - Encoding not supported]"
+msgstr "操作がサポートされていません"
+
+msgid "[Error - Invalid encoding]"
+msgstr ""
+
+#, fuzzy
+msgid "The key has both a smartcard based private part and a public part"
+msgstr "この鍵は秘密鍵と公開鍵がある"
+
+msgid "The key has both a private and a public part"
+msgstr "この鍵は秘密鍵と公開鍵がある"
+
+msgid "The key has only a public part"
+msgstr "この鍵は公開鍵しかない"
+
+#, c-format
+msgid "%s %u bits"
+msgstr "%s %u ビット"
+
+msgid "No keys selected"
+msgstr "鍵が選択されていません"
+
+#, fuzzy, c-format
+msgid "%d key selected"
+msgid_plural "%d keys selected"
+msgstr[0] "%d 個の鍵が選択されています"
+msgstr[1] "%d 個の鍵が選択されています"
+
+#, fuzzy
+msgid "User name:"
+msgstr "ユーザ名:"
+
+msgid "Fingerprint:"
+msgstr "指紋:"
+
+msgid "Key ID:"
+msgstr "鍵 ID:"
+
+msgid "Expires at:"
+msgstr "有効期限:"
+
+msgid "Owner Trust:"
+msgstr "所有者の信用度:"
+
+#, fuzzy
+msgid "Key validity:"
+msgstr "鍵の有効性:"
+
+#, fuzzy
+msgid "Key type:"
+msgstr "鍵タイプ:"
+
+msgid "Created at:"
+msgstr "作成日:"
+
+#, fuzzy
+msgid "Last update:"
+msgstr "最終更新:"
+
+msgid "Details"
+msgstr "詳細"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "ユーザ ID"
+
+msgid "Show signatures on user name:"
+msgstr "ユーザ名に対する署名を表示"
+
+#, fuzzy
+msgid "Chain"
+msgstr "署名可能"
+
+msgid "Signatures"
+msgstr "署名"
+
+msgid "All signatures"
+msgstr "すべての署名"
+
+msgid "Subkeys"
+msgstr "副鍵"
+
+#, fuzzy
+msgid "Key"
+msgstr "/鍵 (_K)"
+
+msgid "Tofu"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+#, fuzzy
+msgid "The mail address."
+msgstr "E メールアドレス:"
+
+#, fuzzy
+msgid "Validity"
+msgstr "鍵の有効性"
+
+#, fuzzy
+msgid "The validity of the mail address\n"
+msgstr "E メールアドレスを記入して下さい"
+
+msgid "Update"
+msgstr ""
+
+msgid "The date the key was last updated via this mail address."
+msgstr ""
+
+#, fuzzy
+msgid "User ID"
+msgstr "ユーザ ID"
+
+msgid "The full user ID."
+msgstr ""
 
 #, fuzzy
 msgid "Output version information and exit"
@@ -359,33 +899,6 @@ msgstr ""
 msgid "Please report bugs to <"
 msgstr "バグは <"
 
-#, fuzzy
-msgid "_Windows"
-msgstr "/ウィンドウ (_W)"
-
-#, fuzzy
-msgid "Open the keyring editor"
-msgstr "鍵束エディタを開く (デフォルト)"
-
-#, fuzzy
-msgid "Open the file manager"
-msgstr "ファイルマネージャを開く"
-
-#, fuzzy
-msgid "Open the clipboard"
-msgstr "クリップボードへコピー (_C)"
-
-#, fuzzy
-msgid "Configure the application"
-msgstr "選択ファイルを暗号化する"
-
-#, fuzzy
-msgid "_Backend Preferences"
-msgstr "/編集 (E)/設定 (_E)"
-
-msgid "Configure the backend programs"
-msgstr ""
-
 #, fuzzy, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -411,6 +924,12 @@ msgstr "鍵をファイルにバックアップする"
 #, fuzzy, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "鍵のバックアップを作成する: %s"
+
+msgid "(not set)"
+msgstr ""
+
+msgid "_Close"
+msgstr "閉じる (_C)"
 
 #, fuzzy
 msgid "The private key has been copied to the clipboard."
@@ -497,9 +1016,6 @@ msgstr "<b>本当に</b>この鍵を使いたいのですか?"
 msgid "Revoked Key"
 msgstr "破棄済みの鍵"
 
-msgid "_Close"
-msgstr "閉じる (_C)"
-
 #, fuzzy
 msgid "The following key has been revoked by its owner:"
 msgstr "以下の鍵は所有者によって破棄されています:"
@@ -519,6 +1035,16 @@ msgstr ""
 
 msgid "You didn't select any key for signing"
 msgstr "署名する鍵を選択しませんでした"
+
+#, fuzzy
+msgid "Importing..."
+msgstr "鍵をインポート"
+
+#, fuzzy, c-format
+msgid "Error importing \"%s\": %s <%s>"
+msgstr ""
+"削除エラー \"%s\": %s\n"
+"%s"
 
 msgid "Signing..."
 msgstr "署名中..."
@@ -624,9 +1150,6 @@ msgstr "ステータス"
 msgid "Algo"
 msgstr "アルゴリズム"
 
-msgid "Size"
-msgstr "サイズ"
-
 #, fuzzy
 msgid "Expires"
 msgstr "期限切れ"
@@ -688,12 +1211,6 @@ msgstr "ユーザ名:"
 msgid "User Names:"
 msgstr "ユーザ名:"
 
-msgid "Key ID:"
-msgstr "鍵 ID:"
-
-msgid "Fingerprint:"
-msgstr "指紋:"
-
 msgid "Expiration"
 msgstr "期限"
 
@@ -712,9 +1229,6 @@ msgid ""
 msgstr ""
 "！致命的エラー！\n"
 "有効期限の入力方式が不正です"
-
-msgid "(not set)"
-msgstr ""
 
 msgid ""
 "Keys are already stored on the card.\n"
@@ -766,10 +1280,6 @@ msgstr ""
 msgid "_Use a different filename"
 msgstr ""
 
-#, fuzzy
-msgid "_Open"
-msgstr "開く"
-
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -815,7 +1325,6 @@ msgstr "̵無効"
 msgid "Faked"
 msgstr ""
 
-#, fuzzy
 msgid "Fully"
 msgstr ""
 
@@ -994,7 +1503,6 @@ msgstr ""
 msgid "Invalid character in comments."
 msgstr ""
 
-#, fuzzy
 msgid "_Details"
 msgstr ""
 
@@ -1009,53 +1517,6 @@ msgstr "GPA について"
 #. be your name and mail
 msgid "translator-credits"
 msgstr ""
-
-#, fuzzy
-msgid "_Help"
-msgstr "/ヘルプ (_H)"
-
-#, fuzzy
-msgid "Open the GPA manual"
-msgstr "ファイルマネージャを開く"
-
-#, fuzzy
-msgid "About this application"
-msgstr "選択ファイルを暗号化する"
-
-#, fuzzy
-msgid "_Verify"
-msgstr "検証"
-
-msgid "_Encrypt"
-msgstr "暗号化 (_E)"
-
-#, fuzzy
-msgid "_Decrypt"
-msgstr "復号化"
-
-#, fuzzy
-msgid "_Brief"
-msgstr "要約"
-
-#, fuzzy
-msgid "_Detailed"
-msgstr "詳細"
-
-#, fuzzy
-msgid "_Keyring Manager"
-msgstr "ファイルマネージャ"
-
-#, fuzzy
-msgid "_Clipboard"
-msgstr "クリップボードへコピー (_C)"
-
-#, fuzzy
-msgid "_File Manager"
-msgstr "ファイルマネージャ"
-
-#, fuzzy
-msgid "_Card Manager"
-msgstr "ファイルマネージャ"
 
 msgid "Removing Secret Key"
 msgstr "秘密鍵を削除"
@@ -1249,10 +1710,6 @@ msgid ""
 "It is only meaningful for OpenPGP."
 msgstr ""
 
-#, fuzzy
-msgid "Validity"
-msgstr "鍵の有効性"
-
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
@@ -1288,140 +1745,11 @@ msgstr "今すぐ鍵をバックアップする (_B)"
 msgid "Only keys of the same procotol may be copied."
 msgstr ""
 
-#, fuzzy
-msgid "_Keys"
-msgstr "/鍵 (_K)"
-
-#, fuzzy
-msgid "_Server"
-msgstr "/サーバ (_S)"
-
-#, fuzzy
-msgid "Copy _Fingerprint"
-msgstr ""
-
-#, fuzzy
-msgid "Copy the fingerprints"
-msgstr ""
-
-#, fuzzy
-msgid "Copy Private Key"
-msgstr ""
-
-#, fuzzy
-msgid "Copy a single private key"
-msgstr ""
-
-#, fuzzy
-msgid "Select all certificates"
-msgstr "失効証明の生成 (_V)"
-
-msgid "Refresh the keyring"
-msgstr ""
-
-#, fuzzy
-msgid "_New key..."
-msgstr "/鍵 (K)/鍵を作成... (_N)"
-
-#, fuzzy
-msgid "Generate a new key"
-msgstr "鍵を生成"
-
-#, fuzzy
-msgid "_Delete keys"
-msgstr "/鍵を削除... (_D)"
-
-msgid "Remove the selected key"
-msgstr "選択された鍵を削除"
-
-#, fuzzy
-msgid "_Sign Keys..."
-msgstr "/鍵に署名... (_S)"
-
-msgid "Sign the selected key"
-msgstr "選択された鍵に署名する"
-
-#, fuzzy
-msgid "Set _Owner Trust..."
-msgstr "/所有者の信用度を指定... (_O)"
-
-#, fuzzy
-msgid "Set owner trust of the selected key"
-msgstr "選択された鍵を削除"
-
-#, fuzzy
-msgid "_Edit Private Key..."
-msgstr "/秘密鍵を編集... (_E)"
-
-msgid "Edit the selected private key"
-msgstr "選択された秘密鍵を編集"
-
-#, fuzzy
-msgid "_Import Keys..."
-msgstr "鍵をインポート"
-
-msgid "Import Keys"
-msgstr "鍵をインポート"
-
-#, fuzzy
-msgid "E_xport Keys..."
-msgstr "/鍵をエクスポート... (_X)"
-
-msgid "Export Keys"
-msgstr "鍵をエクスポート"
-
-#, fuzzy
-msgid "_Backup..."
-msgstr "/バックアップ... (_B)"
-
-#, fuzzy
-msgid "Backup key"
-msgstr "鍵をバックアップ"
-
-#, fuzzy
-msgid "_Retrieve Keys..."
-msgstr "/サーバ (S)/鍵を取得... (_R)"
-
-#, fuzzy
-msgid "Retrieve keys from server"
-msgstr "鍵をサーバから受信"
-
-#, fuzzy
-msgid "Re_fresh Keys"
-msgstr "鍵を削除"
-
-#, fuzzy
-msgid "Refresh keys from server"
-msgstr "鍵をサーバから受信"
-
-#, fuzzy
-msgid "_Send Keys..."
-msgstr "/鍵に署名... (_S)"
-
-#, fuzzy
-msgid "Send keys to server"
-msgstr "/鍵をサーバへ送信... (_N)"
-
 msgid "Show Brief Keylist"
 msgstr "要約版の鍵リストを表示"
 
 msgid "Show Key Details"
 msgstr "鍵の詳細を表示"
-
-msgid "Edit"
-msgstr "編集"
-
-msgid "Delete"
-msgstr "削除"
-
-msgid "Sign"
-msgstr "署名する"
-
-msgid "Export"
-msgstr "エクスポート"
-
-msgid "Import"
-msgstr "インポート"
 
 #, fuzzy
 msgid "Selected default key:"
@@ -1434,84 +1762,6 @@ msgstr "保護するファイルが選択されていません"
 #, fuzzy
 msgid "Key Manager"
 msgstr "ファイルマネージャ"
-
-#, fuzzy
-msgid "The key has both a smartcard based private part and a public part"
-msgstr "この鍵は秘密鍵と公開鍵がある"
-
-msgid "The key has both a private and a public part"
-msgstr "この鍵は秘密鍵と公開鍵がある"
-
-msgid "The key has only a public part"
-msgstr "この鍵は公開鍵しかない"
-
-#, c-format
-msgid "%s %u bits"
-msgstr "%s %u ビット"
-
-msgid "No keys selected"
-msgstr "鍵が選択されていません"
-
-#, fuzzy, c-format
-msgid "%d key selected"
-msgid_plural "%d keys selected"
-msgstr[0] "%d 個の鍵が選択されています"
-msgstr[1] "%d 個の鍵が選択されています"
-
-#, fuzzy
-msgid "User name:"
-msgstr "ユーザ名:"
-
-msgid "Expires at:"
-msgstr "有効期限:"
-
-msgid "Owner Trust:"
-msgstr "所有者の信用度:"
-
-#, fuzzy
-msgid "Key validity:"
-msgstr "鍵の有効性:"
-
-#, fuzzy
-msgid "Key type:"
-msgstr "鍵タイプ:"
-
-msgid "Created at:"
-msgstr "作成日:"
-
-#, fuzzy
-msgid "Last update:"
-msgstr "最終更新:"
-
-msgid "Details"
-msgstr "詳細"
-
-#, fuzzy
-msgid "User IDs"
-msgstr "ユーザ ID"
-
-msgid "Show signatures on user name:"
-msgstr "ユーザ名に対する署名を表示"
-
-#, fuzzy
-msgid "Chain"
-msgstr "署名可能"
-
-msgid "Signatures"
-msgstr "署名"
-
-msgid "All signatures"
-msgstr "すべての署名"
-
-msgid "Subkeys"
-msgstr "副鍵"
-
-#, fuzzy
-msgid "Key"
-msgstr "/鍵 (_K)"
-
-msgid "Tofu"
-msgstr ""
 
 msgid "Sign Key"
 msgstr "鍵に署名"
@@ -1671,9 +1921,6 @@ msgid ""
 "been found."
 msgstr ""
 
-msgid "Key ID"
-msgstr "鍵 ID"
-
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
 "selected."
@@ -1716,15 +1963,6 @@ msgid "[Ambiguous X.509 key. Right-click to select]"
 msgstr ""
 
 msgid "[Right-click to select]"
-msgstr ""
-
-msgid "Select _PGP key..."
-msgstr ""
-
-msgid "Select _S\\/MIME key..."
-msgstr ""
-
-msgid "Toggle _Ignore flag"
 msgstr ""
 
 #, fuzzy
@@ -1946,430 +2184,263 @@ msgstr "署名"
 msgid "Signatures:"
 msgstr "署名:"
 
-#, fuzzy
-msgid "Card Manager"
-msgstr "ファイルマネージャ"
+#~ msgid "_File"
+#~ msgstr "ファイル (_F)"
 
-#, c-format
-msgid "%s card detected."
-msgstr ""
+#~ msgid "_Edit"
+#~ msgstr "編集 (_E)"
 
-msgid "Checking for card..."
-msgstr ""
+#~ msgid "Clear buffer"
+#~ msgstr "バッファをクリア"
 
-#, fuzzy
-msgid "No card found."
-msgstr "鍵が見付かりませんでした。"
+#~ msgid "Open a file"
+#~ msgstr "ファイルを開く"
 
-msgid "The selected card application is currently not available."
-msgstr ""
+#~ msgid "Save to a file"
+#~ msgstr "ファイルを保存"
 
-msgid ""
-"Another process is using a different card application than the selected "
-"one.\n"
-"\n"
-"You may change the application selection mode to \"Auto\" to select the "
-"active application."
-msgstr ""
+#~ msgid "Sign buffer text"
+#~ msgstr "バッファのテクストに署名"
 
-#, fuzzy
-msgid "The selected card application is not available."
-msgstr "選択した鍵は署名には利用できません"
+#~ msgid "Check signatures of buffer text"
+#~ msgstr "バッファのテクストの署名をチェック"
 
-#, fuzzy
-msgid "Error accessing the card."
-msgstr "ファイルアクセスのエラー"
+#~ msgid "Encrypt the buffer text"
+#~ msgstr "バッファのテクストを暗号化する"
 
-#, fuzzy
-msgid "Error accessing card"
-msgstr "ファイルアクセスのエラー"
+#~ msgid "Decrypt the buffer text"
+#~ msgstr "バッファのテクストを復号する"
 
-msgid "No card"
-msgstr ""
+#~ msgid "Close the buffer"
+#~ msgstr "バッファを閉じる"
 
-#, fuzzy
-msgid "_Card"
-msgstr "クリップボードへコピー (_C)"
+#~ msgid "Quit the program"
+#~ msgstr "プログラムを終了"
 
-msgid "Reload card information"
-msgstr ""
+#~ msgid "Undo the last action"
+#~ msgstr "最後のアクションをアンドゥ"
 
-#, fuzzy
-msgid "Generate new key on card"
-msgstr "鍵を生成"
+#~ msgid "Redo the last undone action"
+#~ msgstr "最後の取り消されたアクションを実行"
 
-#, fuzzy
-msgid "This card application is not yet supported."
-msgstr "操作がサポートされていません"
+#~ msgid "Cut the selection"
+#~ msgstr "選択を切り取る"
 
-#, fuzzy
-msgid "Application selection:"
-msgstr "選択ファイルを暗号化する"
+#~ msgid "Copy the selection"
+#~ msgstr "選択をコピー"
 
-msgid "Auto"
-msgstr ""
+#~ msgid "Paste the clipboard"
+#~ msgstr "クリップボードにペースト"
 
-msgid "The GPGME library is too old to support smartcards."
-msgstr ""
+#~ msgid "Delete the selected text"
+#~ msgstr "選択されたテクストを削除"
 
-msgid ""
-"<b>Admin-PIN Required</b>\n"
-"\n"
-"Depending on the previous operations you may now be asked for the Admin-"
-"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
-"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
-"restored anymore and thus the data on the card can't be modified.\n"
-"\n"
-"Unless changed, a fresh standard card has set the Admin-PIN to the value "
-"<i>12345678</i>.  However, the issuer of your card might have initialized "
-"the card with a different Admin-PIN and that Admin-PIN might only be known "
-"to the issuer.  Please check the instructions of your issuer.\n"
-"\n"
-"This notice will be shown only once per session."
-msgstr ""
+#~ msgid "Close all files"
+#~ msgstr "ファイルをすべて閉じる"
 
-msgid "PUK retry counter:"
-msgstr ""
+#~ msgid "Sign the selected file"
+#~ msgstr "選択ファイルに署名する"
 
-msgid "CHV2 retry counter: "
-msgstr ""
+#~ msgid "Check signatures of selected file"
+#~ msgstr "選択ファイルの署名をチェック"
 
-msgid "Reset PIN"
-msgstr ""
+#~ msgid "Encrypt the selected file"
+#~ msgstr "選択ファイルを暗号化する"
+
+#~ msgid "Decrypt the selected file"
+#~ msgstr "選択ファイルを復号化する"
 
 #, fuzzy
-msgid "Change PIN"
-msgstr "信用度の変更 (_T)"
+#~ msgid "Select all files"
+#~ msgstr "ファイルをすべて閉じる"
 
 #, fuzzy
-msgid "Change PUK"
-msgstr "信用度の変更 (_T)"
-
-msgid "Reset PUK"
-msgstr ""
-
-#, c-format
-msgid ""
-"Error saving the changed values.\n"
-"(%s <%s>)"
-msgstr ""
-
-msgid "Only plain ASCII is currently allowed."
-msgstr ""
-
-msgid "The \"<\" character may not be used."
-msgstr ""
-
-msgid "Double spaces are not allowed."
-msgstr ""
-
-msgid ""
-"Total length of first and last name may not be longer than 39 characters."
-msgstr ""
+#~ msgid "_Windows"
+#~ msgstr "/ウィンドウ (_W)"
 
 #, fuzzy
-msgid "Saving the field failed."
-msgstr "選択ファイルに署名する"
-
-msgid "Invalid length of the language preference."
-msgstr ""
-
-msgid "The language preference may only contain the letters 'a' through 'z'."
-msgstr ""
-
-msgid "The field may not be longer than 254 characters."
-msgstr ""
-
-msgid ""
-"<b>Unblocking the PIN</b>\n"
-"\n"
-"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Reset "
-"Code</b> and then to enter a new value for the PIN and repeat that new value "
-"at another prompt."
-msgstr ""
-
-msgid ""
-"<b>Changing the PIN</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the PIN decrements the retry counter.  If the "
-"retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reset by using the Admin-PIN.\n"
-"\n"
-"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
-"the issuer of your card might have initialized the card with a different "
-"PIN.  Please check the instructions of your issuer."
-msgstr ""
-
-msgid ""
-"<b>Changing the Reset Code</b>\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the Reset Code and repeat that new value at "
-"another prompt."
-msgstr ""
-
-msgid ""
-"<b>Resetting the PIN or the Reset Code</b>\n"
-"\n"
-"If the retry counters of the PIN and of the Reset Code are both down to "
-"zero, it is only possible to reset them if you have access to the Admin-"
-"PIN.\n"
-"\n"
-"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
-"However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
-"Please check the instructions of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
-"repeat that new value at another prompt."
-msgstr ""
-
-msgid ""
-"<b>Changing the Admin-PIN</b>\n"
-"\n"
-"If you know the Admin-PIN you may change the Admin-PIN.\n"
-"\n"
-"The Admin-PIN is required to create keys on the card and to change other "
-"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
-"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
-"card might have initialized the card with a different Admin-PIN and that "
-"Admin-PIN might only be known to the issuer.  Please check the instructions "
-"of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
-"value at another prompt."
-msgstr ""
-
-#, c-format
-msgid ""
-"Error changing or resetting the PIN/PUK.\n"
-"(%s <%s>)"
-msgstr ""
-
-#, fuzzy, c-format
-msgid ""
-"Error fetching the key.\n"
-"(%s <%s>)"
-msgstr "削除エラー \"%s\": %s"
-
-#, c-format
-msgid "Keys found: %d, imported: %d, unchanged: %d"
-msgstr ""
-
-msgid "Fetch Key"
-msgstr ""
+#~ msgid "Open the keyring editor"
+#~ msgstr "鍵束エディタを開く (デフォルト)"
 
 #, fuzzy
-msgid "<b>General</b>"
-msgstr "上級者モードを使う (_A):"
-
-msgid "Serial number:"
-msgstr ""
-
-msgid "Card version:"
-msgstr ""
-
-msgid "Manufacturer:"
-msgstr ""
+#~ msgid "Open the file manager"
+#~ msgstr "ファイルマネージャを開く"
 
 #, fuzzy
-msgid "<b>Personal</b>"
-msgstr "個人"
+#~ msgid "Open the clipboard"
+#~ msgstr "クリップボードへコピー (_C)"
 
 #, fuzzy
-msgid "Salutation:"
-msgstr "選択: "
+#~ msgid "Configure the application"
+#~ msgstr "選択ファイルを暗号化する"
 
 #, fuzzy
-msgid "First name:"
-msgstr "ディレクトリ名:"
+#~ msgid "_Backend Preferences"
+#~ msgstr "/編集 (E)/設定 (_E)"
+
+#~ msgid "Size"
+#~ msgstr "サイズ"
 
 #, fuzzy
-msgid "Last name:"
-msgstr "ユーザ名:"
-
-msgid "Language:"
-msgstr ""
-
-msgid "Login data:"
-msgstr ""
+#~ msgid "_Help"
+#~ msgstr "/ヘルプ (_H)"
 
 #, fuzzy
-msgid "Public key URL:"
-msgstr "公開鍵 (_P)"
+#~ msgid "Open the GPA manual"
+#~ msgstr "ファイルマネージャを開く"
 
 #, fuzzy
-msgid "<b>Keys</b>"
-msgstr "署名選択 (_A)"
+#~ msgid "About this application"
+#~ msgstr "選択ファイルを暗号化する"
 
 #, fuzzy
-msgid "Signature key:"
-msgstr "署名:"
+#~ msgid "_Verify"
+#~ msgstr "検証"
+
+#~ msgid "_Encrypt"
+#~ msgstr "暗号化 (_E)"
 
 #, fuzzy
-msgid "Encryption key:"
-msgstr "暗号化中..."
+#~ msgid "_Decrypt"
+#~ msgstr "復号化"
 
 #, fuzzy
-msgid "Authentication key:"
-msgstr "認証可能"
+#~ msgid "_Brief"
+#~ msgstr "要約"
 
 #, fuzzy
-msgid "Signature counter:"
-msgstr "署名:"
-
-msgid "<b>PIN</b>"
-msgstr ""
+#~ msgid "_Detailed"
+#~ msgstr "詳細"
 
 #, fuzzy
-msgid "Force signature PIN:"
-msgstr "署名にエラー"
-
-msgid "PIN retry counter:"
-msgstr ""
-
-msgid "Admin-PIN retry counter:"
-msgstr ""
-
-msgid "blocked"
-msgstr ""
+#~ msgid "_Keyring Manager"
+#~ msgstr "ファイルマネージャ"
 
 #, fuzzy
-msgid "Learn keys"
-msgstr "鍵エクスポート"
-
-msgid ""
-"For some or all of the keys available on the card, the GnuPG crypto engine "
-"does not yet know the corresponding certificates.\n"
-"\n"
-"If you click this button, GnuPG will be asked to \"learn\" this card and "
-"import all certificates stored on the card into its own certificate store.  "
-"This is not done automatically because it may take several seconds to read "
-"all certificates from the card.\n"
-"\n"
-"If you are unsure what to do, just click the button."
-msgstr ""
+#~ msgid "_Clipboard"
+#~ msgstr "クリップボードへコピー (_C)"
 
 #, fuzzy
-msgid "Learning keys ..."
-msgstr "鍵を生成中..."
-
-#, c-format
-msgid ""
-"<b>Setting the Initial PIN</b> (%s)\n"
-"\n"
-"You selected to set the initial PIN of your card.  The PIN is currently set "
-"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
-"reverted</b>.\n"
-"\n"
-"Please check the documentation of your card to learn for what the NullPIN is "
-"good.\n"
-"\n"
-"If you proceed you will be asked to enter a new PIN and later to repeat that "
-"PIN.  Make sure that you will remember that PIN - it will not be possible to "
-"recover the PIN if it has been entered wrongly more than %d times.\n"
-"\n"
-"%s"
-msgstr ""
-
-msgid ""
-"You are now setting the PIN for the SigG key used to create <b>qualified "
-"signatures</b>.  You may want to set the PIN to the same value as used for "
-"the NKS keys."
-msgstr ""
-
-msgid ""
-"You are now setting the PIN for the NKS keys used for standard signatures, "
-"encryption and authentication."
-msgstr ""
-
-#, c-format
-msgid ""
-"Error changing the NullPIN.\n"
-"(%s <%s>)"
-msgstr ""
-
-msgid ""
-"<b>Changing a PIN or PUK</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value and then to "
-"enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the current value decrements the retry counter.  "
-"If the retry counters of the PIN and the corresponding PUK are both down to "
-"zero, the keys controlled by the PIN are not anymore usable and there is no "
-"way to unblock them!"
-msgstr ""
-
-msgid ""
-"<b>Resetting a PUK</b>\n"
-"\n"
-"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
-"system of the NetKey card implements it as an alternative PIN and thus it is "
-"possible to use the PIN to unblock the PUK.\n"
-"\n"
-"If the PUK is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PIN.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the blocked PUK and repeat that new value at "
-"another prompt."
-msgstr ""
-
-msgid ""
-"<b>Resetting a PIN</b>\n"
-"\n"
-"If the PIN is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PUK.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PUK and "
-"then to enter a new value for the blocked PIN and repeat that new value at "
-"another prompt."
-msgstr ""
-
-msgid ""
-"<b>A NullPIN is still active on this card</b>.\n"
-"You need to set a real PIN before you can make use of the card."
-msgstr ""
-
-msgid "Set initial PIN"
-msgstr ""
+#~ msgid "_File Manager"
+#~ msgstr "ファイルマネージャ"
 
 #, fuzzy
-msgid "scanning ..."
-msgstr "署名中..."
-
-msgid "SigG PIN retry counter:"
-msgstr ""
-
-msgid "SigG PUK retry counter:"
-msgstr ""
-
-#, c-format
-msgid ""
-"There is not much information to display for a %s card.  You may want to use "
-"the application selector button to switch to another application available "
-"on this card."
-msgstr ""
+#~ msgid "_Card Manager"
+#~ msgstr "ファイルマネージャ"
 
 #, fuzzy
-#~ msgid "The key ID is a short number to identify a certificate."
-#~ msgstr "証明にのみ使える鍵です。"
+#~ msgid "_Keys"
+#~ msgstr "/鍵 (_K)"
+
+#, fuzzy
+#~ msgid "_Server"
+#~ msgstr "/サーバ (_S)"
+
+#, fuzzy
+#~ msgid "Select all certificates"
+#~ msgstr "失効証明の生成 (_V)"
+
+#, fuzzy
+#~ msgid "_New key..."
+#~ msgstr "/鍵 (K)/鍵を作成... (_N)"
+
+#, fuzzy
+#~ msgid "Generate a new key"
+#~ msgstr "鍵を生成"
+
+#, fuzzy
+#~ msgid "_Delete keys"
+#~ msgstr "/鍵を削除... (_D)"
+
+#~ msgid "Remove the selected key"
+#~ msgstr "選択された鍵を削除"
+
+#, fuzzy
+#~ msgid "_Sign Keys..."
+#~ msgstr "/鍵に署名... (_S)"
+
+#~ msgid "Sign the selected key"
+#~ msgstr "選択された鍵に署名する"
+
+#, fuzzy
+#~ msgid "Set _Owner Trust..."
+#~ msgstr "/所有者の信用度を指定... (_O)"
+
+#, fuzzy
+#~ msgid "Set owner trust of the selected key"
+#~ msgstr "選択された鍵を削除"
+
+#, fuzzy
+#~ msgid "_Edit Private Key..."
+#~ msgstr "/秘密鍵を編集... (_E)"
+
+#~ msgid "Edit the selected private key"
+#~ msgstr "選択された秘密鍵を編集"
+
+#~ msgid "Import Keys"
+#~ msgstr "鍵をインポート"
+
+#, fuzzy
+#~ msgid "E_xport Keys..."
+#~ msgstr "/鍵をエクスポート... (_X)"
+
+#~ msgid "Export Keys"
+#~ msgstr "鍵をエクスポート"
+
+#, fuzzy
+#~ msgid "_Backup..."
+#~ msgstr "/バックアップ... (_B)"
+
+#, fuzzy
+#~ msgid "Backup key"
+#~ msgstr "鍵をバックアップ"
+
+#, fuzzy
+#~ msgid "_Retrieve Keys..."
+#~ msgstr "/サーバ (S)/鍵を取得... (_R)"
+
+#, fuzzy
+#~ msgid "Retrieve keys from server"
+#~ msgstr "鍵をサーバから受信"
+
+#, fuzzy
+#~ msgid "Re_fresh Keys"
+#~ msgstr "鍵を削除"
+
+#, fuzzy
+#~ msgid "Refresh keys from server"
+#~ msgstr "鍵をサーバから受信"
+
+#, fuzzy
+#~ msgid "_Send Keys..."
+#~ msgstr "/鍵に署名... (_S)"
+
+#, fuzzy
+#~ msgid "Send keys to server"
+#~ msgstr "/鍵をサーバへ送信... (_N)"
+
+#~ msgid "Edit"
+#~ msgstr "編集"
+
+#~ msgid "Delete"
+#~ msgstr "削除"
+
+#~ msgid "Sign"
+#~ msgstr "署名する"
+
+#~ msgid "Export"
+#~ msgstr "エクスポート"
+
+#~ msgid "Import"
+#~ msgstr "インポート"
+
+#, fuzzy
+#~ msgid "_Card"
+#~ msgstr "クリップボードへコピー (_C)"
+
+#, fuzzy
+#~ msgid "Generate new key on card"
+#~ msgstr "鍵を生成"
 
 #~ msgid "Error"
 #~ msgstr "エラー"
@@ -2682,9 +2753,6 @@ msgstr ""
 #~ msgid "Please insert your name"
 #~ msgstr "氏名を記入してください"
 
-#~ msgid "Please insert your email address"
-#~ msgstr "E メールアドレスを記入して下さい"
-
 #, fuzzy
 #~ msgid "/Keys/sep0"
 #~ msgstr "/鍵 (K)/sep1"
@@ -2919,9 +2987,6 @@ msgstr ""
 #~ msgid "Directories"
 #~ msgstr "ディレクトリ"
 
-#~ msgid "_OK"
-#~ msgstr "_OK"
-
 #~ msgid "OK"
 #~ msgstr "OK"
 
@@ -2983,13 +3048,6 @@ msgstr ""
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"
 #~ msgstr "\"%s\" というファイル名にはファイル名に使えない記号が入っています"
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "削除エラー \"%s\": %s\n"
-#~ "%s"
 
 #~ msgid "It probably contains symbols not allowed in filenames."
 #~ msgstr "おそらくファイル名に使えない記号が入っています"
@@ -3253,9 +3311,6 @@ msgstr ""
 
 #~ msgid "Error initializing network"
 #~ msgstr "ネットワーク初期化エラー"
-
-#~ msgid "Error resolving host name"
-#~ msgstr "ホスト名解決エラー"
 
 #~ msgid "Invalid number of fields in GnuPG colon output"
 #~ msgstr "GnuPG コロン出力欄の数が不正です"

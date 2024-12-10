@@ -15,6 +15,83 @@ msgstr ""
 "X-Generator: Poedit 1.8.7.1\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
+msgid "Card Manager"
+msgstr "Správce karet"
+
+#, c-format
+msgid "%s card detected."
+msgstr "Detekována %s karta."
+
+msgid "Checking for card..."
+msgstr "Hledá se karta..."
+
+msgid "No card found."
+msgstr "Nebyla nalezena žádná karta."
+
+msgid "The selected card application is currently not available."
+msgstr "Zvolená aplikace karty v tuto chvíli není dostupná."
+
+msgid ""
+"Another process is using a different card application than the selected "
+"one.\n"
+"\n"
+"You may change the application selection mode to \"Auto\" to select the "
+"active application."
+msgstr ""
+"Jiný proces používá odlišnou aplikaci karty než tu která je vybrána.\n"
+"\n"
+"Nastavením na \"Auto\" můžete změnit mód výběru aktivní aplikace. "
+
+msgid "The selected card application is not available."
+msgstr "Zvolená aplikace karty není dostupná."
+
+msgid "Error accessing the card."
+msgstr "Chyba přístupu ke kartě."
+
+msgid "Error accessing card"
+msgstr "Chyba přístupu ke kartě"
+
+msgid "No card"
+msgstr "Žádná karta"
+
+msgid "This card application is not yet supported."
+msgstr "Tato aplikace karty není zatím podporována."
+
+msgid "Application selection:"
+msgstr "Volba aplikace: "
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "The GPGME library is too old to support smartcards."
+msgstr "Knihovna GPGME je příliš zastaralá aby podporovala čipové karty."
+
+msgid "Key ID"
+msgstr "ID klíče"
+
+msgid "The key ID is a short number to identify a certificate."
+msgstr "ID klíče je krátké číslo k identifikaci certifikátu."
+
+#, fuzzy
+msgid "Serialno."
+msgstr "Výrobní číslo:"
+
+msgid "Issuer"
+msgstr ""
+
+msgid "[chain too long]"
+msgstr ""
+
+#, fuzzy
+msgid "[issuer not found]"
+msgstr "Klíč nebyl nalezen"
+
+msgid "_Cancel"
+msgstr "_Zrušit"
+
+msgid "_Open"
+msgstr "_Otevřít"
+
 msgid "Open File"
 msgstr "Otevřít soubor"
 
@@ -27,65 +104,14 @@ msgstr "Zpráva GPA"
 msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr "Soubor %s je  %llu%s velký. Opravdu jej chcete otevřít?"
 
+msgid "_Save"
+msgstr ""
+
 msgid "Save As..."
 msgstr "Uložit jako..."
 
 msgid "Clipboard"
 msgstr "Schránka"
-
-msgid "_File"
-msgstr "_Soubor"
-
-msgid "_Edit"
-msgstr "Úpr_avy"
-
-msgid "Clear buffer"
-msgstr "Vyprázdnit mezipaměť"
-
-msgid "Open a file"
-msgstr "Otevřít soubor"
-
-msgid "Save to a file"
-msgstr "Uložit do souboru"
-
-msgid "Sign buffer text"
-msgstr "Podepsat text v mezipaměti"
-
-msgid "Check signatures of buffer text"
-msgstr "Zkontrolovat podpis textu v mezipaměti"
-
-msgid "Encrypt the buffer text"
-msgstr "Šifrovat text v mezipaměti"
-
-msgid "Decrypt the buffer text"
-msgstr "Dešifrovat text v mezipaměti"
-
-msgid "Close the buffer"
-msgstr "Uzavřít mezipaměť"
-
-msgid "Quit the program"
-msgstr "Ukončit program"
-
-msgid "Undo the last action"
-msgstr "Vrátit zpět poslední akci"
-
-msgid "Redo the last undone action"
-msgstr "Opakovat poslední vrácenou akci"
-
-msgid "Cut the selection"
-msgstr "Vyjmout výběr"
-
-msgid "Copy the selection"
-msgstr "Kopírovat výběr"
-
-msgid "Paste the clipboard"
-msgstr "Vložit ze schránky"
-
-msgid "Delete the selected text"
-msgstr "Smazat vybraný text"
-
-msgid "Select the entire document"
-msgstr "Vybrat celý dokument"
 
 msgid "Keyring"
 msgstr "Klíčenka"
@@ -95,6 +121,529 @@ msgstr "Soubory"
 
 msgid "Card"
 msgstr "Karta"
+
+msgid "<b>General</b>"
+msgstr "<b>Obecné</b>"
+
+msgid "Serial number:"
+msgstr "Výrobní číslo:"
+
+#, c-format
+msgid ""
+"There is not much information to display for a %s card.  You may want to use "
+"the application selector button to switch to another application available "
+"on this card."
+msgstr ""
+"Pro kartu %s není mnoho informací ke zobrazení. Zkuste použít tlačítko pro "
+"volbu aplikace pro přepnutí na jinou aplikaci, která je na kartě k dispozici."
+
+#, fuzzy
+msgid "<b>Amount</b>"
+msgstr "<b>Hlavní</b>"
+
+#, fuzzy
+msgid "Card number: "
+msgstr "Výrobní číslo:"
+
+msgid "Short Bank Code number: "
+msgstr ""
+
+#, fuzzy
+msgid "Bank type: "
+msgstr "Typ klíče:"
+
+#, fuzzy
+msgid "Card valid from: "
+msgstr "Verze karty:"
+
+#, fuzzy
+msgid "Card expires: "
+msgstr "nikdy nevyprší"
+
+msgid "Issuing country: "
+msgstr ""
+
+msgid "Currency: "
+msgstr ""
+
+msgid "ZKA chip Id: "
+msgstr ""
+
+#, fuzzy
+msgid "Chip OS version: "
+msgstr "Verze karty:"
+
+msgid "Balance: "
+msgstr ""
+
+msgid "General limit: "
+msgstr ""
+
+msgid "Transaction limit: "
+msgstr ""
+
+msgid "unknown"
+msgstr "neznámá"
+
+msgid "blocked"
+msgstr "blokováno"
+
+msgid "Reset PUK"
+msgstr "Resetovat PUK"
+
+msgid "Reset PIN"
+msgstr "Resetovat PIN"
+
+msgid "Change PUK"
+msgstr "Změnit PUK"
+
+msgid "Change PIN"
+msgstr "Změnit PIN"
+
+msgid "Learn keys"
+msgstr "Učit klíče"
+
+msgid ""
+"For some or all of the keys available on the card, the GnuPG crypto engine "
+"does not yet know the corresponding certificates.\n"
+"\n"
+"If you click this button, GnuPG will be asked to \"learn\" this card and "
+"import all certificates stored on the card into its own certificate store.  "
+"This is not done automatically because it may take several seconds to read "
+"all certificates from the card.\n"
+"\n"
+"If you are unsure what to do, just click the button."
+msgstr ""
+"Pro některé nebo všechny klíče dostupné na kartě nezná GnuPG šifrovací stroj "
+"odpovídající certifikáty.\n"
+"\n"
+"Pokud kliknete na toto tlačítko, GnuPG bude požádán, aby se \"naučil\" tuto "
+"kartu a importoval všechny certifikáty uložené na kartě do svého vlastního "
+"úložiště certifikátů. Tato operace není prováděna automaticky. Čtení všech "
+"certifikátů z karty může trvat několik sekund.\n"
+"\n"
+"Pokud si nejste jistí co dělat, klikněte na tlačítko."
+
+msgid "Learning keys ..."
+msgstr "Klíče jsou učeny"
+
+#, c-format
+msgid ""
+"<b>Setting the Initial PIN</b> (%s)\n"
+"\n"
+"You selected to set the initial PIN of your card.  The PIN is currently set "
+"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
+"reverted</b>.\n"
+"\n"
+"Please check the documentation of your card to learn for what the NullPIN is "
+"good.\n"
+"\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
+"\n"
+"%s"
+msgstr ""
+"<b>Nastavení výchozího PIN</b> (%s)\n"
+"\n"
+"Zvolili jste možnost nastavit výchozí PIN vaší karty. PIN je v tuto chvíli "
+"nastaven na NullPIN. Nastavení výchozího PIN je <b>vyžadování ale nemůže být "
+"odvoláno</b>.\n"
+"\n"
+"Zkontrolujte prosím dokumentaci vaší karty a podívejte se k čemu je NullPIN "
+"dobrý.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzváni abyste vložili nový PIN, později "
+"abyste jej opakovali. Ujistěte se, že si PIN pamatujete - nebude možné jej "
+"obnovit pokud bude zadán více než %d krát nesprávně.\n"
+"\n"
+"%s"
+
+msgid ""
+"You are now setting the PIN for the SigG key used to create <b>qualified "
+"signatures</b>.  You may want to set the PIN to the same value as used for "
+"the NKS keys."
+msgstr ""
+"Nyní nastavujete PIN pro SigG klíče používané pro vytváření "
+"<b>kvalifikovaných podpisů</b>. PIN můžete nastavit stejný jako u NKS klíčů."
+
+msgid ""
+"You are now setting the PIN for the NKS keys used for standard signatures, "
+"encryption and authentication."
+msgstr ""
+"Nyní nastavujete PIN pro NKS klíče používané pro běžné podpisy, šifrování a "
+"autentizaci."
+
+#, c-format
+msgid ""
+"Error changing the NullPIN.\n"
+"(%s <%s>)"
+msgstr ""
+"Chyba při změně prázdného PIN.\n"
+"(%s <%s>)"
+
+msgid ""
+"<b>Changing a PIN or PUK</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value and then to "
+"enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the current value decrements the retry counter.  "
+"If the retry counters of the PIN and the corresponding PUK are both down to "
+"zero, the keys controlled by the PIN are not anymore usable and there is no "
+"way to unblock them!"
+msgstr ""
+"<b>Změna PIN nebo PUK</b>\n"
+"\n"
+"Pokud budete pokračovat, budete vyzváni abyste zadali současnou hodnotu, "
+"poté novou a zopakovali ji na dalším řádku.\n"
+"\n"
+"Vložením nesprávné hodnoty pro současný PIN/PUK snížíte čítač opakování. "
+"Pokud oba čítače (PIN a odpovídající PUK) klesnou na nulu, klíče chráněné "
+"tímto PIN nebudou více použitelné. Ani je nebude možné nikdy odblokovat!"
+
+msgid ""
+"<b>Resetting a PUK</b>\n"
+"\n"
+"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
+"system of the NetKey card implements it as an alternative PIN and thus it is "
+"possible to use the PIN to unblock the PUK.\n"
+"\n"
+"If the PUK is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PIN.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the blocked PUK and repeat that new value at "
+"another prompt."
+msgstr ""
+"<b>Resetování PUK</b>\n"
+"\n"
+"Přestože <i>PUK</i> znamená <i>kód k odblokování PIN (PIN Unblocking Code)</"
+"i> implementuje jej operační systém TCOS karty NetKey jako alternativní PIN "
+"a tutíž je možné použít PIN pro odblokování PUK.\n"
+"\n"
+"Pokud je PUK zablokovaný (čítač opakování klesl na nulu), můžete jej "
+"odblokovat použitím neblokovaného PIN. Čítač opakovaného zadání se vrátí "
+"zpět na původní hodnotu.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzváni abyste zadali současnou hodnotu PIN, "
+"poté novou hodnotu pro blokovaný PUK a tu na dalším řádku zopakovali."
+
+msgid ""
+"<b>Resetting a PIN</b>\n"
+"\n"
+"If the PIN is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PUK.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PUK and "
+"then to enter a new value for the blocked PIN and repeat that new value at "
+"another prompt."
+msgstr ""
+"<b>Resetovat PIN</b>\n"
+"\n"
+"Pokud je PIN zablokovaný (čítač opakování klesl na nulu), můžete jej "
+"odblokovat použitím neblokovaného PUK. Čítač opakovaného zadání se vrátí "
+"zpět na původní hodnotu.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzváni abyste zadali současnou hodnotu PUK, "
+"poté novou hodnotu pro blokovaný PIN a tu na dalším řádku zopakovali."
+
+#, c-format
+msgid ""
+"Error changing or resetting the PIN/PUK.\n"
+"(%s <%s>)"
+msgstr ""
+"Chyba při změně nebo resetu PIN/PUK.\n"
+"(%s <%s>)"
+
+msgid "Card version:"
+msgstr "Verze karty:"
+
+msgid ""
+"<b>A NullPIN is still active on this card</b>.\n"
+"You need to set a real PIN before you can make use of the card."
+msgstr ""
+"<b>NullPIN je na této kartě stále aktivní</b>.\n"
+"Před použitím karty musíte nastavit reálný PIN."
+
+msgid "Set initial PIN"
+msgstr "Nastavit výchozí PIN"
+
+msgid "<b>Keys</b>"
+msgstr "<b>Klíče</b>"
+
+msgid "scanning ..."
+msgstr "skenování ..."
+
+msgid "<b>PIN</b>"
+msgstr "<b>PIN</b>"
+
+msgid "PIN retry counter:"
+msgstr "Čítač opakování PIN:"
+
+msgid "PUK retry counter:"
+msgstr "Čítač opakování PUK:"
+
+msgid "SigG PIN retry counter:"
+msgstr "Čítač opakování SigG PIN:"
+
+msgid "SigG PUK retry counter:"
+msgstr "Čítač opakování SigG PUK:"
+
+msgid ""
+"<b>Admin-PIN Required</b>\n"
+"\n"
+"Depending on the previous operations you may now be asked for the Admin-"
+"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
+"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
+"restored anymore and thus the data on the card can't be modified.\n"
+"\n"
+"Unless changed, a fresh standard card has set the Admin-PIN to the value "
+"<i>12345678</i>.  However, the issuer of your card might have initialized "
+"the card with a different Admin-PIN and that Admin-PIN might only be known "
+"to the issuer.  Please check the instructions of your issuer.\n"
+"\n"
+"This notice will be shown only once per session."
+msgstr ""
+"<b>Admin-PIN požadován</b>\n"
+"\n"
+"V závislosti na předchozích operacích můžete být nyní požádáni o Admin-PIN. "
+"Vložení špatné hodnoty Admin-PIN sníží odpovídající čítač opakování. Pokud "
+"čítač dosáhne nuly, Admin-PIN nelze obnovit a data na kartě nemohu být "
+"změněna.\n"
+"\n"
+"Pokud nebyl změněn, nová standardní karta má nastaven Admin-PIN na hodnotu "
+"<i>12345678</i>. Nicméně vydavatel mohl vaši kartu inicializovat s jiným "
+"Admin-PIN a ten tedy bude znám pouze vydavateli. Zkontrolujte prosím "
+"instrukce od vašeho vydavatele.\n"
+"\n"
+"Toto oznámení bude zobrazeno pouze jednou za relaci."
+
+msgid "CHV2 retry counter: "
+msgstr "Čítač opakování CHV2:"
+
+#, c-format
+msgid ""
+"Error saving the changed values.\n"
+"(%s <%s>)"
+msgstr ""
+"Chyba při ukládání změněných hodnot.\n"
+"(%s <%s>)"
+
+msgid "Only plain ASCII is currently allowed."
+msgstr "Aktuálně je povoleno pouze základní ASCII."
+
+msgid "The \"<\" character may not be used."
+msgstr "Znak \"<\" nelze použít."
+
+msgid "Double spaces are not allowed."
+msgstr "Více mezer není povoleno."
+
+msgid ""
+"Total length of first and last name may not be longer than 39 characters."
+msgstr "Celková délka křestního jména a příjmení nesmí přesáhnout 39 znaků."
+
+msgid "Saving the field failed."
+msgstr "Uložení pole selhalo."
+
+msgid "Invalid length of the language preference."
+msgstr "Neplatná délka předvolby jazyka."
+
+msgid "The language preference may only contain the letters 'a' through 'z'."
+msgstr "Volba jazyka smí obsahovat pouze písmena 'a' až 'z'."
+
+msgid "The field may not be longer than 254 characters."
+msgstr "Délka tohoto pole nesmí přesáhnout 254 znaků."
+
+msgid ""
+"<b>Unblocking the PIN</b>\n"
+"\n"
+"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Reset "
+"Code</b> and then to enter a new value for the PIN and repeat that new value "
+"at another prompt."
+msgstr ""
+"<b>Odblokování PIN</b>\n"
+"\n"
+"Čítač opakovaného zadání PIN je na nule, ale je nastaven Reset kód.\n"
+"\n"
+"Reset kód je podobný PUK (PIN Unblocking Code) a je používán pro odblokování "
+"PIN bez nutnosti znát Admin-PIN.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"<b>Reset kódu</b> , poté novou hodnotu PIN a tu na dalším řádku zopakovali."
+
+msgid ""
+"<b>Changing the PIN</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the PIN decrements the retry counter.  If the "
+"retry counters of the PIN and of the Reset Code are both down to zero, the "
+"PIN can still be reset by using the Admin-PIN.\n"
+"\n"
+"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
+"the issuer of your card might have initialized the card with a different "
+"PIN.  Please check the instructions of your issuer."
+msgstr ""
+"<b>Změna PIN</b>\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"PIN, poté novou hodnotu a tu na dalším řádku zopakovali.\n"
+"\n"
+"Vložení nesprávné hodnoty PIN sníží čítač opakovaného zadání. Pokud oba "
+"čítače opakování pro PIN a Reset kód klesnou na nulu, může být PIN "
+"odblokován použitím Admin-PIN.\n"
+"\n"
+"Čistá standardní karta má PIN nastaven na hodnotu <i>12345678</i>. Nicméně "
+"vydavatel mohl vaši kartu inicializovat s jiným PIN. Zkontrolujte prosím "
+"instrukce od vašeho vydavatele."
+
+msgid ""
+"<b>Changing the Reset Code</b>\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the Reset Code and repeat that new value at "
+"another prompt."
+msgstr ""
+"<b>Změna Reset kódu</b>\n"
+"\n"
+"Reset kód je podobný PUK (PIN Unblocking Code) a je používán pro odblokování "
+"PIN bez nutnosti znát Admin-PIN.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"PIN, poté novou hodnotu Reset kódu a tu na dalším řádku zopakovali."
+
+msgid ""
+"<b>Resetting the PIN or the Reset Code</b>\n"
+"\n"
+"If the retry counters of the PIN and of the Reset Code are both down to "
+"zero, it is only possible to reset them if you have access to the Admin-"
+"PIN.\n"
+"\n"
+"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
+"However, the issuer of your card might have initialized the card with a "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
+"Please check the instructions of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
+"repeat that new value at another prompt."
+msgstr ""
+"<b>Resetování PIN nebo Reset kódu</b>\n"
+"\n"
+"Pokud klesnou oba čítače opakování PIN a Reset kódu na nulu, bude jedinou "
+"možností jejich resetu použití Admin-PIN\n"
+"\n"
+"Čistá standardní karta má Admin-PIN nastaven na hodnotu <i>12345678</i>. "
+"Nicméně vydavatel mohl vaši kartu inicializovat s jiným Admin-PIN a ten tedy "
+"bude znám pouze jemu. Zkontrolujte prosím instrukce od vašeho vydavatele.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"<b>Admin-PIN</b>, poté novou hodnotu PIN nebo Reset kódu a tu na dalším "
+"řádku zopakovali."
+
+msgid ""
+"<b>Changing the Admin-PIN</b>\n"
+"\n"
+"If you know the Admin-PIN you may change the Admin-PIN.\n"
+"\n"
+"The Admin-PIN is required to create keys on the card and to change other "
+"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
+"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
+"card might have initialized the card with a different Admin-PIN and that "
+"Admin-PIN might only be known to the issuer.  Please check the instructions "
+"of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
+"value at another prompt."
+msgstr ""
+"<b>Změna Admin-PIN</b>\n"
+"\n"
+"Znáte-li Admin-PIN, můžete jej změnit.\n"
+"\n"
+"Admin-PIN je vyžadovaný při tvorbě klíčů na kartě a změně dalších dat. Admin-"
+"PIN můžete, ale také nemusíte znát. Čistá standardní karta má Admin-PIN "
+"nastaven na hodnotu <i>12345678</i>. Nicméně vydavatel mohl vaši kartu "
+"inicializovat s jiným Admin-PIN a ten tedy bude znám pouze jemu. "
+"Zkontrolujte prosím instrukce od vašeho vydavatele.\n"
+"\n"
+"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
+"<b>Admin-PIN</b>, poté novou hodnotu a tu na dalším řádku zopakovali."
+
+#, c-format
+msgid ""
+"Error fetching the key.\n"
+"(%s <%s>)"
+msgstr ""
+"Chyba při stahování klíče.\n"
+"(%s <%s>)"
+
+#, c-format
+msgid "Keys found: %d, imported: %d, unchanged: %d"
+msgstr "Nalezeno %d klíčů, importováno: %d, nezměněno: %d"
+
+msgid "Fetch Key"
+msgstr "Získat klíč"
+
+msgid "Manufacturer:"
+msgstr "Výrobce:"
+
+msgid "<b>Personal</b>"
+msgstr "<b>Osobní</b>"
+
+msgid "Salutation:"
+msgstr "Oslovení:"
+
+msgid "First name:"
+msgstr "Křestní jméno:"
+
+msgid "Last name:"
+msgstr "Příjmení:"
+
+msgid "Language:"
+msgstr "Jazyk:"
+
+msgid "Login data:"
+msgstr "Data přihlášení:"
+
+msgid "Public key URL:"
+msgstr "URL veřejného klíče: "
+
+msgid "Signature key:"
+msgstr "Podpisový klíč:"
+
+msgid "Encryption key:"
+msgstr "Šifrovací klíč:"
+
+msgid "Authentication key:"
+msgstr "Autentizační klíč:"
+
+msgid "Signature counter:"
+msgstr "Počítadlo podpisů:"
+
+msgid "Force signature PIN:"
+msgstr "Vynutit podpisový PIN:"
+
+msgid "Admin-PIN retry counter:"
+msgstr "Čítač opakování admin PIN:"
+
+msgid "The ATR of the card is:"
+msgstr ""
+
+msgid "<b>Unknown Card</b>"
+msgstr ""
 
 msgid "<b>Main</b>"
 msgstr "<b>Hlavní</b>"
@@ -117,6 +666,9 @@ msgstr "Použít vlastní hodnotu"
 msgid "Use default argument"
 msgstr "Použít výchozí argument"
 
+msgid "_Apply"
+msgstr ""
+
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
@@ -127,8 +679,14 @@ msgstr ""
 msgid "Crypto Backend Configuration"
 msgstr "Nastavení šifrovacího backendu"
 
+msgid "Apply"
+msgstr ""
+
 msgid "Reset"
 msgstr "Výchozí"
+
+msgid "_OK"
+msgstr ""
 
 msgid "Configure the tools of the GnuPG system."
 msgstr "Nastavit nástroje GnuPG systému."
@@ -174,9 +732,6 @@ msgstr "roky"
 
 msgid "never expires"
 msgstr "nikdy nevyprší"
-
-msgid "unknown"
-msgstr "neznámá"
 
 #, fuzzy
 msgid "keyserver"
@@ -233,35 +788,11 @@ msgstr "Zadejte prosím platné datum."
 msgid "Change expiry date"
 msgstr "Změnit datum expirace"
 
-msgid "_Cancel"
-msgstr "_Zrušit"
-
 msgid "_never expire"
 msgstr "_nikdy nevyprší"
 
 msgid "_expire on:"
 msgstr "_vyprší:"
-
-msgid "Close all files"
-msgstr "Vymazat všechny soubory"
-
-msgid "Sign the selected file"
-msgstr "Podepsat vybraný soubor"
-
-msgid "Check signatures of selected file"
-msgstr "Zkontrolovat podpis vybraného souboru"
-
-msgid "Encrypt the selected file"
-msgstr "Zašifrovat vybraný soubor"
-
-msgid "Decrypt the selected file"
-msgstr "Dešifrovat vybraný soubor"
-
-msgid "Close the window"
-msgstr "Zavřít okno"
-
-msgid "Select all files"
-msgstr "Vybrat všechny soubory"
 
 msgid "File"
 msgstr "Soubor"
@@ -289,6 +820,121 @@ msgstr "Clear _text podpis"
 
 msgid "_Detached signature"
 msgstr "O_ddělený podpis"
+
+msgid "[Error - No name]"
+msgstr ""
+
+#, fuzzy
+msgid "[Error - Encoding not supported]"
+msgstr "Operace není podporována"
+
+msgid "[Error - Invalid encoding]"
+msgstr ""
+
+msgid "The key has both a smartcard based private part and a public part"
+msgstr "Klíč má soukromou i veřejnou část uloženou na čipové kartě"
+
+msgid "The key has both a private and a public part"
+msgstr "Klíč má soukromou i veřejnou část"
+
+msgid "The key has only a public part"
+msgstr "Klíč má pouze veřejnou část"
+
+#, c-format
+msgid "%s %u bits"
+msgstr "%s %u bitů"
+
+msgid "No keys selected"
+msgstr "Žádný klíč nevybrán"
+
+#, c-format
+msgid "%d key selected"
+msgid_plural "%d keys selected"
+msgstr[0] "%d klíčů vybráno"
+msgstr[1] "%d klíčů vybráno"
+msgstr[2] "%d klíčů vybráno"
+
+msgid "User name:"
+msgstr "Uživatelské jméno:"
+
+msgid "Fingerprint:"
+msgstr "Otisk:"
+
+msgid "Key ID:"
+msgstr "ID klíče:"
+
+msgid "Expires at:"
+msgstr "Vyprší:"
+
+msgid "Owner Trust:"
+msgstr "Důvěra ve vlastníka:"
+
+msgid "Key validity:"
+msgstr "Platnost klíče:"
+
+msgid "Key type:"
+msgstr "Typ klíče:"
+
+msgid "Created at:"
+msgstr "Vytvořen:"
+
+#, fuzzy
+msgid "Last update:"
+msgstr "Příjmení:"
+
+msgid "Details"
+msgstr "Podrobnosti"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "ID uživatele:"
+
+msgid "Show signatures on user name:"
+msgstr "Zobrazit podpisy u jména uživatele:"
+
+msgid "Chain"
+msgstr "Řetěz"
+
+msgid "Signatures"
+msgstr "Podpisy"
+
+msgid "All signatures"
+msgstr "Všechny podpisy"
+
+msgid "Subkeys"
+msgstr "Podklíče"
+
+msgid "Key"
+msgstr "Klíč"
+
+msgid "Tofu"
+msgstr "Tofu"
+
+msgid "Address"
+msgstr ""
+
+#, fuzzy
+msgid "The mail address."
+msgstr "Vaše E-Mail adresa:"
+
+msgid "Validity"
+msgstr "Platnost"
+
+msgid "The validity of the mail address\n"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "The date the key was last updated via this mail address."
+msgstr ""
+
+#, fuzzy
+msgid "User ID"
+msgstr "ID uživatele:"
+
+msgid "The full user ID."
+msgstr ""
 
 msgid "Output version information and exit"
 msgstr "Vypsat informace o verzi a skončit"
@@ -329,27 +975,6 @@ msgstr "Grafické rozhraní pro GnuPG"
 msgid "Please report bugs to <"
 msgstr "Nahlaste prosím chybu <"
 
-msgid "_Windows"
-msgstr "_Okna"
-
-msgid "Open the keyring editor"
-msgstr "Otevřít správce klíčenky"
-
-msgid "Open the file manager"
-msgstr "Otevřít správce souborů"
-
-msgid "Open the clipboard"
-msgstr "Otevřít schránku"
-
-msgid "Configure the application"
-msgstr "Nastavit aplikaci"
-
-msgid "_Backend Preferences"
-msgstr "Na_stavení backendu"
-
-msgid "Configure the backend programs"
-msgstr "Nastavit programy backednu"
-
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -375,6 +1000,12 @@ msgstr "Zálohovat klíč do souboru"
 #, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "Vytváří se záloha klíče: 0x%s"
+
+msgid "(not set)"
+msgstr "(není nastaveno)"
+
+msgid "_Close"
+msgstr "_Zavřít"
 
 #, fuzzy
 msgid "The private key has been copied to the clipboard."
@@ -457,9 +1088,6 @@ msgstr "<b>Určitě</b> chcete použít tento klíč?"
 msgid "Revoked Key"
 msgstr "Zneplatněný klíč"
 
-msgid "_Close"
-msgstr "_Zavřít"
-
 msgid "The following key has been revoked by its owner:"
 msgstr "Následující klíč byl zneplatněn vlastníkem:"
 
@@ -480,6 +1108,16 @@ msgstr ""
 
 msgid "You didn't select any key for signing"
 msgstr "Nevybrali jste žádný klíč pro podpis"
+
+#, fuzzy
+msgid "Importing..."
+msgstr "_Importovat klíče..."
+
+#, fuzzy, c-format
+msgid "Error importing \"%s\": %s <%s>"
+msgstr ""
+"Chyba při stahování klíče.\n"
+"(%s <%s>)"
 
 msgid "Signing..."
 msgstr "Podepisuji ..."
@@ -641,12 +1279,6 @@ msgstr "Jméno uživatele:"
 msgid "User Names:"
 msgstr "Jména uživatelů:"
 
-msgid "Key ID:"
-msgstr "ID klíče:"
-
-msgid "Fingerprint:"
-msgstr "Otisk:"
-
 msgid "Expiration"
 msgstr "Platnost do"
 
@@ -665,9 +1297,6 @@ msgid ""
 msgstr ""
 "!KRITICKÁ CHYBA!\n"
 "Neplatný mód pro vkládání data vypršení."
-
-msgid "(not set)"
-msgstr "(není nastaveno)"
 
 msgid ""
 "Keys are already stored on the card.\n"
@@ -720,9 +1349,6 @@ msgstr ""
 
 msgid "_Use a different filename"
 msgstr "Po_užijte jiný název souboru"
-
-msgid "_Open"
-msgstr "_Otevřít"
 
 msgid ""
 "************************************************************************\n"
@@ -968,42 +1594,6 @@ msgstr "O GPA"
 msgid "translator-credits"
 msgstr "Zdeněk Hataš <zdenek.hatas@gmail.com>"
 
-msgid "_Help"
-msgstr "_Nápověda"
-
-msgid "Open the GPA manual"
-msgstr "Otevřít návod GPA"
-
-msgid "About this application"
-msgstr "O této aplikaci"
-
-msgid "_Verify"
-msgstr "O_věřit"
-
-msgid "_Encrypt"
-msgstr "_Verschlüsseln"
-
-msgid "_Decrypt"
-msgstr "_Dešifrovat"
-
-msgid "_Brief"
-msgstr "_Stručně"
-
-msgid "_Detailed"
-msgstr "Po_drobně"
-
-msgid "_Keyring Manager"
-msgstr "Správce _klíčenky"
-
-msgid "_Clipboard"
-msgstr "S_chránka"
-
-msgid "_File Manager"
-msgstr "Správce _souborů"
-
-msgid "_Card Manager"
-msgstr "Správce _karet"
-
 msgid "Removing Secret Key"
 msgstr "Odstraňuji soukromý klíč"
 
@@ -1202,9 +1792,6 @@ msgstr ""
 "certifikátu korektně podepisuje (certifikuje) ostatní certifikáty. To má "
 "smysl pouze pro OpenPGP."
 
-msgid "Validity"
-msgstr "Platnost"
-
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
@@ -1246,120 +1833,11 @@ msgstr "_Zálohovat klíč nyní"
 msgid "Only keys of the same procotol may be copied."
 msgstr "Pouze klíče stejného protokolu smějí být exportovány jako kolekce."
 
-msgid "_Keys"
-msgstr "_Klíče"
-
-msgid "_Server"
-msgstr "_Server"
-
-#, fuzzy
-msgid "Copy _Fingerprint"
-msgstr "Otisk:"
-
-#, fuzzy
-msgid "Copy the fingerprints"
-msgstr "Kopírovat výběr"
-
-#, fuzzy
-msgid "Copy Private Key"
-msgstr "Upravit _soukromý klíč..."
-
-#, fuzzy
-msgid "Copy a single private key"
-msgstr "Upravit vybraný soukromý klíč"
-
-msgid "Select all certificates"
-msgstr "Vybrat všechny certifikáty"
-
-msgid "Refresh the keyring"
-msgstr "Aktualizovat keyring"
-
-msgid "_New key..."
-msgstr "_Nový klíč..."
-
-msgid "Generate a new key"
-msgstr "Vytvořit nový klíč"
-
-msgid "_Delete keys"
-msgstr "Smazat klíče"
-
-msgid "Remove the selected key"
-msgstr "Odstranit vybraný klíč"
-
-msgid "_Sign Keys..."
-msgstr "Podep_sat klíče..."
-
-msgid "Sign the selected key"
-msgstr "Podepsat vybraný klíč"
-
-msgid "Set _Owner Trust..."
-msgstr "Nastavit úr_oveň důvěry..."
-
-msgid "Set owner trust of the selected key"
-msgstr "Nastavit úroveň důvěry zvoleného klíče"
-
-msgid "_Edit Private Key..."
-msgstr "Upravit _soukromý klíč..."
-
-msgid "Edit the selected private key"
-msgstr "Upravit vybraný soukromý klíč"
-
-msgid "_Import Keys..."
-msgstr "_Importovat klíče..."
-
-msgid "Import Keys"
-msgstr "Importovat klíče"
-
-msgid "E_xport Keys..."
-msgstr "E_xportovat klíče..."
-
-msgid "Export Keys"
-msgstr "Exportovat klíče"
-
-msgid "_Backup..."
-msgstr "_Zálohovat..."
-
-msgid "Backup key"
-msgstr "Zálohovat klíč"
-
-msgid "_Retrieve Keys..."
-msgstr "_Získat klíče..."
-
-msgid "Retrieve keys from server"
-msgstr "Získat klíče ze serveru"
-
-msgid "Re_fresh Keys"
-msgstr "A_ktualizovat klíče"
-
-msgid "Refresh keys from server"
-msgstr "Aktualizovat klíče ze serveru"
-
-msgid "_Send Keys..."
-msgstr "Ode_slat klíče..."
-
-msgid "Send keys to server"
-msgstr "Odeslat klíče na server..."
-
 msgid "Show Brief Keylist"
 msgstr "Zobrazit stručný seznam klíčů"
 
 msgid "Show Key Details"
 msgstr "Zobrazit podrobný seznam klíčů"
-
-msgid "Edit"
-msgstr "Upravit"
-
-msgid "Delete"
-msgstr "Smazat"
-
-msgid "Sign"
-msgstr "Podepsat"
-
-msgid "Export"
-msgstr "Exportovat"
-
-msgid "Import"
-msgstr "Importovat"
 
 msgid "Selected default key:"
 msgstr "Zvolený výchozí klíč:"
@@ -1369,79 +1847,6 @@ msgstr "V předvolbách nebyl zvolen žádný výchozí klíč."
 
 msgid "Key Manager"
 msgstr "Správce klíčů"
-
-msgid "The key has both a smartcard based private part and a public part"
-msgstr "Klíč má soukromou i veřejnou část uloženou na čipové kartě"
-
-msgid "The key has both a private and a public part"
-msgstr "Klíč má soukromou i veřejnou část"
-
-msgid "The key has only a public part"
-msgstr "Klíč má pouze veřejnou část"
-
-#, c-format
-msgid "%s %u bits"
-msgstr "%s %u bitů"
-
-msgid "No keys selected"
-msgstr "Žádný klíč nevybrán"
-
-#, c-format
-msgid "%d key selected"
-msgid_plural "%d keys selected"
-msgstr[0] "%d klíčů vybráno"
-msgstr[1] "%d klíčů vybráno"
-msgstr[2] "%d klíčů vybráno"
-
-msgid "User name:"
-msgstr "Uživatelské jméno:"
-
-msgid "Expires at:"
-msgstr "Vyprší:"
-
-msgid "Owner Trust:"
-msgstr "Důvěra ve vlastníka:"
-
-msgid "Key validity:"
-msgstr "Platnost klíče:"
-
-msgid "Key type:"
-msgstr "Typ klíče:"
-
-msgid "Created at:"
-msgstr "Vytvořen:"
-
-#, fuzzy
-msgid "Last update:"
-msgstr "Příjmení:"
-
-msgid "Details"
-msgstr "Podrobnosti"
-
-#, fuzzy
-msgid "User IDs"
-msgstr "ID uživatele:"
-
-msgid "Show signatures on user name:"
-msgstr "Zobrazit podpisy u jména uživatele:"
-
-msgid "Chain"
-msgstr "Řetěz"
-
-msgid "Signatures"
-msgstr "Podpisy"
-
-msgid "All signatures"
-msgstr "Všechny podpisy"
-
-msgid "Subkeys"
-msgstr "Podklíče"
-
-msgid "Key"
-msgstr "Klíč"
-
-msgid "Tofu"
-msgstr "Tofu"
 
 msgid "Sign Key"
 msgstr "Podepsat klíč"
@@ -1609,9 +2014,6 @@ msgstr ""
 "Zkontrolujte zda byl nalezen alespoň jeden odpovídající X.509 certifikát pro "
 "použití s S/MIME."
 
-msgid "Key ID"
-msgstr "ID klíče"
-
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
 "selected."
@@ -1659,15 +2061,6 @@ msgstr "[Nejednoznačný X.509 klíč. Vyberte pravým tlačítkem myši]"
 
 msgid "[Right-click to select]"
 msgstr "[Vybrat pravým tlačítkem myši]"
-
-msgid "Select _PGP key..."
-msgstr "Zvolit _PGP klíč..."
-
-msgid "Select _S\\/MIME key..."
-msgstr "Zvolit _S\\/MIME klíč..."
-
-msgid "Toggle _Ignore flag"
-msgstr "Přepnout _ignore příznak"
 
 msgid "Select keys for recipients"
 msgstr "Vybrat klíče příjemců"
@@ -1889,534 +2282,261 @@ msgstr "Podpis: %s"
 msgid "Signatures:"
 msgstr "Podpisy:"
 
-msgid "Card Manager"
-msgstr "Správce karet"
-
-#, c-format
-msgid "%s card detected."
-msgstr "Detekována %s karta."
-
-msgid "Checking for card..."
-msgstr "Hledá se karta..."
-
-msgid "No card found."
-msgstr "Nebyla nalezena žádná karta."
-
-msgid "The selected card application is currently not available."
-msgstr "Zvolená aplikace karty v tuto chvíli není dostupná."
-
-msgid ""
-"Another process is using a different card application than the selected "
-"one.\n"
-"\n"
-"You may change the application selection mode to \"Auto\" to select the "
-"active application."
-msgstr ""
-"Jiný proces používá odlišnou aplikaci karty než tu která je vybrána.\n"
-"\n"
-"Nastavením na \"Auto\" můžete změnit mód výběru aktivní aplikace. "
-
-msgid "The selected card application is not available."
-msgstr "Zvolená aplikace karty není dostupná."
-
-msgid "Error accessing the card."
-msgstr "Chyba přístupu ke kartě."
-
-msgid "Error accessing card"
-msgstr "Chyba přístupu ke kartě"
-
-msgid "No card"
-msgstr "Žádná karta"
-
-msgid "_Card"
-msgstr "_Karta"
-
-msgid "Reload card information"
-msgstr "Obnovit informace o kartě"
-
-msgid "Generate new key on card"
-msgstr "Vytvořit nový klíč na kartě"
-
-msgid "This card application is not yet supported."
-msgstr "Tato aplikace karty není zatím podporována."
-
-msgid "Application selection:"
-msgstr "Volba aplikace: "
-
-msgid "Auto"
-msgstr "Auto"
-
-msgid "The GPGME library is too old to support smartcards."
-msgstr "Knihovna GPGME je příliš zastaralá aby podporovala čipové karty."
-
-msgid ""
-"<b>Admin-PIN Required</b>\n"
-"\n"
-"Depending on the previous operations you may now be asked for the Admin-"
-"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
-"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
-"restored anymore and thus the data on the card can't be modified.\n"
-"\n"
-"Unless changed, a fresh standard card has set the Admin-PIN to the value "
-"<i>12345678</i>.  However, the issuer of your card might have initialized "
-"the card with a different Admin-PIN and that Admin-PIN might only be known "
-"to the issuer.  Please check the instructions of your issuer.\n"
-"\n"
-"This notice will be shown only once per session."
-msgstr ""
-"<b>Admin-PIN požadován</b>\n"
-"\n"
-"V závislosti na předchozích operacích můžete být nyní požádáni o Admin-PIN. "
-"Vložení špatné hodnoty Admin-PIN sníží odpovídající čítač opakování. Pokud "
-"čítač dosáhne nuly, Admin-PIN nelze obnovit a data na kartě nemohu být "
-"změněna.\n"
-"\n"
-"Pokud nebyl změněn, nová standardní karta má nastaven Admin-PIN na hodnotu "
-"<i>12345678</i>. Nicméně vydavatel mohl vaši kartu inicializovat s jiným "
-"Admin-PIN a ten tedy bude znám pouze vydavateli. Zkontrolujte prosím "
-"instrukce od vašeho vydavatele.\n"
-"\n"
-"Toto oznámení bude zobrazeno pouze jednou za relaci."
-
-msgid "PUK retry counter:"
-msgstr "Čítač opakování PUK:"
-
-msgid "CHV2 retry counter: "
-msgstr "Čítač opakování CHV2:"
-
-msgid "Reset PIN"
-msgstr "Resetovat PIN"
-
-msgid "Change PIN"
-msgstr "Změnit PIN"
-
-msgid "Change PUK"
-msgstr "Změnit PUK"
-
-msgid "Reset PUK"
-msgstr "Resetovat PUK"
-
-#, c-format
-msgid ""
-"Error saving the changed values.\n"
-"(%s <%s>)"
-msgstr ""
-"Chyba při ukládání změněných hodnot.\n"
-"(%s <%s>)"
-
-msgid "Only plain ASCII is currently allowed."
-msgstr "Aktuálně je povoleno pouze základní ASCII."
-
-msgid "The \"<\" character may not be used."
-msgstr "Znak \"<\" nelze použít."
-
-msgid "Double spaces are not allowed."
-msgstr "Více mezer není povoleno."
-
-msgid ""
-"Total length of first and last name may not be longer than 39 characters."
-msgstr "Celková délka křestního jména a příjmení nesmí přesáhnout 39 znaků."
-
-msgid "Saving the field failed."
-msgstr "Uložení pole selhalo."
-
-msgid "Invalid length of the language preference."
-msgstr "Neplatná délka předvolby jazyka."
-
-msgid "The language preference may only contain the letters 'a' through 'z'."
-msgstr "Volba jazyka smí obsahovat pouze písmena 'a' až 'z'."
-
-msgid "The field may not be longer than 254 characters."
-msgstr "Délka tohoto pole nesmí přesáhnout 254 znaků."
-
-msgid ""
-"<b>Unblocking the PIN</b>\n"
-"\n"
-"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Reset "
-"Code</b> and then to enter a new value for the PIN and repeat that new value "
-"at another prompt."
-msgstr ""
-"<b>Odblokování PIN</b>\n"
-"\n"
-"Čítač opakovaného zadání PIN je na nule, ale je nastaven Reset kód.\n"
-"\n"
-"Reset kód je podobný PUK (PIN Unblocking Code) a je používán pro odblokování "
-"PIN bez nutnosti znát Admin-PIN.\n"
-"\n"
-"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
-"<b>Reset kódu</b> , poté novou hodnotu PIN a tu na dalším řádku zopakovali."
-
-msgid ""
-"<b>Changing the PIN</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the PIN decrements the retry counter.  If the "
-"retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reset by using the Admin-PIN.\n"
-"\n"
-"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
-"the issuer of your card might have initialized the card with a different "
-"PIN.  Please check the instructions of your issuer."
-msgstr ""
-"<b>Změna PIN</b>\n"
-"\n"
-"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
-"PIN, poté novou hodnotu a tu na dalším řádku zopakovali.\n"
-"\n"
-"Vložení nesprávné hodnoty PIN sníží čítač opakovaného zadání. Pokud oba "
-"čítače opakování pro PIN a Reset kód klesnou na nulu, může být PIN "
-"odblokován použitím Admin-PIN.\n"
-"\n"
-"Čistá standardní karta má PIN nastaven na hodnotu <i>12345678</i>. Nicméně "
-"vydavatel mohl vaši kartu inicializovat s jiným PIN. Zkontrolujte prosím "
-"instrukce od vašeho vydavatele."
-
-msgid ""
-"<b>Changing the Reset Code</b>\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the Reset Code and repeat that new value at "
-"another prompt."
-msgstr ""
-"<b>Změna Reset kódu</b>\n"
-"\n"
-"Reset kód je podobný PUK (PIN Unblocking Code) a je používán pro odblokování "
-"PIN bez nutnosti znát Admin-PIN.\n"
-"\n"
-"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
-"PIN, poté novou hodnotu Reset kódu a tu na dalším řádku zopakovali."
-
-msgid ""
-"<b>Resetting the PIN or the Reset Code</b>\n"
-"\n"
-"If the retry counters of the PIN and of the Reset Code are both down to "
-"zero, it is only possible to reset them if you have access to the Admin-"
-"PIN.\n"
-"\n"
-"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
-"However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
-"Please check the instructions of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
-"repeat that new value at another prompt."
-msgstr ""
-"<b>Resetování PIN nebo Reset kódu</b>\n"
-"\n"
-"Pokud klesnou oba čítače opakování PIN a Reset kódu na nulu, bude jedinou "
-"možností jejich resetu použití Admin-PIN\n"
-"\n"
-"Čistá standardní karta má Admin-PIN nastaven na hodnotu <i>12345678</i>. "
-"Nicméně vydavatel mohl vaši kartu inicializovat s jiným Admin-PIN a ten tedy "
-"bude znám pouze jemu. Zkontrolujte prosím instrukce od vašeho vydavatele.\n"
-"\n"
-"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
-"<b>Admin-PIN</b>, poté novou hodnotu PIN nebo Reset kódu a tu na dalším "
-"řádku zopakovali."
-
-msgid ""
-"<b>Changing the Admin-PIN</b>\n"
-"\n"
-"If you know the Admin-PIN you may change the Admin-PIN.\n"
-"\n"
-"The Admin-PIN is required to create keys on the card and to change other "
-"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
-"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
-"card might have initialized the card with a different Admin-PIN and that "
-"Admin-PIN might only be known to the issuer.  Please check the instructions "
-"of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
-"value at another prompt."
-msgstr ""
-"<b>Změna Admin-PIN</b>\n"
-"\n"
-"Znáte-li Admin-PIN, můžete jej změnit.\n"
-"\n"
-"Admin-PIN je vyžadovaný při tvorbě klíčů na kartě a změně dalších dat. Admin-"
-"PIN můžete, ale také nemusíte znát. Čistá standardní karta má Admin-PIN "
-"nastaven na hodnotu <i>12345678</i>. Nicméně vydavatel mohl vaši kartu "
-"inicializovat s jiným Admin-PIN a ten tedy bude znám pouze jemu. "
-"Zkontrolujte prosím instrukce od vašeho vydavatele.\n"
-"\n"
-"Pokud budete pokračovat, budete vyzvání, abyste vložili současnou hodnotu "
-"<b>Admin-PIN</b>, poté novou hodnotu a tu na dalším řádku zopakovali."
-
-#, c-format
-msgid ""
-"Error changing or resetting the PIN/PUK.\n"
-"(%s <%s>)"
-msgstr ""
-"Chyba při změně nebo resetu PIN/PUK.\n"
-"(%s <%s>)"
-
-#, c-format
-msgid ""
-"Error fetching the key.\n"
-"(%s <%s>)"
-msgstr ""
-"Chyba při stahování klíče.\n"
-"(%s <%s>)"
-
-#, c-format
-msgid "Keys found: %d, imported: %d, unchanged: %d"
-msgstr "Nalezeno %d klíčů, importováno: %d, nezměněno: %d"
-
-msgid "Fetch Key"
-msgstr "Získat klíč"
-
-msgid "<b>General</b>"
-msgstr "<b>Obecné</b>"
-
-msgid "Serial number:"
-msgstr "Výrobní číslo:"
-
-msgid "Card version:"
-msgstr "Verze karty:"
-
-msgid "Manufacturer:"
-msgstr "Výrobce:"
-
-msgid "<b>Personal</b>"
-msgstr "<b>Osobní</b>"
-
-msgid "Salutation:"
-msgstr "Oslovení:"
-
-msgid "First name:"
-msgstr "Křestní jméno:"
-
-msgid "Last name:"
-msgstr "Příjmení:"
-
-msgid "Language:"
-msgstr "Jazyk:"
-
-msgid "Login data:"
-msgstr "Data přihlášení:"
-
-msgid "Public key URL:"
-msgstr "URL veřejného klíče: "
-
-msgid "<b>Keys</b>"
-msgstr "<b>Klíče</b>"
-
-msgid "Signature key:"
-msgstr "Podpisový klíč:"
-
-msgid "Encryption key:"
-msgstr "Šifrovací klíč:"
-
-msgid "Authentication key:"
-msgstr "Autentizační klíč:"
-
-msgid "Signature counter:"
-msgstr "Počítadlo podpisů:"
-
-msgid "<b>PIN</b>"
-msgstr "<b>PIN</b>"
-
-msgid "Force signature PIN:"
-msgstr "Vynutit podpisový PIN:"
-
-msgid "PIN retry counter:"
-msgstr "Čítač opakování PIN:"
-
-msgid "Admin-PIN retry counter:"
-msgstr "Čítač opakování admin PIN:"
-
-msgid "blocked"
-msgstr "blokováno"
-
-msgid "Learn keys"
-msgstr "Učit klíče"
-
-msgid ""
-"For some or all of the keys available on the card, the GnuPG crypto engine "
-"does not yet know the corresponding certificates.\n"
-"\n"
-"If you click this button, GnuPG will be asked to \"learn\" this card and "
-"import all certificates stored on the card into its own certificate store.  "
-"This is not done automatically because it may take several seconds to read "
-"all certificates from the card.\n"
-"\n"
-"If you are unsure what to do, just click the button."
-msgstr ""
-"Pro některé nebo všechny klíče dostupné na kartě nezná GnuPG šifrovací stroj "
-"odpovídající certifikáty.\n"
-"\n"
-"Pokud kliknete na toto tlačítko, GnuPG bude požádán, aby se \"naučil\" tuto "
-"kartu a importoval všechny certifikáty uložené na kartě do svého vlastního "
-"úložiště certifikátů. Tato operace není prováděna automaticky. Čtení všech "
-"certifikátů z karty může trvat několik sekund.\n"
-"\n"
-"Pokud si nejste jistí co dělat, klikněte na tlačítko."
-
-msgid "Learning keys ..."
-msgstr "Klíče jsou učeny"
-
-#, c-format
-msgid ""
-"<b>Setting the Initial PIN</b> (%s)\n"
-"\n"
-"You selected to set the initial PIN of your card.  The PIN is currently set "
-"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
-"reverted</b>.\n"
-"\n"
-"Please check the documentation of your card to learn for what the NullPIN is "
-"good.\n"
-"\n"
-"If you proceed you will be asked to enter a new PIN and later to repeat that "
-"PIN.  Make sure that you will remember that PIN - it will not be possible to "
-"recover the PIN if it has been entered wrongly more than %d times.\n"
-"\n"
-"%s"
-msgstr ""
-"<b>Nastavení výchozího PIN</b> (%s)\n"
-"\n"
-"Zvolili jste možnost nastavit výchozí PIN vaší karty. PIN je v tuto chvíli "
-"nastaven na NullPIN. Nastavení výchozího PIN je <b>vyžadování ale nemůže být "
-"odvoláno</b>.\n"
-"\n"
-"Zkontrolujte prosím dokumentaci vaší karty a podívejte se k čemu je NullPIN "
-"dobrý.\n"
-"\n"
-"Pokud budete pokračovat, budete vyzváni abyste vložili nový PIN, později "
-"abyste jej opakovali. Ujistěte se, že si PIN pamatujete - nebude možné jej "
-"obnovit pokud bude zadán více než %d krát nesprávně.\n"
-"\n"
-"%s"
-
-msgid ""
-"You are now setting the PIN for the SigG key used to create <b>qualified "
-"signatures</b>.  You may want to set the PIN to the same value as used for "
-"the NKS keys."
-msgstr ""
-"Nyní nastavujete PIN pro SigG klíče používané pro vytváření "
-"<b>kvalifikovaných podpisů</b>. PIN můžete nastavit stejný jako u NKS klíčů."
-
-msgid ""
-"You are now setting the PIN for the NKS keys used for standard signatures, "
-"encryption and authentication."
-msgstr ""
-"Nyní nastavujete PIN pro NKS klíče používané pro běžné podpisy, šifrování a "
-"autentizaci."
-
-#, c-format
-msgid ""
-"Error changing the NullPIN.\n"
-"(%s <%s>)"
-msgstr ""
-"Chyba při změně prázdného PIN.\n"
-"(%s <%s>)"
-
-msgid ""
-"<b>Changing a PIN or PUK</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value and then to "
-"enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the current value decrements the retry counter.  "
-"If the retry counters of the PIN and the corresponding PUK are both down to "
-"zero, the keys controlled by the PIN are not anymore usable and there is no "
-"way to unblock them!"
-msgstr ""
-"<b>Změna PIN nebo PUK</b>\n"
-"\n"
-"Pokud budete pokračovat, budete vyzváni abyste zadali současnou hodnotu, "
-"poté novou a zopakovali ji na dalším řádku.\n"
-"\n"
-"Vložením nesprávné hodnoty pro současný PIN/PUK snížíte čítač opakování. "
-"Pokud oba čítače (PIN a odpovídající PUK) klesnou na nulu, klíče chráněné "
-"tímto PIN nebudou více použitelné. Ani je nebude možné nikdy odblokovat!"
-
-msgid ""
-"<b>Resetting a PUK</b>\n"
-"\n"
-"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
-"system of the NetKey card implements it as an alternative PIN and thus it is "
-"possible to use the PIN to unblock the PUK.\n"
-"\n"
-"If the PUK is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PIN.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the blocked PUK and repeat that new value at "
-"another prompt."
-msgstr ""
-"<b>Resetování PUK</b>\n"
-"\n"
-"Přestože <i>PUK</i> znamená <i>kód k odblokování PIN (PIN Unblocking Code)</"
-"i> implementuje jej operační systém TCOS karty NetKey jako alternativní PIN "
-"a tutíž je možné použít PIN pro odblokování PUK.\n"
-"\n"
-"Pokud je PUK zablokovaný (čítač opakování klesl na nulu), můžete jej "
-"odblokovat použitím neblokovaného PIN. Čítač opakovaného zadání se vrátí "
-"zpět na původní hodnotu.\n"
-"\n"
-"Pokud budete pokračovat, budete vyzváni abyste zadali současnou hodnotu PIN, "
-"poté novou hodnotu pro blokovaný PUK a tu na dalším řádku zopakovali."
-
-msgid ""
-"<b>Resetting a PIN</b>\n"
-"\n"
-"If the PIN is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PUK.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PUK and "
-"then to enter a new value for the blocked PIN and repeat that new value at "
-"another prompt."
-msgstr ""
-"<b>Resetovat PIN</b>\n"
-"\n"
-"Pokud je PIN zablokovaný (čítač opakování klesl na nulu), můžete jej "
-"odblokovat použitím neblokovaného PUK. Čítač opakovaného zadání se vrátí "
-"zpět na původní hodnotu.\n"
-"\n"
-"Pokud budete pokračovat, budete vyzváni abyste zadali současnou hodnotu PUK, "
-"poté novou hodnotu pro blokovaný PIN a tu na dalším řádku zopakovali."
-
-msgid ""
-"<b>A NullPIN is still active on this card</b>.\n"
-"You need to set a real PIN before you can make use of the card."
-msgstr ""
-"<b>NullPIN je na této kartě stále aktivní</b>.\n"
-"Před použitím karty musíte nastavit reálný PIN."
-
-msgid "Set initial PIN"
-msgstr "Nastavit výchozí PIN"
-
-msgid "scanning ..."
-msgstr "skenování ..."
-
-msgid "SigG PIN retry counter:"
-msgstr "Čítač opakování SigG PIN:"
-
-msgid "SigG PUK retry counter:"
-msgstr "Čítač opakování SigG PUK:"
-
-#, c-format
-msgid ""
-"There is not much information to display for a %s card.  You may want to use "
-"the application selector button to switch to another application available "
-"on this card."
-msgstr ""
-"Pro kartu %s není mnoho informací ke zobrazení. Zkuste použít tlačítko pro "
-"volbu aplikace pro přepnutí na jinou aplikaci, která je na kartě k dispozici."
+#~ msgid "_File"
+#~ msgstr "_Soubor"
+
+#~ msgid "_Edit"
+#~ msgstr "Úpr_avy"
+
+#~ msgid "Clear buffer"
+#~ msgstr "Vyprázdnit mezipaměť"
+
+#~ msgid "Open a file"
+#~ msgstr "Otevřít soubor"
+
+#~ msgid "Save to a file"
+#~ msgstr "Uložit do souboru"
+
+#~ msgid "Sign buffer text"
+#~ msgstr "Podepsat text v mezipaměti"
+
+#~ msgid "Check signatures of buffer text"
+#~ msgstr "Zkontrolovat podpis textu v mezipaměti"
+
+#~ msgid "Encrypt the buffer text"
+#~ msgstr "Šifrovat text v mezipaměti"
+
+#~ msgid "Decrypt the buffer text"
+#~ msgstr "Dešifrovat text v mezipaměti"
+
+#~ msgid "Close the buffer"
+#~ msgstr "Uzavřít mezipaměť"
+
+#~ msgid "Quit the program"
+#~ msgstr "Ukončit program"
+
+#~ msgid "Undo the last action"
+#~ msgstr "Vrátit zpět poslední akci"
+
+#~ msgid "Redo the last undone action"
+#~ msgstr "Opakovat poslední vrácenou akci"
+
+#~ msgid "Cut the selection"
+#~ msgstr "Vyjmout výběr"
+
+#~ msgid "Copy the selection"
+#~ msgstr "Kopírovat výběr"
+
+#~ msgid "Paste the clipboard"
+#~ msgstr "Vložit ze schránky"
+
+#~ msgid "Delete the selected text"
+#~ msgstr "Smazat vybraný text"
+
+#~ msgid "Select the entire document"
+#~ msgstr "Vybrat celý dokument"
+
+#~ msgid "Close all files"
+#~ msgstr "Vymazat všechny soubory"
+
+#~ msgid "Sign the selected file"
+#~ msgstr "Podepsat vybraný soubor"
+
+#~ msgid "Check signatures of selected file"
+#~ msgstr "Zkontrolovat podpis vybraného souboru"
+
+#~ msgid "Encrypt the selected file"
+#~ msgstr "Zašifrovat vybraný soubor"
+
+#~ msgid "Decrypt the selected file"
+#~ msgstr "Dešifrovat vybraný soubor"
+
+#~ msgid "Close the window"
+#~ msgstr "Zavřít okno"
+
+#~ msgid "Select all files"
+#~ msgstr "Vybrat všechny soubory"
+
+#~ msgid "_Windows"
+#~ msgstr "_Okna"
+
+#~ msgid "Open the keyring editor"
+#~ msgstr "Otevřít správce klíčenky"
+
+#~ msgid "Open the file manager"
+#~ msgstr "Otevřít správce souborů"
+
+#~ msgid "Open the clipboard"
+#~ msgstr "Otevřít schránku"
+
+#~ msgid "Configure the application"
+#~ msgstr "Nastavit aplikaci"
+
+#~ msgid "_Backend Preferences"
+#~ msgstr "Na_stavení backendu"
+
+#~ msgid "Configure the backend programs"
+#~ msgstr "Nastavit programy backednu"
+
+#~ msgid "_Help"
+#~ msgstr "_Nápověda"
+
+#~ msgid "Open the GPA manual"
+#~ msgstr "Otevřít návod GPA"
+
+#~ msgid "About this application"
+#~ msgstr "O této aplikaci"
+
+#~ msgid "_Verify"
+#~ msgstr "O_věřit"
+
+#~ msgid "_Encrypt"
+#~ msgstr "_Verschlüsseln"
+
+#~ msgid "_Decrypt"
+#~ msgstr "_Dešifrovat"
+
+#~ msgid "_Brief"
+#~ msgstr "_Stručně"
+
+#~ msgid "_Detailed"
+#~ msgstr "Po_drobně"
+
+#~ msgid "_Keyring Manager"
+#~ msgstr "Správce _klíčenky"
+
+#~ msgid "_Clipboard"
+#~ msgstr "S_chránka"
+
+#~ msgid "_File Manager"
+#~ msgstr "Správce _souborů"
+
+#~ msgid "_Card Manager"
+#~ msgstr "Správce _karet"
+
+#~ msgid "_Keys"
+#~ msgstr "_Klíče"
+
+#~ msgid "_Server"
+#~ msgstr "_Server"
+
+#, fuzzy
+#~ msgid "Copy _Fingerprint"
+#~ msgstr "Otisk:"
+
+#, fuzzy
+#~ msgid "Copy the fingerprints"
+#~ msgstr "Kopírovat výběr"
+
+#, fuzzy
+#~ msgid "Copy Private Key"
+#~ msgstr "Upravit _soukromý klíč..."
+
+#, fuzzy
+#~ msgid "Copy a single private key"
+#~ msgstr "Upravit vybraný soukromý klíč"
+
+#~ msgid "Select all certificates"
+#~ msgstr "Vybrat všechny certifikáty"
+
+#~ msgid "Refresh the keyring"
+#~ msgstr "Aktualizovat keyring"
+
+#~ msgid "_New key..."
+#~ msgstr "_Nový klíč..."
+
+#~ msgid "Generate a new key"
+#~ msgstr "Vytvořit nový klíč"
+
+#~ msgid "_Delete keys"
+#~ msgstr "Smazat klíče"
+
+#~ msgid "Remove the selected key"
+#~ msgstr "Odstranit vybraný klíč"
+
+#~ msgid "_Sign Keys..."
+#~ msgstr "Podep_sat klíče..."
+
+#~ msgid "Sign the selected key"
+#~ msgstr "Podepsat vybraný klíč"
+
+#~ msgid "Set _Owner Trust..."
+#~ msgstr "Nastavit úr_oveň důvěry..."
+
+#~ msgid "Set owner trust of the selected key"
+#~ msgstr "Nastavit úroveň důvěry zvoleného klíče"
+
+#~ msgid "_Edit Private Key..."
+#~ msgstr "Upravit _soukromý klíč..."
+
+#~ msgid "Edit the selected private key"
+#~ msgstr "Upravit vybraný soukromý klíč"
+
+#~ msgid "Import Keys"
+#~ msgstr "Importovat klíče"
+
+#~ msgid "E_xport Keys..."
+#~ msgstr "E_xportovat klíče..."
+
+#~ msgid "Export Keys"
+#~ msgstr "Exportovat klíče"
+
+#~ msgid "_Backup..."
+#~ msgstr "_Zálohovat..."
+
+#~ msgid "Backup key"
+#~ msgstr "Zálohovat klíč"
+
+#~ msgid "_Retrieve Keys..."
+#~ msgstr "_Získat klíče..."
+
+#~ msgid "Retrieve keys from server"
+#~ msgstr "Získat klíče ze serveru"
+
+#~ msgid "Re_fresh Keys"
+#~ msgstr "A_ktualizovat klíče"
+
+#~ msgid "Refresh keys from server"
+#~ msgstr "Aktualizovat klíče ze serveru"
+
+#~ msgid "_Send Keys..."
+#~ msgstr "Ode_slat klíče..."
+
+#~ msgid "Send keys to server"
+#~ msgstr "Odeslat klíče na server..."
+
+#~ msgid "Edit"
+#~ msgstr "Upravit"
+
+#~ msgid "Delete"
+#~ msgstr "Smazat"
+
+#~ msgid "Sign"
+#~ msgstr "Podepsat"
+
+#~ msgid "Export"
+#~ msgstr "Exportovat"
+
+#~ msgid "Import"
+#~ msgstr "Importovat"
+
+#~ msgid "Select _PGP key..."
+#~ msgstr "Zvolit _PGP klíč..."
+
+#~ msgid "Select _S\\/MIME key..."
+#~ msgstr "Zvolit _S\\/MIME klíč..."
+
+#~ msgid "Toggle _Ignore flag"
+#~ msgstr "Přepnout _ignore příznak"
+
+#~ msgid "_Card"
+#~ msgstr "_Karta"
+
+#~ msgid "Reload card information"
+#~ msgstr "Obnovit informace o kartě"
+
+#~ msgid "Generate new key on card"
+#~ msgstr "Vytvořit nový klíč na kartě"
 
 #~ msgid "Size"
 #~ msgstr "Velikost"
@@ -2447,9 +2567,6 @@ msgstr ""
 
 #~ msgid "GPA Error"
 #~ msgstr "Chyba GPA"
-
-#~ msgid "The key ID is a short number to identify a certificate."
-#~ msgstr "ID klíče je krátké číslo k identifikaci certifikátu."
 
 #~ msgid "GNU Privacy Assistant - Key Manager"
 #~ msgstr "GNU Privacy Assistant - Správce klíčů"

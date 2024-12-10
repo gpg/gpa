@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "Card Manager"
 msgstr "Диспетчер карт"
@@ -59,36 +59,6 @@ msgstr "Ошибка доступа к карте"
 msgid "No card"
 msgstr "Карты нет"
 
-msgid "_File"
-msgstr "_Файл"
-
-msgid "_Edit"
-msgstr "_Правка"
-
-msgid "_Card"
-msgstr "_Карта"
-
-msgid "Close the window"
-msgstr "Закрыть окно"
-
-msgid "Quit the program"
-msgstr "Выйти из программы"
-
-msgid "Reload card information"
-msgstr "Перезагрузить информацию о карте"
-
-msgid "Generate key"
-msgstr "Генерация ключа"
-
-msgid "Generate new key on card"
-msgstr "Создать ключ на карте"
-
-msgid "Keyring"
-msgstr "Таблица ключей"
-
-msgid "Files"
-msgstr "Файлы"
-
 msgid "This card application is not yet supported."
 msgstr "Это приложение карты пока не поддерживается."
 
@@ -119,6 +89,12 @@ msgstr "[слишком длинная цепочка]"
 msgid "[issuer not found]"
 msgstr "[издатель не найден]"
 
+msgid "_Cancel"
+msgstr "От_мена"
+
+msgid "_Open"
+msgstr "_Открыть"
+
 msgid "Open File"
 msgstr "Открыть файл"
 
@@ -131,56 +107,20 @@ msgstr "Сообщение GPA"
 msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr "Размер файла %s равен %llu%s. Открыть его?"
 
+msgid "_Save"
+msgstr ""
+
 msgid "Save As..."
 msgstr "Сохранить как..."
 
 msgid "Clipboard"
 msgstr "Буфер"
 
-msgid "Clear buffer"
-msgstr "Очистить буфер"
+msgid "Keyring"
+msgstr "Таблица ключей"
 
-msgid "Open a file"
-msgstr "Открыть файл"
-
-msgid "Save to a file"
-msgstr "Сохранить в файле"
-
-msgid "Sign buffer text"
-msgstr "Подписать текст из буфера"
-
-msgid "Check signatures of buffer text"
-msgstr "Проверить подписи текста из буфера"
-
-msgid "Encrypt the buffer text"
-msgstr "Зашифровать текст из буфера"
-
-msgid "Decrypt the buffer text"
-msgstr "Расшифровать текст из буфера"
-
-msgid "Close the buffer"
-msgstr "Закрыть буфер"
-
-msgid "Undo the last action"
-msgstr "Отменить последнее действие"
-
-msgid "Redo the last undone action"
-msgstr "Выполнить последнее отмененное действие"
-
-msgid "Cut the selection"
-msgstr "Вырезать выделенное в буфер"
-
-msgid "Copy the selection"
-msgstr "Копировать выделенное в буфер"
-
-msgid "Paste the clipboard"
-msgstr "Вставить из буфера"
-
-msgid "Delete the selected text"
-msgstr "Удалить выделенный текст"
-
-msgid "Select the entire document"
-msgstr "Выделить весь документ"
+msgid "Files"
+msgstr "Файлы"
 
 msgid "Card"
 msgstr "Карта"
@@ -729,6 +669,9 @@ msgstr "Другое значение"
 msgid "Use default argument"
 msgstr "Исходный аргумент"
 
+msgid "_Apply"
+msgstr ""
+
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
@@ -739,8 +682,14 @@ msgstr ""
 msgid "Crypto Backend Configuration"
 msgstr "Настройки базовых программ"
 
+msgid "Apply"
+msgstr ""
+
 msgid "Reset"
 msgstr "Сбросить"
+
+msgid "_OK"
+msgstr ""
 
 msgid "Configure the tools of the GnuPG system."
 msgstr "Настройки инструментов GnuPG."
@@ -841,32 +790,11 @@ msgstr "Пожалуйста, введите корректную дату."
 msgid "Change expiry date"
 msgstr "Изменить срок годности"
 
-msgid "_Cancel"
-msgstr "От_мена"
-
 msgid "_never expire"
 msgstr "_неогранич."
 
 msgid "_expire on:"
 msgstr "_годен до:"
-
-msgid "Close all files"
-msgstr "Закрыть все файлы"
-
-msgid "Sign the selected file"
-msgstr "Подписать выбранный файл"
-
-msgid "Check signatures of selected file"
-msgstr "Проверить подписи выбранного файла"
-
-msgid "Encrypt the selected file"
-msgstr "Зашифровать выбранный файл"
-
-msgid "Decrypt the selected file"
-msgstr "Расшифровать выбранный файл"
-
-msgid "Select all files"
-msgstr "Выбрать все файлы"
 
 msgid "File"
 msgstr "Файл"
@@ -1044,27 +972,6 @@ msgstr "Графическая оболочка для GnuPG"
 msgid "Please report bugs to <"
 msgstr "Об ошибках сообщайте по адресу <"
 
-msgid "_Windows"
-msgstr "_Окна"
-
-msgid "Open the keyring editor"
-msgstr "Редактировать таблицу ключей"
-
-msgid "Open the file manager"
-msgstr "Открыть менеджер файлов"
-
-msgid "Open the clipboard"
-msgstr "Открыть буфер"
-
-msgid "Configure the application"
-msgstr "Настроить приложение"
-
-msgid "_Backend Preferences"
-msgstr "Настройки _базовых программ"
-
-msgid "Configure the backend programs"
-msgstr "Сконфиругировать базовые программы"
-
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -1093,6 +1000,9 @@ msgstr "Создание резервной копии ключа: 0x%s"
 
 msgid "(not set)"
 msgstr "(не установлен)"
+
+msgid "_Close"
+msgstr "_Закрыть"
 
 msgid "The private key has been copied to the clipboard."
 msgstr "Секретный ключ скопирован в буфер."
@@ -1172,9 +1082,6 @@ msgstr "Вы <b>точно</b> хотите использовать этот к
 
 msgid "Revoked Key"
 msgstr "Ключ отозван"
-
-msgid "_Close"
-msgstr "_Закрыть"
 
 msgid "The following key has been revoked by its owner:"
 msgstr "Следующий ключ отозван владельцем:"
@@ -1437,9 +1344,6 @@ msgstr ""
 msgid "_Use a different filename"
 msgstr "_Записать под другим именем"
 
-msgid "_Open"
-msgstr "_Открыть"
-
 msgid ""
 "************************************************************************\n"
 "* WARNING: This file is a backup of your secret key. Please keep it in *\n"
@@ -1681,42 +1585,6 @@ msgstr ""
 "CJ (2008);\n"
 "Ineiev <ineiev@gnu.org> (2016)"
 
-msgid "_Help"
-msgstr "_Справка"
-
-msgid "Open the GPA manual"
-msgstr "Открыть руководство по GPA"
-
-msgid "About this application"
-msgstr "Об этой программе"
-
-msgid "_Verify"
-msgstr "Про_верить"
-
-msgid "_Encrypt"
-msgstr "За_шифровать"
-
-msgid "_Decrypt"
-msgstr "_Расшифровать"
-
-msgid "_Brief"
-msgstr "Кра_тко"
-
-msgid "_Detailed"
-msgstr "_Подробно"
-
-msgid "_Keyring Manager"
-msgstr "_Диспетчер ключей"
-
-msgid "_Clipboard"
-msgstr "_Буфер"
-
-msgid "_File Manager"
-msgstr "Менеджер _файлов"
-
-msgid "_Card Manager"
-msgstr "Диспетчер _карт"
-
 msgid "Removing Secret Key"
 msgstr "Удаление секретного ключа"
 
@@ -1784,6 +1652,9 @@ msgstr "Нужно ввести размер ключа."
 
 msgid "Generate card key"
 msgstr "Генерация ключа на карте"
+
+msgid "Generate key"
+msgstr "Генерация ключа"
 
 msgid "_Algorithm: "
 msgstr "_Алгоритм: "
@@ -1886,15 +1757,6 @@ msgstr ""
 "Создание ключа успешно завершено. Новый ключ абсолютно достоверен, его длина "
 "равна %d бит."
 
-msgid "Keyserver did not return any matching keys."
-msgstr "Сервер ключей не вернул ни одного подходящего ключа."
-
-msgid "Select keys to import"
-msgstr "Выбрать ключи для импорта"
-
-msgid "_Import"
-msgstr "_Импорт"
-
 msgid ""
 "GnuPG is rebuilding the trust database.\n"
 "This might take a few seconds."
@@ -1963,116 +1825,11 @@ msgstr "Создать _резервную копию сейчас"
 msgid "Only keys of the same procotol may be copied."
 msgstr "Копировать можно только ключи одного и того же протокола."
 
-msgid "_Keys"
-msgstr "_Ключи"
-
-msgid "_Server"
-msgstr "С_ервер"
-
-msgid "Copy _Fingerprint"
-msgstr "Копировать _отпечаток"
-
-msgid "Copy the fingerprints"
-msgstr "Копировать отпечатки"
-
-msgid "Copy Private Key"
-msgstr "Копировать _секретный ключ..."
-
-msgid "Copy a single private key"
-msgstr "Копирование отдельного секретного ключа"
-
-msgid "Select all certificates"
-msgstr "Выбрать все сертификаты"
-
-msgid "Refresh the keyring"
-msgstr "Обновить таблицу ключей"
-
-msgid "_New key..."
-msgstr "_Новый ключ..."
-
-msgid "Generate a new key"
-msgstr "Создать ключ"
-
-msgid "_Delete keys"
-msgstr "_Удалить ключи"
-
-msgid "Remove the selected key"
-msgstr "Удалить выбранный ключ"
-
-msgid "_Sign Keys..."
-msgstr "_Подписать ключи..."
-
-msgid "Sign the selected key"
-msgstr "Подписать выбранный ключ"
-
-msgid "Set _Owner Trust..."
-msgstr "_Доверие владельцу..."
-
-msgid "Set owner trust of the selected key"
-msgstr "Установить доверие владельцу выбранного ключа"
-
-msgid "_Edit Private Key..."
-msgstr "Править _секретный ключ..."
-
-msgid "Edit the selected private key"
-msgstr "Правка выбранного секретного ключа"
-
-msgid "_Import Keys..."
-msgstr "_Импорт ключей"
-
-msgid "Import Keys"
-msgstr "Импорт ключей"
-
-msgid "E_xport Keys..."
-msgstr "_Экспорт ключей..."
-
-msgid "Export Keys"
-msgstr "Экспорт ключей"
-
-msgid "_Backup..."
-msgstr "_Резервная копия..."
-
-msgid "Backup key"
-msgstr "Создать резервную копию ключа"
-
-msgid "_Retrieve Keys..."
-msgstr "Извлеч_ь ключи..."
-
-msgid "Retrieve keys from server"
-msgstr "Получить ключи с сервера"
-
-msgid "Re_fresh Keys"
-msgstr "_Обновить ключи"
-
-msgid "Refresh keys from server"
-msgstr "Обновить ключи с сервера"
-
-msgid "_Send Keys..."
-msgstr "О_тправить ключи..."
-
-msgid "Send keys to server"
-msgstr "Отправить ключи на сервер"
-
 msgid "Show Brief Keylist"
 msgstr "Скрыть детали"
 
 msgid "Show Key Details"
 msgstr "Подробно"
-
-msgid "Edit"
-msgstr "Правка"
-
-msgid "Delete"
-msgstr "Удалить"
-
-msgid "Sign"
-msgstr "Подписать"
-
-msgid "Export"
-msgstr "Экспорт"
-
-msgid "Import"
-msgstr "Импорт"
 
 msgid "Selected default key:"
 msgstr "Выбран основной ключ:"
@@ -2299,15 +2056,6 @@ msgstr "[Неоднозначный ключ X.509. Для выбора щелк
 msgid "[Right-click to select]"
 msgstr "[Для выбора щелкните правой кнопкой]"
 
-msgid "Select _PGP key..."
-msgstr "Выбрать ключ _PGP..."
-
-msgid "Select _S\\/MIME key..."
-msgstr "Выбрать ключ _S\\/MIME..."
-
-msgid "Toggle _Ignore flag"
-msgstr "Переключить флаг \"_игнорировать\""
-
 msgid "Select keys for recipients"
 msgstr "Выбрать ключи получателей"
 
@@ -2526,6 +2274,270 @@ msgstr "Подпись: %s"
 
 msgid "Signatures:"
 msgstr "Подписи:"
+
+#~ msgid "_File"
+#~ msgstr "_Файл"
+
+#~ msgid "_Edit"
+#~ msgstr "_Правка"
+
+#~ msgid "_Card"
+#~ msgstr "_Карта"
+
+#~ msgid "Close the window"
+#~ msgstr "Закрыть окно"
+
+#~ msgid "Quit the program"
+#~ msgstr "Выйти из программы"
+
+#~ msgid "Reload card information"
+#~ msgstr "Перезагрузить информацию о карте"
+
+#~ msgid "Generate new key on card"
+#~ msgstr "Создать ключ на карте"
+
+#~ msgid "Clear buffer"
+#~ msgstr "Очистить буфер"
+
+#~ msgid "Open a file"
+#~ msgstr "Открыть файл"
+
+#~ msgid "Save to a file"
+#~ msgstr "Сохранить в файле"
+
+#~ msgid "Sign buffer text"
+#~ msgstr "Подписать текст из буфера"
+
+#~ msgid "Check signatures of buffer text"
+#~ msgstr "Проверить подписи текста из буфера"
+
+#~ msgid "Encrypt the buffer text"
+#~ msgstr "Зашифровать текст из буфера"
+
+#~ msgid "Decrypt the buffer text"
+#~ msgstr "Расшифровать текст из буфера"
+
+#~ msgid "Close the buffer"
+#~ msgstr "Закрыть буфер"
+
+#~ msgid "Undo the last action"
+#~ msgstr "Отменить последнее действие"
+
+#~ msgid "Redo the last undone action"
+#~ msgstr "Выполнить последнее отмененное действие"
+
+#~ msgid "Cut the selection"
+#~ msgstr "Вырезать выделенное в буфер"
+
+#~ msgid "Copy the selection"
+#~ msgstr "Копировать выделенное в буфер"
+
+#~ msgid "Paste the clipboard"
+#~ msgstr "Вставить из буфера"
+
+#~ msgid "Delete the selected text"
+#~ msgstr "Удалить выделенный текст"
+
+#~ msgid "Select the entire document"
+#~ msgstr "Выделить весь документ"
+
+#~ msgid "Close all files"
+#~ msgstr "Закрыть все файлы"
+
+#~ msgid "Sign the selected file"
+#~ msgstr "Подписать выбранный файл"
+
+#~ msgid "Check signatures of selected file"
+#~ msgstr "Проверить подписи выбранного файла"
+
+#~ msgid "Encrypt the selected file"
+#~ msgstr "Зашифровать выбранный файл"
+
+#~ msgid "Decrypt the selected file"
+#~ msgstr "Расшифровать выбранный файл"
+
+#~ msgid "Select all files"
+#~ msgstr "Выбрать все файлы"
+
+#~ msgid "_Windows"
+#~ msgstr "_Окна"
+
+#~ msgid "Open the keyring editor"
+#~ msgstr "Редактировать таблицу ключей"
+
+#~ msgid "Open the file manager"
+#~ msgstr "Открыть менеджер файлов"
+
+#~ msgid "Open the clipboard"
+#~ msgstr "Открыть буфер"
+
+#~ msgid "Configure the application"
+#~ msgstr "Настроить приложение"
+
+#~ msgid "_Backend Preferences"
+#~ msgstr "Настройки _базовых программ"
+
+#~ msgid "Configure the backend programs"
+#~ msgstr "Сконфиругировать базовые программы"
+
+#~ msgid "_Help"
+#~ msgstr "_Справка"
+
+#~ msgid "Open the GPA manual"
+#~ msgstr "Открыть руководство по GPA"
+
+#~ msgid "About this application"
+#~ msgstr "Об этой программе"
+
+#~ msgid "_Verify"
+#~ msgstr "Про_верить"
+
+#~ msgid "_Encrypt"
+#~ msgstr "За_шифровать"
+
+#~ msgid "_Decrypt"
+#~ msgstr "_Расшифровать"
+
+#~ msgid "_Brief"
+#~ msgstr "Кра_тко"
+
+#~ msgid "_Detailed"
+#~ msgstr "_Подробно"
+
+#~ msgid "_Keyring Manager"
+#~ msgstr "_Диспетчер ключей"
+
+#~ msgid "_Clipboard"
+#~ msgstr "_Буфер"
+
+#~ msgid "_File Manager"
+#~ msgstr "Менеджер _файлов"
+
+#~ msgid "_Card Manager"
+#~ msgstr "Диспетчер _карт"
+
+#~ msgid "Keyserver did not return any matching keys."
+#~ msgstr "Сервер ключей не вернул ни одного подходящего ключа."
+
+#~ msgid "Select keys to import"
+#~ msgstr "Выбрать ключи для импорта"
+
+#~ msgid "_Import"
+#~ msgstr "_Импорт"
+
+#~ msgid "_Keys"
+#~ msgstr "_Ключи"
+
+#~ msgid "_Server"
+#~ msgstr "С_ервер"
+
+#~ msgid "Copy _Fingerprint"
+#~ msgstr "Копировать _отпечаток"
+
+#~ msgid "Copy the fingerprints"
+#~ msgstr "Копировать отпечатки"
+
+#~ msgid "Copy Private Key"
+#~ msgstr "Копировать _секретный ключ..."
+
+#~ msgid "Copy a single private key"
+#~ msgstr "Копирование отдельного секретного ключа"
+
+#~ msgid "Select all certificates"
+#~ msgstr "Выбрать все сертификаты"
+
+#~ msgid "Refresh the keyring"
+#~ msgstr "Обновить таблицу ключей"
+
+#~ msgid "_New key..."
+#~ msgstr "_Новый ключ..."
+
+#~ msgid "Generate a new key"
+#~ msgstr "Создать ключ"
+
+#~ msgid "_Delete keys"
+#~ msgstr "_Удалить ключи"
+
+#~ msgid "Remove the selected key"
+#~ msgstr "Удалить выбранный ключ"
+
+#~ msgid "_Sign Keys..."
+#~ msgstr "_Подписать ключи..."
+
+#~ msgid "Sign the selected key"
+#~ msgstr "Подписать выбранный ключ"
+
+#~ msgid "Set _Owner Trust..."
+#~ msgstr "_Доверие владельцу..."
+
+#~ msgid "Set owner trust of the selected key"
+#~ msgstr "Установить доверие владельцу выбранного ключа"
+
+#~ msgid "_Edit Private Key..."
+#~ msgstr "Править _секретный ключ..."
+
+#~ msgid "Edit the selected private key"
+#~ msgstr "Правка выбранного секретного ключа"
+
+#~ msgid "_Import Keys..."
+#~ msgstr "_Импорт ключей"
+
+#~ msgid "Import Keys"
+#~ msgstr "Импорт ключей"
+
+#~ msgid "E_xport Keys..."
+#~ msgstr "_Экспорт ключей..."
+
+#~ msgid "Export Keys"
+#~ msgstr "Экспорт ключей"
+
+#~ msgid "_Backup..."
+#~ msgstr "_Резервная копия..."
+
+#~ msgid "Backup key"
+#~ msgstr "Создать резервную копию ключа"
+
+#~ msgid "_Retrieve Keys..."
+#~ msgstr "Извлеч_ь ключи..."
+
+#~ msgid "Retrieve keys from server"
+#~ msgstr "Получить ключи с сервера"
+
+#~ msgid "Re_fresh Keys"
+#~ msgstr "_Обновить ключи"
+
+#~ msgid "Refresh keys from server"
+#~ msgstr "Обновить ключи с сервера"
+
+#~ msgid "_Send Keys..."
+#~ msgstr "О_тправить ключи..."
+
+#~ msgid "Send keys to server"
+#~ msgstr "Отправить ключи на сервер"
+
+#~ msgid "Edit"
+#~ msgstr "Правка"
+
+#~ msgid "Delete"
+#~ msgstr "Удалить"
+
+#~ msgid "Sign"
+#~ msgstr "Подписать"
+
+#~ msgid "Export"
+#~ msgstr "Экспорт"
+
+#~ msgid "Import"
+#~ msgstr "Импорт"
+
+#~ msgid "Select _PGP key..."
+#~ msgstr "Выбрать ключ _PGP..."
+
+#~ msgid "Select _S\\/MIME key..."
+#~ msgstr "Выбрать ключ _S\\/MIME..."
+
+#~ msgid "Toggle _Ignore flag"
+#~ msgstr "Переключить флаг \"_игнорировать\""
 
 #~ msgid "Size"
 #~ msgstr "Размер"

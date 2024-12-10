@@ -19,6 +19,85 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.11\n"
 
+msgid "Card Manager"
+msgstr "Korthanterare"
+
+#, c-format
+msgid "%s card detected."
+msgstr "%s-kort detekterat."
+
+msgid "Checking for card..."
+msgstr "Söker efter kort..."
+
+msgid "No card found."
+msgstr "Inget kort hittades."
+
+msgid "The selected card application is currently not available."
+msgstr "Den valda kortapplikationen är inte tillgänglig för närvarande."
+
+msgid ""
+"Another process is using a different card application than the selected "
+"one.\n"
+"\n"
+"You may change the application selection mode to \"Auto\" to select the "
+"active application."
+msgstr ""
+"Ytterligare en process kör en annan kortapplikation som skiljer sig från "
+"vald.\n"
+"\n"
+"Du kan ändra applikationsvalsläget till ”Auto” för att välja den aktiva "
+"applikationen."
+
+msgid "The selected card application is not available."
+msgstr "Den valda kortapplikationen finns inte tillgänglig."
+
+msgid "Error accessing the card."
+msgstr "Fel vid åtkomst till kortet"
+
+msgid "Error accessing card"
+msgstr "Fel vid kortåtkomst"
+
+msgid "No card"
+msgstr "Inget kort"
+
+msgid "This card application is not yet supported."
+msgstr "Denna kortapplikation stöds inte än."
+
+msgid "Application selection:"
+msgstr "Applikationsval:"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "The GPGME library is too old to support smartcards."
+msgstr "GPGME-biblioteket är för gammalt för att stödja smartkort."
+
+msgid "Key ID"
+msgstr "Nyckelidentitet"
+
+msgid "The key ID is a short number to identify a certificate."
+msgstr "Nyckelidentiteten är ett kort tal för att identifiera ett certifikat."
+
+#, fuzzy
+msgid "Serialno."
+msgstr "Serienummer:"
+
+msgid "Issuer"
+msgstr ""
+
+msgid "[chain too long]"
+msgstr ""
+
+#, fuzzy
+msgid "[issuer not found]"
+msgstr "Nyckeln hittades inte"
+
+msgid "_Cancel"
+msgstr "_Avbryt"
+
+msgid "_Open"
+msgstr "Ö_ppna"
+
 msgid "Open File"
 msgstr "Öppna fil"
 
@@ -31,65 +110,14 @@ msgstr "GPA-meddelande"
 msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr "Filen %s är %llu%s stor.  Vill du verkligen öppna den?"
 
+msgid "_Save"
+msgstr ""
+
 msgid "Save As..."
 msgstr "Spara som..."
 
 msgid "Clipboard"
 msgstr "Urklipp"
-
-msgid "_File"
-msgstr "_Arkiv"
-
-msgid "_Edit"
-msgstr "R_edigera"
-
-msgid "Clear buffer"
-msgstr "Töm buffert"
-
-msgid "Open a file"
-msgstr "Öppna en fil"
-
-msgid "Save to a file"
-msgstr "Spara till en fil"
-
-msgid "Sign buffer text"
-msgstr "Signera bufferttexten"
-
-msgid "Check signatures of buffer text"
-msgstr "Kontrollera signaturer för bufferttext"
-
-msgid "Encrypt the buffer text"
-msgstr "Kryptera bufferttexten"
-
-msgid "Decrypt the buffer text"
-msgstr "Dekryptera bufferttexten"
-
-msgid "Close the buffer"
-msgstr "Stäng bufferten"
-
-msgid "Quit the program"
-msgstr "Avsluta programmet"
-
-msgid "Undo the last action"
-msgstr "Ångra senaste åtgärden"
-
-msgid "Redo the last undone action"
-msgstr "Gör om senaste ångrade åtgärden"
-
-msgid "Cut the selection"
-msgstr "Klipp ut markeringen"
-
-msgid "Copy the selection"
-msgstr "Kopiera markeringen"
-
-msgid "Paste the clipboard"
-msgstr "Klistra in urklipp"
-
-msgid "Delete the selected text"
-msgstr "Ta bort markerad text"
-
-msgid "Select the entire document"
-msgstr "Välj hela dokumentet"
 
 msgid "Keyring"
 msgstr "Nyckelring"
@@ -99,6 +127,541 @@ msgstr "Filer"
 
 msgid "Card"
 msgstr "Kort"
+
+msgid "<b>General</b>"
+msgstr "<b>Allmän</b>"
+
+msgid "Serial number:"
+msgstr "Serienummer:"
+
+#, c-format
+msgid ""
+"There is not much information to display for a %s card.  You may want to use "
+"the application selector button to switch to another application available "
+"on this card."
+msgstr ""
+"Det finns inte mycket information att visa för ett %s-kort. Du kanske vill "
+"använda knappen för applikationsval för att ändra till en annan applikation "
+"som finns tillgänglig på detta kort."
+
+#, fuzzy
+msgid "<b>Amount</b>"
+msgstr "<b>Allmänt</b>"
+
+#, fuzzy
+msgid "Card number: "
+msgstr "Serienummer:"
+
+msgid "Short Bank Code number: "
+msgstr ""
+
+#, fuzzy
+msgid "Bank type: "
+msgstr "Nyckeltyp:"
+
+#, fuzzy
+msgid "Card valid from: "
+msgstr "Kortversion:"
+
+#, fuzzy
+msgid "Card expires: "
+msgstr "går aldrig ut"
+
+msgid "Issuing country: "
+msgstr ""
+
+msgid "Currency: "
+msgstr ""
+
+msgid "ZKA chip Id: "
+msgstr ""
+
+#, fuzzy
+msgid "Chip OS version: "
+msgstr "Kortversion:"
+
+msgid "Balance: "
+msgstr ""
+
+msgid "General limit: "
+msgstr ""
+
+msgid "Transaction limit: "
+msgstr ""
+
+msgid "unknown"
+msgstr "okänt"
+
+msgid "blocked"
+msgstr "blockerad"
+
+msgid "Reset PUK"
+msgstr "Återställ PUK"
+
+msgid "Reset PIN"
+msgstr "Återställ PIN"
+
+msgid "Change PUK"
+msgstr "Ändra PUK"
+
+msgid "Change PIN"
+msgstr "Ändra PIN"
+
+msgid "Learn keys"
+msgstr "Lär nycklar"
+
+msgid ""
+"For some or all of the keys available on the card, the GnuPG crypto engine "
+"does not yet know the corresponding certificates.\n"
+"\n"
+"If you click this button, GnuPG will be asked to \"learn\" this card and "
+"import all certificates stored on the card into its own certificate store.  "
+"This is not done automatically because it may take several seconds to read "
+"all certificates from the card.\n"
+"\n"
+"If you are unsure what to do, just click the button."
+msgstr ""
+"För några eller alla nycklar som finns tillgängliga på kortet, känner inte "
+"GnuPG-kryptomotorn till motsvarande certifikat.\n"
+"\n"
+"Om du klickar på denna knapp kommer GnuPG förfrågas att ”lära” detta kort "
+"och importera alla certifikat som lagras på kortet in i sin egen "
+"certifikatslagring. Detta görs inte automatiskt eftersom det kan ta flera "
+"sekunder att läsa alla certifikat från kortet.\n"
+"\n"
+"Om du är osäker på vad du bör göra, kan du bara klicka på knappen."
+
+msgid "Learning keys ..."
+msgstr "Lär sig nycklar..."
+
+#, c-format
+msgid ""
+"<b>Setting the Initial PIN</b> (%s)\n"
+"\n"
+"You selected to set the initial PIN of your card.  The PIN is currently set "
+"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
+"reverted</b>.\n"
+"\n"
+"Please check the documentation of your card to learn for what the NullPIN is "
+"good.\n"
+"\n"
+"If you proceed you will be asked to enter a new PIN and later to repeat that "
+"PIN.  Make sure that you will remember that PIN - it will not be possible to "
+"recover the PIN if it has been entered wrongly more than %d times.\n"
+"\n"
+"%s"
+msgstr ""
+"<b>Sätter en initial PIN<b> (%s)\n"
+"\n"
+"Du valda att sätta initial PIN för ditt kort. PIN är för närvarande satt "
+"till NullPIN.  Att sätta en initial PIN <b>krävs men kan inte ångras</b>.\n"
+"\n"
+"Vänligen se dokumentationen för ditt kort för att lära vad en NullPIN är bra "
+"för.\n"
+"\n"
+"Om du fortsätter kommer du efterfrågas en ny PIN och senare att upprepa "
+"denna PIN.  Säkerställ att du kommer att komma ihåg denna PIN - Det kommer "
+"inte att vara möjligt att återställa PIN om den har matats in felaktigt mer "
+"än %d gånger.\n"
+"\n"
+"%s"
+
+msgid ""
+"You are now setting the PIN for the SigG key used to create <b>qualified "
+"signatures</b>.  You may want to set the PIN to the same value as used for "
+"the NKS keys."
+msgstr ""
+"Du sätter nu PIN för SigG-nycklarna som används för att skapa "
+"<b>kvalificerade signaturer</b>. Du kan behöva sätta PIN till samma värde "
+"som används för NKS-nycklarna."
+
+msgid ""
+"You are now setting the PIN for the NKS keys used for standard signatures, "
+"encryption and authentication."
+msgstr ""
+"Du sätter nu PIN för NKS-nycklarna som används för standardsignaturer, "
+"kryptering och autentisering."
+
+#, c-format
+msgid ""
+"Error changing the NullPIN.\n"
+"(%s <%s>)"
+msgstr ""
+"Fel vid ändring av NullPIN.\n"
+"(%s <%s>)"
+
+msgid ""
+"<b>Changing a PIN or PUK</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value and then to "
+"enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the current value decrements the retry counter.  "
+"If the retry counters of the PIN and the corresponding PUK are both down to "
+"zero, the keys controlled by the PIN are not anymore usable and there is no "
+"way to unblock them!"
+msgstr ""
+"<b>Förändra en PIN eller PUK</b>\n"
+"\n"
+"Om du fortsätter kommer du att efterfrågas aktuellt värde och sedan att mata "
+"in ett nytt värde samt att upprepa detta värde vid en ny inmatning.\n"
+"\n"
+"Om du matar in ett felaktigt värde i aktuellt värde minskas "
+"försöksräknaren.  Om försöksräknarna för PIN och motsvarande PUK båda går "
+"ner till noll kommer nycklarna som kontrolleras av denna PIN att inte längre "
+"att kunna användas och det finns inget sätt att avblockera dem!"
+
+msgid ""
+"<b>Resetting a PUK</b>\n"
+"\n"
+"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
+"system of the NetKey card implements it as an alternative PIN and thus it is "
+"possible to use the PIN to unblock the PUK.\n"
+"\n"
+"If the PUK is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PIN.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the blocked PUK and repeat that new value at "
+"another prompt."
+msgstr ""
+"<b>Återställa en PUK</b>\n"
+"\n"
+"Även om <i>PUK</i> står för <i>PIN Unblocking Code</i> så implementerar "
+"operativsystemet TCOS från NetKey-kortet det som en alternativ PIN och "
+"därför är det möjligt att använda denna PIN för att avblockera PUK.\n"
+"\n"
+"Om PUK är blockerad (försöksräknaren är nere på noll), så kan du avblockera "
+"den genom att använda den ickeblockerade PIN. Försöksräknaren återställs då "
+"till sitt ursprungliga värde.\n"
+"\n"
+"Om du fortsätter kommer du efterfrågas att mata in aktuellt värde av PIN och "
+"sedan att mata in ett nytt värde för den blockerade PUK och upprepa detta "
+"nya värde i ytterligare ett inmatningsfält."
+
+msgid ""
+"<b>Resetting a PIN</b>\n"
+"\n"
+"If the PIN is blocked (the retry counter is down to zero), you may unblock "
+"it by using the non-blocked PUK.  The retry counter is then set back to its "
+"initial value.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PUK and "
+"then to enter a new value for the blocked PIN and repeat that new value at "
+"another prompt."
+msgstr ""
+"<b>Återställa en PIN</b>\n"
+"\n"
+"Om PIN är blockerad (försök-räknaren är nere på noll), så kan du avblockera "
+"den genom att använda den ickeblockerade PUKen. Försöksräknaren återställs "
+"då till sitt ursprungliga värde.\n"
+"\n"
+"Om du fortsätter kommer du att efterfrågas att mata in aktuellt värde i "
+"PUKen och sedan mata in ett nytt värde för den blockerade PIN samt upprepa "
+"detta nya värde i en annan inmatning."
+
+#, c-format
+msgid ""
+"Error changing or resetting the PIN/PUK.\n"
+"(%s <%s>)"
+msgstr ""
+"Fel vid förändring eller återställning av PIN/PUK.\n"
+"(%s <%s>)"
+
+msgid "Card version:"
+msgstr "Kortversion:"
+
+msgid ""
+"<b>A NullPIN is still active on this card</b>.\n"
+"You need to set a real PIN before you can make use of the card."
+msgstr ""
+"<b>En NullPIN är fortfarande aktiv på detta kort</b>.\n"
+"Du måste sätta en riktig PIN innan du kan använda kortet."
+
+msgid "Set initial PIN"
+msgstr "Sätt initial PIN"
+
+msgid "<b>Keys</b>"
+msgstr "<b>Nycklar</b>"
+
+msgid "scanning ..."
+msgstr "avsöker ..."
+
+msgid "<b>PIN</b>"
+msgstr "<b>PIN</b>"
+
+msgid "PIN retry counter:"
+msgstr "PIN-försöksräknare:"
+
+msgid "PUK retry counter:"
+msgstr "PUK-försöksräknare:"
+
+msgid "SigG PIN retry counter:"
+msgstr "SigG PIN-försöksräknare:"
+
+msgid "SigG PUK retry counter:"
+msgstr "SigG PUK-försöksräknare:"
+
+msgid ""
+"<b>Admin-PIN Required</b>\n"
+"\n"
+"Depending on the previous operations you may now be asked for the Admin-"
+"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
+"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
+"restored anymore and thus the data on the card can't be modified.\n"
+"\n"
+"Unless changed, a fresh standard card has set the Admin-PIN to the value "
+"<i>12345678</i>.  However, the issuer of your card might have initialized "
+"the card with a different Admin-PIN and that Admin-PIN might only be known "
+"to the issuer.  Please check the instructions of your issuer.\n"
+"\n"
+"This notice will be shown only once per session."
+msgstr ""
+"<b>Admin-PIN krävs</b>\n"
+"\n"
+"Beroende på tidigare operationer kan du nu efterfrågas Admin-PIN. Om du "
+"matar in ett felaktigt värde för Admin-PIN minskar motsvarande "
+"försöksräknare. Om försöksräknaren kommer ner till noll kan inte Admin-PIN "
+"återställas mer och därmed kan inte data på kortet förändras.\n"
+"\n"
+"Om den inte har förändras så har en fräscht standardkort Admin-PIN satt till "
+"värdet <i>12345678</i>. Dock så kan utfärdaren av ditt kort ha initierat "
+"kortet med en annan Admin-PIN och denna Admin-PIN kanske endast är känd för "
+"utfärdaren. Vänligen kontrollera instruktionerna från din utfärdare.\n"
+"\n"
+"Detta meddelande kommer endast att visas en gång per session."
+
+msgid "CHV2 retry counter: "
+msgstr "CHV2-försöksräknare:"
+
+#, c-format
+msgid ""
+"Error saving the changed values.\n"
+"(%s <%s>)"
+msgstr ""
+"Fel vid sparande av de förändrade värdena.\n"
+"(%s <%s>)"
+
+msgid "Only plain ASCII is currently allowed."
+msgstr "Endast ren ASCII tillåts för närvarande."
+
+msgid "The \"<\" character may not be used."
+msgstr "”<”-tecknet får inte användas."
+
+msgid "Double spaces are not allowed."
+msgstr "Dubbla mellanslag är ej tillåtet."
+
+msgid ""
+"Total length of first and last name may not be longer than 39 characters."
+msgstr "Total längd av förnamn och efternamn får inte överstiga 39 tecken."
+
+msgid "Saving the field failed."
+msgstr "Misslyckades att spara fältet."
+
+msgid "Invalid length of the language preference."
+msgstr "Ogiltig längd på språkinställningen."
+
+msgid "The language preference may only contain the letters 'a' through 'z'."
+msgstr "Språkinställningen får endast innehålla tecknen ”a“ till “z“."
+
+msgid "The field may not be longer than 254 characters."
+msgstr "Fältet får inte vara längre än 254 tecken."
+
+msgid ""
+"<b>Unblocking the PIN</b>\n"
+"\n"
+"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Reset "
+"Code</b> and then to enter a new value for the PIN and repeat that new value "
+"at another prompt."
+msgstr ""
+"<b>Avblockera PIN</b>\n"
+"\n"
+"Försöksräknaren i PIN är nere på noll, men en återställningskod är satt.\n"
+"\n"
+"Återställningskoden liknar en PUK (PIN Unblocking Code) och används för att "
+"avblockera en PIN utan att behöva känna till Admin-PIN.\n"
+"\n"
+"Om du fortsätter kommer du att efterfrågas att mata in aktuellt värde för "
+"<b>Återställningskoden</b> och sedan en nytt värde för PIN samt att upprepa "
+"detta värde i ytterligare en inmatning."
+
+msgid ""
+"<b>Changing the PIN</b>\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value and repeat that value at another prompt.\n"
+"\n"
+"Entering a wrong value for the PIN decrements the retry counter.  If the "
+"retry counters of the PIN and of the Reset Code are both down to zero, the "
+"PIN can still be reset by using the Admin-PIN.\n"
+"\n"
+"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
+"the issuer of your card might have initialized the card with a different "
+"PIN.  Please check the instructions of your issuer."
+msgstr ""
+"<b>Ändra PIN</b>\n"
+"\n"
+"Om du fortsätter kommer du att efterfrågas det aktuella värdet på PIN och "
+"sedan att mata in ett nytt värde och upprepa detta värde i en ny "
+"inmatningsruta.\n"
+"\n"
+"Om du matar in ett felaktigt värde för PIN minskas omförsöksräknaren. Om "
+"omförsöksräknaren för PIN och för Återställningskoden båda är nere på noll, "
+"kan PIN fortfarande återställas genom att använda Admin-PIN.\n"
+"\n"
+"Ett fräscht standardkort har PIN-värdet <i>123456</i>. Dock kan utgivaren av "
+"ditt kort ha initierat kortet med ett annat PIN-värde. Vänligen se din "
+"utgivares instruktioner."
+
+msgid ""
+"<b>Changing the Reset Code</b>\n"
+"\n"
+"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
+"a PIN without the need to know the Admin-PIN.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the PIN and "
+"then to enter a new value for the Reset Code and repeat that new value at "
+"another prompt."
+msgstr ""
+"<b>Ändra återställningskod</b>\n"
+"\n"
+"Återställningskoden liknar PUK (PIN Unblocking Code) och används för att "
+"avblockera en PIN utan att behöva en Admin-PIN.\n"
+"\n"
+"Om du fortsätter kommer du efterfrågas om aktuellt värde i PIN-koden och "
+"sedan efter ett nytt värde för Återställningskoden samt upprepa detta nya "
+"värde i ytterligare en inmatning."
+
+msgid ""
+"<b>Resetting the PIN or the Reset Code</b>\n"
+"\n"
+"If the retry counters of the PIN and of the Reset Code are both down to "
+"zero, it is only possible to reset them if you have access to the Admin-"
+"PIN.\n"
+"\n"
+"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
+"However, the issuer of your card might have initialized the card with a "
+"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
+"Please check the instructions of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
+"repeat that new value at another prompt."
+msgstr ""
+"<b>Återställning av PIN eller Återställningskod<\\b>\n"
+"\n"
+"Om omförsöksräknaren för PIN och Återställningskoden båda är nere på noll, "
+"är det endast möjligt att återställa dem om du har tillgång till Admin-PIN.\n"
+"\n"
+"Ett färskt standardkort har satt Admin-PIN till värdet <i>12345678</i>. Dock "
+"så kan utfärdaren av ditt kort ha initierat ditt kort med en annan Admin-PIN "
+"och denna Admin-PIN kanske endast är känd för utgivaren. Vänligen se "
+"instruktionerna från din utgivare.\n"
+"\n"
+"Om du fortsätter kommer du att efterfrågas att mata in det nuvarande värdet "
+"på <b>Admin-PIN</b> och sedan att mata in ett nytt värde för PIN eller "
+"Återställningskoden och sedan att upprepa detta nya värde i ett nytt "
+"inmatningsfält."
+
+msgid ""
+"<b>Changing the Admin-PIN</b>\n"
+"\n"
+"If you know the Admin-PIN you may change the Admin-PIN.\n"
+"\n"
+"The Admin-PIN is required to create keys on the card and to change other "
+"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
+"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
+"card might have initialized the card with a different Admin-PIN and that "
+"Admin-PIN might only be known to the issuer.  Please check the instructions "
+"of your issuer.\n"
+"\n"
+"If you proceed you will be asked to enter the current value of the <b>Admin-"
+"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
+"value at another prompt."
+msgstr ""
+"<b>Ändra Admin-PIN</b>\n"
+"\n"
+"Om du känner till Admin-PIN kan du ändra Admin-PIN.\n"
+"\n"
+"Admin-PIN krävs för att skapa nycklar på kortet samt för att förändra annan "
+"data. Antingen kan du eller så kan du inte Admin-PIN. Ett fräscht "
+"standardkort har satt Admin-PIN till värdet <i>12345678</i>. Dock så kan "
+"utfärdaren av ditt kort ha initierat kortet med en annan Admin-Pin och denna "
+"Admin-PIN kanske bara är känd för utfärdaren. Vänligen kontrollera din "
+"utfärdares instruktioner.\n"
+"\n"
+"Om du fortsätter kommer du efterfrågas aktuellt värde av <b>Admin-PIN</b> "
+"och sedan efter att mata in ett nytt värde för denna Admin-PIN samt "
+"ytterligare en inmatning av detta nya värde i ett nytt inmatningsfält."
+
+#, c-format
+msgid ""
+"Error fetching the key.\n"
+"(%s <%s>)"
+msgstr ""
+"Fel vid hämtning av nyckeln.\n"
+"(%s <%s>)"
+
+#, c-format
+msgid "Keys found: %d, imported: %d, unchanged: %d"
+msgstr "Hittade nycklar: %d, importerade: %d, oförändrade: %d"
+
+msgid "Fetch Key"
+msgstr "Hämta Nyckel"
+
+msgid "Manufacturer:"
+msgstr "Tillverkare:"
+
+msgid "<b>Personal</b>"
+msgstr "<b>Personlig</b>"
+
+msgid "Salutation:"
+msgstr "Hälsning:"
+
+msgid "First name:"
+msgstr "Förnamn:"
+
+msgid "Last name:"
+msgstr "Efternamn:"
+
+msgid "Language:"
+msgstr "Språk:"
+
+msgid "Login data:"
+msgstr "Logindata:"
+
+msgid "Public key URL:"
+msgstr "URL för öppen nyckel:"
+
+msgid "Signature key:"
+msgstr "Signaturnyckel:"
+
+msgid "Encryption key:"
+msgstr "Krypteringsnyckel:"
+
+msgid "Authentication key:"
+msgstr "Autentiseringsnyckel:"
+
+msgid "Signature counter:"
+msgstr "Signaturräknare:"
+
+msgid "Force signature PIN:"
+msgstr "Tvinga signatur-PIN:"
+
+msgid "Admin-PIN retry counter:"
+msgstr "Admin-PIN-försöksräknare:"
+
+msgid "The ATR of the card is:"
+msgstr ""
+
+msgid "<b>Unknown Card</b>"
+msgstr ""
 
 msgid "<b>Main</b>"
 msgstr "<b>Allmänt</b>"
@@ -121,6 +684,9 @@ msgstr "Använd anpassat värde"
 msgid "Use default argument"
 msgstr "Använd standardargument"
 
+msgid "_Apply"
+msgstr ""
+
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
 "those changes.  Do you want to continue?"
@@ -131,8 +697,14 @@ msgstr ""
 msgid "Crypto Backend Configuration"
 msgstr "Konfiguration av krypteringsbakände"
 
+msgid "Apply"
+msgstr ""
+
 msgid "Reset"
 msgstr "Återställ"
+
+msgid "_OK"
+msgstr ""
 
 msgid "Configure the tools of the GnuPG system."
 msgstr "Konfigurera verktygen för GnuPG-systemet."
@@ -179,9 +751,6 @@ msgstr "år"
 
 msgid "never expires"
 msgstr "går aldrig ut"
-
-msgid "unknown"
-msgstr "okänt"
 
 #, fuzzy
 msgid "keyserver"
@@ -238,35 +807,11 @@ msgstr "Ange ett korrekt datum."
 msgid "Change expiry date"
 msgstr "Ändra utgångsdatum"
 
-msgid "_Cancel"
-msgstr "_Avbryt"
-
 msgid "_never expire"
 msgstr "_går aldrig ut"
 
 msgid "_expire on:"
 msgstr "går _ut den:"
-
-msgid "Close all files"
-msgstr "Stäng alla filer"
-
-msgid "Sign the selected file"
-msgstr "Signera markerad fil"
-
-msgid "Check signatures of selected file"
-msgstr "Kontrollera signatur på markerad fil"
-
-msgid "Encrypt the selected file"
-msgstr "Kryptera markerad fil"
-
-msgid "Decrypt the selected file"
-msgstr "Dekryptera markerad fil"
-
-msgid "Close the window"
-msgstr "Stäng fönstret"
-
-msgid "Select all files"
-msgstr "Markera alla filer"
 
 msgid "File"
 msgstr "Arkiv"
@@ -294,6 +839,120 @@ msgstr "Signatur i klar_text"
 
 msgid "_Detached signature"
 msgstr "_Frikopplad signatur"
+
+msgid "[Error - No name]"
+msgstr ""
+
+#, fuzzy
+msgid "[Error - Encoding not supported]"
+msgstr "Åtgärden stöds inte"
+
+msgid "[Error - Invalid encoding]"
+msgstr ""
+
+msgid "The key has both a smartcard based private part and a public part"
+msgstr "Nyckeln har både en smartkortsbaserad privat del och en öppen del"
+
+msgid "The key has both a private and a public part"
+msgstr "Denna nyckel har både en privat och en öppen del"
+
+msgid "The key has only a public part"
+msgstr "Denna nyckel har endast en öppen del"
+
+#, c-format
+msgid "%s %u bits"
+msgstr "%s %u bitar"
+
+msgid "No keys selected"
+msgstr "Inga nycklar valda"
+
+#, c-format
+msgid "%d key selected"
+msgid_plural "%d keys selected"
+msgstr[0] "%d nyckel markerad"
+msgstr[1] "%d nycklar markerade"
+
+msgid "User name:"
+msgstr "Användarnamn:"
+
+msgid "Fingerprint:"
+msgstr "Fingeravtryck:"
+
+msgid "Key ID:"
+msgstr "Nyckelidentitet:"
+
+msgid "Expires at:"
+msgstr "Går ut den:"
+
+msgid "Owner Trust:"
+msgstr "Ägartillit:"
+
+msgid "Key validity:"
+msgstr "Nyckelgiltighet:"
+
+msgid "Key type:"
+msgstr "Nyckeltyp:"
+
+msgid "Created at:"
+msgstr "Skapad den:"
+
+#, fuzzy
+msgid "Last update:"
+msgstr "Efternamn:"
+
+msgid "Details"
+msgstr "Detaljer"
+
+#, fuzzy
+msgid "User IDs"
+msgstr "Användaridentitet: "
+
+msgid "Show signatures on user name:"
+msgstr "Visa signaturer på användarnamn:"
+
+msgid "Chain"
+msgstr "Kedja"
+
+msgid "Signatures"
+msgstr "Signaturer"
+
+msgid "All signatures"
+msgstr "Alla signaturer"
+
+msgid "Subkeys"
+msgstr "Undernycklar"
+
+msgid "Key"
+msgstr "Nyckel"
+
+msgid "Tofu"
+msgstr "Tofu"
+
+msgid "Address"
+msgstr ""
+
+#, fuzzy
+msgid "The mail address."
+msgstr "Din e-postadress:"
+
+msgid "Validity"
+msgstr "Giltighet"
+
+msgid "The validity of the mail address\n"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "The date the key was last updated via this mail address."
+msgstr ""
+
+#, fuzzy
+msgid "User ID"
+msgstr "Användaridentitet: "
+
+msgid "The full user ID."
+msgstr ""
 
 msgid "Output version information and exit"
 msgstr "Skriv ut versionsinformation och avsluta"
@@ -334,27 +993,6 @@ msgstr "Grafiskt användargränssnitt till GnuPG"
 msgid "Please report bugs to <"
 msgstr "Rapportera fel till <"
 
-msgid "_Windows"
-msgstr "_Fönster"
-
-msgid "Open the keyring editor"
-msgstr "Öppna nyckelringsredigeraren"
-
-msgid "Open the file manager"
-msgstr "Öppna filhanteraren"
-
-msgid "Open the clipboard"
-msgstr "Öppna urklipp"
-
-msgid "Configure the application"
-msgstr "Konfigurera programmet"
-
-msgid "_Backend Preferences"
-msgstr "Inställningar för bakände"
-
-msgid "Configure the backend programs"
-msgstr "Konfigurera bakändesprogram"
-
 #, c-format
 msgid ""
 "A copy of your secret key has been made to the file:\n"
@@ -380,6 +1018,12 @@ msgstr "Säkerhetskopiera nyckel till fil"
 #, c-format
 msgid "Generating backup of key: 0x%s"
 msgstr "Skapar säkerhetskopia av nyckel: 0x%s"
+
+msgid "(not set)"
+msgstr "(ej satt)"
+
+msgid "_Close"
+msgstr "_Stäng"
 
 #, fuzzy
 msgid "The private key has been copied to the clipboard."
@@ -462,9 +1106,6 @@ msgstr "Vill du <b>verkligen</b> använda denna nyckel?"
 msgid "Revoked Key"
 msgstr "Spärrad nyckel"
 
-msgid "_Close"
-msgstr "_Stäng"
-
 msgid "The following key has been revoked by its owner:"
 msgstr "Följande nyckel har spärrats av sin ägare:"
 
@@ -486,6 +1127,16 @@ msgstr ""
 
 msgid "You didn't select any key for signing"
 msgstr "Du valde ingen nyckel för signering"
+
+#, fuzzy
+msgid "Importing..."
+msgstr "_Importera nycklar..."
+
+#, fuzzy, c-format
+msgid "Error importing \"%s\": %s <%s>"
+msgstr ""
+"Fel vid hämtning av nyckeln.\n"
+"(%s <%s>)"
 
 msgid "Signing..."
 msgstr "Signerar..."
@@ -651,12 +1302,6 @@ msgstr "Användarnamn:"
 msgid "User Names:"
 msgstr "Användarnamn:"
 
-msgid "Key ID:"
-msgstr "Nyckelidentitet:"
-
-msgid "Fingerprint:"
-msgstr "Fingeravtryck:"
-
 msgid "Expiration"
 msgstr "Utgångstid"
 
@@ -675,9 +1320,6 @@ msgid ""
 msgstr ""
 "!ÖDESDIGERT FEL!\n"
 "Ogiltigt infogande av utgångsdatum."
-
-msgid "(not set)"
-msgstr "(ej satt)"
 
 msgid ""
 "Keys are already stored on the card.\n"
@@ -730,9 +1372,6 @@ msgstr ""
 
 msgid "_Use a different filename"
 msgstr "An_vänd ett annat filnamn"
-
-msgid "_Open"
-msgstr "Ö_ppna"
 
 msgid ""
 "************************************************************************\n"
@@ -974,42 +1613,6 @@ msgstr "Om GPA"
 msgid "translator-credits"
 msgstr "Andreas Rönnquist <andreas@ronnquist.net>, © 2017"
 
-msgid "_Help"
-msgstr "_Hjälp"
-
-msgid "Open the GPA manual"
-msgstr "Öppna handboken för GPA"
-
-msgid "About this application"
-msgstr "Om detta program"
-
-msgid "_Verify"
-msgstr "_Validera"
-
-msgid "_Encrypt"
-msgstr "_Kryptera"
-
-msgid "_Decrypt"
-msgstr "_Dekryptera"
-
-msgid "_Brief"
-msgstr "Ko_rtfattat"
-
-msgid "_Detailed"
-msgstr "D_etaljerat"
-
-msgid "_Keyring Manager"
-msgstr "Nyc_kelringshanterare"
-
-msgid "_Clipboard"
-msgstr "_Urklipp"
-
-msgid "_File Manager"
-msgstr "F_ilhanterare"
-
-msgid "_Card Manager"
-msgstr "Korthanterare"
-
 msgid "Removing Secret Key"
 msgstr "Tar bort hemlig nyckel"
 
@@ -1212,9 +1815,6 @@ msgstr ""
 "ägaren av certifikatet korrekt signerar (certifierar) andra certifikat.  Det "
 "är endast betydelsefullt för OpenPGP."
 
-msgid "Validity"
-msgstr "Giltighet"
-
 msgid ""
 "The Validity describes the trust level the system has in this certificate.  "
 "That is how sure it is that the named user is actually that user."
@@ -1254,120 +1854,11 @@ msgstr "Skapa _säkerhetskopia nu"
 msgid "Only keys of the same procotol may be copied."
 msgstr "Endast nycklar av samma protokoll får exporteras som en samling."
 
-msgid "_Keys"
-msgstr "_Nycklar"
-
-msgid "_Server"
-msgstr "_Server"
-
-#, fuzzy
-msgid "Copy _Fingerprint"
-msgstr "Fingeravtryck:"
-
-#, fuzzy
-msgid "Copy the fingerprints"
-msgstr "Kopiera markeringen"
-
-#, fuzzy
-msgid "Copy Private Key"
-msgstr "Redigera _privat nyckel..."
-
-#, fuzzy
-msgid "Copy a single private key"
-msgstr "Redigera markerad privat nyckel"
-
-msgid "Select all certificates"
-msgstr "Markera alla certifikat"
-
-msgid "Refresh the keyring"
-msgstr "Uppdatera nyckelringen"
-
-msgid "_New key..."
-msgstr "_Ny nyckel..."
-
-msgid "Generate a new key"
-msgstr "Generera en ny nyckel"
-
-msgid "_Delete keys"
-msgstr "_Ta bort nycklar..."
-
-msgid "Remove the selected key"
-msgstr "Ta bort vald nyckel"
-
-msgid "_Sign Keys..."
-msgstr "_Signera nycklar..."
-
-msgid "Sign the selected key"
-msgstr "Signera vald nyckel"
-
-msgid "Set _Owner Trust..."
-msgstr "Ange _ägartillit..."
-
-msgid "Set owner trust of the selected key"
-msgstr "Ange ägartillit för vald nyckel"
-
-msgid "_Edit Private Key..."
-msgstr "Redigera _privat nyckel..."
-
-msgid "Edit the selected private key"
-msgstr "Redigera markerad privat nyckel"
-
-msgid "_Import Keys..."
-msgstr "_Importera nycklar..."
-
-msgid "Import Keys"
-msgstr "Importera nycklar"
-
-msgid "E_xport Keys..."
-msgstr "E_xportera nycklar..."
-
-msgid "Export Keys"
-msgstr "Exportera nycklar"
-
-msgid "_Backup..."
-msgstr "Säkerhetsk_opiera..."
-
-msgid "Backup key"
-msgstr "Säkerhetskopiera nyckel"
-
-msgid "_Retrieve Keys..."
-msgstr "_Hämta nycklar..."
-
-msgid "Retrieve keys from server"
-msgstr "Hämta nycklar från server"
-
-msgid "Re_fresh Keys"
-msgstr "Uppdatera Nycklar"
-
-msgid "Refresh keys from server"
-msgstr "Uppdatera nycklar från server"
-
-msgid "_Send Keys..."
-msgstr "_Skicka nycklar..."
-
-msgid "Send keys to server"
-msgstr "Skicka nycklar till server"
-
 msgid "Show Brief Keylist"
 msgstr "Visa kortfattad nyckellista"
 
 msgid "Show Key Details"
 msgstr "Visa nyckeldetaljer"
-
-msgid "Edit"
-msgstr "Redigera"
-
-msgid "Delete"
-msgstr "Ta bort"
-
-msgid "Sign"
-msgstr "Signera"
-
-msgid "Export"
-msgstr "Exportera"
-
-msgid "Import"
-msgstr "Importera"
 
 msgid "Selected default key:"
 msgstr "Vald standardnyckel:"
@@ -1377,78 +1868,6 @@ msgstr "Ingen standardnyckel har valts i inställningarna."
 
 msgid "Key Manager"
 msgstr "Nyckelhanterare"
-
-msgid "The key has both a smartcard based private part and a public part"
-msgstr "Nyckeln har både en smartkortsbaserad privat del och en öppen del"
-
-msgid "The key has both a private and a public part"
-msgstr "Denna nyckel har både en privat och en öppen del"
-
-msgid "The key has only a public part"
-msgstr "Denna nyckel har endast en öppen del"
-
-#, c-format
-msgid "%s %u bits"
-msgstr "%s %u bitar"
-
-msgid "No keys selected"
-msgstr "Inga nycklar valda"
-
-#, c-format
-msgid "%d key selected"
-msgid_plural "%d keys selected"
-msgstr[0] "%d nyckel markerad"
-msgstr[1] "%d nycklar markerade"
-
-msgid "User name:"
-msgstr "Användarnamn:"
-
-msgid "Expires at:"
-msgstr "Går ut den:"
-
-msgid "Owner Trust:"
-msgstr "Ägartillit:"
-
-msgid "Key validity:"
-msgstr "Nyckelgiltighet:"
-
-msgid "Key type:"
-msgstr "Nyckeltyp:"
-
-msgid "Created at:"
-msgstr "Skapad den:"
-
-#, fuzzy
-msgid "Last update:"
-msgstr "Efternamn:"
-
-msgid "Details"
-msgstr "Detaljer"
-
-#, fuzzy
-msgid "User IDs"
-msgstr "Användaridentitet: "
-
-msgid "Show signatures on user name:"
-msgstr "Visa signaturer på användarnamn:"
-
-msgid "Chain"
-msgstr "Kedja"
-
-msgid "Signatures"
-msgstr "Signaturer"
-
-msgid "All signatures"
-msgstr "Alla signaturer"
-
-msgid "Subkeys"
-msgstr "Undernycklar"
-
-msgid "Key"
-msgstr "Nyckel"
-
-msgid "Tofu"
-msgstr "Tofu"
 
 msgid "Sign Key"
 msgstr "Signera nyckel"
@@ -1614,9 +2033,6 @@ msgstr ""
 "Kontrollerade om åtminstone ett matchande X.509-certifikat för användning "
 "med S/MIME hittades."
 
-msgid "Key ID"
-msgstr "Nyckelidentitet"
-
 msgid ""
 "Shows the key ID of the selected key or an indication that a key needs to be "
 "selected."
@@ -1667,15 +2083,6 @@ msgstr "[Tvetydig X.509-nyckel. Högerklicka för att välja]"
 
 msgid "[Right-click to select]"
 msgstr "[Högerklicka för att välja]"
-
-msgid "Select _PGP key..."
-msgstr "Välj _PGP-nyckel..."
-
-msgid "Select _S\\/MIME key..."
-msgstr "Välj _S\\/MIME-nyckel..."
-
-msgid "Toggle _Ignore flag"
-msgstr "Växla _Ignorera-flagga"
 
 msgid "Select keys for recipients"
 msgstr "Välj nycklar för mottagarna"
@@ -1897,558 +2304,267 @@ msgstr "Signatur: %s"
 msgid "Signatures:"
 msgstr "Signaturer:"
 
-msgid "Card Manager"
-msgstr "Korthanterare"
-
-#, c-format
-msgid "%s card detected."
-msgstr "%s-kort detekterat."
-
-msgid "Checking for card..."
-msgstr "Söker efter kort..."
-
-msgid "No card found."
-msgstr "Inget kort hittades."
-
-msgid "The selected card application is currently not available."
-msgstr "Den valda kortapplikationen är inte tillgänglig för närvarande."
-
-msgid ""
-"Another process is using a different card application than the selected "
-"one.\n"
-"\n"
-"You may change the application selection mode to \"Auto\" to select the "
-"active application."
-msgstr ""
-"Ytterligare en process kör en annan kortapplikation som skiljer sig från "
-"vald.\n"
-"\n"
-"Du kan ändra applikationsvalsläget till ”Auto” för att välja den aktiva "
-"applikationen."
-
-msgid "The selected card application is not available."
-msgstr "Den valda kortapplikationen finns inte tillgänglig."
-
-msgid "Error accessing the card."
-msgstr "Fel vid åtkomst till kortet"
-
-msgid "Error accessing card"
-msgstr "Fel vid kortåtkomst"
-
-msgid "No card"
-msgstr "Inget kort"
-
-msgid "_Card"
-msgstr "_Kort"
-
-msgid "Reload card information"
-msgstr "Ladda om kortinformation"
-
-msgid "Generate new key on card"
-msgstr "Generera en ny nyckel på kort"
-
-msgid "This card application is not yet supported."
-msgstr "Denna kortapplikation stöds inte än."
-
-msgid "Application selection:"
-msgstr "Applikationsval:"
-
-msgid "Auto"
-msgstr "Auto"
-
-msgid "The GPGME library is too old to support smartcards."
-msgstr "GPGME-biblioteket är för gammalt för att stödja smartkort."
-
-msgid ""
-"<b>Admin-PIN Required</b>\n"
-"\n"
-"Depending on the previous operations you may now be asked for the Admin-"
-"PIN.  Entering a wrong value for the Admin-PIN decrements the corresponding "
-"retry counter. If the retry counter is down to zero, the Admin-PIN can't be "
-"restored anymore and thus the data on the card can't be modified.\n"
-"\n"
-"Unless changed, a fresh standard card has set the Admin-PIN to the value "
-"<i>12345678</i>.  However, the issuer of your card might have initialized "
-"the card with a different Admin-PIN and that Admin-PIN might only be known "
-"to the issuer.  Please check the instructions of your issuer.\n"
-"\n"
-"This notice will be shown only once per session."
-msgstr ""
-"<b>Admin-PIN krävs</b>\n"
-"\n"
-"Beroende på tidigare operationer kan du nu efterfrågas Admin-PIN. Om du "
-"matar in ett felaktigt värde för Admin-PIN minskar motsvarande "
-"försöksräknare. Om försöksräknaren kommer ner till noll kan inte Admin-PIN "
-"återställas mer och därmed kan inte data på kortet förändras.\n"
-"\n"
-"Om den inte har förändras så har en fräscht standardkort Admin-PIN satt till "
-"värdet <i>12345678</i>. Dock så kan utfärdaren av ditt kort ha initierat "
-"kortet med en annan Admin-PIN och denna Admin-PIN kanske endast är känd för "
-"utfärdaren. Vänligen kontrollera instruktionerna från din utfärdare.\n"
-"\n"
-"Detta meddelande kommer endast att visas en gång per session."
-
-msgid "PUK retry counter:"
-msgstr "PUK-försöksräknare:"
-
-msgid "CHV2 retry counter: "
-msgstr "CHV2-försöksräknare:"
-
-msgid "Reset PIN"
-msgstr "Återställ PIN"
-
-msgid "Change PIN"
-msgstr "Ändra PIN"
-
-msgid "Change PUK"
-msgstr "Ändra PUK"
-
-msgid "Reset PUK"
-msgstr "Återställ PUK"
-
-#, c-format
-msgid ""
-"Error saving the changed values.\n"
-"(%s <%s>)"
-msgstr ""
-"Fel vid sparande av de förändrade värdena.\n"
-"(%s <%s>)"
-
-msgid "Only plain ASCII is currently allowed."
-msgstr "Endast ren ASCII tillåts för närvarande."
-
-msgid "The \"<\" character may not be used."
-msgstr "”<”-tecknet får inte användas."
-
-msgid "Double spaces are not allowed."
-msgstr "Dubbla mellanslag är ej tillåtet."
-
-msgid ""
-"Total length of first and last name may not be longer than 39 characters."
-msgstr "Total längd av förnamn och efternamn får inte överstiga 39 tecken."
-
-msgid "Saving the field failed."
-msgstr "Misslyckades att spara fältet."
-
-msgid "Invalid length of the language preference."
-msgstr "Ogiltig längd på språkinställningen."
-
-msgid "The language preference may only contain the letters 'a' through 'z'."
-msgstr "Språkinställningen får endast innehålla tecknen ”a“ till “z“."
-
-msgid "The field may not be longer than 254 characters."
-msgstr "Fältet får inte vara längre än 254 tecken."
-
-msgid ""
-"<b>Unblocking the PIN</b>\n"
-"\n"
-"The retry counter of the PIN is down to zero but a Reset Code has been set.\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code)and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Reset "
-"Code</b> and then to enter a new value for the PIN and repeat that new value "
-"at another prompt."
-msgstr ""
-"<b>Avblockera PIN</b>\n"
-"\n"
-"Försöksräknaren i PIN är nere på noll, men en återställningskod är satt.\n"
-"\n"
-"Återställningskoden liknar en PUK (PIN Unblocking Code) och används för att "
-"avblockera en PIN utan att behöva känna till Admin-PIN.\n"
-"\n"
-"Om du fortsätter kommer du att efterfrågas att mata in aktuellt värde för "
-"<b>Återställningskoden</b> och sedan en nytt värde för PIN samt att upprepa "
-"detta värde i ytterligare en inmatning."
-
-msgid ""
-"<b>Changing the PIN</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the PIN decrements the retry counter.  If the "
-"retry counters of the PIN and of the Reset Code are both down to zero, the "
-"PIN can still be reset by using the Admin-PIN.\n"
-"\n"
-"A fresh standard card has set the PIN to the value <i>123456</i>.  However, "
-"the issuer of your card might have initialized the card with a different "
-"PIN.  Please check the instructions of your issuer."
-msgstr ""
-"<b>Ändra PIN</b>\n"
-"\n"
-"Om du fortsätter kommer du att efterfrågas det aktuella värdet på PIN och "
-"sedan att mata in ett nytt värde och upprepa detta värde i en ny "
-"inmatningsruta.\n"
-"\n"
-"Om du matar in ett felaktigt värde för PIN minskas omförsöksräknaren. Om "
-"omförsöksräknaren för PIN och för Återställningskoden båda är nere på noll, "
-"kan PIN fortfarande återställas genom att använda Admin-PIN.\n"
-"\n"
-"Ett fräscht standardkort har PIN-värdet <i>123456</i>. Dock kan utgivaren av "
-"ditt kort ha initierat kortet med ett annat PIN-värde. Vänligen se din "
-"utgivares instruktioner."
-
-msgid ""
-"<b>Changing the Reset Code</b>\n"
-"\n"
-"The Reset Code is similar to a PUK (PIN Unblocking Code) and used to unblock "
-"a PIN without the need to know the Admin-PIN.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the Reset Code and repeat that new value at "
-"another prompt."
-msgstr ""
-"<b>Ändra återställningskod</b>\n"
-"\n"
-"Återställningskoden liknar PUK (PIN Unblocking Code) och används för att "
-"avblockera en PIN utan att behöva en Admin-PIN.\n"
-"\n"
-"Om du fortsätter kommer du efterfrågas om aktuellt värde i PIN-koden och "
-"sedan efter ett nytt värde för Återställningskoden samt upprepa detta nya "
-"värde i ytterligare en inmatning."
-
-msgid ""
-"<b>Resetting the PIN or the Reset Code</b>\n"
-"\n"
-"If the retry counters of the PIN and of the Reset Code are both down to "
-"zero, it is only possible to reset them if you have access to the Admin-"
-"PIN.\n"
-"\n"
-"A fresh standard card has set the Admin-PIN to the value <i>12345678</i>.  "
-"However, the issuer of your card might have initialized the card with a "
-"different Admin-PIN and that Admin-PIN might only be known to the issuer.  "
-"Please check the instructions of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for the PIN or the Reset Code and "
-"repeat that new value at another prompt."
-msgstr ""
-"<b>Återställning av PIN eller Återställningskod<\\b>\n"
-"\n"
-"Om omförsöksräknaren för PIN och Återställningskoden båda är nere på noll, "
-"är det endast möjligt att återställa dem om du har tillgång till Admin-PIN.\n"
-"\n"
-"Ett färskt standardkort har satt Admin-PIN till värdet <i>12345678</i>. Dock "
-"så kan utfärdaren av ditt kort ha initierat ditt kort med en annan Admin-PIN "
-"och denna Admin-PIN kanske endast är känd för utgivaren. Vänligen se "
-"instruktionerna från din utgivare.\n"
-"\n"
-"Om du fortsätter kommer du att efterfrågas att mata in det nuvarande värdet "
-"på <b>Admin-PIN</b> och sedan att mata in ett nytt värde för PIN eller "
-"Återställningskoden och sedan att upprepa detta nya värde i ett nytt "
-"inmatningsfält."
-
-msgid ""
-"<b>Changing the Admin-PIN</b>\n"
-"\n"
-"If you know the Admin-PIN you may change the Admin-PIN.\n"
-"\n"
-"The Admin-PIN is required to create keys on the card and to change other "
-"data.  You may or may not know the Admin-PIN.  A fresh standard card has set "
-"the Admin-PIN to the value <i>12345678</i>.  However, the issuer of your "
-"card might have initialized the card with a different Admin-PIN and that "
-"Admin-PIN might only be known to the issuer.  Please check the instructions "
-"of your issuer.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the <b>Admin-"
-"PIN</b> and then to enter a new value for that Admin-PIN and repeat that new "
-"value at another prompt."
-msgstr ""
-"<b>Ändra Admin-PIN</b>\n"
-"\n"
-"Om du känner till Admin-PIN kan du ändra Admin-PIN.\n"
-"\n"
-"Admin-PIN krävs för att skapa nycklar på kortet samt för att förändra annan "
-"data. Antingen kan du eller så kan du inte Admin-PIN. Ett fräscht "
-"standardkort har satt Admin-PIN till värdet <i>12345678</i>. Dock så kan "
-"utfärdaren av ditt kort ha initierat kortet med en annan Admin-Pin och denna "
-"Admin-PIN kanske bara är känd för utfärdaren. Vänligen kontrollera din "
-"utfärdares instruktioner.\n"
-"\n"
-"Om du fortsätter kommer du efterfrågas aktuellt värde av <b>Admin-PIN</b> "
-"och sedan efter att mata in ett nytt värde för denna Admin-PIN samt "
-"ytterligare en inmatning av detta nya värde i ett nytt inmatningsfält."
-
-#, c-format
-msgid ""
-"Error changing or resetting the PIN/PUK.\n"
-"(%s <%s>)"
-msgstr ""
-"Fel vid förändring eller återställning av PIN/PUK.\n"
-"(%s <%s>)"
-
-#, c-format
-msgid ""
-"Error fetching the key.\n"
-"(%s <%s>)"
-msgstr ""
-"Fel vid hämtning av nyckeln.\n"
-"(%s <%s>)"
-
-#, c-format
-msgid "Keys found: %d, imported: %d, unchanged: %d"
-msgstr "Hittade nycklar: %d, importerade: %d, oförändrade: %d"
-
-msgid "Fetch Key"
-msgstr "Hämta Nyckel"
-
-msgid "<b>General</b>"
-msgstr "<b>Allmän</b>"
-
-msgid "Serial number:"
-msgstr "Serienummer:"
-
-msgid "Card version:"
-msgstr "Kortversion:"
-
-msgid "Manufacturer:"
-msgstr "Tillverkare:"
-
-msgid "<b>Personal</b>"
-msgstr "<b>Personlig</b>"
-
-msgid "Salutation:"
-msgstr "Hälsning:"
-
-msgid "First name:"
-msgstr "Förnamn:"
-
-msgid "Last name:"
-msgstr "Efternamn:"
-
-msgid "Language:"
-msgstr "Språk:"
-
-msgid "Login data:"
-msgstr "Logindata:"
-
-msgid "Public key URL:"
-msgstr "URL för öppen nyckel:"
-
-msgid "<b>Keys</b>"
-msgstr "<b>Nycklar</b>"
-
-msgid "Signature key:"
-msgstr "Signaturnyckel:"
-
-msgid "Encryption key:"
-msgstr "Krypteringsnyckel:"
-
-msgid "Authentication key:"
-msgstr "Autentiseringsnyckel:"
-
-msgid "Signature counter:"
-msgstr "Signaturräknare:"
-
-msgid "<b>PIN</b>"
-msgstr "<b>PIN</b>"
-
-msgid "Force signature PIN:"
-msgstr "Tvinga signatur-PIN:"
-
-msgid "PIN retry counter:"
-msgstr "PIN-försöksräknare:"
-
-msgid "Admin-PIN retry counter:"
-msgstr "Admin-PIN-försöksräknare:"
-
-msgid "blocked"
-msgstr "blockerad"
-
-msgid "Learn keys"
-msgstr "Lär nycklar"
-
-msgid ""
-"For some or all of the keys available on the card, the GnuPG crypto engine "
-"does not yet know the corresponding certificates.\n"
-"\n"
-"If you click this button, GnuPG will be asked to \"learn\" this card and "
-"import all certificates stored on the card into its own certificate store.  "
-"This is not done automatically because it may take several seconds to read "
-"all certificates from the card.\n"
-"\n"
-"If you are unsure what to do, just click the button."
-msgstr ""
-"För några eller alla nycklar som finns tillgängliga på kortet, känner inte "
-"GnuPG-kryptomotorn till motsvarande certifikat.\n"
-"\n"
-"Om du klickar på denna knapp kommer GnuPG förfrågas att ”lära” detta kort "
-"och importera alla certifikat som lagras på kortet in i sin egen "
-"certifikatslagring. Detta görs inte automatiskt eftersom det kan ta flera "
-"sekunder att läsa alla certifikat från kortet.\n"
-"\n"
-"Om du är osäker på vad du bör göra, kan du bara klicka på knappen."
-
-msgid "Learning keys ..."
-msgstr "Lär sig nycklar..."
-
-#, c-format
-msgid ""
-"<b>Setting the Initial PIN</b> (%s)\n"
-"\n"
-"You selected to set the initial PIN of your card.  The PIN is currently set "
-"to the NullPIN.  Setting an initial PIN is <b>required but can't be "
-"reverted</b>.\n"
-"\n"
-"Please check the documentation of your card to learn for what the NullPIN is "
-"good.\n"
-"\n"
-"If you proceed you will be asked to enter a new PIN and later to repeat that "
-"PIN.  Make sure that you will remember that PIN - it will not be possible to "
-"recover the PIN if it has been entered wrongly more than %d times.\n"
-"\n"
-"%s"
-msgstr ""
-"<b>Sätter en initial PIN<b> (%s)\n"
-"\n"
-"Du valda att sätta initial PIN för ditt kort. PIN är för närvarande satt "
-"till NullPIN.  Att sätta en initial PIN <b>krävs men kan inte ångras</b>.\n"
-"\n"
-"Vänligen se dokumentationen för ditt kort för att lära vad en NullPIN är bra "
-"för.\n"
-"\n"
-"Om du fortsätter kommer du efterfrågas en ny PIN och senare att upprepa "
-"denna PIN.  Säkerställ att du kommer att komma ihåg denna PIN - Det kommer "
-"inte att vara möjligt att återställa PIN om den har matats in felaktigt mer "
-"än %d gånger.\n"
-"\n"
-"%s"
-
-msgid ""
-"You are now setting the PIN for the SigG key used to create <b>qualified "
-"signatures</b>.  You may want to set the PIN to the same value as used for "
-"the NKS keys."
-msgstr ""
-"Du sätter nu PIN för SigG-nycklarna som används för att skapa "
-"<b>kvalificerade signaturer</b>. Du kan behöva sätta PIN till samma värde "
-"som används för NKS-nycklarna."
-
-msgid ""
-"You are now setting the PIN for the NKS keys used for standard signatures, "
-"encryption and authentication."
-msgstr ""
-"Du sätter nu PIN för NKS-nycklarna som används för standardsignaturer, "
-"kryptering och autentisering."
-
-#, c-format
-msgid ""
-"Error changing the NullPIN.\n"
-"(%s <%s>)"
-msgstr ""
-"Fel vid ändring av NullPIN.\n"
-"(%s <%s>)"
-
-msgid ""
-"<b>Changing a PIN or PUK</b>\n"
-"\n"
-"If you proceed you will be asked to enter the current value and then to "
-"enter a new value and repeat that value at another prompt.\n"
-"\n"
-"Entering a wrong value for the current value decrements the retry counter.  "
-"If the retry counters of the PIN and the corresponding PUK are both down to "
-"zero, the keys controlled by the PIN are not anymore usable and there is no "
-"way to unblock them!"
-msgstr ""
-"<b>Förändra en PIN eller PUK</b>\n"
-"\n"
-"Om du fortsätter kommer du att efterfrågas aktuellt värde och sedan att mata "
-"in ett nytt värde samt att upprepa detta värde vid en ny inmatning.\n"
-"\n"
-"Om du matar in ett felaktigt värde i aktuellt värde minskas "
-"försöksräknaren.  Om försöksräknarna för PIN och motsvarande PUK båda går "
-"ner till noll kommer nycklarna som kontrolleras av denna PIN att inte längre "
-"att kunna användas och det finns inget sätt att avblockera dem!"
-
-msgid ""
-"<b>Resetting a PUK</b>\n"
-"\n"
-"Although <i>PUK</i> stands for <i>PIN Unblocking Code</i> the TCOS operating "
-"system of the NetKey card implements it as an alternative PIN and thus it is "
-"possible to use the PIN to unblock the PUK.\n"
-"\n"
-"If the PUK is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PIN.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PIN and "
-"then to enter a new value for the blocked PUK and repeat that new value at "
-"another prompt."
-msgstr ""
-"<b>Återställa en PUK</b>\n"
-"\n"
-"Även om <i>PUK</i> står för <i>PIN Unblocking Code</i> så implementerar "
-"operativsystemet TCOS från NetKey-kortet det som en alternativ PIN och "
-"därför är det möjligt att använda denna PIN för att avblockera PUK.\n"
-"\n"
-"Om PUK är blockerad (försöksräknaren är nere på noll), så kan du avblockera "
-"den genom att använda den ickeblockerade PIN. Försöksräknaren återställs då "
-"till sitt ursprungliga värde.\n"
-"\n"
-"Om du fortsätter kommer du efterfrågas att mata in aktuellt värde av PIN och "
-"sedan att mata in ett nytt värde för den blockerade PUK och upprepa detta "
-"nya värde i ytterligare ett inmatningsfält."
-
-msgid ""
-"<b>Resetting a PIN</b>\n"
-"\n"
-"If the PIN is blocked (the retry counter is down to zero), you may unblock "
-"it by using the non-blocked PUK.  The retry counter is then set back to its "
-"initial value.\n"
-"\n"
-"If you proceed you will be asked to enter the current value of the PUK and "
-"then to enter a new value for the blocked PIN and repeat that new value at "
-"another prompt."
-msgstr ""
-"<b>Återställa en PIN</b>\n"
-"\n"
-"Om PIN är blockerad (försök-räknaren är nere på noll), så kan du avblockera "
-"den genom att använda den ickeblockerade PUKen. Försöksräknaren återställs "
-"då till sitt ursprungliga värde.\n"
-"\n"
-"Om du fortsätter kommer du att efterfrågas att mata in aktuellt värde i "
-"PUKen och sedan mata in ett nytt värde för den blockerade PIN samt upprepa "
-"detta nya värde i en annan inmatning."
-
-msgid ""
-"<b>A NullPIN is still active on this card</b>.\n"
-"You need to set a real PIN before you can make use of the card."
-msgstr ""
-"<b>En NullPIN är fortfarande aktiv på detta kort</b>.\n"
-"Du måste sätta en riktig PIN innan du kan använda kortet."
-
-msgid "Set initial PIN"
-msgstr "Sätt initial PIN"
-
-msgid "scanning ..."
-msgstr "avsöker ..."
-
-msgid "SigG PIN retry counter:"
-msgstr "SigG PIN-försöksräknare:"
-
-msgid "SigG PUK retry counter:"
-msgstr "SigG PUK-försöksräknare:"
-
-#, c-format
-msgid ""
-"There is not much information to display for a %s card.  You may want to use "
-"the application selector button to switch to another application available "
-"on this card."
-msgstr ""
-"Det finns inte mycket information att visa för ett %s-kort. Du kanske vill "
-"använda knappen för applikationsval för att ändra till en annan applikation "
-"som finns tillgänglig på detta kort."
+#~ msgid "_File"
+#~ msgstr "_Arkiv"
+
+#~ msgid "_Edit"
+#~ msgstr "R_edigera"
+
+#~ msgid "Clear buffer"
+#~ msgstr "Töm buffert"
+
+#~ msgid "Open a file"
+#~ msgstr "Öppna en fil"
+
+#~ msgid "Save to a file"
+#~ msgstr "Spara till en fil"
+
+#~ msgid "Sign buffer text"
+#~ msgstr "Signera bufferttexten"
+
+#~ msgid "Check signatures of buffer text"
+#~ msgstr "Kontrollera signaturer för bufferttext"
+
+#~ msgid "Encrypt the buffer text"
+#~ msgstr "Kryptera bufferttexten"
+
+#~ msgid "Decrypt the buffer text"
+#~ msgstr "Dekryptera bufferttexten"
+
+#~ msgid "Close the buffer"
+#~ msgstr "Stäng bufferten"
+
+#~ msgid "Quit the program"
+#~ msgstr "Avsluta programmet"
+
+#~ msgid "Undo the last action"
+#~ msgstr "Ångra senaste åtgärden"
+
+#~ msgid "Redo the last undone action"
+#~ msgstr "Gör om senaste ångrade åtgärden"
+
+#~ msgid "Cut the selection"
+#~ msgstr "Klipp ut markeringen"
+
+#~ msgid "Copy the selection"
+#~ msgstr "Kopiera markeringen"
+
+#~ msgid "Paste the clipboard"
+#~ msgstr "Klistra in urklipp"
+
+#~ msgid "Delete the selected text"
+#~ msgstr "Ta bort markerad text"
+
+#~ msgid "Select the entire document"
+#~ msgstr "Välj hela dokumentet"
+
+#~ msgid "Close all files"
+#~ msgstr "Stäng alla filer"
+
+#~ msgid "Sign the selected file"
+#~ msgstr "Signera markerad fil"
+
+#~ msgid "Check signatures of selected file"
+#~ msgstr "Kontrollera signatur på markerad fil"
+
+#~ msgid "Encrypt the selected file"
+#~ msgstr "Kryptera markerad fil"
+
+#~ msgid "Decrypt the selected file"
+#~ msgstr "Dekryptera markerad fil"
+
+#~ msgid "Close the window"
+#~ msgstr "Stäng fönstret"
+
+#~ msgid "Select all files"
+#~ msgstr "Markera alla filer"
+
+#~ msgid "_Windows"
+#~ msgstr "_Fönster"
+
+#~ msgid "Open the keyring editor"
+#~ msgstr "Öppna nyckelringsredigeraren"
+
+#~ msgid "Open the file manager"
+#~ msgstr "Öppna filhanteraren"
+
+#~ msgid "Open the clipboard"
+#~ msgstr "Öppna urklipp"
+
+#~ msgid "Configure the application"
+#~ msgstr "Konfigurera programmet"
+
+#~ msgid "_Backend Preferences"
+#~ msgstr "Inställningar för bakände"
+
+#~ msgid "Configure the backend programs"
+#~ msgstr "Konfigurera bakändesprogram"
+
+#~ msgid "_Help"
+#~ msgstr "_Hjälp"
+
+#~ msgid "Open the GPA manual"
+#~ msgstr "Öppna handboken för GPA"
+
+#~ msgid "About this application"
+#~ msgstr "Om detta program"
+
+#~ msgid "_Verify"
+#~ msgstr "_Validera"
+
+#~ msgid "_Encrypt"
+#~ msgstr "_Kryptera"
+
+#~ msgid "_Decrypt"
+#~ msgstr "_Dekryptera"
+
+#~ msgid "_Brief"
+#~ msgstr "Ko_rtfattat"
+
+#~ msgid "_Detailed"
+#~ msgstr "D_etaljerat"
+
+#~ msgid "_Keyring Manager"
+#~ msgstr "Nyc_kelringshanterare"
+
+#~ msgid "_Clipboard"
+#~ msgstr "_Urklipp"
+
+#~ msgid "_File Manager"
+#~ msgstr "F_ilhanterare"
+
+#~ msgid "_Card Manager"
+#~ msgstr "Korthanterare"
+
+#~ msgid "_Keys"
+#~ msgstr "_Nycklar"
+
+#~ msgid "_Server"
+#~ msgstr "_Server"
+
+#, fuzzy
+#~ msgid "Copy _Fingerprint"
+#~ msgstr "Fingeravtryck:"
+
+#, fuzzy
+#~ msgid "Copy the fingerprints"
+#~ msgstr "Kopiera markeringen"
+
+#, fuzzy
+#~ msgid "Copy Private Key"
+#~ msgstr "Redigera _privat nyckel..."
+
+#, fuzzy
+#~ msgid "Copy a single private key"
+#~ msgstr "Redigera markerad privat nyckel"
+
+#~ msgid "Select all certificates"
+#~ msgstr "Markera alla certifikat"
+
+#~ msgid "Refresh the keyring"
+#~ msgstr "Uppdatera nyckelringen"
+
+#~ msgid "_New key..."
+#~ msgstr "_Ny nyckel..."
+
+#~ msgid "Generate a new key"
+#~ msgstr "Generera en ny nyckel"
+
+#~ msgid "_Delete keys"
+#~ msgstr "_Ta bort nycklar..."
+
+#~ msgid "Remove the selected key"
+#~ msgstr "Ta bort vald nyckel"
+
+#~ msgid "_Sign Keys..."
+#~ msgstr "_Signera nycklar..."
+
+#~ msgid "Sign the selected key"
+#~ msgstr "Signera vald nyckel"
+
+#~ msgid "Set _Owner Trust..."
+#~ msgstr "Ange _ägartillit..."
+
+#~ msgid "Set owner trust of the selected key"
+#~ msgstr "Ange ägartillit för vald nyckel"
+
+#~ msgid "_Edit Private Key..."
+#~ msgstr "Redigera _privat nyckel..."
+
+#~ msgid "Edit the selected private key"
+#~ msgstr "Redigera markerad privat nyckel"
+
+#~ msgid "Import Keys"
+#~ msgstr "Importera nycklar"
+
+#~ msgid "E_xport Keys..."
+#~ msgstr "E_xportera nycklar..."
+
+#~ msgid "Export Keys"
+#~ msgstr "Exportera nycklar"
+
+#~ msgid "_Backup..."
+#~ msgstr "Säkerhetsk_opiera..."
+
+#~ msgid "Backup key"
+#~ msgstr "Säkerhetskopiera nyckel"
+
+#~ msgid "_Retrieve Keys..."
+#~ msgstr "_Hämta nycklar..."
+
+#~ msgid "Retrieve keys from server"
+#~ msgstr "Hämta nycklar från server"
+
+#~ msgid "Re_fresh Keys"
+#~ msgstr "Uppdatera Nycklar"
+
+#~ msgid "Refresh keys from server"
+#~ msgstr "Uppdatera nycklar från server"
+
+#~ msgid "_Send Keys..."
+#~ msgstr "_Skicka nycklar..."
+
+#~ msgid "Send keys to server"
+#~ msgstr "Skicka nycklar till server"
+
+#~ msgid "Edit"
+#~ msgstr "Redigera"
+
+#~ msgid "Delete"
+#~ msgstr "Ta bort"
+
+#~ msgid "Sign"
+#~ msgstr "Signera"
+
+#~ msgid "Export"
+#~ msgstr "Exportera"
+
+#~ msgid "Import"
+#~ msgstr "Importera"
+
+#~ msgid "Select _PGP key..."
+#~ msgstr "Välj _PGP-nyckel..."
+
+#~ msgid "Select _S\\/MIME key..."
+#~ msgstr "Välj _S\\/MIME-nyckel..."
+
+#~ msgid "Toggle _Ignore flag"
+#~ msgstr "Växla _Ignorera-flagga"
+
+#~ msgid "_Card"
+#~ msgstr "_Kort"
+
+#~ msgid "Reload card information"
+#~ msgstr "Ladda om kortinformation"
+
+#~ msgid "Generate new key on card"
+#~ msgstr "Generera en ny nyckel på kort"
 
 #~ msgid "Size"
 #~ msgstr "Storlek"
 
 #~ msgid "The file \"%s\" contained no validencrypted data."
 #~ msgstr "Filen ”%s” innehöll ingen giltig krypterad data."
-
-#~ msgid "The key ID is a short number to identify a certificate."
-#~ msgstr ""
-#~ "Nyckelidentiteten är ett kort tal för att identifiera ett certifikat."
 
 #~ msgid ""
 #~ "<b>Changing the PIN</b>\n"
