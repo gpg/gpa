@@ -84,7 +84,7 @@ gpa_help_about(GSimpleAction *simple, GVariant *parameter, gpointer user_data)
     if (engine->protocol == GPGME_PROTOCOL_OpenPGP)
       break;
   comment = g_strdup_printf ("[%s]\n\n(GPGME %s)\n(GnuPG %s)\n\n%s",
-                             BUILD_REVISION,
+                             BUILD_COMMITID,
                              gpgme_check_version (NULL),
                              engine? engine->version : "?",
                              _("GPA is the GNU Privacy Assistant."));
