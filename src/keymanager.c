@@ -1444,8 +1444,18 @@ key_manager_action_new (GpaKeyManager *self,
   "</interface>";
 
   GError *err = NULL;
+  GtkBuilder *gtk_builder;
+  GMenuModel *menu_bar_model;
+  GMenuModel *popup_menu_model;
+  GtkWidget *grid;
+  GtkCssProvider *css_provider;
+  GdkDisplay *display;
+  GdkScreen *screen;
+  GtkStyleContext *style_context;
+  GApplication *gpa_app;
+  GSimpleAction *action;
 
-  GtkBuilder *gtk_builder = gtk_builder_new ();
+  gtk_builder = gtk_builder_new ();
 
   if (gtk_builder_add_from_string( gtk_builder, icons_string , -1, &err) == 0) {
     printf("ERROR icons: %s \n", err->message);
@@ -1457,27 +1467,26 @@ key_manager_action_new (GpaKeyManager *self,
     g_error_free (err);
   }
 
-  GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
+  menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
   *menu = gtk_menu_bar_new_from_model (menu_bar_model);
 
-  GMenuModel *popup_menu_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "popupmenu"));
+  popup_menu_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "popupmenu"));
   *popup = gtk_menu_new_from_model (popup_menu_model);
 
-  GtkWidget *grid = GTK_WIDGET (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar"));
+  grid = GTK_WIDGET (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar"));
 
-  GtkCssProvider *css_provider = gtk_css_provider_new();
-  GdkDisplay *display = gdk_display_get_default();
-  GdkScreen *screen = gdk_display_get_default_screen (display);
+  css_provider = gtk_css_provider_new();
+  display = gdk_display_get_default();
+  screen = gdk_display_get_default_screen (display);
   gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
   gtk_css_provider_load_from_data(css_provider,
                                         "#toolbar {\n"
-                                        //" padding-left: 55px;\n"
-                                        // " padding-right: 5px;\n"
-                                        // " border-radius: 3px;\n"
+                                        /* " padding-left: 55px;\n" */
+                                        /* " padding-right: 5px;\n" */
+                                        /* " border-radius: 3px;\n" */
                                         "}\n", -1, NULL);
 
-  GtkStyleContext *style_context;
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (grid));
 
@@ -1489,8 +1498,7 @@ key_manager_action_new (GpaKeyManager *self,
 
   gtk_style_context_add_class (style_context, "toolbar");
 
-  GApplication *gpa_app = G_APPLICATION (get_gpa_application ());
-
+  gpa_app = G_APPLICATION (get_gpa_application ());
 
   g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
                                     gpa_windows_menu_g_action_entries,
@@ -1513,7 +1521,6 @@ key_manager_action_new (GpaKeyManager *self,
                                     self);
 
 
-  GSimpleAction *action;
   action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "edit_copy");
   add_selection_sensitive_action (self, action,
                                   key_manager_has_selection);

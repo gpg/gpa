@@ -969,14 +969,23 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
   */
 
   GError *err = NULL;
+  GtkBuilder *gtk_builder;
+  GMenuModel *menu_bar_model;
+  GObject *grid;
+  GtkCssProvider *css_provider;
+  GdkDisplay *display;
+  GdkScreen *screen;
+  GtkStyleContext *style_context;
+  GtkApplication *gpa_app;
+  GSimpleAction *action;
 
-  GtkBuilder *gtk_builder = gtk_builder_new_from_string (menu_string, -1);
+  gtk_builder = gtk_builder_new_from_string (menu_string, -1);
 
   if (gtk_builder_add_from_string( gtk_builder, menu_string , -1, &err) == 0) {
     printf("ERROR: %s \n", err->message);
   }
 
-  GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "main_menu"));
+  menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "main_menu"));
   *menubar = gtk_menu_bar_new_from_model (menu_bar_model);
 
   /*
@@ -984,11 +993,11 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
   *popup = gtk_menu_new_from_model (popup_menu_model);
   */
 
-  GObject *grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
+  grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
 
-  GtkCssProvider *css_provider = gtk_css_provider_new();
-  GdkDisplay *display = gdk_display_get_default();
-  GdkScreen *screen = gdk_display_get_default_screen (display);
+  css_provider = gtk_css_provider_new();
+  display = gdk_display_get_default();
+  screen = gdk_display_get_default_screen (display);
   gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
   gtk_css_provider_load_from_data(css_provider,
@@ -998,7 +1007,6 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
                                         // " border-radius: 3px;\n"
                                         "}\n", -1, NULL);
 
-  GtkStyleContext *style_context;
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (grid));
 
@@ -1013,7 +1021,7 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
   gtk_style_context_add_class (style_context, "toolbar");
 
 
-  GtkApplication *gpa_app = get_gpa_application ();
+  gpa_app = get_gpa_application ();
 
   g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
                                     gpa_windows_menu_g_action_entries,
@@ -1034,7 +1042,6 @@ fileman_action_new (GpaFileManager *fileman, GtkWidget **menubar,
                                     gpa_preferences_menu_g_action_entries,
                                     G_N_ELEMENTS (gpa_preferences_menu_g_action_entries),
                                     fileman);
-  GSimpleAction *action;
 
   action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "file_sign");
   add_selection_sensitive_action (fileman, action, has_selection);

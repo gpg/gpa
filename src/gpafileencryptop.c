@@ -476,6 +476,7 @@ ignore_key_trust (gpgme_key_t key, GtkWidget *parent)
   GtkWidget *label;
   GtkWidget *image;
   GtkResponseType response;
+  GtkWidget *box;
 
   dialog = gtk_dialog_new_with_buttons (_("Unknown Key"), GTK_WINDOW(parent),
 					GTK_DIALOG_MODAL,
@@ -490,7 +491,7 @@ ignore_key_trust (gpgme_key_t key, GtkWidget *parent)
   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
   label = gtk_label_new (_("You are going to encrypt a document using "
@@ -528,6 +529,7 @@ revoked_key (gpgme_key_t key, GtkWidget *parent)
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *image;
+  GtkWidget *box;
 
   dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent),
 					GTK_DIALOG_MODAL,
@@ -541,7 +543,7 @@ revoked_key (gpgme_key_t key, GtkWidget *parent)
   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  GtkWidget *box = gtk_dialog_get_content_area( GTK_DIALOG(dialog));
+  box = gtk_dialog_get_content_area( GTK_DIALOG(dialog));
   gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
   label = gtk_label_new (_("The following key has been revoked by its owner:"));
@@ -569,6 +571,7 @@ expired_key (gpgme_key_t key, GtkWidget *parent)
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *image;
+  GtkWidget *box;
   gchar *message;
 
   dialog = gtk_dialog_new_with_buttons (_("Revoked Key"), GTK_WINDOW(parent),
@@ -583,7 +586,7 @@ expired_key (gpgme_key_t key, GtkWidget *parent)
   gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, TRUE, 0);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-  GtkWidget *box = gtk_dialog_get_content_area( GTK_DIALOG(dialog));
+  box = gtk_dialog_get_content_area( GTK_DIALOG(dialog));
   gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
   /* Fixme: We leak the date string.  */

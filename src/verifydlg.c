@@ -101,6 +101,7 @@ gpa_file_verify_dialog_constructor (GType type,
 {
   GObject *object;
   GpaFileVerifyDialog *dialog;
+  GtkWidget *box;
 
   /* Invoke parent's constructor */
   object = parent_class->constructor (type,
@@ -119,8 +120,8 @@ gpa_file_verify_dialog_constructor (GType type,
 
   dialog->notebook = gtk_notebook_new ();
 
-  //vboxEncrypt = gtk_dialog_get_content_area(dialog);
-  GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  /*vboxEncrypt = gtk_dialog_get_content_area(dialog);*/
+  box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   gtk_box_pack_start (GTK_BOX (box),
 			       dialog->notebook, TRUE, TRUE, 0);

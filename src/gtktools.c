@@ -57,6 +57,7 @@ create_diagnostics_dialog (GtkWidget *parent, const char *string)
   GtkWidget *widget, *scrollwidget, *textview;
   GtkDialog *dialog;
   GtkTextBuffer *textbuffer;
+  GtkWidget *box;
 
   widget = gtk_dialog_new_with_buttons ("Diagnostics",
                                         parent? GTK_WINDOW (parent):NULL,
@@ -75,7 +76,7 @@ create_diagnostics_dialog (GtkWidget *parent, const char *string)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwidget),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
-  GtkWidget *box;
+
   box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_pack_start (GTK_BOX (box), scrollwidget, TRUE, TRUE, 0);
 

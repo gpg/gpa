@@ -898,14 +898,17 @@ cardman_action_new (GpaCardManager *cardman, GtkWidget **menu_bar,
 
   "</interface>";
 
-  GtkBuilder *gtk_builder = gtk_builder_new_from_string (menu_string, -1);
-  GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
+  GtkBuilder *gtk_builder;
+  GMenuModel *menu_bar_model;
+  GtkApplication *gpa_app;
+
+  gtk_builder = gtk_builder_new_from_string (menu_string, -1);
+  menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
   *menu_bar = gtk_menu_bar_new_from_model (menu_bar_model);
 
-  // GObject *grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
   *toolbar = GTK_WIDGET (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar"));
 
-  GtkApplication *gpa_app = get_gpa_application ();
+  gpa_app = get_gpa_application ();
 
   g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
                                     gpa_windows_menu_g_action_entries,
@@ -1119,6 +1122,7 @@ construct_widgets (GpaCardManager *cardman)
   GtkWidget *menubar;
   GtkWidget *toolbar;
   GtkWidget *statusbar;
+  GtkBuilder *gtk_builder;
 
   /* Set a default size for the main window.  */
   gtk_window_set_default_size (GTK_WINDOW (cardman), 680, 480);
@@ -1137,7 +1141,7 @@ construct_widgets (GpaCardManager *cardman)
   /* Add a fancy label that tells us: This is the card manager.  */
   hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
+  gtk_builder = gtk_builder_new_from_string (icons_string, -1);
 
   icon = GTK_WIDGET (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "smartcard"));
 

@@ -151,6 +151,7 @@ gpa_file_sign_dialog_constructor (GType type,
   GtkWidget *labelWho;
   GtkWidget *scrollerWho;
   GtkWidget *clistWho;
+  GtkWidget *box;
 
   /* Invoke parent's constructor */
   object = parent_class->constructor (type,
@@ -169,8 +170,7 @@ gpa_file_sign_dialog_constructor (GType type,
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
   vboxSign = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  // gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), vboxSign);
-  GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_pack_start (GTK_BOX (box), vboxSign, TRUE, TRUE, 0);
 
 

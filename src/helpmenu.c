@@ -78,6 +78,8 @@ gpa_help_about(GSimpleAction *simple, GVariant *parameter, gpointer user_data)
   char *comment;
   GdkPixbuf *logo;
   gpgme_engine_info_t engine;
+  GtkApplication *gpa_app;
+  GtkWindow *window;
 
   gpgme_get_engine_info (&engine);
   for (; engine; engine = engine->next)
@@ -91,9 +93,8 @@ gpa_help_about(GSimpleAction *simple, GVariant *parameter, gpointer user_data)
   logo = gdk_pixbuf_new_from_resource ("/org/gnupg/gpa/gpa_logo.xpm", NULL);
 
   // Get a window from the GtkApplication
-  GtkApplication *gpa_app = get_gpa_application ();
-
-  GtkWindow *window = gtk_application_get_active_window (gpa_app);
+  gpa_app = get_gpa_application ();
+  window = gtk_application_get_active_window (gpa_app);
 
   gtk_show_about_dialog (window,
 			 "program-name", "GPA",

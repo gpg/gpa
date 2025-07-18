@@ -33,10 +33,10 @@
  */
 
 static void
-init_radio_buttons (gpgme_validity_t trust, GtkWidget *unknown_radio, 
-                    GtkWidget *never_radio, GtkWidget *marginal_radio, 
+init_radio_buttons (gpgme_validity_t trust, GtkWidget *unknown_radio,
+                    GtkWidget *never_radio, GtkWidget *marginal_radio,
                     GtkWidget *full_radio, GtkWidget *ultimate_radio)
-{  
+{
   switch (trust)
     {
     case GPGME_VALIDITY_UNKNOWN:
@@ -97,6 +97,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
     *ultimate_radio;
   GtkWidget *label;
   GtkResponseType response;
+  GtkWidget *box;
   gpgme_validity_t trust = key->owner_trust;
   gboolean result;
 
@@ -112,7 +113,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
 
   key_info = gpa_key_info_new (key);
 
-  GtkWidget *box = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+  box = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
   gtk_box_pack_start(GTK_BOX (box), key_info, FALSE, FALSE, 0);
 
   /* Create the "Owner Trust" frame */
@@ -136,7 +137,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
   gtk_widget_set_valign(label, GTK_ALIGN_START);
   gtk_grid_attach(GTK_GRID (grid), label, 1, 1, 1, 1);
 
-  never_radio = gtk_radio_button_new_from_widget 
+  never_radio = gtk_radio_button_new_from_widget
     (GTK_RADIO_BUTTON (unknown_radio));
   gtk_grid_attach(GTK_GRID (grid), never_radio, 0, 2, 1, 1);
   label = gtk_label_new_with_mnemonic (_("_Never"));
@@ -152,7 +153,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
   gtk_widget_set_valign(label, GTK_ALIGN_START);
   gtk_grid_attach(GTK_GRID (grid), label, 1, 3, 1, 1);
 
-  marginal_radio = gtk_radio_button_new_from_widget 
+  marginal_radio = gtk_radio_button_new_from_widget
     (GTK_RADIO_BUTTON (unknown_radio));
   gtk_grid_attach(GTK_GRID (grid), marginal_radio, 0, 4, 1, 1);
   label = gtk_label_new_with_mnemonic (_("_Marginal"));
@@ -176,7 +177,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
 
   gtk_grid_attach(GTK_GRID (grid), label, 1, 5, 1, 1);
 
-  full_radio = gtk_radio_button_new_from_widget 
+  full_radio = gtk_radio_button_new_from_widget
     (GTK_RADIO_BUTTON (unknown_radio));
   gtk_grid_attach(GTK_GRID (grid), full_radio, 0, 6, 1, 1);
   label = gtk_label_new_with_mnemonic (_("_Full"));
@@ -197,7 +198,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
 
   gtk_grid_attach(GTK_GRID (grid), label, 1, 7, 1, 1);
 
-  ultimate_radio = gtk_radio_button_new_from_widget 
+  ultimate_radio = gtk_radio_button_new_from_widget
     (GTK_RADIO_BUTTON (unknown_radio));
   gtk_grid_attach(GTK_GRID (grid), ultimate_radio, 0, 8, 1, 1);
   label = gtk_label_new_with_mnemonic (_("U_ltimate"));
@@ -218,7 +219,7 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
   gtk_grid_attach(GTK_GRID (grid), label, 1, 9, 1, 1);
 
   /* Initialize */
-  init_radio_buttons (trust, unknown_radio, never_radio, marginal_radio, 
+  init_radio_buttons (trust, unknown_radio, never_radio, marginal_radio,
                       full_radio, ultimate_radio);
 
   gtk_container_add (GTK_CONTAINER (frame), grid);
@@ -229,16 +230,16 @@ gboolean gpa_ownertrust_run_dialog (gpgme_key_t key, GtkWidget *parent,
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
   /* Return the ownertrust */
-  if (response == GTK_RESPONSE_OK) 
+  if (response == GTK_RESPONSE_OK)
     {
       gpgme_validity_t new_trust = get_selected_validity (unknown_radio,
-							  never_radio, 
+							  never_radio,
 							  marginal_radio,
 							  full_radio,
 							  ultimate_radio);
       /* If the user didn't change the trust, don't edit the key */
       if (trust == new_trust ||
-          (trust == GPGME_VALIDITY_UNDEFINED && 
+          (trust == GPGME_VALIDITY_UNDEFINED &&
            new_trust == GPGME_VALIDITY_UNKNOWN))
         {
           result = FALSE;

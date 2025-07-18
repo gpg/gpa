@@ -826,11 +826,12 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
 		   const char *passphrase_info,
 		   int prev_was_bad, int fd)
 {
-  GtkWidget * dialog;
-  GtkWidget * hbox;
-  GtkWidget * vbox;
-  GtkWidget * entry;
-  GtkWidget * pixmap;
+  GtkWidget *dialog;
+  GtkWidget *hbox;
+  GtkWidget *vbox;
+  GtkWidget *entry;
+  GtkWidget *pixmap;
+  GtkWidget *box;
   GtkResponseType response;
   gchar *passphrase;
 
@@ -841,7 +842,7 @@ gpa_passphrase_cb (void *hook, const char *uid_hint,
           NULL);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  box = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   gtk_box_pack_start (GTK_BOX (box), hbox,
 		      TRUE, FALSE, 10);
@@ -1836,4 +1837,3 @@ gpa_validate_gpg_comment (const char *comment)
 
   return result;
 }
-

@@ -922,6 +922,7 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
   GObject *object;
   SettingsDlg *dialog;
   GtkWidget *frame;
+  GtkWidget *box;
 
   object = parent_class->constructor (type,
 				      n_construct_properties,
@@ -937,7 +938,7 @@ settings_dlg_constructor (GType type, guint n_construct_properties,
 
   /* The UI mode section.  */
   frame = user_interface_mode_frame (dialog);
-  GtkWidget *box = gtk_dialog_get_content_area( GTK_DIALOG (dialog));
+  box = gtk_dialog_get_content_area( GTK_DIALOG (dialog));
   gtk_box_pack_start (GTK_BOX (box), frame,
                       FALSE, FALSE, 0);
 

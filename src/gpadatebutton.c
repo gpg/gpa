@@ -162,6 +162,7 @@ gpa_date_button_clicked (GtkButton *button)
 {
   GpaDateButton *self = GPA_DATE_BUTTON (button);
   GtkWidget *toplevel;
+  GtkWidget *box;
 
   if (!self->dialog)
     {
@@ -182,7 +183,7 @@ gpa_date_button_clicked (GtkButton *button)
                                 G_CALLBACK (gtk_widget_destroy), self->dialog);
 
       self->calendar = gtk_calendar_new ();
-      GtkWidget *box = gtk_dialog_get_content_area(GTK_DIALOG(self->dialog));
+      box = gtk_dialog_get_content_area(GTK_DIALOG(self->dialog));
 
       gtk_container_add (GTK_CONTAINER (box),
                          self->calendar);

@@ -34,10 +34,12 @@
 static gboolean
 confirm_delete_secret (GtkWidget * parent)
 {
-  GtkWidget * window;
-  GtkWidget * label;
-  GtkWidget * hbox;
-  
+  GtkWidget *window;
+  GtkWidget *label;
+  GtkWidget *hbox;
+  GtkWidget *image_warning;
+  GtkBox *box;
+
   window = gtk_dialog_new_with_buttons (_("Removing Secret Key"),
                                         GTK_WINDOW(parent),
                                         GTK_DIALOG_MODAL,
@@ -50,7 +52,6 @@ confirm_delete_secret (GtkWidget * parent)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 10);
 
-  GtkWidget *image_warning;
   image_warning = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_DIALOG);
 
   gtk_box_pack_start (GTK_BOX (hbox), GTK_WIDGET (image_warning), TRUE, TRUE, 0);
@@ -59,7 +60,7 @@ confirm_delete_secret (GtkWidget * parent)
                            "Are you really sure you want to delete it?"));
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
-  GtkBox *box = GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (window)));
+  box = GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (window)));
 
   gtk_box_pack_start(GTK_BOX (box), hbox, TRUE, TRUE, 0);
   gtk_widget_show_all (window);
@@ -89,8 +90,8 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
   GtkWidget * label;
   GtkWidget * info;
 
-  gboolean has_secret_key = (gpa_keytable_lookup_key 
-			     (gpa_keytable_get_secret_instance(), 
+  gboolean has_secret_key = (gpa_keytable_lookup_key
+			     (gpa_keytable_get_secret_instance(),
 			      key->subkeys->fpr) != NULL);
 
   window = gtk_dialog_new_with_buttons (_("Remove Key"), GTK_WINDOW(parent),
@@ -112,7 +113,7 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
   gtk_widget_set_halign (GTK_WIDGET (label), 0.0);
   gtk_widget_set_valign (GTK_WIDGET (label), 0.5);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
-  
+
   info = gpa_key_info_new (key);
   gtk_box_pack_start (GTK_BOX (vbox), info, TRUE, TRUE, 5);
 
@@ -137,7 +138,7 @@ gpa_delete_dialog_run (GtkWidget * parent, gpgme_key_t key)
       gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
     }
-  
+
   label = gtk_label_new (_("Are you sure you want to delete this key?"));
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
 

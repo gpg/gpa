@@ -849,25 +849,26 @@ recplist_popup_menu_new (GtkWidget *window, RecipientDlg *dialog)
     "</interface>";
 
   GError *err = NULL;
-
   GtkWidget *popup_menu_widget;
+  GtkBuilder *gtk_builder;
+  GMenuModel *popup_menu_model;
+  GApplication *gpa_app;
 
-  GtkBuilder *gtk_builder = gtk_builder_new ();
+  gtk_builder = gtk_builder_new ();
 
   if (gtk_builder_add_from_string( gtk_builder, menu_string , -1, &err) == 0) {
     printf("ERROR menu: %s \n", err->message);
   }
 
-  GMenuModel *popup_menu_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "popup_menu"));
+  popup_menu_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "popup_menu"));
   popup_menu_widget = gtk_menu_new_from_model (popup_menu_model);
 
-  GApplication *gpa_app = G_APPLICATION (get_gpa_application ());
+  gpa_app = G_APPLICATION (get_gpa_application ());
 
   g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
                                     entries,
                                     G_N_ELEMENTS (entries),
                                     window);
-
 
   return popup_menu_widget;
 }
@@ -1235,6 +1236,3 @@ recipient_dlg_get_keys (RecipientDlg *dialog, gpgme_protocol_t *r_protocol)
 
   return keyarray;
 }
-
-
-

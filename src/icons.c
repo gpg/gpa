@@ -205,13 +205,15 @@ register_stock_icons (void)
 {
   GdkDisplay *display = gdk_display_get_default();
   GdkScreen *screen = gdk_display_get_default_screen (display);
+  GtkIconTheme *icon_theme;
+  GResource *resource;
 
   g_application_set_resource_base_path (G_APPLICATION (get_gpa_application ()), "/org/gnupg/gpa");
 
-  //GtkIconTheme *icon_theme = gtk_icon_theme_new ();
-  GtkIconTheme *icon_theme = gtk_icon_theme_get_for_screen (screen);
+  /*icon_theme = gtk_icon_theme_new ();*/
+  icon_theme = gtk_icon_theme_get_for_screen (screen);
 
-  GResource *resource = org_get_resource ();
+  resource = org_get_resource ();
 
   g_resources_register (resource);
   gtk_icon_theme_add_resource_path (icon_theme, "/org/gnupg/gpa");

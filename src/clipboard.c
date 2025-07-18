@@ -411,6 +411,7 @@ file_open (GSimpleAction *simple, GVariant *parameter, gpointer param)
       GtkWidget *hbox;
       GtkWidget *labelMessage;
       GtkWidget *pixmap;
+      GtkWidget *box;
       gint result;
       gchar *str;
 
@@ -425,8 +426,8 @@ file_open (GSimpleAction *simple, GVariant *parameter, gpointer param)
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-      //gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), hbox);
-      GtkWidget *box = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      /*gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (window)->vbox), hbox);*/
+      box = gtk_dialog_get_content_area (GTK_DIALOG (window));
       gtk_box_pack_start( GTK_BOX (box), hbox, TRUE, TRUE, 0);
       pixmap = gtk_image_new_from_icon_name ("dialog-information", GTK_ICON_SIZE_DIALOG);
       gtk_box_pack_start (GTK_BOX (hbox), pixmap, TRUE, FALSE, 10);
@@ -1308,21 +1309,30 @@ clipboard_action_new (GpaClipboard *clipboard,
 #else
 
   GError *err = NULL;
+  GtkBuilder *gtk_builder;
+  GMenuModel *menu_bar_model;
+  GObject *grid;
+  GtkCssProvider *css_provider;
+  GdkDisplay *display;
+  GdkScreen *screen;
+  GtkStyleContext *style_context;
+  GtkApplication *gpa_app;
+  GSimpleAction *action;
 
-  GtkBuilder *gtk_builder = gtk_builder_new_from_string (icons_string, -1);
+  gtk_builder = gtk_builder_new_from_string (icons_string, -1);
 
   if (gtk_builder_add_from_string( gtk_builder, ui_string , -1, &err) == 0) {
     printf("ERROR: %s \n", err->message);
   }
 
-  GMenuModel *menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
+  menu_bar_model = G_MENU_MODEL (gtk_builder_get_object (GTK_BUILDER (gtk_builder), "menu"));
   *menu = gtk_menu_bar_new_from_model (menu_bar_model);
 
-  GObject *grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
+  grid = gtk_builder_get_object (GTK_BUILDER (gtk_builder), "toolbar");
 
-  GtkCssProvider *css_provider = gtk_css_provider_new();
-  GdkDisplay *display = gdk_display_get_default();
-  GdkScreen *screen = gdk_display_get_default_screen (display);
+  css_provider = gtk_css_provider_new();
+  display = gdk_display_get_default();
+  screen = gdk_display_get_default_screen (display);
   gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
   gtk_css_provider_load_from_data(css_provider,
@@ -1332,8 +1342,6 @@ clipboard_action_new (GpaClipboard *clipboard,
                                         // " border-radius: 3px;\n"
                                         "}\n", -1, NULL);
 
-
-  GtkStyleContext *style_context;
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (grid));
 
@@ -1345,7 +1353,7 @@ clipboard_action_new (GpaClipboard *clipboard,
   gtk_style_context_add_class (style_context, "toolbar");
 
 
-  GtkApplication *gpa_app = get_gpa_application ();
+  gpa_app = get_gpa_application ();
 
   g_action_map_add_action_entries (G_ACTION_MAP (gpa_app),
                                     gpa_windows_menu_g_action_entries,
@@ -1367,7 +1375,6 @@ clipboard_action_new (GpaClipboard *clipboard,
                                     G_N_ELEMENTS (gpa_preferences_menu_g_action_entries),
                                     clipboard);
 
-  GSimpleAction *action;
   action = (GSimpleAction*)g_action_map_lookup_action (G_ACTION_MAP (gpa_app), "edit_cut");
   add_selection_sensitive_action (clipboard, action);
 

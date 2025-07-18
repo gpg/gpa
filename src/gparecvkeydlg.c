@@ -91,12 +91,13 @@ gpa_receive_key_dialog_init (GpaReceiveKeyDialog *dialog)
 {
   GtkWidget *label;
   GtkWidget *hbox;
+  GtkWidget *box;
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			  _("_Cancel"), GTK_RESPONSE_CANCEL,
 			  _("_OK"), GTK_RESPONSE_OK,
                           NULL);
-  GtkWidget *box = gtk_dialog_get_content_area( GTK_DIALOG( dialog));
+  box = gtk_dialog_get_content_area( GTK_DIALOG( dialog));
   gtk_container_set_border_width (GTK_CONTAINER (box),10);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
@@ -198,4 +199,3 @@ gpa_receive_key_dialog_get_id (GpaReceiveKeyDialog *dialog)
 {
   return gtk_entry_get_text (GTK_ENTRY (dialog->entry));
 }
-
