@@ -41,6 +41,7 @@
 #include "gtktools.h"
 #include "convert.h"
 #include "gpa-key-details.h"
+#include "keytable.h"
 
 #include "cm-object.h"
 #include "cm-piv.h"
