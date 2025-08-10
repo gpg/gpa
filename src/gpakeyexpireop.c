@@ -31,6 +31,7 @@
 #endif
 
 #include "gpa.h"
+#include "gpa-marshal.h"
 #include "gpakeyexpireop.h"
 #include "expirydlg.h"
 #include "gpgmeedit.h"
@@ -114,7 +115,7 @@ gpa_key_expire_operation_class_init (GpaKeyExpireOperationClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GpaKeyExpireOperationClass, new_expiration),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__POINTER,
+		  gpa_marshal_VOID__POINTER_POINTER,
 		  G_TYPE_NONE, 2,
 		  G_TYPE_POINTER,
 		  G_TYPE_POINTER);

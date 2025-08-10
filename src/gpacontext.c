@@ -25,6 +25,7 @@
 #include "gpa.h"
 #include "gpgmetools.h"
 #include "gpacontext.h"
+#include "gpa-marshal.h"
 
 /* GObject type functions */
 
@@ -145,9 +146,9 @@ gpa_context_class_init (GpaContextClass *klass)
                         G_SIGNAL_RUN_FIRST,
                         G_STRUCT_OFFSET (GpaContextClass, progress),
                         NULL, NULL,
-                        g_cclosure_marshal_VOID__INT,
+                        gpa_marshal_VOID__INT_INT,
                         G_TYPE_NONE, 2,
-			G_TYPE_INT);
+			G_TYPE_INT, G_TYPE_INT);
 }
 
 static void
