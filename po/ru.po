@@ -3,13 +3,13 @@
 # Maxim Britov <maxim.britov@gmail.com>, 2007.
 # CJ <cj@neocaching.ru>, 2008.
 # Sergei Smirnov <moscow@hro.org>, 2008.
-# Ineiev <ineiev@gnu.org>, 2015, 2016, 2017, 2021.
+# Ineiev <ineiev@gnu.org>, 2015, 2016, 2017, 2021, 2026.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GPA 0.10.0\n"
+"Project-Id-Version: GPA 0.11.0\n"
 "Report-Msgid-Bugs-To: translations@gnupg.org\n"
-"PO-Revision-Date: 2021-10-12 10:17+0000\n"
+"PO-Revision-Date: 2026-02-08 10:17+0000\n"
 "Last-Translator: Ineiev <ineiev@gnu.org>\n"
 "Language-Team: Russian <gnupg-i18n@gnupg.org>\n"
 "Language: ru\n"
@@ -108,7 +108,7 @@ msgid "The file %s is %llu%s large.  Do you really  want to open it?"
 msgstr "Размер файла %s равен %llu%s. Открыть его?"
 
 msgid "_Save"
-msgstr ""
+msgstr "_Сохранить"
 
 msgid "Save As..."
 msgstr "Сохранить как..."
@@ -670,7 +670,7 @@ msgid "Use default argument"
 msgstr "Исходный аргумент"
 
 msgid "_Apply"
-msgstr ""
+msgstr "_Применить"
 
 msgid ""
 "There are unapplied changes by you. Changing the expert setting will apply "
@@ -683,13 +683,13 @@ msgid "Crypto Backend Configuration"
 msgstr "Настройки базовых программ"
 
 msgid "Apply"
-msgstr ""
+msgstr "Применить"
 
 msgid "Reset"
 msgstr "Сбросить"
 
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 msgid "Configure the tools of the GnuPG system."
 msgstr "Настройки инструментов GnuPG."
