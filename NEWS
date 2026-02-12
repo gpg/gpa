@@ -1,5 +1,13 @@
-Noteworthy changes in version 0.11.1 (unreleased)
+Noteworthy changes in version 0.11.1 (2026-02-12)
 -------------------------------------------------
+
+ * Remove unused trust_item stuff to make it build with gpgme 2.x.
+   [rGPAb6ba8bcc6d]
+
+ * Fix a crash due to bad marshaling.  See
+   https://bugs.gentoo.org/957196.  [rGPA45fc64a4ac]
+
+ Release-info: https://dev.gnupg.org/T7449
 
 
 Noteworthy changes in version 0.11.0 (2024-12-10)
